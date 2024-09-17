@@ -135,3 +135,4 @@
 		else
 			str += "\n|''(Check [R.type]/on_reaction()!)''"
 	text2file(str+"\n|}","chemistry-recipes.wiki")
+z

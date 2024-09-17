@@ -86,7 +86,7 @@
 	if(istype(get_turf(src),/turf/unsimulated/floor/brimstone))
 		FireBurn(11, 9001, ONE_ATMOSPHERE) // lag free weird way of doing it
 		fire_stacks = 11
-		IgniteMob() // ffffFIRE!!!! FIRE!!! FIRE!!
+		ignite() // ffffFIRE!!!! FIRE!!! FIRE!!
 	return 1
 
 // Apply connect damage
@@ -123,19 +123,19 @@
 			G.overlays = 0
 			if(istype(G.mind.current, /mob/living/carbon/human/))
 				var/mob/living/carbon/human/H = G.mind.current
-				G.overlays += H.obj_overlays[ID_LAYER]
-				G.overlays += H.obj_overlays[EARS_LAYER]
-				G.overlays += H.obj_overlays[SUIT_LAYER]
-				G.overlays += H.obj_overlays[GLASSES_LAYER]
-				G.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
-				G.overlays += H.obj_overlays[BELT_LAYER]
-				G.overlays += H.obj_overlays[BACK_LAYER]
-				G.overlays += H.obj_overlays[HEAD_LAYER]
-				G.overlays += H.obj_overlays[HANDCUFF_LAYER]
+				G.overlays += H.overlays_standing[ID_LAYER]
+				G.overlays += H.overlays_standing[EARS_LAYER]
+				G.overlays += H.overlays_standing[SUIT_LAYER]
+				G.overlays += H.overlays_standing[GLASSES_LAYER]
+				G.overlays += H.overlays_standing[GLASSES_OVER_HAIR_LAYER]
+				G.overlays += H.overlays_standing[BELT_LAYER]
+				G.overlays += H.overlays_standing[BACK_LAYER]
+				G.overlays += H.overlays_standing[HEAD_LAYER]
+				G.overlays += H.overlays_standing[HANDCUFF_LAYER]
 			G.invisibility = 0
 			to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
 		spawn(1)
-			dust()
+			gib()
 
 /mob/living/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
@@ -150,7 +150,7 @@
 	if (B.sources.len >= 1 && (isliving(B.sources[1])))
 		var/mob/living/assailant = B.sources[1]
 		if (assailant.ckey || src.ckey)
-			log_attack("<font color='red'>[assailant.name][assailant.ckey ? "([assailant.ckey])" : "(no key)"] attacked [src.name][src.ckey ? "([src.ckey])" : "(no key)"] with [B.name]</font>")
+			log_attack("<font color='red'>[assailant.name][assailant.ckey ? "([assailant.ckey])" : "(no key)"] attacked [src.name][src.ckey ? "([src.ckey])" : "(no key)"] with [B.name] ([damage] damage)</font>")
 
 	// Update check time.
 	last_beamchecks["\ref[B]"]=world.time
@@ -433,7 +433,7 @@
 /mob/living/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
 		if(B.stuck_to)
-			visible_message("<span class='warning'>\the [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
+			visible_message("<span class='warning'>\The [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
 			B.deactivate()
 			B.unstick()
 
@@ -544,6 +544,8 @@ Thanks.
 	stunned = 0
 	knockdown = 0
 	remove_jitter()
+	dizziness = 0
+	confused = 0
 	germ_level = 0
 	next_pain_time = 0
 	radiation = 0
@@ -565,7 +567,7 @@ Thanks.
 	else
 		reagents.clear_reagents()
 	heal_overall_damage(1000, 1000)
-	ExtinguishMob()
+	extinguish()
 	fire_stacks = 0
 	/*
 	if(locked_to)
@@ -737,7 +739,7 @@ Thanks.
 		stop_pulling()
 		. = ..()
 
-	if ((s_active && !is_holder_of(src, s_active)))
+	if (s_active && !is_holder_of(src, s_active) && !s_active.Adjacent(src))
 		s_active.close(src)
 
 	if(update_slimes)
@@ -746,13 +748,6 @@ Thanks.
 
 	if(T != loc)
 		handle_hookchain(Dir)
-
-	if(client && client.eye && istype(client.eye,/turf/simulated/wall))
-		var/turf/simulated/wall/W = client.eye
-		if (!Adjacent(W))
-			client.eye = src
-			client.perspective = MOB_PERSPECTIVE
-			W.peeper = null
 
 	if(.)
 		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
@@ -865,7 +860,7 @@ Thanks.
 		if(!istype(CM) || !CM.handcuffed)
 			var/datum/chain/tether_datum = L.tether.chain_datum
 			if(tether_datum.extremity_B == src)
-				L.visible_message("<span class='danger'>\the [L] quickly grabs and removes \the [L.tether] tethered to his body!</span>",
+				L.visible_message("<span class='danger'>\The [L] quickly grabs and removes \the [L.tether] tethered to his body!</span>",
 							  "<span class='warning'>You quickly grab and remove \the [L.tether] tethered to your body.</span>")
 				L.tether = null
 				tether_datum.extremity_B = null
@@ -874,7 +869,7 @@ Thanks.
 	//Trying to unstick a stickybomb
 	for(var/obj/item/stickybomb/B in L)
 		if(B.stuck_to)
-			L.visible_message("<span class='danger'>\the [L] is trying to reach and pull off \the [B] stuck on his body!</span>",
+			L.visible_message("<span class='danger'>\The [L] is trying to reach and pull off \the [B] stuck on his body!</span>",
 						  "<span class='warning'>You reach for \the [B] stuck on your body and start pulling.</span>")
 			if(do_after(L, src, 30, 10, FALSE))
 				L.visible_message("<span class='danger'>After struggling for an instant, \the [L] manages unstick \the [B] from his body!</span>",
@@ -1032,7 +1027,7 @@ Thanks.
 					return //closed but not welded...
 
 		//okay, so the closet is either welded or locked... resist!!!
-		L.visible_message("<span class='danger'>The [C] begins to shake violenty!</span>",
+		L.visible_message("<span class='danger'>\The [C] begins to shake violenty!</span>",
 						  "<span class='warning'>You lean on the back of [C] and start pushing the door open (this will take about [breakout_time] minutes).</span>")
 		spawn(0)
 			if(do_after(usr, C, breakout_time * 60 * 10, 30, custom_checks = new /callback(C, /obj/structure/closet/proc/on_do_after))) 	//minutes * 60seconds * 10deciseconds
@@ -1141,7 +1136,7 @@ Thanks.
 				sleep(1 SECONDS)
 			CM.fire_stacks = 0
 			CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>","<span class='notice'>You extinguish yourself.</span>")
-			ExtinguishMob()
+			extinguish()
 			return
 
 		CM.resist_restraints()
@@ -1172,16 +1167,6 @@ Thanks.
 		cuffs = mutual_handcuffs
 		resist_time = cuffs.restraint_resist_time/2 //it's only one cuff
 		var_to_check = "mutual_handcuffs"
-	else if(is_wearing_item(/obj/item/clothing/suit/strait_jacket, slot_wear_suit))
-		cuffs = get_item_by_slot(slot_wear_suit)
-		if(!is_hulk)
-			do_after_callback = new /callback(GLOBAL_PROC, /proc/strait_jacket_resist_do_after)
-			var/left_arm = get_organ(LIMB_LEFT_ARM)
-			var/right_arm = get_organ(LIMB_RIGHT_ARM)
-			for(var/datum/organ/external/arm in list(left_arm, right_arm))
-				if(!arm.is_existing() || arm.is_broken())
-					resist_time = max(0, resist_time - 30 SECONDS)
-		var_to_check = "wear_suit"
 	else
 		return
 	if(is_hulk)
@@ -1208,20 +1193,6 @@ Thanks.
 			simple_message("<span class='warning'>Your attempt at [is_hulk ? "breaking" : "removing"] \the [cuffs] was interrupted.</span>",
 							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
 
-/proc/strait_jacket_resist_do_after(mob/living/carbon/user)
-	var/left_arm = user.get_organ(LIMB_LEFT_ARM)
-	var/right_arm = user.get_organ(LIMB_RIGHT_ARM)
-	for(var/datum/organ/external/arm in list(left_arm, right_arm))
-		if(!arm)
-			// Not a humanoid or something
-			continue
-		if(!arm.is_existing() || arm.is_broken() || !arm.is_organic())
-			continue
-		if(prob(5))
-			arm.fracture()
-			return FALSE
-	return TRUE
-
 /mob/living/verb/lay_down()
 	set name = "Rest"
 	set category = "IC"
@@ -1242,6 +1213,9 @@ Thanks.
 	to_chat(src, "<span class='notice'>You are now [resting ? "resting" : "getting up"]</span>")
 
 /mob/living/proc/has_brain()
+	return 1
+
+/mob/living/proc/has_attached_brain()
 	return 1
 
 /mob/living/proc/has_eyes()
@@ -1368,7 +1342,6 @@ Thanks.
 				now_pushing = 0
 				return
 
-			tmob.LAssailant = src
 			tmob.assaulted_by(src, TRUE)
 
 		now_pushing = 0
@@ -1398,9 +1371,6 @@ Thanks.
 				now_pushing = 0
 			return
 	return
-
-/mob/living/is_open_container()
-	return 1
 
 /mob/living/proc/scoop_up(mob/M) //M = mob who scoops us up!
 	if(!holder_type)
@@ -1565,11 +1535,7 @@ Thanks.
 				usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
 
 				log_attack("<font color='red'>[usr.name] ([usr.ckey]) Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				if(!iscarbon(usr))
-					M.LAssailant = null
-				else
-					M.LAssailant = usr
-					M.assaulted_by(usr)
+				M.assaulted_by(usr)
 				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null
@@ -1579,7 +1545,7 @@ Thanks.
 			to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
 			return FAILED_THROW
 
-		if(I.pre_throw(target))
+		if(I.pre_throw(target,src))
 			return FAILED_THROW
 
 	remove_from_mob(item)
@@ -1943,3 +1909,11 @@ Thanks.
 	if(B.host_brain.ckey)
 		to_chat(src, "<span class='danger'>You send a punishing spike of psychic agony lancing into your host's brain.</span>")
 		to_chat(B.host_brain, "<span class='danger'><FONT size=3>Horrific, burning agony lances through you, ripping a soundless scream from your trapped mind!</FONT></span>")
+
+/mob/living/Stat()
+	..()
+	if(statpanel("Status"))
+		if(mind)
+			for(var/role in mind.antag_roles)
+				var/datum/role/R = mind.antag_roles[role]
+				stat(R.StatPanel())

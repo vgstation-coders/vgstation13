@@ -8,7 +8,6 @@
 	name = "mysterious structure"
 	requires_power = 0
 	icon_state = "firingrange"
-	dynamic_lighting = 1
 
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
@@ -45,6 +44,14 @@
 
 /area/vault/podstation
 	requires_power = 1
+
+/area/vault/podstation/interior
+	name = "\improper Pod Station"
+	icon_state = "kitchen"
+
+/area/vault/podstation/exterior
+	name = "\improper Pod Station Asteroid"
+	icon_state = "pod"
 
 /area/vault/fastfood
 
@@ -285,6 +292,13 @@
 /obj/docking_port/destination/vault/amelab
 	areaname = "Nanotrasen Experimental AME Lab"
 
+/area/vault/soulblade_sanctum
+	jammed = 2
+	color = "red"
+	ambient_sounds = list(
+		/datum/ambience/spaced2,
+		/datum/ambience/spaced3,
+		)
 
 /area/vault/meteorlogical
 	name = "\improper Meteorlogical Station"
@@ -498,7 +512,10 @@
 	maxHealth = 150
 	icon_state = "duey0"
 	icon_initial = "duey"
-	Max_Fertilizers = 50
+
+/obj/machinery/bot/farmbot/duey/New()
+	..()
+	reagents.maximum_volume = 500
 
 /obj/structure/ladder/spacepond/ground
 	name = "wine cellar"
@@ -528,7 +545,7 @@
 	check_records = 1
 	criminals = 1
 	auth_weapons = 1
-	stun_all = 1
+	stun_peasants = 1
 	check_anomalies = 1
 	ai = 1
 
@@ -1009,7 +1026,7 @@
 /obj/item/device/pda/clown/broken/attack_self(mob/user)
 	INVOKE_EVENT(src, /event/item_attack_self, "user" = user) // Minimalist version of original function
 
-/obj/structure/falserwall/doorobscurer
+/obj/structure/falsewall/rwall/doorobscurer
 	layer = ABOVE_DOOR_LAYER
 
 /mob/living/simple_animal/hostile/retaliate/cookbot
@@ -1046,6 +1063,7 @@
 	minbodytemp = 0
 
 	mob_property_flags = MOB_ROBOTIC
+	meat_type = null
 
 	environment_smash_flags = 0
 

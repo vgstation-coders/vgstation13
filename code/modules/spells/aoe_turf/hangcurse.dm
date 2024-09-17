@@ -27,7 +27,11 @@ Removes letters in the afflicted's sentences like the virology symptom, others m
 
 /spell/aoe_turf/hangman/get_upgrade_info(upgrade_type, level)
 	if(upgrade_type == Sp_POWER)
-		return "Remove more letters from the affecteds' sentences"
+		if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+			if(prob(10))
+				return "Th__ _p_ll _lr__dy r_mov__ __ m_ny l_tt_r_ __ _t c_n!"
+			return "This spell already removes as many letters as it can!"
+		return "Remove more letters from the sentences of those who are affected."
 	return ..()
 
 /spell/aoe_turf/hangman/empower_spell()
@@ -45,7 +49,7 @@ Removes letters in the afflicted's sentences like the virology symptom, others m
 		if(2)
 			name = "C__s_ __ _h_ H__g___"
 			invocation = "V_R'_ R_'_G_"
-	
+
 	return "The curse will now retain less letters"
 
 /spell/aoe_turf/hangman/choose_targets(var/mob/user = usr)

@@ -1,6 +1,8 @@
 /obj/machinery/computer
 	name = "computer"
 	icon = 'icons/obj/computer.dmi'
+	var/on_flick = "on"
+	var/off_flick = "off"
 	density = 1
 	anchored = 1.0
 	use_power = MACHINE_POWER_USE_IDLE
@@ -15,6 +17,7 @@
 	use_auto_lights = 1
 	light_power_on = 1
 	light_range_on = 3
+	var/moody_state = "overlay_computer"
 
 /obj/machinery/computer/cultify()
 	new /obj/structure/cult_legacy/tome(loc)
@@ -24,8 +27,10 @@
 	..()
 	if(world.has_round_started())
 		if(!(computer_flags & NO_ONOFF_ANIMS))
-			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "on")
+			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = on_flick)
 		initialize()
+	if (icon_state == "old")
+		moody_state = "overlay_computer_old"//I hate doing that but a bunch of computers got varedited in maps so this covers them
 
 /obj/machinery/computer/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(pass_flags_self))
@@ -99,18 +104,21 @@
 	// Broken
 	if(stat & BROKEN)
 		icon_state = "[initial(icon_state)]b"
+		update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 
 	// Unpowered/Disabled
 	else if(stat & (FORCEDISABLE|NOPOWER))
 		if(icon_state != "[initial(icon_state)]0" && !(computer_flags & NO_ONOFF_ANIMS))
-			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "off")
+			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = off_flick)
 		icon_state = "[initial(icon_state)]0"
+		kill_moody_light()
 
 	// Functional
 	else
 		if(icon_state == "[initial(icon_state)]0" && !(computer_flags & NO_ONOFF_ANIMS))
-			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "on")
+			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = on_flick)
 		icon_state = initial(icon_state)
+		update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 
 
 /obj/machinery/computer/power_change(var/nodelay = 0)
@@ -135,9 +143,10 @@
 
 /obj/machinery/computer/proc/set_broken()
 	if(empproof && prob(50)) // Halves chance if reinforced with plasma glass
-		return
+		return FALSE
 	stat |= BROKEN
 	update_icon()
+	return TRUE
 
 /obj/machinery/computer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head against \the [src] screen! It looks like \he's trying to commit suicide.</span>")
@@ -155,7 +164,7 @@
 	if (do_after(user, src, 20) && (circuit || CC))
 		var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 		if(!(computer_flags & NO_ONOFF_ANIMS))
-			anim(target = A, a_icon = 'icons/obj/computer.dmi', flick_anim = "off")
+			anim(target = A, a_icon = 'icons/obj/computer.dmi', flick_anim = off_flick)
 		src.transfer_fingerprints_to(A)
 		if(!CC)
 			CC = new circuit( A )

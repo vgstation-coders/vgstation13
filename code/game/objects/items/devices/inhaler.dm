@@ -6,6 +6,7 @@
 	icon = 'icons/obj/inhaler.dmi'
 	icon_state = "inhaler"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_PLASTIC
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	throwforce = 0
@@ -13,7 +14,7 @@
 	throw_range = 20
 	force = 0
 	var/last_puff = 0
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 
 /obj/item/device/inhaler/proc/puff_ready()
 	return last_puff < world.time - PUFF_COOLDOWN_TIME

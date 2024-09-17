@@ -36,7 +36,7 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 
 	ghost_read = FALSE
 
-	var/frequency = 0
+	frequency = 0
 	var/datum/radio_frequency/radio_connection
 	machine_flags = MULTITOOL_MENU
 
@@ -99,14 +99,13 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 		icon_state = "intact_on"
 	..()
 
-
 /obj/machinery/atmospherics/binary/heat_pump/initialize()
 	..()
 	if(frequency)
 		set_frequency(frequency)
 
 
-/obj/machinery/atmospherics/binary/heat_pump/proc/set_frequency(new_frequency)
+/obj/machinery/atmospherics/binary/heat_pump/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)

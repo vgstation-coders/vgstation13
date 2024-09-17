@@ -37,6 +37,9 @@ JOBS_HAVE_MINIMAL_ACCESS
 ## Remove # here if you wish to have cargo forwards sent always be a set amount (for debugging)
 #CARGO_FORWARDING_AMOUNT_OVERRIDE 5
 
+## Remove # here if you wish to have all lights on by default at roundstart
+ROUNDSTART_LIGHTS_ON
+
 ## (SECURITY RISK ON PUBLIC SERVERS) Automatically give localhost clients +HOST access.
 LOCALHOST_AUTOADMIN
 
@@ -375,3 +378,18 @@ BSQL_THREAD_LIMIT 50
 
 ## Uncomment to enable verbose BSQL communication logs
 #BSQL_DEBUG
+
+## Comment to make the map rendering verb not lag the game during rounds when done
+MAPRENDER_LAGS_GAME
+
+## Location of .git/refs/heads/Bleeding-Edge
+BRANCH_HEAD .git/refs/heads/Bleeding-Edge
+
+## HTTP URL for external stats tracking
+# STATS_ADDR
+
+## Location of rsc folder
+# RSCLIST
+
+## Location of rsc string
+# RSCSTRING

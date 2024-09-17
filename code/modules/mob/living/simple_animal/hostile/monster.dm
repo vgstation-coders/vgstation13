@@ -76,13 +76,16 @@
 			adjustBruteLoss(25)
 			emp_damage+=25
 
-/mob/living/simple_animal/hostile/monster/cyber_horror/AttackingTarget()
-	..()
-	var/mob/living/L = target
-	if(L.reagents)
-		if(prob(nanobot_chance))
-			visible_message("<b><span class='warning'>[src] injects something into [L]!</span>")
-			L.reagents.add_reagent(MEDNANOBOTS, 2)
+//Override the UnarmedAttack in order to allow checking for whether the attack actually goes through
+/mob/living/simple_animal/hostile/monster/cyber_horror/UnarmedAttack(atom/A)
+	if(ismob(A))
+		delayNextAttack(10)
+	if(A.attack_animal(src)) //Returns 0 if blocked, returns 1 if the attack went through
+		var/mob/living/L = A
+		if(istype(L) && L.reagents)
+			if(prob(nanobot_chance))
+				visible_message("<b><span class='warning'>[src] injects something into [L]!</span>")
+				L.reagents.add_reagent(MEDNANOBOTS, 2)
 
 /mob/living/simple_animal/hostile/monster/cyber_horror/death(var/gibbed = FALSE)
 	..(gibbed)

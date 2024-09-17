@@ -246,7 +246,7 @@
 	if(H.dna.species != "Human")
 		H.set_species(H.dna.species, TRUE)
 
-	isslimeperson(H) ? H.adjustToxLoss(150) : H.adjustCloneLoss(150)
+	isslimeperson(H) ? H.adjustToxLoss(75) : H.adjustCloneLoss(150) // 75 for slime people due to their tox_mod of 2
 	H.adjustBrainLoss(upgraded ? 0 : (heal_level + 50 + rand(10, 30))) // The rand(10, 30) will come out as extra brain damage
 	H.Paralyse(4)
 	H.stat = H.status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS //There was a bug which allowed you to talk for a few seconds after being cloned, because your stat wasn't updated until next Life() tick. This is a fix for this!

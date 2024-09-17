@@ -6,7 +6,7 @@
 	icon_living = "grinch"
 	icon_dead = "grinch_dead"
 	held_items = list(null, null)
-	mob_bump_flag = PASSTABLE // Pass over everything
+	mob_bump_flag = PASSTABLE | PASSRAILING // Pass over everything
 	mutations = list(M_CLUMSY)
 
 	// -- Much more health than a regular gremlin.
@@ -25,14 +25,7 @@
 	max_n2 = 0
 	minbodytemp = 223	//Below -50 Degrees Celcius
 	maxbodytemp = 323	//Above 50 Degrees Celcius
-
-	var/list/obj/abstract/Overlays/obj_overlays[TOTAL_LAYERS]
-
-// -- INVENTORY CODE --
-// Stolen from advanced holograms
-/mob/living/simple_animal/hostile/gremlin/grinch/New()
-	. = ..()
-	obj_overlays[BACK_LAYER]		= new /obj/abstract/Overlays/back_layer
+	var/list/overlays_standing[TOTAL_LAYERS]
 
 /mob/living/simple_animal/hostile/gremlin/grinch/Login()
 	..()
@@ -121,37 +114,24 @@
 	popup.set_content(dat)
 	popup.open()
 
-/mob/living/simple_animal/hostile/gremlin/grinch/update_inv_hand(index, var/update_icons = 1)
-	if(!obj_overlays)
+/mob/living/simple_animal/hostile/gremlin/grinch/update_inv_hand(index)
+	overlays -= overlays_standing["[HAND_LAYER]-[index]"]
+	overlays_standing["[HAND_LAYER]-[index]"] = null
+	var/obj/item/held_item = get_held_item_by_index(index)
+	if(!(held_item && held_item.is_visible()))
 		return
-	var/obj/abstract/Overlays/hand_layer/O = obj_overlays["[HAND_LAYER]-[index]"]
-	if(!O)
-		O = new /obj/abstract/Overlays/hand_layer
-		obj_overlays["[HAND_LAYER]-[index]"] = O
-	else
-		overlays.Remove(O)
-		O.overlays.len = 0
-	var/obj/item/I = get_held_item_by_index(index)
-	if(I && I.is_visible())
-		var/t_state = I.item_state
-		var/t_inhand_state = I.inhand_states[get_direction_by_index(index)]
-		var/icon/check_dimensions = new(t_inhand_state)
-		if(!t_state)
-			t_state = I.icon_state
-		O.name = "[index]"
-		O.icon = t_inhand_state
-		O.icon_state = t_state
-		O.color = I.color
-		O.pixel_x = -1*(check_dimensions.Width() - WORLD_ICON_SIZE)/2
-		O.pixel_y = -1*(check_dimensions.Height() - WORLD_ICON_SIZE)/2
-		O.layer = O.layer
-		if(I.dynamic_overlay && I.dynamic_overlay["[HAND_LAYER]-[index]"])
-			var/image/dyn_overlay = I.dynamic_overlay["[HAND_LAYER]-[index]"]
-			O.overlays.Add(dyn_overlay)
-		I.screen_loc = get_held_item_ui_location(index)
-		overlays.Add(O)
-	if(update_icons)
-		update_icons()
+	var/t_state = held_item.item_state || held_item.icon_state
+	var/t_inhand_state = held_item.inhand_states[get_direction_by_index(index)]
+	var/icon/check_dimensions = new(t_inhand_state)
+	var/mutable_appearance/hand_overlay = mutable_appearance(t_inhand_state, t_state, -HAND_LAYER)
+	hand_overlay.color = held_item.color
+	hand_overlay.pixel_x = -1*(check_dimensions.Width() - WORLD_ICON_SIZE)/2
+	hand_overlay.pixel_y = -1*(check_dimensions.Height() - WORLD_ICON_SIZE)/2
+	if(held_item.dynamic_overlay && held_item.dynamic_overlay["[HAND_LAYER]-[index]"])
+		var/mutable_appearance/dyn_overlay = held_item.dynamic_overlay["[HAND_LAYER]-[index]"]
+		hand_overlay.overlays += dyn_overlay
+	held_item.screen_loc = get_held_item_ui_location(index)
+	overlays += overlays_standing["[HAND_LAYER]-[index]"] = hand_overlay
 
 /mob/living/simple_animal/hostile/gremlin/grinch/UnarmedAttack(var/atom/A)
 	if(istype(A, /obj/machinery) || istype(A, /obj/structure))
@@ -161,30 +141,18 @@
 		delayNextAttack(10)
 	A.attack_hand(src)
 
-/mob/living/simple_animal/hostile/gremlin/grinch/update_inv_back(var/update_icons=1)
-	overlays -= obj_overlays[BACK_LAYER]
-	if(back && back.is_visible())
-		back.screen_loc = ui_back
-		var/image/standing	= image("icon" = ((back.icon_override) ? back.icon_override : 'icons/mob/back.dmi'), "icon_state" = "[back.icon_state]")
-		var/obj/abstract/Overlays/O = obj_overlays[BACK_LAYER]
-		O.icon = standing
-		O.icon_state = standing.icon_state
-		O.overlays.len = 0
-		if(back.dynamic_overlay)
-			if(back.dynamic_overlay["[BACK_LAYER]"])
-				var/image/dyn_overlay = back.dynamic_overlay["[BACK_LAYER]"]
-				O.overlays += dyn_overlay
-				O.icon = standing
-		O.icon_state = standing.icon_state
-		var/image/I = new()
-		I.appearance = O.appearance
-		I.plane = FLOAT_PLANE
-		obj_overlays[BACK_LAYER] = I
-		overlays += I
-
-	if(update_icons)
-		update_icons()
-
+/mob/living/simple_animal/hostile/gremlin/grinch/update_inv_back()
+	overlays -= overlays_standing[BACK_LAYER]
+	overlays_standing[BACK_LAYER] = null
+	if(!(back && back.is_visible()))
+		return
+	back.screen_loc = ui_back
+	var/mutable_appearance/back_overlay = mutable_appearance(((back.icon_override) ? back.icon_override : 'icons/mob/back.dmi'), "[back.icon_state]", -BACK_LAYER)
+	if(back.dynamic_overlay)
+		if(back.dynamic_overlay["[BACK_LAYER]"])
+			var/mutable_appearance/dyn_overlay = back.dynamic_overlay["[BACK_LAYER]"]
+			back_overlay.overlays += dyn_overlay
+	overlays += overlays_standing[BACK_LAYER] = back_overlay
 
 // -- Clearing of refs
 /mob/living/simple_animal/hostile/gremlin/grinch/Destroy()

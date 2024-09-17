@@ -10,6 +10,15 @@
  * Misc
  */
 
+///Initialize the lazylist
+#define LAZYINITLIST(L) if (!L) { L = list(); }
+///If the provided list is empty, set it to null
+#define UNSETEMPTY(L) if (L && !length(L)) L = null
+///Remove an item from the list, set the list to null if empty
+#define LAZYREMOVE(L, I) if(L) { L -= I; if(!length(L)) { L = null; } }
+///Add an item to the list, if the list is null it will initialize it
+#define LAZYADD(L, I) if(!L) { L = list(); } L += I;
+
 //Returns a list in plain english as a string
 /proc/english_list(var/list/input, nothing_text = "nothing", and_text = " and ", comma_text = ", ", final_comma_text = "" )
 	var/total = input.len
@@ -179,6 +188,10 @@
 	else
 		result = first ^ second
 	return result
+
+//Returns a new list of only elements in both lists.
+/proc/andlist(var/list/A, var/list/B)
+	return A & B
 
 //Picks an element based on its weight
 /proc/pickweight(list/L)
@@ -365,6 +378,13 @@
 		keys += key
 	return keys
 
+//In an associative list, return a sum of the elements.
+/proc/get_sum_of_elements(var/list/L)
+	var/elements = 0
+	for(var/key in L)
+		elements += L[key]
+	return elements
+
 /proc/count_by_type(var/list/L, type)
 	var/i = 0
 	for(var/T in L)
@@ -507,3 +527,12 @@
     for(var/a in L)
         if(max == null || L[a] > max) max = L[a]
     return max
+
+//Convert a list of paths into a list of object names
+/proc/types_to_english_list(var/list/L)
+	var/list/names = list()
+	for(var/P in L)
+		if(!ispath(P))
+			continue
+		names += "\the [P:name]"
+	return english_list(names)

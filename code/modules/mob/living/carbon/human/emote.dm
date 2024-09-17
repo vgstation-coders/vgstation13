@@ -4,10 +4,10 @@
 /datum/emote/living/carbon/human/can_run_emote(var/mob/living/carbon/human/user, var/status_check = TRUE)
 	if (istype(user) && hands_needed > 0)
 		var/available_hands = 0
-		for (var/datum/organ/external/r_hand/right_hand in user.grasp_organs)
+		for (var/datum/organ/external/hand/r_hand/right_hand in user.grasp_organs)
 			if (!right_hand.status)
 				available_hands++
-		for (var/datum/organ/external/l_hand/left_hand in user.grasp_organs)
+		for (var/datum/organ/external/hand/l_hand/left_hand in user.grasp_organs)
 			if (!left_hand.status)
 				available_hands++
 		if (available_hands < hands_needed)
@@ -188,6 +188,10 @@
 				to_chat(user, "<span class = 'warning'>You gas yourself!</span>")
 				H.reagents.add_reagent(SPACE_DRUGS, rand(10,50))
 			else
+				if(istype(location,/turf/simulated))
+					var/turf/simulated/S = location
+					if(S.zone)
+						S.zone.blow_dust_motes_but_with_turf(location, -700)
 				// Was /turf/, now /mob/
 				for(var/mob/living/M in view(location,aoe_range))
 					if (M.internal != null && M.wear_mask && (M.wear_mask.clothing_flags & MASKINTERNALS))
@@ -215,6 +219,10 @@
 			if(is_unconscious)
 				H.visible_message("<span class='warning'><b>[H]</b>Explodes in a shower of gore! Damn, what a madman!", "<span class='warning'>The super-fart made you explode!</span>")
 			playsound(location, 'sound/effects/superfart.ogg', 50, 0)
+			if(istype(location,/turf/simulated))
+				var/turf/simulated/S = location
+				if(S.zone)
+					S.zone.blow_dust_motes_but_with_turf(location, -700)
 			for(var/mob/living/V in oviewers(aoe_range, get_turf(H)))
 				if(!airborne_can_reach(location,get_turf(V),aoe_range))
 					continue

@@ -28,6 +28,7 @@
 	var/static/list/plasmaman_suits
 	var/static/list/vox_suits
 	var/apply_multiplier = 1
+	var/phasic_scanning = FALSE
 	idle_power_usage = 50
 	active_power_usage = 300
 
@@ -70,8 +71,12 @@
 		/obj/item/weapon/stock_parts/scanning_module,
 		/obj/item/weapon/stock_parts/micro_laser
 	)
-	if(world.has_round_started())
-		initialize()
+	suit_overlay = new /atom/movable/overlay(src)
+	suit_overlay.icon = 'icons/obj/stationobjs.dmi'
+	suit_overlay.icon_state = "suitmodifier_overlay"
+	suit_overlay.plane = ABOVE_HUMAN_PLANE
+	suit_overlay.mouse_opacity = 0
+	vis_contents += suit_overlay
 
 /obj/machinery/suit_modifier/RefreshParts()
 	var/avg_rate = 0
@@ -86,12 +91,11 @@
 		avg_rate += ML.rating
 		amount++
 	active_power_usage = 300 / (avg_rate / amount)
+	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
+		//Phasic or higher scanners skip scanning animation
+		phasic_scanning = (SM.rating >= 3)
 
 /obj/machinery/suit_modifier/initialize()
-	suit_overlay = new
-	suit_overlay.icon = 'icons/obj/stationobjs.dmi'
-	suit_overlay.plane = ABOVE_HUMAN_PLANE
-	vis_contents += suit_overlay
 	if(!plasmaman_suits)
 		plasmaman_suits = build_plasmaman_suit_list()
 	if(!vox_suits)
@@ -113,10 +117,12 @@
 
 /obj/machinery/suit_modifier/attackby(var/obj/item/I, var/mob/user)
 	if(istype(I, /obj/item/rig_module) && user.drop_item(I, src))
+		playsound(src, 'sound/machines/click.ogg', 50, 1)
 		say("\The [I] installed.", class = "binaryradio")
 		modules_to_install.Add(I)
 		return
 	if(istype(I, /obj/item/weapon/cell) && !cell && user.drop_item(I, src))
+		playsound(src, 'sound/machines/click.ogg', 50, 1)
 		say("\The [I] installed.", class = "binaryradio")
 		cell = I
 		return
@@ -124,6 +130,8 @@
 
 /obj/machinery/suit_modifier/attack_hand(mob/user)
 	if(!isliving(user))
+		return
+	if(!powered())
 		return
 	if(is_locking(/mob/living/carbon/human))
 		playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
@@ -146,9 +154,9 @@
 			process_module_installation(H)
 			return
 		if(istype(worn_suit, /obj/item/clothing/suit/space/plasmaman))
-			process_suit_paint(H, plasmaman_suits)
+			process_suit_replace(H, plasmaman_suits)
 		else if(istype(worn_suit, /obj/item/clothing/suit/space/vox))
-			process_suit_paint(H, vox_suits)
+			process_suit_replace(H, vox_suits)
 		else
 			say("Unable to detect compatible spacesuit on [H].", class = "binaryradio")
 	else if((modules_to_install.len || cell) && !activated)
@@ -164,23 +172,63 @@
 			modules_to_install -= removed
 
 /obj/machinery/suit_modifier/proc/activation_animation()
+	//Close the scanner module
 	flick("suitmodifier_activate", suit_overlay)
-	sleep(12)
+	playsound(src, 'sound/machines/click.ogg', 30, 1)
+	sleep(11)
+	//Lights turn on
+	suit_overlay.set_light(1,1,"#00FF00")
+	sleep(1)
+	suit_overlay.icon_state = "suitmodifier_active"
+
+	//If the scanners are good enough, we don't need to scan the suit
+	if(phasic_scanning)
+		return
+
+	//Begin the scanner, scans 4 times
+	flick("suitmodifier_working", suit_overlay)
+	sleep(3)
+	playsound(src, 'sound/items/healthanalyzer.ogg', 30, 1)
+	sleep(9)
+	playsound(src, 'sound/items/healthanalyzer.ogg', 30, 1)
+	sleep(17)
+	playsound(src, 'sound/items/healthanalyzer.ogg', 30, 1)
+	sleep(9)
+	playsound(src, 'sound/items/healthanalyzer.ogg', 30, 1)
+	sleep(9)
+	playsound(src, 'sound/machines/click.ogg', 30, 1)
 
 /obj/machinery/suit_modifier/proc/working_animation()
-	flick("suitmodifier_working", suit_overlay)
-	sleep(38)
-
+	//Close the big doors
 	flick("suitmodifier_close", suit_overlay)
-	sleep(22)
+	playsound(src, 'sound/machines/poddoor.ogg', 50, 1)
+	sleep(12)
+	//Light gets covered up, anim still playing
+	suit_overlay.set_light(0,0,"#00FF00")
+	sleep(10)
 
+	//Doors are closed
 	suit_overlay.icon_state = "suitmodifier_closed"
 	sleep(20)
 
 /obj/machinery/suit_modifier/proc/finished_animation()
-	suit_overlay.icon_state = null
-	playsound(src, 'sound/machines/pressurehiss.ogg', 40, 1)
+	//Pssshhh, doors open
+	playsound(src, 'sound/machines/poddoor.ogg', 50, 1)
+	playsound(src, 'sound/machines/pressurehiss.ogg', 30, 1)
 	new /obj/effect/smoke(get_turf(src))
+	flick("suitmodifier_open", suit_overlay)
+	sleep(22)
+
+	suit_overlay.icon_state = "suitmodifier_overlay"
+
+/obj/machinery/suit_modifier/proc/cancel_animation()
+	//Open the scanner module
+	suit_overlay.set_light(0,0,"#00FF00")
+	flick("suitmodifier_deactivate", suit_overlay)
+	sleep(12)
+	playsound(src, 'sound/machines/click.ogg', 30, 1)
+
+	suit_overlay.icon_state = "suitmodifier_overlay"
 
 /proc/filter_suit_list(mob/living/carbon/human/guy, list/suit_list)
 	var/guy_access = guy.GetAccess()
@@ -191,96 +239,131 @@
 			filtered_suit_list[entry] = list(suit_list[entry][SUIT_INDEX], suit_list[entry][HELMET_INDEX])
 	return filtered_suit_list
 
-/obj/machinery/suit_modifier/proc/process_suit_paint(mob/living/carbon/human/guy, list/suit_list)
+/obj/machinery/suit_modifier/proc/process_suit_replace(mob/living/carbon/human/guy, list/suit_list)
 	if(activated)
 		return
-	lock_atom(guy)
-	var/obj/item/clothing/suit/space/chosen_job = input(guy, "What kind of paint do you wish to apply?") as null|anything in filter_suit_list(guy, suit_list)
-	if(!chosen_job || activated || guy.incapacitated() || guy.loc != loc)
-		unlock_atom(guy)
-		return
-	var/obj/item/clothing/suit/space/chosen_suit = suit_list[chosen_job][SUIT_INDEX]
-	var/obj/item/clothing/head/helmet/space/plasmaman/chosen_helmet = suit_list[chosen_job][HELMET_INDEX]
 	activated = TRUE
 	use_power = MACHINE_POWER_USE_ACTIVE
+	lock_atom(guy)
 	activation_animation()
+	var/obj/item/clothing/suit/space/chosen_job = input(guy, "What kind of model do you wish to apply?") as null|anything in filter_suit_list(guy, suit_list)
+	if(!chosen_job || activated || guy.incapacitated() || guy.loc != loc)
+		cancel_animation()
+		unlock_atom(guy)
+		use_power = MACHINE_POWER_USE_IDLE
+		activated = FALSE
+		return
 	working_animation()
-	var/obj/item/clothing/suit/space/suit = guy.get_item_by_slot(slot_wear_suit)
-	suit.desc = "The colors are a bit dodgy."
-	suit.icon_state = initial(chosen_suit.icon_state)
-	guy.update_inv_wear_suit()
-	var/obj/item/clothing/head/helmet/space/helmet = guy.get_item_by_slot(slot_head)
-	if(istype(helmet))
-		helmet.icon_state = initial(chosen_helmet.icon_state)
-		desc = "The colors are a bit dodgy."
-		if(istype(helmet, /obj/item/clothing/head/helmet/space/plasmaman))
-			var/obj/item/clothing/head/helmet/space/plasmaman/special_snowflake = helmet
-			special_snowflake.base_state = initial(chosen_helmet.base_state)
-		guy.update_inv_head()
-	finished_animation()
+	var/obj/item/clothing/suit/space/chosen_suit = suit_list[chosen_job][SUIT_INDEX]
+	var/obj/item/clothing/head/helmet/space/chosen_helmet = suit_list[chosen_job][HELMET_INDEX]
+	spawn(rand(3,10) / apply_multiplier)
+		playsound(src, 'sound/effects/spray3.ogg', 30, 1)
+	spawn(rand(20,30) / apply_multiplier)
+		playsound(src, 'sound/effects/spray2.ogg', 30, 1)
+	spawn(5 SECONDS / apply_multiplier)
+		playsound(src, 'sound/effects/spray.ogg', 30, 1)
+	if(do_after(guy, src, 8 SECONDS / apply_multiplier, needhand = FALSE))
+		var/obj/item/clothing/suit/space/oldsuit = guy.get_item_by_slot(slot_wear_suit)
+		if(oldsuit)
+			guy.equip_to_slot(new chosen_suit, slot_wear_suit)
+			qdel(oldsuit)
+			guy.update_inv_wear_suit()
+		var/obj/item/clothing/head/helmet/space/oldhelmet = guy.get_item_by_slot(slot_head)
+		if(oldhelmet)
+			guy.equip_to_slot(new chosen_helmet, slot_head)
+			qdel(oldhelmet)
+			guy.update_inv_head()
 	unlock_atom(guy)
+	finished_animation()
 	use_power = MACHINE_POWER_USE_IDLE
 	activated = FALSE
 
 /obj/machinery/suit_modifier/proc/process_module_installation(var/mob/living/carbon/human/H)
 	if(activated)
 		return
-	lock_atom(H)
+	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
+	if(!R)
+		return
 	activated = TRUE
 	use_power = MACHINE_POWER_USE_ACTIVE
-	activation_animation()
-	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
+	R.canremove = FALSE
+	lock_atom(H)
 	R.deactivate_suit()
+	activation_animation()
+	working_animation()
 	for(var/obj/item/rig_module/RM in modules_to_install)
-		if(locate(RM.type) in R.modules) //One already installed
+		var/install_result=RM.can_install(R)
+		if(!install_result[1]) //more versatile check, allows for custom install conditions.
+			say(install_result[2], class = "binaryradio")
 			continue
+		playsound(src, 'sound/mecha/hydraulic.ogg', 40, 1)
+		spawn(rand(4 SECONDS, 5 SECONDS) / apply_multiplier)
+			playsound(src, 'sound/items/Welder.ogg', 50, 1)
 		if(do_after(H, src, 8 SECONDS / apply_multiplier, needhand = FALSE))
 			say("Installing [RM] into \the [R].", class = "binaryradio")
 			R.modules.Add(RM)
 			RM.rig = R
 			RM.forceMove(R)
 			modules_to_install.Remove(RM)
-	working_animation()
 	if(cell) //Can't answer the prompt if you're incapacitated.
 		var/choice = alert(H, "Do you wish to install [cell]?", src, "Yes", "No")
 		if((choice == "Yes") && H.Adjacent(src) && !H.incapacitated())
 			say("Installing [cell] into to \the [R].", class = "binaryradio")
-			if(R.cell)
-				R.cell.forceMove(get_turf(src))
-			cell.forceMove(R)
-			R.cell = cell
-			cell = null
-	finished_animation()
-	unlock_atom(H)
+			playsound(src, 'sound/mecha/hydraulic.ogg', 40, 1)
+			spawn(rand(4 SECONDS, 5 SECONDS) / apply_multiplier)
+				playsound(src, 'sound/misc/click.ogg', 50, 1)
+			if(do_after(H, src, 8 SECONDS / apply_multiplier, needhand = FALSE))
+				R.cell?.forceMove(get_turf(src))
+				cell.forceMove(R)
+				R.cell = cell
+				cell = null
+	if(!R.current_glue_state)
+		R.canremove = TRUE
 	R.initialize_suit()
+	unlock_atom(H)
+	finished_animation()
 	use_power = MACHINE_POWER_USE_IDLE
 	activated = FALSE
 
 /obj/machinery/suit_modifier/proc/process_module_removal(var/mob/living/carbon/human/H)
 	if(activated)
 		return
-	lock_atom(H)
+	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
+	if(!R)
+		return
+	// if we have something that's not a rig_module here we have a problem
+	if(!R.modules.len)
+		return
 	activated = TRUE
 	use_power = MACHINE_POWER_USE_ACTIVE
-	activation_animation()
-	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
+	R.canremove = FALSE
+	lock_atom(H)
 	R.deactivate_suit()
-	if(R.modules.len)
-		// if we have something that's not a rig_module here we have a problem
-		var/obj/item/rig_module/RM = input(H, "Choose an upgrade to remove from [R].", R) as null|anything in R.modules
-		if(!RM|| !H.Adjacent(src) || H.incapacitated())
-			unlock_atom(H)
-			activated = FALSE
-			return
-		working_animation()
-		say("Uninstalling [RM] from \the [R].", class = "binaryradio")
-		if(do_after(H, src, 8 SECONDS / apply_multiplier, needhand = FALSE))
-			R.modules.Remove(RM)
-			RM.rig = null
-			RM.forceMove(get_turf(src))
-		finished_animation()
-	unlock_atom(H)
+	activation_animation()
+	var/obj/item/rig_module/RM = input(H, "Choose an upgrade to remove from [R].", R) as null|anything in R.modules
+	if(!RM|| !H.Adjacent(src) || H.incapacitated())
+		cancel_animation()
+		if(!R.current_glue_state)
+			R.canremove = TRUE
+		unlock_atom(H)
+		R.initialize_suit()
+		use_power = MACHINE_POWER_USE_IDLE
+		activated = FALSE
+		return
+	say("Uninstalling [RM] from \the [R].", class = "binaryradio")
+	working_animation()
+	playsound(src, 'sound/mecha/hydraulic.ogg', 40, 1)
+	spawn(rand(4 SECONDS, 5 SECONDS) / apply_multiplier)
+		playsound(src, 'sound/items/Welder.ogg', 60, 1)
+	if(do_after(H, src, 8 SECONDS / apply_multiplier, needhand = FALSE))
+		R.modules.Remove(RM)
+		RM.rig = null
+		RM.forceMove(get_turf(src))
+	if(!R.current_glue_state)
+		R.canremove = TRUE
 	R.initialize_suit()
+	unlock_atom(H)
+	finished_animation()
 	use_power = MACHINE_POWER_USE_IDLE
 	activated = FALSE
 

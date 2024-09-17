@@ -13,7 +13,7 @@
 	name = "bar stool"
 	desc = "Apply butt. Get drunk."
 	icon_state = "bar-stool"
-	
+
 /obj/item/weapon/stool/cushion
 	name = "cushion"
 	desc = "Apply butt. Get comfy."
@@ -26,8 +26,9 @@
 	name = "piano stool"
 	desc = "Apply butt. Become Mozart."
 	icon_state = "stool_piano"
-	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 3
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	sheet_type = /obj/item/stack/sheet/wood
 
 /obj/item/weapon/stool/piano/initialize()

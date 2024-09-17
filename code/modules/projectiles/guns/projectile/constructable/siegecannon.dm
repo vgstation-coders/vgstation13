@@ -1,5 +1,5 @@
 /obj/structure/siege_cannon
-	name = "Siege Cannon"
+	name = "\improper Siege Cannon"
 	desc = "A heavy-duty cannon. Capable of knocking down walls and fortifications when loaded with the right munitions."
 	icon = 'icons/obj/siege_cannon.dmi'
 	icon_state = "siege_cannon"
@@ -53,7 +53,7 @@
 		loadCannon(G, user)
 		return
 	if(wFuel >= maxFuel)
-		to_chat(user,"<span class='warning'>The [src] is already full.</span>" )
+		to_chat(user,"<span class='warning'>\The [src] is already full.</span>" )
 		return
 	for(var/datum/reagent/R in G.reagents.reagent_list)
 		if(R.id != FUEL)
@@ -81,7 +81,7 @@
 		if(istype(cAmmo, /obj/item/anvil))
 			to_chat(user,"<span class='warning'>You force \the [cAmmo] into \the [src], somehow.</span>")	//Terrifying
 		else
-			to_chat(user,"<span class='warning'>The [cAmmo] is too large to fit in \the [src].</span>")
+			to_chat(user,"<span class='warning'>\The [cAmmo] is too large to fit in \the [src].</span>")
 			return
 	if(user.drop_item(cAmmo, src))
 		loadedItem = cAmmo
@@ -209,7 +209,7 @@
 	throw_speed = 1
 	throw_range = 2	//Rather heavy
 	force = 10	//Somehow less than a toolbox but okay
-	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL*3)
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL*20)
 	w_type = RECYK_METAL
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND
 	var/cannonFired = FALSE
@@ -485,7 +485,7 @@
 	desc = "A large sphere of honk."
 	icon = 'icons/obj/siege_cannon.dmi'
 	icon_state = "clownnonball"
-	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_METAL*3)
+	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_CLOWN*20)
 	adjRange = 50
 	adjSpeed = 1
 	adjForce = 0

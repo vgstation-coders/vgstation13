@@ -4,6 +4,7 @@ var/list/small_explosion_sound = list('sound/effects/Explosion_Small1.ogg','soun
 var/list/spark_sound = list('sound/effects/sparks1.ogg','sound/effects/sparks2.ogg','sound/effects/sparks3.ogg','sound/effects/sparks4.ogg')
 var/list/rustle_sound = list('sound/effects/rustle1.ogg','sound/effects/rustle2.ogg','sound/effects/rustle3.ogg','sound/effects/rustle4.ogg','sound/effects/rustle5.ogg')
 var/list/punch_sound = list('sound/weapons/punch1.ogg','sound/weapons/punch2.ogg','sound/weapons/punch3.ogg','sound/weapons/punch4.ogg')
+var/list/kick_sound = list('sound/weapons/kick.ogg')
 var/list/crowbar_hit_sound = list('sound/weapons/cbar_hit1.ogg','sound/weapons/cbar_hit2.ogg')
 var/list/crowbar_hitbod_sound = list('sound/weapons/cbar_hitbod1.ogg','sound/weapons/cbar_hitbod2.ogg','sound/weapons/cbar_hitbod3.ogg')
 var/list/clown_sound = list('sound/effects/clownstep1.ogg','sound/effects/clownstep2.ogg')
@@ -40,6 +41,7 @@ var/list/disappear_sound = list('sound/effects/disappear_1.ogg', 'sound/effects/
 var/list/pd_wail_sound = list('sound/voice/pdwail1.ogg', 'sound/voice/pdwail2.ogg', 'sound/voice/pdwail3.ogg')
 var/list/procgun_sound = list('sound/weapons/procgun1.ogg', 'sound/weapons/procgun2.ogg')
 var/list/trayhit_sound = list('sound/items/trayhit1.ogg', 'sound/items/trayhit2.ogg')
+var/list/sand_sound = list('sound/effects/sand_walk1.ogg', 'sound/effects/sand_walk2.ogg')
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
@@ -62,6 +64,10 @@ var/list/trayhit_sound = list('sound/items/trayhit1.ogg', 'sound/items/trayhit2.
 		extrarange = 0
 	if(!vol) //don't do that
 		return
+	if(istype(source,/atom/movable))
+		var/atom/movable/AM = source
+		if(AM.silence_sprayed) //shhhh
+			return
 
 	if(turf_source)
 		vol *= turf_source.volume_mult
@@ -186,6 +192,8 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(rustle_sound)
 			if ("punch")
 				soundin = pick(punch_sound)
+			if ("kick")
+				soundin = pick(kick_sound)
 			if ("crowbar_hit")
 				soundin = pick(crowbar_hit_sound)
 			if ("crowbar_hitbod")
@@ -250,6 +258,8 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(procgun_sound)
 			if ("trayhit")
 				soundin = pick(trayhit_sound)
+			if ("sand")
+				soundin = pick(sand_sound)
 			//if ("gunshot") soundin = pick(gun_sound)
 	else if(islist(soundin))
 		soundin = pick(soundin)

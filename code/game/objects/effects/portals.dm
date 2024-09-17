@@ -130,7 +130,7 @@
 				P.red_portal = null
 				P.sync_portals()
 	if (marke_sparks)
-		spark(loc, 5)
+		spark(loc, 5, surfaceburn = FALSE)
 	..()
 
 /obj/effect/portal/cultify()

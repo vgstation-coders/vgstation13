@@ -17,7 +17,7 @@
 	selection_type = "range"
 	spell_flags = WAIT_FOR_CLICK
 
-	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
+	valid_targets = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 
 	hud_state = "wiz_horse"
 

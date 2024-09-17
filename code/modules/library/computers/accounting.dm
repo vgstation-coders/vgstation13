@@ -4,7 +4,11 @@
 	pass_flags = PASSTABLE
 	machine_flags = WRENCHMOVE | FIXED2WORK
 	icon = 'icons/obj/library.dmi'
-	icon_state = "computer"
+	icon_state = "accounting"
+	moody_state = "overlay_accounting"
+	on_flick = "accounting_on"
+	off_flick = "accounting_off"
+	light_range_on = 2
 	req_access = list(access_library)
 	var/savings = 0 //Total savings this cycle
 	var/oldgood = -1 //Was our last calculation correct? -1 indicates no last query this cycle, resets to -1 at cycle end, 0 is bad, 1 is good

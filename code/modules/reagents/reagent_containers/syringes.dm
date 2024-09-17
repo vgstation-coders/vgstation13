@@ -45,6 +45,7 @@
 	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/reagent_containers/syringe/on_reagent_change()
+	..()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/pickup(mob/user)

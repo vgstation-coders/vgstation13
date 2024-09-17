@@ -1,8 +1,13 @@
+var/list/redphones = list()
+var/list/available_redphone_names1 = list("alpha","bravo","charlie","delta","echo","foxtrot","golf","hotel","india")
+var/list/available_redphone_names2 = list("anton","boris","vasilij","grigorij","dimitrij","elena","zhenja","ivan","nikolaj")
+var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
+
 /obj/item/weapon/phone
 	name = "red phone"
 	desc = "Should anything ever go wrong..."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "red_phone"
+	icon_state = "red_phone_base"
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 3.0
@@ -12,6 +17,62 @@
 	w_class = W_CLASS_SMALL
 	attack_verb = list("calls", "rings", "dials")
 	hitsound = 'sound/weapons/ring.ogg'
+	var/obj/landline/landline
+
+/obj/item/weapon/phone/New()
+	..()
+	landline = new /obj/landline/red (src,src)
+	redphones += src
+
+	var/a = pick_n_take(available_redphone_names1)
+	var/b = pick_n_take(available_redphone_names2)
+	var/c = pick_n_take(available_redphone_names3)
+	if(a && b && c)
+		name += " [a]-[b]-[c]" //9 possible "normal" names, enough for the roundstart redphones
+	else
+		name += " " + Gibberish("ERROR ERROR",50) //someone's gonna spawn 50 of them eventually, doesn't really matter if their names are the same at that point
+
+/obj/item/weapon/phone/Destroy()
+	redphones -= src
+	..()
+
+/obj/item/weapon/phone/verb/pick_up_phone()
+	set category = "Object"
+	set name = "Pick up telephone"
+	set src in oview(1)
+	if(!landline)
+		to_chat(usr, "<span class='notice'>\The [src] model does not come with a telephone!</span>")
+		return
+	landline.pick_up_phone(usr)
+
+/obj/item/weapon/phone/verb/dial()
+	set category = "Object"
+	set name = "Dial"
+	set src in oview(1)
+	if(!iscarbon(usr))
+		to_chat(usr, "<span class='notice'>You are not capable of such fine manipulation.</span>")
+		return
+	if(usr.dexterity_check())
+		var/obj/item/weapon/phone/P = input("Where would you like to call?", "destination picker") as null|anything in redphones
+		if(P)
+			landline.start_call(P.landline)
+	else
+		usr.visible_message("<span class='notice'>too clumsy to operate \the [src], [usr] bangs on it instead!</span>")
+		if(prob(50))
+			return
+		var/obj/item/weapon/phone/P = pick(redphones)
+		if(P)
+			landline.start_call(P.landline)
+
+/obj/item/weapon/phone/MouseDropFrom(atom/over_object)
+	MouseDropPickUp(over_object)
+	return ..()
+
+/obj/item/weapon/phone/attack_hand(mob/user as mob)
+	pick_up_phone(user)
+
+/obj/item/weapon/phone/attackby(var/obj/item/weapon/phone/P as obj, var/mob/user as mob)
+	landline.attackby(P, user)
 
 /obj/item/weapon/phone/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] wraps the cord of the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
@@ -94,6 +155,11 @@
 	w_class = W_CLASS_SMALL
 	w_type = RECYK_ELECTRONIC
 	starting_materials = list(MAT_IRON = 200, MAT_GLASS = 20)
+
+/obj/item/weapon/disk/jobdisk
+	name = "Alternate Jobs Database"
+	desc = "A disk which scrambles the jobs database when installed in the Labor Management Console."
+	icon_state = "synddisk"
 
 //TODO: Figure out wtf this is and possibly remove it -Nodrak
 /obj/item/weapon/dummy
@@ -194,6 +260,16 @@
 		var/mob/living/M = hit_atom
 		if(ishuman(M)) //if they're a human species
 			var/mob/living/carbon/human/H = M
+			if(!H.check_stand_ability()) //Target has no legs, how is this going to trip them up?
+				throw_failed()
+				return
+			var/leg_count //If one-legged, will halve the chance of getting caught by bolas
+			for(var/datum/organ/external/leg in H.get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
+				leg_count++
+			if(!prob(50*leg_count))
+				H.visible_message("<span class='borange'>The bolas miss [H]!</span>", "<span class='borange'>The bolas miss you!</span>")
+				throw_failed()
+				return
 			if(H.m_intent == "run") //if they're set to run (though not necessarily running at that moment)
 				if(prob(trip_prob)) //this probability is up for change and mostly a placeholder - Comic
 					step(H, H.dir)
@@ -235,7 +311,7 @@
 /obj/item/weapon/legcuffs/bolas/cable
 	name = "cable bolas"
 	desc = "A poorly made bolas, tied together with cable."
-	icon_state = ""
+	icon_state = "cbolas"
 	item_state = "cbolas"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	throw_speed = 1
@@ -243,27 +319,29 @@
 	trip_prob = 20 //gets updated below in update_icon()
 	var/obj/item/weight1 = null //the two items that are attached to the cable
 	var/obj/item/weight2 = null
-	var/cable_color = ""
+	var/cable_color = "#FF0000"
 	var/desc_empty = "A poorly made bolas, tied together with cable. It has nothing on it."
 	var/screw_state = "" //used for storing info about the screwdriver
 	var/screw_istate = ""
 
-/obj/item/weapon/legcuffs/bolas/cable/New()
+/obj/item/weapon/legcuffs/bolas/cable/New(var/turf/loc, var/_cable_color = "#FF0000")
 	..()
 	desc = desc_empty
 	weight1 = null
 	weight2 = null
+	cable_color = _cable_color
 	update_icon()
 
 /obj/item/weapon/legcuffs/bolas/cable/update_icon()
+	overlays.len = 0
+	var/image/cable_overlay = image(icon,src,"cbolas_color")
+	cable_overlay.color = cable_color
+	overlays += cable_overlay
 	if (!weight1 && !weight2)
-		icon_state = "cbolas_[cable_color]"
-		overlays.len = 0
 		desc = desc_empty
 		trip_prob = 0
 		return
 	else
-		overlays.len = 0
 		if (weight1)
 			trip_prob = 20
 			overlays += icon("icons/obj/weapons.dmi", "cbolas_weight1")
@@ -271,6 +349,14 @@
 			trip_prob = 60
 			overlays += icon("icons/obj/weapons.dmi", "cbolas_weight2")
 		desc = "A poorly made bolas, made out of \a [weight1] and [weight2 ? "\a [weight2]": "missing a second weight"], tied together with cable."
+
+	//dynamic in-hand overlay
+	var/image/cableleft = image(inhand_states["left_hand"], src, "cbolas_color")
+	var/image/cableright = image(inhand_states["right_hand"], src, "cbolas_color")
+	cableleft.color = cable_color
+	cableright.color = cable_color
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = cableleft
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = cableright
 
 /obj/item/weapon/legcuffs/bolas/cable/throw_failed()
 	if(prob(20))
@@ -291,14 +377,14 @@
 		if(istype(O, /obj/item/weapon/legcuffs/bolas)) //don't stack into infinity
 			return
 		if(I.is_wirecutter(user)) //allows you to convert the wire back to a cable coil
+			var/atom/loctogo = Adjacent(user) ? user.loc : loc
 			if(!weight1 && !weight2) //if there's nothing attached
 				user.show_message("<span class='notice'>You cut the knot in the [src].</span>")
 				I.playtoolsound(usr, 50)
-				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(user.loc) //we get back the wire lengths we put in
-				var /obj/item/stack/cable_coil/S = new /obj/item/tool/screwdriver(user.loc)
+				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(loctogo) //we get back the wire lengths we put in
+				var /obj/item/stack/cable_coil/S = new /obj/item/tool/screwdriver(loctogo)
 				C.amount = 10
-				C._color = cable_color
-				C.icon_state = "coil_[C._color]"
+				C.color = cable_color
 				C.update_icon()
 				S.item_state = screw_state
 				S.icon_state = screw_istate
@@ -309,10 +395,10 @@
 			else
 				user.show_message("<span class='notice'>You cut off [weight1] [weight2 ? "and [weight2]" : ""].</span>") //you remove the items currently attached
 				if(weight1)
-					weight1.forceMove(get_turf(usr))
+					weight1.forceMove(loctogo)
 					weight1 = null
 				if(weight2)
-					weight2.forceMove(get_turf(usr))
+					weight2.forceMove(loctogo)
 					weight2 = null
 				I.playtoolsound(user, 50)
 				update_icon()

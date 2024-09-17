@@ -73,12 +73,8 @@ var/list/global_deadchat_listeners = list()
 	var/location_text = get_coordinates_string(src)
 	log_say("[name]/[key_name(src)] (@[location_text]) Deadsay: [message]")
 
-	var/list/hearers = get_deadchat_hearers()
-	if(hearers)
-		for(var/mob/M in hearers)
-			var/rendered = "<span class='game deadsay'><a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a>"
-			rendered += "<span class='name'> [name]</span>[alt_name] <span class='message'>[message]</span></span>"
-			to_chat(M, rendered)
+	for(var/mob/M in get_deadchat_hearers())
+		to_chat(M, "<span class='game deadsay'>[formatFollow(src)] <span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>")
 
 /mob/proc/get_ear()
 	// returns an atom representing a location on the map from which this

@@ -108,7 +108,7 @@ var/list/valid_ninja_suits = list(
 	)
 
 /obj/item/stack/shuriken
-	name = "EM shuriken"
+	name = "\improper EM shuriken"
 	desc = "A specially designed shuriken that can only be used to its full potential by one trained in Spider Clan techniques. Highly effective against unarmored targets."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "shuriken"
@@ -169,11 +169,11 @@ var/list/valid_ninja_suits = list(
 	if(!..() && isliving(impacted_atom))
 		var/mob/living/L = impacted_atom
 		forceMove(L)
-		visible_message("<span class='warning'>The [src] sticks to \the [L]!</span>")
+		visible_message("<span class='warning'>\The [src] sticks to \the [L]!</span>")
 		sleep(5 SECONDS)
 		if(!gcDestroyed)
 			forceMove(L.loc)
-			visible_message("<span class='warning'>The [src] falls off \the [L].", "<span class='warning'>You hear something clattering on the floor.</span>")
+			visible_message("<span class='warning'>\The [src] falls off \the [L].", "<span class='warning'>You hear something clattering on the floor.</span>")
 
 /obj/item/stack/shuriken/pickup(mob/user)
 	var/datum/role/ninja/weeb = isninja(user)
@@ -289,6 +289,7 @@ var/list/valid_ninja_suits = list(
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	pressure_resistance = 200 * ONE_ATMOSPHERE
+	blocks_tracking = TRUE
 	var/cooldown = 0
 	var/shuriken_icon = "radial_print"
 	actions_types = list(
@@ -608,6 +609,7 @@ Helpers For Both Variants
 	active_state = "blade1"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	activeforce = 40
+	sharpness_on = 2
 	siemens_coefficient = 0
 	onsound = null
 	actions_types = list(/datum/action/item_action/toggle_teleport)
@@ -665,7 +667,7 @@ Helpers For Both Variants
 /obj/item/weapon/melee/energy/sword/ninja/equipped(mob/user)
 	if(!isninja(user) && active)
 		toggleActive(user,togglestate = "off")
-		to_chat(user,"<span class='warning'>The [src] shuts off.</span>")
+		to_chat(user,"<span class='warning'>\The [src] shuts off.</span>")
 	..()
 
 /*=======
@@ -921,6 +923,7 @@ Suit and assorted
 		spaceninja.internals.icon_state = "internal1"
 
 	spaceninja.see_in_dark_override = 8
+	spaceninja.dark_plane_alpha_override = 155
 
 /proc/equip_weeaboo(var/mob/living/carbon/human/H)
 	if(!istype(H))
@@ -945,6 +948,7 @@ Suit and assorted
 	H.equip_to_slot_or_del(new /obj/item/stack/shuriken/pizza(H,10), slot_l_store)
 
 	H.see_in_dark_override = 8
+	H.dark_plane_alpha_override = 155
 
 	var/datum/role/R = H.mind.GetRole(NINJA)
 	if(R)
