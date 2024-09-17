@@ -379,6 +379,20 @@ emp_act
 	apply_damage(damage, BRUTE, ourfoot)
 	return TRUE
 
+/**
+ * Returns a random valid foot if the mob has a foot unprotected by clothing, robolimb metal, or stone skin mutation.
+ * Otherwise, returns FALSE
+ */
+/mob/living/carbon/human/proc/has_vulnerable_foot()
+	if(check_body_part_coverage(FEET))
+		return FALSE
+	var/list/limbs_to_check = shuffle(list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT)) //pick randomly
+	for(var/has_organ in limbs_to_check)
+		var/datum/organ/external/foot = pick_usable_organ(has_organ)
+		if(foot && foot.is_organic() && !organ_has_mutation(foot, M_STONE_SKIN))
+			return foot
+	return FALSE
+
 /mob/living/carbon/human/proc/bloody_hands(var/mob/living/source, var/amount = 3)
 	if (ishuman(source))
 		var/mob/living/carbon/human/H = source
