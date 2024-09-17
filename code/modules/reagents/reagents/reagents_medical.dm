@@ -425,7 +425,7 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	var/found_any = FALSE
 	for(var/datum/reagent/reagent in holder.reagent_list)
-		if(reagent.id in charcoal_doesnt_remove)
+		if((reagent.flags & CHEMFLAG_NOTREMOVABLE) || (reagent.id in charcoal_doesnt_remove))
 			continue
 		holder.remove_reagent(reagent.id, 15*REM)
 		found_any = TRUE

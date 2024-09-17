@@ -57,10 +57,16 @@ included:
 		var/molestotransfer=  pdiff*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
 		var/datum/gas_mixture/nu_mix=air_contents.remove(molestotransfer *0.5) //we multiply by 1/2 because if we transfer the whole difference, then it'll just swap between the 2 bodies forever.
 		associated_reactor.coolant.merge(nu_mix) 
+		//air_contents.update=1
+		if(network)
+			network.update=1
 	else //flowing reactor->external
 		var/molestotransfer=  pdiff*associated_reactor.coolant.volume/(R_IDEAL_GAS_EQUATION*associated_reactor.coolant.temperature)
 		var/datum/gas_mixture/nu_mix=associated_reactor.coolant.remove(molestotransfer *0.5)
 		air_contents.merge(nu_mix)
+		if(network)
+			network.update=1
+		//air_contents.update=1
 		
 
 
@@ -79,6 +85,14 @@ included:
 	var/datum/fission_reactor_holder/associated_reactor=null
 	var/obj/item/weapon/fuelrod/currentfuelrod=null
 	var/poweroutagemsg=FALSE
+
+/obj/machinery/computer/fissioncontroller/Destroy()
+	if(currentfuelrod)
+		currentfuelrod.loc=src.loc
+		currentfuelrod=null
+	if(associated_reactor)
+		associated_reactor.handledestruction(src)
+	..()
 
 /*/proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE, var/frequency = 0)*/
 
@@ -115,12 +129,14 @@ included:
 				
 		user.visible_message("<span class='notice'>[user] starts prying the fuel rod out of \the [src].</span>", "<span class='notice'>You start prying the fuel rod out of \the [src].</span>")
 		playsound(src,'sound/items/crowbar.ogg',50)
-		if(do_after(user, src,20))
+		if(do_after(user, src,20) && currentfuelrod)
 			currentfuelrod.loc=src.loc
 			currentfuelrod=null
 			playsound(src,'sound/machines/door_unbolt.ogg',50)
 			if(associated_reactor)
 				associated_reactor.fuel=null
+		return
+	if(associated_reactor && associated_reactor.considered_on())
 		return
 	..()
 
@@ -135,6 +151,7 @@ included:
 			associated_reactor=null
 			return
 		associated_reactor.init_parts()
+		associated_reactor.controller=src
 		if(currentfuelrod)
 			associated_reactor.fuel=currentfuelrod.fueldata
 		say("Reactor setup success.", class = "binaryradio")
@@ -157,7 +174,7 @@ included:
 	if(associated_reactor.fuel.life <=0)
 		icon_state="control_depleted"
 		return
-	if(associated_reactor.temperature>=4500)
+	if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP)
 		icon_state="control_danger"
 		return
 	if(!associated_reactor.considered_on())
@@ -205,7 +222,7 @@ included:
 		return	
 		
 	associated_reactor.update_all_icos()
-	associated_reactor.coolantcycle()
+	//associated_reactor.coolantcycle()
 	if(!powered()) //with my last breath, i curse zoidberg!
 		if(!poweroutagemsg)
 			poweroutagemsg=TRUE
@@ -220,7 +237,7 @@ included:
 	if(associated_reactor.fuel.life<=0) //fuel depleted? no reactions to be done.
 		return
 
-	associated_reactor.fissioncycle()
+	//associated_reactor.fissioncycle()
 	
 	if(associated_reactor.fuel.life<=0)
 		say("Reactor fuel depleted.", class = "binaryradio")
@@ -399,10 +416,13 @@ included:
 					to_chat(user, "<span class='notice'>There's already a piping added!</span>")	
 					return
 				var/obj/item/pipe/P = W
-				if(P.pipe_type==0)
+				if(P.pipe_type!=0)
 					to_chat(user, "<span class='notice'>This isn't the right pipe to use!</span>")	
 					return
+				qdel(W)
 				pipeadded=TRUE
+				user.visible_message("<span class='notice'>[user] adds piping into \the [src].</span>", "<span class='notice'>You add piping into \the [src].</span>")	
+				return
 			if(pipeadded && W.is_wrench(user))
 				W.playtoolsound(src, 100)	
 				to_chat(user, "<span class='notice'>You remove the piping from \the [src]</span>")	
@@ -426,7 +446,7 @@ included:
 					dir=NORTH
 					nds="north"
 				to_chat(user, "<span class='notice'>You turn \the [src]'s piping. It is now facing [nds]</span>")	
-				
+				return
 			to_chat(user, "<span class='notice'>You can't find a use for \the [W]</span>")	
 			return
 		if(3) // plating added
@@ -439,8 +459,10 @@ included:
 					if(!pipeadded)
 						var/obj/structure/fission_reactor_case/newcase= new /obj/structure/fission_reactor_case
 						newcase.loc=src.loc
+						newcase.dir=src.dir
 					else
 						var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/newcase= new /obj/machinery/atmospherics/unary/fissionreactor_coolantport
+						newcase.dir=src.dir
 						newcase.loc=src.loc
 					qdel(src)
 

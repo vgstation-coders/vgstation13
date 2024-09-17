@@ -253,13 +253,14 @@
 	color = "#808080" //rgb: 128, 128, 128
 	density = 9.73
 	specheatcap = 0.936
+	custom_metabolism = 1 //decays really fast, so it shouldn't linger long.
 	fission_time=300 //5 minutes.
 	fission_power=5000
 	
 /datum/reagent/plutonium/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	M.apply_radiation(3, RAD_INTERNAL)
+	M.apply_radiation(5, RAD_INTERNAL)
 
 
 /datum/reagent/lead
@@ -280,13 +281,15 @@
 /datum/reagent/thallium
 	name ="Thallium"
 	id = THALLIUM
-	description = "A silvery-grey metallic chemical element in the post-transition metal series. Toxic when touched, ingested, or inhaled."
+	description = "A silvery-grey metallic chemical element in the post-transition metal series. Toxic when touched, ingested, or inhaled. Very difficult to remove from the body once exposed."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#CACAD2" //rgb: 202, 202, 210
 	density = 11.87
+	custom_metabolism = 0.1
+	flags = CHEMFLAG_NOTREMOVABLE
 	specheatcap = 0.128
 
-/datum/reagent/thallium/on_mob_life(var/mob/living/M)
+/datum/reagent/thallium/on_mob_life(var/mob/living/M) //the point of this is to be a nuisance. stays in you no matter what, but not really *that* deadly, just kind of annoying. You'd have to really piss someone off to get a mouthfull of this.
 	if(..())
 		return 1
-	M.adjustToxLoss(2)
+	M.adjustToxLoss(.5)

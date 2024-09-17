@@ -420,3 +420,56 @@
 	access = list(access_engine_minor)
 	group = "Engineering"
 	containsdesc = "A cutting edge machine that tears into a universe orthogonal to ours and applies alternative laws of physics to gaseous oxygen in its immediate vicinity. Requires a bluespace crystal to work (an artificial crystal comes with this crate!)."
+
+/datum/supply_packs/fissionreactor_starterkit
+	contains = list(
+		/obj/item/weapon/storage/box/fissionsupply_controller,
+		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
+		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
+		/obj/item/weapon/storage/box/fissionsupply_fuelmaker,
+		/obj/item/weapon/fuelrod/starter,
+		/obj/item/weapon/circuitboard/fission_control_rod,
+		/obj/item/weapon/circuitboard/fission_fuel_rod,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+	
+	)
+	name = "Fission reactor starter kit"
+	cost = 500 //Includes a lot of plasteel. Fuck you, ask the miners for more you socially inept jobbie.
+	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	containername = "Fission reactor starter kit"
+	group = "Engineering"
+	access = list(access_engine_major)
+	var/static/list/shard_counts_by_user = list()
+	containsdesc = "Everything you need to build a very basic fission reactor. Comes with a pre-filled fuel rod."
+	
+/datum/supply_packs/fissionreactor_starterkit
+	contains = list(
+		/obj/item/weapon/circuitboard/fission_control_rod,
+		/obj/item/weapon/circuitboard/fission_fuel_rod,
+		/obj/item/weapon/circuitboard/fission_control_rod,
+		/obj/item/weapon/circuitboard/fission_fuel_rod,
+		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
+		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+	)
+	name = "Fission reactor expansion pak"
+	cost = 200 //See above.
+	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	containername = "Fission reactor starter kit"
+	group = "Engineering"
+	access = list(access_engine_major)
+	var/static/list/shard_counts_by_user = list()
+	containsdesc = "Contains supplies to expand an existing fission reactor. Remember to turn it off and drain the coolant first!"
+		
+	

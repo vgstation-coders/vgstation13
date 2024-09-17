@@ -10,6 +10,9 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/list/control_rods=list()
 	var/list/coolant_ports=list()
 	var/list/casing_parts=list()
+	var/list/breaches=list()
+	var/obj/machinery/computer/fissioncontroller/controller=null
+	var/obj/ticker=null //what ticks it.
 	var/heat_capacity=0
 	var/fuel_reactivity=1
 	var/fuel_reactivity_with_rods=0
@@ -37,6 +40,21 @@ datums for the fission reactor, which includes the fuel and reactor
 	coolant = new /datum/gas_mixture
 	coolant.temperature = T20C //vaguely room temp.
 	coolant.volume = 2500
+	fissionreactorlist+=src
+
+/datum/fission_reactor_holder/Destroy()
+	fissionreactorlist-=src
+
+/datum/fission_reactor_holder/proc/handledestruction(var/obj/shitgettingfucked)
+	if(istype(shitgettingfucked, /obj/machinery/computer/fissioncontroller ))
+		controller=null
+	breaches+=shitgettingfucked.loc
+	recalculatereactorstats()
+	
+	//init_parts() //re-scan the parts to generate the new stats. the show must go on!
+
+	//if(fuel_rods.len==0) //no fuel rods means nothing to react with.
+		//qdel(src)
 
 /datum/fission_reactor_holder/proc/considered_on()
 	if(!fuel) //no fuel? not on.
@@ -213,6 +231,9 @@ datums for the fission reactor, which includes the fuel and reactor
 	heat_capacity=sizex*sizey*1000 // this scales with area as well.
 	return null
 	
+/datum/fission_reactor_holder/proc/meltdown()	
+	//TODO: FSU when it gets too hot
+	
 /datum/fission_reactor_holder/proc/clear_parts() 
 	for (var/i=1,i<=casing_parts.len,i++)
 		casing_parts[i].associated_reactor=null
@@ -268,12 +289,23 @@ datums for the fission reactor, which includes the fuel and reactor
 
 	for (var/i=1,i<=fuel_rods.len,i++)
 		fuel_rods[i].update_icon()
-		fuel_reactivity+=fuel_rods[i].get_reactivity()
-		fuel_reactivity_with_rods+=fuel_rods[i].get_iscontrolled() ? fuel_rods[i].get_reactivity() : 0
-		fuel_rods_affected_by_rods+=fuel_rods[i].get_iscontrolled() ? 1 : 0
+	recalculatereactorstats()
+
+/datum/fission_reactor_holder/proc/recalculatereactorstats()
+	world.log << "generating reactor stats..."
+	fuel_reactivity_with_rods=0
+	fuel_reactivity=0
+	fuel_rods_affected_by_rods=0
+	
+	for (var/i=1,i<=fuel_rods.len,i++)
+		var/reactivity=fuel_rods[i].get_reactivity()
+		var/controlled=fuel_rods[i].get_iscontrolled()
+		
+		fuel_reactivity+=reactivity
+		fuel_reactivity_with_rods+=(controlled ? 0 : reactivity)
+		fuel_rods_affected_by_rods+=(controlled ? 1 : 0)
 	fuel_reactivity/=fuel_rods.len //average them out.
 	fuel_reactivity_with_rods/=fuel_rods.len
-	
 	
 /datum/fission_reactor_holder/proc/update_all_icos()
 	for (var/i=1,i<=control_rods.len,i++)
@@ -292,8 +324,7 @@ datums for the fission reactor, which includes the fuel and reactor
 		return
 		
 	var/speedfactor=fuel_rods.len - (fuel_rods_affected_by_rods*control_rod_insertion)
-	var/powerfactor=(fuel_reactivity*fuel_rods.len) - (fuel_reactivity_with_rods*control_rod_insertion)
-	
+	var/powerfactor=fuel_rods.len*((fuel_reactivity) - ( (fuel_reactivity-fuel_reactivity_with_rods)*control_rod_insertion))
 
 	var/totalpowertodump=0
 	if(fuel.wattage < fuel.absorbance) //slow down the reaction if there's not enuff powah
@@ -304,7 +335,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	
 
 	if (fuel.lifetime>0)
-		fuel.life-= (2*speedfactor)/fuel.lifetime //multiply this by 2 because it ticks every 2 seconds
+		fuel.life-= (speedfactor)/fuel.lifetime
 		fuel.life=max(0,fuel.life)
 	else
 		fuel.life=0
@@ -316,14 +347,15 @@ datums for the fission reactor, which includes the fuel and reactor
 	
 	if(temperature>=FISSIONREACTOR_MELTDOWNTEMP)
 		if(graceperiodtick)
-			//TODO: FSU when it gets too hot
-			world.log << "kabooom!"
+			meltdown()
 		graceperiodtick=TRUE
 	else
 		graceperiodtick=FALSE
 	
 	
 /datum/fission_reactor_holder/proc/coolantcycle()
+	if(coolant_ports.len==0)
+		goto skipcoolantports //avoiding div by 0. yes, this is really lazy, i know.
 	for(var/i=1, i<=coolant_ports.len,i++)
 		var/real_index= ((i+coolantport_counter)%coolant_ports.len)+1 //this way we spread out any first index prefrence.
 		var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/coolant_port=coolant_ports[real_index]
@@ -332,6 +364,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	coolantport_counter++
 	coolantport_counter=(coolantport_counter%coolant_ports.len)+1 //shift it around.	
 	
+	skipcoolantports:
 	var/chp=coolant.heat_capacity()
 	
 	//unrealistically, the heat transfer is 100% between the 2 sources.
