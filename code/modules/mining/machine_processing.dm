@@ -445,8 +445,8 @@
 			return 1
 
 		var/datum/money_account/acct = signal.data["claimcredits"]
-		if(istype(acct) && acct.charge(-credits, null, "Claimed mining credits.", src.name, dest_name = "Processing Machine"))
-			credits = 0
+		if(istype(acct) && acct.charge(-floor(credits), null, "Claimed mining credits.", src.name, dest_name = "Processing Machine"))
+			credits -= floor(credits)
 
 	if(signal.data["inc_priority"])
 		var/idx = clamp(signal.data["inc_priority"], 2, recipes.len)
