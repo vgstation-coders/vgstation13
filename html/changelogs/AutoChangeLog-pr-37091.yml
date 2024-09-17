@@ -1,0 +1,4 @@
+author: falcon2346
+delete-after: true
+changes:
+- tweak: Changed patient rooms to only require access from one side.
