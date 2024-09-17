@@ -223,6 +223,15 @@
 	icon_state = "dark"
 	},
 /area/vault/advanced_pocketsat)
+"Q" = (
+/obj/machinery/door_control{
+	name = "Satellite Door Control";
+	id_tag = "APS";
+	pixel_x = 24;
+	specialfunctions = 4
+	},
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
 "R" = (
 /obj/machinery/teleport/hub,
 /obj/machinery/turretid{
@@ -433,7 +442,7 @@ a
 "}
 (8,1,1) = {"
 G
-M
+Q
 J
 M
 M

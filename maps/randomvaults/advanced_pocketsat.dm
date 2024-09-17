@@ -11,6 +11,7 @@
 	desc = "It opens and closes. It appears to have a microphone and speaker attached."
 	locked = 1
 	flags = FPRINT | HEAR
+	id_tag = "APS"
 	var/list/codewords = list()
 	var/last_saytime = 0
 
