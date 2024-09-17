@@ -114,7 +114,7 @@
 	if(glasstype)
 		if(glasshealth > 0)
 			glasshealth -= damage/2
-			if(sound)
+			if(sound && loc)
 				playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 			if(user && I)
 				user.visible_message("<span class='warning'>[user] hits \the [src] glass with \a [I].</span>",\
@@ -132,7 +132,7 @@
 		break_glass(TRUE)
 		return 0
 	health -= damage/2
-	if(sound)
+	if(sound && loc)
 		playsound(loc, 'sound/effects/grillehit.ogg', 80, 1)
 	if (health > 0)
 		if(user && I)
