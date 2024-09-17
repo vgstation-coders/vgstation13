@@ -233,7 +233,10 @@
 /obj/item/clothing/accessory/stethoscope/proc/heartbeat(mob/user)
 	var/mob/M = get_holder_of_type(src,/mob)
 	if(M)
-		to_chat(M,"*thump*")
+		if(listening && M.Adjacent(listening))
+			to_chat(M,"*thump*")
+		else
+			on_move(M)
 
 //Medals
 /obj/item/clothing/accessory/medal
