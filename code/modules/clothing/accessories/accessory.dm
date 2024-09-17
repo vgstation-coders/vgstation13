@@ -191,11 +191,7 @@
 	user.register_event(/event/moved, src, nameof(src::on_move()))
 
 /obj/item/clothing/accessory/stethoscope/dropped(mob/user)
-	user.unregister_event(/event/moved, src, nameof(src::on_move()))
-	if(listening)
-		listening.unregister_event(/event/moved, src, nameof(src::on_move()))
-		listening.unregister_event(/event/heartbeat, src, nameof(src::heartbeat()))
-		listening = null
+	on_move(user)
 	. = ..()
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
@@ -215,11 +211,8 @@
 						if(M.oxyloss < 50)
 							sound_strength = "hear a healthy"
 						sound = "pulse and respiration"
-
-					if(listening)
-						listening.unregister_event(/event/moved, src, nameof(src::on_move()))
-						listening.unregister_event(/event/heartbeat, src, nameof(src::heartbeat()))
-						listening = null
+					
+					clear_listening()
 					listening = M
 					listening.register_event(/event/moved, src, nameof(src::on_move()))
 					listening.register_event(/event/heartbeat, src, nameof(src::heartbeat()))
@@ -229,6 +222,9 @@
 
 /obj/item/clothing/accessory/stethoscope/proc/on_move(atom/movable/mover)
 	mover.unregister_event(/event/moved, src, nameof(src::on_move()))
+	clear_listening()
+
+/obj/item/clothing/accessory/stethoscope/proc/clear_listening()
 	if(listening)
 		listening.unregister_event(/event/heartbeat, src, nameof(src::heartbeat()))
 		listening.unregister_event(/event/moved, src, nameof(src::on_move()))
