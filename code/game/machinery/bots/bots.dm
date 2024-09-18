@@ -26,6 +26,7 @@
 	luminosity = 3
 	use_power = MACHINE_POWER_USE_NONE
 	pAImovement_delay = 1
+	machine_flags = EMAGGABLE
 	var/icon_initial //To get around all that pesky hardcoding of icon states, don't put modifiers on this one
 	var/obj/item/weapon/card/id/botcard			// the ID card that the bot "holds"
 	var/mob/living/simple_animal/hostile/pulse_demon/PD_occupant // for when they take over them

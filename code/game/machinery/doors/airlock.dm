@@ -59,7 +59,7 @@
 	explosion_block = 1
 
 	emag_cost = 1 // in MJ
-	machine_flags = SCREWTOGGLE | WIREJACK
+	machine_flags = SCREWTOGGLE | WIREJACK | EMAGGABLE
 	animation_delay = 5
 
 	hack_abilities = list(
