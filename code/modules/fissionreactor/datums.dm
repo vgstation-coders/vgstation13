@@ -388,8 +388,12 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/absorbance=0 //subtraced from above to get total emission.
 
 /datum/fission_fuel/New()
-	var/datum/reagents/fuel= new /datum/reagents //this probably isn't the best way to do things, but that's a problem for future me (someone else) to deal with.
+	fuel= new /datum/reagents //this probably isn't the best way to do things, but that's a problem for future me (someone else) to deal with.
+	fuel.my_atom=src
 	fuel.maximum_volume=150
+
+/datum/fission_fuel/proc/on_reagent_change() //dummy proc so we can set my_atom in the reagents.
+	
 	
 /datum/fission_fuel/proc/rederive_stats() //should be called whenever you change the materials
 	if(!fuel)

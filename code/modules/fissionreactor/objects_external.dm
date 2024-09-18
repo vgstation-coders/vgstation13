@@ -19,6 +19,10 @@ included:
 	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 0
 	active_power_usage = 0
+	var/pipename="fission reactor coolant port"
+	//this is so that we can call a proc with ourselves that will use a proc that shouldn't belong to this. this is probably very fragile, but just don't touch it and it'll be fine, i swear
+/obj/machinery/atmospherics/unary/fissionreactor_coolantport/proc/get_pipe_dir() //the atmos gods demand a sacrifice.
+	return dir
 
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/examine()
 	..()
@@ -45,6 +49,7 @@ included:
 
 
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/New()
+	..()
 	src.buildFrom(usr,src)
 
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/proc/transfer_reactor() //transfer coolant from/to the reactor

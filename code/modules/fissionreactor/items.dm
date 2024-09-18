@@ -15,8 +15,9 @@ includes:
 	
 
 /obj/item/weapon/fuelrod/New()
-	..()
 	fueldata = new /datum/fission_fuel
+	..()
+	
 
 /obj/item/weapon/fuelrod/update_icon()
 	..()
