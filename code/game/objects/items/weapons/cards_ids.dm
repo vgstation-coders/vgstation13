@@ -182,15 +182,6 @@
 		var/zone = ran_zone(user.zone_sel.selecting, 100)
 		var/datum/organ/external/organ = target_living.get_organ(zone)
 		target_living.emag_act(user, organ, src)
-		return
-	if(istype(target,/obj/machinery))
-		return // Handled in machine attackby()
-	if(arcanetampered && prob(50))
-		target.arcane_act(user)
-		if(prob(50))
-			return
-	target.emag_act(user)
-
 
 var/list/global/id_cards = list()
 

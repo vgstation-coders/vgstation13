@@ -27,6 +27,10 @@
 
 /atom/movable/proc/emag_check(obj/item/weapon/card/emag/E, mob/user)
 	if(can_emag() && istype(E) && E.canUse(user,src))
+		if(E.arcanetampered && prob(50))
+			arcane_act(user)
+			if(prob(50))
+				return TRUE
 		emag_act(user)
 		return TRUE
 	return FALSE
