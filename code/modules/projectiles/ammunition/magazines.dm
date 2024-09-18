@@ -312,7 +312,7 @@
 	max_ammo = 0
 	multiple_sprites = 1
 	sprite_modulo = 2
-	var/list/datum/lawgiver_mode/ammo_counters
+	var/list/ammo_counters
 	var/compatible_gun_type = /obj/item/weapon/gun/lawgiver
 
 /obj/item/ammo_storage/magazine/lawgiver/New()
@@ -393,7 +393,8 @@
 	var/i = 1
 	for(var/datum/lawgiver_mode/mode in HGM.ammo_counters)
 		if(i<=HGM.ammo_counters.len)
-			HGM.ammo_counters[mode] = floor(ammo_counters[ammo_counters[i]] * mode.ammo_per_shot/ammo_counters[i].ammo_per_shot)
+			var/datum/lawgiver_mode/modeOther = ammo_counters[i]
+			HGM.ammo_counters[mode] = floor(ammo_counters[modeOther] * mode.ammo_per_shot/modeOther.ammo_per_shot)
 		else
 			return
 		i++
