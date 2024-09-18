@@ -25,12 +25,10 @@
 		W.material_type.on_use(W, src, user)
 	return emag_check()
 
-/atom/movable/proc/emag_check(obj/item/W, mob/user)
-	if(can_emag() && isEmag(W))
-		var/obj/item/weapon/card/emag/E = W
-		if(E.canUse(user,src))
-			emag_act(user)
-			return TRUE
+/atom/movable/proc/emag_check(obj/item/weapon/card/emag/E, mob/user)
+	if(can_emag() && istype(E) && E.canUse(user,src))
+		emag_act(user)
+		return TRUE
 	return FALSE
 
 /mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null, var/def_zone = null)
