@@ -15,6 +15,9 @@
 	if (!locked)
 		..()
 
+/obj/machinery/door/unpowered/emag_check(obj/item/weapon/card/emag/E, mob/user)
+	return FALSE
+
 /obj/machinery/door/unpowered/attack_hand(mob/user as mob)
 	if(istype(user,/mob/dead/observer))
 		return
