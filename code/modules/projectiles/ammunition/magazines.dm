@@ -312,7 +312,7 @@
 	max_ammo = 0
 	multiple_sprites = 1
 	sprite_modulo = 2
-	var/list/ammo_counters
+	var/list/datum/lawgiver_mode/ammo_counters
 	var/compatible_gun_type = /obj/item/weapon/gun/lawgiver
 
 /obj/item/ammo_storage/magazine/lawgiver/New()
