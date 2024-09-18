@@ -16,12 +16,9 @@ boxes used for cargo orders to make my life easier.
 	new /obj/item/weapon/stock_parts/matter_bin(src)
 	new /obj/item/weapon/stock_parts/manipulator(src)
 	new /obj/item/weapon/stock_parts/console_screen(src)
-	var/obj/item/stack/rods/newrods= new /obj/item/stack/rods(src)//2 rods
-	newrods.amount=2
-	var/obj/item/stack/sheet/plasteel/plasteelsheet= new /obj/item/stack/sheet/plasteel(src)//5 plasteel
-	plasteelsheet.amount=5
-	var/obj/item/stack/cable_coil/cables= new /obj/item/stack/cable_coil(src)//5 wire
-	cables.amount=5
+	new /obj/item/stack/rods(src,2)//2 rods
+	new /obj/item/stack/sheet/plasteel(src,5)//5 plasteel
+	new /obj/item/stack/cable_coil(src,5)//5 wire
 
 
 /obj/item/weapon/storage/box/fissionsupply_genericassembly //include seperate boards
@@ -30,13 +27,10 @@ boxes used for cargo orders to make my life easier.
 
 /obj/item/weapon/storage/box/fissionsupply_genericassembly/New()
 	..()
-	var/obj/item/stack/sheet/plasteel/plasteelsheet= new /obj/item/stack/sheet/plasteel(src)//5 plasteel
-	plasteelsheet.amount=5
-	var/obj/item/stack/rods/newrods= new /obj/item/stack/rods(src)//2 rods
-	newrods.amount=2
-	var/obj/item/stack/cable_coil/cables= new /obj/item/stack/cable_coil(src)//5 wire
-	cables.amount=5
- 
+	new /obj/item/stack/sheet/plasteel(src,5)//5 plasteel
+	new /obj/item/stack/rods(src,2)//2 rods
+	new /obj/item/stack/cable_coil(src,5)//5 wire
+
 	new /obj/item/weapon/stock_parts/manipulator(src)	 //1 scanning module OR 1 micro-manipulator
 	new /obj/item/weapon/stock_parts/scanning_module(src)
 	new /obj/item/weapon/stock_parts/matter_bin(src)	 // 1 matter bin
@@ -47,12 +41,9 @@ boxes used for cargo orders to make my life easier.
 	
 /obj/item/weapon/storage/box/fissionsupply_casing/New()
 	..()
-	var/obj/item/stack/sheet/plasteel/plasteelsheet= new /obj/item/stack/sheet/plasteel(src)//6 plasteel
-	plasteelsheet.amount=6
-	var/obj/item/stack/rods/newrods= new /obj/item/stack/rods(src) //4 rods
-	newrods.amount=4
-	var/obj/item/pipe/pip = new /obj/item/pipe(src) //1 pipe (optional)
-	pip.pipe_type=0
+	new /obj/item/stack/sheet/plasteel(src,6)//6 plasteel
+	new /obj/item/stack/rods(src,4) //4 rods
+	new /obj/item/pipe(src,0) //1 pipe (optional)
 	 
 /obj/item/weapon/storage/box/fissionsupply_fuelmaker
 	name="seperational isotopic combiner parts"
@@ -61,16 +52,14 @@ boxes used for cargo orders to make my life easier.
 /obj/item/weapon/storage/box/fissionsupply_fuelmaker/New()
 	..()
 	new /obj/item/weapon/circuitboard/fission_fuelmaker()
-	var/obj/item/stack/sheet/metal/metalsheet= new /obj/item/stack/sheet/metal(src)//5 metal
-	metalsheet.amount=5
+	new /obj/item/stack/sheet/metal(src,5)//5 metal
 	new /obj/item/weapon/stock_parts/scanning_module(src)
 	new /obj/item/weapon/stock_parts/scanning_module(src)
 	new /obj/item/weapon/stock_parts/matter_bin(src)
 	new /obj/item/weapon/stock_parts/matter_bin(src)
 	new /obj/item/weapon/stock_parts/manipulator(src)
 	new /obj/item/weapon/stock_parts/console_screen(src)
-	var/obj/item/stack/cable_coil/cables= new /obj/item/stack/cable_coil(src)//5 wire
-	cables.amount=5	
+	new /obj/item/stack/cable_coil(src,5)//5 wire
 		
 /obj/item/weapon/fuelrod/starter
 	icon_state="i_fuelrod"

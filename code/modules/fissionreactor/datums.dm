@@ -39,7 +39,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	..()
 	coolant = new /datum/gas_mixture
 	coolant.temperature = T20C //vaguely room temp.
-	coolant.volume = 2500
+	coolant.volume = CELL_VOLUME
 	fissionreactorlist+=src
 
 /datum/fission_reactor_holder/Destroy()
@@ -225,7 +225,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/sizex=abs(corner_x-origin_x)+1
 	var/sizey=abs(corner_y-origin_y)+1
 
-	coolant.volume=2500* (sizex-2)*(sizey-2) //sub 2 to make sure there's no casing involved in the internal volume.
+	coolant.volume=CELL_VOLUME* (sizex-2)*(sizey-2) //sub 2 to make sure there's no casing involved in the internal volume.
 	coolant.volume=max(coolant.volume,1) //atmos code will probably shit itself if this is 0.
 
 	heat_capacity=sizex*sizey*1000 // this scales with area as well.
@@ -354,21 +354,17 @@ datums for the fission reactor, which includes the fuel and reactor
 	
 	
 /datum/fission_reactor_holder/proc/coolantcycle()
-	if(coolant_ports.len==0)
-		goto skipcoolantports //avoiding div by 0. yes, this is really lazy, i know.
-	for(var/i=1, i<=coolant_ports.len,i++)
-		var/real_index= ((i+coolantport_counter)%coolant_ports.len)+1 //this way we spread out any first index prefrence.
-		var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/coolant_port=coolant_ports[real_index]
-		coolant_port.transfer_reactor()
-		
-	coolantport_counter++
-	coolantport_counter=(coolantport_counter%coolant_ports.len)+1 //shift it around.	
-	
-	skipcoolantports:
-	var/chp=coolant.heat_capacity()
+	if(coolant_ports.len)
+		for(var/i=1, i<=coolant_ports.len,i++)
+			var/real_index= ((i+coolantport_counter)%coolant_ports.len)+1 //this way we spread out any first index prefrence.
+			var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/coolant_port=coolant_ports[real_index]
+			coolant_port.transfer_reactor()	
+		coolantport_counter++
+		coolantport_counter=(coolantport_counter%coolant_ports.len)+1 //shift it around.	
 	
 	//unrealistically, the heat transfer is 100% between the 2 sources.
 	//too bad.
+	var/chp=coolant.heat_capacity()
 	var/newtemp=(chp*coolant.temperature + heat_capacity*temperature)/(chp+heat_capacity)
 	coolant.temperature=newtemp
 	temperature=newtemp
@@ -388,9 +384,8 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/absorbance=0 //subtraced from above to get total emission.
 
 /datum/fission_fuel/New()
-	fuel= new /datum/reagents //this probably isn't the best way to do things, but that's a problem for future me (someone else) to deal with.
-	//fuel.my_atom=src
-	fuel.maximum_volume=150
+	fuel= new /datum/reagents(150) //this probably isn't the best way to do things, but that's a problem for future me (someone else) to deal with.
+
 
 
 	
@@ -428,7 +423,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/thisabsorbance=0
 	
 	for(var/datum/reagent/R in fuel.reagent_list)
-		if (R.fission_time != null)
+		if (R.fission_time)
 			thislifetime+=R.fission_time* (fuel.amount_cache[R.id] + 0)/(fuel.total_volume) //fuel time is a weighted average
 		thiswattage+=R.fission_power
 		thisabsorbance+=R.fission_absorbtion
@@ -438,8 +433,8 @@ datums for the fission reactor, which includes the fuel and reactor
 	absorbance=max(thisabsorbance,0)
 	
 /datum/fission_fuel/proc/get_products()	//fission products.
-	var/datum/reagents/products = new /datum/reagents
-	products.maximum_volume=150
+	var/datum/reagents/products = new /datum/reagents(150)
+
 	if(!fuel)
 		return products
 	

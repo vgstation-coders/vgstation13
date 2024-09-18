@@ -35,7 +35,7 @@ the machine which makes fuel rods have things in them.
 		user.visible_message("<span class='notice'>[user] starts prying the fuel rod out of \the [src].</span>", "<span class='notice'>You start prying the fuel rod out of \the [src].</span>")
 		playsound(src,'sound/items/crowbar.ogg',50)
 		if(do_after(user, src,20))
-			heldrod.loc=src.loc
+			heldrod.forceMove(loc)
 			heldrod=null
 			playsound(src,'sound/machines/door_unbolt.ogg',50)
 		update_icon()

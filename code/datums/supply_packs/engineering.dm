@@ -465,7 +465,7 @@
 	name = "Fission reactor expansion pak"
 	cost = 200 //See above.
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
-	containername = "Fission reactor starter kit"
+	containername = "Fission reactor expansion pak"
 	group = "Engineering"
 	access = list(access_engine_major)
 	containsdesc = "Contains supplies to expand an existing fission reactor. Remember to turn it off and drain the coolant first!"
