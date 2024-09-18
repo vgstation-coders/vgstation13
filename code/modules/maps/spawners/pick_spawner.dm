@@ -31,7 +31,7 @@
 		map_pickspawners[category] -= src
 	..()
 
-//This is called in /datum/subsystem/map/Initialize().
+//This is called in /datum/subsystem/mapping/Initialize().
 /proc/spawn_map_pickspawners()
 	for(var/category in map_pickspawners)
 		var/amount_to_spawn
@@ -60,7 +60,7 @@
 	to_spawn = list(
 		/obj/item/clothing/gloves/yellow
 		)
-		
+
 /obj/abstract/map/spawner/pick_spawner/yellowgloves/tcomms_storage
 	category = "yellowgloves_tcommsstorage"
 	name = "glubb pickspawner (tcomms_storage)"

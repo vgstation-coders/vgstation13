@@ -11,7 +11,7 @@
 #define SS_INIT_GARBAGE            23
 #define SS_INIT_JOB                22
 #define SS_INIT_HUMANS             21
-#define SS_INIT_MAP                20
+#define SS_INIT_MAPPING            20
 #define SS_INIT_COMPONENT          19.5
 #define SS_INIT_POWER              19
 #define SS_INIT_OBJECT             18
@@ -29,7 +29,6 @@
 #define SS_INIT_PERSISTENCE_MAP	  -98
 #define SS_INIT_PERSISTENCE_MISC  -99
 #define SS_INIT_PATHFINDER        -100
-#define SS_INIT_MAPPING           -150
 #define SS_INIT_DAYNIGHT          -200
 
 #define SS_PRIORITY_TIMER          1000
@@ -61,11 +60,11 @@
 #define SS_PRIORITY_THERM_DISS     19
 #define SS_PRIORITY_AMBIENCE	   18
 #define SS_PRIORITY_DBCORE		   17
+#define SS_PRIORITY_MAPPING        16
 #define SS_PRIORITY_SUN            3
 #define SS_PRIORITY_GARBAGE        2
 #define SS_PRIORITY_INACTIVITY     1
 #define SS_PRIORITY_BURNABLE	  -50
-#define SS_PRIORITY_MAPPING       -100
 #define SS_PRIORITY_DAYNIGHT	  -200
 
 #define SS_WAIT_WEATHER         	2 SECONDS
@@ -79,7 +78,7 @@
 #define SS_WAIT_TICKER              2 SECONDS
 #define SS_WAIT_ENGINES				30 SECONDS
 #define SS_WAIT_BURNABLE			3 SECONDS
-#define SS_WAIT_MAPPING				3 SECONDS
+#define SS_WAIT_MAPPING				0.5 SECONDS
 
 #define SS_DISPLAY_TIMER          -110
 #define SS_DISPLAY_GARBAGE        -100
@@ -104,9 +103,9 @@
 #define SS_DISPLAY_THERM_ENTROPY   13
 #define SS_DISPLAY_THERM_DISS      14
 #define SS_DISPLAY_DBCORE		   15
+#define SS_DISPLAY_MAPPING		   16
 #define SS_DISPLAY_DAYNIGHT		   20
 #define SS_DISPLAY_BURNABLE		   21
-#define SS_DISPLAY_MAPPING		   21
 
 #define SS_TRASH                  "trash"
 #define SS_CLEANABLE              "cleanable_decals"
