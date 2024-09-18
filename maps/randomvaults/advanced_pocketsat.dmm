@@ -214,6 +214,7 @@
 /area/vault/advanced_pocketsat)
 "O" = (
 /obj/structure/safe/floor/advanced_pocketsat,
+/obj/item/device/t_scanner/advanced,
 /turf/simulated/floor/engine/plated,
 /area/vault/advanced_pocketsat)
 "P" = (
