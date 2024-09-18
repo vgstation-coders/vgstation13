@@ -393,7 +393,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	fuel.maximum_volume=150
 
 /datum/fission_fuel/proc/on_reagent_change() //dummy proc so we can set my_atom in the reagents.
-	
+	rederive_stats() //convenient! actually a good outcome of this shittery.
 	
 /datum/fission_fuel/proc/rederive_stats() //should be called whenever you change the materials
 	if(!fuel)
