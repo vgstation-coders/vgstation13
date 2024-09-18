@@ -106,6 +106,25 @@
 	item_state = "firstaid-internalbleed"
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector = 4)
 
+/obj/item/weapon/storage/firstaid/vox
+	name = "oxygen deprivation first-aid kit"
+	desc = "A box full of vox medical essentials."
+	icon_state = "vox"
+	item_state = "firstaid-advanced"
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/pill/dexalin = 2,
+		/obj/item/weapon/reagent_containers/hypospray/autoinjector/turkizol,
+		/obj/item/weapon/reagent_containers/syringe/nitrogen = 2,
+		/obj/item/device/healthanalyzer,
+	)
+
+/obj/item/weapon/storage/firstaid/vox/New()
+	..()
+	var/support = pick( //emotional support items
+		50;/obj/item/weapon/reagent_containers/food/snacks/cracker,
+		50;/obj/item/toy/plushie/cash)
+	new support(src)
+
 
 /*
  * Pill Bottles

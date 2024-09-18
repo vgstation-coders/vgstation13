@@ -1690,6 +1690,40 @@ var/global/list/charcoal_doesnt_remove=list(
 	if(prob(10))
 		M.drowsyness = max(M.drowsyness, 2)
 
+/datum/reagent/turkizol
+	name = "Turkizol"
+	id = TURKIZOL
+	description = "Turkizol is a broad spectrum medication formulated for the unique biology of vox. While still effective on other species, some of its effects are less potent."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#CD8471" //rgb: 205, 132, 113
+	density = 1.29
+	specheatcap = 0.72
+	custom_metabolism = 0.4
+
+/datum/reagent/turkizol/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(M.getOxyLoss())
+		M.adjustOxyLoss(-3 * REM)
+	if(M.getBruteLoss())
+		M.heal_organ_damage(3 * REM, 0)
+	if(M.getFireLoss())
+		M.heal_organ_damage(0, 3 * REM)
+	if(M.getToxLoss())
+		M.adjustToxLoss(-3 * REM)
+
+/datum/reagent/turkizol/on_mob_life(var/mob/living/M, var/alien)
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.name == "Vox")
+			if(M.getOxyLoss())
+				M.adjustOxyLoss(-2 * REM)
+			if(M.getToxLoss())
+				M.adjustToxLoss(-2 * REM)
+
 /datum/reagent/vaccine
 	name = "Vaccine"
 	description = "A subunit vaccine. Introduces antigens without pathogenic particles to the body, allowing the immune system to produce enough antibodies to prevent any current or future infection."

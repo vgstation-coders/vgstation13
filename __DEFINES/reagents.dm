@@ -531,6 +531,7 @@
 #define LEMONDROP		"lemondrop"
 #define FEVERFEW		"feverfew"
 #define SQUASH			"squash"
+#define TURKIZOL		"turkizol"
 
 #define ACRYLIC			"acrylic"
 #define ACETONE			"acetone"
