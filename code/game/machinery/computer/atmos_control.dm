@@ -271,8 +271,7 @@ var/global/list/atmos_controllers = list()
 		if (istype(I, /obj/item/device/pda))
 			var/obj/item/device/pda/pda = I
 			I = pda.id
-		if(isEmag(I))
-			emag_act(I, usr)
+		emag_check(I,M)
 		if (I && istype(I))
 			log_in_id = I
 		return 1

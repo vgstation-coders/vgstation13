@@ -150,7 +150,7 @@
 		if (istype(I, /obj/item/weapon/card))
 			if(usr.drop_item(I, src))
 				auth_card = I
-				if(attempt_unlock(I))
+				if(attempt_unlock(I,usr))
 					to_chat(usr, "<span class='info'>You insert [I], the console flashes \'<i>Access granted.</a>\'</span>")
 				else
 					to_chat(usr, "<span class='warning'>You insert [I], the console flashes \'<i>Access denied.</a>\'</span>")
@@ -249,10 +249,10 @@
 		else
 			to_chat(user, "<span class='warning'>Remove [auth_card] first.</span>")
 
-/obj/machinery/suspension_gen/proc/attempt_unlock(var/obj/item/weapon/card/C)
+/obj/machinery/suspension_gen/proc/attempt_unlock(var/obj/item/weapon/card/C,var/mob/user)
 	if(!open)
-		if(isEmag(C))
-			emag_act()
+		if(emag_check(C,user))
+			return
 		else if(istype(C, /obj/item/weapon/card/id) && check_access(C))
 			locked = 0
 		if(!locked)

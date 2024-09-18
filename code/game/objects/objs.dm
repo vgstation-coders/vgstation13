@@ -170,8 +170,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(handle_item_attack(W, user))
 		return
 	
-	if(isEmag(W))
-		. = ..()
+	if(emag_check(W,user))
+		. = 1
 			
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)

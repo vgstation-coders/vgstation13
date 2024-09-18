@@ -208,8 +208,8 @@
 				reagents.add_reagent(BANANA, bananas) //adding banan back
 		else
 			to_chat(user, "<span class='warning'>The HONKTech pump is not strong enough to do that yet. Reinforce it with more bananium sheets first.</span>")
-	else if(isEmag(W)) //emag
-		emag_act(user)
+	else if(emag_check(W,user)) //emag
+		return
 	else if(istype(W, /obj/item/weapon/stamp/))
 		if(mode == MODE_DRAWING)
 			if(istype(W, /obj/item/weapon/stamp/captain))

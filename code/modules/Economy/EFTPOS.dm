@@ -162,8 +162,8 @@
 			if("reset")
 				//reset the access code - requires HoP/captain access
 				var/obj/item/I = usr.get_active_hand()
-				if (isEmag(I))
-					emag_act(usr)
+				if (emag_check(I,user))
+					return
 				else if (istype(I, /obj/item/weapon/card))
 					var/obj/item/weapon/card/id/C = I
 					if((access_cent_captain in C.access) || (access_hop in C.access) || (access_captain in C.access))

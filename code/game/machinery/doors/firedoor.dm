@@ -359,8 +359,7 @@ var/global/list/alert_overlays_global = list()
 		else
 			to_chat(user, "<span class = 'attack'>\The [src] is not welded or otherwise blocked.</span>")
 
-	if(isEmag(C))
-		emag_act(user)
+	if(emag_check(C,user))
 		return
 
 	do_interaction(user, C)

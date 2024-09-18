@@ -85,8 +85,8 @@
 		else
 			to_chat(user, "<span class='notice'>The locker appears to be broken.</span>")
 			return
-	else if(isEmag(W) && !broken)
-		emag_act(user)
+	else if(!broken && emag_check(W,user))
+		return
 	else if(iswelder(W) && canweld())
 		var/obj/item/tool/weldingtool/WT = W
 		if(!WT.remove_fuel(1,user))

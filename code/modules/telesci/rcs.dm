@@ -116,8 +116,8 @@
 		to_chat(user, "<span class = 'caution'>You emag the RCS. Click on it to toggle between modes.</span>")
 
 /obj/item/weapon/rcs/attackby(var/obj/item/W, var/mob/user)
-	if(isEmag(W))
-		emag_act(user)
+	if(emag_check(W,user))
+		return
 	else if(W.is_screwdriver(user))
 		if(cell)
 			cell.updateicon()
