@@ -153,11 +153,7 @@ Class Procs:
 	 * Machine construction/destruction/emag flags.
 	 */
 	var/machine_flags = 0
-
-	/**
-	 * Emag energy cost (in MJ).
-	 */
-	var/emag_cost = 1
+	emag_cost = 1
 
 	var/inMachineList = 1 // For debugging.
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
@@ -659,16 +655,6 @@ Class Procs:
 	// Disable emaggability. Note that some machines such as the Communications Computer might be emaggable multiple times.
 	machine_flags &= ~EMAGGABLE
 	spark(src)
-
-
-/**
- * Returns the cost of emagging this machine (emag_cost by default)
- * @param user /mob The mob that used the emag.
- * @param emag /obj/item/weapon/card/emag The emag used on this device.
- * @return number Cost to emag.
- */
-/obj/machinery/proc/getEmagCost(var/mob/user, var/obj/item/weapon/card/emag/emag)
-	return emag_cost
 
 /obj/machinery/can_emag()
 	return machine_flags & EMAGGABLE

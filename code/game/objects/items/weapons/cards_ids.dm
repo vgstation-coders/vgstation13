@@ -131,14 +131,14 @@
 		nticks = 0
 		processing_objects.Remove(src)
 
-/obj/item/weapon/card/emag/proc/canUse(var/mob/user, var/obj/machinery/M)
+/obj/item/weapon/card/emag/proc/canUse(var/mob/user, var/atom/A)
 	// We've already checked for emaggability.  All we do here is check cost.
 
 	// Infinite uses?  Just return true.
 	if(energy < 0)
 		return 1
 
-	var/cost=M.getEmagCost(user,src)
+	var/cost=A.getEmagCost(user,src)
 
 	// Free to emag?  Return true every time.
 	if(cost == 0)
@@ -174,7 +174,7 @@
 
 //perform individual emag_act() stuff on children overriding the method here
 /obj/item/weapon/card/emag/afterattack(var/atom/target, mob/user, proximity)
-	if(!proximity)
+	if(!proximity || !canUse(use,target))
 		return
 	if (istype(target, /mob/living/carbon/human))
 		var/mob/living/carbon/target_living = target
