@@ -70,9 +70,10 @@
 /obj/machinery/door/airlock/external/adv_pocketsat_entrance/proc/grant_access(var/from_speech = FALSE)
 	var/turrets_were_on = FALSE
 	var/area/control_area = get_area(src)
-	for(var/obj/machinery/turret/aTurret in control_area.contents)
-		turrets_were_on |= aTurret.enabled
-		aTurret.setState(0, 1)
+	for(var/obj/machinery/turretid/controller in control_area.contents)
+		turrets_were_on |= controller.enabled
+		controller.enabled = 0
+		controller.updateTurrets()
 	say("[from_speech ? "Response phrase accepted. " : "Identity authenticated. "]Welcome, Agent.[turrets_were_on ? " Turrets disabled." : ""]")
 	locked = 0
 	playsound(src, "sound/machines/door_unbolt.ogg", 50, 1, -1)

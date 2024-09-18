@@ -229,7 +229,8 @@
 	name = "Satellite Door Control";
 	id_tag = "APS";
 	pixel_x = 24;
-	specialfunctions = 4
+	specialfunctions = 4;
+	normaldoorcontrol = 1
 	},
 /turf/simulated/floor/engine/plated,
 /area/vault/advanced_pocketsat)
