@@ -19,7 +19,6 @@
 #define SS_INIT_XENOARCH           17
 #define SS_INIT_MORE_INIT          16
 #define SS_INIT_AIR                15
-#define SS_INIT_FISSION			   14.5
 #define SS_INIT_LIGHTING           14
 #define SS_INIT_UNSPECIFIED        0
 #define SS_INIT_EMERGENCY_SHUTTLE -19
@@ -50,11 +49,11 @@
 #define SS_PRIORITY_ENGINES		   89
 #define SS_PRIORITY_PIPENET        85
 #define SS_PRIORITY_AIR            70
-#define SS_PRIORITY_FISSION		   67
 #define SS_PRIORITY_EVENT          65
 #define SS_PRIORITY_DISEASE        60
 #define SS_PRIORITY_FAST_MACHINERY 55
 #define SS_PRIORITY_PLANT          40
+#define SS_PRIORITY_FISSION		   35
 #define SS_PRIORITY_UNSPECIFIED    30
 #define SS_PRIORITY_THERM_ENTROPY_RECHECK  22
 #define SS_PRIORITY_THERM_ENTROPY  21

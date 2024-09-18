@@ -25,10 +25,8 @@ includes:
 	if(!fueldata)
 		return
 	if(fueldata.fuel.total_volume>0)
-		if(fueldata.life>0)
-			icon_state="i_fuelrod"
-		else
-			icon_state="i_fuelrod_depleted"
+		icon_state="i_fuelrod[fueldata.life>0 ? "" : "_depleted"]"
+
 
 
 

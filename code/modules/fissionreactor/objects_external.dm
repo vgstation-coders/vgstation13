@@ -94,6 +94,8 @@ included:
 	var/datum/fission_reactor_holder/associated_reactor=null
 	var/obj/item/weapon/fuelrod/currentfuelrod=null
 	var/poweroutagemsg=FALSE
+	var/fueldepletedmsg=TRUE
+	var/lasttempnag=0 //ensures temp warning only occur if it is increasing. less chat spam.
 
 /obj/machinery/fissioncontroller/Destroy()
 	if(currentfuelrod)
@@ -117,8 +119,7 @@ included:
 			newrod.loc=null
 			currentfuelrod=newrod
 			playsound(src,'sound/items/crowbar.ogg',50)
-			if(associated_reactor)
-				associated_reactor.fuel=newrod.fueldata
+			associated_reactor?.fuel=newrod.fueldata
 		return
 	if(iscrowbar(I) && currentfuelrod)
 		if(associated_reactor?.considered_on())
@@ -131,8 +132,7 @@ included:
 				currentfuelrod.forceMove(loc)
 				currentfuelrod=null
 				playsound(src,'sound/machines/door_unbolt.ogg',50)
-				if(associated_reactor)
-					associated_reactor.fuel=null
+				associated_reactor?.fuel=null
 				//TODO: SPREAD RADS
 			return
 				
@@ -271,7 +271,7 @@ included:
 	else
 		fueldepletedmsg=FALSE
 	
-	if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP)
+	if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP && associated_reactor.temperature>lasttempnag )
 		if(associated_reactor.temperature>=FISSIONREACTOR_MELTDOWNTEMP)
 			say("Reactor at critical temperature: [associated_reactor.temperature]K. Evacuate immediately.", class = "binaryradio")
 			if(can_autoscram && !associated_reactor.SCRAM )
@@ -280,6 +280,7 @@ included:
 		else
 			say("Reactor at dangerous temperature: [associated_reactor.temperature]K", class = "binaryradio")
 
+	lasttempnag=associated_reactor.temperature
 	
 	if(associated_reactor.fuel?.life<=0) //no fuel or depleated? no reactions to be done.
 		return
