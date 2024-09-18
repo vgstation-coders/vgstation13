@@ -183,6 +183,9 @@
 		var/datum/organ/external/organ = target_living.get_organ(zone)
 		target_living.emag_act(user, organ, src)
 
+/mob/living/carbon/human/emag_check(obj/item/weapon/card/emag/E, mob/user) //handled above!
+	return FALSE
+
 var/list/global/id_cards = list()
 
 /obj/item/weapon/card/id
