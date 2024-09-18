@@ -174,7 +174,7 @@
 
 //perform individual emag_act() stuff on children overriding the method here
 /obj/item/weapon/card/emag/afterattack(var/atom/target, mob/user, proximity)
-	if(!proximity || !canUse(use,target))
+	if(!proximity || !canUse(user,target))
 		return
 	if (istype(target, /mob/living/carbon/human))
 		var/mob/living/carbon/target_living = target
