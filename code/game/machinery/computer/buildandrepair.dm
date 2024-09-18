@@ -355,12 +355,6 @@
 	build_path = /obj/machinery/computer/stacking_unit
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
-/obj/item/weapon/circuitboard/fisson_reactor
-	name = "Circuit board (Fission Reactor Controller)"
-	desc = "A circuit board for running a fission reactor."
-	build_path = /obj/machinery/computer/fissioncontroller
-	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=4"
-	var/safety_disabled=FALSE
 
 
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
@@ -399,9 +393,7 @@
 	to_chat(user, "<span class='notice'>You [contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>")
 	contraband_enabled = !contraband_enabled
 
-/obj/item/weapon/circuitboard/fisson_reactor/solder_improve(mob/user)
-	to_chat(user, "<span class='[safety_disabled ? "notice" : "warning"]'>You [safety_disabled ? "re" : "dis"]connect the auto-SCRAM fuse.</span>")
-	safety_disabled = !safety_disabled
+
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
@@ -539,10 +531,6 @@
 					var/obj/machinery/computer/arcade/arcade = B
 					var/obj/item/weapon/circuitboard/arcade/C = circuit
 					arcade.import_game_data(C)
-				else if(istype(circuit,/obj/item/weapon/circuitboard/fisson_reactor))
-					var/obj/machinery/computer/fissioncontroller/RC = B
-					var/obj/item/weapon/circuitboard/fisson_reactor/C = circuit
-					RC.can_autoscram = !C.safety_disabled
 				var/obj/machinery/MA = B
 				if(istype(MA))
 					MA.power_change()

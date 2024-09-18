@@ -11,7 +11,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/list/coolant_ports=list()
 	var/list/casing_parts=list()
 	var/list/breaches=list()
-	var/obj/machinery/computer/fissioncontroller/controller=null
+	var/obj/machinery/fissioncontroller/controller=null
 	var/obj/ticker=null //what ticks it.
 	var/heat_capacity=0
 	var/fuel_reactivity=1
@@ -46,7 +46,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	fissionreactorlist-=src
 
 /datum/fission_reactor_holder/proc/handledestruction(var/obj/shitgettingfucked)
-	if(istype(shitgettingfucked, /obj/machinery/computer/fissioncontroller ))
+	if(istype(shitgettingfucked, /obj/machinery/fissioncontroller ))
 		controller=null
 	breaches+=shitgettingfucked.loc
 	recalculatereactorstats()

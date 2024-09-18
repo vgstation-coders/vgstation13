@@ -423,11 +423,11 @@
 
 /datum/supply_packs/fissionreactor_starterkit
 	contains = list(
-		/obj/item/weapon/storage/box/fissionsupply_controller,
+		/obj/item/weapon/fuelrod/starter,
+		/obj/item/weapon/storage/box/fissionsupply_controller, //makes a crappy 1x2 interior. but it'll do.
 		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
 		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
 		/obj/item/weapon/storage/box/fissionsupply_fuelmaker,
-		/obj/item/weapon/fuelrod/starter,
 		/obj/item/weapon/circuitboard/fission_control_rod,
 		/obj/item/weapon/circuitboard/fission_fuel_rod,
 		/obj/item/weapon/storage/box/fissionsupply_casing,
@@ -447,17 +447,16 @@
 	containername = "Fission reactor starter kit"
 	group = "Engineering"
 	access = list(access_engine_major)
-	var/static/list/shard_counts_by_user = list()
 	containsdesc = "Everything you need to build a very basic fission reactor. Comes with a pre-filled fuel rod."
 	
-/datum/supply_packs/fissionreactor_starterkit
+/datum/supply_packs/fissionreactor_expansion
 	contains = list(
-		/obj/item/weapon/circuitboard/fission_control_rod,
+		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
+		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
+		/obj/item/weapon/circuitboard/fission_control_rod, //gives you 2 expansion parts (control/fuel rod) and the casing needed to add. 
 		/obj/item/weapon/circuitboard/fission_fuel_rod,
 		/obj/item/weapon/circuitboard/fission_control_rod,
 		/obj/item/weapon/circuitboard/fission_fuel_rod,
-		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
-		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
 		/obj/item/weapon/storage/box/fissionsupply_casing,
 		/obj/item/weapon/storage/box/fissionsupply_casing,
 		/obj/item/weapon/storage/box/fissionsupply_casing,
@@ -469,7 +468,6 @@
 	containername = "Fission reactor starter kit"
 	group = "Engineering"
 	access = list(access_engine_major)
-	var/static/list/shard_counts_by_user = list()
 	containsdesc = "Contains supplies to expand an existing fission reactor. Remember to turn it off and drain the coolant first!"
 		
 	

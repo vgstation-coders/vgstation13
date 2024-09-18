@@ -1777,6 +1777,7 @@ var/proccalls = 1
 #define COMPUTER "computer"
 #define EMBEDDED_CONTROLLER "embedded controller"
 #define OTHER "other"
+#define MACHINE_REINFORCED "reinforced machine"
 
 // Bedsheet altering
 #define PLAIDPATTERN_INCOMPATIBLE	0

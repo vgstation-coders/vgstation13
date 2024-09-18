@@ -1714,27 +1714,3 @@ to destroy them and players will be able to make replacements.
 		/obj/item/weapon/stock_parts/matter_bin = 1,
 	)
 
-/obj/item/weapon/circuitboard/fission_control_rod
-	name = "Circuit board (Control Rod)"
-	desc = "A circuit board used in control rods for safer fission reactors."
-	build_path = /obj/machinery/fissionreactor/fissionreactor_controlrod
-	board_type = MACHINE
-	origin_tech = Tc_ENGINEERING + "=4;" + Tc_PROGRAMMING + "=2;" + Tc_POWERSTORAGE + "=3"
-	req_components = list(
-		/obj/item/weapon/stock_parts/manipulator = 1,
-		/obj/item/weapon/stock_parts/matter_bin = 1,
-		/obj/item/stack/sheet/plasteel = 2
-	)
-
-/obj/item/weapon/circuitboard/fission_fuel_rod
-	name = "Circuit board (Fuel Rod)"
-	desc = "A circuit board used in fuel rod assemblies for heat generation in fission reactors."
-	build_path = /obj/machinery/fissionreactor/fissionreactor_fuelrod
-	board_type = MACHINE
-	origin_tech = Tc_ENGINEERING + "=4;" + Tc_PROGRAMMING + "=2;" + Tc_POWERSTORAGE + "=3"
-	req_components = list(
-		/obj/item/weapon/stock_parts/scanning_module = 1,
-		/obj/item/weapon/stock_parts/matter_bin = 1,
-		/obj/item/stack/sheet/plasteel = 2
-	)
-

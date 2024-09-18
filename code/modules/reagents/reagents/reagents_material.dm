@@ -292,4 +292,4 @@
 /datum/reagent/thallium/on_mob_life(var/mob/living/M) //the point of this is to be a nuisance. stays in you no matter what, but not really *that* deadly, just kind of annoying. You'd have to really piss someone off to get a mouthfull of this.
 	if(..())
 		return 1
-	M.adjustToxLoss(.5)
+	M.adjustToxLoss(0.5)

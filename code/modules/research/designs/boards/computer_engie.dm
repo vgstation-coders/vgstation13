@@ -185,7 +185,7 @@
 	category = "Console Boards"
 	build_path = /obj/item/weapon/circuitboard/security/engineering
 
-/datum/design/fisson_reactor_controller
+/datum/design/fission_reactor_controller
 	name = "Circuit Design (Fission Reactor Controller)"
 	desc = "Allows for the construction of circuit boards used to safely control a fission reactor."
 	id = "fission_control"
@@ -193,4 +193,16 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = /obj/item/weapon/circuitboard/fisson_reactor
+	build_path = /obj/item/weapon/circuitboard/fission_reactor
+	
+/datum/design/fission_fuel_maker
+	name = "Circuit Design (Isotopic Seperational Combiner)"
+	desc = "Allows for the construction of circuit boards used to seperate and combine different isotopes of materials"
+	id = "fission_control"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/fission_fuelmaker
+	
+	
