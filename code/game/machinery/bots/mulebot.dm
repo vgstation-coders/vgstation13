@@ -136,11 +136,8 @@ var/global/mulebot_count = 0
 // other: chance to knock rider off bot
 /obj/machinery/bot/mulebot/attackby(obj/item/I, mob/user)
 	user.delayNextAttack(I.attack_delay)
-	if(isEmag(I))
-		toggle_lock(user, TRUE)
-		to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] [src]'s controls!</span>")
-		flick("[icon_initial]-emagged", src)
-		playsound(src, 'sound/effects/sparks1.ogg', 100, 0)
+	if(emag_check(I,user))
+		return	
 	else if(istype(I, /obj/item/weapon/card/id))
 		if(toggle_lock(user))
 			to_chat(user, "<span class='notice'>Controls [(locked ? "locked" : "unlocked")].</span>")
@@ -187,6 +184,11 @@ var/global/mulebot_count = 0
 			user.visible_message("<span class='warning'>[user] knocks [load] off [src] with \the [I]!</span>", "<span class='warning'>You knock [load] off [src] with \the [I]!</span>")
 		. = ..()
 
+/obj/machinery/bot/mulebot/emag_act(mob/user)
+	toggle_lock(user, TRUE)
+	to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] [src]'s controls!</span>")
+	flick("[icon_initial]-emagged", src)
+	playsound(src, 'sound/effects/sparks1.ogg', 100, 0)
 
 /obj/machinery/bot/mulebot/ex_act(var/severity)
 	unload(0)
