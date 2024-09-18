@@ -71,14 +71,18 @@
 		dat += "<br>Current unclaimed credits: $[num2septext(round(smelter_data["credits"],0.01))]<br>"
 
 		if(istype(id))
-			dat += "You have [id.GetBalance(format = 1)] credits in your bank account. <A href='?src=\ref[src];eject=1'>Eject ID.</A><br>"
-			dat += "<A href='?src=\ref[src];claim=1'>Claim points.</A><br>"
+			if(!can_access(id.GetAccess(),req_access))
+				dat += "This ID is not authorised to claim credits. <A href='?src=\ref[src];eject=1'>Eject ID.</A>"
+			else
+				dat += "You have [id.GetBalance(format = 1)] credits in your bank account. <A href='?src=\ref[src];eject=1'>Eject ID.</A><br>"
+				dat += "<A href='?src=\ref[src];claim=1'>Claim points.</A><br>"
 		else
 			dat += text("No ID inserted. <A href='?src=\ref[src];insert=1'>Insert ID.</A><br>")
 
 	else if(id)	//I don't care but the ID got in there in some way, allow them to eject it atleast.
 		dat += "<br><A href='?src=\ref[src];eject=1'>Eject ID.</A>"
-
+	if(id && can_access(id.GetAccess(),req_access))
+		dat += "<br><A href='?src=\ref[src];lock_access=1'>[req_access && req_access.len ? "Unlock access requirements" : "Set access requirements to ID"]</A>"
 	dat += {"</div>
 	<div style="float:left;" class="block">
 	<table>
@@ -199,6 +203,12 @@
 		updateUsrDialog()
 		return 1
 
+	if(href_list["lock_access"])
+		if(req_access && req_access.len)
+			req_access = list()
+		else if(id)
+			var/list/newaccess = id.GetAccess()
+			req_access = newaccess.Copy()
 
 /obj/machinery/computer/smelting/attackby(var/obj/item/W, var/mob/user)
 	if(istype(W, /obj/item/weapon/card/id))
@@ -250,6 +260,11 @@
 		<li>[format_tag("ID Tag","smelter_tag")]</li>
 	</ul>
 	"}
+
+/obj/machinery/computer/smelting/recycling
+	name = "recycling furnace console"
+	smelter_tag = "recycling_smelter"
+	req_access = list()
 
 /**********************Mineral processing unit**************************/
 
