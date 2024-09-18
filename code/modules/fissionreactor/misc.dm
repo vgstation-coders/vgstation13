@@ -77,7 +77,8 @@ boxes used for cargo orders to make my life easier.
 
 /obj/item/weapon/fuelrod/starter/New()
 	..()
-	fueldata.fuel.add_reagent(URANIUM,150)
+	//fueldata.fuel.add_reagent(URANIUM,150)
+	fueldata.add_shit_to(URANIUM,150,fueldata.fuel)
 	fueldata.rederive_stats()
 	fueldata.life=1
 	

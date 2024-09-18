@@ -389,11 +389,33 @@ datums for the fission reactor, which includes the fuel and reactor
 
 /datum/fission_fuel/New()
 	fuel= new /datum/reagents //this probably isn't the best way to do things, but that's a problem for future me (someone else) to deal with.
-	fuel.my_atom=src
+	//fuel.my_atom=src
 	fuel.maximum_volume=150
 
-/datum/fission_fuel/proc/on_reagent_change() //dummy proc so we can set my_atom in the reagents.
-	rederive_stats() //convenient! actually a good outcome of this shittery.
+
+	
+/datum/fission_fuel/proc/add_shit_to(var/reagent, var/amount,var/datum/reagents/holder)	//this exists because reagent code really wants an atom. but this is a datum. sux to be them. this is simpler, anyways.
+	for (var/datum/reagent/R in holder.reagent_list)
+		if (R.id == reagent)
+			R.volume += amount
+			holder.update_total()
+			return 0
+	var/datum/reagent/D = chemical_reagents_list[reagent]
+	if(D)
+		var/datum/reagent/R = new D.type()
+
+		holder.reagent_list += R
+		R.holder = holder
+		R.volume = amount
+
+		holder.update_total()
+		return 0
+	else
+		return 1
+	rederive_stats()
+	
+	
+	
 	
 /datum/fission_fuel/proc/rederive_stats() //should be called whenever you change the materials
 	if(!fuel)
@@ -428,8 +450,8 @@ datums for the fission reactor, which includes the fuel and reactor
 		var/fissionprods=R.irradiate()
 		for(var/RID in fissionprods) //associative lists hurt my brain. don't think too hard about how they work, ok?
 			var/RCT=fissionprods[RID]
-			products.add_reagent(RID, reagamt*RCT*(1.0-life)) // we multiply the proportion of outputs by the amount of that fuel type, by the amount we actually processed.
-		products.add_reagent(R.id, life*reagamt ) //add unspent fuel back.
+			add_shit_to(RID, reagamt*RCT*(1.0-life),products) // we multiply the proportion of outputs by the amount of that fuel type, by the amount we actually processed.
+		add_shit_to(R.id, life*reagamt ,products) //add unspent fuel back.
 			
 	
 	return products
