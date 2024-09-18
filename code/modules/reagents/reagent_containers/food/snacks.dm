@@ -329,10 +329,12 @@
 
 			if(fullness <= (550 * (1 + M.overeatduration / 1000))) //The mob will accept
 				target.visible_message("<span class='danger'>[user] attempts to feed [target] \the [src].</span>", \
-				"<span class='userdanger'>[user] attempts to feed you \the [src].</span>")
+				"<span class='userdanger'>[user] attempts to feed you \the [src].</span>", \
+				"<span class='userdanger'>You feel \a [src] being pushed into your mouth.</span>")
 			else //The mob is overfed and will refuse
 				target.visible_message("<span class='danger'>[user] cannot force anymore of \the [src] down [target]'s throat!</span>", \
-				"<span class='userdanger'>[user] cannot force anymore of \the [src] down your throat!</span>")
+				"<span class='userdanger'>[user] cannot force anymore of \the [src] down your throat!</span>", \
+				"<span class='userdanger'>[src] cannot be forced down your throat any more!</span>")
 				return 0
 
 			if(!do_mob(user, target))
@@ -343,7 +345,8 @@
 
 			add_logs(user, target, "fed", object="[reagentlist(src)]")
 			target.visible_message("<span class='danger'>[user] feeds [target] \the [src].</span>", \
-			"<span class='userdanger'>[user] feeds you \the [src].</span>")
+			"<span class='userdanger'>[user] feeds you \the [src].</span>", \
+			"<span class='userdanger'>You have been fed \a [src].</span>")
 
 		return consume(target)
 
@@ -591,56 +594,9 @@
 		if(!isturf(src.loc) || !(locate(/obj/structure/table) in src.loc) && !(locate(/obj/item/weapon/tray) in src.loc))
 			to_chat(user, "<span class='notice'>You cannot slice \the [src] here! You need a table or at least a tray.</span>")
 			return 1
-		if(slice_path && slices_num && slices_num > 0)
-			var/slices_lost = 0
-			if(W.is_sharp() >= 1.2)
-				user.visible_message("<span class='notice'>[user] slices \the [src].</span>", \
-				"<span class='notice'>You slice \the [src].</span>")
-			else
-				user.visible_message("<span class='notice'>[user] inaccurately slices \the [src] with \the [W]!</span>", \
-				"<span class='notice'>You inaccurately slice \the [src] with \the [W]!</span>")
-				slices_lost = rand(1, min(1, round(slices_num/2))) //Randomly lose a few slices along the way, but at least one and up to half
-			var/reagents_per_slice = reagents.total_volume/slices_num //Figure out how much reagents each slice inherits (losing slices loses reagents)
-			for(var/i = 1 to (slices_num - slices_lost)) //Transfer those reagents
-				var/obj/item/weapon/reagent_containers/food/snacks/slice = new slice_path(src.loc)
-				if(istype(src, /obj/item/weapon/reagent_containers/food/snacks/customizable)) //custom sliceable foods have overlays we need to apply
-					var/obj/item/weapon/reagent_containers/food/snacks/customizable/C = src
-					var/obj/item/weapon/reagent_containers/food/snacks/customizable/S = slice
-					S.name = "[C.name][S.name]"
-					S.filling.color = C.filling.color
-					S.extra_food_overlay.overlays += S.filling
-					S.overlays += S.filling
-				if(luckiness && isitem(slice))
-					var/obj/item/sliceItem = slice
-					sliceItem.luckiness += luckiness / slices_num
-				reagents.trans_to(slice, reagents_per_slice)
-				for (var/C in visible_condiments)
-					var/image/I = image('icons/obj/condiment_overlays.dmi',slice,C)
-					I.color = visible_condiments[C]
-					slice.extra_food_overlay.overlays += I
-					slice.overlays += I
-				if (candles.len > 0)
-					var/image/candle = pick(candles)
-					candles.Remove(candle)
-					candle.pixel_x = 0
-					candle.pixel_y = 0
-					slice.candles += candle
-					slice.candles_state = candles_state
-					if (slice.candles_state == CANDLES_LIT)
-						slice.set_light(CANDLE_LUM,0.5,LIGHT_COLOR_FIRE)
-				else if (always_candles)
-					slice.candles_state = candles_state
-					if (slice.candles_state == CANDLES_LIT)
-						slice.set_light(CANDLE_LUM,0.5,LIGHT_COLOR_FIRE)
-				slice.update_icon() //So hot slices start steaming right away
-			qdel(src) //So long and thanks for all the fish
+		if(slice_act(user,W))
 			return 1
-		if(contents.len) //Food item is not sliceable but still has items hidden inside. Using a knife on it should be an easy way to get them out.
-			for(var/atom/movable/A in src)
-				A.forceMove(get_turf(src))
-			visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
-			return 1
-
+		
 	if (istype(W, /obj/item/candle)) //candles added on afterattack
 		return 0
 
@@ -654,7 +610,7 @@
 			return 0
 
 		if(contents.len >= storage_slots) //There's a rational limit to this madness people
-			to_chat(user, "<span class='warning'>\the [src] is already too full to fit \the [W].</span>")
+			to_chat(user, "<span class='warning'>\The [src] is already too full to fit \the [W].</span>")
 			return 0
 
 		if(user.drop_item(W, src))
@@ -663,6 +619,64 @@
 		add_fingerprint(user)
 		contents += W
 		return 1 //No afterattack here
+
+/obj/item/weapon/reagent_containers/food/snacks/proc/slice_act(mob/user,obj/item/W)
+	if(slice_path && slices_num && slices_num > 0)
+		var/slices_lost = 0
+		if(W.is_sharp() >= 1.2)
+			user.visible_message("<span class='notice'>[user] slices \the [src].</span>", \
+			"<span class='notice'>You slice \the [src].</span>")
+		else
+			user.visible_message("<span class='notice'>[user] inaccurately slices \the [src] with \the [W]!</span>", \
+			"<span class='notice'>You inaccurately slice \the [src] with \the [W]!</span>")
+			slices_lost = rand(1, min(1, round(slices_num/2))) //Randomly lose a few slices along the way, but at least one and up to half
+		var/reagents_per_slice = reagents.total_volume/slices_num //Figure out how much reagents each slice inherits (losing slices loses reagents)
+		for(var/i = 1 to (slices_num - slices_lost)) //Transfer those reagents
+			var/obj/item/weapon/reagent_containers/food/snacks/slice = new slice_path(get_turf(src))
+			if(istype(src, /obj/item/weapon/reagent_containers/food/snacks/customizable)) //custom sliceable foods have overlays we need to apply
+				var/obj/item/weapon/reagent_containers/food/snacks/customizable/C = src
+				var/obj/item/weapon/reagent_containers/food/snacks/customizable/S = slice
+				S.name = "[C.name][S.name]"
+				S.filling.color = C.filling.color
+				S.extra_food_overlay.overlays += S.filling
+				S.overlays += S.filling
+			if(luckiness && isitem(slice))
+				var/obj/item/sliceItem = slice
+				sliceItem.luckiness += luckiness / slices_num
+			reagents.trans_to(slice, reagents_per_slice)
+			for (var/C in visible_condiments)
+				var/image/I = image('icons/obj/condiment_overlays.dmi',slice,C)
+				I.color = visible_condiments[C]
+				slice.extra_food_overlay.overlays += I
+				slice.overlays += I
+			if (candles.len > 0)
+				var/image/candle = pick(candles)
+				candles.Remove(candle)
+				candle.pixel_x = 0
+				candle.pixel_y = 0
+				slice.candles += candle
+				slice.candles_state = candles_state
+				if (slice.candles_state == CANDLES_LIT)
+					slice.set_light(CANDLE_LUM,0.5,LIGHT_COLOR_FIRE)
+			else if (always_candles)
+				slice.candles_state = candles_state
+				if (slice.candles_state == CANDLES_LIT)
+					slice.set_light(CANDLE_LUM,0.5,LIGHT_COLOR_FIRE)
+			slice.update_icon() //So hot slices start steaming right away
+		qdel(src) //So long and thanks for all the fish
+		return 1
+	if(contents.len) //Food item is not sliceable but still has items hidden inside. Using a knife on it should be an easy way to get them out.
+		for(var/atom/movable/A in src)
+			A.forceMove(get_turf(src))
+		visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
+		return 1
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/slice_act(mob/user,obj/item/W) // to stop plate duplication memes
+	for(var/obj/item/weapon/reagent_containers/food/snacks/S in src)
+		. |= S.slice_act(user,W)
+	if(!contents.len) // get rid of this if we're done here (ie the item we hold got baleeeeted)
+		new trash(loc)
+		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	..()

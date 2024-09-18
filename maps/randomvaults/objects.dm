@@ -1063,6 +1063,7 @@
 	minbodytemp = 0
 
 	mob_property_flags = MOB_ROBOTIC
+	meat_type = null
 
 	environment_smash_flags = 0
 

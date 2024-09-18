@@ -378,3 +378,18 @@ BSQL_THREAD_LIMIT 50
 
 ## Uncomment to enable verbose BSQL communication logs
 #BSQL_DEBUG
+
+## Comment to make the map rendering verb not lag the game during rounds when done
+MAPRENDER_LAGS_GAME
+
+## Location of .git/refs/heads/Bleeding-Edge
+BRANCH_HEAD .git/refs/heads/Bleeding-Edge
+
+## HTTP URL for external stats tracking
+# STATS_ADDR
+
+## Location of rsc folder
+# RSCLIST
+
+## Location of rsc string
+# RSCSTRING

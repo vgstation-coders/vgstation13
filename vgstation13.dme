@@ -1524,6 +1524,7 @@
 #include "code\modules\client\global cache.dm"
 #include "code\modules\client\preferences.dm"
 #include "code\modules\client\preferences_savefile.dm"
+#include "code\modules\client\secret_hwaccel_check.dm"
 #include "code\modules\client\edge_sliding\move_loop.dm"
 #include "code\modules\client\preferences\subsections.dm"
 #include "code\modules\client\preferences\subsections\limbs.dm"

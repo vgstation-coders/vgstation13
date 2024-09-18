@@ -24,7 +24,7 @@
 	if(W.is_wrench(user))
 		W.playtoolsound(src, 50)
 		anchored = !anchored
-		to_chat(user, "<span class='caution'>\the [src] [anchored ? "is now secured" : "can now be moved"] .</span>")
+		to_chat(user, "<span class='caution'>\The [src] [anchored ? "is now secured" : "can now be moved"] .</span>")
 	if(W.is_screwdriver(user))
 		if(stage == 0)
 			W.playtoolsound(src, 50)

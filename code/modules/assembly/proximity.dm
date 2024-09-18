@@ -53,6 +53,7 @@
 		return 0//Cooldown check
 	timing = !timing
 	update_icon()
+	countdown()
 	return 0
 
 /obj/item/device/assembly/prox_sensor/toggle_secure()
@@ -109,9 +110,12 @@
 				in_proximity = FALSE
 				sense()
 
+/obj/item/device/assembly/prox_sensor/proc/countdown()
 	if(timing)
-		if(time >= 0)
-			time--
+		if(time > 0)
+			spawn(10)
+				time--
+				countdown()
 		else
 			timing = 0
 			toggle_scan()
@@ -158,7 +162,7 @@
 		return 0
 	var/second = time % 60
 	var/minute = (time - second) / 60
-	var/dat = text("<TT><B>Proximity Sensor</B>\n[] []:[]\n<A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT>", (timing ? text("<A href='?src=\ref[];time=0'>Arming</A>", src) : text("<A href='?src=\ref[];time=1'>Not Arming</A>", src)), minute, second, src, src, src, src)
+	var/dat = text("<TT><B>Proximity Sensor</B>\n[] []:[]\n<A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT>", (timing ? text("<A href='?src=\ref[];time=1'>Arming</A>", src) : text("<A href='?src=\ref[];time=1'>Not Arming</A>", src)), minute, second, src, src, src, src)
 	dat += text("<BR>Range: <A href='?src=\ref[];range=-1'>-</A> [] <A href='?src=\ref[];range=1'>+</A>", src, range, src)
 
 	dat += {"<BR><A href='?src=\ref[src];scanning=1'>[scanning?"Armed":"Unarmed"]</A> (Movement sensor active when armed!)
@@ -182,8 +186,7 @@
 		toggle_scan()
 
 	if(href_list["time"])
-		timing = text2num(href_list["time"])
-		update_icon()
+		activate()
 
 	if(href_list["tp"])
 		var/tp = text2num(href_list["tp"])

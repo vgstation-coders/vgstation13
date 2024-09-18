@@ -1325,10 +1325,10 @@ var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/proc/copy_blood_from_item(var/obj/item/other_item)
 	virus2 = virus_copylist(other_item.virus2)
-	if (!other_item.blood_overlay)
+	if (!other_item.blood_overlay || !other_item.blood_color)
 		return
 	blood_color = other_item.blood_color
-	blood_DNA = other_item.blood_DNA.Copy()
+	blood_DNA = other_item.blood_DNA?.Copy()
 	had_blood = TRUE
 	set_blood_overlay()
 

@@ -286,9 +286,9 @@
 							use_energy(our_schematic.energy_cost, user)
 					else
 						if(istext(t))
-							to_chat(user, "<span class='warning'>\the [src]'s error light flickers: [t]</span>")
+							to_chat(user, "<span class='warning'>\The [src]'s error light flickers: [t]</span>")
 						else
-							to_chat(user, "<span class='warning'>\the [src]'s error light flickers.</span>")
+							to_chat(user, "<span class='warning'>\The [src]'s error light flickers.</span>")
 
 				busy = FALSE
 			return 1
@@ -300,9 +300,9 @@
 			use_energy(selected.energy_cost, user)
 	else
 		if(istext(t))
-			to_chat(user, "<span class='warning'>\the [src]'s error light flickers: [t]</span>")
+			to_chat(user, "<span class='warning'>\The [src]'s error light flickers: [t]</span>")
 		else
-			to_chat(user, "<span class='warning'>\the [src]'s error light flickers.</span>")
+			to_chat(user, "<span class='warning'>\The [src]'s error light flickers.</span>")
 
 	busy = FALSE
 	return 1
