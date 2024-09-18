@@ -4,6 +4,7 @@ datums for the fission reactor, which includes the fuel and reactor
 */
 #define FISSIONREACTOR_MELTDOWNTEMP 5500 //temp when shit goes wrong
 #define FISSIONREACTOR_DANGERTEMP 4500 //temp to start warning you and to SCRAM
+#define FISSIONREACTOR_SAFEENUFFTEMP 1000 //temp where SCRAM resets
 
 /datum/fission_reactor_holder
 	var/list/fuel_rods=list() //phase 0 vars, set upon construction
@@ -20,6 +21,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	
 	var/coolantport_counter=0 // this varible exists to ensure that all coolant ports get treated equally, because if we didn't it would have a flow prefrence towards the ports with lower indexes.
 	var/control_rod_insertion=1  //phase 1 vars. modified during runtime
+	var/control_rod_target=1 // this is to create a bit of input lag to make things a bit more tense. also allows autoscram to work while the controller is unpowered.
 	var/SCRAM=FALSE //all caps because AAAAAAAAAAAAAAAAAAA EVERYBODY PANIC WE'RE ALL GONNA DIE.
 	var/temperature=T20C //this is set last
 	
@@ -315,6 +317,18 @@ datums for the fission reactor, which includes the fuel and reactor
 		fuel_rods[i].update_icon()
 	
 /datum/fission_reactor_holder/proc/fissioncycle() //what makes the heat.
+
+	if (SCRAM)
+		control_rod_target=1
+		if(temperature<=FISSIONREACTOR_SAFEENUFFTEMP)
+			SCRAM=FALSE
+
+	
+	if(control_rod_target>control_rod_insertion) //5% insertion increments
+		control_rod_insertion+=.05
+	else if(control_rod_target<control_rod_insertion)
+		control_rod_insertion-=.05
+
 
 	if(!fuel)
 		return

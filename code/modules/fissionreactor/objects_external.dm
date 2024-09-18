@@ -212,38 +212,37 @@ included:
 /obj/machinery/fissioncontroller/examine()
 	..()
 	to_chat(usr, "It's held together tightly, you'll have to cut the metal to take it apart.")
-	switch(icon_state)
-		if("control0")
-			to_chat(usr, "The power is off. You should plug it in. Soon.")
-			return
-		if("controlb")
-			to_chat(usr, "The screen is broken. You should fix it soon.")
-			return
-		if("control_noreactor")
-			to_chat(usr, "The readouts indicate there's no linked reactor.")
-		if("control_nofuel")
-			to_chat(usr, "The readouts indicate there's no fuel rod inserted.")
-		if("control_depleted")
-			to_chat(usr, "The readouts indicate that the fuel is depleted.")
-		if("control")
-			to_chat(usr, "The readouts indicate that the reactor is operating normally.")
-		if("control_idle")
-			to_chat(usr, "The readouts indicate that the reactor is shut down.")
-		if("control_danger")
-			to_chat(usr, "The readouts indicate that the reactor is overheated, and that you should cool it down.")
-		
-	to_chat(usr, "The temperature reads out [associated_reactor.temperature]K")
-	if(associated_reactor.fuel)
-		to_chat(usr, "The fuel reads out [floor(associated_reactor.fuel.life*100+0.5)]% life remaining")
+	if(!powered())
+		to_chat(usr, "The power is off. You should plug it in. Soon.")
+		return
+	if(stat & BROKEN)
+		to_chat(usr, "The screen is broken. You should fix it soon.")
+		return
+	
+	if(!associated_reactor)
+		to_chat(usr, "The readouts indicate there's no linked reactor.")
+		return
 
-/*
-/obj/machinery/fissioncontroller/set_broken()
-	if(can_autoscram)
-		associated_reactor.SCRAM=TRUE
-		say("Reactor controller electrical fault detected, engaging SCRAM.", class = "binaryradio")
-		return TRUE
-	return FALSE
-*/
+	if(associated_reactor.SCRAM)
+		to_chat(usr, "<span class='warning'>The readouts indicate that the SCRAM protocol has been activated.</span>")
+	
+	if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP)
+		to_chat(usr, "<span class='warning'>The readouts indicate that the reactor is overheated, and that you should cool it down.</span>")
+	
+	if(!associated_reactor.fuel)
+		to_chat(usr, "The readouts indicate there's no fuel rod inserted.")
+	else
+		if(associated_reactor.fuel.life <=0)
+			to_chat(usr, "The readouts indicate that the fuel is depleted.")
+		else
+			if(associated_reactor.considered_on())
+				to_chat(usr, "The readouts indicate that the reactor is operating normally.")
+			else
+				to_chat(usr, "The readouts indicate that the reactor is shut down.")
+			to_chat(usr, "The fuel reads out [floor(associated_reactor.fuel.life*100+0.5)]% life remaining")
+	to_chat(usr, "The temperature reads out [associated_reactor.temperature]K")
+
+		
 
 /obj/machinery/fissioncontroller/process()
 	update_icon()
@@ -258,6 +257,7 @@ included:
 			if(can_autoscram)
 				say("Reactor lost power, engaging SCRAM.", class = "binaryradio")
 				associated_reactor.SCRAM=TRUE
+		return
 	else
 		poweroutagemsg=FALSE
 	
