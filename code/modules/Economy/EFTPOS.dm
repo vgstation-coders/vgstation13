@@ -162,7 +162,7 @@
 			if("reset")
 				//reset the access code - requires HoP/captain access
 				var/obj/item/I = usr.get_active_hand()
-				if (emag_check(I,user))
+				if (emag_check(I,usr))
 					return
 				else if (istype(I, /obj/item/weapon/card))
 					var/obj/item/weapon/card/id/C = I
