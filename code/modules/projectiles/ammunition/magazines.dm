@@ -404,7 +404,7 @@
 	compatible_gun_type = /obj/item/weapon/gun/lawgiver/demolition
 
 /obj/item/ammo_storage/magazine/lawgiver/honkgiver
-	desc = "State-of-the-HONK clownspace technology allows this magazine to generate new rounds by honking it with a simple bike horn."
+	desc = "State-of-the-HONK clownspace technology allows this magazine to generate honkmunitions by converting recharger power. Just don't let security catch you."
 	compatible_gun_type = /obj/item/weapon/gun/lawgiver/honkgiver
 	icon_state = "honkgiver"
 	var/obj/item/ammo_storage/magazine/lawgiver/original_type = null
