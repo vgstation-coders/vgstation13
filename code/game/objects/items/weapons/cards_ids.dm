@@ -176,7 +176,7 @@
 /obj/item/weapon/card/emag/afterattack(var/atom/target, mob/user, proximity)
 	if(!proximity || !canUse(user,target))
 		return
-	if (istype(target, /mob/living/carbon/human))
+	if (ishuman(target))
 		var/mob/living/carbon/target_living = target
 		//get target zone with 0% chance of missing
 		var/zone = ran_zone(user.zone_sel.selecting, 100)
