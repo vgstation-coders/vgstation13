@@ -383,7 +383,10 @@ var/global/list/alert_overlays_global = list()
 	if(density)
 		door_animate("spark")
 		sleep(6)
-		open()
+		if(isAI(user) || ispulsedemon(user))
+			open()
+		else
+			force_open(user)
 		sleep(8)
 	blocked = TRUE
 	update_icon()
