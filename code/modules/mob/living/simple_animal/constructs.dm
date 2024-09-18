@@ -40,7 +40,7 @@
 
 	var/list/healers = list()
 
-	var/construct_color = rgb(255,255,255)
+	var/construct_color = "#FFFFFF"
 
 	var/floating_amplitude = 4
 
@@ -48,6 +48,8 @@
 	var/spell/spell_on_use_inhand = /spell
 
 	blooded = FALSE
+
+	var/construct_type = "Unknown"
 
 
 /mob/living/simple_animal/construct/New()
@@ -96,6 +98,14 @@
 		return 1
 	if(find_active_faction_by_member(mind.GetRole(LEGACY_CULTIST)))
 		return 1
+
+/mob/living/simple_animal/construct/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor)
+	var/datum/role/cultist/C = iscultist(src)
+	if (C && damage && !iscultist(target) && !target.isDead())
+		if (target.mind)
+			C.gain_devotion(30, DEVOTION_TIER_3, "attack_construct", target)
+		else
+			C.gain_devotion(30, DEVOTION_TIER_2, "attack_construct_nomind", target)
 
 #define SPEAK_OVER_GENERAL_CULT_CHAT 0
 #define SPEAK_OVER_CHANNEL_INTO_CULT_CHAT 1
@@ -238,7 +248,9 @@
 		update_icons()
 	else
 		M.unarmed_attack_mob(src)
+		return 1
 
+/*
 /mob/living/simple_animal/construct/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)
 	if(O.force)
@@ -246,6 +258,8 @@
 		if (O.damtype == HALLOSS)
 			damage = 0
 		if(isholyweapon(O))
+			playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
+			anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "holy",sleeptime = 5, lay = NARSIE_GLOW,plane = ABOVE_LIGHTING_PLANE)
 			damage *= 2
 			purge = 3
 		adjustBruteLoss(damage)
@@ -254,7 +268,7 @@
 	else
 		to_chat(usr, "<span class='warning'>This weapon is ineffective, it does no damage.</span>")
 		user.visible_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
-
+*/
 
 /mob/living/simple_animal/construct/mode()
 	set name = "Activate Held Object"
@@ -295,6 +309,7 @@
 	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
 	floating_amplitude = 2
 	var/damageblock = 10
+	construct_type = "Juggernaut"
 
 /mob/living/simple_animal/construct/armoured/proc/juggerblock(var/damage, var/atom/A)//juggernauts ignore damage of 10 and bellow if they aren't showing cracks yet (which happens when they are at 66% hp)
 	var/hurt = maxHealth - health
@@ -347,10 +362,12 @@
 		return PROJECTILE_COLLISION_BLOCKED
 	return (..(P))
 
-/mob/living/simple_animal/construct/armoured/thrown_defense(var/obj/O)
-	if(juggerblock(O.throwforce,O))
-		return FALSE
-	return TRUE
+/mob/living/simple_animal/construct/armoured/thrown_defense(var/obj/O,var/speed = 5)
+	. = ..()
+	if (. <= 1)//juggerblock doesn't protect from holy weapons
+		if(juggerblock(O.throwforce*(speed/5),O))
+			return 0
+	return .
 
 /mob/living/simple_animal/construct/armoured/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, sharp, edge, var/used_weapon = null, ignore_events = 0)
 	if (juggerblock(damage))
@@ -378,6 +395,7 @@
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/targeted/ethereal_jaunt/shift)
+	construct_type = "Wraith"
 
 /mob/living/simple_animal/construct/wraith/get_unarmed_sharpness(mob/living/victim)
 	return 1.5
@@ -415,6 +433,7 @@
 
 	// tactically deploy a wall under you and become immune to projectiles, I guess
 	spell_on_use_inhand = /spell/aoe_turf/conjure/wall
+	construct_type = "Artificer"
 
 /mob/living/simple_animal/construct/builder/New()
 	..()
@@ -470,6 +489,7 @@
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/pierce.ogg'
+	construct_type = "Harvester"
 
 	construct_spells = list(
 			/spell/targeted/harvest,

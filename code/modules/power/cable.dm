@@ -206,8 +206,13 @@ By design, d1 is the smallest direction and d2 is the highest
 	src.add_fingerprint(user)
 
 /obj/structure/cable/proc/report_load(mob/user)
-	if((powernet) && (powernet.avail > 0))		// is it powered?
-		to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [format_watts(powernet.get_load())] - Available: [format_watts(powernet.avail)].</SPAN>")
+	if(powernet)
+		if(powernet.avail > 0)		// is it powered?
+			to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [format_watts(powernet.get_load())] - Available: [format_watts(powernet.avail)].</SPAN>")
+		else
+			to_chat(user, "<SPAN CLASS='notice'>The cable is not powered.</SPAN>")
+		if(powernet.haspulsedemon)
+			to_chat(user, "<SPAN CLASS='warning'>Strange malicious pull on load detected, possible sentience.</SPAN>")
 	else
 		to_chat(user, "<SPAN CLASS='notice'>The cable is not powered.</SPAN>")
 

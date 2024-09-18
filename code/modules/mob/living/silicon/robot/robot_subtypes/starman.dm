@@ -18,6 +18,7 @@
 	src.add_spell(new /spell/aoe_turf/starman_heal)
 	src.add_spell(new /spell/targeted/starman_shield)
 	src.add_spell(new /spell/targeted/starman_warp)
+	src.add_spell(new /spell/starman_dance)
 
 /mob/living/silicon/robot/starman/updatename(var/prefix)
 
@@ -313,6 +314,30 @@
 		user.visible_message("<span class='danger'>\The [user] bends reality in impossible ways!</span>","<span class='notice'>*Beep* Hostile consciousnesses twisted.</span>")
 
 	..()
+
+/spell/starman_dance
+	name = "Starman's Dance"
+	desc = "Damn! Look at those moves!"
+	override_icon = 'icons/mob/robots.dmi'
+	hud_state = "starman"
+	charge_max = 100
+	spell_flags = INCLUDEUSER
+	range = 1
+
+//Because spellcode requires a target, any target, even if there is no target
+/spell/starman_dance/choose_targets(mob/user)
+	return list(user)
+
+//Because the .dmi file sprite is larger than the robots sprite the new sprite will be displaced
+//Temporarily shifts the starman's sprite for the duration of the animation
+//The duration is set manually because BYOND doesn't support playing it for as long as the flick lasts
+//The duration is 0.4 (40ms) frame delay * 45 frames (and one frame is 10ms shorter because the timing is not precise) = 1.799 seconds
+/spell/starman_dance/cast(list/targets, mob/user)
+	var/original_x = user.pixel_x
+	user.pixel_x -= 7 * PIXEL_MULTIPLIER
+	flick('icons/mob/robots_starman_dance.dmi', user)
+	spawn(18)
+		user.pixel_x = original_x
 
 
 /obj/item/weapon/gun/energy/starman_beam

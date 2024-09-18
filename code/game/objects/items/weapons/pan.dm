@@ -39,7 +39,6 @@
 												/obj/item/weapon/reagent_containers/syringe,
 												/obj/item/weapon/reagent_containers/dropper)
 	var/open_container_override = FALSE
-	particles = new/particles/steam
 
 
 /obj/item/weapon/reagent_containers/pan/New()
@@ -77,24 +76,15 @@
 		average_chem_temp = reagents.chem_temp
 		chem_temps = 1
 	for(var/atom/content in contents)
-		average_chem_temp += content.reagents.chem_temp
-		chem_temps++
+		if(content.reagents)
+			average_chem_temp += content.reagents.chem_temp
+			chem_temps++
 	if (chem_temps)
 		average_chem_temp /= chem_temps
-	if (!particles)
-		particles = new/particles/steam
-	if (average_chem_temp >= STEAMTEMP)
-		steam_spawn_adjust(average_chem_temp)
-	else
-		particles.spawning = 0
+	steam_spawn_adjust(average_chem_temp)
 
 /obj/item/weapon/reagent_containers/pan/update_icon()
-
 	overlays.len = 0
-
-	if(blood_overlay)
-		overlays += blood_overlay
-
 	//reagents:
 	if(reagents.total_volume)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "pan20")
@@ -132,25 +122,14 @@
 		//put a front over the ingredients where they're occluded from view by the side of the pan
 		var/image/pan_front = image('icons/obj/pan.dmi', src, "pan_front")
 		overlays += pan_front
-		//put blood back onto the pan front
-		if(blood_overlay)
-
-			var/icon/I = new /icon('icons/obj/pan.dmi', "pan_front")
-			I.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD) //fills the icon_state with white (except where it's transparent)
-			I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY) //adds blood and the remaining white areas become transparant
-
-			var/image/frontblood = image(I)
-			frontblood.color = blood_color
-
-			overlays += frontblood
 		update_temperature_overlays()
 	else
-		if (particles)
-			particles.spawning = 0
+		remove_particles(PS_STEAM)
 
 		//Note: an alternative to the above might be to overlay all of the non-reagent ingredients onto a single icon, then mask it with the "pan_mask" icon_state.
 		//This would obviate the need to regenerate the blood overlay, and help avoid anomalies with large ingredient sprites.
 		//However I'm not totally sure how to do this nicely.
+	set_blood_overlay()
 
 /////////////////////Dumping-and-splashing-related stuff/////////////////////
 
@@ -398,8 +377,7 @@
 	return ffuu
 
 /obj/item/weapon/reagent_containers/pan/process()
-	if (particles)
-		particles.spawning = 0
+	steam_spawn_adjust(0)
 
 	var/obj/O
 	if(isobj(loc))
@@ -427,17 +405,15 @@
 		chem_temps = 1
 	//If there are non-reagent contents (meat etc), heat them as well
 	for(var/atom/content in contents)
-		content.reagents.heating(cook_energy / contents.len, cook_temperature)
-		average_chem_temp += content.reagents.chem_temp
-		chem_temps++
+		if(content.reagents)
+			content.reagents.heating(cook_energy / contents.len, cook_temperature)
+			average_chem_temp += content.reagents.chem_temp
+			chem_temps++
 
 	//making the pan steam when its content is hot enough
 	if (chem_temps)
 		average_chem_temp /= chem_temps
-	if (!particles)
-		particles = new/particles/steam
-	if (average_chem_temp >= STEAMTEMP)
-		steam_spawn_adjust(average_chem_temp)
+	steam_spawn_adjust(average_chem_temp)
 
 	cookingprogress += (SS_WAIT_FAST_OBJECTS * speed_multiplier)
 
@@ -462,8 +438,8 @@
 			cooked = cook_fail()
 
 		if(cooked)
-			if (cooked.reagents.chem_temp < COOKTEMP_READY)
-				cooked.reagents.chem_temp = COOKTEMP_READY//so cooking with frozen meat doesn't produce frozen steaks
+			if (cooked.reagents?.chem_temp < COOKTEMP_READY)
+				cooked.reagents?.chem_temp = COOKTEMP_READY//so cooking with frozen meat doesn't produce frozen steaks
 				cooked.update_icon()
 			cooked.forceMove(src)
 			update_icon()
@@ -475,7 +451,8 @@
 
 	//Hotspot expose
 	var/turf/T = get_turf(src)
-	T?.hotspot_expose(O ? O.cook_temperature() : COOKTEMP_DEFAULT, 500, 1, surfaces = 0) //Everything but the first arg is taken from igniter.
+	if(T)
+		try_hotspot_expose(O ? O.cook_temperature() : COOKTEMP_DEFAULT, MEDIUM_FLAME, 0) //Everything but the first arg is taken from igniter.
 
 /obj/item/weapon/reagent_containers/pan/proc/reset_cooking_progress()
 	cookingprogress = 0

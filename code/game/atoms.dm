@@ -44,7 +44,8 @@ var/global/list/ghdel_profiling = list()
 	var/timestopped
 
 	appearance_flags = TILE_BOUND|LONG_GLIDE|TILE_MOVER
-
+	/// sources of setting KEEP_TOGETHER on an atom
+	var/list/keep_together_sources
 	var/slowdown_modifier //modified on how fast a person can move over the tile we are on, see turf.dm for more info
 	/// Last name used to calculate a color for the chatmessage overlays
 	var/chat_color_name
@@ -57,8 +58,9 @@ var/global/list/ghdel_profiling = list()
 
 	var/arcanetampered = 0 //A looot of things can be
 
+
 	var/image/moody_light
-	var/list/moody_lights = list()
+	var/list/moody_lights
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
@@ -154,8 +156,10 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/throw_impact(atom/hit_atom, var/speed, mob/user, var/list/impact_whitelist)
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
-		playsound(src, src.throw_impact_sound, 80, 1)
-		M.hitby(src,speed,src.dir,impact_whitelist)
+		if (M.hitby(src,speed,src.dir,impact_whitelist))
+			playsound(loc,'sound/effects/slap2.ogg', 15, 1)//grabbed the item
+		else
+			playsound(src, src.throw_impact_sound, 80, 1)
 		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by [user] ([user ? user.ckey : "what"])</font>")
 
 	else if(isobj(hit_atom))
@@ -168,12 +172,13 @@ var/global/list/ghdel_profiling = list()
 	else if(isturf(hit_atom) && !istype(src,/obj/mecha))//heavy mechs don't just bounce off walls, also it can fuck up rocket dashes
 		var/turf/T = hit_atom
 		if(T.density)
-			spawn(2)
-				step(src, turn(src.dir, 180))
+			if (isturf(loc))
+				spawn(2)
+					step(src, turn(src.dir, 180))
 			if(istype(src,/mob/living))
 				var/mob/living/M = src
 				M.take_organ_damage(10)
-	INVOKE_EVENT(src, /event/throw_impact, "hit_atom" = hit_atom, "speed" = speed, "user" = user)
+	INVOKE_EVENT(src, /event/throw_impact, "hit_atom" = hit_atom, "speed" = speed, "user" = user, "thrown_atom" = src)
 
 /atom/Destroy()
 	QDEL_NULL(reagents)
@@ -184,6 +189,9 @@ var/global/list/ghdel_profiling = list()
 	invisibility = 101
 	if(istype(beams, /list) && beams.len)
 		beams.len = 0
+	var/turf/simulated/T = get_turf(src)
+	if(istype(T))
+		T.zone?.burnable_atoms -= src
 	/*if(istype(beams) && beams.len)
 		for(var/obj/effect/beam/B in beams)
 			if(B && B.target == src)
@@ -192,6 +200,7 @@ var/global/list/ghdel_profiling = list()
 				B.master.target = null
 		beams.len = 0
 	*/
+	remove_particles()
 	QDEL_NULL(firelightdummy)
 	..()
 
@@ -247,6 +256,9 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/is_open_container()
 	return flags & OPENCONTAINER
 
+/atom/proc/reagent_transfer_message(var/transfer_amt)
+	return "<span class='notice'>You transfer [transfer_amt] units of the solution to \the [src.name].</span>"
+
 // For when we want an open container that doesn't show its reagents on examine
 /atom/proc/hide_own_reagents()
 	return FALSE
@@ -295,13 +307,12 @@ var/global/list/ghdel_profiling = list()
 		return 1
 	return
 
-/atom/proc/recursive_in_contents_of(var/atom/container, var/atom/searching_for = src)
-	if(isturf(searching_for))
+/atom/proc/recursive_in_contents_of(atom/container)
+	if(!loc)
 		return FALSE
 	if(loc == container)
 		return TRUE
-	return recursive_in_contents_of(container, src.loc)
-
+	return loc.recursive_in_contents_of(container)
 
 /atom/proc/projectile_check()
 	return
@@ -463,7 +474,8 @@ its easier to just keep the beam vertical.
 	if(on_fire)
 		user.simple_message("<span class='danger'>OH SHIT! IT'S ON FIRE!</span>",\
 			"<span class='info'>It's on fire, man.</span>")
-
+	if(charred_overlay)
+		to_chat(user, span_info("It's covered in ash."))
 	if(min_harm_label && harm_labeled)
 		if(harm_labeled < min_harm_label)
 			to_chat(user, harm_label_examine[1])
@@ -479,6 +491,11 @@ its easier to just keep the beam vertical.
 			to_chat(user, "<a href='?src=\ref[src];bug=\ref[bug]'>There's something hidden in there.</a>")
 		else if(isobserver(user) || prob(100 / (distance + 2)))
 			to_chat(user, "There's something hidden in there.")
+	if(isliving(user) && user.mind)
+		for(var/datum/role/R in get_list_of_elements(user.mind.antag_roles))
+			var/antag_text = R.role_examine_text_addition(src)
+			if(antag_text)
+				to_chat(user, "[antag_text]\n")
 	INVOKE_EVENT(src, /event/examined, "user" = user)
 
 /atom/Topic(href, href_list)
@@ -494,7 +511,7 @@ its easier to just keep the beam vertical.
 			bug.removed(usr)
 
 /atom/proc/relaymove()
-	return
+	INVOKE_EVENT(src, /event/relaymoved, "mover" = src)
 
 // Try to override a mob's eastface(), westface() etc. (CTRL+RIGHTARROW, CTRL+LEFTARROW). Return 1 if successful, which blocks the mob's own eastface() etc.
 // Called first on the mob's loc (turf, locker, mech), then on whatever the mob is buckled to, if anything.
@@ -541,10 +558,15 @@ its easier to just keep the beam vertical.
 /atom/proc/clean_act(var/cleanliness)//1 = contact with water (splashed with water, removes glue from objs), 2 = space cleaner or efficient cleaning (showers, sink, soap), 3 = bleach
 	if (cleanliness >= CLEANLINESS_SPACECLEANER)
 		clean_blood()
+		if(charred_overlay)
+			cut_overlay(charred_overlay)
 	if (cleanliness >= CLEANLINESS_BLEACH)
 		color = ""
 	if (cleanliness >= CLEANLINESS_WATER)//I mean, not sure why we'd ever add a rank below water but, futur-proofing and all that jazz
 		extinguish()//Fire.dm
+
+/atom/proc/wind_act(var/differential, var/list/connecting_turfs)
+	return
 
 //Called on every object in a shuttle which rotates
 /atom/proc/map_element_rotate(var/angle)
@@ -883,6 +905,12 @@ its easier to just keep the beam vertical.
 
 /atom/proc/update_icon()
 
+/atom/proc/add_overlay(overlay_appearances)
+	overlays += overlay_appearances
+
+/atom/proc/cut_overlay(overlay_appearances)
+	overlays -= overlay_appearances
+
 /atom/proc/splashable()
 	return TRUE
 
@@ -959,6 +987,11 @@ its easier to just keep the beam vertical.
 
 /atom/proc/thermal_energy_transfer()
 	return
+
+/atom/proc/update_keep_together()
+	appearance_flags &= ~KEEP_TOGETHER
+	if(length(keep_together_sources))
+		appearance_flags |= KEEP_TOGETHER
 
 /atom/proc/suitable_colony()
 	return FALSE
@@ -1063,7 +1096,7 @@ its easier to just keep the beam vertical.
 	return FALSE
 
 //Single overlay moody light
-/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
+/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", var/moody_alpha = 255, var/moody_color = "#ffffff", var/offX = 0, var/offY = 0)
 	overlays -= moody_light
 	var/area/here = get_area(src)
 	if (here && here.dynamic_lighting)
@@ -1073,6 +1106,8 @@ its easier to just keep the beam vertical.
 		moody_light.blend_mode = BLEND_ADD
 		moody_light.alpha = moody_alpha
 		moody_light.color = moody_color
+		moody_light.pixel_x = offX
+		moody_light.pixel_y = offY
 		overlays += moody_light
 	luminosity = max(luminosity, 2)
 
@@ -1082,24 +1117,33 @@ its easier to just keep the beam vertical.
 	moody_light = null
 
 //Multi-overlay moody lights. don't combine both procs on a single atom, use one or the other.
-/atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
+/atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", var/moody_alpha = 255, var/moody_color = "#ffffff", var/offX = 0, var/offY = 0, var/image_override = null)
 	if (!index)
 		return
+	if (isnull(moody_lights))
+		moody_lights = list()
 	if (index in moody_lights)
 		overlays -= moody_lights[index]
 	var/area/here = get_area(src)
 	if (here && here.dynamic_lighting)
-		moody_light = image(moody_icon, src, moody_state)
-		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
+		if (image_override)
+			moody_light = image_override
+		else
+			moody_light = image(moody_icon, src, moody_state)
+		moody_light.appearance_flags |= RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
 		moody_light.plane = LIGHTING_PLANE
 		moody_light.blend_mode = BLEND_ADD
 		moody_light.alpha = moody_alpha
 		moody_light.color = moody_color
+		moody_light.pixel_x = offX
+		moody_light.pixel_y = offY
 		moody_lights[index] = moody_light
 		overlays += moody_lights[index]
 	luminosity = max(luminosity, 2)
 
 /atom/proc/kill_moody_light_index(var/index)
+	if (isnull(moody_lights))
+		moody_lights = list()
 	if (!index || !(index in moody_lights))
 		return
 	overlays -= moody_lights[index]
@@ -1108,6 +1152,8 @@ its easier to just keep the beam vertical.
 		luminosity = initial(luminosity)
 
 /atom/proc/kill_moody_light_all()
+	if (isnull(moody_lights))
+		moody_lights = list()
 	for (var/i in moody_lights)
 		overlays -= moody_lights[i]
 		moody_lights.Remove(i)

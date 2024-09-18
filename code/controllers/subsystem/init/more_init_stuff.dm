@@ -26,7 +26,8 @@ var/datum/subsystem/more_init/SSmore_init
 	create_global_parallax_icons()
 	log_debug("  Finished caching space parallax simulation in [stop_watch(watch)]s.", FALSE)
 
-	if (!config.skip_minimap_generation)
+	init_sensed_explosions_list()
+	if (!config.skip_holominimap_generation)
 		watch=start_watch()
 		generateHoloMinimaps()
 		log_debug("  Finished holominimaps in [stop_watch(watch)]s.", FALSE)
@@ -53,6 +54,10 @@ var/datum/subsystem/more_init/SSmore_init
 	centcomm_store = new
 	create_randomized_reagents()
 	log_debug("Finished doing the other misc. initializations in [stop_watch(watch)]s.", FALSE)
+
+/proc/init_sensed_explosions_list()
+	for (var/z = 1 to world.maxz)
+		sensed_explosions["z[z]"] = list()
 
 /proc/cache_machinery_components_rating()
 	var/list/cache = list()

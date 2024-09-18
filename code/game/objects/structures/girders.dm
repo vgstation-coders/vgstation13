@@ -33,13 +33,19 @@
 
 /obj/structure/girder/wood/attackby(var/obj/item/W, var/mob/user)
 	if(W.sharpness_flags & CHOPWOOD)
-		playsound(src, 'sound/effects/woodcuttingshort.ogg', 50, 1)
-		user.visible_message("<span class='warning'>[user] smashes through \the [src] with \the [W].</span>", \
-							"<span class='notice'>You smash through \the [src].</span>",\
-							"<span class='warning'>You hear the sound of wood being cut</span>"
-							)
-		qdel(src)
-		new material(get_turf(src), 2)
+		user.visible_message("<span class='notice'>[user] starts chopping at \the [src] with \the [W].</span>", \
+				"<span class='notice'>You start chopping at \the [src] with \the [W].</span>", \
+				"<span class='warning'>You hear the sound of wood being cut.</span>")
+		W.playtoolsound(src, 100)
+		var/choptime = 50
+		if(istype(W, /obj/item/weapon/fireaxe))
+			choptime = 10
+		if(do_after(user, src, choptime))
+			user.visible_message("<span class='warning'>[user] smashes through \the [src] with \the [W].</span>", \
+						"<span class='notice'>You smash through \the [src].</span>")
+			W.playtoolsound(src, 100)
+			new material(get_turf(src), 2)
+			qdel(src)
 	else
 		..()
 
@@ -236,7 +242,7 @@
 						S.use(use_amount)
 						user.visible_message("<span class='warning'>[user] creates a false reinforced wall!</span>", \
 						"<span class='notice'>You create a false reinforced wall. Push on it to open or close the passage.</span>")
-						var/obj/structure/falserwall/FW = new /obj/structure/falserwall(src.loc)
+						var/obj/structure/falsewall/rwall/FW = new /obj/structure/falsewall/rwall(src.loc)
 						FW.add_hiddenprint(user)
 						FW.add_fingerprint(user)
 						qdel(src)
@@ -449,6 +455,11 @@
 	name = "reinforced girder"
 	icon_state = "reinforced"
 	state = 2
+
+/obj/structure/girder/reinforced/displaced
+	name = "displaced reinforced girder"
+	icon_state = "r_displaced"
+	anchored = 0
 
 /obj/structure/cultgirder
 	name = "cult girder"

@@ -249,7 +249,7 @@
 			if(href_list["chem"])
 				if(!get_holder_of_type(loc, /mob))
 					to_chat(src, "<span class='warning'>You must have a carrier to inject with chemicals!</span>")
-				else if(chargeloop("chemsynth"))
+				else if(chargeloop(SOFT_CS))
 					var/mob/M = get_holder_of_type(loc, /mob)
 					if(M) //Sanity
 						M.reagents.add_reagent(href_list["chem"], 15)
@@ -257,7 +257,7 @@
 				else
 					to_chat(src, "<span class='warning'>Charge interrupted.</span>")
 		if(SOFT_FS)
-			if(href_list["food"] && chargeloop("foodsynth"))
+			if(href_list["food"] && chargeloop(SOFT_FS))
 				var/foodType = href_list["food"]
 				var/found = FALSE
 				for (var/name in synthable_default_food)
@@ -376,7 +376,7 @@
 		if(s == SOFT_CS)
 			dat += "<a href='byond://?src=\ref[src];software=[SOFT_CS];sub=0'>Chemical Synthesizer</a> <br>"
 		if(s == SOFT_FS)
-			dat += "<a href='byond://?src=\ref[src];software=[SOFT_CS];sub=0'>Nutrition Synthesizer</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_FS];sub=0'>Nutrition Synthesizer</a> <br>"
 	dat += "<br>"
 
 	// Navigation
@@ -557,7 +557,7 @@
 					dat += "<a href='byond://?src=\ref[src];software=[SOFT_MS];sub=0'>Return to Records</a><br>"
 					subscreen = 0
 					return dat
-				dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=2'>Update Scan</a><br>"
+				dat += "<a href='byond://?src=\ref[src];software=[SOFT_MS];sub=2'>Update Scan</a><br>"
 				dat += healthanalyze(M, src, TRUE)
 		dat += "<br/><a href='byond://?src=\ref[src];software=[SOFT_MS];sub=0'>Return to Records</a><br>"
 	return dat

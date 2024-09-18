@@ -219,3 +219,10 @@
 /obj/abstract/screen/fullscreen/client_fadein/New()
 	. = ..()
 	icon = current_round_splashscreen
+
+/obj/abstract/screen/fullscreen/narsie_rising
+	icon = 'icons/mob/screen1.dmi'
+	screen_loc = "WEST,SOUTH to EAST,NORTH"
+	icon_state = "blank"
+	anim_state = "narsie_rising"
+	clear_after_length = 80

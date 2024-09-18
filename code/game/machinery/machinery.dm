@@ -117,6 +117,9 @@ Class Procs:
 
 	w_type = NOT_RECYCLABLE
 	layer = MACHINERY_LAYER
+	flammable = FALSE
+
+	pass_flags_self = PASSMACHINE
 
 	penetration_dampening = 5
 
@@ -160,8 +163,6 @@ Class Procs:
 	var/inMachineList = 1 // For debugging.
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
 	var/id_tag = null // Identify the machine
-
-	autoignition_temperature = 0 //machinery shouldn't burn
 
 /obj/machinery/cultify()
 	var/list/random_structure = list(
@@ -215,6 +216,11 @@ Class Procs:
 	qdel(hack_overlay)
 
 	..()
+
+/obj/machinery/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover) && mover.checkpass(pass_flags_self))
+		return TRUE
+	return ..()
 
 /obj/machinery/projectile_check()
 	return PROJREACT_OBJS

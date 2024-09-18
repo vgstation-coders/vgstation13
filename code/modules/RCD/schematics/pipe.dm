@@ -40,6 +40,12 @@
 
 	AM.investigation_log(I_RCD,"was deconstructed by [user]")
 
+
+/datum/rcd_schematic/decon_pipes/send_list_assets(var/client/client)
+	register_asset("RPD_ICON_[name].png", new/icon('icons/effects/condecon.dmi', "decon" ))
+	send_asset(client, "RPD_ICON_[name].png")
+	list_icon="RPD_ICON_[name].png"
+
 /datum/rcd_schematic/paint_pipes
 	name     = "Paint pipes"
 	category = "Utilities"
@@ -105,7 +111,7 @@
 	var/mass_colour_on = mass_colour ? "On" : "Off"
 	. += {" <br>
 			<h4>Mass Colour:</h4>
-			Mass Colouration: <b><A href='?src=\ref[master.interface];set_mass_colour=1'>[mass_colour_on]</a></b>"}
+			Mass Colouration: <b><A  href='?src=\ref[master.interface];set_mass_colour=1'><span class='[mass_colour? "schem_selected" : "schem"]'>[mass_colour_on]</span></a></b>"}
 
 /datum/rcd_schematic/paint_pipes/attack(var/atom/A, var/mob/user)
 	if(!istype(A, /obj/machinery/atmospherics))
@@ -162,6 +168,11 @@
 		master.update_options_menu()
 	return 1
 
+/datum/rcd_schematic/paint_pipes/send_list_assets(var/client/client)
+	register_asset("RPD_ICON_[name].png", new/icon('icons/obj/painting_items.dmi', "paint_roller" ))
+	send_asset(client, "RPD_ICON_[name].png")
+	list_icon="RPD_ICON_[name].png"
+
 //METERS AND SENSORS.
 
 /datum/rcd_schematic/gsensor
@@ -181,6 +192,13 @@
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 	new /obj/item/pipe_gsensor(A, frequency, id)
 
+
+/datum/rcd_schematic/gsensor/send_list_assets(var/client/client)
+	register_asset("RPD_ICON_[name].png", new/icon('icons/obj/stationobjs.dmi', "gsensor0" ))
+	send_asset(client, "RPD_ICON_[name].png")
+	list_icon="RPD_ICON_[name].png"
+
+
 /datum/rcd_schematic/pmeter
 	name     = "Pipe meter"
 	category = "Devices"
@@ -198,6 +216,12 @@
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 	new /obj/item/pipe_meter(A, frequency, id)
 
+
+/datum/rcd_schematic/pmeter/send_list_assets(var/client/client)
+	register_asset("RPD_ICON_[name].png", new/icon('icons/obj/pipe-item.dmi', "meter" ))
+	send_asset(client, "RPD_ICON_[name].png")
+	list_icon="RPD_ICON_[name].png"
+
 //ACTUAL PIPES.
 
 /datum/rcd_schematic/pipe
@@ -209,6 +233,9 @@
 	var/pipe_type    = PIPE_BINARY
 	var/selected_dir = NORTH
 	var/layer        = PIPING_LAYER_DEFAULT //Layer selected, at 0, no layer picker will be available (disposals).
+	list_icon="RPD_ICON_0.png" //i would like to have placed this in the schematic_list_line proc, but it won't render.
+	//pipe_id constants are defined in /code/ATMOSPHERICS/pipe/construction.dm, by the way.
+	//"do NOT hardcode these, use the defines" - unfortunately we don't have the luxury because you can only do constant statements in defines.
 
 /datum/rcd_schematic/pipe/New(var/obj/item/device/rcd/n_master)
 	. = ..()
@@ -270,7 +297,7 @@
 
 /datum/rcd_schematic/pipe/get_HTML()
 	. += "<h4>Directions & layers</h4>"
-	. += "<div id='dir_holder'>"
+	. += "<span id='dir_holder'>"
 
 	switch(pipe_type)
 		if(PIPE_BINARY)
@@ -324,31 +351,39 @@
 			. += render_dir_image(SOUTH, "South to Down")
 			. += render_dir_image(WEST, "West to Down")
 
-	. += "</div>"
+	. += "</span>"
 
 	if(layer)
-		. += {"
-		<div class="layer_holder">
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=1"><div class="layer vertical one   [layer == 1 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=2"><div class="layer vertical two   [layer == 2 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=3"><div class="layer vertical three [layer == 3 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=4"><div class="layer vertical four  [layer == 4 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=5"><div class="layer vertical five  [layer == 5 ? "selected" : ""]"></div></a>
-		</div>
-
-		<div class="layer_holder" style="left: 200px;">
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=1"><div class="layer horizontal one   [layer == 1 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=2"><div class="layer horizontal two   [layer == 2 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=3"><div class="layer horizontal three [layer == 3 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=4"><div class="layer horizontal four  [layer == 4 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=5"><div class="layer horizontal five  [layer == 5 ? "selected" : ""]"></div></a>
-		</div>
+	
+		. += {"<span id="layersholder">
+		<table class="layer">
+			<tr>
+			<td class="layergradv" id="[layer==1 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=1"> </a></td>
+			<td class="layergradv" id="[layer==2 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=2"> </a></td>
+			<td class="layergradv" id="[layer==3 ? "layer_center_selected" : "layer_center" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=3"> </a></td> 
+			<td class="layergradv" id="[layer==4 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=4"> </a></td> 
+			<td class="layergradv" id="[layer==5 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=5"> </a></td>
+			</tr>
+		</table>
+		
+		<table class="layer">
+		
+			<tr><td class="layergradh" id="[layer==1 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=1">  </a></td></tr>
+			<tr><td class="layergradh" id="[layer==2 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=2">  </a></td></tr>
+			<tr><td class="layergradh" id="[layer==3 ? "layer_center_selected" : "layer_center" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=3">  </a></td></tr>
+			<tr><td class="layergradh" id="[layer==4 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=4">  </a></td></tr>
+			<tr><td class="layergradh" id="[layer==5 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=5">  </a></td></tr>
+		
+	
+		</table></span>
 	"}
 	
+	
+
 	. += {"
 		<div>
-			<b>Frequency:</b> <a href="?src=\ref[master.interface];set_freq=-1">[format_frequency(master.frequency)] GHz</a> <a href="?src=\ref[master.interface];set_freq=[1439]">Reset</a>
-			<b>ID:</b> <a href="?src=\ref[master.interface];set_id=-1">[master.id ? master.id : "-----"] </a> <a href="?src=\ref[master.interface];set_id=null">Reset</a>
+			<b>Frequency:</b> <a  href="?src=\ref[master.interface];set_freq=-1"><span class='schem'>[format_frequency(master.frequency)] GHz</span></a> <a href="?src=\ref[master.interface];set_freq=[1439]"><span class='schem'>Reset</span></a>
+			<b>ID:</b> <a href="?src=\ref[master.interface];set_id=-1"><span class='schem'>[master.id ? master.id : "-----"]</span></a> <a href="?src=\ref[master.interface];set_id=null"><span class='schem'>Reset</span></a>
 		</div>
 	"}
 
@@ -468,6 +503,14 @@
 
 	return ..()
 
+/datum/rcd_schematic/pipe/send_list_assets(var/client/client)
+	var/list/dirs=get_dirs()
+	if(!dirs || dirs.len==0)
+		return ..() //if there's no dirs, we can't really display that, now can we?
+	register_asset("RPD_ICON_[pipe_id].png", new/icon('icons/obj/pipe-item.dmi', pipeID2State[pipe_id + 1], dirs[2]))
+	send_asset(client, "RPD_ICON_[pipe_id].png") // [pipe_id]
+	list_icon="RPD_ICON_[pipe_id].png"
+
 //Disposal piping.
 /datum/rcd_schematic/pipe/disposal
 	category      = "Disposal Pipes"
@@ -475,6 +518,16 @@
 	layer         = 0 // Set to 0 to disable layer selection.
 	pipe_id       = DISP_PIPE_STRAIGHT
 	var/actual_id = 0 // This is needed because disposals construction code is a shit.
+
+
+/datum/rcd_schematic/pipe/disposal/send_list_assets(var/client/client)
+	var/list/dirs=get_dirs()
+	if(!dirs || dirs.len==0)
+		return ..()
+	register_asset("RPD_ICON_D_[pipe_id].png", new/icon('icons/obj/pipes/disposal.dmi', disposalpipeID2State[pipe_id + 1], dirs[2]))
+	send_asset(client, "RPD_ICON_D_[pipe_id].png")
+	list_icon="RPD_ICON_D_[pipe_id].png"
+
 
 /datum/rcd_schematic/pipe/disposal/register_icon(var/dir)
 	register_asset("RPD_D_[pipe_id]_[dir].png", new/icon('icons/obj/pipes/disposal.dmi', disposalpipeID2State[pipe_id + 1], dir))
@@ -622,6 +675,14 @@ var/global/list/disposalpipeID2State = list(
 
 	pipe_id		= PIPE_LAYER_ADAPTER
 	pipe_type	= PIPE_UNARY
+
+/datum/rcd_schematic/pipe/layer_adapter/send_list_assets(var/client/client)
+	var/list/dirs=get_dirs()
+	if(!dirs || dirs.len==0)
+		return ..()
+	register_asset("RPD_ICON_[pipe_id].png", new/icon('icons/obj/atmospherics/pipe_adapter.dmi', "adapter_5", dirs[2]))
+	send_asset(client, "RPD_ICON_[pipe_id].png")
+	list_icon="RPD_ICON_[pipe_id].png"
 
 /datum/rcd_schematic/pipe/layer_adapter/register_icon(var/dir)
 	for(var/layer = PIPING_LAYER_MIN to PIPING_LAYER_MAX)
@@ -851,6 +912,11 @@ var/global/list/disposalpipeID2State = list(
 	pipe_id		= DISP_END_BIN
 	actual_id	= 6
 	pipe_type	= PIPE_NONE //Will disable the icon.
+
+/datum/rcd_schematic/pipe/disposal/bin/send_list_assets(var/client/client)
+	register_asset("RPD_ICON_D_[pipe_id].png", new/icon('icons/obj/pipes/disposal.dmi', "condisposal"))
+	send_asset(client, "RPD_ICON_D_[pipe_id].png")
+	list_icon="RPD_ICON_D_[pipe_id].png"
 
 /datum/rcd_schematic/pipe/disposal/outlet
 	name		= "Outlet"

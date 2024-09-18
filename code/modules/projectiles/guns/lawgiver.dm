@@ -339,10 +339,8 @@ var/list/lawgiver_modes = list(
 
 /obj/item/weapon/gun/lawgiver/proc/RemoveMag(var/mob/user)
 	if(magazine)
-		magazine.forceMove(get_turf(src.loc))
-		if(user)
-			user.put_in_hands(magazine)
-			to_chat(user, "<span class='notice'>You pull the magazine out of \the [src].</span>")
+		user.put_in_hands(magazine)
+		to_chat(user, "<span class='notice'>You pull the magazine out of \the [src].</span>")
 		magazine.update_icon()
 		magazine = null
 		update_icon()

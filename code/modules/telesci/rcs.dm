@@ -24,7 +24,7 @@
 	if(W.is_wrench(user))
 		W.playtoolsound(src, 50)
 		anchored = !anchored
-		to_chat(user, "<span class='caution'>\the [src] [anchored ? "is now secured" : "can now be moved"] .</span>")
+		to_chat(user, "<span class='caution'>\The [src] [anchored ? "is now secured" : "can now be moved"] .</span>")
 	if(W.is_screwdriver(user))
 		if(stage == 0)
 			W.playtoolsound(src, 50)
@@ -141,7 +141,7 @@
 		return
 
 	if (no_station && user.z == map.zMainStation)
-		to_chat(user, "<span class='warning'>The safety prevents the sending of crates from the viscinity of Nanotrasen Station.</span>")
+		to_chat(user, "<span class='warning'>The safety prevents the sending of crates from the vicinity of Nanotrasen Station.</span>")
 		return
 
 	if (cell.charge < send_cost)

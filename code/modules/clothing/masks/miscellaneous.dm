@@ -272,7 +272,7 @@
 	icon_state = "goldenmask"
 	item_state = "goldenmask"
 	species_fit = list(INSECT_SHAPED)
-	autoignition_temperature = 0
+	flammable = FALSE
 
 /obj/item/clothing/mask/goldface/equipped()
 	..()
@@ -292,6 +292,7 @@
 	icon_state = "holopipe_off"
 	item_state = "holopipe_off"
 	var/activated = 0
+	species_fit = list(VOX_SHAPED)
 
 
 /obj/item/clothing/mask/holopipe/proc/activate(var/mob/user as mob)

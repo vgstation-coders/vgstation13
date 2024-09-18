@@ -19,6 +19,11 @@ var/list/restricted_roulette_projectiles = list(
 	/obj/item/projectile/soulbullet,
 	)
 
+var/list/restrict_with_subtypes = list(
+		/obj/item/projectile/meteor,
+		/obj/item/projectile/immovablerod
+	)
+
 /obj/item/weapon/gun/projectile/roulette_revolver
 	name = "\improper Roulette Revolver"
 	desc = "A strange-looking revolver. Its construction appears somewhat slapdash."
@@ -40,11 +45,6 @@ var/list/restricted_roulette_projectiles = list(
 	var/infinite = 0
 	var/time_since_last_recharge = 0
 	var/list/available_projectiles = list()
-
-	var/list/restrict_with_subtypes = list(
-		/obj/item/projectile/meteor,
-		/obj/item/projectile/immovablerod
-	)
 
 /obj/item/weapon/gun/projectile/roulette_revolver/New()
 	..()

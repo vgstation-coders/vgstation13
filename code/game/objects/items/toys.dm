@@ -21,7 +21,6 @@
 	throw_speed = 4
 	throw_range = 20
 	force = 0
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 
 /*
@@ -43,9 +42,13 @@
 	return
 
 /obj/item/toy/waterballoon/afterattack(atom/A as mob|obj, mob/user as mob)
-	if (istype(A, /obj/structure/reagent_dispensers/watertank) && get_dist(src,A) <= 1)
-		A.reagents.trans_to(src, 10)
-		to_chat(user, "<span class = 'notice'>You fill the balloon with the contents of \the [A].</span>")
+	if(get_dist(src,A) <= 1)
+		if(istype(A, /obj/structure/reagent_dispensers/watertank))
+			A.reagents.trans_to(src, 10)
+			to_chat(user, "<span class = 'notice'>You fill the balloon with the contents of \the [A].</span>")
+		else if(istype(A,/obj/structure/sink))
+			reagents.add_reagent(WATER, 10)
+			to_chat(user, "<span class = 'notice'>You fill the balloon using \the [A].</span>")
 		src.desc = "A translucent balloon with some form of liquid sloshing around in it."
 		src.update_icon()
 	return
@@ -566,7 +569,7 @@
 	J.Shift(WEST, 13)
 	underlays += J
 	overlays += image(icon = icon, icon_state = "device")
-	rendered = getFlatIcon(src)
+	rendered = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(src)), override_dir = SOUTH)
 
 /obj/item/toy/bomb/examine(mob/user)
 	..()
@@ -680,6 +683,7 @@
 	desc = "A seemingly innocent sunflower...with a twist."
 	icon = 'icons/obj/hydroponics/sunflower.dmi'
 	icon_state = "produce"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
 	item_state = "sunflower"
 	var/empty = 0
 	flags = OPENCONTAINER
@@ -830,6 +834,8 @@
 	icon = 'icons/obj/module.dmi'
 	icon_state = "gooncode"
 	w_class = W_CLASS_TINY
+	origin_tech = Tc_MATERIALS + "=10;" + Tc_PLASMATECH + "=6;" + Tc_SYNDICATE + "=6;" + Tc_PROGRAMMING + "=-10;" + Tc_BLUESPACE + "=6;" + Tc_POWERSTORAGE + "=6;" + Tc_BIOTECH + "=6;" + Tc_NANOTRASEN + "1"
+	mech_flags = MECH_SCAN_GOONECODE //It's closed source!
 
 /obj/item/toy/gooncode/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's trying to re-add poo!</span>")
@@ -1442,14 +1448,7 @@
 /obj/item/toy/balloon/inflated/glove/pair/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/toy/crayon/red))
-		to_chat(user, "You color \the [src] light red using \the [W].")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/clothing/gloves/anchor_arms/A = new (get_turf(user))
-			user.put_in_hands(A)
-		else
-			new /obj/item/clothing/gloves/anchor_arms(get_turf(src.loc))
-		qdel(src)
+		user.create_in_hands(src, /obj/item/clothing/gloves/anchor_arms, msg = "You color \the [src] light red using \the [W].")
 
 /obj/item/toy/balloon/decoy
 	name = "inflatable decoy"

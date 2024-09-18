@@ -593,7 +593,10 @@ var/list/shuttle_log = list()
 	if(!justification)
 		justification = "#??!7E/_1$*/ARR-CON�FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
 	if(!isobserver(user))
-		shuttle_log += "\[[worldtime2text()]] Called from [get_area(user)] ([user.x-WORLD_X_OFFSET[user.z]], [user.y-WORLD_Y_OFFSET[user.z]], [user.z])."
+		if (user)
+			shuttle_log += "\[[worldtime2text()]] Called from [get_area(user)] ([user.x-WORLD_X_OFFSET[user.z]], [user.y-WORLD_Y_OFFSET[user.z]], [user.z])."
+		else
+			shuttle_log += "\[[worldtime2text()]] Called by game."
 	if (user)
 		log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
 		message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'.", 1)

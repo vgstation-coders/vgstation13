@@ -12,6 +12,9 @@
 	var/brute_dam = 0
 	var/burn_dam = 0
 
+/obj/item/robot_parts/proc/on_attach(datum/organ/external/attached_site)
+	return
+
 /obj/item/robot_parts/l_arm
 	name = "robot left arm"
 	desc = "A skeletal limb wrapped in pseudomuscles, with a low-conductivity case."
@@ -35,6 +38,40 @@
 	desc = "A skeletal limb wrapped in pseudomuscles, with a low-conductivity case."
 	icon_state = LIMB_RIGHT_LEG
 	part = list(LIMB_RIGHT_LEG,LIMB_RIGHT_FOOT)
+
+/obj/item/robot_parts/tail
+	name = "robot tail"
+	desc = "A skeletal appendage wrapped in pseudomuscles, with a low-conductivity case."
+	icon_state = null
+	part = list(COSMETIC_ORGAN_TAIL)
+	var/tail_icon_file = 'icons/mob/tails.dmi'
+	var/tail_type = "vox"
+	var/static/list/tail_icons = list()
+
+/obj/item/robot_parts/tail/New(loc, type_of_tail)
+	if(type_of_tail)
+		tail_type = type_of_tail
+	update_icon()
+	return ..()
+
+/obj/item/robot_parts/tail/on_attach(datum/organ/external/tail/attached_site)
+	attached_site.tail_type = tail_type
+
+/obj/item/robot_parts/tail/attackby(obj/item/W, mob/user)
+	if(!ismultitool(W))
+		return ..()
+	var/type_of_tail = input(user, "Configure tail type", "Robotic tail design", "vox") as null|anything in list("vox", "tajaran", "unathi")
+	tail_type = type_of_tail
+	update_icon()
+
+/obj/item/robot_parts/tail/update_icon()
+	var/returned_tail_icon = tail_icons[tail_type]
+	if(!returned_tail_icon)
+		var/icon/new_tail_icon = icon(tail_icon_file, "[tail_type]_robotic_BEHIND", EAST)
+		new_tail_icon.Shift(EAST, 6)
+		new_tail_icon.Shift(NORTH, 3)
+		returned_tail_icon = tail_icons[tail_type] = new_tail_icon
+	icon = returned_tail_icon
 
 /obj/item/robot_parts/chest
 	name = "robot torso"
@@ -110,14 +147,8 @@
 /obj/item/robot_parts/robot_suit/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if(istype(W, /obj/item/stack/sheet/metal) && !l_arm && !r_arm && !l_leg && !r_leg && !chest && !head)
-		var/obj/item/weapon/ed209_assembly/B = new /obj/item/weapon/ed209_assembly
-		B.forceMove(get_turf(src))
-		to_chat(user, "You armed the robot frame")
-		W:use(1)
-		if (user.get_inactive_hand()==src)
-			user.before_take_item(src)
-			user.put_in_inactive_hand(B)
-		qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/ed209_assembly, W, 1, "You armed the robot frame")
+		return
 	if(istype(W, /obj/item/robot_parts/l_leg))
 		if(src.l_leg)
 			return

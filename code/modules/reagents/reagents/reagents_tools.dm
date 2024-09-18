@@ -8,11 +8,8 @@
 	color = "#404030" //rgb: 64, 64, 48
 	density = 0.51
 	specheatcap = 14.38
-
-/datum/reagent/ammonia/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(10)
-	T.add_planthealth(1)
+	plant_nutrition = 10
+	plant_health = 1
 
 /datum/reagent/fuel
 	name = "Welding Fuel"
@@ -175,6 +172,8 @@
 	custom_metabolism = 0.5
 	density = 1.98
 	specheatcap = 1.39
+	plant_toxins = 20
+	plant_health = -5
 
 /datum/reagent/pacid/on_mob_life(var/mob/living/M)
 	if(..())
@@ -260,10 +259,6 @@
 		var/obj/effect/dummy/chameleon/projection = O
 		projection.disrupt()
 
-/datum/reagent/pacid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(20)
-
 /datum/reagent/sacid
 	name = "Sulphuric Acid"
 	id = SACID
@@ -273,6 +268,7 @@
 	custom_metabolism = 0.5
 	density = 1.84
 	specheatcap = 1.38
+	plant_toxins = 2
 
 /datum/reagent/sacid/on_mob_life(var/mob/living/M)
 	if(..())
@@ -353,10 +349,6 @@
 		var/obj/effect/dummy/chameleon/projection = O
 		projection.disrupt()
 
-/datum/reagent/sacid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(2)
-
 /datum/reagent/sodium_polyacrylate
 	name = "Sodium Polyacrylate"
 	id = SODIUM_POLYACRYLATE
@@ -422,13 +414,13 @@
 		return 1
 
 	if(iscarbon(M))
-		var/mob/living/carbon/H = M
-		for(var/obj/item/I in H.held_items)
+		var/mob/living/carbon/carbon = M
+		for(var/obj/item/I in carbon.held_items)
 			I.clean_act(clean_level)
 
 		for(var/obj/item/clothing/C in M.get_equipped_items())
 			if(C.clean_blood())
-				H.update_inv_by_slot(C.slot_flags)
+				carbon.update_inv_by_slot(C.slot_flags)
 
 	M.clean_act(clean_level)
 

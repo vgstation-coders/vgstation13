@@ -27,6 +27,8 @@
 	if(istype(loc, /area/chapel))
 		holy = 1
 	levelupdate()
+	if(flammable)
+		zone?.burnable_atoms |= src
 
 /turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD,var/luminous=FALSE)
 	var/obj/effect/decal/cleanable/blood/tracks/tracks = locate(typepath) in src

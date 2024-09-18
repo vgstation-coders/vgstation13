@@ -56,6 +56,10 @@ Class Procs:
 	var/turf_color
 	#endif
 
+	// Hardcoded-event specific variables.
+	var/ice_puddle_list
+	var/list/atom/burnable_atoms = list()
+
 /zone/New()
 	SSair.add_zone(src)
 	air.temperature = TCMB
@@ -80,13 +84,13 @@ Class Procs:
 	#ifdef ZAS_COLOR
 	T.color = turf_color
 	#endif
+	handle_events_add(T)
 
 /zone/proc/remove(turf/simulated/T)
 #ifdef ZASDBG
 	ASSERT(!invalid)
 	ASSERT(istype(T))
 	ASSERT(T.zone == src)
-	soft_assert(T in contents, "Lists are weird broseph")
 #endif
 
 	T.c_copy_air()
@@ -102,6 +106,7 @@ Class Procs:
 	#endif
 	if(!contents.len)
 		c_invalidate()
+	handle_events_remove(T)
 
 /zone/proc/c_merge(zone/into)
 #ifdef ZASDBG
@@ -128,6 +133,8 @@ Class Procs:
 /zone/proc/c_invalidate()
 	invalid = 1
 	SSair.remove_zone(src)
+	for(var/turf/simulated/T in contents)
+		handle_events_remove(T)
 	#ifdef ZASDBG
 	for(var/turf/simulated/T in contents)
 		T.dbg(invalid_zone)
@@ -162,6 +169,8 @@ Class Procs:
 				Z.get_equalized_zone_air(found)
 
 /zone/proc/tick()
+	check_for_events()
+	air.reaction_tick()
 	if(air.check_tile_graphic(graphic_add, graphic_remove))
 		for(var/turf/simulated/T in contents)
 			T.update_graphic(graphic_add, graphic_remove)
@@ -198,6 +207,90 @@ Class Procs:
 
 	//for(var/turf/T in unsimulated_contents)
 //		to_chat(M, "[T] at ([T.x],[T.y])")
+
+// There are some behaviors that we want to happen upon certain thresholds. For instance, if slippery ice is spread across many turfs that melts upon a certain temperature,
+// we want to know when the zone's temperature is raised above that threshold.
+// In an ideal non-BYOND environment we could use something like events to hookup each ice tile to. However, our in-house implementation of events suck for performance. So you
+// can just hardcode the check here.
+/zone/proc/check_for_events()
+	// Only initialize ice_puddle_list and check for ice-related temperature events after cryotheum has been introduced to the zone.
+	if( ice_puddle_list != null )
+		for(var/obj/effect/overlay/puddle/ice/existing_ice in ice_puddle_list)
+			existing_ice.current_temp = air.temperature
+		// Below freezing and cryotheum in the air, create ice.
+		if( air.temperature <= T0C && air.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME )
+			for(var/turf/simulated/T in contents)
+				var/found = FALSE
+				for(var/obj/effect/overlay/puddle/ice/puddle in T)
+					found = TRUE
+					break
+				if(!found)
+					var/obj/effect/overlay/puddle/ice/new_ice = new /obj/effect/overlay/puddle/ice(T, T.zone)
+					new_ice.wet = TURF_WET_ICE
+		else if(air.temperature >= T0C+5 && isemptylist(ice_puddle_list))
+			ice_puddle_list = null
+	else if ( air.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME )
+		ice_puddle_list = list()
+	if(air.temperature >= AUTOIGNITION_TRIGGER)
+		burnable_zones_processing |= src
+	else
+		burnable_zones_processing -= src
+
+/zone/proc/handle_events_add(turf/simulated/T)
+	for(var/obj/effect/overlay/puddle/ice/ice_puddle in T)
+		if(ice_puddle_list == null)
+			ice_puddle_list = list()
+		ice_puddle_list |= ice_puddle
+	if(T.flammable)
+		burnable_atoms |= T
+	for(var/obj/O in T)
+		if(O.flammable)
+			burnable_atoms |= O
+
+/zone/proc/handle_events_remove(turf/simulated/T)
+	if(ice_puddle_list != null)
+		for(var/obj/effect/overlay/puddle/ice/ice_puddle in T)
+			ice_puddle_list -= ice_puddle
+	burnable_atoms -= T
+	for(var/obj/O in T)
+		burnable_atoms -= O
+
+/zone/proc/checkzoneburn()
+	for(var/atom/A in burnable_atoms)
+		A.checkburn()
+
+/zone/proc/blow_dust_motes(var/connection_edge/edge, var/differential)
+	if (!edge)
+		return
+	var/dust_differential = log(abs(differential) * 3)
+	var/list/my_turfs = contents.Copy()
+	var/i = ZAS_DUST_TURFS_PER_TICK
+	while (my_turfs.len > 0 && i > 0)
+		var/turf/T = pick(my_turfs)
+		my_turfs.Remove(T)
+		i--
+		var/turf/closest_turf = null
+		var/closest_dist = 999
+		for(var/turf/U in edge.connecting_turfs)
+			var/dist = get_dist(T,U)
+			if(dist > 0 && dist < closest_dist)
+				closest_dist = dist
+				closest_turf = U
+		if (closest_turf)
+			if (differential > 0)
+				T.flying_dust(closest_turf,dust_differential,min(99,abs(differential*2)))
+			else
+				T.flying_dust(closest_turf,-dust_differential,min(99,abs(differential*2)))
+
+/zone/proc/blow_dust_motes_but_with_turf(var/turf/target_turf, var/differential)
+	if (!target_turf)
+		return
+	var/dust_differential = log(abs(differential) * 3)
+	for (var/turf/T in contents)
+		if (differential > 0)
+			T.flying_dust(target_turf,dust_differential,min(99,abs(differential*2)))
+		else
+			T.flying_dust(target_turf,-dust_differential,min(99,abs(differential*2)))
 
 #ifdef ZAS_COLOR
 #undef ZAS_COLOR

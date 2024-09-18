@@ -446,7 +446,7 @@
 /area/wizard_station)
 "XB" = (
 /obj/structure/table/woodentable,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "wood"

@@ -21,7 +21,8 @@
 	use_to_pickup = TRUE
 	slot_flags = SLOT_BELT
 	flags = FPRINT
-	autoignition_temperature = AUTOIGNITION_FABRIC
+	w_type = RECYK_FABRIC
+	flammable = TRUE
 
 // -----------------------------
 //          Trash bag
@@ -297,7 +298,19 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	fits_max_w_class = 3
 	max_combined_w_class = 28 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_MEDIUM
-	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks","/obj/item/weapon/reagent_containers/food/drinks","/obj/item/weapon/reagent_containers/food/condiment","/obj/item/weapon/kitchen/utensil")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks","/obj/item/weapon/reagent_containers/food/drinks","/obj/item/weapon/reagent_containers/food/condiment","/obj/item/weapon/kitchen/utensil","/obj/item/trash/soda_cans","/obj/item/trash/packet")
+	var/vending_update = FALSE
+
+/obj/item/weapon/storage/bag/food/New()
+	..()
+	for (var/obj/item/weapon/reagent_containers/food/snacks/F in contents)
+		if(F.trash)
+			can_only_hold |= "[F.trash]"
+	if(vending_update)
+		for (var/obj/O in contents)
+			O.on_vending_machine_spawn()
+			O.update_icon()
+	update_icon()
 
 /obj/item/weapon/storage/bag/food/update_icon()
 	if(contents.len < 1)
@@ -307,30 +320,26 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 /obj/item/weapon/storage/bag/food/return_air()//prevents hot food from getting cold while in it.
 	return
 
-/obj/item/weapon/storage/bag/food/menu1/New()
-	..()
-	new/obj/item/weapon/reagent_containers/food/snacks/monkeyburger(src)//6 nutriments
-	new/obj/item/weapon/reagent_containers/food/snacks/fries/cone(src)//4 nutriments
-	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola(src)//-3 drowsy
-	new/obj/item/weapon/reagent_containers/food/condiment/small/ketchup(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/mayo(src)
-	for (var/obj/O in contents)
-		O.on_vending_machine_spawn()
-		O.update_icon()
-	update_icon()
+/obj/item/weapon/storage/bag/food/menu1
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/food/snacks/monkeyburger,//6 nutriments
+		/obj/item/weapon/reagent_containers/food/snacks/fries/cone,//4 nutriments
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,//-3 drowsy
+		/obj/item/weapon/reagent_containers/food/condiment/small/ketchup,
+		/obj/item/weapon/reagent_containers/food/condiment/small/mayo
+	)
+	vending_update = TRUE
 
-/obj/item/weapon/storage/bag/food/menu2/New()
-	..()
-	new/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger(src)//14 nutriments
-	new/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet(src)//6 nutriments
-	new/obj/item/weapon/kitchen/utensil/fork/plastic(src)
-	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind(src)//-7 drowsy, -1 sleepy
-	new/obj/item/weapon/reagent_containers/food/condiment/small/ketchup(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/mayo(src)
-	for (var/obj/O in contents)
-		O.on_vending_machine_spawn()
-		O.update_icon()
-	update_icon()
+/obj/item/weapon/storage/bag/food/menu2
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger,//14 nutriments
+		/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet,//6 nutriments
+		/obj/item/weapon/kitchen/utensil/fork/plastic,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind,//-7 drowsy, -1 sleepy
+		/obj/item/weapon/reagent_containers/food/condiment/small/ketchup,
+		/obj/item/weapon/reagent_containers/food/condiment/small/mayo
+	)
+	vending_update = TRUE
 
 /obj/item/weapon/storage/bag/zam_food
 	icon = 'icons/obj/kitchen.dmi'
@@ -349,35 +358,35 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 		icon_state = "Zam_foodbag0"
 	else icon_state = "Zam_foodbag1"
 
-/obj/item/weapon/storage/bag/zam_food/zam_menu1/New()
-	..()
-	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/wrapped(src)//18 nutriments
-	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
-	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
-	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea(src)//tea you can't trust
-	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
-	update_icon()
+/obj/item/weapon/storage/bag/zam_food/zam_menu1
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/wrapped,//18 nutriments
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos,
+		/obj/item/weapon/kitchen/utensil/fork/teflon,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea,//tea you can't trust
+		/obj/item/weapon/reagent_containers/food/condiment/small/zammild,
+		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin
+	)
 
-/obj/item/weapon/storage/bag/zam_food/zam_menu2/New()
-	..()
-	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/wrapped(src)//15 nutriments
-	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
-	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
-	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz(src)//yum yum melts my tum
-	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
-	update_icon()
+/obj/item/weapon/storage/bag/zam_food/zam_menu2
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/wrapped,//15 nutriments
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos,
+		/obj/item/weapon/kitchen/utensil/fork/teflon,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz,//yum yum melts my tum
+		/obj/item/weapon/reagent_containers/food/condiment/small/zammild,
+		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin
+	)
 
-/obj/item/weapon/storage/bag/zam_food/zam_menu3/New()
-	..()
-	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/wrapped(src)//12 nutriments
-	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
-	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
-	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
-	update_icon()
+/obj/item/weapon/storage/bag/zam_food/zam_menu3
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/wrapped,//12 nutriments
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos,
+		/obj/item/weapon/kitchen/utensil/fork/teflon,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,
+		/obj/item/weapon/reagent_containers/food/condiment/small/zammild,
+		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin
+	)
 
 // -----------------------------
 //          Borg Food bag
@@ -404,149 +413,26 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	can_only_hold = list("/obj/item/weapon/reagent_containers/glass/bottle","/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/reagent_containers/syringe")
 
 // -----------------------------
-//        Sheet Snatcher
+//    Sheet Snatcher (Cyborg)
 // -----------------------------
-// Because it stacks stacks, this doesn't operate normally.
-// However, making it a storage/bag allows us to reuse existing code in some places. -Sayu
 
 /obj/item/weapon/storage/bag/sheetsnatcher
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "sheetsnatcher"
 	name = "Sheet Snatcher"
 	desc = "A patented Nanotrasen storage system designed for any kind of mineral sheet."
-
-	var/capacity = 300; //the number of sheets it can carry.
 	w_class = W_CLASS_MEDIUM
+	storage_slots = 50
+	max_combined_w_class = 18
+	can_only_hold = list("/obj/item/stack/sheet")
+	cant_hold = list("/obj/item/stack/sheet/mineral/sandstone","/obj/item/stack/sheet/wood")
+	//display_contents_with_number = TRUE //used to be broken with old snowflake behaviour, now works. uncomment to add it.
 
-	allow_quick_empty = 1 // this function is superceded
-
-/obj/item/weapon/storage/bag/sheetsnatcher/New()
-	..()
-	//verbs -= /obj/item/weapon/storage/verb/quick_empty
-	//verbs += /obj/item/weapon/storage/bag/sheetsnatcher/quick_empty
-
-/obj/item/weapon/storage/bag/sheetsnatcher/can_be_inserted(obj/item/W as obj, stop_messages = FALSE)
-	if(!istype(W,/obj/item/stack/sheet) || istype(W,/obj/item/stack/sheet/mineral/sandstone) || istype(W,/obj/item/stack/sheet/wood))
-		if(!stop_messages)
-			to_chat(usr, "The snatcher does not accept [W].")
-		return FALSE //I don't care, but the existing code rejects them for not being "sheets" *shrug* -Sayu
-	var/current = 0
-	for(var/obj/item/stack/sheet/S in contents)
-		current += S.amount
-	if(capacity == current)//If it's full, you're done
-		if(!stop_messages)
-			to_chat(usr, "<span class='warning'>The snatcher is full.</span>")
-		return FALSE
-	return TRUE
-
-
-// Modified handle_item_insertion.  Would prefer not to, but...
-/obj/item/weapon/storage/bag/sheetsnatcher/handle_item_insertion(obj/item/W as obj, prevent_warning = FALSE)
-	var/obj/item/stack/sheet/S = W
-	if(!istype(S))
-		return FALSE
-
-	var/amount
-	var/inserted = FALSE
-	var/current = 0
-	for(var/obj/item/stack/sheet/S2 in contents)
-		current += S2.amount
-	if(capacity < current + S.amount)//If the stack will fill it up
-		amount = capacity - current
-	else
-		amount = S.amount
-
-	for(var/obj/item/stack/sheet/sheet in contents)
-		if(S.type == sheet.type) // we are violating the amount limitation because these are not sane objects
-			sheet.amount += amount	// they should only be removed through procs in this file, which split them up.
-			S.amount -= amount
-			inserted = TRUE
-			break
-
-	if(!inserted || !S.amount)
-		usr.u_equip(S,1)
-		usr.update_icons()	//update our overlays
-		if (usr.client && usr.s_active != src)
-			usr.client.screen -= S
-		//S.dropped(usr)
-		if(!S.amount)
-			QDEL_NULL (S)
-		else
-			S.forceMove(src)
-
-	orient2hud(usr)
-	if(usr.s_active)
-		usr.s_active.show_to(usr)
-	update_icon()
-	return TRUE
-
-
-// Sets up numbered display to show the stack size of each stored mineral
-// NOTE: numbered display is turned off currently because it's broken
-/obj/item/weapon/storage/bag/sheetsnatcher/orient2hud(mob/user as mob)
-	var/adjusted_contents = contents.len
-
-	//Numbered contents display
-	var/list/datum/numbered_display/numbered_contents
-	if(display_contents_with_number)
-		numbered_contents = list()
-		adjusted_contents = 0
-		for(var/obj/item/stack/sheet/I in contents)
-			adjusted_contents++
-			var/datum/numbered_display/D = new/datum/numbered_display(I)
-			D.number = I.amount
-			numbered_contents.Add( D )
-
-	var/row_num = 0
-	var/col_count = min(7,storage_slots) -1
-	if (adjusted_contents > 7)
-		row_num = round((adjusted_contents-1) / 7) // 7 is the maximum allowed width.
-	src.standard_orient_objs(row_num, col_count, numbered_contents)
-	return
-
-
-// Modified quick_empty verb drops appropriate sized stacks
-/obj/item/weapon/storage/bag/sheetsnatcher/quick_empty()
-	var/location = get_turf(src)
-	for(var/obj/item/stack/sheet/S in contents)
-		while(S.amount)
-			var/obj/item/stack/sheet/N = new S.type(location)
-			var/stacksize = min(S.amount,N.max_amount)
-			N.amount = stacksize
-			S.amount -= stacksize
-		if(!S.amount)
-			QDEL_NULL (S) // todo: there's probably something missing here
-	orient2hud(usr)
-	if(usr.s_active)
-		usr.s_active.show_to(usr)
-	update_icon()
-
-// Instead of removing
-/obj/item/weapon/storage/bag/sheetsnatcher/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
-	var/obj/item/stack/sheet/S = W
-	if(!istype(S))
-		return FALSE
-
-	//I would prefer to drop a new stack, but the item/attack_hand code
-	// that calls this can't receive a different object than you clicked on.
-	//Therefore, make a new stack internally that has the remainder.
-	// -Sayu
-
-	if(S.amount > S.max_amount)
-		var/obj/item/stack/sheet/temp = new S.type(src)
-		temp.amount = S.amount - S.max_amount
-		S.amount = S.max_amount
-
-	return ..(S,new_location)
-
-// -----------------------------
-//    Sheet Snatcher (Cyborg)
-// -----------------------------
 
 /obj/item/weapon/storage/bag/sheetsnatcher/borg
 	name = "Sheet Snatcher 9000"
 	desc = ""
-	capacity = 500//Borgs get more because >specialization
+	max_combined_w_class = 30 //Borgs get more because >specialization
 
 // -----------------------------
 //          Gadget Bag

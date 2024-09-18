@@ -10,7 +10,7 @@
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "nano_paper"
 
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/weapon/paper/nano/New()
 	..()
@@ -49,6 +49,8 @@
 		\[u\] - \[/u\] : Makes the text <u>underlined</u>.<br>
 		\[large\] - \[/large\] : Increases the <span style=\"font-size:25px\">size</span> of the text.<br>
 		\[sign\] : Inserts a signature of your name in a foolproof way.<br>
+		\[stationname\] : Inserts the name of the station.<br>
+		\[logo\] : Inserts a medium-size Nanotrasen logo.<br>
 		\[field\] : Inserts an invisible field which lets you start type from there. Useful for forms.<br>
 		\[small\] - \[/small\] : Decreases the <span style=\"font-size:15px\">size</span> of the text.<br>
 		\[tiny\] - \[/tiny\] : Sharply decreases the <span style=\"font-size:10px\">size</span> of the text.<br>

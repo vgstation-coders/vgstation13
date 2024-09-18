@@ -119,6 +119,8 @@
 		hud_used.spider_queen_counter.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:6px'><br><font color='#FFFF00'>[spider_count]/[queen_req]</font></div>"
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/proc/spin_web(var/turf/T)
+	if(!T)
+		return 0
 	if(!T.has_gravity(src))
 		return 0
 	if(!locate(/obj/effect/spider/stickyweb) in T)
@@ -132,7 +134,7 @@
 	fed--
 	var/obj/effect/spider/eggcluster/E = locate() in get_turf(src)
 	if(!E)
-		visible_message("<span class='notice'>\the [src] begins to lay a cluster of eggs.</span>")
+		visible_message("<span class='notice'>\The [src] begins to lay a cluster of eggs.</span>")
 		stop_automated_movement = 1
 		if(do_after(src,loc, 50))
 			E = locate() in get_turf(src)
@@ -149,7 +151,7 @@
 		return
 	if(locate(/obj/effect/spider/cocoon) in cocoon_target.loc)
 		return
-	visible_message("<span class='notice'>\the [src] begins to secrete a sticky substance around \the [cocoon_target].</span>")
+	visible_message("<span class='notice'>\The [src] begins to secrete a sticky substance around \the [cocoon_target].</span>")
 	stop_automated_movement = 1
 	if(do_after(src,cocoon_target, 50))
 		var/obj/effect/spider/cocoon/C = new(cocoon_target.loc)
@@ -165,7 +167,7 @@
 				M.locked_to.unlock_atom(M)
 			suffix = "_mob"
 			fed++
-			visible_message("<span class='warning'>\the [src] sticks a proboscis into \the [cocoon_target] and secretes a digestive enzyme.</span>")
+			visible_message("<span class='warning'>\The [src] sticks a proboscis into \the [cocoon_target] and secretes a digestive enzyme.</span>")
 			M.adjustToxLoss(85)
 			M.forceMove(C)
 			C.pixel_x = M.pixel_x

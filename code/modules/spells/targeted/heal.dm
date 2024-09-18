@@ -14,7 +14,7 @@
 	invocation_type = SpI_SHOUT
 	message = "<span class='sinister'>You feel refreshed.<span>"
 	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 2, Sp_POWER = 1, Sp_RANGE = 1)
-	compatible_mobs = list(/mob/living)
+	valid_targets = list(/mob/living)
 
 	max_targets = 1
 

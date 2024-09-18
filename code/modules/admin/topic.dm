@@ -1377,12 +1377,12 @@
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Cluwne;jobban4=\ref[M]'><font color=red>Cluwne</font></a></td>"
 		else
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Cluwne;jobban4=\ref[M]'>Cluwne</a></td>"
-		
+
 		if(jobban_isbanned(M, "artist")) //so people can't make paintings
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=artist;jobban4=\ref[M]'><font color=red>Artist</font></a></td>"
 		else
-			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=artist;jobban4=\ref[M]'>Artist</a></td>"	
-		
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=artist;jobban4=\ref[M]'>Artist</a></td>"
+
 		jobs += "</tr></table>"
 
 		body = "<body>[jobs]</body>"
@@ -2182,7 +2182,23 @@
 		to_chat(M, "<span class='warning'>You have been sent to the prison station!</span>")
 		log_admin("[key_name(usr)] sent [key_name(M)] to the prison station.")
 		message_admins("<span class='notice'>[key_name_admin(usr)] sent [key_name_admin(M)] to the prison station.</span>", 1)
-
+	else if(href_list["sendbacktolobby"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/mob/player_to_send = locate(href_list["sendbacktolobby"])
+		if(!isobserver(player_to_send))
+			to_chat(usr, span_notice("You can only send ghost players back to the Lobby."))
+			return
+		if(!player_to_send.client)
+			to_chat(usr, span_warning("[player_to_send] doesn't seem to have an active client."))
+			return
+		if(alert(usr, "Send [key_name(player_to_send)] back to Lobby?", "Message", "Yes", "No") != "Yes")
+			return
+		log_admin("[key_name(usr)] has sent [key_name(player_to_send)] back to the Lobby.")
+		message_admins("[key_name(usr)] has sent [key_name(player_to_send)] back to the Lobby.")
+		var/mob/new_player/new_lobby_player = new()
+		new_lobby_player.ckey = player_to_send.ckey
+		qdel(player_to_send)
 	else if(href_list["tdome1"] || href_list["tdome2"])
 		if(!check_rights(R_FUN))
 			return
@@ -2926,15 +2942,10 @@
 			return
 
 		if(H.op_stage.butt != 4) // does the target have an ass
-			var/obj/item/clothing/head/butt/B = new(H.loc)
-			B.transfer_buttdentity(H)
-			H.op_stage.butt = 4 //No having two butts.
+			H.butt_blast()
 			to_chat(H, "<span class='warning'>Your ass was just blown off by an unknown force!</span>")
 			log_admin("[key_name(H)] was buttblasted by [src.owner]")
 			message_admins("[key_name(H)] was buttblasted by [src.owner]")
-			playsound(H, 'sound/effects/superfart.ogg', 50, 1)
-			H.apply_damage(40, BRUTE, LIMB_GROIN)
-			H.apply_damage(10, BURN, LIMB_GROIN)
 			H.Knockdown(8)
 			H.Stun(8)
 		else
@@ -3561,13 +3572,13 @@
 			if("switchoff")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","WO")
-				for(var/obj/machinery/light_switch/LS in all_machines)
+				for(var/obj/machinery/light_switch/LS in lightswitches)
 					LS.toggle_switch(0)
 				message_admins("[key_name_admin(usr)] switched off all lights", 1)
 			if("switchon")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","WO")
-				for(var/obj/machinery/light_switch/LS in all_machines)
+				for(var/obj/machinery/light_switch/LS in lightswitches)
 					LS.toggle_switch(1)
 				message_admins("[key_name_admin(usr)] switched on all lights", 1)
 			if("floorlava")
@@ -3667,6 +3678,23 @@
 							var/dis_level = clamp(round((dis.get_total_badness()+1)/2),1,8)
 							spawn(rand(0,3000))
 								biohazard_alert(dis_level)
+			if("mass_equip_outfit")
+				var/const/yes_choice = "Yeah!"
+				var/const/no_choice = "Nah."
+				var/const/cancel_choice = "Cancel"
+				var/choice = input("Do you want to delete existing clothing instead of drop?") in list(yes_choice, no_choice, cancel_choice)
+				if(choice == cancel_choice)
+					return
+				var/outfit_type = select_loadout()
+				if(!outfit_type || !ispath(outfit_type))
+					return
+				var/delete_items = choice == yes_choice ? TRUE : FALSE
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","EQU")
+				for(var/mob/living/carbon/human/H in player_list)
+					var/datum/outfit/concrete_outfit = new outfit_type
+					concrete_outfit.equip(H, TRUE, strip = delete_items, delete = delete_items)
+				message_admins("[key_name_admin(usr)] has mass equipped a loadout of type [outfit_type] to everyone.")
 			if("retardify")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RET")
@@ -3746,8 +3774,13 @@
 					custom.generate_icon()
 
 					message_admins("[key_name_admin(usr)] has created a custom artifact")
-
-
+			if("naturify")
+				var/choice = input("Are you sure you want to return the station to nature? This will irreversibly break most of the station!") in list("Yeah!", "Cancel")
+				if(choice != "Cancel")
+					feedback_inc("admin_secrets_fun_used",1)
+					feedback_add_details("admin_secrets_fun_used","NA")
+					naturify_station()
+					message_admins("[key_name_admin(usr)] turned the station into wilderness.")
 			if("schoolgirl")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SG")
@@ -3944,7 +3977,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			if("fakealerts")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEA")
-				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") as null|anything in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Revs", "Bloodstones raised", "Bloodstones destroyed")
+				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") as null|anything in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Revs")
 				//Big fat lists of effects, not very modular but at least there's less buttons
 				switch (choice)
 					if("Biohazard") //GUISE WE HAVE A BLOB
@@ -3995,7 +4028,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 						message_admins("[key_name_admin(usr)] triggered a FAKE revolution alert.")
 						log_admin("[key_name_admin(usr)] triggered a FAKE revolution alert.")
 						return
-					//TODO (UPHEAVAL PART 2) think of fake alerts too
+
 			if("fakebooms") //Michael Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEE")
@@ -4162,11 +4195,13 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				if (!choice)
 					return
 				var/turf/T = get_turf(usr)
-				var/obj/structure/cult/bloodstone/blood_stone = new(T)
+				var/obj/structure/cult/bloodstone/admin/blood_stone = new(T)
 				if(choice == "Yes")
 					blood_stone.flashy_entrance()
 				if(choice == "No")
-					blood_stone.update_icon()
+					blood_stone.ready = TRUE
+					blood_stone.overlays_pre()
+					blood_stone.set_animate()
 				message_admins("[key_name_admin(usr)] spawned a blood stone at [formatJumpTo(get_turf(usr))].")
 
 
@@ -4956,6 +4991,14 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			if("can rotate")
 				new_value = input(usr,"0 - rotation disabled, 1 - rotation enabled","Shuttle editing",S.can_rotate) as num
 				S.can_rotate = new_value
+			if("destroy areas")
+				new_value = input(usr,"Allow this shuttle to crush into areas? Currently set to: [S.destroy_everything ? "True" : "False"]","Shuttle editing") as null|anything in list("CRUSH","No crush")
+				if(new_value == "CRUSH")
+					S.destroy_everything = TRUE
+				else if(new_value == "No crush")
+					S.destroy_everything = FALSE
+				else
+					return
 			if("DEFINED LOCATIONS")
 				to_chat(usr, "To prevent accidental mistakes, you can only set these locations to docking ports in the shuttle's memory (use the \"Add a destination docking port to a shuttle\" command)")
 
@@ -5763,7 +5806,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 					return FALSE
 				vars[href_list["change_zone_del"]] = new_limit
 			if ("z_del")
-				var/new_limit = input(usr, "Input the new z-level..", "Setting [href_list["change_zone_del"]]") as null|num
+				var/new_limit = input(usr, "Input the new z-level.", "Setting [href_list["change_zone_del"]]") as null|num
 				if (new_limit < 1 || new_limit > 6)
 					to_chat(usr, "<span class='warning'>Please enter a number between 1 and 6.</span>")
 					return FALSE

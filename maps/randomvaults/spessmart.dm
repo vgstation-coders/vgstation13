@@ -357,6 +357,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	max_n2 = 0
 	minbodytemp = 0
 	mob_property_flags = MOB_ROBOTIC
+	meat_type = null
 
 /mob/living/simple_animal/robot/New()
 	..()
@@ -672,6 +673,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	faction = "spessmart"
 	mob_property_flags = MOB_ROBOTIC
+	meat_type = null
 
 	var/alert_on_movement = 1 //If moved, trigger an alert and become agressive
 

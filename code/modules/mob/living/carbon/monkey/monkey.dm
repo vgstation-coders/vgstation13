@@ -5,7 +5,7 @@
 	icon_state = "monkey1"
 	icon = 'icons/mob/monkey.dmi'
 	gender = NEUTER
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	update_icon = 0		///no need to call regenerate_icon
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey
 	species_type = /mob/living/carbon/monkey
@@ -254,19 +254,6 @@
 		if(I_GRAB)
 			M.grab_mob(src)
 
-
-/mob/living/carbon/monkey/proc/defense(var/power, var/def_zone)
-	var/armor = run_armor_check(def_zone, "melee", "Your armor has protected your [def_zone].", "Your armor has softened hit to your [def_zone].")
-	if(armor >= 2)
-		return 0
-	if(!power)
-		return 0
-
-	var/damage = power
-	if(armor)
-		damage = (damage/(armor+1))
-	return damage
-
 /mob/living/carbon/monkey/attack_hand(var/mob/living/carbon/human/M)
 	var/touch_zone = get_part_from_limb(M.zone_sel.selecting)
 	var/block = 0
@@ -361,7 +348,7 @@
 /mob/living/carbon/monkey/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
 		if(B.stuck_to)
-			visible_message("<span class='warning'>\the [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
+			visible_message("<span class='warning'>\The [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
 			B.deactivate()
 			B.unstick()
 
@@ -473,6 +460,8 @@
 	if(ticker.mode.name == "monkey")//monkey mode override
 		return TRUE
 	if(reagents.has_reagent(METHYLIN))
+		return TRUE
+	if(is_dexterous)
 		return TRUE
 	return FALSE//monkeys can't use complex things by default unless they're high on methylin
 

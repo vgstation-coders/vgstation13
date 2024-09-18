@@ -26,7 +26,9 @@ var/global/global_playlists = list()
 		if(response)
 			log_debug("Received response from media server for [playlist_id], with a length of [length(response)]")
 			var/json = file2text(response["CONTENT"])
-			if("/>" in json)
+			//i don't think this works as a string search
+			//if("/>" in json)
+			if(findtext(json, "/>"))
 				continue
 			var/songdata = json_decode(json)
 			log_debug("Successfully decoded media server's response for [playlist_id]")
@@ -959,6 +961,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/superjuke/thematic
 	playlist_id="endgame"
+	use_power = 0
 
 /obj/machinery/media/jukebox/superjuke/thematic/update_music()
 	if(current_song && playing)

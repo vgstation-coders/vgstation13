@@ -123,14 +123,24 @@ var/creating_arena = FALSE
 		name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
 	real_name = name
 
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult && ((cult.stage == BLOODCULT_STAGE_ECLIPSE) || (cult.stage == BLOODCULT_STAGE_NARSIE)))
+		cultify()
+
 	start_poltergeist_cooldown() //FUCK OFF GHOSTS
+	register_event(/event/after_move, src, nameof(src::update_holomaps()))
 	..()
 
 /mob/dead/observer/Destroy()
 	..()
+	unregister_event(/event/after_move, src, nameof(src::update_holomaps()))
 	QDEL_NULL(station_holomap)
 	ghostMulti = null
 	observers.Remove(src)
+
+/mob/dead/observer/proc/update_holomaps()
+	if(station_holomap)
+		station_holomap.update_holomap()
 
 /mob/dead/observer/hasFullAccess()
 	return isAdminGhost(src)
@@ -142,15 +152,17 @@ var/creating_arena = FALSE
 	// Legacy Cult stuff
 	if(istype(W,/obj/item/weapon/tome_legacy))
 		cultify()//takes care of making ghosts visible
-    // Big boy modern Cult 3.0 stuff
+    // Big boy modern Cult 3.0 and beyond stuff
 	if (iscultist(user))
 		if(istype(W,/obj/item/weapon/tome))
-			if(invisibility != 0 || icon_state != "ghost-narsie")
+			if(invisibility != 0)
 				cultify()
 				user.visible_message(
 					"<span class='warning'>[user] drags a ghost to our plane of reality!</span>",
 					"<span class='warning'>You drag a ghost to our plane of reality!</span>"
 				)
+				var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+				C.gain_devotion(50, DEVOTION_TIER_3, "visible_ghost", src)
 			return
 		else if (istype(W,/obj/item/weapon/talisman))
 			var/obj/item/weapon/talisman/T = W
@@ -203,9 +215,8 @@ var/creating_arena = FALSE
 						W.blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 
 	if(istype(W,/obj/item/weapon/storage/bible) || isholyweapon(W))
-		var/mob/dead/M = src
-		if(src.invisibility == 0)
-			M.invisibility = 60
+		if(invisibility == 0)
+			decultify()
 			user.visible_message(
 				"<span class='warning'>[user] banishes the ghost from our plane of reality!</span>",
 				"<span class='warning'>You banish the ghost from our plane of reality!</span>"
@@ -402,12 +413,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/dead/observer/proc/manual_follow(var/atom/movable/target)
 	if(target)
 		var/turf/targetloc = get_turf(target)
+		if(targetloc && targetloc.holy && (!invisibility || islegacycultist(src)))
+			to_chat(usr, "<span class='warning'>You cannot follow a mob standing on holy grounds!</span>")
+			return
 		var/area/targetarea = get_area(target)
 		if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
 			to_chat(usr, "<span class='sinister'>You can sense a sinister force surrounding that mob, your spooky body itself refuses to follow it.</span>")
-			return
-		if(targetloc && targetloc.holy && (!invisibility || islegacycultist(src)))
-			to_chat(usr, "<span class='warning'>You cannot follow a mob standing on holy grounds!</span>")
 			return
 		if(target != src)
 			if(locked_to)
@@ -442,43 +453,54 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			if(istype(A))
 				A.reenter_corpse()
 
-	//BEGIN TELEPORT HREF CODE
 	if(usr != src)
 		return
 	..()
 
-	if(href_list["follow"])
-		var/target = locate(href_list["follow"])
-		if(target)
-			if(isAI(target))
-				var/mob/living/silicon/ai/M = target
-				target = M.eyeobj
-			manual_follow(target)
+//BEGIN TELEPORT HREF CODE
+/datum/subsystem/mob/Topic(href, href_list)
+	if(istype(usr,/mob/dead/observer))
+		var/mob/dead/observer/O = usr
+		if(href_list["follow"])
+			var/target = locate(href_list["follow"])
+			if(target)
+				if(isAI(target))
+					var/mob/living/silicon/ai/M = target
+					if(!istype(M.loc,/obj/item/device/aicard))
+						target = M.eyeobj
+				O.manual_follow(target)
+			else
+				to_chat(O, "That mob doesn't seem to exist anymore.")
+			return
 
-	if (href_list["jump"])
-		var/mob/target = locate(href_list["jump"])
-		var/mob/A = usr;
-		to_chat(A, "Teleporting to [target]...")
-		if(target && target != usr)
-			var/turf/pos = get_turf(A)
-			var/turf/T=get_turf(target)
-			if(T != pos)
-				if(!T)
-					to_chat(A, "<span class='warning'>Target not in a turf.</span>")
-					return
-				if(locked_to)
-					manual_stop_follow(locked_to)
-				forceMove(T)
+		if (href_list["jump"])
+			var/target = locate(href_list["jump"])
+			if(target && target != usr)
+				to_chat(O, "Teleporting to [target]...")
+				var/turf/pos = get_turf(O)
+				var/turf/T=get_turf(target)
+				if(T != pos)
+					if(!T)
+						to_chat(O, "<span class='warning'>Target not in a turf.</span>")
+						return
+					if(O.locked_to)
+						O.manual_stop_follow(O.locked_to)
+					O.forceMove(T)
+			else
+				to_chat(O, "That thing doesn't seem to exist anymore, or is you.")
+			return
 
-	if(href_list["jumptoarenacood"])
-		var/datum/bomberman_arena/targetarena = locate(href_list["targetarena"])
-		if(targetarena)
-			if(locked_to)
-				manual_stop_follow(locked_to)
-			usr.forceMove(targetarena.center)
-			to_chat(usr, "Remember to enable darkness to be able to see the spawns. Click on a green spawn between rounds to register on it.")
-		else
-			to_chat(usr, "That arena doesn't seem to exist anymore.")
+		if(href_list["targetarena"])
+			var/datum/bomberman_arena/targetarena = locate(href_list["targetarena"])
+			if(targetarena)
+				if(O.locked_to)
+					O.manual_stop_follow(O.locked_to)
+				O.forceMove(targetarena.center)
+				to_chat(O, "Click on a green spawn between rounds to register on it.")
+			else
+				to_chat(O, "That arena doesn't seem to exist anymore.")
+			return
+	return ..()
 
 //END TELEPORT HREF CODE
 
@@ -521,7 +543,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if (get_dist(source_turf, src) <= world.view) // If this isn't true, we can't be in view, so no need for costlier proc.
 		if (source_turf in view(src))
 			rendered_speech = "<B>[rendered_speech]</B>"
-			to_chat(src, "<a href='?src=\ref[src];follow=\ref[source]'>(Follow)</a> [rendered_speech]")
+			to_chat(src, "[formatFollow(source)] [rendered_speech]")
 
 /mob/dead/observer/hasHUD(var/hud_kind)
 	switch(hud_kind)

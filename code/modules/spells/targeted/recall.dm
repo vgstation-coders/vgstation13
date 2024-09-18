@@ -47,6 +47,9 @@
 		/obj/machinery/light,									//light bulbs and tubes
 		/obj/machinery/media/receiver/boombox/wallmount,		//sound systems
 		/obj/machinery/keycard_auth,							//keycard authentication devices
+		/obj/landline,											//telephone landlines
+		/obj/effect/phone_cord,									//the telephone cord effect
+		/obj/item/telephone,									//telephones
 		)
 	//Generally extremely dangerous things that could spell doom and devastation for anyone nearby, possibly the wizard too
 	var/list/empower_limited = list(
@@ -94,6 +97,7 @@
 						return 1
 					M.drop_item(I, force_drop = 1)
 					M.update_icons()
+				bound.forceMove(get_turf(user))
 				user.put_in_hands(I)
 			else
 				bound.forceMove(get_turf(user))
@@ -112,11 +116,19 @@
 						return 0
 			has_object = 1
 			bound = target
-			bound_icon = image(target.icon, target.icon_state, layer = HUD_ITEM_LAYER)
-			connected_button.overlays += bound_icon
+			draw_bound_object(bound)
 			to_chat(user, "You bind \the [target] to yourself.")
 			channel_spell(force_remove = 1)
 	return 1
+
+//Creates the item's sprite for the spell sprite
+/spell/targeted/bound_object/proc/draw_bound_object(var/obj/target)
+	if(!connected_button || !target)
+		return
+	connected_button.overlays -= bound_icon
+	bound_icon = null
+	bound_icon = image(target.icon, target.icon_state, layer = HUD_ITEM_LAYER)
+	connected_button.overlays += bound_icon
 
 /spell/targeted/bound_object/empower_spell()
 	var/upgrade_desc
@@ -151,7 +163,8 @@
 /spell/targeted/bound_object/proc/clear_bound()
 	has_object = 0
 	bound = null
-	connected_button.overlays -= bound_icon
+	if(connected_button)
+		connected_button.overlays -= bound_icon
 	bound_icon = null
 
 /spell/targeted/bound_object/on_added(mob/user)
@@ -167,6 +180,10 @@
 	clear_bound()
 	for(var/spell/unbind/spell in user.spell_list)
 		user.remove_spell(spell)
+
+//The connected button is regenerated, have it re-draw the image
+/spell/targeted/bound_object/on_transfer(mob/user)
+	draw_bound_object(bound)
 
 /spell/unbind
 	name = "Unbind"

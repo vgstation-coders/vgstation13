@@ -104,6 +104,88 @@
 
 	modifiers -= list("alt", "shift", "ctrl")
 
+/obj/item/device/rcd/rpd/attack_self(var/mob/user)
+	..()
+	for(var/cat in schematics)
+		var/list/L = schematics[cat]
+		for(var/datum/rcd_schematic/C in L)
+			for(var/client/client in interface.clients)
+				C.send_list_assets(client)
+	
+
+/obj/item/device/rcd/rpd/rebuild_ui()
+	var/dat = ""
+
+	//i don't know why i have to add padding to the bottom of the RPD, but it doesn't look right otherwise.
+	dat += {"
+		<div style="padding-bottom:1em;" id="schematic_options2">
+		</div>
+		<div id="schematic_options1">
+		</div>
+
+		<h2>Available schematics</h2>
+		<div id='fav_list'></div>
+	"}
+	for(var/cat in schematics)
+		dat += "<b>[cat]:</b><ul style='list-style-type:disc'>"
+		var/list/L = schematics[cat]
+		for(var/datum/rcd_schematic/C in L)
+			for(var/client/client in interface.clients)
+				C.send_list_assets(client)
+			var/turf/T = get_turf(src)
+			if(!T || ((C.flags & RCD_Z_DOWN) && !HasBelow(T.z)) || ((C.flags & RCD_Z_UP) && !HasAbove(T.z)))
+				continue
+			dat += C.schematic_list_line(interface,FALSE,src.selected==C)
+		dat += "</ul>"
+
+	interface.updateLayout(dat)
+
+	if(selected)
+		update_options_menu()
+		interface.updateContent("selectedname", selected.name)
+
+	rebuild_favs()
+
+/obj/item/device/rcd/rpd/update_options_menu()
+	if(selected)
+		var/multitext=""
+		var/autotext=""
+	
+		if (has_metal_slime)//build_all
+			multitext=" <div style='margin-top:1em;'><b>Multilayer Mode: </b><a href='?src=\ref[interface];toggle_multi=1'><span class='[build_all? "schem_selected" : "schem"]'>[build_all ? "On" : "Off"]</span></a></div> "
+		if (has_yellow_slime)//build_all
+			autotext=" <div style='margin-top:1em;'><b>Autowrench: </b><a href='?src=\ref[interface];toggle_auto=1'><span class='[autowrench? "schem_selected" : "schem"]'>[autowrench ? "On" : "Off"]</span></a></div> "
+	
+		for(var/client/client in interface.clients)
+			selected.send_assets(client)
+		var/schematichtml=selected.get_HTML(args)
+		if (build_all)
+			schematichtml=replacetext(replacetext(schematichtml,"id=\"layer\"","id=\"layer_selected\""),"id=\"layer_center\"","id=\"layer_center_selected\"")
+		if (autowrench)
+			schematichtml=replacetext(replacetext(schematichtml,"id=\"layer_selected\"","id=\"layer_selectedauto\""),"id=\"layer_center_selected\"","id=\"layer_center_selectedauto\"")
+		schematichtml+=multitext
+		schematichtml+=autotext
+		interface.updateContent("schematic_options1", schematichtml )
+		interface.updateContent("schematic_options2", schematichtml )
+	else
+		interface.updateContent("schematic_options1", " ")
+		interface.updateContent("schematic_options2", " ")
+
+
+/obj/item/device/rcd/rpd/Topic(var/href, var/list/href_list)
+	..()
+	if (href_list["toggle_auto"])
+		autowrench=has_yellow_slime ? !autowrench : 0
+		rebuild_ui()
+		return TRUE
+	if (href_list["toggle_multi"])
+		build_all=has_metal_slime ? !build_all : 0
+		rebuild_ui()
+		return TRUE
+	
+
+
+
 /obj/item/device/rcd/rpd/mech/Topic(var/href, var/list/href_list)
 	..()
 	if(href_list["close"])
@@ -144,7 +226,6 @@
 					favorites.Swap(index, index - 1)
 
 				rebuild_favs()
-
 		return 1
 
 	// The href didn't get handled by us so we pass it down to the selected schematic.
@@ -205,9 +286,9 @@
 							use_energy(our_schematic.energy_cost, user)
 					else
 						if(istext(t))
-							to_chat(user, "<span class='warning'>\the [src]'s error light flickers: [t]</span>")
+							to_chat(user, "<span class='warning'>\The [src]'s error light flickers: [t]</span>")
 						else
-							to_chat(user, "<span class='warning'>\the [src]'s error light flickers.</span>")
+							to_chat(user, "<span class='warning'>\The [src]'s error light flickers.</span>")
 
 				busy = FALSE
 			return 1
@@ -219,9 +300,9 @@
 			use_energy(selected.energy_cost, user)
 	else
 		if(istext(t))
-			to_chat(user, "<span class='warning'>\the [src]'s error light flickers: [t]</span>")
+			to_chat(user, "<span class='warning'>\The [src]'s error light flickers: [t]</span>")
 		else
-			to_chat(user, "<span class='warning'>\the [src]'s error light flickers.</span>")
+			to_chat(user, "<span class='warning'>\The [src]'s error light flickers.</span>")
 
 	busy = FALSE
 	return 1
@@ -235,6 +316,8 @@
 		return
 
 	src.build_all = !src.build_all
+	if (interface)
+		rebuild_ui() 
 	to_chat(usr, "You [build_all ? "enable" : "disable"] the multilayer mode.")
 
 /obj/item/device/rcd/rpd/proc/autowrench()
@@ -245,6 +328,8 @@
 		return
 
 	src.autowrench = !src.autowrench
+	if (interface)
+		rebuild_ui() 
 	to_chat(usr, "You [autowrench ? "enable" : "disable"] the automatic wrenching mode.")
 
 /obj/item/device/rcd/rpd/admin

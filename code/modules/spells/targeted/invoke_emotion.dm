@@ -14,7 +14,7 @@ var/global/list/invoked_emotions = list()
 	range = 9
 	charge_max = 150
 	cooldown_min = 10
-	compatible_mobs = list(/mob/living/carbon)
+	valid_targets = list(/mob/living/carbon)
 	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0, Sp_MOVE = 0)
 	level_max = list(Sp_TOTAL = 7, Sp_SPEED = 1, Sp_POWER = 5, Sp_MOVE = 1)
 
@@ -83,7 +83,7 @@ var/global/list/invoked_emotions = list()
 /obj/item/weapon/paper/emotion_invoker
 	name = "emotion invoker"
 	desc = "A cursed sheet of paper designed to transfer or create powerful emotions. Seeks out its target after being thrown."
-	fire_fuel = 0	//Covering my bases on potential infinite fire bugs
+
 	throw_range = 6
 	var/mob/living/curseTarget = null
 	var/isActive = FALSE

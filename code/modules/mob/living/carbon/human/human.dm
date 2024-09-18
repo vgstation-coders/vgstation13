@@ -97,7 +97,7 @@
 	..(new_loc)
 	initialize_basic_NPC_components()
 
-/mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
+/mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0, no_tail = FALSE) //Just fuck my shit up: the mob
 	var/list/valid_species = (all_species - list("Krampus", "Horror", "Manifested"))
 
 	var/datum/species/new_species = all_species[pick(valid_species)]
@@ -109,7 +109,20 @@
 
 	for(var/datum/organ/external/E in organs)
 		E.species = all_species[pick(valid_species)]
-
+	var/datum/organ/external/tail/tail_datum = get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
+	if(no_tail)
+		tail_datum.droplimb(TRUE, spawn_limb = FALSE)
+	else
+		var/list/tailed_species = list()
+		for(var/species_name in all_species)
+			var/datum/species/picked_species = all_species[species_name]
+			if(picked_species.anatomy_flags & HAS_TAIL)
+				tailed_species += picked_species
+		var/datum/species/species_with_tail = pick(tailed_species)
+		tail_datum.fleshify()
+		tail_datum.create_tail_info(species_with_tail)
+		tail_datum.species = species_with_tail
+		tail_datum.update_tail(src, random = TRUE)
 	update_body()
 
 /mob/living/carbon/human/mushroom/New(var/new_loc, delay_ready_dna = 0)
@@ -133,6 +146,8 @@
 	multicolor_skin_g = rand(0,255)
 	multicolor_skin_b = rand(0,255)
 
+	create_reagents(1000) //Moved it here because it could sometimes lead to errors in set_species() in certain cases
+
 	if(!src.species)
 		if(new_species_name)
 			src.set_species(new_species_name)
@@ -143,8 +158,6 @@
 
 	default_language = get_default_language()
 	init_language = default_language
-
-	create_reagents(1000)
 
 	if(!dna)
 		dna = new /datum/dna(null)
@@ -164,31 +177,6 @@
 	hud_list[SPECIALROLE_HUD] = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = new/image/hud('icons/mob/hud.dmi', src, "hudhealthy")
 	hud_list[WAGE_HUD]        = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
-
-	obj_overlays[FIRE_LAYER]		= new /obj/abstract/Overlays/fire_layer
-	obj_overlays[MUTANTRACE_LAYER]	= new /obj/abstract/Overlays/mutantrace_layer
-	obj_overlays[MUTATIONS_LAYER]	= new /obj/abstract/Overlays/mutations_layer
-	obj_overlays[DAMAGE_LAYER]	= new /obj/abstract/Overlays/damage_layer
-	obj_overlays[UNIFORM_LAYER]		= new /obj/abstract/Overlays/uniform_layer
-	obj_overlays[ID_LAYER]			= new /obj/abstract/Overlays/id_layer
-	obj_overlays[SHOES_LAYER]		= new /obj/abstract/Overlays/shoes_layer
-	obj_overlays[GLOVES_LAYER]		= new /obj/abstract/Overlays/gloves_layer
-	obj_overlays[EARS_LAYER]		= new /obj/abstract/Overlays/ears_layer
-	obj_overlays[SUIT_LAYER]		= new /obj/abstract/Overlays/suit_layer
-	obj_overlays[GLASSES_LAYER]		= new /obj/abstract/Overlays/glasses_layer
-	obj_overlays[BELT_LAYER]		= new /obj/abstract/Overlays/belt_layer
-	obj_overlays[SUIT_STORE_LAYER]	= new /obj/abstract/Overlays/suit_store_layer
-	obj_overlays[BACK_LAYER]		= new /obj/abstract/Overlays/back_layer
-	obj_overlays[HAIR_LAYER]		= new /obj/abstract/Overlays/hair_layer
-	obj_overlays[GLASSES_OVER_HAIR_LAYER] = new /obj/abstract/Overlays/glasses_over_hair_layer
-	obj_overlays[FACEMASK_LAYER]	= new /obj/abstract/Overlays/facemask_layer
-	obj_overlays[HEAD_LAYER]		= new /obj/abstract/Overlays/head_layer
-	obj_overlays[HANDCUFF_LAYER]	= new /obj/abstract/Overlays/handcuff_layer
-	obj_overlays[MUTUALCUFF_LAYER]	= new /obj/abstract/Overlays/mutualcuff_layer
-	obj_overlays[LEGCUFF_LAYER]		= new /obj/abstract/Overlays/legcuff_layer
-	//obj_overlays[HAND_LAYER]		= new /obj/abstract/Overlays/hand_layer
-	obj_overlays[TAIL_LAYER]		= new /obj/abstract/Overlays/tail_layer
-	obj_overlays[TARGETED_LAYER]	= new /obj/abstract/Overlays/targeted_layer
 
 	..()
 
@@ -1026,23 +1014,11 @@
 		var/obj/item/clothing/shoes/S = shoes
 		S.track_blood = max(0, _amount, S.track_blood)                //Adding blood to shoes
 		S.luminous_paint = luminous
-
-		if(!blood_overlays["[S.type][S.icon_state]"]) //If there isn't a precreated blood overlay make one
-			S.set_blood_overlay()
-
-		if(S.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
-			S.overlays.Remove(S.blood_overlay)
-		else
-			S.blood_overlay = blood_overlays["[S.type][S.icon_state]"]
-
 		if(!S.blood_DNA)
 			S.blood_DNA = list()
-
 		var/newcolor = (S.blood_color && S.blood_DNA.len) ? BlendRYB(S.blood_color, _color, 0.5) : _color
-		S.blood_overlay.color = newcolor
-		S.overlays += S.blood_overlay
 		S.blood_color = newcolor
-
+		S.set_blood_overlay()
 		if(_blood_DNA)
 			S.blood_DNA |= _blood_DNA.Copy()
 		update_inv_shoes(1)
@@ -1238,11 +1214,92 @@
 	else
 		to_chat(usr, "<span class='info'>You moved while counting. Try again.</span>")
 
-/mob/living/carbon/human/proc/set_species(var/new_species_name, var/force_organs, var/default_colour)
+//Record_organ datum, stores as much info as it can about each organ
+var/datum/record_organ //This is just a dummy proc, not storing any variables here even if it is "name"
+
+/datum/record_organ/proc/can_record(var/datum/organ/O) //To optimize things a little, see if the limb should be recorded in the first place
+
+/datum/record_organ/proc/record_values(var/datum/organ/O)
+
+/datum/record_organ/proc/apply_values(var/datum/organ/O)
+
+/datum/record_organ/external
+	var/name //This is only used for tracking which limb has to be affected, don't paste this over in apply_values
+	var/brute_damage
+	var/burn_damage
+	var/list/wounds = list()
+	var/status_flags
+
+/datum/record_organ/external/can_record(var/datum/organ/external/E)
+	return (E.brute_dam || E.burn_dam || E.wounds.len || E.status)
+
+/datum/record_organ/external/record_values(var/datum/organ/external/E)
+	if(E && istype(E))
+		name = E.name
+		brute_damage = E.brute_dam
+		burn_damage = E.burn_dam
+		wounds = E.wounds.Copy()
+		E.wounds = list() //Because otherwise the wounds would get caught in the garbage collection and fully heal the mob as they get deleted
+		status_flags = E.status
+
+/datum/record_organ/external/apply_values(var/datum/organ/external/E)
+	if(E && istype(E))
+		E.brute_dam = brute_damage
+		E.burn_dam = burn_damage
+		E.wounds = wounds.Copy()
+		wounds = list() //Now get rid of this here
+		E.status = status_flags
+
+/datum/record_organ/internal
+	var/name
+	var/damage
+	var/robotic
+
+/datum/record_organ/internal/can_record(var/datum/organ/internal/I)
+	return (I.damage || I.robotic)
+
+/datum/record_organ/internal/record_values(var/datum/organ/internal/I)
+	if(I && istype(I))
+		name = I.name
+		damage = I.damage
+		robotic = I.robotic
+
+/datum/record_organ/internal/apply_values(var/datum/organ/internal/I)
+	if(I && istype(I))
+		I.damage = damage
+		I.robotic = robotic
+
+/mob/living/carbon/human/proc/set_species(var/new_species_name, var/force_organs, var/default_colour, var/transfer_damage = 0, var/mob/living/carbon/human/target_override)
 	set waitfor = FALSE
+
+	// Target override, in case we want to transfer stuff from a previous mob (the override) to the current one.
+	// Only applied to the damage transfer system.
+	var/mob/living/carbon/human/target = src
+	if(target_override && istype(target_override))
+		target = target_override
+
+	//A list of organs and their associated damages
+	//External and internal organs have different damage systems
+	var/list/recorded_external_damage = list()
+	var/list/recorded_internal_damage = list()
+
+	if(transfer_damage) //Don't bother recording any of it if we're not transferring the damage
+		for(var/datum/organ/external/E in target.organs) //"organs" is actually external organs
+			var/datum/record_organ/external/external_data = new
+			if(external_data.can_record(E))
+				external_data.record_values(E)
+				recorded_external_damage += external_data
+		for(var/datum/organ/internal/I in target.internal_organs)
+			var/datum/record_organ/internal/internal_data = new
+			if(internal_data.can_record(I))
+				internal_data.record_values(I)
+				recorded_internal_damage += internal_data
 
 	if(new_species_name)
 		if(src.species && src.species.name && (src.species.name == new_species_name))
+			if(transfer_damage)
+				if(target != src) //This mob is a new mob, let's apply the damage from the previous mob
+					apply_stored_damages(recorded_external_damage, recorded_internal_damage)
 			return
 	else if(src.dna)
 		new_species_name = src.dna.species
@@ -1311,6 +1368,9 @@
 
 	if(dna)
 		dna.species = new_species_name
+	//Now re-apply all the damages from before the transformation
+	if(transfer_damage)
+		apply_stored_damages(recorded_external_damage, recorded_internal_damage)
 
 	if(my_appearance)
 		var/list/valid_hair = valid_sprite_accessories(hair_styles_list, null, species.name)
@@ -1329,6 +1389,23 @@
 	if(species.species_intro)
 		to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
 	return 1
+
+/mob/living/carbon/human/proc/apply_stored_damages(var/list/recorded_external_damage, var/list/recorded_internal_damage)
+	for(var/datum/organ/external/new_external in organs)
+		for(var/datum/record_organ/external/old_external in recorded_external_damage)
+			if(new_external.name == old_external.name)
+				old_external.apply_values(new_external)
+				recorded_external_damage -= old_external //Trim the list so it doesn't search as much
+				QDEL_NULL(old_external)
+				break //We found a matching record for this organ, move on to the next organ
+	for(var/datum/organ/internal/new_internal in internal_organs)
+		for(var/datum/record_organ/internal/old_internal in recorded_internal_damage)
+			if(new_internal.name == old_internal.name)
+				old_internal.apply_values(new_internal)
+				recorded_internal_damage -= old_internal
+				QDEL_NULL(old_internal)
+				break
+	src.handle_organs(TRUE) //Now update them
 
 #define BLOODOODLE_NOSOURCE	0
 #define BLOODOODLE_HANDS	1
@@ -1683,12 +1760,16 @@
 /mob/living/carbon/human/dexterity_check()
 	if (stat != CONSCIOUS)
 		return FALSE
+	var/datum/organ/external/hand_organ_datum = get_active_hand_organ()
+	var/obj/item/organ/external/hand_obj = new hand_organ_datum.generic_type
+	if(!(hand_obj.is_dexterous))
+		return FALSE
 	if(gloves && istype(gloves, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = gloves
 		if(!G.dexterity_check())//some gloves might make it harder to interact with complex technologies, or fit your index in a gun's trigger
 			return FALSE
 	if(getBrainLoss() >= 60)
-		if(!reagents.has_reagent(METHYLIN))//methylin supercedes brain damage, but not uncomfortable gloves
+		if(!(reagents.has_reagent(METHYLIN) ||  is_dexterous))//methylin and the is_dextrous var supercede brain damage, but not uncomfortable gloves
 			return FALSE
 	return TRUE//humans are dexterous enough by default
 
@@ -1884,7 +1965,7 @@
 	if(new_amount > held_items.len)
 		for(var/i = (held_items.len + 1) to new_amount) //For all the new indexes, create a hand organ
 			if(!find_organ_by_grasp_index(i))
-				var/datum/organ/external/OE = new/datum/organ/external/r_hand(organs_by_name[LIMB_GROIN]) //Fuck it the new hand will grow out of the groin (it doesn't matter anyways)
+				var/datum/organ/external/OE = new/datum/organ/external/hand/r_hand(organs_by_name[LIMB_GROIN]) //Fuck it the new hand will grow out of the groin (it doesn't matter anyways)
 				OE.grasp_id = i
 				OE.owner = src
 
@@ -2104,6 +2185,9 @@
 	// Or being a husk...
 	if(M_HUSK in mutations)
 		return FALSE
+	// Or being appearance banned...
+	if(appearance_isbanned(src))
+		return FALSE
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
@@ -2143,6 +2227,26 @@
 		return T
 	else
 		become_zombie = TRUE
+
+/mob/living/carbon/human/drop_hands(var/atom/Target, force_drop = 0)
+	if (istype(gloves, /obj/item/clothing/gloves/hunter))
+		for(var/obj/item/I in held_items)
+			if (istype(I, /obj/item/weapon/gun/hookshot/whip))
+				to_chat(src, "<span class='notice'>You hold your grip onto your [I]</span>")
+			else
+				drop_item(I, Target, force_drop = force_drop)
+	else
+		..()
+
+/mob/living/carbon/human/get_afterimage()
+	if (istype(w_uniform, /obj/item/clothing/under/hunter)\
+		&& istype(wear_suit, /obj/item/clothing/suit/hunter)\
+		&& istype(shoes, /obj/item/clothing/shoes/hunter)\
+		&& istype(head, /obj/item/clothing/head/hunter)\
+		&& istype(gloves, /obj/item/clothing/gloves/hunter))
+		playsound(src, 'sound/weapons/authenticrichtertackleslide.ogg', 70, 0)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "castlevania_tackle_flick", plane = ABOVE_LIGHTING_PLANE)
+		return "richter tackle"
 
 /mob/living/carbon/human/throw_item(var/atom/target,var/atom/movable/what=null)
 	var/atom/movable/item = get_active_hand()
@@ -2203,6 +2307,16 @@
 		return C.cell
 	if(wear_suit && wear_suit.get_cell())
 		return wear_suit.get_cell()
+
+/mob/living/carbon/human/proc/butt_blast()
+	var/mob/living/carbon/C = src
+	if(C.op_stage.butt != SURGERY_NO_BUTT)
+		if(remove_butt())
+			to_chat(src, "<span class='warning'>Your ass just blew up!</span>")
+	playsound(src, 'sound/effects/superfart.ogg', 50, 1)
+	C.apply_damage(40, BRUTE, LIMB_GROIN)
+	C.apply_damage(10, BURN, LIMB_GROIN)
+	score.assesblasted++
 
 // Returns null on failure, the butt on success.
 /mob/living/carbon/human/proc/remove_butt(var/where = loc)

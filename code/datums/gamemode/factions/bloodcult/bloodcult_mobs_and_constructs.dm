@@ -13,6 +13,13 @@
 	var/turf/crashing = null
 	spell_on_use_inhand = /spell/juggerdash //standard jug gets forcewall, but this seems better for perfect
 
+/mob/living/simple_animal/construct/armoured/perfect/special_thrown_behaviour()
+	dash_dir = dir
+	throwing = 2//dashing through windows and grilles
+
+/mob/living/simple_animal/construct/armoured/perfect/get_afterimage()
+	return "red"
+
 /mob/living/simple_animal/construct/armoured/perfect/to_bump(var/atom/obstacle)
 	if(src.throwing)
 		var/breakthrough = 0
@@ -139,6 +146,25 @@
 	var/obj/effect/overlay/artificerray/ray = null
 	var/heal_range = 2
 	var/list/minions = list()
+	var/list/satellites = list()
+
+/obj/abstract/satellite
+	mouse_opacity = 0
+	invisibility = 101
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "blank"
+
+/mob/living/simple_animal/construct/builder/perfect/proc/update_satellites()
+	var/turf/T = get_turf(src)
+	while(satellites.len < 3)
+		var/obj/abstract/satellite/S = new(T)
+		satellites.Add(S)
+	var/obj/abstract/satellite/satellite_A = satellites[1]
+	var/obj/abstract/satellite/satellite_B = satellites[2]
+	var/obj/abstract/satellite/satellite_C = satellites[3]
+	satellite_A.forceMove(get_step(T, turn(dir, 180)))//behind
+	satellite_B.forceMove(get_step(T, turn(dir, 135)))//behind on one side
+	satellite_C.forceMove(get_step(T, turn(dir, 225)))//behind on the other side
 
 /mob/living/simple_animal/construct/builder/perfect/Life()
 	if(timestopped)
@@ -149,11 +175,19 @@
 		heal_target.update_icons()
 		anim(target = heal_target, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 		move_ray()
+	update_satellites()
 
 /mob/living/simple_animal/construct/builder/perfect/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
 	. = ..()
 	if (ray)
 		move_ray()
+	update_satellites()
+
+/mob/living/simple_animal/construct/builder/perfect/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+	. = ..()
+	if (ray)
+		move_ray()
+	update_satellites()
 
 /mob/living/simple_animal/construct/builder/perfect/proc/start_ray(var/mob/living/simple_animal/construct/target)
 	if (!istype(target))
@@ -278,46 +312,136 @@
 	environment_smash_flags = 0
 	var/mob/living/simple_animal/construct/builder/perfect/master = null
 	var/no_master = TRUE
+	var/glow_color = "#FFFFFF"
 
+	var/image/master_glow = null
+	var/image/harm_glow = null
+
+	var/mode = HEX_MODE_ROAMING
+	var/passive = FALSE
+	var/turf/guard_spot = null
+	/*
+	HEX_MODE_ROAMING 	: Usual mob roaming behaviour.
+	HEX_MODE_GUARD 		: Stands in place. If it spots an enemy, will chase it, then attempt to return to the spot where they were placed.
+	HEX_MODE_ESCORT		: Follows the Artificer that summoned them around if they're close enough, otherwise stays idle. Shoots at enemies but doesn't chase them.
+	*/
 
 /mob/living/simple_animal/hostile/hex/New()
 	..()
-	setupglow(rgb(255,255,255))
+	setupglow(glow_color)
+	update_harmglow()
 	animate(src, pixel_y = 4 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)
 	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 10, loop = -1, easing = SINE_EASING)
 
-/mob/living/simple_animal/hostile/hex/proc/setupglow(glowcolor)
-	overlays = 0
-	var/overlay_layer = ABOVE_LIGHTING_LAYER
-	var/overlay_plane = ABOVE_LIGHTING_PLANE
-	if(layer != MOB_LAYER) // ie it's hiding
-		overlay_layer = FLOAT_LAYER
-		overlay_plane = FLOAT_PLANE
+/mob/living/simple_animal/hostile/hex/adjustBruteLoss(damage)
+	..()
+	update_icons()
 
+/mob/living/simple_animal/hostile/hex/update_icons()
+	overlays = 0
+
+	var/damage = maxHealth - health
+	var/icon/damageicon
+	if (damage > (2*maxHealth/3))
+		damageicon = icon(icon,"wraith2_damage_high")//fits well enough
+	else if (damage > (maxHealth/3))
+		damageicon = icon(icon,"wraith2_damage_low")
+	if (damageicon)
+		damageicon.Blend(glow_color, ICON_ADD)
+		var/image/damage_overlay = image(icon = damageicon, layer = ABOVE_LIGHTING_LAYER)
+		damage_overlay.plane = ABOVE_LIGHTING_PLANE
+		overlays += damage_overlay
+
+	setupglow(glow_color)
+	update_harmglow()
+
+/mob/living/simple_animal/hostile/hex/proc/setupglow(var/_glowcolor = "#FFFFFF")
+	glow_color = _glowcolor
+	overlays -= master_glow
 	var/icon/glowicon = icon(icon,"glow-[icon_state]")
-	glowicon.Blend(glowcolor, ICON_ADD)
-	var/image/glow = image(icon = glowicon, layer = overlay_layer)
-	glow.plane = relative_plane(overlay_plane)
-	overlays += glow
+	glowicon.Blend(_glowcolor, ICON_ADD)
+	master_glow = image(icon = glowicon, layer = ABOVE_LIGHTING_LAYER)
+	master_glow.plane = ABOVE_LIGHTING_PLANE
+	overlays += master_glow
+
+/mob/living/simple_animal/hostile/hex/proc/update_harmglow()
+	overlays -= harm_glow
+	harm_glow = image(icon, src, "[passive ? "glow-hex-passive" : "glow-hex-harm"]", layer = ABOVE_LIGHTING_LAYER)
+	harm_glow.plane = ABOVE_LIGHTING_PLANE+1
+	overlays += harm_glow
 
 /mob/living/simple_animal/hostile/hex/Destroy()
 	if (master)
 		master.minions.Remove(src)
+		if (iscultist(master))
+			master.DisplayUI("Cultist Right Panel")
 	master = null
 	..()
 
 /mob/living/simple_animal/hostile/hex/Life()
 	if(timestopped)
 		return 0
+	if (mode != HEX_MODE_ROAMING)
+		stop_automated_movement = 1
 	. = ..()
 	if (!no_master)
 		if (!master || master.gcDestroyed || master.isDead())
 			adjustBruteLoss(20)//we shortly die out after our master's demise
+			mode = HEX_MODE_ROAMING
+	switch(mode)
+		if (HEX_MODE_GUARD)
+			if (stance == HOSTILE_STANCE_IDLE)
+				if (!guard_spot)
+					guard_spot = get_turf(src)
+				else
+					var/turf/T = get_turf(src)
+					if (T != guard_spot)
+						if ((T.z == guard_spot.z) && (get_dist(T,guard_spot) < 50))
+							Goto(guard_spot,move_to_delay,0)
+						else
+							guard_spot = get_turf(src)
+					else
+						dir = turn(dir, -90)
+		if (HEX_MODE_ESCORT)
+			escort_routine()
+		else
+			guard_spot = null
+
+/mob/living/simple_animal/hostile/hex/proc/escort_routine()
+	guard_spot = null
+	var/escorts = 0
+	var/spot = 0
+	for (var/mob/living/simple_animal/hostile/hex/H in master.minions)
+		if (H.mode == HEX_MODE_ESCORT)
+			escorts++
+		if (H == src)
+			spot = escorts
+	if (escorts == 1)
+		Goto(master.satellites[1],move_to_delay,0)//trailing behind
+		if (!target && (loc == get_turf(master.satellites[1])))
+			dir = master.dir
+	else
+		Goto(master.satellites[spot+1],move_to_delay,0)//trailing on each sides
+		if (!target && (loc == get_turf(master.satellites[spot+1])))
+			dir = master.dir
 
 /mob/living/simple_animal/hostile/hex/Cross(var/atom/movable/mover, var/turf/target, var/height=1.5, var/air_group = 0)
 	if(istype(mover, /obj/item/projectile/bloodslash))//stop hitting yourself ffs!
 		return 1
+	if ((mode == HEX_MODE_ESCORT) && (istype(mover, /mob/living/simple_animal/hostile/hex) || (mover == master)))//Escort mode is janky otherwise
+		return 1
+
 	return ..()
+
+/mob/living/simple_animal/hostile/hex/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
+	. = ..()
+	if (target)
+		dir = get_dir(src, target)
+
+/mob/living/simple_animal/hostile/hex/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+	. = ..()
+	if (target)
+		dir = get_dir(src, target)
 
 /mob/living/simple_animal/hostile/hex/death(var/gibbed = FALSE)
 	..(TRUE) //If they qdel, they gib regardless
@@ -326,20 +450,40 @@
 	visible_message("<span class='warning'>\The [src] collapses in a shattered heap. </span>")
 	qdel (src)
 
-/mob/living/simple_animal/hostile/hex/Found(var/atom/the_target)
+/mob/living/simple_animal/hostile/hex/isValidTarget(var/atom/the_target)
+	if (passive)
+		return FALSE
 	if(ismob(the_target))
 		var/mob/M = the_target
 		if(isanycultist(M))
-			return 0
-	return ..(the_target)
+			return FALSE
+		if (iscarbon(M))
+			var/mob/living/carbon/C = M
+			if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult)) //hex don't attack prisoners
+				return FALSE
+		if (locate(/obj/effect/stun_indicator) in M)//or people that got stun paper'd
+			return FALSE
+		if (locate(/obj/effect/cult_ritual/conversion) in M.loc)//or people that stand on top of an active conversion rune
+			return FALSE
+	return TRUE
 
-
-/mob/living/simple_animal/hostile/hex/CanAttack(var/atom/the_target)
-	if(ismob(the_target))
-		var/mob/M = the_target
-		if(isanycultist(M))
-			return 0
-	return ..(the_target)
+/mob/living/simple_animal/hostile/hex/MoveToTarget()
+	if (mode == HEX_MODE_ESCORT)
+		stop_automated_movement = 1
+		if(!target || !CanAttack(target))
+			LoseTarget()
+			return
+		if(isturf(loc))
+			if(target in ListTargets())
+				dir = get_dir(src, target)
+				if(get_dist(src,target) >= 2 && ranged_cooldown <= 0)
+					OpenFire(target)
+				if(target.Adjacent(src))
+					AttackingTarget()
+				return
+		LostTarget()
+	else
+		..()
 
 /mob/living/simple_animal/hostile/hex/cultify()
 	return
@@ -390,7 +534,7 @@ var/list/astral_projections = list()
 	now_pushing = 1 //prevents pushing atoms
 
 	//keeps track of whether we're in "ghost" form or "slightly less ghost" form
-	var/tangibility = FALSE
+	tangibility = FALSE
 
 	//the cultist's original body
 	var/mob/living/anchor
@@ -411,10 +555,13 @@ var/list/astral_projections = list()
 
 	var/image/hudicon
 
+	var/last_devotion_gain = 0
+	var/devotion_gain_delay = 60 SECONDS
+
 /mob/living/simple_animal/astral_projection/New()
 	..()
 	astral_projections += src
-
+	last_devotion_gain = world.time
 	incorporeal_appearance = image('icons/mob/mob.dmi',"blank")
 	tangible_appearance = image('icons/mob/mob.dmi',"blank")
 	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
@@ -485,6 +632,11 @@ var/list/astral_projections = list()
 	else
 		death()
 		return
+
+	if (world.time >= (last_devotion_gain + devotion_gain_delay))
+		last_devotion_gain += devotion_gain_delay
+		var/datum/role/cultist/C = mind.GetRole(CULTIST)
+		C.gain_devotion(50, DEVOTION_TIER_2, "astral_journey")
 
 	//convertibility HUD
 	if (!tangibility && client)
@@ -568,14 +720,14 @@ var/list/astral_projections = list()
 		var/mob/living/carbon/human/H = body
 		//instead of just adding an overlay of the body's uniform and suit, we'll first process them a bit so the leg part is mostly erased, for a ghostly look.
 		overlays += crop_human_suit_and_uniform(body)
-		overlays += H.obj_overlays[ID_LAYER]
-		overlays += H.obj_overlays[EARS_LAYER]
-		overlays += H.obj_overlays[GLASSES_LAYER]
-		overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
-		overlays += H.obj_overlays[BELT_LAYER]
-		overlays += H.obj_overlays[BACK_LAYER]
-		overlays += H.obj_overlays[HEAD_LAYER]
-		overlays += H.obj_overlays[HANDCUFF_LAYER]
+		overlays += H.overlays_standing[ID_LAYER]
+		overlays += H.overlays_standing[EARS_LAYER]
+		overlays += H.overlays_standing[GLASSES_LAYER]
+		overlays += H.overlays_standing[GLASSES_OVER_HAIR_LAYER]
+		overlays += H.overlays_standing[BELT_LAYER]
+		overlays += H.overlays_standing[BACK_LAYER]
+		overlays += H.overlays_standing[HEAD_LAYER]
+		overlays += H.overlays_standing[HANDCUFF_LAYER]
 
 	//giving control to the player
 	key = body.key
@@ -691,3 +843,43 @@ var/list/astral_projections = list()
 				0,0,1,0,
 				0,0,0,1,
 				0,0,0,0)
+
+
+////////////////////Harvester/////////////////////////
+
+
+/mob/living/simple_animal/construct/harvester/perfect
+	desc = "The reward of those who sacrificed their life so that Nar-Sie could rise."
+	icon_state = "harvester2"
+	icon_living = "harvester2"
+	icon_dead = "harvester2"
+
+	var/ready = FALSE
+
+	construct_spells = list(
+			/spell/targeted/harvest,
+			/spell/aoe_turf/knock/harvester,
+		)
+
+
+/mob/living/simple_animal/construct/harvester/perfect/New()
+	..()
+	flick("harvester2_spawn",src)
+	spawn(10)
+		ready = TRUE
+		if (mind)
+			var/datum/role/streamer/streamer_role = mind.GetRole(STREAMER)
+			if(streamer_role && streamer_role.team == ESPORTS_CULTISTS)
+				if(streamer_role.followers.len == 0 && streamer_role.subscribers.len == 0) //No followers and subscribers, use normal cult colors.
+					construct_color = rgb(235,0,0) // STREAMER (no subs) -> RED
+				else
+					construct_color = rgb(30,255,30) // STREAMER (with subs) -> GREEN
+			else
+				construct_color = rgb(235,0,0)
+		else
+			construct_color = rgb(235,0,0)
+		update_icons()
+
+/mob/living/simple_animal/construct/harvester/perfect/update_icons()
+	if (ready)
+		..()

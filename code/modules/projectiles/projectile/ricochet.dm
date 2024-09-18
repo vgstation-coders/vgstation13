@@ -250,21 +250,21 @@
 			if(istype(A,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = A
 				if(istype(H.wear_suit,/obj/item/clothing/suit/armor/laserproof))// bwoing!!
-					visible_message("<span class='warning'>\the [src.name] bounces off \the [A.name]'s [H.wear_suit]!</span>")
+					visible_message("<span class='warning'>\The [src.name] bounces off \the [A.name]'s [H.wear_suit]!</span>")
 					bounce()
 				else
-					visible_message("<span class='warning'>\the [A.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
+					visible_message("<span class='warning'>\The [A.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
 					A.bullet_act(src, def_zone)
 					admin_warn(A)
 					bulletdies(A)
 			else
-				visible_message("<span class='warning'>\the [A.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
+				visible_message("<span class='warning'>\The [A.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
 				A.bullet_act(src, def_zone)
 				admin_warn(A)
 				bulletdies(A)
 
 		else if(is_type_in_list(A,ricochet_bump))//beware fuel tanks!
-			visible_message("<span class='warning'>\the [A.name] is hit by \the [src.name]!</span>")
+			visible_message("<span class='warning'>\The [A.name] is hit by \the [src.name]!</span>")
 			A.bullet_act(src)
 			bulletdies(A)
 

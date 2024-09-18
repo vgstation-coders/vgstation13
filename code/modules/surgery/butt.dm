@@ -153,7 +153,7 @@
 	"<span class='notice'>You have cauterized [target]'s ass with \the [tool].</span>")
 	var/obj/item/clothing/head/butt/B = new(target.loc)
 	B.transfer_buttdentity(target)
-	target.op_stage.butt = 4
+	target.op_stage.butt = SURGERY_NO_BUTT
 
 /datum/surgery_step/butt/cauterize_butt/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("<span class='warning'>[target] lets out a small fart, which gets set alight with [user]'s [tool]!</span>" , \

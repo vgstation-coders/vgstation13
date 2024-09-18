@@ -12,7 +12,7 @@
 	invocation_type = SpI_SHOUT
 	amt_stunned = 5//just exists to make sure the giftwrap "catches" them
 	cooldown_min = 30 //100 deciseconds reduction per rank
-	compatible_mobs = list(/mob/living)
+	valid_targets = list(/mob/living)
 
 	hud_state = "wrap"
 

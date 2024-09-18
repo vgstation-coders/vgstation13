@@ -170,7 +170,6 @@
 	if(heldkey && !user.incapacitated() && Adjacent(user) && user.dexterity_check())
 		to_chat(user, "<span class='notice'>You remove \the [heldkey] from \the [src]'s ignition.</span>")
 		user.visible_message("<span class='notice'>\The [src]'s engine shuts off.</span>")
-		heldkey.forceMove(get_turf(user))
 		user.put_in_hands(heldkey)
 		heldkey = null
 	else
@@ -185,6 +184,7 @@
 
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
+	..()
 	if(user.incapacitated())
 		unlock_atom(user)
 		return
@@ -359,7 +359,7 @@
 /obj/structure/bed/chair/vehicle/bullet_act(var/obj/item/projectile/Proj)
 	var/hitrider = 0
 	if(istype(Proj, /obj/item/projectile/ion))
-		Proj.on_hit(src, 2)
+		Proj.on_hit(src, 100)
 		return
 
 	if(occupant)

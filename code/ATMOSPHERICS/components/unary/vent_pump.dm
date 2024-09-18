@@ -70,7 +70,7 @@
 	overlays = null
 	icon_state = welded ? "weld" : "base"
 
-	if (on && ~stat & (FORCEDISABLE|NOPOWER|BROKEN))
+	if (on && !(stat & (FORCEDISABLE|NOPOWER|BROKEN)))
 		overlays += pump_direction ? "out" : "in"
 
 	..()
@@ -172,7 +172,7 @@
 		name = "Vent Pump"
 	else
 		broadcast_status()
-		
+
 /obj/machinery/atmospherics/unary/vent_pump/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	..()
 	src.broadcast_status()
@@ -259,12 +259,10 @@
 		return
 
 	if("status" in signal.data)
-		spawn(2)
-			broadcast_status()
+		broadcast_status()
 		return //do not update_icon
 
-	spawn(2)
-		broadcast_status()
+	broadcast_status()
 	update_icon()
 	return
 

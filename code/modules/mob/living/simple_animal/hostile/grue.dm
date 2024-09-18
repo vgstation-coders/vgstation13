@@ -267,7 +267,7 @@
 			handle_feed(pick(feed_targets))
 
 	//Egglaying
-	if(lifestage==GRUE_ADULT && eatencharge>0 && lightparams.dark_dim_light==GRUE_DARK)
+	if(config.grue_egglaying && (lifestage==GRUE_ADULT) && (eatencharge>0) && (lightparams.dark_dim_light==GRUE_DARK))
 		reproduce()
 
 	//Movement
@@ -625,7 +625,7 @@
 		E.reagents.trans_to(src, E.reagents.total_volume)
 
 		//Upgrade the grue's stats as it feeds
-		if(E.mind) //eaten creature must have a mind to power up the grue
+		if(E.mind && !isskellington(E)) //eaten creature must have a mind to power up the grue, and mustn't be pure skeletons
 			playsound(src, 'sound/misc/grue_growl.ogg', 50, 1)
 			eatencount++					//makes the grue stronger
 			if(mind && mind.GetRole(GRUE)) //also increment the counter for objectives
@@ -635,22 +635,41 @@
 			eatencharge++ //can be spent on egg laying
 			grue_stat_updates(TRUE)
 		else
-			to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
-		E.death(1)
+			if(isskellington(E))
+				to_chat(src, "<span class='warning'>That creature was only bones, and didn't quite satisfy your hunger...</span>")
+			else
+				to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
 		E.drop_all()
-		E.gib()
+		if(can_skeletonize(E))
+			var/mob/living/carbon/human/H = E
+			gibs(H.loc, H.virus2, H.dna, H.species.flesh_color, H.species.blood_color)
+			if(isvox(H))
+				H.set_species("Skeletal Vox")
+			else
+				H.set_species("Skellington")
+			H.regenerate_icons()
+			H.death(FALSE)
+		else //Eat the mob otherwise
+			E.gib()
 	busy=FALSE
+
+//Determines whether the human will be gibbed or turned into a skeleton
+/mob/living/simple_animal/hostile/grue/proc/can_skeletonize(var/mob/living/E)
+	if(ishuman(E))
+		var/mob/living/carbon/human/H = E
+		if(H.species.anatomy_flags & NO_BLOOD)
+			return 0
+		return 1
+	return 0
 
 /mob/living/simple_animal/hostile/grue/proc/grue_stat_updates(var/feed_verbose = FALSE) //update stats, called by lifestage_updates() as well as handle_feed()
 
 	//health regen in darkness
-	lightparams.regenbonus = lightparams.base_regenbonus * (1.5 ** eatencount) //increased health regen in darkness
+	lightparams.regenbonus = lightparams.base_regenbonus * (1.1 ** eatencount) //increased health regen in darkness
 
 	//melee damage, 50 damage limit
 	melee_damage_lower = min(50, base_melee_dam_lw + (5 * eatencount))
 	melee_damage_upper = min(50, base_melee_dam_up + (5 * eatencount))
-	//How much armor they ignore on hit, +10% armor penetration for every target consumed up to 50% of armor ignored, meaning 80% damage reduction becomes 40%.
-	armor_modifier = max(0.5, 1 - (0.1 * eatencount))
 
 	//speed bonus in dark and dim conditions
 	lightparams.speed_m_dark_dim_light[1]=max(1/2,lightparams.base_speed_m_dark_dim_light[1]/(1.2 ** eatencount))//faster in darkness
@@ -779,6 +798,7 @@
 		playsound(blinktarget, 'sound/effects/grue_shadowshunt.ogg', 20, 1)
 		to_chat(src, "<span class='notice'>You [pick("shift", "step", "slide", "glide", "push")] [pick("comfortably", "easily", "effortlessly", "readily", "gracefully")] through the [pick("darkness", "dark", "shadows", "shade", "blackness")].</span>")
 		new /obj/effect/gruesparkles (loc)
+		unlock_from() // just in case
 		forceMove(blinktarget)
 		new /obj/effect/gruesparkles (loc)
 		return TRUE

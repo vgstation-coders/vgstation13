@@ -5,13 +5,14 @@
 	icon_state = "rollstart"
 	flags = FPRINT
 	w_class = W_CLASS_TINY
+	w_type = RECYK_PLASTIC
 	restraint_resist_time = 20 SECONDS
 	toolsounds = list('sound/weapons/cablecuff.ogg')
 	var/turf/start
 	var/turf/end
 	var/tape_type = /obj/item/tape
 	var/icon_base
-	autoignition_temperature = AUTOIGNITION_PAPER
+	flammable = TRUE
 
 /obj/item/tape
 	name = "tape"
@@ -20,9 +21,12 @@
 	density = 1
 	layer = ABOVE_DOOR_LAYER
 	pass_flags_self = PASSGLASS
+	w_class = W_CLASS_TINY
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 	var/icon_base
 	var/robot_compatibility
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/taperoll/police
 	name = "police tape"
@@ -164,7 +168,7 @@
 	if(proximity_flag == 0)//Check adjacency.
 		return 0
 
-	if(istype(target, /obj/machinery/door/airlock) || istype(target, /obj/machinery/door/firedoor))	//Make sure we can tape the target.
+	if(istype(target, /obj/machinery/door/airlock))	//Make sure we can tape the target.
 		var/turf = get_turf(target)
 
 		//Check to see if the object already has any tape of any kind on it.
@@ -181,7 +185,9 @@
 			to_chat(user, "<span class='notice'>You placed \the [src].</span>")
 			return 1
 
-/obj/item/tape/blocks_doors()
+/obj/item/tape/blocks_doors(var/obj/machinery/door/D)
+	if (istype(D, /obj/machinery/door/firedoor/border_only))
+		return FALSE
 	return TRUE
 
 /obj/item/tape/Bumped(var/atom/movable/AM)

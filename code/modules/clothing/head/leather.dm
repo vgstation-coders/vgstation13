@@ -9,7 +9,7 @@
 	armor = list(melee = 30, bullet = 10, laser = 20, energy = 10, bomb = 20, bio = 0, rad = 0)
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 	siemens_coefficient = 0.6
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 /obj/item/clothing/head/leather/attackby(obj/W, mob/user)
 	if(istype (W, /obj/item/stack/sheet/animalhide))

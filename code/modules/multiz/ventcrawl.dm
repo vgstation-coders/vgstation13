@@ -41,6 +41,16 @@
 					user.forceMove(target_move.loc) //handles entering and so on
 					user.visible_message("You hear something squeeze through the ducts.", "You climb out the ventilation system.")
 		else if(target_move.can_crawl_through())
+			if(istype(target_move,/obj/machinery/atmospherics/unary/cap/bluespace))   //if the target is a bluespace pipe cap, teleport to the next cap in bspipe_list
+				var/obj/machinery/atmospherics/unary/cap/bluespace/bscap = target_move
+				var/list_len = bspipe_list.len
+				var/starting_index = bspipe_list.Find(bscap)
+				if(bscap.network)
+					for(var/i=0 to list_len-2)
+						var/pointer = ((i + starting_index) % list_len)+1
+						if(bscap.network == bspipe_list[pointer].network)
+							target_move = bspipe_list[pointer]
+							break
 			if(target_move.return_network(target_move) != return_network(src))
 				user.remove_ventcrawl()
 				user.add_ventcrawl(target_move)

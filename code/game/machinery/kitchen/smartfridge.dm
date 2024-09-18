@@ -533,10 +533,10 @@
 /obj/machinery/smartfridge/Topic(href, href_list)
 	. = ..()
 	if(stat & BROKEN)
-		to_chat(usr, "<span class='warning'>The [src] has broken down and must be re-assembled.</span>")
+		to_chat(usr, "<span class='warning'>\The [src] has broken down and must be re-assembled.</span>")
 		return 1
 	if(stat & (NOPOWER|FORCEDISABLE))
-		to_chat(usr, "<span class='warning'>The [src] doesn't respond as it is unpowered.</span>")
+		to_chat(usr, "<span class='warning'>\The [src] doesn't respond as it is unpowered.</span>")
 		return 1
 
 	if(.)
