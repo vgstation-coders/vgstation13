@@ -325,9 +325,9 @@ datums for the fission reactor, which includes the fuel and reactor
 
 	
 	if(control_rod_target>control_rod_insertion) //5% insertion increments
-		control_rod_insertion+=.05
+		control_rod_insertion+=0.05
 	else if(control_rod_target<control_rod_insertion)
-		control_rod_insertion-=.05
+		control_rod_insertion-=0.05
 
 
 	if(!fuel)
@@ -439,8 +439,8 @@ datums for the fission reactor, which includes the fuel and reactor
 	for(var/datum/reagent/R in fuel.reagent_list)
 		if (R.fission_time)
 			thislifetime+=R.fission_time* (fuel.amount_cache[R.id] + 0)/(fuel.total_volume) //fuel time is a weighted average
-		thiswattage+=R.fission_power
-		thisabsorbance+=R.fission_absorbtion
+		thiswattage+=R.fission_power*fuel.amount_cache[R.id]
+		thisabsorbance+=R.fission_absorbtion*fuel.amount_cache[R.id]
 
 	lifetime=max(thislifetime,0)
 	wattage=max(thiswattage,0)

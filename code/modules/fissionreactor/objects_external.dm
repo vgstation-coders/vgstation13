@@ -41,7 +41,7 @@ included:
 			var/obj/item/tool/weldingtool/WT = I
 			user.visible_message("<span class='notice'>[user] starts welding \the [src]'s external plating off its frame.</span>", "<span class='notice'>You start welding \the [src]'s external plating off its frame.</span>")
 			if(WT.do_weld(user,src,60,0))
-				var/obj/structure/girder/reactor/newcase= new /obj/structure/girder/reactor
+				var/obj/structure/girder/reactor/newcase= new /obj/structure/girder/reactor(loc)
 				newcase.forceMove(loc)
 				newcase.pipeadded=TRUE
 				newcase.state=3
@@ -155,7 +155,7 @@ included:
 		var/obj/item/tool/weldingtool/WT = I
 		user.visible_message("<span class='notice'>[user] starts welding \the [src]'s external plating off its frame.</span>", "<span class='notice'>You start welding \the [src]'s external plating off its frame.</span>")
 		if(WT.do_weld(user,src,60,0))
-			var/obj/machinery/constructable_frame/machine_frame/reinforced/newframe= new /obj/machinery/constructable_frame/machine_frame/reinforced
+			var/obj/machinery/constructable_frame/machine_frame/reinforced/newframe= new /obj/machinery/constructable_frame/machine_frame/reinforced(loc)
 			newframe.forceMove(loc)
 			newframe.build_state=3
 			newframe.circuit=/obj/item/weapon/circuitboard/fission_reactor
@@ -199,12 +199,12 @@ included:
 		icon_state="controlb"
 	else if(!associated_reactor)
 		icon_state="control_noreactor"
+	else if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP || associated_reactor.SCRAM)
+		icon_state="control_danger"
 	else if(!associated_reactor.fuel)
 		icon_state="control_nofuel"
 	else if(associated_reactor.fuel.life <=0)
 		icon_state="control_depleted"
-	else if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP)
-		icon_state="control_danger"
 	else if(!associated_reactor.considered_on())
 		icon_state="control_idle"
 	
@@ -321,7 +321,7 @@ included:
 			user.visible_message("<span class='notice'>[user] starts welding \the [src]'s external plating off its frame.</span>", "<span class='notice'>You start welding \the [src]'s external plating off its frame.</span>")
 			if(WT.do_weld(user,src,60,0))
 				qdel(src)
-				var/obj/structure/girder/reactor/newcase= new /obj/structure/girder/reactor
+				var/obj/structure/girder/reactor/newcase= new /obj/structure/girder/reactor(loc)
 				newcase.forceMove(loc)
 				newcase.state=3
 
@@ -462,7 +462,7 @@ included:
 			if(pipeadded && W.is_wrench(user))
 				W.playtoolsound(src, 100)	
 				to_chat(user, "<span class='notice'>You remove the piping from \the [src]</span>")	
-				var/obj/item/pipe/np= new /obj/item/pipe 
+				var/obj/item/pipe/np= new /obj/item/pipe(loc)
 				np.pipe_type=1
 				np.forceMove(loc)
 				pipeadded=FALSE
@@ -494,11 +494,11 @@ included:
 					user.visible_message("<span class='notice'>[user] welds the external plating to \the [src]'s frame.</span>", "<span class='notice'>You weld the external plating to \the [src]'s frame.</span>")
 					
 					if(!pipeadded)
-						var/obj/structure/fission_reactor_case/newcase= new /obj/structure/fission_reactor_case
+						var/obj/structure/fission_reactor_case/newcase= new /obj/structure/fission_reactor_case(loc)
 						newcase.forceMove(loc)
 						newcase.dir=src.dir
 					else
-						var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/newcase= new /obj/machinery/atmospherics/unary/fissionreactor_coolantport
+						var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/newcase= new /obj/machinery/atmospherics/unary/fissionreactor_coolantport(loc)
 						newcase.dir=src.dir
 						newcase.forceMove(loc)
 					qdel(src)
