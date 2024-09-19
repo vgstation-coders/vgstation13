@@ -423,7 +423,7 @@
 
 /datum/supply_packs/fissionreactor_starterkit
 	contains = list(
-		/obj/item/weapon/fuelrod/starter,
+		/obj/item/weapon/fuelrod/small/starter,
 		/obj/item/weapon/storage/box/fissionsupply_controller, //makes a crappy 1x2 interior. but it'll do.
 		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
 		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
@@ -447,7 +447,7 @@
 	containername = "Fission reactor starter kit"
 	group = "Engineering"
 	access = list(access_engine_major)
-	containsdesc = "Everything you need to build a very basic fission reactor. Comes with a pre-filled fuel rod."
+	containsdesc = "Everything you need to build a very basic fission reactor. Comes with a pre-filled (albeit small) fuel rod."
 	
 /datum/supply_packs/fissionreactor_expansion
 	contains = list(

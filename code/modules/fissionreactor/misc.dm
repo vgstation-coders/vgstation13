@@ -61,13 +61,13 @@ boxes used for cargo orders to make my life easier.
 	new /obj/item/weapon/stock_parts/console_screen(src)
 	new /obj/item/stack/cable_coil(src,5)//5 wire
 		
-/obj/item/weapon/fuelrod/starter
+/obj/item/weapon/fuelrod/small/starter
 	icon_state="i_fuelrod"
 
-/obj/item/weapon/fuelrod/starter/New()
+/obj/item/weapon/fuelrod/small/starter/New()
 	..()
 	//fueldata.fuel.add_reagent(URANIUM,150)
-	fueldata.add_shit_to(URANIUM,150,fueldata.fuel)
+	fueldata.add_shit_to(URANIUM,units_of_storage,fueldata.fuel)
 	fueldata.rederive_stats()
 	fueldata.life=1
 	

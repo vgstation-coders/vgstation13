@@ -397,8 +397,8 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/wattage=0 // heat which will be added.
 	var/absorbance=0 //subtraced from above to get total emission.
 
-/datum/fission_fuel/New()
-	fuel= new /datum/reagents(150) //this probably isn't the best way to do things, but that's a problem for future me (someone else) to deal with.
+/datum/fission_fuel/New(storage_size)
+	fuel= new /datum/reagents(storage_size) //this probably isn't the best way to do things, but that's a problem for future me (someone else) to deal with.
 
 
 
@@ -447,7 +447,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	absorbance=max(thisabsorbance,0)
 	
 /datum/fission_fuel/proc/get_products()	//fission products.
-	var/datum/reagents/products = new /datum/reagents(150)
+	var/datum/reagents/products = new /datum/reagents(fuel.maximum_volume)
 
 	if(!fuel)
 		return products
