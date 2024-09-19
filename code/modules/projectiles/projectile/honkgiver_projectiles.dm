@@ -10,6 +10,10 @@
 	hitsound = 'sound/weapons/taserhit.ogg'
 	movement_speed_reduction = 0.75
 	speed_reduction_duration = 15
+	has_special_suicide = TRUE
+
+/obj/item/projectile/beam/electrode/custom_mouthshot(mob/living/user)
+	//TODO; user screams.... that is all.
 
 //It's big, its flashy, it's noisy, and it does absolutely fuck all except make you deaf.
 /obj/item/projectile/beam/doomlazorz
@@ -88,7 +92,7 @@
 	hitsound = "sound/effects/boink.ogg"
 	bounce_sound = "sound/effects/boink.ogg"
 	embed = 0
-	//decay_type = //this is what drops when it ceases to exist// drop pop effect
+	has_special_suicide = TRUE
 
 /obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/on_hit(var/atom/target, var/blocked = 0)
 	..()
@@ -99,10 +103,16 @@
 			var/turf/W = get_turf(target)
 			var/destination = get_dir(T,W)
 			step(M, destination)
-		//M.throw_at(get_edge_target_turf(target,destination),1,1) this was doing damage
 
 /obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/admin_warn(mob/living/M)
 	return 0 //don't log it will spam admin logs and they shouldn't damage anyways
+
+/obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/custom_mouthshot(mob/living/user)
+	playsound(src, 'sound/misc/balloon_pop.ogg', 75, 1)
+	flick("ball_pop",src)
+	user.gib(FALSE,FALSE)
+	log_attack("<font color='red'>[key_name(user)] committed suicide with \the [src].</font>")
+	user.attack_log += "\[[time_stamp()]\] <font color='red'> [user.real_name] committed suicide with \the [src]</font>"
 
 //a shot of water + honkserum. Slips people that walk over the water, and if you hit them in the mouth they'll honk like a clown.
 /obj/item/projectile/beam/liquid_stream/honkgiver_stream
@@ -128,11 +138,15 @@
 	custom_impact = 1
 	embed = 0
 	nodamage = 1
+	has_special_suicide = TRUE
 
 /obj/item/projectile/bullet/pie_shot/on_hit(var/atom/target, var/blocked = 0)
 	..()
 	var/obj/item/weapon/reagent_containers/food/snacks/pie/empty/no_throwforce/P = new  /obj/item/weapon/reagent_containers/food/snacks/pie/empty/no_throwforce
 	P.throw_impact(target)
+
+/obj/item/projectile/bullet/pie_shot/custom_mouthshot(mob/living/user)
+	on_hit(user,0)
 
 //A high velocity banana peel that flies straight through mobs. applies a banana slip on everything it hits.
 /obj/item/projectile/bullet/peel_shot
@@ -147,6 +161,7 @@
 	penetration = 100 								//CAN STOP THIS PEEL
 	custom_impact = 1
 	nodamage = 1
+	has_special_suicide = TRUE
 
 /obj/item/projectile/bullet/peel_shot/on_hit(var/atom/target, var/blocked = 0)
 	..()
@@ -154,3 +169,16 @@
 	if(istype(target,/atom/movable))
 		B.handle_slip(target)
 	qdel(B)
+
+/obj/item/projectile/bullet/peel_shot/custom_mouthshot(mob/living/user)
+	var/datum/organ/external/head/user_head = user.get_organ(LIMB_HEAD)
+	user_head.explode()
+	var/obj/item/projectile/bullet/peel_shot/PS = new /obj/item/projectile/bullet/peel_shot(get_turf(user))
+	PS.starting = get_turf(user)
+	PS.current = get_turf(user)
+	PS.original = get_step(user, opposite_dirs[user.dir])
+	PS.target = get_step(user, opposite_dirs[user.dir])
+	PS.OnFired(PS.original)
+	PS.yo = PS.original.y - PS.current.y
+	PS.xo = PS.original.x - PS.current.x
+	PS.process()
