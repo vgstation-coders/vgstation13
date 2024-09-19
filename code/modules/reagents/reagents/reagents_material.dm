@@ -79,8 +79,8 @@
 	description = "Plasma in its liquid form."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#500064" //rgb: 80, 0, 100
-	fission_time=3600 //60 minutes.
-	fission_absorbtion=25000
+	fission_time=18000 //5 hours.
+	fission_absorbtion=5000
 
 /datum/reagent/plasma/New()
 	..()
@@ -143,8 +143,8 @@
 	color = "#B8B8C0" //rgb: 184, 184, 192
 	density = 19.05
 	specheatcap = 0.124
-	fission_time=1800 //30 minutes.
-	fission_power=50000
+	fission_time=9000 //2.5 hours.
+	fission_power=10000
 
 /datum/reagent/uranium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -237,8 +237,8 @@
 	color = "#CACAD2" //rgb: 202, 202, 210
 	density = 19.85
 	specheatcap = 0.124
-	fission_time=900 //15 minutes.
-	fission_power=200000
+	fission_time=4500 //1.25 hours.
+	fission_power=40000
 	
 /datum/reagent/plutonium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -254,8 +254,8 @@
 	density = 9.73
 	specheatcap = 0.936
 	custom_metabolism = 1 //decays really fast, so it shouldn't linger long.
-	fission_time=300 //5 minutes.
-	fission_power=5000
+	fission_time=1500 //25 minutes.
+	fission_power=1000
 	
 /datum/reagent/plutonium/on_mob_life(var/mob/living/M)
 	if(..())

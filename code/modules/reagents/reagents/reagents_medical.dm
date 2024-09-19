@@ -621,8 +621,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	density = 3.9
 	specheatcap = 0.12812
 	custom_metabolism = 0.1
-	fission_time=600
-	fission_absorbtion=15000
+	fission_time=3000 // 100 minutes (1hr 40)
+	fission_absorbtion=3000
 
 /datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
 	if(..())
