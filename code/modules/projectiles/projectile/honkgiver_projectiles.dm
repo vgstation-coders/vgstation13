@@ -10,12 +10,9 @@
 	hitsound = 'sound/weapons/taserhit.ogg'
 	movement_speed_reduction = 0.75
 	speed_reduction_duration = 15
-	has_special_suicide = TRUE
+	has_special_suicide = TRUE //will override the default mouth shot suicide.
 
-/obj/item/projectile/beam/electrode/custom_mouthshot(mob/living/user)
-	//TODO; user screams.... that is all.
-
-//It's big, its flashy, it's noisy, and it does absolutely fuck all except make you deaf.
+//It's big, its flashy, it's noisy, and it does absolutely fuck all except make the victim deaf. Also may burn off victim's facial hair.
 /obj/item/projectile/beam/doomlazorz
 	name = "ultra-lethal-death-laser of doom"
 	icon_state = "ultradeathray"
@@ -25,7 +22,6 @@
 	damage = 0
 	nodamage = 1
 	has_special_suicide = TRUE
-	//custom_impact = 1
 
 /obj/item/projectile/beam/doomlazorz/custom_mouthshot(mob/living/user)
 	var/datum/organ/external/head/user_head = user.get_organ(LIMB_HEAD)
@@ -75,8 +71,7 @@
 				L.visible_message("<span class='warning'>All of [H.name]'s facial hair is vaporized away by the intense blast of energy!</span>")
 				H.update_hair()
 
-//TODO make it pop when it is finally destroyed!
-//A bouncy ball that bounces off virtually everything. It deals one tile of knockback when it hits a living mob and screen shakes them.
+//A bouncy ball that bounces off virtually everything. It deals one tile of knockback when it hits a living mob.
 /obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball
 	name = "bouncy ball shot"
 	icon_state = "ball"
@@ -96,7 +91,7 @@
 
 /obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/on_hit(var/atom/target, var/blocked = 0)
 	..()
-	if(isliving(target))//knockback on hit. canmove might be to restricting. perhaps target.locked_to is better. it returns the obj the target is locked to.
+	if(isliving(target))
 		var/mob/living/M = target
 		if(M.canmove)
 			var/turf/T = get_turf(src)
@@ -128,7 +123,7 @@
 	alpha = m_alpha
 	travel_range = 7
 
-//A fast moving pie. Is fired in rapid fire mode where it has a little bit of spread. great for blinding a crowd.
+//A fast moving projectile pie. It's fired in a burst with a some spread. Great for blinding a crowd.
 /obj/item/projectile/bullet/pie_shot
 	name = "high-velocity projectile pie"
 	icon_state = "pie"
@@ -150,7 +145,6 @@
 
 //A high velocity banana peel that flies straight through mobs. applies a banana slip on everything it hits.
 /obj/item/projectile/bullet/peel_shot
-	//banana peel shot keeps going!
 	name = "high-velocity banana peel"
 	icon_state = "peel"
 	damage = 0
@@ -171,6 +165,7 @@
 	qdel(B)
 
 /obj/item/projectile/bullet/peel_shot/custom_mouthshot(mob/living/user)
+	//gibs user's head and continues to fly in direction opposite of facing.
 	var/datum/organ/external/head/user_head = user.get_organ(LIMB_HEAD)
 	user_head.explode()
 	var/obj/item/projectile/bullet/peel_shot/PS = new /obj/item/projectile/bullet/peel_shot(get_turf(user))
@@ -182,3 +177,5 @@
 	PS.yo = PS.original.y - PS.current.y
 	PS.xo = PS.original.x - PS.current.x
 	PS.process()
+	log_attack("<font color='red'>[key_name(user)] committed suicide with \the [src].</font>")
+	user.attack_log += "\[[time_stamp()]\] <font color='red'> [user.real_name] committed suicide with \the [src]</font>"
