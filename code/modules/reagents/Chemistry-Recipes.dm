@@ -4272,10 +4272,10 @@
 	required_reagents = list(MANLYDORF = 1, DEGENERATECALCIUM = 1, HYPERZINE = 1)
 	result_amount = 2
 
-/datum/chemical_reaction/turkizol
-	name = "Turkizol"
-	id = TURKIZOL
-	result = TURKIZOL
+/datum/chemical_reaction/priaxate
+	name = "Priaxate"
+	id = PRIAXATE
+	result = PRIAXATE
 	required_reagents = list(GRAVY = 1, TRICORDRAZINE = 1)
 	result_amount = 2
 

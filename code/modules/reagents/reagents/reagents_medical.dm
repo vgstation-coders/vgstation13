@@ -1690,10 +1690,10 @@ var/global/list/charcoal_doesnt_remove=list(
 	if(prob(10))
 		M.drowsyness = max(M.drowsyness, 2)
 
-/datum/reagent/turkizol
-	name = "Turkizol"
-	id = TURKIZOL
-	description = "Turkizol is a broad spectrum medication formulated for the unique biology of vox. While still effective on other species, some of its effects are less potent."
+/datum/reagent/priaxate
+	name = "Priaxate"
+	id = PRIAXATE
+	description = "Priaxate is a broad spectrum medication formulated for the unique biology of vox. While still effective on other species, some of its effects are less potent."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CD8471" //rgb: 205, 132, 113
 	density = 1.29

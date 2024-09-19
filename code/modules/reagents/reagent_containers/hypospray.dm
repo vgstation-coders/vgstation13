@@ -139,13 +139,13 @@
 	else
 		icon_state = "paralytic0"
 
-/obj/item/weapon/reagent_containers/hypospray/autoinjector/turkizol
-	name = "turkizol injector"
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/priaxate
+	name = "priaxate injector"
 	desc = "A rapid and safe way to administer small amounts of drugs by untrained or trained personnel. More effective on vox."
 	icon_state = "turkey1"
 	item_state = "turkey"
 	flags = FPRINT
-	refill_reagent_list = list(TURKIZOL = 5)
+	refill_reagent_list = list(PRIAXATE = 5)
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/turkizol/update_icon()
 	if(reagents.total_volume > 0)
