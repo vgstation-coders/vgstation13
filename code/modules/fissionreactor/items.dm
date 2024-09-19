@@ -34,6 +34,11 @@ includes:
 	name="small fuel rod"
 	desc="a smaller fuel rod, for lower-power applications."
 	units_of_storage=50
+
+/obj/item/weapon/fuelrod/large
+	name="large fuel rod"
+	desc="a very large fuel rod, for high-power or complex mixes. use with caution."
+	units_of_storage=350	
 	
 
 

@@ -468,6 +468,22 @@
 	containername = "Fission reactor expansion pak"
 	group = "Engineering"
 	access = list(access_engine_major)
-	containsdesc = "Contains supplies to expand an existing fission reactor. Remember to turn it off and drain the coolant first!"
+	containsdesc = "Contains supplies to expand an existing fission reactor. Remember to turn it off and drain the coolant first!"		
+		
+/datum/supply_packs/fissionreactor_bigrod
+	contains = list(
+		/obj/item/weapon/fuelrod/large
+	)
+	name = "High-capacity fuel rod."
+	cost = 100 //It's a one time purchance, really. somewhat costy, but not that much for a department. watch for meltdowns.
+	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	containername = "Large fuel rod"
+	group = "Engineering"
+	access = list(access_engine_major)
+	containsdesc = "An extra-large fuel rod, for extra power or for more complex fuel mixes. Use with extreme caution and control rods inserted."
+		
+				
+		
+		
 		
 	
