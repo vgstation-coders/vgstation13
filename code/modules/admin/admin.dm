@@ -1319,7 +1319,7 @@ var/global/floorIsLava = 0
 
 		object = copytext(object, 1, variables_start)
 
-	var/chosen = filter_list_input("Select an atom type", "Spawn Atom", get_matching_types(object, /atom))
+	var/chosen = filter_typelist_input("Select an atom type", "Spawn Atom", get_matching_types(object, /atom))
 	if(!chosen)
 		return
 	var/atom/location = usr.loc

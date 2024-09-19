@@ -160,8 +160,10 @@ var/list/forbidden_varedit_object_types = list(
 				new_value = input("Enter new number:", window_title, old_value) as num
 
 			if(V_TYPE)
-				var/partial_type = input("Enter type, or leave blank to see all types", window_title, "[old_value]") as text|null
-				new_value = filter_list_input("Select type", window_title, get_matching_types(partial_type, /datum))
+				var/partial_type = input("Enter type, partial type, or leave blank to set null", window_title, "[old_value]") as text|null
+				if(isnull(partial_type) || partial_type == "")
+					return
+				new_value = filter_typelist_input("Select type", window_title, get_matching_types(partial_type, /datum))
 
 			if(V_LIST_EMPTY)
 				if (acceptsLists)

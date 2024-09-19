@@ -133,7 +133,6 @@ var/list/admin_verbs_fun = list(
 	/client/proc/add_centcomm_order,
 	/client/proc/apes,
 	/client/proc/force_next_map,
-	/client/proc/gun_override,
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
@@ -257,7 +256,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/play_local_sound,
 	/client/proc/play_sound,
 	/client/proc/object_talk,
-	/client/proc/gun_override,
 	/client/proc/cmd_admin_gib_self,
 	/client/proc/drop_bomb,
 	/client/proc/drop_emp,
@@ -781,89 +779,6 @@ var/list/admin_verbs_mod = list(
 	log_admin("[key_name(usr)] made [O] at [O.x], [O.y], [O.z] say \"[message]\"")
 	message_admins("<span class='adminnotice'>[key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. say \"[message]\"</span>", 1)
 	feedback_add_details("admin_verb","OT") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/client/proc/gun_override(var/obj/item/weapon/gun/G in world)
-	set category = "Fun"
-	set name = "Override Projectile Vars"
-	set desc = "Give a gun special rules"
-
-	//dumb temporary override please fix this if we can get a list of these
-	//remains here to remind you of what could have been.
-	/*
-	var/obj/item/projectile/tempproj = new
-	var/list/projectile_vars = sortList(tempproj.vars)
-	qdel(tempproj)
-	*/
-
-	var/list/projectile_vars = list(
-		//damage/main vars
-		"damage", "damage_type", "nodamage", "what armor resists (flag)", "projectile_speed", "travel_range",
-		//effect vars
-		"stun", "weaken", "paralyze", "irradiate", "eyeblur", "drowsy", "agony", "jittery",
-		//appearance/misc vars
-		"icon (upload dmi)", "icon_state", "color", "silenced", "manual variable entry"
-	)
-
-	var/inputvar
-	G.bullet_overrides ||= list()
-	if(!G.bullet_overrides.len)
-		inputvar = input(usr, "What variable would you like to change?", "Gun Variables") as null|anything in projectile_vars
-	else
-		var/existing_bullet_override_pick = input(usr, "Would you like to edit an existing variable or add a new one?", "Gun Variables") as null|anything in G.bullet_overrides + "(ADD VAR)"
-		if(!existing_bullet_override_pick)
-			return
-		else if(existing_bullet_override_pick == "(ADD VAR)")
-			inputvar = input(usr, "What variable would you like to change?", "Gun Variables") as null|anything in projectile_vars
-		else
-			inputvar = existing_bullet_override_pick
-	if(!inputvar)
-		return
-	var/newvalue
-	switch(inputvar)
-		if("damage","irradiate")
-			newvalue = input(usr, "How much damage should the projectile deal?", "Var: [inputvar]") as null|num
-		if("damage_type")
-			newvalue = input(usr, "What type of damage should the projectile deal (it can only deal one, sorry)?", "Var: [inputvar]") as null|anything in list("brute", "oxy", "tox", "fire", "clone", "brain")
-		if("nodamage")
-			newvalue = input(usr, "Should the gun NOT do damage on hit?", "Var: [inputvar]") as null|anything in list("True", "False")
-			if(newvalue == "True")
-				newvalue = TRUE
-			else
-				newvalue = FALSE
-		if("what armor resists (flag)")
-			newvalue = input(usr, "What armor type should resist this damage?", "Var: [inputvar]") as null|anything in list("melee", "bullet", "laser", "energy", "bomb", "bio", "rad")
-			inputvar = "flag"
-		if("projectile_speed")
-			newvalue = input(usr, "How much time (in deciseconds) should the bullet delay between tile movements? (examples, Taser electrode is 1, Glock bullets are 0.5)?", "Var: [inputvar]") as null|num
-		if("travel_range")
-			newvalue = input(usr, "How far should the projectile travel before vanishing? (0 to go indefinitely)", "Gun Variables") as null|num
-		if("stun","weaken","paralyze","eyeblur","agony","jittery")
-			newvalue = input(usr, "New effect value? Most go down 1 per tick.", "Var: [inputvar]") as null|num
-		if("color")
-			newvalue = input(usr, "What color (RGB format, example: #00ff00)?", "Var: [inputvar]") as null|color
-		if("silenced")
-			newvalue = input(usr, "Should the gun have no text when fired?", "Var: [inputvar]") as null|anything in list(TRUE, FALSE)
-		if("manual variable entry")
-			inputvar = input(usr, "What variable name to manually insert and then edit (verify it!)?", "Var: [inputvar]") as null|text
-			if(isnull(inputvar))
-				return
-			newvalue = variable_set(usr)
-		if("icon (upload dmi)")
-			newvalue = input(usr, "Choose an icon file for your new projectile!", "Var: [inputvar]") as null|icon
-			inputvar = "icon"
-		if("icon_state")
-			newvalue = input(usr, "What icon_state to set?", "Var: [inputvar]") as null|text
-		else
-			newvalue = variable_set(usr)
-	if(isnull(newvalue))
-		return
-	G.bullet_overrides[inputvar] = newvalue
-	to_chat(usr,"Current list of projectile edits:")
-	for(var/result in G.bullet_overrides)
-		to_chat(usr,"[result]: [G.bullet_overrides[result]]")
-	log_admin("[key_name(usr)] overrode [G]'s projectile variable [inputvar] to [newvalue].")
-	message_admins("<span class='adminnotice'>[key_name_admin(usr)] overrode [G]'s projectile variable [inputvar] to [newvalue].</span>", 1)
-	feedback_add_details("admin_verb","GOR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/deadmin_self()
 	set name = "De-admin self"
