@@ -107,7 +107,7 @@
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector = 4)
 
 /obj/item/weapon/storage/firstaid/vox
-	name = "oxygen deprivation first-aid kit"
+	name = "oxygen exposure first-aid kit"
 	desc = "A box full of vox medical essentials."
 	icon_state = "vox"
 	item_state = "firstaid-advanced"
