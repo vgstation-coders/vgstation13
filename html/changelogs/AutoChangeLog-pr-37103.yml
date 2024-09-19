@@ -1,6 +1,0 @@
-author: jwhitak
-delete-after: true
-changes:
-- bugfix: Roulette Revolvers are less likely to crash the server with hookshot projectiles,
-    again.
-- rscadd: Admins have even more projectile weapon tools at their disposal.
