@@ -591,7 +591,7 @@ var/global/global_cricket_population = 0
 		if((queen_bees_inside || worker_bees_inside) && species.angery)
 			playsound(loc, 'sound/effects/fan.ogg', 75, 1, -1)
 			anim(target = loc, a_icon = 'icons/effects/160x160.dmi', flick_anim = "incense", offX = -WORLD_ICON_SIZE*2+pixel_x, offY = -WORLD_ICON_SIZE*2+pixel_y)
-			visible_message("<span class='good'>\The hive fans smoke, calming the residents for the harvest.</span>")
+			visible_message("<span class='good'>The hive fans smoke, calming the residents for the harvest.</span>")
 
 		if(do_after(user, loc, 50))
 			if(harvest_honeycombs())

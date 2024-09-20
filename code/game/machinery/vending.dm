@@ -189,7 +189,7 @@ var/global/num_vending_terminals = 1
 		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating
 	shoot_chance = manipcount * 3
-	
+
 	coinbox = locate() in component_parts
 	if(!coinbox)
 		coinbox = new(src)
@@ -792,7 +792,7 @@ var/global/num_vending_terminals = 1
 	if(!isAdminGhost(usr) && (user.lying || user.incapacitated()))
 		return 0
 
-	if(M_TK in user.mutations && user.a_intent == "hurt" && iscarbon(user))
+	if((M_TK in user.mutations) && user.a_intent == "hurt" && iscarbon(user))
 		if(!Adjacent(user))
 			to_chat(user, "<span class='danger'>You slam \the [src] with your mind!</span>")
 			visible_message("<span class='danger'>[src] dents slightly, as if it was struck!</span>")

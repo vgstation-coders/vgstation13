@@ -138,7 +138,7 @@ var/list/discounted_items_of_the_round = list()
 
 	// If the uplink's holder is in the user's contents
 	var/obj/item/holder = U.parent
-	if ((holder in user.contents || (in_range(holder, user) && istype(holder.loc, /turf))))
+	if ((holder in user.contents) || (in_range(holder, user) && istype(holder.loc, /turf)))
 		user.set_machine(U)
 		if(get_cost(U.job, U.species) > U.telecrystals)
 			return 0
