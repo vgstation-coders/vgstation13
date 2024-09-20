@@ -20,7 +20,3 @@
 	pixel_x = (rand(0,4)-4) * PIXEL_MULTIPLIER
 	pixel_y = (rand(0,4)-4) * PIXEL_MULTIPLIER
 	..()
-
-/obj/item/stack/sheet/initialize()
-	. = ..()
-	recycles_cash = TRUE // unless roundstart sheets
