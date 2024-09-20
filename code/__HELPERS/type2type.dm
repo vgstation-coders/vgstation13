@@ -103,6 +103,7 @@
 		if(SOUTHWEST)
 			return "southwest"
 		else
+			EMPTY_BLOCK_GUARD
 	return
 
 /proc/dir2text_short(direction)
@@ -124,6 +125,7 @@
 		if(SOUTHWEST)
 			return "SW"
 		else
+			EMPTY_BLOCK_GUARD
 	return
 
 //Turns text into proper directions
@@ -146,6 +148,7 @@
 		if("SOUTHWEST")
 			return SOUTHWEST
 		else
+			EMPTY_BLOCK_GUARD
 	return
 
 // A copy of text2dir, extended to accept one and two letter
@@ -169,6 +172,7 @@
 		if("SOUTHWEST", "SW")
 			return SOUTHWEST
 		else
+			EMPTY_BLOCK_GUARD
 	return 0
 
 //Converts an angle (degrees) into an ss13 direction

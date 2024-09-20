@@ -371,6 +371,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 			if("brute")
 				src.health -= W.force * 0.75
 			else
+				EMPTY_BLOCK_GUARD
 		if (src.health <= 0)
 			visible_message("<span class='danger'>\The [src] is smashed apart!</span>")
 			new /obj/item/stack/sheet/snow(get_turf(src), 1)

@@ -152,7 +152,7 @@
 			if(RAY_CAST_NO_HIT_EXIT)
 				return hits
 			if(RAY_CAST_NO_HIT_CONTINUE)
-				//nothing happens
+				EMPTY_BLOCK_GUARD
 			if(RAY_CAST_HIT_CONTINUE)
 				hits += hit
 			if(RAY_CAST_HIT_EXIT)
@@ -170,7 +170,7 @@
 				if(RAY_CAST_NO_HIT_EXIT)
 					return hits
 				if(RAY_CAST_NO_HIT_CONTINUE)
-					//nothing happens
+					EMPTY_BLOCK_GUARD
 				if(RAY_CAST_HIT_CONTINUE)
 					hits += hit
 				if(RAY_CAST_HIT_EXIT)

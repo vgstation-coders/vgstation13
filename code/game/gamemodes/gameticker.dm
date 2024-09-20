@@ -206,6 +206,7 @@ var/datum/controller/gameticker/ticker
 				roundstart_occupied_area_paths |= get_department_area_typepaths(S)
 			if("MODE")
 				//antags aren't new players
+				EMPTY_BLOCK_GUARD
 			else
 				var/mob/living/carbon/human/H = np.create_human(prefs)
 				H.store_position()

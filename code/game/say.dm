@@ -120,6 +120,7 @@ var/global/lastDecTalkUse = 0
 	var/atom/movable/source = speech.speaker.GetSource()
 	say_testing(speech.speaker, "Checking if [src]([type]) understands [source]([source.type])")
 	if(!say_understands(source, speech.language))
+		EMPTY_BLOCK_GUARD
 		say_testing(speech.speaker," We don't understand this fuck, adding stars().")
 		filtered_speech=filtered_speech.scramble()
 		pooled=1
@@ -216,6 +217,7 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 
 		say_testing(speech.speaker, "Checking if [src]([type]) understands [source]([source.type])")
 		if(!say_understands(source))
+			EMPTY_BLOCK_GUARD
 			say_testing(speech.speaker," We don't understand this fuck, adding stars().")
 			rendered = stars(rendered)
 		else

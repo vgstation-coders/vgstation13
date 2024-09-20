@@ -40,21 +40,6 @@ function SetMusic(url, time, volume) {
 </script>
 "}
 
-/* OLD, DO NOT USE.  CONTROLS.CURRENTPOSITION IS BROKEN.*/
-/*var/const/PLAYER_OLD_HTML={"
-	<OBJECT id='playerwmp' CLASSID='CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6' type='application/x-oleobject'></OBJECT>
-	<script>
-function noErrorMessages () { return true; }
-window.onerror = noErrorMessages;
-function SetMusic(url, time, volume) {
-	var player = document.getElementById('playerwmp');
-	player.URL = url;
-	player.controls.currentPosition = time;
-	player.settings.volume = volume;
-}
-	</script>"}
-
-*/
 
 var/const/PLAYER_OLD_HTML={"
 	<OBJECT id='player' CLASSID='CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6' type='application/x-oleobject'></OBJECT>
