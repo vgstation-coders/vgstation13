@@ -21,16 +21,22 @@
 
 /obj/structure/rack/crate_shelf/New()
 	. = ..()
-	overlays += image(icon = 'icons/obj/objects.dmi', icon_state = "shelf_overlay")
+	var/mutable_appearance/base = mutable_appearance(icon = 'icons/obj/objects.dmi', icon_state = "shelf_overlay", layer = BELOW_OBJ_LAYER + 0.01, plane = FLOAT_PLANE)
+	base.plane = FLOAT_PLANE
+	overlays += base
 	shelf_contents = new/list(capacity) // Initialize our shelf's contents list, this will be used later.
 	var/stack_layer // This is used to generate the sprite layering of the shelf pieces.
 	var/stack_offset // This is used to generate the vertical offset of the shelf pieces.
 	for(var/i in 1 to (capacity - 1))
 		stack_layer  = BELOW_OBJ_LAYER + (0.02 * i) - 0.01 // Make each shelf piece render above the last, but below the crate that should be on it.
 		stack_offset = DEFAULT_SHELF_VERTICAL_OFFSET * i // Make each shelf piece physically above the last.
-		overlays += image(icon = 'icons/obj/objects.dmi', icon_state = "shelf_stack", layer = stack_layer, pixel_y = stack_offset)
+		var/mutable_appearance/nextshelf = mutable_appearance(icon = 'icons/obj/objects.dmi', icon_state = "shelf_stack", layer = stack_layer, plane = FLOAT_PLANE)
 		stack_layer += 0.2
-		overlays += image(icon = 'icons/obj/objects.dmi', icon_state = "shelf_overlay", layer = stack_layer, pixel_y = stack_offset)
+		nextshelf.pixel_y = stack_offset
+		overlays += nextshelf
+		var/mutable_appearance/nextshelf_olay = mutable_appearance(icon = 'icons/obj/objects.dmi', icon_state = "shelf_overlay", layer = stack_layer, plane = FLOAT_PLANE)
+		nextshelf_olay.pixel_y = stack_offset
+		overlays += nextshelf_olay
 	return
 
 /obj/structure/rack/crate_shelf/Destroy()
@@ -85,8 +91,9 @@
 				return FALSE // If we fail to close it, don't load it into the shelf.
 		shelf_contents[next_free] = crate // Insert a reference to the crate into the free slot.
 		crate.forceMove(src) // Insert the crate into the shelf.
+		crate.plane = FLOAT_PLANE
 		crate.pixel_y = DEFAULT_SHELF_VERTICAL_OFFSET * (next_free - 1) // Adjust the vertical offset of the crate to look like it's on the shelf.
-		crate.layer = BELOW_OBJ_LAYER + 0.03 * (next_free - 1) // Adjust the layer of the crate to look like it's in the shelf.
+		crate.layer = BELOW_OBJ_LAYER + 0.02 * (next_free - 1) // Adjust the layer of the crate to look like it's in the shelf.
 		handle_visuals()
 		return TRUE
 	return FALSE // If the do_after() is interrupted, return FALSE!
@@ -97,6 +104,7 @@
 	if(do_after(user, use_delay, target = crate))
 		if(!shelf_contents.Find(crate))
 			return FALSE // If something has happened to the crate while we were waiting, abort!
+		crate.plane = initial(crate.plane)
 		crate.layer = initial(crate.layer) // Reset the crate back to having the default layer, otherwise we might get strange interactions.
 		crate.pixel_y = initial(crate.pixel_y) // Reset the crate back to having no offset, otherwise it will be floating.
 		crate.forceMove(unload_turf)
@@ -108,6 +116,7 @@
 /obj/structure/rack/crate_shelf/destroy(dropParts = TRUE)
 	var/turf/dump_turf = get_turf(src)
 	for(var/obj/structure/closet/crate/crate in shelf_contents)
+		crate.plane = initial(crate.plane)
 		crate.layer = initial(crate.layer) // Reset the crates back to default visual state
 		crate.pixel_y = initial(crate.pixel_y)
 		crate.forceMove(dump_turf)
