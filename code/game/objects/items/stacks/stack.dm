@@ -22,6 +22,9 @@
 	var/sheettype = null //this is used for girders in the creation of walls/false walls. Used by both tiles and sheets.
 	var/last_work = 0 //rounded last world.time at which a crafting began
 
+/atom
+	var/recycles_cash = TRUE
+
 /obj/item/stack/New(var/loc, var/amount=null)
 	..()
 	if (amount)
@@ -273,10 +276,7 @@
 		gender = PLURAL
 
 /obj/item/stack/proc/can_stack_with(obj/item/other_stack)
-	if(ispath(other_stack))
-		return (src.type == other_stack)
-
-	return (src.type == other_stack.type)
+	return ispath(other_stack) ? src.type == other_stack : src.type == other_stack.type && src.recycles_cash == other_stack.recycles_cash
 
 /obj/item/stack/attack_hand(mob/user as mob)
 	if (user.get_inactive_hand() == src)
@@ -363,7 +363,7 @@
 
  */
 
-/proc/drop_stack(new_stack_type = /obj/item/stack, atom/loc, add_amount = 1, mob/user)
+/proc/drop_stack(new_stack_type = /obj/item/stack, atom/loc, add_amount = 1, mob/user, recyclescash = TRUE)
 	if(!ispath(new_stack_type, /obj/item/stack))
 		return new new_stack_type(loc)
 	for(var/obj/item/stack/S in loc)
@@ -382,6 +382,7 @@
 		add_amount -= S.amount
 		S.update_materials()
 		S.update_icon()
+		S.recycles_cash = recyclescash
 	return S
 
 /obj/item/stack/verb_pickup(mob/living/user)
