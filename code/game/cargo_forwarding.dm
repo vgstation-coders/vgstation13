@@ -29,6 +29,11 @@
 /obj
 	var/datum/cargo_forwarding/associated_forward = null // Associated cargo forward
 
+obj
+	test obj
+		var
+			poop
+
 /datum/cargo_forwarding/New(var/sender = "", var/station = "", var/supply_type = null, var/do_not_add = FALSE)
 	..()
 	if (acct_by_string)
