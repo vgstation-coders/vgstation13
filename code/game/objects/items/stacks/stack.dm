@@ -276,7 +276,10 @@
 		gender = PLURAL
 
 /obj/item/stack/proc/can_stack_with(obj/item/other_stack)
-	return ispath(other_stack) ? src.type == other_stack : src.type == other_stack.type && src.recycles_cash == other_stack.recycles_cash
+	if(ispath(other_stack))
+		return (src.type == other_stack)
+
+	return (src.type == other_stack.type)
 
 /obj/item/stack/attack_hand(mob/user as mob)
 	if (user.get_inactive_hand() == src)
