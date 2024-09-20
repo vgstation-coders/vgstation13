@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="fission.css">
+</head>
+<body>
+
+
+
+<div id="fuelbar">
+
+<span id="fuelbar_overlay" style='width:55%'></span> <!--apply storage left in the width percentage-->
+
+<span id="fuelbar_text">[current]/[capacity]</span>
+
+</div>
+
+<div class="fuelstats">
+Baseline fuel lifespan: <i>[time] minutes </i><br>
+Baseline heat generation: <i>[heatgen] Watts</i>
+</div>
+
+<span class="button">Eject fuel rod</span>
+
+<span class="horline"></span>
+
+<span class="button">Eject container</span>
+
+<table style="width:100%">
+	<tr>
+		<th>material</th>
+		<th>to add</th>
+		<th>available</th>
+	</tr>
+	
+	<tr>
+		<td>Radon</td>
+		<td>  <span class="button">---</span> <span class="button">--</span> <span class="button">-</span> 0 <span class="button">+</span> <span class="button">++</span> <span class="button">+++</span> </td>
+		<td>50</td>
+	<tr>
+
+	<tr>
+		<td>Uranium</td>
+		<td>  <span class="button">---</span> <span class="button">--</span> <span class="button">-</span> 50 <span class="button">+</span> <span class="button">++</span> <span class="button">+++</span> </td>
+		<td>100</td>
+	<tr>
+	
+	<tr>
+		<td>Radium</td>
+		<td>  <span class="button">---</span> <span class="button">--</span> <span class="button">-</span> 75 <span class="button">+</span> <span class="button">++</span> <span class="button">+++</span> </td>
+		<td>100</td>
+	<tr>
+	
+	<tr>
+		<td>Plutonium</td>
+		<td>  <span class="button">---</span> <span class="button">--</span> <span class="button">-</span> 25 <span class="button">+</span> <span class="button">++</span> <span class="button">+++</span> </td>
+		<td>25</td>
+	<tr>
+
+</table>
+
+
+
+</body>
+</html>

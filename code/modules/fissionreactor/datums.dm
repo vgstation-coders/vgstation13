@@ -380,8 +380,11 @@ datums for the fission reactor, which includes the fuel and reactor
 	//too bad.
 	var/chp=coolant.heat_capacity()
 	var/newtemp=(chp*coolant.temperature + heat_capacity*temperature)/(chp+heat_capacity)
-	coolant.temperature=newtemp
-	temperature=newtemp
+	
+	var/heatconductivitycoeff=0.75 //fudge, mmmm....
+	
+	coolant.temperature=newtemp*heatconductivitycoeff + (1-heatconductivitycoeff)*coolant.temperature
+	temperature=newtemp*heatconductivitycoeff + (1-heatconductivitycoeff)*temperature
 	
 	
 	

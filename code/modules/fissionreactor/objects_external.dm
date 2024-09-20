@@ -96,6 +96,11 @@ included:
 	var/poweroutagemsg=FALSE
 	var/fueldepletedmsg=TRUE
 	var/lasttempnag=0 //ensures temp warning only occur if it is increasing. less chat spam.
+	var/datum/html_interface/interface
+
+/obj/machinery/fissioncontroller/New()
+	..()
+	interface=new /datum/html_interface(src,"Fission reactor controller",590,340,"<link rel='stylesheet' href='fission.css'>")
 
 /obj/machinery/fissioncontroller/Destroy()
 	if(currentfuelrod)
@@ -103,6 +108,7 @@ included:
 		currentfuelrod=null
 	if(associated_reactor)
 		associated_reactor.handledestruction(src)
+	qdel(interface)
 	..()
 
 /*/proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE, var/frequency = 0)*/
@@ -189,6 +195,147 @@ included:
 			associated_reactor.fuel=currentfuelrod.fueldata
 		say("Reactor setup success.", class = "binaryradio")
 		update_icon()
+	interface.show(user)
+	register_asset("fission.css", 'code/modules/fissionreactor/fission.css')
+	send_asset(user, "fission.css")
+	
+	
+/obj/machinery/fissioncontroller/proc/buildui()
+	var/aychteeemel_string=""
+	if(!associated_reactor)
+		interface.updateLayout("<h1>NO REACTOR</h1>")
+		return 
+		
+	var/fuelusepercent=associated_reactor.fuel? floor(associated_reactor.fuel.life*100+0.5) : 0
+	var/estimatedtimeleft =""
+	if(associated_reactor.fuel)
+		if(associated_reactor.fuel.life<=0)
+			estimatedtimeleft="DO:NE"
+		else if(associated_reactor.fuel_rods_affected_by_rods==associated_reactor.fuel_rods.len && associated_reactor.control_rod_insertion>=1.0)
+			estimatedtimeleft="HA:LT" //avoids a div by 0
+		else
+			var/secs=associated_reactor.fuel.lifetime
+			secs/=associated_reactor.fuel_rods.len - (associated_reactor.fuel_rods_affected_by_rods*associated_reactor.control_rod_insertion)
+			secs *= associated_reactor.fuel.life
+			secs=floor(secs)
+			var/mins=floor(secs/60)
+			secs%=60
+			//if(mins>99)
+			//	mins=99
+			//	secs=99
+			estimatedtimeleft="[mins]:[secs]"
+	else	
+		estimatedtimeleft="NO:NE"
+
+	var/rodinsertpercent= floor(associated_reactor.control_rod_target*100+0.5)
+
+	var/status="operational"
+	var/statuscolor="lime"
+	if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP)
+		status="danger"
+		statuscolor="red"
+	else if(!associated_reactor.fuel)
+		status="no fuel"
+		statuscolor="blue"
+	else if(associated_reactor.fuel.life<=0)
+		status="depleated"
+		statuscolor="blue"
+	else if (!associated_reactor.considered_on())
+		status="standby"
+	
+	var/coretemppercent= associated_reactor.temperature / FISSIONREACTOR_MELTDOWNTEMP
+	coretemppercent=max(min(coretemppercent,1),0)
+	coretemppercent=floor(coretemppercent*100+0.5)
+	var/coolanttemppercent=associated_reactor.coolant.temperature / FISSIONREACTOR_MELTDOWNTEMP
+	coolanttemppercent=max(min(coolanttemppercent,1),0)
+	coolanttemppercent=floor(coolanttemppercent*100+0.5)
+	
+	var/reactivity=associated_reactor.fuel_rods.len*((associated_reactor.fuel_reactivity) - ( (associated_reactor.fuel_reactivity-associated_reactor.fuel_reactivity_with_rods)*associated_reactor.control_rod_insertion))
+	reactivity=floor(reactivity*100+0.5)
+	var/speed=associated_reactor.fuel_rods.len - (associated_reactor.fuel_rods_affected_by_rods*associated_reactor.control_rod_insertion)
+	speed=floor(speed*100+0.5)
+	
+	var/fueltxt="EJECT FUEL"
+	if(associated_reactor.considered_on())
+		fueltxt="FUEL LOCKED"
+	else if (!associated_reactor.fuel)
+		fueltxt="NO FUEL"
+	
+	aychteeemel_string={"
+	<div id='fuelprogressbar'>
+	<span id='fuelprogressbar_overlay' style='width:[fuelusepercent]%'></span> <!--apply storage left in the width percentage-->
+	<span id='fuelprogressbar_text'>[fuelusepercent]% ([estimatedtimeleft])</span>
+	<span id='fuelprogressbar_desc'>fuel life remaining</span>
+</div>
+
+<div id='tempbar'>
+	<span id='[ associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP ? "tempbar_overlay_caution" : "tempbar_overlay" ]' style='width:[coretemppercent]%'></span>
+	<span id='tempbar_text'>[associated_reactor.temperature]K</span>
+	<span id='tempbar_desc'>core temp</span>
+</div>
+
+<div id='coolantbar'>
+	<span id='[associated_reactor.coolant.temperature >=FISSIONREACTOR_DANGERTEMP ? "coolantbar_overlay_caution" : "coolantbar_overlay" ]' style='width:[coolanttemppercent]%'></span>
+	<span id='coolantbar_text'>[associated_reactor.coolant.temperature]K @ [associated_reactor.coolant.pressure]kPa</span>
+	<span id='coolantbar_desc'>coolant</span>
+</div>
+
+
+<table id='controlrod_struct'>
+	<tr style='background-color:#444;color:white;'>
+		<td>control<br>rods</td>
+	</tr>
+	<tr class='controlrod_movbut'>
+		<td>\[UP\]</td>
+	</tr>
+	<tr id='conbrolrod_colorback'>
+	 
+	<td style='padding:0;display:block;height:100%;'>
+		<span id='conbrolrod_roddisplay' style='height:[rodinsertpercent]%;'></span>
+	</td>
+	</tr>
+	<tr class='controlrod_movbut'>
+		<td>\[DN\]</td>
+	</tr>
+	<tr style='background-color:#444;font-size:1.5em;color:white;'>
+		<td>[rodinsertpercent]%</td>
+	</tr>
+</table>
+
+
+
+<table style='position:absolute;width:80%;bottom:.5em;color:white;border-collapse: collapse;'>
+<tr>
+	<td>
+	<span style='color:white;font-size:140%'>reactor status:</span>
+	</td>
+	<td>
+	<span style='color:[statuscolor];font-size:140%'>[status]</span>
+	</td>
+</tr>
+<tr>
+	<td>
+		<span class='button[(associated_reactor.considered_on() || (!associated_reactor.fuel)) ? "_locked" : ""]' style='font-size:1.25em;'>[fueltxt]</span>
+	</td>
+</tr>
+
+<tr>
+	<td style='text-align:left;font-weight:initial;'>
+	fuel reactivity: [reactivity]%<br>
+	fissile speed: [speed]%<br>
+	</td>
+	<td style='text-align:right;font-weight:initial;'>
+	fuel rods: [associated_reactor.fuel_rods.len]<br>
+	control rods: [associated_reactor.control_rods.len]<br>
+	</td>
+</tr>
+
+</table>
+
+<div id='scrambutton'><span style='position:relative;top:20%;font-weight:bold;font-size:133%;'>SCRAM</span></div>
+"}
+	
+	interface.updateLayout(aychteeemel_string)
 	
 
 /obj/machinery/fissioncontroller/update_icon()
@@ -248,6 +395,10 @@ included:
 	update_icon()
 	if(!associated_reactor) //no reactor? no processing to be done.
 		return	
+	buildui()
+	
+	for (var/client in interface.clients)
+		interface.show( interface._getClient(interface.clients[client]) ) //"There's probably shenanigans" - dilt. yes there are.
 		
 	associated_reactor.update_all_icos()
 	//associated_reactor.coolantcycle()
@@ -264,19 +415,21 @@ included:
 
 
 
-	if(associated_reactor.fuel.life<=0)
+	if(associated_reactor.fuel?.life<=0)
 		if(!fueldepletedmsg)
 			say("Reactor fuel depleted.", class = "binaryradio")
 		fueldepletedmsg=TRUE
 	else
 		fueldepletedmsg=FALSE
 	
+	
+	if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP && can_autoscram && !associated_reactor.SCRAM )
+		say("critical temperature reached, engaging SCRAM.", class = "binaryradio")
+		associated_reactor.SCRAM=TRUE
+	
 	if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP && associated_reactor.temperature>lasttempnag )
 		if(associated_reactor.temperature>=FISSIONREACTOR_MELTDOWNTEMP)
 			say("Reactor at critical temperature: [associated_reactor.temperature]K. Evacuate immediately.", class = "binaryradio")
-			if(can_autoscram && !associated_reactor.SCRAM )
-				say("critical temperature reached, engaging SCRAM.", class = "binaryradio")
-				associated_reactor.SCRAM=TRUE
 		else
 			say("Reactor at dangerous temperature: [associated_reactor.temperature]K", class = "binaryradio")
 
