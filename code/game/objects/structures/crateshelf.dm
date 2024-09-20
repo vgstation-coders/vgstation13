@@ -27,14 +27,17 @@
 	shelf_contents = new/list(capacity) // Initialize our shelf's contents list, this will be used later.
 	var/stack_layer // This is used to generate the sprite layering of the shelf pieces.
 	var/stack_offset // This is used to generate the vertical offset of the shelf pieces.
+	var/stack_plane = FLOAT_PLANE
 	for(var/i in 1 to (capacity - 1))
+		if(i >= 3) // If we're at or above three, we'll be on the way to going off the tile we're on. This allows mobs to be below the shelf when this happens.
+			stack_plane = HUMAN_PLANE
 		stack_layer  = BELOW_OBJ_LAYER + (0.02 * i) - 0.01 // Make each shelf piece render above the last, but below the crate that should be on it.
 		stack_offset = DEFAULT_SHELF_VERTICAL_OFFSET * i // Make each shelf piece physically above the last.
-		var/mutable_appearance/nextshelf = mutable_appearance(icon = 'icons/obj/objects.dmi', icon_state = "shelf_stack", layer = stack_layer, plane = FLOAT_PLANE)
+		var/mutable_appearance/nextshelf = mutable_appearance(icon = 'icons/obj/objects.dmi', icon_state = "shelf_stack", layer = stack_layer, plane = stack_plane)
 		stack_layer += 0.2
 		nextshelf.pixel_y = stack_offset
 		overlays += nextshelf
-		var/mutable_appearance/nextshelf_olay = mutable_appearance(icon = 'icons/obj/objects.dmi', icon_state = "shelf_overlay", layer = stack_layer, plane = FLOAT_PLANE)
+		var/mutable_appearance/nextshelf_olay = mutable_appearance(icon = 'icons/obj/objects.dmi', icon_state = "shelf_overlay", layer = stack_layer, plane = stack_plane)
 		nextshelf_olay.pixel_y = stack_offset
 		overlays += nextshelf_olay
 	return
@@ -69,6 +72,7 @@
 						"<span class='notice>You hear a thud.</span>")
 		crate.forceMove(get_turf(src)) // Drop the crate onto the shelf,
 		step_rand(crate, 1) // Then try to push it somewhere.
+		crate.plane = initial(crate.plane)
 		crate.layer = initial(crate.layer) // Reset the crate back to having the default layer, otherwise we might get strange interactions.
 		crate.pixel_y = initial(crate.pixel_y) // Reset the crate back to having no offset, otherwise it will be floating.
 		shelf_contents[shelf_contents.Find(crate)] = null // Remove the reference to the crate from the list.
@@ -81,7 +85,7 @@
 /obj/structure/rack/crate_shelf/proc/load(obj/structure/closet/crate/crate, mob/user)
 	var/next_free = shelf_contents.Find(null) // Find the first empty slot in the shelf.
 	if(!next_free) // If we don't find an empty slot, return early.
-		to_chat(user, "<span class='warning'>\The [src] os full!</span>")
+		to_chat(user, "<span class='warning'>\The [src] is full!</span>")
 		return FALSE
 	if(do_after(user, use_delay, target = crate))
 		if(shelf_contents[next_free] != null)
@@ -91,8 +95,10 @@
 				return FALSE // If we fail to close it, don't load it into the shelf.
 		shelf_contents[next_free] = crate // Insert a reference to the crate into the free slot.
 		crate.forceMove(src) // Insert the crate into the shelf.
-		crate.plane = FLOAT_PLANE
 		crate.pixel_y = DEFAULT_SHELF_VERTICAL_OFFSET * (next_free - 1) // Adjust the vertical offset of the crate to look like it's on the shelf.
+		crate.plane = FLOAT_PLANE
+		if(next_free >= 3) // If we're at or above three, we'll be on the way to going off the tile we're on. This allows mobs to be below the crate when this happens.
+			crate.plane = HUMAN_PLANE
 		crate.layer = BELOW_OBJ_LAYER + 0.02 * (next_free - 1) // Adjust the layer of the crate to look like it's in the shelf.
 		handle_visuals()
 		return TRUE
@@ -101,6 +107,11 @@
 /obj/structure/rack/crate_shelf/proc/unload(obj/structure/closet/crate/crate, mob/user, turf/unload_turf)
 	if(!unload_turf)
 		unload_turf = get_turf(user) // If a turf somehow isn't passed into the proc, put it at the user's feet.
+	if(unload_turf.density)
+		return
+	if(locate(/obj/structure/closet/crate) in unload_turf)
+		to_chat(user,"<span class='warning'>There is already a crate here.</span>")
+		return
 	if(do_after(user, use_delay, target = crate))
 		if(!shelf_contents.Find(crate))
 			return FALSE // If something has happened to the crate while we were waiting, abort!
