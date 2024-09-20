@@ -1243,6 +1243,7 @@
 #include "code\game\objects\structures\catwalk.dm"
 #include "code\game\objects\structures\clock.dm"
 #include "code\game\objects\structures\coatrack.dm"
+#include "code\game\objects\structures\crateshelf.dm"
 #include "code\game\objects\structures\curtains.dm"
 #include "code\game\objects\structures\displaycase.dm"
 #include "code\game\objects\structures\docking_port.dm"
