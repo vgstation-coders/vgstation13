@@ -645,7 +645,7 @@
 		occupantData["name"] = connected.occupant.name
 		occupantData["stat"] = connected.occupant.stat
 		occupantData["isViableSubject"] = 1
-		if (M_NOCLONE in connected.occupant.mutations || !src.connected.occupant.dna)
+		if ((M_NOCLONE in connected.occupant.mutations) || !src.connected.occupant.dna)
 			occupantData["isViableSubject"] = 0
 		occupantData["health"] = connected.occupant.health
 		occupantData["maxHealth"] = connected.occupant.maxHealth

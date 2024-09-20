@@ -320,7 +320,7 @@ var/list/global/id_cards = list()
 		return jobName
 	if(alt_jobName in get_all_job_icons()) //Check if the base job has a hud icon
 		return alt_jobName
-	if(jobName in get_all_centcom_jobs() || (alt_jobName in get_all_centcom_jobs())) //Return with the NT logo if it is a Centcom job
+	if((jobName in get_all_centcom_jobs()) || (alt_jobName in get_all_centcom_jobs())) //Return with the NT logo if it is a Centcom job
 		return "Centcom"
 	return "Unknown" //Return unknown if none of the above apply
 
