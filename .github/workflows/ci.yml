@@ -42,6 +42,10 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Setup Python
+        run: |
+          tools/bootstrap/python -c ''
+
         #TODO: Cache Dreamchecker install
       - name: Run dreamchecker
         run: |
