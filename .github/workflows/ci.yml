@@ -46,7 +46,7 @@ jobs:
       - name: Run dreamchecker
         run: |
           SPACEMAN_DMM_GIT_TAG="suite-1.8" tools/travis/install_spaceman_dmm.sh dreamchecker
-          ~/dreamchecker
+          ~/dreamchecker 2>&1 | bash tools/ci/annotate_dm.sh
 
       - name: Run map checker
         run: python tools/travis/check_map_files.py maps/
@@ -58,6 +58,18 @@ jobs:
           python tools/dmi-validhunt/dmi-validhunt.py icons/ || true
       - name: Make sure test maps or vaults aren't ticked
         run: find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*|\.dmm/ { exit 1 }'
+
+      # OpenDream linting
+      - name: Install OpenDream
+        uses: robinraju/release-downloader@v1.9
+        with:
+          repository: "OpenDreamProject/OpenDream"
+          tag: "latest"
+          fileName: "DMCompiler_linux-x64.tar.gz"
+          extract: true
+      - name: Run OpenDream
+        if: steps.linter-setup.conclusion == 'success' && !cancelled()
+        run: ./DMCompiler_linux-x64/DMCompiler vgstation13.dme --suppress-unimplemented --define=CIBUILDING | bash tools/ci/annotate_od.sh
 
   build:
     name: ${{matrix.job-name}}
