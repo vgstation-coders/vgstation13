@@ -366,7 +366,7 @@
 
  */
 
-/proc/drop_stack(new_stack_type = /obj/item/stack, atom/loc, add_amount = 1, mob/user, recyclescash = TRUE)
+/proc/drop_stack(new_stack_type = /obj/item/stack, atom/loc, add_amount = 1, mob/user)
 	if(!ispath(new_stack_type, /obj/item/stack))
 		return new new_stack_type(loc)
 	for(var/obj/item/stack/S in loc)
@@ -385,7 +385,6 @@
 		add_amount -= S.amount
 		S.update_materials()
 		S.update_icon()
-		S.recycles_cash = recyclescash
 	return S
 
 /obj/item/stack/verb_pickup(mob/living/user)

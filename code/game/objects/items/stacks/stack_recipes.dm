@@ -102,7 +102,7 @@
 				return
 	var/atom/O
 	if(ispath(result_type, /obj/item/stack))
-		O = drop_stack(result_type, construct_loc, (max_res_amount>1 ? res_amount*multiplier : 1), usr, S.recycles_cash)
+		O = drop_stack(result_type, construct_loc, (max_res_amount>1 ? res_amount*multiplier : 1), usr)
 		var/obj/item/stack/SS = O
 		SS.update_materials()
 	else
