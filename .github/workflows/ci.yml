@@ -38,9 +38,9 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
+      # - uses: actions/setup-python@v4
+      #   with:
+      #     python-version: '3.x'
 
       - name: Setup Python
         run: |
