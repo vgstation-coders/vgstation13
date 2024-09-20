@@ -408,6 +408,7 @@ var/list/tag_suits_list = list()
 	icon_state = "cassock"
 	item_state = "cassock"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/imperium_monk
