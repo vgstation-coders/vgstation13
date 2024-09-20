@@ -72,7 +72,6 @@ jobs:
           fileName: "DMCompiler_linux-x64.tar.gz"
           extract: true
       - name: Run OpenDream
-        if: steps.linter-setup.conclusion == 'success' && !cancelled()
         run: ./DMCompiler_linux-x64/DMCompiler vgstation13.dme --suppress-unimplemented --define=CIBUILDING | bash tools/ci/annotate_od.sh
 
   build:
