@@ -11,6 +11,16 @@ table{
 	border-collapse:collapse;
 }
 
+a{
+text-decoration:inherit;
+color:inherit;
+}
+
+a:hover{
+text-decoration:inherit;
+color:inherit;
+}
+
 .button{
 	border:2px solid black;
 	color:black;

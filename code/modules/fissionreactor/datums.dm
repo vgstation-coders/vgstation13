@@ -325,9 +325,9 @@ datums for the fission reactor, which includes the fuel and reactor
 
 	
 	if(control_rod_target>control_rod_insertion) //5% insertion increments
-		control_rod_insertion+=0.05
+		control_rod_insertion=min(0.05+control_rod_insertion,control_rod_target)
 	else if(control_rod_target<control_rod_insertion)
-		control_rod_insertion-=0.05
+		control_rod_insertion=max(control_rod_insertion-0.05,control_rod_target)
 
 
 	if(!fuel)

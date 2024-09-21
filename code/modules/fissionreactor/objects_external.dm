@@ -97,6 +97,7 @@ included:
 	var/fueldepletedmsg=TRUE
 	var/lasttempnag=0 //ensures temp warning only occur if it is increasing. less chat spam.
 	var/datum/html_interface/interface
+	var/lastupdatetick=0
 
 /obj/machinery/fissioncontroller/New()
 	..()
@@ -300,7 +301,7 @@ included:
 	</td></tr>
 
 	<tr><td style='font-size:2em;font-weight:bold;text-align:center;'><span style='text-align:right;'>reactor status:<span> <span style='text-align:left;color:[statuscolor];'>[status]</span></td></tr>
-	<tr><td><span class='button[(associated_reactor.considered_on() || (!associated_reactor.fuel)) ? "_locked" : ""]' style='font-size:150%;font-weight:bold;'>[fueltxt]</span></td></tr>
+	<tr><td><a href='?src=\ref[interface];action=eject'><span class='button[(associated_reactor.considered_on() || (!associated_reactor.fuel)) ? "_locked" : ""]' style='font-size:150%;font-weight:bold;'>[fueltxt]</span></a></td></tr>
 
 	<tr><td style='font-size:125%;'><span style='width:50%;display:inline-block;text-align:left;'>fuel reactivity:[reactivity]%</span><span style='width:50%;display:inline-block;text-align:right'>fuel rods:[associated_reactor.fuel_rods.len]</span></td></tr>
 	<tr><td style='font-size:125%;'><span style='width:50%;display:inline-block;text-align:left;'>fissile speed:[speed]%</span><span style='width:50%;display:inline-block;text-align:right;margin-bottom:1em;'>control rods:[associated_reactor.control_rods.len]</span></td></tr>
@@ -313,17 +314,17 @@ included:
 	<tr><td style='text-align:center;'>
 		
 		<span style='background-color:darkgrey;width:100%;display:block;font-size:1.5em;font-weight:bold;'>control<br>rods</span>
-		<span class='reactor_controlrod_movebutton'>\[UP\]</span>
+		<a href='?src=\ref[interface];action=rods_up'><span class='reactor_controlrod_movebutton'>\[UP\]</span></a>
 		<span style='background-image:linear-gradient(orangered,yellow,green,cyan,lightblue);width:100%;height:10em;display:block;'>
 			<span style='background-color:#222;width:40%;height:[rodinsertpercent]%;display:block;position:relative;left:30%;'></span>
 		</span>
-		<span class='reactor_controlrod_movebutton'>\[DN\]</span>
+		<a href='?src=\ref[interface];action=rods_down'><span class='reactor_controlrod_movebutton'>\[DN\]</span></a>
 		<span style='background-color:darkgrey;width:100%;display:block;font-size:2em;font-weight:bold;'>[rodinsertpercent]%</span>
 		
 		
 		
 	</td></tr>
-	<tr><td> <span id='reactor_scrambutton[associated_reactor.SCRAM ? "_on" : ""]'>SCRAM</span> </td></tr>
+	<tr><td> <a href='?src=\ref[interface];action=SCRAM'><span id='reactor_scrambutton[associated_reactor.SCRAM ? "_on" : ""]'>SCRAM</span></a> </td></tr>
 	</table>
 
 
@@ -385,17 +386,25 @@ included:
 			to_chat(usr, "The fuel reads out [floor(associated_reactor.fuel.life*100+0.5)]% life remaining")
 	to_chat(usr, "The temperature reads out [associated_reactor.temperature]K")
 
-		
+
+
+/obj/machinery/fissioncontroller/proc/ask_remakeUI(var/forced=FALSE)
+	if(lastupdatetick==world.time && !forced)
+		return
+	buildui()
+	for (var/client in interface.clients)
+		interface.show( interface._getClient(interface.clients[client]) ) //"There's probably shenanigans" - dilt. yes there are.
+	lastupdatetick=world.time
 
 /obj/machinery/fissioncontroller/process()
 	update_icon()
 	if(!associated_reactor) //no reactor? no processing to be done.
 		return	
-	buildui()
-	
-	for (var/client in interface.clients)
-		interface.show( interface._getClient(interface.clients[client]) ) //"There's probably shenanigans" - dilt. yes there are.
 		
+	ask_remakeUI(TRUE)
+		
+
+	
 	associated_reactor.update_all_icos()
 	//associated_reactor.coolantcycle()
 	if(!powered()) //with my last breath, i curse zoidberg!
@@ -433,9 +442,36 @@ included:
 	
 	if(associated_reactor.fuel?.life<=0) //no fuel or depleated? no reactions to be done.
 		return
-	
 
+
+/obj/machinery/fissioncontroller/Topic(var/href, var/list/href_list , var/datum/html_interface_client/hclient )	
+	if(!associated_reactor)
+		return
+	if(!powered())
+		return
+	if(stat & BROKEN)
+		return
 	
+	switch(href_list["action"])
+		if("SCRAM")
+			associated_reactor.SCRAM=TRUE
+		if("rods_up")
+			associated_reactor.control_rod_target-=0.05
+			associated_reactor.control_rod_target=max(0,associated_reactor.control_rod_target)
+		if("rods_down")
+			associated_reactor.control_rod_target+=0.05
+			associated_reactor.control_rod_target=min(1,associated_reactor.control_rod_target)
+		if("eject")
+			if(!associated_reactor.fuel)
+				to_chat(hclient.client, "There's no fuel to eject!")
+				return
+			if(associated_reactor.considered_on())
+				to_chat(hclient.client, "The reactor safety locks prevent the fuel rod from being ejected!")
+				return
+			currentfuelrod.forceMove(src.loc)
+			currentfuelrod=null	
+			associated_reactor.fuel=null
+	ask_remakeUI() //update it so that changes appear NOW.
 //SS_WAIT_MACHINERY
 
 
