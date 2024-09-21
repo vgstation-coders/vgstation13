@@ -198,6 +198,9 @@ included:
 	interface.show(user)
 	register_asset("fission.css", 'code/modules/fissionreactor/fission.css')
 	send_asset(user, "fission.css")
+	register_asset("uiBg.png", 'code/modules/html_interface/nanotrasen/uiBg.png')
+	send_asset(user, "uiBg.png")
+	
 	
 	
 /obj/machinery/fissioncontroller/proc/buildui()
@@ -261,79 +264,72 @@ included:
 	else if (!associated_reactor.fuel)
 		fueltxt="NO FUEL"
 	
-	aychteeemel_string={"
-	<div id='fuelprogressbar'>
-	<span id='fuelprogressbar_overlay' style='width:[fuelusepercent]%'></span> <!--apply storage left in the width percentage-->
-	<span id='fuelprogressbar_text'>[fuelusepercent]% ([estimatedtimeleft])</span>
-	<span id='fuelprogressbar_desc'>fuel life remaining</span>
-</div>
-
-<div id='tempbar'>
-	<span id='[ associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP ? "tempbar_overlay_caution" : "tempbar_overlay" ]' style='width:[coretemppercent]%'></span>
-	<span id='tempbar_text'>[associated_reactor.temperature]K</span>
-	<span id='tempbar_desc'>core temp</span>
-</div>
-
-<div id='coolantbar'>
-	<span id='[associated_reactor.coolant.temperature >=FISSIONREACTOR_DANGERTEMP ? "coolantbar_overlay_caution" : "coolantbar_overlay" ]' style='width:[coolanttemppercent]%'></span>
-	<span id='coolantbar_text'>[associated_reactor.coolant.temperature]K @ [associated_reactor.coolant.pressure]kPa</span>
-	<span id='coolantbar_desc'>coolant</span>
-</div>
-
-
-<table id='controlrod_struct'>
-	<tr style='background-color:#444;color:white;'>
-		<td>control<br>rods</td>
-	</tr>
-	<tr class='controlrod_movbut'>
-		<td>\[UP\]</td>
-	</tr>
-	<tr id='conbrolrod_colorback'>
-	 
-	<td style='padding:0;display:block;height:100%;'>
-		<span id='conbrolrod_roddisplay' style='height:[rodinsertpercent]%;'></span>
-	</td>
-	</tr>
-	<tr class='controlrod_movbut'>
-		<td>\[DN\]</td>
-	</tr>
-	<tr style='background-color:#444;font-size:1.5em;color:white;'>
-		<td>[rodinsertpercent]%</td>
-	</tr>
-</table>
-
-
-
-<table style='position:absolute;width:80%;bottom:.5em;color:white;border-collapse: collapse;'>
+	aychteeemel_string={"<table style='width:100%;height:100%;'>
 <tr>
-	<td>
-	<span style='color:white;font-size:140%'>reactor status:</span>
-	</td>
-	<td>
-	<span style='color:[statuscolor];font-size:140%'>[status]</span>
-	</td>
-</tr>
-<tr>
-	<td>
-		<span class='button[(associated_reactor.considered_on() || (!associated_reactor.fuel)) ? "_locked" : ""]' style='font-size:1.25em;'>[fueltxt]</span>
-	</td>
-</tr>
+<td style='width:90%;'>
 
-<tr>
-	<td style='text-align:left;font-weight:initial;'>
-	fuel reactivity: [reactivity]%<br>
-	fissile speed: [speed]%<br>
-	</td>
-	<td style='text-align:right;font-weight:initial;'>
-	fuel rods: [associated_reactor.fuel_rods.len]<br>
-	control rods: [associated_reactor.control_rods.len]<br>
-	</td>
+	<table style='height:100%;width:97.5%'>
+	<tr><td style='width:100%;text-align:center;'>
+		<span class='bar_back' id='reactor_fuelbar_back'>
+			<span class='bar_overlay' id='reactor_fuelbar_overlay' style='width:[fuelusepercent]%'>
+				
+			</span>
+			<span style='position:relative;top:-1.5em;font-size:2em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>[fuelusepercent]% ([estimatedtimeleft])</span>
+		</span>
+		fuel life remaining
+	</td></tr>
+	
+	<tr><td style='width:100%;text-align:center;'>
+		<span class='bar_back' id='reactor_tempbar_back'>
+			<span class='bar_overlay' id='reactor_tempbar_overlay[associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP ? "_caution" : ""]' id='reactor_tempbar_overlay' style='width:[coretemppercent]%'>
+				
+			</span>
+			<span style='position:relative;top:-1.5em;font-size:2em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>[associated_reactor.temperature]K</span>
+		</span>
+		core temp
+	</td></tr>
+	
+	<tr><td style='width:100%;text-align:center;'>
+		<span class='bar_back' id='reactor_coolantbar_back'>
+			<span class='bar_overlay' id='reactor_coolantbar_overlay[associated_reactor.coolant.temperature>=FISSIONREACTOR_DANGERTEMP ? "_caution" : ""]' style='width:[coolanttemppercent]%'>
+				
+			</span>
+			<span style='position:relative;top:-1.5em;font-size:1.25em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>[associated_reactor.coolant.temperature]K @ [associated_reactor.coolant.pressure]kPa</span>
+		</span>
+		coolant
+	</td></tr>
+
+	<tr><td style='font-size:2em;font-weight:bold;text-align:center;'><span style='text-align:right;'>reactor status:<span> <span style='text-align:left;color:[statuscolor];'>[status]</span></td></tr>
+	<tr><td><span class='button[(associated_reactor.considered_on() || (!associated_reactor.fuel)) ? "_locked" : ""]' style='font-size:150%;font-weight:bold;'>[fueltxt]</span></td></tr>
+
+	<tr><td style='font-size:125%;'><span style='width:50%;display:inline-block;text-align:left;'>fuel reactivity:[reactivity]%</span><span style='width:50%;display:inline-block;text-align:right'>fuel rods:[associated_reactor.fuel_rods.len]</span></td></tr>
+	<tr><td style='font-size:125%;'><span style='width:50%;display:inline-block;text-align:left;'>fissile speed:[speed]%</span><span style='width:50%;display:inline-block;text-align:right;margin-bottom:1em;'>control rods:[associated_reactor.control_rods.len]</span></td></tr>
+	</table>
+
+</td>
+<td>
+
+	<table style='width:100%;height:100%;'>
+	<tr><td style='text-align:center;'>
+		
+		<span style='background-color:darkgrey;width:100%;display:block;font-size:1.5em;font-weight:bold;'>control<br>rods</span>
+		<span class='reactor_controlrod_movebutton'>\[UP\]</span>
+		<span style='background-image:linear-gradient(orangered,yellow,green,cyan,lightblue);width:100%;height:10em;display:block;'>
+			<span style='background-color:#222;width:40%;height:[rodinsertpercent]%;display:block;position:relative;left:30%;'></span>
+		</span>
+		<span class='reactor_controlrod_movebutton'>\[DN\]</span>
+		<span style='background-color:darkgrey;width:100%;display:block;font-size:2em;font-weight:bold;'>[rodinsertpercent]%</span>
+		
+		
+		
+	</td></tr>
+	<tr><td> <span id='reactor_scrambutton[associated_reactor.SCRAM ? "_on" : ""]'>SCRAM</span> </td></tr>
+	</table>
+
+
+</td>
 </tr>
-
-</table>
-
-<div id='scrambutton'><span style='position:relative;top:20%;font-weight:bold;font-size:133%;'>SCRAM</span></div>
-"}
+</table>"}
 	
 	interface.updateLayout(aychteeemel_string)
 	

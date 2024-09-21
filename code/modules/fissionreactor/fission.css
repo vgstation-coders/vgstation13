@@ -1,291 +1,132 @@
 body{
-	background-color:grey;
+	background-color: #272727;
 	font-family:monospace;
+	background-image: url(uiBg.png);
+	background-repeat: repeat-x;
+	background-position: center top;
+	color:white
 }
 
-th{
-font-weight:bold;
-font-size:1.5em;
-}
-
-td{
-font-weight:bold;
-font-size:1.25em;
-text-align:center;
-}
-
-#fuelbar{
-	background-color:dodgerblue;
-	width:90%;
-	height:5em;
-	margin-left:5%;
-	margin-right:5%;
-	margin-bottom:1em;
-	border: 2px solid black;
-}
-
-#fuelbar_overlay{
-	background-color:limegreen;
-	height:inherit;
-	display:block;
-	border-right: 2px solid black;
-}
-
-#fuelbar_text{
-	text-align:center;
-	position:relative;
-	font-size:2em;
-	font-weight:bold;
-	top:-2em; /*sub 1/2 height and half an em*/
-	padding-bottom:1em;
-	display:block;
-	text-shadow: 0px 0px 3px white;
-}
-
-.fuelstats{
-	font-size:1.25em;
-	font-weight:bold;
-}
-
-.horline{
-	border:3px solid;
-	width:100%;
-	display:inline-block;
-	margin-top:.5em;
-	margin-bottom:.5em;
-	left:-5px;
-	position:relative;
+table{
+	border-collapse:collapse;
 }
 
 .button{
-background-color:royalblue;
-border:2px solid black;
-padding-left:1px;
-padding-right:1px;
+	border:2px solid black;
+	color:black;
+	background-color:cadetblue;
+	padding:2px;
 }
+
 .button:hover{
-	background-color:darkblue;
+	border:2px solid white;
+	background-color:darkslategray;
 	color:white;
-	border-color:white;
 }
+
 
 .button_locked{
-background-color:#99b;
-border:2px solid #eee;
-color:#eee;
-padding-left:1px;
-padding-right:1px;
+	border:2px solid black;
+	color:black;
+	background-color:lightblue;
+	padding:2px;
 }
 
 
-#fuelprogressbar{
-	position:absolute;
-	background-color:lightslategray;
-	width:80%;
-	height:4em;
-	margin-left:2%;
-	margin-right:15%;
-	margin-bottom:1em;
-	border: 2px solid black;
-}
-
-#fuelprogressbar_overlay{
-	background-color:mediumturquoise;
-	height:3.7em; /*don't ask. looks bad without.*/
-	display:block;
-	border-right: 2px solid black;
-	padding:0px;
-}
-
-#fuelprogressbar_text{
-	text-align:center;
-	position:relative;
-	font-size:2em;
-	font-weight:bold;
-	top:-1.5em; /*sub 1/2 height and half an em*/
-	padding-bottom:1em;
-	display:block;
-	text-shadow: 0px 0px 3px white;
-}
-
-#fuelprogressbar_desc{
-	text-align:center;
-	position:relative;
+.bar_back{
 	width:100%;
-	top:-4.25em;
 	display:block;
-	color:white;
-	font-weight:bold;
-}
-
-
-#tempbar{
-	position:absolute;
-	background-color:dimgray;
-	width:80%;
-	height:4em;
-	top:6.25em;
-	margin-left:2%;
-	margin-right:15%;
-	margin-bottom:1em;
 	border: 2px solid black;
 }
 
-#tempbar_overlay{
-	background-color:darkgreen;
-	height:3.75em;
+.bar_overlay{
 	display:block;
-	border-right: 2px solid black;
+	height:inherit;
+	border-right:2px solid black;
 }
 
+#reactor_fuelbar_back{
+	height:4em;
+	background-color:lightslategray
+}
 
-#tempbar_overlay_caution{
+#reactor_fuelbar_overlay{
+	height:3.7em; /*why do i have to make these .3 em smaller?*/
+	background-color:mediumturquoise
+
+}
+
+#reactor_tempbar_back{
+	height:4em;
+	background-color:dimgray	
+}
+#reactor_tempbar_overlay{
+	height:3.7em;
+	background-color:darkgreen
+}
+
+#reactor_tempbar_overlay_caution{
+	height:3.7em;
 	background-color:goldenrod;
-	height:3.75em;
-	display:block;
-	border-right: 2px solid black;
 }
 
-#tempbar_overlay_danger{
-	background-color:indianred;
-	height:3.75em;
-	display:block;
-	border-right: 2px solid black;
-}
-
-#tempbar_text{
-	text-align:center;
-	position:relative;
-	font-size:2em;
-	font-weight:bold;
-	top:-1.5em; /*sub 1/2 height and half an em*/
-	padding-bottom:1em;
-	display:block;
-	text-shadow: 0px 0px 3px white;
-}
-
-
-
-#tempbar_desc{
-	text-align:center;
-	position:relative;
-	width:100%;
-	top:-4.25em;
-	display:block;
-	color:white;
-	font-weight:bold;
-}
-
-
-
-#coolantbar{
-	position:absolute;
-	background-color:dimgray;
-	width:80%;
+#reactor_coolantbar_back{
 	height:2em;
-	top:12em;
-	margin-left:2%;
-	margin-right:15%;
-	margin-bottom:1em;
-	border: 2px solid black;
+	background-color:dimgray	
 }
 
-#coolantbar_overlay{
-	background-color:darkgreen;
+#reactor_coolantbar_overlay{
 	height:1.7em;
-	display:block;
-	border-right: 2px solid black;
+	background-color:darkgreen
 }
 
-
-#coolantbar_overlay_caution{
+#reactor_coolantbar_overlay_caution{
+	height:1.7em;
 	background-color:goldenrod;
-	height:inherit;
-	display:block;
-	border-right: 2px solid black;
 }
 
-#coolantbar_overlay_danger{
-	background-color:indianred;
-	height:inherit;
-	display:block;
-	border-right: 2px solid black;
-}
-
-#coolantbar_text{
-	text-align:center;
-	position:relative;
-	font-size:1.5em;
-	font-weight:bold;
-	top:-1.25em; /*sub 1/2 height and half an em*/
-	padding-bottom:1em;
-	display:block;
-	text-shadow: 0px 0px 3px white;
-}
-
-
-
-#coolantbar_desc{
-	text-align:center;
-	position:relative;
+.reactor_controlrod_movebutton{
+	background-color:grey;
 	width:100%;
-	top:-3em;
+	height:1.5em;
 	display:block;
-	color:white;
+	font-size:1.25em;
 	font-weight:bold;
 }
-
-
-
-#controlrodbar{
-	position:absolute;
-	right:1%;
-	width:10%;	
-	display:block;
-	background-color:gradient;
-	background-image:linear-gradient(red,yellow,green,cyan,blue);
-	height:86%;
-	float:right;
-}
-
-#scrambutton{
-	position:absolute;
-	right:1%;
-	bottom:1%;
-	background-color:darkred;
-	color:white;
-	width:13%;
-	padding-left:3px;
-	padding-right:3px;
-	text-align:center;
-	height:2em;
-}
-
-#controlrod_struct{
-	position:absolute;
-	right:1%;
-	height:87%;
-	width:10%;
-	border-collapse: collapse;	
-}
-
-.controlrod_movbut{
+.reactor_controlrod_movebutton:hover{
 	background-color:#333;
-	color:white;
 }
 
-#conbrolrod_colorback{
-	height:100%;
-	background-image:linear-gradient(orangered,yellow,green,cyan,lightblue);
+@keyframes scram_active{
+	0% {background-color:red;}
+	33% {background-color:red;}
+	50% {background-color:darkred;}
+	66% {background-color:darkred;}
+	100% {background-color:red;}
 }
 
-#conbrolrod_roddisplay{
-	width:1.5em;
-	background-color:#222;
+#reactor_scrambutton{
+	background-color:darkred;
+	font-size:150%;
+	font-weight:bold;
 	display:block;
-	position:relative;
-	left:50%;
-	margin-left:-.75em;
+	width:100%;
+	height:2em;
+	text-align:center;
 }
 
+#reactor_scrambutton:hover{
+	background-color:red;
+}
+
+#reactor_scrambutton_on{
+		animation:scram_active 1s infinite;
+			background-color:darkred;
+	font-size:150%;
+	font-weight:bold;
+	display:block;
+	width:100%;
+	height:2em;
+	text-align:center;
+}
 

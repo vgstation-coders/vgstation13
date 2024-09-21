@@ -8,78 +8,72 @@
 
 
 
+<table style='width:100%;height:100%;'>
+<tr>
+<td style='width:90%;'>
 
-<div id='fuelprogressbar'>
-	<span id='fuelprogressbar_overlay' style='width:55%'></span> <!--apply storage left in the width percentage-->
-	<span id='fuelprogressbar_text'>50% (10:00)</span>
-	<span id='fuelprogressbar_desc'>fuel life remaining</span>
-</div>
+	<table style='height:100%;width:97.5%'>
+	<tr><td style='width:100%;text-align:center;'>
+		<span class='bar_back' id='reactor_fuelbar_back'>
+			<span class='bar_overlay' id='reactor_fuelbar_overlay' style='width:60%'>
+				
+			</span>
+			<span style='position:relative;top:-1.5em;font-size:2em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>100% (10:00)</span>
+		</span>
+		fuel life remaining
+	</td></tr>
+	
+	<tr><td style='width:100%;text-align:center;'>
+		<span class='bar_back' id='reactor_tempbar_back'>
+			<span class='bar_overlay' id='reactor_tempbar_overlay' style='width:60%'>
+				
+			</span>
+			<span style='position:relative;top:-1.5em;font-size:2em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>1000K</span>
+		</span>
+		core temp
+	</td></tr>
+	
+	<tr><td style='width:100%;text-align:center;'>
+		<span class='bar_back' id='reactor_coolantbar_back'>
+			<span class='bar_overlay' id='reactor_coolantbar_overlay' style='width:60%'>
+				
+			</span>
+			<span style='position:relative;top:-1.5em;font-size:1.25em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>1000K @ 500kPa</span>
+		</span>
+		coolant
+	</td></tr>
 
-<div id='tempbar'>
-	<span id='tempbar_overlay' style='width:18%'></span>
-	<span id='tempbar_text'>1000K</span>
-	<span id='tempbar_desc'>core temp</span>
-</div>
+	<tr><td style='font-size:2em;font-weight:bold;text-align:center;'><span style='text-align:right;'>reactor status:<span> <span style='text-align:left;color:lime;'>operational</span></td></tr>
+	<tr><td><span class='button_locked' style='font-size:150%;font-weight:bold;'>FUEL LOCKED</span></td></tr>
 
-<div id='coolantbar'>
-	<span id='coolantbar_overlay' style='width:18%'></span>
-	<span id='coolantbar_text'>1000K @ 1000kPa</span>
-	<span id='coolantbar_desc'>coolant</span>
-</div>
+	<tr><td style='font-size:125%;'><span style='width:50%;display:inline-block;text-align:left;'>fuel reactivity:[MULT]%</span><span style='width:50%;display:inline-block;text-align:right'>fuel rods:[FUEL]</span></td></tr>
+	<tr><td style='font-size:125%;'><span style='width:50%;display:inline-block;text-align:left;'>fissile speed:[SPEED]%</span><span style='width:50%;display:inline-block;text-align:right;margin-bottom:1em;'>control rods:[CONTROL]</span></td></tr>
+	</table>
+
+</td>
+<td>
+
+	<table style='width:100%;height:100%;'>
+	<tr><td style='text-align:center;'>
+		
+		<span style='background-color:darkgrey;width:100%;display:block;font-size:1.5em;'>control<br>rods</span>
+		<span class='reactor_controlrod_movebutton'>[UP]</span>
+		<span style='background-image:linear-gradient(orangered,yellow,green,cyan,lightblue);width:100%;height:10em;display:block;'>
+			<span style='background-color:#222;width:40%;height:100%;display:block;position:relative;left:30%;'></span>
+		</span>
+		<span class='reactor_controlrod_movebutton'>[DN]</span>
+		<span style='background-color:darkgrey;width:100%;display:block;font-size:2em;'>100%</span>
+		
+		
+		
+	</td></tr>
+	<tr><td> <span id='reactor_scrambutton'>SCRAM</span> </td></tr>
+	</table>
 
 
-<table id='controlrod_struct'>
-	<tr style='background-color:#444;color:white;'>
-		<td>control<br>rods</td>
-	</tr>
-	<tr class='controlrod_movbut'>
-		<td>[UP]</td>
-	</tr>
-	<tr id='conbrolrod_colorback'>
-	 
-	<td style='padding:0;display:block;height:100%;'>
-		<span id='conbrolrod_roddisplay' style='height:60%;'></span>
-	</td>
-	</tr>
-	<tr class='controlrod_movbut'>
-		<td>[DN]</td>
-	</tr>
-	<tr style='background-color:#444;font-size:1.5em;color:white;'>
-		<td>60%</td>
-	</tr>
+</td>
+</tr>
 </table>
-
-
-
-<table style='position:absolute;width:80%;bottom:.5em;color:white;border-collapse: collapse;'>
-<tr>
-	<td>
-	<span style='color:white;font-size:140%'>reactor status:</span>
-	</td>
-	<td>
-	<span style='color:lime;font-size:140%'>operational</span>
-	</td>
-</tr>
-<tr>
-	<td>
-		<span class='button_locked' style='font-size:1.25em;'>FUEL LOCKED</span>
-	</td>
-</tr>
-
-<tr>
-	<td style='text-align:left;font-weight:initial;'>
-	fuel reactivity: 200%<br>
-	fissile speed: 2000%<br>
-	</td>
-	<td style='text-align:right;font-weight:initial;'>
-	fuel rods: 8<br>
-	control rods: 4<br>
-	</td>
-</tr>
-
-</table>
-
-<div id='scrambutton'><span style='position:relative;top:20%;font-weight:bold;font-size:133%;'>SCRAM</span></div>
 
 
 </body>
