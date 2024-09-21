@@ -38,14 +38,14 @@ included:
 			if(user.a_intent==I_HELP)
 				to_chat(usr,"<span class='danger'>this seems like a really bad idea.</span>")
 				return
-			var/obj/item/tool/weldingtool/WT = I
-			user.visible_message("<span class='notice'>[user] starts welding \the [src]'s external plating off its frame.</span>", "<span class='notice'>You start welding \the [src]'s external plating off its frame.</span>")
-			if(WT.do_weld(user,src,60,0))
-				var/obj/structure/girder/reactor/newcase= new /obj/structure/girder/reactor(loc)
-				newcase.forceMove(loc)
-				newcase.pipeadded=TRUE
-				newcase.state=3
-				qdel(src)
+		var/obj/item/tool/weldingtool/WT = I
+		user.visible_message("<span class='notice'>[user] starts welding \the [src]'s external plating off its frame.</span>", "<span class='notice'>You start welding \the [src]'s external plating off its frame.</span>")
+		if(WT.do_weld(user,src,60,0))
+			var/obj/structure/girder/reactor/newcase= new /obj/structure/girder/reactor(loc)
+			newcase.forceMove(loc)
+			newcase.pipeadded=TRUE
+			newcase.state=3
+			qdel(src)
 
 
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/New()
@@ -164,14 +164,15 @@ included:
 		if(WT.do_weld(user,src,60,0))
 			var/obj/machinery/constructable_frame/machine_frame/reinforced/newframe= new /obj/machinery/constructable_frame/machine_frame/reinforced(loc)
 			newframe.forceMove(loc)
-			newframe.build_state=3
-			newframe.circuit=/obj/item/weapon/circuitboard/fission_reactor
-			newframe.components+=/obj/item/stack/rods
-			newframe.components+=/obj/item/stack/rods
-			newframe.components+=/obj/item/weapon/stock_parts/console_screen
-			newframe.components+=/obj/item/weapon/stock_parts/manipulator
-			newframe.components+=/obj/item/weapon/stock_parts/matter_bin
-			newframe.components+=/obj/item/weapon/stock_parts/scanning_module
+			//newframe.build_state=3
+			newframe.set_build_state(3)
+			newframe.circuit= new /obj/item/weapon/circuitboard/fission_reactor
+			newframe.components=list()
+			newframe.components+= new /obj/item/stack/rods(null,2)
+			newframe.components+=new /obj/item/weapon/stock_parts/console_screen
+			newframe.components+=new /obj/item/weapon/stock_parts/manipulator
+			newframe.components+=new /obj/item/weapon/stock_parts/matter_bin
+			newframe.components+=new /obj/item/weapon/stock_parts/scanning_module
 			qdel(src)
 		return
 				
@@ -502,13 +503,13 @@ included:
 			if(user.a_intent==I_HELP)
 				to_chat(usr,"<span class='danger'>this seems like a really bad idea.</span>")
 				return
-			var/obj/item/tool/weldingtool/WT = I
-			user.visible_message("<span class='notice'>[user] starts welding \the [src]'s external plating off its frame.</span>", "<span class='notice'>You start welding \the [src]'s external plating off its frame.</span>")
-			if(WT.do_weld(user,src,60,0))
-				qdel(src)
-				var/obj/structure/girder/reactor/newcase= new /obj/structure/girder/reactor(loc)
-				newcase.forceMove(loc)
-				newcase.state=3
+		var/obj/item/tool/weldingtool/WT = I
+		user.visible_message("<span class='notice'>[user] starts welding \the [src]'s external plating off its frame.</span>", "<span class='notice'>You start welding \the [src]'s external plating off its frame.</span>")
+		if(WT.do_weld(user,src,60,0))
+			var/obj/structure/girder/reactor/newcase= new /obj/structure/girder/reactor(loc)
+			newcase.forceMove(loc)
+			newcase.state=3
+			qdel(src)
 
 
 /obj/structure/girder/reactor
@@ -532,7 +533,7 @@ included:
 				if (dir&NORTH)
 					dirstr="north"
 				if (dir&SOUTH)
-					dirstr="soth"
+					dirstr="south"
 				if (dir&EAST)
 					dirstr="east"
 				if (dir&WEST)
@@ -707,188 +708,9 @@ included:
 /obj/machinery/constructable_frame/machine_frame/reinforced
 	name="reinforced frame"
 	desc="A frame made from plasteel for heavy-duty applications."
-	
+	sheet_type= /obj/item/stack/sheet/plasteel
+	required_circuit_type=MACHINE_REINFORCED
 
-/obj/machinery/constructable_frame/machine_frame/reinforced/attackby(obj/item/P as obj, mob/user as mob)
-	if(P.crit_fail)
-		to_chat(user, "<span class='warning'>This part is faulty, you cannot add this to the machine!</span>")
-		return
-
-	switch(build_state)
-		if(1)
-			if(istype(P, /obj/item/stack/cable_coil))
-				var/obj/item/stack/cable_coil/C = P
-				if(C.amount >= 5)
-					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-					to_chat(user, "<span class='notice'>You start to add cables to the frame.</span>")
-					if(do_after(user, src, 20))
-						if(C && C.amount >= 5) // Check again
-							C.use(5)
-							to_chat(user, "<span class='notice'>You add cables to the frame.</span>")
-							set_build_state(2)
-			else if(istype(P, /obj/item/stack/sheet/glass/glass))
-				var/obj/item/stack/sheet/glass/glass/G=P
-				if(G.amount<1)
-					return
-				G.use(1)
-				to_chat(user, "<span class='notice'>You add the glass to the frame.</span>")
-				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-				build_path = 1
-				icon_state="box_glass"
-				return
-			else
-				if(P.is_wrench(user))
-					P.playtoolsound(src, 75)
-					to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
-					drop_stack(sheet_type, get_turf(src), 5, user)
-					qdel(src)
-		if(2)
-			if(!..())
-				if(istype(P, /obj/item/weapon/circuitboard))
-					var/obj/item/weapon/circuitboard/B = P
-					if(B.board_type == MACHINE_REINFORCED)
-						if(!user.drop_item(B, src, failmsg = TRUE))
-							return
-
-						playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-						to_chat(user, "<span class='notice'>You add the circuit board to the frame.</span>")
-						circuit = P
-						set_build_state(3)
-						components = list()
-						req_components = circuit.req_components.Copy()
-						for(var/A in circuit.req_components)
-							req_components[A] = circuit.req_components[A]
-						req_component_names = circuit.req_components.Copy()
-						for(var/A in req_components)
-							var/atom/path = A
-							req_component_names[A] = initial(path.name)
-						update_desc() // sets the description based on req_components
-						to_chat(user, desc)
-					else
-						to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
-				else
-					if(P.is_wirecutter(user))
-						P.playtoolsound(src, 50)
-						to_chat(user, "<span class='notice'>You remove the cables.</span>")
-						set_build_state(1)
-						var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( src.loc )
-						A.amount = 5
-
-		if(3)
-			if(!..())
-				if(iscrowbar(P))
-					P.playtoolsound(src, 50)
-					set_build_state(2)
-					circuit.forceMove(src.loc)
-					circuit = null
-					if(components.len == 0)
-						to_chat(user, "<span class='notice'>You remove the circuit board.</span>")
-					else
-						to_chat(user, "<span class='notice'>You remove the circuit board and other components.</span>")
-						for(var/obj/item/I in components)
-							I.forceMove(src.loc)
-					desc = initial(desc)
-					req_components = null
-					components = null
-				else
-					if(P.is_screwdriver(user))
-						if(isshuttleturf(get_turf(src)))
-							to_chat(user, "<span class='warning'>You must move \the [src] to a more stable location, such as a space station, before you can finish constructing it.</span>")
-							return
-						var/component_check = 1
-						for(var/R in req_components)
-							if(req_components[R] > 0)
-								component_check = 0
-								break
-						if(component_check)
-							P.playtoolsound(src, 50)
-							var/type2build = src.circuit.build_path
-							if(arcanetampered || circuit.arcanetampered)
-								type2build = pick(typesof(/obj/machinery/cooking))
-							var/obj/machinery/new_machine = new type2build(loc)
-							for(var/obj/O in new_machine.component_parts)
-								qdel(O)
-							new_machine.component_parts = list()
-							for(var/obj/O in src)
-								if(circuit.contain_parts) // things like disposal don't want their parts in them
-									O.forceMove(components_in_use)
-								else
-									O.forceMove(null)
-								new_machine.component_parts += O
-							if(circuit.contain_parts)
-								circuit.forceMove(components_in_use)
-							else
-								circuit.forceMove(null)
-							new_machine.RefreshParts()
-							new_machine.power_change()
-							circuit.finish_building(new_machine, user)
-							components = null
-							if(arcanetampered || circuit.arcanetampered)
-								new_machine.stat |= BROKEN
-								new_machine.update_icon()
-							qdel(src)
-					else
-						if(istype(P, /obj/item/weapon/storage/bag/gadgets/part_replacer) && P.contents.len && get_req_components_amt())
-							var/obj/item/weapon/storage/bag/gadgets/part_replacer/replacer = P
-							var/list/added_components = list()
-							var/list/part_list = replacer.contents.Copy()
-
-							//Sort the parts. This ensures that higher tier items are applied first.
-							part_list = sortTim(part_list, /proc/cmp_rped_sort)
-
-							for(var/path in req_components)
-								while(req_components[path] > 0 && (locate(path) in part_list))
-									var/obj/item/part = (locate(path) in part_list)
-									if(!part.crit_fail)
-										added_components[part] = path
-										replacer.remove_from_storage(part, src)
-										req_components[path]--
-										part_list -= part
-
-							for(var/obj/item/weapon/stock_parts/part in added_components)
-								components += part
-								to_chat(user, "<span class='notice'>[part.name] applied.</span>")
-							replacer.play_rped_sound()
-
-							update_desc()
-
-						else
-							if(istype(P, /obj/item/weapon) || istype(P, /obj/item/stack))
-								var/matched = FALSE
-								for(var/I in req_components)
-									if(istype(P, I) && (req_components[I] > 0))
-										matched = TRUE
-										var/wentin = FALSE
-										playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-										if(istype(P, /obj/item/stack))
-											var/obj/item/stack/CP = P
-											var/camt = min(CP.amount, req_components[I]) // amount of the stack to take, idealy amount required, but limited by amount provided
-											var/obj/item/stack/CC = locate() in src
-											if(!CC)
-												CC = new I(src)
-											CC.amount = camt
-											CC.update_icon()
-											CP.use(camt)
-											if(!(CC in components))
-												components += CC
-											req_components[I] -= camt
-											wentin = TRUE
-
-										else if(user.drop_item(P, src))
-											components += P
-											req_components[I]--
-											if(P.is_open_container())
-												. = 1
-											wentin = TRUE
-
-										if(wentin)
-											update_desc()
-											to_chat(user, desc)
-											break
-
-								if(!matched)
-									to_chat(user, "<span class='warning'>You cannot add that component to the machine!</span>")
-									
 
 /obj/item/weapon/circuitboard/fission_reactor
 	name = "Circuit board (Fission Reactor Controller)"
