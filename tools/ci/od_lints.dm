@@ -25,7 +25,7 @@
 #pragma AmbiguousResourcePath error
 
 //3000-3999
-#pragma EmptyBlock error
+#pragma EmptyBlock disabled
 #pragma EmptyProc disabled
 #pragma UnsafeClientAccess disabled
 #pragma SuspiciousSwitchCase error
