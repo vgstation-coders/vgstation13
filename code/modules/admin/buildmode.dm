@@ -184,6 +184,7 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 /obj/effect/bmode/buildmode/New()
 	..()
 	area_overlay = image('icons/turf/areas.dmi', "yellow")
+	area_overlay.plane = ABOVE_LIGHTING_PLANE
 
 /obj/effect/bmode/buildmode/Destroy()
 	copycat = null
