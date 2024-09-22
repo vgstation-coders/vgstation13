@@ -1,0 +1,4 @@
+author: jwhitak
+delete-after: true
+changes:
+- bugfix: Fixed various damage cascades from occuring on human mobs
