@@ -1,4 +1,0 @@
-author: DeityLink
-delete-after: true
-changes:
-- bugfix: Fixed area overlays being additive when using blueprints or admin buildmode.
