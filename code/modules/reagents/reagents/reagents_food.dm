@@ -159,6 +159,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+	harms_animal_type = /mob/living/simple_animal/corgi
 
 /datum/reagent/condensedcapsaicin
 	name = "Condensed Capsaicin"

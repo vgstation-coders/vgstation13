@@ -31,6 +31,7 @@
 	var/wrapped = 0 //Is the food wrapped (preventing one from eating until unwrapped)
 	var/dried_type = null //What can we dry the food into
 	var/deepfried = 0 //Is the food deep-fried ?
+	var/harmfultocorgis = 0 //Is it harmful for corgis to eat?
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
 	var/list/random_filling_colors = list()
 	var/plate_offset_y = 0
@@ -718,6 +719,9 @@
 			after_consume(M, reagents)
 			playsound(M,'sound/items/eatfood.ogg', rand(10,50), 1)
 			M.delayNextAttack(10)
+			if(harmfultocorgis)
+				var/mob/living/simple_animal/corgi/C = M
+				C.atepoison()
 			if(!reagents || !reagents.total_volume)
 				M.visible_message("[M] [pick("burps from enjoyment", "yaps for more", "woofs twice", "looks at the area where \the [src] was")].", "<span class='notice'>You swallow up the last of \the [src].")
 				qdel(src)
@@ -1663,6 +1667,7 @@
 	icon_state = "avocadoburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadoburger/New()
 	..()
@@ -2917,6 +2922,7 @@
 	crumb_icon = "dribbles"
 	filling_color = "#CBD15B"
 	valid_utensils = UTENSILE_SPOON
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadosoup/New()
 	..()
@@ -3236,6 +3242,7 @@
 	desc = "Salted avocado on a slice of toast. For the authentic experience, make sure you pay an exorbitant price for it."
 	icon_state = "avocadotoast"
 	food_flags = FOOD_DIPPABLE
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadotoast/New()
 	..()
@@ -5762,6 +5769,7 @@
 	base_crumb_chance = 0
 	crumb_icon = "dribbles"
 	valid_utensils = UTENSILE_SPOON
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake/New()
 	..()
@@ -6318,6 +6326,7 @@
 	icon_state = "garlicbread"
 	bitesize = 3
 	food_flags = FOOD_DIPPABLE
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/garlicbread/New()
 	..()
@@ -7264,6 +7273,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A simple sushi consisting of avocado and rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_avocado"
+	harmfultocorgis = TRUE
 
 ////	END SUSHI	////
 
@@ -7713,6 +7723,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "peanutbutter"
 	base_crumb_chance = 0
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/peanutbutter/New()
 	..()
@@ -7725,6 +7736,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "saltednuts"
 	base_crumb_chance = 0
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/saltednuts/New()
 	..()
@@ -7738,6 +7750,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "pbj"
 	base_crumb_chance = 0
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/pbj/New()
 	..()
