@@ -104,6 +104,8 @@ included:
 	var/lasttempnag=0 //ensures temp warning only occur if it is increasing. less chat spam.
 	var/datum/html_interface/interface
 	var/lastupdatetick=0
+	var/displaycoolantinmoles=FALSE
+	var/tempdisplaymode=0
 
 /obj/machinery/fissioncontroller/New()
 	..()
@@ -272,6 +274,18 @@ included:
 	else if (!associated_reactor.fuel)
 		fueltxt="NO FUEL"
 	
+	var/coolant_tempdisplay="[associated_reactor.coolant.temperature]K"
+	var/reactor_tempdisplay="[associated_reactor.temperature]K"
+	if(tempdisplaymode==1) //C
+		coolant_tempdisplay="[associated_reactor.coolant.temperature-273.15]°C"
+		reactor_tempdisplay="[associated_reactor.temperature-273.15]°C"
+	else if(tempdisplaymode==2) //F (because this is really old, outdated tech (fission is soooo last millenium))
+		coolant_tempdisplay="[1.8*associated_reactor.coolant.temperature-459.67]°F"
+		reactor_tempdisplay="[1.8*associated_reactor.temperature-459.67]°F"
+	else if(tempdisplaymode==3) //R (because muh absolute scale)
+		coolant_tempdisplay="[1.8*associated_reactor.coolant.temperature]R"
+		reactor_tempdisplay="[1.8*associated_reactor.temperature]R"
+	
 	aychteeemel_string={"<table style='width:100%;height:100%;'>
 <tr>
 <td style='width:90%;'>
@@ -292,9 +306,9 @@ included:
 			<span class='bar_overlay' id='reactor_tempbar_overlay[associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP ? "_caution" : ""]' id='reactor_tempbar_overlay' style='width:[coretemppercent]%'>
 				
 			</span>
-			<span style='position:relative;top:-1.5em;font-size:2em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>[associated_reactor.temperature]K</span>
+			<span style='position:relative;top:-1.5em;font-size:2em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>[reactor_tempdisplay]</span>
 		</span>
-		core temp
+		core temp <a href='?src=\ref[interface];action=swap_tempunit'><span class='button'>change unit</span></a>
 	</td></tr>
 	
 	<tr><td style='width:100%;text-align:center;'>
@@ -302,10 +316,10 @@ included:
 			<span class='bar_overlay' id='reactor_coolantbar_overlay[associated_reactor.coolant.temperature>=FISSIONREACTOR_DANGERTEMP ? "_caution" : ""]' style='width:[coolanttemppercent]%'>
 				
 			</span>
-			<span style='position:relative;top:-1.5em;font-size:1.25em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>[associated_reactor.coolant.temperature]K @ [associated_reactor.coolant.pressure]kPa</span>
-		</span>
-		coolant
-	</td></tr>
+			<span style='position:relative;top:-1.5em;font-size:1.25em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>[coolant_tempdisplay] [displaycoolantinmoles? "& [associated_reactor.coolant.total_moles] moles" : "@ [associated_reactor.coolant.pressure]kPa"]</span> 
+		</span> 
+		coolant <a href='?src=\ref[interface];action=swap_gasunit'><span class='button'>[displaycoolantinmoles ? "in moles" : "in kPa"]</span></a>
+	</td></tr> 
 
 	<tr><td style='font-size:2em;font-weight:bold;text-align:center;'><span style='text-align:right;'>reactor status:<span> <span style='text-align:left;color:[statuscolor];'>[status]</span></td></tr>
 	<tr><td><a href='?src=\ref[interface];action=eject'><span class='button[(associated_reactor.considered_on() || (!associated_reactor.fuel)) ? "_locked" : ""]' style='font-size:150%;font-weight:bold;'>[fueltxt]</span></a></td></tr>
@@ -478,6 +492,12 @@ included:
 			currentfuelrod.forceMove(src.loc)
 			currentfuelrod=null	
 			associated_reactor.fuel=null
+		if("swap_tempunit")	
+			tempdisplaymode++
+			tempdisplaymode%=4
+		if("swap_gasunit")		
+			displaycoolantinmoles=!displaycoolantinmoles
+			
 	ask_remakeUI() //update it so that changes appear NOW.
 //SS_WAIT_MACHINERY
 
