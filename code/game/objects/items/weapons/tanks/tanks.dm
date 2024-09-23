@@ -14,9 +14,6 @@
 	throwforce = 10.0
 	throw_speed = 1
 	throw_range = 4
-	slimeadd_message = "You add the slime extract to the tank's nozzle"
-	slimes_accepted = SLIME_OIL
-	slimeadd_success_message = "It feels lighter"
 
 	var/datum/gas_mixture/air_contents = null
 	var/distribute_pressure = ONE_ATMOSPHERE
