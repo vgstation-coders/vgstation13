@@ -491,7 +491,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return FALSE
 	has_slimes |= primarytype
 	slimeadd_message = replacetext(slimeadd_message,"SRCTAG","\the [src]")
-	to_chat(user, "[slimeadd_message][slimes_accepted & primarytype ? ". [slimeadd_success_message]" : ""].")
+	to_chat(user, "[slimeadd_message][slimeadd_success_message && (slimes_accepted & primarytype) ? ". [slimeadd_success_message]" : ""].")
 	return TRUE
 
 /obj/singularity_pull(S, current_size, repel = FALSE)
