@@ -377,7 +377,6 @@
 					to_chat(user, "<span class='info'>You add [add_amount] item\s to the stack. It now contains [S.amount] [S.correct_name()].</span>")
 				return S
 	var/obj/item/stack/S = new_stack_type
-	S.recycles_cash = recyclescash
 	for(var/i = 0 to round(add_amount/initial(S.max_amount)))
 		if (add_amount <= 0)
 			continue
@@ -386,6 +385,7 @@
 		add_amount -= S.amount
 		S.update_materials()
 		S.update_icon()
+		S.recycles_cash = recyclescash
 	return S
 
 /obj/item/stack/verb_pickup(mob/living/user)
