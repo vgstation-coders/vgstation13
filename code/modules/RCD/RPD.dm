@@ -5,6 +5,7 @@
 	frequency = 1439
 	id = null
 	starting_materials = list(MAT_IRON = 75000, MAT_GLASS = 37500)
+	slimes_accepted = SLIME_METAL|SLIME_YELLOW
 	var/build_all = 0
 	var/autowrench = 0
 	var/obj/item/tool/wrench/internal_wrench = new()
