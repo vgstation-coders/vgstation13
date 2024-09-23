@@ -88,13 +88,13 @@
 /atom/proc/arcane_message(mob/user)
 	if(arcanetampered)
 		to_chat(user, "<span class='sinister'>\The [src] has an arcane aura to it!</span>")
-		. = 1
 		if(contents.len)
 			to_chat(user, "<span class='sinister'>And inside \the [src]...</span>")
 			for(var/atom/A in src)
 				. |= A.arcane_message(user)
 			if(!.)
 				to_chat(user, "<span class='notice'>Nothing of note.</span>")
+		. = 1
 
 
 /obj/item/weapon/nullrod/pickup(mob/living/user as mob)
