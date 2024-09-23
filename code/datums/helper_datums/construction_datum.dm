@@ -148,6 +148,7 @@
 		var/obj/item/R = new result(get_turf(holder))
 		if(in_hands && istype(R))
 			user.put_in_hands(R)
+		R.recycles_cash = holder.recycles_cash
 		spawn()
 			QDEL_NULL (holder)
 
@@ -248,6 +249,7 @@
 //		testing("[user] fully deconstructed a [result]!")
 		for(var/thing in tospawn)
 			var/atom/A = new thing(get_turf(holder))
+			A.recycles_cash = holder.recycles_cash
 			if(istype(A,/obj/item/stack))
 				var/obj/item/stack/S = A
 				if(tospawn[thing] > 1)
