@@ -55,6 +55,7 @@ included:
 			to_chat(usr,"The rod is mostly inserted.")
 		if("controlrod_5")
 			to_chat(usr,"The rod is nearly fully inserted.") 
+	to_chat(usr,"The structure is held together firmly, it'll have to be cut in order to part it.")
 
 /obj/machinery/fissionreactor/fissionreactor_controlrod/New()
 	overlay_N = image(icon, src,"cr_overlay_N")
@@ -66,7 +67,25 @@ included:
 	overlay_NW = image(icon, src,"cr_overlay_NW")
 	overlay_SW = image(icon, src,"cr_overlay_SW")
 	..()
-	
+
+/obj/machinery/fissionreactor/fissionreactor_controlrod/attackby(var/obj/item/O,var/mob/user)	
+	if(iswelder(O))
+		if(associated_reactor && associated_reactor.considered_on())
+			if(user.a_intent==I_HELP)
+				to_chat(usr,"<span class='danger'>this seems like a really bad idea.</span>")
+				return
+		user.visible_message("<span class='notice'>[user] starts welding \the [src]'s external plating off its frame.</span>", "<span class='notice'>You start welding \the [src]'s external plating off its frame.</span>")
+		var/obj/item/tool/weldingtool/WT = O
+		if(WT.do_weld(user,src,60,0))
+			var/obj/machinery/constructable_frame/machine_frame/reinforced/newframe= new /obj/machinery/constructable_frame/machine_frame/reinforced(loc)
+			newframe.forceMove(loc)
+			newframe.set_build_state(3)
+			newframe.circuit= new /obj/item/weapon/circuitboard/fission_control_rod
+			newframe.components=list()
+			newframe.components+= new /obj/item/stack/rods(null,2)
+			newframe.components+=new /obj/item/weapon/stock_parts/manipulator
+			newframe.components+=new /obj/item/weapon/stock_parts/matter_bin
+			qdel(src)
 	
 /obj/machinery/fissionreactor/fissionreactor_controlrod/update_icon()
 	icon_state="controlrod"
@@ -117,6 +136,7 @@ included:
 	to_chat(usr,"The lights indicate that there are [overlays.len] adjacent fuel rod assemblies")
 	if(icon_state=="fuelrod_active")
 		to_chat(usr,"The center emits a blue glow.")
+	to_chat(usr,"The structure is held together firmly, it'll have to be cut in order to part it.")
 	
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/update_icon()
 	icon_state="fuelrod"
@@ -144,19 +164,36 @@ included:
 		if (fuel_rod.loc.x==src.loc.x)
 			if (fuel_rod.loc.y==src.loc.y+1 || fuel_rod.loc.y==src.loc.y-1)
 				num_adjacent_fuel_rods++
-	world.log << "fuel rod at [loc.x] [loc.y] recorded [num_adjacent_fuel_rods]"
 	return 1.0+num_adjacent_fuel_rods*adjacency_reactivity_bonus
 
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/proc/get_iscontrolled()
 	var/list/lofrds=associated_reactor.control_rods
 	for (var/obj/machinery/fissionreactor/fissionreactor_controlrod/control_rod in  lofrds)
 		if ((control_rod.loc.x-src.loc.x)**2<=1 &&  (control_rod.loc.y-src.loc.y)**2<=1  ) //ensure it's within 1 tile
-			world.log << "fuel rod at [loc.x] [loc.y] found a control rod."
 			return TRUE
 	return FALSE
 	
 	
 	
+/obj/machinery/fissionreactor/fissionreactor_fuelrod/attackby(var/obj/item/O,var/mob/user)	
+	if(iswelder(O))
+		if(associated_reactor && associated_reactor.considered_on())
+			if(user.a_intent==I_HELP)
+				to_chat(usr,"<span class='danger'>this seems like a really bad idea.</span>")
+				return
+		user.visible_message("<span class='notice'>[user] starts welding \the [src]'s external plating off its frame.</span>", "<span class='notice'>You start welding \the [src]'s external plating off its frame.</span>")
+		var/obj/item/tool/weldingtool/WT = O
+		if(WT.do_weld(user,src,60,0))
+			var/obj/machinery/constructable_frame/machine_frame/reinforced/newframe= new /obj/machinery/constructable_frame/machine_frame/reinforced(loc)
+			newframe.forceMove(loc)
+			newframe.set_build_state(3)
+			newframe.circuit= new /obj/item/weapon/circuitboard/fission_fuel_rod
+			newframe.components=list()
+			newframe.components+= new /obj/item/stack/rods(null,2)
+			newframe.components+=new /obj/item/weapon/stock_parts/scanning_module
+			newframe.components+=new /obj/item/weapon/stock_parts/matter_bin
+			qdel(src)
+		
 	
 	
 	

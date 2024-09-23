@@ -16,7 +16,18 @@ the machine which makes fuel rods have things in them.
 	icon_state="fuelmaker"
 	var/hatchopen=FALSE
 	var/obj/item/weapon/fuelrod/heldrod = null
+	var/obj/item/weapon/reagent_containers/container=null
+	var/datum/html_interface/interface
+	var/pipename="isotopic separational combiner"
+	
+/obj/machinery/atmospherics/unary/fissionfuelmaker/proc/get_pipe_dir() //the atmos gods demand a sacrifice.
+	return dir	
 
+/obj/machinery/atmospherics/unary/fissionfuelmaker/New()
+	..()
+	src.buildFrom(usr,src)
+	interface=new /datum/html_interface(src,"isotopic separational combiner",550,500,"<link rel='stylesheet' href='fission.css'>")	
+	buildui()
 
 /obj/machinery/atmospherics/unary/fissionfuelmaker/attackby(var/obj/item/I,var/mob/user)
 	if(istype(I,/obj/item/weapon/fuelrod))
@@ -28,6 +39,7 @@ the machine which makes fuel rods have things in them.
 			to_chat(user,"You insert the fuel rod into \the [src].")
 			I.loc=null
 			heldrod=I
+			ask_remakeUI()
 			playsound(src,'sound/items/crowbar.ogg',50)
 			update_icon()
 		return
@@ -37,6 +49,7 @@ the machine which makes fuel rods have things in them.
 		if(do_after(user, src,20))
 			heldrod.forceMove(loc)
 			heldrod=null
+			ask_remakeUI()
 			playsound(src,'sound/machines/door_unbolt.ogg',50)
 		update_icon()
 		return
@@ -50,25 +63,219 @@ the machine which makes fuel rods have things in them.
 		user.visible_message("<span class='warning'>[user] starts prying the electronics out of \the [src].</span>", "<span class='notice'>You start prying the electronics out of \the [src].</span>")
 		if(do_after(user, src, 30 ))
 			user.visible_message("<span class='warning'>[user] pries the electronics out of \the [src]</span>","<span class='notice'>You pry the electronics out of \the [src].</span>")
+			var/obj/machinery/constructable_frame/machine_frame/newframe= new /obj/machinery/constructable_frame/machine_frame(loc)
+			newframe.set_build_state(3)
+			newframe.forceMove(loc)
+			newframe.circuit= new /obj/item/weapon/circuitboard/fission_fuelmaker
+			newframe.components+=new /obj/item/weapon/stock_parts/console_screen
+			newframe.components+=new /obj/item/weapon/stock_parts/manipulator
+			newframe.components+=new /obj/item/weapon/stock_parts/matter_bin
+			newframe.components+=new /obj/item/weapon/stock_parts/matter_bin
+			newframe.components+=new /obj/item/weapon/stock_parts/scanning_module
+			newframe.components+=new /obj/item/weapon/stock_parts/scanning_module
 			qdel(src)
-			var/obj/machinery/constructable_frame/machine_frame/newframe= new /obj/machinery/constructable_frame/machine_frame
-			newframe.loc=src.loc
-			newframe.build_state=3
-			newframe.circuit=/obj/item/weapon/circuitboard/fission_fuelmaker
-			newframe.components+=/obj/item/weapon/stock_parts/console_screen
-			newframe.components+=/obj/item/weapon/stock_parts/manipulator
-			newframe.components+=/obj/item/weapon/stock_parts/matter_bin
-			newframe.components+=/obj/item/weapon/stock_parts/matter_bin
-			newframe.components+=/obj/item/weapon/stock_parts/scanning_module
-			newframe.components+=/obj/item/weapon/stock_parts/scanning_module
+	if( istype(I,/obj/item/weapon/reagent_containers) )
+		var/obj/item/weapon/reagent_containers/C=I
+		if(container)
+			to_chat(user,"There's already a container inside of \the [src].")
+			return TRUE
+		if(!user.drop_item(C))
+			return
+		C.forceMove(null)
+		container=C
+		to_chat(user,"You add \the [C] to \the [src]")
+		ask_remakeUI()
+		return TRUE
+		
 
 	//..()
 
 
 /obj/machinery/atmospherics/unary/fissionfuelmaker/attack_hand(mob/user)
 	if(..())
+		if(container)
+			to_chat(user,"You remove \the [container] from \the [src]")
+			container.loc=src.loc
+			container=null
+			ask_remakeUI()
+		return
+
+	interface.show(user)
+	register_asset("fission.css", 'code/modules/fissionreactor/fission.css')
+	send_asset(user, "fission.css")
+	register_asset("uiBg.png", 'code/modules/html_interface/nanotrasen/uiBg.png')
+	send_asset(user, "uiBg.png")
+	
+	
+/obj/machinery/atmospherics/unary/fissionfuelmaker/Topic(var/href, var/list/href_list , var/datum/html_interface_client/hclient)
+	if(!powered())
+		return
+	if(stat & BROKEN)
 		return
 		
+	if(href_list["action"])
+		switch(href_list["action"])
+			if("eject_fuel")	
+				if(!heldrod)
+					to_chat(hclient.client,"There's no fuel rod to eject.")
+				else
+					heldrod.forceMove(src.loc)
+					heldrod.update_icon()
+					heldrod=null
+			if("eject_cont")
+				if(!container)
+					to_chat(hclient.client,"There's no container to eject.")
+				else
+					container.forceMove(src.loc)
+					container.update_icon()
+					container=null
+					
+	if(href_list["reagent"])
+		if(href_list["dir"]=="to_fuel")
+			var/error=transfer_to_fuelrod( href_list["reagent"] , text2num(href_list["amount"]) || 0 )
+			if(error)
+				to_chat(hclient.client,"could not transfer reagent: [error]!")
+		else if(href_list["dir"]=="from_fuel")
+			var/error=transfer_from_fuelrod( href_list["reagent"] , text2num(href_list["amount"]) || 0 )
+			if(error)
+				to_chat(hclient.client,"could not transfer reagent: [error]!")
+		
+	
+	ask_remakeUI()
+
+
+/obj/machinery/atmospherics/unary/fissionfuelmaker/proc/transfer_from_fuelrod(var/reagent_id,var/amount)
+	if(!container)
+		return "no container"
+	if(!heldrod)
+		return "no fuel rod"
+	
+	amount=min(amount,container.volume-container.reagents.total_volume)
+	
+	var/actually_taken=heldrod.fueldata.take_shit_from(reagent_id,amount ,heldrod.fueldata.fuel)
+	
+	container.reagents.add_reagent(reagent_id, actually_taken)
+
+/obj/machinery/atmospherics/unary/fissionfuelmaker/proc/transfer_to_fuelrod(var/reagent_id,var/amount)
+	if(!container)
+		return "no container"
+	if(!heldrod)
+		return "no fuel rod"
+	
+	amount=min(amount,heldrod.units_of_storage-heldrod.fueldata.fuel.total_volume,container.reagents.amount_cache[reagent_id] || 0)
+	
+	heldrod.fueldata.add_shit_to(reagent_id,amount ,heldrod.fueldata.fuel)
+
+	container.reagents.remove_reagent(reagent_id, amount, TRUE)
+
+/obj/machinery/atmospherics/unary/fissionfuelmaker/proc/ask_remakeUI()
+	buildui()
+	for (var/client in interface.clients)
+		interface.show( interface._getClient(interface.clients[client]) )
+
+/obj/machinery/atmospherics/unary/fissionfuelmaker/proc/buildui()	
+	var/html=""
+
+	var/current_rodamt=0
+	var/rodpercent=0
+	var/estimated_time=0
+	var/estimated_power=0
+	
+	var/list/allreagentlists=list() //stores the reagents of both, at least the id, which is the important one
+	
+	if(container)
+		for(var/datum/reagent/R in container.reagents.reagent_list)
+			allreagentlists+=R
+	
+	if(heldrod)
+		for(var/datum/reagent/R  in heldrod.fueldata.fuel.reagent_list)
+			var/add=TRUE
+			for(var/datum/reagent/R2 in allreagentlists)
+				if(R2.id==R.id)
+					add=FALSE
+					break
+			if(add)
+				allreagentlists+=R
+			
+			current_rodamt+=R.volume
+		rodpercent=current_rodamt/heldrod.units_of_storage
+		rodpercent=floor(rodpercent*100+0.5)
+		
+		estimated_time=heldrod.fueldata.lifetime
+		if(heldrod.fueldata.absorbance>heldrod.fueldata.wattage)
+			if(heldrod.fueldata.wattage>0)
+				estimated_time/= (heldrod.fueldata.absorbance-heldrod.fueldata.wattage)/heldrod.fueldata.wattage
+			else
+				estimated_time="NEVER"
+		else
+			estimated_power=heldrod.fueldata.wattage - heldrod.fueldata.absorbance
+		  
+	
+
+	
+	html={"<table style='width:100%;height:100%;'>
+<tr><td>
+
+<div id='fuelbar'>
+
+<span id='fuelbar_overlay' style='width:[rodpercent]%'></span> <!--apply storage left in the width percentage-->
+
+<span id='fuelbar_text'>[ heldrod ? "[current_rodamt]/[heldrod.units_of_storage]" : "NO FUEL ROD" ]</span>
+
+</div>
+
+</td></tr>
+<tr><td>
+
+<div class='fuelstats'>
+Baseline fuel lifespan: <i>[num2text(estimated_time,99)] minutes </i><br>
+Baseline heat generation: <i>[num2text(estimated_power,99)] Watts</i>
+</div>
+
+</td></tr>
+<tr><td>
+<br>
+<a href='?src=\ref[interface];action=eject_fuel'><span class='button[heldrod ? "" : "_locked"]'>Eject fuel rod</span></a>
+<br><br>
+</td></tr>
+
+
+
+<tr><td>
+
+<span style='width:100%;height:5px;background-color:#ccc;display:inline-block;margin-bottom:1em;'> </span>
+
+<span style='font-size:115%;'>current container: [container ? container : "NONE"] <a href='?src=\ref[interface];action=eject_cont'><span class='button[container ? "" : "_locked"]'>EJECT</span></a><br>
+[container? container.reagents.total_volume : 0]/[ container? container.volume : 0] units</span>
+<br><br>
+
+</td></tr>
+<tr><td>
+
+<table id='fuellisting' style='width:100%;text-align:center;line-height:200%;'>
+	<tr style='font-size:125%;'>
+		<th>material</th>
+		<th>to add</th>
+		<th>available</th>
+	</tr>"}
+	
+
+	for(var/datum/reagent/R in allreagentlists)
+		html+={"	<tr style='font-size:90%;'>
+			<td>[R.name]</td>
+			<td style='white-space:nowrap;'>  <a href='?src=\ref[interface];reagent=[R.id];dir=from_fuel;amount=25'><span class='button'>---</span></a> <a href='?src=\ref[interface];reagent=[R.id];dir=from_fuel;amount=5'><span class='button'>--</span></a> <a href='?src=\ref[interface];reagent=[R.id];dir=from_fuel;amount=1'><span class='button'>-</span></a> [heldrod ? (heldrod.fueldata.fuel.amount_cache[R.id] || 0) : 0] <a href='?src=\ref[interface];reagent=[R.id];dir=to_fuel;amount=1'><span class='button'>+</span></a> <a href='?src=\ref[interface];reagent=[R.id];dir=to_fuel;amount=5'><span class='button'>++</span></a> <a href='?src=\ref[interface];reagent=[R.id];dir=to_fuel;amount=25'><span class='button'>+++</span></a> </td>
+			<td>[container ? (container.reagents.amount_cache[R.id] || 0) : 0]</td>
+			<tr>"}
+	
+	
+	html+={"</table>
+
+</td></tr>
+</table>"}
+
+
+	interface.updateLayout(html)
+	
 
 /obj/machinery/atmospherics/unary/fissionfuelmaker/update_icon()
 	..()

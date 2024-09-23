@@ -80,7 +80,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#500064" //rgb: 80, 0, 100
 	fission_time=18000 //5 hours.
-	fission_absorbtion=5000
+	fission_absorbtion=8333.333
 
 /datum/reagent/plasma/New()
 	..()
@@ -144,7 +144,7 @@
 	density = 19.05
 	specheatcap = 0.124
 	fission_time=9000 //2.5 hours.
-	fission_power=10000
+	fission_power=16666.667
 
 /datum/reagent/uranium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -238,7 +238,7 @@
 	density = 19.85
 	specheatcap = 0.124
 	fission_time=4500 //1.25 hours.
-	fission_power=40000
+	fission_power=66666.67 //spooky
 	
 /datum/reagent/plutonium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -255,7 +255,7 @@
 	specheatcap = 0.936
 	custom_metabolism = 1 //decays really fast, so it shouldn't linger long.
 	fission_time=1500 //25 minutes.
-	fission_power=1000
+	fission_power=1666.6666
 	
 /datum/reagent/plutonium/on_mob_life(var/mob/living/M)
 	if(..())

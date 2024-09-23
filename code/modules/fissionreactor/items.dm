@@ -13,7 +13,7 @@ includes:
 	icon='icons/obj/fissionreactor/items.dmi'
 	icon_state="i_fuelrod_empty"
 	var/datum/fission_fuel/fueldata=null
-	var/units_of_storage=150
+	var/units_of_storage=90
 	
 
 /obj/item/weapon/fuelrod/New()
@@ -33,12 +33,12 @@ includes:
 /obj/item/weapon/fuelrod/small
 	name="small fuel rod"
 	desc="a smaller fuel rod, for lower-power applications."
-	units_of_storage=50
+	units_of_storage=30
 
 /obj/item/weapon/fuelrod/large
 	name="large fuel rod"
 	desc="a very large fuel rod, for high-power or complex mixes. use with caution."
-	units_of_storage=350	
+	units_of_storage=210	
 	
 
 

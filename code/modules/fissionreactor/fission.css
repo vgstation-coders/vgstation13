@@ -140,3 +140,50 @@ color:inherit;
 	text-align:center;
 }
 
+
+
+
+
+
+
+
+/*fuel maker specific stuff here*/
+
+#fuelbar{
+	width:100%;
+	background-color:grey;
+	height:4em;
+	display:block;
+	border:2px solid black;
+}
+
+#fuelbar_overlay{
+	height:3.7em;	
+	background-color:darkgreen;
+	display:block;
+	border-right:2px solid black;
+}
+
+#fuelbar_text{
+	position:relative;
+	top:-1.5em;
+	text-align:center;
+	display:block;
+	font-size:2em;
+	font-weight:bold;
+	color:black;
+	text-shadow: 0px 0px 3px white;
+}
+
+.fuelstats{
+	font-size:1.5em;
+
+}
+
+#fuellisting{
+	font-size:125%;
+}
+
+#fuellisting > * > th{
+	font-size:150%;
+}

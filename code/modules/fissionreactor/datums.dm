@@ -410,7 +410,9 @@ datums for the fission reactor, which includes the fuel and reactor
 	for (var/datum/reagent/R in holder.reagent_list)
 		if (R.id == reagent)
 			R.volume += amount
+			holder.amount_cache[R.id]=R.volume
 			holder.update_total()
+			rederive_stats()
 			return 0
 	var/datum/reagent/D = chemical_reagents_list[reagent]
 	if(D)
@@ -419,12 +421,24 @@ datums for the fission reactor, which includes the fuel and reactor
 		holder.reagent_list += R
 		R.holder = holder
 		R.volume = amount
-
+		holder.amount_cache[R.id]=amount
 		holder.update_total()
+		rederive_stats()
 		return 0
 	else
 		return 1
-	rederive_stats()
+	
+/datum/fission_fuel/proc/take_shit_from(var/reagent, var/amount,var/datum/reagents/holder)
+	for (var/datum/reagent/R in holder.reagent_list)
+		if(R.id==reagent)
+			var/taken=min(amount,R.volume)
+			R.volume=max(R.volume-amount,0)
+			holder.amount_cache[R.id]=amount
+			holder.update_total()
+			rederive_stats()
+			return taken 
+			
+	return 0		
 	
 	
 	
