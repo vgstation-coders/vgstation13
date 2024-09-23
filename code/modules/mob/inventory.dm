@@ -301,6 +301,7 @@
 		. = put_in_hands(newitem)
 	newitem.cant_drop = olditem.cant_drop
 	newitem.canremove = olditem.canremove
+	newitem.recycles_cash = olditem.recycles_cash
 	if(move_in)
 		olditem.forceMove(newitem)
 	else
