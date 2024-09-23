@@ -2953,6 +2953,7 @@
 #include "maps\defficiency\areas.dm"
 #include "maps\lampreystation\lamprey.dm"
 #include "maps\packedstation\telecomms.dm"
+#include "maps\randomvaults\advanced_pocketsat.dm"
 #include "maps\randomvaults\dance_revolution.dm"
 #include "maps\randomvaults\keycard_vault.dm"
 #include "maps\randomvaults\laundromat.dm"
