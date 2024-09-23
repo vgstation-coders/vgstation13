@@ -248,6 +248,7 @@
 		return 0
 
 	var/pressure = air_contents.return_pressure()
+
 	if(pressure > TANK_FRAGMENT_PRESSURE)
 
 		if(!istype(src.loc,/obj/item/device/transfer_valve))
