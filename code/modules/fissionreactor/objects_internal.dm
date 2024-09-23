@@ -22,7 +22,7 @@ included:
 		loc=null
 		part.update_icon()
 	if(associated_reactor)
-		associated_reactor.init_parts()
+		associated_reactor.handledestruction(src)
 	..()
 
 /obj/machinery/fissionreactor/fissionreactor_controlrod

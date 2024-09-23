@@ -24,6 +24,12 @@ included:
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/proc/get_pipe_dir() //the atmos gods demand a sacrifice.
 	return dir
 
+
+/obj/machinery/atmospherics/unary/fissionreactor_coolantport/Destroy()
+	if(associated_reactor)
+		associated_reactor.handledestruction(src)
+	..()
+
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/examine()
 	..()
 	if(associated_reactor && associated_reactor.considered_on())
@@ -488,6 +494,11 @@ included:
 	name="fission reactor casing"
 	icon='icons/obj/fissionreactor/reactorcase.dmi'
 	icon_state="case"
+
+/obj/structure/fission_reactor_case/Destroy()
+	if(associated_reactor)
+		associated_reactor.handledestruction(src)
+	..()
 	
 /obj/structure/fission_reactor_case/examine()
 	..()

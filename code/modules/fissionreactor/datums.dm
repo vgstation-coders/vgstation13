@@ -45,18 +45,67 @@ datums for the fission reactor, which includes the fuel and reactor
 	fissionreactorlist+=src
 
 /datum/fission_reactor_holder/Destroy()
-	fissionreactorlist-=src
+	fissionreactorlist-=src //remove from global list
+	for(var/obj/machinery/fissionreactor/fissionreactor_fuelrod/fuelrod in fuel_rods) //dissassociate all parts (if any still exist).
+		fuelrod.associated_reactor=null
+	fuel_rods=list()
+	for(var/obj/machinery/fissionreactor/fissionreactor_controlrod/controlrod in control_rods)
+		controlrod.associated_reactor=null
+	control_rods=list()
+	for(var/obj/structure/fission_reactor_case/casing in casing_parts)
+		casing.associated_reactor=null
+	casing_parts=list()
+	for(var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/coolport in coolant_ports)
+		coolport.associated_reactor=null
+	coolant_ports=list()	
+	if(controller)
+		controller.associated_reactor=null
+		controller=null
+	fuel=null
+
+
+/datum/fission_reactor_holder/proc/verify_integrity() //destroys the reactor if too many parts are missing. fixes stuff lingering.
+	var/notlookinggood_points=0
+
+	var/exterior_elements=0
+	exterior_elements+=coolant_ports.len
+	exterior_elements+=casing_parts.len
+	exterior_elements+=controller?1:0
+	var/expected_exterior=2*abs(origin_x-corner_x)+2*abs(origin_y-corner_y) //also the perimeter. kind of.
+	expected_exterior-=4 //to account for the double counting of corner pieces.
+
+	if(exterior_elements/expected_exterior < 0.5) //half the case remaining?
+		notlookinggood_points++
+	if(!fuel_rods.len) //no fuel rods?
+		notlookinggood_points++
+	if(!controller) //no controller?
+		notlookinggood_points++
+	if(!coolant_ports.len) //no coolant ports?
+		notlookinggood_points++
+	
+	if(notlookinggood_points>=2) //if 2 or more criteria are met, something really bad has happened, so just destroy the whole thing.
+		qdel(src)
 
 /datum/fission_reactor_holder/proc/handledestruction(var/obj/shitgettingfucked)
 	if(istype(shitgettingfucked, /obj/machinery/fissioncontroller ))
 		controller=null
-	breaches+=shitgettingfucked.loc
-	recalculatereactorstats()
+		breaches+=shitgettingfucked.loc
+	if(istype(shitgettingfucked, /obj/machinery/fissionreactor/fissionreactor_fuelrod ))
+		fuel_rods-=shitgettingfucked
+	if(istype(shitgettingfucked, /obj/machinery/fissionreactor/fissionreactor_controlrod ))
+		control_rods-=shitgettingfucked
+	if(istype(shitgettingfucked, /obj/structure/fission_reactor_case ))
+		casing_parts-=shitgettingfucked
+		breaches+=shitgettingfucked.loc
+	if(istype(shitgettingfucked, /obj/machinery/atmospherics/unary/fissionreactor_coolantport ))
+		coolant_ports-=shitgettingfucked
+		breaches+=shitgettingfucked.loc
 	
-	//init_parts() //re-scan the parts to generate the new stats. the show must go on!
+	
+	
+	recalculatereactorstats() //re-scan the parts to generate the new stats. the show must go on!
+	verify_integrity() //unless we are too far gone
 
-	//if(fuel_rods.len==0) //no fuel rods means nothing to react with.
-		//qdel(src)
 
 /datum/fission_reactor_holder/proc/considered_on()
 	if(!fuel) //no fuel? not on.
@@ -357,14 +406,6 @@ datums for the fission reactor, which includes the fuel and reactor
 	
 	temperature+=totalpowertodump*powerfactor/heat_capacity
 	
-
-	
-	if(temperature>=FISSIONREACTOR_MELTDOWNTEMP)
-		if(graceperiodtick)
-			meltdown()
-		graceperiodtick=TRUE
-	else
-		graceperiodtick=FALSE
 	
 	
 /datum/fission_reactor_holder/proc/coolantcycle()
@@ -387,7 +428,21 @@ datums for the fission reactor, which includes the fuel and reactor
 	temperature=newtemp*heatconductivitycoeff + (1-heatconductivitycoeff)*temperature
 	
 	
+/datum/fission_reactor_holder/proc/misccycle() //cleanup and other checks
 	
+	for(var/turf/breachlocation in breaches)
+		if(rand()>0.5) //50% chance every tick to leak
+			var/datum/gas_mixture/removed= coolant.remove(coolant.total_moles*0.5*rand(),TRUE,TRUE) //when we leak, leak 0-50% of the coolant
+			breachlocation.return_air().merge(removed,TRUE)
+	
+	
+	if(temperature>=FISSIONREACTOR_MELTDOWNTEMP)
+		if(graceperiodtick)
+			meltdown()
+		graceperiodtick=TRUE
+	else
+		graceperiodtick=FALSE
+
 	
 	
 
