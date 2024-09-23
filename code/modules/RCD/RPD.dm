@@ -149,9 +149,9 @@
 		var/multitext=""
 		var/autotext=""
 	
-		if (has_metal_slime)//build_all
+		if (has_slimes & SLIME_METAL)//build_all
 			multitext=" <div style='margin-top:1em;'><b>Multilayer Mode: </b><a href='?src=\ref[interface];toggle_multi=1'><span class='[build_all? "schem_selected" : "schem"]'>[build_all ? "On" : "Off"]</span></a></div> "
-		if (has_yellow_slime)//build_all
+		if (has_slimes & SLIME_YELLOW)//build_all
 			autotext=" <div style='margin-top:1em;'><b>Autowrench: </b><a href='?src=\ref[interface];toggle_auto=1'><span class='[autowrench? "schem_selected" : "schem"]'>[autowrench ? "On" : "Off"]</span></a></div> "
 	
 		for(var/client/client in interface.clients)
@@ -173,11 +173,11 @@
 /obj/item/device/rcd/rpd/Topic(var/href, var/list/href_list)
 	..()
 	if (href_list["toggle_auto"])
-		autowrench=has_yellow_slime ? !autowrench : 0
+		autowrench=has_slimes & SLIME_METAL ? !autowrench : 0
 		rebuild_ui()
 		return TRUE
 	if (href_list["toggle_multi"])
-		build_all=has_metal_slime ? !build_all : 0
+		build_all=has_slimes & SLIME_METAL ? !build_all : 0
 		rebuild_ui()
 		return TRUE
 	

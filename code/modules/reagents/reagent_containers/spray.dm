@@ -17,7 +17,6 @@
 	possible_transfer_amounts = null
 	slimeadd_message = "You drop the slime extract down into the spray nozzle."
 	var/preset_reagent
-	var/slime_refill_type = SLIME_GREY
 	var/melted = 0
 
 	var/delay_spraying = TRUE // Whether to delay the next attack after using it
@@ -41,11 +40,11 @@
 		user.create_in_hands(src, new /obj/item/weapon/gun_assembly(loc, "spraybottle_assembly"), W, msg = "You press \the [W] into the melted plastic on the top of \the [src].")
 
 /obj/item/weapon/reagent_containers/spray/slime_act(primarytype, mob/user)
-	if(primarytype == slime_refill_type && preset_reagent)
+	if(preset_reagent && (slimes_accepted & primarytype))
 		slimeadd_message += ", and the reagents inside swells up to the brim"
 	slimeadd_message += "."
 	if(..())
-		if(primarytype == slime_refill_type && preset_reagent)
+		if(preset_reagent && (slimes_accepted & primarytype))
 			reagents.add_reagent(preset_reagent, volume)//in a perfect world, we'd calculate how much to add, but the add_reagents() already has sanity checking for max volume
 		slimeadd_message = initial(slimeadd_message)
 		return TRUE
@@ -100,7 +99,7 @@
 		reagents.add_reagent(LUBE, 2)
 
 /obj/item/weapon/reagent_containers/spray/proc/make_puff(var/atom/target, var/mob/user)
-	if((has_slimes & slime_refill_type) && preset_reagent)
+	if((has_slimes & slimes_accepted) && preset_reagent)
 		reagents.add_reagent(preset_reagent, 10)
 	// Create the chemical puff
 	var/transfer_amount = amount_per_transfer_from_this
@@ -125,7 +124,7 @@
 /obj/item/weapon/reagent_containers/spray/cleaner
 	name = "space cleaner"
 	desc = "BLAM!-brand non-foaming space cleaner!"
-	slime_refill_type = SLIME_BLUE
+	slimes_accepted = SLIME_BLUE
 	preset_reagent = CLEANER
 	var/image/content_reagent
 
@@ -158,14 +157,14 @@
 	volume = 40
 	amount_per_transfer_from_this = 10
 	slimeadd_message = "You drop the slime extract down into the spray canister"
-	slime_refill_type = SLIME_ORANGE
+	slimes_accepted = SLIME_ORANGE
 	preset_reagent = CONDENSEDCAPSAICIN
 
 // Luminol
 /obj/item/weapon/reagent_containers/spray/luminol
 	name = "spray bottle (luminol)"
 	desc = "A spray bottle with an unscrewable top. A label on the side reads 'Contains: Luminol'."
-	slime_refill_type = SLIME_GREEN
+	slimes_accepted = SLIME_GREEN
 	preset_reagent = LUMINOL
 
 // Plant-B-Gone
@@ -175,7 +174,7 @@
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
-	slime_refill_type = SLIME_RED
+	slimes_accepted = SLIME_RED
 	preset_reagent = PLANTBGONE
 
 /obj/item/weapon/reagent_containers/spray/bugzapper
@@ -184,14 +183,14 @@
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "pestspray"
 	item_state = "pestspray"
-	slime_refill_type = SLIME_RED
+	slimes_accepted = SLIME_RED
 	preset_reagent = INSECTICIDE
 
 //Fake Xeno Creep Sprayer
 /obj/item/weapon/reagent_containers/spray/creepspray
 	name = "Alien Weed Spray"
 	desc = "You're unsure if this is meant to cull or create weeds. The Discount Dan logo is haphazardly slapped on top of a faded yellow 'W' and gray 'Y'"
-	slime_refill_type = SLIME_PYRITE
+	slimes_accepted = SLIME_PYRITE
 	preset_reagent = FAKE_CREEP
 
 //chemsprayer

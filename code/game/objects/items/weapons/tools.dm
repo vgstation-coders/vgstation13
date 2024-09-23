@@ -92,13 +92,8 @@
 	force = 15.0
 	throwforce = 12.0
 	slimeadd_message = "You shove the slime extract inside SRCTAG's head"
-
-/obj/item/tool/wrench/socket/slime_act(primarytype, mob/user)
-	if(primarytype == SLIME_BLUESPACE)
-		slimeadd_message += ", and feel a small draft of air sucking into it"
-	slimeadd_message += "."
-	. = ..()
-	slimeadd_message = initial(slimeadd_message)
+	slimes_accepted = SLIME_BLUESPACE
+	slimeadd_success_message = "A small draft of air sucks into it"
 
 /*
  * Screwdriver

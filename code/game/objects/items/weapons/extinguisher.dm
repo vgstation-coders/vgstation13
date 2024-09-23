@@ -18,7 +18,9 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	attack_verb = list("slams", "whacks", "bashes", "thunks", "batters", "bludgeons", "thrashes")
-	slimeadd_message = "You attach the slime extract to the extinguisher's funnel."
+	slimeadd_message = "You attach the slime extract to the extinguisher's funnel"
+	slimes_accepted = SLIME_BLUE
+	slimeadd_success_message = "It feels much colder now"
 	var/max_water = 50
 	var/last_use = 1.0
 	var/safety = 1
@@ -81,12 +83,6 @@
 	src.desc = "The safety is [safety ? "on" : "off"]."
 	to_chat(user, "The safety is [safety ? "on" : "off"].")
 	return
-
-/obj/item/weapon/extinguisher/foam/slime_act(primarytype, mob/user)
-	if(primarytype == SLIME_BLUE)
-		slimeadd_message += " It feels much colder now."
-	. = ..()
-	slimeadd_message = initial(slimeadd_message)
 
 /obj/item/weapon/extinguisher/attackby(obj/item/W, mob/user)
 	if(user.stat || user.restrained() || user.lying)

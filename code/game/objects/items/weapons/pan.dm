@@ -23,7 +23,9 @@
 	slot_flags = SLOT_HEAD
 	armor = list(melee = 30, bullet = 30, laser = 30, energy = 10, bomb = 25, bio = 0, rad = 0)
 	body_parts_covered = HEAD
-	slimeadd_message = "You spread the slime extract on the SRCTAG."
+	slimeadd_message = "You spread the slime extract on the SRCTAG"
+	slimes_accepted = SLIME_SILVER
+	slimeadd_success_message = "It gives off a distinct shine as a result"
 	var/mob/chef //The mob who most recently added a non-reagent ingredient to or picked up the pan.
 	var/limit = 10 //Number of ingredients that the pan can hold at once.
 	var/speed_multiplier = 1 //Can be changed to modify cooking speed.
@@ -155,12 +157,6 @@
 		var/obj/O = target
 		if(!O.is_cooktop)
 			transfer(target, user)
-
-/obj/item/weapon/reagent_containers/pan/slime_act(primarytype, mob/user)
-	if(primarytype == SLIME_SILVER)
-		slimeadd_message += " It gives off a distinct shine as a result."
-	. = ..()
-	slimeadd_message = initial(slimeadd_message)
 
 /obj/item/weapon/reagent_containers/pan/attackby(var/obj/item/I, var/mob/user)
 

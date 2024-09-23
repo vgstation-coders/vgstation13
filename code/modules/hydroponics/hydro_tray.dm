@@ -13,6 +13,8 @@ var/list/hydro_trays = list()
 	idle_power_usage = 10
 	active_power_usage = 50
 	slimeadd_message = "You attach the slime extract to SRCTAG's internal mechanisms"
+	slimes_accepted = SLIME_GREEN
+	slimeadd_success_message = "A faint whiff of clonexadone is emitted from them"
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | MULTIOUTPUT
 
 	var/draw_warnings = 1 // Set to 0 to stop it from drawing the alert lights.
@@ -469,13 +471,6 @@ var/list/hydro_trays = list()
 	. = ..()
 	if (.)
 		power_change()//calls update_icon()
-
-/obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
-	if(primarytype == SLIME_GREEN)
-		slimeadd_message += ", catching a faint whiff of clonexadone from them"
-	slimeadd_message += "."
-	. = ..()
-	slimeadd_message = initial(slimeadd_message)
 
 /obj/machinery/portable_atmospherics/hydroponics/wind_act(var/differential, var/list/connecting_turfs)
 	if (seed)

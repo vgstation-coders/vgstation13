@@ -13,7 +13,9 @@
 	flags = OPENCONTAINER | NOREACT
 	pass_flags = PASSTABLE
 	log_reagents = 0 //transferred 5u of flour from a flour sack [0x20107e8] to Microwave [0x2007fdd]. transferred 5u of flour from a flour sack [0x20107e8] to Microwave [0x2007fdd]. transferred 5u of flour from a flour sack [0x20107e8] to Microwave [0x2007fdd].
-	slimeadd_message = "You place the slime extract into the cooking mechanisms."
+	slimeadd_message = "You place the slime extract into the cooking mechanisms"
+	slimes_accepted = SLIME_SILVER
+	slimeadd_success_message = "It gives off a distinct shine as a result"
 	var/operating = 0 // Is it on?
 	var/opened = 0.0
 	var/dirty = 0 // = {0..100} Does it need cleaning?
@@ -96,12 +98,6 @@
 /*******************
 *   Item Adding
 ********************/
-
-/obj/machinery/microwave/slime_act(primarytype, mob/user)
-	if(primarytype == SLIME_SILVER)
-		slimeadd_message += " It gives off a distinct shine as a result."
-	. = ..()
-	slimeadd_message = initial(slimeadd_message)
 
 /obj/machinery/microwave/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(contents.len >= limit)

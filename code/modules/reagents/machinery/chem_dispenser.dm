@@ -10,6 +10,8 @@
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 40
 	slimeadd_message = "You throw the slime into the dispenser's tank"
+	slimes_accepted = SLIME_BLACK
+	slimeadd_success_message = "A new option appears on the dispenser screen"
 	var/energy = 0
 	var/max_energy = 50
 	var/rechargerate = 2
@@ -21,7 +23,6 @@
 	var/useramount = 30 // Last used amount
 	var/required_quirk = MODULE_CAN_HANDLE_CHEMS
 	var/template_path = "chem_dispenser.tmpl"
-	var/chem_dispensing_slimetypes = SLIME_BLACK
 	var/list/dispensable_reagents = list(
 		HYDROGEN,
 		LITHIUM,
@@ -387,20 +388,14 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			return
 
 /obj/machinery/chem_dispenser/slime_act(primarytype, mob/user)
-	if(chem_dispensing_slimetypes & primarytype)
-		slimeadd_message += ", and see a new option appear on the dispenser screen"
-	slimeadd_message += "."
-	if(..())
-		if(chem_dispensing_slimetypes & primarytype)
-			switch(primarytype)
-				if(SLIME_BLACK)
-					dispensable_reagents.Add(DSYRUP)
-				if(SLIME_PYRITE)
-					dispensable_reagents.Add(BANANA)
-					dispensable_reagents.Add(COLORFUL_REAGENT)
-		slimeadd_message = initial(slimeadd_message)
-		return TRUE
-	slimeadd_message = initial(slimeadd_message)
+	. = ..()
+	if(. && (slimes_accepted & primarytype))
+		switch(primarytype)
+			if(SLIME_BLACK)
+				dispensable_reagents.Add(DSYRUP)
+			if(SLIME_PYRITE)
+				dispensable_reagents.Add(BANANA)
+				dispensable_reagents.Add(COLORFUL_REAGENT)
 
 /obj/machinery/chem_dispenser/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -541,7 +536,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	pass_flags = PASSTABLE
 	beaker_height = -6
 	required_quirk = MODULE_CAN_HANDLE_FOOD
-	chem_dispensing_slimetypes = SLIME_BLACK|SLIME_PYRITE
+	slimes_accepted = SLIME_BLACK|SLIME_PYRITE
 	dispensable_reagents = list(
 		BEER,
 		WHISKEY,

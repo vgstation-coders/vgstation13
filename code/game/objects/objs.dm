@@ -52,6 +52,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	//Does this item have slimes installed? Bitflag for each type.
 	var/has_slimes = 0
 	var/slimeadd_message = "You add the slime extract to SRCTAG."
+	var/slimeadd_success_message
+	var/slimes_accepted = 0
 
 	var/on_armory_manifest = FALSE // Does this get included in the armory manifest paper?
 	var/holds_armory_items = FALSE // Does this check inside the object for stuff to include?
@@ -489,7 +491,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return FALSE
 	has_slimes |= primarytype
 	slimeadd_message = replacetext(slimeadd_message,"SRCTAG","\the [src]")
-	to_chat(user, slimeadd_message)
+	to_chat(user, "[slimeadd_message][slimes_accepted & primarytype ? ". [slimeadd_success_message]" : ""].")
 	return TRUE
 
 /obj/singularity_pull(S, current_size, repel = FALSE)

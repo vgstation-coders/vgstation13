@@ -10,6 +10,8 @@
 	var/heating = BUNSEN_OFF //whether the bunsen is turned on
 	var/obj/item/weapon/reagent_containers/held_container
 	slimeadd_message = "You add the slime extract to the fuel port."
+	slimes_accepted = SLIME_RED
+	slimeadd_success_message = "It feels full now."
 	ghost_read = 0
 	is_cooktop = TRUE
 
@@ -46,14 +48,11 @@
 /////////////////////
 
 /obj/machinery/bunsen_burner/slime_act(primarytype, mob/user)
-	if(primarytype == SLIME_RED)
-		slimeadd_message += " It feels full now."
-	if(..())
+	. = ..()
+	if(primarytype == SLIME_RED && .)
 		reagents.clear_reagents()
 		reagents.add_reagent(GLYCEROL, 250)
-		slimeadd_message = initial(slimeadd_message)
-		return TRUE
-	slimeadd_message = initial(slimeadd_message)
+		has_slimes &= ~SLIME_RED
 
 /obj/machinery/bunsen_burner/splashable()
 	return FALSE
