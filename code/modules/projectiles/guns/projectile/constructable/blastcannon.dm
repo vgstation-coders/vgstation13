@@ -17,6 +17,8 @@
 	fire_volume = 100
 	conventional_firearm = 0
 	silenced = 1
+	slimes_accepted = SLIME_OIL
+	slimeadd_success_message = "It feels lighter"
 	var/obj/item/device/transfer_valve/bomb = null
 	var/obj/item/toy/bomb/toybomb = null
 	var/datum/gas_mixture/bomb_air_contents_1 = null
