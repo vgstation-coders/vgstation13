@@ -5,8 +5,6 @@
 	item_state = "ttv_empty"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/tanks.dmi', "right_hand" = 'icons/mob/in-hand/right/tanks.dmi')
 	desc = "Regulates the transfer of air between two tanks."
-	slimes_accepted = SLIME_OIL
-	slimeadd_success_message = "It feels lighter"
 	var/obj/item/weapon/tank/tank_one
 	var/obj/item/weapon/tank/tank_two
 	var/obj/item/device/attached_device
