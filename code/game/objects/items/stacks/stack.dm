@@ -366,7 +366,7 @@
 
  */
 
-/proc/drop_stack(new_stack_type = /obj/item/stack, atom/loc, add_amount = 1, mob/user)
+/proc/drop_stack(new_stack_type = /obj/item/stack, atom/loc, add_amount = 1, mob/user, recyclescash)
 	if(!ispath(new_stack_type, /obj/item/stack))
 		return new new_stack_type(loc)
 	for(var/obj/item/stack/S in loc)
@@ -377,6 +377,7 @@
 					to_chat(user, "<span class='info'>You add [add_amount] item\s to the stack. It now contains [S.amount] [S.correct_name()].</span>")
 				return S
 	var/obj/item/stack/S = new_stack_type
+	S.recycles_cash = recyclescash
 	for(var/i = 0 to round(add_amount/initial(S.max_amount)))
 		if (add_amount <= 0)
 			continue
