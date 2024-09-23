@@ -8,10 +8,7 @@
 	mount_reqs = list("simfloor")
 	flags = FPRINT
 	siemens_coefficient = 1
-
-/obj/item/mounted/frame/airlock_controller/do_build(turf/on_wall, mob/user)
-	new /obj/machinery/embedded_controller(get_turf(src), get_dir(user, on_wall), 1)
-	qdel(src)
+	resulttype = /obj/machinery/embedded_controller
 
 /////////////////////////////////////////////////////////////
 // Embedded Controller Boards

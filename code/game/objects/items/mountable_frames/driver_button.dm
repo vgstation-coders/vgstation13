@@ -5,10 +5,7 @@
 	icon_state = "launcherbtt_frame"
 	flags = FPRINT
 	mount_reqs = list("simfloor")
-
-/obj/item/mounted/frame/driver_button/do_build(turf/on_wall, mob/user)
-	new /obj/machinery/driver_button(get_turf(user), get_dir(user, on_wall))
-	qdel(src)
+	resulttype = /obj/machinery/driver_button
 
 /obj/item/mounted/frame/driver_button/signaler_button
 	name = "signaler button frame"
@@ -20,6 +17,7 @@
 	var/obj/item/device/assembly/signaler/signaler_button/I = new (get_turf(user), get_dir(user, on_wall))
 	I.code = src.code
 	I.frequency = src.frequency
+	I.recycles_cash = src.recycles_cash
 	qdel(src)
 
 /obj/item/mounted/frame/driver_button/signaler_button/attackby(obj/item/weapon/W, mob/user)

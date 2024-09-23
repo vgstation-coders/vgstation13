@@ -6,7 +6,5 @@
 	flags = FPRINT
 	w_type=2*RECYK_METAL
 	mount_reqs = list("nospace", "simfloor")
-
-/obj/item/mounted/frame/light_switch/do_build(turf/on_wall, mob/user)
-	new /obj/machinery/light_switch(get_turf(src), get_dir(user, on_wall), 0)
-	qdel(src)
+	resulttype = /obj/machinery/light_switch
+	building = FALSE

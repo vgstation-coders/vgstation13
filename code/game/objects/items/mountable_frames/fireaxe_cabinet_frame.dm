@@ -8,7 +8,4 @@
 	melt_temperature = MELTPOINT_STEEL
 	w_type = NOT_RECYCLABLE //Plasteel recycling doesn't exist, to my knowledge.
 	mount_reqs = list("simfloor", "nospace")
-
-/obj/item/mounted/frame/fireaxe_cabinet_frame/do_build(turf/on_wall, mob/user)
-	new /obj/structure/fireaxecabinet/empty(get_turf(src), get_dir(user, on_wall), 1)
-	qdel(src)
+	resulttype = /obj/structure/fireaxecabinet/empty

@@ -7,6 +7,7 @@
 	w_type=RECYK_METAL
 	mount_reqs = list("simfloor", "nospace")
 	sheets_refunded = 0 // we handle this in the datum below
+	resulttype = /obj/machinery/power/apc
 	var/datum/construction/construct
 
 /obj/item/mounted/frame/apc_frame/New()
@@ -39,7 +40,3 @@
 				qdel(T)
 		return 1
 	return
-
-/obj/item/mounted/frame/apc_frame/do_build(turf/on_wall, mob/user)
-	new /obj/machinery/power/apc(get_turf(src), get_dir(user, on_wall), 1)
-	qdel(src)

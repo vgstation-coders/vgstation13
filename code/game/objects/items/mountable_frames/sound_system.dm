@@ -6,7 +6,5 @@
 	flags = FPRINT
 	w_type=2*RECYK_METAL
 	mount_reqs = list("nospace", "simfloor")
-
-/obj/item/mounted/frame/soundsystem/do_build(turf/on_wall, mob/user)
-	new /obj/machinery/media/receiver/boombox/wallmount(get_turf(src), get_dir(user, on_wall), 0)
-	qdel(src)
+	resulttype = /obj/machinery/media/receiver/boombox/wallmount
+	building = FALSE
