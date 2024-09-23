@@ -271,7 +271,6 @@
 "Ie" = (
 /obj/structure/rack,
 /obj/item/clothing/suit/wizrobe/necro,
-/obj/item/clothing/head/wizard/necro,
 /obj/item/clothing/shoes/sandal,
 /turf/unsimulated/floor{
 	icon_state = "grimy"
@@ -447,7 +446,7 @@
 /area/wizard_station)
 "XB" = (
 /obj/structure/table/woodentable,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "wood"

@@ -227,9 +227,12 @@ var/list/potential_bonus_items = list(
 			results = "The vox raiders didn't beat the previous record of [score_to_beat]."
 
 		for (var/datum/role/R in members)
-			to_chat(R.antag.current, "<span class='notice'>The raid is over. You'll go back to the shoal in a few minutes...</span>")
-			spawn (1 MINUTES)
-				qdel(R.antag.current)
+			if(get_area(R.antag.current) == end_area)
+				to_chat(R.antag.current, "<span class='notice'>The raid is over. You'll go back to the shoal in a few minutes...</span>")
+				spawn (1 MINUTES)
+					qdel(R.antag.current)
+			else
+				to_chat(R.antag.current, "<span class='notice'>The raid is over, but you were left behind by your skipjack. You're on your own now.</span>")
 
 /datum/faction/vox_shoal/proc/count_score(var/atom/O)
 	if (ishuman(O))
@@ -322,7 +325,7 @@ var/list/potential_bonus_items = list(
 	new /obj/item/clothing/suit/space/vox/carapace(src)
 	new /obj/item/clothing/head/helmet/space/vox/carapace(src)
 	new /obj/item/weapon/melee/telebaton(src)
-	new /obj/item/clothing/glasses/thermal/monocle(src)
+	new /obj/item/clothing/glasses/hud/thermal/monocle(src)
 	new /obj/item/device/chameleon(src)
 	var/obj/item/weapon/crossbow/W = new(src)
 	W.cell = new /obj/item/weapon/cell/crap(W)
@@ -352,7 +355,7 @@ var/list/potential_bonus_items = list(
 	new /obj/item/clothing/suit/space/vox/carapace(src)
 	new /obj/item/clothing/head/helmet/space/vox/carapace(src)
 	new /obj/item/weapon/storage/belt/utility/full(src)
-	new /obj/item/clothing/glasses/thermal/monocle(src)
+	new /obj/item/clothing/glasses/hud/thermal/monocle(src)
 	new /obj/item/weapon/card/emag(src)
 	new /obj/item/weapon/gun/dartgun/vox/raider(src)
 	new /obj/item/device/multitool(src)

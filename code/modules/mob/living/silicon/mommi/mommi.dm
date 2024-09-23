@@ -13,7 +13,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	maxHealth = 60
 	health = 60
 
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	mob_bump_flag = ROBOT
 	mob_swap_flags = ALLMOBS
 	mob_push_flags = 0
@@ -341,3 +341,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(gives_milk && udder && prob(5))
 		udder.add_reagent(MOMMIMILK, rand(5, 10))
 	..()
+
+/mob/living/silicon/robot/mommi/ignite()
+	return 0
+
+/mob/living/silicon/robot/mommi/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	return 0

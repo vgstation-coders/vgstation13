@@ -398,7 +398,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	else
 		user.simple_message("<span class='notice'>You clean \the [target.name].</span>",
 			"<span class='warning'>You [pick("deface","ruin","stain")] \the [target.name].</span>")
-		target.clean_blood()
+		target.clean_act(CLEANLINESS_SPACECLEANER)
 	return
 
 /obj/machinery/bot/cleanbot/state_controls_pai(obj/item/device/paicard/P)
@@ -424,7 +424,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	else if(W.type == /obj/item/weapon/kitchen/utensil/knife/large && !armed && user.a_intent != I_HURT)
 		if(user.drop_item(W))
 			qdel(W)
-			to_chat(user, "<span class='notice'>\the [src] extends a tiny arm from a hidden compartment and grasps \the [W]. Its light blinks excitedly for a moment before returning to normal.</span>")
+			to_chat(user, "<span class='notice'>\The [src] extends a tiny arm from a hidden compartment and grasps \the [W]. Its light blinks excitedly for a moment before returning to normal.</span>")
 			armed++
 			icon_state = "maidbot_battle[on]"
 			icon_initial = "maidbot_battle"

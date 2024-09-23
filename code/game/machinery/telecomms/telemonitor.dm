@@ -96,6 +96,7 @@
 		..() //Handles off or broken
 	else
 		icon_state = screen == 3 ? "network_unlinked" : "network_monitor" //Special icon if on screen 3
+		update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 
 /obj/machinery/computer/telecomms/monitor/Topic(href, href_list)
 	if(..())
@@ -165,7 +166,7 @@
 	if(href_list["network"])
 
 		var/newnet = sanitize(input(usr, "Which network do you want to view?", "Comm Monitor", network) as null|text)
-		if(newnet && ((usr in range(1, src) || issilicon(usr))))
+		if(newnet && ((usr in range(1, src)) || issilicon(usr)))
 			if(length(newnet) > 15)
 				temp = "<font color = #D70B00>- FAILED: NETWORK TAG STRING TOO LENGHTLY -</font color>"
 

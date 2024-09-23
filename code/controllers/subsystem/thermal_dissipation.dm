@@ -1,14 +1,16 @@
 var/datum/subsystem/thermal_dissipation/SStd
-var/list/thermal_dissipation_reagents = list()
+var/list/datum/reagents/thermal_dissipation_reagents = list()
 
 /datum/subsystem/thermal_dissipation
 	name          = "Thermal Dissipation"
 	wait          = SS_WAIT_THERM_DISS
-	flags         = SS_KEEP_TIMING
+	//flags         = SS_KEEP_TIMING
+	flags 	 = SS_NO_FIRE
+	can_fire = FALSE //Turning thermal dissipation OFF until the matter of its CPU usage has been sorted out, and ideally thermal energy transfer has been fleshed out more as a game mechanic
 	priority      = SS_PRIORITY_THERM_DISS
 	display_order = SS_DISPLAY_THERM_DISS
 
-	var/list/currentrun
+	var/list/datum/reagents/currentrun
 	var/currentrun_index
 
 /datum/subsystem/thermal_dissipation/New()

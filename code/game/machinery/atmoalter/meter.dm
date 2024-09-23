@@ -14,13 +14,15 @@
 	active_power_usage = 4
 	machine_flags = MULTITOOL_MENU
 
-/obj/machinery/meter/New(newloc, new_target, freq = 1439, id = null)
+/obj/machinery/meter/New(newloc, new_target, freq, id)
 	..(newloc)
 	src.target = new_target
 	if(target)
 		setAttachLayer(target.piping_layer)
-	frequency = freq
-	id_tag = id
+	if (freq != null)
+		frequency = freq
+	if (id != null)
+		id_tag = id
 	return 1
 
 /obj/machinery/meter/initialize()
@@ -110,7 +112,7 @@
 	if (src.target)
 		var/datum/gas_mixture/environment = target.return_air()
 		if(environment)
-			t += "The pressure gauge reads [round(environment.return_pressure(), 0.01)] kPa; [round(environment.temperature,0.01)]K ([round(environment.temperature-T0C,0.01)]&deg;C)"
+			t += "The pressure gauge reads [round(environment.return_pressure(), 0.01)] kPa; [environment.temperature_kelvin_pretty()]K ([environment.temperature_celsius_pretty()]&deg;C)"
 		else
 			t += "The sensor error light is blinking."
 	else

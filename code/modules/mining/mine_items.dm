@@ -46,20 +46,18 @@
 	icon_state = "lantern"
 	item_state = "lantern"
 	desc = "A mining lantern."
-	brightness_on = 6			// luminosity when on
-	light_power = 2
+	brightness_on = 1
+	range_on = 6
 	light_color = LIGHT_COLOR_TUNGSTEN
 
 //Explicit
-/obj/item/device/flashlight/lantern/on/New()
-	..()
-
+/obj/item/device/flashlight/lantern/on
 	on = 1
-	update_brightness()
 
 /obj/item/device/flashlight/lantern/on/dim
 	name = "dim lantern"
-	light_power = 0.6
+	brightness_on = 0.6
+	range_on = 5
 
 /*****************************Pickaxe********************************/
 
@@ -85,6 +83,7 @@
 	attack_verb = list("hits", "pierces", "slices", "attacks")
 	toolsounds = list('sound/weapons/Genhit.ogg')
 	slimeadd_message = "You mold the slime extract around the tip of SRCTAG"
+	hitsound = "sound/weapons/bloodyslice.ogg"
 	var/drill_verb = "picking"
 	var/diggables = DIG_ROCKS
 	var/excavation_amount = 100
@@ -104,6 +103,7 @@
 	//icon_state = "sledgehammer" Waiting on sprite
 	desc = "A mining hammer made of reinforced metal. You feel like smashing your boss in the face with this."
 	drill_verb = "hammering"
+	hitsound = "sound/weapons/toolbox.ogg"
 
 /obj/item/weapon/pickaxe/silver
 	name = "silver pickaxe"
@@ -161,6 +161,7 @@
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
 	toolsounds = list('sound/items/Welder.ogg')
+	hitsound = "sound/weapons/welderattack.ogg"
 
 /obj/item/weapon/pickaxe/plasmacutter/accelerator
 	name = "plasma cutter"
@@ -243,7 +244,7 @@
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_POWERSTORAGE + "=3;" + Tc_ENGINEERING + "=2"
 	desc = "Yours is the drill that will pierce through the rock walls."
 	drill_verb = "drilling"
-
+	hitsound = 'sound/weapons/circsawhit.ogg'
 	diggables = DIG_ROCKS | DIG_SOIL //drills are multipurpose
 
 /obj/item/weapon/pickaxe/drill/diamond //When people ask about the badass leader of the mining tools, they are talking about ME!
@@ -278,8 +279,7 @@
 	w_type = RECYK_MISC
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("bashes", "bludgeons", "thrashes", "whacks")
-
-
+	hitsound = "trayhit"
 	toolspeed = 0.4
 	diggables = DIG_SOIL //soil only
 
@@ -699,50 +699,55 @@
 	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 5
+	starting_materials = list(MAT_IRON = 200)
+	w_type = RECYK_ELECTRONIC
 	var/loaded = 1
 	var/refreshes_drops = FALSE
 
 /obj/item/weapon/lazarus_injector/update_icon()
 	..()
-	if(loaded)
-		icon_state = "lazarus_hypo"
-	else
-		icon_state = "lazarus_empty"
+	icon_state = loaded ? "lazarus_hypo" : "lazarus_empty"
+	w_type = loaded ? RECYK_ELECTRONIC : RECYK_METAL
 
 /obj/item/weapon/lazarus_injector/afterattack(atom/target, mob/user, proximity_flag)
-	if(!loaded)
+	if(!loaded || !proximity_flag)
 		return
-	if(istype(target, /mob/living) && proximity_flag)
-		if(istype(target, /mob/living/simple_animal))
-			var/mob/living/simple_animal/M = target
-			if(M.mob_property_flags & MOB_NO_LAZ)
-				to_chat(user, "<span class='warning'>\The [src] is incapable of reviving \the [M].</span>")
-				return
-			if(M.stat == DEAD)
-
-				M.faction = "lazarus \ref[user]"
-				M.revive(refreshbutcher = refreshes_drops)
-				if(istype(target, /mob/living/simple_animal/hostile))
-					var/mob/living/simple_animal/hostile/H = M
-					H.friends += makeweakref(user)
-
-					log_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector.")
-					H.attack_log += "\[[time_stamp()]\] Revived by <b>[key_name(user)]</b> with a lazarus injector."
-					user.attack_log += "\[[time_stamp()]\] Revived hostile mob <b>[H]</b> with a lazarus injector."
-					msg_admin_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-
-				loaded = 0
-				user.visible_message("<span class='warning'>[user] injects [M] with \the [src], reviving it.</span>", \
-				"<span class='notice'>You inject [M] with \the [src], reviving it.</span>")
-				playsound(src,'sound/effects/refill.ogg',50,1)
-				update_icon()
-				return
-			else
-				to_chat(user, "<span class='warning'>\The [src] is only effective on the dead.</span>")
-				return
-		else
-			to_chat(user, "<span class='warning'>\The [src] is only effective on lesser beings.</span>")
+	var/mob/living/L
+	if(isliving(target))
+		L = target
+	else if(istype(target,/obj/item/weapon/holder))
+		var/obj/item/weapon/holder/hol = target
+		L = hol.stored_mob
+	else
+		to_chat(user, "<span class='warning'>\The [src] is only effective on living things.</span>")
+		return
+	if(istype(L, /mob/living/simple_animal))
+		var/mob/living/simple_animal/M = L
+		if(M.mob_property_flags & MOB_NO_LAZ)
+			to_chat(user, "<span class='warning'>\The [src] is incapable of reviving \the [M].</span>")
 			return
+		if(M.stat == DEAD)
+
+			M.faction = "lazarus \ref[user]"
+			M.revive(refreshbutcher = refreshes_drops)
+			if(istype(M, /mob/living/simple_animal/hostile))
+				var/mob/living/simple_animal/hostile/H = M
+				H.friends += makeweakref(user)
+
+				log_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector.")
+				H.attack_log += "\[[time_stamp()]\] Revived by <b>[key_name(user)]</b> with a lazarus injector."
+				user.attack_log += "\[[time_stamp()]\] Revived hostile mob <b>[H]</b> with a lazarus injector."
+				msg_admin_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+
+			loaded = 0
+			user.visible_message("<span class='warning'>[user] injects [M] with \the [src], reviving it.</span>", \
+			"<span class='notice'>You inject [M] with \the [src], reviving it.</span>")
+			playsound(src,'sound/effects/refill.ogg',50,1)
+			update_icon()
+		else
+			to_chat(user, "<span class='warning'>\The [src] is only effective on the dead.</span>")
+	else
+		to_chat(user, "<span class='warning'>\The [src] is only effective on lesser beings.</span>")
 
 /obj/item/weapon/lazarus_injector/examine(mob/user)
 	..()

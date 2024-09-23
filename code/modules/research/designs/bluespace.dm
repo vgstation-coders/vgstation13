@@ -84,6 +84,17 @@
 	category = "Bluespace"
 	build_path = /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 
+/datum/design/bluespace_shaker
+	name = "Bluespace Shaker"
+	desc = "A newly-developed high-capacity shaker, powered by experimental bluespace technology. Can hold up to 300 units."
+	id = "bluespaceshaker"
+	req_tech = list(Tc_BLUESPACE = 4, Tc_MATERIALS = 6)
+	build_type = PROTOLATHE
+	materials = list(MAT_DIAMOND = 2500, MAT_IRON = 5000, MAT_GLASS = 5000, MAT_URANIUM = 2000)
+	reliability = 100
+	category = "Bluespace"
+	build_path = /obj/item/weapon/reagent_containers/food/drinks/shaker/bluespaceshaker
+
 /datum/design/gps
 	name = "Global Positioning System"
 	desc = "Helping lost spacemen find their way through the planets since 2016."

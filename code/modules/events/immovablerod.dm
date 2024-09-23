@@ -10,12 +10,12 @@ var/list/all_rods = list()
 	announceWhen = 1
 
 /datum/event/immovable_rod/can_start(var/list/active_with_role)
-	if(active_with_role["Engineer"] > 1 && active_with_role.len > 6)
+	if(active_with_role["Engineer"] > 1 && active_with_role["Any"] > 6)
 		return 15
 	return 0
 
 /datum/event/immovable_rod/big/can_start(var/list/active_with_role)
-	if(active_with_role["Engineer"] > 2 && active_with_role.len > 6)
+	if(active_with_role["Engineer"] > 2 && active_with_role["Any"] > 6)
 		return 15
 	return 0
 
@@ -89,7 +89,7 @@ var/list/all_rods = list()
 
 /obj/item/projectile/immovablerod/throw_at(atom/end)
 	for(var/mob/dead/observer/people in observers)
-		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, <a href='?src=\ref[people];follow=\ref[src]'>Follow it</a></span>")
+		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, [formatFollow(src,"Follow it")]</span>")
 	original = end
 	starting = loc
 	current = loc

@@ -235,9 +235,10 @@ var/MAX_EXPLOSION_RANGE = 32
 #define PASSBLOB	16
 #define PASSMACHINE	32 //computers, vending machines, rnd machines
 #define PASSDOOR	64 //not just airlocks, but also firelocks, windoors etc
-#define PASSGIRDER	128 //not just airlocks, but also firelocks, windoors etc
+#define PASSGIRDER	128
+#define PASSRAILING 256
 
-#define PASSALL 191 //really ugly, shouldn't this be PASSTABLE|PASSGLASS|PASSGRILLE etc?
+#define PASSALL	PASSTABLE|PASSGLASS|PASSGRILLE|PASSMOB|PASSBLOB|PASSMACHINE|PASSGIRDER|PASSRAILING
 
 
 /*
@@ -326,19 +327,20 @@ var/MAX_EXPLOSION_RANGE = 32
 #define ARM_RIGHT		256
 #define HAND_LEFT		512
 #define HAND_RIGHT		1024
+#define TAIL			524288
 
 
 // bitflags for clothing parts
 
-#define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)
-#define FACE			(EYES|MOUTH|BEARD)	//38912
+#define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)	// 6
+#define FACE			(EYES|MOUTH|BEARD)			// 38912
 #define BEARD			32768
-#define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)
+#define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)		// 14337
 #define LEGS			(LEG_LEFT|LEG_RIGHT) 		// 24
-#define FEET			(FOOT_LEFT|FOOT_RIGHT) 	//96
-#define ARMS			(ARM_LEFT|ARM_RIGHT)		//384
-#define HANDS			(HAND_LEFT|HAND_RIGHT) //1536
-#define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS)
+#define FEET			(FOOT_LEFT|FOOT_RIGHT) 		// 96
+#define ARMS			(ARM_LEFT|ARM_RIGHT)		// 384
+#define HANDS			(HAND_LEFT|HAND_RIGHT) 		// 1536
+#define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS) // 16383
 #define IGNORE_INV		16384 // Don't make stuff invisible
 
 
@@ -346,17 +348,19 @@ var/MAX_EXPLOSION_RANGE = 32
 // Used in body_parts_covered
 
 #define HIDEGLOVES			HANDS
-#define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)
+#define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)		// 414
 #define HIDESHOES			FEET
 #define HIDEMASK			FACE
 #define HIDEEARS			EARS
 #define HIDEEYES			EYES
 #define HIDEFACE			FACE
+#define HIDETAIL			TAIL
 #define HIDEHEADHAIR 		65536
 #define MASKHEADHAIR		131072
 #define HIDEBEARDHAIR		BEARD
-#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)//98304
+#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR) // 98304
 #define	HIDESUITSTORAGE		LOWER_TORSO
+#define	HIDEBACK			262144
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
 // Used with human/proc/get_heat_protection() and human/proc/get_cold_protection() as well as calculate_affecting_pressure() now
@@ -554,13 +558,6 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 #define MAX_STACK_AMOUNT_METAL	50
 #define MAX_STACK_AMOUNT_GLASS	50
 #define MAX_STACK_AMOUNT_RODS	60
-
-#define GAS_O2 	(1 << 0)
-#define GAS_N2	(1 << 1)
-#define GAS_PL	(1 << 2)
-#define GAS_CO2	(1 << 3)
-#define GAS_N2O	(1 << 4)
-
 
 #define INV_SLOT_SIGHT "sight_slot"
 #define INV_SLOT_TOOL "tool_slot"
@@ -927,8 +924,10 @@ SEE_PIXELS	256
 // for secHUDs and medHUDs and variants. The number is the location of the image on the list hud_list of humans.
 #define HEALTH_HUD          "health" // a simple line rounding the mob's number health
 #define STATUS_HUD          "status" // alive, dead, diseased, etc.
-#define RECORD_HUD			"record" // what medbay has set your records to
+#define PHYSRECORD_HUD			"p_record" // what medbay has set your records to
+#define MENTRECORD_HUD			"m_record" // what medbay has set your records to
 #define ID_HUD              "id" // the job asigned to your ID
+#define WAGE_HUD			"wage" // the wage assigned to your ID
 #define WANTED_HUD          "wanted" // wanted, released, parroled, security status
 #define IMPLOYAL_HUD		"imployal" // loyality implant
 #define IMPCHEM_HUD		    "impchem" // chemical implant
@@ -1003,6 +1002,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define ACID4WATER 4096 //Acid now acts like water, and vice versa.
 #define NO_BALD 8192 //cannot lose hair through being shaved/radiation/etc
 #define RGBSKINTONE 16384
+#define HAS_ICON_SKIN_TONE 32768
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -1110,6 +1110,9 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define RECYK_ELECTRONIC 5
 #define RECYK_WOOD       6
 #define RECYK_PLASTIC    7
+#define RECYK_FABRIC     8
+#define RECYK_WAX	     9
+#define RECYK_CARDBOARD	 10
 
 ////////////////
 // job.info_flags
@@ -1124,16 +1127,60 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define MT_UPDATE 1
 #define MT_REINIT 2
 
+//////////////////
+// FIRE
+//////////////////
+
+// high heating value for burning objects, assuming perfect combustion (MJ/kg)
+#define HHV_WOOD 18.0
+#define HHV_PLASTIC 46.4 // Polypropylene
+#define HHV_FABRIC 19.4 // Cotton
+#define HHV_WAX 42.0 // Paraffin wax
+#define HHV_BIOLOGICAL 38.0 // Body fat
+
+// combustion requires about 14% oxygen concentration
+#define MINOXY2BURN 0.14
+
+// minimum burn time
+#define MIN_BURN_TIME 3 SECONDS
+
+// stoichiometric combustion ratios in oxygen
+#define FUEL_OX_RATIO_WOOD (1/6) // C6H10O5 (cellulose)
+#define FUEL_OX_RATIO_PLASTIC (2/9) // C3H6 ((poly)propylene)
+#define FUEL_OX_RATIO_FABRIC (1/6) // C6H10O5 (cellulose)
+#define FUEL_OX_RATIO_WAX (1/38) // C25H52 (paraffin wax)
+#define FUEL_OX_RATIO_BIOLOGICAL (1/78) // C55H104O6 ("average" triglyceride)
+
+// maximum flame temperature (K)
+#define FLAME_TEMPERATURE_WOOD 1300.15
+#define FLAME_TEMPERATURE_PLASTIC 1773.15
+#define FLAME_TEMPERATURE_FABRIC 1073.15
+#define FLAME_TEMPERATURE_WAX 973.15
+#define FLAME_TEMPERATURE_BIOLOGICAL 1173.15
+
+// molecular weight (km/mol)
+#define MOLECULAR_WEIGHT_WOOD 0.16
+#define MOLECULAR_WEIGHT_PLASTIC 0.042
+#define MOLECULAR_WEIGHT_FABRIC 0.16
+#define MOLECULAR_WEIGHT_WAX 0.35
+#define MOLECULAR_WEIGHT_BIOLOGICAL 0.86
+
+// Autoignition temperatures (K)
 #define AUTOIGNITION_WOOD  573.15
-#define AUTOIGNITION_PAPER 519.15
-#define AUTOIGNITION_PLASTIC 689.15 //autoignition temperature of ABS plastic
+#define AUTOIGNITION_PLASTIC 661.15 //polypropylene
 #define AUTOIGNITION_FABRIC 523.15
-#define AUTOIGNITION_PROTECTIVE 573.15 //autoignition temperature of protective clothing like firesuits or kevlar vests
-#define AUTOIGNITION_ORGANIC 633.15 //autoignition temperature of animal fats
-// Assuming this is http://en.wikipedia.org/wiki/Butane
-// (Autoignition temp 288°C, or 561.15°K)
-// Used in fueltanks exploding.
-#define AUTOIGNITION_WELDERFUEL 561.15
+#define AUTOIGNITION_WAX 518.15
+#define AUTOIGNITION_BIOLOGICAL 633.15 //animal fat
+#define AUTOIGNITION_WELDERFUEL 561.15 //butane
+#define AUTOIGNITION_TRIGGER 500.00 //temperature at which an area begins checking for autoignition
+
+// flame sizes (% of cell volume occupied by a flame)
+#define SMALL_FLAME 25 //a match, a candle, or a lighter (1% chance to ignite)
+#define MEDIUM_FLAME 250 //a single burning object on the ground (10%)
+#define LARGE_FLAME 675 //a healthy campfire (25%)
+#define FULL_FLAME 2500 //floor to ceiling flames
+
+//////////////////
 
 // snow business
 #define SNOWBALL_MINIMALTEMP 265	//about -10°C, the minimal temperature at which a thrown snowball can cool you down.
@@ -1194,6 +1241,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define MECH_SCAN_FAIL		1 // Cannot be scanned at all.
 #define MECH_SCAN_ILLEGAL	2 // Can only be scanned by the antag scanner.
 #define MECH_SCAN_ACCESS	4 // Can only be scanned with the access required for the machine
+#define MECH_SCAN_GOONECODE 8 // Cannot be scanned and gives a "this is closed source!" message on scan attempt.
 
 
 // EMOTES!
@@ -1245,31 +1293,33 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define STAGE_SSGSS	13
 
 //Human Overlays Indexes/////////THIS DEFINES WHAT LAYERS APPEARS ON TOP OF OTHERS
-#define FIRE_LAYER				1		//If you're on fire (/tg/ shit)
-#define MUTANTRACE_LAYER		2		//TODO: make part of body?
-#define MUTATIONS_LAYER			3
-#define DAMAGE_LAYER			4
-#define UNIFORM_LAYER			5
-#define SHOES_LAYER				6
-#define GLOVES_LAYER			7
-#define EARS_LAYER				8
-#define SUIT_LAYER				9
-#define GLASSES_LAYER			10
-#define BELT_LAYER				11		//Possible make this an overlay of somethign required to wear a belt?
-#define SUIT_STORE_LAYER		12
-#define HAIR_LAYER				13		//TODO: make part of head layer?
-#define GLASSES_OVER_HAIR_LAYER	14
-#define FACEMASK_LAYER			15
-#define HEAD_LAYER				16
-#define BACK_LAYER				17		//Back should be above head so that headgear doesn't hides backpack when facing north
-#define ID_LAYER				18		//IDs should be visible above suits and backpacks
-#define HANDCUFF_LAYER			19
-#define MUTUALCUFF_LAYER		20
-#define LEGCUFF_LAYER			21
-#define HAND_LAYER				22
-#define TAIL_LAYER				23		//bs12 specific. this hack is probably gonna come back to haunt me
-#define TARGETED_LAYER			24		//BS12: Layer for the target overlay from weapon targeting system
-#define TOTAL_LAYERS			24
+#define FIRE_LAYER				26		//If you're on fire (/tg/ shit)
+#define MUTANTRACE_LAYER		25		//TODO: make part of body?
+#define TAIL_UNDERLIMBS_LAYER	24
+#define LIMBS_LAYER				23
+#define MUTATIONS_LAYER			22
+#define DAMAGE_LAYER			21
+#define UNIFORM_LAYER			20
+#define SHOES_LAYER				19
+#define GLOVES_LAYER			18
+#define EARS_LAYER				17
+#define SUIT_LAYER				16
+#define GLASSES_LAYER			15
+#define BELT_LAYER				14		//Possible make this an overlay of somethign required to wear a belt?
+#define SUIT_STORE_LAYER		13
+#define HAIR_LAYER				12		//TODO: make part of head layer?
+#define GLASSES_OVER_HAIR_LAYER	11
+#define TAIL_LAYER				10
+#define FACEMASK_LAYER			9
+#define HEAD_LAYER				8
+#define BACK_LAYER				7		//Back should be above head so that headgear doesn't hides backpack when facing north
+#define ID_LAYER				6		//IDs should be visible above suits and backpacks
+#define HANDCUFF_LAYER			5
+#define MUTUALCUFF_LAYER		4
+#define LEGCUFF_LAYER			3
+#define HAND_LAYER				2
+#define TARGETED_LAYER			1		//BS12: Layer for the target overlay from weapon targeting system
+#define TOTAL_LAYERS			26
 //////////////////////////////////
 
 //Snake stuff so leaderboard can see it too
@@ -1331,7 +1381,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define ASTAR_DEBUG 0
 #if ASTAR_DEBUG == 1
 #warn "Astar debug is on. Don't forget to turn it off after you've done :)"
-#define astar_debug(text) //to_chat(world, text)
+#define astar_debug(text) to_chat(world, text)
 #define astar_debug_mulebots(text) to_chat(world, text)
 #else
 #define astar_debug(text)
@@ -1377,6 +1427,7 @@ var/proccalls = 1
 #define CHANNEL_ADMINMUSIC			1024
 #define CHANNEL_STARMAN				1025
 #define CHANNEL_CRITSOUNDS			1026
+#define CHANNEL_TELEPHONES			1027
 
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0
@@ -1628,9 +1679,8 @@ var/proccalls = 1
 #define HOLOMAP_MARKER_DISK				"diskspawn"
 #define HOLOMAP_MARKER_SKIPJACK			"skipjack"
 #define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
+#define HOLOMAP_MARKER_TEARREALITY		"tearreality"
 #define HOLOMAP_MARKER_BLOODSTONE		"bloodstone"
-#define HOLOMAP_MARKER_BLOODSTONE_BROKEN	"bloodstone-broken"
-#define HOLOMAP_MARKER_BLOODSTONE_ANCHOR	"bloodstone-narsie"
 #define HOLOMAP_MARKER_CULT_ALTAR		"altar"
 #define HOLOMAP_MARKER_CULT_FORGE		"forge"
 #define HOLOMAP_MARKER_CULT_SPIRE		"spire"
@@ -1700,6 +1750,9 @@ var/proccalls = 1
 #define HUD_NONE 0
 #define HUD_MEDICAL 1
 #define HUD_SECURITY 2
+#define HUD_WAGE 3
+#define HUD_MESON 4
+#define HUD_ARRESTACCESS 5
 
 //Cyborg components
 #define COMPONENT_BROKEN -1
@@ -1724,6 +1777,11 @@ var/proccalls = 1
 #define COMPUTER "computer"
 #define EMBEDDED_CONTROLLER "embedded controller"
 #define OTHER "other"
+
+// Bedsheet altering
+#define PLAIDPATTERN_INCOMPATIBLE	0
+#define PLAIDPATTERN_TO_PLAID		1
+#define PLAIDPATTERN_TO_NOT_PLAID	2
 
 // How many times to retry winset()ing window parameters before giving up
 #define WINSET_MAX_ATTEMPTS 10
@@ -1829,7 +1887,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 
 // /datum/reagent/var/sport
 #define SPORTINESS_NONE 1
-#define SPORTINESS_SUGAR 1.2
+#define SPORTINESS_SUGAR 1.5
 #define SPORTINESS_SPORTS_DRINK 5
 
 //Luck-related defines
@@ -1865,5 +1923,78 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define COOKVESSEL_CONTAINS_CONTENTS (1<<1)	//The cooking vessel contains non-reagent contents (eg. items)
 
 //Cooking-related temperatures
+#define FRIDGETEMP_FREEZER	 (T0C - 40)
+#define FRIDGETEMP_FROZEN	 (T0C - 20)//because freezers at room temperature actually hold items at -20°C, so we can apply that to meatvend items
+#define FRIDGETEMP_DEFAULT	 (T0C + 4)
+#define STEAMTEMP	 (T0C + 50)
+#define COOKTEMP_READY	 (T0C + 100) //The minimal temperature at which items come out of a frying pan, enables food to visibly steam. After a few seconds it's fully safe to eat.
 #define COOKTEMP_DEFAULT (T0C + 316) //Default cooking temperature, around 600 F
+#define COOKTEMP_EMAGGED (T0C + 8000000)
 #define COOKTEMP_HUMANSAFE (BODYTEMP_HEAT_DAMAGE_LIMIT - 1) //Human-safe temperature for cooked food, 1 degree less than the threshold for burning a human.
+
+//Cleaning
+#define CLEANLINESS_WATER			1
+#define CLEANLINESS_SPACECLEANER	2
+#define CLEANLINESS_BLEACH			3
+
+//Paint Luminosity
+#define PAINTLIGHT_NONE		0	//regular paint
+#define PAINTLIGHT_LIMITED	1	//radium, lights up on canvas, limited color mixing
+#define PAINTLIGHT_FULL		2	//nano paint, lights up floors as well
+
+//Candles on snacks
+#define CANDLES_NONE 0
+#define CANDLES_UNLIT 1
+#define CANDLES_LIT 2
+
+#define MINDUI_FLAG_PROCESSING	1
+#define MINDUI_FLAG_TOOLTIP		2
+
+#define MINDUI_MAX_CULT_SLOTS	14
+
+#define ECLIPSE_NOT_YET	0
+#define ECLIPSE_ONGOING	1
+#define ECLIPSE_OVER	2
+
+#define HEX_MODE_ROAMING 0
+#define HEX_MODE_GUARD	 1
+#define HEX_MODE_ESCORT	 2
+
+//Particles system defines
+#define PS_STEAM			"Steam"
+#define PS_SMOKE			"Smoke"
+#define PS_TEAR_REALITY		"Tear Reality"
+#define PS_CANDLE			"Candle"
+#define PS_CANDLE2			"Candle2"
+#define PS_CULT_GAUGE		"Cult Gauge"
+#define PS_CULT_SMOKE		"Cult Smoke"
+#define PS_CULT_SMOKE2		"Cult Smoke2"
+#define PS_CULT_SMOKE_BOX	"Cult Smoke Box"
+#define PS_CULT_HALO		"Cult Halo"
+#define PS_SPACE_RUNES		"Space Runes"
+#define PS_NARSIEHASRISEN1	"Nar-SieHasRisen1"
+#define PS_NARSIEHASRISEN2	"Nar-SieHasRisen2"
+#define PS_NARSIEHASRISEN3	"Nar-SieHasRisen3"
+#define PS_ZAS_DUST			"ZAS Dust"
+#define PS_DANDELIONS		"Dandelions"
+#define PS_CROSS_DUST		"Cross Dust"
+#define PS_CROSS_ORB		"Cross Orb"
+#define PS_SACRED_FLAME		"Sacred Flame"
+#define PS_SACRED_FLAME2	"Sacred Flame2"
+#define PS_BIBLE_PAGE		"Bible Page"
+
+//Particles variable defines
+#define PVAR_SPAWNING	"spawning"
+#define PVAR_POSITION	"position"
+#define PVAR_VELOCITY	"velocity"
+#define PVAR_ICON_STATE	"icon_state"
+#define PVAR_COLOR		"color"
+#define PVAR_SCALE		"scale"
+#define PVAR_PLANE		"plane"
+#define PVAR_LAYER		"layer"
+#define PVAR_PIXEL_X	"pixel_x"
+#define PVAR_PIXEL_Y	"pixel_y"
+#define PVAR_LIFESPAN	"lifespan"
+#define PVAR_FADE		"fade"
+
+#define ZAS_DUST_TURFS_PER_TICK	20

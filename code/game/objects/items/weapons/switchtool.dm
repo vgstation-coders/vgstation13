@@ -37,7 +37,7 @@
 	if(istype(target, /obj/item/weapon/storage) && !istype(target, /obj/item/weapon/storage/pill_bottle)) //we place automatically, but want pill bottles to be meltable
 		return
 	if(deployed)
-		if(!deployed.preattack(target, user))
+		if(!deployed.preattack(target, user, proximity_flag, click_parameters))
 			if(proximity_flag)
 				target.attackby(deployed, user)
 			deployed.afterattack(target, user, proximity_flag, click_parameters)

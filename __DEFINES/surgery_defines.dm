@@ -13,3 +13,7 @@
 #define SURGERY_REPLACE_HIP			   2
 #define SURGERY_BUTT_SHAPE			   3
 #define SURGERY_END_BUTT_REPLACE	   4
+
+// Surgery delay
+
+#define SURGERY_DELAY_TIME 0.1 SECONDS

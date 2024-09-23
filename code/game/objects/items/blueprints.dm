@@ -22,7 +22,8 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "blueprints"
 	attack_verb = list("attacks", "baps", "hits")
-	autoignition_temperature = AUTOIGNITION_PAPER
+	w_type = RECYK_WOOD
+	flammable = TRUE
 
 	var/header = "<small>property of Nanotrasen. For heads of staff only. Store in high-secure storage.</small>"
 
@@ -334,6 +335,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	//Create a visual effect over the edited area
 	edited_overlay = image('icons/turf/areas.dmi', currently_edited, "yellow")
+	edited_overlay.plane = ABOVE_LIGHTING_PLANE
 	editor.client.images.Add(edited_overlay)
 
 	to_chat(editor, "<span class='info'>In this mode, you can add or modify tiles to the [currently_edited] area. When you're done, bring up the blueprints or leave the area.</span>")
@@ -423,8 +425,6 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	if (locate(/obj/machinery/door) in T2)
 		return BORDER_2NDTILE
 	if (locate(/obj/structure/falsewall) in T2)
-		return BORDER_2NDTILE
-	if (locate(/obj/structure/falserwall) in T2)
 		return BORDER_2NDTILE
 
 	return BORDER_NONE

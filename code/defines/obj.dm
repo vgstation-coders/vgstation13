@@ -348,7 +348,7 @@ We don't care about names, DNA, accounts, activity, any of that. We're just gonn
 		var/list/jobs = player.client.prefs.jobs
 
 		for(var/job in jobs)
-			if(jobs[job] == JOB_PREF_HIGH)
+			if((jobs[job] == JOB_PREF_HIGH) && GetJob(job))
 				crystal_ball[job] += 1
 
 /*

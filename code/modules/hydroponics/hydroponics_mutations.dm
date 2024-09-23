@@ -8,13 +8,17 @@
 	if(!isnull(SSplant.seeds[seed.name]))
 		seed = seed.diverge(modified)
 
-/obj/machinery/portable_atmospherics/hydroponics/proc/mutate(var/gene)
+/obj/machinery/portable_atmospherics/hydroponics/proc/mutate(var/gene, var/specific_gene)
+	//the specific gene var is for chems that call a specific mutation, like metastable mutagen (ONLY affects the chems, not the potency)
+	//for example, a mutate that specifically does the aforementioned mutation would be mutate(GENE_PHYTOCHEMISTRY, PLANT_CHEMICAL)
+	//TODO: make it so the plant gun can call specific genes at will
 	if(!seed)
 		return
 	if(seed.immutable)
 		return
 	if(age < 3 && length(seed.mutants) && gene)
 		mutate_species()
+		return
 	if(!gene)
 		gene = pick(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_DEVELOPMENT, GENE_XENOPHYSIOLOGY)
 
@@ -23,16 +27,20 @@
 	//15% is currently default for the maximum change in most cases
 	//Log function so can't be equal to or less than 0, there are special cases where below a threshold the value is set to 0
 	//Be aware the formulas are slightly different for lowering and increasing values inside log() and also min()
+	var/mutation_type
 	switch(gene)
 		if(GENE_PHYTOCHEMISTRY)
-			var/mutation_type = pick(85; PLANT_POTENCY, 15; PLANT_CHEMICAL)
+			if(!specific_gene)
+				mutation_type = pick(85; PLANT_POTENCY, 15; PLANT_CHEMICAL)
+			else
+				mutation_type = specific_gene
 			switch(mutation_type)
 				if(PLANT_POTENCY)
 					if(seed.potency <= 0)
 						return
-					var/hardcap = 200
-					var/max_change = 0.10 //percent
-					seed.potency += round(min(hardcap - hardcap/2*round(log(10,seed.potency/hardcap*100),0.01),max_change*hardcap),0.1)
+					var/hardcap = 200.15 //finally fixes the 198 potency thing
+					var/max_change = 0.11 //percent
+					seed.potency += round(min(hardcap - hardcap/2*log(10,seed.potency/hardcap*100),max_change*hardcap),0.1)
 					generic_mutation_message("quivers!")
 				if(PLANT_CHEMICAL)
 					var/check_success = FALSE
@@ -46,7 +54,10 @@
 							visible_message("<span class='notice'>\The [seed.display_name] develops a strange-looking gland.</span>")
 
 		if(GENE_MORPHOLOGY)
-			var/mutation_type = pick(PLANT_PRODUCTS, PLANT_THORNY, PLANT_JUICY, PLANT_LIGNEOUS, PLANT_STINGING, PLANT_APPEARANCE)
+			if(!specific_gene)
+				mutation_type = pick(PLANT_PRODUCTS, PLANT_THORNY, PLANT_JUICY, PLANT_LIGNEOUS, PLANT_STINGING, PLANT_APPEARANCE)
+			else
+				mutation_type = specific_gene
 			switch(mutation_type)
 				if(PLANT_PRODUCTS)
 					seed.products += pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown))
@@ -58,7 +69,7 @@
 					else
 						visible_message("<span class='notice'>\The [seed.display_name] sheds its thorns away...</span>")
 				if(PLANT_JUICY)
-					//clever way of going from 0 to 1 to 2. 
+					//clever way of going from 0 to 1 to 2.
 					seed.juicy = (seed.juicy + 1) % 3
 					generic_mutation_message("wobbles!")
 				if(PLANT_LIGNEOUS)
@@ -79,7 +90,10 @@
 					visible_message("<span class='notice'>\The [seed.display_name] suddenly looks a little different.</span>")
 
 		if(GENE_BIOLUMINESCENCE)
-			var/mutation_type = pick(seed.biolum ? 10 : 0;	PLANT_BIOLUM_COLOR, seed.biolum ? 1 : 10; PLANT_BIOLUM)
+			if(!specific_gene)
+				mutation_type = pick(seed.biolum ? 10 : 0;	PLANT_BIOLUM_COLOR, seed.biolum ? 1 : 10; PLANT_BIOLUM)
+			else
+				mutation_type = specific_gene
 			switch(mutation_type)
 				if(PLANT_BIOLUM)
 					seed.biolum = !seed.biolum
@@ -95,7 +109,10 @@
 			update_icon()
 
 		if(GENE_ECOLOGY)
-			var/mutation_type = pick(PLANT_TEMPERATURE_IDEAL, PLANT_HEAT_TOLERANCE, PLANT_PRESSURE_TOLERANCE,PLANT_LIGHT_TOLERANCE, PLANT_LIGHT_IDEAL)
+			if(!specific_gene)
+				mutation_type = pick(PLANT_TEMPERATURE_IDEAL, PLANT_HEAT_TOLERANCE, PLANT_PRESSURE_TOLERANCE,PLANT_LIGHT_TOLERANCE, PLANT_LIGHT_IDEAL)
+			else
+				mutation_type = specific_gene
 			switch(mutation_type)
 				if(PLANT_TEMPERATURE_IDEAL)
 					//Variance so small that it can be fixed by just touching the thermostat, but I guarantee people will just apply a new enviro gene anyways
@@ -111,7 +128,7 @@
 						//lower better
 						var/hardcap = 0.1
 						var/max_change = 0.15 //percent
-						seed.lowkpa_tolerance -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.lowkpa_tolerance*100),0.01),max_change*seed.lowkpa_tolerance),0.1) 
+						seed.lowkpa_tolerance -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.lowkpa_tolerance*100),0.01),max_change*seed.lowkpa_tolerance),0.1)
 					//higher better
 					var/hardcap = 500
 					var/max_change = 0.15 //percent
@@ -125,7 +142,10 @@
 			generic_mutation_message("shakes!")
 
 		if(GENE_ECOPHYSIOLOGY)
-			var/mutation_type = pick(PLANT_TOXIN_AFFINITY, PLANT_WEED_TOLERANCE, PLANT_PEST_TOLERANCE, PLANT_LIFESPAN, PLANT_ENDURANCE)
+			if(!specific_gene)
+				mutation_type = pick(PLANT_TOXIN_AFFINITY, PLANT_WEED_TOLERANCE, PLANT_PEST_TOLERANCE, PLANT_LIFESPAN, PLANT_ENDURANCE)
+			else
+				mutation_type = specific_gene
 			switch(mutation_type)
 				if(PLANT_TOXIN_AFFINITY)
 					var/hardcap = 110
@@ -150,7 +170,10 @@
 			generic_mutation_message("quivers!")
 
 		if(GENE_METABOLISM)
-			var/mutation_type = pick(30; PLANT_NUTRIENT_CONSUMPTION, 30; PLANT_FLUID_CONSUMPTION, 20; PLANT_VORACIOUS, 20; PLANT_HEMATOPHAGE)
+			if(!specific_gene)
+				mutation_type = pick(30; PLANT_NUTRIENT_CONSUMPTION, 30; PLANT_FLUID_CONSUMPTION, 20; PLANT_VORACIOUS, 20; PLANT_HEMATOPHAGE)
+			else
+				mutation_type = specific_gene
 			switch(mutation_type)
 				if(PLANT_NUTRIENT_CONSUMPTION)
 					if(seed.nutrient_consumption < 0.1)
@@ -180,12 +203,13 @@
 					else
 						visible_message("<span class='notice'>\The [seed.display_name]'s red roots slowly wash their color out...</span>")
 		if(GENE_DEVELOPMENT)
-			var/mutation_type
 			if(seed.yield == -1)
 				//These have a yield that is not allowed to be modified
 				mutation_type = pick(PLANT_PRODUCTION, PLANT_MATURATION, PLANT_SPREAD)
-			else
+			else if(!specific_gene)
 				mutation_type = pick(28; PLANT_PRODUCTION, 28; PLANT_MATURATION, 8; PLANT_SPREAD, 8; PLANT_HARVEST, 28; PLANT_YIELD)
+			else
+				mutation_type = specific_gene
 			switch(mutation_type)
 				if(PLANT_PRODUCTION)
 					//lower better
@@ -235,7 +259,10 @@
 					var/hardcap = 16
 					seed.yield += round(min(hardcap - hardcap/2*round(log(10,seed.yield/hardcap*100),0.01),0.15*hardcap),0.1)
 		if(GENE_XENOPHYSIOLOGY)
-			var/mutation_type = pick(PLANT_TELEPORT, PLANT_GAS, PLANT_ROOMTEMP, PLANT_NOREACT)
+			if(!specific_gene)
+				mutation_type = pick(PLANT_TELEPORT, PLANT_GAS, PLANT_ROOMTEMP, PLANT_NOREACT)
+			else
+				mutation_type = specific_gene
 			switch(mutation_type)
 				if(PLANT_TELEPORT)
 					//Toggle true or false
@@ -268,6 +295,7 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/mutate_species()
 	var/previous_plant = seed.display_name
+	var/previous_plural = seed.plural
 	var/newseed = seed.get_mutant_variant()
 
 	seed = SSplant.seeds[newseed]
@@ -281,4 +309,4 @@
 	sampled = 0
 
 	update_icon()
-	visible_message("<span class='alert'>The</span> <span class='italics,alert'>[previous_plant]</span> <span class='alert'>has suddenly mutated into</span> <span class='italics,alert'>[seed.display_name]!</span>")
+	visible_message("<span class='alert'>The</span> <span class='italics,alert'>[previous_plant]</span> <span class='alert'>[previous_plural ? "have" : "has"] suddenly mutated into</span> <span class='italics,alert'>[seed.display_name]!</span>")

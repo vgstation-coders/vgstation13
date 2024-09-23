@@ -93,21 +93,17 @@
 		handcuffed_to.u_equip(src)
 
 /mob/living/carbon/proc/on_mutual_cuffed_move(atom/movable/mover)
-	if (!isturf(loc) || (mutual_handcuffed_to && get_dist(mutual_handcuffed_to, src) > 3)) // We moved to a mech, a sleeper, or a locker, or got teleported
+	if (!isturf(loc) || (mutual_handcuffed_to && get_dist(mutual_handcuffed_to, src) > 3) || locked_to) // We moved to a mech, a sleeper, or a locker, was teleported, or tried pulling someone who was locked in place
 		var/obj/item/weapon/handcuffs/H = mutual_handcuffs
 		if (!istype(H))
 			return
-		H.visible_message("<span class='warning'>\The [H] breaks!</span>")
+		H.visible_message("<span class='warning'>\The [H] break!</span>")
 		qdel(H)
 		return
 	if (mutual_handcuffed_to && !mutual_handcuffed_to.Adjacent(src) && (world.time > mutual_handcuff_forcemove_time + 2))
 		mutual_handcuffed_to.Slip(2, 3)
 		src.Slip(2, 3)
 		src.forceMove(get_turf(mutual_handcuffed_to))
-		//if pulling somebody who is buckled force them out of the buckled structure
-		var/obj/structure/bed/locked_to = src.locked_to
-		if (locked_to && istype(locked_to))
-			locked_to.manual_unbuckle(src)
 		//last_call as not to get too many nested calls
 		mutual_handcuff_forcemove_time = world.time
 

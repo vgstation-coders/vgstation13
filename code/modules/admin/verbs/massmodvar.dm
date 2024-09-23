@@ -7,7 +7,7 @@
 		return
 
 	if(istext(target_type))
-		target_type = filter_list_input("Select an object type to mass-modify", "Mass-editing", get_matching_types(target_type, /atom))
+		target_type = filter_typelist_input("Select an object type to mass-modify", "Mass-editing", get_matching_types(target_type, /atom))
 
 		//get_vars_from_type() fails on turf and area objects. If you want to mass-edit a turf, you have to do it through the varedit window
 		if(ispath(target_type, /atom) && !ispath(target_type, /atom/movable))

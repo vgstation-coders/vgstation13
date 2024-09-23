@@ -16,6 +16,7 @@ var/list/labor_console_categories = list(
 	light_color = LIGHT_COLOR_GREEN
 	req_access = list(access_hop)
 	circuit = "/obj/item/weapon/circuitboard/labor"
+	moody_state = "overlay_labor"
 
 	var/awaiting_swipe = FALSE
 	var/verifying = FALSE
@@ -142,9 +143,28 @@ var/list/labor_console_categories = list(
 		if(isEmag(W))
 			playsound(src, get_sfx("card_swipe"), 60, 1, -5)
 			verified(user)
+	if(istype(W,/obj/item/weapon/disk/jobdisk))
+		to_chat(user, "<span class='notice'>You begin installing the alternate database.</span>")
+		if(!user.drop_item(W, failmsg = TRUE))
+			return
+		W.forceMove(src)
+		if(do_after(user,src,30))
+			playsound(src, 'sound/machines/ping.ogg', 35, 0, -2)
+			to_chat(user, "<span class='notice'>Alternate jobs database successfully installed.</span>")
+			job_master.alt_database_active = TRUE
+			W.forceMove(loc)
+			qdel(W)
+			update_icon()
+			alt_job_limit += 3 //each disk opens 3 spaces
+		else
+			W.forceMove(loc)
 
 /obj/machinery/computer/labor/kick_act(mob/user)
 	..()
+	if(job_master.alt_database_active)
+		to_chat(user,"<span class='warning'>Percussive maintenance has cleared the database bug!")
+		job_master.alt_database_active = FALSE
+		update_icon()
 	if(prob(5))
 		verified(user, FALSE)
 
@@ -207,8 +227,9 @@ var/list/labor_console_categories = list(
 
 /obj/machinery/computer/labor/update_icon()
 	..()
-	overlays = 0
+	overlays -= awaiting_overlay
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
+	icon_state = job_master.alt_database_active ? "labor_alt" : "labor"
 	if(awaiting_swipe || verifying)
 		overlays += awaiting_overlay

@@ -14,7 +14,7 @@
 	invocation_type = SpI_SHOUT
 	message = "<span class='sinister'>You feel refreshed.<span>"
 	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 2, Sp_POWER = 1, Sp_RANGE = 1)
-	compatible_mobs = list(/mob/living)
+	valid_targets = list(/mob/living)
 
 	max_targets = 1
 
@@ -57,10 +57,16 @@
 /spell/targeted/heal/get_upgrade_info(upgrade_type, level)
 	switch(upgrade_type)
 		if(Sp_SPEED)
-			return "Reduce this spell's cooldown."
+			if(spell_levels[Sp_SPEED] >= level_max[Sp_SPEED])
+				return "The spell can't be made any quicker than this!"
+			return "Reduce this spell's cooldown by [cooldown_reduc/10] seconds."
 		if(Sp_POWER)
+			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+				return "This spell already has a chance of mending internal injuries!"
 			return "Grants the spell a chance of mending internal injuries in the primary target."
 		if(Sp_RANGE)
+			if(spell_levels[Sp_RANGE] >= level_max[Sp_RANGE])
+				return "This spell already affects a small area around the target!"
 			return "Expands the spell's effects to a small area around the target."
 
 

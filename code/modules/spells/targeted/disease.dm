@@ -17,6 +17,7 @@
 
 	override_base = "vamp"
 	hud_state = "vampire_disaese"
+	valid_targets = list(/mob/living/carbon)
 
 	var/blood_cost = 50
 
@@ -24,22 +25,6 @@
 	. = ..()
 	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
-
-/spell/targeted/disease/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
-	if (!ismob(target))
-		return FALSE
-
-	var/mob/M = target
-
-	var/success = M.vampire_affected(user.mind)
-	switch (success)
-		if (TRUE)
-			return ..()
-		if (FALSE)
-			return FALSE
-		if (VAMP_FAILURE)
-			critfail(target, user)
-			return FALSE
 
 /spell/targeted/disease/cast(var/list/targets, var/mob/user)
 	if (targets.len > 1)
@@ -51,6 +36,13 @@
 
 	var/mob/living/carbon/target = targets[1]
 
+	var/success = target.vampire_affected(user.mind)
+	switch(success)
+		if(FALSE)
+			return TRUE
+		if(VAMP_FAILURE)
+			critfail(targets, user)
+			return
 	log_admin("[key_name(user)] has death-touched [key_name(target)]. The latter will die in moments.")
 	message_admins("[key_name(user)] has death-touched [key_name(target)] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[target.x];Y=[target.y];Z=[target.z]'>JMP</A>). The latter will die in moments.")
 	var/datum/disease2/disease/S = new ()

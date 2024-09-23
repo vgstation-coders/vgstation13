@@ -1,46 +1,38 @@
 /mob/living/carbon/human/gib(animation = FALSE, meat = TRUE)
-	if(status_flags & BUDDHAMODE)
-		adjustBruteLoss(200)
-		return
-	if(!isUnconscious())
-		forcesay("-")
-	if(species)
-		species.gib(src)
-		return
+	ASSERT(species)
+	species.gib(src, animation, meat)
 
+/* This will be called if the species datum has not overwritten /datum/species/gib() */
+/mob/living/carbon/human/proc/default_gib(animation, meat)
 	death(1)
-	canmove = 0
-	icon = null
-	invisibility = 101
-	default_gib()
+	handle_body_destroyed()
 
-//This will get called often at first until custom gibbing events get made up for each species.
-/mob/living/carbon/human/proc/default_gib()
-	monkeyizing = TRUE
 	for(var/datum/organ/external/E in src.organs)
 		if(istype(E, /datum/organ/external/chest) || istype(E, /datum/organ/external/groin)) //Really bad stuff happens when either get removed
 			continue
-		//Only make the limb drop if it's not too damaged
-		if(prob(100 - E.get_damage()))
+		//Only make the limb drop if it's not too damaged, or if it's the head
+		if(prob(100 - E.get_damage()) || istype(E, /datum/organ/external/head))
 			//Override the current limb status and don't cause an explosion
 			E.droplimb(1, 1)
-	dropBorers()
+	for(var/datum/organ/external/cosmetic_organ in cosmetic_organs)
+		cosmetic_organ.droplimb(TRUE, TRUE)
 	var/gib_radius = 0
 	if(reagents.has_reagent(LUBE))
 		gib_radius = 6 //Your insides are all lubed, so gibs travel much further
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
 	hgibs(loc, virus2, dna, species.flesh_color, species.blood_color, gib_radius)
-	qdel(src)
+	spawn()
+		qdel(src)
 
 /mob/living/carbon/human/dust(var/drop_everything = FALSE)
-	death(1)
-	monkeyizing = 1
-	canmove = 0
-	icon = null
-	invisibility = 101
+	ASSERT(species)
+	species.dust(src, drop_everything)
 
-	dropBorers(1)
+/* This will be called if the species datum has not overwritten /datum/species/dust() */
+/mob/living/carbon/human/proc/default_dust(drop_everything)
+	death(1)
+	handle_body_destroyed()
 
 	if(istype(src, /mob/living/carbon/human/manifested))
 		anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-hm", sleeptime = 15)
@@ -54,7 +46,15 @@
 		new /obj/effect/decal/remains/human(loc)
 	if(drop_everything)
 		drop_all()
-	qdel(src)
+	spawn()
+		qdel(src)
+
+/mob/living/carbon/human/proc/handle_body_destroyed()
+	monkeyizing = TRUE
+	canmove = 0
+	icon = null
+	invisibility = 101
+	dropBorers(1)
 
 /mob/living/carbon/human/Destroy()
 	infected_contact_mobs -= src
@@ -85,11 +85,6 @@
 
 	..()
 
-	for(var/obj/abstract/Overlays/O in obj_overlays)
-		qdel(O)
-
-	obj_overlays = null
-
 /mob/living/carbon/human/death(gibbed)
 	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return
@@ -105,19 +100,16 @@
 		to_chat(B.host_brain, "<span class='danger'>Just before your body passes, you feel a brief return of sensation.  You are now in control...  And dead.</span>")
 		do_release_control(0)
 
-	//Check for heist mode kill count.
-	//if(ticker.mode && ( istype( ticker.mode,/datum/game_mode/heist) ) )
-		//Check for last assailant's mutantrace.
-		/*if( LAssailant && ( istype( LAssailant,/mob/living/carbon/human ) ) )
-			var/mob/living/carbon/human/V = LAssailant
-			if (V.dna && (V.dna.mutantrace == "vox"))
-				*/ //Not currently feasible due to terrible LAssailant tracking.
-//		to_chat(world, "Vox kills: [vox_kills]")
-		//vox_kills++ //Bad vox. Shouldn't be killing humans.
-	if(ishuman(LAssailant))
-		var/mob/living/carbon/human/A=LAssailant
-		if(A.mind)
-			A.mind.kills += "[name] ([ckey])"
+	if(lastassailant)
+		var/mob/living/carbon/human/A=lastassailant.get()
+		if(istype(A))
+			//Check if last assailant is a vox raider.
+			//if (isvoxraider(A))
+				//Not currently feasible due to terrible lastassailant tracking, and the inviolate not even being a thing anymore.
+				//vox_kills++ //Bad vox. Shouldn't be killing humans.
+				//to_chat(world, "Vox kills: [vox_kills]")
+			if(A.mind)
+				A.mind.kills += "[name] ([ckey])"
 
 	if(!gibbed)
 		update_canmove()

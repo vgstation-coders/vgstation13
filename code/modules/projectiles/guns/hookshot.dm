@@ -25,6 +25,8 @@
 	var/mob/living/carbon/firer = null
 	var/atom/movable/extremity = null
 	var/panic = 0	//set to 1 by a part of the hookchain that got destroyed.
+	var/rewind_delay = 0 //whips come out faster than hooks, but hang in the air for an instant
+	var/rewind_speed = 1
 
 /obj/item/weapon/gun/hookshot/update_icon()
 	if(hook || chain_datum)
@@ -80,6 +82,7 @@
 	if(!hook && !rewinding && !clockwerk && !check_tether())//if there is no projectile already, and we aren't currently rewinding the chain, or reeling in toward a target,
 		hook = new hooktype(src)		//and that the hookshot isn't currently sustaining a tether, then we can fire.
 		in_chamber = hook
+		rewind_speed = in_chamber.projectile_speed
 		firer = loc
 		update_icon()
 		return 1
@@ -148,6 +151,7 @@
 	if(rewinding)
 		return
 	rewinding = 1
+	sleep(rewind_delay)
 	for(var/j = 1; j <= maxlength; j++)
 		rewind_loop()
 	rewinding = 0
@@ -173,7 +177,7 @@
 		HC.pixel_x = HC0.pixel_x
 		HC.pixel_y = HC0.pixel_y
 	apply_item_overlay()
-	sleep(pause)
+	sleep(pause*rewind_speed)
 
 /obj/item/weapon/gun/hookshot/proc/reset_hookchain_overlays(var/obj/effect/overlay/hookchain/HC)	//fleshshot only
 	return
@@ -208,7 +212,7 @@
 			break
 		var/turf/oldLoc = firer.loc
 		var/bckp = firer.pass_flags
-		firer.pass_flags = PASSTABLE
+		firer.pass_flags = PASSTABLE | PASSRAILING
 		firer.Move(HC.loc,get_dir(firer,HC.loc))
 		firer.pass_flags = bckp
 		if(firer.loc == oldLoc)//we're bumping into something, abort!
@@ -429,7 +433,7 @@
 				CH.tether_pull = 1
 				var/pass_backup = CH.pass_flags
 				if(chain_datum.rewinding && (istype(CH,/mob/living) || istype(CH,/obj/item)))
-					CH.pass_flags = PASSTABLE//mobs can be pulled above tables
+					CH.pass_flags = PASSTABLE | PASSRAILING //mobs can be pulled above tables and railings
 				CH.Move(R, get_dir(CH, R))
 				CH.pass_flags = pass_backup
 				CH.tether_pull = 0
@@ -474,6 +478,7 @@
 	hooktype = /obj/item/projectile/hookshot/whip
 	empty_sound = null
 	slot_flags = SLOT_BELT
+	rewind_delay = 3
 
 /obj/item/weapon/gun/hookshot/whip/update_icon()
 	return
@@ -498,6 +503,15 @@
 	force = 15
 	hooktype = /obj/item/projectile/hookshot/whip/vampkiller
 	fire_sound = 'sound/weapons/vampkiller.ogg'
+
+/obj/item/weapon/gun/hookshot/whip/vampkiller/update_icon()
+	if(hook || chain_datum)
+		item_state = "vampkiller0"
+	else
+		item_state = "vampkiller"
+	if(istype(loc,/mob))
+		var/mob/M = loc
+		M.regenerate_icons()
 
 /obj/item/weapon/gun/hookshot/whip/vampkiller/true
 	desc = "A brutal looking weapon consisting of a morning star head attached to a chain lash. It is blessed to be effective against the undead and radiates an awesome holy aura."

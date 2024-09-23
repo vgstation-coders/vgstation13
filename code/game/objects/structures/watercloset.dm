@@ -233,6 +233,7 @@
 	var/ismist = 0 //Needs a var so we can make it linger~
 	var/watertemp = "cool" //Freezing, normal, or boiling
 	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
+	var/clean_power = CLEANLINESS_SPACECLEANER//Nanotrasen showers scrub you clean
 
 	machine_flags = SCREWTOGGLE
 
@@ -275,7 +276,7 @@
 	update_icon()
 	if(on)
 		for(var/atom/movable/G in get_turf(src))
-			G.clean_blood()
+			G.clean_act(clean_power)
 
 /obj/machinery/shower/attackby(obj/item/I as obj, mob/user as mob)
 
@@ -358,9 +359,12 @@
 
 	if(iscarbon(O))
 		var/mob/living/carbon/M = O
+		if(prob(CLEAN_PROB))
+			M.clean_blood()//cleaning feet for humans
 		for(var/obj/item/I in M.held_items)
 			if(prob(CLEAN_PROB))
 				I.clean_blood()
+				I.clean_act(clean_power)
 				M.update_inv_hand(M.is_holding_item(I))
 		if(M.back && prob(CLEAN_PROB))
 			if(M.back.clean_blood())
@@ -422,6 +426,7 @@
 	else
 		if(prob(CLEAN_PROB))
 			O.clean_blood()
+			O.clean_act(clean_power)
 
 	var/turf/turf = get_turf(src)
 	if(prob(CLEAN_PROB))
@@ -473,6 +478,7 @@
 	icon_state = "sink"
 	desc = "A sink used for washing one's hands and face."
 	anchored = 1
+	var/clean_power = CLEANLINESS_SPACECLEANER//Nanotrasen sinks are equipped with state of the art water propulsion for extra cleanliness
 	var/busy = 0 	//Something's being washed at the moment
 
 /obj/structure/sink/splashable()
@@ -512,39 +518,34 @@
 
 	to_chat(usr, "<span class='notice'>You start washing your hands.</span>")
 
-	busy = 1
-	sleep(40)
-	busy = 0
+	busy = TRUE
+	if (do_after(M,src, 40))
+		M.clean_blood()
+		if(ishuman(M))
+			M:update_inv_gloves()
+			var/mob/living/carbon/human/HM = M
 
-	if(!Adjacent(M))
-		return		//Person has moved away from the sink
+			if(!HM.gloves && HM.species && HM.species.anatomy_flags & ACID4WATER)
+				HM.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
+				HM.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
 
-	M.clean_blood()
-	if(ishuman(M))
-		M:update_inv_gloves()
-		var/mob/living/carbon/human/HM = M
-
-		if(!HM.gloves && HM.species && HM.species.anatomy_flags & ACID4WATER)
-			HM.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
-			HM.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
-
-	for(var/mob/V in viewers(src, null))
-		V.show_message("<span class='notice'>[M] washes their hands using \the [src].</span>")
+		M.visible_message("<span class='notice'>[M] washes \his hands using \the [src].</span>","<span class='notice'>You wash your hands using \the [src].</span>")
+	busy = FALSE
 
 /obj/structure/sink/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(busy)
 		return 1
 	user.visible_message("<span class='notice'>[user] puts \the [M] underneath the running water.","<span class='notice'>You put \the [M] underneath the running water.</span>")
-	busy = 1
-	sleep(40)
-	busy = 0
-	M.clean_blood()
-	if(M.reagents.maximum_volume > M.reagents.total_volume)
-		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
-		M.reagents.add_reagent(WATER, min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
-		user.visible_message("<span class='notice'>[user] finishes soaking \the [M], \he could clean the entire station with that.</span>","<span class='notice'>You finish soaking \the [M], you feel as if you could clean anything now, even the Chef's backroom...</span>")
-	else
-		user.visible_message("<span class='notice'>[user] removes \the [M], cleaner than before.</span>","<span class='notice'>You remove \the [M] from \the [src], it's all nice and sparkly now but somehow didnt get it any wetter.</span>")
+	busy = TRUE
+	if (do_after(user,src, 40))
+		M.clean_blood()
+		if(M.reagents.maximum_volume > M.reagents.total_volume)
+			playsound(src, 'sound/effects/slosh.ogg', 25, 1)
+			M.reagents.add_reagent(WATER, min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
+			user.visible_message("<span class='notice'>[user] finishes soaking \the [M], \he could clean the entire station with that.</span>","<span class='notice'>You finish soaking \the [M], you feel as if you could clean anything now, even the Chef's backroom...</span>")
+		else
+			user.visible_message("<span class='notice'>[user] removes \the [M], cleaner than before.</span>","<span class='notice'>You remove \the [M] from \the [src], it's all nice and sparkly now but somehow didnt get it any wetter.</span>")
+	busy = FALSE
 	return 1
 
 /obj/structure/sink/attackby(obj/item/O as obj, mob/user as mob)
@@ -558,7 +559,7 @@
 	if(!anchored)
 		return
 
-	if(istype(O, /obj/item/weapon/mop))
+	if(istype(O, /obj/item/weapon/mop) || istype(O, /obj/item/toy/waterballoon))
 		return
 
 	if (istype(O, /obj/item/weapon/reagent_containers))
@@ -574,12 +575,7 @@
 		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill the [RG] using \the [src].</span>")
 		return
 
-	if(istype(O,/obj/item/trash/plate))
-		var/obj/item/trash/plate/the_plate = O
-		the_plate.clean = TRUE
-		O.update_icon()
-
-	else if (istype(O, /obj/item/weapon/melee/baton))
+	if (istype(O, /obj/item/weapon/melee/baton))
 		var/obj/item/weapon/melee/baton/B = O
 		if (B.bcell && B.bcell.charge > 0 && B.status == 1)
 			flick("baton_active", src)
@@ -604,6 +600,22 @@
 			P.colour = "black"
 			P.bloodied = FALSE
 
+	else if(istype(O, /obj/item/stack/sheet/hairlesshide))
+		var/obj/item/stack/sheet/hairlesshide/H = O
+		user.visible_message("<span class='notice'>[user] puts \the [H] underneath the running water and begins soaking it.","<span class='notice'>You put \the [H] underneath the running water and begin soaking it.</span>")
+		busy = TRUE
+		if (do_after(user, src, 10*H.amount))
+			var/obj/item/stack/sheet/wetleather/WL = new(src)
+			WL.amount = H.amount
+			WL.source_string = H.source_string
+			WL.name = H.source_string ? "wet [H.source_string] leather" : "wet leather"
+			user.create_in_hands(H, WL, msg = "<span class='notice'>You finish up, creating [WL].</span>")
+			QDEL_NULL(H)
+		else
+			to_chat(user, "<span class='notice'>You stop soaking \the [H].</span>")
+		busy = FALSE
+		return
+
 	if (!isturf(user.loc))
 		return
 
@@ -612,9 +624,7 @@
 		busy = TRUE
 
 		if (do_after(user,src, 40))
-			O.clean_blood()
-			if(O.current_glue_state == GLUE_STATE_TEMP)
-				O.unglue()
+			O.clean_act(clean_power)//removes blood, unglues, etc
 			user.visible_message( \
 				"<span class='notice'>[user] washes \the [O] using \the [src].</span>", \
 				"<span class='notice'>You wash \the [O] using \the [src].</span>")

@@ -140,19 +140,19 @@
 	return 0
 
 /obj/machinery/turret/proc/get_new_target()
+	var/static/list/types_to_search = list(
+		/mob,
+		/obj/mecha,
+		/obj/structure/bed/chair/vehicle,
+		/obj/effect/blob
+		)
 	var/list/new_targets = new
 	var/new_target
-	for(var/mob/M in view(7, src))
-		if(check_target(M))
-			new_targets += M
-	for(var/obj/mecha/ME in view(7, src))
-		if(check_target(ME))
-			new_targets += ME
-	for(var/obj/structure/bed/chair/vehicle/V in view(7, src))
-		if(check_target(V))
-			new_targets += V
-	for(var/obj/effect/blob/B in view(7, src))
-		new_targets += B
+
+	for(var/atom/movable/A in view(7, src))
+		if(is_type_in_list(A, types_to_search))
+			if(check_target(A))
+				new_targets += A
 	if(new_targets.len)
 		new_target = pick(new_targets)
 	return new_target
@@ -235,6 +235,9 @@
 	else
 		var/obj/item/weapon/gun/energy/E = installed
 		A = new E.projectile_type(loc)
+	var/obj/item/weapon/gun/G = installed
+	if(G.bullet_type_override && ispath(G.bullet_type_override, /obj/item/projectile))
+		A = new G.bullet_type_override
 	A.original = target
 	A.starting = T
 	A.shot_from = installed
@@ -243,6 +246,11 @@
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
 	A.OnFired()
+	if(G.bullet_overrides)
+		for(var/bvar in A.vars)
+			for(var/o in G.bullet_overrides)
+				if(bvar == o)
+					A.vars[bvar] = G.bullet_overrides[o]
 	spawn()
 		A.process()
 	return
@@ -577,7 +585,8 @@
 		icon_state = "turretid_safe"
 
 /obj/structure/turret/gun_turret
-	name = "Gun Turret"
+	name = "gun turret"
+	desc = "A break-away from traditional design, this turret always has its hulking gun exposed. It looks menacing."
 	density = 1
 	anchored = 1
 	var/cooldown = 20
@@ -587,12 +596,28 @@
 	var/list/exclude = list()
 	var/atom/cur_target
 	var/scan_range = 7
+	var/projectile_type = /obj/item/projectile
+	var/firing_delay = 2
+	var/admin_only = 0 //Can non-admins interface with this turret's controls?
+	var/roulette_mode = FALSE
+	var/list/roulette_projectiles = list()
+
 	health = 40
 	var/list/scan_for = list("human"=0,"cyborg"=0,"mecha"=0,"alien"=1)
 	var/on = 0
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "gun_turret"
 
+/obj/structure/turret/gun_turret/New()
+	..()
+	roulette_projectiles = existing_typesof(/obj/item/projectile) - restricted_roulette_projectiles
+	for(var/projectile_types in restrict_with_subtypes)
+		roulette_projectiles -= typesof(projectile_types)
+
+/obj/structure/turret/gun_turret/examine(mob/user)
+	..()
+	if(admin_only)
+		to_chat(user, "<span class='warning'>This turret's control panel is glowing red and appears to be remotely locked down.</span>")
 
 /obj/structure/turret/gun_turret/ex_act()
 	qdel (src)
@@ -612,9 +637,12 @@
 	return ..()
 
 /obj/structure/turret/gun_turret/attack_hand(mob/user as mob)
+	if(admin_only && !check_rights(R_ADMIN))
+		to_chat(user, "<span class='warning'> The turret's control panel is glowing red and appears to be remotely locked down.</span>")
+		return
 	user.set_machine(src)
 	var/dat = {"<html>
-					<head><title>[src] Control</title></head>
+					<head><title>[src] control</title></head>
 					<body>
 					<b>Power: </b><a href='?src=\ref[src];power=1'>[on?"on":"off"]</a><br>
 					<b>Scan Range: </b><a href='?src=\ref[src];scan_range=-1'>-</a> [scan_range] <a href='?src=\ref[src];scan_range=1'>+</a><br>
@@ -622,7 +650,19 @@
 	for(var/scan in scan_for)
 		dat += "<div style=\"margin-left: 15px;\">[scan] (<a href='?src=\ref[src];scan_for=[scan]'>[scan_for[scan]?"Yes":"No"]</a>)</div>"
 
-	dat += {"<b>Ammo: </b>[max(0, projectiles)]<br>
+	dat += "<b>Ammo: </b>[max(0, projectiles)]<br>"
+	if(check_rights(R_ADMIN))
+		dat += {"<br><b><font color="red">Admin Options:</font></b><br>
+				<b>Admin-only mode:</b> <a href='?src=\ref[src];admin_only=1'>[admin_only?"ON":"OFF"]</a><br>
+				<b>Roulette mode:</b> <a href='?src=\ref[src];roulette_mode=0'>[roulette_mode?"ON":"OFF"]</a><br>
+				"}
+		if(!roulette_mode)
+			dat += {"<b>Projectile type:</b> <a href='?src=\ref[src];projectile_type=1'>[projectile_type]</a><br>"}
+		dat += {"<b>Projectiles per burst:</b> <a href='?src=\ref[src];projectile_burst=1'>[projectiles_per_shot]</a><br>
+				<b>Firing delay:</b> <a href='?src=\ref[src];firing_delay=1'>[cooldown] deci-seconds</a><br>
+				<b>Set ammo #:</b> <a href='?src=\ref[src];force_ammo_amt=1'>[projectiles]</a><br>
+
+
 				</body>
 				</html>"}
 	user << browse(dat, "window=turret")
@@ -652,6 +692,51 @@
 	if(href_list["scan_for"])
 		if(href_list["scan_for"] in scan_for)
 			scan_for[href_list["scan_for"]] = !scan_for[href_list["scan_for"]]
+	if(href_list["admin_only"])
+		if(!check_rights(R_ADMIN))
+			return
+		src.admin_only = !src.admin_only
+	if(href_list["roulette_mode"])
+		if(!check_rights(R_ADMIN))
+			return
+		roulette_mode = !roulette_mode
+	if(href_list["projectile_type"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/list/valid_turret_projectiles = existing_typesof(/obj/item/projectile/bullet) + existing_typesof(/obj/item/projectile/energy)
+		var/userinput = filter_typelist_input("New projectile typepath", "You can only pick one!", valid_turret_projectiles)
+		if(!userinput)
+			to_chat(usr, "<span class='warning'><b>No projetile typepath entered. The turret's projectile remains unchanged.</b></span>")
+			return
+		projectile_type = userinput
+
+	if(href_list["projectile_burst"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/userinput = input("Enter new # of projectiles in a burst-fire", "RATATATTATATA", 2) as num
+		if(userinput > 5)
+			projectiles_per_shot = 5
+			to_chat(usr, "<span class='warning'><b>Error: Max burst-fire exceeded. Burst-fire set to 5.</b></span>")
+			return
+		projectiles_per_shot = max(1, userinput)
+	if(href_list["firing_delay"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/userinput = input("Enter new firing delay (as tenths of a second)", "RATATATTATATA", 20) as num
+		if(userinput <= 0)
+			cooldown = 1
+			to_chat(usr, "<span class='warning'><b>Error: Firing cooldown floor reached. Cooldown set to 1/10th of a second.</b></span>")
+			return
+		cooldown = userinput
+	if(href_list["force_ammo_amt"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/userinput = input("Enter new # of projectiles left in the turret", "RATATATTATATA", 100) as num
+		if(userinput < 0)
+			projectiles = 0
+			to_chat(usr, "<span class='warning'><b>Error: Setting negative projectiles is a bad idea, okay? <u>Don't do that<u/>. Projectiles reset to 0.</b></span>")
+			return
+		projectiles = userinput
 	src.updateUsrDialog()
 	return
 
@@ -714,7 +799,6 @@
 		target = pick(pos_targets)
 	return target
 
-
 /obj/structure/turret/gun_turret/proc/fire(atom/target)
 	if(!target)
 		cur_target = null
@@ -730,7 +814,9 @@
 		if (targloc == curloc)
 			continue
 		playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
-		var/obj/item/projectile/A = new /obj/item/projectile(curloc)
+		if(roulette_mode)
+			projectile_type = pick(roulette_projectiles)
+		var/obj/item/projectile/A = new projectile_type(curloc)
 		src.projectiles--
 		A.original = target
 		A.current = curloc
@@ -742,6 +828,9 @@
 		A.process()
 		sleep(2)
 	return
+
+/obj/structure/turret/gun_turret/admin
+	admin_only = 1
 
 /obj/machinery/turret/Destroy()
 	// deletes its own cover with it

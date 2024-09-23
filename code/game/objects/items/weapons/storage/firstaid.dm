@@ -15,8 +15,8 @@
 	icon_state = "firstaid"
 	throw_speed = 2
 	throw_range = 8
-	autoignition_temperature = AUTOIGNITION_PAPER
-
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 
 /obj/item/weapon/storage/firstaid/fire
 	name = "fire first-aid kit"
@@ -129,6 +129,9 @@
 	..()
 	colour_overlay = image('icons/obj/chemical.dmi',"bottle_colour")
 	overlays += colour_overlay
+
+/obj/item/weapon/storage/pill_bottle/return_air()//keeping your pills at room temperature while in space
+	return
 
 /obj/item/weapon/storage/pill_bottle/CtrlClick()
 	if(isturf(loc))

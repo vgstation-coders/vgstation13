@@ -37,7 +37,6 @@
 
 /obj/item/weapon/gun/projectile/blastcannon/attack_self(mob/user as mob)
 	if(bomb)
-		bomb.forceMove(user.loc)
 		user.put_in_hands(bomb)
 		to_chat(user, "You detach \the [bomb] from \the [src].")
 		bomb = null
@@ -46,7 +45,6 @@
 		desc = "A pipe welded onto a gun stock. You're not sure how you could even use this."
 		w_class = W_CLASS_MEDIUM
 	else if (toybomb)
-		toybomb.forceMove(user.loc)
 		user.put_in_hands(toybomb)
 		to_chat(user, "You detach \the [toybomb] from \the [src].")
 		toybomb = null
@@ -100,8 +98,7 @@
 			to_chat(user, "<span class='warning'>Nothing's going to happen if there[!T.tank_one && !T.tank_two ? " aren't any tanks" : "'s only one tank"] attached to \the [W]!</span>")
 			return
 		bomb_appearance = W.appearance
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			bomb_appearance = null
 			return 1
 		bomb = W
@@ -117,8 +114,7 @@
 			to_chat(user, "<span class='warning'>There's already a [toybomb.name] attached to \the [src]!</span>")
 			return
 		bomb_appearance = W.appearance
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			bomb_appearance = null
 			return 1
 		toybomb = W

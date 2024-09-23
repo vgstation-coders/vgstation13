@@ -117,6 +117,9 @@ Class Procs:
 
 	w_type = NOT_RECYCLABLE
 	layer = MACHINERY_LAYER
+	flammable = FALSE
+
+	pass_flags_self = PASSMACHINE
 
 	penetration_dampening = 5
 
@@ -180,6 +183,8 @@ Class Procs:
 
 /obj/machinery/initialize()
 	..()
+	if (locate(/obj/structure/table) in loc)
+		table_shift()
 	if(machine_flags & PURCHASER)
 		reconnect_database()
 		linked_account = vendor_account
@@ -211,6 +216,11 @@ Class Procs:
 	qdel(hack_overlay)
 
 	..()
+
+/obj/machinery/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover) && mover.checkpass(pass_flags_self))
+		return TRUE
+	return ..()
 
 /obj/machinery/projectile_check()
 	return PROJREACT_OBJS
@@ -296,9 +306,10 @@ Class Procs:
 
 		if(!use_auto_lights)
 			return
-		if(stat & FORCEDISABLE)
-			return
-		set_light(light_range_on, light_power_on)
+		if(stat & (BROKEN|FORCEDISABLE))
+			set_light(0)
+		else
+			set_light(light_range_on, light_power_on)
 
 	else
 		stat |= NOPOWER
@@ -907,3 +918,20 @@ Class Procs:
 		if("Machine Location")
 			output_dir = 0
 			to_chat(user, "<span class='notice'>Output set.</span>")
+
+//Called when either built over a table, or when placing a table underneath, or said table gets unflipped
+/obj/machinery/proc/table_shift()
+	return
+
+//Called when a table underneath is removed, or flipped
+/obj/machinery/proc/table_unshift()
+	return
+
+/obj/machinery/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
+	. = ..()
+	if (.)
+		if (anchored)
+			if (locate(/obj/structure/table) in loc)
+				table_shift()
+		else
+			table_unshift()

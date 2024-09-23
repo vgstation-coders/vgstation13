@@ -96,8 +96,7 @@
 	if(istype(usr, /mob/living/silicon/ai))
 		var/mob/living/silicon/ai/AI = usr
 		if(AI.eyeobj && AI.client.eye == AI.eyeobj)
-			AI.cameraFollow = null
-			//AI.eyeobj.forceMove(src)
+			AI.stop_ai_tracking()
 			if (isturf(src.loc) || isturf(src))
 				AI.eyeobj.forceMove(src)
 
@@ -153,7 +152,7 @@
 	else
 		user.sprint = initial
 
-	user.cameraFollow = null
+	user.stop_ai_tracking()
 
 	//user.unset_machine() //Uncomment this if it causes problems.
 	//user.lightNearbyCamera()
@@ -168,7 +167,7 @@
 		T.malf_release_control()
 
 	current = null
-	cameraFollow = null
+	stop_ai_tracking()
 	unset_machine()
 
 	if(!loc)
@@ -209,7 +208,7 @@
 	if(!T)
 		to_chat(src, "<span class='danger'>Nowhere to jump to!</span>")
 		return
-	cameraFollow = null
+	stop_ai_tracking()
 	eyeobj.forceMove(T)
 
 /mob/living/silicon/ai/proc/toggleholopadoverlays() //shows holopads above all static

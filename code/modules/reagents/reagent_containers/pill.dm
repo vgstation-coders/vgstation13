@@ -19,6 +19,7 @@
 	prearcane_name = name
 	if(!icon_state)
 		icon_state = "pill[rand(1,20)]"
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/pill/attack_self(mob/user as mob)
 	return attack(user, user) //Dealt with in attack code
@@ -88,6 +89,12 @@
 	..()
 	name = prearcane_name
 
+/obj/item/weapon/reagent_containers/pill/update_icon()
+	..()
+	overlays.len = 0
+	update_temperature_overlays()
+	set_blood_overlay()//re-applying blood stains
+
 //OOP, HO!
 /obj/item/weapon/reagent_containers/pill/proc/ingest(mob/M as mob)
 	if(!reagents)
@@ -104,6 +111,12 @@
 
 /obj/item/weapon/reagent_containers/pill/should_qdel_if_empty() //If you remove the reagents from this thing via smoke or IV drip or something, it shouldn't like it.
 	return 1													//This isn't an on_reagent_change() because so many things runtime if it is.
+
+/obj/item/weapon/reagent_containers/pill/thermal_entropy()
+	thermal_entropy_containers.Remove(src)
+
+/obj/item/weapon/reagent_containers/pill/get_heat_conductivity()
+	return 0
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Pills. END
@@ -344,7 +357,7 @@
 		return
 	var/timer = round(reagents.get_reagent_amount(SUGAR),1)
 	forceMove(M)
-	spawn(timer*30)
+	spawn(timer*10 SECONDS) //10 seconds per unit of sugar
 		reagents.del_reagent(SUGAR)
 		reagents.reaction(M, INGEST)
 		reagents.trans_to(M, reagents.total_volume)
@@ -514,6 +527,14 @@
 	..()
 	reagents.add_reagent(ARITHRAZINE, 10)
 
+/obj/item/weapon/reagent_containers/pill/lithotorcrazine
+	name = "lithotorcrazine pill"
+	desc = "Shields the body against radiation buildup, but does not cure it. Lasts around 5 minutes."
+	icon_state = "pill38"
+
+/obj/item/weapon/reagent_containers/pill/lithotorcrazine/New()
+	..()
+	reagents.add_reagent(LITHOTORCRAZINE, 30)
 
 /obj/item/weapon/reagent_containers/pill/nanofloxacin
 	name = "nanofloxacin pill"
