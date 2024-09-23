@@ -15,7 +15,8 @@
 	amount_per_transfer_from_this = 10
 	volume = 250
 	possible_transfer_amounts = null
-	slimeadd_message = "You drop the slime extract down into the spray nozzle."
+	slimeadd_message = "You drop the slime extract down into the spray nozzle"
+	slimeadd_success_message = "The reagents inside swell up to the brim"
 	var/preset_reagent
 	var/melted = 0
 
@@ -40,15 +41,9 @@
 		user.create_in_hands(src, new /obj/item/weapon/gun_assembly(loc, "spraybottle_assembly"), W, msg = "You press \the [W] into the melted plastic on the top of \the [src].")
 
 /obj/item/weapon/reagent_containers/spray/slime_act(primarytype, mob/user)
-	if(preset_reagent && (slimes_accepted & primarytype))
-		slimeadd_message += ", and the reagents inside swells up to the brim"
-	slimeadd_message += "."
-	if(..())
-		if(preset_reagent && (slimes_accepted & primarytype))
-			reagents.add_reagent(preset_reagent, volume)//in a perfect world, we'd calculate how much to add, but the add_reagents() already has sanity checking for max volume
-		slimeadd_message = initial(slimeadd_message)
-		return TRUE
-	slimeadd_message = initial(slimeadd_message)
+	. = ..()
+	if(. && preset_reagent && (slimes_accepted & primarytype))
+		reagents.add_reagent(preset_reagent, volume)//in a perfect world, we'd calculate how much to add, but the add_reagents() already has sanity checking for max volume
 
 /obj/item/weapon/reagent_containers/spray/afterattack(atom/A as mob|obj, mob/user as mob, var/adjacency_flag, var/click_params)
 	if (adjacency_flag && is_type_in_list(A, ignore_spray_types))
