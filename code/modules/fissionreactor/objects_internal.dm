@@ -27,6 +27,7 @@ included:
 
 /obj/machinery/fissionreactor/fissionreactor_controlrod
 	name="fission reactor control rod assembly"
+	desc="Monitors a nuclear reactor and can slow or halt the fission process if needed."
 	icon='icons/obj/fissionreactor/controlrod.dmi'
 	icon_state="controlrod"
 	
@@ -114,8 +115,11 @@ included:
 	
 /obj/machinery/fissionreactor/fissionreactor_fuelrod
 	icon='icons/obj/fissionreactor/fuelrod.dmi'
+	desc="Monitors and stores a fuel rod for nuclear reactions."
 	icon_state="fuelrod"
 	name="fission reactor fuel rod assembly"
+	var/adjacencybonus=1.0
+	var/hatchopen=FALSE
 	
 	var/image/overlay_N
 	var/image/overlay_S
@@ -137,34 +141,38 @@ included:
 	if(icon_state=="fuelrod_active")
 		to_chat(usr,"The center emits a blue glow.")
 	to_chat(usr,"The structure is held together firmly, it'll have to be cut in order to part it.")
+	to_chat(usr,"There is a maitinance hatch at the top, it is [hatchopen?"open":"screwed shut"].")
 	
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/update_icon()
 	icon_state="fuelrod"
 	if(associated_reactor && associated_reactor.considered_on())
 		icon_state="fuelrod_active"
 	overlays=null
-	if(  locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, NORTH) )
+	var/obj/machinery/fissionreactor/fissionreactor_fuelrod/CFR= locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, NORTH)
+	if( CFR?.adjacencybonus>0 )
 		overlays+=overlay_N
-	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, SOUTH) )
+	CFR= locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, SOUTH)
+	if( CFR?.adjacencybonus>0 )
 		overlays+=overlay_S
-	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, EAST) )
+	CFR= locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, EAST)
+	if( CFR?.adjacencybonus>0 )
 		overlays+=overlay_E
-	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, WEST) )
+	CFR= locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, WEST)
+	if( CFR?.adjacencybonus>0 )
 		overlays+=overlay_W
 
 
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/proc/get_reactivity()
-	var/adjacency_reactivity_bonus=1.0 //addative per neighbor. max of 4x this number.
-	var/num_adjacent_fuel_rods=0
-	var/list/lofrds=associated_reactor.fuel_rods
+	var/currentbonus=0.0
+	var/list/lofrds=associated_reactor.fuel_rods 
 	for (var/obj/machinery/fissionreactor/fissionreactor_fuelrod/fuel_rod in lofrds) //probably not the most efficent way... but it works well enough
 		if (fuel_rod.loc.y==src.loc.y)
 			if (fuel_rod.loc.x==src.loc.x+1 || fuel_rod.loc.x==src.loc.x-1)
-				num_adjacent_fuel_rods++
+				currentbonus+=fuel_rod.adjacencybonus
 		if (fuel_rod.loc.x==src.loc.x)
 			if (fuel_rod.loc.y==src.loc.y+1 || fuel_rod.loc.y==src.loc.y-1)
-				num_adjacent_fuel_rods++
-	return 1.0+num_adjacent_fuel_rods*adjacency_reactivity_bonus
+				currentbonus+=fuel_rod.adjacencybonus
+	return 1.0+currentbonus
 
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/proc/get_iscontrolled()
 	var/list/lofrds=associated_reactor.control_rods
@@ -193,9 +201,70 @@ included:
 			newframe.components+=new /obj/item/weapon/stock_parts/scanning_module
 			newframe.components+=new /obj/item/weapon/stock_parts/matter_bin
 			qdel(src)
-		
+	if(O.is_screwdriver(user))
+		O.playtoolsound(src, 100)
+		user.visible_message("<span class='notice'>[user] [hatchopen ? "closes" : "opens"] the maintenance hatch of the [src].</span>", "<span class='notice'>You [hatchopen ? "close" : "open"] the maintenance hatch of the [src].</span>")	
+		hatchopen=!hatchopen
+	if(hatchopen && istype(O, /obj/item/stack/sheet/metal))
+		var/obj/item/stack/sheet/metal/mmmmmetal=O
+		if(mmmmmetal.amount<4)
+			to_chat(usr,"you don't have enough sheets to do this!")
+			return
+		mmmmmetal.use(4)
+		var/obj/machinery/fissionreactor/fissionreactor_fuelrod/inert/newfrd=new /obj/machinery/fissionreactor/fissionreactor_fuelrod/inert(src.loc)
+		playsound(src,'sound/items/crowbar.ogg',50)
+		newfrd.hatchopen=TRUE
+		qdel(src)
+	
+/obj/machinery/fissionreactor/fissionreactor_fuelrod/inert
+	adjacencybonus=0.0
+	desc="Monitors and stores a fuel rod for nuclear reactions. This unit has been modified with metal plating to remove the influence of nearby fuel rods."
+	
+/obj/machinery/fissionreactor/fissionreactor_fuelrod/inert/examine()
+	to_chat(usr,"The adjacency lights are covered up.")
+	if(icon_state=="fuelrod_active")
+		to_chat(usr,"The center emits a blue glow.")
+	to_chat(usr,"The structure is held together firmly, it'll have to be cut in order to part it.")
+	to_chat(usr,"There is a maitinance hatch at the top, it is [hatchopen?"open":"screwed shut"].")
+	
+/obj/machinery/fissionreactor/fissionreactor_fuelrod/inert/update_icon()
+	icon_state="fuelrod-inert"
+	if(associated_reactor && associated_reactor.considered_on())
+		icon_state="fuelrod-inert_active"
 	
 	
+/obj/machinery/fissionreactor/fissionreactor_fuelrod/inert/attackby(var/obj/item/O,var/mob/user)	
+	if(iswelder(O))
+		if(associated_reactor && associated_reactor.considered_on())
+			if(user.a_intent==I_HELP)
+				to_chat(usr,"<span class='danger'>this seems like a really bad idea.</span>")
+				return
+		user.visible_message("<span class='notice'>[user] starts welding \the [src]'s external plating off its frame.</span>", "<span class='notice'>You start welding \the [src]'s external plating off its frame.</span>")
+		var/obj/item/tool/weldingtool/WT = O
+		if(WT.do_weld(user,src,60,0))
+			var/obj/machinery/constructable_frame/machine_frame/reinforced/newframe= new /obj/machinery/constructable_frame/machine_frame/reinforced(loc)
+			newframe.forceMove(loc)
+			newframe.set_build_state(3)
+			newframe.circuit= new /obj/item/weapon/circuitboard/fission_fuel_rod
+			newframe.components=list()
+			newframe.components+= new /obj/item/stack/rods(null,2)
+			newframe.components+=new /obj/item/weapon/stock_parts/scanning_module
+			newframe.components+=new /obj/item/weapon/stock_parts/matter_bin
+			new /obj/item/stack/sheet/metal(src.loc,4)
+			qdel(src)
+	if(O.is_screwdriver(user))
+		O.playtoolsound(src, 100)
+		user.visible_message("<span class='notice'>[user] [hatchopen ? "closes" : "opens"] the maintenance hatch of the [src].</span>", "<span class='notice'>You [hatchopen ? "close" : "open"] the maintenance hatch of the [src].</span>")	
+		hatchopen=!hatchopen
+	if(hatchopen && iscrowbar(O))
+		new /obj/item/stack/sheet/metal(src.loc,4)
+		var/obj/machinery/fissionreactor/fissionreactor_fuelrod/newfrd=new /obj/machinery/fissionreactor/fissionreactor_fuelrod(src.loc)
+		playsound(src,'sound/items/crowbar.ogg',50)
+		newfrd.hatchopen=TRUE
+		qdel(src)	
+	
+/obj/machinery/fissionreactor/fissionreactor_fuelrod/inert/get_reactivity()	
+	return 1.0
 	
 	
 	
