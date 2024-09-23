@@ -9,9 +9,9 @@
 	pass_flags = PASSTABLE
 	var/heating = BUNSEN_OFF //whether the bunsen is turned on
 	var/obj/item/weapon/reagent_containers/held_container
-	slimeadd_message = "You add the slime extract to the fuel port."
+	slimeadd_message = "You add the slime extract to the fuel port"
 	slimes_accepted = SLIME_RED
-	slimeadd_success_message = "It feels full now."
+	slimeadd_success_message = "It feels full now"
 	ghost_read = 0
 	is_cooktop = TRUE
 
@@ -52,7 +52,6 @@
 	if(primarytype == SLIME_RED && .)
 		reagents.clear_reagents()
 		reagents.add_reagent(GLYCEROL, 250)
-		has_slimes &= ~SLIME_RED
 
 /obj/machinery/bunsen_burner/splashable()
 	return FALSE
@@ -161,7 +160,7 @@
 				o2_consumption = has_slimes & SLIME_RED ? fuel_stats["o2_cons"] : 0
 				co2_consumption = has_slimes & SLIME_RED ? fuel_stats["co2_cons"] : 0
 
-				if(reagents.has_reagent(possible_fuel))
+				if(!(possible_fuel == GLYCEROL && (has_slimes & SLIME_RED)) && reagents.has_reagent(possible_fuel))
 					reagents.remove_reagent(possible_fuel, consumption_rate)
 				if(held_container)
 					if(!cookvessel) //Cooking vessels are heated differently.
