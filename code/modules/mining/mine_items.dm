@@ -84,6 +84,7 @@
 	toolsounds = list('sound/weapons/Genhit.ogg')
 	slimeadd_message = "You mold the slime extract around the tip of SRCTAG"
 	hitsound = "sound/weapons/bloodyslice.ogg"
+	slimes_accepted = SLIME_OIL|SLIME_PYRITE
 	var/drill_verb = "picking"
 	var/diggables = DIG_ROCKS
 	var/excavation_amount = 100
@@ -91,12 +92,10 @@
 /obj/item/weapon/pickaxe/slime_act(primarytype, mob/user)
 	switch(primarytype)
 		if(SLIME_OIL)
-			slimeadd_message += ", giving it a strangely dense gravitational aura to it"
+			slimeadd_success_message = "It now has a strangely dense gravitational aura to it"
 		if(SLIME_PYRITE)
-			slimeadd_message += ", causing it to shine spectacularly"
-	slimeadd_message += "."
+			slimeadd_success_message = "It shines spectacularly"
 	. = ..()
-	slimeadd_message = initial(slimeadd_message)
 
 /obj/item/weapon/pickaxe/hammer
 	name = "sledgehammer"

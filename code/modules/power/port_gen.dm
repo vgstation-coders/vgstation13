@@ -45,12 +45,10 @@
 
 /obj/machinery/power/port_gen/slime_act(primarytype, mob/user)
 	if(has_slimes & (slimes_accepted|primarytype))
-		slimeadd_message += ", and hear it begin to churn comfortably"
+		slimeadd_success_message = "It churns comfortably"
 	else if(slimes_accepted & primarytype)
-		slimeadd_message += ", and hear it begin to [pick("nudge","budge","rumble")] slightly"
-	slimeadd_message += "."
+		slimeadd_success_message = "It begins to [pick("nudge","budge","rumble")] slightly"
 	. = ..()
-	slimeadd_message = initial(slimeadd_message)
 
 /obj/machinery/power/port_gen/attack_hand(mob/user as mob)
 	if(..())
