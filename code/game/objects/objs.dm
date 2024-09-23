@@ -51,7 +51,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	//Does this item have slimes installed? Bitflag for each type.
 	var/has_slimes = 0
-	var/slimeadd_message = "You add the slime extract to SRCTAG."
+	var/slimeadd_message = "You add the slime extract to SRCTAG"
 	var/slimeadd_success_message
 	var/slimes_accepted = 0
 
