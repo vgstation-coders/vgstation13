@@ -199,10 +199,7 @@
 
 	var/pressure = temp_first.return_pressure()
 
-	var/pressure_threshold = TANK_FRAGMENT_PRESSURE
-	if((tank_one.has_slimes & SLIME_OIL) && (tank_two.has_slimes & SLIME_OIL))
-		pressure_threshold *= 0.9
-	if(pressure <= pressure_threshold)
+	if(pressure <= TANK_FRAGMENT_PRESSURE)
 		return 0
 
 	temp_first.react()
@@ -211,7 +208,7 @@
 
 	pressure = temp_first.return_pressure()
 
-	var/range = (pressure-pressure_threshold)/TANK_FRAGMENT_SCALE
+	var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
 	var/dev = round(range*0.25)
 
 	return dev

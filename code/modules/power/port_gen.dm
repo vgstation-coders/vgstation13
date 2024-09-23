@@ -44,7 +44,7 @@
 		handleInactive()
 
 /obj/machinery/power/port_gen/slime_act(primarytype, mob/user)
-	if((has_slimes|primarytype) & slimes_accepted)
+	if((slimes_accepted&(has_slimes|primarytype)) == slimes_accepted)
 		slimeadd_success_message = "It churns comfortably"
 	else if(slimes_accepted & primarytype)
 		slimeadd_success_message = "It begins to [pick("nudge","budge","rumble")] slightly"
