@@ -147,7 +147,7 @@
 	flags = FPRINT
 	refill_reagent_list = list(PRIAXATE = 5)
 
-/obj/item/weapon/reagent_containers/hypospray/autoinjector/turkizol/update_icon()
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/priaxate/update_icon()
 	if(reagents.total_volume > 0)
 		icon_state = "turkey1"
 	else

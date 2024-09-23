@@ -1700,7 +1700,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	specheatcap = 0.72
 	custom_metabolism = 0.4
 
-/datum/reagent/turkizol/on_mob_life(var/mob/living/M)
+/datum/reagent/priaxate/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
@@ -1713,7 +1713,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	if(M.getToxLoss())
 		M.adjustToxLoss(-3 * REM)
 
-/datum/reagent/turkizol/on_mob_life(var/mob/living/M, var/alien)
+/datum/reagent/priaxate/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
 		return 1
 	if(ishuman(M))

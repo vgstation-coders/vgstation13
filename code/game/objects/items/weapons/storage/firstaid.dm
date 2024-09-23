@@ -113,7 +113,7 @@
 	item_state = "firstaid-advanced"
 	items_to_spawn = list(
 		/obj/item/weapon/reagent_containers/pill/dexalin = 2,
-		/obj/item/weapon/reagent_containers/hypospray/autoinjector/turkizol,
+		/obj/item/weapon/reagent_containers/hypospray/autoinjector/priaxate,
 		/obj/item/weapon/reagent_containers/syringe/nitrogen = 2,
 		/obj/item/device/healthanalyzer,
 	)
