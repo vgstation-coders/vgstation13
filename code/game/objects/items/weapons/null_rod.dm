@@ -87,7 +87,7 @@
 
 /atom/proc/arcane_message(mob/user)
 	if(arcanetampered)
-		to_chat(user, "<span class='sinister'>\The [src] has arcane aura to it!</span>")
+		to_chat(user, "<span class='sinister'>\The [src] has an arcane aura to it!</span>")
 		. = 1
 		if(contents.len)
 			to_chat(user, "<span class='sinister'>And inside \the [src]...</span>")
