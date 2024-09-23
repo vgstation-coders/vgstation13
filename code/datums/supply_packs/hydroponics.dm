@@ -128,6 +128,7 @@
 					/obj/item/fish_eggs/glofish,
 					/obj/item/weapon/circuitboard/fishwall,
 					/obj/item/weapon/circuitboard/fishwall,
+					/obj/item/weapon/circuitboard/conduction_plate,
 					/obj/item/weapon/circuitboard/conduction_plate
 					)
 	cost = 40
