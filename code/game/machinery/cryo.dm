@@ -649,7 +649,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		else
 			visible_message("[user] places [M] into \the [src].")
 	else
-		visible_message("\the [M] is placed into \the [src].")
+		visible_message("\The [M] is placed into \the [src].")
 	return TRUE
 
 /obj/machinery/atmospherics/unary/cryo_cell/verb/move_eject()

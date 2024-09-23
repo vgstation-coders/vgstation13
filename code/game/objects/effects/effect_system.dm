@@ -80,6 +80,9 @@ would spawn and follow the beaker, even if it is carried or thrown.
 /obj/effect/blob_act()
 	return
 
+/obj/effect/ignite()
+	return
+
 /////////////////////////////////////////////
 // GENERIC STEAM SPREAD SYSTEM
 

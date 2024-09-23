@@ -123,7 +123,7 @@
 
 /obj/machinery/dna_scannernew/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(occupant)
-		to_chat(user, "<span class='warning'>\the [src] is occupied.</span>")
+		to_chat(user, "<span class='warning'>\The [src] is occupied.</span>")
 		return FALSE
 	return ..()
 
@@ -287,7 +287,7 @@
 		else
 			visible_message("[user] places [M] into \the [src].")
 	else
-		visible_message("\the [M] is placed into \the [src].")
+		visible_message("\The [M] is placed into \the [src].")
 
 	// search for ghosts, if the corpse is empty and the scanner is connected to a cloner
 	for(dir in cardinal)
@@ -645,7 +645,7 @@
 		occupantData["name"] = connected.occupant.name
 		occupantData["stat"] = connected.occupant.stat
 		occupantData["isViableSubject"] = 1
-		if (M_NOCLONE in connected.occupant.mutations || !src.connected.occupant.dna)
+		if ((M_NOCLONE in connected.occupant.mutations) || !src.connected.occupant.dna)
 			occupantData["isViableSubject"] = 0
 		occupantData["health"] = connected.occupant.health
 		occupantData["maxHealth"] = connected.occupant.maxHealth

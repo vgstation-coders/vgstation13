@@ -619,7 +619,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 	set name = "Pick up telephone"
 	set src in view(1)
 	if(!landline)
-		to_chat(usr, "<span class='notice'>\the [src] model does not come with a telephone!</span>")
+		to_chat(usr, "<span class='notice'>\The [src] model does not come with a telephone!</span>")
 		return
 	landline.pick_up_phone(usr)
 

@@ -12,6 +12,7 @@
 	attack_verb = list("chops", "cleaves", "tears", "cuts")
 	toolspeed = 0.5
 	toolsounds = list('sound/items/metal_impact.ogg')
+	hitsound = 'sound/weapons/empty.ogg'
 	var/list/activated_toolsounds = list('sound/items/Welder2.ogg')
 	var/active = FALSE
 	var/overheat = FALSE
