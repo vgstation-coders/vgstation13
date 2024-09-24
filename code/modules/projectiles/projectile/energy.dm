@@ -42,9 +42,9 @@
 /obj/item/projectile/energy/electrode/robot_on_hit(var/mob/living/atarget, var/blocked)
 	QDEL_NULL(tracker_datum)
 	if(atarget.tazed == 0)
-		atarget.movement_speed_modifier -= 0.75
-		spawn(30)
-			atarget.movement_speed_modifier += 0.75
+		atarget.movement_speed_modifier -= movement_speed_reduction
+		spawn(speed_reduction_duration)
+			atarget.movement_speed_modifier += movement_speed_reduction
 	atarget.tazed = 1
 	spawn(30)
 		atarget.tazed = 0

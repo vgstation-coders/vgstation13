@@ -392,12 +392,14 @@
 /obj/item/ammo_storage/magazine/lawgiver/proc/honkgiver_ammo_conversion(var/obj/item/ammo_storage/magazine/lawgiver/honkgiver/HGM)
 	var/i = 1
 	for(var/datum/lawgiver_mode/mode in HGM.ammo_counters)
-		if(i<=HGM.ammo_counters.len)
+		if(i<=ammo_counters.len)
 			var/datum/lawgiver_mode/modeOther = ammo_counters[i]
 			HGM.ammo_counters[mode] = floor(ammo_counters[modeOther] * mode.ammo_per_shot/modeOther.ammo_per_shot)
 		else
-			return
+			HGM.ammo_counters[mode] = 0
 		i++
+	return
+
 
 /obj/item/ammo_storage/magazine/lawgiver/demolition
 	desc = "State-of-the-art bluespace technology allows this magazine to generate new rounds from energy, requiring only a power source to refill the full suite of ammunition types. This model is outfitted with high-explosive rounds."

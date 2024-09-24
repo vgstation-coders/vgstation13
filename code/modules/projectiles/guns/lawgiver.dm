@@ -120,7 +120,7 @@
 	projectile_type = /obj/item/projectile/beam/doomlazorz
 	fire_delay = 10
 	activation_message = "ULTRA-LETHAL-DEATH-LAZOR OF DOOM!"
-	ammo_per_shot = 20
+	ammo_per_shot = 10
 
 /datum/lawgiver_mode/ball
 	name = "ball"
@@ -468,6 +468,9 @@ var/list/lawgiver_modes = list(
 		to_chat(user, "<span class='warning'>You can't load \the [src] with that kind of magazine!</span>")
 
 	if(clowned == CLOWNABLE && istype(A,/obj/item/toy/crayon/rainbow))
+		if(!isturf(loc))
+			to_chat(user, "<span class='warning'>\The [src] must be safely placed on the ground before it can be honkified.</span>")
+			return
 		to_chat(user, "<span class = 'notice'>You begin modifying \the [src].</span>")
 		if(do_after(user, src, 4 SECONDS))
 			to_chat(user, "<span class = 'notice'>You finish modifying \the [src]!</span>")
@@ -485,6 +488,7 @@ var/list/lawgiver_modes = list(
 		HG.magazine = null
 	transfer_fingerprints(src,HG)
 	HG.original_type = src.type		//store typepath for lawgiver into honkgiver
+	HG.dna_profile_holder = dna_profile
 	qdel(src)
 	HG.update_icon()
 
@@ -619,6 +623,7 @@ var/list/lawgiver_modes = list(
 	voiceclass = "clown"
 	var/original_type = null //if this is a clowned lawgiver, the original lawgiver type is stored here for when we get unclowned. otherwise it is adminspawn or vaultloot and cannot be declowned.
 	clowned = CLOWNED
+	var/dna_profile_holder = null
 
 /obj/item/weapon/gun/lawgiver/honkgiver/New()
 	..()
@@ -672,6 +677,8 @@ var/list/lawgiver_modes = list(
 	if(!original_type) //adminspawn or vault honkgiver
 		visible_message("<span class='notice'>\The [src] resists all efforts to be brought to mundanity. This... this is a true Honkgiver. Woah...</span>")
 	else
+		if(!isturf(loc))
+			forceMove(get_turf(src))
 		var/obj/item/weapon/gun/lawgiver/LG = new original_type(loc)
 		if(magazine)
 			var/obj/item/ammo_storage/magazine/lawgiver/honkgiver/HGM = magazine
@@ -685,6 +692,7 @@ var/list/lawgiver_modes = list(
 			qdel(LG.magazine)
 			LG.magazine = null
 		transfer_fingerprints(LG,src)
+		LG.dna_profile = dna_profile_holder //hand over the dna profile we held from the original lawgiver
 		qdel(src)
 		LG.update_icon()
 

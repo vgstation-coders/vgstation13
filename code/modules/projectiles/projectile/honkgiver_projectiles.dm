@@ -12,6 +12,10 @@
 	speed_reduction_duration = 15
 	has_special_suicide = TRUE //will override the default mouth shot suicide.
 
+/obj/item/projectile/energy/electrode/robot_on_hit(var/mob/living/atarget, var/blocked)
+	atarget.emote("buzz", TRUE)
+	..()
+
 //It's big, its flashy, it's noisy, and it does absolutely fuck all except make the victim deaf. Also may burn off victim's facial hair.
 /obj/item/projectile/beam/doomlazorz
 	name = "ultra-lethal-death-laser of doom"
@@ -40,7 +44,7 @@
 		return ..()
 
 /obj/item/projectile/beam/doomlazorz/on_hit(var/atom/A, var/blocked = 0)
-	if(isliving(A)) //DEBUG lazor currently not affecting living
+	if(isliving(A))
 		var/mob/living/L = A
 		doomify(L)
 	..()
@@ -68,7 +72,7 @@
 				H.my_appearance.f_style = "Shaved"
 				lost_hair = TRUE
 			if(lost_hair)
-				L.visible_message("<span class='warning'>All of [H.name]'s facial hair is vaporized away by the intense blast of energy!</span>")
+				L.visible_message("<span class='warning'>[H.name]'s facial hair is vaporized away by the intense blast of energy!</span>")
 				H.update_hair()
 
 //A bouncy ball that bounces off virtually everything. It deals one tile of knockback when it hits a living mob.
@@ -102,6 +106,9 @@
 /obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/admin_warn(mob/living/M)
 	return 0 //don't log it will spam admin logs and they shouldn't damage anyways
 
+obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/bump_original_check()
+	return
+
 /obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/custom_mouthshot(mob/living/user)
 	playsound(src, 'sound/misc/balloon_pop.ogg', 75, 1)
 	flick("ball_pop",src)
@@ -109,17 +116,19 @@
 	log_attack("<font color='red'>[key_name(user)] committed suicide with \the [src].</font>")
 	user.attack_log += "\[[time_stamp()]\] <font color='red'> [user.real_name] committed suicide with \the [src]</font>"
 
-//a shot of water + honkserum. Slips people that walk over the water, and if you hit them in the mouth they'll honk like a clown.
+//a shot of water + a random but harmless chem. Slips people that walk over the water.
 /obj/item/projectile/beam/liquid_stream/honkgiver_stream
 	nodamage = 1
+	var/list/random_color_list = list("#00aedb","#a200ff","#f47835","#d41243","#d11141","#00b159","#00aedb","#f37735","#ffc425","#008744","#0057e7","#d62d20","#ffa700")
+	var/list/random_liquid_list = list(HONKSERUM, BUSTANUT, LOCUTOGEN, ANTHRACENE)
 
 /obj/item/projectile/beam/liquid_stream/honkgiver_stream/New(atom/A, var/t_range=3, var/m_color, var/m_alpha=255)
 	..(A)
 	create_reagents(20)
 	reagents.add_reagent(WATER, 10)
-	reagents.add_reagent(HONKSERUM, 10)
+	reagents.add_reagent(pick(random_liquid_list), 10)
 	travel_range = t_range
-	beam_color = m_color
+	beam_color = pick(random_color_list)
 	alpha = m_alpha
 	travel_range = 7
 
