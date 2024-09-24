@@ -23,7 +23,7 @@
 	var/useramount = 30 // Last used amount
 	var/required_quirk = MODULE_CAN_HANDLE_CHEMS
 	var/template_path = "chem_dispenser.tmpl"
-	var/list/slime_reagents = list(SLIME_BLACK = DSYRUP, SLIME_PYRITE = COLORFUL_REAGENT)
+	slime_reagents = list("black" = DSYRUP, "pyrite" = COLORFUL_REAGENT)
 	var/list/dispensable_reagents = list(
 		HYDROGEN,
 		LITHIUM,
@@ -393,9 +393,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if(. && (slimes_accepted & primarytype))
 		switch(primarytype)
 			if(SLIME_BLACK)
-				dispensable_reagents.Add(slime_reagents[SLIME_BLACK])
+				dispensable_reagents.Add(slime_reagents["black"])
 			if(SLIME_PYRITE)
-				dispensable_reagents.Add(slime_reagents[SLIME_PYRITE])
+				dispensable_reagents.Add(slime_reagents["pyrite"])
 
 /obj/machinery/chem_dispenser/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -454,7 +454,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	icon_state = "brewer"
 	pass_flags = PASSTABLE
 	required_quirk = MODULE_CAN_HANDLE_FOOD
-	slime_reagents = list(SLIME_BLACK = BLOOD, SLIME_PYRITE = BANANA)
+	slime_reagents = list("black" = BLOOD, "pyrite" = BANANA)
 	dispensable_reagents = list(
 		TEA = COOKTEMP_READY,
 		GREENTEA = COOKTEMP_READY,
@@ -502,7 +502,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	pass_flags = PASSTABLE
 	beaker_height = -5
 	required_quirk = MODULE_CAN_HANDLE_FOOD
-	slime_reagents = list(SLIME_BLACK = TRICORDRAZINE, SLIME_PYRITE = BANANA)
+	slime_reagents = list("black" = TRICORDRAZINE, "pyrite" = BANANA)
 	dispensable_reagents = list(SPACEMOUNTAINWIND, SODAWATER, LEMON_LIME, DR_GIBB, COLA, ICE = T0C, TONIC)
 
 /obj/machinery/chem_dispenser/soda_dispenser/New()
@@ -538,7 +538,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	pass_flags = PASSTABLE
 	beaker_height = -6
 	required_quirk = MODULE_CAN_HANDLE_FOOD
-	slime_reagents = list(SLIME_BLACK = TRICORDRAZINE, SLIME_PYRITE = BANANA)
+	slime_reagents = list("black" = TRICORDRAZINE, "pyrite" = BANANA)
 	dispensable_reagents = list(
 		BEER,
 		WHISKEY,
