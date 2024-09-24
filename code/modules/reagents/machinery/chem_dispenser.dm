@@ -23,7 +23,7 @@
 	var/useramount = 30 // Last used amount
 	var/required_quirk = MODULE_CAN_HANDLE_CHEMS
 	var/template_path = "chem_dispenser.tmpl"
-	slime_reagents = list("black" = DSYRUP, "pyrite" = COLORFUL_REAGENT)
+	var/slime_reagents = list("black" = DSYRUP, "pyrite" = COLORFUL_REAGENT)
 	var/list/dispensable_reagents = list(
 		HYDROGEN,
 		LITHIUM,
