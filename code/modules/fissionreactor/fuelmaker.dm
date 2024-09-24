@@ -327,7 +327,7 @@ Baseline heat generation: <i>[num2text(estimated_power,99)] Watts</i>
 
 	interface.updateLayout(html)
 
-/obj/machinery/atmospherics/unary/fissionfuelmaker/update() //because atmos fuckery, we have to periodically update it.
+/obj/machinery/atmospherics/unary/fissionfuelmaker/process() //because atmos fuckery, we have to periodically update it.
 	ask_remakeUI()
 	..()
 

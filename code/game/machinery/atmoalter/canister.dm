@@ -82,8 +82,8 @@
 
 /obj/machinery/portable_atmospherics/canister/radon //for testing (or admin shittery)
 	name = "Canister \[Rn\]"
-	icon_state = "orange"
-	canister_color = "orange"
+	icon_state = "green"
+	canister_color = "green"
 	can_label = 0
 
 /obj/machinery/portable_atmospherics/canister/update_icon()
@@ -399,6 +399,7 @@
 				"\[CO2\]" = "black", \
 				"\[Air\]" = "grey", \
 				"\[CAUTION\]" = "yellow", \
+				"\[Rn\]" = "green", \
 			)
 			var/label = input("Choose canister label", "Gas canister") as null|anything in colors
 			if (label)
