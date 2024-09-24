@@ -10,7 +10,7 @@
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 40
 	slimeadd_message = "You throw the slime into the dispenser's tank"
-	slimes_accepted = SLIME_BLACK
+	slimes_accepted = SLIME_BLACK|SLIME_PYRITE
 	slimeadd_success_message = "A new option appears on the dispenser screen"
 	var/energy = 0
 	var/max_energy = 50
@@ -23,6 +23,7 @@
 	var/useramount = 30 // Last used amount
 	var/required_quirk = MODULE_CAN_HANDLE_CHEMS
 	var/template_path = "chem_dispenser.tmpl"
+	var/list/slime_reagents = list(SLIME_BLACK = DSYRUP, SLIME_PYRITE = COLORFUL_REAGENT)
 	var/list/dispensable_reagents = list(
 		HYDROGEN,
 		LITHIUM,
@@ -392,10 +393,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if(. && (slimes_accepted & primarytype))
 		switch(primarytype)
 			if(SLIME_BLACK)
-				dispensable_reagents.Add(DSYRUP)
+				dispensable_reagents.Add(slime_reagents[SLIME_BLACK])
 			if(SLIME_PYRITE)
-				dispensable_reagents.Add(BANANA)
-				dispensable_reagents.Add(COLORFUL_REAGENT)
+				dispensable_reagents.Add(slime_reagents[SLIME_PYRITE])
 
 /obj/machinery/chem_dispenser/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -454,6 +454,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	icon_state = "brewer"
 	pass_flags = PASSTABLE
 	required_quirk = MODULE_CAN_HANDLE_FOOD
+	slime_reagents = list(SLIME_BLACK = BLOOD, SLIME_PYRITE = BANANA)
 	dispensable_reagents = list(
 		TEA = COOKTEMP_READY,
 		GREENTEA = COOKTEMP_READY,
@@ -501,6 +502,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	pass_flags = PASSTABLE
 	beaker_height = -5
 	required_quirk = MODULE_CAN_HANDLE_FOOD
+	slime_reagents = list(SLIME_BLACK = TRICORDRAZINE, SLIME_PYRITE = BANANA)
 	dispensable_reagents = list(SPACEMOUNTAINWIND, SODAWATER, LEMON_LIME, DR_GIBB, COLA, ICE = T0C, TONIC)
 
 /obj/machinery/chem_dispenser/soda_dispenser/New()
@@ -536,7 +538,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	pass_flags = PASSTABLE
 	beaker_height = -6
 	required_quirk = MODULE_CAN_HANDLE_FOOD
-	slimes_accepted = SLIME_BLACK|SLIME_PYRITE
+	slime_reagents = list(SLIME_BLACK = TRICORDRAZINE, SLIME_PYRITE = BANANA)
 	dispensable_reagents = list(
 		BEER,
 		WHISKEY,
