@@ -78,8 +78,8 @@
 			if(prob(0.01))//one-in-ten-thousand chance
 				L.visible_message("<span class='danger'>[H.name]'s flesh is vaporized into dust by the super intense blast of energy!</span>")
 				H.makeSkeleton()
-				user.knockdown += 4
-				user.stuttering += 10
+				H.knockdown += 4
+				H.stuttering += 10
 
 
 //A bouncy ball that bounces off virtually everything. It deals one tile of knockback when it hits a living mob.
