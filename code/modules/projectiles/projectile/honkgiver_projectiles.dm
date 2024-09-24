@@ -106,7 +106,7 @@
 /obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/admin_warn(mob/living/M)
 	return 0 //don't log it will spam admin logs and they shouldn't damage anyways
 
-obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/bump_original_check()
+/obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/bump_original_check()
 	return
 
 /obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/custom_mouthshot(mob/living/user)
