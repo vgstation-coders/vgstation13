@@ -120,7 +120,7 @@
 	projectile_type = /obj/item/projectile/beam/doomlazorz
 	fire_delay = 10
 	activation_message = "ULTRA-LETHAL-DEATH-LAZOR OF DOOM!"
-	ammo_per_shot = 10
+	ammo_per_shot = 1 //single shot! but it recharges!
 
 /datum/lawgiver_mode/ball
 	name = "ball"

@@ -395,8 +395,6 @@
 		if(i<=ammo_counters.len)
 			var/datum/lawgiver_mode/modeOther = ammo_counters[i]
 			HGM.ammo_counters[mode] = floor(ammo_counters[modeOther] * mode.ammo_per_shot/modeOther.ammo_per_shot)
-		else
-			HGM.ammo_counters[mode] = 0
 		i++
 	return
 
@@ -406,10 +404,22 @@
 	compatible_gun_type = /obj/item/weapon/gun/lawgiver/demolition
 
 /obj/item/ammo_storage/magazine/lawgiver/honkgiver
-	desc = "State-of-the-HONK clownspace technology allows this magazine to generate honkmunitions by converting recharger power. Just don't let security catch you."
+	desc = "State-of-the-HONK clownspace technology allows this magazine to generate honkmunitions by converting recharger power. The DOOMLAZOR module recharges slowly on its own. Just don't let security catch you."
 	compatible_gun_type = /obj/item/weapon/gun/lawgiver/honkgiver
 	icon_state = "honkgiver"
-	var/obj/item/ammo_storage/magazine/lawgiver/original_type = null
+	var/obj/item/ammo_storage/magazine/lawgiver/original_type = null //stores original type for deconversion
+	var/charge_tick = 0 //for automatically recharging the doomlazor
+	var/doomlazorposition = 0 //stores position of doomlazor for recharging
+
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver/New()
+	..()
+	processing_objects.Add(src)
+	var/i=1
+	for(var/datum/lawgiver_mode/mode in ammo_counters)
+		if(istype(mode,/datum/lawgiver_mode/doomlazor))
+			doomlazorposition = i
+			break
+		i++
 
 /obj/item/ammo_storage/magazine/lawgiver/honkgiver/decontaminate()
 	..()
@@ -421,6 +431,19 @@
 	else
 		visible_message("<span class='notice'>\The [src] resists your efforts to declownify it! It must truly be a timeless relic of clownliness...</span>")
 
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver/process() //recharges the doomlazor when at zero
+	if(doomlazorposition && (ammo_counters[ammo_counters[doomlazorposition]] == 0))
+		charge_tick++
+		if(charge_tick < 4)
+			return 0
+		ammo_counters[ammo_counters[doomlazorposition]] ++
+		charge_tick=0
+		return 1
+	return 0
+
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver/Destroy()
+	processing_objects.Remove(src)
+	..()
 
 /obj/item/ammo_storage/magazine/lawgiver/honkgiver/ultimate
 
@@ -429,6 +452,9 @@
 	for(var/datum/lawgiver_mode/mode in ammo_counters)
 		ammo_counters[mode] = 9999999
 	update_icon()
+
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver/ultimate/process()
+	return 0
 
 /obj/item/ammo_storage/magazine/invisible
 	desc = "Reading how many shots you had left just got a lot more difficult."

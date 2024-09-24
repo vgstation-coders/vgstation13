@@ -8,7 +8,7 @@
 	stutter = 5
 	jittery = 10
 	hitsound = 'sound/weapons/taserhit.ogg'
-	movement_speed_reduction = 0.75
+	movement_speed_reduction = -0.25 //this makes you faster when you get shot!
 	speed_reduction_duration = 15
 	has_special_suicide = TRUE //will override the default mouth shot suicide.
 
@@ -106,7 +106,7 @@
 /obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/admin_warn(mob/living/M)
 	return 0 //don't log it will spam admin logs and they shouldn't damage anyways
 
-obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/bump_original_check()
+/obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/bump_original_check()
 	return
 
 /obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball/custom_mouthshot(mob/living/user)
