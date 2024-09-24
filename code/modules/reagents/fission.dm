@@ -7,7 +7,7 @@
 //the variables determining power output and fuel duration are in the reagent defines.
 
 /datum/reagent/uranium/irradiate() //primary purpose: general purpose. gets you a bit of everything and decent power.
-	return list(LEAD=0.25, PLUTONIUM=0.25, RADIUM=0.25, THALLIUM=0.1, RADON=0.15)
+	return list(LEAD=0.3, PLUTONIUM=0.2, RADIUM=0.25, THALLIUM=0.1, RADON=0.15)
 
 /datum/reagent/plutonium/irradiate() //primary purpose: pure power bay bee.
 	return list(LEAD=0.5, URANIUM=0.2, RADIUM=0.2, RADON=0.1)

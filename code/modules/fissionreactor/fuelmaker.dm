@@ -39,6 +39,9 @@ the machine which makes fuel rods have things in them.
 			to_chat(user,"You insert the fuel rod into \the [src].")
 			I.loc=null
 			heldrod=I
+			heldrod.fueldata.fuel=heldrod.fueldata.get_products() //process the fuel turning
+			heldrod.fueldata.life=1
+			heldrod.fueldata.rederive_stats()
 			ask_remakeUI()
 			playsound(src,'sound/items/crowbar.ogg',50)
 			update_icon()
@@ -145,11 +148,21 @@ the machine which makes fuel rods have things in them.
 
 
 /obj/machinery/atmospherics/unary/fissionfuelmaker/proc/transfer_from_fuelrod(var/reagent_id,var/amount)
-	if(!container)
-		return "no container"
 	if(!heldrod)
 		return "no fuel rod"
-	
+	if(reagent_id==RADON)
+		if(air_contents)
+			var/actually_taken=heldrod.fueldata.take_shit_from(reagent_id,amount ,heldrod.fueldata.fuel)
+			if(!air_contents.gas[GAS_RADON])
+				air_contents.gas[GAS_RADON]=0
+			air_contents.gas[GAS_RADON]+=actually_taken
+			air_contents.update_values()	
+			if(network)
+				network.update=1
+		return
+	if(!container)
+		return "no container"
+		
 	amount=min(amount,container.volume-container.reagents.total_volume)
 	
 	var/actually_taken=heldrod.fueldata.take_shit_from(reagent_id,amount ,heldrod.fueldata.fuel)
@@ -157,11 +170,20 @@ the machine which makes fuel rods have things in them.
 	container.reagents.add_reagent(reagent_id, actually_taken)
 
 /obj/machinery/atmospherics/unary/fissionfuelmaker/proc/transfer_to_fuelrod(var/reagent_id,var/amount)
-	if(!container)
-		return "no container"
 	if(!heldrod)
 		return "no fuel rod"
-	
+	if(reagent_id==RADON)
+		if(air_contents)
+			var/avalible_gas=air_contents.gas[GAS_RADON] || 0 
+			amount=min(amount,avalible_gas,heldrod.units_of_storage-heldrod.fueldata.fuel.total_volume)
+			air_contents.gas[GAS_RADON]= max(0,avalible_gas-amount)
+			heldrod.fueldata.add_shit_to(reagent_id,amount ,heldrod.fueldata.fuel)
+			air_contents.update_values()	
+			if(network)
+				network.update=1
+		return
+	if(!container)
+		return "no container"
 	amount=min(amount,heldrod.units_of_storage-heldrod.fueldata.fuel.total_volume,container.reagents.amount_cache[reagent_id] || 0)
 	
 	heldrod.fueldata.add_shit_to(reagent_id,amount ,heldrod.fueldata.fuel)
@@ -196,8 +218,8 @@ the machine which makes fuel rods have things in them.
 					break
 			if(add)
 				allreagentlists+=R
-			
 			current_rodamt+=R.volume
+				
 		rodpercent=current_rodamt/heldrod.units_of_storage
 		rodpercent=floor(rodpercent*100+0.5)
 		
@@ -208,9 +230,24 @@ the machine which makes fuel rods have things in them.
 			else
 				estimated_time="NEVER"
 		else
-			estimated_power=heldrod.fueldata.wattage - heldrod.fueldata.absorbance
-		  
-	
+			estimated_power=heldrod.fueldata.wattage - heldrod.fueldata.absorbance		
+				
+				
+
+	if(air_contents)
+
+		var/add=TRUE
+		for(var/datum/reagent/R  in allreagentlists)
+			if(R.id==RADON)
+				add=FALSE
+				break
+
+		if(add && air_contents.gas[GAS_RADON])
+			var/datum/reagent/radon_to_add = new /datum/reagent
+			radon_to_add.volume=air_contents.gas[GAS_RADON] || 0
+			radon_to_add.id=RADON  
+			radon_to_add.name="Radon"
+			allreagentlists+=radon_to_add
 
 	
 	html={"<table style='width:100%;height:100%;'>
@@ -259,12 +296,26 @@ Baseline heat generation: <i>[num2text(estimated_power,99)] Watts</i>
 		<th>available</th>
 	</tr>"}
 	
-
-	for(var/datum/reagent/R in allreagentlists)
+	var/list/sortedlist=list()
+	
+	for(var/i=1,i<=allreagentlists.len,i++) //bad performance scaling, but it shouldn't matter *too* much given the circumstances.
+		var/datum/reagent/R=allreagentlists[i]
+		var/spot=sortedlist.len+1
+		for(var/i2=1,i2<=sortedlist.len,i2++)
+			var/datum/reagent/R2 =sortedlist[i2]
+			if(sorttext(R.name,R2.name)==1)
+				spot=i2
+				break
+		sortedlist.Insert(spot,R)	
+	
+	for(var/datum/reagent/R in sortedlist)
+		var/avalibstr="[container ? (container.reagents.amount_cache[R.id] || 0) : 0]"
+		if (R.id==RADON)
+			avalibstr=air_contents.gas[GAS_RADON] || 0
 		html+={"	<tr style='font-size:90%;'>
 			<td>[R.name]</td>
 			<td style='white-space:nowrap;'>  <a href='?src=\ref[interface];reagent=[R.id];dir=from_fuel;amount=25'><span class='button'>---</span></a> <a href='?src=\ref[interface];reagent=[R.id];dir=from_fuel;amount=5'><span class='button'>--</span></a> <a href='?src=\ref[interface];reagent=[R.id];dir=from_fuel;amount=1'><span class='button'>-</span></a> [heldrod ? (heldrod.fueldata.fuel.amount_cache[R.id] || 0) : 0] <a href='?src=\ref[interface];reagent=[R.id];dir=to_fuel;amount=1'><span class='button'>+</span></a> <a href='?src=\ref[interface];reagent=[R.id];dir=to_fuel;amount=5'><span class='button'>++</span></a> <a href='?src=\ref[interface];reagent=[R.id];dir=to_fuel;amount=25'><span class='button'>+++</span></a> </td>
-			<td>[container ? (container.reagents.amount_cache[R.id] || 0) : 0]</td>
+			<td>[avalibstr]</td>
 			<tr>"}
 	
 	
@@ -275,7 +326,10 @@ Baseline heat generation: <i>[num2text(estimated_power,99)] Watts</i>
 
 
 	interface.updateLayout(html)
-	
+
+/obj/machinery/atmospherics/unary/fissionfuelmaker/update() //because atmos fuckery, we have to periodically update it.
+	ask_remakeUI()
+	..()
 
 /obj/machinery/atmospherics/unary/fissionfuelmaker/update_icon()
 	..()
