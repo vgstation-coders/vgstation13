@@ -355,6 +355,7 @@
 		var/turf/output = get_output()
 		being_built.forceMove(get_turf(output))
 		being_built.anchored = 0
+		being_built.recycles_cash = FALSE //i see what you're trying. no.
 		if(arcanetampered)
 			if(prob(90))
 				qdel(being_built)
