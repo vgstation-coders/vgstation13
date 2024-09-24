@@ -63,17 +63,24 @@
 		L.audible_scream()
 	if(ishuman(L))
 		var/mob/living/carbon/human/H = L
-		if(H.species.name == "Human" && prob(50))
-			var/lost_hair = FALSE
-			if(!(H.my_appearance.h_style == "Bald") && (H.get_body_part_coverage(MOUTH)))
-				H.my_appearance.h_style = "Bald"
-				lost_hair = TRUE
-			if(!(H.my_appearance.f_style == "Shaved") && (H.get_body_part_coverage(HEAD)))
-				H.my_appearance.f_style = "Shaved"
-				lost_hair = TRUE
-			if(lost_hair)
-				L.visible_message("<span class='warning'>[H.name]'s facial hair is vaporized away by the intense blast of energy!</span>")
-				H.update_hair()
+		if(H.species.name == "Human")
+			if(prob(50))
+				var/lost_hair = FALSE
+				if(!(H.my_appearance.h_style == "Bald") && (H.get_body_part_coverage(MOUTH)))
+					H.my_appearance.h_style = "Bald"
+					lost_hair = TRUE
+				if(!(H.my_appearance.f_style == "Shaved") && (H.get_body_part_coverage(HEAD)))
+					H.my_appearance.f_style = "Shaved"
+					lost_hair = TRUE
+				if(lost_hair)
+					L.visible_message("<span class='warning'>[H.name]'s facial hair is vaporized away by the intense blast of energy!</span>")
+					H.update_hair()
+			if(prob(0.01))//one-in-ten-thousand chance
+				L.visible_message("<span class='danger'>[H.name]'s flesh is vaporized into dust by the super intense blast of energy!</span>")
+				H.makeSkeleton()
+				user.knockdown += 4
+				user.stuttering += 10
+
 
 //A bouncy ball that bounces off virtually everything. It deals one tile of knockback when it hits a living mob.
 /obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball

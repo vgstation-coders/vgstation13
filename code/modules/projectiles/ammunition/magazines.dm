@@ -434,7 +434,7 @@
 /obj/item/ammo_storage/magazine/lawgiver/honkgiver/process() //recharges the doomlazor when at zero
 	if(doomlazorposition && (ammo_counters[ammo_counters[doomlazorposition]] == 0))
 		charge_tick++
-		if(charge_tick < 4)
+		if(charge_tick < 8)
 			return 0
 		ammo_counters[ammo_counters[doomlazorposition]] ++
 		charge_tick=0
