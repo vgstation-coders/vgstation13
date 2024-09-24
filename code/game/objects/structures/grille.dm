@@ -298,7 +298,7 @@
 		icon_state = "grille"
 
 /obj/structure/grille/proc/dropmaterial(var/amount = 1, mob/user)
-	var/obj/item/stack/S = drop_stack(grille_material, get_turf(src), amount, user, recycles_cash)
+	drop_stack(grille_material, get_turf(src), amount, user, recycles_cash)
 
 /obj/structure/grille/cult //Used to get rid of those ugly fucking walls everywhere while still blocking air
 
