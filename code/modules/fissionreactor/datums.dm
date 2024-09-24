@@ -62,7 +62,8 @@ datums for the fission reactor, which includes the fuel and reactor
 		controller.associated_reactor=null
 		controller=null
 	fuel=null
-
+	var/turf/originloc=locate(origin_x,origin_y,zlevel)
+	originloc.return_air().merge(coolant.remove(coolant.total_moles,TRUE,TRUE),TRUE) //dump all coolant to atmos.
 
 /datum/fission_reactor_holder/proc/verify_integrity() //destroys the reactor if too many parts are missing. fixes stuff lingering.
 	var/notlookinggood_points=0
@@ -74,16 +75,30 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/expected_exterior=2*abs(origin_x-corner_x)+2*abs(origin_y-corner_y) //also the perimeter. kind of.
 	expected_exterior-=4 //to account for the double counting of corner pieces.
 
+	if(exterior_elements<expected_exterior) //missing any at all? (for deconstruction)
+		world.log << "check 1"
+		notlookinggood_points++
 	if(exterior_elements/expected_exterior < 0.5) //half the case remaining?
+		world.log << "check 2"
 		notlookinggood_points++
 	if(!fuel_rods.len) //no fuel rods?
+		world.log << "check 3"
 		notlookinggood_points++
 	if(!controller) //no controller?
+		world.log << "check 4"
 		notlookinggood_points++
 	if(!coolant_ports.len) //no coolant ports?
+		world.log << "check 5"
+		notlookinggood_points++
+	if(!fuel) //no fuel? (to handle deconstruction)
+		world.log << "check 6"
+		notlookinggood_points++
+	if(coolant.total_moles < 0.5*(coolant.volume/CELL_VOLUME) ) //less than .5 mole per tile of coolant? (draining to deconstruct)
+		world.log << "check 7"
 		notlookinggood_points++
 	
-	if(notlookinggood_points>=2) //if 2 or more criteria are met, something really bad has happened, so just destroy the whole thing.
+	if(notlookinggood_points>=3) //if 3 or more criteria are met, something really bad has happened, so just destroy the whole thing.
+		world.log << "PASSED"
 		qdel(src)
 
 /datum/fission_reactor_holder/proc/handledestruction(var/obj/shitgettingfucked)
@@ -107,6 +122,32 @@ datums for the fission reactor, which includes the fuel and reactor
 	verify_integrity() //unless we are too far gone
 
 
+/datum/fission_reactor_holder/proc/adopt_part(var/obj/thepart) //for construction on an existing reactor. dangerous.
+	if(istype(thepart, /obj/machinery/fissioncontroller ))
+		if(controller)
+			return FALSE
+		controller=thepart
+		var/obj/machinery/fissioncontroller/nc=thepart
+		nc.associated_reactor=src
+	if(istype(thepart, /obj/machinery/fissionreactor/fissionreactor_fuelrod ))
+		var/obj/machinery/fissionreactor/fissionreactor_fuelrod/nfr=thepart
+		nfr.associated_reactor=src
+		fuel_rods+=thepart
+	if(istype(thepart, /obj/machinery/fissionreactor/fissionreactor_controlrod ))
+		var/obj/machinery/fissionreactor/fissionreactor_controlrod/nfr=thepart
+		nfr.associated_reactor=src
+		control_rods+=thepart
+	if(istype(thepart, /obj/structure/fission_reactor_case ))
+		var/obj/structure/fission_reactor_case/nc=thepart
+		nc.associated_reactor=src
+		casing_parts+=thepart
+	if(istype(thepart, /obj/machinery/atmospherics/unary/fissionreactor_coolantport ))
+		var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/ncp=thepart
+		ncp.associated_reactor=src
+		coolant_ports+=thepart
+	recalculatereactorstats()
+	return TRUE
+
 /datum/fission_reactor_holder/proc/considered_on()
 	if(!fuel) //no fuel? not on.
 		return FALSE
@@ -128,34 +169,28 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/directions=0
 	
 	//copy
-	world.log << "checking..."
 	var/list/wc = wall_up.contents
 	for (var/i=1,i<=wc.len,i++)
-		world.log << "N - [wc[i]]"
 		if(istype(wc[i],/obj/structure/fission_reactor_case) || istype(wc[i],/obj/machinery/atmospherics/unary/fissionreactor_coolantport) )
 			directions|=NORTH
-			world.log << "found N"
 			break
 
 	wc = wall_down.contents
 	for (var/i=1,i<=wc.len,i++)
 		if(istype(wc[i],/obj/structure/fission_reactor_case) || istype(wc[i],/obj/machinery/atmospherics/unary/fissionreactor_coolantport) )
 			directions|=SOUTH
-			world.log << "found S"
 			break
 
 	wc = wall_left.contents
 	for (var/i=1,i<=wc.len,i++)
 		if(istype(wc[i],/obj/structure/fission_reactor_case) || istype(wc[i],/obj/machinery/atmospherics/unary/fissionreactor_coolantport) )
 			directions|=WEST
-			world.log << "found W"
 			break
 
 	wc = wall_right.contents
 	for (var/i=1,i<=wc.len,i++)
 		if(istype(wc[i],/obj/structure/fission_reactor_case) || istype(wc[i],/obj/machinery/atmospherics/unary/fissionreactor_coolantport) )
 			directions|=EAST
-			world.log << "found E"
 			break
 	//paste
 	
@@ -282,8 +317,31 @@ datums for the fission reactor, which includes the fuel and reactor
 	heat_capacity=sizex*sizey*1000 // this scales with area as well.
 	return null
 	
+/datum/fission_reactor_holder/proc/determineexplosionsize()
+	if(!fuel)
+		return list(0,0,0)	
+	var/TRP=((fuel.wattage-fuel.absorbance)*fuel.life)
+	var/powerfactor=((fuel_reactivity) - ( (fuel_reactivity-fuel_reactivity_with_rods)*control_rod_insertion))
+	TRP=ceil(sqrt(0.000001+(powerfactor+1)*(TRP/5000))) //every 5kw of power nets us 1 tile
+	
+	return list( floor(TRP*0.65),floor(TRP*0.8),TRP)
+	
+
+/datum/fission_reactor_holder/proc/randomtileinreactor()
+	return locate( rand( min(origin_x,corner_x),max(origin_x,corner_x) ) , rand(min(origin_y,corner_y),max(origin_y,corner_y)) , zlevel   )
+	
 /datum/fission_reactor_holder/proc/meltdown()	
-	//TODO: FSU when it gets too hot
+	var/turf/centerturf=locate(origin_x,origin_y,zlevel)
+	
+	message_admins("Fission reactor meltdown occured in area [centerturf.loc.name] ([formatJumpTo(centerturf,"JMP")])")
+	log_game("Fission reactor meltdown occured in area [centerturf.loc.name]")
+	var/reactorarea=(max(origin_x,corner_x)-min(origin_x,corner_x)) *  (max(origin_y,corner_y)-min(origin_y,corner_y))
+	reactorarea=ceil(reactorarea/5) // 1 fith of the tiles will be eligable to explode
+	for(var/i=1,i<=reactorarea,i++)
+		if(rand()<=0.33)
+			var/list/eplodies=determineexplosionsize()
+			explosion( randomtileinreactor() ,eplodies[1],eplodies[2],eplodies[3])
+	
 	
 /datum/fission_reactor_holder/proc/clear_parts() 
 	for (var/i=1,i<=casing_parts.len,i++)
@@ -364,6 +422,22 @@ datums for the fission reactor, which includes the fuel and reactor
 		
 	for (var/i=1,i<=fuel_rods.len,i++)
 		fuel_rods[i].update_icon()
+
+
+/datum/fission_reactor_holder/proc/turf_in_reactor(var/turf/location) //returns 0 if it is not in. 1 if it is exterior, and 2 if it is interior
+	if(location.z!=zlevel)
+		return 0
+	var/xs=min(origin_x,corner_x)
+	var/xe=max(origin_x,corner_x)
+	var/ys=min(origin_y,corner_y)
+	var/ye=max(origin_y,corner_y)
+	
+	if(location.x>=xs && location.x<=xe && location.y>=ys && location.y<=ye) //within the bounds of the reactor?
+		if(location.x==xs || location.x==xe || location.y==ys || location.y==ye) //if we are on an edge
+			return 1
+		return 2
+	return 0
+	
 	
 /datum/fission_reactor_holder/proc/fissioncycle() //what makes the heat.
 
@@ -443,6 +517,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	else
 		graceperiodtick=FALSE
 
+	verify_integrity()
 	
 	
 
