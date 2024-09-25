@@ -443,7 +443,7 @@
 		while(R.checkIngredients(ore)) //While we have materials for this
 			for(var/ore_id in R.ingredients)
 				ore.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
-				remove_from_credits_if_necessary(ore_id, R.ingredients[ore_id]) // hotfixed way to deal with a subtype, proc is left blank for this
+				remove_from_credits_if_necessary(ore_id, ore.getValueByAmount(ore_id,R.ingredients[ore_id])) // hotfixed way to deal with a subtype, proc is left blank for this
 				score.oremined += 1 //Count this ore piece as processed for the scoreboard
 
 			drop_stack(R.yieldtype, out_T)
