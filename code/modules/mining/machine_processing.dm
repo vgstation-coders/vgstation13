@@ -95,7 +95,7 @@
 		dat += {"
 		<tr>
 			<td>[smelter_data["ore"][ore_id]["name"]]</td>
-			<td>[smelter_data["ore"][ore_id]["amount"]]</td>
+			<td>[smelter_data["ore"][ore_id]["amount"]] ($[smelter_data["ore"][ore_id]["value"]])</td>
 		</tr>
 		"}
 
@@ -365,7 +365,7 @@
 		var/amount = ore.getAmount(metal)
 		if (M.default_show_in_menus || amount != 0)
 			// display 1 = 1 sheet in the interface.
-			data["ore"][metal] = list("name" = M.name, "amount" = amount / M.cc_per_sheet)
+			data["ore"][metal] = list("name" = M.name, "amount" = amount / M.cc_per_sheet, "value" = ore.getValueByMaterial(metal))
 
 	data["credits"] = credits
 
