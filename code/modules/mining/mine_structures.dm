@@ -7,7 +7,10 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "hanginglantern-construct-frame"
 	sheets_refunded = 1
-	resulttype = /obj/structure/hanging_lantern/hook
+
+/obj/item/mounted/frame/hanging_lantern_hook/do_build(turf/on_wall, mob/user)
+	new /obj/structure/hanging_lantern/hook(get_turf(user), get_dir(user, on_wall), 1)
+	qdel(src)
 
 /obj/structure/hanging_lantern
 	name = "wall-mounted lantern hook"

@@ -58,8 +58,7 @@
 	var/placelocation = placeloc
 
 	if(user.Adjacent(placeloc) && direction && use(1))
-		var/obj/structure/conveyor_assembly/ca = new (placelocation, direction)
-		ca.recycles_cash = recycles_cash
+		new /obj/structure/conveyor_assembly(placelocation, direction)
 	if(amount && !gcDestroyed)
 		spawn()
 			active = new /obj/abstract/screen/draggable(src, user)
@@ -108,8 +107,7 @@
 		P.playtoolsound(src, 75)
 		if(do_after(user, src, 10))
 			to_chat(user, "<span class='notice'>You unhinge the frame.</span>")
-			var/obj/item/stack/conveyor_assembly/ca = new(src.loc)
-			ca.recycles_cash = recycles_cash
+			new /obj/item/stack/conveyor_assembly(src.loc)
 			qdel(src)
 			return
 	else if(istype(P, /obj/item/stack/sheet/metal))
@@ -119,6 +117,5 @@
 			if(do_after(user, src, 30) && S.amount > 2)
 				S.use(2)
 				to_chat(user, "<span class='notice'>You add the plates to \the [src].</span>")
-				var/obj/machinery/conveyor/ca = new(src.loc, src.dir)
-				ca.recycles_cash = recycles_cash
+				new /obj/machinery/conveyor(src.loc, src.dir)
 				qdel(src)

@@ -1,7 +1,6 @@
 /obj/item/mounted
 	var/list/buildon_types = list(/turf/simulated/wall, /turf/simulated/wall/shuttle)
-	var/resulttype
-	var/building = TRUE
+
 
 /obj/item/mounted/afterattack(var/atom/A, mob/user, proximity_flag)
 	var/found_type = 0
@@ -39,7 +38,4 @@
 	return 1
 
 /obj/item/mounted/proc/do_build(turf/on_wall, mob/user) //the buildy bit after we pass the checks
-	if(resulttype)
-		var/atom/A = new resulttype(get_turf(src), get_dir(user, on_wall), building)
-		A.recycles_cash = recycles_cash
-		qdel(src)
+	return

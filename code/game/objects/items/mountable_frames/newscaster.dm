@@ -6,5 +6,7 @@
 	flags = FPRINT
 	w_type=2*RECYK_METAL
 	mount_reqs = list("nospace", "simfloor")
-	resulttype = /obj/machinery/newscaster
-	building = FALSE
+
+/obj/item/mounted/frame/newscaster/do_build(turf/on_wall, mob/user)
+	new /obj/machinery/newscaster(get_turf(src), get_dir(user, on_wall), 0)
+	qdel(src)

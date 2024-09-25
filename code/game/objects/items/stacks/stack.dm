@@ -276,10 +276,7 @@
 		gender = PLURAL
 
 /obj/item/stack/proc/can_stack_with(obj/item/other_stack)
-	if(ispath(other_stack))
-		return (src.type == other_stack)
-
-	return (src.type == other_stack.type)
+	return ispath(other_stack) ? src.type == other_stack : src.type == other_stack.type && src.recycles_cash == other_stack.recycles_cash
 
 /obj/item/stack/attack_hand(mob/user as mob)
 	if (user.get_inactive_hand() == src)
@@ -366,7 +363,7 @@
 
  */
 
-/proc/drop_stack(new_stack_type = /obj/item/stack, atom/loc, add_amount = 1, mob/user, recyclescash = -1)
+/proc/drop_stack(new_stack_type = /obj/item/stack, atom/loc, add_amount = 1, mob/user, recyclescash = TRUE)
 	if(!ispath(new_stack_type, /obj/item/stack))
 		return new new_stack_type(loc)
 	for(var/obj/item/stack/S in loc)
@@ -385,8 +382,7 @@
 		add_amount -= S.amount
 		S.update_materials()
 		S.update_icon()
-		if(recyclescash != -1) // -1 ignores override
-			S.recycles_cash = recyclescash
+		S.recycles_cash = recyclescash
 	return S
 
 /obj/item/stack/verb_pickup(mob/living/user)

@@ -36,7 +36,6 @@
 	newlight.fingerprints = src.fingerprints
 	newlight.fingerprintshidden = src.fingerprintshidden
 	newlight.fingerprintslast = src.fingerprintslast
-	newlight.recycles_cash = src.recycles_cash
 
 	user.visible_message("[user] attaches \the [src] to \the [on_wall].", \
 		"You attach \the [src] to \the [on_wall].")

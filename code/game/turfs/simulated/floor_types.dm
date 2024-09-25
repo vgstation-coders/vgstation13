@@ -107,8 +107,7 @@
 		to_chat(user, "<span class='notice'>Removing rods...</span>")
 		C.playtoolsound(src, 80)
 		if(do_after(user, src, 30) && istype(src, /turf/simulated/floor/engine)) // Somehow changing the turf does NOT kill the current running proc.
-			var/obj/item/stack/rods/R = new(src, 2)
-			R.recycles_cash = recycles_cash
+			new /obj/item/stack/rods(src, 2)
 			ChangeTurf(/turf/simulated/floor)
 			var/turf/simulated/floor/F = src
 			F.make_plating()

@@ -47,8 +47,7 @@
 		var/obj/item/tool/weldingtool/WeldingTool = C
 		if(WeldingTool.remove_fuel(0, user))
 			to_chat(user, "<span class='notice'>Slicing [src] joints...</span>")
-			var/obj/item/stack/rods/R = new(loc)
-			R.recycles_cash = recycles_cash
+			new/obj/item/stack/rods(loc)
 			qdel(src)
 	else
 		var/turf/T = get_turf(src)

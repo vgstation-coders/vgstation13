@@ -75,8 +75,7 @@
 	if(T.density)
 		to_chat(user, "<span class='warning'>You can't build there!</span>")
 		return
-	var/obj/structure/table/tab = new table_type(T)
-	tab.recycles_cash = recycles_cash
+	new table_type(T)
 	user.drop_item(src, force_drop = 1)
 	qdel(src)
 
@@ -233,6 +232,5 @@
 /obj/item/weapon/rack_parts/attack_self(mob/user)
 	var/obj/structure/rack/R = new /obj/structure/rack(user.loc)
 	R.add_fingerprint(user)
-	R.recycles_cash = src.recycles_cash
 	user.drop_item(src, force_drop = 1)
 	qdel(src)

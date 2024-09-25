@@ -8,4 +8,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	w_type = RECYK_METAL
 	mount_reqs = list("simfloor", "nospace")
-	resulttype = /obj/machinery/firealarm/empty
+
+/obj/item/mounted/frame/firealarm/do_build(turf/on_wall, mob/user)
+	new /obj/machinery/firealarm/empty(get_turf(src), get_dir(on_wall, user), 1)
+	qdel(src)

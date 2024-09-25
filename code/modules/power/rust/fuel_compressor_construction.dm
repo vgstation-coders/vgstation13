@@ -9,7 +9,6 @@
 	mount_reqs = list("simfloor", "nospace")
 	flags = FPRINT
 	siemens_coefficient = 1
-	resulttype = /obj/machinery/rust_fuel_compressor
 
 /obj/item/mounted/frame/rust_fuel_compressor/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (W.is_wrench(user))
@@ -17,6 +16,10 @@
 		qdel(src)
 		return
 	..()
+
+/obj/item/mounted/frame/rust_fuel_compressor/do_build(turf/on_wall, mob/user)
+	new /obj/machinery/rust_fuel_compressor(get_turf(user), get_dir(user, on_wall), 1)
+	qdel(src)
 
 //construction steps
 /obj/machinery/rust_fuel_compressor/New(turf/loc, var/ndir, var/building=0)

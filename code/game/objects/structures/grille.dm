@@ -47,7 +47,7 @@
 		broken = 1
 		icon_state = "[initial(icon_state)]-b"
 		setDensity(FALSE) //Not blocking anything anymore
-		dropmaterial() //One rod set
+		new grille_material(get_turf(src)) //One rod set
 		relativewall_neighbours()
 	else if(health > (0.25*initial(health)) && broken) //Repair the damage to this bitch
 		broken = 0
@@ -55,7 +55,7 @@
 		setDensity(TRUE)
 		relativewall_neighbours()
 	if(health <= 0) //Dead
-		dropmaterial()//Drop the second set of rods
+		new grille_material(get_turf(src)) //Drop the second set of rods
 		qdel(src)
 
 /obj/structure/grille/ex_act(severity)
@@ -193,7 +193,7 @@
 	if(W.is_wirecutter(user))
 		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
 			W.playtoolsound(loc, 100)
-			dropmaterial(broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not!
+			drop_stack(grille_material, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not!
 			qdel(src)
 			return
 		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards!
@@ -296,9 +296,6 @@
 		icon_state = "grille-b"
 	else
 		icon_state = "grille"
-
-/obj/structure/grille/proc/dropmaterial(var/amount = 1, mob/user)
-	drop_stack(grille_material, get_turf(src), amount, user, recycles_cash)
 
 /obj/structure/grille/cult //Used to get rid of those ugly fucking walls everywhere while still blocking air
 

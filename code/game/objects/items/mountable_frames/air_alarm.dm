@@ -13,4 +13,7 @@ Code shamelessly copied from apc_frame
 	melt_temperature = MELTPOINT_STEEL
 	w_type = RECYK_METAL
 	mount_reqs = list("simfloor", "nospace")
-	resulttype = /obj/machinery/alarm
+
+/obj/item/mounted/frame/alarm_frame/do_build(turf/on_wall, mob/user)
+	new /obj/machinery/alarm(get_turf(src), get_dir(on_wall, user), 1)
+	qdel(src)

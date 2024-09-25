@@ -657,13 +657,10 @@ var/list/one_way_windows
 	qdel(src)
 
 /obj/structure/window/proc/spawnBrokenPieces()
-	var/atom/movable/A
 	if(shardtype)
-		A = new shardtype(loc, sheetamount)
-		A.recycles_cash = recycles_cash
+		new shardtype(loc, sheetamount)
 	if(reinforced)
-		A = new reinforcetype(loc, sheetamount)
-		A.recycles_cash = recycles_cash
+		new reinforcetype(loc, sheetamount)
 
 /obj/structure/window/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 

@@ -5,7 +5,10 @@
 	icon_state = "station_map_frame0"
 	flags = FPRINT
 	mount_reqs = list("nospace")
-	resulttype = /obj/machinery/station_map_frame
+
+/obj/item/mounted/frame/station_map/do_build(turf/on_wall, mob/user)
+	new /obj/machinery/station_map_frame(get_turf(src), get_dir(user, on_wall))
+	qdel(src)
 
 /obj/machinery/station_map_frame
 	name = "station holomap frame"

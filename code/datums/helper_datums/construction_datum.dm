@@ -148,7 +148,6 @@
 		var/obj/item/R = new result(get_turf(holder))
 		if(in_hands && istype(R))
 			user.put_in_hands(R)
-		R.recycles_cash = holder.recycles_cash
 		spawn()
 			QDEL_NULL (holder)
 
@@ -249,7 +248,6 @@
 //		testing("[user] fully deconstructed a [result]!")
 		for(var/thing in tospawn)
 			var/atom/A = new thing(get_turf(holder))
-			A.recycles_cash = holder.recycles_cash
 			if(istype(A,/obj/item/stack))
 				var/obj/item/stack/S = A
 				if(tospawn[thing] > 1)
@@ -351,7 +349,6 @@
 			var/working_type = (islist(current_step[Co_KEY]) ? pick(current_step[Co_KEY]) : (ispath(current_step[Co_KEY]) ? current_step[Co_KEY] : null))
 			if(working_type)
 				S = new working_type(holder.loc)
-				S.recycles_cash = holder.recycles_cash
 				if(istype(S) && !(Co_KEEP in current_step))
 					S.amount = current_step[Co_MAX_AMOUNT] - current_step[Co_AMOUNT]
 					S.update_icon()
@@ -439,7 +436,6 @@
 
 		for(var/atom/movable/this_drop in to_drop)
 			this_drop.forceMove(holder.loc)
-			this_drop.recycles_cash = holder.recycles_cash
 	return 1
 
 /datum/construction/reversible/proc/get_forward_step(index)
