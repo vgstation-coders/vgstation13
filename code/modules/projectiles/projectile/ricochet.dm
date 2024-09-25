@@ -10,7 +10,6 @@
 	icon = 'icons/obj/projectiles_experimental.dmi'
 	icon_state = "ricochet_head"
 	animate_movement = 0
-	linear_movement = 0
 	custom_impact = 1
 	var/pos_from = EAST	//which side of the turf is the shot coming from
 	var/pos_to = SOUTH	//which side of the turf is the shot heading to
@@ -190,7 +189,7 @@
 	if(nodamage)
 		bump.icon_state += "_t"
 	bump.dir = pos_to
-	playsound(src, 'sound/items/metal_impact.ogg', 50, 1)
+	playsound(src, bounce_sound, 50, 1)
 	switch(pos_to)
 		if(NORTH)
 			if(pos_from == WEST)
