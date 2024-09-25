@@ -466,12 +466,7 @@
 		update_icon()
 
 	if(signal.data["claimcredits"])
-		if(credits < 1)	//Is there actual money to collect?
-			return 1
-
-		var/datum/money_account/acct = signal.data["claimcredits"]
-		if(istype(acct) && acct.charge(-floor(credits), null, "Claimed mining credits.", src.name, dest_name = "Processing Machine"))
-			credits -= floor(credits)
+		claim_credits(signal.data["claimcredits"])
 
 	if(signal.data["inc_priority"])
 		var/idx = clamp(signal.data["inc_priority"], 2, recipes.len)
@@ -481,10 +476,16 @@
 		var/idx = clamp(signal.data["dec_priority"], 1, recipes.len - 1)
 		recipes.Swap(idx, idx + 1)
 
+/obj/machinery/mineral/processing_unit/proc/claim_credits(var/datum/money_account/acct,var/cap = INFINITY)
+	var/toclaim = min(credits,cap)
+	if(toclaim >= 1 && istype(acct) && acct.charge(-floor(toclaim), null, "Claimed mining credits.", src.name, dest_name = "Processing Machine"))
+		credits -= floor(toclaim)
+
 /////////////////////////////////////////////////
 // Recycling Furnace
 /obj/machinery/mineral/processing_unit/recycle
 	name = "recycling furnace"
+	var/list/recycled_values = list()
 
 /obj/machinery/mineral/processing_unit/recycle/grab_ores()
 	var/turf/in_T = get_step(src, in_dir)
@@ -500,12 +501,25 @@
 		if(!(A.w_type in list(NOT_RECYCLABLE, RECYK_BIOLOGICAL)))
 			if(A.materials && !istype(A,/obj/item/stack/sheet)) // no infinite money glitches allowed
 				credits += A.materials.getValue()
+				for(var/mat_id in A.materials.storage)
+					recycled_values[mat_id] += A.materials.getValueByMaterial(mat_id)
 			if(A.recycle(ore))
 				ore.addFrom(A.materials, FALSE)
 				qdel(A)
 				continue
 
 		A.forceMove(out_T)
+
+/obj/machinery/mineral/processing_unit/recycle/claim_credits(datum/money_account/acct, cap)
+	cap = 0
+	var/specvalue
+	for(var/mat_id in recycled_values)
+		specvalue = cap + recycled_values[mat_id]
+		if(specvalue > credits)
+			break
+		cap = specvalue
+		recycled_values[mat_id] = 0
+	..(acct,cap)
 
 /obj/machinery/mineral/processing_unit/recycle/New()
 	. = ..()
