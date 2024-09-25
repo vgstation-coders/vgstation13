@@ -12,6 +12,7 @@
 
 	var/frequency = FREQ_DISPOSAL //Same as conveyors.
 	var/smelter_tag = null
+	var/show_credits_per_mat = FALSE //debug value for testing
 	var/datum/radio_frequency/radio_connection
 
 	var/list/smelter_data //All the data we have about the smelter, since it uses radio connection based RC.
@@ -95,7 +96,7 @@
 		dat += {"
 		<tr>
 			<td>[smelter_data["ore"][ore_id]["name"]]</td>
-			<td>[smelter_data["ore"][ore_id]["amount"]] ($[smelter_data["ore"][ore_id]["value"]])</td>
+			<td>[smelter_data["ore"][ore_id]["amount"]][show_credits_per_mat ? " ($[smelter_data["ore"][ore_id]["value"]])" : ""]</td>
 		</tr>
 		"}
 
