@@ -365,13 +365,16 @@
 		var/amount = ore.getAmount(metal)
 		if (M.default_show_in_menus || amount != 0)
 			// display 1 = 1 sheet in the interface.
-			data["ore"][metal] = list("name" = M.name, "amount" = amount / M.cc_per_sheet, "value" = ore.getValueByMaterial(metal))
+			data["ore"][metal] = list("name" = M.name, "amount" = amount / M.cc_per_sheet, "value" = value_by_id(metal))
 
 	data["credits"] = credits
 
 	data["type"] = "smelter"
 
 	send_signal(data)
+
+/obj/machinery/mineral/processing_unit/proc/value_by_id(var/mat_id)
+	return ore.getValueByMaterial(metal)
 
 /obj/machinery/mineral/processing_unit/proc/send_signal(list/data)
 	var/datum/signal/signal = new /datum/signal
@@ -486,6 +489,9 @@
 /obj/machinery/mineral/processing_unit/recycle
 	name = "recycling furnace"
 	var/list/recycled_values = list()
+
+/obj/machinery/mineral/processing_unit/recycle/value_by_id(var/mat_id)
+	return mat_id in recycled_values ? recycled_values[mat_id] : 0
 
 /obj/machinery/mineral/processing_unit/recycle/grab_ores()
 	var/turf/in_T = get_step(src, in_dir)
