@@ -14,6 +14,7 @@
 	faction = "creature"
 	speed = 5
 	size = SIZE_BIG
+	supernatural = TRUE
 
 /mob/living/simple_animal/hostile/creature/cult
 	faction = "cult"
@@ -30,7 +31,6 @@
 	max_n2 = 0
 	minbodytemp = 0
 
-	supernatural = 1
 	held_items = list()
 
 /mob/living/simple_animal/hostile/creature/get_butchering_products()

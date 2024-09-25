@@ -21,6 +21,17 @@
 /datum/dna/gene/basic/psychic_resist/New()
 	block = PSYRESISTBLOCK
 
+/datum/dna/gene/basic/psychic_resist/activate(var/mob/M, var/connected, var/flags)
+	..()
+	INVOKE_EVENT(M, /event/camera_sight_changed, "mover" = M)
+	return 1
+
+/*/datum/dna/gene/basic/psychic_resist/deactivate(var/mob/M, var/connected, var/flags)
+	if(!..())
+		return 0
+	INVOKE_EVENT(M, /event/camera_sight_changed, "mover" = M)
+	return 1*/ // Allows retracking, uncomment to enable
+
 /////////////////////////
 // Stealth Enhancers
 /////////////////////////
@@ -57,6 +68,7 @@
 /datum/dna/gene/basic/stealth/chameleon/deactivate(var/mob/M, var/connected, var/flags)
 	if(!..())
 		return 0
+	M.alphas["chameleon_stealth"] = 255
 	M.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 	return 1
 
@@ -170,7 +182,7 @@
 		if(!handle_suit)
 			target.bodytemperature = max(T0C + 29, target.bodytemperature - 5)
 			target.adjustFireLoss(10)
-			target.ExtinguishMob()
+			target.extinguish()
 
 			target.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [target]!</span>")
 
@@ -487,7 +499,7 @@
 			target.pixel_y = 0
 			target.stop_flying()
 
-			if (M_FAT in target.mutations && prob(66))
+			if ((M_FAT in target.mutations) && prob(66))
 				target.visible_message("<span class='warning'><b>[target.name]</b> crashes due to their heavy weight!</span>")
 				//playsound(usr.loc, 'zhit.wav', 50, 1)
 				target.AdjustKnockdown(10)

@@ -116,6 +116,8 @@
 	var/target_temperature = T0C+20
 	// What gasses are scrubbed on this preset.
 	var/list/scrubbed_gases = list()
+	// Automatically switch to the fire suppression preset when a fire is detected.
+	var/suppression_mode = FALSE
 
 /datum/airalarm_configuration/proc/deep_config_copy()
 	var/datum/airalarm_configuration/to_return = new /datum/airalarm_configuration()
@@ -150,6 +152,7 @@
 	data["temperature_threshold"] = temperature_threshold.raw_values
 	data["target_temperature"] = target_temperature
 	data["scrubbed_gases"] = scrubbed_gases
+	data["suppression_mode"] = suppression_mode
 	return data
 
 
@@ -265,6 +268,22 @@
 	target_temperature = T0C+20
 	scrubbed_gases = list( GAS_OXYGEN, GAS_NITROGEN, GAS_CARBON, GAS_PLASMA, GAS_SLEEPING, GAS_CRYOTHEUM )
 
+/datum/airalarm_configuration/preset/fire_suppression
+	name = "Fire Suppression"
+	desc = "Replaces combustible gasses with inert gasses."
+	core = TRUE
+	gas_thresholds = list( 	GAS_OXYGEN = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_NITROGEN = new /datum/airalarm_threshold(16, 18, 135, 140),
+							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, -1, -1),
+							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, -1, -1),
+							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, -1, -1) )
+	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
+	pressure_threshold = new /datum/airalarm_threshold(-1, -1, -1, -1)
+	temperature_threshold = new /datum/airalarm_threshold(T0C-50, T0C-25, T0C+25, T0C+50)
+	target_temperature = T0C
+	scrubbed_gases = list( GAS_OXYGEN, GAS_PLASMA )
+
 //these are used for the UIs and new ones can be added and existing ones edited at the CAC
 var/global/list/airalarm_presets = list(
 	"Human" = new /datum/airalarm_configuration/preset/human,
@@ -272,6 +291,7 @@ var/global/list/airalarm_presets = list(
 	"Coldroom" = new /datum/airalarm_configuration/preset/coldroom,
 	"Plasmaman" = new /datum/airalarm_configuration/preset/plasmaman,
 	"Vacuum" = new /datum/airalarm_configuration/preset/vacuum,
+	"Fire Suppression" = new /datum/airalarm_configuration/preset/fire_suppression,
 )
 var/global/list/air_alarms = list()
 
@@ -310,7 +330,7 @@ var/global/list/air_alarms = list()
 	var/buildstage = 2 //2 is built, 1 is building, 0 is frame.
 	var/cycle_after_preset = 1 // Whether we automatically cycle when presets are changed
 
-	var/target_temperature = T0C+20
+	var/target_temperature //Manual override for target temperature changing, usable for maps/admin vv edits
 	var/regulating_temperature = 0
 
 	var/datum/radio_frequency/radio_connection
@@ -320,6 +340,7 @@ var/global/list/air_alarms = list()
 
 	machine_flags = WIREJACK
 
+	var/auto_suppress = FALSE //automatically switch to the fire suppression preset when a fire is detected
 
 /obj/machinery/alarm/xenobio
 	req_one_access = list(access_rd, access_atmospherics, access_engine_minor, access_xenobiology)
@@ -418,32 +439,45 @@ var/global/list/air_alarms = list()
 	if(!istype(location))
 		return//returns if loc is not simulated
 
+	if(!isnull(target_temperature))
+		set_temperature(target_temperature, FALSE)
+		target_temperature = null
+
 	var/datum/gas_mixture/environment = location.return_air()
 
 	// Handle temperature adjustment here.
 	if(environment.temperature < config.target_temperature - 2 || environment.temperature > config.target_temperature  + 2 || regulating_temperature)
 		//If it goes too far, we should adjust ourselves back before stopping.
-		var/actual_target_temperature = target_temperature
+		var/actual_target_temperature = config.target_temperature
 		if(config.temperature_threshold.assess_danger(actual_target_temperature))
 			//use the max or min safe temperature
 			actual_target_temperature = clamp(actual_target_temperature, config.temperature_threshold.min_1(), config.temperature_threshold.max_1())
-
+		var/thermo_changed = FALSE
 		if(!regulating_temperature)
-			regulating_temperature = 1
-			visible_message("\The [src] clicks as it starts [environment.temperature > config.target_temperature  ? "cooling" : "heating"] the room.",\
+			if(environment.temperature > config.target_temperature)
+				regulating_temperature = "cooling"
+			else
+				regulating_temperature = "heating"
+			thermo_changed = TRUE
+		else if(regulating_temperature == "heating" && environment.temperature > config.target_temperature)
+			regulating_temperature = "cooling"
+			thermo_changed = TRUE
+		else if(regulating_temperature == "cooling" && environment.temperature < config.target_temperature)
+			regulating_temperature = "heating"
+			thermo_changed = TRUE
+		if(thermo_changed)
+			visible_message("\The [src] clicks as it starts [regulating_temperature] the room.",\
 			"You hear a click and a faint electronic hum.")
 
 		var/datum/gas_mixture/gas = environment.remove_volume(0.25 * CELL_VOLUME)
 		if(gas)
 			var/heat_capacity = gas.heat_capacity()
 			var/energy_used = min(abs(heat_capacity * (gas.temperature - actual_target_temperature)), MAX_ENERGY_CHANGE)
-			var/cooled = 0 //1 means we cooled this tick, 0 means we warmed. Used for the message below.
 
 			// We need to cool ourselves, but only if the gas isn't already colder than what we can do.
 			if (environment.temperature > actual_target_temperature && gas.temperature >= MIN_TEMPERATURE)
 				gas.temperature -= energy_used / heat_capacity
 				use_power(energy_used/3) //these are heat pumps, so they can have a >100% efficiency, typically about 300%
-				cooled = 1
 			// We need to warm ourselves, but only if the gas isn't already hotter than what we can do.
 			else if (environment.temperature < actual_target_temperature && gas.temperature <= MAX_TEMPERATURE)
 				gas.temperature += energy_used / heat_capacity
@@ -452,9 +486,9 @@ var/global/list/air_alarms = list()
 			environment.merge(gas)
 
 			if (abs(environment.temperature - actual_target_temperature) <= 0.5)
-				regulating_temperature = 0
-				visible_message("\The [src] clicks quietly as it stops [cooled ? "cooling" : "heating"] the room.",\
+				visible_message("\The [src] clicks quietly as it stops [regulating_temperature] the room.",\
 				"You hear a click as a faint electronic humming stops.")
+				regulating_temperature = 0
 
 	var/old_level = local_danger_level
 	var/new_danger = calculate_local_danger_level(environment)
@@ -490,6 +524,11 @@ var/global/list/air_alarms = list()
 		*/
 		if(RCON_YES)
 			remote_control = 1
+	if(auto_suppress)
+		var/area/this_area = get_area(src)
+		if(this_area.fire)
+			preset_key = "Fire Suppression"
+			apply_preset(1)
 	return
 
 /obj/machinery/alarm/proc/calculate_local_danger_level(const/datum/gas_mixture/environment)
@@ -850,6 +889,7 @@ var/global/list/air_alarms = list()
 	data["screen"]=screen
 	data["cycle_after_preset"] = cycle_after_preset
 	data["firedoor_override"] = this_area.doors_overridden
+	data["suppression_mode"] = auto_suppress
 
 	var/list/vents=list()
 	if(this_area.air_vent_names.len)
@@ -949,14 +989,11 @@ var/global/list/air_alarms = list()
 		else
 			max_temperature = temperature_threshold.max_1() - T0C
 			min_temperature = temperature_threshold.min_1() - T0C
-		var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
+		var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE - T0C]C or above [MAX_TEMPERATURE - T0C]C by itself. ", "Thermostat Controls") as num|null
 		if(input_temperature==null)
 			return 1
-		if(!input_temperature || input_temperature >= max_temperature || input_temperature <= min_temperature)
-			to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
-		else
-			input_temperature = input_temperature + T0C
-			set_temperature(input_temperature)
+		input_temperature = round(clamp(input_temperature, min_temperature, max_temperature) + T0C, 0.01)
+		set_temperature(input_temperature)
 		return 1
 
 	if(!buttonCheck(usr))
@@ -1048,6 +1085,10 @@ var/global/list/air_alarms = list()
 		if(href_list["preset"] in airalarm_presets)
 			preset_key = href_list["preset"]
 			apply_preset(!cycle_after_preset)
+		return 1
+
+	if(href_list["auto_suppress"])
+		auto_suppress = !auto_suppress
 		return 1
 
 /obj/machinery/alarm/attackby(obj/item/W as obj, mob/user as mob)

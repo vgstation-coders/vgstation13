@@ -49,6 +49,7 @@
 
 	var/additional_damage = 0//tracking how much damage we took
 
+	supernatural = TRUE
 	blooded = FALSE
 
 

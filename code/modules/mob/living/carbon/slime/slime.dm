@@ -33,6 +33,8 @@
 	var/list/Friends = list() // A list of potential friends
 	var/list/FriendsWeight = list() // A list containing values respective to Friends. This determines how many times a slime "likes" something. If the slime likes it more than 2 times, it becomes a friend
 
+	var/list/preferred_food = list(/mob/living/carbon/monkey) //Will ignore hungry checks and try to eat the types in the list ASAP.
+
 	var/list/speech_buffer = list()
 
 	// slimes pass on genetic data, so all their offspring have the same "Friends",
@@ -83,7 +85,7 @@
 		if (SLIME_BABY)
 			maxHealth = 150
 			health = 150
-			nutrition = 700 // 1000 = max
+			nutrition = 700 // 1200 = max
 			speak_emote = list("hums")
 		if (SLIME_ADULT)
 			maxHealth = 200
@@ -201,14 +203,11 @@
 
 	if(statpanel("Status"))
 		stat(null, "Health: [round((health / maxHealth) * 100)]%")
-
-		if(slime_lifestage == SLIME_ADULT)
-			stat(null, "Nutrition: [nutrition]/1200")
-			if(amount_grown >= 10)
+		stat(null, "Nutrition: [nutrition]/1200")
+		if(amount_grown >= 10)
+			if(slime_lifestage == SLIME_ADULT)
 				stat(null, "You can reproduce!")
-		else
-			stat(null, "Nutrition: [nutrition]/1000")
-			if(amount_grown >= 10)
+			else
 				stat(null, "You can evolve!")
 
 		stat(null,"Power Level: [powerlevel]")
@@ -225,7 +224,7 @@
 /mob/living/carbon/slime/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
 		if(B.stuck_to)
-			visible_message("<span class='warning'>\the [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
+			visible_message("<span class='warning'>\The [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
 			B.deactivate()
 			B.unstick()
 
@@ -1023,7 +1022,7 @@
 
 	qdel (src)
 
-/mob/living/carbon/slime/IgniteMob()
+/mob/living/carbon/slime/ignite()
 	return 0
 
 /mob/living/carbon/slime/ApplySlip(var/obj/effect/overlay/puddle/P)

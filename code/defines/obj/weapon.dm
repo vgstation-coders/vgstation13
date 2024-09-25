@@ -41,7 +41,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 	set name = "Pick up telephone"
 	set src in oview(1)
 	if(!landline)
-		to_chat(usr, "<span class='notice'>\the [src] model does not come with a telephone!</span>")
+		to_chat(usr, "<span class='notice'>\The [src] model does not come with a telephone!</span>")
 		return
 	landline.pick_up_phone(usr)
 

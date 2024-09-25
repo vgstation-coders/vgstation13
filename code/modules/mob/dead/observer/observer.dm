@@ -250,10 +250,10 @@ Works together with spawning an observer, noted above.
 			visible.icon_state = "visible1"
 		else
 			visible.icon_state = "visible0"
-
 /mob/proc/ghostize(var/flags = GHOST_CAN_REENTER,var/deafmute = 0)
 	if(key && !(copytext(key,1,2)=="@"))
-		log_admin("[key_name(src)] is now a[src.client.holder ? "n admin-" : " "]ghost.")
+		if((src && src.client && src.client.holder))
+			log_admin("[key_name(src)] is now a[src.client.holder ? "n admin-" : " "]ghost.")
 		var/ghostype = /mob/dead/observer
 		if (deafmute)
 			ghostype = /mob/dead/observer/deafmute

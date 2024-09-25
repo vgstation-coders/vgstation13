@@ -540,3 +540,20 @@
 	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON
 	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD // So it totals to the same pressure
 	//icon = 'icons/turf/shuttle-debug.dmi'
+
+// Plated catwalks
+/turf/simulated/floor/plated_catwalk
+	icon = 'icons/turf/catwalks.dmi'
+	icon_state = "pcat0"
+	name = "plated catwalk"
+	desc = "A hybrid floor tile-catwalk which provides visibility and easy access to pipes and wires beneath it."
+	plane = TURF_PLANE
+	layer = PAINT_LAYER
+	hatch_installed = TRUE
+	hatch_open = FALSE
+
+/turf/simulated/floor/plated_catwalk/New()
+	..()
+	overlays.Cut()
+	overlays += mutable_appearance(icon='icons/turf/floors.dmi', icon_state="plating", layer = CATWALK_LAYER, plane = ABOVE_PLATING_PLANE)
+	overlays += mutable_appearance(icon='icons/turf/catwalks.dmi', icon_state="[icon_state]_olay", layer = PAINT_LAYER, plane = TURF_PLANE)

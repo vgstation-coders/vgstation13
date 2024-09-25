@@ -64,7 +64,7 @@
 /mob/living/carbon/human/movement_tally_multiplier()
 	. = ..()
 	if(!reagents.has_any_reagents(HYPERZINES))
-		if(!shoes)
+		if(!shoes && has_vulnerable_foot())
 			. *= NO_SHOES_SLOWDOWN
 	if(M_FAT in mutations) // hyperzine can't save you, fatty!
 		. *= 1.5

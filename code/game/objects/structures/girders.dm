@@ -33,13 +33,19 @@
 
 /obj/structure/girder/wood/attackby(var/obj/item/W, var/mob/user)
 	if(W.sharpness_flags & CHOPWOOD)
-		playsound(src, 'sound/effects/woodcuttingshort.ogg', 50, 1)
-		user.visible_message("<span class='warning'>[user] smashes through \the [src] with \the [W].</span>", \
-							"<span class='notice'>You smash through \the [src].</span>",\
-							"<span class='warning'>You hear the sound of wood being cut</span>"
-							)
-		qdel(src)
-		new material(get_turf(src), 2)
+		user.visible_message("<span class='notice'>[user] starts chopping at \the [src] with \the [W].</span>", \
+				"<span class='notice'>You start chopping at \the [src] with \the [W].</span>", \
+				"<span class='warning'>You hear the sound of wood being cut.</span>")
+		W.playtoolsound(src, 100)
+		var/choptime = 50
+		if(istype(W, /obj/item/weapon/fireaxe))
+			choptime = 10
+		if(do_after(user, src, choptime))
+			user.visible_message("<span class='warning'>[user] smashes through \the [src] with \the [W].</span>", \
+						"<span class='notice'>You smash through \the [src].</span>")
+			W.playtoolsound(src, 100)
+			new material(get_turf(src), 2)
+			qdel(src)
 	else
 		..()
 

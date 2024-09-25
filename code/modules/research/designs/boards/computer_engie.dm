@@ -2,7 +2,7 @@
 
 /datum/design/atmosalerts
 	name = "Circuit Design (Atmosphere Alert)"
-	desc = "Allows for the construction of circuit boards used to build an atmosphere alert console.."
+	desc = "Allows for the construction of circuit boards used to build an atmosphere alert console."
 	id = "atmosalerts"
 	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER

@@ -37,6 +37,7 @@
 	desc = "An ominous-sounding megaphone with a built-in radio transmitter and voice scrambler. Use in hand to fiddle with the controls."
 	var/frequency = 0
 	mask_voice = TRUE
+	blocks_tracking = TRUE
 	flags = FPRINT | HEAR
 
 var/list/megaphone_channels = list("DISABLE" = 0) + stationchannels
@@ -53,6 +54,13 @@ var/list/megaphone_channels = list("DISABLE" = 0) + stationchannels
 	Broadcast_Message(clone, level = list(map.zMainStation, map.zAsteroid))
 	to_chat(speech.speaker, "\The [src] [pick("creaks", "whines", "crackles", "whirrs", 1;"makes an odd static/popping noise that you kind of recognize as similar to a geiger counter", 1;"squeaks")] \
 		as it transmits your voice into the set frequency...") //Since you may not be able to hear your own demands, some feedback that they're getting through
+
+/obj/item/device/megaphone/madscientist/pickup(mob/user)
+	INVOKE_EVENT(user, /event/camera_sight_changed, "mover" = user)
+
+/*/obj/item/device/megaphone/madscientist/dropped(mob/user)
+	..()
+	INVOKE_EVENT(user, /event/camera_sight_changed, "mover" = user)*/ // Allows retracking, uncomment to enable
 
 /obj/item/device/megaphone/madscientist/attack_self(mob/living/user as mob)
 	show_ui(user)

@@ -103,7 +103,7 @@
 	build_path = /obj/machinery/computer/card
 /obj/item/weapon/circuitboard/card/centcom
 	name = "Circuit board (CentCom ID Computer)"
-	desc = "A circuit board for running a computer used for granting access to areas at Central Command.."
+	desc = "A circuit board for running a computer used for granting access to areas at Central Command."
 	build_path = /obj/machinery/computer/card/centcom
 //obj/item/weapon/circuitboard/shield
 //	name = "Circuit board (Shield Control)"

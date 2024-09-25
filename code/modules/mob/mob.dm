@@ -541,21 +541,24 @@
 // Used in job equipping so shit doesn't pile up at the start loc.
 /mob/living/carbon/human/proc/equip_or_collect(var/obj/item/W, var/slot)
 	if(!equip_to_slot_or_drop(W, slot))
-		// Do I have a backpack?
-		var/obj/item/weapon/storage/B = back
+		collect_in_backpack(W)
 
-		// Do I have a plastic bag?
-		if(!B)
-			var/index = find_held_item_by_type(/obj/item/weapon/storage/bag/plasticbag)
-			if(index)
-				B = held_items[index]
+/mob/living/carbon/human/proc/collect_in_backpack(var/obj/item/W)
+	// Do I have a backpack?
+	var/obj/item/weapon/storage/B = back
 
-		if(!B)
-			// Gimme one.
-			B=new /obj/item/weapon/storage/bag/plasticbag(null) // Null in case of failed equip.
-			if(!put_in_hands(B,slot_back))
-				return // Fuck it
-		B.handle_item_insertion(W,1)
+	// Do I have a plastic bag?
+	if(!B)
+		var/index = find_held_item_by_type(/obj/item/weapon/storage/bag/plasticbag)
+		if(index)
+			B = held_items[index]
+
+	if(!B)
+		// Gimme one.
+		B=new /obj/item/weapon/storage/bag/plasticbag(null) // Null in case of failed equip.
+		if(!put_in_hands(B,slot_back))
+			return // Fuck it
+	B.handle_item_insertion(W,1)
 
 //The list of slots by priority. equip_to_appropriate_slot() uses this list. Doesn't matter if a mob type doesn't have a slot.
 var/static/list/slot_equipment_priority = list( \
@@ -1352,13 +1355,16 @@ Use this proc preferably at the end of an equipment loadout
 	set category = "IC"
 	unset_machine()
 	reset_view(null)
-	if(istype(src, /mob/living))
-		var/mob/living/M = src
-		if(M.cameraFollow)
-			M.cameraFollow = null
-		if(istype(src, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = M
-			H.handle_regular_hud_updates()
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		H.handle_regular_hud_updates()
+
+/mob/living/silicon/ai/cancel_camera()
+	set name = "Cancel Camera View"
+	set category = "IC"
+	stop_ai_tracking()
+	unset_machine()
+	reset_view(null)
 
 // http://www.byond.com/forum/?post=2219001#comment22205313
 // TODO: Clean up and identify the args, document
@@ -2235,6 +2241,9 @@ Use this proc preferably at the end of an equipment loadout
 	if(src.client && src.client.media && !src.client.media.forced)
 		spawn()
 			src.update_music()
+
+/mob/proc/isUnholy()
+	return (isanycultist(src) || isvampire(src))
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

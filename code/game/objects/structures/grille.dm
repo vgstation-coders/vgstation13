@@ -15,10 +15,7 @@
 	var/grille_material = /obj/item/stack/rods
 
 /obj/structure/grille/canSmoothWith()
-	var/static/list/smoothables = list(
-		/obj/structure/grille,
-	)
-	return smoothables
+	return 1
 
 /obj/structure/grille/relativewall()
 	if(broken)
@@ -28,9 +25,7 @@
 /obj/structure/grille/isSmoothableNeighbor(atom/A)
 	if(istype(A,/obj/structure/grille))
 		var/obj/structure/grille/G = A
-		if(G.broken)
-			return 0
-	return ..()
+		return !G.broken
 
 /obj/structure/grille/examine(mob/user)
 

@@ -26,7 +26,9 @@ var/global/global_playlists = list()
 		if(response)
 			log_debug("Received response from media server for [playlist_id], with a length of [length(response)]")
 			var/json = file2text(response["CONTENT"])
-			if("/>" in json)
+			//i don't think this works as a string search
+			//if("/>" in json)
+			if(findtext(json, "/>"))
 				continue
 			var/songdata = json_decode(json)
 			log_debug("Successfully decoded media server's response for [playlist_id]")
@@ -610,7 +612,7 @@ var/global/list/loopModeNames=list(
 
 				change_cost = max(0,text2num(href_list["set_change_cost"]))
 				linked_account = new_linked_account
-				if("lock" in href_list && href_list["lock"] != "")
+				if(("lock" in href_list) && href_list["lock"] != "")
 					change_access = list(text2num(href_list["lock"]))
 				else
 					change_access = list()

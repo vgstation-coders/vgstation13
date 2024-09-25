@@ -126,6 +126,9 @@
 	icon_state = "insectoid_cyber_horror"
 
 /mob/living/simple_animal/hostile/monster/cyber_horror/monster/New(loc, var/mob/living/who_we_were)
+	if(!istype(who_we_were))
+		..()
+		return
 	name = who_we_were.name+" cyber horror"
 	desc = "What was once \a [who_we_were], twisted by machine."
 	var/multiplier = min(3,who_we_were.reagents.has_reagent(MEDNANOBOTS)?who_we_were.reagents.get_reagent_amount(MEDNANOBOTS)/10:1)

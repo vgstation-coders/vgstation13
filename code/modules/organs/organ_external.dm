@@ -107,6 +107,9 @@
 			to_chat(owner, "<span class = 'warning'>Your [display_name] malfunctions!</span>")
 	take_damage(damage, 0, 1, used_weapon = "EMP")
 
+/**
+ * This returns the amount of DAMAGE on the limb, unlike what the proc suggests
+ */
 /datum/organ/external/proc/get_health()
 	return (burn_dam + brute_dam)
 
@@ -169,6 +172,11 @@
 	if(!is_existing()) //No limb there
 		return 0
 
+	//These are here to prevent a 'weakness cascade' from dealing unfair damage amounts to species with weaknesses
+	var/bonus_brute_damage = 0
+	var/bonus_burn_damage = 0
+	var/original_brute = brute
+	var/original_burn = burn
 	if(!no_damage_modifier)
 		if(!is_organic())
 			brute *= 0.66 //~2/3 damage for ROBOLIMBS
@@ -180,6 +188,11 @@
 					brute *= species.brute_mod
 				if(species.burn_mod)
 					burn *= species.burn_mod
+	//We only care about weaknesses, not resists
+	if(original_brute < brute)
+		bonus_brute_damage = brute - original_brute
+	if(original_burn < burn)
+		bonus_burn_damage = burn - original_burn
 
 	//If limb took enough damage, try to cut or tear it off
 	if(body_part != UPPER_TORSO && body_part != LOWER_TORSO) //As hilarious as it is, getting hit on the chest too much shouldn't effectively gib you.
@@ -260,7 +273,11 @@
 				//How much burn damage is left to inflict
 				burn = max(0, burn - can_inflict)
 		//If there are still hurties to dispense
-		if(burn || brute)
+		//Then we need to be fair and remove the damage weaknesses applied for this limb
+		//After all, other limbs can have different weaknesses/resists
+		brute -= bonus_brute_damage
+		burn -= bonus_burn_damage
+		if(burn > 0 || brute > 0)
 			if(!is_organic())
 				droplimb(1) //Non-organic limbs just drop off with no further complications
 			else
@@ -645,7 +662,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		// slow healing
 		var/heal_amt = 0
 
-		if(W.damage < 15 || (M_REGEN in owner.mutations && W.damage <= 50)) //This thing's edges are not in day's travel of each other, what healing?
+		if(W.damage < 15 || ((M_REGEN in owner.mutations) && W.damage <= 50)) //This thing's edges are not in day's travel of each other, what healing?
 			heal_amt += 0.2
 
 		if(W.is_treated() && W.damage < 50) //Whoa, not even magical band aid can hold it together
@@ -1300,6 +1317,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	max_damage = 115
 	min_broken_damage = 70
 	body_part = LOWER_TORSO
+	has_fat = TRUE //for humans this is a blank sprite, fat belly covers groin pixels
 	vital = 1
 	generic_type = /obj/item/organ
 
@@ -1391,6 +1409,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "l_leg"
 	max_damage = 75
 	min_broken_damage = 30
+	has_fat = TRUE
 	body_part = LEG_LEFT
 	icon_position = LEFT
 	generic_type = /obj/item/organ/external/l_leg
@@ -1427,6 +1446,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "r_leg"
 	max_damage = 75
 	min_broken_damage = 30
+	has_fat = TRUE
 	body_part = LEG_RIGHT
 	icon_position = RIGHT
 	generic_type = /obj/item/organ/external/r_leg
@@ -1555,7 +1575,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/hand/get_icon(gender = "", isFat = 0)
 	var/obj/item/organ/external/hand_obj = new generic_type()
 	var/overriding_icon = hand_obj.forced_icon_file
-	return ..(forced_icon_file = overriding_icon)
+	return ..(isFat = isFat, forced_icon_file = overriding_icon)
 
 /datum/organ/external/hand/robotize()
 	generic_type = initial(generic_type)
@@ -1584,6 +1604,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "r_hand"
 	body_part = HAND_RIGHT
 	grasp_id = GRASP_RIGHT_HAND
+	has_fat = TRUE
 	can_grasp = 1
 	slots_to_drop = list(slot_gloves, slot_handcuffed)
 	generic_type = /obj/item/organ/external/r_hand
@@ -1594,6 +1615,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "l_hand"
 	body_part = HAND_LEFT
 	grasp_id = GRASP_LEFT_HAND
+	has_fat = TRUE
 	can_grasp = 1
 	slots_to_drop = list(slot_gloves, slot_handcuffed)
 	generic_type = /obj/item/organ/external/l_hand
@@ -2064,9 +2086,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 /obj/item/organ/external/head/New(loc, mob/living/carbon/human/H, var/datum/organ/external/head/O)
 	origin_body = makeweakref(H)
 
-	if(istype(H))
-		src.icon_state = H.gender == MALE? "head_m" : "head_f"
 	..()
+	if(!istype(H)) //It's entirely possible for stuff to call this without a human, such as headpoles with heads in maps for some reason...
+		return
+	src.icon_state = H.gender == MALE? "head_m" : "head_f"
 	if(isgolem(H)) //Golems don't inhabit their severed heads, they turn to dust when they die.
 		var/mob/living/simple_animal/borer/B = H.has_brain_worms()
 		if(B)
@@ -2098,20 +2121,18 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 				overlays.Add(hair) //icon.Blend(hair, ICON_OVERLAY)
 
-	if(H && istype(H))
-		var/mob/living/simple_animal/borer/B = H.has_brain_worms()
-		if(B)
-			B.infest_limb(src)
+	var/mob/living/simple_animal/borer/B = H.has_brain_worms()
+	if(B)
+		B.infest_limb(src)
 
-	if(H)
-		transfer_identity(H)
+	transfer_identity(H)
 
-		if (!O || !O.disfigured)
-			name = "[H.real_name]'s head"
-		else
-			name = "disfigured head"
+	if (!O || !O.disfigured)
+		name = "[H.real_name]'s head"
+	else
+		name = "disfigured head"
 
-		H.regenerate_icons()
+	H.regenerate_icons()
 
 	if(brainmob)
 		brainmob.stat = 2

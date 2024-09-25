@@ -194,6 +194,10 @@
 	selected = null
 	..()
 
+/obj/mecha/special_thrown_behaviour()
+	dash_dir = dir
+	throwing = 2//dashing through windows and grilles
+
 /obj/mecha/can_apply_inertia()
 	return 1 //No anchored check - so that mechas can fly off into space
 
@@ -306,7 +310,8 @@
 		return
 	if(src == target)
 		var/obj/item/mecha_parts/mecha_equipment/passive/rack/R = get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/rack)
-		R.rack.AltClick(user)
+		if(R)
+			R.rack.AltClick(user)
 		return
 	var/dir_to_target = get_dir(src,target)
 	if(dir_to_target && !(dir_to_target & src.dir))//wrong direction
@@ -350,6 +355,7 @@
 //////////////////////////////////
 
 /obj/mecha/relaymove(mob/user,direction)
+	..()
 	if(user != src.occupant) //While not "realistic", this piece is player friendly.
 		user.forceMove(get_turf(src))
 		to_chat(user, "You climb out from [src]")
@@ -774,7 +780,7 @@
 	for(var/mob/living/cookedalive as anything in occupant)
 		if(cookedalive.fire_stacks < 5)
 			cookedalive.adjust_fire_stacks(1)
-			cookedalive.IgniteMob()
+			cookedalive.ignite()
 
 	return
 
@@ -797,6 +803,17 @@
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 	return
 
+/obj/mecha/proc/get_remaining_equipment_slots()
+	if(equipment.len >= max_equip)
+		return 0
+	return max_equip - equipment.len
+
+/obj/mecha/proc/is_killdozer()
+	for(var/obj/I in equipment)
+		if(istype(I, /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit))
+			return TRUE
+	return FALSE
+
 //////////////////////
 ////// AttackBy //////
 //////////////////////
@@ -817,7 +834,7 @@
 	if(istype(W, /obj/item/mecha_parts/mecha_equipment))
 		var/obj/item/mecha_parts/mecha_equipment/E = W
 		spawn()
-			if(E.can_attach(src))
+			if((E.can_attach(src) || is_killdozer()) && get_remaining_equipment_slots())
 				if(user.drop_item(W))
 					E.attach(src)
 					user.visible_message("[user] attaches [W] to [src]", "You attach [W] to [src]")

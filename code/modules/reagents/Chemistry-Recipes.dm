@@ -467,6 +467,15 @@
 	required_temp = T0C + 200
 	result_amount = 5
 
+/datum/chemical_reaction/meth
+	name = "Methamphetamine"
+	id = METHAMPHETAMINE
+	result = METHAMPHETAMINE
+	required_reagents = list(ALBUTEROL = 1, HYDROGEN = 3, CHLORINE = 1) //a flimsy equivalent to ephedrine + hydrogen to make DL-meth, and then adding HCL to make crystal meth
+	required_catalysts = list(CARBON = 5)
+	required_temp = T0C + 200
+	result_amount = 2
+
 /datum/chemical_reaction/ryetalyn
 	name = "Ryetalyn"
 	id = RYETALYN
@@ -1921,7 +1930,7 @@
 	required_container = /obj/item/slime_extract/yellow
 
 /datum/chemical_reaction/slime_extract/slimeglow/on_reaction(var/datum/reagents/holder)
-	var/obj/item/device/flashlight/lamp/slime/P = new /obj/item/device/flashlight/lamp/slime
+	var/obj/item/device/flashlight/slime/P = new /obj/item/device/flashlight/slime
 	P.forceMove(get_turf(holder.my_atom))
 	..()
 
@@ -2554,6 +2563,15 @@
 	required_reagents = list(WATER = 1, DRY_RAMEN = 3)
 	result_amount = 3
 	required_temp = 100+T0C
+
+/datum/chemical_reaction/hot_ramen_2
+	name = "Hot Ramen"
+	id = HOT_RAMEN
+	result = HOT_RAMEN
+	required_reagents = list(WATER = 1, DRY_RAMEN = 3)
+	result_amount = 3
+	required_container = /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating
+	reaction_temp_change = 100
 
 /datum/chemical_reaction/hell_ramen
 	name = "Hell Ramen"
@@ -3729,13 +3747,28 @@
 	required_reagents = list(SODIUM = 2, SILICON = 1, OXYGEN = 3)
 	result_amount = 5
 
-
 /datum/chemical_reaction/untable
 	name = "Untable Mutagen"
 	id = UNTABLE_MUTAGEN
 	result = UNTABLE_MUTAGEN
 	required_reagents = list(FORMIC_ACID = 1, PHENOL = 1, RADIUM = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/metatable
+	name = "Metatable Mutagen"
+	id = METATABLE_MUTAGEN
+	result = METATABLE_MUTAGEN
+	required_reagents = list(UNTABLE_MUTAGEN = 1, CHARCOAL = 1)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 2
+
+/datum/chemical_reaction/metastable
+	name = "Metastable Mutagen"
+	id = METASTABLE_MUTAGEN
+	result = METASTABLE_MUTAGEN
+	required_reagents = list(MUTAGEN = 1, CHARCOAL = 1)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 2
 
 //Karmotrine Drinks
 
@@ -4213,7 +4246,7 @@
 		var/datum/chemical_reaction/new_reaction = pick(chemical_reactions_list[our_id])
 		holder.handle_reaction(new_reaction,TRUE,created_volume)
 	else // Or else just spawn a new chem
-		var/list/blocked_chems = list(ADMINORDRAZINE, PROCIZINE, BLOCKIZINE, PAISMOKE) // Bad ideas to spawn
+		var/list/blocked_chems = list(ADMINORDRAZINE, PROCIZINE, BLOCKIZINE, PAISMOKE, PANACEA) // Bad ideas to spawn
 		var/list/allowed_reagents = chemical_reagents_list - blocked_chems
 		holder.add_reagent(pick(allowed_reagents),created_volume)
 
@@ -4224,6 +4257,27 @@
 	required_reagents = list(HYPERZINE = 10, FUEL = 10)
 	required_catalysts = list(ZOMBIEPOWDER = 5)
 	result_amount = 5
+
+/datum/chemical_reaction/vomit //yes you can electrolize vomit for low efficiency sacid and nutriment, or make vomit from sacid and nutriment, if you need chemically made vomit for some reason
+	name = "Vomit"
+	id = VOMIT
+	result = VOMIT
+	required_reagents = list(NUTRIMENT = 1, SACID = 1)
+	required_catalysts = list(ENZYME = 5)
+
+/datum/chemical_reaction/squash
+	name = "Squash"
+	id = SQUASH
+	result = SQUASH
+	required_reagents = list(MANLYDORF = 1, DEGENERATECALCIUM = 1, HYPERZINE = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/priaxate
+	name = "Priaxate"
+	id = PRIAXATE
+	result = PRIAXATE
+	required_reagents = list(GRAVY = 1, TRICORDRAZINE = 1)
+	result_amount = 2
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

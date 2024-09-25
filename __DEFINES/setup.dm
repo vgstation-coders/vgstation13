@@ -1976,6 +1976,13 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PS_NARSIEHASRISEN1	"Nar-SieHasRisen1"
 #define PS_NARSIEHASRISEN2	"Nar-SieHasRisen2"
 #define PS_NARSIEHASRISEN3	"Nar-SieHasRisen3"
+#define PS_ZAS_DUST			"ZAS Dust"
+#define PS_DANDELIONS		"Dandelions"
+#define PS_CROSS_DUST		"Cross Dust"
+#define PS_CROSS_ORB		"Cross Orb"
+#define PS_SACRED_FLAME		"Sacred Flame"
+#define PS_SACRED_FLAME2	"Sacred Flame2"
+#define PS_BIBLE_PAGE		"Bible Page"
 
 //Particles variable defines
 #define PVAR_SPAWNING	"spawning"
@@ -1988,3 +1995,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PVAR_LAYER		"layer"
 #define PVAR_PIXEL_X	"pixel_x"
 #define PVAR_PIXEL_Y	"pixel_y"
+#define PVAR_LIFESPAN	"lifespan"
+#define PVAR_FADE		"fade"
+
+#define ZAS_DUST_TURFS_PER_TICK	20

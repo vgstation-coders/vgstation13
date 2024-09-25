@@ -39,6 +39,7 @@
 #define STOXIN 			"stoxin"
 #define INAPROVALINE 			"inaprovaline"
 #define HOLYWATER 			"holywater"
+#define SACREDWATER 		"sacredwater"
 #define SEROTROTIUM 			"serotrotium"
 #define SILICATE 			"silicate"
 #define OXYGEN 			"oxygen"
@@ -102,6 +103,7 @@
 #define TRICORDRAZINE 			"tricordrazine"
 #define SIMPOLINOL			"simpolinol"
 #define ADMINORDRAZINE 			"adminordrazine"
+#define PANACEA				"panacea"
 #define PROCIZINE 			"procizine"
 #define SYNAPTIZINE 			"synaptizine"
 #define IMPEDREZENE 			"impedrezene"
@@ -433,6 +435,8 @@
 #define MUSTARD			"mustard"
 #define RELISH			"relish"
 #define UNTABLE_MUTAGEN		"untable"
+#define METATABLE_MUTAGEN	"metatable"
+#define METASTABLE_MUTAGEN	"metastable"
 #define ELECTRIC_SHEEP		"electric_sheep"
 #define SCIENTISTS_SERENDIPITY		"scientists_serendipity"
 #define METABUDDY		"metabuddy"
@@ -527,6 +531,8 @@
 #define MIMOSA			"mimosa"
 #define LEMONDROP		"lemondrop"
 #define FEVERFEW		"feverfew"
+#define SQUASH			"squash"
+#define PRIAXATE		"priaxate"
 
 #define ACRYLIC			"acrylic"
 #define ACETONE			"acetone"
@@ -539,6 +545,8 @@
 #define LEAD			"lead"
 #define THALLIUM		"thallium"
 #define REGENERATECALCIUM	"regeneratecalcium"
+
+#define DYE_DANDELIONS	"dandelion_dye"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -593,7 +601,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define ALLNANITES list(NANITES, AUTISTNANITES)
 #define SUGARS list(SUGAR, CORNSYRUP)
 #define GUNKS list(CHEMICAL_WASTE, TOXICWASTE, VOMIT, TOXIN, SOLANINE, RADIUM, MUTAGEN, UNTABLE_MUTAGEN, SPIDERS)
-#define COLDDRINKS list(ICECOFFEE, ICETEA, ARNOLDPALMER, TONIC, SODAWATER, ICE, COLA, NUKA_COLA, GEOMETER, SPACEMOUNTAINWIND, DR_GIBB, SPACE_UP, LEMON_LIME, LEMONADE, KIRASPECIAL, MILKSHAKE, BROWNSTAR, REWRITER, DIY_SODA)
+#define COLDDRINKS list(ICECOFFEE, ICETEA, ICED_BEER, ARNOLDPALMER, TONIC, SODAWATER, ICE, COLA, NUKA_COLA, GEOMETER, SPACEMOUNTAINWIND, DR_GIBB, SPACE_UP, LEMON_LIME, LEMONADE, KIRASPECIAL, MILKSHAKE, BROWNSTAR, REWRITER, DIY_SODA)
 #define HOTDRINKS list(COFFEE, SOY_LATTE, TEA, GATORMIX, HOT_COCO, HOT_COCO_SUBHUMAN, CREAMY_HOT_COCO) //Blisterol not included as that's medicine, not a warm drink
 //HOT and COLD drinks defines used for the mint toxin/mint essence checks for tooth pain and shit, maybe you can find another use for it
 
@@ -604,7 +612,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define INCENSE_NOVAFLOWERS	"novaflowers"
 #define INCENSE_BANANA		"bananas"
 #define INCENSE_BOOZE		"helmets"
-#define INCENSE_LEAFY		"cabbage"
+#define INCENSE_LEAFY		"leafy"
 #define INCENSE_VAPOR		"vaporsacs"
 #define INCENSE_DENSE		"grasses"
 #define INCENSE_CRAVE		"vales"

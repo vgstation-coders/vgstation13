@@ -419,7 +419,7 @@
 
 /obj/item/weapon/spellbook/oneuse/ringoffire/recoil(mob/living/carbon/user as mob)
 	user.adjust_fire_stacks(10)
-	user.IgniteMob()
+	user.ignite()
 	to_chat(user, "<span class = 'warning'>The book sets you alight!</span>")
 
 /obj/item/weapon/spellbook/oneuse/mirror_of_pain
@@ -462,7 +462,7 @@
 /obj/item/weapon/spellbook/oneuse/firebreath/recoil(mob/living/carbon/user)
 	to_chat(user, "<span class = 'warning'>You burst into flames!</span>")
 	user.adjust_fire_stacks(0.5)
-	user.IgniteMob()
+	user.ignite()
 
 /obj/item/weapon/spellbook/oneuse/snakes
 	spell = /spell/aoe_turf/conjure/snakes

@@ -334,6 +334,9 @@ var/global/powernets_broke = 0
 			if(G.siemens_coefficient == 0)									// to avoid spamming with insulated glvoes on
 				return 0
 
+			if(istype(G, /obj/item/clothing/gloves/fyellow/insulted))
+				G.say(pick("Hah, dumbass.", "Get fucked idiot.", "You moron, what did you expect?", "Next time try the OTHER yellow gloves, numbskull.", "Oof that's gotta sting."))
+
 	var/area/source_area
 
 	if(isarea(power_source))

@@ -587,6 +587,8 @@
 	name = "clown psychedelic shoes"
 	icon_state = "clownshoespsyche"
 	item_state = "clownshoespsyche"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	luminosity = 2
 	_color = "clownshoespsyche"
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 	species_fit = list(VOX_SHAPED)
@@ -614,3 +616,20 @@
 	item_state = "scubafloppers"
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, UNDEAD_SHAPED, MUSHROOM_SHAPED, INSECT_SHAPED)
+
+
+/obj/item/clothing/shoes/hunter
+	name = "heavy leather boots"
+	desc = "Tall leather boots, perfect for performing slide kicks."
+	icon_state = "hunter"
+	item_state = "hunter_boots"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
+	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
+	bonus_kick_damage = 3
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
+
+/obj/item/clothing/shoes/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/shoes/hunter/rangeTackleBonus()
+	return 1

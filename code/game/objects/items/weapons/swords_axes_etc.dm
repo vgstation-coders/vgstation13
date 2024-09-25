@@ -326,7 +326,7 @@
 
 /obj/item/weapon/caber
 	name = "\improper Ullapool Caber"
-	desc = "A potato-masher style hand grenade. Only explodes when swung against a target while the safety grip is on."
+	desc = "A potato-masher style hand grenade. Only explodes when swung against a target while the safety grip is on. Can recharge once a minute."
 	icon_state = "ullapoolcaber"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	siemens_coefficient = 0 //wooden handle
@@ -337,8 +337,8 @@
 	w_class = W_CLASS_SMALL //fits in your pocket
 	attack_verb = list("blasts", "smacks", "smashes")
 	var/exploded = FALSE
-	var/admintier = FALSE
-	var/rechargetime = 30 //1 minute between each boom, only used by the admincaber
+	var/admintier = TRUE
+	var/rechargetime = 30 //1 minute between each boom
 	var/timer = 0
 
 /obj/item/weapon/caber/New()
@@ -357,7 +357,7 @@
 		attack_verb = list("blasts", "explodes")
 	if(!cant_drop)
 		attack_verb = list("smacks", "smashes")
-	if(admintier && exploded) //only admin tier cabers have a recharge timer
+	if(admintier && exploded)
 		timer += 1
 	if(admintier && timer == rechargetime)
 		timer = 0
@@ -381,12 +381,11 @@
 			exploded = TRUE
 			icon_state = "ullapoolcaberexploded"
 			sharpness = 1.3 //ragged metal edges are kinda like a serrated knife
-			sharpness_flags = SHARP_BLADE //ever cut yourself when opening a can of whatever with a can opener? same deal here
+			sharpness_flags = SHARP_TIP | SERRATED_BLADE | INSULATED_EDGE //ever cut yourself when opening a can of whatever with a can opener? same deal here, sharp spikes, uneven ragged metal and wooden handle
 		else
 			playsound(target, 'sound/misc/caber_hitsound.ogg', 100, 0)
 	else
 		playsound(target, 'sound/misc/caber_hitsound.ogg', 100, 0)
-//TO DO: make inhand update properly when exploded or restored
 //TO DO: less self damage the more inebriated you are, with max immunity at or near liver death levels
 //TO DO: explosion when used against walls or windows
 

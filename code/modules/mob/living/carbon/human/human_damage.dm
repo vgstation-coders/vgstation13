@@ -262,12 +262,23 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 
 		var/brute_was = picked.brute_dam
 		var/burn_was = picked.burn_dam
+		var/damage_cap = picked.max_damage - picked.get_health() //the limb cannot take more than this much damage
 		//Multiplied damage is already handled at the limb level
 		update |= picked.take_damage(brute,burn,sharp,edge,used_weapon, no_damage_modifier = no_damage_change, spread_damage = FALSE)
-		brute	-= (picked.brute_dam - brute_was)
+		if(!picked.is_existing())
+			//the organ got cut off or removed! the organ takes no damage in these cases for some reason...
+			//So we'll rule in favor of the damage taker and assume the organ took the most it can accept from both
+			brute	-= damage_cap
+			burn	-= damage_cap
+		else if(picked.max_damage - picked.get_health() > 0)
+			//since the damage cannot spread: if we did not max out the limb's damage, then we're done!
+			break
+		else
+			//The organ has taken the maximum damage it's allowed, we will have leftover damage
+			brute	-= (picked.brute_dam - brute_was)
+			burn	-= (picked.burn_dam - burn_was)
 		if(brute < 0)
 			brute = 0
-		burn	-= (picked.burn_dam - burn_was)
 		if(burn < 0)
 			burn = 0
 		parts -= picked

@@ -114,7 +114,7 @@
 	if(glasstype)
 		if(glasshealth > 0)
 			glasshealth -= damage/2
-			if(sound)
+			if(sound && loc)
 				playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 			if(user && I)
 				user.visible_message("<span class='warning'>[user] hits \the [src] glass with \a [I].</span>",\
@@ -132,7 +132,7 @@
 		break_glass(TRUE)
 		return 0
 	health -= damage/2
-	if(sound)
+	if(sound && loc)
 		playsound(loc, 'sound/effects/grillehit.ogg', 80, 1)
 	if (health > 0)
 		if(user && I)
@@ -150,12 +150,12 @@
 	return 1
 
 /obj/structure/railing/canSmoothWith()
-	return list(/obj/structure/railing)
+	return 1
 
 /obj/structure/railing/isSmoothableNeighbor(atom/A)
-	if(istype(A,/obj/structure/railing))
-		var/obj/structure/railing/O = A
-		return O.anchored && O.dir == src.dir && ..()
+	if(A?.dir == src.dir && istype(A,/obj/structure/railing))
+		var/atom/movable/O = A
+		return O.anchored
 
 /obj/structure/railing/relativewall()
 	if(anchored)

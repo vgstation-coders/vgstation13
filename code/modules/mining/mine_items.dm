@@ -46,20 +46,18 @@
 	icon_state = "lantern"
 	item_state = "lantern"
 	desc = "A mining lantern."
-	brightness_on = 6			// luminosity when on
-	light_power = 2
+	brightness_on = 1
+	range_on = 6
 	light_color = LIGHT_COLOR_TUNGSTEN
 
 //Explicit
-/obj/item/device/flashlight/lantern/on/New()
-	..()
-
+/obj/item/device/flashlight/lantern/on
 	on = 1
-	update_brightness()
 
 /obj/item/device/flashlight/lantern/on/dim
 	name = "dim lantern"
-	light_power = 0.6
+	brightness_on = 0.6
+	range_on = 5
 
 /*****************************Pickaxe********************************/
 
@@ -84,6 +82,7 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("hits", "pierces", "slices", "attacks")
 	toolsounds = list('sound/weapons/Genhit.ogg')
+	hitsound = "sound/weapons/bloodyslice.ogg"
 	var/drill_verb = "picking"
 	var/diggables = DIG_ROCKS
 	var/excavation_amount = 100
@@ -100,6 +99,7 @@
 	//icon_state = "sledgehammer" Waiting on sprite
 	desc = "A mining hammer made of reinforced metal. You feel like smashing your boss in the face with this."
 	drill_verb = "hammering"
+	hitsound = "sound/weapons/toolbox.ogg"
 
 /obj/item/weapon/pickaxe/silver
 	name = "silver pickaxe"
@@ -157,6 +157,7 @@
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
 	toolsounds = list('sound/items/Welder.ogg')
+	hitsound = "sound/weapons/welderattack.ogg"
 
 /obj/item/weapon/pickaxe/plasmacutter/accelerator
 	name = "plasma cutter"
@@ -239,7 +240,7 @@
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_POWERSTORAGE + "=3;" + Tc_ENGINEERING + "=2"
 	desc = "Yours is the drill that will pierce through the rock walls."
 	drill_verb = "drilling"
-
+	hitsound = 'sound/weapons/circsawhit.ogg'
 	diggables = DIG_ROCKS | DIG_SOIL //drills are multipurpose
 
 /obj/item/weapon/pickaxe/drill/diamond //When people ask about the badass leader of the mining tools, they are talking about ME!
@@ -274,8 +275,7 @@
 	w_type = RECYK_MISC
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("bashes", "bludgeons", "thrashes", "whacks")
-
-
+	hitsound = "trayhit"
 	toolspeed = 0.4
 	diggables = DIG_SOIL //soil only
 

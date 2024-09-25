@@ -223,6 +223,12 @@
 			src.update_icon()
 		nanomanager.update_uis(src)
 
+		//Updating the pipenet if we're on a connector
+		if (connected_port)
+			var/datum/pipe_network/P = connected_port.return_network(src)
+			if (P)
+				P.update = 1
+
 	if(air_contents.return_pressure() < 1)
 		can_label = 1
 	else

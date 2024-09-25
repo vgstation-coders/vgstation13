@@ -86,7 +86,7 @@
 	if(istype(get_turf(src),/turf/unsimulated/floor/brimstone))
 		FireBurn(11, 9001, ONE_ATMOSPHERE) // lag free weird way of doing it
 		fire_stacks = 11
-		IgniteMob() // ffffFIRE!!!! FIRE!!! FIRE!!
+		ignite() // ffffFIRE!!!! FIRE!!! FIRE!!
 	return 1
 
 // Apply connect damage
@@ -433,7 +433,7 @@
 /mob/living/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
 		if(B.stuck_to)
-			visible_message("<span class='warning'>\the [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
+			visible_message("<span class='warning'>\The [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
 			B.deactivate()
 			B.unstick()
 
@@ -567,7 +567,7 @@ Thanks.
 	else
 		reagents.clear_reagents()
 	heal_overall_damage(1000, 1000)
-	ExtinguishMob()
+	extinguish()
 	fire_stacks = 0
 	/*
 	if(locked_to)
@@ -860,7 +860,7 @@ Thanks.
 		if(!istype(CM) || !CM.handcuffed)
 			var/datum/chain/tether_datum = L.tether.chain_datum
 			if(tether_datum.extremity_B == src)
-				L.visible_message("<span class='danger'>\the [L] quickly grabs and removes \the [L.tether] tethered to his body!</span>",
+				L.visible_message("<span class='danger'>\The [L] quickly grabs and removes \the [L.tether] tethered to his body!</span>",
 							  "<span class='warning'>You quickly grab and remove \the [L.tether] tethered to your body.</span>")
 				L.tether = null
 				tether_datum.extremity_B = null
@@ -869,7 +869,7 @@ Thanks.
 	//Trying to unstick a stickybomb
 	for(var/obj/item/stickybomb/B in L)
 		if(B.stuck_to)
-			L.visible_message("<span class='danger'>\the [L] is trying to reach and pull off \the [B] stuck on his body!</span>",
+			L.visible_message("<span class='danger'>\The [L] is trying to reach and pull off \the [B] stuck on his body!</span>",
 						  "<span class='warning'>You reach for \the [B] stuck on your body and start pulling.</span>")
 			if(do_after(L, src, 30, 10, FALSE))
 				L.visible_message("<span class='danger'>After struggling for an instant, \the [L] manages unstick \the [B] from his body!</span>",
@@ -1017,6 +1017,11 @@ Thanks.
 		var/obj/structure/closet/C = L.loc
 		if(C.opened)
 			return //Door's open... wait, why are you in it's contents then?
+		if(istype(C.loc, /obj/structure/rack/crate_shelf) && istype(C,/obj/structure/closet/crate))
+			var/obj/structure/closet/crate/R = C
+			var/obj/structure/rack/crate_shelf/CS = C.loc
+			CS.relay_container_resist_act(src,R)
+			return
 		if(!istype(C.loc, /obj/item/delivery/large)) //Wouldn't want to interrupt escaping being wrapped over the next few trivial checks
 			if(istype(C, /obj/structure/closet/secure_closet))
 				var/obj/structure/closet/secure_closet/SC = L.loc
@@ -1136,7 +1141,7 @@ Thanks.
 				sleep(1 SECONDS)
 			CM.fire_stacks = 0
 			CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>","<span class='notice'>You extinguish yourself.</span>")
-			ExtinguishMob()
+			extinguish()
 			return
 
 		CM.resist_restraints()
@@ -1545,7 +1550,7 @@ Thanks.
 			to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
 			return FAILED_THROW
 
-		if(I.pre_throw(target))
+		if(I.pre_throw(target,src))
 			return FAILED_THROW
 
 	remove_from_mob(item)

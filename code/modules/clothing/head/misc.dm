@@ -832,3 +832,16 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
 	flags = FPRINT
 	icon_state = "trucker"
 	item_state = "trucker"
+
+/obj/item/clothing/head/hunter
+	name = "white bandana"
+	desc = "An old piece of cloth that keeps hair out of your monster slaying business."
+	icon_state = "hunter"
+	item_state = "hunter_headband"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
+
+/obj/item/clothing/head/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/head/hunter/rangeTackleBonus()
+	return 1

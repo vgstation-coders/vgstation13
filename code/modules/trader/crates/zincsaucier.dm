@@ -443,9 +443,8 @@ var/global/global_cricket_population = 0
 
 
 /obj/item/apiary/langstroth
-	name = "\improper Langstroth hive"
+	name = "\improper Langstroth hive kit"
 	desc = "A vertically-modular tray-based apiary. You can simply reach in with your hand and smokers will protect you while you harvest honeycombs."
-	icon = 'icons/obj/items_weird.dmi'
 	icon_state = "langstroth_item"
 	buildtype = /obj/machinery/apiary/langstroth
 
@@ -577,9 +576,25 @@ var/global/global_cricket_population = 0
 
 /obj/machinery/apiary/langstroth
 	name = "\improper Langstroth hive"
+	icon_state = "langstroth"
 	apiary_icon = "langstroth"
+	kit_type = /obj/item/apiary/langstroth
 
 /obj/machinery/apiary/langstroth/attack_hand(mob/user)
-	if(harvest_honeycombs())
-		playsound(loc, 'sound/effects/fan.ogg', 75, 1, -1)
-		visible_message("<span class='good'>\The [itemform] fans smoke, calming the residents for the harvest.</span>")
+	if(reagents.total_volume <= 0)
+		alert(user,"There's no honey to harvest yet!","[name]","Ok")
+		return
+
+	if(alert(user,"Harvest the honeycombs?[((queen_bees_inside || worker_bees_inside) && species.angery) ? " Be ready to handle some angry bees!" : ""]","[name]","Yes","No")== "Yes")
+		user.visible_message("<span class='notice'>\The [user] begins dismantling the apiary.</span>","<span class='danger'>You begin harvesting the honeycombs.</span>")
+
+		if((queen_bees_inside || worker_bees_inside) && species.angery)
+			playsound(loc, 'sound/effects/fan.ogg', 75, 1, -1)
+			anim(target = loc, a_icon = 'icons/effects/160x160.dmi', flick_anim = "incense", offX = -WORLD_ICON_SIZE*2+pixel_x, offY = -WORLD_ICON_SIZE*2+pixel_y)
+			visible_message("<span class='good'>The hive fans smoke, calming the residents for the harvest.</span>")
+
+		if(do_after(user, loc, 50))
+			if(harvest_honeycombs())
+				to_chat(user, "<span class='notice'>You successfully harvest the honeycombs.</span>")
+			else
+				to_chat(user, "<span class='notice'>You somehow didn't find a single honeycomb in there.</span>")

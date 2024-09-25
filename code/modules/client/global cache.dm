@@ -27,6 +27,9 @@ var/list/asset_datums = list()
 		else
 			return 0
 
+	if(!client)	//don't have a goddamned clue why this would be called without a client input but it currently is!
+		return 0
+
 	while(!global.asset_cache_populated)
 		sleep(5)
 

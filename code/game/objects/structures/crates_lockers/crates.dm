@@ -156,6 +156,39 @@
 	icon_opened = "surgeryfreezeropen"
 	icon_closed = "surgeryfreezer"
 
+/obj/structure/closet/crate/freezer/surgery/close(mob/user)
+	..()
+	update_icon()
+
+	var/list/inside = recursive_type_check(src, /mob/living/carbon/brain)
+	for(var/mob/living/carbon/brain/braine in inside)
+		if(braine.mind && !braine.client) //!braine.client = mob has ghosted out of their body
+			var/mob/dead/observer/ghost = mind_can_reenter(braine.mind)
+			if(ghost)
+				var/mob/ghostmob = ghost.get_top_transmogrification()
+				if(ghostmob)
+					to_chat(ghostmob, "<span class='interface'><span class='big bold'>Your brain has been placed into a surgery freezer.</span> \
+						Re-entering your corpse will cause the freezer's heart to pulse, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
+
+/obj/structure/closet/crate/freezer/surgery/update_icon()
+	..()
+
+	var/list/inside = recursive_type_check(src, /mob/living/carbon/brain)
+	for(var/mob/living/carbon/brain/brained in inside)
+		if(brained.mind && brained.mind.suiciding)
+			continue
+		if(brained && brained.client)
+			icon_state = "surgeryfreezerbrained"
+			return
+
+/obj/structure/closet/crate/freezer/surgery/on_login(var/mob/M)
+	..()
+	update_icon()
+
+/obj/structure/closet/crate/freezer/surgery/on_logout(var/mob/M)
+	..()
+	update_icon()
+
 /obj/structure/closet/crate/bin
 	desc = "A large bin."
 	name = "Large bin"
@@ -499,6 +532,8 @@
 /obj/structure/closet/crate/attack_hand(var/mob/user)
 	if(!Adjacent(user))
 		return
+	if(istype(src.loc, /obj/structure/rack/crate_shelf))
+		return // No opening crates in shelves!!
 	add_fingerprint(user)
 	if(opened)
 		close()
@@ -526,6 +561,22 @@
 			return
 	else
 		..()
+
+/obj/structure/closet/crate/MouseDrop(atom/drop_atom, src_location, over_location)
+	. = ..()
+	var/mob/living/user = usr
+	if(!isliving(user))
+		return // Ghosts busted.
+	if(!isturf(user.loc) || user.incapacitated() || user.resting)
+		return // If the user is in a weird state, don't bother trying.
+	if(get_dist(drop_atom, src) != 1 || get_dist(drop_atom, user) != 1)
+		return // Check whether the crate is exactly 1 tile from the shelf and the user.
+	if(isturf(drop_atom) && istype(loc, /obj/structure/rack/crate_shelf) && user.Adjacent(drop_atom))
+		var/obj/structure/rack/crate_shelf/shelf = loc
+		return shelf.unload(src, user, drop_atom) // If we're being dropped onto a turf, and we're inside of a crate shelf, unload.
+	if(istype(drop_atom, /obj/structure/rack/crate_shelf) && isturf(loc) && user.Adjacent(src))
+		var/obj/structure/rack/crate_shelf/shelf = drop_atom
+		return shelf.load(src, user) // If we're being dropped onto a crate shelf, and we're in a turf, load.
 
 /obj/structure/closet/crate/secure/proc/togglelock(atom/A)
 	if(istype(A,/mob))
