@@ -374,7 +374,7 @@
 	send_signal(data)
 
 /obj/machinery/mineral/processing_unit/proc/value_by_id(var/mat_id)
-	return ore.getValueByMaterial(metal)
+	return ore.getValueByMaterial(mat_id)
 
 /obj/machinery/mineral/processing_unit/proc/send_signal(list/data)
 	var/datum/signal/signal = new /datum/signal
