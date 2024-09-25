@@ -351,6 +351,7 @@
 			var/working_type = (islist(current_step[Co_KEY]) ? pick(current_step[Co_KEY]) : (ispath(current_step[Co_KEY]) ? current_step[Co_KEY] : null))
 			if(working_type)
 				S = new working_type(holder.loc)
+				S.recycles_cash = recycles_cash
 				if(istype(S) && !(Co_KEEP in current_step))
 					S.amount = current_step[Co_MAX_AMOUNT] - current_step[Co_AMOUNT]
 					S.update_icon()
@@ -438,6 +439,7 @@
 
 		for(var/atom/movable/this_drop in to_drop)
 			this_drop.forceMove(holder.loc)
+			this_drop.recycles_cash = recycles_cash
 	return 1
 
 /datum/construction/reversible/proc/get_forward_step(index)
