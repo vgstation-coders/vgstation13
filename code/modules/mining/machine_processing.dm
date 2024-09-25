@@ -414,6 +414,9 @@
 		ore.addFrom(A.materials, FALSE)
 		qdel(A)
 
+/obj/machinery/mineral/processing_unit/proc/remove_from_credits_if_necessary(var/mat_id,var/amount)
+	return
+
 /obj/machinery/mineral/processing_unit/process()
 	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		return
@@ -440,6 +443,7 @@
 		while(R.checkIngredients(ore)) //While we have materials for this
 			for(var/ore_id in R.ingredients)
 				ore.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
+				remove_from_credits_if_necessary(ore_id, R.ingredients[ore_id]) // hotfixed way to deal with a subtype, proc is left blank for this
 				score.oremined += 1 //Count this ore piece as processed for the scoreboard
 
 			drop_stack(R.yieldtype, out_T)
@@ -492,7 +496,12 @@
 	var/list/recycled_values = list()
 
 /obj/machinery/mineral/processing_unit/recycle/value_by_id(var/mat_id)
-	return mat_id in recycled_values ? recycled_values[mat_id] : 0
+	return (mat_id in recycled_values) ? recycled_values[mat_id] : 0
+
+/obj/machinery/mineral/processing_unit/recycle/remove_from_credits_if_necessary(var/mat_id,var/amount)
+	credits = max(0,credits-amount)
+	if(mat_id in recycled_values)
+		recycled_values[mat_id] = max(0,recycled_values[mat_id]-amount)
 
 /obj/machinery/mineral/processing_unit/recycle/grab_ores()
 	var/turf/in_T = get_step(src, in_dir)
