@@ -226,16 +226,6 @@
 
 	. = ..()
 
-/obj/machinery/computer/smelting/emag_act(mob/user)
-	if(req_access?.len)
-		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
-		req_access = list()
-		if(user)
-			to_chat(user, "<span class='notice'>You disable the security protocols</span>")
-		return 1
-	if(user)
-		to_chat(user, "<span class='warning'>No security protocols enabled</span>")
-
 //Just a little helper proc
 /obj/machinery/computer/smelting/proc/send_signal(list/data)
 	if(!frequency)
@@ -438,7 +428,7 @@
 				ore.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
 				score.oremined += 1 //Count this ore piece as processed for the scoreboard
 
-			drop_stack(R.yieldtype, out_T, recyclescash = FALSE)
+			drop_stack(R.yieldtype, out_T)
 
 			sheets_this_tick++
 			if(sheets_this_tick >= max_moved)
@@ -498,7 +488,7 @@
 			continue
 
 		if(!(A.w_type in list(NOT_RECYCLABLE, RECYK_BIOLOGICAL)))
-			if(A.materials && A.recycles_cash) // no infinite money glitches allowed
+			if(A.materials && !istype(A,/obj/item/stack/sheet)) // no infinite money glitches allowed
 				credits += A.materials.getValue()
 			if(A.recycle(ore))
 				ore.addFrom(A.materials, FALSE)
