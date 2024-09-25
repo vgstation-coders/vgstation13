@@ -518,10 +518,10 @@
 		if(specvalue > credits) //if over the limit
 			recycled_values[mat_id] = max(0,recycled_values[mat_id]-(credits-cap)) //then take the amount we can have left off
 			cap += recycled_values[mat_id] //and give it to the cap
-			//ore.removeAmount(mat_id, credits-cap)
+			//ore.removeAmountByValue(mat_id, credits-cap)
 			break
 		cap = specvalue
-		//ore.removeAmount(mat_id, recycled_values[mat_id])
+		//ore.removeAmountByValue(mat_id, recycled_values[mat_id])
 		recycled_values[mat_id] = 0 //otherwise yank it out directly
 	..(acct,cap)
 
