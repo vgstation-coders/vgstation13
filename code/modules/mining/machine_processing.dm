@@ -499,7 +499,7 @@
 			continue
 
 		if(!(A.w_type in list(NOT_RECYCLABLE, RECYK_BIOLOGICAL)))
-			if(A.materials && !istype(A,/obj/item/stack/sheet)) // no infinite money glitches allowed
+			if(A.materials)
 				credits += A.materials.getValue()
 				for(var/mat_id in A.materials.storage)
 					recycled_values[mat_id] += A.materials.getValueByMaterial(mat_id)
@@ -518,8 +518,10 @@
 		if(specvalue > credits) //if over the limit
 			recycled_values[mat_id] = max(0,recycled_values[mat_id]-(credits-cap)) //then take the amount we can have left off
 			cap += recycled_values[mat_id] //and give it to the cap
+			//ore.removeAmount(mat_id, credits-cap)
 			break
 		cap = specvalue
+		//ore.removeAmount(mat_id, recycled_values[mat_id])
 		recycled_values[mat_id] = 0 //otherwise yank it out directly
 	..(acct,cap)
 
