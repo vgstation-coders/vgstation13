@@ -525,8 +525,8 @@
 		specvalue = cap + totake
 		if(specvalue > credits) //if over the limit
 			recycled_values[mat_id] = max(0,recycled_values[mat_id]-(totake-(credits-cap))) //then take the amount we can have left off
-			cap += totake //and give it to the cap
-			ore.removeAmountByValue(mat_id, totake) //and take it from the ores
+			cap += totake-(credits-cap) //and give it to the cap
+			ore.removeAmountByValue(mat_id, totake-(credits-cap)) //and take it from the ores
 			break
 		cap = specvalue
 		ore.removeAmountByValue(mat_id, totake) //take everything or the amount in the value storage, whichever is lesser
