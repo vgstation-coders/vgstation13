@@ -513,16 +513,24 @@
 /obj/machinery/mineral/processing_unit/recycle/claim_credits(datum/money_account/acct, cap)
 	cap = 0
 	var/specvalue
+	var/totake
+	var/datum/material/mat
 	for(var/mat_id in recycled_values)
-		specvalue = cap + recycled_values[mat_id]
+		mat = ore.getMaterial(mat_id)
+		if(!mat)
+			continue
+		totake = ore.getValueByMaterial(mat_id)
+		if(recycled_values[mat_id] < totake) // if we have more mats in storage than the stuff recycled for money
+			totake = recycled_values[mat_id] // just take this much off. that's why this list is even here
+		specvalue = cap + totake
 		if(specvalue > credits) //if over the limit
-			recycled_values[mat_id] = max(0,recycled_values[mat_id]-(credits-cap)) //then take the amount we can have left off
-			cap += recycled_values[mat_id] //and give it to the cap
-			//ore.removeAmountByValue(mat_id, credits-cap)
+			recycled_values[mat_id] = max(0,recycled_values[mat_id]-(totake-(credits-cap))) //then take the amount we can have left off
+			cap += totake //and give it to the cap
+			ore.removeAmountByValue(mat_id, totake) //and take it from the ores
 			break
 		cap = specvalue
-		//ore.removeAmountByValue(mat_id, recycled_values[mat_id])
-		recycled_values[mat_id] = 0 //otherwise yank it out directly
+		ore.removeAmountByValue(mat_id, totake) //take everything or the amount in the value storage, whichever is lesser
+		recycled_values[mat_id] = max(0,recycled_values[mat_id]-totake) //otherwise yank it out directly
 	..(acct,cap)
 
 /obj/machinery/mineral/processing_unit/recycle/New()
