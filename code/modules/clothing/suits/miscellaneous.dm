@@ -369,6 +369,7 @@ var/list/tag_suits_list = list()
 	flags = FPRINT
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/sith
 	name = "Sith Robe"
@@ -767,6 +768,7 @@ var/list/tag_suits_list = list()
 	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
 	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/storage/draculacoat_fake
 	name = "Vampire Costume"
@@ -774,6 +776,7 @@ var/list/tag_suits_list = list()
 	icon_state = "draculacoat"
 	blood_overlay_type = "coat"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/bedsheet_ghost
 	name = "Bedsheet Ghost"
@@ -1194,6 +1197,7 @@ var/list/tag_suits_list = list()
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	pressure_resistance = 2 * ONE_ATMOSPHERE
 	species_fit = list(VOX_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/wftr
 	name ="welding fuel tank refiller shirt"

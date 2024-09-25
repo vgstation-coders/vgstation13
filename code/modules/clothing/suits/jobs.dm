@@ -11,6 +11,7 @@
 	allowed = list(/obj/item/device/analyzer,/obj/item/stack/medical,/obj/item/weapon/dnainjector,/obj/item/weapon/reagent_containers/dropper,/obj/item/weapon/reagent_containers/syringe,/obj/item/weapon/reagent_containers/hypospray,/obj/item/device/healthanalyzer,/obj/item/device/flashlight/pen,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/radio,/obj/item/device/gps, /obj/item/roller, /obj/item/weapon/autopsy_scanner/healthanalyzerpro, /obj/item/device/pcmc)
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 10, rad = 10)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 
 //Botonist
 /obj/item/clothing/suit/apron
@@ -22,6 +23,7 @@
 	body_parts_covered = FULL_TORSO
 	allowed = list (/obj/item/weapon/reagent_containers/spray,/obj/item/device/analyzer/plant_analyzer,/obj/item/seeds,/obj/item/weapon/reagent_containers/glass,/obj/item/tool/wirecutters/clippers,/obj/item/weapon/minihoe,/obj/item/weapon/grenade/chem_grenade,/obj/item/device/lightreplacer,/obj/item/device/flashlight,/obj/item/weapon/soap,/obj/item/key/janicart,/obj/item/clothing/gloves,/obj/item/weapon/caution,/obj/item/weapon/mop,/obj/item/weapon/storage/bag/trash)
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 
 //Captain
 /obj/item/clothing/suit/captunic
@@ -31,6 +33,7 @@
 	item_state = "bio_suit"
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/storage/capjacket
 	name = "captain's uniform jacket"
@@ -41,6 +44,7 @@
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	max_combined_w_class = 6
 	storage_slots = 3
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/storage/armorjacketcapt
 	name = "Captain's Jacketed Armor"
@@ -98,6 +102,7 @@
 	blood_overlay_type = "armor"
 	body_parts_covered = FULL_TORSO
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 
 //Detective
 /obj/item/clothing/suit/storage/det_suit
@@ -205,6 +210,7 @@
 	icon_state = "hazard"
 	item_state = "hazard"
 	blood_overlay_type = "armor"
+	clothing_flags = ONESIZEFITSALL
 	allowed = list (
 		/obj/item/device/analyzer,
 		/obj/item/device/flashlight,
@@ -336,6 +342,7 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/lighter,/obj/item/device/detective_scanner,/obj/item/device/taperecorder)
 	armor = list(melee = 50, bullet = 10, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
+	clothing_flags = ONESIZEFITSALL
 
 //Syndicate exec
 /obj/item/clothing/suit/storage/syndicateexec
