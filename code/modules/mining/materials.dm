@@ -59,7 +59,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	. = mat.value * (amount/mat.cc_per_sheet)
 
 /datum/materials/proc/getValueByMaterial(var/mat_id)
-	return getValueByAmount(storage[mat_id])
+	return getValueByAmount(mat_id,storage[mat_id])
 
 //Returns however much we have of that material
 /datum/materials/proc/getAmount(var/mat_id)
