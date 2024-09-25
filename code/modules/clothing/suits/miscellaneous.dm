@@ -466,6 +466,7 @@ var/list/tag_suits_list = list()
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|HIDETAIL
 	siemens_coefficient = 2.0
+	clothing_flags = ONESIZEFITSALL
 
 
 /obj/item/clothing/suit/holidaypriest
