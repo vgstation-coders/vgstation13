@@ -1017,6 +1017,11 @@ Thanks.
 		var/obj/structure/closet/C = L.loc
 		if(C.opened)
 			return //Door's open... wait, why are you in it's contents then?
+		if(istype(C.loc, /obj/structure/rack/crate_shelf) && istype(C,/obj/structure/closet/crate))
+			var/obj/structure/closet/crate/R = C
+			var/obj/structure/rack/crate_shelf/CS = C.loc
+			CS.relay_container_resist_act(src,R)
+			return
 		if(!istype(C.loc, /obj/item/delivery/large)) //Wouldn't want to interrupt escaping being wrapped over the next few trivial checks
 			if(istype(C, /obj/structure/closet/secure_closet))
 				var/obj/structure/closet/secure_closet/SC = L.loc
