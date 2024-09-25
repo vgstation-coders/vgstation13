@@ -1,0 +1,5 @@
+author: west3436
+delete-after: true
+changes:
+- rscadd: Added Plated Catwalks which provide visibility and easy access to cables
+    and pipes.
