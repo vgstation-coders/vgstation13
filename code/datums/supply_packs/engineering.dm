@@ -424,6 +424,7 @@
 /datum/supply_packs/fissionreactor_starterkit
 	contains = list(
 		/obj/item/weapon/fuelrod/small/starter,
+		/obj/item/weapon/book/manual/engineering_fissionreactor_guide,
 		/obj/item/weapon/storage/box/fissionsupply_controller, //makes a crappy 1x2 interior. but it'll do.
 		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
 		/obj/item/weapon/storage/box/fissionsupply_genericassembly,

@@ -39,6 +39,3 @@ includes:
 	name="large fuel rod"
 	desc="a very large fuel rod, for high-power or complex mixes. use with caution."
 	units_of_storage=210	
-	
-
-

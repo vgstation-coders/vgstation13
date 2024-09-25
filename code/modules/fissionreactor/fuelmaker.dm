@@ -265,8 +265,8 @@ the machine which makes fuel rods have things in them.
 <tr><td>
 
 <div class='fuelstats'>
-Baseline fuel lifespan: <i>[num2text(estimated_time,99)] minutes </i><br>
-Baseline heat generation: <i>[num2text(estimated_power,99)] Watts</i>
+Baseline fuel lifespan: <i>[floor(estimated_time/60)] minutes </i><br>
+Baseline heat generation: <i>[floor(estimated_power)] Watts</i>
 </div>
 
 </td></tr>

@@ -51,7 +51,7 @@ boxes used for cargo orders to make my life easier.
 	
 /obj/item/weapon/storage/box/fissionsupply_fuelmaker/New()
 	..()
-	new /obj/item/weapon/circuitboard/fission_fuelmaker()
+	new /obj/item/weapon/circuitboard/fission_fuelmaker(src)
 	new /obj/item/stack/sheet/metal(src,5)//5 metal
 	new /obj/item/weapon/stock_parts/scanning_module(src)
 	new /obj/item/weapon/stock_parts/scanning_module(src)

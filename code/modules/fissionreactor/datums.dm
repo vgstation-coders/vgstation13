@@ -73,8 +73,9 @@ datums for the fission reactor, which includes the fuel and reactor
 	exterior_elements+=casing_parts.len
 	exterior_elements+=controller?1:0
 	var/expected_exterior=2*abs(origin_x-corner_x)+2*abs(origin_y-corner_y) //also the perimeter. kind of.
-	expected_exterior-=4 //to account for the double counting of corner pieces.
+	//expected_exterior-=4 //to account for the double counting of corner pieces.
 
+	//world.log << "[exterior_elements] / [expected_exterior]"
 	if(exterior_elements<expected_exterior) //missing any at all? (for deconstruction)
 		world.log << "check 1"
 		notlookinggood_points++
@@ -322,9 +323,9 @@ datums for the fission reactor, which includes the fuel and reactor
 		return list(0,0,0)	
 	var/TRP=((fuel.wattage-fuel.absorbance)*fuel.life)
 	var/powerfactor=((fuel_reactivity) - ( (fuel_reactivity-fuel_reactivity_with_rods)*control_rod_insertion))
-	TRP=ceil(sqrt(0.000001+(powerfactor+1)*(TRP/5000))) //every 5kw of power nets us 1 tile
+	TRP=ceil(sqrt(0.000001+((powerfactor/2)+1)*(TRP/25000))) //every 25kw of power nets us 1 tile
 	
-	return list( floor(TRP*0.65),floor(TRP*0.8),TRP)
+	return list( floor(TRP*0.55),floor(TRP*0.75),TRP)
 	
 
 /datum/fission_reactor_holder/proc/randomtileinreactor()
@@ -504,11 +505,18 @@ datums for the fission reactor, which includes the fuel and reactor
 	
 /datum/fission_reactor_holder/proc/misccycle() //cleanup and other checks
 	
+	var/powerfactor=fuel_rods.len*((fuel_reactivity) - ( (fuel_reactivity-fuel_reactivity_with_rods)*control_rod_insertion))
+	var/fuelpower=0
+	if(fuel)
+		fuelpower=max( (fuel.wattage+(fuel.wattage-fuel.absorbance))/2 ,0)
+	
 	for(var/turf/breachlocation in breaches)
 		if(rand()>0.5) //50% chance every tick to leak
 			var/datum/gas_mixture/removed= coolant.remove(coolant.total_moles*0.5*rand(),TRUE,TRUE) //when we leak, leak 0-50% of the coolant
 			breachlocation.return_air().merge(removed,TRUE)
-	
+		for(var/mob/living/l in range(breachlocation, 5))
+			var/rads = (  fuelpower*powerfactor/100000   ) * sqrt(1/(max(get_dist(l, breachlocation), 1)))
+			l.apply_radiation(rads, RAD_EXTERNAL)
 	
 	if(temperature>=FISSIONREACTOR_MELTDOWNTEMP)
 		if(graceperiodtick)
@@ -520,6 +528,12 @@ datums for the fission reactor, which includes the fuel and reactor
 	verify_integrity()
 	
 	
+
+
+
+
+
+
 
 /datum/fission_fuel
 	var/datum/reagents/fuel= null
