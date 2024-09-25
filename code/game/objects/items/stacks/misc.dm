@@ -31,8 +31,12 @@
 			QDEL_NULL(active) //otherwise remove the draggable screen
 
 /obj/item/stack/rods/drag_use(mob/user, turf/T)
+	make_lattice(T)
+
+/obj/item/stack/rods/proc/make_lattice(turf/T)
 	playsound(T, 'sound/weapons/Genhit.ogg', 25, 1)
-	new /obj/structure/lattice(T)
+	var/obj/structure/lattice/L = new(T)
+	L.recycles_cash = recycles_cash
 
 /obj/item/stack/rods/end_drag_use()
 	active = null
@@ -61,14 +65,15 @@
 					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You build a catwalk!</span>")
 					use(1)
-					new /obj/structure/catwalk(T)
+					var/obj/structure/catwalk/C = new(T)
+					C.recycles_cash = recycles_cash
 					qdel(L)
 					return
 
 			if(T.canBuildLattice(src))
 				to_chat(user, "<span class='notice'>Constructing support lattice ...</span>")
 				playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-				new /obj/structure/lattice(T)
+				make_lattice(T)
 				use(1)
 				return
 
@@ -131,6 +136,7 @@
 		var/obj/structure/grille/Grille = new /obj/structure/grille(user.loc)
 		if(!Grille)
 			Grille = new(user.loc)
+		Grille.recycles_cash = recycles_cash
 		to_chat(user, "<span class='notice'>You assembled a grille!</span>")
 		Grille.add_fingerprint(user)
 		use(2)

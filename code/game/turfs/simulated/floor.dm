@@ -536,6 +536,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 				if(do_after(user, src, 30) && R && R.amount >= 2 && is_plating())
 					ChangeTurf(/turf/simulated/floor/engine)
 					playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
+					recycles_cash = R.recycles_cash
 					R.use(2)
 					return
 			else

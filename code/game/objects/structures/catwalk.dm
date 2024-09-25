@@ -25,12 +25,10 @@
 			if(prob(75))
 				qdel(src)
 			else
-				new /obj/structure/lattice(src.loc)
-				qdel(src)
+				make_lattice()
 		if(3.0)
 			if(prob(10))
-				new /obj/structure/lattice(src.loc)
-				qdel(src)
+				make_lattice()
 
 /obj/structure/catwalk/attackby(obj/item/C as obj, mob/user as mob)
 	if(!C || !user)
@@ -40,9 +38,15 @@
 		C.playtoolsound(src, 80)
 		if(do_after(user, src, 30) && src)
 			to_chat(user, "<span class='notice'>You finish taking taking the catwalk apart.</span>")
-			new /obj/item/stack/rods(src.loc, 2)
-			new /obj/structure/lattice(src.loc)
-			qdel(src)
+			make_lattice(TRUE)
+
+/obj/structure/catwalk/proc/make_lattice(and_rods = FALSE)
+	var/atom/A = new /obj/structure/lattice(src.loc)
+	A.recycles_cash = recycles_cash
+	if(and_rods)
+		A = new /obj/item/stack/rods(src.loc, 2)
+		A.recycles_cash = recycles_cash
+	qdel(src)
 
 /obj/structure/catwalk/invulnerable/ex_act()
 	return
