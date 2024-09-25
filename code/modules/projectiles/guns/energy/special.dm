@@ -507,29 +507,45 @@
 	desc = "According to Nanotrasen accounting, this is mining equipment. It's been modified for extreme power output to crush rocks, but often serves as a miner's first defense against hostile alien life; it's not very powerful unless used in a low pressure environment."
 	icon_state = "kineticgun"
 	item_state = "kineticgun"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	fire_sound = 'sound/weapons/kinetic_accelerator.ogg'
 	projectile_type = "/obj/item/projectile/kinetic"
 	cell_type = "/obj/item/weapon/cell/crap"
 	charge_cost = 50
 	icon_charge_multiple = 20
+
+/obj/item/weapon/gun/energy/kinetic_accelerator/shotgun
+	name = "proto-kinetic pump-shotgun"
+	desc = "An upgraded proto-kinetic accelerator, with the ability to pump to reload."
+	icon_state = "kineticshotgun"
+	item_state = "kineticshotgun"
+	rechargeable = FALSE
+	charge_cost = 250
+	icon_charge_multiple = 50
+	fire_delay = 0
 	var/overheat = 0
-	var/recent_reload = 1
-/*
-/obj/item/weapon/gun/energy/kinetic_accelerator/shoot_live_shot()
-	overheat = 1
-	spawn(20)
-		overheat = 0
-		recent_reload = 0
-	..()
-*/
-/obj/item/weapon/gun/energy/kinetic_accelerator/attack_self(var/mob/living/user)
-	if(overheat || recent_reload)
+	var/pump_delay = 20 //cooldown after last real shot in decaseconds before reloading
+
+/obj/item/weapon/gun/energy/kinetic_accelerator/shotgun/attack_self(var/mob/living/user)
+	. = ..()
+	if(overheat)
 		return
-	power_supply.give(500)
+	if(power_supply.charge == power_supply.maxcharge)
+		return
+	if(last_fired + pump_delay > world.time)
+		to_chat(user, span_notice("\The [src] is still cooling down."))
+		return
+	power_supply.give(power_supply.maxcharge)
 	playsound(src.loc, 'sound/weapons/shotgunpump.ogg', 60, 1)
-	recent_reload = 1
 	update_icon()
-	return
+
+/obj/item/weapon/gun/energy/kinetic_accelerator/shotgun/ready_to_fire()
+	if(world.time >= last_fired + fire_delay)
+		if(power_supply.charge >= charge_cost)
+			last_fired = world.time
+		return 1
+	else
+		return 0
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg
 	name = "proto-kinetic accelerator"
