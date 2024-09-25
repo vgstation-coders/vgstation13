@@ -89,7 +89,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/materials/proc/GetAmountByValue(var/mat_id,var/amount)
 	. = 0
 	var/datum/material/mat = getMaterial(mat_id)
-	. = (amount/mat.value) * mat.cc_per_sheet
+	. = mat.value ? ((amount/mat.value) * mat.cc_per_sheet) : 0
 
 /datum/materials/proc/addAmountByValue(var/mat_id,var/amount)
 	addAmount(mat_id,GetAmountByValue(mat_id,amount))
