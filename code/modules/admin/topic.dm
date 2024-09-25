@@ -2838,7 +2838,7 @@
 			var/obj/item/weapon/reagent_containers/food/snacks/cookie/C = reward
 			C.thermal_variation_modifier = 0
 
-		if(!H.put_in_hands(reward)
+		if(!H.put_in_hands(reward))
 			log_admin("[key_name(H)] has their hands full, so they did not receive their [answer], spawned by [key_name(src.owner)].")
 			message_admins("[key_name(H)] has their hands full, so they did not receive their [answer], spawned by [key_name(src.owner)].")
 			return
