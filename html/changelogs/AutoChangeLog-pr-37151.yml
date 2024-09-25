@@ -1,0 +1,5 @@
+author: west3436
+delete-after: true
+changes:
+- rscadd: Added Crate Shelves which can be used to stack multiple crates in a single
+    tile.
