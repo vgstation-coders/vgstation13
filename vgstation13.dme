@@ -10,6 +10,7 @@
 #define DEBUG
 // END_PREFERENCES
 // BEGIN_INCLUDE
+#include "___odlint.dm"
 #include "__DEFINES\__compile_options.dm"
 #include "__DEFINES\__opendream.dm"
 #include "__DEFINES\__spaceman_dmm.dm"
