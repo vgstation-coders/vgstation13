@@ -545,6 +545,13 @@
 	spawn(pump_delay)
 		overheat = 0
 
+/obj/item/weapon/gun/energy/kinetic_accelerator/shotgun/update_icon()
+	..()
+	if(clowned == CLOWNED)
+		fire_sound = 'sound/items/quack.ogg'
+	else
+		fire_sound = 'sound/weapons/kinetic_accelerator.ogg'
+
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg
 	name = "proto-kinetic accelerator"
 	desc = "According to Nanotrasen accounting, this is mining equipment. It's been modified for extreme power output to crush rocks, but often serves as a miner's first defense against hostile alien life; it's not very powerful unless used in a low pressure environment."
