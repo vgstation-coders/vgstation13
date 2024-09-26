@@ -346,8 +346,12 @@ datums for the fission reactor, which includes the fuel and reactor
 	log_game("Fission reactor meltdown occured in area [centerturf.loc.name]")
 	var/reactorarea=(max(origin_x,corner_x)-min(origin_x,corner_x)) *  (max(origin_y,corner_y)-min(origin_y,corner_y))
 	var/reactorarea2=ceil(reactorarea/5) // 1 fith of the tiles will be eligable to explode
+	var/explodeprob = 1
+	if(fuel)
+		explodeprob=max(0,(1-(1/( log(1+max(0,fuel.wattage-fuel.absorbance)/15000)  ))))
+		
 	for(var/i=1,i<=reactorarea2,i++)
-		if(rand()<=0.33)
+		if(rand()<=0.33*explodeprob)
 			var/list/eplodies=determineexplosionsize()
 			explosion( randomtileinreactor() ,eplodies[1],eplodies[2],eplodies[3])
 			
@@ -372,6 +376,9 @@ datums for the fission reactor, which includes the fuel and reactor
 				else if(istype(o,/obj/machinery/atmospherics/unary/fissionreactor_coolantport))
 					new /obj/machinery/corium(o.loc,crads+crads*0.5*(rand()-0.5))
 					qdel(o)
+				for(var/mob/living/l in range(locate(origin_x,origin_y,zlevel), 5))
+					l.apply_radiation(crads*5, RAD_EXTERNAL)
+				
 	
 /datum/fission_reactor_holder/proc/clear_parts() 
 	for (var/i=1,i<=casing_parts.len,i++)

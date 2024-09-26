@@ -205,8 +205,12 @@ the machine which makes fuel rods have things in them.
 
 /obj/machinery/atmospherics/unary/fissionfuelmaker/proc/ask_remakeUI()
 	buildui()
-	for (var/client in interface.clients)
-		interface.show( interface._getClient(interface.clients[client]) )
+	for (var/client/C in interface.clients)
+		if(C.mob && get_dist(C.mob.loc,src.loc)<=1)
+			interface.show( interface._getClient(interface.clients[C]) ) 
+		else
+			interface.hide(interface._getClient(interface.clients[C]))
+
 
 /obj/machinery/atmospherics/unary/fissionfuelmaker/proc/buildui()	
 	var/html=""

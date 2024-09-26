@@ -430,8 +430,11 @@ included:
 	if(lastupdatetick==world.time && !forced)
 		return
 	buildui()
-	for (var/client in interface.clients)
-		interface.show( interface._getClient(interface.clients[client]) ) //"There's probably shenanigans" - dilt. yes there are.
+	for (var/client/C in interface.clients)
+		if(C.mob && get_dist(C.mob.loc,src.loc)<=1)
+			interface.show( interface._getClient(interface.clients[C]) ) //"There's probably shenanigans" - dilt. yes there are.
+		else
+			interface.hide(interface._getClient(interface.clients[C]))
 	lastupdatetick=world.time
 
 /obj/machinery/fissioncontroller/process()
