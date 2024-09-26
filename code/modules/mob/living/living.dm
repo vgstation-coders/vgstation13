@@ -1317,7 +1317,6 @@ Thanks.
 			if(tmob.loc && tmob.canmove && canmove && !dense && can_move_mob(tmob, 1, 0))
 				if (tmob.is_opening_door) // the guy is opening a door, so we only tileswap on harm intent
 					if ((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent != I_HELP || src.restrained()))
-						visible_message("forced hurt intent tileswap")
 						var/turf/oldloc = loc
 						forceMove(tmob.loc)
 						tmob.forceMove(oldloc, glide_size_override = src.glide_size)
@@ -1325,11 +1324,9 @@ Thanks.
 						for(var/mob/living/carbon/slime/slime in view(1,tmob))
 							if(slime.Victim == tmob)
 								slime.UpdateFeed()
-					else
-						visible_message("no tileswap because tmob is protected")
+					return
 				else
 					if ((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained())) // mutual brohugs all around!
-						visible_message("help intent tileswap")
 						var/turf/oldloc = loc
 						forceMove(tmob.loc)
 						tmob.forceMove(oldloc, glide_size_override = src.glide_size)
@@ -1337,6 +1334,7 @@ Thanks.
 						for(var/mob/living/carbon/slime/slime in view(1,tmob))
 							if(slime.Victim == tmob)
 								slime.UpdateFeed()
+						return
 
 			if(!can_move_mob(tmob, 0, 0))
 				now_pushing = 0
