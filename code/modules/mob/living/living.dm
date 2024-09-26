@@ -1313,15 +1313,30 @@ Thanks.
 						dense = 1
 				if(dense)
 					break
-			if((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained()) && tmob.canmove && canmove && !dense && can_move_mob(tmob, 1, 0)) // mutual brohugs all around!
-				var/turf/oldloc = loc
-				forceMove(tmob.loc)
-				tmob.forceMove(oldloc, glide_size_override = src.glide_size)
-				now_pushing = 0
-				for(var/mob/living/carbon/slime/slime in view(1,tmob))
-					if(slime.Victim == tmob)
-						slime.UpdateFeed()
-				return
+			// Help intent tile swap
+			if(tmob.loc && tmob.canmove && canmove && !dense && can_move_mob(tmob, 1, 0))
+				if (tmob.is_opening_door) // the guy is opening a door, so we only tileswap on harm intent
+					if ((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent != I_HELP || src.restrained()))
+						visible_message("forced hurt intent tileswap")
+						var/turf/oldloc = loc
+						forceMove(tmob.loc)
+						tmob.forceMove(oldloc, glide_size_override = src.glide_size)
+						now_pushing = 0
+						for(var/mob/living/carbon/slime/slime in view(1,tmob))
+							if(slime.Victim == tmob)
+								slime.UpdateFeed()
+					else
+						visible_message("no tileswap because tmob is protected")
+				else
+					if ((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained())) // mutual brohugs all around!
+						visible_message("help intent tileswap")
+						var/turf/oldloc = loc
+						forceMove(tmob.loc)
+						tmob.forceMove(oldloc, glide_size_override = src.glide_size)
+						now_pushing = 0
+						for(var/mob/living/carbon/slime/slime in view(1,tmob))
+							if(slime.Victim == tmob)
+								slime.UpdateFeed()
 
 			if(!can_move_mob(tmob, 0, 0))
 				now_pushing = 0
@@ -1376,6 +1391,20 @@ Thanks.
 				now_pushing = 0
 			return
 	return
+
+/mob/living/proc/tileswap(var/mob/tmob)
+	var/turf/oldloc = loc
+	forceMove(tmob.loc)
+	tmob.forceMove(oldloc, glide_size_override = src.glide_size)
+	now_pushing = 0
+	for(var/mob/living/carbon/slime/slime in view(1,tmob))
+		if(slime.Victim == tmob)
+			slime.UpdateFeed()
+		return
+
+// Need to call args because
+/mob/living/proc/no_longer_opening_door(var/mover, var/atom)
+	is_opening_door = FALSE
 
 /mob/living/proc/scoop_up(mob/M) //M = mob who scoops us up!
 	if(!holder_type)

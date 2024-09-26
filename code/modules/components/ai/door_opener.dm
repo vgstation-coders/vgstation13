@@ -21,13 +21,13 @@
 			D.visible_message("<span class='warning'>\The [D]'s motors whine as four arachnid claws begin trying to force it open!</span>")
 			spawn(50)
 				if(CanOpenDoor(D) && prob(25))
-					D.open(1)
+					D.open()
 					D.visible_message("<span class='warning'>\The [src] forces \the [D] open!</span>")
 
 					// Open firedoors, too.
 					for(var/obj/machinery/door/firedoor/FD in D.loc)
 						if(FD && FD.density)
-							FD.open(1)
+							FD.open(forced = 1)
 
 					// Reset targetting
 					INVOKE_EVENT(parent, /event/comp_ai_cmd_set_busy, "yes" = FALSE)

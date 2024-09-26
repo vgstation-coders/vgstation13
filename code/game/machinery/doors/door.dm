@@ -172,7 +172,7 @@ var/list/all_doors = list()
 	if(allowed(user))
 		if (isshade(user))
 			user.forceMove(loc)//They're basically slightly tangible ghosts, they can fit through doors as soon as they begin openning.
-		open()
+		open(user)
 	else if(!operating)
 		denied()
 
@@ -263,7 +263,7 @@ var/list/all_doors = list()
 		icon_state = "[prefix]door_closed"
 
 
-/obj/machinery/door/proc/open()
+/obj/machinery/door/proc/open(var/mob/living/user)
 	if(!density)
 		return 1
 	if(operating > 0)
@@ -285,10 +285,23 @@ var/list/all_doors = list()
 	if(!arcanetampered || !arcane_linked_door)
 		set_opacity(0)
 	door_animate("opening")
+	/*
+	if (user)
+		visible_message("door opened, making user protected")
+		user.is_opening_door = TRUE
+		user.register_event(/event/density_change, src, /mob/living/proc/no_longer_opening_door)
+		user.register_event(/event/moved, user, /mob/living/proc/no_longer_opening_door)
+	*/
 	if (animation_delay_predensity_opening)
 		sleep(animation_delay_predensity_opening)
 	else
 		sleep(animation_delay)
+	/*
+	if (user && !user.gcDestroyed)
+		visible_message("unregistering user")
+		user.unregister_event(/event/density_change, src, /mob/living/proc/no_longer_opening_door)
+		user.unregister_event(/event/moved, user, /mob/living/proc/no_longer_opening_door)
+	*/
 	plane = open_plane
 	layer = open_layer
 	setDensity(FALSE)
@@ -302,7 +315,6 @@ var/list/all_doors = list()
 
 	if(operating == 1)
 		operating = 0
-
 	return 1
 
 /obj/machinery/door/proc/autoclose()

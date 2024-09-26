@@ -83,3 +83,5 @@
 	var/braindamagespeechcooldown = FALSE //used to avoid braindamage proc spamming when checking the like 80 replacements
 
 	var/list/luminosity_sources = list()
+
+	var/is_opening_door = FALSE

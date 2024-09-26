@@ -67,7 +67,7 @@
 				set_opacity(0)
 				operating = 0
 
-/obj/machinery/door/poddoor/shutters/open()
+/obj/machinery/door/poddoor/shutters/open(var/mob/user)
 	if(cut_open && !pried_open)
 		icon_state = "shutter2"
 		setDensity(TRUE)

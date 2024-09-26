@@ -21,12 +21,12 @@
 	switch(signal.data["command"])
 		if("cycle")
 			if(density)
-				open(1)
+				open(forced = 1)
 			else
 				close(1)
 
 		if("open")
-			open(1)
+			open(forced =1)
 
 		if("close")
 			close(1)
@@ -53,7 +53,7 @@
 					playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 					update_icon()
 					sleep(2)
-				open(1)
+				open(forced = 1)
 
 				locked =  boltsDestroyed ? 0 : 1
 				playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
@@ -75,7 +75,7 @@
 				playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 				update_icon()
 				sleep(2)
-			open(1)
+			open(forced = 1)
 
 			locked =  boltsDestroyed ? 0 : 1
 			playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
@@ -108,7 +108,7 @@
 		radio_connection.post_signal(src, signal, range = AIRLOCK_CONTROL_RANGE, filter = RADIO_AIRLOCK)
 
 
-/obj/machinery/door/airlock/open(surpress_send)
+/obj/machinery/door/airlock/open(var/mob/user, surpress_send)
 	. = ..()
 	if(!surpress_send)
 		send_status()

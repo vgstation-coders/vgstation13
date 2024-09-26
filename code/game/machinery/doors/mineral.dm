@@ -63,7 +63,7 @@
 	else
 		return open()
 
-/obj/machinery/door/mineral/open()
+/obj/machinery/door/mineral/open(var/mob/user)
 	playsound(src, soundeffect, 100, 1)
 	return ..()
 

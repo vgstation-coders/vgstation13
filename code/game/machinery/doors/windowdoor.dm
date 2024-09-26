@@ -128,7 +128,7 @@
 /obj/machinery/door/window/CanAStarPass(var/obj/item/weapon/card/id/ID, var/to_dir)
 	return !density || (dir != to_dir) || check_access(ID)
 
-/obj/machinery/door/window/open()
+/obj/machinery/door/window/open(var/mob/user)
 	if(!density) //it's already open you silly cunt
 		return FALSE
 	if(operating == 1) //doors can still open when emag-disabled

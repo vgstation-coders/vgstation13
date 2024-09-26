@@ -1145,10 +1145,10 @@ About the new airlock wires panel:
 				to_chat(user, "<span class='notice'>The airlock won't budge!</span>")
 				return
 			visible_message("<span class='warning'>\The [user] forces \the [src] [density ? "open" : "closed"]!</span>")
-			density ? open(1) : close(1)
+			density ? open(forced = 1) : close(1)
 	else
 		visible_message("<span class='warning'>\The [user] forces \the [src] [density ? "open" : "closed"]!</span>")
-		density ? open(1) : close(1)
+		density ? open(forced = 1) : close(1)
 
 /obj/machinery/door/airlock/attack_animal(var/mob/living/simple_animal/M)
 	if(isElectrified())
@@ -1171,9 +1171,9 @@ About the new airlock wires panel:
 				return
 			if(!M.force_airlock_time)
 				if(M.client)
-					density ? open(1):close(1)
+					density ? open(forced = 1):close(1)
 				else if(density)
-					open(1)
+					open(forced = 1)
 			else //Simple mobs with a nonzero force_airlock_time take time to force the airlock.
 				to_chat(M, "<span class='notice'>You start forcing the airlock [density ? "open" : "closed"].</span>")
 				visible_message("<span class='warning'>\The [src]'s motors whine as something begins trying to force it [density ? "open" : "closed"]!</span>",\
@@ -1184,14 +1184,14 @@ About the new airlock wires panel:
 						return
 					visible_message("<span class='warning'>\The [M] forces \the [src] [density ? "open" : "closed"]!</span>")
 					if(M.client)
-						density ? open(1):close(1)
+						density ? open(forced = 1):close(1)
 					else if(density)
-						open(1)
+						open(forced = 1)
 		else
 			if(M.client)
-				density ? open(1):close(1)
+				density ? open(forced= 1):close(1)
 			else if(density)
-				open(1)
+				open(forced = 1)
 			visible_message("<span class = 'warning'>\The [M] forces \the [src] [density?"closed":"open"]!</span>")
 
 
@@ -1336,11 +1336,11 @@ About the new airlock wires panel:
 				if(beingcrowbarred == 0) //being fireaxe'd
 					var/obj/item/weapon/fireaxe/F = I
 					if(F.wielded)
-						spawn(0)	open(1)
+						spawn(0)	open(forced = 1)
 					else
 						to_chat(user, "<span class='warning'>You need to be wielding \the [F] to do that.</span>")
 				else
-					spawn(0)	open(1)
+					spawn(0)	open(forced = 1)
 			else
 				if(beingcrowbarred == 0)
 					var/obj/item/weapon/fireaxe/F = I
@@ -1375,7 +1375,7 @@ About the new airlock wires panel:
 		if(density)
 			door_animate("spark")
 			sleep(6)
-			open(1)
+			open(forced = 1)
 		operating = -1
 
 /obj/machinery/door/airlock/bashed_in(var/mob/user, var/throw_circuit = TRUE)
@@ -1399,7 +1399,7 @@ About the new airlock wires panel:
 		if(do_after(user,src,breaktime))
 			src.busy=0
 			if (density)
-				open(1)
+				open(forced = 1)
 			else
 				close(1)
 			return 1
@@ -1464,11 +1464,11 @@ About the new airlock wires panel:
 		if(src.density)
 			src.door_animate("spark")
 			sleep(6)
-			src.open(1)
+			src.open(forced = 1)
 		src.operating = -1
 	..()
 
-/obj/machinery/door/airlock/open(var/forced=0)
+/obj/machinery/door/airlock/open(var/mob/user, var/forced=0)
 	if((operating && !forced) || locked || welded)
 		return 0
 	if(!forced)

@@ -480,7 +480,7 @@ var/global/list/alert_overlays_global = list()
 			if(alarmed && !density)
 				close()
 
-/obj/machinery/door/firedoor/open(mob/user)
+/obj/machinery/door/firedoor/open(mob/user, var/forced)
 	if(user)
 		add_fingerprint(user)
 	if(!loc || blocked)

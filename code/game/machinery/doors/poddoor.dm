@@ -96,7 +96,7 @@ var/list/poddoors = list()
 /obj/machinery/door/poddoor/allowed(mob/M)
 	return 0
 
-/obj/machinery/door/poddoor/open()
+/obj/machinery/door/poddoor/open(var/mob/user)
 	if(!density) //it's already open bro
 		return FALSE
 	if (operating == 1) //doors can still open when emag-disabled
