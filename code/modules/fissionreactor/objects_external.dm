@@ -85,8 +85,17 @@ included:
 			network.update=1
 		//air_contents.update=1
 		
-
-
+		
+/obj/machinery/atmospherics/unary/fissionreactor_coolantport/ex_act(var/severity, var/child=null, var/mob/whodunnit)
+	switch(severity)
+		if(1) //dev
+			if(rand()>0.1) //90% chance to destroy
+				qdel(src)
+		if(2) //heavy
+			if(rand()<0.25) //25% chance to destroy
+				qdel(src)
+		if(3) //light
+			return
 	
 	
 
@@ -535,7 +544,16 @@ included:
 	ask_remakeUI() //update it so that changes appear NOW.
 //SS_WAIT_MACHINERY
 
-
+/obj/machinery/fissioncontroller/ex_act(var/severity, var/child=null, var/mob/whodunnit)
+	switch(severity)
+		if(1) //dev
+			if(rand()>0.1) //90% chance to destroy
+				qdel(src)
+		if(2) //heavy
+			if(rand()<0.25) //25% chance to destroy
+				qdel(src)
+		if(3) //light
+			return
 
 
 
@@ -582,6 +600,19 @@ included:
 			newcase.forceMove(loc)
 			newcase.state=3
 			qdel(src)
+
+
+/obj/structure/fission_reactor_case/ex_act(var/severity, var/child=null, var/mob/whodunnit)
+	switch(severity)
+		if(1) //dev
+			if(rand()>0.1) //90% chance to destroy
+				qdel(src)
+		if(2) //heavy
+			if(rand()<0.25) //25% chance to destroy
+				qdel(src)
+		if(3) //light
+			return
+
 
 
 /obj/structure/girder/reactor

@@ -115,7 +115,18 @@ included:
 	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, SOUTHWEST) )
 		overlays+=overlay_SW
 		
-		
+	
+/obj/machinery/fissionreactor/fissionreactor_controlrod/ex_act(var/severity, var/child=null, var/mob/whodunnit)
+	switch(severity)
+		if(1) //dev
+			if(rand()>0.1) //90% chance to destroy
+				qdel(src)
+		if(2) //heavy
+			if(rand()<0.25) //25% chance to destroy
+				qdel(src)
+		if(3) //light
+			return
+	
 	
 /obj/machinery/fissionreactor/fissionreactor_fuelrod
 	icon='icons/obj/fissionreactor/fuelrod.dmi'
@@ -223,6 +234,33 @@ included:
 		playsound(src,'sound/items/crowbar.ogg',50)
 		newfrd.hatchopen=TRUE
 		qdel(src)
+
+
+/obj/machinery/fissionreactor/fissionreactor_fuelrod/proc/boom(var/mob/whodunnit)
+	if(!associated_reactor)
+		return
+	if(!associated_reactor.fuel)
+		return
+	var/expow= sqrt(associated_reactor.fuel.wattage/100000)
+	message_admins("An explosion [whodunnit? "caused by [whodunnit]" : ""] caused a fuel rod with [expow] power to explode [src.loc.name] ([formatJumpTo(src,"JMP")])")
+	explosion(src.loc,floor(expow*0.5),floor(expow*0.75),floor(expow))	
+	
+
+/obj/machinery/fissionreactor/fissionreactor_fuelrod/ex_act(var/severity, var/child=null, var/mob/whodunnit)
+	switch(severity)
+		if(1) //dev
+			if(rand()>0.1) //90% chance to destroy
+				boom(whodunnit)
+				qdel(src)
+		if(2) //heavy
+			if(rand()<0.25) //25% chance to destroy
+				boom(whodunnit)
+				qdel(src)
+		if(3) //light
+			return
+
+
+
 	
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/inert
 	adjacencybonus=0.0
