@@ -522,30 +522,28 @@
 	rechargeable = FALSE
 	charge_cost = 250
 	icon_charge_multiple = 50
-	fire_delay = 0
+	clowned = CLOWNABLE
 	var/overheat = 0
 	var/pump_delay = 20 //cooldown after last real shot in decaseconds before reloading
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/shotgun/attack_self(var/mob/living/user)
 	. = ..()
 	if(overheat)
+		to_chat(user, span_warning("The pump-recharger is still cooling down!"))
 		return
-	if(power_supply.charge == power_supply.maxcharge)
-		return
-	if(last_fired + pump_delay > world.time)
-		to_chat(user, span_notice("\The [src] is still cooling down."))
-		return
-	power_supply.give(power_supply.maxcharge)
-	playsound(src.loc, 'sound/weapons/shotgunpump.ogg', 60, 1)
-	update_icon()
-
-/obj/item/weapon/gun/energy/kinetic_accelerator/shotgun/ready_to_fire()
-	if(world.time >= last_fired + fire_delay)
-		if(power_supply.charge >= charge_cost)
-			last_fired = world.time
-		return 1
+	overheat = 1
+	var/image/lightning_effect = image('icons/effects/effects.dmi', src, "shield2")
+	overlays += lightning_effect
+	spawn(5)
+		overlays -= lightning_effect
+	if(clowned == CLOWNED)
+		playsound(src.loc, 'sound/items/bikehorn.ogg', 50, 1)
 	else
-		return 0
+		playsound(src.loc, 'sound/weapons/shotgunpump.ogg', 50, 1)
+	power_supply.give(power_supply.maxcharge)
+	update_icon()
+	spawn(pump_delay)
+		overheat = 0
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg
 	name = "proto-kinetic accelerator"

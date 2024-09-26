@@ -135,8 +135,10 @@
 	damage = 15
 	damage_type = BRUTE
 	flag = "energy"
-	var/range = 2
 	fire_sound = 'sound/weapons/Taser.ogg'
+	color = "#a7ff96"
+	var/low_pressure_bonus = 15 //bonus in pressures below 50kpa
+	var/monster_bonus = 0 //bonus against simple_animals (roid mobs) and xenos
 
 /obj/item/projectile/kinetic/New()
 	var/turf/proj_turf = get_turf(src)
@@ -146,7 +148,8 @@
 	var/pressure = environment.return_pressure()
 	if(pressure < 50)
 		name = "full strength kinetic force"
-		damage += 15
+		damage += low_pressure_bonus
+		color = "#ccffff"// "#ff4444"
 	..()
 
 /* wat - N3X
@@ -170,6 +173,8 @@
 	..(target,blocked)
 
 /obj/item/projectile/kinetic/to_bump(atom/A as mob|obj|turf|area)
+	if(istype(A, /mob/living/simple_animal) || istype(A, /mob/living/carbon/alien))
+		damage += monster_bonus
 	if(!loc)
 		return
 	if(A == firer)
@@ -185,6 +190,7 @@
 				var/turf/unsimulated/mineral/M = target_turf
 				if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
 					M.GetDrilled()
+				new /obj/item/effect/kinetic_blast(target_turf)
 			// Now we bump as a bullet, if the atom is a non-turf.
 			if(!isturf(A))
 				..(A)
@@ -196,6 +202,12 @@
 		qdel(src)
 		return 0
 
+/obj/item/projectile/kinetic/shotgun
+	low_pressure_bonus = 25
+
+/obj/item/projectile/kinetic/cutter
+	monster_bonus = 15
+
 /obj/item/effect/kinetic_blast
 	name = "kinetic explosion"
 	icon = 'icons/obj/projectiles.dmi'
@@ -206,13 +218,6 @@
 	..()
 	spawn(4)
 		qdel(src)
-
-/obj/item/projectile/kinetic/cutter
-
-/obj/item/projectile/kinetic/cutter/to_bump(atom/A)
-	if(istype(A, /mob/living/simple_animal) || istype(A, /mob/living/carbon/alien))
-		damage += 15
-	..()
 
 /obj/item/projectile/stickybomb
 	icon = 'icons/obj/projectiles_experimental.dmi'

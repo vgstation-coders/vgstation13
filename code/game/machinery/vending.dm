@@ -3588,6 +3588,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/pickaxe/silver = 1,
 		/obj/item/weapon/pickaxe/gold = 1,
 		/obj/item/weapon/pickaxe/diamond = 1,
+		/obj/item/device/modkit/kineticshotgun = 1,
 		/obj/item/borg/upgrade/hook = 1,
 		)
 	prices = list(
@@ -3613,6 +3614,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/gun/hookshot = 300,
 		/obj/item/weapon/lazarus_injector/advanced = 150,
 		/obj/item/weapon/pickaxe/diamond = 300,
+		/obj/item/device/modkit/kineticshotgun = 250,
 		/obj/item/borg/upgrade/hook = 300,
 		)
 
