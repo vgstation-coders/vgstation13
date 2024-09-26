@@ -285,26 +285,22 @@ var/list/all_doors = list()
 	if(!arcanetampered || !arcane_linked_door)
 		set_opacity(0)
 	door_animate("opening")
-	/*
+
 	if (user)
-		visible_message("door opened, making user protected")
 		user.is_opening_door = TRUE
-		user.register_event(/event/density_change, src, /mob/living/proc/no_longer_opening_door)
+		src.register_event(/event/density_change, user, /mob/living/proc/no_longer_opening_door)
 		user.register_event(/event/moved, user, /mob/living/proc/no_longer_opening_door)
-	*/
+
 	if (animation_delay_predensity_opening)
 		sleep(animation_delay_predensity_opening)
 	else
 		sleep(animation_delay)
-	/*
-	if (user && !user.gcDestroyed)
-		visible_message("unregistering user")
-		user.unregister_event(/event/density_change, src, /mob/living/proc/no_longer_opening_door)
-		user.unregister_event(/event/moved, user, /mob/living/proc/no_longer_opening_door)
-	*/
 	plane = open_plane
 	layer = open_layer
 	setDensity(FALSE)
+	if (user && !user.gcDestroyed)
+		src.unregister_event(/event/density_change, user, /mob/living/proc/no_longer_opening_door)
+		user.unregister_event(/event/moved, user, /mob/living/proc/no_longer_opening_door)
 	update_nearby_tiles()
 	if (animation_delay_predensity_opening)
 		sleep(animation_delay - animation_delay_predensity_opening)

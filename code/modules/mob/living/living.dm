@@ -1317,24 +1317,26 @@ Thanks.
 			if(tmob.loc && tmob.canmove && canmove && !dense && can_move_mob(tmob, 1, 0))
 				if (tmob.is_opening_door) // the guy is opening a door, so we only tileswap on harm intent
 					if ((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent != I_HELP || src.restrained()))
+						visible_message("<span class='warning'>[src] bumps [tmob] out of the way. How rude!</span>")
 						var/turf/oldloc = loc
 						forceMove(tmob.loc)
-						tmob.forceMove(oldloc, glide_size_override = src.glide_size)
+						tmob.forceMove(oldloc, glide_size_override = src.glide_size) // Nesting this in a tileswap proc for some reason messes up with gliding
 						now_pushing = 0
 						for(var/mob/living/carbon/slime/slime in view(1,tmob))
 							if(slime.Victim == tmob)
 								slime.UpdateFeed()
-					return
+					return // That return is needed otherwise the game crashes! Yes, I'm serious. No idea why
+
 				else
 					if ((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained())) // mutual brohugs all around!
 						var/turf/oldloc = loc
 						forceMove(tmob.loc)
-						tmob.forceMove(oldloc, glide_size_override = src.glide_size)
+						tmob.forceMove(oldloc, glide_size_override = src.glide_size) // Nesting this in a tileswap proc for some reason messes up with gliding
 						now_pushing = 0
 						for(var/mob/living/carbon/slime/slime in view(1,tmob))
 							if(slime.Victim == tmob)
 								slime.UpdateFeed()
-						return
+						return // That return is needed otherwise the game crashes! Yes, I'm serious. No idea why
 
 			if(!can_move_mob(tmob, 0, 0))
 				now_pushing = 0
@@ -1400,9 +1402,13 @@ Thanks.
 			slime.UpdateFeed()
 		return
 
-// Need to call args because
-/mob/living/proc/no_longer_opening_door(var/mover, var/atom)
+// Need to call args because otherwise you get runtimes. Plus it allows for nice unregistering, I guess.
+/mob/living/proc/no_longer_opening_door(var/atom/movable/mover, var/atom/atom)
 	is_opening_door = FALSE
+	if (atom)
+		atom.unregister_event(/event/density_change, src, /mob/living/proc/no_longer_opening_door)
+	if (mover)
+		mover.unregister_event(/event/moved, src, /mob/living/proc/no_longer_opening_door)
 
 /mob/living/proc/scoop_up(mob/M) //M = mob who scoops us up!
 	if(!holder_type)
