@@ -331,7 +331,7 @@ datums for the fission reactor, which includes the fuel and reactor
 		return list(0,0,0)	
 	var/TRP=((fuel.wattage-fuel.absorbance)*fuel.life)
 	var/powerfactor=((fuel_reactivity) - ( (fuel_reactivity-fuel_reactivity_with_rods)*control_rod_insertion))
-	TRP=ceil(sqrt(0.000001+((powerfactor/2)+1)*(TRP/25000))) //every 25kw of power nets us 1 tile
+	TRP=ceil(sqrt(0.000001+((powerfactor)+1)*(TRP/25000))) //every 25kw of power nets us 1 tile
 	
 	return list( floor(TRP*0.55),floor(TRP*0.75),TRP)
 	
