@@ -142,10 +142,18 @@ datums for the fission reactor, which includes the fuel and reactor
 		var/obj/structure/fission_reactor_case/nc=thepart
 		nc.associated_reactor=src
 		casing_parts+=thepart
+		for(var/turf/t in breaches)
+			if(t==nc.loc)
+				breaches-=t
+				break
 	if(istype(thepart, /obj/machinery/atmospherics/unary/fissionreactor_coolantport ))
 		var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/ncp=thepart
 		ncp.associated_reactor=src
 		coolant_ports+=thepart
+		for(var/turf/t in breaches)
+			if(t==ncp.loc)
+				breaches-=t
+				break
 	recalculatereactorstats()
 	return TRUE
 
@@ -337,12 +345,33 @@ datums for the fission reactor, which includes the fuel and reactor
 	message_admins("Fission reactor meltdown occured in area [centerturf.loc.name] ([formatJumpTo(centerturf,"JMP")])")
 	log_game("Fission reactor meltdown occured in area [centerturf.loc.name]")
 	var/reactorarea=(max(origin_x,corner_x)-min(origin_x,corner_x)) *  (max(origin_y,corner_y)-min(origin_y,corner_y))
-	reactorarea=ceil(reactorarea/5) // 1 fith of the tiles will be eligable to explode
-	for(var/i=1,i<=reactorarea,i++)
+	var/reactorarea2=ceil(reactorarea/5) // 1 fith of the tiles will be eligable to explode
+	for(var/i=1,i<=reactorarea2,i++)
 		if(rand()<=0.33)
 			var/list/eplodies=determineexplosionsize()
 			explosion( randomtileinreactor() ,eplodies[1],eplodies[2],eplodies[3])
-	
+			
+	reactorarea2=ceil(reactorarea/2)
+	var/crads=((fuel.wattage-fuel.absorbance)*fuel.life)/100000 //100kw nets 1 rad.
+	for(var/i=1,i<=reactorarea2,i++)
+		if(rand()<=0.5)
+			for (var/obj/o in randomtileinreactor().contents)
+			
+				if(istype(o, /obj/machinery/fissioncontroller))
+					new /obj/machinery/corium(o.loc,crads+crads*0.5*(rand()-0.5)) //25% variance on the radiation levels.
+					qdel(o)				
+				else if(istype(o,/obj/machinery/fissionreactor/fissionreactor_fuelrod))
+					new /obj/machinery/corium(o.loc,crads+crads*0.5*(rand()-0.5))
+					qdel(o)		
+				else if(istype(o,/obj/machinery/fissionreactor/fissionreactor_controlrod))
+					new /obj/machinery/corium(o.loc,crads+crads*0.5*(rand()-0.5))
+					qdel(o)				
+				else if(istype(o,/obj/structure/fission_reactor_case))
+					new /obj/machinery/corium(o.loc,crads+crads*0.5*(rand()-0.5))
+					qdel(o)				
+				else if(istype(o,/obj/machinery/atmospherics/unary/fissionreactor_coolantport))
+					new /obj/machinery/corium(o.loc,crads+crads*0.5*(rand()-0.5))
+					qdel(o)
 	
 /datum/fission_reactor_holder/proc/clear_parts() 
 	for (var/i=1,i<=casing_parts.len,i++)
@@ -414,8 +443,9 @@ datums for the fission reactor, which includes the fuel and reactor
 		fuel_reactivity+=reactivity
 		fuel_reactivity_with_rods+=(controlled ? 0 : reactivity)
 		fuel_rods_affected_by_rods+=(controlled ? 1 : 0)
-	fuel_reactivity/=fuel_rods.len //average them out.
-	fuel_reactivity_with_rods/=fuel_rods.len
+	if(fuel_rods.len)
+		fuel_reactivity/=fuel_rods.len //average them out.
+		fuel_reactivity_with_rods/=fuel_rods.len
 	
 /datum/fission_reactor_holder/proc/update_all_icos()
 	for (var/i=1,i<=control_rods.len,i++)

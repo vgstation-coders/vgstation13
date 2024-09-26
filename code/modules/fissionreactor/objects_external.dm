@@ -57,6 +57,10 @@ included:
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/New()
 	..()
 	src.buildFrom(usr,src)
+	for(var/datum/fission_reactor_holder/r in fissionreactorlist)
+		if(r.turf_in_reactor(src.loc))
+			if(r.adopt_part(src))
+				break
 
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/proc/transfer_reactor() //transfer coolant from/to the reactor
 	if(!associated_reactor)
@@ -110,7 +114,12 @@ included:
 /obj/machinery/fissioncontroller/New()
 	..()
 	interface=new /datum/html_interface(src,"Fission reactor controller",590,340,"<link rel='stylesheet' href='fission.css'>")
-
+	for(var/datum/fission_reactor_holder/r in fissionreactorlist)
+		if(r.turf_in_reactor(src.loc))
+			if(r.adopt_part(src))
+				break
+				
+				
 /obj/machinery/fissioncontroller/Destroy()
 	if(currentfuelrod)
 		currentfuelrod.forceMove(loc)
@@ -118,6 +127,10 @@ included:
 	if(associated_reactor)
 		associated_reactor.handledestruction(src)
 	qdel(interface)
+	if(associated_reactor && associated_reactor.fuel && associated_reactor.considered_on())
+		var/rads= associated_reactor.fuel_rods.len*((associated_reactor.fuel_reactivity) - ( (associated_reactor.fuel_reactivity-associated_reactor.fuel_reactivity_with_rods)*associated_reactor.control_rod_insertion))*associated_reactor.fuel.wattage/25000
+		for(var/mob/living/l in range(src.loc, 5))
+			l.apply_radiation(rads, RAD_EXTERNAL)
 	..()
 
 /*/proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE, var/frequency = 0)*/
@@ -147,8 +160,12 @@ included:
 				currentfuelrod.forceMove(loc)
 				currentfuelrod=null
 				playsound(src,'sound/machines/door_unbolt.ogg',50)
+				if(associated_reactor && associated_reactor.fuel && associated_reactor.considered_on())
+					var/rads= associated_reactor.fuel_rods.len*((associated_reactor.fuel_reactivity) - ( (associated_reactor.fuel_reactivity-associated_reactor.fuel_reactivity_with_rods)*associated_reactor.control_rod_insertion))*associated_reactor.fuel.wattage/25000
+					for(var/mob/living/l in range(src.loc, 5))
+						l.apply_radiation(rads, RAD_EXTERNAL)
 				associated_reactor?.fuel=null
-				//TODO: SPREAD RADS
+
 			return
 				
 		user.visible_message("<span class='notice'>[user] starts prying the fuel rod out of \the [src].</span>", "<span class='notice'>You start prying the fuel rod out of \the [src].</span>")
@@ -472,6 +489,20 @@ included:
 		return
 	if(stat & BROKEN)
 		return
+	if(!canGhostWrite(usr,src,"",0))
+		if(usr.restrained() || usr.lying || usr.stat)
+			return 1
+		if (!usr.dexterity_check())
+			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
+			return 1
+		if(!is_on_same_z(usr))
+			to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
+			return 1
+		if(!is_in_range(usr))
+			to_chat(usr, "<span class='warning'>WARNING: Connection failure. Reduce range.</span>")
+			return 1
+	
+	
 	
 	switch(href_list["action"])
 		if("SCRAM")
@@ -514,6 +545,13 @@ included:
 	name="fission reactor casing"
 	icon='icons/obj/fissionreactor/reactorcase.dmi'
 	icon_state="case"
+
+/obj/structure/fission_reactor_case/New()
+	for(var/datum/fission_reactor_holder/r in fissionreactorlist)
+		if(r.turf_in_reactor(src.loc))
+			if(r.adopt_part(src))
+				break
+
 
 /obj/structure/fission_reactor_case/Destroy()
 	if(associated_reactor)

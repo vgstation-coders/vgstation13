@@ -115,7 +115,20 @@ the machine which makes fuel rods have things in them.
 		return
 	if(stat & BROKEN)
 		return
-		
+	
+	if(!canGhostWrite(usr,src,"",0))
+		if(usr.restrained() || usr.lying || usr.stat)
+			return 1
+		if (!usr.dexterity_check())
+			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
+			return 1
+		if(!is_on_same_z(usr))
+			to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
+			return 1
+		if(!is_in_range(usr))
+			to_chat(usr, "<span class='warning'>WARNING: Connection failure. Reduce range.</span>")
+			return 1
+	
 	if(href_list["action"])
 		switch(href_list["action"])
 			if("eject_fuel")	

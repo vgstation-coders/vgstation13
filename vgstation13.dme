@@ -2946,6 +2946,7 @@
 #include "code\ZAS\Fire.dm"
 #include "code\ZAS\NewSettings.dm"
 #include "code\ZAS\Plasma.dm"
+#include "code\ZAS\Radon.dm"
 #include "code\ZAS\Turf.dm"
 #include "code\ZAS\XGM.dm"
 #include "code\ZAS\XGM_gases.dm"

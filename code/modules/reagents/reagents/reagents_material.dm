@@ -258,10 +258,10 @@
 	fission_time=1500 //25 minutes.
 	fission_power=1666.6666
 	
-/datum/reagent/plutonium/on_mob_life(var/mob/living/M)
+/datum/reagent/radon/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	M.apply_radiation(5, RAD_INTERNAL)
+	M.apply_radiation(7.5, RAD_INTERNAL)
 
 
 /datum/reagent/lead

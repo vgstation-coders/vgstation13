@@ -67,6 +67,10 @@ included:
 	overlay_SE = image(icon, src,"cr_overlay_SE")
 	overlay_NW = image(icon, src,"cr_overlay_NW")
 	overlay_SW = image(icon, src,"cr_overlay_SW")
+	for(var/datum/fission_reactor_holder/r in fissionreactorlist)
+		if(r.turf_in_reactor(src.loc))
+			if(r.adopt_part(src))
+				break
 	..()
 
 /obj/machinery/fissionreactor/fissionreactor_controlrod/attackby(var/obj/item/O,var/mob/user)	
@@ -133,6 +137,10 @@ included:
 	overlay_S = image(icon, src,"fuelrod_overlay_S")
 	overlay_E = image(icon, src,"fuelrod_overlay_E") 
 	overlay_W = image(icon, src,"fuelrod_overlay_W") 
+	for(var/datum/fission_reactor_holder/r in fissionreactorlist)
+		if(r.turf_in_reactor(src.loc))
+			if(r.adopt_part(src))
+				break
 	..()
 
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/examine()
