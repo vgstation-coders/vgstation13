@@ -440,6 +440,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/ice
 	name = "Ice"
 	id = MAT_ICE
+	value = 0
 	oretype = /obj/item/ice_crystal
 	cc_per_sheet = CC_PER_SHEET_ICE
 
