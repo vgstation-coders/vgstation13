@@ -549,8 +549,12 @@
 	..()
 	if(clowned == CLOWNED)
 		fire_sound = 'sound/items/quack.ogg'
+		empty_sound = 'sound/items/quack.ogg'
+		hitsound = 'sound/items/bikehorn.ogg'
 	else
 		fire_sound = 'sound/weapons/kinetic_accelerator.ogg'
+		empty_sound = 'sound/weapons/empty.ogg'
+		hitsound = 'sound/weapons/smash.ogg'
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg
 	name = "proto-kinetic accelerator"
