@@ -262,7 +262,7 @@ included:
 			//if(mins>99)
 			//	mins=99
 			//	secs=99
-			estimatedtimeleft="[mins]:[secs]"
+			estimatedtimeleft="[mins]:[num2text(secs,2,10)]"
 	else	
 		estimatedtimeleft="NO:NE"
 
