@@ -323,7 +323,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	coolant.volume=CELL_VOLUME* (sizex-2)*(sizey-2) //sub 2 to make sure there's no casing involved in the internal volume.
 	coolant.volume=max(coolant.volume,1) //atmos code will probably shit itself if this is 0.
 
-	heat_capacity=sizex*sizey*1000 // this scales with area as well.
+	heat_capacity=sizex*sizey*2500 // this scales with area as well.
 	return null
 	
 /datum/fission_reactor_holder/proc/determineexplosionsize()
