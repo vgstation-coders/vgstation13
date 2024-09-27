@@ -54,7 +54,7 @@ the machine which makes fuel rods have things in them.
 			heldrod=null
 			ask_remakeUI()
 			playsound(src,'sound/machines/door_unbolt.ogg',50)
-		update_icon()
+			update_icon()
 		return
 		
 	if(I.is_screwdriver(user))
@@ -138,6 +138,7 @@ the machine which makes fuel rods have things in them.
 					heldrod.forceMove(src.loc)
 					heldrod.update_icon()
 					heldrod=null
+					update_icon()
 			if("eject_cont")
 				if(!container)
 					to_chat(hclient.client,"There's no container to eject.")

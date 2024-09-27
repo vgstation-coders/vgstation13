@@ -62,7 +62,7 @@ boxes used for cargo orders to make my life easier.
 	new /obj/item/stack/cable_coil(src,5)//5 wire
 		
 /obj/item/weapon/fuelrod/small/starter
-	icon_state="i_fuelrod"
+	icon_state="i_fuelrod_s"
 
 /obj/item/weapon/fuelrod/small/starter/New()
 	..()
