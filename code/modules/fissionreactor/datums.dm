@@ -506,11 +506,11 @@ datums for the fission reactor, which includes the fuel and reactor
 		totalpowertodump=0
 		speedfactor*=(fuel.absorbance-fuel.wattage)/fuel.wattage
 	else
-		totalpowertodump=fuel.wattage-fuel.absorbance
+		totalpowertodump=(fuel.wattage-fuel.absorbance)*2
 	
 
 	if (fuel.lifetime>0)
-		fuel.life-= (speedfactor)/fuel.lifetime
+		fuel.life-= (speedfactor*2)/fuel.lifetime
 		fuel.life=max(0,fuel.life)
 	else
 		fuel.life=0
