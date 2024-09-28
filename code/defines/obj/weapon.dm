@@ -1046,6 +1046,31 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
 
+
+/obj/item/gta_jetpack
+	name = "jetpack"
+	desc = "ROCKETMAN"
+	icon = 'icons/obj/weapons.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	icon_state = "jetpack"
+	item_state = "jetpack"
+	w_class = W_CLASS_HUGE
+
+/obj/item/gta_jetpack/pickup(var/mob/user)
+	..()
+	playsound(src, 'sound/items/GTA_UI.ogg', 100, 0, null, FALLOFF_SOUNDS, 0)
+	user.flying = 1
+	animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER , time = 10, loop = 1, easing = SINE_EASING)
+
+/obj/item/gta_jetpack/dropped(var/mob/user)
+	..()
+	user.flying = 0
+	animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER , time = 1, loop = 1)
+	animate(user, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
+	animate(user)
+	if(user.lying)//aka. if they have just been stunned
+		user.pixel_y -= 6 * PIXEL_MULTIPLIER
+
 /obj/item/weapon/wire
 	desc = "This is just a simple piece of regular insulated wire."
 	name = "wire"
