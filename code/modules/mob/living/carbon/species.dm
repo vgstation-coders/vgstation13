@@ -1157,7 +1157,7 @@ var/list/has_died_as_golem = list()
 	known_languages = list(LANGUAGE_VOX)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/mushroom_man
 
-	flags = WHITELISTED | PLAYABLE | NO_BREATHE | IS_PLANT | SPECIES_NO_MOUTH
+	flags = WHITELISTED | PLAYABLE | NO_BREATHE | IS_PLANT | SPECIES_NO_MOUTH | NO_PAIN
 	anatomy_flags = NO_BALD
 
 	gender = NEUTER
