@@ -1709,7 +1709,7 @@
 #include "code\modules\fish\fish_items.dm"
 #include "code\modules\fish\fish_tank.dm"
 #include "code\modules\fissionreactor\cleanup.dm"
-#include "code\modules\fissionreactor\datums.dm"
+#include "code\modules\fissionreactor\fission_datums.dm"
 #include "code\modules\fissionreactor\fuelmaker.dm"
 #include "code\modules\fissionreactor\items.dm"
 #include "code\modules\fissionreactor\misc.dm"
