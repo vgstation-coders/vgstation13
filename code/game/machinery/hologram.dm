@@ -126,6 +126,20 @@ var/list/holopads = list()
 		activate_holo(user.eyeobj)
 	return
 
+// For when an AI bounces between one holopad to another - it should look seamless by reusing the same hologram. Returns whether the transfer was successful.
+/obj/machinery/hologram/holopad/proc/transfer_ai(obj/machinery/hologram/holopad/source_pad)
+	if(stat & (FORCEDISABLE|NOPOWER))
+		return FALSE
+	if(master || holo)
+		return FALSE
+
+	var/transferred_master = source_pad.master
+	var/transferred_holo = source_pad.holo
+	source_pad.clear_holo(FALSE)
+	source_pad.holo = null
+	transfer_holo(transferred_master, transferred_holo)
+	return TRUE
+
 /obj/machinery/hologram/holopad/AltClick(var/mob/living/carbon/human/user)
 	if(istype(user) && !user.stat && user.Adjacent(src))
 		user_holocolor = input(user, "Please select the user hologram colour.", "Hologram colour") as color
@@ -297,7 +311,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		master = null //Null the master, since no-one is using it now.
 	advancedholo = FALSE
 	QDEL_NULL(ray)
-	if(delete_holo && holo)
+	if(holo)
 		var/obj/effect/overlay/hologram/H = holo
 		visible_message("<span class='warning'>The image of [holo] fades away.</span>")
 		holo = null
@@ -365,7 +379,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 				project_ray(holo,ray,old)
 		else
 			var/transferred = FALSE
-			for(var/obj/machinery/hologram/holopad/other_holopad in range(holo_range, master.eyeobj.loc))
+			for(var/obj/machinery/hologram/holopad/other_holopad in range(holo_range, master.loc))
 				if(other_holopad != src && other_holopad.transfer_ai(src))
 					transferred = TRUE
 					break
