@@ -1,0 +1,9 @@
+author: RealestEstate
+delete-after: true
+changes:
+- imageadd: 'Obese crewmembers can now properly wear: biosuits, clown EVA, monkey
+    suits, cassocks, overalls, certain aprons, certain vests, trashbags, hoodies,
+    scuba suits, certain HoP, HoS, and Captain coats, timesuits, vampire coats, and
+    advanced EOD suits'
+- bugfix: Becoming fat while wearing the trashbag should no longer give you permanent
+    chest storage.
