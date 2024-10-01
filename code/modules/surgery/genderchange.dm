@@ -44,7 +44,7 @@
 		/obj/item/tool/scalpel = 100,
 		/obj/item/weapon/kitchen/utensil/knife/large = 75,
 		/obj/item/weapon/hatchet = 50,
-		/obj/item/tool/wirecutters = 35,
+		"wirecutter" = 35,
 		)
 
 	priority = 10 //Fuck sakes

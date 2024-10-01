@@ -172,7 +172,7 @@
 /datum/surgery_step/cavity/implant_removal
 	allowed_tools = list(
 		/obj/item/tool/hemostat = 100,
-		/obj/item/tool/wirecutters = 75,
+		"wirecutters" = 75,
 		/obj/item/weapon/talisman = 70,
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)

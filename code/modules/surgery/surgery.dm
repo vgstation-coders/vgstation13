@@ -22,7 +22,15 @@
 	//returns how well tool is suited for this step
 /datum/surgery_step/proc/tool_quality(obj/item/tool)
 	for (var/T in allowed_tools)
-		if (istype(tool,T))
+		if (!istext(T) && istype(tool,T))
+			return allowed_tools[T]
+		if (!istype(tool,/obj/item))
+			continue
+		if (T == "screwdriver" && tool.is_screwdriver())
+			return allowed_tools[T]
+		if (T == "wrench" && tool.is_wrench())
+			return allowed_tools[T]
+		if (T == "wirecutter" && tool.is_wirecutter())
 			return allowed_tools[T]
 	return 0
 

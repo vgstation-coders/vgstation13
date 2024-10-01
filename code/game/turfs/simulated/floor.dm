@@ -592,7 +592,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 						make_tiled_floor(T)
 						return
 			return
-		else if(istype(user.get_inactive_hand(), /obj/item/tool/screwdriver))
+		else if(istype(user.get_inactive_hand(), /obj/item) && user.get_inactive_hand().is_screwdriver())
 			if(is_wood_floor())
 				var/obj/item/stack/tile/T = C
 				if(istype(T))
