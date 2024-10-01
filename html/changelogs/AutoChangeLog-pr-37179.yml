@@ -1,0 +1,5 @@
+author: MercuriusGH
+delete-after: true
+changes:
+- tweak: Spacepod construction QoL
+- imageadd: Replaced mask pixels on the inside of pod parts sprites
