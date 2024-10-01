@@ -253,7 +253,7 @@
 	affected.createwound(CUT, 20)
 	if (affected.implants.len)
 		var/fail_prob = 10
-		fail_prob += 100 - tool_quality(tool)
+		fail_prob += 100 - tool_quality(user, tool)
 		if (prob(fail_prob))
 			var/obj/item/weapon/implant/imp = affected.implants[1]
 			user.visible_message("<span class='warning'>Something beeps inside [target]'s [affected.display_name]!</span>")

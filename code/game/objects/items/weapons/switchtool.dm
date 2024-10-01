@@ -91,7 +91,7 @@
 		choose_deploy(user)
 
 /obj/item/weapon/switchtool/attackby(var/obj/item/used_item, mob/user)
-	if(can_remove_items && used_item.is_screwdriver()) //if it's the thing that lets us remove tools and we have something to remove
+	if(can_remove_items && used_item.is_screwdriver(user)) //if it's the thing that lets us remove tools and we have something to remove
 		var/no_modules = TRUE
 		for(var/module in stored_modules)
 			if(stored_modules[module])

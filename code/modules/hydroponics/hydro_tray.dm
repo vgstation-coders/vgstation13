@@ -388,7 +388,7 @@ var/list/hydro_trays = list()
 			C.being_potted = FALSE
 		return
 
-	else if(is_type_in_list(O, list(/obj/item/tool/wirecutters, /obj/item/tool/scalpel)))
+	else if(istype(O,/obj/item/tool/scalpel) || O.is_wirecutter(user))
 		if(!seed)
 			to_chat(user, "There is nothing to take a sample from in \the [src].")
 			return

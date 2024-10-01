@@ -146,7 +146,7 @@
 /datum/surgery_step/tooth_extract/pull_tooth
 	allowed_tools = list(
 		/obj/item/tool/hemostat = 100,
-		/obj/item/tool/wirecutters = 50,
+		"wirecutter" = 50,
 		/obj/item/device/assembly/mousetrap = 10,	//I don't know. Don't ask me. But I'm leaving it because hilarity.
 		)
 
