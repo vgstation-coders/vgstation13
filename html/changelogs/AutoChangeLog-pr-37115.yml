@@ -1,0 +1,7 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- rscadd: Random news events now actually work and are separated entirely from the
+    random event system, no longer counting towards them and on their own cycle that
+    repeats every 25-50 minutes or so. They show up on the newscasters under the preset
+    channels
