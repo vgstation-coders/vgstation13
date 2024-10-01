@@ -197,7 +197,7 @@
 	currently_tracking.register_event(/event/after_move,src,nameof(src::on_camera_change()))
 	currently_tracking.register_event(/event/destroyed,src,nameof(src::stop_ai_tracking()))
 	currently_tracking.register_event(/event/equipped,src,nameof(src::on_camera_change()))
-	//currently_tracking.register_event(/event/unequipped,src,nameof(src::on_camera_change()))
+	currently_tracking.register_event(/event/unequipped,src,nameof(src::on_camera_change()))
 	currently_tracking.register_event(/event/camera_sight_changed,src,nameof(src::on_camera_change()))
 	to_chat(src, "Now tracking [currently_tracking.name] on camera.")
 
@@ -219,7 +219,7 @@
 		currently_tracking.unregister_event(/event/after_move,src,nameof(src::on_camera_change()))
 		currently_tracking.unregister_event(/event/destroyed,src,nameof(src::stop_ai_tracking()))
 		currently_tracking.unregister_event(/event/equipped,src,nameof(src::on_camera_change()))
-		//currently_tracking.unregister_event(/event/unequipped,src,nameof(src::on_camera_change()))
+		currently_tracking.unregister_event(/event/unequipped,src,nameof(src::on_camera_change()))
 		currently_tracking.unregister_event(/event/camera_sight_changed,src,nameof(src::on_camera_change()))
 		if(eyeobj?.locked_to == currently_tracking)
 			eyeobj.unlock_from()
