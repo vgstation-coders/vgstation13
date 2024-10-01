@@ -290,7 +290,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		newlist["[M.name]"] = M
 	return newlist
 
-/obj/machinery/hologram/holopad/proc/clear_holo()
+/obj/machinery/hologram/holopad/proc/clear_holo(var/delete_holo = TRUE)
 	var/mob/camera/aiEye/eye = master
 	var/mob/living/silicon/ai/AI = istype(eye) ? eye.ai : master
 	if(istype(AI) && AI.holopadoverlays.len)
@@ -311,7 +311,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		master = null //Null the master, since no-one is using it now.
 	advancedholo = FALSE
 	QDEL_NULL(ray)
-	if(holo)
+	if(delete_holo && holo)
 		var/obj/effect/overlay/hologram/H = holo
 		visible_message("<span class='warning'>The image of [holo] fades away.</span>")
 		holo = null
