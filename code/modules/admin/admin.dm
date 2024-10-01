@@ -76,6 +76,7 @@ var/global/floorIsLava = 0
 
 	if(M.client)
 		body += "| <A HREF='?src=\ref[src];sendtoprison=\ref[M]'>Prison</A> | "
+		body += "\ <A href='?src=\ref[src];sendbacktolobby=\ref[M]'>Send back to Lobby</A> | "
 		var/muted = M.client.prefs.muted
 		body += {"<br><b>Mute: </b>
 			\[<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_IC]'><font color='[(muted & MUTE_IC)?"red":"blue"]'>IC</font></a> |
@@ -821,45 +822,29 @@ var/global/floorIsLava = 0
 			<BR>
 			"}
 
-
+	/*Anything on this list should have a justifcation to be its own button instead of just the pickevent
+	Parenthesis usually specify the feature that makes this different than just spawning the event
+	Bus Only are events that don't trigger on their own, or were never actually made into event datums
+	*/
 	if(check_rights(R_FUN,0))
 		dat += {"
-			<B>'Random' Events</B><BR>
+			<B>Dynamic Events</B><BR>
+			<a href='?src=\ref[src];secretsfun=pick_event'>Pick a specific Dynamic Event</A><BR>
+			<a href='?src=\ref[src];secretsfun=roll_event'>Roll a random Dynamic Event</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=wave'>Spawn a wave of meteors (aka lagocolyptic shower)</A><BR>
-			<A href='?src=\ref[src];secretsfun=silent_meteors'>Spawn a wave of meteors with no warning</A><BR>
+			<A href='?src=\ref[src];secretsfun=vermin_infestation'>Vermin infestation (specify type and location)</A><BR>
+			<A href='?src=\ref[src];secretsfun=hostile_infestation'>Monster infestation (specify type and location)</A><BR>
+			<A href='?src=\ref[src];secretsfun=virus'>Virus Outbreak (lesser, greater, or custom)</A><BR>
+			<A href='?src=\ref[src];secretsfun=comms_blackout'>Communications blackout (silent or announced)</A><BR>
+			<A href='?src=\ref[src];secretsfun=breaklink'>Break the station's link with Central Command (indefinitely)</A><BR>
+			<A href='?src=\ref[src];secretsfun=makelink'>Fix the station's link with Central Command</A><BR>
+			<BR>
+			<B>Bus-Only Events</B>
+			<BR>
 			<A href='?src=\ref[src];secretsfun=gravity'>Toggle station artificial gravity</A><BR>
 			<A href='?src=\ref[src];secretsfun=gravanomalies'>Spawn a gravitational anomaly (aka lagitational anomolag)</A><BR>
 			<A href='?src=\ref[src];secretsfun=timeanomalies'>Spawn wormholes</A><BR>
-			<A href='?src=\ref[src];secretsfun=immovable'>Spawn an Immovable Rod</A><BR>
-			<A href='?src=\ref[src];secretsfun=immovablebig'>Spawn an Immovable Pillar</A><BR>
-			<A href='?src=\ref[src];secretsfun=immovablehyper'>Spawn an Immovable Monolith (highly destructive!)</A><BR>
-			<A href='?src=\ref[src];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
-			<A href='?src=\ref[src];secretsfun=fireworks'>Send some fireworks at the station</A><BR>
-			<A href='?src=\ref[src];secretsfun=old_vendotron_crash'>Launch an old vendotron at the station</A><BR>
-			<A href='?src=\ref[src];secretsfun=old_vendotron_teleport'>Teleport an old vendotron onto the station</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=blobwave'>Spawn a blob cluster</A><BR>
-			<A href='?src=\ref[src];secretsfun=aliens'>Trigger an Alien infestation</A><BR>
-			<A href='?src=\ref[src];secretsfun=alien_silent'>Spawn an Alien silently</A><BR>
-			<A href='?src=\ref[src];secretsfun=spiders'>Trigger a Spider infestation</A><BR>
-			<A href='?src=\ref[src];secretsfun=vermin_infestation'>Spawn a vermin infestation</A><BR>
-			<A href='?src=\ref[src];secretsfun=hostile_infestation'>Spawn a hostile creature infestation</A><BR>
-			<A href='?src=\ref[src];secretsfun=carp'>Trigger a Carp migration</A><BR>
-			<A href='?src=\ref[src];secretsfun=mobswarm'>Trigger mobs of your choice appearing out of thin air</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=spacevines'>Spawn Space-Vines</A><BR>
-			<A href='?src=\ref[src];secretsfun=radiation'>Irradiate the station</A><BR>
-			<A href='?src=\ref[src];secretsfun=virus'>Trigger a Virus Outbreak</A><BR>
-			<A href='?src=\ref[src];secretsfun=mass_hallucination'>Cause the crew to hallucinate</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=lightsout'>Trigger an Electrical Storm (breaks some lights)</A><BR>
-			<A href='?src=\ref[src];secretsfun=prison_break'>Trigger a Prison Break</A><BR>
-			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
-			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
-			<A href='?src=\ref[src];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
-			<A href='?src=\ref[src];secretsfun=money_lotto'>Start a lotto draw</A><BR>
-			<a href='?src=\ref[src];secretsfun=pick_event'>Pick a random event from all possible random events (WARNING, NOT ALL ARE GUARANTEED TO WORK).</A><BR>
+			<A href='?src=\ref[src];secretsfun=mobswarm'>Any mob infestation (specify type only)</A><BR>
 			<BR>
 			<B>Fun Secrets</B><BR>
 			<BR>
@@ -868,6 +853,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode (removes access on doors except for Command and Security)</A><BR>
 			<A href='?src=\ref[src];secretsfun=RandomizedLawset'>Give the AIs a randomly generated Lawset.</A><BR>
 			<A href='?src=\ref[src];secretsfun=buddha_mode_everyone'>Toggle Buddha Mode on/off for everyone</A><BR>
+			<A href='?src=\ref[src];secretsfun=spawn_custom_turret'>Spawn a customizable turret</A><BR>
+			<A href='?src=\ref[src];secretsfun=spawn_meat_blob'>Spawn a Meat Blob</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=power'>Make all areas powered</A><BR>
 			<A href='?src=\ref[src];secretsfun=unpower'>Make all areas unpowered</A><BR>
@@ -876,8 +863,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=makelink'>Fix the station's link with Central Command</A><BR>
 			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
-			<A href='?src=\ref[src];secretsfun=switchoff'>Flip all (ALL Z-LEVELS) light switches to off (Lags briefly)</A><BR>
-			<A href='?src=\ref[src];secretsfun=switchon'>Flip all (ALL Z-LEVELS) light switches to on (Lags briefly)</A><BR>
+			<A href='?src=\ref[src];secretsfun=switchoff'>Flip all (ALL Z-LEVELS) light switches to off</A><BR>
+			<A href='?src=\ref[src];secretsfun=switchon'>Flip all (ALL Z-LEVELS) light switches to on</A><BR>
 			<A href='?src=\ref[src];secretsfun=create_artifact'>Create custom artifact</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=athfthrowing'>Toggle thrown items exploding on stop</A><BR>
@@ -885,6 +872,7 @@ var/global/floorIsLava = 0
 			<BR>
 			<A href='?src=\ref[src];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
 			<A href='?src=\ref[src];secretsfun=fakebooms'>Create fake explosions around the station</A><BR>
+			<A href='?src=\ref[src];secretsfun=fakenews'>Create a preset news announcement</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
 			<A href='?src=\ref[src];secretsfun=virusdish'>Create a new virus in a dish</A><BR>
@@ -896,6 +884,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=flicklights'>Ghost Mode</A><BR>
 			<A href='?src=\ref[src];secretsfun=monkey'>Turn all humans into monkeys</A><BR>
 			<BR>
+			<A href='?src=\ref[src];secretsfun=mass_equip_outfit'>Equip outfit on all player humans</A><BR>
 			<A href='?src=\ref[src];secretsfun=sec_all_clothes'>Remove ALL clothing</A><BR>
 			<A href='?src=\ref[src];secretsfun=retardify'>Make all players retarded</A><BR>
 			<A href='?src=\ref[src];secretsfun=fakeguns'>Make all items look like guns (traitor revolvers)</A><BR>
@@ -914,6 +903,11 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environment (default)</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=mechanics_motivator'>Incentivize Mechanics to do their job</A><BR>
+			<BR>
+			<B>Major Station Transformations</B><BR>
+			<A href='?src=\ref[src];secretsfun=naturify'>Return the station to nature</A><BR>
+			<A href='?src=\ref[src];secretsfun=christmas_vic'>Make the station christmasy</A><BR>
+			<BR>
 			<B>Final Solutions</B><BR>
 			<I>(Warning, these will end the round!)</I><BR>
 			<BR>
@@ -921,7 +915,6 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=supermattercascade'>Start a Supermatter Cascade</A><BR>
 			<A href='?src=\ref[src];secretsfun=meteorstorm'>Trigger an undending Meteor Storm</A><BR>
 			<A href='?src=\ref[src];secretsfun=halloween'>Trigger the blood moon</A><BR>
-			<A href='?src=\ref[src];secretsfun=christmas_vic'>Make the station christmasy</A><BR>
 			"}
 
 	if(check_rights(R_SERVER,0))
@@ -1019,8 +1012,6 @@ var/global/floorIsLava = 0
 
 		if(blackbox)
 			blackbox.save_all_data_to_sql()
-
-		CallHook("Reboot",list())
 
 		if (watchdog.waiting)
 			to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in a few seconds.</B></span>")
@@ -1256,8 +1247,6 @@ var/global/floorIsLava = 0
 	if(blackbox)
 		blackbox.save_all_data_to_sql()
 
-	CallHook("Reboot",list())
-
 	if (watchdog.waiting)
 		to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in a few seconds.</B></span>")
 		watchdog.signal_ready()
@@ -1331,7 +1320,7 @@ var/global/floorIsLava = 0
 
 		object = copytext(object, 1, variables_start)
 
-	var/chosen = filter_list_input("Select an atom type", "Spawn Atom", get_matching_types(object, /atom))
+	var/chosen = filter_typelist_input("Select an atom type", "Spawn Atom", get_matching_types(object, /atom))
 	if(!chosen)
 		return
 	var/atom/location = usr.loc

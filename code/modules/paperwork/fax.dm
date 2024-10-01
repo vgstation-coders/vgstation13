@@ -55,6 +55,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 
 /obj/machinery/faxmachine/verb/remove_id()
 	set name = "Remove ID from the fax machine"
+	set category = "Object"
 	set src in view(1)
 	if(scan && ishuman(usr))
 		usr.put_in_hands(scan)
@@ -62,6 +63,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 
 /obj/machinery/faxmachine/verb/remove_paper()
 	set name = "Remove fax material from the fax machine"
+	set category = "Object"
 	set src in view(1)
 	if(tofax && ishuman(usr))
 		usr.put_in_hands(tofax)
@@ -170,22 +172,16 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 
 	if(href_list["remove"])
 		if(tofax)
-			tofax.forceMove(loc)
-			if(Adjacent(usr))
-				usr.put_in_hands(tofax)
+			usr.put_in_hands(tofax)
 			to_chat(usr, "<span class='notice'>You take the paper out of \the [src].</span>")
 			tofax = null
 
 	if(href_list["scan"])
 		if (scan)
-			if(ishuman(usr))
-				scan.forceMove(usr.loc)
-				if(!usr.get_active_hand())
-					usr.put_in_hands(scan)
-				scan = null
-			else
-				scan.forceMove(src.loc)
-				scan = null
+			scan.forceMove(src.loc)
+			if(ishuman(usr) && !usr.get_active_hand())
+				usr.put_in_hands(scan)
+			scan = null
 		else
 			var/obj/item/I = usr.get_active_hand()
 			if (istype(I, /obj/item/weapon/card/id))

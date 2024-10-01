@@ -283,7 +283,7 @@ var/list/meteor_warnings = list()
 	name = "small meteor"
 	desc = "The mineral version of armed C4, coming right for your walls."
 	icon_state = "small"
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 
 /obj/item/projectile/meteor/small/to_bump(atom/A)
 	if(loc == null)
@@ -572,9 +572,9 @@ var/list/blob_candidates = list()
 	log_admin("Blob core meteor impacted at [formatJumpTo(T)] controlled by [key_name(blob_candidate)].")
 	message_admins("Blob core meteor impacted at [formatJumpTo(T)] controlled by [key_name(blob_candidate)].")
 	if(blob_candidate && istype(blob_candidate.mob, /mob/dead/observer))
-		new/obj/effect/blob/core(T, new_overmind = blob_candidate, no_morph = 1)
+		new/obj/effect/blob/core(T, new_overmind = blob_candidate, no_morph = 1, new_rate = 4)
 	else
-		new/obj/effect/blob/core(T, no_morph = 1)
+		new/obj/effect/blob/core(T, no_morph = 1, new_rate = 4)
 	blob_candidate = null
 
 //It's a tool to debug and test stuff, ok? Pls don't hand them out to players unless you just want to set the world on fire.

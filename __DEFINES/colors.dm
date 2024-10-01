@@ -9,3 +9,15 @@
 
 #define DYNAMIC_TEXT_COLOR_V_MIN 60 //Dynamically-colored text such as that describing blood-stains will have its HSV V brightness clamped to between these.
 #define DYNAMIC_TEXT_COLOR_V_MAX 200
+
+#define COLOR_WHITE "#FFFFFF"
+#define COLOR_LINEN "#E5E4DC"
+#define COLOR_RADIUM "#61F09A"
+#define COLOR_GLUE "#FFFFCC"
+#define COLOR_BEESWAX "#FFB700"
+#define COLOR_DEFAULT_CANDLE "#BE0000"
+#define COLOR_RED "#FF0000"
+#define COLOR_GREEN "#00FF00"
+#define COLOR_BLUE "#0000FF"
+
+#define COLOR_MATRIX_ADD(color) list(COLOR_RED, COLOR_GREEN, COLOR_BLUE, color)

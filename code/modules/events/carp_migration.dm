@@ -4,7 +4,7 @@
 	var/list/spawned_carp = list()
 
 /datum/event/carp_migration/can_start(var/list/active_with_role)
-	if(active_with_role.len > 6)
+	if(active_with_role["Any"] > 6)
 		return 40
 	return 0
 

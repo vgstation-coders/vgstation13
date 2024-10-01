@@ -58,7 +58,7 @@
 						hookshot.rewind_chain()
 				bullet_die()
 
-		sleep(sleeptime)
+		sleep(sleeptime * projectile_speed)
 
 /obj/item/projectile/hookshot/proc/drop_item()	//fleshshot only
 	return
@@ -85,6 +85,8 @@
 	bumped = 1
 
 	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+	if(!hookshot) /* Can happen with hookshots if it doesn't have shot_from assigned for one reason or another. Probably something to do with hostage-taking? */
+		return
 	spawn()
 		if(!can_tether)
 			..(A)
@@ -178,6 +180,7 @@
 	sharpness = 1.2
 	failure_message = "Your hand slips and the whip falls loose..."
 	can_tether = FALSE
+	projectile_speed = 0.33
 	var/whipitgood_bonus = 5
 
 /obj/item/projectile/hookshot/whip/on_hit(var/atom/atarget, var/blocked = 0)

@@ -117,7 +117,6 @@ var/list/holopads = list()
 	/*There are pretty much only three ways to interact here.
 	I don't need to check for client since they're clicking on an object.
 	This may change in the future but for now will suffice.*/
-	user.cameraFollow = null // Stops tracking
 
 	if(master && (master==user) && holo)//If there is a hologram, remove it. But only if the user is the master. Otherwise do nothing.
 		clear_holo()
@@ -219,6 +218,29 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 	return 1
 
+/obj/machinery/hologram/holopad/proc/transfer_holo(mob/living/silicon/ai/A, obj/effect/overlay/hologram/transferred_holo)
+	ray = new(loc)
+	holo = transferred_holo
+
+	set_light(2, 0, A.holocolor)
+	icon_state = "holopad1"
+
+	var/icon/colored_ray = getFlatIcon(ray)
+	colored_ray.ColorTone(A.holocolor)
+	ray.icon = colored_ray
+
+	A.current = src
+	master = A
+	use_power = MACHINE_POWER_USE_ACTIVE
+	holo.set_glide_size(DELAY2GLIDESIZE(1))
+	move_hologram()
+	if(A && A.holopadoverlays.len)
+		for(var/image/ol in A.holopadoverlays)
+			if(ol.loc == src)
+				ol.icon_state = "holopad1"
+				break
+	return 1
+
 /obj/machinery/hologram/holopad/proc/create_advanced_holo(var/mob/living/silicon/ai/A)
 	if(stat & (FORCEDISABLE|NOPOWER))
 		return
@@ -275,7 +297,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		master = null //Null the master, since no-one is using it now.
 	advancedholo = FALSE
 	QDEL_NULL(ray)
-	if(holo)
+	if(delete_holo && holo)
 		var/obj/effect/overlay/hologram/H = holo
 		visible_message("<span class='warning'>The image of [holo] fades away.</span>")
 		holo = null
@@ -342,7 +364,14 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			if(ray)
 				project_ray(holo,ray,old)
 		else
-			clear_holo()
+			var/transferred = FALSE
+			for(var/obj/machinery/hologram/holopad/other_holopad in range(holo_range, master.eyeobj.loc))
+				if(other_holopad != src && other_holopad.transfer_ai(src))
+					transferred = TRUE
+					break
+			if(!transferred)
+				clear_holo()
+
 	return 1
 
 /obj/machinery/hologram/holopad/proc/project_ray(var/atom/movable/target,var/obj/effect/overlay/targetray,var/turf/oldLoc)

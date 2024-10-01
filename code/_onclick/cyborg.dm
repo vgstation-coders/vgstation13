@@ -18,6 +18,8 @@
 	if(incapacitated() || lockdown)
 		return
 
+	var/obj/item/W = get_active_hand()
+
 	var/list/modifiers = params2list(params)
 	if(modifiers["middle"] && modifiers["shift"])
 		MiddleShiftClickOn(A)
@@ -29,6 +31,8 @@
 		ShiftClickOn(A)
 		return
 	if(modifiers["alt"]) // alt and alt-gr (rightalt)
+		if (W && W.AltFrom(A,src,A.Adjacent(src, MAX_ITEM_DEPTH),params))
+			return
 		AltClickOn(A)
 		return
 	if(modifiers["ctrl"])
@@ -49,8 +53,6 @@
 
 	if(INVOKE_EVENT(src, /event/uattack, "atom" = A))
 		return
-
-	var/obj/item/W = get_active_hand()
 
 	// Cyborgs have no range-checking unless there is item use
 	if(!W)

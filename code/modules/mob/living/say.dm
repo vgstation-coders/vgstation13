@@ -124,7 +124,7 @@ var/list/headset_modes = list(
 
 	//Muting
 	var/turf/T = get_turf(src)
-	if(T.mute_time > world.time)
+	if(T && T.mute_time > world.time)
 		return
 
 	var/message_mode = get_message_mode(message)
@@ -216,8 +216,9 @@ var/list/headset_modes = list(
 			if(findtext(speech.message, syn))
 				score.syndisponses += 1
 
-	var/message_range = 7
-	treat_speech(speech)
+	var/message_range = SPEECH_RANGE
+	if(!isDead()) //Dead players can still talk from dead bodies and it would be inconvenient to have these.
+		treat_speech(speech)
 	if(!speech.message)
 		qdel(speech)
 		return
@@ -446,8 +447,14 @@ var/list/headset_modes = list(
 				var/mob/living/L = speech.speaker
 				var/themessage
 				var/datum/role/cultist/C = iscultist(L)
-				if (C && (C.cultist_role == CULTIST_ROLE_MENTOR))
-					themessage = text("<span class='sinisterbig'><b>[]:</b> []</span>",src.name,html_encode(speech.message))//mentor messages are bigger
+				if (C)
+					switch (C.cultist_role)
+						if (CULTIST_ROLE_MENTOR)
+							themessage = text("<span class='sinistermentor'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
+						if (CULTIST_ROLE_ACOLYTE)
+							themessage = text("<span class='sinisteracolyte'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
+						else
+							themessage = text("<span class='sinister'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
 				else
 					themessage = text("<span class='sinister'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
 				for(var/mob/M in player_list)
@@ -513,16 +520,25 @@ var/list/headset_modes = list(
 			I.affect_speech(speech, src)
 
 	if(getBrainLoss() >= 60)
-		speech.message = derpspeech(speech.message, stuttering)
+		if(braindamagespeechcooldown)
+			speech.message = null
+			emote("gibber")
+		else
+			braindamagespeechcooldown = TRUE
+			speech.message = derpspeech(speech.message, stuttering)
+			spawn(1 SECONDS)
+			braindamagespeechcooldown = FALSE
 
 	if(stuttering || (undergoing_hypothermia() == MODERATE_HYPOTHERMIA && prob(25)) )
 		speech.message = stutter(speech.message)
 
-	if(reagents && reagents.has_any_reagents(HYPERZINES))
-		speech.message = replacetext(speech.message," ","") // motor mouth
-		speech.message = replacetext(speech.message,",","") // motor mouth
-		speech.message = replacetext(speech.message,";","") // motor mouth
-		speech.message = replacetext(speech.message,"-","") // motor mouth
+	if (reagents)
+		var/datum/reagent/hyperzine/H = reagents.get_reagent_by_type(/datum/reagent/hyperzine)//also checks for hyperzine subtypes like cocaine etc
+		if (H && (H.data != "no motor mouth"))
+			speech.message = replacetext(speech.message," ","") // motor mouth
+			speech.message = replacetext(speech.message,",","") // motor mouth
+			speech.message = replacetext(speech.message,";","") // motor mouth
+			speech.message = replacetext(speech.message,"-","") // motor mouth
 
 	for(var/obj/item/weapon/implant/vocal/VI in src)
 		if(VI.imp_in == src)
@@ -726,7 +742,8 @@ var/list/headset_modes = list(
 	var/critical = InCritical()
 
 	log_whisper("[key_name(src)] ([formatLocation(src)]): [message]")
-	treat_speech(speech)
+	if(!isDead())
+		treat_speech(speech)
 	if(!speech.message)
 		qdel(speech)
 		return
@@ -741,7 +758,8 @@ var/list/headset_modes = list(
 		speech.mode= SPEECH_MODE_FINAL
 		whispers = "whispers with their final breath"
 		said_last_words = src.stat
-	treat_speech(speech)
+	if(!isDead())
+		treat_speech(speech)
 	if(!speech.message)
 		qdel(speech)
 		return

@@ -85,6 +85,8 @@ var/station_name = null
 var/game_version = "veegee"
 var/changelog_hash = ""
 var/game_year = (text2num(time2text(world.realtime, "YYYY")) + 544)
+var/time_taken_to_init = 0
+var/roundstart_timestamp = 0
 
 var/going = 1.0
 var/master_mode = "extended"//"extended"
@@ -317,7 +319,9 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
 		/mob/living/simple_animal/hostile/bunnybot,						// See viscerator
 		/mob/living/carbon/human/NPC,									// Unfinished, with its own AI that conflicts with player movements.
-		/mob/living/simple_animal/hostile/pulse_demon/					// Your motherfucking life ends in 0 seconds.
+		/mob/living/simple_animal/hostile/pulse_demon,					// Your motherfucking life ends in 0 seconds.
+		/mob/living/simple_animal/hostile/pulse_demon/maxedout,			// Admin testing mob, do not ever spawn otherwise.
+		/mob/living/simple_animal/hostile/slime,						// Instantly kills player and destroys the MC.
 		)
 
 //Boss monster list
@@ -400,3 +404,6 @@ var/list/machinery_rating_cache = list() // list of type path -> number
 
 var/runescape_pvp = FALSE
 var/runescape_skull_display = FALSE
+
+//Custom Harm Alarm lines
+var/global/harm_alarm_line = fexists("config/custom_lines.txt") ? pick(file2list("config/custom_lines.txt")) : "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZT"

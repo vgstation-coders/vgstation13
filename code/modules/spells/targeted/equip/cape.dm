@@ -19,7 +19,7 @@
 
 	override_base = "vamp"
 
-	compatible_mobs = list(/mob/living/carbon/human)
+	valid_targets = list(/mob/living/carbon/human)
 	equipped_summons = list(SLOT_WEAR_SUIT_STR = /obj/item/clothing/suit/storage/draculacoat)
 
 	hud_state = "vamp_coat"

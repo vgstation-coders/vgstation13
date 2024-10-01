@@ -35,8 +35,8 @@
 	holomap_offset_x = list(96,0,0,96,0,88,0,)
 	holomap_offset_y = list(96,0,0,96,0,108,0,)
 
-	center_x = 150
-	center_y = 150
+	center_x = 162
+	center_y = 159
 
 	snow_theme = TRUE
 	can_enlarge = FALSE

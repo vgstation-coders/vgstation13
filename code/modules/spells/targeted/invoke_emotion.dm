@@ -14,7 +14,7 @@ var/global/list/invoked_emotions = list()
 	range = 9
 	charge_max = 150
 	cooldown_min = 10
-	compatible_mobs = list(/mob/living/carbon)
+	valid_targets = list(/mob/living/carbon)
 	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0, Sp_MOVE = 0)
 	level_max = list(Sp_TOTAL = 7, Sp_SPEED = 1, Sp_POWER = 5, Sp_MOVE = 1)
 
@@ -60,12 +60,15 @@ var/global/list/invoked_emotions = list()
 
 /spell/targeted/invoke_emotion/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
-			return "Nearly removes the cooldown of the spell."
 		if(Sp_POWER)
+			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+				return "The invoked paper annoys the target as much as it can!"
 			return "Invoked paper is more likely to cut, or otherwise curse, the target."
 		if(Sp_MOVE)
+			if(spell_levels[Sp_MOVE] >= level_max[Sp_MOVE])
+				return "The invoked emotions can already place themselves in their target's hand!"
 			return "Invoked emotions have a chance to place themselves in their target's hand."
+	return ..()
 
 /obj/item/weapon/pen/invoked_quill
 	name = "invoked quill"
@@ -80,7 +83,7 @@ var/global/list/invoked_emotions = list()
 /obj/item/weapon/paper/emotion_invoker
 	name = "emotion invoker"
 	desc = "A cursed sheet of paper designed to transfer or create powerful emotions. Seeks out its target after being thrown."
-	fire_fuel = 0	//Covering my bases on potential infinite fire bugs
+
 	throw_range = 6
 	var/mob/living/curseTarget = null
 	var/isActive = FALSE

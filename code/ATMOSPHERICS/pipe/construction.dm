@@ -43,6 +43,7 @@ Buildable meters
 #define PIPE_Z_DOWN				36
 #define PIPE_MPVALVE			37
 #define PIPE_DPVALVE			38
+#define PIPE_BSCAP              39
 
 //Disposal piping numbers - do NOT hardcode these, use the defines
 #define DISP_PIPE_STRAIGHT		0
@@ -74,6 +75,8 @@ var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION,
 	flags = FPRINT
 	w_class = W_CLASS_MEDIUM
 	level = 2
+	var/frequency = 0
+	var/id_tag = null
 
 	var/piping_layer = PIPING_LAYER_DEFAULT
 
@@ -100,8 +103,12 @@ var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION,
 	qdel(src)
 	return 2
 var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
-/obj/item/pipe/New(var/loc, var/pipe_type as num, var/dir as num, var/obj/machinery/atmospherics/make_from = null)
+/obj/item/pipe/New(var/loc, var/pipe_type as num, var/dir as num, var/obj/machinery/atmospherics/make_from = null, freq, id)
 	..()
+	if (freq)
+		frequency = freq
+	if (id)
+		id_tag = id
 	if (make_from)
 		src.dir = make_from.dir
 		src.pipename = make_from.name
@@ -171,6 +178,8 @@ var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 				src.pipe_type = PIPE_INSUL_MANIFOLD4W
 			else
 				src.pipe_type = PIPE_MANIFOLD4W
+		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap/bluespace))
+			src.pipe_type = PIPE_BSCAP
 		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap/heat))
 			src.pipe_type = PIPE_HE_CAP
 		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap))
@@ -196,10 +205,17 @@ var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 	else
 		src.pipe_type = pipe_type
 		src.dir = dir
+	if(src.pipe_type == PIPE_BSCAP)
+		src.w_class = W_CLASS_LARGE
+		bspipe_item_list.Add(src)
 	//src.pipe_dir = get_pipe_dir()
 	update()
 //	src.pixel_x = rand(-5, 5)
 //	src.pixel_y = rand(-5, 5)
+
+/obj/item/pipe/Destroy()
+	bspipe_item_list.Remove(src)
+	..()
 
 /obj/item/pipe/proc/setPipingLayer(new_layer = PIPING_LAYER_DEFAULT)
 	piping_layer = new_layer
@@ -249,7 +265,8 @@ var/global/list/pipeID2State = list(
 	"z_up",
 	"z_down",
 	"mpvalve",
-	"dpvalve"
+	"dpvalve",
+	"bscap"
 )
 var/global/list/nlist = list( \
 	"pipe", \
@@ -291,6 +308,7 @@ var/global/list/nlist = list( \
 	"down pipe", \
 	"manual conditional valve", \
 	"digital conditional valve", \
+	"bluespace pipe cap", \
 )
 /obj/item/pipe/proc/update()
 
@@ -377,7 +395,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 			return flip|cw|acw
 		if(PIPE_GAS_FILTER, PIPE_GAS_MIXER,PIPE_MTVALVE,PIPE_DTVALVE,PIPE_MPVALVE,PIPE_DPVALVE)
 			return dir|flip|cw
-		if(PIPE_CAP, PIPE_HE_CAP, PIPE_Z_UP, PIPE_Z_DOWN)
+		if(PIPE_CAP, PIPE_HE_CAP, PIPE_BSCAP, PIPE_Z_UP, PIPE_Z_DOWN)
 			return dir
 	return 0
 
@@ -503,6 +521,9 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 
 		if(PIPE_HE_CAP)
 			P=new /obj/machinery/atmospherics/unary/cap/heat(src.loc)
+			
+		if(PIPE_BSCAP)
+			P=new /obj/machinery/atmospherics/unary/cap/bluespace(src.loc)
 
 		if(PIPE_PASSIVE_GATE)		//passive gate
 			P=new /obj/machinery/atmospherics/binary/passive_gate(src.loc)
@@ -581,8 +602,17 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	item_state = "buildpipe"
 	flags = FPRINT
 	w_class = W_CLASS_LARGE
+	var/frequency = 1439
+	var/id_tag = null
 
 	var/layer_to_make = PIPING_LAYER_DEFAULT
+	
+/obj/item/pipe_meter/New(loc, freq, id)
+	..()
+	if(freq)
+		frequency = freq
+	if(id)
+		id_tag = id
 
 /obj/item/pipe_meter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	..()
@@ -597,7 +627,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	if(!pipe)
 		to_chat(user, "<span class='warning'>You need to fasten it to a pipe.</span>")
 		return 1
-	new/obj/machinery/meter(src.loc, pipe)
+	new/obj/machinery/meter(src.loc, pipe, frequency, id_tag)
 	W.playtoolsound(src, 50)
 	to_chat(user, "<span class='notice'>You have fastened the meter to the pipe.</span>")
 	qdel(src)
@@ -620,12 +650,21 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	item_state = "buildpipe"
 	flags = FPRINT
 	w_class = W_CLASS_LARGE
+	var/frequency = 1439
+	var/id_tag = null
+	
+/obj/item/pipe_gsensor/New(loc, freq, id)
+	..()
+	if(freq)
+		frequency = freq
+	if(id)
+		id_tag = id
 
 /obj/item/pipe_gsensor/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	..()
 	if(!W.is_wrench(user))
 		return ..()
-	new/obj/machinery/air_sensor( src.loc )
+	new/obj/machinery/air_sensor( src.loc, frequency, id_tag )
 	W.playtoolsound(src, 50)
 	to_chat(user, "<span class='notice'>You have fastened the gas sensor.</span>")
 	qdel(src)

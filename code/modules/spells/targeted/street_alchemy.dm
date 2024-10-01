@@ -57,16 +57,21 @@
 
 /spell/targeted/alchemy/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
-			return
 		if(Sp_POWER)
+			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+				return "Thrown elixirs can already transfer their contents into living targets!"
 			return "Thrown elixirs transfer their contents into living targets."
 		if(Sp_RANGE)
+			if(spell_levels[Sp_RANGE] >= level_max[Sp_RANGE])
+				return "This spell already steals as many reagents as it can from an area!"
 			if(spell_levels[Sp_RANGE] >= 21)
 				return "You will now steal all reagents in an area."
 			return "Pilfers from one more target per cast."
 		if(Sp_AMOUNT)
+			if(spell_levels[Sp_AMOUNT] >= level_max[Sp_AMOUNT])
+				return "You have already reached the limit of how many elixirs can exist at a time!"
 			return "The amount of alchemic elixirs that can exist at a time."
+	return ..()
 
 /spell/targeted/alchemy/cast(list/targets, mob/user)
 	for(var/target in targets)

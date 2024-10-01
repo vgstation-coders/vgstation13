@@ -171,7 +171,16 @@
 		else
 			to_chat(user, "The hatch must be open to insert a power cell.")
 			return
-	return
+
+/obj/machinery/space_heater/campfire/proc/addWood(obj/item/stack/sheet/wood/woody, mob/living/user)
+	var/woodnumber = input(user, "You may add a maximum of four planks.", "How much wood would you like to add to \the [src]?", 0) as num
+	if (woodnumber)
+		woodnumber = clamp(woodnumber, 0, min(woody.amount, 4))
+		woody.use(woodnumber)
+		user.visible_message("<span class='notice'>[user] adds some wood to \the [src].</span>", "<span class='notice'>You add some wood to \the [src].</span>")
+		cell.charge = min(cell.charge+woodnumber*250,cell.maxcharge)
+		update_icon()
+		return woodnumber
 
 /obj/machinery/space_heater/campfire/attackby(obj/item/I, mob/living/user)
 	..()
@@ -181,6 +190,9 @@
 	var/datum/gas_mixture/env = T.return_air()
 	if(env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME)
 		to_chat(user, "<span class='notice'>You try to light \the [name], but it won't catch on fire!")
+		return
+	if(istype(I, /obj/item/stack/sheet/wood))
+		addWood(I, user)
 		return
 	if(!on && cell.charge > 0)
 	//Items with special messages go first - yes, this is all stolen from cigarette code. sue me.
@@ -215,14 +227,6 @@
 		else if(I.is_hot())
 			light("<span class='notice'>[user] lights \the [name] with \the [I].</span>")
 		return
-	if(istype(I, /obj/item/stack/sheet/wood) && ((on)||(nocell == 2)))
-		var/woodnumber = input(user, "You may insert a maximum of four planks.", "How much wood would you like to add to \the [src]?", 0) as num
-		woodnumber = clamp(woodnumber,0,4)
-		var/obj/item/stack/sheet/wood/woody = I
-		woody.use(woodnumber)
-		user.visible_message("<span class='notice'>[user] adds some wood to \the [src].</span>", "<span class='notice'>You add some wood to \the [src].</span>")
-		cell.charge = min(cell.charge+woodnumber*250,cell.maxcharge)
-		update_icon()
 	if(on && istype(I,/obj/item/clothing/mask/cigarette))
 		var/obj/item/clothing/mask/cigarette/fag = I
 		fag.light("<span class='notice'>[user] lights \the [fag] using \the [src]'s flames.</span>")
@@ -234,10 +238,6 @@
 	T.visible_message(flavourtext)
 	on = 1
 	update_icon()
-
-/obj/machinery/space_heater/campfire/proc/snuff()
-	cell.charge = 0
-	process()
 
 /obj/machinery/space_heater/togglePanelOpen(var/obj/toggleitem, mob/user)
 	..()
@@ -393,8 +393,12 @@
 		playsound(src, pick(comfyfire), (cell.charge/250)*5, 1, -1,channel = 124)
 
 /obj/machinery/space_heater/campfire/proc/putOutFire()
-	new /obj/effect/decal/cleanable/campfire(get_turf(src))
-	qdel(src)
+	if (cell.charge)
+		on = 0
+		update_icon()
+	else
+		new /obj/effect/decal/cleanable/campfire(get_turf(src))
+		qdel(src)
 
 /obj/machinery/space_heater/campfire/stove/putOutFire()
 	if(on)
@@ -407,7 +411,7 @@
 	if(istype(user,/mob/living/carbon) && on)
 		var/mob/living/carbon/absolutemadman = user
 		absolutemadman.adjust_fire_stacks(1)
-		if(absolutemadman.IgniteMob())
+		if(absolutemadman.ignite())
 			absolutemadman.visible_message("<span class='danger'>[user] walks into \the [src], and is set alight!</span>", "<span class='danger'>You walk into \the [src], and are set alight!</span>")
 
 /obj/machinery/space_heater/campfire/stove/fireplace

@@ -15,15 +15,20 @@
 			return
 
 		var/list/turfs = list()
+		var/list/backup_turfs = list()
 		for(var/turf/T in A)
-			if(T.density)
-				continue
-			turfs.Add(T)
+			if(!T.density)
+				if(!T.has_dense_content())
+					turfs.Add(T)
+				else
+					backup_turfs.Add(T)
 
 		var/turf/T = pick_n_take(turfs)
 		if(!T)
-			to_chat(src, "Nowhere to jump to!")
-			return
+			T = pick_n_take(backup_turfs)
+			if(!T)
+				to_chat(src, "Nowhere to jump to!")
+				return
 		usr.unlock_from()
 		usr.teleport_to(T)
 

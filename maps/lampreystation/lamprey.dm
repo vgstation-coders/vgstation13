@@ -324,9 +324,7 @@
 	icon = 'icons/lamprey.dmi'
 	icon_state = "statuelock_underlay"
 	opacity = 0
-
-/turf/unsimulated/wall/statuelock/canSmoothWith()
-	return null
+	smooths = 0
 
 /turf/unsimulated/wall/statuelock/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/voxpearl))
@@ -347,7 +345,7 @@
 /obj/item/weapon/paper/lamprey
 	icon = 'icons/lamprey.dmi'
 	icon_state = "lampreynote"
-	fire_fuel = 0
+
 
 /obj/item/weapon/paper/lamprey/update_icon()
 	return 0
@@ -505,26 +503,13 @@
 		return
 	verbs -= /obj/item/allfruit/admin/verb/pick_leaf
 	switching = 0
-	var/N = rand(1,3)
 	if(get_turf(user))
-		switch(N)
-			if(1)
-				playsound(user, 'sound/weapons/genhit1.ogg', 50, 1)
-			if(2)
-				playsound(user, 'sound/weapons/genhit2.ogg', 50, 1)
-			if(3)
-				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
+		playsound(user, "sound/weapons/genhit[rand(1,3)].ogg", 50, 1)
 	if(W)
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
 	else
 		user.visible_message("[user] smacks \the [src].","You smack \the [src].")
-	if(src.loc == user)
-		user.drop_item(src, force_drop = 1)
-		var/I = new current_path(get_turf(user))
-		user.put_in_hands(I)
-	else
-		new current_path(get_turf(src))
-	qdel(src)
+	user.create_in_hands(src,current_path)
 
 /obj/item/allfruit/admin/pre_ticking/New() //Never spawn this.
 	..()

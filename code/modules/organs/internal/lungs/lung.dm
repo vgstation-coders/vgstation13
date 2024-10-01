@@ -42,28 +42,35 @@
 	breath.volume = inhale_volume
 	breath.update_values()
 
+	// Instantiate a variable to determine if we should show the player a toxins_alert
+	var/toxic_gas_detected = FALSE
+
 	// First, we consume air.
 	for(var/datum/lung_gas/G in gasses)
 		G.set_context(src,breath,H)
-		G.handle_inhale()
+		toxic_gas_detected |= G.handle_inhale()
 
 	// Next, we exhale. At the moment, only /datum/lung_gas/waste uses this.
 	for(var/datum/lung_gas/G in gasses)
 		G.set_context(src,breath,H)
 		G.handle_exhale()
 
+	// If no toxic gas detected, ensure toxins_alert is disabled
+	if(!toxic_gas_detected)
+		H.toxins_alert = 0
+
 	if( (abs(310.15 - breath.temperature) > 50) && !(M_RESIST_HEAT in H.mutations)) // Hot air hurts :(
 		if(H.status_flags & GODMODE)
 			return 1	//godmode
 		if(breath.temperature < H.species.cold_level_1)
 			if(prob(20))
-				H << "<span class='warning'>You feel your face freezing and an icicle forming in your lungs!</span>"
+				to_chat(H, "<span class='warning'>You feel your face freezing and an icicle forming in your lungs!</span>")
 		else if(breath.temperature > H.species.heat_level_1)
 			if(prob(20))
 				if(isslimeperson(H))
-					H << "<span class='warning'>You feel supercharged by the extreme heat!</span>"
+					to_chat(H, "<span class='warning'>You feel supercharged by the extreme heat!</span>")
 				else
-					H << "<span class='warning'>You feel your face burning and a searing heat in your lungs!</span>"
+					to_chat(H, "<span class='warning'>You feel your face burning and a searing heat in your lungs!</span>")
 
 		if(isslimeperson(H))
 			if(breath.temperature < H.species.cold_level_1)
@@ -125,6 +132,7 @@
 		new /datum/lung_gas/metabolizable(GAS_NITROGEN,          min_pp=16, max_pp=140),
 		new /datum/lung_gas/waste(GAS_CARBON,            max_pp=10), // I guess? Ideally it'd be some sort of nitrogen compound.  Maybe N2O?
 		new /datum/lung_gas/toxic(OXYGEN,                    max_pp=0.5, max_pp_mask=0, reagent_id=OXYGEN, reagent_mult=0.1),
+		new /datum/lung_gas/toxic(GAS_PLASMA,                    max_pp=0.5, max_pp_mask=5, reagent_id=PLASMA, reagent_mult=0.1),
 		new /datum/lung_gas/sleep_agent(GAS_SLEEPING, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
 	)
 

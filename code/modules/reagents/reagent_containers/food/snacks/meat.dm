@@ -74,15 +74,20 @@
 		return
 	..()
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/human/on_vending_machine_spawn()
+	reagents.chem_temp = FRIDGETEMP_FROZEN
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/diona
 	name = "leafy meat"
 	desc = "It's got an awful lot of protein for a vegetable."
 	icon_state = "diona_meat"
+	food_flags = FOOD_SKELETON_FRIENDLY
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat // Can also be used to make veggie burgers like normal diona meat.
 	name = "nymph meat"
 	desc = "A chunk of meat from a diona nymph. It looks dense and fibrous."
 	icon_state = "nymphmeat"
+	food_flags = FOOD_SKELETON_FRIENDLY
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/grey
 	name = "grey meat"
@@ -165,6 +170,9 @@
 	name = "imitation carp fillet"
 	desc = "Almost just like the real thing, kinda."
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/imitation/on_vending_machine_spawn()
+	reagents.chem_temp = FRIDGETEMP_FROZEN
+
 /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
 	name = "venomous spines"
 	desc = "The toxin-filled spines of a space carp."
@@ -227,6 +235,9 @@
 	reagents.add_reagent(ROACHSHELL, rand(2,6))
 	bitesize = 5
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach/on_vending_machine_spawn()
+	reagents.chem_temp = FRIDGETEMP_FROZEN
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
 	name = "mutated cockroach meat"
 	desc = "A chunk of meat from an above-average sized cockroach."
@@ -250,6 +261,26 @@
 	..()
 	reagents.add_reagent(FLOUR, rand(4,10))
 	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/big
+	name = "creatine cricket meat"
+	desc = "An oddly large slab of cricket meat. Tastes like nuts and protein. Very earthy and chewy."
+	icon_state = "bigroachmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/big/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(FLOUR, 32)
+	
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/king
+	name = "cricket king meat"
+	desc = "A royal bloodline was felled to make this. Tastes like regicide."
+	icon_state = "bigroachmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/king/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 25)
+	reagents.add_reagent(FLOUR, 75)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
 	name = "mimic meat"
@@ -488,6 +519,36 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		reagents.add_reagent(ROACHSHELL,1) //Sometimes a roach gets in. No nutritional value
 	//Total ranging from 18 to 57 nutrition. Normal meat provides 45.
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan/on_vending_machine_spawn()
+	reagents.chem_temp = FRIDGETEMP_FROZEN
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/blob
+	name = "blob meat"
+	desc = "A slab of glowing meat hacked off of a greater part. It has a spongy feel to it."
+	icon_state = "blob_meat"
+	origin_tech = Tc_BIOTECH + "=2"
+	throw_impact_sound = 'sound/effects/attackblob.ogg'
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/blob/New()
+	..()
+	reagents.add_reagent(BLOBANINE, 5)
+	reagents.add_reagent(NUTRIMENT, 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/blob/blob_act()
+	// Blobs ignore their own parts
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/blob/core
+	name = "blob core meat"
+	desc = "A piece of a blob's core. It pulsates wildly."
+	icon_state = "blob_core_meat"
+	origin_tech = Tc_BIOTECH + "=6"
+	throw_impact_sound = 'sound/effects/attackblob.ogg'
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/blob/core/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(BLOB_ESSENCE, 1)
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/scraps
 	name = "meat scraps"
 	desc = "Some leftover scraps of meat, probably trimmed off a bigger slab."
@@ -496,3 +557,36 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/scraps/New()
 	..()
 	reagents.remove_reagent(NUTRIMENT, 1) // A bit less nutriment
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/borer
+	name = "borer"
+	desc = "It's still twitching slightly."
+	icon_state = "slug0"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/mob_holders.dmi', "right_hand" = 'icons/mob/in-hand/right/mob_holders.dmi')
+	item_state = "borer"
+	crumb_icon = "dribbles"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/borer/New()
+	..()
+	reagents.add_reagent(GREYGOO, 1)
+	reagents.add_reagent(PERIDAXON, 1) //yes you will eat the slugs for their valuable nutrients
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/borer/after_consume(mob/user, datum/reagents/reagentreference)
+	..()
+	icon_state = "slug[min(bitecount,2)]"
+	if(bitecount == 1)
+		desc = pick("Whichever nerves were keeping it wriggling have been ripped off by now.", "It's a lot more foul smelling once you bite into it.", "There's some slimy substance leaking out of it.", "Was this really a good idea?")
+	else
+		desc = pick("There's barely anything left of it.", "It could have lived happily in your brain, you know.", "It was only here to help.", "Poor thing.", "You monster.", "At least it's nutritious.")
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/bullmeat
+	name = "carne de lidia"
+	desc = "En algunos lugares, la tauromaquia es incruenta. Aqui no."
+	icon_state = "bearmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/bullmeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(BICARIDINE, 5)
+	bitesize = 3

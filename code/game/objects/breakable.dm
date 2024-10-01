@@ -136,14 +136,7 @@
 
 /obj/item/transfer_obj_blood_data(obj/item/A, obj/item/B)
 	..()
-	if(!blood_overlays[B.type]) //If there isn't a precreated blood overlay make one
-		B.set_blood_overlay()
-	if(B.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
-		B.overlays.Remove(B.blood_overlay)
-	else
-		B.blood_overlay = blood_overlays["[B.type][B.icon_state]"]
-	B.blood_overlay.color = B.blood_color
-	B.overlays += B.blood_overlay
+	B.set_blood_overlay()
 
 /obj/proc/generate_break_text(glanced = FALSE, suppress_glance_text) //Generates text for when an object is hit.
 	if(glanced)
@@ -232,7 +225,7 @@
 		var/glanced=!take_damage(W.force, damage_type = W.damtype == BURN ? "energy" : "melee", skip_break = TRUE)
 		if(W.hitsound)
 			playsound(src, W.hitsound, 50, 1)
-		user.visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You [shift_verb_tense(pick(W.attack_verb))] \the [src] with \the [W][generate_break_text(glanced)]<span>")
+		user.visible_message("<span class='warning'>\The [user] [W.attack_verb?.len ? pick(W.attack_verb) : "attacks"] \the [src] with \the [W][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You [W.attack_verb?.len ? shift_verb_tense(pick(W.attack_verb)) : "attack"] \the [src] with \the [W][generate_break_text(glanced)]<span>")
 		try_break()
 		//Break the weapon as well, if applicable, based on its own force.
 		if(W.breakable_flags & BREAKABLE_AS_MELEE && W.damtype == BRUTE)
@@ -343,9 +336,9 @@
 		if(kicker.loc == loc)
 			kick_dir = kicker.dir
 		var/turf/T = get_edge_target_turf(loc, kick_dir)
-		var/kick_power = max((kicker.get_strength() * 10 - (get_total_scaled_w_class(2))), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
+		var/kick_power = get_kick_power(kicker)
 		var/thispropel = new /datum/throwparams(T, kick_power, 1)
-		if(kick_power < 6)
+		if(kick_power < 1)
 			kick_power = 0
 			thispropel = null
 		if(try_break(thispropel))

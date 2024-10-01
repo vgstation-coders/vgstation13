@@ -47,13 +47,16 @@
 				E = organ_name
 			else
 				E = get_organ(organ_name)
+			var/is_holding_cane = find_held_item_by_type(/obj/item/weapon/cane)
 			if(!E || (E.status & ORGAN_DESTROYED) || (E.status & ORGAN_PEG))
 				. += 2*multiplier
+				if(is_holding_cane)
+					. -= 1*multiplier //Halve the movement speed penalty
 			if(E.status & ORGAN_SPLINTED)
-				if(!find_held_item_by_type(/obj/item/weapon/cane))
+				if(!is_holding_cane)
 					. += 0.5*multiplier
 			else if(E.status & ORGAN_BROKEN)
-				if(!find_held_item_by_type(/obj/item/weapon/cane))
+				if(!is_holding_cane)
 					. += 1*multiplier
 				. += 0.5*multiplier
 
@@ -61,7 +64,7 @@
 /mob/living/carbon/human/movement_tally_multiplier()
 	. = ..()
 	if(!reagents.has_any_reagents(HYPERZINES))
-		if(!shoes)
+		if(!shoes && has_vulnerable_foot())
 			. *= NO_SHOES_SLOWDOWN
 	if(M_FAT in mutations) // hyperzine can't save you, fatty!
 		. *= 1.5

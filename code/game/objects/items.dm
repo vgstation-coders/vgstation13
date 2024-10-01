@@ -18,7 +18,7 @@
 	var/slot_flags = 0		//This is used to determine on which slots an item can fit.
 	var/clothing_flags = 0
 	var/obj/item/offhand/wielded = null
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	pressure_resistance = 5
 //	causeerrorheresoifixthis
 	var/obj/item/master = null//apparently used by device assemblies to track the object they are attached to.
@@ -87,8 +87,15 @@
 
 	var/is_cookvessel //If true, the item is a cooking vessel.
 
+	var/blocks_tracking = FALSE //Blocks mind and AI tracking
+
+	var/list/quick_equip_priority = list() //stuff to override the quick equip thing so it goes in this first
+
+	var/last_burn
+
 /obj/item/New()
 	..()
+
 	for(var/path in actions_types)
 		new path(src)
 
@@ -187,7 +194,7 @@
 			return SUICIDE_ACT_BRUTELOSS
 	else if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
-		user.IgniteMob()
+		user.ignite()
 		return SUICIDE_ACT_FIRELOSS
 	else if (force >= 10)
 		user.visible_message("<span class='danger'>[user] is bludgeoning \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
@@ -213,10 +220,17 @@
 	..()
 	qdel(src)
 
+/obj/item/proc/dye_act(var/obj/structure/reagent_dispensers/cauldron/cauldron, var/mob/user)
+	return FALSE
+
 var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/throw_impact(atom/impacted_atom, speed, mob/user)
 	..()
+	if(isliving(impacted_atom))
+		var/mob/living/L = impacted_atom
+		if(!L.tangibility)
+			return 1
 	if(isturf(impacted_atom))
 		var/turf/T = impacted_atom
 		if(objects_thrown_when_explode || (T.arcanetampered && T.arcanetampered != user))
@@ -332,11 +346,55 @@ var/global/objects_thrown_when_explode = FALSE
 	..(user, size, show_name)
 	if(price && price > 0)
 		to_chat(user, "You read '[price] space bucks' on the tag.")
-	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
-		to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
+	if(user.is_holding_item(src))
+		if(reagents?.total_volume && isliving(user))
+			held_examine_temperature_message(user)
+		if(cant_drop != FALSE) //Item can't be dropped, and is either in left or right hand!
+			to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
 	if(daemon && daemon.flags & DAEMON_EXAMINE)
 		daemon.examine(user)
 
+/obj/item/proc/held_examine_temperature_message(mob/living/examiner)
+	#define HEAT_LEVEL_SPAN 10
+	#define COLD_LEVEL_SPAN 5
+	#define TEMP_PERCEPTION_ADJUST 20
+	var/temperature_delta = (reagents.chem_temp - examiner.get_skin_temperature()) * heat_conductivity ** (1/3) //Cubed root to skew it towards being perceptible.
+	temperature_delta += TEMP_PERCEPTION_ADJUST//We perceive things warmer than they are, gotta account for that.
+	if (ishuman(examiner))
+		var/mob/living/carbon/human/H = examiner
+		temperature_delta *= (H.gloves ? H.gloves.heat_conductivity ** (1/3) : 1)
+	var/safetemp_excursion
+	if (temperature_delta < 0)
+		safetemp_excursion = examiner.get_safe_temperature_excursion(examiner.get_skin_temperature() + temperature_delta - TEMP_PERCEPTION_ADJUST)
+	else
+		safetemp_excursion = examiner.get_safe_temperature_excursion(examiner.get_skin_temperature() + temperature_delta)
+	if (!examiner.feels_pain() || examiner.has_painkillers())
+		safetemp_excursion = 0
+	else if(safetemp_excursion > 0)
+		safetemp_excursion = min(ceil(safetemp_excursion / HEAT_LEVEL_SPAN), 3)
+	else if (safetemp_excursion < 0)
+		safetemp_excursion = max(round(safetemp_excursion / COLD_LEVEL_SPAN), -3)
+	switch (safetemp_excursion)
+		if (0)
+			if (temperature_delta >= (HEAT_LEVEL_SPAN*2))
+				to_chat(examiner, "<span class='notice'>It feels warm.</span>")
+			else if(temperature_delta <= 0)
+				to_chat(examiner, "<span class='notice'>It feels cool.</span>")
+		if (1)
+			to_chat(examiner, "<span class='warning'>It feels very hot.</span>")
+		if (-1)
+			to_chat(examiner, "<span class='warning'>It feels very cold.</span>")
+		if (2)
+			to_chat(examiner, "<span class='warning'>It feels searing hot.</span>")
+		if (-2)
+			to_chat(examiner, "<span class='warning'>It feels freezing cold.</span>")
+		if (3)
+			to_chat(examiner, "<span class='warning'>It feels blisteringly hot.</span>")
+		if (-3)
+			to_chat(examiner, "<span class='warning'>It feels piercingly cold.</span>")
+	#undef HEAT_LEVEL_SPAN
+	#undef COLD_LEVEL_SPAN
+	#undef TEMP_PERCEPTION_ADJUST
 
 /obj/item/attack_ai(mob/user as mob)
 	..()
@@ -371,7 +429,7 @@ var/global/objects_thrown_when_explode = FALSE
 			if(!user.put_in_hand_check(src, user.get_active_hand()))
 				return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
-		if(!canremove)
+		if(!canremove && user.is_wearing_item(src))
 			to_chat(user, "<span class='notice'>\The [src][cant_remove_msg]</span>")
 			return
 
@@ -381,11 +439,26 @@ var/global/objects_thrown_when_explode = FALSE
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
+
+	if(on_fire)
+		if(user.a_intent && user.a_intent == I_DISARM)
+			extinguish_with_hands(user)
+			return //don't pick it up immediately, you have to click it again after it's extinguished
+
 	if(can_pickup(user) && !user.put_in_active_hand(src))
 		forceMove(get_turf(user))
 
 	//transfers diseases between the mob and the item
 	disease_contact(user)
+
+	if(on_fire)
+		if(world.time - last_burn <= 5 SECONDS)
+			return //no spam clicking burning items to seppuku
+		var/mob/living/L = user
+		L.visible_message("<span class='warning'>\The [src] burns [L]'s hands!</span>", "<span class='warning'>Your hands are burned by \the [src]!</span>")
+		L.drop_item(src, force_drop = 1)
+		L.apply_damage(10,BURN,L.get_active_hand_organ())
+		last_burn = world.time
 
 /obj/item/requires_dexterity(mob/user)
 	return TRUE
@@ -565,6 +638,10 @@ var/global/objects_thrown_when_explode = FALSE
 								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
 							return CANNOT_EQUIP
 
+				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
+					to_chat(H, "<span class='warning'>You have no mouth.</span>")
+					return CANNOT_EQUIP
+
 				if(H.wear_mask)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -574,9 +651,7 @@ var/global/objects_thrown_when_explode = FALSE
 					else
 						return CANNOT_EQUIP
 
-				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
-					to_chat(H, "<span class='warning'>You have no mouth.</span>")
-					return CANNOT_EQUIP
+
 
 				return CAN_EQUIP
 			if(slot_back)
@@ -617,21 +692,21 @@ var/global/objects_thrown_when_explode = FALSE
 						return CANNOT_EQUIP
 				return CAN_EQUIP
 			if(slot_gloves)
-				if( !(slot_flags & SLOT_GLOVES) )
+				if(!(slot_flags & SLOT_GLOVES))
 					return CANNOT_EQUIP
-
-				for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
-					if(!OE.species) //Organ has same species as body
-						if(H.species.anatomy_flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL)) //Use the body's base species
-							if(!disable_warning)
-								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky fingers!</span>")
-							return CANNOT_EQUIP
-					else //Organ's species is different from body
-						if(OE.species.anatomy_flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL))
-							if(!disable_warning)
-								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky fingers!</span>")
-							return CANNOT_EQUIP
-
+				for(var/datum/organ/external/hand_datum in get_organs_by_slot(slot, H))
+					var/obj/item/organ/external/hand_obj = new hand_datum.generic_type()
+					var/failed_gloves_equip = FALSE
+					var/datum/species/checked_species = hand_datum.species || H.species
+					if(!(clothing_flags & ONESIZEFITSALL))
+						if(checked_species.anatomy_flags & IS_BULKY)
+							failed_gloves_equip = TRUE
+						if(hand_obj.forbid_gloves)
+							failed_gloves_equip = TRUE
+					if(failed_gloves_equip)
+						if(!disable_warning)
+							to_chat(H, span_warning("You can't get \the [src] to fasten around your bulky fingers!"))
+						return CANNOT_EQUIP
 				if(H.gloves)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -1135,11 +1210,7 @@ var/global/objects_thrown_when_explode = FALSE
 	M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>"
 	msg_admin_attack("ATTACK: [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])") //BS12 EDIT ALG
 	log_attack("<font color='red'> [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 
 	add_fingerprint(user)
 	//if(clumsy_check(user) && prob(50))
@@ -1194,31 +1265,19 @@ var/global/objects_thrown_when_explode = FALSE
 /obj/item/clean_blood()
 	. = ..()
 	remove_disease2()
-	if (blood_overlay)
-		overlays.Remove(blood_overlay)
-	if (had_blood)
+	REMOVE_KEEP_TOGETHER(src, "bloody_item")
+	if(blood_overlay)
+		overlays -= blood_overlay
+	if(had_blood)
 		clear_luminol()
-	if (istype(src, /obj/item/clothing/gloves))
+	if(istype(src, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = src
 		G.transfer_blood = 0
-
 
 /obj/item/add_blood(var/mob/living/carbon/human/M)
 	if (!..())
 		return FALSE
-
-	//if we haven't made our blood_overlay already
-	if(!blood_overlays["[type][icon_state]"])
-		set_blood_overlay()
-
-	if(!blood_overlay)
-		blood_overlay = blood_overlays["[type][icon_state]"]
-	else
-		overlays.Remove(blood_overlay)
-
-	//apply the blood-splatter overlay if it isn't already in there, else it updates it.
-	blood_overlay.color = blood_color
-	overlays += blood_overlay
+	set_blood_overlay()
 	//if this blood isn't already in the list, add it
 	if(!M)
 		return
@@ -1243,19 +1302,7 @@ var/global/objects_thrown_when_explode = FALSE
 /obj/item/add_blood_from_data(var/list/blood_data)
 	if (!..())
 		return FALSE
-
-	//if we haven't made our blood_overlay already
-	if(!blood_overlays["[type][icon_state]"])
-		set_blood_overlay()
-
-	if(!blood_overlay)
-		blood_overlay = blood_overlays["[type][icon_state]"]
-	else
-		overlays.Remove(blood_overlay)
-
-	//apply the blood-splatter overlay if it isn't already in there, else it updates it.
-	blood_overlay.color = blood_color
-	overlays += blood_overlay
+	set_blood_overlay()
 	//if this blood isn't already in the list, add it
 	if(!blood_data)
 		return
@@ -1276,42 +1323,30 @@ var/global/objects_thrown_when_explode = FALSE
 	had_blood = TRUE
 	return TRUE //we applied blood to the item
 
-
-
-var/global/list/image/blood_overlays = list()
-/obj/item/proc/set_blood_overlay() /* If your item needs to update its blood overlay when its icon_state changes, use this one. update_blood_overlay() is simply a helper proc for this one. */
-	if(update_blood_overlay())
+/obj/item/proc/copy_blood_from_item(var/obj/item/other_item)
+	virus2 = virus_copylist(other_item.virus2)
+	if (!other_item.blood_overlay || !other_item.blood_color)
 		return
+	blood_color = other_item.blood_color
+	blood_DNA = other_item.blood_DNA?.Copy()
+	had_blood = TRUE
+	set_blood_overlay()
 
-	var/icon/I = new /icon(icon, icon_state)
-	I.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD) //fills the icon_state with white (except where it's transparent)
-	I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY) //adds blood and the remaining white areas become transparant
-
-	var/image/img = image(I)
-	img.name = "blood_overlay"
-	blood_overlays["[type][icon_state]"] = img
-	update_blood_overlay()
-
-/obj/item/proc/update_blood_overlay() /* See comment on set_blood_overlay() - this shouldn't be used outside of that proc! */
-	if(blood_overlays["[type][icon_state]"] && blood_overlay)
-		overlays -= blood_overlay
-		blood_overlay = blood_overlays["[type][icon_state]"]
-		blood_overlay.color = blood_color
-		overlays += blood_overlay
-		return 1
+/obj/item/proc/set_blood_overlay(passed_color = blood_color, forced = FALSE)
+	REMOVE_KEEP_TOGETHER(src, "bloody_item")
+	cut_overlay(blood_overlay)
+	var/mutable_appearance/item_blood_overlay = mutable_appearance('icons/effects/blood.dmi', "itemblood", appearance_flags = RESET_COLOR|RESET_ALPHA)
+	item_blood_overlay.blend_mode = BLEND_INSET_OVERLAY
+	item_blood_overlay.color = passed_color
+	blood_overlay = item_blood_overlay
+	if(forced || is_blood_stained(src))
+		ADD_KEEP_TOGETHER(src, "bloody_item")
+		add_overlay(blood_overlay)
 
 /obj/item/apply_luminol()
 	if(!..())
 		return FALSE
-	if(!blood_overlays["[type][icon_state]"]) //Blood overlay generation if it lacks one.
-		set_blood_overlay()
-	if(blood_overlay)
-		overlays.Remove(blood_overlay)
-	else
-		blood_overlay = blood_overlays["[type][icon_state]"]
-	var/image/luminol_overlay = blood_overlay
-	luminol_overlay.color = LIGHT_COLOR_CYAN
-	overlays += luminol_overlay
+	set_blood_overlay(LIGHT_COLOR_CYAN, TRUE)
 	var/obj/effect/decal/cleanable/blueglow/BG
 	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
 		BG = had_blood
@@ -1390,6 +1425,7 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/kick_act(mob/living/carbon/human/H) //Kick items around!
 	var/datum/organ/external/kickingfoot = H.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
+	playsound(loc, "kick", 30, 1, -1)
 	if(anchored || w_class > W_CLASS_MEDIUM + H.get_strength())
 		H.visible_message("<span class='danger'>[H] attempts to kick \the [src]!</span>", "<span class='danger'>You attempt to kick \the [src]!</span>")
 		if(prob(70))
@@ -1403,7 +1439,7 @@ var/global/list/image/blood_overlays = list()
 
 	var/turf/T = get_edge_target_turf(loc, kick_dir)
 
-	var/kick_power = max((H.get_strength() * 10 - (get_total_scaled_w_class(2))), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
+	var/kick_power = get_kick_power(H)
 
 	//Attempt to damage the item if it's breakable here.
 	var/glanced = TRUE
@@ -1418,17 +1454,26 @@ var/global/list/image/blood_overlays = list()
 		var/thispropel = new /datum/throwparams(T, kick_power, 1)
 		broken = try_break(propelparams = thispropel)
 
-	if(kick_power >= 6 && !broken) //Fly in an arc!
-		spawn()
-			var/original_pixel_y = pixel_y
-			animate(src, pixel_y = original_pixel_y + WORLD_ICON_SIZE, time = 10, easing = CUBIC_EASING)
-			while(loc)
-				if(!throwing)
-					animate(src, pixel_y = original_pixel_y, time = 5, easing = ELASTIC_EASING)
-					break
-				sleep(5)
+	if(kick_power >= 1 && !broken) //Fly in an arc!
+		kicked_item_arc_animation(kick_power)
 		throw_at(T, kick_power, 1)
 	Crossed(H) //So you can't kick shards while naked without suffering
+
+/obj/proc/get_kick_power(mob/living/carbon/human/kicker)
+	return max((kicker.get_strength() * 10 - round(get_total_scaled_w_class(3) / 7)), 1) //The range of the kick is affected by the strength of the kicker, depending on the kicker's genes, and the total weight of the object and its contents.
+
+/obj/proc/kicked_item_arc_animation(distance = 5)
+	spawn()
+		var/original_pixel_y = pixel_y
+		var/time_to_zenith = min(distance, 5)
+		animate(src, pixel_y = original_pixel_y + (round(WORLD_ICON_SIZE * time_to_zenith / 10)), time = time_to_zenith, easing = QUAD_EASING | EASE_OUT)
+		spawn(time_to_zenith)
+			animate(src, pixel_y = original_pixel_y, time = time_to_zenith, easing = QUAD_EASING | EASE_IN)
+		while(loc)
+			if(!throwing)
+				animate(src, pixel_y = original_pixel_y, time = time_to_zenith, easing = BOUNCE_EASING)
+				break
+			sleep(5)
 
 /obj/item/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)
@@ -1490,11 +1535,7 @@ var/global/list/image/blood_overlays = list()
 
 	M.attack_log += text("\[[time_stamp()]] <span style='color: orange'>Has been restrained (attempt) by [user.name] ([user.ckey]) with \the [src].</span>")
 	user.attack_log += text("\[[time_stamp()]] <span style='color: red'>Attempted to restrain [M.name] ([M.ckey]) with \the [src].</span>")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 	log_attack("[user.name] ([user.ckey]) Attempted to restrain [M.name] ([M.ckey]) with \the [src].")
 	return TRUE
 
@@ -1603,7 +1644,7 @@ var/global/list/image/blood_overlays = list()
 		usr.put_in_hand(OI.hand_index, src)
 		add_fingerprint(usr)
 
-/obj/item/proc/pre_throw(atom/movable/target)
+/obj/item/proc/pre_throw(var/atom/movable/target,var/mob/living/user)
 	return
 
 /obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
@@ -1692,13 +1733,64 @@ var/global/list/image/blood_overlays = list()
 				perp.infect_disease2(D, notes="(Blood, from picking up \a [src])")
 
 /obj/item/proc/playtoolsound(atom/A, var/volume = 75, vary = TRUE, extrarange = null)
-	if(A && toolsounds)
-		var/tool_sound = pick(toolsounds)
-		playsound(A, tool_sound, volume, TRUE, vary)
+	if(!A)
+		return
+	var/tool_sound
+	if(toolsounds)
+		tool_sound = pick(toolsounds)
+	else if(surgerysound)
+		tool_sound = surgerysound
+	else if(hitsound)
+		tool_sound = hitsound
+	if(tool_sound)
+		playsound(A, tool_sound, volume, vary, extrarange)
 
 /obj/item/proc/playsurgerysound(atom/A, var/volume = 75)
-	if(A && surgerysound)
-		playsound(A, surgerysound, volume, vary = TRUE)
+	if(!A)
+		return
+	var/tool_sound
+	if(surgerysound)
+		tool_sound = surgerysound
+	else if(toolsounds)
+		tool_sound = pick(toolsounds)
+	else if(hitsound)
+		tool_sound = hitsound
+	if(tool_sound)
+		playsound(A, tool_sound, volume, vary = TRUE)
 
 /obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
 	return FALSE
+
+/obj/item/proc/AltFrom(var/atom/A,var/mob/user)
+	return FALSE
+
+/obj/item/get_heat_conductivity()
+	. = heat_conductivity
+	if (is_open_container())
+		. = max(. , 0.5) //Even if it's perfectly insulating, if it's open then some heat can be exchanged.
+
+/obj/item/MiddleAltClick(var/mob/user)
+	extinguish_with_hands(user)
+
+/obj/item/proc/extinguish_with_hands(var/mob/user)
+	if(!isliving(user))
+		return
+	if(src.on_fire)
+		extinguish()
+		var/prot = 0
+
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(H.gloves)
+				var/obj/item/clothing/gloves/G = H.gloves
+				if(G.max_heat_protection_temperature)
+					prot = (G.max_heat_protection_temperature > 360)
+		else
+			prot = 1
+		var/datum/organ/external/active_hand_organ = user.get_active_hand_organ()
+		if(prot > 0 || (M_RESIST_HEAT in user.mutations) || active_hand_organ?.is_robotic())
+			user.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src].")
+			return
+		var/mob/living/L = user
+		L.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
+		L.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src], burning your hand in the process.")

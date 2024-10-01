@@ -228,13 +228,13 @@
 	icon_state = "generic"
 	item_state = "syringe_kit"
 	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
 	flags = FPRINT
+	flammable = TRUE
 
 	var/foldable = /obj/item/stack/sheet/cardboard
 	var/foldable_amount = 4
 
-	autoignition_temperature = 522 // Kelvin
-	fire_fuel = 2
 
 /obj/item/emptyvendomatpack/attack_self()
 	to_chat(usr, "<span class='notice'>You fold [src] flat.</span>")

@@ -104,16 +104,8 @@
 		name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
 		stage = GRENADE_STAGE_ASSEMBLY_INSERTED
 	else if(istype(W,/obj/item/stack/cable_coil) && !beakers.len)
-		var/obj/item/stack/cable_coil/coil = W
-		if(coil.amount < 2)
-			return
-		coil.use(2)
-		var/obj/item/weapon/electrolyzer/E = new /obj/item/weapon/electrolyzer
-		to_chat(user, "<span class='notice'>You tightly coil the wire around the metal casing.</span>")
 		W.playtoolsound(src, 30, TRUE, -2)
-		user.before_take_item(src)
-		user.put_in_hands(E)
-		qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/electrolyzer, W, 2, "<span class='notice'>You tightly coil the wire around the metal casing.</span>")
 	else if(W.is_screwdriver(user) && path != PATH_STAGE_COMPLETE)
 		if(stage == GRENADE_STAGE_ASSEMBLY_INSERTED )
 			path = PATH_STAGE_CONTAINER_INSERTED
@@ -181,16 +173,8 @@
 	else if(iscrowbar(W))
 		to_chat(user, "You begin pressing \the [W] into \the [src].")
 		if(do_after(user, src, 30))
-			to_chat(user, "You poke a hole in \the [src].")
 			eject_contents()
-			if(src.loc == user)
-				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/fuel_reservoir/I = new (get_turf(user))
-				user.put_in_hands(I)
-				qdel(src)
-			else
-				new /obj/item/weapon/fuel_reservoir(get_turf(src.loc))
-				qdel(src)
+			user.create_in_hands(src, /obj/item/weapon/fuel_reservoir, msg = "You poke a hole in \the [src].")
 
 /obj/item/weapon/grenade/chem_grenade/examine(mob/user)
 	..()
@@ -297,16 +281,8 @@
 
 	reservoir.reagents.trans_to(src, reservoir.reagents.total_volume)
 
-	if(src.reagents.total_volume) //The possible reactions didnt use up all reagents.
-		var/datum/effect/system/steam_spread/steam = new /datum/effect/system/steam_spread()
-		steam.set_up(10, 0, get_turf(src))
-		steam.attach(src)
-		steam.start()
-
-		for(var/atom/A in view(affected_area, get_turf(src)))
-			if( A == src )
-				continue
-			src.reagents.reaction(A, 1, 10)
+	if(reagents.total_volume) //The possible reactions didnt use up all reagents.
+		reagents.splashplosion(affected_area)
 
 	invisibility = INVISIBILITY_MAXIMUM //Why am i doing this?
 	spawn(50)		   //To make sure all reagents can work

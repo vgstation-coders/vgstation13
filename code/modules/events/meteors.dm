@@ -9,7 +9,7 @@
 	endWhen			= 30
 
 /datum/event/meteor_wave/can_start(var/list/active_with_role)
-	if(active_with_role["Engineer"] > 1 && active_with_role.len > 6)
+	if(active_with_role["Engineer"] > 1 && active_with_role["Any"] > 6)
 		return 15
 	return 0
 
@@ -34,7 +34,7 @@
 	endWhen 		= 30
 
 /datum/event/meteor_shower/can_start(var/list/active_with_role)
-	if(active_with_role["Engineer"] > 1 && active_with_role.len > 6)
+	if(active_with_role["Engineer"] > 1 && active_with_role["Any"] > 6)
 		return 40
 	return 0
 

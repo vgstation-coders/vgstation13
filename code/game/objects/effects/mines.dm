@@ -39,7 +39,7 @@
 	for(var/turf/simulated/floor/target in range(1,src))
 		if(!target.blocks_air)
 			target.zone.air.adjust_gas(GAS_PLASMA, 30)
-			target.hotspot_expose(1000, CELL_VOLUME)
+			try_hotspot_expose(1000, FULL_FLAME, 1)
 	qdel(src)
 
 /obj/effect/mine/kick
