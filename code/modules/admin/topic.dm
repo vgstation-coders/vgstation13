@@ -2833,7 +2833,12 @@
 			spawntype = /obj/item/weapon/coin/pumf
 			feedback = "You have greatly angered the gods, and their grudge toward you has been crystalized into a damned pumf coin."
 
-		if(!H.put_in_hands( new spawntype(H)))
+		var/obj/item/reward = new spawntype(H)
+		if (answer == "Cookie")
+			var/obj/item/weapon/reagent_containers/food/snacks/cookie/C = reward
+			C.thermal_variation_modifier = 0
+
+		if(!H.put_in_hands(reward))
 			log_admin("[key_name(H)] has their hands full, so they did not receive their [answer], spawned by [key_name(src.owner)].")
 			message_admins("[key_name(H)] has their hands full, so they did not receive their [answer], spawned by [key_name(src.owner)].")
 			return
