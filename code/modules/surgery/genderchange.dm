@@ -34,7 +34,7 @@
 
 
 //////RESHAPE GENITALS//////
-/datum/surgery_step/reshape_genitals/tool_quality(obj/item/tool)
+/datum/surgery_step/reshape_genitals/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
