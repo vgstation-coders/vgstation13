@@ -1,5 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- rscadd: Nukeop camera consoles now finally track their crew's rigsuits and uplink
-    spawned borgs as they're meant to.

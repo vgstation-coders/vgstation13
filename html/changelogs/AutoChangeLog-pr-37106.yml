@@ -1,7 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- rscadd: Station blueprints can now be used to save a virtual snapshot of how an
-    immediate surroundings looked at the time of saving, and load it temporarily into
-    your view for 10 seconds, only visible to the person when summoning it up again
-    from them.
