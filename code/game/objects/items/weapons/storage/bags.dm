@@ -41,6 +41,7 @@
 	can_only_hold = list() // any
 	cant_hold = list("/obj/item/weapon/disk/nuclear", "/obj/item/weapon/pinpointer") //No janiborg, stop stealing the pinpointer with your bag.
 	slot_flags = SLOT_BELT | SLOT_OCLOTHING
+	clothing_flags = ONESIZEFITSALL
 	no_storage_slot = list(slot_wear_suit) //when worn on the suit slot it will function purely as a suit and will not store items
 
 /obj/item/weapon/storage/bag/trash/update_icon()

@@ -216,6 +216,7 @@
 	armor = list(melee = 65, bullet = 30, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	siemens_coefficient = 0.6
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/armor/hos/surveyor
 	name = "surveyor coat"
@@ -239,7 +240,6 @@
 	desc = "A trenchcoat augmented with a special alloy for protection and style."
 	icon_state = "jensencoat"
 	item_state = "jensencoat"
-	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.6
 	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
@@ -249,6 +249,7 @@
 	icon_state = "sundowner_coat_allblack"
 	item_state = "sundowner_coat_allblack"
 	siemens_coefficient = 0.6
+
 
 // -- Centcomm, OG by SkyMarshall
 
