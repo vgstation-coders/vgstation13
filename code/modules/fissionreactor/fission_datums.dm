@@ -485,10 +485,10 @@ datums for the fission reactor, which includes the fuel and reactor
 			SCRAM=FALSE
 
 	
-	if(control_rod_target>control_rod_insertion) //5% insertion increments
-		control_rod_insertion=min(0.05+control_rod_insertion,control_rod_target)
+	if(control_rod_target>control_rod_insertion) //5% insertion increments (2x because every 2 seconds)
+		control_rod_insertion=min((0.1*(SCRAM ? 1.5 : 1.0))+control_rod_insertion,control_rod_target) //rods fall 50% faster when shit is going down to hitting the fan town.
 	else if(control_rod_target<control_rod_insertion)
-		control_rod_insertion=max(control_rod_insertion-0.05,control_rod_target)
+		control_rod_insertion=max(control_rod_insertion-0.1,control_rod_target)
 
 
 	if(!fuel)
