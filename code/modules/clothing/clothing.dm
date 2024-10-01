@@ -205,9 +205,6 @@
 			return
 		if(user.drop_item(I, src))
 			attach_accessory(A, user)
-		if(iscarbon(loc))
-			var/mob/living/carbon/carbon_wearer = loc
-			carbon_wearer.update_inv_by_slot(slot_flags)
 		return 1
 	if(I.is_screwdriver(user))
 		for(var/obj/item/clothing/accessory/accessory in priority_accessories())
@@ -437,6 +434,9 @@
 	if(user)
 		to_chat(user, "<span class='notice'>You attach [accessory] to [src].</span>")
 		accessory.add_fingerprint(user)
+	if(iscarbon(loc))
+		var/mob/living/carbon/carbon_wearer = loc
+		carbon_wearer.update_inv_by_slot(slot_flags)
 
 /obj/item/clothing/proc/priority_accessories()
 	if(!accessories.len)
