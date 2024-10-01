@@ -335,5 +335,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 	light_color = LIGHT_COLOR_YELLOW
 
+/obj/machinery/computer/security/nukies
+	network = list(CAMERANET_SS13,CAMERANET_NUKE)
 
 #undef DEFAULT_MAP_SIZE
