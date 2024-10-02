@@ -546,7 +546,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(!flammable || check_fire_protection() || thermal_mass <= 0)
 		return FALSE
 
-	var/datum/gas_mixture = return_air()
+	var/datum/gas_mixture/air_contents = return_air()
 	if(air_contents[GAS_OXYGEN] < 1)
 		return FALSE
 
