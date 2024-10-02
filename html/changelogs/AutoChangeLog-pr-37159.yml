@@ -1,0 +1,7 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- rscadd: Null rods can now show if something is arcane tampered by hitting it with
+    them.
+- rscadd: Blessing an arcane tampered item now shows a message confirming the removal
+    of this property to nearby people.
