@@ -899,6 +899,7 @@ its easier to just keep the beam vertical.
 			var/mob/M = arcanetampered
 			M.arcane_tampered_atoms.Remove(src)
 		arcanetampered = FALSE
+		visible_message("<span class='sinister'>The arcane properties of \the [src] vanish!</span>")
 		for(var/atom/A in contents)
 			A.bless()
 	blessed = 1
