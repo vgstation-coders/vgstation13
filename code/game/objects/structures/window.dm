@@ -28,7 +28,7 @@ var/list/one_way_windows
 	var/reinforced = 0 //Used for deconstruction steps
 	penetration_dampening = 1
 	pass_flags_self = PASSGLASS
-	var/obj/abstract/Overlays/damage_overlay
+	var/mutable_appearance/damage_overlay
 	var/image/oneway_overlay
 	var/cracked_base = "crack"
 
@@ -61,9 +61,9 @@ var/list/one_way_windows
 	return unsmoothables
 
 /obj/structure/window/isSmoothableNeighbor(atom/A)
-	if(isobj(A))
-		var/obj/O = A
-		return ..() && O.anchored && O.density
+	if(A?.density && ismovable(A))
+		var/atom/movable/O = A
+		return O.anchored && ..() 
 
 /obj/structure/window/relativewall()
 	icon_state = anchored && density ? "[base_state][..()]" : initial(icon_state)
@@ -95,7 +95,7 @@ var/list/one_way_windows
 	else
 		if(user.incapacitated() || !Adjacent(user))
 			return
-		rotate()
+		ccwrotate()
 
 /obj/structure/window/proc/examine_health(mob/user)
 	if(!anchored)
@@ -144,9 +144,11 @@ var/list/one_way_windows
 		if(sound)
 			playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 		if(!damage_overlay)
-			damage_overlay = new(src)
+			damage_overlay = mutable_appearance(src)
 			damage_overlay.icon = icon('icons/obj/structures/window.dmi')
 			damage_overlay.dir = src.dir
+			damage_overlay.layer = OBJ_LAYER
+			damage_overlay.blend_mode = BLEND_ADD
 
 		overlays -= damage_overlay
 
@@ -162,6 +164,42 @@ var/list/one_way_windows
 		return FALSE
 	health -= amount
 	return TRUE
+
+/obj/structure/window/silicate_act(var/obj/item/device/silicate_sprayer/S, var/mob/user)
+	if(!S.get_amount())
+		to_chat(user, "<span class='notice'>\The [S] is out of silicate!</span>")
+		return 1
+	var/mode = MODE_REPAIR
+	if(istype(S,/obj/item/device/silicate_sprayer/advanced))
+		var/obj/item/device/silicate_sprayer/advanced/SA = S
+		mode = SA.mode
+
+	var/diff = initial(health) - health
+	if(!diff && (mode == MODE_REPAIR)) // Not damaged.
+		to_chat(user, "<span class='notice'>\The [src] is already in perfect condition!</span>")
+		return 1
+
+	if(diff > 0)
+		diff = min(diff, S.get_amount() / SILICATE_PER_DAMAGE)
+
+		health += diff
+		healthcheck(user, FALSE)
+
+		user.visible_message("<span class='notice'>[user] repairs \the [src] with their [S]!</span>", "<span class='notice'>You repair \the [src] with your [S].</span>")
+
+	else // No diff, but we didn't exit earlier, so mode must be reinforce
+		var/extra_health = health - initial(health)
+		if(health >= initial(health) * MAX_WINDOW_HEALTH_MULTIPLIER)
+			to_chat(user, "<span class='notice'>You can't reinforce \the [src] any further!</span>")
+			return 1
+		diff = min(S.get_amount() / SILICATE_PER_REINFORCE, (initial(health) * MAX_WINDOW_HEALTH_MULTIPLIER) - (initial(health) + extra_health))
+		health += diff
+		healthcheck(user)
+		user.visible_message("<span class='notice'>[user] reinforced \the [src] with their [S]!</span>", "<span class='notice'>You reinforce \the [src] with your [S].</span>")
+
+	playsound(src, 'sound/effects/refill.ogg', 10, 1, -6)
+	S.remove_silicate(diff * SILICATE_PER_DAMAGE)
+	return 1
 
 /obj/structure/window/bullet_act(var/obj/item/projectile/Proj)
 
@@ -223,7 +261,10 @@ var/list/one_way_windows
 		return TRUE
 	if(!density)
 		return TRUE
-	if(istype(mover))
+	if(istype(mover, /obj/item/projectile/beam))
+		var/obj/item/projectile/beam/B = mover
+		return bounds_dist(border_dummy, B.previous_turf) >= 0
+	else if(istype(mover))
 		return bounds_dist(border_dummy, mover) >= 0
 	else if(get_dir(loc, target) == dir)
 		return FALSE
@@ -571,33 +612,34 @@ var/list/one_way_windows
 					return 0
 	return 1
 
-/obj/structure/window/verb/rotate()
+/obj/structure/window/verb/ccwrotate()
 	set name = "Rotate Window Counter-Clockwise"
 	set category = "Object"
 	set src in oview(1)
 
-	if(anchored)
-		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
-		return 0
+	rotate(90)
 
-	update_nearby_tiles() //Compel updates before
-	change_dir(turn(dir, 90))
-	update_nearby_tiles()
-	return
-
-/obj/structure/window/verb/revrotate()
+/obj/structure/window/verb/cwrotate()
 	set name = "Rotate Window Clockwise"
 	set category = "Object"
 	set src in oview(1)
 
+	rotate(270)
+
+/obj/structure/window/proc/rotate(var/angle = 90)
 	if(anchored)
+		var/turf/T = loc
+		if(T)
+			for(var/obj/structure/window/W in T)
+				if(!W.anchored && W.dir == src.dir)
+					W.rotate(angle)
+					return
 		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
-		return 0
+		return
 
 	update_nearby_tiles() //Compel updates before
-	change_dir(turn(dir, 270))
+	change_dir(turn(dir, angle))
 	update_nearby_tiles()
-	return
 
 /obj/structure/window/Destroy()
 	setDensity(FALSE) //Sanity while we do the rest

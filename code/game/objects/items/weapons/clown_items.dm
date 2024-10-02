@@ -249,7 +249,8 @@
 	icon_state = "glue0"
 
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 	var/uses = 1 //How many uses the glue has.
 	var/glue_duration = -1 //-1 For infinite.
 	var/glue_state_to_set = GLUE_STATE_PERMA //This is the glue state we set to the item the user puts glue on.
@@ -296,6 +297,8 @@
 	update_icon()
 	apply_glue(target)
 
+/obj/item/weapon/glue/proc/apply_glue(obj/item/target)
+	target.glue_act(glue_duration, glue_state_to_set)
 
 /obj/item/weapon/glue/temp_glue
 	name = "bottle of school glue"
@@ -319,15 +322,24 @@
 	name = "empty school glue bottle"
 	icon_state = "glue_safe0"
 
+/obj/item/weapon/glue/infinite/afterattack()
+	.=..()
+	uses = 1
+	update_icon()
+
+//--------------------------------
+
 /obj/proc/glue_act(var/stick_time = 1 SECONDS, var/glue_state = GLUE_STATE_NONE) //proc for when glue is used on something
 	default_glue_act(stick_time, glue_state)
 
 /obj/proc/default_glue_act(stick_time, glue_state)
+	last_glue_application = world.time
 	switch(glue_state)
 		if(GLUE_STATE_TEMP)
 			current_glue_state = GLUE_STATE_TEMP
-			spawn(stick_time)
-				unglue()
+			spawn(stick_time+1)
+				if (last_glue_application+stick_time < world.time)
+					unglue()
 		else
 			current_glue_state = GLUE_STATE_PERMA
 
@@ -337,34 +349,37 @@
 /obj/proc/default_unglue()
 	if(current_glue_state == GLUE_STATE_TEMP)
 		current_glue_state = GLUE_STATE_NONE
+		if ("glue" in blood_DNA)
+			clean_blood()
 		return 1
 	else
 		return 0
 
+//--------------------------------
+
 /obj/item/glue_act(stick_time)
-	cant_drop++
-	..()
+	cant_drop = TRUE
+	if (current_glue_state != GLUE_STATE_PERMA)
+		..()
 
 /obj/item/unglue()
 	if(..())
-		cant_drop--
+		cant_drop = FALSE
+
+//--------------------------------
 
 /obj/item/clothing/glue_act(stick_time, glue_state)
-	canremove--
-	default_glue_act(stick_time, glue_state)
+	canremove = FALSE
+	if (current_glue_state != GLUE_STATE_PERMA)
+		default_glue_act(stick_time, glue_state)
 
 /obj/item/clothing/unglue()
 	if(default_unglue())
-		canremove++
+		canremove = TRUE
+
+//--------------------------------
 
 /obj/structure/bed/glue_act(stick_time)
 	..()
 
-/obj/item/weapon/glue/proc/apply_glue(obj/item/target)
-	target.glue_act(glue_duration, glue_state_to_set)
-
-/obj/item/weapon/glue/infinite/afterattack()
-	.=..()
-	uses = 1
-	update_icon()
 

@@ -12,7 +12,7 @@
 
 
 //////CUT FLESH//////
-/datum/surgery_step/slime/cut_flesh/tool_quality(obj/item/tool)
+/datum/surgery_step/slime/cut_flesh/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -49,7 +49,7 @@
 
 
 //////CUT INNARDS///////
-/datum/surgery_step/slime/cut_innards/tool_quality(obj/item/tool)
+/datum/surgery_step/slime/cut_innards/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0

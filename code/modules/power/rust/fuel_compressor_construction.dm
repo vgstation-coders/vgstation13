@@ -81,20 +81,6 @@
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 
-	else if (istype(W, /obj/item/weapon/card/emag) && !emagged)		// trying to unlock with an emag card
-		if(opened)
-			to_chat(user, "You must close the cover to swipe an ID card.")
-		else
-			flick("apc-spark", src)
-			if (do_after(user, src,6))
-				if(prob(50))
-					emagged = 1
-					locked = 0
-					to_chat(user, "You emag the port interface.")
-				else
-					to_chat(user, "You fail to [ locked ? "unlock" : "lock"] the compressor interface.")
-		return
-
 	else if (istype(W, /obj/item/stack/cable_coil) && opened && !(has_electronics & 2))
 		var/obj/item/stack/cable_coil/C = W
 		if(C.amount < 10)
@@ -145,3 +131,17 @@
 		return
 
 	..()
+
+/obj/machinery/rust_fuel_compressor/emag_act(mob/user)
+	if(!emagged)
+		if(opened)
+			to_chat(user, "You must close the cover to swipe an ID card.")
+		else
+			flick("apc-spark", src)
+			if (do_after(user,src,6))
+				if(prob(50))
+					emagged = 1
+					locked = 0
+					to_chat(user, "You emag the port interface.")
+				else
+					to_chat(user, "You fail to [ locked ? "unlock" : "lock"] the compressor interface.")

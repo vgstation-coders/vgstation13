@@ -329,8 +329,14 @@
 /obj/item/device/pda/trader/New()
 	..()
 	var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in applications
-	if(app)
+	if(app && !show_overlays)
 		app.note = "Congratulations, your statio RUNTIME FAULT AT 0x3ae46dc1"
+
+/obj/item/device/pda/trader/fancy
+	name = "Merchant PDA"
+	desc = "A sophisticated PDA for a sophisticated trader."
+	icon_state = "pda-trader-fancy"
+	show_overlays = TRUE
 
 /obj/item/device/pda/chef
 	name = "Chef PDA"

@@ -3,7 +3,6 @@
  * They can also have the stuffing removed and replaced with a grenade to create an explosive surprise for the next person to hug the plushie.
  * They might also make a sound when interacted with.
  */
-
 /obj/item/toy/plushie
 	icon = 'icons/obj/plushie.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/plushie.dmi', "right_hand" = 'icons/mob/in-hand/right/plushie.dmi')
@@ -13,7 +12,10 @@
 	var/list/interact_sounds = list()//plays when the plushie is interacted with (attack_self etc.)
 	var/list/hug_sounds = list('sound/weapons/thudswoosh.ogg') //plays when the plushie hugs someone
 	var/death_sound //sound to play when the plushie is destroyed, e.g. in an explosion
-	autoignition_temperature = AUTOIGNITION_FABRIC
+	w_class = W_CLASS_SMALL
+	w_type = RECYK_FABRIC
+	flammable = TRUE
+	var/list/hug_reagents //= list(PARACETAMOL)
 
 /obj/item/toy/plushie/Destroy()
 	if(grenade)
@@ -67,6 +69,10 @@
 		playsound(src, hug_sound, 50, 1, -1)
 	if(stuffed || grenade)
 		src.visible_message("<span class='notice'>\The [src] gives \the [M] a [pick("hug", "warm embrace")].</span>")
+		if(hug_reagents.len && M.reagents)
+			for(var/R in hug_reagents)
+				if(!M.has_reagent_in_blood(R))
+					M.reagents.add_reagent(R, 1)
 	else
 		src.visible_message("<span class='notice'>\The [src] gives \the [M] a limp hug.</span>")
 	if(grenade && !grenade.active)
@@ -230,7 +236,20 @@
 	desc = "An extra-large version of the classic stuffed bear."
 	icon_state = "teddy"
 
+/obj/item/toy/plushie/cash
+	name = "plush cash"
+	desc = "This note is not legal tender for all debts public and private."
+	icon_state = "cash"
+	interact_sounds = list("sound/items/polaroid2.ogg")
+
+
 //This one is only available with a pomfcoin
+/obj/item/toy/plushie/chicken/pomf
+	name = "plush Pomf the Chicken"
+	desc = "An extremely soft and plushy chicken. Cluck!"
+	icon_state = "chicken_pomf"
+	hug_reagents = list(DOCTORSDELIGHT)
+
 /obj/item/toy/plushie/sylveon
 	name = "plush Sylveon"
 	desc = "This special edition Sylveon plushie was never officially released to the public."

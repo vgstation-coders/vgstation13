@@ -264,7 +264,7 @@
 			snowball_stack.add(1)
 			snowballs--
 			break
-		var/obj/item/stack/sheet/snow/snowball = new /obj/item/stack/sheet/snow(user.loc)
+		var/obj/item/stack/sheet/snow/snowball = new /obj/item/stack/sheet/snow(loc)
 		snowball.pixel_x = rand(-16, 16) * PIXEL_MULTIPLIER //Would be wise to move this into snowball New() down the line
 		snowball.pixel_y = rand(-16, 16) * PIXEL_MULTIPLIER
 

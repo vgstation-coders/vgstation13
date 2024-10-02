@@ -94,7 +94,7 @@
 		/obj/item/clothing/suit/unathi/mantle,
 		/obj/item/clothing/suit/unathi/robe,
 		/obj/item/clothing/shoes/sandal = 3,
-		/obj/item/clothing/under/rags = 2,
+		/obj/item/clothing/under/leather_rags = 2,
 		/obj/item/clothing/under/shorts/black,
 		/obj/item/clothing/under/vox/vox_casual = 3,
 	)

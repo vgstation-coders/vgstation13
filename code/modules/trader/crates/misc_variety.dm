@@ -18,8 +18,9 @@
 	icon_off = "cabinetdetective_broken"
 	is_wooden = TRUE
 	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
+	thermal_mass = 25
 	w_type = RECYK_WOOD
-	autoignition_temperature = AUTOIGNITION_WOOD
+	flammable = TRUE
 	var/wonder_whitelist = list(
 	/obj/item/clothing/mask/morphing/corgi,
 	/obj/item/clothing/under/rank/vice,
@@ -70,7 +71,7 @@
 	icon_state = "pbag"	//Supposed to look kind of shitty, cubes aren't even wrapped
 	foldable = /obj/item/weapon/paper
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube")
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/weapon/storage/box/mysterycubes/New()
 	..()
@@ -113,7 +114,8 @@
 		BLOCKIZINE,
 		AUTISTNANITES,
 		XENOMICROBES,
-		PAISMOKE
+		PAISMOKE,
+		PANACEA
 	)
 
 /obj/item/weapon/reagent_containers/glass/beaker/vial/mystery/New()
@@ -413,8 +415,24 @@
 /obj/item/dictionary/dsquad/New()
 	name = "redacted nanodictionary"
 	desc += " Is it in some kind of code?"
-	icon_state = "booknuclear"
+	icon_state = "bookNuclear"
 	tongue = all_languages[LANGUAGE_DEATHSQUAD]
 	progress_goal = 20
 	progress_time = 15 SECONDS
 	progress_fail_chance = 25
+
+/obj/item/weapon/storage/toolbox/nanopaint
+	name = "nano painter's toolbox"
+	desc = "Contains an assortment of luminous nano paints for the artistic trader."
+	icon_state = "toolbox_nanopaint"
+	item_state = "toolbox_nanopaint"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/arts_n_crafts.dmi', "right_hand" = 'icons/mob/in-hand/right/arts_n_crafts.dmi')
+	attack_verb = list("daubs", "decorates", "slathers")
+	max_combined_w_class = 42
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/nanopaint/filled/vantablack,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/nanopaint/filled/red,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/nanopaint/filled/green,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/nanopaint/filled/blue,
+		/obj/item/clothing/glasses/sunglasses/polarized,
+	)

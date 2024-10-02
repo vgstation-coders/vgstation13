@@ -15,12 +15,20 @@
 	amount_per_transfer_from_this = 10
 	volume = 250
 	possible_transfer_amounts = null
+	slimeadd_message = "You drop the slime extract down into the spray nozzle"
+	slimeadd_success_message = "The reagents inside swell up to the brim"
+	var/preset_reagent
 	var/melted = 0
 
 	var/delay_spraying = TRUE // Whether to delay the next attack after using it
 
 	//! List of things to avoid spraying on close range. TODO Remove snowflake, handle this in every attackby() properly.
 	var/list/ignore_spray_types = list(/obj/item/weapon/storage, /obj/structure/table, /obj/structure/rack, /obj/structure/closet, /obj/structure/sink)
+
+/obj/item/weapon/reagent_containers/spray/New()
+	..()
+	if(preset_reagent)
+		reagents.add_reagent(preset_reagent, volume)
 
 /obj/item/weapon/reagent_containers/spray/attackby(obj/item/weapon/W, mob/user)
 	if(user.is_in_modules(src))
@@ -29,19 +37,13 @@
 		if(W.is_hot())
 			to_chat(user, "You slightly melt the plastic on the top of \the [src] with \the [W].")
 			melted = 1
-	if(melted)
-		if(istype(W, /obj/item/stack/rods))
-			to_chat(user, "You press \the [W] into the melted plastic on the top of \the [src].")
-			var/obj/item/stack/rods/R = W
-			if(src.loc == user)
-				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/gun_assembly/I = new (get_turf(user), "spraybottle_assembly")
-				user.put_in_hands(I)
-			else
-				new /obj/item/weapon/gun_assembly(get_turf(src.loc), "spraybottle_assembly")
-			R.use(1)
-			qdel(src)
+	else if(istype(W, /obj/item/stack/rods))
+		user.create_in_hands(src, new /obj/item/weapon/gun_assembly(loc, "spraybottle_assembly"), W, msg = "You press \the [W] into the melted plastic on the top of \the [src].")
 
+/obj/item/weapon/reagent_containers/spray/slime_act(primarytype, mob/user)
+	. = ..()
+	if(. && preset_reagent && (slimes_accepted & primarytype))
+		reagents.add_reagent(preset_reagent, volume)//in a perfect world, we'd calculate how much to add, but the add_reagents() already has sanity checking for max volume
 
 /obj/item/weapon/reagent_containers/spray/afterattack(atom/A as mob|obj, mob/user as mob, var/adjacency_flag, var/click_params)
 	if (adjacency_flag && is_type_in_list(A, ignore_spray_types))
@@ -92,6 +94,8 @@
 		reagents.add_reagent(LUBE, 2)
 
 /obj/item/weapon/reagent_containers/spray/proc/make_puff(var/atom/target, var/mob/user)
+	if((has_slimes & slimes_accepted) && preset_reagent)
+		reagents.add_reagent(preset_reagent, 10)
 	// Create the chemical puff
 	var/transfer_amount = amount_per_transfer_from_this
 	if (!can_transfer_an_APTFT() && !is_empty()) //If it doesn't contain enough reagents to fulfill its amount_per_transfer_from_this, but also isn't empty, it'll spray whatever it has left.
@@ -108,17 +112,35 @@
 			sleep(3)
 
 		qdel(D)
-
+	update_icon()
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
 //space cleaner
 /obj/item/weapon/reagent_containers/spray/cleaner
 	name = "space cleaner"
 	desc = "BLAM!-brand non-foaming space cleaner!"
+	slimes_accepted = SLIME_BLUE
+	preset_reagent = CLEANER
+	var/image/content_reagent
 
 /obj/item/weapon/reagent_containers/spray/cleaner/New()
 	..()
 	reagents.add_reagent(CLEANER, 250)
+	content_reagent = image(icon,src,"cleaner-content3")
+	update_icon()
+
+/obj/item/weapon/reagent_containers/spray/cleaner/on_reagent_change()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/spray/cleaner/update_icon()
+	overlays.len = 0
+	if (!is_empty())
+		if (!content_reagent)
+			content_reagent = image(icon,src,"cleaner-content3")
+		content_reagent.icon_state = "cleaner-content[clamp(round(3*reagents.total_volume/reagents.maximum_volume)+1,1,3)]"
+		content_reagent.color = mix_color_from_reagents(reagents.reagent_list)
+		content_reagent.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		overlays += content_reagent
 
 //pepperspray
 /obj/item/weapon/reagent_containers/spray/pepper
@@ -129,32 +151,16 @@
 	item_state = "pepperspray"
 	volume = 40
 	amount_per_transfer_from_this = 10
-
-/obj/item/weapon/reagent_containers/spray/pepper/New()
-	..()
-	reagents.add_reagent(CONDENSEDCAPSAICIN, 40)
-
-/obj/item/weapon/reagent_containers/spray/pepper/slime_act(primarytype, mob/user)
-	..()
-	if(primarytype == /mob/living/carbon/slime/orange)
-		has_slime=1
-		reagents.add_reagent(CONDENSEDCAPSAICIN, 40)//in a perfect world, we'd calculate how much to add, but the add_reagents() already has sanity checking for max volume
-		to_chat(user, "You drop the slime extract down into the spray canister, and liquid capsaicin swells up to the brim.")
-		return TRUE
-
-/obj/item/weapon/reagent_containers/spray/pepper/make_puff(var/atom/target, var/mob/user)
-	if(has_slime)
-		reagents.add_reagent(CONDENSEDCAPSAICIN, 10)
-	..()
+	slimeadd_message = "You drop the slime extract down into the spray canister"
+	slimes_accepted = SLIME_ORANGE
+	preset_reagent = CONDENSEDCAPSAICIN
 
 // Luminol
 /obj/item/weapon/reagent_containers/spray/luminol
 	name = "spray bottle (luminol)"
 	desc = "A spray bottle with an unscrewable top. A label on the side reads 'Contains: Luminol'."
-
-/obj/item/weapon/reagent_containers/spray/luminol/New()
-	..()
-	reagents.add_reagent(LUMINOL, 250)
+	slimes_accepted = SLIME_GREEN
+	preset_reagent = LUMINOL
 
 // Plant-B-Gone
 /obj/item/weapon/reagent_containers/spray/plantbgone
@@ -163,11 +169,8 @@
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
-	volume = 250
-
-/obj/item/weapon/reagent_containers/spray/plantbgone/New()
-	..()
-	reagents.add_reagent(PLANTBGONE, 250)
+	slimes_accepted = SLIME_RED
+	preset_reagent = PLANTBGONE
 
 /obj/item/weapon/reagent_containers/spray/bugzapper
 	name = "Bug Zapper"
@@ -175,21 +178,15 @@
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "pestspray"
 	item_state = "pestspray"
-	volume = 250
-
-/obj/item/weapon/reagent_containers/spray/bugzapper/New()
-	..()
-	reagents.add_reagent(INSECTICIDE, 250)
+	slimes_accepted = SLIME_RED
+	preset_reagent = INSECTICIDE
 
 //Fake Xeno Creep Sprayer
 /obj/item/weapon/reagent_containers/spray/creepspray
 	name = "Alien Weed Spray"
 	desc = "You're unsure if this is meant to cull or create weeds. The Discount Dan logo is haphazardly slapped on top of a faded yellow 'W' and gray 'Y'"
-	volume = 250
-
-/obj/item/weapon/reagent_containers/spray/creepspray/New()
-	..()
-	reagents.add_reagent(FAKE_CREEP, 250)
+	slimes_accepted = SLIME_PYRITE
+	preset_reagent = FAKE_CREEP
 
 //chemsprayer
 /obj/item/weapon/reagent_containers/spray/chemsprayer

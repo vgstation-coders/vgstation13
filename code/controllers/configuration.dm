@@ -76,6 +76,7 @@
 	var/copy_logs = null
 	var/cargo_forwarding_on_roundstart = 0
 	var/cargo_forwarding_amount_override = 0
+	var/roundstart_lights_on = 0
 
 	// BSQL things
 	var/bsql_debug = 0
@@ -206,6 +207,16 @@
 	var/thermal_dissipation = 1 //Whether or not thermal dissipation occurs.
 	var/reagents_heat_air = 0 //Whether or not reagents exchanging heat with the surrounding air actually heat or the cool air. If off, the energy change only applies to the reagents.
 
+	var/maprender_lags_game = 0 //If the map render checks tick or not to get done during a round
+
+	var/library_url = ""
+	var/branch_head = ""
+	var/stats_addr = ""
+
+	//Resources
+	var/rsclist = ""
+	var/rscstring = ""
+
 /datum/configuration/New()
 	. = ..()
 	var/list/L = subtypesof(/datum/gamemode)-/datum/gamemode/cult
@@ -280,6 +291,9 @@
 
 				if ("cargo_forwarding_amount_override")
 					cargo_forwarding_amount_override = text2num(value)
+
+				if("roundstart_lights_on")
+					roundstart_lights_on = 1
 
 				if ("use_recursive_explosions")
 					use_recursive_explosions = 1
@@ -634,7 +648,16 @@
 					discord_url = value
 				if("discord_password")
 					discord_password = value
-
+				if("library_url")
+					library_url = value
+				if("branch_head")
+					branch_head = value
+				if("stats_addr")
+					stats_addr = value
+				if("rsclist")
+					rsclist = value
+				if("rscstring")
+					rscstring = value
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 
@@ -688,6 +711,8 @@
 					config.silent_borg = 1
 				if("borer_takeover_immediately")
 					config.borer_takeover_immediately = 1
+				if("maprender_lags_game")
+					config.maprender_lags_game = 1
 				if("hardcore_mode")
 					hardcore_mode = value
 				if("humans_speak")

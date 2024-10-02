@@ -2175,7 +2175,7 @@
 /area/awaymission/research)
 "fC" = (
 /obj/structure/table/holotable,
-/obj/item/weapon/gun/energy/floragun{
+/obj/item/floral_somatoray{
 	pixel_x = 2;
 	pixel_y = 3
 	},

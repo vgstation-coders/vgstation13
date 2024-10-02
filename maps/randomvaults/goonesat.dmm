@@ -1229,7 +1229,7 @@
 	},
 /obj/machinery/air_sensor{
 	id_tag = "satellite_coldroom";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";

@@ -134,13 +134,18 @@ var/global/list/rad_collectors = list()
 	else
 		update_icons()
 
+//This completely ignores Z Levels, so you can collect radiations from the station's singulo from the asteroid.
+//I don't have it in me to patch this one out guys.
 /proc/emitted_harvestable_radiation(turf/center, power, range = 7)
 	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
 		if(get_dist(R, center) <= range) //Better than using orange() every process.
 			R.receive_pulse(power)
-	for(var/obj/item/weapon/am_containment/decelerator/D in decelerators)
+	for(var/obj/item/weapon/am_containment/D in decelerators)
 		if(get_dist(D, center) <= range)
 			D.receive_pulse(power)
+	for(var/obj/machinery/portable_atmospherics/hydroponics/tray in hydro_trays)
+		if(get_dist(tray, center) <= range)
+			tray.receive_pulse(power)
 
 //Pulse_strength is multiplied by around 70 (less or more depending on the air tank setup) to get the amount of watts generated
 /obj/machinery/power/rad_collector/proc/receive_pulse(const/pulse_strength)

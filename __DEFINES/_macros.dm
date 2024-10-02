@@ -206,7 +206,11 @@
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
 
-#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod) || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller))
+#define isholyweapon(I) (istype(I, /obj/item/weapon/storage/bible)\
+						 || istype(I, /obj/item/weapon/nullrod)\
+						 || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller/true)\
+						 || istype(I, /obj/item/projectile/hookshot/whip/vampkiller/true)\
+						 || istype(I, /obj/item/weapon/boomerang/cross))
 
 #define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
 
@@ -222,7 +226,7 @@
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
-#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()))
+#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()) || istype(A,/obj/effect/ash))
 
 #define ismatrix(A) (istype(A, /matrix))
 
@@ -235,6 +239,8 @@
 #define isPDA(A) (istype(A, /obj/item/device/pda))
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/floor/shuttle) || istype(A, /turf/simulated/floor/shuttle/brig))
+
+#define iswall(A) (istype(A, /turf/simulated/wall) || istype(A, /turf/unsimulated/wall))
 
 #define isshuttleturf(A) (istype(A, /turf/simulated/wall/shuttle) || istype(A, /turf/simulated/floor/shuttle))
 
@@ -343,6 +349,8 @@
 #define isspace(A) (A.type == /area)
 
 #define isopenspace(A) istype(A, /turf/simulated/open)
+var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floor/glass)
+#define isvisiblespace(A) is_type_in_list(A, visible_spaces)
 
 //This one returns the "space" area
 //#define get_space_area (get_area(locate(1,1,2))) //xd

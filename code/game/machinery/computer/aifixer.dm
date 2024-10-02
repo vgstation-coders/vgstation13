@@ -112,6 +112,8 @@
 	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		return
 
+	update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
+
 	if (occupant)
 		switch (occupant.stat)
 			if (0)

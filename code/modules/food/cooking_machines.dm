@@ -85,6 +85,8 @@ var/global/ingredientLimit = 10
 	var/cooks_in_reagents = 0 //are we able to add stuff to the machine so that reagents are added to food?
 	var/cks_max_volume = 50
 
+	var/cooking_temperature = COOKTEMP_DEFAULT
+
 /obj/machinery/cooking/cultify()
 	new /obj/structure/cult_legacy/talisman(loc)
 	..()
@@ -324,7 +326,7 @@ var/global/ingredientLimit = 10
 		var/obj/item/weapon/reagent_containers/food/snacks/customizable/F = new_food
 		F.ingredients += I
 		F.updateName()
-		F.overlays += F.generateFilling(I)
+		F.extra_food_overlay.overlays += F.generateFilling(I)
 		F.luckiness += I.luckiness
 		I.luckiness = null
 	else if (istype(new_food, /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable))
@@ -334,8 +336,26 @@ var/global/ingredientLimit = 10
 		F.overlays += F.generateFilling(I)
 		F.luckiness += I.luckiness
 		I.luckiness = null
+	if (cooking_temperature && (new_food.reagents.chem_temp < cooking_temperature))
+		new_food.reagents.chem_temp = cooking_temperature
+	new_food.update_icon()
+	if(istype(ingredient,/obj/item/weapon/reagent_containers/food/snacks/monkeycube/humancube))
+		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/humancube/H = ingredient
+		qdel(H.contained_mob)
 	ingredient = null
 	return new_food
+
+/obj/machinery/cooking/proc/apply_color(var/obj/item/weapon/reagent_containers/food/snacks/_snack, var/_color)
+	var/mutable_appearance/ma = new(_snack)
+	ma.appearance = _snack.appearance
+	ma.color = _color
+	ma.plane = FLOAT_PLANE
+	ma.layer = FLOAT_LAYER
+	ma.pixel_x = 0
+	ma.pixel_y = 0
+	_snack.extra_food_overlay.overlays.len = 0//no need to redraw all the layers that will get hidden by their colored variants
+	_snack.extra_food_overlay.overlays += ma
+	_snack.update_icon()
 
 // Candy Machine ///////////////////////////////////////////////
 
@@ -379,6 +399,7 @@ var/global/ingredientLimit = 10
 	icon_state = "still_off"
 	icon_state_on = "still_on"
 	cookSound = 'sound/machines/juicer.ogg'
+	cooking_temperature = 0
 
 /obj/machinery/cooking/still/validateIngredient(var/obj/item/I)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/grown))
@@ -425,9 +446,10 @@ var/global/ingredientLimit = 10
 	if(cooks_in_reagents)
 		transfer_reagents_to_food(C) //add the stuff from the machine
 	C.name = "[ingredient.name] cereal"
-	var/image/I = image(getFlatIcon(ingredient, ingredient.dir, 0))
+	var/image/I = image(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(ingredient)), override_dir = ingredient.dir))
 	I.transform *= 0.7
-	C.overlays += I
+	C.extra_food_overlay.overlays += I
+	C.update_icon()
 
 	if(istype(ingredient, /obj/item/weapon/holder))
 		var/obj/item/weapon/holder/H = ingredient
@@ -513,11 +535,16 @@ var/global/ingredientLimit = 10
 	if(istype(ingredient,/obj/item/weapon/reagent_containers/food/snacks))
 		if(cooks_in_reagents)
 			transfer_reagents_to_food(ingredient)
-			if(!arcanetampered && (ingredient.reagents.chem_temp > COOKTEMP_HUMANSAFE)) //Make sure the food isn't scalding hot.
-				ingredient.reagents.chem_temp = COOKTEMP_HUMANSAFE
+			var/cook_temp = COOKTEMP_READY//100°C
+			if(emagged || arcanetampered)
+				cook_temp = COOKTEMP_EMAGGED
+			if (ingredient.reagents.chem_temp < cook_temp)
+				ingredient.reagents.chem_temp = cook_temp
+				ingredient.update_icon()
 		ingredient.name = "deep fried [ingredient.name]"
-		ingredient.color = "#FFAD33"
+		apply_color(ingredient, "#FFAD33")
 		ingredient.forceMove(loc)
+
 		for(var/obj/item/embedded in ingredient.contents)
 			embedded.forceMove(ingredient)
 	else //some admin enabled funfood and we're frying the captain's ID or someshit
@@ -684,15 +711,15 @@ var/global/ingredientLimit = 10
 	ingredient.forceMove(loc)
 	ingredient.mouse_opacity = 0
 	if (cook_after(cookTime/3, 14))
-		ingredient.color = "#C28566"
+		apply_color(ingredient, "#C28566")
 		if (cook_after(cookTime/3, 14))
-			ingredient.color = "#A34719"
+			apply_color(ingredient, "#A34719")
 			if (cook_after(cookTime/3, 14))
 				makeFood()
 				if(use_power != MACHINE_POWER_USE_NONE)
 					playsound(src,cookSound,100,1)
 				else
-					visible_message("<span class='notice'>\the [foodname] looks ready to eat!</span>")
+					visible_message("<span class='notice'>\The [foodname] looks ready to eat!</span>")
 	active = 0
 	update_icon()
 	return
@@ -704,6 +731,12 @@ var/global/ingredientLimit = 10
 		var/obj/item/weapon/reagent_containers/food/F = ingredient
 		F.reagents.add_reagent(NUTRIMENT,10)
 		F.reagents.trans_to(ingredient,ingredient.reagents.total_volume)
+		var/cook_temp = COOKTEMP_READY//100°C
+		if(emagged || arcanetampered)
+			cook_temp = COOKTEMP_DEFAULT//300°C
+		if (F.reagents.chem_temp < cook_temp)
+			F.reagents.chem_temp = cook_temp
+			F.update_icon()
 	ingredient.mouse_opacity = 1
 	if(!(findtext(ingredient.name,"rotisserie")))
 		ingredient.name = "grilled [ingredient.name]"

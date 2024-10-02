@@ -22,7 +22,7 @@ var/max_snails = 40
 
 	size = SIZE_TINY
 
-	pass_flags = PASSTABLE | PASSGRILLE | PASSMACHINE
+	pass_flags = PASSTABLE | PASSGRILLE | PASSMACHINE | PASSRAILING
 	stop_automated_movement_when_pulled = 1
 
 	turns_per_move = 8 //8 life ticks / move

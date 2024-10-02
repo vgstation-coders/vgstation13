@@ -145,7 +145,7 @@
 	/obj/item/clothing/glasses/monocle,
 	/obj/item/clothing/glasses/regular,
 	/obj/item/clothing/glasses/regular/hipster,
-	/obj/item/clothing/glasses/science,
+	/obj/item/clothing/glasses/scanner/science,
 	/obj/item/clothing/glasses/simonglasses,
 	/obj/item/clothing/glasses/sunglasses,
 	/obj/item/clothing/glasses/sunglasses/big,
@@ -529,3 +529,15 @@
 	containername = "miscellaneous winter coats"
 	group = "Clothing"
 	containsdesc = "Coats that just don't fit in with the others. Includes one for a Captain, Head of Personnel, Clown, Mime, and even a prisoner."
+
+/datum/supply_packs/knittingbundle
+	name = "Knitting bundle"
+	contains = list(/obj/item/knitting_needles,
+					/obj/item/stack/sheet/cloth/bigstack,
+					)
+	cost = 30
+	containertype = /obj/structure/closet/crate
+	containername = "\improper Knitting bundle"
+	group = "Clothing"
+	containsicon = "knitting"
+	containsdesc = "Some knitting needles and a roll of cloth to get you started on your clothesmaking journey."

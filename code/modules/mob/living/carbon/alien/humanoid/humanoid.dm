@@ -28,7 +28,7 @@
 	add_spell(new /spell/targeted/alientransferplasma, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
 
 /mob/living/carbon/alien/humanoid/get_butchering_products()
-	return list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, /datum/butchering_product/teeth/bunch)
+	return list(/datum/butchering_product/claws/xeno, /datum/butchering_product/skin/xeno, /datum/butchering_product/teeth/bunch)
 
 /mob/living/carbon/alien/humanoid/emp_act(severity)
 	if(flags & INVULNERABLE)

@@ -16,10 +16,12 @@
 	desc = "Does card things."
 	icon = 'icons/obj/card.dmi'
 	w_class = W_CLASS_TINY
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 	var/associated_account_number = 0
 
 	var/list/files = list(  )
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	quick_equip_priority = list(slot_wear_id)
 
 /obj/item/weapon/card/data
 	name = "data disk"
@@ -61,6 +63,7 @@
 	item_state = "card-id"
 	slot_flags = SLOT_ID
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=2"
+	flags = FPRINT | NO_ATTACK_MSG //because of overrides
 
 	/**
 	 * Number of uses left.  -1 = infinite
@@ -128,14 +131,14 @@
 		nticks = 0
 		processing_objects.Remove(src)
 
-/obj/item/weapon/card/emag/proc/canUse(var/mob/user, var/obj/machinery/M)
+/obj/item/weapon/card/emag/proc/canUse(var/mob/user, var/atom/A)
 	// We've already checked for emaggability.  All we do here is check cost.
 
 	// Infinite uses?  Just return true.
 	if(energy < 0)
 		return 1
 
-	var/cost=M.getEmagCost(user,src)
+	var/cost=A.getEmagCost(user,src)
 
 	// Free to emag?  Return true every time.
 	if(cost == 0)
@@ -171,23 +174,17 @@
 
 //perform individual emag_act() stuff on children overriding the method here
 /obj/item/weapon/card/emag/afterattack(var/atom/target, mob/user, proximity)
-	if(!proximity)
+	if(!proximity || !canUse(user,target))
 		return
-	if (istype(target, /mob/living/carbon/human))
+	if (ishuman(target))
 		var/mob/living/carbon/target_living = target
 		//get target zone with 0% chance of missing
 		var/zone = ran_zone(user.zone_sel.selecting, 100)
 		var/datum/organ/external/organ = target_living.get_organ(zone)
 		target_living.emag_act(user, organ, src)
-		return
-	if(istype(target,/obj/machinery))
-		return // Handled in machine attackby()
-	if(arcanetampered && prob(50))
-		target.arcane_act(user)
-		if(prob(50))
-			return
-	target.emag_act(user)
 
+/mob/living/carbon/human/emag_check(obj/item/weapon/card/emag/E, mob/user) //handled above!
+	return FALSE
 
 var/list/global/id_cards = list()
 
@@ -203,6 +200,7 @@ var/list/global/id_cards = list()
 	var/registered_name = "Unknown" // The name registered_name on the card
 	slot_flags = SLOT_ID
 
+	var/show_biometrics = TRUE //Necessary to display the below stats
 	var/blood_type = "\[UNSET\]"
 	var/dna_hash = "\[UNSET\]"
 	var/fingerprint_hash = "\[UNSET\]"
@@ -236,12 +234,13 @@ var/list/global/id_cards = list()
 			user.show_message(text("The current assignment on the card is [assignment]."),1)
 		else
 			user.show_message(text("No assignment has been set. Use an identification computer to edit."),1)
-		if (dna_hash == "\[UNSET\]")
-			user.show_message(text("No biometric data referenced. Use a body scanner at Medbay to imprint."),1)
-		else
-			user.show_message("Blood Type: [blood_type].",1)
-			user.show_message("DNA: [dna_hash].",1)
-			user.show_message("Fingerprint: [fingerprint_hash].",1)
+		if(show_biometrics)
+			if (dna_hash == "\[UNSET\]")
+				user.show_message(text("No biometric data referenced. Use a body scanner at Medbay to imprint."),1)
+			else
+				user.show_message("Blood Type: [blood_type].",1)
+				user.show_message("DNA: [dna_hash].",1)
+				user.show_message("Fingerprint: [fingerprint_hash].",1)
 		if(dchip && dchip.stamped.len)
 			to_chat(user,"<span class='bad'>It has a demotion modchip with the following stamps: [english_list(uniquenamelist(dchip.stamped))].</span>")
 
@@ -316,7 +315,7 @@ var/list/global/id_cards = list()
 		return jobName
 	if(alt_jobName in get_all_job_icons()) //Check if the base job has a hud icon
 		return alt_jobName
-	if(jobName in get_all_centcom_jobs() || (alt_jobName in get_all_centcom_jobs())) //Return with the NT logo if it is a Centcom job
+	if((jobName in get_all_centcom_jobs()) || (alt_jobName in get_all_centcom_jobs())) //Return with the NT logo if it is a Centcom job
 		return "Centcom"
 	return "Unknown" //Return unknown if none of the above apply
 
@@ -437,13 +436,14 @@ var/list/global/id_cards = list()
 	access = AGENT_CARD_DEFAULT_ACCESS
 	base_access = list(access_syndicate)
 	origin_tech = Tc_SYNDICATE + "=3"
+	blocks_tracking = TRUE
 	var/registered_user=null
 	var/copy_appearance = FALSE
 
 /obj/item/weapon/card/id/syndicate/AltClick()
 	if (can_use(usr)) // Checks that the this is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
 		copy_appearance = !copy_appearance
-		to_chat(usr, "<span class='notice'>The [src] is now set to copy [copy_appearance ? "the appearance along with" : "just"] the access.</span>")
+		to_chat(usr, "<span class='notice'>zThe [src] is now set to copy [copy_appearance ? "the appearance along with" : "just"] the access.</span>")
 		return
 	return ..()
 
@@ -453,7 +453,7 @@ var/list/global/id_cards = list()
 	return 0
 
 /obj/item/weapon/card/id/syndicate/commando
-	name = "Hacked syndie card"
+	name = "hacked syndie card"
 
 /obj/item/weapon/card/id/syndicate/commando/New()
 	..()
@@ -462,7 +462,7 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/syndicate/afterattack(var/obj/item/weapon/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I = O
-		to_chat(user, "<span class='notice'>The [src]'s microscanners activate as you pass it over \the [I], copying its access[copy_appearance ? " and appearance" : ""].</span>")
+		to_chat(user, "<span class='notice'>\The [src]'s microscanners activate as you pass it over \the [I], copying its access[copy_appearance ? " and appearance" : ""].</span>")
 		access |= I.access
 		if(copy_appearance)
 			registered_name = I.registered_name

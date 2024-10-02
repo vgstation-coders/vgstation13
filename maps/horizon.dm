@@ -33,7 +33,7 @@
 	has_engines = TRUE
 
 	holomap_offset_x = list(0,0,0,86,0,0,0,)
-	holomap_offset_y = list(85,0,0,94,0,0,0,)
+	holomap_offset_y = list(0,0,0,94,0,0,0,)
 
 	center_x = 253
 	center_y = 142
@@ -58,7 +58,7 @@
 		null,
 		null,
 		DISP_BAR,
-		null,
+		DISP_KITCHEN,
 		DISP_HYDROPONICS,
 		null,
 		DISP_GENETICS,
@@ -72,6 +72,7 @@
 
 	research_shuttle.name = "Asteroid Shuttle" //There is only one shuttle on packedstation - the asteroid shuttle
 	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
+	salvage_shuttle.can_rotate = 1
 
 ////////////////////////////////////////////////////////////////
 #include "horizon.dmm"

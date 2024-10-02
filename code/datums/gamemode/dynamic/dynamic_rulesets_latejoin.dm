@@ -66,6 +66,17 @@
 	repeatable = TRUE
 	flags = TRAITOR_RULESET
 
+/datum/dynamic_ruleset/latejoin/infiltrator/ready(var/forced = 0)
+	if (forced)
+		return ..()
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
+	var/max_traitors = round(player_count / 10) + 1
+	if(required_candidates > player_count)
+		return 0
+	if(antag_count < max_traitors && prob(mode.midround_threat_level))//adding traitors if the antag population is getting low
+		return ..()
+	return 0
 
 /datum/dynamic_ruleset/latejoin/infiltrator/execute()
 	var/mob/M = pick(assigned)
@@ -96,6 +107,16 @@
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
 	repeatable = TRUE
+
+/datum/dynamic_ruleset/latejoin/raginmages/ready(var/forced=0)
+	if (forced)
+		return ..()
+	if(locate(/datum/dynamic_ruleset/roundstart/cwc) in mode.executed_rules)
+		message_admins("Rejected Ragin' Mages as there was a Civil War.")
+		return 0 //This is elegantly skipped by specific ruleset.
+		//This means that all ragin mages in CWC will be called only by that ruleset.
+	else
+		return ..()
 
 /datum/dynamic_ruleset/latejoin/raginmages/execute()
 	var/mob/M = pick(assigned)
@@ -134,6 +155,17 @@
 
 	repeatable = TRUE
 
+/datum/dynamic_ruleset/latejoin/ninja/ready(var/forced=0)
+	if (forced)
+		return ..()
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
+	var/max_traitors = round(player_count / 10) + 1
+	if ((antag_count < max_traitors) && prob(mode.midround_threat_level))
+		return ..()
+	return 0
+
+
 /datum/dynamic_ruleset/latejoin/ninja/execute()
 	var/mob/M = pick(assigned)
 	if(!latejoinprompt(M))
@@ -158,8 +190,8 @@
 /datum/dynamic_ruleset/latejoin/pulse_demon
 	name = "Pulse Demon Infiltration"
 	role_category = /datum/role/pulse_demon
-	enemy_jobs = list("Station Engineer","Chief Engineer")
-	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
+	enemy_jobs = list("Station Engineer","Chief Engineer","Warden","Head of Security","Captain","AI","Cyborg")
+	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	weight_category = "Pulse"

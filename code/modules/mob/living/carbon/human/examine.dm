@@ -431,24 +431,44 @@
 
 			var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
 			if(sec_record)
+				msg += {"<span class = 'deptradio'><b><u>Security Data</u></b></span>\n"}
 				criminal = sec_record.fields["criminal"]
 
-				msg += {"<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>
-	<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]\n</a>"}
+				if(user.hasHUD(HUD_ARRESTACCESS))
+					msg += {"<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>\n"}
+				else
+					msg += {"<span class = 'deptradio'>Criminal status:</span> \[[criminal]\]\n"}
+				msg += {"<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]\n</a>"}
 				if(!isjustobserver(user))
 					msg += "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"
 				msg += {"[wpermit(src) ? "<span class = 'deptradio'>Has weapon permit.</span>\n" : ""]"}
 
-		if(user.hasHUD(HUD_MEDICAL))
+		if(user.hasHUD(HUD_WAGE))
 			var/perpname = get_identification_name(get_face_name())
-			var/medical = "None"
+			var/employment = "None"
 
 			var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
 			if(gen_record)
-				medical = gen_record.fields["p_stat"]
+				msg += {"<span class = 'deptradio'><b><u>Employment Data</u></b></span>\n"}
+				employment = gen_record.fields["notes"]
 
-			msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n
-				<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]\n</a>"}
+				msg += {"<span class = 'deptradio'>Employment Records:</span></a>\n"}
+				msg += {"<span class = 'deptradio'>[employment]</span>\n"}
+
+		if(user.hasHUD(HUD_MEDICAL))
+			var/perpname = get_identification_name(get_face_name())
+			var/medical = "None"
+			var/medicalsanity = "None"
+
+			var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
+			if(gen_record)
+				msg += {"<span class = 'deptradio'><b><u>Medical Data</u></b></span>\n"}
+				medical = gen_record.fields["p_stat"]
+				medicalsanity = gen_record.fields["m_stat"]
+
+			msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>
+				<span class = 'deptradio'>Mental status:</span> <a href='?src=\ref[src];medicalsanity=1'>\[[medicalsanity]\]</a>
+				<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]</a>\n"}
 			for (var/ID in virus2)
 				if (ID in virusDB)
 					var/datum/data/record/v = virusDB[ID]
@@ -460,6 +480,13 @@
 			var/mob/dead/observer/O = user
 			if(O.antagHUD && mind && mind.antag_roles.len)
 				msg += "<a href='?src=\ref[src];purchaselog=`'>\[Show antag purchase log\]</a>\n"
+
+	//It's also here because the examine text is written from scratch for humans.
+	if(isliving(user) && user.mind)
+		for(var/datum/role/R in get_list_of_elements(user.mind.antag_roles))
+			var/antag_text = R.role_examine_text_addition(src)
+			if(antag_text)
+				msg += "[antag_text]\n"
 
 	if(flavor_text && can_show_flavor_text())
 		msg += "[print_flavor_text()]\n"

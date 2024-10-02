@@ -22,7 +22,7 @@
 				show_message("[absorb_text]")
 			else
 				show_message("<span class='borange'>Your armor ABSORBS the blow!</span>")
-	else if(armor > 50)
+	else if(armor >= 50)
 		if(!quiet)
 			if(absorb_text)
 				show_message("[soften_text]",4)
@@ -64,7 +64,7 @@
 
 	var/absorb = run_armor_check(def_zone, P.flag, armor_penetration = P.armor_penetration)
 	if(absorb >= 100)
-		P.on_hit(src,2)
+		P.on_hit(src,100)
 		return PROJECTILE_COLLISION_BLOCKED
 	if(!P.nodamage)
 		var/damage = run_armor_absorb(def_zone, P.flag, P.damage)
@@ -77,7 +77,7 @@
 	return PROJECTILE_COLLISION_DEFAULT
 
 //Multiplier for damage when an object has hit.
-/mob/living/proc/thrown_defense(var/obj/O)
+/mob/living/proc/thrown_defense(var/obj/O,var/speed = 5)
 	return 1
 
 /mob/living/hitby(atom/movable/AM as mob|obj,var/speed = 5,var/dir,var/list/hit_whitelist)//Standardization and logging -Sieve
@@ -112,7 +112,7 @@
 				zone_normal_name = zone
 		var/armor = run_armor_check(zone, "melee", "Your armor has protected your [zone_normal_name].", "Your armor has softened the blow to your [zone_normal_name].", armor_penetration = O.throwforce*(speed/5)*O.sharpness)
 		if(armor < 100) //Stop the damage if the person is immune
-			var/damage = run_armor_absorb(zone, "melee", O.throwforce*(speed/5) * thrown_defense(O))
+			var/damage = run_armor_absorb(zone, "melee", O.throwforce*(speed/5) * thrown_defense(O,speed))
 			apply_damage(damage, dtype, zone, armor, O.is_sharp(), O)
 
 		// Begin BS12 momentum-transfer code.
@@ -148,7 +148,6 @@
 			msg_admin_attack("[src.name] ([src.ckey]) was hit by a thrown [O], last touched by [assailant.mob.name] ([assailant.ckey]) (speed: [speed]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
 			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been hit with a thrown [O], last touched by [assailant.mob.name] ([assailant.ckey]) (speed: [speed])</font>")
 			assailant.mob.attack_log += text("\[[time_stamp()]\] <font color='red'>Hit [src.name] ([src.ckey]) with a thrown [O] (speed: [speed])</font>")
-			src.LAssailant = assailant.mob
 			assaulted_by(assailant.mob)
 
 /*
@@ -278,21 +277,30 @@
 
 // End BS12 momentum-transfer code.
 //Mobs on Fire
-/mob/living/proc/IgniteMob()
-	if(fire_stacks > 0 && !on_fire)
-		on_fire = 1
-		set_light(src.light_range + 3)
-		update_fire()
+/mob/living/ignite()
+	if(on_fire)
+		return 0
+	if(check_fire_protection())
+		return 0
+	if(!firelightdummy)
+		firelightdummy = new (src)
+	on_fire = 1
+	update_fire()
+	return 1
+
+/mob/living/extinguish()
+	..()
+	update_fire()
+
+/mob/living/check_fire_protection()
+	if(fire_stacks<0)
+		fire_stacks++
 		return 1
 	else
 		return 0
 
-/mob/living/proc/ExtinguishMob()
-	if(on_fire)
-		on_fire = 0
-		fire_stacks = 0
-		set_light(src.light_range - 3)
-		update_fire()
+/mob/living/burnSolidFuel()
+	return
 
 /mob/living/proc/update_fire()
 	return
@@ -314,23 +322,31 @@
 		return 1
 
 	var/oxy=0
-	var/turf/T=loc
+	var/turf/T=get_turf(src)
 	if(istype(T))
-		var/datum/gas_mixture/G = loc.return_air() // Check if we're standing in an oxygenless environment
+		var/datum/gas_mixture/G = T.return_air() // Check if we're standing in an oxygenless environment
 		if(G)
 			oxy = G.molar_density(GAS_OXYGEN)
-	if(oxy < (1 / CELL_VOLUME) || fire_stacks <= 0)
-		ExtinguishMob() //If there's no oxygen in the tile we're on, put out the fire
+	if(oxy < (1 / CELL_VOLUME) || fire_stacks < 0)
+		extinguish() //If there's no oxygen in the tile we're on, put out the fire
 		return 1
-	var/turf/location = get_turf(src)
-	location.hotspot_expose(700, 50, 1,surfaces=1)
+	T.hotspot_expose(700, SMALL_FLAME, 1)
 
-/mob/living/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/mob/living/fire_act(datum/gas_mixture/air, temperature, exposed_volume)
 	if(mutations.Find(M_UNBURNABLE))
 		return
 
 	adjust_fire_stacks(0.5)
-	IgniteMob()
+	ignite()
+
+	var/turf/T = get_turf(src)
+	var/flevel = air.calculate_firelevel(T)
+	var/pressure = air.return_pressure()
+	FireBurn(flevel,temperature, pressure)
+
+/mob/living/proc/FireBurn(var/firelevel = 0, var/temperature, var/pressure)
+	var/mx = 5 * max(firelevel,1.5)/ZAS_firelevel_multiplier * min(pressure / ONE_ATMOSPHERE, 1)
+	apply_damage(2.5*mx, BURN)
 
 //Mobs on Fire end
 

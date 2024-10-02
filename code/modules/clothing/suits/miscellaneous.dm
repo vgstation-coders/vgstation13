@@ -369,6 +369,7 @@ var/list/tag_suits_list = list()
 	flags = FPRINT
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/sith
 	name = "Sith Robe"
@@ -408,6 +409,7 @@ var/list/tag_suits_list = list()
 	icon_state = "cassock"
 	item_state = "cassock"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/imperium_monk
@@ -426,6 +428,20 @@ var/list/tag_suits_list = list()
 	body_parts_covered = FULL_TORSO|FEET
 	species_fit = list(INSECT_SHAPED)
 
+/obj/item/clothing/suit/hunter
+	name ="modern vampire hunter's overcoat"
+	desc = "An iconic blue overcoat similar to the one worn by a vampire hunter that vanquished Dracula 800 years ago. The sleeves have been ripped off for a better range of motion."
+	icon_state = "hunter_overcoat"
+	item_state = "hunter_overcoat"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
+	body_parts_covered = FULL_TORSO
+
+/obj/item/clothing/suit/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/suit/hunter/rangeTackleBonus()
+	return 1
+
 /obj/item/clothing/suit/chickensuit
 	name = "chicken suit"
 	desc = "A suit made long ago by the ancient empire KFC."
@@ -433,7 +449,7 @@ var/list/tag_suits_list = list()
 	item_state = "chickensuit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
-	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/suit/chickensuit/white
@@ -447,9 +463,10 @@ var/list/tag_suits_list = list()
 	name = "Monkey Suit"
 	desc = "A suit that looks like a primate."
 	icon_state = "monkeysuit"
-	species_fit = list(INSECT_SHAPED)
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|HIDETAIL
 	siemens_coefficient = 2.0
+	clothing_flags = ONESIZEFITSALL
 
 
 /obj/item/clothing/suit/holidaypriest
@@ -487,7 +504,7 @@ var/list/tag_suits_list = list()
 	icon_state = "strait_jacket"
 	item_state = "strait_jacket"
 	origin_tech = Tc_BIOTECH + "=2"
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|HIDETAIL
 	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/ianshirt
@@ -720,7 +737,7 @@ var/list/tag_suits_list = list()
 	desc = "You'll be the Ruler of the King's Navy in no time."
 	icon_state = "lordadmiral"
 	species_fit = list(INSECT_SHAPED)
-	allowed = list (/obj/item/weapon/gun)
+	allowed = list (/obj/item/weapon/gun,/obj/item/toy/gun)
 
 /obj/item/clothing/suit/raincoat
 	name = "Raincoat"
@@ -741,7 +758,7 @@ var/list/tag_suits_list = list()
 	name = "Liberty Coat"
 	desc = "Smells faintly of freedom."
 	icon_state = "libertycoat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = FULL_TORSO|ARMS
 
 /obj/item/clothing/suit/storage/draculacoat
@@ -752,6 +769,7 @@ var/list/tag_suits_list = list()
 	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
 	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/storage/draculacoat_fake
 	name = "Vampire Costume"
@@ -759,6 +777,7 @@ var/list/tag_suits_list = list()
 	icon_state = "draculacoat"
 	blood_overlay_type = "coat"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/bedsheet_ghost
 	name = "Bedsheet Ghost"
@@ -777,7 +796,7 @@ var/list/tag_suits_list = list()
 	name = "Apron"
 	desc = "Simple white apron."
 	icon_state = "maidapron"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = FULL_TORSO
 
 /obj/item/clothing/suit/clownpiece
@@ -1164,3 +1183,27 @@ var/list/tag_suits_list = list()
 
 /obj/item/clothing/suit/reticulatedvest/update_icon()
 	icon_state = "reticulated[hits]"
+
+/obj/item/clothing/suit/scuba
+	name = "scuba suit"
+	desc = "A watertight swimming suit used to support a Self-Contained Underwater Breathing Apparatus."
+	icon_state = "scuba"
+	item_state = "scuba"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=1"
+	w_class = W_CLASS_LARGE//bulky item
+	gas_transfer_coefficient = 0.90
+	permeability_coefficient = 0.50
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	allowed = list(/obj/item/weapon/tank)
+	slowdown = HARDSUIT_SLOWDOWN_LOW
+	pressure_resistance = 2 * ONE_ATMOSPHERE
+	species_fit = list(VOX_SHAPED)
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/wftr
+	name ="welding fuel tank refiller shirt"
+	desc = "A shirt worn by those with a passion for refilling welding fuel tanks."
+	icon_state = "wftr"
+	item_state = "wftr"
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
+	body_parts_covered = FULL_TORSO

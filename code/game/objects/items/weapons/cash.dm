@@ -23,12 +23,14 @@ var/global/list/moneytypes = list(
 	throw_speed = 1
 	throw_range = 2
 	w_class = W_CLASS_TINY
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	var/access = list()
 	access = access_crate_cash
 	var/worth = 1 //Per chip
 	var/amount = 1 //Number of chips
 	var/stack_color = "#4E054F"
-	autoignition_temperature=AUTOIGNITION_PAPER
+	quick_equip_priority = list(slot_wear_id)
 
 /obj/item/weapon/spacecash/New(var/new_loc,var/new_amount=1)
 	. = ..(new_loc)

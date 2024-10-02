@@ -108,7 +108,6 @@
 	if(iscrowbar(W) && electronics)
 		to_chat(user, "<span class='notice'>You pry the [electronics] out.</span>")
 		W.playtoolsound(src, 50)
-		electronics.forceMove(get_turf(src))
 		user.put_in_hands(electronics)
 		electronics = null
 	if(W.is_wrench(user))
@@ -159,7 +158,6 @@
 	if(iscrowbar(W) && circuitry)
 		to_chat(user, "<span class='notice'>You pry the [circuitry] out.</span>")
 		W.playtoolsound(src, 50)
-		circuitry.forceMove(get_turf(src))
 		user.put_in_hands(circuitry)
 		circuitry = null
 	if(iswelder(W))

@@ -808,6 +808,7 @@
 	title = "A Crash Course in Virology"
 	book_width = 819
 	book_height = 516
+	id = 25
 	dat = {"<html>
 				<head>
 				<style>
@@ -1254,3 +1255,41 @@ var/virology_encyclopedia = ""
 			</body>
 			</html>
 			"}
+
+/obj/item/weapon/book/manual/how_to_win_friends_and_influence_people_primer
+	name = "\improper A Primer on How to Win Friends and Influence People"
+	icon_state = "bookCarnegie"
+	item_state = "bookCarnegie"
+	author = "Dale Carnegie"
+	title = "A Primer on How to Win Friends and Influence People"
+	id = 25
+
+	dat = {"<html>
+	<body>
+	<p>
+	Who cares what you desire? I am worried about my own problems.The bank is foreclosing the mortage on my house, the bugs are destroying the hollyhocks, the stock market tumbled yesterday.
+	I missed the eight-fifteen this morning, I wasn't invited to the Jones's dance last night, the doctor tells me I have high blood pressure and neuritis and dandruff.
+	And then what happens? I come down to the office this morning worried, open my mail and here is some little whippersnapper off in New York yapping about what he wants. Bah!
+	If he only realized what sort of impression his letter makes, he would get out of the advertising business and start manufacturing sheep dip.
+	</p>
+
+	<p>
+	You are big and rich and right at the top, are you? So what?
+	I don't give two whoops in Hades if you are as big as General Motors and General Electric and the General Staff of the U.S. Army all combined.
+	If you had as much sense as a half-witted hummingbird, you would realize that I am interested in how big I am - not how big you are.
+	</p>
+
+	<p>
+	You desire! You desire. You unmitigated ass.
+	I'm not interested in what you desire or what the President of the United States desires.
+	Let me tell you once and for all that I am interested in what I desire - and you haven't said a word about that yet in this absurd letter of yours.
+	</p>
+
+	<p>
+	Any advertising man who is guilty of perpetrating such drivel as you have sent me has something wrong with his medulla oblongata.
+	You don't need a letter giving our latest doings.
+	What you need is a quart of iodine in your thyroid gland.
+	</p>
+	</body>
+	</html>
+	"}

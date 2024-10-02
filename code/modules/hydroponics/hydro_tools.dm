@@ -14,6 +14,7 @@
 
 /obj/item/device/analyzer/plant_analyzer
 	name = "plant analyzer"
+	desc = "A hand-held botanical scanner that reports detailed information about seeds, plants and produce."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "hydro"
 	item_state = "analyzer"
@@ -79,12 +80,20 @@
 	dat += "<tr><td><b>Potency</b></td><td>[round(grown_seed.potency, 0.01)]</td></tr>"
 	dat += "</table>"
 
-	if(grown_reagents && grown_reagents.reagent_list && grown_reagents.reagent_list.len)
-		dat += "<h2>Reagent Data</h2>"
+	dat += "<h2>Reagent Data</h2>"
 
-		dat += "<br>This sample contains: "
+	if(!grown_reagents || istype(target,/obj/machinery/portable_atmospherics/hydroponics))
+		dat += "This plant will produce: "
+		var/datum/reagent/N
+		for (var/rid in grown_seed.chems)
+			N = chemical_reagents_list[rid]
+			dat += "<br>- [N.id]"
+		dat += "<br>" //so it doesn't overlap with the next part
+
+	if(grown_reagents && grown_reagents.reagent_list && grown_reagents.reagent_list.len)
+		dat += "This sample contains: "
 		for(var/datum/reagent/R in grown_reagents.reagent_list)
-			dat += "<br>- [R.id], [grown_reagents.get_reagent_amount(R.id)] unit(s)"
+			dat += "<br>- [R.id], [grown_reagents.get_reagent_amount(R.id)] unit[grown_reagents.get_reagent_amount(R.id) == 1 ? "" : "s"]"
 
 	dat += "<h2>Other Data</h2>"
 
@@ -105,110 +114,106 @@
 		dat += "The mature plant will produce [grown_seed.products.len == 1 ? "fruit" : "[grown_seed.products.len] varieties of fruit"].<br>"
 
 	if(grown_seed.nutrient_consumption == 0)
-		dat += "It does not require nutrient to subsist.<br>"
-	else if(grown_seed.nutrient_consumption < 2)
-		dat += "It consumes a small amount of nutrient.<br>"
-	else if(grown_seed.nutrient_consumption > 3)
-		dat += "It requires a heavy supply of nutrient.<br>"
+		dat += "It does not require nutrients to subsist.<br>"
 	else
-		dat += "It requires a moderate supply of nutrient.<br>"
+		dat += "It consumes [grown_seed.nutrient_consumption] unit[grown_seed.nutrient_consumption == 1 ? "" : "s"] of nutrient per cycle.<br>"
 
 	if(grown_seed.fluid_consumption == 0)
-		dat += "It does not require fluids to subsist.<br>"
-	else if(grown_seed.fluid_consumption < 1)
-		dat += "It requires very little fluids.<br>"
-	else if(grown_seed.fluid_consumption > 5)
-		dat += "It requires a large amount of fluids.<br>"
+		dat += "It does not require any fluids to subsist.<br>"
+	else if(grown_seed.toxin_affinity < 5)
+		dat += "It requires [grown_seed.fluid_consumption] unit[grown_seed.fluid_consumption == 1 ? "" : "s"] of water per cycle.<br>"
+	else if(grown_seed.toxin_affinity > 7)
+		dat += "It requires [grown_seed.fluid_consumption] unit[grown_seed.fluid_consumption == 1 ? "" : "s"] of toxins per cycle.<br>"
+	else if(grown_seed.toxin_affinity >= 5 && grown_seed.toxin_affinity <= 7)
+		dat += "It requires [grown_seed.fluid_consumption * 0.5] unit[grown_seed.fluid_consumption == 1 ? "" : "s"] of both water and toxins per cycle.<br>"
+
+	dat += "It thrives in a temperature of [grown_seed.ideal_heat] Kelvin and can tolerate deviations of up to [grown_seed.heat_tolerance] Kelvin.<br>"
+
+	dat += "It can tolerate pressures between [grown_seed.lowkpa_tolerance] and [grown_seed.highkpa_tolerance] kPa.<br>"
+
+	dat += "It thrives in a light level of [grown_seed.ideal_light] lumen[grown_seed.ideal_light == 1 ? "" : "s"], and can tolerate a deviation of up to [grown_seed.light_tolerance] lumen[grown_seed.light_tolerance == 1 ? "" : "s"] from it.<br>"
+
+	dat += "It has a toxin affinity of [grown_seed.toxin_affinity] "
+	if(grown_seed.toxin_affinity < 5)
+		dat += "and will get damaged if exposed to them.<br>"
+	else if(grown_seed.toxin_affinity > 7)
+		dat += "and will require toxins as a fluid, getting damaged if exposed to water.<br>"
+	else if(grown_seed.toxin_affinity >= 5 && grown_seed.toxin_affinity <= 7)
+		dat += "and requires both water and toxins, being able somewhat to tolerate either.<br>"
+
+	dat += "It has a pest tolerance of [grown_seed.pest_tolerance]. "
+	if(grown_seed.pest_tolerance < 30)
+		dat += "It is highly sensitive to them.<br>"
+	else if(grown_seed.pest_tolerance > 70)
+		dat += "It is remarkably resistant to them.<br>"
 	else
-		dat += "It requires a stable supply of fluids.<br>"
+		dat += "It is average.<br>"
 
-	dat += "It thrives in a temperature of [grown_seed.ideal_heat] Kelvin."
-
-	if(grown_seed.lowkpa_tolerance < 20)
-		dat += "<br>It is well adapted to low pressure levels."
-	if(grown_seed.highkpa_tolerance > 220)
-		dat += "<br>It is well adapted to high pressure levels."
-
-	if(grown_seed.heat_tolerance > 50)
-		dat += "<br>It is well adapted to a range of temperatures."
-	else if(grown_seed.heat_tolerance < 10)
-		dat += "<br>It is very sensitive to temperature shifts."
-
-	dat += "<br>It thrives in a light level of [grown_seed.ideal_light] lumen[grown_seed.ideal_light == 1 ? "" : "s"]."
+	dat += "It has a weed tolerance of [grown_seed.weed_tolerance]. "
+	if(grown_seed.weed_tolerance < 30)
+		dat += "It is highly sensitive to them.<br>"
+	else if(grown_seed.weed_tolerance > 70)
+		dat += "It is remarkably resistant to them.<br>"
+	else
+		dat += "It is average.<br>"
 
 	if(grown_seed.consume_gasses)
 		for(var/gas in grown_seed.consume_gasses)
-			dat += "<br>It will consume [gas] from the environment."
+			dat += "It will consume [grown_seed.consume_gasses[gas]] moles of [gas] from the environment per cycle.<br>"
 	if(grown_seed.gas_absorb)
-		dat += "<br>It will turn absorbed gasses into reagents."
+		dat += "It will absorb the consumed gases, slowly gaining potency as it does.<br>Its produce can also absorb the consumed gases and will slowly turn them into reagents.<br>"
 	if(grown_seed.exude_gasses)
 		for(var/gas in grown_seed.exude_gasses)
-			dat += "<br>It will exude [gas] into the environment."
-
-	if(grown_seed.light_tolerance > 7)
-		dat += "<br>It is well adapted to a range of light levels."
-	else if(grown_seed.light_tolerance < 3)
-		dat += "<br>It is very sensitive to light level shifts."
-
-	if(grown_seed.toxin_affinity < 5)
-		dat += "<br>It is highly sensitive to toxins."
-	else if(grown_seed.toxin_affinity > 7)
-		dat += "<br>It has a remarkable affinity for toxins."
-
-	if(grown_seed.pest_tolerance < 30)
-		dat += "<br>It is highly sensitive to pests."
-	else if(grown_seed.pest_tolerance > 70)
-		dat += "<br>It is remarkably resistant to pests."
-
-	if(grown_seed.weed_tolerance < 30)
-		dat += "<br>It is highly sensitive to weeds."
-	else if(grown_seed.weed_tolerance > 70)
-		dat += "<br>It is remarkably resistant to weeds."
+			var/amount = max(1,round((grown_seed.exude_gasses[gas]*round(grown_seed.potency))/grown_seed.exude_gasses.len))
+			dat += "It will exude [amount] moles of [gas] into the environment per cycle.<br>"
 
 	switch(grown_seed.spread)
 		if(1)
-			dat += "<br>It is capable of growing beyond the confines of a tray."
+			dat += "It is capable of growing beyond the confines of a tray.<br>"
 		if(2)
-			dat += "<br>It is a robust and vigorous vine that will spread rapidly."
+			dat += "It is a robust and vigorous vine that will spread rapidly.<br>"
 
 	if(grown_seed.hematophage)
-		dat += "<br>It is a highly specialized hematophage that will only draw nutrients from blood."
+		dat += "It is a highly specialized hematophage that will only draw nutrients from blood.<br>"
 
 	switch(grown_seed.voracious)
 		if(1)
-			dat += "<br>It is carnivorous and will eat tray pests and weeds for sustenance."
+			dat += "It is omnivorous and will eat tray pests and weeds for sustenance.<br>"
 		if(2)
-			dat	+= "<br>It is carnivorous and poses a significant threat to living things around it."
+			dat	+= "It is carnivorous and poses a significant threat to living things around it.<br>"
 
 	if(grown_seed.alter_temp)
-		dat += "<br>It will gradually alter the local room temperature to match it's ideal habitat."
+		dat += "It will gradually alter the local room temperature to match its ideal habitat.<br>"
 
 	if(grown_seed.ligneous)
-		dat += "<br>It is a ligneous plant with strong and robust stems."
+		dat += "It is a ligneous plant with strong and robust stems.<br>"
 
 	if(grown_seed.thorny)
-		dat += "<br>It possesses a cover of sharp thorns."
+		dat += "It possesses a cover of sharp thorns.<br>"
 
 	if(grown_seed.stinging)
-		dat += "<br>It possesses a cover of fine stingers capable of releasing chemicals on touch."
+		dat += "It possesses a cover of fine stingers capable of releasing chemicals on touch.<br>"
 
 	if(grown_seed.teleporting)
-		dat += "<br>It possesses a high degree of temporal/spatial instability and may cause spontaneous bluespace disruptions."
+		dat += "It possesses a high degree of temporal/spatial instability and may cause spontaneous bluespace disruptions.<br>"
 
 	switch(grown_seed.juicy)
 		if(1)
-			dat += "<br>Its fruit is soft-skinned and abudantly juicy."
+			dat += "Its fruit is soft-skinned and abudantly juicy.<br>"
 		if(2)
-			dat	+= "<br>Its fruit is excessively soft and juicy."
+			dat	+= "Its fruit is excessively soft and juicy.<br>"
 
 	if(grown_seed.biolum)
-		dat += "<br>It is [grown_seed.biolum_colour ? "<font color='[grown_seed.biolum_colour]'>bio-luminescent</font>" : "bio-luminescent"]."
+		if(grown_seed.biolum_colour == "#FFFFFF")
+			dat += "It is bio-luminescent and glows pure white.<br>" //exception for shardlime
+		else
+			dat += "It is [grown_seed.biolum_colour ? "<font color='[grown_seed.biolum_colour]'>bio-luminescent</font>" : "bio-luminescent"].<br>"
 
 	if(dat)
 		dat = jointext(dat,"")
 		last_data = dat
-		dat += "<br><br>\[<a href='?src=\ref[src];print=1'>print report</a>\] \[<a href='?src=\ref[src];clear=1'>clear</a>\]"
-		user << browse(dat,"window=plant_analyzer_\ref[src];size=400x500")
+		dat += "<br>\[<a href='?src=\ref[src];print=1'>print report</a>\] \[<a href='?src=\ref[src];clear=1'>clear</a>\]"
+		user << browse(dat,"window=plant_analyzer_\ref[src];size=500x600")
 	return
 
 /obj/item/device/analyzer/plant_analyzer/attack_self(mob/user as mob)
@@ -287,6 +292,7 @@
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=1"
 	attack_verb = list("chops", "tears", "cuts")
 	surgerysound = 'sound/items/hatchetsurgery.ogg'
+	toolsounds = list('sound/effects/woodcuttingshort.ogg')
 
 /obj/item/weapon/hatchet/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
@@ -350,14 +356,102 @@
 	throw_range = 3
 	flags = FPRINT
 	var/being_potted = FALSE
+	var/list/paint_layers = list("paint-full" = null, "paint-rim" = null, "paint-stripe" = null)
 
 /obj/item/claypot/attackby(var/obj/item/O,var/mob/user)
 	if(istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(O,/obj/item/weapon/grown))
 		to_chat(user, "<span class='warning'>You have to transplant the plant into the pot directly from the hydroponic tray, using a spade.</span>")
 	else if(isshovel(O))
 		to_chat(user, "<span class='warning'>There is no plant to remove in \the [src].</span>")
+	else if(istype(O, /obj/item/painting_brush))
+		var/obj/item/painting_brush/P = O
+		if (P.paint_color)
+			paint_act(P.paint_color,user, P.nano_paint != PAINTLIGHT_NONE)
+		else
+			to_chat(user, "<span class='warning'>There is no paint on \the [P].</span>")
+		return 1
+	else if(istype(O, /obj/item/paint_roller))
+		var/obj/item/paint_roller/P = O
+		if (P.paint_color)
+			paint_act(P.paint_color,user, P.nano_paint != PAINTLIGHT_NONE)
+		else
+			to_chat(user, "<span class='warning'>There is no paint on \the [P].</span>")
+		return 1
 	else
 		to_chat(user, "<span class='warning'>You cannot plant \the [O] in \the [src].</span>")
+
+/obj/item/claypot/proc/paint_act(var/_color, var/mob/user, var/nano_paint)
+	var/list/choices = list("Full" = "paint-full", "Rim" = "paint-rim", "Stripe" = "paint-stripe")
+	var/paint_target = input("Which part do you want to paint?","Clay Pot Painting",1) as null|anything in choices
+	if (!paint_target)
+		return
+	switch(paint_target)
+		if ("Full")
+			to_chat(user, "<span class='notice'>You begin to cover \the [src] in paint.</span>")
+		if ("Rim")
+			to_chat(user, "<span class='notice'>You begin to paint \the [src]'s rim.</span>")
+		if ("Stripe")
+			to_chat(user, "<span class='notice'>You begin to paint a stripe on \the [src].</span>")
+	playsound(loc, "mop", 10, 1)
+	if (do_after(user, src, 20))
+		if (_color == "#FFFFFF")
+			_color = "#FEFEFE" //null color prevention
+		if (paint_target == "Full")
+			paint_layers["paint-rim"] = null
+			paint_layers["paint-stripe"] = null
+		paint_layers[choices[paint_target]]	= list(_color, nano_paint)
+		update_icon()
+		user.regenerate_icons()
+
+/obj/item/claypot/update_icon()
+	overlays.len = 0
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = null
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = null
+	var/image/left_I = image(inhand_states["left_hand"], src, "")
+	var/image/right_I = image(inhand_states["right_hand"], src, "")
+
+	for (var/entry in paint_layers)
+		if (!paint_layers[entry])
+			kill_moody_light_index(entry)
+		else
+			var/list/paint_layer = paint_layers[entry]
+			var/image/I = image(icon, src, "[icon_state]-[entry]")
+			I.color = paint_layer[1]
+			overlays += I
+
+			//dynamic in-hands
+			var/image/left_layer = image(inhand_states["left_hand"], src, "[item_state]-[entry]")
+			var/image/right_layer = image(inhand_states["right_hand"], src, "[item_state]-[entry]")
+			left_layer.appearance_flags = RESET_COLOR
+			left_layer.color = paint_layer[1]
+			left_I.overlays += left_layer
+			right_layer.appearance_flags = RESET_COLOR
+			right_layer.color = paint_layer[1]
+			right_I.overlays += right_layer
+
+			if (paint_layer[2])
+				update_moody_light_index(entry, image_override = I)
+
+				//dynamic in-hands moody lights
+				var/image/left_moody = image(left_layer)
+				var/image/right_moody = image(right_layer)
+				left_moody.blend_mode = BLEND_ADD
+				left_moody.plane = LIGHTING_PLANE
+				left_moody.color = paint_layer[1]
+				left_I.overlays += left_moody
+				right_moody.blend_mode = BLEND_ADD
+				right_moody.plane = LIGHTING_PLANE
+				right_moody.color = paint_layer[1]
+				right_I.overlays += right_moody
+
+			else
+				kill_moody_light_index(entry)
+
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
+	set_blood_overlay()
+	if (on_fire && fire_overlay)
+		overlays += fire_overlay
 
 /obj/item/claypot/throw_impact(atom/hit_atom)
 	if(!..() && prob(40))
@@ -365,3 +459,9 @@
 		new/obj/effect/decal/cleanable/clay_fragments(src.loc)
 		src.visible_message("<span class='warning'>\The [src.name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
 		qdel(src)
+
+/obj/item/claypot/clean_act(var/cleanliness)
+	..()
+	if (cleanliness >= CLEANLINESS_BLEACH)
+		paint_layers = list("paint_full" = null, "paint_rim" = null, "paint_stripe" = null)
+		update_icon()

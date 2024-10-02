@@ -10,8 +10,10 @@
 	var/fragrance = null
 
 /obj/item/weapon/grown/New(atom/loc, custom_plantname)
-
 	..()
+
+	pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER	//Randomizes position slightly.
+	pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 	var/datum/reagents/R = new/datum/reagents(50)
 	reagents = R
@@ -50,6 +52,7 @@
 	potency = newValue
 
 /obj/item/weapon/grown/log
+	plantname = "towercap"
 	name = "tower-cap log"
 	desc = "It's better than bad, it's good!"
 	icon = 'icons/obj/hydroponics/towercap.dmi'
@@ -106,7 +109,8 @@
 	name = "sunflower"
 	desc = "It's beautiful! A certain person might beat you to death if you trample these."
 	icon = 'icons/obj/hydroponics/sunflower.dmi'
-	icon_state = "produce"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	icon_state = "sunflower"
 	damtype = "fire"
 	force = 0
 	flags = 0
@@ -115,6 +119,7 @@
 	throw_speed = 1
 	throw_range = 3
 	fragrance = INCENSE_SUNFLOWERS
+	slot_flags = SLOT_HEAD
 
 /obj/item/weapon/grown/sunflower/attack(mob/M as mob, mob/user as mob)
 	to_chat(M, "<font color='green'><b> [user] smacks you with a sunflower! </font><font color='yellow'><b>FLOWER POWER<b></font>")
@@ -126,7 +131,8 @@
 	name = "novaflower"
 	desc = "These beautiful flowers have a crisp smokey scent, like a summer bonfire."
 	icon = 'icons/obj/hydroponics/novaflower.dmi'
-	icon_state = "produce"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	icon_state = "novaflower"
 	damtype = "fire"
 	force = 0
 	flags = 0
@@ -316,3 +322,97 @@
 		M.put_in_hands(src)
 		to_chat(M, "<span class = 'userwarning'>\The [src] has been forced onto you by \the [user]! Find somebody else to give it to before it consumes your head!</span>")
 
+/obj/item/weapon/grown/dandelion
+	plantname = "dandelions"
+	name = "dandelion"
+	desc = "A fuzzy flower, the head consists of a mass of seeds called a pappus, ready to be carried by the wind."
+	gender = NEUTER
+	icon = 'icons/obj/hydroponics/dandelions.dmi'
+	icon_state = "produce-2"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "dandelion-pappus"
+	throwforce = 0
+	w_class = W_CLASS_TINY
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
+	throw_range = 1
+	throw_speed = 1
+	pressure_resistance = 2
+	attack_verb = list("slaps")
+	var/seeds_left = 3
+
+/obj/item/weapon/grown/dandelion/MiddleAltClick(var/mob/living/user)
+	attack_self(user)
+
+/obj/item/weapon/grown/dandelion/attack_self(var/mob/living/user)
+	var/turf/T = get_turf(user)
+	var/turf/U = get_step(T, user.dir)
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if (H.species && (H.species.flags & SPECIES_NO_MOUTH))
+			to_chat(user, "<span class='warning'>You stare at \the [src] intently. Wishing you had a mouth to blown on it.</span>")
+			return
+	playsound(user, 'sound/effects/blow.ogg', 5, 1, -2)
+	if(test_reach(T,U,PASSTABLE|PASSGRILLE|PASSMOB|PASSMACHINE|PASSGIRDER|PASSRAILING))
+		blow_seeds(T,U)
+	else
+		blow_seeds(T,T)
+	user.visible_message("<span class='notice'>[user] blows some dandelion seeds.</span>", "<span class='notice'>You blow some dandelion seeds.</span>")
+
+/obj/item/weapon/grown/dandelion/attack(var/mob/living/carbon/human/M, var/mob/living/user)
+	return
+
+/obj/item/weapon/grown/dandelion/afterattack(var/atom/A, var/mob/user, proximity_flag)
+
+	if (isshelf(A))
+		return
+
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if (H.species && (H.species.flags & SPECIES_NO_MOUTH))
+			to_chat(user, "<span class='warning'>You stare at \the [src] intently. Wishing you had a mouth to blown on it.</span>")
+			return
+
+	playsound(user, 'sound/effects/blow.ogg', 5, 1, -2)
+
+	var/turf/T = get_turf(user)
+	var/turf/U = get_step(T, get_dir(T,A))
+
+	if(T != U && test_reach(T,U,PASSTABLE|PASSGRILLE|PASSMOB|PASSMACHINE|PASSGIRDER|PASSRAILING))
+		blow_seeds(T,U)
+	else
+		blow_seeds(T,T)
+	user.visible_message("<span class='notice'>[user] blows some dandelion seeds.</span>", "<span class='notice'>You blow some dandelion seeds.</span>")
+
+/obj/item/weapon/grown/dandelion/proc/blow_seeds(var/turf/source_turf, var/turf/dest_turf)
+	source_turf.flying_pollen(dest_turf,3.5)
+
+	sow_trays(dest_turf)
+
+	seeds_left--
+	if (seeds_left <= 0)
+		qdel(src)
+
+/obj/item/weapon/grown/dandelion/proc/sow_trays(var/turf/T)//TODO: have it work on grass and possibly with other weeds/pollen/seeds
+	spawn(10)
+		for (var/obj/machinery/portable_atmospherics/hydroponics/tray in T)
+			if (!tray.seed)
+				tray.seed = SSplant.seeds[plantname]
+				tray.add_planthealth(tray.seed.endurance)
+				tray.lastcycle = world.time
+				tray.weedlevel = 0
+				tray.update_icon()
+
+/obj/item/weapon/grown/dandelion/wind_act(var/differential, var/list/connecting_turfs)
+	var/turf/T = get_turf(src)
+	var/turf/U = get_step(T,get_dir(T,pick(connecting_turfs)))
+	var/log_differential = log(abs(differential) * 3)
+	if (U)
+		if (differential > 0)
+			T.flying_pollen(U,log_differential,PS_DANDELIONS)
+		else
+			T.flying_pollen(U,-log_differential,PS_DANDELIONS)
+	sow_trays(U)
+	seeds_left--
+	if (seeds_left <= 0)
+		qdel(src)

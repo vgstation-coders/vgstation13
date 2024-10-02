@@ -12,7 +12,7 @@
 #if ASTAR_DEBUG == 1
 #define log_astar_bot(text) visible_message("[src] : [text]")
 #define log_astar_beacon(text) //to_chat(world, "[src] : [text]")
-#define log_astar_command(text) //to_chat(world, "[src] : [text]")
+#define log_astar_command(text) to_chat(world, "[src] : [text]")
 #else
 #define log_astar_bot(text)
 #define log_astar_beacon(text)
@@ -26,6 +26,7 @@
 	luminosity = 3
 	use_power = MACHINE_POWER_USE_NONE
 	pAImovement_delay = 1
+	machine_flags = EMAGGABLE
 	var/icon_initial //To get around all that pesky hardcoding of icon states, don't put modifiers on this one
 	var/obj/item/weapon/card/id/botcard			// the ID card that the bot "holds"
 	var/mob/living/simple_animal/hostile/pulse_demon/PD_occupant // for when they take over them
@@ -171,8 +172,8 @@
 
 /obj/machinery/bot/proc/decay_oldtargets()
 	for(var/i in old_targets)
-		log_astar_bot("[i] [old_targets[i]]")
-		if(--old_targets[i] == 0)
+		log_astar_bot("old target: [i] [old_targets[i]]")
+		if(--old_targets[i] <= 0)
 			remove_oldtarget(i)
 
 // Can we move to the next tile or not ?
@@ -496,6 +497,7 @@
 				target = get_turf(signal.source)
 			path = list()
 			patrol_path = list()
+			destinations_queue = list()
 			return 1
 		if ("switch_power")
 			if (on)
@@ -514,13 +516,19 @@
 	destination = place_to_go
 
 /datum/bot/order/mule
-	var/atom/thing_to_load
+	var/atom/thing_to_load = null
 	var/unload_here = FALSE
+	var/unload_dir = 0
+	var/loc_description = ""
+	var/returning = FALSE
 
-/datum/bot/order/mule/New(var/turf/place_to_go, var/atom/thing, _unload_here = FALSE)
+/datum/bot/order/mule/New(var/turf/place_to_go, var/atom/thing = null, _unload_here = FALSE, var/unload_direction = 0, var/text_desc = "Unknown")
 	destination = place_to_go
 	thing_to_load = thing
 	unload_here = _unload_here
+	unload_dir = unload_direction
+	loc_description = text_desc
+	astar_debug_mulebots("Order up! [destination] [loc_description] [thing_to_load] [unload_here] [unload_dir]!")
 
 /datum/bot/order/mule/unload
 
@@ -708,8 +716,8 @@
 				to_chat(user, "<span class='notice'>Unable to repair with the maintenance panel closed.</span>")
 		else
 			to_chat(user, "<span class='notice'>[src] does not need a repair.</span>")
-	else if (istype(W, /obj/item/weapon/card/emag) && emagged < 2)
-		emag_act(user)
+	else if (emagged < 2)
+		emag_check(W,user)
 	else
 		if(isobj(W))
 			W.on_attack(src, user)

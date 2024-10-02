@@ -3,7 +3,7 @@
 	desc = "A small, twin-bladed machine capable of inflicting very deadly lacerations."
 	icon_state = "viscerator_attack"
 	icon_living = "viscerator_attack"
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	health = 15
 	maxHealth = 15
 	melee_damage_lower = 15

@@ -156,18 +156,25 @@
 
 /obj/item/weapon/storage/toolbox/paint
 	name = "painter's toolbox"
-	desc = "Contains an assortment of paints for the artistic trader."
+	desc = "Contains an assortment of paints for the artistic spacefarer."
 	icon_state = "toolbox_paint"
 	item_state = "toolbox_paint"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/arts_n_crafts.dmi', "right_hand" = 'icons/mob/in-hand/right/arts_n_crafts.dmi')
 	attack_verb = list("daubs", "decorates", "slathers")
+	max_combined_w_class = 42
 	items_to_spawn = list(
-	/obj/item/weapon/reagent_containers/glass/paint/red,
-	/obj/item/weapon/reagent_containers/glass/paint/green,
-	/obj/item/weapon/reagent_containers/glass/paint/blue,
-	/obj/item/weapon/reagent_containers/glass/paint/yellow,
-	/obj/item/weapon/reagent_containers/glass/paint/purple,
-	/obj/item/weapon/reagent_containers/glass/paint/cyan,
-	/obj/item/weapon/reagent_containers/glass/paint/black,
-	/obj/item/weapon/reagent_containers/glass/paint/white,
-	/obj/item/weapon/reagent_containers/glass/paint/remover
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/red,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/vermilion,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/orange,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/amber,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/yellow,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/chartreuse,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/green,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/turquoise,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/blue,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/indigo,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/violet,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/magenta,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/black,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/white,
 	)

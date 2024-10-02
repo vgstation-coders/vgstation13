@@ -212,11 +212,6 @@ For vending packs, see vending_packs.dm*/
 
 	add_fingerprint(user)
 
-	if(istype(I,/obj/item/weapon/card/emag) && !hacked)
-		to_chat(user, "<span class='notice'>Special supplies unlocked.</span>")
-		hacked = 1
-		can_order_contraband = 1
-		return
 	if(I.is_screwdriver(user))
 		I.playtoolsound(loc, 50)
 		if(do_after(user, src, 20))
@@ -251,11 +246,13 @@ For vending packs, see vending_packs.dm*/
 	else
 		return ..()
 
-/obj/machinery/computer/supplycomp/emag_ai(mob/living/silicon/ai/A)
-	to_chat(A, "<span class='warning'>Special supplies unlocked.</span>")
-	hacked = 1
-	can_order_contraband = 1
-
+/obj/machinery/computer/supplycomp/emag_act(mob/user)
+	if(!hacked)
+		to_chat(user, "<span class='warning'>Special supplies unlocked.</span>")
+		hacked = 1
+		can_order_contraband = 1
+	else
+		return ..()
 
 /obj/machinery/computer/supplycomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(!current_acct)
@@ -412,6 +409,7 @@ For vending packs, see vending_packs.dm*/
 
 			SSsupply_shuttle.moving = -1
 			SSsupply_shuttle.sell()
+			SSsupply_shuttle.scrub()
 			SSsupply_shuttle.send()
 		else
 			SSsupply_shuttle.moving = 1

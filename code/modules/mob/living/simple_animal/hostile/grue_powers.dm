@@ -10,7 +10,7 @@
 	charge_type = Sp_RECHARGE
 	charge_max = 0 SECONDS
 	range = 1
-	compatible_mobs = list(/mob/living/carbon)
+	valid_targets = list(/mob/living/carbon)
 
 /spell/targeted/grue_eat/cast(var/list/targets, mob/living/simple_animal/hostile/grue/user)
 	if (!isturf(user.loc))

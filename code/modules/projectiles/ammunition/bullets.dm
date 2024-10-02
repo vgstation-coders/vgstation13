@@ -16,7 +16,6 @@
 	projectile_type = /obj/item/projectile/bullet/suffocationbullet
 	w_type = RECYK_METAL
 
-
 /obj/item/ammo_casing/a75
 	desc = "A .75 bullet casing."
 	caliber = POINT75
@@ -184,6 +183,12 @@
 	projectile_type = /obj/item/projectile/bullet/boombullet
 	starting_materials = list(MAT_IRON = 250, MAT_PLASMA = 4000)
 
+/obj/item/ammo_casing/shotgun/rocksalt
+	name = "rock-salt shell"
+	desc = "A 12 gauge shell filled with a makeshift rock-salt slug, intended for riot control or battling the occult."
+	icon_state = "rsshell"
+	projectile_type = /obj/item/projectile/bullet/rocksalt
+	starting_materials = list(MAT_IRON = 250)
 
 /obj/item/ammo_casing/a762
 	desc = "A 7.62x51mm bullet casing."

@@ -186,13 +186,11 @@ Refactored AI modules by N3X15
 	var/datum/ai_laws/randomize/RLS = new
 	laws.inherent = RLS.inherent
 	return 1
-/obj/item/weapon/aiModule/randomize/attackby(var/obj/item/I, mob/user as mob)
-	..()
-	if(istype(I, /obj/item/weapon/card/emag))
-		spark(src, 5)
-		qdel(src)
-		to_chat(user,"<span class='warning'>You connect various wires from the cryptographic sequencer to the module, and overwrite its internal memory.</span>")
-		new /obj/item/weapon/aiModule/emaggedrandomize(get_turf(user))
+/obj/item/weapon/aiModule/randomize/emag_act(mob/user)
+	spark(src, 5)
+	qdel(src)
+	to_chat(user,"<span class='warning'>You connect various wires from the cryptographic sequencer to the module, and overwrite its internal memory.</span>")
+	new /obj/item/weapon/aiModule/emaggedrandomize(get_turf(user))
 
 /*************** Emagged Randomize ********************/
 

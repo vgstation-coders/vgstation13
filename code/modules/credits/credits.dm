@@ -36,24 +36,24 @@ var/global/datum/credits/end_credits = new
 	var/js_args = list()
 
 	var/change_credits_song = 1 //If positive, will change the credits song based on criteria
-	var/audio_link = "http://ss13.moe/media/source/roundend/credits/Frolic_Luciano_Michelini.mp3"
+	var/audio_link = "http://media.ss13.moe/source/roundend/credits/Frolic_Luciano_Michelini.mp3"
 	var/list/classic_roundend_jingles = list(
-		"http://ss13.moe/media/source/roundend/jingleclassic/bangindonk.mp3",
-		"http://ss13.moe/media/source/roundend/jingleclassic/apcdestroyed.mp3"
+		"http://media.ss13.moe/source/roundend/jingleclassic/bangindonk.mp3",
+		"http://media.ss13.moe/source/roundend/jingleclassic/apcdestroyed.mp3"
 		)
 	var/list/new_roundend_jingles = list(
-		"http://ss13.moe/media/source/roundend/jinglenew/FTLvictory.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/bayojingle.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/calamitytrigger.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/castlevania.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/duckgame.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/gameoveryeah.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/marioworld.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/megamanX.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/rayman.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/slugmissioncomplete.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/soniclevelcomplete.mp3",
-		"http://ss13.moe/media/source/roundend/jinglenew/tfvictory.mp3"
+		"http://media.ss13.moe/source/roundend/jinglenew/FTLvictory.mp3",
+		"http://media.ss13.moe/source/roundend/jinglenew/bayojingle.mp3",
+		"http://media.ss13.moe/source/roundend/jinglenew/calamitytrigger.mp3",
+		"http://media.ss13.moe/source/roundend/jinglenew/castlevania.mp3",
+		"http://media.ss13.moe/source/roundend/jinglenew/duckgame.mp3",
+		"http://media.ss13.moe/source/roundend/jinglenew/gameoveryeah.mp3",
+		"http://media.ss13.moe/source/roundend/jinglenew/marioworld.mp3",
+		"http://media.ss13.moe/source/roundend/jinglenew/megamanX.mp3",
+		"http://media.ss13.moe/source/roundend/jinglenew/rayman.mp3",
+		"http://media.ss13.moe/source/roundend/jinglenew/slugmissioncomplete.mp3",
+		"http://media.ss13.moe/source/roundend/jinglenew/soniclevelcomplete.mp3",
+		"http://media.ss13.moe/source/roundend/jinglenew/tfvictory.mp3"
 		)
 
 /datum/credits/proc/is_rerun()
@@ -291,13 +291,13 @@ var/global/datum/credits/end_credits = new
 /datum/credits/proc/determine_round_end_song()
 	var/list/candidates = list()
 	if(ticker.malfunctioning_AI_victory)
-		candidates += "http://ss13.moe/media/source/roundend/credits/System_Shock_Elevator.mp3"
+		candidates += "http://media.ss13.moe/source/roundend/credits/System_Shock_Elevator.mp3"
 	else if(ticker.station_was_nuked)
-		candidates += pick("http://ss13.moe/media/source/roundend/credits/RA2_Blow_It_Up.mp3",
-						"http://ss13.moe/media/source/roundend/credits/Castanets_You_Are_The_Blood.mp3",
-						"http://ss13.moe/media/source/roundend/credits/Julee_Cruise_Falling_Instrumental.mp3",
-						"http://ss13.moe/media/source/roundend/credits/Julee_Cruise_The_World_Spins.mp3",
-						"http://ss13.moe/media/source/roundend/credits/Mike_Oldfield_Nuclear.mp3")
+		candidates += pick("http://media.ss13.moe/source/roundend/credits/RA2_Blow_It_Up.mp3",
+						"http://media.ss13.moe/source/roundend/credits/Castanets_You_Are_The_Blood.mp3",
+						"http://media.ss13.moe/source/roundend/credits/Julee_Cruise_Falling_Instrumental.mp3",
+						"http://media.ss13.moe/source/roundend/credits/Julee_Cruise_The_World_Spins.mp3",
+						"http://media.ss13.moe/source/roundend/credits/Mike_Oldfield_Nuclear.mp3")
 
 	if(candidates.len)
 		audio_link = pick(candidates)

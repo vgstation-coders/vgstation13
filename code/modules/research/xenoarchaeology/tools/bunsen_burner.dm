@@ -9,6 +9,9 @@
 	pass_flags = PASSTABLE
 	var/heating = BUNSEN_OFF //whether the bunsen is turned on
 	var/obj/item/weapon/reagent_containers/held_container
+	slimeadd_message = "You add the slime extract to the fuel port"
+	slimes_accepted = SLIME_RED
+	slimeadd_success_message = "It feels full now"
 	ghost_read = 0
 	is_cooktop = TRUE
 
@@ -25,6 +28,10 @@
 
 /obj/machinery/bunsen_burner/render_cookvessel(offset_x = 2, offset_y = 12)
 	..()
+	if(cookvessel || held_container)
+		adjust_particles(PVAR_POSITION, list(offset_x,offset_y))
+	else
+		adjust_particles(PVAR_POSITION, 0)
 
 /obj/machinery/bunsen_burner/cook_temperature()
 	var/temperature = get_max_temperature()
@@ -40,13 +47,28 @@
 
 /////////////////////
 
+/obj/machinery/bunsen_burner/slime_act(primarytype, mob/user)
+	. = ..()
+	if(primarytype == SLIME_RED && .)
+		reagents.clear_reagents()
+		reagents.add_reagent(GLYCEROL, 250)
+
 /obj/machinery/bunsen_burner/splashable()
 	return FALSE
+
+/obj/machinery/bunsen_burner/table_shift()
+	pixel_y = 6
+
+/obj/machinery/bunsen_burner/table_unshift()
+	pixel_y = 0
 
 /obj/machinery/bunsen_burner/New()
 	..()
 	processing_objects.Remove(src)
 	create_reagents(250)
+
+	if(ticker)
+		initialize()
 
 /obj/machinery/bunsen_burner/mapping/New()
 	..()
@@ -54,6 +76,7 @@
 
 /obj/machinery/bunsen_burner/Destroy()
 	if(held_container)
+		adjust_particles(PVAR_POSITION, 0)
 		held_container.forceMove(get_turf(src))
 		held_container = null
 	processing_objects.Remove(src)
@@ -89,6 +112,8 @@
 				add_fingerprint(user)
 				//if it is a cooking vessel, we do want to call afterattack() so that it gets added properly
 			else if(!held_container && user.drop_item(W, src))
+				W.adjust_particles(PVAR_POSITION, list(2,12))
+				W.link_particles(src)
 				to_chat(user, "<span class='notice'>You put [W] onto \the [src].</span>")
 				add_fingerprint(user)
 				load_item(W)
@@ -126,16 +151,17 @@
 			try_refill_nearby()
 
 		for(var/possible_fuel in possible_fuels)
-			if(reagents.has_reagent(possible_fuel))
+			if(reagents.has_reagent(possible_fuel) || (possible_fuel == GLYCEROL && (has_slimes & SLIME_RED)))
 				var/list/fuel_stats = possible_fuels[possible_fuel]
 				max_temperature = fuel_stats["max_temperature"]
 				thermal_energy_transfer = fuel_stats["thermal_energy_transfer"]
 				consumption_rate = fuel_stats["consumption_rate"]
-				unsafety = fuel_stats["unsafety"]
-				o2_consumption = fuel_stats["o2_cons"]
-				co2_consumption = fuel_stats["co2_cons"]
+				unsafety = has_slimes & SLIME_RED ? fuel_stats["unsafety"] : 0
+				o2_consumption = has_slimes & SLIME_RED ? fuel_stats["o2_cons"] : 0
+				co2_consumption = has_slimes & SLIME_RED ? fuel_stats["co2_cons"] : 0
 
-				reagents.remove_reagent(possible_fuel, consumption_rate)
+				if(!(possible_fuel == GLYCEROL && (has_slimes & SLIME_RED)) && reagents.has_reagent(possible_fuel))
+					reagents.remove_reagent(possible_fuel, consumption_rate)
 				if(held_container)
 					if(!cookvessel) //Cooking vessels are heated differently.
 						held_container.reagents.heating(thermal_energy_transfer, max_temperature)
@@ -144,7 +170,7 @@
 					GAS_OXYGEN, -o2_consumption,
 					GAS_CARBON, -co2_consumption)
 				if(prob(unsafety) && T)
-					T.hotspot_expose(max_temperature, 5)
+					try_hotspot_expose(max_temperature, SMALL_FLAME,0)
 				break
 
 		if(!max_temperature)
@@ -202,6 +228,8 @@
 		..()
 	else if(held_container)
 		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
+		adjust_particles(PVAR_POSITION, 0)
+		remove_particles()
 		held_container.forceMove(src.loc)
 		held_container.attack_hand(user)
 		held_container = null
