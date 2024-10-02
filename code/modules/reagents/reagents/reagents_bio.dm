@@ -320,7 +320,7 @@
 	color = "#993300"
 	custom_metabolism = 2
 	density = 109.06
-	//var/list/mob/living/simple_animal/hostile/retaliate/horde = list()
+	var/list/mob/living/simple_animal/hostile/retaliate/horde = list()
 
 /datum/reagent/killer_pheromones/on_mob_life(var/mob/living/M)
 	if(..())
@@ -343,21 +343,21 @@
 			continue
 
 		R.Retaliate()
-		//horde += R
+		horde += R
 		alerted++
 		break
 
 	if(alerted >= 2)
 		to_chat(M,"<span class='danger'>YOU HAVE ALERTED THE HORDE!</span>")
 
-/*/datum/reagent/killer_pheromones/reagent_deleted() // uncomment if necessary
+/datum/reagent/killer_pheromones/reagent_deleted() // uncomment if necessary
 	if(..())
 		return 1
 	if(!holder)
 		return
 	var/mob/M =  holder.my_atom
 	for(var/mob/living/simple_animal/hostile/retaliate/R in horde)
-		R.enemies -= M*/
+		R.enemies -= M
 
 /datum/reagent/ectoplasm
 	name = "Ectoplasm"
