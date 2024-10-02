@@ -8,7 +8,7 @@
 /datum/surgery_step/glue_bone
 	allowed_tools = list(
 		/obj/item/tool/bonegel = 100,
-		/obj/item/tool/screwdriver = 75,
+		"screwdriver" = 75,
 		)
 	can_infect = 1
 	blood_level = 1
@@ -46,7 +46,7 @@
 /datum/surgery_step/set_bone
 	allowed_tools = list(
 		/obj/item/tool/bonesetter = 100,
-		/obj/item/tool/wrench = 75,
+		"wrench" = 75,
 		)
 
 	duration = 6 SECONDS
@@ -85,7 +85,7 @@
 /datum/surgery_step/mend_skull
 	allowed_tools = list(
 		/obj/item/tool/bonesetter = 100,
-		/obj/item/tool/wrench = 75,
+		"wrench"= 75,
 		)
 
 	duration = 6 SECONDS
@@ -119,7 +119,7 @@
 /datum/surgery_step/finish_bone
 	allowed_tools = list(
 		/obj/item/tool/bonegel = 100,
-		/obj/item/tool/screwdriver = 75,
+		"screwdriver" = 75,
 		)
 
 	can_infect = 1

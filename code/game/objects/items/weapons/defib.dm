@@ -267,7 +267,7 @@
 		to_chat(user, "<span class='notice'>You wrap the exposed wires around the cell.</span>")
 		src.update_icon()
 
-	if (istype(I, /obj/item/tool/screwdriver))
+	if (I.is_screwdriver(user))
 		if (!power_supply)
 			return
 

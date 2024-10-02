@@ -307,7 +307,7 @@
 /obj/item/tool/weldingtool/attackby(obj/item/W as obj, mob/user as mob)
 	if(user.is_in_modules(src))
 		return
-	if(istype(W,/obj/item/tool/screwdriver))
+	if(W.is_screwdriver(user))
 		if(welding)
 			to_chat(user, "<span class='warning'>Stop welding first!</span>")
 			return

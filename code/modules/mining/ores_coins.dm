@@ -533,7 +533,7 @@
 		string_attached = 1
 		to_chat(user, "<span class='notice'>You attach a string to \the [name].</span>")
 		CC.use(1)
-	else if(istype(W,/obj/item/tool/wirecutters) )
+	else if(W.is_wirecutter(user))
 		if(!string_attached)
 			..()
 			return

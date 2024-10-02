@@ -1,4 +1,5 @@
 /obj/structure/spacepod_frame
+	name = "spacepod frame"
 	density = 1
 	opacity = 0
 
@@ -58,7 +59,7 @@
 				list(
 					Co_DESC = "A space pod with unwelded bulkhead panelling exposed.",
 					Co_BACKSTEP = list(
-						Co_KEY      = /obj/item/tool/wrench,
+						Co_KEY      = "is_wrench",
 						Co_VIS_MSG  = "{USER} unbolt{s} {HOLDER}'s bulkhead panelling.",
 					),
 					Co_NEXTSTEP = list(
@@ -75,7 +76,7 @@
 						Co_VIS_MSG  = "{USER} pop{s} {HOLDER}'s bulkhead panelling loose.",
 					),
 					Co_NEXTSTEP = list(
-						Co_KEY      = /obj/item/tool/wrench,
+						Co_KEY      = "is_wrench",
 						Co_VIS_MSG  = "{USER} secure{s} {HOLDER}'s bulkhead panelling."
 					)
 				),
@@ -83,7 +84,7 @@
 				list(
 					Co_DESC = "A naked space pod with an exposed core. How lewd.",
 					Co_BACKSTEP = list(
-						Co_KEY      = /obj/item/tool/wrench,
+						Co_KEY      = "is_wrench",
 						Co_VIS_MSG  = "{USER} unsecure{s} {HOLDER}'s core."
 					),
 					Co_NEXTSTEP = list(
@@ -100,7 +101,7 @@
 						Co_VIS_MSG  = "{USER} delicately remove{s} the core from {HOLDER} with a crowbar."
 					),
 					Co_NEXTSTEP = list(
-						Co_KEY      = /obj/item/tool/wrench,
+						Co_KEY      = "is_wrench",
 						Co_VIS_MSG  = "{USER} secure{s} the core's bolts."
 					)
 				),
@@ -108,7 +109,7 @@
 				list(
 					Co_DESC = "A wired pod frame with a secured mainboard.",
 					Co_BACKSTEP = list(
-						Co_KEY      = /obj/item/tool/screwdriver,
+						Co_KEY      = "is_screwdriver",
 						Co_VIS_MSG  = "{USER} unsecure{s} the mainboard."
 					),
 					Co_NEXTSTEP = list(
@@ -126,7 +127,7 @@
 						Co_VIS_MSG  = "{USER} prie{s} out the mainboard."
 					),
 					Co_NEXTSTEP = list(
-						Co_KEY      = /obj/item/tool/screwdriver,
+						Co_KEY      = "is_screwdriver",
 						Co_VIS_MSG  = "{USER} secure{s} the mainboard."
 					)
 				),
@@ -134,7 +135,7 @@
 				list(
 					Co_DESC = "A wired pod frame.",
 					Co_BACKSTEP = list(
-						Co_KEY      = /obj/item/tool/screwdriver,
+						Co_KEY      = "is_screwdriver",
 						Co_VIS_MSG  = "{USER} unclip{s} {HOLDER}'s wiring harnesses."
 					),
 					Co_NEXTSTEP = list(
@@ -148,11 +149,11 @@
 				list(
 					Co_DESC = "A crudely-wired pod frame.",
 					Co_BACKSTEP = list(
-						Co_KEY      = /obj/item/tool/wirecutters,
+						Co_KEY      = "is_wirecutter",
 						Co_VIS_MSG  = "{USER} cut{s} out {HOLDER}'s wiring."
 					),
 					Co_NEXTSTEP = list(
-						Co_KEY      = /obj/item/tool/screwdriver,
+						Co_KEY      = "is_screwdriver",
 						Co_VIS_MSG  = "{USER} adjust{s} the wiring."
 					)
 				),
@@ -202,7 +203,7 @@
 				list(
 					Co_DESC = "A space pod with unsecured armor.",
 					Co_BACKSTEP = list(
-						Co_KEY      = /obj/item/tool/wrench,
+						Co_KEY      = "is_wrench",
 						Co_VIS_MSG  = "{USER} unsecure{s} {HOLDER}'s armor."
 					),
 					Co_NEXTSTEP = list(
@@ -219,7 +220,7 @@
 						Co_VIS_MSG  = "{USER} remove{s} {HOLDER}'s armor."
 					),
 					Co_NEXTSTEP = list(
-						Co_KEY      = /obj/item/tool/wrench,
+						Co_KEY      = "is_wrench",
 						Co_VIS_MSG  = "{USER} bolt{s} down {HOLDER}'s armor."
 					)
 				),
@@ -248,7 +249,7 @@
 				list(
 					Co_DESC = "A space pod with unsecured armor.",
 					Co_BACKSTEP = list(
-						Co_KEY      = /obj/item/tool/wrench,
+						Co_KEY      = "is_wrench",
 						Co_VIS_MSG  = "{USER} unsecure{s} {HOLDER}'s armor."
 					),
 					Co_NEXTSTEP = list(
@@ -265,7 +266,7 @@
 						Co_VIS_MSG  = "{USER} remove{s} {HOLDER}'s armor."
 					),
 					Co_NEXTSTEP = list(
-						Co_KEY      = /obj/item/tool/wrench,
+						Co_KEY      = "is_wrench",
 						Co_VIS_MSG  = "{USER} bolt{s} down {HOLDER}'s armor."
 					)
 				),
