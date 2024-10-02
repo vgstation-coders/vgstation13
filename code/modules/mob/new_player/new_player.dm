@@ -572,6 +572,8 @@
 
 			dat += "<tr[color ? " class='reqalt'" : " class='request'"]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[highprior[job]]</td></tr>"
 			color = !color
+		if(job_master.priority_justification != "")
+			dat += "<tr><th class='reqhead' colspan=3>Justification: [job_master.priority_justification]</th></tr>"
 	else
 		dat += "<tr><th class='reqhead' colspan=3><a style='color:white' href='byond://?src=\ref[src];RequestPrio=1'>Request High Priority Jobs</a></th></tr>"
 

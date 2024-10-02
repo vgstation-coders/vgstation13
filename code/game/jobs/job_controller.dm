@@ -18,6 +18,8 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 	var/list/crystal_ball = list() //This should be an assoc. list. Job = # of players ready. Configured by predict_manifest() in obj.dm
 
 	var/priority_jobs_remaining = 3 //Limit on how many prioritized jobs can be had at once.
+	var/priority_justification = "" //Message to joiners about why jobs are prioritised
+
 	var/list/labor_consoles = list()
 	var/list/assistant_second_chance = list()
 
@@ -175,6 +177,9 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 			to_chat(player, "<span class='notice'>The [rank] job is [job.priority ? "now highly requested!" : "no longer highly requested."]</span>")
 		return 1
 	return 0
+
+/datum/controller/occupations/proc/SetPriorityJustification(justification)
+	priority_justification = strip_html(justification)
 
 /datum/controller/occupations/proc/PrioritzeDeparmentHead(var/datum/job/job)
 	if(job.department == "Civilian")
