@@ -339,7 +339,7 @@
 	
 	var/alerted = 0
 	for(var/mob/living/simple_animal/hostile/retaliate/R in view(stench_radius, M)) //All other retaliating hostile mobs in radius
-		if(R == M || R.stat || (M in R.enemies))
+		if(R == M || R.stat || R.hostile || (M in R.enemies))
 			continue
 
 		R.Retaliate()
