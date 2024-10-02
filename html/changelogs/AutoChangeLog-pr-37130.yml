@@ -1,0 +1,9 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- rscadd: Recycling furnaces can now have credits claimed from them for recycling,
+    albeit meager amounts in the majority of cases, and with the tradeoff of deducting
+    from materials smeltable for value claimed.
+- rscadd: Smelter consoles can now be ID locked or unlocked to prevent claiming of
+    credits. Recycling ones start unlocked by default, mining ones default to mining
+    access. Emagging also removes all access locks.
