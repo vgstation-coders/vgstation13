@@ -174,6 +174,8 @@ var/list/datum/stack_recipe/chain_recipes = list (
 /obj/item/stack/telecrystal/fake/attack_self(mob/user)
 	. = ..()
 	amount = input(user,"Set an amount to show","Set amount",amount) as num
+	// clients.len is a good max because it's realistic but not too metagamey ie giving away the number of players alive or antags or etc.
+	amount = clamp(amount,0,clients.len) // no infinity or negative numbers, as funny as it is i don't want unforeseen consequences
 
 /obj/item/stack/rcd_ammo
 	name = "compressed matter cartridge"
