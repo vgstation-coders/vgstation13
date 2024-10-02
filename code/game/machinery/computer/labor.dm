@@ -61,7 +61,7 @@ var/list/labor_console_categories = list(
 		else if(toggling_priority != "")
 			dat += "<b>[job_master.IsJobPrioritized(toggling_priority) ? "Deprioritizing" : "Prioritizing"]</b> <div class='line'>[uppertext(toggling_priority)]</div> Job Slot"
 			if(!job_master.IsJobPrioritized(toggling_priority))
-				dat += "<br><A href='?src=\ref[src];reason=1'>Write Justification</A>"
+				dat += "<br><br><A href='?src=\ref[src];reason=1'>Write Justification</A>"
 		dat += "<br><br><A href='?src=\ref[src];cancel=1'>CANCEL</A>"
 		if(isAdminGhost(user))
 			dat += "<br><br><div class='line'>...or...</div><A href='?src=\ref[src];adminhax=1'>CHEEKY ADMINGHOST-ONLY CARD BYPASS BUTTON</A>"
@@ -217,7 +217,7 @@ var/list/labor_console_categories = list(
 			verified(usr, FALSE)
 
 		else if(href_list["reason"])
-			justification = input(src,"Enter a reason for justifying job priorities","Priority justification","") as text
+			justification = input(usr,"Enter a reason for justifying job priorities","Priority justification","") as text
 
 		else if(href_list["cancel"])
 			cancel_swipe()
