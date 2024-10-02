@@ -57,7 +57,7 @@ var/global/list/atmos_controllers = list()
 	return interact(user)
 
 /obj/machinery/computer/atmoscontrol/attackby(var/obj/item/I as obj, var/mob/user as mob)
-	if(istype(I, /obj/item/weapon/card/emag))
+	if(isEmag(I))
 		return //lazy hackfix for the UI opening and not updating when using an emag with the UI closed
 	return ..()
 
@@ -271,8 +271,7 @@ var/global/list/atmos_controllers = list()
 		if (istype(I, /obj/item/device/pda))
 			var/obj/item/device/pda/pda = I
 			I = pda.id
-		if (istype(I,/obj/item/weapon/card/emag))
-			emag_act(I, usr)
+		emag_check(I,M)
 		if (I && istype(I))
 			log_in_id = I
 		return 1

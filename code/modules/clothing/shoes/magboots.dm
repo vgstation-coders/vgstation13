@@ -14,7 +14,6 @@
 	var/stomp_boot = "magboot"
 	var/stomp_hit = "crushes"
 	var/anchoring_system_examine = "Its mag-pulse traction system appears to be"
-	var/emagged = FALSE
 
 	var/obj/item/clothing/shoes/stored_shoes = null	//Shoe holder
 

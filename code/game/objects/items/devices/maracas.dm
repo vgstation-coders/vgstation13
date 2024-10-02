@@ -11,7 +11,6 @@
 	slot_flags = SLOT_BELT
 	flammable = TRUE
 
-	var/emagged = 0//our maracas are different - Deity Link
 	var/triggered = 0 //Do not make it explode twice
 
 /obj/item/device/maracas/cubanpete
