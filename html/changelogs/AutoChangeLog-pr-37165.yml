@@ -1,0 +1,21 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- rscadd: Silver slime extracts now allow for the creation of cooking recipes in their
+    random probability "perfect" forms, such as frosted donuts.
+- rscadd: Red slime extracts now refill bunsen burners with glycerol and remove its
+    downsides, while refilling itself.
+- rscadd: Pyrite slime extracts now boost the output of mining tools depending on
+    ore, with diamond multiplying by 4 and gold/silver/uranium by 2, and dusty crates
+    becoming more common finds.
+- rscadd: Insecticide and plantbgone sprays can now be refilled with red slime extracts,
+    luminol and fakecreep with green and pyrite respectively.
+- rscadd: Port generators can now accept slime extracts to run a small amount of extra
+    automatic output. PACMAN requires dark purple, SUPERPACMAN requires dark purple
+    and metal, MRSPACMAN requires dark purple, metal and adamantine, BABYPACMAN requires
+    dark purple, metal, adamantine and pyrite, and PROFESSORPACMAN requires dark purple,
+    metal, adamantine, pyrite and black.
+- rscadd: Bar dispensers can now dispense banana juice and chemical dispensers can
+    now dispense colorful reagent by adding pyrite slime extract to them. Bar dispensers
+    now have different reagents dispensed to delightful syrup when black slime extract
+    is applied; blood for space breweries and tricordrazine for everything else.
