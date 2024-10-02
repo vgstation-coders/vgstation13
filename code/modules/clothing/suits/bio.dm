@@ -91,10 +91,14 @@
 
 //Scientist's biosuit, white with a pink-ish hue
 /obj/item/clothing/head/bio_hood/scientist
+	name = "scientist bio hood"
+	desc = "A hood that protects the head and face from biological comtaminants. It has a reinforced synthetic lining to protect against slime glomps."
 	icon_state = "bio_scientist"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 20)
 
 /obj/item/clothing/suit/bio_suit/scientist
+	name = "scientist bio suit"
+	desc = "A suit that protects against biological contamination. It has a reinforced synthetic lining to protect against slime glomps and feeding."
 	icon_state = "bio_scientist"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 20)
 
