@@ -1,4 +1,0 @@
-author: jwhitak
-delete-after: true
-changes:
-- bugfix: Screwsolders, omnitools, and switchtools can be used in more situations.

@@ -1,5 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: Lockboxes can no longer be quick stored into if locked and not broken.
-- bugfix: Quick equipping accessories to clothes now updates the icon properly.
