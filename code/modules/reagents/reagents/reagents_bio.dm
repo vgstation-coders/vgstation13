@@ -337,17 +337,17 @@
 
 	var/stench_radius = clamp(volume * 0.1, 1, 6) //Stench starts out with 1 tile radius and grows after every 10 reagents on you
 	
-	var/alerted = FALSE
+	var/alerted = 0
 	for(var/mob/living/simple_animal/hostile/retaliate/R in view(stench_radius, M)) //All other retaliating hostile mobs in radius
 		if(R == M || R.stat || (M in R.enemies))
 			continue
 
 		R.Retaliate()
 		//horde += R
-		alerted = TRUE
+		alerted++
 		break
 
-	if(alerted)
+	if(alerted >= 2)
 		to_chat(M,"<span class='danger'>YOU HAVE ALERTED THE HORDE!</span>")
 
 /*/datum/reagent/killer_pheromones/reagent_deleted() // uncomment if necessary
