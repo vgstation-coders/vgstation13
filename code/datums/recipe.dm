@@ -37,6 +37,7 @@
 	var/list/reagents_forbidden //List of reagents that will not be transfered to the cooked item if found. reagents_forbidden = list(TOXIN, WATER)
 	var/list/items //List of items needed, items = list(/obj/item/tool/crowbar, /obj/item/weapon/welder)
 	var/result //Result of a complete recipe. result = /obj/item/weapon/reagent_containers/food/snacks/donut/normal
+	var/silver_slime_result //Result with a silver slime on the item
 	var/time = 10 SECONDS //Length of time it takes to complete the recipe. In 10ths of a second
 	var/priority = 0 //To check which recipe takes priority if they share ingredients
 	var/cookable_with = COOKABLE_WITH_HEAT //How this recipe can be cooked, eg. COOKABLE_WITH_MICROWAVE (see setup.dm).
@@ -124,7 +125,11 @@
 		obj: Resulting object.
 */
 /datum/recipe/proc/make_food(var/obj/container, var/mob/user)
-	var/obj/result_obj = new result(container)
+	var/obj/result_obj
+	if((container.has_slimes & SLIME_SILVER) && silver_slime_result)
+		result_obj = new silver_slime_result(container)
+	else
+		result_obj = new result(container)
 	for(var/obj/O in (container.contents - result_obj))
 		if(O.arcanetampered && istype(container,/obj/machinery/microwave))
 			var/obj/machinery/microwave/M = container

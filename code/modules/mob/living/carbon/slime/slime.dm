@@ -489,7 +489,7 @@
 	mech_flags = MECH_SCAN_FAIL
 	var/Uses = 1 // uses before it goes inert
 	var/enhanced = 0 //has it been enhanced before?
-	var/primarytype = /mob/living/carbon/slime
+	var/primarytype = SLIME_GREY
 	var/list/reactive_reagents = list() //easier lookup for reaction checks in grenades
 	var/icon_state_backup	//backup icon_state_name to switch between multiple use sprites
 
@@ -551,127 +551,127 @@
 /obj/item/slime_extract/grey
 	name = "grey slime extract"
 	icon_state = "grey slime extract"
-	primarytype = /mob/living/carbon/slime
+	primarytype = SLIME_GREY
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/gold
 	name = "gold slime extract"
 	icon_state = "gold slime extract"
-	primarytype = /mob/living/carbon/slime/gold
+	primarytype = SLIME_GOLD
 	reactive_reagents = list(PLASMA,BLOOD,WATER)
 
 /obj/item/slime_extract/silver
 	name = "silver slime extract"
 	icon_state = "silver slime extract"
-	primarytype = /mob/living/carbon/slime/silver
+	primarytype = SLIME_SILVER
 	reactive_reagents = list(PLASMA,WATER,CARBON)
 
 /obj/item/slime_extract/metal
 	name = "metal slime extract"
 	icon_state = "metal slime extract"
-	primarytype = /mob/living/carbon/slime/metal
+	primarytype = SLIME_METAL
 	reactive_reagents = list(PLASMA,COPPER,TUNGSTEN,RADIUM,CARBON)
 
 /obj/item/slime_extract/purple
 	name = "purple slime extract"
 	icon_state = "purple slime extract"
-	primarytype = /mob/living/carbon/slime/purple
+	primarytype = SLIME_PURPLE
 	reactive_reagents = list(PLASMA,SUGAR)
 
 /obj/item/slime_extract/darkpurple
 	name = "dark purple slime extract"
 	icon_state = "dark purple slime extract"
-	primarytype = /mob/living/carbon/slime/darkpurple
+	primarytype = SLIME_DARKPURPLE
 	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/orange
 	name = "orange slime extract"
 	icon_state = "orange slime extract"
-	primarytype = /mob/living/carbon/slime/orange
+	primarytype = SLIME_ORANGE
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/yellow
 	name = "yellow slime extract"
 	icon_state = "yellow slime extract"
-	primarytype = /mob/living/carbon/slime/yellow
+	primarytype = SLIME_YELLOW
 	reactive_reagents = list(PLASMA,BLOOD,WATER)
 
 /obj/item/slime_extract/red
 	name = "red slime extract"
 	icon_state = "red slime extract"
-	primarytype = /mob/living/carbon/slime/red
+	primarytype = SLIME_RED
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/blue
 	name = "blue slime extract"
 	icon_state = "blue slime extract"
-	primarytype = /mob/living/carbon/slime/blue
+	primarytype = SLIME_BLUE
 	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/darkblue
 	name = "dark blue slime extract"
 	icon_state = "dark blue slime extract"
-	primarytype = /mob/living/carbon/slime/darkblue
+	primarytype = SLIME_DARKBLUE
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/pink
 	name = "pink slime extract"
 	icon_state = "pink slime extract"
-	primarytype = /mob/living/carbon/slime/pink
+	primarytype = SLIME_PINK
 	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/green
 	name = "green slime extract"
 	icon_state = "green slime extract"
-	primarytype = /mob/living/carbon/slime/green
+	primarytype = SLIME_GREEN
 	reactive_reagents = list(PLASMA,IRON,BLOOD,WATER)
 
 /obj/item/slime_extract/lightpink
 	name = "light pink slime extract"
 	icon_state = "light pink slime extract"
-	primarytype = /mob/living/carbon/slime/lightpink
+	primarytype = SLIME_LIGHTPINK
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/black
 	name = "black slime extract"
 	icon_state = "black slime extract"
-	primarytype = /mob/living/carbon/slime/black
+	primarytype = SLIME_BLACK
 	reactive_reagents = list(PLASMA,GOLD,WATER,SUGAR,BLOOD)
 
 /obj/item/slime_extract/oil
 	name = "oil slime extract"
 	icon_state = "oil slime extract"
-	primarytype = /mob/living/carbon/slime/oil
+	primarytype = SLIME_OIL
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/adamantine
 	name = "adamantine slime extract"
 	icon_state = "adamantine slime extract"
-	primarytype = /mob/living/carbon/slime/adamantine
+	primarytype = SLIME_ADAMANTINE
 	reactive_reagents = list(PLASMA,CARBON,GOLD,SILVER)
 
 /obj/item/slime_extract/bluespace
 	name = "bluespace slime extract"
 	icon_state = "bluespace slime extract"
-	primarytype = /mob/living/carbon/slime/bluespace
+	primarytype = SLIME_BLUESPACE
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/pyrite
 	name = "pyrite slime extract"
 	icon_state = "pyrite slime extract"
-	primarytype = /mob/living/carbon/slime/pyrite
+	primarytype = SLIME_PYRITE
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/cerulean
 	name = "cerulean slime extract"
 	icon_state = "cerulean slime extract"
-	primarytype = /mob/living/carbon/slime/cerulean
+	primarytype = SLIME_CERULEAN
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/sepia
 	name = "sepia slime extract"
 	icon_state = "sepia slime extract"
-	primarytype = /mob/living/carbon/slime/sepia
+	primarytype = SLIME_SEPIA
 	reactive_reagents = list(PLASMA,BLOOD,PHAZON)
 
 ////Pet Slime Creation///

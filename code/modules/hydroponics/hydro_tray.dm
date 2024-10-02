@@ -9,11 +9,12 @@ var/list/hydro_trays = list()
 	flags = OPENCONTAINER | PROXMOVE // PROXMOVE could be added and removed as necessary if it causes lag
 	volume = 100
 	layer = HYDROPONIC_TRAY_LAYER
-
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 50
-
+	slimeadd_message = "You attach the slime extract to SRCTAG's internal mechanisms"
+	slimes_accepted = SLIME_GREEN
+	slimeadd_success_message = "A faint whiff of clonexadone is emitted from them"
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | MULTIOUTPUT
 
 	var/draw_warnings = 1 // Set to 0 to stop it from drawing the alert lights.
@@ -470,13 +471,6 @@ var/list/hydro_trays = list()
 	. = ..()
 	if (.)
 		power_change()//calls update_icon()
-
-/obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
-	..()
-	if(primarytype == /mob/living/carbon/slime/green)
-		has_slime=1
-		to_chat(user, "You attach the slime extract to \the [src]'s internal mechanisms.")
-		return TRUE
 
 /obj/machinery/portable_atmospherics/hydroponics/wind_act(var/differential, var/list/connecting_turfs)
 	if (seed)
