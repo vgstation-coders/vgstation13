@@ -1,0 +1,12 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: AIs and pulse demons can now emag many more things a cryptographic sequencer
+    already can, including mulebots, megaphones, tape recorders, security hailers,
+    robot parts, nukeop gasha toys, the randomize AI module, defibrilators, secure
+    closets, secure crates, secure lockboxes, the clowncart, EFTPOS scanners, holobadges,
+    floral somatorays, spiderbots, temperature guns, nikitas, trash compactors, R&D
+    server control computer, suspension generators, RUST fuel compressors and rapid
+    crate senders.
+- tweak: Pulse demons can now emag supply computers and firedoors.
+- bugfix: The EFTPOS emag now works.
