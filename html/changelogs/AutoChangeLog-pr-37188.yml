@@ -1,0 +1,4 @@
+author: jwhitak
+delete-after: true
+changes:
+- bugfix: Fixed guns exploding when you couldn't even fire them in the first place.
