@@ -92,10 +92,11 @@
 //Scientist's biosuit, white with a pink-ish hue
 /obj/item/clothing/head/bio_hood/scientist
 	icon_state = "bio_scientist"
+	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 20)
 
 /obj/item/clothing/suit/bio_suit/scientist
 	icon_state = "bio_scientist"
-
+	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 20)
 
 //CMO's biosuit, blue stripe
 /obj/item/clothing/suit/bio_suit/cmo
