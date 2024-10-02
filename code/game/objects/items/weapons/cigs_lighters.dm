@@ -624,7 +624,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(cig_tag)
 		user.visible_message("<span class='notice'>[user] calmly drops and treads on the [name], putting it out.</span>")
 		var/turf/T = get_turf(src)
-		var/obj/item/trash/cigbutt/bugged/new_butt = locate(/obj/item/trash/cigbutt/bugged) in T
+		var/obj/item/trash/cigbutt/bugged/new_butt = new /obj/item/trash/cigbutt/bugged(T)
 		new_butt.cigbug.radio_tag = cig_tag
 		transfer_fingerprints_to(new_butt)
 		lit = 0 //Needed for proper update
