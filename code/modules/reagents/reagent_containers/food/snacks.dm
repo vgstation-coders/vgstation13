@@ -1302,6 +1302,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/tomatomeat/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(KILLERPHEROMONES, 3)
 	src.bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg
