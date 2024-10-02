@@ -156,6 +156,7 @@
 						T.hotspot_expose(700,125,surfaces=istype(AM.loc,/turf))
 						explosion(T,-1,2,3)
 					qdel(parent)
+			crystals.use(crystals.amount)
 			return
 		telecrystals += crystals.amount
 		crystals.use(crystals.amount)
