@@ -1,0 +1,5 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- imageadd: Mysterious artifact vendors now have their own unique sprite, all black
+    with no markings.
