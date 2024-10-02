@@ -170,6 +170,7 @@ var/list/datum/stack_recipe/chain_recipes = list (
 
 /obj/item/stack/telecrystal/fake
 	transferrable = FALSE
+	amount = 8
 
 /obj/item/stack/telecrystal/fake/attack_self(mob/user)
 	. = ..()
