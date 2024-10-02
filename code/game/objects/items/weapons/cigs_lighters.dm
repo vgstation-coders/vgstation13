@@ -622,7 +622,14 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/bugged/attack_self(mob/user as mob)
 	if(cig_tag)
-		..()
+		user.visible_message("<span class='notice'>[user] calmly drops and treads on the [name], putting it out.</span>")
+		var/turf/T = get_turf(src)
+		var/obj/item/trash/cigbutt/bugged/new_butt = locate(/obj/item/trash/cigbutt/bugged) in T
+		new_butt.cigbug.radio_tag = cig_tag
+		transfer_fingerprints_to(new_butt)
+		lit = 0 //Needed for proper update
+		update_brightness()
+		qdel(src)
 	else
 		var/newtag = sanitize(input(user, "Choose a unique ID tag:", name, cig_tag) as null|text)
 		if(newtag)
