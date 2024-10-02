@@ -63,9 +63,9 @@
 		if(M in view(1, src))
 			loc = M.loc
 
-			var/hasbioprotection = istype(M.get_item_by_slot(slot_wear_suit), /obj/item/clothing/suit/bio_suit/scientist)
-			if(istype(M, /mob/living/carbon) && !hasbioprotection)
-				if(prob(15) && M.client)
+			if(istype(M, /mob/living/carbon))
+				var/bioprotectdivisor = istype(M.get_item_by_slot(slot_wear_suit), /obj/item/clothing/suit/bio_suit/scientist) ? 2 : 1
+				if(prob(15 / bioprotectdivisor) && M.client)
 					to_chat(M, "<span class='warning'>[pick("You can feel your body becoming weak!", \
 					"You feel like you're about to die!", \
 					"You feel every part of your body screaming in agony!", \
@@ -74,24 +74,25 @@
 					"You feel extremely weak!", \
 					"A sharp, deep pain bathes every inch of your body!")]</span>")
 
-				Victim.adjustCloneLoss(rand(1,10))
-				Victim.adjustToxLoss(rand(1,2))
+				Victim.adjustCloneLoss(rand(1,10/bioprotectdivisor))
+				Victim.adjustToxLoss(rand(1,2/bioprotectdivisor))
 				if(Victim.health <= 0)
-					Victim.adjustToxLoss(rand(2,4))
+					Victim.adjustToxLoss(rand(2/bioprotectdivisor,4/bioprotectdivisor))
 
 				// Heal yourself
-				adjustToxLoss(-10)
-				adjustOxyLoss(-10)
-				adjustBruteLoss(-10)
-				adjustFireLoss(-10)
-				adjustCloneLoss(-10)
+				var/healrate = 10 / bioprotectdivisor
+				adjustToxLoss(-healrate)
+				adjustOxyLoss(-healrate)
+				adjustBruteLoss(-healrate)
+				adjustFireLoss(-healrate)
+				adjustCloneLoss(-healrate)
 
 				if(Victim)
 					for(var/mob/living/carbon/slime/slime in view(1,M))
 						if(slime.Victim == M && slime != src)
 							slime.Feedstop()
 
-				nutrition += rand(10,25)
+				nutrition += rand(10/bioprotectdivisor,25/bioprotectdivisor)
 				if(nutrition >= lastnut + 50)
 					if(prob(80))
 						lastnut = nutrition
@@ -107,10 +108,10 @@
 
 			else
 				if(prob(25))
-					var/list/feedbacks = list("I am not satisified","I can not feed from this subject","I do not feel nourished")
-					if(!hasbioprotection)
-						feedbacks += list("This subject is incompatable","This subject does not have a life energy","This subject is empty","This subject is not food")
-					to_chat(src, "<span class='warning'>[pick(feedbacks)]...</span>")
+					to_chat(src, "<span class='warning'>[pick("I am not satisified",\
+					"I can not feed from this subject","I do not feel nourished",\
+					"This subject is incompatable","This subject does not have a life energy",\
+					"This subject is empty","This subject is not food")]...</span>")
 
 			sleep(rand(15,45))
 
