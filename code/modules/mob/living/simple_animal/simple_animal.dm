@@ -922,6 +922,16 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else
 		return FALSE
 
+/mob/living/simple_animal/proc/atepoison() //reusable function
+	health -= 5
+	if(prob(10))
+		if(istype(loc, /turf/simulated))
+			var/turf/simulated/T = loc
+			T.add_vomit_floor(src, 1, 0, 1)
+		Stun(5)
+		visible_message("<span class='warning'>[src] throws up!</span>","<span class='danger'>You throw up!</span>")
+		playsound(loc, 'sound/effects/splat.ogg', 50, 1)
+
 // Simplemobs do not have hands.
 /mob/living/simple_animal/put_in_hand_check(obj/item/W, index)
 	return 0

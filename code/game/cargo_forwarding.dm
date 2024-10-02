@@ -233,7 +233,7 @@
 				else
 					calculated_weight += 5
 			playsound(get_turf(src), 'sound/machines/chime.ogg', 50, 1)
-			visible_message("<span class='notice'>\the [src] prints out the weighed [current_manifest]</span>")
+			visible_message("<span class='notice'>\The [src] prints out the weighed [current_manifest]</span>")
 			current_manifest.info += "<br>Total object weight: [calculated_weight]kg<br>CHECK CONTENTS AND STAMP BELOW THE LINE TO CONFIRM RECEIPT OF GOODS<hr>"
 			current_manifest.forceMove(get_turf(src))
 			current_manifest = null

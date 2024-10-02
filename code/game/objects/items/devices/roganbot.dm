@@ -226,3 +226,215 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 	number = "38"
 	transcript = "Give me your extra resources."
 	soundfile = 'sound/effects/aoe2/38 give me your extra resources.ogg'
+
+var/static/list/headshot_zones = list(LIMB_HEAD,TARGET_EYES,TARGET_MOUTH)
+
+/obj/item/device/roganbot/killbot
+	name = "KILLbot"
+	desc = "A sound synthetizer with 38 preset phrases. To activate, say a number from 1 to 38 out loud. This one seems designed for an hero going for the high score."
+	mech_flags = MECH_SCAN_ILLEGAL
+	var/killcount = 0
+	var/time_since_last_kill = 0
+	var/fastkillcount = 0
+	var/headshots = 0
+	var/pickedup = FALSE
+
+/obj/item/device/roganbot/killbot/examine(mob/user, size, show_name)
+	. = ..()
+	var/spantype = "notice"
+	switch(killcount)
+		if(1 to 14)
+			spantype = "warning"
+		if(15 to INFINITY)
+			spantype = "danger"
+	to_chat(user,"<span class='[spantype]'>The screen shows a kill streak of [killcount]!</span>")
+
+/obj/item/device/roganbot/killbot/pickup(mob/user)
+	. = ..()
+	user.register_event(/event/kill, src, nameof(src::on_kill()))
+	user.register_event(/event/death, src, nameof(src::kill_reset()))
+	if(emergency_shuttle)
+		emergency_shuttle.register_event(/event/shuttletimer, src, nameof(src::on_shuttle_time()))
+	if(!pickedup)
+		playsound(user.loc,'sound/effects/2003M/GoodLuckWarrior-3.ogg',100)
+		say("Good luck, warrior.")
+		pickedup = TRUE
+
+/obj/item/device/roganbot/killbot/dropped(mob/user)
+	. = ..()
+	user.unregister_event(/event/kill, src, nameof(src::on_kill()))
+	user.unregister_event(/event/death, src, nameof(src::kill_reset()))
+	kill_reset()
+	if(emergency_shuttle)
+		emergency_shuttle.unregister_event(/event/shuttletimer, src, nameof(src::on_shuttle_time()))
+
+/obj/item/device/roganbot/killbot/proc/on_kill(mob/killer,mob/victim)
+	var/specialsoundplayed = FALSE
+	killcount++
+	if(!firstblood)
+		playsound(killer.loc,'sound/effects/2003M/first_blood.ogg',100)
+		say("FIRST BLOOD!")
+		specialsoundplayed = TRUE
+	if(!specialsoundplayed && istype(get_area(victim),/area/shuttle/arrival))
+		playsound(killer.loc,'sound/effects/2003M/Spawn_Killer.ogg',100)
+		say("SPAWN KILLER!")
+		specialsoundplayed = TRUE
+	if(!specialsoundplayed && killer.mind && killer.mind.antag_roles.len)
+		for(var/datum/role/R in killer.mind.antag_roles)
+			if(R.faction && (victim in R.faction.members))
+				playsound(killer.loc,'sound/effects/2003M/Team_Killer.ogg',100)
+				say("TEAM KILLER!")
+				specialsoundplayed = TRUE
+				break
+	if(killer.zone_sel && (killer.zone_sel.selecting in headshot_zones) && istype(killer.get_active_hand(),/obj/item/weapon/gun))
+		headshots++
+		if(!specialsoundplayed)
+			if(headshots == 15)
+				playsound(killer.loc,'sound/effects/2003M/HeadHunter.ogg',100)
+				say("HEAD HUNTER!")
+				specialsoundplayed = TRUE
+			else if(!fastkillcount && killcount % 5 != 0)
+				playsound(killer.loc,'sound/effects/2003M/headshot.ogg',100)
+				say("HEADSHOT!")
+				specialsoundplayed = TRUE
+	if((world.time - victim.timeofdeath < 3 SECONDS && world.time - time_since_last_kill < 3 SECONDS) || !time_since_last_kill)
+		fastkillcount++
+		if(!specialsoundplayed)
+			switch(fastkillcount)
+				if(2)
+					playsound(killer.loc,'sound/effects/2003M/double_kill.ogg',100)
+					say("DOUBLE KILL!")
+				if(3)
+					playsound(killer.loc,'sound/effects/2003M/triple_kill.ogg',100)
+					say("TRIPLE KILL!")
+				if(4)
+					playsound(killer.loc,'sound/effects/2003M/multikill.ogg',100)
+					say("MULTI KILL!")
+				if(5)
+					playsound(killer.loc,'sound/effects/2003M/ultrakill.ogg',100)
+					say("ULTRA KILL!")
+				if(6)
+					playsound(killer.loc,'sound/effects/2003M/monster_kill.ogg',100)
+					say("M-M-M-M-MONSTER KILL!")
+				if(7)
+					playsound(killer.loc,'sound/effects/2003M/LudicrousKill_F.ogg',100)
+					say("L-L-L-L-LUDICROUS KILL!")
+				if(8 to INFINITY)
+					if(fastkillcount > 30 || fastkillcount % 5 != 0)
+						playsound(killer.loc,'sound/effects/2003M/HolyShit_F.ogg',100)
+						say("HOLY SHIT!")
+			time_since_last_kill = world.time
+			if(fastkillcount > 30 || fastkillcount < 8 || fastkillcount % 5 == 0)
+				return
+	else
+		fastkillcount = 0
+		time_since_last_kill = 0
+	if(!specialsoundplayed)
+		switch(killcount)
+			if(5)
+				playsound(killer.loc,'sound/effects/2003M/killing_spree.ogg',100)
+				killer.visible_message("<span class='danger'>[killer] is on a KILLING SPREE!</span>")
+			if(10)
+				playsound(killer.loc,'sound/effects/2003M/rampage.ogg',100)
+				killer.visible_message("<span class='danger'>[killer] is on a RAMPAGE!</span>")
+			if(15)
+				playsound(killer.loc,'sound/effects/2003M/dominating.ogg',100)
+				killer.visible_message("<span class='danger'>[killer] is DOMINATING!</span>")
+			if(20)
+				playsound(killer.loc,'sound/effects/2003M/unstoppable.ogg',100)
+				killer.visible_message("<span class='danger'>[killer] is UNSTOPPABLE!</span>")
+			if(25)
+				playsound(killer.loc,'sound/effects/2003M/Godlike.ogg',100)
+				killer.visible_message("<span class='danger'>[killer] is GODLIKE!</span>")
+			if(30)
+				playsound(killer.loc,'sound/effects/2003M/WhickedSick.ogg',100)
+				killer.visible_message("<span class='danger'>[killer] is WICKED SICK!</span>")
+
+/obj/item/device/roganbot/killbot/proc/kill_reset(mob/user, body_destroyed)
+	if(killcount)
+		playsound(loc,'sound/effects/2003M/Reset.ogg',100)
+		visible_message("<span class='danger'>[src] kill count reset!</span>")
+	killcount = 0
+	fastkillcount = 0
+	time_since_last_kill = 0
+	headshots = 0
+
+/obj/item/device/roganbot/killbot/proc/on_shuttle_time(time,direction)
+	switch(time)
+		if(SHUTTLEGRACEPERIOD)
+			playsound(loc,'sound/effects/2003M/5_minute_warning.ogg',100)
+			say("Five minute warning!")
+		if(240)
+			playsound(loc,'sound/effects/2003M/4_minutes_remain.ogg',100)
+			say("Four minutes remain!")
+		if(SHUTTLELEAVETIME)
+			playsound(loc,'sound/effects/2003M/3_minutes_remain.ogg',100)
+			say("Three minutes remain!")
+		if(SHUTTLEGRACEPERIOD)
+			playsound(loc,'sound/effects/2003M/2_minutes_remain.ogg',100)
+			say("Two minutes remain!")
+		if(60)
+			playsound(loc,'sound/effects/2003M/1_minute_remains.ogg',100)
+			say("One minute remains!")
+		if(30)
+			playsound(loc,'sound/effects/2003M/30_seconds_remain.ogg',100)
+			say("Thirty seconds remain!")
+		if(20)
+			playsound(loc,'sound/effects/2003M/20_seconds.ogg',100)
+			say("Twenty seconds!")
+		if(10)
+			playsound(loc,'sound/effects/2003M/Ten.ogg',100)
+			say("Ten!")
+		if(9)
+			playsound(loc,'sound/effects/2003M/Nine.ogg',100)
+			say("Nine!")
+		if(8)
+			playsound(loc,'sound/effects/2003M/Eight.ogg',100)
+			say("Eight!")
+		if(7)
+			playsound(loc,'sound/effects/2003M/Seven.ogg',100)
+			say("Sever!")
+		if(6)
+			playsound(loc,'sound/effects/2003M/Six.ogg',100)
+			say("Six!")
+		if(5)
+			playsound(loc,'sound/effects/2003M/Five.ogg',100)
+			say("Five!")
+		if(4)
+			playsound(loc,'sound/effects/2003M/Four.ogg',100)
+			say("Four!")
+		if(3)
+			playsound(loc,'sound/effects/2003M/Three.ogg',100)
+			say("Three!")
+		if(2)
+			playsound(loc,'sound/effects/2003M/Two.ogg',100)
+			say("Two!")
+		if(1)
+			playsound(loc,'sound/effects/2003M/One.ogg',100)
+			say("One!")
+		/*if(0)
+			var/mob/M = get_holder_of_type(/mob)
+			var/flawless_victory = FALSE
+			var/failed_jectie = FALSE
+			var/teamwon = FALSE
+			if(M && M.mind && M.mind.antag_roles.len)
+				for(var/datum/role/R in M.mind.antag_roles)
+					if(R.faction && R.faction.IsSuccessful())
+						teamwon = TRUE
+					for(var/datum/objective/objective in R.objectives.GetObjectives())
+						if(objective.flags & FREEFORM_OBJECTIVE)
+							continue
+						if(objective.IsFulfilled())
+							flawless_victory = TRUE
+						else
+							flawless_victory = FALSE
+							failed_jectie = TRUE
+							break
+					if(failed_jectie)
+						break
+			if(flawless_victory)
+				playsound(loc,'sound/effects/2003M/Flawless_victory.ogg',100)
+			else if(teamwon)
+				playsound(loc,'sound/effects/2003M/You_have_won_the_match.ogg',100)
+			else
+				playsound(loc,'sound/effects/2003M/You_have_lost_the_match.ogg',100)*/

@@ -130,25 +130,25 @@
 	switch(body_part)
 		if (HEAD)//head-patting
 			var/datum/organ/external/head = organs_by_name[LIMB_HEAD]
-			if(head.status & ORGAN_BLEEDING)
+			if(head?.status & ORGAN_BLEEDING)
 				bleeding = 1
 		if (FULL_TORSO)//hugging, lying over infected blood, broken dishes
 			var/datum/organ/external/chest = organs_by_name[LIMB_CHEST]
-			if(chest.status & ORGAN_BLEEDING)
+			if(chest?.status & ORGAN_BLEEDING)
 				bleeding = 1
 		if (FEET)//walking over infected blood, broken dishes
 			var/datum/organ/external/l_foot = organs_by_name[LIMB_LEFT_FOOT]
-			if(l_foot.status & ORGAN_BLEEDING)
+			if(l_foot?.status & ORGAN_BLEEDING)
 				bleeding = 1
 			var/datum/organ/external/r_foot = organs_by_name[LIMB_RIGHT_FOOT]
-			if(r_foot.status & ORGAN_BLEEDING)
+			if(r_foot?.status & ORGAN_BLEEDING)
 				bleeding = 1
 		if (HANDS)//walking over infected blood, broken dishes
 			var/datum/organ/external/hand/l_hand = organs_by_name[LIMB_LEFT_HAND]
-			if(l_hand.status & ORGAN_BLEEDING)
+			if(l_hand?.status & ORGAN_BLEEDING)
 				bleeding = 1
 			var/datum/organ/external/hand/r_hand = organs_by_name[LIMB_RIGHT_HAND]
-			if(r_hand.status & ORGAN_BLEEDING)
+			if(r_hand?.status & ORGAN_BLEEDING)
 				bleeding = 1
 	return bleeding
 

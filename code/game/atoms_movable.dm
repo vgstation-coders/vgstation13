@@ -273,7 +273,7 @@
 // For category you should pass the typepath of the category, however strings should be used for slots made dynamically at runtime.
 /atom/movable/proc/lock_atom(var/atom/movable/AM, var/datum/locking_category/category = /datum/locking_category)
 	locking_init()
-	if (AM in locked_atoms || AM.locked_to || !istype(AM))
+	if ((AM in locked_atoms) || AM.locked_to || !istype(AM))
 		return FALSE
 
 	category = get_lock_cat(category)

@@ -109,6 +109,8 @@ var/list/impact_master = list()
 	var/travel_range = 0	//if set, the projectile will be deleted when its distance from the firing location exceeds this
 	var/decay_type = null	//if set, along with travel range, will drop a new item of this type when the projectile exceeds its course
 	var/special_collision = PROJECTILE_COLLISION_DEFAULT
+	var/has_special_suicide = FALSE //when set to true will invoke a custom_mouthshot() in place of the standard mouthshot effect.
+
 
 	var/is_crit = FALSE
 	var/point_blank = FALSE //If fired at point-blank, deals extra damage and doesn't miss.
@@ -873,4 +875,7 @@ var/list/impact_master = list()
 	return
 
 /obj/item/projectile/proc/teleport_act()
+	return
+
+/obj/item/projectile/proc/custom_mouthshot(mob/living/user)
 	return

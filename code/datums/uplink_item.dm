@@ -138,7 +138,7 @@ var/list/discounted_items_of_the_round = list()
 
 	// If the uplink's holder is in the user's contents
 	var/obj/item/holder = U.parent
-	if ((holder in user.contents || (in_range(holder, user) && istype(holder.loc, /turf))))
+	if ((holder in user.contents) || (in_range(holder, user) && istype(holder.loc, /turf)))
 		user.set_machine(U)
 		if(get_cost(U.job, U.species) > U.telecrystals)
 			return 0
@@ -707,6 +707,12 @@ var/list/discounted_items_of_the_round = list()
  	name = "Raincoat"
  	desc = "It's hip to be square! Fireaxe not included."
  	item = /obj/item/clothing/suit/raincoat
+ 	cost = 1
+
+/datum/uplink_item/badass/killbot
+ 	name = "KILLbot"
+ 	desc = "A phrase spouting device perfectly suited for the loud spree killer's ego."
+ 	item = /obj/item/device/roganbot/killbot
  	cost = 1
 
 /datum/uplink_item/badass/experimental_gear

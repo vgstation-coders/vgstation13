@@ -59,7 +59,6 @@ var/global/num_vending_terminals = 1
 	var/list/slogan_languages = list()
 	var/icon_vend				//Icon_state when vending!
 	var/icon_deny				//Icon_state when vending!
-	//var/emagged = 0			//Ignores if somebody doesn't have card access to that machine.
 	var/seconds_electrified = 0	//Shock customers like an airlock.
 	var/shoot_inventory = 0		//Fire items at customers! We're broken!
 	var/shut_up = 0				//Stop spouting those godawful pitches!
@@ -189,7 +188,7 @@ var/global/num_vending_terminals = 1
 		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating
 	shoot_chance = manipcount * 3
-	
+
 	coinbox = locate() in component_parts
 	if(!coinbox)
 		coinbox = new(src)
@@ -549,7 +548,7 @@ var/global/num_vending_terminals = 1
 		var/obj/item/weapon/spacecash/C = W
 		pay_with_cash(C, user)
 
-	else if(istype(W, /obj/item/weapon/card/emag))
+	else if(isEmag(W))
 		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
 		to_chat(user, "<span class='notice'>You swipe \the [W] through [src]</span>")
 		if (emag_act())
@@ -792,7 +791,7 @@ var/global/num_vending_terminals = 1
 	if(!isAdminGhost(usr) && (user.lying || user.incapacitated()))
 		return 0
 
-	if(M_TK in user.mutations && user.a_intent == "hurt" && iscarbon(user))
+	if((M_TK in user.mutations) && user.a_intent == "hurt" && iscarbon(user))
 		if(!Adjacent(user))
 			to_chat(user, "<span class='danger'>You slam \the [src] with your mind!</span>")
 			visible_message("<span class='danger'>[src] dents slightly, as if it was struck!</span>")

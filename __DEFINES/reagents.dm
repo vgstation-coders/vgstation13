@@ -531,6 +531,7 @@
 #define LEMONDROP		"lemondrop"
 #define FEVERFEW		"feverfew"
 #define SQUASH			"squash"
+#define PRIAXATE		"priaxate"
 
 #define ACRYLIC			"acrylic"
 #define ACETONE			"acetone"

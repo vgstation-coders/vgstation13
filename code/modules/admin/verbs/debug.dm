@@ -1273,7 +1273,7 @@ var/global/blood_virus_spreading_disabled = 0
 
 
 	//Exclude non-movable atoms
-	var/chosen = filter_list_input("Select a datum type", "Spawn Datum", get_matching_types(object, /datum) - typesof(/turf, /area, /datum/admins))
+	var/chosen = filter_typelist_input("Select a datum type", "Spawn Datum", get_matching_types(object, /datum) - typesof(/turf, /area, /datum/admins))
 	if(!chosen)
 		return
 

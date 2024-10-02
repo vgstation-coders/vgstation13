@@ -261,7 +261,7 @@
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
 		// the ui does not exist, so we'll create a new() one
-		// for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
+		// for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm 
 		ui = new(user, src, ui_key, template_path, "Waste Disposal Unit", 430, 150)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
@@ -269,6 +269,16 @@
 		ui.open()
 		// Make the UI auto-update.
 		ui.set_auto_update(1)
+
+/obj/machinery/disposal/AltClick(mob/user)
+	if(user.loc == src)
+		to_chat(user, "<span class='warning'>You cannot reach the controls from inside.</span>")
+	else if(mode==-1)
+		to_chat(user, "<span class='warning'>The disposal units power is disabled.</span>")
+	else if(!user.incapacitated() && Adjacent(user))
+		flush = !flush
+		to_chat(user, "<span class='notice'>The disposal handle is now [flush ? "" : "dis"]engaged.</span>")
+	return ..()
 
 // handle machine interaction
 /obj/machinery/disposal/Topic(href, href_list)
@@ -311,11 +321,16 @@
 	return
 
 // eject the contents of the disposal unit
-/obj/machinery/disposal/proc/eject()
-	for(var/atom/movable/AM in src)
-		AM.forceMove(src.loc)
-		AM.pipe_eject(0)
-	update_icon()
+/obj/machinery/disposal/proc/eject(var/atom/location = loc)
+	if(Adjacent(location))
+		if(location != loc)
+			var/turf/T = get_turf(location)
+			if(!T || is_blocked_turf(T,src))
+				location = loc
+		for(var/atom/movable/AM in src)
+			AM.forceMove(location)
+			AM.pipe_eject(0)
+		update_icon()
 
 // update the icon & overlays to reflect mode & status
 /obj/machinery/disposal/update_icon()
@@ -476,11 +491,9 @@
 		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
 		if(prob(75) || (mob?.reagents?.get_sportiness()>=5))
 			I.forceMove(src)
-			for(var/mob/M in viewers(src))
-				M.show_message("\the [I] lands in \the [src].", 1)
+			visible_message("\The [I] lands in \the [src].")
 		else
-			for(var/mob/M in viewers(src))
-				M.show_message("\the [I] bounces off of \the [src]'s rim!", 1)
+			visible_message("\The [I] bounces off of \the [src]'s rim!")
 		return 0
 	else
 		return ..(mover, target, height, air_group)
@@ -560,6 +573,20 @@
 	add_fingerprint(user)
 	target.forceMove(src)
 	update_icon()
+
+/obj/machinery/disposal/MouseDropFrom(atom/over_object, src_location, over_location, src_control, over_control, params)
+	if(isAI(usr))
+		return
+
+	//We are restrained or can't move, this will compromise taking out the trash
+	if(usr.restrained() || !usr.canmove || usr.incapacitated())
+		return
+	if(!Adjacent(usr) || !Adjacent(over_location))
+		return
+	if(!usr.canMouseDrag())
+		return
+
+	eject(over_location)
 
 // virtual disposal object
 // travels through pipes in lieu of actual items

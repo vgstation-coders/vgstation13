@@ -372,7 +372,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 				src.health -= W.force * 0.75
 			else
 		if (src.health <= 0)
-			visible_message("<span class='danger'>\the [src] is smashed apart!</span>")
+			visible_message("<span class='danger'>\The [src] is smashed apart!</span>")
 			new /obj/item/stack/sheet/snow(get_turf(src), 1)
 			new /obj/item/stack/sheet/snow(get_turf(src), 1)
 			new /obj/item/stack/sheet/snow(get_turf(src), 1)
@@ -383,13 +383,13 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 /obj/structure/window/barricade/snow/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			visible_message("<span class='danger'>\the [src] is blown apart!</span>")
+			visible_message("<span class='danger'>\The [src] is blown apart!</span>")
 			qdel(src)
 			return
 		if(2.0)
 			src.health -= 25
 			if (src.health <= 0)
-				visible_message("<span class='danger'>\the [src] is blown apart!</span>")
+				visible_message("<span class='danger'>\The [src] is blown apart!</span>")
 				new /obj/item/stack/sheet/snow(get_turf(src), 1)
 				new /obj/item/stack/sheet/snow(get_turf(src), 1)
 				new /obj/item/stack/sheet/snow(get_turf(src), 1)

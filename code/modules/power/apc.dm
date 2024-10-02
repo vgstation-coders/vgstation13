@@ -561,7 +561,7 @@
 				nanomanager.update_uis(src)
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
-	else if (istype(W, /obj/item/weapon/card/emag) && !(emagged || malfhack))		// trying to unlock with an emag card
+	else if (isEmag(W) && !(emagged || malfhack))		// trying to unlock with an emag card
 		if(opened)
 			to_chat(user, "You must close the cover to swipe an ID card.")
 		else if(wiresexposed)

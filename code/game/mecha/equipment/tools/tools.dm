@@ -577,7 +577,7 @@
 		else
 			chassis.use_power(energy_drain)
 	else
-		occupant_message("<span class='warning'>\the [src]'s error light flickers[istext(t) ? ": [t]" : "."]</span>")
+		occupant_message("<span class='warning'>\The [src]'s error light flickers[istext(t) ? ": [t]" : "."]</span>")
 
 	R.busy = FALSE
 
