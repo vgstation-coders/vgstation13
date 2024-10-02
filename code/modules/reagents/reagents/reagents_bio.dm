@@ -350,7 +350,7 @@
 	if(alerted >= 2)
 		to_chat(M,"<span class='danger'>YOU HAVE ALERTED THE HORDE!</span>")
 
-/datum/reagent/killer_pheromones/reagent_deleted() // uncomment if necessary
+/datum/reagent/killer_pheromones/reagent_deleted()
 	if(..())
 		return 1
 	if(!holder)
