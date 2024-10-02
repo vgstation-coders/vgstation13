@@ -37,13 +37,17 @@
 		A = pick(teleportlocs)
 
 	var/area/thearea = teleportlocs[A]
+	if(!thearea) //Wizard didn't pick an area
+		to_chat(holder, "<span class='warning'>You cancel the teleportation.</span>")
+		return
 
 	return list(thearea)
 
 /spell/area_teleport/cast(area/thearea, mob/user)
 	if(!istype(thearea))
 		if(istype(thearea, /list))
-			thearea = thearea[1]
+			var/list/templist = thearea
+			thearea = templist[1]
 	var/list/L = list()
 	for(var/turf/T in get_area_turfs(thearea.type))
 		if(!T.density)

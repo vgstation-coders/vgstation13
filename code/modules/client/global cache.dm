@@ -27,6 +27,9 @@ var/list/asset_datums = list()
 		else
 			return 0
 
+	if(!client)	//don't have a goddamned clue why this would be called without a client input but it currently is!
+		return 0
+
 	while(!global.asset_cache_populated)
 		sleep(5)
 
@@ -245,7 +248,7 @@ var/list/asset_datums = list()
 		"pda_snake_bodytail_south.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bodytail_south.png',
 		"pda_snake_bodytail_west.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bodytail_west.png',
 		"pda_snake_bonus1.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bonus1.png',
-		"pda_snake_bones2.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bonus2.png',
+		"pda_snake_bonus2.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bonus2.png',
 		"pda_snake_bonus3.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bonus3.png',
 		"pda_snake_bonus4.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bonus4.png',
 		"pda_snake_bonus5.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bonus5.png',

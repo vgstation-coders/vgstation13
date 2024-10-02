@@ -195,6 +195,8 @@ Manual Tracking Direction:"}
 
 		if(track == 2)
 			for(var/obj/machinery/power/solar/panel/tracker/T in getPowernetNodes())
+				if(T.stat & BROKEN)
+					continue
 				cdir = T.sun_angle
 				break
 
@@ -228,12 +230,12 @@ Manual Tracking Direction:"}
 
 /obj/machinery/power/solar/control/ex_act(severity)
 	switch(severity)
-		if(1.0)
+		if(1)
 			qdel(src)
-		if(2.0)
+		if(2)
 			if (prob(50))
 				broken()
-		if(3.0)
+		if(3)
 			if (prob(25))
 				broken()
 

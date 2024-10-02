@@ -19,7 +19,7 @@
 	amt_stuttering = 86
 	mind_affecting = 1
 
-	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
+	valid_targets = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 	spell_flags = WAIT_FOR_CLICK
 
 	hud_state = "wiz_disorient"

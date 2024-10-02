@@ -15,8 +15,8 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1;" + Tc_BLUESPACE + "=1"
 	attack_verb = list("strikes", "hits", "bashes")
 	mech_flags = MECH_SCAN_ILLEGAL
-	var/loaded_crystal = null
-	var/loaded_matter_bin = null
+	var/obj/item/bluespace_crystal/loaded_crystal = null
+	var/obj/item/weapon/stock_parts/matter_bin/loaded_matter_bin = null
 	var/list/stored_items = list()
 	var/stored_item_mass = 0
 
@@ -60,6 +60,9 @@
 		/obj/machinery/am_shielding,							//the AME
 		/obj/machinery/gateway,									//the gateway
 		/obj/structure/catwalk,									//catwalks
+		/obj/effect/blob,                                       //blobs
+		/obj/effect/rune,										//cult runes
+		/obj/effect/cult_ritual,								//cult rituals
 		)
 
 /obj/item/weapon/subspacetunneler/Destroy()
@@ -85,11 +88,9 @@
 	if(!loaded_crystal)
 		return
 
-	var/obj/item/bluespace_crystal/B = loaded_crystal
-	B.forceMove(user.loc)
-	user.put_in_hands(B)
+	user.put_in_hands(loaded_crystal)
+	to_chat(user, "You unload \the [loaded_crystal] from \the [src].")
 	loaded_crystal = null
-	to_chat(user, "You unload \the [B] from \the [src].")
 
 	update_icon()
 	update_verbs()
@@ -102,8 +103,7 @@
 		overlays += crystal_overlay
 	if(loaded_matter_bin)
 		var/image/matter_bin_overlay
-		var/obj/item/weapon/stock_parts/matter_bin/M = loaded_matter_bin
-		switch(M.type)
+		switch(loaded_matter_bin.type)
 			if(/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace)
 				matter_bin_overlay = image('icons/obj/weaponsmithing.dmi', src, "subspacetunneler_bluespacematterbin_overlay")
 			if(/obj/item/weapon/stock_parts/matter_bin/adv/super)
@@ -135,31 +135,25 @@
 		to_chat(usr, "<span class='warning'>You can't remove the matter bin while there are still objects inside it!</span>")
 		return
 	else
-		var/obj/item/weapon/stock_parts/matter_bin/M = loaded_matter_bin
-		M.forceMove(usr.loc)
-		usr.put_in_hands(M)
+		usr.put_in_hands(loaded_matter_bin)
+		to_chat(usr, "You remove \the [loaded_matter_bin] from \the [src].")
 		loaded_matter_bin = null
-		to_chat(usr, "You remove \the [M] from \the [src].")
 	update_verbs()
 	update_icon()
 
 /obj/item/weapon/subspacetunneler/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/bluespace_crystal))
 		if(loaded_crystal)
-			var/obj/item/bluespace_crystal/B = loaded_crystal
-			to_chat(user, "<span class='warning'>There is already \a [B.name] loaded into \the [src].</span>")
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+			to_chat(user, "<span class='warning'>There is already \a [loaded_crystal.name] loaded into \the [src].</span>")
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return 1
 		loaded_crystal = W
 		user.visible_message("[user] inserts \the [W] into \the [src].","You insert \the [W] into \the [src].")
 	if(istype(W, /obj/item/weapon/stock_parts/matter_bin))
 		if(loaded_matter_bin)
-			var/obj/item/weapon/stock_parts/matter_bin/M = loaded_matter_bin
-			to_chat(user, "<span class='warning'>There is already \a [M.name] attached to \the [src].</span>")
+			to_chat(user, "<span class='warning'>There is already \a [loaded_matter_bin.name] attached to \the [src].</span>")
 			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return 1
 		loaded_matter_bin = W
 		user.visible_message("[user] attaches \the [W] into \the [src].","You attach \the [W] into \the [src].")
@@ -170,8 +164,7 @@
 	..()
 	if(loaded_matter_bin)
 		if(stored_items.len)
-			var/obj/item/weapon/stock_parts/matter_bin/M = loaded_matter_bin
-			to_chat(user, "<span class='info'>The gauge on \the [src]'s [M.name] indicates that there [stored_items.len > 1 ? "are [stored_items.len] objects" : "is [stored_items.len] object"] stored inside it.</span>")
+			to_chat(user, "<span class='info'>The gauge on \the [src]'s [loaded_matter_bin.name] indicates that there [stored_items.len > 1 ? "are [stored_items.len] objects" : "is [stored_items.len] object"] stored inside it.</span>")
 
 /obj/item/weapon/subspacetunneler/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj)
 	if (target.loc == user)
@@ -283,13 +276,11 @@
 			user.visible_message("[user] pulls \the [I] to \himself through a subspace rift!","You pull \the [I] to yourself through a subspace rift.")
 			consume_crystal(user)
 	else
-		var/obj/item/weapon/stock_parts/matter_bin/M = loaded_matter_bin
-		var/obj/item/bluespace_crystal/C = loaded_crystal
-		if(!istype(O, /obj/item) && !istype(M, /obj/item/weapon/stock_parts/matter_bin/adv/super))
+		if(!istype(O, /obj/item) && !istype(loaded_matter_bin, /obj/item/weapon/stock_parts/matter_bin/adv/super))
 			to_chat(user, "<span class='warning'>\The [src] doesn't have the equipment to retrieve an object that large.</span>")
 			return
-		else if(!istype(O, /obj/item) && istype(C, /obj/item/bluespace_crystal/artificial))
-			to_chat(user, "<span class='warning'>\The [C] doesn't have the energy necessary to retrieve an object that large. Only a natural bluespace crystal will do.</span>")
+		else if(!istype(O, /obj/item) && istype(loaded_crystal, /obj/item/bluespace_crystal/artificial))
+			to_chat(user, "<span class='warning'>\The [loaded_crystal] doesn't have the energy necessary to retrieve an object that large. Only a natural bluespace crystal will do.</span>")
 			return
 		var/mass = 0
 		if(istype(O, /obj/item))
@@ -298,7 +289,7 @@
 		else
 			mass = 5
 		var/multiplication = 1
-		switch(M.type)
+		switch(loaded_matter_bin.type)
 			if(/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace)
 				multiplication = 4
 			if(/obj/item/weapon/stock_parts/matter_bin/adv/super)
@@ -306,7 +297,7 @@
 			if(/obj/item/weapon/stock_parts/matter_bin/adv)
 				multiplication = 2
 		if((stored_item_mass + mass) > MAX_BIN_MASS * multiplication)
-			to_chat(user, "<span class='warning'>\The [src]'s [M.name] is too full to retrieve that object!</span>")
+			to_chat(user, "<span class='warning'>\The [src]'s [loaded_matter_bin.name] is too full to retrieve that object!</span>")
 			return
 		else
 			user.visible_message("<span class='warning'>[user] pulls \the [O] into \his [src.name] through a subspace rift!</span>","You pull \the [O] into your [src.name] through a subspace rift.")
@@ -327,22 +318,19 @@
 
 /obj/item/weapon/subspacetunneler/proc/consume_crystal(mob/user)
 	spark(src)
-	var/obj/item/bluespace_crystal/B = loaded_crystal
-	if(istype(B, /obj/item/bluespace_crystal/artificial))
-		qdel(B)
-		loaded_crystal = null
+	if(istype(loaded_crystal, /obj/item/bluespace_crystal/artificial))
+		to_chat(user, "<span class='notice'>\The [loaded_crystal] is consumed by the eruption of bluespace energy.</span>")
+		QDEL_NULL(loaded_crystal)
 	else
-		if(prob(50) || istype(B, /obj/item/bluespace_crystal/flawless))
-			if(istype(B, /obj/item/bluespace_crystal/flawless))
-				var/obj/item/bluespace_crystal/flawless/F = B
+		if(prob(50) || istype(loaded_crystal, /obj/item/bluespace_crystal/flawless))
+			if(istype(loaded_crystal, /obj/item/bluespace_crystal/flawless))
+				var/obj/item/bluespace_crystal/flawless/F = loaded_crystal
 				if(!F.infinite)
 					F.uses -= 1
-			to_chat(user, "<span class='notice'>\The [B] withstands the eruption of bluespace energy!</span>")
+			to_chat(user, "<span class='notice'>\The [loaded_crystal] withstands the eruption of bluespace energy!</span>")
 		else
-			qdel(B)
-			loaded_crystal = null
-	if(!loaded_crystal)
-		to_chat(user, "<span class='notice'>\The [B] is consumed by the eruption of bluespace energy.</span>")
+			to_chat(user, "<span class='notice'>\The [loaded_crystal] is consumed by the eruption of bluespace energy.</span>")
+			QDEL_NULL(loaded_crystal)
 
 /obj/item/weapon/subspacetunneler/complete/New() //Comes with a flawless bluespace crystal and supermatter bin by default
 	..()

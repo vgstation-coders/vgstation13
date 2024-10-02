@@ -19,7 +19,7 @@ BREATHALYZER
 	starting_materials = list(MAT_IRON = 500, MAT_GLASS = 100)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
 
 	var/on = 0
@@ -53,6 +53,8 @@ BREATHALYZER
 			if(istype(A,/obj/))
 				var/obj/O = A
 				O.t_scanner_expose()
+			else if(istype(A,/obj/effect/ash))
+				continue
 			else if(istype(A,/mob/living/carbon))
 				var/mob/living/carbon/C = A
 				if(C.alpha < OPAQUE || (C.invisibility > 0 && C.invisibility < INVISIBILITY_OBSERVER) || length(C.body_alphas))
@@ -106,7 +108,7 @@ BREATHALYZER
 	starting_materials = list(MAT_IRON = 200)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_BIOTECH + "=1"
 	attack_delay = 0
 	var/tmp/last_scantime = 0
@@ -324,7 +326,7 @@ Subject's pulse: ??? BPM"})
 	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = FALSE //the thing used to see how hot the air around it is probably shouldn't be flammable
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
 
 /obj/item/device/analyzer/attack_self(mob/user as mob)
@@ -392,30 +394,56 @@ Subject's pulse: ??? BPM"})
 		message += "<span class='bnotice'><B>[bicon(container)] Results of [container] scan:</span></B>"
 	if(total_moles)
 		message += "<br>[human_standard && abs(pressure - ONE_ATMOSPHERE) > 10 ? "<span class='bad'>" : "<span class='notice'>"] Pressure: [round(pressure, 0.1)] kPa</span>"
-		var/o2_concentration = scanned[GAS_OXYGEN]/total_moles
-		var/n2_concentration = scanned[GAS_NITROGEN]/total_moles
-		var/co2_concentration = scanned[GAS_CARBON]/total_moles
-		var/plasma_concentration = scanned[GAS_PLASMA]/total_moles
-		var/heat_capacity = scanned.heat_capacity()
 
-		var/unknown_concentration =  1 - (o2_concentration + n2_concentration + co2_concentration + plasma_concentration)
+		for (var/id in scanned.gas)
+			var/class = "notice"
+			var/moles = scanned[id]
+			var/concentration = moles / total_moles
+			var/datum/gas/gas = XGM.gases[id]
 
-		if(n2_concentration > 0.01)
-			message += "<br>[human_standard && abs(n2_concentration - N2STANDARD) > 20 ? "<span class='bad'>" : "<span class='notice'>"] Nitrogen: [round(scanned[GAS_NITROGEN], 0.1)] mol, [round(n2_concentration*100)]%</span>"
-		if(o2_concentration > 0.01)
-			message += "<br>[human_standard && abs(o2_concentration - O2STANDARD) > 2 ? "<span class='bad'>" : "<span class='notice'>"] Oxygen: [round(scanned[GAS_OXYGEN], 0.1)] mol, [round(o2_concentration*100)]%</span>"
-		if(co2_concentration > 0.01)
-			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] CO2: [round(scanned[GAS_CARBON], 0.1)] mol, [round(co2_concentration*100)]%</span>"
-		if(plasma_concentration > 0.01)
-			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] Plasma: [round(scanned[GAS_PLASMA], 0.1)] mol, [round(plasma_concentration*100)]%</span>"
-		if(unknown_concentration > 0.01)
-			message += "<br><span class='notice'>Unknown: [round(unknown_concentration*100)]%</span>"
+			if (concentration < 0.01)
+				continue
 
-		message += "<br>[human_standard && !IsInRange(scanned.temperature, BODYTEMP_COLD_DAMAGE_LIMIT, BODYTEMP_HEAT_DAMAGE_LIMIT) ? "<span class='bad'>" : "<span class='notice'>"] Temperature: [round(scanned.temperature-T0C)]&deg;C"
-		message += "<br><span class='notice'>Heat capacity: [round(heat_capacity, 0.01)]</span>"
+			if (human_standard)
+				switch (id)
+					if (GAS_OXYGEN)
+						class = abs(concentration - O2STANDARD) > 2 ? "bad" : "notice"
+					if (GAS_NITROGEN)
+						class = abs(concentration - N2STANDARD) > 20 ? "bad" : "notice"
+					else
+						class = "bad"
+			message += "<br><span class='[class]'>[gas.name]: [round(moles, 0.1)] mol, [round(concentration*100)]%</span>"
+
+		var/kelvinTemperatureDisplay = scanned.temperature_kelvin_pretty()
+		var/celsiusTemperatureDisplay = scanned.temperature_celsius_pretty()
+		message += "<br>[human_standard && !IsInRange(scanned.temperature, BODYTEMP_COLD_DAMAGE_LIMIT, BODYTEMP_HEAT_DAMAGE_LIMIT) ? "<span class='bad'>" : "<span class='notice'>"] Temperature: [kelvinTemperatureDisplay]K ([celsiusTemperatureDisplay]&deg;C)"
+		message += "<br><span class='notice'>Heat capacity: [round(scanned.heat_capacity(), 0.01)]</span>"
 	else
 		message += "<br><span class='warning'>No gasses detected[container && !istype(container, /turf) ? " in \the [container]." : ""]!</span>"
 	return message
+
+/obj/item/device/analyzer/wood
+	name = "wood analyzer"
+	desc = "Analyzes whether or not an object is wood."
+
+/obj/item/device/analyzer/wood/attack_self(mob/user as mob)
+	return
+
+/obj/item/device/analyzer/wood/preattack(atom/A, mob/user as mob, proximity_flag)
+	if(!proximity_flag)
+		return
+	if(!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return
+	if(istype(A,/obj))
+		var/obj/O = A
+		if(O.w_type == RECYK_WOOD)
+			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"Yep, it's wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows green.</span>")
+		else
+			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"No, it's not wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows red.</span>")
+		playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+	else
+		return
 
 /obj/item/device/mass_spectrometer
 	desc = "A hand-held mass spectrometer which identifies trace chemicals in a blood sample."
@@ -431,7 +459,7 @@ Subject's pulse: ??? BPM"})
 	throw_range = 20
 	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_BIOTECH + "=2"
 	var/details = 0
 
@@ -517,7 +545,7 @@ Subject's pulse: ??? BPM"})
 	throw_range = 20
 	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_BIOTECH + "=2"
 	var/details = 0
 	var/recent_fail = 0
@@ -534,12 +562,12 @@ Subject's pulse: ??? BPM"})
 		if(O.reagents.reagent_list.len)
 			for(var/datum/reagent/R in O.reagents.reagent_list)
 				var/reagent_percent = (R.volume/O.reagents.total_volume)*100
-				dat += "<br><span class='notice'>[R][details ? " ([R.volume] units, [reagent_percent]%, time in system: [R.real_tick*2] seconds" : ""]</span>"
+				dat += "<br><span class='notice'>[R][details ? " ([R.volume] units, [reagent_percent]%[ismob(O) ? ", time in system: [R.real_tick*2] seconds" : ""])" : ""]</span>"
 		if (istype (O, /obj/item/weapon/reagent_containers/food/snacks))
 			var/obj/item/weapon/reagent_containers/food/snacks/S = O
 			if(S.dip && S.dip.reagent_list.len > 0)
 				for (var/datum/reagent/R in S.dip.reagent_list)
-					dat += "<br><span class='notice'>[R][details ? " (trace amounts, time in system: [R.real_tick*2] seconds" : ""]</span>"
+					dat += "<br><span class='notice'>[R][details ? " (trace amounts)" : ""]</span>"
 		if(dat)
 			to_chat(user, "<span class='notice'>Chemicals found in \the [O]:[dat]</span>")
 		else
@@ -569,7 +597,7 @@ Subject's pulse: ??? BPM"})
 	starting_materials = list(MAT_IRON = 50)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_ENGINEERING + "=1;" + Tc_BIOTECH + "=1"
 
 	var/legal_limit

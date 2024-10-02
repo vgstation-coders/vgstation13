@@ -193,7 +193,7 @@ h4
 	color: #ff0000;
 }
 
-.redBackground {
+.redBackground, a.redBackground {
     background: #ea0000;
 }
 

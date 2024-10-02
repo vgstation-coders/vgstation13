@@ -329,8 +329,8 @@
 	if(!istype(M) || !M.blob_core)
 		return
 	var/required_points = BLOBCOREBASECOST + (BLOBCORECOSTINC * (blob_cores.len - 1))
-	if (M.max_blob_points < required_points || M.blob_core.creator)
-		Hide()
+	if (M.max_blob_points < required_points || M.blob_core.has_been_created)
+		Disappear()
 		return
 	offset_y = round(-96 + (required_points * 200 / M.max_blob_points))
 	UpdateUIScreenLoc()
@@ -470,8 +470,8 @@
 	var/mob/camera/blob/M = GetUser()
 	if(!istype(M) || !M.blob_core)
 		return
-	if (M.blob_core.creator)
-		Hide()
+	if (M.blob_core.has_been_created)
+		Disappear()
 		return
 	overlays.len = 0
 	if (M.max_blob_points < required_points)

@@ -29,6 +29,9 @@ Used In File(s): /code/game/machinery/alarm.dm
 		<div class="line">
 			{{:helper.link('Show Tracker Map', 'pin-s', {'reset': 1, 'showMap' : 1})}}
 			{{:helper.link('Show Detail List', 'script', {'set_screen': 1})}}
+			{{if data.bspipe_exist}}
+				{{:helper.link('Show Bluespace Caps List', 'script', {'set_screen': 3})}}
+			{{/if}}
 		</div>
 
 		<div class="line">
@@ -68,51 +71,30 @@ Used In File(s): /code/game/machinery/alarm.dm
 						<th class="bad">max2</th>
 					</thead>
 					<tbody>
+						{{for data.selected_preset.noteworthy_thresholds : threshold}}
+							<tr>
+								<th>{{:threshold.name}}</th>
+								<td>{{:helper.link(threshold.raw_values.min2 >= 0 ? helper.precisionRound(threshold.raw_values.min2,4) : "OFF",null,{'set_preset_setting':threshold.id,'index':1})}}</td>
+								<td>{{:helper.link(threshold.raw_values.min1 >= 0 ? helper.precisionRound(threshold.raw_values.min1,4) : "OFF",null,{'set_preset_setting':threshold.id,'index':2})}}</td>
+								<td>{{:helper.link(threshold.raw_values.max1 >= 0 ? helper.precisionRound(threshold.raw_values.max1,4) : "OFF",null,{'set_preset_setting':threshold.id,'index':3})}}</td>
+								<td>{{:helper.link(threshold.raw_values.max2 >= 0 ? helper.precisionRound(threshold.raw_values.max2,4) : "OFF",null,{'set_preset_setting':threshold.id,'index':4})}}</td>
+							</tr>
+						{{/for}}
 						<tr>
-							<th>O<sub>2</sub></th>
-							{{for data.selected_preset.oxygen}}
-								<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'set_preset_setting':'oxygen','index':index+1})}}</td>
-							{{/for}}
-						</tr>
-						<tr>
-							<th>N<sub>2</sub></th>
-							{{for data.selected_preset.nitrogen}}
-								<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'set_preset_setting':'nitrogen','index':index+1})}}</td>
-							{{/for}}
-						</tr>
-						<tr>
-							<th>CO<sub>2</sub></th>
-							{{for data.selected_preset.carbon_dioxide}}
-								<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'set_preset_setting':'carbon_dioxide','index':index+1})}}</td>
-							{{/for}}
-						</tr>
-						<tr>
-							<th>Plasma</th>
-							{{for data.selected_preset.plasma}}
-								<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'set_preset_setting':'plasma','index':index+1})}}</td>
-							{{/for}}
-						</tr>
-						<tr>
-							<th>Nitrous Oxide</th>
-							{{for data.selected_preset.n2o}}
-								<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'set_preset_setting':'n2o','index':index+1})}}</td>
-							{{/for}}
-						</tr>
-						<tr>
-							<th>Trace Gases</th>
-							{{for data.selected_preset.other}}
+							<th>Other Gases</th>
+							{{for data.selected_preset.other_threshold}}
 								<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'set_preset_setting':'other','index':index+1})}}</td>
 							{{/for}}
 						</tr>
 						<tr>
 							<th>Pressure</th>
-							{{for data.selected_preset.pressure}}
+							{{for data.selected_preset.pressure_threshold}}
 								<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'set_preset_setting':'pressure','index':index+1})}}</td>
 							{{/for}}
 						</tr>
 						<tr>
 							<th>Temperature (K)</th>
-							{{for data.selected_preset.temperature}}
+							{{for data.selected_preset.temperature_threshold}}
 								<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'set_preset_setting':'temperature','index':index+1})}}</td>
 							{{/for}}
 						</tr>
@@ -125,11 +107,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 				<div class="line">
 					<div class="statusLabel">Scrubbed gases:</div>
 					<div class="statusValue">
-						{{:helper.link('CO<sub>2</sub>', null, {'set_preset_setting': 'scrubbers_gases', 'gas': 'carbon_dioxide'}, null, (data.selected_preset.scrubbers_gases.carbon_dioxide?'linkOn':''))}}
-						{{:helper.link('Plasma', null, {'set_preset_setting': 'scrubbers_gases', 'gas': 'plasma'}, null, (data.selected_preset.scrubbers_gases.plasma?'linkOn':''))}}
-						{{:helper.link('N<sub>2</sub>O', null, {'set_preset_setting': 'scrubbers_gases', 'gas': 'n2o'}, null, (data.selected_preset.scrubbers_gases.n2o?'linkOn':''))}}
-						{{:helper.link('N<sub>2</sub>', null, {'set_preset_setting': 'scrubbers_gases', 'gas': 'nitrogen'}, null, (data.selected_preset.scrubbers_gases.nitrogen?'linkOn':''))}}
-						{{:helper.link('O<sub>2</sub>', null, {'set_preset_setting': 'scrubbers_gases', 'gas': 'oxygen'}, null, (data.selected_preset.scrubbers_gases.oxygen?'linkOn':''))}}
+						{{:helper.generateScrubberGasOptionsCentral(data.gas_datums, data.selected_preset.scrubbed_gases)}}
 					</div>
 				</div>
 			</div>
@@ -150,8 +128,12 @@ Used In File(s): /code/game/machinery/alarm.dm
 	{{else data.aca_screen == "1"}}
 		<div class="line">
 			{{:helper.link('Show Tracker Map', 'pin-s', {'reset': 1, 'showMap' : 1})}}
+			{{if data.bspipe_exist}}
+				{{:helper.link('Show Bluespace Caps List', 'script', {'set_screen': 3})}}
+			{{/if}}
 			{{if data.admin_access}}
 				{{:helper.link('Show Presets Panel', 'gear', {'set_screen': 2})}}
+                {{:helper.link("Mass Set Mode",'alert',{'set_mass_mode': 1},null,"floatRight")}}
 			{{/if}}
 		</div>
 		{{if !data.alarm}}
@@ -167,17 +149,17 @@ Used In File(s): /code/game/machinery/alarm.dm
 		{{else}}
 			{{:helper.link("Main Menu","gear",{"reset":1},null,null)}}
 
-			<!-- The markup below is a direct copy of air_alarm.tmpl -->
 			<h3>{{:data.name}}</h3>
+			<!-- The markup below is a direct copy/paste of air_alarm.tmpl. -->
 			{{if !data.air}}
 				<div class="notice">Unable to acquire air sample.</div>
 			{{else}}
 				<div class="statusDisplay">
 					<div class="line">
 						<div class="statusLabel">Pressure:</div>
-						{{:helper.string("<div class='statusValue {0}'>{1} kPa</div>",helper.dangerToClass(data.air.danger.pressure),helper.precisionRound(data.air.pressure,4))}}
+						{{:helper.string("<div class='statusValue {0}'>{1} kPa</div>",helper.dangerToClass(data.air.pressure_danger),helper.precisionRound(data.air.pressure,4))}}
 						<div class="statusValue" style="margin-left:5px;">
-						{{if !data.locked && data.rcon_enabled}}
+						{{if !data.locked}}
 							{{if data.mode == 3}}
 								{{:helper.link("DEACTIVATE PANIC SYPHON",null,{"mode" : 1},null,'linkOn')}}
 							{{else}}
@@ -186,67 +168,42 @@ Used In File(s): /code/game/machinery/alarm.dm
 						{{/if}}
 						</div>
 					</div>
-					<div class="line">
-						<div class="statusLabel">Oxygen:</div>
-						{{:helper.displayBar(data.air.contents.oxygen, 0, 100, helper.dangerToClass(data.air.danger.oxygen))}}
-						{{:helper.string("<div class='statusValue {0}'>{1}%</div>",helper.dangerToClass(data.air.danger.oxygen),helper.precisionRound(data.air.contents.oxygen,2))}}
-					</div>
-					<div class="line">
-						<div class="statusLabel">Nitrogen:</div>
-						{{:helper.displayBar(data.air.contents.nitrogen, 0, 100, helper.dangerToClass(data.air.danger.nitrogen))}}
-						{{:helper.string("<div class='statusValue {0}'>{1}%</div>",helper.dangerToClass(data.air.danger.nitrogen),helper.precisionRound(data.air.contents.nitrogen,2))}}
-					</div>
-					<div class="line">
-						<div class="statusLabel">Carbon Dioxide:</div>
-						{{:helper.displayBar(data.air.contents.co2, 0, 100, helper.dangerToClass(data.air.danger.co2))}}
-						{{:helper.string("<div class='statusValue {0}'>{1}%</div>",helper.dangerToClass(data.air.danger.co2),helper.precisionRound(data.air.contents.co2,2))}}
-					</div>
-					<div class="line">
-						<div class="statusLabel">Plasma:</div>
-						{{:helper.displayBar(data.air.contents.plasma, 0, 100, helper.dangerToClass(data.air.danger.plasma))}}
-						{{:helper.string("<div class='statusValue {0}'>{1}%</div>",helper.dangerToClass(data.air.danger.plasma),helper.precisionRound(data.air.contents.plasma,2))}}
-					</div>
-					<div class="line">
-						<div class="statusLabel">Nitrous Oxide:</div>
-						{{:helper.displayBar(data.air.contents.n2o, 0, 100, helper.dangerToClass(data.air.danger.n2o))}}
-						{{:helper.string("<div class='statusValue {0}'>{1}%</div>",helper.dangerToClass(data.air.danger.n2o),helper.precisionRound(data.air.contents.n2o,2))}}
-					</div>
-					{{if data.air.danger.other>0}}
-					<div class="line">
-						<div class="statusLabel">Other:</div>
-						{{:helper.displayBar(data.air.contents.other, 0, 100, helper.dangerToClass(data.air.danger.other))}}
-						{{:helper.string("<div class='statusValue {0}'>{1}%</div>",helper.dangerToClass(data.air.danger.other),helper.precisionRound(data.air.contents.other,2))}}
-					</div>
-					{{/if}}
+					{{for data.air.noteworthy_gases}}
+						<div class="line">
+							<div class="statusLabel">{{:value.name}}:</div>
+							{{:helper.displayBar(value.percentage, 0, 100, helper.dangerToClass(value.danger))}}
+							{{:helper.string("<div class='statusValue {0}'>{1}%</div>",helper.dangerToClass(value.danger),helper.precisionRound(value.percentage,2))}}
+						</div>
+					{{/for}}
 					<div class="line">
 						<div class="statusLabel">
 							Temperature:
 						</div>
-						{{:helper.string("<div class='statusValue {0}'>{1}K ({2}&deg;C)</div>",helper.dangerToClass(data.air.danger.temperature),helper.precisionRound(data.air.temperature,2),helper.precisionRound(data.air.temperature_c,2))}}
+						{{:helper.string("<div class='statusValue {0}'>{1}K ({2}&deg;C)</div>",helper.dangerToClass(data.air.temperature_danger),helper.precisionRound(data.air.temperature,2),helper.precisionRound(data.air.temperature_c,2))}}
 					</div>
 					<div class="line">
 						<div class="statusLabel">Local Status:</div>
-						{{if data.air.danger.overall == 0}}
+						{{if data.air.overall_danger == 0}}
 							{{if data.atmos_alarm}}
 								<div class="average">Caution: Atmos alert in area</div>
 							{{else}}
 								<div class="good">Optimal</div>
 							{{/if}}
-						{{else data.air.danger.overall == 1}}
+						{{else data.air.overall_danger == 1}}
 							<div class="average">Caution</div>
 						{{else}}
 							<div class="notice">DANGER: Internals Required</div>
 						{{/if}}
-						{{if !data.locked && data.rcon_enabled}}
+						{{if !data.locked}}
 							{{if data.alarmActivated}}
 								{{:helper.link('Reset Alarm',null,{'atmos_reset':1},null,'linkOn')}}
 							{{else}}
 								{{:helper.link('Activate Alarm',null,{'atmos_alarm':1},null,'red')}}
 							{{/if}}
 							{{if data.firedoor_override}}
-								{{:helper.link('Manual override enabled', null, {'disable_override':1}, 'disabled', 'linkOn')}}
+								{{:helper.link('Manual override enabled', null, {'disable_override':1}, null, 'linkOn')}}
 							{{else}}
-								{{:helper.link('Manual override disabled', null, {'enable_override':1}, 'disabled', 'red')}}
+								{{:helper.link('Manual override disabled', null, {'enable_override':1}, null, 'red')}}
 							{{/if}}
 						{{/if}}
 					</div>
@@ -257,21 +214,25 @@ Used In File(s): /code/game/machinery/alarm.dm
 						#define RCON_YES	3
 						-->
 						<div class="statusLabel">Remote Control:</div>
-						{{if data.rcon_enabled}}
-							<div class="good">Enabled</div>
+						{{if !data.locked}}
+							{{:helper.link('Off',  null, {'rcon' : 1}, (data.rcon != 1) ? null : 'selected')}}
+							{{:helper.link('On',   null, {'rcon' : 2}, (data.rcon != 2) ? null : 'selected')}}
 						{{else}}
-							<div class="bad">Disabled</div>
+							{{:helper.link('Off',  null, {'rcon' : 1}, (data.rcon != 1) ? 'disabled' : 'selected')}}
+							{{:helper.link('On',   null, {'rcon' : 2}, (data.rcon != 2) ? 'disabled' : 'selected')}}
 						{{/if}}
 					</div>
 					<div class="line">
 						<div class="statusLabel">Thermostat:</div>
-						{{:helper.link(data.target_temp+" C", 'carat-2-n-s', {'temperature': 1}, (data.rcon_enabled) ? null : 'disabled')}}
+						{{:helper.link(data.target_temp+" C", 'carat-2-n-s', {'temperature': 1})}}
 					</div>
 				</div>
 			{{/if}}
-			{{if !data.rcon_enabled}}
-				<div class="notice">Remote control disabled.</div>
+
+			{{if data.locked}}
+				<div class="notice">Swipe card to unlock.</div>
 			{{else}}
+				<div class="notice">Remember to lock with ID card after use.</div>
 				<div class="item">
 					<div class="itemLabel">Screen:</div>
 					<div class="itemContents">
@@ -356,11 +317,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 							<div class="line">
 								<div class="statusLabel">Filtering:</div>
 								<div class="statusValue">
-									{{:helper.link('CO<sub>2</sub>',null,{'id_tag':value.id_tag,'command':'co2_scrub','val':(value.filter_co2==0?1:0)},null,(value.filter_co2?'linkOn':''))}}
-									{{:helper.link('Plasma',        null,{'id_tag':value.id_tag,'command':'tox_scrub','val':(value.filter_tox==0?1:0)},null,(value.filter_tox?'linkOn':''))}}
-									{{:helper.link('N<sub>2</sub>O',null,{'id_tag':value.id_tag,'command':'n2o_scrub','val':(value.filter_n2o==0?1:0)},null,(value.filter_n2o?'linkOn':''))}}
-									{{:helper.link('N<sub>2</sub>', null,{'id_tag':value.id_tag,'command':'n2_scrub', 'val':(value.filter_n2 ==0?1:0)},null,(value.filter_n2 ?'linkOn':''))}}
-									{{:helper.link('O<sub>2</sub>', null,{'id_tag':value.id_tag,'command':'o2_scrub', 'val':(value.filter_o2 ==0?1:0)},null,(value.filter_o2 ?'linkOn':''))}}
+									{{:helper.generateScrubberGasOptions(data.gas_datums, value)}}
 								</div>
 							</div>
 							{{/if}}
@@ -423,6 +380,22 @@ Used In File(s): /code/game/machinery/alarm.dm
 						</div>
 						{{/for}}
 					</div>
+					<div class="item">
+						<div class="itemLabel">
+						Automatic Fire Suppression:
+						</div>
+						<div class="itemContent">
+							{{if data.locked && !data.siliconUser}}
+								{{if data.suppression_mode}}
+									<span class='good'>On</span>
+								{{else}}
+									<span class='bad'>Off</span>
+								{{/if}}
+							{{else}}
+								{{:helper.link('On', 'power', {'auto_suppress' : 1}, data.suppression_mode ? 'selected' : null)}}{{:helper.link('Off', 'close', {'auto_suppress' : 1}, data.suppression_mode ? null : 'selected')}}
+							{{/if}}
+						</div>
+					</div>
 				<!-- SENSORS -->
 				{{else data.screen == 5}}
 					<h3>Sensor Thresholds</h3>
@@ -439,51 +412,30 @@ Used In File(s): /code/game/machinery/alarm.dm
 								<th class="bad">max2</th>
 							</thead>
 							<tbody>
+								{{for data.thresholds.noteworthy_thresholds : threshold}}
+									<tr>
+										<th>{{:threshold.name}}</th>
+										<td>{{:helper.link(threshold.raw_values.min2 >= 0 ? helper.precisionRound(threshold.raw_values.min2,4) : "OFF",null,{'command':'set_threshold','env':threshold.id,'var':1})}}</td>
+										<td>{{:helper.link(threshold.raw_values.min1 >= 0 ? helper.precisionRound(threshold.raw_values.min1,4) : "OFF",null,{'command':'set_threshold','env':threshold.id,'var':2})}}</td>
+										<td>{{:helper.link(threshold.raw_values.max1 >= 0 ? helper.precisionRound(threshold.raw_values.max1,4) : "OFF",null,{'command':'set_threshold','env':threshold.id,'var':3})}}</td>
+										<td>{{:helper.link(threshold.raw_values.max2 >= 0 ? helper.precisionRound(threshold.raw_values.max2,4) : "OFF",null,{'command':'set_threshold','env':threshold.id,'var':4})}}</td>
+									</tr>
+								{{/for}}
 								<tr>
-									<th>O<sub>2</sub></th>
-									{{for data.sensors.oxygen}}
-										<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'command':'set_threshold','env':'oxygen','var':index+1})}}</td>
-									{{/for}}
-								</tr>
-								<tr>
-									<th>N<sub>2</sub></th>
-									{{for data.sensors.nitrogen}}
-										<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'command':'set_threshold','env':'nitrogen','var':index+1})}}</td>
-									{{/for}}
-								</tr>
-								<tr>
-									<th>CO<sub>2</sub></th>
-									{{for data.sensors.carbon_dioxide}}
-										<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'command':'set_threshold','env':'carbon_dioxide','var':index+1})}}</td>
-									{{/for}}
-								</tr>
-								<tr>
-									<th>Plasma</th>
-									{{for data.sensors.plasma}}
-										<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'command':'set_threshold','env':'plasma','var':index+1})}}</td>
-									{{/for}}
-								</tr>
-								<tr>
-									<th>Nitrous Oxide</th>
-									{{for data.sensors.n2o}}
-										<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'command':'set_threshold','env':'n2o','var':index+1})}}</td>
-									{{/for}}
-								</tr>
-								<tr>
-									<th>Trace Gases</th>
-									{{for data.sensors.other}}
+									<th>Other Gases</th>
+									{{for data.thresholds.other_threshold}}
 										<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'command':'set_threshold','env':'other','var':index+1})}}</td>
 									{{/for}}
 								</tr>
 								<tr>
 									<th>Pressure</th>
-									{{for data.sensors.pressure}}
+									{{for data.thresholds.pressure_threshold}}
 										<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'command':'set_threshold','env':'pressure','var':index+1})}}</td>
 									{{/for}}
 								</tr>
 								<tr>
 									<th>Temperature (K)</th>
-									{{for data.sensors.temperature}}
+									{{for data.thresholds.temperature_threshold}}
 										<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'command':'set_threshold','env':'temperature','var':index+1})}}</td>
 									{{/for}}
 								</tr>
@@ -492,6 +444,25 @@ Used In File(s): /code/game/machinery/alarm.dm
 					</div>
 				{{/if}}
 			{{/if}}
+			<!-- End air_alarm.tmpl copypaste -->
 		{{/if}}
+	{{else data.aca_screen == "3"}}
+		<div class="line">
+			{{:helper.link('Show Tracker Map', 'pin-s', {'reset': 1, 'showMap' : 1})}}
+			{{:helper.link('Show Detail List', 'script', {'set_screen': 1})}}
+			{{if data.admin_access}}
+				{{:helper.link('Show Presets Panel', 'gear', {'set_screen': 2})}}
+                {{:helper.link("Mass Set Mode",'alert',{'set_mass_mode': 1},null,"floatRight")}}
+			{{/if}}
+		</div>
+		<h3>Bluespace Pipes Locations</h3>
+		<div class="statusDisplay">
+		{{for data.bspipes}}
+			<div class="line">
+				{{:helper.string("<div class='statusValue good'>{0}</div>",value.name)}}
+				{{:helper.string("<div class='floatRight'>X: {0}, Y: {1}, Z: {2}</div>",value.x,value.y,value.z)}}
+			</div>
+		{{/for}}
+		</div>
 	{{/if}}
 {{/if}}

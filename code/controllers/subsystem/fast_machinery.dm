@@ -18,4 +18,5 @@ var/list/fast_machines = list()
 	..("FP:[fast_machines.len]")
 
 /datum/subsystem/machinery/fast/get_currenrun()
+	currentrun_index = fast_machines.len
 	return fast_machines.Copy()

@@ -4,6 +4,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "gum_wrapped"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_BIOLOGICAL
 	var/wrapped = TRUE
 	var/chewed = FALSE
 	var/chem_volume = 35
@@ -11,7 +12,7 @@
 	var/image/color_overlay
 	var/atom/target = null
 	var/sprite_shrunk = FALSE //I couldn't think of a satisfactory way to check if our transform matrix is minty fresh, so this is used to track if we're shrunk from being stuck to a vending machine
-	autoignition_temperature = AUTOIGNITION_PAPER
+	flammable = TRUE
 	goes_in_mouth = TRUE
 	gender = PLURAL
 	uncountable = TRUE
@@ -112,7 +113,7 @@
 /obj/item/gum/attackby(var/obj/item/W, var/mob/user)
 	if(locked_to)
 		var/datum/locking_category/category = locked_to.get_lock_cat_for(src)
-		if(istype(category, /datum/locking_category/gum_stuck) && is_type_in_list(W, list(/obj/item/weapon/chisel, /obj/item/tool/screwdriver)))
+		if(istype(category, /datum/locking_category/gum_stuck) && is_type_in_list(W, list(/obj/item/weapon/chisel, /obj/item/tool/screwdriver, /obj/item/tool/solder/screw)))
 			playsound(src, "sound/items/screwdriver.ogg", 10, 1, -1)
 			if(do_after(user, src, 5 SECONDS) && locked_to)
 				to_chat(user, "You pry \the [src] loose from \the [locked_to].")
@@ -212,15 +213,8 @@
 		return
 	if(H.shoes)
 		var/obj/item/clothing/shoes/S = H.shoes
-		if(!blood_overlays[S.type]) //If there isn't a precreated blood overlay make one
-			S.set_blood_overlay()
-		if(S.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
-			S.overlays.Remove(S.blood_overlay)
-		else
-			S.blood_overlay = blood_overlays["[S.type][S.icon_state]"]
-		S.blood_overlay.color = "#FFB2C4"
-		S.overlays += S.blood_overlay
 		S.blood_color = "#FFB2C4"
+		S.set_blood_overlay()
 		H.update_inv_shoes(1)
 	else
 		H.feet_blood_color = "#FFB2C4"

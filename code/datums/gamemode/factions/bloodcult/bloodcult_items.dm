@@ -19,7 +19,6 @@ var/list/arcane_tomes = list()
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	mech_flags = MECH_SCAN_FAIL
-	fire_fuel = 3
 	var/state = TOME_CLOSED
 	var/can_flick = 1
 	var/list/talismans = list()
@@ -41,7 +40,9 @@ var/list/arcane_tomes = list()
 	ignite()
 
 /obj/item/weapon/tome/suicide_act(var/mob/living/user)
-	if (iscultist(user))
+	var/datum/role/cultist/C = iscultist(user)
+	if (C)
+		playsound(get_turf(user), 'sound/effects/blood/edibles.ogg', 75, 0)
 		anim(target = user, a_icon = 'icons/obj/cult.dmi', a_icon_state = "build", lay = BELOW_OBJ_LAYER, plane = OBJ_PLANE, sleeptime = 20)
 		user.Stun(10)
 		icon_state = "tome-open"
@@ -63,6 +64,7 @@ var/list/arcane_tomes = list()
 			H.bloody_body(H)
 			H.bloody_hands(H)
 		sleep(10)
+		C.gain_devotion(500, DEVOTION_TIER_4, "suicide_tome", user)
 		anim(target = user, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_sac", lay = ABOVE_SINGULO_LAYER, plane = EFFECTS_PLANE)
 		to_chat(user, "<span class='sinister'>You offer this shell of flesh to Nar-Sie.</span>")
 		sleep(4)
@@ -188,11 +190,7 @@ var/list/arcane_tomes = list()
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used [name] on [M.name] ([M.ckey])</font>")
 	msg_admin_attack("[user.name] ([user.ckey]) used [name] on [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
-	if(!iscarbon(M))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 
 	if(!istype(M))
 		return
@@ -201,8 +199,16 @@ var/list/arcane_tomes = list()
 		return
 
 	..()
-	M.take_organ_damage(0,10)
-	to_chat(M, "<span class='warning'>You feel a searing heat inside of you!</span>")
+
+	if (!M.isDead())
+		M.take_organ_damage(0,rand(5,20))
+		to_chat(M, "<span class='warning'>You feel a searing heat inside of you!</span>")
+		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+		if (C)
+			if (M.mind)
+				C.gain_devotion(30, DEVOTION_TIER_3, "attack_tome", M)
+			else
+				C.gain_devotion(30, DEVOTION_TIER_2, "attack_tome_nomind", M)
 
 /obj/item/weapon/tome/attack_hand(var/mob/living/user)
 	if(!iscultist(user) && state == TOME_OPEN)
@@ -355,8 +361,7 @@ var/list/arcane_tomes = list()
 	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 1
 	attack_verb = list("slaps")
-	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
+	flammable = TRUE
 	mech_flags = MECH_SCAN_FAIL
 	var/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman/linked_ui
 	var/blood_text = ""
@@ -450,6 +455,12 @@ var/list/arcane_tomes = list()
 				user << browse(T.tome_text(), "window=arcanetome;size=900x600")
 				user.put_in_hands(src)
 		return
+
+	if(iscarbon(user))
+		var/mob/living/carbon/C = user
+		if (C.occult_muted())
+			to_chat(user, "<span class='danger'>You find yourself unable to focus your mind on the arcane words of the talisman.</span>")
+			return
 
 	if (attuned_rune)
 		if (attuned_rune.loc)
@@ -588,6 +599,12 @@ var/list/arcane_tomes = list()
 	if(!checkcult)
 		return ..()
 	if (iscultist(user))
+		if (!iscultist(target) && !target.isDead())
+			var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+			if (target.mind)
+				C.gain_devotion(30, DEVOTION_TIER_3, "attack_cultblade", target)
+			else
+				C.gain_devotion(30, DEVOTION_TIER_2, "attack_cultblade_nomind", target)
 		if (ishuman(target) && target.resting)
 			var/obj/structure/cult/altar/altar = locate() in target.loc
 			if (altar)
@@ -662,7 +679,7 @@ var/list/arcane_tomes = list()
 	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper))
 		return 1
 	if(istype(I,/obj/item/soulstone/gem))
-		to_chat(user,"<span class='warning'>The [src]'s damage doesn't allow it to hold \a [I] any longer.</span>")
+		to_chat(user,"<span class='warning'>\The [src]'s damage doesn't allow it to hold \a [I] any longer.</span>")
 		return 1
 	..()
 
@@ -703,6 +720,7 @@ var/list/arcane_tomes = list()
 	if (shade)
 		shade.remove_blade_powers()
 		if (T)
+			shade.soulblade_ritual = FALSE
 			shade.forceMove(T)
 			shade.status_flags &= ~GODMODE
 			shade.canmove = 1
@@ -747,12 +765,15 @@ var/list/arcane_tomes = list()
 	if(shade || !iscarbon(user))
 		return (SUICIDE_ACT_BRUTELOSS)
 	else//allows wielder to captures their own soul
+		playsound(get_turf(user), 'sound/effects/blood/edibles_short.ogg', 75, 0)
+		var/datum/role/cultist/C = iscultist(user)
+		C?.gain_devotion(500, DEVOTION_TIER_4, "suicide_soulblade", user)
 		playsound(user, 'sound/weapons/bloodyslice.ogg', 50, 1)
 		user.overlays += image('icons/obj/cult.dmi', "altar-soulblade")
 		user.drop_from_inventory(src)
 		if (ishuman(user))
-			var/datum/organ/external/chest/C = user.get_organ(LIMB_CHEST)
-			C.hidden = src
+			var/datum/organ/external/chest/Ch = user.get_organ(LIMB_CHEST)
+			Ch.hidden = src
 			user.update_inv_hands()
 		src.forceMove(user)
 		sleep(10)
@@ -803,6 +824,7 @@ var/list/arcane_tomes = list()
 				shade.forceMove(SG)
 				SG.shade = shade
 				shade.remove_blade_powers()
+				shade.soulblade_ritual = FALSE
 				SG.icon_state = "soulstone2"
 				SG.item_state = "shard-soulstone2"
 				SG.name = "Soul Gem: [shade.real_name]"
@@ -818,6 +840,12 @@ var/list/arcane_tomes = list()
 		if(affecting && affecting.take_damage(rand(force/2, force))) //random amount of damage between half of the blade's force and the full force of the blade.
 			user.UpdateDamageIcon()
 		return
+	if (iscultist(user) && !iscultist(target) && !target.isDead())
+		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+		if (target.mind)
+			C.gain_devotion(30, DEVOTION_TIER_3, "attack_soulblade", target)
+		else
+			C.gain_devotion(30, DEVOTION_TIER_2, "attack_soulblade_nomind", target)
 	if (ishuman(target) && target.resting)
 		var/obj/structure/cult/altar/altar = locate() in target.loc
 		if (altar)
@@ -947,7 +975,7 @@ var/list/arcane_tomes = list()
 		var/mob/living/carbon/C = loc
 		C.update_inv_hands()
 		if (areYouWorthy(C))
-			var/image/I = image('icons/mob/hud.dmi', src, "consthealth[10*round((blood/maxblood)*10)]")
+			var/image/I = new/image/hud('icons/mob/hud.dmi', src, "consthealth[10*round((blood/maxblood)*10)]")
 			I.pixel_x = 16
 			I.pixel_y = 16
 			overlays += I
@@ -1070,7 +1098,7 @@ var/list/arcane_tomes = list()
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "blood_dagger"
 	item_state = "blood_dagger"
-	desc = "A knife-shaped hunk of solidified blood."
+	desc = "A knife-shaped hunk of solidified blood. Can be thrown to pin enemies down."
 	siemens_coefficient = 0.2
 	sharpness = 1.5
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
@@ -1114,6 +1142,12 @@ var/list/arcane_tomes = list()
 			playsound(user, 'sound/weapons/bladeslice.ogg', 30, 0, -2)
 			to_chat(user, "<span class='warning'>\The [src] takes a bit of your blood.</span>")
 		return
+	if (iscultist(user) && !iscultist(target) && !target.isDead())
+		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+		if (target.mind)
+			C.gain_devotion(30, DEVOTION_TIER_3, "attack_blooddagger", target)
+		else
+			C.gain_devotion(30, DEVOTION_TIER_2, "attack_blooddagger_nomind", target)
 	..()
 /obj/item/weapon/melee/blood_dagger/attack_hand(var/mob/living/user)
 	if(!ismob(loc))
@@ -1218,13 +1252,19 @@ var/list/arcane_tomes = list()
 		body_parts_covered = FULL_HEAD|HIDEHAIR
 		body_parts_visible_override = 0
 		hides_identity = HIDES_IDENTITY_ALWAYS
-		to_chat(user, "<span class='notice'>The hood's textile reacts with your soul and produces a shadow over your face that will hide your identity.</span>")
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			H.update_name()
+			to_chat(user, "<span class='notice'>The hood's textile reacts with your soul and produces a shadow over your face that will hide your identity.</span>")
 	else
 		icon_state = initial(icon_state)
 		body_parts_covered = EARS|HEAD|HIDEHAIR
 		body_parts_visible_override = FACE
 		hides_identity = HIDES_IDENTITY_DEFAULT
-		to_chat(user, "<span class='notice'>You dispel the shadow covering your face.</span>")
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			H.update_name()
+			to_chat(user, "<span class='notice'>You dispel the shadow covering your face.</span>")
 
 	user.update_inv_head()
 	anon_mode = !anon_mode
@@ -1316,12 +1356,15 @@ var/list/arcane_tomes = list()
 	item_state = "cultrobes"
 	flags = FPRINT
 	allowed = list(/obj/item/weapon/melee/cultblade,/obj/item/weapon/melee/soulblade,/obj/item/weapon/tome,/obj/item/weapon/talisman,/obj/item/weapon/blood_tesseract,/obj/item/weapon/tank)
-	armor = list(melee = 50, bullet = 30, laser = 30,energy = 20, bomb = 25, bio = 25, rad = 0)
+	armor = list(melee = 50, bullet = 30, laser = 40,energy = 20, bomb = 25, bio = 25, rad = 0)
 	siemens_coefficient = 0
 	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	mech_flags = MECH_SCAN_FAIL
+	hood = new /obj/item/clothing/head/culthood()
+	auto_hood = TRUE
+	hood_suit_name = "robes"
 
 	//plasmaman stuff
 	var/next_extinguish=0
@@ -1332,6 +1375,7 @@ var/list/arcane_tomes = list()
 	desc = "A set of warm armored robes worn by the followers of Nar-Sie."
 	icon_state = "cultrobes_snow"
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	hood = new /obj/item/clothing/head/culthood/snow()
 
 /obj/item/clothing/suit/cultrobes/get_cult_power()
 	return 50
@@ -1358,7 +1402,7 @@ var/list/arcane_tomes = list()
 
 	next_extinguish = world.time + extinguish_cooldown
 	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
-	H.ExtinguishMob()
+	H.extinguish()
 
 //plasmaman stuff
 /obj/item/clothing/suit/cultrobes/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
@@ -1419,7 +1463,7 @@ var/list/arcane_tomes = list()
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
 	icon_state = "culthelmet"
 	item_state = "culthelmet"
-	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
@@ -1448,7 +1492,7 @@ var/list/arcane_tomes = list()
 	w_class = W_CLASS_MEDIUM
 	allowed = list(/obj/item/weapon/tome,/obj/item/weapon/melee/cultblade,/obj/item/weapon/melee/soulblade,/obj/item/weapon/tank,/obj/item/weapon/tome,/obj/item/weapon/talisman,/obj/item/weapon/blood_tesseract)
 	slowdown = HARDSUIT_SLOWDOWN_MED
-	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
@@ -1475,7 +1519,7 @@ var/list/arcane_tomes = list()
 
 	next_extinguish = world.time + extinguish_cooldown
 	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
-	H.ExtinguishMob()
+	H.extinguish()
 
 //plasmaman stuff
 /obj/item/clothing/suit/space/cult/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
@@ -1506,6 +1550,7 @@ var/list/arcane_tomes = list()
 	icon_state = "cultrobes_old"
 	item_state = "cultrobes_old"
 	species_fit = list()
+	hood = new /obj/item/clothing/head/culthood/old()
 
 /obj/item/clothing/head/magus
 	name = "magus helm"
@@ -1581,8 +1626,7 @@ var/list/arcane_tomes = list()
 	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 1
 	attack_verb = list("slaps")
-	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
+	flammable = TRUE
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/bloodcult_pamphlet/attack_self(var/mob/user)
@@ -1690,18 +1734,18 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/on_reagent_change()
 	..()
-	overlays.len = 0
+	update_icon()
+	for(var/datum/reagent/R in reagents.reagent_list)
+		if(R.id == BLOOD)
+			R.handle_data_mix(list("virus2" = list(DISEASE_CULT = global_diseases[DISEASE_CULT])))
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/update_icon()
+	..()
 	if (reagents.reagent_list.len > 0)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "cult")
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		overlays += filling
-
-	for(var/datum/reagent/R in reagents.reagent_list)
-		if(R.id == BLOOD)
-			var/datum/reagent/blood/B = R
-			var/datum/disease2/disease/cultvirus = global_diseases[DISEASE_CULT]
-			B.data["virus2"]["[cultvirus.uniqueID]-[cultvirus.subID]"] += cultvirus.getcopy()
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/throw_impact(var/atom/hit_atom)
 	if(reagents.total_volume)
@@ -1836,14 +1880,17 @@ var/list/arcane_tomes = list()
 			var/obj/item/I = stored_gear[slot]
 			stored_gear -= slot
 			I.forceMove(T)
+		for(var/obj/A in contents)
+			A.forceMove(T)
 	if (remaining)
 		QDEL_NULL(remaining)
 	..()
 
 /obj/item/weapon/blood_tesseract/throw_impact(atom/hit_atom)
 	var/turf/T = get_turf(src)
-	playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
-	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "tesseract_break", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+	if(T)
+		playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "tesseract_break", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 	qdel(src)
 
 /obj/item/weapon/blood_tesseract/examine(var/mob/user)
@@ -1917,19 +1964,29 @@ var/list/arcane_tomes = list()
 	desc = "A candle made out of blood moth wax, burns much longer than regular candles. Used for moody lighting and occult rituals."
 	icon = 'icons/obj/candle.dmi'
 	icon_state = "bloodcandle"
+	item_state = "bloodcandle"
+	food_candle = "foodbloodcandle"
+	color = null
 
-	wax = 1200 // 20 minutes
+	wax = 3600 // 60 minutes
 	trashtype = /obj/item/trash/blood_candle
+
+/obj/item/candle/blood/get_cult_power()
+	return 1
 
 /obj/item/candle/blood/update_icon()
 	overlays.len = 0
-	var/i
-	if(wax > 800)
-		i = 1
-	else if(wax > 400)
-		i = 2
-	else i = 3
-	icon_state = "bloodcandle[i]"
+	if (wax == initial(wax))
+		icon_state = "bloodcandle"
+	else
+		var/i
+		if(wax > 2400)
+			i = 1
+		else if(wax > 1200)
+			i = 2
+		else i = 3
+		icon_state = "bloodcandle[i]"
+	set_blood_overlay()
 	if (lit)
 		var/image/I = image(icon,src,"[icon_state]_lit")
 		I.blend_mode = BLEND_ADD
@@ -1938,6 +1995,16 @@ var/list/arcane_tomes = list()
 		else
 			I.plane = ABOVE_HUD_PLANE // inventory
 		overlays += I
+
+		//dynamic in-hands
+		var/image/left_I = image(inhand_states["left_hand"], src, "bloodcandle_lit")
+		var/image/right_I = image(inhand_states["right_hand"], src, "bloodcandle_lit")
+		left_I.blend_mode = BLEND_ADD
+		left_I.plane = ABOVE_LIGHTING_PLANE
+		right_I.blend_mode = BLEND_ADD
+		right_I.plane = ABOVE_LIGHTING_PLANE
+		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
+		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
 
 /obj/item/trash/blood_candle
 	name = "blood candle"

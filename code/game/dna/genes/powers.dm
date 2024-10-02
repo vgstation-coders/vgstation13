@@ -133,19 +133,23 @@
 	spell_flags = SELECTABLE|TALKED_BEFORE
 	override_base = "genetic"
 	hud_state = "gen_project"
-	compatible_mobs = list(/mob/living/carbon/human, /datum/mind)
+	valid_targets = list(/mob/living/carbon/human, /datum/mind)
 	mind_affecting = 1
+	var/telepathy_type = SPECIFIC_TELEPATHY
+	var/targeted = 0
+
 /spell/targeted/telepathy/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
 	if (!.)
 		return FALSE
 	if(!user || !istype(user))
-		return
+		return FALSE
 	if(user.mind.miming)
 		to_chat(user, "<span class = 'warning'>You find yourself unable to convey your thoughts outside of gestures.</span>")
-		return
+		return FALSE
+
 /spell/targeted/telepathy/cast(var/list/targets, mob/living/carbon/human/user)
-	var/datum/species/mushroom/M = user.species
+	var/datum/species/mushroom/M = user.species //Mushmen will set their target for regular speech instead
 	var/message
 	if(!istype(M))
 		message = stripped_input(user, "What do you wish to say?", "Telepathy")
@@ -153,6 +157,7 @@
 			return 1
 	else
 		M.telepathic_target.len = 0
+		M.telepathy_type = telepathy_type
 
 	var/all_switch = TRUE
 	for(var/T in targets)
@@ -177,6 +182,18 @@
 			for(var/mob/dead/observer/G in dead_mob_list)
 				G.show_message("<i>Telepathy, <b>[user]</b> to [english_list(targets)]</b>:<b> \"[message]\"</b></i>")
 			log_admin("[key_name(user)] projects his mind towards to [english_list(targets)]: [message]")
+
+/spell/targeted/telepathy/on_right_click(mob/user)
+	..()
+	if(!targeted)
+		targeted = TRUE
+		to_chat(user, "<span class='notice'>You will now target the spell to immediately communicate to someone in view.</span>")
+		spell_flags |=  WAIT_FOR_CLICK
+	else
+		targeted = FALSE
+		to_chat(user, "<span class='notice'>You will now select from a list of people to communicate to.</span>")
+		spell_flags &= ~WAIT_FOR_CLICK
+	return 1 //So that the spellmaster does not try to perform it
 
 /datum/dna/gene/basic/morph
 	name = "Morph"

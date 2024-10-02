@@ -168,6 +168,7 @@ var/list/shop_prices = list( //Cost in space credits
 /datum/map_element/vault/supermarket
 	name = "Spessmart"
 	file_path = "maps/randomvaults/spessmart.dmm"
+	spawn_cost = 5
 
 	var/customer_has_entered = FALSE
 
@@ -356,6 +357,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	max_n2 = 0
 	minbodytemp = 0
 	mob_property_flags = MOB_ROBOTIC
+	meat_type = null
 
 /mob/living/simple_animal/robot/New()
 	..()
@@ -671,6 +673,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	faction = "spessmart"
 	mob_property_flags = MOB_ROBOTIC
+	meat_type = null
 
 	var/alert_on_movement = 1 //If moved, trigger an alert and become agressive
 

@@ -3,6 +3,7 @@
 var/const/TOUCH = 1
 var/const/INGEST = 2
 
+#define NO_REACTION_UNMET_TEMP_COND -1
 #define NO_REACTION 0
 #define NON_DISCRETE_REACTION 1
 #define DISCRETE_REACTION 2
@@ -18,6 +19,8 @@ var/const/INGEST = 2
 	var/last_ckey_transferred_to_this = ""	//The ckey of the last player who transferred reagents into this reagent datum.
 	var/chem_temp = T20C
 	var/obscured = FALSE
+	var/total_thermal_mass = 0
+	var/skip_flags = 0 //Flags for skipping certain calculations where unnecessary. See __DEFINES/reagents.dm.
 
 /datum/reagents/New(maximum=100)
 	maximum_volume = maximum
@@ -41,19 +44,43 @@ var/const/INGEST = 2
 
 		chemical_reactions_list = list()
 
-		for (var/path in typesof(/datum/chemical_reaction) - /datum/chemical_reaction)
+		//variables that we want to reuse
+		var/list/reaction_ids = list()
+		var/smallest_number_of_reactants = INFINITY
+		var/smallest_reactants_list_index = 1
+		var/list/reactant_list
+		var/datum/chemical_reaction/D
+		var/i
 
-			var/datum/chemical_reaction/D = new path()
-			var/list/reaction_ids = list()
+		for(var/path in typesof(/datum/chemical_reaction) - /datum/chemical_reaction)
+
+			D = new path()
+			reaction_ids.len = 0
 
 			if(D.required_reagents && D.required_reagents.len)
-				var/reaction = D.required_reagents[1]
-				if(islist(reaction))
-					var/list/L = reaction
-					for(var/content in L)
-						reaction_ids += content
-				else
-					reaction_ids += reaction
+
+				//to minimize the size of the reactions lists, we ideally want each reaction that requires an individual (non-list) reactant to have that as the "key" reactant of the reaction
+				//if a reaction only requires lists of reagents, then we want to pick the smallest list
+				smallest_number_of_reactants = INFINITY
+				smallest_reactants_list_index = 1
+
+				i = 0
+				for(var/reactant in D.required_reagents)
+					i++
+					if(islist(reactant))
+						reactant_list = reactant
+						if(reactant_list.len < smallest_number_of_reactants)
+							smallest_reactants_list_index = i
+							smallest_number_of_reactants = reactant_list.len
+					else
+						smallest_number_of_reactants = 1
+						reaction_ids.len = 0
+						reaction_ids += reactant
+						break
+
+				if(smallest_number_of_reactants > 1)
+					for(var/reactant in D.required_reagents[smallest_reactants_list_index])
+						reaction_ids += reactant
 
 			// Create filters based on each reagent id in the required reagents list
 			for(var/id in reaction_ids)
@@ -62,8 +89,7 @@ var/const/INGEST = 2
 				chemical_reactions_list[id] += D
 				//previously we broke here, which meant that we were only testing the first reagent - even if the first reagent was a list
 				//now we no longer break because we didn't add all the reagents to reaction_ids - we want to add the reaction to everything in
-				//reaction_ids, which will be over everything in the first reagent in the table
-
+				//reaction_ids, which will be everything in the key reactants(s) in the table
 
 /datum/reagents/proc/remove_any(var/amount=1)
 	var/total_transfered = 0
@@ -90,6 +116,14 @@ var/const/INGEST = 2
 
 	handle_reactions()
 	return total_transfered
+
+/datum/reagents/proc/remove_from_all(var/amount=1)
+	for(var/datum/reagent/R in reagent_list)
+		remove_reagent(R.id, (R.volume/total_volume) * amount)
+		if (R.volume < 0.01)
+			del_reagent(R.id,update_totals=0)
+
+	return amount
 
 /datum/reagents/proc/get_master_reagent()
 	var/the_reagent = null
@@ -143,6 +177,7 @@ var/const/INGEST = 2
 		return
 
 	var/datum/reagents/R
+	var/to_mob = FALSE
 	if (istype(target, /datum/reagents))
 		R = target
 	else
@@ -151,6 +186,8 @@ var/const/INGEST = 2
 			return
 		else
 			R = AM.reagents
+			if (ismob(AM))
+				to_mob = TRUE
 
 	amount = min(min(amount, src.total_volume), R.maximum_volume-R.total_volume)
 	var/part = amount / src.total_volume
@@ -177,7 +214,10 @@ var/const/INGEST = 2
 			logged_message += "[current_reagent_transfer]u of [current_reagent.name]"
 			if(current_reagent.id in reagents_to_log)
 				adminwarn_message += "[current_reagent_transfer]u of <span class='warning'>[current_reagent.name]</span>"
-		R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data, chem_temp)
+		if (to_mob)
+			R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data, chem_temp, current_reagent.adj_temp)
+		else
+			R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data, chem_temp)
 		src.remove_reagent(current_reagent.id, current_reagent_transfer)
 
 	for(var/datum/reagent/reagent_datum in R.reagent_list) //Wake up all of the reagents in our target, let them know we did stuff
@@ -404,11 +444,14 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 	var/any_reactions
 	var/reaction_occured
+	skip_flags = ALL
 	do
 		reaction_occured = 0
 		for(var/R in amount_cache) // Usually a small list
 			for(var/datum/chemical_reaction/C as anything in chemical_reactions_list[R]) // Was a big list but now it should be smaller since we filtered it with our reagent id
 				switch(handle_reaction(C))
+					if(NO_REACTION)
+						continue
 					if(DISCRETE_REACTION)
 						any_reactions = 1
 						break
@@ -416,6 +459,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 						any_reactions = 1
 						reaction_occured = 1
 						break
+					if(NO_REACTION_UNMET_TEMP_COND)
+						skip_flags &= !SKIP_RXN_CHECK_ON_HEATING
 	while(reaction_occured)
 
 	if(any_reactions)
@@ -425,9 +470,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /datum/reagents/proc/handle_reaction(var/datum/chemical_reaction/C, var/requirement_override = FALSE, var/multiplier_override = 1)
 
 	if(!requirement_override)
-
-		if((C.required_temp && (C.is_cold_recipe ? (chem_temp > C.required_temp) : (chem_temp < C.required_temp))))
-			return NO_REACTION
 
 		var/total_required_catalysts = C.required_catalysts.len
 		for(var/B in C.required_catalysts)
@@ -466,32 +508,36 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			multipliers += round(amount_cache[B] / req_reag_amt)
 
 	if(!total_required_reagents || requirement_override)
+
+		if((C.required_temp && (C.is_cold_recipe ? (chem_temp > C.required_temp) : (chem_temp < C.required_temp))) && !requirement_override) //If everything other than the temperature conditions are met.
+			return NO_REACTION_UNMET_TEMP_COND
+
 		var/multiplier = min(multipliers) * multiplier_override
-		var/preserved_data = null
+		var/list/preserved_data = list()
 		for(var/B in C.required_reagents)
 			req_reag_amt = C.required_reagents[B]
 			if(islist(B))
 				var/list/L = B
 				for(var/D in L)
 					if(amount_cache[D] >= req_reag_amt)
-						if(!preserved_data)
-							preserved_data = get_data(D)
+						if(!(B in preserved_data))
+							preserved_data[B] = get_data(D)
 						remove_reagent(D, (multiplier * req_reag_amt), safety = 1)
 						break
 			else
-				if(!preserved_data)
-					preserved_data = get_data(B)
+				if(!(B in preserved_data))
+					preserved_data[B] = get_data(B)
 				remove_reagent(B, (multiplier * req_reag_amt), safety = 1)
 
-		chem_temp += C.reaction_temp_change
+		if (C.reaction_temp_change)
+			chem_temp += C.reaction_temp_change
+			my_atom.process_temperature()
 
 		var/created_volume = C.result_amount*multiplier
 		if(C.result)
 			feedback_add_details("chemical_reaction","[C.result][created_volume]")
 			multiplier = max(multiplier, 1) //this shouldnt happen ...
-			add_reagent(C.result, created_volume, null, chem_temp)
-			if (preserved_data)
-				set_data(C.result, preserved_data)
+			add_reagent(C.result, created_volume, null, chem_temp, additional_data = preserved_data)
 
 			//add secondary products
 			for(var/S in C.secondary_results)
@@ -567,6 +613,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			amount_cache += list(R.id = R.volume)
 		if(R.flags & CHEMFLAG_OBSCURING)
 			obscured = TRUE
+	total_thermal_mass = get_thermal_mass()
 	return 0
 
 /datum/reagents/proc/clear_reagents()
@@ -642,11 +689,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				if (second != "lance")
 					third_list += "lances through" //don't say "lance lances"
 				custom_pain_msg = "[pick("A burning", "A searing", "A boiling")] [second] of pain [pick(third_list)] [which_organ ? "your " + which_organ.display_name : "you"]!"
+			else if (method == INGEST)
+				custom_pain_msg = "You burn your lips and tongue!"
 			else
 				custom_pain_msg = "Pain sears [which_organ ? " your " + which_organ.display_name : ""]!"
 			H.custom_pain(custom_pain_msg, post_mod_predicted_dmg >= SCALD_AGONIZING, post_mod_predicted_dmg >= SCALD_PAINFUL)
-		L.apply_effect(burn_dmg * 5, AGONY) //pain
-		L.apply_damage(burn_dmg, BURN, which_organ)
+		L.apply_effect(burn_dmg, AGONY) //pain
 
 #undef SCALD_PAINFUL
 #undef SCALD_AGONIZING
@@ -661,7 +709,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		warning("[usr] tried to equalize the temperature of a thermally-massless mixture.")
 		return T0C+20 //Sanity but this shouldn't happen.
 
-/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20)
+/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20, var/temp_adj = 0, var/mob/admin, var/list/additional_data=null)
 	if(!my_atom)
 		return 0
 	if(!amount)
@@ -677,21 +725,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			//Equalize temperatures
 			chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap * CC_PER_U)
 
+			R.handle_data_mix(data, amount, admin)
+			if (additional_data)
+				R.handle_additional_data(additional_data)
 			R.volume += amount
 			update_total()
+			handle_special_behaviours()
 			my_atom.on_reagent_change()
-
-			if(!isnull(data))
-				if (reagent == BLOOD)
-				//to do: add better ways for blood colors to interact with each other
-				//right now we don't support blood mixing or something similar at all.
-					if(R.data["virus2"] && data["virus2"])
-						R.data["virus2"] |= virus_copylist(data["virus2"])
-				else if (reagent == VACCINE)
-					R.data["antigen"] |= data["antigen"]
-				else
-					R.data = data //just in case someone adds a new reagent with a data var
-
 			handle_reactions()
 			return 0
 
@@ -701,29 +741,23 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		var/datum/reagent/R = new D.type()
 
 		//Equalize temperatures
+		if(!total_volume)
+			chem_temp = reagtemp//adding reagents to an empty container? reset chem_temp
 		chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap * CC_PER_U)
 
 		reagent_list += R
 		R.holder = src
+		R.handle_data_copy(data, amount, admin)
+		if (additional_data)
+			R.handle_additional_data(additional_data)
 		R.volume = amount
-
-		if(!isnull(data))
-			if (reagent == BLOOD)
-				R.data = data.Copy()
-				if(data["virus2"])
-					R.data["virus2"] |= virus_copylist(data["virus2"])
-				if(data["blood_colour"])
-					R.color = data["blood_colour"]
-			else if (reagent == VACCINE)
-				R.data = data.Copy()
-			else
-				R.data = data
-		else if (reagent == VACCINE)
-			R.data = list("antigen" = list())
+		if (temp_adj)
+			R.adj_temp = temp_adj
 
 		R.on_introduced()
 
 		update_total()
+		handle_special_behaviours()
 		my_atom.on_reagent_change()
 		handle_reactions()
 		return 0
@@ -733,6 +767,25 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	handle_reactions()
 
 	return 1
+
+/datum/reagents/proc/handle_special_behaviours()
+	for (var/datum/reagent/R in reagent_list)
+		R.special_behaviour()
+
+/datum/reagents/proc/get_pigment_names()
+	var/list/names = list()
+	for (var/datum/reagent/R in reagent_list)
+		switch (R.id)
+			if (ACRYLIC)
+				names += "acrylic"
+			if (NANOPAINT)
+				names += "nano"
+			if (FLAXOIL)
+				names += "oil"
+			else
+				if (R.flags & CHEMFLAG_PIGMENT)
+					names += lowertext(R.name)
+	return names
 
 /datum/reagents/proc/remove_reagent(var/reagent, var/amount, var/safety)//Added a safety check for the trans_id_to
 
@@ -916,12 +969,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 //						to_chat(world, "proffering a data-carrying reagent ([reagent_id])")
 			return D.data
 
-/datum/reagents/proc/set_data(var/reagent_id, var/new_data)
-	for(var/datum/reagent/D in reagent_list)
-		if(D.id == reagent_id)
-//						to_chat(world, "reagent data set ([reagent_id])")
-			D.data = new_data
-
 /datum/reagents/Destroy()
 	for(var/datum/reagent/reagent in reagent_list)
 		qdel(reagent)
@@ -957,6 +1004,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /datum/reagents/proc/is_full()
 	return total_volume >= maximum_volume
 
+/datum/reagents/proc/get_max_paint_light()
+	var/max_paint_light = PAINTLIGHT_NONE
+	for (var/datum/reagent/R in reagent_list)
+		max_paint_light = max(max_paint_light, R.paint_light)
+	return max_paint_light
+
 /datum/reagents/proc/get_overall_mass() //currently unused
 	//M = DV
 	var/overall_mass = 0
@@ -981,12 +1034,33 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(received_temperature == chem_temp || !total_volume || !reagent_list.len)
 		return
 	var/energy = power_transfer
-	var/temp_change = (energy / (get_thermal_mass()))
+	var/temp_change = (energy / (total_thermal_mass))
 	if(power_transfer > 0)
 		chem_temp = min(chem_temp + temp_change, received_temperature)
 	else
-		chem_temp = max(chem_temp + temp_change, received_temperature, 0)
+		chem_temp = max(chem_temp + temp_change, received_temperature, TCMB)
+	if(skip_flags & SKIP_RXN_CHECK_ON_HEATING)
+		return
 	handle_reactions()
+
+/datum/reagents/proc/adjust_consumed_reagents_temp()
+	for(var/datum/reagent/R in reagent_list)
+		if (R.adj_temp != 0)//if the reagent already has a set adjust, we ignore its actual temperature
+			continue
+		else
+			switch(chem_temp)
+				if (-INFINITY to T0C)
+					R.adj_temp = -5
+				if (T0C to (T0C+10))
+					R.adj_temp = -1.5
+				if ((T0C + 30) to STEAMTEMP)
+					R.adj_temp = chem_temp - (T0C + 30)
+				if (STEAMTEMP to INFINITY)
+					R.adj_temp = 20
+
+/datum/reagents/proc/reset_consumed_reagents_temp()
+	for(var/datum/reagent/R in reagent_list)
+		R.adj_temp = initial(R.adj_temp)
 
 /datum/reagents/proc/get_examine(var/mob/user, var/vis_override, var/blood_type)
 	if(obscured && !vis_override)
@@ -995,9 +1069,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if (istype(my_atom,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) && reagent_list.len)
 		to_chat(user, "<span class='info'>It contains [total_volume] units of what looks like [get_master_reagent_name()].</span>")
 		return
-	to_chat(user, "It contains:")
 	if(!user.hallucinating())
 		if(reagent_list.len)
+			to_chat(user, "It contains:")
 			for(var/datum/reagent/R in reagent_list)
 				if(blood_type && R.id == BLOOD)
 					var/type = R.data["blood_type"]
@@ -1005,9 +1079,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				else
 					to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
 		else
-			to_chat(user, "<span class='info'>Nothing.</span>")
+			if (istype(my_atom,/obj/machinery/portable_atmospherics/hydroponics))
+				to_chat(user, "It contains <span class='info'>no reagents</span>.")//I mean, there's probably a big ass plant in there.
+			else
+				to_chat(user, "It contains <span class='info'>nothing</span>.")
 
 	else //Show stupid things to hallucinating mobs
+		to_chat(user, "It contains:")
 		var/list/fake_reagents = list("Water", "Orange juice", "Banana juice", "Tungsten", "Chloral Hydrate", "Helium",\
 			"Sea water", "Energy drink", "Gushin' Granny", "Salt", "Sugar", "something yellow", "something red", "something blue",\
 			"something suspicious", "something smelly", "something sweet", "Soda", "something that reminds you of home",\
@@ -1088,6 +1166,134 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 	return add_reagent(reagent_id, total_amount_converted)
 
+/datum/reagents/proc/handle_thermal_dissipation(simulate_air)
+	//Exchange heat between reagents and the surrounding air.
+	//Although the heat is exchanged directly between reagents and air, for now this is based on thermal radiation, not convection per se.
+
+	if(gcDestroyed)
+		return
+
+	if (!my_atom || my_atom.gcDestroyed || my_atom.timestopped)
+		return
+
+	if (!total_volume || !total_thermal_mass)
+		return
+
+	var/datum/gas_mixture/the_air = (get_turf(my_atom))?.return_air()
+	if (!the_air)
+		return
+
+	if (!(abs(chem_temp - the_air.temperature) >= MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)) //Do it this way to catch NaNs.
+		return
+
+	//We treat the reagents like a spherical grey body with an emissivity of THERM_DISS_SCALING_FACTOR.
+
+	var/emission_factor = THERM_DISS_SCALING_FACTOR * (SS_WAIT_THERM_DISS / (1 SECONDS)) * STEFAN_BOLTZMANN_CONSTANT * (36 * PI) ** (1/3) * (CC_PER_U / 1000) ** (2/3) * total_volume ** (2/3)
+
+	//Here we reduce thermal transfer to account for insulation of the container.
+	//We iterate though each loc until the loc is the turf containing the_air, to account for things like nested containers, each time multiplying emission_factor by a factor than can range between [0 and 1], representing heat insulation.
+
+	var/atom/this_potentially_insulative_layer = my_atom
+	var/i
+	while (emission_factor)
+		emission_factor *= this_potentially_insulative_layer.get_heat_conductivity()
+		if (isturf(this_potentially_insulative_layer) || isarea(this_potentially_insulative_layer))
+			break
+		else if (i <= ARBITRARILY_LARGE_NUMBER)
+			if (isatom(this_potentially_insulative_layer.loc))
+				this_potentially_insulative_layer = this_potentially_insulative_layer.loc
+				i++
+			else
+				break
+		else
+			log_admin("Something went wrong with [my_atom]'s handle_heat_dissipation() at iteration #[i] at [this_potentially_insulative_layer].")
+			break //Avoid infinite loops.
+
+	if (emission_factor)
+
+		var/is_the_air_simulated = simulate_air && !istype(the_air, /datum/gas_mixture/unsimulated)
+		var/air_thermal_mass = the_air.heat_capacity()
+
+		var/Tr = chem_temp
+		var/Ta = the_air.temperature
+
+		if (max(Tr, Ta) <= THERM_DISS_MAX_SAFE_TEMP)
+
+			var/reagents_thermal_mass_reciprocal = (1 / total_thermal_mass)
+			var/air_thermal_mass_reciprocal = (1 / air_thermal_mass)
+
+			#define REAGENTS_HOTTER 1
+			#define AIR_HOTTER -1
+
+			var/which_is_hotter = Tr > Ta ? REAGENTS_HOTTER : AIR_HOTTER
+
+			if (is_the_air_simulated)
+				//If either temperature would change by more than a factor of THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO, we do a more granular calculation.
+				var/slices = ceil((1 / THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO) * abs(emission_factor * (Tr ** 4 - Ta ** 4) * max(reagents_thermal_mass_reciprocal / Tr, air_thermal_mass_reciprocal / Ta)))
+				emission_factor /= slices
+				var/this_slice_energy
+				switch (which_is_hotter)
+					if (REAGENTS_HOTTER)
+						for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+							this_slice_energy = emission_factor * (Tr ** 4 - Ta ** 4)
+							Tr -= this_slice_energy * reagents_thermal_mass_reciprocal
+							Ta += this_slice_energy * air_thermal_mass_reciprocal
+							//If the discrete nature of the calculation would cause the reagents temperature to go past the equalization temperature, we equalize the temperatures.
+							if (!(Tr > Ta))
+								goto temperature_equalization_simmed_air
+					if (AIR_HOTTER)
+						for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+							this_slice_energy = emission_factor * (Tr ** 4 - Ta ** 4)
+							Tr -= this_slice_energy * reagents_thermal_mass_reciprocal
+							Ta += this_slice_energy * air_thermal_mass_reciprocal
+							if (!(Tr < Ta))
+								goto temperature_equalization_simmed_air
+			else
+				var/slices = ceil((1 / THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO) * abs(emission_factor * (Tr ** 4 - Ta ** 4) * reagents_thermal_mass_reciprocal / Tr))
+				emission_factor /= slices
+				switch (which_is_hotter)
+					if (REAGENTS_HOTTER)
+						for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+							Tr -= emission_factor * (Tr ** 4 - Ta ** 4) * reagents_thermal_mass_reciprocal
+							if (!(Tr > Ta))
+								goto temperature_equalization_unsimmed_air
+					if (AIR_HOTTER)
+						for (var/this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+							Tr -= emission_factor * (Tr ** 4 - Ta ** 4) * reagents_thermal_mass_reciprocal
+							if (!(Tr < Ta))
+								goto temperature_equalization_unsimmed_air
+
+			#undef REAGENTS_HOTTER
+			#undef AIR_HOTTER
+
+			the_air.temperature = Ta
+			chem_temp = Tr
+
+		else //At extreme temperatures, we do a simpler calculation to avoid blowing out any values.
+			if (is_the_air_simulated) //For simmed air, we equalize the temperatures.
+				goto temperature_equalization_simmed_air
+			else //For unsimmed, air, the reagents temperature is set to the average of the two temperatures.
+				chem_temp = (1/2) * Tr + (1/2) * Ta
+
+		goto reactions_check
+
+		temperature_equalization_unsimmed_air:
+		//If the air is unsimulated we consider the air to have infinite thermal mass so the equalization temperature is the air temperature.
+		chem_temp = the_air.temperature
+
+		goto reactions_check
+
+		temperature_equalization_simmed_air:
+		//If the air is simulated we consider the thermal mass of the air.
+		chem_temp = (total_thermal_mass * chem_temp + air_thermal_mass * the_air.temperature) / (total_thermal_mass + air_thermal_mass) //Use the original values in case something went wrong.
+		the_air.temperature = chem_temp
+
+		reactions_check:
+		if(skip_flags & SKIP_RXN_CHECK_ON_HEATING)
+			return
+		handle_reactions()
+
+#undef NO_REACTION_UNMET_TEMP_COND
 #undef NO_REACTION
 #undef NON_DISCRETE_REACTION
 #undef DISCRETE_REACTION

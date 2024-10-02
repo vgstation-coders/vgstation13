@@ -5,12 +5,12 @@
 	item_state = "megaphone"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	w_class = W_CLASS_TINY
+	w_type = RECYK_ELECTRONIC
 	flags = FPRINT
 	siemens_coefficient = 1
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 
 	var/spamcheck = 0
-	var/emagged = 0
 	var/insults = 0
 	var/list/insultmsgs = list("FUCK EVERYONE!", "I'M A TATER!", "ALL SECURITY TO SHOOT ME ON SIGHT!", "I HAVE A BOMB!", "CAPTAIN IS A COMDOM!", "FOR THE SYNDICATE!")
 
@@ -23,19 +23,18 @@
 		speech.message = pick(insultmsgs)
 		insults--
 
-/obj/item/device/megaphone/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
+/obj/item/device/megaphone/emag_act(mob/user)
+	if(!emagged)
 		to_chat(user, "<span class='warning'>You overload \the [src]'s voice synthesizer.</span>")
 		emagged = 1
 		insults = rand(1, 3) //to prevent dickflooding
-		return
-	return
 
 /obj/item/device/megaphone/madscientist
 	name = "mad scientist megaphone"
 	desc = "An ominous-sounding megaphone with a built-in radio transmitter and voice scrambler. Use in hand to fiddle with the controls."
 	var/frequency = 0
 	mask_voice = TRUE
+	blocks_tracking = TRUE
 	flags = FPRINT | HEAR
 
 var/list/megaphone_channels = list("DISABLE" = 0) + stationchannels
@@ -52,6 +51,13 @@ var/list/megaphone_channels = list("DISABLE" = 0) + stationchannels
 	Broadcast_Message(clone, level = list(map.zMainStation, map.zAsteroid))
 	to_chat(speech.speaker, "\The [src] [pick("creaks", "whines", "crackles", "whirrs", 1;"makes an odd static/popping noise that you kind of recognize as similar to a geiger counter", 1;"squeaks")] \
 		as it transmits your voice into the set frequency...") //Since you may not be able to hear your own demands, some feedback that they're getting through
+
+/obj/item/device/megaphone/madscientist/pickup(mob/user)
+	INVOKE_EVENT(user, /event/camera_sight_changed, "mover" = user)
+
+/*/obj/item/device/megaphone/madscientist/dropped(mob/user)
+	..()
+	INVOKE_EVENT(user, /event/camera_sight_changed, "mover" = user)*/ // Allows retracking, uncomment to enable
 
 /obj/item/device/megaphone/madscientist/attack_self(mob/living/user as mob)
 	show_ui(user)
