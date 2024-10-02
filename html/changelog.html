@@ -73,6 +73,16 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2024.10.02</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Null rods can now show if something is arcane tampered by hitting it with them.</li>
+				<li class="rscadd">Blessing an arcane tampered item now shows a message confirming the removal of this property to nearby people.</li>
+			</ul>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed guns exploding when you couldn&#39;t even fire them in the first place.</li>
+			</ul>
 			<h2 class="date">2024.10.01</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -1743,36 +1753,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="tweak">Ryetalyn no longer cures damage-induced blindness and deafness. Genetic blindness and deafness is, of course, still cured.</li>
 				<li class="rscadd">Goonecode now has a tech origin and can be put in the destructive analyzer.</li>
 				<li class="experiment">Active attack delays will no longer prevent you from storing/retrieving items from inventories, or picking up new items.</li>
-			</ul>
-			<h2 class="date">2024.03.01</h2>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">You can now wear Sunflowers and Moonflowers as head accessories (previously only Novaflowers).</li>
-				<li class="imageadd">Adds an icon for Sunflower, Moonflower and Novaflower head accessory.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Buying a spell that has no spell menu button will no longer create a phantom spell menu if it is the first spell in it.</li>
-				<li class="tweak">Ancient spellbook spells will now properly be counted as wizard spells that get transferred alongside regular wizard spells.</li>
-				<li class="bugfix">Fixed an oversight where it was possible for a wizard to get points for the &#34;No Gun Allowed&#34; restriction multiple times, provided that he had extra spellbooks.</li>
-				<li class="bugfix">Fixed a bug where the &#34;No Gun Allowed&#34; restriction wasn&#39;t transferred when the wizard transformed into something else, meaning that they would be able to use guns.</li>
-				<li class="bugfix">Fixed a bug where artifacts that could be purchased only one time could be repurchased again after buying the wizard&#39;s spellbook bundle or after summoning magic, which also fixes an exploit where it was possible to infinitely buy Summon Magic as long as the wizard bought No Gun Allowed after every cast.</li>
-				<li class="bugfix">The &#34;No Clothes&#34; passive will no longer say it has &#34;Range: 7&#34;, but instead &#34;Range: Self&#34;.</li>
-				<li class="bugfix">Players who got transformed into humanoids will now properly retain their spells.</li>
-				<li class="bugfix">Being transformed into a slime will no longer give you a chat message that says &#34;Your icons have been generated!&#34;.</li>
-				<li class="bugfix">Victims of a Staff of Change&#39;s humanoid transformation will now immediately update their sprites rather than after a short moment.</li>
-				<li class="bugfix">Fixed a nearly 5 years old bug where Fireball could be used while pacified.</li>
-				<li class="bugfix">Fixed a bug where it was impossible to buy Fireball after buying Fire Breath. Fire Breath is now its own independent spell, and the way the spellbook searches for known spells in a player&#39;s mind has been changed to fix the edge-case bug where buying a sub-type of a spell would prevent that spell from being purchased.</li>
-				<li class="bugfix">Targeting someone directly with Pacify will now cast the spell at their location.</li>
-				<li class="bugfix">Pacify can no longer be targeted at tiles that are not in the player&#39;s view. No, you can&#39;t use mesons to do it either, but you can use the Scrying Orb.</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Several hundred unconnected vents and scrubbers across ALL stations have been fixed, courteous of a new debugging verb.</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">RD Console entries are now readable on mouseover.</li>
 			</ul>
 		</div>
 		<!--
