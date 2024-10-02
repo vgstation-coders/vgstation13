@@ -320,7 +320,7 @@
 	color = "#993300"
 	custom_metabolism = 2
 	density = 109.06
-	//var/list/enemies
+	//var/list/mob/living/simple_animal/hostile/retaliate/horde = list()
 
 /datum/reagent/killer_pheromones/on_mob_life(var/mob/living/M)
 	if(..())
@@ -339,23 +339,25 @@
 	
 	var/alerted = FALSE
 	for(var/mob/living/simple_animal/hostile/retaliate/R in view(stench_radius, M)) //All other retaliating hostile mobs in radius
-		if(R == M || R.stat)
+		if(R == M || R.stat || (M in R.enemies))
 			continue
 
 		R.Retaliate()
-		//enemies |= R.enemies
+		//horde += R
 		alerted = TRUE
 		break
 
 	if(alerted)
 		to_chat(M,"<span class='danger'>YOU HAVE ALERTED THE HORDE!</span>")
 
-/*/datum/reagent/killer_pheromones/reagent_deleted() // TODO: remove all mobs attacking you maybe
+/*/datum/reagent/killer_pheromones/reagent_deleted() // uncomment if necessary
 	if(..())
 		return 1
 	if(!holder)
 		return
-	var/mob/M =  holder.my_atom*/
+	var/mob/M =  holder.my_atom
+	for(var/mob/living/simple_animal/hostile/retaliate/R in horde)
+		R.enemies -= M*/
 
 /datum/reagent/ectoplasm
 	name = "Ectoplasm"
