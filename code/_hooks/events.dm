@@ -268,6 +268,16 @@
 // atom/movable/exiter: the movable exiting the area
 /event/area_exited
 
+// Arguments:
+// mob/killer: the person who killed
+// mob/victim: the person who got killed
+/event/kill
+
+// Arguments:
+// time: shuttle timer
+// direction: shuttle direction
+/event/shuttletimer
+
 // Called by miscellaneous functions not covered by entered, equipped and unequipped events for cameranet updates
 // Arguments:
 // atom/movable/mover: the atom changing status on the cameranet
