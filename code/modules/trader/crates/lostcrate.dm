@@ -242,7 +242,7 @@ var/global/list/lemuria_stuff = list(
 		target_ground = check_turfs(shuffle(near_grounds))
 
 	if(!target_ground)
-		message_admins("DEBUG: Goliath lure could not find a spawn position.")
+		log_debug("Goliath lure could not find a spawn position.")
 		return
 	var/mob/living/simple_animal/hostile/asteroid/goliath/G = new (target_ground)
 	G.shake(1,3)
