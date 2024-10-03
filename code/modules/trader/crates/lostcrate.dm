@@ -333,9 +333,7 @@ var/global/list/lemuria_stuff = list(
 	icon_state = "cosmicgrill0"
 
 /obj/item/cosmic_grill/can_cook()
-	if(istype(loc, /turf/space))
-		return TRUE
-	return FALSE
+	return istype(loc, /turf/space)
 
 /obj/item/cosmic_grill/render_cookvessel(offset_x, offset_y)
 	overlays.len = 0
