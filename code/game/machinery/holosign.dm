@@ -71,8 +71,9 @@ var/list/obj/machinery/holosign/holosigns = list()
 			toggle(TRUE)
 			should_update = FALSE
 			return PROCESS_KILL
-	toggle(FALSE)
-	should_update = FALSE
+	if(lit < 2)
+		toggle(FALSE)
+		should_update = FALSE
 	return PROCESS_KILL
 
 /obj/machinery/holosign/virology
@@ -150,7 +151,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 
 	for(var/obj/machinery/holosign/M in holosigns)
 		if (M.id_tag == src.id_tag)
-			M.toggle(active)
+			M.toggle(active*2)
 
 /obj/machinery/holosign_switch/attack_ghost(var/mob/dead/observer/ghost)
 	if(!can_spook())

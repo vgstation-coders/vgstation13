@@ -214,7 +214,7 @@
 							listening = TRUE
 							var/pulsespeed = M.get_pulsespeed()
 							if(pulsespeed)
-								to_chat(M,"*thump*")
+								to_chat(user,"*thump*")
 								sleep(max(1,pulsespeed))
 						listening = FALSE
 				return
