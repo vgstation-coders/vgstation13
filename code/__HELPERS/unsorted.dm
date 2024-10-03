@@ -508,7 +508,7 @@
 	appearance_flags = RESET_COLOR | RESET_TRANSFORM
 
 //if needs_item is 0 it won't need any item that existed in "holding" to finish
-/proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10, var/needs_item = 1) //This is quite an ugly solution but i refuse to use the old request system.
+/proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10, var/needs_item = 1, var/showtarget = TRUE) //This is quite an ugly solution but i refuse to use the old request system.
 	if(!user || !target)
 		return 0
 	var/user_loc = user.loc
@@ -526,7 +526,7 @@
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 			if(user && user.client && user.client.prefs.progress_bars)
 				user.client.images |= progbar
-			if(target && target.client && target.client.prefs.progress_bars)
+			if(target && target.client && target.client.prefs.progress_bars && showtarget)
 				target.client.images |= progbar
 		sleep(delayfraction)
 		if (!user || !target || user.loc != user_loc || target.loc != target_loc || (needs_item && (holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())) || user.isStunned())
@@ -539,7 +539,7 @@
 		progbar.loc = null
 	return 1
 
-/proc/do_after_many(var/mob/user, var/list/targets, var/delay, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE)
+/proc/do_after_many(var/mob/user, var/list/targets, var/delay, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE, var/showtarget = TRUE)
 	if(!user || numticks == 0 || !targets || !targets.len)
 		return 0
 
@@ -558,7 +558,7 @@
 				var/image/progressbar/new_progress_bar = new("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 				targets[target] = new_progress_bar
 				user.client.images += new_progress_bar
-				if(ismob(target))
+				if(showtarget && ismob(target))
 					var/mob/mtarget = target
 					if(mtarget.client && mtarget.client.prefs.progress_bars)
 						mtarget.client.images += new_progress_bar
@@ -634,7 +634,7 @@
   * * use_user_turf - if TRUE, the turf of the user is checked instead of its location. default FALSE
   * * custom_checks - if specified, the return value of this callback (called every `delay/numticks` seconds) will determine whether the action succeeded
   */
-/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE, callback/custom_checks)
+/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE, callback/custom_checks, var/showtarget = TRUE)
 	if(!user || isnull(user))
 		return 0
 	if(numticks == 0)
@@ -657,7 +657,7 @@
 		progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 		if(user && user.client && user.client.prefs.progress_bars)
 			user.client.images |= progbar
-		if(ismob(target))
+		if(showtarget && ismob(target))
 			var/mob/mtarget = target
 			if(mtarget.client && mtarget.client.prefs.progress_bars)
 				mtarget.client.images |= progbar
