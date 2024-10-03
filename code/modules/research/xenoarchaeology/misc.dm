@@ -12,6 +12,9 @@
 		archaeo_types[initial(F.find_ID)] = i
 
 	for(var/turf/unsimulated/mineral/M in mineral_turfs)
+		if(!M.finddatum)
+			M.finddatum = new(M)
+
 		if(M.no_finds || !prob(XENOARCH_SPAWN_CHANCE))
 			continue
 
@@ -19,8 +22,6 @@
 		var/datum/digsite/D = get_random_digsite_type()
 		var/list/processed_turfs = list()
 		var/list/turfs_to_process = list(M)
-		if(!M.finddatum)
-			M.finddatum = new(M)
 
 		while(turfs_to_process.len)
 			var/turf/unsimulated/mineral/archeo_turf = turfs_to_process[1]
