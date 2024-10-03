@@ -190,9 +190,9 @@ var/list/icon_state_to_appearance = list()
 		if(old_finds)
 			AS.finddatum = old_finds
 			if(AS.finddatum.archaeo_overlay)
-				AS.overlays += AS.archaeo_overlay
+				AS.overlays += AS.finddatum.archaeo_overlay
 			if(AS.finddatum.excav_overlay)
-				AS.overlays += AS.excav_overlay
+				AS.overlays += AS.finddatum.excav_overlay
 
 /turf/unsimulated/mineral/ex_act(severity)
 	if(mining_difficulty > MINE_DIFFICULTY_TOUGH)
@@ -499,12 +499,6 @@ var/list/icon_state_to_appearance = list()
 	var/sand_type = /obj/item/stack/ore/glass
 	plane = PLATING_PLANE
 	overlay_state = "roidfloor_overlay"
-	var/excavation_level = 0
-	var/list/finds = list()//no longer null to prevent those pesky runtime errors
-//	var/next_rock = 0
-	var/archaeo_overlay = ""
-	var/excav_overlay = ""
-	var/datum/artifact_find/artifact_find
 
 /turf/unsimulated/floor/asteroid/air
 	oxygen = MOLES_O2STANDARD
@@ -558,6 +552,9 @@ var/list/icon_state_to_appearance = list()
 
 	if(!W || !user)
 		return 0
+
+	if(finddatum && finddatum.handle_attackby(W,user))
+		return
 
 	if (istype(W, /obj/item/weapon/pickaxe))
 		var/obj/item/weapon/pickaxe/used_digging = W //cast for dig speed and flags
