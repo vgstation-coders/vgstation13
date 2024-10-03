@@ -43,6 +43,10 @@
 	if(holder)
 		holder.name = name
 
+/datum/arcade_game/proc/arcane_act(mob/user)
+	if(holder)
+		holder.name = name
+
 /datum/arcade_game/proc/emp_act(var/severity)
 
 /datum/arcade_game/proc/kick_act()
