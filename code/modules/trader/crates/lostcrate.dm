@@ -246,7 +246,7 @@ var/global/list/lemuria_stuff = list(
 		return
 	var/mob/living/simple_animal/hostile/asteroid/goliath/G = new (target_ground)
 	G.shake(1,3)
-	var/mob/bait = locate(/mob/living/simple_animal/bait) in loc
+	var/mob/bait = locate(/mob/living/simple_animal/bait) in view(2,loc)
 	if(bait)
 		G.GiveTarget(bait)
 	else
