@@ -151,7 +151,7 @@
     var/obj/structure/boulder/B
     . = TRUE
     if(!depresses_digsites)
-        if(!artifact_find)
+        if(artifact_find)
             if(excavation_level > 0)
 
                 B = new /obj/structure/boulder(holder)
