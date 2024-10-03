@@ -420,7 +420,7 @@ var/list/icon_state_to_appearance = list()
 						M.GetDrilled(safety_override = TRUE, driller = user, multiplier = (P.has_slimes & SLIME_PYRITE) ? 2 : 1)
 					return
 
-				GetDrilled(artifact_destroyed, multiplier = (P.has_slimes & SLIME_PYRITE) ? 2 : 1)
+				GetDrilled(artifact_destroyed, multiplier = (P.has_slimes & SLIME_PYRITE) ? 2 : 1, digsitedepressed = P.depresses_digsites)
 
 				return
 
@@ -503,7 +503,7 @@ var/list/icon_state_to_appearance = list()
 *                  disabled after drilling (ie. gibtonite will be immediately disarmed).
 * driller: Whatever is doing the drilling.  Used for some messages.
 */
-/turf/unsimulated/mineral/proc/GetDrilled(var/artifact_fail = TRUE, var/safety_override = FALSE, var/atom/driller, var/multiplier = 1)
+/turf/unsimulated/mineral/proc/GetDrilled(var/artifact_fail = TRUE, var/safety_override = FALSE, var/atom/driller, var/multiplier = 1, var/digsitedepressed = 0)
 	if (mineral && mineral.result_amount)
 		if(multiplier >= 2 && fortune_multiplier >= 2)
 			for(var/i in 1 to round(fortune_multiplier*(multiplier/2)))
@@ -519,11 +519,7 @@ var/list/icon_state_to_appearance = list()
 			var/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/R = new(src)
 			if(mineral)
 				R.possessed_ore = mineral.ore
-	
-	var/digsitedepressed = FALSE
-	if(istype(driller,/obj/item/weapon/pickaxe))
-		var/obj/item/weapon/pickaxe/P = driller
-		digsitedepressed = P.depresses_digsites
+
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
 	if(!digsitedepressed && artifact_find && artifact_fail)
@@ -1117,7 +1113,7 @@ var/list/icon_state_to_appearance = list()
 			det_time = 0
 		visible_message("<span class='notice'>The chain reaction was stopped! The gibtonite had [src.det_time] reactions left till the explosion!</span>")
 
-/turf/unsimulated/mineral/gibtonite/GetDrilled(var/artifact_fail = TRUE, var/safety_override = FALSE, var/atom/driller, var/multiplier = 1)
+/turf/unsimulated/mineral/gibtonite/GetDrilled(var/artifact_fail = TRUE, var/safety_override = FALSE, var/atom/driller, var/multiplier = 1, var/digsitedepressed = 0)
 	if(stage == 0 && mineral.result_amount >= 1) //Gibtonite deposit is activated
 		playsound(src,'sound/effects/hit_on_shattered_glass.ogg',50,1)
 		explosive_reaction()
