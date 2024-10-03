@@ -4,6 +4,7 @@
 	var/list/prizes = list()
 	var/list/cheaters = list()
 	var/emagged = 0
+	var/arcanetampered = 0
 	var/turn = 0
 
 /datum/arcade_game/Destroy()
@@ -117,6 +118,7 @@
 /datum/arcade_game/space_villain/export_data()
 	return list("name" = name,
 				"emagged" = emagged,
+				"arcanetampered" = arcanetampered,
 				"enemy_name" = enemy_name,
 				"temp" = temp,
 				"player_hp" = player_hp,
@@ -137,6 +139,7 @@
 		return
 	name = args["name"]
 	emagged = args["emagged"]
+	arcanetampered = args["arcanetampered"]
 	enemy_name = args["enemy_name"]
 	temp = args["temp"]
 	player_hp = args["player_hp"]
@@ -229,6 +232,9 @@
 		if(emagged)
 			src.New()
 			emagged = 0
+		if(arcanetampered)
+			src.New()
+			arcanetampered = 0
 
 	holder.add_fingerprint(usr)
 	holder.updateUsrDialog()
@@ -241,29 +247,44 @@
 			temp = "[enemy_name] has fallen! Rejoice!"
 
 			if(emagged)
+				new /obj/item/clothing/head/collectable/petehat(holder.loc)
+				new /obj/item/device/maracas/cubanpete(holder.loc)
+				new /obj/item/device/maracas/cubanpete(holder.loc)
+			if(arcanetampered)
+				new /obj/item/weapon/reagent_containers/glass/bottle/wizarditis(holder.loc)
+				new /obj/item/clothing/suit/wizrobe(holder.loc)
+				new /obj/item/clothing/head/wizard(holder.loc)
+				new /obj/item/clothing/shoes/sandal(holder.loc)
+			if(emagged && arcanetampered)
+				feedback_inc("arcade_win_arcane_emagged")
+				message_admins("[key_name_admin(usr)] has out-shoe-bombed Cuban Willy and been awarded explosive maracas and a wizard culture bottle.")
+				log_game("[key_name_admin(usr)] has out-shoe-bombed Cuban Willy and been awarded explosive maracas and a wizard culture bottle.")
+			else if(emagged)
 				feedback_inc("arcade_win_emagged")
-				if(holder.arcanetampered)
-					new /obj/item/weapon/reagent_containers/glass/bottle/wizarditis(holder.loc)
-					new /obj/item/clothing/suit/wizrobe(holder.loc)
-					new /obj/item/clothing/head/wizard(holder.loc)
-					new /obj/item/clothing/shoes/sandal(holder.loc)
-				else
-					new /obj/item/clothing/head/collectable/petehat(holder.loc)
-					new /obj/item/device/maracas/cubanpete(holder.loc)
-					new /obj/item/device/maracas/cubanpete(holder.loc)
 				message_admins("[key_name_admin(usr)] has outbombed Cuban Pete and been awarded explosive maracas.")
 				log_game("[key_name_admin(usr)] has outbombed Cuban Pete and been awarded explosive maracas.")
-				holder.New()
-				emagged = 0
-
+			else if(arcanetampered)
+				feedback_inc("arcade_win_arcane")
+				message_admins("[key_name_admin(usr)] has out-shoe-snatched Willy and been awarded a wizard culture bottle.")
+				log_game("[key_name_admin(usr)] has out-shoe-snatched Willy and been awarded a wizard culture bottle.")
 			else
 				feedback_inc("arcade_win_normal")
 				dispense_prize(1)
+			if(emagged || arcanetampered)
+				holder.New()
+				emagged = 0
+				arcanetampered = 0
 
-	else if (emagged && (turtle >= 4))
+	else if (turtle >= 4)
 		var/boomamt = rand(5,10)
-		temp = "[enemy_name] throws a bomb, exploding you for [boomamt] damage!"
-		player_hp -= boomamt
+		if(emagged)
+			temp = "[enemy_name] throws a bomb, exploding you for [boomamt] damage!"
+			player_hp -= boomamt
+		if(arcanetampered)
+			temp = "[enemy_name] snatches your shoes, stealing [boomamt] of your power!"
+			player_mp -= boomamt
+		if(emagged && arcanetampered)
+			temp = "[enemy_name] bombs your shoes, stealing [boomamt] of your power and exploding you for [boomamt] damage!"
 
 	else if ((enemy_mp <= 5) && (prob(70)))
 		var/stealamt = rand(2,3)
@@ -277,6 +298,9 @@
 			temp = "You have been drained! GAME OVER"
 			if(emagged)
 				feedback_inc("arcade_loss_mana_emagged")
+				usr.gib()
+			else if(arcanetampered)
+				feedback_inc("arcade_loss_mana_arcanetampered")
 				usr.gib()
 			else
 				feedback_inc("arcade_loss_mana_normal")
@@ -296,6 +320,9 @@
 		temp = "You have been crushed! GAME OVER"
 		if(emagged)
 			feedback_inc("arcade_loss_hp_emagged")
+			usr.gib()
+		else if(arcanetampered)
+			feedback_inc("arcade_loss_mana_arcanetampered")
 			usr.gib()
 		else
 			feedback_inc("arcade_loss_hp_normal")
@@ -329,10 +356,10 @@
 	if(istype(holder.playertwo,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = holder.playertwo
 		var/oldhealth = PD.health
-		var/subtract = 50 * (emagged * 3) //Packs a punch to them
+		var/subtract = 50 * ((emagged || arcanetampered) * 3) //Packs a punch to them
 		PD.health -= subtract
 		if(oldhealth - subtract <= 0) //If they die from this
-			if(emagged && prob(25))
+			if((emagged || arcanetampered) && prob(25))
 				var/obj/item/device/powersink/PS = new /obj/item/device/powersink(holder.loc)
 				PS.dev_multi = 6
 			else if(prob(50))
@@ -361,7 +388,7 @@
 /datum/arcade_game/space_villain/proc/harm_p1()
 	if(istype(holder.playertwo,/mob/living/simple_animal/hostile/pulse_demon) && isliving(holder.playerone))
 		var/mob/living/L = holder.playerone
-		L.electrocute_act(67 * (emagged * 3), src, 1) //And to the player too, if (s)he loses
+		L.electrocute_act(67 * ((emagged || arcanetampered) * 3), src, 1) //And to the player too, if (s)he loses
 
 /datum/arcade_game/space_villain/proc/action_charge()
 	blocked = 1
@@ -452,7 +479,7 @@
 	check_p2_win()
 
 /datum/arcade_game/space_villain/is_cheater(mob/user)
-	if(emagged && !gameover)
+	if((emagged || arcanetampered) && !gameover)
 		if(holder.stat & (NOPOWER|BROKEN|FORCEDISABLE))
 			return 0
 		else if(user in cheaters)
@@ -486,6 +513,32 @@
 
 	enemy_name = "Cuban Pete"
 	name = "Outbomb Cuban Pete"
+	if(arcanetampered)
+		enemy_name = "Cuban Willy"
+		name = "Out-shoe-bomb Willy"
+
+	holder.updateUsrDialog()
+
+/datum/arcade_game/space_villain/arcane_act(mob/user)
+	if(is_cheater(user))
+		return
+
+	temp = "If you die in the game, you die for real!"
+	p2_temp = "If he dies in the game, he dies for real!"
+	player_hp = 30
+	player_mp = 10
+	enemy_hp = 45
+	enemy_mp = 20
+	gameover = 0
+	blocked = 0
+
+	arcanetampered = 1
+
+	enemy_name = "Shoe Snatchin Willy"
+	name = "Out-shoe-snatch Willy"
+	if(emagged)
+		enemy_name = "Cuban Willy"
+		name = "Out-shoe-bomb Willy"
 
 	holder.updateUsrDialog()
 
@@ -502,7 +555,7 @@
 	if(is_cheater(usr))
 		return
 
-	if(!emagged && prob(5)) //Bug
+	if(!emagged && !arcanetampered && prob(5)) //Bug
 		temp = "|eW R0vnb##[rand(0,9)]#"
 		p2_temp = "|eW R0vnb##[rand(0,9)]#"
 		player_hp = rand(1,30)
