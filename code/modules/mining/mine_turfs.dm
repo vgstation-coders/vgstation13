@@ -196,8 +196,8 @@ var/list/icon_state_to_appearance = list()
 	var/old_excav_overlay = excav_overlay
 	var/old_archaeo_overlay = archaeo_overlay
 	. = ..(N, tell_universe, 1, allow)
-	if(digsite_depressed && istype(N,/turf/unsimulated/floor/asteroid))
-		var/turf/unsimulated/floor/asteroid/AS = N
+	if(digsite_depressed && istype(.,/turf/unsimulated/floor/asteroid))
+		var/turf/unsimulated/floor/asteroid/AS = .
 		AS.finds = old_finds
 		AS.excavation_level = old_excavation_level
 		AS.artifact_find = old_find
@@ -417,7 +417,7 @@ var/list/icon_state_to_appearance = list()
 
 				if(P.has_slimes & SLIME_OIL)
 					for(var/turf/unsimulated/mineral/M in range(user,1))
-						M.GetDrilled(safety_override = TRUE, driller = user, multiplier = (P.has_slimes & SLIME_PYRITE) ? 2 : 1)
+						M.GetDrilled(safety_override = TRUE, driller = user, multiplier = (P.has_slimes & SLIME_PYRITE) ? 2 : 1, digsitedepressed = P.depresses_digsites)
 					return
 
 				GetDrilled(artifact_destroyed, multiplier = (P.has_slimes & SLIME_PYRITE) ? 2 : 1, digsitedepressed = P.depresses_digsites)
