@@ -190,8 +190,8 @@ var/global/list/lemuria_stuff = list(
 	name = "goliath lure"
 	desc = "Goliaths have a sophisticated set of eyes that can see infrared. This emits beams that will attract goliaths. After placing it on the ground, wrench it into place. Use meat on the lure to create bait."
 	var/pity = 0
-	icon = 'icons/obj/barricade.dmi'
-	icon_state = "barricade_kit"
+	icon = 'icons/obj/items_weird.dmi'
+	icon_state = "goliathlure"
 	w_class = W_CLASS_LARGE
 
 /obj/item/goliath_lure/attackby(obj/item/I, mob/user)
