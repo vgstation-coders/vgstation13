@@ -1,6 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- tweak: Mappers can now make use of more types of window-grille spawners, (for all
-    windows except tinted and brass ones) with clearer, updated sprites.
-- tweak: The "construct window" option on RCDs now has a newer, cleaner looking sprite.
