@@ -209,13 +209,12 @@
 				user.visible_message("[user] places [src] against [M]'s [body_part] and listens attentively.", "You place [src] against [M]'s [body_part]. You [sound_strength] [sound].")
 				
 				spawn()
-					if(!listening)
-						while(M.pulse != PULSE_NONE && loc == user && M.Adjacent(user) && !M.timestopped)
-							listening = TRUE
-							var/pulsespeed = M.get_pulsespeed()
-							if(pulsespeed)
-								to_chat(M,"*thump*")
-								sleep(max(1,pulsespeed))
+					while(!listening && M.pulse != PULSE_NONE && loc == user && M.Adjacent(user) && !M.timestopped)
+						listening = TRUE
+						var/pulsespeed = M.get_pulsespeed()
+						if(pulsespeed)
+							to_chat(M,"*thump*")
+							sleep(max(1,pulsespeed))
 					listening = FALSE
 				return
 	return ..(M,user)

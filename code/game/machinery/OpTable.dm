@@ -14,6 +14,7 @@
 	var/rating = 1 //Use this for upgrades some day
 	pass_flags_self = PASSTABLE
 	var/obj/machinery/computer/operating/computer = null
+	var/pulsing = FALSE
 
 /obj/machinery/optable/New()
 	..()
@@ -182,7 +183,8 @@
 
 	update()
 
-	while(victim.loc == src.loc && victim.lying && victim.pulse != PULSE_NONE && victim.stat != DEAD && !victim.timestopped)
+	while(!pulsing && victim.loc == src.loc && victim.lying && victim.pulse != PULSE_NONE && victim.stat != DEAD && !victim.timestopped)
+		pulsing = TRUE
 		var/pulsespeed = victim.get_pulsespeed()
 		if(pulsespeed)
 			if(computer)
@@ -190,6 +192,7 @@
 				computer.icon_state = "operating-living"
 			icon_state = "table2-active"
 			sleep(max(1,pulsespeed))
+	pulsing = FALSE
 
 /obj/machinery/optable/attackby(obj/item/weapon/W as obj, mob/living/carbon/user as mob)
 	if(W.is_wrench(user))
