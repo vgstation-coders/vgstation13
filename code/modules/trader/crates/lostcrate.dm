@@ -337,7 +337,7 @@ var/global/list/lemuria_stuff = list(
 		return TRUE
 	return FALSE
 
-/obj/item/cosmic_grill/render_cookvessel(offset_x, offset_y = 5)
+/obj/item/cosmic_grill/render_cookvessel(offset_x, offset_y)
 	overlays.len = 0
 	..()
 
