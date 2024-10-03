@@ -185,7 +185,7 @@ var/global/list/organ_damage_overlays = list(
 	update_canmove()
 	//Update our name based on whether our face is obscured/disfigured
 	handle_regular_hud_updates()
-	var/oldpulse = pulse
+	//var/oldpulse = pulse
 	pulse = handle_pulse()
 	for(var/obj/item/weapon/grab/G in src)
 		G.process()
