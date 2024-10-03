@@ -2664,6 +2664,7 @@
 #include "code\modules\research\xenoarchaeology\artifact\triggers\unknown_trigger_visible.dm"
 #include "code\modules\research\xenoarchaeology\finds\digsites.dm"
 #include "code\modules\research\xenoarchaeology\finds\finds.dm"
+#include "code\modules\research\xenoarchaeology\finds\finds_container.dm"
 #include "code\modules\research\xenoarchaeology\finds\finds_defines.dm"
 #include "code\modules\research\xenoarchaeology\finds\finds_fossils.dm"
 #include "code\modules\research\xenoarchaeology\finds\finds_guitar.dm"
