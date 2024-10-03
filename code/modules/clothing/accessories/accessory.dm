@@ -185,6 +185,7 @@
 	origin_tech = Tc_BIOTECH + "=1"
 	restraint_resist_time = 30 SECONDS
 	toolsounds = list("rustle")
+	var/listening = FALSE
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
 	if(ishuman(M) && isliving(user))
@@ -208,11 +209,14 @@
 				user.visible_message("[user] places [src] against [M]'s [body_part] and listens attentively.", "You place [src] against [M]'s [body_part]. You [sound_strength] [sound].")
 				
 				spawn()
-					while(M.pulse != PULSE_NONE && loc == user && M.Adjacent(user) && !M.timestopped)
-						var/pulsespeed = M.get_pulsespeed()
-						if(pulsespeed)
-							to_chat(M,"*thump*")
-							sleep(max(1,pulsespeed))
+					if(!listening)
+						while(M.pulse != PULSE_NONE && loc == user && M.Adjacent(user) && !M.timestopped)
+							listening = TRUE
+							var/pulsespeed = M.get_pulsespeed()
+							if(pulsespeed)
+								to_chat(M,"*thump*")
+								sleep(max(1,pulsespeed))
+					listening = FALSE
 				return
 	return ..(M,user)
 
