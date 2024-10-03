@@ -43,32 +43,33 @@
         return TRUE
     return FALSE
 
-/datum/finds/proc/exceed_depth(obj/item/weapon/pickaxe/P, mob/user)
+/datum/finds/proc/exceed_depth(obj/item/weapon/pickaxe/P, depresses_digsites = FALSE, mob/user)
     . = FALSE
-    var/datum/find/top_find = finds[1]
+    if(!depresses_digsites && finds?.len)
+        var/datum/find/top_find = finds[1]
 
-    var/exc_diff = excavation_level + P.excavation_amount - top_find.excavation_required
+        var/exc_diff = excavation_level + P.excavation_amount - top_find.excavation_required
 
-    if (exc_diff > 0)
-        // Digging too far, probably breaking the artifact.
-        var/fail_message = "<b>[pick("There is a crunching noise","[P] collides with some different rock","Part of the rock face crumbles away","Something breaks under [P]")]</b>"
-        to_chat(user, "<span class='rose'>[fail_message].</span>")
-        . = TRUE
+        if (exc_diff > 0)
+            // Digging too far, probably breaking the artifact.
+            var/fail_message = "<b>[pick("There is a crunching noise","[P] collides with some different rock","Part of the rock face crumbles away","Something breaks under [P]")]</b>"
+            to_chat(user, "<span class='rose'>[fail_message].</span>")
+            . = TRUE
 
-        var/destroy_prob = 50
-        if (exc_diff > 5)
-            destroy_prob = 95
+            var/destroy_prob = 50
+            if (exc_diff > 5)
+                destroy_prob = 95
 
-        if (prob(destroy_prob))
-            finds.Remove(top_find)
-            if (prob(40))
-                artifact_debris()
+            if (prob(destroy_prob))
+                finds.Remove(top_find)
+                if (prob(40))
+                    artifact_debris()
 
-        else
-            excavate_find(5, top_find)
+            else
+                excavate_find(5, top_find)
 
-/datum/finds/proc/drill_find(obj/item/weapon/pickaxe/P, broke_find)
-    if(!P.depresses_digsites && finds && finds.len && !broke_find)
+/datum/finds/proc/drill_find(obj/item/weapon/pickaxe/P, depresses_digsites = FALSE, broke_find)
+    if(!depresses_digsites && finds && finds.len && !broke_find)
         var/datum/find/F = finds[1]
         if(round(excavation_level + P.excavation_amount) == F.excavation_required)
             excavate_find(100, F)
@@ -146,25 +147,26 @@
         excav_overlay = "overlay_excv[excav_quadrant]_[rand(1,3)]"
         holder.overlays += excav_overlay
 
-/datum/finds/proc/spawn_boulder(obj/item/weapon/pickaxe/P,mob/user)
+/datum/finds/proc/spawn_boulder(depresses_digsites = FALSE,mob/user)
     var/obj/structure/boulder/B
     . = TRUE
-    if(!P.depresses_digsites && artifact_find)
-        if(excavation_level > 0)
+    if(!depresses_digsites)
+        if(!artifact_find)
+            if(excavation_level > 0)
 
+                B = new /obj/structure/boulder(holder)
+                B.geological_data = geologic_data
+
+                B.artifact_find = artifact_find
+                B.investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] - [artifact_find.artifact_id] found by [key_name(user)].")
+                . = FALSE
+
+            else
+                artifact_debris(1)
+
+        else if(!excavation_level > 0 && prob(15))
             B = new /obj/structure/boulder(holder)
             B.geological_data = geologic_data
-
-            B.artifact_find = artifact_find
-            B.investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] - [artifact_find.artifact_id] found by [key_name(user)].")
-            . = FALSE
-
-        else
-            artifact_debris(1)
-
-    else if(!P.depresses_digsites && excavation_level > 0 && prob(15))
-        B = new /obj/structure/boulder(holder)
-        B.geological_data = geologic_data
 
         
 /datum/finds/proc/large_artifact_fail()

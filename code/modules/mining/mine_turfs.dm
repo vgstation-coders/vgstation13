@@ -335,7 +335,7 @@ var/list/icon_state_to_appearance = list()
 
 		P.playtoolsound(user, 20)
 
-		var/broke_find = finddatum ? finddatum.exceed_depth(P,user) : FALSE
+		var/broke_find = finddatum ? finddatum.exceed_depth(P,P.depresses_digsites,user) : FALSE
 
 		busy = 1
 
@@ -343,12 +343,12 @@ var/list/icon_state_to_appearance = list()
 			busy = 0
 
 			if(finddatum)
-				finddatum.drill_find(P,broke_find)
+				finddatum.drill_find(P,P.depresses_digsites,broke_find)
 
 				if(finddatum.excavation_level + P.excavation_amount >= 100 )
 
 					var/obj/structure/boulder/B
-					var/artifact_destroyed = finddatum.spawn_boulder(P,user)
+					var/artifact_destroyed = finddatum.spawn_boulder(P.depresses_digsites,user)
 
 					if(P.has_slimes & SLIME_OIL)
 						for(var/turf/unsimulated/mineral/M in range(user,1))
