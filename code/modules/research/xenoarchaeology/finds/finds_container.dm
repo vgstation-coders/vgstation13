@@ -45,7 +45,7 @@
 
 /datum/finds/proc/exceed_depth(obj/item/weapon/pickaxe/P, depresses_digsites = FALSE, mob/user)
     . = FALSE
-    if(!depresses_digsites && finds?.len)
+    if(!depresses_digsites && finds && finds.len)
         var/datum/find/top_find = finds[1]
 
         var/exc_diff = excavation_level + P.excavation_amount - top_find.excavation_required

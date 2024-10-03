@@ -347,7 +347,6 @@ var/list/icon_state_to_appearance = list()
 
 				if(finddatum.excavation_level + P.excavation_amount >= 100 )
 
-					var/obj/structure/boulder/B
 					var/artifact_destroyed = finddatum.spawn_boulder(P.depresses_digsites,user)
 
 					if(P.has_slimes & SLIME_OIL)
@@ -561,19 +560,31 @@ var/list/icon_state_to_appearance = list()
 		if (get_turf(user) != user.loc) //if we aren't somehow on the turf we're in
 			return
 
-		if(!(used_digging.diggables & DIG_SOIL)) //if the pickaxe can't dig soil, we don't
-			to_chat(user, "<span class='rose'>You can't dig soft soil with \the [W].</span>")
-			return
-
-		if (dug)
-			to_chat(user, "<span class='rose'>This area has already been dug.</span>")
-			return
+		var/broke_find = FALSE
+		if(finddatum)
+			broke_find = finddatum.exceed_depth(used_digging,FALSE,user)
+		else
+			if(!(used_digging.diggables & DIG_SOIL)) //if the pickaxe can't dig soil, we don't
+				to_chat(user, "<span class='rose'>You can't dig soft soil with \the [W].</span>")
+				return
+		
+			if (dug)
+				to_chat(user, "<span class='rose'>This area has already been dug.</span>")
+				return
 
 		playsound(src, 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
 
 		if(do_after(user, src, (MINE_DURATION * used_digging.toolspeed)) && user) //the better the drill, the faster the digging
-			playsound(src, 'sound/items/shovel.ogg', 50, 1)
-			gets_dug()
+			var/totaldug = used_digging.excavation_amount
+			if(finddatum)
+				finddatum.drill_find(used_digging,FALSE,broke_find)
+				totaldug += finddatum.excavation_level
+			if(totaldug >= 100)
+				if(finddatum)
+					if(finddatum.spawn_boulder(FALSE,user))
+						finddatum.large_artifact_fail()
+				playsound(src, 'sound/items/shovel.ogg', 50, 1)
+				gets_dug()
 
 	else
 		..(W,user)
