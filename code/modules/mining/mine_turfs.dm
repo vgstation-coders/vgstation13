@@ -202,9 +202,11 @@ var/list/icon_state_to_appearance = list()
 		AS.excavation_level = old_excavation_level
 		AS.artifact_find = old_find
 		AS.archaeo_overlay = old_archaeo_overlay
-		AS.overlays += AS.archaeo_overlay
+		if(AS.archaeo_overlay)
+			AS.overlays += AS.archaeo_overlay
 		AS.excav_overlay = old_excav_overlay
-		AS.overlays += AS.archaeo_overlay
+		if(AS.excav_overlay)
+			AS.overlays += AS.excav_overlay
 
 /turf/unsimulated/mineral/ex_act(severity)
 	if(mining_difficulty > MINE_DIFFICULTY_TOUGH)
