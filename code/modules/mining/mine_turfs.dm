@@ -357,38 +357,35 @@ var/list/icon_state_to_appearance = list()
 
 		var/broke_find = FALSE
 		//handle any archaeological finds we might uncover
-		if (finds && finds.len != 0)
+		if (!P.depresses_digsites && finds && finds.len != 0)
 			var/datum/find/top_find = finds[1]
 
 			var/exc_diff = excavation_level + P.excavation_amount - top_find.excavation_required
 
 			if (exc_diff > 0)
-				if(!P.depresses_digsites)
-					// Digging too far, probably breaking the artifact.
-					var/fail_message = "<b>[pick("There is a crunching noise","[W] collides with some different rock","Part of the rock face crumbles away","Something breaks under [W]")]</b>"
-					to_chat(user, "<span class='rose'>[fail_message].</span>")
-					broke_find = TRUE
+				// Digging too far, probably breaking the artifact.
+				var/fail_message = "<b>[pick("There is a crunching noise","[W] collides with some different rock","Part of the rock face crumbles away","Something breaks under [W]")]</b>"
+				to_chat(user, "<span class='rose'>[fail_message].</span>")
+				broke_find = TRUE
 
-					var/destroy_prob = 50
-					if (exc_diff > 5)
-						destroy_prob = 95
+				var/destroy_prob = 50
+				if (exc_diff > 5)
+					destroy_prob = 95
 
-					if (prob(destroy_prob))
-						finds.Remove(top_find)
-						if (prob(40))
-							artifact_debris()
+				if (prob(destroy_prob))
+					finds.Remove(top_find)
+					if (prob(40))
+						artifact_debris()
 
-					else
-						excavate_find(5, top_find)
 				else
-					//TODO: depressor code goes here
+					excavate_find(5, top_find)
 
 		busy = 1
 
 		if(do_after(user, src, max((MINE_DURATION * P.toolspeed),minimum_mine_time)) && user)
 			busy = 0
 
-			if(finds && finds.len && !broke_find)
+			if(!P.depresses_digsites && finds && finds.len && !broke_find)
 				var/datum/find/F = finds[1]
 				if(round(excavation_level + P.excavation_amount) == F.excavation_required)
 					excavate_find(100, F)
