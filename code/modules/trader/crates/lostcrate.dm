@@ -371,4 +371,4 @@ var/global/list/lemuria_stuff = list(
     var/obj/item/weapon/pickaxe/drill/D = O
     D.depresses_digsites = TRUE
     user.visible_message("<span class='warning'>[user] opens \the [src] and modifies \the [O] to depress digsites.</span>","<span class='warning'>You open \the [src] and modify \the [O] to depress digsites.</span>")
-    qdel(O)
+    qdel(src)
