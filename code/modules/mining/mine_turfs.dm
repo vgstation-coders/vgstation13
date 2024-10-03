@@ -188,10 +188,23 @@ var/list/icon_state_to_appearance = list()
 	..(img = image('icons/turf/spookycave.dmi', "spooky_cave",layer = SIDE_LAYER),offset=-16)
 	..(img = image('icons/turf/spookycave.dmi', "spooky_cave_corners",layer = CORNER_LAYER),offset = -16)
 
-/turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+/turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/digsite_depressed = 0)
 	mineral_turfs -= src
-	return ..(N, tell_universe, 1, allow)
-
+	var/list/old_finds = finds.Copy()
+	var/old_excavation_level = excavation_level
+	var/datum/artifact_find/old_find = artifact_find
+	var/old_excav_overlay = excav_overlay
+	var/old_archaeo_overlay = archaeo_overlay
+	. = ..(N, tell_universe, 1, allow)
+	if(digsite_depressed && istype(N,/turf/unsimulated/floor/asteroid))
+		var/turf/unsimulated/floor/asteroid/AS = N
+		AS.finds = old_finds
+		AS.excavation_level = old_excavation_level
+		AS.artifact_find = old_find
+		AS.archaeo_overlay = old_archaeo_overlay
+		AS.overlays += AS.archaeo_overlay
+		AS.excav_overlay = old_excav_overlay
+		AS.overlays += AS.archaeo_overlay
 
 /turf/unsimulated/mineral/ex_act(severity)
 	if(mining_difficulty > MINE_DIFFICULTY_TOUGH)
@@ -509,9 +522,14 @@ var/list/icon_state_to_appearance = list()
 			var/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/R = new(src)
 			if(mineral)
 				R.possessed_ore = mineral.ore
+	
+	var/digsitedepressed = FALSE
+	if(istype(driller,/obj/item/weapon/pickaxe))
+		var/obj/item/weapon/pickaxe/P = driller
+		digsitedepressed = P.depresses_digsites
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
-	if(artifact_find && artifact_fail)
+	if(!digsitedepressed && artifact_find && artifact_fail)
 		var/datum/artifact_postmortem_data/destroyed = new(null, FALSE, TRUE)
 		destroyed.artifact_id = artifact_find.artifact_id
 		destroyed.last_loc = src
@@ -538,7 +556,7 @@ var/list/icon_state_to_appearance = list()
 		visible_message("<span class='notice'>An old dusty crate was buried within!</span>")
 		DropAbandonedCrate()
 
-	ChangeTurf(mined_type)
+	ChangeTurf(mined_type, digsite_depressed = digsitedepressed)
 
 /turf/unsimulated/mineral/proc/DropAbandonedCrate()
 	var/crate_type = pick(valid_abandoned_crate_types)
@@ -628,6 +646,12 @@ var/list/icon_state_to_appearance = list()
 	var/sand_type = /obj/item/stack/ore/glass
 	plane = PLATING_PLANE
 	overlay_state = "roidfloor_overlay"
+	var/excavation_level = 0
+	var/list/finds = list()//no longer null to prevent those pesky runtime errors
+//	var/next_rock = 0
+	var/archaeo_overlay = ""
+	var/excav_overlay = ""
+	var/datum/artifact_find/artifact_find
 
 /turf/unsimulated/floor/asteroid/air
 	oxygen = MOLES_O2STANDARD
