@@ -38,6 +38,8 @@
 			turfs_to_process.Remove(archeo_turf)
 			processed_turfs.Add(archeo_turf)
 
+			if(!archeo_turf.finddatum)
+				archeo_turf.finddatum = new(M)
 			if(!archeo_turf.finddatum.finds || !archeo_turf.finddatum.finds.len)
 				archeo_turf.finddatum.create_finds(D)
 
