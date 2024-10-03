@@ -29,7 +29,7 @@ included:
 	name="fission reactor control rod assembly"
 	desc="Monitors a nuclear reactor and can slow or halt the fission process if needed."
 	icon='icons/obj/fissionreactor/controlrod.dmi'
-	icon_state="controlrod"
+	icon_state="controlrod_off"
 	
 	var/image/overlay_N 
 	var/image/overlay_S 
@@ -42,20 +42,21 @@ included:
 	
 /obj/machinery/fissionreactor/fissionreactor_controlrod/examine()
 	..()
-	to_chat(usr,"The lights indicate that there are [overlays.len] adjacent fuel rod assemblies")
-	switch(icon_state)
-		if("controlrod_0") 
-			to_chat(usr,"The rod is hardly inserted.") //haha that's what she said
-		if("controlrod_1")
-			to_chat(usr,"The rod is partially inserted.")
-		if("controlrod_2")
-			to_chat(usr,"The rod is just under halfway inserted.")
-		if("controlrod_3")
-			to_chat(usr,"The rod is just over halfway inserted.")
-		if("controlrod_4")
-			to_chat(usr,"The rod is mostly inserted.")
-		if("controlrod_5")
-			to_chat(usr,"The rod is nearly fully inserted.") 
+	if(associated_reactor)
+		to_chat(usr,"The lights indicate that there are [overlays.len] adjacent fuel rod assemblies")
+		switch(icon_state)
+			if("controlrod_0") 
+				to_chat(usr,"The rod is hardly inserted.") //haha that's what she said
+			if("controlrod_1")
+				to_chat(usr,"The rod is partially inserted.")
+			if("controlrod_2")
+				to_chat(usr,"The rod is just under halfway inserted.")
+			if("controlrod_3")
+				to_chat(usr,"The rod is just over halfway inserted.")
+			if("controlrod_4")
+				to_chat(usr,"The rod is mostly inserted.")
+			if("controlrod_5")
+				to_chat(usr,"The rod is nearly fully inserted.") 
 	to_chat(usr,"The structure is held together firmly, it'll have to be cut in order to part it.")
 
 /obj/machinery/fissionreactor/fissionreactor_controlrod/New()
@@ -93,11 +94,13 @@ included:
 			qdel(src)
 	
 /obj/machinery/fissionreactor/fissionreactor_controlrod/update_icon()
-	icon_state="controlrod"
+	icon_state="controlrod_off"
 	if(associated_reactor)
 		var/statetouse=floor(associated_reactor.control_rod_insertion*5+0.5)
 		icon_state="controlrod_[statetouse]"
 	overlays=null
+	if(!associated_reactor)
+		return
 	if(  locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, NORTH) )
 		overlays+=overlay_N
 	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, SOUTH) )
@@ -131,7 +134,7 @@ included:
 /obj/machinery/fissionreactor/fissionreactor_fuelrod
 	icon='icons/obj/fissionreactor/fuelrod.dmi'
 	desc="Monitors and stores a fuel rod for nuclear reactions."
-	icon_state="fuelrod"
+	icon_state="fuelrod_off"
 	name="fission reactor fuel rod assembly"
 	var/adjacencybonus=1.0
 	var/hatchopen=FALSE
@@ -156,17 +159,21 @@ included:
 
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/examine()
 	..()
-	to_chat(usr,"The lights indicate that there are [overlays.len] adjacent fuel rod assemblies")
-	if(icon_state=="fuelrod_active")
-		to_chat(usr,"The center emits a blue glow.")
+	if(associated_reactor)
+		to_chat(usr,"The lights indicate that there are [overlays.len] adjacent fuel rod assemblies")
+		if(icon_state=="fuelrod_active")
+			to_chat(usr,"The center emits a blue glow.")
+		
 	to_chat(usr,"The structure is held together firmly, it'll have to be cut in order to part it.")
 	to_chat(usr,"There is a maitinance hatch at the top, it is [hatchopen?"open":"screwed shut"].")
 	
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/update_icon()
-	icon_state="fuelrod"
-	if(associated_reactor && associated_reactor.considered_on())
-		icon_state="fuelrod_active"
+	icon_state="fuelrod_off"
+	if(associated_reactor)
+		icon_state="fuelrod[associated_reactor.considered_on() ?"_active" : ""]"
 	overlays=null
+	if(!associated_reactor)
+		return
 	var/obj/machinery/fissionreactor/fissionreactor_fuelrod/CFR= locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, NORTH)
 	if( CFR?.adjacencybonus>0 )
 		overlays+=overlay_N
@@ -265,6 +272,7 @@ included:
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/inert
 	adjacencybonus=0.0
 	desc="Monitors and stores a fuel rod for nuclear reactions. This unit has been modified with metal plating to remove the influence of nearby fuel rods."
+	icon_state="fuelrod-inert_off"
 	
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/inert/examine()
 	to_chat(usr,"The adjacency lights are covered up.")
@@ -274,9 +282,9 @@ included:
 	to_chat(usr,"There is a maitinance hatch at the top, it is [hatchopen?"open":"screwed shut"].")
 	
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/inert/update_icon()
-	icon_state="fuelrod-inert"
-	if(associated_reactor && associated_reactor.considered_on())
-		icon_state="fuelrod-inert_active"
+	icon_state="fuelrod-inert_off"
+	if(associated_reactor)
+		icon_state="fuelrod-inert[associated_reactor.considered_on() ? "_active" : ""]"
 	
 	
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/inert/attackby(var/obj/item/O,var/mob/user)	

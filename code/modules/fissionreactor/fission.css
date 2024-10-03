@@ -1,10 +1,10 @@
 body{
 	background-color: #272727;
-	font-family:monospace;
 	background-image: url(uiBg.png);
 	background-repeat: repeat-x;
 	background-position: center top;
-	color:white
+	color:white;
+	font-family:consolas, monospace;
 }
 
 table{
@@ -80,6 +80,11 @@ color:inherit;
 	background-color:goldenrod;
 }
 
+#reactor_tempbar_overlay_danger{
+	height:3.7em;
+	background-color:firebrick;
+}
+
 #reactor_coolantbar_back{
 	height:2em;
 	background-color:dimgray	
@@ -93,6 +98,11 @@ color:inherit;
 #reactor_coolantbar_overlay_caution{
 	height:1.7em;
 	background-color:goldenrod;
+}
+
+#reactor_coolantbar_overlay_danger{
+	height:1.7em;
+	background-color:Firebrick;
 }
 
 .reactor_controlrod_movebutton{

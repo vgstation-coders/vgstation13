@@ -27,7 +27,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	
 	var/datum/gas_mixture/coolant
 
-	var/graceperiodtick=FALSE // set to true when we hit meltdown temp. gives you a bit of time to GTFO or save it. this will result in peak kino (i hope)
+	var/graceperiodtick=2 // set to true when we hit meltdown temp. gives you a bit of time to GTFO or save it. this will result in peak kino (i hope)
 	
 	var/zlevel=0 //positional varibles
 	var/origin_x=0
@@ -556,11 +556,15 @@ datums for the fission reactor, which includes the fuel and reactor
 			l.apply_radiation(rads, RAD_EXTERNAL)
 	
 	if(temperature>=FISSIONREACTOR_MELTDOWNTEMP)
-		if(graceperiodtick)
+		if(!graceperiodtick)
 			meltdown()
-		graceperiodtick=TRUE
+		else
+			if(graceperiodtick==2)
+				var/turf/centerturf=locate(origin_x,origin_y,zlevel)
+				message_admins("A meltdown is probably just about to occur in area [centerturf.loc.name] ([formatJumpTo(centerturf,"JMP")]).")
+			graceperiodtick--
 	else
-		graceperiodtick=FALSE
+		graceperiodtick=2
 
 	verify_integrity()
 	

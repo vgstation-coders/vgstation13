@@ -312,6 +312,20 @@ included:
 		coolant_tempdisplay="[1.8*associated_reactor.coolant.temperature]R"
 		reactor_tempdisplay="[1.8*associated_reactor.temperature]R"
 	
+	
+	var/temp_suffix=""
+	if(associated_reactor.temperature>FISSIONREACTOR_MELTDOWNTEMP)
+		temp_suffix="_danger"
+	else if(associated_reactor.temperature>FISSIONREACTOR_DANGERTEMP)
+		temp_suffix="_caution"
+		
+	var/temp_suffix_C=""
+	if(associated_reactor.coolant.temperature>FISSIONREACTOR_MELTDOWNTEMP)
+		temp_suffix_C="_danger"
+	else if(associated_reactor.coolant.temperature>FISSIONREACTOR_DANGERTEMP)
+		temp_suffix_C="_caution"	
+		
+	
 	aychteeemel_string={"<table style='width:100%;height:100%;'>
 <tr>
 <td style='width:90%;'>
@@ -329,7 +343,7 @@ included:
 	
 	<tr><td style='width:100%;text-align:center;'>
 		<span class='bar_back' id='reactor_tempbar_back'>
-			<span class='bar_overlay' id='reactor_tempbar_overlay[associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP ? "_caution" : ""]' id='reactor_tempbar_overlay' style='width:[coretemppercent]%'>
+			<span class='bar_overlay' id='reactor_tempbar_overlay[temp_suffix]'  style='width:[coretemppercent]%'>
 				
 			</span>
 			<span style='position:relative;top:-1.5em;font-size:2em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>[reactor_tempdisplay]</span>
@@ -339,7 +353,7 @@ included:
 	
 	<tr><td style='width:100%;text-align:center;'>
 		<span class='bar_back' id='reactor_coolantbar_back'>
-			<span class='bar_overlay' id='reactor_coolantbar_overlay[associated_reactor.coolant.temperature>=FISSIONREACTOR_DANGERTEMP ? "_caution" : ""]' style='width:[coolanttemppercent]%'>
+			<span class='bar_overlay' id='reactor_coolantbar_overlay[temp_suffix_C]' style='width:[coolanttemppercent]%'>
 				
 			</span>
 			<span style='position:relative;top:-1.5em;font-size:1.25em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>[coolant_tempdisplay] [displaycoolantinmoles? "& [associated_reactor.coolant.total_moles] moles" : "@ [associated_reactor.coolant.pressure]kPa"]</span> 
