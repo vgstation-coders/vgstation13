@@ -1,0 +1,7 @@
+author: jwhitak
+delete-after: true
+changes:
+- rscadd: Adds the proto-kinetic pump-shotgun modkit to mining vending machines under
+    their premium selection.
+- tweak: Proto-kinetic accelerator shots now appear blue-white when they're shot at
+    full force in low pressure environments.
