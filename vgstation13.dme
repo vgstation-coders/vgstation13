@@ -2900,6 +2900,7 @@
 #include "code\modules\trader\trade_window.dm"
 #include "code\modules\trader\crates\alcatrazfour.dm"
 #include "code\modules\trader\crates\cloudnine.dm"
+#include "code\modules\trader\crates\lostcrate.dm"
 #include "code\modules\trader\crates\misc_variety.dm"
 #include "code\modules\trader\crates\shoaljunk.dm"
 #include "code\modules\trader\crates\yantar.dm"

@@ -71,6 +71,13 @@
 	maxunits = 3
 	sales_category = TRADE_VARIETY
 
+/datum/trade_product/lostlemuria
+	name = "Lost Crate of Lemuria"
+	path = /obj/structure/closet/crate/lemuria
+	baseprice = 160
+	maxunits = 2
+	sales_category = TRADE_VARIETY
+
 /datum/trade_product/babel
 	name = "Library of Babel shipment"
 	path = /obj/structure/closet/crate/library
