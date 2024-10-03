@@ -36,7 +36,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 
 /obj/machinery/holosign/update_icon()
 	overlays.len = 0
-	if(!lit || (stat & (NOPOWER|BROKEN|FORCEDISABLE)))
+	if(lit < 0 || (stat & (NOPOWER|BROKEN|FORCEDISABLE)))
 		set_light(0)
 		return
 	if(!overlay)
@@ -67,7 +67,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 		var/area/optable_area = get_area(OT)
 		if(optable_area != this_area)
 			continue
-		if(OT.victim)
+		if(OT.victim && !lit)
 			toggle(TRUE)
 			should_update = FALSE
 			return PROCESS_KILL
@@ -151,7 +151,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 
 	for(var/obj/machinery/holosign/M in holosigns)
 		if (M.id_tag == src.id_tag)
-			M.toggle(active*2)
+			M.toggle(active ? 1 : -1)
 
 /obj/machinery/holosign_switch/attack_ghost(var/mob/dead/observer/ghost)
 	if(!can_spook())
