@@ -323,7 +323,7 @@ var/global/list/lemuria_stuff = list(
 	w_class = W_CLASS_MEDIUM
 
 /obj/item/cosmic_grill/update_icon()
-	icon_state = "cosmicgrill[!isnull(cookvessel)]"
+    icon_state = "cosmicgrill[!isnull(cookvessel)]"
     render_cookvessel()
 
 /obj/item/cosmic_grill/on_cook_start()
