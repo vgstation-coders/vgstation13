@@ -202,7 +202,8 @@
 					if(body_part == LIMB_CHEST)
 						if(M.oxyloss < 50)
 							sound_strength = "hear a healthy"
-						sound = "pulse and respiration"
+						if(!(M_NO_BREATH in M.mutations))
+							sound = "pulse and respiration"
 
 				user.visible_message("[user] places [src] against [M]'s [body_part] and listens attentively.", "You place [src] against [M]'s [body_part]. You [sound_strength] [sound].")
 				
