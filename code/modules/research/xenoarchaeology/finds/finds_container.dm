@@ -30,6 +30,19 @@
         archaeo_overlay = "overlay_archaeo[rand(1,3)]"
         holder.overlays += archaeo_overlay
 
+/datum/finds/proc/handle_attackby(obj/item/weapon/W, mob/user)
+    if (istype(W, /obj/item/device/depth_scanner))
+        var/obj/item/device/depth_scanner/C = W
+        C.scan_atom(user, holder)
+        return TRUE
+
+    if (istype(W, /obj/item/device/measuring_tape))
+        var/obj/item/device/measuring_tape/P = W
+        user.visible_message("<span class='notice'>[user] extends [P] towards [holder].</span>","<span class='notice'>You extend [P] towards [holder].</span>")
+        to_chat(user, "<span class='notice'>[bicon(P)] [holder] has been excavated to a depth of [excavation_level]cm.</span>")
+        return TRUE
+    return FALSE
+
 /datum/finds/proc/exceed_depth(obj/item/weapon/pickaxe/P, mob/user)
     . = FALSE
     var/datum/find/top_find = finds[1]

@@ -292,15 +292,7 @@ var/list/icon_state_to_appearance = list()
 		C.sample_item(src, user)
 		return
 
-	if (istype(W, /obj/item/device/depth_scanner))
-		var/obj/item/device/depth_scanner/C = W
-		C.scan_atom(user, src)
-		return
-
-	if (istype(W, /obj/item/device/measuring_tape) && finddatum)
-		var/obj/item/device/measuring_tape/P = W
-		user.visible_message("<span class='notice'>[user] extends [P] towards [src].</span>","<span class='notice'>You extend [P] towards [src].</span>")
-		to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [finddatum.excavation_level]cm.</span>")
+	if(finddatum && finddatum.handle_attackby(W,user))
 		return
 
 	if(istype(W,/obj/item/stack/sheet/metal))
