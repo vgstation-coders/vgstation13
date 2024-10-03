@@ -35,8 +35,8 @@
 	..()
 	hud_list[CONVERSION_HUD] = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
 	register_event(/event/after_move, src, /mob/living/carbon/proc/update_holomaps)
-	spawn()
-		pulse_loop()
+	//spawn()
+		//pulse_loop()
 
 /mob/living/carbon/Destroy()
 	unregister_event(/event/after_move, src, /mob/living/carbon/proc/update_holomaps)

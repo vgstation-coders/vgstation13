@@ -103,11 +103,6 @@
 // body_destroyed: Whether the mob is about to be gibbed.
 /event/death
 
-// Called whenever a mob heartbeats.
-// Arguments:
-// mob/user: The mob that had their heart beat.
-/event/heartbeat
-
 // Called by /mob/proc/ClickOn.
 // The list of modifiers can be changed by the event listeners.
 // Arguments:

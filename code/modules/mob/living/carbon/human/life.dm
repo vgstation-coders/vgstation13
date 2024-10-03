@@ -195,9 +195,9 @@ var/global/list/organ_damage_overlays = list(
 		UpdateDamageIcon()
 	cycle++
 	..()
-	if(oldpulse == PULSE_NONE && pulse != PULSE_NONE)
-		spawn()
-			pulse_loop() //restart this if pulse comes back
+	//if(oldpulse == PULSE_NONE && pulse != PULSE_NONE)
+		//spawn()
+			//pulse_loop() //restart this if pulse comes back
 
 //Need this in species.
 //#undef HUMAN_MAX_OXYLOSS

@@ -106,13 +106,6 @@
 	take_victim(L, user)
 	return
 
-/obj/machinery/optable/proc/beat(mob/user)
-	if(user == victim && victim.loc == src.loc && victim.lying && victim.stat != DEAD)
-		if(computer)
-			playsound(computer.loc, 'sound/machines/Heartbeat.ogg', 50)
-			computer.icon_state = "operating-living"
-		icon_state = "table2-active"
-
 /obj/machinery/optable/proc/flatline(mob/user, body_destroyed)
 	if(user == victim && victim.loc == src.loc && victim.lying)
 		if(computer)
@@ -128,7 +121,6 @@
 				return 1
 
 		victim.reset_view()
-		victim.unregister_event(/event/heartbeat, src, nameof(src::beat()))
 		victim.unregister_event(/event/death, src, nameof(src::flatline()))
 		victim = null
 		update()
@@ -179,8 +171,16 @@
 		victim = C
 		C.resting = 1 //This probably shouldn't be using this variable
 		C.update_canmove() //but for as long as it does we're adding sanity to it
-		C.register_event(/event/heartbeat, src, nameof(src::beat()))
 		C.register_event(/event/death, src, nameof(src::flatline()))
+		spawn()
+			while(victim.loc == src.loc && victim.lying && victim.pulse != PULSE_NONE && victim.stat != DEAD && !victim.timestopped)
+				var/pulsespeed = victim.get_pulsespeed()
+				if(pulsespeed)
+					if(computer)
+						playsound(computer.loc, 'sound/machines/Heartbeat.ogg', 50)
+						computer.icon_state = "operating-living"
+					icon_state = "table2-active"
+					sleep(max(1,pulsespeed))
 
 	if (C == user)
 		user.visible_message("[user] climbs on the operating table.","You climb on the operating table.")

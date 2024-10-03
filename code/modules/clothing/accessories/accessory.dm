@@ -185,15 +185,6 @@
 	origin_tech = Tc_BIOTECH + "=1"
 	restraint_resist_time = 30 SECONDS
 	toolsounds = list("rustle")
-	var/mob/living/carbon/human/listening = null
-
-/obj/item/clothing/accessory/stethoscope/pickup(mob/user)
-	user.register_event(/event/moved, src, nameof(src::on_move()))
-
-/obj/item/clothing/accessory/stethoscope/dropped(mob/user)
-	user.unregister_event(/event/moved, src, nameof(src::on_move()))
-	clear_listening()
-	. = ..()
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
 	if(ishuman(M) && isliving(user))
@@ -212,34 +203,17 @@
 						if(M.oxyloss < 50)
 							sound_strength = "hear a healthy"
 						sound = "pulse and respiration"
-					
-					clear_listening()
-					listening = M
-					listening.register_event(/event/moved, src, nameof(src::on_move()))
-					listening.register_event(/event/heartbeat, src, nameof(src::heartbeat()))
+
 				user.visible_message("[user] places [src] against [M]'s [body_part] and listens attentively.", "You place [src] against [M]'s [body_part]. You [sound_strength] [sound].")
+				
+				spawn()
+					while(M.pulse != PULSE_NONE && M.Adjacent(user) && !M.timestopped)
+						var/pulsespeed = M.get_pulsespeed()
+						if(pulsespeed)
+							to_chat(M,"*thump*")
+							sleep(max(1,pulsespeed))
 				return
 	return ..(M,user)
-
-/obj/item/clothing/accessory/stethoscope/proc/on_move(atom/movable/mover)
-	if(listening)
-		mover.unregister_event(/event/moved, src, nameof(src::on_move()))
-		clear_listening()
-
-/obj/item/clothing/accessory/stethoscope/proc/clear_listening()
-	if(listening)
-		listening.unregister_event(/event/heartbeat, src, nameof(src::heartbeat()))
-		listening.unregister_event(/event/moved, src, nameof(src::on_move()))
-		listening = null
-
-/obj/item/clothing/accessory/stethoscope/proc/heartbeat(mob/user)
-	var/mob/M = get_holder_of_type(src,/mob)
-	if(M)
-		if(listening && M.Adjacent(listening))
-			to_chat(M,"*thump*")
-		else
-			user.unregister_event(/event/moved, src, nameof(src::on_move()))
-			clear_listening()
 
 //Medals
 /obj/item/clothing/accessory/medal

@@ -457,12 +457,12 @@
 		if(PULSE_THREADY)
 			. = 2
 
-/mob/living/carbon/proc/pulse_loop()
+/*/mob/living/carbon/proc/pulse_loop() // commented out because not used beyond fluff, was requested
 	while(pulse != PULSE_NONE)
 		var/pulsespeed = get_pulsespeed()
 		if(pulsespeed && !timestopped)
 			INVOKE_EVENT(src, /event/heartbeat, "user" = src)
-		sleep(max(1,pulsespeed))
+		sleep(max(1,pulsespeed))*/
 
 /mob/living/carbon/verb/mob_sleep()
 	set name = "Sleep"
