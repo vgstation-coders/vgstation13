@@ -175,7 +175,7 @@
 
 	target.assaulted_by(assailant)
 	var/initial_silentbite = silentbite //No switching bite types after latching onto someone
-	while(do_mob(assailant, target, (5 SECONDS) * (initial_silentbite + 1), showtarget = !silentbite))
+	while(do_mob(assailant, target, (5 SECONDS) * (initial_silentbite + 1), showtarget = !initial_silentbite))
 		if(!isvampire(assailant))
 			to_chat(assailant, "<span class='warning'>Your fangs have disappeared!</span>")
 			draining = null
