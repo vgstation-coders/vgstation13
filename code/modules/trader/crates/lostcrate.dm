@@ -3,6 +3,7 @@ var/global/list/lemuria_stuff = list(
 	/obj/item/weapon/fakeposter_kit, /obj/item/weapon/fakeposter_kit, /obj/item/weapon/fakeposter_kit,
 	//2 of a kind
 	/obj/item/weapon/storage/bag/gibtonite,/obj/item/weapon/storage/bag/gibtonite,
+    /obj/item/device/digsite_depressor_modkit,/obj/item/device/digsite_depressor_modkit,
 	//1 of a kind
 	/obj/item/weapon/quantumroutingcomputer,
 	/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard,
@@ -338,3 +339,32 @@ var/global/list/lemuria_stuff = list(
 /obj/item/cosmic_grill/preloaded/New()
 	..()
 	cookvessel = new /obj/item/weapon/reagent_containers/pan(src)
+
+/obj/item/device/digsite_depressor_modkit
+	name = "digsite depressor modification kit"
+	desc = "A kit containing all the needed tools and parts to make mining drills shove archaeological digsites into the ground beneath."
+	icon_state = "modkit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
+	toolsounds = list('sound/items/Screwdriver.ogg')
+
+/obj/item/weapon/pickaxe
+    var/depresses_digsites = FALSE
+    
+/obj/item/weapon/pickaxe/examine(mob/user, size, show_name)
+    . = ..()
+    if(depresses_digsites)
+        to_chat(user, "<span class='notice'>\The [src] can depress digsites into the ground when drilling them.</span>")
+
+/obj/item/device/digsite_depressor_modkit/afterattack(obj/O, mob/user as mob)
+    if(!istype(O,/obj/item/weapon/pickaxe/drill))
+        to_chat(user, "<span class='notice'>This only works on mining drills.</span>")
+        return
+    if(!isturf(O.loc))
+        to_chat(user, "<span class='warning'>\The [O] must be safely placed on the ground for modification.</span>")
+        return
+    playtoolsound(user.loc, 100)
+    var/obj/item/weapon/pickaxe/drill/D = O
+    D.depresses_digsites = TRUE
+    user.visible_message("<span class='warning'>[user] opens \the [src] and modifies \the [O] to depress digsites.</span>","<span class='warning'>You open \the [src] and modify \the [O] to depress digsites.</span>")
+    qdel(O)
