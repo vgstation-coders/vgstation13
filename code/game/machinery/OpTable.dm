@@ -172,15 +172,6 @@
 		C.resting = 1 //This probably shouldn't be using this variable
 		C.update_canmove() //but for as long as it does we're adding sanity to it
 		C.register_event(/event/death, src, nameof(src::flatline()))
-		spawn()
-			while(victim.loc == src.loc && victim.lying && victim.pulse != PULSE_NONE && victim.stat != DEAD && !victim.timestopped)
-				var/pulsespeed = victim.get_pulsespeed()
-				if(pulsespeed)
-					if(computer)
-						playsound(computer.loc, 'sound/machines/Heartbeat.ogg', 50)
-						computer.icon_state = "operating-living"
-					icon_state = "table2-active"
-					sleep(max(1,pulsespeed))
 
 	if (C == user)
 		user.visible_message("[user] climbs on the operating table.","You climb on the operating table.")
@@ -190,6 +181,15 @@
 	add_fingerprint(user)
 
 	update()
+
+	while(victim.loc == src.loc && victim.lying && victim.pulse != PULSE_NONE && victim.stat != DEAD && !victim.timestopped)
+		var/pulsespeed = victim.get_pulsespeed()
+		if(pulsespeed)
+			if(computer)
+				playsound(computer.loc, 'sound/machines/Heartbeat.ogg', 50)
+				computer.icon_state = "operating-living"
+			icon_state = "table2-active"
+			sleep(max(1,pulsespeed))
 
 /obj/machinery/optable/attackby(obj/item/weapon/W as obj, mob/living/carbon/user as mob)
 	if(W.is_wrench(user))
