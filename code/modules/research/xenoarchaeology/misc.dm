@@ -39,7 +39,7 @@
 			processed_turfs.Add(archeo_turf)
 
 			if(!archeo_turf.finddatum)
-				archeo_turf.finddatum = new(M)
+				archeo_turf.finddatum = new(archeo_turf)
 			if(!archeo_turf.finddatum.finds || !archeo_turf.finddatum.finds.len)
 				archeo_turf.finddatum.create_finds(D)
 
