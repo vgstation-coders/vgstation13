@@ -43,7 +43,7 @@
         return TRUE
     return FALSE
 
-/datum/finds/proc/exceed_depth(obj/item/weapon/pickaxe/P, depresses_digsites = FALSE, mob/user)
+/datum/finds/proc/exceed_depth(obj/item/weapon/pickaxe/P, mob/user, depresses_digsites = FALSE)
     . = FALSE
     if(!depresses_digsites && finds && finds.len)
         var/datum/find/top_find = finds[1]
@@ -68,7 +68,7 @@
             else
                 excavate_find(5, top_find)
 
-/datum/finds/proc/drill_find(obj/item/weapon/pickaxe/P, depresses_digsites = FALSE, broke_find)
+/datum/finds/proc/drill_find(obj/item/weapon/pickaxe/P, broke_find, depresses_digsites = FALSE)
     if(!depresses_digsites && finds && finds.len && !broke_find)
         var/datum/find/F = finds[1]
         if(round(excavation_level + P.excavation_amount) == F.excavation_required)
@@ -147,7 +147,7 @@
         excav_overlay = "overlay_excv[excav_quadrant]_[rand(1,3)]"
         holder.overlays += excav_overlay
 
-/datum/finds/proc/spawn_boulder(depresses_digsites = FALSE,mob/user)
+/datum/finds/proc/spawn_boulder(mob/user,depresses_digsites = FALSE)
     var/obj/structure/boulder/B
     . = TRUE
     if(!depresses_digsites)
