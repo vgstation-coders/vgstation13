@@ -183,16 +183,17 @@
 
 	update()
 
-	while(!pulsing && victim.loc == src.loc && victim.lying && victim.pulse != PULSE_NONE && victim.stat != DEAD && !victim.timestopped)
-		pulsing = TRUE
-		var/pulsespeed = victim.get_pulsespeed()
-		if(pulsespeed)
-			if(computer)
-				playsound(computer.loc, 'sound/machines/Heartbeat.ogg', 50)
-				computer.icon_state = "operating-living"
-			icon_state = "table2-active"
-			sleep(max(1,pulsespeed))
-	pulsing = FALSE
+	if(!pulsing)
+		while(victim.loc == src.loc && victim.lying && victim.pulse != PULSE_NONE && victim.stat != DEAD && !victim.timestopped)
+			pulsing = TRUE
+			var/pulsespeed = victim.get_pulsespeed()
+			if(pulsespeed)
+				if(computer)
+					playsound(computer.loc, 'sound/machines/Heartbeat.ogg', 50)
+					computer.icon_state = "operating-living"
+				icon_state = "table2-active"
+				sleep(max(1,pulsespeed))
+		pulsing = FALSE
 
 /obj/machinery/optable/attackby(obj/item/weapon/W as obj, mob/living/carbon/user as mob)
 	if(W.is_wrench(user))
