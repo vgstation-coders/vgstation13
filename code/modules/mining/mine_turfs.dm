@@ -397,7 +397,7 @@ var/list/icon_state_to_appearance = list()
 
 				var/obj/structure/boulder/B
 				var/artifact_destroyed = TRUE
-				if(artifact_find)
+				if(!P.depresses_digsites && artifact_find)
 					if(excavation_level > 0)
 
 						B = new /obj/structure/boulder(src)
@@ -410,7 +410,7 @@ var/list/icon_state_to_appearance = list()
 					else
 						artifact_debris(1)
 
-				else if(excavation_level > 0 && prob(15))
+				else if(!P.depresses_digsites && excavation_level > 0 && prob(15))
 					B = new /obj/structure/boulder(src)
 					B.geological_data = geologic_data
 
