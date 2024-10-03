@@ -324,6 +324,7 @@ var/global/list/lemuria_stuff = list(
 
 /obj/item/cosmic_grill/update_icon()
 	icon_state = "cosmicgrill[!isnull(cookvessel)]"
+    render_cookvessel()
 
 /obj/item/cosmic_grill/on_cook_start()
 	icon_state = "cosmicgrill1"
@@ -335,6 +336,10 @@ var/global/list/lemuria_stuff = list(
 	if(istype(loc, /turf/space))
 		return TRUE
 	return FALSE
+
+/obj/item/cosmic_grill/render_cookvessel(offset_x, offset_y = 5)
+	overlays.len = 0
+	..()
 
 /obj/item/cosmic_grill/preloaded/New()
     ..()
