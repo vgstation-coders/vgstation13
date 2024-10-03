@@ -337,8 +337,8 @@ var/global/list/lemuria_stuff = list(
 	return FALSE
 
 /obj/item/cosmic_grill/preloaded/New()
-	..()
-	cookvessel = new /obj/item/weapon/reagent_containers/pan(src)
+    ..()
+    cookvessel = new /obj/item/weapon/reagent_containers/pan(src)
     update_icon()
 
 /obj/item/device/digsite_depressor_modkit
