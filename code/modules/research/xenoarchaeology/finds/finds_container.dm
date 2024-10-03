@@ -3,8 +3,8 @@
     var/excavation_level = 0
     var/list/finds = list()//no longer null to prevent those pesky runtime errors
     //	var/next_rock = 0
-    var/archaeo_overlay = ""
-    var/excav_overlay = ""
+    var/archaeo_overlay
+    var/excav_overlay
     var/datum/artifact_find/artifact_find
     var/turf/holder
 
@@ -23,12 +23,7 @@
         finds.Add(D.gen_find(rand(35,75)))
         finds.Add(D.gen_find(rand(75,95)))
 
-    //sometimes a find will be close enough to the surface to show
-    var/datum/find/F = finds[1]
-
-    if(F.excavation_required <= F.view_range)
-        archaeo_overlay = "overlay_archaeo[rand(1,3)]"
-        holder.overlays += archaeo_overlay
+    update_archaeo_overlay()
 
 /datum/finds/proc/handle_attackby(obj/item/weapon/W, mob/user)
     if (istype(W, /obj/item/device/depth_scanner))
@@ -126,11 +121,7 @@
 /datum/finds/proc/update_excav_level(obj/item/weapon/pickaxe/P)
     excavation_level += P.excavation_amount
 
-    if(!archaeo_overlay && finds && finds.len)
-        var/datum/find/F = finds[1]
-        if(F.excavation_required <= excavation_level + F.view_range)
-            archaeo_overlay = "overlay_archaeo[rand(1,3)]"
-            holder.overlays += archaeo_overlay
+    update_archaeo_overlay()
 
     var/update_excav_overlay = 0
 
@@ -145,6 +136,14 @@
         var/excav_quadrant = round(excavation_level / 25) + 1
         excav_overlay = "overlay_excv[excav_quadrant]_[rand(1,3)]"
         holder.overlays += excav_overlay
+
+/datum/finds/proc/update_archaeo_overlay()
+    if(!archaeo_overlay && finds && finds.len)
+        //sometimes a find will be close enough to the surface to show
+        var/datum/find/F = finds[1]
+        if(F.excavation_required <= excavation_level + F.view_range)
+            archaeo_overlay = "overlay_archaeo[rand(1,3)]"
+            holder.overlays += archaeo_overlay
 
 /datum/finds/proc/spawn_boulder(mob/user,depresses_digsites = FALSE)
     var/obj/structure/boulder/B
