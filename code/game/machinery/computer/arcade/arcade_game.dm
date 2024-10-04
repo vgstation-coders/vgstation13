@@ -487,7 +487,7 @@
 		if(holder.stat & (NOPOWER|BROKEN|FORCEDISABLE))
 			return 0
 		else if(user in cheaters)
-			to_chat(usr, "<span class='danger'>[enemy_name] throws a bomb at you for trying to cheat him again.</span>")
+			to_chat(usr, "<span class='danger'>[enemy_name] throws a [arcanetampered ? "shoe" : "bomb"] at you for trying to cheat him again.</span>")
 			explosion(holder.loc,-1,0,2, whodunnit = user)//IED sized explosion
 			user.gib()
 			cheaters = null
@@ -500,7 +500,6 @@
 	return 0
 
 /datum/arcade_game/space_villain/emag_act(mob/user)
-	..()
 	if(is_cheater(user))
 		return
 
@@ -520,6 +519,7 @@
 	if(arcanetampered)
 		enemy_name = "Cuban Willy"
 		name = "Out-shoe-bomb Willy"
+	..()
 
 	holder.updateUsrDialog()
 
@@ -543,6 +543,7 @@
 	if(emagged)
 		enemy_name = "Cuban Willy"
 		name = "Out-shoe-bomb Willy"
+	..()
 
 	holder.updateUsrDialog()
 
