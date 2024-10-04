@@ -573,11 +573,11 @@ var/list/headset_modes = list(
 				var/memoryfound = FALSE
 				var/list/split = list()
 				if(VI.imp_in.mind && VI.imp_in.mind.memory && VI.imp_in.mind.memory != "")
-					var/list/split = splittext(VI.imp_in.mind.memory,"<BR>")
+					split = splittext(VI.imp_in.mind.memory,"<BR>")
 					if(split.len)
 						memoryfound = TRUE
 				if(!memoryfound && VI.imp_in.memory && VI.imp_in.memory != "")
-					var/list/split = splittext(VI.imp_in.memory,"<BR>")
+					split = splittext(VI.imp_in.memory,"<BR>")
 				if(split.len)
 					var/splittxt = uppertext(pick(strip_html(split)))
 					splittxt = replacetext(splittxt,"YOUR","MY")
