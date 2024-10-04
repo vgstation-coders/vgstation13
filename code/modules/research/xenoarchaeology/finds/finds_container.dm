@@ -135,19 +135,20 @@
 
     update_archaeo_overlay()
 
-    var/update_excav_overlay = 0
+    if(excavation_level < 100) //sanity because not everything changes turf anymore, thank you sand
+        var/update_excav_overlay = 0
 
-    var/subtractions = 0
-    while(excavation_level - 25*(subtractions + 1) >= 0 && subtractions < 3)
-        subtractions++
-    if(excavation_level - P.excavation_amount < subtractions * 25)
-        update_excav_overlay = 1
+        var/subtractions = 0
+        while(excavation_level - 25*(subtractions + 1) >= 0 && subtractions < 3)
+            subtractions++
+        if(excavation_level - P.excavation_amount < subtractions * 25)
+            update_excav_overlay = 1
 
-    //update overlays displaying excavation level
-    if( !(excav_overlay && excavation_level > 0) || update_excav_overlay )
-        var/excav_quadrant = round(excavation_level / 25) + 1
-        excav_overlay = "overlay_excv[excav_quadrant]_[rand(1,3)]"
-        T.overlays += image('icons/turf/walls.dmi',T,excav_overlay)
+        //update overlays displaying excavation level
+        if( !(excav_overlay && excavation_level > 0) || update_excav_overlay )
+            var/excav_quadrant = round(excavation_level / 25) + 1
+            excav_overlay = "overlay_excv[excav_quadrant]_[rand(1,3)]"
+            T.overlays += image('icons/turf/walls.dmi',T,excav_overlay)
 
 /datum/finds/proc/update_archaeo_overlay()
     var/turf/T = holder.get()
