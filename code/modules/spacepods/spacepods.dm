@@ -567,6 +567,24 @@
 		to_chat(usr, "You stop unloading the pod.")
 	return
 
+/obj/spacepod/proc/attempt_cargo_resist(var/mob/living/user, var/obj/contained)
+	if(!ES || !istype(ES))
+		to_chat(user, "<span class='warning'>The pod has no equipment datum, or is the wrong type, yell at pomf.</span>")
+		return
+	if(!ES.cargo_system)
+		to_chat(user, "<span class='warning'>Something's resisting in a spacepod's cargo bay with no cargo bay. Tell your local coder...</span>")
+		return
+	user.visible_message("<span class='danger'>\The [src]'s cargo hatch begins to make banging sounds!</span>",
+						  "<span class='warning'>You slam on the back of \the [contained] and start trying to bust out of \the [src]'s cargo bay! (This will take about 30 seconds)</span>")
+	if(do_after(user, src, 30 SECONDS))
+		if(!ES.cargo_system.stored)
+			//Something unloaded when you weren't looking!
+			return
+		ES.cargo_system.stored.forceMove(get_turf(src))
+		user.visible_message("<span class='danger'>\The [src]'s cargo hatch pops open, and \the [contained] inside pops out!</span>",
+						"<span class='warning'>You manage to pop \the [src]'s cargo door open!</span>")
+		ES.cargo_system.stored = null
+
 /datum/global_iterator/pod_preserve_temp  //normalizing cabin air temperature to 20 degrees celsium
 	delay = 20
 /datum/global_iterator/pod_preserve_temp/process(var/obj/spacepod/spacepod)
