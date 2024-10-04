@@ -400,4 +400,5 @@ var/global/list/lemuria_stuff = list(
 		to_chat(user, "<span class='info'>You paint the MULEbot.</span>")
 		M.icon_initial = icontype
 		M.icon_state = icontype
+		playsound(src, 'sound/effects/spray3.ogg', 15, 1)
 	return 1
