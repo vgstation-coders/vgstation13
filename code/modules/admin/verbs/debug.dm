@@ -133,9 +133,13 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		spawn(PROC_RESULT_KEEP_TIME)
 			. = null
 	else if(islist(.))
-		returntext = "<a href='?_src_=vars;List=\ref[.]'>\[List\]</A>"
-		spawn(PROC_RESULT_KEEP_TIME)
-			. = null
+		var/list/L = .
+		if(!L.len)
+			returntext = "\[Empty list\]"
+		else
+			returntext = "<a href='?_src_=vars;List=\ref[.]'>\[List\]</A>"
+			spawn(PROC_RESULT_KEEP_TIME)
+				. = null
 	to_chat(user, "<span class='notice'>[procname] returned: [returntext]</span>")
 
 /client/proc/Cell()
