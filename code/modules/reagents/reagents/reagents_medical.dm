@@ -1633,6 +1633,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	density = 1.04
 	specheatcap = 18.53
 	arcane_id = SPIRITBREAKER
+	arcane_ratio = 0.5
 
 /datum/reagent/synaptizine/on_mob_life(var/mob/living/M)
 	if(..())
