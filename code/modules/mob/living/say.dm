@@ -568,6 +568,10 @@ var/list/headset_modes = list(
 						[pick("SEGMENTATION FAULT (CORE DUMP)","OUT OF MEMORY","INFINITE LOOP DETECTED", \
 						"NULL REFERENCE EXCEPTION","DIVISION BY ZERO","CANNOT READ NULL.[uppertext(pick(adjectives))]")]",
 						"[pick(rawcodelines)]")
+				if(VI.imp_in.mind && VI.imp_in.mind.memory && VI.imp_in.mind.memory != "")
+					possible_messages += list(uppertext(pick(splittext(VI.imp_in.mind.memory,"\n"))))
+				else if(VI.imp_in.memory && VI.imp_in.memory != "")
+					possible_messages += list(uppertext(pick(splittext(VI.imp_in.mind.memory,"\n"))))
 				if(VI.filter.expressions.len)
 					var/original = pick(get_list_of_keys(VI.filter.expressions))
 					possible_messages += list("[inserter && prob(50) ? inserter : "SOMEONE"] \
