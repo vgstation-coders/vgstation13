@@ -560,14 +560,15 @@ var/list/headset_modes = list(
 					"[inserter && prob(50) ? inserter : "SOMEONE"] PUT A VOCAL IMPLANT IN ME AND MADE ME SAY THIS")
 				if(VI.rawcode != "")
 					var/list/rawcodelines = splittext(VI.rawcode,";")
-					possible_messages += list("COMPILE ERROR IN SPEECH PARSING ON LINE [(rand(1,rawcodelines.len))]: \
-						[pick("INCONSISTENT INDENTATION (1 >> [pick(2,4)])",\
-						"UNKNOWN VARIABLE \"[uppertext(pick(adjectives))]\"",\
-						"[pick("{","}","(",")","[","]",";")] EXPECTED")]",
-						"RUNTIME ERROR IN SPEECH PARSING ON LINE [(rand(1,rawcodelines.len))]: \
-						[pick("SEGMENTATION FAULT (CORE DUMP)","OUT OF MEMORY","INFINITE LOOP DETECTED", \
-						"NULL REFERENCE EXCEPTION","DIVISION BY ZERO","CANNOT READ NULL.[uppertext(pick(adjectives))]")]",
-						"[pick(rawcodelines)]")
+					if(rawcodelines.len)
+						possible_messages += list("COMPILE ERROR IN SPEECH PARSING ON LINE [(rand(1,rawcodelines.len))]: \
+							[pick("INCONSISTENT INDENTATION (1 >> [pick(2,4)])",\
+							"UNKNOWN VARIABLE \"[uppertext(pick(adjectives))]\"",\
+							"[pick("{","}","(",")","[","]",";")] EXPECTED")]",
+							"RUNTIME ERROR IN SPEECH PARSING ON LINE [(rand(1,rawcodelines.len))]: \
+							[pick("SEGMENTATION FAULT (CORE DUMP)","OUT OF MEMORY","INFINITE LOOP DETECTED", \
+							"NULL REFERENCE EXCEPTION","DIVISION BY ZERO","CANNOT READ NULL.[uppertext(pick(adjectives))]")]",
+							"[pick(rawcodelines)]")
 				var/memoryfound = FALSE
 				if(VI.imp_in.mind && VI.imp_in.mind.memory && VI.imp_in.mind.memory != "")
 					var/list/split = splittext(VI.imp_in.mind.memory,"\n")
