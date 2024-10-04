@@ -53,13 +53,12 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 				stufftocall = mob_list
 			else
 				for(var/atom/A in world)
-					switch(class)
-						if("Obj")
-							if(isobj(A))
-								stufftocall += A
-						if("Area or Turf")
-							if(isarea(A) || isturf(A))
-								stufftocall += A
+					if(class == "Obj")
+						if(isobj(A))
+							stufftocall += A
+					else if(class == "Area or Turf")
+						if(isarea(A) || isturf(A))
+							stufftocall += A
 					IN_ROUND_CHECK_TICK //bam. now it doesn't freeze the game anymore
 			target = input("Enter target", "Target:", class == "Area or Turf" ? usr.loc : usr, null) as null|anything in stufftocall
 
