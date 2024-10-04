@@ -49,14 +49,13 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			if(class == "Client")
 				for(var/client/C in clients)
 					stufftocall += C
+			else if(class == "Mob")
+				stufftocall = mob_list
 			else
 				for(var/atom/A in world)
 					switch(class)
 						if("Obj")
 							if(isobj(A))
-								stufftocall += A
-						if("Mob")
-							if(ismob(A))
 								stufftocall += A
 						if("Area or Turf")
 							if(isarea(A) || isturf(A))
