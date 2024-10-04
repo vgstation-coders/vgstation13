@@ -561,6 +561,9 @@ var/list/headset_modes = list(
 					"..[pick(rune_words_rune)]..")
 				if(VI.rawcode != "")
 					var/list/rawcodelines = splittext(VI.rawcode,";")
+					for(var/text in rawcodelines)
+						if(text == "")
+							rawcodelines -= list(text) // just get it out of that list
 					if(rawcodelines.len)
 						possible_messages += list("COMPILE ERROR IN SPEECH PARSING ON LINE [(rand(1,rawcodelines.len))]: \
 							[pick("INCONSISTENT INDENTATION (1 >> [pick(2,4)])",\
@@ -574,15 +577,17 @@ var/list/headset_modes = list(
 				var/list/split = list()
 				if(VI.imp_in.mind && VI.imp_in.mind.memory && VI.imp_in.mind.memory != "")
 					split = splittext(VI.imp_in.mind.memory,"<BR>")
+					split = splittext(VI.imp_in.mind.memory,"<br>")
 					if(split.len)
 						memoryfound = TRUE
 				if(!memoryfound && VI.imp_in.memory && VI.imp_in.memory != "")
 					split = splittext(VI.imp_in.memory,"<BR>")
+					split = splittext(VI.imp_in.mind.memory,"<br>")
 				for(var/text in split)
 					if(text == "")
 						split -= list(text) // just get it out of that list
 				if(split.len)
-					var/splittxt = uppertext(pick(strip_html_properly(split)))
+					var/splittxt = uppertext(strip_html_properly(pick(split)))
 					splittxt = replacetext(splittxt,"YOUR","MY")
 					splittxt = replacetext(splittxt,"YOU","I")
 					possible_messages += list(splittxt)
