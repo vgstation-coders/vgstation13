@@ -37,35 +37,34 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		return
 
 	var/target = null
-	var/targetselected = 0
-	var/lst[] // List reference
-	lst = new/list() // Make the list
-	var/returnval = null
 	var/class = null
 
 	switch(alert("Proc owned by something?",,"Yes","No"))
 		if("Yes")
-			targetselected = 1
 			class = input("Proc owned by...","Owner",null) as null|anything in list("Obj","Mob","Area or Turf","Client")
-			switch(class)
-				if("Obj")
-					target = input("Enter target:","Target",usr) as obj in world
-				if("Mob")
-					target = input("Enter target:","Target",usr) as mob in world
-				if("Area or Turf")
-					target = input("Enter target:","Target",usr.loc) as area|turf in world
-				if("Client")
-					var/list/keys = list()
-					for(var/client/C)
-						keys += C
-					target = input("Please, select a player!", "Selection", null, null) as null|anything in keys
-				else
-					return
-		if("No")
-			target = null
-			targetselected = 0
+			if(!class)
+				return
+			
+			var/list/stufftocall = list()
+			if(class == "Client")
+				for(var/client/C in clients)
+					stufftocall += C
+			else
+				for(var/atom/A in world)
+					switch(class)
+						if("Obj")
+							if(isobj(A))
+								stufftocall += A
+						if("Mob")
+							if(ismob(A))
+								stufftocall += A
+						if("Area or Turf")
+							if(isarea(A) || isturf(A))
+								stufftocall += A
+					IN_ROUND_CHECK_TICK //bam. now it doesn't freeze the game anymore
+			target = input("Enter target", "Target:", class == "Area or Turf" ? usr.loc : usr, null) as null|anything in stufftocall
 
-	callproc(usr,target,targetselected)
+	callproc(usr,target)
 	feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/callatomproc(var/datum/target as anything)
@@ -78,13 +77,14 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	callproc(usr,target)
 	feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/proc/callproc(mob/user, var/datum/target as anything, var/targetselected)
+/client/proc/callproc(mob/user, var/datum/target as anything)
 	if(!check_rights(R_DEBUG))
 		return
 
 	var/lst[] // List reference
 	lst = new/list() // Make the list
 	var/returnval = null
+	var/targetselected = !isnull(target)
 
 	var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
 	if(!procname)
