@@ -8,7 +8,8 @@ var/global/list/lemuria_stuff = list(
 	/obj/item/weapon/quantumroutingcomputer,
 	/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard,
 	/obj/item/goliath_lure,
-	/obj/item/cosmic_grill/preloaded
+	/obj/item/cosmic_grill/preloaded,
+	/obj/item/device/mule_painter
 )
 /obj/structure/closet/crate/lemuria
 	name = "Lost Crate of Lemuria"
@@ -372,3 +373,31 @@ var/global/list/lemuria_stuff = list(
     D.depresses_digsites = TRUE
     user.visible_message("<span class='warning'>[user] opens \the [src] and modifies \the [O] to depress digsites.</span>","<span class='warning'>You open \the [src] and modify \the [O] to depress digsites.</span>")
     qdel(src)
+	
+/obj/item/device/mule_painter
+	name = "\improper MULEbot painter"
+	desc = "A device used to paint MULEbots in various colours and fashions."
+	icon = 'icons/obj/RCD.dmi'
+	icon_state = "rpd"//placeholder art, someone please sprite it
+	force = 0
+
+/obj/item/device/mule_painter/afterattack(var/obj/machinery/bot/mulebot/M, var/mob/user)
+	if(!istype(M))
+		return 0
+	if (!M.bot_sprites.len)
+		to_chat(user, "<span class='warning'>This MULEbot has no other paint-jobs. Some coder probably deleted them all, please report this.</span>")
+		return 1
+
+	var/icontype = input("Select the paint-job!")in M.bot_sprites
+	icontype = "mulebot[icontype != "default" ? "_[icontype]" : ""]"
+	//Sanity checks because icontype can be selected at an arbitrary amount of time.
+	if(!user.Adjacent(M) || user.incapacitated() || user.lying)
+		return 1
+	if(icontype == M.icon_initial)
+		to_chat(user, "<span class='warning'>This mech is already painted in that style.</span>")
+		return 1
+	if(icontype)
+		to_chat(user, "<span class='info'>You paint the MULEbot.</span>")
+		M.icon_initial = icontype
+		M.update_icon()
+	return 1

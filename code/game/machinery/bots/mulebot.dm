@@ -80,6 +80,7 @@ var/global/mulebot_count = 0
 	var/honk_cooldown = 1 SECONDS	//how often a pAI-controlled MULEbot can damage a mob by running over them
 	var/coolingdown = FALSE
 	var/honk_coolingdown = FALSE
+	var/list/bot_sprites = list("default","flames","cargonia","gold")
 
 	// Technically if we were true to form, the navbeacon should've an insider radio which would be sending the signal rather than sending the signal itself
 	// The gain in functionality if it were to be implented is negligeble for a lot of confusing code
