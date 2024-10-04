@@ -81,7 +81,6 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 	var/lst[] // List reference
 	lst = new/list() // Make the list
-	var/returnval = null
 	var/targetselected = !isnull(target)
 
 	var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
@@ -118,27 +117,26 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			return
 
 		log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
-		returnval = call(target,procname)(arglist(lst)) // Pass the lst as an argument list to the proc
+		. = call(target,procname)(arglist(lst)) // Pass the lst as an argument list to the proc
 	else
 		//this currently has no hascall protection. wasn't able to get it working.
 		log_admin("[key_name(src)] called [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
-		returnval = call(procname)(arglist(lst)) // Pass the lst as an argument list to the proc
+		. = call(procname)(arglist(lst)) // Pass the lst as an argument list to the proc
 
-	var/returntext = returnval
-	if(isnull(returnval))
+	var/returntext = .
+	if(isnull(.))
 		returntext = "null"
-	else if(returnval == "")
+	else if(. == "")
 		returntext = "\"\" (empty string)"
-	else if(isdatum(returnval))
-		returntext = "[returnval] <a href='?_src_=vars;Vars=\ref[returnval]'>\[VV\]</A>"
+	else if(isdatum(.))
+		returntext = "[.] <a href='?_src_=vars;Vars=\ref[.]'>\[VV\]</A>"
 		spawn(PROC_RESULT_KEEP_TIME)
-			returnval = null
-	else if(islist(returnval))
-		returntext = "<a href='?_src_=vars;List=\ref[returnval]'>\[List\]</A>"
+			. = null
+	else if(islist(.))
+		returntext = "<a href='?_src_=vars;List=\ref[.]'>\[List\]</A>"
 		spawn(PROC_RESULT_KEEP_TIME)
-			returnval = null
+			. = null
 	to_chat(user, "<span class='notice'>[procname] returned: [returntext]</span>")
-	return returnval
 
 /client/proc/Cell()
 	set category = "Debug"
