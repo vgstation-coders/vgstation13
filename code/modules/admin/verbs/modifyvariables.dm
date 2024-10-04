@@ -237,13 +237,18 @@ var/list/forbidden_varedit_object_types = list(
 		return var_inside_list_helper(new_value)
 	else if(isdatum(new_value))
 		return var_inside_datum_helper(new_value)
+	return new_value
 
 /proc/var_inside_list_helper(new_value) // so it can go recursively
 	if(islist(new_value))
-		if(alert(usr, "This appears to be a list, use a var in this?","Variable inside list","No","Yes") == "Yes")
-			var/list/L = new_value
-			new_value = input("Select item in list:", "Varedit list") in L
-			return var_inside_detect_helper(new_value)
+		var/list/L = new_value
+		if(L.len)
+			if(alert(usr, "This appears to be a populated list, use a var in this?","Variable inside list","No","Yes") == "Yes")
+				new_value = input("Select item in list:", "Varedit list") in L
+				if(L[new_value])
+					if(alert(usr, "This has an associated value of [L[new_value]], use it?","Associated list variable","No","Yes") == "Yes")
+						new_value = L[new_value]
+				return var_inside_detect_helper(new_value)
 	return new_value
 
 /proc/var_inside_datum_helper(new_value) // so it can go recursively
