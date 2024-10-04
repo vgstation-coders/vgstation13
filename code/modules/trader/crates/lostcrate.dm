@@ -24,12 +24,12 @@ var/global/list/lemuria_stuff = list(
 		new path(src)
 
 /obj/item/weapon/quantumroutingcomputer
-    name = "quantum routing computer"
-    desc = "A quantum supercomputer uses q-bits to perform very large calculations. This one can reduce shipping times dramatically by calculating the most efficient use of gravity wells along a route."
-    inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
+	name = "quantum routing computer"
+	desc = "A quantum supercomputer uses q-bits to perform very large calculations. This one can reduce shipping times dramatically by calculating the most efficient use of gravity wells along a route."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon = 'icons/obj/items_weird.dmi'
 	icon_state = "quantumrouter"
-    item_state = "box_of_doom"
+	item_state = "box_of_doom"
 
 /obj/item/weapon/quantumroutingcomputer/preattack(var/atom/A, var/mob/user, proximity_flag)
 	if(proximity_flag != 1)
