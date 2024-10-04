@@ -572,14 +572,14 @@ var/list/headset_modes = list(
 							"[pick(rawcodelines)]")
 				var/memoryfound = FALSE
 				if(VI.imp_in.mind && VI.imp_in.mind.memory && VI.imp_in.mind.memory != "")
-					var/list/split = splittext(VI.imp_in.mind.memory,"\n")
+					var/list/split = splittext(VI.imp_in.mind.memory,"<BR>")
 					if(split.len)
-						possible_messages += list(uppertext(pick(split)))
+						possible_messages += list(uppertext(pick(strip_html(split))))
 						memoryfound = TRUE
 				if(!memoryfound && VI.imp_in.memory && VI.imp_in.memory != "")
-					var/list/split = splittext(VI.imp_in.memory,"\n")
+					var/list/split = splittext(VI.imp_in.memory,"<BR>")
 					if(split.len)
-						possible_messages += list(uppertext(pick(split)))
+						possible_messages += list(uppertext(pick(strip_html(split))))
 				if(VI.filter.expressions.len)
 					var/original = pick(get_list_of_keys(VI.filter.expressions))
 					possible_messages += list("[inserter && prob(50) ? inserter : "SOMEONE"] \
@@ -612,7 +612,9 @@ var/list/headset_modes = list(
 					if(UL && (UL.unlock_code || UL.unlock_frequency))
 						tatormsg += " [M == src ? "MY" : "HIS"] UPLINK PASSCODE IS [uppertext(UL.unlock_code || UL.unlock_frequency)]"
 					possible_messages += list(tatormsg)
-				speech.message = "[mandates_radio || prob(50) ? ";" : ""][pick(possible_messages)]"
+				if(mandates_radio || prob(50))
+					speech.frequency == COMMON_FREQ
+				speech.message = "[pick(possible_messages)]"
 			if(speech.message != original_message)
 				message_admins("The [VI] in [src] made \him say \"[speech.message]\" instead of \"[original_message]\" [formatJumpTo(src)]")
 
