@@ -219,7 +219,7 @@ var/list/forbidden_varedit_object_types = list(
 
 			if(V_PROC)
 				if(C)
-					new_value = C.callproc()
+					new_value = C.calladvproc()
 
 			else
 				to_chat(user, "Unknown type: [selected_type]")

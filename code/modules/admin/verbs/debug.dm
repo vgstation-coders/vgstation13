@@ -29,7 +29,7 @@ Because if you select a player mob as owner it tries to do the proc for
 But you can call procs that are of type /mob/living/carbon/human/proc/ for that player.
 */
 
-/client/proc/callproc()
+/client/proc/calladvproc()
 	set category = "Debug"
 	set name = "Advanced ProcCall"
 
@@ -65,19 +65,40 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			target = null
 			targetselected = 0
 
+	callproc(usr,target,targetselected)
+	feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/client/proc/callatomproc(var/datum/target as anything)
+	set category = "Debug"
+	set name = "Atom ProcCall"
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	callproc(usr,target)
+	feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/client/proc/callproc(mob/user, var/datum/target as anything, var/targetselected)
+	if(!check_rights(R_DEBUG))
+		return
+
+	var/lst[] // List reference
+	lst = new/list() // Make the list
+	var/returnval = null
+
 	var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
 	if(!procname)
 		return
 
 	// Do not make this a global reference. Global references can be cleared out.
 	if (istype(target, /datum/subsystem/dbcore/))
-		to_chat(usr, "<span class='red'>Never use atom proc call to inject SQL.</span>")
-		message_admins("[key_name(usr)] used atom proc call on the db controller.")
-		log_admin("[key_name(usr)] used atom proc call on the db controller.")
+		to_chat(user, "<span class='red'>Never use atom proc call to inject SQL.</span>")
+		message_admins("[key_name(user)] used atom proc call on the db controller.")
+		log_admin("[key_name(user)] used atom proc call on the db controller.")
 		return
 
 	if(target && !hascall(target, procname))
-		to_chat(usr, "<span class='red'>Error: callproc(): target has no such call [procname].</span>")
+		to_chat(user, "<span class='red'>Error: calladvproc(): target has no such call [procname].</span>")
 		return
 
 	var/argnum = input("Number of arguments","Number:",0) as num|null
@@ -95,7 +116,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 	if(targetselected)
 		if(!target)
-			to_chat(usr, "<span class='red'>Error: callproc(): owner of proc no longer exists.</span>")
+			to_chat(user, "<span class='red'>Error: calladvproc(): owner of proc no longer exists.</span>")
 			return
 
 		log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
@@ -105,55 +126,11 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		log_admin("[key_name(src)] called [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
 		returnval = call(procname)(arglist(lst)) // Pass the lst as an argument list to the proc
 
-	. = returnval // let's grab it here before it gets processed below
-	if(isnull(returnval))
-		returnval = "null"
-	else if(returnval == "")
-		returnval = "\"\" (empty string)"
-	to_chat(usr, "<span class='notice'>[procname] returned: [returnval]</span>")
-	feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/client/proc/callatomproc(var/datum/target as anything)
-	set category = "Debug"
-	set name = "Atom ProcCall"
-
-	if(!check_rights(R_DEBUG))
-		return
-
-	var/lst[] // List reference
-	lst = new/list() // Make the list
-	var/returnval = null
-
-	var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
-	if(!procname)
-		return
-
-	if(!hascall(target, procname))
-		to_chat(usr, "<span class='red'>Error: callatomproc(): target has no such call [procname].</span>")
-		return
-
-	var/argnum = input("Number of arguments","Number:",0) as num|null
-	if(!argnum && (argnum!=0))
-		return
-
-	lst.len = argnum // Expand to right length
-	//TODO: make a list to store whether each argument was initialised as null.
-	//Reason: So we can abort the proccall if say, one of our arguments was a mob which no longer exists
-	//this will protect us from a fair few errors ~Carn
-
-	var/i
-	for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
-		lst[i] = variable_set(src)
-
-	log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
-	returnval = call(target,procname)(arglist(lst)) // Pass the lst as an argument list to the proc
-
-	if(isnull(returnval))
-		returnval = "null"
-	else if(returnval == "")
-		returnval = "\"\" (empty string)"
-
 	var/returntext = returnval
+	if(isnull(returnval))
+		returntext = "null"
+	else if(returnval == "")
+		returntext = "\"\" (empty string)"
 	if(istype(returnval, /datum))
 		returntext = "[returnval] <a href='?_src_=vars;Vars=\ref[returnval]'>\[VV\]</A>"
 		spawn(PROC_RESULT_KEEP_TIME)
@@ -162,9 +139,8 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		returntext = "<a href='?_src_=vars;List=\ref[returnval]'>\[List\]</A>"
 		spawn(PROC_RESULT_KEEP_TIME)
 			returnval = null
-
-	to_chat(usr, "<span class='notice'>[procname] returned: [returntext]</span>")
-	feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	to_chat(user, "<span class='notice'>[procname] returned: [returnval]</span>")
+	return returnval
 
 /client/proc/Cell()
 	set category = "Debug"
