@@ -362,18 +362,18 @@ var/global/list/lemuria_stuff = list(
         to_chat(user, "<span class='notice'>\The [src] can depress digsites into the ground when drilling them.</span>")
 
 /obj/item/device/digsite_depressor_modkit/afterattack(obj/O, mob/user as mob)
-    if(!istype(O,/obj/item/weapon/pickaxe/drill))
-        to_chat(user, "<span class='notice'>This only works on mining drills.</span>")
-        return
-    if(!isturf(O.loc))
-        to_chat(user, "<span class='warning'>\The [O] must be safely placed on the ground for modification.</span>")
-        return
-    playtoolsound(user.loc, 100)
-    var/obj/item/weapon/pickaxe/drill/D = O
-    D.depresses_digsites = TRUE
+	if(!istype(O,/obj/item/weapon/pickaxe/drill))
+		to_chat(user, "<span class='notice'>This only works on mining drills.</span>")
+		return
+	if(!isturf(O.loc))
+		to_chat(user, "<span class='warning'>\The [O] must be safely placed on the ground for modification.</span>")
+		return
+	playtoolsound(user.loc, 100)
+	var/obj/item/weapon/pickaxe/drill/D = O
+	D.depresses_digsites = TRUE
 	D.overlays += "digsite_depressor"
-    user.visible_message("<span class='warning'>[user] opens \the [src] and modifies \the [O] to depress digsites.</span>","<span class='warning'>You open \the [src] and modify \the [O] to depress digsites.</span>")
-    qdel(src)
+	user.visible_message("<span class='warning'>[user] opens \the [src] and modifies \the [O] to depress digsites.</span>","<span class='warning'>You open \the [src] and modify \the [O] to depress digsites.</span>")
+	qdel(src)
 	
 /obj/item/device/mule_painter
 	name = "\improper MULEbot painter"
