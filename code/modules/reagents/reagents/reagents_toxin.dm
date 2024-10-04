@@ -559,7 +559,7 @@
 	dupeable = FALSE
 	color = "#535E66" //rgb: 83, 94, 102
 	var/disease_type = DISEASE_CYBORG
-	arcane_id = XENOMICROBES
+	//arcane_id = XENOMICROBES
 
 /datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
