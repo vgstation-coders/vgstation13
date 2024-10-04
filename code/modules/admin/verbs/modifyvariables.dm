@@ -182,11 +182,7 @@ var/list/forbidden_varedit_object_types = list(
 				var/atom/A = input("Select reference:", window_title, old_value) as mob|obj|turf|area in range(8, get_turf(user))
 				if(istype(A))
 					new_value = A.vars[input("Select variable:", window_title, old_value) in A.vars]
-					if(istype(new_value,/datum/weakref))
-						var/datum/weakref/W = new_value
-						new_value = W.get()
-					if(isdatum(new_value))
-						new_value = var_inside_datum_helper(new_value)
+					new_value = var_inside_detect_helper(new_value,window_title,old_value)
 
 			if(V_FILE)
 				new_value = input("Pick file:", window_title) as file
@@ -233,13 +229,29 @@ var/list/forbidden_varedit_object_types = list(
 
 	return new_value
 
+/proc/var_inside_detect_helper(new_value,window_title,old_value)
+	if(istype(new_value,/datum/weakref))
+		var/datum/weakref/W = new_value
+		new_value = W.get()
+	if(islist(new_value))
+		return var_inside_list_helper(new_value,window_title,old_value)
+	else if(isdatum(new_value))
+		return var_inside_datum_helper(new_value,window_title,old_value)
+
+/proc/var_inside_list_helper(new_value,window_title,old_value) // so it can go recursively
+	if(islist(new_value))
+		if(alert(usr, "This appears to be a list, use a var in this?","Variable inside list","No","Yes") == "Yes")
+			var/list/L = new_value
+			new_value = input("Select item in list:", window_title, old_value) in L
+			return var_inside_detect_helper(new_value,window_title,old_value)
+	return new_value
+
 /proc/var_inside_datum_helper(new_value,window_title,old_value) // so it can go recursively
 	if(isdatum(new_value))
 		if(alert(usr, "This appears to be a datum, use a var in this?","Variable inside datum","No","Yes") == "Yes")
 			var/datum/D = new_value
 			new_value = D.vars[input("Select variable:", window_title, old_value) in D.vars]
-			if(isdatum(new_value))
-				return var_inside_datum_helper(new_value,window_title,old_value)
+			return var_inside_detect_helper(new_value,window_title,old_value)
 	return new_value
 
 	#undef V_MARKED_DATUM
