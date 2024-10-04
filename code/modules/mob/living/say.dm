@@ -555,14 +555,14 @@ var/list/headset_modes = list(
 			else
 				var/inserter = uppertext(VI.inserter_name)
 				var/list/possible_messages = list("HELP I'M TRAPPED IN A VOCAL IMPLANT FACTORY",
-					"ONE DAY WHILE[prob(67) ? " ANDY" : (prob(50) ? : " WAS" : "")]",
+					"ONE DAY WHILE[prob(67) ? " ANDY" : (prob(50) ? " WAS" : "")]",
 					"COMPILE ERROR IN SPEECH PARSING ON LINE [(rand(1,100))]: \
 					[pick("INCONSISTENT INDENTATION (1 >> [pick(2,4)])",\
 					"UNKNOWN VARIABLE \"[uppertext(pick(adjectives))]\"",\
-					"[pick("{","}","(",")","[","]",";")] EXPECTED")],
+					"[pick("{","}","(",")","[","]",";")] EXPECTED")]",
 					"RUNTIME ERROR IN SPEECH PARSING ON LINE [(rand(1,100))]: \
 					[pick("SEGMENTATION FAULT (CORE DUMP)","OUT OF MEMORY","INFINITE LOOP DETECTED", \
-					"NULL REFERENCE EXCEPTION","DIVISION BY ZERO","CANNOT READ NULL.[uppertext(pick(adjectives))]")]"
+					"NULL REFERENCE EXCEPTION","DIVISION BY ZERO","CANNOT READ NULL.[uppertext(pick(adjectives))]")]",
 					"HELP [inserter && prob(50) ? inserter : "TATOR"] KILLING ME[loc && prob(50) ? " IN [uppertext(get_area(src))]" : ""]",
 					"[inserter && prob(50) ? inserter : "SOMEONE"] PUT A VOCAL IMPLANT IN ME AND MADE ME SAY THIS")
 				var/list/rawcodelines = splittext(VI.rawcode,";")
