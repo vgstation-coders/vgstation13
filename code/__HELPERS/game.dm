@@ -26,6 +26,23 @@
 		return null
 	return format_text ? format_text(A.name) : A.name
 
+/proc/get_area_short_name(atom/X, format_text = FALSE)
+	if(istype(X,/area/maintenance))
+		return "Maint"
+	if(istype(X,/area/crew_quarters/sleep))
+		return "Dorms"
+	if(istype(X,/area/solar))
+		return "Solars"
+	if(istype(X,/area/security/perma))
+		return "Perma"
+	if(istype(X,/area/security/armory))
+		return "Armory"
+	if(istype(X,/area/science/xenobiology))
+		return "Xenobio"
+	if(X.type != /area/storage/nuke_storage && istype(X,/area/storage))
+		return "Storage"
+	return replacetext(get_first_word(get_area_name(X,format_text)),"'s","")
+
 /proc/get_coordinates_string(var/atom/A)
 	var/turf/T = get_turf(A)
 	return T ? "[T.x],[T.y],[T.z]" : "nullspace"
