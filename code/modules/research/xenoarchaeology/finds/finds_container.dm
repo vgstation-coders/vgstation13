@@ -161,7 +161,14 @@
         var/datum/find/F = finds[1]
         if(F.excavation_required <= excavation_level + F.view_range)
             archaeo_overlay = "overlay_archaeo[rand(1,3)]"
-            T.overlays += image('icons/turf/walls.dmi',T,archaeo_overlay)
+            var/image/I = image('icons/turf/walls.dmi',T,archaeo_overlay)
+            if(istype(T,/turf/unsimulated/floor/asteroid))
+                I.color = list(0.75,0.75,0.75,0,
+                            0.75,0.75,0.75,0,
+                            0.75,0.75,0.75,0,
+                            0,0,0,1,
+                            0,0,0,0)
+            T.overlays += I
 
 /datum/finds/proc/spawn_boulder(mob/user,depresses_digsites = FALSE)
     var/turf/T = holder.get()
