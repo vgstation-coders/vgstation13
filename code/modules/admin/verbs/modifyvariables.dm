@@ -55,6 +55,7 @@ var/list/forbidden_varedit_object_types = list(
 	#define V_LIST_EMPTY "empty_list"
 	#define V_LIST "list"
 	#define V_OBJECT "object"
+	#define V_OBJECT_VAR "object_variable"
 	#define V_ICON "icon"
 	#define V_FILE "file"
 	#define V_CLIENT "client"
@@ -115,6 +116,7 @@ var/list/forbidden_varedit_object_types = list(
 		"empty list"      = V_LIST_EMPTY,
 		"list"  = V_LIST,
 		"object (nearby)" = V_OBJECT,
+		"object var (nearby)" = V_OBJECT_VAR,
 		"icon"   = V_ICON,
 		"file"   = V_FILE,
 		"client" = V_CLIENT,
@@ -176,6 +178,13 @@ var/list/forbidden_varedit_object_types = list(
 			if(V_OBJECT)
 				new_value = input("Select reference:", window_title, old_value) as mob|obj|turf|area in range(8, get_turf(user))
 
+			if(V_OBJECT_VAR)
+				var/atom/A = input("Select reference:", window_title, old_value) as mob|obj|turf|area in range(8, get_turf(user))
+				if(istype(A))
+					new_value = A.vars[input("Select variable:", window_title, old_value) in A.vars]
+					if(isdatum(new_value))
+						new_value = var_inside_datum_helper(new_value)
+
 			if(V_FILE)
 				new_value = input("Pick file:", window_title) as file
 
@@ -219,6 +228,15 @@ var/list/forbidden_varedit_object_types = list(
 		if(logging)
 			log_admin("[key_name(usr)] modified [edited_datum]'s [edited_variable] to [html_encode(new_value)]")
 
+	return new_value
+
+/proc/var_inside_datum_helper(new_value,window_title,old_value) // so it can go recursively
+	if(isdatum(new_value))
+		if(alert(usr, "This appears to be a datum, use a var in this?","Variable inside datum","No","Yes") == "Yes")
+			var/datum/D = new_value
+			new_value = D.vars[input("Select variable:", window_title, old_value) in D.vars]
+			if(isdatum(new_value))
+				return var_inside_datum_helper(new_value,window_title,old_value)
 	return new_value
 
 	#undef V_MARKED_DATUM
