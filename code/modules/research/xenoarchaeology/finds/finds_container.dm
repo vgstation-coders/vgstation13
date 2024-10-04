@@ -26,7 +26,7 @@
     update_archaeo_overlay()
 
 /datum/finds/proc/handle_attackby(obj/item/weapon/W, mob/user)
-    var/turf/T = holder.get()
+    var/turf/unsimulated/T = holder.get()
     if(!istype(T))
         return
     if (istype(W, /obj/item/device/depth_scanner))
@@ -76,7 +76,7 @@
             excavate_find(0, F)
 
 /datum/finds/proc/artifact_debris(var/severity = 0)
-    var/turf/T = holder.get()
+    var/turf/unsimulated/T = holder.get()
     if(!istype(T))
         return
     if(severity)
@@ -112,7 +112,7 @@
 /datum/finds/proc/excavate_find(var/prob_clean = 0, var/datum/find/F)
     //with skill or luck, players can cleanly extract finds
     //otherwise, they come out inside a chunk of rock
-    var/turf/T = holder.get()
+    var/turf/unsimulated/T = holder.get()
     if(!istype(T))
         return
     var/obj/item/weapon/X
@@ -129,7 +129,7 @@
 
 /datum/finds/proc/update_excav_level(obj/item/weapon/pickaxe/P)
     if(excavation_level < 100) //sanity because not everything changes turf anymore, thank you sand
-        var/turf/T = holder.get()
+        var/turf/unsimulated/T = holder.get()
         if(!istype(T))
             return
         excavation_level += P.excavation_amount
@@ -151,16 +151,11 @@
             var/excav_quadrant = round(excavation_level / 25) + 1
             excav_overlay = "overlay_excv[excav_quadrant]_[rand(1,3)]"
             var/image/I = image('icons/turf/walls.dmi',T,excav_overlay)
-            if(istype(T,/turf/unsimulated/floor/asteroid))
-                I.color = list(0.75,0.75,0.75,0,
-                            0.75,0.75,0.75,0,
-                            0.75,0.75,0.75,0,
-                            0,0,0,1,
-                            0,0,0,0)
+            I.color = T.color_finds()
             T.overlays += I
 
 /datum/finds/proc/update_archaeo_overlay()
-    var/turf/T = holder.get()
+    var/turf/unsimulated/T = holder.get()
     if(!istype(T))
         return
     if(!archaeo_overlay && finds && finds.len)
@@ -169,16 +164,11 @@
         if(F.excavation_required <= excavation_level + F.view_range)
             archaeo_overlay = "overlay_archaeo[rand(1,3)]"
             var/image/I = image('icons/turf/walls.dmi',T,archaeo_overlay)
-            if(istype(T,/turf/unsimulated/floor/asteroid))
-                I.color = list(0.75,0.75,0.75,0,
-                            0.75,0.75,0.75,0,
-                            0.75,0.75,0.75,0,
-                            0,0,0,1,
-                            0,0,0,0)
+            I.color = T.color_finds()
             T.overlays += I
 
 /datum/finds/proc/spawn_boulder(mob/user,depresses_digsites = FALSE)
-    var/turf/T = holder.get()
+    var/turf/unsimulated/T = holder.get()
     if(!istype(T))
         return
     var/obj/structure/boulder/B
@@ -203,7 +193,7 @@
 
         
 /datum/finds/proc/large_artifact_fail()
-    var/turf/T = holder.get()
+    var/turf/unsimulated/T = holder.get()
     if(!istype(T))
         return
     //destroyed artifacts have weird, unpleasant effects
