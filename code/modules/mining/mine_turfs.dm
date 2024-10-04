@@ -597,6 +597,8 @@ var/list/icon_state_to_appearance = list()
 /turf/unsimulated/floor/asteroid/update_icon()
 	if(dug && ispath(sand_type, /obj/item/stack/ore/glass))
 		icon_state = "asteroid_dug"
+		overlays.Cut()
+		add_rock_overlay()
 
 /turf/unsimulated/floor/asteroid/proc/gets_dug()
 	if(dug)
