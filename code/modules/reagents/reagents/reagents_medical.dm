@@ -1751,7 +1751,7 @@ var/global/list/charcoal_doesnt_remove=list(
 		"antigen" = list(),
 		)
 	arcane_id = AUTISTNANITES //jenny mccarthy pls go
-	arcane_ratio = 0.5 //mr fauci, give us vaccines
+	arcane_ratio = 0.5 //dr fauci, give us vaccines
 
 /datum/reagent/vaccine/handle_data_mix(var/list/added_data=null, var/added_volume, var/mob/admin)
 	if (added_data)

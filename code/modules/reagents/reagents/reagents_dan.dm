@@ -98,7 +98,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
-	arcane_id = URANIUM
+	arcane_id = MUTAGEN
 
 /datum/reagent/mutatedbeans/on_mob_life(var/mob/living/M)
 	if(..())
