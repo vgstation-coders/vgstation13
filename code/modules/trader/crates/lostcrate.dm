@@ -371,6 +371,7 @@ var/global/list/lemuria_stuff = list(
     playtoolsound(user.loc, 100)
     var/obj/item/weapon/pickaxe/drill/D = O
     D.depresses_digsites = TRUE
+	D.overlays += "digsite_depressor"
     user.visible_message("<span class='warning'>[user] opens \the [src] and modifies \the [O] to depress digsites.</span>","<span class='warning'>You open \the [src] and modify \the [O] to depress digsites.</span>")
     qdel(src)
 	
