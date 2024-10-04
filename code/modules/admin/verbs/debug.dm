@@ -129,15 +129,15 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		returntext = "null"
 	else if(returnval == "")
 		returntext = "\"\" (empty string)"
-	if(istype(returnval, /datum))
+	else if(isdatum(returnval))
 		returntext = "[returnval] <a href='?_src_=vars;Vars=\ref[returnval]'>\[VV\]</A>"
 		spawn(PROC_RESULT_KEEP_TIME)
 			returnval = null
-	else if(istype(returnval, /list))
+	else if(islist(returnval))
 		returntext = "<a href='?_src_=vars;List=\ref[returnval]'>\[List\]</A>"
 		spawn(PROC_RESULT_KEEP_TIME)
 			returnval = null
-	to_chat(user, "<span class='notice'>[procname] returned: [returnval]</span>")
+	to_chat(user, "<span class='notice'>[procname] returned: [returntext]</span>")
 	return returnval
 
 /client/proc/Cell()
