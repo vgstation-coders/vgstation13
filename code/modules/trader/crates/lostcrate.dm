@@ -390,8 +390,10 @@ var/global/list/lemuria_stuff = list(
 		return
 	playtoolsound(user.loc, 100)
 	D.depresses_digsites = TRUE
-	D.update_icon()
 	user.visible_message("<span class='warning'>[user] opens \the [src] and modifies \the [O] to depress digsites.</span>","<span class='warning'>You open \the [src] and modify \the [O] to depress digsites.</span>")
+	D.overlays += "depressor_activate"
+	spawn(5)
+		D.update_icon()
 	qdel(src)
 	
 /obj/item/device/mule_painter
