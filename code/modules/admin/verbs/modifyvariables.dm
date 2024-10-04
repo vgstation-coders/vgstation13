@@ -238,7 +238,7 @@ var/list/forbidden_varedit_object_types = list(
 	else if(isdatum(new_value))
 		return var_inside_datum_helper(new_value)
 
-/proc/var_inside_list_helper(new_value,old_value) // so it can go recursively
+/proc/var_inside_list_helper(new_value) // so it can go recursively
 	if(islist(new_value))
 		if(alert(usr, "This appears to be a list, use a var in this?","Variable inside list","No","Yes") == "Yes")
 			var/list/L = new_value
@@ -246,7 +246,7 @@ var/list/forbidden_varedit_object_types = list(
 			return var_inside_detect_helper(new_value)
 	return new_value
 
-/proc/var_inside_datum_helper(new_value,old_value) // so it can go recursively
+/proc/var_inside_datum_helper(new_value) // so it can go recursively
 	if(isdatum(new_value))
 		if(alert(usr, "This appears to be a datum, use a var in this?","Variable inside [D]","No","Yes") == "Yes")
 			var/datum/D = new_value
