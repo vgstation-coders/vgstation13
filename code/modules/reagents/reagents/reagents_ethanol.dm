@@ -378,7 +378,7 @@
 	glass_icon_state = "metabuddy"
 	glass_name = "\improper Metabuddy"
 	glass_desc = "The glass is etched with the name of a very deserving spaceman. There's a special note etched in the bottom..."
-	arcane_id = CHILLWAX
+	arcane_id = PINTPOINTER
 
 /datum/reagent/ethanol/metabuddy/on_mob_life(var/mob/living/L)
 	if(..())
