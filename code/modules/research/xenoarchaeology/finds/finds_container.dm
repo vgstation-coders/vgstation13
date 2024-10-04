@@ -128,14 +128,16 @@
     finds.Remove(F)
 
 /datum/finds/proc/update_excav_level(obj/item/weapon/pickaxe/P)
-    var/turf/T = holder.get()
-    if(!istype(T))
-        return
-    excavation_level += P.excavation_amount
-
-    update_archaeo_overlay()
-
     if(excavation_level < 100) //sanity because not everything changes turf anymore, thank you sand
+        var/turf/T = holder.get()
+        if(!istype(T))
+            return
+        excavation_level += P.excavation_amount
+        if(excavation_level >= 100)
+            excavation_level = 100
+
+        update_archaeo_overlay()
+
         var/update_excav_overlay = 0
 
         var/subtractions = 0

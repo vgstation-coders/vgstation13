@@ -582,13 +582,12 @@ var/list/icon_state_to_appearance = list()
 			if(finddatum)
 				finddatum.drill_find(used_digging,broke_find)
 				totaldug += finddatum.excavation_level
+				finddatum.update_excav_level(used_digging)
 			if(totaldug >= 100)
 				if(finddatum && finddatum.spawn_boulder(user))
 					finddatum.large_artifact_fail()
 				playsound(src, 'sound/items/shovel.ogg', 50, 1)
 				gets_dug()
-			else if(finddatum)
-				finddatum.update_excav_level(used_digging)
 
 	else
 		..(W,user)
