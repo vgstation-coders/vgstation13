@@ -548,7 +548,7 @@
 /datum/rcd_schematic/con_pwindow/attack(var/atom/A, var/mob/user)
 
 	var/list/obj/structure/window/reinforced/rwindows = list()
-	var/list/obj/structure/window/full/reinforced/frwindow = null
+	var/obj/structure/window/full/reinforced/frwindow = null
 	var/turf/simulated/floor/T = get_turf(A)
 	var/founddirs = 0
 	for(var/obj/structure/window/reinforced/R in T)
