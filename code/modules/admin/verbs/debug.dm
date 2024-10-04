@@ -36,83 +36,82 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	if(!check_rights(R_DEBUG))
 		return
 
-	spawn(0)
-		var/target = null
-		var/targetselected = 0
-		var/lst[] // List reference
-		lst = new/list() // Make the list
-		var/returnval = null
-		var/class = null
+	var/target = null
+	var/targetselected = 0
+	var/lst[] // List reference
+	lst = new/list() // Make the list
+	var/returnval = null
+	var/class = null
 
-		switch(alert("Proc owned by something?",,"Yes","No"))
-			if("Yes")
-				targetselected = 1
-				class = input("Proc owned by...","Owner",null) as null|anything in list("Obj","Mob","Area or Turf","Client")
-				switch(class)
-					if("Obj")
-						target = input("Enter target:","Target",usr) as obj in world
-					if("Mob")
-						target = input("Enter target:","Target",usr) as mob in world
-					if("Area or Turf")
-						target = input("Enter target:","Target",usr.loc) as area|turf in world
-					if("Client")
-						var/list/keys = list()
-						for(var/client/C)
-							keys += C
-						target = input("Please, select a player!", "Selection", null, null) as null|anything in keys
-					else
-						return
-			if("No")
-				target = null
-				targetselected = 0
+	switch(alert("Proc owned by something?",,"Yes","No"))
+		if("Yes")
+			targetselected = 1
+			class = input("Proc owned by...","Owner",null) as null|anything in list("Obj","Mob","Area or Turf","Client")
+			switch(class)
+				if("Obj")
+					target = input("Enter target:","Target",usr) as obj in world
+				if("Mob")
+					target = input("Enter target:","Target",usr) as mob in world
+				if("Area or Turf")
+					target = input("Enter target:","Target",usr.loc) as area|turf in world
+				if("Client")
+					var/list/keys = list()
+					for(var/client/C)
+						keys += C
+					target = input("Please, select a player!", "Selection", null, null) as null|anything in keys
+				else
+					return
+		if("No")
+			target = null
+			targetselected = 0
 
-		var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
-		if(!procname)
+	var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
+	if(!procname)
+		return
+
+	// Do not make this a global reference. Global references can be cleared out.
+	if (istype(target, /datum/subsystem/dbcore/))
+		to_chat(usr, "<span class='red'>Never use atom proc call to inject SQL.</span>")
+		message_admins("[key_name(usr)] used atom proc call on the db controller.")
+		log_admin("[key_name(usr)] used atom proc call on the db controller.")
+		return
+
+	if(target && !hascall(target, procname))
+		to_chat(usr, "<span class='red'>Error: callproc(): target has no such call [procname].</span>")
+		return
+
+	var/argnum = input("Number of arguments","Number:",0) as num|null
+	if(!argnum && (argnum!=0))
+		return
+
+	lst.len = argnum // Expand to right length
+	//TODO: make a list to store whether each argument was initialised as null.
+	//Reason: So we can abort the proccall if say, one of our arguments was a mob which no longer exists
+	//this will protect us from a fair few errors ~Carn
+
+	var/i
+	for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
+		lst[i] = variable_set(src)
+
+	if(targetselected)
+		if(!target)
+			to_chat(usr, "<span class='red'>Error: callproc(): owner of proc no longer exists.</span>")
 			return
 
-		// Do not make this a global reference. Global references can be cleared out.
-		if (istype(target, /datum/subsystem/dbcore/))
-			to_chat(usr, "<span class='red'>Never use atom proc call to inject SQL.</span>")
-			message_admins("[key_name(usr)] used atom proc call on the db controller.")
-			log_admin("[key_name(usr)] used atom proc call on the db controller.")
-			return
+		log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
+		returnval = call(target,procname)(arglist(lst)) // Pass the lst as an argument list to the proc
+	else
+		//this currently has no hascall protection. wasn't able to get it working.
+		log_admin("[key_name(src)] called [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
+		returnval = call(procname)(arglist(lst)) // Pass the lst as an argument list to the proc
 
-		if(target && !hascall(target, procname))
-			to_chat(usr, "<span class='red'>Error: callproc(): target has no such call [procname].</span>")
-			return
-
-		var/argnum = input("Number of arguments","Number:",0) as num|null
-		if(!argnum && (argnum!=0))
-			return
-
-		lst.len = argnum // Expand to right length
-		//TODO: make a list to store whether each argument was initialised as null.
-		//Reason: So we can abort the proccall if say, one of our arguments was a mob which no longer exists
-		//this will protect us from a fair few errors ~Carn
-
-		var/i
-		for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
-			lst[i] = variable_set(src)
-
-		if(targetselected)
-			if(!target)
-				to_chat(usr, "<span class='red'>Error: callproc(): owner of proc no longer exists.</span>")
-				return
-
-			log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
-			returnval = call(target,procname)(arglist(lst)) // Pass the lst as an argument list to the proc
-		else
-			//this currently has no hascall protection. wasn't able to get it working.
-			log_admin("[key_name(src)] called [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
-			returnval = call(procname)(arglist(lst)) // Pass the lst as an argument list to the proc
-
-		. = returnval // let's grab it here before it gets processed below
-		if(isnull(returnval))
-			returnval = "null"
-		else if(returnval == "")
-			returnval = "\"\" (empty string)"
-		to_chat(usr, "<span class='notice'>[procname] returned: [returnval]</span>")
-		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	. = returnval // let's grab it here before it gets processed below
+	if(isnull(returnval))
+		returnval = "null"
+	else if(returnval == "")
+		returnval = "\"\" (empty string)"
+	to_chat(usr, "<span class='notice'>[procname] returned: [returnval]</span>")
+	feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/callatomproc(var/datum/target as anything)
 	set category = "Debug"
@@ -121,52 +120,51 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	if(!check_rights(R_DEBUG))
 		return
 
-	spawn(0)
-		var/lst[] // List reference
-		lst = new/list() // Make the list
-		var/returnval = null
+	var/lst[] // List reference
+	lst = new/list() // Make the list
+	var/returnval = null
 
-		var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
-		if(!procname)
-			return
+	var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
+	if(!procname)
+		return
 
-		if(!hascall(target, procname))
-			to_chat(usr, "<span class='red'>Error: callatomproc(): target has no such call [procname].</span>")
-			return
+	if(!hascall(target, procname))
+		to_chat(usr, "<span class='red'>Error: callatomproc(): target has no such call [procname].</span>")
+		return
 
-		var/argnum = input("Number of arguments","Number:",0) as num|null
-		if(!argnum && (argnum!=0))
-			return
+	var/argnum = input("Number of arguments","Number:",0) as num|null
+	if(!argnum && (argnum!=0))
+		return
 
-		lst.len = argnum // Expand to right length
-		//TODO: make a list to store whether each argument was initialised as null.
-		//Reason: So we can abort the proccall if say, one of our arguments was a mob which no longer exists
-		//this will protect us from a fair few errors ~Carn
+	lst.len = argnum // Expand to right length
+	//TODO: make a list to store whether each argument was initialised as null.
+	//Reason: So we can abort the proccall if say, one of our arguments was a mob which no longer exists
+	//this will protect us from a fair few errors ~Carn
 
-		var/i
-		for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
-			lst[i] = variable_set(src)
+	var/i
+	for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
+		lst[i] = variable_set(src)
 
-		log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
-		returnval = call(target,procname)(arglist(lst)) // Pass the lst as an argument list to the proc
+	log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
+	returnval = call(target,procname)(arglist(lst)) // Pass the lst as an argument list to the proc
 
-		if(isnull(returnval))
-			returnval = "null"
-		else if(returnval == "")
-			returnval = "\"\" (empty string)"
+	if(isnull(returnval))
+		returnval = "null"
+	else if(returnval == "")
+		returnval = "\"\" (empty string)"
 
-		var/returntext = returnval
-		if(istype(returnval, /datum))
-			returntext = "[returnval] <a href='?_src_=vars;Vars=\ref[returnval]'>\[VV\]</A>"
-			spawn(PROC_RESULT_KEEP_TIME)
-				returnval = null
-		else if(istype(returnval, /list))
-			returntext = "<a href='?_src_=vars;List=\ref[returnval]'>\[List\]</A>"
-			spawn(PROC_RESULT_KEEP_TIME)
-				returnval = null
+	var/returntext = returnval
+	if(istype(returnval, /datum))
+		returntext = "[returnval] <a href='?_src_=vars;Vars=\ref[returnval]'>\[VV\]</A>"
+		spawn(PROC_RESULT_KEEP_TIME)
+			returnval = null
+	else if(istype(returnval, /list))
+		returntext = "<a href='?_src_=vars;List=\ref[returnval]'>\[List\]</A>"
+		spawn(PROC_RESULT_KEEP_TIME)
+			returnval = null
 
-		to_chat(usr, "<span class='notice'>[procname] returned: [returntext]</span>")
-		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	to_chat(usr, "<span class='notice'>[procname] returned: [returntext]</span>")
+	feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/Cell()
 	set category = "Debug"
