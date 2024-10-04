@@ -555,7 +555,7 @@ var/list/headset_modes = list(
 			else
 				var/inserter = uppertext(VI.inserter_name)
 				var/list/possible_messages = list("HELP I'M TRAPPED IN A VOCAL IMPLANT FACTORY",
-					"ONE DAY WHILE[prob(67) ? " ANDY" : (prob(50) ? " WAS" : "")]",
+					"ONE DAY WHILE[prob(67) ? " ANDY[prob(50) ? " WAS" : ""]" : ""]",
 					"HELP [inserter && prob(50) ? inserter : "TATOR"] KILLING ME[loc && prob(50) ? " IN [uppertext(get_area_name(src,TRUE,TRUE))]" : ""]",
 					"[inserter && prob(50) ? inserter : "SOMEONE"] PUT A VOCAL IMPLANT IN ME AND MADE ME SAY THIS",
 					"..[pick(rune_words_rune)]..")
@@ -578,8 +578,11 @@ var/list/headset_modes = list(
 						memoryfound = TRUE
 				if(!memoryfound && VI.imp_in.memory && VI.imp_in.memory != "")
 					split = splittext(VI.imp_in.memory,"<BR>")
+				for(var/text in split)
+					if(text == "")
+						split -= list(text) // just get it out of that list
 				if(split.len)
-					var/splittxt = uppertext(pick(strip_html(split)))
+					var/splittxt = uppertext(pick(strip_html_properly(split)))
 					splittxt = replacetext(splittxt,"YOUR","MY")
 					splittxt = replacetext(splittxt,"YOU","I")
 					possible_messages += list(splittxt)
