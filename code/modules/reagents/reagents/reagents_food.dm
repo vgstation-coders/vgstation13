@@ -534,7 +534,7 @@
 	var/quality = 2
 	density = 1.59
 	specheatcap = 1.244
-	arcane_id = TOXIN
+	//arcane_id = TOXIN
 
 /datum/reagent/honey/on_mob_life(var/mob/living/M)
 	if(ishuman(M))
@@ -726,7 +726,7 @@
 	color = "#664330" //rgb: 102, 67, 48
 	density = 6.54
 	specheatcap = 17.56
-	arcane_id = LIPOZINE
+	//arcane_id = LIPOZINE
 	plant_nutrition = 10
 	plant_health = 1
 
@@ -908,7 +908,7 @@
 	color = "#FF00FF" //rgb: 255, 0, 255
 	density = 1.59
 	specheatcap = 1.24
-	arcane_id = HONKSERUM
+	//arcane_id = HONKSERUM
 
 /datum/reagent/sprinkles/on_mob_life(var/mob/living/M)
 	if(..())

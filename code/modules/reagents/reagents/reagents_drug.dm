@@ -498,7 +498,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#181818" //rgb: 24, 24, 24
 	density = 1.01
-	arcane_id = DANBACCO
+	//arcane_id = DANBACCO
 
 /datum/reagent/psilocybin
 	name = "Psilocybin"
@@ -589,7 +589,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#4c1e00" //rgb: 76, 30, 0
 	density = 1.01
-	arcane_id = DANBACCO
+	//arcane_id = DANBACCO
 
 /datum/reagent/squash
 	name = "Squash"

@@ -1201,7 +1201,7 @@
 	color = "#FFFFFF" //rgb: 255, 255, 255
 	glass_icon_state = "corpsereviver"
 	glass_name = "\improper Corpse Reviver No. 2"
-	arcane_id = ZOMBIEPOWDER
+	//arcane_id = ZOMBIEPOWDER
 
 /datum/reagent/ethanol/drink/bluelagoon
 	name = "Blue Lagoon"
@@ -1468,7 +1468,7 @@
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "proj_manhattanglass"
 	glass_name = "\improper Manhattan Project"
-	arcane_id = URANIUM //we knew the cocktail would no longer be the same
+	//arcane_id = URANIUM //we knew the cocktail would no longer be the same
 
 /datum/reagent/ethanol/drink/whiskeysoda
 	name = "Whiskey Soda"

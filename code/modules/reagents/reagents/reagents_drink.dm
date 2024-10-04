@@ -695,7 +695,7 @@
 	glass_icon_state = "doctorsdelightglass"
 	glass_name = "\improper Doctor's Delight"
 	glass_desc = "A rejuvenating mixture of juices, guaranteed to keep you healthy until the next toolboxing takes place."
-	arcane_id = FORMIC_ACID
+	//arcane_id = FORMIC_ACID
 
 /datum/reagent/drink/doctor_delight/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1011,7 +1011,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	mug_name = "\improper Lifeline"
 	mug_desc = "Some days, the only thing that keeps you going is cryo and caffeine."
 	color = "#390600"
-	arcane_id = PHENOL
+	//arcane_id = PHENOL
 
 /datum/reagent/drink/coffee/medcoffee/on_mob_life(var/mob/living/M)
 	if(..())

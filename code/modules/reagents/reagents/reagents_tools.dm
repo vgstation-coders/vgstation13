@@ -21,7 +21,7 @@
 	specheatcap = 0.68
 	glass_icon_state = "dr_gibb_glass"
 	glass_desc = "Unless you are an industrial tool, this is probably not safe for consumption."
-	arcane_id = PLASMA
+	//arcane_id = PLASMA
 
 /datum/reagent/fuel/reaction_obj(var/obj/O, var/volume)
 	var/datum/reagent/self = src
