@@ -507,9 +507,9 @@ var/list/icon_state_to_appearance = list()
 	overlay_state = "roidfloor_overlay"
 
 /turf/unsimulated/floor/asteroid/color_finds()
-	var/static/list/finds_colorspace = list(1,0.5,0,0,
-											0.5,0.75,0,0,
-											0,0,0.25,0,
+	var/static/list/finds_colorspace = list(1,0.5,0.5,0,
+											0.5,0.75,0.5,0,
+											0.5,0.5,0.5,0,
 											0,0,0,1,
 											0,0,0,0)
 	return finds_colorspace
