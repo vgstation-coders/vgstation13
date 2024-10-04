@@ -1122,6 +1122,7 @@ var/global/maxStackDepth = 10
 		3 = Report location
 		*/
 	var/displays_id = 1
+	var/stuns_arcane_loyalty = FALSE
 	clothing_flags = CANEXTINGUISH
 	var/icon/jersey_overlays
 	cloth_layer = UNIFORM_LAYER
