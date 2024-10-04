@@ -361,6 +361,7 @@ var/global/list/lemuria_stuff = list(
 	update_icon()
 
 /obj/item/weapon/pickaxe/update_icon()
+	overlays.Cut()
 	if(depresses_digsites)
 		overlays += "digsite_depressor"
 	. = ..()
@@ -389,7 +390,7 @@ var/global/list/lemuria_stuff = list(
 		return
 	playtoolsound(user.loc, 100)
 	D.depresses_digsites = TRUE
-	D.overlays += "digsite_depressor"
+	D.update_icon()
 	user.visible_message("<span class='warning'>[user] opens \the [src] and modifies \the [O] to depress digsites.</span>","<span class='warning'>You open \the [src] and modify \the [O] to depress digsites.</span>")
 	qdel(src)
 	
