@@ -62,6 +62,7 @@ var/list/forbidden_varedit_object_types = list(
 	#define V_NULL "null"
 	#define V_CANCEL "cancel"
 	#define V_MATRIX "matrix"
+	#define V_PROC "proc_call"
 
 	var/new_variable_type
 	var/old_value = null //Old value of the variable
@@ -123,6 +124,8 @@ var/list/forbidden_varedit_object_types = list(
 		"matrix" = V_MATRIX,
 		"null"   = V_NULL,
 		)
+		if(C.check_rights(R_DEBUG))
+			choices += list("proc call" = V_PROC)
 
 		if (!acceptsLists)
 			choices -= V_LIST
@@ -213,6 +216,10 @@ var/list/forbidden_varedit_object_types = list(
 
 			if(V_MATRIX)
 				new_value = matrix()
+
+			if(V_PROC)
+				if(C)
+					new_value = C.callproc()
 
 			else
 				to_chat(user, "Unknown type: [selected_type]")

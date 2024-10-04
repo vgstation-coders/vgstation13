@@ -106,6 +106,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			log_admin("[key_name(src)] called [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
 			returnval = call(procname)(arglist(lst)) // Pass the lst as an argument list to the proc
 
+		. = returnval // let's grab it here before it gets processed below
 		if(isnull(returnval))
 			returnval = "null"
 		else if(returnval == "")
