@@ -345,19 +345,21 @@ var/list/icon_state_to_appearance = list()
 			if(finddatum)
 				finddatum.drill_find(P,broke_find,P.depresses_digsites)
 
-				if(finddatum.excavation_level + P.excavation_amount >= 100 )
+			var/excalevel = finddatum ? finddatum.excavation_level : 0
+			if(excalevel + P.excavation_amount >= 100 )
 
-					var/artifact_destroyed = finddatum.spawn_boulder(user,P.depresses_digsites)
+				var/artifact_destroyed = finddatum ? finddatum.spawn_boulder(user,P.depresses_digsites) : FALSE
 
-					if(P.has_slimes & SLIME_OIL)
-						for(var/turf/unsimulated/mineral/M in range(user,1))
-							M.GetDrilled(safety_override = TRUE, driller = user, multiplier = (P.has_slimes & SLIME_PYRITE) ? 2 : 1, digsitedepressed = P.depresses_digsites)
-						return
-
-					GetDrilled(artifact_destroyed, multiplier = (P.has_slimes & SLIME_PYRITE) ? 2 : 1, digsitedepressed = P.depresses_digsites)
-
+				if(P.has_slimes & SLIME_OIL)
+					for(var/turf/unsimulated/mineral/M in range(user,1))
+						M.GetDrilled(safety_override = TRUE, driller = user, multiplier = (P.has_slimes & SLIME_PYRITE) ? 2 : 1, digsitedepressed = P.depresses_digsites)
 					return
 
+				GetDrilled(artifact_destroyed, multiplier = (P.has_slimes & SLIME_PYRITE) ? 2 : 1, digsitedepressed = P.depresses_digsites)
+
+				return
+
+			if(finddatum)
 				if(finddatum.finds?.len)
 					var/I = rand(1,100)
 					if(I == 1)
