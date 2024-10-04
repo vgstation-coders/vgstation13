@@ -245,9 +245,9 @@ var/list/forbidden_varedit_object_types = list(
 		if(L.len)
 			if(alert(usr, "This appears to be a populated list, use a var in this?","Variable inside list","No","Yes") == "Yes")
 				new_value = input("Select item in list:", "Varedit list") in L
-				if((new_value in L) && L[new_value])
+				/*if((new_value in L) && L[new_value])
 					if(alert(usr, "This has an associated value of [L[new_value]], use it?","Associated list variable","No","Yes") == "Yes")
-						new_value = L[new_value]
+						new_value = L[new_value]*/ // sadly no associated lists today because BYOND is weird about this
 				return var_inside_detect_helper(new_value)
 	return new_value
 
