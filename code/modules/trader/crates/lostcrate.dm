@@ -399,5 +399,5 @@ var/global/list/lemuria_stuff = list(
 	if(icontype)
 		to_chat(user, "<span class='info'>You paint the MULEbot.</span>")
 		M.icon_initial = icontype
-		M.update_icon()
+		M.icon_state = icontype
 	return 1

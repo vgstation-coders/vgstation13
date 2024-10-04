@@ -27,7 +27,7 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot
 	name = "\improper MULEbot"
 	desc = "A Multiple Utility Load Effector bot."
-	icon_state = "mulebot0"
+	icon_state = "mulebot"
 	icon_initial = "mulebot"
 	density = 1
 	anchored = 1
