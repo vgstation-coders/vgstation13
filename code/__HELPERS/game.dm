@@ -24,11 +24,12 @@
 	var/area/A = isarea(X) ? X : get_area(X)
 	if(!A)
 		return null
-	if(short && A.short_name)
-		return A.short_name
-	. = format_text ? format_text(A.name) : A.name
 	if(short)
-		. = replacetext(get_first_word(.),"'s","")
+		if(A.short_name)
+			. = A.short_name
+		else
+			. = replacetext(get_first_word(.),"'s","")
+	. = format_text ? format_text(.) : .
 
 /proc/get_coordinates_string(var/atom/A)
 	var/turf/T = get_turf(A)
