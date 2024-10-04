@@ -1721,7 +1721,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	alpha = 142
 	density = 1.33
 	specheatcap = 3.88
-	arcane_id = GLYCEROL
+	//arcane_id = GLYCEROL
 
 /datum/reagent/trinitrine/on_mob_life(var/mob/living/M)
 	if(prob(10))
