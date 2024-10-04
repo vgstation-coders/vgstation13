@@ -6,11 +6,11 @@
     var/archaeo_overlay
     var/excav_overlay
     var/datum/artifact_find/artifact_find
-    var/turf/holder
+    var/datum/weakref/holder
 
 /datum/finds/New(turf/T)
     ..()
-    holder = T
+    holder = makeweakref(T)
 
 /datum/finds/proc/create_finds(datum/digsite/D)
     if(prob(50)) //Single find
@@ -26,15 +26,18 @@
     update_archaeo_overlay()
 
 /datum/finds/proc/handle_attackby(obj/item/weapon/W, mob/user)
+    var/turf/T = holder.get()
+    if(!istype(T))
+        return
     if (istype(W, /obj/item/device/depth_scanner))
         var/obj/item/device/depth_scanner/C = W
-        C.scan_atom(user, holder)
+        C.scan_atom(user, T)
         return TRUE
 
     if (istype(W, /obj/item/device/measuring_tape))
         var/obj/item/device/measuring_tape/P = W
-        user.visible_message("<span class='notice'>[user] extends [P] towards [holder].</span>","<span class='notice'>You extend [P] towards [holder].</span>")
-        to_chat(user, "<span class='notice'>[bicon(P)] [holder] has been excavated to a depth of [excavation_level]cm.</span>")
+        user.visible_message("<span class='notice'>[user] extends [P] towards [T].</span>","<span class='notice'>You extend [P] towards [T].</span>")
+        to_chat(user, "<span class='notice'>[bicon(P)] [T] has been excavated to a depth of [excavation_level]cm.</span>")
         return TRUE
     return FALSE
 
@@ -73,52 +76,61 @@
             excavate_find(0, F)
 
 /datum/finds/proc/artifact_debris(var/severity = 0)
+    var/turf/T = holder.get()
+    if(!istype(T))
+        return
     if(severity)
         var/obj/item/stack/S
         var/bigamount = rand(5,25)
         switch(rand(1,3))
             if(1)
-                S = new /obj/item/stack/sheet/metal(holder)
+                S = new /obj/item/stack/sheet/metal(T)
             if(2)
-                S = new /obj/item/stack/sheet/plasteel(holder)
+                S = new /obj/item/stack/sheet/plasteel(T)
             if(3)
-                S = new /obj/item/stack/sheet/mineral/uranium(holder)
+                S = new /obj/item/stack/sheet/mineral/uranium(T)
         S.amount = bigamount
     else
         var/quantity = rand(1,3)
         switch(rand(1,5))
             if(1)
-                var/obj/item/stack/rods/R = new(holder)
+                var/obj/item/stack/rods/R = new(T)
                 R.amount = rand(5,25)
             if(2)
-                var/obj/item/stack/tile/metal/R = new(holder)
+                var/obj/item/stack/tile/metal/R = new(T)
                 R.amount = rand(1,5)
             if(3)
-                var/obj/item/stack/sheet/metal/M = new(holder)
+                var/obj/item/stack/sheet/metal/M = new(T)
                 M.amount = rand(1,5)
             if(4)
                 for(var/i in 1 to quantity)
-                    new /obj/item/weapon/shard(holder)
+                    new /obj/item/weapon/shard(T)
             if(5)
                 for(var/i in 1 to quantity)
-                    new /obj/item/weapon/shard/plasma(holder)
+                    new /obj/item/weapon/shard/plasma(T)
 
 /datum/finds/proc/excavate_find(var/prob_clean = 0, var/datum/find/F)
-	//with skill or luck, players can cleanly extract finds
-	//otherwise, they come out inside a chunk of rock
-	var/obj/item/weapon/X
-	if(prob_clean)
-		X = F.create_find(holder)
-	else
-		X = new /obj/item/weapon/strangerock(holder, F)
-		if(!geologic_data)
-			geologic_data = new/datum/geosample(holder)
-		geologic_data.UpdateNearbyArtifactInfo(holder)
-		X:geologic_data = geologic_data
+    //with skill or luck, players can cleanly extract finds
+    //otherwise, they come out inside a chunk of rock
+    var/turf/T = holder.get()
+    if(!istype(T))
+        return
+    var/obj/item/weapon/X
+    if(prob_clean)
+        X = F.create_find(T)
+    else
+        X = new /obj/item/weapon/strangerock(T, F)
+        if(!geologic_data)
+            geologic_data = new/datum/geosample(T)
+        geologic_data.UpdateNearbyArtifactInfo(T)
+        X:geologic_data = geologic_data
 
-	finds.Remove(F)
+    finds.Remove(F)
 
 /datum/finds/proc/update_excav_level(obj/item/weapon/pickaxe/P)
+    var/turf/T = holder.get()
+    if(!istype(T))
+        return
     excavation_level += P.excavation_amount
 
     update_archaeo_overlay()
@@ -135,24 +147,30 @@
     if( !(excav_overlay && excavation_level > 0) || update_excav_overlay )
         var/excav_quadrant = round(excavation_level / 25) + 1
         excav_overlay = "overlay_excv[excav_quadrant]_[rand(1,3)]"
-        holder.overlays += excav_overlay
+        T.overlays += excav_overlay
 
 /datum/finds/proc/update_archaeo_overlay()
+    var/turf/T = holder.get()
+    if(!istype(T))
+        return
     if(!archaeo_overlay && finds && finds.len)
         //sometimes a find will be close enough to the surface to show
         var/datum/find/F = finds[1]
         if(F.excavation_required <= excavation_level + F.view_range)
             archaeo_overlay = "overlay_archaeo[rand(1,3)]"
-            holder.overlays += archaeo_overlay
+            T.overlays += archaeo_overlay
 
 /datum/finds/proc/spawn_boulder(mob/user,depresses_digsites = FALSE)
+    var/turf/T = holder.get()
+    if(!istype(T))
+        return
     var/obj/structure/boulder/B
     . = TRUE
     if(!depresses_digsites)
         if(artifact_find)
             if(excavation_level > 0)
 
-                B = new /obj/structure/boulder(holder)
+                B = new /obj/structure/boulder(T)
                 B.geological_data = geologic_data
 
                 B.artifact_find = artifact_find
@@ -163,20 +181,23 @@
                 artifact_debris(1)
 
         else if(!excavation_level > 0 && prob(15))
-            B = new /obj/structure/boulder(holder)
+            B = new /obj/structure/boulder(T)
             B.geological_data = geologic_data
 
         
 /datum/finds/proc/large_artifact_fail()
+    var/turf/T = holder.get()
+    if(!istype(T))
+        return
     //destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
 	if(artifact_find)
 		var/datum/artifact_postmortem_data/destroyed = new(null, FALSE, TRUE)
 		destroyed.artifact_id = artifact_find.artifact_id
-		destroyed.last_loc = holder
+		destroyed.last_loc = T
 		destroyed.artifact_type = artifact_find.artifact_find_type
 		if (artifact_find.artifact_find_type == /obj/machinery/artifact)
 			destroyed.primary_effect = "???"
 			destroyed.secondary_effect = "???"
 		razed_large_artifacts[artifact_find.artifact_id] += destroyed
-		ArtifactRepercussion(holder, usr, "", "[artifact_find.artifact_find_type]")
+		ArtifactRepercussion(T, usr, "", "[artifact_find.artifact_find_type]")
