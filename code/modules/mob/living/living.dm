@@ -1298,6 +1298,7 @@ Thanks.
 							tmob.apply_effect(10, STUTTER)
 						if(tmob.knockdown)
 							playsound(tmob.loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+						now_pushing = 0
 						return
 			for(var/obj/structure/bed/roller/R in range(tmob, 1))
 				if(tmob.pulling == R && !(tmob.restrained()) && tmob.stat == 0 && R.density == 1)
