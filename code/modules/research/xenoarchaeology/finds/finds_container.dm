@@ -150,7 +150,14 @@
         if( !(excav_overlay && excavation_level > 0) || update_excav_overlay )
             var/excav_quadrant = round(excavation_level / 25) + 1
             excav_overlay = "overlay_excv[excav_quadrant]_[rand(1,3)]"
-            T.overlays += image('icons/turf/walls.dmi',T,excav_overlay)
+            var/image/I = image('icons/turf/walls.dmi',T,excav_overlay)
+            if(istype(T,/turf/unsimulated/floor/asteroid))
+                I.color = list(0.75,0.75,0.75,0,
+                            0.75,0.75,0.75,0,
+                            0.75,0.75,0.75,0,
+                            0,0,0,1,
+                            0,0,0,0)
+            T.overlays += I
 
 /datum/finds/proc/update_archaeo_overlay()
     var/turf/T = holder.get()
