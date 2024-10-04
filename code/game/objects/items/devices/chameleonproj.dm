@@ -61,6 +61,12 @@
 				saved_overlays = target.overlays.Copy()
 			return 1
 
+/obj/item/device/chameleon/arcane_act(mob/user, recursive)
+	. = ..()
+	saved_item = /obj/item/toy/syndicateballoon
+	saved_icon = 'icons/obj/weapons.dmi'
+	saved_icon_state = "syndballoon"
+
 /obj/item/device/chameleon/proc/toggle()
 	if(!can_use || !saved_item)
 		return
