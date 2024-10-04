@@ -547,13 +547,12 @@
 			speaker_name = H.real_name
 			L = speech.speaker
 		rendered_message = speech.render_message()
-		var/shownmessage = speech.message
 		if(arcanetampered)
 			if(prob(50))
-				shownmessage = derpspeech(speech.message)
+				speech.message = derpspeech(speech.message)
 			else
-				shownmessage = tumblrspeech(speech.message)
-				shownmessage = nekospeech(speech.message)
+				speech.message = tumblrspeech(speech.message)
+				speech.message = nekospeech(speech.message)
 			speaker_name = pick(clown_names)
 		var/datum/faction/bloodcult = find_active_faction_by_member(iscultist(L))
 		for(var/datum/role/cultist/C in bloodcult.members)
@@ -563,9 +562,11 @@
 			if (M.current && iscultist(M.current))//failsafe for cultist brains put in MMIs
 				to_chat(M.current, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinisterbig'>[speech.message]</span></B></span>")
 		for(var/mob/living/simple_animal/astral_projection/A in astral_projections)
-			to_chat(A, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[shownmessage]</span></span>")
+			to_chat(A, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[speech.message]</span></span>")
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[shownmessage]</span></span>")
+			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[speech.message]</span></span>")
+		if(arcanetampered && prob(50))
+			L.radio(speech,MODE_HEADSET) //busted!
 		log_cultspeak("[key_name(speech.speaker)] Cult Communicate Rune: [rendered_message]")
 
 /obj/effect/cult_ritual/cult_communication/HasProximity(var/atom/movable/AM)
