@@ -28,9 +28,9 @@
 		if(A.short_name)
 			. = A.short_name
 		else
-			. = replacetext(format_text(get_first_word(.)),"'s","")
+			. = replacetext(format_text(get_first_word(A.name)),"'s","")
 	else
-		. = format_text ? format_text(.) : .
+		. = format_text ? format_text(A.name) : A.name
 
 /proc/get_coordinates_string(var/atom/A)
 	var/turf/T = get_turf(A)
