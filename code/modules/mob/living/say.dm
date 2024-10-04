@@ -556,7 +556,7 @@ var/list/headset_modes = list(
 				var/inserter = uppertext(VI.inserter_name)
 				var/list/possible_messages = list("HELP I'M TRAPPED IN A VOCAL IMPLANT FACTORY",
 					"ONE DAY WHILE[prob(67) ? " ANDY" : (prob(50) ? " WAS" : "")]",
-					"HELP [inserter && prob(50) ? inserter : "TATOR"] KILLING ME[loc && prob(50) ? " IN [uppertext(get_area_short_name(src))]" : ""]",
+					"HELP [inserter && prob(50) ? inserter : "TATOR"] KILLING ME[loc && prob(50) ? " IN [uppertext(get_area_name(src,short=TRUE))]" : ""]",
 					"[inserter && prob(50) ? inserter : "SOMEONE"] PUT A VOCAL IMPLANT IN ME AND MADE ME SAY THIS")
 				if(VI.rawcode != "")
 					var/list/rawcodelines = splittext(VI.rawcode,";")
@@ -592,7 +592,7 @@ var/list/headset_modes = list(
 						possible_messages += list("I HAVE AN EXPLOSIVE IMPLANT IN ME TRY TO GUESS THE PHRASE",
 							"[prob(50) ? "MY EXPLOSIVE IMPLANT PHRASE IS " : ""][uppertext(copytext(E.phrase,1,rand(2,length(E.phrase))))]-")
 				if(locate(/obj/effect/rune) in view(client ? client.view : world.view,src))
-					possible_messages += list("IT'S CULT","CULT [loc && prob(50) ? " IN [uppertext(get_area_short_name(src))]" : ""]")
+					possible_messages += list("IT'S CULT","CULT [loc && prob(50) ? " IN [uppertext(get_area_name(src,short=TRUE))]" : ""]")
 				for(var/obj/machinery/nuclearbomb/nuke in nuclear_bombs)
 					if(text2num(nuke.r_code))
 						possible_messages += list("THE BOMB CODE IS [copytext(nuke.r_code,1,rand(2,length(nuke.r_code)))]-")
