@@ -663,6 +663,7 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/asteroid					// -- TLE
 	name = "\improper Asteroid"
+	short_name = "Roid"
 	icon_state = "asteroid"
 	requires_power = 0
 	shuttle_can_crush = FALSE
