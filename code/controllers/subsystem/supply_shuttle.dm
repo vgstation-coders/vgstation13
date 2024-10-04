@@ -124,7 +124,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 		if(!destination)
 			message_admins("WARNING: Cargo shuttle unable to find the station!")
-			warning("Cargo shuttle can't find centcomm")
+			warning("Cargo shuttle can't find station")
 	else //at station
 		for(var/obj/structure/shuttle/engine/propulsion/P in cargo_shuttle.linked_area)
 			spawn()
@@ -168,6 +168,12 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	for(var/datum/centcomm_order/O in deferred_orders)
 		if(O.CheckShuttleObject(A,in_crate,preserve))
 			return
+
+/datum/subsystem/supply_shuttle/proc/scrub()
+	for (var/obj/effect/decal/cleanable/C in cargo_shuttle.linked_area)
+		qdel(C)
+	for (var/obj/effect/rune/R in cargo_shuttle.linked_area)
+		qdel(R)
 
 /datum/subsystem/supply_shuttle/proc/sell()
 
@@ -312,7 +318,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			continue
 		var/contcount
 		for(var/atom/A in T.contents)
-			if(islightingoverlay(A))
+			if(islightingoverlay(A) || istype(A, /obj/machinery/conveyor))
 				continue
 			contcount++
 		if(contcount)
@@ -373,6 +379,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			var/atom/B2 = new typepath(A)
 			if(SP.amount && B2:amount)
 				B2:amount = SP.amount
+			B2.on_vending_machine_spawn()
 			slip.info += "<li>[B2.name]</li>" //add the item to the manifest
 
 		SP.post_creation(A)
@@ -463,14 +470,16 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			if(CF.one_access && istype(CF.associated_crate, /obj/structure/closet))
 				CF.associated_crate:req_one_access = CF.one_access
 
+			var/this_amount = CF.amount
 			for(var/typepath in CF.contains)
 				if(!typepath)
 					continue
 				var/atom/B2 = new typepath(CF.associated_crate)
 				if(istype(B2,/obj/item/stack))
 					var/obj/item/stack/S = B2
-					if(CF.amount && S.amount)
-						S.amount = CF.amount < S.max_amount ? CF.amount : S.max_amount // Just cap it here
+					if(this_amount && S.amount)
+						S.amount = min(this_amount,S.max_amount)
+						this_amount -= S.amount //leave the count over for the next pile until the last has the remainder under it
 			for(var/atom/thing in CF.associated_crate)
 				CF.associated_manifest.info += "<li>[thing.name]</li>" //add the item to the manifest
 				CF.initial_contents += thing

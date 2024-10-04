@@ -6,6 +6,7 @@
 	name = "remote gallery computer"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "artcomp"
+	moody_state = "overlay_artcomp"
 	anchored = 1
 	density = 1
 	req_access = list(access_library) //This access requirement is currently only used for the delete button showing
@@ -89,6 +90,9 @@
 			if(C) last_id_processed = C.id
 			var/author = C.author
 			var/datum/custom_painting/the_painting = json2painting(C.content)
+			if(!the_painting)
+				message_admins("The remote gallery tried to render a painting with blank content, which it can't display. <A style='color:red' href='?src=\ref[src];del=[C.id]'>\[Delete\]</A>")
+				continue
 			var/controls =  "<A href='?src=\ref[src];id=[C.id]'>\[Order\]</A>"
 			if(isAdminGhost(user))
 				author += " (<A style='color:red' href='?src=\ref[src];delbyckey=[ckey(C.ckey)]'>[ckey(C.ckey)])</A>)"
@@ -132,9 +136,23 @@
 /obj/machinery/computer/library/checkout/remote_gallery/make_external_book(var/datum/cachedbook/newbook)
 	if(!newbook)
 		return
-	var/obj/item/mounted/frame/painting/custom/C = new(get_turf(src))
+
+	var/obj/item/mounted/frame/painting/custom/C
+	var/datum/custom_painting/painting_data = json2painting(newbook.content, newbook.title, newbook.author, newbook.description)
+
+	//pick a canvas that fits the bitmap size.
+	if (painting_data.bitmap_width == 24)
+		if (painting_data.bitmap_height == 24)
+			C = new/obj/item/mounted/frame/painting/custom/large(get_turf(src))
+		else
+			C = new/obj/item/mounted/frame/painting/custom/landscape(get_turf(src))
+	else if(painting_data.bitmap_height == 24)
+		C = new/obj/item/mounted/frame/painting/custom/portrait(get_turf(src))
+	else
+		C = new/obj/item/mounted/frame/painting/custom(get_turf(src))
+
 	C.name = "[newbook.title] by [newbook.author]"
 	C.desc = newbook.description
-	C.set_painting_data(json2painting(newbook.content, newbook.title, newbook.author, newbook.description))
+	C.set_painting_data(painting_data)
 	C.update_painting(TRUE)
 	return C

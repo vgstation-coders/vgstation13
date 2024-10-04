@@ -16,6 +16,7 @@ var/global/num_vending_terminals = 1
 	desc = "Just add capitalism!"
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "empty"
+	var/moody_state = null
 	var/obj/structure/vendomatpack/pack = null
 	anchored = 1
 	density = 1
@@ -26,6 +27,7 @@ var/global/num_vending_terminals = 1
 	var/active = 1		//No sales pitches if off!
 	var/vend_ready = 1	//Are we ready to vend?? Is it time??
 	var/vend_delay = 10	//How long does it take to vend?
+	var/vend_sound = null
 	var/shoot_chance = 2 //How often do we throw items?
 	var/datum/data/vending_product/currently_vending = null // A /datum/data/vending_product instance of what we're paying for right now.
 	// To be filled out at compile time
@@ -57,7 +59,6 @@ var/global/num_vending_terminals = 1
 	var/list/slogan_languages = list()
 	var/icon_vend				//Icon_state when vending!
 	var/icon_deny				//Icon_state when vending!
-	//var/emagged = 0			//Ignores if somebody doesn't have card access to that machine.
 	var/seconds_electrified = 0	//Shock customers like an airlock.
 	var/shoot_inventory = 0		//Fire items at customers! We're broken!
 	var/shut_up = 0				//Stop spouting those godawful pitches!
@@ -67,7 +68,7 @@ var/global/num_vending_terminals = 1
 	var/dont_render_OOS = FALSE
 	var/obj/item/weapon/coin
 	var/datum/wires/vending/wires = null
-	var/list/overlays_vending[2]//1 is the panel layer, 2 is the dangermode layer
+	var/image/panel_icon
 
 	var/list/vouchers
 	var/obj/item/weapon/storage/lockbox/coinbox/coinbox
@@ -78,6 +79,9 @@ var/global/num_vending_terminals = 1
 	var/machine_id = "#"
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK
+
+	light_power_on = 0.5
+	light_range_on = 1.4
 
 	var/account_first_linked = 1
 	var/is_custom_machine = FALSE // true if this vendor supports editing the prices
@@ -90,7 +94,6 @@ var/global/num_vending_terminals = 1
 		/datum/malfhack_ability/oneuse/overload_quiet,
 		/datum/malfhack_ability/oneuse/emag
 	)
-
 
 /atom/movable/proc/product_name()
 	return name
@@ -131,13 +134,14 @@ var/global/num_vending_terminals = 1
 	machine_id = "[name] #[multinum_display(num_vending_machines,4)]"
 	num_vending_machines++
 
-	overlays_vending[1] = "[icon_state]-panel"
+	panel_icon = image(icon, src,"[icon_state]-panel")
 
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/vendomat,\
 		/obj/item/weapon/stock_parts/matter_bin,\
 		/obj/item/weapon/stock_parts/manipulator,\
-		/obj/item/weapon/stock_parts/scanning_module\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/storage/lockbox/coinbox\
 	)
 
 	RefreshParts()
@@ -150,8 +154,6 @@ var/global/num_vending_terminals = 1
 		last_slogan = world.time + rand(0, slogan_delay)
 
 		power_change()
-
-	coinbox = new(src)
 
 	for(var/langname in slogan_languages)
 		if(istext(langname))
@@ -187,6 +189,10 @@ var/global/num_vending_terminals = 1
 			manipcount += SP.rating
 	shoot_chance = manipcount * 3
 
+	coinbox = locate() in component_parts
+	if(!coinbox)
+		coinbox = new(src)
+
 /obj/machinery/vending/Destroy()
 	if(wires)
 		QDEL_NULL(wires)
@@ -197,15 +203,18 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/splashable()
 	return FALSE
 
+/obj/machinery/vending/spillContents(destroy_chance)
+	. = ..()
+	dump_vendpack_and_coinbox()
+
 /obj/machinery/vending/proc/dump_vendpack_and_coinbox()
 	if(product_records.len && cardboard) //Only spit out if we have slotted cardboard
+		var/obj/structure/vendomatpack/custom/newpack = new(src.loc)
 		if(is_custom_machine)
-			var/obj/structure/vendomatpack/custom/newpack = new(src.loc)
 			for(var/obj/item/I in custom_stock)
 				I.forceMove(newpack)
 				custom_stock.Remove(I)
 		else
-			var/obj/structure/vendomatpack/partial/newpack = new(src.loc)
 			newpack.stock = products
 			newpack.secretstock = contraband
 			newpack.preciousstock = premium
@@ -216,7 +225,8 @@ var/global/num_vending_terminals = 1
 			newpack.targetvendomat = src.type
 
 	if(coinbox)
-		coinbox.forceMove(get_turf(src))
+		coinbox.forceMove(src.loc)
+		coinbox = null
 
 /obj/machinery/vending/examine(var/mob/user)
 	..()
@@ -282,7 +292,6 @@ var/global/num_vending_terminals = 1
 				if(user.machine==src)
 					newmachine.attack_hand(user)
 				component_parts = 0
-				qdel(coinbox)
 				qdel(src)
 			else
 				is_being_filled = FALSE
@@ -539,7 +548,7 @@ var/global/num_vending_terminals = 1
 		var/obj/item/weapon/spacecash/C = W
 		pay_with_cash(C, user)
 
-	else if(istype(W, /obj/item/weapon/card/emag))
+	else if(isEmag(W))
 		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
 		to_chat(user, "<span class='notice'>You swipe \the [W] through [src]</span>")
 		if (emag_act())
@@ -590,7 +599,7 @@ var/global/num_vending_terminals = 1
 			custom_stock += item
 			if(item.loc != src)
 				item.forceMove(src)
-			update_vicon()
+			update_icon()
 			return
 	//If this code block is reached, no existing vending_product exists, so we must create one
 	var/datum/data/vending_product/R = new()
@@ -605,7 +614,7 @@ var/global/num_vending_terminals = 1
 		item.forceMove(src)
 	product_records += R
 	custom_stock += item
-	update_vicon()
+	update_icon()
 
 /obj/machinery/vending/proc/connect_to_user_account(mob/user)
 	var/new_account = input(user,"Please enter the account to connect to.","New account link") as num
@@ -733,26 +742,18 @@ var/global/num_vending_terminals = 1
 		return
 
 	stat |= NOPOWER
-	src.update_vicon()
-	src.visible_message("<span class='warning'>[src] goes off!</span>")
+	update_icon()
+	visible_message("<span class='warning'>[src] goes off!</span>")
 
 	spawn(ticks)
 
 	power_change()
 
-/obj/machinery/vending/proc/update_vicon()
-	if(stat & (BROKEN))
-		src.icon_state = "[initial(icon_state)]-broken"
-	else if (stat & (NOPOWER|FORCEDISABLE))
-		src.icon_state = "[initial(icon_state)]-off"
-	else
-		src.icon_state = "[initial(icon_state)]"
-
 /obj/machinery/vending/proc/damaged(var/coef=1)
 	src.health -= 4*coef
 	if(src.health <= 0)
 		stat |= BROKEN
-		src.update_vicon()
+		update_icon()
 		return
 	if(prob(2*coef)) //Jackpot!
 		malfunction()
@@ -790,7 +791,7 @@ var/global/num_vending_terminals = 1
 	if(!isAdminGhost(usr) && (user.lying || user.incapacitated()))
 		return 0
 
-	if(M_TK in user.mutations && user.a_intent == "hurt" && iscarbon(user))
+	if((M_TK in user.mutations) && user.a_intent == "hurt" && iscarbon(user))
 		if(!Adjacent(user))
 			to_chat(user, "<span class='danger'>You slam \the [src] with your mind!</span>")
 			visible_message("<span class='danger'>[src] dents slightly, as if it was struck!</span>")
@@ -1065,7 +1066,7 @@ var/global/num_vending_terminals = 1
 				products -= I
 				break
 	product_records -= R
-	update_vicon()
+	update_icon()
 	qdel(R)
 
 /obj/machinery/vending/arcane_act(mob/user)
@@ -1091,6 +1092,9 @@ var/global/num_vending_terminals = 1
 			if(real_coin.string_attached)
 				if(prob(50))
 					to_chat(user, "<SPAN CLASS='notice'>You successfully pulled \the [coin] out before \the [src] could swallow it.</SPAN>")
+					return_coin = 1
+				else if(prob(real_coin.luckiness/10))
+					to_chat(user, "<SPAN CLASS='notice'>You just barely were able to pull \the [coin] out before [src] could swallow it, lucky!</SPAN>")
 					return_coin = 1
 				else
 					to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull \the [coin] out fast enough, the machine ate it, string and all.</SPAN>")
@@ -1118,12 +1122,16 @@ var/global/num_vending_terminals = 1
 	R.amount--
 	src.updateUsrDialog()
 	visible_message("\The [src.name] whirrs as it vends.", "You hear a whirr.")
+	if (vend_sound)
+		playsound(loc, vend_sound, 50, 0)
 	spawn(vend_delay)
 		if(!R.custom)
 			var/path2use = R.product_path
 			if(arcanetampered && prob(90))
 				path2use = /obj/item/weapon/bikehorn/rubberducky  // BONUS DUCKS! refunds
 			var/atom/A = new path2use(get_turf(src))
+			A.on_vending_machine_spawn()
+			A.update_temperature_overlays()
 			if(arcanetampered && path2use == R.product_path)
 				A.arcane_act(user)
 		else
@@ -1135,7 +1143,7 @@ var/global/num_vending_terminals = 1
 					custom_stock.Remove(O)
 					break
 		src.vend_ready = 1
-		update_vicon()
+		update_icon()
 		src.updateUsrDialog()
 
 /obj/machinery/vending/proc/on_return_coin_detect(mob/user)
@@ -1202,11 +1210,11 @@ var/global/num_vending_terminals = 1
 	if(!(stat & BROKEN))
 		if( powered() )
 			stat &= ~NOPOWER
-			update_vicon()
+			update_icon()
 		else
 			spawn(rand(0, 15))
 				stat |= NOPOWER
-				update_vicon()
+				update_icon()
 
 
 //Oh no we're malfunctioning!  Dump out some product and break.
@@ -1216,7 +1224,7 @@ var/global/num_vending_terminals = 1
 		throw_item()
 		lost_inventory--
 	stat |= BROKEN
-	update_vicon()
+	update_icon()
 
 //Somebody cut an important wire and now we're following a new definition of "pitch."
 /obj/machinery/vending/proc/throw_item()
@@ -1269,14 +1277,23 @@ var/global/num_vending_terminals = 1
 	return 0
 
 /obj/machinery/vending/update_icon()
-	if(panel_open)
-		overlays += overlays_vending[1]
+	if(stat & (BROKEN))
+		icon_state = "[initial(icon_state)]-broken"
+		kill_moody_light()
+		set_light(0)
+	else if (stat & (NOPOWER|FORCEDISABLE))
+		icon_state = "[initial(icon_state)]-off"
+		kill_moody_light()
+		set_light(0)
 	else
-		overlays -= overlays_vending[1]
+		icon_state = "[initial(icon_state)]"
+		if (moody_state)
+			update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
+		set_light(light_range_on, light_power_on)
 
-	overlays -= overlays_vending[2]
-	if(emagged)
-		overlays += overlays_vending[2]
+	overlays -= panel_icon
+	if(panel_open)
+		overlays += panel_icon
 
 /obj/machinery/vending/wirejack(var/mob/living/silicon/pai/P)
 	if(..())
@@ -1318,6 +1335,7 @@ var/global/num_vending_terminals = 1
 	desc = "A vending machine containing multiple drinks for bartending."
 	req_access = list(access_bar)
 	icon_state = "boozeomat"        //////////////18 drink entities below, plus the glasses, in case someone wants to edit the number of bottles
+	moody_state = "overlay_vending_boozeomat"
 	icon_deny = "boozeomat-deny"
 	products = list(
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/gin = 5,
@@ -1389,6 +1407,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper StockPro"
 	desc = "A vending machine containing generic stock parts and assemblies."
 	icon_state = "generic"
+	moody_state = "overlay_vending_generic"
 	products = list(
 		/obj/item/device/assembly/prox_sensor = 5,
 		/obj/item/device/assembly/igniter = 3,
@@ -1441,11 +1460,15 @@ var/global/num_vending_terminals = 1
 		"Coffee helps you work!",
 		"Try some tea.",
 		"We hope you like the best!",
-		"Try our new chocolate!"
+		"Try our new chocolate!",
+		"Count to ten for your drink to be at safe temperature... If you're unrobust that is!"
 	)
+	vend_reply = "Count to ten for your drink to be at safe temperature."
 	icon_state = COFFEE
 	icon_vend = "coffee-vend"
+	moody_state = "overlay_vending_coffee"
 	vend_delay = 34
+	vend_sound = 'sound/machines/vending_machines/vend_coffee.ogg'
 	products = list(
 		/obj/item/weapon/reagent_containers/food/drinks/coffee = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/espresso = 30,
@@ -1459,6 +1482,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/drinks/tomatosoup = 3,
+		/obj/item/weapon/reagent_containers/food/drinks/thermos = 3,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/ice = 10,
@@ -1505,6 +1529,7 @@ var/global/num_vending_terminals = 1
 		"Try our new jerky!"
 	)
 	icon_state = "snack"
+	moody_state = "overlay_vending_snack"
 	icon_vend = "snack-vend"
 	vend_delay = 25
 	products = list(
@@ -1562,6 +1587,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper Robust Softdrinks"
 	desc = "A softdrink vendor provided by Robust Industries, LLC."
 	icon_state = "Cola_Machine"
+	moody_state = "overlay_vending_cola"
 	icon_vend = "Cola_Machine-vend"
 	vend_delay = 11
 	product_slogans = list(
@@ -1606,6 +1632,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper Offworld Off-Licence"
 	desc = "A vendor containing all you need to drown your sorrows and your finances."
 	icon_state = "offlicence"
+	moody_state = "overlay_vending_offlicence"
 	product_slogans = list(
 		"Offworld Off-Licence: Think outcider the box!",
 		"People may abandon you, but alcohol will always be there for you.",
@@ -1656,6 +1683,7 @@ var/global/num_vending_terminals = 1
 	req_access = list(access_change_ids)
 	product_slogans = list("Carts to go!")
 	icon_state = "cart"
+	moody_state = "overlay_vending_cart"
 	icon_deny = "cart-deny"
 	icon_vend = "cart-vend"
 	products = list(
@@ -1704,6 +1732,8 @@ var/global/num_vending_terminals = 1
 		"Award-winning cigs."
 	)
 	icon_state = "cigs"
+	moody_state = "overlay_vending_cigs"
+	light_power_on = 1
 	icon_vend = "cigs-vend"
 	vend_delay = 21
 	products = list(
@@ -1744,6 +1774,8 @@ var/global/num_vending_terminals = 1
 	desc = "A vending machine containing medical supplies."
 	req_access = list(access_medical)
 	icon_state = "med"
+	moody_state = "overlay_vending_med"
+	light_power_on = 2
 	icon_deny = "med-deny"
 	icon_vend = "med-vend"
 	vend_delay = 18
@@ -1825,6 +1857,8 @@ var/global/num_vending_terminals = 1
 		"Don't you want some?"
 	)
 	icon_state = "wallmed"
+	moody_state = "overlay_vending_wallmed"
+	light_power_on = 2
 	icon_deny = "wallmed-deny"
 	density = 0 //It is wall-mounted, and thus, not dense. --Superxpdude
 	products = list(
@@ -1849,6 +1883,8 @@ var/global/num_vending_terminals = 1
 	desc = "Wall-mounted medical equipment dispenser."
 	//req_access = list(access_medical)
 	icon_state = "wallmed"
+	moody_state = "overlay_vending_wallmed"
+	light_power_on = 2
 	icon_deny = "wallmed-deny"
 	density = 0 //It is wall-mounted, and thus, not dense. --Superxpdude
 	products = list(
@@ -1934,6 +1970,10 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/wallmed_frame/update_icon()
 	icon_state = "wallmed_frame[build]"
+	if (build == 3)
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_vending_wallmed")
+	else
+		kill_moody_light()
 
 /obj/machinery/wallmed_frame/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	switch(build)
@@ -2071,6 +2111,7 @@ var/global/num_vending_terminals = 1
 		"Why not have a donut?"
 	)
 	icon_state = "sec"
+	moody_state = "overlay_vending_sec"
 	icon_deny = "sec-deny"
 	icon_vend = "sec-vend"
 	vend_delay = 14
@@ -2153,6 +2194,7 @@ var/global/num_vending_terminals = 1
 	icon_state = "nutri"
 	icon_deny = "nutri-deny"
 	icon_vend = "nutri-vend"
+	moody_state = "overlay_vending_nutri"
 	vend_delay = 26
 	products = list(
 		/obj/item/weapon/reagent_containers/food/snacks/beezeez = 20,
@@ -2187,6 +2229,7 @@ var/global/num_vending_terminals = 1
 		"Aw h'yeah son!"
 	)
 	icon_state = "seeds"
+	moody_state = "overlay_vending_seeds"
 	icon_vend = "seeds-vend"
 	vend_delay = 13
 	products = list(
@@ -2237,6 +2280,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/plumpmycelium = 2,
 		/obj/item/seeds/reishimycelium = 2,
 		/obj/item/seeds/harebell = 3,
+		/obj/item/seeds/dandelionseed = 3,
 		)//,/obj/item/seeds/synthbuttseed = 3)
 	premium = list(
 		/obj/item/toy/waterflower = 1,
@@ -2259,6 +2303,7 @@ var/global/num_vending_terminals = 1
 		"Vox food being best."
 	)
 	icon_state = "voxseed"
+	moody_state = "overlay_vending_voxseed"
 	products = list(
 		/obj/item/seeds/breadfruit = 3,
 		/obj/item/seeds/woodapple = 3,
@@ -2283,6 +2328,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper MagiVend"
 	desc = "A mystical vending machine containing magical garments and magic supplies."
 	icon_state = "MagiVend"
+	moody_state = "overlay_vending_magi"
 	product_slogans = list(
 		"Sling spells the proper way with MagiVend!",
 		"Be your own Houdini! Use MagiVend!"
@@ -2352,6 +2398,7 @@ var/global/num_vending_terminals = 1
 		"You don't really need these..."
 	)
 	icon_state = "dinnerware"
+	moody_state = "overlay_vending_dinnerware"
 	icon_vend = "dinnerware-vend"
 	products = list(
 		/obj/item/weapon/tray = 8,
@@ -2385,6 +2432,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper BODA"
 	desc = "An old vending machine containing sweet water."
 	icon_state = "sovietsoda"
+	moody_state = "overlay_vending_sovietsoda"
 	icon_vend = "sovietsoda-vend"
 	product_slogans = list(
 		"BODA: We sell drink.",
@@ -2419,6 +2467,8 @@ var/global/num_vending_terminals = 1
 	desc = "A vending machine containing standard tools. A label reads: \"Tools for tools.\""
 	//req_access = list(access_maint_tunnels)
 	icon_state = "tool"
+	moody_state = "overlay_vending_tool"
+	light_power_on = 1
 	icon_deny = "tool-deny"
 	icon_vend = "tool-vend"
 	vend_delay = 11
@@ -2450,6 +2500,7 @@ var/global/num_vending_terminals = 1
 	desc = "Spare tool vending. What? Did you expect some witty description?"
 	req_access = list(access_engine_minor)//Engineering Equipment access
 	icon_state = "engivend"
+	moody_state = "overlay_vending_engivend"
 	icon_deny = "engivend-deny"
 	icon_vend = "engivend-vend"
 	vend_delay = 21
@@ -2488,6 +2539,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper Habitat Depot"
 	desc = "Habitat, sweet habitat. All you need for remodeling."
 	icon_state = "building"
+	moody_state = "overlay_vending_building"
 	products = list(
 		/obj/item/stack/sheet/metal/bigstack = 10,
 		/obj/item/stack/sheet/glass/glass/bigstack = 10,
@@ -2528,6 +2580,7 @@ var/global/num_vending_terminals = 1
 	desc = "A vending machine containing many engineering supplies. A label reads: \"Everything you need for do-it-yourself station repair.\""
 	req_access = list(access_engine_minor)
 	icon_state = "engi"
+	moody_state = "overlay_vending_engi"
 	icon_deny = "engi-deny"
 	products = list(
 		/obj/item/clothing/under/rank/engineer = 4,
@@ -2584,6 +2637,7 @@ var/global/num_vending_terminals = 1
 	desc = "A vending machine containing roboticizing supplies. A label reads: \"All the tools you need to create your own robot army.\""
 	req_access = list(access_robotics)
 	icon_state = "robotics"
+	moody_state = "overlay_vending_robotics"
 	icon_deny = "robotics-deny"
 	products = list(
 		/obj/item/clothing/suit/storage/labcoat = 4,
@@ -2611,6 +2665,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper AutoDrobe"
 	desc = "A vending machine containing costumes."
 	icon_state = "theater"
+	moody_state = "overlay_vending_theater"
 	icon_deny = "theater-deny"
 	req_access = list(access_theatre)
 	product_slogans = list(
@@ -2721,7 +2776,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/mask/gas/oni = 3,
 		/obj/item/clothing/head/helmet/samurai = 3,
 		/obj/item/clothing/suit/armor/samurai = 3,
-		/obj/item/toy/syndicateballoon/green = 1,
+		/obj/item/clothing/gloves/fyellow/insulted = 3,
+		/obj/item/toy/syndicateballoon/green = 1
 		)
 
 	pack = /obj/structure/vendomatpack/autodrobe
@@ -2730,6 +2786,8 @@ var/global/num_vending_terminals = 1
 	name = "\improper Hatlord 9000"
 	desc = "A vending machine containing hats."
 	icon_state = "hats"
+	moody_state = "overlay_vending_hats"
+	light_power_on = 1
 	vend_reply = "Take care now!"
 	product_ads = list(
 		"Buy some hats!",
@@ -2789,6 +2847,8 @@ var/global/num_vending_terminals = 1
 	name = "\improper Suitlord 9000"
 	desc = "A vending machine containing jumpsuits and dress garments."
 	icon_state = "suits"
+	moody_state = "overlay_vending_suits"
+	light_power_on = 1
 	vend_reply = "Come again!"
 	product_ads = list(
 		"Skinny? Looking for some clothes? Suitlord is the machine for you!",
@@ -2834,14 +2894,23 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/storage/greaserjacket/snakes = 10,
 		/obj/item/clothing/under/sl_suit = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/grey = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/black = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/brown = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/red = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/darkred = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/orange = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/yellow = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/green = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/darkgreen = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/lime = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/blue = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/darkblue = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/purple = 10,
-		/obj/item/clothing/suit/storage/wintercoat/hoodie/yellow = 10,
-		/obj/item/clothing/suit/storage/wintercoat/hoodie/orange = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/darkpurple = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/pink = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/cyan = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/teal =10
 		)
 	contraband = list(
 		/obj/item/clothing/under/syndicate/tacticool = 5,
@@ -2862,6 +2931,8 @@ var/global/num_vending_terminals = 1
 	name = "\improper Shoelord 9000"
 	desc = "A vending machine containing footwear."
 	icon_state = "shoes"
+	moody_state = "overlay_vending_shoes"
+	light_power_on = 1
 	vend_reply = "Enjoy your pair!"
 	product_ads = list(
 		"Dont be a hobbit: Choose Shoelord.",
@@ -2901,6 +2972,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper Nazivend"
 	desc = "A vending machine containing Nazi German supplies. A label reads: \"Remember the gorrilions lost.\""
 	icon_state = "nazi"
+	moody_state = "overlay_vending_nazi"
 	vend_reply = "SIEG HEIL!"
 	product_ads = list(
 		"BESTRAFEN die Juden.",
@@ -2942,12 +3014,13 @@ var/global/num_vending_terminals = 1
 		contraband[/obj/item/weapon/gun/energy/plasma/MP40k] = 4
 		src.build_inventory(contraband, 1)
 		emagged = 1
-		overlays = 0
-		var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
-		dangerlay.plane = ABOVE_LIGHTING_PLANE
-		overlays_vending[2] = dangerlay
 		update_icon()
 		return 1
+
+/obj/machinery/vending/nazivend/update_icon()
+	..()
+	if(emagged && !(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
+		icon_state = "nazi-dangermode"
 
 //NaziVend++
 /obj/machinery/vending/nazivend/DANGERMODE
@@ -2975,9 +3048,6 @@ var/global/num_vending_terminals = 1
 	..()
 	emagged = 1
 	overlays = 0
-	var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
-	dangerlay.plane = ABOVE_LIGHTING_PLANE
-	overlays_vending[2] = dangerlay
 	update_icon()
 
 //MOTHERBUSLAND
@@ -2985,6 +3055,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper KomradeVendtink"
 	desc = "Rodina-mat' zovyot!"
 	icon_state = "soviet"
+	moody_state = "overlay_vending_soviet"
 	vend_reply = "The fascist and capitalist svin'ya shall fall, komrade!"
 	product_ads = list(
 		"Quality worth waiting in line for!",
@@ -3025,13 +3096,14 @@ var/global/num_vending_terminals = 1
 		contraband[/obj/item/weapon/gun/energy/laser/LaserAK] = 4
 		src.build_inventory(contraband, 1)
 		emagged = 1
-		overlays = 0
-		var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
-		dangerlay.plane = ABOVE_LIGHTING_PLANE
-		overlays_vending[2] = dangerlay
 		update_icon()
 		return 1
 	return
+
+/obj/machinery/vending/sovietvend/update_icon()
+	..()
+	if(emagged && !(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
+		icon_state = "soviet-dangermode"
 
 //SovietVend++
 /obj/machinery/vending/sovietvend/DANGERMODE
@@ -3058,10 +3130,6 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/sovietvend/DANGERMODE/New()
 	..()
 	emagged = 1
-	overlays = 0
-	var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
-	dangerlay.plane = ABOVE_LIGHTING_PLANE
-	overlays_vending[2] = dangerlay
 	update_icon()
 
 /obj/machinery/vending/discount
@@ -3081,6 +3149,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "No refunds."
 	icon_state = DISCOUNT
+	moody_state = "overlay_vending_discount"
 	products = list(
 		/obj/item/weapon/reagent_containers/food/snacks/discountchocolate = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/danitos = 6,
@@ -3133,6 +3202,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "No refunds."
 	icon_state = "groans"
+	moody_state = "overlay_vending_groans"
 	products = list(
 		/obj/item/weapon/reagent_containers/food/drinks/groans = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/filk = 10,
@@ -3170,6 +3240,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "Enjoy a Nuka break!"
 	icon_state = "nuka"
+	moody_state = "overlay_vending_nuka"
 	products = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka = 15)
 	prices = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka = 20, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum = 50)
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum = 5)
@@ -3190,6 +3261,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "Deus vult!"
 	icon_state = "chapel"
+	moody_state = "overlay_vending_chapel"
 	products = list(
 		/obj/item/clothing/under/rank/chaplain = 2,
 		/obj/item/clothing/shoes/laceup = 2,
@@ -3252,9 +3324,11 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "Time to shine!"
 	icon_state = "voxoutfitter"
+	moody_state = "overlay_vending_voxoutfitter"
 	products = list (
 		/obj/item/clothing/suit/storage/trader = 3,
 		/obj/item/device/pda/trader = 3,
+		/obj/item/device/megaphone = 3,
 		/obj/item/weapon/card/id/vox/extra = 3,
 		/obj/item/weapon/stamp/trader = 3,
 		/obj/item/crackerbox = 1,
@@ -3268,6 +3342,7 @@ var/global/num_vending_terminals = 1
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
 		/obj/item/device/pda/trader = 100,
+		/obj/item/device/megaphone = 100,
 		/obj/item/weapon/card/id/vox/extra = 100,
 		/obj/item/weapon/stamp/trader = 20,
 		/obj/item/crackerbox = 200,
@@ -3300,6 +3375,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "Enjoy your new look!"
 	icon_state = "barber"
+	moody_state = "overlay_vending_barber"
 	products = list(
 		/obj/item/weapon/hair_dye = 4,
 		/obj/item/weapon/razor = 4,
@@ -3329,6 +3405,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "The other girls will be so envious."
 	icon_state = "makeup"
+	moody_state = "overlay_vending_makeup"
 	products = list(
 		/obj/item/weapon/eyeshadow = 3,
 		/obj/item/weapon/eyeshadow/jade = 3,
@@ -3361,6 +3438,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "Tell your friends about the Circus of Values!"
 	icon_state = "circus"
+	moody_state = "overlay_vending_circus"
 	products = list(
 		/obj/item/toy/balloon = 20,
 		/obj/item/toy/waterballoon = 20,
@@ -3412,6 +3490,7 @@ var/global/num_vending_terminals = 1
 	name = "Sales"
 	desc = "Buy, sell, repeat."
 	icon_state = "sale"
+	moody_state = "overlay_vending_sale"
 	is_custom_machine = TRUE
 	//vend_reply = "Insert another joke here"
 	//product_ads = "Another joke here"
@@ -3424,7 +3503,7 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/sale/New()
 	..()
-	update_vicon()
+	update_icon()
 
 /obj/machinery/vending/sale/link_to_account()
 	return
@@ -3439,13 +3518,13 @@ var/global/num_vending_terminals = 1
 	to_chat(user, "<span class='warning'>The machine requires an ID to unlock it.</span>")
 	return 0
 
-/obj/machinery/vending/sale/update_vicon()
-	if(stat & (BROKEN))
-		icon_state = initial(icon_state)+"-broken"
-	else if (stat & (NOPOWER) || custom_stock.len == 0)
-		icon_state = initial(icon_state)+"-off"
+/obj/machinery/vending/sale/update_icon()
+	if(!(stat & BROKEN) && custom_stock.len == 0)
+		icon_state = "[initial(icon_state)]-off"
+		kill_moody_light()
+		set_light(0)
 	else
-		icon_state = initial(icon_state)
+		..()
 
 /obj/machinery/vending/sale/trader
 	name = "TraderVend"
@@ -3480,6 +3559,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "What a glorious time to mine!"
 	icon_state = "mining"
+	moody_state = "overlay_vending_mining"
 	products = list(
 		/obj/item/toy/canary = 10,
 		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 10,
@@ -3507,6 +3587,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/pickaxe/silver = 1,
 		/obj/item/weapon/pickaxe/gold = 1,
 		/obj/item/weapon/pickaxe/diamond = 1,
+		/obj/item/device/modkit/kineticshotgun = 1,
 		/obj/item/borg/upgrade/hook = 1,
 		)
 	prices = list(
@@ -3532,6 +3613,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/gun/hookshot = 300,
 		/obj/item/weapon/lazarus_injector/advanced = 150,
 		/obj/item/weapon/pickaxe/diamond = 300,
+		/obj/item/device/modkit/kineticshotgun = 250,
 		/obj/item/borg/upgrade/hook = 300,
 		)
 
@@ -3544,20 +3626,24 @@ var/global/num_vending_terminals = 1
 		"It's all fun and games at Al's Fun And Games!",
 		"Roll for initiative!",
 		"It's a full house of fun!",
-		"Caves and Wyverns 3rd edition available now!"
+		"Red Core 1st Edition available now!"
 	)
 	product_ads = list(
 		"Sponsored by Warlocks of the Shore.",
 		"Al's Fun And Games Co. is not liable for friendships damaged by use of the Product."
 	)
 	icon_state = "games"
+	moody_state = "overlay_vending_games"
 	products = list(
 		/obj/item/toy/cards = 5,
 		/obj/item/toy/cards/une = 5,
 		/obj/item/weapon/storage/pill_bottle/dice = 5,
 		/obj/item/weapon/storage/pill_bottle/dice/fudge = 5,
 		/obj/item/weapon/storage/pill_bottle/dice/d6 = 5,
-		/obj/item/weapon/storage/pill_bottle/dice/cup = 10
+		/obj/item/weapon/storage/pill_bottle/dice/cup = 10,
+		/obj/item/dicetower = 2,
+		/obj/item/battlemat = 2,
+		/obj/item/weapon/storage/box/redcore = 1
 		)
 	contraband = list(
 		/obj/item/weapon/dice/loaded = 3,
@@ -3577,7 +3663,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/dice/loaded = 15,
 		/obj/item/weapon/dice/loaded/d20 = 15,
 		/obj/item/weapon/skull = 20,
-		/obj/item/weapon/storage/bag/wiz_cards/frog = 20
+		/obj/item/weapon/storage/bag/wiz_cards/frog = 20,
+		/obj/item/dicetower = 50,
+		/obj/item/battlemat = 40,
+		/obj/item/weapon/storage/box/redcore = 60
 		)
 
 	pack = /obj/structure/vendomatpack/games
@@ -3587,6 +3676,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper Team Security Merch"
 	desc = "A refurbished vending machine selling merch for Team Security."
 	icon_state = "teamsec"
+	moody_state = "overlay_vending_teamsec"
 	vend_reply = "Team Security is my Guideline."
 	product_slogans = list(
 		"Security helmet: on. Knuckles: cracked. Clown: brutalized. Yep...it's Team Security time.",
@@ -3632,6 +3722,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper Telecommunications Parts Vendor"
 	desc = "A vending machine containing telecommunications parts."
 	icon_state = "telecomms"
+	moody_state = "overlay_vending_telecomms"
 	products = list(
 		/obj/item/weapon/stock_parts/manipulator = 10,
 		/obj/item/weapon/stock_parts/micro_laser = 5,
@@ -3673,6 +3764,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper Snow Man's Land"
 	desc = "A vending machine for the intrepid snow-settler or pioneer."
 	icon_state = "snow"
+	moody_state = "overlay_vending_snow"
 	vend_reply = "To the Pole!"
 	product_ads = list(
 		"You wouldn't let a little snow stop you.",
@@ -3740,6 +3832,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "The mothership provides."
 	icon_state = "ZamSnax"
+	moody_state = "overlay_vending_zam"
 	products = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash = 8,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz = 8,
@@ -3813,6 +3906,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "Good luck!"
 	icon_state = "Lotto"
+	moody_state = "overlay_vending_lotto"
 	icon_vend = "Lotto-vend"
 	products = list(
 		/obj/item/toy/lotto_ticket/gold_rush = 20,
@@ -3842,7 +3936,7 @@ var/station_jackpot = 1000000
 		to_chat(user,"<span class='notice'>The winning numbers are [english_list(winning_numbers)]</span>")
 
 #define LOTTO_SAMPLE 6
-#define LOTTO_BALLCOUNT 32 //lottery is a topdefine/bottomdefine system
+#define LOTTO_BALLCOUNT 18 //lottery is a topdefine/bottomdefine system
 #if LOTTO_BALLCOUNT < LOTTO_SAMPLE
 #define LOTTO_BALLCOUNT LOTTO_SAMPLE
 #endif
@@ -3990,6 +4084,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		"NT drools, Syndicate Rules.",
 	)
 	icon_state = "syndicatesuits"
+	moody_state = "overlay_vending_syndicatesuits"
 	products = list(
 		/obj/item/clothing/under/syndicate/combat = 2,
 		/obj/item/clothing/under/syndicate/executive = 2,
@@ -4034,6 +4129,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		"This isn't spam! Only real meat here."
 	)
 	icon_state = "meat"
+	moody_state = "overlay_vending_meat"
 	icon_vend = "meat-vend"
 	vend_delay = 25
 	//The vending machine can have a mouse inside of it! If it does, it has a chance to eject it on each vend.
@@ -4082,10 +4178,12 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		)
 	src.build_inventory(products)
 
-/obj/machinery/vending/meat/update_vicon()
+/obj/machinery/vending/meat/update_icon()
 	//Override the usual function so we can run special mouse codes
 	if(stat & (BROKEN))
 		icon_state = "[initial(icon_state)]-broken"
+		kill_moody_light()
+		set_light(0)
 		//If the mouse is still inside, it isn't anymore... rip
 		if(hasmouse)
 			hasmouse = FALSE
@@ -4095,8 +4193,12 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 			return
 	else if (stat & (NOPOWER|FORCEDISABLE))
 		icon_state = "[initial(icon_state)]-off"
+		kill_moody_light()
+		set_light(0)
 	else
 		icon_state = "[initial(icon_state)]"
+		update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
+		set_light(light_range_on, light_power_on)
 	if(!hasmouse)
 		icon_state += "nomouse"
 
@@ -4137,12 +4239,14 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 	product_slogans = list(
 		"Il est temps pour vous de jeter des perles devant ces porcs incultes.",
 		"Oui, j'ai capitulé. Vous pouvez aussi acheter des crayons maintenant.",
-		"Il y a la peinture sur toile, et puis il y a l'art véritable. Pouvez-vous voir la différence ?"
+		"Il y a la peinture sur toile, et puis il y a l'art véritable. Pouvez-vous voir la différence?",
+		"'Omelette du Fromage, Omelette du Fromage!' C'est tout ce que tu peux diiiiiire!"
 	)
 	product_ads = list(
 		"This is not a cigarette vendor."
 	)
 	icon_state = "art"
+	moody_state = "overlay_vending_art"
 	products = list (
 		/obj/item/weapon/storage/toolbox/paint = 2,
 		/obj/item/weapon/storage/fancy/crayons = 2,
@@ -4162,7 +4266,8 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 
 	contraband = list(
 		/obj/item/stack/sheet/wood/bigstack = 3,
-		/obj/item/clothing/mask/cigarette/pipe = 2
+		/obj/item/clothing/mask/cigarette/pipe = 2,
+		/obj/item/weapon/reagent_containers/food/snacks/omelette = 3
 		)
 
 	premium = list(

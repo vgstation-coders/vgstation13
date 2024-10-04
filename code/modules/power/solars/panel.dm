@@ -349,3 +349,28 @@
 
 	if(.)
 		control = null
+
+/obj/machinery/power/solar/panel/silicate_act(var/obj/item/device/silicate_sprayer/S, var/mob/user)
+	if(!S.get_amount())
+		to_chat(user, "<span class='notice'>\The [S] is out of silicate!</span>")
+		return 1
+
+	if(stat & BROKEN)
+		to_chat(user, "<span class='warning'>\The [S] is too damaged.</span>")
+		return 1
+
+	var/diff = initial(health) - health
+	if(!diff) // Not damaged.
+		to_chat(user, "<span class='notice'>\The [src] is already in perfect condition!</span>")
+		return 1
+
+	diff = min(diff, S.get_amount() / SILICATE_PER_DAMAGE)
+
+	health += diff
+	healthcheck(user, FALSE)
+
+	user.visible_message("<span class='notice'>[user] repairs \the [src] with their [S]!</span>", "<span class='notice'>You repair \the [src] with your [S].</span>")
+
+	playsound(src, 'sound/effects/refill.ogg', 10, 1, -6) //Probably will never hear this!
+	S.remove_silicate(diff * SILICATE_PER_DAMAGE)
+	return 1

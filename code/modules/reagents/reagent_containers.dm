@@ -7,13 +7,15 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = null
 	w_class = W_CLASS_TINY
+	heat_conductivity = 0.90
 	var/amount_per_transfer_from_this = 5
 	var/possible_transfer_amounts = list(5,10,15,25,30)
 	var/volume = 30
 	var/amount_per_imbibe = 5
 	var/attack_mob_instead_of_feed //If true, the reagent container will be used as a melee weapon rather than as a vessel to feed another mob with (in attack()).
 
-	var/thermal_entropy_delay = 2 SECONDS//we run thermal_entropy() every X ticks
+	var/image/ice_overlay = null
+	var/ice_alpha = 64
 	var/thermal_variation_from_environment = 0.055//how much of the environmental temperature do we want to match per entropy procs
 	var/thermal_variation_modifier = 1//if set to 0, no entropy will occur in that container. More than 1 means it reaches room temperature quicker.
 
@@ -77,7 +79,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return ..()
 
 /obj/item/weapon/reagent_containers/MiddleAltClick(var/mob/living/user)
-	if(!is_holder_of(user, src))
+	if(!Adjacent(user, src))
 		return
 	if(!reagents || !reagents.total_volume)
 		to_chat(user, "<span class='warning'>\The [src] is desperately empty.</span>")
@@ -88,6 +90,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			to_chat(user, "<span class='warning'>You stare at \the [src] intently. Wishing you had a mouth to interact with it.</span>")
 			return
 	thermal_entropy()
+	blow_act(user)
 	playsound(user, 'sound/effects/blow.ogg', 5, 1, -2)
 	var/can_it_burn = round(user.get_splash_burn_damage(amount_per_imbibe, reagents.chem_temp))
 	if (can_it_burn)
@@ -96,6 +99,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='warning'>It feels pretty cold still...</span>")
 	else
 		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='notice'>Temperature seems safe...</span>")
+
+/obj/item/weapon/reagent_containers/proc/blow_act(var/mob/living/user)
+	return
 
 /obj/item/weapon/reagent_containers/New()
 	..()
@@ -111,7 +117,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(istype(loc, /obj/machinery/iv_drip))
 		var/obj/machinery/iv_drip/holder = loc
 		holder.remove_container()
-	thermal_dissipation_reagents -= reagents
+	thermal_entropy_containers.Remove(src)
 	all_reagent_containers.Remove(src)
 	. = ..()
 
@@ -315,7 +321,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 		if(success)
 			if (success > 0)
-				to_chat(user, "<span class='notice'>You transfer [success] units of the solution to \the [target].</span>")
+				to_chat(user, target.reagent_transfer_message(success))
 
 			return (success)
 	if(!success)
@@ -403,7 +409,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.reaction(user, INGEST, amount_override = min(reagents.total_volume,amount_per_imbibe)/(reagents.reagent_list.len))
 		spawn(5)
 			if(reagents)
+				reagents.adjust_consumed_reagents_temp()
 				reagents.trans_to(user, amount_per_imbibe)
+				reagents.reset_consumed_reagents_temp()
 
 	return 1
 
@@ -449,8 +457,6 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 /obj/item/weapon/reagent_containers/on_reagent_change()
 	. = ..()
-	//Reagent containers can exchange heat with the surrounding air.
-	heat_dissipation_updates() //Every reagent_containers that should be added to the heat dissipation subsystem should call this on_reagent_change(). If you add something that breaks the supercall chain, be sure to call this.
 	process_temperature()
 
 ////////////THERMAL ENTROPY///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -477,6 +483,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		return
 
 	var/diff = air.temperature - reagents.chem_temp
+
+	if (!isturf(loc) && (air.pressure < 100))//low pressure environments slow down entropy, unless the item is laid directly onto the floor so space meat remains frozen until brought in
+		diff *= air.pressure/100
 
 	//we only bother if there's less than a 1 degree difference
 	if (abs(diff) < 2)
@@ -505,3 +514,74 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 /obj/item/weapon/reagent_containers/pickup(var/mob/user)
 	..()
 	process_temperature()
+
+/obj/item/weapon/reagent_containers/update_temperature_overlays()
+	if(reagents && reagents.total_volume)
+		if (reagents.chem_temp <= (T0C+2))
+			ice_alpha = 96 + clamp((-64*((reagents.chem_temp-T0C)/80)),0,64)
+			if(!ice_overlays["[type][icon_state]"])
+				set_ice_overlay()
+			else
+				update_ice_overlay()
+		steam_spawn_adjust(reagents.chem_temp)
+	else
+		remove_particles(PS_STEAM)
+
+///////////ICE OVERLAY///////////////////////////////////////////////////////////////////////////////////////////////////////////
+//appears when the food item's reagents' temperature falls to 0°C or below
+//based on how blood overlays are generated
+
+var/global/list/image/ice_overlays = list()
+/obj/item/weapon/reagent_containers/proc/set_ice_overlay()
+	if(update_ice_overlay())
+		return
+
+	var/icon/I = new /icon(icon, icon_state)
+	//fills the icon_state with white (except where it's transparent)
+	I.Blend(rgb(255,255,255),ICON_ADD)
+	//inspired by urist's old cult rune drawing method, will let us add a 1px ice border around the object
+	var/list/border_pixels = list()
+	for(var/x = 1, x <= 32, x++)
+		for(var/y = 1, y <= 32, y++)
+			var/p = I.GetPixel(x, y)
+
+			if(p == null)
+				var/n = I.GetPixel(x, y + 1)
+				var/s = I.GetPixel(x, y - 1)
+				var/e = I.GetPixel(x + 1, y)
+				var/w = I.GetPixel(x - 1, y)
+
+				if(n == "#ffffff" || s == "#ffffff" || e == "#ffffff" || w == "#ffffff")
+					border_pixels += list(list(x,y))
+	for (var/list/L in border_pixels)
+		I.DrawBox(rgb(255, 255, 255), L[1], L[2])
+	//adds the ice texture
+	I.Blend(new /icon('icons/effects/effects.dmi', "ice"),ICON_MULTIPLY)
+
+	var/image/img = image(I)
+	img.name = "ice_overlay"
+	ice_overlays["[type][icon_state]"] = img
+	update_ice_overlay()
+
+/obj/item/weapon/reagent_containers/proc/update_ice_overlay()
+	if(ice_overlays["[type][icon_state]"])
+		if (ice_overlay)
+			overlays -= ice_overlay
+		ice_overlay = image(ice_overlays["[type][icon_state]"])
+		ice_overlay.appearance_flags = RESET_COLOR|RESET_ALPHA
+		ice_overlay.alpha = ice_alpha
+		overlays += ice_overlay
+		return 1
+
+///////////STEAM PARTICLES/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/obj/item/weapon/reagent_containers/proc/steam_spawn_adjust(var/_temp)
+	if (!(PS_STEAM in particle_systems))
+		add_particles(PS_STEAM)
+	var/obj/abstract/particles_holder/steam_holder = particle_systems[PS_STEAM]
+	if (_temp < STEAMTEMP)
+		steam_holder.particles.spawning = 0
+	else
+		steam_holder.particles.spawning = clamp(0.1 + 0.002 * (_temp - STEAMTEMP),0.1,0.5)
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

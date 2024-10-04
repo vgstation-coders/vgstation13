@@ -7,4 +7,10 @@
 
 /obj/structure/particle_accelerator/power_box/update_icon()
 	..()
-	return
+	if(construction_state == 3)
+		if(powered)
+			update_moody_light('icons/lighting/moody_lights.dmi', "[reference]p[strength]")
+		else
+			update_moody_light('icons/lighting/moody_lights.dmi', "[reference]c")
+	else
+		kill_moody_light()

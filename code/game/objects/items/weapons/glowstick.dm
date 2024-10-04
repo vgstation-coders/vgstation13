@@ -11,7 +11,8 @@
 
 	light_color = GLOW_GREEN
 	w_class = W_CLASS_SMALL
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 
 /obj/item/weapon/glowstick/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] is breaking open \the [src] and eating the liquid inside! It looks like \he's trying to commit suicide!</span>")

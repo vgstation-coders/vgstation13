@@ -27,12 +27,14 @@
 	if(istype(loc, /area/chapel))
 		holy = 1
 	levelupdate()
+	if(flammable)
+		zone?.burnable_atoms |= src
 
-/turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD)
+/turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD,var/luminous=FALSE)
 	var/obj/effect/decal/cleanable/blood/tracks/tracks = locate(typepath) in src
 	if(!tracks)
 		tracks = new typepath(src)
-	tracks.AddTracks(bloodDNA,comingdir,goingdir,bloodcolor)
+	tracks.AddTracks(bloodDNA,comingdir,goingdir,bloodcolor,luminous)
 
 /turf/simulated/Entered(atom/A, atom/OL)
 	if(movement_disabled && usr.ckey != movement_disabled_exception)
@@ -65,10 +67,10 @@
 					H.track_blood = max(round(H.track_blood - 1, 1),0)
 
 			if (bloodDNA)
-				src.AddTracks(H.get_footprint_type(),bloodDNA,H.dir,0,bloodcolor) // Coming
+				AddTracks(H.get_footprint_type(),bloodDNA,H.dir,0,bloodcolor,H.luminous_feet()) // Coming
 				var/turf/simulated/from = get_step(H,opposite_dirs[H.dir])
 				if(istype(from) && from)
-					from.AddTracks(H.get_footprint_type(),bloodDNA,0,H.dir,bloodcolor) // Going
+					from.AddTracks(H.get_footprint_type(),bloodDNA,0,H.dir,bloodcolor,H.luminous_feet()) // Going
 
 			bloodDNA = null
 

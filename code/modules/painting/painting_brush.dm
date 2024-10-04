@@ -29,8 +29,8 @@
 	// Materials stuff
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_WOOD = 23) //1cm wide, 30cm long
-	autoignition_temperature=AUTOIGNITION_WOOD
 	w_type = RECYK_WOOD
+	flammable = TRUE
 	siemens_coefficient = 0
 
 	// Paint brush stuff
@@ -57,7 +57,7 @@
 		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = paintright
 	else
 		dynamic_overlay = list()
-	update_blood_overlay()
+	set_blood_overlay()
 	if(ismob(loc))
 		var/mob/M = loc
 		M.update_inv_hands()
@@ -111,7 +111,7 @@
 		if (user.zone_sel.selecting == LIMB_LEFT_HAND || user.zone_sel.selecting == LIMB_RIGHT_HAND)
 			H.bloody_hands_from_data(copy_blood_data(paint_data),2,src)
 		else if (user.zone_sel.selecting == LIMB_LEFT_FOOT || user.zone_sel.selecting == LIMB_RIGHT_FOOT)
-			H.add_blood_to_feet(3, paint_color, list("wet paint" = "paint"))
+			H.add_blood_to_feet(3, paint_color, list("wet paint" = "paint")	)
 		else
 			H.bloody_body_from_data(copy_blood_data(paint_data),0,src)
 			if ((target == user) && (user.zone_sel.selecting == TARGET_MOUTH))
@@ -211,8 +211,8 @@
 
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_PLASTIC = 50)
-	autoignition_temperature=AUTOIGNITION_PLASTIC
 	w_type = RECYK_PLASTIC
+	flammable = TRUE
 	siemens_coefficient = 0
 
 	var/paint_color = null
@@ -298,7 +298,7 @@
 		if (user.zone_sel.selecting == LIMB_LEFT_HAND || user.zone_sel.selecting == LIMB_RIGHT_HAND)
 			H.bloody_hands_from_data(copy_blood_data(paint_data),2,src)
 		else if (user.zone_sel.selecting == LIMB_LEFT_FOOT || user.zone_sel.selecting == LIMB_RIGHT_FOOT)
-			H.add_blood_to_feet(3, paint_color, list("wet paint" = "paint"))
+			H.add_blood_to_feet(3, paint_color, list("wet paint" = "paint"), nano_paint == PAINTLIGHT_FULL)
 		else
 			H.bloody_body_from_data(copy_blood_data(paint_data),0,src)
 		playsound(src, get_sfx("mop"), 5, 1)
@@ -319,7 +319,7 @@
 		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = paintright
 	else
 		dynamic_overlay = list()
-	update_blood_overlay()
+	set_blood_overlay()
 	if(ismob(loc))
 		var/mob/M = loc
 		M.update_inv_hands()
@@ -521,7 +521,7 @@
 	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = rollerhandleft
 	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = rollerhandright
 
-	update_blood_overlay()
+	set_blood_overlay()
 	if(ismob(loc))
 		var/mob/M = loc
 		M.update_inv_hands()

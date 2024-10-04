@@ -1,8 +1,13 @@
+var/list/redphones = list()
+var/list/available_redphone_names1 = list("alpha","bravo","charlie","delta","echo","foxtrot","golf","hotel","india")
+var/list/available_redphone_names2 = list("anton","boris","vasilij","grigorij","dimitrij","elena","zhenja","ivan","nikolaj")
+var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
+
 /obj/item/weapon/phone
 	name = "red phone"
 	desc = "Should anything ever go wrong..."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "red_phone"
+	icon_state = "red_phone_base"
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 3.0
@@ -12,6 +17,62 @@
 	w_class = W_CLASS_SMALL
 	attack_verb = list("calls", "rings", "dials")
 	hitsound = 'sound/weapons/ring.ogg'
+	var/obj/landline/landline
+
+/obj/item/weapon/phone/New()
+	..()
+	landline = new /obj/landline/red (src,src)
+	redphones += src
+
+	var/a = pick_n_take(available_redphone_names1)
+	var/b = pick_n_take(available_redphone_names2)
+	var/c = pick_n_take(available_redphone_names3)
+	if(a && b && c)
+		name += " [a]-[b]-[c]" //9 possible "normal" names, enough for the roundstart redphones
+	else
+		name += " " + Gibberish("ERROR ERROR",50) //someone's gonna spawn 50 of them eventually, doesn't really matter if their names are the same at that point
+
+/obj/item/weapon/phone/Destroy()
+	redphones -= src
+	..()
+
+/obj/item/weapon/phone/verb/pick_up_phone()
+	set category = "Object"
+	set name = "Pick up telephone"
+	set src in oview(1)
+	if(!landline)
+		to_chat(usr, "<span class='notice'>\The [src] model does not come with a telephone!</span>")
+		return
+	landline.pick_up_phone(usr)
+
+/obj/item/weapon/phone/verb/dial()
+	set category = "Object"
+	set name = "Dial"
+	set src in oview(1)
+	if(!iscarbon(usr))
+		to_chat(usr, "<span class='notice'>You are not capable of such fine manipulation.</span>")
+		return
+	if(usr.dexterity_check())
+		var/obj/item/weapon/phone/P = input("Where would you like to call?", "destination picker") as null|anything in redphones
+		if(P)
+			landline.start_call(P.landline)
+	else
+		usr.visible_message("<span class='notice'>too clumsy to operate \the [src], [usr] bangs on it instead!</span>")
+		if(prob(50))
+			return
+		var/obj/item/weapon/phone/P = pick(redphones)
+		if(P)
+			landline.start_call(P.landline)
+
+/obj/item/weapon/phone/MouseDropFrom(atom/over_object)
+	MouseDropPickUp(over_object)
+	return ..()
+
+/obj/item/weapon/phone/attack_hand(mob/user as mob)
+	pick_up_phone(user)
+
+/obj/item/weapon/phone/attackby(var/obj/item/weapon/phone/P as obj, var/mob/user as mob)
+	landline.attackby(P, user)
 
 /obj/item/weapon/phone/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] wraps the cord of the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
@@ -94,6 +155,11 @@
 	w_class = W_CLASS_SMALL
 	w_type = RECYK_ELECTRONIC
 	starting_materials = list(MAT_IRON = 200, MAT_GLASS = 20)
+
+/obj/item/weapon/disk/jobdisk
+	name = "Alternate Jobs Database"
+	desc = "A disk which scrambles the jobs database when installed in the Labor Management Console."
+	icon_state = "synddisk"
 
 //TODO: Figure out wtf this is and possibly remove it -Nodrak
 /obj/item/weapon/dummy
@@ -311,11 +377,12 @@
 		if(istype(O, /obj/item/weapon/legcuffs/bolas)) //don't stack into infinity
 			return
 		if(I.is_wirecutter(user)) //allows you to convert the wire back to a cable coil
+			var/atom/loctogo = Adjacent(user) ? user.loc : loc
 			if(!weight1 && !weight2) //if there's nothing attached
 				user.show_message("<span class='notice'>You cut the knot in the [src].</span>")
 				I.playtoolsound(usr, 50)
-				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(user.loc) //we get back the wire lengths we put in
-				var /obj/item/stack/cable_coil/S = new /obj/item/tool/screwdriver(user.loc)
+				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(loctogo) //we get back the wire lengths we put in
+				var /obj/item/stack/cable_coil/S = new /obj/item/tool/screwdriver(loctogo)
 				C.amount = 10
 				C.color = cable_color
 				C.update_icon()
@@ -328,10 +395,10 @@
 			else
 				user.show_message("<span class='notice'>You cut off [weight1] [weight2 ? "and [weight2]" : ""].</span>") //you remove the items currently attached
 				if(weight1)
-					weight1.forceMove(get_turf(usr))
+					weight1.forceMove(loctogo)
 					weight1 = null
 				if(weight2)
-					weight2.forceMove(get_turf(usr))
+					weight2.forceMove(loctogo)
 					weight2 = null
 				I.playtoolsound(user, 50)
 				update_icon()
@@ -978,6 +1045,31 @@
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
+
+
+/obj/item/gta_jetpack
+	name = "jetpack"
+	desc = "ROCKETMAN"
+	icon = 'icons/obj/weapons.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	icon_state = "jetpack"
+	item_state = "jetpack"
+	w_class = W_CLASS_HUGE
+
+/obj/item/gta_jetpack/pickup(var/mob/user)
+	..()
+	playsound(src, 'sound/items/GTA_UI.ogg', 100, 0, null, FALLOFF_SOUNDS, 0)
+	user.flying = 1
+	animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER , time = 10, loop = 1, easing = SINE_EASING)
+
+/obj/item/gta_jetpack/dropped(var/mob/user)
+	..()
+	user.flying = 0
+	animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER , time = 1, loop = 1)
+	animate(user, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
+	animate(user)
+	if(user.lying)//aka. if they have just been stunned
+		user.pixel_y -= 6 * PIXEL_MULTIPLIER
 
 /obj/item/weapon/wire
 	desc = "This is just a simple piece of regular insulated wire."

@@ -26,7 +26,7 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 
 	var/icon/spots
 	var/last_pigments = ""
-	var/name_base = "paint bucket"
+	var/name_base = "metal bucket"
 	var/icon_lid = "paint_cover"
 //-------------------------------------------------------------------------------------------------
 
@@ -92,7 +92,15 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	if (pigment_rgb)
 		var/mix_alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		var/turf/T = get_turf(hit_atom)
-		T.apply_paint_stroke(pigment_rgb, mix_alpha, SOUTH, "splatter")
+		var/datum/reagent/B = get_blood(reagents)
+		var/list/bucket_blood_data = list()
+		if (B)
+			bucket_blood_data = list(B.data["blood_DNA"] = B.data["blood_type"])
+		var/has_nanopaint = FALSE
+		for(var/datum/reagent/R in reagents.reagent_list)
+			if (R.paint_light == PAINTLIGHT_FULL)
+				has_nanopaint = TRUE
+		T.apply_paint_stroke(pigment_rgb, mix_alpha, SOUTH, "splatter", bucket_blood_data, has_nanopaint)
 		T.paint_overlay.wet(pigment_rgb,20 SECONDS,2)
 		reagents.remove_any(5)
 		playsound(T, 'sound/effects/slosh.ogg', 25, 1)

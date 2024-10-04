@@ -12,6 +12,7 @@
 	pass_flags = PASSTABLE
 	icon = 'icons/obj/library.dmi'
 	icon_state = "computer"
+	moody_state = "overlay_computer_old"
 
 	var/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", "Reference", "Religion")
 

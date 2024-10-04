@@ -74,7 +74,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				B.volume += 0.1 // regenerate blood VERY slowly
 				if(M_REGEN in mutations)
 					B.volume += 0.4 //A big chunky boost. If you have nutriment and iron you can regenerate 4.1 blood per tick
-				if (iscultist(src) && (iscultist(src) in blood_communion))//cultists that take on the blood communion tattoo get a slight blood regen bonus
+				var/datum/role/cultist/C = iscultist(src)
+				if (C && C.blood_pool)//cultists that take on the blood communion tattoo get a slight blood regen bonus
 					if(M_REGEN in mutations)
 						B.volume += 0.6
 					else
@@ -220,6 +221,9 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	if(reagents.has_reagent(CLOTTING_AGENT) || reagents.has_reagent(BIOFOAM)) //Clotting agent and biofoam stop bleeding entirely
 		blood_factor = 0
+
+	if(reagents.has_reagent(FEVERFEW)) //A powerful anticoagulant that overrides clotting agents
+		blood_factor = 1
 
 	if(bodytemperature < 170) //Cryo stops bleeding entirely
 		blood_factor = 0

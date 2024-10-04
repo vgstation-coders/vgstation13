@@ -116,7 +116,6 @@
 /datum/next_map/metaclub
 	name = "Meta Club"
 	path = "Metaclub"
-	min_players = 20
 
 /datum/next_map/packed
 	name = "Packed Station"
@@ -177,11 +176,6 @@
 		warning(msg)
 		return FALSE
 	return ..()
-
-/datum/next_map/nerve
-	name = "Nerve Station"
-	path = "nervestation"
-	min_players = 20
 
 /datum/next_map/wheelstation
 	name = "Wheelstation"

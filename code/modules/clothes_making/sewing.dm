@@ -25,7 +25,7 @@
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_WOOD = 75)
 	w_type = RECYK_WOOD
-	autoignition_temperature = AUTOIGNITION_WOOD
+	flammable = TRUE
 	attack_verb = list("stabs")
 
 	var/obj/item/stack/sheet/cloth/stored_cloth = null
@@ -41,7 +41,7 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	siemens_coefficient = 1
-	autoignition_temperature = 0
+	flammable = FALSE
 	force = 10
 	throwforce = 15
 	throw_range = 7
@@ -68,9 +68,9 @@
 		return
 	if(istype(target, /obj/item/stack/sheet/cloth))
 		if (stored_cloth)
-			if (loc.color == stored_cloth.color)
+			var/obj/item/stack/sheet/cloth/C = target
+			if (C.color == stored_cloth.color)
 				to_chat(user, "You add some more cloth.")
-				var/obj/item/stack/sheet/cloth/C = target
 				C.merge(stored_cloth)
 			else
 				user.drop_item(target)//in case it's in our bag or another hand
@@ -95,6 +95,7 @@
 				if (W.color == stored_cloth.color)
 					to_chat(user, "You add some more cloth.")
 					var/obj/item/stack/sheet/cloth/C = W
+					C.forceMove(get_turf(src))//moves the new roll out so its on_empty() won't empty the needles
 					C.merge(stored_cloth)
 					if (C.amount > 0)
 						user.put_in_hands(C)
@@ -153,7 +154,7 @@
 		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = clothright
 	else
 		dynamic_overlay = list()
-	update_blood_overlay()
+	set_blood_overlay()
 	if(ismob(loc))
 		var/mob/M = loc
 		M.update_inv_hands()
@@ -258,6 +259,7 @@
 				if (W.color == stored_cloth.color)
 					to_chat(user, "You add some more cloth.")
 					var/obj/item/stack/sheet/cloth/C = W
+					C.forceMove(loc)//moves the new roll out so its on_empty() won't empty the machine
 					C.merge(stored_cloth)
 					if (C.amount > 0)
 						user.put_in_hands(C)
@@ -437,3 +439,9 @@
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 	else
 		attack_hand(user)
+
+/obj/machinery/sewing_machine/table_shift()
+	pixel_y = 4
+
+/obj/machinery/sewing_machine/table_unshift()
+	pixel_y = 0

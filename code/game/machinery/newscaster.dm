@@ -116,6 +116,17 @@ var/datum/feed_network/news_network = new /datum/feed_network     //The global n
 
 var/list/obj/machinery/newscaster/allCasters = list() //Global list that will contain reference to all newscasters in existence.
 
+/datum/feed_channel/preset
+	locked = 1
+	is_admin_channel = 1
+
+/datum/feed_channel/preset/tauceti
+	channel_name = "Tau Ceti Daily"
+	author = "CentComm Minister of Information"
+
+/datum/feed_channel/preset/gibsongazette
+	channel_name = "The Gibson Gazette"
+	author = "Editor Mike Hammers"
 
 /obj/machinery/newscaster
 	name = "newscaster"
@@ -191,6 +202,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 /obj/machinery/newscaster/update_icon()
 	if(buildstage != 1)
 		icon_state = "newscaster_0"
+		kill_moody_light()
 		return
 
 	if((stat & (FORCEDISABLE|NOPOWER)) || (stat & BROKEN))
@@ -198,6 +210,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		if(stat & BROKEN) //If the thing is smashed, add crack overlay on top of the unpowered sprite.
 			overlays.Cut()
 			overlays += image(icon, "crack3")
+		kill_moody_light()
 		return
 
 	overlays.Cut() //reset overlays
@@ -213,7 +226,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		overlays += image(icon, "crack[hitstaken]")
 
 	icon_state = "newscaster_normal"
-	return
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_newscaster")
 
 /obj/machinery/newscaster/power_change()
 	if(stat & BROKEN || buildstage != 1) //Broken shit can't be powered.
@@ -1160,8 +1173,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	throw_speed = 1
 	pressure_resistance = 1
 	attack_verb = list("baps", "smacks", "whaps")
-	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = TRUE
+	flammable = TRUE
 
 	var/screen = 0
 	var/pages = 0

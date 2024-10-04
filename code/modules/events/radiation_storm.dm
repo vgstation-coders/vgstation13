@@ -1,5 +1,7 @@
 /datum/event/radiation_storm
 	announceWhen	= 1
+	endWhen			= 64 //128 seconds
+	var/syndiestorm = FALSE
 	var/safe_zones = list(
 		/area/engineering/engineering_auxiliary,
 		/area/maintenance,
@@ -37,7 +39,19 @@
 
 /datum/event/radiation_storm/start()
 	spawn()
-		command_alert(/datum/command_alert/radiation_storm)
+		if(syndiestorm)
+			endWhen	= 69 //138 seconds
+			if(prob(5) || Holiday == APRIL_FOOLS_DAY)
+				world << sound('sound/effects/nuclearlaunchdetected.ogg')
+				sleep(5 SECONDS)
+				world << sound('sound/effects/explosionfar.ogg')
+				sleep(5 SECONDS)
+			else
+				world << sound('sound/effects/explosionfar.ogg') //yes I know the fact that hearing the explosion makes no sense but it makes me smile
+				sleep(10 SECONDS) //extra 10 seconds to those paying attention
+			command_alert(/datum/command_alert/radiation_storm_malicious)
+		else
+			command_alert(/datum/command_alert/radiation_storm)
 
 		for(var/area/A in areas)
 			if(A.z != map.zMainStation || is_safe_zone(A))
@@ -47,9 +61,7 @@
 
 		make_doors_all_access(list(access_maint_tunnels))
 
-
 		sleep(30 SECONDS)
-
 
 		command_alert(/datum/command_alert/radiation_storm/start)
 
@@ -57,18 +69,19 @@
 			var/irradiationThisBurst = rand(15,25) //everybody gets the same rads this radiation burst
 			for(var/obj/machinery/power/rad_collector/R in rad_collectors)
 				var/turf/T = get_turf(R)
-				if(!T)
-					continue
-				if(T.z != map.zMainStation || is_safe_zone(T.loc))
+				if(!T || T.z != map.zMainStation || is_safe_zone(T.loc))
 					continue
 				R.receive_pulse(irradiationThisBurst * 50)
 			for(var/obj/item/weapon/am_containment/decelerator/D in decelerators)
 				var/turf/T = get_turf(D)
-				if(!T)
-					continue
-				if(T.z != map.zMainStation || is_safe_zone(T.loc))
+				if(!T || T.z != map.zMainStation || is_safe_zone(T.loc))
 					continue
 				D.receive_pulse(irradiationThisBurst * 50)
+			for(var/obj/machinery/portable_atmospherics/hydroponics/tray in hydro_trays)
+				var/turf/T = get_turf(tray)
+				if(!T || T.z != map.zMainStation || is_safe_zone(T.loc))
+					continue
+				tray.receive_pulse(irradiationThisBurst * 50)
 
 			var/randomMutation
 			var/badMutation
@@ -95,7 +108,6 @@
 
 			sleep(25)
 
-
 		command_alert(/datum/command_alert/radiation_storm/end)
 
 		for(var/area/A in areas)
@@ -104,8 +116,6 @@
 			var/area/ma = get_area(A)
 			ma.reset_radiation_alert()
 
-
 		sleep(600) // Want to give them time to get out of maintenance.
-
 
 		revoke_doors_all_access(list(access_maint_tunnels))

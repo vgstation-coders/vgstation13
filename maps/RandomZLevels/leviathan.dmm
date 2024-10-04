@@ -4171,7 +4171,7 @@
 /obj/item/clothing/suit/bio_suit/anomaly,
 /obj/item/clothing/head/bio_hood/anomaly,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/clothing/gloves/latex,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'RADIOACTIVE AREA'";
@@ -4188,7 +4188,7 @@
 /obj/item/clothing/suit/bio_suit/anomaly,
 /obj/item/clothing/head/bio_hood/anomaly,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/clothing/gloves/latex,
 /turf/simulated/floor{
 	icon_state = "white"

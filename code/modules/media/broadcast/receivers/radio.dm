@@ -1,7 +1,7 @@
 /obj/machinery/media/receiver/boombox
 	name = "Boombox"
 	desc = "Tune in and tune out."
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	icon='icons/obj/radio.dmi'
 	icon_state="radio"
 
@@ -129,8 +129,10 @@
 /obj/machinery/media/receiver/boombox/wallmount/update_icon()
 	if(buildstage==SYSTEMISDONE && on)
 		icon_state="wallradio-p"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_wallradio")
 	else
 		icon_state="wallradio"
+		kill_moody_light()
 
 /obj/machinery/media/receiver/boombox/wallmount/attack_hand(var/mob/user)
 	if(buildstage<SYSTEMISDONE)

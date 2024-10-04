@@ -177,6 +177,7 @@ var/const/INGEST = 2
 		return
 
 	var/datum/reagents/R
+	var/to_mob = FALSE
 	if (istype(target, /datum/reagents))
 		R = target
 	else
@@ -185,6 +186,8 @@ var/const/INGEST = 2
 			return
 		else
 			R = AM.reagents
+			if (ismob(AM))
+				to_mob = TRUE
 
 	amount = min(min(amount, src.total_volume), R.maximum_volume-R.total_volume)
 	var/part = amount / src.total_volume
@@ -211,7 +214,10 @@ var/const/INGEST = 2
 			logged_message += "[current_reagent_transfer]u of [current_reagent.name]"
 			if(current_reagent.id in reagents_to_log)
 				adminwarn_message += "[current_reagent_transfer]u of <span class='warning'>[current_reagent.name]</span>"
-		R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data, chem_temp)
+		if (to_mob)
+			R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data, chem_temp, current_reagent.adj_temp)
+		else
+			R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data, chem_temp)
 		src.remove_reagent(current_reagent.id, current_reagent_transfer)
 
 	for(var/datum/reagent/reagent_datum in R.reagent_list) //Wake up all of the reagents in our target, let them know we did stuff
@@ -683,11 +689,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				if (second != "lance")
 					third_list += "lances through" //don't say "lance lances"
 				custom_pain_msg = "[pick("A burning", "A searing", "A boiling")] [second] of pain [pick(third_list)] [which_organ ? "your " + which_organ.display_name : "you"]!"
+			else if (method == INGEST)
+				custom_pain_msg = "You burn your lips and tongue!"
 			else
 				custom_pain_msg = "Pain sears [which_organ ? " your " + which_organ.display_name : ""]!"
 			H.custom_pain(custom_pain_msg, post_mod_predicted_dmg >= SCALD_AGONIZING, post_mod_predicted_dmg >= SCALD_PAINFUL)
 		L.apply_effect(burn_dmg, AGONY) //pain
-		L.apply_damage(burn_dmg, BURN, which_organ)
 
 #undef SCALD_PAINFUL
 #undef SCALD_AGONIZING
@@ -702,7 +709,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		warning("[usr] tried to equalize the temperature of a thermally-massless mixture.")
 		return T0C+20 //Sanity but this shouldn't happen.
 
-/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20, var/mob/admin, var/list/additional_data=null)
+/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20, var/temp_adj = 0, var/mob/admin, var/list/additional_data=null)
 	if(!my_atom)
 		return 0
 	if(!amount)
@@ -734,6 +741,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		var/datum/reagent/R = new D.type()
 
 		//Equalize temperatures
+		if(!total_volume)
+			chem_temp = reagtemp//adding reagents to an empty container? reset chem_temp
 		chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap * CC_PER_U)
 
 		reagent_list += R
@@ -742,6 +751,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		if (additional_data)
 			R.handle_additional_data(additional_data)
 		R.volume = amount
+		if (temp_adj)
+			R.adj_temp = temp_adj
 
 		R.on_introduced()
 
@@ -1032,6 +1043,25 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		return
 	handle_reactions()
 
+/datum/reagents/proc/adjust_consumed_reagents_temp()
+	for(var/datum/reagent/R in reagent_list)
+		if (R.adj_temp != 0)//if the reagent already has a set adjust, we ignore its actual temperature
+			continue
+		else
+			switch(chem_temp)
+				if (-INFINITY to T0C)
+					R.adj_temp = -5
+				if (T0C to (T0C+10))
+					R.adj_temp = -1.5
+				if ((T0C + 30) to STEAMTEMP)
+					R.adj_temp = chem_temp - (T0C + 30)
+				if (STEAMTEMP to INFINITY)
+					R.adj_temp = 20
+
+/datum/reagents/proc/reset_consumed_reagents_temp()
+	for(var/datum/reagent/R in reagent_list)
+		R.adj_temp = initial(R.adj_temp)
+
 /datum/reagents/proc/get_examine(var/mob/user, var/vis_override, var/blood_type)
 	if(obscured && !vis_override)
 		to_chat(user, "<span class='info'>You can't quite make out the contents.</span>")
@@ -1039,9 +1069,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if (istype(my_atom,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) && reagent_list.len)
 		to_chat(user, "<span class='info'>It contains [total_volume] units of what looks like [get_master_reagent_name()].</span>")
 		return
-	to_chat(user, "It contains:")
 	if(!user.hallucinating())
 		if(reagent_list.len)
+			to_chat(user, "It contains:")
 			for(var/datum/reagent/R in reagent_list)
 				if(blood_type && R.id == BLOOD)
 					var/type = R.data["blood_type"]
@@ -1049,9 +1079,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				else
 					to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
 		else
-			to_chat(user, "<span class='info'>Nothing.</span>")
+			if (istype(my_atom,/obj/machinery/portable_atmospherics/hydroponics))
+				to_chat(user, "It contains <span class='info'>no reagents</span>.")//I mean, there's probably a big ass plant in there.
+			else
+				to_chat(user, "It contains <span class='info'>nothing</span>.")
 
 	else //Show stupid things to hallucinating mobs
+		to_chat(user, "It contains:")
 		var/list/fake_reagents = list("Water", "Orange juice", "Banana juice", "Tungsten", "Chloral Hydrate", "Helium",\
 			"Sea water", "Energy drink", "Gushin' Granny", "Salt", "Sugar", "something yellow", "something red", "something blue",\
 			"something suspicious", "something smelly", "something sweet", "Soda", "something that reminds you of home",\

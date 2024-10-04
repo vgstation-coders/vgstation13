@@ -45,6 +45,10 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 	var/was_early_launched = FALSE //had timer shortened to 10 seconds
 
+	var/extremely_hihg_speed = FALSE
+
+	var/last_second_tick = 0
+
 	// call the shuttle
 	// if not called before, set the endtime to T+600 seconds
 	// otherwise if outgoing, switch to incoming
@@ -104,6 +108,9 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	if(online)
 		var/timeleft = round((endtime - world.time)/10 ,1)
 		if(direction >= 0)
+			if(world.time - last_second_tick >= 1 SECONDS)
+				INVOKE_EVENT(src, /event/shuttletimer, "time" = timeleft, "direction" = direction)
+				last_second_tick = world.time
 			return timeleft
 		else
 			return SHUTTLEARRIVETIME-timeleft
@@ -112,8 +119,18 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 // sets the time left to a given delay (in seconds)
 /datum/emergency_shuttle/proc/settimeleft(var/delay)
-	endtime = world.time + delay * 10
-	timelimit = delay
+	if (extremely_hihg_speed)
+		endtime = world.time + 60 SECONDS
+		timelimit = 60
+	else
+		endtime = world.time + delay * 10
+		timelimit = delay
+
+/datum/emergency_shuttle/proc/get_shuttle_timer()
+	var/shuttle_time_left = timeleft()
+	if(shuttle_time_left)
+		return "[add_zero(num2text((shuttle_time_left / 60) % 60),2)]:[add_zero(num2text(shuttle_time_left % 60), 2)]"
+	return ""
 
 // sets the shuttle direction
 // 1 = towards SS13, -1 = back to centcom
@@ -265,7 +282,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 				command_alert(/datum/command_alert/emergency_shuttle_left)
 				vote_preload()
-				
+
 				/* Handle jukebox updates */
 				spawn()
 					for(var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)

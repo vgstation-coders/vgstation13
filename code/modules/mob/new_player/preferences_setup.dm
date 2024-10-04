@@ -174,25 +174,25 @@
 	if(current_species)
 		if(current_species.name == "Vox")
 			switch(s_tone)
-				if(6)
+				if(VOXEMERALD)
 					icobase = 'icons/mob/human_races/vox/r_voxemrl.dmi'
-				if(5)
+				if(VOXAZURE)
 					icobase = 'icons/mob/human_races/vox/r_voxazu.dmi'
-				if(4)
+				if(VOXLGREEN)
 					icobase = 'icons/mob/human_races/vox/r_voxlgrn.dmi'
-				if(3)
+				if(VOXGRAY)
 					icobase = 'icons/mob/human_races/vox/r_voxgry.dmi'
-				if(2)
+				if(VOXBROWN)
 					icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
 				else
 					icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 		else if(current_species.name == "Grey")
 			switch(s_tone)
-				if(4)
+				if(GREYBLUE)
 					icobase = 'icons/mob/human_races/grey/r_greyblue.dmi'
-				if(3)
+				if(GREYGREEN)
 					icobase = 'icons/mob/human_races/grey/r_greygreen.dmi'
-				if(2)
+				if(GREYLIGHT)
 					icobase = 'icons/mob/human_races/grey/r_greylight.dmi'
 				else
 					icobase = 'icons/mob/human_races/grey/r_grey.dmi'
@@ -230,7 +230,31 @@
 		var/icon/temp = new /icon(o_icobase, "[name]")
 
 		preview_icon.Blend(temp, ICON_OVERLAY)
-
+	//Tail
+	if(current_species && (current_species.anatomy_flags & HAS_TAIL))
+		var/tail_icon_state = current_species.tail
+		if(current_species.name == "Vox")
+			switch(s_tone)
+				if(VOXEMERALD)
+					tail_icon_state = "emerald"
+				if(VOXAZURE)
+					tail_icon_state = "azure"
+				if(VOXLGREEN)
+					tail_icon_state = "lightgreen"
+				if(VOXGRAY)
+					tail_icon_state = "grey"
+				if(VOXBROWN)
+					tail_icon_state = "brown"
+				else
+					tail_icon_state = "green"
+		if(current_species.name == "Tajaran")
+			switch(s_tone)
+				if(CATBEASTBLACK)
+					tail_icon_state = "tajaran_black"
+				else
+					tail_icon_state = "tajaran_brown"
+		var/icon/temp_tail_icon = icon(current_species.tail_icon, "[tail_icon_state]_BEHIND")
+		preview_icon.Blend(temp_tail_icon, ICON_UNDERLAY)
 	// Skin tone
 	if(current_species && (current_species.anatomy_flags & HAS_SKIN_TONE))
 		if (s_tone >= 0)
@@ -529,7 +553,7 @@
 
 	// Observers get a tourist or vacationer outfit.
 	else
-		if (prob(100/3) || fat == "_fat") //Currently no fat sprites for vacationer outfits.
+		if (prob(100/3))
 			clothes_s = new /icon(uniform_dmi, "tourist_s")
 			clothes_s.Blend(new /icon(feet_dmi, "black"), ICON_UNDERLAY)
 			clothes_s.Blend(new /icon('icons/mob/clothing_accessories.dmi', "wristwatch"), ICON_UNDERLAY)

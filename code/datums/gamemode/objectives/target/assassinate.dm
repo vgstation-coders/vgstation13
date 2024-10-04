@@ -109,15 +109,20 @@ var/list/assassination_objectives = list()
 		//Drains all TCs from the assassinated player's uplink even if it had less than 8.
 		if (enemy_uplink)
 			enemy_uplink.telecrystals = 0
+		var/obj/item/device/roganbot/killbot/killbotfound = recursive_type_check(owner,/obj/item/device/roganbot/killbot)
 		//Checks if the new target would be the player themselves; if so, they have won.
 		if (A.target == owner)
 			to_chat(owner.current, "<span class='notice'>The Syndicate congratulates you on your victory. Look forward to be assigned on higher risk operations another day.</span>")
+			if(killbotfound)
+				playsound(owner.current.loc,'sound/effects/2003M/GrandChampion.ogg',100)
 		//If not, the challenger gets assigned their old target's target.
 		else
 			var/datum/objective/target/assassinate/new_kill_target = new(auto_target = FALSE)
 			if(new_kill_target.set_target(A.target))
 				self.AppendObjective(new_kill_target)
 				to_chat(owner.current, "<b>New Objective</b>: [new_kill_target.explanation_text]<br>")
+				if(killbotfound)
+					playsound(owner.current.loc,'sound/effects/2003M/NewChallengers-2.ogg',100)
 
 		A.syndicate_checked = SYNDICATE_CANCELED
 		to_chat(target.current, "<span class='warning'>The Syndicate has taken note of your demise. You are therefore ineligible for victory this time around. Better luck next time!</span>")

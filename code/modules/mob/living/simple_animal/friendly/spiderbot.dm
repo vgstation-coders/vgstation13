@@ -38,10 +38,9 @@
 
 	var/obj/item/held_item = null //Storage for single item they can hold.
 	var/lob_range = 3
-	var/emagged = 0               //IS WE EXPLODEN?
 	var/syndie = 0                //IS WE SYNDICAT? (currently unused)
 	speed = 1                    //Spiderbots gotta go fast.
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	speak_emote = list("beeps","clicks","chirps")
 	size = SIZE_SMALL
 	meat_type = null
@@ -75,9 +74,8 @@
 			to_chat(user, "<span class='warning'>[O] is dead. Sticking it into the frame would sort of defeat the purpose.</span>")
 			return
 
-		
-		if(!user.drop_item(O, src))
-			user << "<span class='warning'>You can't let go of \the [O].</span>"
+		if(!user.drop_item(O, src, failmsg = TRUE))
+			return
 
 		to_chat(user, "<span class='notice'>You install [O] in [src]!</span>")
 
@@ -129,19 +127,18 @@
 		else
 			to_chat(user, "<span class='warning'>You swipe your card, with no effect.</span>")
 			return 0
-	else if (istype(O, /obj/item/weapon/card/emag))
-		if (emagged)
-			to_chat(user, "<span class='warning'>[src] is already overloaded - better run.</span>")
-			return 0
-		else
-			emagged = 1
-			to_chat(user, "<span class='notice'>You short out the security protocols and overload [src]'s cell, priming it to explode in a short time.</span>")
-			spawn(100)	to_chat(src, "<span class='warning'>Your cell seems to be outputting a lot of power...</span>")
-			spawn(200)	to_chat(src, "<span class='warning'>Internal heat sensors are spiking! Something is badly wrong with your cell!</span>")
-			spawn(300)	src.explode()
-
 	else
 		return ..()
+
+/mob/living/simple_animal/spiderbot/emag_act(mob/user)
+	if (emagged)
+		to_chat(user, "<span class='warning'>[src] is already overloaded - better run.</span>")
+	else
+		emagged = 1
+		to_chat(user, "<span class='notice'>You short out the security protocols and overload [src]'s cell, priming it to explode in a short time.</span>")
+		spawn(100)	to_chat(src, "<span class='warning'>Your cell seems to be outputting a lot of power...</span>")
+		spawn(200)	to_chat(src, "<span class='warning'>Internal heat sensors are spiking! Something is badly wrong with your cell!</span>")
+		spawn(300)	src.explode()
 
 /mob/living/simple_animal/spiderbot/attack_animal(var/mob/user as mob)
 	if(istype(user,/mob/living/simple_animal/mouse) && !(src.mmi || src.mouse))
@@ -153,7 +150,7 @@
 		user.forceMove(src)
 		src.update_icon()
 	else
-		..()
+		return ..()
 
 /mob/living/simple_animal/spiderbot/proc/transfer_personality(var/obj/item/device/mmi/M as obj)
 	src.mind = M.brainmob.mind

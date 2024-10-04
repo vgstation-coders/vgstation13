@@ -190,7 +190,7 @@
 					return
 
 
-/obj/item/stack/glass_tile/rglass/afterattack(atom/target, mob/user, adjacent, params)
+/obj/item/stack/tile/rglass/afterattack(atom/target, mob/user, adjacent, params)
 	if(adjacent)
 		if(isturf(target) || istype(target, /obj/structure/lattice))
 			var/turf/T = get_turf(target)
@@ -200,14 +200,14 @@
 					build(T)
 					use(1)
 
-/obj/item/stack/glass_tile/rglass
+/obj/item/stack/tile/rglass
 	name = "glass tile"
 	singular_name = "tile"
 	desc = "A relatively clear reinforced glass tile."
 	icon_state = "tile_rglass"
 	max_amount = 60
 
-/obj/item/stack/glass_tile/rglass/proc/build(turf/S as turf)
+/obj/item/stack/tile/rglass/proc/build(turf/S as turf)
 	var/obj/structure/lattice/L = S.canBuildCatwalk(src)
 	if(istype(L))
 		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
@@ -221,13 +221,13 @@
 
 
 
-/obj/item/stack/glass_tile/rglass/plasma
+/obj/item/stack/tile/rglass/plasma
 	name = "plasma glass tile"
 	singular_name = "tile"
 	desc = "A relatively clear reinforced plasma glass tile."
 	icon_state = "tile_plasmarglass"
 
-/obj/item/stack/glass_tile/rglass/plasma/build(turf/S as turf)
+/obj/item/stack/tile/rglass/plasma/build(turf/S as turf)
 	var/obj/structure/lattice/L = S.canBuildCatwalk(src)
 	if(istype(L))
 		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)

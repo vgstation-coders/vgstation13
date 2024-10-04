@@ -172,6 +172,7 @@
 	var/title = ""
 	var/description = ""
 	var/contributing_artists = list()
+	var/show_on_scoreboard = TRUE
 
 	var/copy = 0
 
@@ -209,6 +210,7 @@
 	copy.bitmap = bitmap.Copy()
 	copy.nanomap = nanomap.Copy()
 	copy.components = components.Copy()
+	copy.has_nano_paint = has_nano_paint
 	return copy
 
 /datum/custom_painting/proc/set_parent(parent)
@@ -492,6 +494,7 @@
 	painting.author = author
 	painting.description = description
 	painting.copy = 1
+	painting.show_on_scoreboard = FALSE //sorry, OC only
 	return painting
 
 #undef PENCIL_STRENGTH_MAX

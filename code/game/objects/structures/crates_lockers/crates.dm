@@ -16,6 +16,12 @@
 	var/sound_effect_open = 'sound/machines/click.ogg'
 	var/sound_effect_close = 'sound/machines/click.ogg'
 
+/obj/structure/closet/crate/proc/jiggle(var/obj/item/I)
+	var/jx = I.w_class == W_CLASS_TINY ? 7 : 3
+	var/jy = I.w_class == W_CLASS_TINY ? 3 : 1
+	I.pixel_x = rand(-jx,jx)
+	I.pixel_y = rand(-jy,jy)
+
 /obj/structure/closet/crate/basic
 	has_lock_type = /obj/structure/closet/crate/secure/basic
 
@@ -149,6 +155,39 @@
 	icon_state = "surgeryfreezer"
 	icon_opened = "surgeryfreezeropen"
 	icon_closed = "surgeryfreezer"
+
+/obj/structure/closet/crate/freezer/surgery/close(mob/user)
+	..()
+	update_icon()
+
+	var/list/inside = recursive_type_check(src, /mob/living/carbon/brain)
+	for(var/mob/living/carbon/brain/braine in inside)
+		if(braine.mind && !braine.client) //!braine.client = mob has ghosted out of their body
+			var/mob/dead/observer/ghost = mind_can_reenter(braine.mind)
+			if(ghost)
+				var/mob/ghostmob = ghost.get_top_transmogrification()
+				if(ghostmob)
+					to_chat(ghostmob, "<span class='interface'><span class='big bold'>Your brain has been placed into a surgery freezer.</span> \
+						Re-entering your corpse will cause the freezer's heart to pulse, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
+
+/obj/structure/closet/crate/freezer/surgery/update_icon()
+	..()
+
+	var/list/inside = recursive_type_check(src, /mob/living/carbon/brain)
+	for(var/mob/living/carbon/brain/brained in inside)
+		if(brained.mind && brained.mind.suiciding)
+			continue
+		if(brained && brained.client)
+			icon_state = "surgeryfreezerbrained"
+			return
+
+/obj/structure/closet/crate/freezer/surgery/on_login(var/mob/M)
+	..()
+	update_icon()
+
+/obj/structure/closet/crate/freezer/surgery/on_logout(var/mob/M)
+	..()
+	update_icon()
 
 /obj/structure/closet/crate/bin
 	desc = "A large bin."
@@ -441,6 +480,10 @@
 		return 0
 	playsound(src, sound_effect_open, 15, 1, -3)
 
+	for(var/obj/item/I in contents)
+		if(I.w_class <= W_CLASS_SMALL)
+			jiggle(I)
+
 	dump_contents()
 
 	icon_state = icon_opened
@@ -489,6 +532,8 @@
 /obj/structure/closet/crate/attack_hand(var/mob/user)
 	if(!Adjacent(user))
 		return
+	if(istype(src.loc, /obj/structure/rack/crate_shelf))
+		return // No opening crates in shelves!!
 	add_fingerprint(user)
 	if(opened)
 		close()
@@ -517,6 +562,22 @@
 	else
 		..()
 
+/obj/structure/closet/crate/MouseDrop(atom/drop_atom, src_location, over_location)
+	. = ..()
+	var/mob/living/user = usr
+	if(!isliving(user))
+		return // Ghosts busted.
+	if(!isturf(user.loc) || user.incapacitated() || user.resting)
+		return // If the user is in a weird state, don't bother trying.
+	if(get_dist(drop_atom, src) != 1 || get_dist(drop_atom, user) != 1)
+		return // Check whether the crate is exactly 1 tile from the shelf and the user.
+	if(isturf(drop_atom) && istype(loc, /obj/structure/rack/crate_shelf) && user.Adjacent(drop_atom))
+		var/obj/structure/rack/crate_shelf/shelf = loc
+		return shelf.unload(src, user, drop_atom) // If we're being dropped onto a turf, and we're inside of a crate shelf, unload.
+	if(istype(drop_atom, /obj/structure/rack/crate_shelf) && isturf(loc) && user.Adjacent(src))
+		var/obj/structure/rack/crate_shelf/shelf = drop_atom
+		return shelf.load(src, user) // If we're being dropped onto a crate shelf, and we're in a turf, load.
+
 /obj/structure/closet/crate/secure/proc/togglelock(atom/A)
 	if(istype(A,/mob))
 		var/mob/user = A
@@ -540,7 +601,16 @@
 			return 0
 
 /obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
+	if(istype(W, /obj/item/weapon/card) && !opened && !broken)
+		togglelock(user)
+		return
+	else if(W.is_screwdriver(user) && !opened && !locked && src.has_lockless_type)
+		remove_lock(user)
+		return
+	return ..()
+
+/obj/structure/closet/crate/secure/emag_act(mob/user)
+	if(locked && !broken)
 		overlays.len = 0
 		overlays += emag
 		overlays += sparks
@@ -549,14 +619,6 @@
 		src.locked = 0
 		src.broken = 1
 		to_chat(user, "<span class='notice'>You unlock \the [src].</span>")
-		return
-	else if(istype(W, /obj/item/weapon/card) && !opened && !broken)
-		togglelock(user)
-		return
-	else if(W.is_screwdriver(user) && !opened && !locked && src.has_lockless_type)
-		remove_lock(user)
-		return
-	return ..()
 
 /obj/structure/closet/crate/secure/verb/verb_togglelock()
 	set src in oview(1) // One square distance
@@ -726,7 +788,7 @@
 			new/obj/item/weapon/gun/projectile/hecate(src)
 			new/obj/item/ammo_storage/box/BMG50(src)
 			new/obj/item/device/radio/headset/headset_earmuffs(src)
-			new/obj/item/clothing/glasses/thermal(src)
+			new/obj/item/clothing/glasses/hud/thermal(src)
 		if("gravitywell")
 			new/obj/item/clothing/suit/radiation(src)
 			new/obj/item/clothing/head/radiation(src)

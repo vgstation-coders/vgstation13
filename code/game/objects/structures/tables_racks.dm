@@ -23,6 +23,7 @@
 	pass_flags_self = PASSTABLE
 	var/parts = /obj/item/weapon/table_parts
 	var/flipped = 0
+	var/tableform = 0 //Stores last known configuration for this table
 	health = 100
 
 /obj/structure/table/splashable()
@@ -225,6 +226,7 @@
 						dir_sum = 2 //These translate the dir_sum to the correct dirs from the 'tabledir' icon_state.
 		if(dir_sum%16 == 15)
 			table_type = 4 //4-way intersection, the 'middle' table sprites will be used.
+		tableform = table_type
 		switch(table_type)
 			if(0)
 				icon_state = "[initial(icon_state)]"
@@ -596,8 +598,10 @@
 	icon_state = "woodtable"
 	parts = /obj/item/weapon/table_parts/wood
 	health = 50
-	autoignition_temperature = AUTOIGNITION_WOOD // TODO:  Special ash subtype that looks like charred table legs.
-	fire_fuel = 5
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
+
 
 /obj/structure/table/woodentable/cultify()
 	return
@@ -747,6 +751,9 @@
 	desc = "A plastic table perfect for on a space patio."
 	icon_state = "plastictable"
 	parts = /obj/item/weapon/table_parts/plastic
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 
 /*
  * Racks
@@ -786,14 +793,14 @@
 			destroy(FALSE)
 		if(2.0)
 			if(prob(50))
-				destroy(TRUE)
-			else
 				destroy(FALSE)
+			else
+				destroy(TRUE)
 		if(3.0)
 			if(prob(25))
-				destroy(TRUE)
-			else
 				destroy(FALSE)
+			else
+				destroy(TRUE)
 
 /obj/structure/rack/proc/checkhealth()
 	if(health <= 0)

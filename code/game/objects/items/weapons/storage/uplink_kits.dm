@@ -21,6 +21,7 @@
 			new /obj/item/weapon/pen/paralysis(src)
 			new /obj/item/device/chameleon(src)
 			new /obj/item/weapon/soap/syndie(src)
+			new /obj/item/weapon/syndie_spray/silent_spray(src)
 
 		if("Screwed")//6?+6?+10+4=26
 			new /obj/effect/spawner/newbomb/timer(src)
@@ -37,7 +38,7 @@
 
 		if("Murder")//8+6+6+2+4=26
 			new /obj/item/weapon/melee/energy/sword(src)
-			new /obj/item/clothing/glasses/thermal/syndi(src)
+			new /obj/item/clothing/glasses/hud/thermal/syndi(src)
 			new /obj/item/weapon/card/emag(src)
 			new /obj/item/clothing/shoes/syndigaloshes(src)
 			new /obj/item/weapon/storage/belt/skull(src)
@@ -175,7 +176,7 @@
 			new /obj/item/weapon/spellbook/oneuse/mutate/highlander(src)
 
 		if("Clown") //4 + 4 + 6 + 14 + 6 + ? = 34?
-			new /obj/item/weapon/invisible_spray/permanent(src)
+			new /obj/item/weapon/syndie_spray/invisible_spray/permanent(src)
 			new /obj/item/weapon/glue(src)
 			new /obj/item/weapon/glue(src)
 			new /obj/item/weapon/gun/hookshot/whip/windup_box/clownbox(src)
@@ -292,7 +293,7 @@
 	name = "box (GT)"
 	items_to_spawn = list(
 		/obj/item/weapon/implanter/traitor = 2,
-		/obj/item/clothing/glasses/sunglasses/sechud/syndishades,
+		/obj/item/clothing/glasses/hud/security/sunglasses/syndishades,
 	)
 
 /obj/item/weapon/storage/box/syndie_kit/boolets
@@ -307,7 +308,7 @@
 	name = "box (CT)"
 	items_to_spawn = list(
 		/obj/item/weapon/implanter/traitor,
-		/obj/item/clothing/glasses/sunglasses/sechud/syndishades,
+		/obj/item/clothing/glasses/hud/security/sunglasses/syndishades,
 	)
 
 /obj/item/weapon/storage/box/syndie_kit/flaregun
@@ -354,6 +355,15 @@
 		/obj/item/weapon/card/emag = 3,
 	)
 
+/obj/item/weapon/storage/box/syndie_kit/mech_killdozer	//mech not included
+	name = "box (KD)"
+	items_to_spawn = list(
+		/obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit,
+		/obj/item/mecha_parts/mecha_equipment/weapon/random_weapon,
+		/obj/item/mecha_parts/mecha_equipment/weapon/random_weapon,
+		/obj/item/mecha_parts/mecha_equipment/weapon/random_weapon,
+	)
+
 //Syndicate Ayy Lmao Gear
 //The mothership sends its warmest regards
 /obj/item/weapon/storage/box/syndie_kit/ayylmao_harmor
@@ -396,7 +406,7 @@
 		/obj/item/weapon/gun/projectile/hecate,
 		/obj/item/clothing/accessory/storage/webbing,
 		/obj/item/ammo_storage/box/BMG50 = 3,
-		/obj/item/clothing/glasses/thermal/syndi,
+		/obj/item/clothing/glasses/hud/thermal/syndi,
 	)
 
 /obj/item/weapon/storage/box/syndie_kit/spotter
@@ -407,7 +417,7 @@
 		/obj/item/weapon/gun/projectile/deagle/camo,
 		/obj/item/clothing/accessory/holster/handgun,
 		/obj/item/ammo_storage/box/a50,
-		/obj/item/clothing/glasses/thermal/syndi,
+		/obj/item/clothing/glasses/hud/thermal/syndi,
 	)
 
 /obj/item/weapon/storage/box/syndie_kit/scammer
@@ -418,7 +428,7 @@
 		/obj/item/clothing/under/chameleon,
 		/obj/item/clothing/shoes/syndigaloshes,
 		/obj/item/weapon/card/id/syndicate,
-		/obj/item/clothing/glasses/sunglasses/sechud/syndishades,
+		/obj/item/clothing/glasses/hud/security/sunglasses/syndishades,
 		/obj/item/device/reportintercom,
 	)
 

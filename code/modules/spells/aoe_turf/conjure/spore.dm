@@ -44,7 +44,7 @@
 	playsound(pos, 'sound/effects/splat.ogg', 50, 1)
 
 /mob/living/simple_animal/hostile/blobspore/small
-	pass_flags = PASSTABLE | PASSMOB | PASSBLOB
+	pass_flags = PASSTABLE | PASSMOB | PASSBLOB | PASSRAILING
 	size = SIZE_TINY
 	flying = TRUE
 	health = 15

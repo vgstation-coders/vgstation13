@@ -9,7 +9,7 @@
 	spell_flags = WAIT_FOR_CLICK
 	invocation_type = SpI_SHOUT
 	max_targets = 1
-	compatible_mobs = list(/mob/living/carbon/human)
+	valid_targets = list(/mob/living/carbon/human)
 	level_max = list(Sp_TOTAL = 0, Sp_SPEED = 0, Sp_POWER = 0) //You can't quicken this, this would be kind of useless
 	hud_state = "card_trick"
 	var/current_card

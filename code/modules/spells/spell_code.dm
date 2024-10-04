@@ -64,6 +64,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/selection_type = "view"		//can be "range" or "view"
 	var/atom/movable/holder			//where the spell is. Normally the user, can be an item
 	var/duration = 0 //how long the spell lasts
+	var/list/valid_targets = list(/mob/living)
 
 	var/list/spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0) //the current spell levels - total spell levels can be obtained by just adding the two values
 	var/list/level_max = list(Sp_TOTAL = 4, Sp_SPEED = 4, Sp_POWER = 0) //maximum possible levels in each category. Total does cover both.
@@ -156,11 +157,17 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return
 
 /spell/proc/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
+	if(ismob(target))
+		var/mob/M = target
+		if(user in M.get_arcane_golems())
+			return FALSE
+		if(user.shares_arcane_golem_spell(M))
+			return FALSE
 	if(bypass_range && istype(target, /mob/living))
 		return TRUE
 	if(options)
 		return (target in options)
-	return ((target in view_or_range(range, user, selection_type)) && istype(target, /mob/living))
+	return ((target in view_or_range(range, user, selection_type)) && is_type_in_list(target, valid_targets))
 
 /spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override)
 	if(!holder)
@@ -428,11 +435,16 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			return 0
 
 	//gentling check
-	if((user_type == USER_TYPE_WIZARD) && (holder == user))
+	if((is_wizard_spell()) && (holder == user))
 		if(user.is_gentled())
 			return 0
 
 	return 1
+
+/spell/proc/is_wizard_spell()
+	if(user_type == USER_TYPE_WIZARD || USER_TYPE_SPELLBOOK)
+		return TRUE
+	return FALSE
 
 /spell/proc/check_charge(var/skipcharge, mob/user)
 	//Arcane golems have no cooldowns on their spells
@@ -656,6 +668,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return
 
 /spell/proc/on_holder_death(mob/user)
+	return
+
+/spell/proc/on_transfer(mob/user)
 	return
 
 //To batch-remove wizard spells. Linked to mind.dm.

@@ -18,6 +18,10 @@
 	var/rest_sprite_height = 2 // How many pixels of the easel rest should sjut out under the canvas
 
 	starting_materials = list(MAT_WOOD = 3*CC_PER_SHEET_WOOD)
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
+
 
 /obj/structure/easel/New()
 	..()

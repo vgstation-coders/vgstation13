@@ -27,11 +27,18 @@
 	var/turf/target
 	var/turf/source
 	var/movetotarget = 1
+	var/moody_icon = 'icons/lighting/moody_lights.dmi'
+
+/obj/effect/accelerated_particle/New()
+	..()
+	update_moody_light(moody_icon, "overlay_particle")
 
 /obj/effect/accelerated_particle/wide
 	icon = 'icons/obj/machines/96x96particles.dmi'
+	moody_icon = 'icons/lighting/moody_lights_96x96.dmi'
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
+	luminosity = 3
 
 /obj/effect/accelerated_particle/wide/weak
 	movement_range = WEAK_PARTICLE_RANGE
