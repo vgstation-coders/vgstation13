@@ -190,14 +190,14 @@
     if(!istype(T))
         return
     //destroyed artifacts have weird, unpleasant effects
-	//make sure to destroy them before changing the turf though
-	if(artifact_find)
-		var/datum/artifact_postmortem_data/destroyed = new(null, FALSE, TRUE)
-		destroyed.artifact_id = artifact_find.artifact_id
-		destroyed.last_loc = T
-		destroyed.artifact_type = artifact_find.artifact_find_type
-		if (artifact_find.artifact_find_type == /obj/machinery/artifact)
-			destroyed.primary_effect = "???"
-			destroyed.secondary_effect = "???"
-		razed_large_artifacts[artifact_find.artifact_id] += destroyed
-		ArtifactRepercussion(T, usr, "", "[artifact_find.artifact_find_type]")
+    //make sure to destroy them before changing the turf though
+    if(artifact_find)
+        var/datum/artifact_postmortem_data/destroyed = new(null, FALSE, TRUE)
+        destroyed.artifact_id = artifact_find.artifact_id
+        destroyed.last_loc = T
+        destroyed.artifact_type = artifact_find.artifact_find_type
+        if (artifact_find.artifact_find_type == /obj/machinery/artifact)
+            destroyed.primary_effect = "???"
+            destroyed.secondary_effect = "???"
+        razed_large_artifacts[artifact_find.artifact_id] += destroyed
+        ArtifactRepercussion(T, usr, "", "[artifact_find.artifact_find_type]")
