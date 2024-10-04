@@ -355,7 +355,18 @@ var/global/list/lemuria_stuff = list(
 
 /obj/item/weapon/pickaxe
     var/depresses_digsites = FALSE
-    
+		
+/obj/item/weapon/pickaxe/New()
+	. = ..()
+	if(depresses_digsites)
+		overlays += "digsite_depressor"
+
+/obj/item/weapon/pickaxe/drill/digdepress
+	depresses_digsites = TRUE
+
+/obj/item/weapon/pickaxe/drill/diamond/digdepress
+	depresses_digsites = TRUE
+
 /obj/item/weapon/pickaxe/examine(mob/user, size, show_name)
     . = ..()
     if(depresses_digsites)
