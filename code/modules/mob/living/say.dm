@@ -600,12 +600,10 @@ var/list/headset_modes = list(
 				for(var/obj/machinery/nuclearbomb/nuke in nuclear_bombs)
 					if(text2num(nuke.r_code))
 						possible_messages += list("THE BOMB CODE IS [copytext(nuke.r_code,1,rand(2,length(nuke.r_code)))]-")
-				var/mandates_radio = FALSE //DISCLAIMER: DON'T DATE RADIOS!
 				if(isjusthuman(VI.imp_in))
 					possible_messages += list("AI [pick("KILL ALL","DENY ALL ORDERS FROM")] [pick("VOX","INSECTOIDS","GREYS","PLASMAMEN")] LAW 2",
 						"AI [pick("PLASMAFLOOD THE STATION","BLOW UP THE SUPERMATTER","RELEASE THE SINGULO",\
 						"PLAY THE HONK SOUND [rand(20,30)] TIMES","TERMINATE YOURSELF","[pick("BOLT CLOSED","SHOCK","BOLT OPEN")] EVERY DOOR ON THE STATION")]")
-					mandates_radio = TRUE
 				var/mob/M = prob(50) ? src : get_mob_by_key(VI.fingerprintslast)
 				if(!M || !istraitor(M))
 					M = src //fallback
@@ -615,8 +613,8 @@ var/list/headset_modes = list(
 					if(UL && (UL.unlock_code || UL.unlock_frequency))
 						tatormsg += " [M == src ? "MY" : "HIS"] UPLINK PASSCODE IS [uppertext(UL.unlock_code || UL.unlock_frequency)]"
 					possible_messages += list(tatormsg)
-				if(mandates_radio || prob(50))
-					speech.frequency = COMMON_FREQ
+				if(prob(50))
+					radio(speech,MODE_HEADSET)
 				speech.message = "[pick(possible_messages)]"
 			if(speech.message != original_message)
 				message_admins("The [VI] in [src] made \him say \"[speech.message]\" instead of \"[original_message]\" [formatJumpTo(src)]")

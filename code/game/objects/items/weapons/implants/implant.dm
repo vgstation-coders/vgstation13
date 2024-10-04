@@ -30,7 +30,8 @@
 		part = organ
 	forceMove(target)
 	imp_in = target
-	inserter_name = implanter.real_name
+	if(implanter)
+		inserter_name = implanter.real_name
 	implanted(implanter)
 	return TRUE
 
