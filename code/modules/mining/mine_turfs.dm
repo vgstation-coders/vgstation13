@@ -191,9 +191,9 @@ var/list/icon_state_to_appearance = list()
 			AS.finddatum = old_finds
 			AS.finddatum.holder = makeweakref(AS)
 			if(AS.finddatum.archaeo_overlay)
-				AS.overlays += AS.finddatum.archaeo_overlay
+				AS.overlays += image('icons/turf/walls.dmi',src,AS.finddatum.archaeo_overlay)
 			if(AS.finddatum.excav_overlay)
-				AS.overlays += AS.finddatum.excav_overlay
+				AS.overlays += image('icons/turf/walls.dmi',src,AS.finddatum.excav_overlay)
 
 /turf/unsimulated/mineral/ex_act(severity)
 	if(mining_difficulty > MINE_DIFFICULTY_TOUGH)

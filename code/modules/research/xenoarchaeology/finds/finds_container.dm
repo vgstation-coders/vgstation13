@@ -147,7 +147,7 @@
     if( !(excav_overlay && excavation_level > 0) || update_excav_overlay )
         var/excav_quadrant = round(excavation_level / 25) + 1
         excav_overlay = "overlay_excv[excav_quadrant]_[rand(1,3)]"
-        T.overlays += excav_overlay
+        T.overlays += image('icons/turf/walls.dmi',T,excav_overlay)
 
 /datum/finds/proc/update_archaeo_overlay()
     var/turf/T = holder.get()
@@ -158,7 +158,7 @@
         var/datum/find/F = finds[1]
         if(F.excavation_required <= excavation_level + F.view_range)
             archaeo_overlay = "overlay_archaeo[rand(1,3)]"
-            T.overlays += archaeo_overlay
+            T.overlays += image('icons/turf/walls.dmi',T,archaeo_overlay)
 
 /datum/finds/proc/spawn_boulder(mob/user,depresses_digsites = FALSE)
     var/turf/T = holder.get()
