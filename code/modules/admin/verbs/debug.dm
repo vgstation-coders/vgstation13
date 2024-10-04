@@ -61,6 +61,8 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 							stufftocall += A
 					IN_ROUND_CHECK_TICK //bam. now it doesn't freeze the game anymore
 			target = input("Enter target", "Target:", class == "Area or Turf" ? usr.loc : usr, null) as null|anything in stufftocall
+			if(!target)
+				return
 
 	callproc(usr,target)
 	feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
