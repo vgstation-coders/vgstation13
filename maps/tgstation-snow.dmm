@@ -83715,7 +83715,7 @@
 	},
 /area/hallway/primary/fore)
 "lzL" = (
-/obj/window_grille_spawner/reinforced_plasma/full,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/plating/airless,
 /area/engineering/engine)
 "lzO" = (
