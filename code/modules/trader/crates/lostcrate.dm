@@ -368,8 +368,11 @@ var/global/list/lemuria_stuff = list(
 	if(!isturf(O.loc))
 		to_chat(user, "<span class='warning'>\The [O] must be safely placed on the ground for modification.</span>")
 		return
-	playtoolsound(user.loc, 100)
 	var/obj/item/weapon/pickaxe/drill/D = O
+	if(D.depresses_digsites)
+		to_chat(user, "<span class='warning'>\The [O] is already modified to depress digsites.</span>")
+		return
+	playtoolsound(user.loc, 100)
 	D.depresses_digsites = TRUE
 	D.overlays += "digsite_depressor"
 	user.visible_message("<span class='warning'>[user] opens \the [src] and modifies \the [O] to depress digsites.</span>","<span class='warning'>You open \the [src] and modify \the [O] to depress digsites.</span>")
