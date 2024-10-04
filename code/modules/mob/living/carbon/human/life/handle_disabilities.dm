@@ -60,7 +60,7 @@
 		audible_cough(src)
 
 	if(arcanetampered)
-		for(var/mob/living/L in shuffle(view(client ? client.view : world.view,src)))
+		for(var/mob/living/carbon/human/L in shuffle(view(client ? client.view : world.view,src)))
 			if(L.muted_letters?.len)
 				var/list/all_letters = list("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
 				if(prob(50))
