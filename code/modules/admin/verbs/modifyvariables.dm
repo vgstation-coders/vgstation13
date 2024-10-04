@@ -248,9 +248,9 @@ var/list/forbidden_varedit_object_types = list(
 
 /proc/var_inside_datum_helper(new_value) // so it can go recursively
 	if(isdatum(new_value))
+		var/datum/D = new_value
 		if(alert(usr, "This appears to be a datum, use a var in this?","Variable inside [D]","No","Yes") == "Yes")
-			var/datum/D = new_value
-			new_value = D.vars[input("Select variable:", "Varedit [D]", old_value) in D.vars]
+			new_value = D.vars[input("Select variable:", "Varedit [D]") in D.vars]
 			return var_inside_detect_helper(new_value)
 	return new_value
 
