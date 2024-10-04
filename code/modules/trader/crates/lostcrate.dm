@@ -177,7 +177,7 @@ var/global/list/lemuria_stuff = list(
 	desc = "A satchel specifically designed for the transport of gibtonite. It has deep, padded pockets to keep it safe. The gibtonite needs to be disarmed first, of course."
 	can_only_hold = list("/obj/item/weapon/gibtonite")
 	fits_max_w_class = W_CLASS_LARGE
-	icon_state = "satchel-eng"
+	icon_state = "satchel-gibtonite"
 	item_state = "engiepack"
 
 /obj/item/weapon/storage/bag/gibtonite/can_be_inserted(obj/item/W, stop_messages = 0)
