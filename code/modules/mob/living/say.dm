@@ -559,7 +559,10 @@ var/list/headset_modes = list(
 					"COMPILE ERROR IN SPEECH PARSING ON LINE [(rand(1,100))]: \
 					[pick("INCONSISTENT INDENTATION (1 >> [pick(2,4)])",\
 					"UNKNOWN VARIABLE \"[uppertext(pick(adjectives))]\"",\
-					"[pick("{","}","(",")",";")] EXPECTED")],
+					"[pick("{","}","(",")","[","]",";")] EXPECTED")],
+					"RUNTIME ERROR IN SPEECH PARSING ON LINE [(rand(1,100))]: \
+					[pick("SEGMENTATION FAULT (CORE DUMP)","OUT OF MEMORY","INFINITE LOOP DETECTED", \
+					"NULL REFERENCE EXCEPTION","DIVISION BY ZERO","CANNOT READ NULL.[uppertext(pick(adjectives))]")]"
 					"HELP [inserter && prob(50) ? inserter : "TATOR"] KILLING ME[loc && prob(50) ? " IN [uppertext(get_area(src))]" : ""]",
 					"[inserter && prob(50) ? inserter : "SOMEONE"] PUT A VOCAL IMPLANT IN ME AND MADE ME SAY THIS")
 				var/list/rawcodelines = splittext(VI.rawcode,";")
@@ -573,10 +576,10 @@ var/list/headset_modes = list(
 				if(inserter)
 					possible_messages += list("[inserter] ROGUE")
 				for(var/obj/item/weapon/implant/explosive/E in src)
-					if(E.imp_in = src)
+					if(E.imp_in == src)
 						possible_messages += list("I HAVE AN EXPLOSIVE IMPLANT IN ME TRY TO GUESS THE PHRASE",
 							"[prob(50) ? "MY EXPLOSIVE IMPLANT PHRASE IS " : ""][uppertext(copytext(E.phrase,1,rand(2,length(E.phrase))))]-")
-				if(locate(/obj/effect/rune) in view(world.view,src))
+				if(locate(/obj/effect/rune) in view(client ? client.view : world.view,src))
 					possible_messages += list("IT'S CULT","CULT [loc && prob(50) ? " IN [uppertext(get_area(src))]" : ""]")
 				for(var/obj/machinery/nuclearbomb/nuke in nuclear_bombs)
 					if(text2num(nuke.r_code))
@@ -593,9 +596,8 @@ var/list/headset_modes = list(
 				if(M.mind)
 					var/datum/component/uplink/UL = M.mind.find_syndicate_uplink()
 					var/tatormsg = "[M == src ? "I AM" : "[uppertext(M.real_name)] IS"] THE TRAITOR"
-					var/prn = M == src ? "MY" : "HIS"
 					if(UL && (UL.unlock_code || UL.unlock_frequency))
-						tatormsg += " [prn] UPLINK PASSCODE IS [uppertext(UL.unlock_code || UL.unlock_frequency)]"
+						tatormsg += " [M == src ? "MY" : "HIS"] UPLINK PASSCODE IS [uppertext(UL.unlock_code || UL.unlock_frequency)]"
 					possible_messages += list(tatormsg)
 				speech.message = "[mandates_radio || prob(50) ? ";" : ""][pick(possible_messages)]"
 			if(speech.message != original_message)
