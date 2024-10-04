@@ -124,7 +124,7 @@ var/list/forbidden_varedit_object_types = list(
 		"matrix" = V_MATRIX,
 		"null"   = V_NULL,
 		)
-		if(C.check_rights(R_DEBUG))
+		if(usr.check_rights(R_DEBUG))
 			choices += list("proc call" = V_PROC)
 
 		if (!acceptsLists)
