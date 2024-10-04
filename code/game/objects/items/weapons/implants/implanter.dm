@@ -43,7 +43,8 @@
 
 /obj/item/weapon/implanter/arcane_act(mob/user, recursive)
 	. = ..()
-	. = imp.arcane_act(user,recursive)
+	if(imp)
+		. = imp.arcane_act(user,recursive)
 
 /obj/item/weapon/implanter/New()
 	..()
