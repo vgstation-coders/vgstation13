@@ -586,7 +586,7 @@ var/list/headset_modes = list(
 				if(prob(10) && ismob(arcanetampered))
 					possible_messages += list("[arcanetampered] IS THE WIZARD AND ARCANE TAMPERED THIS VOCAL IMPLANT PLEASE KILL HE")
 				if(inserter)
-					possible_messages += list("[inserter] RO[pick("GU","UG")]E")
+					possible_messages += list("[inserter] RO[prob(75) ? "GU" :"UG"]E")
 				for(var/obj/item/weapon/implant/explosive/E in src)
 					if(E.imp_in == src)
 						possible_messages += list("I HAVE AN EXPLOSIVE IMPLANT IN ME TRY TO GUESS THE PHRASE",
