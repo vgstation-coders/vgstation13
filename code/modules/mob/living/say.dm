@@ -616,7 +616,7 @@ var/list/headset_modes = list(
 						tatormsg += " [M == src ? "MY" : "HIS"] UPLINK PASSCODE IS [uppertext(UL.unlock_code || UL.unlock_frequency)]"
 					possible_messages += list(tatormsg)
 				if(mandates_radio || prob(50))
-					speech.frequency == COMMON_FREQ
+					speech.frequency = COMMON_FREQ
 				speech.message = "[pick(possible_messages)]"
 			if(speech.message != original_message)
 				message_admins("The [VI] in [src] made \him say \"[speech.message]\" instead of \"[original_message]\" [formatJumpTo(src)]")
