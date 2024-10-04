@@ -587,6 +587,8 @@ var/list/icon_state_to_appearance = list()
 					finddatum.large_artifact_fail()
 				playsound(src, 'sound/items/shovel.ogg', 50, 1)
 				gets_dug()
+			else
+				finddatum.update_excav_level(used_digging)
 
 	else
 		..(W,user)
