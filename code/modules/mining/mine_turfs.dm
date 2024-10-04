@@ -189,6 +189,7 @@ var/list/icon_state_to_appearance = list()
 		var/turf/unsimulated/floor/asteroid/AS = .
 		if(old_finds)
 			AS.finddatum = old_finds
+			AS.finddatum.holder = AS
 			if(AS.finddatum.archaeo_overlay)
 				AS.overlays += AS.finddatum.archaeo_overlay
 			if(AS.finddatum.excav_overlay)
