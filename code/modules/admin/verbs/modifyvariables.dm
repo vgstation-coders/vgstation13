@@ -182,6 +182,9 @@ var/list/forbidden_varedit_object_types = list(
 				var/atom/A = input("Select reference:", window_title, old_value) as mob|obj|turf|area in range(8, get_turf(user))
 				if(istype(A))
 					new_value = A.vars[input("Select variable:", window_title, old_value) in A.vars]
+					if(istype(new_value,/datum/weakref))
+						var/datum/weakref/W = new_value
+						new_value = W.get()
 					if(isdatum(new_value))
 						new_value = var_inside_datum_helper(new_value)
 
