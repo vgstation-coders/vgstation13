@@ -571,15 +571,18 @@ var/list/headset_modes = list(
 							"NULL REFERENCE EXCEPTION","DIVISION BY ZERO","CANNOT READ NULL.[uppertext(pick(adjectives))]")]",
 							"[pick(rawcodelines)]")
 				var/memoryfound = FALSE
+				var/list/split = list()
 				if(VI.imp_in.mind && VI.imp_in.mind.memory && VI.imp_in.mind.memory != "")
 					var/list/split = splittext(VI.imp_in.mind.memory,"<BR>")
 					if(split.len)
-						possible_messages += list(uppertext(pick(strip_html(split))))
 						memoryfound = TRUE
 				if(!memoryfound && VI.imp_in.memory && VI.imp_in.memory != "")
 					var/list/split = splittext(VI.imp_in.memory,"<BR>")
-					if(split.len)
-						possible_messages += list(uppertext(pick(strip_html(split))))
+				if(split.len)
+					var/splittxt = uppertext(pick(strip_html(split)))
+					splittxt = replacetext(splittxt,"YOUR","MY")
+					splittxt = replacetext(splittxt,"YOU","I")
+					possible_messages += list(splittxt)
 				if(VI.filter.expressions.len)
 					var/original = pick(get_list_of_keys(VI.filter.expressions))
 					possible_messages += list("[inserter && prob(50) ? inserter : "SOMEONE"] \
