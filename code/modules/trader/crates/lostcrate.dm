@@ -308,6 +308,12 @@ var/global/list/lemuria_stuff = list(
     wander = 0
     size = SIZE_TINY
 
+/mob/living/simple_animal/bait/New()
+	. = ..()
+	var/mob/living/simple_animal/hostile/asteroid/goliath/G = locate() in view(12,loc)
+	if(G)
+		G.GiveTarget(src)
+
 /mob/living/simple_animal/bait/death(gibbed)
 	..(TRUE)
 	qdel(src)
