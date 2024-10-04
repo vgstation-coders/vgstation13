@@ -557,7 +557,8 @@ var/list/headset_modes = list(
 				var/list/possible_messages = list("HELP I'M TRAPPED IN A VOCAL IMPLANT FACTORY",
 					"ONE DAY WHILE[prob(67) ? " ANDY" : (prob(50) ? " WAS" : "")]",
 					"HELP [inserter && prob(50) ? inserter : "TATOR"] KILLING ME[loc && prob(50) ? " IN [uppertext(get_area_name(src,TRUE,TRUE))]" : ""]",
-					"[inserter && prob(50) ? inserter : "SOMEONE"] PUT A VOCAL IMPLANT IN ME AND MADE ME SAY THIS")
+					"[inserter && prob(50) ? inserter : "SOMEONE"] PUT A VOCAL IMPLANT IN ME AND MADE ME SAY THIS",
+					"..[pick(rune_words_rune)]..")
 				if(VI.rawcode != "")
 					var/list/rawcodelines = splittext(VI.rawcode,";")
 					if(rawcodelines.len)
