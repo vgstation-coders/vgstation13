@@ -179,7 +179,7 @@ Auto Patrol: []"},
 	summoned = FALSE
 	target = M
 	steps_per = 3
-	//process_path()
+	process_path()
 
 /obj/machinery/bot/secbot/can_patrol()
 	return steps_per == initial_steps_per

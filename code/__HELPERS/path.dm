@@ -18,7 +18,7 @@
  * * exclude: If we want to avoid a specific turf, like if we're a mulebot who already got blocked by some turf
  * * skip_first: Whether or not to delete the first item in the path. This would be done because the first item is the starting tile, which can break movement for some creatures.
  */
-/proc/get_path_to(caller, end, max_distance = 30, mintargetdist, id=null, simulated_only = TRUE, turf/exclude, skip_first=TRUE)
+/proc/get_path_to(caller, end, max_distance = 30, mintargetdist, id=null, simulated_only = TRUE, turf/exclude, skip_first=TRUE, diagonally = FALSE)
 	if(!caller || !get_turf(end))
 		return
 
@@ -28,7 +28,7 @@
 		l = SSpathfinder.mobs.getfree(caller)
 
 	var/list/path
-	var/datum/pathfind/pathfind_datum = new(caller, end, id, max_distance, mintargetdist, simulated_only, exclude)
+	var/datum/pathfind/pathfind_datum = new(caller, end, id, max_distance, mintargetdist, simulated_only, exclude, diagonally)
 	path = pathfind_datum.search()
 	qdel(pathfind_datum)
 
@@ -44,10 +44,10 @@
  * Note that this can only be used inside the [datum/pathfind][pathfind datum] since it uses variables from said datum.
  * If you really want to optimize things, optimize this, cuz this gets called a lot.
  */
-#define CAN_STEP(cur_turf, next) (next && !next.density && cur_turf.Adjacent(next) && !(simulated_only && SSpathfinder.space_type_cache[next.type]) && !cur_turf.LinkBlockedWithAccess(next,caller, id) && (next != avoid))
+#define CAN_STEP(cur_turf, next,thing,id) Toomycross(cur_turf,next,thing,id) //(next && !next.density && cur_turf.Adjacent(next) && !(simulated_only && SSpathfinder.space_type_cache[next.type]) && !cur_turf.LinkBlockedWithAccess(next,caller, id) && (next != avoid))
 /// Another helper macro for JPS, for telling when a node has forced neighbors that need expanding
-#define STEP_NOT_HERE_BUT_THERE(cur_turf, dirA, dirB) ((!CAN_STEP(cur_turf, get_step(cur_turf, dirA)) && CAN_STEP(cur_turf, get_step(cur_turf, dirB))))
-
+#define STEP_NOT_HERE_BUT_THERE(cur_turf, dirA, dirB,thing,id) ((!CAN_STEP(cur_turf,get_step(cur_turf,dirA),thing,id)) && CAN_STEP(cur_turf,get_step(cur_turf,dirB),thing,id))
+//if(!Toomycross(lag_turf,current_turf,caller,id)
 /// The JPS Node datum represents a turf that we find interesting enough to add to the open list and possibly search for new tiles from
 /datum/jps_node
 	/// The turf associated with this node
@@ -120,8 +120,10 @@
 	var/simulated_only
 	/// A specific turf we're avoiding, like if a mulebot is being blocked by someone t-posing in a doorway we're trying to get through
 	var/turf/avoid
+	/// Are we calculating diagonal stuff?
+	var/diagonally = 0
 
-/datum/pathfind/New(atom/movable/caller, atom/goal, id, max_distance, mintargetdist, simulated_only, avoid)
+/datum/pathfind/New(atom/movable/caller, atom/goal, id, max_distance, mintargetdist, simulated_only, avoid, diagonally = 0)
 	src.caller = caller
 	end = get_turf(goal)
 	open = new /datum/heap(/proc/HeapPathWeightCompare)
@@ -131,6 +133,7 @@
 	src.mintargetdist = mintargetdist
 	src.simulated_only = simulated_only
 	src.avoid = avoid
+	src.diagonally = diagonally
 
 /**
  * search() is the proc you call to kick off and handle the actual pathfinding, and kills the pathfind datum instance when it's done.
@@ -164,9 +167,9 @@
 		var/turf/current_turf = current_processed_node.tile
 		for(var/scan_direction in list(EAST, WEST, NORTH, SOUTH))
 			lateral_scan_spec(current_turf, scan_direction, current_processed_node)
-
-		for(var/scan_direction in list(NORTHEAST, SOUTHEAST, NORTHWEST, SOUTHWEST))
-			diag_scan_spec(current_turf, scan_direction, current_processed_node)
+		if(diagonally)
+			for(var/scan_direction in list(NORTHEAST, SOUTHEAST, NORTHWEST, SOUTHWEST))
+				diag_scan_spec(current_turf, scan_direction, current_processed_node)
 
 		CHECK_TICK
 
@@ -217,7 +220,8 @@
 		lag_turf = current_turf
 		current_turf = get_step(current_turf, heading)
 		steps_taken++
-		if(!CAN_STEP(lag_turf, current_turf))
+		//if(!CAN_STEP(lag_turf, current_turf))
+		if(!CAN_STEP(lag_turf,current_turf,caller,id))
 			return
 
 		if(current_turf == end || (mintargetdist && (get_dist(current_turf, end) <= mintargetdist)))
@@ -234,22 +238,37 @@
 		if(parent_node && parent_node.number_tiles + steps_taken > max_distance)
 			return
 
-		var/interesting = FALSE // have we found a forced neighbor that would make us add this turf to the open list?
-
-		switch(heading)
+		var/interesting = TRUE // have we found a forced neighbor that would make us add this turf to the open list?
+/*		switch(heading)
 			if(NORTH)
-				if(STEP_NOT_HERE_BUT_THERE(current_turf, WEST, NORTHWEST) || STEP_NOT_HERE_BUT_THERE(current_turf, EAST, NORTHEAST))
-					interesting = TRUE
+				if(diagonally)
+					if(STEP_NOT_HERE_BUT_THERE(current_turf, WEST, NORTHWEST, caller, id) || STEP_NOT_HERE_BUT_THERE(current_turf, EAST, NORTHEAST, caller, id))
+						interesting = TRUE
+				else
+					if(CAN_STEP(current_turf, get_step(current_turf, EAST), caller, id) || CAN_STEP(current_turf, get_step(current_turf, WEST), caller, id))
+						interesting = TRUE
 			if(SOUTH)
-				if(STEP_NOT_HERE_BUT_THERE(current_turf, WEST, SOUTHWEST) || STEP_NOT_HERE_BUT_THERE(current_turf, EAST, SOUTHEAST))
+				if(diagonally)
+					if(STEP_NOT_HERE_BUT_THERE(current_turf, WEST, SOUTHWEST, caller, id) || STEP_NOT_HERE_BUT_THERE(current_turf, EAST, SOUTHEAST, caller, id))
+						interesting = TRUE
+				else
+					if(CAN_STEP(current_turf, get_step(current_turf, EAST), caller, id) || CAN_STEP(current_turf, get_step(current_turf, WEST), caller, id))
 					interesting = TRUE
 			if(EAST)
-				if(STEP_NOT_HERE_BUT_THERE(current_turf, NORTH, NORTHEAST) || STEP_NOT_HERE_BUT_THERE(current_turf, SOUTH, SOUTHEAST))
+				if (diagonally)
+					if(STEP_NOT_HERE_BUT_THERE(current_turf, NORTH, NORTHEAST, caller, id) || STEP_NOT_HERE_BUT_THERE(current_turf, SOUTH, SOUTHEAST, caller, id))
+						interesting = TRUE
+				else
+					if(CAN_STEP(current_turf, get_step(current_turf, NORTH), caller, id) || CAN_STEP(current_turf, get_step(current_turf, SOUTH), caller, id))
 					interesting = TRUE
 			if(WEST)
-				if(STEP_NOT_HERE_BUT_THERE(current_turf, NORTH, NORTHWEST) || STEP_NOT_HERE_BUT_THERE(current_turf, SOUTH, SOUTHWEST))
+				if(diagonally)
+					if(STEP_NOT_HERE_BUT_THERE(current_turf, NORTH, NORTHWEST, caller, id) || STEP_NOT_HERE_BUT_THERE(current_turf, SOUTH, SOUTHWEST, caller, id))
+						interesting = TRUE
+				else
+					if(CAN_STEP(current_turf, get_step(current_turf, NORTH), caller, id) || CAN_STEP(current_turf, get_step(current_turf, SOUTH), caller, id))
 					interesting = TRUE
-
+*/
 		if(interesting)
 			var/datum/jps_node/newnode = new(current_turf, parent_node, steps_taken)
 			if(parent_node) // if we're a diagonal subscan, we'll handle adding ourselves to the heap in the diag
@@ -278,7 +297,7 @@
 		lag_turf = current_turf
 		current_turf = get_step(current_turf, heading)
 		steps_taken++
-		if(!CAN_STEP(lag_turf, current_turf))
+		if(!CAN_STEP(lag_turf,current_turf,caller,id))
 			return
 
 		if(current_turf == end || (mintargetdist && (get_dist(current_turf, end) <= mintargetdist)))
@@ -299,22 +318,22 @@
 
 		switch(heading)
 			if(NORTHWEST)
-				if(STEP_NOT_HERE_BUT_THERE(current_turf, EAST, NORTHEAST) || STEP_NOT_HERE_BUT_THERE(current_turf, SOUTH, SOUTHWEST))
+				if(STEP_NOT_HERE_BUT_THERE(current_turf, EAST, NORTHEAST,caller,id) || STEP_NOT_HERE_BUT_THERE(current_turf, SOUTH, SOUTHWEST,caller,id))
 					interesting = TRUE
 				else
 					possible_child_node = (lateral_scan_spec(current_turf, WEST) || lateral_scan_spec(current_turf, NORTH))
 			if(NORTHEAST)
-				if(STEP_NOT_HERE_BUT_THERE(current_turf, WEST, NORTHWEST) || STEP_NOT_HERE_BUT_THERE(current_turf, SOUTH, SOUTHEAST))
+				if(STEP_NOT_HERE_BUT_THERE(current_turf, WEST, NORTHWEST,caller,id) || STEP_NOT_HERE_BUT_THERE(current_turf, SOUTH, SOUTHEAST,caller,id))
 					interesting = TRUE
 				else
 					possible_child_node = (lateral_scan_spec(current_turf, EAST) || lateral_scan_spec(current_turf, NORTH))
 			if(SOUTHWEST)
-				if(STEP_NOT_HERE_BUT_THERE(current_turf, EAST, SOUTHEAST) || STEP_NOT_HERE_BUT_THERE(current_turf, NORTH, NORTHWEST))
+				if(STEP_NOT_HERE_BUT_THERE(current_turf, EAST, SOUTHEAST,caller,id) || STEP_NOT_HERE_BUT_THERE(current_turf, NORTH, NORTHWEST,caller,id))
 					interesting = TRUE
 				else
 					possible_child_node = (lateral_scan_spec(current_turf, SOUTH) || lateral_scan_spec(current_turf, WEST))
 			if(SOUTHEAST)
-				if(STEP_NOT_HERE_BUT_THERE(current_turf, WEST, SOUTHWEST) || STEP_NOT_HERE_BUT_THERE(current_turf, NORTH, NORTHEAST))
+				if(STEP_NOT_HERE_BUT_THERE(current_turf, WEST, SOUTHWEST,caller,id) || STEP_NOT_HERE_BUT_THERE(current_turf, NORTH, NORTHEAST,caller,id))
 					interesting = TRUE
 				else
 					possible_child_node = (lateral_scan_spec(current_turf, SOUTH) || lateral_scan_spec(current_turf, EAST))

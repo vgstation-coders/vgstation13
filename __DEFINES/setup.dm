@@ -1372,7 +1372,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 //	null << "[x][a]")
 #endif
 
-#define ASTAR_DEBUG 1
+#define ASTAR_DEBUG 0
 #if ASTAR_DEBUG == 1
 #warn "Astar debug is on. Don't forget to turn it off after you've done :)"
 #define astar_debug(text) to_chat(world, text)

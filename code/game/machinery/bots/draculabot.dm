@@ -205,7 +205,7 @@
 				possible_targets += H
 		if (possible_targets.len)
 			target = pick(possible_targets)
-			process_path() // Let's waste no time
+			process_pathing() // Let's waste no time
 
 /obj/machinery/bot/bloodbot/proc/drink(mob/living/carbon/human/H)
 	if(!on || !istype(H))

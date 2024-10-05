@@ -503,7 +503,7 @@ var/list/firstaid_exceptions = list(
 					var/area/location = get_area(src)
 					broadcast_medical_hud_message("[name] is treating <b>[C]</b> in <b>[location]</b>", src)
 			visible_message("<b>[src]</b> points at [C.name]!")
-			process_path() // Let's waste no time
+			process_pathing() // Let's waste no time
 			look_for_target = FALSE
 			break
 	look_for_target = FALSE

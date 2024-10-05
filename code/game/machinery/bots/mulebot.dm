@@ -1040,7 +1040,9 @@ var/global/mulebot_count = 0
 	if(!cell.use(2))
 		turn_off()
 		return FALSE
-	Move(path[1])
+	density = 0
+	step_to(src,path[1])
+	density = initial(density)
 	if(get_turf(src) != path[1])
 		if(on_path_step_fail(path[1]))
 			return TRUE // keep trying
@@ -1050,7 +1052,7 @@ var/global/mulebot_count = 0
 	path.Remove(path[1])
 	return TRUE
 
-/obj/machinery/bot/mulebot/proc/handle_destination_arrival()
+/obj/machinery/bot/mulebot/handle_destination_arrival()
 	astar_debug_mulebots("dest arrived!")
 	//We've confirmed to arrive at our destination
 	if(current_order.unload_here && is_locking(/datum/locking_category/mulebot))
@@ -1249,10 +1251,13 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/handleAIMouseCommand(atom/A,command)
 	switch(command)
 		if("summon","default")
+			destinations_queue = list()
+			current_order = null
 			target = A
 			destination = A
 			path = list()
 			summoned = TRUE
+			add_manual_destination(get_turf(A),0)
 			process()
 		if("load", "default")
 			if(istype(A, /atom/movable))

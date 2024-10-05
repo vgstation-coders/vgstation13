@@ -268,7 +268,7 @@ Auto Patrol: []"},
 			if(!lasercolor)
 				playsound(src, pick('sound/voice/ed209_20sec.ogg', 'sound/voice/EDPlaceholder.ogg'), 50, 0)
 			visible_message("<b>[src]</b> points at [C.name]!")
-			process_path()
+			process_pathing()
 
 //If the security records say to arrest them, arrest them
 //Or if they have weapons and aren't security, arrest them.
