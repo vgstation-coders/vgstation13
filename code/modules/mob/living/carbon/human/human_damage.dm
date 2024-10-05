@@ -181,9 +181,8 @@
 //Returns a list of damageable organs
 /mob/living/carbon/human/proc/get_damageable_organs(var/ignore_inorganics = FALSE)
 	var/arcanedrink_hands = 0
-	var/obj/item/weapon/reagent_containers/food/drinks/I
 	for(var/indx in GRASP_RIGHT_HAND to GRASP_LEFT_HAND)
-		I = get_held_item_by_index(indx)
+		var/obj/item/weapon/reagent_containers/food/drinks/I = get_held_item_by_index(indx)
 		if(istype(I) && I.arcanetampered)
 			arcanedrink_hands |= indx
 	var/list/datum/organ/external/parts = list()
