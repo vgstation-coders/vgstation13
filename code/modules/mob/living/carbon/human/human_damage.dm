@@ -183,7 +183,7 @@
 	var/arcanedrink_hands = 0
 	for(var/indx in GRASP_RIGHT_HAND to GRASP_LEFT_HAND)
 		var/obj/item/weapon/reagent_containers/food/drinks/I = get_held_item_by_index(indx)
-		if(istype(I) && I.arcanetampered)
+		if(I && I.arcanetampered && istype(I))
 			arcanedrink_hands |= indx
 	var/list/datum/organ/external/parts = list()
 	for(var/datum/organ/external/O in organs)
