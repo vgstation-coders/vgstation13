@@ -124,7 +124,7 @@
 		H.adjustHalLoss(50)
 		H.vessel.trans_to(reagents,reagents.maximum_volume)
 	update_icon()
-	if (can_flip && (M_SOBER in user.mutations) && (user.a_intent == I_GRAB))
+	if (can_flip && !arcanetampered && (M_SOBER in user.mutations) && (user.a_intent == I_GRAB))
 		if (flipping && (M_CLUMSY in user.mutations) && prob(20))
 			to_chat(user, "<span class='warning'>Your clumsy fingers fail to catch back \the [src].</span>")
 			user.drop_item(src, user.loc, 1)
