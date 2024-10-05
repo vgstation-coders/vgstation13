@@ -190,7 +190,7 @@
 			continue
 		if(ignore_inorganics && !O.is_organic())
 			continue
-		if(arcanedrink && (O.type in list(/datum/organ/external/l_arm,/datum/organ/external/hand/l_hand,/datum/organ/external/r_arm,/datum/organ/external/hand/r_hand)))
+		if(arcanedrink && O.grasp_id)
 			continue
 		if(O.brute_dam + O.burn_dam < O.max_damage)
 			parts += O
