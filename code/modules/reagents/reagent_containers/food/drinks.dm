@@ -97,7 +97,7 @@
 	user.drop_item(src, user.loc)
 	cant_drop = 1
 	var/list/obj/structure/table/tables = list()
-	for(var/obj/structure/table/T in view(7,src))
+	for(var/obj/structure/table/T in view(world.view,src))
 		tables += T
 	var/obj/structure/table/ourtable = pick(tables)
 	forceMove(ourtable.loc)
