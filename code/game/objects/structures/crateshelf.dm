@@ -28,7 +28,7 @@
 	capacity = 12
 
 /obj/structure/rack/crate_shelf/centcomm_provided/
-    var/how_cheap_percent = 20
+	var/how_cheap_percent = 20
 
 /obj/structure/rack/crate_shelf/New()
 	. = ..()
@@ -54,8 +54,8 @@
 	return
 
 /obj/structure/rack/crate_shelf/centcomm_provided/New()
-    . = ..()
-     if(prob(how_cheap_percent))
+	. = ..()
+	if(prob(how_cheap_percent))
 		osha_violation = TRUE
 
 /obj/structure/rack/crate_shelf/Destroy()
