@@ -180,17 +180,19 @@
 
 //Returns a list of damageable organs
 /mob/living/carbon/human/proc/get_damageable_organs(var/ignore_inorganics = FALSE)
-	var/arcanedrink = 0
+	var/list/arcanedrinks = list()
+	var/arcaneindx
 	for(var/obj/item/I in held_items)
+		arcaneindx++
 		if(I.arcanetampered && istype(I,/obj/item/weapon/reagent_containers/food/drinks))
-			arcanedrink = 1
+			arcanedrinks += list("[arcaneindx]")
 	var/list/datum/organ/external/parts = list()
 	for(var/datum/organ/external/O in organs)
 		if(!O.is_existing())
 			continue
 		if(ignore_inorganics && !O.is_organic())
 			continue
-		if(arcanedrink && O.grasp_id)
+		if("[O.grasp_id]" in arcanedrinks)
 			continue
 		if(O.brute_dam + O.burn_dam < O.max_damage)
 			parts += O
