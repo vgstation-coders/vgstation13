@@ -14,14 +14,6 @@
 	parts = /obj/item/weapon/rack_parts/shelf
 	pass_flags_self = null
 
-/obj/structure/rack/crate_shelf/centcomm_provided/
-    var/how_cheap_percent = 20
-
-/obj/structure/rack/crate_shelf/centcomm_provided/New()
-    . = ..()
-     if(prob(how_cheap_percent))
-          var/osha_violation = TRUE
-
 	var/mob/living/carbon/human/trappeduser
 	var/trapping = FALSE
 	var/capacity = DEFAULT_SHELF_CAPACITY
@@ -34,6 +26,9 @@
 
 /obj/structure/rack/crate_shelf/tall
 	capacity = 12
+
+/obj/structure/rack/crate_shelf/centcomm_provided/
+    var/how_cheap_percent = 20
 
 /obj/structure/rack/crate_shelf/New()
 	. = ..()
@@ -57,6 +52,11 @@
 		nextshelf_olay.pixel_y = stack_offset
 		overlays += nextshelf_olay
 	return
+
+/obj/structure/rack/crate_shelf/centcomm_provided/New()
+    . = ..()
+     if(prob(how_cheap_percent))
+          var/osha_violation = TRUE
 
 /obj/structure/rack/crate_shelf/Destroy()
 	QDEL_LIST(shelf_contents)
