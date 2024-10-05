@@ -30,8 +30,7 @@
 		if(dish)
 			to_chat(user, "<span class='warning'>A virus containment dish is already inside \the [src].</span>")
 			return
-		if(!user.drop_item(I, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [I]!</span>")
+		if(!user.drop_item(I, src, failmsg = TRUE))
 			return
 		dish = I
 		playsound(loc, 'sound/machines/click.ogg', 50, 1)
@@ -155,7 +154,7 @@
 
 
 /obj/machinery/computer/diseasesplicer/update_icon()
-	..()
+
 	overlays.len = 0
 
 	if (dish)
@@ -174,7 +173,7 @@
 		overlays += dish_content
 
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
-		return
+		return ..()
 
 	if (dish && dish.contained_virus)
 		if (dish.analysed)
@@ -198,6 +197,7 @@
 		buffer_light.plane = ABOVE_LIGHTING_PLANE
 		buffer_light.layer = ABOVE_LIGHTING_LAYER
 		overlays += buffer_light
+	..()
 
 /obj/machinery/computer/diseasesplicer/proc/buffer2dish()
 	if(!memorybank || !dish || !dish.contained_virus)

@@ -1172,7 +1172,13 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define AUTOIGNITION_WAX 518.15
 #define AUTOIGNITION_BIOLOGICAL 633.15 //animal fat
 #define AUTOIGNITION_WELDERFUEL 561.15 //butane
+#define AUTOIGNITION_TRIGGER 500.00 //temperature at which an area begins checking for autoignition
 
+// flame sizes (% of cell volume occupied by a flame)
+#define SMALL_FLAME 25 //a match, a candle, or a lighter (1% chance to ignite)
+#define MEDIUM_FLAME 250 //a single burning object on the ground (10%)
+#define LARGE_FLAME 675 //a healthy campfire (25%)
+#define FULL_FLAME 2500 //floor to ceiling flames
 
 //////////////////
 
@@ -1969,6 +1975,13 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PS_NARSIEHASRISEN1	"Nar-SieHasRisen1"
 #define PS_NARSIEHASRISEN2	"Nar-SieHasRisen2"
 #define PS_NARSIEHASRISEN3	"Nar-SieHasRisen3"
+#define PS_ZAS_DUST			"ZAS Dust"
+#define PS_DANDELIONS		"Dandelions"
+#define PS_CROSS_DUST		"Cross Dust"
+#define PS_CROSS_ORB		"Cross Orb"
+#define PS_SACRED_FLAME		"Sacred Flame"
+#define PS_SACRED_FLAME2	"Sacred Flame2"
+#define PS_BIBLE_PAGE		"Bible Page"
 
 //Particles variable defines
 #define PVAR_SPAWNING	"spawning"
@@ -1981,3 +1994,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PVAR_LAYER		"layer"
 #define PVAR_PIXEL_X	"pixel_x"
 #define PVAR_PIXEL_Y	"pixel_y"
+#define PVAR_LIFESPAN	"lifespan"
+#define PVAR_FADE		"fade"
+
+#define ZAS_DUST_TURFS_PER_TICK	20

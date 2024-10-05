@@ -44,4 +44,4 @@
 			dat += "<br/>"
 
 	dat += "</body></html>"
-	usr << browse(dat, "window=roundstatus;size=700x500")
+	usr << browse(dat, "window=roundstatus;size=750x500")

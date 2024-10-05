@@ -25,14 +25,12 @@
 	if(user.attack_delayer.blocked())
 		return
 
-	if(user.drop_item(I, src))
+	if(user.drop_item(I, src, failmsg = TRUE))
 		holstered = I
 		holstered.add_fingerprint(user)
 		user.visible_message("<span class='notice'>[user] holsters \the [holstered].</span>", "<span class='notice'>You holster \the [holstered].</span>")
 		update_icon()
 		return 1
-	else
-		to_chat(user, "<span class='warning'>You can't let go of \the [I]!</span>")
 
 /obj/item/clothing/accessory/holster/proc/unholster(mob/user as mob)
 	if(!holstered)
@@ -195,6 +193,7 @@
 	return is_type_in_list(W, list(\
 		/obj/item/weapon/kitchen/utensil, \
 		/obj/item/tool/screwdriver, \
+		/obj/item/tool/solder, \
 		/obj/item/tool/wirecutters, \
 		/obj/item/weapon/pen, \
 		/obj/item/tool/scalpel, \

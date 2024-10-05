@@ -45,7 +45,7 @@
 	if(occupant && W.is_wirecutter(user))
 		for(var/datum/butchering_product/teeth/T in occupant.butchering_drops)
 			harvest_product(T,user,W)
-		for(var/datum/butchering_product/xeno_claw/X in occupant.butchering_drops)
+		for(var/datum/butchering_product/claws/X in occupant.butchering_drops)
 			harvest_product(X,user,W)
 
 	if(istype(W,/obj/item/weapon/grab))

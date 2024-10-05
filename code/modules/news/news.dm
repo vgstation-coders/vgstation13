@@ -1,51 +1,3 @@
-
-#define RIOTS 1
-#define WILD_ANIMAL_ATTACK 2
-#define INDUSTRIAL_ACCIDENT 3
-#define BIOHAZARD_OUTBREAK 4
-#define WARSHIPS_ARRIVE 5
-#define PIRATES 6
-#define CORPORATE_ATTACK 7
-#define ALIEN_RAIDERS 8
-#define AI_LIBERATION 9
-#define MOURNING 10
-#define CULT_CELL_REVEALED 11
-#define SECURITY_BREACH 12
-#define ANIMAL_RIGHTS_RAID 13
-#define FESTIVAL 14
-
-#define RESEARCH_BREAKTHROUGH 15
-#define BARGAINS 16
-#define SONG_DEBUT 17
-#define MOVIE_RELEASE 18
-#define BIG_GAME_HUNTERS 19
-#define ELECTION 20
-#define GOSSIP 21
-#define TOURISM 22
-#define CELEBRITY_DEATH 23
-#define RESIGNATION 24
-
-#define DEFAULT 1
-
-#define ADMINISTRATIVE 2
-#define CLOTHING 3
-#define SECURITY 4
-#define SPECIAL_SECURITY 5
-
-#define FOOD 6
-#define ANIMALS 7
-
-#define MINERALS 8
-
-#define EMERGENCY 9
-#define GAS 10
-#define MAINTENANCE 11
-#define ELECTRICAL 12
-#define ROBOTICS 13
-#define BIOMEDICAL 14
-
-#define GEAR_EVA 15
-
 //---- The following corporations are friendly with Nanotrasen and loosely enable trade and travel:
 //Corporation Nanotrasen - Generalised / high tech research and plasma exploitation.
 //Corporation Vessel Contracting - Ship and station construction, materials research.
@@ -63,27 +15,71 @@
 //Destroyers are medium sized vessels, often used for escorting larger ships but able to go toe-to-toe with them if need be.
 //Frigates are medium sized vessels, often used for escorting larger ships. They will rapidly find themselves outclassed if forced to face heavy warships head on.
 
+var/global/list/non_update_news_types = list(/datum/feed_message/news/misc/paycuts_confirmation,/datum/feed_message/news/misc/human_experiments,/datum/feed_message/news/misc/more_food_riots)
+var/global/list/news_types = list()
+
 var/setup_news = 0
 /proc/setup_news()
 	if(setup_news)
 		return
-	var/datum/feed_channel/newChannel = new /datum/feed_channel
-	newChannel.channel_name = "Tau Ceti Daily"
-	newChannel.author = "CentComm Minister of Information"
-	newChannel.locked = 1
-	newChannel.is_admin_channel = 1
-	news_network.network_channels += newChannel
+	news_network.network_channels += new /datum/feed_channel/preset/tauceti
+	news_network.network_channels += new /datum/feed_channel/preset/gibsongazette
 
-	newChannel = new /datum/feed_channel
-	newChannel.channel_name = "The Gibson Gazette"
-	newChannel.author = "Editor Mike Hammers"
-	newChannel.locked = 1
-	newChannel.is_admin_channel = 1
-	news_network.network_channels += newChannel
-
-	for(var/loc_type in typesof(/datum/trade_destination) - /datum/trade_destination)
+	for(var/loc_type in subtypesof(/datum/trade_destination))
 		var/datum/trade_destination/D = new loc_type
 		weighted_randomevent_locations[D] = D.viable_random_events.len
 		weighted_mundaneevent_locations[D] = D.viable_mundane_events.len
 
+	news_types = subtypesof(/datum/feed_message/news/misc) - non_update_news_types
 	setup_news = 1
+
+var/scheduledNews = null
+/proc/checkNews()
+	if(!scheduledNews)
+		var/delay = rand(eventTimeLower, eventTimeUpper) MINUTES
+		scheduledNews = world.timeofday + delay
+		message_admins("News cycle refreshed. Next post in [delay/600] minutes.")
+	else if(world.timeofday >scheduledNews)
+		var/datum/trade_destination/affected_dest = prob(90) || !news_types.len ? pickweight(weighted_mundaneevent_locations) : null
+		var/datum/feed_message/news/newspost
+		var/type
+		if(affected_dest?.viable_mundane_events.len)
+			type = pick(affected_dest.viable_mundane_events)
+			newspost = new type(affected_dest)
+			if(newspost.affected_dest.get_custom_eventstring(type))
+				newspost.body = newspost.affected_dest.get_custom_eventstring(type)
+		else
+			type = pick(news_types)
+			newspost = new type()
+			news_types -= newspost
+		announce_newscaster_news(newspost)
+		scheduledNews = null
+		checkNews()
+
+/proc/announce_newscaster_news(datum/feed_message/news/news)
+
+	if(news.affected_dest?.get_custom_eventstring(news.type))
+		news.body = news.affected_dest.get_custom_eventstring(news.type)
+
+	var/datum/feed_channel/sendto
+	for(var/datum/feed_channel/FC in news_network.network_channels)
+		if(FC.channel_name == news.channel_name)
+			sendto = FC
+			break
+
+	if(!sendto)
+		sendto = new /datum/feed_channel
+		sendto.channel_name = news.channel_name
+		sendto.author = news.author
+		sendto.locked = 1
+		sendto.is_admin_channel = 1
+		news_network.network_channels += sendto
+
+	sendto.messages += news
+
+	for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
+		NEWSCASTER.newsAlert(news.channel_name,news.headline)
+
+	if(news.update_type)
+		spawn(rand(news.update_delay_min,news.update_delay_max))
+			announce_newscaster_news(new news.update_type)

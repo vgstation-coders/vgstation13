@@ -81,7 +81,6 @@ var/list/holopads = list()
 	/*There are pretty much only three ways to interact here.
 	I don't need to check for client since they're clicking on an object.
 	This may change in the future but for now will suffice.*/
-	user.cameraFollow = null // Stops tracking
 
 	if(master && (master==user) && holo)//If there is a hologram, remove it. But only if the user is the master. Otherwise do nothing.
 		clear_holo()
@@ -146,7 +145,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	colored_holo.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
 	holo.icon = colored_holo
 
-	var/icon/colored_ray = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(ray)), override_dir = SOUTH)
+	var/icon/colored_ray = getFlatIcon(ray)
 	colored_ray.ColorTone(A.holocolor)
 	ray.icon = colored_ray
 

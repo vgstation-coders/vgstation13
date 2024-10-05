@@ -305,6 +305,8 @@
 			tF += C.offenseTackleBonus()
 	if(species)
 		tF += species.tacklePower
+	if(reagents.has_reagent(SQUASH))
+		tF *= 1.5
 	return tF
 
 /mob/living/carbon/human/bonusTackleDefense(var/tD = 0)
@@ -313,6 +315,8 @@
 			tD += C.defenseTackleBonus()
 	if(species)
 		tD += species.tacklePower
+	if(reagents.has_reagent(SQUASH))
+		tD *= 1.5
 	return tD
 
 /mob/living/carbon/human/bonusTackleRange(var/tR = 0)
@@ -325,6 +329,8 @@
 		var/obj/item/slowSuit = wear_suit
 		if(slowSuit.slowdown > NO_SLOWDOWN)
 			tR -= 1
+	if(reagents.has_reagent(SQUASH))
+		tR *= 2
 	if(reagents.get_sportiness()>=5)
 		tR += 1
 	return max(0, tR)
@@ -338,3 +344,12 @@
 		knock_out_teeth()
 	..(hurtAmount, knockAmount, hurtSound)
 
+/mob/living/carbon/human/get_attacker_accuracy_increase()
+	var/accuracy_bonus = 0
+	if(isninja(src)) //Ninjas are expert combatants
+		accuracy_bonus = 50
+	return accuracy_bonus
+
+/mob/living/carbon/human/get_defender_accuracy_decrease()
+	var/accuracy = 0
+	return accuracy

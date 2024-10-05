@@ -241,7 +241,7 @@
 			T.cover.shake_animation(4, 4, 0.2 SECONDS, 20)
 	else
 		machine.shake_animation(4, 4, 0.2 SECONDS, 20)
-	spark(machine)
+	spark(machine, surfaceburn = TRUE)
 	spawn(4 SECONDS)
 		if(machine)
 			explosion(get_turf(machine), -1, 2, 3, 4) // Welding tank sized explosion

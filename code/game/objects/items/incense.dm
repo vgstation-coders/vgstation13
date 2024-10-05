@@ -66,7 +66,7 @@
 	adjective = "slippery"
 	color = "#ffff00"
 
-/obj/item/incense_stick/cabbage
+/obj/item/incense_stick/leafy
 	fragrance = INCENSE_LEAFY
 	adjective = "fresh"
 	color = "#33cc33"
@@ -107,6 +107,11 @@
 		exting()
 
 /obj/item/incense_stick/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(lit)
+		return
+	burn()
+
+/obj/item/incense_stick/ignite()
 	if(lit)
 		return
 	burn()
@@ -173,7 +178,7 @@
 		//are we on a turf? or held by a mob that's on a turf? or in a thurible (that's on the ground or held by a mob?)
 		if (istype(location) && (isturf(loc) || (ismob(loc) && isturf(loc.loc)) || (istype(loc,/obj/item/weapon/thurible) && (isturf(loc.loc) || (ismob(loc.loc) && isturf(loc.loc.loc))))))//I'm sorry
 			if (location)
-				location.hotspot_expose(source_temperature, 5, surfaces = 0)
+				try_hotspot_expose(source_temperature, SMALL_FLAME, 0)
 				anim(target = location, a_icon = 'icons/effects/160x160.dmi', flick_anim = "incense", offX = -WORLD_ICON_SIZE*2+pixel_x, offY = -WORLD_ICON_SIZE*2+pixel_y)
 				if (location.zone)//is there a simulated atmosphere where we are?
 
@@ -234,6 +239,11 @@
 	if(ismob(loc))
 		var/mob/M = loc
 		M.update_inv_hands()
+
+/obj/item/incense_stick/extinguish()
+	lit = 0
+	update_icon()
+	..()
 
 /obj/item/incense_stick/proc/set_fragrance(var/newfrag)
 	if(fragrance == newfrag)
@@ -340,7 +350,7 @@
 	new /obj/item/incense_stick/vapor(src)
 	new /obj/item/incense_stick/booze(src)
 	new /obj/item/incense_stick/banana(src)
-	new /obj/item/incense_stick/cabbage(src)
+	new /obj/item/incense_stick/leafy(src)
 	new /obj/item/incense_stick/vale(src)
 	new /obj/item/incense_stick/cornoil(src)
 
@@ -388,7 +398,7 @@
 	fragrance = INCENSE_BANANA
 	adjective = "slippery"
 
-/obj/item/incense_oilbox/cabbage
+/obj/item/incense_oilbox/leafy
 	fragrance = INCENSE_LEAFY
 	adjective = "fresh"
 

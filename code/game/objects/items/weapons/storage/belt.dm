@@ -10,7 +10,6 @@
 	hitsound = "sound/weapons/whip.ogg"
 	restraint_resist_time = 30 SECONDS
 	toolsounds = list("rustle")
-	w_class = W_CLASS_LARGE
 	w_type = RECYK_BIOLOGICAL //leather
 	flammable = TRUE
 
@@ -19,6 +18,7 @@
 	desc = "It has a tag that rates it for compatibility with standard tools, device analyzers, flashlights, cables, engineering tape, small fire extinguishers, compressed matter cartridges, light replacers, and fuel cans."
 	icon_state = "utilitybelt"
 	item_state = "utility"
+	w_class = W_CLASS_LARGE
 	storage_slots = 14
 	max_combined_w_class = 200 //This actually doesn't matter as long as it is arbitrarily high, bar will be set by storage slots
 	fits_ignoring_w_class = list(
@@ -170,6 +170,7 @@
 		"/obj/item/device/flashlight/pen",
 		"/obj/item/clothing/mask/surgical",
 		"/obj/item/clothing/gloves/latex",
+		"/obj/item/clothing/accessory/stethoscope",
 		"/obj/item/device/mass_spectrometer",
 		"/obj/item/device/reagent_scanner",
 		"/obj/item/device/gps/paramedic",
@@ -179,6 +180,7 @@
 		"/obj/item/weapon/electrolyzer",
 		"/obj/item/weapon/autopsy_scanner/healthanalyzerpro",
 		"/obj/item/weapon/depocket_wand/suit",
+		"/obj/item/weapon/thermometer",
 		"/obj/item/taperoll/viro",
 		"/obj/item/taperoll/syndie/viro"
 	)
@@ -529,7 +531,7 @@
 		"/obj/item/weapon/minihoe",
 		"/obj/item/weapon/hatchet",
 		"/obj/item/weapon/bee_net",
-		"/obj/item/weapon/gun/energy/floragun",
+		"/obj/item/floral_somatoray",
 		"/obj/item/weapon/fishtools",
 		"/obj/item/fish_eggs")
 

@@ -33,5 +33,6 @@
 	max_n2 = 0
 	minbodytemp = 0
 	speed = 7
+	supernatural = TRUE
 
 	blooded = FALSE

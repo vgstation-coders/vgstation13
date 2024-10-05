@@ -41,7 +41,6 @@ var/global/list/available_paintings = list(
 	item_state = "painting"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	flags = FPRINT
-	w_class = W_CLASS_MEDIUM
 	w_type = RECYK_WOOD
 	flammable = TRUE
 	frame_material = /obj/item/stack/sheet/wood
@@ -156,8 +155,7 @@ var/global/list/available_paintings = list(
 			desc = "So perfectly blank you dare not paint on it."
 
 /obj/item/mounted/frame/painting/do_build(turf/on_wall, mob/user)
-	if(!user.drop_item(src))
-		to_chat(user, "<span class='warning'>You can't let go of \the [src]!</span>")
+	if(!user.drop_item(src, failmsg = TRUE))
 		return
 
 	to_chat(user, "<span class='notice'>You hang the [src] on \the [on_wall]...</span>")
@@ -208,7 +206,6 @@ var/global/list/available_paintings = list(
 	desc = "A blank painting."
 	icon = 'icons/obj/paintings.dmi'
 	icon_state = "blank_old"
-	w_class = W_CLASS_LARGE
 	w_type = RECYK_WOOD
 	flammable = FALSE //no good way of burning these yet
 	anchored = 1

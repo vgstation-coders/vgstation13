@@ -97,6 +97,30 @@
 			return {"<a href='?_src_=holder;adminplayeropts=\ref[AP]'>astral projecting</a>"}
 	return "logged out"
 
+/datum/role/cultist/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
+	var/dat = ..()
+	dat += "  - <a href='?src=\ref[src]&mind=\ref[antag]&givedevotion=1'>Give devotion ([devotion])</a>"
+	return dat
+
+/datum/role/cultist/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+	..()
+	if (!usr.client.holder)
+		return FALSE
+	if (href_list["givedevotion"])
+		var/amount = input("How much would you like to give?", "Giving devotion") as null|num
+		if (!amount)
+			return FALSE
+		gain_devotion(amount, DEVOTION_TIER_4)
+	if (href_list["replaceritual"])
+		var/choice = alert(usr,"Which ritual do you want to replace?","Replace Ritual","first ritual","second ritual")
+		switch(choice)
+			if ("first ritual")
+				replace_rituals(RITUAL_CULTIST_1)
+				antag.role_panel()
+			if ("second ritual")
+				replace_rituals(RITUAL_CULTIST_2)
+				antag.role_panel()
+
 /datum/role/cultist/process()
 	..()
 	if (holywarning_cooldown > 0)
@@ -226,6 +250,15 @@
 
 /datum/role/cultist/extraPanelButtons()
 	var/dat = ""
+	dat += "  - <a href='?src=\ref[src]&mind=\ref[antag]&givedevotion=1'>Give devotion ([devotion])</a>"
+	dat += "<br>rituals: "
+	for (var/ritual_slot in rituals)
+		if (rituals[ritual_slot])
+			var/datum/bloodcult_ritual/my_ritual = rituals[ritual_slot]
+			dat += "[my_ritual.name] - "
+		else
+			dat += "<i>cooldown</i> - "
+	dat += "<a href='?src=\ref[src]&mind=\ref[antag]&replaceritual=1'>\[Replace\]</a>"
 	if (mentor)
 		dat = "<br>Currently under the mentorship of <b>[mentor.antag.name]/([mentor.antag.key])</b><br>"
 	if (acolytes.len)
@@ -372,7 +405,7 @@
 						if (M)
 							to_chat(M, "<span class='sinister'>You have completed a ritual and been reward for your devotion...soon another ritual will take its place.</span>")
 						spawn(5 MINUTES)
-							if (!gcDestroyed)
+							if (!gcDestroyed && !rituals[ritual_slot])
 								replace_rituals(ritual_slot)
 	if (faction && (faction.stage != BLOODCULT_STAGE_ECLIPSE))
 		var/datum/faction/bloodcult/cult = faction
@@ -393,7 +426,8 @@
 								else
 									to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
 						spawn(10 MINUTES)
-							cult.replace_rituals(ritual_slot)
+							if (!cult.rituals[ritual_slot])
+								cult.replace_rituals(ritual_slot)
 
 	//The more devotion the cultist has acquired, the less devotion they obtain from lesser rituals
 	switch (get_devotion_rank() - tier)
@@ -518,7 +552,7 @@
 		H.stuttering = max(H.stuttering, 12)
 		H.Jitter(12)
 
-/datum/role/cultist/handle_splashed_reagent(var/reagent_id)//also proc'd when holy water is drinked or ingested in any way
+/datum/role/cultist/handle_splashed_reagent(var/reagent_id, var/method, var/volume)//also proc'd when holy water is drinked or ingested in any way
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))
 		return
@@ -527,11 +561,17 @@
 			holywarning_cooldown = 5
 			to_chat(H, "<span class='danger'>The cold touch of holy water makes your head spin, you're having trouble walking straight.</span>")
 
-	if (reagent_id == HOLYWATER || reagent_id == INCENSE_HAREBELLS)
-		H.eye_blurry = max(H.eye_blurry, 12)
-		H.Dizzy(12)
-		H.stuttering = max(H.stuttering, 12)
-		H.Jitter(12)
+	if (reagent_id == SACREDWATER)
+		if (holywarning_cooldown <= 0)
+			holywarning_cooldown = 5
+			to_chat(H, "<span class='danger'>The burning touch of sacred water sears your skin.</span>")
+
+	switch(reagent_id)
+		if (HOLYWATER,INCENSE_HAREBELLS,SACREDWATER)
+			H.eye_blurry = max(H.eye_blurry, 12)
+			H.Dizzy(12)
+			H.stuttering = max(H.stuttering, 12)
+			H.Jitter(12)
 
 /datum/role/cultist/proc/write_rune(var/word_to_draw)
 	var/mob/living/user = antag.current
@@ -546,6 +586,10 @@
 
 	if(!istype(user.loc, /turf))
 		to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
+		return
+
+	if(istype(user.loc, /turf/space))
+		to_chat(user, "<span class='warning'>Get over a solid surface first!</span>")
 		return
 
 	var/turf/T = get_turf(user)

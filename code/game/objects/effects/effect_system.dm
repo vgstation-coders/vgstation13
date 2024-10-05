@@ -11,8 +11,9 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	icon = 'icons/effects/effects.dmi'
 	mouse_opacity = 0
 	flags = 0
+	density = 0
 	w_type = NOT_RECYCLABLE
-	pass_flags = PASSTABLE|PASSGRILLE|PASSMACHINE|PASSRAILING
+	pass_flags = PASSTABLE | PASSGRILLE | PASSMACHINE | PASSGIRDER | PASSRAILING
 
 /obj/effect/dissolvable()
 	return 0
@@ -28,25 +29,14 @@ would spawn and follow the beaker, even if it is carried or thrown.
 
 /obj/effect/water/New()
 	. = ..()
-	//var/turf/T = src.loc
-	//if (istype(T, /turf))
-	//	T.firelevel = 0 //TODO: FIX
 
 	spawn(70)
 		qdel(src)
 
 /obj/effect/water/Destroy()
-	//var/turf/T = src.loc
-	//if (istype(T, /turf))
-	//	T.firelevel = 0 //TODO: FIX
-
 	..()
 
 /obj/effect/water/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	//var/turf/T = src.loc
-	//if (istype(T, /turf))
-	//	T.firelevel = 0 //TODO: FIX
-
 	if (--life < 1)
 		//SN src = null
 		qdel(src)
@@ -88,6 +78,9 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	return 0
 
 /obj/effect/blob_act()
+	return
+
+/obj/effect/ignite()
 	return
 
 /////////////////////////////////////////////
@@ -187,9 +180,7 @@ steam.start() -- spawns the effect
 		qdel(src)
 		return
 	else
-		var/turf/T = src.loc
-		if(istype(T, /turf) && prob(1))
-			T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
+		try_hotspot_expose(SPARK_TEMP, SMALL_FLAME, surfaceburn)
 		step(src,move_dir)
 	energy--
 
@@ -202,7 +193,7 @@ steam.start() -- spawns the effect
 	else
 		location = get_turf(loca)
 
-/datum/effect/system/spark_spread/start(surfaceburn = TRUE)
+/datum/effect/system/spark_spread/start(surfaceburn = TRUE, silent = FALSE)
 	if (holder)
 		location = get_turf(holder)
 	if(!location)
@@ -213,7 +204,8 @@ steam.start() -- spawns the effect
 	else
 		directions = alldirs.Copy()
 
-	playsound(location, "sparks", 100, 1)
+	if(!silent)
+		playsound(location, "sparks", 100, 1)
 	for (var/i = 1 to number)
 		var/nextdir=pick_n_take(directions)
 		if(nextdir)
@@ -223,12 +215,22 @@ steam.start() -- spawns the effect
 			else
 				var/obj/effect/sparks/nosurfaceburn/sparks = new /obj/effect/sparks/nosurfaceburn(location)
 				sparks.start(nextdir)
-// This sparks.
-/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = TRUE) //surfaceburn means the sparks can ignite things on the ground. set it to false to keep eg. portals like in the time agent event from burning down the station
+/**
+  * This sparks.
+  *
+  * Generates some sparks at specified location
+  * Arguments:
+  * * atom/loc - where the sparks are set off
+  * * amount - how many sparks, default 3
+  * * cardinals - if true, sparks will not spread diagonally, default TRUE
+  * * surfaceburn - if it starts fires, default FALSE
+  * * silent - if TRUE, the initial spark won't make noise, default FALSE
+  */
+/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = FALSE, var/silent = FALSE)
 	loc = get_turf(loc)
 	var/datum/effect/system/spark_spread/S = new
 	S.set_up(amount, cardinals, loc)
-	S.start(surfaceburn)
+	S.start(surfaceburn, silent)
 
 #undef SPARK_TEMP
 

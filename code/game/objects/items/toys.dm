@@ -683,6 +683,7 @@
 	desc = "A seemingly innocent sunflower...with a twist."
 	icon = 'icons/obj/hydroponics/sunflower.dmi'
 	icon_state = "produce"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
 	item_state = "sunflower"
 	var/empty = 0
 	flags = OPENCONTAINER
@@ -911,10 +912,9 @@
 	name = "toy nuke-op"
 	desc = "Mildly explosive."
 	icon_state = "newcop"
-	var/emagged = 0
 
-/obj/item/toy/gasha/newcop/attackby(obj/item/I, mob/user)
-	if(isEmag(I) && !emagged)
+/obj/item/toy/gasha/newcop/emag_act(mob/user)
+	if(!emagged)
 		to_chat(user, "<span class='warning'>You turned the toy into a bomb!</span>")
 		emagged = 1
 
@@ -925,10 +925,6 @@
 		sleep(5)
 		explosion(get_turf(src), -1,1,4, whodunnit = user)
 		qdel(src)
-	else
-		return
-
-
 
 /obj/item/toy/gasha/jani
 	name = "toy janitor"
@@ -1447,14 +1443,7 @@
 /obj/item/toy/balloon/inflated/glove/pair/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/toy/crayon/red))
-		to_chat(user, "You color \the [src] light red using \the [W].")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/clothing/gloves/anchor_arms/A = new (get_turf(user))
-			user.put_in_hands(A)
-		else
-			new /obj/item/clothing/gloves/anchor_arms(get_turf(src.loc))
-		qdel(src)
+		user.create_in_hands(src, /obj/item/clothing/gloves/anchor_arms, msg = "You color \the [src] light red using \the [W].")
 
 /obj/item/toy/balloon/decoy
 	name = "inflatable decoy"

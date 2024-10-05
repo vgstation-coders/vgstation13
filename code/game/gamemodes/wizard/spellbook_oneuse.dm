@@ -18,11 +18,6 @@
 	name += spellname
 
 /obj/item/weapon/spellbook/oneuse/attack_self(mob/user)
-	if(istype(user,/mob/living/carbon))
-		var/mob/living/carbon/C = user
-		if(C.op_stage.butt == SURGERY_NO_BUTT)
-			to_chat(user, "<span class='info'>You are missing your ass! It would be pointless to attempt to learn magic without an ass to store it in.</span>")
-			return
 	var/spell/S = new spell(user)
 	for(var/spell/knownspell in user.spell_list)
 		if(knownspell.type == S.type)
@@ -37,6 +32,12 @@
 	else
 		S.refund_price = 0 // So that they can't be refunded
 		user.add_spell(S, iswizard = TRUE)
+		var/datum/role/wizard/W = user.mind.GetRole(WIZARD)
+		if(istype(W))
+			W.spells_from_spellbook += S
+		var/datum/role/wizard_apprentice/WA = user.mind.GetRole(WIZAPP)
+		if(istype(WA))
+			WA.spells_from_spellbook += S
 		to_chat(user, "<span class='notice'>you rapidly read through the arcane book. Suddenly you realize you understand [spellname]!</span>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.real_name] ([user.ckey]) learned the spell [spellname] ([S]).</font>")
 		onlearned(user)
@@ -418,7 +419,7 @@
 
 /obj/item/weapon/spellbook/oneuse/ringoffire/recoil(mob/living/carbon/user as mob)
 	user.adjust_fire_stacks(10)
-	user.IgniteMob()
+	user.ignite()
 	to_chat(user, "<span class = 'warning'>The book sets you alight!</span>")
 
 /obj/item/weapon/spellbook/oneuse/mirror_of_pain
@@ -461,7 +462,7 @@
 /obj/item/weapon/spellbook/oneuse/firebreath/recoil(mob/living/carbon/user)
 	to_chat(user, "<span class = 'warning'>You burst into flames!</span>")
 	user.adjust_fire_stacks(0.5)
-	user.IgniteMob()
+	user.ignite()
 
 /obj/item/weapon/spellbook/oneuse/snakes
 	spell = /spell/aoe_turf/conjure/snakes

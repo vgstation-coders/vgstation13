@@ -220,23 +220,6 @@
 	if (istype(receptacle, /obj/item/soulstone/gem))
 		gem = TRUE
 
-	var/mob/victim
-	if (iscarbon(target))
-		victim = target
-	else if (istype(target, /obj/item/organ/external/head))
-		var/obj/item/organ/external/head/target_head = target
-		victim = target_head.brainmob
-
-	if (victim)
-		//First off let's check that the cult isn't bypassing its convertee cap
-		if (iscultist(user))
-			if (!iscultist(victim))
-				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-				if (cult && !cult.CanConvert())
-					if (!blade || victim.isDead())
-						to_chat(user, "<span class='danger'>The cult has too many members already, \the [soul_receptacle] won't let you take their soul. Although you could bypass this restriction by sacrificing them at an Altar with this blade instead.</span>")
-					return
-
 	if (iscarbon(target))
 		init_body(target,user)
 

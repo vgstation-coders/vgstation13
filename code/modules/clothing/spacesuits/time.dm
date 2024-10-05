@@ -35,7 +35,7 @@
 	w_class = W_CLASS_LARGE
 	slowdown = NO_SLOWDOWN
 	armor = list(melee = 30, bullet = 25, laser = 15, energy = 15, bomb = 15, bio = 100, rad = 30)
-	clothing_flags = PLASMAGUARD
+	clothing_flags = PLASMAGUARD | ONESIZEFITSALL
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/radio, /obj/item/weapon/gun, /obj/item/weapon/grenade)
 	siemens_coefficient = 0.6

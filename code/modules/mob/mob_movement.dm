@@ -235,20 +235,24 @@
 	return
 
 /client/proc/Move_object(direct)
+	. = 0
 	for(var/datum/control/C in mob.control_object)
 		if(!C.controller)
 			mob.control_object.Remove(C)
 			qdel(C)
 			continue
 		C.Move_object(direct)
+		. = 1
 
 /client/proc/Dir_object(direct)
+	. = 0
 	for(var/datum/control/C in mob.orient_object)
 		if(!C.controller)
 			mob.orient_object.Remove(C)
 			qdel(C)
 			continue
 		C.Orient_object(direct)
+		. = 1
 
 /client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(move_delayer.next_allowed > world.time)
@@ -347,7 +351,6 @@
 		var/old_dir = mob.dir
 
 		mob.delayNextMove(move_delay)
-		mob.last_move_intent = world.time + 10
 		mob.set_glide_size(DELAY2GLIDESIZE(move_delay)) //Since we're moving OUT OF OUR OWN VOLITION AND BY OURSELVES we can update our glide_size here!
 
 		INVOKE_EVENT(mob, /event/before_move)
@@ -476,9 +479,7 @@
 				var/mob/dead/observer/observer = mob
 				if(observer.locked_to) //Ghosts can move at any time to unlock themselves (in theory from following a mob)
 					observer.manual_stop_follow(observer.locked_to)
-
-				if (observer.station_holomap)
-					observer.station_holomap.update_holomap()
+				observer.update_holomaps()
 			var/movedelay = GHOST_MOVEDELAY
 			if(isobserver(mob))
 				var/mob/dead/observer/observer = mob
@@ -492,14 +493,13 @@
 			if(A && A.anti_ethereal && !isAdminGhost(mob))
 				to_chat(mob, "<span class='sinister'>A dark forcefield prevents you from entering the area.</span>")
 			else
+				var/blocked = FALSE
 				if((T && T.holy) && isobserver(mob))
 					var/mob/dead/observer/observer = mob
 					if(observer.invisibility == 0 || observer.mind && (find_active_faction_by_member(observer.mind.GetRole(LEGACY_CULTIST)) || find_active_faction_by_member(iscultist(observer))))
 						to_chat(mob, "<span class='warning'>You cannot get past holy grounds while you are in this plane of existence!</span>")
-					else
-						mob.forceEnter(get_step(mob, direct))
-						mob.dir = direct
-				else
+						blocked = TRUE
+				if(!blocked && !Move_object(direct) && !Dir_object(direct))
 					mob.forceEnter(get_step(mob, direct))
 					mob.dir = direct
 			if(istype(T, /turf/simulated/open)) // Stair movement down
@@ -519,7 +519,7 @@
 				movedelay = ETHEREAL_IMPROVED_MOVEDELAY
 			mob.set_glide_size(DELAY2GLIDESIZE(movedelay))
 			var/turf/newLoc = get_step(mob,direct)
-			if(!(newLoc.turf_flags & NOJAUNT) && !newLoc.holy)
+			if(!(newLoc.turf_flags & NOJAUNT) && !newLoc.holy && !Move_object(direct) && !Dir_object(direct))
 				mob.forceEnter(newLoc)
 				mob.dir = direct
 			else

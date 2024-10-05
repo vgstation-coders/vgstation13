@@ -54,7 +54,6 @@
 	var/tmp/lock_time = -100
 	var/mouthshoot = 0 ///To stop people from suiciding twice... >.>
 	var/automatic = 0 //Used to determine if you can target multiple people.
-	var/tmp/mob/living/last_moved_mob //Used to fire faster at more than one person.
 	var/tmp/told_cant_shoot = 0 //So that it doesn't spam them with the fact they cannot hit them.
 	var/firerate = 1 	// 0 for one bullet after tarrget moves and aim is lowered,
 						//1 for keep shooting until aim is lowered
@@ -73,6 +72,20 @@
 	// Tells is_honorable() which special_roles to respect.
 	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER | HONORABLE_NINJA
 	var/kick_fire_chance = 5
+
+	//Affects the accuracy of the weapon
+	var/gun_excessive_missing //If toggled on, projectiles that fail to hit a specified zone will always miss
+	var/gun_miss_chance_value //Additive miss chance
+	var/gun_miss_message //Message that shows up as an addition to the message text
+	var/gun_miss_message_replace //If toggled on, will cause gun_miss_message to replace the entire missing message
+
+	//This is a list that allows admins to alter projectile properties mid-round via assoc list.
+	//Usage: vv the gun, C a new list, add text variable equal to the variable name you want to change,
+	//Then set an associative value equal to the new value you want to change it to.
+	//aka if you want to change the damage to 25, add a list with entry: text damage and associated value num 25
+	var/list/bullet_overrides
+	//And this overrides whatever's in the chamber.
+	var/bullet_type_override
 
 /obj/item/weapon/gun/New()
 	..()
@@ -187,12 +200,17 @@
 		var/datum/organ/external/a_hand = H.get_active_hand_organ()
 		if(!a_hand.can_use_advanced_tools())
 			if(display_message)
-				to_chat(user, "<span class='warning'>Your [a_hand] doesn't have the dexterity to do this!</span>")
+				to_chat(user, "<span class='warning'>Your [a_hand.display_name] doesn't have the dexterity to do this!</span>")
 			return 0
 	return 1
 
 /obj/item/weapon/gun/proc/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	//Exclude lasertag guns from the M_CLUMSY check.
+	. = reset_point_blank_shot()
+
+	if(!can_Fire(user, 1))
+		return
+
 	var/explode = FALSE
 	var/dehand = FALSE
 	if(istype(user, /mob/living))
@@ -219,9 +237,6 @@
 			qdel(src)
 			return
 
-	if(!can_Fire(user, 1))
-		return
-
 	add_fingerprint(user)
 	var/atom/originaltarget = target
 
@@ -246,6 +261,9 @@
 
 	if(!process_chambered() || jammed) //CHECK
 		return click_empty(user)
+
+	if(bullet_type_override && ispath(bullet_type_override, /obj/item/projectile))
+		in_chamber = new bullet_type_override
 
 	if(!in_chamber)
 		return
@@ -296,8 +314,6 @@
 
 		user.apply_inertia(get_dir(target, user))
 
-	play_firesound(user, reflex)
-
 	in_chamber.original = target
 	in_chamber.forceMove(get_turf(user))
 	in_chamber.starting = get_turf(user)
@@ -319,6 +335,22 @@
 			in_chamber.p_x = text2num(mouse_control["icon-x"])
 		if(mouse_control["icon-y"])
 			in_chamber.p_y = text2num(mouse_control["icon-y"])
+	if(gun_excessive_missing)
+		in_chamber.excessive_missing = gun_excessive_missing
+	if(gun_miss_chance_value)
+		in_chamber.projectile_miss_chance = gun_miss_chance_value
+	if(gun_miss_message)
+		in_chamber.projectile_miss_message = gun_miss_message
+	if(gun_miss_message_replace)
+		in_chamber.projectile_miss_message_replace = gun_miss_message_replace
+
+	if(bullet_overrides)
+		for(var/bvar in in_chamber.vars)
+			for(var/o in bullet_overrides)
+				if(bvar == o)
+					in_chamber.vars[bvar] = bullet_overrides[o]
+
+	play_firesound(user, reflex)
 
 	spawn()
 		if(in_chamber)
@@ -338,6 +370,11 @@
 		return 1
 
 	return 1
+
+/obj/item/weapon/gun/proc/reset_point_blank_shot()
+	if(in_chamber && in_chamber.point_blank)
+		in_chamber.point_blank = FALSE
+		in_chamber.damage = in_chamber.damage/1.3
 
 /obj/item/weapon/gun/proc/canbe_fired()
 	return process_chambered()
@@ -382,7 +419,9 @@
 					playsound(user, in_chamber.fire_sound, fire_volume, 1)
 			in_chamber.firer = M
 			in_chamber.on_hit(M)
-			if (!in_chamber.nodamage)
+			if(in_chamber.has_special_suicide)
+				in_chamber.custom_mouthshot(user)
+			else if (!in_chamber.nodamage)
 				user.apply_damage(in_chamber.damage*2.5, in_chamber.damage_type, LIMB_HEAD, used_weapon = "Point blank shot in the mouth with \a [in_chamber]")
 				user.death()
 				var/suicidesound = pick('sound/misc/suicide/suicide1.ogg','sound/misc/suicide/suicide2.ogg','sound/misc/suicide/suicide3.ogg','sound/misc/suicide/suicide4.ogg','sound/misc/suicide/suicide5.ogg','sound/misc/suicide/suicide6.ogg')
@@ -407,8 +446,9 @@
 				to_chat(user, "<span class='notice'>[pick("Hey that's dangerous...wouldn't want hurting people.","You don't feel like firing \the [src] at \the [M].","Peace, my [user.gender == FEMALE ? "girl" : "man"]...")]</span>")
 				return
 			user.visible_message("<span class='danger'> \The [user] fires \the [src] point blank at [M]!</span>")
-			if (process_chambered()) //Load whatever it is we fire
+			if (process_chambered() && !in_chamber.point_blank) //Load whatever it is we fire
 				in_chamber.damage *= 1.3 //Some guns don't work with damage / chambers, like dart guns!
+				in_chamber.point_blank = TRUE
 			src.Fire(M,user,0,0,1)
 			return
 		else if(target && (M in target))
@@ -451,13 +491,8 @@
 /obj/item/weapon/gun/attackby(var/obj/item/A, mob/user)
 	if(istype(A, /obj/item/weapon/gun))
 		var/obj/item/weapon/gun/G = A
-		if(isHandgun() && G.isHandgun())
-			var/obj/item/weapon/gun/akimbo/AA = new /obj/item/weapon/gun/akimbo(get_turf(src),src,G)
-			if(user.drop_item(G, AA) && user.drop_item(src, AA) && user.put_in_hands(AA))
-				AA.update_icon(user)
-			else
-				to_chat(user, "<span class = 'warning'>You can not combine \the [G] and \the [src].</span>")
-				qdel(AA)
+		if(!isHandgun() || !G.isHandgun() || !user.create_in_hands(src, new /obj/item/weapon/gun/akimbo(loc, src, G), G, move_in = TRUE))
+			to_chat(user, "<span class = 'warning'>You can not combine \the [G] and \the [src].</span>")
 	if(clowned == CLOWNABLE && istype(A,/obj/item/toy/crayon/rainbow))
 		to_chat(user, "<span class = 'notice'>You begin modifying \the [src].</span>")
 		if(do_after(user, src, 4 SECONDS))

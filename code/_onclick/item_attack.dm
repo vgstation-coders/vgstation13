@@ -23,6 +23,17 @@
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
 	if(W.material_type)
 		W.material_type.on_use(W, src, user)
+	return emag_check()
+
+/atom/movable/proc/emag_check(obj/item/weapon/card/emag/E, mob/user)
+	if(can_emag() && istype(E) && E.canUse(user,src))
+		if(E.arcanetampered && prob(50))
+			arcane_act(user)
+			if(prob(50))
+				return TRUE
+		emag_act(user)
+		return TRUE
+	return FALSE
 
 /mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null, var/def_zone = null)
 	if(!no_delay)
@@ -97,76 +108,19 @@
 
 	power = I.modify_attack_power(power, M, user) //Apply any special modifiers to the power here.
 
+	var/is_crit = I.on_attack(M,user)
+	if (is_crit == CRITICAL_HIT)
+		power *= CRIT_MULTIPLIER
+
+
 	if(!(ishuman(M) || ismonkey(M)))
 		if(istype(M, /mob/living/carbon/slime))
 			var/mob/living/carbon/slime/slime = M
 			if(prob(25))
 				to_chat(user, "<span class='warning'>[I] passes right through [M]!</span>")
 				return 0
-
-			if(power > 0)
-				slime.attacked += 10
-
-			if(slime.Discipline && prob(50))	// wow, buddy, why am I getting attacked??
-				slime.Discipline = 0
-
-			if(power >= 3)
-				if(slime.slime_lifestage == SLIME_ADULT)
-					if(prob(5 + round(power/2)))
-
-						if(slime.Victim)
-							if(prob(80) && !slime.client)
-								slime.Discipline++
-						slime.Victim = null
-						slime.anchored = 0
-
-						spawn()
-							if(slime)
-								slime.SStun = 1
-								sleep(rand(5,20))
-								if(slime)
-									slime.SStun = 0
-
-						spawn(0)
-							if(slime)
-								slime.canmove = 0
-								step_away(slime, user)
-								if(prob(25 + power))
-									sleep(2)
-									if(slime && user)
-										step_away(slime, user)
-								slime.canmove = 1
-
-				else
-					if(prob(10 + power*2))
-						if(slime)
-							if(slime.Victim)
-								if(prob(80) && !slime.client)
-									slime.Discipline++
-
-									if(slime.Discipline == 1)
-										slime.attacked = 0
-
-								spawn()
-									if(slime)
-										slime.SStun = 1
-										sleep(rand(5,20))
-										if(slime)
-											slime.SStun = 0
-
-							slime.Victim = null
-							slime.anchored = 0
-
-
-						spawn(0)
-							if(slime && user)
-								step_away(slime, user)
-								slime.canmove = 0
-								if(prob(25 + power*4))
-									sleep(2)
-									if(slime && user)
-										step_away(slime, user)
-								slime.canmove = 1
+			//Handles pushing slimes off of targets, making them hostile from being attacked etc.
+			slime.slime_item_attacked(src, user, power) //The code has been moved to code/modules/mob/living/carbon/slime/slime.dm
 
 		var/showname = ""
 		if(user)
@@ -208,9 +162,6 @@
 						to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
 				else
 					to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
-	var/is_crit = I.on_attack(M,user)
-	if (is_crit == CRITICAL_HIT)
-		power *= CRIT_MULTIPLIER
 
 	if(istype(M, /mob/living/carbon))
 		var/mob/living/carbon/C = M
@@ -221,31 +172,20 @@
 	else
 		switch(I.damtype)
 			if("brute")
-				if(istype(src, /mob/living/carbon/slime))
-					M.adjustBrainLoss(power)
-				else
-					if(istype(M, /mob/living/carbon/monkey))
-						var/mob/living/carbon/monkey/K = M
-						power = K.defense(power,def_zone)
-					M.take_organ_damage(power)
-					if (prob(33) && I.force) // Added blood for whacking non-humans too
-						var/turf/location = M.loc
-						if (istype(location, /turf/simulated))
-							location:add_blood_floor(M)
+				M.take_organ_damage(power)
+				if (prob(33) && I.force) // Added blood for whacking non-humans too
+					var/turf/simulated/location = M.loc
+					if (istype(location))
+						location.add_blood_floor(M)
 			if("fire")
 				if (!(M_RESIST_COLD in M.mutations))
-					if(istype(M, /mob/living/carbon/monkey))
-						var/mob/living/carbon/monkey/K = M
-						power = K.defense(power,def_zone)
 					M.take_organ_damage(0, power)
-					to_chat(M, "Aargh it burns!")
 
 	//Break the item if applicable.
 	if(power && (I.breakable_flags & BREAKABLE_AS_MELEE) && (I.breakable_flags & BREAKABLE_MOB) && (I.damtype == BRUTE))
 		take_damage(min(power, BREAKARMOR_MEDIUM), skip_break = TRUE, mute = FALSE) //Cap recoil damage at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used. Be verbose about the item being damaged if applicable.
 		try_break(hit_atom = M) //Break the item and spill any reagents onto the target.
 
-		. = TRUE //The attack always lands
 		M.updatehealth()
 	I.add_fingerprint(user)
 

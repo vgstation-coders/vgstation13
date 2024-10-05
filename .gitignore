@@ -78,3 +78,6 @@ Thumbs.db
 # Bootstrapped node installation for the tgui build system
 .cache
 start.sh
+
+# Running OpenDream locally
+vgstation13.json

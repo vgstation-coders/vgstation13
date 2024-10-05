@@ -33,6 +33,8 @@
 	var/list/Friends = list() // A list of potential friends
 	var/list/FriendsWeight = list() // A list containing values respective to Friends. This determines how many times a slime "likes" something. If the slime likes it more than 2 times, it becomes a friend
 
+	var/list/preferred_food = list(/mob/living/carbon/monkey) //Will ignore hungry checks and try to eat the types in the list ASAP.
+
 	var/list/speech_buffer = list()
 
 	// slimes pass on genetic data, so all their offspring have the same "Friends",
@@ -83,7 +85,7 @@
 		if (SLIME_BABY)
 			maxHealth = 150
 			health = 150
-			nutrition = 700 // 1000 = max
+			nutrition = 700 // 1200 = max
 			speak_emote = list("hums")
 		if (SLIME_ADULT)
 			maxHealth = 200
@@ -201,14 +203,11 @@
 
 	if(statpanel("Status"))
 		stat(null, "Health: [round((health / maxHealth) * 100)]%")
-
-		if(slime_lifestage == SLIME_ADULT)
-			stat(null, "Nutrition: [nutrition]/1200")
-			if(amount_grown >= 10)
+		stat(null, "Nutrition: [nutrition]/1200")
+		if(amount_grown >= 10)
+			if(slime_lifestage == SLIME_ADULT)
 				stat(null, "You can reproduce!")
-		else
-			stat(null, "Nutrition: [nutrition]/1000")
-			if(amount_grown >= 10)
+			else
 				stat(null, "You can evolve!")
 
 		stat(null,"Power Level: [powerlevel]")
@@ -225,7 +224,7 @@
 /mob/living/carbon/slime/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
 		if(B.stuck_to)
-			visible_message("<span class='warning'>\the [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
+			visible_message("<span class='warning'>\The [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
 			B.deactivate()
 			B.unstick()
 
@@ -310,6 +309,7 @@
 
 /mob/living/carbon/slime/attack_animal(mob/living/simple_animal/M)
 	M.unarmed_attack_mob(src)
+	return 1
 
 /mob/living/carbon/slime/attack_paw(mob/living/carbon/monkey/M)
 	if(!(istype(M, /mob/living/carbon/monkey)))
@@ -489,7 +489,7 @@
 	mech_flags = MECH_SCAN_FAIL
 	var/Uses = 1 // uses before it goes inert
 	var/enhanced = 0 //has it been enhanced before?
-	var/primarytype = /mob/living/carbon/slime
+	var/primarytype = SLIME_GREY
 	var/list/reactive_reagents = list() //easier lookup for reaction checks in grenades
 	var/icon_state_backup	//backup icon_state_name to switch between multiple use sprites
 
@@ -551,127 +551,127 @@
 /obj/item/slime_extract/grey
 	name = "grey slime extract"
 	icon_state = "grey slime extract"
-	primarytype = /mob/living/carbon/slime
+	primarytype = SLIME_GREY
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/gold
 	name = "gold slime extract"
 	icon_state = "gold slime extract"
-	primarytype = /mob/living/carbon/slime/gold
+	primarytype = SLIME_GOLD
 	reactive_reagents = list(PLASMA,BLOOD,WATER)
 
 /obj/item/slime_extract/silver
 	name = "silver slime extract"
 	icon_state = "silver slime extract"
-	primarytype = /mob/living/carbon/slime/silver
+	primarytype = SLIME_SILVER
 	reactive_reagents = list(PLASMA,WATER,CARBON)
 
 /obj/item/slime_extract/metal
 	name = "metal slime extract"
 	icon_state = "metal slime extract"
-	primarytype = /mob/living/carbon/slime/metal
+	primarytype = SLIME_METAL
 	reactive_reagents = list(PLASMA,COPPER,TUNGSTEN,RADIUM,CARBON)
 
 /obj/item/slime_extract/purple
 	name = "purple slime extract"
 	icon_state = "purple slime extract"
-	primarytype = /mob/living/carbon/slime/purple
+	primarytype = SLIME_PURPLE
 	reactive_reagents = list(PLASMA,SUGAR)
 
 /obj/item/slime_extract/darkpurple
 	name = "dark purple slime extract"
 	icon_state = "dark purple slime extract"
-	primarytype = /mob/living/carbon/slime/darkpurple
+	primarytype = SLIME_DARKPURPLE
 	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/orange
 	name = "orange slime extract"
 	icon_state = "orange slime extract"
-	primarytype = /mob/living/carbon/slime/orange
+	primarytype = SLIME_ORANGE
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/yellow
 	name = "yellow slime extract"
 	icon_state = "yellow slime extract"
-	primarytype = /mob/living/carbon/slime/yellow
+	primarytype = SLIME_YELLOW
 	reactive_reagents = list(PLASMA,BLOOD,WATER)
 
 /obj/item/slime_extract/red
 	name = "red slime extract"
 	icon_state = "red slime extract"
-	primarytype = /mob/living/carbon/slime/red
+	primarytype = SLIME_RED
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/blue
 	name = "blue slime extract"
 	icon_state = "blue slime extract"
-	primarytype = /mob/living/carbon/slime/blue
+	primarytype = SLIME_BLUE
 	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/darkblue
 	name = "dark blue slime extract"
 	icon_state = "dark blue slime extract"
-	primarytype = /mob/living/carbon/slime/darkblue
+	primarytype = SLIME_DARKBLUE
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/pink
 	name = "pink slime extract"
 	icon_state = "pink slime extract"
-	primarytype = /mob/living/carbon/slime/pink
+	primarytype = SLIME_PINK
 	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/green
 	name = "green slime extract"
 	icon_state = "green slime extract"
-	primarytype = /mob/living/carbon/slime/green
+	primarytype = SLIME_GREEN
 	reactive_reagents = list(PLASMA,IRON,BLOOD,WATER)
 
 /obj/item/slime_extract/lightpink
 	name = "light pink slime extract"
 	icon_state = "light pink slime extract"
-	primarytype = /mob/living/carbon/slime/lightpink
+	primarytype = SLIME_LIGHTPINK
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/black
 	name = "black slime extract"
 	icon_state = "black slime extract"
-	primarytype = /mob/living/carbon/slime/black
+	primarytype = SLIME_BLACK
 	reactive_reagents = list(PLASMA,GOLD,WATER,SUGAR,BLOOD)
 
 /obj/item/slime_extract/oil
 	name = "oil slime extract"
 	icon_state = "oil slime extract"
-	primarytype = /mob/living/carbon/slime/oil
+	primarytype = SLIME_OIL
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/adamantine
 	name = "adamantine slime extract"
 	icon_state = "adamantine slime extract"
-	primarytype = /mob/living/carbon/slime/adamantine
+	primarytype = SLIME_ADAMANTINE
 	reactive_reagents = list(PLASMA,CARBON,GOLD,SILVER)
 
 /obj/item/slime_extract/bluespace
 	name = "bluespace slime extract"
 	icon_state = "bluespace slime extract"
-	primarytype = /mob/living/carbon/slime/bluespace
+	primarytype = SLIME_BLUESPACE
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/pyrite
 	name = "pyrite slime extract"
 	icon_state = "pyrite slime extract"
-	primarytype = /mob/living/carbon/slime/pyrite
+	primarytype = SLIME_PYRITE
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/cerulean
 	name = "cerulean slime extract"
 	icon_state = "cerulean slime extract"
-	primarytype = /mob/living/carbon/slime/cerulean
+	primarytype = SLIME_CERULEAN
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/sepia
 	name = "sepia slime extract"
 	icon_state = "sepia slime extract"
-	primarytype = /mob/living/carbon/slime/sepia
+	primarytype = SLIME_SEPIA
 	reactive_reagents = list(PLASMA,BLOOD,PHAZON)
 
 ////Pet Slime Creation///
@@ -960,7 +960,7 @@
 		if(O.client)
 			var/area/A = get_area(src)
 			if(A)
-				to_chat(O, "<span class=\"recruit\">Golem rune created in [A.name]. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>")
+				to_chat(O, "<span class=\"recruit\">Golem rune created in [A.name]. ([formatGhostJump(src)] | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>")
 
 /obj/effect/golem_rune/Topic(href,href_list)
 	if("signup" in href_list)
@@ -1022,11 +1022,45 @@
 
 	qdel (src)
 
-/mob/living/carbon/slime/IgniteMob()
+/mob/living/carbon/slime/ignite()
 	return 0
 
 /mob/living/carbon/slime/ApplySlip(var/obj/effect/overlay/puddle/P)
 	return FALSE
+
+//This was previously added directly in item_attack.dm in handle_attack()
+//Now it's its own proc that gets called there, freeing up roughly 61 lines of code
+/mob/living/carbon/slime/proc/slime_item_attacked(var/obj/item/I, var/mob/living/user, var/force)
+	if(force > 0)
+		attacked += 10
+
+	if(Discipline && prob(50))	// wow, buddy, why am I getting attacked??
+		Discipline = 0
+
+	if(force >= 3)
+		var/probability = isslimeadult(src) ? (prob(5 + round(force/2))) : (prob(10 + force*2))
+		if(probability) //We basically roll the check already in the above variable, to save up on copypaste by not having two separate rolls
+			if(Victim) //Can only be disciplined if they are currently attacking someone
+				if(prob(80) && !client)
+					Discipline++
+					attacked = !isslimeadult(src) //Adult slimes will not stop attacking, since discipline doesn't affect them.
+			Victim = null
+			anchored = 0
+			spawn()
+				if(src)
+					SStun = 1
+					sleep(rand(5,20))
+					if(src)
+						SStun = 0
+			spawn(0)
+				if(src)
+					canmove = 0
+					step_away(src, user)
+					if(prob(25 + force * (isslimeadult(src) ? 1 : 4)))
+						sleep(2)
+						if(src && user)
+							step_away(src, user)
+					canmove = 1
 
 //////////////////////////////Old shit from metroids/RoRos, and the old cores, would not take much work to re-add them////////////////////////
 

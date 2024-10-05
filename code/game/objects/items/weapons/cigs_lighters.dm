@@ -55,7 +55,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	return 0
 
 /obj/item/weapon/match/ignite(temperature)
-	. = ..()
 	light()
 
 /obj/item/weapon/match/proc/light()
@@ -148,9 +147,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		update_brightness()
 		if(M)
 			to_chat(M, "The flame on \the [src] suddenly goes out in a weak fashion.")
-	if(location && istype(loc,/turf)) //only hotspot expose if it's physically on the floor
-		if(prob(1)) //reduced chance of fires from spamming lit cigs
-			location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
+	if(location && lit == 1)
+		try_hotspot_expose(source_temperature, SMALL_FLAME, -1)
 		return
 
 /obj/item/weapon/match/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -176,9 +174,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/match/strike_anywhere/s_a_k/process()//never burns out, extra swiss quality magic matches
 	var/turf/location = get_turf(src)
-	if(location && istype(loc,/turf))
-		if(prob(1))
-			location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
+	if(location && lit == 1)
+		try_hotspot_expose(source_temperature, SMALL_FLAME, -1)
 
 /obj/item/weapon/match/strike_anywhere/afterattack(atom/target, mob/user, prox_flags)
 	if(!prox_flags == 1)
@@ -220,6 +217,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_MASK|SLOT_EARS
 	goes_in_mouth = TRUE
 	var/lit = 0
+	flammable = FALSE //cigs are LIT not IGNITED
 	var/overlay_on = "ciglit" //Apparently not used
 	var/type_butt = /obj/item/trash/cigbutt
 	var/lastHolder = null
@@ -313,6 +311,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	update_icon()
 
 /obj/item/clothing/mask/cigarette/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(lit)
+		return
+	ignite()
+
+/obj/item/clothing/mask/cigarette/ignite()
 	if(lit)
 		return
 	light("<span class='danger'>The raging fire sets \the [src] alight.</span>")
@@ -463,8 +466,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/clothing/mask/cigarette/process()
 	var/turf/location = get_turf(src)
 	var/mob/living/M = get_holder_of_type(src,/mob/living)
-	if(isliving(loc))
-		M.IgniteMob()
 	smoketime--
 	if (smoketime == 5 && ismob(loc))
 		to_chat(M, "<span class='warning'>Your [name] is about to go out.</span>")
@@ -500,9 +501,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			M.u_equip(src, 0)	//Un-equip it so the overlays can update
 		qdel(src)
 		return
-	if(location && istype(loc,/turf))
-		if(prob(1))
-			location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
+	if(location && lit == 1)
+		try_hotspot_expose(source_temperature, SMALL_FLAME, -1)
 	//Oddly specific and snowflakey reagent transfer system below
 	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
 		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
@@ -772,7 +772,18 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	burn_on_end = TRUE
 
-/obj/item/clothing/mask/cigarette/blunt/rolled //grown.dm handles reagents for these
+/obj/item/clothing/mask/cigarette/blunt/New(Loc, obj/item/weapon/reagent_containers/food/snacks/grown/held)
+	..(Loc)
+	if(held)
+		add_from_grown(held)
+
+/obj/item/clothing/mask/cigarette/blunt/proc/add_from_grown(obj/item/weapon/reagent_containers/food/snacks/grown/held)
+	return
+
+/obj/item/clothing/mask/cigarette/blunt/rolled/add_from_grown(obj/item/weapon/reagent_containers/food/snacks/grown/held) //grown.dm handles reagents for these // not anymore! have fun badmins
+	name = "[held.name] blunt"
+	filling = "[held.name]"
+	held.reagents.trans_to(src, held.reagents.total_volume)
 
 /obj/item/clothing/mask/cigarette/blunt/cruciatus
 
@@ -805,7 +816,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	reagents.add_reagent(SPACE_DRUGS, 5)
 	update_brightness()*/
 
-/obj/item/clothing/mask/cigarette/blunt/deus/rolled
+/obj/item/clothing/mask/cigarette/blunt/deus/rolled/add_from_grown(obj/item/weapon/reagent_containers/food/snacks/grown/held)
+	held.reagents.trans_to(src, held.reagents.total_volume)
+	light_color = held.filling_color
 
 /obj/item/trash/cigbutt/bluntbutt
 	name = "blunt butt"
@@ -860,9 +873,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 				M.update_inv_wear_mask(0)
 		update_brightness()
 		return
-	if(location && istype(loc,/turf))
-		if(prob(1))
-			location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
+	if(location && lit == 1)
+		try_hotspot_expose(source_temperature, SMALL_FLAME, -1)
 	return
 
 /obj/item/clothing/mask/cigarette/pipe/attack_self(mob/user as mob) //Refills the pipe. Can be changed to an attackby later, if loose tobacco is added to vendors or something. //Later meaning never
@@ -924,6 +936,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	attack_verb = list("prods", "pokes")
 	light_color = LIGHT_COLOR_FIRE
 	var/lit = 0
+	flammable = FALSE //lit not ignited
 	var/base_icon = "lighter"
 	surgerysound = 'sound/items/cautery.ogg'
 	var/light_icon = "lighter-light"
@@ -1076,9 +1089,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter/process()
 	var/turf/location = get_turf(src)
-	if(location && istype(loc,/turf))
-		if(prob(1))
-			location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
+	if(location && lit == 1)
+		try_hotspot_expose(source_temperature, SMALL_FLAME, -1)
 	if(!fueltime)
 		fueltime = world.time + 100
 	if(world.time > fueltime)

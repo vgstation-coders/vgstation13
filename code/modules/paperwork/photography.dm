@@ -165,6 +165,9 @@
 	w_type = RECYK_ELECTRONIC
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>", "<span class='warning'>A label covers the lens!</span>")
+	slimeadd_message = "You add the slime extract to the camera lens"
+	slimes_accepted = SLIME_SEPIA
+	slimeadd_success_message = "It now has a sepia tinge"
 	var/pictures_max = 10
 	var/pictures_left = 10
 	var/on = TRUE
@@ -195,6 +198,13 @@
 /obj/item/device/camera/Destroy()
 	QDEL_NULL(flashbulb)
 	..()
+
+/obj/item/device/camera/slime_act(primarytype, mob/user)
+	if(primarytype == SLIME_SEPIA && ..())
+		var/obj/item/device/camera/sepia/S = new(user.loc)
+		if(src in user.held_items)
+			user.put_in_hands(S)
+		qdel(src)
 
 /obj/item/device/camera/sepia
 	name = "camera"
@@ -310,21 +320,10 @@
 	if(istype(I, /obj/item/stack/cable_coil))
 		if(!panelopen)
 			return
+		var/obj/item/device/blinder/Q = new(loc, empty = TRUE)
+		handle_blinder(Q)
 		var/obj/item/stack/cable_coil/C = I
-		if(C.amount < 5)
-			to_chat(user, "You don't have enough cable to alter \the [src].")
-			return
-		to_chat(user, "You attach [C.amount > 5 ? "some" : "the"] wires to \the [src]'s flash circuit.")
-		if(loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/device/blinder/Q = new(get_turf(user), empty = TRUE)
-			handle_blinder(Q)
-			user.put_in_hands(Q)
-		else
-			var/obj/item/device/blinder/Q = new(get_turf(loc), empty = TRUE)
-			handle_blinder(Q)
-		C.use(5)
-		qdel(src)
+		user.create_in_hands(src, Q, C, 5, "You attach [C.amount > 5 ? "some" : "the"] wires to \the [src]'s flash circuit.")
 
 	if(istype(I, /obj/item/device/camera_film))
 		if(pictures_left)

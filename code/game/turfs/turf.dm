@@ -79,6 +79,8 @@
 	..()
 	if(bullet_marks)
 		to_chat(user, "It has [bullet_marks > 1 ? "some holes" : "a hole"] in it.")
+	if(locate(/obj/effect/ash) in src)
+		to_chat(user, "It is covered in ashes.")
 
 /turf/proc/process()
 	set waitfor = FALSE
@@ -280,6 +282,8 @@
 	return 0
 /turf/proc/is_mineral_floor()
 	return 0
+/turf/proc/is_plated_catwalk()
+	return 0
 /turf/proc/return_siding_icon_state()		//used for grass floors, which have siding.
 	return 0
 
@@ -319,7 +323,7 @@
 		A.area_turfs -= src
 	if (!N || !allow)
 		return
-
+	remove_particles()
 	var/datum/gas_mixture/env
 
 	var/old_opacity = opacity

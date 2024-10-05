@@ -572,14 +572,7 @@ var/list/firstaid_exceptions = list(
 		to_chat(user, "<span class='notice'>You need to empty [src] out first.</span>")
 		return
 
-	var/obj/item/weapon/firstaid_arm_assembly/A = new /obj/item/weapon/firstaid_arm_assembly(get_turf(src),icon_state)
-
-	QDEL_NULL(S)
-	user.put_in_hands(A)
-	to_chat(user, "<span class='notice'>You add the robot arm to the first aid kit.</span>")
-	user.drop_from_inventory(src)
-	qdel(src)
-
+	user.create_in_hands(src, new /obj/item/weapon/firstaid_arm_assembly(get_turf(src),icon_state), S, msg = "<span class='notice'>You add the robot arm to the first aid kit.</span>")
 
 /obj/item/weapon/firstaid_arm_assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()

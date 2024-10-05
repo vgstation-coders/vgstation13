@@ -110,7 +110,7 @@ Doesn't work on other aliens/AI.*/
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 
 	range = 2
-	compatible_mobs = list(/mob/living/carbon/alien)
+	valid_targets = list(/mob/living/carbon/alien)
 
 //Does it take charge before casting? How to transfer to new alien
 /spell/targeted/alientransferplasma/cast(var/list/targets, mob/user)

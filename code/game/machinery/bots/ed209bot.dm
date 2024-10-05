@@ -24,7 +24,6 @@
 	//var/lasers = 0
 
 	var/threatlevel = 0
-//var/emagged = 0 //Emagged Secbots view everyone as a criminal
 	var/check_records = 1 //Does it check security records?
 	var/arrest_type = 0 //If true, don't handcuff
 
@@ -41,7 +40,6 @@
 		/obj/item/weapon/gun/energy/tag,
 		/obj/item/weapon/gun/energy/laser/practice,
 		/obj/item/weapon/gun/hookshot,
-		/obj/item/weapon/gun/energy/floragun,
 		/obj/item/weapon/melee/defibrillator
 		)
 

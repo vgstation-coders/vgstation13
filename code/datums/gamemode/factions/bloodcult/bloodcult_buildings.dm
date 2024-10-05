@@ -1223,7 +1223,7 @@ var/list/cult_spires = list()
 	if (isturf(loc))
 		var/turf/simulated/L = loc
 		if(istype(L))
-			L.hotspot_expose(TEMPERATURE_FLAME, 125, surfaces = 1)//we start fires in plasma atmos
+			try_hotspot_expose(TEMPERATURE_FLAME, SMALL_FLAME, 0)//we start fires in plasma atmos
 			var/datum/gas_mixture/env = L.return_air()
 			if (env.total_moles > 0)//we cannot manipulate temperature in a vacuum
 				if(env.temperature != set_temperature + T0C)
@@ -1473,7 +1473,7 @@ var/list/cult_spires = list()
 
 /obj/structure/cult/pillar/update_icon()
 	icon_state = "pillar[alt ? "alt": ""]2"
-	set_light(1, 2, LIGHT_COLOR_RED)
+	set_light(1.5, 2.5, LIGHT_COLOR_RED)
 	overlays.len = 0
 	if (health < maxHealth/3)
 		icon_state = "pillar[alt ? "alt": ""]0"

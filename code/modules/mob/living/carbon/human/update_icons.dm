@@ -99,9 +99,15 @@ Please contact me on #coderbus IRC. ~Carn x //FUCK YOU CARN
 	update_overlays_standing()
 	update_transform()
 	update_hands_icons()
+	update_luminosity()
 	if(istype(loc,/obj/structure/inflatable/shelter))
 		var/obj/O = loc
 		O.update_icon() //Shelters use an overlay of the human inside, so if we change state we want the appearance to reflect that.
+
+/mob/living/carbon/human/proc/update_luminosity()//due to moody lights we might want people to show up in the dark even if they aren't actually emitting light
+	luminosity = 0
+	for (var/obj/item/I in contents)
+		luminosity = max(luminosity, I.luminosity)
 
 /mob/living/carbon/human/proc/update_overlays_standing()
 	if(species && species.override_icon)
@@ -192,6 +198,8 @@ var/global/list/damage_icon_parts = list()
 			var/icon/temp
 			if (istype(part, /datum/organ/external/groin) || istype(part, /datum/organ/external/head))
 				temp = part.get_icon(g,fat)
+			else if(part.has_fat)
+				temp = part.get_icon(isFat = fat)
 			else
 				temp = part.get_icon()
 
@@ -980,6 +988,7 @@ var/global/list/damage_icon_parts = list()
 				i++
 
 		overlays += overlays_standing[HEAD_LAYER] = head_overlay
+	update_tail_layer(FALSE)
 	if(update_icons)
 		update_icons()
 
@@ -1268,7 +1277,7 @@ var/global/list/damage_icon_parts = list()
 	var/datum/organ/external/tail/tail_organ = get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
 	if(!tail_organ || (tail_organ.status & ORGAN_DESTROYED))
 		return
-	if(check_hidden_body_flags(HIDETAIL, force_check = TRUE))
+	if(check_hidden_body_flags(HIDETAIL, force_check = TRUE)|| check_hidden_head_flags(HIDETAIL))
 		return
 	var/tail_file = tail_organ.tail_icon_file
 	var/tail_icon_state = tail_organ.icon_name

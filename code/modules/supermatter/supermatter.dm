@@ -20,6 +20,7 @@
 	anchored = 0
 
 	mech_flags = MECH_SCAN_FAIL
+	pass_flags_self = 0
 
 	var/max_luminosity = 8 // Now varies based on power.
 
@@ -68,7 +69,7 @@
 	var/datum/radio_frequency/radio_connection
 
 	//Add types to this list so it doesn't make a message or get desroyed by the Supermatter on touch.
-	var/list/message_exclusions = list(/obj/effect/sparks,/obj/effect/overlay/hologram,/obj/abstract)
+	var/list/message_exclusions = list(/obj/effect/sparks,/obj/effect/overlay/hologram,/obj/abstract,/obj/effect/smoke)
 	machine_flags = MULTITOOL_MENU
 
 	var/has_exploded = 0 // increments each times it tries to explode so we may track how it may occur more than once
