@@ -539,6 +539,8 @@ included:
 	
 	switch(href_list["action"])
 		if("SCRAM")
+			if(!associated_reactor.SCRAM)
+				playsound(src,'sound/machines/fission/rc_scram.ogg',50)
 			associated_reactor.SCRAM=TRUE
 		if("rods_up")
 			associated_reactor.control_rod_target-=0.05
