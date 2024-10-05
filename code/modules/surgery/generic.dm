@@ -353,9 +353,13 @@
 		return 0
 	if(isslimeperson(target) && istype(affected, /datum/organ/external/head))
 		return 0
+	var/static/list/targetable_zones = list(GRASP_LEFT_HAND = list(LIMB_LEFT_ARM,LIMB_LEFT_HAND), GRASP_RIGHT_HAND = list(LIMB_RIGHT_ARM,LIMB_RIGHT_HAND))
 	for(var/obj/item/I in target.held_items)
-		if(I.arcanetampered && (target_zone == LIMB_LEFT_ARM || target_zone == LIMB_LEFT_HAND || target_zone == LIMB_RIGHT_ARM || target_zone == LIMB_RIGHT_HAND) && istype(I,/obj/item/weapon/reagent_containers/food/drinks))
-			return 0
+		if(I.arcanetampered)	
+			var/item_index = target.is_holding_item(I)
+			if((item_index == GRASP_LEFT_HAND || item_index == GRASP_RIGHT_HAND) && \
+				(target_zone in targetable_zones[item_index]) && istype(I,/obj/item/weapon/reagent_containers/food/drinks))
+				return 0
 	return target_zone != LIMB_CHEST && target_zone != LIMB_GROIN && target_zone != LIMB_HEAD
 
 /datum/surgery_step/generic/cut_limb/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
