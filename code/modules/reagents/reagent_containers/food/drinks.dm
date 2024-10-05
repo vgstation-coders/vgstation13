@@ -119,6 +119,7 @@
 		user.register_event(/event/death, src, nameof(src::drop_arcane()))
 		var/mob/living/carbon/human/H = user
 		reagents.clear_reagents()
+		H << 'sound/items/cautery.ogg'
 		H.audible_scream()
 		H.adjustHalLoss(50)
 		H.vessel.trans_to(reagents,reagents.maximum_volume)
