@@ -77,18 +77,12 @@
 	icon_state = "medsci_cypherkey"
 	channels = list("Medical" = 1, "Science" = 1)
 
-/obj/item/device/encryptionkey/headset_medsec
-	name = "Medical Security Radio Encryption Key"
-	desc = "An encryption key for a radio headset.  Contains cypherkeys."
-	icon_state = "medsec_cypherkey"
-	channels = list("Medical" = 1, "Security" = 1)
-
 /obj/item/device/encryptionkey/headset_com
 	name = "Command Radio Encryption Key"
 	desc = "An encryption key for a radio headset.  Contains cypherkeys."
 	icon_state = "com_cypherkey"
 	channels = list("Command" = 1)
-
+	
 /obj/item/device/encryptionkey/headset_iaa
 	name = "Internal Affairs Radio Encryption Key"
 	desc = "An encryption key for a radio headset.  Contains cypherkeys."

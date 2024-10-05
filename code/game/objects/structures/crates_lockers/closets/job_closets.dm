@@ -87,7 +87,6 @@
 /obj/structure/closet/paramedic/atoms_to_spawn()
 	return list(
 		/obj/item/clothing/under/rank/medical/paramedic = 2,
-		/obj/item/clothing/under/rank/medical/brigmedic = 2,
 		/obj/item/device/radio/headset/headset_med = 2,
 		/obj/item/clothing/head/soft/paramedic = 2,
 		/obj/item/clothing/gloves/latex = 2,

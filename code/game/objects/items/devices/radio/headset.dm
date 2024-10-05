@@ -119,13 +119,6 @@
 	item_state = "headset"
 	init_keyslot2_type = /obj/item/device/encryptionkey/headset_medsci
 
-/obj/item/device/radio/headset/headset_medsec
-	name = "medical security radio headset"
-	desc = "A headset used to annoy the security crew and gossip with the medical crew. To access the medical channel, use :m. For security, use :s."
-	icon_state = "med_headset"
-	item_state = "headset"
-	init_keyslot2_type = /obj/item/device/encryptionkey/headset_medsec
-
 /obj/item/device/radio/headset/headset_com
 	name = "command radio headset"
 	desc = "A headset with a commanding channel. To access the command channel, use :c."
@@ -210,7 +203,7 @@
 	icon_state = "com_headset"
 	item_state = "headset"
 	init_keyslot2_type = /obj/item/device/encryptionkey/headset_servsci
-
+	
 /obj/item/device/radio/headset/headset_iaa
 	name = "internal affairs radio headset"
 	desc = "A headset used to communicate with security and heads of staff. To access the security channel, use :s. For command, use :c."
