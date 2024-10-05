@@ -153,6 +153,8 @@ included:
 			if(!user.drop_item(newrod))
 				return
 			to_chat(user,"You insert the fuel rod into \the [src].")
+			if(powered() && !(stat&BROKEN))
+				playsound(src,'sound/machines/fission/rc_fuelnone.ogg',50)
 			newrod.loc=null
 			currentfuelrod=newrod
 			playsound(src,'sound/items/crowbar.ogg',50)
@@ -476,6 +478,7 @@ included:
 			poweroutagemsg=TRUE
 			if(can_autoscram)
 				say("Reactor lost power, engaging SCRAM.", class = "binaryradio")
+				playsound(src,'sound/machines/fission/rc_scram.ogg',50)
 				associated_reactor.SCRAM=TRUE
 		return
 	else
@@ -487,6 +490,7 @@ included:
 	if(associated_reactor.fuel?.life<=0)
 		if(!fueldepletedmsg)
 			say("Reactor fuel depleted.", class = "binaryradio")
+			playsound(src,'sound/machines/fission/rc_fuelnone.ogg',50)
 		fueldepletedmsg=TRUE
 	else
 		fueldepletedmsg=FALSE
@@ -494,13 +498,16 @@ included:
 	
 	if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP && can_autoscram && !associated_reactor.SCRAM )
 		say("critical temperature reached, engaging SCRAM.", class = "binaryradio")
+		playsound(src,'sound/machines/fission/rc_scram.ogg',50)
 		associated_reactor.SCRAM=TRUE
 	
 	if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP && associated_reactor.temperature>lasttempnag )
 		if(associated_reactor.temperature>=FISSIONREACTOR_MELTDOWNTEMP)
 			say("Reactor at critical temperature: [associated_reactor.temperature]K. Evacuate immediately.", class = "binaryradio")
+			playsound(src,'sound/machines/fission/rc_scram.ogg',50,0,10) //lots of extra range because shit is about to go down to hit the fan town.
 		else
 			say("Reactor at dangerous temperature: [associated_reactor.temperature]K", class = "binaryradio")
+			playsound(src,'sound/machines/fission/rc_alert.ogg',50)
 
 	lasttempnag=associated_reactor.temperature
 	
