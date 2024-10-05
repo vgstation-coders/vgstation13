@@ -56,7 +56,7 @@
 /obj/structure/rack/crate_shelf/centcomm_provided/New()
     . = ..()
      if(prob(how_cheap_percent))
-          var/osha_violation = TRUE
+		osha_violation = TRUE
 
 /obj/structure/rack/crate_shelf/Destroy()
 	QDEL_LIST(shelf_contents)
