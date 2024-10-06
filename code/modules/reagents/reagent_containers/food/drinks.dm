@@ -76,20 +76,22 @@
 	..()
 	cant_drop = 0
 	processing_objects.Remove(src)
+	var/mob/living/carbon/human/H = is_arcaneheld()
+	if(H)
+		H.unregister_event(/event/death, src, nameof(src::drop_arcane()))
 
 /obj/item/weapon/reagent_containers/food/drinks/process()
 	. =	..()
-	if(arcanetampered && ishuman(loc))
-		var/mob/living/carbon/human/H = loc
-		if(src in H.held_items)
-			if(!reagents.is_full())	
-				var/transfer_rate = (reagents.maximum_volume-reagents.total_volume)/2
-				H.reagents.trans_to(reagents,transfer_rate)
-				H.vessel.trans_to(reagents,transfer_rate)
-				H.nutrition += 3
-			else
-				H.overeatduration = 0
-				H.nutrition -= 10
+	var/mob/living/carbon/human/H = is_arcaneheld()
+	if(H)
+		if(!reagents.is_full())	
+			var/transfer_rate = (reagents.maximum_volume-reagents.total_volume)/2
+			H.reagents.trans_to(reagents,transfer_rate)
+			H.vessel.trans_to(reagents,transfer_rate)
+			H.nutrition += 3
+		else
+			H.overeatduration = 0
+			H.nutrition -= 10
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/drop_arcane(mob/user, body_destroyed)
 	user.unregister_event(/event/death, src, nameof(src::drop_arcane()))
@@ -112,6 +114,19 @@
 		var/datum/reagent/R = addtype
 		things2add += list(initial(R.id))
 	reagents.add_reagent(pick(things2add),reagents.maximum_volume/rand(4,5))
+	update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/proc/is_arcaneheld()
+	if(arcanetampered && ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		if(src in H.held_items)
+			return H
+
+/obj/item/weapon/reagent_containers/food/drinks/Destroy()
+	. = ..()
+	var/mob/living/carbon/human/H = is_arcaneheld()
+	if(H)
+		H.unregister_event(/event/death, src, nameof(src::drop_arcane()))
 
 /obj/item/weapon/reagent_containers/food/drinks/pickup(var/mob/user)
 	..()
