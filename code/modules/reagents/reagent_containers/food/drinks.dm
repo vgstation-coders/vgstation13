@@ -141,14 +141,14 @@
 	..()
 	if(ishuman(user) && arcanetampered) // wizards turn it into SCP-198
 		spawn(rand(20,50)) // how long it takes to kick in in the SCP
-		if(is_arcaneheld())
-			user.register_event(/event/death, src, nameof(src::drop_arcane()))
-			var/mob/living/carbon/human/H = user
-			reagents.clear_reagents()
-			H << 'sound/items/cautery.ogg'
-			H.audible_scream()
-			H.adjustHalLoss(50)
-			H.vessel.trans_to(reagents,reagents.maximum_volume)
+			if(is_arcaneheld())
+				user.register_event(/event/death, src, nameof(src::drop_arcane()))
+				var/mob/living/carbon/human/H = user
+				reagents.clear_reagents()
+				H << 'sound/items/cautery.ogg'
+				H.audible_scream()
+				H.adjustHalLoss(50)
+				H.vessel.trans_to(reagents,reagents.maximum_volume)
 	update_icon()
 	if (can_flip && !arcanetampered && (M_SOBER in user.mutations) && (user.a_intent == I_GRAB))
 		if (flipping && (M_CLUMSY in user.mutations) && prob(20))
