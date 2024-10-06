@@ -120,8 +120,10 @@
 		D.reagents.add_reagent(pick(things2add),reagents.maximum_volume/rand(4,5))
 		qdel(src)
 	else
-		bless()
+		cant_drop = 0
 		user.drop_item(src, user.loc)
+		reagents.clear_reagents()
+		cant_drop = 1
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/is_arcaneheld(checks_cantdrop = TRUE)
 	if(checks_cantdrop && !cant_drop)
