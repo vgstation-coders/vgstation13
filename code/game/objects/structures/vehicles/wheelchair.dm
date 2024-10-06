@@ -176,10 +176,27 @@
 	new /obj/item/stack/rods(get_turf(src), 2)
 	qdel(src)
 
+/obj/structure/bed/chair/vehicle/wheelchair/arcane_act(mob/user)
+	multi_people = TRUE
+	..()
+	return "H'LLA R'D!"
+
+/obj/structure/bed/chair/vehicle/wheelchair/bless()
+	multi_people = FALSE
+	..()
+
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people
 	nick = "hella ride"
 	desc = "A chair with fitted wheels. Something seems off about this one..."
 	multi_people = 1
+
+/obj/structure/bed/chair/vehicle/wheelchair/multi_people/arcane_act(mob/user)
+	. = ..()
+	multi_people = FALSE //l'inverse
+
+/obj/structure/bed/chair/vehicle/wheelchair/multi_people/bless()
+	..()
+	multi_people = TRUE // nice try, not today
 
 /obj/structure/bed/chair/vehicle/wheelchair/examine(mob/user)
 	..()
@@ -264,14 +281,6 @@
 	desc = "A high-riding wheelchair fitted with a powerful cell and blades under the carriage. Better get a table between you and it."
 	var/attack_cooldown = 0
 
-/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/arcane_act(mob/user)
-	multi_people = TRUE
-	return ..()
-
-/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/bless()
-	multi_people = FALSE
-	..()
-
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/to_bump(var/atom/A)
 	if(isliving(A) && !attack_cooldown)
 		var/mob/living/L = A
@@ -288,7 +297,9 @@
 			L.lying = 1
 			L.update_icons()
 		if(arcanetampered && multi_people)
-			buckle_chair(L,occupant)
+			var/mob/living/owner = locate() in get_locked(/datum/locking_category/buckle/chair/vehicle)
+			if(owner)
+				buckle_mob(L,owner)
 	..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/proc/crush(var/mob/living/H,var/bloodcolor) //Basically identical to the MULE, see mulebot.dm
@@ -299,7 +310,9 @@
 	H.apply_damage(damage, BRUTE, LIMB_LEFT_LEG)
 	H.apply_damage(damage, BRUTE, LIMB_RIGHT_LEG)
 	if(arcanetampered && multi_people)
-		buckle_chair(H,occupant)
+		var/mob/living/owner = locate() in get_locked(/datum/locking_category/buckle/chair/vehicle)
+		if(owner)
+			buckle_mob(H,owner)
 	attack_cooldown = 1
 	spawn(10)
 		attack_cooldown = 0
