@@ -390,10 +390,7 @@
 /obj/item/projectile/swap/on_hit(var/atom/target, var/blocked = 0)
 	var/turf/T = get_turf(target)
 	do_teleport(target, firer.loc)
-	if(arcanetampered)
-		firer.dimensional_push()
-	else
-		do_teleport(firer, T)
+	do_teleport(firer, T)
 
 /obj/item/projectile/swap/advanced
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE | PASSRAILING
