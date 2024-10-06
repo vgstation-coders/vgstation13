@@ -54,7 +54,7 @@
 		overlays -= wheel_overlay
 
 /obj/structure/bed/chair/vehicle/wheelchair/can_buckle(mob/M, mob/user)
-	if(!Adjacent(user) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.stat || ((user.restrained() || user.locked_to)) && !arcanetampered) || (!multi_people && occupant) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
+	if(!Adjacent(user) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.stat || (((user.restrained() || user.locked_to)) && !arcanetampered) || (!multi_people && occupant)) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
 		return 0
 	if(M_HULK in M.mutations)
 		if(M == user)
