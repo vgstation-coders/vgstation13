@@ -125,7 +125,9 @@
 		bless()
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/is_arcaneheld(checks_cantdrop = TRUE)
-	if(arcanetampered && ishuman(loc) && checks_cantdrop && cant_drop)
+	if(checks_cantdrop && !cant_drop)
+		return
+	if(arcanetampered && ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 		if(src in H.held_items)
 			return H
