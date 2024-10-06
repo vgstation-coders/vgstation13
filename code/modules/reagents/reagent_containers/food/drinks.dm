@@ -100,10 +100,6 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/drop_arcane(mob/user, body_destroyed)
 	if(prob(75)) // percent of time in the SCP it does this
-		user.unregister_event(/event/death, src, nameof(src::drop_arcane()))
-		cant_drop = 0
-		user.drop_item(src, user.loc)
-		cant_drop = 1
 		var/list/obj/structure/table/tables = list()
 		for(var/obj/structure/table/T in view(world.view,src))
 			tables += T
@@ -125,6 +121,7 @@
 		qdel(src)
 	else
 		bless()
+		user.drop_item(src, user.loc)
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/is_arcaneheld(checks_cantdrop = TRUE)
 	if(checks_cantdrop && !cant_drop)
