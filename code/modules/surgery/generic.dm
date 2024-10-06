@@ -354,8 +354,8 @@
 	if(isslimeperson(target) && istype(affected, /datum/organ/external/head))
 		return 0
 	var/static/list/targetable_zones = list(GRASP_RIGHT_HAND = list(LIMB_RIGHT_ARM,LIMB_RIGHT_HAND),GRASP_LEFT_HAND = list(LIMB_LEFT_ARM,LIMB_LEFT_HAND))
-	for(var/obj/item/I in target.held_items)
-		if(I.arcanetampered)	
+	for(var/obj/item/weapon/reagent_containers/food/drinks/I in target.held_items)
+		if(I.arcanetampered && I.cant_drop)	
 			var/item_index = target.is_holding_item(I)
 			if((item_index == GRASP_LEFT_HAND || item_index == GRASP_RIGHT_HAND) && \
 				(target_zone in targetable_zones[item_index]) && istype(I,/obj/item/weapon/reagent_containers/food/drinks))
