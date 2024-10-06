@@ -39,7 +39,10 @@
 	. = ..()
 	if(syndie_type)
 		var/obj/item/tape/P = new syndie_type(loc)
-		P.icon_state = "[P.icon_base]_[dir]"
+		if(findtext(icon_state,"_door"))
+			P.icon_state = "[P.icon_base]_door"
+		else
+			P.icon_state = "[P.icon_base]_[dir]"
 		qdel(src)
 
 /obj/item/taperoll/police
