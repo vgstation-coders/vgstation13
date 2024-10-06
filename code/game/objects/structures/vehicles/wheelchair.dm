@@ -54,7 +54,7 @@
 		overlays -= wheel_overlay
 
 /obj/structure/bed/chair/vehicle/wheelchair/can_buckle(mob/M, mob/user)
-	if(!Adjacent(user) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.stat || (!multi_people && (occupant || user.restrained()|| user.locked_to))) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
+	if(!Adjacent(user) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.stat || (!multi_people && (occupant || user.restrained() || user.locked_to))) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
 		return 0
 	if(M_HULK in M.mutations)
 		if(M == user)
@@ -297,9 +297,7 @@
 			L.lying = 1
 			L.update_icons()
 		if(arcanetampered && multi_people)
-			var/mob/living/owner = locate() in get_locked(/datum/locking_category/buckle/chair/vehicle)
-			if(owner)
-				buckle_mob(L,owner)
+			crush(L)
 	..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/proc/crush(var/mob/living/H,var/bloodcolor) //Basically identical to the MULE, see mulebot.dm
