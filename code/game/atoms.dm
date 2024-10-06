@@ -882,7 +882,7 @@ its easier to just keep the beam vertical.
 /mob/var/list/atom/arcane_tampered_atoms = list()
 
 /atom/proc/arcane_act(var/mob/user, var/recursive = FALSE)
-	if(user)
+	if(ismob(user))
 		arcanetampered = user
 		user.arcane_tampered_atoms.Add(src)
 	else
