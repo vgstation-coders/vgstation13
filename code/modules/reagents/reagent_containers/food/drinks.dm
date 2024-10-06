@@ -148,6 +148,7 @@
 				var/mob/living/carbon/human/H = user
 				reagents.clear_reagents()
 				H << 'sound/items/cautery.ogg'
+				to_chat(H,"<span class='danger'>You feel a sharp burning pain in your hard as \the [src] sticks to it!</span>")
 				H.audible_scream()
 				H.adjustHalLoss(50)
 				H.vessel.trans_to(reagents,reagents.maximum_volume)
