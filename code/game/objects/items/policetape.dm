@@ -11,8 +11,15 @@
 	var/turf/start
 	var/turf/end
 	var/tape_type = /obj/item/tape
+	var/syndie_type = /obj/item/taperoll/syndie
 	var/icon_base
 	flammable = TRUE
+
+/obj/item/taperoll/arcane_act(mob/user, recursive)
+	. = ..()
+	if(syndie_type)
+		new syndie_type(loc)
+		qdel(src)
 
 /obj/item/tape
 	name = "tape"
@@ -24,9 +31,15 @@
 	w_class = W_CLASS_TINY
 	w_type = RECYK_PLASTIC
 	flammable = TRUE
+	var/syndie_type
 	var/icon_base
 	var/robot_compatibility
 
+/obj/item/tape/arcane_act(mob/user, recursive)
+	. = ..()
+	if(syndie_type)
+		new syndie_type(loc)
+		qdel(src)
 
 /obj/item/taperoll/police
 	name = "police tape"
@@ -34,6 +47,7 @@
 	icon_state = "police_start"
 	tape_type = /obj/item/tape/police
 	icon_base = "police"
+	syndie_type = /obj/item/taperoll/syndie/police
 
 /obj/item/tape/police
 	name = "police tape"
@@ -41,6 +55,7 @@
 	req_access = list(access_security)
 	icon_base = "police"
 	robot_compatibility = MODULE_CAN_LIFT_SECTAPE
+	syndie_type = /obj/item/tape/police/syndie
 
 /obj/item/taperoll/engineering
 	name = "engineering tape"
@@ -48,6 +63,7 @@
 	icon_state = "engineering_start"
 	tape_type = /obj/item/tape/engineering
 	icon_base = "engineering"
+	syndie_type = /obj/item/taperoll/syndie/engineering
 
 /obj/item/tape/engineering
 	name = "engineering tape"
@@ -55,6 +71,7 @@
 	req_one_access = list(access_engine_minor,access_atmospherics)
 	icon_base = "engineering"
 	robot_compatibility = MODULE_CAN_LIFT_ENGITAPE
+	syndie_type = /obj/item/tape/engineering/syndie
 
 /obj/item/taperoll/atmos
 	name = "atmospherics tape"
@@ -62,6 +79,7 @@
 	icon_state = "atmos_start"
 	tape_type = /obj/item/tape/atmos
 	icon_base = "atmos"
+	syndie_type = /obj/item/taperoll/syndie/atmos
 
 /obj/item/tape/atmos
 	name = "atmospherics tape"
@@ -69,6 +87,7 @@
 	req_one_access = list(access_engine_major,access_atmospherics)
 	icon_base = "atmos"
 	robot_compatibility = MODULE_CAN_LIFT_ENGITAPE
+	syndie_type = /obj/item/tape/atmos/syndie
 
 /obj/item/taperoll/viro
 	name = "biohazard tape"
@@ -76,6 +95,7 @@
 	icon_state = "viro_start"
 	tape_type = /obj/item/tape/viro
 	icon_base = "viro"
+	syndie_type = /obj/item/taperoll/syndie/viro
 
 /obj/item/tape/viro
 	name = "biohazard tape"
@@ -83,6 +103,7 @@
 	req_access = list(access_medical)
 	icon_base = "viro"
 	robot_compatibility = MODULE_CAN_LIFT_VIROTAPE
+	syndie_type = /obj/item/tape/viro/syndie
 
 /obj/item/taperoll/attack_self(mob/user as mob)
 	..()
