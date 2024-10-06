@@ -85,8 +85,10 @@
 	if(H)
 		if(!reagents.is_full())	
 			var/transfer_rate = (reagents.maximum_volume-reagents.total_volume)/2
-			H.reagents.trans_to(reagents,transfer_rate)
-			H.vessel.trans_to(reagents,transfer_rate)
+			if(H.reagents.total_volume)
+				H.reagents.trans_to(reagents,transfer_rate)
+			if(H.vessel.total_volume)
+				H.vessel.trans_to(reagents,transfer_rate)
 			H.nutrition += 3
 		else
 			H.overeatduration = 0
