@@ -81,7 +81,6 @@
 		H.unregister_event(/event/death, src, nameof(src::drop_arcane()))
 
 /obj/item/weapon/reagent_containers/food/drinks/process()
-	. =	..()
 	var/mob/living/carbon/human/H = is_arcaneheld()
 	if(H)
 		if(!reagents.is_full())	
