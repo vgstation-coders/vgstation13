@@ -38,7 +38,7 @@
 /obj/item/tape/arcane_act(mob/user, recursive)
 	. = ..()
 	if(syndie_type)
-		var/obj/item/tape/P =new syndie_type(loc)
+		var/obj/item/tape/P = new syndie_type(loc)
 		P.icon_state = "[P.icon_base]_[dir]"
 		qdel(src)
 
