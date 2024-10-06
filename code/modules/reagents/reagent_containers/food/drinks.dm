@@ -91,6 +91,11 @@
 		else
 			H.overeatduration = 0
 			H.nutrition -= 10
+	var/turf/loca = get_turf(src)
+	if(lit && loca)
+//		to_chat(world, "<span  class='warning'>Burning...</span>")
+		loca.hotspot_expose(700, SMALL_FLAME)
+	return
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/drop_arcane(mob/user, body_destroyed)
 	user.unregister_event(/event/death, src, nameof(src::drop_arcane()))
@@ -2364,14 +2369,6 @@
 		var/mob/living/carbon/human/H = src.loc
 		H.update_inv_belt()
 
-	return
-
-
-/obj/item/weapon/reagent_containers/food/drinks/process()
-	var/turf/loca = get_turf(src)
-	if(lit && loca)
-//		to_chat(world, "<span  class='warning'>Burning...</span>")
-		loca.hotspot_expose(700, SMALL_FLAME)
 	return
 
 // Sliding from one table to another
