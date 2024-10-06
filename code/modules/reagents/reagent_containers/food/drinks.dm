@@ -100,27 +100,30 @@
 	return
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/drop_arcane(mob/user, body_destroyed)
-	user.unregister_event(/event/death, src, nameof(src::drop_arcane()))
-	cant_drop = 0
-	user.drop_item(src, user.loc)
-	cant_drop = 1
-	var/list/obj/structure/table/tables = list()
-	for(var/obj/structure/table/T in view(world.view,src))
-		tables += T
-	var/obj/structure/table/ourtable = pick(tables)
-	forceMove(ourtable.loc)
-	reagents.clear_reagents()
-	var/static/list/blocked = list(
-		/datum/reagent/drink,
-		/datum/reagent/drink/cold,
-	)
-	var/list/things_can_add = existing_typesof(/datum/reagent/drink) - blocked
-	var/list/things2add
-	for(var/addtype in things_can_add)
-		var/datum/reagent/R = addtype
-		things2add += list(initial(R.id))
-	reagents.add_reagent(pick(things2add),reagents.maximum_volume/rand(4,5))
-	update_icon()
+	if(prob(75)) // percent of time in the SCP it does this
+		user.unregister_event(/event/death, src, nameof(src::drop_arcane()))
+		cant_drop = 0
+		user.drop_item(src, user.loc)
+		cant_drop = 1
+		var/list/obj/structure/table/tables = list()
+		for(var/obj/structure/table/T in view(world.view,src))
+			tables += T
+		var/obj/structure/table/ourtable = pick(tables)
+		forceMove(ourtable.loc)
+		reagents.clear_reagents()
+		var/static/list/blocked = list(
+			/datum/reagent/drink,
+			/datum/reagent/drink/cold,
+		)
+		var/list/things_can_add = existing_typesof(/datum/reagent/drink) - blocked
+		var/list/things2add
+		for(var/addtype in things_can_add)
+			var/datum/reagent/R = addtype
+			things2add += list(initial(R.id))
+		reagents.add_reagent(pick(things2add),reagents.maximum_volume/rand(4,5))
+		update_icon()
+	else
+		bless()
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/is_arcaneheld()
 	if(arcanetampered && ishuman(loc))
@@ -137,13 +140,15 @@
 /obj/item/weapon/reagent_containers/food/drinks/pickup(var/mob/user)
 	..()
 	if(ishuman(user) && arcanetampered) // wizards turn it into SCP-198
-		user.register_event(/event/death, src, nameof(src::drop_arcane()))
-		var/mob/living/carbon/human/H = user
-		reagents.clear_reagents()
-		H << 'sound/items/cautery.ogg'
-		H.audible_scream()
-		H.adjustHalLoss(50)
-		H.vessel.trans_to(reagents,reagents.maximum_volume)
+		spawn(rand(20,50)) // how long it takes to kick in in the SCP
+		if(is_arcaneheld())
+			user.register_event(/event/death, src, nameof(src::drop_arcane()))
+			var/mob/living/carbon/human/H = user
+			reagents.clear_reagents()
+			H << 'sound/items/cautery.ogg'
+			H.audible_scream()
+			H.adjustHalLoss(50)
+			H.vessel.trans_to(reagents,reagents.maximum_volume)
 	update_icon()
 	if (can_flip && !arcanetampered && (M_SOBER in user.mutations) && (user.a_intent == I_GRAB))
 		if (flipping && (M_CLUMSY in user.mutations) && prob(20))
