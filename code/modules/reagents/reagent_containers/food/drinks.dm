@@ -122,7 +122,7 @@
 			var/datum/reagent/R = addtype
 			things2add += list(initial(R.id))
 		D.reagents.add_reagent(pick(things2add),reagents.maximum_volume/rand(4,5))
-		update_icon()
+		qdel(src)
 	else
 		bless()
 
