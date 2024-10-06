@@ -57,7 +57,7 @@
 				areas_to_check -= prospective
 				continue
 			var/turf/T = pick(prospective_turfs)
-			if(user && !(T.z == user.z)) //Selected turf is not in the same z-level
+			if(T.z != src.z) //Selected turf is not in the same z-level
 				areas_to_check -= prospective
 				continue
 			thearea = prospective //We found it
@@ -67,7 +67,7 @@
 			continue
 	var/list/L = list()
 	for(var/turf/T in get_area_turfs(thearea.type))
-		if(!T.density && user && (T.z == user.z)) //In case an area somehow shows up in multiple z-levels
+		if(!T.density && T.z != src.z) //In case an area somehow shows up in multiple z-levels
 			var/clear = 1
 			for(var/obj/O in T)
 				if(O.density)
