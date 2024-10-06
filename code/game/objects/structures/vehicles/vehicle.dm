@@ -248,7 +248,7 @@
 	return 1
 
 /obj/structure/bed/chair/vehicle/proc/can_buckle(mob/M, mob/user)
-	if((M != user && !arcanetampered) || !ishigherbeing(user) || user.restrained() || user.lying || user.stat || user.locked_to || occupant)
+	if(M != user || !ishigherbeing(user) || user.restrained() || user.lying || user.stat || user.locked_to || occupant)
 		return 0
 	if(!Adjacent(user) && buckle_range <= 1)
 		return 0
