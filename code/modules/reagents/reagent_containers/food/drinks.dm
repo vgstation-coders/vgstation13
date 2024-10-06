@@ -109,7 +109,7 @@
 			tables += T
 		var/obj/structure/table/ourtable = pick(tables)
 		var/spawntype = pick(subtypesof(/obj/item/weapon/reagent_containers/food/drinks))
-		var/obj/item/weapon/reagent_containers/food/drinks/D = new(ourtable.loc)
+		var/obj/item/weapon/reagent_containers/food/drinks/D = new spawntype(ourtable.loc)
 		D.arcane_act(arcanetampered)
 		D.reagents.clear_reagents()
 		var/static/list/blocked = list(
