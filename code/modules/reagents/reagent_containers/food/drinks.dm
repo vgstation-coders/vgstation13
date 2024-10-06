@@ -68,7 +68,6 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/arcane_act(mob/user)
 	..()
-	cant_drop = 1
 	processing_objects.Add(src)
 	return prob(50) ? "D'TA EX'P'GED!" : "R'D'CTED!"
 
@@ -125,8 +124,8 @@
 	else
 		bless()
 
-/obj/item/weapon/reagent_containers/food/drinks/proc/is_arcaneheld()
-	if(arcanetampered && ishuman(loc))
+/obj/item/weapon/reagent_containers/food/drinks/proc/is_arcaneheld(checks_cantdrop = TRUE)
+	if(arcanetampered && ishuman(loc) && checks_cantdrop && cant_drop)
 		var/mob/living/carbon/human/H = loc
 		if(src in H.held_items)
 			return H
@@ -141,7 +140,7 @@
 	..()
 	if(ishuman(user) && arcanetampered) // wizards turn it into SCP-198
 		spawn(rand(20,50)) // how long it takes to kick in in the SCP
-			if(is_arcaneheld())
+			if(is_arcaneheld(FALSE))
 				user.register_event(/event/death, src, nameof(src::drop_arcane()))
 				var/mob/living/carbon/human/H = user
 				reagents.clear_reagents()
@@ -149,6 +148,7 @@
 				H.audible_scream()
 				H.adjustHalLoss(50)
 				H.vessel.trans_to(reagents,reagents.maximum_volume)
+				cant_drop = 1
 	update_icon()
 	if (can_flip && !arcanetampered && (M_SOBER in user.mutations) && (user.a_intent == I_GRAB))
 		if (flipping && (M_CLUMSY in user.mutations) && prob(20))
