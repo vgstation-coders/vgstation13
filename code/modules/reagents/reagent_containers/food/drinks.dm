@@ -108,8 +108,8 @@
 		for(var/obj/structure/table/T in view(world.view,src))
 			tables += T
 		var/obj/structure/table/ourtable = pick(tables)
-		forceMove(ourtable.loc)
-		reagents.clear_reagents()
+		var/spawntype = pick(subtypesof(/obj/item/weapon/reagent_containers/food/drinks))
+		D.reagents.clear_reagents()
 		var/static/list/blocked = list(
 			/datum/reagent/drink,
 			/datum/reagent/drink/cold,
@@ -119,7 +119,7 @@
 		for(var/addtype in things_can_add)
 			var/datum/reagent/R = addtype
 			things2add += list(initial(R.id))
-		reagents.add_reagent(pick(things2add),reagents.maximum_volume/rand(4,5))
+		D.reagents.add_reagent(pick(things2add),reagents.maximum_volume/rand(4,5))
 		update_icon()
 	else
 		bless()
