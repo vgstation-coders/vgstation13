@@ -172,8 +172,8 @@
 
 // Concrete logic of selecting a target, depending on each bot.
 /obj/machinery/bot/proc/target_selection()
-	if(!target && next_destination)
-		target = next_destination
+	//if(!target && next_destination)
+	//	target = next_destination
 
 // Will we continue chasing our target or not?
 /obj/machinery/bot/proc/can_abandon_target()
@@ -198,13 +198,19 @@
 /obj/machinery/bot/proc/can_path()
 	return TRUE
 /obj/machinery/bot/proc/handle_destination_arrival()
-	at_path_target()
+	if(patrol_target && loc==patrol_target)
+		at_patrol_target()
+	else
+		at_path_target()
 // If we get a path through process_path(), which means we have a target, and we're not set to autopatrol, we get a patrol path.
 /obj/machinery/bot/proc/process_path()
-	if(!summoned && (bot_flags & BOT_PATROL) && auto_patrol)
-		find_patrol_path()
 	if(target)
 		path = calc_path(target)
+		return
+	if(patrol_target)
+		path = calc_path(patrol_target)
+	if(!summoned && (bot_flags & BOT_PATROL) && auto_patrol)
+		find_patrol_path()
 		//get_path_to(src, target, 300, 0, botcard, TRUE)
 
 //	if(!process_path() && (bot_flags & BOT_PATROL) && auto_patrol)
@@ -225,7 +231,7 @@
 	current_pathing++
 	if (current_pathing > MAX_PATHING_ATTEMPTS)
 		CRASH("maximum pathing reached")
-	if(!path.len)
+	if(!path || !path.len)
 		process_path()
 		return
 	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
