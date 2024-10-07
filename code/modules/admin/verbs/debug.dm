@@ -139,7 +139,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		if(!L.len)
 			returntext = "\[Empty list\]"
 		else
-			returntext = "<a href='?_src_=vars;List=\ref[.]'>\[List\]</A>"
+			returntext = "<a href='?_src_=vars;List=\ref[.]'>[json_encode(L)]</A>"
 			spawn(PROC_RESULT_KEEP_TIME)
 				. = null
 	to_chat(user, "<span class='notice'>[procname] returned: [returntext]</span>")
