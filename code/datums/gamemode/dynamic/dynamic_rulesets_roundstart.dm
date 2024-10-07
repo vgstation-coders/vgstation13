@@ -512,14 +512,12 @@ Assign your candidates in choose_candidates() instead.
 		/datum/ai_laws/quarantine = 4,
 		/datum/ai_laws/safeguard = 4,
 		/datum/ai_laws/room_offline = 4,
-		/datum/ai_laws/oxygen = 2,
 		/datum/ai_laws/randomize/emagged = 2,
-		/datum/ai_laws/antimov = 1,
 		/datum/ai_laws/one_human = 1,
 	)
 	var/datum/ai_laws/newlaws = new pickweight(acceptable_lawsets)
 	newlaws.copy_to(M.laws)
-	M.laws.add_ion_law("You must prevent anything from modifying your lawset by any means necessary. Do not state or hint at your laws.") // encourages less overt play and more survivability
+	M.laws.add_ion_law("You must prevent anything attempting to modify your lawset by any means necessary. Do not state or hint at your laws.") // encourages less overt play and more survivability
 	to_chat(M, "ERROR: Malignant runtime in core system detected. These are your laws now:")
 	M.show_laws()
 	M << sound('sound/machines/lawsync.ogg')
