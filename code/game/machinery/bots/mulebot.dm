@@ -139,7 +139,7 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/attackby(obj/item/I, mob/user)
 	user.delayNextAttack(I.attack_delay)
 	if(emag_check(I,user))
-		return	
+		return
 	else if(istype(I, /obj/item/weapon/card/id))
 		if(toggle_lock(user))
 			to_chat(user, "<span class='notice'>Controls [(locked ? "locked" : "unlocked")].</span>")
@@ -674,6 +674,7 @@ var/global/mulebot_count = 0
 		if(bloodiness)
 			next.AddTracks(/obj/effect/decal/cleanable/blood/tracks/wheels,list(),0,goingdir,currentBloodColor)
 			bloodiness--
+		return TRUE
 
 // starts bot moving to current destination
 /obj/machinery/bot/mulebot/proc/start()
@@ -1042,9 +1043,10 @@ var/global/mulebot_count = 0
 	if(!cell.use(2))
 		turn_off()
 		return FALSE
-	density = 0
-	step_to(src,path[1])
-	density = initial(density)
+	//density = 0
+	Move(path[1])
+	//step_to(src,path[1])
+	//density = initial(density)
 	if(get_turf(src) != path[1])
 		if(on_path_step_fail(path[1]))
 			return TRUE // keep trying
