@@ -577,6 +577,7 @@
 			var/obj/structure/window/reinforced/plasma/P = new(R.loc)
 			P.dir = R.dir
 			P.update_icon()
+			P.update_nearby_tiles()
 			qdel(R)
 		if(frwindow)
 			new /obj/structure/window/full/reinforced/plasma(frwindow.loc)
