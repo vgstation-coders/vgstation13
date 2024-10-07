@@ -327,7 +327,8 @@
 		/obj/item/weapon/storage/bag/plants/portactor,
 		/obj/item/device/analyzer/plant_analyzer,
 		/obj/item/weapon/reagent_containers/glass/bottle/robot/water,
-		/obj/item/weapon/reagent_containers/glass/bottle/robot/eznutrient
+		/obj/item/weapon/reagent_containers/glass/bottle/robot/eznutrient,
+		/obj/item/weapon/reagent_containers/glass/bottle/robot/insecticide
 		)
 
 /obj/item/borg/upgrade/hydro/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
@@ -339,6 +340,18 @@
 		return FAILED_TO_ADD
 
 	G.can_hold.Add(/obj/item/seeds, /obj/item/weapon/disk/botany)
+
+/obj/item/borg/upgrade/hydro_adv
+	name = "service cyborg H.U.E.Y. MK-2 upgrade board"
+	desc = "Used to give a service cyborg more hydroponics tools to combat vines and mutate plants."
+	icon_state = "mainboard"
+	required_modules = list(SERVICE_MODULE)
+	required_upgrades = list(/obj/item/borg/upgrade/hydro)
+	modules_to_add = list(
+		/obj/item/floral_somatoray,
+		/obj/item/weapon/scythe,
+		/obj/item/weapon/reagent_containers/spray/plantbgone
+		)
 
 /obj/item/borg/upgrade/honk
 	name = "service cyborg H.O.N.K. upgrade board"

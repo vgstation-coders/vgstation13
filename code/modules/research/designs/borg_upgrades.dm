@@ -140,8 +140,18 @@
 
 /datum/design/borg_service_upgrade_hydro
 	name = "Service cyborg H.U.E.Y. upgrade"
-	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds, weed killers, sprayers and glass containers."
+	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and botany disks."
 	id = "borg_service_module_hydro"
+	req_tech = list(Tc_BIOTECH = 4, Tc_ENGINEERING = 2, Tc_PROGRAMMING = 2)
+	build_type = MECHFAB
+	materials = list(MAT_IRON=45000, MAT_GLASS=8000, MAT_PLASTIC=2500)
+	build_path = /obj/item/borg/upgrade/hydro
+	category = "Robotic_Upgrade_Modules"
+
+/datum/design/borg_service_upgrade_hydro_adv
+	name = "Service cyborg H.U.E.Y. MK-2 upgrade"
+	desc = "Used to give a service cyborg tools to mutate plants and combat vines."
+	id = "borg_adv_service_module_hydro"
 	req_tech = list(Tc_BIOTECH = 4, Tc_ENGINEERING = 2, Tc_PROGRAMMING = 2)
 	build_type = MECHFAB
 	materials = list(MAT_IRON=45000, MAT_GLASS=8000, MAT_PLASTIC=2500)
