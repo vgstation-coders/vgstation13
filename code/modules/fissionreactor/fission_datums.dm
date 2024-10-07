@@ -64,6 +64,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	fuel=null
 	var/turf/originloc=locate(origin_x,origin_y,zlevel)
 	originloc.return_air().merge(coolant.remove(coolant.total_moles,TRUE,TRUE),TRUE) //dump all coolant to atmos.
+	..()
 
 /datum/fission_reactor_holder/proc/verify_integrity() //destroys the reactor if too many parts are missing. fixes stuff lingering.
 	var/notlookinggood_points=0
@@ -73,33 +74,23 @@ datums for the fission reactor, which includes the fuel and reactor
 	exterior_elements+=casing_parts.len
 	exterior_elements+=controller?1:0
 	var/expected_exterior=2*abs(origin_x-corner_x)+2*abs(origin_y-corner_y) //also the perimeter. kind of.
-	//expected_exterior-=4 //to account for the double counting of corner pieces.
 
-	//world.log << "[exterior_elements] / [expected_exterior]"
 	if(exterior_elements<expected_exterior) //missing any at all? (for deconstruction)
-		world.log << "check 1"
 		notlookinggood_points++
 	if(exterior_elements/expected_exterior < 0.5) //half the case remaining?
-		world.log << "check 2"
 		notlookinggood_points++
 	if(!fuel_rods.len) //no fuel rods?
-		world.log << "check 3"
 		notlookinggood_points++
 	if(!controller) //no controller?
-		world.log << "check 4"
 		notlookinggood_points++
 	if(!coolant_ports.len) //no coolant ports?
-		world.log << "check 5"
 		notlookinggood_points++
 	if(!fuel) //no fuel? (to handle deconstruction)
-		world.log << "check 6"
 		notlookinggood_points++
 	if(coolant.total_moles < 0.5*(coolant.volume/CELL_VOLUME) ) //less than .5 mole per tile of coolant? (draining to deconstruct)
-		world.log << "check 7"
 		notlookinggood_points++
 	
 	if(notlookinggood_points>=3) //if 3 or more criteria are met, something really bad has happened, so just destroy the whole thing.
-		world.log << "PASSED"
 		qdel(src)
 
 /datum/fission_reactor_holder/proc/handledestruction(var/obj/shitgettingfucked)
@@ -438,7 +429,6 @@ datums for the fission reactor, which includes the fuel and reactor
 	recalculatereactorstats()
 
 /datum/fission_reactor_holder/proc/recalculatereactorstats()
-	world.log << "generating reactor stats..."
 	fuel_reactivity_with_rods=0
 	fuel_reactivity=0
 	fuel_rods_affected_by_rods=0

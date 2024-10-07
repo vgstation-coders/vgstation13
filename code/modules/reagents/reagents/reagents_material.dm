@@ -267,7 +267,7 @@
 /datum/reagent/lead
 	name ="Lead"
 	id = LEAD
-	description = "A dull grey metallic element and heavy metal. ingestion leads to organ damage, most notably the brain."
+	description = "A dull grey metallic element and heavy metal. Ingestion leads to brain damage"
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#676767" //rgb: 103, 103, 103
 	density = 11.34

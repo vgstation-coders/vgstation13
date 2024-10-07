@@ -475,7 +475,7 @@
 	contains = list(
 		/obj/item/weapon/fuelrod/large
 	)
-	name = "High-capacity fuel rod."
+	name = "High-capacity fuel rod"
 	cost = 100 //It's a one time purchance, really. somewhat costy, but not that much for a department. watch for meltdowns.
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "Large fuel rod"

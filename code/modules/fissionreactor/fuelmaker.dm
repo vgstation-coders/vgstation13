@@ -37,7 +37,7 @@ the machine which makes fuel rods have things in them.
 			if(!user.drop_item(I))
 				return
 			to_chat(user,"You insert the fuel rod into \the [src].")
-			I.loc=null
+			I.forceMove(src)
 			heldrod=I
 			heldrod.fueldata.fuel=heldrod.fueldata.get_products() //process the fuel turning
 			heldrod.fueldata.life=1
@@ -84,7 +84,7 @@ the machine which makes fuel rods have things in them.
 			return TRUE
 		if(!user.drop_item(C))
 			return
-		C.forceMove(null)
+		C.forceMove(src.loc)
 		container=C
 		to_chat(user,"You add \the [C] to \the [src]")
 		ask_remakeUI()
@@ -98,7 +98,7 @@ the machine which makes fuel rods have things in them.
 	if(..())
 		if(container)
 			to_chat(user,"You remove \the [container] from \the [src]")
-			container.loc=src.loc
+			container.forceMove(src.loc)
 			container=null
 			ask_remakeUI()
 		return
