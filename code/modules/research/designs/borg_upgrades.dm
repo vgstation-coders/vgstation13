@@ -152,10 +152,10 @@
 	name = "Service cyborg H.U.E.Y. MK-2 upgrade"
 	desc = "Used to give a service cyborg tools to mutate plants and combat vines."
 	id = "borg_adv_service_module_hydro"
-	req_tech = list(Tc_BIOTECH = 4, Tc_ENGINEERING = 2, Tc_PROGRAMMING = 2)
+	req_tech = list(Tc_BIOTECH = 5, Tc_ENGINEERING = 4, Tc_PROGRAMMING = 4)
 	build_type = MECHFAB
-	materials = list(MAT_IRON=45000, MAT_GLASS=8000, MAT_PLASTIC=2500)
-	build_path = /obj/item/borg/upgrade/hydro
+	materials = list(MAT_IRON=55000, MAT_GLASS=16000, MAT_PLASTIC=5000, MAT_GOLD=2500, MAT_SILVER=2500)
+	build_path = /obj/item/borg/upgrade/hydro_adv
 	category = "Robotic_Upgrade_Modules"
 
 /datum/design/borg_service_upgrade_honk
