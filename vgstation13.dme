@@ -609,6 +609,7 @@
 #include "code\defines\procs\captain_announce.dm"
 #include "code\defines\procs\command_alert.dm"
 #include "code\defines\procs\statistics.dm"
+#include "code\defines\procs\toomyspathing.dm"
 #include "code\game\asteroid.dm"
 #include "code\game\atoms.dm"
 #include "code\game\atoms_movable.dm"
