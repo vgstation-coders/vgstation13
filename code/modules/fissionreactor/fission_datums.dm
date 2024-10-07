@@ -13,11 +13,11 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/list/casing_parts=list()
 	var/list/breaches=list()
 	var/obj/machinery/fissioncontroller/controller=null
-	var/obj/ticker=null //what ticks it.
 	var/heat_capacity=0
 	var/fuel_reactivity=1
 	var/fuel_reactivity_with_rods=0
 	var/fuel_rods_affected_by_rods=0
+	var/time_last_ticked=null
 	
 	var/coolantport_counter=0 // this varible exists to ensure that all coolant ports get treated equally, because if we didn't it would have a flow prefrence towards the ports with lower indexes.
 	var/control_rod_insertion=1  //phase 1 vars. modified during runtime
@@ -43,6 +43,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	coolant.temperature = T20C //vaguely room temp.
 	coolant.volume = CELL_VOLUME
 	fissionreactorlist+=src
+	time_last_ticked=world.time
 
 /datum/fission_reactor_holder/Destroy()
 	fissionreactorlist-=src //remove from global list
@@ -331,6 +332,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	return locate( rand( min(origin_x,corner_x),max(origin_x,corner_x) ) , rand(min(origin_y,corner_y),max(origin_y,corner_y)) , zlevel   )
 	
 /datum/fission_reactor_holder/proc/meltdown()	
+	var/dt=(world.time-time_last_ticked)/10
 	var/turf/centerturf=locate(origin_x,origin_y,zlevel)
 	
 	message_admins("Fission reactor meltdown occured in area [centerturf.loc.name] ([formatJumpTo(centerturf,"JMP")])")
@@ -342,14 +344,14 @@ datums for the fission reactor, which includes the fuel and reactor
 		explodeprob=max(0,(1-(1/( log(1+max(0,fuel.wattage-fuel.absorbance)/15000)  ))))
 		
 	for(var/i=1,i<=reactorarea2,i++)
-		if(rand()<=0.33*explodeprob)
+		if(rand()<=0.33*explodeprob*dt)
 			var/list/eplodies=determineexplosionsize()
 			explosion( randomtileinreactor() ,eplodies[1],eplodies[2],eplodies[3])
 			
 	reactorarea2=ceil(reactorarea/2)
 	var/crads=((fuel.wattage-fuel.absorbance)*fuel.life)/100000 //100kw nets 1 rad.
 	for(var/i=1,i<=reactorarea2,i++)
-		if(rand()<=0.5)
+		if(rand()<=0.5*dt)
 			for (var/obj/o in randomtileinreactor().contents)
 			
 				if(istype(o, /obj/machinery/fissioncontroller))
@@ -468,17 +470,17 @@ datums for the fission reactor, which includes the fuel and reactor
 	
 	
 /datum/fission_reactor_holder/proc/fissioncycle() //what makes the heat.
-
+	var/dt=(world.time-time_last_ticked)/10
 	if (SCRAM)
 		control_rod_target=1
 		if(temperature<=FISSIONREACTOR_SAFEENUFFTEMP)
 			SCRAM=FALSE
 
 	
-	if(control_rod_target>control_rod_insertion) //5% insertion increments (2x because every 2 seconds)
-		control_rod_insertion=min((0.1*(SCRAM ? 1.5 : 1.0))+control_rod_insertion,control_rod_target) //rods fall 50% faster when shit is going down to hitting the fan town.
+	if(control_rod_target>control_rod_insertion) //5% insertion increment per second
+		control_rod_insertion=min((0.05*dt*(SCRAM ? 1.5 : 1.0))+control_rod_insertion,control_rod_target) //rods fall 50% faster when shit is going down to hitting the fan town.
 	else if(control_rod_target<control_rod_insertion)
-		control_rod_insertion=max(control_rod_insertion-0.1,control_rod_target)
+		control_rod_insertion=max(control_rod_insertion-0.05*dt,control_rod_target)
 
 
 	if(!fuel)
@@ -496,11 +498,11 @@ datums for the fission reactor, which includes the fuel and reactor
 		totalpowertodump=0
 		speedfactor*=(fuel.absorbance-fuel.wattage)/fuel.wattage
 	else
-		totalpowertodump=(fuel.wattage-fuel.absorbance)*2
+		totalpowertodump=(fuel.wattage-fuel.absorbance)*dt
 	
 
 	if (fuel.lifetime>0)
-		fuel.life-= (speedfactor*2)/fuel.lifetime
+		fuel.life-= (speedfactor*dt)/fuel.lifetime
 		fuel.life=max(0,fuel.life)
 	else
 		fuel.life=0
@@ -511,6 +513,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	
 	
 /datum/fission_reactor_holder/proc/coolantcycle()
+	var/dt=(world.time-time_last_ticked)/10
 	if(coolant_ports.len)
 		for(var/i=1, i<=coolant_ports.len,i++)
 			var/real_index= ((i+coolantport_counter)%coolant_ports.len)+1 //this way we spread out any first index prefrence.
@@ -524,14 +527,14 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/chp=coolant.heat_capacity()
 	var/newtemp=(chp*coolant.temperature + heat_capacity*temperature)/(chp+heat_capacity)
 	
-	var/heatconductivitycoeff=0.75 //fudge, mmmm....
+	var/heatconductivitycoeff=1- (0.5**dt) //dt=2 seconds: 75% heat transference. dt->inf, %->100. dt=0:0%
 	
 	coolant.temperature=newtemp*heatconductivitycoeff + (1-heatconductivitycoeff)*coolant.temperature
 	temperature=newtemp*heatconductivitycoeff + (1-heatconductivitycoeff)*temperature
 	
 	
 /datum/fission_reactor_holder/proc/misccycle() //cleanup and other checks
-	
+	var/dt=(world.time-time_last_ticked)/10
 	var/powerfactor=fuel_rods.len*((fuel_reactivity) - ( (fuel_reactivity-fuel_reactivity_with_rods)*control_rod_insertion))
 	var/fuelpower=0
 	if(fuel)
@@ -539,7 +542,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	
 	for(var/turf/breachlocation in breaches)
 		if(rand()>0.5) //50% chance every tick to leak
-			var/datum/gas_mixture/removed= coolant.remove(coolant.total_moles*0.5*rand(),TRUE,TRUE) //when we leak, leak 0-50% of the coolant
+			var/datum/gas_mixture/removed= coolant.remove(coolant.total_moles*0.5*dt*rand(),TRUE,TRUE) //when we leak, leak 0-50% of the coolant
 			breachlocation.return_air().merge(removed,TRUE)
 		for(var/mob/living/l in range(breachlocation, 5))
 			var/rads = (  fuelpower*powerfactor/100000   ) * sqrt(1/(max(get_dist(l, breachlocation), 1)))
@@ -557,7 +560,7 @@ datums for the fission reactor, which includes the fuel and reactor
 		graceperiodtick=2
 
 	verify_integrity()
-	
+	time_last_ticked=world.time
 	
 
 
