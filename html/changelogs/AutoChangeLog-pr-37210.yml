@@ -1,0 +1,4 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- rscadd: AIs now retrack their targets as soon as they come back into view.
