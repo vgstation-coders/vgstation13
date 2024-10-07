@@ -317,7 +317,7 @@ var/list/hydro_trays = list()
 
 	else if(isshovel(O))
 		if(closed_system)
-			to_chat(user, "<span class='warning'>You can't transplant the plant while the lid is shut.</span>")
+			to_chat(user, "<span class='warning'>You can't dig soil while the lid is shut.</span>")
 			return
 		if(arcanetampered)
 			to_chat(user,"<span class='sinister'>You cannot dig into the soil.</span>")
