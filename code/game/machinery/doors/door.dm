@@ -399,11 +399,9 @@ var/list/all_doors = list()
 			arcane_linked_door = pick_n_take(door_selection)
 			if(!door_selection.len)
 				break
-		if(!arcane_linked_door)
-			arcanetampered = 0
-			return
-		arcane_linked_door.arcanetampered = arcanetampered
-		arcane_linked_door.arcane_linked_door = src
+		if(arcane_linked_door)
+			arcane_linked_door.arcanetampered = arcanetampered
+			arcane_linked_door.arcane_linked_door = src
 		return "D'R ST'K!"
 
 /obj/machinery/door/proc/arcane_linkable()
