@@ -316,7 +316,7 @@
 //Service Stuff
 /obj/item/borg/upgrade/hydro
 	name = "service cyborg H.U.E.Y. upgrade board"
-	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and glass containers."
+	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and diskettes."
 	icon_state = "mainboard"
 	required_modules = list(SERVICE_MODULE)
 	modules_to_add = list(
@@ -325,7 +325,10 @@
 		/obj/item/weapon/pickaxe/shovel/spade,
 		/obj/item/tool/wirecutters/clippers,
 		/obj/item/weapon/storage/bag/plants/portactor,
-		/obj/item/device/analyzer/plant_analyzer)
+		/obj/item/device/analyzer/plant_analyzer,
+		/obj/item/weapon/reagent_containers/glass/bottle/robot/water,
+		/obj/item/weapon/reagent_containers/glass/bottle/robot/eznutrient
+		)
 
 /obj/item/borg/upgrade/hydro/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
