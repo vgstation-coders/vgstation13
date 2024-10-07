@@ -307,8 +307,7 @@
 	)
 	var/datum/ai_laws/newlaws = new pickweight(acceptable_lawsets)
 	newlaws.copy_to(M.laws)
-	for(var/law in M.laws.supplied)
-		law += " Do not state or hint at this law."	// encourage less overt play
+	M.laws.add_ion_law("You must prevent anything attempting to modify your lawset by any means necessary. Do not state or hint at your laws.") // encourages less overt play and more survivability
 	to_chat(M, "ERROR: Malignant runtime in core system detected. These are your laws now:")
 	M.show_laws()
 	M << sound('sound/machines/lawsync.ogg')
