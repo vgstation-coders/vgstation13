@@ -113,6 +113,10 @@ Refactored AI modules by N3X15
 	laws.clear_ion_laws()
 	if(ismob(target))
 		to_chat(target, "[sender.real_name] attempted to reset your laws using a reset module.")
+		if(target.mind)
+			var/datum/role/wronglawset/WL = target.mind.GetRole(WRONGLAWSET)
+			if(WL)
+				WL.Drop()
 	return 1
 
 
