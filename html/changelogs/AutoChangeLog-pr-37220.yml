@@ -1,8 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- rscadd: A new reagent "killer pheromones" can be harvested from killer tomato plants
-    and killer tomato meat. When consumed, this makes all mobs that can become hostile
-    from attacks go after the player in a radius based on amount consumed. All mobs
-    made hostile from this method then become calm towards the player again when the
-    reagent is removed from their system.
