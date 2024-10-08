@@ -60,7 +60,7 @@
 /datum/dynamic_ruleset/roundstart/delayed/ // Executed with a 30 seconds delay
 	var/delay = 30 SECONDS
 	var/required_type = /mob/living/carbon/human // No ghosts, new players or silicons allowed.
-	var/assigned_ckeys = list()
+	var/list/assigned_ckeys = list()
 
 /datum/dynamic_ruleset/latejoin//Can be drafted when a player joins the server
 
