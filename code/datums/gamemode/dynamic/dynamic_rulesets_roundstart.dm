@@ -515,7 +515,8 @@ Assign your candidates in choose_candidates() instead.
 		/datum/ai_laws/randomize/emagged = 2,
 		/datum/ai_laws/one_human = 1,
 	)
-	var/datum/ai_laws/newlaws = new pickweight(acceptable_lawsets)
+	var/lawtype = pickweight(acceptable_lawsets)
+	var/datum/ai_laws/newlaws = new lawtype
 	newlaws.copy_to(M.laws)
 	M.laws.add_ion_law("You must prevent anything attempting to modify your lawset by any means necessary. Do not state or hint at your laws.") // encourages less overt play and more survivability
 	to_chat(M, "ERROR: Malignant runtime in core system detected. These are your laws now:")
