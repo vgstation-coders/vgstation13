@@ -81,10 +81,10 @@
 		to_chat(user, "<span class='warning'>There's no phone to fix!</span>")
 		return
 	if(phone.linked_landline)
-		to_chat(user, "<span class='warning'>\the [phone] is already connected!</span>")
+		to_chat(user, "<span class='warning'>\The [phone] is already connected!</span>")
 		return
 	if(linked_phone)
-		to_chat(user, "<span class='warning'>\the [phone] is connected elsewhere!</span>")
+		to_chat(user, "<span class='warning'>\The [phone] is connected elsewhere!</span>")
 		return
 	phone.linked_landline = src
 	linked_phone = phone
@@ -170,7 +170,7 @@
 		to_chat(user, "<span class='notice'>You cannot do this while incapacitated.</span>")
 		return
 	if(!phone)
-		to_chat(user, "<span class='notice'>\the [src] has no telephone!</span>")
+		to_chat(user, "<span class='notice'>\The [src] has no telephone!</span>")
 		return
 
 	user.put_in_hands(src.phone)
@@ -328,7 +328,7 @@
 	linked_landline.linked_phone = null
 	linked_landline = null
 	broken = TRUE
-	visible_message("<span class='warning'>\the [src] releases its magic smoke!</span>")
+	visible_message("<span class='warning'>\The [src] releases its magic smoke!</span>")
 	spawn(1)
 		flashbangprime()
 
@@ -385,7 +385,7 @@
 	linked_landline.listening_operators -= src
 	linked_landline = null
 	broken = TRUE
-	visible_message("<span class='warning'>\the [src] releases its magic smoke!</span>")
+	visible_message("<span class='warning'>\The [src] releases its magic smoke!</span>")
 	spawn(1)
 		flashbangprime()
 

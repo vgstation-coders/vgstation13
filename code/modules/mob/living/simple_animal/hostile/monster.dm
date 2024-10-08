@@ -80,9 +80,9 @@
 /mob/living/simple_animal/hostile/monster/cyber_horror/UnarmedAttack(atom/A)
 	if(ismob(A))
 		delayNextAttack(10)
-	if(A.attack_animal(src)) //Returns 0 if blocked
+	if(A.attack_animal(src)) //Returns 0 if blocked, returns 1 if the attack went through
 		var/mob/living/L = A
-		if(L.reagents)
+		if(istype(L) && L.reagents)
 			if(prob(nanobot_chance))
 				visible_message("<b><span class='warning'>[src] injects something into [L]!</span>")
 				L.reagents.add_reagent(MEDNANOBOTS, 2)
@@ -126,6 +126,9 @@
 	icon_state = "insectoid_cyber_horror"
 
 /mob/living/simple_animal/hostile/monster/cyber_horror/monster/New(loc, var/mob/living/who_we_were)
+	if(!istype(who_we_were))
+		..()
+		return
 	name = who_we_were.name+" cyber horror"
 	desc = "What was once \a [who_we_were], twisted by machine."
 	var/multiplier = min(3,who_we_were.reagents.has_reagent(MEDNANOBOTS)?who_we_were.reagents.get_reagent_amount(MEDNANOBOTS)/10:1)

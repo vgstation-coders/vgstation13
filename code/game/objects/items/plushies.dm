@@ -236,6 +236,13 @@
 	desc = "An extra-large version of the classic stuffed bear."
 	icon_state = "teddy"
 
+/obj/item/toy/plushie/cash
+	name = "plush cash"
+	desc = "This note is not legal tender for all debts public and private."
+	icon_state = "cash"
+	interact_sounds = list("sound/items/polaroid2.ogg")
+
+
 //This one is only available with a pomfcoin
 /obj/item/toy/plushie/chicken/pomf
 	name = "plush Pomf the Chicken"

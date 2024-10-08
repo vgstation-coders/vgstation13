@@ -1,3 +1,10 @@
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//						HOLOGRAM PROJECTOR						  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
 /obj/item/device/hologram_projector
 	name = "hologram projector"
 	desc = "It makes a hologram appear...with magnets or something..."
@@ -6,56 +13,45 @@
 
 	var/mob/living/simple_animal/hologram/advanced/projector/holoperson = null
 	var/holo_range = 10 //if you run, you disappear with lower range
-	var/holo_mode = 0
 	var/obj/effect/overlay/holoray/ray	//The link between the projection and the projector.
 	var/datum/recruiter/recruiter = null
 	var/polling_ghosts = FALSE
 
+/obj/item/device/hologram_projector/New()
+	..()
+	register_event(/event/after_move, src, /obj/item/device/hologram_projector/proc/update_ray)
+
 /obj/item/device/hologram_projector/Destroy()
 	if(holoperson)
-		holoperson.unequip_everything()
 		QDEL_NULL(holoperson)
 	if(ray)
 		QDEL_NULL(ray)
 	..()
 
-/mob/living/simple_animal/hologram/advanced/projector
-	var/obj/item/device/hologram_projector/projector = null
-	var/proj_turf = null
-	login_text = "You are a hologram. You can perform a few basic functions, and are unable to leave the vicinity of the projector.\
-	\n<span class='danger'>Do not damage the station. Do not harm crew members without their consent. Serve your master.</span>"
-
-
-/mob/living/simple_animal/hologram/advanced/projector/Login()
-	if(projector?.integratedpai)
-		var/obj/item/device/paicard/P = projector.integratedpai
-		login_text = "Your supplemental directives have been updated. Your new directives are: \
-			\nPrime Directive : <br>[P.pai.pai_law0] \
-			\nSupplemental Directives: <br>[P.pai.pai_laws]"
+/obj/item/device/hologram_projector/install_pai(obj/item/device/paicard/P)
 	..()
-
-/mob/living/simple_animal/hologram/advanced/projector/Destroy()
-	if(projector)
-		projector.icon_state = "shield0"
-		if(projector.ray)
-			qdel(projector.ray)
-		projector = null
-	..()
-
-/obj/item/device/hologram_projector/proc/clear_holo()
-	set_light(0)
 	if(holoperson)
-		if(integratedpai)
-			remove_pai()
-		visible_message("<span class='warning'>The image of [holoperson] fades away.</span>")
-		animate(holoperson, alpha = 0, time = 5)
-		spawn(5)
-			holoperson.set_light(0)
-			QDEL_NULL(ray)
-			holoperson.unequip_everything()
-			QDEL_NULL(holoperson)
-			icon_state = "shield0"
-	return 1
+		clear_holo()
+	if(P?.pai)
+		P.pai.verbs += /obj/item/device/hologram_projector/proc/spawn_hologram
+		spawn_pai_hologram()
+
+/obj/item/device/hologram_projector/eject_integratedpai_if_present()
+	clear_holo()
+	if(integratedpai)
+		var/obj/item/device/paicard/P = integratedpai
+		if(P?.pai)
+			P.pai.verbs -= /obj/item/device/hologram_projector/proc/spawn_hologram
+	..()
+
+/obj/item/device/hologram_projector/proc/spawn_hologram()
+	set category = "pAI Commands"
+	set name = "Spawn Hologram"
+	set desc = "Display a a visual representation of yourself to those nearby!"
+
+	var/obj/item/device/hologram_projector/mine = usr.loc.loc //the pai in the card in the projector (that's how MULEbots do it)
+	if(istype(mine))
+		mine.spawn_pai_hologram()
 
 /obj/item/device/hologram_projector/emp_act()
 	if(holoperson)
@@ -69,10 +65,66 @@
 		clear_holo()
 		return
 	else if(integratedpai)
-		install_pai()
+		spawn_pai_hologram()
 	else
 		recruit_holoperson()
 	to_chat(usr, "Generating hologram...")
+
+/obj/item/device/hologram_projector/pickup(var/mob/user)
+	user.register_event(/event/after_move, src, /obj/item/device/hologram_projector/proc/update_ray)
+	update_ray()
+
+/obj/item/device/hologram_projector/dropped(var/mob/user)
+	if (!still_in_user(user,src.loc))
+		user.unregister_event(/event/after_move, src, /obj/item/device/hologram_projector/proc/update_ray)
+	update_ray()
+
+/obj/item/device/hologram_projector/proc/still_in_user(var/mob/user, var/atom/check)
+	if (!check)
+		return FALSE
+	if (check == user)
+		return TRUE
+	else if (isturf(check))
+		return FALSE
+	else
+		return still_in_user(user,check.loc)
+
+/obj/item/device/hologram_projector/proc/spawn_pai_hologram()
+	if (integratedpai?.pai)
+		var/turf/T = get_turf(src)
+		holoperson = new (T)
+		holoperson.set_light(1)
+		holoperson.real_name = integratedpai.pai.real_name
+		holoperson.name = integratedpai.pai.name
+		holoperson.projector = src
+		holoperson.proj_turf = T
+
+		//giving control of the hologram to the pAI
+		holoperson.key = integratedpai.pai.key
+		//we don't transfer the mind but we keep a reference to it.
+		holoperson.mind = integratedpai.pai.mind
+
+		icon_state = "shield1"
+		update_ray()
+
+/obj/item/device/hologram_projector/proc/clear_holo()
+	if(holoperson)
+		holoperson.clearing_holo = TRUE
+		if(integratedpai)
+			if (!integratedpai.pai)//shouldn't occur but hey just in case
+				integratedpai.pai = new (integratedpai)
+			integratedpai.pai.key = holoperson.key
+		visible_message("<span class='warning'>The image of [holoperson] fades away.</span>")
+		var/atom/movable/overlay/fade_out = anim(location = get_turf(holoperson))
+		fade_out.appearance = holoperson.appearance
+		animate(fade_out, alpha = 0, time = 5)
+		holoperson.set_light(0)
+		holoperson.drop_hands()
+		holoperson.unequip_everything()
+
+		QDEL_NULL(holoperson)
+		update_ray()
+		icon_state = "shield0"
 
 /obj/item/device/hologram_projector/proc/recruit_holoperson()
 	if(polling_ghosts)
@@ -113,45 +165,30 @@
 	holoperson.proj_turf = T
 
 	icon_state = "shield1"
-	ray = new(T)
+	update_ray()
 	qdel(recruiter)
 
-/mob/living/simple_animal/hologram/advanced/projector/Life()
-	regular_hud_updates()
+/obj/item/device/hologram_projector/proc/update_ray()
+	if (!ray)
+		ray = new(src)
+	var/turf/hologram_turf = null
+	var/turf/projector_turf = get_turf(src)
 
-	if(!projector)
-		return
-	if((mind && !client))
-		projector.clear_holo()
+	if (holoperson && !holoperson.clearing_holo)
+		hologram_turf = get_turf(holoperson)
 
-	var/turf/T = get_turf(src)
-	var/turf/dest = get_turf(projector)
+		if (get_dist(projector_turf, hologram_turf) > holo_range)
+			clear_holo()
+			return
 
-	if(T && T.obscured)
-		projector.clear_holo()
-	if((projector.holo_mode == 0 && (get_dist(dest, T) <= projector.holo_range)))
-		return 1
-	else if (projector.holo_mode == 1)
-		var/area/area = get_area(dest)
-		var/area/holoperson_area = get_area(T)
-		if(holoperson_area == area)
-			return 1
-
-	projector.clear_holo() //If not, we want to get rid of the hologram.
-
-/mob/living/simple_animal/hologram/advanced/projector/Move()
-	..()
-	if(!projector)
-		return
-	var/turf/T = get_turf(src)
-	var/turf/dest = get_turf(projector)
-	if(proj_turf && proj_turf != dest)
-		qdel(projector.ray)
-		projector.ray = new(dest)
-		proj_turf = dest
-	else
-		var/disty = y - projector.ray.y
-		var/distx = x - projector.ray.x
+	//we only render the ray if the holoperson isn't on top of the projector
+	if (hologram_turf && projector_turf && (hologram_turf != projector_turf))
+		if (hologram_turf.z != projector_turf.z)
+			ray.forceMove(src)
+			return
+		ray.forceMove(projector_turf)
+		var/disty = hologram_turf.y - projector_turf.y
+		var/distx = hologram_turf.x - projector_turf.x
 		var/newangle
 		if(!disty)
 			if(distx >= 0)
@@ -165,37 +202,61 @@
 			else if(distx < 0)
 				newangle += 360
 		var/matrix/M = matrix()
-		if (get_dist(T,dest) <= 1)
-			animate(projector.ray, transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle),time = 1)
+		if (get_dist(hologram_turf,projector_turf) <= 1)
+			animate(ray, transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle),time = 1)
 		else
-			projector.ray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
+			ray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
+	else if (ray.loc != src)
+		ray.forceMove(src)
 
-//pAI it uses the pAI framework in objs.dm. Check that code for further information
-/obj/item/device/hologram_projector/install_pai(obj/item/device/paicard/P)
+////////////////////////////////////////////////////////////////////
+//																  //
+//							HOLOGRAM MOB						  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/mob/living/simple_animal/hologram/advanced/projector
+	holodeck_bound = FALSE
+	var/clearing_holo = FALSE
+	var/obj/item/device/hologram_projector/projector = null
+	var/proj_turf = null
+	login_text = "You are a hologram. You can perform a few basic functions, and are unable to leave the vicinity of the projector.\
+	\n<span class='danger'>Do not damage the station. Do not harm crew members without their consent. Serve your master.</span>"
+
+
+/mob/living/simple_animal/hologram/advanced/projector/Login()
+	if(projector?.integratedpai)
+		var/obj/item/device/paicard/P = projector.integratedpai
+		login_text = "Your supplemental directives have been updated. Your new directives are: \
+			\nPrime Directive : <br>[P.pai.pai_law0] \
+			\nSupplemental Directives: <br>[P.pai.pai_laws]"
+
+	register_event(/event/after_move, src, /mob/living/simple_animal/hologram/advanced/projector/proc/update_ray)
 	..()
-	if(holoperson)
-		clear_holo()
-	if(!P?.pai)
+
+/mob/living/simple_animal/hologram/advanced/projector/Destroy()
+	unregister_event(/event/after_move, src, /mob/living/simple_animal/hologram/advanced/projector/proc/update_ray)
+	if(projector && !clearing_holo)
+		projector.clear_holo()
+	projector = null
+	..()
+
+/mob/living/simple_animal/hologram/advanced/projector/Life()
+	..()
+
+	if(!projector)
 		return
+
+	if(mind && !client)
+		projector.clear_holo()
+
 	var/turf/T = get_turf(src)
-	holoperson = new (T)
-	holoperson.set_light(1)
-	holoperson.real_name = P.pai.real_name
-	holoperson.name = P.pai.name
-	holoperson.projector = src
-	holoperson.proj_turf = T
-	P.pai.mind.transfer_to(holoperson)
-	qdel(P.pai)
 
-	icon_state = "shield1"
-	ray = new(T)
+	if(T && T.obscured)
+		projector.clear_holo()
+	else
+		update_ray()
 
-/obj/item/device/hologram_projector/remove_pai()
-	if(holoperson)
-		integratedpai.pai = new (integratedpai)
-		integratedpai.pai.real_name = holoperson.real_name
-		integratedpai.pai.name = holoperson.name
-		var/datum/mind/M = holoperson.mind
-		M.transfer_to(integratedpai.pai)
-		clear_holo()
-	..()
+/mob/living/simple_animal/hologram/advanced/projector/proc/update_ray()
+	if (projector)
+		projector.update_ray()

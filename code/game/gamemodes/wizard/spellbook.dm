@@ -94,12 +94,6 @@
 	if(user.is_blind())
 		to_chat(user, "<span class='info'>You open \the [src] and run your fingers across the parchment. Suddenly, the pages coalesce in your mind!</span>")
 
-	if(istype(user,/mob/living/carbon))
-		var/mob/living/carbon/C = user
-		if(C.op_stage.butt == SURGERY_NO_BUTT)
-			to_chat(user, "<span class='info'>You are missing your ass! It would be pointless to attempt to learn magic without an ass to store it in.</span>")
-			return
-
 	user.set_machine(src)
 
 	var/dat
@@ -307,9 +301,12 @@
 
 		//stat collection: spellbook purchases
 		var/datum/role/wizard/W = user.mind.GetRole(WIZARD)
-		if(istype(W) && istype(W.stat_datum, /datum/stat/role/wizard))
-			var/datum/stat/role/wizard/WD = W.stat_datum
-			WD.spellbook_purchases.Add("REFUND-" + S.name)
+		if(istype(W))
+			W.spells_from_spellbook -= S
+			W.spells_from_absorb -= S //Those get removed too
+			if(istype(W.stat_datum, /datum/stat/role/wizard))
+				var/datum/stat/role/wizard/WD = W.stat_datum
+				WD.spellbook_purchases.Add("REFUND-" + S.name)
 
 		return 1
 
@@ -322,7 +319,7 @@
 		return
 
 	if(L.mind.special_role == "apprentice")
-		to_chat(L, "If you got caught sneaking a peak from your teacher's spellbook, you'd likely be expelled from the Wizard Academy. Better not.")
+		to_chat(L, "If you got caught sneaking a peak from a senior wizard's spellbook, you'd likely be expelled from the Wizard Academy. Better not.")
 		return
 
 	if(href_list["refund"])
@@ -351,9 +348,11 @@
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
 					feedback_add_details("wizard_spell_learned", added.abbreviation)
 					var/datum/role/wizard/W = usr.mind.GetRole(WIZARD)
-					if(istype(W) && istype(W.stat_datum, /datum/stat/role/wizard))
-						var/datum/stat/role/wizard/WD = W.stat_datum
-						WD.spellbook_purchases.Add(added.name)
+					if(istype(W))
+						W.spells_from_spellbook += added
+						if(istype(W.stat_datum, /datum/stat/role/wizard))
+							var/datum/stat/role/wizard/WD = W.stat_datum
+							WD.spellbook_purchases.Add(added.name)
 
 		else if(ispath(buy_type, /obj/item/potion))
 			if(buy_type in available_potions)

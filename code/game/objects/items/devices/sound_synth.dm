@@ -13,7 +13,6 @@
 	var/selected_sound = "sound/items/bikehorn.ogg"
 	var/shiftpitch = 1
 	var/volume = 50
-	var/emagged = 0
 
 	var/list/sound_list_emagged = list(
 	"Blob Pulse" = "selected_sound=sound/effects/blob_pulse.ogg&shiftpitch=1&volume=100",

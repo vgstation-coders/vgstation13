@@ -146,6 +146,8 @@
 	multicolor_skin_g = rand(0,255)
 	multicolor_skin_b = rand(0,255)
 
+	create_reagents(1000) //Moved it here because it could sometimes lead to errors in set_species() in certain cases
+
 	if(!src.species)
 		if(new_species_name)
 			src.set_species(new_species_name)
@@ -156,8 +158,6 @@
 
 	default_language = get_default_language()
 	init_language = default_language
-
-	create_reagents(1000)
 
 	if(!dna)
 		dna = new /datum/dna(null)
@@ -1214,11 +1214,92 @@
 	else
 		to_chat(usr, "<span class='info'>You moved while counting. Try again.</span>")
 
-/mob/living/carbon/human/proc/set_species(var/new_species_name, var/force_organs, var/default_colour)
+//Record_organ datum, stores as much info as it can about each organ
+var/datum/record_organ //This is just a dummy proc, not storing any variables here even if it is "name"
+
+/datum/record_organ/proc/can_record(var/datum/organ/O) //To optimize things a little, see if the limb should be recorded in the first place
+
+/datum/record_organ/proc/record_values(var/datum/organ/O)
+
+/datum/record_organ/proc/apply_values(var/datum/organ/O)
+
+/datum/record_organ/external
+	var/name //This is only used for tracking which limb has to be affected, don't paste this over in apply_values
+	var/brute_damage
+	var/burn_damage
+	var/list/wounds = list()
+	var/status_flags
+
+/datum/record_organ/external/can_record(var/datum/organ/external/E)
+	return (E.brute_dam || E.burn_dam || E.wounds.len || E.status)
+
+/datum/record_organ/external/record_values(var/datum/organ/external/E)
+	if(E && istype(E))
+		name = E.name
+		brute_damage = E.brute_dam
+		burn_damage = E.burn_dam
+		wounds = E.wounds.Copy()
+		E.wounds = list() //Because otherwise the wounds would get caught in the garbage collection and fully heal the mob as they get deleted
+		status_flags = E.status
+
+/datum/record_organ/external/apply_values(var/datum/organ/external/E)
+	if(E && istype(E))
+		E.brute_dam = brute_damage
+		E.burn_dam = burn_damage
+		E.wounds = wounds.Copy()
+		wounds = list() //Now get rid of this here
+		E.status = status_flags
+
+/datum/record_organ/internal
+	var/name
+	var/damage
+	var/robotic
+
+/datum/record_organ/internal/can_record(var/datum/organ/internal/I)
+	return (I.damage || I.robotic)
+
+/datum/record_organ/internal/record_values(var/datum/organ/internal/I)
+	if(I && istype(I))
+		name = I.name
+		damage = I.damage
+		robotic = I.robotic
+
+/datum/record_organ/internal/apply_values(var/datum/organ/internal/I)
+	if(I && istype(I))
+		I.damage = damage
+		I.robotic = robotic
+
+/mob/living/carbon/human/proc/set_species(var/new_species_name, var/force_organs, var/default_colour, var/transfer_damage = 0, var/mob/living/carbon/human/target_override)
 	set waitfor = FALSE
+
+	// Target override, in case we want to transfer stuff from a previous mob (the override) to the current one.
+	// Only applied to the damage transfer system.
+	var/mob/living/carbon/human/target = src
+	if(target_override && istype(target_override))
+		target = target_override
+
+	//A list of organs and their associated damages
+	//External and internal organs have different damage systems
+	var/list/recorded_external_damage = list()
+	var/list/recorded_internal_damage = list()
+
+	if(transfer_damage) //Don't bother recording any of it if we're not transferring the damage
+		for(var/datum/organ/external/E in target.organs) //"organs" is actually external organs
+			var/datum/record_organ/external/external_data = new
+			if(external_data.can_record(E))
+				external_data.record_values(E)
+				recorded_external_damage += external_data
+		for(var/datum/organ/internal/I in target.internal_organs)
+			var/datum/record_organ/internal/internal_data = new
+			if(internal_data.can_record(I))
+				internal_data.record_values(I)
+				recorded_internal_damage += internal_data
 
 	if(new_species_name)
 		if(src.species && src.species.name && (src.species.name == new_species_name))
+			if(transfer_damage)
+				if(target != src) //This mob is a new mob, let's apply the damage from the previous mob
+					apply_stored_damages(recorded_external_damage, recorded_internal_damage)
 			return
 	else if(src.dna)
 		new_species_name = src.dna.species
@@ -1287,6 +1368,9 @@
 
 	if(dna)
 		dna.species = new_species_name
+	//Now re-apply all the damages from before the transformation
+	if(transfer_damage)
+		apply_stored_damages(recorded_external_damage, recorded_internal_damage)
 
 	if(my_appearance)
 		var/list/valid_hair = valid_sprite_accessories(hair_styles_list, null, species.name)
@@ -1305,6 +1389,23 @@
 	if(species.species_intro)
 		to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
 	return 1
+
+/mob/living/carbon/human/proc/apply_stored_damages(var/list/recorded_external_damage, var/list/recorded_internal_damage)
+	for(var/datum/organ/external/new_external in organs)
+		for(var/datum/record_organ/external/old_external in recorded_external_damage)
+			if(new_external.name == old_external.name)
+				old_external.apply_values(new_external)
+				recorded_external_damage -= old_external //Trim the list so it doesn't search as much
+				QDEL_NULL(old_external)
+				break //We found a matching record for this organ, move on to the next organ
+	for(var/datum/organ/internal/new_internal in internal_organs)
+		for(var/datum/record_organ/internal/old_internal in recorded_internal_damage)
+			if(new_internal.name == old_internal.name)
+				old_internal.apply_values(new_internal)
+				recorded_internal_damage -= old_internal
+				QDEL_NULL(old_internal)
+				break
+	src.handle_organs(TRUE) //Now update them
 
 #define BLOODOODLE_NOSOURCE	0
 #define BLOODOODLE_HANDS	1
@@ -1668,7 +1769,7 @@
 		if(!G.dexterity_check())//some gloves might make it harder to interact with complex technologies, or fit your index in a gun's trigger
 			return FALSE
 	if(getBrainLoss() >= 60)
-		if(!reagents.has_reagent(METHYLIN))//methylin supercedes brain damage, but not uncomfortable gloves
+		if(!(reagents.has_reagent(METHYLIN) ||  is_dexterous))//methylin and the is_dextrous var supercede brain damage, but not uncomfortable gloves
 			return FALSE
 	return TRUE//humans are dexterous enough by default
 
@@ -2000,6 +2101,9 @@
 
 	if(!can_be_fat)
 		species.anatomy_flags &= ~CAN_BE_FAT
+	
+	species.blood_color = get_random_colour()
+	species.flesh_color = get_random_colour()
 
 /mob/living/carbon/human/send_to_past(var/duration)
 	..()
@@ -2127,6 +2231,26 @@
 	else
 		become_zombie = TRUE
 
+/mob/living/carbon/human/drop_hands(var/atom/Target, force_drop = 0)
+	if (istype(gloves, /obj/item/clothing/gloves/hunter))
+		for(var/obj/item/I in held_items)
+			if (istype(I, /obj/item/weapon/gun/hookshot/whip))
+				to_chat(src, "<span class='notice'>You hold your grip onto your [I]</span>")
+			else
+				drop_item(I, Target, force_drop = force_drop)
+	else
+		..()
+
+/mob/living/carbon/human/get_afterimage()
+	if (istype(w_uniform, /obj/item/clothing/under/hunter)\
+		&& istype(wear_suit, /obj/item/clothing/suit/hunter)\
+		&& istype(shoes, /obj/item/clothing/shoes/hunter)\
+		&& istype(head, /obj/item/clothing/head/hunter)\
+		&& istype(gloves, /obj/item/clothing/gloves/hunter))
+		playsound(src, 'sound/weapons/authenticrichtertackleslide.ogg', 70, 0)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "castlevania_tackle_flick", plane = ABOVE_LIGHTING_PLANE)
+		return "richter tackle"
+
 /mob/living/carbon/human/throw_item(var/atom/target,var/atom/movable/what=null)
 	var/atom/movable/item = get_active_hand()
 	if(what)
@@ -2202,10 +2326,6 @@
 	if(op_stage.butt == SURGERY_NO_BUTT)
 		return
 	var/obj/item/clothing/head/butt/donkey = new(where)
-	if(mind.wizard_spells)
-		donkey.spells.Add(mind.wizard_spells)
-		for(var/spell/spell in mind.wizard_spells)
-			remove_spell(spell)
 	donkey.transfer_buttdentity(src)
 	op_stage.butt = SURGERY_NO_BUTT
 	return donkey

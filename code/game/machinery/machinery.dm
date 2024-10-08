@@ -124,7 +124,6 @@ Class Procs:
 	penetration_dampening = 5
 
 	var/stat = 0
-	var/emagged = 0
 	var/use_power = MACHINE_POWER_USE_IDLE
 		//0 = dont run the auto
 		//1 = run auto, use idle
@@ -154,11 +153,7 @@ Class Procs:
 	 * Machine construction/destruction/emag flags.
 	 */
 	var/machine_flags = 0
-
-	/**
-	 * Emag energy cost (in MJ).
-	 */
-	var/emag_cost = 1
+	emag_cost = 1
 
 	var/inMachineList = 1 // For debugging.
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
@@ -661,29 +656,16 @@ Class Procs:
 	machine_flags &= ~EMAGGABLE
 	spark(src)
 
-
-/**
- * Returns the cost of emagging this machine (emag_cost by default)
- * @param user /mob The mob that used the emag.
- * @param emag /obj/item/weapon/card/emag The emag used on this device.
- * @return number Cost to emag.
- */
-/obj/machinery/proc/getEmagCost(var/mob/user, var/obj/item/weapon/card/emag/emag)
-	return emag_cost
+/obj/machinery/can_emag()
+	return machine_flags & EMAGGABLE
 
 /obj/machinery/attackby(var/obj/item/O, var/mob/user)
-	..()
+	. = ..()
 
 	add_fingerprint(user)
 
 	if(O.is_cookvessel && is_cooktop)
 		return 1
-
-	if(isEmag(O) && machine_flags & EMAGGABLE)
-		var/obj/item/weapon/card/emag/E = O
-		if(E.canUse(user,src))
-			emag_act(user)
-			return 1
 
 	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)

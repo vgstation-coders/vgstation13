@@ -108,7 +108,7 @@
 	if(!client)
 		return 0
 
-	if(secret_check_one(src,href_list))
+	if(voting_age_check(src,href_list))
 		return 0
 
 	if(href_list["show_preferences"])
@@ -496,6 +496,12 @@
 
 		Broadcast_Message(speech, vmask=null, data=0, compression=0, level=list(0,1))
 		qdel(speech)
+
+/proc/voting_age_check(var/mob/M,var/list/href_list)
+	if(href_list["votepollid"] && href_list["votetype"])
+		if(M.client && !M.client.holder && M.client.player_age < 30)
+			message_admins("[key_name(M)] attempted to vote in poll # [href_list["votepollid"]] despite their player age of [M.client.player_age].")
+			return TRUE
 
 /mob/new_player/proc/LateChoices()
 

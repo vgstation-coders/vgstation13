@@ -27,6 +27,7 @@
 	equip_catbeast(H)
 	infect_catbeast_tier1(H)
 	H.regenerate_icons()
+	antag.current.register_event(/event/mob_area_changed, src, nameof(src::on_area_enter()))
 	var/datum/gamemode/dynamic/D = ticker.mode
 	if(istype(D))
 		D.threat_log += "[worldtime2text()]: Loose catbeast created."
@@ -35,6 +36,10 @@
 		if(antag.current.stat!=DEAD)
 			command_alert("An escaped disease-ridden catbeast has been detected aboard your station. Crew should cooperate with security staff in its extermination or removal from the main station. Remember to get a medical checkup afterward in case of infection.", "Catbeast Detected",1)
 	return TRUE
+
+/datum/role/catbeast/Drop()
+	antag?.current?.unregister_event(/event/mob_area_changed, src, nameof(src::on_area_enter()))
+	..()
 
 var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a","Nyanners","Thing From Below","Airlock Scratcher","Flees-Like-Fleas",
 						"Lurks-In-Shadows","Eartha Kitt","Target Practice","Fresh Meat","Ca'thulu","Furry Fury","Vore-Strikes-Back","Killing Machine","Uncle Tom",
@@ -136,17 +141,11 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 	..()
 	if(!iscatbeast(antag.current) || antag.current.gcDestroyed || antag.current.stat == DEAD)
 		return // dead or destroyed
-	var/on_station = OnStation()
-	if(!on_station || on_station == -1)
+	if(!OnStation())
 		return // offstation or hiding
-	var/area/A = on_station
 	ticks_survived++
 	if(!(ticks_survived % 10) && !(ticks_survived > 150)) //every 20 seconds, for 5 minutes
 		increment_threat(SURVIVAL_THREAT)
-	if(!(A in areas_defiled))
-		increment_threat(DEFILE_THREAT)
-		areas_defiled.Add(A)
-		to_chat(antag.current,"<span class='notice'>You have defiled [A.name] with your presence.")
 	switch(current_disease_tier)
 		if(2)
 			if((areas_defiled.len >= AREAS_THRESHOLD_TIER3) && ticks_survived > (TICKS_THRESHOLD_TIER3/SS_WAIT_TICKER))
@@ -159,6 +158,16 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 				to_chat(antag.current, "<span class='danger'>You feel sick!</span>")
 				current_disease_tier = 2
 
+/datum/role/catbeast/proc/on_area_enter(mob/mob, area/newarea, area/oldarea)
+	if(mob != antag.current || !iscatbeast(antag.current) || antag.current.gcDestroyed || antag.current.stat == DEAD)
+		return // dead or destroyed
+	if(OnStation() != newarea)
+		return // offstation or hiding
+	if(!(newarea in areas_defiled))
+		increment_threat(DEFILE_THREAT)
+		areas_defiled.Add(newarea)
+		to_chat(antag.current,"<span class='notice'>You have defiled [newarea.name] with your presence.")
+
 /datum/role/catbeast/StatPanel()
 	stat(null, text("Threat generated: [threat_generated]"))
 
@@ -168,7 +177,7 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 	if(T.z != map.zMainStation) //Antag not on station's z-level
 		return FALSE
 	if(antag.current.z != map.zMainStation) //Antag is hiding in an object, but do not count them out of the station
-		return -1
+		return FALSE
 	var/area/A = get_area(antag.current)
 	if (isspace(A))
 		return FALSE

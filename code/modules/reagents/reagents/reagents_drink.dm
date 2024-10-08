@@ -183,6 +183,7 @@
 	description = "Freshly squeezed juice from red grapes. Quite sweet."
 	color = "#512284" //rgb: 81, 34, 132
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
+	harms_animal_type = /mob/living/simple_animal/corgi
 
 /datum/reagent/drink/ggrapejuice
 	name = "Green Grape Juice"
@@ -190,6 +191,7 @@
 	description = "Freshly squeezed juice from green grapes. Smoothly sweet."
 	color = "#B79E42" //rgb: 183, 158, 66
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
+	harms_animal_type = /mob/living/simple_animal/corgi
 
 /datum/reagent/drink/berryjuice
 	name = "Berry Juice"
@@ -291,6 +293,8 @@
 	alpha = 240
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "White and nutritious goodness!"
+	plant_nutrition = 1
+	plant_watering = 1
 
 /datum/reagent/drink/milk/on_mob_life(var/mob/living/M)
 	if(..())
@@ -305,11 +309,14 @@
 	if(prob(50))
 		M.heal_organ_damage(1, 0)
 
-/datum/reagent/drink/milk/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(1)
-	T.add_waterlevel(1)
-
+/datum/reagent/drink/milk/chocolate
+	name = "Chocolate Milk"
+	id = CHOCOLATEMILK
+	description = "A delicious blend of swiss chocolate and milk made by chocolate cows or enterprising gastronomers."
+	color = "#BF965E"
+	alpha = 240
+	nutriment_factor = 6 * REAGENTS_METABOLISM //equal to hot coco
+	glass_desc = "Don't tip it!"
 
 /datum/reagent/drink/milk/mommimilk
 	name = "MoMMI Milk"
@@ -318,16 +325,13 @@
 	color = "#eaeaea" //rgb(234, 234, 234)
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "Artificially white nutrition!"
-
+	plant_toxins = 10
+	plant_health = -20
 
 /datum/reagent/drink/milk/mommimilk/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	M.adjustToxLoss(1)
-/datum/reagent/drink/milk/mommimilk/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(10)
-	T.add_planthealth(-20)
 
 /datum/reagent/drink/milk/soymilk
 	name = "Soy Milk"
@@ -500,12 +504,9 @@
 	adj_dizzy = -5
 	adj_drowsy = -3
 	glass_desc = "Soda water. Why not make a scotch and soda?"
-
-/datum/reagent/drink/cold/sodawater/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(1)
-	T.add_waterlevel(1)
-	T.add_planthealth(1)
+	plant_nutrition = 1
+	plant_watering = 1
+	plant_health = 1
 
 /datum/reagent/drink/cold/ice
 	name = "Ice"

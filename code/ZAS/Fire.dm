@@ -227,8 +227,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		return
 
 	//Setup
-	var/turf/T = get_turf(src)
-	if(!T)
+	var/turf/simulated/T = get_turf(src)
+	if(!T || !istype(T))
 		extinguish()
 		return
 	var/datum/thermal_material/material = src.thermal_material
@@ -251,7 +251,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	//Rate at which energy is consumed from the burning atom and delivered to the fire.
 	//Provides the "heat" and "oxygen" portions of the fire triangle.
 	var/burnrate = (oxy_ratio/(MINOXY2BURN + rand(-2,2)*0.01)) * (temperature/T20C) //burnrate ~ 1 for standard air
-	if(burnrate < 0.1)
+	if(burnrate < 0.1 || (air[GAS_OXYGEN] * CELL_VOLUME < air.volume)) //evil fucking unit manipulation; extinguishes if less than 1mol O2 per tile in a zone
 		extinguish()
 		return
 
@@ -300,8 +300,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		return
 
 	//Setup
-	var/turf/T = get_turf(src)
-	if(!T)
+	var/turf/simulated/T = get_turf(src)
+	if(!T || !istype(T))
 		extinguish()
 		return
 
@@ -367,7 +367,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(check_fire_protection())
 		return 0
 
-	if(!istype(loc, /turf)) //worn or held items don't ignite (for now >:^) )
+	if(!isturf(loc)) //worn or held items don't ignite (for now >:^) )
 		return 0
 
 	if(!flammable)
@@ -389,8 +389,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	return 1
 
 /atom/movable/ignite()
-	..()
-	firelightdummy = new (src)
+	if(..() && !firelightdummy)
+		firelightdummy = new (src)
 
 /atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(flammable && !on_fire)
@@ -415,6 +415,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(!(G.temperature >= autoignition_temperature))
 		return
 	if(!(G.molar_ratio(GAS_OXYGEN) >= MINOXY2BURN))
+		return
+	if(G[GAS_OXYGEN] * CELL_VOLUME < G.volume) //if less than 1 mol/tile, no fire
 		return
 	if(prob(50))
 		ignite()
@@ -507,7 +509,10 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 				ignite()
 				igniting = 1
 		if(surfaces)
-			if((flammable || flammable_reagent_check()) && !on_fire)
+			if(flammable_reagent_check())
+				ignite()
+				igniting = 1
+			else if(flammable && !on_fire)
 				if(prob(exposed_volume * 100 / CELL_VOLUME))
 					ignite()
 					igniting = 1
@@ -539,6 +544,10 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 
 /turf/simulated/ignite()
 	if(!flammable || check_fire_protection() || thermal_mass <= 0)
+		return FALSE
+
+	var/datum/gas_mixture/air_contents = return_air()
+	if(air_contents[GAS_OXYGEN] < 1)
 		return FALSE
 
 	var/in_fire = FALSE
@@ -582,11 +591,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	. = ..()
 	dir = pick(cardinal)
 	var/turf/T = get_turf(loc)
-	var/i = 0
-	for(var/obj/effect/fire/F in T)
-		i++
-	if(i>1)
-		qdel(src)
 	var/datum/gas_mixture/air_contents=T.return_air()
 	if(air_contents)
 		setfirelight(air_contents.calculate_firelevel(get_turf(src)), air_contents.temperature)
@@ -602,15 +606,29 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		A.extinguish()
 	qdel(src)
 
+/obj/effect/fire/extinguish() //lol
+	QDEL_NULL(firelightdummy)
+	qdel(src)
+
+
+/obj/effect/fire/burnSolidFuel()
+	return 0
+
+/obj/effect/fire/burnLiquidFuel()
+	return 0
+
+/obj/effect/fire/Crossed(atom/movable/AM)
+	AM.ignite()
+	..()
+
 /obj/effect/fire/process()
 	if(timestopped)
 		return 0
 	. = 1
 
 	//Fires shouldn't spawn in areas or mobs, but it has happened...
-	if(istype(loc,/area) || istype(loc,/mob))
+	if(!istype(loc,/turf))
 		qdel(src)
-		CRASH("Fire was created at [loc] instead of a turf.")
 
 	// Get location and check if it is in a proper ZAS zone.
 	var/turf/simulated/S = get_turf(loc)
@@ -626,7 +644,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(!air_contents.check_recombustability(S))
 		Extinguish()
 	else if(air_contents.check_recombustability(S) == 1)
-		if((air_contents.molar_ratio(GAS_OXYGEN)) < (MINOXY2BURN + rand(-2,2)*0.01))
+		if((air_contents.molar_ratio(GAS_OXYGEN)) < (MINOXY2BURN + rand(-2,2)*0.01) || (air_contents[GAS_OXYGEN] < 1)) //extinguish if the ratio of fuel:oxygen is too low or if there isn't enough oxygen present at all
 			Extinguish()
 			return
 
@@ -643,14 +661,15 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	setfirelight(firelevel, air_contents.temperature)
 
 	//Burn mobs.
-	for(var/mob/living/carbon/human/M in loc)
+	for(var/mob/living/carbon/human/M in S)
 		if(M.mutations.Find(M_UNBURNABLE))
 			continue
-		M.FireBurn(firelevel, air_contents.temperature, air_contents.return_pressure())
+		M.fire_act(air_contents, FLAME_TEMPERATURE_PLASTIC, air_contents.return_volume())
 
 	//Burn items in the turf.
-	for(var/atom/A in loc)
-		A.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
+	for(var/atom/A in S)
+		if(A.loc == S)
+			A.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
 
 	//Burn the turf, too.
 	S.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
@@ -754,7 +773,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/solid_burn_products
 	var/liquid_burn_products
 	if(T)
-		if(T.flammable) //burn the turf
+		if(T.on_fire) //burn the turf
 			solid_burn_products = T.burnSolidFuel()
 			if(solid_burn_products)
 				combustion_energy += solid_burn_products["heat_out"]
@@ -762,7 +781,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 				combustion_co2_prod += solid_burn_products["co2_prod"]
 				max_temperature = max(max_temperature, solid_burn_products["max_temperature"])
 		for(var/atom/A in T)
-			if(A.flammable) //burn items on the turf
+			if(A.on_fire) //burn items on the turf
 				solid_burn_products = A.burnSolidFuel()
 				if(solid_burn_products)
 					combustion_energy += solid_burn_products["heat_out"]
@@ -868,53 +887,3 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 			firelevel = ZAS_firelevel_multiplier * mix_multiplier * dampening_multiplier
 
 	return max(0, firelevel)
-
-
-///////////////////////////////////////////////
-// BURNING MOBS
-///////////////////////////////////////////////
-/mob/living/proc/FireBurn(var/firelevel, var/last_temperature, var/pressure)
-	var/mx = 5 * firelevel/ZAS_firelevel_multiplier * min(pressure / ONE_ATMOSPHERE, 1)
-	apply_damage(2.5*mx, BURN)
-
-/mob/living/carbon/human/FireBurn(var/firelevel, var/last_temperature, var/pressure)
-	var/head_exposure = 1
-	var/chest_exposure = 1
-	var/groin_exposure = 1
-	var/legs_exposure = 1
-	var/arms_exposure = 1
-
-	//Get heat transfer coefficients for clothing.
-	for(var/obj/item/clothing/C in src)
-		if(is_holding_item(C))
-			continue
-		if(C.max_heat_protection_temperature >= last_temperature)
-			if(!is_slot_hidden(C.body_parts_covered,FULL_HEAD))
-				head_exposure = 0
-			if(!is_slot_hidden(C.body_parts_covered,UPPER_TORSO))
-				chest_exposure = 0
-			if(!is_slot_hidden(C.body_parts_covered,LOWER_TORSO))
-				groin_exposure = 0
-			if(!is_slot_hidden(C.body_parts_covered,LEGS))
-				legs_exposure = 0
-			if(!is_slot_hidden(C.body_parts_covered,ARMS))
-				arms_exposure = 0
-
-	//minimize this for low-pressure enviroments
-	var/mx = 5 * firelevel/ZAS_firelevel_multiplier * min(pressure / ONE_ATMOSPHERE, 1)
-
-	//Always check these damage procs first if fire damage isn't working. They're probably what's wrong.
-	var/fire_tile_modifier = 4 //multiplier for damage received while standing on a fire tile
-	apply_damage(fire_tile_modifier*HEAD_FIRE_DAMAGE_MULTIPLIER*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
-	apply_damage(fire_tile_modifier*CHEST_FIRE_DAMAGE_MULTIPLIER*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
-	apply_damage(fire_tile_modifier*GROIN_FIRE_DAMAGE_MULTIPLIER*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
-	apply_damage(fire_tile_modifier*LEGS_FIRE_DAMAGE_MULTIPLIER*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
-	apply_damage(fire_tile_modifier*LEGS_FIRE_DAMAGE_MULTIPLIER*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
-	apply_damage(fire_tile_modifier*ARMS_FIRE_DAMAGE_MULTIPLIER*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
-	apply_damage(fire_tile_modifier*ARMS_FIRE_DAMAGE_MULTIPLIER*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
-
-	if(head_exposure || chest_exposure || groin_exposure || legs_exposure || arms_exposure)
-		dizziness = 5
-		confused = 5
-		if(prob(25))
-			audible_scream()

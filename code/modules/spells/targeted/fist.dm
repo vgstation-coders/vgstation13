@@ -13,9 +13,16 @@
 	max_targets = 3
 	spell_flags = NEEDSCLOTHES | LOSE_IN_TRANSFER | IS_HARMFUL
 
-	compatible_mobs = list(/mob/living)
+	valid_targets = list(/mob/living)
 
 	hud_state = "wiz_fist"
+
+/spell/targeted/fist/is_valid_target(atom/target, mob/user, options, bypass_range)
+	if(target in user.get_arcane_golems())
+		return FALSE
+	if((target in doppelgangers) && doppelgangers[target] == user)
+		return FALSE
+	return ..()	
 
 /spell/targeted/fist/cast(var/list/targets)
 	var/mob/living/L = holder

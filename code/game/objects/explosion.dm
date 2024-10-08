@@ -53,9 +53,14 @@ var/explosion_shake_message_cooldown = 0
 				message_admins("If uncapped, its size would have been ([round(true_range*0.25)], [round(true_range*0.5)], [round(true_range)])")
 				log_game("If uncapped, its size would have been ([round(true_range*0.25)], [round(true_range*0.5)], [round(true_range)])")
 
-		//Pause the lighting updates for a bit.
+		//Pause some updates for a bit.
 		var/postponeCycles = max(round(devastation_range/8),1)
-		SSlighting.postpone(postponeCycles)
+		if(postponeCycles)
+			SSlighting.postpone(postponeCycles)
+			SSair.postpone(postponeCycles)
+			SSburnable.postpone(postponeCycles)
+			SSpower.postpone(postponeCycles)
+			SSpipenet.postpone(postponeCycles)
 
 		var/x0 = epicenter.x
 		var/y0 = epicenter.y

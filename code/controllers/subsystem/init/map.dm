@@ -23,11 +23,10 @@ var/datum/subsystem/map/SSmap
 		log_startup_progress("Placing random space structures...")
 		generate_vaults()
 		generate_asteroid_secrets()
+		make_mining_asteroid_secrets() // loops 3 times
 		log_startup_progress("  Finished placing structures in [stop_watch(watch)]s.")
 	else
 		log_startup_progress("Not generating vaults - SKIP_VAULT_GENERATION found in config/config.txt")
-
-	make_mining_asteroid_secrets() // loops 3 times
 
 	//hobo shack generation, one shack will spawn, 1/3 chance of two shacks
 	generate_hoboshack()

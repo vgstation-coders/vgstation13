@@ -59,6 +59,8 @@
 
 	var/atom/movable/border_dummy/border_dummy //Used for border objects. The old Uncross() method fails miserably with pixel movement or large hitboxes.
 
+	var/silence_sprayed = FALSE //sprayed by silencing spray
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
@@ -271,7 +273,7 @@
 // For category you should pass the typepath of the category, however strings should be used for slots made dynamically at runtime.
 /atom/movable/proc/lock_atom(var/atom/movable/AM, var/datum/locking_category/category = /datum/locking_category)
 	locking_init()
-	if (AM in locked_atoms || AM.locked_to || !istype(AM))
+	if ((AM in locked_atoms) || AM.locked_to || !istype(AM))
 		return FALSE
 
 	category = get_lock_cat(category)
@@ -306,9 +308,15 @@
 		M.canmove = 1
 
 	category.unlock(AM)
+	if((category.flags & LOCKED_STAY_INSIDE) && AM.loc == src)
+		AM.forceMove(src.loc)
 	//AM.reset_glide_size() // FIXME: Currently broken.
 
 	return TRUE
+
+/atom/movable/proc/unlock_atoms(var/category, var/subtypes = FALSE)
+	for(var/atom/movable/AM in get_locked(category, subtypes))
+		unlock_atom(AM)
 
 /atom/movable/proc/unlock_from()
 	if(!locked_to)
@@ -568,6 +576,20 @@
 					throwing = 0
 					. = 0
 
+/atom/movable/proc/special_thrown_behaviour()
+	return
+
+/atom/movable/proc/get_afterimage()
+	return ""
+
+/atom/movable/proc/spawn_afterimage(var/afterimage,var/afterimage_step)
+	switch(afterimage)
+		if ("red")
+			new /obj/effect/afterimage/red(loc,src)
+		if ("richter tackle")
+			var/obj/effect/afterimage/richter_tackle/RT = new (loc,src)
+			RT.overlays += image('icons/effects/effects.dmi', src, "castlevania_tackle", dir = turn(SOUTH, 90 * afterimage_step))
+
 /atom/movable/proc/throw_at(atom/target, range, speed, override = TRUE, var/fly_speed = 0, var/list/whitelist) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
 	set waitfor = FALSE
 	if(!target || !src)
@@ -588,22 +610,9 @@
 		if(M_HULK in usr.mutations)
 			src.throwing = 2 // really strong throw!
 
-	if(istype(src,/obj/mecha))
-		var/obj/mecha/M = src
-		M.dash_dir = dir
-		src.throwing = 2// mechas will crash through windows, grilles, tables, people, you name it
-
-	if(istype(src,/mob/living/simple_animal/hostile/humanoid/nurseunit))
-		var/mob/living/simple_animal/hostile/humanoid/nurseunit/M = src
-		M.dash_dir = dir
-		src.throwing = 2
-
-	var/afterimage = 0
-	if(istype(src,/mob/living/simple_animal/construct/armoured/perfect))
-		var/mob/living/simple_animal/construct/armoured/perfect/M = src
-		M.dash_dir = dir
-		src.throwing = 2
-		afterimage = 1
+	special_thrown_behaviour()
+	var/afterimage = get_afterimage()
+	var/afterimage_step = 0
 
 	var/dist_x = abs(target.x - src.x)
 	var/dist_y = abs(target.y - src.y)
@@ -643,8 +652,8 @@
 			if(kinetic_acceleration>kinetic_sum)
 				fly_speed += kinetic_acceleration-kinetic_sum
 				kinetic_sum = kinetic_acceleration
-			if(afterimage)
-				new /obj/effect/afterimage/red(loc,src)
+			spawn_afterimage(afterimage,afterimage_step)
+			afterimage_step++
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -684,8 +693,8 @@
 			if(kinetic_acceleration>0)
 				fly_speed += kinetic_acceleration
 				kinetic_acceleration = 0
-			if(afterimage)
-				new /obj/effect/afterimage/red(loc,src)
+			spawn_afterimage(afterimage,afterimage_step)
+			afterimage_step++
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -1344,3 +1353,12 @@
 			change_dir(new_dir)
 			sleep(1)
 	change_dir(prev_dir)
+
+/atom/movable/proc/make_silent(var/duration)
+	silence_sprayed = TRUE
+	if(duration > 0)
+		spawn(duration)
+			silence_sprayed = FALSE
+
+/atom/movable/proc/remove_silence()
+	silence_sprayed = FALSE

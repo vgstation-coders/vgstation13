@@ -499,48 +499,39 @@
 /proc/is_blocked_turf(var/turf/T, var/atom/movable/exclude)
 	return T.density || T.has_dense_content(exclude) != 0
 
+/image/progressbar
+	icon = 'icons/effects/doafter_icon.dmi'
+	icon_state = "prog_bar_0"
+	pixel_z = WORLD_ICON_SIZE
+	plane = HUD_PLANE
+	layer = HUD_ABOVE_ITEM_LAYER
+	appearance_flags = RESET_COLOR | RESET_TRANSFORM
+
 //if needs_item is 0 it won't need any item that existed in "holding" to finish
-/proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10, var/needs_item = 1) //This is quite an ugly solution but i refuse to use the old request system.
+/proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10, var/needs_item = 1, var/showtarget = TRUE) //This is quite an ugly solution but i refuse to use the old request system.
 	if(!user || !target)
 		return 0
 	var/user_loc = user.loc
 	var/target_loc = target.loc
 	var/holding = user.get_active_hand()
 	var/delayfraction = round(delay/numticks)
-	var/image/progbar
-	if(user && user.client && user.client.prefs.progress_bars)
-		if(!progbar)
-			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-			progbar.plane = HUD_PLANE
-			progbar.layer = HUD_ABOVE_ITEM_LAYER
-			progbar.pixel_z = WORLD_ICON_SIZE
-		//if(!barbar)
-			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "none")
-			//barbar.pixel_y = 36
+	var/image/progressbar/progbar = new("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+	//if(!barbar)
+		//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "none")
+		//barbar.pixel_y = 36
 	//var/oldstate
 	for (var/i = 1 to numticks)
-		if(user && user.client && user.client.prefs.progress_bars && progbar)
+		if(progbar)
 			//oldstate = progbar.icon_state
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
-			user.client.images |= progbar
+			if(user && user.client && user.client.prefs.progress_bars)
+				user.client.images |= progbar
+			if(target && target.client && target.client.prefs.progress_bars && showtarget)
+				target.client.images |= progbar
 		sleep(delayfraction)
-		if(!user || !target)
+		if (!user || !target || user.loc != user_loc || target.loc != target_loc || (needs_item && (holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())) || user.isStunned())
 			if(progbar)
-				progbar.icon_state = "prog_bar_stopped"
-				spawn(2)
-					if(user && user.client)
-						user.client.images -= progbar
-					if(progbar)
-						progbar.loc = null
-			return 0
-		if ( user.loc != user_loc || target.loc != target_loc || (needs_item && (holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())) || user.isStunned())
-			if(progbar)
-				progbar.icon_state = "prog_bar_stopped"
-				spawn(2)
-					if(user && user.client)
-						user.client.images -= progbar
-					if(progbar)
-						progbar.loc = null
+				stop_progress_bar(user,target,progbar)
 			return 0
 	if(user && user.client)
 		user.client.images -= progbar
@@ -548,7 +539,7 @@
 		progbar.loc = null
 	return 1
 
-/proc/do_after_many(var/mob/user, var/list/targets, var/delay, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE)
+/proc/do_after_many(var/mob/user, var/list/targets, var/delay, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE, var/showtarget = TRUE)
 	if(!user || numticks == 0 || !targets || !targets.len)
 		return 0
 
@@ -564,9 +555,13 @@
 	if(user.client && user.client.prefs.progress_bars)
 		for(var/target in targets)
 			if(!targets[target])
-				var/image/new_progress_bar = create_progress_bar_on(target)
+				var/image/progressbar/new_progress_bar = new("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 				targets[target] = new_progress_bar
 				user.client.images += new_progress_bar
+				if(showtarget && ismob(target))
+					var/mob/mtarget = target
+					if(mtarget.client && mtarget.client.prefs.progress_bars)
+						mtarget.client.images += new_progress_bar
 	for(var/i = 1 to numticks)
 		for(var/target in targets)
 			var/image/target_progress_bar = targets[target]
@@ -578,37 +573,31 @@
 			if(!user || user.isStunned() || user_loc_to_check != initial_user_location || !target || target.loc != initial_target_location)
 				for(var/target_ in targets)
 					var/image/target_progress_bar = targets[target_]
-					stop_progress_bar(user, target_progress_bar)
+					stop_progress_bar(user, target_, target_progress_bar)
 				return FALSE
 		if(needhand && ((holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())))
 			for(var/target_ in targets)
 				var/image/target_progress_bar = targets[target_]
-				stop_progress_bar(user, target_progress_bar)
+				stop_progress_bar(user, target_, target_progress_bar)
 			return FALSE
 	for(var/target in targets)
 		var/image/target_progress_bar = targets[target]
-		remove_progress_bar(user, target_progress_bar)
+		remove_progress_bar(user, target, target_progress_bar)
 
 	return TRUE
 
-/proc/create_progress_bar_on(var/atom/target)
-	var/image/progress_bar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-	progress_bar.pixel_z = WORLD_ICON_SIZE
-	progress_bar.plane = HUD_PLANE
-	progress_bar.layer = HUD_ABOVE_ITEM_LAYER
-	progress_bar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
-	return progress_bar
-
-/proc/remove_progress_bar(var/mob/user, var/image/progress_bar)
-	if(user && user.client)
+/proc/remove_progress_bar(var/mob/user, var/mob/target, var/image/progress_bar)
+	if(istype(user) && user.client)
 		user.client.images -= progress_bar
+	if(istype(target) && target.client)
+		target.client.images -= progress_bar
 	if(progress_bar)
 		progress_bar.loc = null
 
-/proc/stop_progress_bar(var/mob/user, var/image/progress_bar)
+/proc/stop_progress_bar(var/mob/user, var/mob/target, var/image/progress_bar)
 	progress_bar.icon_state = "prog_bar_stopped"
 	spawn(0.2 SECONDS)
-		remove_progress_bar(user, progress_bar)
+		remove_progress_bar(user, target, progress_bar)
 
 // Returns TRUE if the checks passed
 /proc/do_after_default_checks(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
@@ -640,12 +629,12 @@
   * * mob/user - the user who will see the progress bar
   * * atom/target - the atom the progress bar will be attached to
   * * delay - duration in deciseconds of the delay
-  * * numticks - how many times the failure conditions will be checked throughout the duration
-  * * needhand - if TRUE, the item in the hands of the user needs to stay the same throughout the duration
-  * * use_user_turf - if TRUE, the turf of the user is checked instead of its location
+  * * numticks - how many times the failure conditions will be checked throughout the duration. default 10
+  * * needhand - if TRUE, the item in the hands of the user needs to stay the same throughout the duration. default TRUE
+  * * use_user_turf - if TRUE, the turf of the user is checked instead of its location. default FALSE
   * * custom_checks - if specified, the return value of this callback (called every `delay/numticks` seconds) will determine whether the action succeeded
   */
-/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE, callback/custom_checks)
+/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE, callback/custom_checks, var/showtarget = TRUE)
 	if(!user || isnull(user))
 		return 0
 	if(numticks == 0)
@@ -661,25 +650,17 @@
 		Location = user.loc
 	var/holding = user.get_active_hand()
 	var/target_location = target.loc
-	var/image/progbar
-	//var/image/barbar
-	if(user && user.client && user.client.prefs.progress_bars && target)
-		if(!progbar)
-			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-			progbar.pixel_z = WORLD_ICON_SIZE
-			progbar.plane = HUD_PLANE
-			progbar.layer = HUD_ABOVE_ITEM_LAYER
-			progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
+	var/image/progressbar/progbar = new("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 	for (var/i = 1 to numticks)
-		if(user && user.client && user.client.prefs.progress_bars && target)
-			if(!progbar)
-				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-				progbar.pixel_z = WORLD_ICON_SIZE
-				progbar.plane = HUD_PLANE
-				progbar.layer = HUD_ABOVE_ITEM_LAYER
-				progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
-			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
+		if(!progbar && target)
+			progbar = new("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+		progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
+		if(user && user.client && user.client.prefs.progress_bars)
 			user.client.images |= progbar
+		if(showtarget && ismob(target))
+			var/mob/mtarget = target
+			if(mtarget.client && mtarget.client.prefs.progress_bars)
+				mtarget.client.images |= progbar
 		sleep(delayfraction)
 		var/success
 		if(custom_checks)
@@ -688,12 +669,9 @@
 			success = do_after_default_checks(user, use_user_turf, Location, target, target_location, needhand, holding)
 		if(!success)
 			if(progbar)
-				stop_progress_bar(user, progbar)
+				stop_progress_bar(user, target, progbar)
 			return 0
-	if(user && user.client)
-		user.client.images -= progbar
-	if(progbar)
-		progbar.loc = null
+	remove_progress_bar(user,target,progbar)
 	return 1
 
 /proc/do_flick(var/atom/A, var/icon_state, var/time)
@@ -1218,7 +1196,7 @@ var/mob/dview/tview/tview_mob = new()
 		result = "-[result]"
 	return result
 
-/proc/get_random_colour(var/simple, var/lower, var/upper)
+/proc/get_random_colour(var/simple = FALSE, var/lower = 0, var/upper = 255)
 	var/colour
 	if(simple)
 		colour = pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))
@@ -1373,52 +1351,6 @@ Game Mode config tags:
 	if(!istype(T2))
 		T2 = get_turf(B)
 	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
-
-/proc/seedify(obj/item/O, obj/machinery/seed_extractor/extractor = null, mob/living/user = null)
-	if(!O)
-		CRASH("Something called seedify() without anything to make seeds of.")
-
-	var/min_seeds = 1
-	var/max_seeds = 4
-	var/seedloc = O.loc
-	var/datum/seed/new_seed_type
-
-	if(extractor)
-		seedloc = get_turf(extractor)
-		min_seeds = extractor.min_seeds
-		max_seeds = extractor.max_seeds
-
-	var/produce = rand(min_seeds,max_seeds)
-
-	if(istype(O, /obj/item/weapon/grown))
-		var/obj/item/weapon/grown/F = O
-		if(F.plantname)
-			new_seed_type = SSplant.seeds[F.plantname]
-	else
-		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
-			var/obj/item/weapon/reagent_containers/food/snacks/grown/F = O
-			if(F.plantname)
-				new_seed_type = SSplant.seeds[F.plantname]
-		else
-			var/obj/item/F = O
-			if(F.nonplant_seed_type)
-				while(min_seeds <= produce)
-					new F.nonplant_seed_type(seedloc)
-					min_seeds++
-				qdel(F)
-				return TRUE
-
-	if(new_seed_type)
-		while(min_seeds <= produce)
-			var/obj/item/seeds/seeds = new(seedloc)
-			seeds.seed_type = new_seed_type.name
-			seeds.update_seed()
-			min_seeds++
-	else
-		return FALSE
-
-	qdel(O)
-	return TRUE
 
 //Same as block(Start, End), but only returns the border turfs
 //'Start' must be lower-left, 'End' must be upper-right

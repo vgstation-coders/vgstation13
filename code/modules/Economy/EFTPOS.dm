@@ -162,14 +162,13 @@
 			if("reset")
 				//reset the access code - requires HoP/captain access
 				var/obj/item/I = usr.get_active_hand()
-				if (istype(I, /obj/item/weapon/card))
+				if (emag_check(I,usr))
+					return
+				else if (istype(I, /obj/item/weapon/card))
 					var/obj/item/weapon/card/id/C = I
 					if((access_cent_captain in C.access) || (access_hop in C.access) || (access_captain in C.access))
 						access_code = 0
 						to_chat(usr, "[bicon(src)] <span class='info'>Access code reset to 0.</span>")
-				else if (istype(I, /obj/item/weapon/card/emag))
-					access_code = 0
-					to_chat(usr, "[bicon(src)] <span class='info'>Access code reset to 0.</span>")
 
 	src.attack_self(usr)
 
@@ -184,8 +183,13 @@
 			playsound(src, 'sound/machines/alert.ogg', 50, 1)
 			visible_message("[bicon(src)] \The [src] buzzes.")
 
-
 /obj/item/device/eftpos/proc/scan_card(var/obj/item/weapon/card/I)
 	if (istype(I, /obj/item/weapon/card))
 		charge_card(I)
 	//emag?
+
+//emag
+/obj/item/device/eftpos/emag_act(mob/user)
+	access_code = 0
+	to_chat(user, "[bicon(src)] <span class='info'>Access code reset to 0.</span>")
+	

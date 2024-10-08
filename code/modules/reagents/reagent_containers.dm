@@ -321,7 +321,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 		if(success)
 			if (success > 0)
-				to_chat(user, "<span class='notice'>You transfer [success] units of the solution to \the [target].</span>")
+				to_chat(user, target.reagent_transfer_message(success))
 
 			return (success)
 	if(!success)

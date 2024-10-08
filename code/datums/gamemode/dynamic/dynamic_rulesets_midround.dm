@@ -922,8 +922,8 @@
 /datum/dynamic_ruleset/midround/from_ghosts/pulse_demon
 	name = "Pulse Demon Infiltration"
 	role_category = /datum/role/pulse_demon
-	enemy_jobs = list("Station Engineer","Chief Engineer")
-	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
+	enemy_jobs = list("Station Engineer","Chief Engineer","Warden","Head of Security","Captain","AI","Cyborg")
+	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	weight_category = "Pulse"
