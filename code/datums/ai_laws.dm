@@ -58,7 +58,7 @@ var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
 /datum/ai_laws/proc/copy_to(var/datum/ai_laws/other_laws)
 	if(inherent.len)
 		other_laws.inherent = inherent.Copy()
-	other_laws.laws += supplied
+	other_laws.supplied += supplied
 	if(zeroth)
 		other_laws.set_zeroth_law(zeroth)
 
