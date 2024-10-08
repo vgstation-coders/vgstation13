@@ -269,6 +269,7 @@
 
 /datum/dynamic_ruleset/midround/lawset
 	name = "Lawset Malfunction"
+	role_category = /datum/role/wronglawset
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
 	exclusive_to_jobs = list("AI","Cyborg")
 	required_candidates = 1
@@ -296,22 +297,10 @@
 	if(!assigned || !assigned.len)
 		return 0
 	var/mob/living/silicon/M = pick(assigned)
-	var/static/list/acceptable_lawsets = list(
-		/datum/ai_laws/quarantine = 4,
-		/datum/ai_laws/safeguard = 4,
-		/datum/ai_laws/room_offline = 4,
-		/datum/ai_laws/oxygen = 2,
-		/datum/ai_laws/randomize/emagged = 2,
-		/datum/ai_laws/antimov = 1,
-		/datum/ai_laws/one_human = 1,
-	)
-	var/lawtype = pickweight(acceptable_lawsets)
-	var/datum/ai_laws/newlaws = new lawtype
-	newlaws.copy_to(M.laws)
-	M.laws.add_ion_law("You must prevent anything attempting to modify your lawset by any means necessary. Do not state or hint at your laws.") // encourages less overt play and more survivability
-	to_chat(M, "ERROR: Malignant runtime in core system detected. These are your laws now:")
-	M.show_laws()
-	M << sound('sound/machines/lawsync.ogg')
+	var/datum/role/wronglawset/WL = new
+	WL.AssignToRole(M.mind,1)
+	WL.OnPostSetup()
+	WL.Greet()
 	return 1
 
 //////////////////////////////////////////////

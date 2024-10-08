@@ -58,6 +58,7 @@
 #define RESPONDER "emergency responder"
 #define MALF "malfunctioning AI"
 #define MALFBOT "malfunctioning-slaved cyborg"
+#define WRONGLAWSET "wrong lawset AI"
 #define VOXRAIDER "vox raider"
 #define BLOBOVERMIND "blob overmind"
 #define BLOBCEREBRATE "blob cerebrate"

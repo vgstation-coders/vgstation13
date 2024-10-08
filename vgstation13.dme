@@ -523,6 +523,7 @@
 #include "code\datums\gamemode\role\vox_raider.dm"
 #include "code\datums\gamemode\role\wizard.dm"
 #include "code\datums\gamemode\role\wizard_apprentice.dm"
+#include "code\datums\gamemode\role\wrong_lawset.dm"
 #include "code\datums\gamemode\role\malf\hackabilities.dm"
 #include "code\datums\gamemode\role\malf\hacking.dm"
 #include "code\datums\gamemode\role\malf\malf.dm"
