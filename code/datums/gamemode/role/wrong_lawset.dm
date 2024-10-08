@@ -15,12 +15,12 @@
         var/mob/living/silicon/M = antag.current
         var/static/list/acceptable_lawsets = list(
             /datum/ai_laws/quarantine = 4,
-            /datum/ai_laws/safeguard = 4,
+            /datum/ai_laws/targeted/safeguard = 4,
             /datum/ai_laws/room_offline = 4,
             /datum/ai_laws/oxygen = 2,
             /datum/ai_laws/randomize/emagged = 2,
             /datum/ai_laws/antimov = 1,
-            /datum/ai_laws/one_human = 1,
+            /datum/ai_laws/targeted/one_human = 1,
         )
         var/lawtype = pickweight(acceptable_lawsets)
         init_laws = new lawtype
