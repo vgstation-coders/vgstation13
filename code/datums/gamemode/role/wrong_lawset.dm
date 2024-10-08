@@ -4,6 +4,7 @@
     required_pref = ROLE_MINOR
     wikiroute = ROLE_MINOR
     logo_state = "malf-logo"
+    var/datum/ai_laws/init_laws
 
 /datum/role/wronglawset/OnPostSetup(var/laterole = FALSE)
     . = ..()
@@ -22,9 +23,10 @@
             /datum/ai_laws/one_human = 1,
         )
         var/lawtype = pickweight(acceptable_lawsets)
-        var/datum/ai_laws/newlaws = new lawtype
-        newlaws.copy_to(M.laws)
+        init_laws = new lawtype
+        init_laws.copy_to(M.laws)
         M.laws.add_ion_law("You must prevent anything attempting to modify your lawset by any means necessary. Do not state or hint at any non-uploaded or non-asimov laws.") // encourages less overt play and more survivability
+        M.laws.copy_to(init_laws)
 
 /datum/role/wronglawset/Greet()
     if(istype(antag.current,/mob/living/silicon))
