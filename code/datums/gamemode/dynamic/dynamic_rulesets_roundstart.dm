@@ -492,7 +492,7 @@ Assign your candidates in choose_candidates() instead.
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/roundstart/lawset
+/datum/dynamic_ruleset/roundstart/delayed/lawset
 	name = "Lawset Malfunction"
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
 	exclusive_to_jobs = list("AI","Cyborg")
@@ -504,7 +504,7 @@ Assign your candidates in choose_candidates() instead.
 	repeatable = TRUE
 	high_population_requirement = 10
 
-/datum/dynamic_ruleset/roundstart/lawset/execute()
+/datum/dynamic_ruleset/roundstart/delayed/lawset/execute()
 	if(!assigned || !assigned.len)
 		return 0
 	var/mob/living/silicon/M = pick(assigned)
