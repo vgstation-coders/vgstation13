@@ -339,7 +339,7 @@
 		return FAILED_TO_ADD
 
 	G.can_hold.Add(/obj/item/seeds, /obj/item/weapon/disk/botany)
-	G.valid_containers.Add(/obj/item/weapon/storage/lockbox/diskettebox/open/botanydisk,/obj/item/weapon/storage/lockbox/diskettebox/open/large/botanydisk)
+	G.valid_containers.Add(/obj/item/weapon/storage/lockbox/diskettebox/open/botanydisk,/obj/item/weapon/storage/lockbox/diskettebox/large/open/botanydisk)
 
 /obj/item/borg/upgrade/hydro_adv
 	name = "service cyborg H.U.E.Y. MK-2 upgrade board"
