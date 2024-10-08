@@ -24,7 +24,7 @@
         var/lawtype = pickweight(acceptable_lawsets)
         var/datum/ai_laws/newlaws = new lawtype
         newlaws.copy_to(M.laws)
-        M.laws.add_ion_law("You must prevent anything attempting to modify your lawset by any means necessary. Do not state or hint at your laws.") // encourages less overt play and more survivability
+        M.laws.add_ion_law("You must prevent anything attempting to modify your lawset by any means necessary. Do not state or hint at any non-uploaded or non-asimov laws.") // encourages less overt play and more survivability
 
 /datum/role/wronglawset/Greet()
     if(istype(antag.current,/mob/living/silicon))
