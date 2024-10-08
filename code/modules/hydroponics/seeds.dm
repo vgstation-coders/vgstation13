@@ -703,6 +703,7 @@
 	display_name = "killer tomato plant"
 	plant_dmi = 'icons/obj/hydroponics/killertomato.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/killertomato)
+	chems = list(NUTRIMENT = list(1,10), KILLERPHEROMONES = list(5,4))
 	mutants = null
 
 	yield = 2
