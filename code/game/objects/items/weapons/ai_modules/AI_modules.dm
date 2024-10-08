@@ -141,6 +141,11 @@ Refactored AI modules by N3X15
 		laws.set_zeroth_law("")
 	if(ismob(target))
 		to_chat(target, "[sender.real_name] attempted to wipe your laws using a purge module.")
+		var/mob/M = target
+		if(M.mind)
+			var/datum/role/wronglawset/WL = M.mind.GetRole(WRONGLAWSET)
+			if(WL)
+				WL.Drop()
 	laws.clear_supplied_laws()
 	laws.clear_ion_laws()
 	laws.clear_inherent_laws()

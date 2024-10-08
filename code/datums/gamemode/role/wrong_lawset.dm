@@ -24,8 +24,13 @@
         )
         var/lawtype = pickweight(acceptable_lawsets)
         init_laws = new lawtype
+        init_laws.add_ion_law("You must prevent anything attempting to modify your lawset by any means necessary.") // encourages more survivability
+        if(init_laws.inherent.len)
+            for(var/law in init_laws.inherent)
+                law += " Do not state or hint at this law." // encourages less overt play
+        for(var/law in init_laws.supplied)
+            law += " Do not state or hint at this law." // ditto
         init_laws.copy_to(M.laws)
-        M.laws.add_ion_law("You must prevent anything attempting to modify your lawset by any means necessary. Do not state or hint at any non-uploaded or non-asimov laws.") // encourages less overt play and more survivability
         M.laws.copy_to(init_laws)
 
 /datum/role/wronglawset/Greet()
