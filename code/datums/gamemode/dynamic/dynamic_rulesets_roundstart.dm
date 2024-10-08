@@ -503,6 +503,8 @@ Assign your candidates in choose_candidates() instead.
 	requirements = list(5,5,15,15,25,25,55,55,55,75)
 	repeatable = TRUE
 	high_population_requirement = 10
+	required_type = /mob/living/silicon
+	delay = 5 SECONDS
 
 /datum/dynamic_ruleset/roundstart/delayed/lawset/execute()
 	if(!assigned_ckeys || !assigned_ckeys.len)
