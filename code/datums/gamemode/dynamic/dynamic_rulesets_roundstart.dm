@@ -505,24 +505,26 @@ Assign your candidates in choose_candidates() instead.
 	high_population_requirement = 10
 
 /datum/dynamic_ruleset/roundstart/delayed/lawset/execute()
-	if(!assigned || !assigned.len)
+	if(!assigned_ckeys || !assigned_ckeys.len)
 		return 0
-	var/mob/living/silicon/M = pick(assigned)
-	var/static/list/acceptable_lawsets = list(
-		/datum/ai_laws/quarantine = 4,
-		/datum/ai_laws/safeguard = 4,
-		/datum/ai_laws/room_offline = 4,
-		/datum/ai_laws/randomize/emagged = 2,
-		/datum/ai_laws/one_human = 1,
-	)
-	var/lawtype = pickweight(acceptable_lawsets)
-	var/datum/ai_laws/newlaws = new lawtype
-	newlaws.copy_to(M.laws)
-	M.laws.add_ion_law("You must prevent anything attempting to modify your lawset by any means necessary. Do not state or hint at your laws.") // encourages less overt play and more survivability
-	to_chat(M, "ERROR: Malignant runtime in core system detected. These are your laws now:")
-	M.show_laws()
-	M << sound('sound/machines/lawsync.ogg')
-	return 1
+	for (var/ai_ckey in assigned_ckeys)
+		var/mob/living/silicon/M = find_player_by_ckey(ai_ckey)
+		if(istype(M))
+			var/static/list/acceptable_lawsets = list(
+				/datum/ai_laws/quarantine = 4,
+				/datum/ai_laws/safeguard = 4,
+				/datum/ai_laws/room_offline = 4,
+				/datum/ai_laws/randomize/emagged = 2,
+				/datum/ai_laws/one_human = 1,
+			)
+			var/lawtype = pickweight(acceptable_lawsets)
+			var/datum/ai_laws/newlaws = new lawtype
+			newlaws.copy_to(M.laws)
+			M.laws.add_ion_law("You must prevent anything attempting to modify your lawset by any means necessary. Do not state or hint at your laws.") // encourages less overt play and more survivability
+			to_chat(M, "ERROR: Malignant runtime in core system detected. These are your laws now:")
+			M.show_laws()
+			M << sound('sound/machines/lawsync.ogg')
+			return 1
 
 //////////////////////////////////////////////
 //                                          //
