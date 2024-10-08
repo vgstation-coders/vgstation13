@@ -1,0 +1,5 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- rscadd: Progress bars from actions are now visible to the targets of these actions,
+    if enabled in prefs and not via pickpocketing or vampire silent bites.
