@@ -84,7 +84,7 @@ the machine which makes fuel rods have things in them.
 			return TRUE
 		if(!user.drop_item(C))
 			return
-		C.forceMove(src.loc)
+		C.forceMove(src)
 		container=C
 		to_chat(user,"You add \the [C] to \the [src]")
 		ask_remakeUI()
