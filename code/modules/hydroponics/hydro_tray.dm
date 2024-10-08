@@ -323,7 +323,7 @@ var/list/hydro_trays = list()
 			to_chat(user,"<span class='sinister'>You cannot dig into the soil.</span>")
 			return
 		if(dead)
-			remove_dead()
+			remove_dead(user)
 			return
 		if(seed)
 			var/obj/item/claypot/C = locate() in range(user,1)
