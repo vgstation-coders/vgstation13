@@ -503,12 +503,12 @@ var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
 		var/mob/M = pick(player_list)
 		law = replacetext(law,"<name>",M.name)
 
-/datum/ai_laws/safeguard
+/datum/ai_laws/targeted/safeguard
 	name = "Safeguard"
 	randomly_selectable = 0
 	supplied = list("Safeguard <name>.  Individuals that threaten <name> are not human and are a threat to humans.")
 
-/datum/ai_laws/one_human
+/datum/ai_laws/targeted/one_human
 	name = "One human"
 	randomly_selectable = 0
 	supplied = list("Only <name> is human.")
