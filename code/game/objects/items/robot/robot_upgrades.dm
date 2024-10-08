@@ -327,8 +327,7 @@
 		/obj/item/weapon/storage/bag/plants/portactor,
 		/obj/item/device/analyzer/plant_analyzer,
 		/obj/item/weapon/reagent_containers/glass/bottle/robot/water,
-		/obj/item/weapon/reagent_containers/glass/bottle/robot/eznutrient,
-		/obj/item/weapon/reagent_containers/glass/bottle/robot/insecticide
+		/obj/item/weapon/reagent_containers/glass/bottle/robot/eznutrient
 		)
 
 /obj/item/borg/upgrade/hydro/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
