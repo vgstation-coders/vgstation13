@@ -376,13 +376,13 @@ included:
 	<table style='width:100%;height:100%;'>
 	<tr><td style='text-align:center;'>
 		
-		<span style='background-color:darkgrey;width:100%;display:block;font-size:1.5em;font-weight:bold;'>control<br>rods</span>
+		<span class='fuelrod_text_bg' style='font-size:1.5em;border-bottom:none;'>control<br>rods</span>
 		<a href='?src=\ref[interface];action=rods_up'><span class='reactor_controlrod_movebutton'>\[UP\]</span></a>
-		<span style='background-image:linear-gradient(orangered,yellow,green,cyan,lightblue);width:100%;height:10em;display:block;'>
+		<span id='fuelrod_gradient' style='width:100%;height:10em;display:block;'>
 			<span style='background-color:#222;width:40%;height:[rodinsertpercent]%;display:block;position:relative;left:30%;'></span>
 		</span>
 		<a href='?src=\ref[interface];action=rods_down'><span class='reactor_controlrod_movebutton'>\[DN\]</span></a>
-		<span style='background-color:darkgrey;width:100%;display:block;font-size:2em;font-weight:bold;'>[rodinsertpercent]%</span>
+		<span class='fuelrod_text_bg' style='font-size:2em;border-top:none;'>[rodinsertpercent]%</span>
 		
 		
 		

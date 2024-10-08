@@ -22,23 +22,21 @@ color:inherit;
 }
 
 .button{
-	border:2px solid black;
-	color:black;
-	background-color:cadetblue;
+	border:2px solid #161616;
+	color:white;
+	background-color:#40628a;
 	padding:2px;
 }
 
 .button:hover{
-	border:2px solid white;
-	background-color:darkslategray;
-	color:white;
+	background-color: #507aac;
 }
 
 
 .button_locked{
-	border:2px solid black;
-	color:black;
-	background-color:lightblue;
+	border:2px solid #666666;
+	color: white;
+	background-color: #999999;
 	padding:2px;
 }
 
@@ -106,16 +104,20 @@ color:inherit;
 }
 
 .reactor_controlrod_movebutton{
-	background-color:grey;
+	background-color: #40628a;
+	border:2px solid #161616;
+	color:white;
 	width:100%;
 	height:1.5em;
 	display:block;
+	padding-bottom:1.5em;
 	font-size:1.25em;
 	font-weight:bold;
 }
 .reactor_controlrod_movebutton:hover{
-	background-color:#333;
+	background-color:#507aac;
 }
+
 
 @keyframes scram_active{
 	0% {background-color:red;}
@@ -133,6 +135,7 @@ color:inherit;
 	width:100%;
 	height:2em;
 	text-align:center;
+	border:2px solid #700000;
 }
 
 #reactor_scrambutton:hover{
@@ -148,11 +151,20 @@ color:inherit;
 	width:100%;
 	height:2em;
 	text-align:center;
+	border:2px solid #700000;
 }
 
+.fuelrod_text_bg{
+	background-color: #999999;
+	width:100%;
+	display:block;
+	font-weight:bold;
+	border:2px solid #666666;
+}
 
-
-
+#fuelrod_gradient{
+	background-image:linear-gradient(rgb(239, 47, 31), rgb(163, 67, 59), rgb(87, 87, 87), rgb(44, 93, 123), rgb(1, 99, 158));
+}
 
 
 
