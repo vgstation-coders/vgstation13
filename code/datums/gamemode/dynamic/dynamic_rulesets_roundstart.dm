@@ -492,7 +492,7 @@ Assign your candidates in choose_candidates() instead.
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/roundstart/delayed/lawset
+/*/datum/dynamic_ruleset/roundstart/delayed/lawset
 	name = "Lawset Malfunction"
 	role_category = /datum/role/wronglawset
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
@@ -517,7 +517,7 @@ Assign your candidates in choose_candidates() instead.
 			WL.AssignToRole(M.mind,1)
 			WL.OnPostSetup()
 			WL.Greet()
-			return 1
+			return 1*/
 
 //////////////////////////////////////////////
 //                                          //
