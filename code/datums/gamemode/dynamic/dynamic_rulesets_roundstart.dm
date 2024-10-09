@@ -492,7 +492,7 @@ Assign your candidates in choose_candidates() instead.
 //                                          //
 //////////////////////////////////////////////
 
-/*/datum/dynamic_ruleset/roundstart/delayed/lawset
+/*/datum/dynamic_ruleset/roundstart/lawset
 	name = "Lawset Malfunction"
 	role_category = /datum/role/wronglawset
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
@@ -504,20 +504,14 @@ Assign your candidates in choose_candidates() instead.
 	requirements = list(5,5,15,15,25,25,55,55,55,75)
 	repeatable = TRUE
 	high_population_requirement = 10
-	required_type = /mob/living/silicon
-	delay = 5 SECONDS
 
-/datum/dynamic_ruleset/roundstart/delayed/lawset/execute()
-	if(!assigned_ckeys || !assigned_ckeys.len)
-		return 0
-	for (var/ai_ckey in assigned_ckeys)
-		var/mob/living/silicon/M = find_player_by_ckey(ai_ckey)
-		if(istype(M))
-			var/datum/role/wronglawset/WL = new
-			WL.AssignToRole(M.mind,1)
-			WL.OnPostSetup()
-			WL.Greet()
-			return 1*/
+/datum/dynamic_ruleset/roundstart/lawset/execute()
+	for (var/mob/M in assigned)
+		var/datum/role/wronglawset/WL = new
+		WL.AssignToRole(M.mind,1)
+		WL.OnPostSetup()
+		WL.Greet()
+	return 1*/
 
 //////////////////////////////////////////////
 //                                          //
