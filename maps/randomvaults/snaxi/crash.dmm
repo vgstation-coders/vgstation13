@@ -134,16 +134,7 @@
 	},
 /area)
 "q" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating/vox,
 /area)
 "r" = (
@@ -253,16 +244,6 @@
 	icon_state = "dark"
 	},
 /area)
-"C" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating/vox,
-/area)
 "D" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -317,17 +298,6 @@
 /turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "wall3"
 	},
-/area)
-"K" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating/vox,
 /area)
 "L" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -469,9 +439,9 @@ x
 J
 J
 q
-C
-C
-K
+q
+q
+q
 J
 x
 a

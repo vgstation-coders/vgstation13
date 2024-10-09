@@ -507,29 +507,54 @@
 	desc = "According to Nanotrasen accounting, this is mining equipment. It's been modified for extreme power output to crush rocks, but often serves as a miner's first defense against hostile alien life; it's not very powerful unless used in a low pressure environment."
 	icon_state = "kineticgun"
 	item_state = "kineticgun"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	fire_sound = 'sound/weapons/kinetic_accelerator.ogg'
 	projectile_type = "/obj/item/projectile/kinetic"
 	cell_type = "/obj/item/weapon/cell/crap"
 	charge_cost = 50
 	icon_charge_multiple = 20
+
+/obj/item/weapon/gun/energy/kinetic_accelerator/shotgun
+	name = "proto-kinetic pump-shotgun"
+	desc = "An upgraded proto-kinetic accelerator, with the ability to pump to reload."
+	icon_state = "kineticshotgun"
+	item_state = "kineticshotgun"
+	rechargeable = FALSE
+	charge_cost = 250
+	icon_charge_multiple = 50
+	clowned = CLOWNABLE
 	var/overheat = 0
-	var/recent_reload = 1
-/*
-/obj/item/weapon/gun/energy/kinetic_accelerator/shoot_live_shot()
-	overheat = 1
-	spawn(20)
-		overheat = 0
-		recent_reload = 0
-	..()
-*/
-/obj/item/weapon/gun/energy/kinetic_accelerator/attack_self(var/mob/living/user)
-	if(overheat || recent_reload)
+	var/pump_delay = 20 //cooldown after last real shot in decaseconds before reloading
+
+/obj/item/weapon/gun/energy/kinetic_accelerator/shotgun/attack_self(var/mob/living/user)
+	. = ..()
+	if(overheat)
+		to_chat(user, span_warning("The pump-recharger is still cooling down!"))
 		return
-	power_supply.give(500)
-	playsound(src.loc, 'sound/weapons/shotgunpump.ogg', 60, 1)
-	recent_reload = 1
+	overheat = 1
+	var/image/lightning_effect = image('icons/effects/effects.dmi', src, "shield2")
+	overlays += lightning_effect
+	spawn(5)
+		overlays -= lightning_effect
+	if(clowned == CLOWNED)
+		playsound(src.loc, 'sound/items/bikehorn.ogg', 50, 1)
+	else
+		playsound(src.loc, 'sound/weapons/shotgunpump.ogg', 50, 1)
+	power_supply.give(power_supply.maxcharge)
 	update_icon()
-	return
+	spawn(pump_delay)
+		overheat = 0
+
+/obj/item/weapon/gun/energy/kinetic_accelerator/shotgun/update_icon()
+	..()
+	if(clowned == CLOWNED)
+		fire_sound = 'sound/items/quack.ogg'
+		empty_sound = 'sound/items/quack.ogg'
+		hitsound = 'sound/items/bikehorn.ogg'
+	else
+		fire_sound = 'sound/weapons/kinetic_accelerator.ogg'
+		empty_sound = 'sound/weapons/empty.ogg'
+		hitsound = 'sound/weapons/smash.ogg'
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg
 	name = "proto-kinetic accelerator"

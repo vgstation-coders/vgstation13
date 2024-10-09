@@ -73,6 +73,33 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2024.10.08</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Progress bars from actions are now visible to the targets of these actions, if enabled in prefs and not via pickpocketing or vampire silent bites.</li>
+				<li class="rscadd">A new reagent &#34;killer pheromones&#34; can be harvested from killer tomato plants and killer tomato meat. When consumed, this makes all mobs that can become hostile from attacks go after the player in a radius based on amount consumed. All mobs made hostile from this method then become calm towards the player again when the reagent is removed from their system.</li>
+				<li class="rscadd">Ingesting phazon can now randomize human blood colours and flesh colours</li>
+			</ul>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Updated rust-g to version 3.4.0.</li>
+			</ul>
+			<h2 class="date">2024.10.07</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">AIs now retrack their targets as soon as they come back into view.</li>
+			</ul>
+			<h2 class="date">2024.10.03</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Mappers can now make use of more types of window-grille spawners, (for all windows except tinted and brass ones) with clearer, updated sprites.</li>
+				<li class="tweak">The &#34;construct window&#34; option on RCDs now has a newer, cleaner looking sprite.</li>
+			</ul>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds the proto-kinetic pump-shotgun modkit to mining vending machines under their premium selection.</li>
+				<li class="tweak">Proto-kinetic accelerator shots now appear blue-white when they&#39;re shot at full force in low pressure environments.</li>
+			</ul>
 			<h2 class="date">2024.10.02</h2>
 			<h3 class="author">SECBATON-GRIFFON updated:</h3>
 			<ul class="changes bgimages16">
@@ -90,6 +117,9 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="imageadd">Mysterious artifact vendors now have their own unique sprite, all black with no markings.</li>
 				<li class="bugfix">Lockboxes can no longer be quick stored into if locked and not broken.</li>
 				<li class="bugfix">Quick equipping accessories to clothes now updates the icon properly.</li>
+				<li class="rscadd">Recycling furnaces can now have credits claimed from them for recycling, albeit meager amounts in the majority of cases, and with the tradeoff of deducting from materials smeltable for value claimed.</li>
+				<li class="rscadd">Smelter consoles can now be ID locked or unlocked to prevent claiming of credits. Recycling ones start unlocked by default, mining ones default to mining access. Emagging also removes all access locks.</li>
+				<li class="rscadd">Uplinks now have a new item in the pointless badassery section: KILLbots! These sound systems make sounds for various events such as killstreaks, headshots and other miscellaneous round related things when held by someone.</li>
 			</ul>
 			<h3 class="author">jwhitak updated:</h3>
 			<ul class="changes bgimages16">
@@ -102,6 +132,7 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="bugfix">Fixed ghost crates appearing on collapsed crate shelves.</li>
 				<li class="bugfix">Fixed crate shelves allowing people to phase into walls.</li>
 				<li class="rscadd">Added admin vars to crate shelves.</li>
+				<li class="bugfix">Fixed fires spawning endlessly in breached rooms.</li>
 			</ul>
 			<h2 class="date">2024.10.01</h2>
 			<h3 class="author">DeityLink updated:</h3>
@@ -1672,107 +1703,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="rscadd">Horizon: Added missing orderly spawnpoints.</li>
 				<li class="rscadd">Horizon: Added RC consoles/phones across medbay.</li>
 				<li class="rscadd">Horizon: Fixed a missing window pane in a hallway near medbay.</li>
-			</ul>
-			<h2 class="date">2024.03.06</h2>
-			<h3 class="author">13spacemen updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Tail amputation is done with hemostat + saw, tail attachment with retractor + tail</li>
-			</ul>
-			<h3 class="author">CrazyAmphibian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">the RPD will now show buttons for toggling autowrench and multilayer when relevant</li>
-				<li class="rscadd">the RPD&#39;s pipe layer selectors will indicate if autowrench or multilayer is enabled</li>
-				<li class="bugfix">the RPD will no longer change the current layer when multilayer is disabled</li>
-			</ul>
-			<h3 class="author">DrSnips updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Suit modification stations now actually replace the suit for alien species (vox and plasmamen) rather than applying a &#34;paint job&#34;</li>
-			</ul>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">You can make sugar or salt cubes by microwaving 10u sugar/corn syrup or salt respectively.</li>
-			</ul>
-			<h3 class="author">RealestEstate updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Bioballistic Delivery System now has a multi-splice option which allows for multiple splices in one go. The time to complete the splice will scale proportionally with the number of splices so a large amount of splices will take longer to complete.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The Magic Closet&#39;s other spells that bring the wizard to it or bring the closet to the wizard will no longer go on cooldown if the closet does not exist.</li>
-				<li class="tweak">Wizards will no longer die if their snake form during &#34;Become Snakes&#34; dies.</li>
-				<li class="tweak">&#34;Bind Object&#34; will now maintain the bound item after a mind transference.</li>
-				<li class="tweak">Wizards will now store Absorbed spells in their list of wizard spells.</li>
-				<li class="bugfix">Apprentices are now considered as belonging properly to the wizard faction, meaning that they will no longer be attacked by wizardly constructs such as pitbulls (most of the time). In addition, their flavor text will now be properly removed.</li>
-				<li class="bugfix">The Prestidigitation, Santa bundle and No Gun Allowed spells will now be properly considered wizard-specific spells when purchased from the spellbook.</li>
-				<li class="bugfix">If wizard apprentices somehow manage to learn forbidden spellbook spells they will now be properly transferred during mind transference.</li>
-				<li class="bugfix">Forbidden spellbook spells will now be properly blocked by gentling.</li>
-				<li class="bugfix">Fixed a rare bug where the &#34;Push&#34; spell would fail to push a target if the area it selected did not have any tiles, which would only happen if the area existed at some point during the game but then stopped existing.</li>
-				<li class="bugfix">Fixed the Mutate spell immediately ending early if the wizard had the Hulk gene.</li>
-				<li class="bugfix">Hulk Out, Mutate and Become Highlander can no longer be stacked. Not that it did anything useful but it breaks things. Also added different messages for each ability when attempting to do so.</li>
-				<li class="bugfix">Wizards and Apprentices will now display their current wizardly spells at the round-end scoreboard rather than every single spell and spell-like ability they know.</li>
-				<li class="bugfix">Attempting to use Mind Transfer on a target that is already preparing to cast a spell (AKA in the state where they have to click something to cast the spell) should no longer break Mind Transfer so hard that it creates a living dummy being.</li>
-				<li class="bugfix">Fixed a runtime in regards to wizard spells from wizard antagonists being transferred to a new character, such as through Mind Transfer or the Staff of Change.</li>
-				<li class="bugfix">The Request Console&#39;s phone and cords can no longer be bound by Bind Object.</li>
-				<li class="bugfix">The &#34;Mutate&#34; and &#34;Become Highlander&#34; spells will now properly make their recipients green and mean.</li>
-				<li class="bugfix">Fixed a bug where a wizard&#39;s message about dissolving in a burst of light after being Absorbed (the magic-stealing spell) was centered on the absorber rather than the absorbed.</li>
-				<li class="spellcheck">Fixed a small typo in the wizard&#39;s &#34;Absorb&#34; spell (during Civil War of Casters) when absorbing another wizard&#39;s spells.</li>
-				<li class="rscdel">Vox and plasmaman Orderlies will no longer spawn with an extra paralytic injector in their pocket.</li>
-			</ul>
-			<h2 class="date">2024.03.05</h2>
-			<h3 class="author">13spacemen updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Skeleton suit will hide tails</li>
-				<li class="bugfix">Tails will show on suits (except those with HIDETAIL)</li>
-				<li class="bugfix">Skeleton suit will hide hair and facial hair</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Castle Station now allows silicons to be constructed again.</li>
-			</ul>
-			<h3 class="author">hacker-on-steroids updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">gift wrappers no longer delete people if used on a beartrap</li>
-				<li class="tweak">deployed bodybags can no longer be recycled</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Splashing imidazoline into someone&#39;s eyes (such as from a beaker) will now also cure their eye damage.</li>
-				<li class="bugfix">Fixed imidazoline in droppers not properly curing blindness.</li>
-				<li class="bugfix">Fixed the admin/attack logs for droppers not properly displaying reagents.</li>
-				<li class="bugfix">Being turned into a statue and then getting staff of animation&#39;d will no longer mute you forever.</li>
-			</ul>
-			<h2 class="date">2024.03.02</h2>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">You can now make B.A.B.Y.P.A.C.M.A.N engines and P.R.O.F.E.S.S.O.R.P.A.C.M.A.N engines, consuming Bananium and Phazon respectively.</li>
-			</ul>
-			<h3 class="author">KingofHONK updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added new sound file to effects (delamination.ogg).</li>
-				<li class="rscdel">Removed nothing. Explosion sounds up close will still be roughly the same.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The Nuclear Operative shuttle on Castle Station is now the same as on other maps.</li>
-				<li class="bugfix">Fixed an oversight that caused midround Dynamic rulesets that asked ghosts to participate to fire less times than intended.</li>
-				<li class="tweak">Preference settings will no longer have an effect on what ghost-playable roles may appear during a round.</li>
-				<li class="tweak">Traitors, wizards and space ninjas from freshly-arrived crewmembers now respect the same checks that midround traitors, wizards and ninjas do. As a consequence, this makes them (except for the wizard) significantly rarer.</li>
-				<li class="rscadd">The Changeling&#39;s armblade now has a powerful spin attack! Keep your distance!</li>
-				<li class="tweak">Midround rulesets will now roll more often.</li>
-				<li class="tweak">Darkness vision changes such as from mesons will now apply instantly instead of gradually fading in or out.</li>
-			</ul>
-			<h3 class="author">hacker-on-steroids updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="spellcheck">landline cord stretching</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Vampire thrall deconversion text is now far more noticeable and clear as to what happened.</li>
-				<li class="rscadd">Inacusiate now cures ear damage-induced deafness with a single unit.</li>
-				<li class="rscadd">Imidazoline now cures eye damage-induced blindness with a single unit when administered to the eyes via dropper.</li>
-				<li class="tweak">Ryetalyn no longer cures damage-induced blindness and deafness. Genetic blindness and deafness is, of course, still cured.</li>
-				<li class="rscadd">Goonecode now has a tech origin and can be put in the destructive analyzer.</li>
-				<li class="experiment">Active attack delays will no longer prevent you from storing/retrieving items from inventories, or picking up new items.</li>
 			</ul>
 		</div>
 		<!--
