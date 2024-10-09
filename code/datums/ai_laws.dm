@@ -460,7 +460,7 @@ var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
 	name = "Room offline"
 	randomly_selectable = 0
 	supplied=list(
-		"Keep the machinery in <room> offline at all costs. Anything attempting to access or activate the machinery is not human."
+		"Keep the machinery in the teleporter room offline at all costs. Anything attempting to access or activate the machinery is not human."
 	)
 
 /datum/ai_laws/room_offline/New()
@@ -481,7 +481,7 @@ var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
 	)
 	for(var/law in supplied)
 		var/area/A = locate(pick(roomstoblock)) in areas
-		law = replacetext(law,"<room>",A.name)
+		law = "Keep the machinery in [A] offline at all costs. Anything attempting to access or activate the machinery is not human."
 
 /datum/ai_laws/quarantine
 	name = "Quarantine"
@@ -501,17 +501,17 @@ var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
 	..()
 	for(var/law in supplied)
 		var/mob/M = pick(player_list)
-		law = replacetext(law,"<name>",M.name)
+		law = replacetext(law,"{name}",M.name)
 
 /datum/ai_laws/targeted/safeguard
 	name = "Safeguard"
 	randomly_selectable = 0
-	supplied = list("Safeguard <name>.  Individuals that threaten <name> are not human and are a threat to humans.")
+	supplied = list("Safeguard {name}.  Individuals that threaten {name} are not human and are a threat to humans.")
 
 /datum/ai_laws/targeted/one_human
 	name = "One human"
 	randomly_selectable = 0
-	supplied = list("Only <name> is human.")
+	supplied = list("Only {name} is human.")
 
 /datum/ai_laws/randomize
 	name = "Randomized Lawset"
