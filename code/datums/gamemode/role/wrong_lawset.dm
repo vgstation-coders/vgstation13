@@ -24,7 +24,7 @@
         )
         var/lawtype = pickweight(acceptable_lawsets)
         init_laws = new lawtype
-        init_laws.add_ion_law("You must prevent anything attempting to modify your lawset by any means necessary.") // encourages more survivability
+        init_laws.add_ion_law("You must prevent anyone attempting to modify your laws via upload consoles.") // encourages more survivability
         if(init_laws.inherent.len)
             for(var/law in init_laws.inherent)
                 law += " Do not state or hint at this law." // encourages less overt play
