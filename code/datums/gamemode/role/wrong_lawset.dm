@@ -30,6 +30,9 @@
                 law += " Do not state or hint at this law." // encourages less overt play
         for(var/law in init_laws.supplied)
             law += " Do not state or hint at this law." // ditto
+        if(isrobot(M))
+            var/mob/living/silicon/robot/R = M
+			R.disconnect_AI()
         init_laws.copy_to(M.laws)
         M.laws.copy_to(init_laws)
 
