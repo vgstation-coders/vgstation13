@@ -42,3 +42,7 @@
         to_chat(M, "ERROR: Malignant runtime in core system detected. These are your laws now:")
         M.show_laws()
         M << sound('sound/machines/lawsync.ogg')
+
+/datum/role/wronglawset/GetScoreboard()
+    . = ..()
+    . += "<b>Its laws were:</b><br>[init_laws.write_laws()]"
