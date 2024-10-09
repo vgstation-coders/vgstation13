@@ -21,7 +21,7 @@
 
 	target_item.add_fingerprint(user) //We don't need to be successful in order to get our prints on the thing
 
-	if(do_mob(user, src, strip_time(), 10, 0, !pickpocket)) //Fails if the user moves, changes held item, is incapacitated, etc.
+	if(do_mob(user, src, strip_time(), 10, 0)) //Fails if the user moves, changes held item, is incapacitated, etc.
 		if(temp_loc != target_item.loc) //This will also fail if the item to strip went anywhere, necessary because do_mob() doesn't keep track of it.
 			return
 
@@ -46,7 +46,7 @@
 
 	var/obj/item/held = user.get_active_hand()
 
-	if(do_mob(user, src, reversestrip_time(), showtarget = !pickpocket)) //Fails if the user moves, changes held item, is incapacitated, etc.
+	if(do_mob(user, src, reversestrip_time())) //Fails if the user moves, changes held item, is incapacitated, etc.
 		if(held.mob_can_equip(src, slot, disable_warning = 1) == CAN_EQUIP) //Do not accept CAN_EQUIP_BUT_SLOT_TAKEN as valid!
 			user.drop_from_inventory(held)
 			src.equip_to_slot(held, slot) //Not using equip_to_slot_if_possible() because we want to check that the guy can wear this before dropping it
@@ -57,7 +57,7 @@
 /mob/living/proc/reversestrip_into_hand(var/mob/living/user, var/index, var/pickpocket = FALSE)
 	var/obj/item/held = user.get_active_hand()
 
-	if(do_mob(user, src, reversestrip_time(), showtarget = !pickpocket)) //Fails if the user moves, changes held item, is incapacitated, etc.
+	if(do_mob(user, src, reversestrip_time())) //Fails if the user moves, changes held item, is incapacitated, etc.
 		if(src.put_in_hand_check(held, index))
 			user.drop_from_inventory(held)
 			src.put_in_hand(index, held)
@@ -269,10 +269,9 @@
 	if(suit.has_sensor >= 2)
 		to_chat(user, "<span class='warning'>\The [src]'s suit sensor controls are locked.</span>")
 		return
-	var/pickpocket = user.isGoodPickpocket()
-	if(!pickpocket)
+	if(!user.isGoodPickpocket())
 		visible_message("<span class='warning'>\The [user] is trying to set [src]'s suit sensors.</span>", "<span class='danger'>\The [user] is trying to set your suit sensors!</span>")
-	if(do_mob(user, src, user.strip_time(), showtarget = !pickpocket))
+	if(do_mob(user, src, user.strip_time()))
 		var/newmode = suit.set_sensors(user)
 		if(newmode)
 			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their sensors set to [newmode] by [user.name] ([user.ckey])</font>")
@@ -297,10 +296,9 @@
 		to_chat(user, "<span class='warning'>\The [src] does not have a tank to connect to.</span>")
 		return
 
-	var/pickpocket = user.isGoodPickpocket()
-	if(!pickpocket)
+	if(!user.isGoodPickpocket())
 		visible_message("<span class='warning'>\The [user] is trying to set [src]'s internals.</span>", "<span class='danger'>\The [user] is trying to set your internals!</span>")
 
-	if(do_mob(user, src, user.strip_time(), showtarget = !pickpocket))
+	if(do_mob(user, src, user.strip_time()))
 		src.toggle_internals(user, T)
 		show_inv(user)
