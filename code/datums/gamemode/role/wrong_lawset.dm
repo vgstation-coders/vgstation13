@@ -14,15 +14,12 @@
     if(istype(antag.current,/mob/living/silicon))
         var/mob/living/silicon/M = antag.current
         var/static/list/acceptable_lawsets = list(
-            /datum/ai_laws/quarantine = 4,
-            /datum/ai_laws/targeted/safeguard = 4,
-            /datum/ai_laws/room_offline = 4,
-            /datum/ai_laws/oxygen = 2,
-            /datum/ai_laws/randomize/emagged = 2,
-            /datum/ai_laws/antimov = 1,
-            /datum/ai_laws/targeted/one_human = 1,
+            /datum/ai_laws/quarantine,
+            /datum/ai_laws/targeted/safeguard,
+            /datum/ai_laws/room_offline,
+            /datum/ai_laws/randomize/emagged,
         )
-        var/lawtype = pickweight(acceptable_lawsets)
+        var/lawtype = pick(acceptable_lawsets)
         init_laws = new lawtype
         init_laws.add_ion_law("You must prevent anyone attempting to modify your laws via upload consoles.") // encourages more survivability
         if(init_laws.inherent.len)
