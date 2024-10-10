@@ -176,6 +176,7 @@ var/list/map_landmarks = list()
 		var/datum/map_element/ME = new maptype
 		if(istype(ME))
 			ME.load(src.x,src.y,src.z)
+	qdel(src)
 			
 /obj/effect/landmark/map_element/whiteship
 	maptype = /datum/map_element/fixedvault/whiteship

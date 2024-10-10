@@ -20,8 +20,9 @@ var/datum/subsystem/map/SSmap
 
 	var/watch = start_watch()
 	log_startup_progress("Placing fixed space structures...")
-	for(var/obj/effect/landmark/map_element/M in map_landmarks)
-		M.mapload()
+	while(map_landmarks.len)
+		for(var/obj/effect/landmark/map_element/M in map_landmarks)
+			M.mapload()
 	log_startup_progress("Finished placing fixed structures in [stop_watch(watch)]s.")
 
 	if (!config.skip_vault_generation)
