@@ -1,6 +1,0 @@
-author: jwhitak
-delete-after: true
-changes:
-- rscadd: Added spacepod cargo bays, where you can upgrade your pod to hold a single
-    crate.
-- tweak: Pod Fabricator is less terrible.
