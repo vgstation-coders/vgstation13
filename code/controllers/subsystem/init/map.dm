@@ -18,12 +18,16 @@ var/datum/subsystem/map/SSmap
 		log_startup_progress("Attempting to generate an away mission...")
 		createRandomZlevel()
 
-	var/watch = start_watch()
-	log_startup_progress("Placing fixed space structures...")
-	while(map_landmarks.len)
-		for(var/obj/effect/landmark/map_element/M in map_landmarks)
-			M.mapload()
-	log_startup_progress("Finished placing fixed structures in [stop_watch(watch)]s.")
+	var/watch
+	if (!config.skip_vault_generation)
+		watch = start_watch()
+		log_startup_progress("Placing fixed space structures...")
+		while(map_landmarks.len)
+			for(var/obj/effect/landmark/map_element/M in map_landmarks)
+				M.mapload()
+		log_startup_progress("Finished placing fixed structures in [stop_watch(watch)]s.")
+	else
+		log_startup_progress("Not generating fixed vaults - SKIP_VAULT_GENERATION found in config/config.txt")
 
 	if (!config.skip_vault_generation)
 		watch = start_watch()
