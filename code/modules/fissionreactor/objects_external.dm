@@ -12,7 +12,7 @@ included:
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport
 	name="fission reactor coolant port"
 	icon='icons/obj/fissionreactor/reactorcase.dmi'
-	icon_state="coolantcase"
+	icon_state="case"
 	density =1
 	anchored =1
 	var/datum/fission_reactor_holder/associated_reactor=null
@@ -28,6 +28,14 @@ included:
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/Destroy()
 	if(associated_reactor)
 		associated_reactor.handledestruction(src)
+	var/origloc=loc
+	for(var/obj/structure/fission_reactor_case/part in range(src,1) )
+		loc=null
+		part.update_icon()
+	loc=origloc
+	for(var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/part in range(src,1) )
+		loc=null
+		part.update_icon()			
 	..()
 
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/examine()
@@ -52,7 +60,30 @@ included:
 			newcase.pipeadded=TRUE
 			newcase.state=3
 			qdel(src)
-
+			
+/obj/machinery/atmospherics/unary/fissionreactor_coolantport/update_icon()
+	var/dirs=0
+	overlays=list()
+	if(  locate(/obj/structure/fission_reactor_case) in get_step(src, NORTH) )
+		dirs|=NORTH
+	if(  locate(/obj/structure/fission_reactor_case) in get_step(src, SOUTH) )
+		dirs|=SOUTH
+	if(  locate(/obj/structure/fission_reactor_case) in get_step(src, EAST) )
+		dirs|=EAST
+	if(  locate(/obj/structure/fission_reactor_case) in get_step(src, WEST) )
+		dirs|=WEST
+		
+	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, NORTH) )
+		dirs|=NORTH
+	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, SOUTH) )
+		dirs|=SOUTH
+	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, EAST) )
+		dirs|=EAST
+	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, WEST) )
+		dirs|=WEST	
+		
+	overlays+=image(icon, src,"coonantpipeoverlay")	
+	icon_state="case_[dirs]"
 
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/New()
 	..()
@@ -61,7 +92,11 @@ included:
 		if(r.turf_in_reactor(src.loc))
 			if(r.adopt_part(src))
 				break
-
+	for(var/obj/structure/fission_reactor_case/part in range(src,1) )
+		part.update_icon()
+	for(var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/part in range(src,1) )
+		part.update_icon()	
+		
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/proc/transfer_reactor() //transfer coolant from/to the reactor
 	if(!associated_reactor)
 		return
@@ -595,12 +630,45 @@ included:
 		if(r.turf_in_reactor(src.loc))
 			if(r.adopt_part(src))
 				break
-
-
+	for(var/obj/structure/fission_reactor_case/part in range(src,1) )
+		part.update_icon()
+	for(var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/part in range(src,1) )
+		part.update_icon()	
+	
 /obj/structure/fission_reactor_case/Destroy()
 	if(associated_reactor)
 		associated_reactor.handledestruction(src)
+	var/origloc=loc
+	for(var/obj/structure/fission_reactor_case/part in range(src,1) )
+		loc=null
+		part.update_icon()
+	loc=origloc
+	for(var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/part in range(src,1) )
+		loc=null
+		part.update_icon()	
 	..()
+
+	
+/obj/structure/fission_reactor_case/update_icon()
+	var/dirs=0
+	if(  locate(/obj/structure/fission_reactor_case) in get_step(src, NORTH) )
+		dirs|=NORTH
+	if(  locate(/obj/structure/fission_reactor_case) in get_step(src, SOUTH) )
+		dirs|=SOUTH
+	if(  locate(/obj/structure/fission_reactor_case) in get_step(src, EAST) )
+		dirs|=EAST
+	if(  locate(/obj/structure/fission_reactor_case) in get_step(src, WEST) )
+		dirs|=WEST
+		
+	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, NORTH) )
+		dirs|=NORTH
+	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, SOUTH) )
+		dirs|=SOUTH
+	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, EAST) )
+		dirs|=EAST
+	if(  locate(/obj/machinery/atmospherics/unary/fissionreactor_coolantport) in get_step(src, WEST) )
+		dirs|=WEST	
+	icon_state="case_[dirs]"
 	
 /obj/structure/fission_reactor_case/examine()
 	..()
@@ -812,6 +880,7 @@ included:
 					else
 						var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/newcase= new /obj/machinery/atmospherics/unary/fissionreactor_coolantport(loc)
 						newcase.dir=src.dir
+						newcase.initialize_directions=src.dir
 						newcase.forceMove(loc)
 					qdel(src)
 
