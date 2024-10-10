@@ -19,7 +19,7 @@ var/datum/subsystem/map/SSmap
 		createRandomZlevel()
 
 	var/watch
-	if (!config.skip_vault_generation)
+	if (!config.skip_fixedvault_generation)
 		watch = start_watch()
 		log_startup_progress("Placing fixed space structures...")
 		while(map_landmarks.len)
