@@ -113,15 +113,7 @@
 
 /obj/effect/landmark/start
 	name = "start"
-	icon = 'icons/mob/screen1.dmi'
 	icon_state = "x"
-	anchored = 1.0
-
-/obj/effect/landmark/start/New()
-	..()
-	invisibility = 101
-
-	return 1
 
 /obj/effect/narration
 	name = "narrator"
@@ -163,3 +155,45 @@
 
 /obj/effect/landmark/hobostart
 	name = "hobostart"
+
+var/list/map_landmarks = list()
+
+/obj/effect/landmark/map_element
+	name = "map_element"
+	icon_state = "x3"
+	var/maptype = /datum/map_element
+
+/obj/effect/landmark/map_element/New()
+	. = ..()
+	map_landmarks += src
+
+/obj/effect/landmark/map_element/Destroy()
+	map_landmarks -= src
+	. = ..()
+	
+/obj/effect/landmark/map_element/proc/mapload()
+	if(maptype)
+		var/datum/map_element/ME = new maptype
+		if(istype(ME))
+			ME.load(src.x,src.y,src.z)
+			
+/obj/effect/landmark/map_element/whiteship
+	maptype = /datum/map_element/fixedvault/whiteship
+    
+/obj/effect/landmark/map_element/abandonted_aitele
+	maptype = /datum/map_element/fixedvault/abandoned_aitele
+    
+/obj/effect/landmark/map_element/salvage_shuttle
+	maptype = /datum/map_element/fixedvault/salvage_shuttle
+    
+/obj/effect/landmark/map_element/deepspaceruin
+	maptype = /datum/map_element/fixedvault/deepspaceruin
+
+/obj/effect/landmark/map_element/oldstation
+	maptype = /datum/map_element/fixedvault/oldstation
+
+/obj/effect/landmark/map_element/djsat
+	maptype = /datum/map_element/fixedvault/djsat
+
+/obj/effect/landmark/map_element/derelict_tele
+	maptype = /datum/map_element/fixedvault/derelict_tele
