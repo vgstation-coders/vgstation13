@@ -322,8 +322,12 @@ SKIP_MINIMAP_GENERATION
 SKIP_HOLOMINIMAP_GENERATION
 
 ## SKIP_VAULT_GENERATION
-## Uncomment to disable generation of vaults (makes the server start faster!)
+## Uncomment to disable generation of random vaults (makes the server start faster!)
 SKIP_VAULT_GENERATION
+
+## SKIP_FIXEDVAULT_GENERATION
+## Uncomment to disable generation of fixed vaults (makes the server start faster!)
+SKIP_FIXEDVAULT_GENERATION
 
 ## DISABLE_VAULT_ROTATION
 ## Uncomment to disable rotation of vaults
