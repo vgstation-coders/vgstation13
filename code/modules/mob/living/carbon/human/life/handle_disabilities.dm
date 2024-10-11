@@ -59,15 +59,6 @@
 		drop_item()
 		audible_cough(src)
 
-	if(arcanetampered)
-		for(var/mob/living/carbon/human/L in shuffle(view(client ? client.view : world.view,src)))
-			if(L.muted_letters?.len)
-				var/list/all_letters = list("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
-				if(prob(50))
-					all_letters -= L.muted_letters // weighted towards the wrong ones!
-				say("[pick(all_letters)]")
-				break
-
 	if(disabilities & TOURETTES)
 		if(prob(7))
 			say("[prob(50) ? ";" : ""][pick("SHIT", "PISS", "FUCK", "CUNT", "COCKSUCKER", "MOTHERFUCKER", "TITS")]")
