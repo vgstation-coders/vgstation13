@@ -1,0 +1,4 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- bugfix: Shoe snatching charm now properly puts shoes in the caster's hands again
