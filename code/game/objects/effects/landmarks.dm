@@ -202,6 +202,12 @@ var/list/map_landmarks = list()
 /obj/effect/landmark/map_element/oldstation
 	maptype = /datum/map_element/fixedvault/oldstation
 
+/obj/effect/landmark/map_element/misc_derelict_west
+	maptype = /datum/map_element/fixedvault/misc_derelict_west
+
+/obj/effect/landmark/map_element/misc_derelict_east
+	maptype = /datum/map_element/fixedvault/misc_derelict_east
+
 /obj/effect/landmark/map_element/djsat
 	maptype = /datum/map_element/fixedvault/djsat
 

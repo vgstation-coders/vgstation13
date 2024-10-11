@@ -38,6 +38,14 @@
     name = "oldstation"
     file_path = "maps/fixedvaults/oldstation.dmm"
 
+/datum/map_element/fixedvault/misc_derelict_west
+    name = "derelict west"
+    file_path = "maps/fixedvaults/misc_derelict_west.dmm"
+    
+/datum/map_element/fixedvault/misc_derelict_east
+    name = "derelict east"
+    file_path = "maps/fixedvaults/misc_derelict_east.dmm"
+
 /datum/map_element/fixedvault/djsat
     name = "DJ satellite"
     file_path = "maps/fixedvaults/djsat.dmm"
