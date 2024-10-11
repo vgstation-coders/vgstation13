@@ -189,6 +189,12 @@ var/list/map_landmarks = list()
 	
 /obj/effect/landmark/map_element/salvage_shuttle_spiders
 	maptype = /datum/map_element/fixedvault/salvage_shuttle_spiders
+	
+/obj/effect/landmark/map_element/salvage_shuttle_bears
+	maptype = /datum/map_element/fixedvault/salvage_shuttle_bears
+	
+/obj/effect/landmark/map_element/salvage_shuttle_cockroaches
+	maptype = /datum/map_element/fixedvault/salvage_shuttle_cockroaches
     
 /obj/effect/landmark/map_element/deepspaceruin
 	maptype = /datum/map_element/fixedvault/deepspaceruin
@@ -201,3 +207,6 @@ var/list/map_landmarks = list()
 
 /obj/effect/landmark/map_element/derelict_tele
 	maptype = /datum/map_element/fixedvault/derelict_tele
+	
+/obj/effect/landmark/map_element/spacegym
+	maptype = /datum/map_element/fixedvault/spacegym
