@@ -159,6 +159,7 @@
 	name = "high force FaNshot shell"
 	desc = "A shell capable of more powerful knockback force."
 	projectile_type = /obj/item/projectile/bullet/weakbullet/fanshot/super
+	mech_flags = MECH_SCAN_ILLEGAL
 
 /obj/item/ammo_casing/shotgun/fanshot/super/syndie
 	name = "beanbag shell"
