@@ -395,6 +395,8 @@ var/list/map_dimension_cache = list()
 /dmm_suite/proc/instance_atom(var/path,var/list/attributes, var/x, var/y, var/z, var/rotate, var/overwrite)
 	if(!path)
 		return
+	if(!overwrite && path == get_base_turf(z))
+		return
 	var/timestart = world.timeofday
 	var/atom/instance
 	_preloader.setup(attributes, path)
@@ -403,7 +405,7 @@ var/list/map_dimension_cache = list()
 	if(!T)
 		WARNING("Turf at [x], [y], [z] not found!")
 	if(ispath(path, /turf)) //Turfs use ChangeTurf
-		if(path != T.type && (overwrite || path != get_base_turf(z)))
+		if(path != T.type)
 			instance = T.ChangeTurf(path, allow = 1)
 			T = instance
 	else
