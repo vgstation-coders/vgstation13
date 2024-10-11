@@ -621,7 +621,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return
 
 /obj/item/clothing/mask/cigarette/bugged/attack_self(mob/user as mob)
-	if(lit)
+	if(cig_tag && lit)
 		user.visible_message("<span class='notice'>[user] calmly drops and treads on the [name], putting it out.</span>")
 		var/turf/T = get_turf(src)
 		var/obj/item/trash/cigbutt/bugged/new_butt = new /obj/item/trash/cigbutt/bugged(T)
