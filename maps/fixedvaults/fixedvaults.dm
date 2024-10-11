@@ -53,3 +53,7 @@
 /datum/map_element/fixedvault/derelict_tele
     name = "derelict teleporter"
     file_path = "maps/fixedvaults/derelict_tele.dmm"
+
+/datum/map_element/fixedvault/medship
+    name = "medical ship"
+    file_path = "maps/fixedvaults/medship.dmm"

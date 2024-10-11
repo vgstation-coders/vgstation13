@@ -51,17 +51,6 @@
 	icon_state = "enginebot"
 	},
 /area/derelict/atmos)
-"cO" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/derelict/solar_control)
 "cW" = (
 /turf/simulated/floor/plating/airless{
 	icon_state = "panelscorched"
@@ -77,14 +66,7 @@
 /turf/simulated/floor/plating,
 /area/derelict/bridge)
 "db" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating/airless,
 /area/derelict/research)
 "df" = (
@@ -149,7 +131,8 @@
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,
 /obj/effect/decal/warning_stripes{
 	dir = 8;
-	icon_state = "old"
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
 	},
 /turf/simulated/floor/airless{
 	icon_state = "white"
@@ -170,13 +153,7 @@
 /turf/space,
 /area/derelict/atmos)
 "fp" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/derelict/solar_control)
 "fC" = (
@@ -192,16 +169,8 @@
 /turf/space,
 /area/derelict/bridge/access)
 "fU" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
 /obj/machinery/atmospherics/pipe/simple/general/hidden,
-/obj/structure/grille,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating/airless,
 /area/derelict/atmos)
 "ge" = (
@@ -277,14 +246,7 @@
 /turf/simulated/floor/plating,
 /area/derelict/research)
 "iF" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/grille,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/derelict/atmos)
 "iH" = (
@@ -304,18 +266,10 @@
 /turf/simulated/floor/plating,
 /area/derelict/bridge/access)
 "iZ" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/full/reinforced,
 /obj/machinery/atmospherics/pipe/simple/general/hidden{
 	dir = 4
 	},
-/obj/structure/grille,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/derelict/atmos)
 "jG" = (
@@ -443,17 +397,6 @@
 "np" = (
 /turf/simulated/floor/plating/airless,
 /area/derelict/research)
-"nx" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/research)
 "nE" = (
 /obj/structure/cable{
 	d2 = 8;
@@ -530,14 +473,6 @@
 	oxygen = 0;
 	temperature = 80
 	},
-/area/derelict/research)
-"oz" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating/airless,
 /area/derelict/research)
 "oW" = (
 /obj/structure/cable,
@@ -650,19 +585,6 @@
 /obj/structure/cable,
 /turf/simulated/floor/plating/airless,
 /area/solar/derelict_starboard)
-"tx" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/grille,
-/obj/machinery/atmospherics/pipe/simple/general/hidden,
-/turf/simulated/floor/plating/airless,
-/area/derelict/atmos)
 "tC" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -702,7 +624,8 @@
 "ue" = (
 /obj/effect/decal/warning_stripes{
 	dir = 5;
-	icon_state = "old"
+	icon_state = "warning";
+	tag = "icon-warning (NORTHEAST)"
 	},
 /obj/machinery/computer/rdconsole/derelict,
 /turf/simulated/floor/airless,
@@ -718,7 +641,8 @@
 /obj/machinery/r_n_d/destructive_analyzer,
 /obj/effect/decal/warning_stripes{
 	dir = 10;
-	icon_state = "old"
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHWEST)"
 	},
 /turf/simulated/floor/airless,
 /area/derelict/research)
@@ -740,35 +664,12 @@
 /turf/simulated/floor,
 /area/derelict/bridge/access)
 "vi" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/full/reinforced,
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
 	dir = 4
 	},
-/obj/structure/grille,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating/airless,
 /area/derelict/research)
-"vw" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/derelict/solar_control)
 "vz" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -864,7 +765,8 @@
 /obj/machinery/meter,
 /obj/effect/decal/warning_stripes{
 	dir = 8;
-	icon_state = "old"
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
 	},
 /turf/simulated/floor/airless{
 	icon_state = "white"
@@ -901,12 +803,7 @@
 /turf/simulated/floor,
 /area/derelict/bridge/access)
 "zi" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/grille,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating/airless,
 /area/derelict/atmos)
 "zv" = (
@@ -946,14 +843,7 @@
 /turf/simulated/floor/plating/airless,
 /area/solar/derelict_starboard)
 "Ai" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/grille,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating/airless,
 /area/derelict/research)
 "Ap" = (
@@ -1097,7 +987,8 @@
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 8;
-	icon_state = "old"
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
 	},
 /turf/simulated/floor/airless{
 	icon_state = "white"
@@ -1187,11 +1078,12 @@
 /area/derelict/research)
 "HT" = (
 /obj/machinery/r_n_d/fabricator/circuit_imprinter,
+/obj/item/weapon/reagent_containers/glass/beaker/sulphuric,
 /obj/effect/decal/warning_stripes{
 	dir = 9;
-	icon_state = "old"
+	icon_state = "warning";
+	tag = "icon-warning (NORTHWEST)"
 	},
-/obj/item/weapon/reagent_containers/glass/beaker/sulphuric,
 /turf/simulated/floor/airless,
 /area/derelict/research)
 "IK" = (
@@ -1531,7 +1423,8 @@
 /obj/machinery/r_n_d/fabricator/protolathe,
 /obj/effect/decal/warning_stripes{
 	dir = 6;
-	icon_state = "old"
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHEAST)"
 	},
 /turf/simulated/floor/airless,
 /area/derelict/research)
@@ -1550,7 +1443,8 @@
 "Um" = (
 /obj/effect/decal/warning_stripes{
 	dir = 1;
-	icon_state = "old"
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
 	},
 /turf/simulated/floor/airless,
 /area/derelict/research)
@@ -1563,7 +1457,8 @@
 /area)
 "UB" = (
 /obj/effect/decal/warning_stripes{
-	icon_state = "old"
+	icon_state = "warning";
+	tag = "icon-warning"
 	},
 /turf/simulated/floor/airless,
 /area/derelict/research)
@@ -1634,23 +1529,6 @@
 	},
 /turf/simulated/floor,
 /area/derelict/bridge/access)
-"XY" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/grille,
-/obj/machinery/atmospherics/pipe/simple/general/hidden{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
 "Ya" = (
 /obj/item/weapon/table_parts,
 /turf/space,
@@ -1686,10 +1564,6 @@
 	current_temperature = 80;
 	dir = 1;
 	on = 1
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "corner"
 	},
 /turf/simulated/floor/airless{
 	icon_state = "white"
@@ -1732,21 +1606,6 @@
 /obj/structure/lattice,
 /turf/space,
 /area/derelict/atmos)
-"ZU" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/full/reinforced,
-/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
-	dir = 4
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating/airless,
-/area/derelict/research)
 
 (1,1,1) = {"
 tf
@@ -2037,17 +1896,17 @@ df
 lC
 Km
 Gm
-tx
+fU
 Zl
 cW
 Oz
 Oz
 df
-XY
+iZ
 iF
 iZ
 df
-XY
+iZ
 iF
 iZ
 df
@@ -2358,7 +2217,7 @@ vi
 Ai
 Ai
 Ai
-ZU
+vi
 wc
 df
 Ph
@@ -2445,7 +2304,7 @@ tf
 tf
 tf
 tf
-nx
+db
 zK
 Rb
 HT
@@ -2491,7 +2350,7 @@ tf
 tf
 tf
 tf
-oz
+db
 zK
 Rb
 Um
@@ -2537,7 +2396,7 @@ tf
 tf
 tf
 Jb
-oz
+db
 zK
 Rb
 ue
@@ -2689,9 +2548,9 @@ fm
 JS
 fm
 fm
-vw
 fp
-cO
+fp
+fp
 YL
 vZ
 eC

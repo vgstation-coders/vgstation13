@@ -166,17 +166,7 @@
 	name = "\improper Derelict Theatre"
 	})
 "aP" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/derelict/bridge/ai_upload{
 	name = "\improper Derelict Holodeck"
@@ -1461,21 +1451,6 @@
 	icon_state = "showroom";
 	name = "\improper Derelict Marketplace"
 	})
-"hT" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/derelict/bridge/ai_upload{
-	name = "\improper Derelict Holodeck"
-	})
 "hV" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -2045,19 +2020,6 @@
 	icon_state = "pmaint";
 	name = "Derelict Port Maintenance"
 	})
-"kI" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/derelict/holodeck)
 "kM" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -5356,14 +5318,7 @@
 	name = "Derelict Starboard Maintenance"
 	})
 "Co" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/derelict/holodeck)
 "Cq" = (
@@ -5519,16 +5474,7 @@
 	name = "Derelict Starboard Maintenance"
 	})
 "Dq" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/derelict/hallway/primary)
 "Ds" = (
@@ -5780,17 +5726,6 @@
 	icon_state = "maintcentral";
 	name = "\improper Derelict Central Maintenance"
 	})
-"EQ" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/derelict/holodeck)
 "ER" = (
 /turf/simulated/floor{
 	dir = 8;
@@ -8894,17 +8829,8 @@
 	name = "\improper Derelict Theatre"
 	})
 "Uu" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
 /obj/structure/window/barricade/full/block,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/derelict/holodeck)
 "Uw" = (
@@ -9301,17 +9227,6 @@
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
 	})
-"Wm" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/derelict/hallway/primary)
 "Wn" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -9560,19 +9475,6 @@
 	icon_state = "fmaint";
 	name = "Derelict Fore Maintenance"
 	})
-"Xo" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/derelict/holodeck)
 "Xr" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -9842,16 +9744,6 @@
 	icon_state = "smaint";
 	name = "Derelict Starboard Maintenance"
 	})
-"YO" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/derelict/holodeck)
 "Za" = (
 /turf/simulated/floor{
 	dir = 1;
@@ -9940,15 +9832,8 @@
 	},
 /area/derelict/arrival)
 "Zy" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
 /obj/structure/window/barricade/full/block,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/derelict/bridge/ai_upload{
 	name = "\improper Derelict Holodeck"
@@ -9987,16 +9872,10 @@
 	name = "Derelict Port Maintenance"
 	})
 "ZM" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /obj/item/weapon/shard{
 	icon_state = "medium"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/derelict/hallway/primary)
 "ZN" = (
@@ -12502,7 +12381,7 @@ UQ
 UQ
 Sy
 ZM
-Wm
+Dq
 XT
 XT
 dC
@@ -14943,16 +14822,16 @@ pJ
 al
 al
 UQ
-kI
+Co
 Co
 vU
 Uu
 Co
 vU
-Xo
+Co
 Qg
-YO
-EQ
+Co
+Co
 yQ
 Bi
 zb
@@ -15168,7 +15047,7 @@ JJ
 Oz
 aP
 zG
-hT
+aP
 Zy
 Ky
 aP

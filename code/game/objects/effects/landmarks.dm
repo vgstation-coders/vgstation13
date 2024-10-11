@@ -216,3 +216,6 @@ var/list/map_landmarks = list()
 	
 /obj/effect/landmark/map_element/spacegym
 	maptype = /datum/map_element/fixedvault/spacegym
+	
+/obj/effect/landmark/map_element/medship
+	maptype = /datum/map_element/fixedvault/medship
