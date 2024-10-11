@@ -60,7 +60,7 @@
 	to_spawn = list(
 		/obj/item/clothing/gloves/yellow
 		)
-		
+
 /obj/abstract/map/spawner/pick_spawner/yellowgloves/tcomms_storage
 	category = "yellowgloves_tcommsstorage"
 	name = "glubb pickspawner (tcomms_storage)"
@@ -72,3 +72,48 @@
 /obj/abstract/map/spawner/pick_spawner/yellowgloves/technicalstorage
 	category = "yellowgloves_technicalstorage"
 	name = "glubb pickspawner (technicalstorage)"
+
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage
+	category = "mecha_graveyard_wreckage"
+	name = "Mecha Graveyard Wreckage Spawner"
+	spawners_to_pick = 14
+	icon_state = "robot_any"
+	to_spawn = list(
+		/obj/effect/decal/mecha_wreckage/ripley,
+		/obj/effect/decal/mecha_wreckage/ripley,
+		/obj/effect/decal/mecha_wreckage/clarke,
+		/obj/effect/decal/mecha_wreckage/clarke,
+		/obj/effect/decal/mecha_wreckage/odysseus,
+		/obj/effect/decal/mecha_wreckage/marauder,
+		/obj/effect/decal/mecha_wreckage/gygax,
+		/obj/effect/decal/mecha_wreckage/durand,
+		/obj/effect/decal/mecha_wreckage/honker,
+		)
+
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_good
+	category = "mecha_graveyard_wreckage_good"
+	name = "Mecha Graveyard Good Wreckage Spawner"
+	icon_state = "engi_materials"
+	to_spawn = list(
+		/obj/effect/decal/mecha_wreckage/graveyard_ripley,
+		/obj/effect/decal/mecha_wreckage/graveyard_clarke,
+		)
+
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_equip
+	category = "mecha_graveyard_wreckage_good"
+	name = "Mecha Graveyard Good Wreckage Spawner"
+	spawners_to_pick = 2
+	icon_state = "space_tools"
+	to_spawn = list(
+		/obj/item/mecha_parts/mecha_equipment/passive/runningboard,
+		/obj/item/mecha_parts/mecha_equipment/passive/rack,
+		/obj/item/mecha_parts/mecha_equipment/tool/jail,
+		/obj/item/mecha_parts/mecha_equipment/jetpack,
+		/obj/item/mecha_parts/mecha_equipment/tool/scythe,
+		/obj/item/mecha_parts/mecha_equipment/tool/extinguisher,
+		/obj/item/mecha_parts/mecha_equipment/tool/red,
+		/obj/item/mecha_parts/mecha_equipment/wormhole_generator,
+		/obj/item/mecha_parts/mecha_equipment/gravcatapult,
+		/obj/item/mecha_parts/mecha_equipment/repair_droid,
+		/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay,
+		)
