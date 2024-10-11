@@ -1,0 +1,4 @@
+author: Dacendeth
+delete-after: true
+changes:
+- bugfix: Timers can no longer crash the server.
