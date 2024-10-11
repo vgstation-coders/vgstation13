@@ -91,7 +91,7 @@
 		if(arcanetampered)
 			multiplier *= 5
 		if(unanchors || arcanetampered)
-			if(AM.anchored && !istype(AM,/obj/effect) && !isvehicle(AM) && get_dist(starting,AM) < 4)
+			if(AM.anchored && AM.fanshot_unanchors && get_dist(starting,AM) < 4)
 				AM.anchored = 0
 				if(istype(AM,/obj/machinery))
 					var/obj/machinery/M = AM
