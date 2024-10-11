@@ -777,7 +777,6 @@
 	name = "disposal pipe"
 	desc = "An underfloor disposal pipe."
 	anchored = 1
-	fanshot_unanchors = 0
 	density = 0
 
 	level = LEVEL_BELOW_FLOOR			// underfloor only

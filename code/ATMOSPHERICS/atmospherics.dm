@@ -19,7 +19,6 @@ Pipelines + Other Objects -> Pipe network
 
 /obj/machinery/atmospherics
 	anchored = 1
-	fanshot_unanchors = 0
 	idle_power_usage = 0
 	active_power_usage = 0
 	power_channel = ENVIRON

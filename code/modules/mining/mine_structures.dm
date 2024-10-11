@@ -18,7 +18,6 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "hanginglantern1"
 	anchored = 1
-	fanshot_unanchors = 0
 	plane = OBJ_PLANE
 	layer = ABOVE_DOOR_LAYER
 	var/tmp/flickering = 0 //SPOOK

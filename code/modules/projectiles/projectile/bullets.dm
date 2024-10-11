@@ -91,17 +91,15 @@
 		if(arcanetampered)
 			multiplier *= 5
 		if((unanchors || arcanetampered) && get_dist(starting,AM) < 4)
-			if(AM.anchored && AM.fanshot_unanchors)
-				AM.anchored = 0
-				AM.pixel_x = clamp(AM.pixel_x,-16,16)
-				AM.pixel_y = clamp(AM.pixel_y,-16,16)
-				if(istype(AM,/obj/machinery))
-					var/obj/machinery/M = AM
+			if(AM.anchored && istype(AM,/obj/machinery) && !istype(AM,/obj/machinery/atmospherics))
+				var/obj/machinery/M = AM
+				if(M.machine_flags & WRENCHMOVE)
+					M.anchored = 0
 					M.state = 0
 					M.power_change()
-				AM.update_icon()
-				if(!arcanetampered)
-					multiplier /= 2
+					M.update_icon()
+					if(!arcanetampered)
+						multiplier /= 2
 			if(istype(AM.locked_to,/obj/structure/bed))
 				AM.locked_to.unlock_atom(AM)
 				if(!arcanetampered)

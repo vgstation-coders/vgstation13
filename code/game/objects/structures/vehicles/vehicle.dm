@@ -33,7 +33,6 @@
 	var/nick = null
 	icon = 'icons/obj/vehicles.dmi'
 	anchored = 1
-	fanshot_unanchors = 0
 	density = 1
 	buckle_range = 1
 	var/empstun = 0

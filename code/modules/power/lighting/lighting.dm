@@ -109,7 +109,6 @@ var/global/list/obj/machinery/light/alllights = list()
 	icon_state = "ltube1"
 	desc = "A lighting fixture."
 	anchored = 1
-	fanshot_unanchors = 0
 	plane = ABOVE_HUMAN_PLANE
 	layer = LIGHT_FIXTURE_LAYER
 	use_power = MACHINE_POWER_USE_ACTIVE

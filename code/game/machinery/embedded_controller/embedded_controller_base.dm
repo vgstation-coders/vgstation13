@@ -5,7 +5,6 @@
 	icon = 'icons/obj/airlock_machines.dmi'
 	icon_state = "airlock_control_build0"
 	anchored = 1
-	fanshot_unanchors = 0
 
 	var/on = 1
 

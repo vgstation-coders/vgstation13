@@ -304,7 +304,6 @@ var/global/list/air_alarms = list()
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "alarm0"
 	anchored = 1
-	fanshot_unanchors = 0
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 100
 	active_power_usage = 200
@@ -1223,7 +1222,6 @@ FIRE ALARM
 	var/timing = 0.0
 	var/lockdownbyai = 0
 	anchored = 1.0
-	fanshot_unanchors = 0
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 2
 	active_power_usage = 6

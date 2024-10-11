@@ -20,14 +20,13 @@ var/list/camera_names=list()
 	var/c_tag_order = 999
 	var/status = 1.0
 	anchored = 1.0
-	fanshot_unanchors = 0
 	var/invuln = null
 	var/bugged = 0
 	var/failure_chance = 10
 	var/obj/item/weapon/camera_assembly/assembly = null
 	var/light_on = 0
 
-	machine_flags = SCREWTOGGLE | FIXED2WORK //| WIREJACK Needs work
+	machine_flags = SCREWTOGGLE //| WIREJACK Needs work
 
 	//OTHER
 

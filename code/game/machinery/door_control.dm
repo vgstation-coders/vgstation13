@@ -25,7 +25,6 @@
 	*/
 
 	anchored = 1.0
-	fanshot_unanchors = 0
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 2
 	active_power_usage = 4

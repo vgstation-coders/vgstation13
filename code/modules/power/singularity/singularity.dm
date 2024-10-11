@@ -7,7 +7,6 @@ var/list/obj/machinery/singularity/white_hole_candidates
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "singularity_s1"
 	anchored = 1
-	fanshot_unanchors = 0
 	density = 0
 	layer = SINGULARITY_LAYER
 	plane = EFFECTS_PLANE

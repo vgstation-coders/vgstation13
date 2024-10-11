@@ -6,7 +6,6 @@ var/list/station_holomaps = list()
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "station_map"
 	anchored = 1
-	fanshot_unanchors = 0
 	density = 0
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10

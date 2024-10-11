@@ -8,7 +8,6 @@
 	var/last_move = null //Direction in which this atom last moved
 	var/last_moved = 0   //world.time when this atom last moved
 	var/anchored = 0
-	var/fanshot_unanchors = 1 //Do FaNshot shells unanchor this?
 	var/move_speed = 10
 	var/l_move_time = 1
 	var/m_flag = 1

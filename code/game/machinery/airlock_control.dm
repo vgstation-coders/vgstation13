@@ -316,7 +316,6 @@
 	icon_state = "access_button_standby"
 	name = "access button"
 	anchored = 1
-	fanshot_unanchors = 0
 	power_channel = ENVIRON
 
 	var/master_tag

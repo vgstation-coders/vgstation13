@@ -10,7 +10,6 @@ var/list/obj/machinery/light_switch/lightswitches = list()
 	icon = 'icons/obj/power.dmi'
 	icon_state = "light1"
 	anchored = 1.0
-	fanshot_unanchors = 0
 	var/buildstage = 2
 	var/on = 0
 	var/image/overlay

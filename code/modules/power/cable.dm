@@ -29,7 +29,6 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable
 	level = LEVEL_BELOW_FLOOR
 	anchored =1
-	fanshot_unanchors = 0
 	var/datum/powernet/powernet
 	name = "power cable"
 	desc = "A flexible superconducting cable for heavy-duty power transfer."
