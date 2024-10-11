@@ -76,7 +76,6 @@
 /obj/item/projectile/bullet/weakbullet/fanshot
 	name = "FaNshot"
 	projectile_speed = 0.5
-	var/unanchors = FALSE
 	var/hardthrow = FALSE
 	var/powermult = 1
 
@@ -88,37 +87,19 @@
 		var/rise = AM.y - starting.y
 		var/dist = get_dist(starting,AM)
 		var/multiplier = (7 / (dist > 0 && dist <= 7 ? dist : 7)) * powermult
-		if(arcanetampered)
-			multiplier *= 5
-		if((unanchors || arcanetampered) && get_dist(starting,AM) < 4)
-			if(AM.anchored && istype(AM,/obj/machinery) && !istype(AM,/obj/machinery/atmospherics))
-				var/obj/machinery/M = AM
-				if(M.machine_flags & WRENCHMOVE)
-					M.anchored = 0
-					M.state = 0
-					M.power_change()
-					M.update_icon()
-					if(!arcanetampered)
-						multiplier /= 2
-			if(istype(AM.locked_to,/obj/structure/bed))
-				AM.locked_to.unlock_atom(AM)
-				if(!arcanetampered)
-					multiplier /= 2
-		if(ishuman(A) && !arcanetampered)
+		if(ishuman(A))
 			var/mob/living/carbon/human/H = A
 			if(M_HULK in H.mutations)
 				multiplier /= 2
-		if(ismecha(A) && !arcanetampered)
+		if(ismecha(A))
 			multiplier /= 2
 		var/turf/finalturf = locate(starting.x+(run*multiplier),starting.y+(rise*multiplier),AM.z)
 		if(finalturf != get_turf(AM) && !AM.anchored)
-			AM.throw_at(finalturf,INFINITY,superthrow = (hardthrow || arcanetampered))
+			AM.throw_at(finalturf,INFINITY,superthrow = hardthrow)
 
 /obj/item/projectile/bullet/weakbullet/fanshot/super
 	name = "high force FaNshot"
 	damage = 30
-	projectile_speed = 0.5
-	unanchors = TRUE
 	hardthrow = TRUE
 	powermult = 2
 
