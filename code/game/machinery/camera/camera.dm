@@ -20,6 +20,7 @@ var/list/camera_names=list()
 	var/c_tag_order = 999
 	var/status = 1.0
 	anchored = 1.0
+	fanshot_unanchors = 0
 	var/invuln = null
 	var/bugged = 0
 	var/failure_chance = 10

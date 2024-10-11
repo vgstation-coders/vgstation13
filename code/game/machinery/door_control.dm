@@ -25,6 +25,7 @@
 	*/
 
 	anchored = 1.0
+	fanshot_unanchors = 0
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 2
 	active_power_usage = 4
@@ -32,7 +33,7 @@
 	ghost_read=0
 	ghost_write=0
 
-	machine_flags = EMAGGABLE | MULTITOOL_MENU
+	machine_flags = EMAGGABLE | MULTITOOL_MENU | FIXED2WORK
 
 /obj/machinery/door_control/attack_ai(mob/user as mob)
 	if(wires & 2)

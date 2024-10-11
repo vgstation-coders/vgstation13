@@ -3,6 +3,7 @@
 	desc = "Talk through this."
 	icon_state = "intercom"
 	anchored = 1
+	fanshot_unanchors = 0
 	w_class = W_CLASS_LARGE
 	canhear_range = 2
 	var/number = 0

@@ -90,9 +90,11 @@
 		var/multiplier = (7 / (dist > 0 && dist <= 7 ? dist : 7)) * powermult
 		if(arcanetampered)
 			multiplier *= 5
-		if(unanchors || arcanetampered)
-			if(AM.anchored && AM.fanshot_unanchors && get_dist(starting,AM) < 4)
+		if((unanchors || arcanetampered) && get_dist(starting,AM) < 4)
+			if(AM.anchored && AM.fanshot_unanchors)
 				AM.anchored = 0
+				AM.pixel_x = clamp(AM.pixel_x,-16,16)
+				AM.pixel_y = clamp(AM.pixel_y,-16,16)
 				if(istype(AM,/obj/machinery))
 					var/obj/machinery/M = AM
 					M.state = 0
