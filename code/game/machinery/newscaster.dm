@@ -177,6 +177,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/anonymous_posting = FALSE
 	luminosity = 0
 	anchored = TRUE
+	fanshot_unanchors = 0
 
 
 /obj/machinery/newscaster/security_unit //Security unit

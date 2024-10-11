@@ -96,6 +96,7 @@
 	icon='icons/obj/radio.dmi'
 	icon_state="wallradio"
 	anchored=1
+	fanshot_unanchors = 0
 	volume=1 // applies a % of the user's media volume pref
 	var/buildstage = 0
 

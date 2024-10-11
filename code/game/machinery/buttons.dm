@@ -6,6 +6,7 @@
 	id_tag = "default"
 	var/active = 0
 	anchored = 1.0
+	fanshot_unanchors = 0
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 2
 	active_power_usage = 4
@@ -55,6 +56,7 @@
 
 	var/active = 0
 	anchored = 1.0
+	fanshot_unanchors = 0
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 2
 	active_power_usage = 4
@@ -71,6 +73,7 @@
 	icon = 'icons/obj/power.dmi'
 	icon_state = "crema_switch"
 	anchored = 1.0
+	fanshot_unanchors = 0
 	req_access = list(access_crematorium)
 	var/on = 0
 	var/otherarea = null

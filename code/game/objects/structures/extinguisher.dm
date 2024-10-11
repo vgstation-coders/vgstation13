@@ -4,6 +4,7 @@
 	icon = 'icons/obj/closet.dmi'
 	icon_state = "extinguisher_closed"
 	anchored = 1
+	fanshot_unanchors = 0
 	density = FALSE
 	var/obj/item/weapon/extinguisher/has_extinguisher = new/obj/item/weapon/extinguisher
 	var/opened = 0

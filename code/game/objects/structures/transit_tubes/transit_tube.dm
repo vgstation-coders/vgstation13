@@ -8,6 +8,7 @@
 	icon_state = "E-W"
 	layer = ABOVE_OBJ_LAYER
 	anchored = 1.0
+	fanshot_unanchors = 0
 	pixel_x = -8
 	pixel_y = -8
 	var/list/tube_dirs = null
