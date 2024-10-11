@@ -572,7 +572,7 @@
 /obj/item/weapon/storage/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/obj/item/weapon/storage/throw_at()
+/obj/item/weapon/storage/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	close_all() //How are you going to see whats inside this thing while throwing it
 	..()
 
