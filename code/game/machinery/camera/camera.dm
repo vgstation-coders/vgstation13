@@ -26,7 +26,7 @@ var/list/camera_names=list()
 	var/obj/item/weapon/camera_assembly/assembly = null
 	var/light_on = 0
 
-	machine_flags = SCREWTOGGLE //| WIREJACK Needs work
+	machine_flags = SCREWTOGGLE | FIXED2WORK //| WIREJACK Needs work
 
 	//OTHER
 

@@ -115,6 +115,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	idle_power_usage = 2
 	active_power_usage = 20
 	power_channel = LIGHT //Lights are calc'd via area so they dont need to be in the machine list
+	machine_flags = FIXED2WORK
 	var/on = 1					// 1 if on, 0 if off
 	var/on_gs = 0
 	var/static_power_used = 0
