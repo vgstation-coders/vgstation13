@@ -14,6 +14,10 @@
     name = "salvage shuttle"
     file_path = "maps/fixedvaults/salvage_shuttle.dmm"
     
+/datum/map_element/fixedvault/salvage_shuttle_spiders
+    name = "salvage shuttle spiders"
+    file_path = "maps/fixedvaults/salvage_shuttle_spiders.dmm"
+
 /datum/map_element/fixedvault/deepspaceruin
     name = "deep space ruin"
     file_path = "maps/fixedvaults/deepspaceruin.dmm"
