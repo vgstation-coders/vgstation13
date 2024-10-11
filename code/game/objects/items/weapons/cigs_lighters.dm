@@ -840,7 +840,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_MASK
 	overlay_on = "pipelit"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-	smoketime = 100
+	smoketime = 200
 
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")
 	if(!src.lit)
