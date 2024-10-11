@@ -157,7 +157,7 @@ var/global/global_cricket_population = 0
 			if(prob(15))
 				eggs += rand(1,5)
 
-/obj/item/cricketfarm/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+/obj/item/cricketfarm/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	..()
 	escape()
 
@@ -553,7 +553,7 @@ var/global/global_cricket_population = 0
 	var/aim = 1
 	var/luck = 1
 
-/obj/item/dart/throw_at(var/atom/A, throw_range, throw_speed)
+/obj/item/dart/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	if(ishuman(usr))
 		var/mob/living/carbon/human/H = usr
 		var/common_data = 1

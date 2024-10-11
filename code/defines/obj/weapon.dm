@@ -231,7 +231,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 	to_chat(viewers(user), "<span class='danger'>[user] is wrapping the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
-/obj/item/weapon/legcuffs/bolas/throw_at(var/atom/A, throw_range, throw_speed)
+/obj/item/weapon/legcuffs/bolas/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	if(!throw_range)
 		return //divide by zero, also you throw like a girl
 	if(istype(usr, /mob/living/carbon/human)) //if the user is human
@@ -241,7 +241,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 			H.Stun(2)
 			H.drop_item(src)
 			return
-	var/turf/target = get_turf(A)
+	var/turf/target = get_turf(target)
 	var/new_x = src.x
 	var/new_y = src.y
 	var/scaler //used to changed the normalised vector to the proper size

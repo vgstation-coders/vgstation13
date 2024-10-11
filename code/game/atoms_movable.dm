@@ -590,7 +590,7 @@
 			var/obj/effect/afterimage/richter_tackle/RT = new (loc,src)
 			RT.overlays += image('icons/effects/effects.dmi', src, "castlevania_tackle", dir = turn(SOUTH, 90 * afterimage_step))
 
-/atom/movable/proc/throw_at(atom/target, range, speed, override = TRUE, var/fly_speed = 0, var/list/whitelist, var/superthrow = FALSE) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
+/atom/movable/proc/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
 	set waitfor = FALSE
 	if(!target || !src)
 		return 0
@@ -1291,7 +1291,7 @@
 		CRASH("border_dummy was collision checked while not locked to anything! ([x], [y], [z])")
 	return (mover == locked_to) || locked_to.border_dummy_Cross(mover) //An object will hit its own border_dummy if the (mover == locked_to) isn't included.
 
-/atom/movable/border_dummy/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0)
+/atom/movable/border_dummy/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	return //It wouldn't actually move even without this override, but it would still hit things on its own tile.
 
 /atom/movable/border_dummy/get_bump_target()
