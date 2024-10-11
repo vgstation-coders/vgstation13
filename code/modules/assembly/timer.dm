@@ -68,6 +68,9 @@
 				timing = 0
 			timer_end()
 			time = default_time
+			if(repeat)
+				spawn()
+					countdown()
 		updateUsrDialog()
 
 /obj/item/device/assembly/timer/update_icon()
