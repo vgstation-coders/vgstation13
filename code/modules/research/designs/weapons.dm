@@ -396,7 +396,7 @@
 	materials = list(MAT_IRON = 500, MAT_PLASMA = 500)
 	build_path = /obj/item/ammo_casing/shotgun/dragonsbreath
 
-/datum/design/shotgun_shell/dragonsbreath
+/datum/design/shotgun_shell/fanshot
 	name = "12ga. FaNshot shell"
 	desc = "A 12 gauge shell capable of knocking things back with incredible force."
 	id = "fanshell"
