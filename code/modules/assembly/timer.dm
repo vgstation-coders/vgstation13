@@ -68,7 +68,7 @@
 				timing = 0
 			timer_end()
 			time = default_time
-			if(repeat)
+			if(repeat && time > 0)
 				spawn()
 					countdown()
 		updateUsrDialog()
