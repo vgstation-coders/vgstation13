@@ -151,7 +151,7 @@
 /obj/item/ammo_casing/shotgun/fanshot
 	name = "FaNshot shell"
 	desc = "A shell capable of knockback force."
-	icon_state = "stunshell"
+	icon_state = "fsshell"
 	projectile_type = /obj/item/projectile/bullet/weakbullet/fanshot
 	starting_materials = list(MAT_IRON = 250)
 
