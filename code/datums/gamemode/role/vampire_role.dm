@@ -1,4 +1,5 @@
 #define MAX_BLOOD_PER_TARGET 200
+#define BLOOD_UNIT_DRAIN_MULTIPLIER 2 //How many units of blood get drained from victim at a time per point of blood the vampire gains
 
 /datum/role/vampire
 	id = VAMPIRE
@@ -172,11 +173,7 @@
 	else
 		to_chat(antag.current, "<span class='warning'>You quietly latch on to \the [target]'s neck...")
 
-	if(!iscarbon(assailant))
-		target.LAssailant = null
-	else
-		target.LAssailant = assailant
-		target.assaulted_by(assailant)
+	target.assaulted_by(assailant)
 	var/initial_silentbite = silentbite //No switching bite types after latching onto someone
 	while(do_mob(assailant, target, (5 SECONDS) * (initial_silentbite + 1)))
 		if(!isvampire(assailant))
@@ -198,7 +195,7 @@
 			feeders[targetref] = 0
 		var/mature = locate(/datum/power/vampire/mature) in current_powers
 		if(target.stat < DEAD) //alive
-			blood = min(mature ? 40 : 20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
+			blood = min(mature ? 40 : 20, target.vessel.get_reagent_amount(BLOOD)/BLOOD_UNIT_DRAIN_MULTIPLIER) // if they have less than 20 blood, give them the remnant else they get 20 blood
 			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
 				blood_total += blood
 			else
@@ -209,7 +206,7 @@
 			var/datum/organ/external/head/head_organ = target.get_organ(LIMB_HEAD)
 			head_organ.add_autopsy_data("sharp teeth", 1)
 		else
-			blood = min(mature ? 20 : 10, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 10 blood
+			blood = min(mature ? 20 : 10, target.vessel.get_reagent_amount(BLOOD)/BLOOD_UNIT_DRAIN_MULTIPLIER) // The dead only give 10 blood
 			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
 				blood_total += blood
 			else
@@ -218,7 +215,7 @@
 		if(blood_total_before != blood_total)
 			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
 		check_vampire_upgrade()
-		target.vessel.remove_reagent(BLOOD,blood)
+		target.vessel.remove_reagent(BLOOD,blood * BLOOD_UNIT_DRAIN_MULTIPLIER)
 		var/mob/living/carbon/V = assailant
 		if(V)
 			var/fatty_chemicals = target.reagents.has_any_reagents(list(CHEESYGLOOP, CORNOIL)) //If the target has these chemicals in his blood the vampire can get fat from sucking blood.
@@ -410,7 +407,7 @@
 			else if(prob(35))
 				to_chat(H, "<span class='danger'>The holy flames continue to burn your flesh!</span>")
 			H.fire_stacks += 5
-			H.IgniteMob()
+			H.ignite()
 
 /datum/role/vampire/proc/remove_blood(var/amount)
 	blood_usable = max(0, blood_usable - amount)
@@ -427,7 +424,7 @@
 
 /datum/role/vampire/handle_reagent(var/reagent_id)
 	switch(reagent_id)
-		if (HOLYWATER,INCENSE_HAREBELLS)
+		if (HOLYWATER,INCENSE_HAREBELLS,SACREDWATER)
 			var/mob/living/carbon/human/H = antag.current
 			if (!istype(H))
 				return
@@ -439,12 +436,9 @@
 				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. You're still too human to be smited!</span>")
 				smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
 
-/*
-	Commented out for now.
-
-/datum/role/vampire/handle_splashed_reagent(var/reagent_id)
+/datum/role/vampire/handle_splashed_reagent(var/reagent_id, var/method, var/volume)
 	switch (reagent_id)
-		if (HOLYWATER)
+		if (HOLYWATER,SACREDWATER)
 			var/mob/living/carbon/human/H = antag.current
 			if (!istype(H))
 				return
@@ -485,8 +479,6 @@
 					if(H.dissolvable())
 						H.take_organ_damage(min(15, volume * 2))
 						smitecounter += 5
-
-*/
 
 /*
 -- Helpers --
@@ -535,13 +527,13 @@
 				else
 					to_chat(src, "<span class='danger'>You continue to burn!</span>")
 				fire_stacks += 5
-				IgniteMob()
+				ignite()
 		audible_scream()
 	else
 		switch(health)
 			if((-INFINITY) to 60)
 				fire_stacks++
-				IgniteMob()
+				ignite()
 	adjustFireLoss(3)
 
 /*

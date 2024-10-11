@@ -65,15 +65,7 @@
 	if(user.is_in_modules(src))
 		return
 	if(istype(W, /obj/item/weapon/handcuffs/cable) && !istype(src, /obj/item/tool/wrench/socket))
-		to_chat(user, "<span class='notice'>You wrap the cable restraint around the top of the wrench.</span>")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/tool/wrench_wired/I = new (get_turf(user))
-			user.put_in_hands(I)
-		else
-			new /obj/item/tool/wrench_wired(get_turf(src.loc))
-		qdel(src)
-		qdel(W)
+		user.create_in_hands(src, /obj/item/tool/wrench_wired, W, msg = "<span class='notice'>You wrap the cable restraint around the top of the wrench.</span>")
 
 /obj/item/tool/wrench/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
@@ -99,13 +91,9 @@
 	starting_materials = list(MAT_IRON = 150)
 	force = 15.0
 	throwforce = 12.0
-
-/obj/item/tool/wrench/socket/slime_act(primarytype, mob/user)
-	..()
-	if(primarytype == /mob/living/carbon/slime/bluespace)
-		has_slime=1
-		to_chat(user, "You shove the slime extract inside \the [src]'s head.")
-		return TRUE
+	slimeadd_message = "You shove the slime extract inside SRCTAG's head"
+	slimes_accepted = SLIME_BLUESPACE
+	slimeadd_success_message = "A small draft of air sucks into it"
 
 /*
  * Screwdriver
@@ -286,7 +274,7 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = 0
+	flammable = FALSE
 
 	//R&D tech level
 	origin_tech = Tc_ENGINEERING + "=1"
@@ -315,7 +303,7 @@
 /obj/item/tool/weldingtool/attackby(obj/item/W as obj, mob/user as mob)
 	if(user.is_in_modules(src))
 		return
-	if(istype(W,/obj/item/tool/screwdriver))
+	if(W.is_screwdriver(user))
 		if(welding)
 			to_chat(user, "<span class='warning'>Stop welding first!</span>")
 			return
@@ -386,8 +374,8 @@
 		var/mob/M = location
 		if(M.is_holding_item(src))
 			location = get_turf(M)
-	if (istype(location, /turf) && welding)
-		location.hotspot_expose(source_temperature, 5,surfaces=istype(loc,/turf))
+	if (welding)
+		try_hotspot_expose(source_temperature, MEDIUM_FLAME, -1)
 
 /obj/item/tool/weldingtool/attack(mob/M as mob, mob/user as mob)
 	if(hasorgans(M))
@@ -442,11 +430,6 @@
 			to_chat(user, "<span class='warning'>That was stupid of you.</span>")
 			explosion(get_turf(A),-1,0,3)
 			return
-	if (src.welding)
-		if(isliving(A))
-			var/mob/living/L = A
-			L.IgniteMob()
-			remove_fuel(1)
 
 /obj/item/tool/weldingtool/attack_self(mob/user as mob)
 	toggle(user)
@@ -763,7 +746,7 @@
 	if(istype(I,/obj/item/weapon/fireaxe))
 		var/obj/item/weapon/fireaxe/F = I
 		to_chat(user, "<span class='notice'>You attach \the [F] and [src] to carry them easier.</span>")
-		var/obj/item/tool/irons/SI = new (user.loc)
+		var/obj/item/tool/irons/SI = new (get_turf(src))
 		SI.fireaxe = F
 		SI.halligan = src
 		user.drop_item(F)

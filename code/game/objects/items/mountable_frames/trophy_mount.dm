@@ -8,7 +8,7 @@
 	w_type = RECYK_WOOD
 	frame_material = /obj/item/stack/sheet/wood
 	sheets_refunded = 2
-	autoignition_temperature = AUTOIGNITION_WOOD
+	flammable = TRUE
 	var/obj/item/held_item
 	var/list/params_list
 	var/icon/clicked
@@ -95,8 +95,7 @@
 		user.visible_message("\The [user] removes \the [I] from \the [src].", "You remove \the [I] from \the [src].")
 
 /obj/item/mounted/frame/trophy_mount/do_build(turf/on_wall, mob/user)
-	if(!user.drop_item(src))
-		to_chat(user, "<span class='warning'>You can't let go of \the [src]!</span>")
+	if(!user.drop_item(src, failmsg = TRUE))
 		return
 	user.visible_message("\The [user] hangs \the [src] on \the [on_wall].", "You hang \the [src] on \the [on_wall].")
 	add_fingerprint(user)
@@ -127,7 +126,9 @@
 	desc = "A wooden trophy mount."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "trophy_mount"
-	autoignition_temperature = AUTOIGNITION_WOOD
+	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	anchored = 1
 	var/obj/item/held_item
 	var/list/params_list

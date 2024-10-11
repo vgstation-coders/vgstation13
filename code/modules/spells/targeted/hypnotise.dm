@@ -22,7 +22,7 @@
 	hud_state = "vampire_hypno"
 
 	var/blood_cost = 10
-	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
+	valid_targets = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 
 /spell/targeted/hypnotise/cast_check(skipcharge = 0, mob/user = usr)
 	. = ..()
@@ -42,7 +42,7 @@
 
 	var/mob/living/carbon/C = target
 	if ((C.sdisabilities & BLIND) || (C.sight & BLIND))
-		to_chat(user, "<span class='warning'>\the [C] is blind!</span>")
+		to_chat(user, "<span class='warning'>\The [C] is blind!</span>")
 		return TRUE
 	var/success = C.vampire_affected(user.mind)
 	switch(success)

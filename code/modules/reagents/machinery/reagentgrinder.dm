@@ -25,7 +25,7 @@ var/global/list/juice_items = list (
 	idle_power_usage = 5
 	active_power_usage = 100
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	var/inuse = 0
 	var/obj/item/weapon/reagent_containers/beaker = null
 	var/max_combined_w_class = 20
@@ -152,8 +152,7 @@ var/global/list/juice_items = list (
 			to_chat(user, "<span class='warning'>\The [O] is too big to fit.</span>")
 			return 0
 		else
-			if(!user.drop_item(O, src))
-				to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
+			if(!user.drop_item(O, src, failmsg = TRUE))
 				return
 
 			src.beaker =  O

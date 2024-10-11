@@ -116,6 +116,17 @@ var/datum/feed_network/news_network = new /datum/feed_network     //The global n
 
 var/list/obj/machinery/newscaster/allCasters = list() //Global list that will contain reference to all newscasters in existence.
 
+/datum/feed_channel/preset
+	locked = 1
+	is_admin_channel = 1
+
+/datum/feed_channel/preset/tauceti
+	channel_name = "Tau Ceti Daily"
+	author = "CentComm Minister of Information"
+
+/datum/feed_channel/preset/gibsongazette
+	channel_name = "The Gibson Gazette"
+	author = "Editor Mike Hammers"
 
 /obj/machinery/newscaster
 	name = "newscaster"
@@ -1162,7 +1173,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	throw_speed = 1
 	pressure_resistance = 1
 	attack_verb = list("baps", "smacks", "whaps")
-	autoignition_temperature = AUTOIGNITION_PAPER
+	flammable = TRUE
 
 	var/screen = 0
 	var/pages = 0

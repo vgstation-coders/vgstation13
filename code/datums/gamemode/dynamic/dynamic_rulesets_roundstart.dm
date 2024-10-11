@@ -289,7 +289,7 @@
 
 /datum/dynamic_ruleset/roundstart/cwc/execute()
 	var/datum/faction/wizard/civilwar/wpf/WPF = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/wpf, null, 1)
-	var/datum/faction/wizard/civilwar/wpf/PFW = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/pfw, null, 1)
+	var/datum/faction/wizard/civilwar/pfw/PFW = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/pfw, null, 1)
 	for(var/mob/new_player/M in assigned)
 		var/datum/role/wizard/newWizard = new
 		if (WPF.members.len < PFW.members.len)
@@ -512,6 +512,8 @@ Assign your candidates in choose_candidates() instead.
 // You should `not` perform any null checks on M. M being null is a sign of a problem and should runtime.
 /datum/dynamic_ruleset/roundstart/malf/choose_candidates()
 	var/mob/M = progressive_job_search() //dynamic_rulesets.dm. Handles adding the guy to assigned.
+	if(!M)
+		return 0
 	if(M.mind.assigned_role != "AI")
 		for(var/mob/living/silicon/ai/player in player_list) //mode.candidates is everyone readied up, not to be confused with candidates
 			if(player != M)	// This should always be true but in case something goes terribly terribly wrong we definitely do not want to end up displacing the malf AI
@@ -525,6 +527,19 @@ Assign your candidates in choose_candidates() instead.
 		M = M.AIize()
 		assigned.Add(M)
 	return (assigned.len > 0)
+
+/datum/dynamic_ruleset/roundstart/malf/progressive_job_search()
+	for(var/job in job_priority)
+		for(var/mob/M in candidates)
+			if(M.mind.assigned_role == job && !jobban_isbanned(M, "AI"))
+				assigned += M
+				candidates -= M
+				return M
+	while(candidates.len)
+		var/mob/M = pick_n_take(candidates)
+		if(!jobban_isbanned(M, "AI"))
+			assigned += M
+			return M
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
@@ -645,6 +660,8 @@ Assign your candidates in choose_candidates() instead.
 
 // 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance. Requires 30 pop still.
 /datum/dynamic_ruleset/roundstart/extended/ready(var/forced=0)
+	if(forced)
+		return TRUE
 	if (mode.roundstart_pop_ready < 30)
 		return FALSE
 	var/probability = clamp(mode.threat_level, 30, 100)
@@ -652,6 +669,9 @@ Assign your candidates in choose_candidates() instead.
 
 /datum/dynamic_ruleset/roundstart/extended/choose_candidates()
 	return TRUE
+
+/datum/dynamic_ruleset/roundstart/extended/trim_candidates()
+	return
 
 /datum/dynamic_ruleset/roundstart/extended/execute()
 	message_admins("Starting a round of extended.")

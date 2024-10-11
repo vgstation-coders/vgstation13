@@ -3,6 +3,7 @@
 #define LIMB_GROIN			"groin"
 #define LIMB_LEFT_ARM		"l_arm"
 #define LIMB_RIGHT_ARM		"r_arm"
+#define LIMB_HAND			"hand"
 #define LIMB_LEFT_HAND		"l_hand"
 #define LIMB_RIGHT_HAND		"r_hand"
 #define LIMB_LEFT_LEG		"l_leg"

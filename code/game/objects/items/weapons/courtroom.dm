@@ -10,8 +10,9 @@
 	force = 5
 	throwforce = 6
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	attack_verb = list("bashed", "battered", "judged", "whacked")
-	autoignition_temperature = AUTOIGNITION_WOOD
 
 /obj/item/weapon/gavelhammer/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] has sentenced \himself to death with \the [src]! It looks like \he's trying to commit suicide.</span>")
@@ -26,7 +27,8 @@
 	force = 2
 	throwforce = 2
 	w_class = W_CLASS_MEDIUM
-	autoignition_temperature = AUTOIGNITION_WOOD
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	var/cooldown = 0
 
 /obj/item/weapon/gavelblock/attackby(obj/item/I, mob/user, params)

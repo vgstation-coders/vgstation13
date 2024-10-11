@@ -48,7 +48,7 @@
 			skip_power_loss = 1
 	if(!skip_power_loss)
 		for(var/obj/machinery/power/apc/A in power_machines)
-			if(A.z != map.zMainStation)
+			if(!is_type_in_list(get_area(A),the_station_areas))
 				continue
 			for(var/obj/item/weapon/cell/C in A.contents)
 				if(C.percent() < 30)
@@ -60,7 +60,7 @@
 		score.powerbonus = 2500
 
 	for(var/obj/machinery/alarm/A2 in air_alarms)
-		if(A2.z != map.zMainStation)
+		if(!is_type_in_list(get_area(A2),the_station_areas))
 			continue
 		var/area/this_area = get_area(A2)
 		if(max(A2.local_danger_level, this_area.atmosalm-1) > 0)
@@ -76,19 +76,16 @@
 
 /datum/controller/gameticker/scoreboard/proc/service_score()
 	//Janitor
-	//Check how many uncleaned mess are on the station. We can't run through cleanable for reasons, so yeah, long
+	//Check how many uncleaned mess are on the station.
+	var/list/valid_areas = (the_station_areas.Copy() - typesof(/area/holodeck)) + /area/holodeck/alphadeck
 	for(var/obj/effect/decal/cleanable/M in decals)
-		if(M.z != map.zMainStation) //Won't work on multi-Z stations, but will do for now
-			continue
-		if(M.messcheck())
+		var/area/A = get_area(M)
+		if(is_type_in_list(A,valid_areas))
 			score.mess++
 	for(var/obj/item/trash/T in trash_items)
-		if(T.z != map.zMainStation) //Won't work on multi-Z stations, but will do for now
-			continue
 		var/area/A = get_area(T)
-		if(istype(A,/area/surface/junkyard))
-			continue
-		score.litter++
+		if(is_type_in_list(A,valid_areas))
+			score.litter++
 	if(score.mess < 5 && score.litter < 5) //Not a single mess or litter on station
 		score.messbonus = 5000
 
@@ -118,7 +115,7 @@
 	var/pai_completions = ""
 	var/completions = ""
 	for(var/mob/living/silicon/player in player_list)
-		var/icon/flat = getFlatIcon(player)
+		var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(player)), override_dir = SOUTH)
 		if(istype(player, /mob/living/silicon/ai))
 			var/mob/living/silicon/ai/ai = player
 			if(ai.stat != DEAD)

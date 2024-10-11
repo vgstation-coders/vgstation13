@@ -29,9 +29,9 @@
 	item_state = "box"
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
 	starting_materials = list(MAT_CARDBOARD = 3750)
-	w_type=RECYK_MISC
-	autoignition_temperature = AUTOIGNITION_PAPER
-	autoignition_temperature = AUTOIGNITION_PAPER
+	w_type=RECYK_WOOD
+	flammable = TRUE
+
 	on_armory_manifest = TRUE
 
 /obj/item/weapon/storage/box/large
@@ -45,8 +45,6 @@
 	starting_materials = list(MAT_CARDBOARD = 15000)
 	storage_slots = 21
 	max_combined_w_class = 42 // 21*2
-
-	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/weapon/storage/box/surveillance
 	name = "\improper DromedaryCo packet"
@@ -586,6 +584,12 @@
 	icon_state = "frag_shells"
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/frag = 16)
+
+/obj/item/weapon/storage/box/rocksaltshells
+	name = "12-gauge rocksalt shells"
+	icon_state = "rocksalt_shells"
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/rocksalt = 16)
 
 /obj/item/weapon/storage/box/labels
 	name = "label roll box"
@@ -1318,3 +1322,16 @@
 		/obj/item/device/modkit/demolition,
 		/obj/item/ammo_storage/magazine/lawgiver/demolition = 2,
 	)
+
+/obj/item/weapon/storage/box/castlevania
+	name = "modern vampire hunter set box"
+	desc = "Apparel for the cooler vampire hunters."
+	icon_state = "castlevania_box"
+
+/obj/item/weapon/storage/box/castlevania/New()
+	..()
+	new /obj/item/clothing/under/hunter(src)
+	new /obj/item/clothing/suit/hunter(src)
+	new /obj/item/clothing/shoes/hunter(src)
+	new /obj/item/clothing/head/hunter(src)
+	new /obj/item/clothing/gloves/hunter(src)

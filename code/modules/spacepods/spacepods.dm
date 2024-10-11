@@ -92,6 +92,8 @@
 		for(var/mob/living/L in occupants)
 			move_outside(L)
 			L.gib()
+	if(ES && ES.cargo_system)
+		QDEL_NULL(ES.cargo_system.stored)
 	QDEL_LIST_NULL(actions)
 	QDEL_NULL(pr_int_temp_processor)
 	QDEL_NULL(pr_give_air)
@@ -140,10 +142,13 @@
 		spawn(0)
 			var/mob/living/L = get_pilot()
 			if(L)
-
 				to_chat(L, "<big><span class='warning'>Critical damage to the vessel detected, core explosion imminent!</span></big>")
-			for(var/i = 10, i >= 0; --i)
+			if(ES && ES.cargo_system && ES.cargo_system.stored)
+				ES.cargo_system.stored.forceMove(get_turf(src))
 				if(L)
+					to_chat(L, "<span class='warning'>Automatically jettisoning cargo.</span>")
+			for(var/i = 10, i >= 0; --i)
+				if(L && L == get_pilot())
 					to_chat(L, "<span class='warning'>[i]</span>")
 				if(i == 0)
 					explosion(loc, 2, 4, 8)
@@ -164,6 +169,9 @@
 				move_outside(H, get_turf(src))
 				H.ex_act(severity + 1)
 				to_chat(H, "<span class='warning'>You are forcefully thrown from \the [src]!</span>")
+			if(ES && ES.cargo_system && ES.cargo_system.stored)
+				ES.cargo_system.stored.forceMove(get_turf(src))
+				ES.cargo_system.stored.ex_act(severity + 1)
 			QDEL_NULL(ion_trail) // Should be nulled by qdel src in next line but OH WELL
 			qdel(src)
 		if(2)
@@ -182,6 +190,8 @@
 				if(istype(AM,/obj/item))
 					if(AM == battery || istype(AM, /obj/item/device/spacepod_equipment))
 						continue //don't eject this particular item!
+					if(ES && ES.cargo_system && istype(AM, ES.cargo_system.allowed_types))
+						continue //it's a crate, probably!
 					anyitem++
 					AM.forceMove(get_turf(user))
 			if(anyitem)
@@ -232,6 +242,15 @@
 				ES.locking_system = W
 				ES.locking_system.my_atom = src
 				return
+		if(istype(W, /obj/item/device/spacepod_equipment/cargo))
+			if(ES.cargo_system)
+				to_chat(user, "<span class = 'notice'>\The [src] already has a cargo system.</span>")
+				return
+			else if(user.drop_item(W, src))
+				to_chat(user, "<span class='notice'>You insert \the [W] into the equipment system.</span>")
+				ES.cargo_system = W
+				ES.cargo_system.my_atom = src
+				return
 	if(W.force)
 		visible_message("<span class = 'warning'>\The [user] hits \the [src] with \the [W]</span>")
 		adjust_health(W.force)
@@ -260,6 +279,8 @@
 	*/
 	if(ES.locking_system)
 		possible.Add("Locking System")
+	if(ES.cargo_system)
+		possible.Add("Cargo System")
 	var/obj/item/device/spacepod_equipment/SPE
 	switch(input(user, "Remove which equipment?", null, null) as null|anything in possible)
 		if("Energy Cell")
@@ -281,6 +302,17 @@
 				to_chat(user, "<span class='notice'>You remove \the [SPE] from the equipment system.</span>")
 				SPE.my_atom = null
 				ES.locking_system = null
+			else
+				to_chat(user, "<span class='warning'>You need an open hand to do that.</span>")
+		if("Cargo System")
+			var/obj/item/device/spacepod_equipment/cargo/CARGOSYS = ES.cargo_system
+			if(CARGOSYS.stored)
+				to_chat(user, "<span class='warning'>The cargo bay is loaded, you need to empty it first.</span>")
+				return
+			if(user.put_in_any_hand_if_possible(CARGOSYS))
+				to_chat(user, "<span class='notice'>You remove \the [CARGOSYS] from the equipment system.</span>")
+				CARGOSYS.my_atom = null
+				ES.cargo_system = null
 			else
 				to_chat(user, "<span class='warning'>You need an open hand to do that.</span>")
 		/*
@@ -393,12 +425,14 @@
 			. = t_air.return_temperature()
 	return
 
-/obj/spacepod/MouseDropTo(mob/M, mob/user)
-	if(M != user)
+/obj/spacepod/MouseDropTo(atom/moved, mob/user)
+	if(!Adjacent(moved) || !Adjacent(user))
 		return
-	if(!Adjacent(M) || !Adjacent(user))
+	if(ES && ES.cargo_system && is_type_in_list(moved, ES.cargo_system.allowed_types))
+		attempt_load_cargo(moved, user)
+	if(moved != user)
 		return
-	attempt_move_inside(M, user)
+	attempt_move_inside(moved, user)
 
 /obj/spacepod/MouseDropFrom(atom/over)
 	if(!usr || !over)
@@ -462,6 +496,94 @@
 	else
 		to_chat(usr, "You stop entering the pod.")
 	return
+
+/obj/spacepod/proc/attempt_load_cargo(atom/movable/moved, mob/user)
+	if(!ES || !istype(ES))
+		to_chat(user, "<span class='warning'>The pod has no equipment datum, or is the wrong type, yell at pomf.</span>")
+		return
+	if(!ES.cargo_system)
+		to_chat(user, "<span class='warning'>The pod has no cargo system.</span>")
+		return
+	if(locked)
+		to_chat(usr, "<span class = 'warning'>\The [src] is locked.</span>")
+		return
+	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
+		return
+	if (!ishigherbeing(usr))
+		return
+	if(ES.cargo_system.stored)
+		to_chat(user, "<span class='warning'>The pod has no room in its cargo bay.</span>")
+
+	visible_message("<span class='notice'>[usr] starts to load \the [moved] into \the [src].</span>")
+
+	if(do_after(usr, src, 4 SECONDS))
+		if(ES.cargo_system.stored)
+			//Something loaded when you weren't looking!
+			to_chat(user, "<span class='warning'>The pod has no room in its cargo bay.</span>")
+			return
+		moved.forceMove(src)
+		ES.cargo_system.stored = moved
+		src.add_fingerprint(usr)
+		moved.add_fingerprint(usr)
+		to_chat(usr, "<span class = 'notice'>You load \the [moved] into \the [src].</span>")
+	else
+		to_chat(usr, "You stop loading the pod.")
+	return
+
+/obj/spacepod/verb/attempt_unload_cargo()
+	set category = "Spacepod"
+	set name = "Unload Cargo"
+	set src in oview(1)
+
+	if(!ES || !istype(ES))
+		to_chat(usr, "<span class='warning'>The pod has no equipment datum, or is the wrong type, yell at pomf.</span>")
+		return
+	if(!ES.cargo_system)
+		to_chat(usr, "<span class='warning'>The pod has no cargo system.</span>")
+		return
+	if(locked)
+		to_chat(usr, "<span class = 'warning'>\The [src] is locked.</span>")
+		return
+	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
+		return
+	if (!ishigherbeing(usr))
+		return
+	if(!ES.cargo_system.stored)
+		to_chat(usr, "<span class='warning'>The pod has nothing in the cargo bay.</span>")
+		return
+
+	visible_message("<span class='notice'>[usr] starts to unload \the [src].</span>")
+
+	if(do_after(usr, src, 4 SECONDS))
+		if(!ES.cargo_system.stored)
+			//Something unloaded when you weren't looking!
+			return
+		ES.cargo_system.stored.forceMove(get_turf(src))
+		src.add_fingerprint(usr)
+		ES.cargo_system.stored.add_fingerprint(usr)
+		to_chat(usr, "<span class = 'notice'>You unload \the [ES.cargo_system.stored] from \the [src].</span>")
+		ES.cargo_system.stored = null
+	else
+		to_chat(usr, "You stop unloading the pod.")
+	return
+
+/obj/spacepod/proc/attempt_cargo_resist(var/mob/living/user, var/obj/contained)
+	if(!ES || !istype(ES))
+		to_chat(user, "<span class='warning'>The pod has no equipment datum, or is the wrong type, yell at pomf.</span>")
+		return
+	if(!ES.cargo_system)
+		to_chat(user, "<span class='warning'>Something's resisting in a spacepod's cargo bay with no cargo bay. Tell your local coder...</span>")
+		return
+	user.visible_message("<span class='danger'>\The [src]'s cargo hatch begins to make banging sounds!</span>",
+						  "<span class='warning'>You slam on the back of \the [contained] and start trying to bust out of \the [src]'s cargo bay! (This will take about 30 seconds)</span>")
+	if(do_after(user, src, 30 SECONDS))
+		if(!ES.cargo_system.stored)
+			//Something unloaded when you weren't looking!
+			return
+		ES.cargo_system.stored.forceMove(get_turf(src))
+		user.visible_message("<span class='danger'>\The [src]'s cargo hatch pops open, and \the [contained] inside pops out!</span>",
+						"<span class='warning'>You manage to pop \the [src]'s cargo door open!</span>")
+		ES.cargo_system.stored = null
 
 /datum/global_iterator/pod_preserve_temp  //normalizing cabin air temperature to 20 degrees celsium
 	delay = 20

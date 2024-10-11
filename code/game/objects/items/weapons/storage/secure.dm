@@ -21,7 +21,6 @@
 	var/l_set = 0
 	var/l_setshort = 0
 	var/l_hacking = 0
-	var/emagged = 0
 	var/open = 0
 	w_class = W_CLASS_MEDIUM
 	fits_max_w_class = W_CLASS_SMALL
@@ -37,16 +36,6 @@
 
 /obj/item/weapon/storage/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(code_locked)
-		if ( istype(W, /obj/item/weapon/card/emag) && (!src.emagged))
-			emagged = 1
-			src.overlays += image('icons/obj/storage/storage.dmi', icon_sparking)
-			sleep(6)
-			overlays.len = 0
-			overlays += image('icons/obj/storage/storage.dmi', icon_locking)
-			code_locked = 0
-			to_chat(user, "You short out the lock on [src].")
-			return
-
 		if (W.is_screwdriver(user))
 			if (do_after(user, src, 20))
 				src.open =! src.open
@@ -76,6 +65,15 @@
 	// -> storage/attackby() what with handle insertion, etc
 	. = ..()
 
+/obj/item/weapon/storage/secure/emag_act(mob/user)
+	if(code_locked && !emagged)
+		emagged = 1
+		src.overlays += image('icons/obj/storage/storage.dmi', icon_sparking)
+		sleep(6)
+		overlays.len = 0
+		overlays += image('icons/obj/storage/storage.dmi', icon_locking)
+		code_locked = 0
+		to_chat(user, "You short out the lock on [src].")
 
 /obj/item/weapon/storage/secure/MouseDropFrom(over_object, src_location, over_location)
 	if (code_locked)
@@ -194,12 +192,10 @@
 						casecuff.cant_drop = 1 //but it'll fall off if their wrist falls off :)
 						target.mutual_handcuffs = casecuff
 						casecuff.invisibility = INVISIBILITY_MAXIMUM
-						var/obj/abstract/Overlays/O = target.obj_overlays[HANDCUFF_LAYER]
-						O.icon = 'icons/obj/cuffs.dmi'
-						O.icon_state = "singlecuff[cuffslot]"
-						O.pixel_x = target.species.inventory_offsets["[cuffslot]"]["pixel_x"] * PIXEL_MULTIPLIER
-						O.pixel_y = target.species.inventory_offsets["[cuffslot]"]["pixel_y"] * PIXEL_MULTIPLIER
-						target.obj_to_plane_overlay(O,HANDCUFF_LAYER)
+						var/mutable_appearance/handcuff_overlay = mutable_appearance('icons/obj/cuffs.dmi', "singlecuff[cuffslot]", -HANDCUFF_LAYER)
+						handcuff_overlay.pixel_x = target.species.inventory_offsets["[cuffslot]"]["pixel_x"] * PIXEL_MULTIPLIER
+						handcuff_overlay.pixel_y = target.species.inventory_offsets["[cuffslot]"]["pixel_y"] * PIXEL_MULTIPLIER
+						target.overlays += target.overlays_standing[HANDCUFF_LAYER] = handcuff_overlay
 						close_all()
 						storage_locked = TRUE
 				else
@@ -215,7 +211,7 @@
 	if(casecuff && Obj == casecuff)  //when stripped, they get forcemoved from the case, that's why this works
 		var/mob/living/carbon/human/target = loc
 		target.mutual_handcuffs = null
-		target.overlays -= target.obj_overlays[HANDCUFF_LAYER]
+		target.overlays -= target.overlays_standing[HANDCUFF_LAYER]
 		casecuff.invisibility = initial(casecuff.invisibility)
 		canremove = 1
 		cant_drop = 0
@@ -236,7 +232,7 @@
 	if(casecuff)
 		var/mob/living/carbon/human/uncuffed = user
 		uncuffed.mutual_handcuffs = null
-		uncuffed.overlays -= uncuffed.obj_overlays[HANDCUFF_LAYER]
+		uncuffed.overlays -= uncuffed.overlays_standing[HANDCUFF_LAYER]
 		casecuff.invisibility = 0
 		casecuff.forceMove(user.loc)
 		canremove = 1

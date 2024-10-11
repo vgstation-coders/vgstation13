@@ -34,17 +34,15 @@
 		return 0//Cooldown check
 
 	timing = !timing
-
+	message_admins("[key_name_admin(usr)] [timing ? "started" : "stopped"] a timer at [formatJumpTo(src)]")
 	update_icon()
+	countdown()
 	return 0
 
 /obj/item/device/assembly/timer/toggle_secure()
 	secured = !secured
-	if(secured)
-		processing_objects.Add(src)
-	else
+	if(!secured)
 		timing = 0
-		processing_objects.Remove(src)
 	update_icon()
 	return secured
 
@@ -59,16 +57,21 @@
 		process_cooldown()
 	return
 
-/obj/item/device/assembly/timer/process()
-	if(timing && (time > 0))
-		time--
-	if(timing && time <= 0)
-		if(!repeat)
-			timing = 0
-		timer_end()
-		time = default_time
-	return
-
+/obj/item/device/assembly/timer/proc/countdown()
+	if(timing)
+		if(time > 0)
+			spawn(10)
+				time--
+				countdown()
+		else
+			if(!repeat)
+				timing = 0
+			timer_end()
+			time = default_time
+			if(repeat)
+				spawn()
+					countdown()
+		updateUsrDialog()
 
 /obj/item/device/assembly/timer/update_icon()
 	overlays.len = 0
@@ -87,12 +90,9 @@
 		return 0
 	var/second = time % 60
 	var/minute = (time - second) / 60
-	var/dat = text("<TT><B>Timing Unit</B>\n[] []:[]\n<A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT>", (timing ? text("<A href='?src=\ref[];time=0'>Timing</A>", src) : text("<A href='?src=\ref[];time=1'>Not Timing</A>", src)), minute, second, src, src, src, src)
-
+	var/dat = text("<TT><B>Timing Unit</B>\n[] []:[]\n<A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT>", (timing ? text("<A href='?src=\ref[];time=1'>Timing</A>", src) : text("<A href='?src=\ref[];time=1'>Not Timing</A>", src)), minute, second, src, src, src, src)
 	dat += "<BR><BR><A href='?src=\ref[src];set_default_time=1'>After countdown, reset time to [(default_time - default_time%60)/60]:[(default_time % 60)]</A>"
-	dat += {"<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>
-		<BR><BR><A href='?src=\ref[src];toggle_mode=1'>Mode: [repeat ? TIMEMODE_REPEAT : TIMEMODE_ONCE]</A>
-		<BR><BR><A href='?src=\ref[src];close=1'>Close</A>"}
+	dat += "<BR><BR><A href='?src=\ref[src];toggle_mode=1'>Mode: [repeat ? TIMEMODE_REPEAT : TIMEMODE_ONCE]</A>"
 	user << browse(dat, "window=timer")
 	onclose(user, "timer")
 	return
@@ -108,9 +108,7 @@
 		return
 
 	if(href_list["time"])
-		timing = text2num(href_list["time"])
-		message_admins("[key_name_admin(usr)] [timing ? "started" : "stopped"] a timer at [formatJumpTo(src)]")
-		update_icon()
+		activate()
 
 	if(href_list["tp"])
 		var/tp = text2num(href_list["tp"])
@@ -119,19 +117,11 @@
 	
 	if(href_list["toggle_mode"])
 		repeat = !repeat
-		return
-
-	if(href_list["close"])
-		usr << browse(null, "window=timer")
-		return
 
 	if(href_list["set_default_time"])
 		default_time = time
 
-	if(usr)
-		attack_self(usr)
-
-	return
+	updateUsrDialog()
 
 /obj/item/device/assembly/timer/send_to_past(var/duration)
 	..()

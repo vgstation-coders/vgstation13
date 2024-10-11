@@ -36,7 +36,7 @@ var/bee_mobs_count = 0
 	var/list/visited_plants = list()
 	var/datum/bee_species/bee_species = null
 	var/turf/building = null
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	turns_per_move = 6
 	density = 0
 	gender = PLURAL
@@ -639,6 +639,10 @@ var/bee_mobs_count = 0
 		return
 	if (!Adjacent(target))
 		return
+	if(isliving(target))
+		var/mob/living/L = target
+		if(!L.tangibility)
+			return
 	var/mob/living/carbon/human/M = target
 	var/sting_prob = 100
 	if(istype(M))

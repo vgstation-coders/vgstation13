@@ -4,7 +4,7 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "taclight"
 	accessory_exclusion = ACCESSORY_LIGHT
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = FALSE
 	var/obj/item/device/flashlight/tactical/source_light
 	ignoreinteract = TRUE
 
@@ -49,9 +49,9 @@
 	else
 		attached_to.actions_types += list(/datum/action/item_action/toggle_taclight)
 		//attached_to.actions += makelight
-	if(ishuman(attached_to.loc))
-		var/mob/living/carbon/human/H = attached_to.loc
-		H.update_inv_by_slot(attached_to.slot_flags)
+	if(iscarbon(attached_to.loc))
+		var/mob/living/carbon/carbon_attached_to = attached_to.loc
+		carbon_attached_to.update_inv_by_slot(attached_to.slot_flags)
 
 /obj/item/clothing/accessory/taclight/update_icon()
 	if(!attached_to)
@@ -64,9 +64,9 @@
 		if (attached_to.overlays.len)
 			attached_to.overlays -= inv_overlay
 		attached_to.overlays += inv_overlay
-	if(ishuman(attached_to.loc))
-		var/mob/living/carbon/human/H = attached_to.loc
-		H.update_inv_by_slot(attached_to.slot_flags)
+	if(iscarbon(attached_to.loc))
+		var/mob/living/carbon/carbon_attached_to = attached_to.loc
+		carbon_attached_to.update_inv_by_slot(attached_to.slot_flags)
 
 	attached_to.update_icon()
 
@@ -120,7 +120,7 @@
 
 /obj/item/clothing/accessory/taclight/proc/update_brightness(obj/item/clothing/C)
 	if(src.source_light && src.source_light.on)
-		C.set_light(src.source_light.brightness_on)
+		C.set_light(src.source_light.range_on, src.source_light.brightness_on)
 	else
 		C.set_light(0)
 	update_icon()

@@ -536,7 +536,7 @@
 	var/mob/living/simple_animal/bee/BEE = new bee_type(T,null)
 	if(istype(A,/mob/living))
 		var/mob/living/M = A
-		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
+		visible_message("<span class='warning'>\The [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
 		M.bullet_act(src, def_zone)
 		admin_warn(M)
 		BEE.forceMove(M.loc)
@@ -570,9 +570,10 @@
 		M.gib()
 	else if(istype(atarget, /obj/machinery/singularity/narsie) && blessed && damage >= 200) //MINE IS THE ROD THAT SHALL PIERCE THE HEAVENS
 		var/obj/machinery/singularity/narsie/N = atarget
-		if(!N.wounded)
-			N.visible_message("<span class = 'danger'>\The [src] strikes \the [N], wounding them. This god can bleed!</span>", range = 20)
-		N.wounded++
+		N.visible_message("<span class = 'danger'>\The [src] strikes \the [N], ripping through them and splattering blood around. This god can bleed!<span class = 'sinister'>...of course it can...it's a god of blood...and now you have its attention.</span></span>", range = 20)
+		if (firer)
+			N.acquire(firer)
+			new /obj/effect/cult_ritual/confusion(firer.loc)
 		bullet_die()
 		return
 	else
@@ -1143,3 +1144,23 @@
 	..()
 	reagents.add_reagent(DIABEETUSOL, 4)
 	reagents.add_reagent(SUGAR, 5)
+
+/obj/item/projectile/bullet/rocksalt
+	name = "rock-salt slug"
+	icon_state = "rsshell"
+	damage = 10
+	agony = 20
+	penetration = 1
+
+/obj/item/projectile/bullet/rocksalt/New()
+	..()
+	create_reagents(10)
+	reagents.add_reagent(HOLYSALTS, 5)
+	reagents.add_reagent(HOLYWATER, 5)
+
+/obj/item/projectile/bullet/rocksalt/on_hit(var/atom/atarget, var/blocked = 0)
+	..()
+	if(!blocked && ishuman(atarget))
+		reagents.trans_to(atarget, reagents.total_volume)
+	else
+		reagents.reaction(atarget)

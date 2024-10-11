@@ -295,7 +295,7 @@
 "ge" = (
 /obj/structure/table/plastic,
 /obj/item/trash/fries_cone,
-/obj/item/trash/ketchup_packet,
+/obj/item/trash/packet/ketchup,
 /obj/item/weapon/reagent_containers/food/condiment/saltshaker{
 	pixel_x = -2;
 	pixel_y = 4
@@ -1489,7 +1489,7 @@
 	},
 /area/vault/fastfood)
 "Gb" = (
-/obj/window_grille_spawner/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "Gf" = (
@@ -1628,7 +1628,7 @@
 	},
 /area/vault/fastfood/dining)
 "Jw" = (
-/obj/window_grille_spawner/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/dining)
@@ -1669,7 +1669,7 @@
 	},
 /area/vault/fastfood)
 "JJ" = (
-/obj/window_grille_spawner/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/kitchen)
 "JK" = (
@@ -1698,7 +1698,7 @@
 /area/vault/fastfood)
 "JZ" = (
 /obj/structure/table/plastic,
-/obj/item/trash/donitos,
+/obj/item/trash/chips/donitos,
 /obj/item/weapon/kitchen/utensil/fork,
 /obj/item/weapon/reagent_containers/food/condiment/mustard{
 	pixel_x = 5;
@@ -1735,7 +1735,7 @@
 	},
 /area/vault/fastfood/kitchen)
 "KI" = (
-/obj/window_grille_spawner/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/dining)
 "KY" = (
@@ -2419,7 +2419,7 @@
 	locked = 1;
 	req_access_txt = "53"
 	},
-/obj/structure/falserwall/doorobscurer,
+/obj/structure/falsewall/rwall/doorobscurer,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},

@@ -235,6 +235,9 @@
 	else
 		var/obj/item/weapon/gun/energy/E = installed
 		A = new E.projectile_type(loc)
+	var/obj/item/weapon/gun/G = installed
+	if(G.bullet_type_override && ispath(G.bullet_type_override, /obj/item/projectile))
+		A = new G.bullet_type_override
 	A.original = target
 	A.starting = T
 	A.shot_from = installed
@@ -243,6 +246,11 @@
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
 	A.OnFired()
+	if(G.bullet_overrides)
+		for(var/bvar in A.vars)
+			for(var/o in G.bullet_overrides)
+				if(bvar == o)
+					A.vars[bvar] = G.bullet_overrides[o]
 	spawn()
 		A.process()
 	return
@@ -592,7 +600,7 @@
 	var/firing_delay = 2
 	var/admin_only = 0 //Can non-admins interface with this turret's controls?
 	var/roulette_mode = FALSE
-	var/list/available_projectiles = list()
+	var/list/roulette_projectiles = list()
 
 	health = 40
 	var/list/scan_for = list("human"=0,"cyborg"=0,"mecha"=0,"alien"=1)
@@ -602,7 +610,9 @@
 
 /obj/structure/turret/gun_turret/New()
 	..()
-	available_projectiles = existing_typesof(/obj/item/projectile)
+	roulette_projectiles = existing_typesof(/obj/item/projectile) - restricted_roulette_projectiles
+	for(var/projectile_types in restrict_with_subtypes)
+		roulette_projectiles -= typesof(projectile_types)
 
 /obj/structure/turret/gun_turret/examine(mob/user)
 	..()
@@ -694,7 +704,7 @@
 		if(!check_rights(R_ADMIN))
 			return
 		var/list/valid_turret_projectiles = existing_typesof(/obj/item/projectile/bullet) + existing_typesof(/obj/item/projectile/energy)
-		var/userinput = filter_list_input("New projectile typepath", "You can only pick one!", valid_turret_projectiles)
+		var/userinput = filter_typelist_input("New projectile typepath", "You can only pick one!", valid_turret_projectiles)
 		if(!userinput)
 			to_chat(usr, "<span class='warning'><b>No projetile typepath entered. The turret's projectile remains unchanged.</b></span>")
 			return
@@ -789,7 +799,6 @@
 		target = pick(pos_targets)
 	return target
 
-
 /obj/structure/turret/gun_turret/proc/fire(atom/target)
 	if(!target)
 		cur_target = null
@@ -806,7 +815,7 @@
 			continue
 		playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
 		if(roulette_mode)
-			projectile_type = pick(available_projectiles - restricted_roulette_projectiles)
+			projectile_type = pick(roulette_projectiles)
 		var/obj/item/projectile/A = new projectile_type(curloc)
 		src.projectiles--
 		A.original = target

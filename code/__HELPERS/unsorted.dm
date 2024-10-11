@@ -496,14 +496,8 @@
 
 	return 1
 
-/proc/is_blocked_turf(var/turf/T)
-	var/cant_pass = 0
-	if(T.density)
-		cant_pass = 1
-	for(var/atom/A in T)
-		if(A.density)//&&A.anchored
-			cant_pass = 1
-	return cant_pass
+/proc/is_blocked_turf(var/turf/T, var/atom/movable/exclude)
+	return T.density || T.has_dense_content(exclude) != 0
 
 //if needs_item is 0 it won't need any item that existed in "holding" to finish
 /proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10, var/needs_item = 1) //This is quite an ugly solution but i refuse to use the old request system.
@@ -646,9 +640,9 @@
   * * mob/user - the user who will see the progress bar
   * * atom/target - the atom the progress bar will be attached to
   * * delay - duration in deciseconds of the delay
-  * * numticks - how many times the failure conditions will be checked throughout the duration
-  * * needhand - if TRUE, the item in the hands of the user needs to stay the same throughout the duration
-  * * use_user_turf - if TRUE, the turf of the user is checked instead of its location
+  * * numticks - how many times the failure conditions will be checked throughout the duration. default 10
+  * * needhand - if TRUE, the item in the hands of the user needs to stay the same throughout the duration. default TRUE
+  * * use_user_turf - if TRUE, the turf of the user is checked instead of its location. default FALSE
   * * custom_checks - if specified, the return value of this callback (called every `delay/numticks` seconds) will determine whether the action succeeded
   */
 /proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE, callback/custom_checks)
@@ -1179,9 +1173,9 @@ var/mob/dview/tview/tview_mob = new()
 
 //Checks if any of the atoms in the turf are dense
 //Returns 1 is anything is dense, 0 otherwise
-/turf/proc/has_dense_content()
+/turf/proc/has_dense_content(atom/movable/exclude)
 	for(var/atom/turf_contents in contents)
-		if(turf_contents.density)
+		if(turf_contents.density && turf_contents != exclude)
 			return turf_contents
 	return 0
 
@@ -1224,7 +1218,7 @@ var/mob/dview/tview/tview_mob = new()
 		result = "-[result]"
 	return result
 
-/proc/get_random_colour(var/simple, var/lower, var/upper)
+/proc/get_random_colour(var/simple = FALSE, var/lower = 0, var/upper = 255)
 	var/colour
 	if(simple)
 		colour = pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))
@@ -1379,52 +1373,6 @@ Game Mode config tags:
 	if(!istype(T2))
 		T2 = get_turf(B)
 	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
-
-/proc/seedify(obj/item/O, obj/machinery/seed_extractor/extractor = null, mob/living/user = null)
-	if(!O)
-		CRASH("Something called seedify() without anything to make seeds of.")
-
-	var/min_seeds = 1
-	var/max_seeds = 4
-	var/seedloc = O.loc
-	var/datum/seed/new_seed_type
-
-	if(extractor)
-		seedloc = get_turf(extractor)
-		min_seeds = extractor.min_seeds
-		max_seeds = extractor.max_seeds
-
-	var/produce = rand(min_seeds,max_seeds)
-
-	if(istype(O, /obj/item/weapon/grown))
-		var/obj/item/weapon/grown/F = O
-		if(F.plantname)
-			new_seed_type = SSplant.seeds[F.plantname]
-	else
-		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
-			var/obj/item/weapon/reagent_containers/food/snacks/grown/F = O
-			if(F.plantname)
-				new_seed_type = SSplant.seeds[F.plantname]
-		else
-			var/obj/item/F = O
-			if(F.nonplant_seed_type)
-				while(min_seeds <= produce)
-					new F.nonplant_seed_type(seedloc)
-					min_seeds++
-				qdel(F)
-				return TRUE
-
-	if(new_seed_type)
-		while(min_seeds <= produce)
-			var/obj/item/seeds/seeds = new(seedloc)
-			seeds.seed_type = new_seed_type.name
-			seeds.update_seed()
-			min_seeds++
-	else
-		return FALSE
-
-	qdel(O)
-	return TRUE
 
 //Same as block(Start, End), but only returns the border turfs
 //'Start' must be lower-left, 'End' must be upper-right

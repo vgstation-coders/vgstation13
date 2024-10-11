@@ -221,12 +221,12 @@
 	var/total_needed = amount_needed
 	if (!tribute && iscultist(user))
 		var/datum/role/cultist/mycultist = iscultist(user)
-		if (mycultist in blood_communion)
+		if (mycultist.blood_pool && (mycultist in blood_communion))
 			communion = 1
 			amount_needed = max(1,round(amount_needed * 4 / 5))//saving 20% blood
 			var/list/tributers = list()
 			for (var/datum/role/cultist/cultist in blood_communion)
-				if (cultist.antag && cultist.antag.current)
+				if (cultist.blood_pool && cultist.antag && cultist.antag.current && iscarbon(cultist.antag.current) && !cultist.antag.current.isDead())
 					var/mob/living/L = cultist.antag.current
 					if (istype(L) && L != user)
 						tributers.Add(L)

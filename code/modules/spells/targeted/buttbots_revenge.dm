@@ -15,7 +15,7 @@
 	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
 	sparks_spread = 1
 	sparks_amt = 4
-	compatible_mobs = list(/mob/living/carbon/human,/mob/living/carbon/monkey)
+	valid_targets = list(/mob/living/carbon/human,/mob/living/carbon/monkey)
 
 	amt_knockdown = 8
 	amt_stunned = 8

@@ -65,6 +65,7 @@
 #define SS_PRIORITY_INACTIVITY     1
 #define SS_PRIORITY_BURNABLE	  -50
 #define SS_PRIORITY_DAYNIGHT	  -200
+#define SS_PRIORITY_NEWS          -1000
 
 #define SS_WAIT_WEATHER         	2 SECONDS
 #define SS_WAIT_MACHINERY           2 SECONDS //TODO move the rest of these to defines
@@ -76,7 +77,7 @@
 #define SS_WAIT_THERM_DISS			1 SECONDS
 #define SS_WAIT_TICKER              2 SECONDS
 #define SS_WAIT_ENGINES				30 SECONDS
-#define SS_WAIT_BURNABLE			7.5 SECONDS
+#define SS_WAIT_BURNABLE			3 SECONDS
 
 #define SS_DISPLAY_TIMER          -110
 #define SS_DISPLAY_GARBAGE        -100

@@ -342,7 +342,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
-	clothing_flags = COLORS_OVERLAY
+	clothing_flags = COLORS_OVERLAY | ONESIZEFITSALL
 	hood_suit_name = "hoodie"
 
 /obj/item/clothing/suit/storage/wintercoat/hoodie/grey
@@ -429,16 +429,15 @@
 	color = "#FFCCCC" //Light Pink
 
 /obj/item/clothing/suit/storage/wintercoat/fur // think one of those big vintage fur coats you find in your grandmothers closet
-	name = "A heavy fur coat"
+	name = "heavy fur coat"
 	icon_state = "furcoat"
 	item_state = "furcoat"
-	var/base_icon_state = "labcoat"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS //the sprite extends down to the ankles, it can protect the legs
 	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
-	desc = "A thick fur coat. Your not sure what animal its fur from."
+	desc = "A thick fur coat. You're not sure what animal its fur is from."
 	hood = null //most fur coats dont have a hood
-	var/belted = 1
+	var/belted = TRUE
 	armor = list(melee = 10, bullet = 5, laser = 10, energy = 10, bomb = 5, bio = 0, rad = 0) //its a big thick frontiersman fur coat, putting it on as partially protective
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
 	allowed = list(
@@ -457,10 +456,7 @@
 		/obj/item/device/taperecorder)
 
 /obj/item/clothing/suit/storage/wintercoat/fur/update_icon()
-	if(!belted)
-		icon_state="[is_hood_up ? hood_up_icon_state : hood_down_icon_state]_beltless"
-	else
-		icon_state="[is_hood_up ? hood_up_icon_state : hood_down_icon_state]"
+	icon_state="[initial(icon_state)][!belted ? "_beltless" : null]"
 
 /obj/item/clothing/suit/storage/wintercoat/fur/verb/toggle()
 	set name = "Toggle Coat Belt"

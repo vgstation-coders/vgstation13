@@ -1,74 +1,50 @@
-/obj/window_grille_spawner
-	name = "window grille spawner"
+/obj/structure/grille/window_spawner
 	icon = 'icons/obj/window_grille_spawner.dmi'
-	icon_state = "window_grille"
-	var/obj/structure/window/window_path = /obj/structure/window
-	var/obj/structure/grille/grille_path = /obj/structure/grille
-	var/activated = FALSE
+	icon_state = "windowgrille"
+	var/window_path = /obj/structure/window
+	var/full_path
 
-/obj/window_grille_spawner/initialize()
+/obj/structure/grille/window_spawner/initialize()
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "grille0"
 	. = ..()
-	activate()
-	qdel(src)
+	if(full_path)
+		new full_path(loc)
 
-/obj/window_grille_spawner/proc/activate()
-	if(activated)
-		return
-	activated = TRUE
-
-	if(locate(grille_path) in loc)
-		CRASH("A grille already exists here")
-
-	new grille_path(loc)
-
-	if(locate(window_path) in loc)
-		CRASH("A window already exists here")
-
-	if(initial(window_path.is_fulltile))
-		new window_path(loc)
-		return
-
-	var/list/neighbours = list()
 	for(var/direction in cardinal)
 		var/turf/there = get_step(src, direction)
-		var/obj/window_grille_spawner/other = locate(type) in there
-		if(other)
-			neighbours += other
+		if(get_area(src) == get_area(there) && (locate(/obj/structure/grille) in there))
 			continue
-		var/found_connection = FALSE
-		if(locate(grille_path) in there)
-			for(var/obj/structure/window/window_there in there)
-				if(window_there.type == window_path && window_there.dir == get_dir(there, src))
-					found_connection = TRUE
-					break
-		if(!found_connection)
-			var/obj/structure/window/new_window = new window_path(loc)
-			new_window.change_dir(direction)
-			new_window.update_nearby_tiles()
+		var/obj/structure/window/new_window = new window_path(loc)
+		new_window.dir = direction
 
-	for(var/obj/window_grille_spawner/other in neighbours)
-		other.activate()
+/obj/structure/grille/window_spawner/full
+	icon_state = "windowgrille_full"
+	full_path = /obj/structure/window/full
 
-/obj/window_grille_spawner/full
-	window_path = /obj/structure/window/full
-
-/obj/window_grille_spawner/reinforced
-	icon_state = "reinforced_window_grille"
+/obj/structure/grille/window_spawner/reinforced
+	icon_state = "rwindowgrille"
 	window_path = /obj/structure/window/reinforced
 
-/obj/window_grille_spawner/reinforced/full
-	window_path = /obj/structure/window/full/reinforced
+/obj/structure/grille/window_spawner/reinforced/tinted
+	window_path = /obj/structure/window/reinforced/tinted
 
-/obj/window_grille_spawner/plasma
-	icon_state = "reinforced_plasma_window_grille"
+/obj/structure/grille/window_spawner/reinforced/full
+	icon_state = "rwindowgrille_full"
+	full_path = /obj/structure/window/full/reinforced
+
+/obj/structure/grille/window_spawner/plasma
+	icon_state = "pwindowgrille"
 	window_path = /obj/structure/window/plasma
 
-/obj/window_grille_spawner/plasma/full
-	window_path = /obj/structure/window/full/plasma
+/obj/structure/grille/window_spawner/plasma/full
+	icon_state = "pwindowgrille_full"
+	full_path = /obj/structure/window/full/plasma
 
-/obj/window_grille_spawner/reinforced_plasma
-	icon_state = "reinforced_plasma_window_grille"
+/obj/structure/grille/window_spawner/reinforced_plasma
+	icon_state = "rpwindowgrille"
 	window_path = /obj/structure/window/reinforced/plasma
 
-/obj/window_grille_spawner/reinforced_plasma/full
-	window_path = /obj/structure/window/full/reinforced/plasma
+/obj/structure/grille/window_spawner/reinforced_plasma/full
+	icon_state = "rpwindowgrille_full"
+	full_path = /obj/structure/window/full/reinforced/plasma

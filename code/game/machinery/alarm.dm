@@ -34,9 +34,6 @@
 #define MAX_TARGET_TEMPERATURE T0C + 300
 #define MIN_TARGET_TEMPERATURE T0C - 200
 
-//All gases that do not fall under "other"
-#define CHECKED_GAS GAS_OXYGEN, GAS_NITROGEN, GAS_CARBON, GAS_PLASMA, GAS_SLEEPING
-
 //all air alarms in area are connected via magic
 /area
 	var/obj/machinery/alarm/master_air_alarm
@@ -45,148 +42,262 @@
 	var/list/air_vent_info = list()
 	var/list/air_scrub_info = list()
 
-//These are the system presets that define things like gas concentrations and pressures
-/datum/airalarm_preset //this one is a blank preset that checks for NOTHING
+
+// This class represents two bounds which represent the danger level of a certain value.
+// Min_1 and Max_1 define a range in which the value is safe (danger level 0). If a value lies outside this range, then a danger level of 1 is given.
+// Min_2 and Max_2 define a strictly larger range that encompasses both Min_1 and Max_1. If the value lies outside this range, then a danger level of 2 is given.
+// If all values are -1, then it will always return a danger level of 0.
+/datum/airalarm_threshold
+	var/list/raw_values = list(0,0,0,0)
+
+/datum/airalarm_threshold/New(var/min_2, var/min_1, var/max_1, var/max_2)
+	raw_values = list(min_2, min_1, max_1, max_2)
+
+/datum/airalarm_threshold/proc/min_2()
+	return raw_values[1]
+/datum/airalarm_threshold/proc/min_1()
+	return raw_values[2]
+/datum/airalarm_threshold/proc/max_1()
+	return raw_values[3]
+/datum/airalarm_threshold/proc/max_2()
+	return raw_values[4]
+
+/datum/airalarm_threshold/proc/assess_danger(var/input)
+	// This should probably be a flag or something but I'm too lazy to change it from how it was before.
+	if( raw_values[1] == -1 && raw_values[2] == -1 && raw_values[3] == -1 && raw_values[4] == -1 )
+		return 0
+	if ((raw_values[4] != -1 && input >= raw_values[4]) || (raw_values[1] != -1 && input <= raw_values[1]))
+		return 2
+	if ((raw_values[3] != -1 && input >= raw_values[3]) || (raw_values[2] != -1 && input <= raw_values[2]))
+		return 1
+	return 0
+
+/datum/airalarm_threshold/proc/adjust_min2(var/input, var/raw_location)
+	adjust_threshold(input, 1)
+/datum/airalarm_threshold/proc/adjust_min1(var/input, var/raw_location)
+	adjust_threshold(input, 2)
+/datum/airalarm_threshold/proc/adjust_max1(var/input, var/raw_location)
+	adjust_threshold(input, 3)
+/datum/airalarm_threshold/proc/adjust_max2(var/input, var/raw_location)
+	adjust_threshold(input, 4)
+
+/datum/airalarm_threshold/proc/adjust_threshold(var/input, var/raw_location)
+	raw_values[raw_location] = input
+	if(input != -1)
+		for(var/i = 1; i <= 4; i++)
+			if(raw_values[i] != -1 && ((i < raw_location && raw_values[i] > input) || (i > raw_location && raw_values[i] < input)))
+				raw_values[i] = input
+
+/datum/airalarm_threshold/proc/get_index(var/index)
+	return raw_values[index]
+
+/datum/airalarm_threshold/proc/deep_copy()
+	return new /datum/airalarm_threshold(min_2(), min_1(), max_1(), max_2())
+
+
+
+
+// This datum represents the current configured values of an air alarm including values such as warning thresholds.
+/datum/airalarm_configuration
+	// Partial pressure, kpa thresholds for each gas. If a gas is not included in here, it will be lumped into "other gases".
+	var/list/gas_thresholds = list( GAS_OXYGEN = new /datum/airalarm_threshold(-1, -1, -1, -1),
+									GAS_NITROGEN = new /datum/airalarm_threshold(-1, -1, -1, -1),
+									GAS_CARBON = new /datum/airalarm_threshold(-1, -1, -1, -1),
+									GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, -1, -1),
+									GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, -1, -1),
+									GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, -1, -1) )
+	// Partial pressure, kpa threshold for any gas not included in gas_thresholds. These gasses are added up.
+	var/datum/airalarm_threshold/other_gas_threshold = new /datum/airalarm_threshold(-1, -1, -1, -1)
+	// Kpa thresholds for what pressures are acceptable.
+	var/datum/airalarm_threshold/pressure_threshold = new /datum/airalarm_threshold(-1, -1, -1, -1)
+	// Thresholds in kelvin for what temperatures are acceptable.
+	var/datum/airalarm_threshold/temperature_threshold = new /datum/airalarm_threshold(-1, -1, -1, -1)
+	// Target temperature this preset is trying to achieve.
+	var/target_temperature = T0C+20
+	// What gasses are scrubbed on this preset.
+	var/list/scrubbed_gases = list()
+	// Automatically switch to the fire suppression preset when a fire is detected.
+	var/suppression_mode = FALSE
+
+/datum/airalarm_configuration/proc/deep_config_copy()
+	var/datum/airalarm_configuration/to_return = new /datum/airalarm_configuration()
+	to_return.gas_thresholds = list()
+	for(var/gas_id in gas_thresholds)
+		var/datum/airalarm_threshold/our_threshold = gas_thresholds[gas_id]
+		to_return.gas_thresholds[gas_id] = our_threshold.deep_copy()
+	to_return.temperature_threshold = temperature_threshold.deep_copy()
+	to_return.other_gas_threshold = other_gas_threshold.deep_copy()
+	to_return.pressure_threshold = pressure_threshold.deep_copy()
+	to_return.target_temperature = target_temperature
+	to_return.scrubbed_gases = scrubbed_gases.Copy()
+	return to_return
+
+// Returns this configuration formatted as a string->data list for use in nanoUI. Please do not use this anywhere else.
+/datum/airalarm_configuration/proc/nanoui_config_data()
+	var/data[0]
+	var/list/noteworthy_gas_thresholds = list()
+	for(var/gas_id in gas_thresholds)
+		var/datum/airalarm_threshold/threshold = gas_thresholds[gas_id]
+		var/datum/gas/target_gas = XGM.gases[gas_id]
+		// Reason for this is complicated, but tl;dr nanoui doesn't support nested for loops so we do this.
+		var/list/raw_values_formatted = list()
+		raw_values_formatted["min2"] = threshold.min_2()
+		raw_values_formatted["min1"] = threshold.min_1()
+		raw_values_formatted["max1"] = threshold.max_1()
+		raw_values_formatted["max2"] = threshold.max_2()
+		noteworthy_gas_thresholds += list(list("raw_values" = raw_values_formatted, "name" = target_gas.name, "id" = gas_id))
+	data["noteworthy_thresholds"] = noteworthy_gas_thresholds
+	data["other_threshold"] = other_gas_threshold.raw_values
+	data["pressure_threshold"] = pressure_threshold.raw_values
+	data["temperature_threshold"] = temperature_threshold.raw_values
+	data["target_temperature"] = target_temperature
+	data["scrubbed_gases"] = scrubbed_gases
+	data["suppression_mode"] = suppression_mode
+	return data
+
+
+
+
+// A preset representing an airalarm_configuration with certain values, as well other identifiers like a name to help selection of a preset.
+/datum/airalarm_configuration/preset
 	var/name = null
 	var/desc = null
-	var/core = FALSE //whether this is a stock preset that cannot be deleted
-	var/list/oxygen = list(-1, -1, -1, -1) // Partial pressure, kpa
-	var/list/nitrogen = list(-1, -1, -1, -1) // Partial pressure, kpa
-	var/list/carbon_dioxide = list(-1, -1, -1, -1) // Partial pressure, kpa
-	var/list/plasma = list(-1, -1, -1, -1) // Partial pressure, kpa
-	var/list/n2o = list(-1, -1, -1, -1) // Partial pressure, kpa
-	var/list/other = list(-1, -1, -1, -1) // Partial pressure, kpa
-	var/list/pressure = list(-1, -1, -1, -1) // kpa
-	var/list/temperature = list(-1, -1, -1, -1) // Kelvin
-	var/target_temperature = T0C+20 // Kelvin
-	var/list/scrubbers_gases = list("oxygen" = 0, "nitrogen" = 0, "carbon_dioxide" = 0, "plasma" = 0, "n2o" = 0)
+	// Whether this is a stock preset that cannot be deleted
+	var/core = FALSE
 
-/datum/airalarm_preset/New(var/datum/airalarm_preset/P, var/name, var/desc, var/core, var/list/oxygen, var/list/nitrogen,
-							var/list/carbon_dioxide, var/list/plasma, var/list/n2o, var/list/other, var/list/pressure,
-							var/list/temperature, var/list/target_temperature, var/list/scrubbers_gases)
-	if(P)
-		src.name = P.name
-		src.desc = P.desc
-		src.core = P.core
-		src.oxygen = P.oxygen.Copy()
-		src.nitrogen = P.nitrogen.Copy()
-		src.carbon_dioxide = P.carbon_dioxide.Copy()
-		src.plasma = P.plasma.Copy()
-		src.n2o = P.n2o.Copy()
-		src.other = P.other.Copy()
-		src.pressure = P.pressure.Copy()
-		src.temperature = P.temperature.Copy()
-		src.target_temperature = P.target_temperature
-		src.scrubbers_gases = P.scrubbers_gases.Copy()
-	if(name)
-		src.name = name
-	if(desc)
-		src.desc = desc
-	if(core != null)
-		src.core = core
-	if(oxygen)
-		src.oxygen = oxygen
-	if(nitrogen)
-		src.nitrogen = nitrogen
-	if(plasma)
-		src.plasma = plasma
-	if(n2o)
-		src.n2o = n2o
-	if(other)
-		src.other = other
-	if(pressure)
-		src.pressure = pressure
-	if(temperature)
-		src.temperature = temperature
-	if(target_temperature)
-		src.target_temperature = target_temperature
-	if(scrubbers_gases)
-		src.scrubbers_gases = scrubbers_gases
+/datum/airalarm_configuration/preset/proc/deep_preset_copy()
+	var/datum/airalarm_configuration/preset/to_return = new /datum/airalarm_configuration/preset()
+	to_return.name = name
+	to_return.desc = desc
+	to_return.core = core
+	to_return.gas_thresholds = list()
+	for(var/gas_id in gas_thresholds)
+		var/datum/airalarm_threshold/our_threshold = gas_thresholds[gas_id]
+		to_return.gas_thresholds[gas_id] = our_threshold.deep_copy()
+	to_return.temperature_threshold = temperature_threshold.deep_copy()
+	to_return.other_gas_threshold = other_gas_threshold.deep_copy()
+	to_return.pressure_threshold = pressure_threshold.deep_copy()
+	to_return.target_temperature = target_temperature
+	to_return.scrubbed_gases = scrubbed_gases.Copy()
+	return to_return
 
-/datum/airalarm_preset/human //For humans
+/datum/airalarm_configuration/preset/proc/nanoui_preset_data()
+	var/data = nanoui_config_data()
+	data["name"] = name
+	data["desc"] = desc
+	data["core"] = core
+	return data
+
+/datum/airalarm_configuration/preset/human //For humans
 	name = "Human"
 	desc = "Permits oxygen and nitrogen."
 	core = TRUE
-	oxygen = list(16, 18, 135, 140)
-	nitrogen = list(-1, -1,  -1,  -1)
-	carbon_dioxide = list(-1, -1, 5, 10)
-	plasma = list(-1, -1, 0.2, 0.5)
-	n2o = list(-1, -1, 0.5, 1)
-	other = list(-1, -1, 0.5, 1)
-	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
-	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
+	gas_thresholds = list( 	GAS_OXYGEN = new /datum/airalarm_threshold(16, 18, 135, 140),
+							GAS_NITROGEN = new /datum/airalarm_threshold(-1, -1, -1, -1),
+							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 5, 10),
+							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
+							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
+	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
+	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
+	temperature_threshold = new /datum/airalarm_threshold(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
-	scrubbers_gases = list("oxygen" = 0, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
+	scrubbed_gases = list( GAS_CARBON, GAS_PLASMA )
 
-/datum/airalarm_preset/vox //For vox
+/datum/airalarm_configuration/preset/vox //For vox
 	name = "Vox"
 	desc = "Permits nitrogen only."
 	core = TRUE
-	oxygen = list(-1, -1, 0.5, 1)
-	nitrogen = list(16, 18, 135,  140)
-	carbon_dioxide = list(-1, -1, 5, 10)
-	plasma = list(-1, -1, 0.2, 0.5)
-	n2o = list(-1, -1, 0.5, 1)
-	other = list(-1, -1, 0.5, 1)
-	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
-	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
+	gas_thresholds = list( 	GAS_OXYGEN = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
+							GAS_NITROGEN = new /datum/airalarm_threshold(16, 18, 135, 140),
+							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 5, 10),
+							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
+							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
+	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
+	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
+	temperature_threshold = new /datum/airalarm_threshold(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
-	scrubbers_gases = list("oxygen" = 1, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
+	scrubbed_gases = list( GAS_OXYGEN, GAS_CARBON, GAS_PLASMA )
 
-/datum/airalarm_preset/coldroom //Server rooms etc.
+/datum/airalarm_configuration/preset/coldroom //Server rooms etc.
 	name = "Coldroom"
 	desc = "For server rooms and freezers."
 	core = TRUE
-	oxygen = list(-1, -1, -1, -1)
-	nitrogen = list(-1, -1, -1, -1)
-	carbon_dioxide = list(-1, -1, 5, 10)
-	plasma = list(-1, -1, 0.2, 0.5)
-	n2o = list(-1, -1, 0.5, 1)
-	other = list(-1, -1, 0.5, 1)
-	pressure = list(-1, ONE_ATMOSPHERE*0.10, ONE_ATMOSPHERE*1.90, ONE_ATMOSPHERE*2.3)
-	temperature = list(20, 40, 140, 160)
+	gas_thresholds = list( 	GAS_OXYGEN = new /datum/airalarm_threshold(-1, -1, -1, -1),
+							GAS_NITROGEN = new /datum/airalarm_threshold(-1, -1, -1, -1),
+							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 5, 10),
+							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
+							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
+	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
+	pressure_threshold = new /datum/airalarm_threshold(-1, ONE_ATMOSPHERE*0.10, ONE_ATMOSPHERE*1.90, ONE_ATMOSPHERE*2.3)
+	temperature_threshold = new /datum/airalarm_threshold(20, 40, 140, 160)
 	target_temperature = 90
-	scrubbers_gases = list("oxygen" = 1, "nitrogen" = 0, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
+	scrubbed_gases = list( GAS_OXYGEN, GAS_CARBON, GAS_PLASMA )
 
-/datum/airalarm_preset/plasmaman //HONK
+/datum/airalarm_configuration/preset/plasmaman //HONK
 	name = "Plasmaman"
 	desc = "Permits plasma and nitrogen only."
 	core = TRUE
-	oxygen = list(-1, -1, 0.5, 1)
-	nitrogen = list(-1, -1, -1, -1)
-	carbon_dioxide = list(-1, -1, 5, 10)
-	plasma = list(16, 18, 135, 140)
-	n2o = list(-1, -1, 0.5, 1)
-	other = list(-1, -1, 0.5, 1)
-	pressure = list(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
-	temperature = list(T0C-30, T0C, T0C+40, T0C+70)
+	gas_thresholds = list( 	GAS_OXYGEN = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
+							GAS_NITROGEN = new /datum/airalarm_threshold(-1, -1, -1, -1),
+							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 5, 10),
+							GAS_PLASMA = new /datum/airalarm_threshold(16, 18, 135, 140),
+							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
+							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
+	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
+	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
+	temperature_threshold = new /datum/airalarm_threshold(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
-	scrubbers_gases = list("oxygen" = 1, "nitrogen" = 1, "carbon_dioxide" = 1, "plasma" = 0, "n2o" = 0)
+	scrubbed_gases = list( GAS_OXYGEN, GAS_NITROGEN, GAS_CARBON )
 
-/datum/airalarm_preset/vacuum
+/datum/airalarm_configuration/preset/vacuum
 	name = "Vacuum"
 	desc = "For rooms to be kept under vacuum."
 	core = TRUE
-	oxygen = list(-1, -1, 0.5, 1)
-	nitrogen = list(-1, -1, 0.5, 1)
-	carbon_dioxide = list(-1, -1, 0.5, 1)
-	plasma = list(-1, -1, 0.5, 1)
-	n2o = list(-1, -1, 0.5, 1)
-	other = list(-1, -1, 0.5, 1)
-	pressure = list(-1, -1, ONE_ATMOSPHERE*0.01, ONE_ATMOSPHERE*0.05)
-	temperature = list(-1, -1, -1, -1)
+	gas_thresholds = list( 	GAS_OXYGEN = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
+							GAS_NITROGEN = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
+							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
+							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
+							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
+							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
+	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
+	pressure_threshold = new /datum/airalarm_threshold(-1, -1, ONE_ATMOSPHERE*0.01, ONE_ATMOSPHERE*0.05)
+	temperature_threshold = new /datum/airalarm_threshold(-1, -1, -1, -1)
 	target_temperature = T0C+20
-	scrubbers_gases = list("oxygen" = 1, "nitrogen" = 1, "carbon_dioxide" = 1, "plasma" = 1, "n2o" = 0)
+	scrubbed_gases = list( GAS_OXYGEN, GAS_NITROGEN, GAS_CARBON, GAS_PLASMA, GAS_SLEEPING, GAS_CRYOTHEUM )
+
+/datum/airalarm_configuration/preset/fire_suppression
+	name = "Fire Suppression"
+	desc = "Replaces combustible gasses with inert gasses."
+	core = TRUE
+	gas_thresholds = list( 	GAS_OXYGEN = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_NITROGEN = new /datum/airalarm_threshold(16, 18, 135, 140),
+							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, -1, -1),
+							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, -1, -1),
+							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, -1, -1) )
+	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
+	pressure_threshold = new /datum/airalarm_threshold(-1, -1, -1, -1)
+	temperature_threshold = new /datum/airalarm_threshold(T0C-50, T0C-25, T0C+25, T0C+50)
+	target_temperature = T0C
+	scrubbed_gases = list( GAS_OXYGEN, GAS_PLASMA )
 
 //these are used for the UIs and new ones can be added and existing ones edited at the CAC
 var/global/list/airalarm_presets = list(
-	"Human" = new /datum/airalarm_preset/human,
-	"Vox" = new /datum/airalarm_preset/vox,
-	"Coldroom" = new /datum/airalarm_preset/coldroom,
-	"Plasmaman" = new /datum/airalarm_preset/plasmaman,
-	"Vacuum" = new /datum/airalarm_preset/vacuum,
+	"Human" = new /datum/airalarm_configuration/preset/human,
+	"Vox" = new /datum/airalarm_configuration/preset/vox,
+	"Coldroom" = new /datum/airalarm_configuration/preset/coldroom,
+	"Plasmaman" = new /datum/airalarm_configuration/preset/plasmaman,
+	"Vacuum" = new /datum/airalarm_configuration/preset/vacuum,
+	"Fire Suppression" = new /datum/airalarm_configuration/preset/fire_suppression,
 )
 var/global/list/air_alarms = list()
+
+
+
+
 
 /obj/machinery/alarm
 	desc = "An alarm used to control the area's atmospherics systems."
@@ -211,7 +322,6 @@ var/global/list/air_alarms = list()
 	var/shorted = 0
 
 	var/mode = AALARM_MODE_SCRUBBING
-	var/datum/airalarm_preset/preset = "Human"
 	var/screen = AALARM_SCREEN_MAIN
 	var/area_uid
 	var/local_danger_level = 0
@@ -220,17 +330,17 @@ var/global/list/air_alarms = list()
 	var/buildstage = 2 //2 is built, 1 is building, 0 is frame.
 	var/cycle_after_preset = 1 // Whether we automatically cycle when presets are changed
 
-	var/target_temperature = T0C+20
+	var/target_temperature //Manual override for target temperature changing, usable for maps/admin vv edits
 	var/regulating_temperature = 0
 
 	var/datum/radio_frequency/radio_connection
 
-	var/list/TLV = list()
+	var/preset_key = "Human"
+	var/datum/airalarm_configuration/config
 
 	machine_flags = WIREJACK
 
-/obj/machinery/alarm/supports_holomap()
-	return TRUE
+	var/auto_suppress = FALSE //automatically switch to the fire suppression preset when a fire is detected
 
 /obj/machinery/alarm/xenobio
 	req_one_access = list(access_rd, access_atmospherics, access_engine_minor, access_xenobiology)
@@ -241,42 +351,17 @@ var/global/list/air_alarms = list()
 	req_access = list()
 
 /obj/machinery/alarm/server
-	preset = "Coldroom"
+	preset_key = "Coldroom"
 	req_one_access = list(access_rd, access_atmospherics, access_engine_minor)
 	req_access = list()
 
 /obj/machinery/alarm/vox
-	preset = "Vox"
+	preset_key = "Vox"
 	req_one_access = list()
 	req_access = list(access_trade)
 
 /obj/machinery/alarm/vacuum
-	preset = "Vacuum"
-
-/obj/machinery/alarm/proc/apply_preset(var/no_cycle_after=0, var/propagate=1)
-	var/datum/airalarm_preset/presetdata = airalarm_presets[preset]
-	if(!presetdata)
-		presetdata = new /datum/airalarm_preset/human()
-	TLV["oxygen"] =			presetdata.oxygen.Copy()
-	TLV["nitrogen"] =		presetdata.nitrogen.Copy()
-	TLV["carbon_dioxide"] = presetdata.carbon_dioxide.Copy()
-	TLV["plasma"] =			presetdata.plasma.Copy()
-	TLV["n2o"] =			presetdata.n2o.Copy()
-	TLV["other"] =			presetdata.other.Copy()
-	TLV["pressure"] =		presetdata.pressure.Copy()
-	TLV["temperature"] =	presetdata.temperature.Copy()
-	target_temperature =	presetdata.target_temperature
-	if(!no_cycle_after)
-		mode = AALARM_MODE_CYCLE
-	// Propagate settings.
-	if(propagate)
-		var/area/this_area = get_area(src)
-		for (var/obj/machinery/alarm/AA in this_area)
-			if ( !(AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && !AA.shorted)
-				AA.preset=preset
-				AA.apply_preset(1, 0) // Only this air alarm should send a cycle.
-		apply_mode() //reapply this to update scrubbers and other things
-
+	preset_key = "Vacuum"
 
 /obj/machinery/alarm/New(var/loc, var/dir, var/building = 0)
 	..()
@@ -314,25 +399,22 @@ var/global/list/air_alarms = list()
 	air_alarms -= src
 	..()
 
-/obj/machinery/alarm/proc/first_run()
-	var/area/this_area = get_area(src)
-	area_uid = this_area.uid
-	name = "[this_area.name] Air Alarm"
-	this_area.air_alarms.Add(src)
-	air_alarms += src
-
-	// breathable air according to human/Life()
-	/*
-	TLV["oxygen"] =			list(16, 19, 135, 140) // Partial pressure, kpa
-	TLV["nitrogen"] =		list(-1, -1,  -1,  -1) // Partial pressure, kpa
-	TLV["carbon_dioxide"] = list(-1.0, -1.0, 5, 10) // Partial pressure, kpa
-	TLV["plasma"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
-	TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
-	TLV["pressure"] =		list(ONE_ATMOSPHERE*0.80,ONE_ATMOSPHERE*0.90,ONE_ATMOSPHERE*1.10,ONE_ATMOSPHERE*1.20) /* kpa */
-	TLV["temperature"] =	list(T0C-26, T0C, T0C+40, T0C+66) // K
-	*/
-	apply_preset(1, 0) // Don't cycle and don't propagate.
-	apply_mode() //apply mode to scrubbers and vents
+/obj/machinery/alarm/proc/apply_preset(var/no_cycle_after=0, var/propagate=1)
+	if(airalarm_presets[preset_key])
+		var/datum/airalarm_configuration/preset/preset = airalarm_presets[preset_key]
+		config = preset.deep_config_copy()
+	else
+		config = new /datum/airalarm_configuration/preset/human()
+	if(!no_cycle_after)
+		mode = AALARM_MODE_CYCLE
+	// Propagate settings.
+	if(propagate)
+		var/area/this_area = get_area(src)
+		for (var/obj/machinery/alarm/AA in this_area)
+			if ( !(AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && !AA.shorted)
+				AA.preset_key=preset_key
+				AA.apply_preset(1, 0) // Only this air alarm should send a cycle.
+		apply_mode() //reapply this to update scrubbers and other things
 
 /obj/machinery/alarm/Entered(atom/movable/Obj, atom/OldLoc)
 	var/area/old_area = get_area(OldLoc)
@@ -348,7 +430,6 @@ var/global/list/air_alarms = list()
 	if (!master_is_operating())
 		elect_master()
 
-
 /obj/machinery/alarm/process()
 	if((stat & (NOPOWER|BROKEN|FORCEDISABLE)) || shorted || buildstage != 2)
 		use_power = MACHINE_POWER_USE_NONE
@@ -358,32 +439,45 @@ var/global/list/air_alarms = list()
 	if(!istype(location))
 		return//returns if loc is not simulated
 
+	if(!isnull(target_temperature))
+		set_temperature(target_temperature, FALSE)
+		target_temperature = null
+
 	var/datum/gas_mixture/environment = location.return_air()
 
 	// Handle temperature adjustment here.
-	if(environment.temperature < target_temperature - 2 || environment.temperature > target_temperature + 2 || regulating_temperature)
+	if(environment.temperature < config.target_temperature - 2 || environment.temperature > config.target_temperature  + 2 || regulating_temperature)
 		//If it goes too far, we should adjust ourselves back before stopping.
-		var/actual_target_temperature = target_temperature
-		if(get_danger_level(actual_target_temperature, TLV["temperature"]))
+		var/actual_target_temperature = config.target_temperature
+		if(config.temperature_threshold.assess_danger(actual_target_temperature))
 			//use the max or min safe temperature
-			actual_target_temperature = clamp(actual_target_temperature, TLV["temperature"][2], TLV["temperature"][3])
-
+			actual_target_temperature = clamp(actual_target_temperature, config.temperature_threshold.min_1(), config.temperature_threshold.max_1())
+		var/thermo_changed = FALSE
 		if(!regulating_temperature)
-			regulating_temperature = 1
-			visible_message("\The [src] clicks as it starts [environment.temperature > target_temperature ? "cooling" : "heating"] the room.",\
+			if(environment.temperature > config.target_temperature)
+				regulating_temperature = "cooling"
+			else
+				regulating_temperature = "heating"
+			thermo_changed = TRUE
+		else if(regulating_temperature == "heating" && environment.temperature > config.target_temperature)
+			regulating_temperature = "cooling"
+			thermo_changed = TRUE
+		else if(regulating_temperature == "cooling" && environment.temperature < config.target_temperature)
+			regulating_temperature = "heating"
+			thermo_changed = TRUE
+		if(thermo_changed)
+			visible_message("\The [src] clicks as it starts [regulating_temperature] the room.",\
 			"You hear a click and a faint electronic hum.")
 
 		var/datum/gas_mixture/gas = environment.remove_volume(0.25 * CELL_VOLUME)
 		if(gas)
 			var/heat_capacity = gas.heat_capacity()
 			var/energy_used = min(abs(heat_capacity * (gas.temperature - actual_target_temperature)), MAX_ENERGY_CHANGE)
-			var/cooled = 0 //1 means we cooled this tick, 0 means we warmed. Used for the message below.
 
 			// We need to cool ourselves, but only if the gas isn't already colder than what we can do.
 			if (environment.temperature > actual_target_temperature && gas.temperature >= MIN_TEMPERATURE)
 				gas.temperature -= energy_used / heat_capacity
 				use_power(energy_used/3) //these are heat pumps, so they can have a >100% efficiency, typically about 300%
-				cooled = 1
 			// We need to warm ourselves, but only if the gas isn't already hotter than what we can do.
 			else if (environment.temperature < actual_target_temperature && gas.temperature <= MAX_TEMPERATURE)
 				gas.temperature += energy_used / heat_capacity
@@ -392,9 +486,9 @@ var/global/list/air_alarms = list()
 			environment.merge(gas)
 
 			if (abs(environment.temperature - actual_target_temperature) <= 0.5)
-				regulating_temperature = 0
-				visible_message("\The [src] clicks quietly as it stops [cooled ? "cooling" : "heating"] the room.",\
+				visible_message("\The [src] clicks quietly as it stops [regulating_temperature] the room.",\
 				"You hear a click as a faint electronic humming stops.")
+				regulating_temperature = 0
 
 	var/old_level = local_danger_level
 	var/new_danger = calculate_local_danger_level(environment)
@@ -430,6 +524,11 @@ var/global/list/air_alarms = list()
 		*/
 		if(RCON_YES)
 			remote_control = 1
+	if(auto_suppress)
+		var/area/this_area = get_area(src)
+		if(this_area.fire)
+			preset_key = "Fire Suppression"
+			apply_preset(1)
 	return
 
 /obj/machinery/alarm/proc/calculate_local_danger_level(const/datum/gas_mixture/environment)
@@ -440,38 +539,22 @@ var/global/list/air_alarms = list()
 		return 0
 
 	var/other_moles
-	for(var/g in environment.gas)
-		switch(g)
-			if(CHECKED_GAS)
-				//Do nothing
-			else
-				other_moles += environment[g]
+	var/worst_dangerlevel = max(config.pressure_threshold.assess_danger(environment.pressure),
+								config.temperature_threshold.assess_danger(environment.temperature))
 
+	for(var/gas_id in environment.gas)
+		var/datum/gas/gas_datum = XGM.gases[gas_id]
+		if(gas_datum.flags & XGM_GAS_NOTEWORTHY)
+			var/datum/airalarm_threshold/threshold = config.gas_thresholds[gas_id]
+			worst_dangerlevel = max(worst_dangerlevel, threshold.assess_danger(environment.partial_pressure(gas_id)))
+		else
+			other_moles += environment[gas_id]
 
-	var/pressure_dangerlevel = get_danger_level(environment.pressure, TLV["pressure"])
-	var/oxygen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_OXYGEN), TLV["oxygen"])
-	var/nitrogen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_NITROGEN), TLV["nitrogen"])
-	var/co2_dangerlevel = get_danger_level(environment.partial_pressure(GAS_CARBON), TLV["carbon_dioxide"])
-	var/plasma_dangerlevel = get_danger_level(environment.partial_pressure(GAS_PLASMA), TLV["plasma"])
-	var/temperature_dangerlevel = get_danger_level(environment.temperature, TLV["temperature"])
-	var/n2o_dangerlevel = get_danger_level(environment.partial_pressure(GAS_SLEEPING), TLV["n2o"])
-	var/other_dangerlevel = get_danger_level(other_moles / environment.total_moles * environment.pressure, TLV["other"])
-
-	return max(
-		pressure_dangerlevel,
-		oxygen_dangerlevel,
-		co2_dangerlevel,
-		nitrogen_dangerlevel,
-		plasma_dangerlevel,
-		n2o_dangerlevel,
-		other_dangerlevel,
-		temperature_dangerlevel
-		)
+	return max(worst_dangerlevel, config.other_gas_threshold.assess_danger(other_moles / environment.total_moles * environment.pressure))
 
 /obj/machinery/alarm/proc/master_is_operating()
 	var/area/this_area = get_area(src)
 	return this_area.master_air_alarm && !(this_area.master_air_alarm.stat & (FORCEDISABLE|NOPOWER|BROKEN))
-
 
 /obj/machinery/alarm/proc/elect_master()
 	var/area/this_area = get_area(src)
@@ -479,16 +562,6 @@ var/global/list/air_alarms = list()
 		if (!(AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)))
 			this_area.master_air_alarm = AA
 			return 1
-	return 0
-
-/obj/machinery/alarm/proc/get_danger_level(const/current_value, const/list/danger_levels)
-	if(!danger_levels || !danger_levels.len)
-		return 0
-	if ((current_value >= danger_levels[4] && danger_levels[4] > 0) || current_value <= danger_levels[1])
-		return 2
-	if ((current_value >= danger_levels[3] && danger_levels[3] > 0) || current_value <= danger_levels[2])
-		return 1
-
 	return 0
 
 /obj/machinery/alarm/update_icon()
@@ -586,61 +659,38 @@ var/global/list/air_alarms = list()
 	signal.data["sigtype"] = "command"
 
 	radio_connection.post_signal(src, signal, RADIO_FROM_AIRALARM)
-//			to_chat(world, text("Signal [] Broadcasted to []", command, target))
 
 	return 1
 
 /obj/machinery/alarm/proc/set_temperature(var/temp, var/propagate=1)
-	target_temperature = temp
+	config.target_temperature = temp
 	//propagate to other air alarms in the area
 	if(propagate)
 		var/area/this_area = get_area(src)
 		for (var/obj/machinery/alarm/AA in this_area)
 			if (!(AA.stat & (NOPOWER|BROKEN|FORCEDISABLE)) && !AA.shorted)
-				AA.target_temperature = temp
+				AA.config.target_temperature  = temp
 
 /obj/machinery/alarm/proc/set_threshold(var/env, var/index, var/value, var/propagate=1)
-	var/list/selected = TLV[env]
-	if (value<0)
-		selected[index] = -1.0
-	else if (env=="temperature" && value>5000)
-		selected[index] = 5000
-	else if (env=="pressure" && value>50*ONE_ATMOSPHERE)
-		selected[index] = 50*ONE_ATMOSPHERE
-	else if (env!="temperature" && env!="pressure" && value>200)
-		selected[index] = 200
+	// TODO: Refactor how external sources can adjust config thresholds. This is not a very clean way to do it.
+	var/datum/airalarm_threshold/target
+
+	value = max(value, -1.0)
+	if(env == "temperature")
+		target = config.temperature_threshold
+		value = min(value, 5000)
+	else if(env == "pressure")
+		target = config.pressure_threshold
+		value = min(value, 50*ONE_ATMOSPHERE)
 	else
-		value = round(value,0.01)
-		selected[index] = value
-	//blegh
-	if(index == 1)
-		if(selected[1] > selected[2])
-			selected[2] = selected[1]
-		if(selected[1] > selected[3])
-			selected[3] = selected[1]
-		if(selected[1] > selected[4])
-			selected[4] = selected[1]
-	if(index == 2)
-		if(selected[1] > selected[2])
-			selected[1] = selected[2]
-		if(selected[2] > selected[3])
-			selected[3] = selected[2]
-		if(selected[2] > selected[4])
-			selected[4] = selected[2]
-	if(index == 3)
-		if(selected[1] > selected[3])
-			selected[1] = selected[3]
-		if(selected[2] > selected[3])
-			selected[2] = selected[3]
-		if(selected[3] > selected[4])
-			selected[4] = selected[3]
-	if(index == 4)
-		if(selected[1] > selected[4])
-			selected[1] = selected[4]
-		if(selected[2] > selected[4])
-			selected[2] = selected[4]
-		if(selected[3] > selected[4])
-			selected[3] = selected[4]
+		value = min(value, 200)
+		value = round(value, 0.01)
+		if(env == "other")
+			target = config.other_gas_threshold
+		else
+			target = config.gas_thresholds[env]
+
+	target.adjust_threshold(value, index)
 
 	//propagate to other air alarms in the area
 	if(propagate)
@@ -661,21 +711,20 @@ var/global/list/air_alarms = list()
 		this_area.updateDangerLevel()
 
 /obj/machinery/alarm/proc/apply_mode()
-	var/list/current_pressures = TLV["pressure"]
-	var/target_pressure = (current_pressures[2] + current_pressures[3])/2
+	var/datum/airalarm_threshold/current_pressure_threshold = config.pressure_threshold
+	var/target_pressure = (current_pressure_threshold.min_1() + current_pressure_threshold.max_1())/2
 	var/area/this_area = get_area(src)
 	switch(mode)
 		if(AALARM_MODE_SCRUBBING)
 			for(var/device_id in this_area.air_scrub_names)
-				var/datum/airalarm_preset/presetdata = airalarm_presets[preset]
+				var/datum/airalarm_configuration/preset/presetdata = airalarm_presets[preset_key]
 				if(!presetdata)
-					presetdata = new /datum/airalarm_preset/human()
-				var/o2 = presetdata.scrubbers_gases["oxygen"]
-				var/n2 = presetdata.scrubbers_gases["nitrogen"]
-				var/co2 = presetdata.scrubbers_gases["carbon_dioxide"]
-				var/n2o = presetdata.scrubbers_gases["n2o"]
-				var/plasma = presetdata.scrubbers_gases["plasma"]
-				send_signal(device_id, list("power"= 1, "co2_scrub"= co2, "o2_scrub" = o2, "n2_scrub" = n2, "tox_scrub" = plasma, "n2o_scrub" = n2o, "scrubbing"= 1, "panic_siphon"= 0) )
+					presetdata = new /datum/airalarm_configuration/preset/human()
+
+				var/list/signal_data = list("power"= 1, "scrubbing"= 1, "panic_siphon"= 0)
+				for(var/gas_id in XGM.gases)
+					signal_data[gas_id + "_scrub"] = (gas_id in presetdata.scrubbed_gases)
+				send_signal(device_id,  signal_data)
 			for(var/device_id in this_area.air_vent_names)
 				send_signal(device_id, list("power"= 1, "checks"= 1, "set_external_pressure"= target_pressure) )
 
@@ -773,69 +822,37 @@ var/global/list/air_alarms = list()
 	if(total==0)
 		return null
 
-	var/list/current_settings = TLV["pressure"]
-	var/pressure_dangerlevel = get_danger_level(environment.pressure, current_settings)
-
-	current_settings = TLV["oxygen"]
-	var/oxygen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_OXYGEN), current_settings)
-	var/oxygen_percent = round(environment[GAS_OXYGEN] / total * 100, 2)
-
-	current_settings = TLV["nitrogen"]
-	var/nitrogen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_NITROGEN), current_settings)
-	var/nitrogen_percent = round(environment[GAS_NITROGEN] / total * 100, 2)
-
-	current_settings = TLV["carbon_dioxide"]
-	var/co2_dangerlevel = get_danger_level(environment.partial_pressure(GAS_CARBON), current_settings)
-	var/co2_percent = round(environment[GAS_CARBON] / total * 100, 2)
-
-	current_settings = TLV["plasma"]
-	var/plasma_dangerlevel = get_danger_level(environment.partial_pressure(GAS_PLASMA), current_settings)
-	var/plasma_percent = round(environment[GAS_PLASMA] / total * 100, 2)
-
-	current_settings = TLV["n2o"]
-	var/n2o_dangerlevel = get_danger_level(environment.partial_pressure(GAS_SLEEPING), current_settings)
-	var/n2o_percent = round(environment[GAS_SLEEPING] / total * 100, 2)
-
-	current_settings = TLV["other"]
-	var/other_moles
-	for(var/g in environment.gas)
-		switch(g)
-			if(CHECKED_GAS)
-				//Do nothing
-			else
-				other_moles += environment[g]
-	var/other_dangerlevel = get_danger_level(other_moles / total * environment.pressure, current_settings)
-	var/other_percent = round(other_moles / total * 100, 2)
-
-	current_settings = TLV["temperature"]
-	var/temperature_dangerlevel = get_danger_level(environment.temperature, current_settings)
-
-
 	var/data[0]
 	data["pressure"]=environment.pressure
 	data["temperature"]=environment.temperature
 	data["temperature_c"]=round(environment.temperature - T0C, 0.1)
+	data["pressure_danger"] = config.pressure_threshold.assess_danger(environment.pressure)
+	data["temperature_danger"] = config.temperature_threshold.assess_danger(environment.temperature)
 
-	var/percentages[0]
-	percentages["oxygen"]=oxygen_percent
-	percentages["nitrogen"]=nitrogen_percent
-	percentages["co2"]=co2_percent
-	percentages["plasma"]=plasma_percent
-	percentages["n2o"]=n2o_percent
-	percentages["other"]=other_percent
-	data["contents"]=percentages
+	var/list/noteworthy_gases = list()
+	var/worst_dangerlevel = 0
+	var/other_moles = 0
+	for(var/gas_id in XGM.gases)
+		var/datum/gas/gas_datum = XGM.gases[gas_id]
+		if(gas_datum.flags & XGM_GAS_NOTEWORTHY)
+			var/list/raw_gas_data = list()
+			var/datum/airalarm_threshold/threshold = config.gas_thresholds[gas_id]
+			raw_gas_data["danger"] = threshold.assess_danger(environment.partial_pressure(gas_id))
+			raw_gas_data["percentage"] = round(environment[gas_id] / total * 100, 2)
+			raw_gas_data["name"] = gas_datum.name
+			noteworthy_gases += list(raw_gas_data)
+			worst_dangerlevel = max(worst_dangerlevel, raw_gas_data["danger"])
+		else
+			if(environment[gas_id])
+				other_moles += environment[gas_id]
+	var/list/raw_other_gas_data = list()
+	raw_other_gas_data["danger"] = config.other_gas_threshold.assess_danger(other_moles / total * environment.pressure)
+	raw_other_gas_data["percentage"] = round(other_moles / total * 100, 2)
+	raw_other_gas_data["name"] = "Other"
+	noteworthy_gases += list(raw_other_gas_data)
+	data["overall_danger"] = max(worst_dangerlevel, raw_other_gas_data["danger"])
+	data["noteworthy_gases"] = noteworthy_gases
 
-	var/danger[0]
-	danger["pressure"]=pressure_dangerlevel
-	danger["temperature"]=temperature_dangerlevel
-	danger["oxygen"]=oxygen_dangerlevel
-	danger["nitrogen"]=nitrogen_dangerlevel
-	danger["co2"]=co2_dangerlevel
-	danger["plasma"]=plasma_dangerlevel
-	danger["n2o"]=n2o_dangerlevel
-	danger["other"]=other_dangerlevel
-	danger["overall"]=max(pressure_dangerlevel,oxygen_dangerlevel,nitrogen_dangerlevel,co2_dangerlevel,plasma_dangerlevel,other_dangerlevel,temperature_dangerlevel)
-	data["danger"]=danger
 	return data
 
 /obj/machinery/alarm/proc/get_nano_data(mob/user, fromAtmosConsole=0)
@@ -843,8 +860,7 @@ var/global/list/air_alarms = list()
 	var/data[0]
 	data["air"]=ui_air_status()
 	data["alarmActivated"]=alarmActivated //|| local_danger_level==2
-	data["sensors"]=TLV
-
+	data["thresholds"]=config.nanoui_config_data()
 	// Locked when:
 	//   Not sent from atmos console AND
 	//   Not silicon AND locked AND
@@ -853,7 +869,7 @@ var/global/list/air_alarms = list()
 
 	data["rcon"]=rcon_setting
 	data["rcon_enabled"] = remote_control
-	data["target_temp"] = target_temperature - T0C
+	data["target_temp"] = config.target_temperature  - T0C
 	data["atmos_alarm"] = this_area.atmosalm
 	data["modes"] = list(
 		AALARM_MODE_SCRUBBING   = list("name"="Filtering",   "desc"="Scrubs out contaminants"),\
@@ -866,13 +882,14 @@ var/global/list/air_alarms = list()
 
 	var/list/tmplist = new/list()
 	for(var/preset in airalarm_presets)
-		var/datum/airalarm_preset/preset_datum = airalarm_presets[preset]
+		var/datum/airalarm_configuration/preset/preset_datum = airalarm_presets[preset]
 		tmplist[++tmplist.len] = list("name" = preset_datum.name, "desc" = preset_datum.desc)
 	data["presets"] = tmplist
-	data["preset"]=preset
+	data["preset"]=preset_key
 	data["screen"]=screen
 	data["cycle_after_preset"] = cycle_after_preset
 	data["firedoor_override"] = this_area.doors_overridden
+	data["suppression_mode"] = auto_suppress
 
 	var/list/vents=list()
 	if(this_area.air_vent_names.len)
@@ -899,6 +916,16 @@ var/global/list/air_alarms = list()
 			scrubber_data["name"]=long_name
 			scrubbers+=list(scrubber_data)
 	data["scrubbers"]=scrubbers
+
+	var/list/gas_datums=list()
+	for(var/gas_id in XGM.gases)
+		var/datum/gas/gas_datum = XGM.gases[gas_id]
+		var/list/datum_data = list()
+		datum_data["id"] = gas_id
+		datum_data["name"] = gas_datum.name
+		datum_data["short_name"] = gas_datum.short_name != null ? gas_datum.short_name : gas_datum.name
+		gas_datums += list(datum_data)
+	data["gas_datums"]=gas_datums
 	return data
 
 
@@ -953,23 +980,20 @@ var/global/list/air_alarms = list()
 		return 1
 
 	if(href_list["temperature"])
-		var/list/selected = TLV["temperature"]
+		var/datum/airalarm_threshold/temperature_threshold = config.temperature_threshold
 		var/max_temperature
 		var/min_temperature
 		if(buttonCheck(usr))
 			max_temperature = MAX_TARGET_TEMPERATURE - T0C
 			min_temperature = MIN_TARGET_TEMPERATURE - T0C
 		else
-			max_temperature = selected[3] - T0C
-			min_temperature = selected[2] - T0C
-		var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
+			max_temperature = temperature_threshold.max_1() - T0C
+			min_temperature = temperature_threshold.min_1() - T0C
+		var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE - T0C]C or above [MAX_TEMPERATURE - T0C]C by itself. ", "Thermostat Controls") as num|null
 		if(input_temperature==null)
 			return 1
-		if(!input_temperature || input_temperature >= max_temperature || input_temperature <= min_temperature)
-			to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
-		else
-			input_temperature = input_temperature + T0C
-			set_temperature(input_temperature)
+		input_temperature = round(clamp(input_temperature, min_temperature, max_temperature) + T0C, 0.01)
+		set_temperature(input_temperature)
 		return 1
 
 	if(!buttonCheck(usr))
@@ -987,44 +1011,40 @@ var/global/list/air_alarms = list()
 
 	if(href_list["command"])
 		var/device_id = href_list["id_tag"]
-		switch(href_list["command"])
-			if( "power",
-				"set_external_pressure",
-				"set_internal_pressure",
-				"checks",
-				"co2_scrub",
-				"tox_scrub",
-				"n2o_scrub",
-				"o2_scrub",
-				"n2_scrub",
-				"panic_siphon",
-				"scrubbing",
-				"direction")
-				var/val
-				if(href_list["val"])
-					val=text2num(href_list["val"])
-				else
-					var/newval = input("Enter new value") as num|null
-					if(isnull(newval))
+		var/command = href_list["command"]
+		if(command in XGM.gases)
+			var/val=text2num(href_list["val"])
+			send_signal(device_id, list(command+"_scrub" = val ))
+		else
+			switch(href_list["command"])
+				if( "power",
+					"set_external_pressure",
+					"set_internal_pressure",
+					"checks",
+					"panic_siphon",
+					"scrubbing",
+					"direction")
+					var/val
+					if(href_list["val"])
+						val=text2num(href_list["val"])
+					else
+						var/newval = input("Enter new value") as num|null
+						if(isnull(newval))
+							return 1
+						if(href_list["command"]=="set_external_pressure")
+							newval = clamp(newval, 0, 1000+ONE_ATMOSPHERE)
+						val = newval
+
+					send_signal(device_id, list(href_list["command"] = val ) )
+
+				if("set_threshold")
+					var/env = href_list["env"]
+					var/threshold = text2num(href_list["var"])
+					var/list/thresholds = list("lower bound", "low warning", "high warning", "upper bound")
+					var/newval = input("Enter [thresholds[threshold]] for [env]", "Alarm triggers", 0) as num|null
+					if (isnull(newval) || ..() || !buttonCheck(usr))
 						return 1
-					if(href_list["command"]=="set_external_pressure")
-						if(newval>1000+ONE_ATMOSPHERE)
-							newval = 1000+ONE_ATMOSPHERE
-						if(newval<0)
-							newval = 0
-					val = newval
-
-				send_signal(device_id, list(href_list["command"] = val ) )
-
-			if("set_threshold")
-				var/env = href_list["env"]
-				var/threshold = text2num(href_list["var"])
-				var/list/selected = TLV[env]
-				var/list/thresholds = list("lower bound", "low warning", "high warning", "upper bound")
-				var/newval = input("Enter [thresholds[threshold]] for [env]", "Alarm triggers", selected[threshold]) as num|null
-				if (isnull(newval) || ..() || !buttonCheck(usr))
-					return 1
-				set_threshold(env, threshold, newval, 1)
+					set_threshold(env, threshold, newval, 1)
 		return 1
 	if(href_list["reset_thresholds"])
 		apply_preset(1) //just apply the preset without cycling
@@ -1063,8 +1083,12 @@ var/global/list/air_alarms = list()
 
 	if(href_list["preset"])
 		if(href_list["preset"] in airalarm_presets)
-			preset = href_list["preset"]
+			preset_key = href_list["preset"]
 			apply_preset(!cycle_after_preset)
+		return 1
+
+	if(href_list["auto_suppress"])
+		auto_suppress = !auto_suppress
 		return 1
 
 /obj/machinery/alarm/attackby(obj/item/W as obj, mob/user as mob)
@@ -1143,6 +1167,17 @@ var/global/list/air_alarms = list()
 				qdel(src)
 				return
 
+// Run after construction process is finished and air alarm is initially built.
+/obj/machinery/alarm/proc/first_run()
+	var/area/this_area = get_area(src)
+	area_uid = this_area.uid
+	name = "[this_area.name] Air Alarm"
+	this_area.air_alarms.Add(src)
+	air_alarms += src
+
+	apply_preset(1, 0) // Don't cycle and don't propagate.
+	apply_mode() //apply mode to scrubbers and vents
+
 /obj/machinery/alarm/power_change()
 	if(powered(power_channel))
 		stat &= ~NOPOWER
@@ -1168,6 +1203,9 @@ var/global/list/air_alarms = list()
 /obj/machinery/alarm/is_in_range(var/mob/user)
 	if(!..())
 		return OMNI_LINK(user,src)
+	return TRUE
+
+/obj/machinery/alarm/supports_holomap()
 	return TRUE
 
 /*
@@ -1436,7 +1474,7 @@ FIRE ALARM
 		else if (href_list["shelter"])
 			if(shelter)
 				var/obj/O = new /obj/item/inflatable/shelter(loc)
-				if(Adjacent(usr)&&!isAdminGhost(usr)) //Silicons AND adminghosts drop it to the floor
+				if(!isAdminGhost(usr)) //Silicons AND adminghosts drop it to the floor
 					usr.put_in_hands(O)
 				shelter = FALSE
 				update_icon()
@@ -1648,5 +1686,3 @@ var/global/list/firealarms = list() //shrug
 	if(avg_divide)
 		return avg_temp / avg_divide
 	return T0C
-
-#undef CHECKED_GAS

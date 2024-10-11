@@ -23,6 +23,7 @@
 	var/nutriment_factor = 0
 	var/pain_resistance = 0
 	var/sport = SPORTINESS_NONE //High sport helps you show off on a treadmill. Multiplicative
+	var/harms_animal_type //What kind of animal does this harm?
 	var/custom_metabolism = REAGENTS_METABOLISM
 	var/overdose_am = 0
 	var/overdose_tick = 0
@@ -39,7 +40,7 @@
 	var/glass_desc = null //for reagents with a different desc in a glass
 	var/glass_name = null //defaults to "glass of [reagent name]"
 	var/light_color = null
-	var/flammable = 0
+	var/can_be_lit = 0
 	var/glass_isGlass = 1
 	var/mug_icon_state = null
 	var/mug_name = null
@@ -48,6 +49,14 @@
 	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
 	var/paint_light = PAINTLIGHT_NONE
 	var/adj_temp = 0//keep between -1.5,20 to prevent people from freezing/burning themselves
+
+	//adjusts the values of hydro trays and soils by this value per process
+	var/plant_nutrition = 0
+	var/plant_watering = 0
+	var/plant_pests = 0
+	var/plant_weeds = 0
+	var/plant_toxins = 0
+	var/plant_health = 0
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS, var/allow_permeability = TRUE, var/list/splashplosion=list())
 	set waitfor = 0
@@ -94,7 +103,7 @@
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
-			R.handle_splashed_reagent(self.id)
+			R.handle_splashed_reagent(self.id, method, volume)
 
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
@@ -110,7 +119,7 @@
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
-			R.handle_splashed_reagent(self.id)
+			R.handle_splashed_reagent(self.id, method, volume)
 
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
@@ -130,6 +139,9 @@
 	src = null
 
 	M.reagent_act(self.id, method, volume)
+
+	if(self.harms_animal_type && istype(M,self.harms_animal_type))
+		M.atepoison()
 
 /datum/reagent/proc/reaction_obj(var/obj/O, var/volume, var/list/splashplosion=list())
 	set waitfor = 0
@@ -218,6 +230,14 @@
 		return
 
 	holder.remove_reagent(src.id, 1)
+
+	T.add_nutrientlevel(plant_nutrition, id == BLOOD)
+	T.add_waterlevel(plant_watering)
+	T.add_pestlevel(plant_pests)
+	T.add_weedlevel(plant_weeds)
+	T.add_toxinlevel(plant_toxins)
+	T.add_planthealth(plant_health)
+
 
 //Called after add_reagents creates a new reagent
 /datum/reagent/proc/on_introduced(var/data)

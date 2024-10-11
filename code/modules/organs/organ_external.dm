@@ -10,6 +10,7 @@
 	var/icon_position = 0
 
 	var/obj/item/organ_item = null //The actual item used to make the organ
+	var/generic_type = null //Typepath for a generic type of the datum
 	var/list/slots_to_drop
 
 	var/damage_state = "00"
@@ -106,6 +107,9 @@
 			to_chat(owner, "<span class = 'warning'>Your [display_name] malfunctions!</span>")
 	take_damage(damage, 0, 1, used_weapon = "EMP")
 
+/**
+ * This returns the amount of DAMAGE on the limb, unlike what the proc suggests
+ */
 /datum/organ/external/proc/get_health()
 	return (burn_dam + brute_dam)
 
@@ -132,7 +136,7 @@
 			step(gib, pick(alldirs)) //move the last spawned gib in a random direction
 
 		if(is_robotic())
-			T.hotspot_expose(1000,1000,surfaces=1)
+			T.hotspot_expose(1000,MEDIUM_FLAME,1)
 		else
 			playsound(T, 'sound/effects/gib3.ogg', 50, 1)
 
@@ -153,27 +157,42 @@
 	new I(owner.loc)
 	droplimb(1, spawn_limb = 0, display_message = FALSE)
 
-/datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
+/datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list(), var/no_damage_modifier, var/spread_damage = TRUE)
 	if(cosmetic_only)
 		return
 	if(owner?.status_flags & GODMODE)
 		return 0	//godmode
+	if(brute < 0)
+		brute = 0
+	if(burn < 0)
+		burn = 0
 	if((brute <= 0) && (burn <= 0))
 		return 0
 
 	if(!is_existing()) //No limb there
 		return 0
 
-	if(!is_organic())
-		brute *= 0.66 //~2/3 damage for ROBOLIMBS
-		burn *= (status & (ORGAN_PEG) ? 2 : 0.66) //~2/3 damage for ROBOLIMBS 2x for peg
-	else
-		var/datum/species/species = src.species || owner.species
-		if(species)
-			if(species.brute_mod)
-				brute *= species.brute_mod
-			if(species.burn_mod)
-				burn *= species.burn_mod
+	//These are here to prevent a 'weakness cascade' from dealing unfair damage amounts to species with weaknesses
+	var/bonus_brute_damage = 0
+	var/bonus_burn_damage = 0
+	var/original_brute = brute
+	var/original_burn = burn
+	if(!no_damage_modifier)
+		if(!is_organic())
+			brute *= 0.66 //~2/3 damage for ROBOLIMBS
+			burn *= (status & (ORGAN_PEG) ? 2 : 0.66) //~2/3 damage for ROBOLIMBS 2x for peg
+		else
+			var/datum/species/species = src.species || owner.species
+			if(species)
+				if(species.brute_mod)
+					brute *= species.brute_mod
+				if(species.burn_mod)
+					burn *= species.burn_mod
+	//We only care about weaknesses, not resists
+	if(original_brute < brute)
+		bonus_brute_damage = brute - original_brute
+	if(original_burn < burn)
+		bonus_burn_damage = burn - original_burn
 
 	//If limb took enough damage, try to cut or tear it off
 	if(body_part != UPPER_TORSO && body_part != LOWER_TORSO) //As hilarious as it is, getting hit on the chest too much shouldn't effectively gib you.
@@ -190,14 +209,14 @@
 					return
 			else
 				if(sharp || is_peg())
-					if(prob((5 * brute) * sharp)) //sharp things have a greater chance to sever based on how sharp they are
+					if(prob((5 * brute) * (sharp ? sharp : 1))) //sharp things have a greater chance to sever based on how sharp they are
 						droplimb(1)
 						return
-				else if(!sharp && brute > 15) //Massive blunt damage can result in limb explosion
-					if(prob((brute/7.5)**3)) //15 dmg - 8% chance, 22 dmg - 27%, 30 dmg - 64%, anything higher than ~35 is a guaranteed limbgib
-						explode()
-						return
-				else if(brute > 20 && prob(2 * brute)) //non-sharp hits with force greater than 20 can cause limbs to sever, too (smaller chance)
+				//15 dmg - 8% chance, 22 dmg - 27%, 30 dmg - 64%, anything higher than ~35 is a guaranteed limbgib
+				else if((brute > 15) && prob((brute/7.5)**3)) //Massive blunt damage can result in limb explosion
+					explode()
+					return
+				else if((brute > 20) && prob(2 * brute)) //non-sharp hits with force greater than 20 can cause limbs to sever, too (smaller chance)
 					droplimb(1)
 					return
 
@@ -235,41 +254,46 @@
 		//If we can't inflict the full amount of damage, spread the damage in other ways
 		//How much damage can we actually cause?
 		var/can_inflict = max_damage * config.organ_health_multiplier - (brute_dam + burn_dam)
-		if(can_inflict)
+		if(can_inflict > 0)
 			if(brute > 0)
-				//Inflict all burte damage we can
+				//Inflict all brute damage we can
 				if(can_cut)
 					createwound(CUT, min(brute,can_inflict))
 				else
 					createwound(BRUISE, min(brute,can_inflict))
 				var/temp = can_inflict
-				//How much mroe damage can we inflict
+				//How much more damage can we inflict
 				can_inflict = max(0, can_inflict - brute)
 				//How much brute damage is left to inflict
 				brute = max(0, brute - temp)
 
-			if(burn > 0 && can_inflict)
+			if(burn > 0 && (can_inflict > 0))
 				//Inflict all burn damage we can
 				createwound(BURN, min(burn,can_inflict))
 				//How much burn damage is left to inflict
 				burn = max(0, burn - can_inflict)
 		//If there are still hurties to dispense
-		if(burn || brute)
+		//Then we need to be fair and remove the damage weaknesses applied for this limb
+		//After all, other limbs can have different weaknesses/resists
+		brute -= bonus_brute_damage
+		burn -= bonus_burn_damage
+		if(burn > 0 || brute > 0)
 			if(!is_organic())
 				droplimb(1) //Non-organic limbs just drop off with no further complications
 			else
-				//List organs we can pass it to
-				var/list/datum/organ/external/possible_points = list()
-				if(parent)
-					possible_points += parent
-				if(children)
-					possible_points += children
-				if(forbidden_limbs.len)
-					possible_points -= forbidden_limbs
-				if(possible_points.len)
-					//And pass the pain around
-					var/datum/organ/external/target = pick(possible_points)
-					target.take_damage(brute, burn, sharp, edge, used_weapon, forbidden_limbs + src)
+				if(spread_damage)
+					//List organs we can pass it to
+					var/list/datum/organ/external/possible_points = list()
+					if(parent)
+						possible_points += parent
+					if(children)
+						possible_points += children
+					if(forbidden_limbs.len)
+						possible_points -= forbidden_limbs
+					if(possible_points.len)
+						//And pass the pain around
+						var/datum/organ/external/target = pick(possible_points)
+						target.take_damage(brute, burn, sharp, edge, used_weapon, forbidden_limbs + src, no_damage_modifier = no_damage_modifier)
 
 	//Sync the organ's damage with its wounds
 	src.update_damages()
@@ -340,18 +364,11 @@
 		return
 
 	var/datum/species/species = src.species || owner.species
-
 	//First check whether we can widen an existing wound
-	if(wounds.len > 0 && prob(50 + owner.number_wounds * 10))
-		if((type == CUT || type == BRUISE) && damage >= 5)
-			var/datum/wound/W = pick(wounds)
-			if(W.amount == 1 && W.started_healing())
-				W.open_wound(damage)
-				if(prob(25))
-					owner.visible_message("<span class='warning'>The wound on [owner.name]'s [display_name] widens with a nasty ripping sound.</span>", \
-					"<span class='warning'>The wound on your [display_name] widens with a nasty ripping sound.</span>", \
-					"You hear a nasty ripping noise, as if flesh is being torn apart.")
-				return
+	if(widenwound(type, damage))
+		update_damages()
+		owner.updatehealth()
+		return
 
 	//Creating wound
 	var/datum/wound/W
@@ -396,6 +413,35 @@
 
 	update_damages()
 	owner.updatehealth()
+
+/**
+ * Tries to expand an existing wound. Returns TRUE if successful.
+ *
+ * Arguments
+ * * type - Damage type inflicted. Expects CUT or BRUISE
+ * * damage - Amount of post-modifier damage inflicted
+ */
+/datum/organ/external/proc/widenwound(var/type = CUT, var/damage)
+	if(!wounds.len)
+		return
+	if(damage < 5)
+		return
+	if(!(type == CUT || type == BRUISE))
+		return
+	if(!prob(50 + owner.number_wounds * 10))
+		return
+	var/list/valid_wounds = list()
+	for(var/datum/wound/testwound in wounds)
+		if(testwound.amount == 1 && !istype(testwound, /datum/wound/burn/) && testwound.started_healing())
+			valid_wounds += testwound
+	if(valid_wounds.len)
+		var/datum/wound/W = pick(valid_wounds)
+		W.open_wound(damage)
+		if(prob(25))
+			owner.visible_message("<span class='warning'>The wound on [owner.name]'s [display_name] widens with a nasty ripping sound.</span>", \
+			"<span class='warning'>The wound on your [display_name] widens with a nasty ripping sound.</span>", \
+			"You hear a nasty ripping noise, as if flesh is being torn apart.")
+		return TRUE
 
 /****************************************************
 			   PROCESSING & UPDATING
@@ -616,7 +662,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		// slow healing
 		var/heal_amt = 0
 
-		if(W.damage < 15 || (M_REGEN in owner.mutations && W.damage <= 50)) //This thing's edges are not in day's travel of each other, what healing?
+		if(W.damage < 15 || ((M_REGEN in owner.mutations) && W.damage <= 50)) //This thing's edges are not in day's travel of each other, what healing?
 			heal_amt += 0.2
 
 		if(W.is_treated() && W.damage < 50) //Whoa, not even magical band aid can hold it together
@@ -660,10 +706,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/datum/species/species = src.species || owner.species
 
 	for(var/datum/wound/W in wounds)
-		if(W.damage_type == CUT || W.damage_type == BRUISE)
-			brute_dam += W.damage
-		else if(W.damage_type == BURN)
-			burn_dam += W.damage
+		if(!W.internal) //Internal wounds don't count for the total mob damage
+			if(W.damage_type == CUT || W.damage_type == BRUISE)
+				brute_dam += W.damage
+			else if(W.damage_type == BURN)
+				burn_dam += W.damage
 
 		if(is_organic() && W.bleeding() && !(species.anatomy_flags & NO_BLOOD))
 			W.bleed_timer--
@@ -697,7 +744,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/tburn = 0
 	var/tbrute = 0
 
-	if(burn_dam == 0)
+	var/datum/species/species = src.species || owner.species
+
+	if(species && !species.damage_overlays.Find("burn")) //Species has disabled burn damaged overlays
+		tburn = 0
+	else if((burn_dam == 0))
 		tburn = 0
 	else if(burn_dam < (max_damage * 0.25 / 2))
 		tburn = 1
@@ -706,7 +757,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 	else
 		tburn = 3
 
-	if(brute_dam == 0)
+	if(species && !species.damage_overlays.Find("brute")) //Species has disabled brute damage overlays
+		tbrute = 0
+	else if(brute_dam == 0)
 		tbrute = 0
 	else if(brute_dam < (max_damage * 0.25 / 2))
 		tbrute = 1
@@ -829,21 +882,22 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 		//Robotic limbs explode if sabotaged.
 		if(status & ORGAN_ROBOT && !no_explode && sabotaged)
-			owner.visible_message("<span class='danger'>\The [owner]'s [display_name] explodes violently!</span>", \
-			"<span class='danger'>Your [display_name] explodes violently!</span>", \
-			"<span class='danger'>You hear an explosion followed by a scream!</span>")
+			owner.visible_message("<span class='moderate'>\The [owner]'s [display_name] explodes violently!</span>", \
+			"<span class='moderate'>Your [display_name] explodes violently!</span>", \
+			"<span class='moderate'>You hear an explosion followed by a scream!</span>")
 			explosion(get_turf(owner), -1, -1, 2, 3, whodunnit = owner)
 			spark(src, 5, FALSE)
 
 		if(organ)
 			if(display_message)
-				owner.visible_message("<span class='danger'>[owner.name]'s [display_name] flies off in an arc.</span>", \
-				"<span class='danger'>Your [display_name] goes flying off!</span>", \
-				"<span class='danger'>You hear a terrible sound of ripping tendons and flesh.</span>")
+				owner.visible_message("<span class='moderate'>[owner.name]'s [display_name] flies off in an arc!</span>", \
+				"<span class='moderate'>Your [display_name] goes flying off!</span>", \
+				"<span class='moderate'>You hear a terrible sound of ripping tendons and flesh!</span>")
 
-			//Throw organs around
-			var/randomdir = pick(cardinal)
-			step(organ, randomdir)
+			if(organ.loc?.type != /obj/machinery/atmospherics/unary/cryo_cell)
+				//Throw organs around
+				var/randomdir = pick(cardinal)
+				step(organ, randomdir)
 		if(!owner)
 			return organ
 		owner.update_body(1)
@@ -1137,7 +1191,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			return 1
 	return 0
 
-/datum/organ/external/get_icon(gender = "", isFat = 0)
+/datum/organ/external/get_icon(gender = "", isFat = 0, forced_icon_file)
 	//stand_icon = new /icon(icobase, "torso_[g][fat?"_fat":""]")
 	if(gender)
 		gender="_[gender]"
@@ -1152,7 +1206,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 		baseicon = 'icons/mob/human_races/o_peg.dmi'
 	else if(is_robotic())
 		baseicon = 'icons/mob/human_races/o_robot.dmi'
-	return new /icon(baseicon, icon_state)
+	if(forced_icon_file)
+		baseicon = forced_icon_file
+	return icon(baseicon, icon_state)
 
 //Our external limb is a peg
 /datum/organ/external/proc/is_peg()
@@ -1252,6 +1308,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	has_fat = 1
 	vital = 1
 	encased = "ribcage"
+	generic_type = /obj/item/organ
 
 /datum/organ/external/groin
 	name = LIMB_GROIN
@@ -1260,7 +1317,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 	max_damage = 115
 	min_broken_damage = 70
 	body_part = LOWER_TORSO
+	has_fat = TRUE //for humans this is a blank sprite, fat belly covers groin pixels
 	vital = 1
+	generic_type = /obj/item/organ
 
 /datum/organ/external/tail
 	name = COSMETIC_ORGAN_TAIL
@@ -1273,6 +1332,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/tail_icon_file = 'icons/mob/tails.dmi'
 	var/tail_type
 	var/overlap_overlays = TRUE
+	generic_type = /obj/item/organ/external/tail
 
 /datum/organ/external/tail/New(datum/organ/external/parent, datum/species/passed_species)
 	if(passed_species && (!(passed_species.anatomy_flags & HAS_TAIL)))
@@ -1349,8 +1409,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "l_leg"
 	max_damage = 75
 	min_broken_damage = 30
+	has_fat = TRUE
 	body_part = LEG_LEFT
 	icon_position = LEFT
+	generic_type = /obj/item/organ/external/l_leg
 
 /datum/organ/external/l_leg/can_stand()
 	//Peg legs don't require an attached foot
@@ -1384,8 +1446,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "r_leg"
 	max_damage = 75
 	min_broken_damage = 30
+	has_fat = TRUE
 	body_part = LEG_RIGHT
 	icon_position = RIGHT
+	generic_type = /obj/item/organ/external/r_leg
 
 //This proc is same as l_leg/can_stand()
 /datum/organ/external/r_leg/can_stand()
@@ -1423,6 +1487,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	max_damage = 75
 	min_broken_damage = 30
 	body_part = ARM_LEFT
+	generic_type = /obj/item/organ/external/l_arm
 
 	grasp_id = GRASP_LEFT_HAND
 
@@ -1443,6 +1508,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	max_damage = 75
 	min_broken_damage = 30
 	body_part = ARM_RIGHT
+	generic_type = /obj/item/organ/external/r_arm
 
 	grasp_id = GRASP_RIGHT_HAND
 
@@ -1464,6 +1530,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 15
 	body_part = FOOT_LEFT
 	icon_position = LEFT
+	generic_type = /obj/item/organ/external/l_foot
 
 	slots_to_drop = list(slot_shoes, slot_legcuffed)
 
@@ -1483,6 +1550,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 15
 	body_part = FOOT_RIGHT
 	icon_position = RIGHT
+	generic_type = /obj/item/organ/external/r_foot
 
 	slots_to_drop = list(slot_shoes, slot_legcuffed)
 
@@ -1494,45 +1562,63 @@ Note that amputating the affected organ does in fact remove the infection from t
 			current_organ = new /obj/item/organ/external/r_foot(owner.loc, owner, src)
 	return current_organ
 
-/datum/organ/external/r_hand
+/datum/organ/external/hand
+	name = LIMB_HAND
+	display_name = "hand"
+	icon_name = "r_hand" //had to pick one in case of weirdness
+	max_damage = 40
+	min_broken_damage = 15
+	grasp_id = 0
+	can_grasp = 0
+	generic_type = /obj/item/organ/external/r_hand
+
+/datum/organ/external/hand/get_icon(gender = "", isFat = 0)
+	var/obj/item/organ/external/hand_obj = new generic_type()
+	var/overriding_icon = hand_obj.forced_icon_file
+	return ..(isFat = isFat, forced_icon_file = overriding_icon)
+
+/datum/organ/external/hand/robotize()
+	generic_type = initial(generic_type)
+	..()
+
+/datum/organ/external/hand/peggify()
+	generic_type = initial(generic_type)
+	..()
+
+/datum/organ/external/hand/generate_dropped_organ(current_organ)
+	if(is_peg())
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+	if(!current_organ)
+		if(!is_robotic())
+			current_organ = new generic_type(owner.loc, owner, src)
+	return current_organ
+
+/datum/organ/external/hand/on_attach(obj/item/organ/external/hand_item)
+	display_name = hand_item.name
+	generic_type = hand_item.type
+	icon_name = hand_item.icon_state
+
+/datum/organ/external/hand/r_hand
 	name = LIMB_RIGHT_HAND
 	display_name = "right hand"
 	icon_name = "r_hand"
-	max_damage = 40
-	min_broken_damage = 15
 	body_part = HAND_RIGHT
 	grasp_id = GRASP_RIGHT_HAND
+	has_fat = TRUE
 	can_grasp = 1
-
 	slots_to_drop = list(slot_gloves, slot_handcuffed)
+	generic_type = /obj/item/organ/external/r_hand
 
-/datum/organ/external/r_hand/generate_dropped_organ(current_organ)
-	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
-	if(!current_organ)
-		if(!is_robotic())
-			current_organ = new /obj/item/organ/external/r_hand(owner.loc, owner, src)
-	return current_organ
-
-/datum/organ/external/l_hand
+/datum/organ/external/hand/l_hand
 	name = LIMB_LEFT_HAND
 	display_name = "left hand"
 	icon_name = "l_hand"
-	max_damage = 40
-	min_broken_damage = 15
 	body_part = HAND_LEFT
 	grasp_id = GRASP_LEFT_HAND
+	has_fat = TRUE
 	can_grasp = 1
-
 	slots_to_drop = list(slot_gloves, slot_handcuffed)
-
-/datum/organ/external/l_hand/generate_dropped_organ(current_organ)
-	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
-	if(!current_organ)
-		if(!is_robotic())
-			current_organ = new /obj/item/organ/external/l_hand(owner.loc, owner, src)
-	return current_organ
+	generic_type = /obj/item/organ/external/l_hand
 
 /datum/organ/external/head
 	icon_name = "head"
@@ -1544,6 +1630,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/disfigured = FALSE
 	vital = 1
 	encased = "skull"
+	generic_type = /obj/item/organ/external/head
 
 	slots_to_drop = list(slot_glasses, slot_wear_mask, slot_head, slot_ears)
 
@@ -1626,8 +1713,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		baseicon = 'icons/mob/human_races/o_robot.dmi'
 	return new /icon(baseicon, "[icon_name]_[gender]")
 
-/datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
-	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs)
+/datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list(), no_damage_modifier, spread_damage)
+	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs, no_damage_modifier, spread_damage)
 	if(!disfigured)
 		/*
 		if(brute_dam > 40)
@@ -1696,6 +1783,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 	//It doesn't contain the whole tree, only the organs attached to this one
 	var/list/obj/item/organ/external/children = list()
 
+	var/forced_icon_file //Has a specific icon to be forced
+	var/forbid_gloves = TRUE //For organs forced to be used as hands, do they block gloves
+	var/list/mutations = list() //does this organ store specific mutations?
+	var/attack_verb_text
+	var/is_dexterous = FALSE
+	var/attack_punch_damage
 
 /obj/item/organ/external/New(loc, mob/living/carbon/human/H, datum/organ/external/source)
 	..(loc)
@@ -1781,7 +1874,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		base = H.get_organ(part).get_icon(H.gender == FEMALE? "f":"m", (M_FAT in H.mutations) && (H.species && H.species.anatomy_flags & CAN_BE_FAT))
 	else if(species)
 		base = icon(species.icobase)
-
+	if(forced_icon_file)
+		base = icon(forced_icon_file, icon_state)
 	//Display organs attached to this one
 	if(children.len)
 		for(var/obj/item/organ/external/attached in children)
@@ -1791,8 +1885,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 			base.Blend(attached.icon, ICON_OVERLAY)
 
 	if(base)
-		//Changing limb's skin tone to match owner
-		if(H)
+		//Changing limb's skin tone to match owner, skip if forced_icon_file to not have strangely colored organs
+		if(!forced_icon_file && H)
 			if(!H.species || H.species.anatomy_flags & HAS_SKIN_TONE)
 				if(H.my_appearance.s_tone >= 0)
 					base.Blend(rgb(H.my_appearance.s_tone, H.my_appearance.s_tone, H.my_appearance.s_tone), ICON_ADD)
@@ -1851,6 +1945,22 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_state = LIMB_LEFT_HAND
 	part = LIMB_LEFT_HAND
 	w_class = W_CLASS_TINY
+	is_dexterous = TRUE
+	forbid_gloves = FALSE
+
+/obj/item/organ/external/l_hand/crab
+	name = "left claw"
+	icon = 'icons/mob/human_races/crab_claws.dmi'
+	attack_verb_text = "pinches"
+	is_dexterous = FALSE
+	attack_punch_damage = 7
+	mutations = list(M_CLAWS)
+	forced_icon_file = 'icons/mob/human_races/crab_claws.dmi'
+	forbid_gloves = TRUE
+
+/obj/item/organ/external/l_hand/crab/megamad
+	icon_state = "left_claw_megamad"
+	attack_punch_damage = 10
 
 /obj/item/organ/external/l_leg
 	name = "left leg"
@@ -1887,6 +1997,22 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_state = LIMB_RIGHT_HAND
 	part = LIMB_RIGHT_HAND
 	w_class = W_CLASS_TINY
+	is_dexterous = TRUE
+	forbid_gloves = FALSE
+
+/obj/item/organ/external/r_hand/crab
+	name = "right claw"
+	icon = 'icons/mob/human_races/crab_claws.dmi'
+	attack_verb_text = "pinches"
+	is_dexterous = FALSE
+	attack_punch_damage = 7
+	mutations = list(M_CLAWS)
+	forced_icon_file = 'icons/mob/human_races/crab_claws.dmi'
+	forbid_gloves = TRUE
+
+/obj/item/organ/external/r_hand/crab/megamad
+	icon_state = "right_claw_megamad"
+	attack_punch_damage = 10
 
 /obj/item/organ/external/r_leg
 	name = "right leg"
@@ -1960,9 +2086,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 /obj/item/organ/external/head/New(loc, mob/living/carbon/human/H, var/datum/organ/external/head/O)
 	origin_body = makeweakref(H)
 
-	if(istype(H))
-		src.icon_state = H.gender == MALE? "head_m" : "head_f"
 	..()
+	if(!istype(H)) //It's entirely possible for stuff to call this without a human, such as headpoles with heads in maps for some reason...
+		return
+	src.icon_state = H.gender == MALE? "head_m" : "head_f"
 	if(isgolem(H)) //Golems don't inhabit their severed heads, they turn to dust when they die.
 		var/mob/living/simple_animal/borer/B = H.has_brain_worms()
 		if(B)
@@ -1994,20 +2121,18 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 				overlays.Add(hair) //icon.Blend(hair, ICON_OVERLAY)
 
-	if(H && istype(H))
-		var/mob/living/simple_animal/borer/B = H.has_brain_worms()
-		if(B)
-			B.infest_limb(src)
+	var/mob/living/simple_animal/borer/B = H.has_brain_worms()
+	if(B)
+		B.infest_limb(src)
 
-	if(H)
-		transfer_identity(H)
+	transfer_identity(H)
 
-		if (!O || !O.disfigured)
-			name = "[H.real_name]'s head"
-		else
-			name = "disfigured head"
+	if (!O || !O.disfigured)
+		name = "[H.real_name]'s head"
+	else
+		name = "disfigured head"
 
-		H.regenerate_icons()
+	H.regenerate_icons()
 
 	if(brainmob)
 		brainmob.stat = 2

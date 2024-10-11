@@ -22,9 +22,9 @@
 	if(occupant && occupant.butchering_drops)
 		for (var/datum/butchering_product/P in occupant.butchering_drops)
 			if(P.amount)
-				to_chat(user,"<span class='info'>[P.result.name] can be extracted from \the [occupant.name].</span>")
+				to_chat(user, span_info("[P.get_product_name()] can be extracted from \the [occupant.name]."))
 			else
-				to_chat(user,"<span class='warning'>\The [P.result.name] has already been extracted.</span>")
+				to_chat(user, span_warning("\The [P.get_product_name()] has already been extracted."))
 
 /obj/structure/kitchenspike/attack_paw(mob/user as mob)
 	return src.attack_hand(usr)
@@ -45,7 +45,7 @@
 	if(occupant && W.is_wirecutter(user))
 		for(var/datum/butchering_product/teeth/T in occupant.butchering_drops)
 			harvest_product(T,user,W)
-		for(var/datum/butchering_product/xeno_claw/X in occupant.butchering_drops)
+		for(var/datum/butchering_product/claws/X in occupant.butchering_drops)
 			harvest_product(X,user,W)
 
 	if(istype(W,/obj/item/weapon/grab))
@@ -53,7 +53,7 @@
 
 /obj/structure/kitchenspike/proc/harvest_product(datum/butchering_product/P, mob/user as mob, obj/item/weapon/W as obj)
 	if(P.amount)
-		user.visible_message("<span class = 'notice'>[user] harvests \the [occupant.name]'s [P.result.name] with \the [W.name].</span>")
+		user.visible_message(span_notice("[user] harvests \the [occupant.name]'s [P.get_product_name()] with \the [W.name]."))
 		P.spawn_result(loc, P)
 
 /obj/structure/kitchenspike/proc/handleGrab(obj/item/weapon/grab/G as obj, mob/user as mob)

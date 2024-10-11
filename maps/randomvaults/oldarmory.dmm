@@ -21,119 +21,30 @@
 	},
 /turf/space,
 /area/vault/oldarmory)
-"ae" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/full/plasma,
-/turf/space,
-/area/vault/oldarmory)
 "af" = (
 /obj/machinery/door/airlock/highsecurity{
 	name = "SECURE FACILITY"
 	},
 /turf/simulated/floor/plating,
 /area/vault/oldarmory)
-"ag" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/full/plasma,
-/turf/space,
-/area/vault/oldarmory)
-"ah" = (
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/full/plasma,
-/turf/space,
-/area/vault/oldarmory)
 "ai" = (
 /obj/effect/decal/cleanable/blood/drip,
 /turf/simulated/floor/plating,
 /area/vault/oldarmory)
-"aj" = (
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/full/plasma,
-/turf/space,
-/area/vault/oldarmory)
 "ak" = (
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/full/plasma,
 /obj/structure/sign/vacuum,
-/turf/space,
-/area/vault/oldarmory)
-"al" = (
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/full/plasma,
-/obj/structure/sign/vacuum,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/space,
 /area/vault/oldarmory)
 "am" = (
 /obj/effect/decal/remains/human,
 /turf/simulated/floor/plating,
 /area/vault/oldarmory)
-"an" = (
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/full/plasma,
-/turf/space,
-/area/vault/oldarmory)
 "ao" = (
 /turf/simulated/floor/plating,
 /area/vault/oldarmory)
 "ap" = (
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/full/plasma,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/space,
 /area/vault/oldarmory)
 "aq" = (
@@ -320,21 +231,6 @@
 /obj/effect/decal/cleanable/blood/gibs,
 /turf/simulated/floor/shuttle/brig,
 /area/vault/oldarmory)
-"bc" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/shuttle/brig,
-/area/vault/oldarmory)
 "bd" = (
 /obj/structure/noticeboard,
 /turf/simulated/wall,
@@ -373,18 +269,7 @@
 /turf/simulated/floor/shuttle/brig,
 /area/vault/oldarmory)
 "bk" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/shuttle/brig,
 /area/vault/oldarmory)
 "bl" = (
@@ -469,37 +354,8 @@
 "bx" = (
 /turf/simulated/wall/r_wall,
 /area/vault/oldarmory)
-"by" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced/plasma,
-/turf/simulated/floor/shuttle/brig,
-/area/vault/oldarmory)
 "bz" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced/plasma,
-/turf/simulated/floor/shuttle/brig,
-/area/vault/oldarmory)
-"bA" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced/plasma,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/shuttle/brig,
 /area/vault/oldarmory)
 "bB" = (
@@ -966,7 +822,7 @@ aB
 bi
 aD
 aD
-by
+bz
 aD
 bJ
 aD
@@ -1026,11 +882,11 @@ ar
 aD
 aQ
 aD
-bc
+bk
 aD
 bn
 aD
-bA
+bz
 aD
 aD
 aD
@@ -1158,7 +1014,7 @@ bd
 aD
 aD
 aD
-by
+bz
 aD
 aD
 aD
@@ -1186,7 +1042,7 @@ az
 aK
 aU
 aY
-bc
+bk
 aD
 aD
 bt
@@ -1222,7 +1078,7 @@ be
 aD
 aD
 aD
-bA
+bz
 aD
 aL
 aD
@@ -1271,12 +1127,12 @@ aa
 aa
 aa
 ab
-ae
-ah
+ap
+ap
 ak
-ah
-ah
-an
+ap
+ap
+ap
 as
 aC
 aM
@@ -1335,11 +1191,11 @@ aa
 aa
 aa
 ad
-ag
-aj
-al
-aj
-aj
+ap
+ap
+ak
+ap
+ap
 ap
 as
 aC

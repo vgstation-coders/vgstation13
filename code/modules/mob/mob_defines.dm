@@ -215,7 +215,7 @@
 	*/
 
 //The last mob/living/carbon to push/drag/grab/harm this mob
-	var/mob/LAssailant = null
+	var/datum/weakref/lastassailant = null
 
 //Wizard mode, but can be used in other modes thanks to the brand new "Give Spell" badmin button
 	var/list/spell/spell_list = list()
@@ -295,3 +295,5 @@
 	var/list/crit_rampup = list() // Of the form timestamp/damage
 
 	var/list/huds = list() // List of active huds on a mob
+
+	var/is_dexterous = FALSE //allows mobs to be made dextrous, mostly for monkeys
