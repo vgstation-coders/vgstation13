@@ -310,6 +310,53 @@
 
 			to_chat(C, "<span class='warning'>You are engulfed by a [pick("tremendous", "foul", "disgusting", "horrible")] stench emanating from [M]!</span>")
 
+/datum/reagent/killer_pheromones
+	name = "Killer Pheromones"
+	id = KILLERPHEROMONES
+	description = "A viscous liquid with a strong smell that resembles blood and ketchup, which is like blood in the water to killer tomatoes if air was water."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#993300"
+	custom_metabolism = 2
+	density = 109.06
+	var/list/mob/living/simple_animal/hostile/retaliate/horde = list()
+
+/datum/reagent/killer_pheromones/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(!tick)
+		to_chat(M,"<span class='bad'><b>You feel like [pick("you're alerting a horde", "something is waiting to pounce on you", "carnivorous beings are nearby")]! [pick("Do you, perhaps...?","Maybe... just maybe...")]</b></span>")
+
+	if(volume < 3)
+		if(volume <= custom_metabolism)
+			to_chat(M,"<span class='good'>You feel [pick("like the coast is clear", "out of danger", "less threatened")]!</span>")
+		else if(!(tick%4))
+			to_chat(M,"<span class='notice'>You feel [pick("further from danger", "like you're losing something chasing you", "less hunted down")]...</span>")
+
+	var/stench_radius = clamp(volume * 0.1, 1, 6) //Stench starts out with 1 tile radius and grows after every 10 reagents on you
+	
+	var/alerted = 0
+	for(var/mob/living/simple_animal/hostile/retaliate/R in view(stench_radius, M)) //All other retaliating hostile mobs in radius
+		if(R == M || R.stat || R.hostile || (M in R.enemies))
+			continue
+
+		R.Retaliate()
+		horde += R
+		alerted++
+		break
+
+	if(alerted >= 2)
+		to_chat(M,"<span class='danger'>YOU HAVE ALERTED THE HORDE!</span>")
+
+/datum/reagent/killer_pheromones/reagent_deleted()
+	if(..())
+		return 1
+	if(!holder)
+		return
+	var/mob/M =  holder.my_atom
+	for(var/mob/living/simple_animal/hostile/retaliate/R in horde)
+		R.enemies -= M
+
 /datum/reagent/ectoplasm
 	name = "Ectoplasm"
 	id = ECTOPLASM

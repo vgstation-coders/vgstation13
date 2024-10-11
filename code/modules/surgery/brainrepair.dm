@@ -7,7 +7,7 @@
 /datum/surgery_step/brain/bone_chips
 	allowed_tools = list(
 		/obj/item/tool/hemostat = 100,
-		/obj/item/tool/wirecutters = 75,
+		"wirecutter" = 75,
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
 

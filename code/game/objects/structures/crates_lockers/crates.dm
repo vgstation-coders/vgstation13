@@ -601,7 +601,16 @@
 			return 0
 
 /obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
+	if(istype(W, /obj/item/weapon/card) && !opened && !broken)
+		togglelock(user)
+		return
+	else if(W.is_screwdriver(user) && !opened && !locked && src.has_lockless_type)
+		remove_lock(user)
+		return
+	return ..()
+
+/obj/structure/closet/crate/secure/emag_act(mob/user)
+	if(locked && !broken)
 		overlays.len = 0
 		overlays += emag
 		overlays += sparks
@@ -610,14 +619,6 @@
 		src.locked = 0
 		src.broken = 1
 		to_chat(user, "<span class='notice'>You unlock \the [src].</span>")
-		return
-	else if(istype(W, /obj/item/weapon/card) && !opened && !broken)
-		togglelock(user)
-		return
-	else if(W.is_screwdriver(user) && !opened && !locked && src.has_lockless_type)
-		remove_lock(user)
-		return
-	return ..()
 
 /obj/structure/closet/crate/secure/verb/verb_togglelock()
 	set src in oview(1) // One square distance

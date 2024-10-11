@@ -77,7 +77,6 @@
 	throw_range = 5
 	var/obj/item/weapon/cell/high/cell = null
 	var/mode    = MODE_NORMAL
-	var/emagged = FALSE
 	var/send_cost = 1500
 	var/send_note = FALSE
 	var/no_station = FALSE
@@ -110,13 +109,15 @@
 		else
 			to_chat(user, "<span class = 'caution'> The telepad locator has become uncalibrated.</span>")
 
-
-/obj/item/weapon/rcs/attackby(var/obj/item/W, var/mob/user)
-	if(isEmag(W) && !emagged)
+/obj/item/weapon/rcs/emag_act(mob/user)
+	if(!emagged)
 		emagged = 1
 		spark(src, 5)
 		to_chat(user, "<span class = 'caution'>You emag the RCS. Click on it to toggle between modes.</span>")
 
+/obj/item/weapon/rcs/attackby(var/obj/item/W, var/mob/user)
+	if(emag_check(W,user))
+		return
 	else if(W.is_screwdriver(user))
 		if(cell)
 			cell.updateicon()

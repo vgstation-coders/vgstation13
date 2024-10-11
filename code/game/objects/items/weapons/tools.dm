@@ -91,13 +91,9 @@
 	starting_materials = list(MAT_IRON = 150)
 	force = 15.0
 	throwforce = 12.0
-
-/obj/item/tool/wrench/socket/slime_act(primarytype, mob/user)
-	..()
-	if(primarytype == /mob/living/carbon/slime/bluespace)
-		has_slime=1
-		to_chat(user, "You shove the slime extract inside \the [src]'s head.")
-		return TRUE
+	slimeadd_message = "You shove the slime extract inside SRCTAG's head"
+	slimes_accepted = SLIME_BLUESPACE
+	slimeadd_success_message = "A small draft of air sucks into it"
 
 /*
  * Screwdriver
@@ -307,7 +303,7 @@
 /obj/item/tool/weldingtool/attackby(obj/item/W as obj, mob/user as mob)
 	if(user.is_in_modules(src))
 		return
-	if(istype(W,/obj/item/tool/screwdriver))
+	if(W.is_screwdriver(user))
 		if(welding)
 			to_chat(user, "<span class='warning'>Stop welding first!</span>")
 			return

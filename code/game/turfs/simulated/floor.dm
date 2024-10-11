@@ -567,6 +567,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			to_chat(user, "<span class='warning'>You must remove the plating first.</span>")
 		return
 	else if(istype(C, /obj/item/stack/tile))
+		var/obj/item/offhand = user.get_inactive_hand()
 		if(istype(C, /obj/item/stack/tile/metal/plasteel))
 			to_chat(user, "<span class='warning'>This floor needs something to anchor this kind of tile to, add some rods first.</span>")
 		else if(is_plating())
@@ -576,7 +577,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 					make_tiled_floor(T)
 			else
 				to_chat(user, "<span class='warning'>This section is too damaged to support a tile. Use a welder to fix the damage.</span>")
-		else if(iscrowbar(user.get_inactive_hand()))
+		else if(iscrowbar(offhand))
 			var/obj/item/stack/tile/T = C
 			if(istype(T))
 				if(T.type == floor_tile.type)
@@ -592,7 +593,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 						make_tiled_floor(T)
 						return
 			return
-		else if(istype(user.get_inactive_hand(), /obj/item/tool/screwdriver))
+		else if(istype(offhand, /obj/item) && offhand.is_screwdriver(user))
 			if(is_wood_floor())
 				var/obj/item/stack/tile/T = C
 				if(istype(T))

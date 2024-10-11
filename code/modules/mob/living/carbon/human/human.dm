@@ -2101,6 +2101,9 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 
 	if(!can_be_fat)
 		species.anatomy_flags &= ~CAN_BE_FAT
+	
+	species.blood_color = get_random_colour()
+	species.flesh_color = get_random_colour()
 
 /mob/living/carbon/human/send_to_past(var/duration)
 	..()

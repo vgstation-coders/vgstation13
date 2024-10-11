@@ -59,7 +59,7 @@
 	explosion_block = 1
 
 	emag_cost = 1 // in MJ
-	machine_flags = SCREWTOGGLE | WIREJACK
+	machine_flags = SCREWTOGGLE | WIREJACK | EMAGGABLE
 	animation_delay = 5
 
 	hack_abilities = list(
@@ -1350,8 +1350,8 @@ About the new airlock wires panel:
 						to_chat(user, "<span class='warning'>You need to be wielding \the [F] to do that.</span>")
 				else
 					spawn(0)	close(1)
-	else if (istype(I, /obj/item/weapon/card/emag))
-		emag_act(src)
+	else if(emag_check(I,user))
+		return
 	else if(istype(I, /obj/item/stack/rods) && boltsDestroyed)
 		var/obj/item/stack/rods/rawd=I
 		if(rawd.amount <4)
@@ -1624,5 +1624,5 @@ About the new airlock wires panel:
 		aiControlDisabled = 0
 
 /obj/machinery/door/airlock/tackled(mob/living/carbon/human/user)
-	if(ishuman(user) && istype(user.wear_id, /obj/item/weapon/card/emag))
-		emag_act()
+	if(ishuman(user))
+		emag_check(user.wear_id,user)

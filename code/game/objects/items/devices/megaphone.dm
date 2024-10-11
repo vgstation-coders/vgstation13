@@ -11,7 +11,6 @@
 	flammable = TRUE
 
 	var/spamcheck = 0
-	var/emagged = 0
 	var/insults = 0
 	var/list/insultmsgs = list("FUCK EVERYONE!", "I'M A TATER!", "ALL SECURITY TO SHOOT ME ON SIGHT!", "I HAVE A BOMB!", "CAPTAIN IS A COMDOM!", "FOR THE SYNDICATE!")
 
@@ -24,13 +23,11 @@
 		speech.message = pick(insultmsgs)
 		insults--
 
-/obj/item/device/megaphone/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
+/obj/item/device/megaphone/emag_act(mob/user)
+	if(!emagged)
 		to_chat(user, "<span class='warning'>You overload \the [src]'s voice synthesizer.</span>")
 		emagged = 1
 		insults = rand(1, 3) //to prevent dickflooding
-		return
-	return
 
 /obj/item/device/megaphone/madscientist
 	name = "mad scientist megaphone"
@@ -58,9 +55,9 @@ var/list/megaphone_channels = list("DISABLE" = 0) + stationchannels
 /obj/item/device/megaphone/madscientist/pickup(mob/user)
 	INVOKE_EVENT(user, /event/camera_sight_changed, "mover" = user)
 
-/*/obj/item/device/megaphone/madscientist/dropped(mob/user)
+/obj/item/device/megaphone/madscientist/dropped(mob/user)
 	..()
-	INVOKE_EVENT(user, /event/camera_sight_changed, "mover" = user)*/ // Allows retracking, uncomment to enable
+	INVOKE_EVENT(user, /event/camera_sight_changed, "mover" = user)
 
 /obj/item/device/megaphone/madscientist/attack_self(mob/living/user as mob)
 	show_ui(user)

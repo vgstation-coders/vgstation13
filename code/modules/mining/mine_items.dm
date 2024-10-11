@@ -82,17 +82,20 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("hits", "pierces", "slices", "attacks")
 	toolsounds = list('sound/weapons/Genhit.ogg')
+	slimeadd_message = "You mold the slime extract around the tip of SRCTAG"
 	hitsound = "sound/weapons/bloodyslice.ogg"
+	slimes_accepted = SLIME_OIL|SLIME_PYRITE
 	var/drill_verb = "picking"
 	var/diggables = DIG_ROCKS
 	var/excavation_amount = 100
 
 /obj/item/weapon/pickaxe/slime_act(primarytype, mob/user)
-	..()
-	if(primarytype == /mob/living/carbon/slime/oil)
-		has_slime=1
-		to_chat(user, "You mold the slime extract around the tip of \the [src].")
-		return TRUE
+	switch(primarytype)
+		if(SLIME_OIL)
+			slimeadd_success_message = "It now has a strangely dense gravitational aura to it"
+		if(SLIME_PYRITE)
+			slimeadd_success_message = "It shines spectacularly"
+	. = ..()
 
 /obj/item/weapon/pickaxe/hammer
 	name = "sledgehammer"

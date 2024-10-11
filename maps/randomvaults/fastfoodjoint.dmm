@@ -1489,7 +1489,7 @@
 	},
 /area/vault/fastfood)
 "Gb" = (
-/obj/window_grille_spawner/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "Gf" = (
@@ -1628,7 +1628,7 @@
 	},
 /area/vault/fastfood/dining)
 "Jw" = (
-/obj/window_grille_spawner/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/dining)
@@ -1669,7 +1669,7 @@
 	},
 /area/vault/fastfood)
 "JJ" = (
-/obj/window_grille_spawner/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/kitchen)
 "JK" = (
@@ -1735,7 +1735,7 @@
 	},
 /area/vault/fastfood/kitchen)
 "KI" = (
-/obj/window_grille_spawner/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/fastfood/dining)
 "KY" = (

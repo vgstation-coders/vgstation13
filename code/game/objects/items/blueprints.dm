@@ -15,6 +15,7 @@
 # define ROOM_ERR_SPACE    -1
 # define ROOM_ERR_TOOLARGE -2
 
+var/global/list/blueprint_archives = list()
 
 /obj/item/blueprints
 	name = "station blueprints"
@@ -26,6 +27,8 @@
 	flammable = TRUE
 
 	var/header = "<small>property of Nanotrasen. For heads of staff only. Store in high-secure storage.</small>"
+	var/shows_archives = TRUE
+	var/last_shown_archive
 
 	var/can_create_areas_in = list(AREA_SPACE,AREA_CONSTRUCT)
 	var/can_rename_areas = list(AREA_STATION, AREA_BLUEPRINTS)
@@ -42,6 +45,30 @@
 	var/area_protection_buffer = 4
 
 	var/mob/editor
+
+// below is non functional, uncomment if you want to have a go at this being available from a roundstart snapshot
+/*/obj/item/blueprints/initialize()
+	. = ..()
+	if(shows_archives && !blueprint_archives.len)
+		for(var/area/A in areas)
+			if(get_area_type(A) == AREA_STATION)
+				for(var/turf/T in A.area_turfs)
+					update_turf_image(T)*/
+
+/obj/item/blueprints/proc/update_turf_image(var/turf/T)
+	var/image/overlay = image(T.icon,T,T.icon_state,T.layer,T.dir,T.pixel_x,T.pixel_y)
+	overlay.plane = NARSIE_PLANE
+	overlay.alpha = 128
+	overlay.color = "#06f"
+	blueprint_archives["[T.x],[T.y],[T.z]"] = list(overlay)
+	for(var/atom/AM in T.contents)
+		if(AM.type == /atom/movable/lighting_overlay)
+			continue
+		overlay = image(AM.icon,T,AM.icon_state,AM.layer,AM.dir,AM.pixel_x,AM.pixel_y)
+		overlay.plane = NARSIE_PLANE
+		overlay.alpha = 128
+		overlay.color = "#0af"
+		blueprint_archives["[T.x],[T.y],[T.z]"] += overlay
 
 //MoMMI blueprints
 /obj/item/blueprints/mommiprints
@@ -62,6 +89,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	icon_state = "permit"
 
 	w_class = W_CLASS_TINY
+	shows_archives = FALSE
 
 	can_rename_areas = list(AREA_BLUEPRINTS)
 	can_delete_areas = list(AREA_BLUEPRINTS)
@@ -109,6 +137,12 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		return
 
 	switch(href_list["action"])
+		if("show_room")
+			show_room(usr)
+
+		if("update_room")
+			update_room(usr)
+
 		if("create_room")
 			create_room(usr)
 
@@ -149,6 +183,9 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	text += "<br>"
 
+	if(shows_archives)
+		text += "<p><a href='?src=\ref[src];action=show_room'>Show archive of surroundings</a></p>"
+		text += "<p><a href='?src=\ref[src];action=update_room'>Update archive of surroundings</a></p>"
 	if(area_type in can_create_areas_in)
 		text += "<p><a href='?src=\ref[src];action=create_room'>Create a new room</a></p>"
 		text += "<p><a href='?src=\ref[src];action=create_area'>Start a new drawing</a></p>"
@@ -261,6 +298,30 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 				C.images.Remove(bad_area)
 
 			#undef error_flash_dur
+
+//Shows an archive of surrounding tiles
+/obj/item/blueprints/proc/show_room(mob/user)
+	if(shows_archives && user.client)
+		var/list/shown_images = list()
+		var/tstring = ""
+		for(var/turf/T in spiral_block(get_turf(user),user.client.view))
+			tstring = "[T.x],[T.y],[T.z]"
+			if(tstring in blueprint_archives)
+				for(var/I in blueprint_archives[tstring])
+					shown_images += I
+					user.client.images += I
+		last_shown_archive = world.time
+		spawn(10 SECONDS)
+			if(world.time - last_shown_archive >= 99) // sanity for mass clicking of this
+				user.client.images -= shown_images
+
+/obj/item/blueprints/proc/update_room(mob/user)
+	if(shows_archives)
+		if(blueprint_archives.len)
+			if(alert(usr,"This will overwrite any archives, continue?","Overwriting","Yes","No") == "No")
+				return
+		for(var/turf/T in view(user.client.view))
+			update_turf_image(T)
 
 //Creates a new area and spreads it to cover the current room
 /obj/item/blueprints/proc/create_room(mob/user)

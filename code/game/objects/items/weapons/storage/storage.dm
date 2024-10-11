@@ -418,7 +418,7 @@
 	return 1
 
 /obj/item/weapon/storage/can_quick_store(var/obj/item/I)
-	return can_be_inserted(I,1)
+	return can_use() && can_be_inserted(I,1)
 
 /obj/item/weapon/storage/quick_store(var/obj/item/I,mob/user)
 	..()

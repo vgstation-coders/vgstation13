@@ -1218,7 +1218,7 @@ var/mob/dview/tview/tview_mob = new()
 		result = "-[result]"
 	return result
 
-/proc/get_random_colour(var/simple, var/lower, var/upper)
+/proc/get_random_colour(var/simple = FALSE, var/lower = 0, var/upper = 255)
 	var/colour
 	if(simple)
 		colour = pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))

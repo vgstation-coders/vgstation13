@@ -18,7 +18,6 @@
 
 	var/charges = 10
 	var/ready = 0
-	var/emagged = 0
 	var/defib_delay = 30
 
 	var/defib_tool = "paddles"
@@ -82,18 +81,14 @@
 	if(user)
 		user.update_inv_hands()
 
-/obj/item/weapon/melee/defibrillator/attackby(obj/item/weapon/W,mob/user)
-	if(istype(W,/obj/item/weapon/card/emag))
-		emagged = !src.emagged
-		if(emagged)
-			to_chat(user, "<span class='warning'>You short out [src]'s safety protocols.</span>")
-			overlays += image(icon = icon, icon_state = "defib_emag")
-		else
-			to_chat(user, "<span class='notice'>You reset [src]'s safety protocols.</span>")
-			overlays.len = 0
+/obj/item/weapon/melee/defibrillator/emag_act(mob/user)
+	emagged = !emagged
+	if(emagged)
+		to_chat(user, "<span class='warning'>You short out [src]'s safety protocols.</span>")
+		overlays += image(icon = icon, icon_state = "defib_emag")
 	else
-		. = ..()
-	return
+		to_chat(user, "<span class='notice'>You reset [src]'s safety protocols.</span>")
+		overlays.len = 0
 
 /obj/item/weapon/melee/defibrillator/attack(mob/M,mob/user)
 	if(!ishuman(M))
@@ -267,7 +262,7 @@
 		to_chat(user, "<span class='notice'>You wrap the exposed wires around the cell.</span>")
 		src.update_icon()
 
-	if (istype(I, /obj/item/tool/screwdriver))
+	if (I.is_screwdriver(user))
 		if (!power_supply)
 			return
 

@@ -2833,7 +2833,12 @@
 			spawntype = /obj/item/weapon/coin/pumf
 			feedback = "You have greatly angered the gods, and their grudge toward you has been crystalized into a damned pumf coin."
 
-		if(!H.put_in_hands( new spawntype(H)))
+		var/obj/item/reward = new spawntype(H)
+		if (answer == "Cookie")
+			var/obj/item/weapon/reagent_containers/food/snacks/cookie/C = reward
+			C.thermal_variation_modifier = 0
+
+		if(!H.put_in_hands(reward))
 			log_admin("[key_name(H)] has their hands full, so they did not receive their [answer], spawned by [key_name(src.owner)].")
 			message_admins("[key_name(H)] has their hands full, so they did not receive their [answer], spawned by [key_name(src.owner)].")
 			return
@@ -4046,6 +4051,27 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 					else
 						world << sound('sound/effects/explosionfar.ogg')
 					sleep(rand(2, 10)) //Sleep 0.2 to 1 second
+			if("fakenews")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","FAKEN")
+				var/type
+				var/datum/feed_message/news/newspost
+				var/dest
+				var/datum/trade_destination/newsdest
+				if(alert(usr,"Generate news specifically from a location or not?","Location","Yes","No") == "Yes")
+					dest = input("Where will it happen?") in subtypesof(/datum/trade_destination)
+					newsdest = new dest()
+					var/list/typelist = newsdest.viable_mundane_events.len || newsdest.viable_random_events.len ? newsdest.viable_mundane_events + newsdest.viable_random_events : subtypesof(/datum/feed_message/news)
+					type = input("Select a news message to broadcast!") in typelist
+					newspost = new type(newsdest)
+				else
+					type = input("Select a news message to broadcast!") in subtypesof(/datum/feed_message/news)
+					dest = input("Where will it happen, if applicable?") in subtypesof(/datum/trade_destination)
+					newsdest = new dest()
+					newspost = new type(newsdest)
+				if(newsdest.get_custom_eventstring(type))
+					newspost.body = newsdest.get_custom_eventstring(type)
+				announce_newscaster_news(newspost)
 			if("togglerunescapepvp")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RSPVP")

@@ -164,8 +164,8 @@
 
 /obj/machinery/bot/chefbot/attackby(obj/item/W as obj, mob/user as mob)
 	..()
-	if(istype(W, /obj/item/weapon/card/emag))
-		emag_act(user, W)
+	if(emag_check(W,user))
+		return
 	else
 		src.visible_message("<span class = 'warning'>[user] hits [src] with [W]!</span>")
 		if(prob(1))

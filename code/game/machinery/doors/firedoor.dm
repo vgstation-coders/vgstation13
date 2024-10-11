@@ -76,6 +76,8 @@ var/global/list/alert_overlays_global = list()
 
 	animation_delay_predensity_opening = 3
 	animation_delay_predensity_closing = 7
+	
+	machine_flags = SCREWTOGGLE | EMAGGABLE
 
 	var/list/alert_overlays_local
 
@@ -359,14 +361,7 @@ var/global/list/alert_overlays_global = list()
 		else
 			to_chat(user, "<span class = 'attack'>\The [src] is not welded or otherwise blocked.</span>")
 
-	if(isEmag(C))
-		if(density)
-			door_animate("spark")
-			sleep(6)
-			force_open(user, C)
-			sleep(8)
-		blocked = TRUE
-		update_icon()
+	if(emag_check(C,user))
 		return
 
 	do_interaction(user, C)
@@ -388,11 +383,14 @@ var/global/list/alert_overlays_global = list()
 			if (here && here.dynamic_lighting)
 				anim(target = src, a_icon = icon, flick_anim = "door_deny-moody", sleeptime = 5, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 
-/obj/machinery/door/firedoor/emag_ai(mob/living/silicon/ai/A)
+/obj/machinery/door/firedoor/emag_act(mob/user)
 	if(density)
 		door_animate("spark")
 		sleep(6)
-		open()
+		if(isAI(user) || ispulsedemon(user))
+			open()
+		else
+			force_open(user)
 		sleep(8)
 	blocked = TRUE
 	update_icon()

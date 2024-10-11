@@ -77,6 +77,7 @@ var/global/list/mineralSpawnChance[]
 	var/rockernaut = NONE
 	var/minimum_mine_time = 0
 	var/mining_difficulty = MINE_DIFFICULTY_NORM
+	var/fortune_multiplier = 1 //how much extra mineral comes from a pyrite slime enhancement
 
 
 /turf/unsimulated/mineral/snow
@@ -270,6 +271,7 @@ var/list/icon_state_to_appearance = list()
 		name = "rock"
 		return
 	name = "\improper [mineral.display_name] deposit"
+	fortune_multiplier = mineral.fortune_multiplier
 	update_icon()
 
 /turf/unsimulated/mineral/attackby(obj/item/weapon/W, mob/user)
@@ -400,12 +402,12 @@ var/list/icon_state_to_appearance = list()
 					B.geological_data = geologic_data
 
 
-				if(P.has_slime)
+				if(P.has_slimes & SLIME_OIL)
 					for(var/turf/unsimulated/mineral/M in range(user,1))
-						M.GetDrilled(safety_override = TRUE, driller = user)
+						M.GetDrilled(safety_override = TRUE, driller = user, multiplier = (P.has_slimes & SLIME_PYRITE) ? 2 : 1)
 					return
 
-				GetDrilled(artifact_destroyed)
+				GetDrilled(artifact_destroyed, multiplier = (P.has_slimes & SLIME_PYRITE) ? 2 : 1)
 
 				return
 
@@ -488,9 +490,13 @@ var/list/icon_state_to_appearance = list()
 *                  disabled after drilling (ie. gibtonite will be immediately disarmed).
 * driller: Whatever is doing the drilling.  Used for some messages.
 */
-/turf/unsimulated/mineral/proc/GetDrilled(var/artifact_fail = TRUE, var/safety_override = FALSE, var/atom/driller)
+/turf/unsimulated/mineral/proc/GetDrilled(var/artifact_fail = TRUE, var/safety_override = FALSE, var/atom/driller, var/multiplier = 1)
 	if (mineral && mineral.result_amount)
-		DropMineral()
+		if(multiplier >= 2 && fortune_multiplier >= 2)
+			for(var/i in 1 to round(fortune_multiplier*(multiplier/2)))
+				DropMineral()
+		else
+			DropMineral()
 	switch(rockernaut)
 		if(TURF_CONTAINS_ROCKERNAUT)
 			var/mob/living/simple_animal/hostile/asteroid/rockernaut/R = new(src)
@@ -514,7 +520,7 @@ var/list/icon_state_to_appearance = list()
 		ArtifactRepercussion(src, usr, "", "[artifact_find.artifact_find_type]")
 
 	if(artifact_fail && !mineral)
-		if(prob(1))
+		if(prob(multiplier))
 			switch(polarstar)
 				if(0)
 					new/obj/item/weapon/gun/energy/polarstar(src)
@@ -525,7 +531,7 @@ var/list/icon_state_to_appearance = list()
 					visible_message("<span class='notice'>Something came out of the wall! Looks like scrap metal.</span>")
 					polarstar = 2
 
-	if(rand(1,500) == 1)
+	if(rand(1,round(500/multiplier)) == 1)
 		visible_message("<span class='notice'>An old dusty crate was buried within!</span>")
 		DropAbandonedCrate()
 
@@ -885,6 +891,7 @@ var/list/icon_state_to_appearance = list()
 	name = "Uranium deposit"
 	icon_state = "rock_Uranium"
 	mineral = new /mineral/uranium
+	fortune_multiplier = 2
 
 
 /turf/unsimulated/mineral/iron
@@ -897,18 +904,21 @@ var/list/icon_state_to_appearance = list()
 	name = "Diamond deposit"
 	icon_state = "rock_Diamond"
 	mineral = new /mineral/diamond
+	fortune_multiplier = 4
 
 
 /turf/unsimulated/mineral/gold
 	name = "Gold deposit"
 	icon_state = "rock_Gold"
 	mineral = new /mineral/gold
+	fortune_multiplier = 2
 
 
 /turf/unsimulated/mineral/silver
 	name = "Silver deposit"
 	icon_state = "rock_Silver"
 	mineral = new /mineral/silver
+	fortune_multiplier = 2
 
 
 /turf/unsimulated/mineral/plasma
@@ -921,12 +931,14 @@ var/list/icon_state_to_appearance = list()
 	name = "Bananium deposit"
 	icon_state = "rock_Clown"
 	mineral = new /mineral/clown
+	fortune_multiplier = 8
 
 
 /turf/unsimulated/mineral/phazon
 	name = "Phazite deposit"
 	icon_state = "rock_Phazon"
 	mineral = new /mineral/phazon
+	fortune_multiplier = 8
 
 /turf/unsimulated/mineral/pharosium
 	name = "Pharosium deposit"
@@ -972,6 +984,7 @@ var/list/icon_state_to_appearance = list()
 	name = "Telecrystal deposit"
 	icon_state = "rock_Telecrystal"
 	mineral = new /mineral/telecrystal
+	fortune_multiplier = 8
 
 /turf/unsimulated/mineral/mauxite
 	name = "Mauxite deposit"
@@ -997,6 +1010,7 @@ var/list/icon_state_to_appearance = list()
 	name = "Silver deposit"
 	icon_state = "rock_Silver"
 	mineral = new /mineral/mythril
+	fortune_multiplier = 8
 
 ////////////////////////////////Gibtonite
 /turf/unsimulated/mineral/gibtonite
@@ -1079,7 +1093,7 @@ var/list/icon_state_to_appearance = list()
 			det_time = 0
 		visible_message("<span class='notice'>The chain reaction was stopped! The gibtonite had [src.det_time] reactions left till the explosion!</span>")
 
-/turf/unsimulated/mineral/gibtonite/GetDrilled(var/artifact_fail = TRUE, var/safety_override = FALSE, var/atom/driller)
+/turf/unsimulated/mineral/gibtonite/GetDrilled(var/artifact_fail = TRUE, var/safety_override = FALSE, var/atom/driller, var/multiplier = 1)
 	if(stage == 0 && mineral.result_amount >= 1) //Gibtonite deposit is activated
 		playsound(src,'sound/effects/hit_on_shattered_glass.ogg',50,1)
 		explosive_reaction()
