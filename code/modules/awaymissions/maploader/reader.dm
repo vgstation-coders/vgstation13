@@ -403,7 +403,7 @@ var/list/map_dimension_cache = list()
 	if(!T)
 		WARNING("Turf at [x], [y], [z] not found!")
 	if(ispath(path, /turf)) //Turfs use ChangeTurf
-		if(path != T.type && !(overwrite && T.type == get_base_turf(z)))
+		if(path != T.type && !(overwrite && path == get_base_turf(z)))
 			instance = T.ChangeTurf(path, allow = 1)
 			T = instance
 	else
