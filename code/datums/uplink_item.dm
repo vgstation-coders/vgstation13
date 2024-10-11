@@ -802,9 +802,9 @@ var/list/discounted_items_of_the_round = list()
 
 /datum/uplink_item/jobspecific/command_security/superfanshot
 	name = "12 Gauge High Force FaNshot Shells"
-	desc = "The true force of nature, this box contains six modified syndicate FaNshots compress the knockback power within these shells further via reverse-engineered bluespace technology to deliver double the punch of an ordinary FaNshot, as well as being able to knock machinery off of its anchor bolts and living things out of buckles. For further knockback and guaranteed debuckling, stand nearer to your target."
+	desc = "The true force of nature, this box contains six modified syndicate FaNshots compress the knockback power within these shells further via reverse-engineered bluespace technology to deliver double the punch of an ordinary FaNshot. For further knockback, stand nearer to your target."
 	item = /obj/item/weapon/storage/box/syndie_kit/fan
-	cost = 14
+	cost = 12
 	discounted_cost = 8
 	jobs_with_discount = list("Warden", "Head of Security")
 
