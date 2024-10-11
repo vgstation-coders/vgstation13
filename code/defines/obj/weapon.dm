@@ -241,16 +241,16 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 			H.Stun(2)
 			H.drop_item(src)
 			return
-	var/turf/target = get_turf(target)
+	var/turf/targ = get_turf(target)
 	var/new_x = src.x
 	var/new_y = src.y
 	var/scaler //used to changed the normalised vector to the proper size
-	scaler = throw_range / max(abs(target.x - src.x), abs(target.y - src.y),1) //whichever is larger magnitude is what we normalise to
-	if (target.x - src.x != 0) //just to avoid fucking with math for no reason
-		var/xadjust = round((target.x - src.x) * scaler) //normalised vector is now scaled up to throw_range
+	scaler = throw_range / max(abs(targ.x - src.x), abs(targ.y - src.y),1) //whichever is larger magnitude is what we normalise to
+	if (targ.x - src.x != 0) //just to avoid fucking with math for no reason
+		var/xadjust = round((targ.x - src.x) * scaler) //normalised vector is now scaled up to throw_range
 		new_x = src.x + xadjust //the new target at max range
-	if (target.y - src.y != 0)
-		var/yadjust = round((target.y - src.y) * scaler)
+	if (targ.y - src.y != 0)
+		var/yadjust = round((targ.y - src.y) * scaler)
 		new_y = src.y + yadjust
 	// log_admin("Adjusted target of [adjtarget.x] and [adjtarget.y], adjusted with [xadjust] and [yadjust] from [scaler]")
 	..(locate(new_x, new_y, src.z), throw_range, throw_speed)
