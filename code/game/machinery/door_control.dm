@@ -32,7 +32,7 @@
 	ghost_read=0
 	ghost_write=0
 
-	machine_flags = EMAGGABLE | MULTITOOL_MENU | FIXED2WORK
+	machine_flags = EMAGGABLE | MULTITOOL_MENU
 
 /obj/machinery/door_control/attack_ai(mob/user as mob)
 	if(wires & 2)
