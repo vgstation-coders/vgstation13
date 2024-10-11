@@ -219,3 +219,12 @@ var/list/map_landmarks = list()
 	
 /obj/effect/landmark/map_element/medship
 	maptype = /datum/map_element/fixedvault/medship
+
+/obj/effect/landmark/map_element/spacetomb
+	maptype = /datum/map_element/fixedvault/spacetomb
+
+/obj/effect/landmark/map_element/clownroid
+	maptype = /datum/map_element/fixedvault/clownroid
+
+/obj/effect/landmark/map_element/deepspaceroid
+	maptype = /datum/map_element/fixedvault/deepspaceroid

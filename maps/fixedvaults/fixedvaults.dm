@@ -57,3 +57,15 @@
 /datum/map_element/fixedvault/medship
     name = "medical ship"
     file_path = "maps/fixedvaults/medship.dmm"
+    
+/datum/map_element/fixedvault/spacetomb
+    name = "space tomb"
+    file_path = "maps/fixedvaults/spacetomb.dmm"
+
+/datum/map_element/fixedvault/clownroid
+    name = "clown roid"
+    file_path = "maps/randomvaults/clownroid.dmm"
+
+/datum/map_element/fixedvault/deepspaceroid
+    name = "deep space roid"
+    file_path = "maps/fixedvaults/deepspaceroid.dmm"
