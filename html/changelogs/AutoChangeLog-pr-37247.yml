@@ -1,0 +1,5 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: Items only worth 1 telecrystal are no longer included in round discounts
+    for uplinks.
