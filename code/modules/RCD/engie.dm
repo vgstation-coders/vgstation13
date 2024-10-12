@@ -62,7 +62,10 @@
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/slime_act(primarytype, mob/user)
 	. = ..()
 	if(. && (slimes_accepted & primarytype))
-		schematics += /datum/rcd_schematic/con_pwindow
+		var/datum/rcd_schematic/con_pwindow/P = new(src)
+		if(!schematics[P.category])
+			schematics[P.category] = list()
+		schematics[P.category] += P
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/delay(var/mob/user, var/atom/target, var/amount)
 	return do_after(user, target, amount/2)
