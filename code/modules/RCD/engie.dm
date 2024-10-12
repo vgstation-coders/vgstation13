@@ -62,13 +62,10 @@
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/slime_act(primarytype, mob/user)
 	. = ..()
 	if(. && (slimes_accepted & primarytype))
-		var/datum/rcd_schematic/con_pwindow/P = new(src)
-		if(!schematics[P.category])
+		var/datum/rcd_schematic/con_pwindow/P = /datum/rcd_schematic/con_pwindow
+		if(!schematics[initial(P.category)])
 			schematics[P.category] = list()
-		if(!(P in schematics[P.category]))
-			schematics[P.category] += P
-		else
-			qdel(P)
+		schematics[P.category] += P
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/delay(var/mob/user, var/atom/target, var/amount)
 	return do_after(user, target, amount/2)
@@ -85,6 +82,7 @@
 	/datum/rcd_schematic/con_window,
 	/datum/rcd_schematic/con_pwindow,
 	)
+	has_slimes = SLIMES_DARKPURPLE // just so this doesn't cause anything off
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/admin/afterattack(var/atom/A, var/mob/user)
 	if(!user.check_rights(R_ADMIN))
