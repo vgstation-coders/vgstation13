@@ -42,4 +42,4 @@
 
 /datum/role/wronglawset/GetScoreboard()
     . = ..()
-    . += "<b>Its laws were:</b><br>[init_laws.write_laws()]"
+    . += "<br><b>Its laws were:</b><br>[init_laws.write_laws()]"
