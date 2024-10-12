@@ -50,12 +50,19 @@
 	/datum/rcd_schematic/con_rwalls,
 	/datum/rcd_schematic/con_airlock,
 	/datum/rcd_schematic/con_window,
-	/datum/rcd_schematic/con_pwindow,
 	)
 	matter = 90
 	max_matter = 90
 	origin_tech = Tc_ENGINEERING + "=5;" + Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=4"
 	mech_flags = MECH_SCAN_FAIL
+	slimeadd_message = "You put the slime extract on the SRCTAG's compressed matter slot"
+	slimes_accepted = SLIME_DARKPURPLE
+	slimeadd_success_message = "It gains a distinct plasma pink hue"
+	
+/obj/item/device/rcd/matter/engineering/pre_loaded/adv/slime_act(primarytype, mob/user)
+	. = ..()
+	if(. && (slimes_accepted & primarytype))
+		schematics += /datum/rcd_schematic/con_pwindow
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/delay(var/mob/user, var/atom/target, var/amount)
 	return do_after(user, target, amount/2)
