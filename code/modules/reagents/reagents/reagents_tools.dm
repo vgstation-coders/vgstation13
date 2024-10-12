@@ -166,7 +166,7 @@
 /datum/reagent/pacid
 	name = "Polytrinic Acid"
 	id = PACID
-	description = "Polytrinic acid is a an extremely corrosive chemical substance."
+	description = "Polytrinic acid is an extremely corrosive chemical substance."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#8E18A9" //rgb: 142, 24, 169
 	custom_metabolism = 0.5

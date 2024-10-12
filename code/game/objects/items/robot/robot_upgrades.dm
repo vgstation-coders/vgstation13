@@ -279,7 +279,7 @@
 
 /obj/item/borg/upgrade/organ_gripper
 	name = "medical cyborg organ gripper upgrade"
-	desc = "Used to give a medical cyborg a organ gripper."
+	desc = "Used to give a medical cyborg an organ gripper."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper-medical"
 	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
@@ -307,7 +307,7 @@
 
 /obj/item/borg/upgrade/magnetic_gripper
 	name = "engineering cyborg magnetic gripper upgrade"
-	desc = "Used to give a engineering cyborg a magnetic gripper."
+	desc = "Used to give an engineering cyborg a magnetic gripper."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper"
 	required_modules = list(ENGINEERING_MODULE)
