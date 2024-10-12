@@ -100,7 +100,7 @@
 	attacktext = "bites into"
 	attack_sound = 'sound/weapons/spiderlunge.ogg'
 
-/mob/living/simple_animal/hostile/asteroid/basilisk/death()
+/mob/living/simple_animal/hostile/asteroid/basilisk/skullbot/death()
 	visible_message("<span class='danger'>\The [src] shatters before dying, leaving some bones.</span>")
 	drop_stack(/obj/item/stack/sheet/bone, loc, 5)
 	new /obj/effect/decal/mecha_wreckage/skullbot(loc)
