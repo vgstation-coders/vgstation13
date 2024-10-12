@@ -1,0 +1,5 @@
+author: jwhitak
+delete-after: true
+changes:
+- bugfix: Fixed the spacesuit modification station not working for plasmamen or vox,
+    again.
