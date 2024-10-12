@@ -62,8 +62,8 @@
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/slime_act(primarytype, mob/user)
 	. = ..()
 	if(. && (slimes_accepted & primarytype))
-		var/datum/rcd_schematic/con_pwindow/P = /datum/rcd_schematic/con_pwindow
-		if(!schematics[initial(P.category)])
+		var/datum/rcd_schematic/con_pwindow/P = new(src)
+		if(!schematics[P.category])
 			schematics[P.category] = list()
 		schematics[P.category] += P
 
