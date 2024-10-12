@@ -82,7 +82,7 @@
 	/datum/rcd_schematic/con_window,
 	/datum/rcd_schematic/con_pwindow,
 	)
-	has_slimes = SLIMES_DARKPURPLE // just so this doesn't cause anything off
+	has_slimes = SLIME_DARKPURPLE // just so this doesn't cause anything off
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/admin/afterattack(var/atom/A, var/mob/user)
 	if(!user.check_rights(R_ADMIN))
