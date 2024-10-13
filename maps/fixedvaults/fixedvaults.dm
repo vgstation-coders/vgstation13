@@ -26,6 +26,10 @@
     name = "salvage shuttle cockroaches"
     file_path = "maps/fixedvaults/salvage_shuttle_cockroaches.dmm"
     
+/datum/map_element/fixedvault/salvage_shuttle_skrites
+    name = "salvage shuttle cockroaches"
+    file_path = "maps/fixedvaults/salvage_shuttle_skrites.dmm"
+    
 /datum/map_element/fixedvault/spacegym
     name = "space gym"
     file_path = "maps/randomvaults/spacegym.dmm"
@@ -33,6 +37,10 @@
 /datum/map_element/fixedvault/deepspaceruin
     name = "deep space ruin"
     file_path = "maps/fixedvaults/deepspaceruin.dmm"
+
+/datum/map_element/fixedvault/deepspaceruin_doom
+    name = "deep space ruin"
+    file_path = "maps/fixedvaults/deepspaceruindoom.dmm"
 
 /datum/map_element/fixedvault/oldstation
     name = "oldstation"
