@@ -55,7 +55,7 @@
     file_path = "maps/fixedvaults/misc_derelict_east.dmm"
 
 /datum/map_element/fixedvault/djsat
-    name = "DJ satellite"
+    name = "DJ satellite tail"
     file_path = "maps/fixedvaults/djsat.dmm"
 
 /datum/map_element/fixedvault/djsat_notail
