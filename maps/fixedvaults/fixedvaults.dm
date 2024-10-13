@@ -58,6 +58,10 @@
     name = "DJ satellite"
     file_path = "maps/fixedvaults/djsat.dmm"
 
+/datum/map_element/fixedvault/djsat_notail
+    name = "DJ satellite"
+    file_path = "maps/fixedvaults/djsat_notail.dmm"
+
 /datum/map_element/fixedvault/derelict_tele
     name = "derelict teleporter"
     file_path = "maps/fixedvaults/derelict_tele.dmm"

@@ -216,6 +216,9 @@ var/list/map_landmarks = list()
 
 /obj/effect/landmark/map_element/djsat
 	maptype = /datum/map_element/fixedvault/djsat
+	
+/obj/effect/landmark/map_element/djsat_notail
+	maptype = /datum/map_element/fixedvault/djsat_notail
 
 /obj/effect/landmark/map_element/derelict_tele
 	maptype = /datum/map_element/fixedvault/derelict_tele
