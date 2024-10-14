@@ -109,8 +109,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	//Reason: So we can abort the proccall if say, one of our arguments was a mob which no longer exists
 	//this will protect us from a fair few errors ~Carn
 
-	var/i
-	for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
+	for(var/i = 1, i < argnum + 1, i++)
 		lst[i] = variable_set(src)
 
 	if(targetselected)
