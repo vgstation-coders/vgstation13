@@ -20,7 +20,6 @@
 		GENE_XENOPHYSIOLOGY		=	"#8AFF81",
 		)
 	var/isSomatoraying = FALSE
-	var/emagged = FALSE
 	var/charge_speed = 10//how many ticks do you have to stand before the radiation comes out
 
 	var/image/mode_color
@@ -74,20 +73,24 @@
 
 /obj/item/floral_somatoray/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(isEmag(W) || issolder(W))
-		if (emagged)
-			if (issolder(W))
-				to_chat(user, "<span class='warning'>You repair the safety limit of the [src.name]!</span>")
-				desc = initial(desc)
-				emagged = FALSE
-				update_icon()
-			else
-				to_chat(user, "The safeties are already de-activated.")
-		else
-			emagged = TRUE
-			to_chat(user, "<span class='warning'>You short out the safety limit of the [src.name]!</span>")
-			desc += " It seems to have it's safety features de-activated."
-			playsound(user, 'sound/effects/sparks4.ogg', 50, 1)
+		if (emagged && issolder(W))
+			to_chat(user, "<span class='warning'>You repair the safety limit of the [src.name]!</span>")
+			desc = initial(desc)
+			emagged = FALSE
 			update_icon()
+		else
+			emag_act(user)
+
+/obj/item/floral_somatoray/emag_act(mob/user)
+	if (emagged)
+		to_chat(user, "The safeties are already de-activated.")
+	else
+		emagged = TRUE
+		to_chat(user, "<span class='warning'>You short out the safety limit of the [src.name]!</span>")
+		desc += " It seems to have it's safety features de-activated."
+		playsound(user, 'sound/effects/sparks4.ogg', 50, 1)
+		update_icon()
+	
 
 /obj/item/floral_somatoray/attack(var/mob/living/M, var/mob/living/user, var/def_zone, var/originator=null)
 	return

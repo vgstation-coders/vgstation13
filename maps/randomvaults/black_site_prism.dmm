@@ -295,28 +295,6 @@
 /mob/living/simple_animal/hostile/humanoid/vampire,
 /turf/simulated/floor/wood,
 /area/vault/black_site_prism)
-"az" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8;
-	name = "reinforced one-way window";
-	one_way = 1
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
-/area/vault/black_site_prism)
 "aA" = (
 /obj/structure/closet/coffin{
 	icon_state = "coffin_open";
@@ -358,33 +336,25 @@
 	},
 /area/vault/black_site_prism)
 "aH" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
 "aL" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/full/plasma,
 /obj/structure/cable/yellow{
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/obj/structure/window/plasma{
-	dir = 8
-	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/grille/window_spawner/plasma/full,
 /turf/simulated/floor/engine,
 /area/vault/black_site_prism)
 "aX" = (
@@ -459,10 +429,6 @@
 	},
 /area/vault/black_site_prism)
 "bs" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
@@ -473,6 +439,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -516,22 +483,12 @@
 	},
 /area/vault/black_site_prism)
 "cf" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	name = "reinforced one-way window";
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/wood,
 /area/vault/black_site_prism)
 "cl" = (
@@ -582,29 +539,6 @@
 	tag = "icon-darkred"
 	},
 /area/vault/black_site_prism)
-"db" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma{
-	dir = 1
-	},
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/window/plasma{
-	dir = 8
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/engine,
-/area/vault/black_site_prism)
 "de" = (
 /obj/machinery/light{
 	color = "#FF0000";
@@ -617,27 +551,6 @@
 	dir = 4
 	},
 /turf/simulated/wall/invulnerable,
-/area/vault/black_site_prism)
-"dF" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
 /area/vault/black_site_prism)
 "dG" = (
 /obj/structure/table,
@@ -690,29 +603,6 @@
 /obj/structure/lattice,
 /turf/space,
 /area/vault/black_site_prism)
-"ex" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/yellow/visible{
-	dir = 4
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
-/area/vault/black_site_prism)
 "eH" = (
 /obj/structure/table,
 /obj/machinery/microwave{
@@ -729,42 +619,6 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/vault/black_site_prism)
-"eI" = (
-/obj/structure/grille,
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma{
-	dir = 1
-	},
-/obj/structure/window/plasma,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/window/plasma{
-	dir = 4
-	},
-/turf/space,
-/area/vault/black_site_prism)
-"eM" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/wood,
 /area/vault/black_site_prism)
 "eZ" = (
 /obj/machinery/atmospherics/pipe/simple/yellow/visible,
@@ -812,10 +666,6 @@
 	},
 /area/vault/black_site_prism)
 "fP" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
 /obj/machinery/door/poddoor{
 	density = 0;
 	icon_state = "pdoor0";
@@ -823,17 +673,12 @@
 	name = "Privacy Shutters";
 	opacity = 0
 	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
 "gl" = (
@@ -846,21 +691,12 @@
 	},
 /area/vault/black_site_prism)
 "gF" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -896,25 +732,6 @@
 	icon_state = "1-2"
 	},
 /turf/simulated/wall,
-/area/vault/black_site_prism)
-"hh" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4;
-	one_way = 1
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
 /area/vault/black_site_prism)
 "hj" = (
 /obj/machinery/smartfridge/bloodbank/filled,
@@ -954,21 +771,12 @@
 	},
 /area/vault/black_site_prism)
 "hM" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
 "hR" = (
@@ -1073,24 +881,6 @@
 	icon_state = "carpetnoconnect"
 	},
 /area/vault/black_site_prism)
-"jt" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
-/area/vault/black_site_prism)
 "jD" = (
 /mob/living/simple_animal/hostile/humanoid/chef,
 /turf/simulated/floor{
@@ -1110,21 +900,6 @@
 	icon_state = "asteroidplating"
 	},
 /area/vault/black_site_prism)
-"kn" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/full/plasma,
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/window/plasma{
-	dir = 8
-	},
-/turf/simulated/floor/engine,
-/area/vault/black_site_prism)
 "ku" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/stack/teeth,
@@ -1133,25 +908,6 @@
 	},
 /mob/living/simple_animal/hostile/humanoid/tajaran,
 /turf/simulated/floor/grass,
-/area/vault/black_site_prism)
-"kK" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating,
 /area/vault/black_site_prism)
 "kL" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1172,63 +928,13 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
-"li" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8;
-	name = "reinforced one-way window";
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
-/area/vault/black_site_prism)
-"lo" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/vault/black_site_prism)
 "lx" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4;
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
 /obj/structure/cable/yellow{
 	d1 = 2;
 	d2 = 8;
 	icon_state = "2-8"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -1305,19 +1011,12 @@
 /turf/simulated/floor/wood,
 /area/vault/black_site_prism)
 "mL" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
 "mP" = (
@@ -1329,22 +1028,6 @@
 	dir = 8;
 	icon_state = "carpetside"
 	},
-/area/vault/black_site_prism)
-"mV" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
 /area/vault/black_site_prism)
 "ng" = (
 /obj/effect/decal/cleanable/soot,
@@ -1405,19 +1088,12 @@
 	},
 /area/vault/black_site_prism)
 "ob" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	one_way = 1
-	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/wood,
 /area/vault/black_site_prism)
 "om" = (
@@ -1477,19 +1153,11 @@
 	},
 /area/vault/black_site_prism)
 "pl" = (
-/obj/structure/grille,
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma{
-	dir = 1
-	},
-/obj/structure/window/plasma,
 /obj/structure/cable/yellow{
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/obj/structure/window/plasma{
-	dir = 8
-	},
+/obj/structure/grille/window_spawner/plasma/full,
 /turf/space,
 /area/vault/black_site_prism)
 "pm" = (
@@ -1504,21 +1172,11 @@
 	},
 /area/vault/black_site_prism)
 "po" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma{
-	dir = 1
-	},
 /obj/structure/cable/yellow{
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/obj/structure/window/plasma{
-	dir = 8
-	},
+/obj/structure/grille/window_spawner/plasma/full,
 /turf/simulated/floor/engine,
 /area/vault/black_site_prism)
 "pq" = (
@@ -1602,23 +1260,6 @@
 	tag = "icon-darkred (SOUTHWEST)"
 	},
 /area/vault/black_site_prism)
-"qL" = (
-/obj/structure/grille,
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma{
-	dir = 1
-	},
-/obj/structure/window/plasma,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/window/plasma{
-	dir = 8
-	},
-/turf/simulated/floor/engine,
-/area/vault/black_site_prism)
 "rm" = (
 /obj/machinery/light{
 	color = "#FF0000";
@@ -1689,27 +1330,10 @@
 	},
 /area/vault/black_site_prism)
 "sk" = (
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
-	},
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
 /obj/machinery/turret/centcomm/syndie{
 	dir = 1
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -1900,25 +1524,6 @@
 	icon_state = "dark"
 	},
 /area/vault/black_site_prism)
-"ud" = (
-/obj/structure/grille,
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma{
-	dir = 1
-	},
-/obj/structure/window/plasma,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/engine,
-/area/vault/black_site_prism)
 "ui" = (
 /obj/structure/window/reinforced{
 	dir = 1
@@ -2005,13 +1610,6 @@
 	},
 /area/vault/black_site_prism)
 "vw" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
@@ -2022,6 +1620,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -2065,21 +1664,6 @@
 	},
 /area/vault/black_site_prism)
 "vG" = (
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
-	},
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /obj/machinery/turret/centcomm/syndie,
 /turf/unsimulated/floor{
 	icon_state = "floor4"
@@ -2140,22 +1724,6 @@
 	dir = 4;
 	icon_state = "darkred"
 	},
-/area/vault/black_site_prism)
-"ws" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
 /area/vault/black_site_prism)
 "wt" = (
 /obj/structure/window/reinforced{
@@ -2244,19 +1812,6 @@
 	dir = 1;
 	icon_state = "darkred"
 	},
-/area/vault/black_site_prism)
-"xk" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating,
 /area/vault/black_site_prism)
 "xo" = (
 /obj/machinery/light{
@@ -2362,20 +1917,12 @@
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
 "yu" = (
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma{
-	dir = 1
-	},
-/obj/structure/window/plasma,
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/plasma/full,
 /turf/space,
 /area/vault/black_site_prism)
 "yw" = (
@@ -2406,30 +1953,7 @@
 	icon_state = "dark"
 	},
 /area/vault/black_site_prism)
-"yV" = (
-/obj/structure/grille,
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma{
-	dir = 1
-	},
-/obj/structure/window/plasma,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/window/plasma{
-	dir = 4
-	},
-/turf/simulated/floor/engine,
-/area/vault/black_site_prism)
 "yX" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/full/reinforced,
 /obj/machinery/door/poddoor{
 	id_tag = "NTBS-EE"
 	},
@@ -2443,6 +1967,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/unsimulated/floor{
 	name = "plating"
 	},
@@ -2452,34 +1977,7 @@
 /obj/item/stack/teeth,
 /turf/simulated/floor/grass,
 /area/vault/black_site_prism)
-"zh" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	one_way = 1
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
-/area/vault/black_site_prism)
 "zm" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
 /obj/machinery/door/poddoor{
 	id_tag = "NTBS-EE"
 	},
@@ -2488,6 +1986,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/unsimulated/floor{
 	name = "plating"
 	},
@@ -2502,44 +2001,13 @@
 	icon_state = "darkred"
 	},
 /area/vault/black_site_prism)
-"zI" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8;
-	name = "reinforced one-way window";
-	one_way = 1
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
-/area/vault/black_site_prism)
 "zK" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/full/reinforced,
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/unsimulated/floor{
 	name = "plating"
 	},
@@ -2599,25 +2067,6 @@
 	icon_state = "darkred"
 	},
 /area/vault/black_site_prism)
-"As" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/wood,
-/area/vault/black_site_prism)
 "AM" = (
 /obj/effect/decal/cleanable/blood/stattrack{
 	dir = 9
@@ -2652,50 +2101,6 @@
 /turf/unsimulated/floor{
 	icon_state = "darkblue"
 	},
-/area/vault/black_site_prism)
-"AY" = (
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 2
-	},
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 2;
-	tag = ""
-	},
-/obj/machinery/turret/centcomm/syndie{
-	dir = 1
-	},
-/turf/unsimulated/floor{
-	icon_state = "floor4"
-	},
-/area/vault/black_site_prism)
-"Bf" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma,
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/window/plasma{
-	dir = 8
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/engine,
 /area/vault/black_site_prism)
 "Bo" = (
 /obj/structure/closet/secure_closet/personal,
@@ -2761,20 +2166,6 @@
 	dir = 4;
 	icon_state = "darkred"
 	},
-/area/vault/black_site_prism)
-"BU" = (
-/obj/structure/grille,
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma{
-	dir = 1
-	},
-/obj/structure/window/plasma,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/space,
 /area/vault/black_site_prism)
 "BY" = (
 /obj/machinery/crema_switch{
@@ -2928,28 +2319,6 @@
 	icon_state = "asteroidplating"
 	},
 /area/vault/black_site_prism)
-"Fa" = (
-/obj/structure/grille,
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma{
-	dir = 1
-	},
-/obj/structure/window/plasma,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/window/plasma{
-	dir = 4
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/engine,
-/area/vault/black_site_prism)
 "Fg" = (
 /obj/structure/catwalk{
 	icon_state = "catwalk4"
@@ -3034,31 +2403,6 @@
 	tag = ""
 	},
 /area/vault/black_site_prism)
-"Gp" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8;
-	name = "reinforced one-way window";
-	one_way = 1
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
-/area/vault/black_site_prism)
 "Gr" = (
 /obj/effect/decal/cleanable/blood/stattrack{
 	dir = 10
@@ -3121,13 +2465,6 @@
 	},
 /area/vault/black_site_prism)
 "Hh" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
 /obj/machinery/atmospherics/pipe/simple/yellow/visible{
 	dir = 4
 	},
@@ -3136,7 +2473,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -3150,22 +2487,6 @@
 /area/vault/black_site_prism)
 "Hm" = (
 /turf/simulated/floor/wood,
-/area/vault/black_site_prism)
-"Hv" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma,
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/window/plasma{
-	dir = 8
-	},
-/turf/simulated/floor/engine,
 /area/vault/black_site_prism)
 "HE" = (
 /obj/machinery/light{
@@ -3208,28 +2529,6 @@
 	icon_state = "dark"
 	},
 /area/vault/black_site_prism)
-"Ia" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
-/area/vault/black_site_prism)
 "Iu" = (
 /obj/machinery/door/airlock/highsecurity{
 	name = "SECURE FACILITY"
@@ -3246,24 +2545,6 @@
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
-/area/vault/black_site_prism)
-"II" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8;
-	name = "reinforced one-way window";
-	one_way = 1
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating,
 /area/vault/black_site_prism)
 "IM" = (
 /mob/living/simple_animal/hostile/humanoid/surgeon{
@@ -3369,15 +2650,6 @@
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
 "Kb" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/full/reinforced,
 /obj/machinery/door/poddoor{
 	id_tag = "NTBS-EW"
 	},
@@ -3386,6 +2658,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/unsimulated/floor{
 	name = "plating"
 	},
@@ -3591,19 +2864,12 @@
 	},
 /area/vault/black_site_prism)
 "Mf" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -3638,50 +2904,23 @@
 	},
 /area/vault/black_site_prism)
 "Mq" = (
-/obj/structure/grille,
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma{
-	dir = 1
-	},
-/obj/structure/window/plasma,
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
-	},
-/obj/structure/window/plasma{
-	dir = 8
 	},
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/plasma/full,
 /turf/simulated/floor/engine,
 /area/vault/black_site_prism)
 "Mr" = (
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "darkredcorners"
-	},
-/area/vault/black_site_prism)
-"Ms" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	one_way = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
 	},
 /area/vault/black_site_prism)
 "Mv" = (
@@ -3710,15 +2949,6 @@
 	},
 /area/vault/black_site_prism)
 "My" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4;
-	one_way = 1
-	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
@@ -3727,6 +2957,7 @@
 /obj/structure/cable/yellow{
 	icon_state = "1-4"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -3835,12 +3066,6 @@
 	},
 /area/vault/black_site_prism)
 "NE" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/full/reinforced,
 /obj/machinery/door/poddoor{
 	id_tag = "NTBS-EW"
 	},
@@ -3854,6 +3079,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/unsimulated/floor{
 	name = "plating"
 	},
@@ -3972,27 +3198,6 @@
 	tag = "icon-darkred"
 	},
 /area/vault/black_site_prism)
-"Pm" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/unsimulated/floor{
-	name = "plating"
-	},
-/area/vault/black_site_prism)
 "Ps" = (
 /obj/effect/decal/cleanable/blood/stattrack{
 	dir = 9
@@ -4024,15 +3229,6 @@
 	},
 /area/vault/black_site_prism)
 "PK" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	name = "reinforced one-way window";
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	one_way = 1
-	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
@@ -4043,6 +3239,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/wood,
 /area/vault/black_site_prism)
 "PM" = (
@@ -4080,18 +3277,10 @@
 	},
 /area/vault/black_site_prism)
 "Qf" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma{
-	dir = 1
-	},
-/obj/structure/window/plasma,
 /obj/structure/cable/yellow{
 	icon_state = "0-8"
 	},
+/obj/structure/grille/window_spawner/plasma/full,
 /turf/space,
 /area/vault/black_site_prism)
 "Qh" = (
@@ -4116,27 +3305,6 @@
 /area/vault/black_site_prism)
 "Qw" = (
 /obj/machinery/chem_master,
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
-/area/vault/black_site_prism)
-"QA" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/machinery/atmospherics/pipe/simple/yellow/visible{
-	dir = 4
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -4208,11 +3376,6 @@
 	},
 /area/vault/black_site_prism)
 "RD" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
@@ -4223,6 +3386,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/black_site_prism)
 "RN" = (
@@ -4412,25 +3576,6 @@
 	icon_state = "dark"
 	},
 /area/vault/black_site_prism)
-"UA" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8;
-	name = "reinforced one-way window";
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
-	},
-/area/vault/black_site_prism)
 "UJ" = (
 /obj/structure/window/reinforced{
 	one_way = 1
@@ -4438,37 +3583,6 @@
 /turf/unsimulated/floor{
 	dir = 1;
 	icon_state = "darkredcorners"
-	},
-/area/vault/black_site_prism)
-"US" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating,
-/area/vault/black_site_prism)
-"UZ" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
 	},
 /area/vault/black_site_prism)
 "Vc" = (
@@ -4515,34 +3629,13 @@
 	},
 /area/vault/black_site_prism)
 "VJ" = (
-/obj/structure/grille,
-/obj/structure/window/full/plasma,
-/obj/structure/window/plasma{
-	dir = 1
-	},
-/obj/structure/window/plasma,
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/plasma/full,
 /turf/simulated/floor/engine,
-/area/vault/black_site_prism)
-"VK" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	name = "reinforced one-way window";
-	one_way = 1
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/wood,
 /area/vault/black_site_prism)
 "VU" = (
 /obj/structure/bed/roller,
@@ -4669,25 +3762,6 @@
 /mob/living/simple_animal/hostile/humanoid/tajaran,
 /turf/simulated/floor/grass,
 /area/vault/black_site_prism)
-"Yi" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	name = "reinforced one-way window";
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/wood,
-/area/vault/black_site_prism)
 "Yk" = (
 /obj/structure/closet/secure_closet/freezer/kitchen,
 /obj/item/weapon/reagent_containers/food/snacks/meat,
@@ -4708,24 +3782,6 @@
 /turf/unsimulated/floor{
 	dir = 1;
 	icon_state = "darkredcorners"
-	},
-/area/vault/black_site_prism)
-"YF" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/unsimulated/floor{
-	icon_state = "dark"
 	},
 /area/vault/black_site_prism)
 "YH" = (
@@ -5029,10 +4085,10 @@ Kr
 nh
 iQ
 hM
-QA
+Hh
 Ou
 gF
-ws
+hM
 iQ
 nh
 Kr
@@ -5081,11 +4137,11 @@ Kr
 Kr
 nh
 iQ
-lo
+mL
 gK
 NU
 Qw
-xk
+mL
 iQ
 nh
 Kr
@@ -5134,11 +4190,11 @@ Kr
 Kr
 nh
 iQ
-xk
+mL
 rK
 iQ
 sq
-xk
+mL
 iQ
 nh
 Kr
@@ -5187,11 +4243,11 @@ Kr
 Kr
 nh
 iQ
-xk
+mL
 pR
 NU
 wJ
-xk
+mL
 iQ
 nh
 Kr
@@ -5240,11 +4296,11 @@ Kr
 Kr
 nh
 iQ
-ex
+Hh
 Hh
 Aj
-ex
-QA
+Hh
+Hh
 iQ
 nh
 Kr
@@ -5346,11 +4402,11 @@ Kr
 Kr
 nh
 iQ
-xk
+mL
 vd
 iQ
 Fu
-lo
+mL
 iQ
 nh
 Kr
@@ -5399,11 +4455,11 @@ nh
 nh
 nh
 iQ
-mV
+mL
 TK
 uu
 Jz
-xk
+mL
 iQ
 nh
 nh
@@ -5456,7 +4512,7 @@ iz
 Yc
 yw
 QB
-xk
+mL
 iQ
 aB
 GC
@@ -5464,7 +4520,7 @@ MN
 rC
 rC
 Gr
-YF
+Mf
 NY
 NY
 tK
@@ -5517,7 +4573,7 @@ BR
 BR
 DI
 da
-UZ
+Mf
 XC
 Wa
 XC
@@ -5565,12 +4621,12 @@ BR
 HE
 uX
 nh
-dF
-zh
+gF
+gF
 My
 Hi
 Pk
-UZ
+Mf
 XC
 kl
 XC
@@ -5612,9 +4668,9 @@ kV
 nh
 vi
 Kh
-db
 aL
-Bf
+aL
+aL
 Kh
 zu
 nh
@@ -5623,7 +4679,7 @@ AM
 JR
 DO
 Ot
-UZ
+Mf
 MU
 OP
 XC
@@ -5673,13 +4729,13 @@ om
 nh
 kl
 xV
-YF
+Mf
 Qh
 Pk
 lx
-zh
-zh
-Ms
+gF
+gF
+gF
 sD
 nh
 Kr
@@ -5695,9 +4751,9 @@ Kr
 "}
 (17,1,1) = {"
 Kr
-BU
+yu
 Ka
-BU
+yu
 Kr
 Kr
 Kr
@@ -5717,16 +4773,16 @@ ng
 xP
 nh
 WI
-ud
+Mq
 kL
 at
 kL
-ud
+Mq
 om
 nh
 EL
 xV
-UZ
+Mf
 tC
 XP
 Bq
@@ -5748,9 +4804,9 @@ Kr
 "}
 (18,1,1) = {"
 Kr
-BU
+yu
 Ka
-BU
+yu
 Kr
 Kr
 Kr
@@ -5770,16 +4826,16 @@ xo
 ng
 nh
 WI
-Fa
+Mq
 kL
 kL
 kL
-Fa
+Mq
 om
 nh
 XC
 xV
-UZ
+Mf
 JS
 BR
 BR
@@ -5801,9 +4857,9 @@ Kr
 "}
 (19,1,1) = {"
 Kr
-BU
+yu
 Ka
-BU
+yu
 Kr
 Kr
 Kr
@@ -5824,18 +4880,18 @@ iQ
 nh
 vi
 Kh
-db
+aL
 CA
-Bf
+aL
 Kh
 zu
 nh
 Tt
 YR
 bs
-zh
-zh
-Ms
+gF
+gF
+gF
 sD
 Mf
 om
@@ -5854,9 +4910,9 @@ Kr
 "}
 (20,1,1) = {"
 Kr
-BU
+yu
 Ka
-BU
+yu
 Kr
 Kr
 Kr
@@ -5885,12 +4941,12 @@ VE
 nh
 Tt
 mx
-UZ
+Mf
 Tt
 XC
 XC
 XC
-UZ
+Mf
 om
 iQ
 nh
@@ -5907,9 +4963,9 @@ Kr
 "}
 (21,1,1) = {"
 Kr
-eI
+yu
 Ka
-eI
+yu
 Kr
 Kr
 Kr
@@ -5938,12 +4994,12 @@ KA
 nh
 Tt
 EK
-hh
+Mf
 Tt
 EK
 kl
 OP
-hh
+Mf
 bz
 iQ
 nh
@@ -6068,7 +5124,7 @@ nh
 nh
 zK
 DX
-Pm
+zK
 NE
 vK
 Mr
@@ -6097,10 +5153,10 @@ iQ
 nh
 Od
 cC
-Ia
+gF
 kT
 cC
-Ia
+gF
 cC
 xf
 nh
@@ -6154,7 +5210,7 @@ jc
 hG
 tw
 vx
-YF
+Mf
 om
 nh
 QH
@@ -6207,7 +5263,7 @@ IS
 ui
 Xm
 px
-UZ
+Mf
 dI
 PJ
 iQ
@@ -6260,7 +5316,7 @@ Ki
 wt
 ek
 AU
-hh
+Mf
 om
 nh
 QH
@@ -6280,7 +5336,7 @@ nh
 nh
 zK
 iR
-Pm
+zK
 yX
 bk
 Ut
@@ -6307,12 +5363,12 @@ nh
 iQ
 iQ
 nh
-Ia
+gF
 cC
-dF
-Ms
+gF
+gF
 cC
-Ms
+gF
 cC
 xf
 nh
@@ -6337,7 +5393,7 @@ Ao
 Bz
 BR
 SK
-AY
+sk
 JS
 RN
 BR
@@ -6490,9 +5546,9 @@ Kr
 "}
 (32,1,1) = {"
 Kr
-BU
+yu
 Ka
-BU
+yu
 Kr
 Kr
 Kr
@@ -6543,9 +5599,9 @@ Kr
 "}
 (33,1,1) = {"
 Kr
-BU
+yu
 Ka
-BU
+yu
 Kr
 Kr
 Kr
@@ -6555,12 +5611,12 @@ Kr
 nh
 iQ
 WI
-li
-UA
+vw
+gF
 ax
-UA
-UA
-az
+gF
+gF
+vw
 om
 iQ
 nh
@@ -6568,7 +5624,7 @@ vi
 Kh
 po
 GW
-Hv
+po
 Kh
 YH
 nh
@@ -6596,9 +5652,9 @@ Kr
 "}
 (34,1,1) = {"
 Kr
-BU
+yu
 Ka
-BU
+yu
 Kr
 Kr
 Kr
@@ -6613,16 +5669,16 @@ wG
 ku
 eb
 zg
-UZ
+Mf
 om
 iQ
 nh
 WI
-qL
+VJ
 lF
 wK
 Sf
-qL
+VJ
 ZX
 nh
 tZ
@@ -6631,7 +5687,7 @@ tZ
 tZ
 tZ
 tZ
-Yi
+cf
 dT
 dT
 dT
@@ -6649,9 +5705,9 @@ Kr
 "}
 (35,1,1) = {"
 Kr
-BU
+yu
 Ka
-BU
+yu
 Kr
 Kr
 Kr
@@ -6661,12 +5717,12 @@ Kr
 nh
 iQ
 WI
-zI
+Mf
 zg
 ly
 zg
 pQ
-UZ
+Mf
 om
 iQ
 nh
@@ -6684,7 +5740,7 @@ aA
 PM
 Gt
 QV
-VK
+cf
 dT
 dT
 dT
@@ -6714,21 +5770,21 @@ Kr
 nh
 iQ
 WI
-UZ
+Mf
 zg
 wG
 wG
 Yh
-jt
+Mf
 om
 iQ
 nh
 WI
-yV
+VJ
 wK
 MG
 wK
-yV
+VJ
 om
 nh
 NO
@@ -6737,7 +5793,7 @@ fm
 fm
 fm
 Uc
-VK
+cf
 dT
 dT
 dT
@@ -6767,7 +5823,7 @@ Kr
 nh
 iQ
 WI
-UZ
+Mf
 tL
 eb
 zg
@@ -6779,15 +5835,15 @@ nh
 vi
 Kh
 po
-kn
-Hv
+po
+po
 Kh
 zu
 nh
-As
-eM
+ob
+ob
 IN
-As
+ob
 ob
 Vc
 PK
@@ -6821,11 +5877,11 @@ nh
 iQ
 WI
 vw
-UA
-UA
-UA
+gF
+gF
+gF
 tk
-Gp
+vw
 om
 iQ
 nh
@@ -6940,7 +5996,7 @@ cC
 Og
 xY
 Nl
-II
+mL
 zS
 wy
 nT
@@ -6993,7 +6049,7 @@ cC
 yJ
 IM
 sS
-xk
+mL
 ZU
 nh
 nh
@@ -7046,7 +6102,7 @@ cC
 uc
 iQ
 Lo
-xk
+mL
 ZU
 nh
 Kr
@@ -7099,7 +6155,7 @@ cC
 YY
 iQ
 hj
-xk
+mL
 ZU
 nh
 Kr
@@ -7149,7 +6205,7 @@ Kr
 nh
 Mw
 cC
-kK
+hM
 Fn
 fP
 RD
@@ -7258,7 +6314,7 @@ cC
 Er
 Jt
 PV
-II
+mL
 ZU
 nh
 Kr
@@ -7311,7 +6367,7 @@ cC
 JZ
 iQ
 VU
-xk
+mL
 ZU
 nh
 Kr
@@ -7364,7 +6420,7 @@ cC
 aC
 iQ
 Nu
-US
+mL
 ZU
 nh
 Kr

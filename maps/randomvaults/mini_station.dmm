@@ -55,39 +55,9 @@
 	icon_state = "green"
 	},
 /area/vault/powered/mini_station_botany)
-"al" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station_engineering)
-"am" = (
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station_engineering)
 "an" = (
 /turf/simulated/floor,
 /area/vault/powered/mini_station)
-"ao" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station_engineering)
 "ap" = (
 /obj/structure/catwalk,
 /obj/machinery/power/solar/panel/tracker,
@@ -474,13 +444,7 @@
 /turf/simulated/floor,
 /area/vault/powered/mini_station_construction)
 "bk" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_entrance)
 "bm" = (
@@ -512,20 +476,6 @@
 /obj/structure/sign/greencross,
 /turf/simulated/wall,
 /area/vault/powered/mini_station_medbay)
-"bu" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station_medbay)
 "bv" = (
 /obj/machinery/door/airlock/glass,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
@@ -546,20 +496,6 @@
 	name = "Firelock West"
 	},
 /turf/simulated/floor,
-/area/vault/powered/mini_station_engineering)
-"bx" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
 /area/vault/powered/mini_station_engineering)
 "by" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
@@ -810,14 +746,6 @@
 	icon_state = "yellow"
 	},
 /area/vault/powered/mini_station_engineering)
-"ci" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station_entrance)
 "cj" = (
 /obj/structure/cable{
 	d1 = 2;
@@ -950,19 +878,6 @@
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station)
-"cA" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station_entrance)
 "cB" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
@@ -1017,14 +932,6 @@
 /obj/structure/cable,
 /turf/space,
 /area/vault/powered/mini_station_entrance)
-"cH" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station_entrance)
 "cI" = (
 /obj/structure/table/woodentable,
 /obj/item/ashtray/bronze,
@@ -1035,17 +942,6 @@
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_kitchen)
-"cJ" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station_entrance)
 "cK" = (
 /obj/structure/bed/chair/wood/normal{
 	dir = 4
@@ -1089,29 +985,8 @@
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_entrance)
-"cO" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station_entrance)
 "cP" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station)
 "cQ" = (
@@ -1125,17 +1000,6 @@
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station)
-"cR" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station_entrance)
 "cS" = (
 /obj/machinery/vending/discount,
 /obj/machinery/light{
@@ -1375,35 +1239,14 @@
 /turf/simulated/floor,
 /area/vault/powered/mini_station_engineering)
 "fw" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_engineering)
 "fC" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma,
 /obj/machinery/atmospherics/pipe/simple/supply/visible{
 	dir = 4
 	},
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/engine{
 	name = "o2 floor";
 	nitrogen = 0;
@@ -1462,14 +1305,7 @@
 /turf/simulated/floor,
 /area/vault/powered/mini_station_botany)
 "iQ" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_medbay)
 "iU" = (
@@ -1633,17 +1469,6 @@
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_kitchen)
-"pY" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station_entrance)
 "qk" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
 	dir = 1
@@ -1757,17 +1582,6 @@
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_entrance)
-"sT" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station_medbay)
 "te" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,
@@ -2014,25 +1828,6 @@
 	icon_state = "blue"
 	},
 /area/vault/powered/mini_station_medbay)
-"At" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/reinforced/plasma,
-/obj/machinery/atmospherics/pipe/simple/supply/visible{
-	dir = 4
-	},
-/turf/simulated/floor/engine{
-	name = "o2 floor";
-	nitrogen = 0;
-	oxygen = 100000
-	},
-/area/vault/powered/mini_station_engineering)
 "AD" = (
 /obj/structure/cable{
 	d2 = 2;
@@ -2080,16 +1875,6 @@
 /obj/machinery/microwave,
 /turf/simulated/floor,
 /area/vault/powered/mini_station_kitchen)
-"Bt" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station_entrance)
 "BA" = (
 /obj/machinery/door/airlock/external,
 /obj/machinery/door/firedoor/border_only{
@@ -2153,17 +1938,7 @@
 	},
 /area/vault/powered/mini_station_medbay)
 "ES" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_construction)
 "ET" = (
@@ -2206,20 +1981,6 @@
 /obj/machinery/vending/groans,
 /turf/simulated/floor,
 /area/vault/powered/mini_station)
-"FM" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station_medbay)
 "Gi" = (
 /obj/structure/cable{
 	d1 = 2;
@@ -2228,17 +1989,6 @@
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_botany)
-"GH" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station)
 "Hu" = (
 /obj/structure/bed/chair/wood/normal{
 	dir = 8
@@ -2389,9 +2139,6 @@
 /turf/simulated/floor,
 /area/vault/powered/mini_station_engineering)
 "Nn" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
 /obj/structure/table/glass,
 /obj/item/tool/bonesetter/bone_mender{
 	pixel_x = -3;
@@ -2406,28 +2153,9 @@
 	icon_state = "blue"
 	},
 /area/vault/powered/mini_station_medbay)
-"NL" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station)
 "NQ" = (
 /turf/simulated/floor,
 /area/vault/powered/mini_station_kitchen)
-"Oc" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor,
-/area/vault/powered/mini_station_medbay)
 "Oy" = (
 /obj/structure/closet/emcloset,
 /obj/item/weapon/switchtool/swiss_army_knife,
@@ -2576,16 +2304,6 @@
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station)
-"TE" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/vault/powered/mini_station)
 "Uf" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -2595,17 +2313,7 @@
 /turf/simulated/floor,
 /area/vault/powered/mini_station_construction)
 "Uj" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_kitchen)
 "UY" = (
@@ -2729,17 +2437,7 @@
 /turf/simulated/floor,
 /area/vault/powered/mini_station_construction)
 "Zh" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/engine{
 	name = "o2 floor";
 	nitrogen = 0;
@@ -2869,9 +2567,9 @@ Qp
 ab
 ab
 ab
-NL
-TE
-GH
+cP
+cP
+cP
 ab
 ab
 Dx
@@ -2920,7 +2618,7 @@ ae
 ae
 Qp
 Zh
-At
+fC
 Qp
 fC
 Qp
@@ -2949,13 +2647,13 @@ ae
 "}
 (6,1,1) = {"
 ae
-al
+fw
 av
 DL
 fg
 OZ
 Qp
-bx
+fw
 af
 fw
 Qp
@@ -2980,7 +2678,7 @@ ae
 "}
 (7,1,1) = {"
 ae
-am
+fw
 aw
 au
 aB
@@ -3011,7 +2709,7 @@ ae
 "}
 (8,1,1) = {"
 ae
-ao
+fw
 aw
 aF
 ba
@@ -3249,7 +2947,7 @@ FH
 pk
 Kv
 bn
-bu
+iQ
 mK
 de
 cY
@@ -3283,9 +2981,9 @@ ce
 qD
 bB
 cD
-Oc
+jz
 Nn
-FM
+iQ
 ae
 "}
 (17,1,1) = {"
@@ -3311,7 +3009,7 @@ rA
 pk
 Am
 DQ
-sT
+iQ
 Zs
 jz
 jz
@@ -3359,23 +3057,23 @@ ae
 ae
 ae
 zb
-cA
-Bt
-cH
+bk
+bk
+bk
 aO
 bk
-Bt
-pY
+bk
+bk
 zb
 ae
 ae
 ae
 tH
-FM
+iQ
 tH
 tH
 tH
-FM
+iQ
 tH
 tH
 tH
@@ -3392,9 +3090,9 @@ ae
 ae
 ae
 ae
-ci
+bk
 bC
-ci
+bk
 ae
 ae
 ae
@@ -3423,9 +3121,9 @@ aI
 aQ
 Ff
 ae
-ci
+bk
 bC
-ci
+bk
 ae
 aI
 aQ
@@ -3454,9 +3152,9 @@ aI
 aS
 Ff
 ae
-ci
+bk
 bC
-ci
+bk
 ae
 aI
 aS
@@ -3485,9 +3183,9 @@ aI
 aS
 Ff
 ae
-cJ
+bk
 bC
-cJ
+bk
 ae
 aI
 aS
@@ -3547,9 +3245,9 @@ aI
 aW
 Ff
 ae
-cO
+bk
 db
-cO
+bk
 ae
 aI
 aW
@@ -3578,9 +3276,9 @@ aI
 aW
 Ff
 ae
-ci
+bk
 db
-ci
+bk
 ae
 aI
 aW
@@ -3609,9 +3307,9 @@ aI
 aX
 Ff
 ae
-ci
+bk
 db
-ci
+bk
 ae
 aI
 aX
@@ -3640,9 +3338,9 @@ ae
 ae
 ae
 ae
-ci
+bk
 db
-ci
+bk
 ae
 ae
 ae
@@ -3671,9 +3369,9 @@ aj
 aj
 aj
 ae
-cR
+bk
 dc
-cR
+bk
 ae
 aj
 aj

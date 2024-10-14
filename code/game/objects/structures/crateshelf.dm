@@ -20,9 +20,15 @@
 	var/use_delay = DEFAULT_SHELF_USE_DELAY
 	var/list/shelf_contents
 	var/osha_violation = FALSE // Have the screws been loosened by a DEVIOUS FIEND
+	var/damage_amount= 25 //for badminnery
+	var/made_in_china = FALSE //gibs if true
+	var/collapsed = FALSE
 
 /obj/structure/rack/crate_shelf/tall
 	capacity = 12
+
+/obj/structure/rack/crate_shelf/centcomm_provided/
+	var/how_cheap_percent = 20
 
 /obj/structure/rack/crate_shelf/New()
 	. = ..()
@@ -46,6 +52,11 @@
 		nextshelf_olay.pixel_y = stack_offset
 		overlays += nextshelf_olay
 	return
+
+/obj/structure/rack/crate_shelf/centcomm_provided/New()
+	. = ..()
+	if(prob(how_cheap_percent))
+		osha_violation = TRUE
 
 /obj/structure/rack/crate_shelf/Destroy()
 	QDEL_LIST(shelf_contents)
@@ -78,7 +89,7 @@
 		visible_message("[user] [osha_violation?"loosens":"tightens"] \the [src]'s bolts.", "You [osha_violation?"loosen":"tighten"] \the [src]'s bolts.")
 
 /obj/structure/rack/crate_shelf/attack_hand(mob/living/user)
-	if(trapping)
+	if(collapsed)
 		visible_message("[user] begins clearing \the [src] debris.", "You begins clearing \the [src] debris.")
 		if(do_after(user,src,5 SECONDS))
 			visible_message("[user] clears \the [src] debris.", "You clear \the [src] debris.")
@@ -230,6 +241,8 @@
 //4: Bombed
 //Loosening the bolts with a screwdriver doubles power
 /obj/structure/rack/crate_shelf/proc/wobble(var/power,var/atom/movable/wobbler = null)
+	if(collapsed) //it won't fall on you if it already fell over
+		return
 	var/wobble_roll = power * 25 * (osha_violation?2:1)
 	var/wobble_amount = floor(clamp(rand(1,wobble_roll),0,100)/5)
 	var/wobble_dir
@@ -278,6 +291,7 @@
 	flags = LOCKED_SHOULD_LIE
 
 /obj/structure/rack/crate_shelf/proc/post2liveleak(var/tipdir)
+	collapsed = TRUE
 	var/turf/fallturf = get_turf(get_step(src,tipdir))
 	if(fallturf.density) //fall in the opposite direction if there's a wall in the way
 		fallturf = get_turf(get_step(src,opposite_dirs[tipdir]))
@@ -299,8 +313,12 @@
 			if(crate.open())
 				crate.visible_message("<span class='warning'>[crate]'s lid falls open!</span>")
 		shelf_contents[shelf_contents.Find(crate)] = null
+		handle_visuals()
 
 	for(var/mob/living/carbon/human/H in fallturf)
+		if(made_in_china)
+			H.gib()
+			return
 		var/datum/organ/external/injuredorgan = H.pick_usable_organ(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN,LIMB_LEFT_ARM,
 								LIMB_RIGHT_ARM,LIMB_LEFT_HAND,LIMB_RIGHT_HAND,LIMB_LEFT_LEG,
 								LIMB_RIGHT_LEG,LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT)
@@ -310,7 +328,7 @@
 						"<span class='warning'>Something heavy fell and pinned you to the floor!</span>")
 		lock_atom(H, /datum/locking_category/shelf)
 
-		if(injuredorgan?.take_damage(15, 0, 25, SERRATED_BLADE & SHARP_BLADE))
+		if(injuredorgan?.take_damage(damage_amount - 10, 0, damage_amount, SERRATED_BLADE & SHARP_BLADE))
 			H.UpdateDamageIcon()
 			H.updatehealth()
 

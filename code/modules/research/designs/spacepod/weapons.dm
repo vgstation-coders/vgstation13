@@ -29,6 +29,16 @@
 	materials = list(MAT_IRON = 15000)
 	locked = 1
 
+/datum/design/pod_cargo_crate
+	name = "Spacepod Cargo Bay (Crate)"
+	desc = "Allows a space pod to hold a crate."
+	id = "pod_crate"
+	build_type = PODFAB
+	build_path = /obj/item/device/spacepod_equipment/cargo/crate
+	req_tech = list(Tc_MATERIALS = 2)
+	category = "Pod_Parts"
+	materials = list(MAT_IRON = 15000)
+
 /datum/design/pod_lock
 	name = "Spacepod Equipment (Toggle Lock)"
 	desc = "Allows for the construction of a spacepod mounted locking system."
@@ -36,7 +46,7 @@
 	build_type = PODFAB
 	build_path = /obj/item/device/spacepod_equipment/locking/lock
 	req_tech = list(Tc_MATERIALS = 2, Tc_BLUESPACE = 2)
-	category = "Misc"
+	category = "Pod_Parts"
 	materials = list(MAT_IRON = 3500)
 
 /datum/design/pod_key
@@ -46,5 +56,5 @@
 	build_type = PODFAB
 	build_path = /obj/item/device/pod_key
 	req_tech = list(Tc_MATERIALS = 2, Tc_BLUESPACE = 2)
-	category = "Misc"
+	category = "Pod_Parts"
 	materials = list(MAT_IRON = 1500)

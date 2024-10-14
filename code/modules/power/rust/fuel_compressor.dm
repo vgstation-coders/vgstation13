@@ -7,7 +7,7 @@ var/const/max_assembly_amount = 300
 	var/list/new_assembly_quantities = list("Deuterium" = 150,"Tritium" = 150,"Rodinium-6" = 0,"Stravium-7" = 0, "Pergium" = 0, "Dilithium" = 0)
 	var/compressed_matter = 0
 	anchored = 1
-
+	machine_flags = EMAGGABLE
 	var/opened = 1 //0=closed, 1=opened
 	var/locked = 0
 	var/has_electronics = 0 // 0 - none, bit 1 - circuitboard, bit 2 - wires

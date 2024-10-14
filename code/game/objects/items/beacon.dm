@@ -8,7 +8,6 @@ var/global/list/obj/item/beacon/beacons = list()
 	item_state = "signaler"
 	var/code = "electronic"
 	var/frequency = 1459
-	var/emagged = 0
 	origin_tech = Tc_BLUESPACE + "=1"
 	flags = FPRINT
 	w_type = RECYK_PLASTIC

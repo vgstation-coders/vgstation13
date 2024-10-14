@@ -18,6 +18,9 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	attack_verb = list("slams", "whacks", "bashes", "thunks", "batters", "bludgeons", "thrashes")
+	slimeadd_message = "You attach the slime extract to the extinguisher's funnel"
+	slimes_accepted = SLIME_BLUE
+	slimeadd_success_message = "It feels much colder now"
 	var/max_water = 50
 	var/last_use = 1.0
 	var/safety = 1
@@ -80,13 +83,6 @@
 	src.desc = "The safety is [safety ? "on" : "off"]."
 	to_chat(user, "The safety is [safety ? "on" : "off"].")
 	return
-
-/obj/item/weapon/extinguisher/foam/slime_act(primarytype, mob/user)
-	..()
-	if(primarytype == /mob/living/carbon/slime/blue)
-		has_slime=1
-		to_chat(user, "You attach the slime extract to the extinguisher's funnel.")
-		return TRUE
 
 /obj/item/weapon/extinguisher/attackby(obj/item/W, mob/user)
 	if(user.stat || user.restrained() || user.lying)
@@ -274,7 +270,7 @@
 				R.my_atom = src
 				reagents.trans_to_holder(R,1)
 				var/obj/effect/foam/fire/W
-				if(has_slime)
+				if(has_slimes & SLIME_BLUE)
 					W=new /obj/effect/foam/fire/enhanced(get_turf(src),R)
 				else
 					W = new /obj/effect/foam/fire(get_turf(src),R)

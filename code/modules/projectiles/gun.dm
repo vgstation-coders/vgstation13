@@ -200,13 +200,17 @@
 		var/datum/organ/external/a_hand = H.get_active_hand_organ()
 		if(!a_hand.can_use_advanced_tools())
 			if(display_message)
-				to_chat(user, "<span class='warning'>Your [a_hand] doesn't have the dexterity to do this!</span>")
+				to_chat(user, "<span class='warning'>Your [a_hand.display_name] doesn't have the dexterity to do this!</span>")
 			return 0
 	return 1
 
 /obj/item/weapon/gun/proc/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	//Exclude lasertag guns from the M_CLUMSY check.
 	. = reset_point_blank_shot()
+
+	if(!can_Fire(user, 1))
+		return
+
 	var/explode = FALSE
 	var/dehand = FALSE
 	if(istype(user, /mob/living))
@@ -232,9 +236,6 @@
 			M.drop_item(src, force_drop = 1)
 			qdel(src)
 			return
-
-	if(!can_Fire(user, 1))
-		return
 
 	add_fingerprint(user)
 	var/atom/originaltarget = target

@@ -165,6 +165,9 @@
 	w_type = RECYK_ELECTRONIC
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>", "<span class='warning'>A label covers the lens!</span>")
+	slimeadd_message = "You add the slime extract to the camera lens"
+	slimes_accepted = SLIME_SEPIA
+	slimeadd_success_message = "It now has a sepia tinge"
 	var/pictures_max = 10
 	var/pictures_left = 10
 	var/on = TRUE
@@ -195,6 +198,13 @@
 /obj/item/device/camera/Destroy()
 	QDEL_NULL(flashbulb)
 	..()
+
+/obj/item/device/camera/slime_act(primarytype, mob/user)
+	if(primarytype == SLIME_SEPIA && ..())
+		var/obj/item/device/camera/sepia/S = new(user.loc)
+		if(src in user.held_items)
+			user.put_in_hands(S)
+		qdel(src)
 
 /obj/item/device/camera/sepia
 	name = "camera"

@@ -458,7 +458,7 @@
 /datum/rcd_schematic/con_window
 	name						= "Build window"
 	icon 						= 'icons/obj/window_grille_spawner.dmi'
-	icon_state 					= "window_grille"
+	icon_state 					= "windowgrille"
 	category					= "Construction"
 	energy_cost					= 2
 

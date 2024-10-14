@@ -949,7 +949,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)
 	// NO FUN ALLOWED.  Emag list is included, anyway.
-	if(istype(W, /obj/item/weapon/card/emag))
+	if(isEmag(W))
 		to_chat(user, "<span class='warning'>Your [W] refuses to touch \the [src]!</span>")
 		return
 	..()
@@ -1076,7 +1076,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/holyjuke/attackby(obj/item/W, mob/user)
 	// EMAG DOES NOTHING
-	if(istype(W, /obj/item/weapon/card/emag))
+	if(isEmag(W))
 		to_chat(user, "<span class='warning'>A guiltiness fills your heart as a higher power pushes away \the [W]!</span>")
 		return
 	..()

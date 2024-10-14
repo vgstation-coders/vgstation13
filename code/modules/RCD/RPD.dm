@@ -4,9 +4,8 @@
 	icon_state = "rpd"
 	frequency = 1439
 	id = null
-	var/has_metal_slime = 0
-	var/has_yellow_slime = 0
 	starting_materials = list(MAT_IRON = 75000, MAT_GLASS = 37500)
+	slimes_accepted = SLIME_METAL|SLIME_YELLOW
 	var/build_all = 0
 	var/autowrench = 0
 	var/obj/item/tool/wrench/internal_wrench = new()
@@ -79,9 +78,9 @@
 	to_chat(user, "<span class='notice'>To quickly scroll between directions of the selected schematic, use alt+mousewheel.")
 	to_chat(user, "<span class='notice'>To quickly scroll between layers, use shift+mousewheel.</span>")
 	to_chat(user, "<span class='notice'>Note that hotkeys like ctrl click do not work while the RPD is held in your active hand!</span>")
-	if(has_metal_slime)
+	if(has_slimes & SLIME_METAL)
 		to_chat(user, "<span class='notice'>The multilayering mode is currently [build_all ? "enabled" : "disabled"].</span>")
-	if(has_yellow_slime)
+	if(has_slimes & SLIME_YELLOW)
 		to_chat(user, "<span class='notice'>The automatic wrenching mode is currently [autowrench ? "enabled" : "disabled"].</span>")
 
 /obj/item/device/rcd/rpd/pickup(var/mob/living/L)
@@ -151,9 +150,9 @@
 		var/multitext=""
 		var/autotext=""
 	
-		if (has_metal_slime)//build_all
+		if (has_slimes & SLIME_METAL)//build_all
 			multitext=" <div style='margin-top:1em;'><b>Multilayer Mode: </b><a href='?src=\ref[interface];toggle_multi=1'><span class='[build_all? "schem_selected" : "schem"]'>[build_all ? "On" : "Off"]</span></a></div> "
-		if (has_yellow_slime)//build_all
+		if (has_slimes & SLIME_YELLOW)//build_all
 			autotext=" <div style='margin-top:1em;'><b>Autowrench: </b><a href='?src=\ref[interface];toggle_auto=1'><span class='[autowrench? "schem_selected" : "schem"]'>[autowrench ? "On" : "Off"]</span></a></div> "
 	
 		for(var/client/client in interface.clients)
@@ -175,11 +174,11 @@
 /obj/item/device/rcd/rpd/Topic(var/href, var/list/href_list)
 	..()
 	if (href_list["toggle_auto"])
-		autowrench=has_yellow_slime ? !autowrench : 0
+		autowrench=has_slimes & SLIME_METAL ? !autowrench : 0
 		rebuild_ui()
 		return TRUE
 	if (href_list["toggle_multi"])
-		build_all=has_metal_slime ? !build_all : 0
+		build_all=has_slimes & SLIME_METAL ? !build_all : 0
 		rebuild_ui()
 		return TRUE
 	
@@ -233,25 +232,16 @@
 		return selected.Topic(href, href_list)
 
 /obj/item/device/rcd/rpd/slime_act(primarytype, mob/user)
-	if(primarytype == /mob/living/carbon/slime/metal)
-		if(has_metal_slime)
-			to_chat(user, "It already has a slime extract attached.")
-			return FALSE
-		else
-			has_metal_slime=1
+	if(primarytype == SLIME_METAL)
+		slimeadd_message = "You jam the slime extract into the RPD's fabricator."
+	if(primarytype == SLIME_YELLOW)
+		slimeadd_message = "You jam the slime extract into the RPD's output nozzle."
+	if(..())
+		if(primarytype == SLIME_METAL)
 			verbs += /obj/item/device/rcd/rpd/proc/multilayer
-			to_chat(user, "You jam the slime extract into the RPD's fabricator.")
-			return TRUE
-
-	if(primarytype == /mob/living/carbon/slime/yellow)
-		if(has_yellow_slime)
-			to_chat(user, "It already has a slime extract attached.")
-			return FALSE
-		else
-			has_yellow_slime=1
+		if(primarytype == SLIME_YELLOW)
 			verbs += /obj/item/device/rcd/rpd/proc/autowrench
-			to_chat(user, "You jam the slime extract into the RPD's output nozzle.")
-			return TRUE
+		return TRUE
 
 /obj/item/device/rcd/rpd/afterattack(var/atom/A, var/mob/user)
 	if(!selected)

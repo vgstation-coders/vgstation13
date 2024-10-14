@@ -56,6 +56,8 @@ var/global/list/ghdel_profiling = list()
 	/// The chat color var, without alpha.
 	var/chat_color_hover
 
+	var/emagged = 0 // Some things other than machinery can be
+	var/emag_cost = 0 // Emag energy cost (in MJ)
 	var/arcanetampered = 0 //A looot of things can be
 
 
@@ -589,6 +591,18 @@ its easier to just keep the beam vertical.
 /atom/proc/singularity_pull()
 	return
 
+/**
+ * Returns the cost of emagging this machine (emag_cost by default)
+ * @param user /mob The mob that used the emag.
+ * @param emag /obj/item/weapon/card/emag The emag used on this device.
+ * @return number Cost to emag.
+ */
+/atom/proc/getEmagCost(var/mob/user, var/obj/item/weapon/card/emag/emag)
+	return emag_cost
+
+/atom/proc/can_emag()
+	return TRUE
+
 /atom/proc/emag_act(var/mob/user)
 	return
 
@@ -899,6 +913,7 @@ its easier to just keep the beam vertical.
 			var/mob/M = arcanetampered
 			M.arcane_tampered_atoms.Remove(src)
 		arcanetampered = FALSE
+		visible_message("<span class='sinister'>The arcane properties of \the [src] vanish!</span>")
 		for(var/atom/A in contents)
 			A.bless()
 	blessed = 1

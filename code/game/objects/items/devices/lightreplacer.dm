@@ -17,7 +17,6 @@
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_MATERIALS + "=2"
 	w_type = RECYK_ELECTRONIC
 	flammable = TRUE
-	var/emagged = 0
 	var/upgraded
 	var/device_mode = LIGHTREPLACER_BASIC
 

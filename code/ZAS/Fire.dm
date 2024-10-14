@@ -546,6 +546,10 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(!flammable || check_fire_protection() || thermal_mass <= 0)
 		return FALSE
 
+	var/datum/gas_mixture/air_contents = return_air()
+	if(air_contents[GAS_OXYGEN] < 1)
+		return FALSE
+
 	var/in_fire = FALSE
 	on_fire=1
 
@@ -625,7 +629,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	//Fires shouldn't spawn in areas or mobs, but it has happened...
 	if(!istype(loc,/turf))
 		qdel(src)
-		CRASH("Fire was created at src->loc: [src]->[loc] instead of a turf.")
 
 	// Get location and check if it is in a proper ZAS zone.
 	var/turf/simulated/S = get_turf(loc)
@@ -641,7 +644,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(!air_contents.check_recombustability(S))
 		Extinguish()
 	else if(air_contents.check_recombustability(S) == 1)
-		if((air_contents.molar_ratio(GAS_OXYGEN)) < (MINOXY2BURN + rand(-2,2)*0.01))
+		if((air_contents.molar_ratio(GAS_OXYGEN)) < (MINOXY2BURN + rand(-2,2)*0.01) || (air_contents[GAS_OXYGEN] < 1)) //extinguish if the ratio of fuel:oxygen is too low or if there isn't enough oxygen present at all
 			Extinguish()
 			return
 

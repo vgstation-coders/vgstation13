@@ -121,12 +121,11 @@
 
 
 //////PREPARE///////
-/datum/surgery_step/head/prepare/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/head/prepare/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/head/prepare
 	allowed_tools = list(
 		/obj/item/tool/cautery = 100,

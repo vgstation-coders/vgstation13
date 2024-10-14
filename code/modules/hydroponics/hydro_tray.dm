@@ -9,11 +9,12 @@ var/list/hydro_trays = list()
 	flags = OPENCONTAINER | PROXMOVE // PROXMOVE could be added and removed as necessary if it causes lag
 	volume = 100
 	layer = HYDROPONIC_TRAY_LAYER
-
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 50
-
+	slimeadd_message = "You attach the slime extract to SRCTAG's internal mechanisms"
+	slimes_accepted = SLIME_GREEN
+	slimeadd_success_message = "A faint whiff of clonexadone is emitted from them"
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | MULTIOUTPUT
 
 	var/draw_warnings = 1 // Set to 0 to stop it from drawing the alert lights.
@@ -314,81 +315,85 @@ var/list/hydro_trays = list()
 		to_chat(user, "<span class='warning'>You must place the pot on the ground and use a spade on \the [src] to make a transplant.</span>")
 		return
 
-	else if(seed && isshovel(O))
+	else if(isshovel(O))
 		if(closed_system)
-			to_chat(user, "<span class='warning'>You can't transplant the plant while the lid is shut.</span>")
+			to_chat(user, "<span class='warning'>You can't dig soil while the lid is shut.</span>")
 			return
 		if(arcanetampered)
 			to_chat(user,"<span class='sinister'>You cannot dig into the soil.</span>")
 			return
-		var/obj/item/claypot/C = locate() in range(user,1)
-		if(!C)
-			to_chat(user, "<span class='warning'>You need an empty clay pot next to you.</span>")
+		if(dead)
+			remove_dead(user)
 			return
-		if(C.being_potted)
-			to_chat(user, "<span class='warning'>You must finish transplanting your current plant before starting another.</span>")
-			return
-		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
-		C.being_potted = TRUE
-		if(do_after(user, src, 50))
-			user.visible_message(	"<span class='notice'>[user] transplants \the [seed.display_name] into \the [C].</span>",
-									"<span class='notice'>[bicon(src)] You transplant \the [seed.display_name] into \the [C].</span>",
-									"<span class='notice'>You hear a ratchet.</span>")
+		if(seed)
+			var/obj/item/claypot/C = locate() in range(user,1)
+			if(!C)
+				to_chat(user, "<span class='warning'>You need an empty clay pot next to you.</span>")
+				return
+			if(C.being_potted)
+				to_chat(user, "<span class='warning'>You must finish transplanting your current plant before starting another.</span>")
+				return
+			playsound(loc, 'sound/items/shovel.ogg', 50, 1)
+			C.being_potted = TRUE
+			if(do_after(user, src, 50))
+				user.visible_message(	"<span class='notice'>[user] transplants \the [seed.display_name] into \the [C].</span>",
+										"<span class='notice'>[bicon(src)] You transplant \the [seed.display_name] into \the [C].</span>",
+										"<span class='notice'>You hear a ratchet.</span>")
 
-			var/obj/structure/flora/pottedplant/claypot/S = new(get_turf(C))
-			transfer_fingerprints(C, S)
-			S.paint_layers = C.paint_layers.Copy()
-			qdel(C)
+				var/obj/structure/flora/pottedplant/claypot/S = new(get_turf(C))
+				transfer_fingerprints(C, S)
+				S.paint_layers = C.paint_layers.Copy()
+				qdel(C)
 
-			if(seed.large)
-				S.icon_state += "-large"
+				if(seed.large)
+					S.icon_state += "-large"
 
-			var/plant_appearance = ""
-			if(dead)
-				plant_appearance = "dead"
-			else if(harvest)
-				if (harvest > 1)
-					plant_appearance = "harvest-[harvest]"
+				var/plant_appearance = ""
+				if(dead)
+					plant_appearance = "dead"
+				else if(harvest)
+					if (harvest > 1)
+						plant_appearance = "harvest-[harvest]"
+					else
+						plant_appearance = "harvest"
 				else
-					plant_appearance = "harvest"
+					plant_appearance = "stage-[growth_level]"
+
+				S.plant_image = image(seed.plant_dmi,plant_appearance)
+				S.plant_name = seed.display_name
+				S.name = "potted [S.plant_name]"
+				S.plantname = seed.name
+
+				if (seed.pollen && harvest >= seed.pollen_at_level)
+					S.pollen = seed.pollen
+					S.add_particles(seed.pollen)
+					S.adjust_particles(PVAR_SPAWNING, 0.05, seed.pollen)
+					S.adjust_particles(PVAR_PLANE, FLOAT_PLANE, seed.pollen)
+					S.adjust_particles(PVAR_POSITION, generator("box", list(-12,4), list(12,12)), seed.pollen)
+
+				if (seed.moody_lights)
+					S.update_moody_light_index("plant", seed.plant_dmi, "[plant_appearance]-moody")
+				else if (seed.biolum)
+					var/image/luminosity_gradient = image(icon, src, "moody_plant_mask")
+					luminosity_gradient.blend_mode = BLEND_INSET_OVERLAY
+					var/image/mask = image(seed.plant_dmi, src, plant_appearance)
+					mask.appearance_flags = KEEP_TOGETHER
+					mask.overlays += luminosity_gradient
+					S.update_moody_light_index("plant", image_override = mask)
+
+				if(seed.biolum)
+					S.set_light(get_biolum())
+					if(seed.biolum_colour)
+						S.light_color = seed.biolum_colour
+
+				remove_plant()
+				S.update_icon()
+				update_icon()
 			else
-				plant_appearance = "stage-[growth_level]"
+				C.being_potted = FALSE
+			return
 
-			S.plant_image = image(seed.plant_dmi,plant_appearance)
-			S.plant_name = seed.display_name
-			S.name = "potted [S.plant_name]"
-			S.plantname = seed.name
-
-			if (seed.pollen && harvest >= seed.pollen_at_level)
-				S.pollen = seed.pollen
-				S.add_particles(seed.pollen)
-				S.adjust_particles(PVAR_SPAWNING, 0.05, seed.pollen)
-				S.adjust_particles(PVAR_PLANE, FLOAT_PLANE, seed.pollen)
-				S.adjust_particles(PVAR_POSITION, generator("box", list(-12,4), list(12,12)), seed.pollen)
-
-			if (seed.moody_lights)
-				S.update_moody_light_index("plant", seed.plant_dmi, "[plant_appearance]-moody")
-			else if (seed.biolum)
-				var/image/luminosity_gradient = image(icon, src, "moody_plant_mask")
-				luminosity_gradient.blend_mode = BLEND_INSET_OVERLAY
-				var/image/mask = image(seed.plant_dmi, src, plant_appearance)
-				mask.appearance_flags = KEEP_TOGETHER
-				mask.overlays += luminosity_gradient
-				S.update_moody_light_index("plant", image_override = mask)
-
-			if(seed.biolum)
-				S.set_light(get_biolum())
-				if(seed.biolum_colour)
-					S.light_color = seed.biolum_colour
-
-			remove_plant()
-			S.update_icon()
-			update_icon()
-		else
-			C.being_potted = FALSE
-		return
-
-	else if(is_type_in_list(O, list(/obj/item/tool/wirecutters, /obj/item/tool/scalpel)))
+	else if(istype(O,/obj/item/tool/scalpel) || O.is_wirecutter(user))
 		if(!seed)
 			to_chat(user, "There is nothing to take a sample from in \the [src].")
 			return
@@ -470,13 +475,6 @@ var/list/hydro_trays = list()
 	. = ..()
 	if (.)
 		power_change()//calls update_icon()
-
-/obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
-	..()
-	if(primarytype == /mob/living/carbon/slime/green)
-		has_slime=1
-		to_chat(user, "You attach the slime extract to \the [src]'s internal mechanisms.")
-		return TRUE
 
 /obj/machinery/portable_atmospherics/hydroponics/wind_act(var/differential, var/list/connecting_turfs)
 	if (seed)
