@@ -1,6 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: Plastic crates now actually behave like crates in many ways, such as not
-    letting stood up mobs inside, going into disposals bins, shuffling the contents
-    inside, and etc.
