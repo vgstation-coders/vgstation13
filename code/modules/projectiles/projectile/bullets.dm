@@ -161,17 +161,17 @@
 	agony = 15
 	penetration = 2
 
-/obj/item/projectile/bullet/auto380/on_hit(var/atom/target, var/blocked = 0)
+/obj/item/projectile/bullet/auto380/to_bump(atom/A)
 	. = ..()
-	if(shot_from.type == /obj/item/weapon/gun/projectile/glock/fancy/kitchengun)
+	if(A && shot_from.type == /obj/item/weapon/gun/projectile/glock/fancy/kitchengun)
 		var/obj/item/weapon/gun/projectile/glock/fancy/kitchengun/K = shot_from
-		if(!(target in K.cleaning_targets)) // BUT WITH THREE SHOTS FROM KITCHEN GUN
-			K.cleaning_targets += target // BANG
-		K.cleaning_targets[target]++ // BANG
-		if(K.cleaning_targets[target] > 2) // BANG
-			target.clean_act(CLEANLINESS_BLEACH) // AND IT SPARKLES LIKE NEW
-			K.cleaning_targets[target] = 0
-			K.cleaning_targets -= target
+		if(!(A in K.cleaning_targets)) // BUT WITH THREE SHOTS FROM KITCHEN GUN
+			K.cleaning_targets += A // BANG
+		K.cleaning_targets[A]++ // BANG
+		if(K.cleaning_targets[A] > 2) // BANG
+			A.clean_act(CLEANLINESS_BLEACH) // AND IT SPARKLES LIKE NEW
+			K.cleaning_targets[A] = 0
+			K.cleaning_targets -= A
 
 /obj/item/projectile/bullet/auto380/practice
 	damage = 2
