@@ -169,7 +169,7 @@
 			K.cleaning_targets += A // BANG
 		K.cleaning_targets[A]++ // BANG
 		if(K.cleaning_targets[A] > 2) // BANG
-			var/turf/T = get_turf(src)
+			var/turf/T = get_turf(A)
 			T.clean_act(CLEANLINESS_BLEACH)
 			for(var/obj/O in T)
 				if(O != A)
