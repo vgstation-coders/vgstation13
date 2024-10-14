@@ -141,7 +141,13 @@ var/list/holopads = list()
 	return TRUE
 
 /obj/machinery/hologram/holopad/AltClick(var/mob/living/carbon/human/user)
-	if(istype(user) && !user.stat && user.Adjacent(src))
+	set_holocolor(user)
+
+/obj/machinery/hologram/holopad/verb/set_holocolor(mob/user)
+	set category = "Object"
+	set name = "Set Holocolor"
+	set src in oview(1)
+	if(ishuman(user) && !user.stat && user.Adjacent(src))
 		user_holocolor = input(user, "Please select the user hologram colour.", "Hologram colour") as color
 
 /obj/machinery/hologram/holopad/proc/activate_holo(mob/user)
@@ -188,7 +194,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	holo = new(T)//Spawn a blank effect at the location.
 	// hologram.mouse_opacity = 0 Why would we not want to click on it
 	holo.name = "[user.name] (Hologram)"//If someone decides to right click.
-	var/holocolor = istype(AI) ? AI.holocolor : user_holocolor
+	var/holocolor = istype(AI) ? AI.holocolor : (source ? source.user_holocolor : user_holocolor)
 
 	set_light(2, 0, holocolor)			//pad lighting
 	icon_state = "holopad1"
