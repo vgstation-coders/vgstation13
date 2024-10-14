@@ -170,7 +170,7 @@
 			K.cleaning_targets[target]++ // BANG
 			if(K.cleaning_targets[target] > 2) // BANG
 				target.clean_act(CLEANLINESS_BLEACH) // AND IT SPARKLES LIKE NEW
-				K.cleaning_targets[target] == 0
+				K.cleaning_targets[target] = 0
 				K.cleaning_targets -= target
 		return 1
 	return 0
