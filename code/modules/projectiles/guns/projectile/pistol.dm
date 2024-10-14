@@ -292,7 +292,7 @@
 
 /obj/item/weapon/gun/projectile/glock/fancy/kitchengun
 	name = "\improper KITCHEN GUN!"
-	desc = "AN UBIQUITOUS SIDEARM PRODUCED BY CYBERSUN! ACCEPTS .380 ROUNDS! FITS IN YOUR POCKET! <br><span class='notice'>COMES WITH PLATINUM SIDING AND LASER SIGHT FOR AFTER DARK CLEANING!</span>"
+	desc = "AN UBIQUITOUS SIDEARM PRODUCED BY CYBERSUN! SAY GOODBYE TO DAILY STAINS AND DIRTY SURFACES IN JUST THREE SHOTS! ACCEPTS .380 ROUNDS! FITS IN YOUR POCKET! <br><span class='notice'>COMES WITH PLATINUM SIDING AND LASER SIGHT FOR AFTER DARK CLEANING!</span>"
 	fire_sound = 'sound/weapons/kitchengun.ogg'
 	var/list/cleaning_targets = list()
 
