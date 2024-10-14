@@ -300,6 +300,11 @@
 	if(L.get_active_hand() == src)
 		speech.message = uppertext(speech.message) + "!"
 
+/obj/item/weapon/gun/projectile/glock/fancy/kitchengun/play_firesound(mob/user, var/reflex)
+	. = ..()
+	if(!silenced)
+		visible_message("<span class='danger'><big>BANG!</big></span>")
+
 /obj/item/weapon/gun/projectile/glock/lockbox
 	max_shells = 0
 	spawn_mag = FALSE
