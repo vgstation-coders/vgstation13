@@ -47,6 +47,8 @@
 	if(!projectile_type)
 		return 0
 	in_chamber = new projectile_type(src)
+	if(arcanetampered)
+		in_chamber.arcanetampered = arcanetampered
 	return 1
 
 /obj/item/weapon/gun/energy/update_icon()

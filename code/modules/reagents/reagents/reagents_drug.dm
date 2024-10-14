@@ -199,6 +199,7 @@
 	overdose_am = REAGENTS_OVERDOSE/2
 	density = 1.79
 	specheatcap = 0.70
+	arcane_id = HYPOZINE
 
 /datum/reagent/hyperzine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -346,6 +347,7 @@
 	var/has_had_heart_explode = 0 //We've applied permanent damage.
 	custom_metabolism = 0.04
 	var/oldspeed = 0
+	arcane_id = HYPERZINE
 
 /datum/reagent/hypozine/reagent_deleted()
 	if(..())
@@ -475,6 +477,7 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 8.15
 	specheatcap = 0.16
+	arcane_id = METHYLIN
 
 /datum/reagent/impedrezene/on_mob_life(var/mob/living/M)
 	if(..())
@@ -495,12 +498,14 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#181818" //rgb: 24, 24, 24
 	density = 1.01
+	//arcane_id = DANBACCO
 
 /datum/reagent/psilocybin
 	name = "Psilocybin"
 	id = PSILOCYBIN
 	description = "A strong psycotropic derived from certain species of mushroom."
 	color = "#E700E7" //rgb: 231, 0, 231
+	arcane_id = SPIRITBREAKER
 
 /datum/reagent/psilocybin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -561,6 +566,7 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 5.23
 	specheatcap = 0.62
+	arcane_id = LIQUIDPCP
 
 /datum/reagent/space_drugs/on_mob_life(var/mob/living/M)
 	if(..())
@@ -583,6 +589,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#4c1e00" //rgb: 76, 30, 0
 	density = 1.01
+	//arcane_id = DANBACCO
 
 /datum/reagent/squash
 	name = "Squash"

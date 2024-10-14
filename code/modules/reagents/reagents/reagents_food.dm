@@ -70,6 +70,7 @@
 	custom_metabolism = FOOD_METABOLISM
 	density = 0.53
 	specheatcap = 3.49
+	arcane_id = CONDENSEDCAPSAICIN
 
 /datum/reagent/capsaicin/on_mob_life(var/mob/living/M)
 
@@ -256,6 +257,7 @@
 	density = 0.9185
 	specheatcap = 2.402
 	var/has_had_heart_explode = 0
+	arcane_id = LIPOZINE
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
 
@@ -312,6 +314,7 @@
 	specheatcap = 0.55536
 	overdose_am = 30
 	custom_metabolism = 0.05
+	arcane_id = LIPOZINE
 
 /datum/reagent/diabeetusol/on_mob_life(var/mob/living/M)
 	if(..())
@@ -355,6 +358,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	nutriment_factor = REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+	arcane_id = HELL_RAMEN
 
 /datum/reagent/dry_ramen/on_mob_life(var/mob/living/M)
 	if(..())
@@ -427,6 +431,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#8BA6E9" //rgb: 139, 166, 233
 	custom_metabolism = FOOD_METABOLISM
+	arcane_id = CONDENSEDCAPSAICIN
 
 /datum/reagent/frostoil/on_mob_life(var/mob/living/M)
 
@@ -493,6 +498,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 10 * REAGENTS_METABOLISM
 	color = "#E7A568"
+	arcane_id = WATER
 
 /datum/reagent/gravy/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -511,6 +517,7 @@
 	color = "#302000" //rgb: 48, 32, 0
 	density = 1.42
 	specheatcap = 14.59
+	arcane_id = CALCIUMOXIDE
 
 /datum/reagent/hell_ramen/on_mob_life(var/mob/living/M)
 	if(..())
@@ -528,6 +535,7 @@
 	var/quality = 2
 	density = 1.59
 	specheatcap = 1.244
+	//arcane_id = TOXIN
 
 /datum/reagent/honey/on_mob_life(var/mob/living/M)
 	if(ishuman(M))
@@ -582,6 +590,7 @@
 	color = "#302000" //rgb: 48, 32, 0
 	density = 1.33
 	specheatcap = 4.18
+	arcane_id = DRY_RAMEN
 
 /datum/reagent/hot_ramen/on_mob_life(var/mob/living/M)
 	if(..())
@@ -613,6 +622,7 @@
 	description = "A lipid heavy liquid, that's likely to make your fad lipozine diet fail."
 	color = "#DFDFDF"
 	nutriment_factor = 25 * REAGENTS_METABOLISM
+	arcane_id = LIPOZINE
 
 /datum/reagent/liquidbutter/on_mob_life(var/mob/living/M)
 	if(..())
@@ -662,6 +672,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFA500"
 	custom_metabolism = 0.1
+	arcane_id = BUSTANUT
 
 /datum/reagent/muhhardcores
 	name = "Hardcores"
@@ -670,6 +681,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FFF000"
 	custom_metabolism = 0.01
+	arcane_id = MEDCORES
 
 /datum/reagent/muhhardcores/on_mob_life(var/mob/living/M)
 	if(..())
@@ -715,6 +727,7 @@
 	color = "#664330" //rgb: 102, 67, 48
 	density = 6.54
 	specheatcap = 17.56
+	//arcane_id = LIPOZINE
 	plant_nutrition = 10
 	plant_health = 1
 
@@ -851,6 +864,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#ff5100"
 	custom_metabolism = 0.1
+	arcane_id = BUSTANUT
 
 /datum/reagent/soysauce
 	name = "Soysauce"
@@ -895,6 +909,7 @@
 	color = "#FF00FF" //rgb: 255, 0, 255
 	density = 1.59
 	specheatcap = 1.24
+	//arcane_id = HONKSERUM
 
 /datum/reagent/sprinkles/on_mob_life(var/mob/living/M)
 	if(..())
@@ -916,6 +931,7 @@
 	sport = SPORTINESS_SUGAR
 	density = 1.59
 	specheatcap = 1.244
+	arcane_id = CORNSYRUP
 	plant_nutrition = 1
 	plant_pests = 20
 	plant_weeds = 20
@@ -989,6 +1005,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 	color = "#B38B26" //rgb: 179, 139, 38
+	arcane_id = ZAMSPICYTOXIN
 
 /datum/reagent/zamspicytoxin
 	name = "Zam's Spicy Sauce"

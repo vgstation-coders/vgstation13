@@ -84,6 +84,7 @@
 	_color = "clown"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	stuns_arcane_loyalty = TRUE
 
 
 /obj/item/clothing/under/rank/head_of_personnel

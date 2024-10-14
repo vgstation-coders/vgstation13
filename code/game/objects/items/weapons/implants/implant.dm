@@ -6,6 +6,7 @@
 	_color = "b"
 	/// The mob this has been implanted into.
 	var/mob/living/imp_in
+	var/inserter_name
 	/// The limb of the mob this has been implanted into.
 	var/datum/organ/external/part
 	var/allow_reagents = FALSE
@@ -29,6 +30,8 @@
 		part = organ
 	forceMove(target)
 	imp_in = target
+	if(implanter)
+		inserter_name = implanter.real_name
 	implanted(implanter)
 	return TRUE
 
@@ -43,6 +46,7 @@
 	if(!gcDestroyed)
 		forceMove(get_turf(imp_in))
 	imp_in = null
+	inserter_name = null
 	return TRUE
 
 /obj/item/weapon/implant/attackby(var/obj/item/weapon/W, var/mob/user)

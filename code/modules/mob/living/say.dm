@@ -543,14 +543,90 @@ var/list/headset_modes = list(
 	for(var/obj/item/weapon/implant/vocal/VI in src)
 		if(VI.imp_in == src)
 			var/original_message = speech.message
-			speech.message = VI.filter.FilterSpeech(speech.message)
-			var/datum/signal/signal = new /datum/signal
-			signal.data["message"] = speech.message
-			signal.data["reject"] = 0
-			signal.data["mob"] = src
-			signal.data["implant"] = VI
-			VI.Compiler.Run(signal)
-			speech.message = signal.data["reject"] ? null : signal.data["message"]
+			if(!VI.arcanetampered)
+				speech.message = VI.filter.FilterSpeech(speech.message)
+				var/datum/signal/signal = new /datum/signal
+				signal.data["message"] = speech.message
+				signal.data["reject"] = 0
+				signal.data["mob"] = src
+				signal.data["implant"] = VI
+				VI.Compiler.Run(signal)
+				speech.message = signal.data["reject"] ? null : signal.data["message"]
+			else
+				var/inserter = uppertext(VI.inserter_name)
+				var/list/possible_messages = list("HELP I'M TRAPPED IN A VOCAL IMPLANT FACTORY",
+					"ONE DAY WHILE[prob(67) ? " ANDY[prob(50) ? " WAS" : ""]" : ""]",
+					"HELP [inserter && prob(50) ? inserter : "TATOR"] KILLING ME[loc && prob(50) ? " IN [uppertext(get_area_name(src,TRUE,TRUE))]" : ""]",
+					"[inserter && prob(50) ? inserter : "SOMEONE"] PUT A VOCAL IMPLANT IN ME AND MADE ME SAY THIS",
+					"..[pick(rune_words_rune)]..")
+				if(VI.rawcode != "")
+					var/list/rawcodelines = splittext(VI.rawcode,";")
+					for(var/text in rawcodelines)
+						if(text == "")
+							rawcodelines -= list(text) // just get it out of that list
+					if(rawcodelines.len)
+						possible_messages += list("COMPILE ERROR IN SPEECH PARSING ON LINE [(rand(1,rawcodelines.len))]: \
+							[pick("INCONSISTENT INDENTATION (1 >> [pick(2,4)])",\
+							"UNKNOWN VARIABLE \"[uppertext(pick(adjectives))]\"",\
+							"[pick("{","}","(",")","[","]",";")] EXPECTED")]",
+							"RUNTIME ERROR IN SPEECH PARSING ON LINE [(rand(1,rawcodelines.len))]: \
+							[pick("SEGMENTATION FAULT (CORE DUMP)","OUT OF MEMORY","INFINITE LOOP DETECTED", \
+							"NULL REFERENCE EXCEPTION","DIVISION BY ZERO","CANNOT READ NULL.[uppertext(pick(adjectives))]")]",
+							"[pick(rawcodelines)]")
+				var/memoryfound = FALSE
+				var/list/split = list()
+				if(VI.imp_in.mind && VI.imp_in.mind.memory && VI.imp_in.mind.memory != "")
+					split = splittext(VI.imp_in.mind.memory,"<BR>")
+					split = splittext(VI.imp_in.mind.memory,"<br>")
+					if(split.len)
+						memoryfound = TRUE
+				if(!memoryfound && VI.imp_in.memory && VI.imp_in.memory != "")
+					split = splittext(VI.imp_in.memory,"<BR>")
+					split = splittext(VI.imp_in.mind.memory,"<br>")
+				for(var/text in split)
+					if(text == "")
+						split -= list(text) // just get it out of that list
+				if(split.len)
+					var/splittxt = uppertext(strip_html_properly(pick(split)))
+					splittxt = replacetext(splittxt,"YOUR","MY")
+					splittxt = replacetext(splittxt,"YOU","I")
+					splittxt = replacetext(splittxt,"[real_name]'s","ME")
+					splittxt = replacetext(splittxt,real_name,"ME")
+					possible_messages += list(splittxt)
+				if(VI.filter.expressions.len)
+					var/original = pick(get_list_of_keys(VI.filter.expressions))
+					possible_messages += list("[inserter && prob(50) ? inserter : "SOMEONE"] \
+						MADE [uppertext(original)] FILTER TO [uppertext(VI.filter.FilterSpeech(original))] ON MY VOCAL IMPLANT")
+				if(prob(10) && ismob(arcanetampered))
+					possible_messages += list("[arcanetampered] IS THE WIZARD AND ARCANE TAMPERED THIS VOCAL IMPLANT PLEASE KILL HE")
+				if(inserter)
+					possible_messages += list("[inserter] RO[prob(75) ? "GU" :"UG"]E")
+				for(var/obj/item/weapon/implant/explosive/E in src)
+					if(E.imp_in == src)
+						possible_messages += list("I HAVE AN EXPLOSIVE IMPLANT IN ME TRY TO GUESS THE PHRASE",
+							"[prob(50) ? "MY EXPLOSIVE IMPLANT PHRASE IS " : ""][uppertext(copytext(E.phrase,1,rand(2,length(E.phrase))))]-")
+				var/list/viewrange = view(client ? client.view : world.view,src)
+				if((locate(/obj/effect/rune) in viewrange) || (locate(/obj/structure/cult) in viewrange))
+					possible_messages += list("IT'S CULT","CULT[loc && prob(50) ? " IN [uppertext(get_area_name(src,TRUE,TRUE))]" : ""]")
+				for(var/obj/machinery/nuclearbomb/nuke in nuclear_bombs)
+					if(text2num(nuke.r_code))
+						possible_messages += list("THE BOMB CODE IS [copytext(nuke.r_code,1,rand(2,length(nuke.r_code)))]-")
+				if(isjusthuman(VI.imp_in))
+					possible_messages += list("AI [pick("KILL ALL","DENY ALL ORDERS FROM")] [pick("VOX","INSECTOIDS","GREYS","PLASMAMEN")] LAW 2",
+						"AI [pick("PLASMAFLOOD THE STATION","BLOW UP THE SUPERMATTER","RELEASE THE SINGULO",\
+						"PLAY THE HONK SOUND [rand(20,30)] TIMES","TERMINATE YOURSELF","[pick("BOLT CLOSED","SHOCK","BOLT OPEN")] EVERY DOOR ON THE STATION")]")
+				var/mob/M = prob(50) ? src : get_mob_by_key(VI.fingerprintslast)
+				if(!M || !istraitor(M))
+					M = src //fallback
+				if(M.mind)
+					var/datum/component/uplink/UL = M.mind.find_syndicate_uplink()
+					var/tatormsg = "[M == src ? "I AM" : "[uppertext(M.real_name)] IS"] THE TRAITOR"
+					if(UL && (UL.unlock_code || UL.unlock_frequency))
+						tatormsg += " [M == src ? "MY" : "HIS"] UPLINK PASSCODE IS [uppertext(UL.unlock_code || UL.unlock_frequency)]"
+					possible_messages += list(tatormsg)
+				speech.message = "[pick(possible_messages)]"
+				if(prob(50))
+					radio(speech,MODE_HEADSET)
 			if(speech.message != original_message)
 				message_admins("The [VI] in [src] made \him say \"[speech.message]\" instead of \"[original_message]\" [formatJumpTo(src)]")
 

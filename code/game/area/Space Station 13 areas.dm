@@ -98,6 +98,8 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 	var/destroy_after_marker = FALSE	//The area is deleted after its holomap marker is created. Useful for shuttle docking zones that need to remain area-free.
 
+	var/short_name
+
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
 var/list/teleportlocs = list()
@@ -661,6 +663,7 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/asteroid					// -- TLE
 	name = "\improper Asteroid"
+	short_name = "Roid"
 	icon_state = "asteroid"
 	requires_power = 0
 	shuttle_can_crush = FALSE
@@ -872,6 +875,7 @@ var/global/list/adminbusteleportlocs = list()
 //Maintenance
 
 /area/maintenance
+	short_name = "Maint"
 	shuttle_can_crush = FALSE
 	ambient_sounds = list(
 		/datum/ambience/maint1,
@@ -1112,6 +1116,7 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/crew_quarters/sleep
 	name = "\improper Dormitories"
+	short_name = "Dorms"
 	icon_state = "Sleep"
 
 /area/crew_quarters/sleep_male
@@ -1363,6 +1368,7 @@ var/global/list/adminbusteleportlocs = list()
 //Solars
 
 /area/solar
+	short_name = "Solars"
 	requires_power = 0
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 	shuttle_can_crush = FALSE
@@ -1605,6 +1611,7 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/security/perma
 	name = "\improper Permanent Confinement"
+	short_name = "Perma"
 	icon_state = "sec_perma"
 
 /area/security/gas_chamber
@@ -1659,6 +1666,7 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/security/armory
 	name = "\improper Secure Armory"
+	short_name = "Armory"
 	icon_state = "Armory"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
@@ -1800,6 +1808,7 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/science/xenobiology
 	name = "\improper Xenobiology Lab"
+	short_name = "Xenobio"
 	icon_state = "xenobio"
 
 /area/science/xenobiology/specimen_1
@@ -1871,6 +1880,7 @@ var/global/list/adminbusteleportlocs = list()
 //Storage
 
 /area/storage
+	short_name = "Storage"
 	shuttle_can_crush = FALSE
 
 /area/storage/tools
@@ -1909,6 +1919,7 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/storage/nuke_storage
 	name = "\improper Vault"
+	short_name = null
 	icon_state = "nuke_storage"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 

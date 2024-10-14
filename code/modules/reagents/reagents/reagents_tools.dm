@@ -21,6 +21,7 @@
 	specheatcap = 0.68
 	glass_icon_state = "dr_gibb_glass"
 	glass_desc = "Unless you are an industrial tool, this is probably not safe for consumption."
+	//arcane_id = PLASMA
 
 /datum/reagent/fuel/reaction_obj(var/obj/O, var/volume)
 	var/datum/reagent/self = src
@@ -133,6 +134,7 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.11775
 	specheatcap = 2.71388
+	arcane_id = SODIUM_POLYACRYLATE
 
 /datum/reagent/lube/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
@@ -172,6 +174,7 @@
 	custom_metabolism = 0.5
 	density = 1.98
 	specheatcap = 1.39
+	arcane_id = WATER
 	plant_toxins = 20
 	plant_health = -5
 
@@ -268,6 +271,7 @@
 	custom_metabolism = 0.5
 	density = 1.84
 	specheatcap = 1.38
+	arcane_id = WATER
 	plant_toxins = 2
 
 /datum/reagent/sacid/on_mob_life(var/mob/living/M)
@@ -357,6 +361,7 @@
 	color = "#FFFFFF"
 	density = 1.22
 	specheatcap = 4.14
+	arcane_id = LUBE
 
 /datum/reagent/sodium_polyacrylate/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
@@ -377,6 +382,7 @@
 	density = 0.76
 	specheatcap = 60.17
 	var/clean_level = CLEANLINESS_SPACECLEANER
+	arcane_id = BLOOD
 
 /datum/reagent/space_cleaner/reaction_obj(var/obj/O, var/volume)
 	if(..())

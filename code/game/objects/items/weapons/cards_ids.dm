@@ -56,6 +56,14 @@
 /*
  * ID CARDS
  */
+ 
+/obj/item/weapon/card/fake_emag
+	desc = "It's a card with a magnetic strip attached to some circuitry... NOT!"
+	name = "cryptographic sequencer"
+	icon_state = "emag"
+	item_state = "card-id"
+	slot_flags = SLOT_ID
+
 /obj/item/weapon/card/emag
 	desc = "It's a card with a magnetic strip attached to some circuitry."
 	name = "cryptographic sequencer"
@@ -459,15 +467,23 @@ var/list/global/id_cards = list()
 	..()
 	access = get_all_accesses()
 
+/obj/item/weapon/card/id/syndicate/arcane_act(mob/user, recursive)
+	registered_name = prob(75) ? pick(clown_names) : user.real_name
+	icon_state = "clown"
+	assignment = pickweight(list("Clown" = 50,"Jester" = 25,"Syndicate" = 10,"Wizard" = 10,"ID that got arcane tampered" = 5))
+	UpdateName()
+	return ..()
+
 /obj/item/weapon/card/id/syndicate/afterattack(var/obj/item/weapon/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I = O
 		to_chat(user, "<span class='notice'>\The [src]'s microscanners activate as you pass it over \the [I], copying its access[copy_appearance ? " and appearance" : ""].</span>")
 		access |= I.access
 		if(copy_appearance)
-			registered_name = I.registered_name
-			icon_state = I.icon_state
-			assignment = I.assignment
+			if(!arcanetampered)
+				registered_name = I.registered_name
+				icon_state = I.icon_state
+				assignment = I.assignment
 			associated_account_number = I.associated_account_number
 			blood_type = I.blood_type
 			dna_hash = I.dna_hash
@@ -489,7 +505,7 @@ var/list/global/id_cards = list()
 			src.registered_name = ""
 			return
 		src.assignment = u
-		src.name = "[src.registered_name]'s ID Card ([src.assignment])"
+		UpdateName()
 		to_chat(user, "<span class='notice'>You successfully forge the ID card.</span>")
 		registered_user = user
 	else if(!registered_user || registered_user == user)
@@ -503,6 +519,10 @@ var/list/global/id_cards = list()
 			if("Edit")
 				switch(input(user,"What would you like to edit on \the [src]?") in list("Name","Appearance","Occupation","Money account","Blood type","DNA hash","Fingerprint hash","Reset card"))
 					if("Name")
+						if(arcanetampered)
+							to_chat(user,"<span class='sinister'>HONK!</span>")
+							user << 'sound/items/bikehorn.ogg'
+							return
 						var/new_name = reject_bad_name(input(user,"What name would you like to put on this card?","Agent card name", ishuman(user) ? user.real_name : user.name))
 						if(!Adjacent(user))
 							return
@@ -512,6 +532,10 @@ var/list/global/id_cards = list()
 						to_chat(user, "Name changed to [new_name].")
 
 					if("Appearance")
+						if(arcanetampered)
+							to_chat(user,"<span class='sinister'>HONK!</span>")
+							user << 'sound/items/bikehorn.ogg'
+							return
 						var/list/appearances = list(
 							"data",
 							"id",
@@ -549,6 +573,10 @@ var/list/global/id_cards = list()
 						to_chat(usr, "Appearance changed to [choice].")
 
 					if("Occupation")
+						if(arcanetampered)
+							to_chat(user,"<span class='sinister'>HONK!</span>")
+							user << 'sound/items/bikehorn.ogg'
+							return
 						var/new_job = sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Agent card occupation", "Assistant", MAX_MESSAGE_LEN))
 						if(!Adjacent(user))
 							return
@@ -606,10 +634,11 @@ var/list/global/id_cards = list()
 						to_chat(user, "Fingerprint hash changed to [new_fingerprint_hash].")
 
 					if("Reset card")
-						name = initial(name)
-						registered_name = initial(registered_name)
-						icon_state = initial(icon_state)
-						assignment = initial(assignment)
+						if(!arcanetampered)
+							name = initial(name)
+							registered_name = initial(registered_name)
+							icon_state = initial(icon_state)
+							assignment = initial(assignment)
 						associated_account_number = initial(associated_account_number)
 						blood_type = initial(blood_type)
 						dna_hash = initial(dna_hash)

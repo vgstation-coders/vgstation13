@@ -49,6 +49,8 @@
 	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
 	var/paint_light = PAINTLIGHT_NONE
 	var/adj_temp = 0//keep between -1.5,20 to prevent people from freezing/burning themselves
+	var/arcane_id //arcane tampered replacement
+	var/arcane_ratio = 1 //how much of it replaced?
 
 	//adjusts the values of hydro trays and soils by this value per process
 	var/plant_nutrition = 0
