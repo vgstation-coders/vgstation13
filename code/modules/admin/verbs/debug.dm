@@ -42,20 +42,22 @@ now actually filters to a type, redundant procs cut down
 	var/class = null
 
 	if(alert("Proc owned by something?","Proc call","Yes","No") == "Yes")
-		class = input("Proc owned by what type of atom? (eg. /obj/machinery)","Owner",null) as text
-		if(!class)
-			return
-		class = filter_typelist_input("Select an atom type", "Spawn Atom", get_matching_types(class, /atom))
-		
+		class = input("Proc owned by...","Owner",null) as null|anything in list("Atom","Client")
 		var/list/stufftocall = list()
-		if(class == "/client")
-			stufftocall = clients
-		else
-			for(var/atom/A in world)
-				if(istype(A,class))
-					stufftocall |= A
-				IN_ROUND_CHECK_TICK //bam. now it doesn't freeze the game anymore
+		switch(class)
+			if("Client")
+				stufftocall = clients
+			if("Atom")
+				class = input("Proc owned by what type of atom? (eg. /obj/machinery)","Owner",null) as text
+				if(!class)
+					return
+				class = filter_typelist_input("Select an atom type", "Spawn Atom", get_matching_types(class, /atom))
+				for(var/atom/A in world)
+					if(istype(A,class))
+						stufftocall["[A] ([ref(A)])"] = A
+					IN_ROUND_CHECK_TICK //bam. now it doesn't freeze the game anymore
 		target = input("Enter target", "Target:", ispath(class,/area) || ispath(class,/turf) ? usr.loc : usr, null) as null|anything in stufftocall
+		target = stufftocall[target]
 		if(!target)
 			return
 
@@ -92,7 +94,7 @@ now actually filters to a type, redundant procs cut down
 		return
 
 	if(target && !hascall(target, procname))
-		to_chat(user, "<span class='red'>Error: calladvproc(): target has no such call [procname].</span>")
+		to_chat(user, "<span class='red'>Error: calladvproc(): target [target] has no such call [procname].</span>")
 		return
 
 	var/argnum = input("Number of arguments","Number:",0) as num|null
