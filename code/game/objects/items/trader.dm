@@ -17,18 +17,21 @@
 	file_path = "maps/randomvaults/dungeons/mecha_graveyard.dmm"
 	unique = TRUE
 
+//Ripley wreckage but with enough parts to rebuild
 /obj/effect/decal/mecha_wreckage/graveyard_ripley
 	name = "Ripley wreckage"
-	desc = "Surprisingly well preserved."
 	icon_state = "ripley-broken"
 
 /obj/effect/decal/mecha_wreckage/graveyard_ripley/New()
 	..()
-	var/list/parts = list(/obj/item/mecha_parts/part/ripley_torso,
+	var/list/parts = list(		/obj/item/mecha_parts/chassis/ripley,
+								/obj/item/mecha_parts/part/ripley_torso,
 								/obj/item/mecha_parts/part/ripley_left_arm,
 								/obj/item/mecha_parts/part/ripley_right_arm,
 								/obj/item/mecha_parts/part/ripley_left_leg,
-								/obj/item/mecha_parts/part/ripley_right_leg)
+								/obj/item/mecha_parts/part/ripley_right_leg,
+								/obj/item/weapon/circuitboard/mecha/ripley/peripherals,
+								/obj/item/weapon/circuitboard/mecha/ripley/main)
 	welder_salvage += parts
 
 	if(prob(80))
@@ -36,27 +39,73 @@
 	else
 		add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/drill/diamonddrill,100)
 	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp,100)
-	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/jetpack,100)
+	if(prob(50))
+		return
+	switch(rand(1,3))
+		if(1)
+			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/jetpack,100)
+		if(2)
+			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/passive/rack,100)
+		if(3)
+			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/passive/runningboard,100)
 
 /obj/effect/decal/mecha_wreckage/graveyard_clarke
 	name = "Clarke wreckage"
-	desc = "Surprisingly well preserved."
 	icon_state = "clarke-broken"
 
 /obj/effect/decal/mecha_wreckage/graveyard_clarke/New()
 	..()
-	var/list/parts = list(
+	var/list/parts = list(		/obj/item/mecha_parts/chassis/clarke,
 								/obj/item/mecha_parts/part/clarke_torso,
 								/obj/item/mecha_parts/part/clarke_head,
 								/obj/item/mecha_parts/part/clarke_left_arm,
 								/obj/item/mecha_parts/part/clarke_right_arm,
 								/obj/item/mecha_parts/part/clarke_left_tread,
-								/obj/item/mecha_parts/part/clarke_right_tread)
+								/obj/item/mecha_parts/part/clarke_right_tread,
+								/obj/item/weapon/circuitboard/mecha/clarke/peripherals,
+								/obj/item/weapon/circuitboard/mecha/clarke/main)
 	welder_salvage += parts
 
-	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/collector,100)
 	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/tiler,100)
 	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/switchtool,100)
+	if(prob(50))
+		return
+	switch(rand(1,4))
+		if(1)
+			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/jetpack,100)
+		if(2)
+			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/passive/rack,100)
+		if(3)
+			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/passive/runningboard,100)
+		if(4)
+			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/collector,100)
+
+
+/mob/living/simple_animal/hostile/asteroid/basilisk/skullbot
+	name = "Mysterious skullbot"
+	desc = "A bizarre robot-like thing."
+	icon = 'icons/mecha/mecha.dmi'
+	icon_state = "skullmech"
+	icon_living = "skullmech"
+	icon_aggro = "skullmech-laugh"
+	icon_dead = "skullmech-broken"
+	icon_gib = null
+	move_to_delay = 5
+	projectiletype = /obj/item/projectile/temp/basilisk
+	projectilesound = 'sound/weapons/pierce.ogg'
+	ranged = 1
+	ranged_message = "laughs"
+	melee_damage_lower = 15
+	melee_damage_upper = 30
+	attacktext = "bites into"
+	attack_sound = 'sound/weapons/spiderlunge.ogg'
+
+/mob/living/simple_animal/hostile/asteroid/basilisk/skullbot/death()
+	visible_message("<span class='danger'>\The [src] shatters before dying, leaving some bones.</span>")
+	drop_stack(/obj/item/stack/sheet/bone, loc, 5)
+	new /obj/effect/decal/mecha_wreckage/skullbot(loc)
+	..(TRUE)
+	qdel(src)
 
 /obj/item/weapon/mech_expansion_kit
 	name = "exosuit expansion kit"

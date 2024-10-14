@@ -27,6 +27,12 @@ var/global/list/mineralSpawnChance[]
 		"Diamond"   = 1,
 		"Ice Cave"  = 1,
 	)
+	mineralSpawnChance["mecha_high"] = list(
+		"Nanotrasite" = 30,
+		"Electrum"  = 20,
+		"Plasma"    = 10,
+		"Diamond"   = 2,
+	)
 	mineralSpawnChance["random_high"] = list(
 		"Uranium" = 10,
 		"Iron"    = 30,
@@ -886,6 +892,11 @@ var/list/icon_state_to_appearance = list()
 	base_icon_state = "snow_rock"
 	mined_type = /turf/unsimulated/floor/snow/permafrost
 	overlay_state = "snow_rock_overlay"
+
+/turf/unsimulated/mineral/random/high_chance/mecha
+	icon_state = "rock(high)"
+	mineralChance = 40 //there's 46 turfs currently in the mecha graveyard...
+	mineralPool = "mecha_high"
 
 /turf/unsimulated/mineral/uranium
 	name = "Uranium deposit"

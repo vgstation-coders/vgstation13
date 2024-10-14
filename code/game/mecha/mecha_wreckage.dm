@@ -135,12 +135,16 @@
 
 /obj/effect/decal/mecha_wreckage/gygax/New()
 	..()
-	var/list/parts = list(/obj/item/mecha_parts/part/gygax_torso,
+	var/list/parts = list(		/obj/item/mecha_parts/chassis/gygax,
+								/obj/item/mecha_parts/part/gygax_torso,
 								/obj/item/mecha_parts/part/gygax_head,
 								/obj/item/mecha_parts/part/gygax_left_arm,
 								/obj/item/mecha_parts/part/gygax_right_arm,
 								/obj/item/mecha_parts/part/gygax_left_leg,
-								/obj/item/mecha_parts/part/gygax_right_leg)
+								/obj/item/mecha_parts/part/gygax_right_leg,
+								/obj/item/weapon/circuitboard/mecha/gygax/peripherals,
+								/obj/item/weapon/circuitboard/mecha/gygax/targeting,
+								/obj/item/weapon/circuitboard/mecha/gygax/main)
 	welder_salvage += pick_random_loot(parts)
 
 /obj/effect/decal/mecha_wreckage/gygax/dark
@@ -154,13 +158,16 @@
 /obj/effect/decal/mecha_wreckage/marauder/New()
 	..()
 	var/list/parts = list(
+		/obj/item/mecha_parts/chassis/marauder,
 		/obj/item/mecha_parts/part/marauder_torso,
 		/obj/item/mecha_parts/part/marauder_head,
 		/obj/item/mecha_parts/part/marauder_left_arm,
 		/obj/item/mecha_parts/part/marauder_right_arm,
 		/obj/item/mecha_parts/part/marauder_left_leg,
 		/obj/item/mecha_parts/part/marauder_right_leg,
-		)
+		/obj/item/weapon/circuitboard/mecha/marauder/peripherals,
+		/obj/item/weapon/circuitboard/mecha/marauder/targeting,
+		/obj/item/weapon/circuitboard/mecha/marauder/main)
 
 	welder_salvage += pick_random_loot(parts)
 
@@ -179,11 +186,14 @@
 
 /obj/effect/decal/mecha_wreckage/ripley/New()
 	..()
-	var/list/parts = list(/obj/item/mecha_parts/part/ripley_torso,
+	var/list/parts = list(		/obj/item/mecha_parts/chassis/ripley,
+								/obj/item/mecha_parts/part/ripley_torso,
 								/obj/item/mecha_parts/part/ripley_left_arm,
 								/obj/item/mecha_parts/part/ripley_right_arm,
 								/obj/item/mecha_parts/part/ripley_left_leg,
-								/obj/item/mecha_parts/part/ripley_right_leg)
+								/obj/item/mecha_parts/part/ripley_right_leg,
+								/obj/item/weapon/circuitboard/mecha/ripley/peripherals,
+								/obj/item/weapon/circuitboard/mecha/ripley/main)
 	welder_salvage += pick_random_loot(parts)
 
 /obj/effect/decal/mecha_wreckage/ripley/mk2
@@ -211,7 +221,10 @@
 							/obj/item/mecha_parts/part/honker_left_arm,
 							/obj/item/mecha_parts/part/honker_right_arm,
 							/obj/item/mecha_parts/part/honker_left_leg,
-							/obj/item/mecha_parts/part/honker_right_leg)
+							/obj/item/mecha_parts/part/honker_right_leg,
+							/obj/item/weapon/circuitboard/mecha/honker/peripherals,
+							/obj/item/weapon/circuitboard/mecha/honker/targeting,
+							/obj/item/weapon/circuitboard/mecha/honker/main)
 	welder_salvage += pick_random_loot(parts)
 
 /obj/effect/decal/mecha_wreckage/durand
@@ -220,13 +233,16 @@
 
 /obj/effect/decal/mecha_wreckage/durand/New()
 	..()
-	var/list/parts = list(
+	var/list/parts = list(		/obj/item/mecha_parts/chassis/durand,
 								/obj/item/mecha_parts/part/durand_torso,
 								/obj/item/mecha_parts/part/durand_head,
 								/obj/item/mecha_parts/part/durand_left_arm,
 								/obj/item/mecha_parts/part/durand_right_arm,
 								/obj/item/mecha_parts/part/durand_left_leg,
-								/obj/item/mecha_parts/part/durand_right_leg)
+								/obj/item/mecha_parts/part/durand_right_leg,
+								/obj/item/weapon/circuitboard/mecha/durand/peripherals,
+								/obj/item/weapon/circuitboard/mecha/durand/targeting,
+								/obj/item/weapon/circuitboard/mecha/durand/main)
 	welder_salvage += pick_random_loot(parts)
 
 
@@ -249,13 +265,15 @@
 
 /obj/effect/decal/mecha_wreckage/odysseus/New()
 	..()
-	var/list/parts = list(
+	var/list/parts = list(		/obj/item/mecha_parts/chassis/odysseus,
 								/obj/item/mecha_parts/part/odysseus_torso,
 								/obj/item/mecha_parts/part/odysseus_head,
 								/obj/item/mecha_parts/part/odysseus_left_arm,
 								/obj/item/mecha_parts/part/odysseus_right_arm,
 								/obj/item/mecha_parts/part/odysseus_left_leg,
-								/obj/item/mecha_parts/part/odysseus_right_leg)
+								/obj/item/mecha_parts/part/odysseus_right_leg,
+								/obj/item/weapon/circuitboard/mecha/odysseus/peripherals,
+								/obj/item/weapon/circuitboard/mecha/odysseus/main)
 	welder_salvage += pick_random_loot(parts)
 
 /obj/effect/decal/mecha_wreckage/clarke
@@ -264,13 +282,15 @@
 
 /obj/effect/decal/mecha_wreckage/clarke/New()
 	..()
-	var/list/parts = list(
+	var/list/parts = list(		/obj/item/mecha_parts/chassis/clarke,
 								/obj/item/mecha_parts/part/clarke_torso,
 								/obj/item/mecha_parts/part/clarke_head,
 								/obj/item/mecha_parts/part/clarke_left_arm,
 								/obj/item/mecha_parts/part/clarke_right_arm,
 								/obj/item/mecha_parts/part/clarke_left_tread,
-								/obj/item/mecha_parts/part/clarke_right_tread)
+								/obj/item/mecha_parts/part/clarke_right_tread,
+								/obj/item/weapon/circuitboard/mecha/clarke/peripherals,
+								/obj/item/weapon/circuitboard/mecha/clarke/main)
 	welder_salvage += pick_random_loot(parts)
 
 /obj/effect/decal/mecha_wreckage/vehicle
@@ -278,3 +298,7 @@
 	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "pussywagon_destroyed"
 	desc = "Remains of some unfortunate vehicle. Completely unrepairable."
+
+/obj/effect/decal/mecha_wreckage/skullbot
+	name = "Mysterious wreckage"
+	icon_state = "skullmech-broken"
