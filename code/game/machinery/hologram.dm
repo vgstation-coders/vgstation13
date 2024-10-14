@@ -237,8 +237,8 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	holo = transferred_holo
 
 	var/mob/camera/aiEye/eye = user
-	var/mob/living/silicon/ai/AI = istype(eye) ? eye.ai : user
-	var/holocolor = istype(AI) ? AI.holocolor : user_holocolor
+	var/mob/living/silicon/ai/AI = istype(eye) ? eye.ai : null
+	var/holocolor = AI ? AI.holocolor : user_holocolor
 
 	set_light(2, 0, holocolor)
 	icon_state = "holopad1"
@@ -247,13 +247,13 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	colored_ray.ColorTone(holocolor)
 	ray.icon = colored_ray
 
-	if(istype(AI))
+	if(AI)
 		AI.current = src
 	master = user
 	use_power = MACHINE_POWER_USE_ACTIVE
 	holo.set_glide_size(DELAY2GLIDESIZE(1))
 	move_hologram()
-	if(istype(AI) && AI.holopadoverlays.len)
+	if(AI && AI.holopadoverlays.len)
 		for(var/image/ol in AI.holopadoverlays)
 			if(ol.loc == src)
 				ol.icon_state = "holopad1"
