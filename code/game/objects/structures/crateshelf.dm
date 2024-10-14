@@ -27,6 +27,9 @@
 /obj/structure/rack/crate_shelf/tall
 	capacity = 12
 
+/obj/structure/rack/crate_shelf/centcomm_provided/
+	var/how_cheap_percent = 20
+
 /obj/structure/rack/crate_shelf/New()
 	. = ..()
 	var/mutable_appearance/base = mutable_appearance(icon = 'icons/obj/objects.dmi', icon_state = "shelf_overlay", layer = BELOW_OBJ_LAYER + 0.01, plane = FLOAT_PLANE)
@@ -49,6 +52,11 @@
 		nextshelf_olay.pixel_y = stack_offset
 		overlays += nextshelf_olay
 	return
+
+/obj/structure/rack/crate_shelf/centcomm_provided/New()
+	. = ..()
+	if(prob(how_cheap_percent))
+		osha_violation = TRUE
 
 /obj/structure/rack/crate_shelf/Destroy()
 	QDEL_LIST(shelf_contents)

@@ -1022,6 +1022,11 @@ Thanks.
 			var/obj/structure/rack/crate_shelf/CS = C.loc
 			CS.relay_container_resist_act(src,R)
 			return
+		if(istype(C.loc, /obj/spacepod/) && istype(C,/obj/structure/closet/crate)) //todo - make this generic for future space pod cargo systems
+			var/obj/structure/closet/crate/R = C
+			var/obj/spacepod/speesepod = C.loc
+			speesepod.attempt_cargo_resist(src,R)
+			return
 		if(!istype(C.loc, /obj/item/delivery/large)) //Wouldn't want to interrupt escaping being wrapped over the next few trivial checks
 			if(istype(C, /obj/structure/closet/secure_closet))
 				var/obj/structure/closet/secure_closet/SC = L.loc

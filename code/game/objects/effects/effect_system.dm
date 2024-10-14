@@ -626,6 +626,8 @@ steam.start() -- spawns the effect
 	if(src.processing)
 		src.processing = 0
 		spawn(0)
+			if(!holder)
+				return
 			var/turf/T = get_turf(src.holder)
 			if(currloc != T)
 				switch(holder.dir)
