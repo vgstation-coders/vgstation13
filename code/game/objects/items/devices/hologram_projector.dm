@@ -47,7 +47,7 @@
 /obj/item/device/hologram_projector/proc/spawn_hologram()
 	set category = "pAI Commands"
 	set name = "Spawn Hologram"
-	set desc = "Display a a visual representation of yourself to those nearby!"
+	set desc = "Display a visual representation of yourself to those nearby!"
 
 	var/obj/item/device/hologram_projector/mine = usr.loc.loc //the pai in the card in the projector (that's how MULEbots do it)
 	if(istype(mine))
