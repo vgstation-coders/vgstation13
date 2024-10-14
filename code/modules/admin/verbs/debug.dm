@@ -27,6 +27,8 @@ Call proc /mob/proc/Dizzy() for some player
 Because if you select a player mob as owner it tries to do the proc for
 /mob/living/carbon/human/ instead. And that gives a run-time error.
 But you can call procs that are of type /mob/living/carbon/human/proc/ for that player.
+14th oct 2024
+now actually filters to a type, redundant procs cut down
 */
 
 /client/proc/calladvproc()
@@ -39,30 +41,23 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	var/target = null
 	var/class = null
 
-	switch(alert("Proc owned by something?",,"Yes","No"))
-		if("Yes")
-			class = input("Proc owned by...","Owner",null) as null|anything in list("Obj","Mob","Area or Turf","Client")
-			if(!class)
-				return
-			
-			var/list/stufftocall = list()
-			if(class == "Client")
-				for(var/client/C in clients)
-					stufftocall += C
-			else if(class == "Mob")
-				stufftocall = mob_list
-			else
-				for(var/atom/A in world)
-					if(class == "Obj")
-						if(isobj(A))
-							stufftocall += A
-					else if(class == "Area or Turf")
-						if(isarea(A) || isturf(A))
-							stufftocall += A
-					IN_ROUND_CHECK_TICK //bam. now it doesn't freeze the game anymore
-			target = input("Enter target", "Target:", class == "Area or Turf" ? usr.loc : usr, null) as null|anything in stufftocall
-			if(!target)
-				return
+	if(alert("Proc owned by something?","Proc call","Yes","No") == "Yes")
+		class = input("Proc owned by what type of atom? (eg. /obj/machinery)","Owner",null) as text
+		if(!class)
+			return
+		class = filter_typelist_input("Select an atom type", "Spawn Atom", get_matching_types(class, /atom))
+		
+		var/list/stufftocall = list()
+		if(class == "/client")
+			stufftocall = clients
+		else
+			for(var/atom/A in world)
+				if(istype(A,class))
+					stufftocall |= A
+				IN_ROUND_CHECK_TICK //bam. now it doesn't freeze the game anymore
+		target = input("Enter target", "Target:", ispath(class,/area) || ispath(class,/turf) ? usr.loc : usr, null) as null|anything in stufftocall
+		if(!target)
+			return
 
 	callproc(usr,target)
 	feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
