@@ -232,24 +232,29 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 	return 1
 
-/obj/machinery/hologram/holopad/proc/transfer_holo(mob/living/silicon/ai/A, obj/effect/overlay/hologram/transferred_holo)
+/obj/machinery/hologram/holopad/proc/transfer_holo(mob/user, obj/effect/overlay/hologram/transferred_holo)
 	ray = new(loc)
 	holo = transferred_holo
 
-	set_light(2, 0, A.holocolor)
+	var/mob/camera/aiEye/eye = user
+	var/mob/living/silicon/ai/AI = istype(eye) ? eye.ai : user
+	var/holocolor = istype(AI) ? AI.holocolor : user_holocolor
+
+	set_light(2, 0, holocolor)
 	icon_state = "holopad1"
 
 	var/icon/colored_ray = getFlatIcon(ray)
-	colored_ray.ColorTone(A.holocolor)
+	colored_ray.ColorTone(holocolor)
 	ray.icon = colored_ray
 
-	A.current = src
-	master = A
+	if(istype(AI))
+		AI.current = src
+	master = user
 	use_power = MACHINE_POWER_USE_ACTIVE
 	holo.set_glide_size(DELAY2GLIDESIZE(1))
 	move_hologram()
-	if(A && A.holopadoverlays.len)
-		for(var/image/ol in A.holopadoverlays)
+	if(istype(AI) && AI.holopadoverlays.len)
+		for(var/image/ol in AI.holopadoverlays)
 			if(ol.loc == src)
 				ol.icon_state = "holopad1"
 				break
