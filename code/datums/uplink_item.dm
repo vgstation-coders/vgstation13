@@ -1078,7 +1078,7 @@ var/list/discounted_items_of_the_round = list()
 	item = /obj/item/weapon/storage/box/syndie_kit/kitchengun
 	cost = 12
 	discounted_cost = 10
-	jobs_with_discount = list("Chef")
+	jobs_with_discount = list("Chef","Janitor")
 
 /datum/uplink_item/jobspecific/service/cautionsign
 	name = "Proximity Mine Wet Floor Sign"
