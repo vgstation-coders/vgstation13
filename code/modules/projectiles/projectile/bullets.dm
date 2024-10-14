@@ -169,6 +169,14 @@
 			K.cleaning_targets += A // BANG
 		K.cleaning_targets[A]++ // BANG
 		if(K.cleaning_targets[A] > 2) // BANG
+			var/turf/T = get_turf(src)
+			T.clean_act(CLEANLINESS_BLEACH)
+			for(var/obj/O in T)
+				if(O != A)
+					if(istype(O,/obj/effect/decal/cleanable))
+						qdel(O)
+						continue
+					O.clean_act(CLEANLINESS_BLEACH)
 			A.clean_act(CLEANLINESS_BLEACH) // AND IT SPARKLES LIKE NEW
 			K.cleaning_targets[A] = 0
 			K.cleaning_targets -= A
