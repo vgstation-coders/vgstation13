@@ -241,44 +241,17 @@ For the main html chat area
 	var/list/partial = splittext(iconData, "{")
 	return replacetext(copytext(partial[2], 3, -5), "\n", "")
 
-/proc/bicon(var/obj)
-	if (!obj)
-		return
+/proc/bicon(atom/A)
+	if(isatom(A))
+		A = A.appearance //The caching is not very smart if you use the object directly.
 
-	if (isicon(obj))
-		//Icons get pooled constantly, references are no good here.
-		/*if (!bicon_cache["\ref[obj]"]) // Doesn't exist yet, make it.
-			bicon_cache["\ref[obj]"] = icon2base64(obj)
-		return "<img class='icon misc' src='data:image/png;base64,[bicon_cache["\ref[obj]"]]'>"*/
-		return "<img class='icon misc' src='data:image/png;base64,[icon2base64(obj)]'>"
+	spawn(5){} //Do nothing. Just hold onto a ref of A for a moment. Hopefully there will be a better way to do this later.
 
-	// Either an atom or somebody fucked up and is gonna get a runtime, which I'm fine with.
-	var/atom/A = obj
-	var/key = ("[A.icon]" || "\ref[A.icon]")+":[A.icon_state]"
-	if (!bicon_cache[key]) // Doesn't exist, make it.
-		var/icon/I = icon(A.icon, A.icon_state, SOUTH, 1, 0)
-		if (!"[A.icon]") // Shitty workaround for a BYOND issue.
-			var/icon/temp = I
-			I = icon()
-			I.Insert(temp, dir = SOUTH)
-		bicon_cache[key] = icon2base64(I, key)
-
-	return "<img class='icon [A.icon_state]' src='data:image/png;base64,[bicon_cache[key]]'>"
+	return "<img class='icon' src='\ref[A]'>"
 
 //Aliases for bicon
 /proc/bi(obj)
 	bicon(obj)
-
-//Costlier version of bicon() that uses getFlatIcon() to account for overlays, underlays, etc. Use with extreme moderation, ESPECIALLY on mobs.
-/proc/costly_bicon(var/obj)
-	if (!obj)
-		return
-
-	if (isicon(obj))
-		return bicon(obj)
-
-	var/icon/I = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(obj)))
-	return bicon(I)
 
 /proc/to_chat(target, message)
 	//Ok so I did my best but I accept that some calls to this will be for shit like sound and images
