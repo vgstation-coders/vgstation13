@@ -189,6 +189,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			return
 		master.show_message( message, 1, blind_message, 2) //otherwise it's being picked up by the holopad itself
 	else if(target && target.holo && target.master && A == target.master)
+		message = replacetext(message,"[target.master]","[target.holo]")
 		target.holo.visible_message(message, blind_message, drugged_message, blind_drugged_message)
 
 /obj/machinery/hologram/holopad/proc/create_holo(mob/user, turf/T = loc)
