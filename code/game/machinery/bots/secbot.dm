@@ -13,6 +13,7 @@
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 //	weight = 1.0E7
+	AI_link = 1
 	req_one_access = list(access_security, access_forensics_lockers)
 	control_filter = RADIO_SECBOT
 	var/check_records = 1
@@ -176,7 +177,7 @@ Auto Patrol: []"},
 	summoned = FALSE
 	target = M
 	steps_per = 3
-	//process_path()
+	process_path()
 
 /obj/machinery/bot/secbot/can_patrol()
 	return steps_per == initial_steps_per

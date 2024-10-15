@@ -5,6 +5,7 @@
 	icon_state = "ed2090"
 	icon_initial = "ed209"
 	density = 1
+	AI_link = 1
 	anchored = 0
 //	weight = 1.0E7
 	req_one_access = list(access_security, access_forensics_lockers)
@@ -265,7 +266,7 @@ Auto Patrol: []"},
 			if(!lasercolor)
 				playsound(src, pick('sound/voice/ed209_20sec.ogg', 'sound/voice/EDPlaceholder.ogg'), 50, 0)
 			visible_message("<b>[src]</b> points at [C.name]!")
-			process_path()
+			process_pathing()
 
 //If the security records say to arrest them, arrest them
 //Or if they have weapons and aren't security, arrest them.

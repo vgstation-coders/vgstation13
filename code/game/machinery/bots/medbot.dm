@@ -37,6 +37,7 @@ var/list/firstaid_exceptions = list(
 	maxHealth = 20
 	req_access =list(access_medical)
 	bot_flags = BOT_NOT_CHASING|BOT_CONTROL
+	AI_link = 1
 	can_take_pai = TRUE
 	var/stunned = 0 //It can be stunned by tasers. Delicate circuits.
 	var/list/botcard_access = list(access_medical)
@@ -71,6 +72,7 @@ var/list/firstaid_exceptions = list(
 	name = "Mysterious Medibot"
 	desc = "International Medibot of mystery."
 	skin = "bezerk"
+	AI_link = 0
 	treatment_oxy = DEXALINP
 	treatment_brute = BICARIDINE
 	treatment_fire = KELOTANE
@@ -80,6 +82,7 @@ var/list/firstaid_exceptions = list(
 	name = "Nanotrasen Advanced Medibot"
 	desc = "Not entirely a replacement for a real doctor."
 	skin = "nanotrasen"
+	AI_link = 1
 
 /obj/item/weapon/firstaid_arm_assembly
 	name = "first aid/robot arm assembly"
@@ -500,7 +503,7 @@ var/list/firstaid_exceptions = list(
 					var/area/location = get_area(src)
 					broadcast_medical_hud_message("[name] is treating <b>[C]</b> in <b>[location]</b>", src)
 			visible_message("<b>[src]</b> points at [C.name]!")
-			process_path() // Let's waste no time
+			process_pathing() // Let's waste no time
 			look_for_target = FALSE
 			break
 	look_for_target = FALSE

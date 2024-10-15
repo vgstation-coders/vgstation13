@@ -49,22 +49,23 @@ var/global/list/pathmakers = list()
 	..("Paths to make:[pathmakers.len]")
 
 /datum/subsystem/pathmaking/fire(var/resumed = FALSE)
-	if(!resumed)
-		currentrun = pathmakers.Copy()
+	for(var/i=0, i<1, i++)
+		if(!resumed)
+			currentrun = pathmakers.Copy()
 
-	while(currentrun.len)
-		var/datum/path_maker/P = currentrun[currentrun.len]
-		currentrun.len--
+		while(currentrun.len)
+			var/datum/path_maker/P = currentrun[currentrun.len]
+			currentrun.len--
 
-		if(!P || P.gcDestroyed)
-			currentrun.Remove(P)
-			continue
+			if(!P || P.gcDestroyed)
+				currentrun.Remove(P)
+				continue
 
-		if(P.can_process())
-			P.process()
+			if(P.can_process())
+				P.process()
 
-		if (MC_TICK_CHECK)
-			return
+			if (MC_TICK_CHECK)
+				return
 
 // -- The datum which stores the path currently being calculated for the owner.
 // -- It will tell its owner the path to follow by calling back a proc it was given.

@@ -1,5 +1,6 @@
 #define CAMERANET_SS13 "SS13"
 #define CAMERANET_ROBOTS "Robots"
+#define CAMERANET_BOTS	"Bots"
 #define CAMERANET_MINE "MINE"
 #define CAMERANET_ENGI "Engineering"
 #define CAMERANET_CARGO "Cargo"

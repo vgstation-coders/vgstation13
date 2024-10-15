@@ -512,6 +512,7 @@
 	maxHealth = 150
 	icon_state = "duey0"
 	icon_initial = "duey"
+	AI_link = 0
 
 /obj/machinery/bot/farmbot/duey/New()
 	..()
