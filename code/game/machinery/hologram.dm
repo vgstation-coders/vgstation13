@@ -79,6 +79,10 @@ var/list/holopads = list()
 		to_chat(user, "<span class='notice'>You stop transmitting to [target].</span>")
 		target.clear_holo()
 		return
+	if(holo)
+		to_chat(user, "<span class='notice'>You stop transmitting [holo][source ? "from [source]" : ""].</span>")
+		clear_holo()
+		return
 	switch(alert(user,"Would you like to request an AI's presence or transmit to another holopad?","Holopad functions","Request AI presence","Transmit to other","Cancel"))
 		if("Request AI presence")
 			if(last_request + 200 < world.time) //don't spam the AI with requests you jerk!
@@ -189,34 +193,22 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 /obj/machinery/hologram/holopad/proc/create_holo(mob/user, turf/T = loc)
 	var/mob/camera/aiEye/eye = user
-	var/mob/living/silicon/ai/AI = istype(eye) ? eye.ai : user
+	var/mob/living/silicon/ai/AI = istype(eye) ? eye.ai : null
 	ray = new(T)
 	holo = new(T)//Spawn a blank effect at the location.
 	// hologram.mouse_opacity = 0 Why would we not want to click on it
 	holo.name = "[user.name] (Hologram)"//If someone decides to right click.
-	var/holocolor = istype(AI) ? AI.holocolor : (source ? source.user_holocolor : user_holocolor)
+	var/holocolor = AI ? AI.holocolor : (source ? source.user_holocolor : user_holocolor)
 
 	set_light(2, 0, holocolor)			//pad lighting
 	icon_state = "holopad1"
-	var/icon/colored_holo = istype(AI) ? AI.holo_icon : null
-	if(!istype(AI))
-		var/icon/I = icon('icons/effects/32x32.dmi', "blank")
-		colored_holo = icon(I, "")
-		colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = SOUTH, ignore_spawn_items = TRUE),  "", dir = SOUTH)
-		colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = NORTH, ignore_spawn_items = TRUE),  "", dir = NORTH)
-		colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = EAST, ignore_spawn_items = TRUE),  "", dir = EAST)
-		colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = WEST, ignore_spawn_items = TRUE),  "", dir = WEST)
-		colored_holo.Crop(1,1,32,32)
-	colored_holo.ColorTone(holocolor)
-	var/icon/alpha_mask = new('icons/effects/effects.dmi', "scanline")
-	colored_holo.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
-	holo.icon = colored_holo
+	update_holo(AI || user)
 
 	var/icon/colored_ray = getFlatIcon(ray)
 	colored_ray.ColorTone(holocolor)
 	ray.icon = colored_ray
 
-	if(istype(AI))
+	if(AI)
 		AI.current = src
 	master = user
 	use_power = MACHINE_POWER_USE_ACTIVE//Active power usage.
@@ -229,14 +221,38 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(!istype(eye)) // to stop unforeseen consequences with these colliding and overriding the hologram bumps
 		master.register_event(/event/face, src, nameof(src::move_hologram()))
 		master.register_event(/event/moved, src, nameof(src::move_hologram()))
+		master.register_event(/event/equipped, src, nameof(src::update_holo()))
+		master.register_event(/event/unequipped, src, nameof(src::update_holo()))
 	move_hologram()
-	if(istype(AI) && AI.holopadoverlays.len)
+	if(AI && AI.holopadoverlays.len)
 		for(var/image/ol in AI.holopadoverlays)
 			if(ol.loc == src)
 				ol.icon_state = "holopad1"
 				break
 
 	return 1
+
+/obj/machinery/hologram/holopad/proc/update_holo(mob/user)
+	if(holo && user)
+		var/icon/colored_holo
+		var/holocolor
+		if(isAI(user))
+			var/mob/living/silicon/ai/ayyeye = user
+			colored_holo = ayyeye.holo_icon
+			holocolor = ayyeye.holocolor
+		else
+			var/icon/I = icon('icons/effects/32x32.dmi', "blank")
+			colored_holo = icon(I, "")
+			colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = SOUTH, ignore_spawn_items = TRUE),  "", dir = SOUTH)
+			colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = NORTH, ignore_spawn_items = TRUE),  "", dir = NORTH)
+			colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = EAST, ignore_spawn_items = TRUE),  "", dir = EAST)
+			colored_holo.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(user)), override_dir = WEST, ignore_spawn_items = TRUE),  "", dir = WEST)
+			colored_holo.Crop(1,1,32,32)
+			holocolor = source ? source.user_holocolor : user_holocolor
+		colored_holo.ColorTone(holocolor)
+		var/icon/alpha_mask = new('icons/effects/effects.dmi', "scanline")
+		colored_holo.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
+		holo.icon = colored_holo
 
 /obj/machinery/hologram/holopad/proc/transfer_holo(mob/user, obj/effect/overlay/hologram/transferred_holo)
 	ray = new(loc)
@@ -317,6 +333,8 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		if(!advancedholo && !isAIEye(master))
 			master.unregister_event(/event/face, src, nameof(src::move_hologram()))
 			master.unregister_event(/event/moved, src, nameof(src::move_hologram()))
+			master.unregister_event(/event/equipped, src, nameof(src::update_holo()))
+			master.unregister_event(/event/unequipped, src, nameof(src::update_holo()))
 		if(istype(AI) && AI.current == src)
 			AI.current = null
 		master = null //Null the master, since no-one is using it now.
