@@ -66,13 +66,13 @@
 		var/turf/unsimulated/mineral/M = target
 		if(M.mining_difficulty > MINE_DIFFICULTY_TOUGH)
 			return
-		if(M.finds && M.finds.len) //Shameless copypaste. TODO: Make an actual proc for this then apply it to mechs as well.
+		if(M.finddatum?.finds?.len) //Shameless copypaste. TODO: Make an actual proc for this then apply it to mechs as well.
 			if(prob(5))
-				M.excavate_find(5, M.finds[1])
+				M.finddatum.excavate_find(5, M.finddatum.finds[1])
 			else if(prob(50))
-				M.finds.Remove(M.finds[1])
+				M.finddatum.finds.Remove(M.finddatum.finds[1])
 				if(prob(50))
-					M.artifact_debris()
+					M.finddatum.artifact_debris()
 		M.GetDrilled()
 		if(OB)
 			var/count = 0

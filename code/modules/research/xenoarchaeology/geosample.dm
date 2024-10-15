@@ -58,20 +58,20 @@
 	if(!container || !istype(container))
 		return
 
-	if(container.artifact_find)
+	if(container.finddatum?.artifact_find)
 		artifact_distance = rand() // 0-1
-		artifact_id = container.artifact_find.artifact_id
+		artifact_id = container.finddatum.artifact_find.artifact_id
 		return
 
 	if(!SSxenoarch) //Sanity check due to runtimes ~Z
 		return
 
 	for(var/turf/unsimulated/mineral/T in SSxenoarch.artifact_spawning_turfs)
-		if(T.artifact_find)
+		if(T.finddatum?.artifact_find)
 			var/cur_dist = sqrt(get_dist_squared(container, T))
 			if(artifact_distance < 0 || cur_dist < artifact_distance)
 				artifact_distance = cur_dist + rand() * 2 - 1
-				artifact_id = T.artifact_find.artifact_id
+				artifact_id = T.finddatum.artifact_find.artifact_id
 		else
 			SSxenoarch.artifact_spawning_turfs.Remove(T)
 

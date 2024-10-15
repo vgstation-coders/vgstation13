@@ -36,12 +36,12 @@
 
 	if(SSxenoarch) //Sanity check due to runtimes ~Z
 		for(var/turf/unsimulated/mineral/T in SSxenoarch.artifact_spawning_turfs)
-			if(T.artifact_find)
+			if(T.finddatum?.artifact_find)
 				if(T.z == cur_turf.z)
 					var/cur_dist = sqrt(get_dist_squared(cur_turf, T))
-					if((nearest_artifact_distance < 0 || cur_dist < nearest_artifact_distance) && cur_dist <= T.artifact_find.artifact_detect_range)
+					if((nearest_artifact_distance < 0 || cur_dist < nearest_artifact_distance) && cur_dist <= T.finddatum.artifact_find.artifact_detect_range)
 						nearest_artifact_distance = cur_dist + rand() * 2 - 1
-						nearest_artifact_id = T.artifact_find.artifact_id
+						nearest_artifact_id = T.finddatum.artifact_find.artifact_id
 			else
 				SSxenoarch.artifact_spawning_turfs.Remove(T)
 
