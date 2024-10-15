@@ -183,8 +183,6 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			target.holo.say(speech.message)
 
 /obj/machinery/hologram/holopad/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
-	if(!master)
-		return
 	if(isAIEye(master))
 		var/mob/camera/aiEye/eye = master
 		if(eye.high_res && cameranet.checkCameraVis(A)) //visible message is already being picked up by the cameras, avoids duplicate messages
