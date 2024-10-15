@@ -1368,8 +1368,8 @@ var/global/objects_thrown_when_explode = FALSE
 	if(abstract)
 		return
 
-	for (var/mob/M in view(user))
-		M.show_message("[user] holds up [src]. <a HREF='?src=\ref[M];lookitem=\ref[src]'>Take a closer look.</a>",1)
+	for (var/atom/AM in view(user))
+		AM.on_see("[user] holds up [src].[ismob(AM) ? " <a HREF='?src=\ref[AM];lookitem=\ref[src]'>Take a closer look.</a>" : ""]",A=AM)
 
 /mob/living/carbon/verb/showoff()
 	set name = "Show Held Item"
