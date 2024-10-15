@@ -2,6 +2,7 @@ var/datum/subsystem/machinery/SSmachinery
 
 var/list/machines = list()
 
+var/list/global/fissionreactorlist=list()
 
 /datum/subsystem/machinery
 	name          = "Machinery"
@@ -31,6 +32,11 @@ var/list/machines = list()
 /datum/subsystem/machinery/fire(resumed = FALSE)
 	if (!resumed)
 		currentrun = get_currenrun()
+
+	for(var/datum/fission_reactor_holder/reactor in fissionreactorlist)
+		reactor.fissioncycle()
+		reactor.coolantcycle()
+		reactor.misccycle()
 
 	var/obj/machinery/M
 	var/c = currentrun_index

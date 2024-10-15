@@ -1293,3 +1293,392 @@ var/virology_encyclopedia = ""
 	</body>
 	</html>
 	"}
+
+
+/obj/item/weapon/book/manual/engineering_fissionreactor_guide
+	name = "Fission Reactor User's Guide"
+	icon_state ="bookEngineering2"
+	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
+	title = "Fission Reactor User's Guide"
+	//big pile of shit below.
+	id = 26
+	dat= {"<html>
+<head>
+<style>
+h1{
+text-align:center;
+}
+.reactor_schematic{
+border-collapse:collapse;
+font-family:monospace;
+font-size:200%;
+}
+.reactor_schematic > * > tr{
+/*height:2em;*/
+}
+.reactor_schematic > * > * > td{
+/*width:2em;*/
+border:2px black solid;
+}
+.r_case{
+background-color:grey;
+}
+.r_port{
+background-color:DarkSlateGray;
+}
+.r_frod{
+background-color:red;
+}
+.r_crod{
+background-color:dodgerblue;
+}
+.r_cont{
+background-color:DarkViolet;
+}
+
+
+
+</style>
+</head>
+<body>
+	
+<h1>Fission Reactors: a quick guide</h1>	
+<p>
+Though often said to be old, outdated technology, fission power should not be underestimated. Even a modest reactor is capible of powering a medium-sized station for several hours with no upkeep. The dismissal of fission technology has delayed the uncovering of more recent discoveries in material sciences which may have been known decades earlier.
+</p>
+
+<hr>
+<h2>What you'll need</h2>
+building a reactor is an expensive endeavor, costing a lot of both time and resources. For the most basic of reactor designs, here is the bare minimum needed to set one up and start generating power. Most of the materials are either provided in the starter kit, or should be available on-site.
+<ul>
+	<li>69 sheets of plasteel</li>
+	<li>42 metal rods</li>
+	<li>15 lengths of wire</li>
+	<li>3 mater bins</li>
+	<li>2 scanning modules</li>
+	<li>2 micro-manipulators</li>
+	<li>1 console screen</li>
+	<li>fissile material and a fuel rod (provided in the starter kit)</li>
+	<li>circuit boards for the controller, fuel rod, and control rod assemblies</li>
+	<li>piping (partially included)</li>
+	<li>at least 1 thermoelectric generator (not included)</li>
+	<li>a welder, crowbar, screwdriver, wrench, and wirecutters (not included)</li>
+</ul>
+
+<b>additionally</b>, to make a isotopic separational combiner (the machine used to fill and additionally recycle spent fuel) you will need the following materials (provided in the starter kit):
+<ul>
+	<li>5 sheets of metal</li>
+	<li>5 lengths of wire</li>
+	<li>2 mater bins</li>
+	<li>2 scanning modules</li>
+	<li>1 micro-manipulator</li>
+	<li>1 console screen</li>
+	<li>the associated circuit board</li>
+	<li>piping (not included)</li>
+</ul>
+<hr>
+<h2>How to construct the parts</h2>
+	<h3>Reactor casing</h3>
+	<ol>
+		<li>use 4 plasteel to construct a reactor casing frame in the desired location</li>
+		<li>insert 4 metal rods inside of the frame</li>
+		<li>use a screwdriver to fasten the rods</li>
+		<li>(optional) insert a straight pipe into the frame to make it a coolant port</li>
+		<li>(optional) use a crowbar to change the direction of the port</li>
+		<li>apply 2 plasteel as external plating</li>
+		<li>weld the external plating to the frame</li>
+	</ol>
+	
+	<h3>Control & Fuel rod assembly</h3>
+	<ol>
+		<li>ise 5 plasteel to construct a reinforced machine frame in the desired location</li>
+		<li>add 5 lengths of wiring to the machine</li>
+		<li>insert the corresponding circuit board</li>
+		<li>insert 2 metal rods inside of the frame</li>
+		<li>add a matter bin to the frame</li>
+		<li><b>if control rod:</b> add a micro-manipulator<br><b>if fuel rod:</b> add a scanning module</li>
+		<li>use a screwdriver to finish assembly</li>
+	</ol>	
+	
+	<h3>Reactor controller</h3>
+	<ol>
+		<li>use 5 plasteel to construct a reinforced machine frame in the desired location</li>
+		<li>add 5 lengths of wiring to the machine</li>
+		<li>insert the circuit board</li>
+		<li>insert 2 metal rods inside of the frame</li>
+		<li>add a matter bin, micro-manipulator, scanning module, and a console screen to the frame</li>
+		<li>use a screwdriver to finish assembly</li>
+	</ol>	
+	
+	<h3>Isotopic separational combiner</h3>
+	<ol>
+		<li>Use 5 metal to construct a machine frame in the desired location</li>
+		<li>add 5 lengths of wiring to the machine</li>
+		<li>insert the circuit board</li>
+		<li>add a 2 matter bins, micro-manipulator, 2 scanning modules, and a console screen to the frame</li>
+		<li>use a screwdriver to finish assembly</li>
+	</ol>
+
+<h2>Design considerations</h2>	
+<p>
+The design of a nuclear reactor is very important. build it wrong, and you may find yourself having a meltdown.
+
+	<h3>casing</h3>
+	the casing of a reactor should include the whole perimeter of it, with no gaps.
+	<h3>coolant ports</h3>
+	a reactor should have at least 2 ports, one for a coolant input, and another for output. coolant ports can be placed at any point in the casing.
+	<h3>controller</h3>
+	a reactor can only have 1 controller to it, and must be placed at a corner of a reactor.
+	<h3>fuel rods</h3>
+	fuel rods should be placed in the interior of the reactor. for each cardinally-adjacent fuel rod, a fuel rod will gain bonus power production without affecting fuel duration. Fuel duration is only affected by the number of fuel rod assemblies.
+	<h3>control rods</h3>
+	control rods are able to affect fuel rods in every ordinal direction around them. if a control rod is not affecting a fuel rod, then the reaction is unable to be stopped. it is recommended to have all fuel rods be controlled for safety reasons.
+	
+	
+
+	
+	
+	<h3>Example designs</h3>
+	
+	<div style='border:2px black solid;background-color:LightSteelBlue;'>
+	<h3 style='text-decoration:underline;'>key</h3>
+	<ul style='color:white;list-style-type: none;font-size:1.5em;padding:0;margin:0;'>
+		<li><span class='r_case'>casing</span></li>
+		<li><span class='r_cont'>controller</span></li>
+		<li><span class='r_port'>coolant port</span></li>
+		<li><span class='r_frod'>fuel rod</span></li>
+		<li><span class='r_crod'>control rod</span></li>
+	</ul>
+	</div>
+	
+	<br>
+	<table class='reactor_schematic'>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_crod'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_cont'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+		</tr>
+	</table>
+	<b>The starter</b>
+	<div>
+		fuel rods: 1<br>
+		control rods: 1 <br>
+		fissile speed: 100%<br>
+		fuel reactivity: 100%<br>
+	</div>
+	
+	<table class='reactor_schematic'>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_crod'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_cont'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+		</tr>
+	</table>
+	<b>The upgrade</b>
+	<div>
+		fuel rods: 3<br>
+		control rods: 1 <br>
+		fissile speed: 300%<br>
+		fuel reactivity: 700%<br>
+	</div>
+	
+		<table class='reactor_schematic'>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_crod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_crod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>		
+		<tr>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_crod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_crod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_cont'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+	</table>
+	<b>For those up to the challenge</b>
+	<div>
+		fuel rods: 32<br>
+		control rods: 4 <br>
+		fissile speed: 3200%<br>
+		fuel reactivity: 12000%<br>
+	</div>
+</p>
+
+
+<h2>How to disassemble</h2>
+	
+	<span style='font-weight:bold;color:red;font-size:125%;'>IMPORTANT: before disassembling a reactor, drain all coolant first, and make sure that it is not currently undergoing fission. Failure to do so may result in injury, destruction of property, or even death.</span>
+
+	<h3>Reactor casing</h3>
+	<ol>
+		<li>use a welder to detach the external plating from the frame</li>
+		<li>use a crowbar to pry off the plating from the frame</li>
+		<li>(optional) use a wrench to remove the piping if there is any</li>
+		<li>use a screwdriver to loosen the internal rods</li>
+		<li>use wirecutters to remove the rods</li>
+		<li>use a wrench to disassemble the frame</li>
+	</ol>
+	
+	<h3>Control & Fuel rod assembly, reactor controller</h3>
+	<ol>
+		<li>use a welder to detach the external plating from the frame</li>
+		<li>use a crowbar to remove the internal components from the frame</li>
+		<li>use wirecutters to remove the wiring from the frame</li>
+		<li>use a wrench to disassemble the frame.</li>
+	</ol>	
+	
+	<h3>Isotopic separational combiner</h3>
+	<ol>
+		<li>use a screwdriver to open the maintenance hatch</li>
+		<li>use a crowbar to pry out the electronics</li>
+		<li>use wirecutters to remove the wiring from the frame</li>
+		<li>use a wrench to disassemble the frame.</li>
+		
+	</ol>
+
+<h2>Other notes</h2>
+	If you unscrew the maintenance hatch of a fuel rod assembly, you can add 4 metal sheets to it. Doing so will make the assembly not give any bonuses for adjacent fuel rods. You can undo this by removing the sheets with a crowbar.
+	<br>
+	<br>
+	standard fuel rods can be made with 2 plasteel sheets. these are bigger than the small one given by the starter kit, but smaller than the one orderable from cargo.
+
+<br>
+<br>
+<h3><u>table of fuels:</u></h3>
+<table>
+<tr>
+	<th>Fuel</th>
+	<th>Heat generation (Watts per unit)</th>
+	<th>Lifetime (weighted average seconds)</th>
+	<th>Byproducts</th>
+</tr>
+<tr>
+	<td>Uranium</td>
+	<td>16667</td>
+	<td>9000</td>
+	<td>Lead: 30%, Plutonium: 20%, Radium: 25%, Thallium: 10%, Radon: 15%</td>
+</tr>
+<tr>
+	<td>Plutonium</td>
+	<td>66667</td>
+	<td>4500</td>
+	<td>Lead: 50%, Uranium: 20%, Radium: 20%, Radon: 10%</td>
+</tr>
+<tr>
+	<td>Radium</td>
+	<td>5000</td>
+	<td>4500</td>
+	<td>Lead: 40%, Thallium: 20%, Radon: 40%</td>
+</tr>
+<tr>
+	<td>Radon</td>
+	<td>1667</td>
+	<td>1500</td>
+	<td>Lead: 100%</td>
+</tr>
+
+</table>
+	
+</body>
+</html>"}

@@ -85,7 +85,7 @@
 		if(L.stat != DEAD)
 			e.amount *= 0.5
 	e.start()
-	holder.clear_reagents()
+	holder.clear_reagents(TRUE)
 	holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
 
 /datum/chemical_reaction/explosion_potassium/holy
@@ -785,7 +785,7 @@
 			S.start()
 			sleep(10)
 			S.start()
-	holder.clear_reagents()
+	holder.clear_reagents(TRUE)
 
 /datum/chemical_reaction/chemsmoke/bleach
 	name = "Bleach Fumes"
@@ -1200,7 +1200,7 @@
 		var/datum/effect/system/foam_spread/s = new()
 		s.set_up(created_volume, location, holder, 0)
 		s.start()
-	holder.clear_reagents()
+	holder.clear_reagents(TRUE)
 
 /datum/chemical_reaction/metalfoam
 	name = "Metal Foam"

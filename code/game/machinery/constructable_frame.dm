@@ -15,6 +15,7 @@
 	var/list/components_in_use = null
 	var/build_state = 1
 	var/build_path = 0 //0 = Default path. 1 = Glass Frame
+	var/required_circuit_type = null
 
 	// For pods
 	var/list/connected_parts = list()
@@ -42,6 +43,9 @@
 	for(var/path in req_components)
 		amt += req_components[path]
 	return amt
+
+/obj/machinery/constructable_frame/machine_frame
+	required_circuit_type=MACHINE
 
 /obj/machinery/constructable_frame/machine_frame/attackby(obj/item/P as obj, mob/user as mob)
 	if(P.crit_fail)
@@ -125,7 +129,7 @@
 			if(!..())
 				if(istype(P, /obj/item/weapon/circuitboard))
 					var/obj/item/weapon/circuitboard/B = P
-					if(B.board_type == MACHINE)
+					if(B.board_type == required_circuit_type)
 						if(!user.drop_item(B, src, failmsg = TRUE))
 							return
 
@@ -1718,3 +1722,4 @@ to destroy them and players will be able to make replacements.
 		/obj/item/weapon/stock_parts/manipulator = 2,
 		/obj/item/weapon/stock_parts/matter_bin = 1,
 	)
+

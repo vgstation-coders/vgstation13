@@ -195,3 +195,37 @@
 		if(prob(20))
 			H.emote(pick("giggle", "laugh"), ignore_status = TRUE)
 	set_moles(0)
+
+
+
+/datum/lung_gas/radioactive
+	var/max_pp=0 // Maximum toxins partial pressure before you get effects. (0.5)
+	var/max_pp_mask=0 // Same as above, but with a mask. (5 _MOLES_; Set to 0 to disable mask blocking.)
+	var/radspermole=3
+	
+/datum/lung_gas/radioactive/New(var/gas_id, var/max_pp=0, var/max_pp_mask=0, var/radspermole=3)
+	..(gas_id)
+	src.max_pp = max_pp
+	src.max_pp_mask = max_pp_mask
+	src.radspermole = radspermole
+
+/datum/lung_gas/radioactive/handle_inhale()
+	..()
+	var/pp = get_pp()
+	var/mob/living/carbon/human/H=lungs.owner
+	if(pp > max_pp) // Too much toxins
+		var/ratio = (pp/max_pp)
+		if(max_pp_mask)
+			if(H.wear_mask)
+				if(H.wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+					if(pp > max_pp_mask)
+						ratio = (pp/max_pp_mask)
+					else
+						ratio = 0
+		if(ratio)
+			H.apply_radiation(ratio*radspermole, RAD_INTERNAL)
+			H.toxins_alert = max(H.toxins_alert, 1)
+			return TRUE
+		return FALSE
+	else
+		return FALSE	

@@ -65,6 +65,8 @@
 
 	if(environment.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)
 		plasma_effects()
+	if(environment.molar_density(GAS_RADON)*CELL_VOLUME > 0.025)
+		radon_effects()
 
 // Helper proc to map body temperatures to its corresponding heat/cold damage value
 /mob/living/carbon/human/proc/get_body_temperature_damage(var/temperature)
