@@ -24,7 +24,7 @@
 	uplink_comp.locked = FALSE
 	uplink_comp.tgui_interact(imp_in)
 
-/obj/item/weapon/implant/uplink/trigger(emote, mob/source, params)
+/obj/item/weapon/implant/uplink/trigger(emote, mob/source)
 	if(emote != activation_emote)
 		return
 	activate()

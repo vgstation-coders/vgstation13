@@ -9,7 +9,7 @@
 	activation_emote = pick("blink", "blink_r", "eyebrow", "chuckle", "twitch_s", "frown", "nod", "blush", "giggle", "grin", "groan", "shrug", "smile", "pale", "sniff", "whimper", "wink")
 	..()
 
-/obj/item/weapon/implant/freedom/trigger(emote, mob/living/carbon/source, params)
+/obj/item/weapon/implant/freedom/trigger(emote, mob/living/carbon/source)
 	if (uses < 1)
 		return 0
 	if (emote == activation_emote)

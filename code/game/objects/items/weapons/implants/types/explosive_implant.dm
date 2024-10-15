@@ -22,7 +22,7 @@
 	if(findtext(msg, phrase))
 		activate()
 
-/obj/item/weapon/implant/explosive/trigger(emote, mob/source, params)
+/obj/item/weapon/implant/explosive/trigger(emote, mob/source)
 	if(emote == "deathgasp")
 		activate()
 
