@@ -1371,7 +1371,7 @@ var/global/objects_thrown_when_explode = FALSE
 		return
 
 	for (var/atom/AM in view(user))
-		AM.on_see("[user] holds up [src]. <a HREF='?src=\ref[src];lookitem=\ref[AM]'>Take a closer look.</a>",A=src)
+		AM.on_see("[user] holds up [src]. <a HREF='?src=\ref[src];lookitem=\ref[AM]'>Take a closer look.</a>",A=user)
 
 /mob/living/carbon/verb/showoff()
 	set name = "Show Held Item"
