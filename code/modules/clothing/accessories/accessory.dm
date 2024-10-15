@@ -185,42 +185,40 @@
 	origin_tech = Tc_BIOTECH + "=1"
 	restraint_resist_time = 30 SECONDS
 	toolsounds = list("rustle")
+	var/listening = FALSE
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
 	if(ishuman(M) && isliving(user))
 		if(user.a_intent == I_HELP)
 			var/body_part = parse_zone(user.zone_sel.selecting)
 			if(body_part)
-				var/their = "their"
-				switch(M.gender)
-					if(MALE)
-						their = "his"
-					if(FEMALE)
-						their = "her"
-
 				var/sound = "pulse"
 				var/sound_strength
 
-				if(M.isDead())
+				if(M.isDead() || body_part == "eyes" || body_part == "mouth")
 					sound_strength = "cannot hear"
 					sound = "anything"
 				else
 					sound_strength = "hear a weak"
-					switch(body_part)
-						if(LIMB_CHEST)
-							if(M.oxyloss < 50)
-								sound_strength = "hear a healthy"
+					if(body_part == LIMB_CHEST)
+						if(M.oxyloss < 50)
+							sound_strength = "hear a healthy"
+						if(!(M_NO_BREATH in M.mutations))
 							sound = "pulse and respiration"
-						if("eyes","mouth")
-							sound_strength = "cannot hear"
-							sound = "anything"
-						else
-							sound_strength = "hear a weak"
 
-				user.visible_message("[user] places [src] against [M]'s [body_part] and listens attentively.", "You place [src] against [their] [body_part]. You [sound_strength] [sound].")
+				user.visible_message("[user] places [src] against [M]'s [body_part] and listens attentively.", "You place [src] against [M]'s [body_part]. You [sound_strength] [sound].")
+				
+				spawn()
+					if(!listening)
+						while(M.pulse != PULSE_NONE && loc == user && M.Adjacent(user) && !M.timestopped)
+							listening = TRUE
+							var/pulsespeed = M.get_pulsespeed()
+							if(pulsespeed)
+								to_chat(user,"*thump*")
+								sleep(max(1,pulsespeed))
+						listening = FALSE
 				return
 	return ..(M,user)
-
 
 //Medals
 /obj/item/clothing/accessory/medal

@@ -16,27 +16,20 @@
 	..()
 	spawn(5)
 		updatemodules()
-		return
-	return
 
 /obj/machinery/computer/operating/proc/updatemodules()
-	src.optable = findoptable()
+	optable = findoptable()
+	if(optable && !optable.computer)
+		optable.computer = src
 
 /obj/machinery/computer/operating/proc/findoptable()
-	var/obj/machinery/optable/optablef = null
-
 	// Loop through every direction
-	for(dir in list(NORTH,EAST,SOUTH,WEST))
-
+	for(dir in cardinal)
 		// Try to find a scanner in that direction
-		optablef = locate(/obj/machinery/optable, get_step(src, dir))
-
+		. = locate(/obj/machinery/optable) in get_step(src, dir)
 		// If found, then we break, and return the scanner
-		if (!isnull(optablef))
+		if (.)
 			break
-
-	// If no scanner was found, it will return null
-	return optablef
 
 /obj/machinery/computer/operating/attack_paw(user as mob)
 	return attack_hand(user)
@@ -91,15 +84,5 @@
 /obj/machinery/computer/operating/process()
 	if(..())
 		src.updateDialog()
-	update_icon()
-
-/obj/machinery/computer/operating/update_icon()
-	..()
 	if(!(stat & (FORCEDISABLE |BROKEN | NOPOWER)))
 		updatemodules()
-		if(!isnull(src.optable) && (src.optable.check_victim()))
-			src.victim = src.optable.victim
-			if(victim.stat == DEAD)
-				icon_state = "operating-dead"
-			else
-				icon_state = "operating-living"

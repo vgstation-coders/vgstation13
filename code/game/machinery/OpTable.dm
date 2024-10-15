@@ -14,15 +14,29 @@
 	var/rating = 1 //Use this for upgrades some day
 	pass_flags_self = PASSTABLE
 	var/obj/machinery/computer/operating/computer = null
+	var/pulsing = FALSE
 
 /obj/machinery/optable/New()
 	..()
-	for(dir in list(NORTH,EAST,SOUTH,WEST))
-		computer = locate(/obj/machinery/computer/operating, get_step(src, dir))
-		if (computer)
-			break
+	optable_list += src
+	updatemodules()
 //	spawn(100) //Wont the MC just call this process() before and at the 10 second mark anyway?
 //		process()
+
+/obj/machinery/optable/Destroy()
+	optable_list -= src
+	..()
+
+/obj/machinery/optable/proc/updatemodules()
+	computer = find_computer()
+	if(computer && !computer.optable)
+		computer.optable = src
+
+/obj/machinery/optable/proc/find_computer()
+	for(dir in cardinal)
+		. = locate(/obj/machinery/computer/operating) in get_step(src, dir)
+		if (.)
+			break
 
 /obj/machinery/optable/ex_act(severity)
 
@@ -93,22 +107,40 @@
 	take_victim(L, user)
 	return
 
+/obj/machinery/optable/proc/flatline(mob/user, body_destroyed)
+	if(user == victim && victim.loc == src.loc && victim.lying)
+		if(computer)
+			playsound(computer.loc, 'sound/machines/Flatline.ogg', 50)
+			computer.icon_state = "operating-dead"
+		icon_state = "table2-idle"
+
 /obj/machinery/optable/proc/check_victim()
+	updatemodules()
 	if (victim)
 		if (victim.loc == src.loc)
 			if (victim.lying)
-				if (victim.pulse)
-					icon_state = "table2-active"
-				else
-					icon_state = "table2-idle"
-
 				return 1
 
 		victim.reset_view()
+		victim.unregister_event(/event/death, src, nameof(src::flatline()))
 		victim = null
+		update()
 
+	if(computer)
+		computer.icon_state = "operating"
 	icon_state = "table2-idle"
 	return 0
+
+/obj/machinery/optable/proc/update()
+	var/area/this_area = get_area(src)
+	for(var/obj/machinery/holosign/surgery/sign in holosigns)
+		var/area/sign_area = get_area(sign)
+		if(this_area != sign_area)
+			continue
+		if(sign.should_update)
+			continue
+		sign.should_update = TRUE
+		processing_objects += sign
 
 /obj/machinery/optable/process()
 	check_victim()
@@ -140,6 +172,7 @@
 		victim = C
 		C.resting = 1 //This probably shouldn't be using this variable
 		C.update_canmove() //but for as long as it does we're adding sanity to it
+		C.register_event(/event/death, src, nameof(src::flatline()))
 
 	if (C == user)
 		user.visible_message("[user] climbs on the operating table.","You climb on the operating table.")
@@ -147,6 +180,20 @@
 		visible_message("<span class='warning'>[C] has been laid on the operating table by [user].</span>")
 
 	add_fingerprint(user)
+
+	update()
+
+	if(!pulsing)
+		while(victim.loc == src.loc && victim.lying && victim.pulse != PULSE_NONE && victim.stat != DEAD && !victim.timestopped)
+			pulsing = TRUE
+			var/pulsespeed = victim.get_pulsespeed()
+			if(pulsespeed)
+				if(computer)
+					playsound(computer.loc, 'sound/machines/Heartbeat.ogg', 50)
+					computer.icon_state = "operating-living"
+				icon_state = "table2-active"
+				sleep(max(1,pulsespeed))
+		pulsing = FALSE
 
 /obj/machinery/optable/attackby(obj/item/weapon/W as obj, mob/living/carbon/user as mob)
 	if(W.is_wrench(user))

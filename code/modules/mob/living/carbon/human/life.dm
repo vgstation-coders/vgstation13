@@ -185,6 +185,7 @@ var/global/list/organ_damage_overlays = list(
 	update_canmove()
 	//Update our name based on whether our face is obscured/disfigured
 	handle_regular_hud_updates()
+	//var/oldpulse = pulse
 	pulse = handle_pulse()
 	for(var/obj/item/weapon/grab/G in src)
 		G.process()
@@ -194,6 +195,9 @@ var/global/list/organ_damage_overlays = list(
 		UpdateDamageIcon()
 	cycle++
 	..()
+	//if(oldpulse == PULSE_NONE && pulse != PULSE_NONE)
+		//spawn()
+			//pulse_loop() //restart this if pulse comes back
 
 //Need this in species.
 //#undef HUMAN_MAX_OXYLOSS
