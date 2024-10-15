@@ -225,6 +225,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		master.register_event(/event/moved, src, nameof(src::move_hologram()))
 		master.register_event(/event/equipped, src, nameof(src::update_holo()))
 		master.register_event(/event/unequipped, src, nameof(src::update_holo()))
+		master.register_event(/event/damaged, src, nameof(src::update_holo()))
 	move_hologram()
 	if(AI && AI.holopadoverlays.len)
 		for(var/image/ol in AI.holopadoverlays)
@@ -234,7 +235,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 	return 1
 
-/obj/machinery/hologram/holopad/proc/update_holo(atom/item, slot)
+/obj/machinery/hologram/holopad/proc/update_holo(atom/item, slot, kind, amount)
 	if(holo && master)
 		var/icon/colored_holo
 		var/holocolor
@@ -337,6 +338,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			master.unregister_event(/event/moved, src, nameof(src::move_hologram()))
 			master.unregister_event(/event/equipped, src, nameof(src::update_holo()))
 			master.unregister_event(/event/unequipped, src, nameof(src::update_holo()))
+			master.register_event(/event/damaged, src, nameof(src::update_holo()))
 		if(istype(AI) && AI.current == src)
 			AI.current = null
 		master = null //Null the master, since no-one is using it now.
