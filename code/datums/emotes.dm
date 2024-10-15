@@ -44,7 +44,7 @@
 	msg = replace_pronoun(user, msg)
 
 	if(isliving(user))
-		INVOKE_EVENT(user, /event/emote, "emote" = key, "source" = user)
+		INVOKE_EVENT(user, /event/emote, "emote" = key, "source" = user, "params" = params)
 
 	if(!msg)
 		return

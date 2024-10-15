@@ -17,7 +17,7 @@
 <b>Special Features:</b> Alerts crew to crewmember death.<BR>
 <b>Integrity:</b> Implant will occasionally be degraded by the body's immune system and thus will occasionally malfunction."}
 
-/obj/item/weapon/implant/compressed/trigger(emote, mob/source)
+/obj/item/weapon/implant/compressed/trigger(emote, mob/source, params)
 	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
 		return 0
 

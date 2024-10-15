@@ -15,7 +15,7 @@
 <b>Special Features:</b> Will prevent and cure most forms of brainwashing.<BR>
 <b>Integrity:</b> Implant can only be used three times before the nanobots are depleted."}
 
-/obj/item/weapon/implant/adrenalin/trigger(emote, mob/source)
+/obj/item/weapon/implant/adrenalin/trigger(emote, mob/source, params)
 	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
 		return 0
 	if (src.uses < 1)

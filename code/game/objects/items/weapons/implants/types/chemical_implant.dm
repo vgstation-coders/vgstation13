@@ -29,7 +29,7 @@ Can only be loaded while still in its original case.<BR>
 <b>Integrity:</b> Implant will last so long as the subject is alive. However, if the subject suffers from malnutrition,<BR>
 the implant may become unstable and either pre-maturely inject the subject or simply break."}
 
-/obj/item/weapon/implant/chem/trigger(emote, mob/source)
+/obj/item/weapon/implant/chem/trigger(emote, mob/source, params)
 	if(emote == "deathgasp")
 		src.activate(src.reagents.total_volume)
 
