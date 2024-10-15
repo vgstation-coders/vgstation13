@@ -1372,7 +1372,7 @@ var/global/objects_thrown_when_explode = FALSE
 
 	for (var/atom/AM in view(world.view,user)) // ternary is so we can see it ourselves
 		if(AM != user)
-			AM.on_see("[user] holds up [src]. <a HREF='?src=\ref[src];lookitem=\ref[AM]'>Take a closer look.</a>",user)
+			AM.on_see("[user] holds up [src]. <a HREF='?src=\ref[src];lookitem=\ref[AM]'>Take a closer look.</a>",A=user)
 	to_chat(user,"You hold up [src]. <a HREF='?src=\ref[src];lookitem=\ref[user]'>Take a closer look.</a>")
 
 /mob/living/carbon/verb/showoff()
