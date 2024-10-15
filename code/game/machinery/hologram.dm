@@ -28,6 +28,7 @@ var/list/holopads = list()
 	icon_state = "holopad0"
 	var/mob/master  //Which AI, if any, is controlling the object? Only one AI may control a hologram at any time.
 	var/obj/machinery/hologram/holopad/target //Which holopad are projections sent to if used by a person?
+	var/obj/machinery/hologram/holopad/last_target //For convenience of accessing in the selection list again
 	var/obj/machinery/hologram/holopad/source //Source of above
 	var/last_request = 0 //to prevent request spam. ~Carn
 	var/holo_range = 6 // Change to change how far the AI can move away from the holopad before deactivating.
@@ -105,7 +106,8 @@ var/list/holopads = list()
 					continue
 				other_holopads += H
 			if(other_holopads.len)
-				target = input("Select a holopad to transmit to") as null|anything in other_holopads
+				target = input(user,"Select a holopad to transmit to","Holopad transmission",last_target) as null|anything in other_holopads
+				last_target = target
 				if(target)
 					target.source = src
 					if(!target.activate_holo(user))
