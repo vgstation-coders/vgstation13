@@ -241,10 +241,11 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(holo && master)
 		var/icon/colored_holo
 		var/holocolor
-		if(isAI(master))
-			var/mob/living/silicon/ai/ayyeye = master
-			colored_holo = ayyeye.holo_icon
-			holocolor = ayyeye.holocolor
+		if(isAIEye(master) || isAI(master))
+			var/mob/camera/aiEye/eye = master
+			var/mob/living/silicon/ai/AI = istype(eye) ? eye.ai : eye
+			colored_holo = AI.holo_icon
+			holocolor = AI.holocolor
 		else
 			var/icon/I = icon('icons/effects/32x32.dmi', "blank")
 			colored_holo = icon(I, "")
