@@ -93,6 +93,9 @@ var/list/holopads = list()
 		if(!activate_holo(user))
 			source.target = null
 			source = null
+			clear_holo()
+		else
+			source.visible_message("<span class='notice'>\proper [target] transmission request accepted.</span>")
 		return
 	switch(alert(user,"Would you like to request an AI's presence or transmit to another holopad?","Holopad functions","Request AI presence","Transmit to other","Cancel"))
 		if("Request AI presence")
@@ -122,9 +125,10 @@ var/list/holopads = list()
 					target.last_transmit_request = world.time
 					target.source = src
 					create_scanray(user)
-					to_chat(user, "<span class='notice'>Transmission request sent to [target].</span>")
+					visible_message("<span class='notice'>Transmission request sent to [target].</span>")
 					target.icon_state = "holopad1"
 					target.visible_message("<span class='big info'>[bicon(target)] Incoming transmission from [src]!</span>")
+					playsound(target,'sound/machines/twobeep.ogg',100)
 				else
 					to_chat(user, "<span class='warning'>This target pad is stil cooling down from its last request.</span>")
 					
