@@ -1111,7 +1111,7 @@ var/global/maxStackDepth = 10
 	icon_state = "space"
 	item_state = "s_suit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/spacesuits.dmi', "right_hand" = 'icons/mob/in-hand/right/spacesuits.dmi')
-	w_class = W_CLASS_LARGE//bulky item
+	w_class = W_CLASS_MEDIUM//fits in a bag now
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.02
 	flags = FPRINT

@@ -14,7 +14,6 @@
 	icon_state = "syndicate"
 	item_state = "space_suit_syndicate"
 	desc = "Has a tag on it: Totally not property of a hostile corporation, honest!"
-	w_class = W_CLASS_MEDIUM
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs, /obj/item/weapon/tank)
 	slowdown = HARDSUIT_SLOWDOWN_LOW

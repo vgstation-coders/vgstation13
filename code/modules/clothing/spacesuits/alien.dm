@@ -4,6 +4,7 @@
 
 /obj/item/clothing/suit/space/unathi
 	name = "unathi space suit"
+	w_class = W_CLASS_LARGE
 
 /obj/item/clothing/head/helmet/space/unathi/breacher
 	name = "unathi breacher helmet"
@@ -112,7 +113,6 @@
 
 //Raider Gear
 /obj/item/clothing/suit/space/vox
-	w_class = W_CLASS_MEDIUM
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank)
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
@@ -738,7 +738,6 @@
 	desc = "An outdated pressure suit that was once standard issue for spacefaring grey explorers. It's compact enough to be stored in a bag."
 	armor = list(melee = 20, bullet = 5, laser = 20, energy = 5, bomb = 15, bio = 100, rad = 10)
 	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/gun/energy/smalldisintegrator)
-	w_class = W_CLASS_MEDIUM
 	species_restricted = list(GREY_SHAPED)
 	species_fit = list(GREY_SHAPED)
 

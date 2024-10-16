@@ -119,6 +119,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	icon_state = "rig-engineering"
 	item_state = "eng_hardsuit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	w_class = W_CLASS_LARGE
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	species_fit = list(GREY_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
