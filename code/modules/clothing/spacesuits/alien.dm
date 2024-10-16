@@ -4,7 +4,6 @@
 
 /obj/item/clothing/suit/space/unathi
 	name = "unathi space suit"
-	w_class = W_CLASS_LARGE
 
 /obj/item/clothing/head/helmet/space/unathi/breacher
 	name = "unathi breacher helmet"
