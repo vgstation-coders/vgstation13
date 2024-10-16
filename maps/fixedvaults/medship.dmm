@@ -1,0 +1,600 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/wall/shuttle,
+/area)
+"b" = (
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"c" = (
+/obj/machinery/computer/crew,
+/turf/simulated/floor/engine,
+/area)
+"g" = (
+/obj/structure/table,
+/obj/item/weapon/storage/firstaid/toxin,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"j" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/space,
+/area)
+"k" = (
+/obj/structure/table,
+/obj/item/weapon/storage/firstaid/adv,
+/turf/simulated/floor/engine,
+/area)
+"l" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/space,
+/area)
+"m" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"n" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"o" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/table,
+/obj/item/weapon/storage/firstaid/fire,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"p" = (
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/engine,
+/area)
+"s" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/turf/space,
+/area)
+"t" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/space,
+/area)
+"u" = (
+/turf/space,
+/area)
+"v" = (
+/obj/structure/shuttle/engine/heater{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"w" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/space,
+/area)
+"y" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/machinery/computer/med_data,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"z" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/space,
+/area)
+"A" = (
+/obj/structure/table,
+/turf/simulated/floor/engine,
+/area)
+"C" = (
+/obj/machinery/door/airlock/glass,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"D" = (
+/turf/simulated/floor/engine,
+/area)
+"E" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/machinery/sleeper,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"F" = (
+/obj/structure/shuttle/engine/propulsion{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"H" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/space,
+/area)
+"I" = (
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/table,
+/obj/item/weapon/storage/firstaid/o2,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"J" = (
+/obj/structure/table,
+/obj/item/weapon/storage/firstaid/regular{
+	pixel_x = 2;
+	pixel_y = 6
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"K" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/turf/space,
+/area)
+"L" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/table,
+/obj/item/weapon/autopsy_scanner,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"M" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"O" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/table,
+/obj/item/weapon/switchtool/surgery,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"P" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/space,
+/area)
+"Q" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/table,
+/obj/item/tool/cautery,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"T" = (
+/obj/machinery/door/airlock/multi_tile/glass{
+	id_tag = "salvage_external"
+	},
+/turf/simulated/floor/engine,
+/area)
+"U" = (
+/obj/machinery/door/airlock/hatch,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"V" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/space,
+/area)
+"W" = (
+/obj/structure/window/reinforced,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"X" = (
+/obj/machinery/door/airlock/multi_tile/glass{
+	id_tag = "salvage_external"
+	},
+/turf/space,
+/area)
+"Y" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+"Z" = (
+/obj/machinery/optable,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area)
+
+(1,1,1) = {"
+u
+u
+u
+t
+p
+p
+p
+p
+p
+w
+u
+u
+u
+"}
+(2,1,1) = {"
+u
+u
+u
+a
+A
+c
+D
+D
+k
+a
+u
+u
+u
+"}
+(3,1,1) = {"
+u
+u
+t
+a
+A
+D
+D
+D
+A
+a
+w
+u
+u
+"}
+(4,1,1) = {"
+u
+u
+a
+g
+a
+a
+U
+a
+a
+J
+a
+u
+u
+"}
+(5,1,1) = {"
+u
+u
+a
+b
+W
+b
+b
+b
+M
+b
+a
+u
+u
+"}
+(6,1,1) = {"
+u
+u
+a
+b
+W
+b
+b
+b
+M
+b
+a
+u
+u
+"}
+(7,1,1) = {"
+u
+u
+a
+b
+b
+b
+b
+b
+b
+b
+a
+u
+u
+"}
+(8,1,1) = {"
+u
+u
+a
+E
+I
+b
+b
+b
+o
+E
+a
+u
+u
+"}
+(9,1,1) = {"
+u
+t
+a
+b
+W
+b
+b
+b
+M
+b
+a
+w
+u
+"}
+(10,1,1) = {"
+t
+a
+a
+n
+n
+b
+b
+b
+n
+n
+a
+a
+w
+"}
+(11,1,1) = {"
+X
+D
+T
+b
+b
+b
+b
+b
+b
+b
+T
+D
+X
+"}
+(12,1,1) = {"
+u
+D
+D
+b
+b
+n
+n
+n
+b
+b
+D
+D
+u
+"}
+(13,1,1) = {"
+s
+a
+a
+b
+m
+z
+P
+K
+Y
+b
+a
+a
+V
+"}
+(14,1,1) = {"
+u
+a
+b
+W
+l
+j
+j
+j
+H
+M
+b
+a
+u
+"}
+(15,1,1) = {"
+u
+a
+b
+b
+a
+L
+Q
+O
+a
+b
+b
+a
+u
+"}
+(16,1,1) = {"
+u
+a
+b
+b
+a
+b
+b
+b
+a
+b
+b
+a
+u
+"}
+(17,1,1) = {"
+u
+a
+b
+b
+C
+b
+Z
+b
+C
+b
+b
+a
+u
+"}
+(18,1,1) = {"
+u
+a
+b
+b
+a
+b
+b
+b
+a
+b
+b
+a
+u
+"}
+(19,1,1) = {"
+u
+a
+n
+n
+a
+a
+a
+a
+a
+n
+y
+a
+u
+"}
+(20,1,1) = {"
+u
+a
+v
+v
+w
+u
+u
+u
+t
+v
+v
+a
+u
+"}
+(21,1,1) = {"
+u
+s
+F
+F
+V
+u
+u
+u
+s
+F
+F
+V
+u
+"}

@@ -18,13 +18,22 @@ var/datum/subsystem/map/SSmap
 		log_startup_progress("Attempting to generate an away mission...")
 		createRandomZlevel()
 
+	var/watch
+	if (!config.skip_fixedvault_generation)
+		watch = start_watch()
+		log_startup_progress("Placing fixed space structures...")
+		generate_fixedvaults()
+		log_startup_progress("Finished placing fixed structures in [stop_watch(watch)]s.")
+	else
+		log_startup_progress("Not generating fixed vaults - SKIP_VAULT_GENERATION found in config/config.txt")
+
 	if (!config.skip_vault_generation)
-		var/watch = start_watch()
+		watch = start_watch()
 		log_startup_progress("Placing random space structures...")
 		generate_vaults()
 		generate_asteroid_secrets()
 		make_mining_asteroid_secrets() // loops 3 times
-		log_startup_progress("  Finished placing structures in [stop_watch(watch)]s.")
+		log_startup_progress("Finished placing structures in [stop_watch(watch)]s.")
 	else
 		log_startup_progress("Not generating vaults - SKIP_VAULT_GENERATION found in config/config.txt")
 
@@ -33,14 +42,14 @@ var/datum/subsystem/map/SSmap
 	if (rand(1,3) == 3)
 		generate_hoboshack()
 
-	var/watch_prim = start_watch()
+	watch = start_watch()
 	for(var/datum/zLevel/z in map.zLevels)
-		var/watch = start_watch()
+		var/watch_prim = start_watch()
 		z.post_mapload()
-		log_debug("Finished with zLevel [z.z] in [stop_watch(watch)]s.", FALSE)
-	log_debug("Finished calling post on zLevels in [stop_watch(watch_prim)]s.", FALSE)
+		log_debug("Finished with zLevel [z.z] in [stop_watch(watch_prim)]s.", FALSE)
+	log_debug("Finished calling post on zLevels in [stop_watch(watch)]s.", FALSE)
 
-	var/watch = start_watch()
+	watch = start_watch()
 	map.map_specific_init()
 	log_debug("Finished map-specific inits in [stop_watch(watch)]s.", FALSE)
 

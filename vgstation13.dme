@@ -2954,6 +2954,7 @@
 #include "maps\_map_override.dm"
 #include "maps\tgstation.dm"
 #include "maps\defficiency\areas.dm"
+#include "maps\fixedvaults\fixedvaults.dm"
 #include "maps\lampreystation\lamprey.dm"
 #include "maps\packedstation\telecomms.dm"
 #include "maps\randomvaults\advanced_pocketsat.dm"

@@ -1,0 +1,14045 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"ac" = (
+/obj/item/taperoll/engineering,
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"ae" = (
+/obj/structure/closet/l3closet/general,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"ak" = (
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating/airless,
+/area/derelict/medical)
+"an" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/solar_control)
+"ao" = (
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"aw" = (
+/obj/machinery/door/window{
+	name = "Heads of Staff";
+	req_access_txt = "19"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"aA" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/secondary)
+"aD" = (
+/obj/machinery/door/airlock/external{
+	name = "Escape Airlock"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"aF" = (
+/obj/structure/window/reinforced,
+/turf/space,
+/area)
+"aH" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"aJ" = (
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/machinery/power/solar/panel{
+	id_tag = "derelictsolar";
+	name = "Derelict Solar Array"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area/solar/derelict_starboard)
+"aM" = (
+/obj/machinery/door/window{
+	dir = 8
+	},
+/turf/simulated/floor/airless,
+/area/derelict/medical/chapel)
+"aZ" = (
+/obj/structure/bed,
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"be" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/item/tool/wirecutters,
+/turf/simulated/floor/airless,
+/area/derelict/hallway/secondary)
+"bf" = (
+/obj/structure/table,
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"bj" = (
+/obj/structure/catwalk,
+/turf/space,
+/area)
+"bm" = (
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating/airless,
+/area)
+"bo" = (
+/obj/structure/sign/science,
+/turf/simulated/wall/r_wall,
+/area/derelict/research)
+"bp" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_aft)
+"bq" = (
+/obj/structure/window/reinforced,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "chapel"
+	},
+/area/derelict/medical/chapel)
+"bu" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"bB" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_aft)
+"bF" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"bI" = (
+/obj/machinery/door/airlock/external{
+	name = "Escape Airlock"
+	},
+/obj/docking_port/destination/salvage/derelict{
+	dir = 2
+	},
+/turf/simulated/floor/plating,
+/area/derelict/arrival)
+"bJ" = (
+/obj/item/weapon/storage/box/lights/mixed,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"bL" = (
+/obj/item/weapon/stock_parts/matter_bin,
+/obj/item/weapon/stock_parts/matter_bin,
+/obj/item/weapon/stock_parts/micro_laser,
+/obj/item/weapon/stock_parts/micro_laser,
+/obj/item/weapon/stock_parts/micro_laser,
+/obj/item/weapon/stock_parts/scanning_module,
+/obj/item/weapon/stock_parts/scanning_module,
+/obj/item/weapon/stock_parts/manipulator,
+/obj/item/weapon/stock_parts/manipulator,
+/obj/item/weapon/stock_parts/manipulator,
+/obj/structure/closet/secure_closet/scientist,
+/obj/machinery/light/small,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"bN" = (
+/turf/simulated/wall,
+/area/derelict/hallway/secondary)
+"bO" = (
+/turf/simulated/wall/r_wall,
+/area/derelict/bridge/ai_upload)
+"bP" = (
+/obj/structure/grille,
+/obj/structure/window{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"bU" = (
+/obj/machinery/computer/general_air_control/large_tank_control{
+	frequency = 1438;
+	input_tag = "tox_in";
+	name = "Toxin Supply Control";
+	output_tag = "tox_out";
+	sensors = list("tox_sensor"="Tank")
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area/derelict/atmos)
+"bV" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/hallway/primary)
+"ce" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/wall/r_wall,
+/area/derelict/bridge/ai_upload)
+"ch" = (
+/obj/machinery/power/solar/panel/tracker,
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"ci" = (
+/obj/structure/table,
+/obj/item/stack/cable_coil{
+	pixel_x = 3;
+	pixel_y = -7
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"cj" = (
+/turf/simulated/wall,
+/area/derelict/singularity_engine)
+"co" = (
+/obj/structure/window/full,
+/turf/simulated/floor/plating/airless,
+/area)
+"cw" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 4
+	},
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/plating,
+/area/derelict/atmos)
+"cx" = (
+/turf/simulated/floor,
+/area/derelict/bridge)
+"cE" = (
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "chapel"
+	},
+/area/derelict/medical/chapel)
+"cH" = (
+/obj/structure/cable,
+/obj/machinery/power/solar/panel{
+	id_tag = "derelictsolar";
+	name = "Derelict Solar Array"
+	},
+/turf/simulated/floor/airless,
+/area/solar/derelict_aft)
+"cJ" = (
+/obj/machinery/sleeper,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"cK" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/primary)
+"cM" = (
+/obj/structure/girder,
+/obj/structure/window,
+/turf/simulated/floor/plating/airless,
+/area/derelict/arrival)
+"cN" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"cO" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"cQ" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/ai_upload)
+"cU" = (
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"cW" = (
+/obj/structure/rack,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"cZ" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/hallway/primary)
+"dc" = (
+/turf/simulated/wall,
+/area/derelict/medical)
+"df" = (
+/obj/structure/cable,
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_aft)
+"dh" = (
+/obj/item/clothing/suit/space/syndicate,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"dm" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	canSpawnMice = 0;
+	dir = 4;
+	external_pressure_bound = 120;
+	icon_state = "in";
+	initialize_directions = 1;
+	internal_pressure_bound = 4000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/turf/simulated/floor/bluegrid{
+	icon_state = "dark";
+	name = "Mainframe Floor";
+	nitrogen = 100;
+	oxygen = 0;
+	temperature = 80
+	},
+/area/derelict/research)
+"dq" = (
+/obj/item/stack/cable_coil/cut,
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/primary)
+"dt" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"dH" = (
+/obj/structure/closet/emcloset,
+/turf/simulated/floor,
+/area/derelict/arrival)
+"dJ" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged4"
+	},
+/area)
+"dL" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"dM" = (
+/obj/item/weapon/shard{
+	icon_state = "small"
+	},
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"dR" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/access)
+"dS" = (
+/obj/machinery/door/airlock/external{
+	name = "Nitrogen Tank Access"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"ea" = (
+/obj/structure/sign/electricshock,
+/turf/simulated/wall/r_wall,
+/area/derelict/singularity_engine)
+"ec" = (
+/obj/item/stack/rods,
+/turf/space,
+/area)
+"eo" = (
+/obj/structure/table,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "chapel"
+	},
+/area/derelict/medical/chapel)
+"et" = (
+/turf/simulated/floor/airless,
+/area/derelict/bridge/access)
+"ev" = (
+/obj/structure/table,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"ew" = (
+/obj/machinery/power/rad_collector,
+/turf/simulated/floor,
+/area/derelict/arrival)
+"ey" = (
+/obj/machinery/recharge_station,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"ez" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "plasma"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"eC" = (
+/obj/structure/window{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"eF" = (
+/obj/structure/reagent_dispensers/fueltank,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"eN" = (
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged5"
+	},
+/area/derelict/singularity_engine)
+"eR" = (
+/obj/machinery/vending/engineering,
+/turf/simulated/wall/r_wall,
+/area/derelict/research)
+"eW" = (
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"fn" = (
+/obj/structure/bed/chair,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"ft" = (
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "chapel"
+	},
+/area/derelict/medical/chapel)
+"fz" = (
+/obj/item/stack/cable_coil/cut,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/singularity_engine)
+"fE" = (
+/obj/structure/cable,
+/obj/machinery/power/apc{
+	pixel_y = -24
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"fG" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 4
+	},
+/turf/simulated/floor/bluegrid{
+	icon_state = "dark";
+	name = "Mainframe Floor";
+	nitrogen = 100;
+	oxygen = 0;
+	temperature = 80
+	},
+/area/derelict/research)
+"fI" = (
+/obj/structure/table,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "chapel"
+	},
+/area/derelict/medical/chapel)
+"fJ" = (
+/obj/structure/grille,
+/obj/structure/lattice,
+/turf/space,
+/area)
+"fK" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"fL" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Starboard Solar Access";
+	req_access_txt = "11"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"fM" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"fO" = (
+/obj/structure/window/reinforced,
+/turf/simulated/floor/airless,
+/area)
+"ga" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"gc" = (
+/obj/structure/cable,
+/obj/machinery/power/apc{
+	dir = 8;
+	environ = 0;
+	equipment = 0;
+	lighting = 0;
+	locked = 0;
+	name = "Worn-out APC";
+	pixel_x = -24
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/bridge/ai_upload)
+"gk" = (
+/obj/item/stack/medical/bruise_pack,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"go" = (
+/obj/item/stack/rods,
+/turf/simulated/floor/plating/airless,
+/area)
+"gw" = (
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"gz" = (
+/obj/machinery/atmospherics/unary/cap/visible{
+	dir = 1
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area/derelict/atmos)
+"gA" = (
+/obj/item/clothing/suit/space/syndicate,
+/turf/simulated/floor/airless,
+/area/derelict/bridge/ai_upload)
+"gN" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"gR" = (
+/obj/machinery/portable_atmospherics/pump,
+/turf/simulated/floor,
+/area/derelict/arrival)
+"gS" = (
+/obj/structure/window{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/derelict/arrival)
+"gU" = (
+/obj/structure/bed,
+/turf/simulated/floor/airless,
+/area)
+"hm" = (
+/obj/item/stack/ore/slag,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"hs" = (
+/obj/structure/window/reinforced,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged4"
+	},
+/area/derelict/singularity_engine)
+"hv" = (
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/machinery/power/apc{
+	dir = 1;
+	environ = 0;
+	equipment = 1;
+	lighting = 0;
+	locked = 0;
+	pixel_y = 24
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"hy" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"hz" = (
+/obj/item/weapon/shard{
+	icon_state = "small"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"hG" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"hK" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"hL" = (
+/obj/item/tool/crowbar,
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"hN" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"hS" = (
+/obj/structure/girder/reinforced,
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"if" = (
+/obj/structure/cable,
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"in" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/door/airlock/research{
+	name = "Toxins Research";
+	req_access_txt = "7"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"io" = (
+/obj/structure/morgue,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/derelict/medical/chapel)
+"iq" = (
+/obj/item/trash/cigbutt,
+/turf/space,
+/area)
+"ir" = (
+/obj/structure/bed/chair,
+/turf/simulated/floor,
+/area/derelict/arrival)
+"iv" = (
+/obj/item/weapon/shard{
+	icon_state = "small"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"iy" = (
+/obj/structure/window/reinforced,
+/obj/item/weapon/table_parts/reinforced,
+/obj/item/weapon/table_parts/reinforced,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged4"
+	},
+/area/derelict/singularity_engine)
+"iH" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"iI" = (
+/obj/machinery/floodlight,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"iJ" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"iK" = (
+/obj/item/stack/cable_coil/cut,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged4"
+	},
+/area/derelict/singularity_engine)
+"iR" = (
+/obj/machinery/door/airlock/maintenance{
+	name = "Atmospherics Access";
+	req_access_txt = "24"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/primary)
+"jk" = (
+/obj/item/stack/cable_coil/cut,
+/turf/simulated/floor/plating/airless,
+/area)
+"jl" = (
+/obj/item/weapon/shard,
+/turf/simulated/floor/plating/airless,
+/area)
+"jn" = (
+/obj/structure/cable,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"jr" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"ju" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"jw" = (
+/obj/machinery/door/airlock/external{
+	name = "External Engineering"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/solar_control)
+"jB" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/obj/item/clothing/head/helmet/space/syndicate,
+/turf/simulated/floor/airless,
+/area/derelict/bridge/ai_upload)
+"jC" = (
+/obj/item/weapon/stool,
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"jK" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged4"
+	},
+/area/derelict/hallway/primary)
+"jL" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"jM" = (
+/obj/machinery/light/small,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/derelict/medical/chapel)
+"jR" = (
+/obj/structure/lattice,
+/obj/structure/window,
+/turf/space,
+/area)
+"ki" = (
+/obj/item/weapon/shard,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"kk" = (
+/obj/item/stack/cable_coil/cut,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged5"
+	},
+/area/derelict/singularity_engine)
+"kq" = (
+/obj/machinery/atmospherics/unary/cold_sink/freezer{
+	current_temperature = 80;
+	dir = 1;
+	on = 1
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"kr" = (
+/turf/simulated/wall,
+/area/derelict/arrival)
+"kz" = (
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"kD" = (
+/obj/structure/reagent_dispensers/beerkeg,
+/turf/space,
+/area)
+"kE" = (
+/obj/structure/cable,
+/obj/machinery/power/apc{
+	pixel_y = -24
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"kJ" = (
+/obj/machinery/door/window{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"kM" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/wall/r_wall,
+/area/derelict/hallway/secondary)
+"kQ" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Turbine Maintenance";
+	req_access_txt = "11"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/research)
+"kR" = (
+/turf/simulated/floor/airless{
+	icon_state = "derelict14"
+	},
+/area/derelict/hallway/secondary)
+"kT" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/hallway/primary)
+"kU" = (
+/turf/simulated/wall/r_wall,
+/area/derelict/singularity_engine)
+"kV" = (
+/obj/machinery/power/emitter/antique,
+/turf/simulated/floor,
+/area/derelict/arrival)
+"kW" = (
+/obj/item/weapon/table_parts/reinforced,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"ld" = (
+/turf/simulated/floor/plating/airless{
+	broken = 1;
+	icon_state = "platingdmg1"
+	},
+/area/derelict/hallway/secondary)
+"lf" = (
+/obj/structure/dispenser,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"lj" = (
+/obj/machinery/door/airlock/maintenance{
+	name = "Tech Storage";
+	req_access_txt = "23"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/access)
+"lk" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"ll" = (
+/obj/structure/window/reinforced,
+/obj/machinery/portable_atmospherics/canister/plasma,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/singularity_engine)
+"lx" = (
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"lz" = (
+/obj/structure/lattice,
+/obj/structure/lattice,
+/obj/structure/window{
+	dir = 1
+	},
+/turf/space,
+/area)
+"lC" = (
+/turf/simulated/floor/plating/airless{
+	broken = 1;
+	icon_state = "panelscorched"
+	},
+/area/derelict/atmos)
+"lF" = (
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating,
+/area/derelict/arrival)
+"lG" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/space,
+/area)
+"lJ" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_aft)
+"lN" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"lY" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"ma" = (
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"md" = (
+/obj/structure/window{
+	dir = 1
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"me" = (
+/obj/structure/window/reinforced,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged5"
+	},
+/area/derelict/singularity_engine)
+"mf" = (
+/obj/structure/window{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/primary)
+"ml" = (
+/obj/structure/table,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/access)
+"mt" = (
+/obj/machinery/door/airlock/glass{
+	name = "Med-Sci";
+	req_access_txt = "9"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/medical)
+"mz" = (
+/obj/structure/window{
+	dir = 4
+	},
+/turf/space,
+/area)
+"mD" = (
+/obj/item/stack/cable_coil/cut,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"mG" = (
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"mS" = (
+/obj/structure/table,
+/obj/machinery/light/small,
+/obj/item/weapon/stamp/denied,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"mT" = (
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"mZ" = (
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_aft)
+"nm" = (
+/obj/structure/window{
+	dir = 1
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/airless,
+/area)
+"nt" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged4"
+	},
+/area/derelict/singularity_engine)
+"nA" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"nE" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged4"
+	},
+/area/derelict/singularity_engine)
+"nL" = (
+/obj/item/stack/rods,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"nQ" = (
+/obj/structure/table,
+/obj/item/weapon/paper_bin{
+	pixel_x = -3;
+	pixel_y = 7
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"nU" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged5"
+	},
+/area/derelict/hallway/primary)
+"od" = (
+/turf/simulated/floor/airless{
+	icon_state = "floorgrime"
+	},
+/area/derelict/hallway/primary)
+"oe" = (
+/obj/structure/table,
+/obj/structure/cable,
+/obj/machinery/power/apc{
+	pixel_y = -24
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"of" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden,
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"ow" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/airless,
+/area/derelict/medical/chapel)
+"oy" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/obj/item/weapon/pen,
+/turf/simulated/floor,
+/area/derelict/arrival)
+"oA" = (
+/obj/machinery/door/window{
+	base_state = "right";
+	icon_state = "right"
+	},
+/turf/simulated/floor/airless,
+/area)
+"oG" = (
+/obj/machinery/door/window{
+	base_state = "right";
+	icon_state = "right"
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"oI" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/primary)
+"oJ" = (
+/obj/structure/cable,
+/obj/machinery/power/apc{
+	pixel_y = -24
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"oK" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"oN" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"oO" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"oQ" = (
+/obj/structure/closet/crate/secure/plasma/prefilled,
+/turf/simulated/floor,
+/area/derelict/arrival)
+"oR" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"oS" = (
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/obj/item/stack/cable_coil/cut,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"oU" = (
+/obj/machinery/atmospherics/unary/cap/visible{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"oZ" = (
+/obj/machinery/power/terminal{
+	dir = 1
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"ph" = (
+/turf/simulated/floor/airless{
+	icon_state = "derelict6"
+	},
+/area/derelict/hallway/secondary)
+"pn" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/bridge/access)
+"pN" = (
+/obj/structure/window/reinforced,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"pR" = (
+/obj/structure/table,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"pU" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	canSpawnMice = 0;
+	dir = 4;
+	external_pressure_bound = 120;
+	frequency = 1438;
+	icon_state = "in";
+	id_tag = "n2_out";
+	initialize_directions = 1;
+	internal_pressure_bound = 4000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"pW" = (
+/obj/machinery/door/airlock/external{
+	name = "Toxins Tank Access"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"pZ" = (
+/obj/structure/table,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "chapel"
+	},
+/area/derelict/medical/chapel)
+"qc" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/derelict/solar_control)
+"qg" = (
+/obj/machinery/door/airlock/medical{
+	name = "Morgue";
+	req_access_txt = "6"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/derelict/medical/chapel)
+"qk" = (
+/obj/machinery/field_generator,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"qn" = (
+/turf/simulated/wall,
+/area)
+"qr" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/arrival)
+"qs" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"qy" = (
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/secondary)
+"qX" = (
+/obj/item/weapon/storage/toolbox/syndicate,
+/turf/simulated/floor/airless,
+/area/derelict/bridge/ai_upload)
+"rb" = (
+/obj/machinery/door/window{
+	dir = 2
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"rc" = (
+/obj/effect/decal/warning_stripes{
+	dir = 5;
+	icon_state = "warning";
+	tag = "icon-warning (NORTHEAST)"
+	},
+/obj/machinery/computer/rdconsole/derelict,
+/turf/simulated/floor/airless,
+/area/derelict/research)
+"rd" = (
+/turf/simulated/wall/r_wall,
+/area/derelict/hallway/secondary)
+"rf" = (
+/obj/structure/reagent_dispensers/watertank,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"rn" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/ai_upload)
+"rp" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/wall,
+/area/derelict/bridge/access)
+"rt" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"ru" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"rw" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"rA" = (
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"rC" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"rD" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/obj/machinery/computer/powermonitor,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"rH" = (
+/obj/structure/closet/wardrobe/mixed,
+/turf/simulated/floor,
+/area/derelict/arrival)
+"rI" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"rS" = (
+/turf/simulated/floor/airless{
+	icon_state = "derelict13"
+	},
+/area/derelict/hallway/secondary)
+"sg" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/primary)
+"sh" = (
+/obj/machinery/air_sensor{
+	frequency = 1438;
+	id_tag = "n2_sensor"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"sm" = (
+/obj/machinery/door/airlock/maintenance{
+	name = "Aux Storage";
+	req_access_txt = "23"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"so" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/airless{
+	icon_state = "derelict10"
+	},
+/area/derelict/hallway/secondary)
+"sr" = (
+/obj/machinery/door/airlock/external{
+	name = "Escape Airlock"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/arrival)
+"sw" = (
+/obj/structure/window{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"sz" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/medical)
+"sE" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/airless,
+/area)
+"sI" = (
+/obj/machinery/r_n_d/destructive_analyzer,
+/obj/effect/decal/warning_stripes{
+	dir = 10;
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHWEST)"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/research)
+"sK" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/machinery/power/solar/panel{
+	id_tag = "derelictsolar";
+	name = "Derelict Solar Array"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_aft)
+"sL" = (
+/turf/simulated/floor/airless{
+	icon_state = "derelict7"
+	},
+/area/derelict/hallway/secondary)
+"sN" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"sR" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "floorscorched2"
+	},
+/area/derelict/arrival)
+"sS" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "nitrogen"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"sW" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/machinery/power/solar/panel{
+	id_tag = "derelictsolar";
+	name = "Derelict Solar Array"
+	},
+/turf/simulated/floor/airless,
+/area/solar/derelict_aft)
+"sX" = (
+/turf/simulated/floor/airless{
+	icon_state = "derelict5"
+	},
+/area/derelict/hallway/secondary)
+"sY" = (
+/turf/simulated/floor/airless{
+	icon_state = "derelict2"
+	},
+/area/derelict/hallway/secondary)
+"td" = (
+/obj/machinery/atmospherics/unary/outlet_injector{
+	dir = 4;
+	frequency = 1438;
+	icon_state = "on";
+	id_tag = "o2_in";
+	on = 1
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"th" = (
+/turf/simulated/floor/airless{
+	icon_state = "derelict3"
+	},
+/area/derelict/hallway/secondary)
+"to" = (
+/obj/machinery/mass_driver{
+	dir = 8;
+	id_tag = "derelict_gun"
+	},
+/obj/machinery/door/window{
+	req_access_txt = "25"
+	},
+/obj/structure/closet/coffin,
+/turf/simulated/floor/plating,
+/area/derelict/medical/chapel)
+"tu" = (
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "chapel"
+	},
+/area/derelict/medical/chapel)
+"tv" = (
+/obj/item/weapon/shard,
+/turf/space,
+/area)
+"tF" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/door/airlock/research{
+	name = "Toxins Research";
+	req_access_txt = "7"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/arrival)
+"tJ" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"tM" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"tN" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"tO" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"tW" = (
+/obj/structure/table,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"ud" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/airless,
+/area)
+"uj" = (
+/obj/structure/table,
+/obj/item/weapon/cell,
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"uq" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/access)
+"uS" = (
+/obj/structure/girder/reinforced,
+/turf/simulated/floor/plating/airless,
+/area)
+"uW" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/derelict/arrival)
+"uZ" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"ve" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"vg" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "floorscorched1"
+	},
+/area/derelict/hallway/primary)
+"vy" = (
+/obj/machinery/atmospherics/unary/outlet_injector{
+	dir = 4;
+	frequency = 1438;
+	icon_state = "on";
+	id_tag = "n2_in";
+	on = 1
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"vA" = (
+/obj/machinery/atmospherics/miner/nitrogen,
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"vC" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"vE" = (
+/obj/structure/table,
+/obj/item/weapon/cell{
+	charge = 100;
+	maxcharge = 15000
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/access)
+"vG" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged4"
+	},
+/area/derelict/bridge/ai_upload)
+"vI" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/space,
+/area)
+"vJ" = (
+/obj/machinery/mommi_spawner,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"vK" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/hallway/primary)
+"vN" = (
+/turf/simulated/wall/r_wall,
+/area/derelict/bridge)
+"vT" = (
+/obj/machinery/atmospherics/unary/outlet_injector{
+	frequency = 1438;
+	icon_state = "on";
+	id_tag = "tox_in";
+	on = 1
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"vV" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"wh" = (
+/turf/simulated/wall/r_wall,
+/area/derelict/bridge/access)
+"wl" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"wo" = (
+/obj/machinery/portable_atmospherics/scrubber,
+/turf/simulated/floor,
+/area/derelict/arrival)
+"wp" = (
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"wt" = (
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"wu" = (
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/solar/panel{
+	id_tag = "derelictsolar";
+	name = "Derelict Solar Array"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area/solar/derelict_starboard)
+"ww" = (
+/obj/machinery/power/apc{
+	cell_type = 0;
+	icon_state = "apc1";
+	opened = 1;
+	pixel_y = -24
+	},
+/obj/item/weapon/cell/high,
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"wC" = (
+/obj/structure/table,
+/obj/item/tool/screwdriver,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"wG" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"wH" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "chapel"
+	},
+/area/derelict/medical/chapel)
+"wJ" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"wK" = (
+/obj/structure/falsewall,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/derelict/hallway/secondary)
+"wM" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/machinery/power/solar/control{
+	id_tag = "derelictsolar";
+	name = "Primary Solar Control"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"wO" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/door/airlock/external{
+	name = "External Engineering"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/solar_control)
+"wQ" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "floorscorched2"
+	},
+/area/derelict/hallway/primary)
+"xf" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"xg" = (
+/turf/simulated/wall/r_wall,
+/area/derelict/hallway/primary)
+"xh" = (
+/obj/machinery/power/emitter/antique,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"xm" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"xr" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Engineering Access";
+	req_access_txt = "11"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"xz" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_aft)
+"xA" = (
+/turf/simulated/wall/r_wall,
+/area/derelict/atmos)
+"xE" = (
+/obj/structure/table,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "chapel"
+	},
+/area/derelict/medical/chapel)
+"xO" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/obj/structure/window/reinforced,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"xS" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"xZ" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/primary)
+"yb" = (
+/obj/structure/table,
+/obj/item/weapon/paper/crumpled,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"yd" = (
+/obj/machinery/door/window{
+	dir = 2
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"yl" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/arrival)
+"yp" = (
+/obj/structure/table,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"ys" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/secondary)
+"yt" = (
+/turf/simulated/floor/plating,
+/area/derelict/medical/chapel)
+"yu" = (
+/obj/structure/table,
+/obj/item/stack/cable_coil{
+	pixel_x = 3;
+	pixel_y = -7
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/access)
+"yv" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"yF" = (
+/obj/machinery/light/small,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged4"
+	},
+/area/derelict/singularity_engine)
+"yK" = (
+/obj/item/stack/medical/bruise_pack,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/medical)
+"yP" = (
+/obj/machinery/atmospherics/unary/cap/visible{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless{
+	broken = 1;
+	icon_state = "platingdmg1"
+	},
+/area/derelict/atmos)
+"yW" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"yX" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"za" = (
+/obj/structure/grille,
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"zi" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning";
+	tag = "icon-warning"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/research)
+"zn" = (
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"zu" = (
+/obj/machinery/door/morgue{
+	name = "coffin storage";
+	req_access_txt = "22"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/derelict/medical/chapel)
+"zA" = (
+/obj/machinery/atmospherics/miner/oxygen,
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"zC" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/door/window,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"zM" = (
+/obj/machinery/door/window{
+	base_state = "right";
+	dir = 2
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"zQ" = (
+/obj/machinery/door/window{
+	dir = 2;
+	name = "Captain's Quarters";
+	req_access_txt = "20"
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating/airless,
+/area/derelict/bridge)
+"zY" = (
+/obj/effect/decal/remains/human{
+	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
+	name = "Syndicate agent remains"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/ai_upload)
+"zZ" = (
+/obj/machinery/light/small,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "chapel"
+	},
+/area/derelict/medical/chapel)
+"Ac" = (
+/obj/machinery/door/airlock/external{
+	name = "Oxygen Tank Access"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"Ah" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/singularity_engine)
+"Ar" = (
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"Aw" = (
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"AF" = (
+/obj/structure/table,
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"AG" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"AJ" = (
+/obj/structure/window/reinforced,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/singularity_engine)
+"AL" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/singularity_engine)
+"AV" = (
+/obj/structure/girder,
+/turf/simulated/floor/plating/airless,
+/area)
+"AW" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/turf/space,
+/area)
+"Bb" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"Bn" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/secondary)
+"Bq" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 4
+	},
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"Bw" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"BB" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/wall/r_wall,
+/area/derelict/hallway/primary)
+"BF" = (
+/obj/machinery/door/airlock/command{
+	name = "AI Upload";
+	req_access_txt = "16"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/item/tape/engineering{
+	icon_state = "engineering_door"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/ai_upload)
+"BJ" = (
+/obj/structure/closet/wardrobe,
+/turf/simulated/floor,
+/area/derelict/arrival)
+"BN" = (
+/turf/simulated/floor{
+	icon_state = "chapel"
+	},
+/area/derelict/medical/chapel)
+"BR" = (
+/obj/item/weapon/shard,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged5"
+	},
+/area/derelict/singularity_engine)
+"BS" = (
+/turf/simulated/floor/plating/airless{
+	broken = 1;
+	icon_state = "panelscorched"
+	},
+/area/derelict/hallway/secondary)
+"BY" = (
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/plating,
+/area/derelict/atmos)
+"BZ" = (
+/obj/structure/girder,
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"Ca" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/secondary)
+"Cc" = (
+/obj/structure/table,
+/obj/item/device/aicard,
+/turf/simulated/floor/airless,
+/area/derelict/bridge/access)
+"Ce" = (
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating,
+/area/derelict/solar_control)
+"Ci" = (
+/obj/structure/cable,
+/obj/machinery/power/apc{
+	dir = 4;
+	pixel_x = 24
+	},
+/turf/simulated/floor/airless,
+/area/derelict/medical/chapel)
+"Cp" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "floorscorched2"
+	},
+/area)
+"Cz" = (
+/turf/simulated/wall,
+/area/derelict/bridge)
+"CD" = (
+/obj/structure/closet/wardrobe/orange,
+/turf/simulated/floor/airless,
+/area)
+"CH" = (
+/obj/structure/computerframe,
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"CL" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/research)
+"CU" = (
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"CW" = (
+/obj/item/weapon/shard,
+/obj/structure/grille/broken,
+/obj/effect/decal/remains/human{
+	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
+	name = "Syndicate agent remains"
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"Dd" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/wall,
+/area/derelict/medical/chapel)
+"Dk" = (
+/obj/structure/lattice,
+/obj/structure/grille,
+/turf/space,
+/area)
+"Dn" = (
+/obj/structure/rack,
+/obj/item/weapon/melee/classic_baton,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"Dq" = (
+/obj/machinery/door/firedoor/border_only{
+	dir = 4;
+	name = "Firelock East"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"Dt" = (
+/turf/simulated/wall,
+/area/derelict/bridge/access)
+"DA" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/wall/r_wall,
+/area)
+"DF" = (
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"DJ" = (
+/obj/structure/grille,
+/turf/space,
+/area/derelict/singularity_engine)
+"DV" = (
+/obj/structure/closet/crate/secure/large/reinforced/shard,
+/turf/simulated/floor/plating/airless,
+/area)
+"DW" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Eb" = (
+/obj/structure/window{
+	dir = 4
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"Ef" = (
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"Eg" = (
+/turf/simulated/floor/airless{
+	icon_state = "derelict1"
+	},
+/area/derelict/hallway/secondary)
+"Em" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 4
+	},
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/bluegrid{
+	name = "Mainframe Base";
+	nitrogen = 100;
+	oxygen = 0;
+	temperature = 80
+	},
+/area/derelict/research)
+"En" = (
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/primary)
+"Ew" = (
+/obj/item/stack/rods,
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"EA" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"EJ" = (
+/turf/simulated/floor/plating/airless,
+/area/derelict/bridge/ai_upload)
+"EL" = (
+/obj/item/stack/rods,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/secondary)
+"ET" = (
+/obj/machinery/door/airlock/security{
+	name = "Gas Storage";
+	req_access_txt = "3"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/primary)
+"EU" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"EV" = (
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area)
+"EX" = (
+/obj/structure/grille/broken,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"Fa" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/derelict/arrival)
+"Fd" = (
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"Fe" = (
+/obj/machinery/door/airlock/external{
+	name = "External Engineering"
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"Fg" = (
+/turf/simulated/floor/plating/airless,
+/area/derelict/medical)
+"Fn" = (
+/turf/simulated/floor/airless{
+	icon_state = "derelict4"
+	},
+/area/derelict/hallway/secondary)
+"Fp" = (
+/obj/structure/table,
+/obj/item/weapon/cell,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Fu" = (
+/obj/structure/grille,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/singularity_engine)
+"Fw" = (
+/obj/structure/window{
+	dir = 1
+	},
+/turf/space,
+/area)
+"Fx" = (
+/turf/simulated/floor/plating/airless,
+/area)
+"FP" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	canSpawnMice = 0;
+	dir = 4;
+	external_pressure_bound = 120;
+	frequency = 1438;
+	icon_state = "in";
+	id_tag = "o2_out";
+	initialize_directions = 1;
+	internal_pressure_bound = 4000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"FQ" = (
+/turf/simulated/floor/plating,
+/area/derelict/arrival)
+"FT" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/medical)
+"FY" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "chapel"
+	},
+/area/derelict/medical/chapel)
+"Ga" = (
+/obj/structure/table,
+/obj/structure/window,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Gb" = (
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area)
+"Ge" = (
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating/airless,
+/area/derelict/bridge/access)
+"Gj" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/obj/structure/lattice,
+/turf/space,
+/area/solar/derelict_starboard)
+"Gk" = (
+/obj/machinery/door/window{
+	base_state = "right";
+	icon_state = "right"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"Gn" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 10
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"Go" = (
+/obj/structure/grille/broken,
+/turf/simulated/floor/plating/airless{
+	broken = 1;
+	icon_state = "panelscorched"
+	},
+/area/derelict/hallway/secondary)
+"Gr" = (
+/turf/simulated/wall,
+/area/derelict/hallway/primary)
+"Gx" = (
+/obj/structure/table,
+/obj/item/device/healthanalyzer,
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"GA" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"GE" = (
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/space,
+/area)
+"GG" = (
+/turf/simulated/wall,
+/area/derelict/medical/chapel)
+"GJ" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/wall,
+/area/derelict/medical/chapel)
+"GL" = (
+/obj/item/stack/medical/ointment,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/medical)
+"GQ" = (
+/obj/item/weapon/pen,
+/obj/machinery/power/rad_collector,
+/turf/simulated/floor,
+/area/derelict/arrival)
+"GT" = (
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating/airless,
+/area)
+"GX" = (
+/obj/structure/sign/securearea,
+/turf/simulated/wall/r_wall,
+/area/derelict/singularity_engine)
+"Ha" = (
+/obj/structure/window{
+	dir = 8
+	},
+/turf/space,
+/area)
+"Hj" = (
+/obj/machinery/air_sensor{
+	frequency = 1438;
+	id_tag = "o2_sensor"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"Hl" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"Hn" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Engineering Access";
+	req_access_txt = "11"
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged5"
+	},
+/area/derelict/singularity_engine)
+"Hr" = (
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"HL" = (
+/obj/machinery/vending/engivend,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"HM" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged5"
+	},
+/area/derelict/singularity_engine)
+"HN" = (
+/obj/machinery/vending/tool,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"HP" = (
+/obj/structure/window,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"HT" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor/airless,
+/area)
+"HU" = (
+/obj/structure/grille,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"HW" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"Id" = (
+/obj/item/weapon/pen,
+/turf/simulated/floor,
+/area/derelict/arrival)
+"If" = (
+/obj/machinery/door/airlock/external{
+	name = "Air Bridge Access"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/atmos)
+"Ig" = (
+/obj/machinery/floodlight,
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"Ih" = (
+/turf/simulated/floor/airless{
+	icon_state = "derelict15"
+	},
+/area/derelict/hallway/secondary)
+"Ii" = (
+/obj/machinery/door/window{
+	base_state = "right";
+	icon_state = "right"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/ai_upload)
+"Im" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	canSpawnMice = 0;
+	dir = 4;
+	external_pressure_bound = 140;
+	on = 1;
+	pressure_checks = 0
+	},
+/turf/simulated/floor/bluegrid{
+	icon_state = "dark";
+	name = "Mainframe Floor";
+	nitrogen = 100;
+	oxygen = 0;
+	temperature = 80
+	},
+/area/derelict/research)
+"Io" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/secondary)
+"IA" = (
+/obj/machinery/door/window{
+	base_state = "right";
+	icon_state = "right"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/light/small,
+/turf/simulated/floor/airless,
+/area/derelict/bridge/ai_upload)
+"IB" = (
+/obj/item/weapon/firstaid_arm_assembly,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"ID" = (
+/obj/structure/lattice,
+/obj/structure/window{
+	dir = 1
+	},
+/turf/space,
+/area)
+"IK" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"IR" = (
+/obj/item/tool/screwdriver,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"Jh" = (
+/obj/structure/window/reinforced,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"Jj" = (
+/obj/item/weapon/shard,
+/obj/structure/grille/broken,
+/turf/simulated/floor/plating/airless,
+/area/derelict/medical)
+"Jk" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area)
+"Jp" = (
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"Jr" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"Jv" = (
+/obj/item/stack/medical/ointment,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"JI" = (
+/obj/machinery/r_n_d/fabricator/protolathe,
+/obj/effect/decal/warning_stripes{
+	dir = 6;
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHEAST)"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/research)
+"JN" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"JO" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/access)
+"JW" = (
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/primary)
+"JY" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"Ka" = (
+/obj/item/weapon/shard,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"Kb" = (
+/obj/item/stack/cable_coil/cut,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/singularity_engine)
+"Kf" = (
+/turf/simulated/wall,
+/area/derelict/solar_control)
+"Kl" = (
+/obj/item/weapon/storage/toolbox/electrical{
+	pixel_x = 1;
+	pixel_y = -1
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/access)
+"Km" = (
+/obj/machinery/r_n_d/fabricator/circuit_imprinter,
+/obj/item/weapon/reagent_containers/glass/beaker/sulphuric,
+/obj/effect/decal/warning_stripes{
+	dir = 9;
+	icon_state = "warning";
+	tag = "icon-warning (NORTHWEST)"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/research)
+"Ko" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/bridge/ai_upload)
+"KH" = (
+/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe{
+	desc = "Your typical Autolathe. It appears to have much more options than your regular one, however...";
+	hacked = 1;
+	name = "Derelict Autolathe"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"KJ" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/derelict/solar_control)
+"KM" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"KN" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"KO" = (
+/turf/simulated/floor/airless,
+/area/derelict/bridge/ai_upload)
+"KQ" = (
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/medical)
+"KR" = (
+/obj/structure/table,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"KU" = (
+/obj/structure/table,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"KY" = (
+/obj/machinery/door/window{
+	dir = 2
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/primary)
+"La" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/structure/cable,
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_aft)
+"Le" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/derelict/arrival)
+"Lp" = (
+/obj/structure/lattice,
+/obj/item/stack/cable_coil/cut,
+/turf/space,
+/area)
+"Ls" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"Lv" = (
+/obj/structure/catwalk,
+/turf/space,
+/area/derelict/atmos)
+"Ly" = (
+/turf/simulated/floor/airless{
+	icon_state = "derelict9"
+	},
+/area/derelict/hallway/secondary)
+"LA" = (
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/derelict/arrival)
+"LE" = (
+/obj/item/weapon/grenade/empgrenade,
+/obj/structure/table,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"LI" = (
+/obj/structure/sign/nosmoking_1,
+/turf/simulated/wall/r_wall,
+/area/derelict/atmos)
+"LJ" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/singularity_engine)
+"LL" = (
+/obj/structure/lattice,
+/obj/structure/window{
+	dir = 4
+	},
+/turf/space,
+/area)
+"LU" = (
+/obj/structure/grille,
+/obj/structure/window{
+	dir = 1
+	},
+/turf/space,
+/area)
+"LV" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"Md" = (
+/obj/item/stack/rods,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"Me" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/primary)
+"Mi" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"Mj" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/obj/machinery/power/rad_collector,
+/turf/simulated/floor,
+/area/derelict/arrival)
+"Mx" = (
+/obj/structure/table,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"ME" = (
+/obj/item/trash/cigbutt,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"MJ" = (
+/obj/structure/closet/emcloset,
+/turf/simulated/floor/airless,
+/area/derelict/hallway/secondary)
+"MX" = (
+/obj/structure/closet/wardrobe/genetics_white,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"Nd" = (
+/obj/structure/window,
+/turf/space,
+/area)
+"Ne" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"Nl" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor/airless,
+/area)
+"Nw" = (
+/obj/structure/window{
+	dir = 8
+	},
+/obj/structure/window,
+/turf/space,
+/area)
+"ND" = (
+/turf/simulated/floor/airless{
+	icon_state = "derelict8"
+	},
+/area/derelict/hallway/secondary)
+"NH" = (
+/obj/machinery/door/window{
+	dir = 2
+	},
+/turf/simulated/floor/airless,
+/area/derelict/medical/chapel)
+"NI" = (
+/obj/structure/table,
+/turf/simulated/floor/airless,
+/area)
+"NQ" = (
+/obj/item/taperoll/engineering,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"NU" = (
+/obj/structure/grille,
+/turf/simulated/floor/plating/airless,
+/area)
+"NY" = (
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"Of" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating/airless,
+/area)
+"Og" = (
+/obj/structure/girder,
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"Ol" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"Om" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"Oq" = (
+/obj/machinery/power/terminal{
+	dir = 1
+	},
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/ai_upload)
+"Ox" = (
+/obj/structure/computerframe,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"OD" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"OE" = (
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"OF" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	canSpawnMice = 0;
+	external_pressure_bound = 120;
+	frequency = 1438;
+	icon_state = "in";
+	id_tag = "tox_out";
+	initialize_directions = 1;
+	internal_pressure_bound = 4000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"OM" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"ON" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"OX" = (
+/obj/structure/table,
+/obj/item/device/paicard,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Pa" = (
+/obj/structure/grille,
+/turf/space,
+/area)
+"Pb" = (
+/turf/simulated/wall/r_wall,
+/area)
+"Pd" = (
+/obj/structure/table,
+/turf/simulated/floor,
+/area/derelict/arrival)
+"Pg" = (
+/obj/item/device/assembly/prox_sensor{
+	pixel_x = -8;
+	pixel_y = 4
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"Pq" = (
+/turf/simulated/floor/plating,
+/area/derelict/bridge)
+"Pt" = (
+/obj/structure/window/full,
+/turf/space,
+/area)
+"Px" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"Pz" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/airless,
+/area)
+"PE" = (
+/obj/machinery/power/battery/smes,
+/obj/structure/cable,
+/turf/simulated/floor/airless,
+/area/derelict/bridge/ai_upload)
+"PJ" = (
+/obj/machinery/r_n_d/server/derelict,
+/turf/simulated/floor/bluegrid{
+	icon_state = "dark";
+	name = "Mainframe Floor";
+	nitrogen = 100;
+	oxygen = 0;
+	temperature = 80
+	},
+/area/derelict/research)
+"PK" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/airless{
+	icon_state = "derelict16"
+	},
+/area/derelict/hallway/secondary)
+"PL" = (
+/obj/machinery/light/small,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/hallway/primary)
+"PO" = (
+/obj/machinery/computer/general_air_control/large_tank_control{
+	frequency = 1438;
+	input_tag = "n2_in";
+	name = "Nitrogen Supply Control";
+	output_tag = "n2_out";
+	sensors = list("n2_sensor"="Tank")
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"PT" = (
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"PW" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/wall/r_wall,
+/area/derelict/bridge/ai_upload)
+"PZ" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/medical)
+"Qf" = (
+/obj/item/weapon/stool,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Qg" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"Qj" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/wall,
+/area/derelict/bridge/access)
+"Qk" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"Ql" = (
+/obj/structure/girder,
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/primary)
+"Qn" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/singularity_engine)
+"Qo" = (
+/obj/structure/window{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"Qq" = (
+/turf/simulated/wall,
+/area/derelict/atmos)
+"Qt" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"QB" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"QE" = (
+/obj/structure/cable,
+/obj/machinery/power/apc{
+	pixel_y = -24
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"QG" = (
+/turf/simulated/floor,
+/area/derelict/arrival)
+"QI" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"QJ" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"QL" = (
+/obj/structure/window/reinforced,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area)
+"QQ" = (
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"QS" = (
+/turf/simulated/floor/airless,
+/area)
+"Rl" = (
+/obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue{
+	dir = 4
+	},
+/obj/item/weapon/paper/derelict_invoice,
+/obj/machinery/meter,
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"Ro" = (
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable,
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"Rp" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/hallway/primary)
+"Rs" = (
+/obj/machinery/door/airlock/security{
+	name = "Security";
+	req_access_txt = "1"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"Rw" = (
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"Rx" = (
+/obj/structure/rack,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"RC" = (
+/obj/structure/cable,
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_aft)
+"RH" = (
+/obj/machinery/door/airlock/external{
+	name = "Arrival Airlock"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/arrival)
+"RT" = (
+/turf/simulated/floor/airless{
+	icon_state = "derelict11"
+	},
+/area/derelict/hallway/secondary)
+"RX" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"RY" = (
+/turf/simulated/wall/r_wall,
+/area/derelict/arrival)
+"Sd" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"Se" = (
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"So" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"Sp" = (
+/turf/simulated/floor/bluegrid{
+	name = "Mainframe Base";
+	nitrogen = 100;
+	oxygen = 0;
+	temperature = 80
+	},
+/area/derelict/research)
+"Sq" = (
+/obj/structure/lattice,
+/turf/space,
+/area/derelict/atmos)
+"Ss" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/airless,
+/area)
+"St" = (
+/obj/structure/sign/securearea{
+	name = "ENGINEERING ACCESS"
+	},
+/turf/simulated/wall/r_wall,
+/area/derelict/singularity_engine)
+"Sv" = (
+/turf/simulated/floor,
+/area/derelict/atmos)
+"Sy" = (
+/obj/machinery/door/poddoor{
+	id_tag = "derelict_gun";
+	name = "Derelict Mass Driver"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/medical/chapel)
+"SA" = (
+/obj/structure/closet/coffin,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/derelict/medical/chapel)
+"SE" = (
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"SH" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_aft)
+"SJ" = (
+/obj/structure/noticeboard{
+	pixel_y = 28
+	},
+/turf/simulated/wall,
+/area/derelict/singularity_engine)
+"SK" = (
+/obj/structure/grille,
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"SQ" = (
+/obj/item/weapon/paper{
+	info = "The Syndicate have cunningly disguised a Syndicate Uplink as your PDA. Simply enter the code \"678 Bravo\" into the ringtone select to unlock its hidden features. <br><br><b>Objective #1</b>. Kill the God damn AI in a fire blast that it rocks the station. <b>Success!</b>  <br><b>Objective #2</b>. Escape alive. <b>Failed.</b>";
+	name = "Mission Objectives"
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/bridge/ai_upload)
+"SX" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/medical)
+"SZ" = (
+/obj/machinery/air_sensor{
+	frequency = 1438;
+	id_tag = "tox_sensor"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"Tc" = (
+/turf/simulated/floor/plating/airless,
+/area/derelict/bridge/access)
+"Te" = (
+/obj/item/weapon/disk/data/demo,
+/turf/simulated/floor/plating/airless,
+/area)
+"Tf" = (
+/obj/structure/grille,
+/obj/item/weapon/shard,
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"Tg" = (
+/obj/item/weapon/storage/toolbox/syndicate,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"Tp" = (
+/turf/simulated/wall,
+/area/derelict/research)
+"Tu" = (
+/obj/item/weapon/paper{
+	info = "<b>Objective #1</b>: Destroy the station with a nuclear device.";
+	name = "Objectives of a Nuclear Operative"
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"Tv" = (
+/obj/structure/table,
+/obj/machinery/computer/pod/old{
+	id_tags = list("derelict_gun");
+	name = "ProComp IIe";
+	pixel_y = 7
+	},
+/turf/simulated/floor{
+	icon_state = "chapel"
+	},
+/area/derelict/medical/chapel)
+"TA" = (
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"TB" = (
+/obj/machinery/vending/sovietsoda,
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"TI" = (
+/turf/simulated/floor/plating,
+/area/derelict/solar_control)
+"TK" = (
+/obj/machinery/door/airlock/glass,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"TW" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/access)
+"TX" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/medical)
+"Uf" = (
+/obj/item/stack/cable_coil/cut,
+/turf/space,
+/area)
+"Ui" = (
+/turf/simulated/floor/airless,
+/area/derelict/medical/chapel)
+"Un" = (
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"UD" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/medical)
+"UK" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"UO" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"UP" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"UX" = (
+/obj/structure/lattice,
+/turf/space,
+/area/derelict/hallway/secondary)
+"UY" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/primary)
+"Vf" = (
+/obj/structure/girder,
+/turf/simulated/floor/plating,
+/area/derelict/arrival)
+"Vk" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/hallway/primary)
+"Vn" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/wall/r_wall,
+/area/derelict/bridge/ai_upload)
+"Vx" = (
+/obj/structure/window,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"VH" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"VW" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"Wb" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area)
+"Wc" = (
+/obj/structure/window/reinforced,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "chapel"
+	},
+/area/derelict/medical/chapel)
+"Wd" = (
+/turf/simulated/floor/airless,
+/area/derelict/hallway/secondary)
+"Wk" = (
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/derelict/medical/chapel)
+"Wq" = (
+/obj/structure/grille,
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"Ww" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+"WD" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/derelict/medical/chapel)
+"WF" = (
+/obj/machinery/light/small,
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"WI" = (
+/obj/machinery/power/battery/smes,
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"WJ" = (
+/obj/structure/table,
+/obj/item/weapon/rack_parts,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"WS" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"WZ" = (
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_aft)
+"Xd" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged5"
+	},
+/area)
+"Xe" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"Xr" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"Xu" = (
+/turf/simulated/wall/r_wall,
+/area/derelict/research)
+"Xv" = (
+/obj/machinery/door/airlock/external{
+	name = "Air Bridge Access"
+	},
+/turf/space,
+/area/derelict/atmos)
+"Xw" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/secondary)
+"XA" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "floorscorched1"
+	},
+/area)
+"XC" = (
+/obj/machinery/door/airlock/command{
+	name = "E.V.A.";
+	req_access_txt = "18"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"XD" = (
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"XH" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/medical)
+"XP" = (
+/turf/simulated/floor/bluegrid{
+	icon_state = "dark";
+	name = "Mainframe Floor";
+	nitrogen = 100;
+	oxygen = 0;
+	temperature = 80
+	},
+/area/derelict/research)
+"XU" = (
+/obj/item/clothing/head/helmet/tactical/swat,
+/turf/simulated/floor/plating/airless,
+/area/derelict/singularity_engine)
+"XW" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating/airless,
+/area/derelict/bridge/access)
+"XZ" = (
+/turf/simulated/floor/plating/airless,
+/area/derelict/hallway/secondary)
+"Yj" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Yk" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/medical)
+"Yl" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Yq" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"Yu" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/space,
+/area)
+"YM" = (
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"YP" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/obj/machinery/power/solar/control{
+	id_tag = "derelictsolar";
+	name = "Primary Solar Control"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/ai_upload)
+"YQ" = (
+/turf/simulated/floor/airless{
+	icon_state = "derelict12"
+	},
+/area/derelict/hallway/secondary)
+"YW" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"Zc" = (
+/obj/machinery/door/airlock/command{
+	name = "AI Upload";
+	req_access_txt = "16"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/bridge/ai_upload)
+"Zd" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"Zg" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "oxygen"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"Zk" = (
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/derelict/arrival)
+"Zl" = (
+/turf/simulated/floor/plating/airless,
+/area/derelict/arrival)
+"Zq" = (
+/obj/machinery/atmospherics/miner/toxins,
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"Zr" = (
+/obj/machinery/door/window{
+	dir = 2
+	},
+/turf/simulated/floor/airless,
+/area/derelict/hallway/primary)
+"Zs" = (
+/obj/machinery/computer/general_air_control/large_tank_control{
+	frequency = 1438;
+	input_tag = "o2_in";
+	name = "Oxygen Supply Control";
+	output_tag = "o2_out";
+	sensors = list("o2_sensor"="Tank")
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"ZJ" = (
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/singularity_engine)
+"ZN" = (
+/turf/space,
+/area)
+"ZP" = (
+/obj/machinery/computer/security,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"ZX" = (
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/simulated/floor/plating/airless,
+/area)
+
+(1,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+aF
+Sy
+Yu
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(2,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+lG
+lG
+AW
+yt
+vI
+lG
+lG
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(3,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+GG
+GG
+GG
+GG
+GG
+fI
+xE
+eo
+yt
+pZ
+xE
+fI
+GG
+GG
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(4,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+Wk
+Wk
+SA
+SA
+GG
+tu
+BN
+Wc
+yt
+FY
+BN
+tu
+Tv
+GG
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(5,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+Wk
+Wk
+Wk
+SA
+GG
+ft
+cE
+bq
+yt
+wH
+cE
+ft
+GG
+GG
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(6,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+Wk
+Wk
+Wk
+Wk
+GG
+tu
+BN
+Wc
+to
+FY
+BN
+zZ
+GG
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(7,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+Wk
+Wk
+Wk
+jM
+GG
+ft
+cE
+ft
+cE
+ft
+cE
+ft
+GG
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(8,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+Wk
+Wk
+Wk
+Wk
+GG
+tu
+BN
+tu
+BN
+tu
+BN
+tu
+GG
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(9,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+Wk
+Wk
+Wk
+Wk
+GG
+ft
+cE
+ft
+cE
+ft
+cE
+ft
+GG
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(10,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+Wk
+Wk
+Wk
+Wk
+zu
+tu
+BN
+tu
+BN
+tu
+BN
+tu
+GG
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(11,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+Wk
+Wk
+GG
+GG
+GG
+GG
+GG
+GG
+aM
+GG
+GG
+GG
+GG
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(12,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+Wk
+Wk
+GG
+Wk
+io
+io
+Wk
+GG
+Ui
+GG
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(13,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+WD
+Wk
+GG
+Wk
+Wk
+Wk
+Wk
+GG
+Ui
+GG
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(14,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+Wk
+Wk
+GG
+WD
+io
+io
+Wk
+GG
+Ui
+GG
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(15,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+SA
+Wk
+GG
+Wk
+Wk
+Wk
+Wk
+GG
+ow
+GG
+Gr
+Gr
+Gr
+Gr
+Gr
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(16,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+Wk
+Wk
+qg
+Wk
+io
+io
+Wk
+GG
+Ui
+GG
+cU
+cU
+cU
+cU
+cU
+UO
+UO
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(17,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+SA
+Wk
+GG
+Wk
+Wk
+Wk
+Wk
+GJ
+Ci
+NH
+cU
+cU
+cU
+cU
+cU
+cU
+UO
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(18,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+GG
+GG
+GG
+GG
+qg
+GG
+qg
+GG
+Dd
+GG
+GG
+cU
+cU
+cU
+Gr
+Gr
+Gr
+Gr
+En
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(19,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+dc
+SE
+vC
+SE
+SE
+SE
+SE
+wG
+cJ
+Gr
+cU
+cU
+cU
+Gr
+aZ
+AF
+Gr
+En
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(20,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+sz
+SE
+SE
+SE
+SE
+SE
+SE
+HW
+SE
+Gr
+cU
+cU
+cU
+Gr
+ru
+cU
+Gr
+En
+En
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(21,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ak
+SE
+SE
+SE
+SE
+SE
+SE
+HW
+SE
+Gr
+ru
+cU
+cU
+cU
+cU
+uj
+Gr
+En
+En
+En
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(22,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+sz
+IB
+SE
+SE
+SE
+SE
+SE
+HW
+SE
+Gr
+cU
+cU
+cU
+Gr
+Gr
+Gr
+Gr
+cU
+vg
+En
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(23,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+kU
+kU
+kU
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+dc
+SE
+SE
+SE
+SE
+SE
+SE
+TX
+oJ
+Gr
+cU
+cU
+cU
+Gr
+aZ
+AF
+Gr
+vg
+od
+En
+En
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(24,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+kU
+kU
+kU
+kU
+kU
+kU
+kU
+UO
+ZN
+ZN
+ZN
+XH
+PZ
+gk
+SE
+Mx
+iv
+ve
+JN
+ve
+Gr
+cU
+cU
+cU
+Gr
+ru
+cU
+Gr
+En
+cU
+vg
+En
+UO
+UO
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+UO
+UO
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(25,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+UO
+kU
+kU
+yp
+ZJ
+kW
+kU
+kU
+UO
+UO
+ZN
+ZN
+Jj
+UD
+PZ
+PZ
+SE
+SE
+SE
+HW
+Jv
+Gr
+cU
+cU
+cU
+Zr
+cU
+AF
+Gr
+vg
+nU
+cU
+En
+En
+Gr
+UO
+UO
+UO
+UO
+UO
+UO
+UO
+UO
+qn
+UO
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(26,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+UO
+kU
+kU
+ON
+Qn
+HM
+ON
+lf
+kU
+kU
+UO
+ZN
+tv
+Fg
+Fg
+UD
+UD
+PZ
+yK
+ME
+HW
+SE
+Gr
+Gr
+Gr
+Gk
+Gr
+Gr
+Gr
+Gr
+Gr
+Gr
+Gr
+Gr
+cU
+Gr
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+bN
+XZ
+XZ
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(27,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+kU
+kU
+kU
+kU
+kU
+kU
+kU
+kU
+fz
+dL
+Ah
+Ah
+lY
+kU
+kU
+kU
+ZN
+ZN
+KQ
+Fg
+Fg
+Fg
+UD
+PZ
+SE
+HW
+SE
+Gr
+cU
+Se
+cU
+cU
+sg
+TB
+cU
+cU
+Se
+cU
+cU
+cU
+Gr
+En
+ZN
+En
+En
+UO
+En
+ZN
+ZN
+BZ
+Wd
+XZ
+UX
+Fx
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(28,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+UO
+UO
+kU
+kU
+kU
+kU
+kU
+kU
+kU
+kU
+kU
+mD
+Hl
+VW
+VW
+ju
+kU
+kU
+kU
+cj
+Rw
+dc
+SX
+Fg
+Fg
+Fg
+GL
+PZ
+HW
+dc
+Gr
+cU
+cU
+cU
+cU
+JW
+cU
+cU
+jC
+cU
+cU
+cU
+cU
+Gr
+En
+En
+dq
+En
+Gr
+En
+UO
+En
+bN
+Wd
+XZ
+cO
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(29,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+UO
+UO
+kU
+kU
+ll
+LV
+Rw
+ON
+Qn
+ON
+ON
+ON
+ON
+ON
+nt
+ON
+Qn
+ON
+Qn
+HM
+Rw
+Rw
+Fe
+UO
+Fg
+Fg
+Fg
+UD
+PZ
+Yk
+yX
+yd
+GA
+GA
+GA
+QJ
+JW
+cU
+cU
+AF
+Gx
+AF
+jC
+cU
+Gr
+jK
+cZ
+En
+En
+En
+En
+En
+En
+bN
+Wd
+Wd
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(30,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+Pb
+UO
+kU
+kU
+me
+LV
+ON
+nt
+HM
+Qn
+ON
+ON
+ON
+nt
+nt
+HM
+nt
+ON
+XD
+nt
+cj
+DJ
+UO
+UO
+Fg
+Fg
+Fg
+Fg
+UD
+UD
+SE
+zM
+cU
+cU
+cU
+QB
+JW
+cU
+jC
+AF
+AF
+AF
+jC
+cU
+Gr
+Vk
+En
+Vk
+cU
+Gr
+Vk
+En
+En
+bN
+Xw
+Wd
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(31,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Pb
+EV
+kU
+kU
+Qn
+hs
+LV
+ON
+HM
+Qn
+Ne
+rw
+rw
+VH
+ON
+nt
+nL
+nA
+rw
+EX
+dM
+UO
+UO
+Pa
+UO
+UO
+ZN
+ZN
+Fg
+Fg
+UD
+dc
+Gr
+cU
+cU
+cU
+QB
+Zr
+cU
+cU
+jC
+cU
+cU
+cU
+cU
+cU
+cU
+cU
+En
+cU
+Gr
+cZ
+En
+cZ
+bN
+Wd
+Wd
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(32,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+kU
+kU
+nt
+iy
+LV
+ON
+Qn
+Ne
+tO
+QI
+tO
+AL
+Rw
+HM
+hm
+Xe
+Rw
+Rw
+Rw
+UO
+UO
+UO
+UO
+UO
+UO
+ZN
+FT
+Fg
+UD
+dc
+Gr
+cU
+So
+cU
+QB
+Me
+cU
+cU
+cU
+So
+cU
+cU
+cU
+Gr
+nU
+cU
+cU
+cZ
+Gr
+cU
+Vk
+cU
+sm
+Wd
+Wd
+bN
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(33,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+kU
+ea
+HM
+hs
+ju
+Tg
+Tu
+CW
+XU
+nt
+nt
+Rw
+Rw
+Rw
+Rw
+Rw
+Rw
+Qn
+Rw
+EX
+Rw
+ON
+kU
+kU
+UO
+UO
+dc
+mt
+dc
+dc
+Gr
+Gr
+Gr
+Gr
+oG
+Gr
+Gr
+Gr
+Gr
+Gr
+Gr
+Gr
+Gr
+Ql
+Gr
+Gr
+En
+Gr
+Gr
+Gr
+Gr
+Gr
+bN
+Wd
+Wd
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(34,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+EV
+kU
+kU
+Kb
+Qn
+Rw
+nt
+Qn
+dh
+hz
+Rw
+Rw
+nL
+Rw
+Rw
+Rw
+Rw
+Qn
+HM
+Qn
+HU
+ki
+ON
+kU
+kU
+kU
+UO
+dc
+Fg
+MX
+dc
+Gr
+cU
+Se
+cU
+QB
+Se
+cU
+Gr
+QS
+Fx
+QS
+Fx
+Fx
+Fx
+Fx
+Fx
+Fx
+Fx
+QS
+Fx
+qn
+ZN
+bN
+Wd
+Wd
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(35,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+Fx
+Fx
+Fx
+GX
+Qn
+AJ
+yW
+Qn
+HM
+nL
+Rw
+Rw
+Rw
+ZN
+ZN
+ZN
+ZN
+ZN
+Rw
+Rw
+ma
+VW
+ON
+Qn
+ON
+kU
+kU
+kU
+dc
+mt
+dc
+dc
+Gr
+cU
+cU
+cU
+QB
+cU
+cU
+Gr
+Fx
+Fx
+Fx
+ZN
+ZN
+UO
+UO
+UO
+ZN
+ZN
+ZN
+Fx
+qn
+ZN
+bN
+Wd
+Wd
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(36,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+UO
+UO
+UO
+Fx
+Fx
+jk
+kU
+Hn
+xr
+kU
+iK
+Qn
+Rw
+Rw
+Rw
+Rw
+ZN
+ZN
+ZN
+ZN
+ZN
+Rw
+Rw
+Qn
+ON
+Qn
+nt
+yF
+kU
+bJ
+kU
+dc
+Fx
+Jk
+ae
+Gr
+cU
+cU
+cU
+Hr
+GA
+QE
+Gr
+Fx
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+Fx
+qn
+bN
+Wd
+Wd
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(37,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+UO
+UO
+Fx
+Fx
+Fx
+Fx
+xr
+Rw
+Rw
+cj
+ON
+Rw
+BR
+Rw
+Rw
+Rw
+ZN
+ZN
+DV
+ZN
+ZN
+Rw
+Rw
+nt
+ON
+Qn
+nt
+HM
+Rw
+Rw
+kU
+hy
+Fx
+Fx
+Gb
+Gr
+cU
+cU
+cU
+QB
+cU
+cU
+Gr
+Fx
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+bN
+Ly
+Eg
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(38,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+UO
+UO
+Fx
+jk
+Fx
+Fx
+Hn
+Rw
+Rw
+SJ
+Rw
+Rw
+Rw
+Rw
+Rw
+Rw
+ZN
+ZN
+ZN
+ZN
+ZN
+Rw
+nt
+HM
+ON
+Md
+nt
+Qn
+kU
+Rw
+kU
+hy
+Fx
+Fx
+Jk
+Gr
+cU
+cU
+cU
+QB
+cU
+cU
+Gr
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+bN
+so
+sY
+bN
+qn
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(39,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+UO
+UO
+Fx
+Fx
+St
+cj
+cj
+kU
+ON
+ON
+Rw
+Rw
+Rw
+Rw
+ZN
+ZN
+ZN
+ZN
+ZN
+Rw
+Qn
+hs
+oN
+ON
+Qn
+ON
+kU
+kU
+kU
+UO
+Fx
+Fx
+Wb
+Gr
+Gr
+Gr
+cU
+QB
+cU
+cU
+Gr
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+Fx
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+bN
+RT
+th
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(40,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+UO
+EV
+kU
+kU
+Rw
+ZJ
+Rw
+ON
+Qn
+HU
+OM
+Rw
+Rw
+Rw
+Rw
+Rw
+Rw
+Rw
+Rw
+Rw
+AJ
+LV
+ON
+ON
+kU
+kU
+kU
+UO
+ZN
+ZN
+jr
+gN
+Gr
+Gr
+Gr
+cU
+QB
+cU
+cU
+Gr
+UO
+UO
+UO
+ZN
+ZN
+ZN
+Fx
+Fx
+UO
+ZN
+UO
+UO
+UO
+UO
+wK
+YQ
+Fn
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(41,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+kU
+kU
+Qn
+Qn
+ON
+Qn
+Qn
+xf
+OM
+Rw
+Rw
+Rw
+Rw
+Rw
+Rw
+Rw
+Rw
+Rw
+hs
+LV
+Qn
+ON
+kU
+kU
+UO
+UO
+UO
+UO
+jl
+Fx
+Wb
+Gr
+Gr
+ru
+QB
+cU
+cU
+Gr
+qn
+UO
+UO
+UO
+UO
+UO
+Fx
+jk
+Fx
+UO
+UO
+ZN
+ZN
+ZN
+bN
+rS
+sX
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(42,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+kU
+kU
+HM
+Qn
+HM
+nt
+Qn
+Hl
+ga
+WS
+dL
+dL
+Jp
+IR
+Rw
+Rw
+Rw
+LJ
+ma
+ju
+nt
+Qn
+kU
+kU
+UO
+ZN
+ZN
+UO
+Fx
+Wb
+Gb
+Gr
+Gr
+cU
+QB
+cU
+cU
+iR
+Fx
+Fx
+ZN
+ZN
+ZN
+ZN
+UO
+Fx
+Fx
+ZN
+UO
+ZN
+ZN
+ZN
+bN
+kR
+ph
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(43,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Pb
+EV
+kU
+kU
+Qn
+Qn
+ON
+nt
+Qn
+ON
+Hl
+VW
+VW
+ju
+Rw
+Rw
+Ka
+Aw
+Aw
+Aw
+Aw
+Qn
+HM
+nt
+kU
+kU
+UO
+ZN
+GE
+UO
+Fx
+Fx
+Gb
+Gr
+cU
+xm
+wJ
+cU
+cU
+Gr
+Fx
+Fx
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+UO
+UO
+ZN
+ZN
+bN
+Ih
+sL
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(44,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+Pb
+UO
+kU
+kU
+xh
+ON
+ON
+HM
+nt
+Qn
+ON
+Rw
+Rw
+ON
+ON
+Rw
+ON
+nt
+HM
+nt
+Qn
+ON
+kU
+kU
+UO
+ZN
+bm
+ZN
+UO
+Fx
+Fx
+Gb
+Gr
+cU
+QB
+cU
+xg
+xg
+xg
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+ZN
+bN
+PK
+ND
+bN
+go
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(45,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+UO
+kU
+kU
+qk
+Rw
+ON
+Qn
+HM
+nt
+kk
+ON
+ON
+eN
+Md
+ON
+ON
+nt
+ON
+nt
+ON
+ON
+kU
+kU
+ZN
+ZN
+bm
+ZN
+ZN
+ZX
+Jk
+Wb
+Gr
+cU
+QB
+cU
+xg
+QS
+Fx
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+bN
+Wd
+Wd
+iH
+go
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(46,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+UO
+kU
+kU
+kU
+kU
+kU
+kU
+kU
+kU
+kU
+Qn
+Fu
+oS
+Qn
+HU
+kU
+kU
+kU
+kU
+kU
+kU
+UO
+Fx
+Te
+QL
+Fx
+Fx
+Gb
+Gb
+Fx
+Gr
+cU
+QB
+cU
+xg
+QS
+Fx
+ZN
+UO
+UO
+UO
+UO
+UO
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+bN
+Wd
+Wd
+iH
+go
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(47,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+UO
+UO
+Pb
+Pb
+Pb
+Pb
+Pb
+Pb
+Pb
+kU
+ON
+nE
+nE
+Xe
+AL
+kU
+kU
+kU
+kU
+kU
+kU
+UO
+Gr
+Gr
+Gr
+Gr
+Gr
+Gr
+Gr
+Gr
+Gr
+cU
+QB
+cU
+xg
+NI
+Fx
+UO
+UO
+ZN
+UO
+ZN
+ZN
+ZN
+UO
+UO
+UO
+UO
+UO
+UO
+ZN
+bN
+Wd
+Wd
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(48,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+Pb
+kU
+Rw
+Qn
+Qn
+HM
+ON
+kU
+kU
+ZN
+ZN
+ZN
+ZN
+En
+En
+cZ
+Vk
+Gr
+cU
+cU
+cU
+cU
+cU
+cU
+QB
+cU
+xg
+QS
+Fx
+go
+UO
+ZN
+UO
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+bN
+Wd
+Wd
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Pb
+NU
+NU
+NU
+NU
+NU
+NU
+ZN
+NU
+NU
+NU
+NU
+"}
+(49,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+kU
+kU
+lf
+bf
+kW
+kU
+kU
+UO
+ZN
+cK
+xZ
+xZ
+xZ
+vK
+vK
+kT
+kT
+GA
+GA
+GA
+UP
+GA
+Qg
+wJ
+cU
+xg
+QS
+QS
+Fx
+UO
+ZN
+Lp
+ZN
+ZN
+Uf
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+bN
+Wd
+Wd
+iH
+NU
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+UO
+Pb
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+NU
+"}
+(50,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+kU
+kU
+kU
+kU
+xg
+xg
+xg
+UO
+cK
+oI
+En
+cZ
+cZ
+Vk
+Vk
+Vk
+Vk
+cU
+cU
+cU
+QB
+cU
+QB
+cU
+cU
+Rs
+ud
+ud
+QS
+Fx
+Fx
+Fx
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+bN
+Wd
+Wd
+bN
+Pb
+Pb
+uS
+UO
+UO
+Lp
+Fx
+Fx
+Pb
+ZN
+ZN
+sW
+lJ
+cH
+ZN
+sW
+lJ
+cH
+ZN
+NU
+"}
+(51,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Pb
+Pb
+ZN
+UO
+kU
+kU
+xg
+cK
+xZ
+xZ
+oI
+cZ
+cZ
+Vk
+Vk
+Vk
+Vk
+cU
+Gr
+cU
+cU
+So
+QB
+cU
+Zd
+GA
+BB
+BB
+sE
+sE
+HT
+sE
+sE
+OD
+Ol
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+bN
+Wd
+Wd
+iH
+NU
+ZN
+Fx
+UO
+Fx
+Fx
+Jk
+QS
+ZN
+ZN
+ZN
+sW
+xz
+cH
+ZN
+sW
+xz
+cH
+ZN
+NU
+"}
+(52,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Dt
+Dt
+Dt
+Dt
+Dt
+Gr
+Gr
+UY
+Gr
+Gr
+Gr
+Gr
+Gr
+Gr
+cU
+Gr
+Gr
+Gr
+Gr
+Gr
+Gr
+Gr
+QB
+Gr
+Gr
+Gr
+xg
+QS
+QS
+QS
+fO
+QS
+QS
+QS
+DA
+UO
+UO
+UO
+UO
+UO
+UO
+UO
+UO
+Fx
+bN
+Wd
+Wd
+iH
+NU
+ZN
+Fx
+Fx
+Fx
+Jk
+oA
+QS
+bO
+ZN
+ZN
+sW
+xz
+cH
+ZN
+sW
+xz
+cH
+ZN
+NU
+"}
+(53,1,1) = {"
+ZN
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+fJ
+ZN
+ZN
+ZN
+ZN
+ZN
+Uf
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Dt
+et
+Kl
+uq
+Qj
+vK
+xZ
+Rp
+Gr
+Vk
+Vk
+cU
+Gr
+cU
+cU
+cU
+Gr
+cU
+En
+cU
+cU
+cU
+QB
+cU
+cU
+cU
+ET
+QS
+Pb
+Pb
+Wq
+GT
+GT
+QS
+DA
+Fx
+Fx
+ZN
+ZN
+UO
+ZN
+ZN
+Fx
+QS
+bN
+Wd
+Wd
+iH
+NU
+ZN
+bO
+bO
+bO
+bO
+KO
+bO
+bO
+ZN
+ZN
+ZN
+mZ
+ZN
+ZN
+ZN
+mZ
+ZN
+ZN
+NU
+"}
+(54,1,1) = {"
+ZN
+fJ
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Uf
+Dt
+et
+TW
+et
+lj
+Vk
+cZ
+wQ
+Gr
+En
+En
+cU
+Gr
+wQ
+Vk
+Vk
+Gr
+wQ
+cU
+cU
+Vk
+cU
+QB
+Vk
+cU
+cU
+xg
+xg
+Pb
+NI
+QS
+QS
+QS
+QS
+DA
+QS
+Fx
+Fx
+ZN
+UO
+ZN
+ZN
+Fx
+QS
+bN
+Wd
+Wd
+iH
+NU
+ZN
+ce
+PE
+Oq
+YP
+IA
+Vn
+Vn
+RC
+bB
+SH
+La
+SH
+SH
+SH
+df
+WZ
+WZ
+NU
+"}
+(55,1,1) = {"
+ZN
+fJ
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+bj
+bj
+bj
+bj
+bj
+bj
+bj
+bj
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+ZN
+Uf
+ZN
+ZN
+ZN
+ZN
+ZN
+Dt
+et
+TW
+et
+Dt
+Vk
+Vk
+Vk
+KY
+En
+Vk
+cU
+cU
+Vk
+En
+Vk
+Gr
+Vk
+En
+cU
+cU
+cU
+bV
+cU
+Vk
+cU
+Og
+Gr
+qn
+QS
+QS
+gU
+gU
+QS
+DA
+QS
+Fx
+Fx
+Fx
+Pb
+ZN
+Fx
+QS
+QS
+bN
+Wd
+Wd
+bN
+bO
+bO
+PW
+bO
+EJ
+bO
+Ii
+bO
+bO
+ZN
+ZN
+ZN
+mZ
+ZN
+ZN
+ZN
+mZ
+ZN
+ZN
+Fx
+"}
+(56,1,1) = {"
+ZN
+fJ
+UO
+bj
+bj
+bj
+bj
+bj
+bj
+bj
+bj
+bj
+bj
+xA
+xA
+dS
+xA
+xA
+xA
+Ac
+xA
+xA
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Dt
+Cc
+TW
+et
+XW
+cU
+cU
+cU
+Gr
+Gr
+Vk
+Vk
+Gr
+wQ
+wQ
+En
+wQ
+wQ
+wQ
+cU
+So
+En
+QB
+cU
+Vk
+cU
+Vk
+Gr
+qn
+CD
+gU
+gU
+gU
+QS
+DA
+QS
+QS
+QS
+QS
+Pb
+Fx
+QS
+QS
+QS
+bN
+Bn
+aA
+aA
+BF
+cQ
+Zc
+rn
+rn
+gc
+KO
+KO
+bO
+ZN
+ZN
+sW
+xz
+cH
+ZN
+sW
+xz
+cH
+ZN
+NU
+"}
+(57,1,1) = {"
+ZN
+fJ
+ZN
+bj
+xA
+xA
+xA
+xA
+xA
+bj
+ZN
+ZN
+bj
+xA
+wp
+sh
+wp
+xA
+wp
+Hj
+wp
+xA
+UO
+UO
+UO
+ZN
+ZN
+Pb
+UO
+Pb
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+Dt
+ml
+TW
+et
+Ge
+cU
+cU
+WF
+Gr
+cU
+cU
+PL
+Gr
+Gr
+wQ
+xg
+xg
+xg
+xg
+xg
+xg
+cU
+QB
+En
+cU
+cU
+Gr
+Gr
+qn
+qn
+qn
+qn
+qn
+bN
+kM
+rd
+rd
+rd
+rd
+rd
+bN
+bN
+bN
+bN
+bN
+Io
+Wd
+XZ
+bO
+bO
+bO
+vG
+KO
+KO
+gA
+KO
+bO
+ZN
+ZN
+sK
+xz
+WZ
+ZN
+sW
+xz
+cH
+ZN
+NU
+"}
+(58,1,1) = {"
+ZN
+fJ
+ZN
+bj
+LI
+wp
+wp
+OF
+of
+gz
+ZN
+ZN
+bj
+xA
+UK
+vA
+wp
+xA
+UK
+zA
+wp
+xA
+UO
+ZN
+ZN
+ZN
+ZN
+Pb
+Pb
+Pb
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+Dt
+yu
+TW
+et
+Ge
+cU
+cU
+cU
+Gr
+hL
+cU
+cU
+Gr
+wQ
+jK
+xg
+Jk
+Cp
+Cp
+dJ
+xg
+cU
+QB
+cU
+Pg
+Og
+qn
+ZN
+ZN
+UO
+UO
+UO
+UO
+BZ
+md
+EL
+be
+aA
+aA
+aA
+aA
+aA
+aA
+aA
+ys
+Ca
+Wd
+XZ
+XZ
+MJ
+Ko
+KO
+qX
+SQ
+zY
+EJ
+bO
+ZN
+ZN
+WZ
+Uf
+ZN
+Uf
+sW
+bp
+cH
+ZN
+Fx
+"}
+(59,1,1) = {"
+ZN
+fJ
+ZN
+bj
+pW
+SZ
+Zq
+ez
+CU
+bU
+Lv
+Lv
+Lv
+xA
+vy
+sS
+pU
+xA
+td
+Zg
+FP
+xA
+UO
+ZN
+ZN
+ZN
+ZN
+Pb
+Pb
+Pb
+ZN
+ZN
+ZN
+UO
+UO
+UO
+Dt
+vE
+TW
+et
+XW
+cU
+Eb
+Eb
+Gr
+SK
+cU
+Gr
+Gr
+wQ
+wQ
+xg
+Cp
+dJ
+Xd
+Cp
+xg
+xg
+in
+xg
+xg
+xg
+ZN
+ZN
+ZN
+UO
+UO
+ZN
+UO
+rd
+rd
+rd
+dt
+QQ
+QQ
+QQ
+QQ
+dt
+rd
+Wd
+qy
+XZ
+Wd
+Wd
+Wd
+MJ
+Ko
+KO
+KO
+jB
+KO
+KO
+bO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Fx
+"}
+(60,1,1) = {"
+ZN
+fJ
+UO
+bj
+xA
+wp
+JY
+vT
+of
+yP
+lC
+Xv
+Xv
+xA
+cw
+BY
+cw
+xA
+cw
+BY
+cw
+xA
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+pn
+Dt
+Dt
+Dt
+Dt
+bP
+Gr
+SK
+Gr
+Gr
+Gr
+jK
+En
+xg
+Jk
+Cp
+ZN
+ZN
+Fx
+Gr
+QB
+Gr
+AV
+AV
+UO
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+Pb
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+bN
+ld
+Wd
+Wd
+Wd
+Wd
+Wd
+rd
+rd
+rd
+rd
+rd
+rd
+rd
+rd
+NU
+NU
+NU
+NU
+Fx
+NU
+NU
+Fx
+Fx
+NU
+Fx
+"}
+(61,1,1) = {"
+UO
+UO
+Tp
+Tp
+Tp
+Xu
+Xu
+Xu
+Xu
+Sq
+Sq
+mG
+mG
+Un
+oU
+PO
+oU
+Un
+oU
+Zs
+oU
+wh
+OE
+OE
+OE
+EU
+OE
+YM
+pN
+OE
+YM
+pN
+OE
+OE
+OE
+Dt
+Dt
+et
+TW
+Tc
+et
+Dt
+AV
+ZN
+Gr
+Gr
+Gr
+Gr
+Gr
+wQ
+mf
+xg
+dJ
+Cp
+ZN
+ZN
+UO
+Nd
+Sd
+ID
+UO
+UO
+ZN
+ZN
+ec
+UO
+UO
+ZN
+ZN
+Pb
+Fx
+qn
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+BS
+Wd
+Wd
+Wd
+XZ
+KN
+za
+za
+za
+Ew
+za
+za
+za
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(62,1,1) = {"
+ZN
+UO
+Tp
+Im
+XP
+Sp
+XP
+XP
+Tp
+mG
+mG
+Sq
+Sq
+mG
+mG
+mG
+mG
+mG
+mG
+mG
+mG
+wh
+OE
+OE
+OE
+lx
+OE
+OE
+rb
+OE
+OE
+rb
+ao
+OE
+OE
+Dt
+Dt
+et
+TW
+et
+et
+Dt
+Fx
+UO
+Gr
+Gr
+ZN
+ZN
+jR
+Fx
+qn
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+Nd
+Sd
+qn
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+Uf
+ZN
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Go
+QQ
+aD
+rd
+rd
+rd
+rd
+rd
+rd
+rd
+rd
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(63,1,1) = {"
+ZN
+UO
+Tp
+fG
+XP
+Sp
+XP
+XP
+Tp
+mG
+mG
+Sq
+Sv
+ac
+mG
+mG
+mG
+mG
+mG
+mG
+mG
+wh
+Dn
+wl
+fK
+Om
+fK
+qs
+xO
+fK
+qs
+bu
+fK
+Xr
+fK
+fK
+rb
+uq
+dR
+et
+et
+Dt
+Dt
+UO
+UO
+UO
+ZN
+UO
+jR
+Cp
+qn
+UO
+UO
+UO
+UO
+UO
+Fx
+qn
+lk
+Nl
+Fw
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+aF
+Dq
+KN
+za
+za
+za
+za
+za
+Ew
+Ew
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(64,1,1) = {"
+UO
+UO
+Tp
+Em
+Sp
+PJ
+Sp
+Sp
+Tp
+jL
+Sv
+mG
+mG
+mG
+mG
+mG
+mG
+mG
+mG
+mG
+mG
+wh
+cW
+Jr
+OE
+lx
+OE
+OE
+pN
+OE
+OE
+pN
+OE
+Jr
+OE
+Dt
+Dt
+et
+et
+et
+et
+Dt
+Dt
+UO
+UO
+Fx
+ZN
+UO
+qn
+Cp
+ID
+UO
+ZN
+ZN
+ZN
+ZN
+UO
+Ha
+Nw
+Sd
+Fw
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+aF
+Qo
+rd
+rd
+rd
+rd
+rd
+rd
+rd
+rd
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(65,1,1) = {"
+ZN
+UO
+Tp
+fG
+XP
+Sp
+XP
+XP
+Tp
+mG
+mG
+lC
+mG
+mG
+mG
+mG
+mG
+mG
+mG
+mG
+mG
+wh
+Rx
+Jr
+OE
+XC
+OE
+OE
+pN
+OE
+OE
+pN
+OE
+AG
+OE
+OE
+Dt
+et
+JO
+et
+et
+Dt
+ZN
+ZN
+ZN
+UO
+UO
+Fx
+qn
+Cp
+ID
+ZN
+ZN
+ZN
+ZN
+ZN
+Fx
+ZN
+Nd
+Ss
+Fw
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+aF
+sw
+Yu
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(66,1,1) = {"
+ZN
+UO
+Tp
+fG
+XP
+Sp
+XP
+dm
+Tp
+mG
+mG
+mG
+mG
+KM
+mG
+mG
+mG
+KM
+mG
+mG
+mG
+wh
+Rx
+aH
+fE
+Dt
+Dt
+Ar
+Dt
+yv
+yv
+wt
+aw
+oK
+rt
+yv
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+UO
+ZN
+ZN
+UO
+ZN
+ZN
+qn
+Fx
+lz
+ZN
+ZN
+Uf
+ZN
+ZN
+UO
+ZN
+ZN
+nm
+co
+ZN
+ZN
+iq
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+XZ
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(67,1,1) = {"
+UO
+UO
+Tp
+Bq
+NY
+NY
+NY
+Bq
+Tp
+xA
+Qq
+If
+If
+Qq
+Qq
+xA
+xA
+xA
+xA
+xA
+xA
+wh
+Dt
+rp
+Dt
+Dt
+Dt
+TK
+Dt
+Ox
+zn
+cx
+cx
+Yj
+ev
+WJ
+vN
+Pb
+UO
+UO
+Uf
+UO
+ZN
+ZN
+ZN
+UO
+ZN
+Pt
+Pt
+Cp
+ID
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+qn
+iJ
+AV
+ZN
+ZN
+ZN
+ZN
+UO
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(68,1,1) = {"
+ZN
+ZN
+Tp
+Gn
+tJ
+tJ
+tJ
+Rl
+kq
+bo
+KH
+gw
+gw
+gw
+ey
+Kf
+hv
+jn
+rD
+rC
+Ls
+Qj
+fK
+Yq
+ao
+OE
+ao
+OE
+Dt
+CH
+cx
+cx
+cx
+Yj
+ev
+Ga
+vN
+UO
+ZN
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+Fx
+Fx
+kr
+sR
+Zl
+RY
+Xd
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+qn
+Pz
+qn
+ZN
+ZN
+ZN
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(69,1,1) = {"
+ZN
+ZN
+fM
+tW
+kz
+Km
+sI
+kz
+Fd
+kQ
+gw
+gw
+NQ
+TI
+ey
+Kf
+WI
+oZ
+gw
+Jh
+gw
+Dt
+OE
+OE
+OE
+OE
+OE
+OE
+Dt
+ev
+Pq
+Pq
+cx
+Yj
+cx
+HP
+zQ
+Fx
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Fx
+Fx
+QS
+kr
+sR
+sR
+RY
+Wb
+ZN
+ZN
+ZN
+ZN
+Fx
+UO
+Dk
+Vx
+ZN
+ZN
+ZN
+UO
+Lp
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(70,1,1) = {"
+ZN
+ZN
+Px
+tW
+kz
+CL
+zi
+kz
+ww
+Xu
+oO
+TI
+vJ
+gw
+ey
+Kf
+wM
+oR
+an
+Jh
+gw
+Dt
+OE
+OE
+EA
+ao
+OE
+OE
+Dt
+ZP
+cx
+cx
+cx
+DW
+tN
+oe
+vN
+Fx
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Fx
+Cp
+QS
+kr
+Zl
+yl
+RY
+Xd
+Xd
+ZN
+ZN
+ZN
+UO
+ZN
+qn
+Ss
+LU
+ZN
+ZN
+ZN
+Lp
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(71,1,1) = {"
+ZN
+UO
+Px
+tW
+kz
+rc
+JI
+kz
+kz
+eR
+gw
+gw
+gw
+gw
+ey
+Kf
+lN
+Qt
+zC
+xS
+gw
+Dt
+Dt
+Dt
+Dt
+Dt
+OE
+OE
+Dt
+ci
+cx
+cx
+OX
+Pq
+fn
+mS
+vN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+qn
+qn
+qn
+kr
+Zl
+yl
+RY
+Fx
+UO
+dJ
+ZN
+ZN
+UO
+ZN
+qn
+Sd
+LU
+ZN
+ZN
+UO
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(72,1,1) = {"
+ZN
+ZN
+Px
+tW
+kz
+kz
+kz
+kz
+bL
+Xu
+HL
+gw
+gw
+TI
+gw
+qc
+gw
+gw
+bF
+gw
+gw
+Dt
+OE
+Dt
+OE
+Dt
+OE
+OE
+Dt
+pR
+cx
+cx
+cx
+cx
+cx
+Ox
+vN
+Pb
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+Fx
+Fx
+Fx
+kr
+yl
+Zl
+RY
+jk
+dJ
+UO
+Jk
+RY
+Fx
+ZN
+qn
+Ss
+Fw
+ZN
+ZN
+UO
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(73,1,1) = {"
+ZN
+ZN
+Fd
+kz
+kz
+kz
+kz
+kz
+eF
+Xu
+HN
+gw
+gw
+gw
+gw
+Bw
+gw
+gw
+Qk
+cN
+gw
+fL
+OE
+fL
+OE
+TA
+OE
+PT
+Dt
+ev
+cx
+Pq
+cx
+cx
+fn
+Ox
+Cz
+AV
+UO
+ZN
+ZN
+ZN
+ZN
+Fx
+Fx
+Pb
+RY
+kr
+kr
+kJ
+RY
+RY
+RY
+RY
+RY
+RY
+Fx
+UO
+jR
+Ss
+eC
+ZN
+LL
+kr
+kr
+mz
+mz
+mz
+mz
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(74,1,1) = {"
+ZN
+ZN
+YW
+kz
+kz
+kz
+kz
+kz
+eF
+Tp
+Kf
+Kf
+Kf
+jw
+Kf
+Kf
+Ce
+Ce
+Ce
+wO
+KJ
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+Dt
+nQ
+yb
+cx
+Qf
+cx
+wC
+ev
+Cz
+Fx
+ZN
+ZN
+ZN
+ZN
+Fx
+Fx
+Wb
+QS
+RY
+Pd
+Pd
+QG
+QG
+Pd
+rA
+QG
+kr
+RY
+RY
+RY
+RY
+tF
+RY
+Zl
+cM
+gS
+Vf
+LA
+LA
+LA
+Fa
+Ww
+Tf
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(75,1,1) = {"
+ZN
+ZN
+Tp
+kz
+kz
+Ig
+iI
+rf
+rf
+Xu
+UO
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+ZN
+ZN
+hK
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+NU
+Cz
+LE
+KR
+Yl
+Fp
+Yl
+mT
+KR
+Cz
+qn
+ZN
+ZN
+ZN
+ZN
+Fx
+Fx
+Fx
+Cp
+RY
+ir
+Pd
+QG
+QG
+Pd
+rA
+QG
+QG
+QG
+QG
+Bb
+kr
+RX
+kr
+kr
+kr
+uZ
+QG
+QG
+Vf
+QG
+sr
+FQ
+bI
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(76,1,1) = {"
+UO
+UO
+Tp
+Tp
+Tp
+Tp
+Tp
+hS
+Xu
+Xu
+UO
+ZN
+ZN
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+hK
+ZN
+ZN
+ZN
+ZN
+ZN
+NU
+ZN
+NU
+NU
+NU
+NU
+go
+NU
+NU
+Fx
+go
+NU
+NU
+ZN
+ZN
+Fx
+Fx
+Fx
+Fx
+XA
+Wb
+RY
+QG
+Pd
+QG
+FQ
+QG
+QG
+QG
+QG
+QG
+QG
+QG
+QG
+qr
+QG
+QG
+QG
+QG
+QG
+QG
+QG
+QG
+sr
+FQ
+sr
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(77,1,1) = {"
+ZN
+UO
+UO
+UO
+UO
+UO
+UO
+ZN
+UO
+UO
+UO
+UO
+UO
+NU
+ZN
+aJ
+aJ
+aJ
+ZN
+hK
+ZN
+aJ
+aJ
+aJ
+ZN
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ec
+ZN
+ZN
+ZN
+ZN
+ZN
+Fx
+Fx
+QS
+Cp
+QS
+Jk
+RY
+hG
+QG
+QG
+QG
+Pd
+rA
+QG
+kr
+kr
+QG
+QG
+QG
+rI
+kE
+kr
+kr
+oQ
+FQ
+QG
+QG
+QG
+Fa
+gN
+Of
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(78,1,1) = {"
+ZN
+ZN
+UO
+ZN
+ZN
+ZN
+UO
+ZN
+UO
+UO
+ZN
+UO
+ZN
+NU
+ZN
+eW
+Ef
+Ef
+tM
+if
+tM
+Ef
+Ef
+Ro
+ZN
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Pb
+Pb
+Pb
+Pb
+Pb
+Pb
+RY
+QG
+QG
+QG
+QG
+KU
+DF
+IK
+kr
+dH
+QG
+QG
+QG
+FQ
+ew
+ew
+kr
+GQ
+ew
+QG
+QG
+kV
+lF
+Fx
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(79,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+UO
+ZN
+NU
+ZN
+wu
+wu
+wu
+ZN
+hK
+ZN
+wu
+wu
+wu
+ZN
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+qn
+qn
+qn
+qn
+qn
+qn
+kr
+oy
+vV
+vV
+QG
+QG
+QG
+Pd
+kr
+dH
+QG
+QG
+QG
+QG
+ew
+ew
+kr
+Mj
+ew
+FQ
+QG
+kV
+lF
+Fx
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(80,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+hK
+ZN
+ZN
+ZN
+ZN
+ZN
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Fx
+Fx
+Fx
+Wb
+QS
+QS
+kr
+vV
+vV
+vV
+QG
+hN
+QG
+Pd
+kr
+dH
+Id
+Mi
+QG
+QG
+wo
+gR
+kr
+ew
+ew
+QG
+QG
+kV
+lF
+Fx
+qn
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(81,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+NU
+ZN
+aJ
+aJ
+aJ
+ZN
+hK
+ZN
+aJ
+aJ
+aJ
+ZN
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+qn
+AV
+qn
+qn
+AV
+qn
+kr
+kr
+kr
+kr
+kr
+kr
+kr
+kr
+kr
+kr
+kr
+kr
+RH
+kr
+kr
+kr
+kr
+ew
+ew
+QG
+QG
+kV
+lF
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(82,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+NU
+ZN
+eW
+Ef
+Ef
+Gj
+sN
+tM
+Ef
+Ef
+Ro
+ZN
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Fx
+Fx
+Fx
+Fx
+Fx
+Fx
+Fx
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+uW
+FQ
+uW
+ZN
+ZN
+RY
+RY
+FQ
+kr
+kr
+kr
+lF
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(83,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+NU
+ZN
+wu
+wu
+wu
+ZN
+hK
+ZN
+wu
+wu
+wu
+ZN
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+Le
+RH
+Le
+ZN
+ZN
+ZN
+RY
+QG
+QG
+Zk
+Id
+lF
+ZN
+ZN
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(84,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ch
+ZN
+ZN
+ZN
+ZN
+ZN
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+RY
+QG
+BJ
+QG
+rH
+lF
+ZN
+ZN
+Fx
+ZN
+Fx
+ZN
+Fx
+ZN
+Fx
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(85,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+RY
+RY
+RY
+RY
+RY
+RY
+Pb
+Pb
+Pb
+Pb
+Pb
+Pb
+Pb
+Pb
+Pb
+Pb
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(86,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+NU
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(87,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(88,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(89,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(90,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
+(91,1,1) = {"
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+kD
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+ZN
+"}
