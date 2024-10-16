@@ -248,7 +248,7 @@ var/global/objects_thrown_when_explode = FALSE
 	if(usr.incapacitated())
 		return TRUE
 	if (href_list["lookitem"])
-		usr.examination(src)
+		usr.examination(src,href_list["lookitem"])
 	if (!usr.dexterity_check())
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return TRUE

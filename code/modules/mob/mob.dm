@@ -1104,7 +1104,7 @@ Use this proc preferably at the end of an equipment loadout
 		memory()
 
 //mob verbs are faster than object verbs. See http://www.byond.com/forum/?post=1326139&page=2#comment8198716 for why this isn't atom/verb/examine()
-/mob/verb/examination(atom/A as mob|obj|turf in view(src)) //It used to be oview(12), but I can't really say why
+/mob/verb/examination(atom/A as mob|obj|turf in view(src), atom/via) //It used to be oview(12), but I can't really say why
 	set name = "Examine"
 	set category = "IC"
 
@@ -1116,11 +1116,13 @@ Use this proc preferably at the end of an equipment loadout
 		to_chat(src, "<span class='sinister'>[pick("Oh god what's this even?","Paranoia and panic prevent you from calmly observing whatever this is.")]</span>")
 		return
 
-	if(get_dist(A,client.eye) > client.view)
+	if(!via || !istype(via) || via == src)
+		via = A
+	if(get_dist(via,client.eye) > client.view)
 		to_chat(src, "<span class='notice'>It is too far away to make out.</span>")
 		return
 
-	face_atom(A)
+	face_atom(via)
 	A.examine(src)
 	if(A.admin_desc && src.client?.holder?.admin_examine)
 		to_chat(src, "<span class='rough'>Admin-only: [A.admin_desc]</span>")
