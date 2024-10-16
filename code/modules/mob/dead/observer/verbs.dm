@@ -277,7 +277,7 @@
 
 	var/datum/gas_mixture/environment = usr.loc.return_readonly_air()
 
-	var/pressure = environment.return_pressure()
+	var/pressure = environment.pressure
 	var/total_moles = environment.total_moles()
 	var/tiles = environment.return_volume() / CELL_VOLUME
 

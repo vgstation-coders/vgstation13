@@ -408,21 +408,21 @@
 /obj/spacepod/proc/return_pressure()
 	. = 0
 	if(use_internal_tank)
-		. =  cabin_air.return_pressure()
+		. =  cabin_air.pressure
 	else
 		var/datum/gas_mixture/t_air = get_turf_air()
 		if(t_air)
-			. = t_air.return_pressure()
+			. = t_air.pressure
 	return
 
 /obj/spacepod/proc/return_temperature()
 	. = 0
 	if(use_internal_tank)
-		. = cabin_air.return_temperature()
+		. = cabin_air.temperature
 	else
 		var/datum/gas_mixture/t_air = get_turf_air()
 		if(t_air)
-			. = t_air.return_temperature()
+			. = t_air.temperature
 	return
 
 /obj/spacepod/MouseDropTo(atom/moved, mob/user)
@@ -601,8 +601,8 @@
 		var/datum/gas_mixture/cabin_air = spacepod.cabin_air
 
 		var/release_pressure = ONE_ATMOSPHERE
-		var/cabin_pressure = cabin_air.return_pressure()
-		var/pressure_delta = min(release_pressure - cabin_pressure, (tank_air.return_pressure() - cabin_pressure)/2)
+		var/cabin_pressure = cabin_air.pressure
+		var/pressure_delta = min(release_pressure - cabin_pressure, (tank_air.pressure - cabin_pressure)/2)
 		var/transfer_moles = 0
 		if(pressure_delta > 0) //cabin pressure lower than release pressure
 			if(tank_air.return_temperature() > 0)
@@ -613,7 +613,7 @@
 			var/datum/gas_mixture/t_air = spacepod.get_turf_air()
 			pressure_delta = cabin_pressure - release_pressure
 			if(t_air)
-				pressure_delta = min(cabin_pressure - t_air.return_pressure(), pressure_delta)
+				pressure_delta = min(cabin_pressure - t_air.pressure, pressure_delta)
 			if(pressure_delta > 0) //if location pressure is lower than cabin pressure
 				transfer_moles = pressure_delta * cabin_air.return_volume() / (cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
 				var/datum/gas_mixture/removed = cabin_air.remove(transfer_moles)

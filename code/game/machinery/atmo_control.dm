@@ -80,7 +80,7 @@
 		var/total_moles = air_sample.total_moles
 		for(var/metric in metrics_monitored)
 			if(metric == "pressure")
-				signal.data["pressure"] =round(air_sample.return_pressure(),0.1)
+				signal.data["pressure"] =round(air_sample.pressure,0.1)
 			if(metric == "temperature")
 				signal.data["temperature"] = round(air_sample.temperature,0.1)
 			else if(metric in XGM.gases)

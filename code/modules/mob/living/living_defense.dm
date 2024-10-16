@@ -341,7 +341,7 @@
 
 	var/turf/T = get_turf(src)
 	var/flevel = air.calculate_firelevel(T)
-	var/pressure = air.return_pressure()
+	var/pressure = air.pressure
 	FireBurn(flevel,temperature, pressure)
 
 /mob/living/proc/FireBurn(var/firelevel = 0, var/temperature, var/pressure)

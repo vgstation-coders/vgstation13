@@ -451,7 +451,7 @@
 		fire_alert = 0
 
 	//Account for massive pressure differences
-	var/pressure = environment.return_pressure()
+	var/pressure = environment.pressure
 	var/adjusted_pressure = calculate_affecting_pressure(pressure) //Returns how much pressure actually affects the mob.
 	switch(adjusted_pressure)
 		if(HAZARD_HIGH_PRESSURE to INFINITY)

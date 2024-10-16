@@ -460,7 +460,7 @@
 			qdel(src)
 	else
 		var/datum/gas_mixture/environment = proj_turf.return_readonly_air()
-		var/pressure = environment.return_pressure()
+		var/pressure = environment.pressure
 		if(pressure < 50)
 			name = "strong resonance field"
 			resonance_damage = 60

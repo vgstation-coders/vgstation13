@@ -619,7 +619,7 @@
 			dat += "No gasses detected.<br>"
 
 		else
-			var/pressure = environment.return_pressure()
+			var/pressure = environment.pressure
 			var/total_moles = environment.total_moles()
 
 			dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"

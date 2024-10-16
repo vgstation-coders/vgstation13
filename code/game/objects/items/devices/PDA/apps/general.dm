@@ -395,7 +395,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 			dat += "No gasses detected.<br>"
 
 		else
-			var/pressure = environment.return_pressure()
+			var/pressure = environment.pressure
 			var/total_moles = environment.total_moles()
 
 			dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"

@@ -385,7 +385,7 @@ Subject's pulse: ??? BPM"})
 		unit.volume = unit_vol
 		unit.copy_from(scanned)
 		scanned = unit
-	var/pressure = scanned.return_pressure()
+	var/pressure = scanned.pressure
 	var/total_moles = scanned.total_moles()
 	var/message = ""
 	if(!container || istype(container, /turf))

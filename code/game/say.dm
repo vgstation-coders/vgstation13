@@ -62,7 +62,7 @@ var/global/lastDecTalkUse = 0
 		var/atmos = 0
 		var/datum/gas_mixture/current_air = T.return_readonly_air()
 		if(current_air)
-			atmos = round(current_air.return_pressure()/ONE_ATMOSPHERE, 0.1)
+			atmos = round(current_air.pressure/ONE_ATMOSPHERE, 0.1)
 		else
 			atmos = 0 //no air
 

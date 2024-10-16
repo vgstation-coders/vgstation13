@@ -868,7 +868,7 @@
 	var/datum/gas_mixture/firemix = new /datum/gas_mixture
 	firemix.adjust_gas(GAS_PLASMA, 666)
 	gas_jet = firemix
-	jet_pressure = firemix.return_pressure()
+	jet_pressure = firemix.pressure
 	gas_jet.temperature = 383.15
 	burn_strength = gas_jet.temperature
 

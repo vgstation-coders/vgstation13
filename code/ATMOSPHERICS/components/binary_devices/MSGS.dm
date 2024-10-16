@@ -41,7 +41,7 @@
 		return
 
 	//Output handling, stolen from pump code.
-	var/output_starting_pressure = air2.return_pressure()
+	var/output_starting_pressure = air2.pressure
 
 	if((target_pressure - output_starting_pressure) > 0.01)
 		//No need to output gas if target is already reached!
@@ -60,7 +60,7 @@
 
 	//Input handling. Literally pump code again with the target pressure being the max pressure of the MSGS
 	if(on)
-		var/input_starting_pressure = air1.return_pressure()
+		var/input_starting_pressure = air1.pressure
 
 		if((max_pressure - input_starting_pressure) > 0.01)
 			//No need to output gas if target is already reached!
@@ -82,8 +82,8 @@
 /obj/machinery/atmospherics/binary/msgs/ui_data()
 	var/list/data = list()
 
-	data["pressure"] = round(air.return_pressure(), 0.01)
-	data["temperature"] = air.return_temperature()
+	data["pressure"] = round(air.pressure, 0.01)
+	data["temperature"] = air.temperature
 	data["power"] = on
 	data["targetPressure"] = target_pressure
 	data["gases"] = list()
@@ -152,7 +152,7 @@
 	if((update_flags & MSGS_ON) != !(stat & (NOPOWER | BROKEN | FORCEDISABLE)))
 		update = 1
 
-	var/pressure = air.return_pressure() // null ref error here.
+	var/pressure = air.pressure // null ref error here.
 	var/i = clamp(round(pressure / (max_pressure / 5)), 0, 5)
 	if(i != last_pressure)
 		update = 1

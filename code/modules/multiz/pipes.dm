@@ -64,7 +64,7 @@
 /obj/machinery/atmospherics/pipe/zpipe/check_pressure(pressure)
 	var/datum/gas_mixture/environment = loc.return_readonly_air()
 
-	var/pressure_difference = pressure - environment.return_pressure()
+	var/pressure_difference = pressure - environment.pressure
 
 	if(pressure_difference > maximum_pressure)
 		burst()

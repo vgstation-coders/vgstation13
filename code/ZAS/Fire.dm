@@ -234,7 +234,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/datum/thermal_material/material = src.thermal_material
 	var/datum/gas_mixture/air = T.return_readonly_air()
 	var/oxy_ratio  = air.molar_ratio(GAS_OXYGEN)
-	var/temperature = air.return_temperature()
+	var/temperature = air.temperature
 	var/delta_t
 	var/heat_out = 0 //J
 	var/oxy_used = 0 //mols

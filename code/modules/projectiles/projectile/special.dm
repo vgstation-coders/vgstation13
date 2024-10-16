@@ -145,7 +145,7 @@
 	if(!istype(proj_turf, /turf))
 		return
 	var/datum/gas_mixture/environment = proj_turf.return_readonly_air()
-	var/pressure = environment.return_pressure()
+	var/pressure = environment.pressure
 	if(pressure < 50)
 		name = "full strength kinetic force"
 		damage += low_pressure_bonus

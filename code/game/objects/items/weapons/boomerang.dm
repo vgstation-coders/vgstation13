@@ -175,7 +175,7 @@
 	var/datum/gas_mixture/current_air = T.return_readonly_air()
 	var/atmosphere = 0
 	if(current_air)
-		atmosphere = current_air.return_pressure()
+		atmosphere = current_air.pressure
 
 	if (atmosphere < ONE_ATMOSPHERE/2)
 		visible_message("\The [boomerang] dramatically fails to come back due to the lack of air pressure.")

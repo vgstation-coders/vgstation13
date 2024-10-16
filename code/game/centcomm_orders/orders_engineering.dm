@@ -67,7 +67,7 @@
 	if (!istype(C))
 		return 0
 	var/datum/gas_mixture/GM = C.return_readonly_air()
-	if ((GM.gas?.len == 1) && (GAS_PLASMA in GM.gas) && (GM.return_temperature() < 2) && (GM.pressure > 1000))
+	if ((GM.gas?.len == 1) && (GAS_PLASMA in GM.gas) && (GM.temperature < 2) && (GM.pressure > 1000))
 		return 1
 	return 0
 

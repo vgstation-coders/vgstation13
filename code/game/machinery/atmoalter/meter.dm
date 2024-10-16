@@ -61,7 +61,7 @@
 		spawn(0) qdel(src)
 		return PROCESS_KILL
 
-	var/env_pressure = environment.return_pressure()
+	var/env_pressure = environment.pressure
 	if(env_pressure <= 0.15*ONE_ATMOSPHERE)
 		icon_state = "meter0"
 	else if(env_pressure <= 1.8*ONE_ATMOSPHERE)
@@ -112,7 +112,7 @@
 	if (src.target)
 		var/datum/gas_mixture/environment = target.return_readonly_air()
 		if(environment)
-			t += "The pressure gauge reads [round(environment.return_pressure(), 0.01)] kPa; [environment.temperature_kelvin_pretty()]K ([environment.temperature_celsius_pretty()]&deg;C)"
+			t += "The pressure gauge reads [round(environment.pressure, 0.01)] kPa; [environment.temperature_kelvin_pretty()]K ([environment.temperature_celsius_pretty()]&deg;C)"
 		else
 			t += "The sensor error light is blinking."
 	else
