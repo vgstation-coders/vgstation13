@@ -386,7 +386,7 @@ Subject's pulse: ??? BPM"})
 		unit.copy_from(scanned)
 		scanned = unit
 	var/pressure = scanned.pressure
-	var/total_moles = scanned.total_moles()
+	var/total_moles = scanned.total_moles
 	var/message = ""
 	if(!container || istype(container, /turf))
 		message += "<span class='bnotice'>Results:</span>"

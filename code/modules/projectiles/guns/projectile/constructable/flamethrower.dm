@@ -106,7 +106,7 @@
 		return
 	tank_gas.update_values()
 	var/pressure = tank_gas.pressure
-	var/total_moles = tank_gas.total_moles()
+	var/total_moles = tank_gas.total_moles
 	if(total_moles)
 		var/o2_concentration = tank_gas[GAS_OXYGEN]/total_moles
 		if(o2_concentration > 0.01)

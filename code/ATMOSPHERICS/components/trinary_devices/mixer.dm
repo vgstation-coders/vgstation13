@@ -56,8 +56,8 @@
 		var/transfer_moles2 = ((node2_concentration * pressure_delta) * output_volume) / (air_temperature2 * R_IDEAL_GAS_EQUATION)
 
 		//fix the mix if one of the inputs has insufficient gas
-		var/air1_moles = air1.total_moles()
-		var/air2_moles = air2.total_moles()
+		var/air1_moles = air1.total_moles
+		var/air2_moles = air2.total_moles
 		if((air1_moles < transfer_moles1) || (air2_moles < transfer_moles2))
 			if(!transfer_moles1 || !transfer_moles2)
 				return

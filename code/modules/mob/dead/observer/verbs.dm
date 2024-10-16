@@ -278,7 +278,7 @@
 	var/datum/gas_mixture/environment = usr.loc.return_readonly_air()
 
 	var/pressure = environment.pressure
-	var/total_moles = environment.total_moles()
+	var/total_moles = environment.total_moles
 	var/tiles = environment.return_volume() / CELL_VOLUME
 
 	to_chat(src, "<span class='notice'><B>Results:</B></span>")

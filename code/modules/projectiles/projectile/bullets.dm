@@ -755,7 +755,7 @@
 	if(!gas_jet)
 		bullet_die()
 	else
-		original_total_moles = gas_jet.total_moles()
+		original_total_moles = gas_jet.total_moles
 
 /obj/item/projectile/bullet/fire_plume/proc/create_puff()
 	if(gas_jet)
