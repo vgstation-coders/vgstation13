@@ -6,6 +6,10 @@
 /mob/living/simple_animal/hostile/giant_spider/hunter,
 /turf/space,
 /area)
+"x" = (
+/obj/effect/landmark/map_element/salvage_shuttle,
+/turf/space,
+/area)
 "K" = (
 /mob/living/simple_animal/hostile/giant_spider/nurse,
 /turf/space,
@@ -15,14 +19,18 @@
 a
 a
 a
-m
 a
 a
 a
 a
 a
+a
+a
+x
 "}
 (2,1,1) = {"
+a
+a
 a
 a
 a
@@ -36,6 +44,8 @@ a
 (3,1,1) = {"
 a
 a
+a
+m
 a
 a
 a
@@ -54,11 +64,15 @@ a
 a
 a
 a
+a
+a
 "}
 (5,1,1) = {"
 a
 a
-K
+a
+a
+a
 a
 a
 a
@@ -75,10 +89,14 @@ a
 a
 a
 a
-m
+a
+a
+a
 "}
 (7,1,1) = {"
 a
+a
+K
 a
 a
 a
@@ -97,15 +115,19 @@ a
 a
 a
 a
+m
+a
 a
 "}
 (9,1,1) = {"
-K
 a
 a
 a
 a
-K
+a
+a
+a
+a
 a
 a
 a
@@ -120,12 +142,16 @@ a
 a
 a
 a
+a
+a
 "}
 (11,1,1) = {"
+K
 a
 a
 a
 a
+K
 a
 a
 a
@@ -133,6 +159,8 @@ a
 a
 "}
 (12,1,1) = {"
+a
+a
 a
 a
 a
@@ -153,8 +181,12 @@ a
 a
 a
 a
+a
+a
 "}
 (14,1,1) = {"
+a
+a
 a
 a
 a
@@ -175,6 +207,8 @@ a
 a
 a
 a
+a
+a
 "}
 (16,1,1) = {"
 a
@@ -183,7 +217,35 @@ a
 a
 a
 a
+a
+a
+a
+a
+a
+"}
+(17,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(18,1,1) = {"
+a
+a
+a
+a
+a
+a
 m
+a
+a
 a
 a
 "}
