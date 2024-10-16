@@ -148,10 +148,10 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(!force_smoke)
 		if(prob(clamp(lerp(temp,T20C,T0C + 1000,96,100),96,100))) //4% chance of smoke at 20C, 0% at 1000C
 			return FALSE
-	var/smoke_density = clamp(5 * ((MINOXY2BURN/oxy) ** 2),1,5)
+	var/smoke_density = clamp(3 * ((MINOXY2BURN/oxy) ** 2),1,3)
 	var/datum/effect/system/smoke_spread/bad/smoke = new
 	smoke.set_up(smoke_density,0,where)
-	smoke.time_to_live = 10 SECONDS
+	smoke.time_to_live = 3 SECONDS
 	smoke.start()
 
 /atom/proc/check_fire_protection()
