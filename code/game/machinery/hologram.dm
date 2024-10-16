@@ -127,7 +127,8 @@ var/list/holopads = list()
 	I don't need to check for client since they're clicking on an object.
 	This may change in the future but for now will suffice.*/
 
-	if(master && (master==user || (!isAIEye(master) && !isAI(master))) && holo)//If there is a hologram, remove it. But only if the user is the master, or the master isn't another AI. Otherwise do nothing.
+	//If there is a hologram, remove it. But only if the user is the master, or the master isn't another AI. Otherwise do nothing.
+	if(master && (master == user || master == user.eyeobj || (!isAIEye(master) && !isAI(master))) && holo)
 		clear_holo()
 	else if(user.eyeobj.loc != src.loc)//Set client eye on the object if it's not already.
 		user.eyeobj.forceMove(get_turf(src))
