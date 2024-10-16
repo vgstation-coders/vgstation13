@@ -76,7 +76,7 @@
 		signal.data["tag"] = id_tag
 		signal.data["timestamp"] = world.time
 
-		var/datum/gas_mixture/air_sample = return_air()
+		var/datum/gas_mixture/air_sample = return_readonly_air()
 		var/total_moles = air_sample.total_moles
 		for(var/metric in metrics_monitored)
 			if(metric == "pressure")

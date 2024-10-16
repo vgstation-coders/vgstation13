@@ -232,7 +232,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		extinguish()
 		return
 	var/datum/thermal_material/material = src.thermal_material
-	var/datum/gas_mixture/air = T.return_air()
+	var/datum/gas_mixture/air = T.return_readonly_air()
 	var/oxy_ratio  = air.molar_ratio(GAS_OXYGEN)
 	var/temperature = air.return_temperature()
 	var/delta_t
@@ -409,7 +409,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(thermal_mass <= 0)
 		ashify()
 		return
-	var/datum/gas_mixture/G = return_air()
+	var/datum/gas_mixture/G = return_readonly_air()
 	if(!G)
 		return
 	if(!(G.temperature >= autoignition_temperature))
@@ -498,7 +498,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(locate(/obj/effect/fire) in src)
 		return 0
 
-	var/datum/gas_mixture/air_contents = return_air()
+	var/datum/gas_mixture/air_contents = return_readonly_air()
 	if(!air_contents)
 		return 0
 
@@ -546,7 +546,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(!flammable || check_fire_protection() || thermal_mass <= 0)
 		return FALSE
 
-	var/datum/gas_mixture/air_contents = return_air()
+	var/datum/gas_mixture/air_contents = return_readonly_air()
 	if(air_contents[GAS_OXYGEN] < 1)
 		return FALSE
 
@@ -591,7 +591,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	. = ..()
 	dir = pick(cardinal)
 	var/turf/T = get_turf(loc)
-	var/datum/gas_mixture/air_contents=T.return_air()
+	var/datum/gas_mixture/air_contents=T.return_readonly_air()
 	if(air_contents)
 		setfirelight(air_contents.calculate_firelevel(get_turf(src)), air_contents.temperature)
 	SSair.add_hotspot(src)
@@ -680,7 +680,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 			var/turf/simulated/enemy_tile = get_step(S, direction)
 			var/liquidburn = FALSE
 			if(istype(enemy_tile))
-				var/datum/gas_mixture/acs = enemy_tile.return_air()
+				var/datum/gas_mixture/acs = enemy_tile.return_readonly_air()
 				if(!acs)
 					continue
 				if(!acs.check_combustability(enemy_tile))

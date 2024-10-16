@@ -275,7 +275,7 @@
 	if (!( istype(usr.loc, /turf) ))
 		return
 
-	var/datum/gas_mixture/environment = usr.loc.return_air()
+	var/datum/gas_mixture/environment = usr.loc.return_readonly_air()
 
 	var/pressure = environment.return_pressure()
 	var/total_moles = environment.total_moles()

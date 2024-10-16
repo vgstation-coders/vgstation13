@@ -613,7 +613,7 @@
 	if (isnull(loc))
 		dat += "Unable to obtain a reading.<br>"
 	else
-		var/datum/gas_mixture/environment = loc.return_air()
+		var/datum/gas_mixture/environment = loc.return_readonly_air()
 
 		if(isnull(environment))
 			dat += "No gasses detected.<br>"

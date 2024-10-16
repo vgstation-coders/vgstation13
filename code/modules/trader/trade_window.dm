@@ -48,7 +48,7 @@
 /obj/structure/trade_window/process()
 	var/turf/T = get_turf(src)
 	if(T && !T.c_airblock(T)) //we are on an airflowing tile with pressure between 80 and 180
-		var/datum/gas_mixture/current_air = T.return_air()
+		var/datum/gas_mixture/current_air = T.return_readonly_air()
 		var/pressure = current_air.return_pressure()
 		if(pressure <= 180 && pressure >= 80)
 			if(closed)

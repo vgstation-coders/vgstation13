@@ -238,13 +238,13 @@
 	return air_contents
 
 /obj/machinery/portable_atmospherics/canister/proc/return_temperature()
-	var/datum/gas_mixture/GM = src.return_air()
+	var/datum/gas_mixture/GM = src.return_readonly_air()
 	if(GM && GM.volume>0)
 		return GM.temperature
 	return 0
 
 /obj/machinery/portable_atmospherics/canister/proc/return_pressure()
-	var/datum/gas_mixture/GM = src.return_air()
+	var/datum/gas_mixture/GM = src.return_readonly_air()
 	if(GM && GM.volume>0)
 		return GM.return_pressure()
 	return 0

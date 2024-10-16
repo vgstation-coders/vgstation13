@@ -217,7 +217,7 @@
 		signal.data["tag"] = id_tag
 		signal.data["timestamp"] = world.time
 
-		var/datum/gas_mixture/air_sample = return_air()
+		var/datum/gas_mixture/air_sample = return_readonly_air()
 
 		var/pressure = round(air_sample.return_pressure(),0.1)
 		alert = (pressure < ONE_ATMOSPHERE*0.8)

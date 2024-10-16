@@ -24,7 +24,7 @@
 
 	var/datum/gas_mixture/environment // Added to prevent null location errors-- TLE
 	if(loc)
-		environment = loc.return_air()
+		environment = loc.return_readonly_air()
 
 	if (stat != DEAD) //still breathing
 		//Lungs required beyond this point

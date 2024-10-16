@@ -109,7 +109,7 @@
 	if(!loc)
 		return
 
-	var/datum/gas_mixture/environment = loc.return_air()
+	var/datum/gas_mixture/environment = loc.return_readonly_air()
 
 	var/pressure_delta = get_pressure_delta(environment)
 	if((environment.temperature || air_contents.temperature) && pressure_delta > 0.5)

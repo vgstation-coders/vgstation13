@@ -26,7 +26,7 @@
 	message_admins("[key_name_admin(user)] has activated an ancient cryopod.")
 	log_game("[key_name(user)] has activated an ancient cryopod.")
 	var/turf/location = get_turf(src)
-	var/datum/gas_mixture/environment = location.return_air()
+	var/datum/gas_mixture/environment = location.return_readonly_air()
 	var/pressure = environment.return_pressure()
 	if(((pressure < WARNING_HIGH_PRESSURE) && pressure > WARNING_LOW_PRESSURE))
 		thawing = TRUE

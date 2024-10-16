@@ -195,7 +195,7 @@
 		return
 
 
-	var/datum/gas_mixture/environment = loc.return_air()
+	var/datum/gas_mixture/environment = loc.return_readonly_air()
 	handle_stalling()
 	if(stalled)
 		return //if we're at max pressure we don't do anything

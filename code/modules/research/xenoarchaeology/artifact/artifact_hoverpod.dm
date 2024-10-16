@@ -46,7 +46,7 @@
 	var/turf/mech_turf = get_turf(src)
 	if(!istype(mech_turf, /turf))
 		return
-	var/datum/gas_mixture/environment = mech_turf.return_air()
+	var/datum/gas_mixture/environment = mech_turf.return_readonly_air()
 	var/pressure = environment.return_pressure()
 	if(pressure > 50)
 		step_in = 4

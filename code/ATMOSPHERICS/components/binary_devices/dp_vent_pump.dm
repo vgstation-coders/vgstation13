@@ -22,7 +22,7 @@
 	//4: Do not pass output_pressure_max
 
 	frequency = 0
-	
+
 	var/datum/radio_frequency/radio_connection
 
 	machine_flags = MULTITOOL_MENU
@@ -73,7 +73,7 @@
 	if(!on)
 		return
 
-	var/datum/gas_mixture/environment = loc.return_air()
+	var/datum/gas_mixture/environment = loc.return_readonly_air()
 
 	var/pressure_delta = get_pressure_delta(environment)
 	if(pressure_delta > 0.5)

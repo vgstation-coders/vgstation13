@@ -53,7 +53,7 @@
 
 	use_power(5)
 
-	var/datum/gas_mixture/environment = target.return_air()
+	var/datum/gas_mixture/environment = target.return_readonly_air()
 	if(!environment)
 		icon_state = "meterX"
 		// Pop the meter off when the environment we're attached to croaks.
@@ -110,7 +110,7 @@
 /obj/machinery/meter/proc/status()
 	var/t = ""
 	if (src.target)
-		var/datum/gas_mixture/environment = target.return_air()
+		var/datum/gas_mixture/environment = target.return_readonly_air()
 		if(environment)
 			t += "The pressure gauge reads [round(environment.return_pressure(), 0.01)] kPa; [environment.temperature_kelvin_pretty()]K ([environment.temperature_celsius_pretty()]&deg;C)"
 		else
