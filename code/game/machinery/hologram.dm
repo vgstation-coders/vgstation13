@@ -80,7 +80,7 @@ var/list/holopads = list()
 		to_chat(user, "<span class='notice'>You stop transmitting to [target].</span>")
 		target.clear_holo()
 		return
-	if(isAIEye(master) || isAI(master))
+	if(master && (isAIEye(master) || isAI(master)))
 		to_chat(user, "<span class='notice'>[master] is using \the [src], you cannot interact with it until it is done.</span>")
 		return
 	if(holo)
