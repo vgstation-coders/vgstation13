@@ -1116,6 +1116,8 @@ Use this proc preferably at the end of an equipment loadout
 		to_chat(src, "<span class='sinister'>[pick("Oh god what's this even?","Paranoia and panic prevent you from calmly observing whatever this is.")]</span>")
 		return
 
+	if(via && !istype(via))
+		via = locate(via)
 	if(!via || !istype(via) || via == src)
 		via = A
 	if(get_dist(via,client.eye) > client.view)
