@@ -26,11 +26,13 @@ var/list/holopads = list()
 	name = "holopad"
 	desc = "It's a floor-mounted device for projecting holographic images. It is activated remotely."
 	icon_state = "holopad0"
+	var/atom/movable/scanner  //Which thing is being scanned?
 	var/mob/master  //Which AI, if any, is controlling the object? Only one AI may control a hologram at any time.
 	var/obj/machinery/hologram/holopad/target //Which holopad are projections sent to if used by a person?
-	var/obj/machinery/hologram/holopad/last_target //For convenience of accessing in the selection list again
 	var/obj/machinery/hologram/holopad/source //Source of above
-	var/last_request = 0 //to prevent request spam. ~Carn
+	var/obj/machinery/hologram/holopad/last_target //For convenience of accessing in the selection list agains
+	var/last_ai_request = 0 //to prevent request spam. ~Carn
+	var/last_transmit_request = 0 //to prevent request spam. ~Carn
 	var/holo_range = 6 // Change to change how far the AI can move away from the holopad before deactivating.
 	var/holopad_mode = 0	//0 = RANGE BASED, 1 = AREA BASED
 	var/user_holocolor = "#0099ff" //Color for holopad talkers
@@ -87,10 +89,15 @@ var/list/holopads = list()
 		to_chat(user, "<span class='notice'>You stop transmitting [holo][source ? " from [source]" : ""].</span>")
 		clear_holo()
 		return
+	if(source?.scanray && !holo)
+		if(!activate_holo(user))
+			source.target = null
+			source = null
+		return
 	switch(alert(user,"Would you like to request an AI's presence or transmit to another holopad?","Holopad functions","Request AI presence","Transmit to other","Cancel"))
 		if("Request AI presence")
-			if(last_request + 200 < world.time) //don't spam the AI with requests you jerk!
-				last_request = world.time
+			if(last_ai_request + 200 < world.time) //don't spam the AI with requests you jerk!
+				last_ai_request = world.time
 				to_chat(user, "<span class='notice'>You request an AI's presence.</span>")
 				var/area/area = get_area(src)
 				for(var/mob/living/silicon/ai/AI in living_mob_list)
@@ -111,12 +118,14 @@ var/list/holopads = list()
 			if(other_holopads.len)
 				target = input(user,"Select a holopad to transmit to","Holopad transmission",last_target) as null|anything in other_holopads
 				last_target = target
-				if(target)
+				if(target && (target.last_transmit_request + 200 < world.time || !scanray))
+					target.last_transmit_request = world.time
 					target.source = src
-					if(!target.activate_holo(user))
-						target.source = null
-						target = null
-
+					create_scanray(user)
+					to_chat(user, "<span class='notice'>Transmission request sent to [target].</span>")
+					target.icon_state = "holopad1"
+					target.visible_message("<span class='big info'>[bicon(target)] Incoming transmission from [src]!</span>")
+					
 			else
 				to_chat(user, "<span class='warning'>ERROR: </span>No other AI holopads were found to transmit to.")
 
@@ -220,14 +229,11 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 	use_power = MACHINE_POWER_USE_ACTIVE//Active power usage.
 	holo.set_glide_size(DELAY2GLIDESIZE(1))
-	if(source)
-		source.scanray = new(source.loc)
-		colored_ray = getFlatIcon(source.scanray)
-		colored_ray.ColorTone(holocolor)
-		source.scanray.icon = colored_ray
+	if(source && !source.scanray)
+		create_scanray(user,T)
 	if(!istype(eye)) // to stop unforeseen consequences with these colliding and overriding the hologram bumps
-		master.register_event(/event/face, src, nameof(src::move_hologram()))
 		master.register_event(/event/moved, src, nameof(src::move_hologram()))
+		master.register_event(/event/face, src, nameof(src::move_hologram()))
 		master.register_event(/event/equipped, src, nameof(src::update_holo()))
 		master.register_event(/event/unequipped, src, nameof(src::update_holo()))
 		master.register_event(/event/damaged, src, nameof(src::update_holo()))
@@ -239,6 +245,20 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 				break
 
 	return 1
+
+/obj/machinery/hologram/holopad/proc/create_scanray(atom/movable/scanning, turf/T = loc)
+	if(scanner)
+		scanner.unregister_event(/event/moved, src, nameof(src::move_scanray()))
+		scanner.register_event(/event/face, src, nameof(src::move_scanray()))
+	scanner = scanning
+	scanner.register_event(/event/moved, src, nameof(src::move_scanray()))
+	scanner.register_event(/event/face, src, nameof(src::move_scanray()))
+	if(!scanray)
+		scanray = new(T)
+	var/icon/colored_ray = getFlatIcon(scanray)
+	colored_ray.ColorTone(user_holocolor)
+	scanray.icon = colored_ray
+	project_ray(scanner,scanray,scanner.loc)
 
 /obj/machinery/hologram/holopad/proc/update_holo(atom/item, slot, kind, amount)
 	if(holo && master)
@@ -344,7 +364,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			master.unregister_event(/event/moved, src, nameof(src::move_hologram()))
 			master.unregister_event(/event/equipped, src, nameof(src::update_holo()))
 			master.unregister_event(/event/unequipped, src, nameof(src::update_holo()))
-			master.register_event(/event/damaged, src, nameof(src::update_holo()))
+			master.unregister_event(/event/damaged, src, nameof(src::update_holo()))
 		if(istype(AI) && AI.current == src)
 			AI.current = null
 		master = null //Null the master, since no-one is using it now.
@@ -358,6 +378,8 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		spawn(5)
 			qdel(H)//Get rid of hologram.
 	if(source)
+		source.scanner.unregister_event(/event/moved, src, nameof(src::move_scanray()))
+		source.scanner.unregister_event(/event/face, src, nameof(src::move_scanray()))
 		QDEL_NULL(source.scanray)
 		source.target = null
 		source = null
@@ -395,6 +417,10 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 /obj/machinery/hologram/holopad/proc/is_in_projection_range()
 	return (isAIEye(master) && get_dist(master, src) <= holo_range) || (source && !isAIEye(master) && get_dist(master, source) <= holo_range) || advancedholo
 
+/obj/machinery/hologram/holopad/proc/move_scanray(var/forced = 0,var/atom/movable/mover)
+	if(scanner && scanray)
+		project_ray(scanner,scanray)
+	
 /obj/machinery/hologram/holopad/proc/move_hologram(var/forced = 0,var/atom/movable/mover)
 	if(holo)
 		if (is_in_projection_range())
@@ -407,8 +433,6 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 				var/x_offset = master.x - source.x
 				var/y_offset = master.y - source.y
 				dest = locate(src.x + x_offset, src.y + y_offset, src.z)
-				if(source.scanray)
-					source.project_ray(master,source.scanray)
 			else
 				dest = get_turf(master)
 				step_to(holo, master) // So it turns.
