@@ -63362,582 +63362,10 @@
 /obj/structure/grille/broken,
 /turf/space,
 /area)
-"dnA" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/machinery/door/poddoor{
-	id_tag = "salvage_privacy";
-	name = "Privacy Shutter"
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dnB" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/machinery/door/poddoor{
-	id_tag = "salvage_privacy";
-	name = "Privacy Shutter"
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dnC" = (
-/obj/structure/shuttle/diag_wall/black{
-	dir = 1
-	},
-/turf/space,
-/area/shuttle/salvage/start)
-"dnD" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/machinery/door/poddoor{
-	id_tag = "salvage_privacy";
-	name = "Privacy Shutter"
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dnE" = (
-/obj/structure/shuttle/diag_wall/black{
-	dir = 8
-	},
-/turf/space,
-/area/shuttle/salvage/start)
-"dnF" = (
-/obj/docking_port/destination/salvage/start{
-	dir = 2
-	},
+"doI" = (
+/obj/effect/landmark/map_element/salvage_shuttle_spiders,
 /turf/space,
 /area)
-"dnG" = (
-/obj/structure/closet/cabinet,
-/obj/item/weapon/storage/backpack/satchel,
-/obj/item/clothing/shoes/jackboots,
-/obj/item/clothing/under/captain_fly{
-	name = "Captain's uniform"
-	},
-/obj/item/clothing/suit/hgpirate,
-/obj/item/clothing/head/hgpiratecap,
-/obj/item/clothing/glasses/eyepatch,
-/obj/item/weapon/gun/energy/bison,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dnH" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dnI" = (
-/turf/simulated/wall/shuttle/unsmoothed/black,
-/area/shuttle/salvage/start)
-"dnJ" = (
-/obj/structure/table/woodentable,
-/obj/item/weapon/storage/fancy/matchbox,
-/obj/item/clothing/mask/cigarette/cigar,
-/obj/item/weapon/reagent_containers/food/drinks/flask{
-	pixel_x = 8
-	},
-/obj/item/clothing/accessory/medal/gold/captain,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dnK" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dnL" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/door/airlock/multi_tile/glass{
-	id_tag = "salvage_external"
-	},
-/obj/docking_port/shuttle,
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dnM" = (
-/obj/structure/bed,
-/obj/item/weapon/bedsheet/rd,
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/door_control{
-	id_tag = "salvage_privacy";
-	name = "Privacy Shutters";
-	pixel_y = -25
-	},
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dnN" = (
-/obj/structure/shuttle/engine/propulsion{
-	dir = 4
-	},
-/turf/space,
-/area/shuttle/salvage/start)
-"dnO" = (
-/obj/structure/shuttle/engine/heater{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/engine{
-	icon_state = "enginebot"
-	},
-/area/shuttle/salvage/start)
-"dnP" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine{
-	dir = 1;
-	icon_state = "enginewarn"
-	},
-/area/shuttle/salvage/start)
-"dnQ" = (
-/obj/machinery/door/airlock/hatch{
-	name = "Captain's Cabin";
-	req_access_txt = "65"
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dnR" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dnS" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/door/airlock/multi_tile/glass{
-	id_tag = "salvage_external"
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dnT" = (
-/obj/structure/bed,
-/obj/item/weapon/bedsheet/brown,
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/cobweb,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dnU" = (
-/obj/structure/bed,
-/obj/item/weapon/bedsheet/brown,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/spacecash/c1000,
-/mob/living/simple_animal/hostile/giant_spider/nurse,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dnV" = (
-/obj/structure/bed,
-/obj/item/weapon/bedsheet/brown,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dnW" = (
-/obj/machinery/suit_storage_unit/standard_unit,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dnX" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/closet/hydrant{
-	pixel_y = 32
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dnY" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/cobweb2,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dnZ" = (
-/obj/structure/bed,
-/obj/item/weapon/bedsheet/brown,
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/cobweb2,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"doa" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/machinery/door/poddoor{
-	density = 0;
-	icon_state = "pdoor0";
-	id_tag = "salvage_blast";
-	name = "Bridge Blast Doors";
-	opacity = 0
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dob" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/door_control{
-	id_tag = "salvage_blast";
-	name = "Blast Doors";
-	pixel_y = 25;
-	req_one_access_txt = "65"
-	},
-/obj/item/device/multitool,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"doc" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/cobweb,
-/obj/item/weapon/paper_bin{
-	pixel_x = 1;
-	pixel_y = 9
-	},
-/obj/item/weapon/pen,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dod" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/computerframe,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"doe" = (
-/obj/structure/bed/chair,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dof" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/machinery/door/poddoor{
-	density = 0;
-	icon_state = "pdoor0";
-	id_tag = "salvage_blast";
-	name = "Bridge Blast Doors";
-	opacity = 0
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dog" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/storage/fancy/donut_box,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"doh" = (
-/obj/machinery/door/airlock/hatch,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"doi" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/light/small{
-	dir = 4
-	},
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"doj" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/device/flashlight/flare{
-	pixel_x = 3;
-	pixel_y = 2
-	},
-/obj/item/device/flashlight/flare,
-/obj/item/device/flashlight/flare{
-	pixel_x = -3;
-	pixel_y = -1
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dok" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/clothing/suit/storage/hazardvest,
-/obj/item/clothing/glasses/welding,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dol" = (
-/obj/structure/fireaxecabinet{
-	pixel_x = -32
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dom" = (
-/obj/structure/bed/chair{
-	dir = 8
-	},
-/obj/effect/decal/cleanable/dirt,
-/mob/living/simple_animal/hostile/giant_spider/hunter,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"don" = (
-/obj/machinery/computer/shuttle_control/salvage,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"doo" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/folder/yellow,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dop" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"doq" = (
-/obj/structure/bed/chair{
-	dir = 8
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dor" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/storage/secure/briefcase,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dos" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/device/analyzer,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dot" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/lighter/zippo,
-/obj/item/weapon/storage/fancy/cigarettes,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dou" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/machinery/door/poddoor{
-	density = 0;
-	icon_state = "pdoor0";
-	id_tag = "salvage_blast";
-	name = "Bridge Blast Doors";
-	opacity = 0
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dov" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dow" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/device/radio,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dox" = (
-/obj/item/weapon/pickaxe{
-	pixel_x = 5
-	},
-/obj/item/weapon/pickaxe/shovel{
-	pixel_x = -5
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/cobweb,
-/turf/simulated/floor/engine{
-	icon_state = "enginebot"
-	},
-/area/shuttle/salvage/start)
-"doy" = (
-/obj/effect/decal/cleanable/dirt,
-/mob/living/simple_animal/hostile/giant_spider/nurse,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"doz" = (
-/obj/item/weapon/rack_parts,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine{
-	icon_state = "enginebot"
-	},
-/area/shuttle/salvage/start)
-"doA" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/computerframe,
-/obj/item/stack/cable_coil/random,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"doB" = (
-/obj/structure/bed/chair{
-	dir = 1
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"doC" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/closet/crate,
-/obj/item/device/flashlight/lantern,
-/obj/item/clothing/glasses/scanner/meson,
-/turf/simulated/floor/engine{
-	icon_state = "enginebot"
-	},
-/area/shuttle/salvage/start)
-"doD" = (
-/obj/structure/shuttle/diag_wall/black,
-/turf/space,
-/area/shuttle/salvage/start)
-"doE" = (
-/obj/machinery/portable_atmospherics/canister/oxygen,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine{
-	icon_state = "enginebot"
-	},
-/area/shuttle/salvage/start)
-"doF" = (
-/obj/structure/rack,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/clothing/mask/gas,
-/obj/item/clothing/mask/gas{
-	pixel_x = 4;
-	pixel_y = 2
-	},
-/turf/simulated/floor/engine{
-	icon_state = "enginebot"
-	},
-/area/shuttle/salvage/start)
-"doG" = (
-/obj/structure/closet/crate,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/card/id/salvage_captain,
-/obj/item/weapon/storage/belt/utility/full,
-/turf/simulated/floor/engine{
-	icon_state = "enginebot"
-	},
-/area/shuttle/salvage/start)
-"doH" = (
-/obj/effect/decal/cleanable/dirt,
-/mob/living/simple_animal/hostile/giant_spider/hunter,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"doI" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/rack,
-/obj/item/stack/sheet/metal{
-	amount = 50
-	},
-/obj/item/tool/weldingtool,
-/turf/simulated/floor/engine{
-	icon_state = "enginebot"
-	},
-/area/shuttle/salvage/start)
-"doJ" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine{
-	icon_state = "enginewarn"
-	},
-/area/shuttle/salvage/start)
-"doK" = (
-/obj/machinery/door/airlock/multi_tile/glass{
-	id_tag = "salvage_external"
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"doL" = (
-/obj/structure/shuttle/diag_wall/black{
-	dir = 4
-	},
-/turf/space,
-/area/shuttle/salvage/start)
-"doM" = (
-/obj/structure/bed/roller,
-/obj/structure/sink{
-	dir = 4;
-	pixel_x = 11
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/cobweb2,
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/shuttle/salvage/start)
-"doN" = (
-/obj/machinery/vending/wallmed1{
-	pixel_y = 28
-	},
-/obj/effect/decal/cleanable/dirt,
-/mob/living/simple_animal/hostile/giant_spider/hunter,
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/shuttle/salvage/start)
-"doO" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/shuttle/salvage/start)
-"doP" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/soap,
-/obj/item/weapon/storage/firstaid/regular{
-	pixel_x = 2;
-	pixel_y = 6
-	},
-/obj/item/weapon/storage/firstaid/toxin{
-	pixel_x = -2;
-	pixel_y = 4
-	},
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/shuttle/salvage/start)
-"doQ" = (
-/obj/machinery/sleeper,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/shuttle/salvage/start)
-"doR" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/door/airlock/multi_tile/glass{
-	id_tag = "salvage_external"
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
 "doS" = (
 /obj/machinery/station_map{
 	forced_zLevel = 6
@@ -517505,17 +516933,17 @@ ccH
 ccH
 ccH
 ccH
-dnE
-doa
-dof
-dof
-dof
-dou
-doD
 ccH
 ccH
 ccH
 ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+doI
 ccH
 ccH
 ccH
@@ -517807,13 +517235,13 @@ ccH
 ccH
 ccH
 ccH
-dnI
-doc
-dog
-don
-dor
-dow
-dnI
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -518109,13 +517537,13 @@ ccH
 ccH
 ccH
 ccH
-dnI
-dob
-dnH
-dom
-dnH
-dov
-dnI
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -518411,13 +517839,13 @@ ccH
 ccH
 ccH
 ccH
-dnI
-dod
-doi
-dnH
-doi
-doA
-dnI
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -518711,17 +518139,17 @@ ccH
 ccH
 ccH
 ccH
-dnE
-dnI
-dnI
-dnI
-dnI
-doh
-dnI
-dnI
-dnI
-dnI
-doD
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -519011,21 +518439,21 @@ ccH
 ccH
 ccH
 ccH
-dnE
-dnI
-dnI
-dnI
-dnW
-dnW
-dnR
-dnR
-dnR
-dnW
-dnW
-dnI
-dnI
-dnI
-doD
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -519313,21 +518741,21 @@ ccH
 ccH
 ccH
 ccH
-dnD
-dnJ
-dnH
-dnQ
-dnR
-dnR
-dnR
-dnR
-dnR
-dnR
-dnR
-doh
-doO
-doQ
-dnI
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -519615,21 +519043,21 @@ ccH
 ccH
 ccH
 ccH
-dnB
-dnH
-dnH
-dnI
-dnI
-dnI
-dnI
-dnR
-dnI
-dnI
-dnI
-dnI
-doN
-doO
-dnI
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -519917,21 +519345,21 @@ ccH
 ccH
 ccH
 ccH
-dnA
-dnG
-dnM
-dnI
-dnT
-dnH
-doh
-dnR
-dnI
-dox
-doE
-dnI
-doM
-doP
-dnI
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -520219,21 +519647,21 @@ ccH
 ccH
 ccH
 ccH
-dnC
-dnI
-dnI
-dnI
-dnV
-dnH
-dnI
-dnR
-dnI
-doz
-doG
-dnI
-dnI
-dnI
-doL
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -520524,15 +519952,15 @@ ccH
 ccH
 ccH
 ccH
-dnI
-dnU
-dnH
-dnI
-dnR
-doh
-doy
-doF
-dnI
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -520826,15 +520254,15 @@ ccH
 ccH
 ccH
 ccH
-dnI
-dnZ
-dnH
-dnI
-dnR
-dnI
-doC
-doI
-dnI
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -521126,19 +520554,19 @@ ccH
 ccH
 ccH
 ccH
-dnE
-dnI
-dnI
-dnI
-dnI
-dnI
-dnR
-dnI
-dnI
-dnI
-dnI
-dnI
-doD
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -521427,20 +520855,20 @@ ccH
 ccH
 ccH
 ccH
-dnF
-dnL
-dnP
-dnS
-dnP
-dnR
-dol
-dnR
-dnR
-dnR
-doJ
-doK
-doJ
-doR
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -521730,19 +521158,19 @@ ccH
 ccH
 ccH
 ccH
-dnK
-dnP
-dnR
-dnP
-dnR
-dnR
-dnR
-dnR
-dnR
-doJ
-dnR
-doJ
-dnK
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -522032,19 +521460,19 @@ ccH
 ccH
 ccH
 ccH
-dnC
-dnO
-dnI
-dnR
-doe
-dok
-dop
-dot
-doB
-dnR
-dnI
-dnO
-doL
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -522335,17 +521763,17 @@ ccH
 ccH
 ccH
 ccH
-dnN
-dnI
-dnX
-doe
-doj
-doo
-dos
-doB
-dnR
-dnI
-dnN
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -522638,15 +522066,15 @@ ccH
 ccH
 ccH
 ccH
-dnI
-dnY
-dnR
-dnR
-doq
-dnR
-dnR
-doH
-dnI
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -522940,15 +522368,15 @@ ccH
 ccH
 ccH
 ccH
-dnI
-dnO
-dnO
-dnO
-dnO
-dnO
-dnO
-dnO
-dnI
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH
@@ -523242,15 +522670,15 @@ ccH
 ccH
 ccH
 ccH
-dnC
-dnN
-dnN
-dnN
-dnN
-dnN
-dnN
-dnN
-doL
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
+ccH
 ccH
 ccH
 ccH

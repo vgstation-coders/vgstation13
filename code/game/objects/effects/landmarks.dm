@@ -198,6 +198,9 @@ var/list/map_landmarks = list()
 	
 /obj/effect/landmark/map_element/salvage_shuttle_skrites
 	maptype = /datum/map_element/fixedvault/salvage_shuttle_skrites
+	
+/obj/effect/landmark/map_element/salvage_shuttle_pets
+	maptype = /datum/map_element/fixedvault/salvage_shuttle_pets
     
 /obj/effect/landmark/map_element/deepspaceruin
 	maptype = /datum/map_element/fixedvault/deepspaceruin

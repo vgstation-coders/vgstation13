@@ -30,6 +30,10 @@
     name = "salvage shuttle cockroaches"
     file_path = "maps/fixedvaults/salvage_shuttle_skrites.dmm"
     
+/datum/map_element/fixedvault/salvage_shuttle_pets
+    name = "salvage shuttle pets"
+    file_path = "maps/fixedvaults/salvage_shuttle_pets.dmm"
+    
 /datum/map_element/fixedvault/spacegym
     name = "space gym"
     file_path = "maps/randomvaults/spacegym.dmm"
