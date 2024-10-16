@@ -3,6 +3,10 @@
 /mob/living/simple_animal/hostile/bigroach,
 /turf/space,
 /area)
+"w" = (
+/obj/effect/landmark/map_element/salvage_shuttle,
+/turf/space,
+/area)
 "H" = (
 /turf/space,
 /area)
@@ -13,15 +17,17 @@ H
 H
 H
 H
-a
 H
 H
 H
 H
 H
 H
+H
+w
 "}
 (2,1,1) = {"
+H
 H
 H
 H
@@ -48,9 +54,9 @@ H
 H
 H
 H
+H
 "}
 (4,1,1) = {"
-a
 H
 H
 H
@@ -60,7 +66,9 @@ a
 H
 H
 H
-a
+H
+H
+H
 H
 "}
 (5,1,1) = {"
@@ -75,7 +83,8 @@ H
 H
 H
 H
-a
+H
+H
 "}
 (6,1,1) = {"
 H
@@ -90,18 +99,20 @@ H
 H
 H
 H
+H
 "}
 (7,1,1) = {"
+a
 H
 H
 H
 H
 H
+a
 H
 H
 H
-H
-H
+a
 H
 H
 "}
@@ -109,11 +120,57 @@ H
 H
 H
 H
+H
+H
+H
+H
+H
+H
+H
+H
+a
+H
+"}
+(9,1,1) = {"
+H
+H
+H
+H
+H
+H
+H
+H
+H
+H
+H
+H
+H
+"}
+(10,1,1) = {"
+H
+H
+H
+H
+H
+H
+H
+H
+H
+H
+H
+H
+H
+"}
+(11,1,1) = {"
+H
+H
+H
 a
 H
 H
 H
 a
+H
 H
 H
 H

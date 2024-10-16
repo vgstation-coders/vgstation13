@@ -2,6 +2,10 @@
 "a" = (
 /turf/space,
 /area)
+"c" = (
+/obj/effect/landmark/map_element/salvage_shuttle,
+/turf/space,
+/area)
 "B" = (
 /mob/living/simple_animal/hostile/bear/polarbear,
 /turf/space,
@@ -15,14 +19,18 @@
 a
 a
 a
-B
 a
 a
 a
 a
 a
+a
+a
+c
 "}
 (2,1,1) = {"
+a
+a
 a
 a
 a
@@ -36,6 +44,8 @@ a
 (3,1,1) = {"
 a
 a
+a
+B
 a
 a
 a
@@ -54,10 +64,14 @@ a
 a
 a
 a
+a
+a
 "}
 (5,1,1) = {"
 a
-S
+a
+a
+a
 a
 a
 a
@@ -75,9 +89,13 @@ a
 a
 a
 a
-S
+a
+a
+a
 "}
 (7,1,1) = {"
+a
+S
 a
 a
 a
@@ -97,15 +115,19 @@ a
 a
 a
 a
+S
+a
 a
 "}
 (9,1,1) = {"
 a
-S
 a
 a
 a
-S
+a
+a
+a
+a
 a
 a
 a
@@ -120,12 +142,16 @@ a
 a
 a
 a
+a
+a
 "}
 (11,1,1) = {"
 a
+S
 a
 a
 a
+S
 a
 a
 a
@@ -133,6 +159,8 @@ a
 a
 "}
 (12,1,1) = {"
+a
+a
 a
 a
 a
@@ -153,9 +181,13 @@ a
 a
 a
 a
+a
+a
 "}
 (14,1,1) = {"
-S
+a
+a
+a
 a
 a
 a
@@ -175,8 +207,36 @@ a
 a
 a
 a
+a
+a
 "}
 (16,1,1) = {"
+S
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(17,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(18,1,1) = {"
 a
 a
 a
@@ -184,6 +244,8 @@ a
 a
 a
 S
+a
+a
 a
 a
 "}
