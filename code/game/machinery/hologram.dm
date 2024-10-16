@@ -64,9 +64,9 @@ var/list/holopads = list()
 /obj/machinery/hologram/holopad/examine(mob/user)
 	..()
 	if(source)
-		to_chat(user, "<span class='notice'>It's currently transmitting from [source].</span>")
+		to_chat(user, "<span class='notice'>It's currently transmitting from [source].[!holo ? " Press on it to accept the transmission." : ""]</span>")
 	if(target)
-		to_chat(user, "<span class='notice'>It's currently transmitting to [target].</span>")
+		to_chat(user, "<span class='notice'>It's currently transmitting to [target].[user == scanner ? " Press on it to stop." : ""]</span>")
 
 /obj/machinery/hologram/holopad/Destroy()
 	holopads -= src
