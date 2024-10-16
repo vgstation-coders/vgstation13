@@ -118,13 +118,15 @@ var/list/holopads = list()
 			if(other_holopads.len)
 				target = input(user,"Select a holopad to transmit to","Holopad transmission",last_target) as null|anything in other_holopads
 				last_target = target
-				if(target && (target.last_transmit_request + 200 < world.time || !scanray))
+				if(target && target.last_transmit_request + 200 < world.time)
 					target.last_transmit_request = world.time
 					target.source = src
 					create_scanray(user)
 					to_chat(user, "<span class='notice'>Transmission request sent to [target].</span>")
 					target.icon_state = "holopad1"
 					target.visible_message("<span class='big info'>[bicon(target)] Incoming transmission from [src]!</span>")
+				else
+					to_chat(user, "<span class='warning'>This target pad is stil cooling down from its last request.</span>")
 					
 			else
 				to_chat(user, "<span class='warning'>ERROR: </span>No other AI holopads were found to transmit to.")
