@@ -806,7 +806,7 @@ var/list/discounted_items_of_the_round = list()
 	item = /obj/item/weapon/storage/box/syndie_kit/fan
 	cost = 12
 	discounted_cost = 8
-	jobs_with_discount = list("Warden", "Head of Security")
+	jobs_with_discount = list("Warden", "Head of Security", "Bartender")
 
 /datum/uplink_item/jobspecific/command_security/evidenceforger
 	name = "Evidence Forger"
