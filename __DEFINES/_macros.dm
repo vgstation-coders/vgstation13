@@ -260,7 +260,7 @@
 
 #define isinvisible(A) (A.invisibility || A.alpha <= 1)
 
-#define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
+#define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[A];lookitem=\ref[user]'>[B].</a></span>"
 
 //Macros for roles/antags
 #define isfaction(A) (istype(A, /datum/faction))
