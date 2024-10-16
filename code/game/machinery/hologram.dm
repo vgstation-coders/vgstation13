@@ -209,6 +209,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(AI)
 		AI.current = src
 	master = user
+	holo.master = user
 	set_light(2, 0, holocolor)			//pad lighting
 	icon_state = "holopad1"
 	update_holo()
@@ -457,6 +458,19 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	plane = ABOVE_HUMAN_PLANE
 	anchored = 1//So space wind cannot drag it.
 	alpha = 200
+	var/mob/master
+
+/obj/effect/overlay/hologram/examine(mob/user)
+	if(ishuman(master))
+		var/mob/living/carbon/human/H = master
+		var/msg = H.get_examine_text(user)
+		msg = replacetext(msg,"[master.name]","[src]")
+		msg = replacetext(msg,"lookitem=\ref[user]","lookitem=\ref[src]")
+		to_chat(user, msg)
+		if(istype(user))
+			user.heard(master)
+	else
+		. = ..()
 
 /obj/effect/overlay/hologram/New()
 	..()
