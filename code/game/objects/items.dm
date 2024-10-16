@@ -247,6 +247,8 @@ var/global/objects_thrown_when_explode = FALSE
 
 	if(usr.incapacitated())
 		return TRUE
+	if (href_list["lookitem"])
+		usr.examination(src,href_list["lookitem"])
 	if (!usr.dexterity_check())
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return TRUE
@@ -1368,8 +1370,10 @@ var/global/objects_thrown_when_explode = FALSE
 	if(abstract)
 		return
 
-	for (var/mob/M in view(user))
-		M.show_message("[user] holds up [src]. <a HREF='?src=\ref[M];lookitem=\ref[src]'>Take a closer look.</a>",1)
+	for (var/atom/AM in view(world.view,user))
+		if(AM != user)
+			AM.on_see("[user] holds up [src]. <a HREF='?src=\ref[src];lookitem=\ref[AM]'>Take a closer look.</a>",A=user)
+	to_chat(user,"You hold up [src]. <a HREF='?src=\ref[src];lookitem=\ref[user]'>Take a closer look.</a>")
 
 /mob/living/carbon/verb/showoff()
 	set name = "Show Held Item"

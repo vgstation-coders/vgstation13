@@ -52,7 +52,7 @@
 /obj/item/clothing/suit/armor/plate_carrier/examine(mob/user)
 	..()
 	if(P)
-		to_chat(user, "<span class = 'notice'>It has \a [P] attached to it. <a HREF='?src=\ref[user];lookitem=\ref[P]'>Take a closer look.</a></span>")
+		to_chat(user, "<span class = 'notice'>It has \a [P] attached to it. <a HREF='?src=\ref[P];lookitem=\ref[user]'>Take a closer look.</a></span>")
 
 /obj/item/clothing/suit/armor/plate_carrier/proc/handle_user_damage(kind, amount)
 	if(!P)
