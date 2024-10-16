@@ -162,6 +162,7 @@ var/list/map_landmarks = list()
 	name = "map_element"
 	icon_state = "x3"
 	var/maptype = /datum/map_element
+	var/rotatable = TRUE
 
 /obj/effect/landmark/map_element/New()
 	. = ..()
@@ -175,7 +176,7 @@ var/list/map_landmarks = list()
 	if(maptype)
 		var/datum/map_element/ME = new maptype
 		if(istype(ME))
-			ME.load(src.x-1,src.y-1,src.z,(map.nameShort == "xoq" ? 180 : 0), override_can_rotate = (map.nameShort == "xoq"))
+			ME.load(src.x-1,src.y-1,src.z,(rotatable && map.nameShort == "xoq" ? 180 : 0), override_can_rotate = (rotatable && map.nameShort == "xoq"))
 	qdel(src)
 			
 /obj/effect/landmark/map_element/whiteship
@@ -186,21 +187,27 @@ var/list/map_landmarks = list()
     
 /obj/effect/landmark/map_element/salvage_shuttle
 	maptype = /datum/map_element/fixedvault/salvage_shuttle
+	rotatable = FALSE
 	
 /obj/effect/landmark/map_element/salvage_shuttle_spiders
 	maptype = /datum/map_element/fixedvault/salvage_shuttle_spiders
+	rotatable = FALSE
 	
 /obj/effect/landmark/map_element/salvage_shuttle_bears
 	maptype = /datum/map_element/fixedvault/salvage_shuttle_bears
+	rotatable = FALSE
 	
 /obj/effect/landmark/map_element/salvage_shuttle_cockroaches
 	maptype = /datum/map_element/fixedvault/salvage_shuttle_cockroaches
+	rotatable = FALSE
 	
 /obj/effect/landmark/map_element/salvage_shuttle_skrites
 	maptype = /datum/map_element/fixedvault/salvage_shuttle_skrites
+	rotatable = FALSE
 	
 /obj/effect/landmark/map_element/salvage_shuttle_pets
 	maptype = /datum/map_element/fixedvault/salvage_shuttle_pets
+	rotatable = FALSE
     
 /obj/effect/landmark/map_element/deepspaceruin
 	maptype = /datum/map_element/fixedvault/deepspaceruin
@@ -219,9 +226,11 @@ var/list/map_landmarks = list()
 
 /obj/effect/landmark/map_element/djsat
 	maptype = /datum/map_element/fixedvault/djsat
+	rotatable = FALSE
 	
 /obj/effect/landmark/map_element/djsat_notail
 	maptype = /datum/map_element/fixedvault/djsat_notail
+	rotatable = FALSE
 
 /obj/effect/landmark/map_element/derelict_tele
 	maptype = /datum/map_element/fixedvault/derelict_tele
@@ -231,6 +240,7 @@ var/list/map_landmarks = list()
 	
 /obj/effect/landmark/map_element/medship
 	maptype = /datum/map_element/fixedvault/medship
+	rotatable = FALSE
 
 /obj/effect/landmark/map_element/spacetomb
 	maptype = /datum/map_element/fixedvault/spacetomb
