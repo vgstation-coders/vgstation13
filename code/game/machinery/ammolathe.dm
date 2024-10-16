@@ -81,6 +81,8 @@
 		new /obj/item/ammo_storage/box/a75(), \
 		new /obj/item/ammo_casing/shotgun/dragonsbreath(), \
 		new /obj/item/weapon/storage/box/dragonsbreathshells(), \
+		new /obj/item/ammo_casing/shotgun/fanshot(), \
+		new /obj/item/weapon/storage/box/fanshotshells(), \
 		)
 	)
 

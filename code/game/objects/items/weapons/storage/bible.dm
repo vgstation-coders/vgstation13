@@ -18,7 +18,7 @@
 	actions_types = list(/datum/action/item_action/convert)
 	rustle_sound = "pageturn"
 
-/obj/item/weapon/storage/bible/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+/obj/item/weapon/storage/bible/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	var/mob/living/user = usr
 	if (istype(user) && istype(my_rel, /datum/religion/belmont) && user?.mind && istype(user.mind.faith, /datum/religion/belmont))
 		new /obj/effect/bible_spin(get_turf(src),usr,src)

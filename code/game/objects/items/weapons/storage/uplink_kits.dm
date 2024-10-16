@@ -300,6 +300,10 @@
 	name = "Shotgun shells"
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/fakebeanbag = 6)
 
+/obj/item/weapon/storage/box/syndie_kit/fan
+	name = "Shotgun shells"
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/fanshot/super/syndie = 6)
+
 /obj/item/weapon/storage/box/syndie_kit/ammo
 	name = "box (spare ammo)"
 	items_to_spawn = list(/obj/item/ammo_storage/speedloader/a357)

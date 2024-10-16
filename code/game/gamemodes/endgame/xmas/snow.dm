@@ -299,7 +299,7 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 		TS.wet(100)
 	qdel(src)
 
-/obj/item/stack/sheet/snow/throw_at(atom/target, range, speed)
+/obj/item/stack/sheet/snow/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	playsound(src.loc, 'sound/weapons/punchmiss.ogg', 50, 1)
 	..()
 

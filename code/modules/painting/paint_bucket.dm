@@ -68,7 +68,7 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	if (prob(10))
 		add_spots()
 
-/obj/item/weapon/reagent_containers/glass/metal_bucket/throw_at(atom/target, range, speed)
+/obj/item/weapon/reagent_containers/glass/metal_bucket/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	..()
 	add_spots(2)
 

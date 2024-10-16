@@ -251,7 +251,7 @@
 	if(loc != myvac)
 		retract()
 
-/obj/item/vachandle/throw_at()
+/obj/item/vachandle/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	retract()
 
 /obj/item/vachandle/proc/mob_moved(atom/movable/mover)

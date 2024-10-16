@@ -224,8 +224,8 @@ var/list/meteor_warnings = list()
 	if(end)
 		throw_at(end)
 
-/obj/item/projectile/meteor/throw_at(atom/end)
-	original = end
+/obj/item/projectile/meteor/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
+	original = target
 	starting = loc
 	current = loc
 	OnFired()
