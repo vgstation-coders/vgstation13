@@ -175,7 +175,7 @@ var/list/map_landmarks = list()
 	if(maptype)
 		var/datum/map_element/ME = new maptype
 		if(istype(ME))
-			ME.load(src.x-1,src.y-1,src.z,(map.nameShort == "xoq" ? 180 : 0))
+			ME.load(src.x-1,src.y-1,src.z,(map.nameShort == "xoq" ? 180 : 0), override_can_rotate = (map.nameShort == "xoq"))
 	qdel(src)
 			
 /obj/effect/landmark/map_element/whiteship
