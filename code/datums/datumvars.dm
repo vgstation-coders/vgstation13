@@ -985,7 +985,7 @@ function loadPage(list) {
 
 		var/obj/item/weapon/gun/G = locate(href_list["projectile_edit"])
 		if(!istype(G))
-			to_chat(src, "Target must be a obj/item/weapon/gun!")
+			to_chat(src, "Target must be an obj/item/weapon/gun!")
 			return
 
 		gun_override(G)
