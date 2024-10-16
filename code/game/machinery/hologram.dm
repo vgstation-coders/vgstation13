@@ -80,7 +80,7 @@ var/list/holopads = list()
 		to_chat(user, "<span class='notice'>You stop transmitting to [target].</span>")
 		target.clear_holo()
 		return
-	if(master && (isAIEye(master) || isAI(master)))
+	if(master && isAIEye(master))
 		to_chat(user, "<span class='notice'>[master] is using \the [src], you cannot interact with it until it is done.</span>")
 		return
 	if(holo)
@@ -128,7 +128,7 @@ var/list/holopads = list()
 	This may change in the future but for now will suffice.*/
 
 	//If there is a hologram, remove it. But only if the user is the master, or the master isn't another AI. Otherwise do nothing.
-	if(master && (master == user || master == user.eyeobj || (!isAIEye(master) && !isAI(master))) && holo)
+	if(master && (master == user || master == user.eyeobj || !isAIEye(master)) && holo)
 		clear_holo()
 	else if(user.eyeobj.loc != src.loc)//Set client eye on the object if it's not already.
 		user.eyeobj.forceMove(get_turf(src))
@@ -242,9 +242,9 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(holo && master)
 		var/icon/colored_holo
 		var/holocolor
-		if(isAIEye(master) || isAI(master))
+		if(isAIEye(master))
 			var/mob/camera/aiEye/eye = master
-			var/mob/living/silicon/ai/AI = istype(eye) ? eye.ai : eye
+			var/mob/living/silicon/ai/AI = eye.ai
 			colored_holo = AI.holo_icon
 			holocolor = AI.holocolor
 		else
