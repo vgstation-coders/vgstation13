@@ -1,0 +1,8 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- rscadd: Advanced RCDs now have a new schematic that lets them turn reinforced windows
+    into their plasma varieties for 5 matter units each, if a dark purple slime extract
+    is applied. This will only affect the first full window and first normal window
+    of each rotated direction on the tile, so building multiple on one tile and converting
+    them all won't work.
