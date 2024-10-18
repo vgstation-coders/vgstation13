@@ -55,12 +55,34 @@
 	max_matter = 90
 	origin_tech = Tc_ENGINEERING + "=5;" + Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=4"
 	mech_flags = MECH_SCAN_FAIL
+	slimeadd_message = "You put the slime extract on the SRCTAG's compressed matter slot"
+	slimes_accepted = SLIME_DARKPURPLE
+	slimeadd_success_message = "It gains a distinct plasma pink hue"
+	
+/obj/item/device/rcd/matter/engineering/pre_loaded/adv/slime_act(primarytype, mob/user)
+	. = ..()
+	if(. && (slimes_accepted & primarytype))
+		var/datum/rcd_schematic/con_pwindow/P = new(src)
+		if(!schematics[P.category])
+			schematics[P.category] = list()
+		schematics[P.category] += P
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/delay(var/mob/user, var/atom/target, var/amount)
 	return do_after(user, target, amount/2)
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/admin
 	name = "experimental Rapid-Construction-Device (RCD)"
+	schematics = list(
+	/datum/rcd_schematic/decon,
+	/datum/rcd_schematic/con_floors,
+	/datum/rcd_schematic/con_rfloors,
+	/datum/rcd_schematic/con_walls,
+	/datum/rcd_schematic/con_rwalls,
+	/datum/rcd_schematic/con_airlock,
+	/datum/rcd_schematic/con_window,
+	/datum/rcd_schematic/con_pwindow,
+	)
+	has_slimes = SLIME_DARKPURPLE // just so this doesn't cause anything off
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/admin/afterattack(var/atom/A, var/mob/user)
 	if(!user.check_rights(R_ADMIN))
