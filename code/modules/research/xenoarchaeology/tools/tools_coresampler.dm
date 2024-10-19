@@ -40,10 +40,11 @@
 		var/datum/geosample/geo_data
 		if(istype(item_to_sample, /turf/unsimulated/mineral))
 			var/turf/unsimulated/mineral/T = item_to_sample
-			T.geologic_data.UpdateNearbyArtifactInfo(T)
-			geo_data = T.geologic_data
-			var/excav_overlay = "overlay_excv1_[rand(1,3)]"
-			T.overlays += excav_overlay
+			if(T.finddatum)
+				T.finddatum.geologic_data.UpdateNearbyArtifactInfo(T)
+				geo_data = T.finddatum.geologic_data
+				var/excav_overlay = "overlay_excv1_[rand(1,3)]"
+				T.overlays += excav_overlay
 		else if(istype(item_to_sample, /obj/item/weapon/strangerock))
 			var/obj/item/weapon/strangerock/O = item_to_sample
 			geo_data = O.geologic_data

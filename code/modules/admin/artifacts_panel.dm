@@ -165,9 +165,9 @@
 		for (var/turf/unsimulated/mineral/M in SSxenoarch.artifact_spawning_turfs)
 			if (!istype(M))
 				continue
-			if (!M.artifact_find)
+			if (!M.finddatum || !M.finddatum.artifact_find)
 				continue
-			var/datum/artifact_find/A = M.artifact_find
+			var/datum/artifact_find/A = M.finddatum.artifact_find
 			dat += {"<tr>
 				<td>[A.artifact_id]</td>
 				<td><b>Buried</b> <a href='?src=\ref[src];artifactpanel_jumpto=\ref[M]'>([M.x],[M.y],[M.z])</a></td>
