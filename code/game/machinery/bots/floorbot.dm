@@ -36,6 +36,7 @@ var/global/list/floorbot_targets=list()
 	maxHealth = 25
 	auto_patrol = 0		// set to make bot automatically patrol
 	bot_flags = BOT_PATROL|BOT_BEACON|BOT_NOT_CHASING|BOT_SPACEWORTHY|BOT_CONTROL
+	AI_link = 1
 	var/amount = 10
 	var/repairing = 0
 	var/improvefloors = 0

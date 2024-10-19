@@ -1,4 +1,5 @@
 #define BORG_CAMERA_BUFFER 30
+#define BOT_CAMERA_BUFFER 15
 
 //UPDATE TRIGGERS, when the chunk (and the surrounding chunks) should update.
 
@@ -32,7 +33,7 @@
 	..()
 	if(ticker)
 		cameranet.updateVisibility(src)
-	
+
 
 // EFFECTS
 
@@ -77,6 +78,21 @@
 						cameranet.updatePortableCamera(src.camera)
 					updating = 0
 
+/obj/machinery/bot/var/camera_updating = 0
+
+/obj/machinery/bot/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	var/oldLoc = loc
+	. = ..()
+	if(.)
+		if(camera)
+			if(!camera_updating)
+				camera_updating = 1
+				spawn(BOT_CAMERA_BUFFER)
+					if(oldLoc != loc)
+						cameranet.updatePortableCamera(camera)
+					camera_updating = 0
+
+
 // CAMERA
 
 // An addition to deactivate which removes/adds the camera from the chunk list based on if it works or not.
@@ -90,3 +106,4 @@
 		cameranet.removeCamera(src)
 
 #undef BORG_CAMERA_BUFFER
+#undef BOT_CAMERA_BUFFER

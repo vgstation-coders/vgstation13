@@ -11,7 +11,7 @@
 
 #if ASTAR_DEBUG == 1
 #define log_astar_bot(text) visible_message("[src] : [text]")
-#define log_astar_beacon(text) //to_chat(world, "[src] : [text]")
+#define log_astar_beacon(text) to_chat(world, "[src] : [text]")
 #define log_astar_command(text) to_chat(world, "[src] : [text]")
 #else
 #define log_astar_bot(text)
@@ -40,7 +40,9 @@
 	var/bot_type // For HuD users.
 	var/declare_message = "" //What the bot will display to the HUD user.
 	var/bot_flags
-
+	var/list/AIradialChoices = list(list("summon","summon")) //list("hack","hack") taken out
+	var/AI_link = 0
+	machine_flags = MULTITOOL_MENU
 	var/frustration
 
 	var/new_destination		// pending new destination (waiting for beacon response)
@@ -76,7 +78,7 @@
 	var/summoned = FALSE // Were they summoned?
 
 	var/commanding_radios = list(/obj/item/radio/integrated/signal/bot)
-
+	var/obj/machinery/camera/camera = null
 	// Queue of directions. Just like shift-clicking on age of empires 2. It'll go to the next direction after it's finished with this one
 	// It's a list of lists. These lists are coordinates
 	// Mulebots contain an extra fourth parameter used to load/unload at that position.
@@ -96,6 +98,15 @@
 	if(bot_flags & BOT_BEACON)
 		radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
 
+	if(!camera)
+		camera = new /obj/machinery/camera/flawless(src)
+		camera.c_tag = "[name]-[round(rand(100,999))]"
+		camera.setViewRange(3)
+		camera.network = list(CAMERANET_BOTS)
+		camera.status = on && AI_link
+		spawn(100)
+			cameranet.updatePortableCamera(camera)
+
 /obj/machinery/bot/Destroy()
 	. = ..()
 	if(botcard)
@@ -105,6 +116,10 @@
 			if (PM.owner == src)
 				qdel(PM)
 	bots_list -= src
+	camera.status = 0
+	cameranet.updatePortableCamera(camera)
+	for(var/mob/living/silicon/ai/A in ai_list)
+		A.list_bot_control -= src
 	nearest_beacon_loc = null
 	patrol_target = null
 	nearest_beacon = null
@@ -117,6 +132,7 @@
 
 // Reset the safety counter, look or move along a path, and then do bot things.
 /obj/machinery/bot/process()
+	camera.status = on && AI_link
 	current_pathing = 0
 	if(!src.on)
 		return
@@ -151,11 +167,13 @@
 		return FALSE
 
 	look_for_target = TRUE
-	target_selection()
+	. = target_selection()
 	look_for_target = FALSE
 
 // Concrete logic of selecting a target, depending on each bot.
 /obj/machinery/bot/proc/target_selection()
+	//if(!target && next_destination)
+	//	target = next_destination
 
 // Will we continue chasing our target or not?
 /obj/machinery/bot/proc/can_abandon_target()
@@ -179,65 +197,92 @@
 // Can we move to the next tile or not ?
 /obj/machinery/bot/proc/can_path()
 	return TRUE
-
+/obj/machinery/bot/proc/handle_destination_arrival()
+	if(patrol_target && loc==patrol_target)
+		at_patrol_target()
+	else
+		at_path_target()
 // If we get a path through process_path(), which means we have a target, and we're not set to autopatrol, we get a patrol path.
-/obj/machinery/bot/proc/process_pathing()
-	if(!process_path() && (bot_flags & BOT_PATROL) && auto_patrol)
-		process_patrol()
+/obj/machinery/bot/proc/process_path()
+	if(target)
+		path = calc_path(target)
+		return
+	if(patrol_target)
+		path = calc_path(patrol_target)
+	if(!summoned && (bot_flags & BOT_PATROL) && auto_patrol)
+		find_patrol_path()
+		//get_path_to(src, target, 300, 0, botcard, TRUE)
+
+//	if(!process_path() && (bot_flags & BOT_PATROL) && auto_patrol)
+//		process_patrol()
 
 //misc stuff our bot may be doing (looking for people to heal, or hurt, or tile)
 /obj/machinery/bot/proc/process_bot()
+//	if(target)
+//		path = get_path_to(src, target, 300, 0, botcard, TRUE)
 
-/*** Regular Pathing Section ***/
-// If we don't have a path, we get a path
-// If we have a path, we step.
-// Speed of the bot is controlled through steps_per.
-// return true to avoid calling process_patrol
-// Move "recursively" in order to respect the subsystem's waitfor = FALSE.
-/obj/machinery/bot/proc/process_path(var/remaining_steps = steps_per)
+
+/obj/machinery/bot/proc/process_pathing(var/remaining_steps = steps_per)
+	if(!on)
+		return FALSE
+	if(remaining_steps <= 0)
+		return FALSE
+	astar_debug_mulebots("process_pathing mulebot")
 	current_pathing++
 	if (current_pathing > MAX_PATHING_ATTEMPTS)
 		CRASH("maximum pathing reached")
-	if (remaining_steps <= 0)
+	if(!path || !path.len)
+		process_path()
 		return
-	if (!isturf(src.loc))
-		return // Stay in the closet, little bot. The world isn't ready to accept you yet ;_;
-	if (!can_path()) // We're busy.
-		return
-	var/turf/T = get_turf(src)
 	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
-	if(!length(path)) //It is assumed we gain a path through process_bot()
-		if(target)
-			if (waiting_for_path)
-				return 1
-			calc_path(target, new /callback(src, nameof(src::get_path())))
-			if (path && length(path))
-				process_path()
-			return 1
-		return  0
-
-	patrol_path = list() //Kill any patrols we're using
-
-	log_astar_bot("Step [remaining_steps] of [steps_per]")
-	if(loc == get_turf(target))
-		return at_path_target()
-	var/turf/next = path[1]
-	if(istype(next, /turf/simulated) || (bot_flags & BOT_SPACEWORTHY))
-		step_to(src, next)
-		if(get_turf(src) == next)
-			path -= next
+	if(!process_astar_path()) // Process the pathfinding. This handles most movement/delivery stuff.
+		//And if there are problems processing, go here.
+		if(frustration > 15) // obstacle found and isn't moving after getting honked at
+			var/turf/obstacle = path[1]
+			path = get_path_to(src, target, 300, 0, botcard, TRUE, obstacle)
 			frustration = 0
-			on_path_step(next)
-		else
-			frustration++
-			on_path_step_fail(next)
-		spawn(SS_WAIT_BOTS/steps_per)
-			process_path(remaining_steps - 1)
-	return T == get_turf(src)
+			if(!path.len)
+				return
+	else
+		//No pathing problems, and the path isn't over yet.
+		//Check to see if this is the last step in recursion
+		if(remaining_steps - 1 && path.len)
+			spawn(SS_WAIT_BOTS/steps_per)
+				process_pathing(remaining_steps - 1)
+		else if(!path.len)
+			//End of path! We made it!
+			handle_destination_arrival()
+			return
+
+
+/obj/machinery/bot/process_astar_path()
+	if(gcDestroyed)
+		return FALSE
+	density = 0
+	step_to(src,path[1])
+	density = initial(density)
+	if(get_turf(src) != path[1])
+		if(on_path_step_fail(path[1]))
+			return TRUE // keep trying
+		return FALSE
+	path.Remove(path[1])
+	return TRUE
+
+
 
 // What happens when the bot cannot go to the next turf.
 // Most bots will just try to open the door.
 /obj/machinery/bot/proc/on_path_step_fail(var/turf/next) // No door shall be left unopened
+	var/isitopen = FALSE
+	for (var/obj/machinery/door/D in src.loc)
+		if (istype(D, /obj/machinery/door/firedoor))
+			continue
+		if (istype(D, /obj/machinery/door/poddoor))
+			continue
+		if (D.check_access(botcard) && !D.operating && D.SpecialAccess(src))
+			D.open()
+			frustration = 0
+			isitopen = TRUE
 	for (var/obj/machinery/door/D in next)
 		if (istype(D, /obj/machinery/door/firedoor))
 			continue
@@ -246,15 +291,18 @@
 		if (D.check_access(botcard) && !D.operating && D.SpecialAccess(src))
 			D.open()
 			frustration = 0
-			return TRUE
+			isitopen = TRUE
 	if(frustration > 5)
 		summoned = FALSE // Let's not try again.
 		if (target && !target.gcDestroyed)
-			calc_path(target, new /callback(src, nameof(src::get_path())), next)
+			path = calc_path(target, next)
+		if (patrol_target && !patrol_target.gcDestroyed)
+			patrol_path = calc_path(patrol_target,next)
 		else
+			patrol_target = null
 			target = null
 			path = list()
-	return
+	return isitopen
 
 /obj/machinery/bot/to_bump(var/M) //Leave no man un-phased through!
 	if((istype(M, /mob/living/)) && (!src.anchored) && !(bot_flags & BOT_DENSE))
@@ -268,46 +316,15 @@
 /obj/machinery/bot/proc/at_path_target()
 	summoned = FALSE
 	target = null
+	path = null
+	patrol_target = null
+	patrol_path = null
+	waiting_for_patrol = FALSE
 	return TRUE
 
 /obj/machinery/bot/proc/can_patrol()
 	return can_path()
 
-/*** Patrol Pathing Section ***/
-// Same as process_path. If we don't have a path, we get a path.
-// If we have a path, we take a step on that path
-// It is very important to exit this proc when you don't have a path.
-/obj/machinery/bot/proc/process_patrol(var/remaining_steps = steps_per)
-	if (!can_patrol())
-		return
-	astar_debug("process patrol called [src] [patrol_path.len]")
-	current_pathing++
-	if (current_pathing > MAX_PATHING_ATTEMPTS)
-		CRASH("maximum pathing reached")
-	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
-	if(!patrol_path.len)
-		return find_patrol_path()
-	if(remaining_steps <= 0)
-		return
-	if(!can_path())
-		return
-	log_astar_bot("Step [remaining_steps] of [steps_per]")
-	if(loc == patrol_target)
-		patrol_path = list()
-		return at_patrol_target()
-	var/turf/next = patrol_path[1]
-	if(istype(next, /turf/simulated) || (bot_flags & BOT_SPACEWORTHY))
-		step_to(src, next)
-		if(get_turf(src) == next)
-			frustration = 0
-			patrol_path -= next
-			on_patrol_step(next)
-		else
-			frustration++
-			on_patrol_step_fail(next)
-		sleep(SS_WAIT_BOTS/steps_per)
-		process_patrol(remaining_steps - 1)
-	return TRUE
 
 // This proc is called when the bot has no patrol path, no regular path, and is on autopatrol.
 // First, we check if we are not already waiting for a signal and a location to path to.
@@ -315,10 +332,6 @@
 // After that, we signal the beacon where we are and they transmit a location.
 // The closet location is picked, and a path is calculated.
 /obj/machinery/bot/proc/find_patrol_path()
-	if (summoned)
-		return
-	if(waiting_for_patrol)
-		return
 	if(awaiting_beacon++)
 		log_astar_beacon("awaiting beacon:[awaiting_beacon]")
 		if(awaiting_beacon > 5)
@@ -331,7 +344,6 @@
 
 	if(patrol_target)
 		waiting_for_patrol = TRUE
-		calc_patrol_path(patrol_target, new /callback(src, nameof(src::get_patrol_path())))
 // This proc send out a singal to every beacon listening to the "beacon_freq" variable.
 // The signal says, "i'm a bot looking for a beacon to patrol to."
 // Every beacon with the flag "patrol" responds by trasmitting its location.
@@ -383,7 +395,8 @@
 // What happens when the bot cannot go to the next turf during a patrol.
 // Most bots will just try to open the door.
 /obj/machinery/bot/proc/on_patrol_step_fail(var/turf/next) // No door shall be left unopened
-	for (var/obj/machinery/door/D in next)
+	var/list/obstacles = list() | next.contents | loc.contents
+	for (var/obj/machinery/door/D in obstacles)
 		if (istype(D, /obj/machinery/door/firedoor))
 			continue
 		if (istype(D, /obj/machinery/door/poddoor))
@@ -418,7 +431,7 @@
 	signal.transmission_method = 1
 	signal.data = keyval
 	if(signal.data["findbeacon"])
-		log_astar_beacon("singal sent via navbeacons")
+		log_astar_beacon("signal sent via navbeacons")
 		frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
 	else
 		frequency.post_signal(src, signal)
@@ -548,40 +561,14 @@
 /obj/machinery/bot/proc/return_status()
 	return "Idle"
 
-// Caluculate a path between the bot and the target.
-// Target is the target to go to.
-// callback gets called by the pathmaker once it's done its work and wishes to return a path.
-// avoid is a turf the path should NOT go through. (a previous obstacle.) This info is then given to the pathmaker.
-// Fast bots use quick_AStar method to direcly calculate a path and move on it.
-/obj/machinery/bot/proc/calc_path(var/target, var/callback, var/turf/avoid = null)
-	ASSERT(target && callback)
-	var/cardinal_proc = bot_flags & BOT_SPACEWORTHY ? /turf/proc/AdjacentTurfsSpace : /turf/proc/CardinalTurfsWithAccess
-	if (((get_dist(src, target) < 13) && !(bot_flags & BOT_NOT_CHASING)) || (get_dist(src, target) < 6)) // For beepers and ED209
-		// IMPORTANT: Quick AStar only takes TURFS as arguments.
-		log_astar_bot("quick astar path calculation...")
-		path = quick_AStar(src.loc, get_turf(target), cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
-		log_astar_bot("path is [path.len]")
-		return TRUE
-	waiting_for_path = 1
-	. = AStar(src, callback, src.loc, target, cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
-	if (!.)
-		waiting_for_path = 0
-
-/obj/machinery/bot/proc/calc_patrol_path(var/target, var/callback, var/turf/avoid = null)
-	ASSERT(target && callback)
-	log_astar_beacon("[new_destination]")
-	var/cardinal_proc = bot_flags & BOT_SPACEWORTHY ? /turf/proc/AdjacentTurfsSpace : /turf/proc/CardinalTurfsWithAccess
-	if ((get_dist(src, target) < 13) && !(bot_flags & BOT_NOT_CHASING)) // For beepers and ED209
-		// IMPORTANT: Quick AStar only takes TURFS as arguments.
-		waiting_for_patrol = FALSE // Case we are calculating a quick path for a patrol.
-		patrol_path = quick_AStar(src.loc, get_turf(target), cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
-		return TRUE
-	return AStar(src, callback, src.loc, target, cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
-
+/obj/machinery/bot/proc/calc_path(var/ourtarget, var/turf/avoid = null)
+	ASSERT(ourtarget)
+	var/spaceworthy = bot_flags & BOT_SPACEWORTHY
+	. = get_path_to(src, ourtarget, max_distance = 300, mintargetdist = 0, id=botcard, simulated_only = !spaceworthy, exclude=avoid)
+	return .
 
 // This proc is called by the path maker once it has calculated a path.
 /obj/machinery/bot/proc/get_path(var/list/L, var/target)
-	waiting_for_path = 0
 	if(islist(L))
 		path = L
 		if (bot_flags & BOT_NOT_CHASING) // Chasing bots are obstinate and will not forget their target so easily.
@@ -608,11 +595,13 @@
 	on = 1
 	set_light(initial(luminosity))
 	waiting_for_patrol = FALSE
+	camera.status = on && AI_link
 	return 1
 
 /obj/machinery/bot/proc/turn_off()
 	on = 0
 	set_light(0)
+	camera.status = on && AI_link
 
 /obj/machinery/bot/proc/explode()
 	qdel(src)
@@ -622,6 +611,9 @@
 		src.explode()
 
 /obj/machinery/bot/emag_act(mob/user)
+	if(!isAI(user))
+		for(var/mob/living/silicon/ai/A in ai_list)
+			A.list_bot_control -= src
 	if(locked)
 		locked = 0
 		emagged = 1
@@ -733,6 +725,15 @@
 		else
 			..()
 
+obj/machinery/bot/attack_hand(mob/user as mob)
+	. = ..()
+	if (.)
+		return
+	if(isAI(user) && !emagged)
+		var/mob/living/silicon/ai/S = user
+		S.list_bot_control |= src
+
+
 /obj/machinery/bot/kick_act(mob/living/H)
 	..()
 
@@ -799,10 +800,78 @@
 		if (was_on)
 			turn_on()
 
-
-
 /obj/machinery/bot/cultify()
 	if(src.flags & INVULNERABLE)
 		return
 	else
 		qdel(src)
+
+
+
+// ------------ AI BOT CONTROL -------------------
+// STOP. Prevent your death. Go no farther.       |
+// There's nothing in this code worth dying for!  |
+// Do not go beyond this point.                   |
+
+/obj/machinery/bot/Click(location, control, params)
+	var/list/modifiers = params2list(params)
+	if(isAI(usr) && istext(location) && (modifiers["shift"] || (ismalf(usr) && modifiers["right"]))) // Welcome to the magical world of making sure AI's dont create radial menus in statpanels. t. toomy
+		move_camera_by_click()
+		return
+	..()
+/obj/machinery/bot/AIShiftClick(var/mob/user)
+	if(!isAI(user))
+		return
+	var/choice= show_radial_menu(user,src,AIradialChoices,icon_file='icons/obj/bots_radial.dmi',tooltip_theme="radial_center") //,var/tooltip_theme,var/callback/custom_check,var/uniqueid,var/radius,var/min_angle,var/starting_angle,var/ending_angle,var/recursive = FALSE, var/close_other_menus)
+	handleAIRadialCommand(user,choice)
+
+/obj/machinery/bot/AICtrlClick(var/mob/user)
+	handleAIRadialCommand(user,"default")
+
+/obj/machinery/bot/proc/handleAIRadialCommand(var/mob/user,var/choice)
+	var/mob/living/silicon/ai/AI = user
+	switch(choice)
+		if("summon","default")
+			AI.handle_bot_click_command(src,choice)
+	/*	if("hack")
+			hack_interact(user)*/
+/obj/machinery/bot/proc/handleAIMouseCommand(atom/A,command)
+	switch(command)
+		if("summon","default")
+			target = A
+			destination = A
+			path = list()
+			summoned = TRUE
+			process()
+
+/obj/machinery/bot/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
+	if(isAI(user))
+		return
+	if(!istype(user.get_active_hand(), /obj/item/device/multitool))
+		return
+
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER))
+		return
+
+	var/screen = {"
+	<h2>AI linkage</h2>
+	<ul>
+		<li><b>AI CONTROL LINK:</b> <a href="?src=\ref[src];ailink=1">[AI_link?"ENABLED":"DISABLED"]</a></li>
+	</ul>
+	"}
+	return screen
+
+/obj/machinery/bot/Topic(href,href_list)
+	if(..(href, href_list))
+		return
+
+	if("ailink" in href_list)
+		AI_link = !AI_link
+		camera.status = on && AI_link
+		update_multitool_menu(usr)
+
+/obj/machinery/bot/attackby(obj/item/weapon/W, mob/user)
+	if(W.is_multitool(user))
+		update_multitool_menu(user)
+		return
+	..()

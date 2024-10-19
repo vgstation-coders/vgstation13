@@ -42,6 +42,11 @@ var/list/ai_list = list()
 	var/mentions_on = FALSE
 	var/list/holopadoverlays = list()
 
+	//bot shite
+	var/list/obj/machinery/bot/list_bot_control = list()
+	var/obj/machinery/bot/directing_bot = null
+	var/bot_command = null
+
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
 	var/vox_corrupted = FALSE
@@ -161,6 +166,12 @@ var/list/ai_list = list()
 				stored_freqs = 1
 
 			job = "AI"
+
+	for(var/obj/machinery/bot/Bot in bots_list)
+		var/turf/T = get_turf(Bot)
+		if(Bot.AI_link && (T.z == map.zMainStation || T.z == map.zAsteroid))
+			list_bot_control |= Bot
+
 	ai_list += src
 	..()
 	if(!safety)
@@ -954,3 +965,22 @@ var/static/list/ai_icon_states = list(
 		client?.darkness_planemaster.alpha = 150
 	else
 		client?.darkness_planemaster.alpha = 255
+
+/mob/living/silicon/ai/Stat()
+	..()
+
+	if(client && client.holder && client.inactivity < 1200)
+		statpanel("Bots",null,list_bot_control)
+
+/mob/living/silicon/ai/proc/handle_bot_click_command(var/obj/machinery/bot/B,var/command="default")
+	client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi") //placeholder cursor
+	directing_bot = B
+	bot_command = command
+	register_event(/event/uattack, src, nameof(src::handle_bot_clicked_atom()))
+
+/mob/living/silicon/ai/proc/handle_bot_clicked_atom(atom/atom)
+	client.mouse_pointer_icon = initial(client.mouse_pointer_icon)
+	directing_bot.handleAIMouseCommand(atom,bot_command)
+	directing_bot = null
+	bot_command = null
+	unregister_event(/event/uattack, src, nameof(src::handle_bot_clicked_atom()))

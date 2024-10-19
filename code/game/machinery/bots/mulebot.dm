@@ -41,6 +41,7 @@ var/global/mulebot_count = 0
 	control_freq = 1447
 	control_filter = RADIO_MULEBOT
 	bot_flags = BOT_DENSE|BOT_NOT_CHASING|BOT_CONTROL|BOT_BEACON
+	AI_link = 1
 	suffix = ""
 
 	var/home_destination = "" 	// tag of home beacon
@@ -103,6 +104,7 @@ var/global/mulebot_count = 0
 	cell = new(src)
 	cell.charge = 2000
 	cell.maxcharge = 2000
+	AIradialChoices = list(list("summon","summon"),list("load","load"))
 	set_light(initial(luminosity))
 
 /obj/machinery/bot/mulebot/initialize()
@@ -112,7 +114,7 @@ var/global/mulebot_count = 0
 		suffix = "#[mulebot_count]"
 	name = "\improper Mulebot ([suffix])"
 	can_load = list(
-		/obj/structure/closet/crate,
+		/obj/structure/closet,
 		/obj/structure/vendomatpack,
 		/obj/structure/stackopacks,
 		/obj/item/weapon/gift,
@@ -137,7 +139,7 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/attackby(obj/item/I, mob/user)
 	user.delayNextAttack(I.attack_delay)
 	if(emag_check(I,user))
-		return	
+		return
 	else if(istype(I, /obj/item/weapon/card/id))
 		if(toggle_lock(user))
 			to_chat(user, "<span class='notice'>Controls [(locked ? "locked" : "unlocked")].</span>")
@@ -650,7 +652,7 @@ var/global/mulebot_count = 0
 	// with items dropping as mobs are loaded
 
 	for(var/atom/movable/AM in src)
-		if(AM == cell || AM == botcard || AM == integratedpai)
+		if(AM == cell || AM == botcard || AM == integratedpai || AM == camera)
 			continue
 
 		AM.forceMove(src.loc)
@@ -672,6 +674,7 @@ var/global/mulebot_count = 0
 		if(bloodiness)
 			next.AddTracks(/obj/effect/decal/cleanable/blood/tracks/wheels,list(),0,goingdir,currentBloodColor)
 			bloodiness--
+		return TRUE
 
 // starts bot moving to current destination
 /obj/machinery/bot/mulebot/proc/start()
@@ -1040,7 +1043,10 @@ var/global/mulebot_count = 0
 	if(!cell.use(2))
 		turn_off()
 		return FALSE
+	//density = 0
 	Move(path[1])
+	//step_to(src,path[1])
+	//density = initial(density)
 	if(get_turf(src) != path[1])
 		if(on_path_step_fail(path[1]))
 			return TRUE // keep trying
@@ -1050,7 +1056,7 @@ var/global/mulebot_count = 0
 	path.Remove(path[1])
 	return TRUE
 
-/obj/machinery/bot/mulebot/proc/handle_destination_arrival()
+/obj/machinery/bot/mulebot/handle_destination_arrival()
 	astar_debug_mulebots("dest arrived!")
 	//We've confirmed to arrive at our destination
 	if(current_order.unload_here && is_locking(/datum/locking_category/mulebot))
@@ -1091,6 +1097,9 @@ var/global/mulebot_count = 0
 		//Finished our current task, nothing in the queue, we're not home? Let's go home.
 		start_home()
 	current_order = null
+	if(istype(target, /atom/movable))
+		var/atom/movable/C = target
+		target = C
 
 // returns true if it's still below the frustration threshold
 /obj/machinery/bot/mulebot/on_path_step_fail(var/turf/next)
@@ -1233,6 +1242,44 @@ var/global/mulebot_count = 0
 	spawn(20)
 		if(point)
 			qdel(point)
+
+/obj/machinery/bot/mulebot/handleAIRadialCommand(var/mob/user,var/choice)
+	var/mob/living/silicon/ai/AI = user
+	switch(choice)
+		if("summon","default","load")
+			AI.handle_bot_click_command(src,choice)
+		if("unload")
+			unload()
+	updateRadialLoadUnloadMenuJesusChrist()
+
+/obj/machinery/bot/mulebot/handleAIMouseCommand(atom/A,command)
+	switch(command)
+		if("summon","default")
+			destinations_queue = list()
+			current_order = null
+			target = A
+			destination = A
+			path = list()
+			summoned = TRUE
+			add_manual_destination(get_turf(A),0)
+			process()
+		if("load", "default")
+			if(istype(A, /atom/movable))
+				var/atom/movable/C = A
+				target = C
+				destination = C
+				path = list()
+				load(C)
+	updateRadialLoadUnloadMenuJesusChrist()
+
+
+/obj/machinery/bot/mulebot/proc/updateRadialLoadUnloadMenuJesusChrist()
+	//HARDCODED because FUCK lists
+	if(is_locking(/datum/locking_category/mulebot))
+		AIradialChoices = list(list("summon","summon"),list("unload","unload"))
+	else
+		AIradialChoices = list(list("summon","summon"),list("load","load"))
+
 
 #undef LOAD_OR_MOVE_HERE
 #undef UNLOAD_HERE
