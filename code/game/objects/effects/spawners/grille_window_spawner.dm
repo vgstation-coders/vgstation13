@@ -6,7 +6,8 @@
 
 /obj/structure/grille/window_spawner/spawned_by_map_element(datum/map_element/ME)
 	. = ..()
-	initialize()
+	if(ticker?.current_state == GAME_STATE_PLAYING)
+		initialize()
 
 /obj/structure/grille/window_spawner/initialize()
 	icon = 'icons/obj/structures.dmi'
