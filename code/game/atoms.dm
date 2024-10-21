@@ -1150,7 +1150,7 @@ its easier to just keep the beam vertical.
 		if (image_override)
 			moody_light = image_override
 		else
-			moody_light = image(moody_light_icon, src, (moody_state || moody_light_state) || icon_state)
+			moody_light = image(moody_light_icon, src, moody_state)
 		moody_light.appearance_flags |= RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
 		moody_light.plane = LIGHTING_PLANE
 		moody_light.blend_mode = BLEND_ADD
