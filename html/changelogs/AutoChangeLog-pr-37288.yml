@@ -1,5 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: Emags now work on borgs and station bots again
-- bugfix: PAIs can now be inserted into bots that accept them again
