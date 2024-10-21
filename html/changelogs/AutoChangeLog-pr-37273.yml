@@ -1,0 +1,4 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: Arcane tampered doors now only link to somewhere on the same z-level
