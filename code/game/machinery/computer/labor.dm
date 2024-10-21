@@ -16,7 +16,7 @@ var/list/labor_console_categories = list(
 	light_color = LIGHT_COLOR_GREEN
 	req_access = list(access_hop)
 	circuit = "/obj/item/weapon/circuitboard/labor"
-	moody_state = "overlay_labor"
+	moody_light_state = "overlay_labor"
 
 	var/awaiting_swipe = FALSE
 	var/verifying = FALSE

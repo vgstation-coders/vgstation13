@@ -9,6 +9,7 @@ var/list/obj/machinery/light_switch/lightswitches = list()
 	desc = "It turns lights on and off. What are you, simple?"
 	icon = 'icons/obj/power.dmi'
 	icon_state = "light1"
+	moody_light_state = "overlay_lightswitch"
 	anchored = 1.0
 	var/buildstage = 2
 	var/on = 0
@@ -31,7 +32,6 @@ var/list/obj/machinery/light_switch/lightswitches = list()
 		pixel_y = (ndir & 3)? (ndir ==1 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER) : 0
 		dir = ndir
 	updateicon()
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_lightswitch")
 	add_self_to_holomap()
 
 /obj/machinery/light_switch/Destroy()

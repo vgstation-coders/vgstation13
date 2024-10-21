@@ -8,6 +8,6 @@
 /obj/structure/particle_accelerator/fuel_chamber/update_icon()
 	..()
 	if ((construction_state == 3) && powered)
-		update_moody_light('icons/lighting/moody_lights.dmi', "[reference]p[strength]")
+		update_moody_light("[reference]p[strength]")
 	else
 		kill_moody_light()

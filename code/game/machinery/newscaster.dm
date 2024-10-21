@@ -226,7 +226,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		overlays += image(icon, "crack[hitstaken]")
 
 	icon_state = "newscaster_normal"
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_newscaster")
+	update_moody_light("overlay_newscaster")
 
 /obj/machinery/newscaster/power_change()
 	if(stat & BROKEN || buildstage != 1) //Broken shit can't be powered.

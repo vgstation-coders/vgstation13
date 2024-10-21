@@ -221,7 +221,7 @@ var/list/station_holomaps = list()
 		kill_moody_light()
 	else
 		icon_state = "station_map"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_holomap")
+		update_moody_light("overlay_holomap")
 
 		if(bogus)
 			holomap_datum.station_map.overlays.len = 0

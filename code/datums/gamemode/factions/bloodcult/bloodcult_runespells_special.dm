@@ -387,7 +387,7 @@
 				blood_stone.flashy_entrance(src)
 		else
 			R.overlays += narsie_glint
-	R.update_moody_light('icons/lighting/moody_lights_96x96.dmi', crystals.icon_state)
+	R.update_moody_light(crystals.icon_state)
 
 /datum/rune_spell/tearreality/proc/pillar_update(var/update_level)
 	for (var/obj/effect/cult_ritual/tear_spawners/pillar_spawner/PS in pillar_spawners)

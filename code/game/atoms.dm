@@ -63,6 +63,8 @@ var/global/list/ghdel_profiling = list()
 
 	var/image/moody_light
 	var/list/moody_lights
+	var/moody_light_icon = 'icons/lighting/moody_lights.dmi'
+	var/moody_light_state
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
@@ -1115,11 +1117,11 @@ its easier to just keep the beam vertical.
 	return FALSE
 
 //Single overlay moody light
-/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", var/moody_alpha = 255, var/moody_color = "#ffffff", var/offX = 0, var/offY = 0)
+/atom/proc/update_moody_light(var/moody_state, var/moody_alpha = 255, var/moody_color = "#ffffff", var/offX = 0, var/offY = 0)
 	overlays -= moody_light
 	var/area/here = get_area(src)
 	if (here && here.dynamic_lighting)
-		moody_light = image(moody_icon, src, moody_state)
+		moody_light = image(moody_light_icon, src, (moody_state || moody_light_state) || icon_state)
 		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
 		moody_light.plane = LIGHTING_PLANE
 		moody_light.blend_mode = BLEND_ADD
@@ -1136,7 +1138,7 @@ its easier to just keep the beam vertical.
 	moody_light = null
 
 //Multi-overlay moody lights. don't combine both procs on a single atom, use one or the other.
-/atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", var/moody_alpha = 255, var/moody_color = "#ffffff", var/offX = 0, var/offY = 0, var/image_override = null)
+/atom/proc/update_moody_light_index(var/index, var/moody_state, var/moody_alpha = 255, var/moody_color = "#ffffff", var/offX = 0, var/offY = 0, var/image_override = null)
 	if (!index)
 		return
 	if (isnull(moody_lights))
@@ -1148,7 +1150,7 @@ its easier to just keep the beam vertical.
 		if (image_override)
 			moody_light = image_override
 		else
-			moody_light = image(moody_icon, src, moody_state)
+			moody_light = image(moody_light_icon, src, (moody_state || moody_light_state) || icon_state)
 		moody_light.appearance_flags |= RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
 		moody_light.plane = LIGHTING_PLANE
 		moody_light.blend_mode = BLEND_ADD

@@ -66,7 +66,7 @@
 	if (closed)
 		kill_moody_light()
 	else
-		update_moody_light('icons/lighting/moody_lights.dmi', "trade_window")
+		update_moody_light()
 
 /obj/structure/trade_window/attackby(obj/item/W, mob/living/carbon/human/user)
 	if(!istype(user))
@@ -260,7 +260,7 @@
 				break
 		new TP.path(newloc)
 		product_selected = null
-		update_moody_light('icons/lighting/moody_lights.dmi', "trade_sold")
+		update_moody_light("trade_sold")
 		spawn(13)
 			update_icon()
 		flick("trade_sold",src)
@@ -282,7 +282,7 @@
 			AM.shake(1, 3) //Just a little movement to make it obvious it's here.
 
 		say(pick(saleslines))
-		update_moody_light('icons/lighting/moody_lights.dmi', "trade_sold")
+		update_moody_light("trade_sold")
 		spawn(13)
 			update_icon()
 		flick("trade_sold",src)

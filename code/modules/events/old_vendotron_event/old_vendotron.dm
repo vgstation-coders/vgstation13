@@ -2,7 +2,7 @@
 	name = "old vendotron"
 	desc = "Covered in layers of gunk of varying ages and origins, it's obvious this old vendotron has a history, and wares to match."
 	icon_state = "Old_Vendotron"
-	moody_state = "overlay_vending_vendotron"
+	moody_light_state = "overlay_vending_vendotron"
 	icon_vend = "Old_Vendotron-vend"
 	unhackable = TRUE
 	mech_flags = MECH_SCAN_FAIL

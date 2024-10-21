@@ -3,6 +3,7 @@ var/list/hydro_trays = list()
 /obj/machinery/portable_atmospherics/hydroponics
 	name = "hydroponics tray"
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
+	moody_light_icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "hydrotray"
 	anchored = 1
 	dir = EAST
@@ -372,7 +373,7 @@ var/list/hydro_trays = list()
 					S.adjust_particles(PVAR_POSITION, generator("box", list(-12,4), list(12,12)), seed.pollen)
 
 				if (seed.moody_lights)
-					S.update_moody_light_index("plant", seed.plant_dmi, "[plant_appearance]-moody")
+					S.update_moody_light_index("plant", image_override = image(seed.plant_dmi, src, "[plant_appearance]-moody"))
 				else if (seed.biolum)
 					var/image/luminosity_gradient = image(icon, src, "moody_plant_mask")
 					luminosity_gradient.blend_mode = BLEND_INSET_OVERLAY

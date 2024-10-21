@@ -224,13 +224,13 @@ var/global/list/status_displays = list() //This list contains both normal status
 	picture_state = state
 	remove_display()
 	overlays += image('icons/obj/status_display.dmi', icon_state=picture_state)
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_statusdisplay")
+	update_moody_light("overlay_statusdisplay")
 
 /obj/machinery/status_display/proc/update_display(line1, line2)
 	var/new_text = {"<div style="font-size:[FONT_SIZE];color:[FONT_COLOR];font:'[FONT_STYLE]';text-align:center;" valign="top">[line1]<br>[line2]</div>"}
 	if(maptext != new_text)
 		maptext = new_text
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_statusdisplay")
+	update_moody_light("overlay_statusdisplay")
 
 /obj/machinery/status_display/proc/get_supply_shuttle_timer()
 	if(SSsupply_shuttle.moving)

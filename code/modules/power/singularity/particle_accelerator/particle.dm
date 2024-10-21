@@ -17,6 +17,8 @@
 	icon_state = "particle1"//Need a new icon for this
 	anchored = 1
 	density = 1
+	moody_light_icon = 'icons/lighting/moody_lights.dmi'
+	moody_light_state = "overlay_particle"
 	var/movement_range = PARTICLE_RANGE
 	var/energy = PARTICLE_ENERGY		//energy in eV
 	var/mega_energy = 0	//energy in MeV
@@ -27,15 +29,14 @@
 	var/turf/target
 	var/turf/source
 	var/movetotarget = 1
-	var/moody_icon = 'icons/lighting/moody_lights.dmi'
 
 /obj/effect/accelerated_particle/New()
 	..()
-	update_moody_light(moody_icon, "overlay_particle")
+	update_moody_light()
 
 /obj/effect/accelerated_particle/wide
 	icon = 'icons/obj/machines/96x96particles.dmi'
-	moody_icon = 'icons/lighting/moody_lights_96x96.dmi'
+	moody_light_icon = 'icons/lighting/moody_lights_96x96.dmi'
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
 	luminosity = 3

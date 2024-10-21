@@ -21,6 +21,7 @@
 /obj/machinery/door/airlock
 	name = "airlock"
 	icon = 'icons/obj/doors/Doorint.dmi'
+	moody_light_icon = 'icons/obj/doors/Doorint.dmi'
 	icon_state = "door_closed"
 	power_channel = ENVIRON
 
@@ -504,7 +505,7 @@ About the new airlock wires panel:
 	else
 		icon_state = "door_open"
 
-	update_moody_light(icon, "[icon_state]-moody")
+	update_moody_light("[icon_state]-moody")
 
 /obj/machinery/door/airlock/door_animate(var/animation)
 	kill_moody_light()

@@ -188,10 +188,10 @@
 	if(on)
 		if(alert)
 			icon_state = "airlock_sensor_alert"
-			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_airlock_sensor_alert")
+			update_moody_light("overlay_airlock_sensor_alert")
 		else
 			icon_state = "airlock_sensor_standby"
-			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_airlock_sensor_standby")
+			update_moody_light("overlay_airlock_sensor_standby")
 	else
 		icon_state = "airlock_sensor_off"
 		kill_moody_light()
@@ -206,9 +206,9 @@
 	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	radio_connection.post_signal(src, signal, range = AIRLOCK_CONTROL_RANGE, filter = RADIO_AIRLOCK)
 	flick("airlock_sensor_cycle", src)
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_airlock_sensor_cycle")
+	update_moody_light("overlay_airlock_sensor_cycle")
 	spawn(10)
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_[icon_state]")
+		update_moody_light( "overlay_[icon_state]")
 
 /obj/machinery/airlock_sensor/process()
 	if(on)
@@ -359,7 +359,7 @@
 /obj/machinery/access_button/update_icon()
 	if(on)
 		icon_state = "access_button_standby"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_button_standby")
+		update_moody_light("overlay_button_standby")
 	else
 		icon_state = "access_button_off"
 		kill_moody_light()
@@ -380,9 +380,9 @@
 
 		radio_connection.post_signal(src, signal, range = AIRLOCK_CONTROL_RANGE, filter = customfilter)
 	flick("access_button_cycle", src)
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_button_cycle")
+	update_moody_light("overlay_button_cycle")
 	spawn(10)
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_button_standby")
+		update_moody_light("overlay_button_standby")
 
 
 

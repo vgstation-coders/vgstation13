@@ -12,6 +12,7 @@ var/list/rune_appearances_cache = list()
 	plane = ABOVE_TURF_PLANE
 
 	mouse_opacity = 1 //So we can actually click these
+	moody_light_icon = 'icons/lighting/moody_lights_96x96.dmi' // for the tear reality one
 
 	//Whether the rune is pulsating
 	var/animated = 0

@@ -342,7 +342,7 @@
 	icon = 'icons/effects/32x32.dmi'
 	icon_state = "blank"
 	mouse_opacity = 0
-
+	moody_light_icon = 'icons/turf/paint_masks.dmi'
 	var/paint_state
 	dir = SOUTH
 
@@ -354,7 +354,7 @@
 /obj/abstract/paint_light/proc/refresh_paintlight(var/turf/_my_turf)
 	if (_my_turf)
 		loc = _my_turf
-		update_moody_light('icons/turf/paint_masks.dmi',paint_state,255,light_color)
+		update_moody_light(paint_state,255,light_color)
 
 /obj/abstract/paint_light/proc/kill_paintlight()
 	kill_moody_light()

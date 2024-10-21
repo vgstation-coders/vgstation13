@@ -20,6 +20,7 @@ log transactions
 	desc = "For all your monetary needs!"
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "atm"
+	moody_light_state = "overlay_atm"
 	anchored = 1
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
@@ -59,7 +60,7 @@ log transactions
 		kill_moody_light()
 	else
 		icon_state = "atm"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_atm")
+		update_moody_light()
 
 /obj/machinery/atm/process()
 	if(stat & (FORCEDISABLE|NOPOWER))

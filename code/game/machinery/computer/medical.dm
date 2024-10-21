@@ -595,7 +595,7 @@
 	name = "Medical Laptop"
 	desc = "A cheap laptop connected to the medical records."
 	icon_state = "medlaptop"
-	moody_state = "overlay_laptop"
+	moody_light_state = "overlay_laptop"
 	pass_flags = PASSTABLE | PASSRAILING
 	machine_flags = 0
 

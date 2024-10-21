@@ -35,8 +35,6 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	var/hide = 0				// Is it a hidden machine?
 	var/listening_level = 0	// 0 = auto set in New() - this is the z level that the machine is listening to.
 
-	var/moody_state
-
 	use_auto_lights = 1
 	light_power_on = 0.5
 	light_range_on = 1
@@ -194,7 +192,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 /obj/machinery/telecomms/update_icon()
 	overlays.Cut()
 	if(on)
-		update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
+		update_moody_light()
 		icon_state = initial(icon_state)
 	else
 		kill_moody_light()
@@ -287,7 +285,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	name = "telecommunications subspace receiver"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "receiver"
-	moody_state = "overlay_receiver"
+	moody_light_state = "overlay_receiver"
 	desc = "This machine has a dish-like shape and green lights. It is designed to detect and process subspace radio activity."
 	density = 1
 	anchored = 1
@@ -359,9 +357,9 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	else
 		say_testing(mob, "bad transmission method")
 
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_receiver_receive")
+	update_moody_light("overlay_receiver_receive")
 	spawn(22)
-		update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
+		update_moody_light()
 	flick("receiver_receive", src)
 
 /obj/machinery/telecomms/receiver/proc/check_receive_level(datum/signal/signal)
@@ -393,7 +391,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	name = "telecommunications hub"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "hub"
-	moody_state = "overlay_hub"
+	moody_light_state = "overlay_hub"
 	desc = "A mighty piece of hardware used to send/receive massive amounts of data."
 	density = 1
 	anchored = 1
@@ -446,7 +444,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	name = "telecommunications relay"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "relay"
-	moody_state = "overlay_relay"
+	moody_light_state = "overlay_relay"
 	desc = "A mighty piece of hardware used to send massive amounts of data far away."
 	density = 1
 	anchored = 1
@@ -513,7 +511,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	name = "telecommunications bus"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "bus"
-	moody_state = "overlay_bus"
+	moody_light_state = "overlay_bus"
 	desc = "A mighty piece of hardware used to send massive amounts of data quickly."
 	density = 1
 	anchored = 1
@@ -583,7 +581,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	name = "telecommunications processor"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "processor"
-	moody_state = "overlay_processor"
+	moody_light_state = "overlay_processor"
 	desc = "This machine is used to process large quantities of information."
 	density = 1
 	anchored = 1
@@ -641,7 +639,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	name = "telecommunications server"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "server"
-	moody_state = "overlay_server"
+	moody_light_state = "overlay_server"
 	desc = "A machine used to store data and network statistics."
 	density = 1
 	anchored = 1

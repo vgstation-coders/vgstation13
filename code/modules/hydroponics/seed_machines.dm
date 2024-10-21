@@ -164,6 +164,7 @@
 /obj/machinery/botany/extractor
 	name = "lysis-isolation centrifuge"
 	icon_state = "traitcopier"
+	moody_light_state = "overlay_traitcopier"
 
 	var/datum/seed/genetics // Currently scanned seed genetic structure.
 
@@ -193,7 +194,7 @@
 		kill_moody_light()
 		icon_state = "traitcopier-off"
 	else
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_traitcopier")
+		update_moody_light()
 		icon_state = "traitcopier"
 
 /obj/machinery/botany/extractor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)

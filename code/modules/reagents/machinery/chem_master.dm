@@ -46,7 +46,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
-	var/moody_state = "overlay_chem_master"
+	moody_light_state = "overlay_chem_master"
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -802,7 +802,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		var/image/overlay = image('icons/obj/chemical.dmi', src, "mixer_overlay")
 		overlay.icon += mix_color_from_reagents(reagents.reagent_list)
 		overlays += overlay
-	update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
+	update_moody_light()
 
 /obj/machinery/chem_master/on_reagent_change()
 	update_icon()
@@ -813,7 +813,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	icon_state = "condimaster"
 	chem_board = /obj/item/weapon/circuitboard/condimaster
 	windowtype = "condi_master"
-	moody_state = "overlay_condimaster"
+	moody_light_state = "overlay_condimaster"
 	max_bottle_size = 50
 
 /obj/machinery/chem_master/electrolytic

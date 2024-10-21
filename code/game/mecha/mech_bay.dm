@@ -2,6 +2,7 @@
 	name = "Mech Bay Recharge Station"
 	icon = 'icons/mecha/mech_bay.dmi'
 	icon_state = "recharge_floor"
+	moody_light_state = "overlay_recharge_floor"
 	var/obj/machinery/mech_bay_recharge_port/recharge_port
 	var/obj/machinery/computer/mech_bay_power_console/recharge_console
 	var/obj/recharging_mecha = null
@@ -21,7 +22,7 @@
 								/obj/item/weapon/stock_parts/capacitor,
 								/obj/item/weapon/stock_parts/capacitor)
 
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_recharge_floor")
+	update_moody_light()
 
 /obj/machinery/mech_bay_recharge_floor/RefreshParts()
 	var/capcount = 0

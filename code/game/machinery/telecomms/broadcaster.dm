@@ -14,7 +14,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	name = "telecommunications subspace broadcaster"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "broadcaster"
-	moody_state = "overlay_broadcaster"
+	moody_light_state = "overlay_broadcaster"
 	desc = "A dish-shaped machine used to broadcast processed subspace signals."
 	density = 1
 	anchored = 1
@@ -122,9 +122,9 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 				recentmessages = list()
 
 		/* --- Do a snazzy animation! --- */
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_broadcaster_send")
+		update_moody_light("overlay_broadcaster_send")
 		spawn(22)
-			update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
+			update_moody_light()
 		flick("broadcaster_send", src)
 
 /obj/machinery/telecomms/broadcaster/Destroy()

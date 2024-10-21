@@ -50,6 +50,7 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 /obj/machinery/message_server
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "pda_server"
+	moody_light_state = "overlay_pda_server"
 	name = "Messaging Server"
 	density = 1
 	anchored = 1.0
@@ -118,10 +119,10 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 		kill_moody_light()
 	else if (disabled)
 		icon_state = "pda_server-off"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_pda_server")
+		update_moody_light()
 	else
 		icon_state = "pda_server-on"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_pda_server")
+		update_moody_light()
 
 /obj/machinery/blackbox_recorder
 	icon = 'icons/obj/machines/telecomms.dmi'

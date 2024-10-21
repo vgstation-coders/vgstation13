@@ -281,7 +281,7 @@ var/global/list/loopModeNames=list(
 		stop_playing()
 		kill_moody_light_all()
 		return
-	update_moody_light_index("main",'icons/lighting/moody_lights.dmi', "overlay_juke")
+	update_moody_light_index("main","overlay_juke")
 	icon_state = state_base
 	if(playing)
 		if(emagged)
@@ -945,7 +945,7 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/superjuke/update_icon()
 	..()
 	if(!(stat & (FORCEDISABLE|NOPOWER|BROKEN)) && anchored && !any_power_cut())
-		update_moody_light_index("glow",'icons/lighting/moody_lights.dmi', "overlay_juke_glow")
+		update_moody_light_index("glow","overlay_juke_glow")
 
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)
 	// NO FUN ALLOWED.  Emag list is included, anyway.
@@ -1072,7 +1072,7 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/holyjuke/update_icon()
 	..()
 	if(!(stat & (FORCEDISABLE|NOPOWER|BROKEN)) && anchored && !any_power_cut())
-		update_moody_light_index("glow",'icons/lighting/moody_lights.dmi', "overlay_juke_glow")
+		update_moody_light_index("glow","overlay_juke_glow")
 
 /obj/machinery/media/jukebox/holyjuke/attackby(obj/item/W, mob/user)
 	// EMAG DOES NOTHING

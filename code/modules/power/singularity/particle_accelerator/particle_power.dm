@@ -9,8 +9,8 @@
 	..()
 	if(construction_state == 3)
 		if(powered)
-			update_moody_light('icons/lighting/moody_lights.dmi', "[reference]p[strength]")
+			update_moody_light("[reference]p[strength]")
 		else
-			update_moody_light('icons/lighting/moody_lights.dmi', "[reference]c")
+			update_moody_light("[reference]c")
 	else
 		kill_moody_light()

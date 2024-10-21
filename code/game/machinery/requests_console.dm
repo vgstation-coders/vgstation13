@@ -82,13 +82,13 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 			switch (newmessagepriority)
 				if (1)
 					icon_state = "req_comp2"
-					update_moody_light('icons/lighting/moody_lights.dmi', "overlay_req_comp2")
+					update_moody_light("overlay_req_comp2")
 				if (2)
 					icon_state = "req_comp3"
-					update_moody_light('icons/lighting/moody_lights.dmi', "overlay_req_comp3")
+					update_moody_light("overlay_req_comp3")
 				else
 					icon_state = "req_comp0"
-					update_moody_light('icons/lighting/moody_lights.dmi', "overlay_req_comp0")
+					update_moody_light("overlay_req_comp0")
 
 /obj/machinery/requests_console/New()
 	requests_consoles += src

@@ -151,7 +151,7 @@
 		return
 	icon_state = "intercom[!on?"-p":""][b_stat ? "-open":""]"
 	if (on)
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_intercom")
+		update_moody_light("overlay_intercom")
 	else
 		kill_moody_light()
 

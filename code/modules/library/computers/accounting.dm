@@ -5,7 +5,7 @@
 	machine_flags = WRENCHMOVE | FIXED2WORK
 	icon = 'icons/obj/library.dmi'
 	icon_state = "accounting"
-	moody_state = "overlay_accounting"
+	moody_light_state = "overlay_accounting"
 	on_flick = "accounting_on"
 	off_flick = "accounting_off"
 	light_range_on = 2

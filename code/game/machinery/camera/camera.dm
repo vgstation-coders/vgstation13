@@ -76,10 +76,10 @@ var/list/camera_names=list()
 		kill_moody_light()
 	else if (EMPd)
 		icon_state = "[camtype]emp"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_cameraemp")
+		update_moody_light("overlay_cameraemp")
 	else
 		icon_state = "[camtype]"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_camera")
+		update_moody_light("overlay_camera")
 
 /obj/machinery/camera/proc/update_hear()//only cameras with voice analyzers can hear, to reduce the number of unecessary /mob/virtualhearer
 	if(!hear_voice && isHearing())

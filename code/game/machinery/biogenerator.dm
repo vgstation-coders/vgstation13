@@ -406,13 +406,13 @@
 			icon_state = "biogen-offempty"
 	else if(!beaker)
 		icon_state = "biogen-empty"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_biogen_empty")
+		update_moody_light("overlay_biogen_empty")
 	else if(!processing)
 		icon_state = "biogen-stand"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_biogen")
+		update_moody_light("overlay_biogen")
 	else
 		icon_state = "biogen-work"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_biogen_work")
+		update_moody_light("overlay_biogen_work")
 
 /obj/machinery/biogenerator/New()
 	. = ..()

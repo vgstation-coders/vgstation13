@@ -75,15 +75,15 @@
 
 	if(!allowed(user) && (wires & 1))
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_doorctrl-denied")
+		update_moody_light("overlay_doorctrl-denied")
 		flick("doorctrl-denied",src)
 		spawn(5)
-			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_doorctrl1")
+			update_moody_light("overlay_doorctrl1")
 		return
 
 	use_power(5)
 	icon_state = "doorctrl1"
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_doorctrl1")
+	update_moody_light("overlay_doorctrl1")
 	add_fingerprint(user)
 
 	if(normaldoorcontrol)
@@ -120,7 +120,7 @@
 	spawn(15)
 		if(!(stat & (FORCEDISABLE|NOPOWER)))
 			icon_state = "doorctrl0"
-			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_doorctrl0")
+			update_moody_light("overlay_doorctrl0")
 
 /obj/machinery/door_control/power_change()
 	..()
@@ -129,7 +129,7 @@
 		kill_moody_light()
 	else
 		icon_state = "doorctrl0"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_doorctrl0")
+		update_moody_light("overlay_doorctrl0")
 
 /obj/machinery/door_control/npc_tamper_act(mob/living/L)
 	attack_hand(L)

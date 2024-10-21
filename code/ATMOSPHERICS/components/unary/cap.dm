@@ -159,7 +159,7 @@ var/global/list/pipe_colors = list(
 	overlays = 0
 	alpha = invisibility ? 128 : 255
 	icon_state = "bscap"
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_bscap")
+	update_moody_light("overlay_bscap")
 	color_overlay = image('icons/obj/pipes.dmi', icon_state = "bscap-overlay")
 	color_overlay.color = rgb(color_r,color_g,color_b)
 	overlays += color_overlay
