@@ -622,16 +622,17 @@
 		src.explode()
 
 /obj/machinery/bot/emag_act(mob/user)
-	if(emagged < 2)
-		if(locked)
-			locked = 0
-			emagged = 1
-			if(user)
-				to_chat(user, "<span class='warning'>You remove [src]'s control restrictions. Opening up its maintenance panel and swiping again will cause [src] to malfunction.</span>")
-		else if(open)
-			emagged = 2
-			if(user)
-				to_chat(user, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
+	if(emagged >= 2)
+		return
+ 	if(locked)
+		locked = 0
+		emagged = 1
+		if(user)
+			to_chat(user, "<span class='warning'>You remove [src]'s control restrictions. Opening up its maintenance panel and swiping again will cause [src] to malfunction.</span>")
+	else if(open)
+		emagged = 2
+		if(user)
+			to_chat(user, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
 
 /obj/machinery/bot/emag_ai(mob/living/silicon/ai/A)
 	locked = 0
