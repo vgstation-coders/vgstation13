@@ -1076,7 +1076,7 @@ var/list/discounted_items_of_the_round = list()
 	name = "Kitchen Gun"
 	desc = "An otherwise ordinary glock that also has the power to completely clean the surface of anything it's fired on in three shots. Causes the holder to shout their speech loudly while held. Comes with night vision goggles for after dark cleaning."
 	item = /obj/item/weapon/storage/box/syndie_kit/kitchengun
-	cost = 12
+	cost = 14
 	discounted_cost = 10
 	jobs_with_discount = list("Chef","Janitor")
 
