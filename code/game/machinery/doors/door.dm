@@ -393,11 +393,15 @@ var/list/all_doors = list()
 
 /obj/machinery/door/arcane_act(mob/user)
 	..()
-	if(!(flow_flags & ON_BORDER) && arcane_linkable())
-		while(!arcane_linked_door || arcane_linked_door == src || !arcane_linked_door.arcane_linkable())
-			arcane_linked_door = pick(all_doors)
-		arcane_linked_door.arcanetampered = arcanetampered
-		arcane_linked_door.arcane_linked_door = src
+	if(arcane_linkable() && all_doors.len > 1)
+		var/list/door_selection = all_doors.Copy()
+		while(!arcane_linked_door || arcane_linked_door == src || arcane_linked_door.z != src.z || !arcane_linked_door.arcane_linkable())
+			arcane_linked_door = pick_n_take(door_selection)
+			if(!door_selection.len)
+				break
+		if(arcane_linked_door)
+			arcane_linked_door.arcanetampered = arcanetampered
+			arcane_linked_door.arcane_linked_door = src
 		return "D'R ST'K!"
 
 /obj/machinery/door/proc/arcane_linkable()
