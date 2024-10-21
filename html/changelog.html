@@ -73,6 +73,15 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2024.10.21</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Arcane tampered doors now only link to somewhere on the same z-level</li>
+			</ul>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Updated the Mecha Graveyard, available via trader destination disk.</li>
+			</ul>
 			<h2 class="date">2024.10.18</h2>
 			<h3 class="author">SECBATON-GRIFFON updated:</h3>
 			<ul class="changes bgimages16">
@@ -1586,96 +1595,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">west3436 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">The Gigadrill now has a unique description.</li>
-			</ul>
-			<h2 class="date">2024.03.27</h2>
-			<h3 class="author">Dacendeth updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Mimes can no longer speak with their mind once again.</li>
-				<li class="rscadd">HF machete now kills powercreeper by walking through it, similarly to how it already did with kudzu.</li>
-			</ul>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Plant analyzers will now output more detailed information about the plant&#39;s assorted stats (toxin affinity, weed/pest tolerance, ideal temperature/light, tolerated deviations from the ideal, gas consumed/produced per cycle), with numerical values, and what reagents can be produced by the seed.</li>
-				<li class="bugfix">Fixes plants consuming more or less water/toxin/nutriment than they should due to rounding.</li>
-				<li class="bugfix">In the event of the plant glowing white, the plant analyzer will now say that it glows pure white, instead of recoloring the word &#39;bioluminescent&#39; white, rendering it unreadable.</li>
-				<li class="rscadd">April Fool&#39;s now also happens on Sundays during the month of April.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Admin test dummies and other godmode creatures no longer get ruptured lungs in a vacuum</li>
-				<li class="tweak">Robotic lung damage prevention now also works in vaccums, decreasing damage taken by 20% like from other sources</li>
-				<li class="bugfix">Arcade machines now properly update their name on emag</li>
-				<li class="bugfix">Wallrot events are now able to start again</li>
-				<li class="bugfix">Gold slime mimic reactions now actually behave properly when in grenades, instead of copying the grenade itself</li>
-				<li class="bugfix">Bhangmeter database entries now properly show up if holominimaps are disabled</li>
-				<li class="tweak">Messes and trash found outside of the station on the same z-level no longer count as &#34;on station&#34; for scoreboards</li>
-				<li class="tweak">If nothing shows up under &#34;the bad&#34; in the scoreboard, a special message is given relating to it</li>
-				<li class="bugfix">Station power, atmos alarms, messes and trash no longer only count for the main level on multi-Z maps</li>
-				<li class="tweak">Appearance banned players can no longer have examined flavor text. They can still edit it in their profile for after their ban, if expired.</li>
-				<li class="bugfix">Missing attack verbs no longer result in &#34;You the item with the item&#34;, it now defaults to &#34;You attack the item with the item&#34;</li>
-				<li class="tweak">Ion rifle projectiles will now actually land when hitting a pulse demon if they&#39;re not under a tile.</li>
-				<li class="bugfix">Bullets no longer indicate they went &#34;right through&#34; a pulse demon if they&#39;re below a floor tile</li>
-				<li class="bugfix">Lazarus injectors now work on held mobs</li>
-				<li class="spellcheck">Item attack messages now display &#34;someone&#34; instead of &#34;.&#34; for unseen mobs</li>
-				<li class="bugfix">Being in an animal holder no longer counts as unseen for item attacks</li>
-				<li class="tweak">Lazarus injectors now display a failure message if not used on a living thing</li>
-				<li class="bugfix">Vox raiders no longer get deleted after the end of a raid if they&#39;re not on the skipjack. They also get a unique message if they aren&#39;t.</li>
-				<li class="tweak">Alt-clicking an anchored window now allows rotating any unanchored window underneath it that faces the same direction, one at a time with each alt-click. This also works for railings.</li>
-				<li class="tweak">Unanchored railings can now be rotated counterclockwise by alt-clicking like unanchored windows.</li>
-				<li class="tweak">Kinetic accelerator warp vouchers now fit in mining gear belts.</li>
-				<li class="bugfix">Cargo crate forwards for ore now stack properly when generated in boxes, allowing them to be closed properly when accidentally (or otherwise) opened.</li>
-				<li class="bugfix">Only humans conveyord into a food processor are now required to lie down, as simplemobs generally do not codewise.</li>
-				<li class="tweak">Clothing accessories can now be attached with quick equip</li>
-				<li class="tweak">Items can now be holstered with quick equip. Currently, only handguns prioritise this.</li>
-				<li class="tweak">Only wallets, cartridges, pens, IDs, PDAs, cash and coins will now go into the ID slot before anything else.</li>
-				<li class="tweak">Many many more kinds of trash, as well as paper and used autoinjectors and lazarus injectors, can now be recyclable into materials in disposals.</li>
-				<li class="tweak">Recycling sorters now have a cardboard category, enabled by default.</li>
-				<li class="bugfix">Discarded trash from food now fit in their delivery bags.</li>
-				<li class="tweak">The scoreboard info for nukeops and revs are now sorted under their respective factions, with some redundant information removed</li>
-				<li class="tweak">The &#34;all ops/head revs arrested&#34; stat now checks the highest ever amount of suitable members in the faction</li>
-				<li class="tweak">Permabrig and the shuttle brig now count for ops or revs arrested on the scoreboard</li>
-				<li class="bugfix">The location of the nuke is now given in the nuke ops scoreboard</li>
-				<li class="rscadd">Players can now look up one connected Z level on multi-Z maps.</li>
-				<li class="bugfix">The move up and down verbs no longer show if there is no connected Z level to move to for each.</li>
-				<li class="bugfix">Pulse demons can no longer be hit by pies.</li>
-				<li class="bugfix">Pulse demons are no longer stung by bees.</li>
-				<li class="tweak">A message now indicates thrown items go through pulse demons instead of hitting them.</li>
-				<li class="bugfix">Many construction steps on items now accept any tool that works as a screwdriver, wirecutters or wrench rather than just literal types. This includes crank changers, station map frames, and mechs</li>
-				<li class="tweak">Mass drivers now give more accurate feedback on placing rods into them during construction.</li>
-				<li class="tweak">Cable coils now play a more appropriate sound when constructing mass drivers.</li>
-				<li class="tweak">Many items that had tool sounds only play at the end of a delayed construction step now play at the start.</li>
-				<li class="tweak">APC frames can now no longer be deconstructed while wires and rods are in them, the build steps for removing them must be performed first, as to stop the player from losing the materials spent.</li>
-				<li class="tweak">APC frames now play a deconstruction sound when made back into sheets.</li>
-				<li class="spellcheck">Restructured some sentences on mass driver construction to use better english.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed an issue where a mob&#39;s death would happen twice when eaten by a grue. This should also hopefully fix a bug where a victim&#39;s items would not always drop when being eaten by a grue.</li>
-			</ul>
-			<h3 class="author">brndd updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Wheelstation: add holosigns, cameras and an extra door to the morgue.</li>
-			</ul>
-			<h3 class="author">cloutcode updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds a new religion based on the Vironese faith in Gene Wolfe&#39;s The Book of the Long Sun</li>
-			</ul>
-			<h3 class="author">jwhitak updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed the TEG Circulator Crate incorrect description</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed greytide implants being able to implant anyone and being infinitely re-useable.</li>
-				<li class="bugfix">Fixed implanters not being able to pick up implants off the ground (unless they were already in a glass tray)</li>
-				<li class="bugfix">Fixed greytide convertees not getting their objectives announced.</li>
-				<li class="tweak">Made the greytide conversion text more clear.</li>
-				<li class="tweak">Failed greytide conversions now announce that the implant has dropped to the floor.</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Valuable Asteroid items will now properly recycle when processed in a recycler.</li>
-				<li class="bugfix">Wizard cards now show their unique descriptions only when flipped.</li>
 			</ul>
 		</div>
 		<!--
