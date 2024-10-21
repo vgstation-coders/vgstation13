@@ -80,7 +80,7 @@
 
 /datum/design/borg_magnetic_gripper_board
 	name = "Engineering cyborg magnetic gripper upgrade"
-	desc = "Used to give a engineering cyborg a magnetic gripper."
+	desc = "Used to give an engineering cyborg a magnetic gripper."
 	id = "borg_magnetic_gripper_board"
 	req_tech = list(Tc_MAGNETS = 5, Tc_ENGINEERING = 5, Tc_ANOMALY = 3)
 	build_type = MECHFAB

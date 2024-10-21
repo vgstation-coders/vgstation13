@@ -967,7 +967,7 @@ var/list/tag_suits_list = list()
 
 /obj/item/clothing/suit/kimono/sakura
 	name = "sakura kimono"
-	desc = "A pale-pink, nearly white, kimono with a red and gold obi. There is a embroidered design of cherry blossom flowers covering the kimono."
+	desc = "A pale-pink, nearly white, kimono with a red and gold obi. There is an embroidered design of cherry blossom flowers covering the kimono."
 	icon_state = "sakura_kimono"
 	item_state = "sakura_kimono"
 	species_fit = list(INSECT_SHAPED)

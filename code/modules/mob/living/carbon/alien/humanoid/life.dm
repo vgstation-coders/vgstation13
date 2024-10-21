@@ -16,7 +16,7 @@
 
 	..()
 
-	var/datum/gas_mixture/environment = loc.return_air()
+	var/datum/gas_mixture/environment = loc.return_readonly_air()
 
 	if (stat != DEAD) //still breathing
 
