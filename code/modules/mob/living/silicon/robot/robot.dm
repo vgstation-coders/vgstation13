@@ -818,6 +818,8 @@
 				updateicon()
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
+	else if(isEmag(W))
+		emag_check(W,user)
 	else if(istype(W, /obj/item/device/toner))
 		if(toner >= tonermax)
 			to_chat(user, "The toner level of [src] is at its highest level possible")
