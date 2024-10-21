@@ -4,6 +4,11 @@
 	var/window_path = /obj/structure/window
 	var/full_path
 
+/obj/structure/grille/window_spawner/New()
+	. = ..()
+	if(ticker?.current_state == GAME_STATE_PLAYING)
+		initialize()
+
 /obj/structure/grille/window_spawner/initialize()
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "grille0"
