@@ -4,10 +4,9 @@
 	var/window_path = /obj/structure/window
 	var/full_path
 
-/obj/structure/grille/window_spawner/New()
+/obj/structure/grille/window_spawner/spawned_by_map_element(datum/map_element/ME)
 	. = ..()
-	if(ticker?.current_state == GAME_STATE_PLAYING)
-		initialize()
+	initialize()
 
 /obj/structure/grille/window_spawner/initialize()
 	icon = 'icons/obj/structures.dmi'
