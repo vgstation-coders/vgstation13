@@ -622,12 +622,14 @@
 		src.explode()
 
 /obj/machinery/bot/emag_act(mob/user)
-	if(locked)
+	if(emagged >= 2)
+		return
+ 	if(locked)
 		locked = 0
 		emagged = 1
 		if(user)
 			to_chat(user, "<span class='warning'>You remove [src]'s control restrictions. Opening up its maintenance panel and swiping again will cause [src] to malfunction.</span>")
-	if(!locked && open)
+	else if(open)
 		emagged = 2
 		if(user)
 			to_chat(user, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
@@ -716,8 +718,6 @@
 				to_chat(user, "<span class='notice'>Unable to repair with the maintenance panel closed.</span>")
 		else
 			to_chat(user, "<span class='notice'>[src] does not need a repair.</span>")
-	else if (emagged < 2)
-		emag_check(W,user)
 	else
 		if(isobj(W))
 			W.on_attack(src, user)
