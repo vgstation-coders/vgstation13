@@ -114,3 +114,6 @@
 
 /obj/item/clothing/head/det_hat/reporter
 	name = "Reporter's Cap"
+	
+/obj/structure/closet/reporter/empty/atoms_to_spawn()
+	return list()
