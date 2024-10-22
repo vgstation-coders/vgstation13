@@ -251,7 +251,7 @@
 	desc = "It's wall-mounted storage unit for first aid supplies."
 	icon_state = "medical_wall"
 	icon_closed = "medical_wall"
-	icon_opened = "medical_wall_open"
+	icon_opened = "medical_wallopen"
 	anchored = 1
 	density = 0
 	wall_mounted = 1

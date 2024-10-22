@@ -59,7 +59,7 @@
 	desc = "A wall mounted locker with a handheld defibrillator."
 	icon = 'icons/obj/closet.dmi'
 	icon_state = "medical_wall"
-	icon_opened = "medical_wall_open"
+	icon_opened = "medical_wallopen"
 	icon_closed = "medical_wall"
 	var/obj/item/weapon/melee/defibrillator/defib
 

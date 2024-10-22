@@ -149,7 +149,7 @@
 		/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer = 2
 	)
 
-/obj/structure/closet/secure_closet/medical_wall
+/obj/structure/closet/secure_closet/medical_wall //completely unused everywhere and icons are out of wack, do not spawn anywhere
 	name = "First Aid Closet"
 	desc = "It's a secure wall-mounted storage unit for first aid supplies."
 	icon_state = "medical_wall"
