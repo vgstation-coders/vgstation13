@@ -35,19 +35,19 @@ var/global/list/battery_online =	list(
 		return
 
 	overlays += battery_online[online + 1]
-	update_moody_light_index("online",battery_online[online + 1])
+	update_moody_light_index("online",image_override = battery_online[online + 1])
 
 	if(charging)
 		overlays += battery_charging[2]
-		update_moody_light_index("charging",battery_charging[2])
+		update_moody_light_index("charging",image_override = battery_charging[2])
 	else if(chargemode)
 		overlays += battery_charging[1]
-		update_moody_light_index("charging",battery_charging[1])
+		update_moody_light_index("charging",image_override = battery_charging[1])
 
 	var/clevel = chargedisplay()
 	if(clevel>0)
 		overlays += battery_charge[clevel]
-		update_moody_light_index("charge",battery_charge[clevel])
+		update_moody_light_index("charge",image_override = battery_charge[clevel])
 	return
 
 #define SMESRATE 0.05 				// rate of internal charge to external power
