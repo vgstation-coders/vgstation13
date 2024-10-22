@@ -222,7 +222,7 @@ var/global/list/crate_mimic_disguises = list(\
 	if(change_icon)
 		if(ispath(copied_object, /obj/structure/closet))
 			var/obj/structure/closet/C = copied_object
-			icon_state = initial(C.icon_opened)
+			icon_state = "[initial(C.icon_state)]open"
 
 	if(berserk)
 		angry = 2 //Can't calm down

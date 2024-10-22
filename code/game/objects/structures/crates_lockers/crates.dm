@@ -168,37 +168,27 @@
 	desc = "A secure weapons crate."
 	name = "Weapons crate"
 	icon_state = "weaponcrate"
-	icon_opened = "weaponcrateopen"
-	icon_closed = "weaponcrate"
 
 /obj/structure/closet/crate/secure/plasma
 	desc = "A secure plasma crate."
 	name = "Plasma crate"
 	icon_state = "plasmacrate"
-	icon_opened = "plasmacrateopen"
-	icon_closed = "plasmacrate"
 
 /obj/structure/closet/crate/secure/gear
 	desc = "A secure gear crate."
 	name = "Gear crate"
 	icon_state = "secgearcrate"
-	icon_opened = "secgearcrateopen"
-	icon_closed = "secgearcrate"
 
 /obj/structure/closet/crate/secure/hydrosec
 	desc = "A crate with a lock on it, painted in the scheme of the station's botanists."
 	name = "secure hydroponics crate"
 	icon_state = "hydrosecurecrate"
-	icon_opened = "hydrosecurecrateopen"
-	icon_closed = "hydrosecurecrate"
 	has_lockless_type = /obj/structure/closet/crate/hydroponics
 
 /obj/structure/closet/crate/secure/bin
 	desc = "A secure bin." 
 	name = "Secure bin"
 	icon_state = "largebins"
-	icon_opened = "largebinsopen"
-	icon_closed = "largebins"
 	moody_light_state = "largebinlight"
 	sparks = "largebinsparks"
 	emag = "largebinemag"
@@ -215,8 +205,6 @@
 	name = "large crate"
 	desc = "A hefty metal crate with an electronic locking system."
 	icon_state = "largemetal"
-	icon_opened = "largemetalopen"
-	icon_closed = "largemetal"
 	moody_light_state = "largemetallight"
 	has_lockless_type = /obj/structure/closet/crate/large
 
@@ -241,8 +229,6 @@
 /obj/structure/closet/crate/secure/large/reinforced
 	desc = "A hefty, reinforced metal crate with an electronic locking system."
 	icon_state = "largermetal"
-	icon_opened = "largermetalopen"
-	icon_closed = "largermetal"
 
 /obj/structure/closet/crate/secure
 	desc = "A secure crate."
@@ -250,8 +236,6 @@
 	moody_light_icon = 'icons/obj/storage/storage.dmi'
 	moody_light_state = "securecratelight"
 	icon_state = "securecrate"
-	icon_opened = "securecrateopen"
-	icon_closed = "securecrate"
 	var/sparks = "securecratesparks"
 	var/emag = "securecrateemag"
 	broken = 0
@@ -282,8 +266,6 @@
 	name = "large crate"
 	desc = "A hefty metal crate."
 	icon_state = "largemetal"
-	icon_opened = "largemetalopen"
-	icon_closed = "largemetal"
 	has_lock_type = /obj/structure/closet/crate/secure/large
 
 /obj/structure/closet/crate/large/close()
@@ -307,48 +289,36 @@
 	name = "Hydroponics crate"
 	desc = "All you need to destroy those pesky weeds and pests."
 	icon_state = "hydrocrate"
-	icon_opened = "hydrocrateopen"
-	icon_closed = "hydrocrate"
 	has_lock_type = /obj/structure/closet/crate/secure/hydrosec
 
 /obj/structure/closet/crate/sci
 	desc = "A science crate."
 	name = "science crate"
 	icon_state = "scicrate"
-	icon_opened = "scicrateopen"
-	icon_closed = "scicrate"
 	has_lock_type = /obj/structure/closet/crate/secure/scisec
 
 /obj/structure/closet/crate/secure/scisec
 	desc = "A secure science crate."
 	name = "secure science crate"
 	icon_state = "scisecurecrate"
-	icon_opened = "scisecurecrateopen"
-	icon_closed = "scisecurecrate"
 	has_lockless_type = /obj/structure/closet/crate/sci
 
 /obj/structure/closet/crate/engi
 	desc = "An engineering crate."
 	name = "engineering crate"
 	icon_state = "engicrate"
-	icon_opened = "engicrateopen"
-	icon_closed = "engicrate"
 	has_lock_type = /obj/structure/closet/crate/secure/engisec
 
 /obj/structure/closet/crate/secure/engisec
 	desc = "A secure engineering crate."
 	name = "secure engineering crate"
 	icon_state = "engisecurecrate"
-	icon_opened = "engisecurecrateopen"
-	icon_closed = "engisecurecrate"
 	has_lockless_type = /obj/structure/closet/crate/engi
 
 /obj/structure/closet/crate/secure/medsec
 	desc = "A secure medical crate."
 	name = "secure medical crate"
 	icon_state = "medicalsecurecrate"
-	icon_opened = "medicalsecurecrateopen"
-	icon_closed = "medicalsecurecrate"
 	has_lockless_type = /obj/structure/closet/crate/medical
 
 /obj/structure/closet/crate/secure/plasma/prefilled
@@ -425,9 +395,9 @@
 
 	take_contents()
 
-	icon_state = icon_closed
 	src.opened = 0
 	src.setDensity(TRUE)
+	update_icon()
 	return 1
 
 /obj/structure/closet/crate/insert(var/atom/movable/AM)
@@ -572,16 +542,13 @@
 	return ..()
 
 /obj/structure/closet/crate/secure/update_icon()
-	if(opened)
-		icon_state = icon_opened
-	else
-		icon_state = icon_closed
-		if (!broken)
-			overlays.len = 0
-			var/image/I = image(icon,src,moody_light_state)
-			I.color = locked ? "#f00" : "#0f0"
-			overlays += I
-			update_moody_light()
+	if (!opened && !broken)
+		overlays.len = 0
+		var/image/I = image(icon,src,moody_light_state)
+		I.color = locked ? "#f00" : "#0f0"
+		overlays += I
+		update_moody_light()
+	icon_state = "[initial(icon_state)][opened ? "open" : ""]"
 
 /obj/structure/closet/crate/attack_paw(mob/user as mob)
 	return attack_hand(user)

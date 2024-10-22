@@ -136,8 +136,8 @@
 	if(!src.can_open())
 		return 0
 
-	src.icon_state = src.icon_opened
 	src.opened = 1
+	update_icon()
 	setDensity(FALSE)
 	src.dump_contents()
 	playsound(src, sound_file, 15, 1, -3)
@@ -213,8 +213,8 @@
 		M.forceMove(src)
 		itemcount++
 	*/
-	src.icon_state = src.icon_closed
 	src.opened = 0
+	src.update_icon()
 	setDensity(initial(density))
 	playsound(src, sound_file, 15, 1, -3)
 	return 1
@@ -544,7 +544,7 @@
 	if(src.opened==0 && L && L.client && L.hallucinating()) //If the closet is CLOSED and user is hallucinating
 		if(prob(10))
 			var/client/C = L.client
-			var/image/temp_overlay = image(src.icon, icon_state=src.icon_opened) //Get the closet's OPEN icon
+			var/image/temp_overlay = image(src.icon, icon_state="[initial(src.icon_state)]open") //Get the closet's OPEN icon
 			temp_overlay.override = 1
 			temp_overlay.loc = src
 

@@ -79,7 +79,7 @@
 				S.playtoolsound(loc, 100)
 				broken = 0
 				to_chat(user, "<span class='notice'>You repair the electronics inside the locking mechanism!</span>")
-				icon_state = icon_closed
+				update_icon()
 		else
 			to_chat(user, "<span class='notice'>The locker appears to be broken.</span>")
 			return
@@ -116,17 +116,7 @@
 		return
 
 	if(!(src.locked) && !(src.welded))
-		for(var/obj/item/I in src)
-			I.forceMove(src.loc)
-		for(var/mob/M in src)
-			M.forceMove(src.loc)
-			if(M.client)
-				M.client.eye = M.client.mob
-				M.client.perspective = MOB_PERSPECTIVE
-		src.icon_state = src.icon_opened
-		src.opened = 1
-		setDensity(FALSE)
-		playsound(src, 'sound/machines/click.ogg', 15, 1, -3)
+		open(user)
 	else
 		if(!can_open())
 			to_chat(user, "<span class='notice'>It won't budge!</span>")
