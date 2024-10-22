@@ -1058,11 +1058,12 @@ Thanks.
 				if(istype(usr.loc, /obj/structure/closet/secure_closet))
 					var/obj/structure/closet/secure_closet/SC = L.loc
 					SC.desc = "It appears to be broken."
-					SC.icon_state = SC.icon_off
-					flick(SC.icon_broken, SC)
+					SC.overlays.len = 0
+					SC.overlays += "emag"
 					sleep(10)
-					flick(SC.icon_broken, SC)
+					SC.overlays += "emag"
 					sleep(10)
+					SC.overlays.len = 0
 					SC.broken = SC.locked // If it's only welded just break the welding, dont break the lock.
 					SC.locked = 0
 					SC.welded = 0
