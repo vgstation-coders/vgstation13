@@ -136,12 +136,16 @@
 	scanner = user
 	icon_state = "analyser_processing"
 	flick("analyser_turnon",src)
-
+	kill_moody_light_all()
+	update_moody_light_index("main","overlay_analyser_turnon")
+	spawn(3)
+		update_moody_light_index("main","overlay_analyser_process")
+	
 	spawn (1)
-		var/image/I = image(icon,"analyser_light")
-		I.plane = ABOVE_LIGHTING_PLANE
-		I.layer = ABOVE_LIGHTING_LAYER
-		overlays += I
+		overlays += "analyser_light"
+		var/image/moody = image(icon,"analyser_light")
+		moody.color = whiteout
+		update_moody_light_index("light",image_override = moody)
 
 	use_power(1000)
 	set_light(2,2)
@@ -171,24 +175,30 @@
 	else
 		alert_noise("buzz")
 
-	update_icon()
+	
 	flick("analyser_turnoff",src)
+	update_moody_light_index("main","overlay_analyser_turnoff")
+	spawn(3)
+		update_moody_light_index("main","overlay_analyser")
+		update_icon()
 	scanner = null
 
 /obj/machinery/disease2/diseaseanalyser/update_icon()
 	overlays.len = 0
-	icon_state = "analyser"
-
-	if (stat & (NOPOWER|FORCEDISABLE))
-		icon_state = "analyser0"
-
+	kill_moody_light_all()
 	if (stat & (BROKEN))
 		icon_state = "analyserb"
-
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		set_light(0)
-	else
-		set_light(2,1)
+		return
+	if (stat & (NOPOWER|FORCEDISABLE))
+		icon_state = "analyser0"
+		set_light(0)
+		return
+
+	icon_state = "analyser"
+	update_moody_light_index("main","overlay_analyser")
+
+	set_light(2,1)
 
 	if (dish)
 		overlays += "smalldish-outline"
