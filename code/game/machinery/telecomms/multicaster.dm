@@ -41,7 +41,7 @@ var/list/pda_multicasters = list()
 
 /obj/machinery/pda_multicaster/update_icon()
 	icon_state = "pda_server-[stat & (FORCEDISABLE|BROKEN|NOPOWER|EMPED) ? "nopower" : (on ? "on" : "off")]"
-	toggle_moody_light(~stat & (FORCEDISABLE|BROKEN|NOPOWER|EMPED))
+	toggle_moody_light(!(stat & (FORCEDISABLE|BROKEN|NOPOWER|EMPED)))
 
 /obj/machinery/pda_multicaster/attack_hand(mob/user)
 	if(user.incapacitated() && !isAdminGhost(user))

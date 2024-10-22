@@ -228,7 +228,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 /obj/machinery/computer/security/telescreen/update_icon()
 	icon_state = "[initial(icon_state)][stat & BROKEN ? "b" : ""]"
-	toggle_moody_light(~stat & BROKEN)
+	toggle_moody_light(!(stat & BROKEN))
 
 /obj/machinery/computer/security/telescreen/entertainment
 	name = "entertainment monitor"

@@ -56,7 +56,7 @@ log transactions
 
 /obj/machinery/atm/update_icon()
 	icon_state = "atm[stat & (FORCEDISABLE|NOPOWER) ? "_off" : ""]"
-	toggle_moody_light(~stat & (FORCEDISABLE|NOPOWER))
+	toggle_moody_light(!(stat & (FORCEDISABLE|NOPOWER)))
 
 /obj/machinery/atm/process()
 	if(stat & (FORCEDISABLE|NOPOWER))

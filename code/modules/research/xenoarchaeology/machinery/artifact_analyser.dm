@@ -60,7 +60,7 @@ var/anomaly_report_num = 0
 
 /obj/machinery/artifact_analyser/update_icon()
 	icon_state = "[initial(icon_state)][stat & (FORCEDISABLE|NOPOWER) ? "" : scan_in_progress]"
-	toggle_moody_light(~stat & (FORCEDISABLE|NOPOWER))
+	toggle_moody_light(!(stat & (FORCEDISABLE|NOPOWER)))
 	if(owned_scanner)
 		owned_scanner.update_icon()
 

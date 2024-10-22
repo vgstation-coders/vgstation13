@@ -53,7 +53,7 @@
 	else
 		icon_state = icon_on
 		set_light(2)
-	toggle_moody_light(~stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	toggle_moody_light(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 
 /obj/machinery/smartfridge/proc/breakdown()
 	stat |= BROKEN
