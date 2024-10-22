@@ -1,5 +1,0 @@
-author: noirogen
-delete-after: true
-changes:
-- bugfix: Fixes cow's udders being clogged with old chemicals after they were mutated
-    by phazon.
