@@ -314,6 +314,7 @@
 /obj/machinery/access_button
 	icon = 'icons/obj/airlock_machines.dmi'
 	icon_state = "access_button_standby"
+	moody_light_state = "overlay_button_standby"
 	name = "access button"
 	anchored = 1
 	power_channel = ENVIRON
@@ -357,13 +358,8 @@
 
 
 /obj/machinery/access_button/update_icon()
-	if(on)
-		icon_state = "access_button_standby"
-		update_moody_light("overlay_button_standby")
-	else
-		icon_state = "access_button_off"
-		kill_moody_light()
-
+	icon_state = "access_button_[on ? "standby" : "off"]"
+	toggle_moody_light(on)
 
 /obj/machinery/access_button/attack_hand(mob/user)
 	add_fingerprint(usr)

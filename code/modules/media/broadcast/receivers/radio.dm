@@ -128,12 +128,8 @@
 	update_icon()
 
 /obj/machinery/media/receiver/boombox/wallmount/update_icon()
-	if(buildstage==SYSTEMISDONE && on)
-		icon_state="wallradio-p"
-		update_moody_light()
-	else
-		icon_state="wallradio"
-		kill_moody_light()
+	icon_state="wallradio[buildstage==SYSTEMISDONE && on ? "-p" : ""]"
+	toggle_moody_light(buildstage==SYSTEMISDONE && on)
 
 /obj/machinery/media/receiver/boombox/wallmount/attack_hand(var/mob/user)
 	if(buildstage<SYSTEMISDONE)

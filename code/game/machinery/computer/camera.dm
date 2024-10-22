@@ -227,12 +227,8 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		to_chat(user, "Looks like the current channel is \"<span class='info'>[active_camera.c_tag]</span>\"")
 
 /obj/machinery/computer/security/telescreen/update_icon()
-	icon_state = initial(icon_state)
-	if(stat & BROKEN)
-		icon_state += "b"
-		kill_moody_light()
-	else
-		update_moody_light()
+	icon_state = "[initial(icon_state)][stat & BROKEN ? "b" : ""]"
+	toggle_moody_light(~stat & BROKEN)
 
 /obj/machinery/computer/security/telescreen/entertainment
 	name = "entertainment monitor"

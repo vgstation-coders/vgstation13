@@ -59,15 +59,10 @@ var/anomaly_report_num = 0
 	update_icon()
 
 /obj/machinery/artifact_analyser/update_icon()
-	if(stat & (FORCEDISABLE|NOPOWER))
-		icon_state = "xenoarch_console"
-		kill_moody_light()
-	else
-		icon_state = "[initial(icon_state)][scan_in_progress]"
-		update_moody_light()
+	icon_state = "[initial(icon_state)][stat & (FORCEDISABLE|NOPOWER) ? "" : scan_in_progress]"
+	toggle_moody_light(~stat & (FORCEDISABLE|NOPOWER))
 	if(owned_scanner)
 		owned_scanner.update_icon()
-
 
 /obj/machinery/artifact_analyser/proc/reconnect_scanner()
 	//connect to a nearby scanner pad

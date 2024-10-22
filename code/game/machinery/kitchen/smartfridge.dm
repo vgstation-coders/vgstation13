@@ -46,16 +46,14 @@
 /obj/machinery/smartfridge/update_icon()
 	if (stat & BROKEN)
 		icon_state = icon_broken
-		kill_moody_light()
 		set_light(0)
 	else if (stat & (NOPOWER|FORCEDISABLE))
 		icon_state = icon_off
-		kill_moody_light()
 		set_light(0)
 	else
 		icon_state = icon_on
-		update_moody_light()
 		set_light(2)
+	toggle_moody_light(~stat & (BROKEN|NOPOWER|FORCEDISABLE))
 
 /obj/machinery/smartfridge/proc/breakdown()
 	stat |= BROKEN

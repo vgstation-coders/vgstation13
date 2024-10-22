@@ -1137,6 +1137,12 @@ its easier to just keep the beam vertical.
 	luminosity = initial(luminosity)
 	moody_light = null
 
+/atom/proc/toggle_moody_light(var/condition)
+	if(condition)
+		update_moody_light()
+	else
+		kill_moody_light()
+
 //Multi-overlay moody lights. don't combine both procs on a single atom, use one or the other.
 /atom/proc/update_moody_light_index(var/index, var/moody_state, var/moody_alpha = 255, var/moody_color = "#ffffff", var/offX = 0, var/offY = 0, var/image_override = null)
 	if (!index)

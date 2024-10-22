@@ -7,7 +7,4 @@
 
 /obj/structure/particle_accelerator/fuel_chamber/update_icon()
 	..()
-	if ((construction_state == 3) && powered)
-		update_moody_light("[reference]p[strength]")
-	else
-		kill_moody_light()
+	toggle_moody_light((construction_state == 3) && powered)

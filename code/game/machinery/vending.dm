@@ -1970,10 +1970,7 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/wallmed_frame/update_icon()
 	icon_state = "wallmed_frame[build]"
-	if (build == 3)
-		update_moody_light()
-	else
-		kill_moody_light()
+	toggle_moody_light(build == 3)
 
 /obj/machinery/wallmed_frame/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	switch(build)

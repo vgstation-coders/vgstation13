@@ -55,12 +55,8 @@ log transactions
 	update_icon()
 
 /obj/machinery/atm/update_icon()
-	if(stat & (FORCEDISABLE|NOPOWER))
-		icon_state = "atm_off"
-		kill_moody_light()
-	else
-		icon_state = "atm"
-		update_moody_light()
+	icon_state = "atm[stat & (FORCEDISABLE|NOPOWER) ? "_off" : ""]"
+	toggle_moody_light(~stat & (FORCEDISABLE|NOPOWER))
 
 /obj/machinery/atm/process()
 	if(stat & (FORCEDISABLE|NOPOWER))

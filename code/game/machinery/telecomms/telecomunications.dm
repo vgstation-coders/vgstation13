@@ -191,12 +191,8 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 /obj/machinery/telecomms/update_icon()
 	overlays.Cut()
-	if(on)
-		update_moody_light()
-		icon_state = initial(icon_state)
-	else
-		kill_moody_light()
-		icon_state = "[initial(icon_state)]_off"
+	icon_state = "[initial(icon_state)][on ? "" : "_off"]"
+	toggle_moody_light(on)
 	if(panel_open)
 		overlays += "[initial(icon_state)]_panel"
 

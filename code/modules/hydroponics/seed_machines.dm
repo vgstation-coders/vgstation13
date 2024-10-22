@@ -190,12 +190,8 @@
 	update_icon()
 
 /obj/machinery/botany/extractor/update_icon()
-	if(stat & (FORCEDISABLE|NOPOWER))
-		kill_moody_light()
-		icon_state = "traitcopier-off"
-	else
-		update_moody_light()
-		icon_state = "traitcopier"
+	icon_state = "traitcopier[stat & (FORCEDISABLE|NOPOWER) ? "-off" : ""]"
+	toggle_moody_light(~stat & (FORCEDISABLE|NOPOWER))
 
 /obj/machinery/botany/extractor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 

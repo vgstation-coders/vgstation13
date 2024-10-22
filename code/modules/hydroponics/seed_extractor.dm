@@ -169,12 +169,8 @@
 	..()
 
 /obj/machinery/seed_extractor/update_icon()
-	if(stat & (FORCEDISABLE|NOPOWER))
-		icon_state = "sextractor-off"
-		kill_moody_light()
-	else
-		icon_state = "sextractor"
-		update_moody_light()
+	icon_state = "sextractor[stat & (FORCEDISABLE|NOPOWER) ? "-off" : ""]"
+	toggle_moody_light(~stat & (FORCEDISABLE|NOPOWER))
 
 //Code shamelessly ported over and adapted from tgstation's github repo, PR #2973, credit to Kelenius for the original code
 /datum/seed_pile //Maybe there's a better way to do this.
