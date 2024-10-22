@@ -7,6 +7,7 @@ var/list/nuclear_bombs = list()
 	name = "\improper Nuclear Fission Explosive"
 	desc = "Uh oh. RUN!!!!"
 	icon = 'icons/obj/stationobjs.dmi'
+	moody_light_icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "nuclearbomb0"
 	density = 1
 	var/deployable = 0
@@ -162,8 +163,14 @@ var/list/nuclear_bombs = list()
 		else
 			visible_message("<span class='notice'>\The [src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut.</span>")
 		flick("nuclearbombc", src)
-		src.icon_state = "nuclearbomb1"
+		update_moody_light("nuclearbombcml")
 		src.extended = 1
+		spawn(3)
+			overlays.len = 0
+			var/image/I = image(icon,src,"nuclearbomb1")
+			I.color = "#f00"
+			overlays += I
+			update_moody_light("nuclearbomb1")
 	return
 
 /obj/machinery/nuclearbomb/verb/make_deployable()
@@ -233,13 +240,21 @@ var/list/nuclear_bombs = list()
 						return
 					src.timing = !( src.timing )
 					if (src.timing)
-						src.icon_state = "nuclearbomb2"
+						overlays.len = 0
+						var/image/I = image(icon,src,"nuclearbomb2")
+						I.color = "#f00"
+						overlays += I
+						update_moody_light("nuclearbomb2")
 						if(!src.safety)
 							bomb_set = 1//There can still be issues with this reseting when there are multiple bombs. Not a big deal tho for Nuke/N
 						else
 							bomb_set = 0
 					else
-						src.icon_state = "nuclearbomb1"
+						overlays.len = 0
+						var/image/I = image(icon,src,"nuclearbomb1")
+						I.color = "#0f0"
+						overlays += I
+						update_moody_light("nuclearbomb1")
 						bomb_set = 0
 						score.nukedefuse = min(src.timeleft, score.nukedefuse)
 						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
@@ -294,6 +309,7 @@ var/area/nuked_area
 	src.yes_code = 0
 	src.safety = 1
 	src.icon_state = "nuclearbomb3"
+	update_moody_light("nuclearbomb3ml")
 	if(sound)
 		world << sound('sound/machines/Alarm.ogg')
 	if (ticker)
