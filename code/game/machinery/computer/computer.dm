@@ -17,6 +17,7 @@
 	use_auto_lights = 1
 	light_power_on = 1
 	light_range_on = 3
+	moody_light_state = "overlay_computer"
 
 /obj/machinery/computer/cultify()
 	new /obj/structure/cult_legacy/tome(loc)
