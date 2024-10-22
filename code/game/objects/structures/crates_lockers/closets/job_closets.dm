@@ -12,7 +12,6 @@
 	name = "formal closet"
 	desc = "It's a storage unit for formal clothing."
 	icon_state = "black"
-	icon_closed = "black"
 
 /obj/structure/closet/gmcloset/atoms_to_spawn()
 	return list(
@@ -36,7 +35,6 @@
 	name = "custodial closet"
 	desc = "It's a storage unit for janitorial clothes and gear."
 	icon_state = "mixed"
-	icon_closed = "mixed"
 
 /obj/structure/closet/jcloset/atoms_to_spawn()
 	return list(
@@ -61,7 +59,6 @@
 	name = "legal closet"
 	desc = "It's a storage unit for courtroom apparel and items."
 	icon_state = "blue"
-	icon_closed = "blue"
 
 /obj/structure/closet/lawcloset/atoms_to_spawn()
 	return list(
@@ -81,7 +78,6 @@
 	name = "Paramedic Wardrobe"
 	desc = "It's a storage unit for paramedic equipment."
 	icon_state = "blue"
-	icon_closed = "blue"
 
 
 /obj/structure/closet/paramedic/atoms_to_spawn()
@@ -97,3 +93,24 @@
 		/obj/item/weapon/tank/emergency_oxygen/engi = 2,
 		/obj/item/device/gps/paramedic = 2,
 	)
+
+/obj/structure/closet/reporter
+	name = "Reporter's Threads"
+	desc = "Everything a reporter needs to look the part."
+	icon_state = "blue"
+
+
+/obj/structure/closet/reporter/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/suit/storage/lawyer/bluejacket,
+		/obj/item/clothing/under/suit_jacket/really_black,
+		/obj/item/clothing/under/suit_jacket/female,
+		/obj/item/clothing/shoes/brown = 2,
+		/obj/item/clothing/accessory/tie/blue,
+		/obj/item/clothing/accessory/tie/red,
+		/obj/item/clothing/head/det_hat/reporter,
+		/obj/item/clothing/head/flatcap
+	)
+
+/obj/item/clothing/head/det_hat/reporter
+	name = "Reporter's Cap"
