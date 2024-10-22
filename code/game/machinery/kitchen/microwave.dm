@@ -4,6 +4,7 @@
 	name = "Microwave"
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "mw"
+	moody_light_state = "overlay_microwave_off"
 	density = 1
 	anchored = 1
 	use_power = MACHINE_POWER_USE_IDLE
@@ -67,7 +68,7 @@
 
 	RefreshParts()
 	create_reagents(100)
-	update_moody_light("overlay_microwave_off")
+	update_moody_light()
 
 	if (!available_recipes)
 		available_recipes = generate_available_recipes(flags = COOKABLE_WITH_MICROWAVE | COOKABLE_WITH_MIXING) //Allow things like salads to be made in a microwave while mixing bowls are unimplemented.
@@ -81,6 +82,12 @@
 
 	if(ticker)
 		initialize()
+
+/obj/machinery/microwave/power_change()
+	. = ..()
+	if(!broken)
+		icon_state = "mw[dirty ? "bloody" : ""][stat & NOPOWER ? "0" : ""]"
+		toggle_moody_light(!(stat & NOPOWER) && !dirty)
 
 /*******************
 *   Part Upgrades
