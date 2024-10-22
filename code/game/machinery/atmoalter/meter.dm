@@ -42,6 +42,7 @@
 
 /obj/machinery/meter/process()
 	overlays.len = 0
+	kill_moody_light()
 	if(!target)
 		overlays += "meterX"
 		update_moody_light("meterX",255,whiteout)
