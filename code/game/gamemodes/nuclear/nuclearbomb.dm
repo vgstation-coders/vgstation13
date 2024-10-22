@@ -168,7 +168,7 @@ var/list/nuclear_bombs = list()
 		spawn(3)
 			overlays.len = 0
 			var/image/I = image(icon,src,"nuclearbomb1")
-			I.color = "#f00"
+			I.color = "#0f0"
 			overlays += I
 			update_moody_light("nuclearbomb1")
 	return
