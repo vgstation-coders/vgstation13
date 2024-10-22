@@ -42,10 +42,10 @@
 
 /obj/machinery/meter/process()
 	overlays.len = 0
-	kill_moody_light()
+	//kill_moody_light()
 	if(!target)
 		overlays += "meterX"
-		update_moody_light("meterX",255,whiteout)
+		//update_moody_light("meterX",255,whiteout) // floor moody lights don't look so good
 		// Pop the meter off when the pipe we're attached to croaks.
 		new /obj/item/pipe_meter(src.loc)
 		spawn(0) qdel(src)
@@ -59,7 +59,7 @@
 	var/datum/gas_mixture/environment = target.return_readonly_air()
 	if(!environment)
 		overlays += "meterX"
-		update_moody_light("meterX",255,whiteout)
+		//update_moody_light("meterX",255,whiteout) // floor moody lights don't look so good
 		// Pop the meter off when the environment we're attached to croaks.
 		new /obj/item/pipe_meter(src.loc)
 		spawn(0) qdel(src)
@@ -78,7 +78,7 @@
 			state = "meter4"
 	if(state)
 		overlays += state
-		update_moody_light(state,255,whiteout)
+		//update_moody_light(state,255,whiteout) // floor moody lights don't look so good
 
 	if(id_tag && frequency)
 		var/datum/radio_frequency/radio_connection = radio_controller.return_frequency(frequency)

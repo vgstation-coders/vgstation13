@@ -75,6 +75,7 @@
 
 /obj/machinery/atmospherics/unary/vent_scrubber/update_icon()
 	overlays = null
+	//kill_moody_light()
 	var/prefix = exposed() ? "" : "h"
 	if (welded)
 		icon_state = prefix + "weld"
@@ -97,7 +98,7 @@
 
 		state += state_postfix
 		overlays += state
-		update_moody_light(state,255,whiteout)
+		//update_moody_light(state,255,whiteout) // floor moody lights don't look so good
 
 	..()
 
