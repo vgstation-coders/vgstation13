@@ -1121,10 +1121,9 @@ its easier to just keep the beam vertical.
 	overlays -= moody_light
 	var/area/here = get_area(src)
 	if (here && here.dynamic_lighting)
-		moody_light = image(moody_light_icon, src, (moody_state || moody_light_state) || icon_state)
+		moody_light = image(moody_light_icon, src, (moody_state || moody_light_state) || icon_state, layer, dir)
 		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
 		moody_light.plane = LIGHTING_PLANE
-		moody_light.dir = src.dir
 		moody_light.blend_mode = BLEND_ADD
 		moody_light.alpha = moody_alpha
 		moody_light.color = moody_color
