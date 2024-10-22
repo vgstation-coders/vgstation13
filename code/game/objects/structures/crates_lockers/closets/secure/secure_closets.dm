@@ -11,21 +11,15 @@
 	locked = 1
 	has_electronics = 1
 	icon_closed = "secure"
-	var/icon_locked = "secure1"
 	icon_opened = "secureopen"
-	var/icon_broken = "securebroken"
-	var/icon_off = "secureoff"
+	var/overlay_x = 0
+	var/overlay_y = 0
 	wall_mounted = 0 //never solid (You can always pass over it)
 	health = 200
 	var/id_tag = null
 
 /obj/structure/closet/secure_closet/cabinet
 	icon_state = "cabinetsecure_locked"
-	icon_closed = "cabinetsecure"
-	icon_locked = "cabinetsecure_locked"
-	icon_opened = "cabinetsecure_open"
-	icon_broken = "cabinetsecure_broken"
-	icon_off = "cabinetsecure_broken"
 	has_lockless_type = /obj/structure/closet/cabinet/basic
 	is_wooden = TRUE
 	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
@@ -43,8 +37,7 @@
 
 /obj/structure/closet/secure_closet/close()
 	..()
-	if(broken)
-		icon_state = src.icon_off
+	update_icon()
 	return 1
 
 /obj/structure/closet/secure_closet/emp_act(severity)
@@ -107,7 +100,6 @@
 		broken = TRUE
 		locked = FALSE
 		desc = "It appears to be broken."
-		icon_state = icon_off
 		for(var/mob/O in viewers(user, 3))
 			O.show_message("<span class='warning'>The locker has been broken by [user] with an electromagnetic card!</span>", 1, "You hear a faint electrical spark.", 2)
 		overlays.len = 0
@@ -184,12 +176,12 @@
 	overlays.len = 0
 	if(!opened)
 		if(!broken)
-			icon_state = icon_closed
 			var/image/I = image(icon = icon, icon_state = "light")
 			I.color = locked ? "#f00" : "#0f0"
+			I.pixel_x = overlay_x
+			I.pixel_y = overlay_y
 			overlays += I
-			update_moody_light()
+			update_moody_light(offX = overlay_x, offY = overlay_y)
 		if(welded)
 			overlays += image(icon = icon, icon_state = "welded")
-	else
-		icon_state = icon_opened
+	icon_state = "[initial(icon_state)][opened ? "open" : ""]"

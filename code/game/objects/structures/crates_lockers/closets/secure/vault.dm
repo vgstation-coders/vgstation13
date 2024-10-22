@@ -1,13 +1,8 @@
 /obj/structure/closet/secure_closet/vault
 	name = "vault locker"
 	desc = "For when you absolutely need to keep something safe."
-	icon_state = "vault1"
+	icon_state = "vault"
 	anchored = 1 //immovable
-	icon_closed = "vault"
-	icon_locked = "vault1"
-	icon_opened = "vaultopen"
-	icon_broken = "vaultbroken"
-	icon_off = "vaultoff"
 	health = 20000
 
 /obj/structure/closet/secure_closet/vault/ex_act(var/severity) //bomb-proof

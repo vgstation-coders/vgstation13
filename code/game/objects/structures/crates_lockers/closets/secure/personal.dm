@@ -21,27 +21,10 @@
 	)
 
 /obj/structure/closet/secure_closet/personal/cabinet
-	icon_state = "cabinetdetective_locked"
-	icon_closed = "cabinetdetective"
-	icon_locked = "cabinetdetective_locked"
-	icon_opened = "cabinetdetective_open"
-	icon_broken = "cabinetdetective_broken"
-	icon_off = "cabinetdetective_broken"
+	icon_state = "cabinetdetective"
 	is_wooden = TRUE
 	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
 	w_type = RECYK_WOOD
-
-/obj/structure/closet/secure_closet/personal/cabinet/update_icon()
-	if(broken)
-		icon_state = icon_broken
-	else
-		if(!opened)
-			if(locked)
-				icon_state = icon_locked
-			else
-				icon_state = icon_closed
-		else
-			icon_state = icon_opened
 
 /obj/structure/closet/secure_closet/personal/cabinet/atoms_to_spawn()
 	return list(
@@ -67,10 +50,7 @@
 		for(var/mob/O in viewers(user, 3))
 			if((O.client && !( O.blinded )))
 				to_chat(O, "<span class='notice'>The locker has been [locked ? null : "un"]locked by [user].</span>")
-		if(src.locked)
-			src.icon_state = src.icon_locked
-		else
-			src.icon_state = src.icon_closed
+		src.update_icon()
 		if(!src.registered_name && given_name)
 			src.registered_name = given_name
 			src.desc = "Owned by [given_name]."

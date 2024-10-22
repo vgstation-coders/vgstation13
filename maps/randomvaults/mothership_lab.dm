@@ -413,53 +413,38 @@
 /obj/structure/closet/ayy
 	name = "GDR locker"
 	desc = "A common storage unit, mass produced by grey laborers."
-	icon_state = "ayy1_closed"
-	icon_closed = "ayy1_closed"
-	icon_opened = "ayy1_open"
+	icon_state = "ayy1"
+	icon_closed = "ayy1"
+	icon_opened = "ayy1open"
 
 /obj/structure/closet/ayy2
 	name = "MDF locker"
 	desc = "A rugged storage unit, for transporting mothership military supplies."
-	icon_state = "ayy2_closed"
-	icon_closed = "ayy2_closed"
-	icon_opened = "ayy2_open"
+	icon_state = "ayy2"
+	icon_closed = "ayy2"
+	icon_opened = "ayy2open"
 
 /obj/structure/closet/ayy3
 	name = "Laborer locker"
 	desc = "A basic storage unit, for holding a grey laborer's spare uniforms and personal items."
-	icon_state = "ayy3_closed"
-	icon_closed = "ayy3_closed"
-	icon_opened = "ayy3_open"
+	icon_state = "ayy3"
+	icon_closed = "ayy3"
+	icon_opened = "ayy3open"
 
 /obj/structure/closet/secure_closet/ayy
 	name = "GDR secure locker"
 	desc = "A mothership issued card-locked storage unit, perfect for storing a researcher's favorite labcoats."
-	icon_state = "ayysecure1"
-	icon_closed = "ayysecure"
-	icon_locked = "ayysecure1"
-	icon_opened = "ayysecureopen"
-	icon_broken = "ayysecurebroken"
-	icon_off = "ayysecureoff"
+	icon_state = "ayysecure"
 
 /obj/structure/closet/secure_closet/ayy2
 	name = "MDF secure locker"
 	desc = "A rugged card-locked storage unit, for transporting mothership military supplies."
-	icon_state = "ayymdfsecure1"
-	icon_closed = "ayymdfsecure"
-	icon_locked = "ayymdfsecure1"
-	icon_opened = "ayymdfsecureopen"
-	icon_broken = "ayymdfsecurebroken"
-	icon_off = "ayymdfsecureoff"
+	icon_state = "ayymdfsecure"
 
 /obj/structure/closet/secure_closet/ayy_leader
 	name = "Administrator's secure locker"
 	desc = "A sleek card-locked storage unit, for keeping the personal effects of the best and brightest secure."
-	icon_state = "leadersecure1"
-	icon_closed = "leadersecure"
-	icon_locked = "leadersecure1"
-	icon_opened = "leadersecureopen"
-	icon_broken = "leadersecurebroken"
-	icon_off = "leadersecureoff"
+	icon_state = "leadersecure"
 
 //////////////////////////////
 // NARRATION

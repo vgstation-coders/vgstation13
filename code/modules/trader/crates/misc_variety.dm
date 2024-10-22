@@ -10,12 +10,7 @@
 	name = "wonderful wardrobe"
 	desc = "Stolen from Space Narnia."
 	req_access = list(access_trade)
-	icon_state = "cabinetdetective_locked"
-	icon_closed = "cabinetdetective"
-	icon_locked = "cabinetdetective_locked"
-	icon_opened = "cabinetdetective_open"
-	icon_broken = "cabinetdetective_broken"
-	icon_off = "cabinetdetective_broken"
+	icon_state = "cabinetdetective"
 	is_wooden = TRUE
 	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
 	thermal_mass = 25

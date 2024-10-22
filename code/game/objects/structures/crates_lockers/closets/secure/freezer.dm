@@ -31,21 +31,10 @@
 
 /obj/structure/closet/secure_closet/freezer/update_icon()
 	overlays.len = 0
-	if(broken)
-		icon_state = icon_broken
-	else
-		if(!opened)
-			if(locked)
-				icon_state = icon_locked
-			else
-				icon_state = icon_closed
-			if(welded)
-				overlays += image(icon = icon, icon_state = "welded")
-		else
-			if(exploded)
-				icon_state = icon_exploded
-				return
-			icon_state = icon_opened
+	if(opened && !broken && exploded)
+		icon_state = icon_exploded
+		return
+	..()
 
 //Fridges cannot be destroyed by explosions (a reference to Indiana Jones if you don't know)
 //However, the door will be blown off its hinges, permanently breaking the fridge
@@ -99,12 +88,9 @@
 
 /obj/structure/closet/secure_closet/freezer/meat
 	name = "Meat Fridge"
-	icon_state = "fridge1"
+	icon_state = "fridge"
 	icon_closed = "fridge"
-	icon_locked = "fridge1"
 	icon_opened = "fridgeopen"
-	icon_broken = "fridgebroken"
-	icon_off = "fridge1"
 	target_temp = FRIDGETEMP_FREEZER
 
 
@@ -115,12 +101,9 @@
 
 /obj/structure/closet/secure_closet/freezer/fridge
 	name = "Refrigerator"
-	icon_state = "fridge1"
+	icon_state = "fridge"
 	icon_closed = "fridge"
-	icon_locked = "fridge1"
 	icon_opened = "fridgeopen"
-	icon_broken = "fridgebroken"
-	icon_off = "fridge1"
 	target_temp = FRIDGETEMP_DEFAULT
 
 /obj/structure/closet/secure_closet/freezer/fridge/atoms_to_spawn()
@@ -135,12 +118,9 @@
 
 /obj/structure/closet/secure_closet/freezer/money
 	name = "Freezer"
-	icon_state = "fridge1"
+	icon_state = "fridge"
 	icon_closed = "fridge"
-	icon_locked = "fridge1"
 	icon_opened = "fridgeopen"
-	icon_broken = "fridgebroken"
-	icon_off = "fridge1"
 	req_access = list(access_heads_vault)
 
 
