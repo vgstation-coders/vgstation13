@@ -29,20 +29,25 @@ var/global/list/battery_online =	list(
 /obj/machinery/power/battery/update_icon()
 	overlays.len = 0
 	icon_state = initial(icon_state)
+	kill_moody_light_all()
 
 	if(stat & (BROKEN | FORCEDISABLE | EMPED))
 		return
 
 	overlays += battery_online[online + 1]
+	update_moody_light_index("online",battery_online[online + 1])
 
 	if(charging)
 		overlays += battery_charging[2]
+		update_moody_light_index("charging",battery_charging[2])
 	else if(chargemode)
 		overlays += battery_charging[1]
+		update_moody_light_index("charging",battery_charging[1])
 
 	var/clevel = chargedisplay()
 	if(clevel>0)
 		overlays += battery_charge[clevel]
+		update_moody_light_index("charge",battery_charge[clevel])
 	return
 
 #define SMESRATE 0.05 				// rate of internal charge to external power
@@ -51,6 +56,7 @@ var/global/list/battery_online =	list(
 	name = "power storage unit"
 	desc = "A placeholder power storage unit. If found, please return to CentCom."
 	icon_state = "smes"
+	moody_light_icon = 'icons/obj/power.dmi'
 	density = 1
 	anchored = 1
 	use_power = MACHINE_POWER_USE_NONE
