@@ -19,11 +19,12 @@
 	var/id_tag = null
 
 /obj/structure/closet/secure_closet/cabinet
-	icon_state = "cabinetsecure_locked"
+	icon_state = "cabinetsecure"
 	has_lockless_type = /obj/structure/closet/cabinet/basic
 	is_wooden = TRUE
 	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
 	w_type = RECYK_WOOD
+	overlay_x = -1
 
 /obj/structure/closet/secure_closet/basic
 	has_lockless_type = /obj/structure/closet/basic

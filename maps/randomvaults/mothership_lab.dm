@@ -435,16 +435,22 @@
 	name = "GDR secure locker"
 	desc = "A mothership issued card-locked storage unit, perfect for storing a researcher's favorite labcoats."
 	icon_state = "ayysecure"
+	overlay_x = -2
+	overlay_y = -1
 
 /obj/structure/closet/secure_closet/ayy2
 	name = "MDF secure locker"
 	desc = "A rugged card-locked storage unit, for transporting mothership military supplies."
 	icon_state = "ayymdfsecure"
+	overlay_x = -2
+	overlay_y = -1
 
 /obj/structure/closet/secure_closet/ayy_leader
 	name = "Administrator's secure locker"
 	desc = "A sleek card-locked storage unit, for keeping the personal effects of the best and brightest secure."
 	icon_state = "leadersecure"
+	overlay_x = -2
+	overlay_y = -1
 
 //////////////////////////////
 // NARRATION
