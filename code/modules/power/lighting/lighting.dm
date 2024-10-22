@@ -244,6 +244,7 @@ var/global/list/obj/machinery/light/alllights = list()
 					color = current_bulb.brightness_color
 			if(LIGHT_BURNED)
 				icon_state = "l[current_bulb.base_state]-burned"
+				update_moody_light()
 				on = 0
 			if(LIGHT_BROKEN)
 				icon_state = "l[current_bulb.base_state]-broken"
