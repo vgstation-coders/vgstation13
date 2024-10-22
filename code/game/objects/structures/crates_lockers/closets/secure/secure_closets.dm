@@ -2,6 +2,8 @@
 	name = "secure locker"
 	desc = "It's a high-security card-locked storage unit."
 	icon = 'icons/obj/closet.dmi'
+	moody_light_icon = 'icons/obj/closet.dmi'
+	moody_light_state = "light"
 	icon_state = "secure1"
 	density = 1
 	opened = 0
@@ -106,10 +108,13 @@
 		locked = FALSE
 		desc = "It appears to be broken."
 		icon_state = icon_off
-		flick(icon_broken, src)
 		for(var/mob/O in viewers(user, 3))
 			O.show_message("<span class='warning'>The locker has been broken by [user] with an electromagnetic card!</span>", 1, "You hear a faint electrical spark.", 2)
-		update_icon()
+		overlays.len = 0
+		overlays += "emag"
+		spawn(5)
+			overlays.len = 0
+			update_icon()
 
 /obj/structure/closet/secure_closet/relaymove(mob/user)
 	if(user.stat || !isturf(src.loc))
@@ -178,12 +183,12 @@
 /obj/structure/closet/secure_closet/update_icon()//Putting the welded stuff in updateicon() so it's easy to overwrite for special cases (Fridges, cabinets, and whatnot)
 	overlays.len = 0
 	if(!opened)
-		if(locked)
-			icon_state = icon_locked
-		else if(broken)
-			icon_state = icon_off
-		else
+		if(!broken)
 			icon_state = icon_closed
+			var/image/I = image(icon = icon, icon_state = "light")
+			I.color = locked ? "#f00" : "#0f0"
+			overlays += I
+			update_moody_light()
 		if(welded)
 			overlays += image(icon = icon, icon_state = "welded")
 	else
