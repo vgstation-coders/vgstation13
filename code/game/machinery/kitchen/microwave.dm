@@ -67,6 +67,7 @@
 
 	RefreshParts()
 	create_reagents(100)
+	update_moody_light("overlay_microwave_off")
 
 	if (!available_recipes)
 		available_recipes = generate_available_recipes(flags = COOKABLE_WITH_MICROWAVE | COOKABLE_WITH_MIXING) //Allow things like salads to be made in a microwave while mixing bowls are unimplemented.
@@ -152,6 +153,7 @@
 					"<span class='notice'>You have fixed the microwave.</span>" \
 				)
 				src.icon_state = "mw"
+				update_moody_light("overlay_microwave_off")
 				src.broken = 0 // Fix it!
 				src.dirty = 0 // just to be sure
 				src.flags |= OPENCONTAINER
@@ -176,6 +178,7 @@
 				src.dirty = 0 // It's clean!
 				src.broken = 0 // just to be sure
 				src.icon_state = "mw"
+				update_moody_light("overlay_microwave_off") // to be sure
 				src.flags |= OPENCONTAINER
 				return 1
 		else //Otherwise bad luck!!
@@ -509,18 +512,18 @@
 	src.visible_message("<span class='notice'>The microwave turns on.</span>", "<span class='notice'>You hear a microwave.</span>")
 	src.operating = 1
 	src.icon_state = "mw1"
+	update_moody_light("overlay_microwave_on")
 	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/abort()
 	src.operating = 0 // Turn it off again aferwards
 	src.icon_state = "mw"
+	update_moody_light("overlay_microwave_off")
 	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/stop()
 	playsound(src, 'sound/machines/ding.ogg', 50, 1)
-	src.operating = 0 // Turn it off again aferwards
-	src.icon_state = "mw"
-	src.updateUsrDialog()
+	abort()
 
 /obj/machinery/microwave/proc/dispose()
 	if(operating)
@@ -556,22 +559,20 @@
 	src.icon_state = "mwbloody1" // Make it look dirty!!
 
 /obj/machinery/microwave/proc/muck_finish()
-	playsound(src, 'sound/machines/ding.ogg', 50, 1)
 	src.visible_message("<span class='warning'>The microwave gets covered in muck!</span>")
 	src.dirty = 100 // Make it dirty so it can't be used util cleaned
 	src.flags &= ~OPENCONTAINER //So you can't add condiments
+	stop()
 	src.icon_state = "mwbloody" // Make it look dirty too
-	src.operating = 0 // Turn it off again aferwards
-	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/broke()
 	spark(src, 2)
-	src.icon_state = "mwb" // Make it look all busted up and shit
 	src.visible_message("<span class='warning'>The microwave breaks!</span>") //Let them know they're stupid
 	src.broken = 2 // Make it broken so it can't be used util fixed
 	src.flags &= ~OPENCONTAINER //So you can't add condiments
-	src.operating = 0 // Turn it off again aferwards
-	src.updateUsrDialog()
+	abort()
+	kill_moody_light()
+	src.icon_state = "mwb" // Make it look all busted up and shit
 
 /obj/machinery/microwave/proc/fail(var/arcane = FALSE)
 	var/obj/item/weapon/reagent_containers/food/snacks/badrecipe/ffuu = new(src)
