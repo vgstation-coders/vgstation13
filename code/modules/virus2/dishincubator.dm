@@ -370,7 +370,7 @@
 				dish_datum.updates += INCUBATOR_DISH_GROWTH
 				update = TRUE
 				alert_noise("ping")
-			add_overlay("incubator_grown",update,slot)
+			add_moody_overlay("incubator_grown",update,slot)
 
 		overlays += grown_gauge
 		moody = image(icon,src,grown_gauge.icon_state)
@@ -382,7 +382,7 @@
 			if (!(dish_datum.updates & INCUBATOR_DISH_REAGENT))
 				dish_datum.updates += INCUBATOR_DISH_REAGENT
 				update = TRUE
-			add_overlay("incubator_reagents",update,slot)
+			add_moody_overlay("incubator_reagents",update,slot)
 
 		if (dish_datum.updates_new & INCUBATOR_DISH_MAJOR)
 			var/update = FALSE
@@ -390,16 +390,16 @@
 				dish_datum.updates += INCUBATOR_DISH_MAJOR
 				alert_noise("beep")
 				update = TRUE
-			add_overlay("incubator_major",update,slot)
+			add_moody_overlay("incubator_major",update,slot)
 
 		if (dish_datum.updates_new & INCUBATOR_DISH_MINOR)
 			var/update = FALSE
 			if (!(dish_datum.updates & INCUBATOR_DISH_MINOR))
 				dish_datum.updates += INCUBATOR_DISH_MINOR
 				update = TRUE
-			add_overlay("incubator_minor",update,slot)
+			add_moody_overlay("incubator_minor",update,slot)
 
-/obj/machinery/disease2/incubator/proc/add_overlay(var/state, var/update, var/slot)
+/obj/machinery/disease2/incubator/proc/add_moody_overlay(var/state, var/update, var/slot)
 	var/image/overlay = image(icon,"[state][update ? "_update" : ""]")
 	overlay.pixel_y = -5 * slot
 	overlays += overlay
