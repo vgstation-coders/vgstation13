@@ -2,6 +2,7 @@
 
 /obj/machinery/atmospherics/unary/vent_scrubber
 	icon = 'icons/obj/atmospherics/vent_scrubber.dmi'
+	moody_light_icon = 'icons/obj/atmospherics/vent_scrubber.dmi'
 	icon_state = "hoff"
 	name = "Air Scrubber"
 	desc = "Has a valve and pump attached to it."
@@ -96,6 +97,7 @@
 
 		state += state_postfix
 		overlays += state
+		update_moody_light(state,255,whiteout)
 
 	..()
 
