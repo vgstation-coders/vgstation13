@@ -194,13 +194,12 @@
 	has_lockless_type = /obj/structure/closet/crate/hydroponics
 
 /obj/structure/closet/crate/secure/bin
-	desc = "A secure bin."
+	desc = "A secure bin." 
 	name = "Secure bin"
 	icon_state = "largebins"
 	icon_opened = "largebinsopen"
 	icon_closed = "largebins"
-	redlight = "largebinr"
-	greenlight = "largebing"
+	lightoverlay = "largebinlight"
 	sparks = "largebinsparks"
 	emag = "largebinemag"
 
@@ -218,8 +217,7 @@
 	icon_state = "largemetal"
 	icon_opened = "largemetalopen"
 	icon_closed = "largemetal"
-	redlight = "largemetalr"
-	greenlight = "largemetalg"
+	lightoverlay = "largemetallight"
 	has_lockless_type = /obj/structure/closet/crate/large
 
 /obj/structure/closet/crate/secure/large/close()
@@ -252,8 +250,7 @@
 	icon_state = "securecrate"
 	icon_opened = "securecrateopen"
 	icon_closed = "securecrate"
-	var/redlight = "securecrater"
-	var/greenlight = "securecrateg"
+	var/lightoverlay = "securecratelight"
 	var/sparks = "securecratesparks"
 	var/emag = "securecrateemag"
 	broken = 0
@@ -580,10 +577,10 @@
 		icon_state = icon_closed
 		if (!broken)
 			overlays.len = 0
-			if(locked)
-				overlays += redlight
-			else
-				overlays += greenlight
+			var/image/I = image(icon,src,lightoverlay)
+			I.color = locked ? "#f00" : "#0f0"
+			overlays += I
+			update_moody_light(lightoverlay)
 
 /obj/structure/closet/crate/attack_paw(mob/user as mob)
 	return attack_hand(user)
