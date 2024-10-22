@@ -37,6 +37,7 @@
 	name = "electrical supplies locker"
 	req_access = list(access_engine_minor)
 	icon_state = "secureengelec"
+	overlay_x = -1
 
 /obj/structure/closet/secure_closet/engineering_electrical/atoms_to_spawn()
 	return list(
@@ -51,6 +52,7 @@
 	name = "welding supplies locker"
 	req_access = list(access_engine_minor)
 	icon_state = "secureengweld"
+	overlay_x = -1
 
 /obj/structure/closet/secure_closet/engineering_welding/atoms_to_spawn()
 	return list(
