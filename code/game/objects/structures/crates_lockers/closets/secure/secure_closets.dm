@@ -179,7 +179,7 @@
 	overlays.len = 0
 	if(!opened)
 		if(!broken)
-			var/image/I = image(icon = icon, icon_state = "light")
+			var/image/I = image(icon = icon, icon_state = moody_light_state)
 			I.color = locked ? "#f00" : "#0f0"
 			I.pixel_x = overlay_x
 			I.pixel_y = overlay_y
