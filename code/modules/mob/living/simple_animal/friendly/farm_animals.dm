@@ -174,6 +174,7 @@
 		milktype = pick((chemical_reagents_list - blocked_chems)) //paismoke reacts instantly inside the cow, so it just constantly makes a smoke cloud harmlessly
 		name = "[lowertext(milktype)] cow"
 		desc = "It smells faintly of grass and [milktype]."
+		milkable_reagents.clear_reagents()
 
 /mob/living/simple_animal/cow/attack_hand(mob/living/carbon/M as mob)
 	if(!stat && M.a_intent == I_DISARM && icon_state != icon_dead)
