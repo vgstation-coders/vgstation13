@@ -9,6 +9,7 @@
 	name = "canister"
 	desc = "A container for gases. Can be used with atmospherics machinery through interaction with a port, and can also fill man-portable tanks."
 	icon = 'icons/obj/atmos.dmi'
+	moody_light_icon = 'icons/obj/atmos.dmi'
 	icon_state = "yellow"
 	density = 1
 	health = 100.0
