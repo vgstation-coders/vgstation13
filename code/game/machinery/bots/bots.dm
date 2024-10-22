@@ -624,7 +624,7 @@
 /obj/machinery/bot/emag_act(mob/user)
 	if(emagged >= 2)
 		return
- 	if(locked)
+	if(locked)
 		locked = 0
 		emagged = 1
 		if(user)
