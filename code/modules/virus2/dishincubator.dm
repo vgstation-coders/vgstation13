@@ -304,6 +304,7 @@
 
 /obj/machinery/disease2/incubator/update_icon()
 	overlays.len = 0
+	kill_moody_light_all()
 	icon_state = "incubator"
 
 	if (stat & (NOPOWER|FORCEDISABLE))
@@ -326,11 +327,17 @@
 			incubator_light.plane = ABOVE_LIGHTING_PLANE
 			incubator_light.layer = ABOVE_LIGHTING_LAYER
 			overlays += incubator_light
+			var/image/I2 = image(icon,src,"incubator_light")
+			I2.color = whiteout
+			update_moody_light_index("light",image_override = I2)
 			var/image/incubator_glass = image(icon,"incubator_glass")
 			incubator_glass.plane = ABOVE_LIGHTING_PLANE
 			incubator_glass.layer = ABOVE_LIGHTING_LAYER
 			incubator_glass.blend_mode = BLEND_ADD
 			overlays += incubator_glass
+			I2 = image(icon,src,"incubator_glass")
+			I2.color = whiteout
+			update_moody_light_index("glass",image_override = I2)
 		else
 			set_light(2,1)
 
@@ -356,10 +363,9 @@
 	overlays += dish_content
 
 	//updating the light indicators
+	var/image/moody
 	if (dish.contained_virus && !(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		var/image/grown_gauge = image(icon,"incubator_growth7")
-		grown_gauge.plane = ABOVE_LIGHTING_PLANE
-		grown_gauge.layer = ABOVE_LIGHTING_LAYER
 		grown_gauge.pixel_y = -5 * slot
 		if (dish.growth < 100)
 			grown_gauge.icon_state = "incubator_growth[min(6,max(1,round(dish.growth*70/1000)))]"
@@ -369,68 +375,58 @@
 				dish_datum.updates += INCUBATOR_DISH_GROWTH
 				update = TRUE
 				alert_noise("ping")
-
-			if (update)
-				var/image/grown_light = image(icon,"incubator_grown_update")
-				grown_light.pixel_y = -5 * slot
-				grown_light.plane = ABOVE_LIGHTING_PLANE
-				grown_light.layer = ABOVE_LIGHTING_LAYER
-				overlays += grown_light
-			else
-				var/image/grown_light = image(icon,"incubator_grown")
-				grown_light.pixel_y = -5 * slot
-				grown_light.plane = ABOVE_LIGHTING_PLANE
-				grown_light.layer = ABOVE_LIGHTING_LAYER
-				overlays += grown_light
+			var/image/grown_light = image(icon,"incubator_grown[update ? "_update" : ""]")
+			grown_light.pixel_y = -5 * slot
+			overlays += grown_light
+			moody = image(icon,src,grown_light.icon_state)
+			moody.color = whiteout
+			moody.pixel_y = -5 * slot
+			update_moody_light_index("grownlight[slot]",image_override = moody)
 
 		overlays += grown_gauge
+		moody = image(icon,src,grown_gauge.icon_state)
+		moody.color = whiteout
+		moody.pixel_y = -5 * slot
+		update_moody_light_index("gauge[slot]",image_override = moody)
 		if (dish.reagents.total_volume < 0.02)
 			var/update = FALSE
 			if (!(dish_datum.updates & INCUBATOR_DISH_REAGENT))
 				dish_datum.updates += INCUBATOR_DISH_REAGENT
 				update = TRUE
-
-			if (update)
-				var/image/reagents_light = image(icon,"incubator_reagents_update")
-				reagents_light.pixel_y = -5 * slot
-				reagents_light.plane = ABOVE_LIGHTING_PLANE
-				reagents_light.layer = ABOVE_LIGHTING_LAYER
-				overlays += reagents_light
-			else
-				var/image/reagents_light = image(icon,"incubator_reagents")
-				reagents_light.pixel_y = -5 * slot
-				reagents_light.plane = ABOVE_LIGHTING_PLANE
-				reagents_light.layer = ABOVE_LIGHTING_LAYER
-				overlays += reagents_light
+			var/image/reagents_light = image(icon,"incubator_reagents[update ? "_update" : ""]")
+			reagents_light.pixel_y = -5 * slot
+			overlays += reagents_light
+			moody = image(icon,src,reagents_light.icon_state)
+			moody.color = whiteout
+			moody.pixel_y = -5 * slot
+			update_moody_light_index("reagents[slot]",image_override = moody)
 
 		if (dish_datum.updates_new & INCUBATOR_DISH_MAJOR)
+			var/update = FALSE
 			if (!(dish_datum.updates & INCUBATOR_DISH_MAJOR))
 				dish_datum.updates += INCUBATOR_DISH_MAJOR
-				var/image/effect_light = image(icon,"incubator_major_update")
-				effect_light.pixel_y = -5 * slot
-				effect_light.plane = ABOVE_LIGHTING_PLANE
-				effect_light.layer = ABOVE_LIGHTING_LAYER
-				overlays += effect_light
 				alert_noise("beep")
-			else
-				var/image/effect_light = image(icon,"incubator_major")
-				effect_light.plane = ABOVE_LIGHTING_PLANE
-				effect_light.layer = ABOVE_LIGHTING_LAYER
-				effect_light.pixel_y = -5 * slot
-				overlays += effect_light
+				update = TRUE
+			var/image/effect_light = image(icon,"incubator_major[update ? "_update" : ""]")
+			effect_light.pixel_y = -5 * slot
+			overlays += effect_light
+			moody = image(icon,src,effect_light.icon_state)
+			moody.color = whiteout
+			moody.pixel_y = -5 * slot
+			update_moody_light_index("majorupdate[slot]",image_override = moody)
 
 		if (dish_datum.updates_new & INCUBATOR_DISH_MINOR)
+			var/update = FALSE
 			if (!(dish_datum.updates & INCUBATOR_DISH_MINOR))
 				dish_datum.updates += INCUBATOR_DISH_MINOR
-				var/image/effect_light = image(icon,"incubator_minor_update")
-				effect_light.pixel_y = -5 * slot
-				effect_light.plane = ABOVE_LIGHTING_PLANE
-				effect_light.layer = ABOVE_LIGHTING_LAYER
-				overlays += effect_light
-			else
-				var/image/effect_light = image(icon,"incubator_minor")
-				effect_light.pixel_y = -5 * slot
-				overlays += effect_light
+				update = TRUE
+			var/image/effect_light = image(icon,"incubator_minor[update ? "_update" : ""]")
+			effect_light.pixel_y = -5 * slot
+			overlays += effect_light
+			moody = image(icon,src,effect_light.icon_state)
+			moody.color = whiteout
+			moody.pixel_y = -5 * slot
+			update_moody_light_index("minorupdate[slot]",image_override = moody)
 
 
 /obj/machinery/disease2/incubator/breakdown()
