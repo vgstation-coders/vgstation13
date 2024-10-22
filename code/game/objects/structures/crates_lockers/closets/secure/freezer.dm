@@ -1,5 +1,5 @@
 /obj/structure/closet/secure_closet/freezer
-
+	overlay_y = -2
 	var/icon_exploded = "fridge_exploded"
 	var/exploded = 0
 	var/target_temp = FRIDGETEMP_DEFAULT

@@ -4,14 +4,12 @@
 	icon = 'icons/obj/closet.dmi'
 	moody_light_icon = 'icons/obj/closet.dmi'
 	moody_light_state = "light"
-	icon_state = "secure1"
+	icon_state = "secure"
 	density = 1
 	opened = 0
 	large = 1
 	locked = 1
 	has_electronics = 1
-	icon_closed = "secure"
-	icon_opened = "secureopen"
 	var/overlay_x = 0
 	var/overlay_y = 0
 	wall_mounted = 0 //never solid (You can always pass over it)
@@ -28,6 +26,10 @@
 
 /obj/structure/closet/secure_closet/basic
 	has_lockless_type = /obj/structure/closet/basic
+
+/obj/structure/closet/secure_closet/New()
+	. = ..()
+	update_icon()
 
 /obj/structure/closet/secure_closet/can_open()
 	if(!..())
