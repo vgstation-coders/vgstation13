@@ -2,6 +2,7 @@
 	name = "station intercom"
 	desc = "Talk through this."
 	icon_state = "intercom"
+	moody_light_state = "overlay_intercom"
 	anchored = 1
 	w_class = W_CLASS_LARGE
 	canhear_range = 2
@@ -150,10 +151,7 @@
 		icon_state="intercom-frame"
 		return
 	icon_state = "intercom[!on?"-p":""][b_stat ? "-open":""]"
-	if (on)
-		update_moody_light("overlay_intercom")
-	else
-		kill_moody_light()
+	toggle_moody_light(on)
 
 /obj/item/device/radio/intercom/process()
 	if(((world.timeofday - last_tick) > 30) || ((world.timeofday - last_tick) < 0))

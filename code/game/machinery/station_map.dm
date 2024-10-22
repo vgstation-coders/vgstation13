@@ -5,6 +5,7 @@ var/list/station_holomaps = list()
 	desc = "A virtual map of the surrounding station."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "station_map"
+	moody_light_state = "overlay_holomap"
 	anchored = 1
 	density = 0
 	use_power = MACHINE_POWER_USE_IDLE
@@ -221,7 +222,7 @@ var/list/station_holomaps = list()
 		kill_moody_light()
 	else
 		icon_state = "station_map"
-		update_moody_light("overlay_holomap")
+		update_moody_light()
 
 		if(bogus)
 			holomap_datum.station_map.overlays.len = 0
