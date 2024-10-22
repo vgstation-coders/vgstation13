@@ -34,8 +34,6 @@
 	name = "Medical Doctor's Locker"
 	req_access = list(access_surgery)
 	icon_state = "securemed"
-	icon_closed = "securemed"
-	icon_opened = "securemedopen"
 
 /obj/structure/closet/secure_closet/medical3/atoms_to_spawn()
 	. = list(

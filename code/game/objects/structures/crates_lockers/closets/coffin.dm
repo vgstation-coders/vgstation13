@@ -2,8 +2,6 @@
 	name = "coffin"
 	desc = "It's a burial receptacle for the dearly departed."
 	icon_state = "coffin"
-	icon_closed = "coffin"
-	icon_opened = "coffin_open"
 
 	w_class = W_CLASS_HUGE
 	w_type = RECYK_WOOD
@@ -43,12 +41,6 @@
 		if(ismob(AM))
 			var/mob/dude = AM
 			dude.clear_alert(SCREEN_ALARM_BUCKLE)
-
-/obj/structure/closet/coffin/update_icon()
-	if(!opened)
-		icon_state = icon_closed
-	else
-		icon_state = icon_opened
 
 /datum/locking_category/buckle/closet/coffin
 	flags = LOCKED_SHOULD_LIE

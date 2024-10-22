@@ -2,12 +2,10 @@
 	name = "closet"
 	desc = "It's a basic storage unit."
 	icon = 'icons/obj/closet.dmi'
-	icon_state = "closed"
+	icon_state = "closet"
 	density = 1
 	flags = FPRINT
 	layer = BELOW_OBJ_LAYER
-	var/icon_closed = "closed"
-	var/icon_opened = "open"
 	var/opened = 0
 	var/welded = 0
 	var/locked = 0
@@ -612,12 +610,9 @@
 
 /obj/structure/closet/update_icon()//Putting the welded stuff in updateicon() so it's easy to overwrite for special cases (Fridges, cabinets, and whatnot)
 	overlays.len = 0
-	if(!opened)
-		icon_state = icon_closed
-		if(welded)
-			overlays += image(icon = icon, icon_state = "welded")
-	else
-		icon_state = icon_opened
+	if(!opened && welded)
+		overlays += image(icon = icon, icon_state = "welded")
+	icon_state = "[initial(icon_state)][opened ? "open" : ""]"
 
 // Objects that try to exit a locker by stepping were doing so successfully,
 // and due to an oversight in turf/Enter() were going through walls.  That

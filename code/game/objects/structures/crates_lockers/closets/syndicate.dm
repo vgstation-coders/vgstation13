@@ -2,8 +2,6 @@
 	name = "armory closet"
 	desc = "Why is this here?"
 	icon_state = "syndicate"
-	icon_closed = "syndicate"
-	icon_opened = "syndicateopen"
 
 
 /obj/structure/closet/syndicate/personal
@@ -121,8 +119,6 @@
 	name = "vox armory closet"
 	desc = "Polly wants a gun."
 	icon_state = "syndicate"
-	icon_closed = "syndicate"
-	icon_opened = "syndicateopen"
 
 /obj/structure/closet/vox_raiders/atoms_to_spawn()
 	return list(
@@ -139,8 +135,6 @@
 	name = "vox armory closet"
 	desc = "Polly wants a gun."
 	icon_state = "syndicate"
-	icon_closed = "syndicate"
-	icon_opened = "syndicateopen"
 
 /obj/structure/closet/vox_raiders/trader/atoms_to_spawn()
 	return list(

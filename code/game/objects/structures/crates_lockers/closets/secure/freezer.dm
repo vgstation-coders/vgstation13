@@ -89,8 +89,6 @@
 /obj/structure/closet/secure_closet/freezer/meat
 	name = "Meat Fridge"
 	icon_state = "fridge"
-	icon_closed = "fridge"
-	icon_opened = "fridgeopen"
 	target_temp = FRIDGETEMP_FREEZER
 
 
@@ -102,8 +100,6 @@
 /obj/structure/closet/secure_closet/freezer/fridge
 	name = "Refrigerator"
 	icon_state = "fridge"
-	icon_closed = "fridge"
-	icon_opened = "fridgeopen"
 	target_temp = FRIDGETEMP_DEFAULT
 
 /obj/structure/closet/secure_closet/freezer/fridge/atoms_to_spawn()
@@ -119,8 +115,6 @@
 /obj/structure/closet/secure_closet/freezer/money
 	name = "Freezer"
 	icon_state = "fridge"
-	icon_closed = "fridge"
-	icon_opened = "fridgeopen"
 	req_access = list(access_heads_vault)
 
 

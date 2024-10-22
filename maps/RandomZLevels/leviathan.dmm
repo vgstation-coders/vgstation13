@@ -1319,11 +1319,7 @@
 /turf/simulated/floor/carpet,
 /area/awaymission/leviathan/research)
 "dN" = (
-/obj/structure/closet{
-	icon_closed = "cabinet_closed";
-	icon_opened = "cabinet_open";
-	icon_state = "cabinet_closed"
-	},
+/obj/structure/closet/cabinet,
 /turf/simulated/floor/carpet,
 /area/awaymission/leviathan/research)
 "dO" = (

@@ -371,8 +371,6 @@
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "ayycrate1"
 	density = 1
-	icon_opened = "ayycrate1open"
-	icon_closed = "ayycrate1"
 
 /obj/structure/closet/crate/ayy2
 	name = "MDF crate"
@@ -380,8 +378,6 @@
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "ayycrate2"
 	density = 1
-	icon_opened = "ayycrate2open"
-	icon_closed = "ayycrate2"
 
 /obj/structure/closet/crate/ayy3
 	name = "GDR industrial crate"
@@ -389,8 +385,6 @@
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "ayycrate3"
 	density = 1
-	icon_opened = "ayycrate3open"
-	icon_closed = "ayycrate3"
 
 /obj/structure/closet/crate/secure/ayy_general
 	name = "GDR secure crate"
@@ -398,8 +392,6 @@
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "ayysecurecrate2"
 	density = 1
-	icon_opened = "ayysecurecrate2open"
-	icon_closed = "ayysecurecrate2"
 
 /obj/structure/closet/crate/secure/ayy_mdf
 	name = "MDF secure crate"
@@ -407,29 +399,20 @@
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "ayysecurecrate"
 	density = 1
-	icon_opened = "ayysecurecrateopen"
-	icon_closed = "ayysecurecrate"
-
 /obj/structure/closet/ayy
 	name = "GDR locker"
 	desc = "A common storage unit, mass produced by grey laborers."
 	icon_state = "ayy1"
-	icon_closed = "ayy1"
-	icon_opened = "ayy1open"
 
 /obj/structure/closet/ayy2
 	name = "MDF locker"
 	desc = "A rugged storage unit, for transporting mothership military supplies."
 	icon_state = "ayy2"
-	icon_closed = "ayy2"
-	icon_opened = "ayy2open"
 
 /obj/structure/closet/ayy3
 	name = "Laborer locker"
 	desc = "A basic storage unit, for holding a grey laborer's spare uniforms and personal items."
 	icon_state = "ayy3"
-	icon_closed = "ayy3"
-	icon_opened = "ayy3open"
 
 /obj/structure/closet/secure_closet/ayy
 	name = "GDR secure locker"

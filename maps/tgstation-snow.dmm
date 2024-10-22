@@ -66551,11 +66551,7 @@
 	},
 /area/syndicate_mothership)
 "fAC" = (
-/obj/structure/closet{
-	icon_closed = "cabinet_closed";
-	icon_opened = "cabinet_open";
-	icon_state = "cabinet_closed"
-	},
+/obj/structure/closet/cabinet,
 /obj/effect/decal/cleanable/cobweb2,
 /turf/unsimulated/floor{
 	dir = 8;

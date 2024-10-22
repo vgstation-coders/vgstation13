@@ -173,8 +173,6 @@
 	name = "mysterious wardrobe"
 	desc = "Smells like wizard robes and beard freshener."
 	icon_state = "wizcabinet_closed"
-	icon_closed = "wizcabinet_closed"
-	icon_opened = "wizcabinet_open"
 	health = 100
 	var/spell/aoe_turf/conjure/magical_wardrobe/mWOrigin = null
 	var/mob/living/carbon/human/theWiz = null

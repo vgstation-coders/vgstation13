@@ -310,8 +310,6 @@
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "miningcar"
 	density = 1
-	icon_opened = "miningcaropen"
-	icon_closed = "miningcar"
 
 /**********************Jaunter**********************/
 

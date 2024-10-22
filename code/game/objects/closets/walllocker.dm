@@ -10,8 +10,6 @@
 	anchored = 1
 	wall_mounted = 1
 	pick_up_stuff = 0 // #367 - Picks up stuff at src.loc, rather than the offset location.
-	icon_closed = "wall-locker"
-	icon_opened = "wall-lockeropen"
 
 /obj/structure/closet/walllocker/can_close()
 	return 1
@@ -59,8 +57,6 @@
 	desc = "A wall mounted locker with a handheld defibrillator."
 	icon = 'icons/obj/closet.dmi'
 	icon_state = "medical_wall"
-	icon_opened = "medical_wallopen"
-	icon_closed = "medical_wall"
 	var/obj/item/weapon/melee/defibrillator/defib
 
 /obj/structure/closet/walllocker/defiblocker/New()
@@ -108,10 +104,7 @@
 
 
 /obj/structure/closet/walllocker/defiblocker/update_icon()
-	if(defib)
-		icon_state = icon_closed
-	else
-		icon_state = icon_opened
+	icon_state = "[initial(icon_state)][defib ? "open" : ""]"
 
 /obj/structure/closet/walllocker/defiblocker/north
 	pixel_y = WORLD_ICON_SIZE

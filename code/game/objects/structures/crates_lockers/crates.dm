@@ -5,8 +5,6 @@
 	desc = "A rectangular steel crate."
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "crate"
-	icon_opened = "crateopen"
-	icon_closed = "crate"
 //	mouse_drag_pointer = MOUSE_ACTIVE_POINTER	//???
 	var/rigged = 0
 	var/sound_effect_open = 'sound/machines/click.ogg'
@@ -25,8 +23,6 @@
 	name = "plastic crate"
 	desc = "A rectangular plastic crate."
 	icon_state = "plasticcrate"
-	icon_opened = "plasticcrateopen"
-	icon_closed = "plasticcrate"
 	w_type = RECYK_PLASTIC //This one's plastic, not metal!
 	starting_materials = list(MAT_PLASTIC = 10*CC_PER_SHEET_MISC) // Recipe calls for 10 sheets.
 
@@ -34,22 +30,16 @@
 	desc = "A internals crate."
 	name = "Internals crate"
 	icon_state = "o2crate"
-	icon_opened = "o2crateopen"
-	icon_closed = "o2crate"
 
 /obj/structure/closet/crate/trashcart
 	desc = "A heavy, metal trashcart with wheels."
 	name = "Trash Cart"
 	icon_state = "trashcart"
-	icon_opened = "trashcartopen"
-	icon_closed = "trashcart"
 
 /obj/structure/closet/crate/chest
 	desc = "A heavy wooden chest. Probably filled with gold and treasure!"
 	name = "chest"
 	icon_state = "chest"
-	icon_opened = "chestopen"
-	icon_closed = "chest"
 
 /obj/structure/closet/crate/chest/potential_mimic/New()
 	..()
@@ -62,24 +52,18 @@
 	desc = "A medical crate."
 	name = "Medical crate"
 	icon_state = "medicalcrate"
-	icon_opened = "medicalcrateopen"
-	icon_closed = "medicalcrate"
 	has_lock_type = /obj/structure/closet/crate/secure/medsec
 
 /obj/structure/closet/crate/rcd
 	desc = "A crate for the storage of the RCD."
 	name = "RCD crate"
 	icon_state = "crate"
-	icon_opened = "crateopen"
-	icon_closed = "crate"
 	has_lock_type = /obj/structure/closet/crate/secure/basic
 
 /obj/structure/closet/crate/freezer
 	desc = "A freezer."
 	name = "Freezer"
 	icon_state = "freezer"
-	icon_opened = "freezeropen"
-	icon_closed = "freezer"
 	var/target_temp = T0C - 40
 	var/cooling_power = 40
 
@@ -106,8 +90,6 @@
 	desc = "A freezer specifically designed to store organic material."
 	name = "surgery freezer"
 	icon_state = "surgeryfreezer"
-	icon_opened = "surgeryfreezeropen"
-	icon_closed = "surgeryfreezer"
 
 /obj/structure/closet/crate/freezer/surgery/close(mob/user)
 	..()
@@ -146,8 +128,6 @@
 	desc = "A large bin."
 	name = "Large bin"
 	icon_state = "largebin"
-	icon_opened = "largebinopen"
-	icon_closed = "largebin"
 
 /obj/structure/closet/crate/bin/attackby(var/obj/item/weapon/W, var/mob/user)
     if(W.is_wrench(user) && wrenchable())
@@ -161,8 +141,6 @@
 	desc = "A crate with a radiation sign on it."
 	name = "Radioactive gear crate"
 	icon_state = "radiation"
-	icon_opened = "radiationopen"
-	icon_closed = "radiation"
 
 /obj/structure/closet/crate/secure/weapon
 	desc = "A secure weapons crate."
@@ -381,9 +359,9 @@
 
 	dump_contents()
 
-	icon_state = icon_opened
 	src.opened = 1
 	setDensity(FALSE)
+	update_icon()
 	return 1
 
 /obj/structure/closet/crate/close()
