@@ -50,7 +50,7 @@
 		return
 	return ..()
 
-/obj/item/weapon/p_folded/throw_at(var/atom/A, throw_range, throw_speed)
+/obj/item/weapon/p_folded/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
 	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 	..()
@@ -126,8 +126,8 @@
 					H.eye_blurry = max(H.eye_blurry, rand(3,6))
 					H.eye_blind = max(H.eye_blind, src.nano)
 //at last, my block at a rest, bereft of all mortal doubts, I have been enlightened, touched by the sage wisdom, my undying gratitude goes to Comic in this emotional moment
-/obj/item/weapon/p_folded/plane/throw_at(var/atom/A, throw_range, throw_speed)
-	if (A.x > src.x)
+/obj/item/weapon/p_folded/plane/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
+	if (target.x > src.x)
 		src.icon_state = "plane_east"
 	else
 		src.icon_state = "plane_west"

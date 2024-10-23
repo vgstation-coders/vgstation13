@@ -73,6 +73,36 @@
 		return 1
 	return 0
 
+/obj/item/projectile/bullet/weakbullet/fanshot
+	name = "FaNshot"
+	projectile_speed = 0.5
+	var/hardthrow = FALSE
+	var/powermult = 1
+
+/obj/item/projectile/bullet/weakbullet/fanshot/to_bump(atom/A)
+	. = ..()
+	if(ismovable(A))
+		var/atom/movable/AM = A
+		var/run = AM.x - starting.x
+		var/rise = AM.y - starting.y
+		var/dist = get_dist(starting,AM)
+		var/multiplier = (7 / (dist > 0 && dist <= 7 ? dist : 7)) * powermult
+		if(ishuman(A))
+			var/mob/living/carbon/human/H = A
+			if(M_HULK in H.mutations)
+				multiplier /= 2
+		if(ismecha(A))
+			multiplier /= 2
+		var/turf/finalturf = locate(starting.x+(run*multiplier),starting.y+(rise*multiplier),AM.z)
+		if(finalturf != get_turf(AM) && !AM.anchored)
+			AM.throw_at(finalturf,INFINITY,superthrow = hardthrow)
+
+/obj/item/projectile/bullet/weakbullet/fanshot/super
+	name = "high force FaNshot"
+	damage = 30
+	hardthrow = TRUE
+	powermult = 2
+
 /obj/item/projectile/bullet/shrapnel
 
 	name = "shrapnel"

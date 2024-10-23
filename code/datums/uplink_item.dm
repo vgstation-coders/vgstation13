@@ -800,6 +800,14 @@ var/list/discounted_items_of_the_round = list()
 	discounted_cost = 12
 	jobs_with_discount = list("Warden", "Head of Security")
 
+/datum/uplink_item/jobspecific/command_security/superfanshot
+	name = "12 Gauge High Force FaNshot Shells"
+	desc = "The true force of nature, this box contains six modified syndicate FaNshots compress the knockback power within these shells further via reverse-engineered bluespace technology to deliver double the punch of an ordinary FaNshot. For further knockback, stand nearer to your target."
+	item = /obj/item/weapon/storage/box/syndie_kit/fan
+	cost = 12
+	discounted_cost = 8
+	jobs_with_discount = list("Warden", "Head of Security", "Bartender")
+
 /datum/uplink_item/jobspecific/command_security/evidenceforger
 	name = "Evidence Forger"
 	desc = "A hacked evidence scanner that allows you to forge evidence by setting a specific output that will apply on the next item scan only. Keep Security Records handy to input all requested data. Concealed as long as the evidence forger itself is not interacted with."

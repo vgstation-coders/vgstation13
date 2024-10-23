@@ -396,6 +396,14 @@
 	materials = list(MAT_IRON = 500, MAT_PLASMA = 500)
 	build_path = /obj/item/ammo_casing/shotgun/dragonsbreath
 
+/datum/design/shotgun_shell/fanshot
+	name = "12ga. FaNshot shell"
+	desc = "A 12 gauge shell capable of knocking things back with incredible force."
+	id = "fanshell"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 1000)
+	build_path = /obj/item/ammo_casing/shotgun/fanshot
+
 /datum/design/shotgun_shell/frag
 	name = "12ga. frag shell"
 	desc = "A 12 gauge shell filled with a high-explosive mixture, for heavy anti-personnel usage."
@@ -508,6 +516,14 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000, MAT_PLASMA = 8000)
 	build_path = /obj/item/weapon/storage/box/dragonsbreathshells
+
+/datum/design/ammo_shotgun/fanshot
+	name = "Ammunition box (12ga. FaNshot)"
+	desc = "A box of 12-gauge FaNshot shells."
+	id = "ammo_12ga_fan"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 16000)
+	build_path = /obj/item/weapon/storage/box/fanshotshells
 
 /datum/design/ammo_shotgun/frag
 	name = "Ammunition box (12ga. frag)"

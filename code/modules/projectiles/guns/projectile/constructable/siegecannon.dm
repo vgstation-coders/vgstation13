@@ -492,7 +492,7 @@
 	var/isBouncing = FALSE	//Prevents it bouncing infinitely due to some dark curse of throw_at()
 	var/lastBounceCount = 0
 
-/obj/item/cannonball/bananium/throw_at(atom/target, range, speed, override = 1)
+/obj/item/cannonball/bananium/throw_at(atom/target, range, speed, override = TRUE, fly_speed = 0, list/whitelist, superthrow = FALSE)
 	if(!cannonFired)
 		..()
 	else if(!isBouncing)
