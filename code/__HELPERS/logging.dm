@@ -95,7 +95,7 @@
 	if (ismob(target))
 		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [what_done] by [user_txt][object_txt].[intent_txt][addition_txt]</font>")
 		if (!iscarbon(user))
-			QDEL_NULL(target.lastassailant)
+			target.lastassailant = null
 
 	if (ismob(user) && ismob(target))
 		target.assaulted_by(user)
