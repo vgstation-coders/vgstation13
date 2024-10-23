@@ -55,12 +55,14 @@ var/list/forbidden_varedit_object_types = list(
 	#define V_LIST_EMPTY "empty_list"
 	#define V_LIST "list"
 	#define V_OBJECT "object"
+	#define V_OBJECT_VAR "object_variable"
 	#define V_ICON "icon"
 	#define V_FILE "file"
 	#define V_CLIENT "client"
 	#define V_NULL "null"
 	#define V_CANCEL "cancel"
 	#define V_MATRIX "matrix"
+	#define V_PROC "proc_call"
 
 	var/new_variable_type
 	var/old_value = null //Old value of the variable
@@ -115,12 +117,15 @@ var/list/forbidden_varedit_object_types = list(
 		"empty list"      = V_LIST_EMPTY,
 		"list"  = V_LIST,
 		"object (nearby)" = V_OBJECT,
+		"object var (nearby)" = V_OBJECT_VAR,
 		"icon"   = V_ICON,
 		"file"   = V_FILE,
 		"client" = V_CLIENT,
 		"matrix" = V_MATRIX,
 		"null"   = V_NULL,
 		)
+		if(usr.check_rights(R_DEBUG))
+			choices += list("proc call" = V_PROC)
 
 		if (!acceptsLists)
 			choices -= V_LIST
@@ -176,6 +181,12 @@ var/list/forbidden_varedit_object_types = list(
 			if(V_OBJECT)
 				new_value = input("Select reference:", window_title, old_value) as mob|obj|turf|area in range(8, get_turf(user))
 
+			if(V_OBJECT_VAR)
+				var/atom/A = input("Select reference:", window_title, old_value) as mob|obj|turf|area in range(8, get_turf(user))
+				if(istype(A))
+					new_value = A.vars[input("Select variable:", window_title, old_value) in A.vars]
+					new_value = var_inside_detect_helper(new_value)
+
 			if(V_FILE)
 				new_value = input("Pick file:", window_title) as file
 
@@ -206,6 +217,10 @@ var/list/forbidden_varedit_object_types = list(
 			if(V_MATRIX)
 				new_value = matrix()
 
+			if(V_PROC)
+				if(C)
+					new_value = C.calladvproc()
+
 			else
 				to_chat(user, "Unknown type: [selected_type]")
 
@@ -219,6 +234,36 @@ var/list/forbidden_varedit_object_types = list(
 		if(logging)
 			log_admin("[key_name(usr)] modified [edited_datum]'s [edited_variable] to [html_encode(new_value)]")
 
+	return new_value
+
+/proc/var_inside_detect_helper(new_value)
+	if(istype(new_value,/datum/weakref))
+		var/datum/weakref/W = new_value
+		new_value = W.get()
+	if(islist(new_value))
+		return var_inside_list_helper(new_value)
+	else if(isdatum(new_value))
+		return var_inside_datum_helper(new_value)
+	return new_value
+
+/proc/var_inside_list_helper(new_value) // so it can go recursively
+	if(islist(new_value))
+		var/list/L = new_value
+		if(L.len)
+			if(alert(usr, "This appears to be a populated list, use a var in this?","Variable inside list","No","Yes") == "Yes")
+				new_value = input("Select item in list:", "Varedit list") in L
+				/*if((new_value in L) && L[new_value])
+					if(alert(usr, "This has an associated value of [L[new_value]], use it?","Associated list variable","No","Yes") == "Yes")
+						new_value = L[new_value]*/ // sadly no associated lists today because BYOND is weird about this
+				return var_inside_detect_helper(new_value)
+	return new_value
+
+/proc/var_inside_datum_helper(new_value) // so it can go recursively
+	if(isdatum(new_value))
+		var/datum/D = new_value
+		if(alert(usr, "This appears to be a datum, use a var in this?","Variable inside [D]","No","Yes") == "Yes")
+			new_value = D.vars[input("Select variable:", "Varedit [D]") in D.vars]
+			return var_inside_detect_helper(new_value)
 	return new_value
 
 	#undef V_MARKED_DATUM
