@@ -160,6 +160,7 @@
 	name = "radiation suit closet"
 	desc = "It's a storage unit for rad-protective suits."
 	icon_state = "radsuitcloset"
+	icon_open_override = "toolclosetopen"
 
 /obj/structure/closet/radiation/atoms_to_spawn()
 	return list(
