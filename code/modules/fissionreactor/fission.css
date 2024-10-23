@@ -1,0 +1,211 @@
+body{
+	background-color: #272727;
+	background-image: url(uiBg.png);
+	background-repeat: repeat-x;
+	background-position: center top;
+	color:white;
+	font-family:consolas, monospace;
+}
+
+table{
+	border-collapse:collapse;
+}
+
+a{
+text-decoration:inherit;
+color:inherit;
+}
+
+a:hover{
+text-decoration:inherit;
+color:inherit;
+}
+
+.button{
+	border:2px solid #161616;
+	color:white;
+	background-color:#40628a;
+	padding:2px;
+}
+
+.button:hover{
+	background-color: #507aac;
+}
+
+
+.button_locked{
+	border:2px solid #666666;
+	color: white;
+	background-color: #999999;
+	padding:2px;
+}
+
+
+.bar_back{
+	width:100%;
+	display:block;
+	border: 2px solid black;
+}
+
+.bar_overlay{
+	display:block;
+	height:inherit;
+	border-right:2px solid black;
+}
+
+#reactor_fuelbar_back{
+	height:4em;
+	background-color:lightslategray
+}
+
+#reactor_fuelbar_overlay{
+	height:3.7em; /*why do i have to make these .3 em smaller?*/
+	background-color:mediumturquoise
+
+}
+
+#reactor_tempbar_back{
+	height:4em;
+	background-color:dimgray	
+}
+#reactor_tempbar_overlay{
+	height:3.7em;
+	background-color:darkgreen
+}
+
+#reactor_tempbar_overlay_caution{
+	height:3.7em;
+	background-color:goldenrod;
+}
+
+#reactor_tempbar_overlay_danger{
+	height:3.7em;
+	background-color:firebrick;
+}
+
+#reactor_coolantbar_back{
+	height:2em;
+	background-color:dimgray	
+}
+
+#reactor_coolantbar_overlay{
+	height:1.7em;
+	background-color:darkgreen
+}
+
+#reactor_coolantbar_overlay_caution{
+	height:1.7em;
+	background-color:goldenrod;
+}
+
+#reactor_coolantbar_overlay_danger{
+	height:1.7em;
+	background-color:Firebrick;
+}
+
+.reactor_controlrod_movebutton{
+	background-color: #40628a;
+	border:2px solid #161616;
+	color:white;
+	width:100%;
+	height:1.5em;
+	display:block;
+	padding-bottom:1.5em;
+	font-size:1.25em;
+	font-weight:bold;
+}
+.reactor_controlrod_movebutton:hover{
+	background-color:#507aac;
+}
+
+
+@keyframes scram_active{
+	0% {background-color:red;}
+	33% {background-color:red;}
+	50% {background-color:darkred;}
+	66% {background-color:darkred;}
+	100% {background-color:red;}
+}
+
+#reactor_scrambutton{
+	background-color:darkred;
+	font-size:150%;
+	font-weight:bold;
+	display:block;
+	width:100%;
+	height:2em;
+	text-align:center;
+	border:2px solid #700000;
+}
+
+#reactor_scrambutton:hover{
+	background-color:red;
+}
+
+#reactor_scrambutton_on{
+		animation:scram_active 1s infinite;
+			background-color:darkred;
+	font-size:150%;
+	font-weight:bold;
+	display:block;
+	width:100%;
+	height:2em;
+	text-align:center;
+	border:2px solid #700000;
+}
+
+.fuelrod_text_bg{
+	background-color: #999999;
+	width:100%;
+	display:block;
+	font-weight:bold;
+	border:2px solid #666666;
+}
+
+#fuelrod_gradient{
+	background-image:linear-gradient(rgb(239, 47, 31), rgb(163, 67, 59), rgb(87, 87, 87), rgb(44, 93, 123), rgb(1, 99, 158));
+}
+
+
+
+
+/*fuel maker specific stuff here*/
+
+#fuelbar{
+	width:100%;
+	background-color:grey;
+	height:4em;
+	display:block;
+	border:2px solid black;
+}
+
+#fuelbar_overlay{
+	height:3.7em;	
+	background-color:darkgreen;
+	display:block;
+	border-right:2px solid black;
+}
+
+#fuelbar_text{
+	position:relative;
+	top:-1.5em;
+	text-align:center;
+	display:block;
+	font-size:2em;
+	font-weight:bold;
+	color:black;
+	text-shadow: 0px 0px 3px white;
+}
+
+.fuelstats{
+	font-size:1.5em;
+
+}
+
+#fuellisting{
+	font-size:125%;
+}
+
+#fuellisting > * > th{
+	font-size:150%;
+}

@@ -105,7 +105,8 @@
 									GAS_CARBON = new /datum/airalarm_threshold(-1, -1, -1, -1),
 									GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, -1, -1),
 									GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, -1, -1),
-									GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, -1, -1) )
+									GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, -1, -1),
+									GAS_RADON = new /datum/airalarm_threshold(-1, -1, -1, -1))
 	// Partial pressure, kpa threshold for any gas not included in gas_thresholds. These gasses are added up.
 	var/datum/airalarm_threshold/other_gas_threshold = new /datum/airalarm_threshold(-1, -1, -1, -1)
 	// Kpa thresholds for what pressures are acceptable.
@@ -196,6 +197,7 @@
 							GAS_NITROGEN = new /datum/airalarm_threshold(-1, -1, -1, -1),
 							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 5, 10),
 							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_RADON = new /datum/airalarm_threshold(-1, -1, 0.05, 0.1),
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
@@ -212,6 +214,7 @@
 							GAS_NITROGEN = new /datum/airalarm_threshold(16, 18, 135, 140),
 							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 5, 10),
 							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_RADON = new /datum/airalarm_threshold(-1, -1, 0.05, 0.1),
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
@@ -228,6 +231,7 @@
 							GAS_NITROGEN = new /datum/airalarm_threshold(-1, -1, -1, -1),
 							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 5, 10),
 							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_RADON = new /datum/airalarm_threshold(-1, -1, 0.05, 0.1),
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
@@ -244,6 +248,7 @@
 							GAS_NITROGEN = new /datum/airalarm_threshold(-1, -1, -1, -1),
 							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 5, 10),
 							GAS_PLASMA = new /datum/airalarm_threshold(16, 18, 135, 140),
+							GAS_RADON = new /datum/airalarm_threshold(-1, -1, 0.05, 0.1),
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
@@ -260,6 +265,7 @@
 							GAS_NITROGEN = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
+							GAS_RADON = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
@@ -276,6 +282,7 @@
 							GAS_NITROGEN = new /datum/airalarm_threshold(16, 18, 135, 140),
 							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, -1, -1),
 							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_RADON = new /datum/airalarm_threshold(-1, -1, 0.05, 0.1),
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, -1, -1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, -1, -1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)

@@ -79,6 +79,8 @@
 	description = "Plasma in its liquid form."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#500064" //rgb: 80, 0, 100
+	fission_time=18000 //5 hours.
+	fission_absorbtion=8333.333
 
 /datum/reagent/plasma/New()
 	..()
@@ -141,6 +143,8 @@
 	color = "#B8B8C0" //rgb: 184, 184, 192
 	density = 19.05
 	specheatcap = 0.124
+	fission_time=9000 //2.5 hours.
+	fission_power=16666.667
 
 /datum/reagent/uranium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -222,3 +226,71 @@
 	if ("color" in additional_data)
 		data["color"] = additional_data["color"]
 		color = data["color"]
+
+
+
+//TODO: give these an effect.
+/datum/reagent/plutonium
+	name ="Plutonium"
+	id = PLUTONIUM
+	description = "A silvery-white metallic chemical element in the actinide series, very radioactive."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#CACAD2" //rgb: 202, 202, 210
+	density = 19.85
+	specheatcap = 0.124
+	fission_time=4500 //1.25 hours.
+	fission_power=66666.67 //spooky
+	
+/datum/reagent/plutonium/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.apply_radiation(4, RAD_INTERNAL)
+
+/datum/reagent/radon
+	name ="Radon"
+	id = RADON
+	description = "A colorless, odorless, highly radioactive noble gas."
+	reagent_state = REAGENT_STATE_GAS
+	color = "#808080" //rgb: 128, 128, 128
+	density = 9.73
+	specheatcap = 0.936
+	custom_metabolism = 1 //decays really fast, so it shouldn't linger long.
+	fission_time=1500 //25 minutes.
+	fission_power=1666.6666
+	
+/datum/reagent/radon/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.apply_radiation(7.5, RAD_INTERNAL)
+
+
+/datum/reagent/lead
+	name ="Lead"
+	id = LEAD
+	description = "A dull grey metallic element and heavy metal. Ingestion leads to brain damage"
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#676767" //rgb: 103, 103, 103
+	density = 11.34
+	specheatcap = 0.129
+	
+/datum/reagent/lead/on_mob_life(var/mob/living/M) //less potent mercury
+	if(..())
+		return 1
+	M.adjustBrainLoss(1)
+
+
+/datum/reagent/thallium
+	name ="Thallium"
+	id = THALLIUM
+	description = "A silvery-grey metallic chemical element in the post-transition metal series. Toxic when touched, ingested, or inhaled. Very difficult to remove from the body once exposed."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#CACAD2" //rgb: 202, 202, 210
+	density = 11.87
+	custom_metabolism = 0.1
+	flags = CHEMFLAG_NOTREMOVABLE
+	specheatcap = 0.128
+
+/datum/reagent/thallium/on_mob_life(var/mob/living/M) //the point of this is to be a nuisance. stays in you no matter what, but not really *that* deadly, just kind of annoying. You'd have to really piss someone off to get a mouthfull of this.
+	if(..())
+		return 1
+	M.adjustToxLoss(0.5)

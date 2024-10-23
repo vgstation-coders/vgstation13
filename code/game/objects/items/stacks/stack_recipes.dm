@@ -446,6 +446,11 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 		new/datum/stack_recipe("shuttle bed",                      /obj/structure/bed/racecar/shuttle,                    2, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe("fire truck bed",                      /obj/structure/bed/racecar/firetruck,                    2, one_per_turf = 1, on_floor = 1),
 		)),
+	null,
+	new/datum/stack_recipe("Reinforced machine frame",	/obj/machinery/constructable_frame/machine_frame/reinforced,	5,  time = 60, one_per_turf = 1	),
+	null,
+	new/datum/stack_recipe("Reactor casing frame",	/obj/structure/girder/reactor,	4,  time = 50, one_per_turf = 1	),
+	new/datum/stack_recipe("Reactor fuel rod",	/obj/item/weapon/fuelrod,	2,	time = 25),
 	)
 
 /* ====================================================================

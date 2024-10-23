@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel='stylesheet' href='fission.css'>
+</head>
+<body>
+
+
+
+
+<table style='width:100%;height:100%;'>
+<tr>
+<td style='width:90%;'>
+
+	<table style='height:100%;width:97.5%'>
+	<tr><td style='width:100%;text-align:center;'>
+		<span class='bar_back' id='reactor_fuelbar_back'>
+			<span class='bar_overlay' id='reactor_fuelbar_overlay' style='width:60%'>
+				
+			</span>
+			<span style='position:relative;top:-1.5em;font-size:2em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>100% (10:00)</span>
+		</span>
+		fuel life remaining
+	</td></tr>
+	
+	<tr><td style='width:100%;text-align:center;'>
+		<span class='bar_back' id='reactor_tempbar_back'>
+			<span class='bar_overlay' id='reactor_tempbar_overlay' style='width:60%'>
+				
+			</span>
+			<span style='position:relative;top:-1.5em;font-size:2em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>1000K</span>
+		</span>
+		core temp
+	</td></tr>
+	
+	<tr><td style='width:100%;text-align:center;'>
+		<span class='bar_back' id='reactor_coolantbar_back'>
+			<span class='bar_overlay' id='reactor_coolantbar_overlay' style='width:60%'>
+				
+			</span>
+			<span style='position:relative;top:-1.5em;font-size:1.25em;font-weight:bold;color:black;text-shadow: 0px 0px 3px white;'>1000K @ 500kPa</span>
+		</span>
+		coolant
+	</td></tr>
+
+	<tr><td style='font-size:2em;font-weight:bold;text-align:center;'><span style='text-align:right;'>reactor status:<span> <span style='text-align:left;color:lime;'>operational</span></td></tr>
+	<tr><td><span class='button_locked' style='font-size:150%;font-weight:bold;'>FUEL LOCKED</span></td></tr>
+
+	<tr><td style='font-size:125%;'><span style='width:50%;display:inline-block;text-align:left;'>fuel reactivity:[MULT]%</span><span style='width:50%;display:inline-block;text-align:right'>fuel rods:[FUEL]</span></td></tr>
+	<tr><td style='font-size:125%;'><span style='width:50%;display:inline-block;text-align:left;'>fissile speed:[SPEED]%</span><span style='width:50%;display:inline-block;text-align:right;margin-bottom:1em;'>control rods:[CONTROL]</span></td></tr>
+	</table>
+
+</td>
+<td>
+
+	<table style='width:100%;height:100%;'>
+	<tr><td style='text-align:center;'>
+		
+		<span style='background-color:darkgrey;width:100%;display:block;font-size:1.5em;'>control<br>rods</span>
+		<span class='reactor_controlrod_movebutton'>[UP]</span>
+		<span style='background-image:linear-gradient(orangered,yellow,green,cyan,lightblue);width:100%;height:10em;display:block;'>
+			<span style='background-color:#222;width:40%;height:100%;display:block;position:relative;left:30%;'></span>
+		</span>
+		<span class='reactor_controlrod_movebutton'>[DN]</span>
+		<span style='background-color:darkgrey;width:100%;display:block;font-size:2em;'>100%</span>
+		
+		
+		
+	</td></tr>
+	<tr><td> <span id='reactor_scrambutton'>SCRAM</span> </td></tr>
+	</table>
+
+
+</td>
+</tr>
+</table>
+
+
+</body>
+</html>

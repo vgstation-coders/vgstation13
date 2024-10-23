@@ -143,3 +143,21 @@
 /obj/effect/overlay/gas_overlay/cryotheum
 	name = "cryotheum"
 	icon_state = "cryotheum"
+
+/datum/gas/radon
+	id = GAS_RADON
+	name = "Radon"
+	short_name = "Rn"
+	specific_heat = 20
+
+	molar_mass = 0.222 //i think i did this right
+
+	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
+
+/datum/gas/radon/is_human_safe(moles, datum/gas_mixture/mixture)
+	return moles/mixture.total_moles() < 0.01
+
+
+
+
+

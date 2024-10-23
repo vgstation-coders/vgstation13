@@ -420,3 +420,71 @@
 	access = list(access_engine_minor)
 	group = "Engineering"
 	containsdesc = "A cutting edge machine that tears into a universe orthogonal to ours and applies alternative laws of physics to gaseous oxygen in its immediate vicinity. Requires a bluespace crystal to work (an artificial crystal comes with this crate!)."
+
+/datum/supply_packs/fissionreactor_starterkit
+	contains = list(
+		/obj/item/weapon/fuelrod/small/starter,
+		/obj/item/weapon/book/manual/engineering_fissionreactor_guide,
+		/obj/item/weapon/storage/box/fissionsupply_controller, //makes a crappy 1x2 interior. but it'll do.
+		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
+		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
+		/obj/item/weapon/storage/box/fissionsupply_fuelmaker,
+		/obj/item/weapon/circuitboard/fission_control_rod,
+		/obj/item/weapon/circuitboard/fission_fuel_rod,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+	
+	)
+	name = "Fission reactor starter kit"
+	cost = 500 //Includes a lot of plasteel. Fuck you, ask the miners for more you socially inept jobbie.
+	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	containername = "Fission reactor starter kit"
+	group = "Engineering"
+	access = list(access_engine_major)
+	containsdesc = "Everything you need to build a very basic fission reactor. Comes with a pre-filled (albeit small) fuel rod."
+	
+/datum/supply_packs/fissionreactor_expansion
+	contains = list(
+		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
+		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
+		/obj/item/weapon/circuitboard/fission_control_rod, //gives you 2 expansion parts (control/fuel rod) and the casing needed to add. 
+		/obj/item/weapon/circuitboard/fission_fuel_rod,
+		/obj/item/weapon/circuitboard/fission_control_rod,
+		/obj/item/weapon/circuitboard/fission_fuel_rod,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/item/weapon/storage/box/fissionsupply_casing,
+	)
+	name = "Fission reactor expansion pak"
+	cost = 200 //See above.
+	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	containername = "Fission reactor expansion pak"
+	group = "Engineering"
+	access = list(access_engine_major)
+	containsdesc = "Contains supplies to expand an existing fission reactor. Remember to turn it off and drain the coolant first!"		
+		
+/datum/supply_packs/fissionreactor_bigrod
+	contains = list(
+		/obj/item/weapon/fuelrod/large
+	)
+	name = "High-capacity fuel rod"
+	cost = 100 //It's a one time purchance, really. somewhat costy, but not that much for a department. watch for meltdowns.
+	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	containername = "Large fuel rod"
+	group = "Engineering"
+	access = list(access_engine_major)
+	containsdesc = "An extra-large fuel rod, for extra power or for more complex fuel mixes. Use with extreme caution and control rods inserted."
+		
+				
+		
+		
+		
+	
