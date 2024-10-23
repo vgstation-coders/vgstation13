@@ -526,7 +526,7 @@
 		I.color = locked ? "#f00" : "#0f0"
 		overlays += I
 		update_moody_light()
-	icon_state = "[initial(icon_state)][opened ? "open" : ""]"
+	icon_state = opened && icon_open_override ? icon_open_override : "[initial(icon_state)][opened ? "open" : ""]"
 
 /obj/structure/closet/crate/attack_paw(mob/user as mob)
 	return attack_hand(user)

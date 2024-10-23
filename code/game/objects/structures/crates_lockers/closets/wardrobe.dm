@@ -2,6 +2,7 @@
 	name = "wardrobe"
 	desc = "It's a storage unit for standard-issue Nanotrasen attire."
 	icon_state = "blue"
+	icon_open_override = "closetopen"
 
 /obj/structure/closet/wardrobe/atoms_to_spawn()
 	return list(

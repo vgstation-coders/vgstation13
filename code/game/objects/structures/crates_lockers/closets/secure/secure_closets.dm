@@ -167,6 +167,7 @@
 
 /obj/structure/closet/secure_closet/update_icon()//Putting the welded stuff in updateicon() so it's easy to overwrite for special cases (Fridges, cabinets, and whatnot)
 	overlays.len = 0
+	kill_moody_light()
 	if(!opened)
 		if(!broken)
 			var/image/I = image(icon = icon, icon_state = moody_light_state)
@@ -177,4 +178,4 @@
 			update_moody_light(offX = overlay_x, offY = overlay_y)
 		if(welded)
 			overlays += image(icon = icon, icon_state = "welded")
-	icon_state = "[initial(icon_state)][opened ? "open" : ""]"
+	icon_state = opened && icon_open_override ? icon_open_override : "[initial(icon_state)][opened ? "open" : ""]"

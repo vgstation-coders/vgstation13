@@ -12,6 +12,7 @@
 	name = "formal closet"
 	desc = "It's a storage unit for formal clothing."
 	icon_state = "black"
+	icon_open_override = "closetopen"
 
 /obj/structure/closet/gmcloset/atoms_to_spawn()
 	return list(
@@ -35,6 +36,7 @@
 	name = "custodial closet"
 	desc = "It's a storage unit for janitorial clothes and gear."
 	icon_state = "mixed"
+	icon_open_override = "closetopen"
 
 /obj/structure/closet/jcloset/atoms_to_spawn()
 	return list(
@@ -59,6 +61,7 @@
 	name = "legal closet"
 	desc = "It's a storage unit for courtroom apparel and items."
 	icon_state = "blue"
+	icon_open_override = "closetopen"
 
 /obj/structure/closet/lawcloset/atoms_to_spawn()
 	return list(
@@ -78,6 +81,7 @@
 	name = "Paramedic Wardrobe"
 	desc = "It's a storage unit for paramedic equipment."
 	icon_state = "blue"
+	icon_open_override = "closetopen"
 
 
 /obj/structure/closet/paramedic/atoms_to_spawn()
@@ -98,6 +102,7 @@
 	name = "Reporter's Threads"
 	desc = "Everything a reporter needs to look the part."
 	icon_state = "blue"
+	icon_open_override = "closetopen"
 
 
 /obj/structure/closet/reporter/atoms_to_spawn()

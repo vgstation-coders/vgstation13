@@ -1,5 +1,3 @@
-var/static/list/default_open_state_overrides = list("blue","mixed","grey","green","orange","pink","red","white","viro","yellow","black")
-
 /obj/structure/closet
 	name = "closet"
 	desc = "It's a basic storage unit."
@@ -8,6 +6,7 @@ var/static/list/default_open_state_overrides = list("blue","mixed","grey","green
 	density = 1
 	flags = FPRINT
 	layer = BELOW_OBJ_LAYER
+	var/icon_open_override
 	var/opened = 0
 	var/welded = 0
 	var/locked = 0
@@ -614,7 +613,7 @@ var/static/list/default_open_state_overrides = list("blue","mixed","grey","green
 	overlays.len = 0
 	if(!opened && welded)
 		overlays += image(icon = icon, icon_state = "welded")
-	icon_state = opened && (initial(icon_state) in default_open_state_overrides) ? "closetopen" : "[initial(icon_state)][opened ? "open" : ""]"
+	icon_state = opened && icon_open_override ? icon_open_override : "[initial(icon_state)][opened ? "open" : ""]"
 
 // Objects that try to exit a locker by stepping were doing so successfully,
 // and due to an oversight in turf/Enter() were going through walls.  That
