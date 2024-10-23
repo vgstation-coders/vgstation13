@@ -1675,6 +1675,7 @@ var/list/living_balloons = list()
 	var/mob/living/simple_animal/hostile/balloon/B = new(get_turf(src), col, icon_state)
 	B.name = name
 	B.air_contents = air_contents
+	B.arcanetampered = arcanetampered
 	qdel(src)
 
 /*

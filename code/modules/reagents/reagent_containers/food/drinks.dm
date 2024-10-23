@@ -68,23 +68,92 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/arcane_act(mob/user)
 	..()
-	cant_drop = 1
+	processing_objects.Add(src)
 	return prob(50) ? "D'TA EX'P'GED!" : "R'D'CTED!"
 
 /obj/item/weapon/reagent_containers/food/drinks/bless()
 	..()
 	cant_drop = 0
+	processing_objects.Remove(src)
+	var/mob/living/carbon/human/H = is_arcaneheld()
+	if(H)
+		H.unregister_event(/event/death, src, nameof(src::drop_arcane()))
+
+/obj/item/weapon/reagent_containers/food/drinks/process()
+	var/mob/living/carbon/human/H = is_arcaneheld()
+	if(H)
+		if(!reagents.is_full())	
+			var/transfer_rate = (reagents.maximum_volume-reagents.total_volume)/2
+			if(H.reagents.total_volume)
+				H.reagents.trans_to(reagents,transfer_rate)
+			if(H.vessel.total_volume)
+				H.vessel.trans_to(reagents,transfer_rate)
+			H.nutrition += 3
+		else
+			H.overeatduration = 0
+			H.nutrition -= 10
+	var/turf/loca = get_turf(src)
+	if(lit && loca)
+//		to_chat(world, "<span  class='warning'>Burning...</span>")
+		loca.hotspot_expose(700, SMALL_FLAME)
+	return
+
+/obj/item/weapon/reagent_containers/food/drinks/proc/drop_arcane(mob/user, body_destroyed)
+	if(prob(75)) // percent of time in the SCP it does this
+		var/list/obj/structure/table/tables = list()
+		for(var/obj/structure/table/T in view(world.view,src))
+			tables += T
+		var/obj/structure/table/ourtable = pick(tables)
+		var/spawntype = pick(subtypesof(/obj/item/weapon/reagent_containers/food/drinks))
+		var/obj/item/weapon/reagent_containers/food/drinks/D = new spawntype(ourtable.loc)
+		D.arcane_act(arcanetampered)
+		D.reagents.clear_reagents()
+		var/static/list/blocked = list(
+			/datum/reagent/drink,
+			/datum/reagent/drink/cold,
+		)
+		var/list/things_can_add = existing_typesof(/datum/reagent/drink) - blocked
+		var/list/things2add
+		for(var/addtype in things_can_add)
+			var/datum/reagent/R = addtype
+			things2add += list(initial(R.id))
+		D.reagents.add_reagent(pick(things2add),reagents.maximum_volume/rand(4,5))
+		qdel(src)
+	else
+		cant_drop = 0
+		user.drop_item(src, user.loc)
+		reagents.clear_reagents()
+
+/obj/item/weapon/reagent_containers/food/drinks/proc/is_arcaneheld(checks_cantdrop = TRUE)
+	if(checks_cantdrop && !cant_drop)
+		return
+	if(arcanetampered && ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		if(src in H.held_items)
+			return H
+
+/obj/item/weapon/reagent_containers/food/drinks/Destroy()
+	. = ..()
+	var/mob/living/carbon/human/H = is_arcaneheld()
+	if(H)
+		H.unregister_event(/event/death, src, nameof(src::drop_arcane()))
 
 /obj/item/weapon/reagent_containers/food/drinks/pickup(var/mob/user)
 	..()
 	if(ishuman(user) && arcanetampered) // wizards turn it into SCP-198
-		var/mob/living/carbon/human/H = user
-		reagents.clear_reagents()
-		H.audible_scream()
-		H.adjustHalLoss(50)
-		H.vessel.trans_to(reagents,reagents.maximum_volume)
+		spawn(rand(20,50)) // how long it takes to kick in in the SCP
+			if(is_arcaneheld(FALSE))
+				user.register_event(/event/death, src, nameof(src::drop_arcane()))
+				var/mob/living/carbon/human/H = user
+				reagents.clear_reagents()
+				H << 'sound/items/cautery.ogg'
+				to_chat(H,"<span class='danger'>You feel a sharp burning pain in your hard as \the [src] sticks to it!</span>")
+				H.audible_scream()
+				H.adjustHalLoss(50)
+				H.vessel.trans_to(reagents,reagents.maximum_volume)
+				cant_drop = 1
 	update_icon()
-	if (can_flip && (M_SOBER in user.mutations) && (user.a_intent == I_GRAB))
+	if (can_flip && !arcanetampered && (M_SOBER in user.mutations) && (user.a_intent == I_GRAB))
 		if (flipping && (M_CLUMSY in user.mutations) && prob(20))
 			to_chat(user, "<span class='warning'>Your clumsy fingers fail to catch back \the [src].</span>")
 			user.drop_item(src, user.loc, 1)
@@ -167,7 +236,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/attack(mob/living/M as mob, mob/user as mob, def_zone)
 	//Smashing on someone
-	if(!controlled_splash && user.a_intent == I_HURT && isGlass && molotov != 1)  //To smash a bottle on someone, the user must be harm intent, the bottle must be out of glass, and we don't want a rag in here
+	if(!arcanetampered && !controlled_splash && user.a_intent == I_HURT && isGlass && molotov != 1)  //To smash a bottle on someone, the user must be harm intent, the bottle must be out of glass, and we don't want a rag in here
 
 		if(!M) //This really shouldn't be checked here, but sure
 			return
@@ -2304,14 +2373,6 @@
 		var/mob/living/carbon/human/H = src.loc
 		H.update_inv_belt()
 
-	return
-
-
-/obj/item/weapon/reagent_containers/food/drinks/process()
-	var/turf/loca = get_turf(src)
-	if(lit && loca)
-//		to_chat(world, "<span  class='warning'>Burning...</span>")
-		loca.hotspot_expose(700, SMALL_FLAME)
 	return
 
 // Sliding from one table to another
