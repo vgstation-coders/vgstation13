@@ -59,16 +59,7 @@ var/list/non_standard_maint_areas = list(
 
 /mob/proc/assaulted_by(var/mob/M,var/weak_assault=FALSE)
 	if(!iscarbon(M))
-		var/ref_in_use = FALSE
-		if(istype(src, /mob/living/simple_animal/hostile))
-			var/mob/living/simple_animal/hostile/H = src
-			for(var/datum/weakref/friend in H.friends)
-				if(friend.get() == lastassailant.get())
-					lastassailant = null
-					ref_in_use = TRUE
-					break;
-		if(!ref_in_use)
-			QDEL_NULL(lastassailant)
+		lastassailant = null
 	else
 		lastassailant = makeweakref(M)
 
