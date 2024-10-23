@@ -133,6 +133,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	desc = "A standard Nanotrasen-licensed newsfeed handler for use in commercial space stations. All the news you absolutely have no use for, in one place!"
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "newscaster_normal"
+	moody_light_state = "overlay_newscaster"
 	var/buildstage = 1 // 1 = complete, 0 = unscrewed
 	ghost_write = 1 // Allow ghosts to send Topic()s.
 	custom_aghost_alerts = 1 // We handle our own logging.
@@ -226,7 +227,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		overlays += image(icon, "crack[hitstaken]")
 
 	icon_state = "newscaster_normal"
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_newscaster")
+	update_moody_light()
 
 /obj/machinery/newscaster/power_change()
 	if(stat & BROKEN || buildstage != 1) //Broken shit can't be powered.

@@ -268,7 +268,7 @@
 	if(!isnull(seed))
 		if(draw_warnings && powered_and_working && get_full_planthealth() <= (seed.endurance / 2))
 			overlays += image('icons/obj/hydroponics/hydro_tools.dmi',"over_lowhealth3")
-			update_moody_light_index("health", icon, "over_lowhealth3-moody")
+			update_moody_light_index("health", "over_lowhealth3-moody")
 
 		if(dead)
 			plant_appearance = "dead"
@@ -292,7 +292,7 @@
 					growth_level++
 				plant_appearance = "stage-[growth_level]"
 			if (seed.moody_lights)
-				update_moody_light_index("plant", seed.plant_dmi, "[plant_appearance][(seed.constrained && closed_system) ? "-constrained" : ""]-moody")
+				update_moody_light_index("plant",  image_override = image(seed.plant_dmi, src, "[plant_appearance][(seed.constrained && closed_system) ? "-constrained" : ""]-moody"))
 			else if (seed.biolum)
 				var/image/luminosity_gradient = image(icon, src, "moody_plant_mask")
 				luminosity_gradient.blend_mode = BLEND_INSET_OVERLAY
@@ -328,9 +328,9 @@
 
 	if (light_actually_on)
 		if(closed_system)
-			update_moody_light_index("lights", icon, "hydrotray-closed-moody")
+			update_moody_light_index("lights", "hydrotray-closed-moody")
 		else
-			update_moody_light_index("lights", icon, "hydrotray-open-moody")
+			update_moody_light_index("lights", "hydrotray-open-moody")
 		if (seed)
 			var/image/luminosity_gradient = image(icon, src, "moody_plant_mask")
 			luminosity_gradient.blend_mode = BLEND_INSET_OVERLAY
@@ -344,30 +344,30 @@
 		return
 	if(get_full_nutrientlevel() <= NUTRIENTLEVEL_MAX / 5)
 		overlays += image(icon = icon, icon_state = "over_lownutri3")
-		update_moody_light_index("nutri", icon, "over_lownutri3-moody")
+		update_moody_light_index("nutri", "over_lownutri3-moody")
 	if(get_full_weedlevel() >= WEEDLEVEL_MAX/2 || get_full_pestlevel() >= PESTLEVEL_MAX/2 || improper_heat || improper_light || improper_kpa || missing_gas)
 		overlays += image(icon = icon, icon_state = "over_alert3")
-		update_moody_light_index("alert", icon, "over_alert3-moody")
+		update_moody_light_index("alert", "over_alert3-moody")
 	if(get_full_waterlevel() <= WATERLEVEL_MAX/5 && get_full_toxinlevel() <= TOXINLEVEL_MAX/5)
 		overlays += image(icon = icon, icon_state = "over_lowwater3")
-		update_moody_light_index("water", icon, "over_lowwater3-moody")
+		update_moody_light_index("water", "over_lowwater3-moody")
 
 	if(!seed)
 		return
 	if(seed.toxin_affinity < 5)
 		if(get_full_waterlevel() <= WATERLEVEL_MAX/5)
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
-			update_moody_light_index("water", icon, "over_lowwater3-moody")
+			update_moody_light_index("water", "over_lowwater3-moody")
 	else if(seed.toxin_affinity <= 7)
 		if(get_full_waterlevel() < WATERLEVEL_MAX/5 || get_full_toxinlevel() < TOXINLEVEL_MAX/5)
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
-			update_moody_light_index("water", icon, "over_lowwater3-moody")
+			update_moody_light_index("water", "over_lowwater3-moody")
 	else if(get_full_toxinlevel() < TOXINLEVEL_MAX/5)
 		overlays += image(icon = icon, icon_state = "over_lowwater3")
-		update_moody_light_index("water", icon, "over_lowwater3-moody")
+		update_moody_light_index("water", "over_lowwater3-moody")
 	if(harvest)
 		overlays += image(icon = icon, icon_state = "over_harvest3")
-		update_moody_light_index("harvest", icon, "over_harvest3-moody")
+		update_moody_light_index("harvest", "over_harvest3-moody")
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/check_light(var/turf/T)
 	var/light_out_range = 0

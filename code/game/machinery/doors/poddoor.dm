@@ -3,6 +3,7 @@ var/list/poddoors = list()
 	name = "Podlock"
 	desc = "Why it no open!!!"
 	icon = 'icons/obj/doors/rapid_pdoor.dmi'
+	moody_light_icon = 'icons/obj/doors/rapid_pdoor.dmi'
 	icon_state = "pdoor1"
 	layer = ABOVE_DOOR_LAYER
 	open_layer = BELOW_TABLE_LAYER
@@ -51,7 +52,7 @@ var/list/poddoors = list()
 /obj/machinery/door/poddoor/New()
 	. = ..()
 	poddoors += src
-	update_moody_light(icon, "[icon_state]-moody")
+	update_moody_light("[icon_state]-moody")
 
 /obj/machinery/door/poddoor/Destroy()
 	poddoors -= src
@@ -89,7 +90,7 @@ var/list/poddoors = list()
 				kill_moody_light()
 				anim(target = src, a_icon = icon, flick_anim = "[openingicon]-moody", sleeptime = animation_delay, plane = ABOVE_LIGHTING_PLANE, blend = BLEND_ADD)
 				sleep(animation_delay)
-				update_moody_light(icon, "[icon_state]-moody")
+				update_moody_light("[icon_state]-moody")
 				setDensity(FALSE)
 				operating = FALSE
 
@@ -112,7 +113,7 @@ var/list/poddoors = list()
 	kill_moody_light()
 	anim(target = src, a_icon = icon, flick_anim = "[openingicon]-moody", sleeptime = animation_delay, plane = ABOVE_LIGHTING_PLANE, blend = BLEND_ADD)
 	sleep(animation_delay)
-	update_moody_light(icon, "[icon_state]-moody")
+	update_moody_light("[icon_state]-moody")
 	layer = open_layer
 	setDensity(FALSE)
 	update_nearby_tiles()
@@ -141,7 +142,7 @@ var/list/poddoors = list()
 	update_nearby_tiles()
 
 	sleep(animation_delay)
-	update_moody_light(icon, "[icon_state]-moody")
+	update_moody_light("[icon_state]-moody")
 	src.operating = 0
 	return
 

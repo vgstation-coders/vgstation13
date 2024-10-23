@@ -96,7 +96,7 @@
 		..() //Handles off or broken
 	else
 		icon_state = screen == 3 ? "network_unlinked" : "network_monitor" //Special icon if on screen 3
-		update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
+		update_moody_light()
 
 /obj/machinery/computer/telecomms/monitor/Topic(href, href_list)
 	if(..())

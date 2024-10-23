@@ -95,6 +95,7 @@
 
 	icon='icons/obj/radio.dmi'
 	icon_state="wallradio"
+	moody_light_state="overlay_wallradio"
 	anchored=1
 	volume=1 // applies a % of the user's media volume pref
 	var/buildstage = 0
@@ -127,12 +128,8 @@
 	update_icon()
 
 /obj/machinery/media/receiver/boombox/wallmount/update_icon()
-	if(buildstage==SYSTEMISDONE && on)
-		icon_state="wallradio-p"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_wallradio")
-	else
-		icon_state="wallradio"
-		kill_moody_light()
+	icon_state="wallradio[buildstage==SYSTEMISDONE && on ? "-p" : ""]"
+	toggle_moody_light(buildstage==SYSTEMISDONE && on)
 
 /obj/machinery/media/receiver/boombox/wallmount/attack_hand(var/mob/user)
 	if(buildstage<SYSTEMISDONE)

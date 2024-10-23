@@ -131,6 +131,7 @@
 	desc = "A bluespace-powered pipe endcap that can instantaneously transfer gases between two points. It will only transfer gases to other pipes with the same color, which can be changed with a multitool."
 	icon = 'icons/obj/pipes.dmi'
 	icon_state = "bscap"
+	moody_light_state = "overlay_bscap"
 	level = LEVEL_ABOVE_FLOOR
 	can_be_coloured = 0
 	color = "#FFFFFF"
@@ -159,7 +160,7 @@ var/global/list/pipe_colors = list(
 	overlays = 0
 	alpha = invisibility ? 128 : 255
 	icon_state = "bscap"
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_bscap")
+	update_moody_light()
 	color_overlay = image('icons/obj/pipes.dmi', icon_state = "bscap-overlay")
 	color_overlay.color = rgb(color_r,color_g,color_b)
 	overlays += color_overlay

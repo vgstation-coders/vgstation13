@@ -62,7 +62,7 @@ TODO: literally every alarm but SPS alarms.
 		overlays += image(icon = icon, icon_state = "secalert-newalerts")
 	else
 		overlays.Cut()
-	update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
+	update_moody_light()
 
 
 /obj/machinery/computer/security_alerts/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)

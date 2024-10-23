@@ -10,12 +10,7 @@
 	name = "wonderful wardrobe"
 	desc = "Stolen from Space Narnia."
 	req_access = list(access_trade)
-	icon_state = "cabinetdetective_locked"
-	icon_closed = "cabinetdetective"
-	icon_locked = "cabinetdetective_locked"
-	icon_opened = "cabinetdetective_open"
-	icon_broken = "cabinetdetective_broken"
-	icon_off = "cabinetdetective_broken"
+	icon_state = "cabinetdetective"
 	is_wooden = TRUE
 	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
 	thermal_mass = 25
@@ -227,8 +222,6 @@
 	name = "Library of Babel shipment"
 	desc = "A shipment of nanodictionaries to be delivered to the Library of Babel. How'd it end up here?"
 	icon_state = "plasmacrate"
-	icon_opened = "plasmacrateopen"
-	icon_closed = "plasmacrate"
 	var/list/common_tongues = list(/obj/item/dictionary/insect,/obj/item/dictionary/root,/obj/item/dictionary/grey,
 	/obj/item/dictionary/tradeband,/obj/item/dictionary/gutter,/obj/item/dictionary/clatter,/obj/item/dictionary/vox, /obj/item/dictionary/human)
 	var/list/weird_tongues = list(/obj/item/dictionary/skrell,/obj/item/dictionary/catbeast,/obj/item/dictionary/clown,

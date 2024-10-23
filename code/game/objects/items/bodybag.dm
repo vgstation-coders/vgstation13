@@ -36,8 +36,8 @@
 	desc = "A plastic bag designed for the storage and transportation of cadavers."
 	icon = 'icons/obj/bodybag.dmi'
 	icon_state = "bodybag_closed"
-	icon_closed = "bodybag_closed"
-	icon_opened = "bodybag_open"
+	var/icon_closed = "bodybag_closed"
+	var/icon_opened = "bodybag_open"
 	density = 0
 	sound_file = 'sound/items/zip.ogg'
 	w_type = NOT_RECYCLABLE

@@ -2,35 +2,34 @@
 	name = "secure locker"
 	desc = "It's a high-security card-locked storage unit."
 	icon = 'icons/obj/closet.dmi'
-	icon_state = "secure1"
+	moody_light_icon = 'icons/obj/closet.dmi'
+	moody_light_state = "light"
+	icon_state = "secure"
 	density = 1
 	opened = 0
 	large = 1
 	locked = 1
 	has_electronics = 1
-	icon_closed = "secure"
-	var/icon_locked = "secure1"
-	icon_opened = "secureopen"
-	var/icon_broken = "securebroken"
-	var/icon_off = "secureoff"
+	var/overlay_x = 0
+	var/overlay_y = 0
 	wall_mounted = 0 //never solid (You can always pass over it)
 	health = 200
 	var/id_tag = null
 
 /obj/structure/closet/secure_closet/cabinet
-	icon_state = "cabinetsecure_locked"
-	icon_closed = "cabinetsecure"
-	icon_locked = "cabinetsecure_locked"
-	icon_opened = "cabinetsecure_open"
-	icon_broken = "cabinetsecure_broken"
-	icon_off = "cabinetsecure_broken"
+	icon_state = "cabinetsecure"
 	has_lockless_type = /obj/structure/closet/cabinet/basic
 	is_wooden = TRUE
 	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
 	w_type = RECYK_WOOD
+	overlay_x = -1
 
 /obj/structure/closet/secure_closet/basic
 	has_lockless_type = /obj/structure/closet/basic
+
+/obj/structure/closet/secure_closet/New()
+	. = ..()
+	update_icon()
 
 /obj/structure/closet/secure_closet/can_open()
 	if(!..())
@@ -41,8 +40,7 @@
 
 /obj/structure/closet/secure_closet/close()
 	..()
-	if(broken)
-		icon_state = src.icon_off
+	update_icon()
 	return 1
 
 /obj/structure/closet/secure_closet/emp_act(severity)
@@ -81,7 +79,7 @@
 				S.playtoolsound(loc, 100)
 				broken = 0
 				to_chat(user, "<span class='notice'>You repair the electronics inside the locking mechanism!</span>")
-				icon_state = icon_closed
+				update_icon()
 		else
 			to_chat(user, "<span class='notice'>The locker appears to be broken.</span>")
 			return
@@ -105,28 +103,20 @@
 		broken = TRUE
 		locked = FALSE
 		desc = "It appears to be broken."
-		icon_state = icon_off
-		flick(icon_broken, src)
 		for(var/mob/O in viewers(user, 3))
 			O.show_message("<span class='warning'>The locker has been broken by [user] with an electromagnetic card!</span>", 1, "You hear a faint electrical spark.", 2)
-		update_icon()
+		overlays.len = 0
+		overlays += "emag"
+		spawn(5)
+			overlays.len = 0
+			update_icon()
 
 /obj/structure/closet/secure_closet/relaymove(mob/user)
 	if(user.stat || !isturf(src.loc))
 		return
 
 	if(!(src.locked) && !(src.welded))
-		for(var/obj/item/I in src)
-			I.forceMove(src.loc)
-		for(var/mob/M in src)
-			M.forceMove(src.loc)
-			if(M.client)
-				M.client.eye = M.client.mob
-				M.client.perspective = MOB_PERSPECTIVE
-		src.icon_state = src.icon_opened
-		src.opened = 1
-		setDensity(FALSE)
-		playsound(src, 'sound/machines/click.ogg', 15, 1, -3)
+		open(user)
 	else
 		if(!can_open())
 			to_chat(user, "<span class='notice'>It won't budge!</span>")
@@ -177,14 +167,15 @@
 
 /obj/structure/closet/secure_closet/update_icon()//Putting the welded stuff in updateicon() so it's easy to overwrite for special cases (Fridges, cabinets, and whatnot)
 	overlays.len = 0
+	kill_moody_light()
 	if(!opened)
-		if(locked)
-			icon_state = icon_locked
-		else if(broken)
-			icon_state = icon_off
-		else
-			icon_state = icon_closed
+		if(!broken)
+			var/image/I = image(icon = icon, icon_state = moody_light_state)
+			I.color = locked ? "#f00" : "#0f0"
+			I.pixel_x = overlay_x
+			I.pixel_y = overlay_y
+			overlays += I
+			update_moody_light(offX = overlay_x, offY = overlay_y)
 		if(welded)
 			overlays += image(icon = icon, icon_state = "welded")
-	else
-		icon_state = icon_opened
+	icon_state = opened && icon_open_override ? icon_open_override : "[initial(icon_state)][opened ? "open" : ""]"

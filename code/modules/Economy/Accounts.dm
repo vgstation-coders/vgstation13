@@ -190,6 +190,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 	desc = "Holds transaction logs, account data and all kinds of other financial records."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "account_db"
+	moody_light_state = "overlay_account"
 	density = TRUE
 	anchored = TRUE
 	req_one_access = list(access_hop, access_captain)
@@ -206,7 +207,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 /obj/machinery/account_database/New(loc)
 	..(loc)
 
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_account")
+	update_moody_light()
 
 	if(!station_account)
 		create_station_account()

@@ -16,8 +16,6 @@
 	name = "emergency closet"
 	desc = "It's a storage unit for emergency breathmasks and O2/N2 tanks."
 	icon_state = "emergency"
-	icon_closed = "emergency"
-	icon_opened = "emergencyopen"
 
 /obj/structure/closet/emcloset/atoms_to_spawn()
 	var/static/list/small = list(
@@ -62,8 +60,6 @@
 	name = "vox emergency closet"
 	desc = "It's full of life-saving equipment.  Assuming, that is, that you breathe nitrogen."
 	icon_state = "emergencyvox"
-	icon_closed = "emergencyvox"
-	icon_opened = "emergencyvoxopen"
 
 /obj/structure/closet/emcloset/vox/atoms_to_spawn()
 	var/static/list/stock = list(
@@ -102,8 +98,6 @@
 	name = "fire-safety closet"
 	desc = "It's a storage unit for fire-fighting supplies."
 	icon_state = "firecloset"
-	icon_closed = "firecloset"
-	icon_opened = "fireclosetopen"
 
 /obj/structure/closet/firecloset/atoms_to_spawn()
 	return list(
@@ -117,13 +111,6 @@
 /obj/structure/closet/firecloset/full/atoms_to_spawn()
 	return ..() + /obj/item/device/flashlight
 
-/obj/structure/closet/firecloset/update_icon()
-	if(!opened)
-		icon_state = icon_closed
-	else
-		icon_state = icon_opened
-
-
 /*
  * Tool Closet
  */
@@ -131,8 +118,6 @@
 	name = "tool closet"
 	desc = "It's a storage unit for tools."
 	icon_state = "toolcloset"
-	icon_closed = "toolcloset"
-	icon_opened = "toolclosetopen"
 
 /obj/structure/closet/toolcloset/atoms_to_spawn()
 	. = list()
@@ -175,8 +160,7 @@
 	name = "radiation suit closet"
 	desc = "It's a storage unit for rad-protective suits."
 	icon_state = "radsuitcloset"
-	icon_opened = "toolclosetopen"
-	icon_closed = "radsuitcloset"
+	icon_open_override = "toolclosetopen"
 
 /obj/structure/closet/radiation/atoms_to_spawn()
 	return list(
@@ -192,8 +176,6 @@
 	name = "\improper EOD closet"
 	desc = "It's a storage unit for explosion-protective suits."
 	icon_state = "bombsuit"
-	icon_closed = "bombsuit"
-	icon_opened = "bombsuitopen"
 	holds_armory_items = TRUE
 
 /obj/structure/closet/bombcloset/atoms_to_spawn()
@@ -209,8 +191,6 @@
 	name = "\improper EOD closet"
 	desc = "It's a storage unit for explosion-protective suits."
 	icon_state = "bombsuitsec"
-	icon_closed = "bombsuitsec"
-	icon_opened = "bombsuitsecopen"
 
 /obj/structure/closet/bombclosetsecurity/atoms_to_spawn()
 	return list(
@@ -227,8 +207,6 @@
 	name = "fire-safety closet"
 	desc = "It's a storage unit for fire-fighting supplies."
 	icon_state = "hydrant"
-	icon_closed = "hydrant"
-	icon_opened = "hydrant_open"
 	anchored = 1
 	density = 0
 	wall_mounted = 1
@@ -250,15 +228,8 @@
 	name = "first-aid closet"
 	desc = "It's wall-mounted storage unit for first aid supplies."
 	icon_state = "medical_wall"
-	icon_closed = "medical_wall"
-	icon_opened = "medical_wall_open"
 	anchored = 1
 	density = 0
 	wall_mounted = 1
 	pick_up_stuff = 0 // #367 - Picks up stuff at src.loc, rather than the offset location.
 
-/obj/structure/closet/medical_wall/update_icon()
-	if(!opened)
-		icon_state = icon_closed
-	else
-		icon_state = icon_opened

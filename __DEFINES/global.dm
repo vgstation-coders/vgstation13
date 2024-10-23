@@ -286,6 +286,8 @@ var/global/list/static_list = list('sound/effects/static/static1.ogg','sound/eff
 
 //Used to set an atom's color var to "grayscale". The magic of color matrixes.
 var/list/grayscale = list(0.3,0.3,0.3,0,0.59,0.59,0.59,0,0.11,0.11,0.11,0,0,0,0,1,0,0,0,0)
+//Same as above, turns it all white
+var/list/whiteout = list(1,1,1,0,1,1,1,0,1,1,1,0,0,0,0,1,0,0,0,0)
 
 //For adminbus blob looks
 var/adminblob_icon = null

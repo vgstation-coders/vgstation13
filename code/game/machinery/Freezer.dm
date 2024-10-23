@@ -5,6 +5,7 @@
 	name = "freezer"
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
+	moody_light_state = "overlay_freezer"
 	density = 1
 	default_colour = "#0000b7"
 	anchored = 1.0
@@ -43,9 +44,11 @@
 	temp_offset = initial(temp_offset) - 5*lasercount
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/update_icon()
+	kill_moody_light()
 	if(node1)
 		if(on)
 			icon_state = "freezer_1"
+			update_moody_light()
 		else
 			icon_state = "freezer"
 	else
@@ -175,7 +178,8 @@
 /obj/machinery/atmospherics/unary/heat_reservoir/heater
 	name = "heater"
 	icon = 'icons/obj/Cryogenic2.dmi'
-	icon_state = "freezer_0"
+	icon_state = "heater_0"
+	moody_light_state = "overlay_heater"
 	density = 1
 	anchored = 1.0
 	default_colour = "#b70000"
@@ -213,9 +217,11 @@
 	temp_offset = initial(temp_offset) + 5*lasercount
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/update_icon()
+	kill_moody_light()
 	if(node1)
 		if(on)
 			icon_state = "heater_1"
+			update_moody_light()
 		else
 			icon_state = "heater"
 	else

@@ -54,7 +54,7 @@
 
 				for(var/obj/structure/closet/secure_closet/brig/temp_closet in A)
 					temp_closet.locked = 0
-					temp_closet.icon_state = temp_closet.icon_closed
+					temp_closet.update_icon()
 
 				for(var/obj/machinery/door/airlock/security/temp_airlock in A)
 					temp_airlock.prison_open()

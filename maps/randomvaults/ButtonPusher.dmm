@@ -190,8 +190,6 @@
 	name = "perfectly preserved candy bar"
 	},
 /obj/structure/closet{
-	icon_closed = "syndicate1";
-	icon_opened = "syndicate1open";
 	icon_state = "syndicate1"
 	},
 /obj/item/weapon/storage/firstaid/regular,
@@ -731,8 +729,6 @@
 /obj/item/tool/solder/pre_fueled,
 /obj/item/weapon/reagent_containers/glass/beaker/sulphuric,
 /obj/structure/closet{
-	icon_closed = "syndicate1";
-	icon_opened = "syndicate1open";
 	icon_state = "syndicate1"
 	},
 /obj/item/device/instrument/saxophone{
@@ -1076,8 +1072,6 @@
 	},
 /obj/item/stack/medical/ointment,
 /obj/structure/closet{
-	icon_closed = "syndicate1";
-	icon_opened = "syndicate1open";
 	icon_state = "syndicate1"
 	},
 /obj/item/trash/syndi_cakes,
@@ -1301,8 +1295,6 @@
 /obj/effect/decal/cleanable/ash,
 /obj/item/stack/ore/slag,
 /obj/structure/closet{
-	icon_closed = "syndicate1";
-	icon_opened = "syndicate1open";
 	icon_state = "syndicate1"
 	},
 /obj/item/device/measuring_tape,

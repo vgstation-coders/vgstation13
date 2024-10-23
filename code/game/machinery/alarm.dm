@@ -577,13 +577,13 @@ var/global/list/air_alarms = list()
 	switch(max(local_danger_level, this_area.atmosalm-1))
 		if (0)
 			icon_state = "alarm0"
-			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_alarm0")
+			update_moody_light("overlay_alarm0")
 		if (1)
 			icon_state = "alarm2" //yes, alarm2 is yellow alarm
-			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_alarm1")
+			update_moody_light("overlay_alarm1")
 		if (2)
 			icon_state = "alarm1"
-			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_alarm1")
+			update_moody_light("overlay_alarm1")
 
 /obj/machinery/alarm/receive_signal(datum/signal/signal)
 	var/area/this_area = get_area(src)
@@ -1260,17 +1260,17 @@ FIRE ALARM
 		kill_moody_light_all()
 	else
 		icon_state = "fire[detecting ? "0" : "1"][shelter ? "s" : "e"]"
-		update_moody_light_index("detecting", 'icons/lighting/moody_lights.dmi', "overlay_firealarm_[detecting ? "" : "not"]detecting")
+		update_moody_light_index("detecting", "overlay_firealarm_[detecting ? "" : "not"]detecting")
 		if (shelter)
-			update_moody_light_index("shelter", 'icons/lighting/moody_lights.dmi', "overlay_firealarm_shelter")
+			update_moody_light_index("shelter", "overlay_firealarm_shelter")
 		else
 			kill_moody_light_index("shelter")
 		if(z == map.zMainStation)
 			overlays += image('icons/obj/monitors.dmi', "overlay_[get_security_level()]")
-			update_moody_light_index("seclevel", 'icons/lighting/moody_lights.dmi', "overlay_firealarm_alert_[get_security_level()]")
+			update_moody_light_index("seclevel", "overlay_firealarm_alert_[get_security_level()]")
 		else
 			overlays += image('icons/obj/monitors.dmi', "overlay_green")
-			update_moody_light_index("seclevel", 'icons/lighting/moody_lights.dmi', "overlay_firealarm_alert_green")
+			update_moody_light_index("seclevel", "overlay_firealarm_alert_green")
 
 /obj/machinery/firealarm/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(src.detecting)

@@ -1510,6 +1510,7 @@ var/list/cult_spires = list()
 	plane = EFFECTS_PLANE
 	layer = BELOW_PROJECTILE_LAYER
 	light_color = "#FF0000"
+	moody_light_icon = 'icons/lighting/moody_lights_64x64.dmi'
 
 	var/ready = FALSE
 	var/image/image_base
@@ -1549,7 +1550,7 @@ var/list/cult_spires = list()
 	overlays += image_circle
 	overlays += image_stones
 	overlays += image_lights
-	update_moody_light_index("tear_stones",'icons/lighting/moody_lights_64x64.dmi', "tear_stones", offY = -16)
+	update_moody_light_index("tear_stones", "tear_stones", offY = -16)
 
 /obj/structure/cult/bloodstone/admin/overlays_pre()
 	overlays += image_base
@@ -1684,13 +1685,13 @@ var/list/cult_spires = list()
 	if (cult)
 		icon_state = "bloodstone-[clamp(round(9*(world.time - cult.bloodstone_rising_time) / (cult.bloodstone_target_time - cult.bloodstone_rising_time)), 0, 9)]"
 	overlays -= image_damage
-	update_moody_light_index("crystal",'icons/lighting/moody_lights_64x64.dmi', icon_state)
+	update_moody_light_index("crystal", icon_state)
 	if (health < maxHealth/3)
 		image_damage.icon_state = "bloodstone_damage2"
-		update_moody_light_index("damage",'icons/lighting/moody_lights_64x64.dmi', "bloodstone_damage2")
+		update_moody_light_index("damage", "bloodstone_damage2")
 	else if (health < 2*maxHealth/3)
 		image_damage.icon_state = "bloodstone_damage1"
-		update_moody_light_index("damage",'icons/lighting/moody_lights_64x64.dmi', "bloodstone_damage1")
+		update_moody_light_index("damage", "bloodstone_damage1")
 	else
 		image_damage.icon_state = "bloodstone_damage0"
 		kill_moody_light_index("damage")
@@ -1699,13 +1700,13 @@ var/list/cult_spires = list()
 /obj/structure/cult/bloodstone/admin/update_icon()
 	icon_state = "bloodstone-9-old"
 	overlays -= image_damage
-	update_moody_light_index("crystal",'icons/lighting/moody_lights_64x64.dmi', icon_state)
+	update_moody_light_index("crystal",icon_state)
 	if (health < maxHealth/3)
 		image_damage.icon_state = "bloodstone_damage2"
-		update_moody_light_index("damage",'icons/lighting/moody_lights_64x64.dmi', "bloodstone_damage2")
+		update_moody_light_index("damage","bloodstone_damage2")
 	else if (health < 2*maxHealth/3)
 		image_damage.icon_state = "bloodstone_damage1"
-		update_moody_light_index("damage",'icons/lighting/moody_lights_64x64.dmi', "bloodstone_damage1")
+		update_moody_light_index("damage","bloodstone_damage1")
 	else
 		image_damage.icon_state = "bloodstone_damage0"
 		kill_moody_light_index("damage")
@@ -2206,7 +2207,7 @@ var/list/cult_spires = list()
 		icon_state = "pylon"
 		sound_damaged = 'sound/effects/Glasshit.ogg'
 		set_light(5)
-		update_moody_light('icons/lighting/moody_lights.dmi', "pylon")
+		update_moody_light()
 
 /obj/structure/cult/pylon/takeDamage()
 	..()
@@ -2223,6 +2224,6 @@ var/list/cult_spires = list()
 /obj/structure/cult/pylon/New()
 	..()
 	flick("[icon_state]-spawn", src)
-	update_moody_light('icons/lighting/moody_lights.dmi', "pylon-spawn")
+	update_moody_light("pylon-spawn")
 	spawn(12)
-		update_moody_light('icons/lighting/moody_lights.dmi', "pylon")
+		update_moody_light()

@@ -2,12 +2,11 @@
 	name = "closet"
 	desc = "It's a basic storage unit."
 	icon = 'icons/obj/closet.dmi'
-	icon_state = "closed"
+	icon_state = "closet"
 	density = 1
 	flags = FPRINT
 	layer = BELOW_OBJ_LAYER
-	var/icon_closed = "closed"
-	var/icon_opened = "open"
+	var/icon_open_override
 	var/opened = 0
 	var/welded = 0
 	var/locked = 0
@@ -136,8 +135,8 @@
 	if(!src.can_open())
 		return 0
 
-	src.icon_state = src.icon_opened
 	src.opened = 1
+	update_icon()
 	setDensity(FALSE)
 	src.dump_contents()
 	playsound(src, sound_file, 15, 1, -3)
@@ -213,8 +212,8 @@
 		M.forceMove(src)
 		itemcount++
 	*/
-	src.icon_state = src.icon_closed
 	src.opened = 0
+	src.update_icon()
 	setDensity(initial(density))
 	playsound(src, sound_file, 15, 1, -3)
 	return 1
@@ -544,7 +543,7 @@
 	if(src.opened==0 && L && L.client && L.hallucinating()) //If the closet is CLOSED and user is hallucinating
 		if(prob(10))
 			var/client/C = L.client
-			var/image/temp_overlay = image(src.icon, icon_state=src.icon_opened) //Get the closet's OPEN icon
+			var/image/temp_overlay = image(src.icon, icon_state="[initial(src.icon_state)]open") //Get the closet's OPEN icon
 			temp_overlay.override = 1
 			temp_overlay.loc = src
 
@@ -612,12 +611,9 @@
 
 /obj/structure/closet/update_icon()//Putting the welded stuff in updateicon() so it's easy to overwrite for special cases (Fridges, cabinets, and whatnot)
 	overlays.len = 0
-	if(!opened)
-		icon_state = icon_closed
-		if(welded)
-			overlays += image(icon = icon, icon_state = "welded")
-	else
-		icon_state = icon_opened
+	if(!opened && welded)
+		overlays += image(icon = icon, icon_state = "welded")
+	icon_state = opened && icon_open_override ? icon_open_override : "[initial(icon_state)][opened ? "open" : ""]"
 
 // Objects that try to exit a locker by stepping were doing so successfully,
 // and due to an oversight in turf/Enter() were going through walls.  That

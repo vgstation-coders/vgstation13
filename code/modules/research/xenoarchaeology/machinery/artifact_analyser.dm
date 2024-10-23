@@ -15,6 +15,7 @@ var/anomaly_report_num = 0
 	desc = "Studies the emissions of anomalous materials to discover their uses."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "xenoarch_console"
+	moody_light_state = "overlay_xenoarch_console"
 	anchored = TRUE
 	density = TRUE
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
@@ -58,15 +59,10 @@ var/anomaly_report_num = 0
 	update_icon()
 
 /obj/machinery/artifact_analyser/update_icon()
-	if(stat & (FORCEDISABLE|NOPOWER))
-		icon_state = "xenoarch_console"
-		kill_moody_light()
-	else
-		icon_state = "[initial(icon_state)][scan_in_progress]"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_xenoarch_console")
+	icon_state = "[initial(icon_state)][stat & (FORCEDISABLE|NOPOWER) ? "" : scan_in_progress]"
+	toggle_moody_light(!(stat & (FORCEDISABLE|NOPOWER)))
 	if(owned_scanner)
 		owned_scanner.update_icon()
-
 
 /obj/machinery/artifact_analyser/proc/reconnect_scanner()
 	//connect to a nearby scanner pad

@@ -107,6 +107,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	name = "light fixture"
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "ltube1"
+	moody_light_state = "overlay_lighttube"
 	desc = "A lighting fixture."
 	anchored = 1
 	plane = ABOVE_HUMAN_PLANE
@@ -201,6 +202,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	icon_state = "lbulb1"
 	fitting = "bulb"
 	desc = "A small lighting fixture."
+	moody_light_state = "overlay_lightbulb"
 	spawn_with_bulb = /obj/item/weapon/light/bulb
 
 /obj/machinery/light/small/broken
@@ -232,12 +234,13 @@ var/global/list/obj/machinery/light/alllights = list()
 		lights_area.lights -= src
 
 /obj/machinery/light/update_icon()
-
+	kill_moody_light()
 	if(current_bulb)
 		switch(current_bulb.status)		// set icon_states
 			if(LIGHT_OK)
 				icon_state = "l[current_bulb.base_state][on]"
 				if(on)
+					update_moody_light()
 					color = current_bulb.brightness_color
 			if(LIGHT_BURNED)
 				icon_state = "l[current_bulb.base_state]-burned"

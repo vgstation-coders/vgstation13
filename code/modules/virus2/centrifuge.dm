@@ -123,6 +123,7 @@
 //Also handles luminosity
 /obj/machinery/disease2/centrifuge/update_icon()
 	overlays.len = 0
+	kill_moody_light_all()
 	icon_state = "centrifuge"
 
 	if (stat & (NOPOWER|FORCEDISABLE))
@@ -134,33 +135,30 @@
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		set_light(0)
 	else
+		var/image/moody
 		if (on)
 			icon_state = "centrifuge_moving"
 			set_light(2,2)
-			var/image/centrifuge_light = image(icon,"centrifuge_light")
-			centrifuge_light.plane = ABOVE_LIGHTING_PLANE
-			centrifuge_light.layer = ABOVE_LIGHTING_LAYER
-			overlays += centrifuge_light
+			overlays += "centrifuge_light"
+			moody = image(icon,src,"centrifuge_light")
+			moody.color = whiteout
+			update_moody_light_index("light",image_override = moody)
 			var/image/centrifuge_glow = image(icon,"centrifuge_glow")
-			centrifuge_glow.plane = ABOVE_LIGHTING_PLANE
-			centrifuge_glow.layer = ABOVE_LIGHTING_LAYER
 			centrifuge_glow.blend_mode = BLEND_ADD
 			overlays += centrifuge_glow
+			moody = image(icon,src,"centrifuge_glow")
+			moody.color = whiteout
+			update_moody_light_index("glow",image_override = moody)
 		else
 			set_light(2,1)
-
-		switch (special)
-			if (CENTRIFUGE_LIGHTSPECIAL_BLINKING)
-				var/image/centrifuge_light = image(icon,"centrifuge_special_update")
-				centrifuge_light.plane = ABOVE_LIGHTING_PLANE
-				centrifuge_light.layer = ABOVE_LIGHTING_LAYER
-				overlays += centrifuge_light
-				special = CENTRIFUGE_LIGHTSPECIAL_ON
-			if (CENTRIFUGE_LIGHTSPECIAL_ON)
-				var/image/centrifuge_light = image(icon,"centrifuge_special")
-				centrifuge_light.plane = ABOVE_LIGHTING_PLANE
-				centrifuge_light.layer = ABOVE_LIGHTING_LAYER
-				overlays += centrifuge_light
+		
+		var/centrifuge_light = "centrifuge_special[special == CENTRIFUGE_LIGHTSPECIAL_BLINKING ? "_update" : ""]"
+		overlays += centrifuge_light
+		moody = image(icon,src,centrifuge_light)
+		moody.color = whiteout
+		update_moody_light_index("special",image_override = moody)
+		if (special == CENTRIFUGE_LIGHTSPECIAL_BLINKING)
+			special = CENTRIFUGE_LIGHTSPECIAL_ON
 
 	for (var/i = 1 to 4)
 		var/isolation_centrifuge_vial/vial_datum = vial_data[i]

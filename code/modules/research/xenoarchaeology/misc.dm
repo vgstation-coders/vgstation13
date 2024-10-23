@@ -129,12 +129,7 @@
 /obj/structure/closet/secure_closet/xenoarchaeologist
 	name = "Xenoarchaeologist Locker"
 	req_access = list(access_tox_storage)
-	icon_state = "secureres1"
-	icon_closed = "secureres"
-	icon_locked = "secureres1"
-	icon_opened = "secureresopen"
-	icon_broken = "secureresbroken"
-	icon_off = "secureresoff"
+	icon_state = "secureres"
 
 /obj/structure/closet/secure_closet/xenoarchaeologist/atoms_to_spawn()
 	return list(
@@ -151,12 +146,7 @@
 /obj/structure/closet/secure_closet/excavation
 	name = "Excavation Tools"
 	req_access = list(access_tox_storage)
-	icon_state = "securexen1"
-	icon_closed = "securexen0"
-	icon_locked = "securexen1"
-	icon_opened = "securexenopen"
-	icon_broken = "securexenbroken"
-	icon_off = "securexenoff"
+	icon_state = "securexen"
 
 /obj/structure/closet/secure_closet/excavation/atoms_to_spawn()
 	return list(

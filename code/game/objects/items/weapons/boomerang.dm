@@ -305,7 +305,7 @@
 /obj/item/weapon/boomerang/cross
 	name = "battle cross"
 	desc = "A holy silver cross that dispels evil and smites unholy creatures."
-
+	moody_light_icon = 'icons/obj/boomerang.dmi'
 	icon_state = "cross_modern"
 
 	starting_materials = list(MAT_SILVER = CC_PER_SHEET_SILVER * 16)
@@ -324,7 +324,7 @@
 
 /obj/item/weapon/boomerang/cross/New()
 	..()
-	update_moody_light(icon, "[icon_state]-moody")
+	update_moody_light("[icon_state]-moody")
 
 /obj/item/weapon/boomerang/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
 	plane = ABOVE_LIGHTING_PLANE

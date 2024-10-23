@@ -9,6 +9,7 @@
 	name = "canister"
 	desc = "A container for gases. Can be used with atmospherics machinery through interaction with a port, and can also fill man-portable tanks."
 	icon = 'icons/obj/atmos.dmi'
+	moody_light_icon = 'icons/obj/atmos.dmi'
 	icon_state = "yellow"
 	density = 1
 	health = 100.0
@@ -81,6 +82,7 @@
 	can_label = 0
 
 /obj/machinery/portable_atmospherics/canister/update_icon()
+	kill_moody_light()
 	if(destroyed)
 		icon_state = "[canister_color]-1"
 		overlays.len = 0
@@ -105,19 +107,22 @@
 			overlays += other_overlays(2)
 			overlay_status |= OVERLAY_CONNECTED
 
+		var/image/I
 		switch(tank_pressure)
 			if(15 * ONE_ATMOSPHERE to INFINITY)
-				overlays += pressure_overlays(4)
+				I = pressure_overlays(4)
 				overlay_status |= OVERLAY_HIGH_PRESSURE
 			if(ONE_ATMOSPHERE to 15 * ONE_ATMOSPHERE)
-				overlays += pressure_overlays(3)
+				I = pressure_overlays(3)
 				overlay_status |= OVERLAY_MEDIUM_PRESSURE
 			if(10 to ONE_ATMOSPHERE)
-				overlays += pressure_overlays(2)
+				I = pressure_overlays(2)
 				overlay_status |= OVERLAY_LOW_PRESSURE
 			else
-				overlays += pressure_overlays(1)
+				I = pressure_overlays(1)
 				overlay_status |= OVERLAY_NO_PRESSURE
+		overlays += I
+		update_moody_light(I.icon_state,255,whiteout)
 	return
 
 /obj/machinery/portable_atmospherics/canister/proc/pressure_overlays(var/state)

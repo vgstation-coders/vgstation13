@@ -208,6 +208,7 @@ var/global/list/loopModeNames=list(
 	var/datum/wires/jukebox/wires = null
 	var/pick_allowed = 1 //Allows you to pick songs
 	var/access_unlocked = 0 //Allows you to access settings
+	var/glows = FALSE
 
 	machine_flags = WRENCHMOVE | FIXED2WORK | EMAGGABLE | MULTITOOL_MENU | SCREWTOGGLE | SHUTTLEWRENCH
 	mech_flags = MECH_SCAN_FAIL
@@ -281,7 +282,9 @@ var/global/list/loopModeNames=list(
 		stop_playing()
 		kill_moody_light_all()
 		return
-	update_moody_light_index("main",'icons/lighting/moody_lights.dmi', "overlay_juke")
+	update_moody_light_index("main","overlay_juke")
+	if(glows)
+		update_moody_light_index("glow","overlay_juke_glow")
 	icon_state = state_base
 	if(playing)
 		if(emagged)
@@ -902,6 +905,7 @@ var/global/list/loopModeNames=list(
 
 	light_power_on = 2
 	light_color = "#3366FF"
+	glows = TRUE
 
 	playlist_id="bar"
 	// Must be defined on your server.
@@ -941,11 +945,6 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/superjuke/New()
 	..()
 	power_change() //enabling lights when admin spawned
-
-/obj/machinery/media/jukebox/superjuke/update_icon()
-	..()
-	if(!(stat & (FORCEDISABLE|NOPOWER|BROKEN)) && anchored && !any_power_cut())
-		update_moody_light_index("glow",'icons/lighting/moody_lights.dmi', "overlay_juke_glow")
 
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)
 	// NO FUN ALLOWED.  Emag list is included, anyway.
@@ -1060,6 +1059,7 @@ var/global/list/loopModeNames=list(
 
 	light_power_on = 2
 	light_color = "#EFEFAA"
+	glows = TRUE
 
 	change_cost = 0
 
@@ -1068,11 +1068,6 @@ var/global/list/loopModeNames=list(
 	playlists=list(
 		"holy" = "Pastor's Paradise"
 	)
-
-/obj/machinery/media/jukebox/holyjuke/update_icon()
-	..()
-	if(!(stat & (FORCEDISABLE|NOPOWER|BROKEN)) && anchored && !any_power_cut())
-		update_moody_light_index("glow",'icons/lighting/moody_lights.dmi', "overlay_juke_glow")
 
 /obj/machinery/media/jukebox/holyjuke/attackby(obj/item/W, mob/user)
 	// EMAG DOES NOTHING

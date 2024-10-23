@@ -76,6 +76,7 @@
 	name = "wall"
 	desc = "A huge chunk of metal used to separate rooms."
 	icon_state = "diagonalWall"
+	moody_light_state = "diag_wall"
 	density = 1
 	anchored = 1
 	opacity = 1
@@ -85,7 +86,7 @@
 	var/turf/T = get_turf(src)
 	if(T)
 		if(!T.dynamic_lighting)
-			update_moody_light('icons/lighting/moody_lights.dmi', "diag_wall")
+			update_moody_light()
 		T.dynamic_lighting = 1
 		if(SSlighting && SSlighting.initialized && !T.lighting_overlay)
 			new /atom/movable/lighting_overlay(T, TRUE)
@@ -112,7 +113,7 @@
 	if(T)
 		kill_moody_light()
 		if(!T.dynamic_lighting)
-			update_moody_light('icons/lighting/moody_lights.dmi', "diag_wall")
+			update_moody_light()
 		T.dynamic_lighting = 1
 		if(!T.lighting_overlay)
 			new /atom/movable/lighting_overlay(T, TRUE)
@@ -204,6 +205,7 @@
 	anchored = TRUE
 	icon_state = "podcomputer"
 	icon_state_open = "podcomputer_maint"
+	moody_light_state = "overlay_podcomputer"
 
 	var/datum/shuttle/escape/pod/linked_pod
 	machine_flags = SCREWTOGGLE | EMAGGABLE
@@ -252,7 +254,7 @@
 	linked_pod?.crashing_this_pod = FALSE
 
 /obj/machinery/podcomputer/update_icon()
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_podcomputer")
+	update_moody_light()
 	if(panel_open)
 		icon_state = "podcomputer_maint"
 	else if(emergency_shuttle.online)

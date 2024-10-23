@@ -22,7 +22,7 @@
 	desc = "The arm is just for decoration."
 	icon = 'icons/obj/slot_machine.dmi'
 	icon_state = "slot"
-	moody_state = "overlay_slot"
+	moody_light_state = "overlay_slot"
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	computer_flags = NO_ONOFF_ANIMS

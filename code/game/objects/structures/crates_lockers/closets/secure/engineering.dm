@@ -1,12 +1,7 @@
 /obj/structure/closet/secure_closet/engineering_chief
 	name = "\improper Chief Engineer's locker"
 	req_access = list(access_ce)
-	icon_state = "securece1"
-	icon_closed = "securece"
-	icon_locked = "securece1"
-	icon_opened = "secureceopen"
-	icon_broken = "securecebroken"
-	icon_off = "secureceoff"
+	icon_state = "securece"
 
 /obj/structure/closet/secure_closet/engineering_chief/atoms_to_spawn()
 	return list(
@@ -41,12 +36,9 @@
 /obj/structure/closet/secure_closet/engineering_electrical
 	name = "electrical supplies locker"
 	req_access = list(access_engine_minor)
-	icon_state = "secureengelec1"
-	icon_closed = "secureengelec"
-	icon_locked = "secureengelec1"
-	icon_opened = "toolclosetopen"
-	icon_broken = "secureengelecbroken"
-	icon_off = "secureengelecoff"
+	icon_state = "secureengelec"
+	icon_open_override = "toolclosetopen"
+	overlay_x = -1
 
 /obj/structure/closet/secure_closet/engineering_electrical/atoms_to_spawn()
 	return list(
@@ -60,12 +52,9 @@
 /obj/structure/closet/secure_closet/engineering_welding
 	name = "welding supplies locker"
 	req_access = list(access_engine_minor)
-	icon_state = "secureengweld1"
-	icon_closed = "secureengweld"
-	icon_locked = "secureengweld1"
-	icon_opened = "toolclosetopen"
-	icon_broken = "secureengweldbroken"
-	icon_off = "secureengweldoff"
+	icon_state = "secureengweld"
+	icon_open_override = "toolclosetopen"
+	overlay_x = -1
 
 /obj/structure/closet/secure_closet/engineering_welding/atoms_to_spawn()
 	return list(
@@ -76,12 +65,7 @@
 /obj/structure/closet/secure_closet/engineering_personal
 	name = "\improper Engineer's locker"
 	req_access = list(access_engine_minor)
-	icon_state = "secureeng1"
-	icon_closed = "secureeng"
-	icon_locked = "secureeng1"
-	icon_opened = "secureengopen"
-	icon_broken = "secureengbroken"
-	icon_off = "secureengoff"
+	icon_state = "secureeng"
 
 /obj/structure/closet/secure_closet/engineering_personal/atoms_to_spawn()
 	return list(
@@ -110,12 +94,7 @@
 /obj/structure/closet/secure_closet/engineering_atmos
 	name = "\improper Atmospheric Technician's locker"
 	req_access = list(access_atmospherics)
-	icon_state = "secureatmos1"
-	icon_closed = "secureatmos"
-	icon_locked = "secureatmos1"
-	icon_opened = "secureatmosopen"
-	icon_broken = "secureatmosbroken"
-	icon_off = "secureatmosoff"
+	icon_state = "secureatmos"
 
 /obj/structure/closet/secure_closet/engineering_atmos/atoms_to_spawn()
 	return list(
@@ -148,12 +127,7 @@
 /obj/structure/closet/secure_closet/engineering_mechanic
 	name = "\improper Mechanic's locker"
 	req_access = list(access_mechanic)
-	icon_state = "securemechni1"
-	icon_closed = "securemechni"
-	icon_locked = "securemechni1"
-	icon_opened = "securemechniopen"
-	icon_broken = "securemechnibroken"
-	icon_off = "securemechnioff"
+	icon_state = "securemechni"
 
 /obj/structure/closet/secure_closet/engineering_mechanic/atoms_to_spawn()
 	return list(
@@ -180,12 +154,7 @@
 /obj/structure/closet/secure_closet/engineering_general
 	name = "engineering locker"
 	req_access = list(access_engine_minor)
-	icon_state = "secureeng1"
-	icon_closed = "secureeng"
-	icon_locked = "secureeng1"
-	icon_opened = "secureengopen"
-	icon_broken = "secureengbroken"
-	icon_off = "secureengoff"
+	icon_state = "secureeng"
 
 /obj/structure/closet/crate/secure/large/reinforced/shard
 	name = "supermatter shard crate"

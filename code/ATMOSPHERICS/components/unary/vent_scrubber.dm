@@ -2,6 +2,7 @@
 
 /obj/machinery/atmospherics/unary/vent_scrubber
 	icon = 'icons/obj/atmospherics/vent_scrubber.dmi'
+	moody_light_icon = 'icons/obj/atmospherics/vent_scrubber.dmi'
 	icon_state = "hoff"
 	name = "Air Scrubber"
 	desc = "Has a valve and pump attached to it."
@@ -74,6 +75,7 @@
 
 /obj/machinery/atmospherics/unary/vent_scrubber/update_icon()
 	overlays = null
+	//kill_moody_light()
 	var/prefix = exposed() ? "" : "h"
 	if (welded)
 		icon_state = prefix + "weld"
@@ -96,6 +98,7 @@
 
 		state += state_postfix
 		overlays += state
+		//update_moody_light(state,255,whiteout) // floor moody lights don't look so good
 
 	..()
 

@@ -60,6 +60,7 @@ var/global/list/alert_overlays_global = list()
 	name = "\improper Emergency Shutter"
 	desc = "Emergency air-tight shutter, capable of sealing off breached areas."
 	icon = 'icons/obj/doors/DoorHazard.dmi'
+	moody_light_icon = 'icons/obj/doors/DoorHazard.dmi'
 	icon_state = "door_open"
 	req_one_access = list(access_atmospherics, access_engine_minor, access_paramedic)
 	opacity = 0
@@ -544,7 +545,7 @@ var/global/list/alert_overlays_global = list()
 			I.plane = ABOVE_LIGHTING_PLANE
 			I.layer = ABOVE_LIGHTING_LAYER
 			overlays += I
-			update_moody_light_index("palert", icon, "palert")
+			update_moody_light_index("palert","palert")
 		if(dir_alerts)
 			for(var/d=1;d<=4;d++)
 				var/cdir = cardinal[d]

@@ -15,6 +15,7 @@
 	desc = "Used to keep bodies in until someone fetches them."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "morgue1"
+	moody_light_state = "overlay_morgue"
 	dir = EAST
 	density = 1
 	var/obj/structure/m_tray/connected = null
@@ -32,7 +33,7 @@
 	morgue_list -= src
 
 /obj/structure/morgue/update_icon()
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_morgue")
+	update_moody_light()
 	if(connected)
 		icon_state = "morgue0"
 		return

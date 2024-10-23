@@ -277,11 +277,7 @@
 /turf/space/void,
 /area)
 "Bw" = (
-/obj/structure/closet{
-	icon_closed = "cabinet_closed";
-	icon_opened = "cabinet_open";
-	icon_state = "cabinet_closed"
-	},
+/obj/structure/closet/cabinet,
 /obj/item/weapon/storage/wallet/random,
 /turf/unsimulated/floor{
 	dir = 5;

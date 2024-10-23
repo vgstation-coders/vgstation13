@@ -1,12 +1,7 @@
 /obj/structure/closet/secure_closet/medical1
 	name = "Medicine Closet"
 	desc = "Filled with medical junk."
-	icon_state = "medical1"
-	icon_closed = "medical"
-	icon_locked = "medical1"
-	icon_opened = "medicalopen"
-	icon_broken = "medicalbroken"
-	icon_off = "medicaloff"
+	icon_state = "medical"
 	req_access = list(access_medical)
 
 
@@ -23,12 +18,7 @@
 /obj/structure/closet/secure_closet/medical2
 	name = "Anesthetic"
 	desc = "Used to knock people out."
-	icon_state = "medical1"
-	icon_closed = "medical"
-	icon_locked = "medical1"
-	icon_opened = "medicalopen"
-	icon_broken = "medicalbroken"
-	icon_off = "medicaloff"
+	icon_state = "medical"
 	req_access = list(access_surgery)
 
 
@@ -43,12 +33,7 @@
 /obj/structure/closet/secure_closet/medical3
 	name = "Medical Doctor's Locker"
 	req_access = list(access_surgery)
-	icon_state = "securemed1"
-	icon_closed = "securemed"
-	icon_locked = "securemed1"
-	icon_opened = "securemedopen"
-	icon_broken = "securemedbroken"
-	icon_off = "securemedoff"
+	icon_state = "securemed"
 
 /obj/structure/closet/secure_closet/medical3/atoms_to_spawn()
 	. = list(
@@ -97,12 +82,7 @@
 /obj/structure/closet/secure_closet/CMO
 	name = "Chief Medical Officer's Locker"
 	req_access = list(access_cmo)
-	icon_state = "cmosecure1"
-	icon_closed = "cmosecure"
-	icon_locked = "cmosecure1"
-	icon_opened = "cmosecureopen"
-	icon_broken = "cmosecurebroken"
-	icon_off = "cmosecureoff"
+	icon_state = "cmosecure"
 
 /obj/structure/closet/secure_closet/CMO/atoms_to_spawn()
 	. = list(
@@ -156,12 +136,7 @@
 /obj/structure/closet/secure_closet/chemical
 	name = "Chemical Closet"
 	desc = "Store dangerous chemicals in here."
-	icon_state = "medical1"
-	icon_closed = "medical"
-	icon_locked = "medical1"
-	icon_opened = "medicalopen"
-	icon_broken = "medicalbroken"
-	icon_off = "medicaloff"
+	icon_state = "medical"
 	req_access = list(access_chemistry)
 
 /obj/structure/closet/secure_closet/chemical/atoms_to_spawn()
@@ -172,41 +147,19 @@
 		/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer = 2
 	)
 
-/obj/structure/closet/secure_closet/medical_wall
+/obj/structure/closet/secure_closet/medical_wall //completely unused everywhere and icons are out of wack, do not spawn anywhere
 	name = "First Aid Closet"
 	desc = "It's a secure wall-mounted storage unit for first aid supplies."
-	icon_state = "medical_wall_locked"
-	icon_closed = "medical_wall_unlocked"
-	icon_locked = "medical_wall_locked"
-	icon_opened = "medical_wall_open"
-	icon_broken = "medical_wall_spark"
-	icon_off = "medical_wall_off"
+	icon_state = "medical_wall"
 	anchored = 1
 	density = FALSE
 	wall_mounted = 1
 	req_access = list(access_medical)
 
-/obj/structure/closet/secure_closet/medical_wall/update_icon()
-	if(broken)
-		icon_state = icon_broken
-	else
-		if(!opened)
-			if(locked)
-				icon_state = icon_locked
-			else
-				icon_state = icon_closed
-		else
-			icon_state = icon_opened
-
 /obj/structure/closet/secure_closet/paramedic
 	name = "Paramedic Gear"
 	desc = "A locker with gear designed for use by paramedics, including an EVA suit."
-	icon_state = "medical1"
-	icon_closed = "medical"
-	icon_locked = "medical1"
-	icon_opened = "medicalopen"
-	icon_broken = "medicalbroken"
-	icon_off = "medicaloff"
+	icon_state = "medical"
 	req_access = list(access_paramedic)
 
 /obj/structure/closet/secure_closet/paramedic/atoms_to_spawn()

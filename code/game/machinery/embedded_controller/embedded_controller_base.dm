@@ -196,10 +196,10 @@
 	if(on && program)
 		if(program.memory["processing"])
 			icon_state = "airlock_control_process"
-			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_control_process")
+			update_moody_light("overlay_control_process")
 		else
 			icon_state = "airlock_control_standby"
-			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_control_standby")
+			update_moody_light("overlay_control_standby")
 	else
 		icon_state = "airlock_control_off"
 		kill_moody_light()

@@ -6,7 +6,7 @@
 	name = "remote gallery computer"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "artcomp"
-	moody_state = "overlay_artcomp"
+	moody_light_state = "overlay_artcomp"
 	anchored = 1
 	density = 1
 	req_access = list(access_library) //This access requirement is currently only used for the delete button showing

@@ -238,6 +238,7 @@ var/list/important_archivists = list()
 	desc = "A high-powered data archive device that takes technology disks and persistently backs them up to specialized servers for the upcoming shift. Usually takes two disks per technology."
 	icon = 'icons/obj/library.dmi'
 	icon_state = "computer_disk"
+	moody_light_state = "overlay_computer_disk"
 	var/on_flick = "on_disk"
 	var/off_flick = "off_disk"
 	anchored = TRUE
@@ -277,7 +278,7 @@ var/list/important_archivists = list()
 	// Broken
 	if(stat & BROKEN)
 		icon_state = "[initial(icon_state)]b"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_computer_disk")
+		update_moody_light()
 
 	// Unpowered/Disabled
 	else if(stat & (FORCEDISABLE|NOPOWER))
@@ -291,7 +292,7 @@ var/list/important_archivists = list()
 		if(icon_state == "[initial(icon_state)]0")
 			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = on_flick)
 		icon_state = initial(icon_state)
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_computer_disk")
+		update_moody_light()
 
 /obj/machinery/researcharchive/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(stat & (BROKEN))

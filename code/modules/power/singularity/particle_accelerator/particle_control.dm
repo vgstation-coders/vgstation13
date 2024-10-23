@@ -5,6 +5,7 @@
 	desc = "This controls the density of the particles."
 	icon = 'icons/obj/machines/particle_accelerator2.dmi'
 	icon_state = "control_box"
+	moody_light_state = "overlay_control_box"
 	reference = "control_box"
 	anchored = 0
 	density = 1
@@ -70,7 +71,7 @@
 /obj/machinery/particle_accelerator/control_box/update_icon()
 	if(active)
 		icon_state = "[reference]p[strength]"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_control_box")
+		update_moody_light()
 		set_light(2,1)
 	else
 		if(stat & (FORCEDISABLE|NOPOWER))
@@ -81,7 +82,7 @@
 		else if(use_power != MACHINE_POWER_USE_NONE)
 			if(assembled)
 				icon_state = "[reference]p"
-				update_moody_light('icons/lighting/moody_lights.dmi', "overlay_control_box")
+				update_moody_light()
 				set_light(2,1)
 		else
 			switch(construction_state)
@@ -93,7 +94,7 @@
 					icon_state = "[reference]w"
 				else
 					icon_state = "[reference]c"
-					update_moody_light('icons/lighting/moody_lights.dmi', "overlay_control_box")
+					update_moody_light()
 					set_light(2,1)
 					return
 			kill_moody_light()

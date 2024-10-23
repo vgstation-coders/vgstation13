@@ -371,8 +371,6 @@
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "ayycrate1"
 	density = 1
-	icon_opened = "ayycrate1open"
-	icon_closed = "ayycrate1"
 
 /obj/structure/closet/crate/ayy2
 	name = "MDF crate"
@@ -380,8 +378,6 @@
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "ayycrate2"
 	density = 1
-	icon_opened = "ayycrate2open"
-	icon_closed = "ayycrate2"
 
 /obj/structure/closet/crate/ayy3
 	name = "GDR industrial crate"
@@ -389,8 +385,6 @@
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "ayycrate3"
 	density = 1
-	icon_opened = "ayycrate3open"
-	icon_closed = "ayycrate3"
 
 /obj/structure/closet/crate/secure/ayy_general
 	name = "GDR secure crate"
@@ -398,8 +392,6 @@
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "ayysecurecrate2"
 	density = 1
-	icon_opened = "ayysecurecrate2open"
-	icon_closed = "ayysecurecrate2"
 
 /obj/structure/closet/crate/secure/ayy_mdf
 	name = "MDF secure crate"
@@ -407,59 +399,41 @@
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "ayysecurecrate"
 	density = 1
-	icon_opened = "ayysecurecrateopen"
-	icon_closed = "ayysecurecrate"
-
 /obj/structure/closet/ayy
 	name = "GDR locker"
 	desc = "A common storage unit, mass produced by grey laborers."
-	icon_state = "ayy1_closed"
-	icon_closed = "ayy1_closed"
-	icon_opened = "ayy1_open"
+	icon_state = "ayy1"
 
 /obj/structure/closet/ayy2
 	name = "MDF locker"
 	desc = "A rugged storage unit, for transporting mothership military supplies."
-	icon_state = "ayy2_closed"
-	icon_closed = "ayy2_closed"
-	icon_opened = "ayy2_open"
+	icon_state = "ayy2"
 
 /obj/structure/closet/ayy3
 	name = "Laborer locker"
 	desc = "A basic storage unit, for holding a grey laborer's spare uniforms and personal items."
-	icon_state = "ayy3_closed"
-	icon_closed = "ayy3_closed"
-	icon_opened = "ayy3_open"
+	icon_state = "ayy3"
 
 /obj/structure/closet/secure_closet/ayy
 	name = "GDR secure locker"
 	desc = "A mothership issued card-locked storage unit, perfect for storing a researcher's favorite labcoats."
-	icon_state = "ayysecure1"
-	icon_closed = "ayysecure"
-	icon_locked = "ayysecure1"
-	icon_opened = "ayysecureopen"
-	icon_broken = "ayysecurebroken"
-	icon_off = "ayysecureoff"
+	icon_state = "ayysecure"
+	overlay_x = -2
+	overlay_y = -1
 
 /obj/structure/closet/secure_closet/ayy2
 	name = "MDF secure locker"
 	desc = "A rugged card-locked storage unit, for transporting mothership military supplies."
-	icon_state = "ayymdfsecure1"
-	icon_closed = "ayymdfsecure"
-	icon_locked = "ayymdfsecure1"
-	icon_opened = "ayymdfsecureopen"
-	icon_broken = "ayymdfsecurebroken"
-	icon_off = "ayymdfsecureoff"
+	icon_state = "ayymdfsecure"
+	overlay_x = -2
+	overlay_y = -1
 
 /obj/structure/closet/secure_closet/ayy_leader
 	name = "Administrator's secure locker"
 	desc = "A sleek card-locked storage unit, for keeping the personal effects of the best and brightest secure."
-	icon_state = "leadersecure1"
-	icon_closed = "leadersecure"
-	icon_locked = "leadersecure1"
-	icon_opened = "leadersecureopen"
-	icon_broken = "leadersecurebroken"
-	icon_off = "leadersecureoff"
+	icon_state = "leadersecure"
+	overlay_x = -2
+	overlay_y = -1
 
 //////////////////////////////
 // NARRATION

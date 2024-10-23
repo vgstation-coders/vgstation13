@@ -2,7 +2,7 @@
 	name = "athletic wardrobe"
 	desc = "It's a storage unit for athletic wear."
 	icon_state = "mixed"
-	icon_closed = "mixed"
+	icon_open_override = "closetopen"
 
 /obj/structure/closet/athletic_mixed/atoms_to_spawn()
 	return list(
@@ -47,7 +47,7 @@
 	name = "red laser tag equipment"
 	desc = "It's a storage unit for laser tag equipment."
 	icon_state = "red"
-	icon_closed = "red"
+	icon_open_override = "closetopen"
 
 /obj/structure/closet/lasertag/red/atoms_to_spawn()
 	return list(
@@ -60,7 +60,7 @@
 	name = "blue laser tag equipment"
 	desc = "It's a storage unit for laser tag equipment."
 	icon_state = "blue"
-	icon_closed = "blue"
+	icon_open_override = "closetopen"
 
 /obj/structure/closet/lasertag/blue/atoms_to_spawn()
 	return list(

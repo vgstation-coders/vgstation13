@@ -2,7 +2,8 @@
 	name = "meter"
 	desc = "A gas flow meter."
 	icon = 'icons/obj/meter.dmi'
-	icon_state = "meterX"
+	moody_light_icon = 'icons/obj/meter.dmi'
+	icon_state = "meter"
 	var/obj/machinery/atmospherics/pipe/target = null
 	var/target_layer = PIPING_LAYER_DEFAULT
 	anchored = 1.0
@@ -40,41 +41,44 @@
 	src.pixel_y = (new_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_Y
 
 /obj/machinery/meter/process()
+	overlays.len = 0
+	//kill_moody_light()
 	if(!target)
-		icon_state = "meterX"
+		overlays += "meterX"
+		//update_moody_light("meterX",255,whiteout) // floor moody lights don't look so good
 		// Pop the meter off when the pipe we're attached to croaks.
 		new /obj/item/pipe_meter(src.loc)
 		spawn(0) qdel(src)
 		return PROCESS_KILL
 
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
-		icon_state = "meter0"
 		return 0
 
 	use_power(5)
 
 	var/datum/gas_mixture/environment = target.return_readonly_air()
 	if(!environment)
-		icon_state = "meterX"
+		overlays += "meterX"
+		//update_moody_light("meterX",255,whiteout) // floor moody lights don't look so good
 		// Pop the meter off when the environment we're attached to croaks.
 		new /obj/item/pipe_meter(src.loc)
 		spawn(0) qdel(src)
 		return PROCESS_KILL
 
 	var/env_pressure = environment.pressure
-	if(env_pressure <= 0.15*ONE_ATMOSPHERE)
-		icon_state = "meter0"
-	else if(env_pressure <= 1.8*ONE_ATMOSPHERE)
-		var/val = round(env_pressure/(ONE_ATMOSPHERE*0.3) + 0.5)
-		icon_state = "meter1_[val]"
-	else if(env_pressure <= 30*ONE_ATMOSPHERE)
-		var/val = round(env_pressure/(ONE_ATMOSPHERE*5)-0.35) + 1
-		icon_state = "meter2_[val]"
-	else if(env_pressure <= 59*ONE_ATMOSPHERE)
-		var/val = round(env_pressure/(ONE_ATMOSPHERE*5) - 6) + 1
-		icon_state = "meter3_[val]"
-	else
-		icon_state = "meter4"
+	var/state
+	switch(env_pressure*ONE_ATMOSPHERE)
+		if(0.15 to 1.8)
+			state = "meter1_[round(env_pressure/(ONE_ATMOSPHERE*0.3) + 0.5)]"
+		if(0.15 to 30)
+			state = "meter2_[round(env_pressure/(ONE_ATMOSPHERE*5)-0.35) + 1]"
+		if(30 to 59)
+			state = "meter3_[round(env_pressure/(ONE_ATMOSPHERE*5) - 6) + 1]"
+		if(59 to INFINITY)
+			state = "meter4"
+	if(state)
+		overlays += state
+		//update_moody_light(state,255,whiteout) // floor moody lights don't look so good
 
 	if(id_tag && frequency)
 		var/datum/radio_frequency/radio_connection = radio_controller.return_frequency(frequency)

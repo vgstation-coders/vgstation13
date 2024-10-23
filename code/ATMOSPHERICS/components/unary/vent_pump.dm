@@ -1,5 +1,6 @@
 /obj/machinery/atmospherics/unary/vent_pump
 	icon = 'icons/obj/atmospherics/vent_pump.dmi'
+	moody_light_icon = 'icons/obj/atmospherics/vent_pump.dmi'
 	icon_state = "base"
 
 	name = "Air Vent"
@@ -68,10 +69,12 @@
 
 /obj/machinery/atmospherics/unary/vent_pump/update_icon()
 	overlays = null
+	//kill_moody_light()
 	icon_state = welded ? "weld" : "base"
 
 	if (on && !(stat & (FORCEDISABLE|NOPOWER|BROKEN)))
 		overlays += pump_direction ? "out" : "in"
+		//update_moody_light(pump_direction ? "out" : "in",255,whiteout) // floor moody lights don't look so good
 
 	..()
 

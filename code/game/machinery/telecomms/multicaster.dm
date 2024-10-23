@@ -5,6 +5,7 @@ var/list/pda_multicasters = list()
 	desc = "Duplicates messages and sends copies to departments."
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "pda_server-on"
+	moody_light_state = "overlay_pda_server"
 	density = 1
 	anchored = 1
 	use_power = MACHINE_POWER_USE_IDLE
@@ -39,12 +40,8 @@ var/list/pda_multicasters = list()
 	update_icon()
 
 /obj/machinery/pda_multicaster/update_icon()
-	if(stat & (FORCEDISABLE|BROKEN|NOPOWER|EMPED))
-		icon_state = "pda_server-nopower"
-		kill_moody_light()
-	else
-		icon_state = "pda_server-[on ? "on" : "off"]"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_pda_server")
+	icon_state = "pda_server-[stat & (FORCEDISABLE|BROKEN|NOPOWER|EMPED) ? "nopower" : (on ? "on" : "off")]"
+	toggle_moody_light(!(stat & (FORCEDISABLE|BROKEN|NOPOWER|EMPED)))
 
 /obj/machinery/pda_multicaster/attack_hand(mob/user)
 	if(user.incapacitated() && !isAdminGhost(user))

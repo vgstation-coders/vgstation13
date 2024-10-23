@@ -1575,8 +1575,6 @@
 /area/shuttle/lightship/start)
 "gU" = (
 /obj/structure/closet{
-	icon_closed = "cabinet_closed";
-	icon_opened = "cabinet_open";
 	icon_state = "cabinet_closed"
 	},
 /obj/abstract/map/spawner/safe/clothing,

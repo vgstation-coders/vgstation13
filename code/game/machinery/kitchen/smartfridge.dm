@@ -18,7 +18,6 @@
 	var/icon_off = "smartfridge-off"
 	var/icon_broken = "smartfridge-broken"
 	var/icon_deny = null
-	var/moody_state = "overlay_vending_smartfridge"
 	var/list/datum/fridge_pile/piles = list()
 	var/opened = 0.0
 	var/display_miniicons = MINIICONS_ON
@@ -47,16 +46,14 @@
 /obj/machinery/smartfridge/update_icon()
 	if (stat & BROKEN)
 		icon_state = icon_broken
-		kill_moody_light()
 		set_light(0)
 	else if (stat & (NOPOWER|FORCEDISABLE))
 		icon_state = icon_off
-		kill_moody_light()
 		set_light(0)
 	else
 		icon_state = icon_on
-		update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 		set_light(2)
+	toggle_moody_light(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 
 /obj/machinery/smartfridge/proc/breakdown()
 	stat |= BROKEN
@@ -167,7 +164,7 @@
 	icon_off = "medfridge-off"
 	icon_broken = "medfridge-broken"
 	icon_deny = "medfridge-deny"
-	moody_state = "overlay_vending_medfridge"
+	moody_light_state = "overlay_vending_medfridge"
 	req_one_access = list(access_chemistry, access_medical)
 
 	accepted_types = list(	/obj/item/weapon/reagent_containers/glass,
@@ -202,7 +199,7 @@
 	icon_off = "smartfridge-off"
 	icon_broken = "smartfridge-broken"
 	icon_deny = null
-	moody_state = "overlay_vending_smartfridge"
+	moody_light_state = "overlay_vending_smartfridge"
 
 	accepted_types = list(	/obj/item/weapon/storage/pill_bottle,
 							/obj/item/weapon/reagent_containers)
@@ -250,7 +247,7 @@
 	icon_off = "slimefridge-off"
 	icon_broken = "slimefridge-broken"
 	icon_deny = null
-	moody_state = "overlay_vending_slimefridge"
+	moody_light_state = "overlay_vending_slimefridge"
 
 	accepted_types = list(
 		/obj/item/slime_extract,
@@ -289,7 +286,7 @@
 	icon_off = "bloodbank-off"
 	icon_broken = "bloodbank-broken"
 	icon_deny = null
-	moody_state = "overlay_vending_bloodbank"
+	moody_light_state = "overlay_vending_bloodbank"
 
 	accepted_types = list(/obj/item/weapon/reagent_containers/blood)
 

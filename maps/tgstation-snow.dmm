@@ -27734,23 +27734,7 @@
 /turf/simulated/floor/plating,
 /area/engineering/engineering_auxiliary)
 "bKE" = (
-/obj/structure/closet{
-	desc = "Everything a reporter needs to look the part.";
-	icon_closed = "blue";
-	icon_state = "blue";
-	name = "Reporter's Threads"
-	},
-/obj/item/clothing/suit/storage/lawyer/bluejacket,
-/obj/item/clothing/under/suit_jacket/really_black,
-/obj/item/clothing/under/suit_jacket/female,
-/obj/item/clothing/shoes/brown,
-/obj/item/clothing/shoes/brown,
-/obj/item/clothing/accessory/tie/blue,
-/obj/item/clothing/accessory/tie/red,
-/obj/item/clothing/head/det_hat{
-	name = "Reporter's Cap"
-	},
-/obj/item/clothing/head/flatcap,
+/obj/structure/closet/reporter,
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -66551,11 +66535,7 @@
 	},
 /area/syndicate_mothership)
 "fAC" = (
-/obj/structure/closet{
-	icon_closed = "cabinet_closed";
-	icon_opened = "cabinet_open";
-	icon_state = "cabinet_closed"
-	},
+/obj/structure/closet/cabinet,
 /obj/effect/decal/cleanable/cobweb2,
 /turf/unsimulated/floor{
 	dir = 8;

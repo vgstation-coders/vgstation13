@@ -320,7 +320,7 @@
 		if(overlays.len)
 			overlays = 0
 			if (!(stat & (BROKEN|MAINT)) && light_range)
-				update_moody_light('icons/lighting/moody_lights.dmi', "overlay_apc", 255, light_color)
+				update_moody_light("overlay_apc", 255, light_color)
 			return
 	if(update & 2)
 
@@ -336,7 +336,7 @@
 				overlays += status_overlays_environ[environ+1]
 
 	if (!(stat & (BROKEN|MAINT)) && light_range)
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_apc", 255, light_color)
+		update_moody_light("overlay_apc", 255, light_color)
 
 
 /obj/machinery/power/apc/proc/check_updates()
