@@ -605,7 +605,7 @@ var/global/num_vending_terminals = 1
 	var/datum/data/vending_product/R = new()
 	R.custom = TRUE
 	R.product_name = item.product_name()
-	R.mini_icon = costly_bicon(item)
+	R.mini_icon = bicon(item)
 	R.display_color = pick("red", "blue", "green")
 	R.amount = 1
 	if(item.price) // price tagger - only works on new items
