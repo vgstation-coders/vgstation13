@@ -1,0 +1,373 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"c" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged4"
+	},
+/area/derelict/teleporter)
+"k" = (
+/obj/machinery/computer/teleporter,
+/turf/simulated/floor/airless,
+/area/derelict/teleporter)
+"p" = (
+/turf/simulated/floor/plating/airless,
+/area/derelict/teleporter)
+"r" = (
+/turf/simulated/floor/airless,
+/area/derelict/teleporter)
+"s" = (
+/obj/machinery/power/apc{
+	pixel_y = -24
+	},
+/turf/simulated/floor/airless,
+/area/derelict/teleporter)
+"u" = (
+/turf/space,
+/area)
+"v" = (
+/obj/machinery/light_construct/small{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/teleporter)
+"x" = (
+/obj/machinery/light_construct/small{
+	dir = 1
+	},
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged3"
+	},
+/area/derelict/teleporter)
+"C" = (
+/obj/machinery/teleport/hub,
+/turf/simulated/floor/airless,
+/area/derelict/teleporter)
+"D" = (
+/obj/structure/lattice,
+/obj/effect/landmark/spacepod/random,
+/turf/space,
+/area)
+"F" = (
+/obj/structure/table,
+/obj/item/weapon/cell{
+	charge = 100;
+	maxcharge = 15000
+	},
+/turf/simulated/floor/airless,
+/area/derelict/teleporter)
+"O" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area/derelict/teleporter)
+"S" = (
+/turf/simulated/wall/r_wall,
+/area/derelict/teleporter)
+"V" = (
+/turf/simulated/floor/plating/airless,
+/area)
+"W" = (
+/obj/machinery/teleport/station,
+/turf/simulated/floor/airless,
+/area/derelict/teleporter)
+
+(1,1,1) = {"
+u
+u
+u
+u
+a
+u
+u
+u
+u
+u
+u
+u
+"}
+(2,1,1) = {"
+u
+u
+u
+u
+a
+a
+u
+u
+u
+u
+u
+u
+"}
+(3,1,1) = {"
+u
+u
+u
+a
+a
+a
+u
+u
+u
+u
+u
+u
+"}
+(4,1,1) = {"
+u
+u
+u
+a
+a
+a
+u
+u
+u
+u
+u
+u
+"}
+(5,1,1) = {"
+u
+u
+u
+a
+a
+a
+S
+S
+S
+S
+S
+u
+"}
+(6,1,1) = {"
+u
+u
+u
+a
+a
+S
+S
+x
+r
+F
+S
+S
+"}
+(7,1,1) = {"
+u
+u
+u
+a
+a
+S
+p
+r
+r
+c
+r
+S
+"}
+(8,1,1) = {"
+u
+u
+u
+a
+V
+S
+p
+r
+k
+p
+s
+S
+"}
+(9,1,1) = {"
+u
+u
+a
+a
+V
+p
+r
+r
+W
+r
+r
+S
+"}
+(10,1,1) = {"
+u
+u
+a
+a
+V
+S
+O
+r
+C
+r
+r
+S
+"}
+(11,1,1) = {"
+a
+D
+a
+a
+V
+S
+r
+r
+r
+r
+p
+p
+"}
+(12,1,1) = {"
+u
+a
+u
+a
+a
+S
+p
+r
+v
+O
+S
+p
+"}
+(13,1,1) = {"
+a
+a
+a
+a
+a
+V
+p
+S
+S
+S
+S
+u
+"}
+(14,1,1) = {"
+a
+a
+a
+a
+a
+V
+a
+a
+a
+u
+u
+u
+"}
+(15,1,1) = {"
+a
+a
+a
+a
+a
+V
+a
+u
+u
+u
+u
+u
+"}
+(16,1,1) = {"
+a
+a
+a
+a
+a
+a
+u
+u
+u
+u
+u
+u
+"}
+(17,1,1) = {"
+a
+a
+a
+a
+a
+u
+u
+u
+u
+u
+u
+u
+"}
+(18,1,1) = {"
+u
+a
+a
+a
+u
+u
+u
+u
+u
+u
+u
+u
+"}
+(19,1,1) = {"
+u
+a
+a
+a
+a
+a
+a
+u
+u
+u
+u
+u
+"}
+(20,1,1) = {"
+a
+a
+a
+u
+a
+a
+u
+u
+u
+u
+u
+u
+"}
+(21,1,1) = {"
+u
+a
+u
+u
+a
+a
+u
+u
+u
+u
+u
+u
+"}

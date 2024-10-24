@@ -1,0 +1,3173 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"az" = (
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"bh" = (
+/obj/machinery/door/airlock/external{
+	name = "Oxygen Tank Access"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"bt" = (
+/obj/machinery/power/terminal{
+	dir = 1
+	},
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"bB" = (
+/obj/structure/cable,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"bJ" = (
+/obj/structure/table,
+/obj/structure/cable,
+/obj/machinery/power/apc{
+	pixel_y = -24
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"cd" = (
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"cF" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	canSpawnMice = 0;
+	dir = 4;
+	external_pressure_bound = 120;
+	frequency = 1438;
+	icon_state = "in";
+	id_tag = "n2_out";
+	initialize_directions = 1;
+	internal_pressure_bound = 4000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/turf/simulated/floor/engine/vacuum{
+	icon_state = "enginebot"
+	},
+/area/derelict/atmos)
+"cW" = (
+/turf/simulated/floor/plating/airless{
+	icon_state = "panelscorched"
+	},
+/area/derelict/atmos)
+"cZ" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/item/device/paicard,
+/turf/simulated/floor/plating,
+/area/derelict/bridge)
+"db" = (
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"df" = (
+/turf/simulated/wall/r_wall,
+/area/derelict/atmos)
+"dh" = (
+/obj/machinery/door/window{
+	dir = 3
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"do" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"dp" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 4
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"dY" = (
+/turf/simulated/floor/plating,
+/area/derelict/bridge)
+"eh" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"eC" = (
+/turf/simulated/wall,
+/area/derelict/bridge/access)
+"eI" = (
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/machinery/power/apc{
+	dir = 1;
+	environ = 0;
+	equipment = 1;
+	lighting = 0;
+	locked = 0;
+	pixel_y = 24
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"ff" = (
+/obj/structure/catwalk,
+/turf/space,
+/area/derelict/atmos)
+"fg" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"fm" = (
+/turf/simulated/wall,
+/area/derelict/solar_control)
+"fn" = (
+/obj/machinery/computer/general_air_control/large_tank_control{
+	frequency = 1438;
+	input_tag = "tox_in";
+	name = "Toxin Supply Control";
+	output_tag = "tox_out";
+	sensors = list("tox_sensor"="Tank")
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area/derelict/atmos)
+"fp" = (
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating,
+/area/derelict/solar_control)
+"fC" = (
+/turf/simulated/floor,
+/area/derelict/bridge)
+"fJ" = (
+/obj/structure/window,
+/obj/item/weapon/stamp/denied,
+/turf/simulated/floor/plating,
+/area/derelict/bridge)
+"fR" = (
+/obj/structure/lattice,
+/turf/space,
+/area/derelict/bridge/access)
+"fU" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden,
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"ge" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"gs" = (
+/turf/simulated/wall/r_wall,
+/area/derelict/research)
+"gA" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"gI" = (
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"hB" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/floodlight,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"hL" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"hW" = (
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"ip" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "oxygen"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"ir" = (
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/space,
+/area)
+"iB" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Turbine Maintenance";
+	req_access_txt = "11"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/research)
+"iF" = (
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/plating,
+/area/derelict/atmos)
+"iH" = (
+/turf/space,
+/area/derelict/bridge)
+"iP" = (
+/obj/structure/grille,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"iZ" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden{
+	dir = 4
+	},
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/plating,
+/area/derelict/atmos)
+"jG" = (
+/obj/item/weapon/shard,
+/turf/space,
+/area)
+"jH" = (
+/obj/machinery/door/airlock/external{
+	name = "Nitrogen Tank Access"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"jR" = (
+/obj/machinery/door/airlock/engineering{
+	name = "Starboard Solar Access";
+	req_access_txt = "11"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"jU" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"jX" = (
+/obj/machinery/door/window{
+	name = "Heads of Staff";
+	req_access_txt = "19"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"ka" = (
+/obj/structure/lattice,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/space,
+/area)
+"kv" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/space,
+/area)
+"kA" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area)
+"kX" = (
+/obj/structure/sign/science,
+/turf/simulated/wall/r_wall,
+/area/derelict/research)
+"kY" = (
+/obj/structure/grille,
+/obj/structure/lattice,
+/turf/space,
+/area)
+"lk" = (
+/obj/machinery/atmospherics/miner/nitrogen,
+/turf/simulated/floor/engine/vacuum{
+	icon_state = "enginedelivery"
+	},
+/area/derelict/atmos)
+"lt" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/solar_control)
+"lC" = (
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"lL" = (
+/obj/machinery/recharge_station,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"mf" = (
+/obj/structure/window/reinforced,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"mh" = (
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"mv" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"mI" = (
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area)
+"mM" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/simulated/wall,
+/area/derelict/research)
+"mP" = (
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/machinery/power/solar/control{
+	id_tag = "derelictsolar";
+	name = "Primary Solar Control"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"mS" = (
+/obj/structure/sign/nosmoking_1,
+/turf/simulated/wall/r_wall,
+/area/derelict/atmos)
+"np" = (
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"nE" = (
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/solar/panel{
+	id_tag = "derelictsolar";
+	name = "Derelict Solar Array"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area/solar/derelict_starboard)
+"nF" = (
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"nK" = (
+/obj/effect/decal/remains/robot,
+/obj/effect/decal/remains/robot{
+	icon_state = "gib7"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"nM" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"oe" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	canSpawnMice = 0;
+	dir = 4;
+	external_pressure_bound = 120;
+	icon_state = "in";
+	initialize_directions = 1;
+	internal_pressure_bound = 4000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/turf/simulated/floor/bluegrid{
+	icon_state = "dark";
+	name = "Mainframe Floor";
+	nitrogen = 100;
+	oxygen = 0;
+	temperature = 80
+	},
+/area/derelict/research)
+"om" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area)
+"ov" = (
+/turf/simulated/floor/bluegrid{
+	icon_state = "dark";
+	name = "Mainframe Floor";
+	nitrogen = 100;
+	oxygen = 0;
+	temperature = 80
+	},
+/area/derelict/research)
+"oW" = (
+/obj/structure/cable,
+/obj/machinery/power/apc{
+	pixel_y = -24
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"px" = (
+/turf/simulated/wall/r_wall,
+/area/derelict/bridge/access)
+"pP" = (
+/obj/machinery/atmospherics/unary/outlet_injector{
+	dir = 4;
+	frequency = 1438;
+	icon_state = "on";
+	id_tag = "n2_in";
+	on = 1
+	},
+/turf/simulated/floor/engine/vacuum{
+	icon_state = "enginebot"
+	},
+/area/derelict/atmos)
+"qn" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"qq" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"qw" = (
+/obj/machinery/vending/engivend,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"qL" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"qW" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"rI" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"sy" = (
+/obj/item/weapon/paper,
+/turf/simulated/floor/plating,
+/area/derelict/bridge)
+"sA" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area)
+"sO" = (
+/obj/structure/table,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"sV" = (
+/obj/structure/girder,
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"sW" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"tf" = (
+/turf/space,
+/area)
+"th" = (
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"tC" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/wall,
+/area/derelict/bridge/access)
+"tD" = (
+/obj/structure/girder/reinforced,
+/turf/space,
+/area/derelict/bridge)
+"tJ" = (
+/obj/structure/lattice,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/space,
+/area)
+"tN" = (
+/obj/item/taperoll/engineering,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"tQ" = (
+/obj/machinery/air_sensor{
+	frequency = 1438;
+	id_tag = "o2_sensor"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"tU" = (
+/obj/structure/catwalk,
+/turf/space,
+/area)
+"uc" = (
+/obj/structure/bed/chair,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"ue" = (
+/obj/effect/decal/warning_stripes{
+	dir = 5;
+	icon_state = "warning";
+	tag = "icon-warning (NORTHEAST)"
+	},
+/obj/machinery/computer/rdconsole/derelict,
+/turf/simulated/floor/airless,
+/area/derelict/research)
+"uh" = (
+/obj/machinery/air_sensor{
+	frequency = 1438;
+	id_tag = "tox_sensor"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"um" = (
+/obj/machinery/r_n_d/destructive_analyzer,
+/obj/effect/decal/warning_stripes{
+	dir = 10;
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHWEST)"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/research)
+"vb" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"vg" = (
+/obj/item/weapon/table_parts,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"vh" = (
+/obj/structure/rack,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"vi" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 4
+	},
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"vz" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"vV" = (
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"vZ" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/derelict/solar_control)
+"wa" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"wc" = (
+/turf/simulated/wall,
+/area/derelict/research)
+"wh" = (
+/obj/machinery/atmospherics/unary/cap/visible{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"wi" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"wo" = (
+/obj/machinery/computer/security,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"xg" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	canSpawnMice = 0;
+	external_pressure_bound = 120;
+	frequency = 1438;
+	icon_state = "in";
+	id_tag = "tox_out";
+	initialize_directions = 1;
+	internal_pressure_bound = 4000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/turf/simulated/floor/engine/vacuum{
+	icon_state = "enginebot"
+	},
+/area/derelict/atmos)
+"xD" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"xH" = (
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/obj/structure/window/reinforced,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"xP" = (
+/obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue{
+	dir = 4
+	},
+/obj/item/weapon/paper/derelict_invoice,
+/obj/machinery/meter,
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"xW" = (
+/obj/item/weapon/rack_parts,
+/turf/space,
+/area/derelict/bridge/access)
+"yp" = (
+/obj/structure/table,
+/obj/item/weapon/paper,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"yH" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"yJ" = (
+/obj/machinery/door/airlock/external{
+	name = "Air Bridge Access"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/atmos)
+"yX" = (
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"zi" = (
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"zv" = (
+/obj/item/weapon/table_parts,
+/turf/simulated/floor/plating,
+/area/derelict/bridge)
+"zK" = (
+/obj/structure/table,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"zW" = (
+/obj/machinery/r_n_d/server/derelict,
+/turf/simulated/floor/bluegrid{
+	icon_state = "dark";
+	name = "Mainframe Floor";
+	nitrogen = 100;
+	oxygen = 0;
+	temperature = 80
+	},
+/area/derelict/research)
+"zZ" = (
+/turf/simulated/floor/plating,
+/area/derelict/solar_control)
+"Ah" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"Ai" = (
+/obj/structure/grille/window_spawner/reinforced/full,
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"Ap" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 4
+	},
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/bluegrid{
+	name = "Mainframe Base";
+	nitrogen = 100;
+	oxygen = 0;
+	temperature = 80
+	},
+/area/derelict/research)
+"Aq" = (
+/obj/structure/rack,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"AG" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"AP" = (
+/obj/machinery/atmospherics/unary/outlet_injector{
+	dir = 4;
+	frequency = 1438;
+	icon_state = "on";
+	id_tag = "o2_in";
+	on = 1
+	},
+/turf/simulated/floor/engine/vacuum{
+	icon_state = "enginebot"
+	},
+/area/derelict/atmos)
+"AY" = (
+/obj/structure/girder,
+/turf/simulated/floor/plating/airless,
+/area)
+"Bm" = (
+/obj/effect/decal/remains/robot{
+	icon_state = "gib6"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"Bn" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"Br" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "plasma"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"Bz" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"BC" = (
+/obj/item/weapon/grenade/empgrenade,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"BF" = (
+/obj/machinery/computer/general_air_control/large_tank_control{
+	frequency = 1438;
+	input_tag = "n2_in";
+	name = "Nitrogen Supply Control";
+	output_tag = "n2_out";
+	sensors = list("n2_sensor"="Tank")
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"BH" = (
+/obj/structure/reagent_dispensers/watertank,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"BV" = (
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable,
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"CJ" = (
+/obj/item/weapon/shard{
+	icon_state = "small"
+	},
+/turf/space,
+/area/derelict/bridge/access)
+"CP" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/derelict/solar_control)
+"CV" = (
+/obj/machinery/vending/tool,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"Dp" = (
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"Ek" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"En" = (
+/turf/simulated/wall,
+/area/derelict/bridge)
+"Eo" = (
+/obj/structure/window/reinforced,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"Es" = (
+/obj/structure/grille,
+/turf/simulated/floor/plating/airless,
+/area)
+"Fb" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 10
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"Ff" = (
+/obj/item/stack/rods,
+/turf/space,
+/area)
+"Fu" = (
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"Gm" = (
+/obj/machinery/atmospherics/unary/outlet_injector{
+	frequency = 1438;
+	icon_state = "on";
+	id_tag = "tox_in";
+	on = 1
+	},
+/turf/simulated/floor/engine/vacuum{
+	icon_state = "enginebot"
+	},
+/area/derelict/atmos)
+"Gt" = (
+/obj/structure/lattice,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 6
+	},
+/turf/space,
+/area)
+"Gy" = (
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"GJ" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"GO" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 4
+	},
+/turf/simulated/floor/bluegrid{
+	icon_state = "dark";
+	name = "Mainframe Floor";
+	nitrogen = 100;
+	oxygen = 0;
+	temperature = 80
+	},
+/area/derelict/research)
+"GV" = (
+/turf/simulated/floor/bluegrid{
+	name = "Mainframe Base";
+	nitrogen = 100;
+	oxygen = 0;
+	temperature = 80
+	},
+/area/derelict/research)
+"Hl" = (
+/obj/item/taperoll/engineering,
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"HF" = (
+/obj/item/weapon/stock_parts/matter_bin,
+/obj/item/weapon/stock_parts/matter_bin,
+/obj/item/weapon/stock_parts/micro_laser,
+/obj/item/weapon/stock_parts/micro_laser,
+/obj/item/weapon/stock_parts/micro_laser,
+/obj/item/weapon/stock_parts/scanning_module,
+/obj/item/weapon/stock_parts/scanning_module,
+/obj/item/weapon/stock_parts/manipulator,
+/obj/item/weapon/stock_parts/manipulator,
+/obj/item/weapon/stock_parts/manipulator,
+/obj/structure/closet/secure_closet/scientist,
+/obj/machinery/light/small,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"HT" = (
+/obj/machinery/r_n_d/fabricator/circuit_imprinter,
+/obj/item/weapon/reagent_containers/glass/beaker/sulphuric,
+/obj/effect/decal/warning_stripes{
+	dir = 9;
+	icon_state = "warning";
+	tag = "icon-warning (NORTHWEST)"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/research)
+"IK" = (
+/obj/machinery/door/airlock/glass,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"IR" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/turf/simulated/floor/plating/airless,
+/area)
+"IX" = (
+/obj/structure/girder/reinforced,
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"IY" = (
+/obj/item/weapon/stool,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Jb" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"Jc" = (
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/machinery/power/solar/panel{
+	id_tag = "derelictsolar";
+	name = "Derelict Solar Array"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area/solar/derelict_starboard)
+"Jd" = (
+/obj/structure/table,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Jf" = (
+/turf/simulated/floor/plating,
+/area)
+"Jo" = (
+/obj/structure/reagent_dispensers/fueltank,
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"JF" = (
+/obj/machinery/power/solar/panel/tracker,
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"JS" = (
+/obj/machinery/door/airlock/external{
+	name = "External Engineering"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/solar_control)
+"Km" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"Kw" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/door/window,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"KJ" = (
+/turf/simulated/floor/plating/airless,
+/area)
+"KO" = (
+/obj/machinery/atmospherics/miner/toxins,
+/turf/simulated/floor/engine/vacuum{
+	icon_state = "enginedelivery"
+	},
+/area/derelict/atmos)
+"KS" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	canSpawnMice = 0;
+	dir = 4;
+	external_pressure_bound = 120;
+	frequency = 1438;
+	icon_state = "in";
+	id_tag = "o2_out";
+	initialize_directions = 1;
+	internal_pressure_bound = 4000;
+	on = 1;
+	pressure_checks = 2;
+	pump_direction = 0
+	},
+/turf/simulated/floor/engine/vacuum{
+	icon_state = "enginebot"
+	},
+/area/derelict/atmos)
+"Lj" = (
+/obj/machinery/door/airlock/command{
+	name = "E.V.A.";
+	req_access_txt = "18"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"Lp" = (
+/obj/structure/lattice,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/space,
+/area)
+"Ly" = (
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"LU" = (
+/obj/structure/table,
+/obj/item/weapon/cell,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"MI" = (
+/obj/structure/rack,
+/obj/item/weapon/melee/classic_baton,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"MJ" = (
+/obj/machinery/vending/engineering,
+/turf/simulated/wall/r_wall,
+/area/derelict/research)
+"MU" = (
+/obj/structure/table,
+/obj/machinery/light/small,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Nc" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	canSpawnMice = 0;
+	dir = 4;
+	external_pressure_bound = 140;
+	on = 1;
+	pressure_checks = 0
+	},
+/turf/simulated/floor/bluegrid{
+	icon_state = "dark";
+	name = "Mainframe Floor";
+	nitrogen = 100;
+	oxygen = 0;
+	temperature = 80
+	},
+/area/derelict/research)
+"Nd" = (
+/obj/machinery/door/airlock/external{
+	name = "Toxins Tank Access"
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"Nz" = (
+/obj/item/weapon/paper_bin{
+	pixel_x = -3;
+	pixel_y = 7
+	},
+/turf/simulated/floor/plating,
+/area/derelict/bridge)
+"Of" = (
+/obj/machinery/power/apc{
+	cell_type = 0;
+	icon_state = "apc1";
+	opened = 1;
+	pixel_y = -24
+	},
+/obj/item/weapon/cell/high,
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"Oz" = (
+/obj/machinery/door/airlock/external{
+	name = "Air Bridge Access"
+	},
+/turf/space,
+/area/derelict/atmos)
+"OL" = (
+/turf/simulated/wall/r_wall,
+/area)
+"Pc" = (
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Ph" = (
+/turf/simulated/wall,
+/area/derelict/atmos)
+"Pp" = (
+/obj/machinery/vending/hatdispenser,
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"PB" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"PC" = (
+/obj/structure/cable,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/plating/airless,
+/area/solar/derelict_starboard)
+"Qh" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"QQ" = (
+/obj/machinery/atmospherics/miner/oxygen,
+/turf/simulated/floor/engine/vacuum{
+	icon_state = "enginedelivery"
+	},
+/area/derelict/atmos)
+"QZ" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"Rb" = (
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"Rc" = (
+/obj/structure/computerframe,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Rr" = (
+/obj/machinery/computer/general_air_control/large_tank_control{
+	frequency = 1438;
+	input_tag = "o2_in";
+	name = "Oxygen Supply Control";
+	output_tag = "o2_out";
+	sensors = list("o2_sensor"="Tank")
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/atmos)
+"Rw" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/wall,
+/area/derelict/bridge/access)
+"RA" = (
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"RT" = (
+/obj/item/stack/rods,
+/turf/simulated/floor/plating/airless,
+/area)
+"Sn" = (
+/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe{
+	desc = "Your typical Autolathe. It appears to have much more options than your regular one, however...";
+	hacked = 1;
+	name = "Derelict Autolathe"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"SO" = (
+/turf/simulated/wall,
+/area)
+"Tt" = (
+/obj/structure/computerframe,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"TD" = (
+/turf/simulated/wall/r_wall,
+/area/derelict/bridge)
+"TE" = (
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/obj/machinery/computer/powermonitor,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"TF" = (
+/obj/machinery/r_n_d/fabricator/protolathe,
+/obj/effect/decal/warning_stripes{
+	dir = 6;
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHEAST)"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/research)
+"Ua" = (
+/obj/machinery/mommi_spawner,
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"Ui" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/derelict/bridge/access)
+"Um" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/research)
+"Ut" = (
+/obj/structure/lattice,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
+	},
+/turf/space,
+/area)
+"UB" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning";
+	tag = "icon-warning"
+	},
+/turf/simulated/floor/airless,
+/area/derelict/research)
+"UC" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"UV" = (
+/obj/structure/table,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Vh" = (
+/turf/space,
+/area/derelict/bridge/access)
+"Wa" = (
+/obj/structure/girder/reinforced,
+/turf/simulated/floor/plating,
+/area)
+"Wg" = (
+/obj/item/weapon/paper/crumpled,
+/turf/simulated/floor/plating,
+/area/derelict/bridge)
+"Wi" = (
+/obj/item/weapon/shard,
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"Wr" = (
+/obj/item/stack/cable_coil{
+	pixel_x = 3;
+	pixel_y = -7
+	},
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Ws" = (
+/obj/item/weapon/paper,
+/turf/simulated/floor,
+/area/derelict/bridge)
+"Wu" = (
+/obj/machinery/atmospherics/unary/cap/visible{
+	dir = 1
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area/derelict/atmos)
+"WQ" = (
+/obj/machinery/air_sensor{
+	frequency = 1438;
+	id_tag = "n2_sensor"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"WY" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"XG" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/derelict/bridge/access)
+"Ya" = (
+/obj/item/weapon/table_parts,
+/turf/space,
+/area)
+"Yj" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "nitrogen"
+	},
+/turf/simulated/floor/engine/vacuum,
+/area/derelict/atmos)
+"Yq" = (
+/obj/machinery/power/battery/smes,
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor,
+/area/derelict/solar_control)
+"YL" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/door/airlock/external{
+	name = "External Engineering"
+	},
+/turf/simulated/floor/plating,
+/area/derelict/solar_control)
+"YN" = (
+/obj/machinery/atmospherics/unary/cold_sink/freezer{
+	current_temperature = 80;
+	dir = 1;
+	on = 1
+	},
+/turf/simulated/floor/airless{
+	icon_state = "white"
+	},
+/area/derelict/research)
+"YR" = (
+/obj/machinery/door/window{
+	dir = 2;
+	name = "Captain's Quarters";
+	req_access_txt = "20"
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating/airless,
+/area/derelict/bridge)
+"Zb" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/simulated/floor/plating/airless,
+/area/derelict/research)
+"Zl" = (
+/obj/machinery/atmospherics/unary/cap/visible{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless{
+	icon_state = "platingdmg1"
+	},
+/area/derelict/atmos)
+"ZM" = (
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/structure/cable,
+/obj/structure/lattice,
+/turf/space,
+/area/solar/derelict_starboard)
+"ZS" = (
+/obj/structure/lattice,
+/turf/space,
+/area/derelict/atmos)
+
+(1,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+kY
+tf
+Jb
+tf
+tf
+tf
+tf
+Jb
+tf
+tf
+tf
+Jb
+tf
+tf
+Jb
+tf
+tf
+tf
+tf
+tf
+tf
+Jb
+tf
+tf
+tf
+tf
+tf
+Jb
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+"}
+(2,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+kY
+tf
+Jb
+tf
+tf
+tf
+tf
+Jb
+tf
+tf
+tf
+tU
+tU
+tU
+tU
+tU
+tU
+tU
+tU
+tf
+tf
+Jb
+tf
+tf
+tf
+tf
+Jb
+Jb
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+"}
+(3,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+kY
+Jb
+tU
+tU
+tU
+tU
+tU
+tU
+tU
+tU
+tU
+tU
+df
+df
+jH
+df
+df
+df
+bh
+df
+df
+Jb
+tf
+tf
+tf
+tf
+Jb
+Jb
+Jb
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+"}
+(4,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+kY
+tf
+tU
+df
+df
+df
+df
+df
+tU
+tf
+tf
+tU
+df
+lC
+WQ
+lC
+df
+lC
+tQ
+lC
+df
+Jb
+Jb
+Jb
+tf
+tf
+OL
+Jb
+tf
+tf
+tf
+tf
+tf
+tf
+Jb
+tf
+tf
+tf
+tf
+"}
+(5,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+kY
+tf
+tU
+mS
+lC
+lC
+xg
+fU
+Wu
+tf
+tf
+tU
+df
+qn
+lk
+lC
+df
+qn
+QQ
+lC
+df
+Jb
+tf
+tf
+tf
+tf
+OL
+OL
+OL
+tf
+tf
+tf
+tf
+Jb
+Jb
+Jb
+Jf
+tf
+tf
+"}
+(6,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+kY
+tf
+tU
+Nd
+uh
+KO
+Br
+zi
+fn
+ff
+ff
+ff
+df
+pP
+Yj
+cF
+df
+AP
+ip
+KS
+df
+Jb
+tf
+tf
+tf
+Jf
+OL
+Wa
+tf
+tf
+tf
+tf
+Jb
+Jb
+Jb
+tf
+tf
+tf
+tf
+"}
+(7,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+kY
+Jb
+tU
+df
+lC
+Km
+Gm
+fU
+Zl
+cW
+Oz
+Oz
+df
+iZ
+iF
+iZ
+df
+iZ
+iF
+iZ
+df
+eC
+eC
+eC
+eC
+eC
+eC
+sV
+Vh
+eC
+CJ
+Vh
+Vh
+fR
+Vh
+tf
+tf
+tf
+tf
+"}
+(8,1,1) = {"
+tf
+tf
+tf
+tf
+Jb
+Jb
+wc
+wc
+wc
+gs
+gs
+gs
+gs
+ZS
+ZS
+mh
+mh
+nF
+wh
+BF
+wh
+nF
+wh
+Rr
+wh
+px
+Fu
+Fu
+vh
+Ui
+Fu
+yX
+Eo
+az
+az
+Vh
+Vh
+Vh
+az
+Vh
+tf
+tf
+tf
+tf
+"}
+(9,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+Jb
+wc
+Nc
+ov
+GV
+ov
+ov
+wc
+mh
+mh
+ZS
+ZS
+mh
+mh
+mh
+mh
+mh
+mh
+mh
+mh
+px
+Fu
+Fu
+Fu
+Ui
+Fu
+Fu
+dh
+Fu
+Vh
+Vh
+az
+az
+az
+Vh
+tf
+tf
+tf
+tf
+"}
+(10,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+Jb
+wc
+GO
+ov
+GV
+ov
+ov
+wc
+mh
+mh
+ZS
+ZS
+Hl
+mh
+mh
+mh
+mh
+mh
+mh
+mh
+px
+MI
+hW
+qq
+iP
+Fu
+hL
+xH
+Fu
+az
+gI
+Wi
+az
+Vh
+Vh
+tf
+tf
+Ya
+tf
+"}
+(11,1,1) = {"
+tf
+tf
+tf
+tf
+Jb
+Jb
+wc
+Ap
+GV
+zW
+GV
+GV
+wc
+Bn
+mh
+mh
+mh
+mh
+mh
+mh
+mh
+mh
+mh
+mh
+mh
+px
+Aq
+qW
+Fu
+wa
+Fu
+Fu
+Eo
+Fu
+Bm
+Wi
+az
+Vh
+Vh
+Vh
+tf
+tf
+tf
+tf
+"}
+(12,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+Jb
+wc
+GO
+ov
+GV
+ov
+ov
+wc
+Pp
+mh
+cW
+mh
+mh
+mh
+mh
+mh
+mh
+mh
+mh
+mh
+px
+Fu
+qW
+Fu
+Lj
+Fu
+Fu
+Eo
+az
+nK
+Eo
+az
+qL
+xW
+Vh
+tf
+tf
+ir
+tf
+"}
+(13,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+Jb
+wc
+GO
+ov
+GV
+ov
+oe
+wc
+mh
+mh
+mh
+mh
+mv
+mh
+mh
+mh
+mv
+mh
+mh
+mh
+px
+vh
+RA
+oW
+eC
+eC
+Fu
+eC
+rI
+rI
+vV
+jX
+eh
+eh
+CJ
+tf
+tf
+tf
+tf
+"}
+(14,1,1) = {"
+tf
+tf
+tf
+tf
+Jb
+Jb
+wc
+vi
+Ai
+Ai
+Ai
+vi
+wc
+df
+Ph
+yJ
+yJ
+Ph
+Ph
+df
+df
+df
+df
+df
+df
+px
+eC
+tC
+eC
+eC
+eC
+IK
+eC
+fC
+Pc
+Tt
+dY
+dY
+iH
+iH
+iH
+Ya
+tf
+jG
+"}
+(15,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+tf
+wc
+Fb
+fg
+fg
+fg
+xP
+YN
+kX
+Sn
+cd
+cd
+cd
+lL
+fm
+eI
+bB
+TE
+vb
+jU
+Rw
+qq
+wi
+az
+Fu
+az
+Fu
+eC
+Rc
+fC
+dY
+dY
+iH
+iH
+iH
+tD
+Jb
+tf
+tf
+"}
+(16,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+tf
+db
+zK
+Rb
+HT
+um
+Rb
+np
+iB
+cd
+cd
+tN
+zZ
+lL
+fm
+Yq
+bt
+cd
+mf
+cd
+eC
+Fu
+Fu
+Fu
+Fu
+Fu
+Fu
+eC
+fC
+dY
+zv
+dY
+dY
+Wg
+fJ
+YR
+tf
+tf
+tf
+"}
+(17,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+tf
+db
+zK
+Rb
+Um
+UB
+Rb
+Of
+gs
+do
+zZ
+Ua
+cd
+lL
+fm
+mP
+nM
+lt
+mf
+cd
+eC
+Fu
+Fu
+XG
+az
+Fu
+Fu
+eC
+wo
+fC
+Wr
+Nz
+cZ
+yH
+bJ
+TD
+tf
+tf
+tf
+"}
+(18,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+Jb
+db
+zK
+Rb
+ue
+TF
+Rb
+Rb
+MJ
+cd
+cd
+cd
+cd
+lL
+fm
+sW
+Qh
+Kw
+QZ
+cd
+eC
+eC
+eC
+eC
+eC
+Fu
+Fu
+eC
+vg
+Ws
+Ws
+sO
+dY
+uc
+MU
+TD
+tf
+tf
+tf
+"}
+(19,1,1) = {"
+tf
+tf
+tf
+tf
+tf
+tf
+db
+zK
+ge
+Rb
+Rb
+Rb
+HF
+gs
+qw
+cd
+cd
+zZ
+cd
+CP
+cd
+cd
+WY
+cd
+cd
+eC
+Fu
+eC
+Fu
+eC
+Fu
+Fu
+eC
+Jd
+vg
+sy
+fC
+fC
+dY
+Tt
+TD
+OL
+tf
+tf
+"}
+(20,1,1) = {"
+Ut
+tJ
+tJ
+IR
+IR
+IR
+xD
+AG
+Ek
+np
+Rb
+Rb
+Rb
+gs
+CV
+cd
+cd
+cd
+cd
+Bz
+cd
+cd
+PB
+vz
+cd
+jR
+Fu
+jR
+Fu
+Fu
+Fu
+Dp
+eC
+fC
+Ws
+dY
+fC
+dY
+uc
+Tt
+En
+AY
+tf
+tf
+"}
+(21,1,1) = {"
+ka
+sA
+om
+tU
+KJ
+KJ
+np
+Rb
+dp
+np
+np
+Rb
+Jo
+wc
+fm
+fm
+fm
+JS
+fm
+fm
+fp
+fp
+fp
+YL
+vZ
+eC
+eC
+eC
+eC
+eC
+eC
+eC
+eC
+yp
+vg
+BC
+IY
+fC
+vg
+sO
+En
+KJ
+tf
+tf
+"}
+(22,1,1) = {"
+ka
+kA
+Gt
+kv
+Lp
+Lp
+mM
+hB
+GJ
+Zb
+np
+Rb
+BH
+gs
+Jb
+tf
+tf
+Jb
+tf
+tf
+tf
+tf
+tf
+gA
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+Es
+En
+sO
+UV
+UC
+LU
+UC
+UV
+UV
+En
+SO
+tf
+tf
+"}
+(23,1,1) = {"
+ka
+kA
+Jb
+tf
+Jb
+Jb
+wc
+wc
+wc
+wc
+wc
+IX
+gs
+gs
+Jb
+tf
+tf
+Es
+tf
+tf
+tf
+tf
+tf
+gA
+tf
+tf
+tf
+tf
+tf
+Es
+tf
+Es
+Es
+Es
+Es
+RT
+Es
+Es
+KJ
+RT
+Es
+Es
+tf
+tf
+"}
+(24,1,1) = {"
+ka
+kA
+Jb
+tf
+tf
+Jb
+Jb
+Jb
+Jb
+Jb
+Jb
+tf
+Jb
+Jb
+Jb
+Jb
+Jb
+Es
+tf
+Jc
+Jc
+Jc
+tf
+gA
+tf
+Jc
+Jc
+Jc
+tf
+Es
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+Ff
+tf
+tf
+tf
+tf
+tf
+"}
+(25,1,1) = {"
+ka
+kA
+Jb
+tf
+tf
+tf
+Jb
+tf
+tf
+tf
+Jb
+tf
+Jb
+Jb
+tf
+Jb
+tf
+Es
+tf
+Ly
+th
+th
+Gy
+PC
+Gy
+th
+th
+BV
+tf
+Es
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+"}
+(26,1,1) = {"
+tf
+kA
+Jb
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+Jb
+tf
+Es
+tf
+nE
+nE
+nE
+tf
+gA
+tf
+nE
+nE
+nE
+tf
+Es
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+"}
+(27,1,1) = {"
+Jb
+tU
+Jb
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+Es
+tf
+tf
+tf
+tf
+tf
+gA
+tf
+tf
+tf
+tf
+tf
+Es
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+"}
+(28,1,1) = {"
+Jb
+tU
+Jb
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+Es
+tf
+Jc
+Jc
+Jc
+tf
+gA
+tf
+Jc
+Jc
+Jc
+tf
+Es
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+"}
+(29,1,1) = {"
+Jb
+mI
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+Es
+tf
+Ly
+th
+th
+ZM
+Ah
+Gy
+th
+th
+BV
+tf
+Es
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+"}
+(30,1,1) = {"
+Jb
+tU
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+Es
+tf
+nE
+nE
+nE
+tf
+gA
+tf
+nE
+nE
+nE
+tf
+Es
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+"}
+(31,1,1) = {"
+Jb
+tU
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+Es
+tf
+tf
+tf
+tf
+tf
+JF
+tf
+tf
+tf
+tf
+tf
+Es
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+"}
+(32,1,1) = {"
+tf
+tU
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+Es
+Es
+Es
+Es
+Es
+Es
+Es
+Es
+Es
+Es
+Es
+Es
+Es
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+"}
+(33,1,1) = {"
+tf
+tU
+Jb
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+"}
+(34,1,1) = {"
+tf
+tf
+Jb
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+tf
+"}
