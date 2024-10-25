@@ -2604,9 +2604,9 @@
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/pancake))
 		var/obj/item/weapon/reagent_containers/food/snacks/pancake/I = O
 		if (pancakes + I.pancakes > max_pancakes)
-			to_chat(user, "<span class='warning'>sorry, can't go any higher!</span>")
+			to_chat(user, "<span class='warning'>It can't go any higher!</span>")
 			return
-		to_chat(user, "<span class='notice'>...and another one!</span>")
+		to_chat(user, "<span class='notice'>...And another one!</span>")
 		var/amount = I.reagents.total_volume
 		I.reagents.trans_to(src, amount)
 		var/image/img = image(I.icon, src, I.icon_state)
@@ -2621,6 +2621,18 @@
 		qdel(I)
 	else
 		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/pancake/pain
+	name = "paincake"
+	desc = "How tough am I? I ate a bowl of nails for breakfast! Without any milk..."
+	icon_state = "paincake"
+	food_flags = FOOD_ANIMAL
+
+/obj/item/weapon/reagent_containers/food/snacks/pancake/pain/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(PAINCAKE, 5)
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/spaghetti
 	name = "Spaghetti"
