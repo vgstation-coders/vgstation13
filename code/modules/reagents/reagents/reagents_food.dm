@@ -746,6 +746,30 @@
 		var/obj/effect/decal/cleanable/flour/F = new (T)
 		F.color = "#E6C968"
 
+/datum/reagent/paincake_mix
+	name = "Paincake Mix"
+	id = PAINCAKE
+	description = "Pure agony turned into batter. Delicious but painful."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 15 * REAGENTS_METABOLISM
+	color = "#B22222" //dark red
+
+/datum/reagent/paincake_mix/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.bodytemperature += 5 * TEMPERATURE_DAMAGE_COEFFICIENT
+	if(prob(20))
+		M.custom_pain("Your stomach hurts a lot.",1)
+		M.adjustBurnLoss(3)
+
+/datum/reagent/paincake_mix/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	if(!(locate(/obj/effect/decal/cleanable/flour) in T))
+		var/obj/effect/decal/cleanable/flour/F = new (T)
+		F.color = "#B22222" //dark red
+
 /datum/reagent/polypgelatin
 	name = "Polyp Gelatin"
 	id = POLYPGELATIN
