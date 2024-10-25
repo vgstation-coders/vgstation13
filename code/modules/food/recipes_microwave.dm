@@ -477,6 +477,10 @@
 	reagents = list(PANCAKE = 5)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pancake
 
+/datum/recipe/paincake
+	reagents = list(PAINCAKE = 5)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pancake/pain
+
 /datum/recipe/sugarcookie
 	reagents = list(FLOUR = 5, SUGARS = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
