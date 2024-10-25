@@ -749,7 +749,7 @@
 /datum/reagent/paincake_mix
 	name = "Paincake Mix"
 	id = PAINCAKE
-	description = "Pure agony turned into batter. Delicious but painful."
+	description = "Legends say that this PAINFULLY DELICIOUS pancake recipe was created by Nacho Man Candy Savage himself."
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	color = "#B22222" //dark red
