@@ -758,9 +758,10 @@
 	if(..())
 		return 1
 	M.bodytemperature += 5 * TEMPERATURE_DAMAGE_COEFFICIENT
-	if(prob(20))
-		M.custom_pain("Your stomach hurts a lot.",1)
-		M.adjustBurnLoss(3)
+	var/mob/living/carbon/human/H = M
+	if(prob(20) && ishuman(M))
+		H.custom_pain("Your stomach hurts a lot.",1)
+		H.adjustFireLoss(3)
 
 /datum/reagent/paincake_mix/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
