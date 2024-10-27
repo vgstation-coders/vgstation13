@@ -294,7 +294,7 @@
 		T.wet(800)
 	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
-		var/datum/gas_mixture/lowertemp = T.remove_air(T.air.total_moles)
+		var/datum/gas_mixture/lowertemp = T.remove_air(T:air:total_moles())
 		lowertemp.temperature = max( min(lowertemp.temperature-2000,lowertemp.temperature / 2), 0)
 		lowertemp.react()
 		T.assume_air(lowertemp)

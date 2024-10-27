@@ -418,7 +418,7 @@
 			environment.adjust_gas(gas, max(1,round((seed.exude_gasses[gas]*round(seed.potency))/seed.exude_gasses.len)))
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/check_kpa(var/datum/gas_mixture/environment)
-	var/pressure = environment.pressure
+	var/pressure = environment.return_pressure()
 	if(pressure < seed.lowkpa_tolerance || pressure > seed.highkpa_tolerance)
 		improper_kpa = 1
 	else

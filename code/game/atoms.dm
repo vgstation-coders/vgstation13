@@ -218,10 +218,6 @@ var/global/list/ghdel_profiling = list()
 	else
 		return null
 
-///Return the current air environment in this atom. If this atom is a turf, it will not automatically update the zone.
-/atom/proc/return_readonly_air()
-	return return_air()
-
 /atom/proc/check_eye(user as mob)
 	if (istype(user, /mob/living/silicon/ai)) // WHYYYY
 		return 1

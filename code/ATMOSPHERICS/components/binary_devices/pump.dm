@@ -53,7 +53,7 @@ air2.volume
 	if((stat & (NOPOWER|BROKEN|FORCEDISABLE)) || !on)
 		return
 
-	var/output_starting_pressure = air2.pressure
+	var/output_starting_pressure = air2.return_pressure()
 	var/pressure_delta = target_pressure - output_starting_pressure
 
 	if(pressure_delta > 0.01 && (air1.temperature > 0 || air2.temperature > 0))

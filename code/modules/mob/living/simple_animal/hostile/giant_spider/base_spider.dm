@@ -111,14 +111,14 @@
 		return
 	if(!istype(curturf))
 		return 0
-	var/datum/gas_mixture/myenv=curturf.return_readonly_air()
-	var/pressure=myenv.pressure
+	var/datum/gas_mixture/myenv=curturf.return_air()
+	var/pressure=myenv.return_pressure()
 
 	for(var/checkdir in cardinal)
 		var/turf/T = get_step(curturf, checkdir)
 		if(T && istype(T))
-			var/datum/gas_mixture/environment = T.return_readonly_air()
-			var/pdiff = abs(pressure - environment.pressure)
+			var/datum/gas_mixture/environment = T.return_air()
+			var/pdiff = abs(pressure - environment.return_pressure())
 			if(pdiff > SPIDER_MAX_PRESSURE_DIFF)
 				return pdiff
 	return 0

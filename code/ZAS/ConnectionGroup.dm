@@ -132,7 +132,7 @@ Class Procs:
 
 	var/equiv = A.air.share_tiles(B.air, coefficient)
 
-	var/differential = A.air.pressure - B.air.pressure
+	var/differential = A.air.return_pressure() - B.air.return_pressure()
 	if(abs(differential) >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
 		flow(A.movables(), differential)
 		flow(B.movables(), -differential)
@@ -195,7 +195,7 @@ Class Procs:
 
 	var/equiv = A.air.share_space(air, coefficient)
 
-	var/differential = A.air.pressure - air.pressure
+	var/differential = A.air.return_pressure() - air.return_pressure()
 	if(abs(differential) >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
 		flow(A.movables(), abs(differential), differential < 0)
 		A.blow_dust_motes(src, differential)

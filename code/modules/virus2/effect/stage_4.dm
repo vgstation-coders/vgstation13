@@ -7,8 +7,8 @@
 	max_chance = 25
 
 /datum/disease2/effect/spaceadapt/activate(var/mob/living/mob)
-	var/datum/gas_mixture/environment = mob.loc.return_readonly_air()
-	var/pressure = environment.pressure
+	var/datum/gas_mixture/environment = mob.loc.return_air()
+	var/pressure = environment.return_pressure()
 	var/adjusted_pressure = mob.calculate_affecting_pressure(pressure)
 	if (istype(mob.loc, /turf/space) || adjusted_pressure < HAZARD_LOW_PRESSURE)
 		if (mob.reagents.get_reagent_amount(DEXALINP) < 10)

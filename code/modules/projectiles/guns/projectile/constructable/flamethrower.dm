@@ -105,8 +105,8 @@
 	if(!tank_gas)
 		return
 	tank_gas.update_values()
-	var/pressure = tank_gas.pressure
-	var/total_moles = tank_gas.total_moles
+	var/pressure = tank_gas.return_pressure()
+	var/total_moles = tank_gas.total_moles()
 	if(total_moles)
 		var/o2_concentration = tank_gas[GAS_OXYGEN]/total_moles
 		if(o2_concentration > 0.01)
@@ -197,7 +197,7 @@
 /obj/item/weapon/gun/projectile/flamethrower/proc/flamethrower_window(mob/user)
 	if(window_open)
 		user.set_machine(src)
-		var/dat = text("<TT><B>Flamethrower (<A HREF='?src=\ref[src];light=1'>[lit ? "<font color='red'>Lit</font>" : "Unlit"]</a>)</B><BR>\n Tank Pressure: [ptank ? "[ptank.air_contents.pressure]" : "No tank loaded."]<BR>\nPercentage to throw: <A HREF='?src=\ref[src];amount=-100'>-</A> <A HREF='?src=\ref[src];amount=-10'>-</A> <A HREF='?src=\ref[src];amount=-1'>-</A> [throw_percent] <A HREF='?src=\ref[src];amount=1'>+</A> <A HREF='?src=\ref[src];amount=10'>+</A> <A HREF='?src=\ref[src];amount=100'>+</A><BR>\n<A HREF='?src=\ref[src];remove=1'>Remove plasmatank</A> - <A HREF='?src=\ref[src];close=1'>Close</A></TT>")
+		var/dat = text("<TT><B>Flamethrower (<A HREF='?src=\ref[src];light=1'>[lit ? "<font color='red'>Lit</font>" : "Unlit"]</a>)</B><BR>\n Tank Pressure: [ptank ? "[ptank.air_contents.return_pressure()]" : "No tank loaded."]<BR>\nPercentage to throw: <A HREF='?src=\ref[src];amount=-100'>-</A> <A HREF='?src=\ref[src];amount=-10'>-</A> <A HREF='?src=\ref[src];amount=-1'>-</A> [throw_percent] <A HREF='?src=\ref[src];amount=1'>+</A> <A HREF='?src=\ref[src];amount=10'>+</A> <A HREF='?src=\ref[src];amount=100'>+</A><BR>\n<A HREF='?src=\ref[src];remove=1'>Remove plasmatank</A> - <A HREF='?src=\ref[src];close=1'>Close</A></TT>")
 		user << browse(dat, "window=flamethrower;size=600x300")
 		onclose(user, "flamethrower", src)
 

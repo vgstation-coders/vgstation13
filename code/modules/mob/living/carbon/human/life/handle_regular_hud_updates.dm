@@ -130,7 +130,7 @@
 		temperature_alert = TEMP_ALARM_HEAT_STRONG
 	else if(has_reagent_in_blood(FROSTOIL))
 		temperature_alert = TEMP_ALARM_COLD_STRONG
-	else if(!(get_thermal_loss(loc.return_readonly_air()) > 0.1) || bodytemperature > T0C + 50)
+	else if(!(get_thermal_loss(loc.return_air()) > 0.1) || bodytemperature > T0C + 50)
 		switch(bodytemperature) //310.055 optimal body temp
 			if(370 to INFINITY)
 				temperature_alert = TEMP_ALARM_HEAT_STRONG
@@ -149,7 +149,7 @@
 	else if(is_vessel_dilated() && undergoing_hypothermia() == MODERATE_HYPOTHERMIA)
 		temperature_alert = TEMP_ALARM_HEAT_STRONG // yes, this is intentional - this is the cause of "paradoxical undressing", ie feeling 2hot when hypothermic
 	else
-		switch(get_thermal_loss(loc.return_readonly_air())) // How many degrees of celsius we are losing per tick.
+		switch(get_thermal_loss(loc.return_air())) // How many degrees of celsius we are losing per tick.
 			if(0.1 to 0.15)
 				temperature_alert = TEMP_ALARM_SAFE
 			if(0.15 to 0.2)

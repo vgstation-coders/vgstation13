@@ -68,7 +68,7 @@
 	..()
 	to_chat(user, "<span class='info'>The valve is dialed to [pressure_setting]%.</span>")
 	if(tank)
-		to_chat(user, "<span class='info'>The tank dial reads [tank.air_contents.pressure] kPa.</span>")
+		to_chat(user, "<span class='info'>The tank dial reads [tank.air_contents.return_pressure()] kPa.</span>")
 	else
 		to_chat(user, "<span class='warning'>Nothing is attached to the tank valve!</span>")
 
@@ -132,7 +132,7 @@
 	if (!istype(targloc) || !istype(curloc))
 		return
 
-	var/fire_pressure = (tank.air_contents.pressure/100)*pressure_setting
+	var/fire_pressure = (tank.air_contents.return_pressure()/100)*pressure_setting
 
 	if (fire_pressure < minimum_tank_pressure)
 		to_chat(user, "There isn't enough gas in the tank to fire [src].")

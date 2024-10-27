@@ -30,7 +30,7 @@
 	flags = XGM_GAS_NOTEWORTHY
 
 /datum/gas/oxygen/is_human_safe(moles, datum/gas_mixture/mixture)
-	return abs(moles/mixture.total_moles - O2STANDARD) < 0.02
+	return abs(moles/mixture.total_moles() - O2STANDARD) < 0.02
 
 /datum/gas/nitrogen
 	id = GAS_NITROGEN
@@ -42,7 +42,7 @@
 	flags = XGM_GAS_NOTEWORTHY
 
 /datum/gas/nitrogen/is_human_safe(moles, datum/gas_mixture/mixture)
-	return abs(moles/mixture.total_moles - N2STANDARD) < 0.2
+	return abs(moles/mixture.total_moles() - N2STANDARD) < 0.2
 
 /datum/gas/carbon_dioxide
 	id = GAS_CARBON
@@ -54,7 +54,7 @@
 	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
 
 /datum/gas/carbon_dioxide/is_human_safe(moles, datum/gas_mixture/mixture)
-	return moles/mixture.total_moles < 0.01
+	return moles/mixture.total_moles() < 0.01
 
 /datum/gas/plasma
 	id = GAS_PLASMA
@@ -75,7 +75,7 @@
 	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
 
 /datum/gas/plasma/is_human_safe(moles, datum/gas_mixture/mixture)
-	return moles/mixture.total_moles < 0.01
+	return moles/mixture.total_moles() < 0.01
 
 /obj/effect/overlay/gas_overlay/plasma
 	name = "plasma"
@@ -93,7 +93,7 @@
 	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
 
 /datum/gas/sleeping_agent/is_human_safe(moles, datum/gas_mixture/mixture)
-	return moles/mixture.total_moles < 0.01
+	return moles/mixture.total_moles() < 0.01
 
 /obj/effect/overlay/gas_overlay/sleeping_agent
 	name = "sleeping agent"
@@ -110,7 +110,7 @@
 	flags = XGM_GAS_LOGGED
 
 /datum/gas/volatile_fuel/is_human_safe(moles, datum/gas_mixture/mixture)
-	return moles/mixture.total_moles < 0.01
+	return moles/mixture.total_moles() < 0.01
 
 /datum/gas/oxygen_agent_b
 	id = GAS_OXAGENT
@@ -123,7 +123,7 @@
 	flags = XGM_GAS_LOGGED
 
 /datum/gas/oxygen_agent_b/is_human_safe(moles, datum/gas_mixture/mixture)
-	return moles/mixture.total_moles < 0.01
+	return moles/mixture.total_moles() < 0.01
 
 /datum/gas/cryotheum
 	id = GAS_CRYOTHEUM
@@ -138,7 +138,7 @@
 	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
 
 /datum/gas/cryotheum/is_human_safe(moles, datum/gas_mixture/mixture)
-	return moles/mixture.total_moles < 0.01
+	return moles/mixture.total_moles() < 0.01
 
 /obj/effect/overlay/gas_overlay/cryotheum
 	name = "cryotheum"

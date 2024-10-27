@@ -276,7 +276,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/datum/gas_mixture/environment
 	if(loc)
-		environment = loc.return_readonly_air()
+		environment = loc.return_air()
 
 	handle_environment(environment)
 	handle_regular_hud_updates()

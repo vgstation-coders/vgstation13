@@ -34,14 +34,14 @@ var/global/list/alert_overlays_global = list()
 			rstats = null
 		else
 			if(T && istype(T) && T.zone)
-				var/datum/gas_mixture/environment = T.return_readonly_air()
+				var/datum/gas_mixture/environment = T.return_air()
 				for(var/i=1;i<=stats.len;i++)
 					rstats[i] = environment.vars[stats[i]]
 			else if(istype(T, /turf/simulated))
 				rstats = null // Exclude zone (wall, door, etc).
 			else if(istype(T, /turf))
 				// Should still work.  (/turf/return_air())
-				var/datum/gas_mixture/environment = T.return_readonly_air()
+				var/datum/gas_mixture/environment = T.return_air()
 				for(var/i=1;i<=stats.len;i++)
 					rstats[i] = environment.vars[stats[i]]
 		temps[direction] = rstats
@@ -76,7 +76,7 @@ var/global/list/alert_overlays_global = list()
 
 	animation_delay_predensity_opening = 3
 	animation_delay_predensity_closing = 7
-
+	
 	machine_flags = SCREWTOGGLE | EMAGGABLE
 
 	var/list/alert_overlays_local

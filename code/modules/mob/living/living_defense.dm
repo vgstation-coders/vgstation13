@@ -324,7 +324,7 @@
 	var/oxy=0
 	var/turf/T=get_turf(src)
 	if(istype(T))
-		var/datum/gas_mixture/G = T.return_readonly_air() // Check if we're standing in an oxygenless environment
+		var/datum/gas_mixture/G = T.return_air() // Check if we're standing in an oxygenless environment
 		if(G)
 			oxy = G.molar_density(GAS_OXYGEN)
 	if(oxy < (1 / CELL_VOLUME) || fire_stacks < 0)
@@ -341,7 +341,7 @@
 
 	var/turf/T = get_turf(src)
 	var/flevel = air.calculate_firelevel(T)
-	var/pressure = air.pressure
+	var/pressure = air.return_pressure()
 	FireBurn(flevel,temperature, pressure)
 
 /mob/living/proc/FireBurn(var/firelevel = 0, var/temperature, var/pressure)

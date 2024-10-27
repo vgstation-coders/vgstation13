@@ -197,7 +197,7 @@
 
 	temp_first.react()
 
-	var/pressure = temp_first.pressure
+	var/pressure = temp_first.return_pressure()
 
 	if(pressure <= TANK_FRAGMENT_PRESSURE)
 		return 0
@@ -206,7 +206,7 @@
 	temp_first.react()
 	temp_first.react()
 
-	pressure = temp_first.pressure
+	pressure = temp_first.return_pressure()
 
 	var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
 	var/dev = round(range*0.25)

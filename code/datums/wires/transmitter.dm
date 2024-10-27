@@ -56,5 +56,5 @@ var/const/TRANS_SETTINGS = 16 //Pulse shows percentage given by environment temp
 		if(TRANS_LINK)
 			T.unhook_media_sources()
 		if(TRANS_SETTINGS)
-			var/datum/gas_mixture/env = T.loc.return_readonly_air()
+			var/datum/gas_mixture/env = T.loc.return_air()
 			counter = 100*(env.temperature / (T20C + 20))

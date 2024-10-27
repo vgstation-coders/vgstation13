@@ -253,7 +253,7 @@
 	if(!location)
 		return
 	var/totaldrying = 0
-	var/datum/gas_mixture/environment = location.return_readonly_air()
+	var/datum/gas_mixture/environment = location.return_air()
 	if(environment.temperature >= drying_threshold_temperature + 21) //Original pre-buff temperature behavior, default 1 minute
 		totaldrying = totaldrying + 6
 	else if(environment.temperature >= drying_threshold_temperature) //(Default variable value) Room temperature drying, default 6 minutes

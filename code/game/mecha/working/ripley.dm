@@ -132,7 +132,7 @@
 	if(!istype(environment))
 		return
 
-	var/pressure = environment.pressure
+	var/pressure = environment.return_pressure()
 	if(pressure <= 20)
 		. = TRUE
 
@@ -148,6 +148,6 @@
 	var/datum/gas_mixture/environment = T.return_air()
 	if(!istype(environment))
 		return
-	var/pressure = environment.pressure
+	var/pressure = environment.return_pressure()
 	if(pressure <= 20)
 		. = TRUE

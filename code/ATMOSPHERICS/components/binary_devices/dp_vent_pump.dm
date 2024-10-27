@@ -22,7 +22,7 @@
 	//4: Do not pass output_pressure_max
 
 	frequency = 0
-
+	
 	var/datum/radio_frequency/radio_connection
 
 	machine_flags = MULTITOOL_MENU
@@ -73,7 +73,7 @@
 	if(!on)
 		return
 
-	var/datum/gas_mixture/environment = loc.return_readonly_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 
 	var/pressure_delta = get_pressure_delta(environment)
 	if(pressure_delta > 0.5)
@@ -105,18 +105,18 @@
 
 /obj/machinery/atmospherics/binary/dp_vent_pump/proc/get_pressure_delta(datum/gas_mixture/environment)
 	var/pressure_delta = 10000 //why is this 10000? whatever
-	var/environment_pressure = environment.pressure
+	var/environment_pressure = environment.return_pressure()
 
 	if(pump_direction) //internal -> external
 		if(pressure_checks & 1)
 			pressure_delta = min(pressure_delta, external_pressure_bound - environment_pressure) //increasing the pressure here
 		if(pressure_checks & 2)
-			pressure_delta = min(pressure_delta, air1.pressure - input_pressure_min) //decreasing the pressure here
+			pressure_delta = min(pressure_delta, air1.return_pressure() - input_pressure_min) //decreasing the pressure here
 	else //external -> internal
 		if(pressure_checks & 1)
 			pressure_delta = min(pressure_delta, environment_pressure - external_pressure_bound) //decreasing the pressure here
 		if(pressure_checks & 2)
-			pressure_delta = min(pressure_delta, output_pressure_max - air2.pressure) //increasing the pressure here
+			pressure_delta = min(pressure_delta, output_pressure_max - air2.return_pressure()) //increasing the pressure here
 
 	return pressure_delta
 

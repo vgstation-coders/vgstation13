@@ -579,7 +579,7 @@ var/list/hydro_trays = list()
 
 			if(!environment)
 				if(istype(T))
-					environment = T.return_readonly_air()
+					environment = T.return_air()
 
 			if(!environment)
 				if(istype(T, /turf/space))

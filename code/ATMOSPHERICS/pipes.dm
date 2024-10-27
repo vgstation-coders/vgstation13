@@ -204,9 +204,9 @@
 
 	// Note: This checks the difference between atmospheric pressure and pressure in the pipe.
 	// So, a pipe rated at 8,000 kPa in a 104kPa environment will explode at 8,104kPa.
-	var/datum/gas_mixture/environment = loc.return_readonly_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 
-	var/pressure_difference = pressure - environment.pressure
+	var/pressure_difference = pressure - environment.return_pressure()
 
 	// Burst check first.
 	if(pressure_difference > maximum_pressure && prob(1))
@@ -938,7 +938,7 @@
 
 	if(istype(W,/obj/item/device/analyzer))
 		var/obj/item/device/analyzer/A = W
-		var/datum/gas_mixture/environment = src.return_readonly_air()
+		var/datum/gas_mixture/environment = src.return_air()
 		user.show_message(A.output_gas_scan(environment,src,1))
 
 	return ..()

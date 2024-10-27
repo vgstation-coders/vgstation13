@@ -18,7 +18,7 @@
 		return 0 //under effects of time magick
 
 	..()
-	var/datum/gas_mixture/enviroment = loc.return_readonly_air()
+	var/datum/gas_mixture/enviroment = loc.return_air()
 	if (stat != DEAD) //still breathing
 
 		// GROW!

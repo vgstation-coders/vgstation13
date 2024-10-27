@@ -86,7 +86,7 @@
 	var/turf/location = get_turf(src)
 	if(!location)
 		return
-	var/datum/gas_mixture/environment = location.return_readonly_air()
+	var/datum/gas_mixture/environment = location.return_air()
 	//testing("[type]/PROCESS() - plasma: [environment[GAS_PLASMA]]")
 	var/meets_conditions=1
 	for(var/gas_id in required_mols)

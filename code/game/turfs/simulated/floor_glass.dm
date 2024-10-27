@@ -88,8 +88,8 @@
 		if(M)
 			var/pressure = 0
 			if(src.zone)
-				var/datum/gas_mixture/environment = src.return_readonly_air()
-				pressure = environment.pressure
+				var/datum/gas_mixture/environment = src.return_air()
+				pressure = environment.return_pressure()
 			if (pressure > 0)
 				message_admins("Glass floor with pressure [pressure]kPa broken (method=[method]) by [M.real_name] ([formatPlayerPanel(M,M.ckey)]) at [formatJumpTo(src)]!")
 				log_admin("Window with pressure [pressure]kPa broken (method=[method]) by [M.real_name] ([M.ckey]) at [src]!")
@@ -249,8 +249,8 @@
 					"<span class='warning'>You hear welding noises.</span>")
 					var/pressure = 0
 					if(src.zone)
-						var/datum/gas_mixture/environment = src.return_readonly_air()
-						pressure = environment.pressure
+						var/datum/gas_mixture/environment = src.return_air()
+						pressure = environment.return_pressure()
 					if (pressure > 0)
 						message_admins("Glass floor with pressure [pressure]kPa deconstructed by [user.real_name] ([formatPlayerPanel(user,user.ckey)]) at [formatJumpTo(src)]!")
 						log_admin("Window with pressure [pressure]kPa deconstructed by [user.real_name] ([user.ckey]) at [src]!")

@@ -41,8 +41,8 @@
 	if(!open)
 		return
 
-	var/output_starting_pressure = air2.pressure
-	var/input_starting_pressure = air1.pressure
+	var/output_starting_pressure = air2.return_pressure()
+	var/input_starting_pressure = air1.return_pressure()
 	//var/pressure_delta = min(10000, abs(environment_pressure - air_contents.return_pressure()))
 	var/pressure_delta = min(10000, input_starting_pressure - output_starting_pressure)
 

@@ -613,14 +613,14 @@
 	if (isnull(loc))
 		dat += "Unable to obtain a reading.<br>"
 	else
-		var/datum/gas_mixture/environment = loc.return_readonly_air()
+		var/datum/gas_mixture/environment = loc.return_air()
 
 		if(isnull(environment))
 			dat += "No gasses detected.<br>"
 
 		else
-			var/pressure = environment.pressure
-			var/total_moles = environment.total_moles
+			var/pressure = environment.return_pressure()
+			var/total_moles = environment.total_moles()
 
 			dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"
 

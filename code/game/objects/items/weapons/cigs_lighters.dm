@@ -137,7 +137,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/mob/living/M = get_holder_of_type(src,/mob/living)
 	var/turf/location = get_turf(src)
 	smoketime--
-	var/datum/gas_mixture/env = location.return_readonly_air()
+	var/datum/gas_mixture/env = location.return_air()
 	if(smoketime <= 0)
 		lit = -1
 		update_brightness()
@@ -469,7 +469,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	smoketime--
 	if (smoketime == 5 && ismob(loc))
 		to_chat(M, "<span class='warning'>Your [name] is about to go out.</span>")
-	var/datum/gas_mixture/env = location.return_readonly_air()
+	var/datum/gas_mixture/env = location.return_air()
 	if(smoketime <= 0 || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		if(smoketime > 0 && ishuman(loc))
 			var/mob/living/carbon/human/mysmoker = loc
@@ -1036,7 +1036,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter/attack_self(mob/living/user)
 	var/turf/T = get_turf(src)
-	var/datum/gas_mixture/env = T.return_readonly_air()
+	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
 	if(!fuel || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
@@ -1101,7 +1101,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			update_brightness()
 			visible_message("<span class='warning'>Without warning, \the [src] suddenly shuts off.</span>")
 			fueltime = null
-	var/datum/gas_mixture/env = location.return_readonly_air()
+	var/datum/gas_mixture/env = location.return_air()
 	if(env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		lit = 0
 		update_brightness()
@@ -1123,7 +1123,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter/zippo/attack_self(mob/living/user)
 	var/turf/T = get_turf(src)
-	var/datum/gas_mixture/env = T.return_readonly_air()
+	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
 	if(!fuel || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \

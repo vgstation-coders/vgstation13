@@ -132,7 +132,7 @@
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
 		return 0
 	var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
-	if(!breath || (breath.total_moles == 0) || (mind && mind.suiciding) || !L)
+	if(!breath || (breath.total_moles() == 0) || (mind && mind.suiciding) || !L)
 		if(reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
 			return 0
 		if(mind && mind.suiciding)
