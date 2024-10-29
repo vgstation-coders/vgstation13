@@ -477,3 +477,17 @@
 
 /obj/item/clothing/gloves/hunter/rangeTackleBonus()
 	return 1
+
+/obj/item/clothing/gloves/ovenmitts
+	name = "oven mitts"
+	desc = "Bulky gloves used to remove freshly cooked hot food from things like pans and microwaves. You no longer always hate-a that part."
+	icon_state = "ovenmitts"
+	item_state = "mittens"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
+	permeability_coefficient = 0.8
+	siemens_coefficient = 0.8
+
+/obj/item/clothing/gloves/ovenmitts/dexterity_check()
+	return 0 //...what did you expect?
