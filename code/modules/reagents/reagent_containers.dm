@@ -514,6 +514,16 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 /obj/item/weapon/reagent_containers/pickup(var/mob/user)
 	..()
 	process_temperature()
+	if(reagents?.chem_temp >= STEAMTEMP && !user.get_item_by_slot(slot_gloves) && ishuman(user)) // if item is too hot to pick up and user is not wearing gloves
+		to_chat(user,"<span class='danger'>The heat from [src] scalds your hand in pain, causing you to drop it!</span>")
+		var/mob/living/carbon/human/H = user
+		var/hand_index = user.held_items.Find(src)
+		switch(hand_index)
+			if (GRASP_RIGHT_HAND)
+				H.apply_damage(5, BURN, LIMB_RIGHT_HAND)
+			if (GRASP_LEFT_HAND)
+				H.apply_damage(5, BURN, LIMB_LEFT_HAND)
+		user.drop_item(src)
 
 /obj/item/weapon/reagent_containers/update_temperature_overlays()
 	if(reagents && reagents.total_volume)
