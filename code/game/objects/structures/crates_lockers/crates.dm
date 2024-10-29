@@ -774,3 +774,16 @@
 	new possible_potion(src)
 	new /obj/item/potion/healing(src) //you always get a guarnteed healing potion
 
+/obj/structure/closet/crate/kitchen
+	name = "kitchen crate"
+	desc = "It's a storage unit for kitchen clothes and equipment."
+
+/obj/structure/closet/crate/kitchen/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/head/chefhat,
+		/obj/item/clothing/under/rank/chef,
+		/obj/item/weapon/storage/box/mousetraps = 2,
+		/obj/item/clothing/under/waiter = 2,
+		/obj/item/clothing/under/sundress,
+		/obj/item/clothing/gloves/ovenmitts = 2
+	)

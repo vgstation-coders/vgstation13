@@ -155,6 +155,7 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/chef,
 			slot_head_str = /obj/item/clothing/head/chefhat,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
+			slot_l_store_str = /obj/item/clothing/gloves/ovenmitts,
 		),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_service,
@@ -163,6 +164,7 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/service,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/service,
+			slot_l_store_str = /obj/item/clothing/gloves/ovenmitts,
 		),
 		/datum/species/vox/ = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_service,
@@ -171,6 +173,7 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/chef,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/chef,
+			slot_l_store_str = /obj/item/clothing/gloves/ovenmitts,
 		),
 	)
 
