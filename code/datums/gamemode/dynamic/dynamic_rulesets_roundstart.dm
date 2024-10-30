@@ -303,7 +303,7 @@
 		var/mob/living/carbon/human/H = M.create_human(M.client.prefs)
 		var/list/acceptable_wizardstarts = list()
 		for(var/obj/effect/landmark/L in wizardstart)
-			if(newWizard.faction == WPF || newWizard.faction = PFW)
+			if(newWizard.faction == WPF || newWizard.faction == PFW)
 				var/datum/faction/wizard/civilwar/CW = newWizard.faction
 				var/turf/T = get_turf(L)
 				if(T && CW.our_den && T.map_element == CW.our_den)
