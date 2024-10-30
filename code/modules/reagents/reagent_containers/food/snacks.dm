@@ -257,14 +257,17 @@
 		if(reagents?.chem_temp >= STEAMTEMP && ishuman(user)) // if item is too hot to pick up
 			var/obj/item/clothing/gloves/G = user.get_item_by_slot(slot_gloves)
 			if(!G || G.heat_conductivity > INS_GLOVES_HEAT_CONDUCTIVITY) // and user is not wearing gloves that insulate heat enough (ovenmitts, captain, black or yellow)
+				var/damagemult = 1
+				if(G)
+					damagemult = G.heat_conductivity
 				var/mob/living/carbon/human/H = user
 				var/hand_index = user.held_items.Find(src)
 				if(hand_index)
 					switch(hand_index)
 						if (GRASP_RIGHT_HAND)
-							H.apply_damage(5, BURN, LIMB_RIGHT_HAND)
+							H.apply_damage(5*damagemult, BURN, LIMB_RIGHT_HAND)
 						if (GRASP_LEFT_HAND)
-							H.apply_damage(5, BURN, LIMB_LEFT_HAND)
+							H.apply_damage(5*damagemult, BURN, LIMB_LEFT_HAND)
 					if(H.feels_pain())
 						to_chat(user,"<span class='danger'>The heat from [src] scalds your hand in pain, causing you to drop it!</span>")
 						user.drop_item(src)
