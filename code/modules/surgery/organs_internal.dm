@@ -287,6 +287,10 @@ var/static/list/partstobraindamagetype = list(
 	var/datum/organ/internal/I = target.internal_organs_by_name[target.op_stage.current_organ]
 	if(istype(I,/datum/organ/internal/brain))
 		var/datum/organ/internal/brain/B = I
+		var/list/partstodamage = partstobraindamagetype.Copy()
+		for(var/damage in B.specific_damages)
+			if(B.specific_damages[damage] >= 100)
+				partstodamage -= get_element_by_key(partstobraindamagetype,damage)
 		var/part_to_cut = input(user, "Which part of this brain to cut?") as null|anything in partstobraindamagetype
 		if(part_to_cut != "remove")
 			brain_damagetype = part_to_cut
