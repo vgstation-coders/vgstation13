@@ -50941,16 +50941,8 @@
 	},
 /area/crew_quarters/kitchen)
 "bMv" = (
-/obj/structure/closet/crate{
-	desc = "It's a storage unit for kitchen clothes and equipment.";
-	name = "Kitchen Crate"
-	},
+/obj/structure/closet/crate/kitchen,
 /obj/item/weapon/reagent_containers/dropper,
-/obj/item/device/eftpos,
-/obj/item/clothing/under/waiter,
-/obj/item/weapon/storage/box/mousetraps,
-/obj/item/clothing/under/rank/chef,
-/obj/item/clothing/head/chefhat,
 /obj/item/weapon/soap,
 /obj/item/device/radio/headset/headset_service,
 /obj/item/tool/wrench,

@@ -785,5 +785,6 @@
 		/obj/item/weapon/storage/box/mousetraps = 2,
 		/obj/item/clothing/under/waiter = 2,
 		/obj/item/clothing/under/sundress,
-		/obj/item/clothing/gloves/ovenmitts = 2
+		/obj/item/clothing/gloves/ovenmitts = 2,
+		/obj/item/device/eftpos/kitchen
 	)

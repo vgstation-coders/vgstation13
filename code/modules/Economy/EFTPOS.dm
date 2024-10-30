@@ -193,3 +193,29 @@
 	access_code = 0
 	to_chat(user, "[bicon(src)] <span class='info'>Access code reset to 0.</span>")
 	
+/obj/item/device/eftpos/qm
+	eftpos_name = "Quartermaster EFTPOS scanner"
+	
+/obj/item/device/eftpos/cargo
+	eftpos_name = "Cargo Bay EFTPOS scanner"
+	
+/obj/item/device/eftpos/chapel
+	eftpos_name = "Chapel EFTPOS scanner"
+	
+/obj/item/device/eftpos/hop
+	eftpos_name = "HoP EFTPOS scanner"
+	
+/obj/item/device/eftpos/cap
+	eftpos_name = "Captain EFTPOS scanner"
+	
+/obj/item/device/eftpos/library
+	eftpos_name = "Library EFTPOS scanner"
+	
+/obj/item/device/eftpos/bar
+	eftpos_name = "Bar EFTPOS scanner"
+	
+/obj/item/device/eftpos/botany
+	eftpos_name = "Botany EFTPOS scanner"
+	
+/obj/item/device/eftpos/kitchen
+	eftpos_name = "Kitchen EFTPOS scanner"

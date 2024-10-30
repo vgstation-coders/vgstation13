@@ -64760,24 +64760,13 @@
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "csQ" = (
-/obj/structure/closet/crate{
-	desc = "It's a storage unit for kitchen clothes and equipment.";
-	name = "Kitchen Crate"
-	},
+/obj/structure/closet/crate/kitchen,
 /obj/item/device/radio/headset/headset_service,
 /obj/item/weapon/storage/bag/food,
 /obj/item/weapon/storage/box/condimentbottles,
 /obj/item/weapon/storage/box/mousetraps,
 /obj/item/weapon/soap,
-/obj/item/clothing/suit/chef,
-/obj/item/clothing/under/rank/chef,
 /obj/item/clothing/monkeyclothes,
-/obj/item/clothing/under/waiter,
-/obj/item/clothing/under/waiter,
-/obj/item/clothing/head/chefhat,
-/obj/item/device/eftpos{
-	eftpos_name = "Kitchen EFTPOS scanner"
-	},
 /obj/item/stack/package_wrap,
 /obj/item/weapon/paper/sc_safehint_paper_caf,
 /turf/simulated/floor{

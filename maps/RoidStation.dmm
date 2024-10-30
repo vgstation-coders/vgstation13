@@ -82258,20 +82258,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "cVi" = (
-/obj/structure/closet/crate{
-	desc = "It's a storage unit for kitchen clothes and equipment.";
-	name = "Kitchen Crate"
-	},
-/obj/item/clothing/head/chefhat,
-/obj/item/clothing/under/rank/chef,
-/obj/item/weapon/storage/box/mousetraps{
-	pixel_x = 5;
-	pixel_y = 5
-	},
-/obj/item/weapon/storage/box/mousetraps,
-/obj/item/clothing/under/waiter,
-/obj/item/clothing/under/waiter,
-/obj/item/clothing/under/sundress,
+/obj/structure/closet/crate/kitchen,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
