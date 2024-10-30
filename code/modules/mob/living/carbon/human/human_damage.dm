@@ -36,6 +36,17 @@
 		return res
 	return 0
 
+/mob/living/carbon/human/format_brain_issues()
+	var/datum/organ/internal/brain/B = internal_organs_by_name["brain"]
+	if(B)
+		var/list/issues = list()
+		for(var/damage in B.specific_damages)
+			if(B.specific_damages[damage] > 0)
+				issues += get_key_by_element(partstobraindamagetype,damage)
+		if(issues.len)
+			return "Brain cut on [english_list(issues)]"
+	return ""
+
 //These procs fetch a cumulative total damage from all organs
 /mob/living/carbon/human/getBruteLoss(var/ignore_inorganic = FALSE)
 	var/amount = 0
