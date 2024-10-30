@@ -132,6 +132,14 @@
 		return
 	..()
 
+// the following heals the compartmentalised stuff in surgery
+/*/mob/living/carbon/human/adjustBrainLoss(var/amount)
+	if(..() && amount < 0 && species && species.has_organ["brain"])
+		var/datum/organ/internal/brain/sponge = internal_organs_by_name["brain"]
+		if(sponge)
+			for(var/damage in sponge.specific_damages)
+				sponge.specific_damages[damage] = max(sponge.specific_damages[damage] + (amount * brain_damage_modifier), 0)*/
+
 /mob/living/carbon/human/adjustCloneLoss(var/amount)
 	..()
 

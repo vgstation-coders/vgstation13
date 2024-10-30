@@ -253,6 +253,17 @@
 		)
 
 	duration = 9 SECONDS
+	var/cutverb = "separate"
+	var/cutverbed = "separated"
+	var/brain_damagetype
+
+var/static/list/partstobraindamagetype = list(
+	"Brain stem (sever this organ)" = "remove",
+	"Cerebellum" = "motor",
+	"Frontal lobe" = "coordination",
+	"Broca's area" = "speech",
+	"Temporal lobe" = "intelligence"
+)
 
 /datum/surgery_step/internal/detatch_organ/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
@@ -274,24 +285,33 @@
 	target.op_stage.current_organ = organ_to_remove
 
 	var/datum/organ/internal/I = target.internal_organs_by_name[target.op_stage.current_organ]
+	if(istype(I,/datum/organ/internal/brain))
+		var/datum/organ/internal/brain/B = I
+		var/part_to_cut = input(user, "Which part of this brain to cut?") as null|anything in partstobraindamagetype
+		if(part_to_cut != "remove")
+			brain_damagetype = part_to_cut
 	return ..() && organ_to_remove && I && istype(I) && I.CanRemove(target, user)
 
 /datum/surgery_step/internal/detatch_organ/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	user.visible_message("[user] starts to separate [target]'s [target.op_stage.current_organ] with \the [tool].", \
-	"You start to separate [target]'s [target.op_stage.current_organ] with \the [tool]." )
+	user.visible_message("[user] starts to [cutverb] [target]'s [target.op_stage.current_organ] with \the [tool].", \
+	"You start to [cutverb] [target]'s [target.op_stage.current_organ] with \the [tool]." )
 	target.custom_pain("The pain in your [affected.display_name] is living hell!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/internal/detatch_organ/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	user.visible_message("<span class='notice'>[user] has separated [target]'s [target.op_stage.current_organ] with \the [tool].</span>" , \
-	"<span class='notice'>You have separated [target]'s [target.op_stage.current_organ] with \the [tool].</span>")
+	user.visible_message("<span class='notice'>[user] has [cutverbed] [target]'s [target.op_stage.current_organ] with \the [tool].</span>" , \
+	"<span class='notice'>You have [cutverbed] [target]'s [target.op_stage.current_organ] with \the [tool].</span>")
 
 	var/datum/organ/internal/I = target.internal_organs_by_name[target.op_stage.current_organ]
-	if(I && istype(I) && I.CanRemove(target, user, quiet=1))
-		I.Remove(target, user)
-		I.status |= ORGAN_CUT_AWAY
+	if(I && istype(I))
+		if(brain_damagetype && istype(I,/datum/organ/internal/brain))
+			var/datum/organ/internal/brain/sponge = I
+			sponge.specific_damages[brain_damagetype] = rand(61,65)
+		else if(I.CanRemove(target, user, quiet=1))
+			I.Remove(target, user)
+			I.status |= ORGAN_CUT_AWAY
 
 /datum/surgery_step/internal/detatch_organ/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)

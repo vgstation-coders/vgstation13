@@ -206,13 +206,6 @@
 //All the internal organs without specific code to them are below
 //Hopefully this will be filled in soon ?
 
-var/static/list/partstobraindamagetype = list(
-	"Cerebellum" = "motor",
-	"Frontal lobe" = "coordination",
-	"Broca's area" = "speech",
-	"Temporal lobe" = "intelligence"
-)
-
 /datum/organ/internal/brain
 	name = "brain"
 	parent_organ = LIMB_HEAD

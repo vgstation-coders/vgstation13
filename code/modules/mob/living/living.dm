@@ -338,6 +338,7 @@
 		return 0
 
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
+	return 1
 
 /mob/living/proc/setBrainLoss(var/amount)
 	if(status_flags & GODMODE)
