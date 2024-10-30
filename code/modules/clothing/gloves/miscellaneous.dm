@@ -101,7 +101,6 @@
 	desc = "Sterile latex gloves."
 	icon_state = "latex"
 	item_state = "latex"
-	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY //hot things hurt to hold now, this eases the use of them
 	siemens_coefficient = 0.30
 	permeability_coefficient = 0.01
 	_color = "medical"				//matches cmo stamp
