@@ -36,7 +36,7 @@
 		return res
 	return 0
 
-/mob/living/carbon/human/format_brain_issues()
+/mob/living/carbon/human/proc/format_brain_issues()
 	var/datum/organ/internal/brain/B = internal_organs_by_name["brain"]
 	if(B)
 		var/list/issues = list()
