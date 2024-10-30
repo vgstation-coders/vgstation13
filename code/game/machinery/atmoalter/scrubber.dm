@@ -122,9 +122,9 @@
 /obj/machinery/portable_atmospherics/scrubber/process()
 	..()
 
-	if(on && air_contents.pressure < MAX_PRESSURE)
+	if(on && air_contents.return_pressure() < MAX_PRESSURE)
 		var/datum/gas_mixture/environment = get_environment()
-		var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles
+		var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles()
 		var/removed_volume = min(volume_rate, environment.volume)
 
 		//Take a gas sample
@@ -140,7 +140,7 @@
 					total_to_filter.adjust_gas((gas_type), removed[gas_type], FALSE)
 			total_to_filter.update_values() //since the FILTER macro doesn't update to save perf, we need to update here
 			//calculate the amount of moles in scrubbing_rate litres of gas in removed and apply the scrubbing rate limit
-			var/filter_moles = min(1, scrubbing_rate / removed_volume) * removed.total_moles
+			var/filter_moles = min(1, scrubbing_rate / removed_volume) * removed.total_moles()
 			var/datum/gas_mixture/filtered_out = total_to_filter.remove(filter_moles)
 
 			removed.subtract(filtered_out)
@@ -171,7 +171,7 @@
 /obj/machinery/portable_atmospherics/scrubber/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/list/data[0]
 	data["portConnected"] = connected_port ? 1 : 0
-	data["tankPressure"] = round(air_contents.pressure > 0 ? air_contents.pressure : 0)
+	data["tankPressure"] = round(air_contents.return_pressure() > 0 ? air_contents.return_pressure() : 0)
 	data["rate"] = round(volume_rate)
 	data["on"] = on ? 1 : 0
 	var/list/scrub_toggles = list()
@@ -182,7 +182,7 @@
 	data["scrub_toggles"] = scrub_toggles
 	data["hasHoldingTank"] = holding ? 1 : 0
 	if (holding)
-		data["holdingTank"] = list("name" = holding.name, "tankPressure" = round(holding.air_contents.pressure > 0 ? holding.air_contents.pressure : 0))
+		data["holdingTank"] = list("name" = holding.name, "tankPressure" = round(holding.air_contents.return_pressure() > 0 ? holding.air_contents.return_pressure() : 0))
 
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)

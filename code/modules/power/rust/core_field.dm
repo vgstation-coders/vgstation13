@@ -142,7 +142,7 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	//at minimum strength, 0.25% of the field volume is pulled in per update (?)
 	//have a max of 1000 moles suspended
 	if(held_plasma[GAS_PLASMA] < transfer_ratio * 1000)
-		var/moles_covered = environment.pressure*volume_covered/(environment.temperature * R_IDEAL_GAS_EQUATION)
+		var/moles_covered = environment.return_pressure()*volume_covered/(environment.temperature * R_IDEAL_GAS_EQUATION)
 //		to_chat(world, "<span class='notice'>moles_covered: [moles_covered]</span>")
 		//
 

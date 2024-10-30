@@ -90,7 +90,7 @@
 		icon_state = "[canister_color]"
 		old_color = canister_color
 
-	var/tank_pressure = air_contents.pressure
+	var/tank_pressure = air_contents.return_pressure()
 	if(check_updates(tank_pressure))
 		if(overlays.len)
 			overlays = 0
@@ -199,8 +199,8 @@
 			environment = loc.return_air()
 			transfer_vol = CELL_VOLUME
 
-		var/env_pressure = environment.pressure
-		var/pressure_delta = min(release_pressure - env_pressure, (air_contents.pressure - env_pressure)/2)
+		var/env_pressure = environment.return_pressure()
+		var/pressure_delta = min(release_pressure - env_pressure, (air_contents.return_pressure() - env_pressure)/2)
 		//Can not have a pressure delta that would cause environment pressure > tank pressure
 
 		var/transfer_moles = 0
@@ -223,7 +223,7 @@
 			if (P)
 				P.update = 1
 
-	if(air_contents.pressure < 1)
+	if(air_contents.return_pressure() < 1)
 		can_label = 1
 	else
 		can_label = 0
@@ -238,15 +238,15 @@
 	return air_contents
 
 /obj/machinery/portable_atmospherics/canister/proc/return_temperature()
-	var/datum/gas_mixture/GM = src.return_readonly_air()
+	var/datum/gas_mixture/GM = src.return_air()
 	if(GM && GM.volume>0)
 		return GM.temperature
 	return 0
 
 /obj/machinery/portable_atmospherics/canister/proc/return_pressure()
-	var/datum/gas_mixture/GM = src.return_readonly_air()
+	var/datum/gas_mixture/GM = src.return_air()
 	if(GM && GM.volume>0)
-		return GM.pressure
+		return GM.return_pressure()
 	return 0
 
 /obj/machinery/portable_atmospherics/canister/blob_act()
@@ -278,8 +278,8 @@
 
 	if(istype(user, /mob/living/silicon/robot) && istype(W, /obj/item/weapon/tank/jetpack))
 		var/datum/gas_mixture/thejetpack = W:air_contents
-		var/env_pressure = thejetpack.pressure
-		var/pressure_delta = min(10*ONE_ATMOSPHERE - env_pressure, (air_contents.pressure - env_pressure)/2)
+		var/env_pressure = thejetpack.return_pressure()
+		var/pressure_delta = min(10*ONE_ATMOSPHERE - env_pressure, (air_contents.return_pressure() - env_pressure)/2)
 		//Can not have a pressure delta that would cause environment pressure > tank pressure
 		var/transfer_moles = 0
 		if((air_contents.temperature > 0) && (pressure_delta > 0))
@@ -323,7 +323,7 @@
 	data["name"] = name
 	data["canLabel"] = can_label ? 1 : 0
 	data["portConnected"] = connected_port ? 1 : 0
-	data["tankPressure"] = round(air_contents.pressure > 0 ? air_contents.pressure : 0)//This used to be redundant, made it into a fix for -1 kPA showing up in the UI
+	data["tankPressure"] = round(air_contents.return_pressure() > 0 ? air_contents.return_pressure() : 0)//This used to be redundant, made it into a fix for -1 kPA showing up in the UI
 	data["releasePressure"] = round(release_pressure)
 	data["minReleasePressure"] = round(ONE_ATMOSPHERE/10)
 	data["maxReleasePressure"] = round(10*ONE_ATMOSPHERE)
@@ -331,7 +331,7 @@
 
 	data["hasHoldingTank"] = holding ? 1 : 0
 	if (holding)
-		data["holdingTank"] = list("name" = holding.name, "tankPressure" = round(holding.air_contents.pressure > 0 ? holding.air_contents.pressure : 0))
+		data["holdingTank"] = list("name" = holding.name, "tankPressure" = round(holding.air_contents.return_pressure() > 0 ? holding.air_contents.return_pressure() : 0))
 
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)

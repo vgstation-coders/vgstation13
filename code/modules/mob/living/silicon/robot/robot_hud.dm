@@ -79,7 +79,7 @@
 // This handles the pressure sensor hud element. Values based on human values.
 /mob/living/silicon/robot/proc/handle_pressure_damage(datum/gas_mixture/environment)
 	//by the power of Polymorph and Errorage
-	var/localpressure = environment.pressure
+	var/localpressure = environment.return_pressure()
 	var/adjusted_pressure = localpressure - ONE_ATMOSPHERE //REAL pressure
 	if(localpressure)
 		if(adjusted_pressure >= HAZARD_HIGH_PRESSURE)
@@ -97,7 +97,7 @@
 
 // This handles the temp sensor hud element
 /mob/living/silicon/robot/proc/handle_heat_damage(datum/gas_mixture/environment)
-	var/envirotemp = environment.temperature
+	var/envirotemp = environment.return_temperature()
 	if(environment)
 		if(envirotemp)
 			if (envirotemp >= 1000 ) //1000 is the heat_level_3 for humans

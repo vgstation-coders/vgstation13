@@ -156,7 +156,7 @@
 		return
 	wax--
 	var/turf/T = get_turf(src)
-	var/datum/gas_mixture/env = T.return_readonly_air()
+	var/datum/gas_mixture/env = T.return_air()
 	if(env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		extinguish()
 		processing_objects.Remove(src)

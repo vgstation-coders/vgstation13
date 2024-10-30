@@ -125,7 +125,7 @@
 					colour = rgb(red, green, blue)
 
 			if(!colour2 && !T.density)
-				var/datum/gas_mixture/environment = T.return_readonly_air()
+				var/datum/gas_mixture/environment = T.return_air()
 				var/turf_total = environment.molar_density() * CELL_VOLUME
 
 
@@ -210,7 +210,7 @@
 						sense = 0
 
 					if("/turf/simulated/floor", "/turf/simulated/floor/engine")
-						var/datum/gas_mixture/environment = T.return_readonly_air()
+						var/datum/gas_mixture/environment = T.return_air()
 						var/turf_total = environment.molar_density() * CELL_VOLUME
 						var/t1 = turf_total / MOLES_CELLSTANDARD * 175
 

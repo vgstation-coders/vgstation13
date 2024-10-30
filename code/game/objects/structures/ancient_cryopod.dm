@@ -26,8 +26,8 @@
 	message_admins("[key_name_admin(user)] has activated an ancient cryopod.")
 	log_game("[key_name(user)] has activated an ancient cryopod.")
 	var/turf/location = get_turf(src)
-	var/datum/gas_mixture/environment = location.return_readonly_air()
-	var/pressure = environment.pressure
+	var/datum/gas_mixture/environment = location.return_air()
+	var/pressure = environment.return_pressure()
 	if(((pressure < WARNING_HIGH_PRESSURE) && pressure > WARNING_LOW_PRESSURE))
 		thawing = TRUE
 		visible_message("<span class='notice'>\The [name] beeps and clicks, then flickers to life, displaying the text 'Attempting to revive occupant...'.</span>")

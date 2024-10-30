@@ -157,14 +157,14 @@
 //currently it turns red the moment the pipe is full, updating ~150 scrubbers at once once the waste pipeloop fills
 /obj/machinery/atmospherics/unary/vent_scrubber/proc/handle_stalling()
 	if(!stalled)
-		if(air_contents.pressure >= MAX_PRESSURE)//not stalled but too much pressure, make stalled
+		if(air_contents.return_pressure() >= MAX_PRESSURE)//not stalled but too much pressure, make stalled
 			stalled = TRUE
 			update_icon()
 		else //not stalled and good pressure, do nothing
 			return
 
 	else
-		if(air_contents.pressure < MAX_PRESSURE) //stalled but good pressure, make unstalled
+		if(air_contents.return_pressure() < MAX_PRESSURE) //stalled but good pressure, make unstalled
 			stalled = FALSE
 			update_icon()
 		else //stalled and too much pressure, do nothing
@@ -195,7 +195,7 @@
 		return
 
 
-	var/datum/gas_mixture/environment = loc.return_readonly_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 	handle_stalling()
 	if(stalled)
 		return //if we're at max pressure we don't do anything
@@ -203,7 +203,7 @@
 	//scrubbing mode
 	if(scrubbing)
 		//if internal pressure limit is enabled and met, we don't do anything
-		if((pressure_checks & 2) && (internal_pressure_bound - air_contents.pressure) <= 0.05)
+		if((pressure_checks & 2) && (internal_pressure_bound - air_contents.return_pressure()) <= 0.05)
 			if(reducing_pressure)
 				reducing_pressure = 0
 				update_icon()
@@ -216,7 +216,7 @@
 				scrubbed_gas_present = TRUE
 				break
 
-		var/external_pressure_delta = environment.pressure - external_pressure_bound
+		var/external_pressure_delta = environment.return_pressure() - external_pressure_bound
 		if(scrubbed_gas_present || ((pressure_checks & 1) && external_pressure_delta > 0.05))
 			var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles
 

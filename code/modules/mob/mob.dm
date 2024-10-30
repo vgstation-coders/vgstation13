@@ -276,7 +276,7 @@
 	if(!loc)
 		return 0
 
-	var/datum/gas_mixture/environment = loc.return_readonly_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 
 	var/t = "<span class='notice'> Coordinates: [x],[y] \n</span>"
 

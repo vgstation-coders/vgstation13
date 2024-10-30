@@ -37,9 +37,9 @@
 	punctured()
 
 /obj/machinery/atmospherics/unary/tank/proc/punctured(var/mob/user as mob)
-	var/internal_pressure = air_contents.pressure
+	var/internal_pressure = air_contents.return_pressure()
 	var/datum/gas_mixture/environment = loc.return_air()
-	var/external_pressure = environment.pressure
+	var/external_pressure = environment.return_pressure()
 	var/pressure_delta = internal_pressure - external_pressure
 	if(pressure_delta >= 500) //only explode if there's this much pressure differential
 		if(user)

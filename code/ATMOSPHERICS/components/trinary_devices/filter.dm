@@ -53,9 +53,9 @@
 	if(!on)
 		return
 
-	var/output_starting_pressure = air3.pressure
+	var/output_starting_pressure = air3.return_pressure()
 	var/pressure_delta = target_pressure - output_starting_pressure
-	var/filtered_pressure_delta = target_pressure - air2.pressure
+	var/filtered_pressure_delta = target_pressure - air2.return_pressure()
 
 	if(pressure_delta > 0.01 && filtered_pressure_delta > 0.01 && (air1.temperature > 0 || air3.temperature > 0))
 		//Figure out how much gas to transfer to meet the target pressure.

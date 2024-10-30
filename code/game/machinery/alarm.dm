@@ -506,7 +506,7 @@ var/global/list/air_alarms = list()
 		danger_averted_confidence = 0 // Reset counter.
 		use_power = MACHINE_POWER_USE_ACTIVE
 
-	if (mode==AALARM_MODE_CYCLE && environment.pressure<ONE_ATMOSPHERE*0.05)
+	if (mode==AALARM_MODE_CYCLE && environment.return_pressure()<ONE_ATMOSPHERE*0.05)
 		mode=AALARM_MODE_FILL
 		apply_mode()
 

@@ -83,7 +83,7 @@
 		var/datum/gas_mixture/environment
 		if(isturf(loc))
 			var/turf/T = loc
-			environment = T.return_readonly_air()
+			environment = T.return_air()
 			if(environment.temperature < T0C)
 				die()
 				return

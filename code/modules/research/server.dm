@@ -55,7 +55,7 @@
 			id_with_download += text2num(N)
 
 /obj/machinery/r_n_d/server/process()
-	var/datum/gas_mixture/environment = loc.return_readonly_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 	switch(environment.temperature)
 		if(0 to T0C)
 			health = min(100, health + 1)
@@ -341,7 +341,7 @@
 				A.anchored = 1
 				src.transfer_fingerprints_to(A)
 				qdel(src)
-	else
+	else 
 		return ..()
 
 /obj/machinery/computer/rdservercontrol/emag_act(mob/user)

@@ -41,9 +41,9 @@
 	// Handle life.
 	var/turf/simulated/T = get_turf(src)
 	if(istype(T))
-		var/datum/gas_mixture/environment = T.return_readonly_air()
+		var/datum/gas_mixture/environment = T.return_air()
 		if(environment)
-			if(environment.pressure > seed.highkpa_tolerance) //Kudzu can live at 0KPA, otherwise you could just vent the room to kill it.
+			if(environment.return_pressure() > seed.highkpa_tolerance) //Kudzu can live at 0KPA, otherwise you could just vent the room to kill it.
 				health -= rand(5,10)
 
 			if(abs(environment.temperature - seed.ideal_heat) > seed.heat_tolerance)

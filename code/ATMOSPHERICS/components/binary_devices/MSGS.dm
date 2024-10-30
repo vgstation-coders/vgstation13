@@ -41,13 +41,13 @@
 		return
 
 	//Output handling, stolen from pump code.
-	var/output_starting_pressure = air2.pressure
+	var/output_starting_pressure = air2.return_pressure()
 
 	if((target_pressure - output_starting_pressure) > 0.01)
 		//No need to output gas if target is already reached!
 
 		//Calculate necessary moles to transfer using PV=nRT
-		if((air.total_moles > 0) && (air.temperature > 0))
+		if((air.total_moles() > 0) && (air.temperature > 0))
 			var/pressure_delta = target_pressure - output_starting_pressure
 			var/transfer_moles = pressure_delta * air2.volume / (air.temperature * R_IDEAL_GAS_EQUATION)
 
@@ -60,13 +60,13 @@
 
 	//Input handling. Literally pump code again with the target pressure being the max pressure of the MSGS
 	if(on)
-		var/input_starting_pressure = air1.pressure
+		var/input_starting_pressure = air1.return_pressure()
 
 		if((max_pressure - input_starting_pressure) > 0.01)
 			//No need to output gas if target is already reached!
 
 			//Calculate necessary moles to transfer using PV=nRT
-			if((air1.total_moles > 0) && (air1.temperature > 0))
+			if((air1.total_moles() > 0) && (air1.temperature > 0))
 				var/pressure_delta = max_pressure - input_starting_pressure
 				var/transfer_moles = pressure_delta * air.volume / (air1.temperature * R_IDEAL_GAS_EQUATION)
 
@@ -82,8 +82,8 @@
 /obj/machinery/atmospherics/binary/msgs/ui_data()
 	var/list/data = list()
 
-	data["pressure"] = round(air.pressure, 0.01)
-	data["temperature"] = air.temperature
+	data["pressure"] = round(air.return_pressure(), 0.01)
+	data["temperature"] = air.return_temperature()
 	data["power"] = on
 	data["targetPressure"] = target_pressure
 	data["gases"] = list()
@@ -152,7 +152,7 @@
 	if((update_flags & MSGS_ON) != !(stat & (NOPOWER | BROKEN | FORCEDISABLE)))
 		update = 1
 
-	var/pressure = air.pressure // null ref error here.
+	var/pressure = air.return_pressure() // null ref error here.
 	var/i = clamp(round(pressure / (max_pressure / 5)), 0, 5)
 	if(i != last_pressure)
 		update = 1

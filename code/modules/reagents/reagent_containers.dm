@@ -476,7 +476,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		update_temperature_overlays()
 		return
 
-	var/datum/gas_mixture/air = return_readonly_air()
+	var/datum/gas_mixture/air = return_air()
 
 	if (!air)
 		thermal_entropy_containers.Remove(src)

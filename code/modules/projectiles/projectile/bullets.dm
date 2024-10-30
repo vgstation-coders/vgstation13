@@ -755,7 +755,7 @@
 	if(!gas_jet)
 		bullet_die()
 	else
-		original_total_moles = gas_jet.total_moles
+		original_total_moles = gas_jet.total_moles()
 
 /obj/item/projectile/bullet/fire_plume/proc/create_puff()
 	if(gas_jet)
@@ -868,7 +868,7 @@
 	var/datum/gas_mixture/firemix = new /datum/gas_mixture
 	firemix.adjust_gas(GAS_PLASMA, 666)
 	gas_jet = firemix
-	jet_pressure = firemix.pressure
+	jet_pressure = firemix.return_pressure()
 	gas_jet.temperature = 383.15
 	burn_strength = gas_jet.temperature
 

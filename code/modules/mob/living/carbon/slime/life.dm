@@ -26,7 +26,7 @@
 
 	var/datum/gas_mixture/environment // Added to prevent null location errors-- TLE
 	if(src.loc)
-		environment = loc.return_readonly_air()
+		environment = loc.return_air()
 
 	//Apparently, the person who wrote this code designed it so that
 	//blinded get reset each cycle and then get activated later in the

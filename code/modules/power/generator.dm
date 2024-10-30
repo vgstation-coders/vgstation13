@@ -189,16 +189,16 @@
 
 	if(circ1)
 		data["first_flow_cap"] = round(circ1.volume_capacity_used * 100)
-		data["first_in_pressure"] = round(circ1.air1.pressure, 1)
+		data["first_in_pressure"] = round(circ1.air1.return_pressure(), 1)
 		data["first_in_temp"] = round(circ1.air1.temperature, 1)
-		data["first_out_pressure"] = round(circ1.air2.pressure, 1)
+		data["first_out_pressure"] = round(circ1.air2.return_pressure(), 1)
 		data["first_out_temp"] = round(circ1.air2.temperature, 1)
 
 	if(circ2)
 		data["second_flow_cap"] = round(circ2.volume_capacity_used * 100)
-		data["second_in_pressure"] = round(circ2.air1.pressure, 1)
+		data["second_in_pressure"] = round(circ2.air1.return_pressure(), 1)
 		data["second_in_temp"] = round(circ2.air1.temperature, 1)
-		data["second_out_pressure"] = round(circ2.air2.pressure, 1)
+		data["second_out_pressure"] = round(circ2.air2.return_pressure(), 1)
 		data["second_out_temp"] = round(circ2.air2.temperature, 1)
 
 	return data

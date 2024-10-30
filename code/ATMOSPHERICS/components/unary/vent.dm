@@ -38,9 +38,9 @@
 
 	//air_contents.mingle_with_turf(loc)
 
-	var/datum/gas_mixture/environment = loc.return_readonly_air()
-	var/environment_pressure = environment.pressure
-	var/pressure_delta = min(10000, abs(environment_pressure - air_contents.pressure))
+	var/datum/gas_mixture/environment = loc.return_air()
+	var/environment_pressure = environment.return_pressure()
+	var/pressure_delta = min(10000, abs(environment_pressure - air_contents.return_pressure()))
 
 	if((environment.temperature || air_contents.temperature) && pressure_delta > 0.5)
 		if(environment_pressure < air_contents.pressure) //move air out
