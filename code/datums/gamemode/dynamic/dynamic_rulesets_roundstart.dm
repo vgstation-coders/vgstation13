@@ -301,7 +301,16 @@
 		else
 			PFW.HandleRecruitedRole(newWizard)
 		var/mob/living/carbon/human/H = M.create_human(M.client.prefs)
-		H.forceMove(pick(wizardstart))
+		var/list/acceptable_wizardstarts = list()
+		for(var/obj/effect/landmark/L in wizardstart)
+			if(newWizard.faction?.type == /datum/faction/wizard/civilwar)
+				var/datum/faction/wizard/civilwar/CW = newWizard.faction
+				var/turf/T = get_turf(L)
+				if(T && CW.our_den && T.map_element == CW.our_den)
+					acceptable_wizardstarts += L
+		if(!acceptable_wizardstarts.len)
+			acceptable_wizardstarts = wizardstart
+		H.forceMove(pick(acceptable_wizardstarts))
 		H.key = M.client.ckey
 		qdel(M)
 		newWizard.AssignToRole(H.mind,1)

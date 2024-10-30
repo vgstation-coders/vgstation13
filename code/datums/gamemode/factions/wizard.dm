@@ -13,10 +13,13 @@
 	hud_icons = list("wizard-logo","apprentice-logo")
 	default_admin_voice = "Wizard Federation"
 	admin_voice_style = "notice"
+	var/datum/map_element/dungeon/wizard_den/our_den
+	var/dentype = /datum/map_element/dungeon/wizard_den
 
 /datum/faction/wizard/New()
 	..()
-	load_dungeon(/datum/map_element/dungeon/wizard_den)
+	our_den = new dentype
+	load_dungeon(our_den)
 
 /datum/faction/wizard/civilwar
 	var/enemy_faction
@@ -39,6 +42,7 @@
 	name = "The Peoples' Front for Wizards"
 	desc = "The PFW are a faction within the Wizard Federation. The only people they hate more than Nanotrasen are the Wizardly Peoples' Front."
 	enemy_faction = /datum/faction/wizard/civilwar/wpf
+	dentype = /datum/map_element/dungeon/wizard_den/enemy_faction
 
 /datum/faction/wizard/HandleNewMind(var/datum/mind/M)
 	..()
@@ -72,3 +76,5 @@
 
 /datum/map_element/dungeon/wizard_den/pre_load()
 	file_path = "maps/misc/wizardden[rand(1,5)].dmm"
+
+/datum/map_element/dungeon/wizard_den/enemy_faction // just so it's unique
