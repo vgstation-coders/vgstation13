@@ -50942,6 +50942,7 @@
 /area/crew_quarters/kitchen)
 "bMv" = (
 /obj/structure/closet/crate/kitchen,
+/obj/item/device/eftpos,
 /obj/item/weapon/reagent_containers/dropper,
 /obj/item/weapon/soap,
 /obj/item/device/radio/headset/headset_service,

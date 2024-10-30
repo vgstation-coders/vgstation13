@@ -82259,6 +82259,7 @@
 /area/maintenance/apmaint)
 "cVi" = (
 /obj/structure/closet/crate/kitchen,
+/obj/item/clothing/under/sundress,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},

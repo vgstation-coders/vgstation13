@@ -12423,6 +12423,7 @@
 /area/crew_quarters/sleep)
 "aHR" = (
 /obj/structure/closet/crate/kitchen,
+/obj/item/device/eftpos/kitchen,
 /obj/item/device/radio/headset/headset_service,
 /obj/item/weapon/storage/bag/food,
 /obj/item/weapon/storage/box/condimentbottles,

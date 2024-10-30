@@ -87283,6 +87283,8 @@
 /area/chapel/main)
 "sUG" = (
 /obj/structure/closet/crate/kitchen,
+/obj/item/clothing/under/sundress,
+/obj/item/device/eftpos/kitchen,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},

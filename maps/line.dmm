@@ -87496,6 +87496,8 @@
 /area/mine/abandoned)
 "oFa" = (
 /obj/structure/closet/crate/kitchen,
+/obj/item/clothing/under/sundress,
+/obj/item/device/eftpos/kitchen,
 /obj/item/weapon/storage/bag/plants{
 	name = "Chef's Plant Bag"
 	},

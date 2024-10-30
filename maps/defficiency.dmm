@@ -33566,6 +33566,7 @@
 /area/crew_quarters/kitchen)
 "bkk" = (
 /obj/structure/closet/crate/kitchen,
+/obj/item/clothing/under/sundress,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},

@@ -20877,6 +20877,8 @@
 /area/crew_quarters/theatre)
 "bar" = (
 /obj/structure/closet/crate/kitchen,
+/obj/item/clothing/under/sundress,
+/obj/item/device/eftpos/kitchen,
 /obj/machinery/alarm{
 	dir = 8;
 	pixel_x = 24

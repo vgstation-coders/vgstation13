@@ -27530,6 +27530,8 @@
 /area/crew_quarters/kitchen)
 "aZQ" = (
 /obj/structure/closet/crate/kitchen,
+/obj/item/clothing/under/sundress,
+/obj/item/device/eftpos/kitchen,
 /obj/machinery/alarm{
 	dir = 4;
 	pixel_x = -24
