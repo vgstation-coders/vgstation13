@@ -253,19 +253,20 @@
 /obj/item/weapon/reagent_containers/food/snacks/pickup(mob/user)
 	..()
 	update_icon()
-	if(reagents?.chem_temp >= STEAMTEMP && ishuman(user)) // if item is too hot to pick up and user is not wearing gloves that insulate heat enough (ovenmitts, black or yellow)
-		var/obj/item/clothing/gloves/G = user.get_item_by_slot(slot_gloves)
-		if(!G || G.heat_conductivity > INS_GLOVES_HEAT_CONDUCTIVITY)
-			var/mob/living/carbon/human/H = user
-			var/hand_index = user.held_items.Find(src)
-			switch(hand_index)
-				if (GRASP_RIGHT_HAND)
-					H.apply_damage(5, BURN, LIMB_RIGHT_HAND)
-				if (GRASP_LEFT_HAND)
-					H.apply_damage(5, BURN, LIMB_LEFT_HAND)
-			if(H.feels_pain())
-				to_chat(user,"<span class='danger'>The heat from [src] scalds your hand in pain, causing you to drop it!</span>")
-				user.drop_item(src)
+	spawn(5)
+		if(reagents?.chem_temp >= STEAMTEMP && ishuman(user)) // if item is too hot to pick up
+			var/obj/item/clothing/gloves/G = user.get_item_by_slot(slot_gloves)
+			if(!G || G.heat_conductivity > INS_GLOVES_HEAT_CONDUCTIVITY) // and user is not wearing gloves that insulate heat enough (ovenmitts, captain, black or yellow)
+				var/mob/living/carbon/human/H = user
+				var/hand_index = user.held_items.Find(src)
+				switch(hand_index)
+					if (GRASP_RIGHT_HAND)
+						H.apply_damage(5, BURN, LIMB_RIGHT_HAND)
+					if (GRASP_LEFT_HAND)
+						H.apply_damage(5, BURN, LIMB_LEFT_HAND)
+				if(H.feels_pain())
+					to_chat(user,"<span class='danger'>The heat from [src] scalds your hand in pain, causing you to drop it!</span>")
+					user.drop_item(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/update_icon()
 	overlays.len = 0//no choice here but to redraw everything in the correct order so condiments etc don't appear over ice and fire.
