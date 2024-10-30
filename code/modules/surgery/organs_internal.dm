@@ -78,6 +78,15 @@
 			else
 				has_damaged_organic_organ = 1
 			break
+		if(istype(I,/datum/organ/internal/brain))
+			var/datum/organ/internal/brain/B = I
+			for(var/damage in B.specific_damages)
+				if(B.specific_damages[damage] > 0)
+					if(I.robotic >= 2)
+						has_damaged_robot_organ = 1
+					else
+						has_damaged_organic_organ = 1
+					break
 	if(..())
 		if(!has_damaged_organic_organ && has_damaged_robot_organ)
 			to_chat(user, "<span class='warning'>You cannot fix robotic organs with this tool.</span>")
@@ -184,6 +193,15 @@
 			else
 				has_damaged_organic_organ = 1
 			break
+		if(istype(I,/datum/organ/internal/brain))
+			var/datum/organ/internal/brain/B = I
+			for(var/damage in B.specific_damages)
+				if(B.specific_damages[damage] > 0)
+					if(I.robotic >= 2)
+						has_damaged_robot_organ = 1
+					else
+						has_damaged_organic_organ = 1
+					break
 	if(..())
 		if(!has_damaged_robot_organ && has_damaged_organic_organ)
 			to_chat(user, "<span class='warning'>You cannot fix organic organs with this tool.</span>")
