@@ -290,9 +290,9 @@ var/static/list/partstobraindamagetype = list(
 		var/list/partstodamage = partstobraindamagetype.Copy()
 		for(var/damage in B.specific_damages)
 			if(B.specific_damages[damage] >= 100)
-				partstodamage -= get_element_by_key(partstobraindamagetype,damage)
-		var/part_to_cut = input(user, "Which part of this brain to cut?") as null|anything in partstobraindamagetype
-		if(part_to_cut != "remove")
+				partstodamage -= get_key_by_element(partstobraindamagetype,damage)
+		var/part_to_cut = input(user, "Which part of this brain to cut?") as null|anything in partstodamage
+		if(part_to_cut && part_to_cut != "remove")
 			brain_damagetype = part_to_cut
 	return ..() && organ_to_remove && I && istype(I) && I.CanRemove(target, user)
 
