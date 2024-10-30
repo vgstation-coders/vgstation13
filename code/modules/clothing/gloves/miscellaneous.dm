@@ -482,8 +482,7 @@
 	name = "oven mitts"
 	desc = "Bulky gloves used to remove freshly cooked hot food from things like pans and microwaves. You no longer always hate-a that part."
 	icon_state = "ovenmitts"
-	item_state = "mittens"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+	item_state = "white"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	permeability_coefficient = 0.8
