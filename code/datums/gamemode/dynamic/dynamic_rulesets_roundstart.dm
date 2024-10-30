@@ -309,6 +309,7 @@
 				if(T && CW.our_den && T.map_element == CW.our_den)
 					acceptable_wizardstarts += L
 		if(!acceptable_wizardstarts.len)
+			message_admins("<span class='danger'>Something went wrong with putting [M.client.key] into a unique den! Using default wizard spawning for them.</span>")
 			acceptable_wizardstarts = wizardstart
 		H.forceMove(pick(acceptable_wizardstarts))
 		H.key = M.client.ckey
