@@ -292,8 +292,17 @@ var/static/list/partstobraindamagetype = list(
 			if(B.specific_damages[damage] >= target.maxHealth)
 				partstodamage -= get_key_by_element(partstobraindamagetype,damage)
 		var/part_to_cut = input(user, "Which part of this brain to cut?") as null|anything in partstodamage
-		if(part_to_cut && part_to_cut != "remove")
-			brain_damagetype = part_to_cut
+		if(part_to_cut && part_to_cut != "Brain stem (sever this organ)")
+			brain_damagetype = partstodamage[part_to_cut]
+			cutverb = "make an incision on"
+			cutverbed = "made an incision on"
+		else
+			brain_damagetype = null
+			cutverb = "separate"
+			cutverbed = "separated"
+	else
+		cutverb = "separate"
+		cutverbed = "separated"
 	return ..() && organ_to_remove && I && istype(I) && I.CanRemove(target, user)
 
 /datum/surgery_step/internal/detatch_organ/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
