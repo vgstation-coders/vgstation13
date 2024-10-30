@@ -519,7 +519,7 @@ var/list/headset_modes = list(
 		for(var/obj/item/I in get_all_slots() + held_items)
 			I.affect_speech(speech, src)
 
-	if(getBrainLoss() >= 60)
+	if(getBrainLoss("speech") >= 60)
 		if(braindamagespeechcooldown)
 			speech.message = null
 			emote("gibber")
@@ -648,7 +648,7 @@ var/list/headset_modes = list(
 /mob/living/say_quote()
 	if (stuttering)
 		return "stammers, [text]"
-	if (getBrainLoss() >= 60)
+	if (getBrainLoss("speech") >= 60)
 		return "gibbers, [text]"
 	return ..()
 
@@ -659,7 +659,7 @@ var/list/headset_modes = list(
 /mob/living/get_spoken_verb(var/msg)
 	if (stuttering)
 		return "stammers"
-	if (getBrainLoss() >= 60)
+	if (getBrainLoss("speech") >= 60)
 		return "gibbers"
 	return ..()
 

@@ -206,12 +206,21 @@
 //All the internal organs without specific code to them are below
 //Hopefully this will be filled in soon ?
 
+var/static/list/partstobraindamagetype = list(
+	"Cerebellum" = "motor",
+	"Frontal lobe" = "coordination",
+	"Broca's area" = "speech",
+	"Amygdala" = "memory",
+	"Temporal lobe" = "intelligence"
+)
+
 /datum/organ/internal/brain
 	name = "brain"
 	parent_organ = LIMB_HEAD
 	organ_type = "brain"
 	removed_type = /obj/item/organ/internal/brain
 	vital = 1
+	var/list/specific_damages = list("motor" = 0,"coordination" = 0,"speech" = 0,"memory" = 0,"intelligence" = 0)
 
 /datum/organ/internal/brain/ash
 	removed_type = /obj/item/organ/internal/brain/ash

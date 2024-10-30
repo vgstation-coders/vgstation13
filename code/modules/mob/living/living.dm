@@ -327,7 +327,7 @@
 		return 0	//godmode
 	cloneloss = amount
 
-/mob/living/proc/getBrainLoss()
+/mob/living/proc/getBrainLoss(var/type)
 	return brainloss
 
 /mob/living/proc/adjustBrainLoss(var/amount)

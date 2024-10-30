@@ -47,7 +47,7 @@
 		return
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(H.getBrainLoss() >= 60)
+		if(H.getBrainLoss("intelligence") >= 60)
 			return
 
 	interact(user)

@@ -140,7 +140,7 @@
 					if(mykey && mykey != W)
 						to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
 						return
-				if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
+				if(((M_CLUMSY in user.mutations) || user.getBrainLoss("coordination") >= 60) && prob(50))
 					to_chat(user, "<span class='warning'>You try to insert \the [W] to \the [src]'s ignition but you miss the slot!</span>")
 					return
 				if(user.drop_item(W, src))

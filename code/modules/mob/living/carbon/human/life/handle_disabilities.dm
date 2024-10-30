@@ -67,7 +67,7 @@
 		if(prob(10))
 			Jitter(10)
 
-	if(getBrainLoss() >= 60 && prob(3))
+	if(getBrainLoss("speech") >= 60 && prob(3))
 		say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
 		"without oxigen blob don't evoluate?", \
 		"CAPTAINS A COMDOM", \
@@ -118,13 +118,13 @@
 		"I AM BASTE", \
 		"TEH TRAITOR THEY KILL PEEPLE BUT I RESPAWN!!!", \
 		"whats a keeper"))
-	else if(getBrainLoss() >= 60 && prob(3))
+	else if(getBrainLoss("intelligence") >= 60 && prob(3))
 		emote("drool")
-	if(getBrainLoss() > 50 && prob(1.5))
+	if(getBrainLoss("motor") > 50 && prob(1.5))
 		if(canmove)
 			to_chat(src, "<span class='warning'>Your legs won't respond properly, you fall down.</span>")
 			Knockdown(3)
-	else if(getBrainLoss() > 35 && prob(1.5))
+	else if(getBrainLoss("motor") > 35 && prob(1.5))
 		if(get_active_hand())
 			to_chat(src, "<span class='warning'>Your hand won't respond properly, you drop what you're holding.</span>")
 			drop_item()
