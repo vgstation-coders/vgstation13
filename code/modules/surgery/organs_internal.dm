@@ -289,7 +289,7 @@ var/static/list/partstobraindamagetype = list(
 		var/datum/organ/internal/brain/B = I
 		var/list/partstodamage = partstobraindamagetype.Copy()
 		for(var/damage in B.specific_damages)
-			if(B.specific_damages[damage] >= 100)
+			if(B.specific_damages[damage] >= target.maxHealth)
 				partstodamage -= get_key_by_element(partstobraindamagetype,damage)
 		var/part_to_cut = input(user, "Which part of this brain to cut?") as null|anything in partstodamage
 		if(part_to_cut && part_to_cut != "remove")
@@ -312,7 +312,7 @@ var/static/list/partstobraindamagetype = list(
 	if(I && istype(I))
 		if(brain_damagetype && istype(I,/datum/organ/internal/brain))
 			var/datum/organ/internal/brain/sponge = I
-			sponge.specific_damages[brain_damagetype] = rand(61,65) * (allowed_tools[tool.type]/100)
+			sponge.specific_damages[brain_damagetype] = min(rand(61,65) * (allowed_tools[tool.type]/100),target.maxHealth)
 		else if(I.CanRemove(target, user, quiet=1))
 			I.Remove(target, user)
 			I.status |= ORGAN_CUT_AWAY
