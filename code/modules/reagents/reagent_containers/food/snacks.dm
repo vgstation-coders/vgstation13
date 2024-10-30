@@ -259,14 +259,15 @@
 			if(!G || G.heat_conductivity > INS_GLOVES_HEAT_CONDUCTIVITY) // and user is not wearing gloves that insulate heat enough (ovenmitts, captain, black or yellow)
 				var/mob/living/carbon/human/H = user
 				var/hand_index = user.held_items.Find(src)
-				switch(hand_index)
-					if (GRASP_RIGHT_HAND)
-						H.apply_damage(5, BURN, LIMB_RIGHT_HAND)
-					if (GRASP_LEFT_HAND)
-						H.apply_damage(5, BURN, LIMB_LEFT_HAND)
-				if(H.feels_pain())
-					to_chat(user,"<span class='danger'>The heat from [src] scalds your hand in pain, causing you to drop it!</span>")
-					user.drop_item(src)
+				if(hand_index)
+					switch(hand_index)
+						if (GRASP_RIGHT_HAND)
+							H.apply_damage(5, BURN, LIMB_RIGHT_HAND)
+						if (GRASP_LEFT_HAND)
+							H.apply_damage(5, BURN, LIMB_LEFT_HAND)
+					if(H.feels_pain())
+						to_chat(user,"<span class='danger'>The heat from [src] scalds your hand in pain, causing you to drop it!</span>")
+						user.drop_item(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/update_icon()
 	overlays.len = 0//no choice here but to redraw everything in the correct order so condiments etc don't appear over ice and fire.
