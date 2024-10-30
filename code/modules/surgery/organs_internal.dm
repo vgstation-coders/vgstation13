@@ -343,7 +343,7 @@ var/static/list/partstobraindamagetype = list(
 	if(I && istype(I))
 		if(brain_damagetype && istype(I,/datum/organ/internal/brain))
 			var/datum/organ/internal/brain/sponge = I
-			sponge.specific_damages[brain_damagetype] += min(rand(61,65) * (allowed_tools[tool.type]/100),target.maxHealth)
+			sponge.specific_damages[brain_damagetype] += min(rand(61,65),target.maxHealth)
 		else if(I.CanRemove(target, user, quiet=1))
 			I.Remove(target, user)
 			I.status |= ORGAN_CUT_AWAY
