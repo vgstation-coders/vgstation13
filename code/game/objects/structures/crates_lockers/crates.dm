@@ -178,6 +178,9 @@
 	icon_opened = "plasmacrateopen"
 	icon_closed = "plasmacrate"
 
+/obj/structure/closet/crate/secure/plasma/prefilled/atoms_to_spawn()
+	return list(/obj/item/weapon/tank/plasma = 10)
+
 /obj/structure/closet/crate/secure/gear
 	desc = "A secure gear crate."
 	name = "Gear crate"
@@ -353,12 +356,6 @@
 	icon_closed = "medicalsecurecrate"
 	has_lockless_type = /obj/structure/closet/crate/medical
 
-/obj/structure/closet/crate/secure/plasma/prefilled
-	var/count=10
-/obj/structure/closet/crate/secure/plasma/prefilled/New()
-	for(var/i=0;i<count;i++)
-		new /obj/item/weapon/tank/plasma(src)
-
 //This exists so the prespawned hydro crates spawn with their contents.
 /obj/structure/closet/crate/hydroponics/prespawned/New()
 	..()
@@ -371,27 +368,11 @@
 	..()
 	update_icon()
 
-/obj/structure/closet/crate/rcd/New()
-	..()
-	new /obj/item/stack/rcd_ammo(src)
-	new /obj/item/stack/rcd_ammo(src)
-	new /obj/item/stack/rcd_ammo(src)
-	new /obj/item/device/rcd/matter/engineering(src)
+/obj/structure/closet/crate/rcd/atoms_to_spawn()
+	return list(/obj/item/stack/rcd_ammo = 3, /obj/item/device/rcd/matter/engineering)
 
-/obj/structure/closet/crate/radiation/New()
-	..()
-	new /obj/item/clothing/suit/radiation(src)
-	new /obj/item/clothing/head/radiation(src)
-	new /obj/item/device/geiger_counter(src)
-	new /obj/item/clothing/suit/radiation(src)
-	new /obj/item/clothing/head/radiation(src)
-	new /obj/item/device/geiger_counter(src)
-	new /obj/item/clothing/suit/radiation(src)
-	new /obj/item/clothing/head/radiation(src)
-	new /obj/item/device/geiger_counter(src)
-	new /obj/item/clothing/suit/radiation(src)
-	new /obj/item/clothing/head/radiation(src)
-	new /obj/item/device/geiger_counter(src)
+/obj/structure/closet/crate/radiation/atoms_to_spawn()
+	return list(/obj/item/clothing/suit/radiation = 4, /obj/item/clothing/head/radiation = 4, /obj/item/device/geiger_counter = 4)
 
 /obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0 || wall_mounted))
