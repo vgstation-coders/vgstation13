@@ -311,6 +311,7 @@
 		if(!acceptable_wizardstarts.len)
 			message_admins("<span class='danger'>Something went wrong with putting [M.client.key] into a unique den! Using default wizard spawning for them.</span>")
 			acceptable_wizardstarts = wizardstart
+			newWizard.spawnedwrong = TRUE
 		H.forceMove(pick(acceptable_wizardstarts))
 		H.key = M.client.ckey
 		qdel(M)

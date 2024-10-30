@@ -14,6 +14,8 @@
 	//Can get lost through absorbing
 	var/list/spells_from_spellbook = list()
 	var/list/spells_from_absorb = list()
+	var/spawnedwrong = FALSE // only set during civil war if the unique den thing didn't work somehow
+
 //Does not show spells because the scoreboard code overrides it
 
 	var/list/artifacts_bought = list()
@@ -61,6 +63,8 @@
 				if("The Wizardly Peoples' Front","The Peoples' Front for Wizards")
 					to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='info'>You are a Space Wizard!</br></span>")
 					to_chat(antag.current, "<span class='danger'>The Wizard Federation is in civil war! Plan your strategy in the den and coordinate with your teammate! You are part of [faction]. Enemy wizards will not have a visible wizard icon, but friendly wizards will.</br></span>")
+					if(spawnedwrong)
+						to_chat(antag.current, "<span class='danger' style='font-size:14pt'>The den is neutral ground! Do NOT fight here!</br></span>")
 					to_chat(antag.current, "<span class='info'>[faction.desc]</span>")
 				else
 					to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Wizard!!</br></span>")
