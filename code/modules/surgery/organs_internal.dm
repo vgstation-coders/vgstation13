@@ -130,6 +130,10 @@
 		if(I)
 			I.status &= ~ORGAN_BROKEN
 			I.status &= ~ORGAN_SPLINTED
+		if(istype(I,/datum/organ/internal/brain))
+			var/datum/organ/internal/brain/B = I
+			for(var/damage in B.specific_damages)
+				B.specific_damages[damage] = 0
 
 /datum/surgery_step/internal/fix_organ/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
