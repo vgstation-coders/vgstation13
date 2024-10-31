@@ -13,6 +13,7 @@
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MAGNETS + "=2;" + Tc_MATERIALS + "=1;" + Tc_ALIEN + "=5"
 	modifystate = "disintegratorscorch"
 	fire_delay = 0.6 SECONDS // Barely noticeable, mostly here to allow the firing noise .ogg to finish ~0.55 seconds
+	starting_materials = list(MAT_IRON = 1000, MAT_RETICULITE = CC_PER_SHEET_RETICULITE)
 
 	var/mode = 0 //0 = scorch, 1 = microwave
 
@@ -57,6 +58,7 @@
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MAGNETS + "=2;" + Tc_MATERIALS + "=2;" + Tc_ALIEN + "=5"
 	modifystate = "heavydisintegratorimmolate"
 	fire_delay = 1.2 SECONDS // Here to slightly counterbalance the more damaging ray, but a lot less noticeable than the laser cannon
+	starting_materials = list(MAT_IRON = 1000, MAT_RETICULITE = CC_PER_SHEET_RETICULITE)
 
 	var/mode = 0 //0 = immolate, 1 = scramble
 
@@ -98,6 +100,7 @@
 	projectile_type = "/obj/item/projectile/beam/scorchray/atomizationray"
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=3" + Tc_POWERSTORAGE + "=4;" + Tc_ALIEN + "=5"
 	fire_delay = 0.6 SECONDS // Barely noticeable, mostly here to allow the firing noise .ogg to finish ~0.55 seconds
+	starting_materials = list(MAT_IRON = 1000, MAT_RETICULITE = CC_PER_SHEET_RETICULITE)
 
 	var/charge_tick = 0
 	var/charge_wait = 4 // This one charges itself like the Captain's laser, at the cost of fun alternate modes

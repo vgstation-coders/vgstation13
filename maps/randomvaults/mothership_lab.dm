@@ -999,6 +999,7 @@
 	w_class = W_CLASS_MEDIUM
 	origin_tech = Tc_COMBAT + "=3" + Tc_POWERSTORAGE + "=2;" + Tc_ALIEN + "=3"
 	attack_verb = list("beats")
+	starting_materials = list(MAT_IRON = 500, MAT_RETICULITE = 500)
 	var/status = 0
 	var/obj/item/weapon/cell/bcell = null
 	var/hitcost = 50 // 20 stuns with integrated cell, but can't upgrade or remove it. Doesn't have a normal baton's vulnerability to emp blasts. Compatible with rechargers
