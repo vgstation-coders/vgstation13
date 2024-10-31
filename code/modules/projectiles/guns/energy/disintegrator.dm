@@ -10,7 +10,7 @@
 
 	charge_cost = 100 //How much energy is needed to fire.
 	projectile_type = "/obj/item/projectile/beam/scorchray"
-	origin_tech = Tc_COMBAT + "=3;" + Tc_MAGNETS + "=2;" + Tc_MATERIALS + "=1"
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MAGNETS + "=2;" + Tc_MATERIALS + "=1;" + Tc_ALIEN + "=5"
 	modifystate = "disintegratorscorch"
 	fire_delay = 0.6 SECONDS // Barely noticeable, mostly here to allow the firing noise .ogg to finish ~0.55 seconds
 
@@ -54,7 +54,7 @@
 
 	charge_cost = 50 //How much energy is needed to fire.
 	projectile_type = "/obj/item/projectile/beam/scorchray/immolationray"
-	origin_tech = Tc_COMBAT + "=4;" + Tc_MAGNETS + "=2;" + Tc_MATERIALS + "=2"
+	origin_tech = Tc_COMBAT + "=4;" + Tc_MAGNETS + "=2;" + Tc_MATERIALS + "=2;" + Tc_ALIEN + "=5"
 	modifystate = "heavydisintegratorimmolate"
 	fire_delay = 1.2 SECONDS // Here to slightly counterbalance the more damaging ray, but a lot less noticeable than the laser cannon
 
@@ -96,7 +96,7 @@
 
 	charge_cost = 50 //How much energy is needed to fire.
 	projectile_type = "/obj/item/projectile/beam/scorchray/atomizationray"
-	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=3" + Tc_POWERSTORAGE + "=4"
+	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=3" + Tc_POWERSTORAGE + "=4;" + Tc_ALIEN + "=5"
 	fire_delay = 0.6 SECONDS // Barely noticeable, mostly here to allow the firing noise .ogg to finish ~0.55 seconds
 
 	var/charge_tick = 0

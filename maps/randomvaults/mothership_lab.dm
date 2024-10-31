@@ -997,7 +997,7 @@
 	force = 10
 	throwforce = 7
 	w_class = W_CLASS_MEDIUM
-	origin_tech = Tc_COMBAT + "=3" + Tc_POWERSTORAGE + "=2"
+	origin_tech = Tc_COMBAT + "=3" + Tc_POWERSTORAGE + "=2;" + Tc_ALIEN + "=3"
 	attack_verb = list("beats")
 	var/status = 0
 	var/obj/item/weapon/cell/bcell = null
