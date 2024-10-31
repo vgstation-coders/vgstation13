@@ -333,6 +333,8 @@ var/static/list/partstobraindamagetype = list(
 	user.visible_message("[user] starts to [cutverb] [target]'s [target.op_stage.current_organ] with \the [tool].", \
 	"You start to [cutverb] [target]'s [target.op_stage.current_organ] with \the [tool]." )
 	target.custom_pain("The pain in your [affected.display_name] is living hell!",1, scream=TRUE)
+	if(brain_damagetype == "speech")
+		target.say_gibberish()
 	..()
 
 /datum/surgery_step/internal/detatch_organ/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
