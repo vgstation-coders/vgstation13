@@ -63,7 +63,7 @@
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
 		return 0
 	if(!environment)
-		environment = loc.return_readonly_air()
+		environment = loc.return_air()
 	var/loc_temp = get_loc_temp(environment)
 	if(loc_temp < bodytemperature)
 		// We're going to try and just use exposed area(temperature difference)/cold divisor, and assume we're only conducting.
@@ -128,7 +128,7 @@
 
 /mob/living/proc/get_loc_temp(var/datum/gas_mixture/environment)
 	if(!environment)
-		environment = loc.return_readonly_air()
+		environment = loc.return_air()
 	var/loc_temp = T0C
 	if(istype(loc, /obj/mecha))
 		var/obj/mecha/M = loc

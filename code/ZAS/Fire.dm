@@ -148,10 +148,10 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(!force_smoke)
 		if(prob(clamp(lerp(temp,T20C,T0C + 1000,96,100),96,100))) //4% chance of smoke at 20C, 0% at 1000C
 			return FALSE
-	var/smoke_density = clamp(3 * ((MINOXY2BURN/oxy) ** 2),1,3)
+	var/smoke_density = clamp(5 * ((MINOXY2BURN/oxy) ** 2),1,5)
 	var/datum/effect/system/smoke_spread/bad/smoke = new
 	smoke.set_up(smoke_density,0,where)
-	smoke.time_to_live = 3 SECONDS
+	smoke.time_to_live = 10 SECONDS
 	smoke.start()
 
 /atom/proc/check_fire_protection()
@@ -232,9 +232,9 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		extinguish()
 		return
 	var/datum/thermal_material/material = src.thermal_material
-	var/datum/gas_mixture/air = T.return_readonly_air()
+	var/datum/gas_mixture/air = T.return_air()
 	var/oxy_ratio  = air.molar_ratio(GAS_OXYGEN)
-	var/temperature = air.temperature
+	var/temperature = air.return_temperature()
 	var/delta_t
 	var/heat_out = 0 //J
 	var/oxy_used = 0 //mols
@@ -409,7 +409,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(thermal_mass <= 0)
 		ashify()
 		return
-	var/datum/gas_mixture/G = return_readonly_air()
+	var/datum/gas_mixture/G = return_air()
 	if(!G)
 		return
 	if(!(G.temperature >= autoignition_temperature))
@@ -498,7 +498,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(locate(/obj/effect/fire) in src)
 		return 0
 
-	var/datum/gas_mixture/air_contents = return_readonly_air()
+	var/datum/gas_mixture/air_contents = return_air()
 	if(!air_contents)
 		return 0
 
@@ -546,7 +546,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(!flammable || check_fire_protection() || thermal_mass <= 0)
 		return FALSE
 
-	var/datum/gas_mixture/air_contents = return_readonly_air()
+	var/datum/gas_mixture/air_contents = return_air()
 	if(air_contents[GAS_OXYGEN] < 1)
 		return FALSE
 
@@ -591,7 +591,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	. = ..()
 	dir = pick(cardinal)
 	var/turf/T = get_turf(loc)
-	var/datum/gas_mixture/air_contents=T.return_readonly_air()
+	var/datum/gas_mixture/air_contents=T.return_air()
 	if(air_contents)
 		setfirelight(air_contents.calculate_firelevel(get_turf(src)), air_contents.temperature)
 	SSair.add_hotspot(src)
@@ -680,7 +680,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 			var/turf/simulated/enemy_tile = get_step(S, direction)
 			var/liquidburn = FALSE
 			if(istype(enemy_tile))
-				var/datum/gas_mixture/acs = enemy_tile.return_readonly_air()
+				var/datum/gas_mixture/acs = enemy_tile.return_air()
 				if(!acs)
 					continue
 				if(!acs.check_combustability(enemy_tile))

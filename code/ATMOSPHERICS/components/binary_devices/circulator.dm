@@ -48,8 +48,8 @@
 		return
 
 	var/datum/gas_mixture/removed
-	var/input_starting_pressure = air1.pressure
-	var/output_starting_pressure = air2.pressure
+	var/input_starting_pressure = air1.return_pressure()
+	var/output_starting_pressure = air2.return_pressure()
 	last_pressure_delta = max(input_starting_pressure - output_starting_pressure - 5, 0)
 
 	//Only circulate air if there is a pressure difference (plus 5kPa kinetic, 10kPa static friction).

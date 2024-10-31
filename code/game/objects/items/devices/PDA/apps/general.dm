@@ -389,14 +389,14 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 	if (isnull(user.loc))
 		dat += "Unable to obtain a reading.<br>"
 	else
-		var/datum/gas_mixture/environment = user.loc.return_readonly_air()
+		var/datum/gas_mixture/environment = user.loc.return_air()
 
 		if(!environment)
 			dat += "No gasses detected.<br>"
 
 		else
-			var/pressure = environment.pressure
-			var/total_moles = environment.total_moles
+			var/pressure = environment.return_pressure()
+			var/total_moles = environment.total_moles()
 
 			dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"
 

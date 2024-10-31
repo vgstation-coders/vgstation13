@@ -187,7 +187,7 @@
 	if (!isliving(user))
 		return
 	var/turf/T = get_turf(src)
-	var/datum/gas_mixture/env = T.return_readonly_air()
+	var/datum/gas_mixture/env = T.return_air()
 	if(env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME)
 		to_chat(user, "<span class='notice'>You try to light \the [name], but it won't catch on fire!")
 		return
@@ -366,7 +366,7 @@
 	//						to_chat(world, "now at [removed.temperature]")
 
 						env.merge(removed)
-						afterheat(L.return_readonly_air())
+						afterheat(L.return_air())
 
 			 if(!istype(loc,/turf/space))
 			 	for (var/mob/living/carbon/M in view(src,light_range_on))
@@ -382,7 +382,7 @@
 	if(!on)
 		return
 	var/turf/simulated/T = loc
-	var/datum/gas_mixture/env = T.return_readonly_air()
+	var/datum/gas_mixture/env = T.return_air()
 	if(Floor(cell.charge/10) != lastcharge)
 		update_icon()
 	if((!(cell && cell.charge > 0) && (nocell != 2)) || !istype(T) || (env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME))

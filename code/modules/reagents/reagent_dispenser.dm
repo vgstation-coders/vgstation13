@@ -940,7 +940,7 @@
 
 /obj/structure/reagent_dispensers/cauldron/barrel/proc/start_fire(mob/user)
 	var/turf/T = get_turf(src)
-	var/datum/gas_mixture/G = T.return_readonly_air()
+	var/datum/gas_mixture/G = T.return_air()
 	if(!G || G.molar_density(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
 		visible_message("<span class = 'warning'>\The [src] fails to ignite due to lack of oxygen.</span>")
 		return 0

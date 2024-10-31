@@ -136,7 +136,6 @@
 	key = "fart"
 	key_third_person = "farts"
 	stat_allowed = UNCONSCIOUS
-
 /datum/emote/living/carbon/human/fart/run_emote(mob/user, params, type_override, ignore_status = FALSE)
 	if(!(type_override) && !(can_run_emote(user, !ignore_status))) // ignore_status == TRUE means that status_check should be FALSE and vise-versa
 		return FALSE
@@ -144,7 +143,17 @@
 	if(H.op_stage.butt == SURGERY_NO_BUTT)
 		return FALSE // Can't fart without an arse (dummy)
 
-	if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? H.fartCooldown : H.fartCooldown  * 2))
+	var/fartcooldownmodifier = 1
+	if(H.disabilities & LACTOSE)
+		fartcooldownmodifier *= 0.5
+	if(H.reagents && H.reagents.has_reagent(IRRADIATEDBEANS))
+		fartcooldownmodifier *= 0.5
+	if(H.reagents && H.reagents.has_reagent(REFRIEDBEANS))
+		fartcooldownmodifier *= 0.5
+	if(H.reagents && H.reagents.has_reagent(MUTATEDBEANS))
+		fartcooldownmodifier *= 0.5
+
+	if(world.time - H.lastFart <= floor(H.fartCooldown * fartcooldownmodifier)) //default cooldown is 20s
 		if(H.stat != UNCONSCIOUS)
 			message = "strains, and nothing happens."
 			emote_type = EMOTE_VISIBLE

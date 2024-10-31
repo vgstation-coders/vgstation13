@@ -35,7 +35,7 @@
 		processing_objects.Remove(src)
 		return
 	var/turf/T=loc
-	var/datum/gas_mixture/env = T.return_readonly_air()
+	var/datum/gas_mixture/env = T.return_air()
 	if(melt_temperature > env.temperature && molten && prob(5))
 		molten=0
 		solidify()

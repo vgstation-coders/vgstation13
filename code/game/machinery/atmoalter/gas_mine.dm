@@ -89,8 +89,8 @@
 //unless running on exernal power, which raises the pressure limit the more power you add
 /obj/machinery/atmospherics/miner/proc/tranfer_gas()
 	pumping.copy_from(air_contents)
-	var/datum/gas_mixture/environment = loc.return_readonly_air()
-	var/environment_pressure = environment.pressure
+	var/datum/gas_mixture/environment = loc.return_air()
+	var/environment_pressure = environment.return_pressure()
 	var/extra_power_pressure_bonus = 0
 	extra_power_pressure_bonus = active_power_usage * WATT_TO_KPA_OF_EXTERNAL_PRESSURE_LIMIT
 /*	if(power_connection.connected)	//raise max pressure if powered

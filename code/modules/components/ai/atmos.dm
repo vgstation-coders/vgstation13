@@ -31,7 +31,7 @@
 
 	if(isturf(A))
 		var/turf/T = A
-		var/datum/gas_mixture/Environment = T.return_readonly_air()
+		var/datum/gas_mixture/Environment = T.return_air()
 
 		if(Environment)
 			if(abs(Environment.temperature - dude.bodytemperature) > min_overheat_temp)

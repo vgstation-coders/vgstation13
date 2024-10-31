@@ -267,18 +267,6 @@
 			make_air()
 		return air
 
-/turf/simulated/return_readonly_air() //does not mark zone for air updates
-	if(zone)
-		if(!zone.invalid)
-			return zone.air
-		else
-			c_copy_air()
-			return air
-	else
-		if(!air)
-			make_air()
-		return air
-
 /turf/proc/make_air()
 	air = new/datum/gas_mixture
 	air.temperature = temperature

@@ -99,7 +99,7 @@
 		user.show_message(analyzer.output_gas_scan(src.air_contents, src, 0), 1)
 		src.add_fingerprint(user)
 	else if (istype(W, /obj/item/clothing/gloves/latex) || (istype(W, /obj/item/toy/balloon) && !istype(W, /obj/item/toy/balloon/inflated)))
-		if(air_contents.pressure >= ONE_ATMOSPHERE)
+		if(air_contents.return_pressure() >= ONE_ATMOSPHERE)
 			to_chat(user, "You inflate \the [W] using \the [src].")
 			if(istype(W, /obj/item/toy/balloon))
 				var/obj/item/toy/balloon/B = W
@@ -134,7 +134,7 @@
 
 	// this is the data which will be sent to the ui
 	var/data[0]
-	data["tankPressure"] = round(air_contents.pressure ? air_contents.pressure : 0)
+	data["tankPressure"] = round(air_contents.return_pressure() ? air_contents.return_pressure() : 0)
 	data["releasePressure"] = round(distribute_pressure ? distribute_pressure : 0)
 	data["defaultReleasePressure"] = round(TANK_DEFAULT_RELEASE_PRESSURE)
 	data["maxReleasePressure"] = round(TANK_MAX_RELEASE_PRESSURE)
@@ -244,7 +244,7 @@
 	if(!air_contents)
 		return 0
 
-	var/pressure = air_contents.pressure
+	var/pressure = air_contents.return_pressure()
 
 	if(pressure > TANK_FRAGMENT_PRESSURE)
 
@@ -256,7 +256,7 @@
 		air_contents.react()
 		air_contents.react()
 		air_contents.react()
-		pressure = air_contents.pressure
+		pressure = air_contents.return_pressure()
 		var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
 		score.largest_TTV = max(score.largest_TTV, range)
 		if(range > MAX_EXPLOSION_RANGE)

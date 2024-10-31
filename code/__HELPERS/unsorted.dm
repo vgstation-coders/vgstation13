@@ -845,7 +845,7 @@
 					B.icon_state = old_icon_state
 					B.icon = old_icon
 
-					B.return_air().copy_from(T.return_readonly_air())
+					B.return_air().copy_from(T.return_air())
 
 					for(var/obj/O in T)
 						copiedobjs += O.DuplicateObject(B)

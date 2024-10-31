@@ -172,10 +172,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	if(handle_item_attack(W, user))
 		return
-
+	
 	if(emag_check(W,user))
 		. = 1
-
+			
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
@@ -461,7 +461,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	..()
 
 /obj/item/proc/checksmoke()
-	var/datum/gas_mixture/G = return_readonly_air()
+	var/datum/gas_mixture/G = return_air()
 	if(!G)
 		return
 	while(G.temperature >= (autoignition_temperature * 0.75))
@@ -473,7 +473,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		var/rate = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
 		adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
 		sleep(10 SECONDS)
-		G = return_readonly_air()
+		G = return_air()
 	remove_particles(PS_SMOKE)
 	smoking = FALSE
 

@@ -25,7 +25,7 @@
 	handle_beams()
 
 	if(loc)
-		var/datum/gas_mixture/environment = loc.return_readonly_air()
+		var/datum/gas_mixture/environment = loc.return_air()
 		handle_pressure_damage(environment)
 		handle_heat_damage(environment)
 

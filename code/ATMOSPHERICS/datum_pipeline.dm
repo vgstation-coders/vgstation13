@@ -28,7 +28,7 @@
 /datum/pipeline/proc/process()//This use to be called called from the pipe networks
 	if((world.timeofday - last_pressure_check) / 10 >= PRESSURE_CHECK_DELAY)
 		//Check to see if pressure is within acceptable limits
-		var/pressure = air.pressure
+		var/pressure = air.return_pressure()
 		if(pressure > alert_pressure)
 			for(var/obj/machinery/atmospherics/pipe/member in members)
 				if(!member.check_pressure(pressure))

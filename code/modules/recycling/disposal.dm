@@ -251,7 +251,7 @@
 	var/list/data[0]
 
 	if(air_contents)
-		data["pressure"] = round(100 * air_contents.pressure / (SEND_PRESSURE))
+		data["pressure"] = round(100 * air_contents.return_pressure() / (SEND_PRESSURE))
 	data["flush"] = flush
 	data["mode"] = mode
 	data["isAI"] = isAI(user)
@@ -261,7 +261,7 @@
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
 		// the ui does not exist, so we'll create a new() one
-		// for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
+		// for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm 
 		ui = new(user, src, ui_key, template_path, "Waste Disposal Unit", 430, 150)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
@@ -379,7 +379,7 @@
 
 	src.updateDialog()
 
-	if(flush && air_contents.pressure >= SEND_PRESSURE )	// flush can happen even without power
+	if(flush && air_contents.return_pressure() >= SEND_PRESSURE )	// flush can happen even without power
 		spawn(0)
 			flush()
 
@@ -397,7 +397,7 @@
 	var/atom/L = loc						// recharging from loc turf
 
 	var/datum/gas_mixture/env = L.return_air()
-	var/pressure_delta = (SEND_PRESSURE*1.01) - air_contents.pressure
+	var/pressure_delta = (SEND_PRESSURE*1.01) - air_contents.return_pressure()
 
 	if(env.temperature > 0)
 		var/transfer_moles = 0.1 * pressure_delta * air_contents.volume / (env.temperature * R_IDEAL_GAS_EQUATION)
@@ -408,7 +408,7 @@
 
 
 	// if full enough, switch to ready mode
-	if(air_contents.pressure >= SEND_PRESSURE)
+	if(air_contents.return_pressure() >= SEND_PRESSURE)
 		mode = 2
 		update_icon()
 	return

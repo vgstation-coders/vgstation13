@@ -184,6 +184,7 @@
 	var/skip_minimap_generation = 0 //If 1, don't generate minimaps
 	var/skip_holominimap_generation = 0 //If 1, don't generate holominimaps
 	var/skip_vault_generation = 0 //If 1, don't generate vaults
+	var/skip_fixedvault_generation = 0 //If 1, don't generate fixed vaults
 	var/disable_vault_rotation = 0 //If 1, don't load vaults rotated
 	var/shut_up_automatic_diagnostic_and_announcement_system = 0 //If 1, don't play the vox sounds at the start of every shift.
 	var/no_lobby_music = 0 //If 1, don't play lobby music, regardless of client preferences.
@@ -624,6 +625,8 @@
 					skip_holominimap_generation = 1
 				if("skip_vault_generation")
 					skip_vault_generation = 1
+				if("skip_fixedvault_generation")
+					skip_fixedvault_generation = 1
 				if("disable_vault_rotation")
 					disable_vault_rotation = 1
 				if("shut_up_automatic_diagnostic_and_announcement_system")

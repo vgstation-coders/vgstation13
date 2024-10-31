@@ -464,7 +464,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/process_occupant()
-	if(air_contents.total_moles < 10)
+	if(air_contents.total_moles() < 10)
 		return
 	if(istype(occupant, /mob/living/simple_animal/))
 		go_out()
@@ -510,7 +510,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		occupant.bodytemperature = mix(occupant.bodytemperature, T0C + 37, 0.6)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/heat_gas_contents()
-	if(air_contents.total_moles < 1)
+	if(air_contents.total_moles() < 1)
 		return
 	var/air_heat_capacity = air_contents.heat_capacity()
 	var/combined_heat_capacity = current_heat_capacity + air_heat_capacity
@@ -519,7 +519,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		air_contents.temperature = combined_energy/combined_heat_capacity
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/expel_gas()
-	if(air_contents.total_moles < 1)
+	if(air_contents.total_moles() < 1)
 		return
 //	var/datum/gas_mixture/expel_gas = new
 //	var/remove_amount = air_contents.total_moles()/50

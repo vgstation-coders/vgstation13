@@ -56,7 +56,7 @@
 
 	use_power(5)
 
-	var/datum/gas_mixture/environment = target.return_readonly_air()
+	var/datum/gas_mixture/environment = target.return_air()
 	if(!environment)
 		overlays += "meterX"
 		//update_moody_light("meterX",255,whiteout) // floor moody lights don't look so good
@@ -65,7 +65,7 @@
 		spawn(0) qdel(src)
 		return PROCESS_KILL
 
-	var/env_pressure = environment.pressure
+	var/env_pressure = environment.return_pressure()
 	var/state
 	switch(env_pressure*ONE_ATMOSPHERE)
 		if(0.15 to 1.8)
@@ -114,9 +114,9 @@
 /obj/machinery/meter/proc/status()
 	var/t = ""
 	if (src.target)
-		var/datum/gas_mixture/environment = target.return_readonly_air()
+		var/datum/gas_mixture/environment = target.return_air()
 		if(environment)
-			t += "The pressure gauge reads [round(environment.pressure, 0.01)] kPa; [environment.temperature_kelvin_pretty()]K ([environment.temperature_celsius_pretty()]&deg;C)"
+			t += "The pressure gauge reads [round(environment.return_pressure(), 0.01)] kPa; [environment.temperature_kelvin_pretty()]K ([environment.temperature_celsius_pretty()]&deg;C)"
 		else
 			t += "The sensor error light is blinking."
 	else

@@ -8,7 +8,7 @@
 	blinded = null
 	var/datum/gas_mixture/environment // Added to prevent null location errors-- TLE
 	if(loc)
-		environment = loc.return_readonly_air()
+		environment = loc.return_air()
 
 	if (stat != DEAD) //still breathing
 		//Lungs required beyond this point
@@ -217,7 +217,7 @@
 
 
 	//Account for massive pressure differences
-	var/pressure = environment.pressure
+	var/pressure = environment.return_pressure()
 	var/adjusted_pressure = calculate_affecting_pressure(pressure) //Returns how much pressure actually affects the mob.
 	switch(adjusted_pressure)
 		if(HAZARD_HIGH_PRESSURE to INFINITY)

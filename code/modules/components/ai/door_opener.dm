@@ -39,14 +39,14 @@
 	var/turf/simulated/lT=loc
 	if(!istype(lT) || !lT.zone)
 		return 0
-	var/datum/gas_mixture/myenv=lT.return_readonly_air()
-	var/pressure=myenv.pressure
+	var/datum/gas_mixture/myenv=lT.return_air()
+	var/pressure=myenv.return_pressure()
 
 	for(var/dir in cardinal)
 		var/turf/simulated/T=get_turf(get_step(loc,dir))
 		if(T && istype(T) && T.zone)
-			var/datum/gas_mixture/environment = T.return_readonly_air()
-			var/pdiff = abs(pressure - environment.pressure)
+			var/datum/gas_mixture/environment = T.return_air()
+			var/pdiff = abs(pressure - environment.return_pressure())
 			if(pdiff > max_pressure_diff)
 				return pdiff
 	return 0

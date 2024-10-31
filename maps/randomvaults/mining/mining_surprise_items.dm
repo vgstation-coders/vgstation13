@@ -239,7 +239,7 @@
 									"That ain't the kind of way I like to be offered plasma, so don't you even think about openin' that in here or there'll be trouble.",
 									"Plasma ain't a very stable or safe substance as a gas and definitely not if it were let outta that tank, so I ain't touchin that."))
 							return
-				var/datum/gas_mixture/current_air = checkloc.return_readonly_air()
+				var/datum/gas_mixture/current_air = checkloc.return_air()
 				if(current_air[GAS_PLASMA])
 					M.say(pick("Dangit when I said get some plasma, I meant in solid form! Now how's this place gonna get customers that ain't purple boney men!",
 							"Did you let GASEOUS plasma get all over my bar? I asked ya for solid plasma and you let it get dispersin' everywhere like this!",

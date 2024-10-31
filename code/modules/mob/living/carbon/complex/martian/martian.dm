@@ -138,5 +138,5 @@
 			if(fishbowl.tank && istype(fishbowl.tank, /obj/item/weapon/tank))
 				var/obj/item/weapon/tank/internal = fishbowl.tank
 				stat("Internal Atmosphere Info", internal.name)
-				stat("Tank Pressure", internal.air_contents.pressure)
+				stat("Tank Pressure", internal.air_contents.return_pressure())
 				stat("Distribution Pressure", internal.distribute_pressure)

@@ -274,7 +274,7 @@
 
 	for(var/g in gas)
 		var/moles = gas[g] * ratio
-		gas[g] -= QUANTIZE(moles)
+		gas[g] -= moles
 		removed[g] += moles
 
 	removed.temperature = temperature
@@ -344,14 +344,13 @@
 
 //Copies the gases from sample to src, per unit volume.
 /datum/gas_mixture/proc/copy_from(datum/gas_mixture/sample)
-	gas = sample.gas.Copy()
+	gas.len = 0
+	for(var/g in sample.gas)
+		src[g] = sample.gas[g]
+
 	temperature = sample.temperature
-	var/list/cached_gas = gas
-	for(var/id in cached_gas)
-		cached_gas[id] = QUANTIZE(cached_gas[id])
 
 	multiply(volume / sample.volume)
-	update_values()
 	return 1
 
 //The general form of the calculation used in compare() to check if two numbers are separated by at least a given abslute value AND relative value.
@@ -407,7 +406,7 @@
 
 /datum/gas_mixture/proc/multiply(factor)
 	for(var/g in gas)
-		gas[g] *= QUANTIZE(factor)
+		gas[g] *= factor
 
 	update_values()
 	return TRUE
@@ -427,8 +426,8 @@
 /datum/gas_mixture/proc/share_ratio(datum/gas_mixture/other, ratio)
 	var/total_volume = volume + other.volume
 
-	var/datum/gas_mixture/holder = remove_ratio(QUANTIZE(ratio * other.volume / total_volume))
-	merge(other.remove_ratio(QUANTIZE(ratio * volume / total_volume)))
+	var/datum/gas_mixture/holder = remove_ratio(ratio * other.volume / total_volume)
+	merge(other.remove_ratio(ratio * volume / total_volume))
 	other.merge(holder)
 
 

@@ -161,6 +161,22 @@
 	agony = 15
 	penetration = 2
 
+/obj/item/projectile/bullet/auto380/to_bump(atom/A)
+	. = ..()
+	if(A && shot_from.type == /obj/item/weapon/gun/projectile/glock/fancy/kitchengun)
+		var/obj/item/weapon/gun/projectile/glock/fancy/kitchengun/K = shot_from
+		if(!(A in K.cleaning_targets)) // BUT WITH THREE SHOTS FROM KITCHEN GUN
+			K.cleaning_targets += A // BANG
+		K.cleaning_targets[A]++ // BANG
+		if(K.cleaning_targets[A] > 2) // BANG
+			var/turf/T = get_turf(A)
+			T.clean_act(CLEANLINESS_BLEACH)
+			for(var/obj/O in T)
+				O.clean_act(CLEANLINESS_BLEACH)
+			A.clean_act(CLEANLINESS_BLEACH) // AND IT SPARKLES LIKE NEW
+			K.cleaning_targets[A] = 0
+			K.cleaning_targets -= A
+
 /obj/item/projectile/bullet/auto380/practice
 	damage = 2
 	agony = 0
@@ -755,7 +771,7 @@
 	if(!gas_jet)
 		bullet_die()
 	else
-		original_total_moles = gas_jet.total_moles
+		original_total_moles = gas_jet.total_moles()
 
 /obj/item/projectile/bullet/fire_plume/proc/create_puff()
 	if(gas_jet)
@@ -868,7 +884,7 @@
 	var/datum/gas_mixture/firemix = new /datum/gas_mixture
 	firemix.adjust_gas(GAS_PLASMA, 666)
 	gas_jet = firemix
-	jet_pressure = firemix.pressure
+	jet_pressure = firemix.return_pressure()
 	gas_jet.temperature = 383.15
 	burn_strength = gas_jet.temperature
 

@@ -5,8 +5,8 @@
 			T:zone:dbg_data(src)
 		else
 			to_chat(mob, "No zone here.")
-			var/datum/gas_mixture/mix = T.return_readonly_air()
-			to_chat(mob, "[mix.pressure] kPa [mix.temperature]C")
+			var/datum/gas_mixture/mix = T.return_air()
+			to_chat(mob, "[mix.return_pressure()] kPa [mix.temperature]C")
 			to_chat(mob, "O2: [mix[GAS_OXYGEN]] N2: [mix[GAS_NITROGEN]] CO2: [mix[GAS_CARBON]] TX: [mix[GAS_PLASMA]]")
 	else
 		if(zone_debug_images)

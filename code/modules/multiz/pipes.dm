@@ -62,9 +62,9 @@
 		. = PROCESS_KILL
 
 /obj/machinery/atmospherics/pipe/zpipe/check_pressure(pressure)
-	var/datum/gas_mixture/environment = loc.return_readonly_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 
-	var/pressure_difference = pressure - environment.pressure
+	var/pressure_difference = pressure - environment.return_pressure()
 
 	if(pressure_difference > maximum_pressure)
 		burst()
