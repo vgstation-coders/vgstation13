@@ -621,6 +621,7 @@ var/list/datum/stack_recipe/gingerbread_recipes = list ( \
 	starting_materials = list(MAT_RETICULITE = CC_PER_SHEET_RETICULITE)
 
 var/list/datum/stack_recipe/reticulite_recipes = list(
+	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/mineral/reticulite, 1, 4, 60),
 	new/datum/stack_recipe("GDR closet", /obj/structure/closet/ayy, 2, one_per_turf = 1, time = 15),
 	new/datum/stack_recipe("MDF closet", /obj/structure/closet/ayy2, 2, one_per_turf = 1, time = 15),
 	new/datum/stack_recipe("Laborer closet", /obj/structure/closet/ayy3, 2, one_per_turf = 1, time = 15),

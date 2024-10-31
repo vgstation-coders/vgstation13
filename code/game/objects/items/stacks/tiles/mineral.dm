@@ -213,5 +213,18 @@
 
 	material  = "gingerbread"
 
+/obj/item/stack/tile/mineral/reticulite
+	name = "reticulite tile"
+	singular_name = "reticulite floor tile"
+	desc = "A hexagonally shaped tile made out of reticulite."
+	icon_state = "tile_reticulite"
+	w_class = W_CLASS_MEDIUM
+	force = 1.0
+	throwforce = 1.0
+	throw_speed = 3
+	throw_range = 7
+	max_amount = 60
 
-
+	material = "reticulite"
+	starting_materials = list(MAT_RETICULITE = CC_PER_SHEET_RETICULITE / 4) // Recipe requires 1 sheet for 4 tiles
+	w_type = RECYK_METAL
