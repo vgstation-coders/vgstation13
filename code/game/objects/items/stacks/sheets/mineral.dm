@@ -608,6 +608,7 @@ var/list/datum/stack_recipe/gingerbread_recipes = list ( \
 /obj/item/stack/sheet/mineral/reticulite
 	name = "reticulite"
 	desc = "Abducted from distant mines you've probably been nowhere near. At least as far as you remember."
+	singular_name = "reticulite plate"
 	icon_state = "sheet-reticulite"
 	force = 5.0
 	throwforce = 5
