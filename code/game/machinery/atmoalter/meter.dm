@@ -70,7 +70,7 @@
 	switch(env_pressure*ONE_ATMOSPHERE)
 		if(0.15 to 1.8)
 			state = "meter1_[round(env_pressure/(ONE_ATMOSPHERE*0.3) + 0.5)]"
-		if(0.15 to 30)
+		if(1.8 to 30)
 			state = "meter2_[round(env_pressure/(ONE_ATMOSPHERE*5)-0.35) + 1]"
 		if(30 to 59)
 			state = "meter3_[round(env_pressure/(ONE_ATMOSPHERE*5) - 6) + 1]"
