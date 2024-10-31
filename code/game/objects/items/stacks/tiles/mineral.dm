@@ -225,6 +225,10 @@
 	throw_range = 7
 	max_amount = 60
 
-	material = "reticulite"
+	material = "alien_tile1"
 	starting_materials = list(MAT_RETICULITE = CC_PER_SHEET_RETICULITE / 4) // Recipe requires 1 sheet for 4 tiles
 	w_type = RECYK_METAL
+
+/obj/item/stack/tile/mineral/reticulite/fancy
+	name = "ornate reticulite tile"
+	material = "alien_tile_fancy"

@@ -622,6 +622,7 @@ var/list/datum/stack_recipe/gingerbread_recipes = list ( \
 
 var/list/datum/stack_recipe/reticulite_recipes = list(
 	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/mineral/reticulite, 1, 4, 60),
+	new/datum/stack_recipe("ornate floor tile", /obj/item/stack/tile/mineral/reticulite/fancy, 1, 4, 60),
 	null,
 	new/datum/stack_recipe("GDR closet", /obj/structure/closet/ayy, 2, one_per_turf = 1, time = 15),
 	new/datum/stack_recipe("MDF closet", /obj/structure/closet/ayy2, 2, one_per_turf = 1, time = 15),

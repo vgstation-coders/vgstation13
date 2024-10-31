@@ -89,6 +89,22 @@
 /turf/simulated/floor/mineral/phazon/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/phazon(null)
 
+//AYYLMAO
+
+/turf/simulated/floor/mineral/reticulite
+	name = "alien plating"
+	icon_state = "alien_tile1"
+
+/turf/simulated/floor/mineral/reticulite/create_floor_tile()
+	floor_tile = new /obj/item/stack/tile/mineral/reticulite(null)
+
+/turf/simulated/floor/mineral/reticulite/fancy
+	name = "ornate alien plating"
+	icon_state = "alien_tile_fancy"
+
+/turf/simulated/floor/mineral/reticulite/fancy/create_floor_tile()
+	floor_tile = new /obj/item/stack/tile/mineral/reticulite/fancy(null)
+
 //BRASS
 
 /turf/simulated/floor/mineral/clockwork
