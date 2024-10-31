@@ -506,6 +506,7 @@
 /datum/reagent/ethanol/scientists_serendipity/secret/when_drinkingglass_master_reagent(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
 	. = ..()
 	if(volume >= 50)
+		flags = CHEMFLAG_OBSCURING
 		glass_icon_state = "scientists_serendipity"
 		glass_name = "\improper Scientist's Supreme Secret"
 		glass_desc = "You are not cleared to know the contents of this glass"
