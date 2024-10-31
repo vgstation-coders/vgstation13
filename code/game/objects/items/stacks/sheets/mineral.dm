@@ -634,3 +634,5 @@ var/list/datum/stack_recipe/reticulite_recipes = list(
 	recipes = reticulite_recipes
 	..()
 
+/obj/item/stack/sheet/mineral/reticulite/dissolvable()
+	return WATER
