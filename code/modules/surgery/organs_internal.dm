@@ -323,6 +323,7 @@ var/static/list/partstobraindamagetype = list(
 			cutverb = "separate"
 			cutverbed = "separated"
 	else
+		brain_damagetype = null
 		cutverb = "separate"
 		cutverbed = "separated"
 	return ..() && organ_to_remove && I && istype(I) && I.CanRemove(target, user)
@@ -346,6 +347,7 @@ var/static/list/partstobraindamagetype = list(
 		if(brain_damagetype && istype(I,/datum/organ/internal/brain))
 			var/datum/organ/internal/brain/sponge = I
 			sponge.specific_damages[brain_damagetype] += min(rand(61,65),target.maxHealth)
+			brain_damagetype = null
 		else if(I.CanRemove(target, user, quiet=1))
 			I.Remove(target, user)
 			I.status |= ORGAN_CUT_AWAY
