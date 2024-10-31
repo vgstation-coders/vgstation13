@@ -119,7 +119,7 @@
 	explosion_block = 9999
 	walltype = "alloy"
 	
-/turf/simulated/wall/mineral/ayy
+/turf/simulated/wall/mineral/reticulite
 	name = "alien alloy wall"
 	desc = "A solid wall of an unknown alloy. It's oddly warm to the touch, and seems to pulse rhymically."
 	icon_state = "alloy"
