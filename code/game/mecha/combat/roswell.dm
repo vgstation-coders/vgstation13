@@ -27,6 +27,16 @@
 /obj/mecha/combat/roswell/Process_Spacemove(var/check_drift = 0) //invaders from outer spaaace
 	return TRUE
     
+/obj/mecha/combat/roswell/process()
+    . = ..()
+    //Flying
+    if(occupant)
+        spawn()
+            animate(src, pixel_y = pixel_y + 5 * PIXEL_MULTIPLIER, time = 10, loop = 1, easing = SINE_EASING)
+        spawn(10)
+            if(occupant)
+                animate(src, pixel_y = pixel_y - 5 * PIXEL_MULTIPLIER, time = 10, loop = 1, easing = SINE_EASING)
+
 /obj/effect/decal/mecha_wreckage/roswell
     name = "downed weather balloon"
     desc = "Seems legit"
