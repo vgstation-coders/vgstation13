@@ -245,7 +245,7 @@
 	build_path = /obj/item/weapon/storage/pneumatic
 
 /datum/design/stunprobe
-	name = "Stun probe"
+	name = "Stun Probe"
 	desc = "A strange stunprod-like stick that delivers shocks instead of stuns."
 	id = "stunprobe"
 	req_tech = list(Tc_COMBAT = 3, Tc_POWERSTORAGE = 2, Tc_ALIEN = 3)
@@ -255,7 +255,7 @@
 	build_path = /obj/item/weapon/melee/stunprobe
 
 /datum/design/smalldisintegrator
-	name = "Small disintegrator"
+	name = "Small Disintegrator"
 	desc = "A strange self defense weapon with two modes, microwave and scorch."
 	id = "smalldisintegrator"
 	req_tech = list(Tc_COMBAT = 3, Tc_MAGNETS = 2, Tc_MATERIALS = 1, Tc_ALIEN = 5)
