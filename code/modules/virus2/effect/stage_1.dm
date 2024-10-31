@@ -225,7 +225,7 @@
 	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/socialconfusion/activate(var/mob/living/mob)
-	if(mob.isUnconscious() || mob.getBrainLoss() >= 10)
+	if(mob.isUnconscious() || mob.getBrainLoss("speech") >= 10)
 		return 1
 
 	var/mob/living/nearest_mob = null
