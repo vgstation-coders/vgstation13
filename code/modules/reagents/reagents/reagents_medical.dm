@@ -1042,6 +1042,10 @@ var/global/list/charcoal_doesnt_remove=list(
 			if(I.damage)
 				I.damage = max(0, I.damage - 5) //Heals a whooping 5 organ damage.
 				holder.remove_reagent(MEDNANOBOTS, 0.10) //Less so it doesn't vanish the nanobot supply
+			if(istype(I,/datum/organ/internal/brain))
+				var/datum/organ/internal/brain/B = I
+				for(var/damtype in B.specific_damages)
+					B.specific_damages[damtype] = max(0, B.specific_damages[damtype] - 5) //Heals a whooping 5 damage.
 			I.status &= ~ORGAN_BROKEN //What do I owe you?
 			I.status &= ~ORGAN_SPLINTED //Nothing, it's for free!
 			I.status &= ~ORGAN_BLEEDING //FOR FREE?!
