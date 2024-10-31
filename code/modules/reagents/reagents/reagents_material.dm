@@ -73,6 +73,8 @@
 
 	if(method == TOUCH && ishuman(M) && !isgrey(M))
 		var/mob/living/carbon/human/H = M
+		if(H.species.flags & NO_BLOOD)
+			return
 		var/screamed = FALSE
 		for(var/part in zone_sels)
 			if(H.check_body_part_coverage(limb_define_to_part_define(part)))
