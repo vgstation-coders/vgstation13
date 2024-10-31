@@ -1011,6 +1011,17 @@
 /datum/chemical_reaction/solidification/phazon/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/phazon
 
+/datum/chemical_reaction/solidification/reticulite
+	name = "Solid Reticulite"
+	id = "solidreticulite"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, ZETADUST = 20)
+	required_catalysts = list(SACID = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/reticulite/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/reticulite
+
 /datum/chemical_reaction/solidification/glass
 	name = "Solid Glass"
 	id = "solidglass"
