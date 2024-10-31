@@ -604,3 +604,33 @@ var/list/datum/stack_recipe/gingerbread_recipes = list ( \
 /obj/item/stack/sheet/mineral/gingerbread/New(var/loc, var/amount=null)
 	recipes = gingerbread_recipes
 	..()
+
+/obj/item/stack/sheet/mineral/reticulite
+	name = "reticulite"
+	desc = "Abducted from distant mines you've probably been nowhere near. At least as far as you remember."
+	icon_state = "sheet-reticulite"
+	force = 5.0
+	throwforce = 5
+	w_class = W_CLASS_MEDIUM
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = Tc_MATERIALS + "=5" + Tc_ALIEN + "=1"
+	perunit = CC_PER_SHEET_RETICULITE
+	mat_type = MAT_RETICULITE
+	starting_materials = list(MAT_RETICULITE = CC_PER_SHEET_RETICULITE)
+
+var/list/datum/stack_recipe/reticulite_recipes = list(
+	new/datum/stack_recipe("GDR closet", /obj/structure/closet/ayy, 2, one_per_turf = 1, time = 15),
+	new/datum/stack_recipe("MDF closet", /obj/structure/closet/ayy2, 2, one_per_turf = 1, time = 15),
+	new/datum/stack_recipe("Laborer closet", /obj/structure/closet/ayy3, 2, one_per_turf = 1, time = 15),
+	new/datum/stack_recipe("GDR crate", /obj/structure/closet/crate/ayy, 2, one_per_turf = 1, time = 15),
+	new/datum/stack_recipe("MDF crate", /obj/structure/closet/crate/ayy2, 2, one_per_turf = 1, time = 15),
+	new/datum/stack_recipe("MDF industrial crate", /obj/structure/closet/crate/ayy3, 2, one_per_turf = 1, time = 15),
+	new/datum/stack_recipe/chair("GDR basic chair",  /obj/structure/bed/chair/comfy/ayy1, 1, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe("GDR basic bed", /obj/structure/bed/ayy1, 2, one_per_turf = 1, on_floor = 1),
+)
+
+/obj/item/stack/sheet/mineral/reticulite/New(var/loc, var/amount=null)
+	recipes = reticulite_recipes
+	..()
+

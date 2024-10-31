@@ -347,16 +347,19 @@
 	icon_state = "ayychair1"
 	name = "GDR chair"
 	desc = "A plain chair manufactured by greys for other greys. Average comfort, but much better than a stool."
+	sheet_type = /obj/item/stack/sheet/mineral/reticulite
 
 /obj/structure/bed/chair/comfy/ayy2
 	icon_state = "ayychair2"
 	name = "GDR premium chair"
 	desc = "A premium chair manufactured by greys for more important greys. Surprisingly comfortable, good lumbar support."
+	sheet_type = /obj/item/stack/sheet/mineral/reticulite
 
 /obj/structure/bed/ayy1
 	name = "GDR standard bed"
 	desc = "Manufactured efficiently from basic alloys and sythetic threads. Quality may vary. "
 	icon_state = "ayybed1"
+	sheet_type = /obj/item/stack/sheet/mineral/reticulite
 
 /obj/structure/bed/ayy2
 	name = "GDR premium bed"
@@ -373,6 +376,7 @@
 	density = 1
 	icon_opened = "ayycrate1open"
 	icon_closed = "ayycrate1"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/crate/ayy2
 	name = "MDF crate"
@@ -382,6 +386,7 @@
 	density = 1
 	icon_opened = "ayycrate2open"
 	icon_closed = "ayycrate2"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/crate/ayy3
 	name = "GDR industrial crate"
@@ -391,6 +396,7 @@
 	density = 1
 	icon_opened = "ayycrate3open"
 	icon_closed = "ayycrate3"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/crate/secure/ayy_general
 	name = "GDR secure crate"
@@ -400,6 +406,7 @@
 	density = 1
 	icon_opened = "ayysecurecrate2open"
 	icon_closed = "ayysecurecrate2"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/crate/secure/ayy_mdf
 	name = "MDF secure crate"
@@ -409,6 +416,7 @@
 	density = 1
 	icon_opened = "ayysecurecrateopen"
 	icon_closed = "ayysecurecrate"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/ayy
 	name = "GDR locker"
@@ -416,6 +424,7 @@
 	icon_state = "ayy1_closed"
 	icon_closed = "ayy1_closed"
 	icon_opened = "ayy1_open"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/ayy2
 	name = "MDF locker"
@@ -423,6 +432,7 @@
 	icon_state = "ayy2_closed"
 	icon_closed = "ayy2_closed"
 	icon_opened = "ayy2_open"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/ayy3
 	name = "Laborer locker"
@@ -430,6 +440,7 @@
 	icon_state = "ayy3_closed"
 	icon_closed = "ayy3_closed"
 	icon_opened = "ayy3_open"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/secure_closet/ayy
 	name = "GDR secure locker"
@@ -440,6 +451,7 @@
 	icon_opened = "ayysecureopen"
 	icon_broken = "ayysecurebroken"
 	icon_off = "ayysecureoff"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/secure_closet/ayy2
 	name = "MDF secure locker"
@@ -450,6 +462,7 @@
 	icon_opened = "ayymdfsecureopen"
 	icon_broken = "ayymdfsecurebroken"
 	icon_off = "ayymdfsecureoff"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 /obj/structure/closet/secure_closet/ayy_leader
 	name = "Administrator's secure locker"
@@ -460,6 +473,7 @@
 	icon_opened = "leadersecureopen"
 	icon_broken = "leadersecurebroken"
 	icon_off = "leadersecureoff"
+	starting_materials = list(MAT_RETICULITE = 2*CC_PER_SHEET_RETICULITE)
 
 //////////////////////////////
 // NARRATION
