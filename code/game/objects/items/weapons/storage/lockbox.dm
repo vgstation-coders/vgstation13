@@ -10,6 +10,7 @@
 	req_one_access = list(access_armory)
 	var/locked = 1
 	var/broken = 0
+	var/startswithelectronics = TRUE
 	var/icon_locked = "lockbox+l"
 	var/icon_closed = "lockbox"
 	var/icon_broken = "lockbox+b"
@@ -19,7 +20,7 @@
 
 /obj/item/weapon/storage/lockbox/New()
 	. = ..()
-	if((req_access?.len) || (req_one_access?.len))
+	if(startswithelectronics)
 		electronics = new(src)
 		if(req_access?.len)
 			electronics.conf_access = req_access
@@ -29,6 +30,7 @@
 
 /obj/item/weapon/storage/lockbox/nolock
 	req_one_access = null
+	startswithelectronics = FALSE
 	icon_state = "lockbox+b"
 
 /obj/item/weapon/storage/lockbox/can_use()
@@ -322,8 +324,9 @@
 	icon_closed = "coinbox"
 	icon_broken = "coinbox+b"
 
-/obj/item/weapon/storage/lockbox/coinbox/allaccess	
+/obj/item/weapon/storage/lockbox/coinbox/nolock
 	req_one_access = null
+	startswithelectronics = FALSE
 	icon_state = "coinbox+b"
 
 /obj/item/weapon/storage/lockbox/lawgiver
@@ -394,6 +397,9 @@
 	icon_state = "map_diskbox_open"
 	locked = FALSE
 
+/obj/item/weapon/storage/lockbox/diskettebox/nolock
+	startswithelectronics = FALSE
+
 /obj/item/weapon/storage/lockbox/diskettebox/large
 	name = "large diskette box"
 	desc = "A bigger lockable box for storing data disks."
@@ -404,6 +410,9 @@
 /obj/item/weapon/storage/lockbox/diskettebox/large/open
 	icon_state = "map_diskbox_large_open"
 	locked = FALSE
+	
+/obj/item/weapon/storage/lockbox/diskettebox/large/nolock
+	startswithelectronics = FALSE
 
 //---------------------------------PRESETS---------------------------------
 
@@ -463,12 +472,12 @@
 	overlays.len = 0
 	icon_state = "diskbox[icon_alt]"
 	item_state = "diskbox"
-	if (!broken && !locked)
-		overlays += image('icons/obj/storage/datadisks.dmi',src,"cover[icon_alt]_open")
+	if (!broken && !locked && electronics)
+		overlays += image(icon,src,"cover[icon_alt]_open")
 
 	var/i = 0
 	for (var/obj/item/weapon/disk/disk in contents)
-		var/image/disk_image = image('icons/obj/storage/datadisks.dmi',src,disk.icon_state)
+		var/image/disk_image = image(icon,src,disk.icon_state)
 		if (icon_alt)
 			disk_image.pixel_x -= 3
 			if ((i % 2) != 0)
@@ -485,9 +494,9 @@
 		overlays += disk_image
 		i++
 
-	overlays += image('icons/obj/storage/datadisks.dmi',src,"overlay[icon_alt]")
+	overlays += image(icon,src,"overlay[icon_alt]")
 
-	if (!broken)
+	if (!broken && electronics)
 		overlays += image(icon, src, "led[locked]")
 		if(locked)
 			overlays += image(icon, src, "cover[icon_alt]")

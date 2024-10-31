@@ -60,6 +60,9 @@
 		new /obj/item/weapon/reagent_containers/food/drinks/mug(), \
 		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(), \
 		new /obj/item/weapon/storage/toolbox(), \
+		new /obj/item/weapon/storage/lockbox/unlockable(), \
+		new /obj/item/weapon/storage/lockbox/diskettebox(), \
+		new /obj/item/weapon/storage/lockbox/diskettebox/large(), \
 		new /obj/item/weapon/storage/lockbox/coinbox(), \
 		new /obj/item/weapon/reagent_containers/glass/jar(), \
 		),
