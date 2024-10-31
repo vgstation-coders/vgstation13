@@ -86,7 +86,7 @@
 	var/obj/item/weapon/card/id/I = W.GetID()
 	if (I)
 		if(!electronics)
-			to_chat(user, "<span class='warning'>There is nothing to unlock. Put an airlock electronics board in this to make it lockable.</span>")
+			to_chat(user, "<span class='warning'>There is nothing to unlock. Put an access electronics board in this to make it lockable.</span>")
 			return
 		if(broken)
 			to_chat(user, "<span class='warning'>It appears to be broken.</span>")

@@ -1323,7 +1323,7 @@ About the new airlock wires panel:
 			I.playtoolsound(loc, 100)
 			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 			// TODO: refactor the called proc
-			to_chat(user, "<span class='notice'>You removed the airlock electronics!</span>")
+			to_chat(user, "<span class='notice'>You removed the access electronics!</span>")
 			revert(user,null)
 			qdel(src)
 			return
