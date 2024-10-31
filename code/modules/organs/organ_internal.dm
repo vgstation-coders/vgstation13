@@ -212,7 +212,7 @@
 	organ_type = "brain"
 	removed_type = /obj/item/organ/internal/brain
 	vital = 1
-	var/list/specific_damages = list("motor" = 0,"coordination" = 0,"speech" = 0,"intelligence" = 0)
+	var/list/specific_damages = list("motor" = 0,"coordination" = 0,"speech" = 0,"intelligence" = 0,"sight" = 0)
 
 /datum/organ/internal/brain/ash
 	removed_type = /obj/item/organ/internal/brain/ash

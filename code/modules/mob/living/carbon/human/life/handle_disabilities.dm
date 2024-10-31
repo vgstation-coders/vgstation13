@@ -75,10 +75,8 @@
 		legfail()
 	else if(getBrainLoss("motor") > 35 && prob(1.5))
 		handfail()
-	else if(getBrainLoss() > 15 && prob(1.5))
-		if(eye_blurry <= 0)
-			to_chat(src, "<span class='warning'>It becomes hard to see for some reason.</span>")
-			eye_blurry = 10
+	else if(getBrainLoss("sight") > 15 && prob(1.5))
+		brain_eyeblur()
 	else if(getBrainLoss() > 0 && prob(2))
 		custom_pain("Your head feels numb and painful.")
 
@@ -91,6 +89,11 @@
 	if(get_active_hand())
 		to_chat(src, "<span class='warning'>Your hand won't respond properly, you drop what you're holding.</span>")
 		drop_item()
+
+/mob/living/carbon/human/proc/brain_eyeblur()
+	if(eye_blurry <= 0)
+		to_chat(src, "<span class='warning'>It becomes hard to see for some reason.</span>")
+		eye_blurry = 10
 
 /mob/living/carbon/human/proc/say_gibberish()
 	say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \

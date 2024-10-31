@@ -284,7 +284,8 @@ var/static/list/partstobraindamagetype = list(
 	"Cerebellum" = "motor",
 	"Frontal lobe" = "coordination",
 	"Broca's area" = "speech",
-	"Temporal lobe" = "intelligence"
+	"Temporal lobe" = "intelligence",
+	"Occipital lobe" = "sight"
 )
 
 /datum/surgery_step/internal/detatch_organ/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
