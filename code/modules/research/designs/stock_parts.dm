@@ -283,7 +283,7 @@
 	id = "s-gravitation"
 	req_tech = list(Tc_MAGNETS = 5, Tc_MATERIALS = 5, Tc_ALIEN = 2)
 	build_type = PROTOLATHE
-	materials = list(MAT_URANIUM = 50, MAT_RETICULITE = 50)
+	materials = list(MAT_GOLD = 50, MAT_RETICULITE = 50)
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/ayy/gravitator
 
@@ -293,6 +293,16 @@
 	id = "s-scrambler"
 	req_tech = list(Tc_PROGRAMMING = 4, Tc_MATERIALS = 5, Tc_ALIEN = 2)
 	build_type = PROTOLATHE
-	materials = list(MAT_SILVER = 25, MAT_GOLD = 25, MAT_RETICULITE = 50)
+	materials = list(MAT_DIAMOND = 50, MAT_RETICULITE = 50)
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/ayy/scrambler
+	
+/datum/design/probing_module
+	name = "Probing Module"
+	desc = "Alien module used to probe things for inspection."
+	id = "s-prober"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_MATERIALS = 5, Tc_ALIEN = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_SILVER = 50, MAT_RETICULITE = 50)
+	category = "Stock Parts"
+	build_path = /obj/item/weapon/stock_parts/ayy/prober

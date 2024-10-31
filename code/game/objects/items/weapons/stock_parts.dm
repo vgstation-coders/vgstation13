@@ -318,7 +318,7 @@
 	icon_state = "subspace_transmitter"
 	desc = "Alien device used to suspend gravity around itself."
 	origin_tech = Tc_MAGNETS + "=5;" + Tc_MATERIALS + "=5;" + Tc_ALIEN + "=2"
-	starting_materials = list(MAT_SILVER = 25, MAT_GOLD = 25, MAT_RETICULITE = 50)
+	starting_materials = list(MAT_GOLD = 50, MAT_RETICULITE = 50)
 	
 /obj/item/weapon/stock_parts/ayy/scrambler
 	name = "zepto scrambler"
@@ -326,3 +326,10 @@
 	desc = "Alien instrument used to scramble the material composition of things."
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_MATERIALS + "=5;" + Tc_ALIEN + "=2"
 	starting_materials = list(MAT_DIAMOND = 50, MAT_RETICULITE = 50)
+		
+/obj/item/weapon/stock_parts/ayy/prober
+	name = "probing module"
+	icon_state = "subspace_transmitter"
+	desc = "Alien module used to probe things for inspection."
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_MATERIALS + "=5;" + Tc_ALIEN + "=2"
+	starting_materials = list(MAT_SILVER = 50, MAT_RETICULITE = 50)
