@@ -42794,14 +42794,6 @@
 	icon_state = "freezerfloor"
 	},
 /area/syndicate_mothership)
-"bGA" = (
-/obj/structure/bed,
-/obj/item/weapon/bedsheet/rd,
-/turf/unsimulated/floor{
-	dir = 5;
-	icon_state = "carpetside"
-	},
-/area/wizard_station)
 "bGB" = (
 /obj/structure/rack,
 /obj/item/weapon/gun/projectile/shotgun/pump/combat{
