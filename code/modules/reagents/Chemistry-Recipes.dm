@@ -1155,7 +1155,7 @@
 	id = GREYZEPTOBOTS
 	result = GREYZEPTOBOTS
 	required_reagents = list(ZEPTOBOTS = 1, GREYGOO = 1)
-	result_amount = 2.5
+	result_amount = 2
 
 /datum/chemical_reaction/comnanobots
 	name = "Combat Nanobots"
