@@ -14,10 +14,20 @@
 	var/icon_closed = "lockbox"
 	var/icon_broken = "lockbox+b"
 	var/tracked_access = "It doesn't look like it's ever been used."
+	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	health = 50
 
+/obj/item/weapon/storage/lockbox/New()
+	. = ..()
+	electronics = new(src)
+	if(req_access && req_access.len)
+		electronics.conf_access = req_access
+	else if(req_one_access && req_one_access.len)
+		electronics.conf_access = req_one_access
+		electronics.one_access = 1
+
 /obj/item/weapon/storage/lockbox/can_use()
-	return broken || !locked
+	return broken || !locked || !electronics
 
 /obj/item/weapon/storage/lockbox/attack_robot(var/mob/user)
 	to_chat(user, "<span class='rose'>This box was not designed for use by non-organics.</span>")
@@ -66,28 +76,50 @@
 		qdel(src)
 
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W, mob/user)
-	if (isID(W))
-		var/obj/item/weapon/card/id/I = W
-		if(broken)
-			to_chat(user, "<span class='rose'>It appears to be broken.</span>")
-			return
-		return toggle(user, I.registered_name)
-	if (isPDA(W))
-		var/obj/item/device/pda/P = W
-		var/obj/item/weapon/card/id/I = P.id
-		if (!I)
+	var/obj/item/weapon/card/id/I = W.GetID()
+	if (I)
+		if(!electronics)
+			to_chat(user, "<span class='warning'>There is nothing to unlock. Put an airlock electronics board in this to make it lockable.</span>")
 			return
 		if(broken)
-			to_chat(user, "<span class='rose'>It appears to be broken.</span>")
+			to_chat(user, "<span class='warning'>It appears to be broken.</span>")
 			return
 		return toggle(user, I.registered_name)
-	if(!locked)
+	if(!electronics && istype(W,/obj/item/weapon/circuitboard/airlock))
+		if(W.icon_state != "door_electronics_smoked")
+			to_chat(user, "<span class='warning'>Repair \the [W] before putting it in!</span>")
+		else if(user.drop_item(W,src))
+			to_chat(user, "<span class='notice'>You add \the [electronics] to \the [src].</span>")
+			playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
+			electronics = W
+			if(electronics.conf_access?.len)
+				if(electronics.one_access)
+					req_one_access = electronics.conf_access
+				else
+					req_access = electronics.conf_access
+			icon_state = icon_locked
+			broken = 0
+			locked = 0
+	else if(!locked)
+		if(W.is_screwdriver() && electronics)
+			to_chat(user, "<span class='notice'>You unsecure \the [electronics] from \the [src].</span>")
+			W.playtoolsound(loc, 50)
+			electronics.forceMove(loc)
+			user.put_in_hands(electronics)
+			req_access = list()
+			req_one_access = list()
+			if(broken)
+				electronics.icon_state = "door_electronics_smoked"
+			broken = 0
+			icon_state = icon_broken
+			locked = 0
+			return
 		. = ..()
 	else
 		to_chat(user, "<span class='warning'>It's locked!</span>")
 
 /obj/item/weapon/storage/lockbox/emag_act(var/mob/user)
-	if (broken)
+	if (!electronics || broken)
 		return FALSE
 	broken = 1
 	locked = 0
@@ -237,6 +269,10 @@
 
 /obj/item/weapon/storage/lockbox/examine(mob/user)
 	..()
+	if(!electronics)
+		to_chat(user, "<span class='info'>It has no access electronics and cannot be locked.</span>")
+	else if(broken)
+		to_chat(user, "<span class='info'>The access locking is broken!</span>")
 	to_chat(user, "<span class='info'>[tracked_access]</span>")
 
 /obj/item/weapon/storage/lockbox/unlockable/attackby(obj/O as obj, mob/user as mob)
@@ -314,7 +350,7 @@
 	if(!Adjacent(usr) || usr.loc == src)
 		return
 
-	if(src.broken)
+	if(!src.electronics || src.broken)
 		return
 
 	if (ishuman(usr))
