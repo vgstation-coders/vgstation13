@@ -929,6 +929,9 @@
 			decapitated = null
 
 			qdel(B)
+	else
+		for(var/damage in BBrain.specific_damages)
+			BBrain.specific_damages[damage] = 0
 
 	for(var/datum/organ/internal/I in internal_organs)
 		I.damage = 0
