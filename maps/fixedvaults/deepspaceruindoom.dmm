@@ -1,0 +1,326 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/space,
+/area)
+"d" = (
+/obj/item/clothing/gloves/doomguy,
+/turf/space,
+/area)
+"g" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"k" = (
+/obj/structure/dispenser/oxygen,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area)
+"l" = (
+/obj/item/clothing/shoes/doomguy,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "floorscorched2"
+	},
+/area)
+"m" = (
+/obj/structure/table,
+/turf/simulated/floor/plating/airless,
+/area)
+"p" = (
+/turf/simulated/floor/plating/airless,
+/area)
+"t" = (
+/obj/structure/grille,
+/turf/simulated/floor/plating/airless,
+/area)
+"v" = (
+/turf/simulated/wall,
+/area)
+"D" = (
+/obj/item/clothing/suit/armor/doomguy,
+/turf/space,
+/area)
+"H" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "floorscorched1"
+	},
+/area)
+"J" = (
+/turf/simulated/floor/airless,
+/area)
+"M" = (
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged2"
+	},
+/area)
+"P" = (
+/obj/item/clothing/under/doomguy,
+/turf/simulated/floor/airless,
+/area)
+"Q" = (
+/obj/structure/grille/broken,
+/turf/simulated/floor/plating/airless,
+/area)
+"T" = (
+/obj/structure/computerframe,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "damaged5"
+	},
+/area)
+"U" = (
+/obj/structure/grille,
+/turf/simulated/floor/airless{
+	broken = 1;
+	icon_state = "floorscorched2"
+	},
+/area)
+"Z" = (
+/obj/item/clothing/head/helmet/doomguy,
+/turf/space,
+/area)
+
+(1,1,1) = {"
+a
+a
+a
+D
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(3,1,1) = {"
+a
+a
+a
+g
+g
+g
+g
+g
+a
+a
+a
+a
+a
+"}
+(4,1,1) = {"
+a
+a
+a
+g
+v
+v
+v
+v
+v
+g
+a
+a
+a
+"}
+(5,1,1) = {"
+a
+a
+a
+a
+v
+T
+p
+p
+v
+g
+a
+a
+a
+"}
+(6,1,1) = {"
+a
+a
+a
+a
+v
+m
+H
+p
+v
+v
+a
+a
+a
+"}
+(7,1,1) = {"
+a
+a
+a
+a
+v
+m
+M
+H
+t
+p
+g
+a
+a
+"}
+(8,1,1) = {"
+a
+a
+a
+a
+v
+J
+J
+P
+Q
+g
+a
+a
+a
+"}
+(9,1,1) = {"
+a
+a
+a
+a
+v
+p
+l
+J
+U
+v
+a
+a
+g
+"}
+(10,1,1) = {"
+a
+a
+a
+g
+a
+k
+p
+J
+p
+v
+a
+a
+a
+"}
+(11,1,1) = {"
+a
+a
+a
+g
+a
+a
+t
+v
+v
+a
+g
+g
+a
+"}
+(12,1,1) = {"
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+a
+"}
+(13,1,1) = {"
+d
+g
+a
+a
+a
+g
+g
+a
+a
+g
+g
+a
+a
+"}
+(14,1,1) = {"
+a
+g
+a
+a
+a
+g
+Z
+a
+a
+a
+a
+a
+a
+"}
+(15,1,1) = {"
+a
+a
+a
+a
+a
+g
+g
+a
+a
+a
+a
+a
+a
+"}
+(16,1,1) = {"
+a
+a
+a
+a
+a
+g
+a
+a
+a
+a
+a
+a
+a
+"}

@@ -65,6 +65,11 @@
 
 	return list_of_vaults
 
+/proc/generate_fixedvaults()
+	while(map_landmarks.len)
+		for(var/obj/effect/landmark/map_element/M in map_landmarks)
+			M.mapload()
+
 /proc/generate_vaults()
 	var/area/space = get_space_area()
 
