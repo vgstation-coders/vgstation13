@@ -85280,1169 +85280,14 @@
 	},
 /turf/space,
 /area)
-"dhe" = (
-/obj/structure/grille,
-/turf/simulated/floor/plating/airless,
-/area/djstation/solars)
-"dhf" = (
-/obj/machinery/power/solar/panel{
-	id_tag = "djstationsolar";
-	name = "DJ Station Solar Array"
-	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/turf/simulated/floor{
-	icon_state = "solarpanel"
-	},
-/area/djstation/solars)
-"dhg" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/catwalk,
-/turf/space,
-/area/djstation/solars)
-"dhh" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/machinery/power/solar/panel/tracker,
-/turf/simulated/floor{
-	icon_state = "solarpanel"
-	},
-/area/djstation/solars)
-"dhi" = (
-/obj/machinery/power/solar/panel{
-	id_tag = "djstationsolar";
-	name = "DJ Station Solar Array"
-	},
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/turf/simulated/floor{
-	icon_state = "solarpanel"
-	},
-/area/djstation/solars)
-"dhj" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/catwalk,
-/turf/space,
-/area/djstation/solars)
-"dhk" = (
-/obj/machinery/power/solar/panel{
-	id_tag = "djstationsolar";
-	name = "DJ Station Solar Array"
-	},
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/turf/simulated/floor{
-	icon_state = "solarpanel"
-	},
-/area/djstation/solars)
-"dhl" = (
-/turf/simulated/wall,
-/area/djstation)
-"dhm" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhn" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dho" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhp" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhq" = (
-/obj/machinery/power/solar/panel{
-	id_tag = "djstationsolar";
-	name = "DJ Station Solar Array"
-	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
-/turf/simulated/floor{
-	icon_state = "solarpanel"
-	},
-/area/djstation/solars)
-"dhr" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhs" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
-/obj/machinery/power/solar/control{
-	id_tag = "djstationsolar";
-	name = "DJ Station Solar Panel Control"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
-"dht" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning";
-	tag = "icon-warning (EAST)"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
-"dhu" = (
-/obj/machinery/light{
-	dir = 1
-	},
-/obj/machinery/media/transmitter/broadcast/dj{
-	heating_power = 0
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
-	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
-"dhv" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning";
-	tag = "icon-warning (WEST)"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
-"dhw" = (
-/obj/machinery/telecomms/relay/preset/ruskie,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
 "dhx" = (
 /obj/effect/landmark/spacepod/random,
 /turf/space,
 /area)
-"dhy" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/catwalk,
-/turf/space,
-/area/djstation/solars)
-"dhz" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/catwalk,
-/turf/space,
-/area/djstation/solars)
-"dhA" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhB" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
-"dhC" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning_corner";
-	tag = "icon-warning_corner (EAST)"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
-"dhD" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
-"dhE" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning_corner";
-	tag = "icon-warning_corner (NORTH)"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
-"dhF" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
-"dhG" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/catwalk,
-/turf/space,
-/area/djstation/solars)
-"dhH" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/catwalk,
-/turf/space,
-/area/djstation/solars)
-"dhI" = (
-/obj/machinery/power/solar/panel{
-	id_tag = "djstationsolar";
-	name = "DJ Station Solar Array"
-	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
-/obj/structure/cable,
-/turf/simulated/floor{
-	icon_state = "solarpanel"
-	},
-/area/djstation/solars)
-"dhJ" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "radiation-w"
-	},
-/obj/machinery/door/window{
-	dir = 2;
-	name = "Radiation Zone Door"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
-"dhK" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
-"dhL" = (
-/obj/machinery/power/terminal,
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/cable,
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/structure/window/reinforced,
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
-"dhM" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
-"dhN" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "radiation-w"
-	},
-/obj/machinery/door/window{
-	dir = 2;
-	icon_state = "right";
-	name = "Radiation Zone Door"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/djstation)
-"dhO" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhP" = (
-/obj/item/weapon/extinguisher,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhQ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhR" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/obj/machinery/power/battery/smes{
-	charge = 5e+006;
-	name_tag = "Aккумулятор"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhS" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhT" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhU" = (
-/obj/machinery/power/solar/panel{
-	id_tag = "djstationsolar";
-	name = "DJ Station Solar Array"
-	},
-/obj/structure/cable,
-/turf/simulated/floor{
-	icon_state = "solarpanel"
-	},
-/area/djstation/solars)
 "dhV" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhW" = (
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhX" = (
-/obj/item/weapon/storage/toolbox/mechanical{
-	pixel_x = -2;
-	pixel_y = -1
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhY" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dhZ" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dia" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/machinery/computer/powermonitor,
-/turf/simulated/floor/plating,
-/area/djstation)
-"dib" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/machinery/power/apc{
-	dir = 8;
-	pixel_x = -24
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dic" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/item/weapon/storage/box/lights/mixed,
-/turf/simulated/floor/plating,
-/area/djstation)
-"did" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "radiation"
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"die" = (
-/obj/structure/rack,
-/obj/item/clothing/suit/space/syndicate,
-/obj/item/clothing/head/helmet/space/syndicate,
-/obj/item/clothing/mask/breath,
-/turf/simulated/floor/plating,
-/area/djstation)
-"dif" = (
-/obj/machinery/door/airlock/maintenance,
-/turf/simulated/floor/plating,
-/area/djstation)
-"dig" = (
-/obj/machinery/light_switch{
-	pixel_x = -32
-	},
-/obj/machinery/newscaster{
-	pixel_y = 32
-	},
-/obj/structure/table,
-/obj/machinery/cell_charger,
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"dih" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'HIGH VOLTAGE'";
-	icon_state = "shock";
-	name = "HIGH VOLTAGE";
-	pixel_y = 32
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "warning_corner";
-	tag = "icon-warning_corner (EAST)"
-	},
-/obj/structure/table,
-/obj/item/device/multitool,
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"dii" = (
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "radiation"
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"dij" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'RADIOACTIVE AREA'";
-	icon_state = "radiation";
-	name = "RADIOACTIVE AREA";
-	pixel_y = 32
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning_corner";
-	tag = "icon-warning_corner (NORTH)"
-	},
-/obj/structure/closet/radiation,
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"dik" = (
-/obj/machinery/light{
-	dir = 4
-	},
-/obj/machinery/status_display{
-	pixel_y = 32
-	},
-/obj/machinery/media/jukebox/dj{
-	autoplay = 0
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"dil" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dim" = (
-/obj/structure/table,
-/obj/machinery/microwave{
-	pixel_y = 8
-	},
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/djstation)
-"din" = (
-/obj/item/weapon/storage/box/donkpockets,
-/obj/structure/table,
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/djstation)
-"dio" = (
-/obj/machinery/vending/coffee,
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/djstation)
-"dip" = (
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/djstation)
-"diq" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dir" = (
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"dis" = (
-/turf/simulated/floor{
-	icon_state = "grimy"
-	},
-/area/djstation)
-"dit" = (
-/obj/machinery/light_switch{
-	pixel_y = 28
-	},
-/turf/simulated/floor{
-	icon_state = "grimy"
-	},
-/area/djstation)
-"diu" = (
-/obj/structure/bed,
-/obj/item/weapon/bedsheet,
-/turf/simulated/floor{
-	icon_state = "grimy"
-	},
-/area/djstation)
-"div" = (
-/obj/structure/table,
-/obj/item/device/flashlight/lamp,
-/turf/simulated/floor{
-	icon_state = "grimy"
-	},
-/area/djstation)
-"diw" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"dix" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"diy" = (
-/obj/machinery/door/airlock/glass{
-	name = "Kitchen"
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"diz" = (
-/obj/structure/table,
-/obj/item/device/radio/intercom{
-	dir = 8;
-	freerange = 1;
-	name = "Pirate Radio Listening Channel"
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"diA" = (
-/obj/structure/bed/chair/office/light,
-/obj/effect/decal/remains/human,
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"diB" = (
-/obj/machinery/door/airlock/glass{
-	name = "Cabin"
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"diC" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"diD" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"diE" = (
-/obj/machinery/disposal,
-/obj/structure/disposalpipe/trunk,
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/djstation)
-"diF" = (
-/obj/machinery/light,
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/djstation)
-"diG" = (
-/obj/structure/bed/chair{
-	dir = 1
-	},
-/turf/simulated/floor{
-	icon_state = "bar"
-	},
-/area/djstation)
-"diH" = (
-/obj/structure/table,
-/obj/machinery/media/receiver/boombox/wallmount/muzak,
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"diI" = (
-/obj/structure/table,
-/obj/item/device/radio/intercom{
-	broadcasting = 1;
-	dir = 8;
-	freerange = 1;
-	listening = 0;
-	name = "Pirate Radio Broadcast Channel"
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"diJ" = (
-/obj/structure/table,
-/obj/item/weapon/paper/djstation,
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"diK" = (
-/obj/structure/computerframe{
-	anchored = 1
-	},
-/turf/simulated/floor{
-	icon_state = "grimy"
-	},
-/area/djstation)
-"diL" = (
-/obj/structure/bed/chair{
-	dir = 8
-	},
-/turf/simulated/floor{
-	icon_state = "grimy"
-	},
-/area/djstation)
-"diM" = (
-/obj/machinery/light,
-/turf/simulated/floor{
-	icon_state = "grimy"
-	},
-/area/djstation)
-"diN" = (
-/obj/structure/closet,
-/turf/simulated/floor{
-	icon_state = "grimy"
-	},
-/area/djstation)
-"diO" = (
-/obj/structure/disposalpipe/segment,
-/turf/simulated/wall,
-/area/djstation)
-"diP" = (
-/obj/machinery/door/airlock{
-	name = "Restroom"
-	},
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/djstation)
-"diQ" = (
-/obj/structure/disposalpipe/segment,
-/obj/structure/catwalk,
+/obj/effect/landmark/map_element/djsat_notail,
 /turf/space,
 /area)
-"diR" = (
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/djstation)
-"diS" = (
-/obj/structure/bed/chair{
-	dir = 4
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"diT" = (
-/obj/machinery/space_heater,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"diU" = (
-/obj/structure/rack{
-	dir = 4
-	},
-/obj/item/clothing/under/soviet,
-/obj/item/clothing/head/ushanka,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"diV" = (
-/obj/structure/closet/emcloset,
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"diW" = (
-/obj/structure/sink{
-	dir = 8;
-	pixel_x = -12;
-	pixel_y = 2
-	},
-/obj/machinery/light/small,
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/djstation)
-"diX" = (
-/obj/structure/toilet{
-	pixel_y = 8
-	},
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/djstation)
-"diY" = (
-/obj/structure/table,
-/obj/item/weapon/paper_bin{
-	pixel_x = 1;
-	pixel_y = 9
-	},
-/obj/item/weapon/pen,
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"diZ" = (
-/obj/structure/bed/chair{
-	dir = 1
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"dja" = (
-/obj/machinery/light,
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"djb" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	name = "EXTERNAL AIRLOCK";
-	pixel_y = -32
-	},
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "cafeteria"
-	},
-/area/djstation)
-"djc" = (
-/obj/machinery/door/airlock/external{
-	name = "Ruskie DJ Station"
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
-"djd" = (
-/obj/machinery/door/airlock/external{
-	name = "Ruskie DJ Station"
-	},
-/obj/docking_port/destination/salvage/dj{
-	dir = 2
-	},
-/turf/simulated/floor/plating,
-/area/djstation)
 "dje" = (
 /turf/simulated/wall/r_wall,
 /area/derelict/atmos)
@@ -102268,651 +101113,10 @@
 	},
 /turf/simulated/floor/asteroid,
 /area)
-"dPN" = (
-/obj/structure/shuttle/diag_wall/black{
-	dir = 8
-	},
-/turf/space,
-/area/shuttle/salvage/start)
-"dPO" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/machinery/door/poddoor{
-	id_tag = "salvage_privacy";
-	name = "Privacy Shutter"
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dPP" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/machinery/door/poddoor{
-	id_tag = "salvage_privacy";
-	name = "Privacy Shutter"
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dPQ" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/machinery/door/poddoor{
-	id_tag = "salvage_privacy";
-	name = "Privacy Shutter"
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dPR" = (
-/obj/structure/shuttle/diag_wall/black{
-	dir = 1
-	},
-/turf/space,
-/area/shuttle/salvage/start)
-"dPS" = (
-/obj/docking_port/destination/salvage/start{
-	dir = 2
-	},
+"dQr" = (
+/obj/effect/landmark/map_element/salvage_shuttle_cockroaches,
 /turf/space,
 /area)
-"dPT" = (
-/turf/simulated/wall/shuttle/unsmoothed/black,
-/area/shuttle/salvage/start)
-"dPU" = (
-/obj/structure/table/woodentable,
-/obj/item/weapon/storage/fancy/matchbox,
-/obj/item/clothing/mask/cigarette/cigar,
-/obj/item/weapon/reagent_containers/food/drinks/flask{
-	pixel_x = 8
-	},
-/obj/item/clothing/accessory/medal/gold/captain,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dPV" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dPW" = (
-/obj/structure/closet/cabinet,
-/obj/item/weapon/storage/backpack/satchel,
-/obj/item/clothing/shoes/jackboots,
-/obj/item/clothing/under/captain_fly{
-	name = "Captain's uniform"
-	},
-/obj/item/clothing/suit/hgpirate,
-/obj/item/clothing/head/hgpiratecap,
-/obj/item/clothing/glasses/eyepatch,
-/obj/item/weapon/gun/energy/bison,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dPX" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/door/airlock/multi_tile/glass{
-	id_tag = "salvage_external"
-	},
-/obj/docking_port/shuttle,
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dPY" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dPZ" = (
-/obj/effect/decal/cleanable/dirt,
-/mob/living/simple_animal/hostile/bigroach,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQa" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/light/small,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQb" = (
-/obj/structure/bed,
-/obj/item/weapon/bedsheet/rd,
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/door_control{
-	id_tag = "salvage_privacy";
-	name = "Privacy Shutters";
-	pixel_y = -25
-	},
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQc" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/obj/machinery/light/small{
-	dir = 8
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQd" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQe" = (
-/obj/structure/shuttle/engine/heater{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQf" = (
-/obj/structure/shuttle/engine/propulsion/right{
-	dir = 4
-	},
-/turf/space,
-/area/shuttle/salvage/start)
-"dQg" = (
-/obj/machinery/door/airlock/hatch{
-	name = "Captain's Cabin";
-	req_access_txt = "65"
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQh" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/door/airlock/multi_tile/glass{
-	id_tag = "salvage_external"
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQi" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQj" = (
-/obj/machinery/suit_storage_unit/standard_unit,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQk" = (
-/obj/structure/bed,
-/obj/item/weapon/bedsheet/brown,
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/cobweb,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQl" = (
-/obj/structure/bed,
-/obj/item/weapon/bedsheet/brown,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQm" = (
-/obj/structure/bed,
-/obj/item/weapon/bedsheet/brown,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/spacecash/c1000,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQn" = (
-/obj/structure/bed,
-/obj/item/weapon/bedsheet/brown,
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/cobweb2,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQo" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/closet/walllocker/emerglocker/north,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQp" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/closet/hydrant{
-	pixel_y = 32
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQq" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/cobweb2,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQr" = (
-/obj/structure/shuttle/engine/propulsion{
-	dir = 4
-	},
-/turf/space,
-/area/shuttle/salvage/start)
-"dQs" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/machinery/door/poddoor{
-	density = 0;
-	id_tag = "salvage_blast";
-	name = "Bridge Blast Doors";
-	opacity = 0
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dQt" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/cobweb,
-/obj/item/weapon/paper_bin{
-	pixel_x = 1;
-	pixel_y = 9
-	},
-/obj/item/weapon/pen,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQu" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/door_control{
-	id_tag = "salvage_blast";
-	name = "Blast Doors";
-	pixel_y = 25;
-	req_one_access_txt = "65"
-	},
-/obj/item/device/multitool,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQv" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/computerframe,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQw" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/bed/chair/shuttle/red,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQx" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/machinery/door/poddoor{
-	density = 0;
-	id_tag = "salvage_blast";
-	name = "Bridge Blast Doors";
-	opacity = 0
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dQy" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/storage/fancy/donut_box,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQz" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/light/small{
-	dir = 4
-	},
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQA" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/light{
-	dir = 8
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQB" = (
-/obj/machinery/door/airlock/hatch,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQC" = (
-/obj/structure/fireaxecabinet{
-	pixel_x = -32
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/light{
-	dir = 8
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQD" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/clothing/suit/storage/hazardvest,
-/obj/item/clothing/glasses/welding,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQE" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/device/flashlight/flare{
-	pixel_x = 3;
-	pixel_y = 2
-	},
-/obj/item/device/flashlight/flare,
-/obj/item/device/flashlight/flare{
-	pixel_x = -3;
-	pixel_y = -1
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQF" = (
-/obj/machinery/computer/shuttle_control/salvage,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQG" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/bed/chair/shuttle/red{
-	dir = 8
-	},
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQH" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/storage/box/lights/mixed,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQI" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/folder/yellow,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQJ" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/bed/chair/shuttle/red{
-	dir = 8
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQK" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/storage/secure/briefcase,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQL" = (
-/obj/effect/decal/cleanable/dirt,
-/mob/living/simple_animal/hostile/bigroach,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQM" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/lighter/zippo,
-/obj/item/weapon/storage/fancy/cigarettes,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQN" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/device/analyzer,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQO" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/machinery/door/poddoor{
-	density = 0;
-	id_tag = "salvage_blast";
-	name = "Bridge Blast Doors";
-	opacity = 0
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
-"dQP" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/device/radio,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQQ" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQR" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/computerframe,
-/obj/item/stack/cable_coil/random,
-/turf/simulated/floor/carpet,
-/area/shuttle/salvage/start)
-"dQS" = (
-/obj/item/weapon/pickaxe{
-	pixel_x = 5
-	},
-/obj/item/weapon/pickaxe/shovel{
-	pixel_x = -5
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/cobweb,
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQT" = (
-/obj/item/weapon/rack_parts,
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/obj/machinery/light/small{
-	dir = 1
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQU" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/closet/crate,
-/obj/item/device/flashlight/lantern,
-/obj/item/clothing/glasses/scanner/meson,
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQV" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/bed/chair/shuttle/red{
-	dir = 1
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQW" = (
-/obj/structure/shuttle/diag_wall/black,
-/turf/space,
-/area/shuttle/salvage/start)
-"dQX" = (
-/obj/machinery/portable_atmospherics/canister/oxygen,
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQY" = (
-/obj/structure/closet/crate,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/card/id/salvage_captain,
-/obj/item/weapon/storage/belt/utility/full,
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dQZ" = (
-/obj/structure/rack,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/clothing/mask/gas,
-/obj/item/clothing/mask/gas{
-	pixel_x = 4;
-	pixel_y = 2
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dRa" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/rack,
-/obj/item/stack/sheet/metal{
-	amount = 50
-	},
-/obj/item/tool/weldingtool,
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dRb" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/warning_stripes{
-	icon_state = "warning";
-	tag = "icon-warning"
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dRc" = (
-/obj/machinery/door/airlock/multi_tile/glass{
-	id_tag = "salvage_external"
-	},
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dRd" = (
-/obj/structure/shuttle/diag_wall/black{
-	dir = 4
-	},
-/turf/space,
-/area/shuttle/salvage/start)
-"dRe" = (
-/obj/effect/decal/cleanable/dirt,
-/mob/living/simple_animal/hostile/bigroach,
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/shuttle/salvage/start)
-"dRf" = (
-/obj/machinery/vending/wallmed1{
-	pixel_y = 28
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/light/small{
-	dir = 1
-	},
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/shuttle/salvage/start)
-"dRg" = (
-/obj/structure/bed/roller,
-/obj/structure/sink{
-	dir = 4;
-	pixel_x = 11
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/cobweb2,
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/shuttle/salvage/start)
-"dRh" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/warning_stripes{
-	icon_state = "warning";
-	tag = "icon-warning"
-	},
-/obj/machinery/light/small{
-	dir = 8
-	},
-/turf/simulated/floor/engine,
-/area/shuttle/salvage/start)
-"dRi" = (
-/obj/structure/shuttle/engine/propulsion/left{
-	dir = 4
-	},
-/turf/space,
-/area/shuttle/salvage/start)
-"dRj" = (
-/obj/machinery/sleeper,
-/obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/shuttle/salvage/start)
-"dRk" = (
-/obj/structure/table,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/soap,
-/obj/item/weapon/storage/firstaid/regular{
-	pixel_x = 2;
-	pixel_y = 6
-	},
-/obj/item/weapon/storage/firstaid/toxin{
-	pixel_x = -2;
-	pixel_y = 4
-	},
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/shuttle/salvage/start)
-"dRl" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/door/airlock/multi_tile/glass{
-	id_tag = "salvage_external"
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/salvage/start)
 "eyG" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -1045141,24 +1043345,24 @@ aaa
 aaa
 aaa
 aaa
-dhe
-dhe
-dhe
-dhe
-dhe
-dhe
-dhe
-aaa
-dhl
-dil
-dix
-diD
-dhl
-aaa
-aai
 aaa
 aaa
 aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+dhV
 aaa
 aaa
 aaa
@@ -1045643,23 +1043847,23 @@ aaa
 aaa
 aaa
 aaa
-dhe
-dhq
-dhy
-dhI
-dhy
-dhU
-dhe
 aaa
-dhl
-dim
-dip
-diE
-diO
-diQ
-diQ
-diQ
-crp
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1046145,22 +1044349,22 @@ aaa
 aaa
 aaa
 aaa
-dhe
-dhq
-dhz
-dhI
-dhz
-dhU
-dhe
 aaa
-dhl
-din
-dip
-diF
-dhl
-dhl
-dhl
-dhl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1046646,23 +1044850,23 @@ aaa
 aaa
 aaa
 aaa
-aai
-dhe
-dhq
-dhz
-dhI
-dhz
-dhU
-dhe
 aaa
-dhl
-dio
-dip
-dip
-diP
-diR
-diW
-dhl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1047147,24 +1045351,24 @@ aaa
 aaa
 aaa
 aaa
-aai
-aai
-dhe
-dhq
-dhz
-dhI
-dhz
-dhU
-dhe
 aaa
-dhl
-dip
-dip
-diG
-dhl
-dhl
-diX
-dhl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1047646,27 +1045850,27 @@ aaa
 aaa
 aaa
 aaa
-dhe
-dhe
-dhe
-dhe
-dhe
-dhl
-dhr
-dhA
-dhl
-dhO
-dhV
-dhl
-dhl
-dhl
-diq
-diy
-diq
-dhl
-dhl
-dhl
-dhl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1048148,27 +1046352,27 @@ aaa
 aaa
 aaa
 aaa
-dhe
-dhf
-dhf
-dhf
-dhf
-dhm
-dhs
-dhB
-dhJ
-dhP
-dhW
-dib
-dhl
-dig
-dir
-dir
-dir
-dir
-diS
-diY
-dhl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1048650,27 +1046854,27 @@ aaa
 aaa
 aaa
 aaa
-dhe
-dhg
-dhj
-dhj
-dhj
-dhn
-dht
-dhC
-dhK
-dhQ
-dhX
-dic
-dhl
-dih
-dir
-diz
-diH
-dir
-dir
-diZ
-dhl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1049152,27 +1047356,27 @@ aaa
 aaa
 aaa
 aaa
-dhe
-dhh
-dhk
-dhk
-dhk
-dhl
-dhu
-dhD
-dhL
-dhR
-dhY
-did
-dif
-dii
-dir
-diA
-diI
-dir
-dir
-dja
-dhl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1049654,29 +1047858,29 @@ aaa
 aaa
 aaa
 aaa
-dhe
-dhg
-dhj
-dhj
-dhj
-dho
-dhv
-dhE
-dhM
-dhS
-dhZ
-dhW
-dhl
-dij
-dir
-diz
-diJ
-dir
-diT
-djb
-dhl
-dhl
-dhl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1050156,29 +1048360,29 @@ aaa
 aaa
 aaa
 aaa
-dhe
-dhi
-dhi
-dhi
-dhi
-dhp
-dhw
-dhF
-dhN
-dhT
-dia
-die
-dhl
-dik
-dir
-dir
-dir
-dir
-diU
-dir
-djc
-dhW
-djd
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1050658,29 +1048862,29 @@ aaa
 aaa
 aaa
 aaa
-dhe
-dhe
-dhe
-dhe
-dhe
-dhl
-dhr
-dhA
-dhl
-dhO
-dhV
-dhl
-dhl
-dhl
-diq
-diB
-diq
-dhl
-diV
-dir
-djc
-dhW
-djc
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1051162,27 +1049366,27 @@ aaa
 aaa
 aaa
 aaa
-aai
-aai
-aai
-dhe
-dhq
-dhG
-dhI
-dhG
-dhU
-dhe
 aaa
-dhl
-dis
-dis
-diK
-dhl
-dhl
-dhl
-dhl
-dhl
-dhl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1051666,20 +1049870,20 @@ aaa
 aaa
 aaa
 aaa
-aai
-dhe
-dhq
-dhG
-dhI
-dhG
-dhU
-dhe
 aaa
-dhl
-dit
-dis
-diL
-dhl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1052168,20 +1050372,20 @@ aaa
 aaa
 aaa
 aaa
-aai
-dhe
-dhq
-dhG
-dhI
-dhG
-dhU
-dhe
 aaa
-dhl
-diu
-dis
-diM
-dhl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1052671,19 +1050875,19 @@ aaa
 aaa
 aaa
 aaa
-dhe
-dhq
-dhH
-dhI
-dhH
-dhU
-dhe
 aaa
-dhl
-div
-dis
-diN
-dhl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1053173,19 +1051377,19 @@ aaa
 aaa
 aaa
 aaa
-dhe
-dhe
-dhe
-dhe
-dhe
-dhe
-dhe
 aaa
-dhl
-diw
-diC
-dhV
-dhl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1053680,13 +1051884,13 @@ aaa
 aaa
 aaa
 aaa
-aai
-aai
-aaa
-aai
 aaa
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1429855,17 +1428059,17 @@ aaa
 aaa
 aaa
 aaa
-dPN
-dQs
-dQx
-dQx
-dQx
-dQO
-dQW
 aaa
 aaa
 aaa
 aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+dQr
 aaa
 aaa
 aaa
@@ -1430357,13 +1428561,13 @@ aaa
 aaa
 aaa
 aaa
-dPT
-dQt
-dQy
-dQF
-dQK
-dQP
-dPT
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1430859,13 +1429063,13 @@ aaa
 aaa
 aaa
 aaa
-dPT
-dQu
-dPV
-dQG
-dPV
-dQQ
-dPT
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1431361,13 +1429565,13 @@ aaa
 aaa
 aaa
 aaa
-dPT
-dQv
-dQz
-dPZ
-dQz
-dQR
-dPT
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1431861,17 +1430065,17 @@ aaa
 aaa
 aaa
 aaa
-dPN
-dPT
-dPT
-dPT
-dPT
-dQB
-dPT
-dPT
-dPT
-dPT
-dQW
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1432361,21 +1430565,21 @@ aaa
 aaa
 aaa
 aaa
-dPN
-dPT
-dPT
-dPT
-dQj
-dQj
-dQA
-dQi
-dQA
-dQj
-dQj
-dPT
-dPT
-dPT
-dQW
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1432863,21 +1431067,21 @@ aaa
 aaa
 aaa
 aaa
-dPO
-dPU
-dPZ
-dQg
-dQi
-dQi
-dQi
-dQi
-dQL
-dQi
-dQi
-dQB
-dRe
-dRj
-dPT
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1433365,21 +1431569,21 @@ aaa
 aaa
 aaa
 aaa
-dPP
-dPV
-dQa
-dPT
-dPT
-dPT
-dPT
-dQi
-dPT
-dPT
-dPT
-dPT
-dRf
-dRe
-dPT
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1433867,21 +1432071,21 @@ aaa
 aaa
 aaa
 aaa
-dPQ
-dPW
-dQb
-dPT
-dQk
-dPV
-dQB
-dQi
-dPT
-dQS
-dQX
-dPT
-dRg
-dRk
-dPT
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1434369,21 +1432573,21 @@ aaa
 aaa
 aaa
 aaa
-dPR
-dPT
-dPT
-dPT
-dQl
-dQa
-dPT
-dQi
-dPT
-dQT
-dQY
-dPT
-dPT
-dPT
-dRd
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1434874,15 +1433078,15 @@ aaa
 aaa
 aaa
 aaa
-dPT
-dQm
-dPZ
-dPT
-dQi
-dQB
-dQL
-dQZ
-dPT
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1435376,15 +1433580,15 @@ aaa
 aaa
 aaa
 aaa
-dPT
-dQn
-dPV
-dPT
-dQi
-dPT
-dQU
-dRa
-dPT
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1435876,19 +1434080,19 @@ aaa
 aaa
 aaa
 aaa
-dPN
-dPT
-dPT
-dPT
-dPT
-dPT
-dQi
-dPT
-dPT
-dPT
-dPT
-dPT
-dQW
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1436377,20 +1434581,20 @@ aaa
 aaa
 aaa
 aaa
-dPS
-dPX
-dQc
-dQh
-dQd
-dQi
-dQC
-dQi
-dQA
-dQi
-dRb
-dRc
-dRh
-dRl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1436880,19 +1435084,19 @@ aaa
 aaa
 aaa
 aaa
-dPY
-dQd
-dQi
-dQd
-dQi
-dQi
-dQi
-dQi
-dQi
-dRb
-dQi
-dRb
-dPY
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1437382,19 +1435586,19 @@ aaa
 aaa
 aaa
 aaa
-dPR
-dQe
-dPT
-dQo
-dQw
-dQD
-dQH
-dQM
-dQV
-dQi
-dPT
-dQe
-dRd
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1437885,17 +1436089,17 @@ aaa
 aaa
 aaa
 aaa
-dQf
-dPT
-dQp
-dQw
-dQE
-dQI
-dQN
-dQV
-dQi
-dPT
-dRi
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1438388,15 +1436592,15 @@ aaa
 aaa
 aaa
 aaa
-dPT
-dQq
-dQi
-dQi
-dQJ
-dQi
-dQi
-dQi
-dPT
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1438890,15 +1437094,15 @@ aaa
 aaa
 aaa
 aaa
-dPT
-dQe
-dQe
-dQe
-dQe
-dQe
-dQe
-dQe
-dPT
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -1439392,15 +1437596,15 @@ aaa
 aaa
 aaa
 aaa
-dPR
-dQr
-dQr
-dQr
-dQr
-dQr
-dQr
-dQr
-dRd
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
