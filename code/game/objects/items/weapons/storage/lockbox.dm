@@ -46,10 +46,7 @@
 		locked = !locked
 		user.visible_message("<span class='notice'>The lockbox has been [locked ? null : "un"]locked by [user].</span>", "<span class='rose'>You [locked ? null : "un"]lock the box.</span>")
 		tracked_access = "The tracker reads: 'Last locked by [id_name || get_id_name(user)].'"
-		if(locked)
-			icon_state = icon_locked
-		else
-			icon_state = icon_closed
+		update_icon()
 	else
 		to_chat(user, "<span class='notice'>Access Denied.</span>")
 		return FALSE
@@ -104,9 +101,9 @@
 					req_one_access = electronics.conf_access
 				else
 					req_access = electronics.conf_access
-			icon_state = icon_locked
 			broken = 0
 			locked = 0
+			update_icon()
 	else if(broken && issolder(W))
 		var/obj/item/tool/solder/S = W
 		if(S.remove_fuel(4,user))
@@ -114,8 +111,9 @@
 			if(do_after(user, src,4 SECONDS * S.work_speed))
 				S.playtoolsound(loc, 100)
 				broken = 0
+				locked = 0
 				to_chat(user, "<span class='notice'>You repair the electronics inside the locking mechanism!</span>")
-				icon_state = icon_locked
+				update_icon()
 		return
 	else if(!locked)
 		if(W.is_screwdriver() && electronics)
@@ -128,8 +126,8 @@
 			if(broken)
 				electronics.icon_state = "door_electronics_smoked"
 			broken = 0
-			icon_state = icon_broken
 			locked = 0
+			update_icon()
 			return
 		. = ..()
 	else
@@ -141,7 +139,7 @@
 	broken = 1
 	locked = 0
 	desc = "It appears to be broken."
-	icon_state = src.icon_broken
+	update_icon()
 	user.visible_message("<span class='danger'>\The [src] has been broken by \the [user] with an electromagnetic card!</span>", "<span class='notice'>You break open \the [src].</span>", "<span class='notice'>You hear a faint click sound.</span>", range = 3)
 	return TRUE
 
@@ -215,7 +213,7 @@
 
 /obj/item/weapon/storage/lockbox/update_icon()
 	..()
-	if (broken)
+	if (!electronics || broken)
 		icon_state = src.icon_broken
 	else if(locked)
 		icon_state = src.icon_locked
@@ -291,27 +289,6 @@
 	else if(broken)
 		to_chat(user, "<span class='info'>The access locking is broken!</span>")
 	to_chat(user, "<span class='info'>[tracked_access]</span>")
-
-/obj/item/weapon/storage/lockbox/unlockable/attackby(obj/O as obj, mob/user as mob)
-	if (istype(O, /obj/item/weapon/card/id))
-		var/obj/item/weapon/card/id/ID = O
-		if(src.broken)
-			to_chat(user, "<span class='rose'>It appears to be broken.</span>")
-			return
-		else
-			src.locked = !( src.locked )
-			if(src.locked)
-				src.icon_state = src.icon_locked
-				to_chat(user, "<span class='rose'>You lock the [src.name]!</span>")
-				tracked_access = "The tracker reads: 'Last locked by [ID.registered_name]'."
-				return
-			else
-				src.icon_state = src.icon_closed
-				to_chat(user, "<span class='rose'>You unlock the [src.name]!</span>")
-				tracked_access = "The tracker reads: 'Last unlocked by [ID.registered_name].'"
-				return
-	else
-		. = ..()
 
 /obj/item/weapon/storage/lockbox/unlockable/peace
 	name = "semi-secure lockbox (pax implants)"
