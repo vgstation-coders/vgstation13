@@ -90,6 +90,22 @@
 		if(screamed)
 			H.audible_scream()
 
+/datum/reagent/zetadust/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	O.clean_blood()
+
+/datum/reagent/zetadust/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	if(volume >= 1)
+		for (var/obj/effect/decal/cleanable/blood/C in T)
+			qdel(C)
+
+		T.clean_blood()
+
 /datum/reagent/phazon
 	name = "Phazon Salt"
 	id = PHAZON
