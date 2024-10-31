@@ -1,0 +1,1485 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"av" = (
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'HIGH VOLTAGE'";
+	icon_state = "shock";
+	name = "HIGH VOLTAGE";
+	pixel_y = 32
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning_corner";
+	tag = "icon-warning_corner (EAST)"
+	},
+/obj/structure/table,
+/obj/item/device/multitool,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"aC" = (
+/obj/structure/sink{
+	dir = 8;
+	pixel_x = -12;
+	pixel_y = 2
+	},
+/obj/machinery/light/small,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/djstation)
+"be" = (
+/obj/structure/table,
+/obj/item/device/radio/intercom{
+	broadcasting = 1;
+	dir = 8;
+	freerange = 1;
+	listening = 0;
+	name = "Pirate Radio Broadcast Channel"
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"bA" = (
+/obj/item/weapon/storage/box/donkpockets,
+/obj/structure/table,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/djstation)
+"bZ" = (
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/djstation)
+"cH" = (
+/obj/machinery/light,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"cI" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/obj/machinery/power/battery/smes{
+	charge = 5e+006;
+	name_tag = "Aккумулятор"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating,
+/area/djstation)
+"cX" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"dm" = (
+/obj/machinery/door/airlock/glass{
+	name = "Kitchen"
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"fa" = (
+/obj/machinery/light,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/djstation)
+"fc" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"fi" = (
+/obj/structure/table,
+/obj/machinery/media/receiver/boombox/wallmount/muzak,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"fS" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "radiation"
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"gG" = (
+/obj/structure/toilet{
+	pixel_y = 8
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/djstation)
+"gR" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area/djstation/solars)
+"jg" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning_corner";
+	tag = "icon-warning_corner (EAST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"jC" = (
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/djstation)
+"kj" = (
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/computer/powermonitor,
+/turf/simulated/floor/plating,
+/area/djstation)
+"kz" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area/djstation/solars)
+"lT" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "radiation"
+	},
+/turf/simulated/floor/plating,
+/area/djstation)
+"lY" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area/djstation/solars)
+"mi" = (
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/djstation)
+"mN" = (
+/obj/structure/computerframe{
+	anchored = 1
+	},
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/djstation)
+"mU" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/djstation)
+"ob" = (
+/obj/structure/table,
+/obj/item/device/radio/intercom{
+	dir = 8;
+	freerange = 1;
+	name = "Pirate Radio Listening Channel"
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"pj" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area/djstation/solars)
+"ps" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/obj/machinery/media/transmitter/broadcast/dj{
+	heating_power = 0
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"pC" = (
+/obj/structure/table,
+/obj/item/weapon/paper/djstation,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"qa" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating,
+/area/djstation)
+"qZ" = (
+/turf/simulated/wall,
+/area/djstation)
+"rd" = (
+/obj/machinery/power/solar/panel{
+	id_tag = "djstationsolar";
+	name = "DJ Station Solar Array"
+	},
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/turf/simulated/floor{
+	icon_state = "solarpanel"
+	},
+/area/djstation/solars)
+"sj" = (
+/turf/simulated/floor/plating,
+/area/djstation)
+"sl" = (
+/obj/structure/disposalpipe/trunk{
+	dir = 1
+	},
+/obj/structure/disposaloutlet,
+/obj/structure/catwalk,
+/turf/space,
+/area)
+"sv" = (
+/obj/item/weapon/storage/toolbox/mechanical{
+	pixel_x = -2;
+	pixel_y = -1
+	},
+/turf/simulated/floor/plating,
+/area/djstation)
+"sz" = (
+/obj/machinery/door/airlock/external{
+	name = "Ruskie DJ Station"
+	},
+/turf/simulated/floor/plating,
+/area/djstation)
+"ti" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "radiation-w"
+	},
+/obj/machinery/door/window{
+	dir = 2;
+	name = "Radiation Zone Door"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"tY" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor/plating,
+/area/djstation)
+"uD" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area/djstation/solars)
+"vx" = (
+/obj/machinery/door/airlock/maintenance,
+/turf/simulated/floor/plating,
+/area/djstation)
+"wL" = (
+/turf/space,
+/area)
+"xp" = (
+/obj/structure/table,
+/obj/item/device/flashlight/lamp,
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/djstation)
+"xF" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/obj/machinery/status_display{
+	pixel_y = 32
+	},
+/obj/machinery/media/jukebox/dj{
+	autoplay = 0
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"xW" = (
+/obj/machinery/door/airlock/external{
+	name = "Ruskie DJ Station"
+	},
+/obj/docking_port/destination/salvage/dj{
+	dir = 2
+	},
+/turf/simulated/floor/plating,
+/area/djstation)
+"yM" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"zg" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating,
+/area/djstation)
+"zG" = (
+/obj/structure/table,
+/obj/item/weapon/paper_bin{
+	pixel_x = 1;
+	pixel_y = 9
+	},
+/obj/item/weapon/pen,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"zN" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"zU" = (
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/solar/panel/tracker,
+/turf/simulated/floor{
+	icon_state = "solarpanel"
+	},
+/area/djstation/solars)
+"AM" = (
+/obj/machinery/door/airlock/glass{
+	name = "Cabin"
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"AZ" = (
+/obj/machinery/telecomms/relay/preset/ruskie,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"Bq" = (
+/obj/structure/closet/emcloset,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"BF" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating,
+/area/djstation)
+"BQ" = (
+/obj/structure/grille,
+/turf/simulated/floor/plating/airless,
+/area/djstation/solars)
+"CN" = (
+/obj/machinery/door/airlock{
+	name = "Restroom"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/djstation)
+"De" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/plating,
+/area/djstation)
+"Di" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/plating,
+/area/djstation)
+"DL" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/item/weapon/storage/box/lights/mixed,
+/turf/simulated/floor/plating,
+/area/djstation)
+"Eh" = (
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"Fe" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"FO" = (
+/obj/machinery/power/solar/panel{
+	id_tag = "djstationsolar";
+	name = "DJ Station Solar Array"
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor{
+	icon_state = "solarpanel"
+	},
+/area/djstation/solars)
+"Gb" = (
+/obj/machinery/vending/coffee,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/djstation)
+"Gu" = (
+/obj/structure/disposalpipe/segment,
+/obj/structure/catwalk,
+/turf/space,
+/area)
+"GO" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning";
+	tag = "icon-warning (EAST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"GQ" = (
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"Hv" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet,
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/djstation)
+"HY" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"IX" = (
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
+	icon_state = "space";
+	name = "EXTERNAL AIRLOCK";
+	pixel_y = -32
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"Jj" = (
+/obj/machinery/light,
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/djstation)
+"JQ" = (
+/obj/machinery/power/solar/panel{
+	id_tag = "djstationsolar";
+	name = "DJ Station Solar Array"
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor{
+	icon_state = "solarpanel"
+	},
+/area/djstation/solars)
+"Kc" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/djstation)
+"Kr" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/obj/machinery/power/solar/control{
+	id_tag = "djstationsolar";
+	name = "DJ Station Solar Panel Control"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"LN" = (
+/obj/item/weapon/extinguisher,
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/plating,
+/area/djstation)
+"Mn" = (
+/obj/machinery/power/solar/panel{
+	id_tag = "djstationsolar";
+	name = "DJ Station Solar Array"
+	},
+/obj/structure/cable,
+/turf/simulated/floor{
+	icon_state = "solarpanel"
+	},
+/area/djstation/solars)
+"MQ" = (
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"Nj" = (
+/obj/structure/rack{
+	dir = 4
+	},
+/obj/item/clothing/under/soviet,
+/obj/item/clothing/head/ushanka,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"No" = (
+/obj/structure/table,
+/obj/machinery/microwave{
+	pixel_y = 8
+	},
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/djstation)
+"Og" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/plating,
+/area/djstation)
+"OJ" = (
+/obj/machinery/power/solar/panel{
+	id_tag = "djstationsolar";
+	name = "DJ Station Solar Array"
+	},
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/obj/structure/cable,
+/turf/simulated/floor{
+	icon_state = "solarpanel"
+	},
+/area/djstation/solars)
+"RD" = (
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'RADIOACTIVE AREA'";
+	icon_state = "radiation";
+	name = "RADIOACTIVE AREA";
+	pixel_y = 32
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning_corner";
+	tag = "icon-warning_corner (NORTH)"
+	},
+/obj/structure/closet/radiation,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"RJ" = (
+/obj/machinery/power/solar/panel{
+	id_tag = "djstationsolar";
+	name = "DJ Station Solar Array"
+	},
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor{
+	icon_state = "solarpanel"
+	},
+/area/djstation/solars)
+"RZ" = (
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/plating,
+/area/djstation)
+"SM" = (
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/machinery/power/apc{
+	dir = 8;
+	pixel_x = -24
+	},
+/turf/simulated/floor/plating,
+/area/djstation)
+"TP" = (
+/obj/structure/closet,
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/djstation)
+"Up" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning_corner";
+	tag = "icon-warning_corner (NORTH)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"Ut" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/space/syndicate,
+/obj/item/clothing/head/helmet/space/syndicate,
+/obj/item/clothing/mask/breath,
+/turf/simulated/floor/plating,
+/area/djstation)
+"VI" = (
+/obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk,
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/djstation)
+"VN" = (
+/obj/structure/cable,
+/turf/simulated/floor{
+	icon_state = "solarpanel"
+	},
+/area/djstation/solars)
+"Wi" = (
+/turf/simulated/floor{
+	icon_state = "bar"
+	},
+/area/djstation)
+"Wj" = (
+/obj/machinery/power/terminal,
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/structure/window/reinforced,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable/yellow,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"Wn" = (
+/obj/structure/disposalpipe/segment,
+/turf/simulated/wall,
+/area/djstation)
+"WH" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "radiation-w"
+	},
+/obj/machinery/door/window{
+	dir = 2;
+	icon_state = "right";
+	name = "Radiation Zone Door"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/djstation)
+"XP" = (
+/obj/structure/bed/chair/office/light,
+/obj/effect/decal/remains/human,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"XW" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/catwalk,
+/turf/space,
+/area/djstation/solars)
+"Yx" = (
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"YU" = (
+/obj/machinery/light_switch{
+	pixel_y = 28
+	},
+/turf/simulated/floor{
+	icon_state = "grimy"
+	},
+/area/djstation)
+"Zi" = (
+/obj/machinery/light_switch{
+	pixel_x = -32
+	},
+/obj/machinery/newscaster{
+	pixel_y = 32
+	},
+/obj/structure/table,
+/obj/machinery/cell_charger,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+"ZU" = (
+/obj/machinery/space_heater,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "cafeteria"
+	},
+/area/djstation)
+
+(1,1,1) = {"
+wL
+wL
+wL
+wL
+wL
+BQ
+BQ
+BQ
+BQ
+BQ
+BQ
+BQ
+wL
+qZ
+RZ
+RZ
+RZ
+qZ
+wL
+Fe
+wL
+wL
+wL
+"}
+(2,1,1) = {"
+wL
+wL
+wL
+wL
+wL
+BQ
+rd
+pj
+OJ
+pj
+Mn
+BQ
+wL
+qZ
+No
+Wi
+VI
+Wn
+Gu
+Gu
+Gu
+sl
+wL
+"}
+(3,1,1) = {"
+wL
+wL
+wL
+wL
+wL
+BQ
+rd
+gR
+OJ
+gR
+Mn
+BQ
+wL
+qZ
+bA
+Wi
+fa
+qZ
+qZ
+qZ
+qZ
+wL
+wL
+"}
+(4,1,1) = {"
+wL
+wL
+wL
+wL
+Fe
+BQ
+rd
+gR
+OJ
+gR
+Mn
+BQ
+wL
+qZ
+Gb
+Wi
+Wi
+CN
+jC
+aC
+qZ
+wL
+wL
+"}
+(5,1,1) = {"
+wL
+wL
+wL
+Fe
+Fe
+BQ
+rd
+gR
+OJ
+gR
+VN
+BQ
+wL
+qZ
+Wi
+Wi
+bZ
+qZ
+qZ
+gG
+qZ
+wL
+wL
+"}
+(6,1,1) = {"
+BQ
+BQ
+BQ
+BQ
+BQ
+qZ
+RZ
+zg
+qZ
+zg
+RZ
+qZ
+qZ
+qZ
+mU
+dm
+mU
+qZ
+qZ
+qZ
+qZ
+wL
+wL
+"}
+(7,1,1) = {"
+BQ
+RJ
+RJ
+RJ
+RJ
+RZ
+Kr
+yM
+ti
+LN
+sj
+SM
+qZ
+Zi
+MQ
+MQ
+MQ
+MQ
+GQ
+zG
+qZ
+wL
+wL
+"}
+(8,1,1) = {"
+BQ
+kz
+XW
+XW
+XW
+BF
+GO
+jg
+fc
+De
+sv
+DL
+qZ
+av
+MQ
+ob
+fi
+MQ
+MQ
+Yx
+qZ
+wL
+wL
+"}
+(9,1,1) = {"
+BQ
+zU
+FO
+FO
+FO
+qZ
+ps
+Eh
+Wj
+cI
+tY
+lT
+vx
+fS
+MQ
+XP
+be
+MQ
+MQ
+cH
+qZ
+wL
+wL
+"}
+(10,1,1) = {"
+BQ
+kz
+XW
+XW
+XW
+BF
+zN
+Up
+cX
+Og
+qa
+sj
+qZ
+RD
+MQ
+ob
+pC
+MQ
+ZU
+IX
+qZ
+qZ
+qZ
+"}
+(11,1,1) = {"
+BQ
+JQ
+JQ
+JQ
+JQ
+RZ
+AZ
+HY
+WH
+Di
+kj
+Ut
+qZ
+xF
+MQ
+MQ
+MQ
+MQ
+Nj
+MQ
+sz
+sj
+xW
+"}
+(12,1,1) = {"
+BQ
+BQ
+BQ
+BQ
+BQ
+qZ
+RZ
+zg
+qZ
+zg
+RZ
+qZ
+qZ
+qZ
+RZ
+AM
+RZ
+qZ
+Bq
+MQ
+sz
+sj
+sz
+"}
+(13,1,1) = {"
+wL
+wL
+Fe
+Fe
+Fe
+BQ
+rd
+uD
+OJ
+uD
+Mn
+BQ
+wL
+qZ
+mi
+mi
+mN
+qZ
+qZ
+qZ
+qZ
+qZ
+qZ
+"}
+(14,1,1) = {"
+wL
+wL
+wL
+wL
+Fe
+BQ
+rd
+uD
+OJ
+uD
+Mn
+BQ
+wL
+qZ
+YU
+mi
+Kc
+qZ
+wL
+wL
+wL
+wL
+wL
+"}
+(15,1,1) = {"
+wL
+wL
+wL
+wL
+Fe
+BQ
+rd
+uD
+OJ
+uD
+Mn
+BQ
+wL
+qZ
+Hv
+mi
+Jj
+qZ
+wL
+wL
+wL
+wL
+wL
+"}
+(16,1,1) = {"
+wL
+wL
+wL
+wL
+wL
+BQ
+rd
+lY
+OJ
+lY
+Mn
+BQ
+wL
+qZ
+xp
+mi
+TP
+qZ
+wL
+wL
+wL
+wL
+wL
+"}
+(17,1,1) = {"
+wL
+wL
+wL
+wL
+wL
+BQ
+BQ
+BQ
+BQ
+BQ
+BQ
+BQ
+wL
+qZ
+RZ
+RZ
+RZ
+qZ
+wL
+wL
+wL
+wL
+wL
+"}
+(18,1,1) = {"
+wL
+wL
+wL
+wL
+wL
+wL
+wL
+wL
+wL
+wL
+Fe
+Fe
+wL
+Fe
+wL
+wL
+Fe
+wL
+wL
+wL
+wL
+wL
+wL
+"}

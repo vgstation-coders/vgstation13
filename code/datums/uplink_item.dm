@@ -1072,6 +1072,14 @@ var/list/discounted_items_of_the_round = list()
 	discounted_cost = 10
 	jobs_with_discount = list("Chef")
 
+/datum/uplink_item/jobspecific/service/kitchengun
+	name = "Kitchen Gun"
+	desc = "An otherwise ordinary glock that also has the power to completely clean the surface of anything it's fired on in three shots. Causes the holder to shout their speech loudly while held. Comes with night vision goggles for after dark cleaning."
+	item = /obj/item/weapon/storage/box/syndie_kit/kitchengun
+	cost = 14
+	discounted_cost = 10
+	jobs_with_discount = list("Chef","Janitor")
+
 /datum/uplink_item/jobspecific/service/cautionsign
 	name = "Proximity Mine Wet Floor Sign"
 	desc = "An anti-personnel proximity mine cleverly disguised as a wet floor caution sign that is triggered by running past it. Interact with it to start the 15 second timer and activate it again to disarm."
