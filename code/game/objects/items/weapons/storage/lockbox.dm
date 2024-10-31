@@ -107,6 +107,16 @@
 			icon_state = icon_locked
 			broken = 0
 			locked = 0
+	else if(broken && issolder(W))
+		var/obj/item/tool/solder/S = W
+		if(S.remove_fuel(4,user))
+			S.playtoolsound(loc, 100)
+			if(do_after(user, src,4 SECONDS * S.work_speed))
+				S.playtoolsound(loc, 100)
+				broken = 0
+				to_chat(user, "<span class='notice'>You repair the electronics inside the locking mechanism!</span>")
+				icon_state = icon_locked
+		return
 	else if(!locked)
 		if(W.is_screwdriver() && electronics)
 			to_chat(user, "<span class='notice'>You unsecure \the [electronics] from \the [src].</span>")
