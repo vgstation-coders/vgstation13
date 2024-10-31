@@ -1,6 +1,6 @@
 /obj/item/weapon/storage/lockbox
 	name = "lockbox"
-	desc = "A locked box."
+	desc = "A box that accepts and uses locking mechanisms."
 	icon_state = "lockbox+l"
 	item_state = "syringe_kit"
 	w_class = W_CLASS_LARGE
@@ -19,12 +19,17 @@
 
 /obj/item/weapon/storage/lockbox/New()
 	. = ..()
-	electronics = new(src)
-	if(req_access && req_access.len)
-		electronics.conf_access = req_access
-	else if(req_one_access && req_one_access.len)
-		electronics.conf_access = req_one_access
-		electronics.one_access = 1
+	if((req_access?.len) || (req_one_access?.len))
+		electronics = new(src)
+		if(req_access?.len)
+			electronics.conf_access = req_access
+		else if(req_one_access?.len)
+			electronics.conf_access = req_one_access
+			electronics.one_access = 1
+
+/obj/item/weapon/storage/lockbox/nolock
+	req_one_access = null
+	icon_state = "lockbox+b"
 
 /obj/item/weapon/storage/lockbox/can_use()
 	return broken || !locked || !electronics
@@ -319,6 +324,7 @@
 
 /obj/item/weapon/storage/lockbox/coinbox/allaccess	
 	req_one_access = null
+	icon_state = "coinbox+b"
 
 /obj/item/weapon/storage/lockbox/lawgiver
 	name = "lockbox (lawgiver)"
