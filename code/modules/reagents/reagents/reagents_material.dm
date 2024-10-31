@@ -76,12 +76,13 @@
 		if(H.species.flags & NO_BLOOD)
 			return
 		var/screamed = FALSE
+		var/damagemult = H.vessel.total_volume / 600
 		for(var/part in zone_sels)
 			if(H.check_body_part_coverage(limb_define_to_part_define(part)))
 				return
 			var/datum/organ/external/ext_organ = H.get_organ(part)
 			if((ext_organ.wounds?.len) && prob(15) && volume >= 5)
-				if(ext_organ.take_damage(0, (10 / zone_sels.len))) // Balance for precisions vs general.
+				if(ext_organ.take_damage(0, (10 / zone_sels.len) * damagemult)) // Balance for precisions vs general.
 					H.UpdateDamageIcon(1)
 					screamed = TRUE
 				if(istype(ext_organ,/datum/organ/external/head))
