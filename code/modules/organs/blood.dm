@@ -75,7 +75,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 					B.volume = max(0,B.volume - 0.2) // drains it less slowly on non greys, stops the regen properties of below
 				else
 					B.volume += 0.1 // regenerate blood VERY slowly
-					var/regenmult = M_REGEN in mutations ? 2 : 1
+					var/regenmult = (M_REGEN in mutations) ? 2 : 1
 					if(M_REGEN in mutations)
 						B.volume += 0.4 //A big chunky boost. If you have nutriment and iron you can regenerate 4.1 blood per tick
 					var/datum/role/cultist/C = iscultist(src)
