@@ -442,6 +442,7 @@
 #define METASTABLE_MUTAGEN	"metastable"
 #define ELECTRIC_SHEEP		"electric_sheep"
 #define SCIENTISTS_SERENDIPITY		"scientists_serendipity"
+#define SCIENTISTS_SUPREMESECRET	"scientists_supreme_secret"
 #define METABUDDY		"metabuddy"
 #define SPIDERS			"spiders"
 #define WEED_EATER		"weed_eater"

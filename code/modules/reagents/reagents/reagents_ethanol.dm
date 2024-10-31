@@ -498,6 +498,19 @@
 		glass_desc = "Why research what has already been catalogued?"
 		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5;illegal=1;nanotrasen=1;syndicate=2" //Maxes everything but Illegal and Anomaly
 
+/datum/reagent/ethanol/scientists_serendipity/secret
+	name = "Scientist's Supreme Secret"
+	id = SCIENTISTS_SUPREMESECRET
+	description = "Not saying it was aliens, but..."
+
+/datum/reagent/ethanol/scientists_serendipity/secret/when_drinkingglass_master_reagent(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
+	. = ..()
+	if(volume >= 50)
+		glass_icon_state = "scientists_serendipity"
+		glass_name = "\improper Scientist's Supreme Secret"
+		glass_desc = "You are not cleared to know the contents of this glass"
+		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5;illegal=1;nanotrasen=1;syndicate=2;alien=6;" //Maxes everything but Illegal and Anomaly
+
 /datum/reagent/ethanol/beepskyclassic
 	name = "Beepsky Classic"
 	id = BEEPSKY_CLASSIC
