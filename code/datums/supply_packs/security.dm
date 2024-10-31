@@ -141,7 +141,7 @@
 					/obj/item/clothing/head/helmet/mothership,
 					/obj/item/clothing/head/helmet/mothership)
 	cost = 60
-	containertype = /obj/structure/closet/secure_closet/ayy2
+	containertype = /obj/structure/closet/secure_closet/ayy2/metal
 	containername = "MDF standard armor locker"
 	one_access = list(access_security, access_mothership_military)
 	group = "Security"
@@ -170,7 +170,7 @@
 					/obj/item/clothing/head/helmet/mothership_explorer,
 					/obj/item/clothing/head/helmet/mothership_explorer)
 	cost = 60
-	containertype = /obj/structure/closet/secure_closet/ayy
+	containertype = /obj/structure/closet/secure_closet/ayy/metal
 	containername = "GDR explorer armor locker"
 	one_access = list(access_security, access_mothership_military)
 	group = "Security"
