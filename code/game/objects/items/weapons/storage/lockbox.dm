@@ -90,7 +90,7 @@
 			return
 		return toggle(user, I.registered_name)
 	if(!electronics && istype(W,/obj/item/weapon/circuitboard/airlock))
-		if(W.icon_state != "door_electronics_smoked")
+		if(W.icon_state == "door_electronics_smoked")
 			to_chat(user, "<span class='warning'>Repair \the [W] before putting it in!</span>")
 		else if(user.drop_item(W,src))
 			to_chat(user, "<span class='notice'>You add \the [electronics] to \the [src].</span>")
@@ -125,6 +125,7 @@
 			req_one_access = list()
 			if(broken)
 				electronics.icon_state = "door_electronics_smoked"
+			electronics = null
 			broken = 0
 			locked = 0
 			update_icon()
