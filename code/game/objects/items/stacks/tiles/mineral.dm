@@ -232,4 +232,5 @@
 /obj/item/stack/tile/mineral/reticulite/fancy
 	name = "ornate reticulite tile"
 	icon_state = "tile_fancyreticulite"
+	desc = "A refined, chiseled and normal shaped tile made out of reticulite."
 	material = "alien_tile_fancy"
