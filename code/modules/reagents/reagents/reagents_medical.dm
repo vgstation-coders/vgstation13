@@ -1245,6 +1245,10 @@ var/global/list/charcoal_doesnt_remove=list(
 		for(var/datum/organ/internal/I in C.internal_organs)
 			if(I.damage > 0)
 				I.damage = max(0,I.damage-0.2)
+			if(istype(I,/datum/organ/internal/brain))
+				var/datum/organ/internal/brain/B = I
+				for(var/damtype in B.specific_damages)
+					B.specific_damages[damtype] = max(0, B.specific_damages[damtype] - 0.2)
 
 /datum/reagent/peridaxon/reaction_obj(var/obj/O, var/volume)
 	if(..())
