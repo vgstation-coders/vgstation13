@@ -67,6 +67,27 @@
 		if(prob(50))
 			M.adjustToxLoss(-1 * REM)
 
+/datum/reagent/zetadust/reaction_mob(var/mob/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
+	if(..())
+		return 1
+
+	if(method == TOUCH && ishuman(M) && !isgrey(M))
+		var/mob/living/carbon/human/H = M
+		var/screamed = FALSE
+		for(var/part in zone_sels)
+			if(H.check_body_part_coverage(limb_define_to_part_define(part)))
+				return
+			var/datum/organ/external/ext_organ = H.get_organ(part)
+			if((ext_organ.wounds?.len) && prob(15) && volume >= 5)
+				if(ext_organ.take_damage(0, (10 / zone_sels.len))) // Balance for precisions vs general.
+					H.UpdateDamageIcon(1)
+					screamed = TRUE
+				if(istype(ext_organ,/datum/organ/external/head))
+					var/datum/organ/external/head/head_organ = ext_organ
+					head_organ.disfigure("burn")
+		if(screamed)
+			H.audible_scream()
+
 /datum/reagent/phazon
 	name = "Phazon Salt"
 	id = PHAZON
