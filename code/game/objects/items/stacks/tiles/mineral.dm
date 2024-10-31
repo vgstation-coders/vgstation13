@@ -231,4 +231,5 @@
 
 /obj/item/stack/tile/mineral/reticulite/fancy
 	name = "ornate reticulite tile"
+	icon_state = "tile_fancyreticulite"
 	material = "alien_tile_fancy"
