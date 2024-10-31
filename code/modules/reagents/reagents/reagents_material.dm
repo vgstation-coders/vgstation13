@@ -49,6 +49,24 @@
 	specheatcap = 0.45
 	density = 7.874
 
+/datum/reagent/zetadust
+	name = "Zeta dust"
+	id = ZETADUST
+	description = "Ground up reticulite, the essence of any grey's healthy blood system."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#336666" //closer to ayy colors
+	specheatcap = 0.1
+	density = 25
+	dupeable = FALSE
+
+/datum/reagent/zetadust/on_mob_life(mob/living/M, alien)
+	. = ..()
+	if(!isgrey(M) && prob(25)) //restores blood on greys, stings a little for anyone else
+		M.adjustFireLoss(0.5 * REM)
+		M.bodytemperature += 1 * TEMPERATURE_DAMAGE_COEFFICIENT
+		if(prob(50))
+			M.adjustToxLoss(-1 * REM)
+
 /datum/reagent/phazon
 	name = "Phazon Salt"
 	id = PHAZON

@@ -72,6 +72,7 @@
 #define VIRUSFOOD 			"virusfood"
 #define STERILIZINE 			"sterilizine"
 #define IRON 			"iron"
+#define ZETADUST 		"zeta dust"
 #define GOLD 			"gold"
 #define SILVER 			"silver"
 #define URANIUM 			"uranium"

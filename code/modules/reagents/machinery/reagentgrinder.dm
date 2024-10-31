@@ -41,6 +41,7 @@ var/global/list/juice_items = list (
 		/obj/item/stack/sheet/mineral/gold    = list(GOLD = 20),
 		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST = 20),
 		/obj/item/stack/sheet/mineral/phazon  = list(PHAZON = 1),
+		/obj/item/stack/sheet/mineral/reticulite = list(ZETADUST = 10),
 		/obj/item/stack/sheet/wax			  = list(WAX = 5),
 		/obj/item/candle					  = list(WAX = 1.25),
 		/obj/item/trash/candle				  = list(WAX = 1),
