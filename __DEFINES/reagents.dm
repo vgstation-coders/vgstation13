@@ -143,6 +143,8 @@
 #define NANOBOTS 			"nanobots"
 #define MEDNANOBOTS 			"mednanobots"
 #define COMNANOBOTS 			"comnanobots"
+#define ZEPTOBOTS 			"zeptobots"
+#define GREYZEPTOBOTS 			"greyzeptobots"
 #define FLUOROSURFACTANT 			"fluorosurfactant"
 #define PICCOLYN			"piccolyn"
 #define NICOTINE 			"nicotine"

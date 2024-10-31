@@ -1143,6 +1143,20 @@
 	required_reagents = list(NANOBOTS = 1, DOCTORSDELIGHT = 5)
 	result_amount = 2.5
 
+/datum/chemical_reaction/zeptobots
+	name = "Zeptobots"
+	id = ZEPTOBOTS
+	result = ZEPTOBOTS
+	required_reagents = list(NANOBOTS = 1, ZETADUST = 5)
+	result_amount = 2.5
+
+/datum/chemical_reaction/greyzeptobots
+	name = "Grey Zeptobots"
+	id = GREYZEPTOBOTS
+	result = GREYZEPTOBOTS
+	required_reagents = list(ZEPTOBOTS = 1, GREYGOO = 1)
+	result_amount = 2.5
+
 /datum/chemical_reaction/comnanobots
 	name = "Combat Nanobots"
 	id = COMNANOBOTS

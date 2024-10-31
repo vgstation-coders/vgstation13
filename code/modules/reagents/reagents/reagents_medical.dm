@@ -1028,6 +1028,9 @@ var/global/list/charcoal_doesnt_remove=list(
 	density = 96.64
 	specheatcap = 0.19999
 
+/datum/reagent/mednanobots/proc/cyberhorrors(var/mob/living/M)
+	return TRUE
+
 /datum/reagent/mednanobots/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
@@ -1067,42 +1070,51 @@ var/global/list/charcoal_doesnt_remove=list(
 			D2.stage--
 			if(D2.stage < 1)
 				D2.cure(M)
-	switch(volume)
-		if(0.1 to 5)
-			if(percent_machine>5) //Slowly lowers the percent machine to a minimum of 5 when you aren't above 5 units.
-				percent_machine -= 1
-				if(prob(20))
-					to_chat(M, pick("You feel more like yourself again."))
+	if(cyberhorrors(M))
+		switch(volume)
+			if(0.1 to 5)
+				if(percent_machine>5) //Slowly lowers the percent machine to a minimum of 5 when you aren't above 5 units.
+					percent_machine -= 1
+					if(prob(20))
+						to_chat(M, pick("You feel more like yourself again."))
 
-		if(5 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
-			percent_machine += 0.5 //The longer it metabolizes at this stage the more likely.
-			if(prob(20))
-				to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>",
-								"<span class='warning'>You feel different, somehow...</span>"))
-			if(prob(percent_machine))
-				holder.add_reagent(MEDNANOBOTS, 20)
-				to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
-		if(20 to INFINITY) //Now you've done it.
-			if(istype(M, /mob/living/simple_animal/hostile/monster/cyber_horror))
-				return
-			spawning_horror = 1
-			to_chat(M, pick("<b><span class='warning'>Something doesn't feel right...</span></b>", "<b><span class='warning'>Something is growing inside you!</span></b>", "<b><span class='warning'>You feel your insides rearrange!</span></b>"))
-			spawn(60)
-				if(spawning_horror == 1)
-					to_chat(M, "<b><span class='warning'>Something bursts out from inside you!</span></b>")
-					message_admins("[key_name(M)] [M] has gibbed and spawned a new cyber horror due to nanobots. ([formatJumpTo(M)])")
-					if(ishuman(M))
-						var/mob/living/carbon/human/H = M
-						var/typepath
-						typepath = text2path("/mob/living/simple_animal/hostile/monster/cyber_horror/[H.species.name]")
-						if(ispath(typepath))
-							new typepath(M.loc)
+			if(5 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
+				percent_machine += 0.5 //The longer it metabolizes at this stage the more likely.
+				if(prob(20))
+					to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>",
+									"<span class='warning'>You feel different, somehow...</span>"))
+				if(prob(percent_machine))
+					holder.add_reagent(MEDNANOBOTS, 20)
+					to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
+			if(20 to INFINITY) //Now you've done it.
+				if(istype(M, /mob/living/simple_animal/hostile/monster/cyber_horror))
+					return
+				spawning_horror = 1
+				to_chat(M, pick("<b><span class='warning'>Something doesn't feel right...</span></b>", "<b><span class='warning'>Something is growing inside you!</span></b>", "<b><span class='warning'>You feel your insides rearrange!</span></b>"))
+				spawn(60)
+					if(spawning_horror == 1)
+						to_chat(M, "<b><span class='warning'>Something bursts out from inside you!</span></b>")
+						message_admins("[key_name(M)] [M] has gibbed and spawned a new cyber horror due to nanobots. ([formatJumpTo(M)])")
+						if(ishuman(M))
+							var/mob/living/carbon/human/H = M
+							var/typepath
+							typepath = text2path("/mob/living/simple_animal/hostile/monster/cyber_horror/[H.species.name]")
+							if(ispath(typepath))
+								new typepath(M.loc)
+							else
+								new /mob/living/simple_animal/hostile/monster/cyber_horror(M.loc)
 						else
-							new /mob/living/simple_animal/hostile/monster/cyber_horror(M.loc)
-					else
-						new /mob/living/simple_animal/hostile/monster/cyber_horror/monster(M.loc,M)
-					spawning_horror = 0
-					M.gib()
+							new /mob/living/simple_animal/hostile/monster/cyber_horror/monster(M.loc,M)
+						spawning_horror = 0
+						M.gib()
+
+/datum/reagent/mednanobots/grey
+	name = "Grey Zeptobots"
+	id = GREYZEPTOBOTS
+	description = "Almost atomic-sized sentient dust intended for use in greys. Configured for rapid healing upon infiltration into the body."
+
+/datum/reagent/mednanobots/grey/cyberhorrors(var/mob/living/M)
+	return !isgrey(M)
 
 /datum/reagent/methylin
 	name = "Methylin"
@@ -1135,6 +1147,11 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#3E3959" //rgb: 62, 57, 89
 	density = 236.6
 	specheatcap = 0.19999
+
+/datum/reagent/nanobots/zepto
+	name = "Zeptobots"
+	id = ZEPTOBOTS
+	description = "Almost atomic-sized sentient dust intended for use in greys. Must be loaded with further chemicals to be useful."
 
 /datum/reagent/oxycodone
 	name = "Oxycodone"
