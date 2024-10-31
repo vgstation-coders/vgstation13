@@ -1113,6 +1113,20 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = GREYZEPTOBOTS
 	description = "Almost atomic-sized sentient dust intended for use in greys. Configured for rapid healing upon infiltration into the body."
 
+/datum/reagent/mednanobots/grey/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+		
+	if(holder.has_any_reagents(list(MERCURY, IMPEDREZENE, SPACE_DRUGS)))
+		holder.remove_reagents(list(MERCURY, IMPEDREZENE, SPACE_DRUGS), 5 * REM)
+	if(holder.has_any_reagents(list(MINDBREAKER, SPIRITBREAKER)))
+		holder.remove_reagents(list(MINDBREAKER, SPIRITBREAKER), 3 * REM) // The only other chemical that removes spiritbreaker besides adminordrazine
+	if(ishuman(M))
+		M.adjustBrainLoss(-10)
+		M.hallucination = 0
+		M.dizziness = 0
+		M.confused = 0
+
 /datum/reagent/mednanobots/grey/cyberhorrors(var/mob/living/M)
 	return !isgrey(M)
 
