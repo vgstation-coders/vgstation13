@@ -1773,7 +1773,7 @@ var/global/objects_thrown_when_explode = FALSE
 	extinguish_with_hands(user)
 
 /obj/item/proc/extinguish_with_hands(var/mob/user)
-	if(user.stat || !user.Adjacent(src) || !isliving(user))
+	if(user.stat || !Adjacent(user, src) || !isliving(user))
 		return
 	if(src.on_fire)
 		extinguish()
