@@ -148,10 +148,13 @@
 		pullcounter++
 
 /obj/item/device/handheld_magnet/proc/can_pull(obj/O) // the iron stuff is basically hotfixed onto this because is_conductor() is WAY too broad for this lil thing
-	. = O && !O.anchored && ((MAT_IRON in O.starting_materials) || (O.reagents?.has_reagent(IRON)))
+	. = O && !O.anchored 
 	if(.)
+		var/inside = FALSE
 		for(var/atom/A in O.contents)
-			. |= can_pull(A)
+			if(can_pull(A))
+				return TRUE
+	. &= ((MAT_IRON in O.starting_materials) || (O.reagents?.has_reagent(IRON)))
 
 /obj/item/device/handheld_magnet/examine(mob/user)
 	..()
