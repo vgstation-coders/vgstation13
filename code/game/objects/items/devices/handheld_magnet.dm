@@ -108,7 +108,11 @@
 		if(T)
 			for(var/obj/O in orange(magnetic_field, T))
 				if(can_pull(O))
+					if(ismecha(O))
+						continue
 					if(O.w_class && pullcounter % O.w_class != 0) // bigger items take longer
+						continue
+					if((density || opacity) && pullcounter % ((density+opacity)*2) == 0) // as do dense ones
 						continue
 					//if(round((1/O.siemens_coefficient)) > 0 && pullcounter % round((1/O.siemens_coefficient)) != 0) // higher coefficient pulls better
 						//continue
