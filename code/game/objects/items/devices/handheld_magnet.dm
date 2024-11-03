@@ -117,12 +117,12 @@
 						CL.open()
 					step_towards(O, T)
 
-			for(var/mob/living/silicon/S in orange(magnetic_field, T))
-				if(istype(S, /mob/living/silicon/ai))
+			for(var/mob/M in orange(magnetic_field, T))
+				if(M.anchored || !(M.mob_property_flags & MOB_ROBOTIC))
 					continue
-				if(S.size && pullcounter % S.size != 0) // bigger bots take longer
+				if(M.size && pullcounter % M.size != 0) // bigger things take longer
 					continue
-				step_towards(S, T)
+				step_towards(M, T)
 
 			for(var/mob/living/carbon/human/H in orange(magnetic_field/2, T))
 				if(can_pull(H.l_store))
