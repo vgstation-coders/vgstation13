@@ -252,7 +252,17 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 1000, MAT_GLASS = 1000, MAT_RETICULITE = 3000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/melee/stunprobe
+	build_path = /obj/item/weapon/melee/baton/loaded/probe
+
+/datum/design/sickstick
+	name = "Sick Stick"
+	desc = "A strange stunprod-like stick that induces vomiting instead of stunning."
+	id = "sickstick"
+	req_tech = list(Tc_COMBAT = 3, Tc_POWERSTORAGE = 2, Tc_ALIEN = 4)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 1000, MAT_GLASS = 1000, MAT_RETICULITE = 3000)
+	category = "Weapons"
+	build_path = /obj/item/weapon/melee/baton/loaded/probe/sick
 
 /datum/design/smalldisintegrator
 	name = "Small Disintegrator"

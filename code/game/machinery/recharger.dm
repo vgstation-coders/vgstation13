@@ -103,7 +103,7 @@
 	if(!anchored)
 		to_chat(user, "<span class='warning'>You must secure \the [src] before you can make use of it!</span>")
 		return 1
-	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G, /obj/item/weapon/melee/stunprobe) || istype(G, /obj/item/energy_magazine) || istype(G, /obj/item/ammo_storage/magazine/lawgiver) || istype(G, /obj/item/weapon/rcs) || istype(G, /obj/item/clothing/head/helmet/stun))
+	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G, /obj/item/weapon/melee/baton/loaded/probe) || istype(G, /obj/item/energy_magazine) || istype(G, /obj/item/ammo_storage/magazine/lawgiver) || istype(G, /obj/item/weapon/rcs) || istype(G, /obj/item/clothing/head/helmet/stun))
 		if (istype(G, /obj/item/weapon/gun/energy))
 			var/obj/item/weapon/gun/energy/gun = G
 			if (!gun.rechargeable)
@@ -235,8 +235,8 @@
 					has_beeped = TRUE
 			else
 				icon_state = "recharger0"
-		else if(istype(charging, /obj/item/weapon/melee/stunprobe)) //25e power loss is so minor that the game shouldn't bother calculating the efficiency of better parts for it
-			var/obj/item/weapon/melee/stunprobe/B = charging
+		else if(istype(charging, /obj/item/weapon/melee/baton/loaded/probe)) //25e power loss is so minor that the game shouldn't bother calculating the efficiency of better parts for it
+			var/obj/item/weapon/melee/baton/loaded/probe/B = charging
 			if(B.bcell)
 				if(B.bcell.give(175*charging_speed_modifier))
 					icon_state = "recharger1"
@@ -291,8 +291,8 @@
 		if(E.power_supply)
 			E.power_supply.emp_act(severity)
 
-	if(istype(charging, /obj/item/weapon/melee/stunprobe))
-		var/obj/item/weapon/melee/stunprobe/B = charging
+	if(istype(charging, /obj/item/weapon/melee/baton/loaded/probe))
+		var/obj/item/weapon/melee/baton/loaded/probe/B = charging
 		if(B.bcell)
 			B.bcell.charge = 0
 
@@ -365,8 +365,8 @@
 					icon_state = "wrecharger2"
 			else
 				icon_state = "wrecharger3"
-		if(istype(charging, /obj/item/weapon/melee/stunprobe))
-			var/obj/item/weapon/melee/stunprobe/B = charging
+		if(istype(charging, /obj/item/weapon/melee/baton/loaded/probe))
+			var/obj/item/weapon/melee/baton/loaded/probe/B = charging
 			if(B.bcell)
 				if(B.bcell.give(175))
 					icon_state = "wrecharger1"

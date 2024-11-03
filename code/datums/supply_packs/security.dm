@@ -74,8 +74,8 @@
 
 /datum/supply_packs/greyweapons
 	name = "MDF surplus weapons"
-	contains = list(/obj/item/weapon/melee/stunprobe,
-					/obj/item/weapon/melee/stunprobe,
+	contains = list(/obj/item/weapon/melee/baton/loaded/probe,
+					/obj/item/weapon/melee/baton/loaded/probe,
 					/obj/item/weapon/gun/energy/smalldisintegrator,
 					/obj/item/weapon/gun/energy/smalldisintegrator)
 	cost = 60
