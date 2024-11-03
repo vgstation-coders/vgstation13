@@ -528,7 +528,7 @@
 			return 0
 
 /obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(emag_check(W,user))
+	if(!opened && !broken && emag_check(W,user))
 		return
 	else if(istype(W, /obj/item/weapon/card/id) && !opened && !broken)
 		togglelock(user)
