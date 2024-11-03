@@ -10,21 +10,16 @@
 	gasses = list()
 	var/list/intake_settings=list(
 		GAS_OXYGEN = list(
-			new /datum/lung_gas/metabolizable(GAS_OXYGEN,            min_pp=16, max_pp=280),
+			new /datum/lung_gas/metabolizable(GAS_OXYGEN,            min_pp=8, max_pp=280),
 			new /datum/lung_gas/waste(GAS_CARBON,            max_pp=10),
-			new /datum/lung_gas/toxic(GAS_PLASMA,                    max_pp=5, max_pp_mask=0, reagent_id="plasma", reagent_mult=0.1),
-			new /datum/lung_gas/sleep_agent(GAS_SLEEPING, min_giggle_pp=1, min_para_pp=5, min_sleep_pp=10),
 		),
 		GAS_NITROGEN = list(
-			new /datum/lung_gas/metabolizable(GAS_NITROGEN,          min_pp=16, max_pp=280),
+			new /datum/lung_gas/metabolizable(GAS_NITROGEN,          min_pp=8, max_pp=280),
 			new /datum/lung_gas/waste(GAS_CARBON,            	max_pp=10), // I guess? Ideally it'd be some sort of nitrogen compound.  Maybe N2O?
-			new /datum/lung_gas/toxic(GAS_OXYGEN,                    max_pp=0.5, max_pp_mask=0, reagent_id=GAS_OXYGEN, reagent_mult=0.1),
-			new /datum/lung_gas/sleep_agent(GAS_SLEEPING, min_giggle_pp=1, min_para_pp=5, min_sleep_pp=10),
 		),
 		GAS_PLASMA = list(
-			new /datum/lung_gas/metabolizable(GAS_PLASMA, min_pp=16, max_pp=280),
+			new /datum/lung_gas/metabolizable(GAS_PLASMA, min_pp=8, max_pp=280),
 			new /datum/lung_gas/waste(GAS_OXYGEN,         max_pp=10),
-			new /datum/lung_gas/sleep_agent(GAS_SLEEPING, min_giggle_pp=1, min_para_pp=5, min_sleep_pp=10),
 		)
 	)
 

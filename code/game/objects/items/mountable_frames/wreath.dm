@@ -6,7 +6,6 @@
 	flags = FPRINT
 	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 	melt_temperature = MELTPOINT_STEEL
-	autoignition_temperature = AUTOIGNITION_WOOD
 	w_type = RECYK_METAL
 
 /obj/structure/wreath

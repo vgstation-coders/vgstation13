@@ -1,113 +1,171 @@
 var/list/station_departments = list("Command", "Medical", "Engineering", "Science", "Security", "Cargo", "Civilian")
 
-// The department the job belongs to.
-/datum/job/var/department = null
+/datum/job
+	var/department = null		// The department the job belongs to.
+	var/head_position = 0		// Whether this is a head position
+	var/department_prioritized	// Whether the head of this department is prioritized, due to his subordinates being prioritized
+	var/department_head			// Link to the department head
 
-// Whether this is a head position
-/datum/job/var/head_position = 0
+/datum/job/captain
+	department = "Command"
+	head_position = 1
 
-// Whether the head of this department is prioritized, due to his subordinates being prioritized
-/datum/job/var/department_prioritized
 
-// Link to the department head
-/datum/job/var/department_head
+/* Civilian */
 
-/datum/job/captain/department = "Command"
-/datum/job/captain/head_position = 1
+/datum/job/hop
+	department = "Civilian"
+	head_position = 1
+	department_prioritized = FALSE
 
-/datum/job/hop/department = "Civilian"
-/datum/job/hop/head_position = 1
+/datum/job/assistant
+	department = "Civilian"
+	department_head = /datum/job/hop
 
-/datum/job/assistant/department = "Civilian"
+/datum/job/bartender
+	department = "Civilian"
+	department_head = /datum/job/hop
 
-/datum/job/bartender/department = "Civilian"
+/datum/job/chef
+	department = "Civilian"
+	department_head = /datum/job/hop
 
-/datum/job/chef/department = "Civilian"
+/datum/job/hydro
+	department = "Civilian"
+	department_head = /datum/job/hop
 
-/datum/job/hydro/department = "Civilian"
+/datum/job/janitor
+	department = "Civilian"
+	department_head = /datum/job/hop
 
-/datum/job/janitor/department = "Civilian"
+/datum/job/librarian
+	department = "Civilian"
+	department_head = /datum/job/hop
 
-/datum/job/librarian/department = "Civilian"
+/datum/job/lawyer
+	department = "Civilian"
+	department_head = /datum/job/hop
 
-/datum/job/lawyer/department = "Civilian"
+/datum/job/chaplain
+	department = "Civilian"
+	department_head = /datum/job/hop
 
-/datum/job/chaplain/department = "Civilian"
+/datum/job/clown
+	department = "Civilian"
+	department_head = /datum/job/hop
 
-/datum/job/clown/department = "Civilian"
+/datum/job/mime
+	department = "Civilian"
+	department_head = /datum/job/hop
 
-/datum/job/mime/department = "Civilian"
 
-/datum/job/qm/department = "Cargo"
-/datum/job/qm/head_position = 1
-/datum/job/qm/department_prioritized = FALSE
+/* Cargo */
 
-/datum/job/cargo_tech/department = "Cargo"
-/datum/job/cargo_tech/department_head = /datum/job/qm
+/datum/job/qm
+	department = "Cargo"
+	head_position = 1
+	department_prioritized = FALSE
 
-/datum/job/mining/department = "Cargo"
-/datum/job/mining/department_head = /datum/job/qm
+/datum/job/cargo_tech
+	department = "Cargo"
+	department_head = /datum/job/qm
 
-/datum/job/chief_engineer/department = "Engineering"
-/datum/job/chief_engineer/head_position = 1
-/datum/job/chief_engineer/department_prioritized = FALSE
+/datum/job/mining
+	department = "Cargo"
+	department_head = /datum/job/qm
 
-/datum/job/engineer/department = "Engineering"
-/datum/job/engineer/department_head = /datum/job/chief_engineer
 
-/datum/job/atmos/department = "Engineering"
-/datum/job/atmos/department_head = /datum/job/chief_engineer
+/* Engineering */
 
-/datum/job/mechanic/department = "Engineering"
-/datum/job/mechanic/department_head = /datum/job/chief_engineer
+/datum/job/chief_engineer
+	department = "Engineering"
+	head_position = 1
+	department_prioritized = FALSE
 
-/datum/job/cmo/department = "Medical"
-/datum/job/cmo/head_position = 1
-/datum/job/cmo/department_prioritized = FALSE
+/datum/job/engineer
+	department = "Engineering"
+	department_head = /datum/job/chief_engineer
 
-/datum/job/doctor/department = "Medical"
-/datum/job/doctor/department_head = /datum/job/cmo
+/datum/job/atmos
+	department = "Engineering"
+	department_head = /datum/job/chief_engineer
 
-/datum/job/paramedic/department = "Medical"
-/datum/job/paramedic/department_head = /datum/job/cmo
+/datum/job/mechanic
+	department = "Engineering"
+	department_head = /datum/job/chief_engineer
 
-/datum/job/chemist/department = "Medical"
-/datum/job/chemist/department_head = /datum/job/cmo
 
-/datum/job/geneticist/department = "Medical"
-/datum/job/geneticist/department_head = /datum/job/cmo
+/* Medical */
 
-/datum/job/virologist/department = "Medical"
-/datum/job/virologist/department_head = /datum/job/cmo
+/datum/job/cmo
+	department = "Medical"
+	head_position = 1
+	department_prioritized = FALSE
 
-/datum/job/orderly/department = "Medical"
-/datum/job/orderly/department_head = /datum/job/cmo
+/datum/job/doctor
+	department = "Medical"
+	department_head = /datum/job/cmo
 
-/datum/job/rd/department = "Science"
-/datum/job/rd/head_position = 1
-/datum/job/rd/department_prioritized = FALSE
+/datum/job/paramedic
+	department = "Medical"
+	department_head = /datum/job/cmo
 
-/datum/job/scientist/department = "Science"
-/datum/job/scientist/department_head = /datum/job/rd
+/datum/job/chemist
+	department = "Medical"
+	department_head = /datum/job/cmo
 
-/datum/job/roboticist/department = "Science"
-/datum/job/roboticist/department_head = /datum/job/rd
+/datum/job/geneticist
+	department = "Medical"
+	department_head = /datum/job/cmo
 
-/datum/job/xenobiologist/department  = "Science"
-/datum/job/xenobiologist/department_head = /datum/job/rd
+/datum/job/virologist
+	department = "Medical"
+	department_head = /datum/job/cmo
 
-/datum/job/xenoarchaeologist/department = "Science"
-/datum/job/xenoarchaeologist/department_head = /datum/job/rd
+/datum/job/orderly
+	department = "Medical"
+	department_head = /datum/job/cmo
 
-/datum/job/hos/department = "Security"
-/datum/job/hos/head_position = 1
-/datum/job/hos/department_prioritized = FALSE
 
-/datum/job/warden/department = "Security"
-/datum/job/warden/department_head = /datum/job/hos
+/* Science */
 
-/datum/job/detective/department = "Security"
-/datum/job/detective/department_head = /datum/job/hos
+/datum/job/rd
+	department = "Science"
+	head_position = 1
+	department_prioritized = FALSE
 
-/datum/job/officer/department = "Security"
-/datum/job/officer/department_head = /datum/job/hos
+/datum/job/scientist
+	department = "Science"
+	department_head = /datum/job/rd
+
+/datum/job/roboticist
+	department = "Science"
+	department_head = /datum/job/rd
+
+/datum/job/xenobiologist
+	department  = "Science"
+	department_head = /datum/job/rd
+
+/datum/job/xenoarchaeologist	
+	department = "Science"
+	department_head = /datum/job/rd
+
+
+/* Security */
+
+/datum/job/hos
+	department = "Security"
+	head_position = 1
+	department_prioritized = FALSE
+
+/datum/job/warden/
+	department = "Security"
+	department_head = /datum/job/hos
+
+/datum/job/detective
+	department = "Security"
+	department_head = /datum/job/hos
+
+/datum/job/officer
+	department = "Security"
+	department_head = /datum/job/hos

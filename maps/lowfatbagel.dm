@@ -28,17 +28,18 @@
 	/datum/map_element/dungeon/holodeck
 	)
 
-	center_x = 260
-	center_y = 236
+	center_x = 255
+	center_y = 247
 
 //All security airlocks have randomized wires
-/obj/machinery/door/airlock/glass_security/New()
-	.=..()
-	wires = new /datum/wires/airlock/secure(src)
+//Disabled from the game
+// /obj/machinery/door/airlock/glass_security/New()
+// 	.=..()
+// 	wires = new /datum/wires/airlock/secure(src)
 
-/obj/machinery/door/airlock/security/New()
-	.=..()
-	wires = new /datum/wires/airlock/secure(src)
+// /obj/machinery/door/airlock/security/New()
+// 	.=..()
+// 	wires = new /datum/wires/airlock/secure(src)
 
 #include "lowfatbagel.dmm"
 #endif

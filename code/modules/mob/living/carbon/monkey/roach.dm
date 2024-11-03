@@ -3,7 +3,7 @@
 	voice_name = "isopod"
 	speak_emote = list("chirrups")
 	icon_state = "isopod"
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big/isopod
 	species_type = /mob/living/carbon/monkey/roach
 	flag = RAD_IMMUNE
 

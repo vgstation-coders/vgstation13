@@ -1,5 +1,5 @@
 /datum/dynamic_ruleset
-	var/name = ""//For admin logging, and round end scoreboard
+	var/name = ""//For admin logging, and round end scoreboard.
 	var/persistent = 0//if set to 1, the rule won't be discarded after being executed, and /gamemode/dynamic will call process() every MC tick
 	var/repeatable = 0//if set to 1, dynamic mode will be able to draft this ruleset again later on. (doesn't apply for roundstart rules)
 	var/midround = 1//if set to 1, is a midround rule
@@ -10,9 +10,9 @@
 	var/list/restricted_from_jobs = list()//if set, rule will deny candidates from those jobs
 	var/list/exclusive_to_jobs = list()//if set, rule will only accept candidates from those jobs
 	var/list/job_priority = list() //May be used by progressive_job_search for prioritizing some jobs for a role. Order matters.
-	var/list/enemy_jobs = list()//if set, there needs to be a certain amount of players doing those jobs (among the players who won't be drafted) for the rule to be drafted
-	var/list/required_pop = list(10,10,0,0,0,0,0,0,0,0)//if enemy_jobs was set, this is the amount of population required for the ruleset to fire. enemy jobs count double
-	var/required_enemies = list(0,0,0,0,0,0,0,0,0,0)		//If set, the ruleset requires this many enemy jobs to be filled in order to fire (per threat level)
+	var/list/enemy_jobs = list()//if required_enemies is set, there needs to be a certain amount of players doing those jobs (among the players who won't be drafted) for the rule to be drafted
+	var/list/required_pop = list(10,10,0,0,0,0,0,0,0,0)//this is the amount of population required for the ruleset to fire (per threat level in slices of 0-9, 10-11, etc..). if enemy_jobs was set, those players count double
+	var/required_enemies = list(0,0,0,0,0,0,0,0,0,0)		//If set, the ruleset requires this many enemy jobs to be filled in order to fire (per threat level in slices of 0-9, 10-19, etc..)
 	var/required_candidates = 0//the rule needs this many candidates (post-trimming) to be executed (example: Cult need 4 players at round start)
 	var/weight = 5//1 -> 9, probability for this rule to be picked against other rules
 	var/list/weekday_rule_boost = list()
@@ -41,6 +41,8 @@
 	var/datum/gamemode/dynamic/mode = null
 
 	var/role_category_override = null // If a role is to be considered another for the purpose of bannig.
+
+	var/weight_category = null	//Allows multiple rulesets to share the same dynamic weight (like Wizard and CWC, or a Roundstart Ruleset with its Midround/Latejoin variants)
 
 /datum/dynamic_ruleset/New()
 	..()
@@ -88,6 +90,8 @@
 // This generic proc works for a solo candidate.
 // returns: 0 or 1 depending on success. (failure meaning something runtimed mid-code.)
 /datum/dynamic_ruleset/proc/choose_candidates()
+	if (candidates.len <= 0)
+		return FALSE
 	var/mob/M = pick(candidates)
 	if (istype(M))
 		assigned += M
@@ -103,10 +107,12 @@
 
 /datum/dynamic_ruleset/proc/ready(var/forced = 0)	//Here you can perform any additional checks you want. (such as checking the map, the amount of certain jobs, etc)
 	if (admin_disable_rulesets && !forced)
-		message_admins("Dynamic Mode: [name] was prevented from firing by admins.")
-		log_admin("Dynamic Mode: [name] was prevented from firing by admins.")
+		message_admins("Dynamic Mode: [name] was prevented from firing because rulesets are disabled.")
+		log_admin("Dynamic Mode: [name] was prevented from firing because rulesets are disabled.")
 		return FALSE
 	if (required_candidates > candidates.len)		//IMPORTANT: If ready() returns 1, that means execute() should never fail!
+		log_admin("Cannot accept [name] ruleset, lack of eligible players.")
+		message_admins("Cannot accept [name] ruleset, lack of eligible players.")
 		return FALSE
 	return TRUE
 
@@ -159,6 +165,9 @@
 			break
 
 	result = previous_rounds_odds_reduction(result)
+
+	if (weight_category in mode.ruleset_category_weights)
+		result *= mode.ruleset_category_weights[weight_category]
 
 	if (mode.highlander_rulesets_favoured && (flags & HIGHLANDER_RULESET))
 		result *= ADDITIONAL_RULESET_WEIGHT

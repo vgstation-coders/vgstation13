@@ -17,7 +17,7 @@
 	selection_type = "range"
 
 	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
-	compatible_mobs = list(/mob/living/carbon/human)
+	valid_targets = list(/mob/living/carbon/human)
 
 	hud_state = "wiz_shoes"
 
@@ -33,6 +33,7 @@
 			target.drop_from_inventory(old_shoes)
 			target.visible_message(	"<span class='danger'>[target]'s shoes suddenly vanish!</span>", \
 									"<span class='danger'>Your shoes suddenly vanish!</span>")
+			old_shoes.forceMove(user.loc)
 			user.put_in_active_hand(old_shoes)
 			score.shoesnatches++
 

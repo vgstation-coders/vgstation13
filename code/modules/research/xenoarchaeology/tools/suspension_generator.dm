@@ -8,6 +8,7 @@
 	icon_state = "suspension2-b"
 	density = 1
 	req_access = list(access_science)
+	machine_flags = EMAGGABLE
 	var/obj/item/weapon/cell/cell
 	var/obj/item/weapon/card/id/auth_card
 	var/locked = 1
@@ -150,7 +151,7 @@
 		if (istype(I, /obj/item/weapon/card))
 			if(usr.drop_item(I, src))
 				auth_card = I
-				if(attempt_unlock(I))
+				if(attempt_unlock(I,usr))
 					to_chat(usr, "<span class='info'>You insert [I], the console flashes \'<i>Access granted.</a>\'</span>")
 				else
 					to_chat(usr, "<span class='warning'>You insert [I], the console flashes \'<i>Access denied.</a>\'</span>")
@@ -208,11 +209,11 @@
 					to_chat(user, "<span class='info'>You crowbar the battery panel [open ? "open" : "in place"].</span>")
 					icon_state = "suspension[anchored ? (open ? (cell ? "1" : "0") : "2") : (open ? (cell ? "1-b" : "0-b") : "2-b")]"
 				else
-					to_chat(user, "<span class='warning'>\the [src]'s safety locks are engaged, shut it down first.</span>")
+					to_chat(user, "<span class='warning'>\The [src]'s safety locks are engaged, shut it down first.</span>")
 			else
 				to_chat(user, "<span class='warning'>Unscrew \the [src]'s battery panel first.</span>")
 		else
-			to_chat(user, "<span class='warning'>\the [src]'s security locks are engaged.</span>")
+			to_chat(user, "<span class='warning'>\The [src]'s security locks are engaged.</span>")
 	else if (W.is_wrench(user))
 		if(!suspension_field)
 			if(anchored)
@@ -249,17 +250,20 @@
 		else
 			to_chat(user, "<span class='warning'>Remove [auth_card] first.</span>")
 
-/obj/machinery/suspension_gen/proc/attempt_unlock(var/obj/item/weapon/card/C)
+/obj/machinery/suspension_gen/proc/attempt_unlock(var/obj/item/weapon/card/C,var/mob/user)
 	if(!open)
-		if(istype(C, /obj/item/weapon/card/emag) && cell.charge > 0)
-			//put sparks here
-			if(prob(95))
-				locked = 0
+		if(emag_check(C,user))
+			return
 		else if(istype(C, /obj/item/weapon/card/id) && check_access(C))
 			locked = 0
-
 		if(!locked)
 			return 1
+
+/obj/machinery/suspension_gen/emag_act(mob/user)
+	if(cell.charge > 0)
+		. = ..()
+		if(prob(95))
+			locked = 0
 
 //checks for whether the machine can be activated or not should already have occurred by this point
 /obj/machinery/suspension_gen/proc/activate()

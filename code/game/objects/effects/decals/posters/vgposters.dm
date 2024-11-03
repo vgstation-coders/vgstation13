@@ -26,7 +26,7 @@
 
 /datum/poster/vg_6//45
 	name = "Termination Of The Self"
-	desc = "A portrait of a famous philospher who challenged the boundaries of mortality."
+	desc = "A portrait of a famous philosopher who challenged the boundaries of mortality."
 	icon_state="vgposter6"
 
 /datum/poster/vg_7//46

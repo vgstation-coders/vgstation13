@@ -241,7 +241,7 @@
 		else
 			visible_message("[user] places \the [L] into \the [src].")
 	else
-		visible_message("\the [L] is placed into \the [src].")
+		visible_message("\The [L] is placed into \the [src].")
 
 	sedativeblock = TRUE
 	sleep(drag_delay)
@@ -426,6 +426,7 @@
 	if (O == occupant)
 		occupant = null
 		update_icon()
+	..()
 
 /obj/machinery/sleeper/proc/go_out(var/exit = loc, var/mob/ejector)
 	var/mob/old_occupant = occupant

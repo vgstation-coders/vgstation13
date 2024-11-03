@@ -145,7 +145,7 @@
 		var/mob/living/L = target
 		if(L.reagents)
 			if(prob(poison_per_bite))
-				src.visible_message("<span class='warning'>\the [src] injects a powerful toxin!</span>")
+				src.visible_message("<span class='warning'>\The [src] injects a powerful toxin!</span>")
 				L.reagents.add_reagent(poison_type, poison_per_bite)
 
 

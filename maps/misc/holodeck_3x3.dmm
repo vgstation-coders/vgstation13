@@ -439,7 +439,7 @@
 /turf/simulated/floor/holofloor,
 /area/holodeck/source_emptycourt)
 "CT" = (
-/obj/item/toy/gasha/carptoy,
+/obj/item/toy/plushie/carp,
 /turf/simulated/floor/beach/coastline,
 /area/holodeck/source_beach)
 "Da" = (

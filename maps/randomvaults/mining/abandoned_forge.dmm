@@ -1,17 +1,17 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
 /turf/simulated/wall/r_rock,
-/area/asteroid)
+/area/mining_surprise)
 "b" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "c" = (
 /obj/effect/decal/cleanable/cockroach_remains,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "d" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/brown/cargo,
@@ -21,7 +21,7 @@
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "e" = (
 /obj/structure/table/woodentable,
 /obj/item/trash/tray,
@@ -30,22 +30,22 @@
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "i" = (
 /obj/structure/boulder,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "j" = (
 /obj/item/item_head/tower_shield,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "k" = (
 /obj/structure/boulder,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "l" = (
 /obj/structure/bed/chair/wood/normal,
 /obj/effect/decal/cleanable/cobweb2,
@@ -53,7 +53,7 @@
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "n" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -69,7 +69,7 @@
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "o" = (
 /obj/item/weapon/paper/crumpled/bloody{
 	info = "Death is not an escape but it's better than staying here."
@@ -77,10 +77,10 @@
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "p" = (
 /turf/unsimulated/mineral,
-/area/asteroid)
+/area/mining_surprise)
 "q" = (
 /obj/structure/rack,
 /obj/item/item_handle,
@@ -89,7 +89,7 @@
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "s" = (
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor6-old";
@@ -98,38 +98,38 @@
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "t" = (
 /obj/structure/ore_box,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "u" = (
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "v" = (
 /obj/structure/boulder,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "x" = (
 /obj/structure/closet/secure_closet/miner,
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "y" = (
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "z" = (
 /obj/structure/vendomatpack/mining,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "B" = (
 /obj/effect/landmark/corpse/miner/rig,
 /obj/effect/decal/cleanable/blood{
@@ -139,13 +139,13 @@
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "C" = (
 /obj/structure/reagent_dispensers/cauldron,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "D" = (
 /obj/structure/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
@@ -156,19 +156,19 @@
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "E" = (
 /obj/item/trash/cigbutt,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "F" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "J" = (
 /obj/structure/bed/chair/wood/normal{
 	dir = 1
@@ -176,18 +176,18 @@
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "K" = (
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "L" = (
 /obj/machinery/door/mineral,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "M" = (
 /obj/item/trash/cigbutt,
 /obj/structure/sign/poster{
@@ -196,21 +196,21 @@
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "N" = (
 /obj/structure/forge,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "P" = (
 /obj/item/anvil,
 /obj/effect/decal/cleanable/cobweb,
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "Q" = (
 /obj/item/item_head/pickaxe_head,
 /obj/structure/hanging_lantern/dim{
@@ -219,7 +219,7 @@
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "S" = (
 /obj/structure/closet,
 /obj/effect/decal/cleanable/dirt,
@@ -232,7 +232,7 @@
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "U" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 8
@@ -240,7 +240,7 @@
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "V" = (
 /obj/structure/hanging_lantern/dim{
 	dir = 1
@@ -248,11 +248,11 @@
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/asteroid)
+/area/mining_surprise)
 "X" = (
 /obj/item/item_head/pitchfork_head,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "Z" = (
 /obj/structure/rack,
 /obj/item/weapon/hammer,
@@ -263,7 +263,7 @@
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/asteroid)
+/area/mining_surprise)
 
 (1,1,1) = {"
 p

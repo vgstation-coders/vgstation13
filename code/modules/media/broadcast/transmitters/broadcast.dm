@@ -1,5 +1,5 @@
 /obj/machinery/media/transmitter/broadcast
-	name = "Radio Transmitter"
+	name = "\improper Radio Transmitter"
 	desc = "A huge hulk of steel containing high-powered phase-modulating radio transmitting equipment."
 
 	icon = 'icons/obj/machines/broadcast.dmi'
@@ -179,7 +179,7 @@
 /obj/machinery/media/transmitter/broadcast/examine(mob/user)
 	..()
 	if (integrity <= 75)
-		to_chat(user,"<span class='warning'>The [src] appears damaged. A solder can be used to repair it.</span>")
+		to_chat(user,"<span class='warning'>\The [src] appears damaged. A solder can be used to repair it.</span>")
 
 /obj/machinery/media/transmitter/broadcast/update_icon()
 	overlays = 0

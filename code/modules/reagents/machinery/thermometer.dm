@@ -47,12 +47,12 @@
 		var/obj/machinery/bunsen_burner/B = target
 		if(B.held_container)
 			target = B.held_container
-	if(istype(target, /obj/machinery/chemheater))
-		var/obj/machinery/chemheater/H = target
+	if(istype(target, /obj/machinery/chemtemper/heater))
+		var/obj/machinery/chemtemper/heater/H = target
 		if(H.held_container)
 			target = H.held_container
-	if(istype(target, /obj/machinery/chemcooler))
-		var/obj/machinery/chemcooler/C = target
+	if(istype(target, /obj/machinery/chemtemper/cooler))
+		var/obj/machinery/chemtemper/cooler/C = target
 		if(C.held_container)
 			target = C.held_container
 
@@ -136,7 +136,7 @@
 	melt_temperature = MELTPOINT_GLASS
 	w_type=RECYK_GLASS
 	hitsound = 'sound/weapons/bladeslice.ogg'
-	
+
 /obj/item/weapon/thermometer/byond
 	desc = "A device that measures temperature using the expansion of blood when exposed to heat. There's an imprint on the glass that says \"Made in BYOND\"."
 	icon_state = "therm_byond"

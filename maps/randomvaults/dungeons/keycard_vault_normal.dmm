@@ -63,7 +63,7 @@
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "M" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/vault/keycard)
 "N" = (

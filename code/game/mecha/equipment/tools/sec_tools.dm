@@ -165,7 +165,7 @@
 	if(!J.chassis.has_charge(J.energy_drain))
 		J.set_ready_state(1)
 		J.log_message("Deactivated.")
-		J.occupant_message("[src] deactivated - no power.")
+		J.occupant_message("[J] deactivated - no power.")
 		for(var/cell in J.cells)
 			J.go_out(cell)
 		return stop()

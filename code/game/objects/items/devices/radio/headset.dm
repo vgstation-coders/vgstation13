@@ -12,7 +12,7 @@
 	flags = FPRINT // No HEAR. Headsets should only work when being used explicitly.
 	broadcasting = TRUE
 	slot_flags = SLOT_EARS
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	var/translate_binary = 0
 	var/translate_hive = 0
 	var/obj/item/device/encryptionkey/keyslot1 = null

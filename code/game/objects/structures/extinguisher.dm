@@ -28,6 +28,11 @@
 			if(user.drop_item(O, src))
 				has_extinguisher = O
 				to_chat(user, "<span class='notice'>You place [O] in [src].</span>")
+				if(!O.reagents.is_full())
+					var/avail_vol = O.reagents.maximum_volume - O.reagents.total_volume
+					O.reagents.add_reagent(WATER, avail_vol)
+					playsound(src, 'sound/effects/refill.ogg', 50, 1)
+					to_chat(user, "<span class='notice'>\The [src] refills \the [O] using its internal water supply.</span>")
 		else
 			opened = !opened
 	else if(iswelder(O))

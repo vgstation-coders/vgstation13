@@ -28,7 +28,7 @@
 /area/vault/assistantlair)
 "ag" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
 "ah" = (
@@ -41,7 +41,7 @@
 /area/vault/assistantlair)
 "aj" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
 "ak" = (
@@ -214,7 +214,7 @@
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
 "aM" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
 "aN" = (
@@ -506,7 +506,7 @@
 /turf/simulated/floor/wood,
 /area/vault/assistantlair)
 "bH" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/wood,
 /area/vault/assistantlair)
 "bI" = (
@@ -1176,7 +1176,7 @@
 /area/vault/assistantlair)
 "dM" = (
 /obj/structure/table,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /obj/item/clothing/gloves/yellow,
 /turf/simulated/floor/plating{
 	icon_state = "panelscorched"

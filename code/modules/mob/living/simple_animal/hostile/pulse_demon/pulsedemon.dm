@@ -27,6 +27,7 @@
 	flying = 1
 	size = SIZE_TINY
 	density = 0 //people walk over you isntead of bumping
+	tangibility = 0
 
 	attacktext = "electrocutes"
 	attack_sound = "sparks"
@@ -34,6 +35,8 @@
 	melee_damage_lower = 0
 	melee_damage_upper = 0											//Handled in unarmed_attack_mob() anyways
 	pass_flags = PASSDOOR //| PASSMOB									//Stops the message spam
+	ranged = TRUE
+	ranged_cooldown_cap = 5
 
 	//VARS
 	var/charge = 1000												//Charge stored
@@ -49,7 +52,7 @@
 	var/draining = TRUE												//For draining power or not
 	var/move_divide = 16											//when unlocked, ability lets you move out of cables with a BIG slowdown
 	var/powerloss_alerted = FALSE									//Prevent spam notifying
-	var/health_lock = 0												//Goes down every tick, while this is on it prevents the Pulse Demon from regenerating
+	var/emp_lock = 0												//Goes down every tick, while this is on it prevents the Pulse Demon from regenerating
 
 	//TYPES
 	var/area/controlling_area										// Area controlled from an APC
@@ -57,7 +60,9 @@
 	var/obj/machinery/power/current_power							// Current power machine we're in
 	var/mob/living/silicon/robot/current_robot						// Currently controlled robot
 	var/obj/machinery/bot/current_bot								// Currently controlled bot
-	var/obj/item/weapon/current_weapon								// Current gun we're controlling
+	var/obj/item/weapon/gun/current_weapon							// Current gun we're controlling
+	var/datum/action/pd_leave_item/PLI
+	var/datum/action/pd_change_camera/PCC
 
 	//LISTS
 	var/list/image/cables_shown = list()							// In cable views
@@ -67,26 +72,55 @@
 /mob/living/simple_animal/hostile/pulse_demon/New()
 	..()
 	// Must be spawned on a power source or cable, or else die
+	PCC = new(src)
 	current_power = locate(/obj/machinery/power) in loc
 	if(!current_power)
 		current_cable = locate(/obj/structure/cable) in loc
 		if(!current_cable)
 			death()
+			return
+		if(current_cable.powernet)
+			current_cable.powernet.haspulsedemon = TRUE
 	else
 		if(istype(current_power,/obj/machinery/power/apc))
 			controlling_area = get_area(current_power)
+			PCC.Grant(src)
 		forceMove(current_power)
 	set_light(1.5,2,"#bbbb00")
 	add_spell(new /spell/pulse_demon/abilities, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
-	add_spell(new /spell/pulse_demon/toggle_drain, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
+	var/datum/action/pd_toggle_drain/PTD = new(src)
+	PTD.Grant(src)
+	PLI = new(src)
 	for(var/pd_spell in getAllPulseDemonSpells())
 		var/spell/S = new pd_spell
-		if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/abilities && S.type != /spell/pulse_demon/toggle_drain)
+		if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/abilities)
 			possible_spells += S
 	for(var/pd_upgrade in subtypesof(/datum/pulse_demon_upgrade))
 		var/datum/pulse_demon_upgrade/PDU = new pd_upgrade(src)
 		possible_upgrades += PDU
 	playsound(get_turf(src),'sound/effects/eleczap.ogg',50,1)
+
+/mob/living/simple_animal/hostile/pulse_demon/maxedout // For testing it, maybe other fun reasons too
+	charge = INFINITY
+	maxcharge = INFINITY
+	health_drain_rate = 1
+	health_regen_rate = INFINITY
+	amount_per_regen = 1
+	charge_absorb_amount = INFINITY
+//	max_can_absorb = INFINITY
+	takeover_time = 1
+	move_divide = 1
+
+/mob/living/simple_animal/hostile/pulse_demon/maxedout/New()
+	..()
+	for(var/spell/S in possible_spells)
+		add_spell(S, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
+		while(S.can_improve(Sp_POWER))
+			S.empower_spell()
+		while(S.can_improve(Sp_SPEED))
+			S.quicken_spell()
+		possible_spells -= S
+	QDEL_LIST_CUT(possible_upgrades)
 
 /mob/living/simple_animal/hostile/pulse_demon/update_perception()
 	// So we can see in maint better
@@ -145,7 +179,7 @@
 		//TODO add a sound
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/power_restored()
-	if(!health_lock)
+	if(!emp_lock)
 		var/health_to_add = maxHealth - health < health_regen_rate ? maxHealth - health : health_regen_rate
 		if(health < maxHealth)
 			health = min(maxHealth, health + health_to_add)
@@ -156,9 +190,9 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/Life()
 	update_glow()
-	if(health_lock)
-		health_lock = max(--health_lock, 0)
-		if(!health_lock) //Tell the Pulse Demon it's all good.
+	if(emp_lock)
+		emp_lock = max(--emp_lock, 0)
+		if(!emp_lock) //Tell the Pulse Demon it's all good.
 			to_chat(src, "<span class='good'>You can regenerate again!</span>")
 	if(current_cable)
 		if(current_cable.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
@@ -196,6 +230,11 @@
 	playsound(T,"pd_wail_sound",50,1)
 	qdel(src) // We vaporise into thin air
 
+/mob/living/simple_animal/hostile/pulse_demon/Destroy()
+	if(current_cable?.powernet)
+		current_cable.powernet.haspulsedemon = FALSE
+	. = ..()
+	
 /mob/living/simple_animal/hostile/pulse_demon/proc/is_under_tile()
 	var/turf/simulated/floor/F = get_turf(src)
 	return istype(F,/turf/simulated/floor) && F.floor_tile
@@ -213,6 +252,8 @@
 		spark(src,rand(2,4))
 	if(new_power)
 		current_power = new_power
+		if(current_cable?.powernet)
+			current_cable.powernet.haspulsedemon = FALSE
 		current_cable = null
 		forceMove(new_power.loc)
 		playsound(src,'sound/weapons/electriczap.ogg',50, 1)
@@ -224,6 +265,7 @@
 				return
 			if(current_apc.pulsecompromised)
 				controlling_area = get_area(current_power)
+				PCC.Grant(src)
 				to_chat(src, "<span class='notice'>You can interact with various electronic objects in the room while connected to the APC.</span>")
 			else
 				hijackAPC(current_apc)
@@ -234,6 +276,8 @@
 	else
 		if(new_cable)
 			current_cable = new_cable
+			if(current_cable?.powernet)
+				current_cable.powernet.haspulsedemon = TRUE
 			current_power = null
 			current_robot = null
 			current_bot = null
@@ -241,9 +285,12 @@
 			if(!isturf(loc))
 				loc = get_turf(NewLoc)
 			controlling_area = null
+			PCC.Remove(src)
 			if(!moved)
 				forceMove(NewLoc)
 		else
+			if(current_cable?.powernet)
+				current_cable.powernet.haspulsedemon = FALSE
 			current_cable = null
 			current_power = null
 			current_robot = null
@@ -319,8 +366,22 @@
 
 // We aren't tangible
 /mob/living/simple_animal/hostile/pulse_demon/bullet_act(var/obj/item/projectile/Proj)
-	visible_message("<span class ='warning'>The [Proj] goes right through \the [src]!</span>")
-	return
+	if(istype(Proj,/obj/item/projectile/ion))
+		return ..()
+	visible_message("<span class ='warning'>\The [Proj] goes right through \the [src]!</span>")
+
+/mob/living/simple_animal/hostile/pulse_demon/vine_protected()
+	return 1
+
+/mob/living/simple_animal/hostile/pulse_demon/hitby(atom/movable/AM, speed, dir, list/hit_whitelist)
+	if(!is_under_tile())
+		visible_message("<span class ='notice'>\The [AM] goes right through \the [src]!</span>")
+
+// Unless...
+/mob/living/simple_animal/hostile/pulse_demon/Crossed(atom/movable/AM)
+	. = ..()
+	if(istype(AM,/obj/item/projectile/ion))
+		AM.to_bump(src)
 
 // Dumb moves
 /mob/living/simple_animal/hostile/pulse_demon/kick_act(mob/living/carbon/human/user)
@@ -348,7 +409,7 @@
 	to_chat(src, "<span class='warning'>You have been blasted by an EMP and cannot regenerate for a while!</span>")
 	playsound(get_turf(src),"pd_wail_sound",50,1)
 	health -= round(max(25, round(maxHealth/4)), 1) //Takes 1/4th of max health as damage if health is big enough
-	health_lock = 5 //EMP prevents the Pulse Demon from regenerating
+	emp_lock = 5 //EMP prevents the Pulse Demon from regenerating or using powers
 
 // Shock therapy
 /mob/living/simple_animal/hostile/pulse_demon/attack_hand(mob/living/carbon/human/M as mob)
@@ -370,7 +431,7 @@
 			C.use(charge_absorb_amount)
 			to_chat(user, "<span class='warning'>You touch \the [src] with \the [W] and \the [src] drains it!</span>")
 			to_chat(src, "<span class='notice'>[user] touches you with \the [W] and you drain its power!</span>")
-		visible_message("<span class ='notice'>The [W] goes right through \the [src].</span>")
+		visible_message("<span class ='notice'>\The [W] goes right through \the [src].</span>")
 		shockMob(user,W.siemens_coefficient)
 
 // In our way
@@ -398,6 +459,17 @@
 /mob/living/simple_animal/hostile/pulse_demon/RangedAttack(atom/A)
 	return
 
+// Cable zapping mobs
+/mob/living/simple_animal/hostile/pulse_demon/OpenFire(atom/ttarget)
+	var/turf/T = get_turf(ttarget)
+	if(T)
+		if((ttarget in view(world.view, src)) && ((locate(/obj/structure/cable) in T.contents) || istype(target,/obj/structure/cable)))
+			var/obj/structure/cable/cable = locate() in T
+			var/datum/powernet/PN = cable.get_powernet()
+			if(PN) // We need actual power in the cable powernet to move
+				if(PN.avail)
+					zaptocable(T)
+
 // Common function for all
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob, var/siemens_coeff = 1)
 	var/dmg_done = 0
@@ -421,6 +493,7 @@
 		current_apc.pulsecompromising = 0
 		current_apc.pulsecompromised = 1
 		controlling_area = get_area(current_power)
+		PCC.Grant(src)
 		to_chat(src,"<span class='notice'>Takeover complete.</span>")
 		// Add to the stats if we can
 		if(mind && mind.GetRole(PULSEDEMON))

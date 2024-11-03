@@ -3,6 +3,7 @@
 
 var/world_startup_time
 var/date_string
+var/force_restart
 
 #if DM_VERSION < 515
 #error You need at least version 515 to compile
@@ -49,6 +50,8 @@ var/auxtools_path
 
 /world/New()
 	world_startup_time = world.timeofday
+
+	TgsNew(null, TGS_SECURITY_TRUSTED)
 
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
@@ -107,9 +110,13 @@ var/auxtools_path
 
 	Master.Setup()
 
+	TgsInitializationComplete()
+
 	return ..()
 
 /world/Topic(T, addr, master, key)
+	TGS_TOPIC
+
 	diary << "TOPIC: \"[T]\", from:[addr], master:[master], key:[key]"
 
 	if (T == "ping")
@@ -166,7 +173,8 @@ var/auxtools_path
 
 		var/notekey = copytext(T, 7)
 		return list2params(exportnotes(notekey))
-
+	else if(T == "force_restart")
+		return force_restart
 
 /world/Reboot(reason)
 	if(reason == REBOOT_HOST)
@@ -185,10 +193,11 @@ var/auxtools_path
 		..()
 		return
 
-	if(vote.winner && vote.map_paths)
+	if((vote.winner || vote.forced_map) && vote.map_paths)
 		//get filename
 		var/filename = "vgstation13.dmb"
-		var/map_path = "maps/voting/" + vote.map_paths[vote.winner] + "/" + filename
+		var/map_to_choose = vote.forced_map ? vote.forced_map : vote.winner
+		var/map_path = "maps/voting/" + vote.map_paths[map_to_choose] + "/" + filename
 		if(fexists(map_path))
 			//copy file to main folder
 			if(!fcopy(map_path, filename))
@@ -196,19 +205,31 @@ var/auxtools_path
 				fcopy(map_path, filename)
 
 	pre_shutdown()
+
+	TgsReboot()
 	..()
 
 /world/proc/pre_shutdown()
+	var/procWatch = start_watch()
+	log_startup_progress("\[[time2text(world.realtime)]\]: Preshutdown begin")
+	var/watch = start_watch()
+	stop_all_media()
+	log_startup_progress("\[[time2text(world.realtime)]\]: stop_all_media finished in [stop_watch(watch)]s")
+	log_startup_progress("\[[time2text(world.realtime)]\]: beginning html_interfaces shutdown")
+	watch = start_watch()
 	for(var/datum/html_interface/D in html_interfaces)
 		D.closeAll()
-
+	log_startup_progress("\[[time2text(world.realtime)]\]: html_interfaces finished in [stop_watch(watch)]s")
+	log_startup_progress("\[[time2text(world.realtime)]\]: beginning master controller shutdown")
+	watch = start_watch()
 	Master.Shutdown()
-
-	stop_all_media()
-
+	log_startup_progress("\[[time2text(world.realtime)]\]: master controller finished in [stop_watch(watch)]s")
+	log_startup_progress("\[[time2text(world.realtime)]\]: beginning end_credits")
+	watch = start_watch()
 	end_credits.on_world_reboot_start()
 	sleep(max(10, end_credits.audio_post_delay))
 	end_credits.on_world_reboot_end()
+	log_startup_progress("\[[time2text(world.realtime)]\]: end_credits finished in [stop_watch(watch)]s")
 
 	for(var/client/C in clients)
 		if(config.server)	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
@@ -220,7 +241,7 @@ var/auxtools_path
 	#if AUXTOOLS_DEBUGGER
 	call_ext(auxtools_path, "auxtools_shutdown")()
 	#endif
-
+	log_startup_progress("\[[time2text(world.realtime)]\]: preshutdown finished in [stop_watch(procWatch)]s")
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
 /world/proc/KickInactiveClients()
 	spawn(-1)

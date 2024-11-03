@@ -2,6 +2,7 @@
 	name = "\improper PDA Terminal"
 	desc = "It can be used to download Apps on your PDA."
 	icon_state = "pdaterm"
+	moody_state = "overlay_pdaterm"
 	circuit = "/obj/item/weapon/circuitboard/pda_terminal"
 	light_color = LIGHT_COLOR_ORANGE
 
@@ -11,11 +12,15 @@
 	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | PURCHASER
 	computer_flags = NO_ONOFF_ANIMS
 
+	var/image/pda_icon
+	var/image/light_icon
+
 /obj/machinery/computer/pda_terminal/New()
 	..()
 	machine_id = "[station_name()] PDA Terminal #[multinum_display(num_pda_terminals,4)]"
 	num_pda_terminals++
-
+	pda_icon = image(icon = icon, icon_state = "pdaterm-full")
+	light_icon = image(icon = icon, icon_state = "pdaterm-light")
 	if(ticker)
 		initialize()
 
@@ -206,8 +211,9 @@
 
 /obj/machinery/computer/pda_terminal/update_icon()
 	..()
-	overlays = 0
+	overlays -= pda_icon
+	overlays -= light_icon
 	if(pda_device)
-		overlays += image(icon = icon, icon_state = "pdaterm-full")
+		overlays += pda_icon
 		if(stat == 0)
-			overlays += image(icon = icon, icon_state = "pdaterm-light")
+			overlays += light_icon

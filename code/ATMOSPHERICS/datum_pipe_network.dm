@@ -117,10 +117,13 @@
 	for(var/datum/gas_mixture/gas in gases)
 		air_transient.volume += gas.volume
 		air_transient.merge(gas, FALSE)
+	air_transient.update_values()
 
 	if(air_transient.volume > 0)
 		//Allow air mixture to react
 		if(air_transient.react())
+			update = 1
+		if(air_transient.reaction_tick())
 			update = 1
 
 		air_transient.update_values()

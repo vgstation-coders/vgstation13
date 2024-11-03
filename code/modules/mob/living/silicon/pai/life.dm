@@ -7,10 +7,7 @@
 
 	handle_regular_status_updates()
 	regular_hud_updates()
-	if(src.secHUD)
-		process_sec_hud(src)
-	if(src.medHUD)
-		process_med_hud(src)
+
 	if(silence_time)
 		if(world.timeofday >= silence_time)
 			silence_time = null

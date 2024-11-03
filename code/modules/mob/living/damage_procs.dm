@@ -12,6 +12,8 @@
 	if(!damage)
 		return 0
 	var/damage_done = (damage/100)*(100-blocked)
+	if(!ignore_events && INVOKE_EVENT(src, /event/damaged, "kind" = damagetype, "amount" = damage))
+		return 0
 	switch(damagetype)
 		if(BRUTE)
 			adjustBruteLoss(damage_done)

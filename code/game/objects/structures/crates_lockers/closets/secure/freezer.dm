@@ -2,20 +2,24 @@
 
 	var/icon_exploded = "fridge_exploded"
 	var/exploded = 0
+	var/target_temp = FRIDGETEMP_DEFAULT
+	var/cooling_power = 40
 
-/obj/structure/closet/secure_closet/freezer/New()
-	..()
-	processing_objects.Add(src)
-
-/obj/structure/closet/secure_closet/freezer/process()
-	..()
-	if(exploded)
-		processing_objects.Remove(src)
+/obj/structure/closet/secure_closet/freezer/return_air()
+	var/datum/gas_mixture/gas = (..())
+	if(!gas)
+		return null
+	var/datum/gas_mixture/newgas = new/datum/gas_mixture()
+	newgas.copy_from(gas)
+	if(newgas.temperature <= target_temp)
 		return
 
-	for(var/obj/item/weapon/reagent_containers/R in contents)
-		if(R.reagents)
-			R.reagents.heating(rand(-200,-800), T0C)
+	if((newgas.temperature - cooling_power) > target_temp)
+		newgas.temperature -= cooling_power
+	else
+		newgas.temperature = target_temp
+	newgas.update_values()
+	return newgas
 
 /obj/structure/closet/secure_closet/freezer/open()
 	if(..())
@@ -75,6 +79,9 @@
 			return 0
 	return 1
 
+/obj/structure/closet/secure_closet/freezer/get_heat_conductivity()
+	return HEAT_CONDUCTIVITY_REFRIGERATOR
+
 /obj/structure/closet/secure_closet/freezer/kitchen
 	name = "Kitchen Cabinet"
 	req_access = list(access_kitchen)
@@ -98,13 +105,13 @@
 	icon_opened = "fridgeopen"
 	icon_broken = "fridgebroken"
 	icon_off = "fridge1"
+	target_temp = FRIDGETEMP_FREEZER
 
 
 /obj/structure/closet/secure_closet/freezer/meat/atoms_to_spawn()
 	return list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey = 4,
 	)
-
 
 /obj/structure/closet/secure_closet/freezer/fridge
 	name = "Refrigerator"
@@ -114,6 +121,7 @@
 	icon_opened = "fridgeopen"
 	icon_broken = "fridgebroken"
 	icon_off = "fridge1"
+	target_temp = FRIDGETEMP_DEFAULT
 
 /obj/structure/closet/secure_closet/freezer/fridge/atoms_to_spawn()
 	return list(

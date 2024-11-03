@@ -141,6 +141,7 @@
 		P.override_target_X += Xchange
 		P.override_target_Y += Ychange
 		P.reflected = TRUE//you can now get hit by the projectile you just fired. Careful with portals!
+		P.teleport_act()
 
 	if(curturf.z != destturf.z)
 		INVOKE_EVENT(teleatom, /event/z_transition, "user" = teleatom, "from_z" = curturf.z, "to_z" = destturf.z)

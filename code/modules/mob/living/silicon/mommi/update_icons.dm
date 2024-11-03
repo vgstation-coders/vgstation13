@@ -81,45 +81,36 @@
 		overlays += I
 
 // Update the MoMMI's hat inventory icons by adding all icons to overlays_hats
-/mob/living/silicon/robot/mommi/update_inv_head(var/update_icons = TRUE)
+/mob/living/silicon/robot/mommi/update_inv_head(update_icons = TRUE)
+	overlays -= overlays_hats[MOMMI_HEAD_LAYER]
+	overlays_hats[MOMMI_HEAD_LAYER]	= null
 	// If the MoMMI is wearing a hat
 	if(head_state)
 		var/obj/item/clothing/head = head_state
-		var/image/overhats
 		// Create the hat icon
-		overhats = image("icon" = ((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[head.icon_state]")
-
+		var/mutable_appearance/overhats = mutable_appearance(((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "[head.icon_state]", -MOMMI_HEAD_LAYER)
 		// If the hat has blood on it
 		if(head.blood_DNA && head.blood_DNA.len)
 			// Add a blood image to the hat
-			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
+			var/mutable_appearance/bloodsies = mutable_appearance('icons/effects/blood.dmi', "helmetblood")
 			bloodsies.color = head.blood_color
-			overhats.overlays	+= bloodsies
-		
-		if(istype(head,/obj/item/clothing/head))
+			overhats.overlays += bloodsies
+		if(istype(head, /obj/item/clothing/head))
 			var/obj/item/clothing/head/hat = head
 			var/i = 1
-			var/image/abovehats
+			var/mutable_appearance/abovehats
 			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
-				abovehats = image("icon" = ((above.icon_override) ? above.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[above.icon_state]")
-
+				abovehats = mutable_appearance(((above.icon_override) ? above.icon_override : 'icons/mob/head.dmi'), "[above.icon_state]")
 				abovehats.pixel_y = (2 * i) * PIXEL_MULTIPLIER
 				overhats.overlays += abovehats
-
 				if(above.blood_DNA && above.blood_DNA.len)
-					var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
+					var/mutable_appearance/bloodsies = mutable_appearance('icons/effects/blood.dmi', "helmetblood")
 					bloodsies.color = above.blood_color
-					//standing.overlays	+= bloodsies
 					bloodsies.pixel_y = (2 * i) * PIXEL_MULTIPLIER
-					abovehats.overlays	+= bloodsies
-
+					abovehats.overlays += bloodsies
 				i++
-
 		// Add our hat images to overlays_hats
 		overlays_hats[MOMMI_HEAD_LAYER]	= overhats
-	// If the MoMMI is not wearing a hat
-	else // Clear the hat array
-		overlays_hats[MOMMI_HEAD_LAYER]	= null
 	// Update the MoMMI's icons
 	if(update_icons)
 		updateicon()

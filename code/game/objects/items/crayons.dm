@@ -109,7 +109,7 @@ var/global/list/all_graffitis = list(
 		return
 
 	if(istype(target, /turf/simulated))
-		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") as null|anything in list("graffiti","rune","letter","text")
+		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") as null|anything in list("graffiti","rune","letter","text", "advanced graffiti")
 		var/preference
 		var/drawtime = 50
 		var/fontsize = 6 //For text
@@ -183,6 +183,15 @@ var/global/list/all_graffitis = list(
 						return
 
 				to_chat(user, "You start writing \"[preference]\" on \the [target].")
+
+			if ("advanced graffiti")
+				var/turf/simulated/the_turf = target
+				var/datum/painting_utensil/p = new(user, src)
+				if (!the_turf.advanced_graffiti)
+					var/datum/custom_painting/advanced_graffiti = new(the_turf, 32, 32, base_color = "#00000000")
+					the_turf.advanced_graffiti = advanced_graffiti
+				the_turf.advanced_graffiti.interact(user, p)
+				return
 
 		if(!user.Adjacent(target))
 			return

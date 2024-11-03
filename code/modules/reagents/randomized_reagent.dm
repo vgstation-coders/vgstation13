@@ -156,7 +156,7 @@
 		return
 
 	if(tf_catbeast && !iscatbeast(H))
-		H.set_species("Tajaran")
+		H.set_species("Tajaran", transfer_damage = TRUE)
 		H.regenerate_icons()
 		H.emote("me", MESSAGE_HEAR, pick("meows", "mews"))
 		playsound(H, 'sound/voice/catmeow.ogg', 100)

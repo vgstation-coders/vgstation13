@@ -18,12 +18,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 					 		Co_AMOUNT = 3,
 					 		Co_VIS_MSG = "{USER} weld{s} external armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_BACKSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the cockpit wire screen.")
 					 	),
 					//2
 					 list(Co_DESC="Cockpit wire mesh is installed. It requires securing with a screwdriver.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} secure{s} external armor layer."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} prie{s} external armor layer from {HOLDER}.",
@@ -46,12 +46,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 					 		Co_AMOUNT = 3,
 					 		Co_VIS_MSG = "{USER} weld{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_BACKSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} unfastens the internal armor layer.")
 					 	),
 					 //5
 					 list(Co_DESC="Internal armor is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} secure{s} internal armor layer."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} prie{s} internal armor layer from {HOLDER}.")
@@ -61,12 +61,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/metal,
 					 		Co_AMOUNT = 5,
 					 		Co_VIS_MSG = "{USER} install{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the peripherals control module.")
 					 	),
 					 //7
 					 list(Co_DESC="Peripherals control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} secure{s} the peripherals control module."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the peripherals control module from {HOLDER}.")
@@ -76,12 +76,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} the peripherals control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the mainboard.")
 					 	),
 					 //9
 					 list(Co_DESC="Central control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} secure{s} the mainboard."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the central control module from {HOLDER}.")
@@ -91,14 +91,14 @@
 						Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} the central control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} disconnect{s} the wiring of {HOLDER}.")
 					 	),
 					 //11
 					 list(Co_DESC="The wiring is added",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wirecutters,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wirecutter",
 					 		Co_VIS_MSG = "{USER} adjust{s} the wiring of {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} remove{s} the wiring of {HOLDER}.")
 					 	),
 					 //12
@@ -106,19 +106,19 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/cable_coil,
 					 		Co_AMOUNT = 10,
 					 		Co_VIS_MSG = "{USER} add{s} the wiring to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} deactivate{s} {HOLDER} hydraulic systems.")
 					 	),
 					 //13
 					 list(Co_DESC="The hydraulic systems are connected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} activate{s} {HOLDER} hydraulic systems."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_BACKSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} disconnect{s} {HOLDER} hydraulic systems.")
 					 	),
 					 //14
 					 list(Co_DESC="The hydraulic systems are disconnected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} connect{s} {HOLDER} hydraulic systems.")
 					 	)
 					)
@@ -164,12 +164,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 					 		Co_AMOUNT = 3,
 					 		Co_VIS_MSG = "{USER} weld{s} external armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_BACKSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the external armor layer.")
 					 	),
 					//2
 					 list(Co_DESC="External armor is installed.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} secure{s} external armor layer."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} prie{s} external armor layer from {HOLDER}.",
@@ -192,12 +192,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 					 		Co_AMOUNT = 3,
 					 		Co_VIS_MSG = "{USER} weld{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_BACKSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the internal armor layer.")
 					 	),
 					 //5
 					 list(Co_DESC="Internal armor is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} secure{s} internal armor layer."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} prie{s} internal armor layer from {HOLDER}.")
@@ -207,12 +207,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/metal,
 					 		Co_AMOUNT = 5,
 					 		Co_VIS_MSG = "{USER} install{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the peripherals control module.")
 					 	),
 					 //7
 					 list(Co_DESC="Peripherals control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} secure{s} the peripherals control module."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the peripherals control module from {HOLDER}.")
@@ -222,12 +222,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} the peripherals control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the mainboard.")
 					 	),
 					 //9
 					 list(Co_DESC="Central control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} secure{s} the mainboard."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the central control module from {HOLDER}.")
@@ -237,14 +237,14 @@
 						Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} the central control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} disconnect{s} the wiring of {HOLDER}.")
 					 	),
 					 //11
 					 list(Co_DESC="The wiring is added",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wirecutters,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wirecutter",
 					 		Co_VIS_MSG = "{USER} adjust{s} the wiring of {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} remove{s} the wiring of {HOLDER}.")
 					 	),
 					 //12
@@ -252,19 +252,19 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/cable_coil,
 					 		Co_AMOUNT = 10,
 					 		Co_VIS_MSG = "{USER} add{s} the wiring to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} deactivate{s} {HOLDER} hydraulic systems.")
 					 	),
 					 //13
 					 list(Co_DESC="The hydraulic systems are connected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} activate{s} {HOLDER} hydraulic systems."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_BACKSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} disconnect{s} {HOLDER} hydraulic systems.")
 					 	),
 					 //14
 					 list(Co_DESC="The hydraulic systems are disconnected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} connect{s} {HOLDER} hydraulic systems.")
 					 	)
 					)
@@ -287,12 +287,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 					 		Co_AMOUNT = 3,
 					 		Co_VIS_MSG = "{USER} weld{s} armor plates to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_BACKSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the armor plates.")
 					 	),
 					//2
 					 list(Co_DESC="External armor is installed.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} secure{s} armor plates."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} prie{s} armor plates from {HOLDER}.",
@@ -315,12 +315,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 					 		Co_AMOUNT = 3,
 					 		Co_VIS_MSG = "{USER} weld{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_BACKSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the internal armor layer.")
 					 	),
 					 //5
 					 list(Co_DESC="Internal armor is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} secure{s} internal armor layer."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} prie{s} internal armor layer from {HOLDER}.")
@@ -330,12 +330,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/metal,
 					 		Co_AMOUNT = 5,
 					 		Co_VIS_MSG = "{USER} install{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the advanced capacitor.")
 					 	),
 					 //7
 					 list(Co_DESC="Advanced capacitor is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} secure{s} the advanced capacitor."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the advanced capacitor from {HOLDER}.")
@@ -345,12 +345,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/capacitor/adv,
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} advanced capacitor to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the Advanced scanner module.")
 					 	),
 					 //9
 					 list(Co_DESC="Advanced scanner module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} secure{s} the advanced scanner module."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the advanced scanner module from {HOLDER}.")
@@ -360,12 +360,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/scanning_module/adv,
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} advanced scanner module to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the targeting module.")
 					 	),
 					 //11
 					 list(Co_DESC="Targeting module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} secure{s} the targeting module."),
 					 	Co_BACKSTOP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the targeting module from {HOLDER}.")
@@ -375,12 +375,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY= null, //set by proc
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} the targeting module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the peripherals control module.")
 					 	),
 					 //13
 					 list(Co_DESC="Peripherals control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} secure{s} the peripherals control module."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the peripherals control module from {HOLDER}.")
@@ -390,12 +390,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} the peripherals control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the mainboard.")
 					 	),
 					 //15
 					 list(Co_DESC="Central control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} secure{s} the mainboard."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the central control module from {HOLDER}.")
@@ -405,14 +405,14 @@
 						Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} the central control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} disconnect{s} the wiring of {HOLDER}.")
 					 	),
 					 //17
 					 list(Co_DESC="The wiring is added",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wirecutters,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wirecutter",
 					 		Co_VIS_MSG = "{USER} adjust{s} the wiring of {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} remove{s} the wiring of {HOLDER}.")
 					 	),
 					 //18
@@ -420,19 +420,19 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/cable_coil,
 					 		Co_AMOUNT = 10,
 					 		Co_VIS_MSG = "{USER} add{s} the wiring to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} deactivate{s} {HOLDER} hydraulic systems.")
 					 	),
 					 //19
 					 list(Co_DESC="The hydraulic systems are connected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} activate{s} {HOLDER} hydraulic systems."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_BACKSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} disconnect{s} {HOLDER} hydraulic systems.")
 					 	),
 					 //20
 					 list(Co_DESC="The hydraulic systems are disconnected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} connect{s} {HOLDER} hydraulic systems.")
 					 	)
 					)
@@ -571,12 +571,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 					 		Co_AMOUNT = 3,
 					 		Co_VIS_MSG = "{USER} weld{s} external armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_BACKSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the external armor layer.")
 					 	),
 					//2
 					 list(Co_DESC="External armor is installed.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} secure{s} external armor layer."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} prie{s} external armor layer from {HOLDER}.",
@@ -599,12 +599,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 					 		Co_AMOUNT = 3,
 					 		Co_VIS_MSG = "{USER} weld{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_BACKSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} unfastens the internal armor layer.")
 					 	),
 					 //5
 					 list(Co_DESC="Internal armor is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} secure{s} internal armor layer."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} prie{s} internal armor layer from {HOLDER}.")
@@ -615,12 +615,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/metal,
 					 		Co_AMOUNT = 5,
 					 		Co_VIS_MSG = "{USER} install{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the phaze array.")
 					 	),
 					 //7
 					 list(Co_DESC="Phaze array is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} secure{s} the phaze array."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the phaze array from {HOLDER}.")
@@ -630,12 +630,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY= /obj/item/mecha_parts/part/phazon_phase_array,
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} phaze array to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the peripherals control module.")
 					 	),
 					 //9
 					 list(Co_DESC="Peripherals control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} secure{s} the peripherals control module."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the peripherals control module from {HOLDER}.")
@@ -645,12 +645,12 @@
 					 	Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} the peripherals control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} unfasten{s} the mainboard.")
 					 	),
 					 //11
 					 list(Co_DESC="Central control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} secure{s} the mainboard."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the central control module from {HOLDER}.")
@@ -660,14 +660,14 @@
 						Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} the central control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} disconnect{s} the wiring of {HOLDER}.")
 					 	),
 					 //13
 					 list(Co_DESC="The wiring is added",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wirecutters,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wirecutter",
 					 		Co_VIS_MSG = "{USER} adjust{s} the wiring of {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} remove{s} the wiring of {HOLDER}.")
 					 	),
 					 //14
@@ -675,19 +675,19 @@
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/cable_coil,
 					 		Co_AMOUNT = 10,
 					 		Co_VIS_MSG = "{USER} add{s} the wiring to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} deactivate{s} {HOLDER} hydraulic systems.")
 					 	),
 					 //15
 					 list(Co_DESC="The hydraulic systems are connected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 					 		Co_VIS_MSG = "{USER} activate{s} {HOLDER} hydraulic systems."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_BACKSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} disconnect{s} {HOLDER} hydraulic systems.")
 					 	),
 					 //16
 					 list(Co_DESC="The hydraulic systems are disconnected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/wrench,
+					 	Co_NEXTSTEP = list(Co_KEY="is_wrench",
 					 		Co_VIS_MSG = "{USER} connect{s} {HOLDER} hydraulic systems.")
 					 	)
 					)

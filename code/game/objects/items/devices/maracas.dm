@@ -5,12 +5,12 @@
 	icon_state = "maracas"
 	item_state = "maracas"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_ELECTRONIC
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 
-	var/emagged = 0//our maracas are different - Deity Link
 	var/triggered = 0 //Do not make it explode twice
 
 /obj/item/device/maracas/cubanpete

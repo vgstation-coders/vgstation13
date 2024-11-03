@@ -20,16 +20,9 @@ Here it is: Buttbot.
 	maxHealth = 25
 	var/buttchance = 80 //Like an 80% chance of it working. It's just a butt with an arm in it.
 	var/sincelastfart = 0
-	var/det_chance
 	flags = HEAR
 
-/obj/machinery/bot/buttbot/New()
-	..()
-	if(isnull(det_chance))
-		det_chance = rand(1,3)
-
-/obj/machinery/bot/buttbot/everbutt
-	det_chance = 0
+	var/obj/item/clothing/head/butt/stored_ass
 
 /obj/machinery/bot/buttbot/attack_hand(mob/living/user as mob)
 	. = ..()
@@ -47,15 +40,12 @@ Here it is: Buttbot.
 		return
 	for(var/mob/O in hearers(src, null))
 		O.show_message("<b>[src]</b> beeps, '[message]'")
+	return
 
 /obj/machinery/bot/buttbot/proc/fart()
 	if(can_fart())
 		playsound(src, 'sound/misc/fart.ogg', 50, 1)
 		sincelastfart = world.timeofday
-		if(prob(det_chance))
-			explode()
-			return
-		det_chance*=2
 
 /obj/machinery/bot/buttbot/Hear(var/datum/speech/speech, var/rendered_speech="")
 	set waitfor = 0 //Buttbots speaking should be queued after the original speech completes
@@ -72,7 +62,7 @@ Here it is: Buttbot.
 	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	playsound(src, 'sound/effects/superfart.ogg', 50, 1) //A fitting end
 	var/turf/Tsec = get_turf(src)
-	new /obj/item/clothing/head/butt(Tsec)
+	stored_ass.forceMove(Tsec)
 
 	if (prob(50))
 		new /obj/item/robot_parts/l_arm(Tsec)
@@ -80,7 +70,6 @@ Here it is: Buttbot.
 	spark(src)
 
 	new /obj/effect/decal/cleanable/blood/oil(src.loc)
-	explosion(0,0,0)
 	qdel(src)
 
 
@@ -92,9 +81,9 @@ Here it is: Buttbot.
 		var/obj/machinery/bot/buttbot/A = new /obj/machinery/bot/buttbot(T)
 		A.name = src.created_name
 		to_chat(user, "<span class='notice'>You roughly shove the robot arm into the ass! Butt Butt!</span>")//I don't even.
-
 		user.drop_from_inventory(src)
-		qdel(src)
+		A.stored_ass = src
+		src.forceMove(A)
 	else if (istype(W, /obj/item/weapon/pen))
 		var/t = stripped_input(user, "Enter new robot name", src.name, src.created_name)
 

@@ -199,14 +199,20 @@
 
 /datum/numbered_display
 	var/obj/item/sample_object
-	var/number
+	var/number = 0
 
 /datum/numbered_display/New(obj/item/sample as obj)
 	if(!istype(sample))
 		qdel(src)
 		return
 	sample_object = sample
-	number = 1
+	number = sample_object.get_storage_number_display_value()
+
+/obj/item/proc/get_storage_number_display_value()
+	return 1
+
+/obj/item/stack/get_storage_number_display_value()
+	return amount
 
 //This proc determines the size of the inventory to be displayed. Please touch it only if you know what you're doing.
 /obj/item/weapon/storage/proc/orient2hud()
@@ -221,7 +227,7 @@
 			var/found = 0
 			for(var/datum/numbered_display/ND in numbered_contents)
 				if(ND.sample_object.type == I.type)
-					ND.number++
+					ND.number += I.get_storage_number_display_value()
 					found = 1
 					break
 			if(!found)
@@ -265,15 +271,10 @@
 
 	if(src.loc == W)
 		return 0 //Means the item is already in the storage item
-	if(storage_slots && (contents.len >= storage_slots))
-		if(!stop_messages)
-			to_chat(usr, "<span class='notice'>\The [src] is full, make some space.</span>")
-		return 0 //Storage item is full
 	if(usr && (W.cant_drop > 0))
 		if(!stop_messages)
 			to_chat(usr,"<span class='notice'>You can't let go of \the [W]!</span>")
 		return 0 //Item is stuck to our hands
-
 	if(W.wielded || istype(W, /obj/item/offhand))
 		var/obj/item/offhand/offhand = W
 		var/obj/item/ref_name = W
@@ -281,7 +282,6 @@
 			ref_name = offhand.wielding
 		to_chat(usr, "<span class='notice'>Unwield \the [ref_name] first.</span>")
 		return
-
 	if(can_only_hold.len)
 		var/ok = 0
 		for(var/A in can_only_hold)
@@ -345,10 +345,18 @@
 				to_chat(usr, "<span class='notice'>\The [W] is too big for \the [src].</span>")
 			return 0
 
-	if(get_sum_w_class() + W.w_class > max_combined_w_class)
+	var/stacktypefound = FALSE
+	if(istype(W,/obj/item/stack))
+		var/obj/item/stack/S = W
+		for(var/obj/item/stack/otherS in src)
+			if(otherS.type == S.type)
+				if(otherS.amount < otherS.max_amount)
+					return TRUE
+				stacktypefound = TRUE
+	if((storage_slots && (contents.len >= storage_slots)) || (get_sum_w_class() + W.w_class > max_combined_w_class))
 		if(!stop_messages)
-			to_chat(usr, "<span class='notice'>\The [src] is full, make some space.</span>")
-		return 0
+			to_chat(usr, "<span class='notice'>\The [src] is full[stacktypefound ? " of this kind of stack": ""], make some space.</span>")
+		return 0 //Storage item is full
 
 	if(W.w_class >= src.w_class && (istype(W, /obj/item/weapon/storage)))
 		if(!istype(src, /obj/item/weapon/storage/backpack/holding))	//bohs should be able to hold backpacks again. The override for putting a boh in a boh is in backpack.dm.
@@ -365,7 +373,23 @@
 	if(!istype(W))
 		return 0
 
-
+	if(istype(W,/obj/item/stack))
+		var/obj/item/stack/S = W
+		for(var/obj/item/stack/otherS in src)
+			if(otherS.amount < otherS.max_amount && otherS.type == S.type)
+				var/to_transfer = min(S.amount, otherS.max_amount - otherS.amount)
+				otherS.add(to_transfer)
+				if(usr)
+					add_fingerprint(usr)
+					if(!prevent_warning)
+						for(var/mob/M in viewers(usr, null)) //If someone is standing close enough, they can tell what it is, otherwise they can only see large or normal items from a distance
+							if(M == usr)
+								to_chat(usr, "You add [to_transfer] [((to_transfer > 1) && S.irregular_plural) ? S.irregular_plural : "[S.singular_name]\s"] to \the [otherS]. It now contains [otherS.amount] [(otherS.irregular_plural && otherS.amount > 1) ? otherS.irregular_plural : "[otherS.singular_name]"].")
+							else if (!stealthy(usr) && ((M in range(1)) || W.w_class >= W_CLASS_MEDIUM))
+								M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
+				S.use(to_transfer)
+				refresh_all()
+				return 1
 
 	if(usr) //WHYYYYY
 
@@ -381,12 +405,10 @@
 		add_fingerprint(usr)
 
 		if(!prevent_warning && !istype(W, /obj/item/weapon/gun/energy/crossbow))
-			for(var/mob/M in viewers(usr, null))
-				if (M == usr)
+			for(var/mob/M in viewers(usr, null)) //If someone is standing close enough, they can tell what it is, otherwise they can only see large or normal items from a distance
+				if(M == usr)
 					to_chat(usr, "<span class='notice'>You put \the [W] into \the [src].</span>")
-				else if (M in range(1) && !stealthy(usr)) //If someone is standing close enough, they can tell what it is...
-					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
-				else if (W.w_class >= W_CLASS_MEDIUM && !stealthy(usr)) //Otherwise they can only see large or normal items from a distance...
+				else if (!stealthy(usr) && ((M in range(1)) || W.w_class >= W_CLASS_MEDIUM))
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
 
 	W.mouse_opacity = 2 //So you can click on the area around the item to equip it, instead of having to pixel hunt
@@ -396,9 +418,10 @@
 	return 1
 
 /obj/item/weapon/storage/can_quick_store(var/obj/item/I)
-	return can_be_inserted(I,1)
+	return can_use() && can_be_inserted(I,1)
 
 /obj/item/weapon/storage/quick_store(var/obj/item/I,mob/user)
+	..()
 	return handle_item_insertion(I,0)
 
 //Call this proc to handle the removal of an item from the storage item. The item will be moved to the atom sent as new_target
@@ -483,6 +506,11 @@
 		storage_locked = !storage_locked
 		to_chat(user, "<span class='notice'>You [(storage_locked)? "" : "un"]lock \the [src] with \the [stkey].</span>")
 		return
+
+	if(istype(W, /obj/item/weapon/hand_labeler))
+		var/obj/item/weapon/hand_labeler/L = W
+		if(L.mode)
+			return
 
 	if(!can_be_inserted(W))
 		if(istype(W, /obj/item/weapon/glue))
@@ -770,6 +798,13 @@
 
 /obj/item/weapon/storage/proc/is_full()
 	return (storage_slots && (contents.len >= storage_slots)) || (get_sum_w_class() >= max_combined_w_class)
+
+/obj/item/weapon/storage/ignite()
+	if(!istype(loc, /turf)) //worn or held items don't ignite (for now >:^) )
+		return 0
+	var/turf/T = get_turf(src)
+	mass_remove(T) //dump contents if it's burning
+	..()
 
 /obj/item/weapon/storage_key
 	name = "storage key"

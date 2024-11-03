@@ -144,10 +144,9 @@ var/list/gravpults = list()
 			G.user.client.images |= G.holomap_images
 
 /obj/structure/deathsquad_gravpult/interface_act(var/mob/i_user,var/action)
-	switch(action)
-		if("launch")
-			i_user.playsound_local(src, 'sound/misc/click.ogg', 50, 0, 0, 0, 0)
-			launch()
+	if(action == "launch")
+		i_user.playsound_local(src, 'sound/misc/click.ogg', 50, 0, 0, 0, 0)
+		launch()
 
 /obj/structure/deathsquad_gravpult/proc/launch()
 	if (!mech)

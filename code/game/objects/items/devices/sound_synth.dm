@@ -4,15 +4,15 @@
 	icon_state = "soundsynth"
 	item_state = "radio"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_ELECTRONIC
 	flags = FPRINT
 	siemens_coefficient = 1
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 
 	var/tmp/spam_flag = 0 //To prevent mashing the button to cause annoyance like a huge idiot.
 	var/selected_sound = "sound/items/bikehorn.ogg"
 	var/shiftpitch = 1
 	var/volume = 50
-	var/emagged = 0
 
 	var/list/sound_list_emagged = list(
 	"Blob Pulse" = "selected_sound=sound/effects/blob_pulse.ogg&shiftpitch=1&volume=100",

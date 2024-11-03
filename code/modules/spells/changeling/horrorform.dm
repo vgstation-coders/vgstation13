@@ -13,7 +13,7 @@
 
 /spell/changeling/horrorform/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
-	if (!.) 
+	if (!.)
 		return FALSE
 	if(istype(user.loc, /obj/mecha))
 		to_chat(user, "<span class='warning'>We cannot transform here!</span>")
@@ -49,7 +49,7 @@
 	user.visible_message("<span class = 'danger'>[user] emits a putrid odor as their torso splits open!</span>")
 	user.name = "unknown"
 	user.real_name = "unknown"
-	
+
 	for(var/obj/item/slot in user.get_all_slots())
 		user.u_equip(slot, 1)
 	user.update_icons()
@@ -60,12 +60,12 @@
 	user.set_species("Horror")
 	playsound(user, 'sound/effects/greaterling.ogg', 100, 0, 10)
 	user.visible_message("<span class = 'sinister'>A roar pierces the air and makes your blood curdle.</span>", ignore_self = TRUE, range = 10)
-	
+
 	user.canmove = 1
 	user.delayNextAttack(0)
 	user.icon = null
 	user.make_changeling()
-	
+
 	return
 
 /spell/changeling/horrorform/proc/deactivate(var/mob/living/carbon/human/user)
@@ -99,7 +99,7 @@
 	user.transferImplantsTo(O)
 	user.transferBorers(O)
 	O.dna = user.dna.Clone()
-	
+
 	user.dna = null
 	O.real_name = chosen_dna.real_name
 	O.name = chosen_dna.real_name
@@ -109,9 +109,9 @@
 		user.drop_from_inventory(W)
 	for(var/obj/T in user)
 		qdel(T)
-	
+
 	changeling.geneticdamage = 60
-	O.forceMove(user.loc)
+	O.forceMove(get_turf(user.loc))
 	O.UpdateAppearance()
 	domutcheck(O, null)
 	//scale down damage when transforming
@@ -127,5 +127,5 @@
 	feedback_add_details("changeling_powers","HF")
 
 	qdel(user)
-	
+
 	return

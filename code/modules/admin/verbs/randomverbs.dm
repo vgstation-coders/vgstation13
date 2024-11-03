@@ -1062,7 +1062,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 /client/proc/save_coordinates(var/x1 as num, var/y1 as num, var/z1 as num, var/x2 as num, var/y2 as num, var/z2 as num, var/mapname as text)
 	set name     = "Save map by coordinates"
-	set category = "Fun"
+	set category = "Server"
 	set desc     = "(x1, y1, z1, x2, y2, z2, mapname) Saves the map beetween (x1, y1, z1) and (x2, y2, z2), and it will be sent to your client, it will also be stored in data/logs/saved_maps."
 
 	if(!check_rights(R_SERVER))
@@ -1134,7 +1134,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 /proc/select_loadout()
 	var/object = input(usr, "Enter a typepath. It will be autocompleted.", "Equip Outfit") as null|text
-	var/outfit_type = filter_list_input("Outfit Type","Equip Outfit", get_matching_types(object, /datum/outfit) - /datum/outfit/ - /datum/outfit/striketeam/)
+	var/outfit_type = filter_typelist_input("Outfit Type","Equip Outfit", get_matching_types(object, /datum/outfit) - /datum/outfit/ - /datum/outfit/striketeam/)
 	if(!outfit_type || !ispath(outfit_type))
 		return
 	return outfit_type

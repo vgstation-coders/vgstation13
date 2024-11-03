@@ -23,7 +23,7 @@
 	L.unlock_from()
 
 	anim(location = mobloc, target = L, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", direction = L.dir, name = "water")
-	L.ExtinguishMob()
+	L.extinguish()
 	var/datum/effect/system/steam_spread/steam = new /datum/effect/system/steam_spread()
 	steam.set_up(10, 0, mobloc)
 	steam.start()

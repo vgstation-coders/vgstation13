@@ -205,8 +205,10 @@
 
 // Chair types
 /obj/structure/bed/chair/wood
-	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 1
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
+
 	// TODO:  Special ash subtype that looks like charred chair legs
 
 	sheet_type = /obj/item/stack/sheet/wood
@@ -648,7 +650,7 @@
 	ghost_can_rotate = TRUE
 
 /obj/structure/bed/chair/shuttle/attackby(var/obj/item/W, var/mob/user)
-	var/mob/M = locate() in loc//so attacking people isn't made harder by the seats' bulkiness
+	var/mob/living/M = locate() in loc //so attacking people isn't made harder by the seats' bulkiness
 	if (M && M != user)
 		return M.attackby(W,user)
 	if(istype(W, /obj/item/assembly/shock_kit))

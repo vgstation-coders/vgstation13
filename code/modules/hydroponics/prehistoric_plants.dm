@@ -69,12 +69,13 @@
 	maturation = 6
 	production = 1
 	yield = 3
-	potency = 30
+	potency = 10
 	growth_stages = 5
 	biolum = 1
 	biolum_colour = "#9FE7EC"
 
 	large = 0
+	moody_lights = 1
 
 /obj/item/seeds/jurlmah
 	seed_type = "jurlmah"
@@ -100,13 +101,14 @@
 	maturation = 10
 	production = 1
 	yield = 3
-	potency = 30
+	potency = 10
 	growth_stages = 3
 	biolum = 1
 	biolum_colour = "#5532E2"
 
 
 	large = 0
+	moody_lights = 1
 
 /obj/item/seeds/amauri
 	seed_type = "amauri"

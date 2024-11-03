@@ -34,10 +34,10 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		src.activate(src.reagents.total_volume)
 
 /obj/item/weapon/implant/chem/implanted(mob/implanter)
-	imp_in.register_event(/event/emote, src, src::trigger())
+	imp_in.register_event(/event/emote, src, nameof(src::trigger()))
 
 /obj/item/weapon/implant/chem/handle_removal(mob/remover)
-	imp_in?.unregister_event(/event/emote, src, src::trigger())
+	imp_in?.unregister_event(/event/emote, src, nameof(src::trigger()))
 	makeunusable(75)
 
 /obj/item/weapon/implant/chem/activate(var/cause)

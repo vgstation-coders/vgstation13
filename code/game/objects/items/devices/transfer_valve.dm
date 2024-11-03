@@ -2,7 +2,7 @@
 	icon = 'icons/obj/assemblies.dmi'
 	name = "tank transfer valve"
 	icon_state = "valve_1"
-	item_state = "ttv"
+	item_state = "ttv_empty"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/tanks.dmi', "right_hand" = 'icons/mob/in-hand/right/tanks.dmi')
 	desc = "Regulates the transfer of air between two tanks."
 	var/obj/item/weapon/tank/tank_one
@@ -143,18 +143,40 @@
 	underlays = null
 
 	if(!tank_one && !tank_two && !attached_device)
-		icon_state = "valve_1"
+		if (damaged)
+			icon_state = "valve_damaged"
+		else
+			icon_state = "valve_1"
+		item_state = "ttv_empty"
+		if(iscarbon(loc))
+			var/mob/living/carbon/M = loc
+			M.update_inv_hands()
 		return
 	icon_state = "valve"
+	item_state = "ttv_empty"
+	var/list/tank_icons = list()
 
 	if(tank_one)
 		overlays += image(icon = icon, icon_state = "[tank_one.icon_state]")
+		tank_icons += tank_one.icon_state
 	if(tank_two)
 		var/icon/J = new(icon, icon_state = "[tank_two.icon_state]")
+		tank_icons += tank_two.icon_state
 		J.Shift(WEST, 13)
 		underlays += J
 	if(attached_device)
 		overlays += image(icon = icon, icon_state = "device")
+	if (tank_icons.len > 0)
+		if ("plasma" in tank_icons)
+			if ("oxygen" in tank_icons)
+				item_state = "ttv"
+			else
+				item_state = "ttv_plasma"
+		else if ("oxygen" in tank_icons)
+			item_state = "ttv_oxygen"
+	if(iscarbon(loc))
+		var/mob/living/carbon/M = loc
+		M.update_inv_hands()
 
 /obj/item/device/transfer_valve/proc/merge_gases()
 	tank_two.air_contents.volume += tank_one.air_contents.volume
@@ -169,11 +191,13 @@
 	var/datum/gas_mixture/temp_first = new (tank_one.air_contents)
 	var/datum/gas_mixture/temp_second = new (tank_two.air_contents)
 
+	temp_first.volume += temp_second.volume
+
 	temp_first.merge(temp_second)
 
 	temp_first.react()
 
-	var/pressure = temp_first.return_pressure()/2
+	var/pressure = temp_first.return_pressure()
 
 	if(pressure <= TANK_FRAGMENT_PRESSURE)
 		return 0
@@ -182,7 +206,7 @@
 	temp_first.react()
 	temp_first.react()
 
-	pressure = temp_first.return_pressure()/2
+	pressure = temp_first.return_pressure()
 
 	var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
 	var/dev = round(range*0.25)

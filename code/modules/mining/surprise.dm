@@ -367,6 +367,7 @@ var/global/list/mining_surprises = typesof(/mining_surprise)-/mining_surprise
 
 	room.UpdateTurfs()
 	postProcessRoom(room)
+	areas |= complex_area
 	rooms += room
 	message_admins("Room spawned at [formatJumpTo(start_loc)]")
 

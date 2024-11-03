@@ -44,6 +44,8 @@
 	var/podsConnected = FALSE
 	var/mob/living/occupantOne = null
 	var/mob/living/occupantTwo = null
+	var/occupantStatOne = null
+	var/occupantStatTwo = null
 	var/mindTypeOne = null	//Player mind, simple mob, silicon, etc
 	var/mindTypeTwo = null
 	var/lockedPods = FALSE
@@ -123,6 +125,7 @@
 		connectTwo = null
 	. = ..()
 
+
 /obj/machinery/mind_machine/mind_machine_hub/attackby(var/obj/item/A, var/mob/user)
 	..()
 	if(istype(A, /obj/item/bluespace_crystal))
@@ -166,7 +169,10 @@
 		connectTwo = FALSE
 		findConnections()
 
+
 //////UI stuff/////////////
+
+
 /obj/machinery/mind_machine/mind_machine_hub/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	if(errorMessage != MINDMACHINE_NOERROR)
 		spawn(5 SECONDS)
@@ -186,8 +192,8 @@
 	if(occupantScan)
 		occData["nameOne"] = occupantOne.name
 		occData["nameTwo"] = occupantTwo.name
-		occData["statOne"] = occupantOne.stat == 2 ? "Dead" : occupantOne.stat == 1 ? "Unconscious" : "Conscious"
-		occData["statTwo"] = occupantTwo.stat == 2 ? "Dead" : occupantTwo.stat == 1 ? "Unconscious" : "Conscious"
+		occData["statOne"] = occupantStatOne
+		occData["statTwo"] = occupantStatTwo
 		occData["mindTypeOne"] = mindTypeOne
 		occData["mindTypeTwo"] = mindTypeTwo
 	data["occData"] = occData;
@@ -258,6 +264,7 @@
 
 
 //////Scan and Swap, other UI procs//////////////
+
 /obj/machinery/mind_machine/mind_machine_hub/proc/unlockPods()
 	occupantScan = FALSE
 	mindTypeOne = "None"
@@ -321,22 +328,40 @@
 	occupantScan = TRUE
 	playsound(connectOne, 'sound/effects/sparks4.ogg', 80, 1)
 	playsound(connectTwo, 'sound/effects/sparks4.ogg', 80, 1)
-	mindTypeOne = scanPod(occupantOne)
-	mindTypeTwo = scanPod(occupantTwo)
+	scanPod(occupantOne)
+	scanPod(occupantTwo)
 	currentlySwapping = FALSE
 
 /obj/machinery/mind_machine/mind_machine_hub/proc/scanPod(var/mob/living/S)
+	var/MT
+	var/OS
+	switch(S.stat)
+		if(CONSCIOUS)
+			OS = "Alive"
+		if(UNCONSCIOUS)
+			OS = "Unconscious"
+		if(DEAD)
+			OS = "Dead"
 	if(!S.mind)
-		return MINDMACHINE_LOWER //Simple mob
-	if(isrobot(S))
-		return MINDMACHINE_SILICON //Silicon player, obviously
-	if(isvampire(S) || isanycultist(S) || ischangeling(S) || ismalf(S) || is_type_in_list(S, illegalSwap))
-		return MINDMACHINE_SHIELDED //Mostly to fix spell bugs but also tinfoil
-	if(S.client && can_mind_interact(S.mind))
-		return MINDMACHINE_HIGHER //Player controlled
-	if(S.client && !can_mind_interact(S.mind))
-		return MINDMACHINE_SHIELDED
-	return MINDMACHINE_LOWER //Monkeyman
+		MT = MINDMACHINE_LOWER//Simple mob
+	if(S.mind)
+		if(isrobot(S))
+			MT = MINDMACHINE_SILICON //Silicon player, obviously
+		else
+			MT = MINDMACHINE_HIGHER //Player controlled
+	if(isvampire(S) || isanycultist(S) || ischangeling(S) || ismalf(S))
+		MT = MINDMACHINE_SHIELDED //Mostly to fix spell bugs but also tinfoil
+	if(is_type_in_list(S, illegalSwap) || is_type_in_list(S, illegalSwap))
+		MT = MINDMACHINE_SHIELDED
+	if((ishigherbeing(S)) || (ismonkey(S)))
+		if(S.is_wearing_any(list(/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
+			MT = MINDMACHINE_SHIELDED
+	if(S == occupantOne)
+		mindTypeOne = MT
+		occupantStatOne = OS
+	if(S == occupantTwo)
+		mindTypeTwo = MT
+		occupantStatTwo = OS
 
 /obj/machinery/mind_machine/mind_machine_hub/proc/swapOccupants(var/mob/living/M)
 	if(!occupantScan || !lockedPods)
@@ -357,7 +382,7 @@
 		spark(connectTwo)
 		unlockPods()
 		return
-	if(occupantOne.stat == DEAD || occupantTwo.stat == DEAD)	//Being able to swap if they die between scan and swap is intentional
+	if(occupantStatOne == "Dead" || occupantStatTwo == "Dead")	//Being able to swap if they die between scan and swap is intentional
 		if(!soulShardSafety) //Secrets
 			errorMessage = MINDMACHINE_LIVING_REQUIRED
 			return
@@ -566,7 +591,7 @@
 		var/list/woopsMobs = list()
 		var/mob/woopsTarget = null
 		for(var/mob/living/R in mob_list)
-			if(!R.mind && R.stat != DEAD && (get_dist(src, R) < 50) && (connectOne.z == R.z) && (!is_type_in_list(R, illegalSwap)))
+			if((!R.mind) && (R.stat != 2) && (get_dist(src, R) < 50) && (connectOne.z == R.z) && (!is_type_in_list(R, illegalSwap)))
 				woopsMobs += R
 		if(woopsMobs.len)
 			woopsTarget = pick(woopsMobs)

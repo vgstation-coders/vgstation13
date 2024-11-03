@@ -160,7 +160,7 @@ var/global/list/screen_alarms_locs = list(
 /obj/abstract/screen/alert/New()
 	..()
 	if(timeout)
-		add_timer(new /callback(src, src::qdel_self()), timeout)
+		add_timer(new /callback(src, nameof(src::qdel_self())), timeout)
 	if(emph)
 		overlays.Add(image('icons/mob/screen_alarms.dmi', icon_state = "emph_outline"))
 

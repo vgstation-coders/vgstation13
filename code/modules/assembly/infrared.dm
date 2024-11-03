@@ -150,8 +150,6 @@
 	var/dat = text("<B>Status</B>: []<BR>\n<B>Visibility</B>: []<BR>", (on ? text("<A href='?src=\ref[];state=0'>ON</A>", src) : text("<A href='?src=\ref[];state=1'>OFF</A>", src)), (src.visible ? text("<A href='?src=\ref[];visible=0'>visible</A>", src) : text("<A href='?src=\ref[];visible=1'>infrared</A>", src)))
 
 	dat += {"<B>Direction</B>: <A href='?src=\ref[src];direction=1'>[dir2text(dir)]</A><BR>"}
-	dat += {"<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>
-		<BR><BR><A href='?src=\ref[src];close=1'>Close</A>"}
 	user << browse("<TITLE>Infrared Laser</TITLE><HR>[dat]", "window=infra")
 	onclose(user, "infra")
 
@@ -173,10 +171,6 @@
 			beam.set_visible(visible)
 		update_icon()
 
-	if(href_list["close"])
-		usr << browse(null, "window=infra")
-		return
-
 	if(href_list["direction"])
 		var/choice = input("What direction will you aim the laser toward?","Infrared Laser") as null|anything in list("NORTH", "EAST", "SOUTH", "WEST")
 		if (choice)
@@ -186,8 +180,7 @@
 				QDEL_NULL(beam)
 			process()
 
-	if(usr)
-		attack_self(usr)
+	updateUsrDialog()
 
 
 /***************************IBeam*********************************/

@@ -1,0 +1,1510 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"bw" = (
+/obj/structure/railing/plasteel{
+	dir = 8
+	},
+/obj/structure/railing/plasteel{
+	dir = 4
+	},
+/turf/unsimulated/floor/lab_underplating{
+	icon_state = "ramptop";
+	dir = 1
+	},
+/area/vault/thestranger)
+"bB" = (
+/obj/structure/largecrate,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"co" = (
+/obj/item/weapon/paper/crumpled,
+/turf/simulated/floor/wood,
+/area/vault/thestranger)
+"cR" = (
+/obj/machinery/door/mineral/wood/log,
+/turf/unsimulated/floor/lab_underplating{
+	icon_state = "ramptop";
+	dir = 4
+	},
+/area/vault/thestranger)
+"da" = (
+/obj/structure/table/reinforced/clockwork,
+/turf/unsimulated/floor/ayy,
+/area/vault/thestranger)
+"eU" = (
+/turf/space,
+/area)
+"eW" = (
+/obj/structure/railing/wood,
+/obj/structure/railing/wood{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid/air,
+/area/vault/thestranger)
+"fn" = (
+/obj/structure/largecrate/skele_stand,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"gn" = (
+/turf/simulated/wall/mineral/wood/log/desert,
+/area/vault/thestranger)
+"gx" = (
+/mob/living/simple_animal/hostile/mimic/crate/chest,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"gJ" = (
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
+/obj/structure/closet/crate/freezer,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"hC" = (
+/obj/machinery/door/mineral/wood/log,
+/turf/unsimulated/floor/ayy,
+/area/vault/thestranger)
+"iD" = (
+/obj/structure/largecrate/snails,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"jt" = (
+/obj/structure/table/reinforced/clockwork,
+/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer{
+	pixel_x = 8;
+	pixel_y = 14
+	},
+/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer{
+	pixel_x = 12;
+	pixel_y = 12
+	},
+/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer{
+	pixel_x = -4;
+	pixel_y = 12
+	},
+/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer{
+	pixel_y = 9
+	},
+/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer{
+	pixel_x = -6;
+	pixel_y = 6
+	},
+/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer{
+	pixel_x = 4;
+	pixel_y = 4
+	},
+/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"lw" = (
+/obj/structure/closet/crate/ayy,
+/obj/item/tool/weldingtool,
+/obj/item/tool/crowbar,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"lG" = (
+/obj/structure/table/reinforced/clockwork,
+/obj/item/device/flashlight/lamp/slime{
+	color = "#00ccff";
+	name = "dreaming lamp";
+	desc = "There is yet life.";
+	light_color = "#15a366"
+	},
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"mq" = (
+/turf/unsimulated/floor/lab_underplating{
+	icon_state = "ramptop"
+	},
+/area/vault/thestranger)
+"mu" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 4
+	},
+/turf/simulated/floor/wood,
+/area/vault/thestranger)
+"on" = (
+/obj/structure/grille/invulnerable,
+/obj/item/tool/wrench,
+/turf/unsimulated/beach/sandbar,
+/area/vault/thestranger)
+"oJ" = (
+/turf/unsimulated/floor/grass,
+/area/vault/thestranger)
+"oO" = (
+/obj/structure/table/woodentable,
+/obj/item/candle/blood{
+	pixel_x = -4;
+	pixel_y = 8
+	},
+/obj/item/weapon/lighter/zippo{
+	pixel_x = 8
+	},
+/obj/machinery/door_control{
+	desc = "A switch.";
+	id_tag = "stranger";
+	name = "Enter";
+	req_one_access_txt = "11;24";
+	pixel_x = 7
+	},
+/turf/simulated/floor/wood,
+/area/vault/thestranger)
+"pY" = (
+/obj/structure/closet/crate/ayy,
+/obj/item/weapon/cell/rad,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"qu" = (
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"qD" = (
+/obj/structure/airshield{
+	color = "#000000"
+	},
+/turf/unsimulated/floor/lab_underplating{
+	icon_state = "ramptop"
+	},
+/area/vault/thestranger)
+"qP" = (
+/obj/structure/railing/plasteel,
+/obj/structure/railing/plasteel{
+	dir = 1
+	},
+/turf/unsimulated/floor/lab_underplating{
+	icon_state = "ramptop";
+	dir = 8
+	},
+/area/vault/thestranger)
+"tm" = (
+/turf/unsimulated/mineral/air,
+/area/vault/thestranger)
+"tr" = (
+/obj/structure/closet/crate/ayy,
+/obj/item/keycard/yellow,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"uU" = (
+/obj/structure/acidsink{
+	dir = 8;
+	pixel_x = 10
+	},
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"xt" = (
+/obj/structure/reagent_dispensers/degreaser{
+	hasbolts = 1;
+	anchored = 1
+	},
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"xz" = (
+/obj/structure/closet/crate/ayy,
+/obj/item/clothing/under/grey/grey_worker,
+/obj/item/stack/cable_coil,
+/obj/item/weapon/cell/hyper,
+/obj/item/weapon/cell/hyper,
+/obj/item/weapon/cell/hyper,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"yD" = (
+/obj/structure/table/reinforced/clockwork,
+/obj/structure/painting{
+	icon_state = "aymao";
+	pixel_x = 30
+	},
+/obj/structure/painting{
+	icon_state = "jmwt3";
+	pixel_y = 30
+	},
+/obj/item/device/flashlight/lamp/slime{
+	color = "#00ccff";
+	name = "dreaming lamp";
+	desc = "There is yet life.";
+	light_color = "#15a366"
+	},
+/turf/unsimulated/floor/ayy,
+/area/vault/thestranger)
+"yR" = (
+/turf/unsimulated/floor/lab_underplating,
+/area/vault/thestranger)
+"zd" = (
+/obj/item/device/flashlight/lamp/slime{
+	color = "#00ccff";
+	name = "dreaming lamp";
+	desc = "There is yet life.";
+	light_color = "#15a366"
+	},
+/turf/unsimulated/floor/asteroid/plating,
+/area/vault/thestranger)
+"zq" = (
+/obj/structure/railing/plasteel{
+	dir = 8
+	},
+/obj/structure/railing/plasteel{
+	dir = 1
+	},
+/turf/unsimulated/floor/lab_sterile,
+/area/vault/thestranger)
+"Ax" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/paper_bin/black,
+/obj/item/weapon/pen/fountain,
+/turf/simulated/floor/wood,
+/area/vault/thestranger)
+"AY" = (
+/obj/machinery/door/airlock/highsecurity/keycard{
+	desc = "Requires three colored keycards to open, found nearby."
+	},
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/thestranger)
+"Bo" = (
+/obj/structure/table/reinforced/clockwork,
+/obj/structure/painting{
+	icon_state = "jmwt1";
+	pixel_y = 30
+	},
+/turf/unsimulated/floor/ayy,
+/area/vault/thestranger)
+"BL" = (
+/obj/structure/grille/invulnerable,
+/turf/unsimulated/beach/sandbar,
+/area/vault/thestranger)
+"Cp" = (
+/turf/unsimulated/floor/lab_underplating{
+	icon = 'icons/turf/space.dmi';
+	icon_state = "13"
+	},
+/area/vault/thestranger)
+"CP" = (
+/obj/structure/grille/invulnerable,
+/obj/machinery/compressor{
+	dir = 4
+	},
+/turf/unsimulated/beach/sandbar,
+/area/vault/thestranger)
+"DB" = (
+/obj/structure/closet/crate/ayy,
+/obj/item/clothing/shoes/jackboots/mothership,
+/obj/item/weapon/storage/belt/mothership,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"DG" = (
+/turf/simulated/wall/r_wall,
+/area/vault/thestranger)
+"Ei" = (
+/turf/unsimulated/floor/ayy,
+/area/vault/thestranger)
+"FA" = (
+/obj/structure/table/reinforced/clockwork,
+/obj/structure/table/reinforced/clockwork,
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/thestranger)
+"Gg" = (
+/obj/machinery/door/airlock/external,
+/turf/unsimulated/floor/lab_underplating,
+/area/vault/thestranger)
+"Gj" = (
+/obj/structure/closet/crate/chest,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"HE" = (
+/obj/structure/reagent_dispensers/watertank,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"Jj" = (
+/obj/structure/largecrate/cat,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"Jn" = (
+/obj/structure/closet/crate/chest,
+/obj/item/weapon/reagent_containers/glass/mortar,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"JK" = (
+/turf/simulated/floor/wood,
+/area/vault/thestranger)
+"JP" = (
+/obj/structure/table/reinforced/clockwork,
+/obj/item/weapon/grenade/chronogrenade/past,
+/obj/item/weapon/grenade/chronogrenade/past,
+/obj/item/weapon/grenade/chronogrenade/past,
+/obj/item/weapon/grenade/chronogrenade/past,
+/obj/item/weapon/grenade/chronogrenade/past,
+/obj/item/weapon/grenade/chronogrenade/past,
+/obj/item/weapon/grenade/chronogrenade/past,
+/obj/item/weapon/grenade/chronogrenade/past,
+/obj/item/weapon/grenade/chronogrenade/past,
+/obj/item/weapon/grenade/chronogrenade/past,
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/thestranger)
+"Lg" = (
+/obj/structure/largecrate/mule,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"LC" = (
+/obj/structure/railing/wood{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid/air,
+/area/vault/thestranger)
+"LJ" = (
+/obj/structure/grille/invulnerable,
+/obj/machinery/power/turbine{
+	dir = 4;
+	name = "turbine"
+	},
+/turf/unsimulated/beach/sandbar,
+/area/vault/thestranger)
+"Mi" = (
+/turf/unsimulated/wall/guts{
+	icon = 'icons/turf/space.dmi';
+	icon_state = "7";
+	name = "space";
+	desc = "The final frontier?"
+	},
+/area/vault/thestranger)
+"Ms" = (
+/obj/structure/railing/plasteel,
+/obj/structure/railing/plasteel,
+/obj/structure/railing/plasteel{
+	dir = 4
+	},
+/turf/unsimulated/floor/lab_sterile,
+/area/vault/thestranger)
+"MW" = (
+/obj/structure/grille/invulnerable,
+/obj/item/keycard/red,
+/turf/unsimulated/beach/sandbar,
+/area/vault/thestranger)
+"NK" = (
+/turf/unsimulated/wall/ayy,
+/area/vault/thestranger)
+"NY" = (
+/obj/structure/table/reinforced/clockwork,
+/obj/structure/painting{
+	icon_state = "jmwt2";
+	pixel_y = 30
+	},
+/obj/structure/painting{
+	icon_state = "sunset";
+	pixel_x = -30
+	},
+/obj/item/device/flashlight/lamp/slime{
+	color = "#00ccff";
+	name = "dreaming lamp";
+	desc = "There is yet life.";
+	light_color = "#15a366"
+	},
+/turf/unsimulated/floor/ayy,
+/area/vault/thestranger)
+"OV" = (
+/obj/structure/railing/plasteel{
+	dir = 4
+	},
+/obj/structure/railing/plasteel{
+	dir = 1
+	},
+/turf/unsimulated/floor/lab_sterile,
+/area/vault/thestranger)
+"PX" = (
+/obj/structure/table/reinforced/clockwork,
+/obj/structure/painting{
+	icon_state = "wizard";
+	pixel_x = 30
+	},
+/obj/item/device/flashlight/lamp/slime{
+	color = "#00ccff";
+	name = "dreaming lamp";
+	desc = "There is yet life.";
+	light_color = "#15a366"
+	},
+/turf/unsimulated/floor/ayy,
+/area/vault/thestranger)
+"Qu" = (
+/obj/item/weapon/paper/crumpled{
+	pixel_x = -4
+	},
+/obj/item/weapon/paper/crumpled{
+	pixel_x = 8;
+	pixel_y = -5
+	},
+/turf/simulated/floor/wood,
+/area/vault/thestranger)
+"QK" = (
+/obj/structure/railing/wood,
+/turf/simulated/wall/mineral/wood/log/desert,
+/area/vault/thestranger)
+"Rk" = (
+/obj/structure/railing/plasteel{
+	dir = 1
+	},
+/obj/structure/railing/plasteel,
+/turf/unsimulated/floor/lab_underplating{
+	icon_state = "ramptop";
+	dir = 4
+	},
+/area/vault/thestranger)
+"Ry" = (
+/turf/unsimulated/beach/sandbar,
+/area/vault/thestranger)
+"RW" = (
+/obj/machinery/door/poddoor{
+	icon = 'icons/turf/walls.dmi';
+	icon_state = "log0";
+	closedicon = "log0";
+	closingicon = "log0";
+	openingicon = "woodfwall_opening";
+	openicon = "woodfwall_open";
+	id_tag = "stranger";
+	desc = "It seems loose.";
+	name = "log wall"
+	},
+/turf/simulated/floor/wood,
+/area/vault/thestranger)
+"Ss" = (
+/obj/structure/railing/plasteel,
+/obj/structure/railing/plasteel{
+	dir = 8
+	},
+/turf/unsimulated/floor/lab_sterile,
+/area/vault/thestranger)
+"SX" = (
+/obj/structure/table/reinforced/clockwork,
+/obj/structure/painting{
+	icon_state = "sunset";
+	pixel_x = -30
+	},
+/obj/item/device/flashlight/lamp/slime{
+	color = "#00ccff";
+	name = "dreaming lamp";
+	desc = "There is yet life.";
+	light_color = "#15a366"
+	},
+/turf/unsimulated/floor/ayy,
+/area/vault/thestranger)
+"Ug" = (
+/obj/structure/table/reinforced/clockwork,
+/obj/item/device/flashlight/lamp/slime{
+	color = "#00ccff";
+	name = "dreaming lamp";
+	desc = "There is yet life.";
+	light_color = "#15a366"
+	},
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/thestranger)
+"Uu" = (
+/obj/structure/closet/crate/ayy,
+/obj/item/device/flashlight,
+/obj/item/stack/sheet/metal/bigstack,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"Vg" = (
+/obj/structure/reagent_dispensers/silicate{
+	anchored = 1;
+	hasbolts = 1
+	},
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"XZ" = (
+/obj/structure/railing/plasteel{
+	dir = 4
+	},
+/turf/unsimulated/floor/lab_underplating{
+	icon_state = "ramptop"
+	},
+/area/vault/thestranger)
+"Yo" = (
+/obj/structure/mann_co_crate,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"YM" = (
+/obj/structure/closet/crate/ayy,
+/obj/item/clothing/mask/gas/mothership,
+/obj/item/clothing/head/welding,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"Za" = (
+/obj/structure/largecrate/porcelain,
+/turf/unsimulated/floor/ayy/maint,
+/area/vault/thestranger)
+"Zj" = (
+/turf/unsimulated/floor/asteroid/air,
+/area/vault/thestranger)
+"Zq" = (
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/thestranger)
+"ZI" = (
+/obj/structure/painting{
+	icon_state = "sunset";
+	pixel_x = -30
+	},
+/obj/item/keycard/blue{
+	pixel_x = -30
+	},
+/turf/unsimulated/floor/ayy,
+/area/vault/thestranger)
+
+(1,1,1) = {"
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+Mi
+Mi
+Mi
+Mi
+Mi
+Mi
+Mi
+Mi
+Mi
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+"}
+(2,1,1) = {"
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+Mi
+Mi
+Mi
+Mi
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Mi
+Mi
+Mi
+Mi
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+"}
+(3,1,1) = {"
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+Mi
+Mi
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Mi
+Mi
+eU
+eU
+eU
+eU
+eU
+eU
+"}
+(4,1,1) = {"
+eU
+eU
+eU
+eU
+eU
+Mi
+Mi
+Mi
+Ry
+Ry
+Ry
+zq
+bw
+bw
+bw
+bw
+bw
+Ss
+tm
+Ry
+Ry
+Ry
+Ry
+Mi
+Mi
+Mi
+eU
+eU
+eU
+eU
+"}
+(5,1,1) = {"
+eU
+eU
+eU
+eU
+Mi
+Mi
+Ry
+Ry
+Ry
+Ry
+oJ
+Rk
+gn
+gn
+gn
+gn
+gn
+qP
+tm
+tm
+zd
+Ry
+Ry
+Ry
+Ry
+Mi
+Mi
+eU
+eU
+eU
+"}
+(6,1,1) = {"
+eU
+eU
+eU
+eU
+Mi
+Ry
+Ry
+Ry
+Ry
+oJ
+oJ
+Rk
+gn
+NY
+ZI
+SX
+gn
+qP
+tm
+Zj
+Zj
+oJ
+Ry
+Ry
+Ry
+Ry
+Mi
+eU
+eU
+eU
+"}
+(7,1,1) = {"
+eU
+eU
+eU
+Mi
+Mi
+Ry
+Ry
+zd
+oJ
+oJ
+oJ
+Rk
+gn
+Bo
+Ei
+da
+gn
+qP
+tm
+tm
+Zj
+oJ
+oJ
+Ry
+Ry
+Ry
+Mi
+Mi
+eU
+eU
+"}
+(8,1,1) = {"
+eU
+eU
+Mi
+Mi
+Ry
+Ry
+Ry
+oJ
+oJ
+oJ
+oJ
+Rk
+gn
+yD
+Ei
+PX
+gn
+qP
+tm
+tm
+Zj
+oJ
+oJ
+oJ
+Ry
+Ry
+Ry
+Mi
+Mi
+eU
+"}
+(9,1,1) = {"
+eU
+eU
+Mi
+Ry
+Ry
+Ry
+oJ
+oJ
+oJ
+oJ
+oJ
+Rk
+gn
+gn
+hC
+gn
+gn
+qP
+tm
+Zj
+Zj
+oJ
+oJ
+zd
+Ry
+Ry
+Ry
+Ry
+Mi
+eU
+"}
+(10,1,1) = {"
+eU
+eU
+Mi
+Ry
+Ry
+zd
+oJ
+oJ
+oJ
+oJ
+oJ
+Rk
+oJ
+oJ
+OV
+XZ
+XZ
+Ms
+tm
+Zj
+oJ
+oJ
+Zj
+Zj
+Zj
+Ry
+Ry
+Ry
+Mi
+eU
+"}
+(11,1,1) = {"
+eU
+Mi
+Mi
+NK
+BL
+NK
+oJ
+oJ
+oJ
+oJ
+oJ
+Zj
+oJ
+oJ
+oJ
+oJ
+oJ
+oJ
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Ry
+Ry
+Ry
+Mi
+Mi
+"}
+(12,1,1) = {"
+eU
+Mi
+NK
+CP
+MW
+DG
+oJ
+oJ
+oJ
+oJ
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Ry
+Ry
+Ry
+Ry
+Mi
+"}
+(13,1,1) = {"
+eU
+Mi
+NK
+LJ
+NK
+NK
+NK
+NK
+NK
+oJ
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+gn
+gn
+gn
+gn
+Zj
+Ry
+NK
+NK
+NK
+Mi
+"}
+(14,1,1) = {"
+eU
+Mi
+NK
+CP
+NK
+JP
+Zq
+Zq
+NK
+zd
+Zj
+Zj
+zd
+oJ
+oJ
+oJ
+oJ
+zd
+Zj
+Zj
+RW
+mu
+co
+gn
+NK
+NK
+NK
+yR
+yR
+Mi
+"}
+(15,1,1) = {"
+eU
+Mi
+NK
+LJ
+NK
+FA
+Zq
+Zq
+AY
+Zj
+Zj
+oJ
+oJ
+oJ
+oJ
+oJ
+oJ
+oJ
+Zj
+Zj
+gn
+Ax
+JK
+Gg
+mq
+mq
+qD
+yR
+yR
+Cp
+"}
+(16,1,1) = {"
+eU
+Mi
+NK
+CP
+NK
+Ug
+Zq
+Zq
+NK
+Zj
+Zj
+oJ
+oJ
+oJ
+oJ
+oJ
+oJ
+oJ
+Zj
+Zj
+gn
+oO
+Qu
+gn
+NK
+NK
+NK
+yR
+yR
+Mi
+"}
+(17,1,1) = {"
+eU
+Mi
+NK
+LJ
+NK
+NK
+NK
+NK
+NK
+Zj
+Zj
+oJ
+oJ
+oJ
+oJ
+oJ
+oJ
+oJ
+zd
+Zj
+gn
+gn
+gn
+gn
+Zj
+Ry
+NK
+NK
+NK
+Mi
+"}
+(18,1,1) = {"
+eU
+Mi
+NK
+CP
+BL
+NK
+tm
+tm
+tm
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+oJ
+oJ
+oJ
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Ry
+Ry
+Ry
+Ry
+Mi
+"}
+(19,1,1) = {"
+eU
+Mi
+Mi
+NK
+on
+NK
+Ry
+tm
+tm
+tm
+zd
+Zj
+tm
+tm
+tm
+Zj
+Zj
+oJ
+oJ
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Ry
+Ry
+Ry
+Mi
+Mi
+"}
+(20,1,1) = {"
+eU
+eU
+Mi
+tm
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Zj
+Zj
+tm
+tm
+tm
+Zj
+oJ
+oJ
+oJ
+Zj
+Zj
+Zj
+Zj
+Ry
+Ry
+Ry
+Ry
+Mi
+eU
+"}
+(21,1,1) = {"
+eU
+eU
+Mi
+tm
+tm
+tm
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+tm
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+Zj
+zd
+Ry
+Ry
+Ry
+Ry
+Mi
+eU
+"}
+(22,1,1) = {"
+eU
+eU
+Mi
+Mi
+tm
+tm
+tm
+tm
+tm
+tm
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Mi
+Mi
+eU
+"}
+(23,1,1) = {"
+eU
+eU
+eU
+Mi
+Mi
+tm
+tm
+tm
+tm
+tm
+tm
+tm
+tm
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Ry
+Mi
+Mi
+eU
+eU
+"}
+(24,1,1) = {"
+eU
+eU
+eU
+eU
+Mi
+tm
+tm
+tm
+NK
+NK
+NK
+NK
+NK
+QK
+LC
+LC
+eW
+gn
+tm
+tm
+tm
+tm
+tm
+tm
+Ry
+Ry
+Mi
+eU
+eU
+eU
+"}
+(25,1,1) = {"
+eU
+eU
+eU
+eU
+Mi
+Mi
+tm
+tm
+NK
+Yo
+Jj
+iD
+bB
+gn
+gn
+cR
+gn
+gn
+NK
+NK
+NK
+NK
+NK
+tm
+Ry
+Mi
+Mi
+eU
+eU
+eU
+"}
+(26,1,1) = {"
+eU
+eU
+eU
+eU
+eU
+Mi
+Mi
+Mi
+NK
+bB
+Lg
+bB
+gJ
+qu
+qu
+qu
+qu
+lw
+xz
+YM
+Uu
+xt
+NK
+Mi
+Mi
+Mi
+eU
+eU
+eU
+eU
+"}
+(27,1,1) = {"
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+Mi
+NK
+bB
+fn
+Za
+Gj
+qu
+qu
+qu
+qu
+qu
+DB
+pY
+Vg
+tr
+NK
+Mi
+eU
+eU
+eU
+eU
+eU
+eU
+"}
+(28,1,1) = {"
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+Mi
+Mi
+NK
+NK
+NK
+Jn
+gx
+lG
+jt
+lG
+uU
+HE
+NK
+NK
+NK
+Mi
+Mi
+eU
+eU
+eU
+eU
+eU
+eU
+"}
+(29,1,1) = {"
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+Mi
+Mi
+Mi
+Mi
+NK
+NK
+NK
+NK
+NK
+NK
+NK
+Mi
+Mi
+Mi
+Mi
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+"}
+(30,1,1) = {"
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+Mi
+Mi
+Mi
+Mi
+Mi
+Mi
+Mi
+Mi
+Mi
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+eU
+"}

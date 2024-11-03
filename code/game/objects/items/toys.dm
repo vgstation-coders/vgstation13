@@ -21,7 +21,6 @@
 	throw_speed = 4
 	throw_range = 20
 	force = 0
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 
 /*
@@ -43,9 +42,13 @@
 	return
 
 /obj/item/toy/waterballoon/afterattack(atom/A as mob|obj, mob/user as mob)
-	if (istype(A, /obj/structure/reagent_dispensers/watertank) && get_dist(src,A) <= 1)
-		A.reagents.trans_to(src, 10)
-		to_chat(user, "<span class = 'notice'>You fill the balloon with the contents of \the [A].</span>")
+	if(get_dist(src,A) <= 1)
+		if(istype(A, /obj/structure/reagent_dispensers/watertank))
+			A.reagents.trans_to(src, 10)
+			to_chat(user, "<span class = 'notice'>You fill the balloon with the contents of \the [A].</span>")
+		else if(istype(A,/obj/structure/sink))
+			reagents.add_reagent(WATER, 10)
+			to_chat(user, "<span class = 'notice'>You fill the balloon using \the [A].</span>")
 		src.desc = "A translucent balloon with some form of liquid sloshing around in it."
 		src.update_icon()
 	return
@@ -566,7 +569,7 @@
 	J.Shift(WEST, 13)
 	underlays += J
 	overlays += image(icon = icon, icon_state = "device")
-	rendered = getFlatIcon(src)
+	rendered = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(src)), override_dir = SOUTH)
 
 /obj/item/toy/bomb/examine(mob/user)
 	..()
@@ -680,6 +683,7 @@
 	desc = "A seemingly innocent sunflower...with a twist."
 	icon = 'icons/obj/hydroponics/sunflower.dmi'
 	icon_state = "produce"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
 	item_state = "sunflower"
 	var/empty = 0
 	flags = OPENCONTAINER
@@ -830,6 +834,8 @@
 	icon = 'icons/obj/module.dmi'
 	icon_state = "gooncode"
 	w_class = W_CLASS_TINY
+	origin_tech = Tc_MATERIALS + "=10;" + Tc_PLASMATECH + "=6;" + Tc_SYNDICATE + "=6;" + Tc_PROGRAMMING + "=-10;" + Tc_BLUESPACE + "=6;" + Tc_POWERSTORAGE + "=6;" + Tc_BIOTECH + "=6;" + Tc_NANOTRASEN + "1"
+	mech_flags = MECH_SCAN_GOONECODE //It's closed source!
 
 /obj/item/toy/gooncode/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's trying to re-add poo!</span>")
@@ -906,10 +912,9 @@
 	name = "toy nuke-op"
 	desc = "Mildly explosive."
 	icon_state = "newcop"
-	var/emagged = 0
 
-/obj/item/toy/gasha/newcop/attackby(obj/item/I, mob/user)
-	if(isEmag(I) && !emagged)
+/obj/item/toy/gasha/newcop/emag_act(mob/user)
+	if(!emagged)
 		to_chat(user, "<span class='warning'>You turned the toy into a bomb!</span>")
 		emagged = 1
 
@@ -920,10 +925,6 @@
 		sleep(5)
 		explosion(get_turf(src), -1,1,4, whodunnit = user)
 		qdel(src)
-	else
-		return
-
-
 
 /obj/item/toy/gasha/jani
 	name = "toy janitor"
@@ -933,12 +934,12 @@
 /obj/item/toy/gasha/miner
 	name = "toy miner"
 	desc = "Walk softly, and carry a ton of monsters."
-	icon_state = "miner"
+	icon_state = "gashaminer"
 
 /obj/item/toy/gasha/clown
 	name = "toy clown"
 	desc = "HONK"
-	icon_state = "clown"
+	icon_state = "gashaclown"
 
 /obj/item/toy/gasha/goliath
 	name = "toy goliath"
@@ -1008,12 +1009,12 @@
 /obj/item/toy/gasha/mime
 	name = "toy mime"
 	desc = "..."
-	icon_state = "mime"
+	icon_state = "gashamime"
 
 /obj/item/toy/gasha/captain
 	name = "toy captain"
 	desc = "Though some say the captain should always go down with his ship, captains on NT stations tend to be the first on escape shuttles whenever the time comes."
-	icon_state = "captain"
+	icon_state = "gashacaptain"
 
 /obj/item/toy/gasha/comdom
 	name = "toy comdom"
@@ -1102,7 +1103,7 @@
 	icon_state = ""
 
 /obj/item/toy/gasha/mimiga/sue
-	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'best girl'."
+	desc = "It looks like some sort of rabbit-thing. For some reason you get the feeling that this one is the 'best girl'."
 	icon_state = "sue"
 
 /obj/item/toy/gasha/mimiga/toroko
@@ -1112,7 +1113,7 @@
 	icon_state = "king"
 
 /obj/item/toy/gasha/mimiga/chaco
-	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'worst girl'."
+	desc = "It looks like some sort of rabbit-thing. For some reason you get the feeling that this one is the 'worst girl'."
 	icon_state = "chaco"
 
 /obj/item/toy/gasha/mario
@@ -1143,32 +1144,8 @@
 /obj/item/toy/gasha/bomberman/blue
 	icon_state = "bomberman4"
 
-/obj/item/toy/gasha/corgitoy
-	name = "plush corgi"
-	desc = "Perfect for the pet owner on a tight budget!"
-	icon_state = "corgitoy"
-
-/obj/item/toy/gasha/cattoy
-	name = "plush cat"
-	desc = "Marginally less affectionate than an actual cat."
-	icon_state = "cattoy"
-
-/obj/item/toy/gasha/parrottoy
-	name = "plush parrot"
-	desc = "All the fun of a real parrot, without the obnoxious talking!"
-	icon_state = "parrottoy"
-
-/obj/item/toy/gasha/beartoy
-	name = "plush bear"
-	desc = "HOO, HA! HOO, HA!"
-	icon_state = "beartoy"
-
-/obj/item/toy/gasha/carptoy
-	name = "plush carp"
-	desc = "Can not be used as a distraction during a space carp attack."
-	icon_state = "carptoy"
 /obj/item/toy/gasha/monkeytoy
-	name = "plush monkey"
+	name = "toy monkey"
 	desc = "Slightly less likely to throw poop than the real one."
 	icon_state = "monkeytoy"
 
@@ -1466,14 +1443,7 @@
 /obj/item/toy/balloon/inflated/glove/pair/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/toy/crayon/red))
-		to_chat(user, "You color \the [src] light red using \the [W].")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/clothing/gloves/anchor_arms/A = new (get_turf(user))
-			user.put_in_hands(A)
-		else
-			new /obj/item/clothing/gloves/anchor_arms(get_turf(src.loc))
-		qdel(src)
+		user.create_in_hands(src, /obj/item/clothing/gloves/anchor_arms, msg = "You color \the [src] light red using \the [W].")
 
 /obj/item/toy/balloon/decoy
 	name = "inflatable decoy"

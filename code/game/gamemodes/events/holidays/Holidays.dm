@@ -55,7 +55,7 @@ var/global/Holiday = null
 		if(5) // May
 			switch(DD)
 				if(1)
-					current_holidays += LABOUR_DAY
+					current_holidays += LABOR_DAY
 				if(4)
 					current_holidays += FIREFIGHTERS_DAY
 				if(9)
@@ -154,7 +154,7 @@ var/global/Holiday = null
 
 //Allows GA and GM to set the Holiday variable
 /client/proc/Set_Holiday(T as text|null)
-	set name = ".Set Holiday"
+	set name = "Set Holiday"
 	set category = "Fun"
 	set desc = "Force-set the Holiday variable to make the game think it's a certain day."
 	if(!check_rights(R_SERVER))

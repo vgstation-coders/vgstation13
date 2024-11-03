@@ -11,7 +11,7 @@
 	range = 3 // Target anyone within 3 tiles of you
 	amt_dam_brain = 90 //90 brain damage
 	max_targets = 1 // Can only target one person
-	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey) // Only works on humans and monkeys
+	valid_targets = list(/mob/living/carbon/human, /mob/living/carbon/monkey) // Only works on humans and monkeys
 	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL //Click on whoever you want to get brain damaged
 	message = "<span class='danger'>You feel dumber!<span>" //What the victim sees when affected
 	mind_affecting = 1 //Blocked by tinfoil hat

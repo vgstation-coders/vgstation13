@@ -328,18 +328,7 @@
 	},
 /area/vault/taxi_engi/atmos)
 "aK" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "aL" = (
@@ -374,8 +363,7 @@
 /obj/item/weapon/storage/fancy/cigarettes,
 /obj/item/weapon/stamp/ce,
 /obj/item/device/radio/intercom{
-	pixel_x = 25;
-	pixel_y = 0
+	pixel_x = 25
 	},
 /obj/item/device/rcd/matter/engineering,
 /obj/item/stack/rcd_ammo,
@@ -426,15 +414,6 @@
 	},
 /turf/simulated/floor/plating/airless,
 /area/vault/taxi_engi/engine)
-"aT" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
-	},
-/turf/simulated/floor/plating/airless,
-/area/vault/taxi_engi/engine)
 "aU" = (
 /obj/structure/cable{
 	d1 = 2;
@@ -470,26 +449,14 @@
 /turf/simulated/wall/r_wall,
 /area/vault/taxi_engi/atmos)
 "bb" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
 /obj/structure/cable{
 	d2 = 4;
 	icon_state = "0-4"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "bc" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/cable{
 	d2 = 4;
@@ -500,14 +467,10 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "bd" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -517,32 +480,12 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/floor/plating,
-/area/vault/taxi_engi/atmos)
-"be" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "bf" = (
 /obj/machinery/door/airlock/glass_engineering{
 	name = "Engineering";
-	req_access_txt = "0";
 	req_one_access_txt = "10;24"
 	},
 /obj/machinery/door/firedoor,
@@ -874,29 +817,18 @@
 /area/vault/taxi_engi/lobby)
 "bS" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner"
 	},
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/lobby)
 "bT" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2";
 	pixel_y = 1
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "bU" = (
@@ -985,19 +917,12 @@
 	id_tag = "Singularity";
 	name = "Shutters Control";
 	pixel_x = -25;
-	pixel_y = 0;
 	req_access_txt = "10"
 	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cb" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cc" = (
@@ -1144,7 +1069,6 @@
 "co" = (
 /obj/machinery/door/airlock/glass_engineering{
 	name = "Engineering Foyer";
-	req_access_txt = "0";
 	req_one_access_txt = "11;24"
 	},
 /obj/machinery/door/firedoor,
@@ -1355,22 +1279,12 @@
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/lobby)
 "cH" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
 /obj/structure/sign/directions/engineering,
 /obj/structure/cable,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cI" = (
@@ -1579,26 +1493,15 @@
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/lobby)
 "dc" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/lobby)
 "dd" = (
 /obj/structure/disposalpipe/junction{
-	dir = 8;
-	icon_state = "pipe-j1"
+	dir = 8
 	},
 /obj/structure/reagent_dispensers/silicate,
 /turf/simulated/floor{
@@ -1648,8 +1551,7 @@
 "dh" = (
 /obj/machinery/power/apc{
 	dir = 4;
-	pixel_x = 24;
-	pixel_y = 0
+	pixel_x = 24
 	},
 /obj/structure/cable{
 	d2 = 8;
@@ -1737,11 +1639,9 @@
 	},
 /obj/machinery/computer/security/telescreen{
 	desc = "Used for watching the singularity chamber.";
-	dir = 2;
 	name = "Singularity Engine Telescreen";
 	network = list("S*&^ngular##");
-	pixel_x = 32;
-	pixel_y = 0
+	pixel_x = 32
 	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
@@ -1831,14 +1731,7 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/mechanics)
 "dz" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/mechanics)
 "dA" = (
@@ -1908,8 +1801,7 @@
 	},
 /obj/machinery/power/apc{
 	dir = 8;
-	pixel_x = -24;
-	pixel_y = 0
+	pixel_x = -24
 	},
 /obj/structure/cable{
 	d2 = 4;
@@ -2433,7 +2325,6 @@
 	id_tag = "Singularity";
 	name = "Shutters Control";
 	pixel_x = 24;
-	pixel_y = 0;
 	req_access_txt = "10"
 	},
 /turf/simulated/floor/damaged,
@@ -2448,7 +2339,6 @@
 	id_tag = "Singularity";
 	name = "Shutters Control";
 	pixel_x = -25;
-	pixel_y = 0;
 	req_access_txt = "10"
 	},
 /obj/effect/decal/warning_stripes{
@@ -2551,8 +2441,7 @@
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
-	icon_state = "1-2";
-	pixel_y = 0
+	icon_state = "1-2"
 	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
@@ -2622,9 +2511,7 @@
 /turf/simulated/floor,
 /area/vault/taxi_engi/engine)
 "fj" = (
-/obj/structure/dispenser{
-	pixel_x = 0
-	},
+/obj/structure/dispenser,
 /turf/simulated/floor,
 /area/vault/taxi_engi/engine)
 "fk" = (
@@ -2769,8 +2656,7 @@
 	pixel_y = -1
 	},
 /obj/item/device/radio/intercom{
-	pixel_x = 25;
-	pixel_y = 0
+	pixel_x = 25
 	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
@@ -2809,7 +2695,6 @@
 	id_tag = "Singularity";
 	name = "Shutters Control";
 	pixel_x = -25;
-	pixel_y = 0;
 	req_access_txt = "10"
 	},
 /turf/simulated/floor/plating,
@@ -2902,8 +2787,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
@@ -2915,8 +2799,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
@@ -2951,7 +2834,6 @@
 "fO" = (
 /obj/machinery/power/apc/no_alerts{
 	dir = 1;
-	pixel_x = 0;
 	pixel_y = 24
 	},
 /obj/structure/cable{
@@ -2966,9 +2848,7 @@
 /area/vault/taxi_engi/storage)
 "fQ" = (
 /obj/machinery/power/emitter{
-	anchored = 0;
-	dir = 8;
-	state = 0
+	dir = 8
 	},
 /obj/item/device/radio/intercom{
 	pixel_y = 25
@@ -2977,17 +2857,13 @@
 /area/vault/taxi_engi/storage)
 "fR" = (
 /obj/machinery/power/emitter{
-	anchored = 0;
-	dir = 8;
-	state = 0
+	dir = 8
 	},
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "fS" = (
 /obj/machinery/power/emitter{
-	anchored = 0;
-	dir = 8;
-	state = 0
+	dir = 8
 	},
 /obj/machinery/light/small{
 	dir = 4
@@ -3087,7 +2963,6 @@
 /obj/item/pod_parts/armor/civ,
 /obj/machinery/power/apc/no_alerts{
 	dir = 1;
-	pixel_x = 0;
 	pixel_y = 24
 	},
 /turf/simulated/floor{
@@ -3282,7 +3157,6 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
@@ -3290,6 +3164,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "gy" = (
@@ -3301,11 +3176,11 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
 /obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "gz" = (
@@ -3313,7 +3188,6 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
@@ -3321,6 +3195,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "gA" = (
@@ -3412,8 +3287,7 @@
 /area)
 "gP" = (
 /obj/item/device/radio/intercom{
-	pixel_x = 25;
-	pixel_y = 0
+	pixel_x = 25
 	},
 /obj/structure/bed/chair,
 /obj/effect/decal/cleanable/blood/tracks/footprints/clown,
@@ -3739,7 +3613,7 @@ aa
 af
 ar
 aG
-be
+bd
 aB
 bT
 co
@@ -4129,7 +4003,7 @@ aa
 aa
 aa
 aa
-aT
+aS
 aB
 bK
 cb

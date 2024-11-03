@@ -4,10 +4,11 @@
 /datum/map_element/vault/lightship
 	name = "Light Speed Ship"
 	file_path = "maps/randomvaults/lightspeedship.dmm"
+	spawn_cost = 3
 
 /datum/map_element/vault/lightship/initialize(list/objects)
 	..()
-		
+
 /datum/shuttle/lightship
 	name = "light speed ship"
 
@@ -34,7 +35,7 @@
 	add_dock(/obj/docking_port/destination/syndicate/west)
 	add_dock(/obj/docking_port/destination/syndicate/northwest)
 
-	
+
 
 /obj/machinery/computer/shuttle_control/lightship
 	icon_state = "syndishuttle"
@@ -42,7 +43,7 @@
 	light_color = LIGHT_COLOR_RED
 
 /obj/machinery/computer/shuttle_control/lightship/New() //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
-	
+
 	var/global/datum/shuttle/lightship/lightship_shuttle = new(starting_area=/area/shuttle/lightship/start)
 	lightship_shuttle.initialize()
 	link_to(lightship_shuttle)

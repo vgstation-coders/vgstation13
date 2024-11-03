@@ -3,9 +3,7 @@
 		if(get_area(A) == controlling_area && istype(A,/obj/machinery/power/apc)) // Put this first to get back into APCs
 			A.attack_pulsedemon(src)
 		else if(current_weapon && !attack_delayer.blocked())
-			if(istype(current_weapon,/obj/item/weapon/gun))
-				var/obj/item/weapon/gun/G = current_weapon
-				G.Fire(A,src) // Shoot at something if we're in a weapon
+			current_weapon.Fire(A,src,use_shooter_turf=TRUE) // Shoot at something if we're in a weapon
 		else if(current_robot) // Do APC stuff if in a borg
 			log_admin("[key_name(src)] made [key_name(current_robot)] attack [A]") // Just so admins don't bwoink them in confusion
 			message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] attack [A]</span>")
@@ -59,19 +57,19 @@
 
 // Do AI stuff for this
 /mob/living/simple_animal/hostile/pulse_demon/ShiftClickOn(var/atom/A)
-	if(get_area(A) == controlling_area)
+	if(get_area(A) == controlling_area || current_robot)
 		A.AIShiftClick(src)
 
 /mob/living/simple_animal/hostile/pulse_demon/CtrlClickOn(var/atom/A)
-	if(get_area(A) == controlling_area)
+	if(get_area(A) == controlling_area || current_robot)
 		A.AICtrlClick(src)
 
 /mob/living/simple_animal/hostile/pulse_demon/AltClickOn(var/atom/A)
-	if(get_area(A) == controlling_area)
+	if(get_area(A) == controlling_area || current_robot)
 		A.AIAltClick(src)
 
 /mob/living/simple_animal/hostile/pulse_demon/MiddleShiftClickOn(var/atom/A)
-	if(get_area(A) == controlling_area)
+	if(get_area(A) == controlling_area || current_robot)
 		A.AIMiddleShiftClick(src)
 
 // Proc that allows special pulse demon functionality
@@ -204,12 +202,14 @@
 // Lets you view from these, and inherit view properties like xray if any
 /obj/machinery/camera/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
 	user.forceMove(src.loc)
+	user.PLI.Grant(user)
 	to_chat(user, "<span class='notice'>You jump towards \the [src]. This allows you to see the area around you in better detail. To come back to the APC click the APC.</span>")
 	user.change_sight(adding = vision_flags)
 
 /obj/machinery/hologram/holopad/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
 	if(user.loc != src.loc)
 		user.forceMove(src.loc)
+		user.PLI.Grant(user)
 		to_chat(user, "<span class='notice'>You jump towards \the [src]. This allows you to communicate with others. To come back to the APC click the APC.</span>")
 	else
 		attack_hand(user)
@@ -219,47 +219,50 @@
 	//you can jump to station bounced radios too, not just wall intercoms
 	if(user.loc != src.loc)
 		user.forceMove(src.loc)
+		user.PLI.Grant(user)
 		to_chat(user, "<span class='notice'>You jump towards \the [src]. This allows you to communicate with others. To come back to the APC click the APC.</span>")
 	else
 		attack_ai(user)
 
 // Lets you take over a weapon to fire
 /obj/machinery/recharger/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-	user.loc = src
+	user.forceMove(src)
 	if(charging)
 		to_chat(user,"<span class='notice'>You are now attempting to hijack \the [charging], this will take approximately [user.takeover_time] seconds.</span>")
 		if(do_after(user,charging,user.takeover_time*10))
 			if(charging)
 				to_chat(user,"<span class='notice'>You are now inside \the [charging].</span>")
-				user.loc = charging
+				user.forceMove(charging)
 				user.current_weapon = charging
 	else
 		to_chat(user,"<span class='warning'>There is no weapon charging.</span>")
+		user.PLI.Grant(user)
 
 // Lets you take over a cell to rig, as if injected by plasma
 /obj/machinery/cell_charger/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-	user.loc = src
+	user.forceMove(src)
 	if(charging && !charging.rigged && !charging.occupant)
 		to_chat(user,"<span class='notice'>You are now attempting to hijack \the [charging], this will take approximately [user.takeover_time] seconds.</span>")
 		// Go in instantly if already rigged, else hijack timer
 		if(!charging.rigged)
 			if(do_after(user,src,user.takeover_time*10))
 				to_chat(user,"<span class='notice'>You are now inside \the [charging].</span>")
-				user.loc = charging
+				user.forceMove(charging)
 				charging.occupant = user
 				charging.rigged = 1
 		else
 			to_chat(user,"<span class='notice'>You are now inside \the [charging].</span>")
-			user.loc = charging
+			user.forceMove(charging)
 			charging.occupant = user
 	else if(charging)
 		to_chat(user,"<span class='warning'>There is already something in this cell.</span>")
 	else
 		to_chat(user,"<span class='warning'>There is no cell charging.</span>")
+	user.PLI.Grant(user)
 
 // Lets you take over a borg, to override its targeting and speech
 /obj/machinery/recharge_station/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
-	user.loc = src
+	user.forceMove(src)
 	if(occupant && istype(occupant,/mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = occupant
 		// Go in instantly if already compromised, else hijack timer
@@ -270,17 +273,18 @@
 				if(occupant)
 					to_chat(user,"<span class='notice'>You are now inside \the [R], in control of its targeting.</span>")
 					R.pulsecompromised = 1
-					user.loc = R
+					user.forceMove(R)
 					user.current_robot = R
 					to_chat(R, "<span class='danger'>ERRORERRORERROR</span>")
 					sleep(20)
 					to_chat(R, "<span class='danger'>TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
 		else
 			to_chat(user,"<span class='notice'>You are now inside \the [R], in control of its targeting.</span>")
-			user.loc = R
+			user.forceMove(R)
 			user.current_robot = R
 	else
 		to_chat(user,"<span class='warning'>There is no silicon-based occupant inside.</span>")
+	user.PLI.Grant(user)
 
 // Lets you take over a bot to move it around
 /obj/machinery/bot/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
@@ -292,6 +296,7 @@
 		PD_occupant = user
 		if(!pAImove_delayer)
 			pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
+		user.PLI.Grant(user)
 		return TRUE
 	return FALSE
 
@@ -309,3 +314,19 @@
 		user.change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
 	else
 		attack_ai(user)
+
+// TEST PROCS
+/mob/living/silicon/robot/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
+	if(user.check_rights(R_ADMIN))
+		to_chat(user,"<span class='notice'>You are now inside \the [src], in control of its targeting.</span>")
+		user.forceMove(src)
+		user.current_robot = src
+		pulsecompromised = 1
+		user.PLI.Grant(user)
+
+/obj/item/weapon/gun/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
+	if(user.check_rights(R_ADMIN))
+		to_chat(user,"<span class='notice'>You are now inside \the [src], in control of its targeting.</span>")
+		user.forceMove(src)
+		user.current_weapon = src
+		user.PLI.Grant(user)

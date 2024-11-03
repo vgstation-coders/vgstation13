@@ -5,13 +5,13 @@
 	item_state = "flashbang"	//looks exactly like a flash (and nothing like a flashbang)
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_COMBAT + "=1"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_ELECTRONIC
 	flags = FPRINT
 	siemens_coefficient = 1
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 
 	var/nextuse = 0
 	var/cooldown = 2 SECONDS
-	var/emagged = 0
 	var/insults = 0//just in case
 
 /obj/item/device/hailer/proc/say_your_thing()
@@ -47,13 +47,11 @@
 						"<span class='warning'>You hear the computerized voice of a security hailer: \"[message]\"</span>")
 	do_your_sound(user)
 
-/obj/item/device/hailer/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
+/obj/item/device/hailer/emag_act(mob/user)
+	if(!emagged)
 		to_chat(user, "<span class='warning'>You overload \the [src]'s voice synthesizer.</span>")
 		emagged = 1
 		insults = rand(1, 3)//to prevent dickflooding
-		return
-	return
 
 /obj/item/device/hailer/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(world.time < nextuse)
@@ -94,3 +92,24 @@
 
 	// ~ sound and cooldown ~ //
 	do_your_sound(user)
+
+/obj/item/device/hailer/lifeguard
+	name = "Lifeguard Hailer"
+	desc = "Used by sun-tanned lifeguards to stop people from running on the beach."
+
+/obj/item/device/hailer/lifeguard/say_your_thing()
+	if(emagged)
+		..()
+	else
+		return "HALT - BEACH VIOLATION!"
+
+/obj/item/device/hailer/lifeguard/do_your_sound(var/mob/user)
+	if(emagged && insults)
+		playsound(user, 'sound/voice/binsult.ogg', 100, 1, vary = 0)
+		insults--
+	else
+		playsound(user, 'sound/machines/warning-buzzer.ogg', 100, 1, vary = 0)
+	if(user)
+		var/list/bystanders = get_hearers_in_view(world.view, user)
+		flick_overlay(image('icons/mob/talk.dmi', user, "hail", MOB_LAYER+1), clients_in_moblist(bystanders), 2 SECONDS)
+	nextuse = world.time + cooldown

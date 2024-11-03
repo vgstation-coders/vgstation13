@@ -117,11 +117,13 @@ Class Procs:
 
 	w_type = NOT_RECYCLABLE
 	layer = MACHINERY_LAYER
+	flammable = FALSE
+
+	pass_flags_self = PASSMACHINE
 
 	penetration_dampening = 5
 
 	var/stat = 0
-	var/emagged = 0
 	var/use_power = MACHINE_POWER_USE_IDLE
 		//0 = dont run the auto
 		//1 = run auto, use idle
@@ -151,11 +153,7 @@ Class Procs:
 	 * Machine construction/destruction/emag flags.
 	 */
 	var/machine_flags = 0
-
-	/**
-	 * Emag energy cost (in MJ).
-	 */
-	var/emag_cost = 1
+	emag_cost = 1
 
 	var/inMachineList = 1 // For debugging.
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
@@ -179,6 +177,9 @@ Class Procs:
 	return ..()
 
 /obj/machinery/initialize()
+	..()
+	if (locate(/obj/structure/table) in loc)
+		table_shift()
 	if(machine_flags & PURCHASER)
 		reconnect_database()
 		linked_account = vendor_account
@@ -210,6 +211,11 @@ Class Procs:
 	qdel(hack_overlay)
 
 	..()
+
+/obj/machinery/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover) && mover.checkpass(pass_flags_self))
+		return TRUE
+	return ..()
 
 /obj/machinery/projectile_check()
 	return PROJREACT_OBJS
@@ -273,19 +279,18 @@ Class Procs:
 // increment the power usage stats for an area
 // defaults to power_channel
 /obj/machinery/proc/use_power(amount, chan = power_channel)
-	var/area/this_area = get_area(src)
 	if(connected_cell && connected_cell.charge > 0)   //If theres a cell directly providing power use it, only for cargo carts at the moment
 		if(connected_cell.charge < amount*0.75)	//Let them squeeze the last bit of power out.
 			connected_cell.charge = 0
 		else
 			connected_cell.use(amount*0.75)
 	else
-		if(!this_area)
-			return 0						// if not, then not powered.
-		if(!powered(chan)) //no point in trying if we don't have power
-			return 0
 
-		this_area.use_power(amount, chan)
+		var/area/power_area = get_area(src)
+		if(power_area && powered(chan, null, power_area)) //no point in trying if we don't have power
+			power_area.use_power(amount, chan)
+		else
+			return 0
 
 // called whenever the power settings of the containing area change
 // by default, check equipment channel & set flag
@@ -296,9 +301,10 @@ Class Procs:
 
 		if(!use_auto_lights)
 			return
-		if(stat & FORCEDISABLE)
-			return
-		set_light(light_range_on, light_power_on)
+		if(stat & (BROKEN|FORCEDISABLE))
+			set_light(0)
+		else
+			set_light(light_range_on, light_power_on)
 
 	else
 		stat |= NOPOWER
@@ -309,7 +315,7 @@ Class Procs:
 
 // returns true if the machine is powered (or doesn't require power).
 // performs basic checks every machine should do, then
-/obj/machinery/proc/powered(chan = power_channel, power_check_anyways = FALSE)
+/obj/machinery/proc/powered(chan = power_channel, power_check_anyways = FALSE, area/this_area)
 	if(!src.loc)
 		return FALSE
 
@@ -328,11 +334,10 @@ Class Procs:
 	if((machine_flags & FIXED2WORK) && !anchored)
 		return FALSE
 
-	var/area/this_area = get_area(src)
-	if(!this_area)
-		return FALSE
-
-	return this_area.powered(chan)
+	if(this_area)
+		return this_area.powered(chan)
+	else
+		return (get_area(src))?.powered(chan)
 
 /obj/machinery/proc/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
 	if("set_id" in href_list)
@@ -651,29 +656,16 @@ Class Procs:
 	machine_flags &= ~EMAGGABLE
 	spark(src)
 
-
-/**
- * Returns the cost of emagging this machine (emag_cost by default)
- * @param user /mob The mob that used the emag.
- * @param emag /obj/item/weapon/card/emag The emag used on this device.
- * @return number Cost to emag.
- */
-/obj/machinery/proc/getEmagCost(var/mob/user, var/obj/item/weapon/card/emag/emag)
-	return emag_cost
+/obj/machinery/can_emag()
+	return machine_flags & EMAGGABLE
 
 /obj/machinery/attackby(var/obj/item/O, var/mob/user)
-	..()
+	. = ..()
 
 	add_fingerprint(user)
 
 	if(O.is_cookvessel && is_cooktop)
 		return 1
-
-	if(isEmag(O) && machine_flags & EMAGGABLE)
-		var/obj/item/weapon/card/emag/E = O
-		if(E.canUse(user,src))
-			emag_act(user)
-			return 1
 
 	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
@@ -908,3 +900,20 @@ Class Procs:
 		if("Machine Location")
 			output_dir = 0
 			to_chat(user, "<span class='notice'>Output set.</span>")
+
+//Called when either built over a table, or when placing a table underneath, or said table gets unflipped
+/obj/machinery/proc/table_shift()
+	return
+
+//Called when a table underneath is removed, or flipped
+/obj/machinery/proc/table_unshift()
+	return
+
+/obj/machinery/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
+	. = ..()
+	if (.)
+		if (anchored)
+			if (locate(/obj/structure/table) in loc)
+				table_shift()
+		else
+			table_unshift()

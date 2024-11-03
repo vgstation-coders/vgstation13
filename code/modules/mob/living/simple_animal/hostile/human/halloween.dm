@@ -183,18 +183,18 @@
 			to_chat(user, "<span class='warning'>You struggle furiously against the [src]'s grip!</span>")
 			if(do_after(user, src, 10)) // 1 second resist time, 60% chance of success
 				if(prob(40))
-					to_chat(user, "<span class='warning'>The [src] manages to keep their hold on you! Their teeth are still firmly lodged in your neck!</span>")
+					to_chat(user, "<span class='warning'>\The [src] manages to keep their hold on you! Their teeth are still firmly lodged in your neck!</span>")
 				else
-					to_chat(user, "<span class='warning'>You yank the [src]'s teeth out of your neck with a mighty effort and shove them away, freeing yourself!</span>")
+					to_chat(user, "<span class='warning'>You yank \the [src]'s teeth out of your neck with a mighty effort and shove them away, freeing yourself!</span>")
 					unlock_atom(H)
 
 		if(H.get_strength() < 2) // Are we just average strength? We get the lowest chance of successfully escaping
 			to_chat(user, "<span class='warning'>You struggle to get free of the [src]'s bloodsucking latch!</span>")
 			if(do_after(user, src, 10)) // 1 second resist time, 35% chance of success with no other modifiers
 				if(prob(65))
-					to_chat(user, "<span class='warning'>You fail to get free of the [src]'s grip, and they only bite down on your neck harder!</span>")
+					to_chat(user, "<span class='warning'>You fail to get free of \the [src]'s grip, and they only bite down on your neck harder!</span>")
 				else
-					to_chat(user, "<span class='warning'>You manage to pry the [src]'s teeth off your neck, freeing yourself!</span>")
+					to_chat(user, "<span class='warning'>You manage to pry \the [src]'s teeth off your neck, freeing yourself!</span>")
 					unlock_atom(H)
 
 /mob/living/simple_animal/hostile/humanoid/vampire/Life()
@@ -275,7 +275,7 @@
 	for(var/mob/living/carbon/human/H in view(7, src))
 		if((H.vampire_affected() <= 0) || H.earprot())
 			continue
-		to_chat(H, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
+		to_chat(H, "<span class='danger'><font size='3'>You hear an ear piercing shriek and your senses dull!</font></span>")
 		H.Knockdown(8)
 		H.ear_deaf = 20
 		H.stuttering = 20
@@ -639,7 +639,9 @@
 	switch(spell)
 		if(1) //Mass Hallucination
 			for(var/mob/living/carbon/human/H in victims)
-				if(!can_mind_interact(H.mind))
+				if(H.is_wearing_any(list(/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
+					continue
+				if(M_PSY_RESIST in H.mutations)
 					continue
 				to_chat(H, "<span class = 'warning'>You feel [diceroll>15 ? "incredibly" : ""] disorientated.</span>")
 				H.hallucination = clamp(rand(10,20)*diceroll, hallucination, 60) //Maximum of 120 seconds

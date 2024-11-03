@@ -166,6 +166,18 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/airflow_hit(atom/A)
 	return
 
+/mob/living/simple_animal/Topic(href, href_list) //not so simple anymore are we
+	..()
+	if(href_list["hands"])
+		if(usr.incapacitated() || !Adjacent(usr) || (isanimal(usr) && !isgrinch(usr)))
+			return
+		handle_strip_hand(usr, text2num(href_list["hands"])) //href_list "hands" is the hand index, not the item itself. example, GRASP_LEFT_HAND
+
+	else if(href_list["item"])
+		if(usr.incapacitated() || !Adjacent(usr) || (isanimal(usr) && !isgrinch(usr)))
+			return
+		handle_strip_slot(usr, text2num(href_list["item"])) //href_list "item" would actually be the item slot, not the item itself. example: slot_head
+
 // For changing wander behavior
 /mob/living/simple_animal/proc/wander_move(var/turf/dest)
 	if(space_check())
@@ -432,11 +444,16 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/attack_animal(mob/living/simple_animal/M)
 	M.unarmed_attack_mob(src)
+	return 1
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
 		return PROJECTILE_COLLISION_DEFAULT
 	Proj.on_hit(src, 0)
+	if(supernatural && isholyweapon(Proj))
+		playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "holy",sleeptime = 5, lay = NARSIE_GLOW,plane = ABOVE_LIGHTING_PLANE)
+		purge = 3
 	adjustBruteLoss(Proj.damage)
 	return PROJECTILE_COLLISION_DEFAULT
 
@@ -516,7 +533,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/damage = rand(1, 3)
 
-	if(istype(M,/mob/living/carbon/slime/adult))
+	if(M.slime_lifestage == SLIME_ADULT)
 		damage = rand(20, 40)
 	else
 		damage = rand(5, 35)
@@ -548,11 +565,20 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else if (user.is_pacified(VIOLENCE_DEFAULT,src))
 		return
 	if(supernatural && isholyweapon(O))
+		playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "holy",sleeptime = 5, lay = NARSIE_GLOW,plane = ABOVE_LIGHTING_PLANE)
 		purge = 3
-	playsound(loc, O.hitsound, 50, 1, -1)
+	if(O.hitsound)
+		playsound(loc, O.hitsound, 50, 1, -1)
 	..()
 
-
+/mob/living/simple_animal/thrown_defense(var/obj/O,var/speed = 5)
+	if(supernatural && isholyweapon(O))
+		playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "holy",sleeptime = 5, lay = NARSIE_GLOW,plane = ABOVE_LIGHTING_PLANE)
+		purge = 3
+		return 2
+	return ..()
 
 /mob/living/simple_animal/base_movement_tally()
 	return speed
@@ -696,9 +722,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/update_fire()
 	return
-/mob/living/simple_animal/IgniteMob()
+/mob/living/simple_animal/ignite()
 	return 0
-/mob/living/simple_animal/ExtinguishMob()
+/mob/living/simple_animal/extinguish()
 	return
 
 /mob/living/simple_animal/revive(refreshbutcher = 1)
@@ -896,6 +922,22 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else
 		return FALSE
 
+/mob/living/simple_animal/proc/atepoison() //reusable function
+	health -= 5
+	if(prob(10))
+		if(istype(loc, /turf/simulated))
+			var/turf/simulated/T = loc
+			T.add_vomit_floor(src, 1, 0, 1)
+		Stun(5)
+		visible_message("<span class='warning'>[src] throws up!</span>","<span class='danger'>You throw up!</span>")
+		playsound(loc, 'sound/effects/splat.ogg', 50, 1)
+
 // Simplemobs do not have hands.
 /mob/living/simple_animal/put_in_hand_check(obj/item/W, index)
 	return 0
+
+/mob/living/simple_animal/isUnholy()
+	if (supernatural)
+		return TRUE
+	else
+		return ..()

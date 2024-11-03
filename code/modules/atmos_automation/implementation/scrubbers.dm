@@ -86,24 +86,16 @@
 		parent.updateUsrDialog()
 		return 1
 
-var/global/list/gas_labels=list(
-	"co2" = "CO<sub>2</sub>",
-	"tox" = "Plasma",
-	"n2o" = "N<sub>2</sub>O",
-	"o2"  = "O<sub>2</sub>",
-	"n2"  = "N<sub>2</sub>"
-)
 /datum/automation/set_scrubber_gasses
 	name="Scrubber: Gasses"
 
 	var/scrubber=null
-	var/list/gasses=list(
-		"co2" = 1,
-		"tox" = 0,
-		"n2o" = 0,
-		"o2"  = 0,
-		"n2"  = 0
-	)
+	var/list/gasses=list()
+
+/datum/automation/set_scrubber_gasses/New()
+	..()
+	for(var/gas_ID in XGM.gases)
+		gasses[gas_ID] = 0
 
 /datum/automation/set_scrubber_gasses/Export()
 	var/list/json = ..()
@@ -129,7 +121,8 @@ var/global/list/gas_labels=list(
 /datum/automation/set_scrubber_gasses/GetText()
 	var/txt = "Set Scrubber <a href=\"?src=\ref[src];set_scrubber=1\">[fmtString(scrubber)]</a> to scrub "
 	for(var/gas in gasses)
-		txt += " [gas_labels[gas]] (<a href=\"?src=\ref[src];tog_gas=[gas]\">[gasses[gas] ? "on" : "off"]</a>),"
+		var/datum/gas/gas_datum = XGM.gases[gas]
+		txt += " [gas_datum.short_name || gas_datum.name] (<a href=\"?src=\ref[src];tog_gas=[gas]\">[gasses[gas] ? "on" : "off"]</a>),"
 	return txt
 
 /datum/automation/set_scrubber_gasses/Topic(href,href_list)

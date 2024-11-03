@@ -8,7 +8,7 @@
 		if(!L.stat)
 			stance = HOSTILE_STANCE_ATTACK
 			return L
-		else
+		else if(!L.reagents || !L.reagents.has_reagent(KILLERPHEROMONES))
 			enemies -= L
 	else if(istype(A, /obj/mecha))
 		var/obj/mecha/M = A

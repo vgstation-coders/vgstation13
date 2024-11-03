@@ -33,7 +33,6 @@
 	else
 		return FALSE
 
-
 //Prisoner Escapes. Same as above, except you don't have to be on the shuttle and you can't be in the brig roundend.
 
 /datum/objective/escape_prisoner
@@ -64,7 +63,7 @@
 
 	if(istype(owner.current, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = owner.current
-		if(H.restrained()) 
+		if(H.restrained())
 			return FALSE
 	else if (istype(owner.current, /mob/living/carbon))
 		var/mob/living/carbon/C = owner.current

@@ -22,3 +22,6 @@
 	melee_damage_upper = 15
 	attacktext = "snips"
 	attack_sound = 'sound/weapons/toolhit.ogg'
+
+/mob/living/simple_animal/hostile/crab/get_butchering_products()
+	return list(/datum/butchering_product/claws/crab/megamad)

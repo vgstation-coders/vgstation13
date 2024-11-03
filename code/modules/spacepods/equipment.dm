@@ -59,6 +59,7 @@
 	//var/obj/item/device/spacepod_equipment/engine/engine_system // engine system
 	//var/obj/item/device/spacepod_equipment/shield/shield_system // shielding system
 	var/obj/item/device/spacepod_equipment/locking/locking_system // locking system
+	var/obj/item/device/spacepod_equipment/cargo/cargo_system // cargo bay system
 
 /datum/spacepod/equipment/New(var/obj/spacepod/SP)
 	..()
@@ -197,3 +198,18 @@
 				if(i < their_code.len && char == their_code[i])
 					correct_positions++
 			to_chat(user, "<span class = 'notice'>[found_values] correct values, [correct_positions] correct positions.</span>")
+
+/obj/item/device/spacepod_equipment/cargo
+	name = "pod cargo system"
+	desc = "You shouldn't be seeing this."
+	icon = 'icons/pods/ship.dmi'
+	icon_state = "blank"
+	var/list/allowed_types
+	var/atom/movable/stored
+
+/obj/item/device/spacepod_equipment/cargo/crate
+	name = "pod cargo system"
+	desc = "A pod system that allows a space pod to hold a single crate."
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "shelf_base"
+	allowed_types = list( /obj/structure/closet/crate)

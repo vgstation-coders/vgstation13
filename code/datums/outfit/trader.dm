@@ -62,11 +62,20 @@
 			items_to_collect[/obj/item/weapon/storage/box/donkpockets/random_amount] = SURVIVAL_BOX
 			items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/thermos/full] = SURVIVAL_BOX
 			items_to_collect[/obj/item/weapon/coin/trader] = SURVIVAL_BOX
+			items_to_collect[/obj/item/device/megaphone] = SURVIVAL_BOX
 
 		if("Merchant") //Merchants get an implant
 			implant_types += /obj/item/weapon/implant/loyalty
+			items_to_collect[/obj/item/weapon/stamp/trader] = SURVIVAL_BOX
+			items_to_collect[/obj/item/device/pda/trader/fancy] = SURVIVAL_BOX
 
 		if("Salvage Broker")
 			items_to_collect[/obj/item/device/telepad_beacon] = SURVIVAL_BOX
 			items_to_collect[/obj/item/weapon/rcs/salvage] = SURVIVAL_BOX
+			items_to_collect[/obj/item/weapon/tank/jetpack/nitrogen] = SURVIVAL_BOX
 	return ..()
+
+/datum/outfit/trader/post_equip(var/mob/living/carbon/human/H)
+	..()
+	if(world.has_round_started()) //only grant on latejoin
+		H.put_in_hands(new /obj/item/weapon/pinpointer/outpost(H))

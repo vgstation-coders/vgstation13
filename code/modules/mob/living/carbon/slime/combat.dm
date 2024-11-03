@@ -8,16 +8,15 @@
 	return "glomps on"
 
 /mob/living/carbon/slime/get_unarmed_damage(var/atom/target)
-	if(isslime(target))
-		return rand(1,3)
-
-	return rand(5, 35)
-
-/mob/living/carbon/slime/adult/get_unarmed_damage(mob/living/target)
-	if(isslime(target))
-		return rand(1,6)
-
-	return rand(15, 40)
+	switch (slime_lifestage)
+		if (SLIME_BABY)
+			if(isslime(target))
+				return rand(1,3)
+			return rand(5, 35)
+		if (SLIME_ADULT)
+			if(isslime(target))
+				return rand(1,6)
+			return rand(15, 40)
 
 /mob/living/carbon/slime/get_unarmed_hit_sound()
 	return 'sound/weapons/welderattack.ogg'
@@ -51,7 +50,6 @@
 	add_attacklogs(src, target, "attacked")
 
 	.=..()
-
 
 	if(powerlevel > 0)
 		if(isalien(target) || ismonkey(target) || ishigherbeing(target))

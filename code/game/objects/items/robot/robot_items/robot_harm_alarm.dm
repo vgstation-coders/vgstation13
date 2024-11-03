@@ -9,6 +9,10 @@
 	var/emagged_alarm_sound = 'sound/machines/warning-buzzer.ogg'
 	var/vary = TRUE
 
+/obj/item/device/harmalarm/New()
+	..()
+	emagged_alarm = uppertext(harm_alarm_line)
+
 /obj/item/device/harmalarm/attack_self(mob/user)
 	var/safety = TRUE
 	if(cooldown > world.time)
@@ -65,7 +69,6 @@
 	desc = "Releases a harmless blast that confuses most organics. For when the crime is JUST TOO MUCH"
 	alarm = "HALT! SECURITY!"
 	alarm_sound = 'sound/voice/halt.ogg'
-	emagged_alarm = "FUCK YOU SHIT EATING BASTARD. EAT A DICK AND SHIT OUT ABORTIONS OF FUCK AND DO A SHIT IN YOUR ASS. FUCK SHIT MONKEY FUCK ASS WANKER FROM THE DEPTHS OF SHIT."
 	emagged_alarm_sound = 'sound/voice/binsult.ogg'
 	vary = FALSE
 

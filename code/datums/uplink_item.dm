@@ -1,11 +1,49 @@
 var/list/uplink_items = list()
 
+var/list/discounted_items_of_the_round = list()
+
+/proc/pick_discounted_items()
+	// Make sure to clear it.
+	var/list/item_list = list()
+
+	var/list/static/forbidden_items = list(
+		/datum/uplink_item/badass/bundle,
+		/datum/uplink_item/badass/random,
+		/datum/uplink_item/badass/experimental_gear,
+		/datum/uplink_item/implants/uplink,
+	)
+
+	var/list/traitor_items = subtypesof(/datum/uplink_item)
+	var/list/possible_picks = list()
+	for (var/thing in traitor_items)
+		var/datum/uplink_item/u_item = thing
+		if(initial(u_item.cost) <= 1) // no point discounting these
+			continue
+		if (thing in forbidden_items)
+			continue
+		if (initial(u_item.item))
+			possible_picks += thing
+
+	for (var/i = 1 to 3)
+		var/picked = pick(possible_picks)
+		possible_picks -= picked
+		item_list += picked
+		world.log << "Picked: [picked]"
+
+	discounted_items_of_the_round = item_list
+
 /proc/get_uplink_items()
 	// If not already initialized..
 	if(!uplink_items.len)
 
 		// Fill in the list	and order it like this:
 		// A keyed list, acting as categories, which are lists to the datum.
+
+		var/list/concrete_items = list()
+		for (var/thing in discounted_items_of_the_round)
+			concrete_items += new thing
+
+		uplink_items["Discounted Surplus"] = concrete_items
 
 		for(var/item in typesof(/datum/uplink_item))
 
@@ -56,6 +94,9 @@ var/list/uplink_items = list()
 		. = discounted_cost
 	else
 		. = cost
+	// 50% discount for items of the day
+	if (is_type_in_list(src, discounted_items_of_the_round))
+		. = cost*0.5
 	. = Ceiling(. * cost_modifier) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
 
 /datum/uplink_item/proc/gives_discount(var/user_job)
@@ -99,7 +140,7 @@ var/list/uplink_items = list()
 
 	// If the uplink's holder is in the user's contents
 	var/obj/item/holder = U.parent
-	if ((holder in user.contents || (in_range(holder, user) && istype(holder.loc, /turf))))
+	if ((holder in user.contents) || (in_range(holder, user) && istype(holder.loc, /turf)))
 		user.set_machine(U)
 		if(get_cost(U.job, U.species) > U.telecrystals)
 			return 0
@@ -200,6 +241,12 @@ var/list/uplink_items = list()
 	item = /obj/structure/closet/crate/secure/weapon/experimental/gatling
 	cost = 40
 
+/datum/uplink_item/nukeprice/gatling_laser
+	name = "Gatling Laser"
+	desc = "A massive rapid-firing multiple-barrel laser. Can be reloaded quickly by swapping its internal cell. Spares not included."
+	item = /obj/item/weapon/gun/energy/gatling
+	cost = 60
+
 /datum/uplink_item/nukeprice/nikita
 	name = "Nikita RC Missile Launcher"
 	desc = "A remote-controlled missile launcher, trades in raw explosive power for extreme steering precision, allowing it to make perfect turns around corners or turn around at will, or simply accelerate normally. Comes with four spare RC rockets."
@@ -276,6 +323,12 @@ var/list/uplink_items = list()
 	discounted_cost = 8
 	//jobs_with_discount = list("Assistant")
 	//would've liked to add a discount for dark skinned or nearsighted characters (closest to one eyed we have) but dunno how
+
+/datum/uplink_item/dangerous/mech_killdozer
+        name = "Killdozer Bundle"
+        desc = "Three random weapons and a modkit that lets you turn a mining mech into an (almost) unstoppable machine of destruction."
+        item = /obj/item/weapon/storage/box/syndie_kit/mech_killdozer
+        cost = 10
 
 // STEALTHY WEAPONS
 // Any Syndicate item with applying lethal force to people without being easily detected (Ex: Syndicate Soap, Parapen, E-Bow)
@@ -443,7 +496,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/device_tools/thermal
 	name = "Thermal Imaging Glasses"
 	desc = "A modified pair of Optical Meson Scanners frame fitted with thermal vision lenses, allowing you to spot organics through walls and in total darkness. Do note that they will not function as regular meson scanners in any way, shape or form."
-	item = /obj/item/clothing/glasses/thermal/syndi
+	item = /obj/item/clothing/glasses/hud/thermal/syndi
 	cost = 6
 
 /datum/uplink_item/device_tools/surveillance
@@ -503,7 +556,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/sabotage_tools/does_not_tip_note
 	name = "\"Does Not Tip\" database backdoor"
-	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the Cargo workers at Central Command. Ensures that all pizza orders will be poisoned from the moment the screen flashes red, without giving any obvious hints to such. Appears as a PDA until inspected more closely."
+	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the Cargo workers at Central Command. Ensures that all pizza and beer orders will be poisoned from the moment the screen flashes red, without giving any obvious hints to such. Appears as a PDA until inspected more closely."
 	item = /obj/item/device/does_not_tip_backdoor
 	num_in_stock = 1
 	cost = 10
@@ -515,6 +568,14 @@ var/list/uplink_items = list()
 	cost = 8
 	discounted_cost = 6
 	jobs_with_discount = SCIENCE_POSITIONS
+
+/datum/uplink_item/sabotage_tools/radstorm_remote
+	name = "Dirty Bomb Artillery Remote"
+	desc = "This device can fire a remote syndicate bluespace artillery every 15 minutes, detonating a dirty bomb on direct intercept with the station, causing an artificial radstorm. The cannon will NOT fire if a radstom is already ongoing."
+	item = /obj/item/device/radstorm_remote
+	cost = 12
+	discounted_cost = 10
+	jobs_with_discount = ENGINEERING_POSITIONS
 
 /datum/uplink_item/sabotage_tools/reportintercom
 	name = "NT Central Command Report Falsifier"
@@ -561,7 +622,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/ayylmao/harmor
 	name = "MDF Heavy Armor"
-	desc = "A set of cumbersome but sturdy alien armor that excels at protecting the wearer from energy weapons and melee attacks. The armor plates were measured for a grey, but can be adjusted to fit a human as well. Not guaranteed to fit any other species. A soldier's uniform and boots are included with the kit."
+	desc = "A set of durable alien armor that excels at protecting the wearer from energy weapons and melee attacks. The armor plates were measured for a grey, but can be adjusted to fit a human as well. Not guaranteed to fit any other species. A soldier's uniform and boots are included with the kit."
 	item = /obj/item/weapon/storage/box/syndie_kit/ayylmao_harmor
 	cost = 4
 	discounted_cost = 3
@@ -650,6 +711,12 @@ var/list/uplink_items = list()
  	item = /obj/item/clothing/suit/raincoat
  	cost = 1
 
+/datum/uplink_item/badass/killbot
+ 	name = "KILLbot"
+ 	desc = "A phrase spouting device perfectly suited for the loud spree killer's ego."
+ 	item = /obj/item/device/roganbot/killbot
+ 	cost = 1
+
 /datum/uplink_item/badass/experimental_gear
 	name = "Syndicate Experimental Gear Bundle"
 	desc = "A box that contains a randomly-selected experimental Syndicate gear, an unique state-of-the-art object. Satisfaction not guaranteed."
@@ -684,6 +751,12 @@ var/list/uplink_items = list()
 		feedback_add_details("traitor_uplink_items_bought","RN")
 		return I
 
+/datum/uplink_item/badass/syndie_lunch
+	name = "Syndicate Lunch"
+	desc = "A service cyborg unit at HQ has packed you a lunch, ready to be delivered. You can't sabotage Nanotrasen on an empty stomach."
+	item = /obj/item/weapon/storage/lunchbox/metal/syndie/pre_filled
+	cost = 1
+
 /datum/uplink_item/jobspecific/command_security
 	category = "Security Specials"
 
@@ -715,9 +788,9 @@ var/list/uplink_items = list()
 	name = "Batling gun"
 	desc = "A gatling gun modified to fire stun batons. The batons are launched in such a way that guarantees the stunning end always connects, and the launch velocity is high enough to cause injuries. Can be reloaded with stun batons."
 	item = /obj/item/weapon/gun/gatling/batling
-	cost = 18
-	discounted_cost = 12
-	jobs_with_discount = list("Warden", "Head of Security")
+	cost = 16
+	discounted_cost = 10
+	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
 
 /datum/uplink_item/jobspecific/command_security/remoteexplosive
 	name = "Remote Explosive Implants"
@@ -885,6 +958,14 @@ var/list/uplink_items = list()
 	discounted_cost = 4
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
 
+/datum/uplink_item/jobspecific/engineering/canned_heat
+	name = "Canned Heat"
+	desc = "A can that when opened agitates the air molecules in the surrounding atmosphere to raise its temperature by 1000 Kelvin. Use in a large area and several numbers for maximum impact."
+	item = /obj/item/canned_heat
+	cost = 12
+	discounted_cost = 6
+	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
+
 /datum/uplink_item/jobspecific/engineering/dev_analyser
 	name = "Modified Device Analyzer"
 	desc = "A device analyzer with the safety features disabled. Allows the user to replicate any kind of Syndicate equipment for further duplication using the station's Mechanic equipment."
@@ -991,6 +1072,14 @@ var/list/uplink_items = list()
 	discounted_cost = 10
 	jobs_with_discount = list("Chef")
 
+/datum/uplink_item/jobspecific/service/kitchengun
+	name = "Kitchen Gun"
+	desc = "An otherwise ordinary glock that also has the power to completely clean the surface of anything it's fired on in three shots. Causes the holder to shout their speech loudly while held. Comes with night vision goggles for after dark cleaning."
+	item = /obj/item/weapon/storage/box/syndie_kit/kitchengun
+	cost = 14
+	discounted_cost = 10
+	jobs_with_discount = list("Chef","Janitor")
+
 /datum/uplink_item/jobspecific/service/cautionsign
 	name = "Proximity Mine Wet Floor Sign"
 	desc = "An anti-personnel proximity mine cleverly disguised as a wet floor caution sign that is triggered by running past it. Interact with it to start the 15 second timer and activate it again to disarm."
@@ -1081,14 +1170,29 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/clown_mime/invisible_spray
 	name = "Can of Invisible Spray"
 	desc = "Spray something to render it invisible for five minutes! Can only be used once. Permanence not guaranteed when exposed to water, may not render all parts invisible, especially for humans."
-	item = /obj/item/weapon/invisible_spray
+	item = /obj/item/weapon/syndie_spray/invisible_spray
+	cost = 6
+	jobs_excluded = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/clown_mime/silent_spray
+	name = "Can of Silencing Spray"
+	desc = "Spray something to render it silent for five minutes! Can only be used once. Permanence not guaranteed when exposed to water."
+	item = /obj/item/weapon/syndie_spray/silent_spray
 	cost = 6
 	jobs_excluded = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/clown_mime/invisible_spray/permanent
 	name = "Can of Permanent Invisible Spray"
 	desc = "Spray something to render it permanently invisible! Can only be used once. Permanence not guaranteed when exposed to water, may not render all parts invisible, especially for humans."
-	item = /obj/item/weapon/invisible_spray/permanent
+	item = /obj/item/weapon/syndie_spray/invisible_spray/permanent
+	cost = 4
+	jobs_excluded = list()
+	jobs_exclusive = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/clown_mime/silent_spray/permanent
+	name = "Can of Permanent Silencing Spray"
+	desc = "Spray something to render it permanently silent! Can only be used once. Permanence not guaranteed when exposed to water."
+	item = /obj/item/weapon/syndie_spray/silent_spray/permanent
 	cost = 4
 	jobs_excluded = list()
 	jobs_exclusive = list("Clown", "Mime")
@@ -1205,6 +1309,14 @@ var/list/uplink_items = list()
 	cost = 4
 	discounted_cost = 2
 	jobs_with_discount = list("Internal Affairs Agent")
+
+/datum/uplink_item/jobspecific/command/jobdisk
+	name = "Alternate Jobs Database"
+	desc = "A disk which scrambles the jobs database when installed in the Labor Management Console."
+	item = /obj/item/weapon/disk/jobdisk
+	cost = 6
+	discounted_cost = 3
+	jobs_with_discount = list("Captain", "Head of Personnel")
 
 /datum/uplink_item/jobspecific/trader
 	category = "Trader Specials"

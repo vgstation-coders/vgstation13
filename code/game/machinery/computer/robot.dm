@@ -78,7 +78,7 @@
 			module = R.module ? "[R.modtype] Module" : "No Module Installed",
 			master = R.connected_ai,
 			emagged = R.emagged,
-			borgimage = iconsouth2base64(getFlatIcon(R)),
+			borgimage = iconsouth2base64(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(R)), override_dir = SOUTH)),
 			ref = ref(R)
 		)
 		data["cyborgs"] += list(cyborg_data)

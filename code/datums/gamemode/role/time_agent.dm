@@ -124,11 +124,11 @@
 					eviltwinrecruiter.logging = TRUE
 
 					// A player has their role set to Yes or Always
-					eviltwinrecruiter.player_volunteering = new /callback(src, src::recruiter_recruiting())
+					eviltwinrecruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
 					// ", but No or Never
-					eviltwinrecruiter.player_not_volunteering = new /callback(src, src::recruiter_not_recruiting())
+					eviltwinrecruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
 
-					eviltwinrecruiter.recruited = new /callback(src, src::recruiter_recruited())
+					eviltwinrecruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
 
 					eviltwinrecruiter.request_player()
 			if(5 to INFINITY)

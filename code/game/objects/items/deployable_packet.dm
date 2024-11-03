@@ -3,9 +3,10 @@
 /obj/item/deployable_packet
 	desc = ""
 	w_class = W_CLASS_TINY
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	var/activated = 0
 	var/deployeditem = null
-	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/deployable_packet/attack_self(mob/user)
 	if(!istype(user))

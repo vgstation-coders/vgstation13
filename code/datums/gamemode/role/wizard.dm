@@ -10,6 +10,11 @@
 	admin_voice_style = "notice"
 
 	stat_datum_type = /datum/stat/role/wizard
+	//Lists used so that the spells will still show up at round-end even if the apprentice has been destroyed.
+	//Can get lost through absorbing
+	var/list/spells_from_spellbook = list()
+	var/list/spells_from_absorb = list()
+//Does not show spells because the scoreboard code overrides it
 
 	var/list/artifacts_bought = list()
 	var/list/potions_bought = list()
@@ -70,31 +75,75 @@
 
 /datum/role/wizard/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	. = ..()
-	for (var/spell/S in old_character.spell_list)
-		if (S.user_type == USER_TYPE_WIZARD && !(S.spell_flags & LOSE_IN_TRANSFER))
-			new_character.add_spell(S)
+	for (var/spell/S in antag.wizard_spells) //Bring back all their wizard spells
+		if (!(S.spell_flags & LOSE_IN_TRANSFER))
+			//Transfer the spell without doing on_added() or on_removed(), instead doing on_transfer()
+			transfer_spell(new_character, old_character, S)
 
 /datum/role/wizard/GetScoreboard()
 	. = ..()
-	if(disallow_job) //Not a survivor wizzie
-		var/mob/living/carbon/human/H = antag.current
-		var/bought_nothing = TRUE
-		if(H.spell_list)
-			bought_nothing = FALSE
-			. += "<BR>The wizard knew:<BR>"
-			for(var/spell/S in H.spell_list)
+	if(!disallow_job) //It's a survivor wizzie
+		return
+	var/mob/living/carbon/human/H = antag.current
+	var/has_nothing = TRUE //No spells, no potions, no artifacts
+
+	//Includes one-use spellbooks and the big spellbook
+	if(spells_from_spellbook.len)
+		. += "<BR>[has_nothing ? "T" : "Additionally, t"]he wizard learned:<BR>"
+		has_nothing = FALSE
+		for(var/spell/S in spells_from_spellbook)
+			var/icon/tempimage
+			if(S.override_icon != "")
+				tempimage = icon(S.override_icon, S.hud_state)
+			else
+				tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+			. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
+
+	//Spells that are learned through absorbing them from other mages
+	if(spells_from_absorb.len)
+		. += "<BR>[has_nothing ? "T" : "Additionally, t"]he wizard absorbed:<BR>"
+		has_nothing = FALSE
+		for(var/spell/S in spells_from_absorb)
+			var/icon/tempimage
+			if(S.override_icon != "")
+				tempimage = icon(S.override_icon, S.hud_state)
+			else
+				tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+			. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
+
+	//Spells that the wizard somehow got their hands on. Must be wizard spells
+	var/list/dummy_list = H.spell_list - (spells_from_spellbook + spells_from_absorb)
+	if(dummy_list.len)
+		var/has_an_uncategorized_wizard_spell = FALSE
+		for(var/spell/S in dummy_list)
+			if(S.is_wizard_spell())
+				has_an_uncategorized_wizard_spell = TRUE
+				break
+		if(has_an_uncategorized_wizard_spell)
+			//This implies adminbus or other shenanigans that could grant wizard spells
+			. += "<BR>[has_nothing ? "T" : "Additionally, t"]he wizard somehow knew, through divine help or other means:<BR>"
+			has_nothing = FALSE
+			for(var/spell/S in dummy_list)
+				if(!S.is_wizard_spell())
+					continue
 				var/icon/tempimage
 				if(S.override_icon != "")
 					tempimage = icon(S.override_icon, S.hud_state)
 				else
 					tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
 				. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
-		if(artifacts_bought || potions_bought)
-			bought_nothing = FALSE
-			. += "<BR>Additionally, the wizard brought:<BR>"
-			for(var/entry in artifacts_bought)
-				. += "[entry]<BR>"
-			for(var/entry in potions_bought)
-				. += "[entry]<BR>"
-		if(bought_nothing)
-			. += "The wizard used only the magic of charisma this round."
+
+	//Artifacts and potions, if the wizard bought any
+	if(artifacts_bought.len || potions_bought.len)
+		. += "<BR>[has_nothing ? "T" : "Additionally, t"]he wizard bought:<BR>"
+		has_nothing = FALSE
+		for(var/entry in artifacts_bought)
+			. += "[entry]<BR>"
+		for(var/entry in potions_bought)
+			. += "[entry]<BR>"
+	if(has_nothing)
+		. += "The wizard used only the magic of charisma this round."
+
+//Mostly handled in the scoreboard
+/datum/role/wizard/GetBought()
+	return ""

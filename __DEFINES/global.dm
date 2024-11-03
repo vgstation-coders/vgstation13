@@ -85,6 +85,8 @@ var/station_name = null
 var/game_version = "veegee"
 var/changelog_hash = ""
 var/game_year = (text2num(time2text(world.realtime, "YYYY")) + 544)
+var/time_taken_to_init = 0
+var/roundstart_timestamp = 0
 
 var/going = 1.0
 var/master_mode = "extended"//"extended"
@@ -179,13 +181,13 @@ var/datum/nanomanager/nanomanager = new()
 
 var/sqladdress = "localhost"
 var/sqlport = 3306
-var/sqldb = "tgstation"
+var/sqldb = "feedback"
 var/sqllogin = "root"
 var/sqlpass = ""
 
 	// Feedback gathering sql connection
 
-var/sqlfdbkdb = "test"
+var/sqlfdbkdb = "feedback"
 var/sqlfdbklogin = "root"
 var/sqlfdbkpass = ""
 
@@ -274,6 +276,10 @@ var/datum/stat_collector/stat_collection = new
 //When enabled, starvation kills
 var/global/hardcore_mode = 0
 
+//Mass Buddha Mode
+//When enabled, all current mobs and all new carbon mobs will be in buddha mode (no crit/death)
+var/global/buddha_mode_everyone = 0
+
 //Global list of all unsimulated mineral turfs for xenoarch
 var/global/list/mineral_turfs = list()
 var/global/list/static_list = list('sound/effects/static/static1.ogg','sound/effects/static/static2.ogg','sound/effects/static/static3.ogg','sound/effects/static/static4.ogg','sound/effects/static/static5.ogg',)
@@ -292,6 +298,7 @@ var/list/centcommMiniMaps = list()
 var/list/extraMiniMaps = list()
 
 var/list/holomap_markers = list()
+var/list/workplace_markers = list()
 
 var/holomaps_initialized = 0
 
@@ -312,7 +319,9 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
 		/mob/living/simple_animal/hostile/bunnybot,						// See viscerator
 		/mob/living/carbon/human/NPC,									// Unfinished, with its own AI that conflicts with player movements.
-		/mob/living/simple_animal/hostile/pulse_demon/					// Your motherfucking life ends in 0 seconds.
+		/mob/living/simple_animal/hostile/pulse_demon,					// Your motherfucking life ends in 0 seconds.
+		/mob/living/simple_animal/hostile/pulse_demon/maxedout,			// Admin testing mob, do not ever spawn otherwise.
+		/mob/living/simple_animal/hostile/slime,						// Instantly kills player and destroys the MC.
 		)
 
 //Boss monster list
@@ -396,4 +405,5 @@ var/list/machinery_rating_cache = list() // list of type path -> number
 var/runescape_pvp = FALSE
 var/runescape_skull_display = FALSE
 
-var/antag_madness = FALSE
+//Custom Harm Alarm lines
+var/global/harm_alarm_line = fexists("config/custom_lines.txt") ? pick(file2list("config/custom_lines.txt")) : "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZT"

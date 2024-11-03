@@ -9,7 +9,6 @@
 "ac" = (
 /obj/effect/step_trigger/thrower{
 	dir = 8;
-	icon_state = "arrows";
 	tag = "icon-arrows (WEST)"
 	},
 /turf/space/transit/east,
@@ -20,7 +19,6 @@
 "ae" = (
 /obj/effect/step_trigger/thrower{
 	dir = 1;
-	icon_state = "arrows";
 	tag = "icon-arrows (NORTH)"
 	},
 /turf/space/transit/east,
@@ -107,7 +105,6 @@
 	},
 /obj/machinery/light/small{
 	dir = 8;
-	icon_state = "lbulb1";
 	tag = "icon-lbulb1 (WEST)"
 	},
 /turf/simulated/floor,
@@ -116,8 +113,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /obj/structure/cable{
 	d1 = 1;
@@ -135,8 +131,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/vault/spy_sat/deployment)
@@ -145,8 +140,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /obj/structure/window/barricade/full/block,
 /turf/simulated/floor,
@@ -297,7 +291,6 @@
 "aQ" = (
 /obj/structure/sign/directions/medical{
 	dir = 1;
-	icon_state = "direction_med";
 	tag = "icon-direction_med (NORTH)"
 	},
 /turf/unsimulated/wall/rock,
@@ -358,7 +351,6 @@
 "aY" = (
 /obj/machinery/light/small{
 	dir = 8;
-	icon_state = "lbulb1";
 	tag = "icon-lbulb1 (WEST)"
 	},
 /turf/simulated/floor,
@@ -402,7 +394,6 @@
 "bg" = (
 /obj/structure/sign/directions/engineering{
 	dir = 4;
-	icon_state = "direction_eng";
 	tag = "icon-direction_eng (EAST)"
 	},
 /turf/unsimulated/wall/rock,
@@ -432,7 +423,6 @@
 "bl" = (
 /obj/effect/step_trigger/thrower{
 	dir = 4;
-	icon_state = "arrows";
 	tag = "icon-arrows (EAST)"
 	},
 /turf/space/transit/east,
@@ -452,7 +442,6 @@
 "bp" = (
 /obj/machinery/light/small{
 	dir = 4;
-	icon_state = "lbulb1";
 	tag = "icon-lbulb1 (EAST)"
 	},
 /turf/simulated/floor,
@@ -513,7 +502,6 @@
 "by" = (
 /obj/machinery/light/small{
 	dir = 1;
-	icon_state = "lbulb1";
 	tag = "icon-lbulb1 (NORTH)"
 	},
 /turf/simulated/floor,
@@ -704,7 +692,6 @@
 "ce" = (
 /obj/structure/bed/chair{
 	dir = 4;
-	icon_state = "chair";
 	tag = "icon-chair (EAST)"
 	},
 /mob/living/simple_animal/hostile/humanoid/pilot,
@@ -723,7 +710,6 @@
 "ch" = (
 /obj/structure/bed/chair{
 	dir = 8;
-	icon_state = "chair";
 	tag = "icon-chair (WEST)"
 	},
 /turf/simulated/floor/carpet,
@@ -756,7 +742,6 @@
 "cm" = (
 /obj/structure/bed/chair{
 	dir = 4;
-	icon_state = "chair";
 	tag = "icon-chair (EAST)"
 	},
 /turf/simulated/floor/carpet,
@@ -830,7 +815,6 @@
 "cz" = (
 /obj/structure/bed/chair{
 	dir = 8;
-	icon_state = "chair";
 	tag = "icon-chair (WEST)"
 	},
 /mob/living/simple_animal/hostile/humanoid/pilot,
@@ -963,7 +947,6 @@
 /obj/machinery/door/airlock/external,
 /obj/docking_port/destination/vault/satellite_deployment{
 	dir = 2;
-	icon_state = "docking_station";
 	tag = "icon-docking_station"
 	},
 /turf/simulated/floor,

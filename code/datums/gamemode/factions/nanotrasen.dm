@@ -32,3 +32,8 @@
 	default_admin_voice = "Nanotrasen Central Command"
 	admin_voice_style = "resteamradio"
 	var/delta = FALSE//goes true once the ERT call has been made
+
+/datum/faction/nanotrasen/forgeObjectives()
+	for(var/datum/role/R in members)
+		R.ForgeObjectives()
+		R.AnnounceObjectives()

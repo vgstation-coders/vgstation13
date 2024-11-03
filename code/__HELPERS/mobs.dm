@@ -137,21 +137,21 @@ var/static/list/ALL_LIMBS = list(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN,
 /proc/haircolordesc(v_hair)
 	switch(v_hair)
 		if("Green")
-			return "1"
+			return 1
 		if("Azure")
-			return "2"
+			return 2
 		if("Brown")
-			return "3"
+			return 3
 		if("Emerald")
-			return "4"
+			return 4
 		if("Gray")
-			return "5"
+			return 5
 		if("Light Green")
-			return "6"
+			return 6
 		if("Green-Brown")
-			return "7"
+			return 7
 		else
-			return "7"
+			return 7
 
 /proc/age2agedescription(age)
 	switch(age)
@@ -246,11 +246,7 @@ Proc for attack log creation, because really why not
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has [what_done] [target ? "[target.name][(ismob(target) && target.ckey) ? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]</font>")
 	if(target && ismob(target))
 		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [what_done] by [user ? "[user.name][(ismob(user) && user.ckey) ? "([user.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]</font>")
-		if(!iscarbon(user))
-			target.LAssailant = null
-		else
-			target.LAssailant = user
-			target.assaulted_by(user)
+		target.assaulted_by(user)
 	if(admin)
 		log_attack("<font color='red'>[user ? "[user.name][(ismob(user) && user.ckey) ? "([user.ckey])" : ""]" : "NON-EXISTANT SUBJECT"] [what_done] [target ? "[target.name][(ismob(target) && target.ckey)? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]</font>")
 

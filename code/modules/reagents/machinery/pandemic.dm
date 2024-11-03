@@ -275,8 +275,7 @@
 		if(I.w_class > W_CLASS_SMALL)
 			to_chat(user, "<span class='warning'>\The [I] is too big to fit.</span>")
 			return
-		if(!user.drop_item(I, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [I]!</span>")
+		if(!user.drop_item(I, src, failmsg = TRUE))
 			return
 
 		src.beaker =  I

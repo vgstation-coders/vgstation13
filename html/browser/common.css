@@ -193,7 +193,7 @@ h4
 	color: #ff0000;
 }
 
-.redBackground {
+.redBackground, a.redBackground {
     background: #ea0000;
 }
 
@@ -209,6 +209,11 @@ h4
 .dark
 {
 	color: #272727;
+}
+
+.red
+{
+	color: #FF0000;
 }
 
 .notice

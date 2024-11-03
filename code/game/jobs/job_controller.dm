@@ -1,4 +1,6 @@
 var/global/datum/controller/occupations/job_master
+var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
+
 
 #define FREE_ASSISTANTS 2
 
@@ -19,6 +21,9 @@ var/global/datum/controller/occupations/job_master
 	var/list/labor_consoles = list()
 	var/list/assistant_second_chance = list()
 
+	var/alt_database_active
+	var/list/alternates = list()
+
 /datum/controller/occupations/proc/SetupOccupations(var/faction = "Station")
 	occupations = list()
 	var/list/all_jobs = typesof(/datum/job)
@@ -31,7 +36,9 @@ var/global/datum/controller/occupations/job_master
 			continue
 		if(job.faction != faction)
 			continue
-
+		if(istype(job,/datum/job/alternate))
+			alternates += job
+			continue
 		if(job.must_be_map_enabled)
 			if(!map)
 				continue
@@ -55,9 +62,13 @@ var/global/datum/controller/occupations/job_master
 
 /datum/controller/occupations/proc/GetJob(var/rank)
 	RETURN_TYPE(/datum/job)
+	var/list/combined_occupations = list()
+	combined_occupations.Add(occupations)
+	if(alt_database_active)
+		combined_occupations.Add(alternates)
 	if(!rank)
 		return null
-	for(var/datum/job/J in occupations)
+	for(var/datum/job/J in combined_occupations)
 		if(!J)
 			continue
 		if(J.title == rank)
@@ -81,7 +92,15 @@ var/global/datum/controller/occupations/job_master
 		if(!latejoin)
 			position_limit = job.spawn_positions
 		if((job.current_positions < position_limit) || position_limit == -1)
-			Debug("Player: [player] is now Rank: [rank], JCP:[job.current_positions], JPL:[position_limit]")
+			if(alt_database_active && (total_alt_positions < alt_job_limit) && latejoin) //Labor console database has been hacked; Centcomm is sending the wrong employees!
+				var/altrank = pick(alternate_positions)
+				if(altjobprompt(altrank,rank,player))
+					rank = altrank
+					Debug("[player] is being assigned non-standard job as the alternate jobs database is installed.")
+					Debug("Player: [player] is now Rank: [rank], JCP:[total_alt_positions], JPL:[alt_job_limit]")
+					total_alt_positions++
+			else
+				Debug("Player: [player] is now Rank: [rank], JCP:[job.current_positions], JPL:[position_limit]")
 			player.mind.assigned_role = rank
 			player.mind.job_priority = pref_level
 			player.mind.role_alt_title = GetPlayerAltTitle(player, rank)
@@ -581,3 +600,12 @@ var/global/datum/controller/occupations/job_master
 
 		tmp_str += "HIGH=[level1]|MEDIUM=[level2]|LOW=[level3]|NEVER=[level4]|BANNED=[level5]|YOUNG=[level6]|-"
 		feedback_add_details("job_preferences",tmp_str)
+
+/datum/controller/occupations/proc/altjobprompt(var/newrank,var/oldrank,var/mob/user)
+	var/turf/oldloc = get_turf(user)
+	user.forceMove(null)
+	if(alert(user,"Central Command had a mix-up and is attempting to send you to the station as \an [newrank]! Would you like to correct them?",,"No - play as [newrank]","Yes - play as [oldrank]") == "No - play as [newrank]")
+		return 1
+	user.forceMove(oldloc)
+	message_admins("[user.key] has opted out of playing as \an [newrank].")
+	return 0

@@ -11,9 +11,10 @@
 
 /datum/storeitem/proc/deliver(var/mob/user,var/obj/machinery/computer/merch/merchcomp)
 	var/thing = new typepath(merchcomp.loc)
+	var/turf/T = get_turf(merchcomp)
+	T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = EFFECTS_PLANE)
 	if(istype(typepath,/obj/item/weapon/storage))
 		var/obj/item/weapon/storage/S = thing
-		user.put_in_hands(S)
 		if(station_does_not_tip)
 			var/list/additional_types = list(
 				IRRADIATEDBEANS,
@@ -49,6 +50,20 @@
 	desc = "For when you're 100% starved and want to become fat in 1 easy step."
 	typepath = /obj/item/weapon/storage/bag/food/menu2
 	cost = 75
+	category = "Food"
+
+/datum/storeitem/lunchbox
+	name = "Prepackaged NT Lunch"
+	desc = "A lunchbox with an entree, side, sweet, condiment, and drink. Courtesy of Nanotrasen."
+	typepath = /obj/item/weapon/storage/lunchbox/plastic/nt/pre_filled
+	cost = 60
+	category = "Food"
+
+/datum/storeitem/lunchbox_collectible
+	name = "Collectible Lunchbox"
+	desc = "A lunchbox with unique exterior art! Collect them all! Lunch is not included."
+	typepath = /obj/item/weapon/storage/lunchbox/plastic/nt/random
+	cost = 10
 	category = "Food"
 
 /datum/storeitem/diy_soda
@@ -253,8 +268,8 @@
 	category = "Luxury"
 
 /datum/storeitem/critter_cage
-	name = "small cage"
-	desc = "A cage where to keep tiny animals safe. Fit with a drinking bottle that can be refilled.."
+	name = "Small Cage"
+	desc = "A cage that keeps tiny animals safe. Fit with a drinking bottle that can be refilled."
 	typepath = /obj/item/critter_cage
 	cost = 60
 	category = "Luxury"
@@ -265,7 +280,7 @@
 /datum/storeitem/zambiscuits
 	name = "Zam Biscuits"
 	desc = "All biscuits are fresh from mothership labs."
-	typepath = /obj/item/weapon/storage/pill_bottle/zambiscuits
+	typepath = /obj/item/weapon/zambiscuit_package
 	cost = 40
 	category = "ZAM!"
 
@@ -288,6 +303,13 @@
 	desc = "This imitation of human steak has received good marks from test subjects."
 	typepath = /obj/item/weapon/storage/bag/zam_food/zam_menu1
 	cost = 75
+	category = "ZAM!"
+
+/datum/storeitem/zamlunchbox
+	name = "Prepackaged Zam Lunch"
+	desc = "A lunchbox with an entree, side, sweet, condiment, and drink. Courtesy of Zam!"
+	typepath = /obj/item/weapon/storage/lunchbox/metal/zam/pre_filled
+	cost = 70
 	category = "ZAM!"
 
 /////////////////////////////

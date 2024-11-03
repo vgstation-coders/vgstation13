@@ -39,7 +39,6 @@
 		H.mind.transfer_to(brainmob)
 
 	to_chat(brainmob, "<span class='notice'>You feel slightly disoriented. That's normal when you're just a brain.</span>")
-	callHook("debrain", list(brainmob))
 
 /obj/item/organ/internal/brain/examine(mob/user)
 	..()
@@ -54,7 +53,7 @@
 				to_chat(user, "<span class='deadsay'>It seems particularly lifeless, but not yet gone. Perhaps it will regain some of its luster later...</span>")
 				return
 		to_chat(user, "<span class='deadsay'>This one seems unresponsive.</span>")// Should probably make this more realistic, but this message ties it in with MMI errors.
-		if(!brainmob.mind)  
+		if(!brainmob.mind)
 			to_chat(user, "<span class='deadsay'>It shows no signs of sentience.</span>") //monkeyman or NPC
 		return
 

@@ -31,6 +31,10 @@
 	meat_type = /obj/item/weapon/ectoplasm
 	mob_property_flags = MOB_SUPERNATURAL
 	var/space_damage_warned = FALSE
+	var/blade_harm = TRUE
+	var/mob/master = null
+
+	var/soulblade_ritual = FALSE
 
 	blooded = FALSE
 
@@ -93,17 +97,20 @@
 		var/obj/item/weapon/melee/soulblade/SB = loc
 		if (istype(SB.loc,/obj/structure/cult/altar))
 			if (SB.blood < SB.maxblood)
-				SB.blood = min(SB.maxblood,SB.blood+5)//faster blood regen when planted on an altar
+				SB.blood = min(SB.maxblood,SB.blood+10)//fastest blood regen when planted on an altar
 			if (SB.health < SB.maxHealth)
-				SB.health = min(SB.maxHealth,SB.health+5)//and health regen on top
+				SB.health = min(SB.maxHealth,SB.health+10)//and health regen on top
 		else if (istype(SB.loc,/mob/living))
 			var/mob/living/L = SB.loc
 			if (iscultist(L) && SB.blood < SB.maxblood)
-				SB.blood = min(SB.maxblood,SB.blood+2)//no cap on blood regen when held by a cultist, no blood regen when held by a non-cultist (but there's a spell to take care of that)
+				SB.blood = min(SB.maxblood,SB.blood+3)//fast blood regen when held by a cultist (stacks with the one below for an effective +5)
 		if (SB.linked_cultist && (get_dist(get_turf(SB.linked_cultist),get_turf(src)) <= 5))
-			SB.blood = min(SB.maxblood,SB.blood+1)//you can also regen blood to full when near your linked cultist
-		if (SB.blood < SB.maxregenblood)
-			SB.blood++ // a bit of extra regen when at very low blood
+			SB.blood = min(SB.maxblood,SB.blood+2)//slow blood regen when near your linked cultist
+		if (SB.passivebloodregen < (SB.blood/3))
+			SB.passivebloodregen++
+		if ((SB.passivebloodregen >= (SB.blood/3)) && (SB.blood < SB.maxblood))
+			SB.passivebloodregen = 0
+			SB.blood++//very slow passive blood regen that goes slower and slower the more blood you currently have.
 		SB.update_icon()
 	else
 		if (istype(loc,/turf/space))
@@ -143,6 +150,14 @@
 	..()
 	if(!client)
 		to_chat(user, "<span class='warning'>It appears to be dormant.</span>")
+
+/mob/living/simple_animal/shade/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor)
+	var/datum/role/cultist/C = iscultist(src)
+	if (C && damage && !iscultist(target) && !target.isDead())
+		if (target.mind)
+			C.gain_devotion(30, DEVOTION_TIER_3, "attack_shade", target)
+		else
+			C.gain_devotion(30, DEVOTION_TIER_2, "attack_shade_nomind", target)
 
 ////////////////HUD//////////////////////
 
@@ -238,6 +253,25 @@
 		if (BS)
 			BS.perform(src)
 			return
+	..()
+
+/mob/living/simple_animal/shade/mode()
+	set name = "Activate Held Object"
+	set category = "IC"
+	set src = usr
+	set hidden = TRUE
+	if (istype(loc, /obj/item/weapon/melee/soulblade))
+		var/spell/soulblade/blade_spin/BS = locate() in spell_list
+		if (BS)
+			BS.perform(src)
+			return
+	..()
+
+/mob/living/simple_animal/shade/toggle_throw_mode()
+	if (istype(loc, /obj/item/weapon/melee/soulblade))
+		var/spell/soulblade/blade_perforate/BP = locate() in spell_list
+		if(BP)
+			BP.perform(src)
 	..()
 
 /mob/living/simple_animal/shade/noncult

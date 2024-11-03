@@ -57,7 +57,8 @@
 		else
 			clear_fullscreen("oxy")
 		//Fire and Brute damage overlay (BSSR)
-		var/hurtdamage = (getBruteLoss()*100/maxHealth) + (getFireLoss()*100/maxHealth) + (damageoverlaytemp * 100 / maxHealth)
+		//Now ignoring peg limb damage! Metal legs do not hurt!
+		var/hurtdamage = (getBruteLoss(TRUE)*100/maxHealth) + (getFireLoss(TRUE)*100/maxHealth) + (damageoverlaytemp * 100 / maxHealth)
 		if (istype(src,/mob/living/simple_animal) || istype(src,/mob/living/carbon/slime))
 			hurtdamage = (100 - health_percent) + (damageoverlaytemp * 100 / maxHealth)
 		damageoverlaytemp = 0 // We do this so we can detect if someone hits us or not.
@@ -133,7 +134,7 @@
 			total += M.hat.nearsighted_modifier
 		if(M.glasses && istype(M.glasses, /obj/item/clothing))
 			total += M.glasses.nearsighted_modifier
-	
+
 	if(total <= 0)
 		return 0
 	return clamp(total,1,10)

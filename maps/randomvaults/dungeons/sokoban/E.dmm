@@ -38,8 +38,7 @@
 /area/vault/sokoban/level)
 "h" = (
 /obj/machinery/power/treadmill{
-	dir = 1;
-	icon_state = "treadmill"
+	dir = 1
 	},
 /turf/simulated/floor{
 	icon_state = "pattern_blue"
@@ -85,8 +84,7 @@
 /area/vault/sokoban/level)
 "o" = (
 /obj/machinery/power/treadmill{
-	dir = 1;
-	icon_state = "treadmill"
+	dir = 1
 	},
 /obj/structure/mirror{
 	pixel_y = 32
@@ -121,8 +119,7 @@
 /area/vault/sokoban/level)
 "s" = (
 /obj/machinery/power/treadmill{
-	dir = 1;
-	icon_state = "treadmill"
+	dir = 1
 	},
 /obj/abstract/map/spawner/misc/gym,
 /turf/simulated/floor{

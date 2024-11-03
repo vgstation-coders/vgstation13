@@ -25,11 +25,7 @@
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 
 	msg_admin_attack("[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
@@ -84,6 +80,22 @@
 		if (found)
 			to_chat(user, "<span class='warning'>A structure suddenly emerges from the ground!</span>")
 		call(/obj/effect/rune_legacy/proc/revealrunes)(src)//revealing legacy runes as well because why not
+
+/obj/item/weapon/nullrod/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	target.arcane_message(user)
+	return ..()
+
+/atom/proc/arcane_message(mob/user)
+	if(arcanetampered)
+		to_chat(user, "<span class='sinister'>\The [src] has an arcane aura to it!</span>")
+		if(contents.len)
+			to_chat(user, "<span class='sinister'>And inside \the [src]...</span>")
+			for(var/atom/A in src)
+				. |= A.arcane_message(user)
+			if(!.)
+				to_chat(user, "<span class='notice'>Nothing of note.</span>")
+		. = 1
+
 
 /obj/item/weapon/nullrod/pickup(mob/living/user as mob)
 	if(user.mind)
@@ -367,11 +379,11 @@
 		recruiter.jobban_roles = list("pAI") // pAI/Borers share the same jobban check so here we go too.
 
 	// Role set to Yes or Always
-	recruiter.player_volunteering = new /callback(src, src::recruiter_recruiting())
+	recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
 	// Role set to No or Never
-	recruiter.player_not_volunteering = new /callback(src, src::recruiter_not_recruiting())
+	recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
 
-	recruiter.recruited = new /callback(src, src::recruiter_recruited())
+	recruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
 
 	recruiter.request_player()
 

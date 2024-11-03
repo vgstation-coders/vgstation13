@@ -16,6 +16,7 @@
 	reagents.add_reagent(SLIMEJELLY, 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/jar/on_reagent_change()
+	..()
 	if (reagents.reagent_list.len > 0)
 		switch(reagents.get_master_reagent_id())
 			if("slime")

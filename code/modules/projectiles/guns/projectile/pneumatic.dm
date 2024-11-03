@@ -53,8 +53,7 @@
 
 /obj/item/weapon/storage/pneumatic/attackby(obj/item/W as obj, mob/user as mob)
 	if(!tank && istype(W,/obj/item/weapon/tank))
-		if(!user.drop_item(W, src.tank_container))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src.tank_container, failmsg = TRUE))
 			return
 
 		tank = W
@@ -124,6 +123,9 @@
 		else if(clumsy_check(M) && prob(50))
 			to_chat(M, "<span class='danger'>[src] blows up in your face!</span>")
 			target = M
+			M.take_organ_damage(0,20)
+			M.drop_item(src, force_drop = 1)
+			qdel(src)
 
 	var/turf/curloc = get_turf(user)
 	var/turf/targloc = get_turf(target)

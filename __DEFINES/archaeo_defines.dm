@@ -1,6 +1,7 @@
 #define ARCHAEO_BOWL "bowl"
 #define ARCHAEO_URN "urn"
 #define ARCHAEO_CUTLERY "cutlery"
+#define ARCHAEO_SEWING_NEEDLES "sewing_needles"
 #define ARCHAEO_STATUETTE "statuette"
 #define ARCHAEO_INSTRUMENT "instrument"
 #define ARCHAEO_KNIFE "knife"
@@ -50,6 +51,7 @@
 #define ARCHAEO_SUPERSHARD "supermatter shard"
 #define ARCHAEO_TOYBOX "mechanical toybox"
 #define ARCHAEO_POCKETWATCH "pocketwatch"
+#define ARCHAEO_MIRROR "pocket mirror"
 
 #define DIGSITE_GARDEN "garden"
 #define DIGSITE_ANIMAL "animal"

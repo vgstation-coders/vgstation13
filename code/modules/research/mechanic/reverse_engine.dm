@@ -4,7 +4,7 @@
 #define REV_ENG_RESEARCHBASE 150
 
 /obj/machinery/r_n_d/reverse_engine
-	name = "Reverse Engine"
+	name = "\improper Reverse Engine"
 	desc = ""
 	icon = 'icons/obj/machines/mechanic.dmi'
 	icon_state = "reverse-engine"
@@ -53,7 +53,7 @@
 	if(..())
 		return 1
 	if(busy)
-		to_chat(user, "<span class='notice'>The [src] is currently busy, please wait until the current operation is finished.</span>")
+		to_chat(user, "<span class='notice'>\The [src] is currently busy, please wait until the current operation is finished.</span>")
 		return
 	if(istype(O, /obj/item/device/device_analyser))
 		var/obj/item/device/device_analyser/DA = O
@@ -101,7 +101,7 @@
 			to_chat(user, "<span class='notice'>The [design.name] has already been researched by \the [src]!</span>")
 			return
 	if(research_queue.len >= max_queue_len)
-		to_chat(user, "<span class='notice'>The [src]'s research queue is full. Research some designs first before adding more.</span>")
+		to_chat(user, "<span class='notice'>\The [src]'s research queue is full. Research some designs first before adding more.</span>")
 		return
 	if(design in design_list) //let's make sure, here
 		research_queue += design

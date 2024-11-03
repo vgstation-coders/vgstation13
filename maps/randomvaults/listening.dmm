@@ -158,8 +158,7 @@
 "ar" = (
 /obj/structure/cable{
 	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 0
+	icon_state = "0-2"
 	},
 /obj/machinery/power/solar/control/vault_listening,
 /obj/machinery/light/small{
@@ -178,19 +177,6 @@
 /turf/simulated/floor/airless{
 	icon_state = "solarpanel"
 	},
-/area/vault/listening)
-"at" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
 /area/vault/listening)
 "au" = (
 /turf/simulated/floor/plating,
@@ -262,18 +248,12 @@
 /turf/space,
 /area/vault/listening)
 "aB" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "aC" = (
@@ -356,17 +336,6 @@
 /turf/simulated/floor/airless{
 	icon_state = "solarpanel"
 	},
-/area/vault/listening)
-"aI" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
 /area/vault/listening)
 "aJ" = (
 /mob/living/simple_animal/hostile/humanoid/syndicate,
@@ -529,19 +498,6 @@
 /obj/item/weapon/disk/shuttle_coords/vault/listening,
 /turf/simulated/floor,
 /area/vault/listening)
-"bg" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/vault/listening)
 "bh" = (
 /obj/item/weapon/stool,
 /turf/simulated/floor/carpet,
@@ -590,16 +546,10 @@
 /turf/space,
 /area/vault/listening)
 "bp" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "bq" = (
@@ -665,25 +615,8 @@
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee,
 /turf/simulated/floor,
 /area/vault/listening)
-"bx" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/vault/listening)
 "by" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/listening)
 "bz" = (
@@ -739,7 +672,6 @@
 /area/vault/listening)
 "bH" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner"
 	},
@@ -750,7 +682,6 @@
 /area/vault/listening)
 "bI" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -875,7 +806,7 @@ af
 af
 ad
 ad
-bg
+by
 bp
 by
 ad
@@ -1055,9 +986,9 @@ aa
 aa
 ad
 ad
-at
+by
 aB
-aI
+by
 ad
 ad
 aa
@@ -1217,9 +1148,9 @@ aa
 aa
 ad
 ad
-at
+by
 aB
-aI
+by
 ad
 ad
 aa
@@ -1415,8 +1346,8 @@ aa
 aa
 ad
 ad
-bg
-bx
+by
+by
 by
 ad
 ad

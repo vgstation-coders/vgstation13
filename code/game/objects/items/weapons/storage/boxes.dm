@@ -29,10 +29,9 @@
 	item_state = "box"
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
 	starting_materials = list(MAT_CARDBOARD = 3750)
-	w_type=RECYK_MISC
-	autoignition_temperature = 522 // Kelvin
-	fire_fuel = 2
-	autoignition_temperature = AUTOIGNITION_PAPER
+	w_type=RECYK_WOOD
+	flammable = TRUE
+
 	on_armory_manifest = TRUE
 
 /obj/item/weapon/storage/box/large
@@ -46,9 +45,6 @@
 	starting_materials = list(MAT_CARDBOARD = 15000)
 	storage_slots = 21
 	max_combined_w_class = 42 // 21*2
-
-	autoignition_temperature = 530 // Kelvin
-	fire_fuel = 3
 
 /obj/item/weapon/storage/box/surveillance
 	name = "\improper DromedaryCo packet"
@@ -469,7 +465,7 @@
 	can_add_combinedwclass = TRUE
 	can_only_hold = list(
 		"/obj/item/device/radio/headset/headset_sec",
-		"/obj/item/clothing/glasses/sunglasses/sechud",
+		"/obj/item/clothing/glasses/hud/security/sunglasses",
 		"/obj/item/clothing/gloves/black",
 		"/obj/item/weapon/storage/belt/security",
 		"/obj/item/device/flashlight/tactical",
@@ -486,7 +482,7 @@
 	)
 	items_to_spawn = list(
 		/obj/item/device/radio/headset/headset_sec,
-		list(/obj/item/clothing/glasses/sunglasses/sechud/prescription,/obj/item/clothing/glasses/sunglasses/sechud),
+		list(/obj/item/clothing/glasses/hud/security/sunglasses/prescription,/obj/item/clothing/glasses/hud/security/sunglasses),
 		/obj/item/clothing/gloves/black,
 		/obj/item/weapon/storage/belt/security,
 		/obj/item/device/flashlight/tactical,
@@ -510,7 +506,7 @@
 	can_add_combinedwclass = TRUE
 	items_to_spawn = list(
 		/obj/item/device/radio/headset/headset_sec,
-			/obj/item/clothing/glasses/regular/tracking/detective,
+			/obj/item/clothing/glasses/hud/tracking/detective,
 		/obj/item/clothing/gloves/black,
 		/obj/item/weapon/storage/belt/detective,
 		/obj/item/weapon/switchtool/switchblade,
@@ -578,6 +574,12 @@
 	icon_state = "frag_shells"
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/frag = 16)
+
+/obj/item/weapon/storage/box/rocksaltshells
+	name = "12-gauge rocksalt shells"
+	icon_state = "rocksalt_shells"
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/rocksalt = 16)
 
 /obj/item/weapon/storage/box/labels
 	name = "label roll box"
@@ -1083,14 +1085,6 @@
 	new /obj/item/clothing/shoes/protoboots(src)
 	..()
 
-/obj/item/weapon/storage/box/smartbox/clothing_box/hastur
-	name = "Hastur outfit box"
-
-/obj/item/weapon/storage/box/smartbox/clothing_box/hastur/New()
-	new	/obj/item/clothing/head/hasturhood(src)
-	new /obj/item/clothing/suit/hastur(src)
-	..()
-
 /obj/item/weapon/storage/box/smartbox/clothing_box/owl
 	name = "Owl outfit box"
 
@@ -1226,14 +1220,6 @@
 	new /obj/item/clothing/shoes/sandal/marisa/leather(src)
 	..()
 
-/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer
-	name = "Necromancer robe box"
-
-/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer/New()
-	new /obj/item/clothing/head/wizard/necro(src)
-	new /obj/item/clothing/suit/wizrobe/necro(src)
-	..()
-
 /obj/item/weapon/storage/box/smartbox/clothing_box/pharaoh
 	name = "Pharaoh robe box"
 
@@ -1326,3 +1312,16 @@
 		/obj/item/device/modkit/demolition,
 		/obj/item/ammo_storage/magazine/lawgiver/demolition = 2,
 	)
+
+/obj/item/weapon/storage/box/castlevania
+	name = "modern vampire hunter set box"
+	desc = "Apparel for the cooler vampire hunters."
+	icon_state = "castlevania_box"
+
+/obj/item/weapon/storage/box/castlevania/New()
+	..()
+	new /obj/item/clothing/under/hunter(src)
+	new /obj/item/clothing/suit/hunter(src)
+	new /obj/item/clothing/shoes/hunter(src)
+	new /obj/item/clothing/head/hunter(src)
+	new /obj/item/clothing/gloves/hunter(src)

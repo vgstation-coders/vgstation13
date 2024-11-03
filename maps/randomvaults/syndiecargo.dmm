@@ -25,21 +25,17 @@
 "af" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 1;
-	icon_state = "heater";
 	tag = "icon-heater (NORTH)"
 	},
 /obj/structure/window/reinforced/plasma,
 /obj/structure/window/reinforced/plasma{
-	dir = 8;
-	icon_state = "plasmarwindow";
-	tag = "icon-plasmarwindow (WEST)"
+	dir = 8
 	},
 /turf/simulated/floor/shuttle/plating,
 /area/vault/syndiecargo)
 "ag" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 1;
-	icon_state = "heater";
 	tag = "icon-heater (NORTH)"
 	},
 /obj/structure/window/reinforced/plasma,
@@ -48,14 +44,11 @@
 "ah" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 1;
-	icon_state = "heater";
 	tag = "icon-heater (NORTH)"
 	},
 /obj/structure/window/reinforced/plasma,
 /obj/structure/window/reinforced/plasma{
-	dir = 4;
-	icon_state = "plasmarwindow";
-	tag = "icon-plasmarwindow (EAST)"
+	dir = 4
 	},
 /turf/simulated/floor/shuttle/plating,
 /area/vault/syndiecargo)
@@ -82,7 +75,6 @@
 "ap" = (
 /obj/machinery/light/small{
 	dir = 1;
-	icon_state = "lbulb1";
 	tag = "icon-lbulb1 (NORTH)"
 	},
 /obj/machinery/nuclearbomb,
@@ -116,7 +108,6 @@
 "au" = (
 /obj/machinery/light/small{
 	dir = 4;
-	icon_state = "lbulb1";
 	tag = "icon-lbulb1 (EAST)"
 	},
 /obj/item/toy/foamblade,
@@ -150,7 +141,6 @@
 "ay" = (
 /obj/machinery/light/small{
 	dir = 8;
-	icon_state = "lbulb1";
 	tag = "icon-lbulb1 (WEST)"
 	},
 /turf/simulated/floor/shuttle/plating,
@@ -193,7 +183,6 @@
 "aI" = (
 /obj/machinery/light{
 	dir = 1;
-	icon_state = "ltube1";
 	tag = "icon-ltube1 (NORTH)"
 	},
 /turf/simulated/floor/shuttle{
@@ -202,24 +191,7 @@
 	},
 /area/vault/syndiecargo)
 "aJ" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 4;
-	icon_state = "plasmarwindow";
-	tag = "icon-plasmarwindow (EAST)"
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 1;
-	icon_state = "plasmarwindow";
-	tag = "icon-plasmarwindow (NORTH)"
-	},
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 8;
-	icon_state = "plasmarwindow";
-	tag = "icon-plasmarwindow (WEST)"
-	},
-/obj/structure/window/full/reinforced/plasma,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/shuttle/plating,
 /area/vault/syndiecargo)
 "aK" = (
@@ -287,48 +259,12 @@
 	tag = "icon-floor4"
 	},
 /area/vault/syndiecargo)
-"aS" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 4;
-	icon_state = "plasmarwindow";
-	tag = "icon-plasmarwindow (EAST)"
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8;
-	icon_state = "plasmarwindow";
-	tag = "icon-plasmarwindow (WEST)"
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 1;
-	icon_state = "plasmarwindow";
-	tag = "icon-plasmarwindow (NORTH)"
-	},
-/obj/structure/window/full/reinforced/plasma,
-/turf/simulated/floor/shuttle/plating,
-/area/vault/syndiecargo)
 "aT" = (
 /mob/living/simple_animal/hostile/humanoid/syndicate/ranged/laser,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor4";
 	tag = "icon-floor4"
 	},
-/area/vault/syndiecargo)
-"aU" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 4;
-	icon_state = "plasmarwindow";
-	tag = "icon-plasmarwindow (EAST)"
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8;
-	icon_state = "plasmarwindow";
-	tag = "icon-plasmarwindow (WEST)"
-	},
-/obj/structure/window/full/reinforced/plasma,
-/turf/simulated/floor/shuttle/plating,
 /area/vault/syndiecargo)
 "aV" = (
 /obj/structure/flora/pottedplant/random,
@@ -387,7 +323,6 @@
 "bf" = (
 /obj/machinery/light{
 	dir = 8;
-	icon_state = "ltube1";
 	tag = "icon-ltube1 (WEST)"
 	},
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee,
@@ -408,7 +343,6 @@
 "bh" = (
 /obj/machinery/light{
 	dir = 4;
-	icon_state = "ltube1";
 	tag = "icon-ltube1 (EAST)"
 	},
 /turf/simulated/floor/shuttle{
@@ -507,7 +441,6 @@
 /obj/structure/closet/crate/bin,
 /obj/machinery/light/small{
 	dir = 8;
-	icon_state = "lbulb1";
 	tag = "icon-lbulb1 (WEST)"
 	},
 /turf/simulated/floor/shuttle/plating,
@@ -516,7 +449,6 @@
 /obj/structure/closet/emcloset,
 /obj/machinery/light/small{
 	dir = 4;
-	icon_state = "lbulb1";
 	tag = "icon-lbulb1 (EAST)"
 	},
 /turf/simulated/floor/shuttle/plating,
@@ -567,28 +499,11 @@
 /turf/space,
 /area/vault/syndiecargo)
 "bF" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 4;
-	icon_state = "plasmarwindow";
-	tag = "icon-plasmarwindow (EAST)"
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 1;
-	icon_state = "plasmarwindow";
-	tag = "icon-plasmarwindow (NORTH)"
-	},
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 8;
-	icon_state = "plasmarwindow";
-	tag = "icon-plasmarwindow (WEST)"
-	},
-/obj/structure/window/full/reinforced/plasma,
 /obj/machinery/door/poddoor{
 	id_tag = 350;
 	name = "Shutters"
 	},
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/shuttle/plating,
 /area/vault/syndiecargo)
 
@@ -695,8 +610,8 @@ bb
 bb
 aJ
 aP
-aS
-aU
+aJ
+aJ
 bb
 bb
 bg

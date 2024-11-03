@@ -16,9 +16,9 @@
 	plane = OBJ_PLANE
 	layer = OBJ_LAYER
 	level = LEVEL_ABOVE_FLOOR
-	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
+	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE | PASSRAILING
 	slowdown_modifier = 2
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 	var/add_state = "_bare"
 	var/grown = 0
 	var/growdirs = 0
@@ -179,9 +179,9 @@
 			else
 				P.growdirs &= ~get_dir(P, src)
 		if(dying)
-			T.unregister_event(/event/density_change, src, src::proxDensityChange())
+			T.unregister_event(/event/density_change, src, nameof(src::proxDensityChange()))
 		else
-			T.register_event(/event/density_change, src, src::proxDensityChange())
+			T.register_event(/event/density_change, src, nameof(src::proxDensityChange()))
 
 /obj/structure/cable/powercreeper/proc/proxDensityChange(atom/atom)
 	var/turf/T = get_turf(atom)

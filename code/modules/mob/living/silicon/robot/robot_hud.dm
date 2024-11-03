@@ -2,11 +2,10 @@
 	handle_sensor_modes()
 
 	regular_hud_updates() //Handles MED/SEC HUDs for borgs.
-	switch(sensor_mode)
-		if(SEC_HUD)
-			process_sec_hud(src, 1)
-		if(MED_HUD)
-			process_med_hud(src)
+
+	handle_vision_effect_updates()
+
+	check_dark_vision()
 
 	handle_health_hud()
 

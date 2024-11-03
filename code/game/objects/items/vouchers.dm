@@ -4,9 +4,11 @@
 	icon = 'icons/obj/vouchers.dmi'
 	icon_state = "voucher"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	force = 0
 	throwforce = 0
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 	var/shred_on_use = 1
 
@@ -45,7 +47,7 @@
 
 /obj/item/voucher/warp/kinetic_accelerator/vouch_condition()
 	var/turf/T = get_turf(src)
-	if(istype(T.loc, /area/mine/explored)||istype(T.loc, /area/mine/unexplored))
+	if(istype(T.loc, /area/mine/explored)||istype(T.loc, /area/mine/unexplored)||istype(T.loc, /area/surface/mine))
 		return TRUE
 	return FALSE
 

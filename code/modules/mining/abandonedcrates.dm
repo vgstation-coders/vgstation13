@@ -6,6 +6,7 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 	icon_state = "rustysecurecrate"
 	icon_opened = "rustysecurecrateopen"
 	icon_closed = "rustysecurecrate"
+	req_access = list(access_salvage_captain)
 	var/code = null
 	var/lastattempt = null
 	var/attempts = 3
@@ -19,6 +20,8 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 
 /obj/structure/closet/crate/secure/loot/attack_hand(mob/user as mob)
 	if(locked)
+		if (src.allowed(usr))
+			return ..()
 		to_chat(user, "<span class='notice'>The crate is locked with a Deca-code lock.</span>")
 		var/input = input(usr, "Enter digit from [min] to [max].", "Deca-Code Lock", "") as num
 		if(in_range(src, user))
@@ -26,6 +29,7 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 			if (input == code)
 				to_chat(user, "<span class='notice'>The crate unlocks!</span>")
 				locked = 0
+				update_icon()
 			else if (input == null || input > max || input < min)
 				to_chat(user, "<span class='notice'>You leave the crate alone.</span>")
 			else

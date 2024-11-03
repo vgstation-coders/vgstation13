@@ -1,7 +1,7 @@
 //Hockey pads, neck guards, particularly well-stained handkerchiefs go here
 /obj/item/clothing/accessory/armor_shard
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 0, bomb = 0, bio = 0, rad = 0)
-	autoignition_temperature = AUTOIGNITION_PROTECTIVE
+
 
 /obj/item/clothing/accessory/armor_shard/can_attach_to(obj/item/clothing/C)
 	. = ..()

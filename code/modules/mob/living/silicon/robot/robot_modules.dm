@@ -280,9 +280,7 @@
 	S.max_amount = MEDICAL_MAX_KIT
 	S.amount = MEDICAL_MAX_KIT
 	modules += S
-	emag = new /obj/item/weapon/reagent_containers/spray(src)
-	emag.reagents.add_reagent(PACID, 250)
-	emag.name = "Polyacid spray"
+	emag = new /obj/item/weapon/reagent_containers/spray/pacid(src)
 
 	sensor_augs = list("Medical", "Disable")
 
@@ -406,9 +404,7 @@
 	modules += new /obj/item/weapon/mop(src)
 	modules += new /obj/item/device/lightreplacer/borg(src)
 	modules += new /obj/item/weapon/reagent_containers/glass/bucket(src)
-	emag = new /obj/item/weapon/reagent_containers/spray(src)
-	emag.reagents.add_reagent(LUBE, 250)
-	emag.name = "Lube spray"
+	emag = new /obj/item/weapon/reagent_containers/spray/lube(src)
 
 	fix_modules()
 
@@ -458,11 +454,26 @@
 	modules += new /obj/item/device/instrument/instrument_synth(src)
 	modules += new /obj/item/weapon/tray/robotray(src)
 	modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
-	modules += new /obj/item/weapon/reagent_containers/glass/replenishing/cyborg(src)
+	modules += new /obj/item/weapon/reagent_containers/food/drinks/shaker(src)
+	modules += new /obj/item/weapon/reagent_containers/glass/rag/robo(src)
+	modules += new /obj/item/device/chem_synth/robot/service(src)
+	modules += new /obj/item/weapon/kitchen/utensil/knife/large(src)
+	modules += new /obj/item/weapon/kitchen/rollingpin(src)
+	modules += new /obj/item/weapon/storage/bag/food/borg(src)
 
-	emag = new /obj/item/weapon/reagent_containers/glass/replenishing/cyborg/hacked(src)
+	emag = new /obj/item/weapon/kitchen/utensil/knife/large/butch(src)
 
 	fix_modules()
+
+/obj/item/weapon/robot_module/butler/on_emag()
+	//add some spicy chemicals to the synth
+	for(var/M in modules)
+		if(istype(M, /obj/item/device/chem_synth/robot/service))
+			var/obj/item/device/chem_synth/robot/service/synth = M
+			synth.emag_act(null)
+			break
+	. = ..()
+
 
 /obj/item/weapon/robot_module/miner
 	name = "supply robot module"

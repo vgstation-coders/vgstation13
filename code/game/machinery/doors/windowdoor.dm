@@ -47,6 +47,9 @@
 	setDensity(FALSE)
 	..()
 
+/obj/machinery/door/window/update_icon()
+	return
+
 /obj/machinery/door/window/proc/smart_toggle() //For "smart" windows
 	// var/color = window_is_opaque ? "#FFFFFF" : "#222222" //these are backwards because we're changing window_is_opaque later
 	// animate(src, color=color, time=5)
@@ -215,7 +218,7 @@
 		..()
 
 /obj/machinery/door/window/attack_paw(mob/living/user)
-	if(istype(user, /mob/living/carbon/alien/humanoid) || istype(user, /mob/living/carbon/slime/adult))
+	if(istype(user, /mob/living/carbon/alien/humanoid) || isslimeadult(user))
 		if(operating)
 			return
 		user.delayNextAttack(8)

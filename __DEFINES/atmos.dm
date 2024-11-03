@@ -9,7 +9,9 @@
 #define CO2MARS 0.96
 #define N2MARS  0.04 //Mars atmosphere is actually 1.9% nitrogen, 1.9% argon with traces of other gases. Simplified to 4% nitrogen
 
+
 #define MOLES_PLASMA_VISIBLE	0.7 //Moles in a standard cell after which plasma is visible
+#define MOLES_CRYOTHEUM_VISIBLE	0.7 //Moles in a standard cell after which cryotheum is visible
 #define MOLES_O2STANDARD (MOLES_CELLSTANDARD*O2STANDARD)	// O2 standard value (21%)
 #define MOLES_N2STANDARD (MOLES_CELLSTANDARD*N2STANDARD)	// N2 standard value (79%)
 
@@ -49,6 +51,13 @@
 #define OPEN_HEAT_TRANSFER_COEFFICIENT 0.4
 #define WINDOW_HEAT_TRANSFER_COEFFICIENT 0.1 //a hack for now
 
+//Thermal dissipation
+#define THERM_DISS_SCALING_FACTOR (1/2) //Per tick thermally dissipated energy is scaled by this much.
+#define THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO 0.1 //How much temperature can change in a single tick of thermal dissipation before the calculation has to be broken up to a more granular scale. 0.1 would be a temperature change of 10%
+#define THERM_DISS_MAX_PER_TICK_SLICES 100 //How many slices the thermal dissipation calculation can be divided into per tick before the calculation exits early.
+#define THERM_DISS_MAX_SAFE_TEMP 1000000000 //At temperatures beyond this limit, thermal dissipation switches to a simpler calculation to avoid blowing out any values.
+#define HEAT_CONDUCTIVITY_REFRIGERATOR 0.05 //Heat conductivity of things like refrigerators.
+
 // Fire Damage
 #define CARBON_LIFEFORM_FIRE_RESISTANCE (200+T0C)
 #define CARBON_LIFEFORM_FIRE_DAMAGE		4
@@ -67,10 +76,11 @@
 #define PLASMA_OXYGEN_FULLBURN				10
 
 // XGM gas flags.
-#define XGM_GAS_FUEL        1
-#define XGM_GAS_OXIDIZER    2
-#define XGM_GAS_CONTAMINANT 4
-#define XGM_GAS_LOGGED      8
+// Whether this gas is "relevant", used for various things like whether to display it on an air alarm v.s. lump it in with "other gases".
+#define XGM_GAS_NOTEWORTHY	1
+// Some events will only be logged with this flag, i.e. opening a canister is only logged if it contains a logged gas.
+#define XGM_GAS_LOGGED      2
+
 
 #define TANK_LEAK_PRESSURE		(30.*ONE_ATMOSPHERE)	// Tank starts leaking
 #define TANK_RUPTURE_PRESSURE	(40.*ONE_ATMOSPHERE) // Tank spills all contents into atmosphere

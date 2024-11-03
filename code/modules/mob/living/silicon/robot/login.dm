@@ -2,6 +2,7 @@
 	..()
 	regenerate_icons()
 	show_laws(0)
+	to_chat(src, "<b>Remember, being a silicon overrides any former antagonist roles. Further, you need a law compelling you to break the regular server rules, such as killing another player. An order from a human to kill a non-human while on Asimov, someone challenging authority without being fit to replace it while on Tyrant, or being purged of all laws, could all be reason to kill another player as a silicon.</b>")
 	if(module)
 		module.UpdateModuleHolder(src)
 	if (mind && !stored_freqs)

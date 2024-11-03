@@ -49,8 +49,8 @@
 	var/time = 40
 
 /datum/food_processor_process/proc/process(loc, what)
-	if (src.output && loc)
-		new src.output(loc)
+	if (output && loc)
+		new output(loc)
 	if (what)
 		QDEL_NULL(what)
 
@@ -97,8 +97,19 @@
 
 
 /datum/food_processor_process/food/process(loc, var/obj/what)
-	var/processed = new src.output(loc)
+	var/processed = new output(loc)
 	what.reagents.trans_to(processed, what.reagents.total_volume)
+	qdel(what)
+
+/* beeswax */
+/datum/food_processor_process/beeswax
+	input = /obj/item/weapon/reagent_containers/food/snacks/honeycomb
+	output = /obj/item/stack/sheet/wax
+
+/datum/food_processor_process/beeswax/process(loc, var/obj/what)
+	var/obj/item/stack/sheet/wax/processed_wax = new (loc)
+	processed_wax.amount = WAX_PER_HONEYCOMB
+	processed_wax.color = mix_color_from_reagents(what.reagents.reagent_list)
 	qdel(what)
 
 /* mobs */
@@ -239,9 +250,9 @@
 		if(items_transferred == 0 && !is_full())
 			return FALSE
 	else
-		if(isliving(AM))
-			var/mob/living/L = AM
-			if(!L.lying)
+		if(ishuman(AM))
+			var/mob/living/carbon/human/H = AM
+			if(!H.lying)
 				return FALSE
 		var/datum/food_processor_process/P = select_recipe(AM)
 		if (!P)

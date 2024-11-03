@@ -8,6 +8,10 @@
 	plane = ABOVE_HUMAN_PLANE
 	var/ctype = 1
 	var/holo = FALSE
+	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
+
 
 /obj/structure/curtain/closed/left
 	ctype = 2

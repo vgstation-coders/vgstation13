@@ -118,6 +118,8 @@
 	fire_sound = 'sound/weapons/ebow.ogg'
 	projectile_type = "/obj/item/projectile/energy/bolt"
 	cell_type = "/obj/item/weapon/cell/crap"
+	rechargeable = FALSE
+	non_rechargeable_reason = "<span class='notice'>Your gun's recharge port was removed to make room for a miniaturized reactor.</span>"
 	var/charge_tick = 0
 
 /obj/item/weapon/gun/energy/crossbow/isHandgun()
@@ -182,6 +184,7 @@
 	desc = "An experimental energy shotgun from Alcatraz IV. It has two modes that fire experimental stun electrodes codenamed HUNTER and SWEEPER."
 	icon_state = "eshotgun"
 	item_state = "shotgun"
+	slot_flags = SLOT_BACK
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2"
 	projectile_type = "/obj/item/projectile/energy/electrode/fast"

@@ -15,11 +15,11 @@
 	)
 
 /datum/component/ai/targetting_handler/initialize()
-	parent.register_event(/event/comp_ai_cmd_evaluate_target, src, src::evaluate_target())
+	parent.register_event(/event/comp_ai_cmd_evaluate_target, src, nameof(src::evaluate_target()))
 	return TRUE
 
 /datum/component/ai/targetting_handler/Destroy()
-	parent.unregister_event(/event/comp_ai_cmd_evaluate_target, src, src::evaluate_target())
+	parent.unregister_event(/event/comp_ai_cmd_evaluate_target, src, nameof(src::evaluate_target()))
 	..()
 
 //Center mass.

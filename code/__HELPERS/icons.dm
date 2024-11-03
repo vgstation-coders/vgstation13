@@ -169,6 +169,25 @@
 	else
 		return FALSE
 
+///Checks if the given iconstate exists in the given file, caching the result. Setting scream to TRUE will print a stack trace ONCE.
+/proc/icon_exists(file, state, scream)
+	var/static/list/icon_states_cache = list()
+	if(icon_states_cache[file]?[state])
+		return TRUE
+	if(icon_states_cache[file]?[state] == FALSE)
+		return FALSE
+	var/list/states = icon_states(file)
+	if(!icon_states_cache[file])
+		icon_states_cache[file] = list()
+	if(state in states)
+		icon_states_cache[file][state] = TRUE
+		return TRUE
+	else
+		icon_states_cache[file][state] = FALSE
+		if(scream)
+			stack_trace("Icon Lookup for state: [state] in file [file] failed.")
+		return FALSE
+
 //returns the number of direction a given icon_state has, or 0 if it's not 1, 4 or 8 (such as in the case of an animated state)
 //should be accurate most of the time, but no guarrantees
 /proc/get_icon_dir_count(icon, icon_state)
@@ -182,3 +201,12 @@
 	if (findtextEx(haystack, "iVBORw0KGgoAAAANSUhEUgAAACAAAABg"))
 		return 8
 	return 0 //unknown pattern, most likely something animated, oh well. be sure to account for that in your proc call.
+
+//clamps the HSV brightness of an RGB color to [lower, upper]
+/proc/ColorVClamp(var/rgb, var/lower = 0, var/upper = 255)
+	var/list/hsv_list = ReadHSV(RGBtoHSV(rgb))
+	hsv_list[3] = clamp(hsv_list[3], lower, upper)
+	if (hsv_list.len == 4)
+		return HSVtoRGB(hsv(hsv_list[1], hsv_list[2], hsv_list[3], hsv_list[4]))
+	return HSVtoRGB(hsv(hsv_list[1], hsv_list[2], hsv_list[3]))
+

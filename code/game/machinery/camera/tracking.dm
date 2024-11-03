@@ -1,3 +1,6 @@
+/mob/living/silicon/ai
+	var/atom/movable/currently_tracking = null
+
 /mob/living/silicon/ai/proc/get_camera_list()
 
 
@@ -111,7 +114,7 @@
 		return
 	spawn(0)
 		if(!can_track_atom(target))
-			to_chat(src, "Target is not near any active cameras.")
+			to_chat(src, "Target is not trackable by any means.")
 			return
 		var/obj/machinery/door/airlock/tobeopened
 		var/dist = -1
@@ -143,7 +146,7 @@
 		return
 
 /mob/living/silicon/ai/proc/can_track_atom(var/atom/target)
-	if(target == src)
+	if(!target || target.gcDestroyed || target == src)
 		return FALSE
 
 	var/turf/T = get_turf(target)
@@ -156,45 +159,71 @@
 		return FALSE
 
 	if(ismob(target))
-		var/mob/M = target
-		if(!can_mind_interact(M.mind))
+		var/mob/target_mob = target
+		if(target_mob.digitalcamo)
 			return FALSE
-		if(istype(target.loc, /obj/effect/dummy))
-			return FALSE
+		for(var/obj/item/I in target_mob.get_all_slots())
+			if(I.blocks_tracking)
+				return FALSE
+			if(target_mob.is_wearing_item(I,slot_wear_id))
+				var/obj/item/ourID = I.GetID()
+				if(ourID && ourID.blocks_tracking)
+					return FALSE
+
+	if(isalien(target))
+		return FALSE
+
+	if(istype(target.loc, /obj/effect/dummy))
+		return FALSE
 
 	if(!near_camera(target))
 		return FALSE
 
 	return TRUE
 
-/mob/living/silicon/ai/proc/ai_actual_track(var/atom/target)
-	if(!istype(target))
+/mob/living/silicon/ai/proc/ai_actual_track(var/atom/movable/target)
+	if(!istype(target) || !eyeobj)
 		return
 
 	if(!can_track_atom(target))
-		to_chat(src, "Target is not near any active camera.")
+		to_chat(src, "Target is not trackable by any means.")
 		return
 
-	cameraFollow = target
+	stop_ai_tracking()
+	currently_tracking = target
+	eyeobj.forceMove(get_turf(currently_tracking))
+	currently_tracking.lock_atom(eyeobj,/datum/locking_category/ai_eye)
 
-	to_chat(src, "Now tracking [target.name] on camera.")
+	currently_tracking.register_event(/event/after_move,src,nameof(src::on_camera_change()))
+	currently_tracking.register_event(/event/destroyed,src,nameof(src::stop_ai_tracking()))
+	currently_tracking.register_event(/event/equipped,src,nameof(src::on_camera_change()))
+	currently_tracking.register_event(/event/unequipped,src,nameof(src::on_camera_change()))
+	currently_tracking.register_event(/event/camera_sight_changed,src,nameof(src::on_camera_change()))
+	to_chat(src, "Now tracking [currently_tracking.name] on camera.")
 
-	spawn (0)
-		while (cameraFollow == target)
-			if (cameraFollow == null)
-				return
+/datum/locking_category/ai_eye
 
-			if(!can_track_atom(target))
-				to_chat(src, "Target is not near any active camera.")
-				sleep(10 SECONDS)
-				continue
+/mob/living/silicon/ai/proc/on_camera_change()
+	if(eyeobj && currently_tracking)
+		var/cantrack = can_track_atom(currently_tracking)
+		if(!eyeobj.locked_to && cantrack)
+			to_chat(src, "Target is trackable again.")
+			currently_tracking.lock_atom(eyeobj,/datum/locking_category/ai_eye)
+		else if(!cantrack && eyeobj.locked_to == currently_tracking)
+			to_chat(src, "Target is no longer trackable.")
+			eyeobj.unlock_from()
 
-			if(eyeobj)
-				eyeobj.forceMove(get_turf(target))
-			else
-				view_core()
-				return
-			sleep(1 SECONDS)
+/mob/living/silicon/ai/proc/stop_ai_tracking()
+	if(currently_tracking)
+		to_chat(src, "No longer tracking [currently_tracking.name] on camera.")
+		currently_tracking.unregister_event(/event/after_move,src,nameof(src::on_camera_change()))
+		currently_tracking.unregister_event(/event/destroyed,src,nameof(src::stop_ai_tracking()))
+		currently_tracking.unregister_event(/event/equipped,src,nameof(src::on_camera_change()))
+		currently_tracking.unregister_event(/event/unequipped,src,nameof(src::on_camera_change()))
+		currently_tracking.unregister_event(/event/camera_sight_changed,src,nameof(src::on_camera_change()))
+		if(eyeobj?.locked_to == currently_tracking)
+			eyeobj.unlock_from()
+		currently_tracking = null
 
 /proc/near_camera(var/mob/living/M)
 	if (!isturf(M.loc))

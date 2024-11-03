@@ -2,7 +2,8 @@
 	var/preattached = FALSE
 	body_parts_covered = HEAD|EARS|EYES|MASKHEADHAIR
 	species_fit = list()
-	autoignition_temperature = AUTOIGNITION_PROTECTIVE
+	flammable = FALSE
+
 	on_armory_manifest = TRUE
 
 /obj/item/clothing/head/helmet/tactical/New()

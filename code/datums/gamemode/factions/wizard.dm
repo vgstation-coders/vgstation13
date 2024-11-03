@@ -30,19 +30,6 @@
 	AppendObjective(O)
 	..()
 
-/datum/faction/wizard/civilwar/process()
-	..()
-	var/anywiz = FALSE
-	var/converts = FALSE
-	for(var/datum/role/R in members)
-		if(istype(R,/datum/role/wizard_convert))
-			converts = TRUE // still converts in the game
-		if(istype(R,/datum/role/wizard) && R.antag.current && !R.antag.current.stat)
-			anywiz = TRUE //If one wizard is still not incapacitated
-	if(!anywiz && converts)
-		for(var/datum/role/wizard_convert/WC in members)
-			WC.Drop()
-
 /datum/faction/wizard/civilwar/wpf
 	name = "The Wizardly Peoples' Front"
 	desc = "The WPF are a faction within the Wizard Federation. The only people they hate more than Nanotrasen are the Peoples' Front for Wizards."

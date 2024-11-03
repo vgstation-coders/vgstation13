@@ -1,7 +1,7 @@
 import { createSearch, decodeHtmlEntities } from 'common/string';
 import { useBackend, useLocalState } from '../backend';
 import { Box, Button, Flex, Input, Section, Table, Tabs, NoticeBox, Icon } from '../components';
-import { formatMoney } from '../format';
+import { formatMoneyWithDiscount } from '../format';
 import { Window } from '../layouts';
 
 const MAX_SEARCH_RESULTS = 25;
@@ -63,7 +63,7 @@ export const GenericUplink = (props, context) => {
         <Box
           inline
           color={currencyAmount > 0 ? 'good' : 'bad'}>
-          {formatMoney(currencyAmount)} {currencySymbol}
+          {formatMoneyWithDiscount(currencyAmount)} {currencySymbol}
         </Box>
       )}
       buttons={(
@@ -162,7 +162,7 @@ const ItemList = (props, context) => {
             <Table.Cell collapsing textAlign="right">
               <Button
                 fluid
-                content={formatMoney(item.cost) + ' ' + currencySymbol}
+                content={formatMoneyWithDiscount(item.cost, item.base_cost) + ' ' + currencySymbol}
                 disabled={item.disabled}
                 tooltip={item.desc}
                 tooltipPosition="left"
@@ -184,7 +184,7 @@ const ItemList = (props, context) => {
       level={2}
       buttons={(
         <Button
-          content={item.cost + ' ' + currencySymbol}
+          content={formatMoneyWithDiscount(item.cost, item.base_cost) + ' ' + currencySymbol}
           disabled={item.disabled}
           onmouseover={() => setHoveredItem(item)}
           onmouseout={() => setHoveredItem({})}

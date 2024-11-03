@@ -7,6 +7,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi')
 	throwforce = 10
 	w_class = W_CLASS_LARGE
+	w_type = RECYK_METAL
 	attack_verb = list("bashed")
 	flags = TWOHANDABLE | MUSTTWOHAND | FPRINT
 	starting_materials = list(MAT_URANIUM = 10000, MAT_GOLD = 10000, MAT_SILVER = 10000, MAT_PLASMA = 10000)

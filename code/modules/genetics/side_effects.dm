@@ -21,7 +21,7 @@
 	duration = 30 SECONDS
 
 /datum/genetics/side_effect/genetic_burn/start(mob/living/carbon/human/H)
-	H.emote("me", 1, "starts turning very red..")
+	H.emote("me", 1, "starts turning very red.")
 
 /datum/genetics/side_effect/genetic_burn/finish(mob/living/carbon/human/H)
 	if(!H.reagents.has_reagent(DEXALIN))

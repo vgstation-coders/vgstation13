@@ -281,6 +281,14 @@
 /obj/machinery/computer/telecomms/traffic/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
 	return ..()
 
+/obj/machinery/computer/telecomms/traffic/kick_act(mob/user)
+	..()
+	if(auth)
+		if(prob(50))
+			auth.forceMove(get_turf(src))
+			visible_message("<span class='notice'>\A [auth] pops out of \the [src]!</span>")
+			auth = null
+
 /obj/machinery/computer/telecomms/traffic/emag_act(mob/user)
 	if(!emagged)
 		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)

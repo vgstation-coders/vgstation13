@@ -347,8 +347,8 @@ if ungreased adult: l containers
 /mob/living/simple_animal/hostile/spacehog/adult/greased/over/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	//Before departing
 	var/turf/simulated/T = loc
-	if(istype(loc) && !T.is_wet())
-		new /obj/effect/overlay/puddle(loc, TURF_WET_LUBE, 5 SECONDS) //leave 5 seconds of lube behind
+	if(istype(T) && !T.is_wet())
+		new /obj/effect/overlay/puddle(T, TURF_WET_LUBE, 5 SECONDS) //leave 5 seconds of lube behind
 	..() //move on
 
 /mob/living/simple_animal/hostile/spacehog/piglet

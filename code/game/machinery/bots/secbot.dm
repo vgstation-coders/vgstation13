@@ -16,7 +16,6 @@
 	req_one_access = list(access_security, access_forensics_lockers)
 	control_filter = RADIO_SECBOT
 	var/check_records = 1
-//	var/emagged = 0 //Emagged Secbots view everyone as a criminal
 
 	var/idcheck = 0 //If true, arrest people with no IDs
 	var/weaponscheck = 0 //If true, arrest people for weapons if they lack access	var/check_records = 1 //Does it check security records?
@@ -38,7 +37,6 @@
 		/obj/item/weapon/gun/energy/tag,
 		/obj/item/weapon/gun/energy/laser/practice,
 		/obj/item/weapon/gun/hookshot,
-		/obj/item/weapon/gun/energy/floragun,
 		/obj/item/weapon/melee/defibrillator
 		)
 
@@ -348,7 +346,7 @@ Auto Patrol: []"},
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/wizrobe))
 			threatcount += PERP_LEVEL_ARREST/2
 
-		if(perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
+		if(!isjusthuman(perp))
 			threatcount += PERP_LEVEL_ARREST/2
 		var/visible_id = perp.get_visible_id()
 		if(!visible_id)
@@ -381,7 +379,7 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/secbot/proc/speak(var/message)
 	visible_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"",\
-		drugged_message="<span class='game say'><span class='name'>[src]</span> beeps, \"[pick("Wait! Let's be friends!","Wait for me!","You're so cool!","Who's your favourite pony?","I-It's not like I like you or anything...","Wanna see a magic trick?","Let's go have fun, assistant-kun~")]\"")
+		drugged_message="<span class='game say'><span class='name'>[src]</span> beeps, \"[pick("Wait! Let's be friends!","Wait for me!","You're so cool!","I-It's not like I like you or anything...","Wanna see a magic trick?","Let's go have fun, assistant-kun~")]\"")
 	return
 
 /obj/machinery/bot/secbot/explode()
@@ -417,20 +415,11 @@ Auto Patrol: []"},
 //Secbot Construction
 
 /obj/item/clothing/head/helmet/tactical/sec/attackby(var/obj/item/device/assembly/signaler/S, mob/user as mob)
-	..()
 	if(!issignaler(S))
 		..()
 		return
-
 	if(S.secured)
-		qdel(S)
-		var/obj/item/weapon/secbot_assembly/A = new /obj/item/weapon/secbot_assembly
-		user.put_in_hands(A)
-		to_chat(user, "You add the signaler to the helmet.")
-		user.drop_from_inventory(src)
-		qdel(src)
-	else
-		return
+		user.create_in_hands(src, /obj/item/weapon/secbot_assembly, S, msg = "You add the signaler to \the [src].")
 
 /obj/item/weapon/secbot_assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -588,14 +577,8 @@ Auto Patrol: []"},
 	..()
 	if(!issignaler(S))
 		return
-
 	if(S.secured)
-		qdel(S)
-		var/obj/item/weapon/secbot_assembly/cheapsky/A = new /obj/item/weapon/secbot_assembly/cheapsky
-		user.put_in_hands(A)
-		to_chat(user, "You add the signaler to \the [src].")
-		user.drop_from_inventory(src)
-		qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/secbot_assembly/cheapsky, S, msg = "You add the signaler to \the [src].")
 
 /obj/item/weapon/secbot_assembly/cheapsky/attackby(obj/item/weapon/W, mob/user)
 	if(W.sharpness && W.sharpness_flags & SHARP_BLADE && (!src.build_step))
@@ -678,14 +661,8 @@ Auto Patrol: []"},
 	..()
 	if(!issignaler(S))
 		return
-
 	if(S.secured)
-		qdel(S)
-		var/obj/item/weapon/secbot_assembly/britsky/A = new /obj/item/weapon/secbot_assembly/britsky
-		user.put_in_hands(A)
-		to_chat(user, "You add the signaler to \the [src]!")
-		user.drop_from_inventory(src)
-		qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/secbot_assembly/britsky, S, msg = "You add the signaler to \the [src].")
 
 /obj/item/weapon/secbot_assembly/britsky/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()

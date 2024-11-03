@@ -1,39 +1,52 @@
+/mob/dead
+	var/appearance_backup //so they recover their original appearance when de-cultified
+
 /mob/dead/dust()	//ghosts can't be vaporised.
 	return
 
 /mob/dead/gib()		//ghosts can't be gibbed.
 	return
 
-/mob/dead/cultify()
-	if(invisibility != 0 || icon_state != "ghost-narsie")
+/mob/dead/cultify(var/obj/machinery/singularity/narsie/N)
+	if (N)//cultified by Nar-Sie
+		if(iscultist(src) && client && !isantagbanned(src) && !jobban_isbanned(src, CULTIST))
+			var/mob/living/simple_animal/construct/harvester/perfect/new_body = new (loc)
+			new_body.name = "[mind.name] the Harvester"
+			new_body.real_name = mind.name
+			mind.transfer_to(new_body)
+			new_body.key = mind.key
+			new_body.DisplayUI("Cultist")
+			return
+	if(invisibility != 0)
+		appearance_backup = appearance
 		icon = 'icons/mob/mob.dmi'
 		icon_state = "ghost-narsie"
 		overlays = 0
 		if(mind && mind.current)
 			if(istype(mind.current, /mob/living/carbon/human/))	//dressing our ghost with a few items that he was wearing just before dying
 				var/mob/living/carbon/human/H = mind.current	//note that ghosts of players that died more than a few seconds before meeting nar-sie won't have any of these overlays
-				/*overlays += H.overlays_standing[6]//ID
-				overlays += H.overlays_standing[9]//Ears
-				overlays += H.overlays_standing[10]//Suit
-				overlays += H.overlays_standing[11]//Glasses
-				overlays += H.overlays_standing[12]//Belt
-				overlays += H.overlays_standing[14]//Back
-				overlays += H.overlays_standing[18]//Head
-				overlays += H.overlays_standing[19]//Handcuffs
-				*/
 				//instead of just adding an overlay of the body's uniform and suit, we'll first process them a bit so the leg part is mostly erased, for a ghostly look.
 				overlays += crop_human_suit_and_uniform(mind.current)
-				overlays += H.obj_overlays[ID_LAYER]
-				overlays += H.obj_overlays[EARS_LAYER]
-				overlays += H.obj_overlays[GLASSES_LAYER]
-				overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
-				overlays += H.obj_overlays[BELT_LAYER]
-				overlays += H.obj_overlays[BACK_LAYER]
-				overlays += H.obj_overlays[HEAD_LAYER]
-				overlays += H.obj_overlays[HANDCUFF_LAYER]
+				overlays += H.overlays_standing[ID_LAYER]
+				overlays += H.overlays_standing[EARS_LAYER]
+				overlays += H.overlays_standing[GLASSES_LAYER]
+				overlays += H.overlays_standing[GLASSES_OVER_HAIR_LAYER]
+				overlays += H.overlays_standing[BELT_LAYER]
+				overlays += H.overlays_standing[BACK_LAYER]
+				overlays += H.overlays_standing[HEAD_LAYER]
+				overlays += H.overlays_standing[HANDCUFF_LAYER]
 		invisibility = 0
+		alpha = 0
+		animate(src, alpha = 127, time = 0.5 SECONDS)
 		//to_chat(src, "<span class='sinister'>Even as a non-corporal being, you can feel Nar-Sie's presence altering you. You are now visible to everyone.</span>")
 		flick("rune_seer",src)
+
+/mob/dead/proc/decultify()
+	if(invisibility == 0)
+		invisibility = 60
+		anim(target = loc, a_icon = 'icons/effects/160x160.dmi', flick_anim = "incense", offX = -WORLD_ICON_SIZE*2+pixel_x, offY = -WORLD_ICON_SIZE*2+pixel_y)
+		if (appearance_backup)
+			appearance = appearance_backup
 
 /mob/dead/update_canmove()
 	return

@@ -13,6 +13,7 @@
 	cooldown_min = 30
 
 	hud_state = "ice_barrage"
+	valid_targets = list(/mob/living)
 
 /spell/targeted/ice_barrage/cast(var/list/targets, mob/user)
 	..()

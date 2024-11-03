@@ -20,7 +20,7 @@
 
 /obj/item/device/assembly/read_write
 	name = "write/read circuit"
-	desc = "A small circuit intended for use in assembly frames. It can be connected to two assemblies: READ and WRITE. ."
+	desc = "A small circuit intended for use in assembly frames. It can be connected to two assemblies: READ and WRITE."
 
 	icon_state = "circuit_write"
 

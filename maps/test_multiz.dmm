@@ -50,16 +50,13 @@
 /area)
 "al" = (
 /obj/machinery/atmospherics/unary/portables_connector{
-	dir = 2;
 	name = "Connector Port (Air Supply)"
 	},
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /turf/simulated/floor/plating,
 /area/crew_quarters/bar)
 "am" = (
-/obj/machinery/atmospherics/unary/cold_sink/freezer{
-	dir = 2
-	},
+/obj/machinery/atmospherics/unary/cold_sink/freezer,
 /turf/simulated/floor/plating,
 /area/crew_quarters/bar)
 "an" = (

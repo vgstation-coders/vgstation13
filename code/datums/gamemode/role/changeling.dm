@@ -23,6 +23,8 @@
 	var/geneticdamage = 0
 
 	powerpoints = 4	//evolve points
+	shows_spells = TRUE
+	spell_exclude = /spell/changeling/evolve
 
 	var/mimicing = ""
 	var/disease_immunity = 0 //If on, the changeling doesn't suffer any symptoms from diseases

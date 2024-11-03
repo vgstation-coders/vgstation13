@@ -94,20 +94,14 @@
 	pixel_x = -8
 	},
 /obj/item/device/assembly/signaler{
-	pixel_x = -4;
-	pixel_y = 0
+	pixel_x = -4
 	},
 /obj/item/device/assembly/prox_sensor{
-	pixel_x = 0;
 	pixel_y = 6
 	},
+/obj/item/device/assembly/signaler,
 /obj/item/device/assembly/signaler{
-	pixel_x = 0;
-	pixel_y = 0
-	},
-/obj/item/device/assembly/signaler{
-	pixel_x = 4;
-	pixel_y = 0
+	pixel_x = 4
 	},
 /obj/item/stack/cable_coil,
 /turf/simulated/floor/shuttle/brig,
@@ -145,7 +139,7 @@
 /area/vault/meteorlogical)
 "ax" = (
 /obj/machinery/computer/crew{
-	holomap_filter = HOLOMAP_FILTER_NUKEOPS;
+	holomap_filter = 4;
 	name = "Syndie crew monitoring computer"
 	},
 /turf/simulated/floor/shuttle/brig,
@@ -229,9 +223,7 @@
 /turf/simulated/floor/shuttle/brig,
 /area/vault/meteorlogical)
 "aM" = (
-/obj/item/weapon/beartrap{
-	armed = 1
-	},
+/obj/item/weapon/beartrap/armed,
 /turf/simulated/floor/shuttle/brig,
 /area/vault/meteorlogical)
 "aN" = (
@@ -353,7 +345,7 @@
 /turf/simulated/floor/wood,
 /area/vault/meteorlogical)
 "bc" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/vault/meteorlogical)
 "bd" = (
@@ -364,51 +356,7 @@
 	},
 /area/vault/meteorlogical)
 "be" = (
-/obj/structure/grille,
-/obj/structure/window/full,
-/obj/structure/window,
-/obj/structure/window{
-	dir = 8
-	},
-/obj/structure/window{
-	dir = 1
-	},
-/obj/structure/window{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/vault/meteorlogical)
-"bf" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating,
-/area/vault/meteorlogical)
-"bg" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating,
-/area/vault/meteorlogical)
-"bh" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/full,
 /turf/simulated/floor/plating,
 /area/vault/meteorlogical)
 "bi" = (
@@ -438,18 +386,7 @@
 /turf/unsimulated/floor/asteroid/plating,
 /area/vault/meteorlogical)
 "bo" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/vault/meteorlogical)
 "bp" = (
@@ -833,7 +770,7 @@ aN
 aS
 aX
 aV
-bf
+bo
 bn
 br
 bt
@@ -860,7 +797,7 @@ aN
 aT
 aI
 aV
-bg
+bo
 bn
 bn
 bn
@@ -887,7 +824,7 @@ aN
 aN
 aY
 aV
-bh
+bo
 bn
 bs
 bu

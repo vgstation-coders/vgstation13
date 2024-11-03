@@ -4,34 +4,34 @@
 	dir = 8
 	},
 /turf/unsimulated/mineral,
-/area/asteroid)
+/area/mining_surprise)
 "b" = (
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 1
 	},
 /turf/unsimulated/mineral,
-/area/asteroid)
+/area/mining_surprise)
 "c" = (
 /obj/machinery/door/unpowered/shuttle,
 /turf/simulated/floor/shuttle,
-/area/asteroid)
+/area/mining_surprise)
 "e" = (
 /obj/structure/flora/rock/pile,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "f" = (
 /obj/effect/decal/cleanable/soot,
 /obj/structure/boulder,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "g" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "j" = (
 /obj/effect/decal/cleanable/soot,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "k" = (
 /obj/item/device/radio/intercom{
 	dir = 4;
@@ -46,13 +46,13 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/shuttle,
-/area/asteroid)
+/area/mining_surprise)
 "m" = (
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "p" = (
 /turf/simulated/wall/shuttle,
-/area/asteroid)
+/area/mining_surprise)
 "q" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -66,7 +66,7 @@
 	},
 /obj/item/weapon/shard,
 /turf/simulated/floor/shuttle/plating,
-/area/asteroid)
+/area/mining_surprise)
 "u" = (
 /obj/machinery/media/receiver/boombox/wallmount/shuttle{
 	pixel_x = -32
@@ -80,45 +80,45 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/shuttle,
-/area/asteroid)
+/area/mining_surprise)
 "x" = (
 /obj/structure/shuttle/engine/propulsion/left,
 /obj/effect/decal/cleanable/soot,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "z" = (
 /obj/structure/shuttle/engine/propulsion/right,
 /obj/effect/decal/cleanable/soot,
 /turf/simulated/floor/plating,
-/area/asteroid)
+/area/mining_surprise)
 "C" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/storage/fancy/donut_box/empty,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "F" = (
 /turf/unsimulated/mineral,
-/area/asteroid)
+/area/mining_surprise)
 "G" = (
 /obj/effect/decal/cleanable/soot,
 /obj/effect/decal/cleanable/soot,
 /obj/item/stack/rods,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "J" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/stack/rods,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "R" = (
 /obj/item/device/flashlight/flare,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 "Y" = (
 /obj/structure/boulder,
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/asteroid,
-/area/asteroid)
+/area/mining_surprise)
 
 (1,1,1) = {"
 F

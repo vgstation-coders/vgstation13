@@ -150,7 +150,7 @@
 /obj/effect/landmark{
 	name = "endgame_exit"
 	},
-/obj/item/toy/gasha/cattoy,
+/obj/item/toy/plushie/cat,
 /obj/item/weapon/bedsheet/rainbow,
 /turf/unsimulated/beach/sand,
 /area/beach)

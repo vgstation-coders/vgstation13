@@ -47,14 +47,14 @@ var/list/mass_drivers = list()
 		return .
 
 	if(W.is_screwdriver(user))
-		to_chat(user, "You begin to unscrew the bolts off the [src]...")
+		to_chat(user, "You begin to unscrew the bolts off \the [src]...")
 		W.playtoolsound(src, 50)
 		if(do_after(user, src, 30))
 			var/obj/machinery/mass_driver_frame/F = new(get_turf(src))
 			F.dir = src.dir
 			F.anchored = 1
-			F.build = 4
-			F.update_icon()
+			F.construct.index = 1
+			F.icon_state = "mass_driver_b4"
 			qdel(src)
 		return 1
 
@@ -126,117 +126,15 @@ var/list/mass_drivers = list()
 	icon_state = "mass_driver_b0"
 	density = 0
 	anchored = 0
-	var/build = 0
+	var/datum/construction/reversible/construct
 
-/obj/machinery/mass_driver_frame/proc/check_competition(var/turf/T = get_turf(src))
-	var/competition_found = 0
-	for(var/obj/machinery/M in T)
-		if(M == src)
-			continue
-		if(istype(M, /obj/machinery/mass_driver_frame) || istype(M, /obj/machinery/mass_driver))
-			competition_found=1
-			break
+/obj/machinery/mass_driver_frame/New()
+	. = ..()
+	construct = new /datum/construction/reversible/mass_driver(src)
 
-	return competition_found
-
-/obj/machinery/mass_driver_frame/attackby(var/obj/item/W as obj, var/mob/user as mob)
-	switch(build)
-		if(0) // Loose frame
-			if(iswelder(W))
-				var/obj/item/tool/weldingtool/WT = W
-				to_chat(user, "You begin to cut the frame apart...")
-				if(WT.do_weld(user, src, 30) && (build == 0))
-					to_chat(user, "<span class='notice'>You detach the plasteel sheets from each others.</span>")
-					new /obj/item/stack/sheet/plasteel(get_turf(src),3)
-					qdel(src)
-				return 1
-			if(W.is_wrench(user))
-				if(check_competition())
-					to_chat(user, "<span class = 'notice'>You can't anchor \the [src], as there's a mass driver in that location already.</span>")
-					return
-				to_chat(user, "You begin to anchor \the [src] on the floor.")
-				W.playtoolsound(src, 50)
-				if(do_after(user, src, 10) && (build == 0))
-					to_chat(user, "<span class='notice'>You anchor \the [src]!</span>")
-					anchored = 1
-					build++
-					update_icon()
-				return 1
-		if(1) // Fixed to the floor
-			if(W.is_wrench(user))
-				to_chat(user, "You begin to de-anchor \the [src] from the floor.")
-				W.playtoolsound(src, 50)
-				if(do_after(user, src, 10) && (build == 1))
-					build--
-					update_icon()
-					anchored = 0
-					to_chat(user, "<span class='notice'>You de-anchored \the [src]!</span>")
-				return 1
-			if(iswelder(W))
-				var/obj/item/tool/weldingtool/WT = W
-				to_chat(user, "You begin to weld \the [src] to the floor...")
-				if(WT.do_weld(user, src, 40) && (build == 1))
-					to_chat(user, "<span class='notice'>You welded \the [src] to the floor.</span>")
-					build++
-					update_icon()
-				return 1
-		if(2) // Welded to the floor
-			if(iswelder(W))
-				var/obj/item/tool/weldingtool/WT = W
-				to_chat(user, "You begin to unweld \the [src] to the floor...")
-				if(WT.do_weld(user, src, 40) && (build == 2))
-					to_chat(user, "<span class='notice'>You unwelded \the [src] to the floor.</span>")
-					build--
-					update_icon()
-			if(istype(W, /obj/item/stack/cable_coil))
-				var/obj/item/stack/cable_coil/C=W
-				to_chat(user, "You start adding cables to \the [src]...")
-				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-				if(do_after(user, src, 20) && (C.amount >= 3) && (build == 2))
-					C.use(3)
-					to_chat(user, "<span class='notice'>You've added cables to \the [src].</span>")
-					build++
-					update_icon()
-		if(3) // Wired
-			if(W.is_wirecutter(user))
-				to_chat(user, "You begin to remove the wiring from \the [src].")
-				if(do_after(user, src, 10) && (build == 3))
-					new /obj/item/stack/cable_coil(loc,3)
-					W.playtoolsound(src, 50)
-					to_chat(user, "<span class='notice'>You've removed the cables from \the [src].</span>")
-					build--
-					update_icon()
-				return 1
-			if(istype(W, /obj/item/stack/rods))
-				var/obj/item/stack/rods/R=W
-				to_chat(user, "You begin to complete \the [src]...")
-				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-				if(do_after(user, src, 20) && (R.amount >= 3) && (build == 3))
-					R.use(3)
-					to_chat(user, "<span class='notice'>You've added the grille to \the [src].</span>")
-					build++
-					update_icon()
-				return 1
-		if(4) // Grille in place
-			if(iscrowbar(W))
-				to_chat(user, "You begin to pry off the grille from \the [src]...")
-				W.playtoolsound(src, 50)
-				if(do_after(user, src, 30) && (build == 4))
-					new /obj/item/stack/rods(loc,2)
-					build--
-					update_icon()
-				return 1
-			if(W.is_screwdriver(user))
-				to_chat(user, "You finalize the Mass Driver...")
-				W.playtoolsound(src, 50)
-				var/obj/machinery/mass_driver/M = new(get_turf(src))
-				M.dir = src.dir
-				qdel(src)
-				return 1
-	..()
-
-/obj/machinery/mass_driver_frame/update_icon()
-	icon_state = "mass_driver_b[build]"
+/obj/machinery/mass_driver_frame/attackby(var/obj/item/W, var/mob/user)
+	if(!construct || !construct.action(W, user))
+		..()
 
 /obj/machinery/mass_driver_frame/verb/rotate()
 	set category = "Object"
@@ -248,3 +146,103 @@ var/list/mass_drivers = list()
 
 	src.dir = turn(src.dir, -90)
 	return
+
+/datum/construction/reversible/mass_driver
+	result = /obj/machinery/mass_driver
+	decon = list(/obj/item/stack/sheet/plasteel = 3)
+	steps = list(
+				//5
+				list(
+					Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
+						Co_VIS_MSG = "<span class = 'notice'>{USER} finalize{s} {HOLDER}.</span>"),
+					Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
+						Co_START_MSG = "{USER} begin{s} to pry off the grille from {HOLDER}.",
+						Co_VIS_MSG = "<span class = 'notice'>{USER} pr{ies} off the grille from {HOLDER}.</span>",
+						Co_DELAY = 10),
+					),
+				//4
+				list(
+					Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/rods,
+						Co_START_MSG = "{USER} begin{s} to complete {HOLDER}.",
+						Co_VIS_MSG = "<span class = 'notice'>{USER} add{s} a grille to {HOLDER}.</span>",
+						Co_START_SOUND = 'sound/items/Deconstruct.ogg',
+						Co_DELAY = 20,
+						Co_AMOUNT = 3),
+					Co_BACKSTEP = list(Co_KEY="is_wirecutter",
+						Co_START_MSG = "{USER} begin{s} to remove wiring from {HOLDER}.",
+						Co_VIS_MSG = "<span class = 'notice'>{USER} remove{s} cables from {HOLDER}.</span>",
+						Co_DELAY = 10),
+					),
+				//3
+				list(
+					Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/cable_coil,
+						Co_START_MSG = "{USER} start{s} adding cables to {HOLDER}.",
+						Co_VIS_MSG = "<span class = 'notice'>{USER} add{s} cables to {HOLDER}.</span>",
+						Co_DELAY = 20,
+						Co_AMOUNT = 3),
+					Co_BACKSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
+						Co_START_MSG = "{USER} begin{s} to un-weld {HOLDER} from the floor.",
+						Co_VIS_MSG = "<span class = 'notice'>{USER} un-weld{s} {HOLDER} from the floor.</span>",
+						Co_AMOUNT = 1,
+						Co_DELAY = 40),
+					),
+				//2
+				list(
+					Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
+						Co_START_MSG = "{USER} begin{s} to weld {HOLDER} to the floor.",
+						Co_VIS_MSG = "<span class = 'notice'>{USER} weld{s} {HOLDER} to the floor.</span>",
+						Co_AMOUNT = 1,
+						Co_DELAY = 40),
+					Co_BACKSTEP = list(Co_KEY="is_wrench",
+						Co_START_MSG = "{USER} begin{s} to de-anchor {HOLDER} from the floor.",
+						Co_VIS_MSG = "<span class = 'notice'>{USER} de-anchor{s} {HOLDER} from the floor.</span>",
+						Co_DELAY = 10),
+					),
+				//1
+				list(
+					Co_NEXTSTEP = list(Co_KEY="is_wrench",
+						Co_START_MSG = "{USER} begin{s} to anchor {HOLDER} on the floor.",
+						Co_VIS_MSG = "<span class = 'notice'>{USER} anchor{s} {HOLDER} to the floor.</span>",
+						Co_DELAY = 50),
+					Co_BACKSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
+						Co_START_MSG = "{USER} begin{s} to cut {HOLDER} apart...",
+						Co_VIS_MSG = "<span class = 'notice'>{USER} detach{es} the plasteel sheets from each other.</span>",
+						Co_AMOUNT = 1,
+						Co_DELAY = 30),
+					),
+				)
+
+/datum/construction/reversible/mass_driver/update_icon(index as num)
+	holder.icon_state = "mass_driver_b[steps.len-index]"
+
+/datum/construction/reversible/mass_driver/action(atom/used_atom,mob/user)
+	return check_step(used_atom,user)
+
+/datum/construction/reversible/mass_driver/update_index(diff, mob/user)
+	. = ..()
+	if(ismovable(holder))
+		var/atom/movable/M = holder
+		M.anchored = index < 5
+
+/datum/construction/reversible/mass_driver/check_step(atom/used_atom, mob/user)
+	if(index == 5)
+		var/turf/T = get_turf(holder)
+		if(!T)
+			return 0
+		for(var/obj/machinery/M in T)
+			if(M == holder)
+				continue
+			if(istype(M, /obj/machinery/mass_driver_frame) || istype(M, /obj/machinery/mass_driver))
+				to_chat(user, "<span class = 'notice'>You can't anchor \the [holder], as there's a mass driver in that location already.</span>")
+				return 0
+	return ..()
+
+/datum/construction/reversible/mass_driver/spawn_result(mob/user as mob)
+	if(result)
+//		testing("[user] finished a [result]!")
+		var/atom/R = new result(get_turf(holder))
+		R.dir = holder.dir
+		spawn()
+			QDEL_NULL (holder)
+
+	feedback_inc("mass_driver_created",1)

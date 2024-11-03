@@ -27,11 +27,11 @@
 	for(var/emoji in emoji_list)
 		parsed = replacetext(parsed, ":" + emoji + ":", "<img src='emoji-[emoji].png'>")
 
-	if(ooc_mode)
+	/*if(ooc_mode)
 		//entering cursed regex zone
 		var/regex/emoji_path_regex = new(@"(:(/[^:]*):)")
 		while(emoji_path_regex.Find(parsed))
-			parsed = emoji_path_regex.Replace(parsed, /proc/validate_emoji_path)
+			parsed = emoji_path_regex.Replace(parsed, /proc/validate_emoji_path)*/
 
 	return parsed
 

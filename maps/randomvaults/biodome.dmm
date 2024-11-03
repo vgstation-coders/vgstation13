@@ -505,7 +505,6 @@
 	},
 /obj/machinery/power/apc{
 	dir = 1;
-	pixel_x = 0;
 	pixel_y = 24
 	},
 /turf/simulated/floor,
@@ -516,12 +515,6 @@
 /area/vault/biodome)
 "bA" = (
 /obj/structure/flora/ausbushes/palebush,
-/turf/simulated/floor/grass,
-/area/vault/biodome)
-"bB" = (
-/obj/structure/window/reinforced{
-	dir = 2
-	},
 /turf/simulated/floor/grass,
 /area/vault/biodome)
 "bC" = (
@@ -951,7 +944,7 @@ am
 am
 am
 am
-bB
+aJ
 bD
 bH
 ak

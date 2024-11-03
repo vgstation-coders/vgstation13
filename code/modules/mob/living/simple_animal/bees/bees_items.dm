@@ -145,7 +145,7 @@
 	if (!caught_bees.len)
 		current_species = null
 
-/obj/item/weapon/bee_net/attack_self(mob/user as mob)
+/obj/item/weapon/bee_net/attack_self(var/mob/user)
 	empty_bees()
 
 /obj/item/weapon/bee_net/verb/empty_bees()
@@ -192,13 +192,42 @@
 
 
 /obj/item/apiary
-	name = "moveable apiary"
+	name = "apiary kit"
 	icon = 'icons/obj/apiary_bees_etc.dmi'
 	icon_state = "apiary_item"
-	item_state = "giftbag"
+	item_state = "apiary"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/beekeeping.dmi', "right_hand" = 'icons/mob/in-hand/right/beekeeping.dmi')
 	w_class = W_CLASS_HUGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
+	throwforce = 5
 	var/buildtype = /obj/machinery/apiary
 
+/obj/item/apiary/attack_self(var/mob/user)
+	to_chat(user, "<span class='warning'>You must build this kit on an empty and adjacent floor.</span>")
+
+/obj/item/apiary/afterattack(var/atom/A, var/mob/living/user, var/proximity_flag, var/click_parameters)
+	if(!proximity_flag)
+		to_chat(user, "<span class='warning'>You must build this kit on an empty and adjacent floor.</span>")
+		return
+	if (!isturf(A))
+		return
+	var/turf/T = A
+	if(!T.density && !T.has_dense_content())
+		build_apiary(user, T)
+
+/obj/item/apiary/proc/build_apiary(var/mob/user, var/turf/T)
+	if (!T)
+		T = get_turf(src)
+	if (!isfloor(T) || T.has_dense_content())
+		to_chat(user, "<span class='warning'>There is no room to build an apiary there!</span>")
+		return
+
+	if(do_after(user, T, 25))
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+		user.drop_item(src, force_drop = 1)
+		new buildtype(T)
+		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/beezeez
 	name = "packet of BeezEez"
@@ -224,6 +253,7 @@
 	name = "honeycomb"
 	icon_state = "honeycomb"
 	desc = "Dripping with sugary sweetness. Grind it to separate the honey."
+	starting_materials = list(MAT_WAX = 4*CC_PER_SHEET_WAX)
 	var/list/authentic = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb/New()
@@ -236,7 +266,12 @@
 	var/image/I = image('icons/obj/food.dmi', icon_state="honeycomb-color")
 	I.color = mix_color_from_reagents(reagents.reagent_list)
 	icon_state = "honeycomb-base"
-	overlays += I
+	extra_food_overlay.overlays += I
+	var/image/glint = image('icons/obj/food.dmi',icon_state="honeycomb-glint")
+	glint.blend_mode = BLEND_ADD
+	extra_food_overlay.overlays += glint
+
+	update_icon()
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb/chill
 	name = "honeycomb"
@@ -253,7 +288,12 @@
 	var/image/I = image('icons/obj/food.dmi', icon_state="honeycomb-color")
 	I.color = mix_color_from_reagents(reagents.reagent_list)
 	icon_state = "chill_honeycomb-base"
-	overlays += I
+	var/image/glint = image('icons/obj/food.dmi',icon_state="honeycomb-glint")
+	glint.blend_mode = BLEND_ADD
+	extra_food_overlay.overlays.len = 0
+	extra_food_overlay.overlays += I
+	extra_food_overlay.overlays += glint
+	update_icon()
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb/proc/authentify()
 	authentic = list()
@@ -277,6 +317,7 @@
 	item_state ="bookHydroponicsBees"
 	author = "Beekeeper Dave"
 	title = "The Ins and Outs of Apiculture - A Precise Art"
+	id = 33
 	dat = {"<html>
 				<head>
 				<style>
@@ -310,11 +351,10 @@
 
 				<h3>Collecting Honeycombs</h3>
 
-				Collecting honeycombs is a relatively simple process, but you'll need to make some preparations, such as getting a Bio suit or prepairing another apiary where to move the bees.
-				First you start by deconstructing the apiary with a hatchet. The bees will become aggressive as soon as you begin. Once the apiary is deconstructed, follow the steps in the above
-				section to capture the homeless feral bees and move them to another apiary. Or simply rebuild the apiary that you just deconstructed. The honeycombs harvested this way
-				are full of honey, you can grind them to process the liquid, then place it in a Condimaster to conserve it in a honey pot. Or you can just eat the honeycombs if you feel like it,
-				they are delicious. You can produce a high variety of flavoured honey by having your bees harvest various plants.
+				Collecting honeycombs is a relatively simple process that can be done by hand, but you'll need to make some preparations, such as getting a beekeeping suit and ways to calm down the bees.
+				The bees will become aggressive as soon as you start harvesting. After you calm them, they will naturally return to their apiary.
+				The honeycombs harvested this way are full of honey, you can grind them to process the liquid, then place it in a Condimaster to conserve it in a honey pot.
+				Or you can just eat the honeycombs if you feel like it,	they are delicious. You can produce a high variety of flavoured honey by having your bees harvest various plants.
 
 
 				</body>

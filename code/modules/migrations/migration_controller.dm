@@ -40,9 +40,9 @@
 			var/list/pack[prepack.len]
 			for(var/datum/migration/M in newpacks[pkgID])
 				pack[M.id] = M
-				//world.log << "\[Migrations] [pkgID]#[M.id] = [M.type] - [M.name]"
+				world.log << "\[Migrations] [pkgID]#[M.id] = [M.type] - [M.name]"
 			packages[pkgID]=pack
-			world.log << "\[Migrations] Loaded [pack.len] [id] DB migrations from package [pkgID]."
+			log_debug("\[Migrations] Loaded [pack.len] [id] DB migrations from package [pkgID].", FALSE)
 		//VersionCheck()
 		UpdateAll()
 

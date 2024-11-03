@@ -2,13 +2,13 @@
 	var/list/messages = list()
 
 /datum/component/ai/conversation/initialize()
-	parent.register_event(/event/comp_ai_cmd_say, src, src::cmd_say())
-	parent.register_event(/event/comp_ai_cmd_specific_say, src, src::cmd_specific_say())
+	parent.register_event(/event/comp_ai_cmd_say, src, nameof(src::cmd_say()))
+	parent.register_event(/event/comp_ai_cmd_specific_say, src, nameof(src::cmd_specific_say()))
 	return TRUE
 
 /datum/component/ai/conversation/Destroy()
-	parent.unregister_event(/event/comp_ai_cmd_say, src, src::cmd_say())
-	parent.unregister_event(/event/comp_ai_cmd_specific_say, src, src::cmd_specific_say())
+	parent.unregister_event(/event/comp_ai_cmd_say, src, nameof(src::cmd_say()))
+	parent.unregister_event(/event/comp_ai_cmd_specific_say, src, nameof(src::cmd_specific_say()))
 	..()
 
 /datum/component/ai/conversation/proc/cmd_say()

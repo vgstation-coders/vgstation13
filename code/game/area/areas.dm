@@ -9,8 +9,10 @@ var/area/space_area
 	var/uid
 	var/obj/machinery/power/apc/areaapc = null
 	var/list/obj/machinery/alarm/air_alarms = list()
+	var/list/obj/machinery/light_switch/lightswitches = list()
+	var/list/obj/machinery/light/lights = list()
 	var/list/area_turfs
-	plane = ABOVE_LIGHTING_PLANE
+	plane = LIGHTING_PLANE
 	layer = MAPPING_AREA_LAYER
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
@@ -37,8 +39,7 @@ var/area/space_area
 		space_area = src
 		for(var/datum/d in ambient_sounds)//can't think of a better way to do this.
 			qdel(d)
-		//ambient_sounds = list(/datum/ambience/spaced1,/datum/ambience/spaced2,/datum/ambience/spaced3,/datum/ambience/spacemusic,/datum/ambience/mainmusic,/datum/ambience/traitormusic)
-		ambient_sounds = list()
+		ambient_sounds = list(/datum/ambience/spaced1,/datum/ambience/spaced2,/datum/ambience/spaced3,/datum/ambience/spacemusic,/datum/ambience/mainmusic,/datum/ambience/traitormusic)
 		//lighting_state = 4
 		//gravity = 0    // Space has gravity.  Because.. because.
 
@@ -124,6 +125,8 @@ var/area/space_area
 						a.cancelAlarm("Power", src, source)
 					else
 						a.triggerAlarm("Power", src, cameras, source)
+			for (var/obj/item/device/pager/P in pager_list)
+				P.triggerAlarm("Power", src)
 	return
 
 /area/proc/send_poweralert(var/obj/machinery/computer/station_alert/a)//sending alerts to newly built Station Alert Computers.
@@ -164,6 +167,8 @@ var/area/space_area
 			for(var/obj/machinery/computer/station_alert/a in machines)
 				if(src in (a.covered_areas))
 					a.triggerAlarm("Atmosphere", src, cameras, src)
+			for (var/obj/item/device/pager/P in pager_list)
+				P.triggerAlarm("Atmosphere", src)
 			door_alerts |= DOORALERT_ATMOS
 			UpdateFirelocks()
 		// Dropping from danger level 2.
@@ -253,6 +258,8 @@ var/area/space_area
 		for (var/obj/machinery/computer/station_alert/a in machines)
 			if(src in (a.covered_areas))
 				a.triggerAlarm("Fire", src, cameras, src)
+		for (var/obj/item/device/pager/P in pager_list)
+			P.triggerAlarm("Fire", src)
 
 /area/proc/send_firealert(var/obj/machinery/computer/station_alert/a)//sending alerts to newly built Station Alert Computers.
 	if(fire)
@@ -339,8 +346,10 @@ var/area/space_area
 /area/proc/updateicon()
 	if (!areaapc)
 		icon_state = null
+		luminosity = 0
 		return
 	if ((fire || eject || party || radalert) && ((!requires_power)?(!requires_power):power_environ))//If it doesn't require power, can still activate this proc.
+		luminosity = 1
 		// Highest priority at the top.
 		if(radalert && !fire)
 			icon_state = "radiation"
@@ -357,6 +366,7 @@ var/area/space_area
 	else
 	//	new lighting behaviour with obj lights
 		icon_state = null
+		luminosity = 0
 
 
 /*
@@ -447,12 +457,13 @@ var/area/space_area
 		thing.area_entered(src)
 
 	for(var/mob/mob_in_obj in Obj.contents)
-		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = src, "old" = oldArea))
+		if(istype(mob_in_obj))
+			INVOKE_EVENT(mob_in_obj, /event/mob_area_changed, "mob" = mob_in_obj, "newarea" = src, "oldarea" = oldArea)
 
 	INVOKE_EVENT(src, /event/area_entered, "enterer" = Obj)
 	var/mob/M = Obj
 	if(istype(M))
-		CallHook("MobAreaChange", list("mob" = M, "new" = src, "old" = oldArea)) // /vg/ - EVENTS!
+		INVOKE_EVENT(M, /event/mob_area_changed, "mob" = M, "newarea" = src, "oldarea" = oldArea)
 		if(narrator)
 			narrator.Crossed(M)
 

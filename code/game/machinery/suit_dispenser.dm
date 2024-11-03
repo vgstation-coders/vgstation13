@@ -19,7 +19,7 @@ var/list/dispenser_presets = list()
 
 /obj/machinery/suit_dispenser
 	name = "Suit Dispenser"
-	desc = "An industrial U-Tak-It Dispenser unit designed to fetch all kinds of space suits.."
+	desc = "An industrial U-Tak-It Dispenser unit designed to fetch all kinds of space suits."
 	icon = 'icons/obj/suitdispenser.dmi'
 	icon_state = "suitdispenser"
 	anchored = 1

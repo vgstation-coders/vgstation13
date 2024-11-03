@@ -7,9 +7,10 @@
 	amount = 1
 	max_amount = 50
 	w_class = W_CLASS_TINY
+	w_type = RECYK_BIOLOGICAL
 	throw_speed = 4
 	throw_range = 10
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	flammable = TRUE
 
 	var/animal_type
 

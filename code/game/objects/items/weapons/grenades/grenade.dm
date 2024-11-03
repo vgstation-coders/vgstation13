@@ -91,7 +91,7 @@
 //	playsound(loc, 'sound/items/Welder2.ogg', 25, 1)
 	var/turf/T = get_turf(src)
 	if(T)
-		T.hotspot_expose(700,125,surfaces=istype(loc,/turf))
+		try_hotspot_expose(700,SMALL_FLAME,1)
 
 /obj/item/weapon/grenade/proc/update_mob()
 	if(ismob(loc))

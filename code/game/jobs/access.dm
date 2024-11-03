@@ -586,4 +586,4 @@ var/global/list/all_jobs
 			return ID.registered_name
 
 /proc/get_all_job_icons() //For all existing HUD icons
-	return get_all_jobs() + list("Prisoner", "visitor")
+	return get_all_jobs() + list("Prisoner", "visitor", "Nanotrasen")

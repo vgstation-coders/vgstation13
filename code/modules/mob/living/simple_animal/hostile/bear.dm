@@ -27,6 +27,7 @@
 	melee_damage_upper = 30
 	size = SIZE_BIG
 	speak_override = TRUE
+	treadmill_speed = 2
 	var/obj/item/weapon/reagent_containers/food/snacks/burger = null
 
 	//Space bears aren't affected by atmos.

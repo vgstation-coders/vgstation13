@@ -4,6 +4,7 @@
 	icon = 'icons/mob/monkey.dmi'
 	icon_state = "punpunsuit_icon"
 	item_state = "punpunsuit_item"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/monkeyclothes.dmi', "right_hand" = 'icons/mob/in-hand/right/monkeyclothes.dmi')
 	force = 0
 	throwforce = 0
 	throw_speed = 2
@@ -30,6 +31,12 @@
 	item_state = "cult_item"
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
 
+/obj/item/clothing/monkeyclothes/cultrobes/snow
+	name = "size S cult winter robes"
+	icon_state = "cultsnow_icon"
+	item_state = "cultsnow_item"
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+
 /obj/item/clothing/monkeyclothes/jumpsuit_red
 	name = "monkey-sized red jumpsuit"
 	desc = "They wear these at the thunderdome."
@@ -55,3 +62,4 @@
 	icon_state = "space_icon"
 	item_state = "space_item"
 	sterility = 100
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY

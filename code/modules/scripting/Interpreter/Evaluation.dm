@@ -5,7 +5,7 @@
 	if(istype(exp, /datum/node/expression/FunctionCall))
 		return RunFunction(exp)
 
-	else if(istype(exp, /datum/node/expression/operator))
+	else if(istype(exp, /datum/node/expression/operation))
 		return EvalOperator(exp)
 
 	else if(istype(exp, /datum/node/expression/value/literal))
@@ -43,63 +43,63 @@
 	else
 		return exp
 
-/datum/n_Interpreter/proc/EvalOperator(datum/node/expression/operator/exp)
-	if(istype(exp, /datum/node/expression/operator/binary))
-		var/datum/node/expression/operator/binary/bin = exp
+/datum/n_Interpreter/proc/EvalOperator(datum/node/expression/operation/exp)
+	if(istype(exp, /datum/node/expression/operation/binary))
+		var/datum/node/expression/operation/binary/bin = exp
 		try // This way we can forgo sanity in the actual evaluation (other than divide by 0).
 			switch(bin.type)
-				if(/datum/node/expression/operator/binary/Equal)
+				if(/datum/node/expression/operation/binary/Equal)
 					return Equal(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/NotEqual)
+				if(/datum/node/expression/operation/binary/NotEqual)
 					return NotEqual(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Greater)
+				if(/datum/node/expression/operation/binary/Greater)
 					return Greater(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Less)
+				if(/datum/node/expression/operation/binary/Less)
 					return Less(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/GreaterOrEqual)
+				if(/datum/node/expression/operation/binary/GreaterOrEqual)
 					return GreaterOrEqual(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/LessOrEqual)
+				if(/datum/node/expression/operation/binary/LessOrEqual)
 					return LessOrEqual(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/LogicalAnd)
+				if(/datum/node/expression/operation/binary/LogicalAnd)
 					return LogicalAnd(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/LogicalOr)
+				if(/datum/node/expression/operation/binary/LogicalOr)
 					return LogicalOr(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/LogicalXor)
+				if(/datum/node/expression/operation/binary/LogicalXor)
 					return LogicalXor(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/BitwiseAnd)
+				if(/datum/node/expression/operation/binary/BitwiseAnd)
 					return BitwiseAnd(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/BitwiseOr)
+				if(/datum/node/expression/operation/binary/BitwiseOr)
 					return BitwiseOr(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/BitwiseXor)
+				if(/datum/node/expression/operation/binary/BitwiseXor)
 					return BitwiseXor(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Add)
+				if(/datum/node/expression/operation/binary/Add)
 					return Add(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Subtract)
+				if(/datum/node/expression/operation/binary/Subtract)
 					return Subtract(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Multiply)
+				if(/datum/node/expression/operation/binary/Multiply)
 					return Multiply(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Divide)
+				if(/datum/node/expression/operation/binary/Divide)
 					return Divide(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Power)
+				if(/datum/node/expression/operation/binary/Power)
 					return Power(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Modulo)
+				if(/datum/node/expression/operation/binary/Modulo)
 					return Modulo(Eval(bin.exp), Eval(bin.exp2))
 
 				else
@@ -111,16 +111,16 @@
 	else
 		try
 			switch(exp.type)
-				if(/datum/node/expression/operator/unary/Minus)
+				if(/datum/node/expression/operation/unary/Minus)
 					return Minus(Eval(exp.exp))
 
-				if(/datum/node/expression/operator/unary/LogicalNot)
+				if(/datum/node/expression/operation/unary/LogicalNot)
 					return LogicalNot(Eval(exp.exp))
 
-				if(/datum/node/expression/operator/unary/BitwiseNot)
+				if(/datum/node/expression/operation/unary/BitwiseNot)
 					return BitwiseNot(Eval(exp.exp))
 
-				if(/datum/node/expression/operator/unary/group)
+				if(/datum/node/expression/operation/unary/group)
 					return Eval(exp.exp)
 
 				else

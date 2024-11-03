@@ -36,6 +36,12 @@
 	processing_objects.Remove(src)
 	..()
 
+/obj/effect/blob/node/update_looks(var/right_now = 0)
+	..()
+	var/icon/I = new(icon)
+	light_color = I.GetPixel(1,1,"node_color")
+	set_light(1, 3, light_color)
+
 /obj/effect/blob/node/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -44,7 +50,7 @@
 		return
 
 	if(icon_size == 64)
-		anim(target = loc, a_icon = icon, flick_anim = "nodepulse", sleeptime = 15, lay = layer+0.5, offX = -16, offY = -16, alph = 150, plane = BLOB_PLANE)
+		anim(target = loc, a_icon = icon, flick_anim = "nodepulse", sleeptime = 15, lay = ABOVE_LIGHTING_LAYER, offX = -16, offY = -16, alph = 150, plane = ABOVE_LIGHTING_PLANE)
 		for(var/mob/M in viewers(src))
 			M.playsound_local(loc, adminblob_beat, 50, 0, null, FALLOFF_SOUNDS, 0)
 
@@ -54,6 +60,11 @@
 	if(health < maxHealth)
 		health = min(maxHealth, health + 1)
 		update_icon()
+
+/obj/effect/blob/node/VisiblePulse(var/pulse = 0)
+	if (pulse > 5)
+		return
+	..(pulse)
 
 /obj/effect/blob/node/run_action()
 	return 0

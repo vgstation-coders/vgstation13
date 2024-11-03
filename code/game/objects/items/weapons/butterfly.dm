@@ -105,7 +105,7 @@
 
 /obj/item/weapon/butterflyknife/viscerator/bunny
 	name = "mechanical toybox"
-	desc = "A small box that rapidly assembles shaudy, barely working wind-up toys."
+	desc = "A small box that rapidly assembles shoddy, barely working wind-up toys."
 	icon = 'icons/obj/butterfly.dmi'
 	icon_state = "Bflyknife_toy"
 	hitsound = "trayhit"

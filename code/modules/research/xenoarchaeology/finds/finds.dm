@@ -165,6 +165,17 @@
 	"It's a mystery how anyone is supposed to eat with this",\
 	"You wonder what the creator's mouth was shaped like")]."
 
+/datum/find/sewing_needles
+	find_ID = ARCHAEO_SEWING_NEEDLES
+	responsive_reagent = IRON
+	apply_material_decorations = TRUE
+	apply_image_decorations = TRUE
+
+/datum/find/sewing_needles/spawn_item()
+	var/obj/item/knitting_needles/alien/new_item = new /obj/item/knitting_needles/alien
+	item_type = new_item.name
+	return new_item
+
 /datum/find/statuette
 	find_ID = ARCHAEO_STATUETTE
 	item_type = "statuette"
@@ -481,28 +492,7 @@
 	responsive_reagent = POTASSIUM
 
 /datum/find/cultrobes/spawn_item()
-
-	//75% chance to get a headgear
-	//25% chance to get a suit
-
-	//33% chance to get current cult hood/robes
-	//26.6% chance to get red cult hood/robes
-	//20% chance to get magus hood/robes
-	//13% chance to get current cult helmet/armor
-	//6.6% chance to get legacy cult helmet/armor
-
-	var/choice = pick(
-	75;/obj/item/clothing/head/culthood,
-	25;/obj/item/clothing/suit/cultrobes,
-	60;/obj/item/clothing/head/culthood/old,
-	20;/obj/item/clothing/suit/cultrobes/old,
-	45;/obj/item/clothing/head/magus,
-	15;/obj/item/clothing/suit/magusred,
-	30;/obj/item/clothing/head/helmet/space/cult,
-	10;/obj/item/clothing/suit/space/cult,
-	15;/obj/item/clothing/head/helmet/space/legacy_cult,
-	5;/obj/item/clothing/suit/space/legacy_cult)
-	return new choice
+	return new /obj/item/weapon/blood_tesseract/xenoarchfind
 
 /datum/find/soulstone
 	find_ID = ARCHAEO_SOULSTONE
@@ -947,8 +937,7 @@
 	responsive_reagent = POTASSIUM
 
 /datum/find/spacesuit/spawn_item()
-	var/result = pick(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/head/helmet/space/ancient)
-	return new result
+	return new /obj/item/weapon/storage/box/large/nasasuit
 
 /datum/find/excasuit
 	find_ID = ARCHAEO_EXCASUIT
@@ -957,8 +946,7 @@
 	responsive_reagent = POTASSIUM
 
 /datum/find/excasuit/spawn_item()
-	var/result = pick(/obj/item/clothing/suit/space/anomaly, /obj/item/clothing/head/helmet/space/anomaly)
-	return new result
+	return new /obj/item/weapon/storage/box/large/xa_excasuit
 
 /datum/find/anomsuit
 	find_ID = ARCHAEO_ANOMSUIT
@@ -967,8 +955,7 @@
 	responsive_reagent = POTASSIUM
 
 /datum/find/anomsuit/spawn_item()
-	var/result = pick(/obj/item/clothing/suit/bio_suit/anomaly/old, /obj/item/clothing/head/bio_hood/anomaly/old)
-	return new result
+	return new /obj/item/weapon/storage/box/large/xa_anomsuit
 
 /datum/find/lance
 	find_ID = ARCHAEO_LANCE
@@ -1098,6 +1085,15 @@
 		return new /obj/item/pocketwatch/luna_dial
 	else
 		return new /obj/item/pocketwatch
+
+/datum/find/mirror
+	find_ID = ARCHAEO_MIRROR
+	anomaly_factor = 4
+	apply_material_decorations = FALSE
+	responsive_reagent = MERCURY
+
+/datum/find/mirror/spawn_item()
+	return new /obj/item/weapon/pocket_mirror/arcane
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Strange rocks

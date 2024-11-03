@@ -39,6 +39,8 @@
 	return 0
 
 /datum/arcade_game/proc/emag_act(mob/user)
+	if(holder)
+		holder.name = name
 
 /datum/arcade_game/proc/emp_act(var/severity)
 
@@ -467,6 +469,7 @@
 	return 0
 
 /datum/arcade_game/space_villain/emag_act(mob/user)
+	..()
 	if(is_cheater(user))
 		return
 

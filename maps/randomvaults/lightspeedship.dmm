@@ -150,26 +150,6 @@
 /obj/abstract/map/spawner/space/tools,
 /turf/simulated/floor/plating,
 /area/shuttle/lightship/start)
-"aw" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/machinery/door/poddoor{
-	id_tag = "lightship_shutter_window";
-	name = "Hull Window Shutters"
-	},
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/lightship/start)
 "ax" = (
 /obj/machinery/light{
 	dir = 8
@@ -186,32 +166,11 @@
 	oxygen = 2644
 	},
 /area/shuttle/lightship/start)
-"az" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/machinery/door/poddoor{
-	id_tag = "lightship_shutter_window";
-	name = "Hull Window Shutters"
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/lightship/start)
 "aF" = (
 /obj/machinery/atmospherics/unary/tank/air{
 	starting_volume = 3200
 	},
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -284,31 +243,11 @@
 	dir = 1
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whiteyellow"
 	},
 /area/shuttle/lightship/start)
-"bi" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/turf/simulated/floor/engine{
-	name = "air floor";
-	nitrogen = 10580;
-	oxygen = 2644
-	},
-/area/shuttle/lightship/start)
 "bj" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/engine{
 	name = "air floor";
 	nitrogen = 10580;
@@ -316,15 +255,8 @@
 	},
 /area/shuttle/lightship/start)
 "bk" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
 /obj/machinery/atmospherics/pipe/simple/general/hidden,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/engine{
 	name = "air floor";
 	nitrogen = 10580;
@@ -455,8 +387,7 @@
 /area/shuttle/lightship/start)
 "bN" = (
 /obj/machinery/light{
-	dir = 8;
-	icon_state = "ltube1"
+	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -547,7 +478,6 @@
 	},
 /obj/machinery/space_heater,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whiteyellow"
 	},
 /area/shuttle/lightship/start)
@@ -651,16 +581,13 @@
 	},
 /obj/structure/table/glass,
 /obj/item/weapon/storage/firstaid/toxin{
-	pixel_x = 7;
-	pixel_y = 0
+	pixel_x = 7
 	},
 /obj/item/weapon/storage/firstaid/o2{
-	pixel_x = 3;
-	pixel_y = 0
+	pixel_x = 3
 	},
 /obj/item/weapon/storage/firstaid/regular{
-	pixel_x = -3;
-	pixel_y = 0
+	pixel_x = -3
 	},
 /obj/item/weapon/storage/firstaid/fire{
 	pixel_x = -7
@@ -773,8 +700,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_y = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -896,31 +822,12 @@
 	icon_state = "whitepurple"
 	},
 /area/shuttle/lightship/start)
-"dK" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor{
-	id_tag = "lightship_shutter_window";
-	name = "Hull Window Shutters"
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/lightship/start)
 "dL" = (
 /obj/machinery/light{
 	dir = 1
 	},
 /obj/machinery/r_n_d/fabricator/mech{
-	req_access = list();
-	req_one_access = null
+	req_access = list()
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -1005,7 +912,6 @@
 	icon_state = "1-2"
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whiteyellow"
 	},
 /area/shuttle/lightship/start)
@@ -1026,23 +932,11 @@
 	icon_state = "whiteyellow"
 	},
 /area/shuttle/lightship/start)
-"dZ" = (
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/lightship/start)
 "eh" = (
 /obj/structure/bed/chair/wood/normal{
 	dir = 4
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitegreen"
 	},
 /area/shuttle/lightship/start)
@@ -1051,7 +945,6 @@
 	dir = 8
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitegreen"
 	},
 /area/shuttle/lightship/start)
@@ -1091,21 +984,6 @@
 	icon_state = "whitegreen"
 	},
 /area/shuttle/lightship/start)
-"et" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor{
-	id_tag = "lightship_shutter_window";
-	name = "Hull Window Shutters"
-	},
-/turf/simulated/floor/plating,
-/area/shuttle/lightship/start)
 "eu" = (
 /turf/simulated/floor{
 	dir = 10;
@@ -1140,19 +1018,6 @@
 	icon_state = "whiteredcorner"
 	},
 /area/shuttle/lightship/start)
-"eB" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/shuttle/lightship/start)
 "eD" = (
 /turf/simulated/floor{
 	dir = 4;
@@ -1180,8 +1045,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_y = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -1203,9 +1067,7 @@
 /obj/item/ammo_casing/rocket_rpg/nikita{
 	pixel_y = 10
 	},
-/obj/item/ammo_casing/rocket_rpg/nikita{
-	pixel_y = 0
-	},
+/obj/item/ammo_casing/rocket_rpg/nikita,
 /obj/item/ammo_casing/rocket_rpg/nikita{
 	pixel_y = 5
 	},
@@ -1219,21 +1081,6 @@
 	dir = 8;
 	icon_state = "whitered"
 	},
-/area/shuttle/lightship/start)
-"eM" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor{
-	id_tag = "lightship_shutter_window";
-	name = "Hull Window Shutters"
-	},
-/turf/simulated/floor/plating,
 /area/shuttle/lightship/start)
 "eR" = (
 /turf/simulated/floor{
@@ -1256,20 +1103,6 @@
 	dir = 4;
 	icon_state = "whiteredcorner"
 	},
-/area/shuttle/lightship/start)
-"eU" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor{
-	id_tag = "lightship_shutter_window";
-	name = "Hull Window Shutters"
-	},
-/turf/simulated/floor/plating,
 /area/shuttle/lightship/start)
 "eV" = (
 /turf/simulated/floor{
@@ -1297,9 +1130,7 @@
 /obj/item/ammo_casing/rocket_rpg/nikita{
 	pixel_y = 10
 	},
-/obj/item/ammo_casing/rocket_rpg/nikita{
-	pixel_y = 0
-	},
+/obj/item/ammo_casing/rocket_rpg/nikita,
 /obj/item/ammo_casing/rocket_rpg/nikita{
 	pixel_y = 5
 	},
@@ -1435,13 +1266,11 @@
 	},
 /obj/structure/cable,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whiteyellow"
 	},
 /area/shuttle/lightship/start)
 "fB" = (
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whiteyellow"
 	},
 /area/shuttle/lightship/start)
@@ -1456,7 +1285,6 @@
 	pixel_x = 10
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whiteyellow"
 	},
 /area/shuttle/lightship/start)
@@ -1476,18 +1304,11 @@
 	},
 /area/shuttle/lightship/start)
 "fE" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
 /obj/machinery/door/poddoor{
 	id_tag = "lightship_shutter_window";
 	name = "Hull Window Shutters"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/shuttle/lightship/start)
 "fF" = (
@@ -1498,7 +1319,6 @@
 /area/shuttle/lightship/start)
 "fG" = (
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitered"
 	},
 /area/shuttle/lightship/start)
@@ -1515,7 +1335,6 @@
 /obj/structure/table/reinforced,
 /obj/abstract/map/spawner/security/misc,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitered"
 	},
 /area/shuttle/lightship/start)
@@ -1636,7 +1455,6 @@
 	pixel_y = -30
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitered"
 	},
 /area/shuttle/lightship/start)
@@ -1922,17 +1740,7 @@
 /turf/simulated/floor/plating,
 /area/shuttle/lightship/start)
 "hP" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/shuttle/lightship/start)
 "hR" = (
@@ -2022,7 +1830,6 @@
 	pixel_y = 18
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitegreen"
 	},
 /area/shuttle/lightship/start)
@@ -2052,23 +1859,6 @@
 /area/shuttle/lightship/start)
 "io" = (
 /mob/living/simple_animal/hostile/giant_spider/hunter/dead,
-/turf/simulated/floor/plating,
-/area/shuttle/lightship/start)
-"ip" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/machinery/door/poddoor{
-	id_tag = "lightship_shutter_window";
-	name = "Hull Window Shutters"
-	},
 /turf/simulated/floor/plating,
 /area/shuttle/lightship/start)
 "iq" = (
@@ -2144,26 +1934,6 @@
 /area/shuttle/lightship/start)
 "jz" = (
 /turf/simulated/wall/shuttle,
-/area/shuttle/lightship/start)
-"nU" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	one_way = 1
-	},
-/obj/machinery/door/poddoor{
-	id_tag = "lightship_shutter_window";
-	name = "Hull Window Shutters"
-	},
-/turf/simulated/floor/plating,
 /area/shuttle/lightship/start)
 "uW" = (
 /obj/docking_port/shuttle,
@@ -2262,7 +2032,7 @@ aL
 jz
 jz
 ib
-dK
+fE
 ib
 jz
 jz
@@ -2355,7 +2125,7 @@ jz
 jz
 jz
 ib
-dK
+fE
 ib
 jz
 jz
@@ -2441,7 +2211,7 @@ dU
 jz
 jz
 ay
-bi
+bj
 bu
 hy
 fB
@@ -2539,11 +2309,11 @@ jz
 hP
 hz
 jz
-eB
-dZ
+hP
+hP
 eH
-eB
-dZ
+hP
+hP
 jz
 hy
 hP
@@ -2901,7 +2671,7 @@ aa
 (22,1,1) = {"
 aa
 jz
-aw
+fE
 jz
 jz
 hU
@@ -2925,7 +2695,7 @@ hU
 hU
 jz
 jz
-az
+fE
 jz
 aa
 "}
@@ -2994,7 +2764,7 @@ aa
 (25,1,1) = {"
 aa
 jz
-nU
+fE
 jz
 jz
 il
@@ -3018,7 +2788,7 @@ ig
 il
 jz
 jz
-az
+fE
 jz
 aa
 "}
@@ -3186,7 +2956,7 @@ aa
 aa
 aa
 aa
-dK
+fE
 cg
 cJ
 cY
@@ -3198,7 +2968,7 @@ fS
 gv
 ha
 ha
-dK
+fE
 aa
 aa
 aa
@@ -3343,7 +3113,7 @@ aa
 aa
 aa
 aa
-et
+fE
 es
 eu
 es
@@ -3351,7 +3121,7 @@ jz
 fq
 fn
 Zq
-et
+fE
 jv
 aa
 aa
@@ -3374,7 +3144,7 @@ aa
 aa
 aa
 aa
-eM
+fE
 fd
 es
 eu
@@ -3382,7 +3152,7 @@ jz
 fn
 fX
 gA
-eM
+fE
 aa
 aa
 aa
@@ -3530,13 +3300,13 @@ aa
 aa
 aa
 aa
-dK
+fE
 dM
 ga
 fV
 fs
 hW
-dK
+fE
 aa
 aa
 aa
@@ -3718,8 +3488,8 @@ aa
 aa
 dh
 jz
-ip
-eU
+fE
+fE
 fE
 jz
 iG

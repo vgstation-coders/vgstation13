@@ -60,7 +60,7 @@
 			I.pixel_y = 38
 			I.dir = SOUTH
 			if(i <= A.passengers.len)
-				I.overlays += getFlatIcon(A.passengers[i],SOUTH,0)
+				I.overlays += getFlatIconDeluxe(sort_image_datas(get_content_image_datas(A.passengers[i])), override_dir = SOUTH)
 			overlays += I
 
 //------------------------------------------------------------

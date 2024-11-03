@@ -26,19 +26,24 @@
 		<th style="width:1%">Key</th>
 		<th style="width:1%">Name</th>
 		<th style="width:1%">Rank</th>
-		<th style="width:0.5%">Spawn Copy</th>
-		<th style="width:1%">Spawn and Transfer</th>
+		<th style="width:0.5%">Naked Copy</th>
+		<th style="width:0.5%">Clothed Copy</th>
+		<th style="width:0.5%">Transfer</th>
 		<th style="width:1%">Mob Type</th>
 		</tr>
 		"}
 
 	for (var/datum/body_archive/archive in body_archives)
+		var/archivename = archive.name
+		if (!archivename)
+			archive.name = "(blank)"
 		dat += {"<tr>
 			<td>[archive.key]</td>
-			<td>[archive.name]</td>
+			<td><a href='?src=\ref[src];bodyarchivepanel_focus=\ref[archive]'>[archivename]</a></td>
 			<td>[archive.rank]</td>
-			<td><a href='?src=\ref[src];bodyarchivepanel_spawncopy=\ref[archive]'>\[SPAWN\]</a></td>
-			<td><a href='?src=\ref[src];bodyarchivepanel_spawntransfer=\ref[archive]'>\[SPAWN+TRANSFER\]</a></td>
+			<td><a href='?src=\ref[src];bodyarchivepanel_spawnnaked=\ref[archive]'>\[SPAWN\]</a></td>
+			<td><a href='?src=\ref[src];bodyarchivepanel_spawnclothed=\ref[archive]'>\[SPAWN\]</a></td>
+			<td><a href='?src=\ref[src];bodyarchivepanel_transfer=\ref[archive]'>\[TRANSFER\]</a></td>
 			<td><i>[archive.mob_type]</i></td>
 			</tr>
 			"}

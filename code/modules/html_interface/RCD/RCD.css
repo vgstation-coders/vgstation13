@@ -1,111 +1,230 @@
 /*Made by N3X15*/
+/*updated by crazyamphibian*/
 
-html {
-	font-family:sans-serif;
-	font-size:small;
-}
-a{
-	color:#0066cc;
-	text-decoration:none;
+body{
+background-image:none;
+background-color:#272727; /*it's very sensitive to the order of things here, for some reason.*/
+line-height:100%
 }
 
-a img {
-	border:1px solid #0066cc;
-	background:#dfdfdf;
-}
 
-a.color {
+a.color, a:link.color  {
 	padding: 5px 10px;
 	font-size: large;
 	font-weight: bold;
 	border:1px solid white;
+	position:relative;
+	top:5px;
 }
 
-a.schematic_selected {
-	color: #199130;
-}
-a.schematic_selected:hover {
-	background-color: #199130;
-}
+a{ color:inherit;background:inherit;border:none;text-decoration:inherit;padding:0px;margin:0px;}
+a:link{ color:inherit;background:inherit;border:none;text-decoration:inherit;padding:0px;margin:0px;} /*dumb override conflicts with nanotrasen.css*/
 
-a.selected img,
-a:hover {
-	background: #0066cc;
-	color: #ffffff;
+a img {
+	border:2px solid #161616;
+	background:#40628a;
 }
 
-a.no_dec
-{
-	display: inline-block;
+
+
+.schem{
+	border-spacing:0px;
+	background-color:#40628a;
+	padding-right:3px;
+	padding-left:2px;
+
+	border:#161616 2px solid;
+	margin-bottom:.3em;
 }
 
-a.no_dec:hover
-{
-	background: #FFFFFF;
-	color: #ffffff;
+.schem_selected{
+	border-spacing:0px;
+	background-color:#2f943c;
+	padding-right:3px;
+	padding-left:2px;
+
+	border:#24722e 2px solid;
+	margin-bottom:.3em;
 }
 
-#dir_holder
-{
-	display: inline-block;
-	margin-right: 10px;
+#dir_holder > a{
+margin:1px;
+font-size:0px;
+line-height:0%;
 }
 
-/* RPD layers, YES I SUCK AT CSS */
-
-.layer_holder
-{
-	height: 32px;
-	width: 40px;
-	display: inline-block;
+a.selected img {
+	background: #2f943c;
+	border-color:#24722e;
 }
 
-.layer.horizontal
-{
-	left: 0px;
-	background-image: url(RPD_0_4.png);
-	height: 5px;
-	width: 32px;
-	background-position: 0px 19px;
+.schem > * > * > .shcem_sub, /*i know this looks really dumb, but it's how to access them from in a table. table looks better than a span or div.*/
+.schem_selected > * > * > .shcem_sub{
+	border:0px;
+	border-right:2px;
+	border-style:solid;
 }
 
-.layer.vertical
-{
-	/*top: 0px;*/
-	background-image: url(RPD_0_1.png);
-	width: 5px;
-	height: 32px;
-	/*right: 0px;*/
-	background-position: 19px 0px;
-	display: inline-block;
-	position: relative;
+.schem > * > * > .shcem_sub{
+	border-color:#161616;
+}
+.schem_selected > * > * > .shcem_sub{
+	border-color:#24722e;
 }
 
-.layer.horizontal.selected
-{
-	background-image: url(RPD-layer-blended-4.png);
+.schem:hover{
+	background:#507aac;
 }
 
-.layer.vertical.selected
-{
-	background-image: url(RPD-layer-blended-1.png);
+.shcem_sub{
+	font-family:monospace;
+	padding-bottom:2px;
+	font-size:14px;
+	width:1em; /*some of the symbols are bigger than others... in a monospace font...*/
 }
 
-.layer.horizontal.one		{top: 0px;}
-.layer.horizontal.two		{top: 2px;}
-.layer.horizontal.three		{top: 2px;}
-.layer.horizontal.four		{top: 2px;}
-.layer.horizontal.five		{top: 2px;}
+.shcem_sub >a:hover{ /*cleaning up all the stuff nanotrasen.css does.*/
+background-color:inherit;
+}
+.shcem_sub >a:active{
+border:none;
+padding:0px;
+}
 
-/* IT WERKS DON'T TOUCH IT */
+.layer{
+	border-spacing:2px;
+	border:0px;
+	white-space:nowrap;
+	display:inline-block;
+	padding:0px;
+	font-size:0px; /*the IE CSS forces the line height to be at least the font size. why?*/
+	line-height:100%;
+	position:relative; /*since #layersholder uses absolute, we have to nudge the children using relative. not idea, but it werks.*/
+	top:-5px;
+}
 
-.layer.vertical.one			{left: 0px;}
-.layer.vertical.two			{left: -1px;}
-.layer.vertical.three		{left: -3px;}
-.layer.vertical.four		{left: -5px;}
-.layer.vertical.five		{left: -7px;}
+.layer a:link{
+	border-radius:inherit;
+}
 
-.fav
-{
-	font-family: Consolas, monospace;
+
+.layer_h{
+	height:5px;
+	width:32px;
+	display:inline-block;
+}
+.layer_v{
+	display:inline-block;
+	height:32px;
+	width:5px;
+}
+
+#layersholder{
+position:absolute;
+left:160px;
+}
+
+
+.layergradh{
+	background-image: linear-gradient(rgba(0,0,0,.5) ,rgba(0,0,0,.2),rgba(0,0,0,0),rgba(0,0,0,.2) ,rgba(0,0,0,.5) );
+}
+.layergradv{
+	background-image: linear-gradient(to right,rgba(0,0,0,.5) ,rgba(0,0,0,.2),rgba(0,0,0,0),rgba(0,0,0,.2) ,rgba(0,0,0,.5) );
+}
+
+
+
+#layer_selected{
+	border-radius:2px;
+	padding:0px;
+	border:0px;
+	margin:0px;
+	background-color:#f00;
+}
+#layer{
+	border-radius:2px;
+	padding:0px;
+	border:0px;
+	background-color:#888;
+}
+#layer_center{
+	border-radius:2px;
+	padding:0px;
+	border:0px;
+	background-color:#666;
+}
+#layer_center_selected{
+	border-radius:2px;
+	padding:0px;
+	border:0px;
+	background-color:#D00;
+}
+#layer_selectedauto{
+	border-radius:2px;
+	padding:0px;
+	border:0px;
+	margin:0px;
+	background-color:#15C;
+}
+#layer_center_selectedauto{
+	border-radius:2px;
+	padding:0px;
+	border:0px;
+	margin:0px;
+	background-color:#14B;
+}
+
+
+
+#layer:hover{
+	background-color:#e7e7e7;
+}
+#layer_center:hover{
+	background-color:#e7e7e7;
+}
+#layer_selected:hover{
+	background-color:#f33;
+}
+#layer_center_selected:hover{
+	background-color:#f33;
+}
+#layer_selectedauto:hover{
+	background-color:#38F;
+}
+#layer_center_selectedauto:hover{
+	background-color:#37E;
+}
+
+
+#selectedname{
+	color:#fff;
+	font-weight:bold;
+}
+
+#list_icon{
+	background-color:rgba(0,0,0,0);
+	color:rgba(0,0,0,0);
+	border:none;
+	height:1em;
+	image-rendering:pixelated;
+}
+
+#schematic_options{ /*because we removed the gradient earlier, we have to re-add it back*/
+	background:linear-gradient(rgb(57,57,57) 0%,rgb(72,72,72) 4%  , rgb(39,39,39) 100%);
+	width:100%;
+	left:-50px
+	top:0px;
+	padding:1em;
+	margin-top:-7px;
+	margin-left:-10px;
+}
+#schematic_options1{ /*this is a really, really awful way to lay things out.*/
+	visibility: hidden;
+}
+#schematic_options2{ /*but it's not my fault IE doesn't support sticky positioning.*/
+	position:fixed;
+	background:linear-gradient(rgb(57,57,57) 0%,rgb(72,72,72) 4%  , rgb(39,39,39) 100%); /*emulating the background of nanotrasen.css. it's an image, but images don't play nice here.*/
+	width:100%;
+	left:0px;
+	top:0em;
 }

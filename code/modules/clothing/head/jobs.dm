@@ -90,7 +90,7 @@
 	name = "formal Head of Security beret"
 	desc = "A navy beret with a Head of Security rank insignia on it. For formal occasions."
 	icon_state = "hosberet"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 //Warden
 /obj/item/clothing/head/warden
@@ -119,7 +119,7 @@
 	name = "formal warden beret"
 	desc = "A navy beret with a Warden rank insignia on it. For formal occasions."
 	icon_state = "wardenberet"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 //Head of Personnel
 /obj/item/clothing/head/hopcap
@@ -176,7 +176,7 @@
 	name = "formal security officer beret"
 	desc = "A navy beret with a Security Officer rank insignia on it. For formal occasions."
 	icon_state = "officerberet"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/peaked
 	name = "peaked cap"

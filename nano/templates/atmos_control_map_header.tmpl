@@ -11,6 +11,9 @@ Used In File(s): \code\workinprogress\mini\atmos_control.dm
         Logged in as: <b>{{:data.login_name}}</b> {{:helper.link('Log out', 'locked', {'logout': 1, 'showMap': 0}, (data.emagged) ? 'disabled' : null)}}
     </div>
     {{:helper.link('Show Detail List', 'script', {'showMap' : 0, 'set_screen': 1})}}
+	{{if data.bspipe_exist}}
+		{{:helper.link('Show Bluespace Caps List', 'script', {'showMap' : 0, 'set_screen': 3})}}
+	{{/if}}
     {{if data.admin_access}}
         {{:helper.link('Show Presets Panel', 'gear', {'showMap': 0, 'set_screen': 2})}}
     {{/if}}

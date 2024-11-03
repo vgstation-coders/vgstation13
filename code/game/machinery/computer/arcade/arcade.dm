@@ -3,6 +3,7 @@
 	desc = "Does not support pinball."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "arcade"
+	moody_state = "overlay_arcade"
 	circuit = "/obj/item/weapon/circuitboard/arcade"
 	var/datum/arcade_game/game
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK

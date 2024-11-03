@@ -10,14 +10,15 @@
 	var/on = 0
 	var/volume_rate = 5000 //litres / tick
 	var/scrubbing_rate = 300 //litres / tick, max amount of gas put in internal tank per tick
-
-	var/scrub_o2 = FALSE
-	var/scrub_n2 = FALSE
-	var/scrub_n2o = TRUE
-	var/scrub_co2 = TRUE
-	var/scrub_plasma = TRUE
-
+	var/scrubbed_gases[] = list()
+	var/list/default_scrubbed_gases = list( GAS_SLEEPING, GAS_CARBON, GAS_PLASMA )
 	volume = 2000
+
+/obj/machinery/portable_atmospherics/scrubber/New()
+	..()
+	for(var/gas_id in default_scrubbed_gases)
+		scrubbed_gases[gas_id] = TRUE
+
 
 /obj/machinery/portable_atmospherics/scrubber/emp_act(severity)
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
@@ -134,19 +135,9 @@
 		if (removed)
 			var/datum/gas_mixture/total_to_filter = new
 			total_to_filter.temperature = removed.temperature
-			#define FILTER(g) total_to_filter.adjust_gas((g), removed[g], FALSE)
-			if(scrub_plasma)
-				FILTER(GAS_PLASMA)
-			if(scrub_co2)
-				FILTER(GAS_CARBON)
-			if(scrub_n2o)
-				FILTER(GAS_SLEEPING)
-			if(scrub_n2)
-				FILTER(GAS_NITROGEN)
-			if(scrub_o2)
-				FILTER(GAS_OXYGEN)
-			FILTER(GAS_OXAGENT)
-			#undef FILTER
+			for(var/gas_type in scrubbed_gases)
+				if(scrubbed_gases[gas_type])
+					total_to_filter.adjust_gas((gas_type), removed[gas_type], FALSE)
 			total_to_filter.update_values() //since the FILTER macro doesn't update to save perf, we need to update here
 			//calculate the amount of moles in scrubbing_rate litres of gas in removed and apply the scrubbing rate limit
 			var/filter_moles = min(1, scrubbing_rate / removed_volume) * removed.total_moles()
@@ -159,6 +150,11 @@
 			return_sample(environment, removed)
 		//src.update_icon()
 		nanomanager.update_uis(src)
+	//Updating the pipenet if we're on a connector
+	if (on && connected_port)
+		var/datum/pipe_network/P = connected_port.return_network(src)
+		if (P)
+			P.update = 1
 	//src.updateDialog()
 	return
 
@@ -178,12 +174,12 @@
 	data["tankPressure"] = round(air_contents.return_pressure() > 0 ? air_contents.return_pressure() : 0)
 	data["rate"] = round(volume_rate)
 	data["on"] = on ? 1 : 0
-	data["scrub_plasma"] = scrub_plasma
-	data["scrub_co2"] = scrub_co2
-	data["scrub_n2o"] = scrub_n2o
-	data["scrub_n2"] = scrub_n2
-	data["scrub_o2"] = scrub_o2
-
+	var/list/scrub_toggles = list()
+	for(var/gas_id in XGM.gases)
+		var/datum/gas/gas_datum = XGM.gases[gas_id]
+		var/list/gas_info = list(list("name" = gas_datum.short_name || gas_datum.name, "id" = gas_id, "active" = scrubbed_gases[gas_datum.id]))
+		scrub_toggles += gas_info
+	data["scrub_toggles"] = scrub_toggles
 	data["hasHoldingTank"] = holding ? 1 : 0
 	if (holding)
 		data["holdingTank"] = list("name" = holding.name, "tankPressure" = round(holding.air_contents.return_pressure() > 0 ? holding.air_contents.return_pressure() : 0))
@@ -215,17 +211,7 @@
 			eject_holding()
 
 	if(href_list["scrub_toggle"])
-		switch(href_list["scrub_toggle"])
-			if("plasma")
-				scrub_plasma = !scrub_plasma
-			if("co2")
-				scrub_co2 = !scrub_co2
-			if("n2o")
-				scrub_n2o = !scrub_n2o
-			if("n2")
-				scrub_n2 = !scrub_n2
-			if("o2")
-				scrub_o2 = !scrub_o2
+		scrubbed_gases[href_list["scrub_toggle"]] = !scrubbed_gases[href_list["scrub_toggle"]]
 		return 1
 
 	src.add_fingerprint(usr)

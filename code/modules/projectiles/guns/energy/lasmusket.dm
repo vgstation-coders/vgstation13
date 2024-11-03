@@ -12,6 +12,7 @@
 	projectile_type = /obj/item/projectile/beam/veryweaklaser
 	conventional_firearm = 0
 	charge_cost = 0
+	rechargeable = FALSE
 	siemens_coefficient = 1
 	var/obj/item/weapon/lens_assembly/loadedassembly = null //The lens assembly
 	var/lens_secure = 0
@@ -122,7 +123,6 @@
 /obj/item/weapon/gun/energy/lasmusket/proc/remove_cell(var/mob/user)
 	if(!loadedcell)
 		return
-	loadedcell.forceMove(user.loc)
 	user.put_in_hands(loadedcell)
 	to_chat(user, "You remove \the [loadedcell] from \the [src].")
 	loadedcell = null
@@ -131,7 +131,6 @@
 /obj/item/weapon/gun/energy/lasmusket/proc/remove_lens(var/mob/user)
 	if(!loadedassembly)
 		return
-	loadedassembly.forceMove(user.loc)
 	user.put_in_hands(loadedassembly)
 	to_chat(user, "You remove \the [loadedassembly] from the barrel of \the [src].")
 	loadedassembly = null
@@ -152,8 +151,7 @@
 		if(loadedassembly)
 			to_chat(user, "There is already a set of lenses in \the [src].")
 			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return 1
 		to_chat(user, "You insert \the [W] into \the [src].")
 		W.forceMove(src)
@@ -164,8 +162,7 @@
 		if(loadedcell)
 			to_chat(user, "There is already a power cell in \the [src].")
 			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return 1
 		to_chat(user, "You insert \the [W] into \the [src].")
 		W.forceMove(src)

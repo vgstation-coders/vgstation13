@@ -77,9 +77,6 @@
 /area/shuttle/arrival/station)
 "aan" = (
 /obj/structure/closet/wardrobe/xenos,
-/obj/item/clothing/under/vox/vox_casual,
-/obj/item/clothing/under/vox/vox_casual,
-/obj/item/clothing/under/vox/vox_casual,
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "aao" = (
@@ -87,7 +84,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "aap" = (
-/obj/structure/closet/wardrobe/grey,
+/obj/structure/closet/wardrobe/pjs,
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "aaq" = (
@@ -2821,7 +2818,7 @@
 /area/lamprey/catchall)
 "agm" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/lamprey/warzonemaintenanceblob)
 "agn" = (
@@ -7274,7 +7271,7 @@
 	},
 /area/lamprey/warzonemaintenanceblob)
 "aqC" = (
-/obj/item/clothing/glasses/thermal,
+/obj/item/clothing/glasses/hud/thermal,
 /obj/structure/rack,
 /turf/simulated/floor/plating,
 /area/lamprey/kitchen)
@@ -7617,7 +7614,7 @@
 /obj/structure/bed/chair/comfy/couch/right/teal{
 	dir = 4
 	},
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
 	dir = 4;
@@ -13080,7 +13077,7 @@
 	},
 /area/lamprey/foreporthallways)
 "aDB" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/lamprey/ghettosecuritymaintenanceblob)
 "aDC" = (
@@ -14002,7 +13999,7 @@
 /area/lamprey/bronxmaintenanceblob)
 "aGb" = (
 /obj/structure/table/woodentable/poker,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /obj/item/pizzabox/margherita,
 /turf/simulated/floor/plating,
 /area/lamprey/bronxmaintenanceblob)
@@ -15091,7 +15088,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/bronxmaintenanceblob)
 "aIQ" = (
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor/plating,
 /area/lamprey/bronxmaintenanceblob)
 "aIR" = (
@@ -16963,7 +16960,7 @@
 	icon_state = "radiation-w"
 	},
 /obj/item/weapon/table_parts/glass,
-/obj/item/weapon/gun/energy/floragun,
+/obj/item/floral_somatoray,
 /turf/simulated/floor/plating,
 /area/lamprey/ghettosecuritymaintenanceblob)
 "aNC" = (
@@ -18026,7 +18023,7 @@
 /area/lamprey/security)
 "aQi" = (
 /obj/structure/grille/broken,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor/plating,
 /area/lamprey/security)
 "aQj" = (
@@ -18396,7 +18393,7 @@
 /obj/item/weapon/spacecash/c10,
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/bustanuts,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /obj/item/trash/oldempirebar,
 /obj/item/trash/plate,
 /obj/item/trash/pistachios,
@@ -19881,7 +19878,7 @@
 /area/lamprey/voxtradepost)
 "aUr" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/wood,
 /area/lamprey/voxtradepost)
@@ -19974,7 +19971,7 @@
 	},
 /area/lamprey/foreporthallways)
 "aUB" = (
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /turf/simulated/floor/plating{
 	icon_state = "panelscorched"
 	},
@@ -20674,7 +20671,7 @@
 /obj/item/weapon/spacecash/c10,
 /obj/item/organ/external/head/with_teeth,
 /obj/effect/decal/cleanable/dirt,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /obj/item/trash/pistachios,
 /obj/item/trash/syndi_cakes,
 /obj/item/trash/tray,
@@ -26680,7 +26677,7 @@
 /obj/structure/bed/chair/comfy/beige{
 	dir = 8
 	},
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor{
 	icon_state = "checker";
 	tag = "icon-yellowcornersiding (WEST)"
@@ -34541,15 +34538,15 @@
 /area/lamprey/permabrig)
 "bAv" = (
 /obj/structure/table/reinforced,
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 2;
 	pixel_y = 6
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 2;
 	pixel_y = 6
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 2;
 	pixel_y = 6
 	},
@@ -36013,7 +36010,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor/plating,
 /area/lamprey/virology)
 "bDy" = (
@@ -37890,7 +37887,7 @@
 /area/lamprey/originmaintenanceblob)
 "bHA" = (
 /obj/effect/mine/stun,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /turf/simulated/floor/plating,
 /area/lamprey/originmaintenanceblob)
 "bHB" = (
@@ -39752,7 +39749,7 @@
 /obj/item/trash/syndi_cakes,
 /obj/item/trash/semki,
 /obj/item/trash/pistachios,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /turf/simulated/floor/plating,
 /area/lamprey/originmaintenanceblob)
 "bLz" = (
@@ -40474,7 +40471,7 @@
 /area/lamprey/originmaintenanceblob)
 "bNh" = (
 /obj/effect/mine/stun,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1";
 	tag = "icon-platingdmg1"
@@ -43331,6 +43328,10 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
+/obj/item/weapon/circuitboard/circuit_imprinter{
+	pixel_x = 3;
+	pixel_y = -3
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -44414,11 +44415,11 @@
 	pixel_x = -8;
 	pixel_y = -1
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 10;
 	pixel_y = 6
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 13;
 	pixel_y = 8
 	},
@@ -45045,7 +45046,7 @@
 /obj/item/trash/syndi_cakes,
 /obj/item/trash/semki,
 /obj/item/trash/pistachios,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /obj/machinery/light/small{
 	dir = 1
 	},
@@ -50927,7 +50928,7 @@
 /area/lamprey/botaneva)
 "cks" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "vault";
@@ -52413,7 +52414,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cnC" = (
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor/plating,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cnD" = (
@@ -59357,7 +59358,7 @@
 /area/lamprey/medbay)
 "cDe" = (
 /obj/structure/rack,
-/obj/item/clothing/glasses/thermal,
+/obj/item/clothing/glasses/hud/thermal,
 /turf/simulated/floor/plating,
 /area/lamprey/aftstarboardhallways)
 "cDf" = (
@@ -61188,6 +61189,13 @@
 "cHm" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/light,
+/obj/item/high_roller{
+	pixel_x = -4
+	},
+/obj/item/weapon/reagent_containers/glass/metal_bucket/nanopaint/filled/red{
+	pixel_y = 8;
+	pixel_x = 8
+	},
 /turf/simulated/floor,
 /area/lamprey/tinyroomzone)
 "cHn" = (
@@ -66565,7 +66573,7 @@
 /obj/structure/window/reinforced/tinted{
 	dir = 1
 	},
-/obj/item/toy/gasha/carptoy,
+/obj/item/toy/plushie/carp,
 /turf/simulated/floor/engine{
 	name = "Holodeck Projector Floor"
 	},
@@ -67901,7 +67909,7 @@
 	},
 /area/lamprey/warzonemaintenanceblob)
 "cVI" = (
-/obj/item/weapon/toolbox_tiles_sensor,
+/obj/item/weapon/toolbox_tiles/sensor,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
 /turf/simulated/floor/plating{
@@ -68849,7 +68857,7 @@
 "cXW" = (
 /obj/structure/lattice,
 /obj/structure/closet/crate/hydroponics,
-/obj/item/weapon/gun/energy/floragun,
+/obj/item/floral_somatoray,
 /obj/abstract/map/spawner/maint,
 /turf/space,
 /area)
@@ -69926,7 +69934,7 @@
 "dau" = (
 /obj/structure/table/reinforced,
 /obj/item/toy/bomb,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/simulated/floor{
 	icon_state = "whitepurplecorner"
 	},
@@ -70158,7 +70166,7 @@
 "dbb" = (
 /obj/structure/closet/secure_closet/hop2,
 /obj/item/clothing/suit/armor/hos,
-/obj/item/toy/gasha/corgitoy,
+/obj/item/toy/plushie/corgi,
 /turf/simulated/floor{
 	icon_state = "darkblue"
 	},
@@ -70330,7 +70338,7 @@
 /area/lamprey/centralhallways)
 "dbt" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor/plating,
 /area/lamprey/centralhallways)
 "dbu" = (
@@ -72518,7 +72526,7 @@
 	icon_state = "bot"
 	},
 /obj/structure/closet/crate/chest,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "brown"
@@ -80036,7 +80044,7 @@
 /area/lamprey/engineering)
 "dtD" = (
 /obj/structure/rack,
-/obj/item/clothing/glasses/thermal,
+/obj/item/clothing/glasses/hud/thermal,
 /turf/simulated/floor/plating,
 /area/lamprey/engineering)
 "dtE" = (
@@ -87585,7 +87593,7 @@
 /obj/item/weapon/stock_parts/subspace/analyzer,
 /obj/item/weapon/stock_parts/subspace/analyzer,
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	scrub_Toxins = 0
+	default_scrubbed_gases = list( "carbon_dioxide" )
 	},
 /obj/item/weapon/stock_parts/subspace/treatment,
 /obj/item/weapon/stock_parts/subspace/treatment,
@@ -91694,8 +91702,7 @@
 /area/lamprey/enginerooms)
 "dQq" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	scrub_CO2 = 0;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "plasma", "oxygen" )
 	},
 /obj/structure/reagent_dispensers/fueltank,
 /obj/structure/reagent_dispensers/fueltank,
@@ -93849,7 +93856,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/thebelt)
 "dUB" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/lamprey/thebelt)
 "dUC" = (
@@ -96763,7 +96770,7 @@
 /area/lamprey/engineeringmaintenanceblob)
 "ebm" = (
 /obj/machinery/atmospherics/pipe/simple/supply/visible,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /obj/effect/decal/warning_stripes{
 	dir = 4;
 	icon_state = "warning";
@@ -100201,7 +100208,7 @@
 	dir = 4;
 	icon_state = "warning"
 	},
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "whitepurple"
@@ -101244,7 +101251,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/hell)
 "elh" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/lamprey/bridge)
 "eli" = (
@@ -101496,7 +101503,7 @@
 /turf/unsimulated/beach/sand,
 /area/lamprey/hell)
 "elQ" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/lamprey/hell)
 "elR" = (
@@ -103522,7 +103529,7 @@
 /turf/simulated/floor/carpet,
 /area/lamprey/barattheedgeoftheworld)
 "eqo" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/lamprey/barattheedgeoftheworld)
 "eqp" = (
@@ -104795,7 +104802,7 @@
 	},
 /area/lamprey/moon)
 "esY" = (
-/obj/item/toy/gasha/corgitoy,
+/obj/item/toy/plushie/corgi,
 /turf/simulated/floor/airless{
 	dir = 5;
 	icon_state = "asteroidfloor"
@@ -107406,7 +107413,7 @@
 "exY" = (
 /obj/structure/table/reinforced,
 /obj/item/toy/bomb,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/tool/wrench,
 /turf/simulated/floor{
 	icon_state = "whitepurplecorner"
@@ -107501,9 +107508,6 @@
 /area/shuttle/arrival/station)
 "eyh" = (
 /obj/structure/closet/wardrobe/xenos,
-/obj/item/clothing/under/vox/vox_casual,
-/obj/item/clothing/under/vox/vox_casual,
-/obj/item/clothing/under/vox/vox_casual,
 /obj/item/tool/wrench,
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
@@ -109906,7 +109910,7 @@
 /obj/item/weapon/spacecash/c10,
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/bustanuts,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /obj/item/trash/oldempirebar,
 /obj/item/trash/plate,
 /obj/item/trash/pistachios,
@@ -111957,7 +111961,7 @@
 /obj/item/clothing/gloves/black,
 /obj/item/weapon/extinguisher,
 /obj/item/weapon/tank/oxygen/red,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor/plating,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "eHr" = (
@@ -112089,7 +112093,7 @@
 	},
 /area/lamprey/headofpersonnelline)
 "eHG" = (
-/obj/item/weapon/reagent_containers/glass/paint,
+/obj/item/weapon/reagent_containers/glass/metal_bucket/paint,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
 	dir = 8;
@@ -113330,7 +113334,7 @@
 	},
 /area/lamprey/voxmetaclub)
 "eJK" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/vox{
 	icon = 'icons/turf/overlays.dmi';
 	icon_state = "black_box";
@@ -114054,7 +114058,7 @@
 /area/lamprey/catchall)
 "eLg" = (
 /obj/structure/rack,
-/obj/item/clothing/glasses/thermal,
+/obj/item/clothing/glasses/hud/thermal,
 /obj/effect/step_trigger/teleporter{
 	name = "best hallway";
 	teleport_x = 300;
@@ -114773,7 +114777,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/wood,
 /area/lamprey/catchall)
@@ -114964,7 +114968,7 @@
 /turf/space,
 /area)
 "eNf" = (
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
@@ -118308,7 +118312,7 @@
 /area/lamprey/catchall)
 "eUz" = (
 /obj/machinery/computer/HolodeckControl,
-/obj/item/toy/gasha/carptoy,
+/obj/item/toy/plushie/carp,
 /turf/simulated/floor/wood,
 /area/lamprey/catchall)
 "eUA" = (
@@ -118615,7 +118619,7 @@
 /area/lamprey/catchall)
 "eUZ" = (
 /obj/structure/closet/secure_closet/personal/cabinet,
-/obj/item/toy/gasha/beartoy,
+/obj/item/toy/plushie/spacebear,
 /obj/machinery/light/small,
 /turf/simulated/floor/carpet,
 /area/lamprey/catchall)
@@ -126834,7 +126838,7 @@
 /area/centcom/ert)
 "fnO" = (
 /obj/structure/table/reinforced,
-/obj/item/clothing/glasses/sunglasses/sechud{
+/obj/item/clothing/glasses/hud/security/sunglasses{
 	pixel_y = 8
 	},
 /obj/item/weapon/gun/energy/taser,
@@ -127758,7 +127762,7 @@
 /obj/item/clothing/head/bio_hood/janitor,
 /obj/item/device/radio/headset/ert,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor{
 	icon_state = "dark purple stripe"
@@ -137495,7 +137499,7 @@
 "fMZ" = (
 /obj/structure/closet/vox_raiders,
 /obj/item/weapon/storage/backpack,
-/obj/item/clothing/glasses/thermal/monocle,
+/obj/item/clothing/glasses/hud/thermal/monocle,
 /obj/item/device/radio/headset/raider/pretuned,
 /turf/simulated/floor/shuttle/vox{
 	icon_state = "floor4"
@@ -139571,7 +139575,7 @@
 	},
 /obj/machinery/air_sensor{
 	id_tag = "satellite_coldroom";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
@@ -143165,10 +143169,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/obj/machinery/computer/smelting{
-	name = "recycling furnace console";
-	smelter_tag = "recycling_smelter"
-	},
+/obj/machinery/computer/smelting/recycling,
 /turf/space,
 /area)
 "fZh" = (
@@ -148546,7 +148547,7 @@
 /area)
 "gkx" = (
 /obj/machinery/computer/HolodeckControl,
-/obj/item/toy/gasha/carptoy,
+/obj/item/toy/plushie/carp,
 /turf/space,
 /area)
 "gky" = (
@@ -148876,7 +148877,7 @@
 /area)
 "glg" = (
 /obj/structure/closet/secure_closet/personal/cabinet,
-/obj/item/toy/gasha/beartoy,
+/obj/item/toy/plushie/spacebear,
 /turf/space,
 /area)
 "glh" = (
@@ -149824,7 +149825,7 @@
 /turf/space,
 /area)
 "gnb" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/space,
 /area)
 "gnc" = (
@@ -151164,7 +151165,7 @@
 /turf/space,
 /area)
 "gpx" = (
-/obj/item/toy/gasha/corgitoy,
+/obj/item/toy/plushie/corgi,
 /turf/space,
 /area)
 "gpy" = (
@@ -152018,8 +152019,8 @@
 /obj/item/device/gps/science,
 /obj/item/device/gps/science,
 /obj/item/device/gps/science,
-/obj/item/clothing/glasses/science,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/space,
 /area)
 "grj" = (
@@ -153972,8 +153973,8 @@
 /area)
 "guN" = (
 /obj/structure/table,
-/obj/item/clothing/glasses/science,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/clothing/gloves/latex,
 /obj/item/clothing/gloves/latex,
 /turf/space,
@@ -156349,7 +156350,7 @@
 /obj/machinery/light_switch{
 	pixel_x = 24
 	},
-/obj/item/toy/gasha/cattoy,
+/obj/item/toy/plushie/cat,
 /turf/space,
 /area)
 "gzp" = (
@@ -156811,7 +156812,7 @@
 /turf/space,
 /area)
 "gAq" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating/airless,
 /area)
 "gAr" = (
@@ -157514,7 +157515,7 @@
 /area)
 "gBN" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	scrub_Toxins = 0
+	default_scrubbed_gases = list( "carbon_dioxide" )
 	},
 /turf/space,
 /area)
@@ -163990,9 +163991,9 @@
 "gNY" = (
 /obj/structure/table,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/item/clothing/glasses/science,
-/obj/item/clothing/glasses/science,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
+/obj/item/clothing/glasses/scanner/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/weapon/storage/box/syringes{
 	pixel_x = 6;
 	pixel_y = 6
@@ -166291,7 +166292,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4;
 	name = "Telecomms Scrubber";
-	scrub_CO2 = 0
+	default_scrubbed_gases = list( "plasma" )
 	},
 /turf/space,
 /area)
@@ -166302,7 +166303,7 @@
 /obj/machinery/air_sensor{
 	id_tag = "tcomms_sensor";
 	name = "Telecomms Gas Sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /turf/space,
 /area)
@@ -170524,7 +170525,7 @@
 /area)
 "hab" = (
 /obj/structure/closet/secure_closet/engineering_chief,
-/obj/item/toy/gasha/parrottoy,
+/obj/item/toy/plushie/parrot,
 /obj/item/weapon/storage/box/foam,
 /obj/item/clothing/suit/storage/wintercoat/engineering/ce,
 /obj/structure/painting/random{
@@ -175401,7 +175402,7 @@
 /turf/space,
 /area)
 "him" = (
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/space,
 /area)
 "hin" = (
@@ -178575,9 +178576,9 @@
 "hnZ" = (
 /obj/structure/table/glass,
 /obj/structure/window/reinforced,
-/obj/item/seeds/weeds,
-/obj/item/seeds/weeds,
-/obj/item/seeds/weeds,
+/obj/item/seeds/dandelionseed,
+/obj/item/seeds/dandelionseed,
+/obj/item/seeds/dandelionseed,
 /obj/item/weapon/reagent_containers/spray/plantbgone,
 /turf/space,
 /area)
@@ -183012,7 +183013,7 @@
 	frequency = 1441;
 	id_tag = "waste_sensor";
 	name = "Mix Sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -183919,7 +183920,7 @@
 	frequency = 1443;
 	id_tag = "air_sensor";
 	name = "Air Sensor";
-	output = 7
+	metrics_monitored = list("pressure", "temperature", "oxygen")
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -185395,7 +185396,7 @@
 "hBo" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 8;
-	filter_type = 1;
+	filtered_gas = "oxygen";
 	icon_state = "intact_on";
 	name = "Gas filter (O2 Tank)";
 	on = 1
@@ -185411,7 +185412,7 @@
 "hBq" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 8;
-	filter_type = 2;
+	filtered_gas = "nitrogen";
 	icon_state = "intact_on";
 	name = "Gas filter (N2 Tank)";
 	on = 1
@@ -185421,7 +185422,7 @@
 "hBr" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 8;
-	filter_type = 3;
+	filtered_gas = "carbon_dioxide";
 	icon_state = "intact_on";
 	name = "Gas filter(CO2 Tank)";
 	on = 1
@@ -185440,7 +185441,7 @@
 "hBt" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 8;
-	filter_type = 4;
+	filtered_gas = "sleeping_agent";
 	icon_state = "intact_on";
 	name = "Gas filter (N2O Tank)";
 	on = 1
@@ -185842,7 +185843,7 @@
 /obj/machinery/air_sensor{
 	frequency = 1441;
 	id_tag = "sme_sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /obj/effect/decal/warning_stripes{
 	color = "#ffff00";
@@ -186223,7 +186224,7 @@
 "hDc" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 4;
-	filter_type = 2;
+	filtered_gas = "nitrogen";
 	icon_state = "intact_on";
 	name = "Gas filter (N2)";
 	on = 1
@@ -187707,7 +187708,7 @@
 /area/lamprey/excavationtunnels)
 "hGV" = (
 /obj/structure/table,
-/obj/item/clothing/glasses/thermal,
+/obj/item/clothing/glasses/hud/thermal,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -187865,7 +187866,7 @@
 /area/lamprey/excavationtunnels)
 "hHv" = (
 /obj/structure/rack,
-/obj/item/clothing/glasses/thermal,
+/obj/item/clothing/glasses/hud/thermal,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -191543,7 +191544,7 @@
 /turf/simulated/wall/r_wall,
 /area/lamprey/combooutpost)
 "hPd" = (
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor,
 /area/lamprey/combooutpost)
 "hPe" = (
@@ -193130,7 +193131,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -193492,7 +193493,7 @@
 /obj/machinery/air_sensor{
 	frequency = 1441;
 	id_tag = "vox_sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /turf/simulated/floor/engine{
 	name = "n2 floor";
@@ -193641,7 +193642,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/plating/vox,
 /area/lamprey/combooutpost)
@@ -193718,7 +193719,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /obj/item/weapon/reagent_containers/spray/cleaner{
 	pixel_x = -3;
@@ -193981,7 +193982,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -194245,7 +194246,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/plating/vox,
 /area/lamprey/combooutpost)
@@ -194904,7 +194905,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -195230,7 +195231,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /obj/structure/window{
 	dir = 4
@@ -195271,7 +195272,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox/wood,
 /area/lamprey/combooutpost)
@@ -195520,7 +195521,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox,
 /area/lamprey/combooutpost)
@@ -195569,7 +195570,7 @@
 /obj/item/weapon/pen,
 /obj/item/weapon/reagent_containers/glass/bottle/mutagen,
 /obj/item/device/analyzer/plant_analyzer,
-/obj/item/weapon/gun/energy/floragun,
+/obj/item/floral_somatoray,
 /turf/simulated/floor/vox{
 	icon_state = "dark"
 	},
@@ -195689,7 +195690,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -196180,7 +196181,7 @@
 /obj/structure/bed/chair{
 	dir = 4
 	},
-/obj/item/clothing/glasses/thermal,
+/obj/item/clothing/glasses/hud/thermal,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -196931,10 +196932,18 @@
 "iaC" = (
 /turf/space,
 /area/lamprey/asteroid)
+"mGT" = (
+/obj/machinery/electric_loom,
+/turf/simulated/floor/plating,
+/area/lamprey/engineeringmaintenanceblob)
 "nlh" = (
 /obj/structure/shuttle/diag_wall/smooth,
 /turf/unsimulated/mineral,
 /area/asteroid/clown)
+"rXL" = (
+/obj/structure/spinning_wheel,
+/turf/simulated/floor/plating,
+/area/lamprey/engineeringmaintenanceblob)
 "tRh" = (
 /obj/machinery/crate_weigher,
 /turf/simulated/floor{
@@ -196942,6 +196951,11 @@
 	icon_state = "brown"
 	},
 /area/lamprey/barndgo)
+"uwA" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/rcl/pre_loaded,
+/turf/simulated/floor/plating,
+/area/lamprey/engineering)
 
 (1,1,1) = {"
 aaa
@@ -294147,7 +294161,7 @@ dbm
 dFm
 dGQ
 dIt
-dJM
+mGT
 dKO
 dJM
 dJL
@@ -294660,7 +294674,7 @@ dGQ
 dGQ
 dGQ
 dGQ
-dJM
+rXL
 dJL
 dVJ
 dGQ
@@ -302171,7 +302185,7 @@ cXx
 doD
 dqj
 drL
-drL
+uwA
 dvd
 dwp
 dxS
@@ -302673,7 +302687,7 @@ cXx
 doE
 dqk
 drM
-drL
+uwA
 dve
 dwq
 dxT
@@ -303175,7 +303189,7 @@ cXx
 doF
 dql
 drL
-drL
+uwA
 dvf
 dwr
 dxU

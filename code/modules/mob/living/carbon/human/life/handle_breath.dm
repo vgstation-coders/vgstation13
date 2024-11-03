@@ -59,7 +59,7 @@
 
 				if(!breath || breath.total_moles < BREATH_MOLES / 5 || breath.total_moles > BREATH_MOLES * 5)
 					if(prob(20))
-						L.damage += 1
+						L.take_damage(1,1)
 					if(!is_lung_ruptured() && L.damage > 2)
 						var/chance_break = (L.damage / L.min_broken_damage)*100
 						if(prob(chance_break))

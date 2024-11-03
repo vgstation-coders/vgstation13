@@ -52,7 +52,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/security,
 			slot_gloves_str = /obj/item/clothing/gloves/combat,
 			slot_belt_str = /obj/item/weapon/storage/belt/security,
-			slot_wear_suit_str = /obj/item/clothing/suit/armor/xcomsquaddie/dredd,
+			slot_wear_suit_str = /obj/item/clothing/suit/armor/dredd,
 			slot_l_store_str = /obj/item/weapon/storage/bag/ammo_pouch/judge
 		)
 	)

@@ -135,6 +135,7 @@ var/const/POS_HEADER = {"<html>
 	density = 0
 	name = "point of sale"
 	desc = "Also known as a cash register, or, more commonly, \"robbery magnet\"."
+	pass_flags = PASSTABLE
 
 	var/id = 0
 	var/sales = 0
@@ -531,7 +532,7 @@ var/const/POS_HEADER = {"<html>
 			if("Add to Order")
 				AddToOrder(href_list["preset"],text2num(href_list["units"]))
 			if("Add Products")
-				for(var/list/line in splittext(href_list["csv"],"\n"))
+				for(var/line in splittext(href_list["csv"],"\n"))
 					var/list/cells = splittext(line,",")
 					if(cells.len<2)
 						to_chat(usr, "<span class='warning'>The CSV must have at least two columns: Product Name, followed by Price (as a number).</span>")

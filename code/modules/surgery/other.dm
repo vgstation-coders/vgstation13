@@ -46,7 +46,7 @@
 		affected.wounds -= W
 		affected.update_damages()
 	if (ishuman(user) && prob(40))
-		user:bloody_hands(target, 1)
+		user:bloody_hands(target, 2)
 
 /datum/surgery_step/fix_vein/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -57,7 +57,7 @@
 
 
 //////FIX DEAD TISSUE/////
-/datum/surgery_step/fix_dead_tissue/tool_quality(obj/item/tool)
+/datum/surgery_step/fix_dead_tissue/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0

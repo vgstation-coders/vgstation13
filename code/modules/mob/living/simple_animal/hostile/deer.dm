@@ -14,6 +14,7 @@
 	melee_damage_lower = 5
 	melee_damage_upper = 15
 
+	treadmill_speed = 2.5
 	minbodytemp = 200
 
 /mob/living/simple_animal/hostile/deer/GiveTarget(var/new_target)
@@ -139,6 +140,7 @@
 	icon_living = "fleshdeer"
 	icon_dead = "fleshdeer_dead"
 
+	supernatural = TRUE
 	canRegenerate = 1
 	maxRegenTime = 150
 	minRegenTime = 60

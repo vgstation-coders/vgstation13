@@ -22,6 +22,7 @@
 	attack_sound = "sound/weapons/pierce.ogg"
 	mob_property_flags = MOB_CONSTRUCT
 	//This dough's hard baked
+	treadmill_speed = 2.5	//Run run as fast as you can etc
 	min_oxy = 0
 	max_oxy = 0
 	min_tox = 0
@@ -32,5 +33,6 @@
 	max_n2 = 0
 	minbodytemp = 0
 	speed = 7
+	supernatural = TRUE
 
 	blooded = FALSE

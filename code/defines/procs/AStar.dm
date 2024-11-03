@@ -329,7 +329,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 
 /////////////////////////////////////////////////////////////////////////
 
-/atom/proc/make_astar_path(var/atom/target, var/callback = new /callback(src, src::get_astar_path()))
+/atom/proc/make_astar_path(var/atom/target, var/callback = new /callback(src, nameof(src::get_astar_path())))
 	AStar(src, callback, get_turf(src), target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 30, 30)
 
 //override when needed to receive your path

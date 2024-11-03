@@ -24,6 +24,12 @@
 /turf/simulated/floor/mineral/gold/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/gold(null)
 
+/turf/simulated/floor/mineral/gold/gold_old
+	icon_state = "gold_old"
+
+/turf/simulated/floor/mineral/gold/gold_old/create_floor_tile()
+	floor_tile = new /obj/item/stack/tile/mineral/gold/gold_old(null)
+
 //SILVER
 
 /turf/simulated/floor/mineral/silver
@@ -33,6 +39,11 @@
 /turf/simulated/floor/mineral/silver/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/silver(null)
 
+/turf/simulated/floor/mineral/silver/silver_old
+	icon_state = "silver_old"
+
+/turf/simulated/floor/mineral/silver/silver_old/create_floor_tile()
+	floor_tile = new /obj/item/stack/tile/mineral/silver/silver_old(null)
 //BANANIUM
 
 /turf/simulated/floor/mineral/clown

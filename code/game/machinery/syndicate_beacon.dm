@@ -85,7 +85,7 @@
 			if (!reason)
 				temptext = ""
 				return
-			message_admins("[key_name(M)] wants to join the Syndicate by using a an already used syndicate beacon. [reason ? "Cover e-mail: [reason]" : "They didn't make a case for themselves."]. (<a href='?_src_=holder;syndbeaconpermission=1;syndbeacon=\ref[src];user=\ref[M];answer=1'>ACCEPT</a>/<a href='?_src_=holder;syndbeaconpermission=1;syndbeacon=\ref[src];user=\ref[M];answer=2'>DENY</a>/<a href='?_src_=holder;syndbeaconpermission=1;syndbeacon=\ref[src];user=\ref[M];answer=3'>DESTROY BEACON</a>)")
+			message_admins("[key_name(M)] wants to join the Syndicate by using an already used syndicate beacon. [reason ? "Cover e-mail: [reason]" : "They didn't make a case for themselves."]. (<a href='?_src_=holder;syndbeaconpermission=1;syndbeacon=\ref[src];user=\ref[M];answer=1'>ACCEPT</a>/<a href='?_src_=holder;syndbeaconpermission=1;syndbeacon=\ref[src];user=\ref[M];answer=2'>DENY</a>/<a href='?_src_=holder;syndbeaconpermission=1;syndbeacon=\ref[src];user=\ref[M];answer=3'>DESTROY BEACON</a>)")
 
 			temptext = "<i>Currently awaiting decision from the HR department...</i><br>"
 			updateUsrDialog()

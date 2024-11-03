@@ -75,7 +75,9 @@
 
 	if(!check_rights(R_SERVER))
 		return
-
+	if(alert("Reload admins? Note: currently playing admins may not like this.","Reload Admins","Yes","No") != "Yes")
+		//dear future coders yes i am mad right now
+		return
 	message_admins("[usr] manually reloaded admins")
 	load_admins()
 	feedback_add_details("admin_verb","RLDA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -135,3 +137,4 @@
 		else
 			str += "\n|''(Check [R.type]/on_reaction()!)''"
 	text2file(str+"\n|}","chemistry-recipes.wiki")
+z

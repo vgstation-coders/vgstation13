@@ -9,7 +9,7 @@
 			if(add_blood_from_data(G.bloody_hands_data)) //only reduces the bloodiness of our gloves if the item wasn't already bloody
 				G.transfer_blood--
 				M.update_inv_gloves()
-	else if(M.bloody_hands)
+	else if(M.bloody_hands > 1)
 		if(add_blood_from_data(M.bloody_hands_data))
 			M.bloody_hands--
 			M.update_inv_gloves()

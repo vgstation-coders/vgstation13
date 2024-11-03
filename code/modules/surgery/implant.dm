@@ -73,12 +73,11 @@
 
 
 ///////CLOSE SPACE/////
-/datum/surgery_step/cavity/close_space/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/cavity/close_space/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/cavity/close_space
 	priority = 2
 	allowed_tools = list(
@@ -150,7 +149,7 @@
 		var/datum/wound/internal_bleeding/I = new (15)
 		affected.wounds += I
 		affected.owner.custom_pain("You feel something rip in your [affected.display_name]!", 1, scream=TRUE)
-	user.drop_item()
+	user.drop_item(tool)
 	affected.hidden = tool
 	tool.forceMove(target)
 
@@ -172,7 +171,7 @@
 /datum/surgery_step/cavity/implant_removal
 	allowed_tools = list(
 		/obj/item/tool/hemostat = 100,
-		/obj/item/tool/wirecutters = 75,
+		"wirecutters" = 75,
 		/obj/item/weapon/talisman = 70,
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
@@ -228,7 +227,7 @@
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
 		"<span class='notice'>You take something out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
 		var/obj/clowndigobj = pick(/obj/item/weapon/bikehorn/rubberducky, /obj/item/weapon/reagent_containers/food/snacks/pie, /obj/item/toy/singlecard, /obj/item/toy/waterflower)
-		clowndigobj = new clowndigobj(user.loc)
+		clowndigobj = new clowndigobj(target.loc)
 		if (istype(clowndigobj, /obj/item/toy/singlecard))
 			var/obj/item/toy/singlecard/O = clowndigobj
 			O.cardname = pick("Red Joker","Black Joker")
@@ -253,7 +252,7 @@
 	affected.createwound(CUT, 20)
 	if (affected.implants.len)
 		var/fail_prob = 10
-		fail_prob += 100 - tool_quality(tool)
+		fail_prob += 100 - tool_quality(tool, user)
 		if (prob(fail_prob))
 			var/obj/item/weapon/implant/imp = affected.implants[1]
 			user.visible_message("<span class='warning'>Something beeps inside [target]'s [affected.display_name]!</span>")

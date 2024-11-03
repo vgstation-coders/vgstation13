@@ -12,6 +12,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	desc = "A special helmet designed for work in a hazardous, low-pressure environment. Has radiation shielding."
 	icon_state = "rig0-engineering"
 	item_state = "eng_helm"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
 	allowed = list(/obj/item/device/flashlight)
 	light_power = 1.7
@@ -26,7 +27,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	eyeprot = 3
 	species_fit = list(GREY_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	autoignition_temperature = null //fireproofing is covered elsewhere
+	flammable = FALSE
 	var/obj/item/clothing/suit/space/rig/rig
 	body_parts_visible_override = 0
 
@@ -90,7 +91,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 
 /obj/item/clothing/head/helmet/space/rig/update_icon()
 	icon_state = "rig[on]-[_color]" //No need for complicated if trees
-
+	..()
 
 /obj/item/clothing/head/helmet/space/rig/unequipped(mob/living/carbon/human/user, var/from_slot = null)
 	..()
@@ -117,11 +118,12 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	desc = "A special suit that protects against hazardous, low pressure environments."
 	icon_state = "rig-engineering"
 	item_state = "eng_hardsuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	species_fit = list(GREY_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 10)
-	autoignition_temperature = null //fireproofing is covered elsewhere
+	flammable = FALSE
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/tool/wrench/socket)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE

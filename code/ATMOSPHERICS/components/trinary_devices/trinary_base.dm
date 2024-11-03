@@ -3,6 +3,8 @@
 	initialize_directions = SOUTH|NORTH|WEST
 	use_power = MACHINE_POWER_USE_IDLE
 	can_be_coloured = 0
+	
+	var/frequency = -1
 
 	var/datum/gas_mixture/air1
 	var/datum/gas_mixture/air2
@@ -51,6 +53,8 @@
 		if(WEST)
 			initialize_directions = EAST|WEST|NORTH
 	..()
+	
+/obj/machinery/atmospherics/trinary/proc/set_frequency(new_frequency)
 
 /obj/machinery/atmospherics/trinary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	if(!(pipe.dir in list(NORTH, SOUTH, EAST, WEST)) && src.mirror) //because the dir isn't in the right set, we want to make the mirror kind
@@ -77,6 +81,10 @@
 	if (node3)
 		node3.initialize()
 		node3.build_network()
+	if(pipe.frequency)
+		set_frequency(pipe.frequency)
+	if(pipe.id_tag)
+		id_tag = pipe.id_tag
 	return 1
 
 

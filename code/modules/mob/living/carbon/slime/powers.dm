@@ -54,10 +54,7 @@
 	anchored = 1
 	var/lastnut = nutrition
 //	to_chat(if(M.client) M, "<span class='warning'>You legs become paralyzed!</span>")
-	if(istype(src, /mob/living/carbon/slime/adult))
-		icon_state = "[colour] adult slime eat"
-	else
-		icon_state = "[colour] baby slime eat"
+	icon_state = "[colour] [lifestage_name()] slime eat"
 	add_logs(src, Victim, "fed on", 0)
 	while(Victim && M.health > -70 && stat != 2)
 		// M.canmove = 0
@@ -101,12 +98,8 @@
 						if(powerlevel > 10)
 							powerlevel = 10
 
-				if(istype(src, /mob/living/carbon/slime/adult))
-					if(nutrition > 1200)
-						nutrition = 1200
-				else
-					if(nutrition > 1000)
-						nutrition = 1000
+				if(nutrition > 1200)
+					nutrition = 1200
 
 				Victim.updatehealth()
 				updatehealth()
@@ -124,14 +117,11 @@
 			break
 
 	if(stat == 2)
-		if(!istype(src, /mob/living/carbon/slime/adult))
+		if(slime_lifestage != SLIME_ADULT)
 			icon_state = "[colour] baby slime dead"
 
 	else
-		if(istype(src, /mob/living/carbon/slime/adult))
-			icon_state = "[colour] adult slime"
-		else
-			icon_state = "[colour] baby slime"
+		icon_state = "[colour] [lifestage_name()] slime"
 
 	canmove = 1
 	anchored = 0
@@ -140,11 +130,12 @@
 		if(M.health <= -70)
 			M.canmove = 0
 			if(!client)
-				if(Victim && !attacked)
-					if(Victim.LAssailant && (Victim.LAssailant != Victim) && Victim.LAssailant.mind)
+				if(Victim && Victim.lastassailant && !attacked)
+					var/mob/assail = Victim.lastassailant.get()
+					if(istype(assail) && (assail != Victim) && assail.mind)
 						if(prob(50))
-							if(!(Victim.LAssailant in Friends))
-								Friends.Add(Victim.LAssailant) // no idea why i was using the |= operator
+							if(!(assail in Friends))
+								Friends.Add(assail) // no idea why i was using the |= operator
 
 			if(M.client && istype(src, /mob/living/carbon/human))
 				if(prob(85))
@@ -182,7 +173,7 @@
 	if(stat)
 		to_chat(src, "<i>I must be conscious to do this...</i>")
 		return
-	if(!istype(src, /mob/living/carbon/slime/adult))
+	if(slime_lifestage != SLIME_ADULT)
 		if(amount_grown >= 10)
 			if(istype(src, /mob/living/carbon/slime/pygmy))
 				var/mob/living/carbon/human/slime/S = new (loc)
@@ -202,7 +193,7 @@
 						S.real_name = randomname
 						i++
 				return
-			var/mob/living/carbon/slime/adult/new_slime = new adulttype(loc)
+			var/mob/living/carbon/slime/new_slime = new adulttype(loc)
 			new_slime.nutrition = nutrition
 			new_slime.powerlevel = max(0, powerlevel-1)
 			new_slime.a_intent = I_HURT
@@ -233,7 +224,7 @@
 		to_chat(src, "<i>I must be conscious to do this...</i>")
 		return
 
-	if(istype(src, /mob/living/carbon/slime/adult))
+	if(slime_lifestage == SLIME_ADULT)
 		if(amount_grown >= 10)
 			//if(input("Are you absolutely sure you want to reproduce? Your current body will cease to be, but your consciousness will be transferred into a produced slime.") in list("Yes","No")=="Yes")
 			if(stat)
@@ -281,8 +272,6 @@
 			to_chat(src, "<i>I am not ready to reproduce yet...</i>")
 	else
 		to_chat(src, "<i>I am not old enough to reproduce yet...</i>")
-
-
 
 /mob/living/carbon/slime/verb/ventcrawl()
 	set name = "Crawl through Vent"

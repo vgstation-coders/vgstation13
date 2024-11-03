@@ -87,13 +87,10 @@
 	data["power"] = on
 	data["targetPressure"] = target_pressure
 	data["gases"] = list()
-	var/static/list/display_gases = list(
-		GAS_OXYGEN = "Oxygen",
-		GAS_NITROGEN = "Nitrogen",
-		GAS_CARBON = "Carbon Dioxide",
-		GAS_PLASMA = "Plasma",
-		GAS_SLEEPING = "Nitrous Oxide",
-	)
+	var/static/list/display_gases = list()
+	for(var/gas_id in XGM.gases)
+		var/datum/gas/gas_datum = XGM.gases[gas_id]
+		display_gases[gas_id] = gas_datum.name
 	var/total_moles = air.total_moles
 	for(var/gas in display_gases)
 		data["gases"] += list(list(

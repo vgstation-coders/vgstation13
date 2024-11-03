@@ -32,8 +32,7 @@
 "ah" = (
 /obj/structure/cable{
 	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 0
+	icon_state = "0-2"
 	},
 /obj/structure/catwalk,
 /obj/machinery/power/solar/panel/tracker,
@@ -317,9 +316,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/obj/machinery/power/apc/no_alerts/vault_AIsat{
-	pixel_x = 0
-	},
+/obj/machinery/power/apc/no_alerts/vault_AIsat,
 /turf/simulated/floor/greengrid,
 /area/vault/AIsat)
 "aS" = (
@@ -526,8 +523,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/wall/r_wall,
 /area/vault/AIsat)

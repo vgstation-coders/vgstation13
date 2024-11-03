@@ -1,6 +1,6 @@
 <!--
-Title: Supply Console UI
-Used In File(s): \code\game\supplyshuttle.dm
+Title: Public Order Console UI
+Used In File(s): code/game/machinery/computer/cargo.dm
 -->
 
 <style type='text/css'>
@@ -11,37 +11,58 @@ Used In File(s): \code\game\supplyshuttle.dm
 	}
 </style>
 <div class="item" style="float: left; width:100%; margin-bottom: 0px;">
-	<div class="itemLabel">
+	<span class="itemLabel" style="width: 26%">
 		Account Name:
-	</div>
-	<div class="itemContent">
+	</span>
+	<span class="itemContent">
 		{{if data.authorized_name != ""}}
 			{{:data.name_of_source_account}} as {{:data.authorized_name}}
 		{{else}}
 			{{:data.name_of_source_account}}
 		{{/if}}
-	</div>
+	</span>
 </div>
 <div class="item" style="width:100%; margin-bottom: 3px;">
-	<div class="itemLabel">
+	<span class="itemLabel" style="width: 26%">
 		Account Funds:
-	</div>
-	<div class="itemContent">
+	</span>
+	<span class="itemContent">
 		{{:data.money}}
+	</span>
+</div>
+<div style="float: left; width: 26%;">
+	<div class="itemLabel" style="margin-bottom: 3px; height: 21px">
+		Categories
+	</div>
+	<div class="itemContentWide" style="width: 100%;">
+		<div class="statusDisplay">
+			{{for data.all_supply_groups}}
+			<div class="line">
+				{{:helper.link(value.category, null, {'last_viewed_group': value.category}, (data.last_viewed_group==value.category)?'linkOn':'', 'noOverflow', 'category')}}
+			</div>
+			{{/for}}
+		</div>
 	</div>
 </div>
-<div style="float: right; width: 67%;">
-	<div class="itemLabel">
+<div style="float: right; width: 74%;">
+	<span class="itemLabel" style="width: 23%">
 		Supply Crates
-	</div>
-	<div class="itemContentWide" style="width: 95%;">
+	</span>
+	<span style="width: 52%;">
+		{{:helper.link("Sort: " + data.sort_method, 'refresh', {'sort': true}, null, '')}}
+	</span>
+	<span style="float: right; width: 24%; padding-right: 1px">
+		{{:helper.link("Search", 'search', {'search': true}, null, (data.last_viewed_group=='Search')?'linkOn':'')}}
+	</span>
+	<div class="itemContentWide" style="width: 92%;">
 		<div class="statusDisplay">
-			<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 184px">
+			<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 240px">
 				{{for data.supply_packs}}
 					<div class="line">
 						<div class="statusValue">
 							{{:helper.link(value.name, null, value.command1, null, 'fixedLeftWidest noOverflow')}}
-							{{:helper.link('#', null, value.command2, null)}}${{:value.cost}}
+							{{:helper.link('#', null, value.command2, null)}}
+							{{:helper.link('ⓘ', null, value.command3, (data.supply_pack_info.name==value.name)?'linkOn':'')}}${{:value.cost}}
 						</div>
 					</div>
 				{{/for}}
@@ -49,21 +70,43 @@ Used In File(s): \code\game\supplyshuttle.dm
 		</div>
 	</div>
 </div>
-<div style="float: left; width: 32%;">
-	<div class="itemLabel" style="margin-bottom: 3px;">
-		Categories
+<div class="item">
+	<div class="itemContentWide" style="margin:left; width: 94%">
+		<div class="statusDisplay">
+			<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 80px;">
+				<span><u><b>{{:data.supply_pack_info.name}}</b></u></span>
+				{{if data.supply_pack_info.access}}
+					 <span style="float: right"><i> Access Required: {{:data.supply_pack_info.access}}</i></span>
+					{{if data.supply_pack_info.has_access == 1}}
+						<span style="float: right; background-image: url(uiIcons16Green.png);" class="uiIcon16 icon-check"></span>
+					{{else}}
+						<span style="float: right; background-image: url(uiIcons16Red.png);" class="uiIcon16 icon-closethick"></span>
+					{{/if}}
+				{{/if}}
+				<br>
+				<div style="float: left; width: 36px;">
+					{{:data.supply_pack_info.packicon}}
+				</div>
+				{{if data.supply_pack_info.containsicon}}
+					<div style="float: left; width: 36px;">
+						{{:data.supply_pack_info.containsicon}}
+					</div>
+				{{/if}}
+				<div>
+					{{:data.supply_pack_info.containsdesc}}
+				</div>
+			</div>
+		</div>
 	</div>
-	{{for data.all_supply_groups}}
-	<div class="line">
-		{{:helper.link(value.category, null, {'last_viewed_group': value.category}, (data.last_viewed_group==value.category)?'linkOn':'', 'noOverflow', 'category')}}
-	</div>
-	{{/for}}
 </div>
+
+
+
 <div class="item">
 	<div class="itemLabel">
 		Supply Orders
 	</div>
-	<div class="itemContentWide">
+	<div class="itemContentWide" style="width: 94%;">
 		<div class="statusDisplay">
 			<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 220px;">
 				<u><b>Requests</b></u>

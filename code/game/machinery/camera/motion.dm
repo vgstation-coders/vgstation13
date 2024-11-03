@@ -34,13 +34,13 @@
 		detectTime = world.time // start the clock
 	if (!(target in motionTargets))
 		motionTargets += target
-		target.register_event(/event/destroyed, src, src::clearDeletedTarget())
+		target.register_event(/event/destroyed, src, nameof(src::clearDeletedTarget()))
 	return 1
 
 /obj/machinery/camera/proc/lostTarget(var/mob/target)
 	if (target in motionTargets)
 		motionTargets -= target
-		target.unregister_event(/event/destroyed, src, src::clearDeletedTarget())
+		target.unregister_event(/event/destroyed, src, nameof(src::clearDeletedTarget()))
 	if (motionTargets.len == 0)
 		cancelAlarm()
 

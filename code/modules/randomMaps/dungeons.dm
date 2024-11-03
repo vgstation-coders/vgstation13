@@ -14,7 +14,7 @@ var/turf/dungeon_area = null
 	//By default, random teleporters are created (making escaping to Z-2 impossible)
 	var/border_type = /obj/effect/step_trigger/teleporter/random/shuttle_transit
 
-/datum/map_element/dungeon/load(x,y,z)
+/datum/map_element/dungeon/load(x,y,z,rotate=0,overwrite=FALSE,override_can_rotate=FALSE)
 	.=..()
 
 	if(border_type)

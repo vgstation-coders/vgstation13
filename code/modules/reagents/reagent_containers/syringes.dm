@@ -45,6 +45,7 @@
 	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/reagent_containers/syringe/on_reagent_change()
+	..()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/pickup(mob/user)
@@ -406,6 +407,15 @@
 	reagents.add_reagent(CYANIDE, 5)
 	reagents.add_reagent(CHLORALHYDRATE, 5)
 	reagents.add_reagent(LEXORIN, 5)
+	mode = SYRINGE_INJECT
+	update_icon()
+
+/obj/item/weapon/reagent_containers/syringe/nitrogen
+	name = "syringe (nitrogen)"
+	desc = "Contains nitrogen - used to stabilize vox."
+/obj/item/weapon/reagent_containers/syringe/nitrogen/New()
+	..()
+	reagents.add_reagent(NITROGEN, 15)
 	mode = SYRINGE_INJECT
 	update_icon()
 

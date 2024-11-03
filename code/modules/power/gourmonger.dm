@@ -6,7 +6,7 @@
 var/global/gourmonger_saturation = 0
 
 /mob/living/simple_animal/hostile/gourmonger
-	name = "Gourmonger"
+	name = "\improper Gourmonger"
 	desc = "A bio-engineered lifeform designed to recycle excess organic matter into fuel."
 	icon = 'icons/mob/gourmonger.dmi'
 	icon_state = "gourmonger"
@@ -67,9 +67,9 @@ var/global/gourmonger_saturation = 0
 /mob/living/simple_animal/hostile/gourmonger/examine(mob/user)
 	..()
 	if(kcalPower < 150)
-		to_chat(user, "<span class='warning'>The [src] looks absolutely famished. It is drooling slightly.</span>")
+		to_chat(user, "<span class='warning'>\The [src] looks absolutely famished. It is drooling slightly.</span>")
 	else if(kcalPower > 1000)
-		to_chat(user, "<span class='notice'>The [src] is even fatter than usual.</span>")
+		to_chat(user, "<span class='notice'>\The [src] is even fatter than usual.</span>")
 
 /mob/living/simple_animal/hostile/gourmonger/attackby(obj/W, mob/user)
 	..()

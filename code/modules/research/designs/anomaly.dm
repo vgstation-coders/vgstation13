@@ -16,7 +16,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 700, MAT_GLASS = 2000)
 	category = "Anomaly"
-	build_path = /obj/item/clothing/glasses/science
+	build_path = /obj/item/clothing/glasses/scanner/science
 
 /datum/design/depth_scanner
 	name = "Depth Analysis Scanner"

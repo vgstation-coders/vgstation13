@@ -124,7 +124,8 @@
 				if(!iscultist(target))
 					var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 					if (cult && !cult.CanConvert())
-						to_chat(user, "<span class='danger'>The cult has too many members already.</span>")
+						to_chat(user, "<span class='danger'>The cult has too many members already. But this shade will obey you nonetheless.</span>")
+						target.master = user
 						return
 
 					var/datum/role/cultist/newCultist = new
@@ -138,9 +139,13 @@
 			else
 				if (iscultist(target))
 					var/datum/role/cultist = iscultist(target)
-					to_chat(target, "<span class='userdanger'>Your new master is NOT a cultist, you are henceforth disconnected from the rest of the cult. You are to follow your new master's commands and help them in their goal.</span>")
+					to_chat(target, "<span class='userdanger'>Your new master is NOT a cultist, you are henceforth disconnected from the rest of the cult.</span>")
 					cultist.Drop()
 					target.add_language(LANGUAGE_CULT)//re-adding cult languages, as all shades can speak it
+
+				if (target.master != user)
+					to_chat(target, "<span class='userdanger'>You are to follow your new master [user.real_name]'s commands and help them in their goal.</span>")
+					target.master = user
 
 /obj/item/soulstone/proc/eject_shade(var/mob/user)
 	if (!shade)
@@ -149,7 +154,10 @@
 	shade.forceMove(get_turf(src))
 	shade.status_flags &= ~GODMODE
 	if(user)
-		to_chat(shade, "<b>You have been released from your prison, but you are still bound to [user.name]'s will. Help them suceed in their goals at all costs.</b>")
+		if (shade.master == user)
+			to_chat(shade, "<b>You have been released from your prison, but you are still bound to [shade.master.real_name]'s will. Help them suceed in their goals at all costs.</b>")
+		else
+			to_chat(shade, "<b>You have been released from your prison by [user.real_name] and are now bound to their will. Help them suceed in their goals at all costs.</b>")
 	shade.canmove = 1
 	shade.cancel_camera()
 	shade = null
@@ -211,23 +219,6 @@
 		blade = TRUE
 	if (istype(receptacle, /obj/item/soulstone/gem))
 		gem = TRUE
-
-	var/mob/victim
-	if (iscarbon(target))
-		victim = target
-	else if (istype(target, /obj/item/organ/external/head))
-		var/obj/item/organ/external/head/target_head = target
-		victim = target_head.brainmob
-
-	if (victim)
-		//First off let's check that the cult isn't bypassing its convertee cap
-		if (iscultist(user))
-			if (!iscultist(victim))
-				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-				if (cult && !cult.CanConvert())
-					if (!blade || victim.isDead())
-						to_chat(user, "<span class='danger'>The cult has too many members already, \the [soul_receptacle] won't let you take their soul.</span>")
-					return
 
 	if (iscarbon(target))
 		init_body(target,user)
@@ -361,12 +352,12 @@
 	if (suicide)
 		receptacle.forceMove(get_turf(target))
 
-	var/mob/living/carbon/human/body = null
+	var/mob/living/carbon/body = null
 	var/datum/mind/mind = null
 
-	if(istype(target,/mob/living/carbon/human))
+	if(istype(target,/mob/living/carbon))
 		body = target
-	else if(istype(add_target,/mob/living/carbon/human))
+	else if(istype(add_target,/mob/living/carbon))
 		body = add_target
 
 	var/true_name = "Unknown"
@@ -390,20 +381,25 @@
 		body.invisibility = 101
 
 		var/datum/organ/external/head_organ = body.get_organ(LIMB_HEAD)
-		if(head_organ.status & ORGAN_DESTROYED)
+		if(head_organ && head_organ.status & ORGAN_DESTROYED)
 			if (!gem)
 				new /obj/effect/decal/remains/human/noskull(T)
 			anim(target = T, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2-nohead", sleeptime = 26)
 		else
 			if (!gem)
-				new /obj/effect/decal/remains/human(T)
+				if (ishuman(body))
+					new /obj/effect/decal/remains/human(T)
+				else if (isalien(body))
+					new /obj/effect/decal/remains/xeno(T)
 			if(body.lying)
 				anim(target = T, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2", sleeptime = 26)
 			else
 				anim(target = T, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 26)
 
-		if(!gem && body.decapitated?.get() == target)//just making sure we're dealing with the right head
-			new /obj/item/weapon/skull(get_turf(target))
+		if(!gem && ishuman(body))
+			var/mob/living/carbon/human/H = body
+			if (H.decapitated?.get() == target)//just making sure we're dealing with the right head
+				new /obj/item/weapon/skull(get_turf(target))
 
 	target.invisibility = 101 //It's not possible to interact with the body normally now, but we don't want to delete it just yet
 
@@ -433,9 +429,10 @@
 			qdel(add_target)
 		return
 
-	message_admins("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)][iscultist(user) ? ", a cultist." : "a NON-cultist."].")
-	log_admin("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)][iscultist(user) ? ", a cultist." : "a NON-cultist."].")
-	add_logs(user, body, "captured [body.name]'s soul", object=receptacle)
+	if (body)
+		message_admins("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)][iscultist(user) ? ", a cultist." : "a NON-cultist."].")
+		log_admin("BLOODCULT: [key_name(body)] has been soul-stoned by [key_name(user)][iscultist(user) ? ", a cultist." : "a NON-cultist."].")
+		add_logs(user, body, "captured [body.name]'s soul", object=receptacle)
 
 	//Creating a shade inside the stone and putting the victim in control
 	var/mob/living/simple_animal/shade/shadeMob
@@ -445,6 +442,8 @@
 		shadeMob = new /mob/living/simple_animal/shade/noncult(receptacle)
 	shadeMob.status_flags |= GODMODE //So they won't die inside the stone somehow
 	shadeMob.canmove = 0//Can't move out of the soul stone
+	if (suicide)
+		shadeMob.soulblade_ritual = TRUE
 	shadeMob.name = "[true_name] the Shade"
 	shadeMob.real_name = "[true_name]"
 	mind.transfer_to(shadeMob)
@@ -467,8 +466,9 @@
 		sblade.update_icon()
 	user.update_inv_hands()
 	if (!suicide)
-		to_chat(shadeMob, "<span class='notice'>Your soul has been captured! You are now bound to [user.name]'s will, help them succeed in their goals at all costs.</span>")
+		to_chat(shadeMob, "<span class='notice'>Your soul has been captured! You are now bound to [user.real_name]'s will, help them succeed in their goals at all costs.</span>")
 		to_chat(user, "<span class='notice'>[true_name]'s soul has been ripped from their body and stored within \the [receptacle].</span>")
+		shadeMob.master = user
 	else
 		to_chat(shadeMob, "<span class='notice'>You have ripped your own soul from your body and now reside within \the [receptacle]. What's the next step of your master plan?</span>")
 
@@ -485,6 +485,13 @@
 				newCultist.OnPostSetup()
 				newCultist.Greet(GREET_SOULSTONE)
 				newCultist.conversion["soulstone"] = user
+				if (!(shadeMob.mind in cult.previously_converted))
+					cult.previously_made_prisoner |= shadeMob.mind
+					var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+					if (shadeMob.mind in cult.previously_made_prisoner)
+						C.gain_devotion(50, DEVOTION_TIER_4, "soulstone_prisoner", shadeMob)//making someone prisoner already grants 250 devotion on top.
+					else
+						C.gain_devotion(300, DEVOTION_TIER_4, "soulstone", shadeMob)
 
 		else
 			if (iscultist(shadeMob))
@@ -635,6 +642,10 @@
 	if (!new_construct)
 		return
 
+	if (iscultist(new_construct))
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		cult.check_ritual("build_construct", new_construct)
+
 	if(islegacycultist(user))//legacy cult stuff
 		var/datum/faction/cult/narsie/cult_round = find_active_faction_by_member(user.mind.GetRole(LEGACY_CULTIST))
 		if(istype(cult_round))
@@ -642,9 +653,6 @@
 
 	new_construct.real_name = soul.real_name
 	new_construct.name = "[new_construct.real_name] the [construct_class]"
-
-	if(iscultist(user))
-		TriggerCultRitual(ritualtype = /datum/bloodcult_ritual/build_construct, extrainfo = list("perfect" = perfect))
 
 	for(var/atom/A in stone)//we get rid of the empty shade once we've transferred its mind to the construct, so it isn't dropped on the floor when the soulstone is destroyed.
 		qdel(A)

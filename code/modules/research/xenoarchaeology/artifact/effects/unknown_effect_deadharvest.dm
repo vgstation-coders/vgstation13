@@ -113,7 +113,7 @@
 		if(istype(summons, sacrifice)) //No sacrificing things we've summoned
 			if(heal_associates)
 				sacrifice.revive(0)
-				sacrifice.visible_message("<span class='warning'>\the [src] appears to wake from the dead, having healed all wounds.</span>")
+				sacrifice.visible_message("<span class='warning'>\The [src] appears to wake from the dead, having healed all wounds.</span>")
 			return
 
 	if(iscarbon(sacrifice))

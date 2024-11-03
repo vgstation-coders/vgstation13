@@ -266,6 +266,11 @@
 	overlay_color = "#CDCDCD"
 	gases = list(GAS_CARBON = 1)
 
+/obj/machinery/atmospherics/miner/cryotheum
+	name = "\improper Cryotheum Gas Miner"
+	overlay_color = "#ABCBFF"
+	gases = list(GAS_CRYOTHEUM = 1)
+
 /obj/machinery/atmospherics/miner/air
 	name = "\improper Air Miner"
 	desc = "You fucking <em>cheater</em>."

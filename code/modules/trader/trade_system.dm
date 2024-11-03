@@ -113,3 +113,12 @@ var/datum/subsystem/trade_system/SStrade
 	if(loyal_customers[user.get_face_name()] >= 1000)
 		return 0.9
 	return 1-round(loyal_customers[user.get_face_name()]/10000,0.01) //1% off per $100 spent, up to 10% off
+
+/datum/subsystem/trade_system/proc/stocked_variety_pack()
+	var/copy = shuffle(all_trade_merch)
+	for(var/datum/trade_product/TP in copy)
+		if(TP.totalsold >= TP.maxunits)
+			continue
+		if(TP.sales_category != TRADE_VARIETY)
+			continue
+		return TP

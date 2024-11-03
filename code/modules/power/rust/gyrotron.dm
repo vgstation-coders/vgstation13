@@ -109,7 +109,7 @@
 		return
 
 	if(anchored)
-		to_chat(usr, "<span class='notify'>\the [src] is anchored to the floor!</span>")
+		to_chat(usr, "<span class='notify'>\The [src] is anchored to the floor!</span>")
 		return
 
 	dir = turn(dir, -90)
@@ -123,7 +123,7 @@
 		return
 
 	if(anchored)
-		to_chat(usr, "<span class='notify'>\the [src] is anchored to the floor!</span>")
+		to_chat(usr, "<span class='notify'>\The [src] is anchored to the floor!</span>")
 		return
 
 	dir = turn(dir, 90)

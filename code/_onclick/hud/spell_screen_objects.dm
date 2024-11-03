@@ -90,6 +90,8 @@
 	if(!spell)
 		return
 
+	if(spell.spell_flags & NO_BUTTON) //no button to add if we don't get one
+		return
 	if(spell.connected_button) //we have one already, for some reason
 		if(spell.connected_button in spell_objects)
 			return
@@ -97,9 +99,6 @@
 			spell_objects.Add(spell.connected_button)
 			toggle_open(2)
 			return
-
-	if(spell.spell_flags & NO_BUTTON) //no button to add if we don't get one
-		return
 
 	var/obj/abstract/screen/spell/newscreen = new /obj/abstract/screen/spell
 	newscreen.spellmaster = src

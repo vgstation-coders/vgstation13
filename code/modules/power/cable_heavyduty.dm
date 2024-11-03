@@ -23,8 +23,3 @@
 		return
 	else
 		..()
-
-/obj/structure/cable/heavyduty/cableColor(var/colorC)
-	_color = "red"
-	light_color = LIGHT_COLOR_RED
-	return

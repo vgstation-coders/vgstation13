@@ -55,7 +55,7 @@ atom/movable/GotoAirflowDest(n)
 		return FALSE
 	if(knockdown <= 0)
 		to_chat(src, "<span class='warning'>The sudden rush of air knocks you over!</span>")
-	SetKnockdown(rand(differential/20,differential/10))
+	SetKnockdown(min(rand(differential/20,differential/10), 5))
 	last_airflow_stun = world.time
 
 /mob/living/silicon/airflow_stun()
@@ -78,7 +78,7 @@ atom/movable/GotoAirflowDest(n)
 
 	if(knockdown <= 0)
 		to_chat(src, "<span class='warning'>The sudden rush of air knocks you over!</span>")
-	SetKnockdown(rand(differential/20,differential/10))
+	SetKnockdown(min(rand(differential/20,differential/10), 5))
 	last_airflow_stun = world.time
 
 /atom/movable/proc/check_airflow_movable(n)

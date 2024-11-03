@@ -27,7 +27,8 @@
 	var/static/list/allowed_targets = list(/obj/item/weapon/reagent_containers, /obj/structure/reagent_dispensers/cauldron)
 	if(!adjacency_flag || !is_type_in_list(target, allowed_targets) || !target.is_open_container())
 		return
-
+	if(user.a_intent == I_HELP)
+		return
 	if(target.reagents.is_full())
 		to_chat(user, "<span class='notice'>\The [target] is full!</span>")
 		return
@@ -106,10 +107,12 @@
 	else
 		..()
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/proc/hatch()
+/obj/item/weapon/reagent_containers/food/snacks/egg/proc/hatch(var/faction)
 	visible_message("[src] hatches with a quiet cracking sound.")
 	new/obj/item/trash/egg(loc)
-	new hatch_type(get_turf(src))
+	var/mob/living/L = new hatch_type(get_turf(src))
+	if(istype(L) && faction) //If it's mob/living, make it take the faction
+		L.faction = faction
 	processing_objects.Remove(src)
 	qdel(src)
 
@@ -158,22 +161,24 @@
 	icon_state = "egg-chaos"
 	can_color = FALSE
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/chaos/hatch()
+/obj/item/weapon/reagent_containers/food/snacks/egg/chaos/hatch(var/faction)
 	var/turf/T = get_turf(src)
 	if(T)
 		playsound(src, 'sound/effects/phasein.ogg', 100, 1)
 		visible_message("\The [src] cracks open, revealing a realm of the unknown within. From that realm, something emerges.")
 		var/choice = pick(existing_typesof(/mob/living/simple_animal) - (boss_mobs + blacklisted_mobs))
-		new choice(T)
+		var/mob/living/simple_animal/A = new choice(T)
+		if(faction)
+			A.faction = faction
 	processing_objects.Remove(src)
 	qdel(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/chaos/instahatch/New()
-	..()
+/obj/item/weapon/reagent_containers/food/snacks/egg/chaos/instahatch/New(var/loc, var/faction)
+	..(loc)
 	var/time = rand(3,10)
 	spawn(time)
 		if(!gcDestroyed)
-			hatch()
+			hatch(faction)
 
 var/snail_egg_count = 0
 

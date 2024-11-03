@@ -220,6 +220,10 @@
 	if(held_items[index])
 		return 0
 
+	// adjacent only loc checks one way around, so first part is necessary, also for anything inside too
+	if(W.loc && !W.recursive_in_contents_of(src) && !Adjacent(W) && !W.arcanetampered)
+		return 0
+
 	if((W.flags & MUSTTWOHAND) && !(M_STRONG in mutations))
 		if(!W.wield(src, 1))
 			to_chat(src, "You need both hands to pick up \the [W].")
@@ -248,6 +252,7 @@
 //If both fail it drops it on the floor and returns 0.
 //This is probably the main one you need to know :)
 /mob/proc/put_in_hands(var/obj/item/W)
+
 	if(!W)
 		return 0
 	for (var/i = 1 to held_items.len)
@@ -255,13 +260,59 @@
 			return 0 // If it's already in your hands and you move it, it's in a superposition and breaks everything.
 	if(put_in_active_hand(W))
 		return 1
-	else if(put_in_inactive_hand(W))
+	if(put_in_inactive_hand(W))
 		return 1
-	else
-		W.forceMove(get_turf(src))
-		W.reset_plane_and_layer()
-		W.dropped()
+	W.forceMove(W.loc ? get_turf(W) : get_turf(src))
+	W.reset_plane_and_layer()
+	W.dropped()
+	return 0
+
+//Helper proc tied to above for creating something in-hand via construction
+/mob/proc/create_in_hands(var/obj/item/olditem, var/obj/item/newitem, var/obj/item/using, var/uses = 1, var/msg, var/vismsg, var/sound, var/move_in = FALSE)
+	if(!olditem || !newitem)
 		return 0
+	. = 0
+	if(ispath(newitem))
+		newitem = new newitem(olditem.loc)
+	if(!newitem) // If it deleted after creation
+		return 0
+	if(using)
+		if(istype(using,/obj/item/stack) && uses)
+			var/obj/item/stack/S = using
+			if(S.amount < uses)
+				to_chat(src, "<span class='warning'>You need at least [S.amount] [S.correct_name()] to make [newitem]!")
+				qdel(newitem)
+				return 0
+			S.use(uses)
+		else if(move_in)
+			if(using.loc != src)
+				using.forceMove(newitem)
+			else if(!drop_item(using, newitem, failmsg = TRUE))
+				qdel(newitem)
+				return 0
+		else
+			if(using.loc == src && !drop_item(using, failmsg = TRUE))
+				qdel(newitem)
+				return 0
+			qdel(using)
+		//using.transfer_fingerprints_to(newitem)
+	if(olditem.loc == src)
+		drop_item(olditem, force_drop = 1) // Necessary to show up in the same hand for below
+		. = put_in_hands(newitem)
+	newitem.cant_drop = olditem.cant_drop
+	newitem.canremove = olditem.canremove
+	if(move_in)
+		olditem.forceMove(newitem)
+	else
+		qdel(olditem)
+	if(vismsg)
+		visible_message(vismsg, msg)
+	else if(msg)
+		to_chat(src, msg)
+	if(sound)
+		playsound(src, sound, 50, 1)
+	if(olditem.loc != src)
+		. = 1 // return this if not runtiming
 
 /mob/proc/set_hand_amount(new_amount)
 	if(new_amount < held_items.len) //Decrease hand amount - drop items held in hands which will no longer exist!
@@ -313,9 +364,14 @@
 
 //Drops the item in our hand - you can specify an item and a location to drop to
 
-/mob/proc/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0) //Set force_drop to 1 to force the item to drop (even if it can't be dropped normally)
+/mob/proc/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0, failmsg) //Set force_drop to 1 to force the item to drop (even if it can't be dropped normally)
 
+	if(failmsg == TRUE)
+		failmsg = to_drop ? "<span class='warning'>You can't let go of \the [to_drop]!</span>" : null
+		
 	if(!candrop) //can't drop items while etheral
+		if(failmsg)
+			to_chat(src, failmsg)
 		return 0
 
 	if(!to_drop) //if we're not told to drop something specific
@@ -325,6 +381,8 @@
 		return 0 //bail
 
 	if((to_drop.cant_drop > 0) && !force_drop)
+		if(failmsg)
+			to_chat(src, failmsg)
 		return 0
 
 	if(!Target)
@@ -352,6 +410,8 @@
 				if(L)
 					L.check(list(to_drop))
 		return 1
+	if(failmsg)
+		to_chat(src, failmsg)
 	return 0
 
 /mob/proc/drop_hands(var/atom/Target, force_drop = 0) //drops both items

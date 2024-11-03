@@ -34,7 +34,7 @@
 	e.light_impact_range = li_range
 	explosions.Add(e)
 
-/datum/stat_collector/proc/add_death_stat(var/mob/living/M)
+/datum/stat_collector/proc/add_death_stat(var/mob/living/M, var/turf/spot)
 	if(M.iscorpse) return 0 // only ever 1 if they are a corpse landmark spawned mob
 	if(!ticker || ticker.current_state != GAME_STATE_PLAYING) return 0 // We don't care about pre-round or post-round deaths.
 	if(!istype(M, /mob/living) || istype(M, /mob/living/carbon/human/manifested)) return 0
@@ -42,7 +42,8 @@
 	var/datum/stat/death_stat/d = new
 	d.time_of_death = M.timeofdeath
 
-	var/turf/spot = get_turf(M)
+	if (!spot)
+		spot = get_turf(M)
 	d.death_x = spot.x
 	d.death_y = spot.y
 	d.death_z = spot.z

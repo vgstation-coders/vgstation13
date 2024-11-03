@@ -12,7 +12,7 @@
 #if ASTAR_DEBUG == 1
 #define log_astar_bot(text) visible_message("[src] : [text]")
 #define log_astar_beacon(text) //to_chat(world, "[src] : [text]")
-#define log_astar_command(text) //to_chat(world, "[src] : [text]")
+#define log_astar_command(text) to_chat(world, "[src] : [text]")
 #else
 #define log_astar_bot(text)
 #define log_astar_beacon(text)
@@ -26,6 +26,7 @@
 	luminosity = 3
 	use_power = MACHINE_POWER_USE_NONE
 	pAImovement_delay = 1
+	machine_flags = EMAGGABLE
 	var/icon_initial //To get around all that pesky hardcoding of icon states, don't put modifiers on this one
 	var/obj/item/weapon/card/id/botcard			// the ID card that the bot "holds"
 	var/mob/living/simple_animal/hostile/pulse_demon/PD_occupant // for when they take over them
@@ -171,8 +172,8 @@
 
 /obj/machinery/bot/proc/decay_oldtargets()
 	for(var/i in old_targets)
-		log_astar_bot("[i] [old_targets[i]]")
-		if(--old_targets[i] == 0)
+		log_astar_bot("old target: [i] [old_targets[i]]")
+		if(--old_targets[i] <= 0)
 			remove_oldtarget(i)
 
 // Can we move to the next tile or not ?
@@ -209,7 +210,7 @@
 		if(target)
 			if (waiting_for_path)
 				return 1
-			calc_path(target, new /callback(src, src::get_path()))
+			calc_path(target, new /callback(src, nameof(src::get_path())))
 			if (path && length(path))
 				process_path()
 			return 1
@@ -249,7 +250,7 @@
 	if(frustration > 5)
 		summoned = FALSE // Let's not try again.
 		if (target && !target.gcDestroyed)
-			calc_path(target, new /callback(src, src::get_path()), next)
+			calc_path(target, new /callback(src, nameof(src::get_path())), next)
 		else
 			target = null
 			path = list()
@@ -330,7 +331,7 @@
 
 	if(patrol_target)
 		waiting_for_patrol = TRUE
-		calc_patrol_path(patrol_target, new /callback(src, src::get_patrol_path()))
+		calc_patrol_path(patrol_target, new /callback(src, nameof(src::get_patrol_path())))
 // This proc send out a singal to every beacon listening to the "beacon_freq" variable.
 // The signal says, "i'm a bot looking for a beacon to patrol to."
 // Every beacon with the flag "patrol" responds by trasmitting its location.
@@ -393,7 +394,7 @@
 			return TRUE
 	if(frustration > 5)
 		if (target && !target.gcDestroyed)
-			calc_path(target, new /callback(src, src::get_path()), next)
+			calc_path(target, new /callback(src, nameof(src::get_path())), next)
 		else
 			target = null
 			patrol_path = list()
@@ -496,6 +497,7 @@
 				target = get_turf(signal.source)
 			path = list()
 			patrol_path = list()
+			destinations_queue = list()
 			return 1
 		if ("switch_power")
 			if (on)
@@ -514,13 +516,19 @@
 	destination = place_to_go
 
 /datum/bot/order/mule
-	var/atom/thing_to_load
+	var/atom/thing_to_load = null
 	var/unload_here = FALSE
+	var/unload_dir = 0
+	var/loc_description = ""
+	var/returning = FALSE
 
-/datum/bot/order/mule/New(var/turf/place_to_go, var/atom/thing, _unload_here = FALSE)
+/datum/bot/order/mule/New(var/turf/place_to_go, var/atom/thing = null, _unload_here = FALSE, var/unload_direction = 0, var/text_desc = "Unknown")
 	destination = place_to_go
 	thing_to_load = thing
 	unload_here = _unload_here
+	unload_dir = unload_direction
+	loc_description = text_desc
+	astar_debug_mulebots("Order up! [destination] [loc_description] [thing_to_load] [unload_here] [unload_dir]!")
 
 /datum/bot/order/mule/unload
 
@@ -614,12 +622,14 @@
 		src.explode()
 
 /obj/machinery/bot/emag_act(mob/user)
+	if(emagged >= 2)
+		return
 	if(locked)
 		locked = 0
 		emagged = 1
 		if(user)
 			to_chat(user, "<span class='warning'>You remove [src]'s control restrictions. Opening up its maintenance panel and swiping again will cause [src] to malfunction.</span>")
-	if(!locked && open)
+	else if(open)
 		emagged = 2
 		if(user)
 			to_chat(user, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
@@ -708,8 +718,6 @@
 				to_chat(user, "<span class='notice'>Unable to repair with the maintenance panel closed.</span>")
 		else
 			to_chat(user, "<span class='notice'>[src] does not need a repair.</span>")
-	else if (istype(W, /obj/item/weapon/card/emag) && emagged < 2)
-		emag_act(user)
 	else
 		if(isobj(W))
 			W.on_attack(src, user)

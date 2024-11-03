@@ -14,7 +14,7 @@
 /obj/structure/essence_printer/Destroy()
 	new /datum/artifact_postmortem_data(src)
 	if(bound_soul)
-		bound_soul.unregister_event(/event/death, src, src::print())
+		bound_soul.unregister_event(/event/death, src, nameof(src::print()))
 		bound_soul = null
 	..()
 
@@ -34,9 +34,9 @@
 	R.languages = H.languages.Copy()
 	R.name=R.dna.real_name
 	if(bound_soul)
-		bound_soul.unregister_event(/event/death, src, src::print())
+		bound_soul.unregister_event(/event/death, src, nameof(src::print()))
 	bound_soul = H
-	H.register_event(/event/death, src, src::print())
+	H.register_event(/event/death, src, nameof(src::print()))
 
 /obj/structure/essence_printer/attack_ghost(mob/user)
 	if(!ready)

@@ -10,7 +10,7 @@ var/list/holomap_cache = list()
 	item_state = null
 	accessory_exclusion = HOLOMAP
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = FALSE
 	var/destroyed = 0
 
 	//Holomap stuff

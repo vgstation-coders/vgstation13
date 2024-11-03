@@ -13,8 +13,10 @@
 	if(!W)
 		return FALSE
 	if(cell && cell.charge <= ROBOT_LOW_POWER)
-		drop_item(W)
-		return FALSE
+		if(!is_in_modules(W))
+			drop_item(W)
+			return FALSE
+		return TRUE
 	if(istype(W, /obj/item/device/material_synth) && !is_in_modules(W)) //Crab no
 		drop_item(W)
 		return FALSE
@@ -71,7 +73,7 @@
 		return tool_state
 	return null
 
-/mob/living/silicon/robot/mommi/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = FALSE, dontsay = null)
+/mob/living/silicon/robot/mommi/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = FALSE, dontsay = null, failmsg)
 	if(!target)
 		target = loc
 	if(!istype(to_drop))

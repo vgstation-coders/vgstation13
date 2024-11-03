@@ -115,8 +115,8 @@ var/announcing_vox = 0 // Stores the time of the last announcement
 var/const/VOX_CHANNEL = 200
 var/const/VOX_DELAY = 600
 var/VOX_AVAILABLE_VOICES = list(
-	"fem" = "Feminine",
-	"mas" = "Masculine"
+	"fem" = "Feminine"//,
+//	"mas" = "Masculine"
 );
 
 #ifndef DISABLE_VOX

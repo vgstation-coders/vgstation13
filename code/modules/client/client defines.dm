@@ -23,7 +23,8 @@
 	var/datum/tooltip/tooltips //datum that controls the displaying and hiding of tooltips
 	var/list/radial_menu_anchors = list() //keeping track of open menus so we're not gonna have several on top of each other.
 	var/list/radial_menus = list()
-	
+	var/click_held_down_time //Used by MouseDown in _onclick/click.dm
+
 		///////////////
 		//SOUND STUFF//
 		///////////////
@@ -47,7 +48,7 @@
 	var/related_accounts_cid = "Requires database"	//So admins know why it isn't working - Used to determine what other accounts previously logged in from this computer id
 
 	//This breaks a lot of shit.  - N3X
-	preload_rsc = 1 // This is 0 so we can set it to an URL once the player logs in and have them download the resources from a different server.
+	preload_rsc = 1 // This is 0 on the host server so we can set it to an URL once the player logs in and have them download the resources from a different server.
 
 	// Used by html_interface module.
 	var/hi_last_pos
@@ -68,6 +69,7 @@
 		//PARALLAX+OTHER PLANEMASTERS//
 		////////////
 	var/list/parallax = list()
+	var/list/parallax_cult = list()
 	var/list/parallax_movable = list()
 	var/list/parallax_offset = list()
 	var/turf/previous_turf = null
@@ -80,7 +82,7 @@
 	var/obj/abstract/screen/plane_master/ghost_planemaster_dummy/darkness_planemaster_dummy = null
 	var/obj/abstract/screen/plane_master/ghost_planemaster/fakecamera_planemaster = null
 	var/obj/abstract/screen/plane_master/ghost_planemaster_dummy/fakecamera_planemaster_dummy = null
-	
+
 
 
 	// This gets set by goonchat.
@@ -100,6 +102,9 @@
 	// Runechat messages
 	var/list/seen_messages = list()
 	var/toggle_runechat_outlines = TRUE
+
+	//Country code
+	var/country_code = "UNK"
 
 	// Voting & civic duty
 	var/ivoted = FALSE

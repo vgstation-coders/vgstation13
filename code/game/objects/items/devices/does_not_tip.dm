@@ -4,8 +4,9 @@
 	icon = 'icons/obj/pda.dmi'
 	icon_state = "pda"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_ELECTRONIC
 	flags = FPRINT
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 
 /obj/item/device/does_not_tip_backdoor/attack_self(var/mob/user)
 	if(alert(user, "A cryptic message appears on the screen: \"Are you sure you want to do it?\".", name, "Yes", "No") != "Yes")

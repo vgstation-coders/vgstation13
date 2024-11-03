@@ -76,8 +76,8 @@
 /obj/item/weapon/gun/projectile/proc/RemoveMag(var/mob/user)
 	if(stored_magazine)
 		if(jammed)
-			to_chat(usr, "<span class='notice'>You begin unjamming \the [name]...</span>")
-			if(do_after(usr,src,50))
+			to_chat(user, "<span class='notice'>You begin unjamming \the [name]...</span>")
+			if(do_after(user,src,50))
 				jammed = 0
 				in_chamber = null
 				var/dropped_bullets
@@ -85,30 +85,22 @@
 				for(var/i = 1; i<=min(to_drop, stored_magazine.stored_ammo.len); i++)
 					var/obj/item/ammo_casing/AC = stored_magazine.stored_ammo[1]
 					stored_magazine.stored_ammo -= AC
-					AC.forceMove(user.loc)
+					AC.forceMove(get_turf(src))
 					dropped_bullets++
 					stored_magazine.update_icon()
 				var/droppedwords = dropped_bullets ? "" : ", and spill [dropped_bullets] bullet\s in the process"
-				to_chat(usr, "<span class='notice'>You unjam the [name][droppedwords].</span>")
+				to_chat(user, "<span class='notice'>You unjam the [name][droppedwords].</span>")
 				chamber_round()
 				update_icon()
 				return 0
 			return 0
-		stored_magazine.forceMove(get_turf(src.loc)) //this first drops the magazine onto the turf, it's here in case there is no applicable user
-		if(user)
-			if(user.put_in_any_hand_if_possible(stored_magazine)) //if you have empty hands, you'll get the mag
-				user.put_in_hands(stored_magazine)
-				to_chat(usr, "<span class='notice'>You pull [stored_magazine] out of \the [src]!</span>")
-			else
-				stored_magazine.forceMove(user.loc) //otherwise, it drops to the place you are existing
-				to_chat(usr, "<span class='notice'>You drop [stored_magazine] out of \the [src]!</span>")
+		user.put_in_hands(stored_magazine)
+		to_chat(user, "<span class='notice'>You pull [stored_magazine] out of \the [src]!</span>")
 		stored_magazine.update_icon()
 		stored_magazine = null
 		if(src.gun_flags & MAG_OVERLAYS)
 			mag_overlay()
 		update_icon()
-		if(user)
-			user.update_inv_hands()
 		return 1
 	return 0
 
@@ -128,7 +120,7 @@
 /obj/item/weapon/gun/projectile/proc/mag_overlay()
 	if(stored_magazine)
 		var/mag_sprite = initial(stored_magazine.icon_state)
-		if(!magazine_overlay || magazine_overlay.icon_state != mag_sprite) 
+		if(!magazine_overlay || magazine_overlay.icon_state != mag_sprite)
 			overlays -= magazine_overlay
 			var/image/magazine_adjustment = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = mag_sprite)
 			magazine_adjustment.pixel_x -= stored_magazine.magoffsetx
@@ -142,7 +134,7 @@
 		if(magazine_overlay)
 			overlays -= magazine_overlay
 			magazine_overlay = null
-		
+
 
 /obj/item/weapon/gun/projectile/proc/chamber_round() //Only used by guns with magazine
 	if(chambered || !stored_magazine)

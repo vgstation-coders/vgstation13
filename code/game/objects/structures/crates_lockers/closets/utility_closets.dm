@@ -66,10 +66,34 @@
 	icon_opened = "emergencyvoxopen"
 
 /obj/structure/closet/emcloset/vox/atoms_to_spawn()
-	return list(
+	var/static/list/stock = list(
 		/obj/item/weapon/tank/nitrogen = 2,
 		/obj/item/clothing/mask/breath/vox = 2,
 	)
+	var/static/list/aid = list(
+		/obj/item/weapon/tank/nitrogen = 2,
+		/obj/item/clothing/mask/breath/vox = 2,
+		/obj/item/weapon/storage/firstaid/vox,
+	)
+	var/static/list/tank = list(
+		/obj/item/weapon/tank/nitrogen,
+		/obj/item/clothing/mask/breath/vox,
+		/obj/item/weapon/tank/emergency_nitrogen/engi,
+		/obj/item/clothing/mask/breath/vox,
+	)
+	var/static/list/both = list(
+		/obj/item/weapon/tank/nitrogen,
+		/obj/item/clothing/mask/breath/vox,
+		/obj/item/weapon/tank/emergency_nitrogen/engi,
+		/obj/item/clothing/mask/breath/vox,
+		/obj/item/weapon/storage/firstaid/vox,
+	)
+	var/list/choices = list()
+	choices[stock] = 50
+	choices[aid] = 30
+	choices[tank] = 10
+	choices[both] = 10
+	return pickweight(choices)
 
 /*
  * Fire Closet

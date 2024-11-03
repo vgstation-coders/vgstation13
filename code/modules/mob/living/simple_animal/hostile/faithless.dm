@@ -32,7 +32,7 @@
 	minbodytemp = 0
 	speed = 5
 
-	supernatural = 1
+	supernatural = TRUE
 
 	faction = "faithless"
 
@@ -53,7 +53,7 @@
 		if(prob(12))
 			L.Knockdown(3)
 			L.Stun(3)
-			L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
+			L.visible_message("<span class='danger'>\The [src] knocks down \the [L]!</span>")
 
 /mob/living/simple_animal/hostile/faithless/cult
 	faction = "cult"

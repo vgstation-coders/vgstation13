@@ -10,9 +10,6 @@
 		"**/.pnp.*": true
 	},
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
-	},
-	"workbench.editorAssociations": {
-		"*.dmi": "imagePreview.previewEditor"
+		"source.fixAll.eslint": "explicit"
 	},
 }

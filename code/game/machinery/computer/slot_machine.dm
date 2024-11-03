@@ -22,9 +22,12 @@
 	desc = "The arm is just for decoration."
 	icon = 'icons/obj/slot_machine.dmi'
 	icon_state = "slot"
+	moody_state = "overlay_slot"
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	computer_flags = NO_ONOFF_ANIMS
+
+	light_range_on = 1.4
 
 	var/show_name
 
@@ -54,7 +57,7 @@
 
 	id = rand(1,99999)
 
-	our_money_account = create_account("slot machine ([id])", rand(30000,50000), null, 0, 1, TRUE)
+	our_money_account = create_account("slot machine ([id])", rand(30000,50000), null, 0, 1, 0, TRUE)
 	radio = new(src)
 
 	update_icon()

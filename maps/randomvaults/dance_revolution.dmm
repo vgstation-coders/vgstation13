@@ -240,7 +240,6 @@
 /area/vault/dancedance)
 "aW" = (
 /obj/item/weapon/reagent_containers/food/drinks/golden_cup{
-	desc = "A golden cup.";
 	name = "Dance Dance Revolution champion"
 	},
 /turf/simulated/floor/greengrid,

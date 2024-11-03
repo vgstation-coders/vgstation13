@@ -13,9 +13,13 @@
 
 
 /datum/striketeam/syndicate/extras()
+	var/v = 0
 	for (var/obj/effect/landmark/L in landmarks_list)
 		if (L.name == "Syndicate-Commando-Bomb")
 			new /obj/effect/spawner/newbomb/timer/syndicate(L.loc)
+			if(!v)
+				new /obj/item/weapon/gun/gatling/beegun/ss_visceratorgun(L.loc)//i don't want to map in more guns
+				v = 1
 
 /datum/striketeam/syndicate/create_commando(obj/spawn_location, syndicate_leader_selected = 0)
 	var/mob/living/carbon/human/new_syndicate_commando = new(spawn_location.loc)

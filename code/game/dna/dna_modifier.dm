@@ -123,7 +123,7 @@
 
 /obj/machinery/dna_scannernew/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(occupant)
-		to_chat(user, "<span class='warning'>\the [src] is occupied.</span>")
+		to_chat(user, "<span class='warning'>\The [src] is occupied.</span>")
 		return FALSE
 	return ..()
 
@@ -287,7 +287,7 @@
 		else
 			visible_message("[user] places [M] into \the [src].")
 	else
-		visible_message("\the [M] is placed into \the [src].")
+		visible_message("\The [M] is placed into \the [src].")
 
 	// search for ghosts, if the corpse is empty and the scanner is connected to a cloner
 	for(dir in cardinal)
@@ -320,6 +320,16 @@
 	return FALSE
 
 #define DNASCANNER_MESSAGE_INTERVAL 1 SECONDS
+
+/obj/machinery/dna_scannernew/Exited(var/atom/movable/O) // Used for teleportation from within the scanner.
+	if (O == occupant)
+		occupant = null
+		icon_state = "scanner_0"
+		for(dir in cardinal)
+			var/obj/machinery/computer/cloning/C = locate(/obj/machinery/computer/cloning) in get_step(src, dir)
+			if(C)
+				C.update_icon()
+				C.updateUsrDialog()
 
 /obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc, var/mob/ejector)
 	if(!occupant)
@@ -512,11 +522,18 @@
 		arr += "[i]:[EncodeDNABlock(buffer[i])]"
 	return arr
 
-/obj/machinery/computer/scan_consolenew/proc/setInjectorBlock(var/obj/item/weapon/dnainjector/I, var/blk, var/datum/dna2/record/buffer)
+//So that we can get the number of the block.
+/obj/machinery/computer/scan_consolenew/proc/find_block_number(var/blk)
 	var/pos = findtext(blk,":")
 	if(!pos)
-		return 0
+		return
 	var/id = text2num(copytext(blk,1,pos))
+	if(!id)
+		return
+	return id
+
+/obj/machinery/computer/scan_consolenew/proc/setInjectorBlock(var/obj/item/weapon/dnainjector/I, var/blk, var/datum/dna2/record/buffer)
+	var/id = find_block_number(blk)
 	if(!id)
 		return 0
 	I.block = id
@@ -628,7 +645,7 @@
 		occupantData["name"] = connected.occupant.name
 		occupantData["stat"] = connected.occupant.stat
 		occupantData["isViableSubject"] = 1
-		if (M_NOCLONE in connected.occupant.mutations || !src.connected.occupant.dna)
+		if ((M_NOCLONE in connected.occupant.mutations) || !src.connected.occupant.dna)
 			occupantData["isViableSubject"] = 0
 		occupantData["health"] = connected.occupant.health
 		occupantData["maxHealth"] = connected.occupant.maxHealth
@@ -1072,7 +1089,7 @@
 				src.connected.occupant.dna.SE = buf.dna.SE
 				src.connected.occupant.dna.UpdateSE()
 				domutcheck(src.connected.occupant,src.connected)
-			src.connected.occupant.radiation += rand(20,50)
+			src.connected.occupant.radiation += rand(1,10)
 			return 1
 
 		if (bufferOption == "createInjector")
@@ -1083,6 +1100,7 @@
 				if(arcanetampered)
 					I.arcanetampered = arcanetampered
 				var/datum/dna2/record/buf = src.buffers[bufferId]
+				var/name_to_give = " ([buf.name])" //Will also add the block it has been
 				if(href_list["createBlockInjector"])
 					waiting_for_user_input=1
 					var/list/selectedbuf
@@ -1096,6 +1114,7 @@
 					else
 						qdel(I)
 						success = FALSE
+					name_to_give += " (Block [find_block_number(blk)])"
 
 
 				else
@@ -1103,7 +1122,7 @@
 				waiting_for_user_input=0
 				if(success)
 					I.forceMove(src.loc)
-					I.name += " ([buf.name])"
+					I.name += name_to_give
 					injector_ready = 0
 					spawn(connected.injector_cooldown)
 						setInjectorReady()

@@ -14,10 +14,37 @@
 	switch(screenstate)
 		if(0)
 
+			var/list/category_elements = list()
+			for(var/i=1,i<=library_section_names.len, ++i)
+				category_elements += "<option value='[library_section_names[i]]'>[library_section_names[i]]</option>"
+			category_elements = category_elements.Join("")
+
+			var/script = {"
+				<script type="text/javascript">
+					function toggleForm() {
+						var form = document.getElementById('category-form');
+						if (form.style.display === 'none' || form.style.display === '') {
+							form.style.display = 'block';
+						} else {
+							form.style.display = 'none';
+						}
+					}
+				</script>"}
+
 			dat += {"<h2>Search Settings</h2><br />
 				<A href='?src=\ref[src];settitle=1'>Filter by Title: [query.title]</A><br />
-				<A href='?src=\ref[src];setcategory=1'>Filter by Category: [query.category]</A><br />
 				<A href='?src=\ref[src];setauthor=1'>Filter by Author: [query.author]</A><br />
+				<A href="javascript:toggleForm();">Filter by Categories: [query.categories ? query.categories.Join(", ") : ""]</A><br />
+				<form id='category-form' name='setcategories' action='?src=\ref[src]' method='get' style='display:none; width: 130px'>
+					<input type='hidden' name='src' value='\ref[src]'>
+					<input type='hidden' name='setcategories' value='1'>
+					<select name='categories' multiple style='width: 100%; height: 80px; display: inline-block;'>
+						[category_elements]
+					</select>
+					<input type='submit' value='Set Categories' onclick='toggleForm();'>
+				</form>
+				[script]
+				[query.order_by ? "Sorting By: [uppertext(copytext(query.order_by, 1, 2))][copytext(query.order_by, 2)] <A href='?src=\ref[src];clearsort=1'>Remove Sort</A><br />" : ""]
 				<A href='?src=\ref[src];search=1'>\[Start Search\]</A><br />"}
 		if(1)
 			if(!SSdbcore.Connect())
@@ -35,10 +62,10 @@
 							</form>"}
 				dat += {"<table border=\"0\">
 					<tr>
-						<td>Author</td>
-						<td>Title</td>
-						<td>Category</td>
-						<td>SS<sup>13</sup>BN</td>
+						<td><A href='?src=\ref[src];orderby=author'>Author</A> [get_sort_arrow("author")]</td>
+						<td><A href='?src=\ref[src];orderby=title'>Title</A> [get_sort_arrow("title")]</td>
+						<td style='white-space: nowrap;'><A href='?src=\ref[src];orderby=category'>Category</A> [get_sort_arrow("category")]</td>
+						<td style='white-space: nowrap;'><A href='?src=\ref[src];orderby=id'>SS<sup>13</sup>BN</A> [get_sort_arrow("id")]</td>
 					</tr>"}
 				for(var/datum/cachedbook/CB in get_page(page_num))
 					dat += {"<tr>
@@ -74,18 +101,36 @@
 			query.title = sanitize(newtitle)
 		else
 			query.title = null
-	if(href_list["setcategory"])
-		var/newcategory = input("Choose a category to search for:") in (list("Any") + library_section_names)
-		if(newcategory)
-			query.category = sanitize(newcategory)
-		else if(newcategory == "Any")
-			query.category = null
+	if(href_list["setcategories"])
+		var/list/newcategories
+		if(!islist(href_list["categories"]))
+			newcategories = list(href_list["categories"])
+		else
+			newcategories = href_list["categories"]
+		if(newcategories)
+			if("Any" in newcategories)
+				query.categories = null
+			else
+				query.categories = list()
+				for(var/category in newcategories)
+					query.categories += sanitize(category)
 	if(href_list["setauthor"])
 		var/newauthor = input("Enter an author to search for:") as text|null
 		if(newauthor)
 			query.author = sanitize(newauthor)
 		else
 			query.author = null
+	if(href_list["orderby"])
+		var/neworderby = href_list["orderby"]
+		if(query.order_by == neworderby)
+			query.descending = !query.descending
+		else
+			query.order_by = neworderby
+			query.descending = FALSE
+
+	if(href_list["clearsort"])
+		query.order_by = null
+		query.descending = FALSE
 
 	if(href_list["page"])
 		if(num_pages == 0)

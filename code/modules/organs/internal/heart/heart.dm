@@ -20,6 +20,13 @@
 	organ_type = "heart"
 	removed_type = /obj/item/organ/internal/heart/insectoid
 
+/datum/organ/internal/heart/vox
+	name = "vox heart"
+	parent_organ = LIMB_CHEST
+	organ_type = "heart"
+	removed_type = /obj/item/organ/internal/heart/vox
+
+
 /datum/organ/internal/heart/cell/New()
 	..()
 	if(!cell)

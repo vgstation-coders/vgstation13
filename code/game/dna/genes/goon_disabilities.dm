@@ -264,7 +264,7 @@
 	range = SELFCAST
 	max_targets = 1
 	selection_type = "range"
-	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
+	valid_targets = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 	cast_sound = 'sound/effects/bamf.ogg'
 
 	hud_state = "gen_immolate"
@@ -321,11 +321,11 @@
 				to_chat(H, "<span class='warning'>You have no flesh left to melt!</span>")
 				return 0
 			if(isvox(H))
-				H.set_species("Skeletal Vox")
+				H.set_species("Skeletal Vox", transfer_damage = TRUE)
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
 				H.drop_all()
-			else if(H.set_species("Skellington"))
+			else if(H.set_species("Skellington", transfer_damage = TRUE))
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
 				H.drop_all()

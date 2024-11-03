@@ -23,6 +23,7 @@
 #define XENOMORPH_HIVE "alien hivemind"
 #define JUSTICE_DEPARTMENT "justice department"
 #define NANOTRASEN "Nanotrasen"
+#define THE_APES "The Apes"
 
 //-------
 #define HIVEMIND "changeling hivemind"
@@ -48,7 +49,6 @@
 #define REV "revolutionary"
 #define WIZAPP_MASTER "wizard's master"
 #define WIZAPP "wizard's apprentice"
-#define WIZARD_CONVERT "wizard's faction convert"
 #define MADMONKEY "monkey fever infected"
 #define NINJA "Space Ninja"
 #define WISHGRANTERAVATAR "avatar of the Wish Granter"
@@ -97,6 +97,8 @@
 #define GREET_CUSTOM		"custom"
 #define GREET_MIDROUND		"midround"
 #define GREET_MASTER		"master"
+#define GREET_RIGHTANDWRONG	"rightandwrong"
+#define GREET_MADNESSSURVIVOR		"madnesssurvivor"
 
 #define GREET_AUTOTATOR		"autotator"
 #define GREET_SYNDBEACON	"syndbeacon"
@@ -120,6 +122,13 @@
 #define FACTION_VICTORY		5
 
 #define MALF_CHOOSING_NUKE	4
+
+#define BLOODCULT_STAGE_NORMAL		1	//default
+#define BLOODCULT_STAGE_READY		2	//eclipse timer has reached zero
+#define BLOODCULT_STAGE_ECLIPSE		FACTION_ENDGAME		//3 - narsie summoning ritual undergoing
+#define BLOODCULT_STAGE_MISSED		4	//eclipse window has ended
+#define BLOODCULT_STAGE_DEFEATED	FACTION_DEFEATED	//5 - narsie summoning ritual failed
+#define BLOODCULT_STAGE_NARSIE		6	//endgame
 
 //////////////////////////////////CULT STUFF////////////////////////////////////
 
@@ -165,7 +174,7 @@
 #define RITUALABORT_MISSING	"missing"
 #define RITUALABORT_OVERCROWDED "overcrowded"
 
-#define TATTOO_POOL		"Blood Communion"
+#define TATTOO_POOL		"Blood Pooling"
 #define TATTOO_SILENT	"Silent Casting"
 #define TATTOO_DAGGER	"Blood Dagger"
 #define TATTOO_HOLY		"Unholy Protection"
@@ -174,7 +183,7 @@
 #define TATTOO_MANIFEST	"Pale Body"
 #define TATTOO_MEMORIZE	"Arcane Dimension"
 #define TATTOO_RUNESTORE "Runic Skin"
-#define TATTOO_SHORTCUT	"Shortcut Tracer"
+#define TATTOO_SHORTCUT	"Shortcut Sigil"
 
 #define	TOME_CLOSED	1
 #define	TOME_OPEN	2
@@ -216,6 +225,19 @@
 #define CULTIST_ROLE_HERALD		2
 #define CULTIST_ROLE_MENTOR		3
 
+#define DEVOTION_TIER_0		0
+#define DEVOTION_TIER_1		1
+#define DEVOTION_TIER_2		2
+#define DEVOTION_TIER_3		3
+#define DEVOTION_TIER_4		4
+
+#define RITUAL_CULTIST_1	"first_ritual"
+#define RITUAL_CULTIST_2	"second_ritual"
+
+#define RITUAL_FACTION_1	"first_ritual"
+#define RITUAL_FACTION_2	"second_ritual"
+#define RITUAL_FACTION_3	"third_ritual"
+
 ////////////////////////////////////////////////////////////////////////////////
 
 // -- Objectives flags
@@ -256,13 +278,18 @@
 #define INTERCEPT_TIME_LOW 10 MINUTES
 #define INTERCEPT_TIME_HIGH 18 MINUTES
 
-// -- Injection delays (in ticks, ie, you need the /20 to get the real result)
+// -- Injection delays (in ticks, ie, you need the /20 to get the real result) (/SS_WAIT_TICKER is clearer actually)
 
-#define LATEJOIN_DELAY_MIN (5 MINUTES)/20
-#define LATEJOIN_DELAY_MAX (30 MINUTES)/20
+#define LATEJOIN_DELAY_MIN (5 MINUTES)/(SS_WAIT_TICKER)
+#define LATEJOIN_DELAY_MAX (30 MINUTES)/(SS_WAIT_TICKER)
+#define LATEJOIN_STARTING_ROUND_DELAY 0 MINUTES
 
-#define MIDROUND_DELAY_MIN (15 MINUTES)/20
-#define MIDROUND_DELAY_MAX (50 MINUTES)/20
+#define MIDROUND_DELAY_MIN (5 MINUTES)/(SS_WAIT_TICKER)
+#define MIDROUND_DELAY_MAX (30 MINUTES)/(SS_WAIT_TICKER)
+#define MIDROUND_STARTING_ROUND_DELAY (30 MINUTES)/(SS_WAIT_TICKER)
+
+#define MIDROUND_EXTENDED_DELAY_MIN (20 MINUTES)/(SS_WAIT_TICKER)
+#define MIDROUND_EXTENDED_DELAY_MAX (35 MINUTES)/(SS_WAIT_TICKER)
 
 // -- Rulesets flags
 
@@ -287,3 +314,7 @@
 
 #define BASE_RULESET_WEIGHT 10
 #define ADDITIONAL_RULESET_WEIGHT 1.4
+
+#define ANTAG_MADNESS_OFF		0
+#define ANTAG_MADNESS_EARLY		1
+#define ANTAG_MADNESS_LATE		2

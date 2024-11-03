@@ -1,5 +1,5 @@
 /obj/machinery/shield
-	name = "Emergency energy shield"
+	name = "emergency energy shield"
 	desc = "An energy shield used to contain hull breaches."
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "shield-old"
@@ -46,7 +46,7 @@
 
 
 	if (src.health <= 0)
-		visible_message("<span class='notice'>The [src] dissapates</span>")
+		visible_message("<span class='notice'>\The [src] dissapates</span>")
 		qdel(src)
 		return
 
@@ -54,7 +54,7 @@
 	spawn(20) if(src) opacity = 0
 
 	if(src.health <= 0)
-		visible_message("<span class='notice'>The [src] dissapates</span>")
+		visible_message("<span class='notice'>\The [src] dissapates</span>")
 		qdel(src)
 		return
 
@@ -65,7 +65,7 @@
 	health -= Proj.damage
 	. = ..()
 	if(health <=0)
-		visible_message("<span class='notice'>The [src] dissapates</span>")
+		visible_message("<span class='notice'>\The [src] dissapates</span>")
 		qdel(src)
 		return
 	opacity = 1
@@ -116,7 +116,7 @@
 
 	//Handle the destruction of the shield
 	if (src.health <= 0)
-		visible_message("<span class='notice'>The [src] dissapates</span>")
+		visible_message("<span class='notice'>\The [src] dissapates</span>")
 		qdel(src)
 		return
 

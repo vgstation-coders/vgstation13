@@ -35,7 +35,7 @@ var/datum/subsystem/pathfinder/SSpathfinder
 		while(flow[free])
 			CHECK_TICK
 			free = (free % lcount) + 1
-		var/t = add_timer(new /callback(src, src::toolong(), free), 15 SECONDS)
+		var/t = add_timer(new /callback(src, nameof(src::toolong()), free), 15 SECONDS)
 		flow[free] = t
 		flow[t] = M
 		return free

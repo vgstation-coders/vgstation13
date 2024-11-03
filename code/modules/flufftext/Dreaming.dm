@@ -22,6 +22,7 @@
 		"an eclipse","a sandwich so tall that it pierces the heavens","things you people wouldn't believe","attack ships on fire off the shoulder of Orion","C-beams glittering in the dark near the Tannhäuser Gate",
 		"the xenoarchaeologist", "the xenobiologist", "getting reincarnated in another world","a hat pile so tall that it pierces the heavens","a wheelchair ride pile so tall that it pierces the heavens",
 		"bees","a cryptographic sequencer","the singularity","mr. clean","a dual sword made of pure energy","a welding tool being held to a fuel tank","a cascading supermatter sea",
+		"a rat of incredible muscular mass","a cuban mariachi wearing a green mask",
 		)
 	spawn(0)
 		for(var/i = rand(1,4),i > 0, i--)

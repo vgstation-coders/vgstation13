@@ -33,7 +33,7 @@
 	icon_state = "parrot_fly"
 	icon_living = "parrot_fly"
 	icon_dead = "parrot_dead"
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	flags = HEAR | PROXMOVE | HEAR_ALWAYS
 
 	speak = list("Hi","Hello!","Cracker?","BAWWWWK george mellons griffing me")
@@ -343,7 +343,7 @@
 
 //Simple animals
 /mob/living/simple_animal/parrot/attack_animal(mob/living/simple_animal/M as mob)
-	..() //goodbye immortal parrots
+	. = ..() //goodbye immortal parrots
 
 	if(client)
 		return

@@ -36,7 +36,7 @@
 /datum/centcomm_order/department/engineering/portable_smes/ExtraChecks(var/obj/machinery/power/battery/portable/P)
 	if (!istype(P))
 		return 0
-	if (P.charge < P.capacity)
+	if (P.charge/P.capacity < 0.995) //Allow for some rounding error wiggle room
 		return 0
 	return 1
 

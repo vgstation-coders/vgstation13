@@ -100,6 +100,14 @@ export const formatMoney = (value, precision = 0) => {
   return result;
 };
 
+export const formatMoneyWithDiscount = (value, base_value, precision = 0) => {
+  if (!base_value)
+  { return formatMoney(value); }
+  value = formatMoney(value);
+  base_value = formatMoney(base_value);
+  return (value === base_value ? value : value + ' (was '+ base_value +')');
+};
+
 /**
  * Formats a floating point number as a number on the decibel scale.
  */

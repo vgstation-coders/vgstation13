@@ -127,7 +127,7 @@
 		src.icon_state = "glassbox2[locked]"
 	overlays.len = 0
 	if(occupant)
-		var/icon/occupant_icon=getFlatIcon(occupant)
+		var/icon/occupant_icon=getFlatIconDeluxe(sort_image_datas(get_content_image_datas(occupant)))
 		occupant_icon.Scale(19,19)
 		occupant_overlay = image(occupant_icon)
 		occupant_overlay.pixel_x= 8 * PIXEL_MULTIPLIER

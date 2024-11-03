@@ -85,8 +85,8 @@ var/static/list/badstuff2putin = list(
 /obj/machinery/vending/artifact
 	name = "mysterious snack vendor"
 	desc = "A vending machine containing snacks, drinks and other assorted products. Insert coin to activate."
-	icon_state = "Cola_Machine"
-	icon_vend = "Cola_Machine-vend"
+	icon_state = "artifact"
+	icon_vend = "artifact-vend"
 	vend_delay = 50
 	mech_flags = MECH_SCAN_FAIL
 	use_power = MACHINE_POWER_USE_NONE // works unpowered
@@ -199,7 +199,7 @@ var/static/list/badstuff2putin = list(
 		throw_item()
 		lost_inventory--
 	stat |= BROKEN
-	update_vicon()
+	update_icon()
 
 /obj/machinery/vending/artifact/process()
 	..()
@@ -231,7 +231,7 @@ var/static/list/badstuff2putin = list(
 			path2use = /obj/item/weapon/bikehorn/rubberducky  // BONUS DUCKS! refunds
 		new path2use(get_turf(src))
 		src.vend_ready = 1
-		update_vicon()
+		update_icon()
 		src.updateUsrDialog()
 	return 1
 

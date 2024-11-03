@@ -6,10 +6,10 @@
 	icon_state = "folder_"
 	item_state = null	// automatically uses the icon_state
 	w_class = W_CLASS_SMALL
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	pressure_resistance = 2
 
-	autoignition_temperature = 522 // Kelvin
-	fire_fuel = 1
 	var/crayon = null
 
 /obj/item/weapon/folder/New()
@@ -121,7 +121,6 @@
 				admin_log.Add(message)
 				return
 			if(P)
-				P.forceMove(usr.loc)
 				usr.put_in_hands(P)
 
 		if(href_list["read"])

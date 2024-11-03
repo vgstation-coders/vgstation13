@@ -988,13 +988,11 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		log_game("[key_name_admin(user.client)] created a \"[size]\" Bomberman arena at [center.loc.name] ([center.x],[center.y],[center.z]) ")
 
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<spawn class='notice'><b>[user.client.key] created a \"[size]\" Bomberman arena at [center.loc.name]. <A HREF='?src=\ref[O];jumptoarenacood=1;targetarena=\ref[src]'>Click here to JUMP to it.</A></b></span>")
+			to_chat(O, "<spawn class='notice'><b>[user.client.key] created a \"[size]\" Bomberman arena at [center.loc.name]. <A HREF='?src=\ref[SSmob];targetarena=\ref[src]'>Click here to JUMP to it.</A></b></span>")
 		return 1
 	else
 		qdel(src)
 		return 0
-
-
 
 /datum/bomberman_arena/proc/spawn_player(var/turf/T, var/mob/M)
 	M.forceMove(T)

@@ -210,16 +210,29 @@
 	/obj/item/weapon/reagent_containers/food/snacks/meat
 	)
 
-/obj/item/weapon/gripper/service //Used to handle food, drinks and seeds.
+/obj/item/weapon/gripper/service //Used to handle food, drinks, and miscellaneous service items (e.g. those found in the rapid service fabricator).
 	name = "service gripper"
 	icon_state = "gripper-old"
-	desc = "A simple grasping tool used to perform tasks in the service sector, such as handling drinks and... fedoras!"
+	desc = "A simple grasping tool used to perform tasks in the service sector, such as handling food, drinks, utensils and toys."
 
 	can_hold = list(
-		/obj/item/weapon/reagent_containers/food/drinks,
+		/obj/item/weapon/reagent_containers/food,
+		/obj/item/weapon/reagent_containers/glass,
 		/obj/item/clothing/head/fedora,
 		/obj/item/weapon/broken_bottle,
-		/obj/item/trash
+		/obj/item/trash,
+		/obj/item/weapon/paper,
+		/obj/item/candle,
+		/obj/item/weapon/storage/pill_bottle/dice,
+		/obj/item/toy,
+		/obj/item/weapon/lighter,
+		/obj/item/weapon/pen,
+		/obj/item/stack/sheet/cardboard,
+		/obj/item/device/camera,
+		/obj/item/device/camera_film,
+		/obj/item/clothing/mask/cigarette,
+		/obj/item/weapon/storage/fancy/cigarettes,
+		/obj/item/weapon/kitchen
 		)
 
 /obj/item/weapon/gripper/service/noir

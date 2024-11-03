@@ -424,8 +424,24 @@
 
 /obj/item/clothing/head/helmet/space/vox/civ/mining
 	name = "vox mining pressure helmet"
-	icon_state = "vox-civ-mining"
+	icon_state = "vox-civ0_mining"
 	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
+	var/brightness_on = 3 //luminosity when on
+	var/on = 0
+	_color = "mining"
+	actions_types = list(/datum/action/item_action/toggle_light)
+
+/obj/item/clothing/head/helmet/space/vox/civ/mining/attack_self(mob/user)
+	on = !on
+	icon_state = "vox-civ[on]_[_color]"
+	item_state = "vox-civ[on]_[_color]"
+
+	if(on)
+		set_light(brightness_on)
+	else
+		set_light(0)
+
+	user.update_inv_head()
 
 //Engineering
 /obj/item/clothing/suit/space/vox/civ/engineer
@@ -440,13 +456,29 @@
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer
 	name = "vox engineer pressure helmet"
-	icon_state = "vox-civ-engineer"
+	icon_state = "vox-civ0_engineer"
 	item_state = "vox-pressure-engineer"
 	desc = "A very alien-looking helmet for vox crewmembers. This one comes with more radiation protection."
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 50)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
+	var/brightness_on = 3 //luminosity when on
+	var/on = 0
+	_color = "engineer"
+	actions_types = list(/datum/action/item_action/toggle_light)
+
+/obj/item/clothing/head/helmet/space/vox/civ/engineer/attack_self(mob/user)
+	on = !on
+	icon_state = "vox-civ[on]_[_color]"
+	item_state = "vox-civ[on]_[_color]"
+
+	if(on)
+		set_light(brightness_on)
+	else
+		set_light(0)
+
+	user.update_inv_head()
 
 /obj/item/clothing/suit/space/vox/civ/engineer/atmos
 	name = "vox atmos pressure suit"
@@ -455,14 +487,17 @@
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
 	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
 	name = "vox atmos pressure helmet"
-	icon_state = "vox-civ-atmos"
+	icon_state = "vox-civ0_atmos"
 	desc = "A very alien-looking helmet for vox crewmembers. Has some heat protection."
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
 	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
+	_color = "atmos"
 
 /obj/item/clothing/suit/space/vox/civ/engineer/ce
 	name = "vox chief engineer pressure suit"
@@ -471,13 +506,16 @@
 	armor = list(melee = 10, bullet = 5, laser = 10, energy = 5, bomb = 10, bio = 100, rad = 50)
 	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer/ce
 	name = "vox chief engineer pressure helmet"
-	icon_state = "vox-civ-ce"
+	icon_state = "vox-civ0_ce"
 	desc = "A very alien-looking helmet for vox crewmembers. Has some radiation and heat protection."
 	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
+	_color = "ce"
 
 //Science
 /obj/item/clothing/suit/space/vox/civ/science
@@ -720,6 +758,7 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	body_parts_covered = FULL_HEAD|IGNORE_INV
 	species_restricted = list("Martian")
+	blocks_tracking = TRUE
 	var/obj/item/weapon/tank/tank
 
 /obj/item/clothing/head/helmet/space/martian/attackby(obj/item/W,mob/user)

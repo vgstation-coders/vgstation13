@@ -11,7 +11,7 @@
 	..()
 	max_pressure = rand(115,1000)
 	effect_type = pick(6,7)
-	effect_gas = pick(GAS_NITROGEN, GAS_OXYGEN, GAS_CARBON, GAS_PLASMA, GAS_SLEEPING)
+	effect_gas = pick(GAS_NITROGEN, GAS_OXYGEN, GAS_CARBON, GAS_PLASMA, GAS_SLEEPING, GAS_CRYOTHEUM)
 
 
 /datum/artifact_effect/gas/DoEffectTouch(var/mob/user)

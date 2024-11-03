@@ -55,7 +55,6 @@
 	if(ismob(AM))
 		var/mob/M = AM
 		to_chat(src, "<span class='danger'>You are too depressed to push [M] out of the way.</span>")
-		M.LAssailant = src
 		M.assaulted_by(src)
 		return
 	..()

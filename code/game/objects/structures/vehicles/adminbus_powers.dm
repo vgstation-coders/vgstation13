@@ -601,17 +601,22 @@
 
 		pack.name = "[M.real_name]'s belongings"
 
+		var/might_need_glasses = FALSE
 		for(var/obj/item/I in M)
 			if(istype(I,/obj/item/clothing/glasses))
 				var/obj/item/clothing/glasses/G = I
-				if(G.prescription)
-					continue
+				if(G.nearsighted_modifier != 0)
+					might_need_glasses = TRUE
 			M.u_equip(I)
 			if(I)
 				I.forceMove(M.loc)
 				I.reset_plane_and_layer()
 				I.dropped(M)
 				I.forceMove(pack)
+
+		if (might_need_glasses && ishuman(M))
+			var/mob/living/carbon/human/H = M
+			H.equip_to_slot_or_del(new /obj/item/clothing/glasses/regular(H), slot_glasses)
 
 		var/obj/item/weapon/card/id/thunderdome/ident = null
 

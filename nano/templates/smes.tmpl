@@ -6,7 +6,7 @@
 		Stored Capacity:
 	</div>
 	<div class="itemContent">
-		{{:helper.displayBar(data.storedCapacity, 0, 100, data.charging ? 'good' : 'average')}}
+		{{:helper.displayBar(data.storedCapacity, 0, 100, data.charging ? 'good' : 'average', data.charge + '/' + data.capacity)}}
 		<div class="statusValue">
 			{{:helper.round(data.storedCapacity)}}%
 		</div>
