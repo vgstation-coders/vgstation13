@@ -12,7 +12,6 @@
 	origin_tech = Tc_MAGNETS + "=5;" + Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;" + Tc_PROGRAMMING + "=3;" + Tc_SYNDICATE + "=5;" + Tc_BLUESPACE + "=3"
 	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/on = 0
-	var/cover_open = 0
 	var/base_state = "hhmagnet"
 	var/obj/item/weapon/cell/power_src = null
 	var/power_usage = 250
@@ -32,7 +31,8 @@
 
 	var/dat = {"Power: <a href='?src=\ref[src];toggleon=1'>[on ? "On" : "Off"]</a><br>
 	Range: <a href='?src=\ref[src];magfield=1'>[magnetic_field] metres</a><br>
-	Interval: <a href='?src=\ref[src];interval=1'>[pull_interval] deciseconds</a><br>"}
+	Interval: <a href='?src=\ref[src];interval=1'>[pull_interval] deciseconds</a><br>
+	[power_src ? "[power_src] charge: [round(power_src.percent())]%" : "No power cell inserted"]"}
 
 	var/datum/browser/popup = new(user, "\ref[src]", name, 400, 500)
 	popup.set_content(dat)
@@ -67,7 +67,7 @@
 		attack_self(usr)
 
 /obj/item/device/handheld_magnet/attack_hand(mob/user)
-	if (cover_open && power_src && user.is_holding_item(src))
+	if (power_src && user.is_holding_item(src))
 		user.put_in_hands(power_src)
 		power_src.add_fingerprint(user)
 		power_src.updateicon()
@@ -85,27 +85,14 @@
 	..()
 
 /obj/item/device/handheld_magnet/attackby(obj/item/W as obj, mob/user as mob)
-	if (W.is_screwdriver(user))
-		cover_open = !cover_open
-		if (cover_open)
-			to_chat(user, "<span class='notice'>You open up the power cell cover.</span>")
-		else
-			to_chat(user, "<span class='notice'>You close the power cell cover.</span>")
-		src.add_fingerprint(user)
-		return
-
 	if (istype(W, /obj/item/weapon/cell))
-		if (cover_open)
-			if (power_src)
-				to_chat(user, "<span class='warning'>There is already a cell inside, remove it first.</span>")
-				return
-			if (user.drop_item(W, src))
-				power_src = W
-				user.visible_message("<span class='notice'>[user] inserts a cell into [src].</span>", "<span class='notice'>You insert a cell into [src].</span>")
-				src.add_fingerprint(user)
-				return
-		else
-			to_chat(user, "<span class='warning'>You have to open the cover first, it's closed!</span>")
+		if (power_src)
+			to_chat(user, "<span class='warning'>There is already a cell inside, remove it first.</span>")
+			return
+		if (user.drop_item(W, src))
+			power_src = W
+			user.visible_message("<span class='notice'>[user] inserts a cell into [src].</span>", "<span class='notice'>You insert a cell into [src].</span>")
+			src.add_fingerprint(user)
 			return
 	..()
 
@@ -157,17 +144,11 @@
 
 /obj/item/device/handheld_magnet/examine(mob/user)
 	..()
-	to_chat(user, "The cover is [cover_open ? "open" : "closed"].")
 	to_chat(user, "<span class='warning'>It's turned [on ? "on!" : "off."]</span>")
 	// Can only see cell charge % if its turned on
-	// or if the cover is open
-	if (cover_open)
-		to_chat(user, "There is [power_src ? "a" : "no"] power cell inside.")
-		if (power_src)
-			to_chat(user, "You can see that it's current charge is [round(power_src.percent())]%")
-	else
-		if (on)
-			to_chat(user, "Current charge: [round(power_src.percent())]%")
+	to_chat(user, "There is [power_src ? "a" : "no"] power cell inside.")
+	if (power_src)
+		to_chat(user, "Its current charge is [round(power_src.percent())]%")
 
 /obj/item/device/handheld_magnet/admin/New()
 	. = ..()
