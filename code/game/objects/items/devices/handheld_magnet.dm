@@ -165,3 +165,7 @@
 	else
 		if (on)
 			to_chat(user, "Current charge: [round(power_src.percent())]%")
+
+/obj/item/device/handheld_magnet/admin/New()
+	. = ..()
+	power_src = new /obj/item/weapon/cell/infinite(src)
