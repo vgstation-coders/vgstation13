@@ -150,7 +150,6 @@
 /obj/item/device/handheld_magnet/proc/can_pull(obj/O) // the iron stuff is basically hotfixed onto this because is_conductor() is WAY too broad for this lil thing
 	. = O && !O.anchored 
 	if(.)
-		var/inside = FALSE
 		for(var/atom/A in O.contents)
 			if(can_pull(A))
 				return TRUE
