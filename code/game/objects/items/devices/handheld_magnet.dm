@@ -120,7 +120,7 @@
 		var/turf/T = get_turf(src)
 		if(T)
 			for(var/obj/O in orange(magnetic_field, T))
-				if(!O.anchored && (O.is_conductor()))
+				if(can_pull(O))
 					if(O.w_class && pullcounter % O.w_class != 0) // bigger items take longer
 						continue
 					if(round((1/O.siemens_coefficient)) > 0 && pullcounter % round((1/O.siemens_coefficient)) != 0) // higher coefficient pulls better
@@ -138,14 +138,17 @@
 				step_towards(S, T)
 
 			for(var/mob/living/carbon/human/H in orange(magnetic_field/2, T))
-				if(H.l_store && H.l_store.is_conductor())
+				if(can_pull(H.l_store))
 					visible_message("<span class='danger'>[src] rips [H.l_store] out of [H]'s left pocket!")
 					H.u_equip(H.l_store)
-				if(H.r_store && H.r_store.is_conductor())
+				if(can_pull(H.r_store))
 					visible_message("<span class='danger'>[src] rips [H.r_store] out of [H]'s right pocket!")
 					H.u_equip(H.r_store)
 		sleep(pull_interval)
 		pullcounter++
+
+/obj/item/device/handheld_magnet/proc/can_pull(obj/O)
+	return O && !O.anchored && O.is_conductor() && ((MAT_IRON in O.starting_materials) || O.reagents?.has_reagent(IRON))
 
 /obj/item/device/handheld_magnet/examine(mob/user)
 	..()
