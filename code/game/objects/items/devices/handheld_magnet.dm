@@ -1,7 +1,7 @@
 /obj/item/device/handheld_magnet
 	name = "portable mini-magnet"
 	desc = "A device used to pull in metallic objects. Requires a power cell to function."
-	icon_state = "radio_jammer0"
+	icon_state = "hhmagnet0"
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
@@ -13,7 +13,7 @@
 	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/on = 0
 	var/cover_open = 0
-	var/base_state = "radio_jammer"
+	var/base_state = "hhmagnet"
 	var/obj/item/weapon/cell/power_src = null
 	var/power_usage = 250
 	var/pull_interval = 1
