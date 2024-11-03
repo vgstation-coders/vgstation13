@@ -1034,7 +1034,7 @@
 /obj/item/weapon/melee/baton/loaded/probe/sick/apply_baton_effect(mob/victim)
 	if(ishuman(victim))
 		var/mob/living/carbon/human/H = victim
-		to_chat(H, "<span class='warning'>The scrambler ray's energy makes you feel lightheaded and sick!</span>")
+		to_chat(H, "<span class='warning'>The scrambler particles in probe makes you feel lightheaded and sick!</span>")
 		H.eye_blurry = max(H.eye_blurry, 5)
 		H.adjustBrainLoss(2)
 		H.drop_item()
