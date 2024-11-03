@@ -123,8 +123,8 @@
 				if(can_pull(O))
 					if(O.w_class && pullcounter % O.w_class != 0) // bigger items take longer
 						continue
-					if(round((1/O.siemens_coefficient)) > 0 && pullcounter % round((1/O.siemens_coefficient)) != 0) // higher coefficient pulls better
-						continue
+					//if(round((1/O.siemens_coefficient)) > 0 && pullcounter % round((1/O.siemens_coefficient)) != 0) // higher coefficient pulls better
+						//continue
 					if(istype(O,/obj/structure/closet) && get_dist(O,T) < magnetic_field/2)
 						var/obj/structure/closet/CL = O
 						CL.open()
