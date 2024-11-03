@@ -152,7 +152,7 @@
 	if(.)
 		for(var/atom/A in O.contents)
 			. |= can_pull(A)
-		. |= ((MAT_IRON in O.starting_materials) || (O.reagents?.has_reagent(IRON)))
+	. |= ((MAT_IRON in O.starting_materials) || (O.reagents?.has_reagent(IRON)))
 
 /obj/item/device/handheld_magnet/examine(mob/user)
 	..()
