@@ -133,6 +133,7 @@
 					H.u_equip(H.r_store)
 		sleep(pull_interval)
 		pullcounter++
+		updateUsrDialog()
 
 /obj/item/device/handheld_magnet/proc/can_pull(obj/O) // the iron stuff is basically hotfixed onto this because is_conductor() is WAY too broad for this lil thing
 	. = O && !O.anchored 
