@@ -147,7 +147,7 @@
 		sleep(pull_interval)
 		pullcounter++
 
-/obj/item/device/handheld_magnet/proc/can_pull(obj/O)
+/obj/item/device/handheld_magnet/proc/can_pull(obj/O) // the iron stuff is basically hotfixed onto this because is_conductor() is WAY too broad for this lil thing
 	return O && !O.anchored && O.is_conductor() && ((MAT_IRON in O.starting_materials) || O.reagents?.has_reagent(IRON))
 
 /obj/item/device/handheld_magnet/examine(mob/user)
