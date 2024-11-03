@@ -117,7 +117,7 @@
 						CL.open()
 					step_towards(O, T)
 
-			for(var/mob/M in orange(magnetic_field, T))
+			for(var/mob/living/M in orange(magnetic_field, T))
 				if(M.anchored || !(M.mob_property_flags & MOB_ROBOTIC))
 					continue
 				if(M.size && pullcounter % M.size != 0) // bigger things take longer
