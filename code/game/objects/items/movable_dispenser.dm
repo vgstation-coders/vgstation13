@@ -13,8 +13,8 @@
 	
 /obj/item/movable_machinery/proc/deploy()
 	if(!machine)
-		visible_message("\the [src] vanishes into thin air. contact an administrator.")
-		message_admins("\the [src] somehow didn't have the machine var set. this should never happen.")
+		visible_message("\The [src] vanishes into thin air. contact an administrator.")
+		message_admins("\The [src] somehow didn't have the machine var set. this should never happen.")
 		qdel(src)
 		return
 	machine.forceMove(get_turf(src))
@@ -40,8 +40,8 @@
 //if this ever applies to more than just dispensers, make sure you check for living occupants and shit so they don't get deleted
 	..()
 	if(!machine)
-		visible_message("\the [src] vanishes into thin air. contact an administrator.")
-		message_admins("\the [src] somehow didn't have the machine var set. this should never happen.")
+		visible_message("\The [src] vanishes into thin air. contact an administrator.")
+		message_admins("\The [src] somehow didn't have the machine var set. this should never happen.")
 		qdel(src)
 		return
 	machine.forceMove(get_turf(src))

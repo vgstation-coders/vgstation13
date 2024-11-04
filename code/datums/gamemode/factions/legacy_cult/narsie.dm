@@ -26,11 +26,13 @@ var/global/list/narsie_list = list()
 /obj/machinery/singularity/narsie/New()
 	..()
 	narsie_list.Add(src)
-	power_machines.Remove(src)//Don't want Nar-Sie hungering for singularity beacons
 
 /obj/machinery/singularity/narsie/Destroy()
 	narsie_list.Remove(src)
 	..()
+
+/obj/machinery/singularity/narsie/seeks_beacon()
+	return FALSE//Don't want Nar-Sie hungering for singularity beacons
 
 /obj/machinery/singularity/narsie/large
 	name = "Nar-Sie"

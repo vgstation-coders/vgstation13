@@ -289,6 +289,7 @@ var/list/valid_ninja_suits = list(
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	pressure_resistance = 200 * ONE_ATMOSPHERE
+	blocks_tracking = TRUE
 	var/cooldown = 0
 	var/shuriken_icon = "radial_print"
 	actions_types = list(
@@ -608,6 +609,7 @@ Helpers For Both Variants
 	active_state = "blade1"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	activeforce = 40
+	sharpness_on = 2
 	siemens_coefficient = 0
 	onsound = null
 	actions_types = list(/datum/action/item_action/toggle_teleport)

@@ -356,7 +356,7 @@
 		return 1
 
 	if(stat & BROKEN)
-		to_chat(user, "<span class='warning'>\The solar panel is too damaged.</span>")
+		to_chat(user, "<span class='warning'>\The [S] is too damaged.</span>")
 		return 1
 
 	var/diff = initial(health) - health

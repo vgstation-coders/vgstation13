@@ -43,7 +43,7 @@ Stage 3 - u r now catbeest
 			if(prob(1) && prob(50))
 				var/mob/living/carbon/human/H=affected_mob
 				to_chat(H, "<span class=\"warning\">You feel a wave of extreme pain and uncleanliness as your body morphs.</span>")
-				H.set_species("Tajaran")
+				H.set_species("Tajaran", transfer_damage = TRUE)
 				for(var/obj/item/W in H)
 					H.drop_from_inventory(W)
 				// TODO:

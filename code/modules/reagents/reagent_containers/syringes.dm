@@ -410,6 +410,15 @@
 	mode = SYRINGE_INJECT
 	update_icon()
 
+/obj/item/weapon/reagent_containers/syringe/nitrogen
+	name = "syringe (nitrogen)"
+	desc = "Contains nitrogen - used to stabilize vox."
+/obj/item/weapon/reagent_containers/syringe/nitrogen/New()
+	..()
+	reagents.add_reagent(NITROGEN, 15)
+	mode = SYRINGE_INJECT
+	update_icon()
+
 
 //Robot syringes
 //Not special in any way, code wise. They don't have added variables or procs.

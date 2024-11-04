@@ -57,17 +57,7 @@
 /turf/unsimulated/floor/asteroid,
 /area/asteroid)
 "aq" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/asteroid)
 "dg" = (
@@ -289,19 +279,12 @@
 /turf/simulated/floor/plating,
 /area/asteroid)
 "zG" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
 /obj/item/weapon/shard{
 	icon_state = "small";
 	pixel_x = 5;
 	pixel_y = -5
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/asteroid)
 "Ar" = (
@@ -418,17 +401,7 @@
 	},
 /area/asteroid)
 "KY" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating/vox,
 /area/asteroid)
 "LV" = (

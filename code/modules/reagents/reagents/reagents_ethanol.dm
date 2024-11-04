@@ -88,17 +88,14 @@
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "beerglass"
 	glass_desc = "A cold pint of pale lager."
+	plant_nutrition = 1
+	plant_watering = 1
 
 /datum/reagent/ethanol/beer/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
 	M.jitteriness = max(M.jitteriness - 3, 0)
-
-/datum/reagent/ethanol/beer/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(1)
-	T.add_waterlevel(1)
 
 /datum/reagent/ethanol/whiskey
 	name = "Whiskey"

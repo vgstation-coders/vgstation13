@@ -435,12 +435,6 @@
 /turf/space,
 /area)
 "lK" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
 /obj/machinery/door/poddoor{
 	id_tag = "ufobridge";
 	name = "Blast Shield Shutters"
@@ -448,6 +442,7 @@
 /obj/docking_port/shuttle{
 	dir = 2
 	},
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor{
 	icon_state = "white";
 	tag = "icon-white"
@@ -587,16 +582,11 @@
 	},
 /area/shuttle/brokeufo/start)
 "xT" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
 /obj/machinery/door/poddoor{
 	id_tag = "ufobridge";
 	name = "Blast Shield Shutters"
 	},
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor{
 	icon_state = "white";
 	tag = "icon-white"
@@ -749,25 +739,6 @@
 "Ue" = (
 /obj/structure/bed/chair/shuttle/red,
 /obj/item/stack/cable_coil/random,
-/turf/simulated/floor{
-	icon_state = "white";
-	tag = "icon-white"
-	},
-/area/shuttle/brokeufo/start)
-"Us" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/obj/machinery/door/poddoor{
-	id_tag = "ufobridge";
-	name = "Blast Shield Shutters"
-	},
 /turf/simulated/floor{
 	icon_state = "white";
 	tag = "icon-white"
@@ -1009,7 +980,7 @@ aZ
 iU
 ZA
 Zo
-Us
+xT
 aa
 "}
 (9,1,1) = {"

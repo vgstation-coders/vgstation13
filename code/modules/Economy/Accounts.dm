@@ -406,8 +406,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 						access_level = 0
 				else
 					var/obj/item/I = usr.get_active_hand()
-					if(isEmag(I))
-						emag_act(usr)
+					if(emag_check(I,usr))
 						return
 					if (istype(I, /obj/item/weapon/card/id))
 						var/obj/item/weapon/card/id/C = I

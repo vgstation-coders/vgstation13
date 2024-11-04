@@ -67,7 +67,7 @@
 	if(network && !network.gases.Find(air_contents))
 		network.gases += air_contents
 		network.update = 1
-	update_icon()
+	update_icon(TRUE)//TRUE to force hydro trays to update
 	return 1
 
 /obj/machinery/portable_atmospherics/proc/disconnect()
@@ -82,7 +82,7 @@
 
 	connected_port.connected_device = null
 	connected_port = null
-	update_icon()
+	update_icon(TRUE)//TRUE to force hydro trays to update
 	return 1
 
 /obj/machinery/portable_atmospherics/proc/eject_holding()
@@ -115,15 +115,17 @@
 
 	else if (W.is_wrench(user))
 		if(connected_port)
-			disconnect()
-			to_chat(user, "<span class='notice'>You disconnect [name] from the port.</span>")
 			pixel_x = 0
 			pixel_y = 0
+			disconnect()
+			W.playtoolsound(src, 50)
+			to_chat(user, "<span class='notice'>You disconnect [name] from the port.</span>")
 			return 1
 		else
 			var/obj/machinery/atmospherics/unary/portables_connector/possible_port = locate(/obj/machinery/atmospherics/unary/portables_connector/) in loc
 			if(possible_port)
 				if(connect(possible_port))
+					W.playtoolsound(src, 50)
 					to_chat(user, "<span class='notice'>You connect [name] to the port.</span>")
 					if(air_contents[GAS_PLASMA] > 0 || air_contents[GAS_SLEEPING] > 0)
 						log_admin("[usr]([ckey(usr.key)]) connected a canister that contains \[[air_contents[GAS_PLASMA] > 0 ? "Toxins" : ""] [air_contents[GAS_SLEEPING] > 0 ? " N2O" : ""]\] to a connector_port at [loc.x], [loc.y], [loc.z]")

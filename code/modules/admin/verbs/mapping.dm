@@ -19,48 +19,31 @@
 //- Identify how hard it is to break into the area and where the weak points are
 //- Check if the area has too much empty space. If so, make it smaller and replace the rest with maintenance tunnels.
 
-var/camera_range_display_status = 0
-var/intercom_range_display_status = 0
-
-/obj/effect/debugging/camera_range
-	icon = 'icons/480x480.dmi'
-	icon_state = "25percent"
-
-/obj/effect/debugging/camera_range/New()
-	src.pixel_x = -224 * PIXEL_MULTIPLIER
-	src.pixel_y = -224 * PIXEL_MULTIPLIER
-
-/obj/effect/debugging/marker
-	icon = 'icons/turf/areas.dmi'
-	icon_state = "yellow"
-
-/obj/effect/debugging/marker/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	return 0
-
-/client/proc/do_not_use_these()
-	set category = "Mapping"
-	set name = "-None of these are for ingame use!!"
+/client
+	var/camera_range_display = FALSE
+	var/list/camera_range_images
+	var/intercom_range_display = FALSE
+	var/list/intercom_range_images
 
 /client/proc/camera_view()
 	set category = "Mapping"
 	set name = "Camera Range Display"
 
-	if(camera_range_display_status)
-		camera_range_display_status = 0
-	else
-		camera_range_display_status = 1
+	camera_range_display = !camera_range_display
 
+	if(camera_range_images)
+		images -= camera_range_images
+	QDEL_LIST(camera_range_images)
+	camera_range_images = list()
 
-
-	for(var/obj/effect/debugging/camera_range/C in world)
-		del(C)
-
-	if(camera_range_display_status)
+	if(camera_range_display)
 		for(var/obj/machinery/camera/C in cameranet.cameras)
-			new/obj/effect/debugging/camera_range(C.loc)
+			for (var/turf/T in view(C.view_range, C))
+				var/image/camrange = image('icons/turf/areas.dmi',T,"green")
+				images += camrange
+				camera_range_images += camrange
+
 	feedback_add_details("admin_verb","mCRD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-
 
 /client/proc/sec_camera_report()
 	set category = "Mapping"
@@ -106,18 +89,19 @@ var/intercom_range_display_status = 0
 	set category = "Mapping"
 	set name = "Intercom Range Display"
 
-	if (intercom_range_display_status)
-		intercom_range_display_status = FALSE
-	else
-		intercom_range_display_status = TRUE
+	intercom_range_display = !intercom_range_display
 
-	for (var/obj/effect/debugging/marker/M in world)
-		qdel(M)
+	if(intercom_range_images)
+		images -= intercom_range_images
+	QDEL_LIST(intercom_range_images)
+	intercom_range_images = list()
 
-	if (intercom_range_display_status)
-		for (var/obj/item/device/radio/intercom/I in world)
+	if(intercom_range_display)
+		for (var/obj/item/device/radio/intercom/I in radio_list)
 			for (var/turf/T in view(I.canhear_range, I))
-				new /obj/effect/debugging/marker(T)
+				var/image/comrange = image('icons/turf/areas.dmi',T,"yellow")
+				images += comrange
+				intercom_range_images += comrange
 
 	feedback_add_details("admin_verb","mIRD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -128,7 +112,6 @@ var/intercom_range_display_status = 0
 	if(!check_rights(R_DEBUG))
 		return
 
-	src.verbs += /client/proc/do_not_use_these 			//-errorage
 	src.verbs += /client/proc/camera_view 				//-errorage
 	src.verbs += /client/proc/sec_camera_report 		//-errorage
 	src.verbs += /client/proc/intercom_view 			//-errorage
@@ -424,9 +407,8 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 		return
 
 	var/z = mob.z
-	to_chat(usr, "<span class = 'notice'>Checking wire connections on current Z Level [z]</span>")
-
-	for(var/obj/structure/cable/C in world)
+	var/error_str = "<h1>Wire connections on current Z Level [z]</h1>"
+	for(var/obj/structure/cable/C in cable_list)
 		if(C.z != z)
 			continue
 		if(!C.d1) //It's a stub
@@ -434,10 +416,14 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 		var/obj/structure/cable/neighbour
 		neighbour = locate() in get_step(get_turf(C),C.d1)
 		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
-			to_chat(usr, "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span>")
+			error_str += "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span><br>"
 		neighbour = locate() in get_step(get_turf(C),C.d2)
 		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
-			to_chat(usr, "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span>")
+			error_str += "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span><br>"
+	
+	var/datum/browser/popup = new(usr, "Wire connections", usr.name, 300, 400)
+	popup.set_content(error_str)
+	popup.open()
 
 /client/proc/check_pipes()
 	set category = "Mapping"

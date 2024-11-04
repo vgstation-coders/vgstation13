@@ -171,7 +171,7 @@
 	if(!.)
 		return
 
-	AM.layer = layer + 0.1
+	AM.layer = layer + CARGO_CART_OFFSET
 	AM.plane = plane
 	AM.pixel_y += 9 * PIXEL_MULTIPLIER
 

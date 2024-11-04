@@ -16,7 +16,7 @@
 
 
 ///////CUT FACE/////////
-/datum/surgery_step/generic/cut_face/tool_quality(obj/item/tool)
+/datum/surgery_step/generic/cut_face/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -117,12 +117,11 @@
 
 
 ////////CAUTERIZE////////
-/datum/surgery_step/face/cauterize/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/face/cauterize/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/face/cauterize
 	allowed_tools = list(
 		/obj/item/tool/cautery = 100,

@@ -28332,10 +28332,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/machinery/computer/smelting{
-	name = "recycling furnace console";
-	smelter_tag = "recycling_smelter"
-	},
+/obj/machinery/computer/smelting/recycling,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "neutral"
@@ -32386,7 +32383,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/obj/machinery/atmospherics/unary/tank/nitrogen{
+/obj/machinery/atmospherics/unary/tank/nitrogen/coldroom{
 	dir = 8;
 	initialize_directions = 4
 	},
@@ -53085,7 +53082,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "caR" = (
-/obj/machinery/atmospherics/unary/tank/nitrogen{
+/obj/machinery/atmospherics/unary/tank/nitrogen/coldroom{
 	dir = 4;
 	initialize_directions = 4
 	},
@@ -69384,7 +69381,7 @@
 	},
 /area/shuttle/nuclearops)
 "cEg" = (
-/obj/machinery/computer/security,
+/obj/machinery/computer/security/nukies,
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -101506,7 +101503,7 @@
 "efx" = (
 /obj/structure/closet,
 /obj/machinery/door_control{
-	desc = "A remote control-switch..";
+	desc = "A remote control-switch.";
 	id_tag = "tradefloor";
 	name = "Trade Shutters";
 	pixel_x = 22;
@@ -103719,7 +103716,7 @@
 /obj/item/weapon/pen,
 /obj/item/weapon/reagent_containers/glass/bottle/mutagen,
 /obj/item/device/analyzer/plant_analyzer,
-/obj/item/weapon/gun/energy/floragun,
+/obj/item/floral_somatoray,
 /turf/simulated/floor/vox{
 	icon_state = "dark"
 	},

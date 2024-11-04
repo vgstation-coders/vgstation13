@@ -165,7 +165,7 @@
 					if(F.reagents.has_reagent(WATER))
 						if(isliving(atm))
 							var/mob/living/M = atm
-							M.ExtinguishMob()
+							M.extinguish()
 						if(atm.on_fire)
 							atm.extinguish()
 	explosion(get_turf(src),0,0,0)

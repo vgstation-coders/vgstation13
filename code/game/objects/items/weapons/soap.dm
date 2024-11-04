@@ -120,6 +120,6 @@
 
 /obj/item/weapon/soap/attack(var/mob/target, var/mob/user)
 	if(target && user && ishuman(target) && !target.stat && !user.stat && user.zone_sel &&user.zone_sel.selecting == "mouth" )
-		user.visible_message("<span class='warning'>\the [user] washes \the [target]'s mouth out with soap!</span>")
+		user.visible_message("<span class='warning'>\The [user] washes \the [target]'s mouth out with soap!</span>")
 		return
 	..()

@@ -19,6 +19,8 @@
 	jittery = 20
 	agony = 10
 	hitsound = 'sound/weapons/taserhit.ogg'
+	var/movement_speed_reduction = 0.75
+	var/speed_reduction_duration = 30
 
 /obj/item/projectile/energy/electrode/hit_apply(var/mob/living/X, var/blocked)
 	if (ismanifested(X))
@@ -29,13 +31,23 @@
 	X.apply_effects(stutter = stutter, blocked = blocked, agony = agony)
 	X.audible_scream()
 	if(X.tazed == 0)
-		X.movement_speed_modifier -= 0.75
-		spawn(30)
-			X.movement_speed_modifier += 0.75
+		X.movement_speed_modifier -= movement_speed_reduction
+		spawn(speed_reduction_duration)
+			X.movement_speed_modifier += movement_speed_reduction
 	X.tazed = 1
 	spawn(30)
 		X.tazed = 0
 
+//Robots get slowed down
+/obj/item/projectile/energy/electrode/robot_on_hit(var/mob/living/atarget, var/blocked)
+	QDEL_NULL(tracker_datum)
+	if(atarget.tazed == 0)
+		atarget.movement_speed_modifier -= movement_speed_reduction
+		spawn(speed_reduction_duration)
+			atarget.movement_speed_modifier += movement_speed_reduction
+	atarget.tazed = 1
+	spawn(30)
+		atarget.tazed = 0
 
 /*/vg/ EDIT
 	agony = 40

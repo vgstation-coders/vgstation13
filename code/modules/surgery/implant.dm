@@ -73,12 +73,11 @@
 
 
 ///////CLOSE SPACE/////
-/datum/surgery_step/cavity/close_space/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/cavity/close_space/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/cavity/close_space
 	priority = 2
 	allowed_tools = list(
@@ -172,7 +171,7 @@
 /datum/surgery_step/cavity/implant_removal
 	allowed_tools = list(
 		/obj/item/tool/hemostat = 100,
-		/obj/item/tool/wirecutters = 75,
+		"wirecutters" = 75,
 		/obj/item/weapon/talisman = 70,
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
@@ -253,7 +252,7 @@
 	affected.createwound(CUT, 20)
 	if (affected.implants.len)
 		var/fail_prob = 10
-		fail_prob += 100 - tool_quality(tool)
+		fail_prob += 100 - tool_quality(tool, user)
 		if (prob(fail_prob))
 			var/obj/item/weapon/implant/imp = affected.implants[1]
 			user.visible_message("<span class='warning'>Something beeps inside [target]'s [affected.display_name]!</span>")

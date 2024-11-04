@@ -89,6 +89,7 @@ var/global/list/all_docking_ports = list()
 	for(var/obj/machinery/door/airlock/A in range(1,src))
 		if(!A.shuttle_warning_lights)
 			A.shuttle_warning_lights = image('icons/obj/doors/Doorint.dmi', src, "warning_lights")
+			A.shuttle_warning_lights.plane = ABOVE_LIGHTING_PLANE
 		A.overlays += A.shuttle_warning_lights
 	for(var/obj/machinery/docklight/D in dockinglights)
 		if(D.id_tag == areaname)

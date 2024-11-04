@@ -74,7 +74,7 @@
 		..()
 
 /mob/living/carbon/monkey/vox/put_in_hand_check(var/obj/item/W) //Silly chicken, you don't have hands
-	if(src.reagents.has_reagent(GRAVY) || src.reagents.has_reagent(METHYLIN))
+	if(src.reagents.has_reagent(GRAVY) || src.reagents.has_reagent(METHYLIN) || (is_dexterous))
 		return 1
 	else
 		return 0

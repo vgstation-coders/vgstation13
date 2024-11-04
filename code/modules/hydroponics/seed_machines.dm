@@ -14,7 +14,7 @@
 /obj/item/weapon/disk/botany/attack_self(var/mob/user as mob)
 	if(genes.len)
 		var/choice = alert(user, "Are you sure you want to wipe the disk?", "Xenobotany Data", "No", "Yes")
-		if(src && user && genes && choice && choice == "Yes" && user.get_active_hand() == src)
+		if(src && user && genes && choice && choice == "Yes" && (user.get_active_hand() == src || istype(loc,/obj/item/weapon/gripper/service)))
 			to_chat(user, "You wipe the disk data.")
 			name = initial(name)
 			desc = initial(desc)

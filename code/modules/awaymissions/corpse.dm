@@ -1328,6 +1328,8 @@
 
 	var/mob/M = .
 	if(M.gender == FEMALE)
+		if(!islist(corpseuniform))
+			corpseuniform = list(corpseuniform)
 		corpseuniform += existing_typesof(/obj/item/clothing/under/dress)
 
 	if(prob(50))

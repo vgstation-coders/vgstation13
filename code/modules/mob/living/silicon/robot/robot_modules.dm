@@ -280,9 +280,7 @@
 	S.max_amount = MEDICAL_MAX_KIT
 	S.amount = MEDICAL_MAX_KIT
 	modules += S
-	emag = new /obj/item/weapon/reagent_containers/spray(src)
-	emag.reagents.add_reagent(PACID, 250)
-	emag.name = "Polyacid spray"
+	emag = new /obj/item/weapon/reagent_containers/spray/pacid(src)
 
 	sensor_augs = list("Medical", "Disable")
 
@@ -406,9 +404,7 @@
 	modules += new /obj/item/weapon/mop(src)
 	modules += new /obj/item/device/lightreplacer/borg(src)
 	modules += new /obj/item/weapon/reagent_containers/glass/bucket(src)
-	emag = new /obj/item/weapon/reagent_containers/spray(src)
-	emag.reagents.add_reagent(LUBE, 250)
-	emag.name = "Lube spray"
+	emag = new /obj/item/weapon/reagent_containers/spray/lube(src)
 
 	fix_modules()
 

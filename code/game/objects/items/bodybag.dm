@@ -159,7 +159,7 @@
 		O.name = "used stasis bag"
 		O.icon = src.icon
 		O.icon_state = "bodybag_used"
-		O.desc = "Pretty useless now.."
+		O.desc = "Pretty useless now."
 		qdel(src)
 
 /obj/structure/closet/body_bag/cryobag/MouseDropFrom(over_object, src_location, over_location)

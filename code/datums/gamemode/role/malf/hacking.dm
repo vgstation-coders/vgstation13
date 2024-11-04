@@ -122,10 +122,10 @@
 
 
 /obj/machinery/proc/set_hack_overlay_icon(var/newstate)
-	hack_overlay.set_icon(newstate)
+	hack_overlay?.set_icon(newstate)
 
 /obj/machinery/camera/set_hack_overlay_icon(var/newstate)
-	hack_overlay.set_icon("[newstate]-camera")
+	hack_overlay?.set_icon("[newstate]-camera")
 
 /obj/machinery/proc/is_malf_owner(var/mob/user)
 	if(!istype(user))

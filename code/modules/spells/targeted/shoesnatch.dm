@@ -33,6 +33,7 @@
 			target.drop_from_inventory(old_shoes)
 			target.visible_message(	"<span class='danger'>[target]'s shoes suddenly vanish!</span>", \
 									"<span class='danger'>Your shoes suddenly vanish!</span>")
+			old_shoes.forceMove(user.loc)
 			user.put_in_active_hand(old_shoes)
 			score.shoesnatches++
 

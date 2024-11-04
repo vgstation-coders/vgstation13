@@ -9,6 +9,7 @@
 	custom_metabolism = 2
 	specheatcap = 4.183
 	alpha = 128
+	plant_watering = 2
 
 /datum/reagent/holywater/on_mob_life(mob/living/M)
 	if(..())
@@ -32,7 +33,7 @@
 			M.make_visible(INVISIBLESPRAY)
 		if(isliving(M))
 			var/mob/living/L = M
-			L.ExtinguishMob()
+			L.extinguish()
 
 	//Water now directly damages slimes instead of being a turf check
 	if(isslime(M))
@@ -89,9 +90,71 @@
 			C.adjustBruteLoss(5)
 			C.visible_message("<span class='danger'>The [src] erodes \the [M].</span>")
 
-/datum/reagent/holywater/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+
+/datum/reagent/holywater/sacredwater
+	name = "Sacred Water"
+	id = SACREDWATER
+	description = "Water-like liquid that combusts when thrown upon a floor. The flames produced only harm the unholy."
+	color = "#017AFF" //rgb: 1, 122, 255
+
+/datum/reagent/holywater/sacredwater/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	if(volume >= 1)
+		var/obj/effect/overlay/sacred_flames/flames = locate() in T
+		if (flames)
+			flames.lifetime = initial(flames.lifetime)
+		else
+			new /obj/effect/overlay/sacred_flames(T)
+
+/datum/reagent/holywater/sacredwater/special_behaviour()
+	//I sure hope allowing castlevania chaplains to produce infinite sacred flames doesn't turn out to be a bad idea
+	for (var/datum/reagent/R in holder.reagent_list)
+		if (R.id == HOLYWATER)
+			var/added_volume = R.volume
+			holder.del_reagent(R.id)
+			volume += added_volume
+
+////////////////////////////////////////////////////////////////////////////////
+/obj/effect/overlay/sacred_flames
+	mouse_opacity = 0
+	icon = 'icons/effects/fireblue.dmi'
+	icon_state = "1"
+	plane = OBJ_PLANE
+	layer = BELOW_OBJ_LAYER
+	var/lifetime = 3//seconds
+
+/obj/effect/overlay/sacred_flames/New()
 	..()
-	T.add_waterlevel(1)
+	icon_state = pick("1","2","3")
+	add_particles(PS_CROSS_DUST)
+	adjust_particles(PVAR_VELOCITY, list(0,4), PS_CROSS_DUST)
+	add_particles(PS_SACRED_FLAME)
+	add_particles(PS_SACRED_FLAME2)
+	set_light(3,0.5,"#1414A4")
+	spawn()
+		process_flames()
+
+/obj/effect/overlay/sacred_flames/proc/process_flames()
+	set waitfor = 0
+	while(lifetime > 0)
+		harm_unholy()
+		lifetime--
+		sleep(1 SECONDS)
+	set_light(0)
+	icon = 'icons/effects/32x32.dmi'
+	icon_state = "blank"
+	adjust_particles(PVAR_SPAWNING, 0)
+	sleep(1 SECONDS)
+	qdel(src)
+
+/obj/effect/overlay/sacred_flames/proc/harm_unholy()
+	var/turf/T = get_turf(src)
+	for (var/mob/living/L in T)
+		if (L.isUnholy())
+			L.take_overall_damage(0,15)
+////////////////////////////////////////////////////////////////////////////////
 
 /datum/reagent/holysalts
 	name = "Holy Salts"
@@ -101,6 +164,12 @@
 	color = "#C1CCD7" //rgb: 80, 80, 84
 	density = 2.09
 	specheatcap = 1.65
+	plant_nutrition = 5
+	plant_watering = -5
+	plant_pests = -10
+	plant_weeds = -20
+	plant_toxins = 8
+	plant_health = -2
 
 /datum/reagent/holysalts/reaction_obj(var/obj/O, var/volume)
 	if(..())
@@ -133,16 +202,6 @@
 			C.purge = 3
 			C.adjustBruteLoss(5)
 			C.visible_message("<span class='danger'>The [src] erodes \the [M].</span>")
-
-/datum/reagent/holysalts/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_waterlevel(-5)
-	T.add_nutrientlevel(5)
-	T.add_toxinlevel(8)
-	T.add_weedlevel(-20)
-	T.add_pestlevel(-10)
-	if(T.seed && !T.dead)
-		T.add_planthealth(-2)
 
 /datum/reagent/incense
 	id = EXPLICITLY_INVALID_REAGENT_ID
@@ -236,12 +295,12 @@
 	if(prob(5))
 		to_chat(M,"<span class='warning'>[pick("You feel like giggling!", "You feel clumsy!", "You want to honk!")]</span>")
 
-/datum/reagent/incense/cabbage
+/datum/reagent/incense/leafy
 	name = "Leafy Incense"
 	id = INCENSE_LEAFY
 	description = "This fragrance smells of fresh greens, delicious to most animals."
 
-/datum/reagent/incense/cabbage/reagent_deleted()
+/datum/reagent/incense/leafy/reagent_deleted()
 	if(..())
 		return 1
 	if(!holder)
@@ -249,7 +308,7 @@
 	var/mob/M =  holder.my_atom
 	walk(M,0) //Cancel walk if it ran out
 
-/datum/reagent/incense/cabbage/on_mob_life(var/mob/living/M)
+/datum/reagent/incense/leafy/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	if(isanimal(M) || ismonkey(M))

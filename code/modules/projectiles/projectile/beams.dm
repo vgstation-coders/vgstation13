@@ -57,7 +57,6 @@ var/list/beam_master = list()
 				if (PROJECTILE_COLLISION_REBOUND)
 					return new /rayCastHit(info, RAY_CAST_REBOUND)
 				if (PROJECTILE_COLLISION_MISS)
-					A.visible_message("<span class='notice'>\The [fired_beam] misses \the [A] narrowly!</span>")
 					return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 				if (PROJECTILE_COLLISION_PORTAL)
 					return new /rayCastHit(info, RAY_CAST_PORTAL)
@@ -213,7 +212,6 @@ var/list/beam_master = list()
 	eyeblur = 50
 	var/tang = 0
 	layer = PROJECTILE_LAYER
-	var/turf/last = null
 	kill_count = 12
 	var/mob/firer_mob = null
 	var/yellow = 0
@@ -279,89 +277,59 @@ var/list/beam_master = list()
 		if(count >= kill_count)
 			break
 		count++
-		var/obj/effect/overlay/beam/persist/X=new /obj/effect/overlay/beam/persist(T)
-		X.BeamSource=src
-		ouroverlays += X
+		var/obj/effect/overlay/beam/persist/lightning_segment = new /obj/effect/overlay/beam/persist(T)
+		lightning_segment.BeamSource=src
+		ouroverlays += lightning_segment
 		if((N+WORLD_ICON_SIZE*2>length) && (N+WORLD_ICON_SIZE<=length))
-			X.icon=Iend
+			lightning_segment.icon=Iend
 		else if(N==0)
-			X.icon=Istart
+			lightning_segment.icon=Istart
 		else if(N+WORLD_ICON_SIZE>length)
-			X.icon=null
+			lightning_segment.icon=null
 		else
-			X.icon=I
+			lightning_segment.icon=I
 
-		var/Pixel_x=round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE/2)
-		var/Pixel_y=round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
-		if(DX==0)
-			Pixel_x=0
-		if(DY==0)
-			Pixel_y=0
-		if(Pixel_x>WORLD_ICON_SIZE)
-			for(var/a=0, a<=Pixel_x,a+=WORLD_ICON_SIZE)
-				X.x++
-				Pixel_x-=WORLD_ICON_SIZE
-		if(Pixel_x<-WORLD_ICON_SIZE)
-			for(var/a=0, a>=Pixel_x,a-=WORLD_ICON_SIZE)
-				X.x--
-				Pixel_x+=WORLD_ICON_SIZE
-		if(Pixel_y>WORLD_ICON_SIZE)
-			for(var/a=0, a<=Pixel_y,a+=WORLD_ICON_SIZE)
-				X.y++
-				Pixel_y-=WORLD_ICON_SIZE
-		if(Pixel_y<-WORLD_ICON_SIZE)
-			for(var/a=0, a>=Pixel_y,a-=WORLD_ICON_SIZE)
-				X.y--
-				Pixel_y+=WORLD_ICON_SIZE
+		// We set pixel_x to the position it should be based on the angle of the lightning, then we reduce pixel_x by a factor of 32 and add it to the
+		// x position variable instead, resulting in the same overall position. Then, we do the same for y.
+		lightning_segment.pixel_x = round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE)/WORLD_ICON_SIZE)
+		lightning_segment.pixel_y = round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE)/WORLD_ICON_SIZE)
+		if(lightning_segment.pixel_x >= 0)
+			lightning_segment.x += Floor( lightning_segment.pixel_x / WORLD_ICON_SIZE )
+		else
+			lightning_segment.x += Ceiling( lightning_segment.pixel_x / WORLD_ICON_SIZE )
+		if(lightning_segment.pixel_y >= 0)
+			lightning_segment.y += Floor( lightning_segment.pixel_y / WORLD_ICON_SIZE )
+		else
+			lightning_segment.y += Ceiling( lightning_segment.pixel_y / WORLD_ICON_SIZE )
+		lightning_segment.pixel_y %= 32
+		lightning_segment.pixel_x %= 32
 
-		//Now that we've calculated the total offset in pixels, we move each beam parts to their closest corresponding turfs
-		var/x_increm = 0
-		var/y_increm = 0
 
-		while(Pixel_x >= WORLD_ICON_SIZE || Pixel_x <= -WORLD_ICON_SIZE)
-			if(Pixel_x > 0)
-				Pixel_x -= WORLD_ICON_SIZE
-				x_increm++
-			else
-				Pixel_x += WORLD_ICON_SIZE
-				x_increm--
-
-		while(Pixel_y >= WORLD_ICON_SIZE || Pixel_y <= -WORLD_ICON_SIZE)
-			if(Pixel_y > 0)
-				Pixel_y -= WORLD_ICON_SIZE
-				y_increm++
-			else
-				Pixel_y += WORLD_ICON_SIZE
-				y_increm--
-
-		X.x += x_increm
-		X.y += y_increm
-
-		X.pixel_x=Pixel_x
-		X.pixel_y=Pixel_y
-		var/turf/TT = get_turf(X.loc)
-		while((TT.timestopped || timestopped || X.timestopped) && count)
+		var/turf/TT = get_turf(lightning_segment.loc)
+		while((TT.timestopped || timestopped || lightning_segment.timestopped) && count)
 			sleep(2)
+
 		if(TT == firer.loc)
 			continue
-		if(TT.density && !passdense)
-			QDEL_NULL(X)
+		if(TT.density)
+			QDEL_NULL(lightning_segment)
 			break
 		for(var/atom/movable/O in TT)
-			if(!O.Cross(src) && !passdense)
-				qdel(X)
+			if(!O.Cross(src))
+				qdel(lightning_segment)
 				broke = 1
 				break
 		for(var/mob/living/O in TT.contents)
 			if(istype(O, /mob/living))
-				if(O.density && !passdense)
-					QDEL_NULL(X)
+				if(O.density)
+					QDEL_NULL(lightning_segment)
 					broke = 1
 					break
 		if(broke)
-			if(X)
-				QDEL_NULL(X)
+			if(lightning_segment)
+				QDEL_NULL(lightning_segment)
 			break
+
 	spawn(10)
 		for(var/atom/thing in ouroverlays)
 			if(!thing.timestopped && thing.loc && !thing.loc.timestopped)
@@ -393,7 +361,7 @@ var/list/beam_master = list()
 				var/turf/simulated/floor/f = current
 				if(f && istype(f))
 					f.break_tile()
-					f.hotspot_expose(1000,CELL_VOLUME,1)
+					f.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
 			if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
 //				to_chat(world, "deleting")
 				//del(src) //Delete if it passes the world edge
@@ -422,7 +390,6 @@ var/list/beam_master = list()
 //				to_chat(world, "breaking")
 				break
 			else
-				last = get_turf(src.loc)
 				step_towards(src, current) //Move~
 				if(src.loc != current)
 					tang = adjustAngle(get_angle(src.loc,current))
@@ -452,6 +419,8 @@ var/list/beam_master = list()
 	var/spell/lightning/our_spell
 	weaken = 0
 	stun = 0
+	stutter = 0
+	eyeblur = 0
 /obj/item/projectile/beam/lightning/spell/to_bump(atom/A as mob|obj|turf|area)
 	. = ..()
 	if(.)
@@ -466,12 +435,17 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/practice/stormtrooper
 	fire_sound = "sound/weapons/blaster-storm.ogg"
+	excessive_missing = TRUE
+	projectile_miss_chance = 99999
+	projectile_miss_message_replace = TRUE
 
-/obj/item/projectile/beam/practice/stormtrooper/on_hit(var/atom/target, var/blocked = 0)
-	if(..(target, blocked))
-		var/mob/living/L = target
-		var/message = pick("\the [src] narrowly whizzes past [L]!","\the [src] almost hits [L]!","\the [src] straight up misses its target.","[L]'s hair is singed off by \the [src]!","\the [src] misses [L] by a millimetre!","\the [src] doesn't hit","\the [src] misses its intended target.","[L] has a lucky escape from \the [src]!")
-		target.loc.visible_message("<span class='danger'>[message]</span>")
+/obj/item/projectile/beam/practice/stormtrooper/to_bump(atom/A)
+	var/selected_message = pick("\The [src] narrowly whizzes past [A]!","\The [src] almost hits [A]!",
+								"\The [src] straight up misses [A].","[A]'s hair is singed off by \the [src]!",
+								"\The [src] misses [A] by a millimetre!","\The [src] doesn't hit [A]!",
+								"\The [src] misses [A].","[A] has a lucky escape from \the [src]!")
+	projectile_miss_message = "<span class='danger'>[selected_message]</span>"
+	return ..()
 
 /obj/item/projectile/beam/scorchray
 	name = "scorch ray"

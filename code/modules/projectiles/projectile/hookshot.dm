@@ -58,7 +58,7 @@
 						hookshot.rewind_chain()
 				bullet_die()
 
-		sleep(sleeptime)
+		sleep(sleeptime * projectile_speed)
 
 /obj/item/projectile/hookshot/proc/drop_item()	//fleshshot only
 	return
@@ -180,6 +180,7 @@
 	sharpness = 1.2
 	failure_message = "Your hand slips and the whip falls loose..."
 	can_tether = FALSE
+	projectile_speed = 0.33
 	var/whipitgood_bonus = 5
 
 /obj/item/projectile/hookshot/whip/on_hit(var/atom/atarget, var/blocked = 0)

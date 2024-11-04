@@ -44,6 +44,7 @@ var/global/list/alcatraz_stuff = list(
 	light_color = LIGHT_COLOR_ORANGE
 	mech_flags = MECH_SCAN_FAIL
 	var/obj/item/weapon/cell/bcell
+	blocks_tracking = TRUE
 
 /obj/item/clothing/head/helmet/stun/New()
 	..()

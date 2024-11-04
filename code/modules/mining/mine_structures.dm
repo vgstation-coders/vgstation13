@@ -24,6 +24,7 @@
 	var/obj/item/device/flashlight/lantern/lantern = null
 	var/start_with_lantern = /obj/item/device/flashlight/lantern/on
 	var/busy = 0
+	var/lantern_can_be_removed = TRUE
 
 	health = 60
 	breakable_flags = BREAKABLE_ALL
@@ -55,13 +56,16 @@
 /obj/structure/hanging_lantern/attack_hand(mob/user)
 
 	if(lantern)
-		user.visible_message("<span class='notice'>[user] takes \the [lantern] off of the \the [src].</span>", \
-		"<span class='notice'>You take \the [lantern] off of the \the [src].</span>")
-		playsound(src, 'sound/machines/click.ogg', 20, 1)
-		lantern.add_fingerprint(user)
-		user.put_in_hands(lantern)
-		lantern = null
-		update()
+		if(lantern_can_be_removed)
+			user.visible_message("<span class='notice'>[user] takes \the [lantern] off of the \the [src].</span>", \
+			"<span class='notice'>You take \the [lantern] off of the \the [src].</span>")
+			playsound(src, 'sound/machines/click.ogg', 20, 1)
+			lantern.add_fingerprint(user)
+			user.put_in_hands(lantern)
+			lantern = null
+			update()
+		else
+			to_chat(user, "The lantern is unable to be removed from its hook!")
 
 /obj/structure/hanging_lantern/examine(mob/user)
 	..()

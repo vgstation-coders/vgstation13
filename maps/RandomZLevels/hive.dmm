@@ -1077,7 +1077,7 @@
 /turf/unsimulated/floor/evil,
 /area/awaymission/hive)
 "ep" = (
-/obj/item/weapon/invisible_spray,
+/obj/item/weapon/syndie_spray/invisible_spray,
 /turf/unsimulated/floor/evil/breathing,
 /area/awaymission/hive)
 "eq" = (

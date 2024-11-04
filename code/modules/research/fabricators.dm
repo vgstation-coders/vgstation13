@@ -382,7 +382,7 @@
 				break
 			var/datum/design/D = set_parts[i]
 			add_to_queue(D)
-	visible_message("[bicon(src)] <b>[src]</b> beeps: \"[set_name] parts were added to the queue\".")
+	visible_message("[bicon(src)] <b>[src]</b> beeps: \"[replacetext(set_name, "_", " ")] parts were added to the queue\".")
 	return
 
 /obj/machinery/r_n_d/fabricator/proc/add_to_queue(var/datum/design/part)

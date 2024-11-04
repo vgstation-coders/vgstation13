@@ -7,6 +7,8 @@
 	density = 1
 	anchored = 0
 	use_power = MACHINE_POWER_USE_NONE
+	slimeadd_message = "You add the slime extract to the fuel port"
+	slimes_accepted = SLIME_GREY
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 
@@ -28,15 +30,25 @@
 	return
 
 /obj/machinery/power/port_gen/process()
-	if(active && HasFuel() && !crit_fail && anchored && powernet)
-		add_avail(power_gen * power_output)
-		UseFuel()
+	if(active && !crit_fail && anchored && powernet)
+		if(HasFuel())
+			add_avail(power_gen * power_output)
+			UseFuel()
+		if(has_slimes & slimes_accepted)
+			add_avail(power_gen)
 		src.updateDialog()
 
 	else
 		active = 0
 		update_icon()
 		handleInactive()
+
+/obj/machinery/power/port_gen/slime_act(primarytype, mob/user)
+	if((slimes_accepted&(has_slimes|primarytype)) == slimes_accepted)
+		slimeadd_success_message = "It churns comfortably"
+	else if(slimes_accepted & primarytype)
+		slimeadd_success_message = "It begins to [pick("nudge","budge","rumble")] slightly"
+	. = ..()
 
 /obj/machinery/power/port_gen/attack_hand(mob/user as mob)
 	if(..())
@@ -53,6 +65,7 @@
 
 /obj/machinery/power/port_gen/pacman
 	name = "P.A.C.M.A.N.-type Portable Generator"
+	slimes_accepted = SLIME_DARKPURPLE
 	var/sheets = 0
 	var/max_sheets = 100
 	var/sheet_name = ""
@@ -302,6 +315,7 @@
 	power_gen = 15000
 	time_per_sheet = 65
 	board_path = "/obj/item/weapon/circuitboard/pacman/super"
+	slimes_accepted = SLIME_DARKPURPLE|SLIME_METAL
 
 /obj/machinery/power/port_gen/pacman/super/overheat()
 	explosion(src.loc, 3, 3, 3, -1)
@@ -313,6 +327,7 @@
 	power_gen = 40000
 	time_per_sheet = 80
 	board_path = "/obj/item/weapon/circuitboard/pacman/mrs"
+	slimes_accepted = SLIME_DARKPURPLE|SLIME_METAL|SLIME_ADAMANTINE
 
 /obj/machinery/power/port_gen/pacman/mrs/overheat()
 	explosion(src.loc, 4, 4, 4, -1)
@@ -325,6 +340,7 @@
 	power_gen = 100000
 	time_per_sheet = 100
 	board_path = "/obj/item/weapon/circuitboard/pacman/baby"
+	slimes_accepted = SLIME_DARKPURPLE|SLIME_METAL|SLIME_ADAMANTINE|SLIME_PYRITE
 
 /obj/machinery/power/port_gen/pacman/baby/overheat()
 	explosion(src.loc, 5, 5, 5, -1)
@@ -337,6 +353,7 @@
 	power_gen = 250000 //you're burning phazon here, you madman
 	time_per_sheet = 250
 	board_path = "/obj/item/weapon/circuitboard/pacman/professor"
+	slimes_accepted = SLIME_DARKPURPLE|SLIME_METAL|SLIME_ADAMANTINE|SLIME_PYRITE|SLIME_BLACK
 
 /obj/machinery/power/port_gen/pacman/professor/overheat()
 	explosion(src.loc, 6, 6, 6, -1)

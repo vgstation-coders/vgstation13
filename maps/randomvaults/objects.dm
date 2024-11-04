@@ -8,7 +8,6 @@
 	name = "mysterious structure"
 	requires_power = 0
 	icon_state = "firingrange"
-	dynamic_lighting = 1
 
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
@@ -1064,6 +1063,7 @@
 	minbodytemp = 0
 
 	mob_property_flags = MOB_ROBOTIC
+	meat_type = null
 
 	environment_smash_flags = 0
 

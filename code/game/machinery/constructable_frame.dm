@@ -278,7 +278,7 @@
 		if(3)
 			icon_state = "box_2"
 
-/obj/item/weapon/circuitboard/proc/finish_building(var/obj/machinery/new_machine, var/mob/user) //Something that will get done after the last step of construction. Currently unused.
+/obj/item/weapon/circuitboard/proc/finish_building(var/obj/machinery/new_machine, var/mob/user) //Something that will get done after the last step of construction.
 	return
 
 //Machine Frame Circuit Boards
@@ -797,7 +797,7 @@ to destroy them and players will be able to make replacements.
 
 /obj/item/weapon/circuitboard/reagentgrinder
 	name = "Circuit Board (All-In-One Grinder)"
-	desc = "A circuit board used to run a machine that grinds or juices solid items.."
+	desc = "A circuit board used to run a machine that grinds or juices solid items."
 	build_path = /obj/machinery/reagentgrinder
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
@@ -877,6 +877,10 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/capacitor = 1,
 							/obj/item/weapon/reagent_containers/glass/beaker = 2,
 							/obj/item/weapon/stock_parts/console_screen = 1)
+
+/obj/item/weapon/circuitboard/hydroponics/finish_building(var/obj/machinery/portable_atmospherics/hydroponics/new_machine, var/mob/user)
+	new_machine.waterlevel = 0
+	new_machine.update_icon(TRUE)
 
 /obj/item/weapon/circuitboard/gibber
 	name = "Circuit Board (Gibber)"
@@ -1166,7 +1170,8 @@ to destroy them and players will be able to make replacements.
 	req_components = list(
 							/obj/item/weapon/stock_parts/matter_bin = 1,
 							/obj/item/weapon/stock_parts/manipulator = 1,
-							/obj/item/weapon/stock_parts/scanning_module = 1)
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/storage/lockbox/coinbox = 1)
 
 /obj/item/weapon/circuitboard/pdapainter
 	name = "Circuit Board (PDA Painter)"

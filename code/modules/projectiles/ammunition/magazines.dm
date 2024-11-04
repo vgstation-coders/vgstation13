@@ -319,14 +319,14 @@
 	..()
 	var/list/new_ammo_counters = list()
 	for(var/datum/lawgiver_mode/mode in lawgiver_modes[compatible_gun_type])
-		new_ammo_counters[mode] = LAWGIVER_MAX_AMMO * mode.ammo_per_shot
+		new_ammo_counters[mode] = mode.ammo_per_shot
 	ammo_counters = new_ammo_counters
 	update_icon()
 
 /obj/item/ammo_storage/magazine/lawgiver/proc/generate_description()
 	. = list("<span class='info'>")
 	for(var/datum/lawgiver_mode/mode in ammo_counters)
-		var/ammo_left = ammo_counters[mode] / mode.ammo_per_shot
+		var/ammo_left = ammo_counters[mode]
 		switch(mode.kind)
 			if(LAWGIVER_MODE_KIND_ENERGY)
 				. += "It has enough energy for [ammo_left] [mode.firing_mode] shot[ammo_left != 1 ? "s" : ""] left.\n"
@@ -341,16 +341,13 @@
 
 /obj/item/ammo_storage/magazine/lawgiver/update_icon()
 	overlays.len = 0
-	// We only have 5 overlays but potentially more
-	// than 5 ammo types. Ammo types after the 5th don't
-	// get an overlay.
-	var/static/list/available_overlays = list(
+	var/static/list/available_overlays = list( //five ammo types get overlays
 		"stun", "laser", "rapid", "flare", "ricochet",
 	)
 	for(var/i in 1 to min(available_overlays.len, ammo_counters.len))
 		var/datum/lawgiver_mode/mode = ammo_counters[i]
-		var/ammo_left = ammo_counters[mode] / mode.ammo_per_shot
-		overlays += image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-[available_overlays[i]]-[ammo_left]")
+		var/ammo_left = ceil(5-((mode.ammo_per_shot-ammo_counters[mode])/(mode.ammo_per_shot/5))) //takes the number of shots left compared to the max and makes it a ratio of five since there are 5 states for each overlay.
+		overlays += image('icons/obj/ammo.dmi', src, "lawgiver-[available_overlays[i]]-[ammo_left]")
 
 /obj/item/ammo_storage/magazine/lawgiver/proc/isEmpty()
 	for(var/datum/lawgiver_mode/mode in ammo_counters)
@@ -360,7 +357,7 @@
 
 /obj/item/ammo_storage/magazine/lawgiver/proc/isFull()
 	for(var/datum/lawgiver_mode/mode in ammo_counters)
-		if(ammo_counters[mode] != LAWGIVER_MAX_AMMO * mode.ammo_per_shot)
+		if(ammo_counters[mode] != mode.ammo_per_shot)
 			return FALSE
 	return TRUE
 
@@ -374,17 +371,90 @@
 
 	var/charged_amount = 0
 	for(var/datum/lawgiver_mode/mode in ammo_counters)
-		if(ammo_counters[mode] == LAWGIVER_MAX_AMMO * mode.ammo_per_shot)
+		if(ammo_counters[mode] ==  mode.ammo_per_shot)
 			continue
 		charged_amount += mode.ammo_per_shot * charger.charging_speed_modifier
-		ammo_counters[mode] = min(ammo_counters[mode] + charged_amount, LAWGIVER_MAX_AMMO * mode.ammo_per_shot)
+		ammo_counters[mode] = min(ammo_counters[mode] + charged_amount, mode.ammo_per_shot)
 
 	charger.try_use_power(100 * charger.charging_speed_modifier + 100 * charger.charging_speed_modifier * charger.efficiency_modifier)
 	charger.update_icon()
 
+/obj/item/ammo_storage/magazine/lawgiver/attackby(var/atom/A, var/mob/user)
+	if(istype(A,/obj/item/toy/crayon/rainbow)&& !istype(src,/obj/item/ammo_storage/magazine/lawgiver/honkgiver))
+		var/obj/item/ammo_storage/magazine/lawgiver/honkgiver/HGM = new /obj/item/ammo_storage/magazine/lawgiver/honkgiver(loc)
+		honkgiver_ammo_conversion(HGM)
+		HGM.original_type = type
+		transfer_fingerprints(src,HGM)
+		qdel(src)
+	else
+		..()
+
+/obj/item/ammo_storage/magazine/lawgiver/proc/honkgiver_ammo_conversion(var/obj/item/ammo_storage/magazine/lawgiver/honkgiver/HGM)
+	var/i = 1
+	for(var/datum/lawgiver_mode/mode in HGM.ammo_counters)
+		if(i<=ammo_counters.len)
+			var/datum/lawgiver_mode/modeOther = ammo_counters[i]
+			HGM.ammo_counters[mode] = floor(ammo_counters[modeOther] * mode.ammo_per_shot/modeOther.ammo_per_shot)
+		i++
+	return
+
+
 /obj/item/ammo_storage/magazine/lawgiver/demolition
 	desc = "State-of-the-art bluespace technology allows this magazine to generate new rounds from energy, requiring only a power source to refill the full suite of ammunition types. This model is outfitted with high-explosive rounds."
 	compatible_gun_type = /obj/item/weapon/gun/lawgiver/demolition
+
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver
+	desc = "State-of-the-HONK clownspace technology allows this magazine to generate honkmunitions by converting recharger power. The DOOMLAZOR module recharges slowly on its own. Just don't let security catch you."
+	compatible_gun_type = /obj/item/weapon/gun/lawgiver/honkgiver
+	icon_state = "honkgiver"
+	var/obj/item/ammo_storage/magazine/lawgiver/original_type = null //stores original type for deconversion
+	var/charge_tick = 0 //for automatically recharging the doomlazor
+	var/doomlazorposition = 0 //stores position of doomlazor for recharging
+
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver/New()
+	..()
+	processing_objects.Add(src)
+	var/i=1
+	for(var/datum/lawgiver_mode/mode in ammo_counters)
+		if(istype(mode,/datum/lawgiver_mode/doomlazor))
+			doomlazorposition = i
+			break
+		i++
+
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver/decontaminate()
+	..()
+	if(original_type)
+		var/obj/item/ammo_storage/magazine/lawgiver/LGM = new original_type(loc)
+		honkgiver_ammo_conversion(LGM)
+		transfer_fingerprints(src,LGM)
+		qdel(src)
+	else
+		visible_message("<span class='notice'>\The [src] resists your efforts to declownify it! It must truly be a timeless relic of clownliness...</span>")
+
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver/process() //recharges the doomlazor when at zero
+	if(doomlazorposition && (ammo_counters[ammo_counters[doomlazorposition]] == 0))
+		charge_tick++
+		if(charge_tick < 8)
+			return 0
+		ammo_counters[ammo_counters[doomlazorposition]] ++
+		charge_tick=0
+		return 1
+	return 0
+
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver/ultimate
+
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver/ultimate/New()
+	..()
+	for(var/datum/lawgiver_mode/mode in ammo_counters)
+		ammo_counters[mode] = 9999999
+	update_icon()
+
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver/ultimate/process()
+	return 0
 
 /obj/item/ammo_storage/magazine/invisible
 	desc = "Reading how many shots you had left just got a lot more difficult."

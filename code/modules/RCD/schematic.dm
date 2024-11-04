@@ -10,6 +10,7 @@
 	var/list/overlays		= list()
 	var/obj/abstract/screen/schematics/ourobj
 	var/datum/selection_schematic/selected
+	var/list_icon=null //the icon that is displayed next to the name on the list.
 
 /datum/rcd_schematic/New(var/obj/item/device/rcd/n_master)
 	master = n_master
@@ -106,9 +107,13 @@ params:
 /datum/rcd_schematic/proc/build_ui()
 	master.interface.updateLayout("<div id='schematic_options'> </div>")
 
+/datum/rcd_schematic/proc/send_list_assets(var/client/client) //this is called when opening the menu to make sure the listed options have their icons.
+	return //registering happens on the same proc unlike send_assets, since this is more specialized.
+
 /datum/rcd_schematic/proc/schematic_list_line(var/datum/html_interface/interface, var/fav=FALSE,var/selected=FALSE)
 	var/fav_html
 	var/class="'schem'"
+	var/image_html=""
 	// Important distinction: being favorited vs being rendered for the favorited list.
 	// The fav parameter means the latter.
 	if (master.favorites.Find(src))
@@ -124,7 +129,9 @@ params:
 
 	if (selected)
 		class="'schem_selected'"
-
-	return "<table class=[class]><tr>[fav_html]<td><a href='?src=\ref[interface];schematic=\ref[src];act=select' >[name]</a><td><tr></table>"
+	if (list_icon)
+		image_html="<img id='list_icon' src='[list_icon]'></img>"
+		
+	return "<table class=[class]><tr>[fav_html]<td><a href='?src=\ref[interface];schematic=\ref[src];act=select' >[image_html][name]</a><td><tr></table>"
 
 /datum/rcd_schematic/proc/MouseWheeled(var/mob/user, var/delta_x, var/delta_y, var/params)

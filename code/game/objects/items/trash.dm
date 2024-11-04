@@ -450,4 +450,23 @@ var/list/crushed_cans_cache = list()
 	desc = "What a shame it's too small to fly in."
 	icon_state	= "emptysaucerbowl"
 	starting_materials = list(MAT_IRON = 100)
-	w_type=RECYK_METAL
+	w_type = RECYK_METAL
+
+/obj/item/trash/broken_ashtray
+	name = "broken ashtray"
+	desc = "Pieces of plastic with ash on them."
+	icon_state = "ashtray_bork_bl"
+	starting_materials = list(MAT_PLASTIC = 50)
+	w_type = RECYK_PLASTIC
+
+/obj/item/trash/broken_ashtray/bronze
+	desc = "Pieces of bronze with ash on them."
+	icon_state = "ashtray_bork_br"
+	starting_materials = list(MAT_IRON = 80)
+	w_type = RECYK_METAL
+
+/obj/item/trash/broken_ashtray/glass
+	desc = "Shards of glass with ash on them."
+	icon_state = "ashtray_bork_gl"
+	starting_materials = list(MAT_GLASS = 60)
+	w_type = RECYK_GLASS

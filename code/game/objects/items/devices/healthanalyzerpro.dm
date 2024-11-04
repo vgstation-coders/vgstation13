@@ -63,7 +63,7 @@
 		to_chat(user, "<span class='warning'>Printing energy spent, please wait a moment.</span>")
 		return
 
-	visible_message("<span class='warning'>\the [src] rattles and prints out a sheet of paper.</span>", 1)
+	visible_message("<span class='warning'>\The [src] rattles and prints out a sheet of paper.</span>", 1)
 	last_print = world.time
 	sleep(1 SECONDS)
 	var/obj/item/weapon/paper/R = new(loc)

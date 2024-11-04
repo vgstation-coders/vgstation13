@@ -158,6 +158,55 @@
 		return chosen
 
 /*
+ * Returns the length of a common prefix in a list, if any
+ * Requires a SORTED list
+ */
+/proc/find_string_list_prefix(var/list/inputlist)
+	if(!inputlist.len)
+		return
+	if(inputlist.len==1)
+		return inputlist[1]
+	var/i = 0
+	var/first = "[inputlist[1]]"
+	var/last = "[inputlist[inputlist.len]]"
+	while(i < length(first) && first[i+1] == last[i+1])
+		i++
+	return i
+
+/*
+ * Returns a choice from an input typelist, given a string filter
+ * If only one thing is returned, just gives us that with no input list.
+ */
+/proc/filter_typelist_input(input_text, input_heading, var/list/matches)
+	if(!matches.len)
+		return
+	if(matches.len==1)
+		return matches[1]
+	matches = sortList(matches)
+	var/prefix = ""
+	var/common = find_string_list_prefix(matches)
+	if(common)
+		prefix = copytext("[matches[1]]", 1, common+1)
+		var/foundpartial = findlasttext(prefix, "/")
+		if(foundpartial)
+			prefix = copytext(prefix, 1, foundpartial)
+			common = foundpartial
+	var/list/results = list()
+	for(var/x in matches)
+		if(common)
+			results += copytext("[x]", common)
+		else
+			results += "[x]"
+	var/newvalue = input("[input_text][(input_text && prefix) ? "\n" : ""][prefix ? "Prefix: [prefix]" : ""]",input_heading) as null|anything in results
+	if(isnull(newvalue))
+		return
+	if(prefix)
+		newvalue = text2path(prefix + newvalue)
+	else
+		newvalue = text2path(newvalue)
+	return newvalue
+
+/*
  * Returns list containing all the entries from first list that are not present in second.
  * If skiprep = 1, repeated elements are treated as one.
  * If either of arguments is not a list, returns null

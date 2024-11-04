@@ -183,7 +183,7 @@
 				E.process_grasp(held_items[E.grasp_id], get_index_limb_name(E.grasp_id))
 
 			//Special effects for legs and foot
-			else if(E.name in list(LIMB_LEFT_LEG, LIMB_LEFT_FOOT, LIMB_RIGHT_LEG, LIMB_RIGHT_FOOT) && !lying)
+			else if((E.name in list(LIMB_LEFT_LEG, LIMB_LEFT_FOOT, LIMB_RIGHT_LEG, LIMB_RIGHT_FOOT)) && !lying)
 				if(E.is_malfunctioning() || E.is_broken())
 					stand_broken = 1 //We can't stand like this
 

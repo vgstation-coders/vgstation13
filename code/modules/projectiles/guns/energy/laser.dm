@@ -30,6 +30,12 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	charge_cost = 100 // holds less "ammo" then the rifle variant.
 
+/obj/item/weapon/gun/energy/laser/pistol/New()
+	..()
+	if((Holiday == APRIL_FOOLS_DAY) && (type == /obj/item/weapon/gun/energy/laser/pistol)) //Don't let it carry over to other laser pistols
+		gun_miss_chance_value = 150
+		gun_miss_message = "That's XCOM, baby!"
+
 /obj/item/weapon/gun/energy/laser/pistol/isHandgun()
 	return TRUE
 
@@ -49,6 +55,12 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	projectile_type = /obj/item/projectile/beam
 	charge_cost = 50
+
+/obj/item/weapon/gun/energy/laser/rifle/New()
+	..()
+	if((Holiday == APRIL_FOOLS_DAY) && (type == /obj/item/weapon/gun/energy/laser/rifle))
+		gun_miss_chance_value = 150
+		gun_miss_message = "That's XCOM, baby!"
 
 /obj/item/weapon/gun/energy/laser/rifle/syndie
 	icon_state = "exaltlasergun"

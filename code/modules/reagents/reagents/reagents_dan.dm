@@ -81,7 +81,7 @@
 /datum/reagent/refriedbeans
 	name = "Re-Fried Beans"
 	id = REFRIEDBEANS
-	description = "Mmm.."
+	description = "Mmm..."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM

@@ -98,12 +98,8 @@
 						if(powerlevel > 10)
 							powerlevel = 10
 
-				if(slime_lifestage == SLIME_ADULT)
-					if(nutrition > 1200)
-						nutrition = 1200
-				else
-					if(nutrition > 1000)
-						nutrition = 1000
+				if(nutrition > 1200)
+					nutrition = 1200
 
 				Victim.updatehealth()
 				updatehealth()

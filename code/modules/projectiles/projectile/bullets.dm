@@ -161,6 +161,22 @@
 	agony = 15
 	penetration = 2
 
+/obj/item/projectile/bullet/auto380/to_bump(atom/A)
+	. = ..()
+	if(A && shot_from.type == /obj/item/weapon/gun/projectile/glock/fancy/kitchengun)
+		var/obj/item/weapon/gun/projectile/glock/fancy/kitchengun/K = shot_from
+		if(!(A in K.cleaning_targets)) // BUT WITH THREE SHOTS FROM KITCHEN GUN
+			K.cleaning_targets += A // BANG
+		K.cleaning_targets[A]++ // BANG
+		if(K.cleaning_targets[A] > 2) // BANG
+			var/turf/T = get_turf(A)
+			T.clean_act(CLEANLINESS_BLEACH)
+			for(var/obj/O in T)
+				O.clean_act(CLEANLINESS_BLEACH)
+			A.clean_act(CLEANLINESS_BLEACH) // AND IT SPARKLES LIKE NEW
+			K.cleaning_targets[A] = 0
+			K.cleaning_targets -= A
+
 /obj/item/projectile/bullet/auto380/practice
 	damage = 2
 	agony = 0
@@ -487,7 +503,7 @@
 	var/mob/living/simple_animal/bee/BEE = new bee_type(T,null)
 	if(istype(A,/mob/living))
 		var/mob/living/M = A
-		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
+		visible_message("<span class='warning'>\The [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
 		M.bullet_act(src, def_zone)
 		admin_warn(M)
 		BEE.forceMove(M.loc)

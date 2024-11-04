@@ -70,7 +70,7 @@
 	overlays = null
 	icon_state = welded ? "weld" : "base"
 
-	if (on && ~stat & (FORCEDISABLE|NOPOWER|BROKEN))
+	if (on && !(stat & (FORCEDISABLE|NOPOWER|BROKEN)))
 		overlays += pump_direction ? "out" : "in"
 
 	..()

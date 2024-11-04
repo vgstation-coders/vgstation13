@@ -268,8 +268,8 @@
 	category = "Luxury"
 
 /datum/storeitem/critter_cage
-	name = "small cage"
-	desc = "A cage where to keep tiny animals safe. Fit with a drinking bottle that can be refilled.."
+	name = "Small Cage"
+	desc = "A cage that keeps tiny animals safe. Fit with a drinking bottle that can be refilled."
 	typepath = /obj/item/critter_cage
 	cost = 60
 	category = "Luxury"

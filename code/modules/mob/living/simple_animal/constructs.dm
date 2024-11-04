@@ -248,7 +248,9 @@
 		update_icons()
 	else
 		M.unarmed_attack_mob(src)
+		return 1
 
+/*
 /mob/living/simple_animal/construct/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)
 	if(O.force)
@@ -257,6 +259,7 @@
 			damage = 0
 		if(isholyweapon(O))
 			playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
+			anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "holy",sleeptime = 5, lay = NARSIE_GLOW,plane = ABOVE_LIGHTING_PLANE)
 			damage *= 2
 			purge = 3
 		adjustBruteLoss(damage)
@@ -265,7 +268,7 @@
 	else
 		to_chat(usr, "<span class='warning'>This weapon is ineffective, it does no damage.</span>")
 		user.visible_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
-
+*/
 
 /mob/living/simple_animal/construct/mode()
 	set name = "Activate Held Object"
@@ -359,10 +362,12 @@
 		return PROJECTILE_COLLISION_BLOCKED
 	return (..(P))
 
-/mob/living/simple_animal/construct/armoured/thrown_defense(var/obj/O)
-	if(juggerblock(O.throwforce,O))
-		return FALSE
-	return TRUE
+/mob/living/simple_animal/construct/armoured/thrown_defense(var/obj/O,var/speed = 5)
+	. = ..()
+	if (. <= 1)//juggerblock doesn't protect from holy weapons
+		if(juggerblock(O.throwforce*(speed/5),O))
+			return 0
+	return .
 
 /mob/living/simple_animal/construct/armoured/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, sharp, edge, var/used_weapon = null, ignore_events = 0)
 	if (juggerblock(damage))

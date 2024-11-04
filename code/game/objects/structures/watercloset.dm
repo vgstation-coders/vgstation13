@@ -600,6 +600,22 @@
 			P.colour = "black"
 			P.bloodied = FALSE
 
+	else if(istype(O, /obj/item/stack/sheet/hairlesshide))
+		var/obj/item/stack/sheet/hairlesshide/H = O
+		user.visible_message("<span class='notice'>[user] puts \the [H] underneath the running water and begins soaking it.","<span class='notice'>You put \the [H] underneath the running water and begin soaking it.</span>")
+		busy = TRUE
+		if (do_after(user, src, 10*H.amount))
+			var/obj/item/stack/sheet/wetleather/WL = new(src)
+			WL.amount = H.amount
+			WL.source_string = H.source_string
+			WL.name = H.source_string ? "wet [H.source_string] leather" : "wet leather"
+			user.create_in_hands(H, WL, msg = "<span class='notice'>You finish up, creating [WL].</span>")
+			QDEL_NULL(H)
+		else
+			to_chat(user, "<span class='notice'>You stop soaking \the [H].</span>")
+		busy = FALSE
+		return
+
 	if (!isturf(user.loc))
 		return
 

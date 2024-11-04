@@ -273,7 +273,7 @@
 							E.createwound(CUT, pick(2, 4, 6, 8, 10))
 
 					if(prob(30))
-						if(H.set_species("Skellington"))
+						if(H.set_species("Skellington", transfer_damage = TRUE))
 							to_chat(mob, "<span class='warning'>A massive amount of flesh sloughs off your bones!</span>")
 							H.regenerate_icons()
 
@@ -1106,7 +1106,7 @@
 /datum/disease2/effect/catbeast/activate(var/mob/living/mob)
 	if(ishuman(mob) && !iscatbeast(mob))
 		var/mob/living/carbon/human/H = mob
-		H.set_species("Tajaran")
+		H.set_species("Tajaran", transfer_damage = TRUE)
 		H.regenerate_icons()
 
 
@@ -1131,7 +1131,7 @@
 /datum/disease2/effect/vox/activate(var/mob/living/mob)
 	if(ishuman(mob) && !isvox(mob))
 		var/mob/living/carbon/human/H = mob
-		H.set_species("Vox")
+		H.set_species("Vox", transfer_damage = TRUE)
 		H.regenerate_icons()
 
 
@@ -1144,7 +1144,7 @@
 /datum/disease2/effect/human/activate(var/mob/living/mob)
 	if(ishuman(mob) && !isjusthuman(mob))
 		var/mob/living/carbon/human/H = mob
-		H.set_species("Human")
+		H.set_species("Human", transfer_damage = TRUE)
 		H.regenerate_icons()
 
 /datum/disease2/effect/lizard
@@ -1156,7 +1156,7 @@
 /datum/disease2/effect/lizard/activate(var/mob/living/mob)
 	if(ishuman(mob) && !isunathi(mob))
 		var/mob/living/carbon/human/H = mob
-		H.set_species("Unathi")
+		H.set_species("Unathi", transfer_damage = TRUE)
 		H.regenerate_icons()
 
 /datum/disease2/effect/insectoid
@@ -1168,7 +1168,7 @@
 /datum/disease2/effect/insectoid/activate(var/mob/living/mob)
 	if(ishuman(mob) && !isinsectoid(mob))
 		var/mob/living/carbon/human/H = mob
-		H.set_species("Insectoid")
+		H.set_species("Insectoid", transfer_damage = TRUE)
 		H.regenerate_icons()
 		if(prob(5))
 			mob.say("How about if I sleep a little bit longer and forget all this nonsense.")
@@ -1182,7 +1182,7 @@
 /datum/disease2/effect/grey/activate(var/mob/living/mob)
 	if(ishuman(mob) && !isgrey(mob))
 		var/mob/living/carbon/human/H = mob
-		H.set_species("Grey")
+		H.set_species("Grey", transfer_damage = TRUE)
 		H.regenerate_icons()
 
 /*

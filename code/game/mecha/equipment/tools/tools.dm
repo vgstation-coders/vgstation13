@@ -388,7 +388,7 @@
 								if(W.reagents.has_reagent(WATER))
 									if(isliving(atm)) // For extinguishing mobs on fire
 										var/mob/living/M = atm // Why isn't this handled by the reagent? - N3X
-										M.ExtinguishMob()
+										M.extinguish()
 									if(atm.on_fire) // For extinguishing objects on fire
 										atm.extinguish()
 									if(atm.molten) // Molten shit.
@@ -577,7 +577,7 @@
 		else
 			chassis.use_power(energy_drain)
 	else
-		occupant_message("<span class='warning'>\the [src]'s error light flickers[istext(t) ? ": [t]" : "."]</span>")
+		occupant_message("<span class='warning'>\The [src]'s error light flickers[istext(t) ? ": [t]" : "."]</span>")
 
 	R.busy = FALSE
 

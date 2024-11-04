@@ -501,6 +501,7 @@ var/global/msg_id = 0
 			(istype(I,/obj/item/weapon/spacecash) && id && id.virtual_wallet)
 
 /obj/item/device/pda/quick_store(var/obj/item/I,mob/user)
+	..()
 	return !(attackby(I,user))
 
 /obj/item/device/pda/proc/add_to_virtual_wallet(var/amount, var/mob/user, var/atom/giver)

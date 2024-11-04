@@ -31,7 +31,6 @@ var/static/list/mat2type = list(
 	origin_tech = Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=5;" + Tc_POWERSTORAGE + "=3"
 
 	var/mode = 1 //0 is material selection, 1 is material production
-	var/emagged = 0
 
 	var/obj/item/stack/sheet/active_material = /obj/item/stack/sheet/metal
 	var/list/materials_scanned = list("metal" = /obj/item/stack/sheet/metal,

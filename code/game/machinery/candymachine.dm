@@ -59,6 +59,9 @@
 				if(prob(30))
 					to_chat(user, "<SPAN CLASS='notice'>You were able to force the knob around and successfully pulled \the [real_coin] out before [src] could swallow it.</SPAN>")
 					user.put_in_hands(O)
+				else if(prob(real_coin.luckiness/10))
+					to_chat(user, "<SPAN CLASS='notice'>You just barely were able to pull \the [real_coin] out before [src] could swallow it, lucky!</SPAN>")
+					user.put_in_hands(O)
 				else
 					to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull \the [real_coin] out fast enough, the machine ate it, string and all.</SPAN>")
 					qdel(O)

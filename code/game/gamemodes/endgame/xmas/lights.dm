@@ -38,12 +38,15 @@
 	if(newdir)
 		dir = newdir
 	lights = image(icon, icon_state = "overlay_big", dir = dir)
+	lights.plane = ABOVE_LIGHTING_PLANE
 	var/list/cl = list(0, 0, 0, 0)
 	for (var/x = 1 to 4)
 		cl = pick(colors) + cl
 
 	lights.color = cl
 	overlays += lights
+	luminosity = 2
+	set_light(light_range_on, light_power_on)
 
 
 /obj/machinery/xmas_light/power_change()
@@ -54,9 +57,10 @@
 /obj/machinery/xmas_light/update_icon()
 	overlays.len = 0
 	if (stat & (FORCEDISABLE|NOPOWER|BROKEN))
-		return
-
-	overlays += lights
+		luminosity = 0
+	else
+		overlays += lights
+		luminosity = 2
 
 
 /obj/machinery/xmas_light/update_dir()

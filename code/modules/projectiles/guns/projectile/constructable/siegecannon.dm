@@ -33,7 +33,7 @@
 	if(istype(W, /obj/item/weapon/reagent_containers))
 		fillCannon(W, user)
 		return 1
-	if(W.is_wrench())
+	if(W.is_wrench(user))
 		wrenchAnchor(user, W, 5)	//Half a second to wrench. Being able to turn it via verb while anchored is intentional.
 	else if((istype(W, /obj/item/weapon/stamp/clown) || istype(W, /obj/item/toy/crayon/rainbow)) && !beenClowned)
 		becomeClownnon(W, user)

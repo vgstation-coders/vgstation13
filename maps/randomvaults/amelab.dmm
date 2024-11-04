@@ -52,18 +52,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/vault/amelab)
-"ci" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating,
-/area/vault/amelab)
 "co" = (
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden,
 /turf/simulated/wall/r_wall,
@@ -80,30 +68,7 @@
 /turf/simulated/floor/engine/airless,
 /area/vault/amelab/lab)
 "dh" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating,
-/area/vault/amelab)
-"ds" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/vault/amelab)
 "dX" = (
@@ -263,19 +228,6 @@
 /obj/machinery/door/airlock/maintenance_hatch{
 	name = "Emergency Power Cell Storage"
 	},
-/turf/simulated/floor/plating,
-/area/vault/amelab)
-"jK" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
 /turf/simulated/floor/plating,
 /area/vault/amelab)
 "jR" = (
@@ -583,14 +535,7 @@
 	},
 /area/vault/amelab)
 "zI" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/amelab)
 "Af" = (
@@ -674,15 +619,6 @@
 "Cr" = (
 /turf/simulated/floor/plating,
 /area/vault/amelab/lab)
-"Cx" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating,
-/area/vault/amelab)
 "CN" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/orange,
@@ -897,30 +833,8 @@
 /turf/simulated/floor/engine/airless,
 /area/vault/amelab/lab)
 "Kz" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/full/reinforced,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
-/turf/simulated/floor/plating,
-/area/vault/amelab)
-"KK" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/vault/amelab)
 "KO" = (
@@ -1022,20 +936,6 @@
 	dir = 4
 	},
 /turf/space,
-/area/vault/amelab)
-"Os" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating,
 /area/vault/amelab)
 "OH" = (
 /obj/machinery/atmospherics/unary/tank/air,
@@ -1176,16 +1076,6 @@
 /obj/structure/catwalk,
 /turf/space,
 /area/vault/amelab)
-"Vu" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/vault/amelab)
 "VK" = (
 /obj/structure/rack,
 /obj/item/clothing/suit/bio_suit/anomaly,
@@ -1317,18 +1207,6 @@
 "Xc" = (
 /obj/structure/lattice,
 /turf/space,
-/area/vault/amelab)
-"Xz" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating,
 /area/vault/amelab)
 "XC" = (
 /obj/structure/lattice,
@@ -1495,9 +1373,9 @@ Jw
 WH
 iG
 Jw
-Os
-KK
-ds
+dh
+dh
+dh
 Jw
 Xc
 Xc
@@ -1522,7 +1400,7 @@ Jw
 jR
 sM
 sM
-ci
+dh
 SM
 SM
 SM
@@ -1546,7 +1424,7 @@ GM
 VP
 Hm
 wy
-Cx
+dh
 SM
 SM
 SM
@@ -1570,7 +1448,7 @@ pn
 jk
 sM
 sM
-Xz
+dh
 SM
 SM
 SM
@@ -1668,8 +1546,8 @@ Ug
 YN
 RB
 Jw
-jK
-Vu
+zI
+zI
 zI
 SM
 "}
@@ -1716,8 +1594,8 @@ GP
 YN
 hH
 Jw
-jK
-Vu
+zI
+zI
 zI
 SM
 "}
@@ -1786,7 +1664,7 @@ pn
 rg
 DV
 eT
-ci
+dh
 SM
 SM
 SM
@@ -1810,7 +1688,7 @@ pn
 kr
 lW
 Nn
-Cx
+dh
 SM
 SM
 SM
@@ -1834,7 +1712,7 @@ pn
 hK
 jo
 AX
-Xz
+dh
 SM
 SM
 SM

@@ -4,6 +4,7 @@
 	desc = "A tube of paste containing swarms of repair nanites. Very effective in repairing robotic machinery."
 	icon = 'icons/obj/nanopaste.dmi'
 	icon_state = "tube"
+	w_class = W_CLASS_SMALL
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_ENGINEERING + "=3"
 	amount = 10
 	max_amount = 10

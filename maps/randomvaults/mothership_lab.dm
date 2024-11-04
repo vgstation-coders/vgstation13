@@ -119,10 +119,6 @@
 	explosion_block = 9999
 	walltype = "alloy"
 
-/turf/unsimulated/wall/ayy/canSmoothWith() // SMOOTH DAT WALL
-	var/static/list/smoothables = list(/turf/unsimulated/wall/ayy)
-	return smoothables
-
 /turf/unsimulated/wall/r_rock
 	name = "riveted porous rock"
 	desc = "Asteroid rock reinforced by a wall with massive rivets embedded in the struts."
@@ -130,10 +126,6 @@
 	icon_state = "rock_rf"
 	explosion_block = 9999
 	walltype = "rock_rf"
-
-/turf/unsimulated/wall/r_rock/canSmoothWith() // SMOOTH DAT WALL
-	var/static/list/smoothables = list(/turf/unsimulated/wall/r_rock)
-	return smoothables
 
 //////////////////////////////
 // FLOORS (Some ayy-themed floors, with walking sound effects!)
@@ -193,18 +185,12 @@
 	if(istype(A,/mob/living/simple_animal))
 		var/mob/living/simple_animal/L = A
 		if(L.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
-			if(prob(50))
-				playsound(src, 'sound/effects/sand_walk1.ogg', 50, 0)
-			else
-				playsound(src, 'sound/effects/sand_walk2.ogg', 50, 0)
+			playsound(src, "sand", 50, 0)
 
 	if(istype(A,/mob/living/carbon))
 		var/mob/living/carbon/M = A
 		if(M.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
-			if(prob(50))
-				playsound(src, 'sound/effects/sand_walk1.ogg', 50, 0)
-			else
-				playsound(src, 'sound/effects/sand_walk2.ogg', 50, 0)
+			playsound(src, "sand", 50, 0)
 
 /turf/unsimulated/floor/lab_asteroid
 	name = "Asteroid"

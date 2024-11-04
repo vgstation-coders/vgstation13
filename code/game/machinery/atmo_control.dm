@@ -62,7 +62,7 @@
 
 	if("toggle_monitoring" in href_list)
 		var/toggle_target = href_list["toggle_monitoring"]
-		if(toggle_target in XGM.gases || toggle_target == "pressure" || toggle_target == "temperature")
+		if((toggle_target in XGM.gases) || toggle_target == "pressure" || toggle_target == "temperature")
 			toggle_monitoring(toggle_target)
 		return MT_UPDATE
 
@@ -305,7 +305,7 @@ font-weight:bold;
 
 /obj/machinery/computer/general_air_control/unlinkFrom(var/mob/user, var/obj/O)
 	..()
-	if("id_tag" in O.vars && (istype(O,/obj/machinery/air_sensor) || istype(O, /obj/machinery/meter)))
+	if(("id_tag" in O.vars) && (istype(O,/obj/machinery/air_sensor) || istype(O, /obj/machinery/meter)))
 		sensors.Remove(O:id_tag)
 		return 1
 	return 0

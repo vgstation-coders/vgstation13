@@ -101,9 +101,10 @@
 	var/speech_mode = VOICE_CHANGER_SAYS
 	canstage = 0
 	origin_tech = Tc_SYNDICATE + "=4"
-	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance_mask, /datum/action/item_action/toggle_voicechanger,)
+	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance_mask, /datum/action/item_action/toggle_voicechanger, /datum/action/item_action/change_voice_mode)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED,INSECT_SHAPED)
 	permeability_coefficient = 0.90
+	blocks_tracking = TRUE
 	var/static/list/clothing_choices
 
 /obj/item/clothing/mask/gas/voice/New()
@@ -329,6 +330,8 @@
 	desc = "A true prankster's groovy facial attire. A clown is incomplete without his wig and mask."
 	icon_state = "clownmaskpsyche"
 	item_state = "clownmaskpsyche"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	luminosity = 2
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0

@@ -44,6 +44,10 @@
 			I.forceMove(src)
 	update_icon()
 
+/obj/structure/bookcase/ignite()
+	..()
+	QDEL_NULL(firelightdummy) //prevent people from grabbing "fire" from the bookcase
+
 /obj/structure/bookcase/proc/healthcheck()
 
 	if(health <= 0)

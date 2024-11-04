@@ -170,6 +170,7 @@
 		"/obj/item/device/flashlight/pen",
 		"/obj/item/clothing/mask/surgical",
 		"/obj/item/clothing/gloves/latex",
+		"/obj/item/clothing/accessory/stethoscope",
 		"/obj/item/device/mass_spectrometer",
 		"/obj/item/device/reagent_scanner",
 		"/obj/item/device/gps/paramedic",
@@ -179,6 +180,7 @@
 		"/obj/item/weapon/electrolyzer",
 		"/obj/item/weapon/autopsy_scanner/healthanalyzerpro",
 		"/obj/item/weapon/depocket_wand/suit",
+		"/obj/item/weapon/thermometer",
 		"/obj/item/taperoll/viro",
 		"/obj/item/taperoll/syndie/viro"
 	)
@@ -529,7 +531,7 @@
 		"/obj/item/weapon/minihoe",
 		"/obj/item/weapon/hatchet",
 		"/obj/item/weapon/bee_net",
-		"/obj/item/weapon/gun/energy/floragun",
+		"/obj/item/floral_somatoray",
 		"/obj/item/weapon/fishtools",
 		"/obj/item/fish_eggs")
 

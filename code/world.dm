@@ -210,16 +210,26 @@ var/auxtools_path
 	..()
 
 /world/proc/pre_shutdown()
+	var/procWatch = start_watch()
+	log_startup_progress("\[[time2text(world.realtime)]\]: Preshutdown begin")
+	var/watch = start_watch()
 	stop_all_media()
-
+	log_startup_progress("\[[time2text(world.realtime)]\]: stop_all_media finished in [stop_watch(watch)]s")
+	log_startup_progress("\[[time2text(world.realtime)]\]: beginning html_interfaces shutdown")
+	watch = start_watch()
 	for(var/datum/html_interface/D in html_interfaces)
 		D.closeAll()
-
+	log_startup_progress("\[[time2text(world.realtime)]\]: html_interfaces finished in [stop_watch(watch)]s")
+	log_startup_progress("\[[time2text(world.realtime)]\]: beginning master controller shutdown")
+	watch = start_watch()
 	Master.Shutdown()
-
+	log_startup_progress("\[[time2text(world.realtime)]\]: master controller finished in [stop_watch(watch)]s")
+	log_startup_progress("\[[time2text(world.realtime)]\]: beginning end_credits")
+	watch = start_watch()
 	end_credits.on_world_reboot_start()
 	sleep(max(10, end_credits.audio_post_delay))
 	end_credits.on_world_reboot_end()
+	log_startup_progress("\[[time2text(world.realtime)]\]: end_credits finished in [stop_watch(watch)]s")
 
 	for(var/client/C in clients)
 		if(config.server)	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
@@ -231,7 +241,7 @@ var/auxtools_path
 	#if AUXTOOLS_DEBUGGER
 	call_ext(auxtools_path, "auxtools_shutdown")()
 	#endif
-
+	log_startup_progress("\[[time2text(world.realtime)]\]: preshutdown finished in [stop_watch(procWatch)]s")
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
 /world/proc/KickInactiveClients()
 	spawn(-1)

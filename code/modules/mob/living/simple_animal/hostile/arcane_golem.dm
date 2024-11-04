@@ -38,6 +38,7 @@
 	heat_damage_per_tick = 0
 	cold_damage_per_tick = 0
 	stop_automated_movement = 1
+	supernatural = TRUE
 
 	blooded = FALSE
 

@@ -249,12 +249,7 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 		UpdateDamageIcon()
 
 // damage MANY external organs, in random order
-/mob/living/carbon/human/take_overall_damage(var/brute, var/burn, var/sharp = 0, var/edge = 0, var/used_weapon = null)
-	if(species && species.burn_mod)
-		burn = burn*species.burn_mod
-	if(species && species.brute_mod)
-		brute = brute*species.brute_mod
-
+/mob/living/carbon/human/take_overall_damage(var/brute, var/burn, var/sharp = 0, var/edge = 0, var/used_weapon = null, var/no_damage_change = FALSE)
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
@@ -267,11 +262,25 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 
 		var/brute_was = picked.brute_dam
 		var/burn_was = picked.burn_dam
-
-		update |= picked.take_damage(brute,burn,sharp,edge,used_weapon)
-		brute	-= (picked.brute_dam - brute_was)
-		burn	-= (picked.burn_dam - burn_was)
-
+		var/damage_cap = picked.max_damage - picked.get_health() //the limb cannot take more than this much damage
+		//Multiplied damage is already handled at the limb level
+		update |= picked.take_damage(brute,burn,sharp,edge,used_weapon, no_damage_modifier = no_damage_change, spread_damage = FALSE)
+		if(!picked.is_existing())
+			//the organ got cut off or removed! the organ takes no damage in these cases for some reason...
+			//So we'll rule in favor of the damage taker and assume the organ took the most it can accept from both
+			brute	-= damage_cap
+			burn	-= damage_cap
+		else if(picked.max_damage - picked.get_health() > 0)
+			//since the damage cannot spread: if we did not max out the limb's damage, then we're done!
+			break
+		else
+			//The organ has taken the maximum damage it's allowed, we will have leftover damage
+			brute	-= (picked.brute_dam - brute_was)
+			burn	-= (picked.burn_dam - burn_was)
+		if(brute < 0)
+			brute = 0
+		if(burn < 0)
+			burn = 0
 		parts -= picked
 	updatehealth()
 	hud_updateflag |= 1 << HEALTH_HUD

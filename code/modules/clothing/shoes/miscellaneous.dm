@@ -230,7 +230,6 @@
 		"Dramatic" = 'sound/effects/dramatic_short.ogg',
 		"Random" = CLOWNSHOES_RANDOM_SOUND)
 	var/random_sound = 0
-	var/emagged = 0
 
 /obj/item/clothing/shoes/clown_shoes/advanced/attack_self(mob/living/user)
 	if(user.mind && !clumsy_check(user))
@@ -450,6 +449,7 @@
 	desc = "As worn by the clowns of old."
 	icon_state = "jestershoes"
 	item_state = "jestershoes"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/aviatorboots
 	name = "Aviator Boots"
@@ -463,12 +463,14 @@
 	desc = "Freedom isn't free, neither were these shoes."
 	icon_state = "libertyshoes"
 	item_state = "libertyshoes"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/megaboots
 	name = "DRN-001 Boots"
 	desc = "Large armored boots, very weak to large spikes."
 	icon_state = "megaboots"
 	item_state = "megaboots"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/protoboots
 	name = "Prototype Boots"
@@ -584,6 +586,8 @@
 	name = "clown psychedelic shoes"
 	icon_state = "clownshoespsyche"
 	item_state = "clownshoespsyche"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	luminosity = 2
 	_color = "clownshoespsyche"
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 	species_fit = list(VOX_SHAPED)
@@ -611,3 +615,20 @@
 	item_state = "scubafloppers"
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, UNDEAD_SHAPED, MUSHROOM_SHAPED, INSECT_SHAPED)
+
+
+/obj/item/clothing/shoes/hunter
+	name = "heavy leather boots"
+	desc = "Tall leather boots, perfect for performing slide kicks."
+	icon_state = "hunter"
+	item_state = "hunter_boots"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
+	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
+	bonus_kick_damage = 3
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
+
+/obj/item/clothing/shoes/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/shoes/hunter/rangeTackleBonus()
+	return 1

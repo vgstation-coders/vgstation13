@@ -28,7 +28,7 @@
 
 
 //////CUT WITH LASER(cut+clamp)//////////
-/datum/surgery_step/generic/cut_with_laser/tool_quality(obj/item/tool)
+/datum/surgery_step/generic/cut_with_laser/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -130,7 +130,7 @@
 
 
 ////////CUT OPEN/////////
-/datum/surgery_step/generic/cut_open/tool_quality(obj/item/tool)
+/datum/surgery_step/generic/cut_open/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -284,12 +284,11 @@
 
 
 /////////CAUTERIZE///////
-/datum/surgery_step/generic/cauterize/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/generic/cauterize/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/generic/cauterize
 	allowed_tools = list(
 	/obj/item/tool/cautery = 100,
@@ -379,7 +378,7 @@
 
 
 /////////BIOFOAM INJECTION///////
-/datum/surgery_step/generic/injectfoam/tool_quality(obj/item/tool)
+/datum/surgery_step/generic/injectfoam/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0

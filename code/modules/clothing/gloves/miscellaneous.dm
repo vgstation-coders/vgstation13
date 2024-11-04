@@ -454,8 +454,8 @@
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "rockernaut")
 
 /obj/item/clothing/gloves/mittens
-	desc = "These mittens are quite comfortable, and will keep you warm!"
 	name = "mittens"
+	desc = "These mittens are quite comfortable, and will keep you warm!"
 	icon_state = "mittens"
 	item_state = "mittens"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
@@ -464,3 +464,16 @@
 
 	color = COLOR_LINEN
 	clothing_flags = COLORS_OVERLAY
+
+/obj/item/clothing/gloves/hunter
+	name = "leather glove & handwraps"
+	desc = "Cloth handwraps and a tough leather glove for your (hopefully dominant) right hand. Provides a comfortable grip when handling holy weaponry."
+	icon_state = "hunter_gloves"
+	item_state = "hunter_gloves"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
+
+/obj/item/clothing/gloves/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/gloves/hunter/rangeTackleBonus()
+	return 1

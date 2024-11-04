@@ -263,7 +263,6 @@
 "aP" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	dir = 4;
-	default_scrubbed_gases = list("plasma");
 	default_scrubbed_gases = list("carbon_dioxide")
 	},
 /turf/simulated/floor/carpet,
@@ -304,7 +303,6 @@
 "aU" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	dir = 4;
-	default_scrubbed_gases = list("plasma");
 	default_scrubbed_gases = list("carbon_dioxide")
 	},
 /turf/simulated/floor{
@@ -602,17 +600,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/mining_bar)
-"bZ" = (
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/mining_bar)
 "cb" = (
 /obj/machinery/door/airlock/external,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -643,17 +630,6 @@
 	},
 /turf/simulated/wall/invulnerable/r_wall,
 /area/mining_bar)
-"qC" = (
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/mining_bar)
 "tr" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 1;
@@ -662,11 +638,7 @@
 /turf/simulated/floor/plating,
 /area/mining_bar)
 "Da" = (
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/grille,
+/obj/structure/grille/window_spawner/reinforced_plasma,
 /turf/simulated/floor/plating,
 /area/mining_bar)
 "Iz" = (
@@ -907,7 +879,7 @@ ae
 ax
 bc
 bc
-bZ
+Da
 bW
 bW
 bW
@@ -943,7 +915,7 @@ bc
 bc
 bc
 bR
-qC
+Da
 bW
 bW
 bW

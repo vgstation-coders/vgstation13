@@ -1,3 +1,5 @@
+#define MAPRENDER_IN_ROUND_CHECK_TICK ( !config.maprender_lags_game ? IN_ROUND_CHECK_TICK : 0 )
+
 /client/proc/maprender()
 	set category = "Mapping"
 	set name = "Generate Map Render"
@@ -5,8 +7,9 @@
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
-	if(alert("Sure you want to do this? It should NEVER be done in an active round and cannot be cancelled", "generate maps", "Yes", "No") == "No")
-		return
+	if(config.maprender_lags_game)
+		if(alert("Sure you want to do this? It should NEVER be done in an active round and cannot be cancelled", "generate maps", "Yes", "No") == "No")
+			return
 
 	var/allz = alert("Do you wish to generate a specific zlevel or all zlevels?", "Generate what levels?", "All", "Specific", "Cancel")
 
@@ -47,25 +50,25 @@
 							continue
 						var/list/allturfcontents = currentturf.contents.Copy()
 
-						//Remove the following line to allow lighting to be considered, if you do this it must be blended with BLEND_MULTIPLY instead of ICON_OVERLAY
-						allturfcontents -= locate(/atom/movable/lighting_overlay) in allturfcontents
-
 						//Remove the following line if you want to add space to your renders, I think it is cheaper to merely use a pregenned image for this
 						if(!istype(currentturf,/turf/space))
 							var/icon/turficon = getFlatIcon(currentturf, currentturf.dir, cache = 0)
 							map_icon.Blend(turficon, ICON_OVERLAY, ((a-1)*WORLD_ICON_SIZE)+1, ((b-1)*WORLD_ICON_SIZE)+1)
 
 						for(var/atom/movable/A in allturfcontents)
-							if(A.locs.len > 1) //Fix for multitile objects I wish I didn't have to do this its probably slow
+							//Remove the following line to allow lighting to be considered, if you do this it must be blended with BLEND_MULTIPLY instead of ICON_OVERLAY
+							if(A.type == /atom/movable/lighting_overlay)
+								allturfcontents -= A
+							else if(A.locs.len > 1) //Fix for multitile objects I wish I didn't have to do this its probably slow
 								if(A.locs[1] != A.loc)
 									allturfcontents -= A
-
+									continue
 						//Due to processing order, a pixelshifted object will be overriden in certain directions,
 						//we'll apply it at the end, they're almost always at the top layer anyway
-						for(var/atom/A in allturfcontents)
 							if(A.pixel_x || A.pixel_y)
 								allturfcontents -= A
 								pixel_shift_objects += A
+							MAPRENDER_IN_ROUND_CHECK_TICK
 
 						if(!allturfcontents.len)
 							continue
@@ -76,12 +79,15 @@
 						for(var/A in allturfcontents)
 							var/icon/icontoblend = getFlatIcon(A,A:dir, cache = 0)
 							map_icon.Blend(icontoblend, ICON_OVERLAY, ((a-1)*WORLD_ICON_SIZE)+1, ((b-1)*WORLD_ICON_SIZE)+1)
+							MAPRENDER_IN_ROUND_CHECK_TICK
 						sleep(-1)
-
+						MAPRENDER_IN_ROUND_CHECK_TICK
+					MAPRENDER_IN_ROUND_CHECK_TICK
 				for(var/A in pixel_shift_objects)
 					var/icon/icontoblend = getFlatIcon(A, A:dir, cache = 0)
 					//This part is tricky since we've skipped a and b, since these are map objects they have valid x,y. a and b should be the modulo'd value of x,y with icon_size
 					map_icon.Blend(icontoblend, ICON_OVERLAY, (((A:x % icon_size)-1)*WORLD_ICON_SIZE)+1+A:pixel_x, (((A:y % icon_size)-1)*WORLD_ICON_SIZE)+1+A:pixel_y)
+					MAPRENDER_IN_ROUND_CHECK_TICK
 
 				if(y >= world.maxy)
 					map_icon.DrawBox(rgb(255,255,255,255), x1 = 1, y1 = 1, x2 = WORLD_ICON_SIZE*icon_size, y2 = WORLD_ICON_SIZE*(icon_size-world.maxy % icon_size))
@@ -97,5 +103,8 @@
 				if(fexists(resultpath))
 					fdel(resultpath)
 				fcopy(result_icon, resultpath)
+				MAPRENDER_IN_ROUND_CHECK_TICK
+			MAPRENDER_IN_ROUND_CHECK_TICK
+		MAPRENDER_IN_ROUND_CHECK_TICK
 	to_chat(world, "<b>The map has been rendered successfully<b>")
 	src << sound('sound/effects/maprendercomplete.ogg')

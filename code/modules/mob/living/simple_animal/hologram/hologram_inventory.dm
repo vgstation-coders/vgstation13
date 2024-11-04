@@ -9,12 +9,12 @@
 		success = 1
 		update_inv_head()
 		INVOKE_EVENT(src, /event/unequipped, W)
-	if (W == w_uniform)
+	else if (W == w_uniform)
 		w_uniform = null
 		success = 1
 		update_inv_w_uniform()
 		INVOKE_EVENT(src, /event/unequipped, W)
-	if (W == wear_suit)
+	else if (W == wear_suit)
 		wear_suit = null
 		success = 1
 		update_inv_wear_suit()

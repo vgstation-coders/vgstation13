@@ -14,7 +14,9 @@
 	var/obj/result
 	var/malleable = FALSE
 	var/strikes_required
-	var/strikes
+	var/strikes = 0
+	var/readytoquench = FALSE
+	light_color = LIGHT_COLOR_ORANGE
 
 /obj/item/smithing_placeholder/Destroy()
 	result = null
@@ -31,15 +33,35 @@
 	result = R
 	R.forceMove(null) //...nullspace?
 
-	// Makes it look like a metal sheet
+	// Makes it look like a smaller metal sheet
 	var/obj/item/stack/sheet/mineral/M = material_type.sheettype
 	appearance = initial(M.appearance)
 	desc = initial(desc)
+	var/matrix/shrink = matrix()
+	shrink.Scale(0.5, 0.5)
+	transform = shrink
 	strikes_required = required_strikes
 
 /obj/item/smithing_placeholder/examine(mob/user)
 	..()
 	to_chat(user, "<span class = 'notice'>[strikes?"It looks like it has been struck [strikes] times.":"It has not been struck yet."]<br>It is [malleable?"malleable":"not malleable"].[strikes_required<strikes?"<br>It looks to be finished, and just needs quenching.":""]")
+	if(strikes<strikes_required)
+		return
+	//Make an estimate of the results based on current code...
+	var/material_mod = material_type ? material_type.quality_mod : 1
+	var/surrounding_mod = 1
+	var/min_quality = 0
+	var/modifier = strikes>strikes_required?(strikes/strikes_required):0
+
+	var/low_quality = round(((1*surrounding_mod)*material_mod)+modifier)
+	var/high_quality = round(((3*surrounding_mod)*material_mod)+modifier)
+	low_quality = clamp(low_quality, B_AWFUL>min_quality?B_AWFUL:min_quality, B_LEGENDARY)
+	high_quality = clamp(high_quality, B_AWFUL>min_quality?B_AWFUL:min_quality, B_LEGENDARY)
+
+	if(low_quality == high_quality)
+		to_chat(user, "<span class = 'notice'>It'll be [lowertext(qualityByString[low_quality])] quality if you finish now.</span>")
+	else
+		to_chat(user, "<span class = 'notice'>It'll be somewhere between [lowertext(qualityByString[low_quality])] and [lowertext(qualityByString[high_quality])] quality if you finish now.</span>")
 
 
 /obj/item/smithing_placeholder/afterattack(atom/A, mob/user, proximity_flag, click_parameters)
@@ -50,7 +72,9 @@
 		if(O.is_hot())
 			heat(O.is_hot(), O, user)
 		if(O.is_open_container() && O.reagents.has_reagent(WATER, 60))
-			quench(O, user)
+			if(do_after(user,O,1 SECONDS))
+				if(O.is_open_container() && O.reagents.has_reagent(WATER, 60))
+					quench(O, user)
 	if(istype(A, /mob/living/simple_animal/hostile/asteroid/magmaw)) //Until we have flameslimes, lavalizards, crimson pyromancers, or flaming skeletons, this will be hardcoded
 		var/mob/living/simple_animal/hostile/asteroid/magmaw/M = A
 		if(M.isDead())
@@ -84,19 +108,23 @@
 		if(user)
 			to_chat(user, "<span class = 'warning'>\The [A] is not hot enough.</span>")
 		return
-	else if(!user)
-		visible_message("<span class='notice'>\The [src] begins heating up.</span>")
-	if(user)
-		to_chat(user, "<span class = 'notice'>You heat \the [src].</span>")
 	if(iswelder(A) && user)
 		var/obj/item/tool/weldingtool/W = A
 		if(!W.do_weld(user, src, 4 SECONDS/(temperature/material_type.melt_temperature), 5))
 			return
 	else if(user && !do_after(user, A, 4 SECONDS/(temperature/material_type.melt_temperature)))
 		return
+	if(user)
+		to_chat(user, "<span class='notice'>You heat \the [src] until it's ready to be worked.</span>")
+	else
+		visible_message("<span class='notice'>\The [src] heats up, and looks ready to be worked.</span>")
 	malleable = TRUE
+	set_light(1, 1)
 	spawn(2 MINUTES)
+		if(malleable)
+			visible_message("<span class='notice'>\The [src] cools down.</span>")
 		malleable = FALSE
+		set_light(0, 0)
 
 
 /obj/item/smithing_placeholder/proc/strike(var/obj/A, mob/user)
@@ -107,6 +135,7 @@
 		to_chat(user, "<span class = 'warning'>There is no anvil to shape \the [src] over.</span>")
 		return
 	playsound(loc, 'sound/items/hammer_strike.ogg', 50, 1)
+	spark(src, amount = 1, cardinals = FALSE, surfaceburn = TRUE, silent = TRUE)
 	if(strikes > strikes_required)
 		if(prob(5*(strikes/strikes_required)))
 			to_chat(user, "<span class = 'warning'>\The [src] becomes brittle and unmalleable.</span>")
@@ -120,8 +149,9 @@
 		strikes+=max(1, round(A.quality/2, 1))
 	else if(istype(A,/obj/item/weapon/storage/toolbox))
 		strikes+=0.25
-	if(strikes == strikes_required)
+	if(!readytoquench && strikes >= strikes_required)
 		to_chat(user, "<span class = 'notice'>\The [src] seems to have taken shape nicely.</span>")
+		readytoquench = TRUE
 
 
 /obj/item/smithing_placeholder/proc/quench(obj/O, mob/user)
@@ -133,5 +163,7 @@
 	var/datum/material/mat = material_type
 	if(mat)
 		result.dorfify(mat, strikes>strikes_required?(strikes/strikes_required):0)
-	result.forceMove(get_turf(src))
+	user.drop_item(src, force_drop = 1)
+	user.put_in_hands(result)
+	to_chat(user, "<span class = 'notice'>You quench \the [src], creating \a [result]!</span>")
 	qdel(src)

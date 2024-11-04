@@ -31,7 +31,7 @@
 											"/obj/item/weapon/chisel:chisel" = null,
 											"/obj/item/device/multitool:multitool" = null)
 	var/obj/item/deployed //what's currently in use
-	var/removing_item = /obj/item/tool/screwdriver //the type of item that lets you take tools out
+	var/can_remove_items = TRUE //if you can remove items with a screwdriver
 
 /obj/item/weapon/switchtool/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(istype(target, /obj/item/weapon/storage) && !istype(target, /obj/item/weapon/storage/pill_bottle)) //we place automatically, but want pill bottles to be meltable
@@ -91,7 +91,7 @@
 		choose_deploy(user)
 
 /obj/item/weapon/switchtool/attackby(var/obj/item/used_item, mob/user)
-	if(istype(used_item, removing_item)) //if it's the thing that lets us remove tools and we have something to remove
+	if(can_remove_items && used_item.is_screwdriver(user)) //if it's the thing that lets us remove tools and we have something to remove
 		var/no_modules = TRUE
 		for(var/module in stored_modules)
 			if(stored_modules[module])
@@ -429,7 +429,7 @@
 	undeploy_sound = "sound/weapons/switchsound.ogg"
 	light_color =  LIGHT_COLOR_CYAN
 	mech_flags = MECH_SCAN_ILLEGAL
-	removing_item = null
+	can_remove_items = FALSE
 	var/has_tech = 0
 	var/hcolor = "CYAN"
 	starting_materials = null

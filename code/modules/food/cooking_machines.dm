@@ -719,7 +719,7 @@ var/global/ingredientLimit = 10
 				if(use_power != MACHINE_POWER_USE_NONE)
 					playsound(src,cookSound,100,1)
 				else
-					visible_message("<span class='notice'>\the [foodname] looks ready to eat!</span>")
+					visible_message("<span class='notice'>\The [foodname] looks ready to eat!</span>")
 	active = 0
 	update_icon()
 	return

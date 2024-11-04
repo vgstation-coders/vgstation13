@@ -165,21 +165,22 @@
 /mob/living/silicon/robot/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(!module)
 		..()
-		return
-	if(module && locate(/obj/item/borg/fire_shield, module.modules))
+	if(locate(/obj/item/borg/fire_shield, module.modules))
 		return
 	..()
 
 //Robots on fire
 /mob/living/silicon/robot/handle_fire()
-	if(..())
+	if(!module)
+		return
+	if(..() || locate(/obj/item/borg/fire_shield, module.modules))
 		return
 	adjustFireLoss(3)
 
 /mob/living/silicon/robot/update_fire()
-	overlays -= image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing")
+	overlays -= mutable_appearance(icon='icons/mob/OnFire.dmi', icon_state="Standing")
 	if(on_fire)
-		overlays += image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing")
+		overlays += mutable_appearance(icon='icons/mob/OnFire.dmi', icon_state="Standing")
 	update_icons()
 
 /mob/living/silicon/robot/update_canmove()

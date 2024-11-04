@@ -113,9 +113,9 @@
 	else
 		if (ismob(A))
 			var/mob/M = A
-			if (!iscultist(M) && (M != shade.master))
+			if (!iscultist(M))
 				A.hitby(blade)
-			else if (!M.get_active_hand())//cultists and the blade's master can catch the blade on the fly
+			else if (!M.get_active_hand())//cultists can catch the blade on the fly
 				blade.forceMove(loc)
 				blade.attack_hand(M)
 				to_chat(M, "<span class='warning'>Your hand moves by itself and catches \the [blade] out of the air.</span>")

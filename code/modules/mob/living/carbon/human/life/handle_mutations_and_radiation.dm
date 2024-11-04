@@ -279,7 +279,7 @@
 					qdel(src)
 					return
 				else
-					if(set_species("Ghoul"))
+					if(set_species("Ghoul", transfer_damage = TRUE))
 						to_chat(src, "<span class = 'notice'>You feel strangely at peace.</span>")
 						spawn(1 SECONDS)
 							setCloneLoss(0)

@@ -1,7 +1,6 @@
 var/list/restricted_roulette_projectiles = list(
 	/obj/item/projectile,
 	/obj/item/projectile/energy,
-	/obj/item/projectile/hookshot,
 	/obj/item/projectile/bullet/blastwave,
 	/obj/item/projectile/beam/lightning,
 	/obj/item/projectile/beam/procjectile,
@@ -21,6 +20,7 @@ var/list/restricted_roulette_projectiles = list(
 
 var/list/restrict_with_subtypes = list(
 		/obj/item/projectile/meteor,
+		/obj/item/projectile/hookshot,
 		/obj/item/projectile/immovablerod
 	)
 
@@ -87,6 +87,9 @@ var/list/restrict_with_subtypes = list(
 		..()
 
 /obj/item/weapon/gun/projectile/roulette_revolver/proc/choose_projectile()
+	if(bullet_type_override)
+		in_chamber = new bullet_type_override
+		return
 	var/chosen_projectile = pick(available_projectiles)
 	for(var/I in restricted_roulette_projectiles)
 		if(chosen_projectile == I)

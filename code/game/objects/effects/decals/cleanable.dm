@@ -72,7 +72,7 @@ var/list/infected_cleanables = list()
 							legacy_cult.getNewObjective()
 		if(src.loc && isturf(src.loc))
 			for(var/obj/effect/decal/cleanable/C in src.loc)
-				if(C.type in absorbs_types && C != src)
+				if((C.type in absorbs_types) && C != src)
 					// Transfer DNA, if possible.
 					if (transfers_dna && C.blood_DNA)
 						blood_DNA |= C.blood_DNA.Copy()

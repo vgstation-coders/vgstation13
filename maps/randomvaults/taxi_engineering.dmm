@@ -328,18 +328,7 @@
 	},
 /area/vault/taxi_engi/atmos)
 "aK" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "aL" = (
@@ -460,26 +449,14 @@
 /turf/simulated/wall/r_wall,
 /area/vault/taxi_engi/atmos)
 "bb" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
 /obj/structure/cable{
 	d2 = 4;
 	icon_state = "0-4"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "bc" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/cable{
 	d2 = 4;
@@ -490,14 +467,10 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "bd" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -507,26 +480,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/floor/plating,
-/area/vault/taxi_engi/atmos)
-"be" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/atmos)
 "bf" = (
@@ -869,22 +823,12 @@
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/lobby)
 "bT" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2";
 	pixel_y = 1
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "bU" = (
@@ -978,13 +922,7 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cb" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cc" = (
@@ -1341,22 +1279,12 @@
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/lobby)
 "cH" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
 /obj/structure/sign/directions/engineering,
 /obj/structure/cable,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/engine)
 "cI" = (
@@ -1565,20 +1493,10 @@
 /turf/simulated/floor/damaged,
 /area/vault/taxi_engi/lobby)
 "dc" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/lobby)
 "dd" = (
@@ -1813,14 +1731,7 @@
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/mechanics)
 "dz" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/mechanics)
 "dA" = (
@@ -3246,7 +3157,6 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
@@ -3254,6 +3164,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "gy" = (
@@ -3265,11 +3176,11 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
 /obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "gz" = (
@@ -3277,7 +3188,6 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
@@ -3285,6 +3195,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/taxi_engi/storage)
 "gA" = (
@@ -3702,7 +3613,7 @@ aa
 af
 ar
 aG
-be
+bd
 aB
 bT
 co

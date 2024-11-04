@@ -100,11 +100,9 @@
 	//Handle the attacker
 	var/datum/role/wizard/absorber_W = absorbed.mind.GetRole(WIZARD)
 	if(istype(absorber_W))
-		absorber_W.spells_from_spellbook += S
 		absorber_W.spells_from_absorb += S
 	var/datum/role/wizard_apprentice/absorber_WA = absorbed.mind.GetRole(WIZAPP)
 	if(istype(absorber_WA))
-		absorber_WA.spells_from_spellbook += S
 		absorber_WA.spells_from_absorb += S
 
 /obj/effect/absorb_effect

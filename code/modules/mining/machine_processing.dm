@@ -12,6 +12,7 @@
 
 	var/frequency = FREQ_DISPOSAL //Same as conveyors.
 	var/smelter_tag = null
+	var/show_credits_per_mat = FALSE //debug value for testing
 	var/datum/radio_frequency/radio_connection
 
 	var/list/smelter_data //All the data we have about the smelter, since it uses radio connection based RC.
@@ -68,17 +69,21 @@
 	"}
 
 	if(smelter_data["credits"] != -1)
-		dat += "<br>Current unclaimed credits: $[num2septext(smelter_data["credits"])]<br>"
+		dat += "<br>Current unclaimed credits: $[num2septext(round(smelter_data["credits"],0.01))]<br>"
 
 		if(istype(id))
-			dat += "You have [id.GetBalance(format = 1)] credits in your bank account. <A href='?src=\ref[src];eject=1'>Eject ID.</A><br>"
-			dat += "<A href='?src=\ref[src];claim=1'>Claim points.</A><br>"
+			if(!can_access(id.GetAccess(),req_access))
+				dat += "This ID is not authorised to claim credits. <A href='?src=\ref[src];eject=1'>Eject ID.</A>"
+			else
+				dat += "You have [id.GetBalance(format = 1)] credits in your bank account. <A href='?src=\ref[src];eject=1'>Eject ID.</A><br>"
+				dat += "<A href='?src=\ref[src];claim=1'>Claim points.</A><br>"
 		else
 			dat += text("No ID inserted. <A href='?src=\ref[src];insert=1'>Insert ID.</A><br>")
 
 	else if(id)	//I don't care but the ID got in there in some way, allow them to eject it atleast.
 		dat += "<br><A href='?src=\ref[src];eject=1'>Eject ID.</A>"
-
+	if(id && can_access(id.GetAccess(),req_access))
+		dat += "<br><A href='?src=\ref[src];lock_access=1'>[req_access && req_access.len ? "Unlock access requirements" : "Set access requirements to ID"]</A>"
 	dat += {"</div>
 	<div style="float:left;" class="block">
 	<table>
@@ -91,7 +96,7 @@
 		dat += {"
 		<tr>
 			<td>[smelter_data["ore"][ore_id]["name"]]</td>
-			<td>[smelter_data["ore"][ore_id]["amount"]]</td>
+			<td>[smelter_data["ore"][ore_id]["amount"]][show_credits_per_mat ? " ($[smelter_data["ore"][ore_id]["value"]])" : ""]</td>
 		</tr>
 		"}
 
@@ -199,6 +204,12 @@
 		updateUsrDialog()
 		return 1
 
+	if(href_list["lock_access"])
+		if(req_access && req_access.len)
+			req_access = list()
+		else if(id)
+			var/list/newaccess = id.GetAccess()
+			req_access = newaccess.Copy()
 
 /obj/machinery/computer/smelting/attackby(var/obj/item/W, var/mob/user)
 	if(istype(W, /obj/item/weapon/card/id))
@@ -215,6 +226,16 @@
 			return 1
 
 	. = ..()
+
+/obj/machinery/computer/smelting/emag_act(mob/user)
+	if(req_access?.len)
+		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
+		req_access = list()
+		if(user)
+			to_chat(user, "<span class='notice'>You disable the security protocols</span>")
+		return 1
+	if(user)
+		to_chat(user, "<span class='warning'>No security protocols enabled</span>")
 
 //Just a little helper proc
 /obj/machinery/computer/smelting/proc/send_signal(list/data)
@@ -250,6 +271,11 @@
 		<li>[format_tag("ID Tag","smelter_tag")]</li>
 	</ul>
 	"}
+
+/obj/machinery/computer/smelting/recycling
+	name = "recycling furnace console"
+	smelter_tag = "recycling_smelter"
+	req_access = list()
 
 /**********************Mineral processing unit**************************/
 
@@ -340,13 +366,16 @@
 		var/amount = ore.getAmount(metal)
 		if (M.default_show_in_menus || amount != 0)
 			// display 1 = 1 sheet in the interface.
-			data["ore"][metal] = list("name" = M.name, "amount" = amount / M.cc_per_sheet)
+			data["ore"][metal] = list("name" = M.name, "amount" = amount / M.cc_per_sheet, "value" = value_by_id(metal))
 
 	data["credits"] = credits
 
 	data["type"] = "smelter"
 
 	send_signal(data)
+
+/obj/machinery/mineral/processing_unit/proc/value_by_id(var/mat_id)
+	return ore.getValueByMaterial(mat_id)
 
 /obj/machinery/mineral/processing_unit/proc/send_signal(list/data)
 	var/datum/signal/signal = new /datum/signal
@@ -385,6 +414,9 @@
 		ore.addFrom(A.materials, FALSE)
 		qdel(A)
 
+/obj/machinery/mineral/processing_unit/proc/remove_from_credits_if_necessary(var/mat_id,var/amount)
+	return
+
 /obj/machinery/mineral/processing_unit/process()
 	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		return
@@ -411,6 +443,7 @@
 		while(R.checkIngredients(ore)) //While we have materials for this
 			for(var/ore_id in R.ingredients)
 				ore.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
+				remove_from_credits_if_necessary(ore_id, ore.getValueByAmount(ore_id,R.ingredients[ore_id])) // hotfixed way to deal with a subtype, proc is left blank for this
 				score.oremined += 1 //Count this ore piece as processed for the scoreboard
 
 			drop_stack(R.yieldtype, out_T)
@@ -441,12 +474,7 @@
 		update_icon()
 
 	if(signal.data["claimcredits"])
-		if(credits < 1)	//Is there actual money to collect?
-			return 1
-
-		var/datum/money_account/acct = signal.data["claimcredits"]
-		if(istype(acct) && acct.charge(-credits, null, "Claimed mining credits.", src.name, dest_name = "Processing Machine"))
-			credits = 0
+		claim_credits(signal.data["claimcredits"])
 
 	if(signal.data["inc_priority"])
 		var/idx = clamp(signal.data["inc_priority"], 2, recipes.len)
@@ -456,12 +484,24 @@
 		var/idx = clamp(signal.data["dec_priority"], 1, recipes.len - 1)
 		recipes.Swap(idx, idx + 1)
 
+/obj/machinery/mineral/processing_unit/proc/claim_credits(var/datum/money_account/acct,var/cap = INFINITY)
+	var/toclaim = min(credits,cap)
+	if(toclaim >= 1 && istype(acct) && acct.charge(-floor(toclaim), null, "Claimed mining credits.", src.name, dest_name = "Processing Machine"))
+		credits -= floor(toclaim)
+
 /////////////////////////////////////////////////
 // Recycling Furnace
 /obj/machinery/mineral/processing_unit/recycle
 	name = "recycling furnace"
+	var/list/recycled_values = list()
 
-	credits = -1
+/obj/machinery/mineral/processing_unit/recycle/value_by_id(var/mat_id)
+	return (mat_id in recycled_values) ? recycled_values[mat_id] : 0
+
+/obj/machinery/mineral/processing_unit/recycle/remove_from_credits_if_necessary(var/mat_id,var/amount)
+	credits = max(0,credits-amount)
+	if(mat_id in recycled_values)
+		recycled_values[mat_id] = max(0,recycled_values[mat_id]-amount)
 
 /obj/machinery/mineral/processing_unit/recycle/grab_ores()
 	var/turf/in_T = get_step(src, in_dir)
@@ -475,12 +515,39 @@
 			continue
 
 		if(!(A.w_type in list(NOT_RECYCLABLE, RECYK_BIOLOGICAL)))
+			if(A.materials)
+				credits += A.materials.getValue()
+				for(var/mat_id in A.materials.storage)
+					recycled_values[mat_id] += A.materials.getValueByMaterial(mat_id)
 			if(A.recycle(ore))
 				ore.addFrom(A.materials, FALSE)
 				qdel(A)
 				continue
 
 		A.forceMove(out_T)
+
+/obj/machinery/mineral/processing_unit/recycle/claim_credits(datum/money_account/acct, cap)
+	cap = 0
+	var/specvalue
+	var/totake
+	var/datum/material/mat
+	for(var/mat_id in recycled_values)
+		mat = ore.getMaterial(mat_id)
+		if(!mat)
+			continue
+		totake = ore.getValueByMaterial(mat_id)
+		if(recycled_values[mat_id] < totake) // if we have more mats in storage than the stuff recycled for money
+			totake = recycled_values[mat_id] // just take this much off. that's why this list is even here
+		specvalue = cap + totake
+		if(specvalue > credits) //if over the limit
+			recycled_values[mat_id] = max(0,recycled_values[mat_id]-(totake-(credits-cap))) //then take the amount we can have left off
+			cap += totake-(credits-cap) //and give it to the cap
+			ore.removeAmountByValue(mat_id, totake-(credits-cap)) //and take it from the ores
+			break
+		cap = specvalue
+		ore.removeAmountByValue(mat_id, totake) //take everything or the amount in the value storage, whichever is lesser
+		recycled_values[mat_id] = max(0,recycled_values[mat_id]-totake) //otherwise yank it out directly
+	..(acct,cap)
 
 /obj/machinery/mineral/processing_unit/recycle/New()
 	. = ..()

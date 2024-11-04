@@ -10,8 +10,6 @@
 
 	sparky				= 0
 
-	var/emagged 		= 0
-
 	schematics = list(/datum/rcd_schematic/clear_decals)
 
 /obj/item/device/rcd/tile_painter/New()

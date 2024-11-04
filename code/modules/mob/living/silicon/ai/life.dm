@@ -7,7 +7,7 @@
 
 /mob/living/silicon/ai/proc/life_handle_camera()
 	if(stat != CONSCIOUS)
-		cameraFollow = null
+		stop_ai_tracking()
 		reset_view(null)
 		unset_machine()
 	if(client)

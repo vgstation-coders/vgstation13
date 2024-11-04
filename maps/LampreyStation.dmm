@@ -16960,7 +16960,7 @@
 	icon_state = "radiation-w"
 	},
 /obj/item/weapon/table_parts/glass,
-/obj/item/weapon/gun/energy/floragun,
+/obj/item/floral_somatoray,
 /turf/simulated/floor/plating,
 /area/lamprey/ghettosecuritymaintenanceblob)
 "aNC" = (
@@ -68857,7 +68857,7 @@
 "cXW" = (
 /obj/structure/lattice,
 /obj/structure/closet/crate/hydroponics,
-/obj/item/weapon/gun/energy/floragun,
+/obj/item/floral_somatoray,
 /obj/abstract/map/spawner/maint,
 /turf/space,
 /area)
@@ -143169,10 +143169,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/obj/machinery/computer/smelting{
-	name = "recycling furnace console";
-	smelter_tag = "recycling_smelter"
-	},
+/obj/machinery/computer/smelting/recycling,
 /turf/space,
 /area)
 "fZh" = (
@@ -178579,9 +178576,9 @@
 "hnZ" = (
 /obj/structure/table/glass,
 /obj/structure/window/reinforced,
-/obj/item/seeds/weeds,
-/obj/item/seeds/weeds,
-/obj/item/seeds/weeds,
+/obj/item/seeds/dandelionseed,
+/obj/item/seeds/dandelionseed,
+/obj/item/seeds/dandelionseed,
 /obj/item/weapon/reagent_containers/spray/plantbgone,
 /turf/space,
 /area)
@@ -195573,7 +195570,7 @@
 /obj/item/weapon/pen,
 /obj/item/weapon/reagent_containers/glass/bottle/mutagen,
 /obj/item/device/analyzer/plant_analyzer,
-/obj/item/weapon/gun/energy/floragun,
+/obj/item/floral_somatoray,
 /turf/simulated/floor/vox{
 	icon_state = "dark"
 	},

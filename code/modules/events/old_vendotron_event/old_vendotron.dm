@@ -6,6 +6,7 @@
 	icon_vend = "Old_Vendotron-vend"
 	unhackable = TRUE
 	mech_flags = MECH_SCAN_FAIL
+	var/mob/living/simple_animal/hostile/old_vendotron/mob_vendotron // This is where the old vendortron will be recorded
 	var/list/commonStock = list(
 		/obj/item/pizzabox/meat = 50,
 		/obj/item/toy/crayon/rainbow = 15,
@@ -299,9 +300,13 @@
 	for(var/i = 1, i < spiderAmount, i++)
 		spawn(i+1)
 			if(prob(75))
-				new /mob/living/simple_animal/hostile/giant_spider/spiderling(get_turf(src))
+				var/mob/living/simple_animal/hostile/giant_spider/spiderling/S = new(get_turf(src))
+				if(mob_vendotron) //The spiders are allied to the vendortron and won't attack it
+					S.faction = mob_vendotron.faction
 			else
-				new /mob/living/simple_animal/hostile/giant_spider/hunter(get_turf(src))
+				var/mob/living/simple_animal/hostile/giant_spider/hunter/H = new(get_turf(src))
+				if(mob_vendotron)
+					H.faction = mob_vendotron.faction
 
 /obj/machinery/vending/old_vendotron/proc/platesPlatesPlates(var/plateAmount = 50) //This many is necessary, I promise
 	visible_message("<span class='big danger'>\The [src] enters dinner mode!</span>")
@@ -309,11 +314,12 @@
 		spawn(i+2)
 			var/obj/item/trash/plate/thePlate = new /obj/item/trash/plate(get_turf(src))
 			var/turf/plateTarg = null
+			var/where_from = mob_vendotron ? mob_vendotron : src //If the mob_vendotron exists, get the mob's location instead, otherwise get the vendor machine
 			if(prob(50))
 				var/plateDir = pick(alldirs)
-				plateTarg = get_edge_target_turf(src, plateDir)
+				plateTarg = get_edge_target_turf(where_from, plateDir)
 			else
-				var/mob/living/t = locate() in view(7, src)	//copy paste of vendor throwing for theming
+				var/mob/living/t = locate(/mob/living) in view(7, where_from)	//copy paste of vendor throwing for theming
 				plateTarg = t
 			if(plateTarg)
 				thePlate.throw_at(plateTarg, 10, i)
@@ -347,7 +353,10 @@
 	visible_message("<span class='big danger'>\The [src] vends some peculiar eggs!</span>")
 	for(var/i = 1 to eggAmount)
 		var/turf/eggT = get_turf(pick(orange(5, get_turf(src))))
-		new /obj/item/weapon/reagent_containers/food/snacks/egg/chaos/instahatch(eggT)
+		if(mob_vendotron) //The newly-hatched eggs will share the same faction as the angry mob vendortron
+			new /obj/item/weapon/reagent_containers/food/snacks/egg/chaos/instahatch(eggT, mob_vendotron.faction)
+		else
+			new /obj/item/weapon/reagent_containers/food/snacks/egg/chaos/instahatch(eggT)
 
 /obj/machinery/vending/old_vendotron/proc/ghettoNightmare(var/nightmareLevel = 8, mob/user)	//This is a sin
 	visible_message("<span class='big danger'>Even \the [src] looks afraid!</span>")
@@ -371,6 +380,7 @@
 	var/mob/living/simple_animal/hostile/old_vendotron/madVendor = new /mob/living/simple_animal/hostile/old_vendotron(loc)
 	madVendor.ourVendor = src
 	src.forceMove(madVendor)
+	mob_vendotron = madVendor
 	if(user)
 		madVendor.GiveTarget(user)
 
@@ -385,6 +395,7 @@
 	melee_damage_lower = 10
 	melee_damage_upper = 30
 	attacktext = "vends"
+	faction = "angry_vendotron"
 	mob_property_flags = MOB_CONSTRUCT | MOB_ROBOTIC | MOB_NO_PETRIFY | MOB_NO_LAZ
 	environment_smash_flags = SMASH_CONTAINERS | SMASH_WALLS | OPEN_DOOR_STRONG
 	var/obj/machinery/vending/old_vendotron/ourVendor = null
@@ -396,6 +407,7 @@
 		ourVendor.forceMove(loc)
 	else
 		explosion(loc, 1,2,2, whodunnit = src)
+	ourVendor.mob_vendotron = null
 	..(gibbed)
 	qdel(src)
 

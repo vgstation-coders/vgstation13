@@ -257,7 +257,7 @@
 	return
 
 /obj/structure/stackopacks/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/tool/wirecutters) || istype(W,/obj/item/weapon/shard) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large) || istype(W,/obj/item/tool/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife))
+	if(W.is_wirecutter(user) || istype(W,/obj/item/weapon/shard) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large) || istype(W,/obj/item/tool/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife))
 		var/turf/T = get_turf(src)
 		for(var/obj/O in contents)
 			O.forceMove(T)

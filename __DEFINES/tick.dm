@@ -33,6 +33,7 @@
 #define TICK_CHECK ( TICK_USAGE > CURRENT_TICKLIMIT )
 // runs stoplag if tick_usage is above the limit
 #define CHECK_TICK ( TICK_CHECK ? stoplag() : 0 )
+#define IN_ROUND_CHECK_TICK ( ticker && ticker.current_state == GAME_STATE_PLAYING ? CHECK_TICK : 0 )
 
 // Returns true if tick usage is above 95, for high priority usage
 #define TICK_CHECK_HIGH_PRIORITY ( TICK_USAGE > 95 )

@@ -188,39 +188,6 @@
 	icon_state = "wall3"
 	},
 /area/shuttle/vox/station)
-"aE" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/shuttle/plating/vox,
-/area/shuttle/vox/station)
-"aF" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/shuttle/plating/vox,
-/area/shuttle/vox/station)
-"aG" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/shuttle/plating/vox,
-/area/shuttle/vox/station)
 "aH" = (
 /obj/machinery/computer/security,
 /turf/simulated/floor/shuttle/vox{
@@ -295,20 +262,6 @@
 "aS" = (
 /turf/simulated/floor/shuttle/plating/vox,
 /area/shuttle/vox/station)
-"aT" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/shuttle/plating/vox,
-/area/shuttle/vox/station)
 "aU" = (
 /obj/structure/bed/chair/shuttle/gamer{
 	dir = 1
@@ -329,18 +282,6 @@
 /area/shuttle/vox/station)
 "aX" = (
 /obj/machinery/light,
-/turf/simulated/floor/shuttle/plating/vox,
-/area/shuttle/vox/station)
-"aY" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/full/reinforced,
 /turf/simulated/floor/shuttle/plating/vox,
 /area/shuttle/vox/station)
 "aZ" = (
@@ -371,20 +312,6 @@
 /area/shuttle/vox/station)
 "bd" = (
 /obj/item/weapon/paper/crumpled,
-/turf/simulated/floor/shuttle/plating/vox,
-/area/shuttle/vox/station)
-"be" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
 /turf/simulated/floor/shuttle/plating/vox,
 /area/shuttle/vox/station)
 "bf" = (
@@ -467,31 +394,6 @@
 	icon_state = "floor4"
 	},
 /area/shuttle/vox/station)
-"bn" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/shuttle/plating/vox,
-/area/shuttle/vox/station)
-"bo" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/shuttle/plating/vox,
-/area/shuttle/vox/station)
 "bp" = (
 /obj/machinery/door/window/brigdoor{
 	base_state = "left";
@@ -508,27 +410,8 @@
 	icon_state = "floor4"
 	},
 /area/shuttle/vox/station)
-"br" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/shuttle/plating/vox,
-/area/shuttle/vox/station)
 "bs" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/shuttle/plating/vox,
 /area/shuttle/vox/station)
 "bt" = (
@@ -595,18 +478,6 @@
 /turf/simulated/floor/shuttle/vox{
 	icon_state = "floor4"
 	},
-/area/shuttle/vox/station)
-"bC" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/shuttle/plating/vox,
 /area/shuttle/vox/station)
 "bD" = (
 /obj/structure/shuttle/engine/heater,
@@ -1400,8 +1271,8 @@ aD
 aD
 aD
 aD
-be
-bo
+bs
+bs
 bs
 aD
 bF
@@ -1591,8 +1462,8 @@ at
 at
 ay
 aD
-aT
-aY
+bs
+bs
 aD
 aS
 aS
@@ -1704,7 +1575,7 @@ ak
 an
 at
 ab
-aE
+bs
 aH
 aM
 aQ
@@ -1743,7 +1614,7 @@ ak
 an
 at
 ab
-aF
+bs
 aI
 aM
 aL
@@ -1782,7 +1653,7 @@ ak
 an
 at
 ab
-aG
+bs
 aJ
 aM
 aQ
@@ -1903,8 +1774,8 @@ at
 at
 az
 aD
-aT
-aY
+bs
+bs
 aD
 aS
 aL
@@ -2102,9 +1973,9 @@ aD
 aD
 aD
 aD
-bn
-br
-bC
+bs
+bs
+bs
 aD
 bM
 ab

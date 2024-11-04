@@ -574,7 +574,7 @@
 	icon_state = "frag_shells"
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/frag = 16)
-	
+
 /obj/item/weapon/storage/box/rocksaltshells
 	name = "12-gauge rocksalt shells"
 	icon_state = "rocksalt_shells"
@@ -1312,3 +1312,16 @@
 		/obj/item/device/modkit/demolition,
 		/obj/item/ammo_storage/magazine/lawgiver/demolition = 2,
 	)
+
+/obj/item/weapon/storage/box/castlevania
+	name = "modern vampire hunter set box"
+	desc = "Apparel for the cooler vampire hunters."
+	icon_state = "castlevania_box"
+
+/obj/item/weapon/storage/box/castlevania/New()
+	..()
+	new /obj/item/clothing/under/hunter(src)
+	new /obj/item/clothing/suit/hunter(src)
+	new /obj/item/clothing/shoes/hunter(src)
+	new /obj/item/clothing/head/hunter(src)
+	new /obj/item/clothing/gloves/hunter(src)

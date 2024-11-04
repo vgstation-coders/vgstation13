@@ -36,7 +36,7 @@
 
 /datum/spellbook_artifact/staff_of_swapping
 	name = "Staff of Swapping"
-	desc = "An artefact that fires a glowing bolt of energy which transfers the caster and targets position in space. Wielding in it both hands increases the power of the staff, and allows it to pass through certain objects.."
+	desc = "An artefact that fires a glowing bolt of energy which transfers the caster and targets position in space. Wielding in it both hands increases the power of the staff, and allows it to pass through certain objects."
 	abbreviation = "SW"
 	price = 20
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/swapper)
@@ -325,7 +325,7 @@
 /datum/spellbook_artifact/phylactery
 	name = "phylactery"
 	desc = "Creates a soulbinding artifact that, upon the death of the user, resurrects them as best it can. You must bind yourself to this through making an incision on your palm, holding the phylactery in that hand, and squeezing it."
-	spawned_items = list(/obj/item/phylactery, /obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich, /obj/item/soulstone)
+	spawned_items = list(/obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich, /obj/item/soulstone, /obj/item/phylactery)
 
 
 /datum/spellbook_artifact/darkness

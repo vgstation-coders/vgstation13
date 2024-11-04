@@ -411,7 +411,7 @@
 	if(istype(user,/mob/living/carbon) && on)
 		var/mob/living/carbon/absolutemadman = user
 		absolutemadman.adjust_fire_stacks(1)
-		if(absolutemadman.IgniteMob())
+		if(absolutemadman.ignite())
 			absolutemadman.visible_message("<span class='danger'>[user] walks into \the [src], and is set alight!</span>", "<span class='danger'>You walk into \the [src], and are set alight!</span>")
 
 /obj/machinery/space_heater/campfire/stove/fireplace

@@ -41,6 +41,7 @@ var/list/disappear_sound = list('sound/effects/disappear_1.ogg', 'sound/effects/
 var/list/pd_wail_sound = list('sound/voice/pdwail1.ogg', 'sound/voice/pdwail2.ogg', 'sound/voice/pdwail3.ogg')
 var/list/procgun_sound = list('sound/weapons/procgun1.ogg', 'sound/weapons/procgun2.ogg')
 var/list/trayhit_sound = list('sound/items/trayhit1.ogg', 'sound/items/trayhit2.ogg')
+var/list/sand_sound = list('sound/effects/sand_walk1.ogg', 'sound/effects/sand_walk2.ogg')
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
@@ -63,6 +64,10 @@ var/list/trayhit_sound = list('sound/items/trayhit1.ogg', 'sound/items/trayhit2.
 		extrarange = 0
 	if(!vol) //don't do that
 		return
+	if(istype(source,/atom/movable))
+		var/atom/movable/AM = source
+		if(AM.silence_sprayed) //shhhh
+			return
 
 	if(turf_source)
 		vol *= turf_source.volume_mult
@@ -253,6 +258,8 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(procgun_sound)
 			if ("trayhit")
 				soundin = pick(trayhit_sound)
+			if ("sand")
+				soundin = pick(sand_sound)
 			//if ("gunshot") soundin = pick(gun_sound)
 	else if(islist(soundin))
 		soundin = pick(soundin)

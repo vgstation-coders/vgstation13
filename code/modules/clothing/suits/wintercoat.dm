@@ -342,7 +342,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
-	clothing_flags = COLORS_OVERLAY
+	clothing_flags = COLORS_OVERLAY | ONESIZEFITSALL
 	hood_suit_name = "hoodie"
 
 /obj/item/clothing/suit/storage/wintercoat/hoodie/grey

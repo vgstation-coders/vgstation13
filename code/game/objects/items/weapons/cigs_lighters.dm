@@ -466,8 +466,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/clothing/mask/cigarette/process()
 	var/turf/location = get_turf(src)
 	var/mob/living/M = get_holder_of_type(src,/mob/living)
-	if(isliving(loc))
-		M.IgniteMob()
 	smoketime--
 	if (smoketime == 5 && ismob(loc))
 		to_chat(M, "<span class='warning'>Your [name] is about to go out.</span>")
@@ -623,7 +621,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return
 
 /obj/item/clothing/mask/cigarette/bugged/attack_self(mob/user as mob)
-	if(lit)
+	if(cig_tag && lit)
 		user.visible_message("<span class='notice'>[user] calmly drops and treads on the [name], putting it out.</span>")
 		var/turf/T = get_turf(src)
 		var/obj/item/trash/cigbutt/bugged/new_butt = new /obj/item/trash/cigbutt/bugged(T)
@@ -842,7 +840,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_MASK
 	overlay_on = "pipelit"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-	smoketime = 100
+	smoketime = 200
 
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")
 	if(!src.lit)

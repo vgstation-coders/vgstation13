@@ -2709,7 +2709,7 @@
 /area/awaymission/academy/classrooms)
 "hm" = (
 /obj/structure/table,
-/obj/item/weapon/gun/energy/floragun,
+/obj/item/floral_somatoray,
 /obj/item/weapon/paper{
 	info = "Grade: D- Educator's Notes: SEE ME AFTER CLASS.";
 	name = "Summoning Midterm Exam"

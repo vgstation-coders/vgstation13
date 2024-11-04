@@ -47,6 +47,8 @@
 
 	message_admins("[key_name_admin(user)] generated an ion law using a LOIC remote.")
 	log_admin("[key_name(user)] generated an ion law using a LOIC remote.")
+	if(recursive_type_check(user,/obj/item/device/roganbot/killbot))
+		playsound(user.loc,'sound/effects/2003M/Ion_cannon_activated.ogg',100)
 
 	for (var/obj/machinery/computer/communications/C in machines)
 		if(! (C.stat & (FORCEDISABLE|BROKEN|NOPOWER) ) )

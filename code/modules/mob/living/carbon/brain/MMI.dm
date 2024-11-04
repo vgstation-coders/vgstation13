@@ -111,7 +111,7 @@
 			var/cc=contents_count(t)
 			var/req=sammi_assembly_parts[t]
 			if(cc<req)
-				to_chat(user, "<span class='warning'>You're short [req-cc] [initial(t)]\s.</span>")
+				to_chat(user, "<span class='warning'>You're short [req-cc] [t]\s.</span>")
 				return TRUE
 		if(!istype(loc,/turf))
 			to_chat(user, "<span class='warning'>You can't assemble the SAMMI, \the [src] has to be standing on the ground (or a table) to be perfectly precise.</span>")

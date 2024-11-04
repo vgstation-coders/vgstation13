@@ -79,13 +79,15 @@
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
 	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
 	slowdown = FIREAXE_SLOWDOWN
+	toolsounds = list('sound/effects/woodcuttingshort.ogg')
 
 	var/list/forbidden_floors = list(
 		/turf/simulated/floor/vault,
 		/turf/simulated/floor/engine,
 		/turf/simulated/floor/beach,
 		/turf/simulated/floor/shuttle,
-		/turf/simulated/floor/plating/snow
+		/turf/simulated/floor/plating/snow,
+		/turf/simulated/floor/planetary_grass
 	)
 
 /obj/item/weapon/fireaxe/update_wield(mob/user)

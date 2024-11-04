@@ -368,14 +368,14 @@
 /mob/living/simple_animal/hostile/pulse_demon/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj,/obj/item/projectile/ion))
 		return ..()
-	visible_message("<span class ='warning'>\the [Proj] goes right through \the [src]!</span>")
+	visible_message("<span class ='warning'>\The [Proj] goes right through \the [src]!</span>")
 
 /mob/living/simple_animal/hostile/pulse_demon/vine_protected()
 	return 1
 
 /mob/living/simple_animal/hostile/pulse_demon/hitby(atom/movable/AM, speed, dir, list/hit_whitelist)
 	if(!is_under_tile())
-		visible_message("<span class ='notice'>\the [AM] goes right through \the [src]!</span>")
+		visible_message("<span class ='notice'>\The [AM] goes right through \the [src]!</span>")
 
 // Unless...
 /mob/living/simple_animal/hostile/pulse_demon/Crossed(atom/movable/AM)

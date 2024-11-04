@@ -108,7 +108,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "aE" = (
-/obj/window_grille_spawner/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/shuttle,
 /area/shuttle/supply)
 "aF" = (
@@ -139,7 +139,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "aK" = (
-/obj/window_grille_spawner/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "aL" = (

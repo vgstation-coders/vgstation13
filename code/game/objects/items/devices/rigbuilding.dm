@@ -53,7 +53,7 @@
 			to_chat(user, "You don't have enough cable to wire \the [src].")
 			return
 
-	else if(istype(W, /obj/item/tool/wirecutters))
+	else if(W.is_wirecutter(user))
 		if(buildstate == RIG_WIRED)
 			to_chat(user, "You secure the wiring in \the [src].")
 			W.playtoolsound(src, 50)

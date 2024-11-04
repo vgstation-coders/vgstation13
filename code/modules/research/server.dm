@@ -312,7 +312,7 @@
 /obj/machinery/computer/rdservercontrol/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
 
 	add_fingerprint(user)
-
+	updateUsrDialog()
 	if(D.is_screwdriver(user))
 		D.playtoolsound(src, 50)
 		if(do_after(user, src, 20))
@@ -341,12 +341,14 @@
 				A.anchored = 1
 				src.transfer_fingerprints_to(A)
 				qdel(src)
-	else if(istype(D, /obj/item/weapon/card/emag) && !emagged)
-		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
+	else 
+		return ..()
+
+/obj/machinery/computer/rdservercontrol/emag_act(mob/user)
+	if(!emagged)
+		. = ..()
 		emagged = 1
 		to_chat(user, "<span class='notice'>You disable the security protocols</span>")
-	src.updateUsrDialog()
-	return
 
 /obj/machinery/r_n_d/server/derelict
 	name = "Derelict R&D Server"

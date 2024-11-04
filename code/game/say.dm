@@ -39,6 +39,8 @@ var/global/lastDecTalkUse = 0
 	return
 
 /atom/movable/proc/can_speak()
+	if(silence_sprayed)
+		return
 	return 1
 
 /atom/movable/proc/send_speech(var/datum/speech/speech, var/range=7, var/bubble_type)

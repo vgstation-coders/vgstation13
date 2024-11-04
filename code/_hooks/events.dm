@@ -26,6 +26,11 @@
 // atom/movable/mover: the movable itself.
 /event/moved
 
+// Called whenever an /atom/movable relay-moves.
+// Arguments:
+// atom/movable/mover: the movable itself.
+/event/relaymoved
+
 // Called right before an /atom/movable attempts to move or change dir.
 /event/before_move
 
@@ -215,6 +220,7 @@
 // atom/hit_atom: the atom hit by the throw impact
 // speed: the speed at which the thrown atom was thrown
 // mob/living/user: the mob who threw the atom, if any
+// thrown_atom: the atom that was thrown
 /event/throw_impact
 
 //Called by examine
@@ -261,6 +267,21 @@
 // Arguments:
 // atom/movable/exiter: the movable exiting the area
 /event/area_exited
+
+// Arguments:
+// mob/killer: the person who killed
+// mob/victim: the person who got killed
+/event/kill
+
+// Arguments:
+// time: shuttle timer
+// direction: shuttle direction
+/event/shuttletimer
+
+// Called by miscellaneous functions not covered by entered, equipped and unequipped events for cameranet updates
+// Arguments:
+// atom/movable/mover: the atom changing status on the cameranet
+/event/camera_sight_changed
 
 // Called by both area/Entered and area/Exited if the atom changing areas is a mob
 // Arguments:

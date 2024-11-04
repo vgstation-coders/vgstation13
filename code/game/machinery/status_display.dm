@@ -17,8 +17,7 @@
 #define MODE_IMAGE				3
 #define MODE_CARGO_TIMER		4
 
-var/global/list/status_displays = list() //This list contains both normal status displays, and AI status displays
-var/global/list/supply_displays = list()
+var/global/list/status_displays = list() //This list contains both normal status displays, and AI status dispays
 
 /obj/machinery/status_display
 	icon = 'icons/obj/status_display.dmi'
@@ -63,10 +62,6 @@ var/global/list/supply_displays = list()
 	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 
-/obj/machinery/status_display/supply/New()
-	..()
-	supply_displays |= src
-
 /obj/machinery/status_display/initialize()
 	..()
 	if(radio_controller)
@@ -76,14 +71,16 @@ var/global/list/supply_displays = list()
 	.=..()
 	status_displays -= src
 
-/obj/machinery/status_display/supply/Destroy()
-	.=..()
-	supply_displays -= src
-
 // timed process
 /obj/machinery/status_display/process()
-	if(mode != MODE_SHUTTLE_TIMER && mode != MODE_CARGO_TIMER) // handled in their subsystems
-		update()
+	if(stat & (FORCEDISABLE|NOPOWER))
+		remove_display()
+		return
+	if(spookymode)
+		spookymode = 0
+		remove_display()
+		return
+	update()
 
 /obj/machinery/status_display/attack_ai(mob/user)
 	if(spookymode)
@@ -134,13 +131,6 @@ var/global/list/supply_displays = list()
 	// set what is displayed
 
 /obj/machinery/status_display/proc/update()
-	if(stat & (FORCEDISABLE|NOPOWER))
-		remove_display()
-		return
-	if(spookymode)
-		spookymode = 0
-		remove_display()
-		return
 	if(friendc && mode!=4) //Makes all status displays except supply shuttle timer display the eye -- Urist
 		set_picture("ai_friend")
 		return

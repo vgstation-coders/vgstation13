@@ -95,8 +95,6 @@
 	var/dat = ""
 
 	dat += {"
-		<b>Selected:</b> <span id="selectedname"></span>
-		<h2>Options</h2>
 		<div id="schematic_options">
 		</div>
 		<h2>Available schematics</h2>
@@ -110,7 +108,8 @@
 			if(!T || ((C.flags & RCD_Z_DOWN) && !HasBelow(T.z)) || ((C.flags & RCD_Z_UP) && !HasAbove(T.z)))
 				continue
 			dat += C.schematic_list_line(interface,FALSE,src.selected==C)
-
+			for(var/client/client in interface.clients)
+				C.send_list_assets(client)
 		dat += "</ul>"
 
 	interface.updateLayout(dat)
@@ -231,9 +230,9 @@
 			use_energy(selected.energy_cost, user)
 	else
 		if(istext(t))
-			to_chat(user, "<span class='warning'>\the [src]'s error light flickers: [t]</span>")
+			to_chat(user, "<span class='warning'>\The [src]'s error light flickers: [t]</span>")
 		else
-			to_chat(user, "<span class='warning'>\the [src]'s error light flickers.</span>")
+			to_chat(user, "<span class='warning'>\The [src]'s error light flickers.</span>")
 
 	busy = FALSE
 
@@ -256,7 +255,6 @@
 	if(selected)
 		for(var/client/client in interface.clients)
 			selected.send_assets(client)
-
 		interface.updateContent("schematic_options", selected.get_HTML(args))
 	else
 		interface.updateContent("schematic_options", " ")
@@ -334,12 +332,12 @@
 	..()
 	if(istype(S,/obj/item/stack/rcd_ammo))
 		if((matter + 10) > max_matter)
-			to_chat(user, "<span class='notice'>\the [src] can't hold any more matter-units.</span>")
+			to_chat(user, "<span class='notice'>\The [src] can't hold any more matter-units.</span>")
 			return 1
 		matter += 10
 		S.use(1)
 		playsound(src, 'sound/machines/click.ogg', 20, 1)
-		to_chat(user, "<span class='notice'>\the [src] now holds [matter]/[max_matter] matter-units.</span>")
+		to_chat(user, "<span class='notice'>\The [src] now holds [matter]/[max_matter] matter-units.</span>")
 		return 1
 
 	if(S.is_screwdriver(user))
@@ -352,7 +350,7 @@
 
 /obj/item/device/rcd/matter/use_energy(var/amount, var/mob/user)
 	matter -= amount
-	to_chat(user, "<span class='notice'>\the [src] currently holds [matter]/[max_matter] matter-units.")
+	to_chat(user, "<span class='notice'>\The [src] currently holds [matter]/[max_matter] matter-units.")
 
 /obj/item/device/rcd/matter/get_energy(var/mob/user)
 	return matter

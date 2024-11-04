@@ -24,7 +24,7 @@
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	flags = FPRINT
-	clothing_flags = PLASMAGUARD
+	clothing_flags = PLASMAGUARD | ONESIZEFITSALL
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|HIDETAIL
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
@@ -130,3 +130,4 @@
 	icon_state = "plaguedoctor"
 	item_state = "bio_suit"
 	species_fit = list(INSECT_SHAPED)
+	clothing_flags = PLASMAGUARD

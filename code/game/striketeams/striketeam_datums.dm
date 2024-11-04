@@ -61,11 +61,6 @@ var/list/sent_strike_teams = list()
 				else
 					mission = initial(mission)
 
-		if(sentStrikeTeams(striketeam_name) || (custom && sentStrikeTeams(TEAM_CUSTOM)))
-			to_chat(user, "Looks like someone beat you to it.")
-			qdel(src)
-			return
-
 	if (custom)
 		sent_strike_teams[TEAM_CUSTOM] = src
 	else

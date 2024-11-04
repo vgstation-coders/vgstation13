@@ -54,15 +54,6 @@
 	icon_state = "dark vault full"
 	},
 /area/vault/laundromat)
-"cd" = (
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/vault/laundromat)
 "co" = (
 /obj/effect/decal/cleanable/crumbs{
 	icon_state = "dribbles";
@@ -329,17 +320,6 @@
 "pA" = (
 /turf/simulated/wall,
 /area/vault/laundromat)
-"qD" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/vault/laundromat)
 "qI" = (
 /obj/effect/landmark/corpse/commander,
 /turf/simulated/floor{
@@ -378,18 +358,6 @@
 /obj/abstract/map/spawner/laundromat/clothing,
 /turf/simulated/floor,
 /area/vault/laundromat)
-"tp" = (
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/vault/laundromat)
 "tB" = (
 /obj/machinery/light/he{
 	dir = 8
@@ -401,21 +369,6 @@
 "tG" = (
 /obj/item/weapon/stool,
 /turf/simulated/floor/glass,
-/area/vault/laundromat)
-"vh" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
 /area/vault/laundromat)
 "vu" = (
 /obj/structure/rack,
@@ -463,18 +416,6 @@
 /obj/effect/landmark/corpse/syndicateexec,
 /obj/item/weapon/stool,
 /turf/simulated/floor/glass,
-/area/vault/laundromat)
-"yR" = (
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
 /area/vault/laundromat)
 "zr" = (
 /obj/machinery/washing_machine,
@@ -676,17 +617,7 @@
 	},
 /area/vault/laundromat)
 "Gj" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/vault/laundromat)
 "Gu" = (
@@ -722,18 +653,6 @@
 	},
 /turf/space,
 /area)
-"He" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/vault/laundromat)
 "Hu" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -767,17 +686,6 @@
 /obj/structure/lattice,
 /turf/space,
 /area)
-"Jd" = (
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/vault/laundromat)
 "Jf" = (
 /obj/structure/window{
 	dir = 8
@@ -836,18 +744,6 @@
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
-/area/vault/laundromat)
-"Ly" = (
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
 /area/vault/laundromat)
 "LH" = (
 /obj/effect/landmark/corpse/quartermaster,
@@ -1096,20 +992,6 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor,
 /area/vault/laundromat)
-"ZU" = (
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/vault/laundromat)
 
 (1,1,1) = {"
 VN
@@ -1203,9 +1085,9 @@ pA
 pA
 pA
 pA
-ZU
-Jd
-tp
+Gj
+Gj
+Gj
 pA
 pA
 pA
@@ -1366,7 +1248,7 @@ cQ
 EV
 PG
 kN
-yR
+Gj
 VN
 VN
 VN
@@ -1377,8 +1259,8 @@ VN
 kc
 pA
 Gj
-qD
-He
+Gj
+Gj
 pA
 pA
 kN
@@ -1392,7 +1274,7 @@ co
 zr
 PG
 kN
-cd
+Gj
 VN
 VN
 VN
@@ -1406,7 +1288,7 @@ VU
 LT
 KK
 vu
-vh
+Gj
 kN
 NM
 SP
@@ -1418,7 +1300,7 @@ EJ
 SP
 tm
 kN
-Ly
+Gj
 VN
 VN
 UH
@@ -1458,7 +1340,7 @@ zX
 Zy
 KK
 sV
-vh
+Gj
 Cs
 Zy
 Az
@@ -1470,7 +1352,7 @@ bu
 Az
 Zy
 Hu
-yR
+Gj
 VN
 VN
 Sb
@@ -1481,8 +1363,8 @@ VN
 kc
 pA
 Gj
-qD
-He
+Gj
+Gj
 pA
 pA
 kN
@@ -1496,7 +1378,7 @@ cQ
 EV
 PG
 Hu
-cd
+Gj
 VN
 VN
 VN
@@ -1522,7 +1404,7 @@ iF
 EV
 PG
 FK
-Ly
+Gj
 VN
 VN
 VN
@@ -1671,9 +1553,9 @@ pA
 pA
 pA
 pA
-ZU
-Jd
-tp
+Gj
+Gj
+Gj
 pA
 pA
 pA

@@ -45,6 +45,15 @@
 	//Status updates, death etc.
 	handle_regular_status_updates()
 
+//Causes the slime to be hungry if it has a preferred food in range, which for now is just monkeys
+//Helps facilitate a faster xenobio by having the slimes eat sooner instead of waiting until they are hungry again
+/mob/living/carbon/slime/proc/preferred_food_in_vicinity()
+	for(var/mob/living/L in view(5, src))
+		if(is_type_in_list(L, preferred_food))
+			if(!(L.health <= -70)) //If the target can still be fed upon by the slime
+				return 1
+	return 0
+
 /mob/living/carbon/slime/proc/AIprocess()  // the master AI process
 
 //	to_chat(world, "AI proc started.")
@@ -66,6 +75,8 @@
 			if(0 to 149)
 				starving = 1
 	AIproc = 1
+	if(!hungry && !starving) //Not hungry nor starving, make it hungry if it has a preferred food in range
+		hungry = preferred_food_in_vicinity()
 //	to_chat(world, "AIproc [AIproc] && stat != 2 [stat] && (attacked > 0 [attacked] || starving [starving] || hungry [hungry] || Victim [Victim] || Target [Target]")
 	while(AIproc && stat != 2 && (attacked > 0 || starving || hungry || Victim))
 		if(Victim) // can't eat AND have this little process at the same time
@@ -437,7 +448,7 @@
 					starving = 1
 
 		else
-			switch(nutrition)			// 1000 max nutrition
+			switch(nutrition)			// 1200 max nutrition
 				if(501 to 700)
 					if(prob(25))
 						hungry = 1
@@ -454,7 +465,8 @@
 
 		if(!Target)
 			var/list/targets = list()
-
+			if(!hungry && !starving)
+				hungry = preferred_food_in_vicinity()
 			if(hungry || starving) //Only add to the list if we need to
 				for(var/mob/living/L in view(7,src))
 

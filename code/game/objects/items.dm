@@ -87,6 +87,8 @@
 
 	var/is_cookvessel //If true, the item is a cooking vessel.
 
+	var/blocks_tracking = FALSE //Blocks mind and AI tracking
+
 	var/list/quick_equip_priority = list() //stuff to override the quick equip thing so it goes in this first
 
 	var/last_burn
@@ -192,7 +194,7 @@
 			return SUICIDE_ACT_BRUTELOSS
 	else if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
-		user.IgniteMob()
+		user.ignite()
 		return SUICIDE_ACT_FIRELOSS
 	else if (force >= 10)
 		user.visible_message("<span class='danger'>[user] is bludgeoning \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
@@ -1323,10 +1325,10 @@ var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/proc/copy_blood_from_item(var/obj/item/other_item)
 	virus2 = virus_copylist(other_item.virus2)
-	if (!other_item.blood_overlay)
+	if (!other_item.blood_overlay || !other_item.blood_color)
 		return
 	blood_color = other_item.blood_color
-	blood_DNA = other_item.blood_DNA.Copy()
+	blood_DNA = other_item.blood_DNA?.Copy()
 	had_blood = TRUE
 	set_blood_overlay()
 
@@ -1642,7 +1644,7 @@ var/global/objects_thrown_when_explode = FALSE
 		usr.put_in_hand(OI.hand_index, src)
 		add_fingerprint(usr)
 
-/obj/item/proc/pre_throw(atom/movable/target)
+/obj/item/proc/pre_throw(var/atom/movable/target,var/mob/living/user)
 	return
 
 /obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
@@ -1731,13 +1733,30 @@ var/global/objects_thrown_when_explode = FALSE
 				perp.infect_disease2(D, notes="(Blood, from picking up \a [src])")
 
 /obj/item/proc/playtoolsound(atom/A, var/volume = 75, vary = TRUE, extrarange = null)
-	if(A && toolsounds)
-		var/tool_sound = pick(toolsounds)
-		playsound(A, tool_sound, volume, TRUE, vary)
+	if(!A)
+		return
+	var/tool_sound
+	if(toolsounds)
+		tool_sound = pick(toolsounds)
+	else if(surgerysound)
+		tool_sound = surgerysound
+	else if(hitsound)
+		tool_sound = hitsound
+	if(tool_sound)
+		playsound(A, tool_sound, volume, vary, extrarange)
 
 /obj/item/proc/playsurgerysound(atom/A, var/volume = 75)
-	if(A && surgerysound)
-		playsound(A, surgerysound, volume, vary = TRUE)
+	if(!A)
+		return
+	var/tool_sound
+	if(surgerysound)
+		tool_sound = surgerysound
+	else if(toolsounds)
+		tool_sound = pick(toolsounds)
+	else if(hitsound)
+		tool_sound = hitsound
+	if(tool_sound)
+		playsound(A, tool_sound, volume, vary = TRUE)
 
 /obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
 	return FALSE

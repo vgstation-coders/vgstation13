@@ -82,7 +82,6 @@
 	<p><a href='?src=\ref[src];change_color=1'>Change color</a> | <a href='?src=\ref[src];toggle_set_state=1'>Light floors will be turned <b>[set_state ? "ON" : "OFF"]</b></a></p>
 	<BR>
 	<p><a href='?src=\ref[src];apply=1'>Activate</a></p>
-	<p><a href='?src=\ref[src];refresh=1'>Refresh</a></p>
 	"}
 
 	var/datum/browser/popup = new(user, "\ref[src]", "[src]", 500, 300, src)
@@ -126,9 +125,6 @@
 			work_mode = MODE_ADDING
 			to_chat(usr, "<span class='info'>When applied to light floors, \the [src] will now connect to them.</span>")
 
-		if(usr)
-			attack_self(usr)
-
 	if(href_list["toggle_set_state"])
 		set_state = !set_state
 
@@ -137,16 +133,10 @@
 		else
 			to_chat(usr, "<span class='info'>Light floors will be turned off.</span>")
 
-		if(usr)
-			attack_self(usr)
-
 	if(href_list["delete_all"])
 		to_chat(usr, "<span class='notice'>Disconnected [connected_floors.len] tiles from the network.</span>")
 
 		connected_floors = list()
-
-		if(usr)
-			attack_self(usr)
 
 	if(href_list["change_color"])
 		var/new_color = input(usr, "Please select a new color for \the [src].", "[src]", rgb(color_r,color_g,color_b)) as color
@@ -160,15 +150,10 @@
 
 		to_chat(usr, "<span class='info'>Changed color to [color_r];[color_g];[color_b]!</span>")
 
-		if(usr)
-			attack_self(usr)
-
 	if(href_list["apply"])
 		change_floors()
 
-	if(href_list["refresh"])
-		if(usr)
-			attack_self(usr)
+	updateUsrDialog()
 
 /obj/item/device/assembly/light_tile_control/proc/change_floors()
 	if(last_used + cooldown_max > world.time)

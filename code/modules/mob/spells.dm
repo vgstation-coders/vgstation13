@@ -58,10 +58,17 @@
 	if(!spell_masters || !spell_masters.len)
 		return
 
-	var/obj/abstract/screen/movable/spell_master/master = spell_to_remove.connected_button.spellmaster
-	if(!(master in spell_masters))
-		return
-	master.remove_spell(spell_to_remove)
+	var/obj/abstract/screen/movable/spell_master/master
+	//Runtime prevention!
+	//Some spells, such as No Gun Allowed, may not have associated spellmaster buttons, which would break things
+	//Instead, check to see if it even has a button to remove
+	if(spell_to_remove.connected_button)
+		if(spell_to_remove.connected_button.spellmaster)
+			master = spell_to_remove.connected_button.spellmaster
+	if(master)
+		if(!(master in spell_masters))
+			return
+		master.remove_spell(spell_to_remove)
 
 	if(mind && mind.wizard_spells)
 		mind.wizard_spells.Remove(spell_to_remove)
@@ -87,4 +94,4 @@
 		return
 	old_character.remove_spell(spell_to_transfer, on_removed = FALSE)
 	new_character.add_spell(spell_to_transfer, on_added = FALSE)
-	spell_to_transfer.on_transfer()
+	spell_to_transfer.on_transfer(new_character)

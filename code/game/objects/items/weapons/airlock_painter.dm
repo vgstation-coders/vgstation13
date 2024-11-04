@@ -58,7 +58,7 @@
 	..()
 	if(istype(W, /obj/item/device/toner))
 		if(ink)
-			to_chat(user, "<span class='notice'>\the [name] already contains \a [ink].</span>")
+			to_chat(user, "<span class='notice'>\The [name] already contains \a [ink].</span>")
 			return
 		if(user.drop_item(W, src))
 			to_chat(user, "<span class='notice'>You install \the [W] into \the [name].</span>")

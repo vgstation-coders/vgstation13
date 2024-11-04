@@ -375,6 +375,152 @@
 /obj/structure/reagent_dispensers/beerkeg/wrenchable()
 	return 1
 
+/obj/structure/reagent_dispensers/beerkeg/blob_act()
+	explosion(src.loc,0,3,5,7,10)
+	qdel(src)
+
+/obj/structure/reagent_dispensers/brewerybeerkeg //beer keg with some randomized chems
+	//name and desc are defined in the New() call
+	desc = ""
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "beertankTEMP"
+	amount_per_transfer_from_this = 10
+	var/basechem = BEER
+	var/dangerchance = 0
+	var/goodchance = 50
+
+/obj/structure/reagent_dispensers/brewerybeerkeg/proc/makerandomkeg()
+	var/list/firstname = list("Old [pick(first_names_male)]'s" = 150, "Granny [pick(first_names_female)]'s" = 150, "The [capitalize(pick(adjectives))]" = 200, "Fancy" = 50, "Supermatter" = 75, "Plasma" = 75, "Scrungulartiy" = 110)
+	var/list/secondname = list("Greyshirt" = 50, "- Formerly Chuck's" = 100, "Loser" = 50, "Imbecile" = 50, "Selects" = 100, "Kit'tens" = 25, "Elysium" = 50, "Cascade" = 50, "Loose" = 50, "Mimes" = 50, "aipleaseprintthelabelhowdoierasetext????" = 70, "Spitoon" = 50, "Liberator" = 50, "Shit-Tronics" = 65)
+	var/list/thirdname = list(", featuring Dante from the Devil May Cry Series" = 25, " & Knuckles" = 10, "" = 965)
+
+	var/selectedfirstname = pickweight(firstname) //safeguards
+	var/selectedsecondname = pickweight(secondname) //only the clownkeg has a chance to not have a second name, so we call for one here just in case
+
+	var/list/safeingredients = list(APPLEJUICE, BANANA, LEMONJUICE, PLUMPHJUICE, WATERMELONJUICE, SUGAR, CORNSYRUP, MINTESSENCE, GARGLEBLASTER, WHISKEY, VODKA, TRIPLESEC, ICE)
+	var/list/specialingredients = list()
+	var/list/dangerousingredients = list(DANS_WHISKEY, POISONBERRYJUICE, BLISTEROL, CHEMICAL_WASTE, VIRUSFOOD, IMPEDREZENE, SALTWATER, SIMPOLINOL, SUX, PWINE, MUTAGEN, PLASMA, VOMIT, CYANIDE, DIAMONDDUST, MERCURY, FROSTOIL, CONDENSEDCAPSAICIN, SILICATE, NEUROTOXIN, DIABEETUSOL, LUBE, MOMMIMILK, PACID, PUNCTUALITE)
+
+	switch(rand(1,520))
+		if(1 to 120)
+			//normal shit
+			specialingredients += list(CARROTJUICE, LIMEJUICE, TOMATOJUICE, ORANGEJUICE, HONEY, MAPLESYRUP)
+		if(121 to 240)
+			//HONK
+			if(prob(50))
+				selectedfirstname = "[pick(clown_names)]'s"
+			else
+				selectedsecondname = pick("Clown", "Honking", "The Unfunny")
+			goodchance = 100
+			specialingredients += list(HONKSERUM, LUBE, BANANA)
+		if(241 to 360)
+			//assorted shit
+			selectedfirstname = pickweight(list("Horny" = 70, "Sneed's" = 110, "The Retarded" = 75, "The Salty" = 25, "Syndicate" = 50, "Tum'mie" = 30, "The Autistic" = 75, "DO NOT REDEEM" = 50, "Slow Moe's" = 50))
+			specialingredients += list(CHILLWAX, HONKSERUM, GYRO, MEDCOFFEE, MONSTERMASH, SPORTDRINK, QUANTUM)
+		if(361 to 480)
+			//medical?
+			selectedfirstname = pickweight(list("Doc Mitchell's" = 10, "Doc [pick(first_names_male)]" = 45, "Doctor's" = 10, "Doc [pick(first_names_female)]" = 45))
+			specialingredients += list(IMIDAZOLINE, INACUSIATE, ETHYLREDOXRAZINE, SPRINKLES, ALLICIN, TANNIC_ACID, OPIUM, THYMOL)
+		if(481 to 520) //hardcoded names
+			switch(rand(1,6))
+				if(1)
+					//meat or CHOESE keg
+					selectedfirstname = "ROID RAT"
+					selectedsecondname = "BULK RATIONS"
+					basechem = null
+					if(prob(50))
+						flags |= NOREACT //50:50 odds for the thing to explode into meat/cheese
+					else
+						desc += " Looks like the contents were just squished inside..."
+					if(prob(50))
+						src.reagents.add_reagent(CLONEXADONE, 166)
+						src.reagents.add_reagent(BLOOD, 830)
+						amount_per_transfer_from_this = 6 //exactly one meat slab per cycle
+					else
+						src.reagents.add_reagent(ENZYME, 110)
+						src.reagents.add_reagent(MILK, 880)
+						amount_per_transfer_from_this = 45 //you know the drill by now
+				if(2)
+					//vomit keg
+					selectedfirstname = "help i'm being forced to work on a beer manufacture"
+					selectedsecondname = "they took my kids last time i tried to escape"
+					basechem = VOMIT
+					safeingredients = list(VOMIT)
+					specialingredients = list(VOMIT)
+					dangerousingredients = list(VOMIT)
+				if(3)
+					//i will not explain myself
+					selectedfirstname = "Slow Moe's"
+					selectedsecondname = "Time to Go-Go"
+					desc += "Ok, here I go..."
+					safeingredients = list(SOYMILK)
+					specialingredients = list(CHILLWAX)
+					dangerousingredients = list(PUNCTUALITE) //it really was time to go-go
+				if(4)
+					//I just wanted an excuse to spawn corgi leather
+					selectedfirstname = "The Dogshit"
+					specialingredients = list(NUTRIMENT)
+					for(var/i=0,i<10,i++)
+						new /obj/item/stack/sheet/animalhide/corgi(src.loc)
+				if(5)
+					//the genius loci of ss13
+					selectedfirstname = "Disco"
+					selectedsecondname = "Elysium"
+					safeingredients = list(ETHANOL)
+					specialingredients = list(ETHANOL)
+					if(prob(50))
+						new /obj/item/device/instrument/trombone(src.loc) //I AM THE CITY (it's the closest we got)
+					else
+						new /obj/item/device/instrument/saxophone(src.loc)
+					new /obj/item/clothing/accessory/tie/horrible(src.loc)
+				if(6)
+					//it's ya boy
+					selectedfirstname = "Uncle Ian's"
+					src.reagents.add_reagent(MINTESSENCE, 250)
+					safeingredients = list(ICE, ICED_BEER)
+					specialingredients = list(ICE, ICED_BEER)
+					dangerousingredients = list(ICE, HOT_COCO) //WHO KNOWS WHAT EVIL LURKS IN THE HEARTS OF MEN...
+
+	name = "[(selectedfirstname)] [(selectedsecondname)][pickweight(thirdname)] beer keg"
+	desc = "Guaranteed quality from [pickweight(firstname)] [pickweight(secondname)] brewery, best before [rand(2300,2540)].[initial(desc)]"
+	color = rgb(rand(75,255),rand(75,255),rand(75,255)) //randomized color in place of assorted random icons
+
+	if(station_does_not_tip) //good luck with your cyanide beer I guess
+		dangerchance = 60
+		desc += " This one might not be safe to drink."
+
+	if(basechem)
+		for(var/i = 0, i < 4, i++)
+			if(prob(dangerchance))
+				src.reagents.add_reagent(pick(dangerousingredients), rand(125,175))
+			else if(prob(goodchance))
+				src.reagents.add_reagent(pick(specialingredients), rand(125,175))
+			else
+				src.reagents.add_reagent(pick(safeingredients), rand(125,175))
+		reagents.add_reagent(basechem, 1000) //fill the remaining space with beer
+
+/obj/structure/reagent_dispensers/brewerybeerkeg/New()
+	. = ..()
+
+	makerandomkeg() //selects name, desc, randomized chems, etc
+
+/obj/structure/reagent_dispensers/brewerybeerkeg/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the keg nozzle and drowning \his sorrows! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
+	return(SUICIDE_ACT_TOXLOSS)
+
+/obj/structure/reagent_dispensers/brewerybeerkeg/wrenchable()
+	return 1
+
+/obj/structure/reagent_dispensers/brewerybeerkeg/blob_act()
+	explosion(src.loc,0,3,5,7,10)
+	qdel(src)
+
+/obj/structure/reagent_dispensers/brewerybeerkeg/contraband
+	desc = " The results of failed beer science." //extra space is intended
+	dangerchance = 10
+	goodchance = 65
+
 /obj/structure/reagent_dispensers/bloodkeg
 	name = "old keg"
 	desc = "A very old-looking keg. Some red liquid periodically drips from it."
@@ -391,10 +537,6 @@
 
 /obj/structure/reagent_dispensers/bloodkeg/cultify()
 	return
-
-/obj/structure/reagent_dispensers/beerkeg/blob_act()
-	explosion(src.loc,0,3,5,7,10)
-	qdel(src)
 
 /obj/structure/reagent_dispensers/virusfood
 	name = "Virus Food Dispenser"
