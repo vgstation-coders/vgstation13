@@ -144,7 +144,7 @@
 		for(var/atom/A in O.contents)
 			if(can_pull(A))
 				return TRUE
-	. &= ((MAT_IRON in O.starting_materials) || (O.reagents?.has_reagent(IRON)))
+	. &= O && ((MAT_IRON in O.starting_materials) || (O.reagents?.has_reagent(IRON)))
 
 /obj/item/device/handheld_magnet/examine(mob/user)
 	..()
