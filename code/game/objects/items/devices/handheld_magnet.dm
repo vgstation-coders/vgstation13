@@ -112,29 +112,28 @@
 						continue
 					if(O.w_class && pullcounter % O.w_class != 0) // bigger items take longer
 						continue
-					if((density || opacity) && pullcounter % ((density+opacity)*2) == 0) // as do dense ones
+					if(istype(O,/obj/structure) && pullcounter % 2 == 0) // as do dense ones
 						continue
 					//if(round((1/O.siemens_coefficient)) > 0 && pullcounter % round((1/O.siemens_coefficient)) != 0) // higher coefficient pulls better
 						//continue
-					if(istype(O,/obj/structure/closet) && get_dist(O,T) < magnetic_field/2)
+					if(get_dist(O,T) < magnetic_field/2 && istype(O,/obj/structure/closet))
 						var/obj/structure/closet/CL = O
 						CL.open()
 					step_towards(O, T)
 
 			for(var/mob/living/M in orange(magnetic_field, T))
+				if(get_dist(M,T) < magnetic_field/2)
+					for(var/slot in list(slot_l_store,slot_r_store))
+						var/obj/item/store = M.get_item_by_slot(slot)
+						if(can_pull(store))
+							visible_message("<span class='danger'>[src] rips [store] out of [M]'s pocket!")
+							M.u_equip(store)
 				if(M.anchored || !(M.mob_property_flags & MOB_ROBOTIC))
 					continue
 				if(M.size && pullcounter % M.size != 0) // bigger things take longer
 					continue
 				step_towards(M, T)
 
-			for(var/mob/living/carbon/human/H in orange(magnetic_field/2, T))
-				if(can_pull(H.l_store))
-					visible_message("<span class='danger'>[src] rips [H.l_store] out of [H]'s left pocket!")
-					H.u_equip(H.l_store)
-				if(can_pull(H.r_store))
-					visible_message("<span class='danger'>[src] rips [H.r_store] out of [H]'s right pocket!")
-					H.u_equip(H.r_store)
 		sleep(pull_interval)
 		pullcounter++
 		updateUsrDialog()
