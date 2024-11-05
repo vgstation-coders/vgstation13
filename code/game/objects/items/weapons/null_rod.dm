@@ -180,11 +180,12 @@
 	item_state = "crucifix"
 	fluff_pickup = "turn"
 
-/obj/item/weapon/nullrod/crucifix/pickup(mob/living/carbon/human/user)
-	if(user.mind.assigned_role == "Chaplain")
+/obj/item/weapon/nullrod/crucifix/examine(mob/user)
+	if(user.mind?.assigned_role == "Chaplain")
 		desc = "What you are about to do has not been approved by the Space Vatican."
 	else
 		desc = initial(desc)
+	..()
 
 /obj/item/weapon/nullrod/crucifix/attack_self(mob/user as mob) //For larping during an exorcism
 	if(user.mind.assigned_role == "Chaplain")
