@@ -187,7 +187,7 @@
 		desc = initial(desc)
 	..()
 
-/obj/item/weapon/nullrod/crucifix/attack_self(mob/user as mob) //For larping during an exorcism
+/obj/item/weapon/nullrod/crucifix/attack_self(mob/user) //For larping during an exorcism
 	if(user.mind?.assigned_role == "Chaplain")
 		if(user.attack_delayer.blocked())
 			return
@@ -197,6 +197,7 @@
 	else //What happens if non-Chaplain uses the cross
 		user.visible_message("[user] holds the cross up, but nothing happens.",\
 		"You lift up the cross, but nothing happens.")
+		user.delayNextAttack(1 SECONDS)
 
 /obj/item/weapon/nullrod/toolbox //Syndicate/Robust religion
 	name = "nullbox"
