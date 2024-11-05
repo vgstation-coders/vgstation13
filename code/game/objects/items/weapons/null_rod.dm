@@ -188,7 +188,7 @@
 	..()
 
 /obj/item/weapon/nullrod/crucifix/attack_self(mob/user as mob) //For larping during an exorcism
-	if(user.mind.assigned_role == "Chaplain")
+	if(user.mind?.assigned_role == "Chaplain")
 		if(user.attack_delayer.blocked())
 			return
 		user.visible_message("[user] raises the cross in a show of faith.",\
