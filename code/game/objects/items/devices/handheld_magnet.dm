@@ -104,6 +104,12 @@
 
 		var/turf/T = get_turf(src)
 		if(T)
+			var/turfloc = isturf(loc)
+			var/objloc = FALSE
+			if(isobj(loc))
+				var/obj/O = loc
+				if(O.anchored)
+					objloc = TRUE
 			for(var/obj/O in orange(magnetic_field, T))
 				if(can_pull(O))
 					if(ismecha(O))
@@ -114,6 +120,12 @@
 						continue
 					//if(round((1/O.siemens_coefficient)) > 0 && pullcounter % round((1/O.siemens_coefficient)) != 0) // higher coefficient pulls better
 						//continue
+					if(turfloc) // if on a turf, just send us after anything
+						step_towards(src, O)
+						break
+					if(objloc) // putting this in something unanchored jumps it towards the target!
+						step_towards(loc, O)
+						break
 					if(get_dist(O,T) < magnetic_field/2 && istype(O,/obj/structure/closet))
 						var/obj/structure/closet/CL = O
 						CL.open()
