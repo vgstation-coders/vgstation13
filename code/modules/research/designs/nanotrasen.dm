@@ -41,3 +41,15 @@
 	build_path = /obj/item/weapon/gun/gravitywell
 	locked = 1
 	req_lock_access = list(access_rd)
+
+/datum/design/portablemagnet
+	name = "Portable Magnet"
+	desc = "A powered magnetic field activator."
+	id = "portamagnet"
+	req_tech = list(Tc_MAGNETS = 6, Tc_MATERIALS = 5, Tc_ENGINEERING = 5, Tc_PROGRAMMING = 4, Tc_SYNDICATE = 6, Tc_BLUESPACE = 4, Tc_NANOTRASEN = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000, MAT_DIAMOND = 1000, MAT_SILVER = 1000)
+	reliability_base = 100
+	category = "Weapons"
+	build_path = /obj/item/device/handheld_magnet
+	req_lock_access = list(access_rnd, access_robotics, access_rd)

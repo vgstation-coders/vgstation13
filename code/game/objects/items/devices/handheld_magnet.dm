@@ -9,7 +9,7 @@
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000, MAT_DIAMOND = 1000, MAT_SILVER = 1000)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = Tc_MAGNETS + "=5;" + Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;" + Tc_PROGRAMMING + "=3;" + Tc_SYNDICATE + "=5;" + Tc_BLUESPACE + "=3"
+	origin_tech = Tc_MAGNETS + "=5;" + Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;" + Tc_PROGRAMMING + "=3;" + Tc_BLUESPACE + "=3"
 	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/on = 0
 	var/base_state = "hhmagnet"
@@ -52,19 +52,17 @@
 		else
 			to_chat(usr, "<span class='warning'>You turn off [src].</span>")
 			pullcounter = 1
-		attack_self(usr)
 	else if(href_list["magfield"])
 		magnetic_field = input(usr,"Set magnetic field range, from 1 to 7","Field range",magnetic_field) as num
 		if(!magnetic_field)
 			magnetic_field = 1
 		magnetic_field = clamp(magnetic_field,1,7)
-		attack_self(usr)
 	else if(href_list["interval"])
 		pull_interval = input(usr,"Set magnetic pull interval","Pull interval",pull_interval) as num
 		if(!pull_interval)
 			pull_interval = 1
 		pull_interval = max(pull_interval,1)
-		attack_self(usr)
+	updateUsrDialog()
 
 /obj/item/device/handheld_magnet/attack_hand(mob/user)
 	if (power_src && user.is_holding_item(src))
