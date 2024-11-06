@@ -132,6 +132,12 @@
 					continue
 				step_towards(M, T)
 
+			if(!T.has_gravity() && ismob(loc))
+				for(var/turf/simulated/wall/W in spiral_block(T,magnetic_field))
+					if((W.walltype == "metal" || W.walltype == "rwall") && get_dist(loc,W) > 1) // gets nearest one
+						step_towards(loc, W)
+						break
+
 		sleep(pull_interval)
 		pullcounter++
 		updateUsrDialog()
