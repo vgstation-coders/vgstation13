@@ -106,7 +106,7 @@
 		if(T)
 			var/turfloc = isturf(loc)
 			var/objloc = FALSE
-			if(isobj(loc) && isturf(loc.loc))
+			if(isobj(loc) && loc.loc && isturf(loc.loc))
 				var/obj/O = loc
 				if(!O.anchored)
 					objloc = TRUE
