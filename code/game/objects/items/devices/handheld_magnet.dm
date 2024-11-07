@@ -131,18 +131,26 @@
 						CL.open()
 					step_towards(O, T)
 
-			for(var/mob/living/M in orange(magnetic_field, T))
-				if(get_dist(M,T) < magnetic_field/2)
+			var/mobloc = FALSE
+			if(ismob(loc))
+				var/mob/M = loc
+				if(!M.anchored)
+					mobloc = M.size
+			for(var/mob/living/L in orange(magnetic_field, T))
+				if(get_dist(L,T) < magnetic_field/2)
 					for(var/slot in list(slot_l_store,slot_r_store))
-						var/obj/item/store = M.get_item_by_slot(slot)
+						var/obj/item/store = L.get_item_by_slot(slot)
 						if(can_pull(store))
-							visible_message("<span class='danger'>[src] rips [store] out of [M]'s pocket!")
-							M.u_equip(store)
-				if(M.anchored || !(M.mob_property_flags & MOB_ROBOTIC))
+							visible_message("<span class='danger'>[src] rips [store] out of [L]'s pocket!")
+							L.u_equip(store)
+				if(L.anchored || !(L.mob_property_flags & MOB_ROBOTIC))
 					continue
-				if(M.size && pullcounter % M.size != 0) // bigger things take longer
+				if(mobloc < L.size)
+					step_towards(loc, L)
+					break
+				if(L.size && pullcounter % L.size != 0) // bigger things take longer
 					continue
-				step_towards(M, T)
+				step_towards(L, T)
 
 			if(!T.has_gravity() && ismob(loc))
 				for(var/turf/simulated/wall/W in spiral_block(T,magnetic_field))
