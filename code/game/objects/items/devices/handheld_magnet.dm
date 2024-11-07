@@ -106,7 +106,7 @@
 		if(T)
 			var/turfloc = isturf(loc)
 			var/objloc = FALSE
-			if(isobj(loc))
+			if(isobj(loc) && isturf(loc.loc))
 				var/obj/O = loc
 				if(!O.anchored)
 					objloc = TRUE
@@ -132,7 +132,7 @@
 					step_towards(O, T)
 
 			var/mobloc = FALSE
-			if(ismob(loc))
+			if(ismob(loc) && loc.loc && isturf(loc.loc))
 				var/mob/M = loc
 				if(!M.anchored)
 					mobloc = M.size
@@ -152,7 +152,7 @@
 					continue
 				step_towards(L, T)
 
-			if(!T.has_gravity() && ismob(loc))
+			if(!T.has_gravity() && mobloc)
 				for(var/turf/simulated/wall/W in spiral_block(T,magnetic_field))
 					if((W.walltype == "metal" || W.walltype == "rwall") && get_dist(loc,W) > 1) // gets nearest one
 						step_towards(loc, W)
