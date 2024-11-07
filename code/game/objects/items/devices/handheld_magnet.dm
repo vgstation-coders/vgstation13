@@ -108,7 +108,7 @@
 			var/objloc = FALSE
 			if(isobj(loc))
 				var/obj/O = loc
-				if(O.anchored)
+				if(!O.anchored)
 					objloc = TRUE
 			for(var/obj/O in orange(magnetic_field, T))
 				if(can_pull(O))
