@@ -104,7 +104,7 @@
 
 		var/turf/T = get_turf(src)
 		if(T)
-			var/turfloc = isturf(loc)
+			var/turfloc = isturf(loc) && !anchored
 			var/objloc = FALSE
 			if(isobj(loc) && loc.loc && isturf(loc.loc))
 				var/obj/O = loc
