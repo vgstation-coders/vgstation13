@@ -195,9 +195,7 @@
 		"You raise your cross in a show of true faith!")
 		user.delayNextAttack(1 SECONDS)
 	else //What happens if non-Chaplain uses the cross
-		user.visible_message("[user] holds the cross up, but nothing happens.",\
-		"You lift up the cross, but nothing happens.")
-		user.delayNextAttack(1 SECONDS)
+		..()
 
 /obj/item/weapon/nullrod/toolbox //Syndicate/Robust religion
 	name = "nullbox"
