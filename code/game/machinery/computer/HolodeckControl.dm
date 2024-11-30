@@ -356,13 +356,14 @@
 		targetsource.copy_contents_to(linkedholodeck , 1)
 		active = 0
 
-/obj/machinery/computer/HolodeckControl/proc/loadProgram(var/area/A, var/room_name, var/override=FALSE)
+/obj/machinery/computer/HolodeckControl/proc/loadProgram(var/area/A, var/room_name, var/override=FALSE, var/bandaid=FALSE)
 	if(!override && (world.time < (last_change + 25)))
 		visible_message("[bicon(src)] <B>ERROR. Recalibrating projetion apparatus. wait a short moment.</B>")
 		return
 
 	last_change = world.time
 	active = 1
+	var/old_room = current_room_name
 	current_room_name = room_name
 
 	for(var/item in holographic_items)
@@ -382,6 +383,15 @@
 	if(emagged)
 		for(var/obj/item/weapon/holo/esword/H in linkedholodeck)
 			H.damtype = BRUTE
+
+	if (!bandaid && (!linkedholodeck.area_turfs || linkedholodeck.area_turfs.len <= 0))
+		log_admin("The Holodeck broke when switching from [old_room ? old_room : "null"] to [room_name]. Attempting bandaid fix.")
+		message_admins("The Holodeck broke when switching from [old_room ? old_room : "null"] to [room_name]. Attempting bandaid fix.")
+		linkedholodeck.area_turfs = list()
+		for (var/turf/T in linkedholodeck)
+			linked_holodeck.area_turfs += T
+		loadProgram(A, room_name, TRUE, TRUE)
+		return
 
 	spawn(30)
 		for(var/obj/effect/landmark/L in linkedholodeck)
