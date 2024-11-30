@@ -389,7 +389,7 @@
 		message_admins("The Holodeck broke when switching from [old_room ? old_room : "null"] to [room_name]. Attempting bandaid fix.")
 		linkedholodeck.area_turfs = list()
 		for (var/turf/T in linkedholodeck)
-			linked_holodeck.area_turfs += T
+			linkedholodeck.area_turfs += T
 		loadProgram(A, room_name, TRUE, TRUE)
 		return
 
