@@ -497,7 +497,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 				if(M.transaction_log.len)
 					var/datum/transaction/T = M.transaction_log[1]
 					remembered_info += "<b>Your account was created:</b> [T.time], [T.date] at [T.source_terminal]<br>"
-				H.mind.store_memory(remembered_info)
+				H.mind.store_memory(remembered_info, category=MIND_MEMORY_GENERAL, forced=TRUE)
 
 				H.mind.initial_account = M
 				H.mind.initial_wallet_funds = balance_wallet
@@ -512,7 +512,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 					remembered_info += "<b>Your department's account pin is:</b> [department_account.remote_access_pin]<br>"
 					remembered_info += "<b>Your department's account funds are:</b> $[department_account.money]<br>"
 
-				H.mind.store_memory(remembered_info)
+				H.mind.store_memory(remembered_info, category=MIND_MEMORY_GENERAL, forced=TRUE)
 
 			spawn()
 				to_chat(H, "<span class='danger'>Your bank account number is: <span class='darknotice'>[M.account_number]</span>, your bank account pin is: <span class='darknotice'>[M.remote_access_pin]</span></span>")

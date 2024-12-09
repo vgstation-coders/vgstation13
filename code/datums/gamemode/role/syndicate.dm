@@ -150,7 +150,7 @@
 	var/obj/item/device/pda/found_pda = locate() in contents
 	if(found_pda)
 		new_uplink = found_pda.add_component(/datum/component/uplink)
-		traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [new_uplink.unlock_code] ([found_pda.name]).")
+		traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [new_uplink.unlock_code] ([found_pda.name]).", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 		traitor_mob.mind.total_TC += new_uplink.telecrystals
 		to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [found_pda.name]. Simply enter the code \"[new_uplink.unlock_code]\" as its ringtone to unlock its hidden features.")
 		. = TRUE
@@ -158,7 +158,7 @@
 		var/obj/item/device/radio/found_radio = locate() in contents
 		if(found_radio)
 			new_uplink = found_radio.add_component(/datum/component/uplink)
-			traitor_mob.mind.store_memory("<B>Uplink frequency:</B> [format_frequency(new_uplink.unlock_frequency)] ([found_radio.name]).")
+			traitor_mob.mind.store_memory("<B>Uplink frequency:</B> [format_frequency(new_uplink.unlock_frequency)] ([found_radio.name]).", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 			traitor_mob.mind.total_TC += new_uplink.telecrystals
 			to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [found_radio.name]. Simply dial the frequency [format_frequency(new_uplink.unlock_frequency)] to unlock its hidden features.")
 			. = TRUE

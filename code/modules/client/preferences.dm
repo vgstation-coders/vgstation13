@@ -29,6 +29,7 @@ var/global/list/special_roles = list(
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER   = 1,
 	ROLE_GRUE		= 1,
+	DIVERGENTCLONE  = 1,
 )
 
 /var/list/antag_roles = list(
@@ -52,6 +53,7 @@ var/global/list/special_roles = list(
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER	= 1,
 	ROLE_GRUE		= 1,
+	DIVERGENTCLONE  = 1,
 )
 
 var/list/nonantag_roles = list(
@@ -85,6 +87,7 @@ var/list/role_wiki=list(
 	ROLE_MINOR				= "Minor_Roles",
 	ROLE_PRISONER			= "Minor_Roles",
 	ROLE_GRUE				= "Grue",
+	DIVERGENTCLONE			= "Divergent_Clone",
 )
 
 var/list/special_popup_text2num = list(

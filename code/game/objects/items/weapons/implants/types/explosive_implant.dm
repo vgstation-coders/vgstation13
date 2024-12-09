@@ -49,7 +49,7 @@
 	phrase = input("Choose activation phrase:") as text
 	var/static/list/replacechars = list("'" = "", "\"" = "", ">" = "", "<" = "", "(" = "", ")" = "")
 	phrase = sanitize_simple(phrase, replacechars)
-	usr.mind.store_memory("Explosive implant in [imp_in] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.", 0, 0)
+	usr.mind.store_memory("Explosive implant in [imp_in] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.", category=MIND_MEMORY_GENERAL, forced=TRUE)
 	to_chat(usr, "The implanted explosive implant in [imp_in] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.")
 	addHear()
 	source.register_event(/event/emote, src, nameof(src::trigger()))

@@ -179,7 +179,7 @@
 	if(!apprentice)
 		to_chat(wizard_mob, "You will find a list of available spells in your spell book. Choose your magic arsenal carefully.")
 		to_chat(wizard_mob, "In your pockets you will find a teleport scroll. Use it as needed.")
-		wizard_mob.mind.store_memory("<B>Remember:</B> do not forget to prepare your spells.")
+		wizard_mob.mind.store_memory("<B>Remember:</B> do not forget to prepare your spells.", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 	return 1
 
 /proc/name_wizard(mob/living/carbon/human/wizard_mob, role_name = "Space Wizard")
@@ -346,13 +346,13 @@
 	if (syndicate_code_phrase)
 		var/phrases = syndicate_code_phrase.Join(", ")
 		words += "<span class='warning'>Code Phrases: </span>[phrases].<br>"
-		agent.mind.store_memory("<b>Code Phrases</b>: [phrases].")
+		agent.mind.store_memory("<b>Code Phrases</b>: [phrases].", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code phrase.<br>"
 	if (syndicate_code_response)
 		var/response = syndicate_code_response.Join(", ")
 		words += "<span class='warning'>Code Response: </span>[response].<br>"
-		agent.mind.store_memory("<b>Code Response</b>: [response].")
+		agent.mind.store_memory("<b>Code Response</b>: [response].", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code response.<br>"
 

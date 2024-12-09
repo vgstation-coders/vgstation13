@@ -25,7 +25,7 @@
 	if (granttext)
 		to_chat(R.antag.current, "<span class = 'notice'>[granttext]</span>")
 	if (store_in_memory)
-		R.antag.store_memory("<font size = '1'>[granttext]</font>")
+		R.antag.store_memory("<font size = '1'>[granttext]</font>", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 	R.current_powers += src
 	role = R
 	grant_spell()

@@ -1085,10 +1085,11 @@ Use this proc preferably at the end of an equipment loadout
 	message_admins("[usr.key]/([usr.name]) added the following message to their memory. [msg]")
 	log_admin("[usr.key]/([usr.name]) added the following message to their memory. [msg]")
 	if(mind)
-		mind.store_memory(msg)
+		mind.store_memory(msg, category = MIND_MEMORY_CUSTOM)
 	else
 		to_chat(src, "The game appears to have misplaced your mind datum, so we can't show you your notes.")
 
+/*
 /mob/proc/store_memory(msg as message, popup, sane = 1)
 	msg = copytext(msg, 1, MAX_MESSAGE_LEN)
 
@@ -1102,6 +1103,7 @@ Use this proc preferably at the end of an equipment loadout
 
 	if (popup)
 		memory()
+*/
 
 //mob verbs are faster than object verbs. See http://www.byond.com/forum/?post=1326139&page=2#comment8198716 for why this isn't atom/verb/examine()
 /mob/verb/examination(atom/A as mob|obj|turf in view(src)) //It used to be oview(12), but I can't really say why

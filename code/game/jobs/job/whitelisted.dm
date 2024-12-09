@@ -35,7 +35,7 @@
 
 	SStrade.loyal_customers[M.real_name] = 0
 
-	M.mind.store_memory("<b>The joint trader account is:</b> #[trader_account.account_number]<br><b>Your shared account pin is:</b> [trader_account.remote_access_pin]<br>")
+	M.mind.store_memory("<b>The joint trader account is:</b> #[trader_account.account_number]<br><b>Your shared account pin is:</b> [trader_account.remote_access_pin]<br>", category=MIND_MEMORY_GENERAL, forced=TRUE)
 
 	log_admin("([M.ckey]/[M]) started the game as a [job_title].")
 

@@ -704,7 +704,7 @@
 	new_character.dna.ready_dna(new_character)
 
 	if(new_character.mind)
-		new_character.mind.store_memory("<b>Your blood type is:</b> [new_character.dna.b_type]<br>")
+		new_character.mind.store_memory("<b>Your blood type is:</b> [new_character.dna.b_type]<br>", category=MIND_MEMORY_GENERAL, forced=TRUE)
 
 	if(prefs.disabilities & DISABILITY_FLAG_NEARSIGHTED)
 		new_character.dna.SetSEState(GLASSESBLOCK,1,1)
