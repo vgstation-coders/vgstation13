@@ -24,7 +24,11 @@
 		else
 			if(prob(chance))
 				CreateItem(pick(to_spawn))
-	qdel(src)
+	kill_spawner()
+
+/obj/abstract/map/spawner/proc/kill_spawner() //prevents hard dels
+	to_spawn = list()
+	src.forceMove(null, harderforce = TRUE)
 
 /obj/abstract/map/spawner/proc/CreateItem(new_item_type)
 	var/obj/spawned = new new_item_type(loc)
