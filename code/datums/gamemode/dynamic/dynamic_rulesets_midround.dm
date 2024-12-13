@@ -1164,6 +1164,9 @@
 	new_role.AnnounceObjectives()
 
 	var/mob/dead/observer/G = H.ghostize(FALSE)
+	//Give it a more spirity looking icon.
+	G.icon = initial(G.icon)
+	G.icon_state = initial(G.icon_state)
 	QDEL_NULL(H)
 	G.forceMove(L)
 	G.add_spell(new /spell/targeted/ghost/divergentclone)
