@@ -501,7 +501,7 @@
                 pod = find_eligible_pod(ghost)
             else
                 return
-    else if(!force_spawn_as && pod.occupants.len == 0 && pod.cloned_records.len == 0)
+    else if(!role.force_spawn_as && pod.occupants.len == 0 && pod.cloned_records.len == 0)
         switch(alert(ghost, "This pod has never cloned anyone. Would you like to jump to the nearest eligible pod?", "Jump to nearest pod?", "Yes", "No"))
             if("Yes")
                 pod = find_eligible_pod(ghost)
