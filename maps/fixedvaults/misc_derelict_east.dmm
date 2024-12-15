@@ -251,10 +251,7 @@
 /turf/simulated/floor{
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "bg" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -314,10 +311,7 @@
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "bp" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -698,10 +692,7 @@
 "dn" = (
 /obj/machinery/vending/discount,
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "do" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
@@ -776,10 +767,7 @@
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "dQ" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -816,10 +804,7 @@
 	dir = 1;
 	icon_state = "floorscorched2"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "dX" = (
 /obj/item/tool/hemostat,
 /turf/simulated/floor/plating,
@@ -910,10 +895,7 @@
 	dir = 10;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "eS" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -945,10 +927,7 @@
 	pixel_x = 24
 	},
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "fc" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -1013,10 +992,7 @@
 	dir = 1;
 	icon_state = "damaged2"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "ft" = (
 /obj/item/weapon/table_parts/wood,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -1227,10 +1203,7 @@
 	icon_state = "4-8"
 	},
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "gP" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -1300,10 +1273,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "hd" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -1447,10 +1417,7 @@
 /area/derelict/crew_quarters)
 "hP" = (
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "hV" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -1550,10 +1517,7 @@
 	dir = 1;
 	icon_state = "chapel"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "iz" = (
 /turf/simulated/wall/r_wall,
 /area/derelict/storage/engine_storage{
@@ -1668,10 +1632,7 @@
 	dir = 4;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "jl" = (
 /obj/item/mounted/poster,
 /turf/simulated/floor/beach/water,
@@ -1982,20 +1943,14 @@
 "kx" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "kB" = (
 /obj/structure/closet,
 /turf/simulated/floor{
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "kD" = (
 /obj/item/weapon/pen,
 /turf/simulated/floor/plating,
@@ -2234,10 +2189,7 @@
 	dir = 8;
 	icon_state = "chapel"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "lL" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -2270,10 +2222,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "lP" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/cable,
@@ -2353,10 +2302,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "me" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/wall,
@@ -2445,10 +2391,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "my" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
@@ -2507,10 +2450,7 @@
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "mK" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -2559,10 +2499,7 @@
 /turf/simulated/floor{
 	icon_state = "chapel"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "mU" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -2626,10 +2563,7 @@
 "ne" = (
 /obj/structure/table,
 /turf/simulated/floor,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "nh" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -2661,18 +2595,12 @@
 /turf/simulated/floor{
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "nn" = (
 /turf/simulated/floor{
 	icon_state = "dark vault corner"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "no" = (
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1"
@@ -2757,20 +2685,14 @@
 	dir = 4;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "nF" = (
 /obj/structure/table,
 /turf/simulated/floor{
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "nK" = (
 /obj/machinery/door/airlock/maintenance{
 	req_access_txt = "12"
@@ -2785,10 +2707,7 @@
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "nR" = (
 /obj/structure/table,
 /obj/effect/landmark{
@@ -2805,10 +2724,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "nZ" = (
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/mime,
@@ -3115,10 +3031,7 @@
 "pA" = (
 /obj/item/device/radio,
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "pC" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -3185,10 +3098,7 @@
 	dir = 9;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "qp" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -3198,10 +3108,7 @@
 /turf/simulated/floor{
 	icon_state = "chapel"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "qx" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
@@ -3232,10 +3139,7 @@
 	dir = 5;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "qC" = (
 /obj/item/weapon/storage/box/lights/mixed,
 /turf/simulated/floor/plating,
@@ -3249,10 +3153,7 @@
 	dir = 8;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "qF" = (
 /turf/simulated/floor{
 	dir = 1;
@@ -3295,10 +3196,7 @@
 	dir = 8
 	},
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "qS" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/door_assembly/door_assembly_mai{
@@ -3436,10 +3334,7 @@
 	dir = 8;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "rN" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
@@ -3663,10 +3558,7 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "tq" = (
 /obj/item/weapon/stock_parts/console_screen,
 /turf/simulated/floor/plating,
@@ -3684,10 +3576,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "tD" = (
 /obj/item/weapon/paper,
 /turf/simulated/floor,
@@ -3708,10 +3597,7 @@
 /obj/structure/table,
 /obj/machinery/pos,
 /turf/simulated/floor,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "tJ" = (
 /obj/structure/lattice,
 /turf/space,
@@ -3747,10 +3633,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "tR" = (
 /obj/machinery/door_control{
 	id_tag = "Dorm3";
@@ -3804,10 +3687,7 @@
 	dir = 1;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "tZ" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -3973,19 +3853,13 @@
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "uN" = (
 /obj/machinery/door/airlock/maintenance{
 	req_access_txt = "12"
 	},
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "uP" = (
 /obj/structure/window/reinforced,
 /turf/simulated/floor{
@@ -4020,10 +3894,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "ve" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -4032,18 +3903,12 @@
 	},
 /obj/machinery/constructable_frame/machine_frame,
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "vg" = (
 /turf/simulated/floor{
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "vi" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -4109,10 +3974,7 @@
 	icon_state = "2-8"
 	},
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "vG" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -4290,10 +4152,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "wo" = (
 /turf/simulated/floor{
 	dir = 1;
@@ -4592,10 +4451,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "xT" = (
 /obj/structure/toilet{
 	dir = 8
@@ -4714,10 +4570,7 @@
 "yI" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/wall,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "yJ" = (
 /obj/structure/cable{
 	d2 = 2;
@@ -4752,10 +4605,7 @@
 	dir = 1;
 	icon_state = "damaged2"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "yU" = (
 /turf/simulated/floor{
 	dir = 1;
@@ -4891,10 +4741,7 @@
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "zC" = (
 /obj/item/weapon/shard{
 	icon_state = "medium"
@@ -4974,10 +4821,7 @@
 	dir = 8
 	},
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "zY" = (
 /obj/machinery/power/terminal{
 	dir = 1
@@ -5014,10 +4858,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Av" = (
 /obj/machinery/door/airlock{
 	id_tag = "rdorm2";
@@ -5072,10 +4913,7 @@
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "AR" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -5160,10 +4998,7 @@
 	dir = 1;
 	icon_state = "damaged2"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Bi" = (
 /obj/structure/rack,
 /obj/item/clothing/mask/gas,
@@ -5641,10 +5476,7 @@
 	dir = 1;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Es" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 1;
@@ -5682,10 +5514,7 @@
 	dir = 1;
 	icon_state = "damaged3"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Ez" = (
 /obj/structure/cable{
 	d2 = 2;
@@ -5731,10 +5560,7 @@
 	dir = 8;
 	icon_state = "chapel"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "ES" = (
 /obj/machinery/door/airlock/glass{
 	name = "Kitchen";
@@ -5752,10 +5578,7 @@
 	dir = 1;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "EV" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -5862,10 +5685,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Fu" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/dice,
@@ -6016,10 +5836,7 @@
 	icon_state = "4-8"
 	},
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "FY" = (
 /turf/simulated/floor,
 /area/derelict/hallway/primary)
@@ -6126,10 +5943,7 @@
 	})
 "GG" = (
 /turf/simulated/wall,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "GH" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 8
@@ -6154,10 +5968,7 @@
 	dir = 8
 	},
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "GN" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -6199,10 +6010,7 @@
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Ha" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/cable{
@@ -6314,10 +6122,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "HL" = (
 /obj/structure/table/woodentable,
 /obj/item/ashtray/bronze{
@@ -6468,10 +6273,7 @@
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "IU" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -6550,10 +6352,7 @@
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Jl" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor/plating,
@@ -6645,10 +6444,7 @@
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "JB" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 8;
@@ -6657,10 +6453,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "JD" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 10
@@ -6698,10 +6491,7 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "JL" = (
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor5"
@@ -6833,10 +6623,7 @@
 	icon_state = "1-4"
 	},
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "KA" = (
 /turf/simulated/floor{
 	icon_state = "grimy"
@@ -6943,10 +6730,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Lf" = (
 /obj/structure/sink{
 	dir = 8;
@@ -6972,10 +6756,7 @@
 	dir = 1;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Lm" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
@@ -6992,10 +6773,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Lv" = (
 /obj/machinery/door/airlock{
 	id_tag = "Unit4";
@@ -7191,10 +6969,7 @@
 	icon_state = "medium"
 	},
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Mt" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 1
@@ -7293,10 +7068,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "MN" = (
 /turf/simulated/floor{
 	dir = 1;
@@ -7321,10 +7093,7 @@
 	icon_state = "dark vault corner";
 	tag = "icon-dark vault corner (EAST)"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "MT" = (
 /obj/structure/closet/crate/medical,
 /turf/simulated/floor/plating,
@@ -7369,10 +7138,7 @@
 	dir = 4
 	},
 /turf/simulated/wall,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Nc" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 8;
@@ -7647,10 +7413,7 @@
 /obj/structure/table,
 /obj/item/weapon/kitchen/utensil/fork,
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Oz" = (
 /turf/simulated/wall,
 /area/derelict/bridge/ai_upload{
@@ -7734,10 +7497,7 @@
 	icon_state = "1-8"
 	},
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "OZ" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor,
@@ -7859,10 +7619,7 @@
 	dir = 8;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "PS" = (
 /obj/structure/closet/crate/hydroponics,
 /obj/item/seeds/carrotseed,
@@ -7902,10 +7659,7 @@
 	pixel_x = -1
 	},
 /turf/simulated/floor,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Qf" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -7950,10 +7704,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Qu" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/effect/decal/cleanable/dirt,
@@ -8000,10 +7751,7 @@
 	dir = 4;
 	icon_state = "chapel"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "QE" = (
 /turf/simulated/wall,
 /area/derelict/hallway{
@@ -8139,10 +7887,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Rl" = (
 /obj/item/seeds/orangeseed,
 /turf/simulated/floor/plating,
@@ -8192,10 +7937,7 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "RB" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -8214,10 +7956,7 @@
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "RP" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/beach/water,
@@ -8272,10 +8011,7 @@
 	dir = 4;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Sc" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
@@ -8542,10 +8278,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Tc" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -8556,10 +8289,7 @@
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Td" = (
 /obj/item/device/radio,
 /turf/simulated/floor/plating,
@@ -8790,10 +8520,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Uk" = (
 /obj/machinery/door/airlock/glass{
 	name = "Door"
@@ -8938,10 +8665,7 @@
 	dir = 8;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Vd" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/item/device/radio,
@@ -9040,10 +8764,7 @@
 	dir = 5;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Vp" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -9069,10 +8790,7 @@
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Vr" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -9274,10 +8992,7 @@
 	dir = 10;
 	icon_state = "caution"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Wx" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -9395,10 +9110,7 @@
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "WS" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
@@ -9726,10 +9438,7 @@
 	dir = 8;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "YK" = (
 /obj/structure/table/woodentable,
 /obj/item/device/radio,
@@ -9764,10 +9473,7 @@
 	dir = 6;
 	icon_state = "dark vault stripe"
 	},
-/area/derelict/singularity_engine{
-	icon_state = "showroom";
-	name = "\improper Derelict Marketplace"
-	})
+/area/derelict/singularity_engine)
 "Ze" = (
 /obj/item/tool/wirecutters,
 /turf/simulated/floor/plating,
