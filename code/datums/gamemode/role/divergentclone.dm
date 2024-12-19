@@ -50,7 +50,7 @@
     if(evil)
         antag.current << sound('sound/voice/syndicate_intro.ogg')
     find_or_create_uplink()
-    if(evil && uplink && (amnesia == 0 || amnesia == 2))
+    if(evil && uplink && amnesia != 1)
         uplink_pw_revealed = TRUE
 
     has_spawned_in = TRUE
@@ -100,7 +100,7 @@
     if(mind.GetRole(DIVERGENTCLONE))
         var/datum/role/divergentclone/clone_role = mind.GetRole(DIVERGENTCLONE)
         original_mind = clone_role.original_mind
-    src.original_mind = mind
+    original_mind = mind
     return 1
 
 
@@ -127,7 +127,7 @@
         to_chat(antag.current, "<span class='warning'>The cloning process has awakened latent Syndicate brainwashing within you. Unlike your original copy, you are a Syndicate traitor.</span>")
     else if(evil) //Traitor, no idea if the original is
         to_chat(antag.current, "<span class='warning'>Memories of Syndicate training flood into your waxing consciousness. You are a Syndicate traitor.</span>")
-    else if(!evil && (amnesia == 0 || amnesia == 1) && original_is_traitor) //Not a traitor, but knows the original is
+    else if(!evil && amnesia != 2 && original_is_traitor) //Not a traitor, but knows the original is
         to_chat(antag.current, "<span class='warning'>The cloning process has undone the Syndicate brainwashing that used to affect you. You are not a Syndicate traitor, but your original copy is.</span>")
 
     if(evil)
@@ -484,6 +484,7 @@
     if(!role) //if they somehow don't have the role already, give it to them
         role = new /datum/role/divergentclone(ghost.mind, override=TRUE)
         if(!role)
+            stack_trace("Failed to give divergent clone role to ghost.")
             to_chat(ghost, "<span class='warning'>Clone divergence failed. Please try again.</span>")
             return
 
@@ -507,7 +508,7 @@
                 pod = find_eligible_pod(ghost)
             else
                 return
-    if(pod == null)
+    if(!pod)
         to_chat(ghost, "<span class='warning'>No eligible cloning pods found. Please try again later.</span>")
         return
     ghost.forceMove(get_turf(pod))

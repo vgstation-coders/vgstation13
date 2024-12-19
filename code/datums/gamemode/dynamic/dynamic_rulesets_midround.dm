@@ -1119,10 +1119,10 @@
 /datum/dynamic_ruleset/midround/from_ghosts/divergentclone/trim_candidates()
 	..()
 	for(var/mob/M in dead_players)
-		if(M.mind.GetRole(DIVERGENTCLONE))
+		if(isdivergentclone(M))
 			dead_players -= M
 	for(var/mob/M in list_observers)
-		if(M.mind.GetRole(DIVERGENTCLONE))
+		if(isdivergentclone(M))
 			list_observers -= M
 
 
@@ -1134,7 +1134,7 @@
 	var/list/candies = dead_players + list_observers
 	var/list/valids[0]
 	for(var/mob/dead/observer/G in candies)
-		if(G.mind.GetRole(DIVERGENTCLONE))
+		if(isdivergentclone(G))
 			continue
 		valids += G
 	if(valids.len == 0)
@@ -1145,7 +1145,7 @@
 	var/list/clonepods = list()
 	for(var/obj/machinery/cloning/clonepod/pod in machines)
 		//Check that the pod has cloned something before
-		if(pod.cloned_records.len > 0)
+		if(pod.cloned_records.len)
 			clonepods += pod
 	if(!forced && clonepods.len == 0)
 		return 0

@@ -29,7 +29,7 @@
         return FALSE
 
     var/datum/role/divergentclone/role = owner.GetRole(DIVERGENTCLONE)
-    if(role && role.has_spawned_in)
+    if(role?.role.has_spawned_in)
         return TRUE
 
 /datum/objective/acquire_personal_id
@@ -53,7 +53,7 @@
         else
             continue
         var/datum/dna/D = owner.current.dna
-        if((I.dna_hash == D.unique_enzymes) || (I.registered_name == owner.name))
+        if((I?.dna_hash == D.unique_enzymes) || (I?.registered_name == owner.name))
             return TRUE
             
     return FALSE

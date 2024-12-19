@@ -515,7 +515,6 @@
 		connected_message(message)
 		locked = FALSE
 		go_out()
-		return
 
 /obj/machinery/cloning/clonepod/emag_act(mob/user as mob)
 	if(occupants.len == 0)
