@@ -29,7 +29,7 @@
         return FALSE
 
     var/datum/role/divergentclone/role = owner.GetRole(DIVERGENTCLONE)
-    if(role?.role.has_spawned_in)
+    if(role?.has_spawned_in)
         return TRUE
 
 /datum/objective/acquire_personal_id
