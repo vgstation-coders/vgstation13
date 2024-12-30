@@ -81,13 +81,23 @@
 	to_spawn = list(
 		/obj/effect/decal/mecha_wreckage/ripley,
 		/obj/effect/decal/mecha_wreckage/ripley,
+		/obj/effect/decal/mecha_wreckage/ripley,
+		/obj/effect/decal/mecha_wreckage/ripley,
+		/obj/effect/decal/mecha_wreckage/clarke,
+		/obj/effect/decal/mecha_wreckage/clarke,
 		/obj/effect/decal/mecha_wreckage/clarke,
 		/obj/effect/decal/mecha_wreckage/clarke,
 		/obj/effect/decal/mecha_wreckage/odysseus,
+		/obj/effect/decal/mecha_wreckage/odysseus,
+		/obj/effect/decal/mecha_wreckage/marauder,
 		/obj/effect/decal/mecha_wreckage/marauder,
 		/obj/effect/decal/mecha_wreckage/gygax,
+		/obj/effect/decal/mecha_wreckage/gygax,
+		/obj/effect/decal/mecha_wreckage/durand,
 		/obj/effect/decal/mecha_wreckage/durand,
 		/obj/effect/decal/mecha_wreckage/honker,
+		/obj/effect/decal/mecha_wreckage/honker,
+		/obj/effect/decal/mecha_wreckage/roswell,
 		)
 
 /obj/abstract/map/spawner/pick_spawner/mecha_wreckage_good
