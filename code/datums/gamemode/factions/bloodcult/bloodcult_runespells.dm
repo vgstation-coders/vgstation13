@@ -463,7 +463,7 @@
 		if (iscultist(M.current))//failsafe for cultist brains put in MMIs
 			to_chat(M.current, "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinisterbig'>[reminder]</span></span>")
 			to_chat(M.current, "<span class='notice'>This message will be remembered by all current cultists, and by new converts as well.</span>")
-			M.store_memory("Cult reminder: [text].")
+			M.store_memory("Cult reminder: [text].", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 
 	for(var/mob/living/simple_animal/astral_projection/A in astral_projections)
 		to_chat(A, "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinisterbig'>[reminder]</span></span>. (Cult reminder)")

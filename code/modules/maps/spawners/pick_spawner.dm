@@ -26,7 +26,7 @@
 		map_pickspawners[category] = list()
 	map_pickspawners[category] += src
 
-/obj/abstract/map/spawner/pick_spawner/Destroy()
+/obj/abstract/map/spawner/pick_spawner/kill_spawner()
 	if(category && map_pickspawners[category])
 		map_pickspawners[category] -= src
 	..()
@@ -45,7 +45,7 @@
 			var/obj/abstract/map/spawner/pick_spawner/winner = pickweight(possible_spawners)
 			winner.perform_spawn() //It automatically removes itself from the list when spawning.
 		for(var/obj/abstract/map/spawner/pick_spawner/loser in map_pickspawners[category])
-			qdel(loser) //They automatically remove themselves from the list in their Destroy().
+			loser.kill_spawner() //They automatically remove themselves from the list here.
 
 
 

@@ -173,6 +173,29 @@
 	item_state = "katana"
 	fluff_pickup = "bisect"
 
+/obj/item/weapon/nullrod/crucifix
+	name = "crucifix"
+	desc = "A shiny gold crucifix."
+	icon_state = "crucifix"
+	item_state = "crucifix"
+	fluff_pickup = "turn"
+
+/obj/item/weapon/nullrod/crucifix/examine(mob/user)
+	if(user.mind?.assigned_role == "Chaplain")
+		desc = "What you are about to do has not been approved by the Space Vatican."
+	else
+		desc = initial(desc)
+	..()
+
+/obj/item/weapon/nullrod/crucifix/attack_self(mob/user) //For larping during an exorcism
+	if(user.mind?.assigned_role == "Chaplain")
+		if(user.attack_delayer.blocked())
+			return
+		user.visible_message("[user] raises the cross in a show of faith.",\
+		"You raise your cross in a show of true faith!")
+		user.delayNextAttack(1 SECONDS)
+	else //What happens if non-Chaplain uses the cross
+		..()
 
 /obj/item/weapon/nullrod/toolbox //Syndicate/Robust religion
 	name = "nullbox"

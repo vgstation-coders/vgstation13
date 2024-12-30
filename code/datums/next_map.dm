@@ -59,7 +59,6 @@
 /datum/next_map/deff
 	name = "Defficiency"
 	path = "Defficiency"
-	min_players = 25
 
 /datum/next_map/dorf
 	name = "DorfStation"
@@ -125,7 +124,6 @@
 /datum/next_map/roid
 	name = "Asteroid Station"
 	path = "RoidStation"
-	min_players = 25
 
 /datum/next_map/snaxi
 	name = "Snow Station"

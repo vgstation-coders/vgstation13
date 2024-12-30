@@ -78,7 +78,7 @@
 	newbody.real_name = owner.current.real_name
 	newbody.name = owner.current.name
 	newbody.flavor_text = owner.current.flavor_text
-	newbody.mind.memory = owner.memory
+	newbody.mind.memory = owner.memory.Copy()
 	if(oldspecies != newbody.dna.species)
 		newbody.set_species(newbody.dna.species, 0)
 	newbody.UpdateAppearance()

@@ -39,7 +39,7 @@
 /obj/item/weapon/implant/compressed/implanted(mob/implanter)
 	imp_in.register_event(/event/emote, src, nameof(src::trigger()))
 	activation_emote = input(implanter, "Choose activation emote:") in list("blink", "blink_r", "eyebrow", "chuckle", "twitch_s", "frown", "nod", "blush", "giggle", "grin", "groan", "shrug", "smile", "pale", "sniff", "whimper", "wink")
-	implanter.mind.store_memory("Compressed matter implant in [implanter == imp_in ? "yourself" : imp_in.name] can be activated by using the [activation_emote] emote, <B>say *[activation_emote]</B> to attempt to activate.", TRUE)
+	implanter.mind.store_memory("Compressed matter implant in [implanter == imp_in ? "yourself" : imp_in.name] can be activated by using the [activation_emote] emote, <B>say *[activation_emote]</B> to attempt to activate.", , category=MIND_MEMORY_GENERAL, forced=TRUE)
 	to_chat(implanter, "The implanted compressed matter implant can be activated by using the [activation_emote] emote, <B>say *[activation_emote]</B> to attempt to activate.")
 
 /obj/item/weapon/implant/compressed/islegal()

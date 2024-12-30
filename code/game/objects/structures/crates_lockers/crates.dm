@@ -528,12 +528,16 @@
 			return 0
 
 /obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/card) && !opened && !broken)
-		togglelock(user)
-		return
-	else if(W.is_screwdriver(user) && !opened && !locked && src.has_lockless_type)
-		remove_lock(user)
-		return
+	if(!opened)
+		if(!broken)
+			if(emag_check(W,user))
+				return
+			if(istype(W, /obj/item/weapon/card/id))
+				togglelock(user)
+				return
+		if(W.is_screwdriver(user) && !locked && src.has_lockless_type)
+			remove_lock(user)
+			return
 	return ..()
 
 /obj/structure/closet/crate/secure/emag_act(mob/user)

@@ -333,6 +333,8 @@
 
 #define istimeagent(H) (H.mind && (H.mind.GetRole(TIMEAGENT) || (H.mind.GetRole(TIMEAGENTTWIN))))
 
+#define isdivergentclone(H) (H.mind && (H.mind.GetRole(DIVERGENTCLONE)))
+
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 
 #define isclownling(H) (H.mind && H.mind.GetRole(CLOWN_LING))

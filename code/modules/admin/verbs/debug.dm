@@ -70,6 +70,13 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		if(!procname)
 			return
 
+		// absolutely not
+		if(findtextEx(trim(lowertext(procname)), "rustg"))
+			message_admins("<span class='userdanger'>[key_name_admin(src)] attempted to proc call rust-g procs ([strip_html_properly(procname)]). Inform the host <i>at once</i>.</span>")
+			log_admin("[key_name(src)] attempted to proc call rust-g procs. Inform the host at once.")
+			send2admindiscord("[key_name(src)] attempted to proc call rustg things. Inform the host at once.", TRUE)
+			return
+
 		// Do not make this a global reference. Global references can be cleared out.
 		if (istype(target, /datum/subsystem/dbcore/))
 			to_chat(usr, "<span class='red'>Never use atom proc call to inject SQL.</span>")

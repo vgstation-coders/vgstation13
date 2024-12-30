@@ -86,6 +86,7 @@
 #define JUDGE "judge"
 #define GRUE "grue"
 #define NANOTRASENOFFICIAL "nanotrasen official"
+#define DIVERGENTCLONE "divergent clone"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"

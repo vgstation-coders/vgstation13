@@ -339,7 +339,7 @@
 			if(!pod1 || !canLink(pod1)) //If the pod exists BUT it's too far away from the console
 				temp = "Error: No Clonepod detected."
 				return
-			else if(pod1.occupant)
+			else if(pod1.occupants.len > 0)
 				temp = "Error: Clonepod is currently occupied."
 				return
 			else if(pod1.biomass < CLONE_BIOMASS)
@@ -487,5 +487,5 @@
 	if(!(stat & (NOPOWER | BROKEN | FORCEDISABLE)))
 		if(scanner && scanner.occupant)
 			overlays += image(icon = icon, icon_state = "cloning-scan")
-		if(pod1 && pod1.occupant)
+		if(pod1 && pod1.occupants.len > 0)
 			overlays += image(icon = icon, icon_state = "cloning-pod")

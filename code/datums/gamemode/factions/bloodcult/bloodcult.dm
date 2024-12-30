@@ -506,7 +506,7 @@
 	if (cult_reminders.len)
 		to_chat(R.antag.current, "<span class='notice'>Other cultists have shared some of their knowledge. It will be stored in your memory (check your Notes under the IC tab).</span>")
 	for (var/reminder in cult_reminders)
-		R.antag.store_memory("Shared Cultist Knowledge: [reminder].")
+		R.antag.store_memory("Shared Cultist Knowledge: [reminder].", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 	previously_converted |= R.antag
 	if (R.antag.name in deconverted)
 		deconverted -= R.antag.name

@@ -72,6 +72,9 @@
 		"Demo B" = /area/holodeck/source_olympics_demo_b,
 	)
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Holodeck Computer
+
 /obj/machinery/computer/HolodeckControl
 	name = "Holodeck Control Computer"
 	desc = "A computer used to control a nearby holodeck."
@@ -89,6 +92,8 @@
 	var/datum/map_element/map_element_type // If null, New() tries to get one from the map's datum
 										   // Set it if you want to source rooms from a different holodeck
 	var/area/alpha_area = /area/holodeck/alphadeck // This is the area of the on-station holodeck, where the rooms will be loaded into.
+
+	var/current_room_name = null
 
 /obj/machinery/computer/HolodeckControl/olympics
 	alpha_area = /area/holodeck/dungeon_holodeck_alpha
@@ -135,9 +140,8 @@
 			return map_element
 	return null
 
-
 /obj/machinery/computer/HolodeckControl/proc/ui_text(mob/user)
-	var/dat = list({"<B>Holodeck Control System</B><BR>"})
+	var/dat = list({"<B>Holodeck Control System</B>[current_room_name ? " <a href='?src=\ref[src];turnoff=1'>Turn Off</a>" : ""]<BR>"})
 	. = dat
 
 	var/datum/map_element/dungeon/holodeck/holodeck_datum = find_holodeck_datum()
@@ -157,7 +161,10 @@
 
 	dat += "<hr>Current Loaded Programs:<br>"
 	for(var/room in holodeck_datum.rooms)
-		dat += "<a href='?src=\ref[src];load=[url_encode(room)]'>(([room]))</a><br>"
+		if (room == current_room_name)
+			dat += "<a href='?src=\ref[src];load=[url_encode(room)]'><b>(([room]))</b></a><br>"
+		else
+			dat += "<a href='?src=\ref[src];load=[url_encode(room)]'>(([room]))</a><br>"
 
 	dat += "Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.<BR>"
 
@@ -206,11 +213,11 @@
 			target_area = holodeck_datum.emagged_rooms[room_name][HOLODECK_INDEX_AREA]
 		target = locate(target_area)
 		if(target)
-			loadProgram(target)
+			loadProgram(target, room_name)
 	else if(href_list["turnoff"])
 		target = locate(/area/holodeck/source_plating)
 		if(target)
-			loadProgram(target)
+			loadProgram(target, null, TRUE)
 
 	else if(href_list["AIoverride"])
 		if(!issilicon(usr))
@@ -281,10 +288,15 @@
 			damaged = 1
 			target = locate(/area/holodeck/source_plating)
 			if(target)
-				loadProgram(target)
+				loadProgram(target, null, TRUE)
 			active = 0
-			for(var/mob/M in range(10,src))
-				M.show_message("The holodeck overloads!")
+
+			var/list/overload_spectators = list()//anyone in view of a holodeck tile will get a warning
+			for(var/turf/T in linkedholodeck)
+				for(var/mob/O in viewers(world.view, T))
+					overload_spectators |= O
+			for(var/mob/M in overload_spectators)
+				to_chat(M, "<span class='danger'>The holodeck overloads!</span>")
 
 			for(var/turf/T in linkedholodeck)
 				if(prob(30))
@@ -344,19 +356,15 @@
 		targetsource.copy_contents_to(linkedholodeck , 1)
 		active = 0
 
-/obj/machinery/computer/HolodeckControl/proc/loadProgram(var/area/A)
-
-
-	if(world.time < (last_change + 25))
-		if(world.time < (last_change + 15))//To prevent super-spam clicking, reduced process size and annoyance -Sieve
-			return
-		for(var/mob/M in range(3,src))
-			M.show_message("<B>ERROR. Recalibrating projetion apparatus.</B>")
-			last_change = world.time
-			return
+/obj/machinery/computer/HolodeckControl/proc/loadProgram(var/area/A, var/room_name, var/override=FALSE, var/bandaid=FALSE)
+	if(!override && (world.time < (last_change + 25)))
+		visible_message("[bicon(src)] <B>ERROR. Recalibrating projetion apparatus. wait a short moment.</B>")
+		return
 
 	last_change = world.time
 	active = 1
+	var/old_room = current_room_name
+	current_room_name = room_name
 
 	for(var/item in holographic_items)
 		derez(item)
@@ -367,11 +375,23 @@
 	for(var/mob/living/simple_animal/hostile/carp/holocarp/holocarp in linkedholodeck)
 		qdel(holocarp)
 
+	for(var/turf/T in linkedholodeck)
+		T.vis_contents = list()//removing the water overlay from Beach
+
 	holographic_items = A.copy_contents_to(linkedholodeck , 1)
 
 	if(emagged)
 		for(var/obj/item/weapon/holo/esword/H in linkedholodeck)
 			H.damtype = BRUTE
+
+	if (!bandaid && (!linkedholodeck.area_turfs || linkedholodeck.area_turfs.len <= 0))
+		log_admin("The Holodeck broke when switching from [old_room ? old_room : "null"] to [room_name]. Attempting bandaid fix.")
+		message_admins("The Holodeck broke when switching from [old_room ? old_room : "null"] to [room_name]. Attempting bandaid fix.")
+		linkedholodeck.area_turfs = list()
+		for (var/turf/T in linkedholodeck)
+			linkedholodeck.area_turfs += T
+		loadProgram(A, room_name, TRUE, TRUE)
+		return
 
 	spawn(30)
 		for(var/obj/effect/landmark/L in linkedholodeck)
@@ -394,12 +414,14 @@
 	//Turn it back to the regular non-holographic room
 	target = locate(/area/holodeck/source_plating)
 	if(target)
-		loadProgram(target)
+		loadProgram(target, null, TRUE)
 
 	var/area/targetsource = locate(/area/holodeck/source_plating)
 	targetsource.copy_contents_to(linkedholodeck , 1)
 	active = 0
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Holographic Items!
 
 /turf/simulated/floor/holofloor/

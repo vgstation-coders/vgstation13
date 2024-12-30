@@ -175,7 +175,7 @@ var/list/potential_bonus_items = list(
 	var/datum/outfit/striketeam/voxraider/concrete_outfit = new
 	concrete_outfit.equip(vox)
 	vox.regenerate_icons()
-	vox.store_memory("The priority items for the day are: [english_list(bonus_items_of_the_day)]")
+	vox.mind.store_memory("The priority items for the day are: [english_list(bonus_items_of_the_day)]", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 
 	/*
 	spawn()
