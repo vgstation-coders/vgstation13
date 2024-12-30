@@ -173,16 +173,15 @@
 	name = "surplus material scrap box"
 	desc = "Caked in layers of dust, smells like a warehouse."
 	var/list/surplusMat= list(
-		/obj/item/stack/sheet/metal = 100,
-		/obj/item/stack/sheet/glass/glass = 70,
-		/obj/item/stack/sheet/plasteel = 50,
-		/obj/item/stack/sheet/mineral/uranium = 40,
-		/obj/item/stack/sheet/mineral/silver = 40,
-		/obj/item/stack/sheet/mineral/gold = 30,
-		/obj/item/stack/sheet/mineral/diamond = 10,
-		/obj/item/stack/sheet/mineral/phazon = 2,
-		/obj/item/stack/sheet/mineral/clown = 2,
-		/obj/item/stack/sheet/mineral/reticulite = 1
+		/obj/item/stack/sheet/metal = 50,
+		/obj/item/stack/sheet/glass/glass = 35,
+		/obj/item/stack/sheet/plasteel = 25,
+		/obj/item/stack/sheet/mineral/uranium = 20,
+		/obj/item/stack/sheet/mineral/silver = 20,
+		/obj/item/stack/sheet/mineral/gold = 15,
+		/obj/item/stack/sheet/mineral/diamond = 5,
+		/obj/item/stack/sheet/mineral/phazon = 1,
+		/obj/item/stack/sheet/mineral/clown = 1
 	)
 
 /obj/item/weapon/storage/box/large/mystery_material/odd
@@ -198,6 +197,7 @@
 		/obj/item/stack/sheet/snow = 25,
 		/obj/item/stack/sheet/cardboard = 20,
 		/obj/item/stack/telecrystal = 2,	//Emergent gameplay!
+		/obj/item/stack/sheet/mineral/reticulite = 1,
 		/obj/item/stack/teeth/gold = 10,
 		/obj/item/stack/tile/slime = 20
 	)
