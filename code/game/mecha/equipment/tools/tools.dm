@@ -1655,7 +1655,6 @@
 	var/datum/global_iterator/pr_mech_abductor
 	var/mob/living/occupant = null
 
-
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/New()
 	..()
 	pr_mech_abductor = new /datum/global_iterator/mech_abductor(list(src),0)
