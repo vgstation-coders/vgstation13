@@ -563,6 +563,17 @@
 	name = "Circuit board (Clarke Central Control module)"
 	icon_state = "mainboard"
 
+/obj/item/weapon/circuitboard/mecha/roswell
+	origin_tech = Tc_PROGRAMMING + "=3" + Tc_ALIEN + "=5"
+
+/obj/item/weapon/circuitboard/mecha/roswell/peripherals
+	name = "Circuit board (Roswell Peripherals Control module)"
+	icon_state = "mcontroller"
+
+/obj/item/weapon/circuitboard/mecha/roswell/main
+	name = "Circuit board (Roswell Central Control module)"
+	icon_state = "mainboard"
+
 /obj/item/weapon/circuitboard/mecha/pod
 	name = "Circuit board (Space Pod Mainboard)"
 	icon_state = "mainboard"
