@@ -854,7 +854,7 @@ steam.start() -- spawns the effect
 /datum/effect/system/foam_spread
 	var/amount = 5				// the size of the foam spread.
 	var/list/carried_reagents	// the IDs of reagents present when the foam was mixed
-	var/metal = 0				// 0=foam, 1=metalfoam, 2=ironfoam
+	var/metal = 0				// 0=foam, 1=metalfoam, 2=ironfoam, 3=RETICULITE FLOORS!!!
 
 /datum/effect/system/foam_spread/set_up(amt=5, loca, var/datum/reagents/carry = null, var/metalfoam = 0)
 	amount = round(sqrt(amt / 3), 1)
@@ -878,6 +878,9 @@ steam.start() -- spawns the effect
 
 /datum/effect/system/foam_spread/start()
 	spawn(0)
+		if(metal > 2)
+			location.ChangeTurf(/turf/simulated/floor/mineral/reticulite)
+			return
 		var/obj/effect/foam/F = locate() in location
 		if(F)
 			F.amount += amount

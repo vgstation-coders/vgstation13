@@ -1210,58 +1210,44 @@
 	result = null
 	required_reagents = list(FLUOROSURFACTANT = 1, WATER = 1)
 	result_amount = 2
+	var/violentlybubbles = TRUE
+	var/type = 0
 
 /datum/chemical_reaction/foam/on_reaction(var/datum/reagents/holder, var/created_volume)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
-		for(var/mob/M in viewers(5, location))
-			to_chat(M, "<span class='warning'>The solution violently bubbles!</span>")
+		if(violentlybubbles)
+			for(var/mob/M in viewers(5, location))
+				to_chat(M, "<span class='warning'>The solution violently bubbles!</span>")
 
-		location = get_turf(holder.my_atom)
-
 		for(var/mob/M in viewers(5, location))
-			to_chat(M, "<span class='warning'>The solution spews out foam!</span>")
+			to_chat(M, "<span class='warning'>The solution spews out [type ? "a metallic" : ""] foam!</span>")
 
 		var/datum/effect/system/foam_spread/s = new()
-		s.set_up(created_volume, location, holder, 0)
+		s.set_up(created_volume, location, holder, type)
 		s.start()
-	holder.clear_reagents()
+	if(violentlybubbles)
+		holder.clear_reagents()
 
-/datum/chemical_reaction/metalfoam
+/datum/chemical_reaction/foam/metal
 	name = "Metal Foam"
 	id = "metalfoam"
-	result = null
 	required_reagents = list(ALUMINUM = 3, FOAMING_AGENT = 1, PACIDS = 1)
 	result_amount = 5
+	violentlybubbles = FALSE
+	type = 1
 
-/datum/chemical_reaction/metalfoam/on_reaction(var/datum/reagents/holder, var/created_volume)
-	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
-		var/location = get_turf(holder.my_atom)
-
-		for(var/mob/M in viewers(5, location))
-			to_chat(M, "<span class='warning'>The solution spews out a metallic foam!</span>")
-
-		var/datum/effect/system/foam_spread/s = new()
-		s.set_up(created_volume, location, holder, 1)
-		s.start()
-
-/datum/chemical_reaction/ironfoam
+/datum/chemical_reaction/foam/metal/iron
 	name = "Iron Foam"
 	id = "ironlfoam"
-	result = null
 	required_reagents = list(IRON = 3, FOAMING_AGENT = 1, PACIDS = 1)
-	result_amount = 5
+	type = 2
 
-/datum/chemical_reaction/ironfoam/on_reaction(var/datum/reagents/holder, var/created_volume)
-	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
-		var/location = get_turf(holder.my_atom)
-
-		for(var/mob/M in viewers(5, location))
-			to_chat(M, "<span class='warning'>The solution spews out a metallic foam!</span>")
-
-		var/datum/effect/system/foam_spread/s = new()
-		s.set_up(created_volume, location, holder, 2)
-		s.start()
+/datum/chemical_reaction/foam/metal/zeta
+	name = "Zeta Foam"
+	id = "zetalfoam"
+	required_reagents = list(ZETADUST = 20, FOAMING_AGENT = 1, PACIDS = 1)
+	type = 3
 
 /datum/chemical_reaction/foaming_agent
 	name = "Foaming Agent"
