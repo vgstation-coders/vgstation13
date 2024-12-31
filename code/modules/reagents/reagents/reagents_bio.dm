@@ -501,6 +501,28 @@
 			M.adjustBruteLoss(10)
 //todo : mech and pod damage
 
+/datum/reagent/zetarot
+	name = "Zetarot"
+	id = ZETAROT
+	description = "An alien fungal compound that causes rapid rotting in zeta reticulian infrastructures."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#005252" //moldy teal
+
+/datum/reagent/zetarot/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	if(volume >= 5 && T.can_thermite && istype(T, /turf/simulated/wall/mineral/reticulite))
+		var/turf/simulated/wall/W = T
+		W.rot()
+
+/datum/reagent/zetarot/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	M.adjustToxLoss((isgrey(M) ? 4 : 1) * REM)
+//todo : mech and pod damage, maybe, maybe not
+
 /datum/reagent/mucus
 	name = "Mucus"
 	id = MUCUS

@@ -465,6 +465,7 @@
 #define PLUMPHJUICE		"plumphjuice"
 #define PLUMPHWINE		"phwine"
 #define IRONROT			"ironrot"
+#define ZETAROT			"zetarot"
 #define GEOMETER		"geometer"
 #define EGG_YOLK		"egg_yolk"
 #define PANCAKE			"pancake"

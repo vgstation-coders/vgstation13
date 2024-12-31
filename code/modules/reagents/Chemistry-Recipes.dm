@@ -3986,6 +3986,13 @@
 	required_reagents = list(AMANITIN = 1, RADIUM = 1, IRON = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/zetarot
+	name = "Zetarot"
+	id = ZETAROT
+	result = ZETAROT
+	required_reagents = list(PACIDS = 1, RADIUM = 1, ZETADUST = 1)
+	result_amount = 3
+
 /datum/chemical_reaction/aminomicin
 	name = "Aminomicin"
 	id = AMINOMICIN
