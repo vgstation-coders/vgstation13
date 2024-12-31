@@ -1790,7 +1790,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(!chassis.operation_allowed(user))
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
-		log_append_to_last("Permission denied.")
+		chassis.log_append_to_last("Permission denied.")
 		return
 	if(W.w_class > 1)
 		to_chat(user,"<span class='warning'>This item is too big for the prober.</span>")
