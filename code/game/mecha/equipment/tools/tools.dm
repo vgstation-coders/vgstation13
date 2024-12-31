@@ -1761,6 +1761,36 @@
 	range = MELEE
 	reliability = 1000
 	equip_cooldown = 20
+	var/obj/item/probe_item = null
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/can_attach(obj/mecha/M as obj)
+	if(..())
+		if(!M.proc_res["dynattackby"])
+			return 1
+	return 0
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/attach(obj/mecha/M as obj)
+	..()
+	chassis.proc_res["dynattackby"] = src
+	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/detach()
+	chassis.proc_res["dynattackby"] = null
+	probe_item.forceMove(get_turf(src))
+	probe_item = null
+	..()
+	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/Destroy()
+	chassis.proc_res["dynattackby"] = null
+	probe_item.forceMove(get_turf(src))
+	probe_item = null
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(user.drop_item(W,src))
+		probe_item = W
+	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/action(atom/target)
 	if(target == chassis)
@@ -1776,15 +1806,21 @@
 	if(!abd.occupant)
 		occupant_message("No occupant in abductor")
 		return
-	if(ishuman(abd.occupant))
+	if(probe_item && ishuman(abd.occupant))
 		var/mob/living/carbon/human/H = abd.occupant
-		//code goes here
-	else if(istype(abd.occupant,/mob/living/simple_animal/cow))
-		var/mob/living/L = abd.occupant
-		chassis.visible_message("<span class='danger'>[chassis] makes some grinding noises!</span>")
-		playsound(chassis.loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
-		abd.go_out()
-		L.adjustBruteLoss(L.maxHealth) // the thing UFOs do to cattle
+		var/datum/organ/external/chest/affected = H.get_organ(LIMB_GROIN) // the crew gets an anal probe
+		if(!affected.hidden)
+			affected.hidden = probe_item
+			probe_item.forceMove(H)
+			if(istype(probe_item, /obj/item/weapon/implant))
+				var/obj/item/weapon/implant/timp = probe_item
+				timp.insert(H, affected.name, chassis.occupant)
+			affected.cavity = 0
+			probe_item = null
+			return
+	chassis.visible_message("<span class='danger'>[chassis] makes some grinding noises!</span>")
+	playsound(chassis.loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
+	abd.occupant.adjustBruteLoss(ishuman(abd.occupant) ? 30 : abd.occupant.maxHealth) // the thing UFOs do to cattle
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED
