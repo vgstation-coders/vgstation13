@@ -1668,7 +1668,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/action(var/mob/living/target)
 	if(!action_checks(target))
 		return
-	if(target.loc != src.loc)
+	if(target.loc != chassis.loc)
 		return
 	if(!ishuman(target) && !istype(target,/mob/living/simple_animal/cow))
 		occupant_message("Cannot abduct [target]: not humanoid or bovine.")
