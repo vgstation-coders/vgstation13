@@ -520,7 +520,7 @@
 	if(..())
 		return 1
 
-	M.adjustToxLoss((isgrey(M) ? 4 : 1) * REM)
+	M.adjustToxLoss((isgrey(M) ? 2 : 1) * REM)
 //todo : mech and pod damage, maybe, maybe not
 
 /datum/reagent/mucus
