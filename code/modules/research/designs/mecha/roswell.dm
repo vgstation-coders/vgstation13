@@ -1,7 +1,7 @@
 /datum/design/roswell/chassis
 	name = "Exosuit Structure (Roswell chassis)"
 	desc = "Used to build a Roswell chassis."
-	id = "honker_chassis"
+	id = "roswell_chassis"
 	req_tech = list(Tc_COMBAT = 1,Tc_ALIEN = 5)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/chassis/roswell

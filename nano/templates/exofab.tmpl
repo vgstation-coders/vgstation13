@@ -101,7 +101,9 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 	</div>
 	<div class="line">
 		{{:helper.link('Phazon',	 'gear',{'screen':36},(data.screen==36)?'linkOn':'', 'fixedLeft')}}
-		{{:helper.link('Roswell',	 'gear',{'screen':39},(data.screen==39)?'linkOn':'', 'fixedLeft')}}
+		{{if data.parts.Roswell.length > 1}}
+			{{:helper.link('Roswell',	 'gear',{'screen':39},(data.screen==39)?'linkOn':'', 'fixedLeft')}}
+		{{/if}}
 	</div>
 	{{if data.parts.Nanotrasen.length > 1}}
 		<div class="line">
