@@ -12,6 +12,7 @@
     types -= /obj/item/weapon/reagent_containers/food/snacks/sliceable
     types -= /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza
     types -= /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy // idk what the fuck is this, but it's not broken
+    types -= /obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje_helper_dummy // idk what the fuck is this, but it's not broken
     types -= /obj/item/weapon/reagent_containers/food/snacks/snackbar/nutriment
     types -= /obj/item/weapon/reagent_containers/food/snacks/sushi
     types -= /obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue //because of meat recoloring
