@@ -500,7 +500,7 @@
 
 /datum/reagent/ethanol/scientists_serendipity/secret
 	name = "Scientist's Secret"
-	id = SCIENTISTS_SUPREMESECRET
+	id = SCIENTISTS_SECRET
 	description = "Not saying it was aliens, but..."
 	flags = CHEMFLAG_OBSCURING
 

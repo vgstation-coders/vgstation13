@@ -3848,8 +3848,8 @@
 
 /datum/chemical_reaction/scientists_supreme_secret
 	name = "Scientist's Supreme Secret"
-	id = SCIENTISTS_SUPREMESECRET
-	result = SCIENTISTS_SUPREMESECRET
+	id = SCIENTISTS_SECRET
+	result = SCIENTISTS_SECRET
 	required_reagents = list(SCIENTISTS_SERENDIPITY = 1, ZETADUST = 1)
 	result_amount = 1
 

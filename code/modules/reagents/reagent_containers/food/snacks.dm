@@ -6216,7 +6216,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje
 	name = "Vreemdkoekje"
 	desc = "Bevat nog steeds geen ijzer."
-	icon_state = "ijzerkoekje"
+	icon_state = "vreemdkoekje"
 	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje/New()
