@@ -496,20 +496,27 @@
 		glass_icon_state = "scientists_serendipity"
 		glass_name = "\improper Scientist's Sapience"
 		glass_desc = "Why research what has already been catalogued?"
-		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5;illegal=1;nanotrasen=1;syndicate=2" //Maxes everything but Illegal and Anomaly
+		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5;illegal=1;nanotrasen=1;syndicate=2" //Maxes everything but Illegal, Alien and Anomaly
 
 /datum/reagent/ethanol/scientists_serendipity/secret
-	name = "Scientist's Supreme Secret"
+	name = "Scientist's Secret"
 	id = SCIENTISTS_SUPREMESECRET
 	description = "Not saying it was aliens, but..."
+	flags = CHEMFLAG_OBSCURING
 
 /datum/reagent/ethanol/scientists_serendipity/secret/when_drinkingglass_master_reagent(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
 	. = ..()
-	if(volume >= 50)
-		flags = CHEMFLAG_OBSCURING
+	
+	if(volume >= 10 && volume < 50)
+		glass_icon_state = "scientists_serendipity"
+		glass_name = "\improper Scientist's Secret"
+		glass_desc = "You are not cleared to know the contents of this glass."
+		D.origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3;alien=6"
+
+	else if(volume >= 50)
 		glass_icon_state = "scientists_serendipity"
 		glass_name = "\improper Scientist's Supreme Secret"
-		glass_desc = "You are not cleared to know the contents of this glass"
+		glass_desc = "You will NOT investigate the contents of this glass."
 		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5;illegal=1;nanotrasen=1;syndicate=2;alien=6" //Maxes everything but Illegal and Anomaly
 
 /datum/reagent/ethanol/beepskyclassic
