@@ -506,14 +506,21 @@
 
 /datum/reagent/ethanol/scientists_serendipity/secret/when_drinkingglass_master_reagent(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
 	. = ..()
-	
-	if(volume >= 10 && volume < 50)
+	if(volume < 10)
+		glass_icon_state = "scientists_surprise"
+		glass_name = "\improper Scientist's Surprise"
+		glass_desc = "There is as yet insufficient data for a meaningful answer."
+		D.origin_tech = ""
+		D.set_light(0,0)
+
+	else if(volume < 50)
 		glass_icon_state = "scientists_secret"
 		glass_name = "\improper Scientist's Secret"
 		glass_desc = "You are not cleared to know the contents of this glass."
 		D.origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3;alien=6"
+		D.set_light(0,0)
 
-	else if(volume >= 50)
+	else
 		glass_icon_state = "scientists_supremesecret"
 		glass_name = "\improper Scientist's Supreme Secret"
 		glass_desc = "You will NOT investigate the contents of this glass."
