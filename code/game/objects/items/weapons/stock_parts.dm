@@ -308,28 +308,28 @@
 
 /obj/item/weapon/stock_parts/ayy/abductor
 	name = "zepto abductor"
-	icon_state = "subspace_transmitter"
+	icon_state = "zepto_abductor"
 	desc = "Alien electronics used to pull things towards itself."
 	origin_tech = Tc_MAGNETS + "=5;" + Tc_MATERIALS + "=5;" + Tc_ALIEN + "=2"
 	starting_materials = list(MAT_URANIUM = 50, MAT_RETICULITE = 50)
 	
 /obj/item/weapon/stock_parts/ayy/gravitator
 	name = "gravitation module"
-	icon_state = "subspace_transmitter"
+	icon_state = "gravitation_module"
 	desc = "Alien device used to suspend gravity around itself."
 	origin_tech = Tc_MAGNETS + "=5;" + Tc_MATERIALS + "=5;" + Tc_ALIEN + "=2"
 	starting_materials = list(MAT_GOLD = 50, MAT_RETICULITE = 50)
 	
 /obj/item/weapon/stock_parts/ayy/scrambler
 	name = "zepto scrambler"
-	icon_state = "subspace_transmitter"
+	icon_state = "zepto_scrambler"
 	desc = "Alien instrument used to scramble the material composition of things."
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_MATERIALS + "=5;" + Tc_ALIEN + "=2"
 	starting_materials = list(MAT_DIAMOND = 50, MAT_RETICULITE = 50)
 		
 /obj/item/weapon/stock_parts/ayy/prober
 	name = "probing module"
-	icon_state = "subspace_transmitter"
+	icon_state = "probing_module"
 	desc = "Alien module used to probe things for inspection."
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_MATERIALS + "=5;" + Tc_ALIEN + "=2"
 	starting_materials = list(MAT_SILVER = 50, MAT_RETICULITE = 50)
