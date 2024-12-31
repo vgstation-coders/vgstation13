@@ -27,6 +27,11 @@
 /obj/mecha/combat/roswell/Process_Spacemove(var/check_drift = 0) //invaders from outer spaaace
 	return TRUE
 
+/obj/mecha/combat/roswell/preloaded/New()
+	..()
+	new /obj/item/mecha_parts/mecha_equipment/tool/abductor(src)
+	new /obj/item/mecha_parts/mecha_equipment/tool/prober(src)
+
 /obj/effect/decal/mecha_wreckage/roswell
     name = "downed weather balloon"
     desc = "Seems legit"
