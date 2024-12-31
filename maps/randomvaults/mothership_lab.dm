@@ -1027,7 +1027,7 @@
 /obj/item/weapon/melee/baton/loaded/probe/sick
 	name = "sick stick"
 	desc = "An even more unusual baton used by MDF pacifiers. Less than nonlethal, more lunch lethal."
-	icon_state = "stun probe"
+	icon_state = "sick stick"
 	item_state = "s_probe"
 	origin_tech = Tc_COMBAT + "=3" + Tc_POWERSTORAGE + "=2;" + Tc_ALIEN + "=4"
 
