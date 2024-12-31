@@ -1788,8 +1788,12 @@
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(!chassis.operation_allowed(user))
+		to_chat(user, "<span class='warning'>Access Denied.</span>")
+		log_append_to_last("Permission denied.")
+		return
 	if(W.w_class > 1)
-		to_chat(user,"<span class='warning'>This item is too big for the prober</span>")
+		to_chat(user,"<span class='warning'>This item is too big for the prober.</span>")
 		return
 	if(user.drop_item(W,src))
 		probe_item = W
@@ -1804,10 +1808,10 @@
 		return
 	var/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/abd = locate() in chassis.equipment
 	if(!abd)
-		occupant_message("No abductor to capture probees with")
+		occupant_message("No abductor to capture probees with.")
 		return
 	if(!abd.occupant)
-		occupant_message("No occupant in abductor")
+		occupant_message("No occupant in abductor.")
 		return
 	if(probe_item && ishuman(abd.occupant))
 		var/mob/living/carbon/human/H = abd.occupant
