@@ -2809,7 +2809,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje_helper_dummy
 
 /obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje_helper_dummy
-	name = "Helper Dummy"
+	name = "Other Helper Dummy"
 	desc = "You should never see this text."
 
 /obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje_helper_dummy/New()
