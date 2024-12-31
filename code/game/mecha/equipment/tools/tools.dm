@@ -1651,7 +1651,7 @@
 	energy_drain = 20
 	range = MELEE
 	reliability = 1000
-	equip_cooldown = 20
+	equip_cooldown = 50
 	var/datum/global_iterator/pr_mech_abductor
 	var/mob/living/occupant = null
 
@@ -1816,7 +1816,7 @@
 	if(probe_item && ishuman(abd.occupant))
 		var/mob/living/carbon/human/H = abd.occupant
 		var/datum/organ/external/chest/affected = H.get_organ(LIMB_GROIN) // the crew gets an anal probe
-		if(!affected.hidden)
+		if(!affected.hidden && do_after_cooldown(H,2.5))
 			affected.hidden = probe_item
 			probe_item.forceMove(H)
 			if(istype(probe_item, /obj/item/weapon/implant))
@@ -1827,7 +1827,8 @@
 			return
 	chassis.visible_message("<span class='danger'>[chassis] makes some grinding noises!</span>")
 	playsound(chassis.loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
-	abd.occupant.adjustBruteLoss(ishuman(abd.occupant) ? 30 : abd.occupant.maxHealth) // the thing UFOs do to cattle
+	if(do_after_cooldown(abd.occupant))
+		abd.occupant.adjustBruteLoss(ishuman(abd.occupant) ? 30 : abd.occupant.maxHealth) // the thing UFOs do to cattle
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED
