@@ -517,7 +517,7 @@
 		glass_icon_state = "scientists_secret"
 		glass_name = "\improper Scientist's Secret"
 		glass_desc = "You are not cleared to know the contents of this glass."
-		D.origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3;alien=6"
+		D.origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3;xenotech=6"
 		D.set_light(0,0)
 
 	else
@@ -525,7 +525,7 @@
 		glass_name = "\improper Scientist's Supreme Secret"
 		glass_desc = "You will NOT investigate the contents of this glass."
 		D.set_light(1, 4, "#006400") //Dark green, RGB(0,100,0)
-		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5;illegal=1;nanotrasen=1;syndicate=2;alien=6" //Maxes everything but Illegal and Anomaly
+		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5;illegal=1;nanotrasen=1;syndicate=2;xenotech=6" //Maxes everything but Illegal and Anomaly
 
 /datum/reagent/ethanol/beepskyclassic
 	name = "Beepsky Classic"

@@ -269,7 +269,7 @@ var/global/list/all_tech = list()
 /datum/tech/alien
 	name = "Alien Technology"
 	desc = "Resarch found in distant systems operated by grays."
-	id = "alien"
+	id = "xenotech"
 	goal_level=0 // Doesn't count towards maxed research, since it's bonus.
 	max_level=6
 
