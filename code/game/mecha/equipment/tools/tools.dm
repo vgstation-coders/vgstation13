@@ -1718,7 +1718,13 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/alt_action()
-	go_out()
+	if(occupant)
+		go_out()
+	else
+		for(var/mob/living/L in chassis.loc)
+			if(ishuman(L) || istype(L,/mob/living/simple_animal/cow))
+				action(L)
+				return
 	
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/detach()
 	if(occupant)
