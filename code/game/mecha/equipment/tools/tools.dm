@@ -1780,10 +1780,11 @@
 		var/mob/living/carbon/human/H = abd.occupant
 		//code goes here
 	else if(istype(abd.occupant,/mob/living/simple_animal/cow))
-		chassis.visible_message("<span class='danger>[chassis] makes some grinding noises!</span>")
+		var/mob/living/L = abd.occupant
+		chassis.visible_message("<span class='danger'>[chassis] makes some grinding noises!</span>")
 		playsound(chassis.loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
-		abd.occupant.adjustBruteLoss(abd.occupant.maxHealth) // the thing UFOs do to cattle
 		abd.go_out()
+		L.adjustBruteLoss(L.maxHealth) // the thing UFOs do to cattle
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED
