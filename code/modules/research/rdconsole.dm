@@ -109,7 +109,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		linked_lathe					= null
 
 /obj/machinery/computer/rdconsole/proc/Maximize()
-	files.known_tech = tech_list.Copy()
+	files.known_tech = all_tech.Copy()
 	for(var/ID in files.known_tech)
 		var/datum/tech/KT = files.known_tech[ID]
 		if(KT.level < KT.max_level)

@@ -46,12 +46,7 @@ research holder datum.
 
 var/global/list/design_list = list()
 var/global/list/tech_list = list()
-
-var/global/list/hidden_tech = list(
-	/datum/tech,
-	/datum/tech/nanotrasen,
-	/datum/tech/alien,
-	)
+var/global/list/all_tech = list()
 
 /datum/research								//Holder for all the existing, archived, and known tech. Individual to console.
 	var/list/known_tech = list()			//List of locally known tech.
@@ -60,9 +55,12 @@ var/global/list/hidden_tech = list(
 
 /datum/research/New()		//Insert techs into possible_tech here. Known_tech automatically updated.
 	if(!tech_list.len)
-		for(var/inst in typesof(/datum/tech) - hidden_tech)
+		var/static/list/hidden_tech = list(/datum/tech/nanotrasen,/datum/tech/alien)
+		for(var/inst in subtypesof(/datum/tech))
 			var/datum/tech/T = new inst()
-			tech_list[T.id] = T
+			if(!(inst in hidden_tech))
+				tech_list[T.id] = T
+			all_tech[T.id] = T
 	if(!design_list.len)
 		for(var/D in typesof(/datum/design) - /datum/design)
 			design_list += new D()
