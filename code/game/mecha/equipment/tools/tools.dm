@@ -1762,5 +1762,23 @@
 	reliability = 1000
 	equip_cooldown = 20
 
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/action(atom/target)
+	if(target == chassis)
+		alt_action()
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/alt_action()
+	if(!action_checks(chassis))
+		return
+	var/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/abd = locate() in chassis.equipment
+	if(!abd)
+		occupant_message("No abductor to capture probees with")
+		return
+	if(!abd.occupant)
+		occupant_message("No occupant in abductor")
+		return
+	if(ishuman(abd.occupant))
+		var/mob/living/carbon/human/H = abd.occupant
+		//code goes here
+
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED
