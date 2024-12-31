@@ -2804,6 +2804,19 @@
 		new /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje(get_turf(src))
 	qdel(src)
 
+/datum/recipe/vreemdkoekje
+	reagents = list(FLOUR = 30, ZETADUST = 30)
+	result = /obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje_helper_dummy
+
+/obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje_helper_dummy
+	name = "Helper Dummy"
+	desc = "You should never see this text."
+
+/obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje_helper_dummy/New()
+	for(var/i = 1 to 6)
+		new /obj/item/weapon/reagent_containers/food/snacks/vreemdkoekje(get_turf(src))
+	qdel(src)
+
 /datum/recipe/pimiento
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,
