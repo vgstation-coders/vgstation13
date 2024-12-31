@@ -1637,5 +1637,26 @@
 	qdel(src)
 	playsound(get_turf(marktwo),'sound/items/ratchet.ogg',50,TRUE)
 
+/obj/item/mecha_parts/mecha_equipment/tool/abductor
+	name = "\improper Carbon Abductor"
+	desc = "Carbon Abductor. (Can be attached to: UFOs)"
+	icon_state = "mecha_abductor"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_ALIEN + "=3"
+	energy_drain = 20
+	range = MELEE
+	reliability = 1000
+	equip_cooldown = 20
+	var/mob/living/carbon/occupant = null
+
+/obj/item/mecha_parts/mecha_equipment/tool/prober
+	name = "\improper Carbon Prober"
+	desc = "Carbon Prober. (Can be attached to: UFOs)"
+	icon_state = "mecha_prober"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_ALIEN + "=3"
+	energy_drain = 20
+	range = MELEE
+	reliability = 1000
+	equip_cooldown = 20
+
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED
