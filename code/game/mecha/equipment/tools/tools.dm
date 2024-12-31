@@ -1677,7 +1677,7 @@
 		occupant_message("Cannot abduct [target]: buckled to [target.locked_to].")
 		return
 	if(occupant)
-		occupant_message("The ship is already occupied")
+		occupant_message("The ship is already occupied.")
 		return
 	for(var/mob/living/carbon/slime/M in range(1,target))
 		if(M.Victim == target)
@@ -1698,7 +1698,7 @@
 		target.sleeping = 30
 		occupant = target
 		pr_mech_abductor.start()
-		occupant_message("<span class='notice'>[target] successfully loaded into [src]</span>.")
+		occupant_message("<span class='notice'>[target] was successfully loaded into [src]</span>.")
 		chassis.visible_message("[chassis] loads [target] into [src].")
 		log_message("[target] loaded.")
 		return 1
@@ -1723,8 +1723,7 @@
 		go_out()
 	else
 		for(var/mob/living/L in chassis.loc)
-			if(ishuman(L) || istype(L,/mob/living/simple_animal/cow))
-				action(L)
+			if(action(L))
 				return
 	
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/detach()
