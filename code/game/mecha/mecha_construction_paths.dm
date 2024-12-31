@@ -698,3 +698,10 @@
 
 	mainboard = /obj/item/weapon/circuitboard/mecha/clarke/main
 	peripherals = /obj/item/weapon/circuitboard/mecha/clarke/peripherals
+
+/datum/construction/reversible/mecha/roswell
+	result = "/obj/mecha/combat/roswell"
+	base_icon = "roswell"
+
+	mainboard = /obj/item/weapon/circuitboard/mecha/roswell/main
+	peripherals = /obj/item/weapon/circuitboard/mecha/roswell/peripherals
