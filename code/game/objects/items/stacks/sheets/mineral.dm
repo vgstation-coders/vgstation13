@@ -615,7 +615,7 @@ var/list/datum/stack_recipe/gingerbread_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5" + Tc_ALIEN + "=1"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_ALIEN + "=1"
 	perunit = CC_PER_SHEET_RETICULITE
 	mat_type = MAT_RETICULITE
 	starting_materials = list(MAT_RETICULITE = CC_PER_SHEET_RETICULITE)
