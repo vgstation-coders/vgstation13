@@ -1211,7 +1211,7 @@
 	required_reagents = list(FLUOROSURFACTANT = 1, WATER = 1)
 	result_amount = 2
 	var/violentlybubbles = TRUE
-	var/type = 0
+	var/foamtype = 0
 
 /datum/chemical_reaction/foam/on_reaction(var/datum/reagents/holder, var/created_volume)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
@@ -1224,7 +1224,7 @@
 			to_chat(M, "<span class='warning'>The solution spews out [type ? "a metallic" : ""] foam!</span>")
 
 		var/datum/effect/system/foam_spread/s = new()
-		s.set_up(created_volume, location, holder, type)
+		s.set_up(created_volume, location, holder, foamtype)
 		s.start()
 	if(violentlybubbles)
 		holder.clear_reagents()
@@ -1235,19 +1235,19 @@
 	required_reagents = list(ALUMINUM = 3, FOAMING_AGENT = 1, PACIDS = 1)
 	result_amount = 5
 	violentlybubbles = FALSE
-	type = 1
+	foamtype = 1
 
 /datum/chemical_reaction/foam/metal/iron
 	name = "Iron Foam"
-	id = "ironlfoam"
+	id = "ironfoam"
 	required_reagents = list(IRON = 3, FOAMING_AGENT = 1, PACIDS = 1)
-	type = 2
+	foamtype = 2
 
 /datum/chemical_reaction/foam/metal/zeta
 	name = "Zeta Foam"
-	id = "zetalfoam"
+	id = "zetafoam"
 	required_reagents = list(ZETADUST = 20, FOAMING_AGENT = 1, PACIDS = 1)
-	type = 3
+	foamtype = 3
 
 /datum/chemical_reaction/foaming_agent
 	name = "Foaming Agent"
