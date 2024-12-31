@@ -1652,7 +1652,15 @@
 	range = MELEE
 	reliability = 1000
 	equip_cooldown = 20
+	var/datum/global_iterator/pr_mech_abductor
 	var/mob/living/occupant = null
+
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/New()
+	..()
+	pr_mech_abductor = new /datum/global_iterator/mech_abductor(list(src),0)
+	pr_mech_abductor.set_delay(equip_cooldown)
+	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/Destroy()
 	go_out()
@@ -1688,6 +1696,7 @@
 			return
 		target.forceMove(src)
 		target.reset_view(src)
+		pr_mech_abductor.start()
 		occupant_message("<font color='blue'>[target] successfully loaded into [src].")
 		chassis.visible_message("[chassis] loads [target] into [src].")
 		log_message("[target] loaded.")
@@ -1711,15 +1720,37 @@
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/alt_action()
 	go_out()
 	
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/detach()
+	if(occupant)
+		occupant_message("Unable to detach [src] - equipment occupied.")
+		return
+	pr_mech_abductor.stop()
+	return ..()
+
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/proc/go_out()
 	if(!occupant)
 		return
+	pr_mech_abductor.stop()
 	occupant.forceMove(get_turf(src))
 	occupant_message("[occupant] ejected.")
 	log_message("[occupant] ejected.")
 	occupant.reset_view()
 	occupant = null
 	return 1
+
+/datum/global_iterator/mech_abductor/process(var/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/A)
+	if(!A.chassis)
+		A.set_ready_state(1)
+		return stop()
+	if(!A.chassis.has_charge(A.energy_drain))
+		A.set_ready_state(1)
+		A.log_message("Deactivated.")
+		A.occupant_message("[A] deactivated - no power.")
+		A.go_out()
+		return stop()
+	A.chassis.use_power(A.energy_drain)
+	A.update_equip_info()
+	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober
 	name = "\improper Carbon Prober"
