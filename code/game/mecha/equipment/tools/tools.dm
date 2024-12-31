@@ -1637,7 +1637,13 @@
 	qdel(src)
 	playsound(get_turf(marktwo),'sound/items/ratchet.ogg',50,TRUE)
 
-/obj/item/mecha_parts/mecha_equipment/tool/abductor
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/can_attach(obj/mecha/combat/roswell/R)
+	if(..())
+		if(istype(R))
+			return 1
+	return 0
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor
 	name = "\improper Carbon Abductor"
 	desc = "Carbon Abductor. (Can be attached to: UFOs)"
 	icon_state = "mecha_abductor"
@@ -1646,9 +1652,76 @@
 	range = MELEE
 	reliability = 1000
 	equip_cooldown = 20
-	var/mob/living/carbon/occupant = null
+	var/mob/living/occupant = null
 
-/obj/item/mecha_parts/mecha_equipment/tool/prober
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/Destroy()
+	go_out()
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/action(var/mob/living/target)
+	if(!action_checks(target))
+		return
+	if(target.loc != src.loc)
+		return
+	if(!ishuman(target) && !istype(target,/mob/living/simple_animal/cow))
+		occupant_message("Cannot abduct [target]: not humanoid or bovine.")
+		return
+	if(target.locked_to)
+		occupant_message("Cannot abduct [target]: buckled to [target.locked_to].")
+		return
+	if(occupant)
+		occupant_message("The ship is already occupied")
+		return
+	for(var/mob/living/carbon/slime/M in range(1,target))
+		if(M.Victim == target)
+			occupant_message("Cannot abduct [target]: slime latched onto their head.")
+			return
+	occupant_message("You start abducting [target] into [src].")
+	chassis.visible_message("[chassis] starts abducting [target] into \the [src].")
+	var/C = chassis.loc
+	var/T = target.loc
+	if(do_after_cooldown(target))
+		if(chassis.loc!=C || target.loc!=T)
+			return
+		if(occupant)
+			occupant_message("<font color=\"red\"><B>The ship is already occupied!</B></font>")
+			return
+		target.forceMove(src)
+		target.reset_view(src)
+		occupant_message("<font color='blue'>[target] successfully loaded into [src].")
+		chassis.visible_message("[chassis] loads [target] into [src].")
+		log_message("[target] loaded.")
+		return 1
+	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/get_equip_info()
+	var/output = ..()
+	if(output)
+		return "[output] <br />\[Occupant: [occupant ? "[occupant] (Health: [occupant.health]%)" : "none"]\]<br />|<a href='?src=\ref[src];eject=1'>Eject</a>|"
+	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/Topic(href,href_list)
+	if(..())
+		return TRUE
+	var/datum/topic_input/topic_filter = new /datum/topic_input(href,href_list)
+	if(topic_filter.get("eject"))
+		go_out()
+	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/alt_action()
+	go_out()
+	
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/proc/go_out()
+	if(!occupant)
+		return
+	occupant.forceMove(get_turf(src))
+	occupant_message("[occupant] ejected.")
+	log_message("[occupant] ejected.")
+	occupant.reset_view()
+	occupant = null
+	return 1
+
+/obj/item/mecha_parts/mecha_equipment/tool/ayy/prober
 	name = "\improper Carbon Prober"
 	desc = "Carbon Prober. (Can be attached to: UFOs)"
 	icon_state = "mecha_prober"

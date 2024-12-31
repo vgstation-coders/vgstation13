@@ -29,8 +29,8 @@
 
 /obj/mecha/combat/roswell/preloaded/New()
 	..()
-	new /obj/item/mecha_parts/mecha_equipment/tool/abductor(src)
-	new /obj/item/mecha_parts/mecha_equipment/tool/prober(src)
+	new /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor(src)
+	new /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober(src)
 
 /obj/effect/decal/mecha_wreckage/roswell
     name = "downed weather balloon"
