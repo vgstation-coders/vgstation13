@@ -1696,6 +1696,7 @@
 			return
 		target.forceMove(src)
 		target.reset_view(src)
+		target.sleeping = 30
 		pr_mech_abductor.start()
 		occupant_message("<font color='blue'>[target] successfully loaded into [src].")
 		chassis.visible_message("[chassis] loads [target] into [src].")
@@ -1750,6 +1751,8 @@
 		return stop()
 	A.chassis.use_power(A.energy_drain)
 	A.update_equip_info()
+	if(A.occupant)
+		A.occupant.sleeping = 30
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober
