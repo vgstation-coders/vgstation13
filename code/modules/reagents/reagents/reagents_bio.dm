@@ -433,6 +433,14 @@
 			M.confused = 0
 			M.adjustToxLoss(1)
 
+/datum/reagent/greygoo/reaction_obj(obj/O, volume, list/splashplosion)
+	if(..())
+		return 1
+	
+	if(volume >= 1 && istype(O,/obj/item/stack/sheet/mineral/reticulite))
+		var/obj/item/stack/S = O
+		S.add(volume)
+
 /datum/reagent/grue_bile
 	name = "Grue Bile"
 	id = GRUE_BILE

@@ -96,6 +96,10 @@
 		return 1
 
 	O.clean_blood()
+		
+	if(volume >= 20 && istype(O,/obj/item/stack/sheet/mineral/reticulite))
+		var/obj/item/stack/S = O
+		S.add(volume/20)
 
 /datum/reagent/zetadust/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
