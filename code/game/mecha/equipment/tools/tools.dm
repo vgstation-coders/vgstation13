@@ -1691,13 +1691,14 @@
 		if(chassis.loc!=C || target.loc!=T)
 			return
 		if(occupant)
-			occupant_message("<font color=\"red\"><B>The ship is already occupied!</B></font>")
+			occupant_message("<span class='warning'>The ship is already occupied!</span>")
 			return
 		target.forceMove(src)
 		target.reset_view(src)
 		target.sleeping = 30
+		occupant = target
 		pr_mech_abductor.start()
-		occupant_message("<font color='blue'>[target] successfully loaded into [src].")
+		occupant_message("<span class='notice'>[target] successfully loaded into [src]</span>.")
 		chassis.visible_message("[chassis] loads [target] into [src].")
 		log_message("[target] loaded.")
 		return 1
