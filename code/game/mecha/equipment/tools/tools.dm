@@ -1788,6 +1788,9 @@
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(W.w_class > 1)
+		to_chat(user,"<span class='warning'>This item is too big for the prober</span>")
+		return
 	if(user.drop_item(W,src))
 		probe_item = W
 	return
