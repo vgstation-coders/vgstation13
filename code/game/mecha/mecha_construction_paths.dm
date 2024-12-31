@@ -703,114 +703,79 @@
 	result = "/obj/mecha/combat/roswell"
 	base_icon = "roswell"
 
-	mainboard = /obj/item/weapon/circuitboard/mecha/roswell/main
-	peripherals = /obj/item/weapon/circuitboard/mecha/roswell/peripherals
 	steps = list(
 					//1
-					list(Co_DESC="Cockpit wire mesh is installed. It requires welding into place.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} weld{s} external armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY="is_wrench",
-					 		Co_VIS_MSG = "{USER} unfasten{s} the cockpit wire screen.")
-					 	),
-					//2
-					 list(Co_DESC="Cockpit wire mesh is installed. It requires securing with a screwdriver.",
-					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
-					 		Co_VIS_MSG = "{USER} secure{s} external armor layer."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
-					 		Co_VIS_MSG = "{USER} prie{s} external armor layer from {HOLDER}.",
-					 		Co_START_MSG = "{USER} begin{s} removing the cockpit's wire screen...",
-					 		Co_DELAY = 30,)
-					 	),
-					 //3
-					 list(Co_DESC="Internal armor is welded. The dome requires metal rods, for a screen. ",
+					list(Co_DESC="Internal armor is installed. The dome requires metal rods, for a screen. ",
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/rods,
 					 		Co_AMOUNT = 10,
 					 		Co_VIS_MSG = "{USER} install{s} a steel wire mesh to {HOLDER}'s dome.",
 					 		Co_START_MSG = "{USER} begin{s} installing the wire mesh...",
 					 		Co_DELAY = 30),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} cut{s} internal armor layer from {HOLDER}.")
-					 	),
-					 //4
-					 list(Co_DESC="Internal armor is wrenched",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} weld{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY="is_wrench",
-					 		Co_VIS_MSG = "{USER} unfastens the internal armor layer.")
-					 	),
-					 //5
-					 list(Co_DESC="Internal armor is installed",
-					 	Co_NEXTSTEP = list(Co_KEY="is_wrench",
-					 		Co_VIS_MSG = "{USER} secure{s} internal armor layer."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} prie{s} internal armor layer from {HOLDER}.")
 					 	),
-					 //6
-					 list(Co_DESC="Peripherals control module is secured",
+					//2
+					list(Co_DESC="Peripherals control module is secured",
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/mineral/reticulite,
 					 		Co_AMOUNT = 5,
 					 		Co_VIS_MSG = "{USER} install{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
-					 		Co_VIS_MSG = "{USER} unfasten{s} the peripherals control module.")
-					 	),
-					 //7
-					 list(Co_DESC="Peripherals control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
-					 		Co_VIS_MSG = "{USER} secure{s} the peripherals control module."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the peripherals control module from {HOLDER}.")
 					 	),
-					 //8
-					 list(Co_DESC="Central control module is secured",
-					 	Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
+					//3
+					list(Co_DESC="Central control module is secured",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/circuitboard/mecha/roswell/peripherals,
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} the peripherals control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
-					 		Co_VIS_MSG = "{USER} unfasten{s} the mainboard.")
-					 	),
-					 //9
-					 list(Co_DESC="Central control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
-					 		Co_VIS_MSG = "{USER} secure{s} the mainboard."),
 					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} remove{s} the central control module from {HOLDER}.")
 					 	),
-					 //10
-					 list(Co_DESC="Prober is installed.",
-						Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
+					//4
+					list(Co_DESC="Prober is installed.",
+						Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/circuitboard/mecha/roswell/main,
 					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} install{s} the central control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY="is_screwdriver",
-					 		Co_VIS_MSG = "{USER} disconnect{s} the wiring of {HOLDER}.")
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
+					 		Co_VIS_MSG = "{USER} removes{s} the prober from {HOLDER}.")
 					 	),
-					 //11
-					 list(Co_DESC="Scrambler is installed.",
+					//5
+					list(Co_DESC="Scrambler is installed.",
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/ayy/prober,
+					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} adds{s} the prober to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY="is_crowbar",
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} removes{s} the scrambler from {HOLDER}.")
 					 	),
-					 //12
-					 list(Co_DESC="Gravitator is installed.",
+					//6
+					list(Co_DESC="Gravitator is installed.",
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/ayy/scrambler,
+					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} adds{s} the scrambler to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY="is_crowbar",
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} removes{s} the gravitator from {HOLDER}.")
 					 	),
-					 //13
-					 list(Co_DESC="Abductor is installed.",
+					//7
+					list(Co_DESC="Abductor is installed.",
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/ayy/gravitator,
+					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} adds{s} the gravitator to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY="is_crowbar",
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 					 		Co_VIS_MSG = "{USER} removes{s} the abductor from {HOLDER}.")
 					 	),
-					 //14
-					 list(Co_DESC="The body of the ship is empty.",
+					//8
+					list(Co_DESC="The body of the ship is empty.",
 					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/ayy/abductor,
+					 		Co_AMOUNT = 1,
 					 		Co_VIS_MSG = "{USER} adds{s} the abductor to {HOLDER}.")
 					 	)
 					)
+
+/datum/construction/reversible/mecha/custom_action(index, diff, atom/used_atom, mob/user)
+	if(!..())
+		return 0
+
+	holder.icon_state = "[base_icon][steps.len - index - diff > 7 ? 1 : 0]"
+	return 1
+
+/datum/construction/reversible/mecha/roswell/add_board_keys()
+	return
