@@ -418,6 +418,7 @@
 
 /obj/item/mecha_parts/chassis/roswell
 	name = "Roswell Chassis"
+	icon_state = "roswell_harness"
 
 /obj/item/mecha_parts/chassis/roswell/New()
 	..()
