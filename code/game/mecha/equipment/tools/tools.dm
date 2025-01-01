@@ -1689,13 +1689,17 @@
 	var/T = target.loc
 	animate(chassis, pixel_y = 16, time = 3, easing = SINE_EASING)
 	animate(target, pixel_y = 16, time = 5 SECONDS)
+	chassis.underlays.Cut()
+	chassis.underlays += image(icon, chassis, "abductor_beam", pixel_y = -10)
 	if(do_after_cooldown(target))
 		if(chassis.loc!=C || target.loc!=T)
+			chassis.underlays.Cut()
 			animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
 			animate(target, pixel_y = 0, time = 1)
 			return
 		if(occupant)
 			occupant_message("<span class='warning'>The ship is already occupied!</span>")
+			chassis.underlays.Cut()
 			animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
 			animate(target, pixel_y = 0, time = 1)
 			return
@@ -1708,9 +1712,11 @@
 		occupant_message("<span class='notice'>[target] was successfully loaded into [src]</span>.")
 		chassis.visible_message("[chassis] loads [target] into [src].")
 		log_message("[target] loaded.")
+		chassis.underlays.Cut()
 		animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
 		animate(target, pixel_y = 0, time = 1)
 		return 1
+	chassis.underlays.Cut()
 	animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
 	if(target)
 		animate(target, pixel_y = 0, time = 1)
