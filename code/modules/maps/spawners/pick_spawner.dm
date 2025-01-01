@@ -109,7 +109,7 @@
 		/obj/effect/decal/mecha_wreckage/graveyard_ripley,
 		/obj/effect/decal/mecha_wreckage/graveyard_clarke,
 		/obj/effect/decal/mecha_wreckage/graveyard_clarke,
-		/obj/effect/decal/mecha_wreckage/graveyard_roswell,
+		/obj/effect/decal/mecha_wreckage/roswell/graveyard,
 		)
 
 /obj/abstract/map/spawner/pick_spawner/mecha_wreckage_equip
