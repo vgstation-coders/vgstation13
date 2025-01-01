@@ -150,7 +150,10 @@ var/global/list/all_tech = list()
 //Input: Tech's ID and Level; Output: null
 /datum/research/proc/UpdateTech(var/ID, var/level)
 	var/datum/tech/KT = GetKTechByID(ID)
-	if(KT && KT.level <= level)
+	if(!KT && (ID in all_tech))
+		KT = create_tech(ID)
+		known_tech[ID] = KT
+	if(KT.level <= level)
 		KT.level = max((KT.level + 1), (level - 1))
 	return
 
