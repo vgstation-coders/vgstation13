@@ -153,7 +153,7 @@ var/global/list/all_tech = list()
 	if(!KT && (ID in all_tech))
 		KT = create_tech(ID)
 		known_tech[ID] = KT
-	if(KT.level <= level)
+	if(KT && KT.level <= level)
 		KT.level = max((KT.level + 1), (level - 1))
 	return
 
