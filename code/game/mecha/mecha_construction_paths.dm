@@ -774,7 +774,7 @@
 	if(!..())
 		return 0
 
-	holder.icon_state = "[base_icon][steps.len - index - diff > 7 ? 1 : 0]"
+	holder.icon_state = "[base_icon][steps.len - index - diff > 8 ? 1 : 0]"
 	return 1
 
 /datum/construction/reversible/mecha/roswell/add_board_keys()
