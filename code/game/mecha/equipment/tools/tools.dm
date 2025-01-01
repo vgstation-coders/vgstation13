@@ -1844,7 +1844,6 @@
 	if(!abd.occupant)
 		occupant_message("No occupant in abductor.")
 		return
-	probing = 1
 	if(ishuman(abd.occupant))
 		if(!probe_item)
 			occupant_message("No item loaded into probe.")
@@ -1855,15 +1854,19 @@
 			occupant_message("Probe space already occupied.")
 			return
 		occupant_message("Beginning probal of [probe_item] into rectal cavity.")
+		probing = 1
 		if(do_after_cooldown(H,2.5))
 			if(!H)
 				occupant_message("Probe failure: Occupant missing.")
+				probing = 0
 				return
 			if(!probe_item)
 				occupant_message("Probe failure: Probe item missing.")
+				probing = 0
 				return
 			if(!affected)
 				occupant_message("Probe failure: Implant area not found.")
+				probing = 0
 				return
 			occupant_message("Probing complete.")
 			affected.hidden = probe_item
@@ -1874,6 +1877,7 @@
 			affected.cavity = 0
 			probe_item = null
 	else
+		probing = 1
 		chassis.visible_message("<span class='danger'>[chassis] makes some grinding noises!</span>")
 		playsound(chassis.loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
 		if(do_after_cooldown(abd.occupant))
