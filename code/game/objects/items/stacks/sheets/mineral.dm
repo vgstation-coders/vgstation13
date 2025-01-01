@@ -610,6 +610,7 @@ var/list/datum/stack_recipe/gingerbread_recipes = list ( \
 	desc = "Abducted from distant mines you've probably been nowhere near. At least as far as you remember."
 	singular_name = "reticulite plate"
 	icon_state = "sheet-reticulite"
+	sheettype = "reticulite"
 	force = 5.0
 	throwforce = 5
 	w_class = W_CLASS_MEDIUM
