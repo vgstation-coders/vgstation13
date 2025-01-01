@@ -1687,14 +1687,14 @@
 	chassis.visible_message("[chassis] starts abducting [target] into \the [src].")
 	var/C = chassis.loc
 	var/T = target.loc
-	animate(pixel_y = 16, time = 1, easing = SINE_EASING)
+	animate(chassis, pixel_y = 16, time = 1, easing = SINE_EASING)
 	if(do_after_cooldown(target))
 		if(chassis.loc!=C || target.loc!=T)
-			animate(pixel_y = 0, time = 1, easing = SINE_EASING)
+			animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
 			return
 		if(occupant)
 			occupant_message("<span class='warning'>The ship is already occupied!</span>")
-			animate(pixel_y = 0, time = 1, easing = SINE_EASING)
+			animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
 			return
 		target.forceMove(src)
 		target.reset_view(src)
@@ -1704,9 +1704,9 @@
 		occupant_message("<span class='notice'>[target] was successfully loaded into [src]</span>.")
 		chassis.visible_message("[chassis] loads [target] into [src].")
 		log_message("[target] loaded.")
-		animate(pixel_y = 0, time = 1, easing = SINE_EASING)
+		animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
 		return 1
-	animate(pixel_y = 0, time = 1, easing = SINE_EASING)
+	animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/get_equip_info()

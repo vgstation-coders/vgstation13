@@ -13,6 +13,8 @@
 	wreckage = /obj/effect/decal/mecha_wreckage/roswell
 	internal_damage_threshold = 35
 	max_equip = 3
+	plane = ABOVE_HUMAN_PLANE
+	layer = VEHICLE_LAYER
 
 /obj/mecha/combat/roswell/mechturn(direction)
 	dir = direction
