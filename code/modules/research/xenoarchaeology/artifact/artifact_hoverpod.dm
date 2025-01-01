@@ -37,7 +37,6 @@
 		playsound(src,'sound/machines/hiss.ogg',40,1)
 	return result
 
-
 /obj/mecha/working/hoverpod/mechsteprand()
 	var/result = step_rand(src)
 	if(result)

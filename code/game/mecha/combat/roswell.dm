@@ -22,11 +22,16 @@
 	return 1
 
 /obj/mecha/combat/roswell/mechstep(direction)
-	playsound(loc, 'sound/mecha/ufo.ogg', 100)
-	return step(src,direction)
+	var/result = step(src,direction)
+	if(result)
+		playsound(loc, 'sound/mecha/ufo.ogg', 100)
+	return result
 
 /obj/mecha/combat/roswell/mechsteprand()
-	return step_rand(src)
+	var/result = step_rand(src)
+	if(result)
+		playsound(loc, 'sound/mecha/ufo.ogg', 100)
+	return result
 
 /obj/mecha/combat/roswell/can_apply_inertia()  //invaders from outer spaaace
 	if(has_charge(step_energy_drain))
