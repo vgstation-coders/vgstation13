@@ -294,7 +294,7 @@
 	desc = "Allows for the construction of the Carbon Abductor."
 	id = "mech_abductor"
 	build_type = MECHFAB
-	req_tech = list(Tc_MATERIALS = 6, Tc_ALIEN = 3)
+	req_tech = list(Tc_MATERIALS = 6, Tc_ALIEN = 6)
 	build_path = /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor
 	category = "Exosuit_Modules"
 	materials = list(MAT_IRON=10000,MAT_RETICULITE=10000)
@@ -304,7 +304,7 @@
 	desc = "Allows for the construction of the Carbon Prober."
 	id = "mech_prober"
 	build_type = MECHFAB
-	req_tech = list(Tc_MATERIALS = 6, Tc_ALIEN = 3)
+	req_tech = list(Tc_MATERIALS = 6, Tc_ALIEN = 6)
 	build_path = /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober
 	category = "Exosuit_Modules"
 	materials = list(MAT_IRON=10000,MAT_RETICULITE=10000)
