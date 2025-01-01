@@ -1692,12 +1692,12 @@
 	if(do_after_cooldown(target))
 		if(chassis.loc!=C || target.loc!=T)
 			animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
-			animate(target, pixel_y = 0, time = 1, easing = SINE_EASING)
+			animate(target, pixel_y = 0, time = 1)
 			return
 		if(occupant)
 			occupant_message("<span class='warning'>The ship is already occupied!</span>")
 			animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
-			animate(target, pixel_y = 0, time = 1, easing = SINE_EASING)
+			animate(target, pixel_y = 0, time = 1)
 			return
 		target.forceMove(src)
 		target.reset_view(src)
@@ -1709,11 +1709,11 @@
 		chassis.visible_message("[chassis] loads [target] into [src].")
 		log_message("[target] loaded.")
 		animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
-		animate(target, pixel_y = 0, time = 1, easing = SINE_EASING)
+		animate(target, pixel_y = 0, time = 1)
 		return 1
 	animate(chassis, pixel_y = 0, time = 1, easing = SINE_EASING)
 	if(target)
-		animate(target, pixel_y = 0, time = 1, easing = SINE_EASING)
+		animate(target, pixel_y = 0, time = 1)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/get_equip_info()
