@@ -1860,11 +1860,13 @@
 			affected.cavity = 0
 			probe_item = null
 			probing = 0
+			abd.go_out()
 			return
 	chassis.visible_message("<span class='danger'>[chassis] makes some grinding noises!</span>")
 	playsound(chassis.loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
 	if(do_after_cooldown(abd.occupant))
 		abd.occupant.adjustBruteLoss(abd.occupant.maxHealth) // the thing UFOs do to cattle
+	abd.go_out()
 	probing = 0
 
 #undef MECHDRILL_SAND_SPEED
