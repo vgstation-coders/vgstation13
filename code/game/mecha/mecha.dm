@@ -101,6 +101,7 @@
 
 	var/list/mech_sprites = list() //sprites alternatives for a given mech. Only have to enter the name of the paint scheme
 	var/paintable = 0
+	var/drifts = TRUE
 
 /obj/mecha/get_cell()
 	return cell
@@ -199,6 +200,8 @@
 	throwing = 2//dashing through windows and grilles
 
 /obj/mecha/can_apply_inertia()
+	if(!drifts && has_charge(step_energy_drain))
+		return 0 //doesn't drift in space if it has power and drifting is disabled
 	return 1 //No anchored check - so that mechas can fly off into space
 
 /obj/mecha/is_airtight()
@@ -407,7 +410,7 @@
 				ME.on_mech_turn()
 		can_move = 0
 		use_power(step_energy_drain)
-		if(istype(src.loc, /turf/space))
+		if(drifts && istype(src.loc, /turf/space))
 			if(!src.check_for_support())
 				src.pr_inertial_movement.start(list(src,direction))
 				src.log_message("Movement control lost. Inertial movement started.")
