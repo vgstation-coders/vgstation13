@@ -22,6 +22,7 @@
 	return 1
 
 /obj/mecha/combat/roswell/mechstep(direction)
+	playsound(loc, 'sound/mecha/ufo.ogg', 100)
 	return step(src,direction)
 
 /obj/mecha/combat/roswell/mechsteprand()

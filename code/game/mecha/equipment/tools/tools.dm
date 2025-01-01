@@ -1691,6 +1691,7 @@
 	animate(target, pixel_y = 16, time = 5 SECONDS)
 	chassis.underlays.Cut()
 	chassis.underlays += image(icon, chassis, "abductor_beam", pixel_y = -10)
+	playsound(chassis.loc, 'sound/mecha/abduct.ogg', 100, 1)
 	if(do_after_cooldown(target))
 		if(chassis.loc!=C || target.loc!=T)
 			chassis.underlays.Cut()
