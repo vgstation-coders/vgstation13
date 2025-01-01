@@ -1788,6 +1788,7 @@
 	reliability = 1000
 	equip_cooldown = 20
 	var/obj/item/probe_item = null
+	var/probing = 0
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/can_attach(obj/mecha/M as obj)
 	if(..())
@@ -1830,6 +1831,8 @@
 		alt_action()
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/alt_action()
+	if(probing)
+		return
 	if(!action_checks(chassis))
 		return
 	var/obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor/abd = locate() in chassis.equipment
@@ -1839,6 +1842,7 @@
 	if(!abd.occupant)
 		occupant_message("No occupant in abductor.")
 		return
+	probing = 1
 	if(probe_item && ishuman(abd.occupant))
 		var/mob/living/carbon/human/H = abd.occupant
 		var/datum/organ/external/chest/affected = H.get_organ(LIMB_GROIN) // the crew gets an anal probe
@@ -1850,11 +1854,13 @@
 				timp.insert(H, affected.name, chassis.occupant)
 			affected.cavity = 0
 			probe_item = null
+			probing = 0
 			return
 	chassis.visible_message("<span class='danger'>[chassis] makes some grinding noises!</span>")
 	playsound(chassis.loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
 	if(do_after_cooldown(abd.occupant))
 		abd.occupant.adjustBruteLoss(ishuman(abd.occupant) ? 30 : abd.occupant.maxHealth) // the thing UFOs do to cattle
+	probing = 0
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED
