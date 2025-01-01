@@ -1687,7 +1687,7 @@
 	chassis.visible_message("[chassis] starts abducting [target] into \the [src].")
 	var/C = chassis.loc
 	var/T = target.loc
-	animate(chassis, pixel_y = 16, time = 1 SECONDS, easing = SINE_EASING)
+	animate(chassis, pixel_y = 16, time = 3, easing = SINE_EASING)
 	animate(target, pixel_y = 16, time = 5 SECONDS)
 	if(do_after_cooldown(target))
 		if(chassis.loc!=C || target.loc!=T)
