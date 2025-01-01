@@ -752,12 +752,15 @@ steam.start() -- spawns the effect
 
 		if(metal)
 			var/turf/T = get_turf(src)
-			if(istype(T, /turf/space) || istype(T, /turf/simulated/open))
-				T.ChangeTurf(/turf/simulated/floor/foamedmetal)
-			if(metal == 2)
-				var/obj/structure/foamedmetal/M = new(src.loc)
-				M.metal = metal
-				M.updateicon()
+			if(metal > 2)
+				T.ChangeTurf(/turf/simulated/floor/mineral/reticulite)
+			else
+				if(istype(T, /turf/space) || istype(T, /turf/simulated/open))
+					T.ChangeTurf(/turf/simulated/floor/foamedmetal)
+				if(metal == 2)
+					var/obj/structure/foamedmetal/M = new(src.loc)
+					M.metal = metal
+					M.updateicon()
 
 		flick("[icon_state]-disolve", src)
 		sleep(5)
@@ -878,9 +881,6 @@ steam.start() -- spawns the effect
 
 /datum/effect/system/foam_spread/start()
 	spawn(0)
-		if(metal > 2)
-			location.ChangeTurf(/turf/simulated/floor/mineral/reticulite)
-			return
 		var/obj/effect/foam/F = locate() in location
 		if(F)
 			F.amount += amount
