@@ -1803,15 +1803,17 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/detach()
 	chassis.proc_res["dynattackby"] = null
-	probe_item.forceMove(get_turf(src))
-	probe_item = null
+	if(probe_item)
+		probe_item.forceMove(get_turf(src))
+		probe_item = null
 	..()
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/Destroy()
 	chassis.proc_res["dynattackby"] = null
-	probe_item.forceMove(get_turf(src))
-	probe_item = null
+	if(probe_item)
+		probe_item.forceMove(get_turf(src))
+		probe_item = null
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
