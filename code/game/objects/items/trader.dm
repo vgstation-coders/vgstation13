@@ -80,6 +80,18 @@
 		if(4)
 			add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/collector,100)
 
+/obj/effect/decal/mecha_wreckage/roswell/graveyard/New()
+	..()
+	var/list/parts = list(		/obj/item/weapon/circuitboard/mecha/roswell/peripherals,
+								/obj/item/weapon/circuitboard/mecha/roswell/main,
+								/obj/item/weapon/stock_parts/ayy/abductor,
+								/obj/item/weapon/stock_parts/ayy/gravitator,
+								/obj/item/weapon/stock_parts/ayy/scrambler,
+								/obj/item/weapon/stock_parts/ayy/prober)
+	welder_salvage += parts
+
+	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor,100)
+	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/ayy/prober,100)
 
 /mob/living/simple_animal/hostile/asteroid/basilisk/skullbot
 	name = "Mysterious skullbot"

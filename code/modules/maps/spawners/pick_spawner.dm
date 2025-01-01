@@ -106,7 +106,10 @@
 	icon_state = "engi_materials"
 	to_spawn = list(
 		/obj/effect/decal/mecha_wreckage/graveyard_ripley,
+		/obj/effect/decal/mecha_wreckage/graveyard_ripley,
 		/obj/effect/decal/mecha_wreckage/graveyard_clarke,
+		/obj/effect/decal/mecha_wreckage/graveyard_clarke,
+		/obj/effect/decal/mecha_wreckage/graveyard_roswell,
 		)
 
 /obj/abstract/map/spawner/pick_spawner/mecha_wreckage_equip
