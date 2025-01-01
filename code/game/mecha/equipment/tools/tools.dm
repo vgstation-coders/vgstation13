@@ -1851,7 +1851,12 @@
 			return
 		var/mob/living/carbon/human/H = abd.occupant
 		var/datum/organ/external/chest/affected = H.get_organ(LIMB_GROIN) // the crew gets an anal probe
-		if(!affected.hidden && do_after_cooldown(H,2.5))
+		if(affected.hidden)
+			occupant_message("Probe space already occupied.")
+			return
+		occupant_message("Beginning probal of [probe_item] into rectal cavity.")
+		if(do_after_cooldown(H,2.5))
+			occupant_message("Probing complete.")
 			affected.hidden = probe_item
 			probe_item.forceMove(H)
 			if(istype(probe_item, /obj/item/weapon/implant))
