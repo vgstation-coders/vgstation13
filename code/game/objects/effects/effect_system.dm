@@ -752,7 +752,7 @@ steam.start() -- spawns the effect
 
 		if(metal)
 			var/turf/T = get_turf(src)
-			if(metal > 2)
+			if(metal > 2 && (istype(T, /turf/space) || istype(T, /turf/simulated/open) || istype(T,/turf/simulated/floor)) && !istype(T,/turf/simulated/floor/shuttle))
 				T.ChangeTurf(/turf/simulated/floor/mineral/reticulite)
 			else
 				if(istype(T, /turf/space) || istype(T, /turf/simulated/open))
