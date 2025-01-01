@@ -1845,7 +1845,10 @@
 		occupant_message("No occupant in abductor.")
 		return
 	probing = 1
-	if(probe_item && ishuman(abd.occupant))
+	if(ishuman(abd.occupant))
+		if(!probe_item)
+			occupant_message("No item loaded into probe.")
+			return
 		var/mob/living/carbon/human/H = abd.occupant
 		var/datum/organ/external/chest/affected = H.get_organ(LIMB_GROIN) // the crew gets an anal probe
 		if(!affected.hidden && do_after_cooldown(H,2.5))
@@ -1861,7 +1864,7 @@
 	chassis.visible_message("<span class='danger'>[chassis] makes some grinding noises!</span>")
 	playsound(chassis.loc, 'sound/machines/ya_dun_clucked.ogg', 50, 1)
 	if(do_after_cooldown(abd.occupant))
-		abd.occupant.adjustBruteLoss(ishuman(abd.occupant) ? 30 : abd.occupant.maxHealth) // the thing UFOs do to cattle
+		abd.occupant.adjustBruteLoss(abd.occupant.maxHealth) // the thing UFOs do to cattle
 	probing = 0
 
 #undef MECHDRILL_SAND_SPEED
