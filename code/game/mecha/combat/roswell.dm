@@ -33,11 +33,6 @@
 		playsound(loc, 'sound/mecha/ufo.ogg', 100)
 	return result
 
-/obj/mecha/combat/roswell/can_apply_inertia()  //invaders from outer spaaace
-	if(has_charge(step_energy_drain))
-		return FALSE //doesn't drift in space if it has power
-	return TRUE
-
 /obj/mecha/combat/roswell/preloaded/New()
 	..()
 	new /obj/item/mecha_parts/mecha_equipment/tool/ayy/abductor(src)
