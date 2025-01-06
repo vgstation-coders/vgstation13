@@ -12,6 +12,7 @@ var/list/restricted_roulette_projectiles = list(
 	/obj/item/projectile/stickybomb,
 	/obj/item/projectile/beam/lightlaser,
 	/obj/item/projectile/portalgun,
+	/obj/item/projectile/hookshot,
 	)
 
 /obj/item/weapon/gun/projectile/roulette_revolver
