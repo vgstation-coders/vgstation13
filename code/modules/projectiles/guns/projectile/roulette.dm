@@ -17,6 +17,7 @@ var/list/restricted_roulette_projectiles = list(
 
 var/list/restrict_with_subtypes = list(
 		/obj/item/projectile/hookshot,
+		/obj/item/projectile/meteor/blob, //includes the nodes
 	)
 /obj/item/weapon/gun/projectile/roulette_revolver
 	name = "\improper Roulette Revolver"
