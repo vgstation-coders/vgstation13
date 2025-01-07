@@ -12,10 +12,12 @@ var/list/restricted_roulette_projectiles = list(
 	/obj/item/projectile/stickybomb,
 	/obj/item/projectile/beam/lightlaser,
 	/obj/item/projectile/portalgun,
-	/obj/item/projectile/hookshot,
 	/obj/item/projectile/friendlyCheck,
 	)
 
+var/list/restrict_with_subtypes = list(
+		/obj/item/projectile/hookshot,
+	)
 /obj/item/weapon/gun/projectile/roulette_revolver
 	name = "\improper Roulette Revolver"
 	desc = "A strange-looking revolver. Its construction appears somewhat slapdash."
@@ -68,6 +70,10 @@ var/list/restricted_roulette_projectiles = list(
 	var/chosen_projectile = pick(available_projectiles)
 	for(var/I in restricted_roulette_projectiles)
 		if(chosen_projectile == I)
+			choose_projectile()
+			return
+	for(var/I in restrict_with_subtypes)
+		if(ispath(chosen_projectile, I))
 			choose_projectile()
 			return
 	var/P = new chosen_projectile()
