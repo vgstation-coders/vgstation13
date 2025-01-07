@@ -611,6 +611,8 @@
 /obj/structure/turret/gun_turret/New()
 	..()
 	roulette_projectiles = existing_typesof(/obj/item/projectile) - restricted_roulette_projectiles
+	for(var/projectile_types in restrict_with_subtypes)
+		roulette_projectiles -= typesof(projectile_types)
 
 /obj/structure/turret/gun_turret/examine(mob/user)
 	..()
