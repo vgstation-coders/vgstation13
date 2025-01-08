@@ -146,6 +146,7 @@
 	specheatcap = 1.335
 
 /datum/reagent/chefspecial/on_overdose(var/mob/living/M)
+	to_chat(M, "<span class='warning'>You feel a sharp pain in your chest, and then nothing.</span>")
 	M.death(0)
 	M.attack_log += "\[[time_stamp()]\]<font color='red'>Died a quick and painless death by <font color='green'>Chef Excellence's Special Sauce</font>.</font>"
 
