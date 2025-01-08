@@ -652,15 +652,30 @@
 		if(!map.climate)
 			return
 		var/datum/climate/C = map.climate
-		var/nu = input(usr, "Select New Weather", "Adjust Weather", C.current_weather.type) as null|anything in typesof(/datum/weather)
-		if(!nu || nu == C.current_weather.type)
+
+		var/list/valid_climates = list()
+
+		for(var/subtype in subtypesof(/datum/weather))
+			var/datum/weather/instance = subtype
+			var/weather_name = initial(instance.name)
+			if (weather_name != "weather")
+				valid_climates[weather_name] = subtype
+
+		if (valid_climates.len <= 0)
+			alert(usr, "There are somehow no weather subtypes!", "Error", "Wtf?")
 			return
-		if(!ispath(nu))
+
+		var/nu = input(usr, "Select New Weather", "Adjust Weather", null) as null|anything in valid_climates
+		if(!nu)
+			to_chat(usr, "Weather change canceled.")
 			return
-		C.change_weather(nu)
+		if(nu == C.current_weather.name)
+			to_chat(usr, "That's already the current weather you dummy.")
+			return
+		C.change_weather(valid_climates[nu])
 		C.forecast()
-		log_admin("[key_name(usr)] adjusted weather type.")
-		message_admins("<span class='notice'>[key_name(usr)] adjusted weather type.</span>", 1)
+		log_admin("[key_name(usr)] changed the weather to [nu].")
+		message_admins("<span class='notice'>[key_name(usr)] changed the weather to [nu].</span>", 1)
 		climate_panel()
 
 	else if(href_list["delay_round_end"])
