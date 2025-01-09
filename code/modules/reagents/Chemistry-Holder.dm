@@ -210,12 +210,11 @@ var/const/INGEST = 2
 		var/current_reagent_transfer = current_reagent.volume * part
 		if(preserve_data)
 			trans_data = current_reagent.data
-		var/log_this_reagent = (current_reagent.id in reagents_to_always_log)
-		if(log_this_reagent)
+		if(current_reagent.id in reagents_to_always_log)
 			log_transfer = TRUE
 		if(log_transfer)
 			logged_message += "[current_reagent_transfer]u of [current_reagent.name]"
-			if(log_this_reagent)
+			if(current_reagent.id in reagents_to_log)
 				adminwarn_message += "[current_reagent_transfer]u of <span class='warning'>[current_reagent.name]</span>"
 		if (to_mob)
 			R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data, chem_temp, current_reagent.adj_temp)
