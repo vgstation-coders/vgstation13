@@ -146,7 +146,10 @@
 	specheatcap = 1.335
 
 /datum/reagent/chefspecial/on_overdose(var/mob/living/M)
-	to_chat(M, "<span class='warning'>You feel a sharp pain in your chest, and then nothing.</span>")
+	to_chat(M, "<span class='warning'>You feel an overwhelming surge of energy, like you could wrestle a bear and win. Suddenly, you remember all the embarrassing moments from your childhood at once. As you cringe in existential dread, you start to feel an odd sensation in your stomach. It's as if a thousand butterflies are having a rave party inside you. You try to shake it off, but then you see a vision of Chef Excellence himself, giving you a thumbs up. You feel a strange sense of pride, but then your vision blurs.</span>")
+	to_chat(M, "<span class='warning'>Your life flashes before your eyes, and you realize you never did finish that novel you always wanted to write. As you contemplate your unfulfilled dreams, you feel a warm, comforting sensation, like being wrapped in a cozy blanket. You think, 'This isn't so bad,' and with a final sigh of contentment, everything goes dark.</span>")
+	to_chat(M, "<span class='warning'>But wait, there's more! You suddenly find yourself in a majestic field of flowers, with unicorns prancing around and rainbows arching across the sky. Chef Excellence appears again, riding a giant eagle, and hands you a golden spatula. You feel an overwhelming sense of accomplishment, as if you've just won a lifetime supply of your favorite dessert. Just as you're about to take a bite, the scene fades away.</span>")
+	to_chat(M, "<span class='warning'>In your final moments, you hear a choir of angels singing the theme song of your favorite childhood cartoon. You can't help but smile as you drift off into eternal slumber, knowing that you went out in the most epic way possible. With a final thought of 'Well, that was something,' everything goes dark.</span>")
 	M.death(0)
 	M.attack_log += "\[[time_stamp()]\]<font color='red'>Died a quick and painless death by <font color='green'>Chef Excellence's Special Sauce</font>.</font>"
 
