@@ -32,7 +32,8 @@
 		/mob/living/simple_animal/hostile/mimic/crate,
 		/obj/structure/closet,
 		/obj/structure/vendomatpack,
-		/obj/structure/stackopacks
+		/obj/structure/stackopacks,
+		/obj/structure/largecrate
 		)
 
 /obj/item/stack/package_wrap/preattack(var/obj/target, var/mob/user, var/proximity_flag)
@@ -225,6 +226,8 @@
 		icon_state = "deliverypack"
 	else if(istype(target,/obj/structure/stackopacks))
 		icon_state = "deliverystack"
+	else if(istype(target,/obj/structure/largecrate))
+		icon_state = "deliverylargecrate"
 	else if(istype(target,/obj/structure/closet))
 		icon_state = "deliverycloset" //Only IF it isn't a crate-type
 
