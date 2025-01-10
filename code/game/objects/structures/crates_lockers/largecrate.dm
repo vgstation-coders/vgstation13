@@ -20,7 +20,7 @@
 							 "<span class='notice'>You pry open \the [src].</span>", \
 							 "<span class='notice'>You hear splitting wood.</span>")
 		qdel(src)
-	else
+	else if(!istype(W,/obj/item/stack/package_wrap))
 		return attack_hand(user)
 
 /obj/structure/largecrate/mule
