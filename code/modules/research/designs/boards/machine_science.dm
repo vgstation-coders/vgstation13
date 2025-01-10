@@ -154,3 +154,12 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/suit_storage_unit
 	
+/datum/design/spiderbotfabricator
+	name = "Circuit Design(Spiderbot Fabricator)"
+	desc = "The circuit board for a Spiderbot Fabricator."
+	id = "spiderbotfab"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/spiderbot_fabricator

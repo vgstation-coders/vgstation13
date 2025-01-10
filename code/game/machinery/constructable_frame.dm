@@ -494,6 +494,17 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/micro_laser = 2,
 							/obj/item/weapon/stock_parts/console_screen = 1)
 
+/obj/item/weapon/circuitboard/spiderbot_fabricator
+	name = "Circuit board (Spiderbot Fabricator)"
+	desc = "A circuit board used to run a spiderbot fabricator."
+	build_path = /obj/machinery/spiderbot_fabricator
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
+	req_components = list(
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 1)
+
 /obj/item/weapon/circuitboard/podfab
 	name = "Circuit board (Spacepod Fabricator)"
 	desc = "A circuit board used to run a spacepod fabricator."
