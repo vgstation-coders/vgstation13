@@ -47,7 +47,7 @@
         if(istype(I, /mob/living/simple_animal/mouse) || istype(I, /obj/item/device/mmi))
             I.forceMove(src.loc)
 
-/obj/machinery/spiderbot_fabricator/spillContents()
+/obj/machinery/spiderbot_fabricator/spillContents(destroy_chance = 0)
     eject_occupant()
     return ..()
 
