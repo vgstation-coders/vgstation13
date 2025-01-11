@@ -482,7 +482,7 @@
 /datum/disease2/effect/milkflourvomit
 	name = "Glutenolactic Emesis Syndrome"
 	desc = "Causes sudden bouts of intermitent vomiting containing either milk or flour. No effects on lesser lifeforms."
-	encyclopedia = "Some virologists moonlighting as chefs combine this sympton with chronic lime disease and chicken pox for an easy way to make a lime cake."
+	encyclopedia = "Some virologists moonlighting as chefs combine this symptom with Chronic Lime Disease and Chicken Pox for an easy way to make lime cake."
 	stage = 1
 	badness = EFFECT_DANGER_ANNOYING
 	multiplier = 2
