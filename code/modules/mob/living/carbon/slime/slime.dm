@@ -913,88 +913,82 @@
 /obj/item/clothing/head/space/golem/dissolvable()
 	return 0
 */
-/obj/effect/golem_rune
+/obj/effect/decal/cleanable/golem_rune
 	anchored = 1
-	desc = "A strange rune used to create golems. It glows when spirits are nearby."
-	name = "rune"
+	desc = "A strange rune used to create golems. It draws in the souls of the dead."
+	name = "adamantine golem rune"
 	icon = 'icons/obj/rune.dmi'
 	icon_state = "golem"
-	mouse_opacity = 1 //So we can actually click these
 	plane = ABOVE_TURF_PLANE
 	layer = RUNE_LAYER
-	var/list/mob/dead/observer/ghosts[0]
+	mouse_opacity = 1
+	var/mob/creator = null
+	var/datum/recruiter/recruiter = null
+	var/recruiting = 0
+	persistent_type_replacement = /obj/effect/decal/cleanable/golem_rune/persistent
+	reagent = SLIMEJELLY
 
-/obj/effect/golem_rune/New()
+/obj/effect/decal/cleanable/golem_rune/New()
 	..()
-	processing_objects.Add(src)
+	if(!recruiter)
+		recruiter = new(src)
+		recruiter.display_name = "adamantine golem"
+		recruiter.role = ROLE_MINOR
+		recruiter.jobban_roles = list(ROLE_MINOR)
 
-/obj/effect/golem_rune/process()
-	if(ghosts.len>0)
-		icon_state = "golem2"
+		// A player has their role set to Yes or Always
+		recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
+		// ", but No or Never
+		recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
+
+		recruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
+	spawn(5 SECONDS)
+		try_recruit()
+
+
+/obj/effect/decal/cleanable/golem_rune/proc/try_recruit()
+	if(recruiting || !src)
+		return
+	icon_state = "golem2"
+	recruiting = 1
+	src.visible_message("<span class='notice'>The [name] glows with arcane energies.</span>")
+	recruiter.request_player()
+
+/obj/effect/decal/cleanable/golem_rune/proc/recruiter_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>\The [src] is about to activate. You have been added to the list of potential ghosts. ([controls])</span>")
+
+/obj/effect/decal/cleanable/golem_rune/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>\The [src] is about to activate. ([controls])</span>")
+
+/obj/effect/decal/cleanable/golem_rune/proc/recruiter_recruited(mob/dead/observer/player)
+	if(player)
+		var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem(get_turf(src))
+		G.real_name = G.species.makeName()
+		G.ckey = player.ckey
+		var/msg = "<span class='info'>You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as impervious to burn damage. You are unable to wear most clothing, but can still use most tools. "
+		if(creator)
+			msg += "Serve [creator.name], and assist them in completing their goals at any cost."
+		else
+			msg += "You were born an unbound golem, free to do as you please."
+		msg += "</span>"
+		to_chat(G, msg)
+		playsound(src.loc, 'sound/effects/shock.ogg', 50, 1)
+		qdel(src)
 	else
+		src.visible_message("<span class='notice'>The energies of \the [name] go dormant for now.</span>")
+		recruiting = 0
 		icon_state = "golem"
+		spawn (5 MINUTES)
+			try_recruit()
 
-/obj/effect/golem_rune/attack_hand(mob/living/user as mob)
-	var/mob/dead/observer/ghost
-	for(var/mob/dead/observer/O in src.loc)
-		if(!check_observer(O))
-			continue
-		ghost = O
-		break
-	if(!ghost)
-		to_chat(user, "The rune fizzles uselessly. There is no spirit nearby.")
-		return
-	var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem
-	G.real_name = G.species.makeName()
-	G.forceMove(src.loc) //we use move to get the entering procs - this fixes gravity
-	G.key = ghost.key
-	to_chat(G, "You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as impervious to burn damage. You are unable to wear most clothing, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
-	qdel (src)
-	if(ticker.mode.name == "sandbox")
-		G.CanBuild()
-		to_chat(G, "Sandbox tab enabled.")
+/obj/effect/decal/cleanable/golem_rune/persistent
+	recruiter = 1
+	mouse_opacity = 0
+
+/obj/effect/decal/cleanable/golem_rune/persistent/try_recruit()
+	return
 
 
-/obj/effect/golem_rune/proc/announce_to_ghosts()
-	for(var/mob/dead/observer/O in player_list)
-		if(O.client)
-			var/area/A = get_area(src)
-			if(A)
-				to_chat(O, "<span class=\"recruit\">Golem rune created in [A.name]. ([formatGhostJump(src)] | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>")
-
-/obj/effect/golem_rune/Topic(href,href_list)
-	if("signup" in href_list)
-		var/mob/dead/observer/O = locate(href_list["signup"])
-		volunteer(O)
-
-/obj/effect/golem_rune/attack_ghost(var/mob/dead/observer/O)
-	if(!O)
-		return
-	volunteer(O)
-
-/obj/effect/golem_rune/proc/check_observer(var/mob/dead/observer/O)
-	if(!O)
-		return 0
-	if(!O.client)
-		return 0
-	if(O.mind && O.mind.current && O.mind.current.stat != DEAD)
-		return 0
-	return 1
-
-/obj/effect/golem_rune/proc/volunteer(var/mob/dead/observer/O)
-	if(O in ghosts)
-		ghosts.Remove(O)
-		to_chat(O, "<span class='warning'>You are no longer signed up to be a golem.</span>")
-	else
-		if(!check_observer(O))
-			to_chat(O, "<span class='warning'>You are not eligible.</span>")
-			return
-		if(O.key in has_died_as_golem)
-			if(world.time < has_died_as_golem[O.key] + GOLEM_RESPAWN_TIME)
-				to_chat(O, "<span class='warning'>You already died as a golem too recently. You must wait longer before you can become a golem again.</span>")
-				return
-		ghosts.Add(O)
-		to_chat(O, "<span class='notice'>You are signed up to be a golem.</span>")
 
 /mob/living/carbon/slime/has_eyes()
 	return 0

@@ -210,6 +210,8 @@ var/const/INGEST = 2
 		var/current_reagent_transfer = current_reagent.volume * part
 		if(preserve_data)
 			trans_data = current_reagent.data
+		if(current_reagent.id in reagents_to_always_log)
+			log_transfer = TRUE
 		if(log_transfer)
 			logged_message += "[current_reagent_transfer]u of [current_reagent.name]"
 			if(current_reagent.id in reagents_to_log)
