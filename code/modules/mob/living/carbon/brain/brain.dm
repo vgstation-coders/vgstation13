@@ -19,9 +19,7 @@
 	verbs -= /mob/living/carbon/verb/mob_sleep
 
 /mob/living/carbon/brain/Destroy()
-	if(key || mind.key)
-		if(!key)
-			src.key = mind.key
+	if(key)				//If there is a mob connected to this thing. Have to check key twice to avoid false death reporting.
 		if(stat!=DEAD)	//If not dead.
 			death(1)	//Brains can die again. AND THEY SHOULD AHA HA HA HA HA HA
 	..()

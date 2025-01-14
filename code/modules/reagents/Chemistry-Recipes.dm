@@ -2120,9 +2120,8 @@
 	required_container = /obj/item/slime_extract/adamantine
 
 /datum/chemical_reaction/slime_extract/slimegolem/on_reaction(var/datum/reagents/holder)
-	var/obj/effect/golem_rune/Z = new /obj/effect/golem_rune
-	Z.forceMove(get_turf(holder.my_atom))
-	Z.announce_to_ghosts()
+	var/obj/effect/decal/cleanable/golem_rune/Z = new /obj/effect/decal/cleanable/golem_rune(get_turf(holder.my_atom))
+	Z.creator = usr
 	..()
 
 /datum/chemical_reaction/slime_extract/slimediamond2
