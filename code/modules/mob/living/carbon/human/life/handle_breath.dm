@@ -94,6 +94,11 @@
 				var/obj/location_as_object = loc
 				location_as_object.handle_internal_lifeform(src, 0)
 
+	if(wear_mask)//Insulated masks will protect you from the elements you breath somewhat
+		var/temp_difference = bodytemperature - breath.temperature
+		var/temp_change = (1 - wear_mask.heat_conductivity) * temp_difference
+		breath.temperature += temp_change
+
 	handle_breath(breath)
 
 	if(species)

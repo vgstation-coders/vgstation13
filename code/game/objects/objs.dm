@@ -1,4 +1,7 @@
-var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXIN, MINDBREAKER, SPIRITBREAKER, CYANIDE, IMPEDREZENE, LUBE)
+//reagents that should adminwarn upon transfer
+var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXIN, MINDBREAKER, SPIRITBREAKER, CYANIDE, IMPEDREZENE, LUBE, CHEFSPECIAL, AMANITIN)
+//dangerous reagents that should always be logged upon transfer no matter what
+var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECIAL, AMANITIN)
 
 /obj
 	var/origin_tech = null	//Used by R&D to determine what research bonuses it grants.
