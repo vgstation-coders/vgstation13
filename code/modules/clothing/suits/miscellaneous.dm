@@ -788,7 +788,7 @@ var/list/tag_suits_list = list()
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	hood = new /obj/item/clothing/head/bedsheet_ghost()
 	hood_suit_name = "robes"
-	body_parts_covered = FULL_BODY|HIDEBACK
+	body_parts_covered = FULL_BODY
 	body_parts_visible_override = FEET
 	force_hood = TRUE
 
