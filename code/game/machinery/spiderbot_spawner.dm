@@ -47,6 +47,7 @@
 
 /obj/machinery/spiderbot_fabricator/spillContents(destroy_chance = 0)
     eject_occupant()
+    var/i
     for(i=0, i<brains, i++)
         if(!prob(destroy_chance))
             var/obj/item/device/mmi/posibrain/brain = new(src.loc)
