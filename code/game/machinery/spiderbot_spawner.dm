@@ -124,16 +124,11 @@
     if(!..())
         if(istype(O,/obj/item/device/mmi))
             var/obj/item/device/mmi/mmi = O
-            if(!mmi.brainmob)
+            if(!mmi.brainmob || (!mmi.brainmob.key && !mind_can_reenter(mmi.brainmob.mind)))
                 brains += 1
                 to_chat(user, "<span class='notice'>You insert \the [mmi] into \the [src]'s storage bay'.")
                 qdel(mmi)
                 return TRUE
-
-            if(!mmi.brainmob.key)
-                if(!mind_can_reenter(mmi.brainmob.mind))
-                    to_chat(user, "<span class='notice'>\The [src] indicates that [O.name]'s mind is completely unresponsive; there's no point.</span>")
-                    return TRUE
 
             if(mmi.brainmob.stat == DEAD)
                 to_chat(user, "<span class='warning'>Yeah, good idea. Give something deader than the pizza in your fridge legs. Mom would be so proud.</span>")
