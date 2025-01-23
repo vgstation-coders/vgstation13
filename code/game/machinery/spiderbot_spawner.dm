@@ -50,7 +50,7 @@
     var/i
     for(i=0, i<brains, i++)
         if(!prob(destroy_chance))
-            var/obj/item/device/mmi/posibrain/brain = new(src.loc)
+            new /obj/item/device/mmi/posibrain(src.loc)
     return ..()
 
 //Matter bin and half of manipulators reduce recharge time. Micro laser and half of manipulators reduce build time.
