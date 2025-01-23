@@ -7,9 +7,7 @@
     anchored = TRUE
     machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
     var/building = FALSE
-    var/metal = 0
-    var/max_metal = 100
-    var/const/metalPerSpiderbot = 10
+    var/brains = 0
     use_power = MACHINE_POWER_USE_IDLE
     idle_power_usage = 20
     active_power_usage = 5000
@@ -49,6 +47,9 @@
 
 /obj/machinery/spiderbot_fabricator/spillContents(destroy_chance = 0)
     eject_occupant()
+    for(i=0, i<brains, i++)
+        if(!prob(destroy_chance))
+            var/obj/item/device/mmi/posibrain/brain = new(src.loc)
     return ..()
 
 //Matter bin and half of manipulators reduce recharge time. Micro laser and half of manipulators reduce build time.
@@ -66,7 +67,7 @@
 
 /obj/machinery/spiderbot_fabricator/examine(mob/user)
     ..()
-    to_chat(user, "<span class='notice'>The sheet storage is at [metal] out of [max_metal].</span>")
+    to_chat(user, "<span class='notice'>The machine is holding [brains] inactive positronic brains.</span>")
 
 /obj/machinery/spiderbot_fabricator/process()
     ..()
@@ -84,7 +85,7 @@
     return (world.time - last_built_time) < get_recharge_time()
 
 /obj/machinery/spiderbot_fabricator/proc/canSpawn()
-    return !(stat & (FORCEDISABLE|NOPOWER)) && !building && !isRecharging() &&metal >= metalPerSpiderbot
+    return !(stat & (FORCEDISABLE|NOPOWER)) && !building && !isRecharging() && brains
 
 /obj/machinery/spiderbot_fabricator/proc/is_valid_user(var/mob/user)
     if(!user)
@@ -98,8 +99,8 @@
         to_chat(user, "<span class='warning'>\The [src] is still recharging from its last activation.</span>")
         return FALSE
 
-    if(metal < metalPerSpiderbot)
-        to_chat(user, "<span class='warning'>\The [name] doesn't have enough metal to complete this task.</span>")
+    if(brains <= 0)
+        to_chat(user, "<span class='warning'>\The [name] doesn't contain any positronic brains.</span>")
         return FALSE
 
     if(istype(user, /mob/living/simple_animal/mouse))
@@ -123,7 +124,9 @@
         if(istype(O,/obj/item/device/mmi))
             var/obj/item/device/mmi/mmi = O
             if(!mmi.brainmob)
-                to_chat(user, "<span class='warning'>\The [mmi] appears to be devoid of any soul.</span>")
+                brains += 1
+                to_chat(user, "<span class='notice'>You insert \the [mmi] into \the [src]'s storage bay'.")
+                qdel(mmi)
                 return TRUE
 
             if(!mmi.brainmob.key)
@@ -141,23 +144,6 @@
             if(user.drop_item(O, src))
                 makeSpiderbot(mmi.brainmob, mmi)
                 return TRUE
-        else if(istype(O, /obj/item/stack/sheet/metal))
-            var/obj/item/stack/sheet/metal/metal_sheet = O
-            var/amount = round(input("How many sheets do you want to add? (0 - [metal_sheet.amount])") as num)//No decimals
-            amount = min(amount, metal_sheet.amount)
-            if(!user.Adjacent(src) || !O || !O.loc || (O.loc != user && !isgripper(O.loc)))
-                return TRUE
-            if(amount <= 0)
-                return TRUE
-            amount = min(amount, max_metal - metal)
-            if(amount <= 0)
-                to_chat(user, "<span class='warning'>\The [src]'s sheet storage is already full.</span>")
-                return TRUE
-            metal += amount
-            metal_sheet.use(amount)
-            to_chat(user, "<span class='notice'>You add [amount] metal sheets to \the [src].</span>")
-            update_icon()
-            return TRUE
     return FALSE
 
 /obj/machinery/spiderbot_fabricator/attack_animal(var/mob/user as mob)
@@ -181,6 +167,7 @@
         M.forceMove(src)
     else
         var/obj/item/device/mmi/posibrain/mmi = new(src)
+        brains -= 1
         M = mmi
         mmi.transfer_personality(user)
     building = TRUE
@@ -208,7 +195,6 @@
             S.transfer_personality(M)
             to_chat(S, "<span class='notice'>You are now a spiderbot. Seek out the roboticist to be turned into something more useful.</span>")
         S.update_icon()
-        metal -= metalPerSpiderbot
         last_built_time = world.time
 
 /obj/machinery/spiderbot_fabricator/update_icon()
@@ -218,7 +204,7 @@
         icon_state="mommispawner-building"
     else if(isRecharging())
         icon_state="mommispawner-recharging"
-    else if(metal < metalPerSpiderbot)
+    else if(!brains)
         icon_state="mommispawner-nopower"
     else
         icon_state="mommispawner-idle"
