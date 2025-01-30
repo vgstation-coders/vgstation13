@@ -478,3 +478,33 @@
 	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)//4
 	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)//3
 	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)//2
+
+/datum/disease2/effect/milkflourvomit
+	name = "Glutenolactic Emesis Syndrome"
+	desc = "Causes sudden bouts of intermitent vomiting containing either milk or flour. No effects on lesser lifeforms."
+	encyclopedia = "Some virologists moonlighting as chefs combine this symptom with Chronic Lime Disease and Chicken Pox for an easy way to make lime cake."
+	stage = 1
+	badness = EFFECT_DANGER_ANNOYING
+	multiplier = 2
+	max_multiplier = 6
+
+/datum/disease2/effect/milkflourvomit/activate(var/mob/living/mob)
+	if(!ishuman(mob))
+		return
+
+	var/mob/living/carbon/human/H = mob
+	switch(rand(1,2))
+		if(1)
+			to_chat(mob, "<span class='notice'>You feel an odd taste in your mouth...</span>")
+			sleep(10)
+			H.reagents.add_reagent(MILK, multiplier*10)
+			H.vomit(0,1,1)
+		if(2)
+			to_chat(mob, "<span class='notice'>Your throat feels extremely dry!</span>")
+			H.audible_cough()
+			H.adjustOxyLoss((2*multiplier)) //not that strong
+			sleep(10)
+			H.reagents.add_reagent(FLOUR, multiplier*10)
+			new /obj/effect/decal/cleanable/flour(get_turf(H))
+			H.vomit(0,1,1)
+//TODO: maybe remove the whole flour vomit thing and have it exclusively as flour coughing if and when we add an easy way to pick up floor flour (the wet dry vacuum doesn't count)
