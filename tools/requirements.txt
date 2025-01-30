@@ -1,6 +1,6 @@
-pygit2==1.7.2
+pygit2==1.16.0
 bidict==0.22.0
-Pillow==10.3.0
+Pillow==11.0.0
 
 # changelogs
 PyYaml==6.0.1

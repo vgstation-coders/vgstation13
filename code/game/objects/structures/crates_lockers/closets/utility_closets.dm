@@ -117,12 +117,6 @@
 /obj/structure/closet/firecloset/full/atoms_to_spawn()
 	return ..() + /obj/item/device/flashlight
 
-/obj/structure/closet/firecloset/update_icon()
-	if(!opened)
-		icon_state = icon_closed
-	else
-		icon_state = icon_opened
-
 
 /*
  * Tool Closet
