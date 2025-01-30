@@ -766,7 +766,7 @@
 			xylophone=0
 	return
 
-/mob/living/carbon/human/proc/vomit(hairball = 0, instant = 0)
+/mob/living/carbon/human/proc/vomit(hairball = 0, instant = 0, vomitvolume = 0.1)
 	if(species && species.flags & SPECIES_NO_MOUTH)
 		return
 
@@ -810,7 +810,7 @@
 						if(G.reagents.total_volume <= G.reagents.maximum_volume-7) //Container can fit 7 more units of chemicals - vomit into it
 							G.reagents.add_reagent(VOMIT, rand(3,10))
 							if(src.reagents)
-								reagents.trans_to(G, 1 + reagents.total_volume * 0.1)
+								reagents.trans_to(G, 1 + reagents.total_volume * vomitvolume) //one tenth
 						else //Container is nearly full - fill it to the brim with vomit and spawn some more on the floor
 							G.reagents.add_reagent(VOMIT, 10)
 							spawn_vomit_on_floor = 1
