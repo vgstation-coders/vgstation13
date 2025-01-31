@@ -52,33 +52,29 @@
 
 	else
 		var/list/dupecheck
-		var/roll
+		dupecheck.Add(1,2,3,4,5,6,7,8,9,10,11,12,13)
+		dupecheck = shuffle(dupecheck)
 		var/i
 		for(i=0; i<=rand(2,5); i++)//generates 2 to 5 objectives, limiting duplicates
-			roll = rand(1,13)
-			if(roll in dupecheck)
-				i = i-1
-			else
-				dupecheck += roll
-				switch(roll)
-					if(1 to 2)
-						AppendObjective(/datum/objective/target/brig)
-					if(3)
-						AppendObjective(/datum/objective/target/skulls)
-					if(4 to 7)
-						AppendObjective(/datum/objective/target/steal)
-					if(8 to 9)
-						AppendObjective(/datum/objective/target/harm)
-					if(10 to 11)
-						switch(rand(1,3))
-							if(1)
-								AppendObjective(/datum/objective/target/assassinate/)
-							if(2)
-								AppendObjective(/datum/objective/target/assassinate/delay_short)
-							else
-								AppendObjective(/datum/objective/target/assassinate/delay_medium)
-					else
-						AppendObjective(/datum/objective/target/assassinate/orexile)
+			switch(dupecheck[i])
+				if(1 to 2)
+					AppendObjective(/datum/objective/target/brig)
+				if(3)
+					AppendObjective(/datum/objective/target/skulls)
+				if(4 to 7)
+					AppendObjective(/datum/objective/target/steal)
+				if(8 to 9)
+					AppendObjective(/datum/objective/target/harm)
+				if(10 to 11)
+					switch(rand(1,3))
+						if(1)
+							AppendObjective(/datum/objective/target/assassinate/)
+						if(2)
+							AppendObjective(/datum/objective/target/assassinate/delay_short)
+						else
+							AppendObjective(/datum/objective/target/assassinate/delay_medium)
+				else
+					AppendObjective(/datum/objective/target/assassinate/orexile)
 		switch(rand(1,100))
 			if(1 to 30) // Die glorious death
 				if(!(locate(/datum/objective/die) in objectives.GetObjectives()) && !(locate(/datum/objective/target/steal) in objectives.GetObjectives()))
