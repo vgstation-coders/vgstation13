@@ -958,69 +958,71 @@ var/global/num_vending_terminals = 1
 	usr.set_machine(src)
 
 
-	if (href_list["vend"] && src.vend_ready && !currently_vending)
-		//testing("vend: [href]")
+	if (src.vend_ready && !currently_vending)
+		if (href_list["vend"])
+			//testing("vend: [href]")
 
-		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
-			to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
+			if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
+				to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
 
-			flick(src.icon_deny,src)
+				flick(src.icon_deny,src)
+				return
+
+			var/idx=text2num(href_list["vend"])
+			var/cat=text2num(href_list["cat"])
+
+			var/datum/data/vending_product/R = GetProductByID(idx,cat)
+			if (!R || !istype(R) || R.amount <= 0)
+				return
+
+			if(R.price == null || !R.price)
+				src.vend(R, usr)
+			else if(free_vend)//for MoMMI and Service Borgs
+				src.vend(R, usr)
+			else
+				src.currently_vending = R
+				src.updateUsrDialog()
+
 			return
 
-		var/idx=text2num(href_list["vend"])
-		var/cat=text2num(href_list["cat"])
+		else if(edit_mode)
+			if (href_list["set_price"])
+				//testing("vend: [href]")
 
-		var/datum/data/vending_product/R = GetProductByID(idx,cat)
-		if (!R || !istype(R) || R.amount <= 0)
-			return
+				if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
+					to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
 
-		if(R.price == null || !R.price)
-			src.vend(R, usr)
-		else if(free_vend)//for MoMMI and Service Borgs
-			src.vend(R, usr)
-		else
-			src.currently_vending = R
-			src.updateUsrDialog()
+					flick(src.icon_deny,src)
+					return
 
-		return
+				var/idx=text2num(href_list["set_price"])
+				var/cat=text2num(href_list["cat"])
 
-	else if (href_list["set_price"] && src.vend_ready && !currently_vending && edit_mode)
-		//testing("vend: [href]")
+				var/datum/data/vending_product/R = GetProductByID(idx,cat)
+				if (!R || !istype(R) || R.amount <= 0)
+					return
 
-		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
-			to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
+				var/new_price = input("Enter a price", "Change price", R.price) as null|num
+				if(new_price == null || new_price < 0)
+					new_price = R.price
+				new_price = min(new_price, MAX_ITEM_PRICE)
 
-			flick(src.icon_deny,src)
-			return
+				R.price = new_price
 
-		var/idx=text2num(href_list["set_price"])
-		var/cat=text2num(href_list["cat"])
+			else if (href_list["delete_entry"])
+				if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
+					to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
 
-		var/datum/data/vending_product/R = GetProductByID(idx,cat)
-		if (!R || !istype(R) || R.amount <= 0)
-			return
+					flick(src.icon_deny,src)
+					return
 
-		var/new_price = input("Enter a price", "Change price", R.price) as null|num
-		if(new_price == null || new_price < 0)
-			new_price = R.price
-		new_price = min(new_price, MAX_ITEM_PRICE)
+				var/idx=text2num(href_list["delete_entry"])
+				var/cat=text2num(href_list["cat"])
 
-		R.price = new_price
-
-	else if (href_list["delete_entry"] && src.vend_ready && !currently_vending && edit_mode)
-		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
-			to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
-
-			flick(src.icon_deny,src)
-			return
-
-		var/idx=text2num(href_list["delete_entry"])
-		var/cat=text2num(href_list["cat"])
-
-		var/datum/data/vending_product/R = GetProductByID(idx,cat)
-		if(!R || !istype(R) || R.amount > 0)
-			return
-		deleteEntry(R)
+				var/datum/data/vending_product/R = GetProductByID(idx,cat)
+				if(!R || !istype(R) || R.amount > 0)
+					return
+				deleteEntry(R)
 
 	else if (href_list["cancel_buying"])
 		dispense_change()
@@ -1036,21 +1038,25 @@ var/global/num_vending_terminals = 1
 	else if ((href_list["togglevoice"]) && (src.panel_open))
 		src.shut_up = !src.shut_up
 
-	else if (href_list["rename"] && edit_mode)
-		var/newname = sanitize(input(usr,"Please enter a new name for the vending machine.","Rename Machine") as text)
-		if(length(newname) > 0 && length(newname) <= CUSTOM_VENDING_MAX_NAME_LENGTH)
-			src.name = newname
+	else if(edit_mode)
+		if (href_list["rename"])
+			var/newname = sanitize(input(usr,"Please enter a new name for the vending machine.","Rename Machine") as text)
+			if(length(newname) > 0 && length(newname) <= CUSTOM_VENDING_MAX_NAME_LENGTH)
+				src.name = newname
 
-	else if (href_list["show_oos"] && edit_mode)
-		dont_render_OOS = !dont_render_OOS
+		else if (href_list["show_oos"])
+			dont_render_OOS = !dont_render_OOS
 
-	else if (href_list["add_slogan"] && edit_mode)
-		var/newslogan = sanitize(input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text)
-		if(length(newslogan) > 0 && length(newslogan) <= CUSTOM_VENDING_MAX_SLOGAN_LENGTH)
-			product_slogans += newslogan
+		else if (href_list["add_slogan"])
+			var/newslogan = sanitize(input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text)
+			if(length(newslogan) > 0 && length(newslogan) <= CUSTOM_VENDING_MAX_SLOGAN_LENGTH)
+				product_slogans += newslogan
 
-	else if (href_list["delete_slogan_line"] && edit_mode && product_slogans.len > 0)
-		product_slogans -= product_slogans[text2num(href_list["delete_slogan_line"])]
+		else if (href_list["delete_slogan_line"] && product_slogans.len > 0)
+			product_slogans -= product_slogans[text2num(href_list["delete_slogan_line"])]
+	
+	else if(!vend_ready && currently_vending)
+		to_chat(usr, "<span class='warning'>[src] is busy, this action is unavailable.</span>")
 
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
@@ -1079,7 +1085,6 @@ var/global/num_vending_terminals = 1
 
 		flick(src.icon_deny,src)
 		return
-	src.vend_ready = 0 //One thing at a time!!
 
 	if (!by_voucher && (R in coin_records))
 		if (isnull(coin))
@@ -1124,6 +1129,7 @@ var/global/num_vending_terminals = 1
 	visible_message("\The [src.name] whirrs as it vends.", "You hear a whirr.")
 	if (vend_sound)
 		playsound(loc, vend_sound, 50, 0)
+	src.vend_ready = 0 //One thing at a time!!
 	spawn(vend_delay)
 		if(!R.custom)
 			var/path2use = R.product_path
