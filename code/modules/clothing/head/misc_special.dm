@@ -94,7 +94,7 @@
 		else
 			return
 
-	try_hotspot_expose(700, SMALL_FLAME, -1)
+	try_hotspot_expose(700, SMALL_FLAME, 0)
 
 /obj/item/clothing/head/cakehat/attack_self(mob/user as mob)
 	if(status > 1)

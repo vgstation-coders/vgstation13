@@ -1732,8 +1732,6 @@ var/proccalls = 1
 #define JINGLE_CLASSIC "Classics"
 #define JINGLE_ALL "All"
 
-#define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
-
 #define BEESPECIES_NORMAL	"bee"
 #define BEESPECIES_VOX		"chill bug"
 #define BEESPECIES_HORNET	"hornet"

@@ -92,11 +92,13 @@
 	..()
 	if(volume >= 0.2)
 		M.rejuvenate()
+		M.mind?.suiciding = 0
 
 /datum/reagent/panacea/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	..()
 	if((method == INGEST) && (volume >= 0.2))
 		M.rejuvenate()
+		M.mind?.suiciding = 0 //If they suicided then bring them back! Also making sure the mind exists in the first place.
 
 /datum/reagent/albuterol
 	name = "Albuterol"

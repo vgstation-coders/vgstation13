@@ -505,7 +505,7 @@ var/list/tag_suits_list = list()
 	item_state = "strait_jacket"
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|HIDETAIL
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/ianshirt
 	name = "worn shirt"
