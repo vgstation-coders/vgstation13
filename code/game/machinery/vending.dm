@@ -957,8 +957,38 @@ var/global/num_vending_terminals = 1
 		coin = null
 	usr.set_machine(src)
 
+	if (href_list["cancel_buying"])
+		dispense_change()
+		src.currently_vending = null
 
-	if (src.vend_ready && !currently_vending)
+	else if (href_list["buy"])
+		var/obj/item/weapon/card/card = usr.get_card()
+		if(card)
+			connect_account(usr, card)
+		else
+			to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
+
+	else if ((href_list["togglevoice"]) && (src.panel_open))
+		src.shut_up = !src.shut_up
+
+	else if(edit_mode)
+		if (href_list["rename"])
+			var/newname = sanitize(input(usr,"Please enter a new name for the vending machine.","Rename Machine") as text)
+			if(length(newname) > 0 && length(newname) <= CUSTOM_VENDING_MAX_NAME_LENGTH)
+				src.name = newname
+
+		else if (href_list["show_oos"])
+			dont_render_OOS = !dont_render_OOS
+
+		else if (href_list["add_slogan"])
+			var/newslogan = sanitize(input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text)
+			if(length(newslogan) > 0 && length(newslogan) <= CUSTOM_VENDING_MAX_SLOGAN_LENGTH)
+				product_slogans += newslogan
+
+		else if (href_list["delete_slogan_line"] && product_slogans.len > 0)
+			product_slogans -= product_slogans[text2num(href_list["delete_slogan_line"])]
+	
+	else if (src.vend_ready && !currently_vending)
 		if (href_list["vend"])
 			//testing("vend: [href]")
 
@@ -1024,38 +1054,7 @@ var/global/num_vending_terminals = 1
 					return
 				deleteEntry(R)
 
-	else if (href_list["cancel_buying"])
-		dispense_change()
-		src.currently_vending = null
-
-	else if (href_list["buy"])
-		var/obj/item/weapon/card/card = usr.get_card()
-		if(card)
-			connect_account(usr, card)
-		else
-			to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
-
-	else if ((href_list["togglevoice"]) && (src.panel_open))
-		src.shut_up = !src.shut_up
-
-	else if(edit_mode)
-		if (href_list["rename"])
-			var/newname = sanitize(input(usr,"Please enter a new name for the vending machine.","Rename Machine") as text)
-			if(length(newname) > 0 && length(newname) <= CUSTOM_VENDING_MAX_NAME_LENGTH)
-				src.name = newname
-
-		else if (href_list["show_oos"])
-			dont_render_OOS = !dont_render_OOS
-
-		else if (href_list["add_slogan"])
-			var/newslogan = sanitize(input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text)
-			if(length(newslogan) > 0 && length(newslogan) <= CUSTOM_VENDING_MAX_SLOGAN_LENGTH)
-				product_slogans += newslogan
-
-		else if (href_list["delete_slogan_line"] && product_slogans.len > 0)
-			product_slogans -= product_slogans[text2num(href_list["delete_slogan_line"])]
-	
-	else if(!vend_ready && currently_vending)
+	else
 		to_chat(usr, "<span class='warning'>[src] is busy, this action is unavailable.</span>")
 
 	src.add_fingerprint(usr)
