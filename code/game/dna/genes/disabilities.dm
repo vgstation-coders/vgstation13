@@ -167,6 +167,16 @@
 	speech.message = replacetext(speech.message,"ss","thh")
 	speech.message = replacetext(speech.message,"s","th")
 
+/datum/dna/gene/disability/lisp/activate(var/mob/M, var/connected, var/flags)
+	..(M,connected,flags)
+	if(isvox(M))
+		M.UpdateAppearance()
+
+/datum/dna/gene/disability/lisp/deactivate(var/mob/M, var/connected, var/flags)
+	..(M,connected,flags)
+	if(isvox(M))
+		M.UpdateAppearance()
+
 /datum/dna/gene/disability/anemia
 	name = "Anemia"
 	activation_message = "You feel out of breath."

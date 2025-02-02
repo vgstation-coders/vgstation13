@@ -111,6 +111,27 @@
 		return
 	vox_tail.update_tail(vox)
 
+	if(/datum/dna/gene/disability/lisp in vox.active_genes) //!! Vox Beaks !!
+		switch(vox.my_appearance.s_tone)
+			if(VOXEMERALD)
+				icobase = 'icons/mob/human_races/vox/r_voxemrl_duck.dmi'
+				deform = 'icons/mob/human_races/vox/r_def_voxemrl_duck.dmi'
+			if(VOXAZURE)
+				icobase = 'icons/mob/human_races/vox/r_voxazu_duck.dmi'
+				deform = 'icons/mob/human_races/vox/r_def_voxazu_duck.dmi'
+			if(VOXLGREEN)
+				icobase = 'icons/mob/human_races/vox/r_voxlgrn_duck.dmi'
+				deform = 'icons/mob/human_races/vox/r_def_voxlgrn_duck.dmi'
+			if(VOXGRAY)
+				icobase = 'icons/mob/human_races/vox/r_voxgry_duck.dmi'
+				deform = 'icons/mob/human_races/vox/r_def_voxgry_duck.dmi'
+			if(VOXBROWN)
+				icobase = 'icons/mob/human_races/vox/r_voxbrn_duck.dmi'
+				deform = 'icons/mob/human_races/vox/r_def_voxbrn_duck.dmi'
+			else
+				icobase = 'icons/mob/human_races/vox/r_vox_duck.dmi'
+				deform = 'icons/mob/human_races/vox/r_def_vox_duck.dmi'
+
 /datum/species/skellington/skelevox // Science never goes too far, it's the public that's too conservative
 	name = "Skeletal Vox"
 	icobase = 'icons/mob/human_races/vox/r_voxboney.dmi'
