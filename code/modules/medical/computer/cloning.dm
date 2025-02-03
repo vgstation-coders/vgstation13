@@ -103,9 +103,8 @@
 /obj/machinery/computer/cloning/proc/findcloners()
 	. = list()
 	for (var/obj/machinery/cloning/clonepod/pod_found in orange(src, CLONEPODRANGE))
-		if(!pod_found.connected)
-			. += pod_found
-			pod_found.connected = src
+		. += pod_found
+		pod_found.connected = src
 
 #undef CLONEPODRANGE
 
