@@ -95,7 +95,7 @@
 		scannerf = locate(/obj/machinery/dna_scannernew, get_step(src, dir))
 
 		// If found, then we add the scanner to the return
-		if (!isnull(scannerf) && !scannerf.connected)
+		if (!isnull(scannerf))
 			. += scannerf
 			scannerf.connected = src
 
