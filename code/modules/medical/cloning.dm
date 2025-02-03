@@ -20,7 +20,7 @@
 	var/heal_level = 0 //The clone is released once its health reaches this level.
 	var/locked = FALSE
 	var/frequency = 0
-	var/obj/machinery/computer/cloning/connected = null //So we remember the connected clone machine.
+	var/list/obj/machinery/computer/cloning/connected = null //So we remember the connected clone machine.
 	var/mess = FALSE //Need to clean out it if it's full of exploded clone.
 	var/working = FALSE //One clone attempt at a time thanks
 	var/eject_wait = FALSE //Don't eject them as soon as they are created fuckkk
@@ -368,12 +368,11 @@
 
 	occupants += H
 
-	if(!connected.emagged)
-		icon_state = "pod_1"
-	else
-		icon_state = "pod_e"
-
-	connected.update_icon()
+	icon_state = "pod_1"
+	for(var/obj/machinery/computer/cloning/C in connected)
+		if(C.emagged)
+			icon_state = "pod_e"
+		C.update_icon()
 
 	isslimeperson(H) ? H.adjustToxLoss(75) : H.adjustCloneLoss(150) // 75 for slime people due to their tox_mod of 2
 	H.adjustBrainLoss(upgraded ? 0 : (heal_level + 50 + rand(10, 30))) // The rand(10, 30) will come out as extra brain damage
@@ -534,10 +533,10 @@
 	return..()
 
 /obj/machinery/cloning/clonepod/Destroy()
-	if(connected)
-		if(src in connected.pods)
-			connected.pods -= src
-		connected = null
+	for(var/obj/machinery/computer/cloning/C in connected)
+		if(src in C.pods)
+			C.pods -= src
+		C = null
 	go_out() //Eject everything
 
 	. = ..()
@@ -571,8 +570,9 @@
 	if (!message)
 		return FALSE
 
-	connected.temp = message
-	connected.updateUsrDialog()
+	for(var/obj/machinery/computer/cloning/C in connected)
+		C.temp = message
+		C.updateUsrDialog()
 	return TRUE
 
 /obj/machinery/cloning/clonepod/verb/eject()
@@ -641,7 +641,8 @@
 	icon_state = "pod_0"
 	eject_wait = FALSE
 	heal_level = 0 //so that it will be re-randomized next time
-	connected.update_icon()
+	for(var/obj/machinery/computer/cloning/C in connected)
+		C.update_icon()
 	working = FALSE //NOW we're done.
 
 	return TRUE

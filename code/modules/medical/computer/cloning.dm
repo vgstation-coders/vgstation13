@@ -42,7 +42,7 @@
 /obj/machinery/computer/cloning/Destroy()
 	if(pods.len)
 		for(var/obj/machinery/cloning/clonepod/pod in pods)
-			pod.connected = null
+			pod.connected -= src
 		pods.Cut()
 	if(scanners.len)
 		for(var/obj/machinery/dna_scannernew/scanner in scanners)
@@ -78,7 +78,7 @@
 	if(istype(O, /obj/machinery/cloning/clonepod))
 		pods += O
 		var/obj/machinery/cloning/clonepod/C = O
-		C.connected = src
+		C.connected += src
 		return 1
 
 /obj/machinery/computer/cloning/proc/updatemodules()
@@ -104,7 +104,7 @@
 	. = list()
 	for (var/obj/machinery/cloning/clonepod/pod_found in orange(src, CLONEPODRANGE))
 		. += pod_found
-		pod_found.connected = src
+		pod_found.connected += src
 
 #undef CLONEPODRANGE
 
