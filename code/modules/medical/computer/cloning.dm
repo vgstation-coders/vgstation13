@@ -31,6 +31,14 @@
 		/datum/malfhack_ability/oneuse/emag
 	)
 
+
+/obj/machinery/computer/cloning/New()
+	..()
+	spawn(5)
+		updatemodules()
+		return
+	return
+
 /obj/machinery/computer/cloning/Destroy()
 	if(pods.len)
 		for(var/obj/machinery/cloning/clonepod/pod in pods)
