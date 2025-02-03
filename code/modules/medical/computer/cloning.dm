@@ -252,7 +252,7 @@
 		return
 
 	if (href_list["scan"])
-		var/obj/machinery/dna_scannernew/scanner = href_list["scan"]
+		var/obj/machinery/dna_scannernew/scanner = locate(href_list["scan"])
 		if(scanner)
 			scantemp = ""
 
@@ -267,7 +267,7 @@
 
 	else if (href_list["lock"])
 		//No locking an open scanner.
-		var/obj/machinery/dna_scannernew/scanner = href_list["lock"]
+		var/obj/machinery/dna_scannernew/scanner = locate(href_list["lock"])
 		if(scanner)
 			scanner.locked = !scanner.locked && scanner.occupant
 
