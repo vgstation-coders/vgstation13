@@ -168,12 +168,12 @@
 				var/i = 0
 				for(var/obj/machinery/dna_scannernew/scanner in scanners)
 					i++
-					dat += "Scanner [i] lock status: <a href='byond://?src=\ref[src];lock=[scanner]'>[scanner.locked ? "Locked" : "Unlocked"]</a><br>"
+					dat += "Scanner [i] lock status: <a href='byond://?src=\ref[src];lock=\ref[scanner]'>[scanner.locked ? "Locked" : "Unlocked"]</a><br>"
 					if (scanner.occupant)
 						if(scantemp == "Scanners unoccupied")
 							scantemp = "" // Stupid check to remove the text
 
-						dat += "<a href='byond://?src=\ref[src];scan=[scanner]'>Scan - [scanner.occupant]</a><br>"
+						dat += "<a href='byond://?src=\ref[src];scan=\ref[scanner]'>Scan - [scanner.occupant]</a><br>"
 					else
 						scantemp = "Scanners unoccupied"
 
