@@ -11,7 +11,7 @@
 	icon_state = "cloning"
 	circuit = "/obj/item/weapon/circuitboard/cloning"
 	req_access = list(access_heads) //Only used for record deletion right now.
-	var/obj/machinery/dna_scannernew/scanner = null //Linked scanner. For scanning.
+	var/list/obj/machinery/dna_scannernew/scanners = list() //Linked scanners. For scanning.
 	//var/obj/machinery/species_modifier/species_mod = null //linked Species Modifier. For handling species.
 	var/list/obj/machinery/cloning/clonepod/pods = list() //Linked cloning pods.
 	var/temp = ""
@@ -44,9 +44,10 @@
 		for(var/obj/machinery/cloning/clonepod/pod in pods)
 			pod.connected = null
 		pods.Cut()
-	if(scanner)
-		scanner.connected = null
-		scanner = null
+	if(scanners.len)
+		for(var/obj/machinery/dna_scannernew/scanner in scanners)
+			scanner.connected = null
+		scanners.Cut()
 	if(diskette)
 		if(loc)
 			diskette.forceMove(loc)
@@ -68,7 +69,7 @@
 	return (istype(O,/obj/machinery/cloning) && get_dist(src,O) < CLONEPODRANGE)
 
 /obj/machinery/computer/cloning/isLinkedWith(var/obj/O)
-	return O != null && ((O in pods) || O == scanner)
+	return O != null && ((O in pods) || (O in scanners))
 
 ///obj/machinery/computer/cloning/getLink(var/idx) - abandoned orphan code that never worked anyway
 //	return (idx >= 1 && idx <= links.len) ? links[idx] : null
@@ -81,33 +82,29 @@
 		return 1
 
 /obj/machinery/computer/cloning/proc/updatemodules()
-	scanner = findscanner()
-	if(scanner && !scanner.connected)
-		scanner.connected = src
+	scanners = findscanners()
 
-/obj/machinery/computer/cloning/proc/findscanner()
+/obj/machinery/computer/cloning/proc/findscanners()
+	. = list()
 	var/obj/machinery/dna_scannernew/scannerf = null
 
 	// Loop through every direction
-	for(dir in list(NORTH,EAST,SOUTH,WEST))
+	for(dir in cardinal)
 
 		// Try to find a scanner in that direction
 		scannerf = locate(/obj/machinery/dna_scannernew, get_step(src, dir))
 
-		// If found, then we break, and return the scanner
-		if (!isnull(scannerf))
-			break
-
-	// If no scanner was found, it will return null
-	return scannerf
+		// If found, then we add the scanner to the return
+		if (!isnull(scannerf) && !scannerf.connected)
+			. += scannerf
+			scannerf.connected = src
 
 /obj/machinery/computer/cloning/proc/findcloners()
 	. = list()
 	for (var/obj/machinery/cloning/clonepod/pod_found in orange(src, CLONEPODRANGE))
-		if(pod_found.connected)
-			continue
-		. += pod_found
-		pod_found.connected = src
+		if(!pod_found.connected)
+			. += pod_found
+			pod_found.connected = src
 
 #undef CLONEPODRANGE
 
@@ -148,7 +145,7 @@
 			// Modules
 			dat += "<h4>Modules</h4>"
 			//dat += "<a href='byond://?src=\ref[src];relmodules=1'>Reload Modules</a>"
-			if (isnull(src.scanner))
+			if (!scanners.len)
 				dat += " <font color=red>Scanner-ERROR</font><br>"
 			else
 				dat += " <font color=green>Scanner-Found!</font><br>"
@@ -165,18 +162,20 @@
 			else
 				dat += "<b>[scantemp]</b><br>"
 
-			if (isnull(src.scanner))
-				dat += "No scanner connected!<br>"
+			if (!scanners.len)
+				dat += "No scanners connected!<br>"
 			else
-				if (src.scanner.occupant)
-					if(scantemp == "Scanner unoccupied")
-						scantemp = "" // Stupid check to remove the text
+				var/i = 0
+				for(var/obj/machinery/dna_scannernew/scanner in scanners)
+					i++
+					dat += "Scanner [i] lock status: <a href='byond://?src=\ref[src];lock=[scanner]'>[scanner.locked ? "Locked" : "Unlocked"]</a><br>"
+					if (scanner.occupant)
+						if(scantemp == "Scanners unoccupied")
+							scantemp = "" // Stupid check to remove the text
 
-					dat += "<a href='byond://?src=\ref[src];scan=1'>Scan - [src.scanner.occupant]</a><br>"
-				else
-					scantemp = "Scanner unoccupied"
-
-				dat += "Lock status: <a href='byond://?src=\ref[src];lock=1'>[src.scanner.locked ? "Locked" : "Unlocked"]</a><br>"
+						dat += "<a href='byond://?src=\ref[src];scan=[scanner]'>Scan - [scanner.occupant]</a><br>"
+					else
+						scantemp = "Scanners unoccupied"
 
 			if (pods.len)
 				var/i = 0
@@ -252,25 +251,25 @@
 	if(loading)
 		return
 
-	if ((href_list["scan"]) && (!isnull(src.scanner)))
-		scantemp = ""
+	if (href_list["scan"])
+		var/obj/machinery/dna_scannernew/scanner = href_list["scan"]
+		if(scanner)
+			scantemp = ""
 
-		loading = 1
-		src.updateUsrDialog()
-
-		spawn(20)
-			src.scan_mob(src.scanner.occupant)
-
-			loading = 0
+			loading = 1
 			src.updateUsrDialog()
 
+			spawn(20)
+				src.scan_mob(scanner.occupant)
 
+				loading = 0
+				src.updateUsrDialog()
+
+	else if (href_list["lock"])
 		//No locking an open scanner.
-	else if ((href_list["lock"]) && (!isnull(src.scanner)))
-		if ((!src.scanner.locked) && (src.scanner.occupant))
-			src.scanner.locked = 1
-		else
-			src.scanner.locked = 0
+		var/obj/machinery/dna_scannernew/scanner = href_list["lock"]
+		if(scanner)
+			scanner.locked = !scanner.locked && scanner.occupant
 
 	else if (href_list["view_rec"])
 		src.active_record = locate(href_list["view_rec"])
@@ -512,8 +511,10 @@
 	..()
 	overlays = 0
 	if(!(stat & (NOPOWER | BROKEN | FORCEDISABLE)))
-		if(scanner && scanner.occupant)
-			overlays += image(icon = icon, icon_state = "cloning-scan")
+		for(var/obj/machinery/dna_scannernew/scanner in scanners)
+			if(scanner && scanner.occupant)
+				overlays += image(icon = icon, icon_state = "cloning-scan")
+				break
 		for(var/obj/machinery/cloning/clonepod/pod in pods)
 			if(pod && pod.occupants.len > 0)
 				overlays += image(icon = icon, icon_state = "cloning-pod")
