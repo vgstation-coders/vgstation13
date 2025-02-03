@@ -535,8 +535,8 @@
 
 /obj/machinery/cloning/clonepod/Destroy()
 	if(connected)
-		if(connected.pod1 == src)
-			connected.pod1 = null
+		if(src in connected.pods)
+			connected.pods -= src
 		connected = null
 	go_out() //Eject everything
 

@@ -1,4 +1,9 @@
 #define CLONEPODRANGE 7
+#define ERR_NO_CLONEPOD 1
+#define ERR_CLONEPOD_OCCUPIED 2
+#define ERR_CLONEPOD_BIOMASS 3
+#define ERR_CLONEPOD_MESS 4
+
 /obj/machinery/computer/cloning
 	name = "cloning console"
 	desc = "A computer that takes DNA from a DNA scanner and uses it to clone an organism with a cloning pod."
@@ -8,7 +13,7 @@
 	req_access = list(access_heads) //Only used for record deletion right now.
 	var/obj/machinery/dna_scannernew/scanner = null //Linked scanner. For scanning.
 	//var/obj/machinery/species_modifier/species_mod = null //linked Species Modifier. For handling species.
-	var/obj/machinery/cloning/clonepod/pod1 = null //Linked cloning pod.
+	var/list/obj/machinery/cloning/clonepod/pods = list() //Linked cloning pods.
 	var/temp = ""
 	var/scantemp = "Scanner unoccupied"
 	var/menu = 1 //Which menu screen to display
@@ -35,9 +40,10 @@
 	return
 
 /obj/machinery/computer/cloning/Destroy()
-	if(pod1)
-		pod1.connected = null
-		pod1 = null
+	if(pods.len)
+		for(var/obj/machinery/cloning/clonepod/pod in pods)
+			pod.connected = null
+		pods.Cut()
 	if(scanner)
 		scanner.connected = null
 		scanner = null
@@ -53,9 +59,7 @@
 	..()
 
 /obj/machinery/computer/cloning/initialize()
-	pod1 = findcloner()
-	if(pod1 && !pod1.connected)
-		pod1.connected = src
+	pods = findcloners()
 
 /obj/machinery/computer/cloning/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return ""
@@ -64,15 +68,16 @@
 	return (istype(O,/obj/machinery/cloning) && get_dist(src,O) < CLONEPODRANGE)
 
 /obj/machinery/computer/cloning/isLinkedWith(var/obj/O)
-	return O != null && (O == pod1 || O == scanner)
+	return O != null && ((O in pods) || O == scanner)
 
 ///obj/machinery/computer/cloning/getLink(var/idx) - abandoned orphan code that never worked anyway
 //	return (idx >= 1 && idx <= links.len) ? links[idx] : null
 
 /obj/machinery/computer/cloning/linkWith(var/mob/user, var/obj/O, var/list/context)
 	if(istype(O, /obj/machinery/cloning/clonepod))
-		pod1 = O
-		pod1.connected = src
+		pods += O
+		var/obj/machinery/cloning/clonepod/C = O
+		C.connected = src
 		return 1
 
 /obj/machinery/computer/cloning/proc/updatemodules()
@@ -96,12 +101,13 @@
 	// If no scanner was found, it will return null
 	return scannerf
 
-/obj/machinery/computer/cloning/proc/findcloner()
-	var/obj/machinery/cloning/clonepod/pod_found = null
-	for (pod_found in orange(src, CLONEPODRANGE))
+/obj/machinery/computer/cloning/proc/findcloners()
+	. = list()
+	for (var/obj/machinery/cloning/clonepod/pod_found in orange(src, CLONEPODRANGE))
 		if(pod_found.connected)
 			continue
-		return pod_found
+		. += pod_found
+		pod_found.connected = src
 
 #undef CLONEPODRANGE
 
@@ -146,7 +152,7 @@
 				dat += " <font color=red>Scanner-ERROR</font><br>"
 			else
 				dat += " <font color=green>Scanner-Found!</font><br>"
-			if (isnull(src.pod1))
+			if (!pods.len)
 				dat += " <font color=red>Pod-ERROR</font><br>"
 			else
 				dat += " <font color=green>Pod-Found!</font><br>"
@@ -172,8 +178,11 @@
 
 				dat += "Lock status: <a href='byond://?src=\ref[src];lock=1'>[src.scanner.locked ? "Locked" : "Unlocked"]</a><br>"
 
-			if (!isnull(src.pod1))
-				dat += "Biomass: <i>[src.pod1.biomass]</i><br>"
+			if (pods.len)
+				var/i = 0
+				for(var/obj/machinery/cloning/clonepod/pod in pods)
+					i++
+					dat += "Pod [i] Biomass: <i>[pod.biomass]</i><br>"
 
 			// Database
 
@@ -212,10 +221,15 @@
 				dat += {"<b>UI:</b> [src.active_record.dna.uni_identity]<br>
 				<b>SE:</b> [src.active_record.dna.struc_enzymes]<br><br>"}
 
-				if(pod1 && pod1.biomass >= CLONE_BIOMASS)
+				var/biomass_found = FALSE
+				for(var/obj/machinery/cloning/clonepod/pod in pods)
+					if(pod.biomass >= CLONE_BIOMASS)
+						biomass_found = TRUE
+						break
+				if(biomass_found)
 					dat += {"<a href='byond://?src=\ref[src];clone=\ref[src.active_record]'>Clone</a><br>"}
 				else
-					dat += {"<b>Insufficient biomass</b><br>"}
+					dat += {"<b>Insufficient biomass in any pod</b><br>"}
 
 		if(4)
 			if (!src.active_record)
@@ -335,33 +349,46 @@
 		var/datum/dna2/record/C = locate(href_list["clone"])
 		//Look for that player! They better be dead!
 		if(istype(C))
-			//Can't clone without someone to clone.  Or a pod.  Or if the pod is busy. Or full of gibs.
-			if(!pod1 || !canLink(pod1)) //If the pod exists BUT it's too far away from the console
-				temp = "Error: No Clonepod detected."
-				return
-			else if(pod1.occupants.len > 0)
-				temp = "Error: Clonepod is currently occupied."
-				return
-			else if(pod1.biomass < CLONE_BIOMASS)
-				temp = "Error: Not enough biomass."
-				return
-			else if(pod1.mess)
-				temp = "Error: Clonepod malfunction."
-				return
-			else if(!config.revival_cloning)
-				temp = "Error: Unable to initiate cloning cycle."
-				return
-
-			if(pod1.growclone(C))
-				temp = "Initiating cloning cycle..."
-				records.Remove(C)
-				QDEL_NULL(C)
-				menu = 1
-
-			else
-				temp = "Initiating cloning cycle...<br>Error: Post-initialisation failed. Cloning cycle aborted."
-				src.updateUsrDialog()
-				return
+			var/obj/machinery/cloning/clonepod/pod_used = null
+			var/list/errcodes = list()
+			for(var/obj/machinery/cloning/clonepod/pod in pods)
+				//Can't clone without someone to clone.  Or a pod.  Or if the pod is busy. Or full of gibs.
+				if(!canLink(pod)) //If the pod exists BUT it's too far away from the console
+					errcodes += list(1)
+				else if(pod.occupants.len > 0)
+					errcodes += list(2)
+				else if(pod.biomass < CLONE_BIOMASS)
+					errcodes += list(3)
+				else if(pod.mess)
+					errcodes += list(4)
+				else
+					pod_used = pod
+					break
+			if(pod_used)
+				if(pod_used.growclone(C))
+					temp = "Initiating cloning cycle..."
+					records.Remove(C)
+					QDEL_NULL(C)
+					menu = 1
+				else
+					temp = "Initiating cloning cycle...<br>Error: Post-initialisation failed. Cloning cycle aborted."
+					src.updateUsrDialog()
+					return
+			else if(errcodes.len)
+				temp = "Error:"
+				var/i = 0
+				for(var/code in errcodes)
+					temp += " "
+					i++
+					switch(code)
+						if(ERR_NO_CLONEPOD)	
+							temp += "Clone pod [i] unlinkable."
+						if(ERR_CLONEPOD_OCCUPIED)
+							temp += "Clone pod [i] is currently occupied."
+						if(ERR_CLONEPOD_BIOMASS)
+							temp += "Clone pod [i] does not have enough biomass."
+						if(ERR_CLONEPOD_MESS)
+							temp += "Clone pod [i] is malfunctioned."
 
 		else
 			temp = "Error: Data corruption."
@@ -487,5 +514,7 @@
 	if(!(stat & (NOPOWER | BROKEN | FORCEDISABLE)))
 		if(scanner && scanner.occupant)
 			overlays += image(icon = icon, icon_state = "cloning-scan")
-		if(pod1 && pod1.occupants.len > 0)
-			overlays += image(icon = icon, icon_state = "cloning-pod")
+		for(var/obj/machinery/cloning/clonepod/pod in pods)
+			if(pod && pod.occupants.len > 0)
+				overlays += image(icon = icon, icon_state = "cloning-pod")
+				break
