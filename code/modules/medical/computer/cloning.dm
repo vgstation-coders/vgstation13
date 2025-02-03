@@ -46,7 +46,7 @@
 		pods.Cut()
 	if(scanners.len)
 		for(var/obj/machinery/dna_scannernew/scanner in scanners)
-			scanner.connected = null
+			scanner.connected -= src
 		scanners.Cut()
 	if(diskette)
 		if(loc)
@@ -98,7 +98,7 @@
 		// If found, then we add the scanner to the return
 		if (!isnull(scannerf))
 			. += scannerf
-			scannerf.connected = src
+			scannerf.connected += src
 
 /obj/machinery/computer/cloning/proc/findcloners()
 	. = list()

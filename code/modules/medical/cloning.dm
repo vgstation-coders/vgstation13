@@ -20,7 +20,7 @@
 	var/heal_level = 0 //The clone is released once its health reaches this level.
 	var/locked = FALSE
 	var/frequency = 0
-	var/list/obj/machinery/computer/cloning/connected = null //So we remember the connected clone machine.
+	var/list/obj/machinery/computer/cloning/connected = list() //So we remember the connected clone machine.
 	var/mess = FALSE //Need to clean out it if it's full of exploded clone.
 	var/working = FALSE //One clone attempt at a time thanks
 	var/eject_wait = FALSE //Don't eject them as soon as they are created fuckkk
@@ -29,7 +29,6 @@
 	var/resource_efficiency = 1
 	id_tag = "clone_pod"
 	var/upgraded = 0 //if fully upgraded with T4 components, it will drastically improve and allow for some stuff
-	var/obj/machinery/computer/cloning/cloning_computer = null
 	var/list/cloned_records = list() //List of all records this pod has cloned.
 
 
