@@ -134,7 +134,8 @@
 	if(connected)
 		if(istype(connected,/obj/machinery/computer/cloning))
 			var/obj/machinery/computer/cloning/C = connected
-			C.scanner = null
+			if(src in C.scanners)
+				C.scanners -= src
 		else if(istype(connected,/obj/machinery/computer/scan_consolenew))
 			var/obj/machinery/computer/scan_consolenew/C = connected
 			C.connected = null
