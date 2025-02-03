@@ -31,14 +31,6 @@
 		/datum/malfhack_ability/oneuse/emag
 	)
 
-
-/obj/machinery/computer/cloning/New()
-	..()
-	spawn(5)
-		updatemodules()
-		return
-	return
-
 /obj/machinery/computer/cloning/Destroy()
 	if(pods.len)
 		for(var/obj/machinery/cloning/clonepod/pod in pods)
@@ -60,7 +52,7 @@
 	..()
 
 /obj/machinery/computer/cloning/initialize()
-	pods = findcloners()
+	updatemodules()
 
 /obj/machinery/computer/cloning/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return ""
@@ -83,6 +75,7 @@
 
 /obj/machinery/computer/cloning/proc/updatemodules()
 	scanners = findscanners()
+	pods = findcloners()
 
 /obj/machinery/computer/cloning/proc/findscanners()
 	. = list()
