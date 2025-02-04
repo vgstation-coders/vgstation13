@@ -640,8 +640,8 @@
 	icon_state = "pod_0"
 	eject_wait = FALSE
 	heal_level = 0 //so that it will be re-randomized next time
-	for(var/obj/machinery/computer/cloning/C in connected)
-		C.update_icon()
+	for(var/obj/machinery/computer/cloning/CL in connected)
+		CL.update_icon()
 	working = FALSE //NOW we're done.
 
 	return TRUE
