@@ -544,6 +544,7 @@
 /obj/item/weapon/robot_module/syndicate/blitzkrieg/New()
 	..()
 
+	modules += new /obj/item/weapon/card/emag(src)
 	modules += new /obj/item/tool/wrench(src) //This thing supposed to be a hacked and modded combat cyborg, is it really going to be stopped by a chair or table?
 	modules += new /obj/item/weapon/pinpointer/nukeop(src)
 	modules += new /obj/item/weapon/gun/projectile/automatic/c20r(src)
