@@ -221,7 +221,8 @@
 		return 0
 
 	// adjacent only loc checks one way around, so first part is necessary, also for anything inside too
-	if(W.loc && !W.recursive_in_contents_of(src) && !Adjacent(W) && !W.arcanetampered)
+	//By using the item's adjacent check instead of the user's, we allow for some item exceptions (e.g.: battlemat)
+	if(W.loc && !W.recursive_in_contents_of(src) && !W.Adjacent(src) && !W.arcanetampered)
 		return 0
 
 	if((W.flags & MUSTTWOHAND) && !(M_STRONG in mutations))
