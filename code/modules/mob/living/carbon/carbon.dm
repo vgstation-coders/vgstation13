@@ -439,6 +439,31 @@
 		temp += rand(-10, 10)
 	return num2text(round(temp))
 
+/mob/living/carbon/proc/get_pulsespeed()
+	. = 600
+	switch(src.pulse)
+		if(PULSE_NONE)
+			. = 0
+		if(PULSE_2SLOW)
+			. /= (30 + sin(life_tick / 2) * 10)
+		if(PULSE_SLOW)
+			. /= (50 + sin(life_tick / 2) * 10)
+		if(PULSE_NORM)
+			. /= (75 + sin(life_tick / 2) * 15)
+		if(PULSE_FAST)
+			. /= (105 + sin(life_tick / 2) * 15)
+		if(PULSE_2FAST)
+			. /= (140 + sin(life_tick / 2) * 20)
+		if(PULSE_THREADY)
+			. = 2
+
+/*/mob/living/carbon/proc/pulse_loop() // commented out because not used beyond fluff, was requested
+	while(pulse != PULSE_NONE)
+		var/pulsespeed = get_pulsespeed()
+		if(pulsespeed && !timestopped)
+			INVOKE_EVENT(src, /event/heartbeat, "user" = src)
+		sleep(max(1,pulsespeed))*/
+
 /mob/living/carbon/verb/mob_sleep()
 	set name = "Sleep"
 	set category = "IC"
