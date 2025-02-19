@@ -76,7 +76,7 @@ jobs:
           fileName: "DMCompiler_linux-x64.tar.gz"
           extract: true
       - name: Run OpenDream
-        run: ./DMCompiler_linux-x64/DMCompiler vgstation13.dme --suppress-unimplemented --define=CIBUILDING | bash tools/ci/annotate_od.sh
+        run: ./DMCompiler_linux-x64/DMCompiler vgstation13.dme --suppress-unimplemented --define=CIBUILDING --version=516.1655 | bash tools/ci/annotate_od.sh
 
   build:
     name: ${{matrix.job-name}}

@@ -2,7 +2,7 @@
 /obj/item/clothing/head/bio_hood
 	name = "bio hood"
 	icon_state = "bio"
-	desc = "A hood that protects the head and face from biological comtaminants."
+	desc = "A hood that protects the head and face from biological contaminants."
 	permeability_coefficient = 0.01
 	flags = FPRINT
 	clothing_flags = PLASMAGUARD
@@ -53,7 +53,7 @@
 //Security biosuit, grey with red stripe across the chest
 /obj/item/clothing/head/bio_hood/security
 	name = "security bio hood"
-	desc = "A hood that protects the head and face from biological comtaminants. It has a reinforced synthetic lining to protect against tearing."
+	desc = "A hood that protects the head and face from biological contaminants. It has a reinforced synthetic lining to protect against tearing."
 	icon_state = "bio_security"
 	armor = list(melee = 25, bullet = 10, laser = 15, energy = 5, bomb = 5, bio = 100, rad = 20)
 
@@ -91,11 +91,16 @@
 
 //Scientist's biosuit, white with a pink-ish hue
 /obj/item/clothing/head/bio_hood/scientist
+	name = "scientist bio hood"
+	desc = "A hood that protects the head and face from biological contaminants. It has a reinforced synthetic lining to protect against slime glomps."
 	icon_state = "bio_scientist"
+	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 20)
 
 /obj/item/clothing/suit/bio_suit/scientist
+	name = "scientist bio suit"
+	desc = "A suit that protects against biological contamination. It has a reinforced synthetic lining to protect against slime glomps and feeding."
 	icon_state = "bio_scientist"
-
+	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 20)
 
 //CMO's biosuit, blue stripe
 /obj/item/clothing/suit/bio_suit/cmo

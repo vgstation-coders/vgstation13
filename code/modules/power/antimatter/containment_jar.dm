@@ -82,3 +82,4 @@ var/list/decelerators = list()
 
 /obj/item/weapon/am_containment/proc/receive_pulse(power)
 	fuel = min(fuel_max, fuel + round(power/25))
+	update_icon()

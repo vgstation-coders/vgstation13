@@ -73,6 +73,32 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2025.02.18</h2>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Battlemats allow you to pick up game pieces no matter what side of the board you are sitting on.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Scientist biosuits now offer some protection from slime attacks and slime feeding. (half reduction for the latter)</li>
+				<li class="spellcheck">Messages from slime feeding sent to the slime and feedee are now formatted better.</li>
+				<li class="spellcheck">Biosuit descriptions now spell &#34;contaminant&#34; properly.</li>
+			</ul>
+			<h2 class="date">2025.02.17</h2>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">AM containment jars now properly update sprite when recharged with radiation.</li>
+			</ul>
+			<h2 class="date">2025.02.16</h2>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Syndicate traitors who want objectives are now once again supplied with them.</li>
+			</ul>
+			<h2 class="date">2025.02.13</h2>
+			<h3 class="author">falcon2346 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Added the venom sword to the CMO coat suit storage list.</li>
+			</ul>
 			<h2 class="date">2025.02.08</h2>
 			<h3 class="author">BoraHive updated:</h3>
 			<ul class="changes bgimages16">
@@ -1356,69 +1382,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="bugfix">Wetted mops will now properly clean ash.</li>
 				<li class="bugfix">T and P-ray scanners will no longer make ash turn opaque.</li>
 				<li class="tweak">The wet-dry vacuum cleaner will now clean ash and produce Carbon.</li>
-			</ul>
-			<h2 class="date">2024.05.18</h2>
-			<h3 class="author">CrazyAmphibian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">the TEG can now use 100% of its flow capacity instead of being limited to 33%</li>
-			</ul>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Firedoor Frames now offer you to either build a directional firedoor, or a full-tile one.</li>
-				<li class="bugfix">Fixed the Atmos Automation Console and the Disease Splicer computers not having moody lights.</li>
-				<li class="bugfix">You can now remove police tape and barricades built over firedoors, although you need to open them first (which can be done now).</li>
-			</ul>
-			<h3 class="author">falcon2346 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">Added Vox sprites for several Autodrobe items</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Admin-spawned roulette turrets will no longer shoot meteors or blob cores.</li>
-				<li class="tweak">Restored pre-existing obj w_class values.</li>
-				<li class="rscadd">Bedsheets and rags will now ignite if you use a hot item on them.</li>
-				<li class="tweak">Increased the chance for burning things like candles or matches to start fires.</li>
-				<li class="tweak">Refactored hotspot_expose()&#39;s volume var.</li>
-				<li class="bugfix">Fixed the off-putting ash visuals on turfs.</li>
-				<li class="tweak">Fire spread now begins at a slower rate and ramps up as the room&#39;s temperature increases.</li>
-				<li class="bugfix">Items covered in ash will now retain the ash when their states are cycled (ie a lit welder will still be ashed when unlit).</li>
-				<li class="bugfix">Held things or flaming things in a container will no longer hotspot_expose and ignite the ground beneath them.</li>
-				<li class="tweak">Fires on flammable liquids will now spread more rapidly.</li>
-				<li class="bugfix">Unlit lighters, matches, cigarettes, and flares will no longer start fires.</li>
-			</ul>
-			<h2 class="date">2024.05.17</h2>
-			<h3 class="author">jwhitak updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Brute damage no longer causes or worsens burn wounds.</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The &#34;Join Game&#34; and &#34;Check Antagonist&#34; menus now display the proper shift duration.</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed the singularity generator.</li>
-				<li class="bugfix">Fixed wall smoothing.</li>
-			</ul>
-			<h2 class="date">2024.05.16</h2>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Wormholes despawning will no longer create station-wide fires.</li>
-				<li class="bugfix">Fire extinguisher spray will now properly pass through machinery.</li>
-				<li class="tweak">Reduced the cooling power of fire extinguishers.</li>
-			</ul>
-			<h2 class="date">2024.05.14</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Attacking glowshrooms (previously only possible as a human using a weapon) now provides some actual feedback that you are in fact damaging it.</li>
-				<li class="rscadd">Monkeys and Simple Animals can now attack glowshrooms, which means that yes, Grues can now deal with those (if they don&#39;t die trying to)</li>
-				<li class="bugfix">Fixed invisible paintings on scoreboards</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Sparks will no longer instantly ignite anything the come into contact with.</li>
-				<li class="bugfix">Fire extinguishers will no longer cool rooms to sub-zero (C) temperatures.</li>
-				<li class="bugfix">Matches now extinguish properly.</li>
 			</ul>
 		</div>
 		<!--

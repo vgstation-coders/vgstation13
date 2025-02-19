@@ -50,13 +50,18 @@
 		if(prob(10))
 			AppendObjective(/datum/objective/block)
 
-	else
-		var/list/dupecheck
-		dupecheck.Add(1,2,3,4,5,6,7,8,9,10,11,12,13)
-		dupecheck = shuffle(dupecheck)
+	else //generates 2 to 5 objectives, reducing duplicates
+		var/list/dupecheck[13]
+		var/it1
+		for(it1=1, it1<=dupecheck.len, it1++)
+			dupecheck[it1] = it1
+		var/objcount = rand(2,5)
 		var/i
-		for(i=0; i<=rand(2,5); i++)//generates 2 to 5 objectives, limiting duplicates
-			switch(dupecheck[i])
+		for(i=0; i<=objcount; i++)
+			var/chooseobj = rand(1,dupecheck.len)
+			var/chosenobj = dupecheck[chooseobj]
+			dupecheck.Remove(chosenobj)
+			switch(chosenobj)
 				if(1 to 2)
 					AppendObjective(/datum/objective/target/brig)
 				if(3)
@@ -75,31 +80,31 @@
 							AppendObjective(/datum/objective/target/assassinate/delay_medium)
 				else
 					AppendObjective(/datum/objective/target/assassinate/orexile)
-		switch(rand(1,100))
-			if(1 to 30) // Die glorious death
-				if(!(locate(/datum/objective/die) in objectives.GetObjectives()) && !(locate(/datum/objective/target/steal) in objectives.GetObjectives()))
-					AppendObjective(/datum/objective/die)
-				else
-					if(prob(85))
-						if (!(locate(/datum/objective/escape) in objectives.GetObjectives()))
-							AppendObjective(/datum/objective/escape)
-					else
-						if(prob(50))
-							if (!(locate(/datum/objective/hijack) in objectives.GetObjectives()))
-								AppendObjective(/datum/objective/hijack)
-						else
-							if (!(locate(/datum/objective/minimize_casualties) in objectives.GetObjectives()))
-								AppendObjective(/datum/objective/minimize_casualties)
-			if(31 to 90)
-				if (!(locate(/datum/objective/escape) in objectives.objectives))
-					AppendObjective(/datum/objective/escape)
+	switch(rand(1,100))
+		if(1 to 30) // Die glorious death
+			if(!(locate(/datum/objective/die) in objectives.GetObjectives()) && !(locate(/datum/objective/target/steal) in objectives.GetObjectives()))
+				AppendObjective(/datum/objective/die)
 			else
-				if(prob(50))
-					if (!(locate(/datum/objective/hijack) in objectives.objectives))
-						AppendObjective(/datum/objective/hijack)
-				else // Honk
-					if (!(locate(/datum/objective/minimize_casualties) in objectives.GetObjectives()))
-						AppendObjective(/datum/objective/minimize_casualties)
+				if(prob(85))
+					if (!(locate(/datum/objective/escape) in objectives.GetObjectives()))
+						AppendObjective(/datum/objective/escape)
+				else
+					if(prob(50))
+						if (!(locate(/datum/objective/hijack) in objectives.GetObjectives()))
+							AppendObjective(/datum/objective/hijack)
+					else
+						if (!(locate(/datum/objective/minimize_casualties) in objectives.GetObjectives()))
+							AppendObjective(/datum/objective/minimize_casualties)
+		if(31 to 90)
+			if (!(locate(/datum/objective/escape) in objectives.objectives))
+				AppendObjective(/datum/objective/escape)
+		else
+			if(prob(50))
+				if (!(locate(/datum/objective/hijack) in objectives.objectives))
+					AppendObjective(/datum/objective/hijack)
+			else // Honk
+				if (!(locate(/datum/objective/minimize_casualties) in objectives.GetObjectives()))
+					AppendObjective(/datum/objective/minimize_casualties)
 
 /datum/role/traitor/extraPanelButtons()
 	var/dat = ""
