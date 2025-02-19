@@ -6,4 +6,3 @@
 #define GAS_CRYOTHEUM "cryotheum"
 #define GAS_VOLATILE "volatile_fuel"
 #define GAS_OXAGENT  "oxygen_agent_b"
-#define GAS_RADON  "radon"

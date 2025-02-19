@@ -1351,10 +1351,6 @@ var/global/list/adminbusteleportlocs = list()
 	name = "Antimatter Engine Room"
 	icon_state = "antimatter"
 
-/area/engineering/reactor_room
-	name = "Fission Reactor Room"
-	icon_state = "fission"
-
 /area/engineering/engineering_auxiliary
 	name = "Auxiliary Engineering"
 	icon_state = "engiaux"
