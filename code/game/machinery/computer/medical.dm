@@ -138,6 +138,10 @@
 
 
 /obj/machinery/computer/med_data/attackby(var/obj/item/O, var/mob/living/user)
+	if(istype(O, /obj/item/weapon/card/id) && !scan)
+		if(usr.drop_item(O, src))
+			scan = O
+			to_chat(user, "You insert \the [O].")
 	if (istype(user) && authenticated && (screen == 4.0) && active1)
 		if(istype(O, /obj/item/weapon/photo/id))
 			var/obj/item/weapon/photo/id/photo_id = O
