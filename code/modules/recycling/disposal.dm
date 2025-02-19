@@ -522,6 +522,7 @@
 
 			attackby(dropping, user)
 		else if(istype(dropping, /obj/structure/closet/crate) && can_load_crates())
+			to_chat(user,"<span class='notice'>You begin lifting \the [dropping] into \the [src].</span>")
 			if(do_after(user,src,20))
 				if(dropping.locked_to || !user.canmove || user.incapacitated() || !isturf(dropping.loc))
 					return
