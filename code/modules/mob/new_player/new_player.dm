@@ -679,6 +679,9 @@
 		new_character.set_species(prefs.species)
 	else
 		to_chat(usr, "Your preferences had a non-playable species, so you were reverted to the default species.")
+		var/datum/species/defaultspec = chosen_species.fallback()
+		if(defaultspec)
+			new_character.set_species(defaultspec)
 
 	var/datum/language/chosen_language
 	if(prefs.language)
