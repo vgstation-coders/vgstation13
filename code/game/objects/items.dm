@@ -92,6 +92,7 @@
 	var/list/quick_equip_priority = list() //stuff to override the quick equip thing so it goes in this first
 
 	var/last_burn
+	var/vent_use = FALSE //can this be used while ventcrawling
 
 /obj/item/New()
 	..()

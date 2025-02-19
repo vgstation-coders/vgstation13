@@ -8,6 +8,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	flammable = TRUE
+	vent_use = TRUE
 
 	var/tmp/spam_flag = 0 //To prevent mashing the button to cause annoyance like a huge idiot.
 	var/selected_sound = "sound/items/bikehorn.ogg"
