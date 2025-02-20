@@ -203,12 +203,12 @@ included:
 /obj/machinery/fissioncontroller/attackby(var/obj/I,var/mob/user)
 	if(istype(I,/obj/item/weapon/fuelrod))
 		if(currentfuelrod)
-			to_chat(user,"There's already a fuel rod inserted into \the [src].")
+			to_chat(user,"There's already a fuel reservoir inserted into \the [src].")
 		else
 			var/obj/item/weapon/fuelrod/newrod=I
 			if(!user.drop_item(newrod))
 				return
-			to_chat(user,"You insert the fuel rod into \the [src].")
+			to_chat(user,"You insert the fuel reservoir into \the [src].")
 			if(powered() && !(stat&BROKEN))
 				playsound(src,'sound/machines/fission/rc_fuelnone.ogg',50)
 			newrod.loc=null
@@ -219,9 +219,9 @@ included:
 	if(iscrowbar(I) && currentfuelrod)
 		if(associated_reactor?.considered_on())
 			if(user.a_intent==I_HELP) //spreading rads is in fact not very helpful
-				to_chat(user,"<span class='notice'>You're not sure it's safe to remove the fuel rod.</span>")
+				to_chat(user,"<span class='notice'>You're not sure it's safe to remove the fuel reservoir.</span>")
 				return
-			user.visible_message("<span class='warning'>[user] starts prying the fuel rod out of \the [src], even though the reactor is active!</span>", "<span class='warning'>You start prying the fuel rod out of \the [src], even though the reactor is active!</span>")
+			user.visible_message("<span class='warning'>[user] starts prying the fuel reservoir out of \the [src], even though the reactor is active!</span>", "<span class='warning'>You start prying the fuel reservoir out of \the [src], even though the reactor is active!</span>")
 			playsound(src,'sound/items/crowbar.ogg',50)
 			if(do_after(user, src,30))
 				currentfuelrod.forceMove(loc)
@@ -235,7 +235,7 @@ included:
 
 			return
 				
-		user.visible_message("<span class='notice'>[user] starts prying the fuel rod out of \the [src].</span>", "<span class='notice'>You start prying the fuel rod out of \the [src].</span>")
+		user.visible_message("<span class='notice'>[user] starts prying the fuel reservoir out of \the [src].</span>", "<span class='notice'>You start prying the fuel reservoir out of \the [src].</span>")
 		playsound(src,'sound/items/crowbar.ogg',50)
 		if(do_after(user, src,20) && currentfuelrod)
 			currentfuelrod.forceMove(loc)
@@ -370,13 +370,13 @@ included:
 	var/reactor_tempdisplay="[floor(associated_reactor.temperature)]K"
 	var/reactor_highesttempdisplay="[floor(highesttemp)]K"
 	if(tempdisplaymode==1) //C
-		coolant_tempdisplay="[floor(associated_reactor.coolant.temperature-273.15)]캜"
-		reactor_tempdisplay="[floor(associated_reactor.temperature-273.15)]캜"
-		reactor_highesttempdisplay="[floor(highesttemp-273.15)]캜"
+		coolant_tempdisplay="[floor(associated_reactor.coolant.temperature-273.15)]째C"
+		reactor_tempdisplay="[floor(associated_reactor.temperature-273.15)]째C"
+		reactor_highesttempdisplay="[floor(highesttemp-273.15)]째C"
 	else if(tempdisplaymode==2) //F (because this is really old, outdated tech (fission is soooo last millenium))
-		coolant_tempdisplay="[floor(1.8*associated_reactor.coolant.temperature-459.67)]캟"
-		reactor_tempdisplay="[floor(1.8*associated_reactor.temperature-459.67)]캟"
-		reactor_highesttempdisplay="[floor(1.8*highesttemp-459.67)]캟"
+		coolant_tempdisplay="[floor(1.8*associated_reactor.coolant.temperature-459.67)]째F"
+		reactor_tempdisplay="[floor(1.8*associated_reactor.temperature-459.67)]째F"
+		reactor_highesttempdisplay="[floor(1.8*highesttemp-459.67)]째F"
 	else if(tempdisplaymode==3) //R (because muh absolute scale)
 		coolant_tempdisplay="[floor(1.8*associated_reactor.coolant.temperature)]R"
 		reactor_tempdisplay="[floor(1.8*associated_reactor.temperature)]R"
@@ -530,7 +530,7 @@ included:
 		to_chat(usr, "<span class='warning'>The readouts indicate that the reactor is overheated, and that you should cool it down.</span>")
 	
 	if(!associated_reactor.fuel)
-		to_chat(usr, "The readouts indicate there's no fuel rod inserted.")
+		to_chat(usr, "The readouts indicate there's no fuel reservoir inserted.")
 	else
 		if(associated_reactor.fuel.life <=0)
 			to_chat(usr, "The readouts indicate that the fuel is depleted.")
@@ -652,7 +652,7 @@ included:
 				to_chat(hclient.client, "There's no fuel to eject!")
 				return
 			if(associated_reactor.considered_on())
-				to_chat(hclient.client, "The reactor safety locks prevent the fuel rod from being ejected!")
+				to_chat(hclient.client, "The reactor safety locks prevent the fuel reservoir from being ejected!")
 				return
 			currentfuelrod.forceMove(src.loc)
 			currentfuelrod=null	
