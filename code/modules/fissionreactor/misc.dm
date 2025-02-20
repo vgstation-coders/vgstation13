@@ -46,8 +46,8 @@ boxes used for cargo orders to make my life easier.
 	new /obj/item/pipe(src,0) //1 pipe (optional)
 	 
 /obj/item/weapon/storage/box/fissionsupply_fuelmaker
-	name="seperational isotopic combiner parts"
-	desc="Contains all the materials needed to assemble a seperational isotopic combiner."
+	name="separational isotopic combiner parts"
+	desc="Contains all the materials needed to assemble a separational isotopic combiner."
 	
 /obj/item/weapon/storage/box/fissionsupply_fuelmaker/New()
 	..()
