@@ -1,6 +1,6 @@
 /*
 in this file:
-the machine which makes fuel rods have things in them.
+the machine which makes fuel reservoirs have things in them.
 */
 
 //because radon is a gas, we need to interface with gasses. yeah, this kind of sucks, but what are you gonna do? (inb4 make better code lol)
@@ -33,11 +33,11 @@ the machine which makes fuel rods have things in them.
 /obj/machinery/atmospherics/unary/fissionfuelmaker/attackby(var/obj/item/I,var/mob/user)
 	if(istype(I,/obj/item/weapon/fuelrod))
 		if(heldrod)
-			to_chat(user,"There's already a fuel rod inserted into \the [src].")
+			to_chat(user,"There's already a fuel reservoir inserted into \the [src].")
 		else
 			if(!user.drop_item(I))
 				return
-			to_chat(user,"You insert the fuel rod into \the [src].")
+			to_chat(user,"You insert the fuel reservoir into \the [src].")
 			I.forceMove(src)
 			heldrod=I
 			heldrod.fueldata.fuel=heldrod.fueldata.get_products() //process the fuel turning
@@ -48,7 +48,7 @@ the machine which makes fuel rods have things in them.
 			update_icon()
 		return
 	if(iscrowbar(I) && heldrod)
-		user.visible_message("<span class='notice'>[user] starts prying the fuel rod out of \the [src].</span>", "<span class='notice'>You start prying the fuel rod out of \the [src].</span>")
+		user.visible_message("<span class='notice'>[user] starts prying the fuel reservoir out of \the [src].</span>", "<span class='notice'>You start prying the fuel reservoir out of \the [src].</span>")
 		playsound(src,'sound/items/crowbar.ogg',50)
 		if(do_after(user, src,20))
 			heldrod.forceMove(loc)
@@ -134,7 +134,7 @@ the machine which makes fuel rods have things in them.
 		switch(href_list["action"])
 			if("eject_fuel")	
 				if(!heldrod)
-					to_chat(hclient.client,"There's no fuel rod to eject.")
+					to_chat(hclient.client,"There's no fuel reservoir to eject.")
 				else
 					heldrod.forceMove(src.loc)
 					heldrod.update_icon()
@@ -168,7 +168,7 @@ the machine which makes fuel rods have things in them.
 
 /obj/machinery/atmospherics/unary/fissionfuelmaker/proc/transfer_from_fuelrod(var/reagent_id,var/amount)
 	if(!heldrod)
-		return "no fuel rod"
+		return "no fuel reservoir"
 	if(reagent_id==RADON || reagent_id=="RADON")
 		if(air_contents)
 			var/actually_taken=heldrod.fueldata.take_shit_from(reagent_id,amount ,heldrod.fueldata.fuel)
@@ -190,7 +190,7 @@ the machine which makes fuel rods have things in them.
 
 /obj/machinery/atmospherics/unary/fissionfuelmaker/proc/transfer_to_fuelrod(var/reagent_id,var/amount)
 	if(!heldrod)
-		return "no fuel rod"
+		return "no fuel reservoir"
 	if(reagent_id==RADON || reagent_id=="RADON")
 		if(air_contents)
 			var/avalible_gas=air_contents.gas[GAS_RADON] || 0 
@@ -293,7 +293,7 @@ the machine which makes fuel rods have things in them.
 		</div>"}
 
 
-		html+={"<hr> <table style='width:100%;'><tr><td> Fuel Rod: [ heldrod ? "[heldrod.name]  \[[current_rodamt]/[heldrod.units_of_storage]\]" : "none" ] <a href='?src=\ref[interface];action=eject_fuel'>Eject</a></td> <td style='text-align:right;'>Transfer To Container</td> </tr>"}
+		html+={"<hr> <table style='width:100%;'><tr><td> Fuel Reservoir: [ heldrod ? "[heldrod.name]  \[[current_rodamt]/[heldrod.units_of_storage]\]" : "none" ] <a href='?src=\ref[interface];action=eject_fuel'>Eject</a></td> <td style='text-align:right;'>Transfer To Container</td> </tr>"}
 	
 		if(heldrod)
 			for(var/datum/reagent/R  in heldrod.fueldata.fuel.reagent_list)
@@ -302,7 +302,7 @@ the machine which makes fuel rods have things in them.
 
 
 		html+={"</table><hr><table style='width:100%;'><tr><td>
-Container: [container ? container : "none"][container ? " \[[container.reagents.total_volume]/[container.volume]\]" : ""] <a href='?src=\ref[interface];action=eject_cont'>Eject</a></td><td style='text-align:right;'> Transfer To Fuel Rod</td> </tr>"}
+Container: [container ? container : "none"][container ? " \[[container.reagents.total_volume]/[container.volume]\]" : ""] <a href='?src=\ref[interface];action=eject_cont'>Eject</a></td><td style='text-align:right;'> Transfer To Fuel Reservoir</td> </tr>"}
 
 		if(container)
 			for(var/datum/reagent/R in container.reagents.reagent_list)
@@ -344,9 +344,9 @@ Container: [container ? container : "none"][container ? " \[[container.reagents.
 	if(hatchopen)
 		to_chat(usr,"It looks like you could pry out the electronics.")
 	if(heldrod)
-		to_chat(usr,"There is a fuel rod inserted into it.")
+		to_chat(usr,"There is a fuel reservoir inserted into it.")
 	else
-		to_chat(usr,"The fuel rod receptacle is empty.")
+		to_chat(usr,"The fuel reservoir receptacle is empty.")
 		
 		
 		
