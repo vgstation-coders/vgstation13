@@ -196,7 +196,7 @@
 	build_path = /obj/item/weapon/circuitboard/fission_reactor
 	
 /datum/design/fission_fuel_maker
-	name = "Circuit Design (Isotopic Seperational Combiner)"
+	name = "Circuit Design (Isotopic Separational Combiner)"
 	desc = "Allows for the construction of circuit boards used to seperate and combine different isotopes of materials"
 	id = "fission_control"
 	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 4)
