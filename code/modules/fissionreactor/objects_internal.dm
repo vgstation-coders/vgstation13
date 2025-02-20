@@ -153,12 +153,12 @@ included:
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/examine()
 	..()
 	if(associated_reactor)
-		to_chat(usr,"The lights indicate that there are [overlays.len] adjacent fuel rod assemblies")
+		to_chat(usr,"The lights indicate that there are [overlays.len] adjacent fuel rod assemblies.")
 		if(icon_state=="fuelrod_active")
-			to_chat(usr,"The center emits a blue glow.")
+			to_chat(usr,"The center is emitting a blue glow.")
 		
 	to_chat(usr,"The structure is held together firmly, it'll have to be cut in order to part it.")
-	to_chat(usr,"There is a maitinance hatch at the top, it is [hatchopen?"open":"screwed shut"].")
+	to_chat(usr,"There is a maintenance hatch at the top, it is [hatchopen?"open":"screwed shut"].")
 	
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/update_icon()
 	icon_state="fuelrod_off"
