@@ -448,7 +448,7 @@
 	containername = "Fission reactor starter kit"
 	group = "Engineering"
 	access = list(access_engine_major)
-	containsdesc = "Everything you need to build a very basic fission reactor. Comes with a pre-filled (albeit small) fuel rod."
+	containsdesc = "Everything you need to build a very basic fission reactor. Comes with a pre-filled (albeit small) fuel reservoir."
 	
 /datum/supply_packs/fissionreactor_expansion
 	contains = list(
@@ -475,13 +475,13 @@
 	contains = list(
 		/obj/item/weapon/fuelrod/large
 	)
-	name = "High-capacity fuel rod"
+	name = "High-capacity fuel reservoir"
 	cost = 100 //It's a one time purchance, really. somewhat costy, but not that much for a department. watch for meltdowns.
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
-	containername = "Large fuel rod"
+	containername = "Large fuel reservoir"
 	group = "Engineering"
 	access = list(access_engine_major)
-	containsdesc = "An extra-large fuel rod, for extra power or for more complex fuel mixes. Use with extreme caution and control rods inserted."
+	containsdesc = "An extra-large fuel reservoir, for extra power or for more complex fuel mixes. Use with extreme caution and control rods inserted."
 		
 				
 		
