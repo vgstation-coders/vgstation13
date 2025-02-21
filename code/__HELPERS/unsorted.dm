@@ -572,7 +572,7 @@
 	for(var/i = 1 to numticks)
 		for(var/target in targets)
 			var/image/target_progress_bar = targets[target]
-			target_progress_bar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
+			target_progress_bar?.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 		sleep(delay_fraction)
 		var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc
 		for(var/atom/target in targets)
@@ -608,6 +608,8 @@
 		progress_bar.loc = null
 
 /proc/stop_progress_bar(var/mob/user, var/image/progress_bar)
+	if(!progress_bar || !user)
+		return
 	progress_bar.icon_state = "prog_bar_stopped"
 	spawn(0.2 SECONDS)
 		remove_progress_bar(user, progress_bar)
