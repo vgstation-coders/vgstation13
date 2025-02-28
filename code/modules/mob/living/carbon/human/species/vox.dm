@@ -181,4 +181,4 @@
 	return capitalize(newname)
 
 /datum/species/skellington/skelevox/fallback()
-	return all_species["Vox"]
+	return "Vox"

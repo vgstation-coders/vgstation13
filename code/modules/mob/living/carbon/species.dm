@@ -341,7 +341,7 @@ var/global/list/playable_species = list("Human")
 	return 0
 
 /datum/species/proc/fallback()
-	return all_species["Human"]
+	return "Human"
 
 /datum/species/human
 	name = "Human"
@@ -469,7 +469,7 @@ var/global/list/playable_species = list("Human")
 	return MM == 10 //October
 
 /datum/species/skellington/fallback()
-	return all_species["Plasmaman"]
+	return "Plasmaman"
 
 /datum/species/skellington/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if (prob(25))

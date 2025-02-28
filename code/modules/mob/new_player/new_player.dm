@@ -677,11 +677,9 @@
 		chosen_species = all_species[prefs.species]
 	if(chosen_species && (check_rights(R_ADMIN, 0) || chosen_species.flags & PLAYABLE || chosen_species.conditional_playable()))
 		new_character.set_species(prefs.species)
-	else
-		to_chat(usr, "Your preferences had a non-playable species, so you were reverted to the default species.")
-		var/datum/species/defaultspec = chosen_species.fallback()
-		if(defaultspec)
-			new_character.set_species(defaultspec)
+	else if(chosen_species.fallback())
+		to_chat(usr, "Your preferences had a non-playable species, so you were reverted to [chosen_species.fallback()] (default for [chosen_species]).")
+		new_character.set_species(chosen_species.fallback())
 
 	var/datum/language/chosen_language
 	if(prefs.language)
