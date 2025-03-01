@@ -348,3 +348,15 @@ Proc for attack log creation, because really why not
 	for (var/mob/M in player_list)
 		if (M.ckey == ckey)
 			return M
+
+/proc/get_open_maintenance_turfs(var/num)
+	var/list/turf/simulated/floor/turfs = list()
+	for(var/areapath in typesof(/area/maintenance))
+		var/area/A = locate(areapath)
+		for(var/turf/simulated/floor/F in A.contents)
+			if(!is_blocked_turf(F))
+				turfs += F
+	var/list/turf/simulated/floor/output = list()
+	for(var/i = 1 to num)
+		output += pick_n_take(turfs)
+	return output
