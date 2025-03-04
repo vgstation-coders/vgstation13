@@ -958,6 +958,7 @@ var/global/num_vending_terminals = 1
 	usr.set_machine(src)
 
 	if(!src.vend_ready)
+		to_chat(usr, "<span class='warning'>[src] is busy, this action is unavailable.</span>")
 		return
 
 	if (href_list["vend"] && !currently_vending)
