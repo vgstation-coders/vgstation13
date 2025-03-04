@@ -28,21 +28,21 @@
 
 /datum/music_code/proc/test(note_num, line_num, line_note_num)
 	var/result = 1
-	if (src.octave!=null && src.octave_condition)
+	if (octave!=null && octave_condition)
 		var/cur_octave = round(note_num * 0.083)
 		if (COMPARE(cur_octave, octave) != octave_condition)
 			result = 0
-	if (src.line_num && src.line_condition)
-		if (COMPARE(line_num, src.line_num) != line_condition)
+	if (line_num && line_condition)
+		if (COMPARE(line_num, line_num) != line_condition)
 			result = 0
-	if (src.line_note_num && src.line_note_condition)
-		if (COMPARE(line_num, src.line_note_num) != line_note_condition)
+	if (line_note_num && line_note_condition)
+		if (COMPARE(line_num, line_note_num) != line_note_condition)
 			result = 0
 	return result
 
 
 /datum/music_code/proc/octave_code()
-	if (src.octave!=null)
+	if (octave!=null)
 		var/sym = ""
 		switch(octave_condition)
 			if(LESSER)
@@ -58,7 +58,7 @@
 
 
 /datum/music_code/proc/line_num_code()
-	if (src.line_num)
+	if (line_num)
 		var/sym = ""
 		switch(line_condition)
 			if(LESSER)
@@ -74,7 +74,7 @@
 
 
 /datum/music_code/proc/line_note_num_code()
-	if (src.line_note_num)
+	if (line_note_num)
 		var/sym = ""
 		switch(line_note_condition)
 			if(LESSER)
@@ -110,31 +110,31 @@
 		var/datum/instrument/new_instrument = new type
 		if (!new_instrument.id) continue
 		new_instrument.create_full_sample_deviation_map()
-		src.instruments[new_instrument.name] = new_instrument
-	src.player = new /datum/sound_player/synthesizer(src, instruments[pick(instruments)])
+		instruments[new_instrument.name] = new_instrument
+	player = new /datum/sound_player/synthesizer(src, instruments[pick(instruments)])
 	icon_state = pick("nusynth","nusynth2","nusynth3")
 
 
 /obj/structure/synthesized_instrument/synthesizer/attackby(obj/item/O, mob/user, params)
 	if (iswrench(O))
 		if (!anchored )//&& !isinspace())
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 			to_chat(usr, "<span class='notice'> You begin to tighten \the [src] to the floor...</span>")
 			if (do_after(user,src , 20))
 				user.visible_message( \
 					"[user] tightens \the [src]'s casters.", \
 					"<span class='notice'> You tighten \the [src]'s casters. Now it can be played again.</span>", \
 					"<span class='italics'>You hear ratchet.</span>")
-				src.anchored = 1
+				anchored = 1
 		else if(anchored)
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 			to_chat(usr, "<span class='notice'> You begin to loosen \the [src]'s casters...</span>")
 			if (do_after(user, src, 40))
 				user.visible_message( \
 					"[user] loosens \the [src]'s casters.", \
 					"<span class='notice'> You loosen \the [src]. Now it can be pulled somewhere else.</span>", \
 					"<span class='italics'>You hear ratchet.</span>")
-				src.anchored = 0
+				anchored = 0
 	else
 		..()
 
@@ -142,10 +142,10 @@
 /obj/structure/synthesized_instrument/synthesizer/proc/compose_code(var/html=0)
 	var/code = ""
 	var/line_number = 1
-	if (src.player:code:len)
+	if (player:code:len)
 		// Find instruments involved and create a list of statements
 		var/list/list/datum/music_code/statements = list() // Instruments involved
-		for (var/datum/music_code/this_code in src.player:code)
+		for (var/datum/music_code/this_code in player:code)
 			if (statements[this_code.instrument.id])
 				statements[this_code.instrument.id] += this_code
 			else
@@ -242,59 +242,59 @@
 			new_condition.instrument = instruments_by_id[id]
 			conditions += new_condition
 		line++
-	src.player:code = conditions
+	player:code = conditions
 
 
 /obj/structure/synthesized_instrument/synthesizer/ui_interact(mob/user, ui_key = "instrument", var/datum/nanoui/ui = null, var/force_open = 0)
 	var/list/data
 	data = list(
 		"playback" = list(
-			"playing" = src.player.song.playing,
-			"autorepeat" = src.player.song.autorepeat,
-			"three_dimensional_sound" = src.player.three_dimensional_sound
+			"playing" = player.song.playing,
+			"autorepeat" = player.song.autorepeat,
+			"three_dimensional_sound" = player.three_dimensional_sound
 		),
 		"basic_options" = list(
-			"cur_instrument" = src.player.song.instrument_data.name,
-			"volume" = src.player.volume,
-			"BPM" = round(600 / src.player.song.tempo),
-			"transposition" = src.player.song.transposition,
+			"cur_instrument" = player.song.instrument_data.name,
+			"volume" = player.volume,
+			"BPM" = round(600 / player.song.tempo),
+			"transposition" = player.song.transposition,
 			"octave_range" = list(
-				"min" = src.player.song.octave_range_min,
-				"max" = src.player.song.octave_range_max
+				"min" = player.song.octave_range_min,
+				"max" = player.song.octave_range_max
 			)
 		),
 		/*"advanced_options" = list(
 			"all_environments" = global.musical_config.all_environments,
-			"selected_environment" = global.musical_config.id_to_environment(src.player.virtual_environment_selected),
-			"apply_echo" = src.player.apply_echo
+			"selected_environment" = global.musical_config.id_to_environment(player.virtual_environment_selected),
+			"apply_echo" = player.apply_echo
 		),*/
 		"sustain" = list(
-			"linear_decay_active" = src.player.song.linear_decay,
-			"sustain_timer" = src.player.song.sustain_timer,
-			"soft_coeff" = src.player.song.soft_coeff
+			"linear_decay_active" = player.song.linear_decay,
+			"sustain_timer" = player.song.sustain_timer,
+			"soft_coeff" = player.song.soft_coeff
 		),
 		/*
 		"code" = list(
-			"code" = src.compose_code(html=1),
+			"code" = compose_code(html=1),
 		),*/
 		"show" = list(
-			"playback" = src.player.song.lines.len > 0
+			"playback" = player.song.lines.len > 0
 		)
-		/*	"custom_env_options" = global.musical_config.is_custom_env(src.player.virtual_environment_selected) && src.player.three_dimensional_sound,
+		/*	"custom_env_options" = global.musical_config.is_custom_env(player.virtual_environment_selected) && player.three_dimensional_sound,
 			"debug_button" = global.musical_config.debug_active,
 			"env_settings" = global.musical_config.env_settings_available
 		),
 
 		"status" = list(
-			"channels" = src.player.song.free_channels.len,
-			"events" = src.player.event_manager.events.len,
+			"channels" = player.song.free_channels.len,
+			"events" = player.event_manager.events.len,
 			"max_channels" = global.musical_config.channels_per_instrument,
 			"max_events" = global.musical_config.max_events,
 		)*/
 	)
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
-		ui = new(user, src, ui_key, "synthesizer.tmpl", src.name, 600, 500)
+		ui = new(user, src, ui_key, "synthesizer.tmpl", name, 600, 500)
 		ui.set_initial_data(data)
 		ui.open()
 		ui.set_auto_update(1)
@@ -311,21 +311,21 @@
 
 	switch (target)
 		if ("volume")
-			src.player.volume = max(min(player.volume+text2num(value), 100), 0)
+			player.volume = max(min(player.volume+text2num(value), 100), 0)
 		if ("transposition")
-			src.player.song.transposition = max(min(player.song.transposition+value, global.musical_config.highest_transposition), global.musical_config.lowest_transposition)
+			player.song.transposition = max(min(player.song.transposition+value, global.musical_config.highest_transposition), global.musical_config.lowest_transposition)
 		if ("min_octave")
-			src.player.song.octave_range_min = max(min(player.song.octave_range_min+value, global.musical_config.highest_octave), global.musical_config.lowest_octave)
-			src.player.song.octave_range_max = max(player.song.octave_range_max, player.song.octave_range_min)
+			player.song.octave_range_min = max(min(player.song.octave_range_min+value, global.musical_config.highest_octave), global.musical_config.lowest_octave)
+			player.song.octave_range_max = max(player.song.octave_range_max, player.song.octave_range_min)
 		if ("max_octave")
-			src.player.song.octave_range_max = max(min(player.song.octave_range_max+value, global.musical_config.highest_octave), global.musical_config.lowest_octave)
-			src.player.song.octave_range_min = min(player.song.octave_range_max, player.song.octave_range_min)
+			player.song.octave_range_max = max(min(player.song.octave_range_max+value, global.musical_config.highest_octave), global.musical_config.lowest_octave)
+			player.song.octave_range_min = min(player.song.octave_range_max, player.song.octave_range_min)
 		if ("sustain_timer")
-			src.player.song.sustain_timer = max(min(player.song.sustain_timer+value, global.musical_config.longest_sustain_timer), 1)
+			player.song.sustain_timer = max(min(player.song.sustain_timer+value, global.musical_config.longest_sustain_timer), 1)
 		if ("soft_coeff")
 			var/new_coeff = input(usr, "from [global.musical_config.gentlest_drop] to [global.musical_config.steepest_drop]") as num
 			new_coeff = round(min(max(new_coeff, global.musical_config.gentlest_drop), global.musical_config.steepest_drop), 0.001)
-			src.player.song.soft_coeff = new_coeff
+			player.song.soft_coeff = new_coeff
 		if ("instrument")
 			var/list/categories = list()
 			for (var/key in instruments)
@@ -341,25 +341,25 @@
 
 			var/new_instrument = input(usr, "Choose an instrument") in instruments_available
 			if (new_instrument)
-				src.player.song.instrument_data = instruments[new_instrument]
-		if ("3d_sound") src.player.three_dimensional_sound = value
-		if ("autorepeat") src.player.song.autorepeat = value
-		if ("decay") src.player.song.linear_decay = value
-		if ("echo") src.player.apply_echo = value
+				player.song.instrument_data = instruments[new_instrument]
+		if ("3d_sound") player.three_dimensional_sound = value
+		if ("autorepeat") player.song.autorepeat = value
+		if ("decay") player.song.linear_decay = value
+		if ("echo") player.apply_echo = value
 		if ("select_env")
 			if (value in -1 to 26)
-				src.player.virtual_environment_selected = round(value)
+				player.virtual_environment_selected = round(value)
 		/*
-		if ("show_code_editor") src.coding = value
-		if ("show_ids") src.showing_ids = value
-		if ("show_code_help") src.coding_help = value
+		if ("show_code_editor") coding = value
+		if ("show_ids") showing_ids = value
+		if ("show_code_help") coding_help = value
 		if ("edit_code")
-			var/new_code = input(usr, "Program code", "Coding", src.compose_code()) as message
-			src.decompose_code(new_code, usr)
+			var/new_code = input(usr, "Program code", "Coding", compose_code()) as message
+			decompose_code(new_code, usr)
 		*/
 
 	return 1
 
 
 /obj/structure/synthesized_instrument/synthesizer/shouldStopPlaying(mob/user)
-	return !((src && in_range(src, user) && src.anchored) || src.player.song.autorepeat)
+	return !((src && in_range(src, user) && anchored) || player.song.autorepeat)

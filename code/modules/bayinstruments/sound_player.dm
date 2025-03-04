@@ -30,19 +30,19 @@
 	var/last_updated_listeners = 0
 
 /datum/sound_player/New(obj/where, datum/instrument/what)
-	src.song = new (src, what)
-	src.actual_instrument = where
-	src.echo = global.musical_config.echo_default.Copy()
-	src.env = global.musical_config.env_default.Copy()
+	song = new (src, what)
+	actual_instrument = where
+	echo = global.musical_config.echo_default.Copy()
+	env = global.musical_config.env_default.Copy()
 
 /datum/sound_player/Destroy()
-	src.song.playing = 0
-	src.present_listeners.Cut()
-	src.stored_locations.Cut()
-	src.actual_instrument = null
-	src.instrument = null
+	song.playing = 0
+	present_listeners.Cut()
+	stored_locations.Cut()
+	actual_instrument = null
+	instrument = null
 	sleep(1)
-	for (var/channel in src.song.free_channels)
+	for (var/channel in song.free_channels)
 		global.musical_config.free_channels += channel // Deoccupy channels
 	song = null
 	qdel(song)
@@ -50,14 +50,14 @@
 
 
 /datum/sound_player/proc/apply_modifications_for(mob/who, sound/what, note_num, which_line, which_note) // You don't need to override this
-	var/mod = (get_dist_euclidian(who, get_turf(src.actual_instrument))-1) / src.range
-	what.volume = volume / (100**mod**src.volume_falloff_exponent)
+	var/mod = (get_dist_euclidian(who, get_turf(actual_instrument))-1) / range
+	what.volume = volume / (100**mod**volume_falloff_exponent)
 	if (get_turf(who) in stored_locations)
 		what.volume /= 10 // Twice as low
 
-	if (src.three_dimensional_sound)
+	if (three_dimensional_sound)
 		what.falloff = falloff
-		var/turf/source = get_turf(src.actual_instrument)
+		var/turf/source = get_turf(actual_instrument)
 		var/turf/receiver = get_turf(who)
 		var/dx = source.x - receiver.x // Hearing from the right/left
 		what.x = dx
@@ -67,20 +67,20 @@
 
 		what.y = 1
 	if (global.musical_config.env_settings_available)
-		what.environment = global.musical_config.is_custom_env(src.virtual_environment_selected) ? src.env : src.virtual_environment_selected
-	if (src.apply_echo)
-		what.echo = src.echo
+		what.environment = global.musical_config.is_custom_env(virtual_environment_selected) ? env : virtual_environment_selected
+	if (apply_echo)
+		what.echo = echo
 	return
 
 
 /datum/sound_player/proc/cache_unseen_tiles()
-	src.stored_locations = range(src.range, get_turf(src.actual_instrument)) - view(src.range, get_turf(src.actual_instrument))
+	stored_locations = range(range, get_turf(actual_instrument)) - view(range, get_turf(actual_instrument))
 
 
 /datum/sound_player/proc/who_to_play_for() // Find suitable mobs to annoy with music
-	if (world.time - src.last_updated_listeners > REFRESH_FREQUENCY)
-		src.present_listeners.Cut()
-		for (var/mob/some_hearer in range(src.range, get_turf(src.actual_instrument))) // Apparently hearers only works for local things -- so if something's inside a closet, only things inside this closet can hear it
+	if (world.time - last_updated_listeners > REFRESH_FREQUENCY)
+		present_listeners.Cut()
+		for (var/mob/some_hearer in range(range, get_turf(actual_instrument))) // Apparently hearers only works for local things -- so if something's inside a closet, only things inside this closet can hear it
 			if (!(some_hearer.client && some_hearer.mind))
 				continue
 			//if (isdeaf(some_hearer))
@@ -90,9 +90,9 @@
 //			var/dist = get_dist(some_hearer, src)
 			if (!some_hearer.client.prefs.hear_instruments)
 				continue
-			src.present_listeners += some_hearer
-			src.last_updated_listeners = world.time
-	return src.present_listeners
+			present_listeners += some_hearer
+			last_updated_listeners = world.time
+	return present_listeners
 
 
 /datum/sound_player/proc/shouldStopPlaying(mob/user)

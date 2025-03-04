@@ -28,13 +28,13 @@
 
 
 /datum/synthesized_song/New(datum/sound_player/playing_object, datum/instrument/instrument)
-	src.player = playing_object
-	src.instrument_data = instrument
-	src.octave_range_min = global.musical_config.lowest_octave
-	src.octave_range_max = global.musical_config.highest_octave
+	player = playing_object
+	instrument_data = instrument
+	octave_range_min = global.musical_config.lowest_octave
+	octave_range_max = global.musical_config.highest_octave
 
 	instrument.create_full_sample_deviation_map()
-	src.occupy_channels()
+	occupy_channels()
 
 
 /datum/synthesized_song/proc/sanitize_tempo(new_tempo) // Identical to datum/song
@@ -50,26 +50,26 @@
 
 	for (var/i=1 to global.musical_config.channels_per_instrument)
 		if (global.musical_config.free_channels.len)
-			src.free_channel(pick_n_take(global.musical_config.free_channels))
+			free_channel(pick_n_take(global.musical_config.free_channels))
 
 
 /datum/synthesized_song/proc/take_any_channel()
-	return pick_n_take(src.free_channels)
+	return pick_n_take(free_channels)
 
 
 /datum/synthesized_song/proc/free_channel(channel)
-	if (channel in src.free_channels) return
-	src.free_channels += channel
+	if (channel in free_channels) return
+	free_channels += channel
 
 
 /datum/synthesized_song/proc/return_all_channels()
-	global.musical_config.free_channels |= src.free_channels
-	src.free_channels.Cut()
+	global.musical_config.free_channels |= free_channels
+	free_channels.Cut()
 
 
 /datum/synthesized_song/proc/play_synthesized_note(note, acc, oct, duration, where, which_one)
 	if (oct < global.musical_config.lowest_octave || oct > global.musical_config.highest_octave)	return
-	if (oct < src.octave_range_min || oct > src.octave_range_max)	return
+	if (oct < octave_range_min || oct > octave_range_max)	return
 
 	var/delta1 = acc == "b" ? -1 : acc == "#" ? 1 : acc == "s" ? 1 : acc == "n" ? 0 : 0
 	var/delta2 = 12 * oct
@@ -78,24 +78,24 @@
 	if (note_num < 0 || note_num > 127)
 		CRASH("play_synthesized note failed because of 0..127 condition, [note], [acc], [oct]")
 
-	var/datum/sample_pair/pair = src.instrument_data.sample_map[global.musical_config.n2t(note_num)]
+	var/datum/sample_pair/pair = instrument_data.sample_map[global.musical_config.n2t(note_num)]
 	#define Q 0.083 // 1/12
 	var/freq = 2**(Q*pair.deviation)
-	var/chan = src.take_any_channel()
+	var/chan = take_any_channel()
 	if (!chan)
-		if (!src.player.channel_overload())
-			src.playing = 0
-			src.autorepeat = 0
+		if (!player.channel_overload())
+			playing = 0
+			autorepeat = 0
 			return
 	#undef Q
-	var/list/mob/to_play_for = src.player.who_to_play_for()
+	var/list/mob/to_play_for = player.who_to_play_for()
 
 	if (!to_play_for.len)
-		src.free_channel(chan) // I'm an idiot, fuck
+		free_channel(chan) // I'm an idiot, fuck
 		return
 
 	for (var/mob/hearer in to_play_for)
-		src.play_for(hearer, pair.sample, duration, freq, chan, note_num, where, which_one)
+		play_for(hearer, pair.sample, duration, freq, chan, note_num, where, which_one)
 
 
 /datum/synthesized_song/proc/play_for(mob/who, what, duration, frequency, channel, which, where, which_one)
@@ -111,7 +111,7 @@
 	sound_copy.frequency = 1
 	#endif
 
-	var/delta_volume = player.volume / src.sustain_timer
+	var/delta_volume = player.volume / sustain_timer
 	var/current_volume = max(round(sound_copy.volume), 0)
 	var/tick = duration
 	while (current_volume > 0)
@@ -119,20 +119,20 @@
 		tick += world.tick_lag
 		if (delta_volume <= 0)
 			CRASH("Delta Volume somehow was non-positive: [delta_volume]")
-		if (src.soft_coeff <= 1)
-			CRASH("Soft Coeff somehow was <=1: [src.soft_coeff]")
+		if (soft_coeff <= 1)
+			CRASH("Soft Coeff somehow was <=1: [soft_coeff]")
 
-		if (src.linear_decay)
+		if (linear_decay)
 			new_volume = new_volume - delta_volume
 		else
-			new_volume = new_volume / src.soft_coeff
+			new_volume = new_volume / soft_coeff
 
 		var/sanitized_volume = max(round(new_volume), 0)
 		if (sanitized_volume == current_volume)
 			current_volume = new_volume
 			continue
 		current_volume = sanitized_volume
-		SSmusic.push_event(src.player, who, sound_copy, tick, current_volume)
+		SSmusic.push_event(player, who, sound_copy, tick, current_volume)
 		if (current_volume <= 0)
 			break
 
@@ -142,26 +142,26 @@
 
 /datum/synthesized_song/proc/play_song(mob/user)
 	// This code is really fucking horrible.
-	src.player.cache_unseen_tiles()
+	player.cache_unseen_tiles()
 	var/list/allowed_suff = list("b", "n", "#", "s")
 	var/list/note_off_delta = list("a"=91, "b"=91, "c"=98, "d"=98, "e"=98, "f"=98, "g"=98)
-	var/list/lines_copy = src.lines.Copy()
+	var/list/lines_copy = lines.Copy()
 	spawn()
 		if (!lines.len)
 			STOP_PLAY_LINES
 		var/list/cur_accidentals = list("n", "n", "n", "n", "n", "n", "n")
 		var/list/cur_octaves = list(3, 3, 3, 3, 3, 3, 3)
-		src.current_line = 1
+		current_line = 1
 		for (var/line in lines_copy)
 			var/cur_note = 1
 			for (var/notes in splittext(lowertext(line), ","))
 				var/list/components = splittext(notes, "/")
-				var/duration = sanitize_tempo(src.tempo)
+				var/duration = sanitize_tempo(tempo)
 				if (components.len)
 					var/delta = components.len==2 && text2num(components[2]) ? text2num(components[2]) : 1
 					var/note_str = splittext(components[1], "-")
 
-					duration = sanitize_tempo(src.tempo / delta)
+					duration = sanitize_tempo(tempo / delta)
 					for (var/note in note_str)
 						if (!note)	continue // wtf, empty note
 						var/note_sym = CP(note, 1)
@@ -191,15 +191,15 @@
 										continue
 						cur_octaves[note_off] = octave
 						cur_accidentals[note_off] = accidental
-						play_synthesized_note(note_off, accidental, octave+transposition, duration, src.current_line, cur_note)
+						play_synthesized_note(note_off, accidental, octave+transposition, duration, current_line, cur_note)
 						if (SSmusic.is_overloaded())
 							STOP_PLAY_LINES
 				cur_note++
-				if (!src.playing || src.player.shouldStopPlaying(user))
+				if (!playing || player.shouldStopPlaying(user))
 					STOP_PLAY_LINES
 				sleep(duration)
-			src.current_line++
-		if (src.autorepeat)
+			current_line++
+		if (autorepeat)
 			.()
 
 

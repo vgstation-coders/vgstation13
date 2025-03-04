@@ -25,8 +25,8 @@ var/datum/subsystem/music/SSmusic
     events = left_events
 
 /datum/subsystem/music/proc/push_event(datum/sound_player/source, mob/subject, sound/object, time, volume)
-	if (istype(source) && istype(subject) && istype(subject) && istype(object) && volume >= 0 && volume <= 100)
-		src.events += new /datum/musical_event(source, subject, object, time, volume)
+	if (istype(source) && istype(subject) && istype(object) && volume >= 0 && volume <= 100)
+		events += new /datum/musical_event(source, subject, object, time, volume)
 	
 /datum/subsystem/music/proc/is_overloaded()
-	return src.events.len > global.musical_config.max_events
+	return events.len > global.musical_config.max_events

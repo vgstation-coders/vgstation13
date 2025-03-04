@@ -204,26 +204,26 @@ Bit flags that modify the behavior of above properties
 
 
 /datum/musical_config/proc/n2t(key) // Used instead of num2text for faster access in sample_map
-	if (!src.n2t_int.len)
+	if (!n2t_int.len)
 		for (var/i=1, i<=127, i++)
-			src.n2t_int += num2text(i)
+			n2t_int += num2text(i)
 
 	if (key==0)
 		return "0" // Fuck you BYOND
 	if (!isnum(key) || key < 0 || key>127 || round(key) != key)
 		CRASH("n2t argument must be an integer from 0 to 127")
-	return src.n2t_int[key]
+	return n2t_int[key]
 
 
 /datum/musical_config/proc/environment_to_id(environment)
-	if (environment in src.all_environments)
-		return src.all_environments.Find(environment) - 2
+	if (environment in all_environments)
+		return all_environments.Find(environment) - 2
 	return -1
 
 
 /datum/musical_config/proc/id_to_environment(id)
 	if (id >= -1 && id <= 26)
-		return src.all_environments[id+2]
+		return all_environments[id+2]
 	return "None"
 
 
@@ -232,13 +232,13 @@ Bit flags that modify the behavior of above properties
 
 
 /datum/musical_config/proc/is_custom_env(id)
-	return id_to_environment(id) == src.all_environments[28]
+	return id_to_environment(id) == all_environments[28]
 
 
 /datum/sample_pair
 	var/sample
 	var/deviation = 0
 
-/datum/sample_pair/New(sample_file, deviation)
-	src.sample = sample_file
-	src.deviation = deviation
+/datum/sample_pair/New(sample_file, deviation_)
+	sample = sample_file
+	deviation = deviation_
