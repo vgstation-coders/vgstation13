@@ -957,7 +957,72 @@ var/global/num_vending_terminals = 1
 		coin = null
 	usr.set_machine(src)
 
-	if (href_list["cancel_buying"])
+
+	if (href_list["vend"] && src.vend_ready && !currently_vending)
+		//testing("vend: [href]")
+
+		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
+			to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
+
+			flick(src.icon_deny,src)
+			return
+
+		var/idx=text2num(href_list["vend"])
+		var/cat=text2num(href_list["cat"])
+
+		var/datum/data/vending_product/R = GetProductByID(idx,cat)
+		if (!R || !istype(R) || R.amount <= 0)
+			return
+
+		if(R.price == null || !R.price)
+			src.vend(R, usr)
+		else if(free_vend)//for MoMMI and Service Borgs
+			src.vend(R, usr)
+		else
+			src.currently_vending = R
+			src.updateUsrDialog()
+
+		return
+
+	else if (href_list["set_price"] && src.vend_ready && !currently_vending && edit_mode)
+		//testing("vend: [href]")
+
+		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
+			to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
+
+			flick(src.icon_deny,src)
+			return
+
+		var/idx=text2num(href_list["set_price"])
+		var/cat=text2num(href_list["cat"])
+
+		var/datum/data/vending_product/R = GetProductByID(idx,cat)
+		if (!R || !istype(R) || R.amount <= 0)
+			return
+
+		var/new_price = input("Enter a price", "Change price", R.price) as null|num
+		if(new_price == null || new_price < 0)
+			new_price = R.price
+		new_price = min(new_price, MAX_ITEM_PRICE)
+
+		R.price = new_price
+
+	else if (href_list["delete_entry"] && src.vend_ready && !currently_vending && edit_mode)
+		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
+			to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
+
+			flick(src.icon_deny,src)
+			return
+
+		var/idx=text2num(href_list["delete_entry"])
+		var/cat=text2num(href_list["cat"])
+
+		var/datum/data/vending_product/R = GetProductByID(idx,cat)
+		if(!R || !istype(R) || R.amount > 0)
+			return
+		deleteEntry(R)
+
+	else if (href_list["cancel_buying"])
 		dispense_change()
 		src.currently_vending = null
 
@@ -971,91 +1036,21 @@ var/global/num_vending_terminals = 1
 	else if ((href_list["togglevoice"]) && (src.panel_open))
 		src.shut_up = !src.shut_up
 
-	else if(edit_mode)
-		if (href_list["rename"])
-			var/newname = sanitize(input(usr,"Please enter a new name for the vending machine.","Rename Machine") as text)
-			if(length(newname) > 0 && length(newname) <= CUSTOM_VENDING_MAX_NAME_LENGTH)
-				src.name = newname
+	else if (href_list["rename"] && edit_mode)
+		var/newname = sanitize(input(usr,"Please enter a new name for the vending machine.","Rename Machine") as text)
+		if(length(newname) > 0 && length(newname) <= CUSTOM_VENDING_MAX_NAME_LENGTH)
+			src.name = newname
 
-		else if (href_list["show_oos"])
-			dont_render_OOS = !dont_render_OOS
+	else if (href_list["show_oos"] && edit_mode)
+		dont_render_OOS = !dont_render_OOS
 
-		else if (href_list["add_slogan"])
-			var/newslogan = sanitize(input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text)
-			if(length(newslogan) > 0 && length(newslogan) <= CUSTOM_VENDING_MAX_SLOGAN_LENGTH)
-				product_slogans += newslogan
+	else if (href_list["add_slogan"] && edit_mode)
+		var/newslogan = sanitize(input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text)
+		if(length(newslogan) > 0 && length(newslogan) <= CUSTOM_VENDING_MAX_SLOGAN_LENGTH)
+			product_slogans += newslogan
 
-		else if (href_list["delete_slogan_line"] && product_slogans.len > 0)
-			product_slogans -= product_slogans[text2num(href_list["delete_slogan_line"])]
-	
-	else if (src.vend_ready && !currently_vending)
-		if (href_list["vend"])
-			//testing("vend: [href]")
-
-			if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
-				to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
-
-				flick(src.icon_deny,src)
-				return
-
-			var/idx=text2num(href_list["vend"])
-			var/cat=text2num(href_list["cat"])
-
-			var/datum/data/vending_product/R = GetProductByID(idx,cat)
-			if (!R || !istype(R) || R.amount <= 0)
-				return
-
-			if(R.price == null || !R.price)
-				src.vend(R, usr)
-			else if(free_vend)//for MoMMI and Service Borgs
-				src.vend(R, usr)
-			else
-				src.currently_vending = R
-				src.updateUsrDialog()
-
-			return
-
-		else if(edit_mode)
-			if (href_list["set_price"])
-				//testing("vend: [href]")
-
-				if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
-					to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
-
-					flick(src.icon_deny,src)
-					return
-
-				var/idx=text2num(href_list["set_price"])
-				var/cat=text2num(href_list["cat"])
-
-				var/datum/data/vending_product/R = GetProductByID(idx,cat)
-				if (!R || !istype(R) || R.amount <= 0)
-					return
-
-				var/new_price = input("Enter a price", "Change price", R.price) as null|num
-				if(new_price == null || new_price < 0)
-					new_price = R.price
-				new_price = min(new_price, MAX_ITEM_PRICE)
-
-				R.price = new_price
-
-			else if (href_list["delete_entry"])
-				if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
-					to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
-
-					flick(src.icon_deny,src)
-					return
-
-				var/idx=text2num(href_list["delete_entry"])
-				var/cat=text2num(href_list["cat"])
-
-				var/datum/data/vending_product/R = GetProductByID(idx,cat)
-				if(!R || !istype(R) || R.amount > 0)
-					return
-				deleteEntry(R)
-
-	else
-		to_chat(usr, "<span class='warning'>[src] is busy, this action is unavailable.</span>")
+	else if (href_list["delete_slogan_line"] && edit_mode && product_slogans.len > 0)
+		product_slogans -= product_slogans[text2num(href_list["delete_slogan_line"])]
 
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
