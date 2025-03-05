@@ -146,7 +146,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 
 /atom/proc/genSmoke(var/oxy,var/temp,var/turf/where,var/force_smoke = FALSE)
 	if(!force_smoke)
-		if(prob(clamp(lerp(temp,T20C,T0C + 1000,96,100),96,100))) //4% chance of smoke at 20C, 0% at 1000C
+		if(prob(clamp(lerp_generic(temp,T20C,T0C + 1000,96,100),96,100))) //4% chance of smoke at 20C, 0% at 1000C
 			return FALSE
 	var/smoke_density = clamp(5 * ((MINOXY2BURN/oxy) ** 2),1,5)
 	var/datum/effect/system/smoke_spread/bad/smoke = new
