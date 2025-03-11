@@ -206,7 +206,7 @@
 
 /obj/item/weapon/bikehorn/ankhhorn
 	name = "ankh horn"
-	desc = "Curse of Ra upon ye!"
+	desc = "Curse of Ra be upon ye!"
 	icon_state = "ankh_horn"
 	item_state = "ankh_horn"
 	attack_verb = list("curses")
