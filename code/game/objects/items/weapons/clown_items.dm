@@ -204,6 +204,16 @@
 	hitsound = 'sound/items/badtothebone.ogg'
 	can_honk_baton = 0
 
+/obj/item/weapon/bikehorn/ankhhorn
+	name = "ankh horn"
+	desc = "Curse of Ra upon ye!"
+	icon_state = "ankh_horn"
+	item_state = "ankh_horn"
+	attack_verb = list("curses")
+	hitsound = 'sound/items/curseofra.ogg'
+	can_honk_baton = 0
+	honk_delay = 80 //long audio
+
 #define TELE_COOLDOWN 5 SECONDS
 
 /obj/item/weapon/bikehorn/rubberducky/quantum
