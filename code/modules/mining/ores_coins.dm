@@ -83,6 +83,13 @@
 	recipes = sand_recipes
 	..()
 
+/obj/item/stack/ore/glass/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W))
+		var/obj/item/weapon/bikehorn/HONKER = W
+		if(HONKER.can_honk_baton)
+			user.create_in_hands(src, /obj/item/weapon/bikehorn/ankhhorn, W, msg = "You call upon the blessings of the Sun God as you cover \the [W] with \the [src].")
+
 /obj/item/stack/ore/plasma
 	name = "\improper plasma ore"
 	icon_state = "Plasma ore"
