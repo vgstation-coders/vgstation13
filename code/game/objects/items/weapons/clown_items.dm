@@ -213,6 +213,7 @@
 	hitsound = 'sound/items/curseofra.ogg'
 	can_honk_baton = 0
 	honk_delay = 80 //long audio
+	vary_pitch = 0 //we want the same pitch
 
 #define TELE_COOLDOWN 5 SECONDS
 
