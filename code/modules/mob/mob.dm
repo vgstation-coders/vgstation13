@@ -1049,11 +1049,10 @@ Use this proc preferably at the end of an equipment loadout
 
 	var/obj/item/W = get_held_item_by_index(active_hand)
 
-	if(isVentCrawling() && !W.vent_use)
-		to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
-		return
-
 	if(W)
+		if(isVentCrawling() && !W.vent_use)
+			to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
+			return
 		W.attack_self(src)
 		update_inv_hand(active_hand)
 
