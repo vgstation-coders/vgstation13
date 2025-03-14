@@ -175,10 +175,10 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 
 	if(handle_item_attack(W, user))
 		return
-	
+
 	if(emag_check(W,user))
 		. = 1
-			
+
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
@@ -467,9 +467,7 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 	var/datum/gas_mixture/G = return_air()
 	if(!G)
 		return
-	while(G.temperature >= (autoignition_temperature * 0.75))
-		if(!G)
-			break
+	while(G && G.temperature >= (autoignition_temperature * 0.75))
 		if(!smoking)
 			add_particles(PS_SMOKE)
 			smoking = TRUE
