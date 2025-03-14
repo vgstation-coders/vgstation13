@@ -473,7 +473,7 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 		if(!smoking)
 			add_particles(PS_SMOKE)
 			smoking = TRUE
-		var/rate = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+		var/rate = clamp(lerp_generic(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
 		adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
 		sleep(10 SECONDS)
 		G = return_air()

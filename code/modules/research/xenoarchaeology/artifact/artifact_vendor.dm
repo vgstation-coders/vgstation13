@@ -225,6 +225,7 @@ var/static/list/badstuff2putin = list(
 		flick(src.icon_vend,src)
 	src.updateUsrDialog()
 	visible_message("\The [src.name] whirrs as it vends.", "You hear a whirr.")
+	src.vend_ready = 0 //One thing at a time!!
 	spawn(vend_delay)
 		var/path2use = pickweight(insultingStock)
 		if(arcanetampered && prob(90))

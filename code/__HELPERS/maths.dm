@@ -112,7 +112,7 @@ var/const/Sqrt2	= 1.41421356
 /**
  * Generic lerp function.
  */
-/proc/lerp(x, x0, x1, y0 = 0, y1 = 1)
+/proc/lerp_generic(x, x0, x1, y0 = 0, y1 = 1)
     return y0 + (y1 - y0)*(x - x0)/(x1 - x0)
 
 /**
@@ -141,7 +141,7 @@ var/const/Sqrt2	= 1.41421356
  * This is the counterpart to the mix() function. It returns the actual
  * percentage x is at inside the [a, b] range.
  *
- * Note that this is theoretically equivalent to calling lerp(x, a, b)
+ * Note that this is theoretically equivalent to calling lerp_generic(x, a, b)
  * (y0 and y1 default to 0 and 1) but this one is slightly faster
  * because Byond is too dumb to optimize procs with default values. It
  * shouldn't matter which one you use (since there are no FP issues)

@@ -292,3 +292,13 @@
 	containername = "big band musical instruments crate"
 	group = "Hospitality"
 	containsdesc = "One way around the strange space law is to just order the whole band. Contains one of every instrument."
+
+/datum/supply_packs/synthesizer
+	contains = list(/obj/structure/synthesized_instrument/synthesizer)
+	name = "Synthesizer crate"
+	cost = 50
+	containertype = /obj/structure/closet/crate/basic
+	containername = "new age synthesizer crate"
+	containsdesc = "A new synthesizer has hit the market! Get it while it's still hot!"
+
+	group = "Hospitality"

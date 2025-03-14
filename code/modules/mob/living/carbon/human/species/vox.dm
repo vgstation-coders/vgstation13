@@ -179,3 +179,6 @@
 	for(var/i = 1 to sounds)
 		newname += pick(vox_name_syllables)
 	return capitalize(newname)
+
+/datum/species/skellington/skelevox/fallback()
+	return "Vox"

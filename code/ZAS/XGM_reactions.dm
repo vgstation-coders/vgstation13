@@ -75,3 +75,34 @@
 	// Arbitrary number to reduce temperature by a significant amount.
 	var/const/base_temp_loss_per_one_reaction = -240000
 	mixture.add_thermal_energy( cooling_coefficient * reaction_coefficient * base_temp_loss_per_one_reaction, 0.1)
+
+
+/datum/gas_reaction/n2o_thermal_decomposition
+	name = "N2O decomposition"
+	
+/datum/gas_reaction/n2o_thermal_decomposition/reaction_is_possible(datum/gas_mixture/mixture)
+	return mixture.temperature>=300+T0C && mixture[GAS_SLEEPING]>0
+
+
+/datum/gas_reaction/n2o_thermal_decomposition/reaction_amounts_requested( datum/gas_mixture/mixture )
+	var/to_return=list()
+	var/cratio=(mixture.temperature-300-T0C)/900
+	cratio*=  1- (1/((mixture.pressure/ONE_ATMOSPHERE)+1)) //higher pressures make more reactions happen
+	cratio=min(0.95,max(0,cratio)**0.5)
+	to_return[GAS_SLEEPING]=mixture[GAS_SLEEPING]*cratio
+	return to_return	
+	
+	
+/datum/gas_reaction/n2o_thermal_decomposition/perform_reaction( datum/gas_mixture/mixture, reactant_amounts )
+	if(!reactant_amounts)
+		return
+	var/const/decomposition_energy=82050 //82.05 Kj/mol
+	var/moles_n2o=reactant_amounts[GAS_SLEEPING]
+	
+	mixture[GAS_OXYGEN]+=reactant_amounts[GAS_SLEEPING]*0.5
+	mixture[GAS_NITROGEN]+=moles_n2o
+	mixture[GAS_SLEEPING]=max(0,mixture[GAS_SLEEPING]-moles_n2o)
+	
+	mixture.add_thermal_energy(moles_n2o*decomposition_energy)
+	
+	mixture.update_values()

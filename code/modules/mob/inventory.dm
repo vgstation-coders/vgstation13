@@ -221,8 +221,7 @@
 		return 0
 
 	// adjacent only loc checks one way around, so first part is necessary, also for anything inside too
-	//By using the item's adjacent check instead of the user's, we allow for some item exceptions (e.g.: battlemat)
-	if(W.loc && !W.recursive_in_contents_of(src) && !W.Adjacent(src) && !W.arcanetampered)
+	if(W.loc && !W.recursive_in_contents_of(src) && !(Adjacent(W) || W.Adjacent(W)) && !W.arcanetampered)
 		return 0
 
 	if((W.flags & MUSTTWOHAND) && !(M_STRONG in mutations))
@@ -369,7 +368,7 @@
 
 	if(failmsg == TRUE)
 		failmsg = to_drop ? "<span class='warning'>You can't let go of \the [to_drop]!</span>" : null
-		
+
 	if(!candrop) //can't drop items while etheral
 		if(failmsg)
 			to_chat(src, failmsg)

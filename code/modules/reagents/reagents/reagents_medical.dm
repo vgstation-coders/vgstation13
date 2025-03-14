@@ -439,7 +439,7 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	var/found_any = FALSE
 	for(var/datum/reagent/reagent in holder.reagent_list)
-		if(reagent.id in charcoal_doesnt_remove)
+		if((reagent.flags & CHEMFLAG_NOTREMOVABLE) || (reagent.id in charcoal_doesnt_remove))
 			continue
 		holder.remove_reagent(reagent.id, 15*REM)
 		found_any = TRUE
@@ -632,6 +632,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	density = 3.9
 	specheatcap = 0.12812
 	custom_metabolism = 0.1
+	fission_time=6000 // 100 minutes (1hr 40)
+	fission_absorbtion=5000
 
 /datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1682,6 +1684,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.58
 	specheatcap = 0.44
+	fission_time=4800 // 80 minutes (1hr 20)
+	fission_absorbtion=3500
 
 /datum/reagent/tricordrazine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1760,3 +1764,87 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#899613" //rgb: 137, 150, 19
 	density = 0.67
 	specheatcap = 4.18
+
+
+/datum/reagent/regenerate_calcium
+	name = "Regenerate Calcium"
+	description = "Highly irradiated degenerate calcium whose structure has been altered, causing it to fuse and set bones with far more efficiency and grace than the original chemical, albeit with the cost of being extremely volatile once introduced into the body, not to mention its production process leaving it with lingering radioactivity."
+	id = REGENERATECALCIUM
+	density = 4.1
+	specheatcap = 0.15
+	custom_metabolism= 0.5 //the candle the burns twice as bright...
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#088c2e"
+	
+/datum/reagent/regenerate_calcium/on_mob_life(var/mob/living/M) //burns half as long...
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		M.apply_radiation(0.5, RAD_INTERNAL) //it is made in a reactor, after all.
+		var/mob/living/carbon/human/H = M
+		if(H.species.anatomy_flags & NO_BONES)
+			return
+
+		var/remaininghealing=2
+		for(var/datum/organ/external/E in H.organs)
+			if(!E.is_organic())
+				continue
+			
+			for(var/datum/wound/W in E.wounds) 
+				if(W.damage_type==CUT || W.damage_type==BRUISE) //fixes limb brute damage
+					remaininghealing=W.heal_damage(remaininghealing,1)
+					if(!remaininghealing)
+						break
+
+			if(E.brute_dam<=E.max_damage*0.5)
+				if(E.status&ORGAN_BROKEN)
+					H.custom_pain("You feel a flash of pain as the bones in your [E.display_name] rapidly set into their correct place.",50)
+					playsound(H.loc, "fracture", 100, 1, -2)
+					H.pain_level +=100
+					E.status&= ~ORGAN_BROKEN //fixes broken limbs
+			if(!remaininghealing)
+				return 1
+
+
+
+/datum/reagent/equalizone
+	name = "Equalizone"
+	description = "An experimental drug synthesized through subjecting particular chemicals to high levels of neutron radiation. Effects while inside the system are still being studied, and are highly unpredictable. Subjects report wounds of different types appearing and disappearing at incredible rates, or falling ill after trials."
+	id = EQUALIZONE
+	density = 2.78
+	specheatcap = 0.103
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#4ee7e6"
+
+/datum/reagent/equalizone/on_mob_life(var/mob/living/M)
+	var/efficacy=0.5 //how much this thing does what it does per tick.
+
+	if(..())
+		return 1
+
+	var/toxmod=M.tox_damage_modifier
+	var/brutemod=M.brute_damage_modifier
+	var/firemod=M.burn_damage_modifier
+	
+	if(toxmod==0 || brutemod==0 || firemod==0) //no div 0 here, so sireeeeee, nope.
+		return 1
+
+	var/brut=M.getBruteLoss()
+	var/brn=M.getFireLoss()
+	var/tox=M.getToxLoss()
+	
+	var/totaldamage = brut+tox+brn
+	if(totaldamage>0.0) //no need to do anything if no damage.
+		totaldamage/=3.0 //average it
+
+		var/tox_target = tox*(1-efficacy) + efficacy*totaldamage //linear interpolation to get the damage.
+		var/brute_target = brut*(1-efficacy) + efficacy*totaldamage
+		var/burn_target = brn*(1-efficacy) + efficacy*totaldamage
+		
+		
+		M.adjustToxLoss(  0.2*ceil(  5.0*((tox_target-tox)/toxmod) )   )
+		M.adjustBruteLoss( 0.2*ceil(  5.0*( (brute_target-brut)/brutemod) ) ) //we divide by the damage modifier, because adjust_loss will multiply by it. we don't want that.
+		M.adjustFireLoss( 0.2*ceil(  5.0*( (burn_target-brn)/firemod) ) ) //why are we rounding to .2? because the damage system acts funky with low fractional numbers, so we avoid that. why ceil instead of floor? fuck you, that's why.
+		
+		M.updatehealth()

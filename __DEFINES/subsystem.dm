@@ -60,6 +60,7 @@
 #define SS_PRIORITY_THERM_DISS     19
 #define SS_PRIORITY_AMBIENCE	   18
 #define SS_PRIORITY_DBCORE		   17
+#define SS_PRIORITY_MUSIC          16
 #define SS_PRIORITY_SUN            3
 #define SS_PRIORITY_GARBAGE        2
 #define SS_PRIORITY_INACTIVITY     1

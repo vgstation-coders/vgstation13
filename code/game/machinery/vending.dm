@@ -957,8 +957,11 @@ var/global/num_vending_terminals = 1
 		coin = null
 	usr.set_machine(src)
 
+	if(!src.vend_ready)
+		to_chat(usr, "<span class='warning'>[src] is busy, this action is unavailable.</span>")
+		return
 
-	if (href_list["vend"] && src.vend_ready && !currently_vending)
+	if (href_list["vend"] && !currently_vending)
 		//testing("vend: [href]")
 
 		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
@@ -984,7 +987,7 @@ var/global/num_vending_terminals = 1
 
 		return
 
-	else if (href_list["set_price"] && src.vend_ready && !currently_vending && edit_mode)
+	else if (href_list["set_price"] && !currently_vending && edit_mode)
 		//testing("vend: [href]")
 
 		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
@@ -1007,7 +1010,7 @@ var/global/num_vending_terminals = 1
 
 		R.price = new_price
 
-	else if (href_list["delete_entry"] && src.vend_ready && !currently_vending && edit_mode)
+	else if (href_list["delete_entry"] && !currently_vending && edit_mode)
 		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
 			to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
 
@@ -1079,7 +1082,6 @@ var/global/num_vending_terminals = 1
 
 		flick(src.icon_deny,src)
 		return
-	src.vend_ready = 0 //One thing at a time!!
 
 	if (!by_voucher && (R in coin_records))
 		if (isnull(coin))
@@ -1124,6 +1126,7 @@ var/global/num_vending_terminals = 1
 	visible_message("\The [src.name] whirrs as it vends.", "You hear a whirr.")
 	if (vend_sound)
 		playsound(loc, vend_sound, 50, 0)
+	src.vend_ready = 0 //One thing at a time!!
 	spawn(vend_delay)
 		if(!R.custom)
 			var/path2use = R.product_path
