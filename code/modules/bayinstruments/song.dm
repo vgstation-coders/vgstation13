@@ -201,6 +201,8 @@
 			current_line++
 		if (autorepeat)
 			.()
+		else
+			STOP_PLAY_LINES
 
 
 #undef CP
