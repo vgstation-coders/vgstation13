@@ -100,7 +100,7 @@
 	desc = "This is the hottest new synth around! With new sounds!"
 	icon = 'icons/obj/musician.dmi'
 	icon_state = "nusynth"
-	anchored = 1
+	anchored = 0
 	density = 1
 	var/list/instruments = list()
 
