@@ -1065,21 +1065,14 @@ Thanks.
 					sleep(10)
 					SC.broken = SC.locked // If it's only welded just break the welding, dont break the lock.
 					SC.locked = 0
-					SC.welded = 0
-					L.visible_message("<span class='danger'>[L] successfully breaks out of [SC]!</span>",
-									  "<span class='notice'>You successfully break out!</span>")
-					if(istype(SC.loc, /obj/item/delivery/large)) //Do this to prevent contents from being opened into nullspace (read: bluespace)
-						var/obj/item/delivery/large/BD = SC.loc
-						BD.attack_hand(usr)
-					SC.open()
-				else
-					C.welded = 0
-					L.visible_message("<span class='danger'>[L] successfully breaks out of [C]!</span>",
-									  "<span class='notice'>You successfully break out!</span>")
-					if(istype(C.loc, /obj/item/delivery/large)) //nullspace ect.. read the comment above
-						var/obj/item/delivery/large/BD = C.loc
-						BD.attack_hand(usr)
-					C.open()
+				C.welded = 0
+				C.arcanetampered = 0 // so it doesn't just close again, fairness on the user
+				L.visible_message("<span class='danger'>[L] successfully breaks out of [C]!</span>",
+									"<span class='notice'>You successfully break out!</span>")
+				if(istype(C.loc, /obj/item/delivery/large)) //Do this to prevent contents from being opened into nullspace (read: bluespace)
+					var/obj/item/delivery/large/BD = C.loc
+					BD.attack_hand(usr)
+				C.open()
 
 	//Removing a headcrab
 	if(ishuman(L))
