@@ -1066,7 +1066,8 @@ Thanks.
 					SC.broken = SC.locked // If it's only welded just break the welding, dont break the lock.
 					SC.locked = 0
 				C.welded = 0
-				C.arcanetampered = 0 // so it doesn't just close again, fairness on the user
+				if(C.arcanetampered)
+					C.bless() // so it doesn't just close again, fairness on the user
 				L.visible_message("<span class='danger'>[L] successfully breaks out of [C]!</span>",
 									"<span class='notice'>You successfully break out!</span>")
 				if(istype(C.loc, /obj/item/delivery/large)) //Do this to prevent contents from being opened into nullspace (read: bluespace)
