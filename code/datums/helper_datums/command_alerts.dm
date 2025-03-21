@@ -55,7 +55,7 @@
 
 /datum/command_alert/hog
 	name = "HOG"
-	alert_title = ""
+	alert_title = "HOG"
 	force_report = 1
 	message = "A Hazardous Organic Grease-source (HOG) has been detected in your station maintenance. Remove it before its secretions damage station equipment."
 

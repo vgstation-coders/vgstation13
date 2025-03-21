@@ -372,8 +372,8 @@ if ungreased adult: l containers
 	name = "rampaging overgreased feral space hog"
 	desc = "It leaves a sickly trail of grease and knocks over anyone in its way."
 	speed = 1 //moves at same speed as a person when not dashing
-	maxHealth = 450
-	health = 450
+	maxHealth = 300
+	health = 300
 	icon = 'icons/mob/hog.dmi'
 	icon_state = "hog_overgreased"
 	icon_living = "hog_overgreased"
@@ -386,6 +386,7 @@ if ungreased adult: l containers
 	response_disarm = "shoves"
 	response_harm = "hits"
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/box/pig
+	meat_amount = 24
 	can_butcher = TRUE
 	size = SIZE_BIG
 	var/dashspeed = 3 //How fast it paths!
@@ -428,9 +429,6 @@ if ungreased adult: l containers
 		playsound(loc, 'sound/voice/pigsqueal.ogg', 50, 0)
 	target = pick(homes)
 	path = get_path_to(src, target, max_distance=500, id = CS)
-	message_admins("Debug: produced path of size [path.len]. View: [path]")
-	if(!path)
-		message_admins("Debug: Rampaging hog failed to get a path.")
 	pathers += src
 
 /mob/living/simple_animal/rampagingspacehog/Life()
@@ -444,6 +442,9 @@ if ungreased adult: l containers
 
 /mob/living/simple_animal/rampagingspacehog/process_astar_path()
 	if(gcDestroyed || stat == DEAD)
+		return FALSE
+	if(!path || !path.len)
+		playsound(loc, 'sound/voice/pigsnort.ogg', 50, 0)
 		return FALSE
 	Move(path[1])
 	path.Remove(path[1])
