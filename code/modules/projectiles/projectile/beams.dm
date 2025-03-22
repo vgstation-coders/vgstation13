@@ -92,7 +92,7 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/proc/fireto(var/vector/origin, var/vector/direction)
 	// + 0.5 because we want to start in the middle of the tile
-	var/ray/beam_ray/shot_ray = new /ray/beam_ray(origin + new /vector(0.5, 0.5), direction, src)
+	var/ray/beam_ray/shot_ray = new /ray/beam_ray(origin + vector(0.5, 0.5), direction, src)
 	for(var/ray/beam_ray/other_ray in past_rays)
 		if(other_ray.equals(shot_ray))
 			return //we already went here

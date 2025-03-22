@@ -1,8 +1,8 @@
 /atom/movable/proc/vector_translate(var/vector/V, var/delay)
 	var/turf/T = get_turf(src)
 	var/turf/destination = locate(T.x + V.x, T.y + V.y, z)
-	var/vector/V_norm = V.chebyshev_normalized()
-	if (!V_norm.is_integer())
+	var/vector/V_norm = chebyshev_normalized(V)
+	if (!is_integer(V_norm))
 		return
 	var/turf/destination_temp
 	while (destination_temp != destination)
@@ -17,42 +17,42 @@
 
 //Vector representing world-pos of A
 /proc/atom2vector(var/atom/A)
-	return new /vector(A.x, A.y)
+	return vector(A.x, A.y)
 
 //Vector from A -> B
 /proc/atoms2vector(var/atom/A, var/atom/B)
-	return new /vector((B.x - A.x), (B.y - A.y))
+	return vector((B.x - A.x), (B.y - A.y))
 
 
 /proc/dir2vector(var/dir)
 	switch(dir)
 		if(NORTH)
-			return new /vector(0,1)
+			return vector(0,1)
 		if(NORTHEAST)
-			return new /vector(1,1)
+			return vector(1,1)
 		if(EAST)
-			return new /vector(1,0)
+			return vector(1,0)
 		if(SOUTHEAST)
-			return new /vector(1,-1)
+			return vector(1,-1)
 		if(SOUTH)
-			return new /vector(0,-1)
+			return vector(0,-1)
 		if(SOUTHWEST)
-			return new /vector(-1,-1)
+			return vector(-1,-1)
 		if(WEST)
-			return new /vector(-1,0)
+			return vector(-1,0)
 		if(NORTHWEST)
-			return new /vector(-1,1)
+			return vector(-1,1)
 
 //defaults to north
 /proc/vector2ClosestDir(var/vector/V)
-	var/vector/V_norm = V.chebyshev_normalized()
+	var/vector/V_norm = chebyshev_normalized(V)
 
 	var/smallest_dist = 2 //since all vectors are normalized, the biggest possible distance is 2
 	var/closestDir = NORTH
 	for(var/d in alldirs)
 		var/vector/dir = dir2vector(d)
-		var/vector/delta = dir.chebyshev_normalized() - V_norm
-		var/dist = delta.chebyshev_norm()
+		var/vector/delta = chebyshev_normalized(dir) - V_norm
+		var/dist = chebyshev_norm(delta)
 		if(dist < smallest_dist)
 			smallest_dist = dist
 			closestDir = d
@@ -61,7 +61,7 @@
 /proc/drawLaser(var/vector/A, var/vector/B, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser")
 	var/vector/delta = (B - A)
 	var/ray/laser_ray = new /ray(A, delta)
-	var/distance = delta.chebyshev_norm()
+	var/distance = chebyshev_norm(delta)
 
 	laser_ray.draw(distance, icon, icon_state)
 

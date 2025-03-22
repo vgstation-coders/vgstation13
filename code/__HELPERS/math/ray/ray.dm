@@ -26,13 +26,13 @@
 	var/turf/previous_turf
 
 /ray/proc/toString()
-	return "\[Ray\](\n- origin = " + origin.toString() + "\n- origin_floored = "+ origin_floored.toString() + "\n- direction = " + direction.toString() + "\n- z-level = " + num2text(z) + "\n)"
+	return "\[Ray\](\n- origin = " + toString(origin) + "\n- origin_floored = "+ toString(origin_floored) + "\n- direction = " + toString(direction) + "\n- z-level = " + num2text(z) + "\n)"
 
 //use atom2vector for the origin, atoms2vector for the direction
 /ray/New(var/vector/p_origin, var/vector/p_direction, var/z)
 	origin = p_origin
-	origin_floored = origin.floored() //to save us from calculating it all over again
-	direction = p_direction.chebyshev_normalized()
+	origin_floored = floor(origin) //to save us from calculating it all over again
+	direction = chebyshev_normalized(p_direction)
 	src.z = z
 
 /ray/Destroy()
@@ -43,18 +43,18 @@
 
 //check if ray equals other ray
 /ray/proc/equals(var/ray/other_ray)
-	return src.direction.equals(other_ray.direction) && src.hitsPoint(other_ray.origin)
+	return vector_equals(direction,other_ray.direction) && src.hitsPoint(other_ray.origin)
 
 //checks if another ray overlaps this one
 /ray/proc/overlaps(var/ray/other_ray)
-	if(!(direction.equals(other_ray.direction) || direction.equals(other_ray.direction*-1))) //direction is normalized, so we can check like this
+	if(!(vector_equals(direction,other_ray.direction) || vector_equals(direction,other_ray.direction*-1))) //direction is normalized, so we can check like this
 		return FALSE
 
 	return hitsPoint(other_ray.origin)
 
 //returns true if point is on our ray (can be called with a max distance)
 /ray/proc/hitsPoint(var/vector/point, var/max_distance = 0)
-	if(origin.equals(point)) //the easy way out
+	if(vector_equals(origin,point)) //the easy way out
 		return TRUE
 
 	if(direction.x == 0)
@@ -75,7 +75,7 @@
 	//calc where we hit the atom
 	var/vector/hit_point = hit.point_raw
 	var/atom/movable/resolved_hit_atom = hit.hit_atom?.get()
-	var/vector/hit_atom_loc = atom2vector(resolved_hit_atom) + new /vector(0.5, 0.5)
+	var/vector/hit_atom_loc = atom2vector(resolved_hit_atom) + vector(0.5, 0.5)
 
 	var/vector/hit_vector = hit_point - hit_atom_loc
 
@@ -84,7 +84,7 @@
 	var/entry_byond_dir = vector2ClosestDir(hit_vector)
 	var/vector/entry_dir = dir2vector(entry_byond_dir)
 
-	return src.direction.mirrorWithNormal(entry_dir)
+	return mirrorWithNormal(src.direction,entry_dir)
 
 
 //gets a point along the ray
@@ -102,10 +102,10 @@
 /ray/proc/cast(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/max_hits = RAY_CAST_UNLIMITED_HITS, var/ignore_origin = TRUE)
 	//calculating a step and its distance to use in the loop
 	var/vector/a_step = direction * RAY_CAST_STEP
-	var/step_distance = a_step.chebyshev_norm()
+	var/step_distance = chebyshev_norm(a_step)
 
 	//setting up our pointer and distance to track where we are
-	var/vector/pointer = new /vector(0,0)
+	var/vector/pointer = vector(0,0)
 	var/distance = 0
 
 	//positions list to easier check if we already found this position (since we are moving in tiny steps, not full numbers)
@@ -114,7 +114,7 @@
 	//our result
 	var/list/rayCastHit/hits = list()
 
-	var/turf/T = vector2turf(origin.floored(), z)
+	var/turf/T = vector2turf(floor(origin), z)
 	previous_turf = T
 	final_turf = T
 
@@ -125,18 +125,18 @@
 
 		//calculating our current position in world space (its two lines cause byond)
 		var/vector/new_position_unfloored = origin + pointer
-		var/vector/new_position = new_position_unfloored.floored()
+		var/vector/new_position = floor(new_position_unfloored)
 
 		//check if we already checked this (floored) vector
 		var/exists = FALSE
 		for(var/vector/V in positions)
-			if(V.equals(new_position))
+			if(vector_equals(V,new_position))
 				exists = TRUE
 		if(exists)
 			continue
 
 		//check if this is origin and if we should ignore it
-		if(ignore_origin && new_position.equals(origin_floored))
+		if(ignore_origin && equals(new_position,origin_floored))
 			continue
 
 		//getting the turf at our current (floored) vector
@@ -188,7 +188,7 @@ var/list/ray_draw_icon_cache = list()
 
 /ray/proc/draw(var/draw_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser", var/starting_distance=0.7, var/distance_from_endpoint=-0.5, var/step_size=0.5, var/lifetime=3, var/fade=TRUE, var/color_override=null, var/color_shift=null)
 	var/distance_pointer = starting_distance
-	var/angle = direction.toAngle()
+	var/angle = vectorToAngle(direction)
 	var/max_distance = draw_distance - distance_from_endpoint
 	while(distance_pointer < max_distance)
 		var/vector/point
@@ -196,9 +196,9 @@ var/list/ray_draw_icon_cache = list()
 			point = getPoint(max_distance - step_size)
 		else
 			point = getPoint(distance_pointer)
-		var/vector/point_floored = point.floored()
+		var/vector/point_floored = floor(point)
 
-		var/vector/pixels = (point - point_floored - new /vector(0.5, 0.5)) * WORLD_ICON_SIZE
+		var/vector/pixels = (point - point_floored - vector(0.5, 0.5)) * WORLD_ICON_SIZE
 
 		var/turf/T = locate(point_floored.x, point_floored.y, z)
 

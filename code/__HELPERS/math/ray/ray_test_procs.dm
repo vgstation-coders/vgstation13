@@ -1,7 +1,7 @@
 
 /proc/raycast_test(var/x = 1, var/y = 1, var/dist)
-	var/vector/origin = new /vector(usr.x, usr.y)
-	var/vector/direction = new /vector(x, y)
+	var/vector/origin = vector(usr.x, usr.y)
+	var/vector/direction = vector(x, y)
 
 	var/ray/our_ray = new /ray(origin, direction, usr.z)
 	var/list/res = our_ray.cast(dist)
