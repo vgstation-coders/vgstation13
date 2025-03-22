@@ -3,7 +3,7 @@
 	var/vector/D
 	for(var/i in range(100))
 		V = vector(i, i*2)
-		D = V.duplicate()
+		D = copyVector(V)
 		if(D == V)
 			fail("Reference copied")
 
@@ -12,16 +12,16 @@
 
 /datum/unit_test/vector_isnull/start()
 	var/vector/V = vector(0,0.0)
-	if(!V.is_null())
+	if(!V.isNullVector())
 		fail("Vector not null")
 
 /datum/unit_test/vector_isint/start()
 	var/vector/V = vector(5416,115)
-	if(!V.is_integer())
+	if(!V.isIntegerVector())
 		fail("Vector not int, should be int")
 
 	V = vector(5416.044,115)
-	if(V.is_integer())
+	if(V.isIntegerVector())
 		fail("Vector int, should not be int")
 
 /datum/unit_test/vector_toangle/start()

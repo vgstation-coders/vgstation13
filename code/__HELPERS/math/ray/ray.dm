@@ -26,7 +26,7 @@
 	var/turf/previous_turf
 
 /ray/proc/toString()
-	return "\[Ray\](\n- origin = " + toString(origin) + "\n- origin_floored = "+ toString(origin_floored) + "\n- direction = " + toString(direction) + "\n- z-level = " + num2text(z) + "\n)"
+	return "\[Ray\](\n- origin = " + vectorToString(origin) + "\n- origin_floored = "+ vectorToString(origin_floored) + "\n- direction = " + vectorToString(direction) + "\n- z-level = " + num2text(z) + "\n)"
 
 //use atom2vector for the origin, atoms2vector for the direction
 /ray/New(var/vector/p_origin, var/vector/p_direction, var/z)

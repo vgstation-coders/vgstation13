@@ -1,5 +1,5 @@
 // Basic geometry things.
-/proc/duplicate(vector/v)
+/proc/copyVector(vector/v)
 	return vector(v.x, v.y)
 
 /proc/euclidian_norm(vector/v)
@@ -17,13 +17,13 @@
 	var/norm = chebyshev_norm(v)
 	return vector(v.x/norm, v.y/norm)
 
-/proc/is_integer(vector/v)
+/proc/isIntegerVector(vector/v)
 	return IS_INT(v.x) && IS_INT(v.y)
 
-/proc/is_null(vector/v)
+/proc/isNullVector(vector/v)
 	return chebyshev_norm(v) == 0
 
-/proc/toString(vector/v)
+/proc/vectorToString(vector/v)
 	return "\[Vector\]([v.x],[v.y])"
 
 //returns angle from 0 to 360

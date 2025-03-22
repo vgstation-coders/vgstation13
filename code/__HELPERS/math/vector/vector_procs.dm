@@ -2,7 +2,7 @@
 	var/turf/T = get_turf(src)
 	var/turf/destination = locate(T.x + V.x, T.y + V.y, z)
 	var/vector/V_norm = chebyshev_normalized(V)
-	if (!is_integer(V_norm))
+	if (!isIntegerVector(V_norm))
 		return
 	var/turf/destination_temp
 	while (destination_temp != destination)

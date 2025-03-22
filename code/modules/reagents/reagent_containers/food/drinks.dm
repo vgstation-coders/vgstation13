@@ -2333,7 +2333,7 @@
 			// Geometrically checking if we're on a straight line.
 			var/vector/V = atoms2vector(src, over_location)
 			var/vector/V_norm = V.Normalize()
-			if (!is_integer(V_norm))
+			if (!isIntegerVector(V_norm))
 				return ..() // Only a cardinal vector (north, south, east, west) can pass this test
 
 			// Checks if there's tables on the path.
