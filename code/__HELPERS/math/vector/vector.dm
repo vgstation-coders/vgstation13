@@ -17,8 +17,7 @@
 /proc/isIntegerVector(vector/v)
 	return IS_INT(v.x) && IS_INT(v.y)
 
-/proc/isNullVector(vector/v)
-	return chebyshev_norm(v) == 0
+#define isNullVector(v) (chebyshev_norm(v) == 0)
 
 /proc/vectorToString(vector/v)
 	return "\[Vector\]([v.x],[v.y])"
