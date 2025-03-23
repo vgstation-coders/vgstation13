@@ -3,10 +3,7 @@
 	return vector(v.x, v.y)
 
 /proc/euclidian_norm(vector/v)
-	return sqrt(v.x*v.x + v.y*v.y)
-
-/proc/squared_norm(vector/v)
-	return v.x*v.x + v.y*v.y
+	return sqrt(v.size)
 
 //use this one
 /proc/chebyshev_norm(vector/v)
