@@ -15,8 +15,7 @@ except AttributeError:
 # So... Travis kills it.
 # Thanks DM.
 # This repeats messages like travis_wait (which I couldn't get working) does to prevent that.
-@asyncio.coroutines
-def run_with_timeout_guards(args):
+async def run_with_timeout_guards(args):
     target_process = yield from asyncio.create_subprocess_exec(*args, stderr=asyncio.subprocess.STDOUT)
     task = ensure_future(print_timeout_guards())
 
@@ -24,8 +23,7 @@ def run_with_timeout_guards(args):
     task.cancel()
     return ret
 
-@asyncio.coroutines
-def print_timeout_guards():
+async def print_timeout_guards():
     while True:
         yield from asyncio.sleep(8*60)
         print("Keeping Travis alive. Ignore this!")
