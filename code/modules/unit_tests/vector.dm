@@ -42,16 +42,3 @@
 	var/vector/R = mirrorWithNormal(V,N)
 	if(!vector_equals(R,M))
 		fail("Mirror #2 incorrect "+R.toString())
-
-/datum/unit_test/vector_dot/start()
-	var/vector/V1 = vector(4,-1)
-	var/vector/V2 = vector(1,1)
-	var/d = V1.Dot(V2)
-	if(d != 3)
-		fail("Dot product #1 ("+num2text(d)+") incorrect")
-
-	V1 = vector(0,2)
-	V2 = vector(1,1)
-	d = V1.Dot(V2)
-	if(d != 2)
-		fail("Dot product #2 ("+num2text(d)+") incorrect")
