@@ -25,23 +25,17 @@
 
 
 /proc/dir2vector(var/dir)
-	switch(dir)
-		if(NORTH)
-			return vector(0,1)
-		if(NORTHEAST)
-			return vector(1,1)
-		if(EAST)
-			return vector(1,0)
-		if(SOUTHEAST)
-			return vector(1,-1)
-		if(SOUTH)
-			return vector(0,-1)
-		if(SOUTHWEST)
-			return vector(-1,-1)
-		if(WEST)
-			return vector(-1,0)
-		if(NORTHWEST)
-			return vector(-1,1)
+	var/x = 0
+	var/y = 0
+	if(dir & EAST)
+		x = 1
+	else if(dir & WEST)
+		x = -1
+	if(dir & NORTH)
+		y = 1
+	else if(dir & SOUTH)
+		y = -1
+	return vector(x,y)
 
 //defaults to north
 /proc/vector2ClosestDir(var/vector/V)
