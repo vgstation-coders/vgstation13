@@ -295,6 +295,19 @@
 	if(!mob.canmove)
 		return
 
+	if(mob.pixelshifting)
+		if(Dir == EAST)
+			mob.pixel_x = min(8, mob.pixel_x + 1)
+		if(Dir == WEST)
+			mob.pixel_x = max(-8, mob.pixel_x - 1)
+		if(Dir == NORTH)
+			mob.pixel_y = min(16, mob.pixel_y + 1)
+		if(Dir == SOUTH)
+			mob.pixel_y = max(-16, mob.pixel_y - 1)
+		return
+	mob.pixel_x = mob.base_pixel_x
+	mob.pixel_y = mob.base_pixel_y
+
 	//if(istype(mob.loc, /turf/space) || (mob.flags & NOGRAV))
 	//	if(!mob.Process_Spacemove(0))	return 0
 
