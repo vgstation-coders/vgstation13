@@ -522,7 +522,7 @@
 			return
 		to_chat(usr, "You try to hold hands with [src].")
 		switch(alert(src, "[usr] wants to hold hands with you!", , "Yes!", "No, I'm a fucking loser."))
-			if("Yes")
+			if("Yes!")
 				if(!Adjacent(usr))
 					to_chat(usr, "<span class='warning'>You need to stay still to hold hands.</span>")
 					to_chat(src, "<span class='warning'>[usr] moved away.</span>")//What an asshole
@@ -535,7 +535,7 @@
 				heart.plane = ABOVE_HUMAN_PLANE
 				flick_overlay(heart, list(src.client,usr.client), 20)
 				src.visible_message("<span class='notice'>[usr] holds hands with [src].</span>")
-			if("No")
+			if("No, I'm a fucking loser.")
 				src.visible_message("<span class='warning'>[usr] tried to hold hands with [src] but \he didn't want to.</span>")
 	else if(href_list["pockets"]) //href_list "pockets" would be "left" or "right"
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
