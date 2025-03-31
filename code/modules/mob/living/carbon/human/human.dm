@@ -521,7 +521,7 @@
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
 		to_chat(usr, "You try to hold hands with [src].")
-		switch(alert(src, "[usr] wants to hold hands with you!", , "Yes", "No"))
+		switch(alert(src, "[usr] wants to hold hands with you!", , "Yes!", "No, I'm a fucking loser."))
 			if("Yes")
 				if(!Adjacent(usr))
 					to_chat(usr, "<span class='warning'>You need to stay still to hold hands.</span>")
