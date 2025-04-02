@@ -6,9 +6,6 @@
 	pass_flags_self = PASSMOB
 	var/said_last_words = 0 // All mobs can now whisper as they die
 	var/list/alerts = list()
-	var/pixelshifting = FALSE
-	var/base_pixel_x = 0
-	var/base_pixel_y = 0
 
 /mob/variable_edited(var_name, old_value, new_value)
 	.=..()
@@ -225,8 +222,7 @@
 	original_density = density
 
 	mob_list += src
-	base_pixel_x = pixel_x
-	base_pixel_y = pixel_y
+
 	if(DEAD == stat)
 		dead_mob_list += src
 	else

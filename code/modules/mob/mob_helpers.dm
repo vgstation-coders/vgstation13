@@ -368,12 +368,12 @@
 	//assorted replacements to make text feel "dumb"
 	message = replacetext(message, "he", "eh") //he, she, the -> eh, seh, teh, etc
 	message = replacetext(message, "ies", "is")
-	message = replacetext(message, "you", "u")
+	message = replacetext(message, "you", "u") 
 	message = replacetext(message, "iou", "ou") //delicous
 	message = replacetext(message, "xc", "x") //exited
 	message = replacetext(message, "air", "er") //cher, her
 	message = replacetext(message, "uni", "uin")
-	message = replacetext(message, "dg", "g") //knowlege,
+	message = replacetext(message, "dg", "g") //knowlege, 
 	message = replacetext(message, "tch", "ch") //bich
 	message = replacetext(message, "are", "ar")
 	message = replacetext(message, "pl", "pul")
@@ -410,7 +410,7 @@
 		var/list/words = splittext(message, " ")
 		words[rand(0, words.len)] = pick("um,", "umm,", "uh,", "uhh,")
 		message = jointext(words, " ")
-
+			
 	if(prob(35))
 		message = uppertext(message)
 		if(prob(50))
@@ -584,17 +584,6 @@ var/list/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
 		H.set_attack_type(ATTACK_BITE)
-
-/mob/verb/toggle_pixelshift()
-	set name = "toggle_pixelshift"
-	set hidden = 1
-
-	if(ishuman(src))
-		var/mob/living/carbon/human/H = src
-		H.pixel_x = 0
-		H.pixel_y = 0
-		H.pixelshifting = !H.pixelshifting
-		to_chat(H, "<span class='notice'> Pixel-shifting [H.pixelshifting?"disabled":"enabled"].</span>")
 
 /proc/is_blind(A)
 	if(istype(A, /mob/living/carbon))

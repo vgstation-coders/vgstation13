@@ -496,9 +496,6 @@ macro "hotkeymode"
 	elem "CTRL+SHIFT+UP"
 		name = "CTRL+SHIFT+UP"
 		command = ".fillmouse_released"
-	elem "C"
-		name = "C"
-		command = "toggle_pixelshift"
 
 
 menu "menu"
