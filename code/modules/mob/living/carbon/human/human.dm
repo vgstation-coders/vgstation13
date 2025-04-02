@@ -501,7 +501,6 @@
 
 	if(legcuffed)
 		dat += "<BR><B>Legcuffed:</B> <A href='?src=\ref[src];item=[slot_legcuffed]'>Remove</A>"
-	dat += "<BR><A href='?src=\ref[src];want_to_hold_hands=1'>Hold hands</A>"
 	dat += {"
 	<BR>
 	<BR><A href='?src=\ref[user];mach_close=mob\ref[src]'>Close</A>
@@ -517,26 +516,7 @@
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
 		handle_strip_id(usr)
-	else if (href_list["want_to_hold_hands"])
-		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
-			return
-		to_chat(usr, "You try to hold hands with [src].")
-		switch(alert(src, "[usr] wants to hold hands with you!", , "Yes!", "No, I'm a fucking loser."))
-			if("Yes!")
-				if(!Adjacent(usr))
-					to_chat(usr, "<span class='warning'>You need to stay still to hold hands.</span>")
-					to_chat(src, "<span class='warning'>[usr] moved away.</span>")//What an asshole
-				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-				heart.pixel_y = 7
-				heart.plane = ABOVE_HUMAN_PLANE
-				flick_overlay(heart, list(src.client,usr.client), 20)
-				heart = image('icons/mob/animal.dmi',usr,"heart-ani2")
-				heart.pixel_y = 7
-				heart.plane = ABOVE_HUMAN_PLANE
-				flick_overlay(heart, list(src.client,usr.client), 20)
-				src.visible_message("<span class='notice'>[usr] holds hands with [src].</span>")
-			if("No, I'm a fucking loser.")
-				src.visible_message("<span class='warning'>[usr] tried to hold hands with [src] but \he didn't want to.</span>")
+
 	else if(href_list["pockets"]) //href_list "pockets" would be "left" or "right"
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
