@@ -917,30 +917,3 @@ Class Procs:
 				table_shift()
 		else
 			table_unshift()
-
-/obj/machinery/proc/cardinalize_dir()
- //bit operation that ensures cardinal facing in the off chance its not.
-	dir = dir^(dir&(dir-1))
-
-/obj/machinery/proc/getDirString(var/atom/target)
-	if(src.loc && target.loc)
-		var/direction = get_dir(src.loc, target.loc)
-		switch(direction)
-			if(NORTH)
-				return "NORTH"
-			if(SOUTH)
-				return "SOUTH"
-			if(WEST)
-				return "WEST"
-			if(EAST)
-				return "EAST"
-			if(NORTHEAST)
-				return "NORTHEAST"
-			if(NORTHWEST)
-				return "NORTHWEST"
-			if(SOUTHEAST)
-				return "SOUTHEAST"
-			if(SOUTHWEST)
-				return "SOUTHWEST"
-	else
-		return null

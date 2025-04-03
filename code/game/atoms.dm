@@ -1176,3 +1176,31 @@ its easier to just keep the beam vertical.
 
 /atom/proc/silicate_act(var/atom/A, var/mob/user)
 	return FALSE
+
+//bit operation that ensures dir is cardinal facing(N,E,S,W) just in case it's not.
+/atom/proc/force_cardinal_dir()
+	dir = dir^(dir&(dir-1))
+
+//Returns dir as a string
+/atom/proc/get_dir_as_string(var/atom/target)
+	if(src.loc && target.loc)
+		var/direction = get_dir(src.loc, target.loc)
+		switch(direction)
+			if(NORTH)
+				return "north"
+			if(SOUTH)
+				return "south"
+			if(WEST)
+				return "west"
+			if(EAST)
+				return "east"
+			if(NORTHEAST)
+				return "northeast"
+			if(NORTHWEST)
+				return "northwest"
+			if(SOUTHEAST)
+				return "southeast"
+			if(SOUTHWEST)
+				return "southwest"
+	else
+		return null
