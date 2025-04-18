@@ -104,6 +104,7 @@
 			broken = 0
 			locked = 0
 			update_icon()
+			return
 	else if(broken && issolder(W))
 		var/obj/item/tool/solder/S = W
 		if(S.remove_fuel(4,user))
