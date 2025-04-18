@@ -38,6 +38,16 @@
 	category = "Data"
 	build_path = /obj/item/weapon/storage/lockbox/diskettebox
 
+/datum/design/large_diskette_box
+	name = "Large Diskette Box"
+	desc = "A large box for storing additional disks."
+	id = "large_disk_box"
+	req_tech = list(Tc_MATERIALS = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_GLASS = 100, MAT_IRON = 400)
+	category = "Data"
+	build_path = /obj/item/weapon/storage/lockbox/diskettebox/large
+
 /datum/design/design_disk
 	name = "Design Storage Disk"
 	desc = "Produce additional disks for storing device designs."

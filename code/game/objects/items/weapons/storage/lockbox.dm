@@ -376,6 +376,7 @@
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	storage_slots = 7
 	req_one_access = list()
+	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 200)
 	var/icon_alt = ""
 
 /obj/item/weapon/storage/lockbox/diskettebox/New()
@@ -395,6 +396,7 @@
 	icon_state = "map_diskbox_large"
 	icon_alt = "_large"
 	storage_slots = 14
+	starting_materials = list(MAT_GLASS = 100, MAT_IRON = 400)
 
 /obj/item/weapon/storage/lockbox/diskettebox/large/open
 	icon_state = "map_diskbox_large_open"
