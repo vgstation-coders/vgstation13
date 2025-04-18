@@ -137,6 +137,7 @@
 	user.s_active = src
 	is_seeing |= user
 
+//Proc for hiding things from the inventory display, useful for things one wouldn't want removed via this interface.
 /obj/item/weapon/storage/proc/obj_shows_to(atom/A)
 	return TRUE
 

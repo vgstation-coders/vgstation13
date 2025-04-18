@@ -32,6 +32,7 @@
 /obj/item/weapon/storage/lockbox/nolock
 	req_one_access = null
 	startswithelectronics = FALSE
+	locked = FALSE
 	icon_state = "lockbox+b"
 
 /obj/item/weapon/storage/lockbox/can_use()
@@ -393,6 +394,7 @@
 
 /obj/item/weapon/storage/lockbox/diskettebox/nolock
 	startswithelectronics = FALSE
+	locked = FALSE
 
 /obj/item/weapon/storage/lockbox/diskettebox/large
 	name = "large diskette box"
@@ -408,6 +410,7 @@
 	
 /obj/item/weapon/storage/lockbox/diskettebox/large/nolock
 	startswithelectronics = FALSE
+	locked = FALSE
 
 //---------------------------------PRESETS---------------------------------
 
