@@ -90,9 +90,10 @@
 /obj/item/weapon/storage/proc/empty_contents_to(var/atom/place)
 	var/turf = get_turf(place)
 	for(var/obj/objects in contents)
-		remove_from_storage(objects, turf)
-		objects.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
-		objects.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
+		if(obj_shows_to(objects))
+			remove_from_storage(objects, turf)
+			objects.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
+			objects.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/storage/proc/return_inv()
 	var/list/L = list(  )
@@ -231,15 +232,16 @@
 		numbered_contents = list()
 		adjusted_contents = 0
 		for(var/obj/item/I in contents)
-			var/found = 0
-			for(var/datum/numbered_display/ND in numbered_contents)
-				if(ND.sample_object.type == I.type)
-					ND.number += I.get_storage_number_display_value()
-					found = 1
-					break
-			if(!found)
-				adjusted_contents++
-				numbered_contents.Add( new/datum/numbered_display(I) )
+			if(obj_shows_to(I))
+				var/found = 0
+				for(var/datum/numbered_display/ND in numbered_contents)
+					if(ND.sample_object.type == I.type)
+						ND.number += I.get_storage_number_display_value()
+						found = 1
+						break
+				if(!found)
+					adjusted_contents++
+					numbered_contents.Add( new/datum/numbered_display(I) )
 
 	//var/mob/living/carbon/human/H = user
 	var/row_num = 0
@@ -801,7 +803,8 @@
 /obj/item/weapon/storage/proc/get_sum_w_class()
 	. = 0
 	for(var/obj/item/I in contents)
-		. += I.w_class
+		if(obj_shows_to(I))
+			. += I.w_class
 
 /obj/item/weapon/storage/proc/is_full()
 	return (storage_slots && (contents.len >= storage_slots)) || (get_sum_w_class() >= max_combined_w_class)
