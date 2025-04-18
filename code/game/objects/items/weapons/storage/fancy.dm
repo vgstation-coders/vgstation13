@@ -599,7 +599,7 @@
 		overlays += vial_image
 		i++
 
-	if (!broken)
+	if (!broken && electronics)
 		overlays += image(icon, src, "led[locked]")
 		if(locked)
 			overlays += image(icon, src, "cover")
