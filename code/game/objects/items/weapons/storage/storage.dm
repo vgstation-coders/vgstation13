@@ -130,9 +130,14 @@
 	user.client.screen += src.boxes
 	user.client.screen += src.closer
 	user.client.screen += src.xtra
-	user.client.screen += src.contents
+	for(var/atom/A in src.contents)
+		if(obj_shows_to(A,user))
+			user.client.screen += A
 	user.s_active = src
 	is_seeing |= user
+
+/obj/item/weapon/storage/proc/obj_shows_to(atom/A, mob/user as mob)
+	return TRUE
 
 /obj/item/weapon/storage/proc/hide_from(mob/user as mob)
 	if(!user.client)
