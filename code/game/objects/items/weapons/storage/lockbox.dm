@@ -17,6 +17,7 @@
 	var/tracked_access = "It doesn't look like it's ever been used."
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	health = 50
+	starting_materials = list(MAT_PLASMA = 1000, MAT_IRON = 1875)
 
 /obj/item/weapon/storage/lockbox/New()
 	. = ..()

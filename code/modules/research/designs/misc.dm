@@ -88,6 +88,16 @@
 	materials = list(MAT_GLASS = 300, MAT_IRON = 500)
 	category = "Misc"
 
+/datum/design/lockbox
+	name = "Empty Lockbox"
+	desc = "An empty lockbox with pre installed access electronics."
+	id = "lockbox"
+	req_tech = list(Tc_MATERIALS = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_PLASMA = 1000, MAT_IRON = 1875)
+	category = "Misc"
+	build_path = /obj/item/weapon/storage/lockbox/unlockable
+
 /datum/design/dses
 	name = "Deep Space Exploration System"
 	desc = "A GPS with a high-gain radio antenna and broadcaster for locating proximity objects in space, the explorers friend."
