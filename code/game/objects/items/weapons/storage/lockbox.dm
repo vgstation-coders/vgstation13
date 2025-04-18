@@ -93,9 +93,9 @@
 		if(W.icon_state == "door_electronics_smoked")
 			to_chat(user, "<span class='warning'>Repair \the [W] before putting it in!</span>")
 		else if(user.drop_item(W,src))
+			electronics = W
 			to_chat(user, "<span class='notice'>You add \the [electronics] to \the [src].</span>")
 			playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
-			electronics = W
 			if(electronics.conf_access?.len)
 				if(electronics.one_access)
 					req_one_access = electronics.conf_access
