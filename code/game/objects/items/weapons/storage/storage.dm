@@ -131,12 +131,12 @@
 	user.client.screen += src.closer
 	user.client.screen += src.xtra
 	for(var/atom/A in src.contents)
-		if(obj_shows_to(A,user))
+		if(obj_shows_to(A))
 			user.client.screen += A
 	user.s_active = src
 	is_seeing |= user
 
-/obj/item/weapon/storage/proc/obj_shows_to(atom/A, mob/user as mob)
+/obj/item/weapon/storage/proc/obj_shows_to(atom/A)
 	return TRUE
 
 /obj/item/weapon/storage/proc/hide_from(mob/user as mob)
@@ -163,12 +163,13 @@
 	var/cy = ty
 	src.boxes.screen_loc = "[tx],[ty] to [mx],[my]"
 	for(var/obj/O in src.contents)
-		O.screen_loc = "[cx],[cy]"
-		O.hud_layerise()
-		cx++
-		if (cx > mx)
-			cx = tx
-			cy--
+		if(obj_shows_to(O))
+			O.screen_loc = "[cx],[cy]"
+			O.hud_layerise()
+			cx++
+			if (cx > mx)
+				cx = tx
+				cy--
 	src.closer.screen_loc = "[mx+1],[my]"
 	src.xtra.screen_loc = src.closer.screen_loc
 	return
@@ -191,14 +192,15 @@
 				cy--
 	else
 		for(var/obj/O in contents)
-			O.mouse_opacity = 2 //This is here so storage items that spawn with contents correctly have the "click around item to equip"
-			O.screen_loc = "[cx]:[WORLD_ICON_SIZE/2],[cy]:[WORLD_ICON_SIZE/2]"
-			O.maptext = ""
-			O.hud_layerise()
-			cx++
-			if (cx > (4+cols))
-				cx = 4
-				cy--
+			if(obj_shows_to(O))
+				O.mouse_opacity = 2 //This is here so storage items that spawn with contents correctly have the "click around item to equip"
+				O.screen_loc = "[cx]:[WORLD_ICON_SIZE/2],[cy]:[WORLD_ICON_SIZE/2]"
+				O.maptext = ""
+				O.hud_layerise()
+				cx++
+				if (cx > (4+cols))
+					cx = 4
+					cy--
 	src.closer.screen_loc = "[4+cols+1]:[WORLD_ICON_SIZE/2],2:[WORLD_ICON_SIZE/2]"
 	src.xtra.screen_loc = src.closer.screen_loc
 

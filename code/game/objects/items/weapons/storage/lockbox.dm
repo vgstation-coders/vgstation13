@@ -136,7 +136,7 @@
 	else
 		to_chat(user, "<span class='warning'>It's locked!</span>")
 
-/obj/item/weapon/storage/lockbox/obj_shows_to(atom/A, mob/user as mob)
+/obj/item/weapon/storage/lockbox/obj_shows_to(atom/A)
 	return A != electronics
 
 /obj/item/weapon/storage/lockbox/emag_act(var/mob/user)
