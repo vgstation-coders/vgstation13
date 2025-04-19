@@ -288,6 +288,15 @@ if (window.__windowId__ === '[' + 'tgui:windowId' + ']') {
       if (!sync) {
         node.media = 'only x';
       }
+      // 516: On Chromium, SecurityError is thrown when trying to
+      // access 'CSSStyleSheet.rules' if using webroot for asset
+      // delivery and 'crossOrigin' is not set. This problem doesn't
+      // accur on IE, also there is no 'crossOrigin' field in 'link'
+      // node so it would throw an exeption if you try to set.
+      // Pilfered from https://github.com/psychonaut-station/PsychonautStation/pull/463
+      if ('crossOrigin' in node) {
+        node.crossOrigin = 'anonymous';
+      }
       node.onload = function () {
         node.onload = null;
         if (isStyleSheetLoaded(node, url)) {
