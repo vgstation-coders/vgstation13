@@ -1635,6 +1635,10 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 		if (dark_plane && glasses.my_dark_plane_alpha_override && glasses.my_dark_plane_alpha_override_value)
 			dark_plane.alphas["[glasses.my_dark_plane_alpha_override]"] = glasses.my_dark_plane_alpha_override_value
 
+	// 516 hack : night vision green vision
+	if (istype(glasses, /obj/item/clothing/glasses/scanner/night))
+		dark_plane.alphas = list()
+
 	if (mind)
 		for (var/key in mind.antag_roles)
 			var/datum/role/R = mind.antag_roles[key]
@@ -2101,7 +2105,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 
 	if(!can_be_fat)
 		species.anatomy_flags &= ~CAN_BE_FAT
-	
+
 	species.blood_color = get_random_colour()
 	species.flesh_color = get_random_colour()
 

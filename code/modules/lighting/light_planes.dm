@@ -34,7 +34,7 @@
 	mouse_opacity = 0
 	plane = LIGHTING_PLANE // Just below the master plane.
 	icon = 'icons/lighting/over_dark.dmi'
-	alpha = 10
+	alpha = 0 //10
 	appearance_flags = RESET_TRANSFORM | RESET_COLOR | RESET_ALPHA
 	var/list/alphas = list()
 	var/colours = null // will animate() to that colour next check_dark_vision()
