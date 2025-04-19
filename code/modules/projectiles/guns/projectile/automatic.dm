@@ -366,7 +366,7 @@
 	max_shells = 0
 	spawn_mag = FALSE
 
-//Vector receivers.
+//vector receivers.
 /obj/item/weapon/vectorreceiver
 	name = "vector receiver"
 	desc = "A detatched vector receiver."
