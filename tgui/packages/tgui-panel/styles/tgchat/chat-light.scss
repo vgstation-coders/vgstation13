@@ -1,0 +1,1252 @@
+/**
+ * Copyright (c) 2020 Aleksej Komarov
+ * SPDX-License-Identifier: MIT
+ */
+
+@use 'sass:map';
+@use 'sass:color';
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  color: var(--color-black);
+}
+
+body {
+  background: hsl(0, 0%, 100%);
+  font-family: Verdana, sans-serif;
+  font-size: 13px;
+  line-height: 1.2;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  word-wrap: break-word;
+}
+
+em {
+  font-style: normal;
+  font-weight: bold;
+}
+
+img {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  -ms-interpolation-mode: nearest-neighbor;
+  image-rendering: pixelated;
+}
+
+img.icon {
+  height: 1em;
+  min-height: 16px;
+  width: auto;
+  vertical-align: bottom;
+}
+
+a {
+  color: hsl(from var(--color-hyperlink) h s calc(l - 40));
+
+  &:hover {
+    color: hsl(from var(--color-hyperlink) h s calc(l - 20));
+  }
+}
+
+a.visited,
+a:visited {
+  color: hsl(from var(--color-hyperlink-visited) h s calc(l - 40));
+
+  &:hover {
+    color: hsl(from var(--color-hyperlink-visited) h s calc(l - 20));
+  }
+}
+
+/* POPUPS */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  background: hsl(0, 0%, 86.7%);
+}
+
+.popup .close {
+  position: absolute;
+  background: hsl(0, 0%, 66.7%);
+  top: 0;
+  right: 0;
+  color: hsl(0, 0%, 20%);
+  text-decoration: none;
+  z-index: 2;
+  padding: 0 10px;
+  height: 30px;
+  line-height: 30px;
+}
+
+.popup .close:hover {
+  background: hsl(0, 0%, 60%);
+}
+
+.popup .head {
+  background: hsl(0, 0%, 60%);
+  color: hsl(0, 0%, 86.7%);
+  padding: 0 10px;
+  height: 30px;
+  line-height: 30px;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  font-weight: bold;
+  border-bottom: 2px solid green;
+}
+
+.popup input {
+  border: 1px solid hsl(0, 0%, 60%);
+  background: hsl(0, 0%, 100%);
+  margin: 0;
+  padding: 5px;
+  outline: none;
+  color: hsl(0, 0%, 20%);
+}
+
+.popup input[type='text']:hover,
+.popup input[type='text']:active,
+.popup input[type='text']:focus {
+  border-color: green;
+}
+
+.popup input[type='submit'] {
+  padding: 5px 10px;
+  background: hsl(0, 0%, 60%);
+  color: hsl(0, 0%, 86.7%);
+  text-transform: uppercase;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.popup input[type='submit']:hover,
+.popup input[type='submit']:focus,
+.popup input[type='submit']:active {
+  background: hsl(0, 0%, 66.7%);
+  cursor: pointer;
+}
+
+.changeFont {
+  padding: 10px;
+}
+
+.changeFont a {
+  display: block;
+  text-decoration: none;
+  padding: 3px;
+  color: hsl(0, 0%, 20%);
+}
+
+.changeFont a:hover {
+  background: hsl(0, 0%, 80%);
+}
+
+.highlightPopup {
+  padding: 10px;
+  text-align: center;
+}
+
+.highlightPopup input[type='text'] {
+  display: block;
+  width: 215px;
+  text-align: left;
+  margin-top: 5px;
+}
+
+.highlightPopup input.highlightColor {
+  background-color: hsl(60, 100%, 50%);
+}
+
+.highlightPopup input.highlightTermSubmit {
+  margin-top: 5px;
+}
+
+/* ADMIN CONTEXT MENU */
+
+.contextMenu {
+  background-color: hsl(0, 0%, 86.7%);
+  position: fixed;
+  margin: 2px;
+  width: 150px;
+}
+
+.contextMenu a {
+  display: block;
+  padding: 2px 5px;
+  text-decoration: none;
+  color: hsl(0, 0%, 20%);
+}
+
+.contextMenu a:hover {
+  background-color: hsl(0, 0%, 80%);
+}
+
+/* ADMIN FILTER MESSAGES MENU */
+
+.filterMessages {
+  padding: 5px;
+}
+
+.filterMessages div {
+  padding: 2px 0;
+}
+
+.filterMessages input {
+}
+
+.filterMessages label {
+}
+
+.icon-stack {
+  height: 1em;
+  line-height: 1em;
+  width: 1em;
+  vertical-align: middle;
+  margin-top: -2px;
+}
+
+/*****************************************
+*
+* OUTPUT ACTUALLY RELATED TO MESSAGES
+*
+******************************************/
+
+/* MOTD */
+
+.motd {
+  color: hsl(75.3, 100%, 26.1%);
+  font-family: Verdana, sans-serif;
+  white-space: normal;
+}
+
+.motd h1,
+.motd h2,
+.motd h3,
+.motd h4,
+.motd h5,
+.motd h6 {
+  color: hsl(75.3, 100%, 26.1%);
+  text-decoration: underline;
+}
+
+.motd a,
+.motd a:link,
+.motd a:visited,
+.motd a:active,
+.motd a:hover {
+  color: hsl(75.3, 100%, 26.1%);
+}
+
+/* ADD HERE FOR BOLD */
+
+.bold,
+.name,
+.prefix,
+.ooc,
+.looc,
+.adminooc,
+.admin,
+.medal,
+.yell {
+  font-weight: bold;
+}
+
+/* ADD HERE FOR ITALIC */
+
+.italic,
+.italics {
+  font-style: italic;
+}
+
+/* OUTPUT COLORS */
+
+.highlight {
+  background: yellow;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: hsl(240, 100%, 50%);
+  font-family: Georgia, Verdana, sans-serif;
+}
+
+h1.alert,
+h2.alert {
+  color: var(--color-black);
+}
+
+em {
+  font-style: normal;
+  font-weight: bold;
+}
+
+.ooc {
+  color: hsl(225, 100%, 36.1%);
+  font-weight: bold;
+}
+
+.adminobserverooc {
+  color: hsl(195, 100%, 40%);
+  font-weight: bold;
+}
+
+.adminooc {
+  color: hsl(330, 100%, 22%);
+  font-weight: bold;
+}
+
+.adminsay {
+  color: hsl(16.2, 100%, 50%);
+  font-weight: bold;
+}
+
+.admin {
+  color: hsl(224.9, 100%, 63.3%);
+  font-weight: bold;
+}
+
+.name {
+  font-weight: bold;
+}
+
+.say,
+.emote,
+.infoplain,
+.oocplain,
+.warningplain {
+}
+
+.deadsay {
+  color: hsl(264, 100%, 45.1%);
+}
+
+.binarysay {
+  color: hsl(114, 86.5%, 40.8%);
+  background-color: var(--color-black);
+  display: block;
+}
+
+.binarysay a {
+  color: hsl(120, 100%, 50%);
+}
+
+.binarysay a:active,
+.binarysay a:visited {
+  color: hsl(120, 100%, 76.7%);
+}
+
+.radio {
+  color: hsl(120, 100%, 25.1%);
+}
+
+.sciradio {
+  color: hsl(300, 50%, 40%);
+}
+
+.comradio {
+  color: hsl(57.9, 97.3%, 29.4%);
+}
+
+.secradio {
+  color: hsl(0, 100%, 32%);
+}
+
+.medradio {
+  color: hsl(201.8, 49.3%, 39.4%);
+}
+
+.engradio {
+  color: hsl(17.3, 96.7%, 52.9%);
+}
+
+.suppradio {
+  color: hsl(34.6, 59.2%, 41.4%);
+}
+
+.servradio {
+  color: hsl(88.6, 58.9%, 42%);
+}
+
+.syndradio {
+  color: hsl(358.7, 26.7%, 33.7%);
+}
+
+.gangradio {
+  color: hsl(305.2, 57.8%, 42.7%);
+}
+
+.centcomradio {
+  color: hsl(0, 0%, 40.8%);
+}
+
+.aiprivradio {
+  color: hsl(300, 100%, 50%);
+}
+
+.enteradio {
+  color: hsl(176.1, 20%, 45.1%);
+}
+
+.redteamradio {
+  color: hsl(0, 100%, 50%) !important;
+}
+
+.blueteamradio {
+  color: hsl(240, 100%, 50%) !important;
+}
+
+.greenteamradio {
+  color: hsl(120, 100%, 50%) !important;
+}
+
+.yellowteamradio {
+  color: hsl(52.1, 72%, 47.6%) !important;
+}
+
+.captaincast {
+  color: hsl(157.1, 39.6%, 62.4%);
+}
+
+.yell {
+  font-weight: bold;
+}
+
+.alert {
+  color: hsl(0, 100%, 50%);
+}
+
+h1.alert,
+h2.alert {
+  color: var(--color-black);
+}
+
+.userdanger {
+  color: hsl(0, 100%, 50%);
+  font-weight: bold;
+  font-size: 185%;
+}
+
+.bolddanger {
+  color: hsl(0, 100%, 50%);
+  font-weight: bold;
+}
+
+.danger {
+  color: hsl(0, 100%, 50%);
+}
+
+.tinydanger {
+  color: hsl(0, 100%, 50%);
+  font-size: 85%;
+}
+
+.smalldanger {
+  color: hsl(0, 100%, 50%);
+  font-size: 90%;
+}
+
+.warning {
+  color: hsl(0, 100%, 50%);
+  font-style: italic;
+}
+
+.alertwarning {
+  color: hsl(0, 100%, 50%);
+  font-weight: bold;
+}
+
+.boldwarning {
+  color: hsl(0, 100%, 50%);
+  font-style: italic;
+  font-weight: bold;
+}
+
+.announce {
+  color: hsl(120, 60.7%, 33.9%);
+  font-weight: bold;
+}
+
+.boldannounce {
+  color: hsl(0, 100%, 50%);
+  font-weight: bold;
+}
+
+.minorannounce {
+  color: hsl(0, 100%, 50%);
+  font-weight: bold;
+  font-size: 185%;
+}
+
+.minoralert {
+  color: var(--color-black);
+  font-size: 125%;
+}
+
+.priorityannounce {
+  color: var(--color-black);
+  font-weight: bold;
+  font-size: 225%;
+}
+
+.prioritytitle {
+  color: hsl(240, 100%, 50%);
+  font-weight: bold;
+  font-size: 185%;
+}
+
+.priorityalert {
+  color: hsl(0, 100%, 50%);
+  font-size: 140%;
+}
+
+.greenannounce {
+  color: hsl(120, 100%, 50%);
+  font-weight: bold;
+}
+
+.rose {
+  color: hsl(0, 100%, 65.7%);
+}
+
+.info {
+  color: hsl(240, 100%, 40%);
+}
+
+.notice {
+  color: hsl(240, 100%, 30%);
+}
+
+.tinynotice {
+  color: hsl(240, 100%, 30%);
+  font-size: 85%;
+}
+
+.tinynoticeital {
+  color: hsl(240, 100%, 30%);
+  font-style: italic;
+  font-size: 85%;
+}
+
+.smallnotice {
+  color: hsl(240, 100%, 30%);
+  font-size: 90%;
+}
+
+.smallnoticeital {
+  color: hsl(240, 100%, 30%);
+  font-style: italic;
+  font-size: 90%;
+}
+
+.boldnotice {
+  color: hsl(240, 100%, 30%);
+  font-weight: bold;
+}
+
+.hear {
+  color: hsl(240, 100%, 30%);
+  font-style: italic;
+}
+
+.adminnotice {
+  color: hsl(240, 100%, 50%);
+}
+
+.adminhelp {
+  color: hsl(0, 100%, 50%);
+  font-weight: bold;
+}
+
+.unconscious {
+  color: hsl(240, 100%, 50%);
+  font-weight: bold;
+}
+
+.suicide {
+  color: hsl(0, 100%, 65.7%);
+  font-style: italic;
+}
+
+.green {
+  color: hsl(132.9, 100%, 50.6%);
+}
+
+.grey {
+  color: hsl(0, 0%, 51.4%);
+}
+
+.red {
+  color: hsl(0, 100%, 50%);
+}
+
+.blue {
+  color: hsl(240, 100%, 50%);
+}
+
+.nicegreen {
+  color: hsl(132.6, 78.7%, 36.9%);
+}
+
+.boldnicegreen {
+  color: hsl(132.6, 78.7%, 36.9%);
+  font-weight: bold;
+}
+
+.tinynicegreen {
+  color: hsl(132.6, 78.7%, 36.9%);
+  font-size: 85%;
+}
+
+.cult {
+  color: hsl(2, 43.8%, 41.2%);
+}
+
+.cultitalic {
+  color: hsl(2, 43.8%, 41.2%);
+  font-style: italic;
+}
+
+.cult_bold {
+  color: hsl(2, 43.8%, 41.2%);
+  font-style: italic;
+  font-weight: bold;
+}
+
+.cult_bold_italic {
+  color: hsl(2, 43.8%, 41.2%);
+  font-weight: bold;
+  font-size: 185%;
+}
+
+.cult_large {
+  color: hsl(2, 43.8%, 41.2%);
+  font-weight: bold;
+  font-size: 185%;
+}
+
+.blob {
+  color: hsl(16.1, 100%, 46.7%);
+}
+
+.blobannounce {
+  color: hsl(82.3, 38.5%, 17.8%);
+  font-weight: bold;
+  font-size: 185%;
+}
+
+.narsie {
+  color: hsl(2, 43.8%, 41.2%);
+  font-weight: bold;
+  font-size: 925%;
+}
+
+.narsiesmall {
+  color: hsl(2, 43.8%, 41.2%);
+  font-weight: bold;
+  font-size: 370%;
+}
+
+.colossus {
+  color: hsl(358.6, 52.1%, 32.7%);
+  font-size: 310%;
+}
+
+.hierophant {
+  color: hsl(280, 100%, 30%);
+  font-weight: bold;
+  font-style: italic;
+}
+
+.hierophant_warning {
+  color: hsl(280, 100%, 30%);
+  font-style: italic;
+}
+
+.purple {
+  color: hsl(278.7, 45.8%, 32.5%);
+}
+
+.holoparasite {
+  color: hsl(257.1, 6.4%, 21.4%);
+}
+
+.revennotice {
+  color: hsl(226.7, 48.2%, 22%);
+}
+
+.revenboldnotice {
+  color: hsl(226.7, 48.2%, 22%);
+  font-weight: bold;
+}
+
+.revenbignotice {
+  color: hsl(226.7, 48.2%, 22%);
+  font-weight: bold;
+  font-size: 185%;
+}
+
+.revenminor {
+  color: hsl(273.5, 52.7%, 48%);
+}
+
+.revenwarning {
+  color: hsl(275.9, 85.1%, 39.6%);
+  font-style: italic;
+}
+
+.revendanger {
+  color: hsl(275.9, 85.1%, 39.6%);
+  font-weight: bold;
+  font-size: 185%;
+}
+
+.deconversion_message {
+  color: hsl(270, 100%, 31.4%);
+  font-size: 185%;
+  font-style: italic;
+}
+
+.ghostalert {
+  color: hsl(264, 100%, 45.1%);
+  font-style: italic;
+  font-weight: bold;
+}
+
+.alien {
+  color: hsl(300, 24.4%, 26.5%);
+}
+
+.noticealien {
+  color: hsl(120, 100%, 37.6%);
+}
+
+.alertalien {
+  color: hsl(120, 100%, 37.6%);
+  font-weight: bold;
+}
+
+.changeling {
+  color: hsl(300, 100%, 25.1%);
+  font-style: italic;
+}
+
+.alertsyndie {
+  color: hsl(0, 100%, 50%);
+  font-size: 185%;
+  font-weight: bold;
+}
+
+.spiderbroodmother {
+  color: hsl(300, 100%, 15.1%);
+  font-weight: bold;
+  font-size: 185%;
+}
+
+.spiderbreacher {
+  color: hsl(34.8, 96.9%, 25.5%);
+  font-weight: bold;
+  font-size: 140%;
+}
+
+.spiderscout {
+  color: hsl(243.3, 90.2%, 23.9%);
+  font-weight: bold;
+  font-size: 120%;
+}
+
+.interface {
+  color: hsl(300, 100%, 10%);
+}
+
+.sans {
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.papyrus {
+  font-family: 'Papyrus', cursive, sans-serif;
+}
+
+.robot {
+  font-family: 'Courier New', cursive, sans-serif;
+}
+
+.tape_recorder {
+  color: hsl(0, 100%, 25.1%);
+  font-family: 'Courier New', cursive, sans-serif;
+}
+
+.command_headset {
+  font-weight: bold;
+  font-size: 160%;
+}
+
+.soapbox {
+  font-weight: bold;
+  font-size: 135%;
+}
+
+.small {
+  font-size: 60%;
+}
+
+.slightly_larger {
+  font-size: 115%;
+}
+
+.big {
+  font-size: 185%;
+}
+
+.reallybig {
+  font-size: 245%;
+}
+
+.extremelybig {
+  font-size: 310%;
+}
+
+.greentext {
+  color: hsl(120, 100%, 50%);
+  font-size: 185%;
+}
+
+.redtext {
+  color: hsl(0, 100%, 50%);
+  font-size: 185%;
+}
+
+.clown {
+  color: hsl(325.6, 100%, 70.6%);
+  font-size: 160%;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  font-weight: bold;
+}
+
+.singing {
+  font-family: 'Trebuchet MS', cursive, sans-serif;
+  font-style: italic;
+}
+
+.his_grace {
+  color: hsl(119.1, 84.4%, 45.3%);
+  font-family: 'Courier New', cursive, sans-serif;
+  font-style: italic;
+}
+
+.hypnophrase {
+  color: hsl(0, 0%, 5.1%);
+  font-weight: bold;
+  animation: hypnocolor 1500ms infinite;
+  animation-direction: alternate;
+}
+
+@keyframes hypnocolor {
+  0% {
+    color: hsl(0, 0%, 5.1%);
+  }
+
+  25% {
+    color: hsl(266.1, 98.7%, 29.2%);
+  }
+
+  50% {
+    color: hsl(272.3, 80.8%, 46.9%);
+  }
+
+  75% {
+    color: hsl(266.1, 98.7%, 29.2%);
+  }
+
+  100% {
+    color: hsl(191.8, 63.3%, 52.9%);
+  }
+}
+
+.phobia {
+  color: hsl(0, 100%, 43.3%);
+  font-weight: bold;
+  animation: phobia 750ms infinite;
+}
+
+@keyframes phobia {
+  0% {
+    color: hsl(0, 0%, 5.1%);
+  }
+
+  50% {
+    color: hsl(0, 100%, 43.3%);
+  }
+
+  100% {
+    color: hsl(0, 0%, 5.1%);
+  }
+}
+
+.icon {
+  height: 1em;
+  width: auto;
+}
+
+.bigicon {
+  font-size: 2.5em;
+}
+
+.hugeicon {
+  font-size: 5em;
+}
+
+.memo {
+  color: hsl(75.3, 100%, 26.1%);
+  text-align: center;
+}
+
+.memoedit {
+  text-align: center;
+  font-size: 125%;
+}
+
+.abductor {
+  color: hsl(300, 100%, 25.1%);
+  font-style: italic;
+}
+
+.mind_control {
+  color: hsl(320, 85%, 33.9%);
+  font-size: 100%;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.slime {
+  color: hsl(180.9, 100%, 41%);
+}
+
+.drone {
+  color: hsl(60, 0.8%, 51.4%);
+}
+
+.monkey {
+  color: hsl(17.8, 50.2%, 39.4%);
+}
+
+.swarmer {
+  color: hsl(219.2, 100%, 58.6%);
+}
+
+.resonate {
+  color: hsl(174.1, 55.4%, 36.1%);
+}
+
+.upside_down {
+  display: inline;
+  -moz-transform: scale(-1, -1);
+  -webkit-transform: scale(-1, -1);
+  -o-transform: scale(-1, -1);
+  -ms-transform: scale(-1, -1);
+  transform: scale(-1, -1);
+}
+
+.connectionClosed,
+.fatalError {
+  background: red;
+  color: white;
+  padding: 5px;
+}
+
+.connectionClosed.restored {
+  background: green;
+}
+
+.internal.boldnshit {
+  color: blue;
+  font-weight: bold;
+}
+
+/* HELPER CLASSES */
+
+.text-normal {
+  font-weight: normal;
+  font-style: normal;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.ml-1 {
+  margin-left: 1em;
+}
+
+.ml-2 {
+  margin-left: 2em;
+}
+
+.ml-3 {
+  margin-left: 3em;
+}
+
+.tooltip {
+  font-style: italic;
+  border-bottom: 1px dashed;
+}
+
+.fieldset_legend {
+  background: hsl(0, 0%, 100%); // Chat background color
+
+  &:before {
+    background: hsl(0, 0%, 100%); // Chat background color
+  }
+}
+
+.boxed_message {
+  background: hsl(220, 100%, 97.5%);
+  border-color: hsla(220, 75%, 25%, 0.5);
+
+  &.red_box {
+    background: hsl(0, 100%, 97.5%);
+    border-color: hsla(0, 100%, 50%, 0.5);
+  }
+
+  &.green_box {
+    background: hsl(140, 100%, 97.5%);
+    border-color: hsl(120, 100%, 33%, 0.5);
+  }
+
+  &.blue_box {
+    background: hsl(220, 100%, 97.5%);
+    border-color: hsla(225, 100%, 50%, 0.5);
+  }
+
+  &.purple_box {
+    background: hsl(260, 100%, 97.5%);
+    border-color: hsla(260, 100%, 50%, 0.5);
+  }
+}
+
+// Provides a horizontal bar with text in the middle
+// I got this off stackoverflow
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.separator::before,
+.separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid hsl(215.5, 39.3%, 11%);
+}
+
+.separator:not(:empty)::before {
+  margin-right: 0.25em;
+}
+
+.separator:not(:empty)::after {
+  margin-left: 0.25em;
+}
+
+// Used to display images besides text
+.img_by_text_container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.img_by_text_container img {
+  width: 2.5em; // a css guru can probably dehardcode this later
+  height: auto;
+  margin-right: 12px;
+  margin-top: 6px;
+}
+
+.img_by_text_container .img_text {
+  flex-grow: 1;
+}
+
+$alert-stripe-colors: (
+  'default': hsl(230.5, 100%, 85.1%),
+  'green': hsl(120, 100%, 83.9%),
+  'blue': hsl(230.5, 100%, 85.1%),
+  'pink': hsl(325.3, 100%, 85.1%),
+  'yellow': hsl(50.5, 100%, 85.1%),
+  'orange': hsl(37.1, 100%, 85.1%),
+  'red': hsl(0, 100%, 85.1%),
+  'purple': hsl(295.1, 100%, 88%),
+  'grey': hsl(0, 0%, 89%),
+);
+
+$alert-stripe-alternate-colors: (
+  'default': hsl(230, 100%, 87.1%),
+  'green': hsl(120, 100%, 87.1%),
+  'blue': hsl(230, 100%, 87.1%),
+  'pink': hsl(325.6, 100%, 88%),
+  'yellow': hsl(50.2, 100%, 88%),
+  'orange': hsl(37.4, 100%, 88%),
+  'red': hsl(0, 100%, 88%),
+  'purple': hsl(294.8, 100%, 91%),
+  'grey': hsl(0, 0%, 92.2%),
+);
+
+$alert-major-header-colors: (
+  'default': hsl(210.3, 100%, 19%),
+  'green': hsl(150, 100%, 16.1%),
+  'blue': hsl(210.3, 100%, 19%),
+  'pink': hsl(336.1, 100%, 25.1%),
+  'yellow': hsl(37.4, 100%, 22.9%),
+  'orange': hsl(20.7, 88.4%, 27.1%),
+  'red': hsl(340.8, 100%, 25.1%),
+  'purple': hsl(266.5, 83%, 30%),
+  'grey': hsl(336.1, 100%, 25.1%),
+);
+
+$alert-subheader-header-colors: (
+  'default': hsl(342.1, 100%, 21%),
+  'green': hsl(342.1, 100%, 21%),
+  'blue': hsl(342.1, 100%, 21%),
+  'pink': hsl(220.2, 100%, 26.1%),
+  'yellow': hsl(220.2, 100%, 26.1%),
+  'orange': hsl(220.2, 100%, 26.1%),
+  'red': hsl(220.2, 100%, 26.1%),
+  'purple': hsl(220.2, 100%, 26.1%),
+  'grey': hsl(220.2, 100%, 26.1%),
+);
+
+$border-width: 4;
+
+$border-width-px: $border-width * 1px;
+
+.major_announcement_title {
+  font-size: 175%;
+  padding: 0rem 0.5rem;
+  line-height: 100%;
+  text-align: left;
+  text-decoration: none;
+  width: 100%;
+}
+
+.subheader_announcement_text {
+  font-weight: bold;
+  padding: 0 0.5rem;
+  padding-top: 0.25rem;
+  line-height: 100%;
+  width: 100%;
+  text-align: left;
+  font-size: 125%;
+}
+
+.major_announcement_text {
+  color: hsl(0, 0%, 7.5%);
+  background-color: hsl(0, 0%, 91.8%);
+  font-weight: bold;
+  font-size: 100%;
+  text-align: left;
+  padding: 0.5rem 0.5rem;
+  width: 100%;
+  height: 100%;
+}
+
+.minor_announcement_title {
+  font-weight: bold;
+  padding: 0 0.5rem;
+  padding-top: 0;
+  line-height: 100%;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  font-size: 150%;
+}
+
+.minor_announcement_text {
+  background-color: hsl(0, 0%, 91.8%);
+  color: hsl(0, 0%, 12.5%);
+  padding: 0.5rem 0.5rem;
+  text-align: left;
+  font-size: 100%;
+}
+
+.announcement_header {
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ooc_alert {
+  background: hsl(230, 100%, 87.1%);
+  border: 1px solid hsl(225, 100%, 36.1%);
+  margin: 0.5em;
+  padding: 0.5em 0.5em 0.5em 0.2em;
+  color: hsl(198.6, 100%, 11.4%);
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+}
+
+.ooc_announcement_text {
+  color: hsl(225, 100%, 36.1%);
+  padding: 0.5em 0 0 0.35em;
+  display: flex;
+  flex-direction: column;
+}
+
+@each $color-name, $color-value in $alert-stripe-colors {
+  .chat_alert_#{$color-name} {
+    color: hsl(0, 0%, 100%);
+    padding: 0.5rem 0.5rem;
+    box-shadow: none;
+    font-weight: bold;
+    margin: 1rem 0 1rem 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    border-image: repeating-linear-gradient(
+      -45deg,
+      map.get($alert-stripe-alternate-colors, $color-name),
+      map.get($alert-stripe-alternate-colors, $color-name) 10px,
+      $color-value 10px,
+      $color-value 20px
+    );
+    border-image-slice: $border-width fill;
+    border-width: $border-width-px;
+    border-image-width: $border-width-px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: repeat repeat;
+    border-style: solid;
+  }
+
+  .chat_alert_#{$color-name} .major_announcement_title {
+    color: map.get($alert-major-header-colors, $color-name);
+  }
+
+  .chat_alert_#{$color-name} .minor_announcement_title {
+    color: map.get($alert-major-header-colors, $color-name);
+  }
+
+  .chat_alert_#{$color-name} .subheader_announcement_text {
+    color: map.get($alert-subheader-header-colors, $color-name);
+  }
+
+  .chat_alert_#{$color-name} .minor_announcement_text {
+    background-color: color.adjust(
+      map.get($alert-stripe-alternate-colors, $color-name),
+      $lightness: 5%,
+      $space: hsl
+    );
+  }
+
+  .chat_alert_#{$color-name} .major_announcement_text {
+    background-color: color.adjust(
+      map.get($alert-stripe-alternate-colors, $color-name),
+      $lightness: 5%,
+      $space: hsl
+    );
+  }
+}
