@@ -77,7 +77,7 @@
 	return new /_vector(x - B.x, y - B.y)
 
 /_vector/proc/operator*(var/mult)
-	if(istype(mult, /vector))
+	if(istype(mult, /_vector))
 		return dot(mult)
 	return new /_vector(x * mult, y * mult)
 
