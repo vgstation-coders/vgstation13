@@ -56,15 +56,12 @@
 /area/vault/fastfood
 
 /area/vault/fastfood/dining
-	requires_power = 1
 	icon_state = "cafeteria"
 
 /area/vault/fastfood/kitchen
-	requires_power = 1
 	icon_state = "kitchen"
 
 /area/vault/fastfood/misc
-	requires_power = 1
 	icon_state = "fmaint"
 
 /area/vault/mechclubhouse

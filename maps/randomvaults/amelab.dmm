@@ -573,7 +573,7 @@
 	},
 /obj/item/weapon/reagent_containers/food/drinks/sillycup{
 	icon_state = "coffee";
-	name = "\improper coffee cup"
+	name = "coffee cup"
 	},
 /turf/simulated/floor{
 	dir = 4;
