@@ -348,11 +348,8 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 					access_level = 1
 	if(issolder(O) && emagged)
 		var/obj/item/tool/solder/S = O
-		if(!S.remove_fuel(4,user))
-			return
-		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
-		if(do_after(user, src,4 SECONDS * S.work_speed))
-			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+		if(S.do_solder(user, src,4 SECONDS,4))
+			S.playtoolsound(loc, 100)
 			emagged = FALSE
 			access_level = 0
 			to_chat(user, "<span class='notice'>You repair the security checks on \the [src].</span>")

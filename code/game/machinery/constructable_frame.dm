@@ -344,11 +344,8 @@ to destroy them and players will be able to make replacements.
 		if(!choice)
 			return
 		var/obj/item/tool/solder/S = O
-		if(!S.remove_fuel(4,user))
-			return
-		S.playtoolsound(loc, 50)
 		soldering = 1
-		if(do_after(user, src,4 SECONDS * S.work_speed))
+		if(S.do_solder(user, src,4 SECONDS,4,50))
 			user.create_in_hands(src, allowed_boards[choice], msg = "<span class='notice'>You fashion a crude [choice] board from the blank circuitboard.</span>")
 			return
 		soldering = 0

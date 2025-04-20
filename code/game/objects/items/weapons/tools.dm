@@ -286,6 +286,7 @@
 	var/start_fueled = 1 //Explicit, should the welder start with fuel in it ?
 	var/eye_damaging = TRUE	//Whether the welder damages unprotected eyes.
 	var/weld_speed = 1 //How much faster this welder is at welding. Higher number = faster
+	var/accepts_plasma = FALSE //Accepts plasma as fuel?
 	toolsounds = list('sound/items/Welder.ogg', 'sound/items/Welder2.ogg')
 
 /obj/item/tool/weldingtool/New()
@@ -298,7 +299,7 @@
 	..()
 	if (!status)
 		to_chat(user, "<span class='notice'>The welder is unsecured.</span>")
-	to_chat(user, "It contains [get_fuel()]/[src.max_fuel] units of fuel!")
+	to_chat(user, "It contains [get_fuel()]/[src.max_fuel] units of fuel![get_fuel(PLASMA) ? " ([get_fuel(PLASMA)] units plasma)" : ""]")
 
 /obj/item/tool/weldingtool/attackby(obj/item/W as obj, mob/user as mob)
 	if(user.is_in_modules(src))
@@ -334,10 +335,11 @@
 	..()
 
 /obj/item/tool/weldingtool/proc/do_weld(var/mob/user, var/atom/thing, var/time, var/fuel_cost)
-	if(!remove_fuel(fuel_cost, user))
+	var/removemult = remove_fuel(fuel_cost, user)
+	if(!removemult)
 		return 0
 	playtoolsound(src, 50)
-	return isOn() && do_after(user, thing, time/weld_speed) && isOn() //Checks if it's on, then does the do_after, then checks if it's still on after.
+	return isOn() && do_after(user, thing, (time/weld_speed)/removemult) && isOn() //Checks if it's on, then does the do_after, then checks if it's still on after.
 
 /obj/item/tool/weldingtool/process()
 	switch(welding)
@@ -358,12 +360,13 @@
 		//Welders left on now use up fuel, but lets not have them run out quite that fast
 		if(1)
 			if(icon_state != "welder1") //Check that the sprite is correct, if it isnt, it means toggle() was not called
-				force = 15
-				sharpness = 0.8
+				var/dmgmult = get_fuel(PLASMA) ? 1 + ((get_fuel(PLASMA) / get_fuel()) / 2) : 1 //divide by zero sanity
+				force = 15 * dmgmult
+				sharpness = 0.8 * dmgmult
 				sharpness_flags = INSULATED_EDGE | HOT_EDGE
 				damtype = "fire"
 				heat_production = 3800
-				source_temperature = TEMPERATURE_WELDER
+				source_temperature = get_fuel(PLASMA) ? TEMPERATURE_PLASMA : TEMPERATURE_WELDER
 				update_icon()
 				hitsound = "sound/weapons/welderattack.ogg"
 			if(prob(5))
@@ -393,8 +396,9 @@
 			if (!src.welding)
 				to_chat(user, "<span class='notice'>You press \the unlit [src] against [user == M ? "your" : "[M]'s"] [S.display_name], but nothing happens.</span>")
 				return
-			if(remove_fuel(1, user))
-				S.heal_damage(15,0,0,1)
+			var/remfuel = remove_fuel(1, user)
+			if(remfuel)
+				S.heal_damage(15*remfuel,0,0,1)
 				if(user != M)
 					user.visible_message("<span class='attack'>\The [user] patches some dents on \the [M]'s [S.display_name] with \the [src]</span>",\
 					"<span class='attack'>You patch some dents on \the [M]'s [S.display_name]</span>",\
@@ -412,9 +416,12 @@
 	if(!proximity)
 		return
 	..()
-	if (istype(A, /obj/structure/reagent_dispensers) && user.Adjacent(A))
+	if ((istype(A, /obj/structure/reagent_dispensers) || (istype(A, /obj/item/weapon/reagent_containers/glass) && A.flags & OPENCONTAINER)) && user.Adjacent(A))
 		if(!src.welding && !A.arcanetampered)
-			if(A.reagents.trans_id_to(src, FUEL, max_fuel))
+			if(accepts_plasma && A.reagents.trans_id_to(src, PLASMA, max_fuel))
+				to_chat(user, "<span class='notice'>Welder refueled.</span>")
+				playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+			else if(A.reagents.trans_id_to(src, FUEL, max_fuel))
 				to_chat(user, "<span class='notice'>Welder refueled.</span>")
 				playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 			else if(!A.reagents.has_reagent(FUEL))
@@ -435,13 +442,19 @@
 	toggle(user)
 
 //Returns the amount of fuel in the welder
-/obj/item/tool/weldingtool/proc/get_fuel()
-	return reagents.get_reagent_amount(FUEL)
+/obj/item/tool/weldingtool/proc/get_fuel(var/type = 0)
+	if(type == FUEL)
+		return reagents.get_reagent_amount(FUEL)
+	else if(type == PLASMA)
+		return reagents.get_reagent_amount(PLASMA)
+	else
+		return reagents.get_reagent_amount(FUEL) + reagents.get_reagent_amount(PLASMA)
 
 
 //Removes fuel from the welding tool. If a mob is passed, it will perform an eyecheck on the mob. This should probably be renamed to use()
 /obj/item/tool/weldingtool/proc/remove_fuel(var/amount = 1, var/mob/M = null)
-	if(!get_fuel())
+	var/fuelamt = get_fuel()
+	if(!fuelamt)
 		if(M) //First and foremost make sure there is enough fuel
 			to_chat(M, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 		return 0
@@ -449,12 +462,17 @@
 		if(M)
 			to_chat(M, "<span class='notice'>Your welding tool has to be lit first.</span>")
 		return 0
-	if(get_fuel() >= amount)
+	if(fuelamt >= amount)
+		var/plasma_amt = get_fuel(PLASMA)
+		var/mult = 1
+		if(plasma_amt)
+			mult += min(1,plasma_amt/amount)
+			reagents.remove_reagent(PLASMA, amount)
 		reagents.remove_reagent(FUEL, amount)
 		check_fuel()
 		if(M)
 			eyecheck(M)
-		return 1
+		return mult
 
 //Returns whether or not the welding tool is currently on.
 /obj/item/tool/weldingtool/proc/isOn()
@@ -652,6 +670,7 @@
 	w_class = W_CLASS_LARGE
 	starting_materials = list(MAT_IRON = 18750, MAT_GLASS = 18750)
 	origin_tech = Tc_ENGINEERING + "=4"
+	accepts_plasma = TRUE
 
 /obj/item/tool/weldingtool/gatling/empty
 	start_fueled = 0
@@ -665,6 +684,7 @@
 	origin_tech = Tc_ENGINEERING + "=4;" + Tc_PLASMATECH + "=3"
 	icon_state = "ewelder"
 	weld_speed = 1.25
+	accepts_plasma = TRUE
 	var/last_gen = 0
 
 /obj/item/tool/weldingtool/experimental/empty
@@ -835,6 +855,7 @@
 	origin_tech = Tc_ENGINEERING + "=1"
 	var/max_fuel = 20 	//The max amount of acid stored
 	var/work_speed = 1 //multiplier
+	var/accepts_pacids = FALSE
 	toolsounds = list('sound/items/Welder.ogg')
 
 /obj/item/tool/solder/splashable()
@@ -870,7 +891,8 @@
 			user.simple_message("<span class='warning'>The mixture is rejected by the tool.</span>",
 				"<span class='warning'>The tool isn't THAT thirsty.</span>")
 			return
-		if(!G.reagents.has_any_reagents(SACIDS, 1))
+		var/reagentcheck = accepts_pacids ? G.reagents.has_any_reagents(SACIDS, 1) || G.reagents.has_any_reagents(PACIDS, 1) : G.reagents.has_any_reagents(SACIDS, 1)
+		if(!reagentcheck)
 			user.simple_message("<span class='warning'>The tool is not compatible with that.</span>",
 				"<span class='warning'>The tool won't drink that.</span>")
 			return
@@ -883,7 +905,11 @@
 			var/transfer_amount = min(G.amount_per_transfer_from_this,space)
 			user.simple_message("<span class='info'>You transfer [transfer_amount] units to the [src].</span>",
 				"<span class='info'>The tool gulps down your drink!</span>")
-			if(G.reagents.has_reagent(SACID, 1))
+			if(accepts_pacids && G.reagents.has_reagent(PACID, 1))
+				G.reagents.trans_id_to(src,PACID,transfer_amount)
+			else if(accepts_pacids && G.reagents.has_reagent(PHENOL, 1))
+				G.reagents.trans_id_to(src,PHENOL,transfer_amount)
+			else if(G.reagents.has_reagent(SACID, 1))
 				G.reagents.trans_id_to(src,SACID,transfer_amount)
 			else
 				G.reagents.trans_id_to(src,FORMIC_ACID,transfer_amount)
@@ -892,17 +918,30 @@
 		return ..()
 
 /obj/item/tool/solder/proc/remove_fuel(var/amount, mob/user as mob)
-	if(reagents.get_reagent_amount(SACID) + reagents.get_reagent_amount(FORMIC_ACID) >= amount)
-		var/facid_amount = amount - reagents.get_reagent_amount(SACID)
-		reagents.remove_reagent(SACID, amount)
-		if(facid_amount > 0)
-			reagents.remove_reagent(FORMIC_ACID, facid_amount)
+	var/list/removable_reagents = accepts_pacids ? PACIDS + SACIDS : SACIDS
+	var/rem_amt = reagents.get_reagent_amounts(removable_reagents)
+	if(rem_amt >= amount)
+		var/mult = 1
+		if(accepts_pacids)
+			mult += min(1,reagents.get_reagent_amounts(PACIDS)/rem_amt)
+		for(var/reag in removable_reagents)
+			reagents.remove_reagent(reag, amount)
+			//still some of one reagent left, so job done
+			if(reagents.get_reagent_amount(reag))
+				break
 		update_icon()
-		return 1
+		return mult
 	else
 		user.simple_message("<span class='warn'>The tool does not have enough acid!</span>",
 			"<span class='warn'>The tool is too thirsty!</span>")
 		return 0
+
+/obj/item/tool/solder/proc/do_solder(var/mob/user, var/atom/thing, var/time, var/fuel_cost, var/volume = 100)
+	var/removemult = remove_fuel(fuel_cost, user)
+	if(!removemult)
+		return 0
+	playtoolsound(loc, volume)
+	return do_after(user, thing, (time/work_speed)/removemult)
 
 /obj/item/tool/solder/pre_fueled/New()
 	. = ..()
@@ -913,7 +952,8 @@
 	name = "screwsolder"
 	desc = "An advanced soldering tool with a screwdriver head. Use in hand to swap to and from the screwhead."
 	max_fuel = 32
-	work_speed = 0.5 //2x faster
+	work_speed = 2 //2x faster
+	accepts_pacids = TRUE
 	icon_state = "ssolder-0"
 	origin_tech = Tc_ENGINEERING + "=6"
 	var/screwmode = TRUE

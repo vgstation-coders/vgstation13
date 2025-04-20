@@ -645,10 +645,7 @@
 /obj/machinery/suit_storage_unit/attackby(obj/item/I as obj, mob/user as mob)
 	if(((stat & BROKEN) || emagged) && issolder(I))
 		var/obj/item/tool/solder/S = I
-		if(!S.remove_fuel(4,user))
-			return
-		S.playtoolsound(loc, 100)
-		if(do_after(user, src,4 SECONDS * S.work_speed))
+		if(S.do_solder(user, src,4 SECONDS,4))
 			S.playtoolsound(loc, 100)
 			stat &= !BROKEN
 			emagged = FALSE
