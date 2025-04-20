@@ -854,6 +854,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_ENGINEERING + "=1"
 	var/max_fuel = 20 	//The max amount of acid stored
+	var/icon_prefix = ""
 	var/work_speed = 1 //multiplier
 	var/accepts_pacids = FALSE
 	toolsounds = list('sound/items/Welder.ogg')
@@ -868,17 +869,18 @@
 
 /obj/item/tool/solder/update_icon()
 	..()
-	switch(reagents.get_reagent_amount(SACID) + reagents.get_reagent_amount(FORMIC_ACID))
-		if(16 to INFINITY)
-			icon_state = "solder-20"
-		if(11 to 15)
-			icon_state = "solder-15"
-		if(6 to 10)
-			icon_state = "solder-10"
-		if(1 to 5)
-			icon_state = "solder-5"
+	var/list/checked_reagents = accepts_pacids ? PACIDS + SACIDS : SACIDS
+	switch(reagents.get_reagent_amounts(checked_reagents))
+		if(((3*max_fuel)/4)+1 to INFINITY)
+			icon_state = "[icon_prefix]solder-20"
+		if((max_fuel/2)+1 to (3*max_fuel)/4)
+			icon_state = "[icon_prefix]solder-15"
+		if((max_fuel/4)+1 to max_fuel/2)
+			icon_state = "[icon_prefix]solder-10"
+		if(1 to max_fuel/4)
+			icon_state = "[icon_prefix]solder-5"
 		if(0)
-			icon_state = "solder-0"
+			icon_state = "[icon_prefix]solder-0"
 
 /obj/item/tool/solder/examine(mob/user)
 	..()
@@ -955,6 +957,7 @@
 	work_speed = 2 //2x faster
 	accepts_pacids = TRUE
 	icon_state = "ssolder-0"
+	icon_prefix = "s"
 	origin_tech = Tc_ENGINEERING + "=6"
 	var/screwmode = TRUE
 
@@ -966,19 +969,10 @@
 /obj/item/tool/solder/screw/is_screwdriver(mob/user)
 	return screwmode
 
-/obj/item/tool/solder/screw/update_icon()
-	..()
-	switch(reagents.get_reagent_amount(SACID) + reagents.get_reagent_amount(FORMIC_ACID))
-		if(22 to INFINITY)
-			icon_state = "ssolder-20"
-		if(15 to 21)
-			icon_state = "ssolder-15"
-		if(8 to 14)
-			icon_state = "ssolder-10"
-		if(1 to 7)
-			icon_state = "ssolder-5"
-		if(0)
-			icon_state = "ssolder-0"
+/obj/item/tool/solder/screw/pre_fueled/New()
+	. = ..()
+	reagents.add_reagent(PACID, 50)
+	update_icon()
 
 /*
 * Fuel Can
