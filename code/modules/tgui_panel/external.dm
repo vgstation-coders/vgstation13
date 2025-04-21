@@ -17,7 +17,7 @@
 	nuke_chat()
 
 	// Failed to fix, using tgalert as fallback
-	action = tgalert(src, "Did that work?", "", "Yes", "No, switch to old ui")
+	action = alert(src, "Did that work?", "", "Yes", "No, switch to old ui")
 	if (action == "No, switch to old ui")
 		winset(src, "output_selector.legacy_output_selector", "left=output_legacy")
 		log_tgui(src, "Failed to fix.", context = "verb/fix_tgui_panel")
