@@ -78,10 +78,10 @@
 /datum/asset_transport/webroot/validate_config(log = TRUE)
 	if (!config.asset_cdn_url)
 		if (log)
-			log_asset("ERROR: [type]: Invalid Config: ASSET_CDN_URL")
+			log_debug("ERROR: [type]: Invalid Config: ASSET_CDN_URL")
 		return FALSE
 	if (!config.asset_cdn_url)
 		if (log)
-			log_asset("ERROR: [type]: Invalid Config: ASSET_CDN_WEBROOT")
+			log_debug("ERROR: [type]: Invalid Config: ASSET_CDN_WEBROOT")
 		return FALSE
 	return TRUE

@@ -48,7 +48,7 @@
 		if (OACI.hash != ACI.hash)
 			var/error_msg = "ERROR: new asset added to the asset cache with the same name as another asset: [asset_name] existing asset hash: [OACI.hash] new asset hash:[ACI.hash]"
 			stack_trace(error_msg)
-			log_asset(error_msg)
+			log_debug(error_msg)
 		else
 			if (length(ACI.namespace))
 				return ACI
@@ -104,11 +104,11 @@
 	for (var/asset_name in asset_list)
 		var/datum/asset_cache_item/ACI = asset_list[asset_name]
 		if (!istype(ACI) && !(ACI = SSassets.cache[asset_name]))
-			log_asset("ERROR: can't send asset `[asset_name]`: unregistered or invalid state: `[ACI]`")
+			log_debug("ERROR: can't send asset `[asset_name]`: unregistered or invalid state: `[ACI]`")
 			continue
 		var/asset_file = ACI.resource
 		if (!asset_file)
-			log_asset("ERROR: can't send asset `[asset_name]`: invalid registered resource: `[ACI.resource]`")
+			log_debug("ERROR: can't send asset `[asset_name]`: invalid registered resource: `[ACI.resource]`")
 			continue
 
 		var/asset_hash = ACI.hash
@@ -121,7 +121,7 @@
 			new_asset_name = "asset.[ACI.hash][ACI.ext]"
 		if (client.sent_assets[new_asset_name] == asset_hash)
 			if (global.Debug2)
-				log_asset("DEBUG: Skipping send of `[asset_name]` (as `[new_asset_name]`) for `[client]` because it already exists in the client's sent_assets list")
+				log_debug("DEBUG: Skipping send of `[asset_name]` (as `[new_asset_name]`) for `[client]` because it already exists in the client's sent_assets list")
 			continue
 		unreceived[asset_name] = ACI
 
@@ -138,7 +138,7 @@
 				|| (ACI.namespace && !ACI.namespace_parent)
 			if (!keep_local_name)
 				new_asset_name = "asset.[ACI.hash][ACI.ext]"
-			log_asset("Sending asset `[asset_name]` to client `[client]` as `[new_asset_name]`")
+			log_debug("Sending asset `[asset_name]` to client `[client]` as `[new_asset_name]`")
 			client << browse_rsc(ACI.resource, new_asset_name)
 
 			client.sent_assets[new_asset_name] = ACI.hash
