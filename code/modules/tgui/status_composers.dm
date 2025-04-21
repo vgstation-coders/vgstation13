@@ -29,11 +29,10 @@
 
 	if(isobserver(user))
 		// If they turn on ghost AI control, admins can always interact.
-		if(isAdminGhostAI(user))
+		if(isAdminGhost(user))
 			return UI_INTERACTIVE
 
 		// Regular ghosts can always at least view if in range.
-		var/datum/client_interface/client = GET_CLIENT(user)
 		if(client)
 			var/clientviewlist = getviewsize(client.view)
 			if(get_dist(source, user) < max(clientviewlist[1], clientviewlist[2]))
@@ -57,7 +56,7 @@
 /// Returns a UI status such that advanced tool users will be able to interact,
 /// but everyone else can only watch.
 /proc/ui_status_user_is_advanced_tool_user(mob/user)
-	return ISADVANCEDTOOLUSER(user) ? UI_INTERACTIVE : UI_UPDATE
+	return user.dexterity_check() ? UI_INTERACTIVE : UI_UPDATE
 
 /// Returns a UI status such that silicons will be able to interact with whatever
 /// they would have access to if this was a machine. For example, AIs can
@@ -100,7 +99,7 @@
 		return UI_UPDATE
 
 	var/mob/living/living_user = user
-	return (living_user.body_position == LYING_DOWN && living_user.stat == CONSCIOUS) \
+	return ((living_user.resting > 0) && living_user.stat == CONSCIOUS) \
 		? UI_INTERACTIVE \
 		: UI_UPDATE
 

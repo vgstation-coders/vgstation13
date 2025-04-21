@@ -1495,7 +1495,6 @@
 #include "code\modules\asset_cache\assets\tgfont.dm"
 #include "code\modules\asset_cache\assets\tgui.dm"
 #include "code\modules\asset_cache\spritesheet\batched\batched_spritesheet.dm"
-#include "code\modules\asset_cache\spritesheet\batched\universal_icon.dm"
 #include "code\modules\asset_cache\spritesheet\legacy\legacy_spritesheet.dm"
 #include "code\modules\asset_cache\transports\asset_transport.dm"
 #include "code\modules\asset_cache\transports\webroot_transport.dm"
