@@ -201,7 +201,7 @@ var/datum/subsystem/tgui/SStgui
 	for(var/datum/tgui/ui in src_object.open_uis)
 		// Check if UI is valid.
 		if(ui?.src_object && ui.user && ui.src_object.ui_host(ui.user))
-			call(ui, TYPE_PROC_REF(/datum/tgui, process))(wait * 0.1, TRUE)
+			ui.process(wait * 0.1, TRUE)
 			count++
 	return count
 
