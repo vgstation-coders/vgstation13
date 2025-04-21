@@ -60,6 +60,10 @@
 	return 0
 #undef FTPDELAY
 
+// Similar to clamp but the bottom rolls around to the top and vice versa. min is inclusive, max is exclusive
+#define WRAP(val, min, max) clamp(( min == max ? min : (val) - (round(((val) - (min))/((max) - (min))) * ((max) - (min))) ),min,max)
+
+
 /// Save file as an external file then md5 it.
 /// Used because md5ing files stored in the rsc sometimes gives incorrect md5 results.
 /// https://www.byond.com/forum/post/2611357
@@ -71,3 +75,7 @@
 	fcopy(file, filename)
 	. = md5filepath(filename)
 	fdel(filename)
+
+/// Returns the md5 of a file at a given path.
+/proc/md5filepath(path)
+	. = md5(file(path))

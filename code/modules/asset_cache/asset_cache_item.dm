@@ -49,6 +49,3 @@
 
 /datum/asset_cache_item/variable_edited(variable_name, old_value, new_value)
 	return FALSE
-
-/datum/asset_cache_item/CanProcCall(procname)
-	return FALSE

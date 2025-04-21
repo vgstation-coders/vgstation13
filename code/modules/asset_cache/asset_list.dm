@@ -141,28 +141,7 @@ GLOBAL_LIST_EMPTY(asset_datums)
 		var/datum/tg_asset/A = get_asset_datum(type)
 		A.unregister()
 
-/datum/tg_asset/changelog_item
-	_abstract = /datum/tg_asset/changelog_item
-	var/item_filename
-
-/datum/tg_asset/changelog_item/New(date)
-	item_filename = SANITIZE_FILENAME("[date].yml")
-	SSassets.transport.register_asset(item_filename, file("html/changelogs/archive/" + item_filename))
-
-/datum/tg_asset/changelog_item/send(client)
-	if (!item_filename)
-		return
-	. = SSassets.transport.send_assets(client, item_filename)
-
-/datum/tg_asset/changelog_item/get_url_mappings()
-	if (!item_filename)
-		return
-	. = list("[item_filename]" = SSassets.transport.get_asset_url(item_filename))
-
-/datum/tg_asset/changelog_item/unregister()
-	if (!item_filename)
-		return
-	SSassets.transport.unregister_asset(item_filename)
+// -- IMPLEMENTABLE : tg_asset for changelog items
 
 //Generates assets based on iconstates of a single icon
 // -- IMPLEMENTABLE : tg_asset for icon_states
@@ -188,7 +167,7 @@ GLOBAL_LIST_EMPTY(asset_datums)
 	for (var/asset_name in sorted_assets)
 		var/datum/asset_cache_item/ACI = new(asset_name, sorted_assets[asset_name])
 		if (!ACI?.hash)
-			log_asset("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
+			log_debug("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
 			continue
 		hashlist += ACI.hash
 		sorted_assets[asset_name] = ACI
@@ -197,7 +176,7 @@ GLOBAL_LIST_EMPTY(asset_datums)
 	for (var/asset_name in parents)
 		var/datum/asset_cache_item/ACI = new(asset_name, parents[asset_name])
 		if (!ACI?.hash)
-			log_asset("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
+			log_debug("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
 			continue
 		ACI.namespace_parent = TRUE
 		sorted_assets[asset_name] = ACI
@@ -205,7 +184,7 @@ GLOBAL_LIST_EMPTY(asset_datums)
 	for (var/asset_name in sorted_assets)
 		var/datum/asset_cache_item/ACI = sorted_assets[asset_name]
 		if (!ACI?.hash)
-			log_asset("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
+			log_debug("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
 			continue
 		ACI.namespace = namespace
 
