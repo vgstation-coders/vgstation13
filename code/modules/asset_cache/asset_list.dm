@@ -165,37 +165,8 @@ GLOBAL_LIST_EMPTY(asset_datums)
 	SSassets.transport.unregister_asset(item_filename)
 
 //Generates assets based on iconstates of a single icon
-/datum/tg_asset/simple/icon_states
-	_abstract = /datum/tg_asset/simple/icon_states
-	var/icon
-	var/list/directions = list(SOUTH)
-	var/frame = 1
-	var/movement_states = FALSE
+// -- IMPLEMENTABLE : tg_asset for icon_states
 
-	var/prefix = "default" //asset_name = "[prefix].[icon_state_name].png"
-	var/generic_icon_names = FALSE //generate icon filenames using generate_asset_name() instead the above format
-
-/datum/tg_asset/simple/icon_states/register(_icon = icon)
-	for(var/icon_state_name in icon_states(_icon))
-		for(var/direction in directions)
-			var/asset = icon(_icon, icon_state_name, direction, frame, movement_states)
-			if (!asset)
-				continue
-			asset = fcopy_rsc(asset) //dedupe
-			var/prefix2 = (directions.len > 1) ? "[dir2text(direction)]." : ""
-			var/asset_name = SANITIZE_FILENAME("[prefix].[prefix2][icon_state_name].png")
-			if (generic_icon_names)
-				asset_name = "[generate_asset_name(asset)].png"
-
-			SSassets.transport.register_asset(asset_name, asset)
-
-/datum/tg_asset/simple/icon_states/multiple_icons
-	_abstract = /datum/tg_asset/simple/icon_states/multiple_icons
-	var/list/icons
-
-/datum/tg_asset/simple/icon_states/multiple_icons/register()
-	for(var/i in icons)
-		..(i)
 
 /// Namespace'ed assets (for static css and html files)
 /// When sent over a cdn transport, all assets in the same asset datum will exist in the same folder, as their plain names.
