@@ -243,6 +243,11 @@ var/const/MAX_SAVE_SLOTS = 16
 
 	// TGUI things
 	var/tgui_fancy = TRUE
+	//// -- Unimplemented for tgui alerts --
+	var/tgui_input = FALSE
+	var/tgui_input_large = FALSE
+	var/tgui_input_swapped = FALSE
+
 	// To implement
 	//var/layout_prefs_used =
 	//var/tgui_lock =
