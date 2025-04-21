@@ -218,6 +218,9 @@
 	var/rsclist = ""
 	var/rscstring = ""
 
+	// TGUI.
+	var/tgui_max_chunk_count = 32
+
 /datum/configuration/New()
 	. = ..()
 	var/list/L = subtypesof(/datum/gamemode)-/datum/gamemode/cult

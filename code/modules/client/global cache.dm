@@ -13,6 +13,21 @@ var/list/asset_datums = list()
 	var/list/sending = list()
 	var/last_asset_job = 0 // Last job done.
 
+/// Blocks until all currently sending browse and browse_rsc assets have been sent.
+/// Due to byond limitations, this proc will sleep for 1 client round trip even if the client has no pending asset sends.
+/// This proc will return an untrue value if it had to return before confirming the send, such as timeout or the client going away.
+/client/proc/browse_queue_flush(timeout = 50)
+	var/job = ++last_asset_job
+	var/t = 0
+	var/timeout_time = timeout
+	src << browse({"<script>window.location.href='byond://?asset_cache_confirm_arrival=[job]'</script>"}, "window=asset_cache_browser&file=asset_cache_send_verify.htm")
+
+	while(!completed_asset_jobs["[job]"] && t < timeout_time) // Reception is handled in Topic()
+		stoplag(1) // Lock up the caller until this is received.
+		t++
+	if (t < timeout_time)
+		return TRUE
+
 //This proc sends the asset to the client, but only if it needs it.
 /proc/send_asset(var/client/client, var/asset_name, var/verify = TRUE)
 	if(!istype(client))
@@ -692,3 +707,17 @@ var/list/asset_datums = list()
 
 		Insert(icon_state, I)
 	return ..()
+
+
+// -- TG asset datums frankenstein monster --
+
+/datum/asset
+	var/cached_serialized_url_mappings
+
+/// Returns a cached tgui message of URL mappings
+/// NB: the TG version of this is a lot more complex but just work with me here
+/datum/asset/proc/get_serialized_url_mappings()
+	if (isnull(cached_serialized_url_mappings))
+		cached_serialized_url_mappings = TGUI_CREATE_MESSAGE("asset/mappings", get_url_mappings())
+
+	return cached_serialized_url_mappings

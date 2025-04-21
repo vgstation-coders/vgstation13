@@ -241,7 +241,11 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/obj_chat_on_map = FALSE
 	var/no_goonchat_for_obj = FALSE
 
+	// TGUI things
 	var/tgui_fancy = TRUE
+	// To implement
+	//var/layout_prefs_used =
+	//var/tgui_lock =
 	var/fps = -1
 
 	var/client/client

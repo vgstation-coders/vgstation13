@@ -9,7 +9,7 @@
  * Checks that the src_object is in the user's hands.
  */
 
-var/datum/ui_state/hands_state/hands_state = new
+GLOBAL_DATUM_INIT(hands_state, /datum/ui_state/hands_state, new)
 
 /datum/ui_state/hands_state/can_use_topic(src_object, mob/user)
 	. = user.shared_ui_interaction(src_object)
@@ -20,7 +20,7 @@ var/datum/ui_state/hands_state/hands_state = new
 	return UI_CLOSE
 
 /mob/living/hands_can_use_topic(src_object)
-	if(is_holding_item(src_object))
+	if(is_holding(src_object))
 		return UI_INTERACTIVE
 	return UI_CLOSE
 

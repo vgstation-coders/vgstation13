@@ -209,4 +209,3 @@
 	if (hsv_list.len == 4)
 		return HSVtoRGB(hsv(hsv_list[1], hsv_list[2], hsv_list[3], hsv_list[4]))
 	return HSVtoRGB(hsv(hsv_list[1], hsv_list[2], hsv_list[3]))
-
