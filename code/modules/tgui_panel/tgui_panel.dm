@@ -52,7 +52,7 @@
 	window.send_asset(get_asset_datum(/datum/asset/spritesheet_batched/chat))
 	// Other setup
 	request_telemetry()
-	addtimer(CALLBACK(src, PROC_REF(on_initialize_timed_out)), 5 SECONDS)
+	add_timer(new /callback(src, PROC_REF(on_initialize_timed_out)), 5 SECONDS)
 	window.send_message("testTelemetryCommand")
 
 /**
