@@ -1,4 +1,4 @@
-/datum/asset/simple/namespaced/fontawesome
+/datum/tg_asset/simple/namespaced/fontawesome
 	assets = list(
 		"fa-regular-400.ttf" = 'html/font-awesome/webfonts/fa-regular-400.ttf',
 		"fa-solid-900.ttf" = 'html/font-awesome/webfonts/fa-solid-900.ttf',

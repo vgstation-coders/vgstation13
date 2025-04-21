@@ -1,3 +1,7 @@
+/// When sending mutiple assets, how many before we give the client a quaint little sending resources message
+#define ASSET_CACHE_TELL_CLIENT_AMOUNT 8
+/// How many assets can be sent at once during legacy asset transport
+#define SLOW_ASSET_SEND_RATE 6
 
 /// Base browse_rsc asset transport
 /datum/asset_transport
@@ -127,7 +131,7 @@
 
 	if (unreceived.len)
 		if (unreceived.len >= ASSET_CACHE_TELL_CLIENT_AMOUNT)
-			to_chat(client, span_infoplain("Sending Resources..."))
+			to_chat(client, ("<span class='info'>Sending Resources...</span>"))
 
 		for (var/asset_name in unreceived)
 			var/new_asset_name = asset_name
@@ -143,7 +147,7 @@
 
 			client.sent_assets[new_asset_name] = ACI.hash
 
-		add_timer(new /callback(client, TYPE_PROC_REF(/client, asset_cache_update_json)), 1 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE)
+		add_timer(new /callback(client, TYPE_PROC_REF(/client, asset_cache_update_json)), 1 SECONDS)
 		return TRUE
 	return FALSE
 

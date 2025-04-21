@@ -9,8 +9,7 @@
  * Checks if the user has specific admin permissions.
  */
 
-GLOBAL_LIST_EMPTY_TYPED(admin_states, /datum/ui_state/admin_state)
-GLOBAL_PROTECT(admin_states)
+var/list/datum/ui_state/admin_state/admin_states = list()
 
 /datum/ui_state/admin_state
 	/// The specific admin permissions required for the UI using this state.
@@ -21,11 +20,11 @@ GLOBAL_PROTECT(admin_states)
 	src.required_perms = required_perms
 
 /datum/ui_state/admin_state/can_use_topic(src_object, mob/user)
-	if(check_rights_for(user.client, required_perms))
+	if(user.client.holder(required_perms))
 		return UI_INTERACTIVE
 	return UI_CLOSE
 
-/datum/ui_state/admin_state/vv_edit_var(var_name, var_value)
-	if(var_name == NAMEOF(src, required_perms))
-		return FALSE
+/datum/ui_state/admin_state/variable_edited(variable_name, old_value, new_value)
+	if(variable_name == NAMEOF(src, required_perms))
+		return 1 // block var edit
 	return ..()
