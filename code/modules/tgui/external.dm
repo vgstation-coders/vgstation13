@@ -86,14 +86,20 @@
  */
 /datum/proc/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
 	SHOULD_CALL_PARENT(TRUE)
-	SEND_SIGNAL(src, COMSIG_UI_ACT, usr, action, params)
+	INVOKE_EVENT(src, /event/ui_act, usr, action)
+
+	// -- FIXME : Should implement the components/signal system to register the ui_act params.
+	//SEND_SIGNAL(src, COMSIG_UI_ACT, usr, action, params)
+
 	// If UI is not interactive or usr calling Topic is not the UI user, bail.
 	if(!ui || ui.status != UI_INTERACTIVE)
 		return TRUE
-	if(action == "change_ui_state")
-		var/mob/living/user = ui.user
-		//write_preferences will make sure it's valid for href exploits.
-		user.client.prefs.write_preference(global.preference_entries[layout_prefs_used], params["new_state"])
+
+	// -- FIXME : Should implement this.
+	// if(action == "change_ui_state")
+	// 	var/mob/living/user = ui.user
+	// 	//write_preferences will make sure it's valid for href exploits.
+	// 	user.client.prefs.layout_prefs_used = params["new_state"]
 
 /**
  * public
@@ -161,7 +167,9 @@
  * client/verb/uiclose(), which closes the ui window
  */
 /datum/proc/ui_close(mob/user)
-	SIGNAL_HANDLER
+	SHOULD_NOT_SLEEP(TRUE)
+	// -- FIXME: Should use signals when we get to implement them.
+	//SIGNAL_HANDLER
 
 /**
  * verb
