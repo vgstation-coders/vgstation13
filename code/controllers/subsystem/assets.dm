@@ -32,8 +32,6 @@ var/datum/subsystem/assets/SSassets
 
 	transport.Initialize(cache)
 
-	return SS_INIT_SUCCESS
-
 /datum/subsystem/assets/Recover()
 	cache = SSassets.cache
 	preload = SSassets.preload
