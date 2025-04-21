@@ -1,13 +1,13 @@
 /// CDN Webroot asset transport.
-/datum/tg_asset_transport/webroot
+/datum/asset_transport/webroot
 	name = "CDN Webroot asset transport"
 
-/datum/tg_asset_transport/webroot/Load()
+/datum/asset_transport/webroot/Load()
 	if (validate_config(log = FALSE))
 		load_existing_assets()
 
 /// Processes thru any assets that were registered before we were loaded as a transport.
-/datum/tg_asset_transport/webroot/proc/load_existing_assets()
+/datum/asset_transport/webroot/proc/load_existing_assets()
 	for (var/asset_name in SSassets.cache)
 		var/datum/tg_asset_cache_item/ACI = SSassets.cache[asset_name]
 		save_asset_to_webroot(ACI)
@@ -16,7 +16,7 @@
 /// We also save it to the CDN webroot at this step instead of waiting for send_assets()
 /// asset_name - the identifier of the asset
 /// asset - the actual asset file or an asset_cache_item datum.
-/datum/tg_asset_transport/webroot/register_asset(asset_name, asset, file_hash, dmi_path)
+/datum/asset_transport/webroot/register_asset(asset_name, asset, file_hash, dmi_path)
 	. = ..()
 	var/datum/tg_asset_cache_item/ACI = .
 
@@ -24,7 +24,7 @@
 		save_asset_to_webroot(ACI)
 
 /// Saves the asset to the webroot taking into account namespaces and hashes.
-/datum/tg_asset_transport/webroot/proc/save_asset_to_webroot(datum/tg_asset_cache_item/ACI)
+/datum/asset_transport/webroot/proc/save_asset_to_webroot(datum/tg_asset_cache_item/ACI)
 	var/webroot = config.asset_cdn_webroot
 	var/newpath = "[webroot][get_asset_suffex(ACI)]"
 	if (fexists(newpath))
@@ -36,13 +36,13 @@
 /// Returns a url for a given asset.
 /// asset_name - Name of the asset.
 /// asset_cache_item - asset cache item datum for the asset, optional, overrides asset_name
-/datum/tg_asset_transport/webroot/get_asset_url(asset_name, datum/tg_asset_cache_item/asset_cache_item)
+/datum/asset_transport/webroot/get_asset_url(asset_name, datum/tg_asset_cache_item/asset_cache_item)
 	if (!istype(asset_cache_item))
 		asset_cache_item = SSassets.cache[asset_name]
 	var/url = config.asset_cdn_url //config loading will handle making sure this ends in a /
 	return "[url][get_asset_suffex(asset_cache_item)]"
 
-/datum/tg_asset_transport/webroot/proc/get_asset_suffex(datum/tg_asset_cache_item/asset_cache_item)
+/datum/asset_transport/webroot/proc/get_asset_suffex(datum/tg_asset_cache_item/asset_cache_item)
 	var/base = "[copytext(asset_cache_item.hash, 1, 3)]/"
 	var/filename = "asset.[asset_cache_item.hash][asset_cache_item.ext]"
 	if (length(asset_cache_item.namespace))
@@ -53,7 +53,7 @@
 
 
 /// webroot asset sending - does nothing unless passed legacy assets
-/datum/tg_asset_transport/webroot/send_assets(client/client, list/asset_list)
+/datum/asset_transport/webroot/send_assets(client/client, list/asset_list)
 	. = FALSE
 	var/list/legacy_assets = list()
 	if (!islist(asset_list))
@@ -72,10 +72,10 @@
 
 
 /// webroot slow asset sending - does nothing.
-/datum/tg_asset_transport/webroot/send_assets_slow(client/client, list/files, filerate)
+/datum/asset_transport/webroot/send_assets_slow(client/client, list/files, filerate)
 	return FALSE
 
-/datum/tg_asset_transport/webroot/validate_config(log = TRUE)
+/datum/asset_transport/webroot/validate_config(log = TRUE)
 	if (!config.asset_cdn_url)
 		if (log)
 			log_asset("ERROR: [type]: Invalid Config: ASSET_CDN_URL")

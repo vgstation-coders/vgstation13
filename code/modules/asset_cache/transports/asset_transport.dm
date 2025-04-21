@@ -1,6 +1,6 @@
 
 /// Base browse_rsc asset transport
-/datum/tg_asset_transport
+/datum/asset_transport
 	var/name = "Simple browse_rsc asset transport"
 	var/static/list/preload
 	/// Don't mutate the filename of assets when sending via browse_rsc.
@@ -9,13 +9,13 @@
 	var/dont_mutate_filenames = FALSE
 
 /// Called when the transport is loaded by the config controller, not called on the default transport unless it gets loaded by a config change.
-/datum/tg_asset_transport/proc/Load()
+/datum/asset_transport/proc/Load()
 	if (config.asset_simple_preload)
 		for(var/client/C in global.clients)
 			add_timer(new /callback(src, PROC_REF(send_assets_slow), C, preload), 1 SECONDS)
 
 /// Initialize - Called when SSassets initializes.
-/datum/tg_asset_transport/proc/Initialize(list/assets)
+/datum/asset_transport/proc/Initialize(list/assets)
 	preload = assets.Copy()
 	if (!config.asset_simple_preload)
 		return
@@ -34,7 +34,7 @@
  * * file_hash - optional, a hash of the contents of the asset files contents. used so asset_cache_item doesnt have to hash it again
  * * dmi_file_path - optional, means that the given asset is from the rsc and thus we dont need to do some expensive operations
  */
-/datum/tg_asset_transport/proc/register_asset(asset_name, asset, file_hash, dmi_file_path)
+/datum/asset_transport/proc/register_asset(asset_name, asset, file_hash, dmi_file_path)
 	var/datum/tg_asset_cache_item/ACI = asset
 	if (!istype(ACI))
 		ACI = new(asset_name, asset, file_hash, dmi_file_path)
@@ -58,14 +58,14 @@
 	return ACI
 
 /// Immediately removes an asset from the asset cache.
-/datum/tg_asset_transport/proc/unregister_asset(asset_name)
+/datum/asset_transport/proc/unregister_asset(asset_name)
 	SSassets.cache[asset_name] = null
 	SSassets.cache.Remove(null)
 
 /// Returns a url for a given asset.
 /// asset_name - Name of the asset.
 /// asset_cache_item - asset cache item datum for the asset, optional, overrides asset_name
-/datum/tg_asset_transport/proc/get_asset_url(asset_name, datum/tg_asset_cache_item/asset_cache_item)
+/datum/asset_transport/proc/get_asset_url(asset_name, datum/tg_asset_cache_item/asset_cache_item)
 	if (!istype(asset_cache_item))
 		asset_cache_item = SSassets.cache[asset_name]
 	// To ensure code that breaks on cdns breaks in local testing, we only
@@ -83,7 +83,7 @@
 /// client - a client or mob
 /// asset_list - A list of asset filenames to be sent to the client. Can optionally be assoicated with the asset's asset_cache_item datum.
 /// Returns TRUE if any assets were sent.
-/datum/tg_asset_transport/proc/send_assets(client/client, list/asset_list)
+/datum/asset_transport/proc/send_assets(client/client, list/asset_list)
 #if defined(UNIT_TESTS)
 	return
 #endif
@@ -149,7 +149,7 @@
 
 
 /// Precache files without clogging up the browse() queue, used for passively sending files on connection start.
-/datum/tg_asset_transport/proc/send_assets_slow(client/client, list/files, filerate = SLOW_ASSET_SEND_RATE)
+/datum/asset_transport/proc/send_assets_slow(client/client, list/files, filerate = SLOW_ASSET_SEND_RATE)
 	var/startingfilerate = filerate
 	for (var/file in files)
 		if (!client)
@@ -162,7 +162,7 @@
 
 /// Check the config is valid to load this transport
 /// Returns TRUE or FALSE
-/datum/tg_asset_transport/proc/validate_config(log = TRUE)
+/datum/asset_transport/proc/validate_config(log = TRUE)
 	return TRUE
 
 #undef ASSET_CACHE_TELL_CLIENT_AMOUNT

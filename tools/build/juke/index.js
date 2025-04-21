@@ -3381,7 +3381,7 @@ var require_sync = __commonJS({
       var pn = remain[0];
       var negate = !!this.minimatch.negate;
       var rawGlob = pn._glob;
-      var dotOk = this.dot || rawglobal.charAt(0) === ".";
+      var dotOk = this.dot || rawGlob.charAt(0) === ".";
       var matchedEntries = [];
       for (var i = 0; i < entries.length; i++) {
         var e = entries[i];
@@ -3748,9 +3748,9 @@ var require_inflight = __commonJS({
   }
 });
 
-// pnp:glob-npm-7.1.7-5698ad9c48-b61f48973b.zip/node_modules/glob/global.js
+// pnp:glob-npm-7.1.7-5698ad9c48-b61f48973b.zip/node_modules/glob/glob.js
 var require_glob = __commonJS({
-  "pnp:glob-npm-7.1.7-5698ad9c48-b61f48973b.zip/node_modules/glob/global.js"(exports, module2) {
+  "pnp:glob-npm-7.1.7-5698ad9c48-b61f48973b.zip/node_modules/glob/glob.js"(exports, module2) {
     module2.exports = glob2;
     var fs4 = require("fs");
     var rp = require_fs();
@@ -4009,7 +4009,7 @@ var require_glob = __commonJS({
       var pn = remain[0];
       var negate = !!this.minimatch.negate;
       var rawGlob = pn._glob;
-      var dotOk = this.dot || rawglobal.charAt(0) === ".";
+      var dotOk = this.dot || rawGlob.charAt(0) === ".";
       var matchedEntries = [];
       for (var i = 0; i < entries.length; i++) {
         var e = entries[i];
@@ -4712,7 +4712,7 @@ var Glob = class {
     this.path = path2;
   }
   toFiles() {
-    const paths = import_global.global.sync(this.path, {
+    const paths = import_glob.glob.sync(this.path, {
       strict: false,
       silent: true
     });
@@ -4750,7 +4750,7 @@ var compareFiles = (sources, targets) => {
   return false;
 };
 var glob = (globPath) => {
-  const unsafePaths = import_global.global.sync(globPath, {
+  const unsafePaths = import_glob.glob.sync(globPath, {
     strict: false,
     silent: true
   });

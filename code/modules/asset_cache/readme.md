@@ -22,7 +22,7 @@ Call .get_url_mappings() to get an associated list with the urls your assets can
 
 ### Manual backend:
 
-See the documentation for `/datum/tg_asset_transport` for the backend api the asset datums utilize.
+See the documentation for `/datum/asset_transport` for the backend api the asset datums utilize.
 
 The global variable `SSassets.transport` contains the currently configured transport.
 
