@@ -24,7 +24,7 @@
 		save_asset_to_webroot(ACI)
 
 /// Saves the asset to the webroot taking into account namespaces and hashes.
-/datum/asset_transport/webroot/proc/save_asset_to_webroot(datum/tg_asset_cache_item/ACI)
+/datum/asset_transport/webroot/proc/save_asset_to_webroot(datum/asset_cache_item/ACI)
 	var/webroot = config.asset_cdn_webroot
 	var/newpath = "[webroot][get_asset_suffex(ACI)]"
 	if (fexists(newpath))
@@ -36,13 +36,13 @@
 /// Returns a url for a given asset.
 /// asset_name - Name of the asset.
 /// asset_cache_item - asset cache item datum for the asset, optional, overrides asset_name
-/datum/asset_transport/webroot/get_asset_url(asset_name, datum/tg_asset_cache_item/asset_cache_item)
+/datum/asset_transport/webroot/get_asset_url(asset_name, datum/asset_cache_item/asset_cache_item)
 	if (!istype(asset_cache_item))
 		asset_cache_item = SSassets.cache[asset_name]
 	var/url = config.asset_cdn_url //config loading will handle making sure this ends in a /
 	return "[url][get_asset_suffex(asset_cache_item)]"
 
-/datum/asset_transport/webroot/proc/get_asset_suffex(datum/tg_asset_cache_item/asset_cache_item)
+/datum/asset_transport/webroot/proc/get_asset_suffex(datum/asset_cache_item/asset_cache_item)
 	var/base = "[copytext(asset_cache_item.hash, 1, 3)]/"
 	var/filename = "asset.[asset_cache_item.hash][asset_cache_item.ext]"
 	if (length(asset_cache_item.namespace))

@@ -65,7 +65,7 @@
 /// Returns a url for a given asset.
 /// asset_name - Name of the asset.
 /// asset_cache_item - asset cache item datum for the asset, optional, overrides asset_name
-/datum/asset_transport/proc/get_asset_url(asset_name, datum/tg_asset_cache_item/asset_cache_item)
+/datum/asset_transport/proc/get_asset_url(asset_name, datum/asset_cache_item/asset_cache_item)
 	if (!istype(asset_cache_item))
 		asset_cache_item = SSassets.cache[asset_name]
 	// To ensure code that breaks on cdns breaks in local testing, we only
