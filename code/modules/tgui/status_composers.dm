@@ -33,8 +33,8 @@
 			return UI_INTERACTIVE
 
 		// Regular ghosts can always at least view if in range.
-		if(client)
-			var/clientviewlist = getviewsize(client.view)
+		if(user.client)
+			var/clientviewlist = getviewsize(user.client.view)
 			if(get_dist(source, user) < max(clientviewlist[1], clientviewlist[2]))
 				return UI_UPDATE
 
