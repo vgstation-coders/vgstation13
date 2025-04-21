@@ -75,7 +75,7 @@ GLOBAL_LIST_EMPTY(asset_datums)
 /// Simply takes any generated file and saves it to the round-specific /logs folder. Useful for debugging potential issues with spritesheet generation/display.
 /// Only called when the SAVE_SPRITESHEETS config option is uncommented.
 /datum/tg_asset/proc/save_to_logs(file_name, file_location)
-	var/asset_path = "[global.log_directory]/generated_assets/[file_name]"
+	var/asset_path = "data/logs/[date_string]/generated_assets/[file_name]"
 	fdel(asset_path) // just in case, sadly we can't use rust_g stuff here.
 	fcopy(file_location, asset_path)
 
@@ -94,9 +94,9 @@ GLOBAL_LIST_EMPTY(asset_datums)
 
 /datum/tg_asset/simple/register()
 	for(var/asset_name in assets)
-		var/datum/tg_asset_cache_item/ACI = SSassets.transport.register_asset(asset_name, assets[asset_name])
+		var/datum/asset_cache_item/ACI = SSassets.transport.register_asset(asset_name, assets[asset_name])
 		if (!ACI)
-			log_asset("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
+			log_debug("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
 			continue
 		if (legacy)
 			ACI.legacy = legacy
@@ -215,7 +215,7 @@ GLOBAL_LIST_EMPTY(asset_datums)
 	var/list/sorted_assets = sort_list(assets)
 
 	for (var/asset_name in sorted_assets)
-		var/datum/tg_asset_cache_item/ACI = new(asset_name, sorted_assets[asset_name])
+		var/datum/asset_cache_item/ACI = new(asset_name, sorted_assets[asset_name])
 		if (!ACI?.hash)
 			log_asset("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
 			continue
@@ -224,7 +224,7 @@ GLOBAL_LIST_EMPTY(asset_datums)
 	var/namespace = md5(hashlist.Join())
 
 	for (var/asset_name in parents)
-		var/datum/tg_asset_cache_item/ACI = new(asset_name, parents[asset_name])
+		var/datum/asset_cache_item/ACI = new(asset_name, parents[asset_name])
 		if (!ACI?.hash)
 			log_asset("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
 			continue
@@ -232,7 +232,7 @@ GLOBAL_LIST_EMPTY(asset_datums)
 		sorted_assets[asset_name] = ACI
 
 	for (var/asset_name in sorted_assets)
-		var/datum/tg_asset_cache_item/ACI = sorted_assets[asset_name]
+		var/datum/asset_cache_item/ACI = sorted_assets[asset_name]
 		if (!ACI?.hash)
 			log_asset("ERROR: Invalid asset: [type]:[asset_name]:[ACI]")
 			continue

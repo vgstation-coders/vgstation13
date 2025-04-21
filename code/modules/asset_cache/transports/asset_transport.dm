@@ -35,13 +35,13 @@
  * * dmi_file_path - optional, means that the given asset is from the rsc and thus we dont need to do some expensive operations
  */
 /datum/asset_transport/proc/register_asset(asset_name, asset, file_hash, dmi_file_path)
-	var/datum/tg_asset_cache_item/ACI = asset
+	var/datum/asset_cache_item/ACI = asset
 	if (!istype(ACI))
 		ACI = new(asset_name, asset, file_hash, dmi_file_path)
 		if (!ACI || !ACI.hash)
 			CRASH("ERROR: Invalid asset: [asset_name]:[asset]:[ACI]")
 	if (SSassets.cache[asset_name])
-		var/datum/tg_asset_cache_item/OACI = SSassets.cache[asset_name]
+		var/datum/asset_cache_item/OACI = SSassets.cache[asset_name]
 		OACI.legacy = ACI.legacy = (ACI.legacy|OACI.legacy)
 		OACI.namespace_parent = ACI.namespace_parent = (ACI.namespace_parent | OACI.namespace_parent)
 		OACI.namespace = OACI.namespace || ACI.namespace
@@ -102,7 +102,7 @@
 	var/list/unreceived = list()
 
 	for (var/asset_name in asset_list)
-		var/datum/tg_asset_cache_item/ACI = asset_list[asset_name]
+		var/datum/asset_cache_item/ACI = asset_list[asset_name]
 		if (!istype(ACI) && !(ACI = SSassets.cache[asset_name]))
 			log_asset("ERROR: can't send asset `[asset_name]`: unregistered or invalid state: `[ACI]`")
 			continue
@@ -131,7 +131,7 @@
 
 		for (var/asset_name in unreceived)
 			var/new_asset_name = asset_name
-			var/datum/tg_asset_cache_item/ACI = unreceived[asset_name]
+			var/datum/asset_cache_item/ACI = unreceived[asset_name]
 			var/keep_local_name = dont_mutate_filenames \
 				|| ACI.legacy \
 				|| ACI.keep_local_name \

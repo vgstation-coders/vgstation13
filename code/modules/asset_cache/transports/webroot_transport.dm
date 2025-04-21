@@ -9,7 +9,7 @@
 /// Processes thru any assets that were registered before we were loaded as a transport.
 /datum/asset_transport/webroot/proc/load_existing_assets()
 	for (var/asset_name in SSassets.cache)
-		var/datum/tg_asset_cache_item/ACI = SSassets.cache[asset_name]
+		var/datum/asset_cache_item/ACI = SSassets.cache[asset_name]
 		save_asset_to_webroot(ACI)
 
 /// Register a browser asset with the asset cache system
@@ -18,7 +18,7 @@
 /// asset - the actual asset file or an asset_cache_item datum.
 /datum/asset_transport/webroot/register_asset(asset_name, asset, file_hash, dmi_path)
 	. = ..()
-	var/datum/tg_asset_cache_item/ACI = .
+	var/datum/asset_cache_item/ACI = .
 
 	if (istype(ACI) && ACI.hash)
 		save_asset_to_webroot(ACI)
@@ -59,7 +59,7 @@
 	if (!islist(asset_list))
 		asset_list = list(asset_list)
 	for (var/asset_name in asset_list)
-		var/datum/tg_asset_cache_item/ACI = asset_list[asset_name]
+		var/datum/asset_cache_item/ACI = asset_list[asset_name]
 		if (!istype(ACI))
 			ACI = SSassets.cache[asset_name]
 		if (!ACI)
