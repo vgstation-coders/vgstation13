@@ -1,4 +1,12 @@
 
+// Client tg_asset things
+/client
+	var/last_completed_asset_job
+	var/list/sent_assets = list()
+
+	// Connection time
+	var/connection_time
+
 /// Process asset cache client topic calls for `"asset_cache_confirm_arrival=[INT]"`
 /client/proc/asset_cache_confirm_arrival(job_id)
 	var/asset_cache_job = round(text2num(job_id))

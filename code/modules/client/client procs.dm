@@ -518,6 +518,7 @@ var/updated_stats = 0
 	if(query_connection_log.ErrorMsg())
 		WARNING("FINGERPRINT: [query_connection_log.ErrorMsg()]")
 	qdel(query_connection_log)
+	connection_time = world.time
 
 #undef TOPIC_SPAM_DELAY
 #undef UPLOAD_LIMIT
