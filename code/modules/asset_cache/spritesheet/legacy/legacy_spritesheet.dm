@@ -85,7 +85,7 @@
 		return
 
 	// If it's cached, may as well load it now, while the loading is cheap
-	if(CONFIG_GET(flag/cache_assets) && cross_round_cachable)
+	if(config.cache_assets && cross_round_cachable)
 		load_immediately = TRUE
 
 	create_spritesheets()
@@ -118,12 +118,12 @@
 	var/css_hash = rustg_hash_string(RUSTG_HASH_MD5, css)
 	SSassets.transport.register_asset(css_name, fcopy_rsc(file_directory), file_hash=css_hash)
 
-	if(CONFIG_GET(flag/save_spritesheets))
+	if(config.save_spritesheets)
 		save_to_logs(file_name = css_name, file_location = file_directory)
 
 	fdel(file_directory)
 
-	if (CONFIG_GET(flag/cache_assets) && cross_round_cachable)
+	if (config.cache_assets && cross_round_cachable)
 		write_to_cache()
 	fully_generated = TRUE
 	// If we were ever in there, remove ourselves
@@ -176,7 +176,7 @@
 		size[SPRSZ_STRIPPED] = icon(file_directory)
 
 		// this is useful here for determining if weird sprite issues (like having a white background) are a cause of what we're doing DM-side or not since we can see the full flattened thing at-a-glance.
-		if(CONFIG_GET(flag/save_spritesheets))
+		if(config.save_spritesheets)
 			save_to_logs(file_name = png_name, file_location = file_directory)
 
 		fdel(file_directory)
@@ -235,7 +235,7 @@
 	rustg_file_write(replaced_css, replaced_css_filename)
 	SSassets.transport.register_asset(finalized_name, replaced_css_filename, file_hash=css_hash)
 
-	if(CONFIG_GET(flag/save_spritesheets))
+	if(config.save_spritesheets)
 		save_to_logs(file_name = finalized_name, file_location = replaced_css_filename)
 
 	fdel(replaced_css_filename)

@@ -25,7 +25,7 @@
 
 /// Saves the asset to the webroot taking into account namespaces and hashes.
 /datum/tg_asset_transport/webroot/proc/save_asset_to_webroot(datum/tg_asset_cache_item/ACI)
-	var/webroot = CONFIG_GET(string/asset_cdn_webroot)
+	var/webroot = config.asset_cdn_webroot
 	var/newpath = "[webroot][get_asset_suffex(ACI)]"
 	if (fexists(newpath))
 		return
@@ -39,7 +39,7 @@
 /datum/tg_asset_transport/webroot/get_asset_url(asset_name, datum/tg_asset_cache_item/asset_cache_item)
 	if (!istype(asset_cache_item))
 		asset_cache_item = SSassets.cache[asset_name]
-	var/url = CONFIG_GET(string/asset_cdn_url) //config loading will handle making sure this ends in a /
+	var/url = config.asset_cdn_url //config loading will handle making sure this ends in a /
 	return "[url][get_asset_suffex(asset_cache_item)]"
 
 /datum/tg_asset_transport/webroot/proc/get_asset_suffex(datum/tg_asset_cache_item/asset_cache_item)
@@ -76,11 +76,11 @@
 	return FALSE
 
 /datum/tg_asset_transport/webroot/validate_config(log = TRUE)
-	if (!CONFIG_GET(string/asset_cdn_url))
+	if (!config.asset_cdn_url)
 		if (log)
 			log_asset("ERROR: [type]: Invalid Config: ASSET_CDN_URL")
 		return FALSE
-	if (!CONFIG_GET(string/asset_cdn_webroot))
+	if (!config.asset_cdn_url)
 		if (log)
 			log_asset("ERROR: [type]: Invalid Config: ASSET_CDN_WEBROOT")
 		return FALSE

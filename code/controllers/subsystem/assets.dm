@@ -12,7 +12,7 @@ var/datum/subsystem/assets/SSassets
 
 /datum/subsystem/assets/OnConfigLoad()
 	var/newtransporttype = /datum/asset_transport
-	switch (CONFIG_GET(string/asset_transport))
+	switch (config.tg_asset_transport)
 		if ("webroot")
 			newtransporttype = /datum/asset_transport/webroot
 

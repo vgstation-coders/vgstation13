@@ -10,14 +10,14 @@
 
 /// Called when the transport is loaded by the config controller, not called on the default transport unless it gets loaded by a config change.
 /datum/tg_asset_transport/proc/Load()
-	if (CONFIG_GET(flag/asset_simple_preload))
+	if (config.asset_simple_preload)
 		for(var/client/C in global.clients)
 			add_timer(new /callback(src, PROC_REF(send_assets_slow), C, preload), 1 SECONDS)
 
 /// Initialize - Called when SSassets initializes.
 /datum/tg_asset_transport/proc/Initialize(list/assets)
 	preload = assets.Copy()
-	if (!CONFIG_GET(flag/asset_simple_preload))
+	if (!config.asset_simple_preload)
 		return
 	for(var/client/C in global.clients)
 		add_timer(new /callback(src, PROC_REF(send_assets_slow), C, preload), 1 SECONDS)
