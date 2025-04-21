@@ -2,15 +2,15 @@
 //Place any asset datums you create in asset_list_items.dm
 
 //all of our asset datums, used for referring to these later
-GLOBAL_LIST_EMPTY(asset_datums)
+var/list/tg_asset_datums = list()
 
 //get an assetdatum or make a new one
-//does NOT ensure it's filled, if you want that use get_asset_datum()
+//does NOT ensure it's filled, if you want that use get_tg_asset_datum()
 /proc/load_asset_datum(type)
-	return global.asset_datums[type] || new type()
+	return global.tg_asset_datums[type] || new type()
 
-/proc/get_asset_datum(type)
-	var/datum/tg_asset/loaded_asset = global.asset_datums[type] || new type()
+/proc/get_tg_asset_datum(type)
+	var/datum/tg_asset/loaded_asset = global.tg_asset_datums[type] || new type()
 	return loaded_asset.ensure_ready()
 
 /datum/tg_asset
@@ -28,7 +28,7 @@ GLOBAL_LIST_EMPTY(asset_datums)
 	var/cross_round_cachable = FALSE
 
 /datum/tg_asset/New()
-	global.asset_datums[type] = src
+	global.tg_asset_datums[type] = src
 	register()
 
 /// Stub that allows us to react to something trying to get us
@@ -127,18 +127,18 @@ GLOBAL_LIST_EMPTY(asset_datums)
 
 /datum/tg_asset/group/send(client/C)
 	for(var/type in children)
-		var/datum/tg_asset/A = get_asset_datum(type)
+		var/datum/tg_asset/A = get_tg_asset_datum(type)
 		. = A.send(C) || .
 
 /datum/tg_asset/group/get_url_mappings()
 	. = list()
 	for(var/type in children)
-		var/datum/tg_asset/A = get_asset_datum(type)
+		var/datum/tg_asset/A = get_tg_asset_datum(type)
 		. += A.get_url_mappings()
 
 /datum/tg_asset/group/unregister()
 	for (var/type in children)
-		var/datum/tg_asset/A = get_asset_datum(type)
+		var/datum/tg_asset/A = get_tg_asset_datum(type)
 		A.unregister()
 
 // -- IMPLEMENTABLE : tg_asset for changelog items

@@ -161,7 +161,7 @@
 		if (send_assets(client, file))
 			if (!(--filerate))
 				filerate = startingfilerate
-				client.browse_queue_flush()
+				client.tg_browse_queue_flush()
 			stoplag(0) //queuing calls like this too quickly can cause issues in some client versions
 
 /// Check the config is valid to load this transport

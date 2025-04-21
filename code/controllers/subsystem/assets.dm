@@ -7,10 +7,10 @@ var/datum/subsystem/assets/SSassets
 	var/list/preload = list()
 	var/datum/asset_transport/transport = new()
 
-/datum/subsystem/ambientsound/New()
+/datum/subsystem/assets/New()
 	NEW_SS_GLOBAL(SSassets)
 
-/datum/subsystem/assets/OnConfigLoad()
+/datum/subsystem/assets/Initialize()
 	var/newtransporttype = /datum/asset_transport
 	switch (config.tg_asset_transport)
 		if ("webroot")
@@ -24,7 +24,6 @@ var/datum/subsystem/assets/SSassets
 		transport = newtransport
 	transport.Load()
 
-/datum/subsystem/assets/Initialize()
 	for(var/type in typesof(/datum/tg_asset))
 		var/datum/tg_asset/A = type
 		if (type != initial(A._abstract))

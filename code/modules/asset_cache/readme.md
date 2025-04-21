@@ -14,7 +14,7 @@ Checkout asset_list.dm for the helper subclasses
 
 The `simple` subclass will most likely be of use for most cases.
 
-Call get_asset_datum() with the type of the datum you created to get your asset cache datum
+Call get_tg_asset_datum() with the type of the datum you created to get your asset cache datum
 
 Call .send(client|usr) on that datum to send the asset to the client. Depending on the asset transport this may or may not block.
 

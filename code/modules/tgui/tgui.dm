@@ -97,7 +97,7 @@
 			strict_mode = TRUE,
 			fancy = user.client.prefs.tgui_fancy,
 			assets = list(
-				get_asset_datum(/datum/asset/simple/tgui),
+				get_tg_asset_datum(/datum/tg_asset/simple/tgui),
 			))
 	else
 		window.send_message("ping")
@@ -110,16 +110,16 @@
 	return TRUE
 
 /datum/tgui/proc/send_assets()
-	var/flush_queue = window.send_asset(get_asset_datum(
+	var/flush_queue = window.send_asset(get_tg_asset_datum(
 		/datum/tg_asset/simple/namespaced/fontawesome))
-	flush_queue |= window.send_asset(get_asset_datum(
+	flush_queue |= window.send_asset(get_tg_asset_datum(
 		/datum/tg_asset/simple/namespaced/tgfont))
-	flush_queue |= window.send_asset(get_asset_datum(
+	flush_queue |= window.send_asset(get_tg_asset_datum(
 		/datum/tg_asset/json/icon_ref_map))
 	for(var/datum/tg_asset/asset in src_object.ui_assets(user))
 		flush_queue |= window.send_asset(asset)
 	if (flush_queue)
-		user.client.browse_queue_flush()
+		user.client.tg_browse_queue_flush()
 
 /**
  * public
@@ -268,7 +268,7 @@
  * Run an update cycle for this UI. Called internally by SStgui
  * every second or so.
  */
-/datum/tgui/process(seconds_per_tick, force = FALSE)
+/datum/tgui/proc/process(seconds_per_tick, force = FALSE)
 	if(closing)
 		return
 	var/datum/host = src_object.ui_host(user)
@@ -318,7 +318,8 @@
 			window = window,
 			src_object = src_object)
 		process_status()
-		DEFAULT_QUEUE_OR_CALL_VERB(VERB_CALLBACK(src, PROC_REF(on_act_message), act_type, payload, state))
+		if(src_object.ui_act(act_type, payload, src, state))
+			SStgui.update_uis(src_object)		
 		return FALSE
 	switch(type)
 		if("ready")

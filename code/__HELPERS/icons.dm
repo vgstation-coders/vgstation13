@@ -229,7 +229,7 @@
 	if(isicon(icon) && isfile(icon))
 		//icons compiled in from 'icons/path/to/dmi_file.dmi' at compile time are weird and aren't really /icon objects,
 		///but they pass both isicon() and isfile() checks. they're the easiest case since stringifying them gives us the path we want
-		var/icon_ref = text_ref(icon)
+		var/icon_ref = ref(icon)
 		var/locate_icon_string = "[locate(icon_ref)]"
 
 		icon_path = locate_icon_string
@@ -240,7 +240,7 @@
 		// the rsc reference returned by fcopy_rsc() will be stringifiable to "icons/path/to/dmi_file.dmi"
 		var/rsc_ref = fcopy_rsc(icon)
 
-		var/icon_ref = text_ref(rsc_ref)
+		var/icon_ref = ref(rsc_ref)
 
 		var/icon_path_string = "[locate(icon_ref)]"
 
@@ -250,7 +250,7 @@
 		var/rsc_ref = fcopy_rsc(icon)
 		//if its the text path of an existing dmi file, the rsc reference returned by fcopy_rsc() will be stringifiable to a dmi path
 
-		var/rsc_ref_ref = text_ref(rsc_ref)
+		var/rsc_ref_ref = ref(rsc_ref)
 		var/rsc_ref_string = "[locate(rsc_ref_ref)]"
 
 		icon_path = rsc_ref_string
@@ -258,4 +258,16 @@
 	if(is_valid_dmi_file(icon_path))
 		return icon_path
 
+	return FALSE
+
+///given a text string, returns whether it is a valid dmi icons folder path
+/proc/is_valid_dmi_file(icon_path)
+	if(!istext(icon_path) || !length(icon_path))
+		return FALSE
+
+	var/is_in_icon_folder = findtextEx(icon_path, "icons/")
+	var/is_dmi_file = findtextEx(icon_path, ".dmi")
+
+	if(is_in_icon_folder && is_dmi_file)
+		return TRUE
 	return FALSE

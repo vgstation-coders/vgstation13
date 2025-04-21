@@ -7,4 +7,5 @@
 #define QDEL_LIST_CUT(L) QDEL_LIST(L); L.Cut()
 #define QDEL_LIST_ASSOC_CUT(L) QDEL_LIST_ASSOC(L); L.Cut()
 
-#define QDELETED(X) (!X || !X || X.gc_destroyed)
+// QDEL macros borrowed from TG
+#define QDELETED(X) (!X || !X || X.gcDestroyed)

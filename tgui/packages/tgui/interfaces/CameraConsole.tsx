@@ -31,7 +31,6 @@ type Camera = {
  * Returns previous and next camera names relative to the currently
  * active camera.
  */
-/*
 const prevNextCamera = (
   cameras: Camera[],
   activeCamera: Camera & { status: BooleanLike },
@@ -61,13 +60,12 @@ const prevNextCamera = (
       return [cameras[index - 1].ref, cameras[index + 1].ref];
   }
 };
-*/
+
 /**
  * Camera selector.
  *
  * Filters cameras, applies search terms and sorts the alphabetically.
  */
-/*
 const selectCameras = (cameras: Camera[], searchText = ''): Camera[] => {
   let queriedCameras = filter(cameras, (camera: Camera) => !!camera.name);
   if (searchText) {
@@ -81,27 +79,17 @@ const selectCameras = (cameras: Camera[], searchText = ''): Camera[] => {
 
   return queriedCameras;
 };
-*/
+
 export const CameraConsole = (props) => {
   return (
     <Window width={850} height={708}>
       <Window.Content>
-      <Stack.Item>
-        <Input
-          autoFocus
-          expensive
-          fluid
-          mt={1}
-          placeholder="Search for a camera"
-          value="I'm just a small camera console."
-        />
-      </Stack.Item>
+        <CameraContent />
       </Window.Content>
     </Window>
   );
 };
 
-/*
 export const CameraContent = (props) => {
   const [searchText, setSearchText] = useState('');
 
@@ -116,7 +104,6 @@ export const CameraContent = (props) => {
     </Stack>
   );
 };
-
 
 const CameraSelector = (props) => {
   const { act, data } = useBackend<Data>();
@@ -240,4 +227,3 @@ const CameraControls = (props: { searchText: string }) => {
     </Section>
   );
 };
-*/

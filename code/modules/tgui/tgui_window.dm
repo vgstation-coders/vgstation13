@@ -58,7 +58,7 @@
  * optional inline_js string - Custom JS to inject.
  * optional inline_css string - Custom CSS to inject.
  */
-/datum/tgui_window/proc/initialize(
+/datum/tgui_window/initialize(
 		strict_mode = FALSE,
 		fancy = FALSE,
 		assets = list(),
@@ -90,7 +90,7 @@
 	html = replacetextEx(html, "\[tgui:strictMode]", strict_mode)
 	// Inject assets
 	var/inline_assets_str = ""
-	for(var/datum/asset/asset in assets)
+	for(var/datum/tg_asset/asset in assets)
 		var/mappings = asset.get_url_mappings()
 		for(var/name in mappings)
 			var/url = mappings[name]
@@ -136,7 +136,7 @@
 		inline_js = initial_inline_js,
 		inline_css = initial_inline_css)
 	// Resend assets
-	for(var/datum/asset/asset in sent_assets)
+	for(var/datum/tg_asset/asset in sent_assets)
 		send_asset(asset)
 
 /**
@@ -295,17 +295,16 @@
  *
  * return bool - TRUE if any assets had to be sent to the client
  */
-/datum/tgui_window/proc/send_asset(datum/asset/asset)
+/datum/tgui_window/proc/send_asset(datum/tg_asset/asset)
 	if(!client || !asset)
 		return
 	sent_assets |= list(asset)
 	. = asset.send(client)
-	if(istype(asset, /datum/asset/spritesheet))
-		var/datum/asset/spritesheet/spritesheet = asset
+	/* FIXME : TG CSS
+	if(istype(asset, /datum/tg_asset/spritesheet))
+		var/datum/tg_asset/spritesheet/spritesheet = asset
 		send_message("asset/stylesheet", spritesheet.css_filename())
-	else if(istype(asset, /datum/asset/spritesheet_batched))
-		var/datum/asset/spritesheet_batched/spritesheet = asset
-		send_message("asset/stylesheet", spritesheet.css_filename())
+	*/
 	send_raw_message(asset.get_serialized_url_mappings())
 
 /**
@@ -369,9 +368,11 @@
 	switch(type)
 		if("ping")
 			send_message("ping/reply", payload)
+		/*
 		if("visible")
 			visible = TRUE
 			SEND_SIGNAL(src, COMSIG_TGUI_WINDOW_VISIBLE, client)
+		*/
 		if("suspend")
 			close(can_be_suspended = TRUE)
 		if("close")
@@ -380,8 +381,10 @@
 			client << link(href_list["url"])
 		if("cacheReloaded")
 			reinitialize()
+		/* Unimplemented
 		if("chat/resend")
 			SSchat.handle_resend(client, payload)
+		*/
 		if("oversizedPayloadRequest")
 			var/payload_id = payload["id"]
 			var/chunk_count = payload["chunkCount"]
@@ -394,8 +397,8 @@
 			append_payload_chunk(payload_id, payload["chunk"])
 			send_message("acknowlegePayloadChunk", list("id" = payload_id))
 
-/datum/tgui_window/vv_edit_var(var_name, var_value)
-	return var_name != NAMEOF(src, id) && ..()
+/datum/tgui_window/variable_edited(variable_name, old_value, new_value)
+	return (variable_name != NAMEOF(src, id)) && ..()
 
 /datum/tgui_window/proc/create_oversized_payload(payload_id, message_type, chunk_count)
 	if(oversized_payloads[payload_id])
@@ -405,7 +408,7 @@
 		"type" = message_type,
 		"count" = chunk_count,
 		"chunks" = list(),
-		"timeout" = add_timer(new /callback(src, PROC_REF(remove_oversized_payload), payload_id), 1 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE|TIMER_STOPPABLE)
+		"timeout" = add_timer(new /callback(src, PROC_REF(remove_oversized_payload), payload_id), 1 SECONDS)
 	)
 
 /datum/tgui_window/proc/append_payload_chunk(payload_id, chunk)
@@ -415,13 +418,13 @@
 	var/list/chunks = payload["chunks"]
 	chunks += chunk
 	if(length(chunks) >= payload["count"])
-		deltimer(payload["timeout"])
+		del_timer(payload["timeout"])
 		var/message_type = payload["type"]
 		var/final_payload = chunks.Join()
 		remove_oversized_payload(payload_id)
 		on_message(message_type, json_decode(final_payload), list("type" = message_type, "payload" = final_payload, "tgui" = TRUE, "window_id" = id))
 	else
-		payload["timeout"] = add_timer(new /callback(src, PROC_REF(remove_oversized_payload), payload_id), 1 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE|TIMER_STOPPABLE)
+		payload["timeout"] = add_timer(new /callback(src, PROC_REF(remove_oversized_payload), payload_id), 1 SECONDS)
 
 /datum/tgui_window/proc/remove_oversized_payload(payload_id)
 	oversized_payloads -= payload_id

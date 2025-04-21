@@ -10,7 +10,7 @@
  * and view for robots.
  */
 
-var/datum/ui_state/dafult/default_state = new
+var/datum/ui_state/default/default_state = new
 
 /datum/ui_state/default/can_use_topic(src_object, mob/user)
 	return user.default_can_use_topic(src_object) // Call the individual mob-overridden procs.
@@ -22,7 +22,7 @@ var/datum/ui_state/dafult/default_state = new
 	. = shared_ui_interaction(src_object)
 	if(. > UI_CLOSE && loc) //must not be in nullspace.
 		. = min(., shared_living_ui_distance(src_object)) // Check the distance...
-	if(. == UI_INTERACTIVE && !ISADVANCEDTOOLUSER(src)) // unhandy living mobs can only look, not touch.
+	if(. == UI_INTERACTIVE && !dexterity_check()) // unhandy living mobs can only look, not touch.
 		return UI_UPDATE
 
 /mob/living/silicon/robot/default_can_use_topic(src_object)

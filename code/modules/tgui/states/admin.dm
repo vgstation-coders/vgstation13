@@ -20,7 +20,7 @@ var/list/datum/ui_state/admin_state/admin_states = list()
 	src.required_perms = required_perms
 
 /datum/ui_state/admin_state/can_use_topic(src_object, mob/user)
-	if(user.client.holder(required_perms))
+	if(user.check_rights(required_perms))
 		return UI_INTERACTIVE
 	return UI_CLOSE
 
