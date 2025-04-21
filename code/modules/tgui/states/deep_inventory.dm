@@ -10,7 +10,7 @@
  * (backpack, box, toolbox, etc) inventory.
  */
 
-GLOBAL_DATUM_INIT(deep_inventory_state, /datum/ui_state/deep_inventory_state, new)
+var/datum/ui_state/deep_inventory_state/deep_inventory_state = new
 
 /datum/ui_state/deep_inventory_state/can_use_topic(src_object, mob/user)
 	if(!user.contains(src_object))

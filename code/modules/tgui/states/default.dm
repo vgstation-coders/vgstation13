@@ -10,7 +10,7 @@
  * and view for robots.
  */
 
-GLOBAL_DATUM_INIT(default_state, /datum/ui_state/default, new)
+var/datum/ui_state/dafult/default_state = new
 
 /datum/ui_state/default/can_use_topic(src_object, mob/user)
 	return user.default_can_use_topic(src_object) // Call the individual mob-overridden procs.

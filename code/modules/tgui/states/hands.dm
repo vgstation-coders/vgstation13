@@ -9,7 +9,7 @@
  * Checks that the src_object is in the user's hands.
  */
 
-GLOBAL_DATUM_INIT(hands_state, /datum/ui_state/hands_state, new)
+var/datum/ui_state/hands_state/hands_state = new
 
 /datum/ui_state/hands_state/can_use_topic(src_object, mob/user)
 	. = user.shared_ui_interaction(src_object)

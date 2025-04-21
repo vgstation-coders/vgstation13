@@ -9,7 +9,7 @@
  * Short-circuits the default state to only check physical distance.
  */
 
-GLOBAL_DATUM_INIT(physical_state, /datum/ui_state/physical, new)
+var/datum/ui_state/physical/physical_state = new
 
 /datum/ui_state/physical/can_use_topic(src_object, mob/user)
 	. = user.shared_ui_interaction(src_object)
@@ -35,7 +35,7 @@ GLOBAL_DATUM_INIT(physical_state, /datum/ui_state/physical, new)
  * Short-circuits the default state to only check physical distance, being in view doesn't matter
  */
 
-GLOBAL_DATUM_INIT(physical_obscured_state, /datum/ui_state/physical_obscured_state, new)
+var/datum/ui_state/physical_obscured_state/physical_obscured_state = new
 
 /datum/ui_state/physical_obscured_state/can_use_topic(src_object, mob/user)
 	. = user.shared_ui_interaction(src_object)
