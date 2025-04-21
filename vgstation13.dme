@@ -2942,7 +2942,6 @@
 #include "code\modules\tgui_input\text.dm"
 #include "code\modules\tgui_input\say_modal\modal.dm"
 #include "code\modules\tgui_input\say_modal\speech.dm"
-#include "code\modules\tgui_input\say_modal\typing.dm"
 #include "code\modules\tgui_panel\audio.dm"
 #include "code\modules\tgui_panel\external.dm"
 #include "code\modules\tgui_panel\telemetry.dm"

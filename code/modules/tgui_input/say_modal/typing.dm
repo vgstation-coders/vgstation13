@@ -1,3 +1,5 @@
+// -- Unimplemented typing indicator via TGUI. Might be worth looking at one day. --
+
 /** Creates a thinking indicator over the mob. */
 /mob/proc/create_thinking_indicator()
 	return

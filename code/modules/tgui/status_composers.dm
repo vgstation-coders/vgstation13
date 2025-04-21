@@ -50,10 +50,9 @@
 
 /// Returns a UI status such that those without blocked hands will be able to interact,
 /// but everyone else can only watch.
+/// TODO: implement (allowed source)
 /proc/ui_status_user_has_free_hands(mob/user, atom/source, allowed_source)
-	if(allowed_source)
-		return HAS_TRAIT_NOT_FROM(user, TRAIT_HANDS_BLOCKED, allowed_source) ? UI_UPDATE : UI_INTERACTIVE
-	return HAS_TRAIT(user, TRAIT_HANDS_BLOCKED) ? UI_UPDATE : UI_INTERACTIVE
+	return user.find_empty_hand_index() ? UI_UPDATE : UI_INTERACTIVE
 
 /// Returns a UI status such that advanced tool users will be able to interact,
 /// but everyone else can only watch.
