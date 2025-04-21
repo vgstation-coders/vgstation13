@@ -19,6 +19,11 @@
 	feedback_add_details("admin_verb","DG2") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
+/// 04/2025
+/// Simple & easy way to prevent things from being procCalled.
+/// TODO: should be back-implemented on sensitive things...
+/datum/proc/CanProcCall(var/procname)
+	return TRUE
 
 /* 21st sept 2010
 Updated by Skie -- Still not perfect but better!
@@ -83,6 +88,9 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			message_admins("[key_name(usr)] used atom proc call on the db controller.")
 			log_admin("[key_name(usr)] used atom proc call on the db controller.")
 			return
+
+		if (!target.CanProcCall(procname))
+			to_chat(usr, "<span>Invalid proc call target</span>")
 
 		if(target && !hascall(target, procname))
 			to_chat(usr, "<span class='red'>Error: callproc(): target has no such call [procname].</span>")
