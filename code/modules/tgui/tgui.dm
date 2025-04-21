@@ -36,7 +36,7 @@
 	/// Topic state used to determine status/interactability.
 	var/datum/ui_state/state = null
 	/// Rate limit client refreshes to prevent DoS.
-	COOLDOWN_DECLARE(refresh_cooldown)
+	var/refresh_cooldown = 0
 
 /**
  * public
@@ -54,11 +54,11 @@
  */
 /datum/tgui/New(mob/user, datum/src_object, interface, title, ui_x, ui_y)
 	log_tgui(user,
-		"new [interface] fancy [user?.client?.prefs.read_preference(/datum/preference/toggle/tgui_fancy)]",
+		"new [interface] fancy [user?.client?.prefs.tgui_fancy]",
 		src_object = src_object)
 	src.user = user
 	src.src_object = src_object
-	src.window_key = "[REF(src_object)]-main"
+	src.window_key = "\ref[src_object]-main"
 	src.interface = interface
 	if(title)
 		src.title = title
@@ -95,7 +95,7 @@
 	if(!window.is_ready())
 		window.initialize(
 			strict_mode = TRUE,
-			fancy = user.client.prefs.read_preference(/datum/preference/toggle/tgui_fancy),
+			fancy = user.client.prefs.tgui_fancy,
 			assets = list(
 				get_asset_datum(/datum/asset/simple/tgui),
 			))
@@ -111,12 +111,12 @@
 
 /datum/tgui/proc/send_assets()
 	var/flush_queue = window.send_asset(get_asset_datum(
-		/datum/asset/simple/namespaced/fontawesome))
+		/datum/tg_asset/simple/namespaced/fontawesome))
 	flush_queue |= window.send_asset(get_asset_datum(
-		/datum/asset/simple/namespaced/tgfont))
+		/datum/tg_asset/simple/namespaced/tgfont))
 	flush_queue |= window.send_asset(get_asset_datum(
-		/datum/asset/json/icon_ref_map))
-	for(var/datum/asset/asset in src_object.ui_assets(user))
+		/datum/tg_asset/json/icon_ref_map))
+	for(var/datum/tg_asset/asset in src_object.ui_assets(user))
 		flush_queue |= window.send_asset(asset)
 	if (flush_queue)
 		user.client.browse_queue_flush()
@@ -232,15 +232,15 @@
 		"status" = status,
 		"interface" = list(
 			"name" = interface,
-			"layout" = user.client.prefs.read_preference(src_object.layout_prefs_used),
+			"layout" = user.client.prefs.layout_prefs_used,
 		),
 		"refreshing" = refreshing,
 		"window" = list(
 			"key" = window_key,
 			"size" = window_size,
-			"fancy" = user.client.prefs.read_preference(/datum/preference/toggle/tgui_fancy),
-			"locked" = user.client.prefs.read_preference(/datum/preference/toggle/tgui_lock),
-			"scale" = user.client.prefs.read_preference(/datum/preference/toggle/ui_scale),
+			"fancy" = user.client.prefs.tgui_fancy,
+			"locked" = user.client.prefs.tgui_lock,
+			"scale" = user.client.prefs.tgui_scale,
 		),
 		"client" = list(
 			"ckey" = user.client.ckey,

@@ -247,10 +247,10 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/tgui_input = FALSE
 	var/tgui_input_large = FALSE
 	var/tgui_input_swapped = FALSE
+	var/tgui_lock = FALSE
+	var/tgui_scale = TRUE
+	var/layout_prefs_used = FALSE
 
-	// To implement
-	//var/layout_prefs_used =
-	//var/tgui_lock =
 	var/fps = -1
 
 	var/client/client
