@@ -3,7 +3,7 @@
 
 import { filter, sort } from 'common/collections';
 import { useState } from 'react';
-import { Box, Button, Dropdown, Flex, Input, LabeledList, NoticeBox, Popper, Section, Stack } from 'tgui-core/components';
+import { Box, Button, Dropdown, Flex, Input, LabeledList, NoticeBox, Section, Stack } from 'tgui-core/components';
 import { classes } from 'tgui-core/react';
 import { createSearch } from 'tgui-core/string';
 
@@ -17,7 +17,7 @@ type Data = {
 
 type BibleStyle = {
   name: string;
-  icon: string;
+  iconName: string;
 };
 
 type Religion = {
@@ -244,7 +244,7 @@ export const DefinedReligionData = ({ religion }) => {
 export const CustomReligion = () => {
   const { act, data } = useBackend<Data>();
   const bibleStyles = data.bibleStyles;
-  const [iconMenuOpen, setIconMenuOpen] = useState('');
+  const [iconMenuOpen, setIconMenuOpen] = useState(false);
   const [
     chosenData,
     setChosenData,
@@ -295,8 +295,8 @@ export const CustomReligion = () => {
           value={chosenData.bibleName}
         />
             <LabeledList.Item key="Bible style" label="Bible style">
-              <Popper popperContent={iconMenuOpen && (
-                <Box width="200px" height={`${32*4}px`} backgroundColor="grey" padding="5px">
+              {iconMenuOpen ?
+              <Box width="200px" height={`${32*4}px`} backgroundColor="grey" padding="5px">
                   <Stack vertical fill>
                     <Stack.Item overflowX="hidden" overflowY="hidden">
                       <Flex wrap>
@@ -314,7 +314,7 @@ export const CustomReligion = () => {
                                 <span
                                   className={classes([
                                     'bible32x32',
-                                    style.icon,
+                                    style.iconName,
                                   ])}
                                   style={{
                                     'vertical-align': 'middle',
@@ -326,12 +326,9 @@ export const CustomReligion = () => {
                       </Flex>
                     </Stack.Item>
                   </Stack>
-                </Box>
-              )} options={{
-                placement: "right",
-              }}>
+              </Box> : ""}
                 <Button
-                  onClick={() => setIconMenuOpen(!iconMenuOpen)}>
+                  onClick={() => setIconMenuOpen(iconMenuOpen => !iconMenuOpen)}>
                   <span
                     className={classes([
                       'bible32x32',
@@ -342,7 +339,6 @@ export const CustomReligion = () => {
                       'horizontal-align': 'middle',
                     }} />
                 </Button>
-              </Popper>
             </LabeledList.Item>
           </LabeledList.Item>
           <LabeledList.Item key="Male adept" label="Male adept">
