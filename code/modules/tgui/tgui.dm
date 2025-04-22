@@ -118,6 +118,19 @@
 		/datum/tg_asset/json/icon_ref_map))
 	for(var/datum/tg_asset/asset in src_object.ui_assets(user))
 		flush_queue |= window.send_asset(asset)
+
+	// -- Legacy code for /vg/ style spritesheet datums --
+	// TOFIX!!! One thing at the time..
+	for(var/asset_type in src_object.ui_assets(user))
+		message_admins("Legacy style spreedsheet datum sent: [asset_type]")
+		window.sent_assets |= list(asset_type)
+		var/datum/asset/instance = get_asset_datum(asset_type)
+		instance.send(window.client)
+		if(istype(instance, /datum/asset/spritesheet))
+			var/datum/asset/spritesheet/spritesheet = instance
+			window.send_message("asset/stylesheet", spritesheet.css_filename())
+		window.send_raw_message(TGUI_CREATE_MESSAGE("asset/mappings", instance.get_url_mappings()))
+	// -- END legacy code for /vg/ style spritesheet datums --
 	if (flush_queue)
 		user.client.tg_browse_queue_flush()
 
@@ -319,7 +332,7 @@
 			src_object = src_object)
 		process_status()
 		if(src_object.ui_act(act_type, payload, src, state))
-			SStgui.update_uis(src_object)		
+			SStgui.update_uis(src_object)
 		return FALSE
 	switch(type)
 		if("ready")

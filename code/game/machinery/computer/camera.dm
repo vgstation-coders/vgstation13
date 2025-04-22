@@ -132,7 +132,6 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 /obj/machinery/computer/security/ui_static_data()
 	var/list/data = list()
-	data["title"] = name
 	data["mapRef"] = map_name
 	var/list/cameras = get_available_cameras()
 	data["cameras"] = list()
@@ -140,17 +139,20 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		var/obj/machinery/camera/C = cameras[i]
 		data["cameras"] += list(list(
 			name = C.c_tag,
+			ref = ref(C),
 		))
 
 	return data
 
 /obj/machinery/computer/security/ui_act(action, params)
 	. = ..()
+	message_admins("Active camera change")
 	if(.)
 		return
 
 	if(action == "switch_camera")
 		var/c_tag = params["name"]
+		message_admins("Act = switch_camera, [c_tag]")
 		var/list/cameras = get_available_cameras()
 		var/obj/machinery/camera/selected_camera = cameras[c_tag]
 		active_camera = selected_camera

@@ -216,7 +216,7 @@ var/datum/subsystem/tgui/SStgui
  */
 /datum/subsystem/tgui/proc/close_uis(datum/src_object)
 	// No UIs opened for this src_object
-	if(!(src_object?.open_uis.len))
+	if(!(src_object?.open_uis?.len))
 		return 0
 	var/count = 0
 	for(var/datum/tgui/ui in src_object.open_uis)

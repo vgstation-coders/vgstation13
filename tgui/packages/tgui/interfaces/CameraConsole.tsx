@@ -17,7 +17,6 @@ import { Window } from '../layouts';
 type Data = {
   activeCamera: Camera & { status: BooleanLike };
   cameras: Camera[];
-  can_spy: BooleanLike;
   mapRef: string;
   network: string[];
 };
@@ -143,7 +142,7 @@ const CameraSelector = (props) => {
               ])}
               onClick={() =>
                 act('switch_camera', {
-                  camera: camera.ref,
+                  name: camera.name,
                 })
               }
             >
@@ -158,7 +157,7 @@ const CameraSelector = (props) => {
 
 const CameraControls = (props: { searchText: string }) => {
   const { act, data } = useBackend<Data>();
-  const { activeCamera, can_spy, mapRef } = data;
+  const { activeCamera, mapRef } = data;
   const { searchText } = props;
 
   const cameras = selectCameras(data.cameras, searchText);
@@ -175,16 +174,6 @@ const CameraControls = (props: { searchText: string }) => {
                 <NoticeBox info>{activeCamera.name}</NoticeBox>
               ) : (
                 <NoticeBox danger>No input signal</NoticeBox>
-              )}
-            </Stack.Item>
-
-            <Stack.Item>
-              {!!can_spy && (
-                <Button
-                  icon="magnifying-glass"
-                  tooltip="Track Person"
-                  onClick={() => act('start_tracking')}
-                />
               )}
             </Stack.Item>
 

@@ -11,6 +11,12 @@ var/datum/subsystem/assets/SSassets
 	NEW_SS_GLOBAL(SSassets)
 
 /datum/subsystem/assets/Initialize()
+
+	// -- FIXME ASSETS:.
+	// -- Old, crusty /vg/ style of populating assets (relying on 'global cache.dm')
+	// TOFIX asap!!! Having two concurrent, parralel & independant asset delivery system is BAD
+	populate_asset_cache()
+
 	var/newtransporttype = /datum/asset_transport
 	switch (config.tg_asset_transport)
 		if ("webroot")
