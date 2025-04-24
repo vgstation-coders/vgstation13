@@ -111,9 +111,9 @@
 
 /datum/tgui/proc/send_assets()
 	var/flush_queue = window.send_asset(get_tg_asset_datum(
-		/datum/tg_asset/simple/namespaced/fontawesome))
+		/datum/tg_asset/simple/fontawesome))
 	flush_queue |= window.send_asset(get_tg_asset_datum(
-		/datum/tg_asset/simple/namespaced/tgfont))
+		/datum/tg_asset/simple/tgfont))
 	flush_queue |= window.send_asset(get_tg_asset_datum(
 		/datum/tg_asset/json/icon_ref_map))
 	for(var/datum/tg_asset/asset in src_object.ui_assets(user))
@@ -122,7 +122,6 @@
 	// -- Legacy code for /vg/ style spritesheet datums --
 	// TOFIX!!! One thing at the time..
 	for(var/asset_type in src_object.ui_assets(user))
-		message_admins("Legacy style spreedsheet datum sent: [asset_type]")
 		window.sent_assets |= list(asset_type)
 		var/datum/asset/instance = get_asset_datum(asset_type)
 		instance.send(window.client)

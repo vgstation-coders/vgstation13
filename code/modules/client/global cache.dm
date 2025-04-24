@@ -453,12 +453,11 @@ var/list/asset_datums = list()
 
 /datum/asset/simple/fontawesome
 	assets = list(
-		"fa-regular-400.eot"  = 'html/font-awesome/webfonts/fa-regular-400.eot',
-		"fa-regular-400.woff" = 'html/font-awesome/webfonts/fa-regular-400.woff',
-		"fa-solid-900.eot"    = 'html/font-awesome/webfonts/fa-solid-900.eot',
-		"fa-solid-900.woff"   = 'html/font-awesome/webfonts/fa-solid-900.woff',
-		"font-awesome.css"    = 'html/font-awesome/css/all.min.css',
-		"v4shim.css"          = 'html/font-awesome/css/v4-shims.min.css'
+		"fa-regular-400.ttf" = 'html/font-awesome/webfonts/fa-regular-400.ttf',
+		"fa-solid-900.ttf" = 'html/font-awesome/webfonts/fa-solid-900.ttf',
+		"fa-v4compatibility.ttf" = 'html/font-awesome/webfonts/fa-v4compatibility.ttf',
+		"v4shim.css" = 'html/font-awesome/css/v4-shims.min.css',
+		"font-awesome.css" = 'html/font-awesome/css/all.min.css',
 	)
 
 /datum/asset/simple/tgui
@@ -707,17 +706,3 @@ var/list/asset_datums = list()
 
 		Insert(icon_state, I)
 	return ..()
-
-
-// -- TG asset datums frankenstein monster --
-
-/datum/asset
-	var/cached_serialized_url_mappings
-
-/// Returns a cached tgui message of URL mappings
-/// NB: the TG version of this is a lot more complex but just work with me here
-/datum/asset/proc/get_serialized_url_mappings()
-	if (isnull(cached_serialized_url_mappings))
-		cached_serialized_url_mappings = TGUI_CREATE_MESSAGE("asset/mappings", get_url_mappings())
-
-	return cached_serialized_url_mappings

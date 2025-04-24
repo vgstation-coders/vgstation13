@@ -91,9 +91,11 @@
 	// Inject assets
 	var/inline_assets_str = ""
 	for(var/datum/tg_asset/asset in assets)
+		to_chat(world, "<h2>inject asset [asset] into tgui</h2>")
 		var/mappings = asset.get_url_mappings()
 		for(var/name in mappings)
 			var/url = mappings[name]
+			to_chat(world, "<h2>inject [name] to [url]</h2>")
 			// Not encoding since asset strings are considered safe
 			if(copytext(name, -4) == ".css")
 				inline_assets_str += "Byond.loadCss('[url]', true);\n"
@@ -300,11 +302,13 @@
 		return
 	sent_assets |= list(asset)
 	. = asset.send(client)
+	message_admins("window [src] for [locked_by] sent out [asset].")
 	/* FIXME : TG CSS
 	if(istype(asset, /datum/tg_asset/spritesheet))
 		var/datum/tg_asset/spritesheet/spritesheet = asset
 		send_message("asset/stylesheet", spritesheet.css_filename())
 	*/
+	message_admins("sending: [asset.get_serialized_url_mappings()]")
 	send_raw_message(asset.get_serialized_url_mappings())
 
 /**
