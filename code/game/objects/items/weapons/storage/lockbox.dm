@@ -29,6 +29,10 @@
 			electronics.conf_access = req_one_access
 			electronics.one_access = 1
 
+/obj/item/weapon/storage/lockbox/Destroy()
+	QDEL_NULL(electronics)
+	. = ..()
+
 /obj/item/weapon/storage/lockbox/nolock
 	req_one_access = null
 	startswithelectronics = FALSE
