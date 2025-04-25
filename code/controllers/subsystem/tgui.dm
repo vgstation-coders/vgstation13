@@ -298,7 +298,6 @@ var/datum/subsystem/tgui/SStgui
 	ui.user.tgui_open_uis |= ui
 	var/list/uis = open_uis_by_src[key]
 	uis |= ui
-	open_uis |= ui
 
 /**
  * private
