@@ -316,7 +316,9 @@ var/datum/subsystem/tgui/SStgui
 	// If the user exists, remove it from them too.
 	if(ui.user)
 		ui.user.tgui_open_uis -= ui
-	if(ui.src_object)
+	// I am FAIRLY SURE this entire fucking list is placebo and is never used by anything
+	// But maybe this is for future-proofing ?
+	if(ui.src_object.open_uis)
 		ui.src_object.open_uis -= ui
 	return TRUE
 
