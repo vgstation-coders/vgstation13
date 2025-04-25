@@ -3080,7 +3080,7 @@
 		var/info_2 = ""
 		if(P.img)
 			usr << browse_rsc(P.img.img, "tmp_photo.png")
-			info_2 = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br>"
+			info_2 = "<img src='tmp_photo.png' width='192' style='image-rendering: pixelated' /><br>"
 		usr << browse("<HTML><HEAD><TITLE>Centcomm Fax Message</TITLE></HEAD><BODY>[info_2][P.info][P.stamps]</BODY></HTML>", "window=Centcomm Fax Message")
 
 	else if(href_list["CentcommFaxReply"])

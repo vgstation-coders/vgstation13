@@ -40,11 +40,11 @@ export const MechaControlConsole = (props) => {
 };
 
 const Mechas = (props) => {
+  const { act } = useBackend<Data>();
   const { mechas } = props;
   const [messageMechas, setMessageMechas] = useState('messageMechas', []);
   const [messageText, setMessageText] = useState('messageText', '');
 
-  const { act } = useBackend<Data>();
   if (!mechas.length) {
     return (
       <NoticeBox>
@@ -110,7 +110,7 @@ const Mechas = (props) => {
               width="80px"
               mx="5px"
               style={{
-                '-ms-interpolation-mode': 'nearest-neighbor',
+                'image-rendering': 'pixelated',
               }}
 
             />
