@@ -69,7 +69,7 @@ export const Gps = (props) => {
             <Button.Input
               content={"Set tag: "+gpstag}
               currentValue={gpstag}
-              onCommit={(e, value) => act('set_tag', { 'new_tag': value })} />
+              onCommit={(e, value) => (act('set_tag', { 'new_tag': value }))} />
           </Section>
         )}
         {!emped && !!transmitting && (

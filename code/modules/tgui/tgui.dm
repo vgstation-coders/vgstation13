@@ -295,9 +295,9 @@
 			src_object = src_object)
 		close(can_be_suspended = FALSE)
 		return
-	// Update through a normal call to ui_interact
+	// Update through a normal call to tgui_interact
 	if(status != UI_DISABLED && (autoupdate || force))
-		src_object.ui_interact(user, src)
+		src_object.tgui_interact(user, src)
 		return
 	// Update status only
 	var/needs_update = process_status()

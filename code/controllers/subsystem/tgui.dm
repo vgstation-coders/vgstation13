@@ -15,6 +15,8 @@ var/datum/subsystem/tgui/SStgui
 	var/list/current_run = list()
 	/// A list of all UIs
 	var/list/all_uis = list()
+	/// All curent open UIs
+	open_uis = list()
 	/// A list of open UIs, grouped by src_object.
 	var/list/open_uis_by_src = list()
 	/// The HTML base used for all UIs.
@@ -53,6 +55,7 @@ var/datum/subsystem/tgui/SStgui
 	var/list/current_run = src.current_run
 	while(current_run.len)
 		var/datum/tgui/ui = current_run[current_run.len]
+		message_admins("processing [ui]... for [ui.user]")
 		current_run.len--
 		// TODO: Move user/src_object check to process()
 		if(ui?.user && ui.src_object)
@@ -298,6 +301,8 @@ var/datum/subsystem/tgui/SStgui
 	ui.user.tgui_open_uis |= ui
 	var/list/uis = open_uis_by_src[key]
 	uis |= ui
+	open_uis |= ui
+	all_uis |= ui
 
 /**
  * private
@@ -311,12 +316,15 @@ var/datum/subsystem/tgui/SStgui
 /datum/subsystem/tgui/proc/on_close(datum/tgui/ui)
 	// Remove it from the list of processing UIs.
 	all_uis -= ui
+	open_uis -= ui
+	var/key = "[ref(ui.src_object)]"
+	open_uis_by_src[key] -= ui
+	if (!length(open_uis_by_src[key]))
+		open_uis_by_src -= key
 	current_run -= ui
 	// If the user exists, remove it from them too.
 	if(ui.user)
 		ui.user.tgui_open_uis -= ui
-	// I am FAIRLY SURE this entire fucking list is placebo and is never used by anything
-	// But maybe this is for future-proofing ?
 	if(ui.src_object.open_uis)
 		ui.src_object.open_uis -= ui
 	return TRUE
