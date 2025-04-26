@@ -127,7 +127,7 @@ var/list/arcane_tomes = list()
 
 	dat += {"</div></div></div>"}
 
-	return HTML_SKELETON_TITLE_STYLE(title, dat, style)
+	return HTML_SKELETON_TITLE_STYLE(title, dat, body_style)
 
 /obj/item/weapon/tome/proc/page_special()
 	var/dat = null

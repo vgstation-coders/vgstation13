@@ -698,7 +698,7 @@ var/const/MAX_SAVE_SLOTS = 16
 		<a href=\"?_src_=prefs;task=reset;preference=disabilities\">\[Reset\]</a>
 		</center></tt>"}
 	user << browse(null, "window=preferences")
-	user << browse(HTML, "window=disabil;size=350x300")
+	user << browse(HTML_SKELETON(HTML), "window=disabil;size=350x300")
 	return
 
 /datum/preferences/proc/SetRecords(mob/user)
@@ -731,7 +731,7 @@ var/const/MAX_SAVE_SLOTS = 16
 		<a href=\"byond://?src=\ref[user];preference=records;records=-1\">\[Done\]</a>
 		</center></tt>"}
 	user << browse(null, "window=preferences")
-	user << browse(HTML, "window=records;size=350x300")
+	user << browse(HTML_SKELETON(HTML), "window=records;size=350x300")
 	return
 
 
