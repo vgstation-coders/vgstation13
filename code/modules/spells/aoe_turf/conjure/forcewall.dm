@@ -15,7 +15,7 @@
 
 	hud_state = "wiz_shield"
 
-	price = 0.5 * Sp_BASE_PRICE //Half of the normal spell price
+	price = 0.5 * SP_BASE_PRICE //Half of the normal spell price
 
 /spell/aoe_turf/conjure/forcewall/mime
 	name = "Invisible wall"

@@ -17,7 +17,7 @@
 
 	hud_state = "blackout"
 
-	price = 0.25 * Sp_BASE_PRICE
+	price = 0.25 * SP_BASE_PRICE
 
 /spell/aoe_turf/lightbulb/cast(list/targets)
 

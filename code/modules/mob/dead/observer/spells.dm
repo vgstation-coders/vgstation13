@@ -70,7 +70,7 @@ var/global/list/boo_phrases_silicon=list(
 	spell_flags = STATALLOWED | GHOSTCAST | INCLUDEUSER
 
 	school = "transmutation"
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 0
 	invocation = ""
 	invocation_type = SpI_NONE

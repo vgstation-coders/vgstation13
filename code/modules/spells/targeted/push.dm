@@ -12,7 +12,7 @@
 	invocation_type = SpI_SHOUT
 	range = 1
 	cooldown_min = 10
-	level_max = list(Sp_TOTAL = 4, Sp_SPEED = 4)
+	level_max = list(SP_TOTAL = 4, SP_SPEED = 4)
 	sparks_spread = 1
 	sparks_amt = 4
 

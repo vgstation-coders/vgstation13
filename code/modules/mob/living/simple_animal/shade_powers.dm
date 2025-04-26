@@ -96,7 +96,7 @@
 	hud_state = "souldblade_move"
 
 	invocation_type = SpI_NONE
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 0
 	range = 0
 	spell_flags = null
@@ -117,7 +117,7 @@
 	hud_state = "soulblade_spin"
 
 	invocation_type = SpI_NONE
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 0
 	range = 0
 	spell_flags = null
@@ -234,7 +234,7 @@
 	hud_state = "soulblade_perforate"
 
 	invocation_type = SpI_NONE
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 40
 	range = 0
 	spell_flags = null
@@ -309,7 +309,7 @@
 	hud_state = "soulblade_mend"
 
 	invocation_type = SpI_NONE
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 20
 	range = 0
 	spell_flags = null
@@ -361,7 +361,7 @@
 	hud_state = "soulblade_harm"
 
 	invocation_type = SpI_NONE
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 20
 	range = 0
 	spell_flags = null

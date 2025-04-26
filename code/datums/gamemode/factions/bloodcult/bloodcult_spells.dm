@@ -14,7 +14,7 @@ var/list/arcane_pockets = list()
 	hud_state = "cult_pocket_empty"
 
 	invocation_type = SpI_NONE
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 0
 	range = 0
 	spell_flags = null

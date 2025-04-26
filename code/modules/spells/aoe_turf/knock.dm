@@ -15,7 +15,7 @@
 
 	hud_state = "wiz_knock"
 
-	price = 0.5 * Sp_BASE_PRICE //Half of the normal spell price
+	price = 0.5 * SP_BASE_PRICE //Half of the normal spell price
 
 /spell/aoe_turf/knock/cast(list/targets)
 	for(var/turf/T in targets)

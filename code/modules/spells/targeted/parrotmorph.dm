@@ -5,7 +5,7 @@
 	user_type = USER_TYPE_SPELLBOOK
 
 	school = "evocation"
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 600
 	invocation = "'P'Y W'NT A CRAC'K'R!"
 	invocation_type = SpI_SHOUT

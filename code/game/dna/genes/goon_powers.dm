@@ -146,7 +146,7 @@
 	desc = "Drops the body temperature of another person."
 	panel = "Mutant Powers"
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 600
 
 	spell_flags = WAIT_FOR_CLICK
@@ -212,7 +212,7 @@
 	user_type = USER_TYPE_GENETIC
 	panel = "Mutant Powers"
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 300
 
 	invocation_type = SpI_NONE
@@ -427,7 +427,7 @@
 	user_type = USER_TYPE_GENETIC
 	range = SELFCAST
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 60
 
 	spell_flags = INCLUDEUSER
@@ -602,7 +602,7 @@
 	spell_flags = SELECTABLE
 	invocation_type = SpI_NONE
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 100
 
 	valid_targets = list(/mob/living/carbon)

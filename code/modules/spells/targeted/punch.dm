@@ -2,7 +2,7 @@
 	name = "Punch"
 	desc = "This spell empowers your next close-and-personal unarmed attack to launch the enemy with such great force that they cause a small explosion where they land. The ensuing explosion won't harm you directly, but the after-effects might. Works against mechas."
 	abbreviation = "PU"
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 2, Sp_POWER = 1)
+	level_max = list(SP_TOTAL = 3, SP_SPEED = 2, SP_POWER = 1)
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
 	charge_max = 90
@@ -29,14 +29,14 @@
 
 /spell/targeted/punch/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_POWER)
+		if(SP_POWER)
 			return "Make the explosion more devastating, allowing it to cause more damage and even breach the ground."
 	return ..()
 
 /spell/targeted/punch/empower_spell()
 	..()
 	empowered += 1
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 	. = "You have made the punch more devastating."
 
 /spell/targeted/punch/cast(var/list/targets)

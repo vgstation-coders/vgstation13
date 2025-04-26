@@ -1,4 +1,4 @@
-#define STARTING_USES 5 * Sp_BASE_PRICE
+#define STARTING_USES 5 * SP_BASE_PRICE
 
 /obj/item/weapon/spellbook
 	name = "spell book"
@@ -22,30 +22,30 @@
 	var/list/available_artifacts = list()
 
 	var/static/list/available_potions = list(
-		/obj/item/potion/healing = Sp_BASE_PRICE,
-		/obj/item/potion/transform = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/toxin = Sp_BASE_PRICE*0.75,
-		/obj/item/potion/mana = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/invisibility/major = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/stoneskin = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/speed/major = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/zombie = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/mutation/truesight/major = Sp_BASE_PRICE*0.25,
-		/obj/item/potion/mutation/strength/major = Sp_BASE_PRICE*0.25,
-		/obj/item/potion/speed = Sp_BASE_PRICE*0.25,
-		/obj/item/potion/random = Sp_BASE_PRICE*0.2,
-		/obj/item/potion/sword = Sp_BASE_PRICE*0.1,
-		/obj/item/potion/deception = Sp_BASE_PRICE*0.1,
-		/obj/item/potion/levitation = Sp_BASE_PRICE*0.1,
-		/obj/item/potion/fireball = Sp_BASE_PRICE*0.1,
-		/obj/item/potion/invisibility = Sp_BASE_PRICE*0.1,
-		/obj/item/potion/light = Sp_BASE_PRICE*0.05,
-		/obj/item/potion/fullness = Sp_BASE_PRICE*0.05,
-		/obj/item/potion/transparency = Sp_BASE_PRICE*0.05,
-		/obj/item/potion/paralysis = Sp_BASE_PRICE*0.05,
-		/obj/item/potion/mutation/strength = Sp_BASE_PRICE*0.05,
-		/obj/item/potion/mutation/truesight = Sp_BASE_PRICE*0.05,
-		/obj/item/potion/teleport = Sp_BASE_PRICE*0.05)
+		/obj/item/potion/healing = SP_BASE_PRICE,
+		/obj/item/potion/transform = SP_BASE_PRICE*0.5,
+		/obj/item/potion/toxin = SP_BASE_PRICE*0.75,
+		/obj/item/potion/mana = SP_BASE_PRICE*0.5,
+		/obj/item/potion/invisibility/major = SP_BASE_PRICE*0.5,
+		/obj/item/potion/stoneskin = SP_BASE_PRICE*0.5,
+		/obj/item/potion/speed/major = SP_BASE_PRICE*0.5,
+		/obj/item/potion/zombie = SP_BASE_PRICE*0.5,
+		/obj/item/potion/mutation/truesight/major = SP_BASE_PRICE*0.25,
+		/obj/item/potion/mutation/strength/major = SP_BASE_PRICE*0.25,
+		/obj/item/potion/speed = SP_BASE_PRICE*0.25,
+		/obj/item/potion/random = SP_BASE_PRICE*0.2,
+		/obj/item/potion/sword = SP_BASE_PRICE*0.1,
+		/obj/item/potion/deception = SP_BASE_PRICE*0.1,
+		/obj/item/potion/levitation = SP_BASE_PRICE*0.1,
+		/obj/item/potion/fireball = SP_BASE_PRICE*0.1,
+		/obj/item/potion/invisibility = SP_BASE_PRICE*0.1,
+		/obj/item/potion/light = SP_BASE_PRICE*0.05,
+		/obj/item/potion/fullness = SP_BASE_PRICE*0.05,
+		/obj/item/potion/transparency = SP_BASE_PRICE*0.05,
+		/obj/item/potion/paralysis = SP_BASE_PRICE*0.05,
+		/obj/item/potion/mutation/strength = SP_BASE_PRICE*0.05,
+		/obj/item/potion/mutation/truesight = SP_BASE_PRICE*0.05,
+		/obj/item/potion/teleport = SP_BASE_PRICE*0.05)
 
 	var/uses = STARTING_USES
 	var/max_uses = STARTING_USES
@@ -53,7 +53,7 @@
 	var/op = 1
 
 /obj/item/weapon/spellbook/admin
-	uses = 30 * Sp_BASE_PRICE
+	uses = 30 * SP_BASE_PRICE
 	op = 0
 
 /obj/item/weapon/spellbook/New()
@@ -258,9 +258,9 @@
 		return
 
 	switch(charge_type)
-		if(Sp_CHARGES)
+		if(SP_CHARGES)
 			return " - [charges] charge\s"
-		if(Sp_RECHARGE)
+		if(SP_RECHARGE)
 			return " - cooldown: [(charges/10)]s"
 
 /obj/item/weapon/spellbook/proc/get_spell_range_string(var/range)

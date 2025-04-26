@@ -26,7 +26,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_weeds"
 	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR|Sp_RECHARGE
+	charge_type = SP_HOLDVAR|SP_RECHARGE
 	holder_var_type = "plasma"
 	holder_var_amount = 50
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
@@ -57,7 +57,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_whisper"
 	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR
+	charge_type = SP_HOLDVAR
 	holder_var_type = "plasma"
 	holder_var_amount = 10
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
@@ -105,7 +105,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_transfer"
 	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR
+	charge_type = SP_HOLDVAR
 	holder_var_type = "plasma"
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 
@@ -135,7 +135,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_neurotoxin"
 	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR|Sp_RECHARGE
+	charge_type = SP_HOLDVAR|SP_RECHARGE
 	holder_var_type = "plasma"
 	holder_var_amount = 50
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
@@ -188,7 +188,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_resin"
 	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR
+	charge_type = SP_HOLDVAR
 	holder_var_type = "plasma"
 	holder_var_amount = 75
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
@@ -205,7 +205,7 @@ Doesn't work on other aliens/AI.*/
 	override_base = "alien"
 
 	spell_flags = WAIT_FOR_CLICK
-	charge_type = Sp_HOLDVAR|Sp_RECHARGE
+	charge_type = SP_HOLDVAR|SP_RECHARGE
 	charge_max = 8 SECONDS
 	holder_var_type = "plasma"
 	holder_var_amount = 200
@@ -256,7 +256,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_egg"
 	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR
+	charge_type = SP_HOLDVAR
 	holder_var_type = "plasma"
 	holder_var_amount = 75
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
@@ -283,7 +283,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_evolve"
 	override_base = "alien"
 
-	charge_type = Sp_HOLDVAR
+	charge_type = SP_HOLDVAR
 	insufficient_holder_msg = "<span class='alien'>You are not ready for this kind of evolution.</span>"
 
 	cast_sound = 'sound/effects/evolve.ogg'

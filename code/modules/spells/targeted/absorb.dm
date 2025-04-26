@@ -54,14 +54,14 @@
 								continue
 							if(targetspell.type == holderspell.type)
 								canAbsorb = FALSE
-								if(holderspell.can_improve(Sp_POWER)) //Prioritize empowerments over cooldown upgrades
+								if(holderspell.can_improve(SP_POWER)) //Prioritize empowerments over cooldown upgrades
 									to_chat(holder, "<span class='notice'>You absorb the magical energies from your foe and have empowered [targetspell.name]!</span>")
-									holderspell.apply_upgrade(Sp_POWER)
+									holderspell.apply_upgrade(SP_POWER)
 									hasAbsorbed = TRUE
 									consumed_spell = TRUE
-								else if(holderspell.can_improve(Sp_SPEED))
+								else if(holderspell.can_improve(SP_SPEED))
 									to_chat(holder, "<span class='notice'>You absorb the magical energies from your foe and have quickened [targetspell.name]!</span>")
-									holderspell.apply_upgrade(Sp_SPEED)
+									holderspell.apply_upgrade(SP_SPEED)
 									hasAbsorbed = TRUE
 									consumed_spell = TRUE
 						if(canAbsorb)

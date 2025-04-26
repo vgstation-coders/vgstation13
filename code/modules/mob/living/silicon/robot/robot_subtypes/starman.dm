@@ -77,7 +77,7 @@
 	desc = "Forces the menacing tunes of the Starman into the minds of all your enemies. And you."
 	hud_state = "time_future"
 	invocation_type = SpI_NONE
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 10
 	var/list/starman_music = list('sound/music/battle_against_a_machine.ogg', 'sound/music/imbossible.ogg')
 
@@ -105,7 +105,7 @@
 	desc = "Teleport to the targeted location."
 	hud_state = "starman_warp"
 	school = "evocation"
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 60
 	invocation_type = SpI_NONE
 	range = 8
@@ -139,7 +139,7 @@
 	name = "Psi Lifeup Alpha"
 	desc = "Slightly heal yourself."
 	hud_state = "psi_lifeup_alpha"
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 250
 	invocation_type = SpI_NONE
 	var/heal_amount = 30
@@ -174,7 +174,7 @@
 	desc = "Generates a psionic barrier in the given direction."
 	hud_state = "psi_shield_beta"
 	school = "evocation"
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 150
 	invocation_type = SpI_NONE
 	range = 8
@@ -234,7 +234,7 @@
 	school = "conjuration"
 	charge_max = 1800
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	invocation_type = SpI_NONE
 
 	duration = 100
@@ -285,7 +285,7 @@
 	school = "conjuration"
 	charge_max = 300
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	invocation_type = SpI_NONE
 
 	duration = 100

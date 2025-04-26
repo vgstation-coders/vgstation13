@@ -13,7 +13,7 @@
 	max_targets = 1
 	cooldown_min = 100 //50 deciseconds reduction per rank
 	duration = 50 //in deciseconds
-	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
+	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)
 
 	hud_state = "wiz_jaunt"
 
@@ -34,14 +34,14 @@
 		ethereal_jaunt(targets[1], duration, enteranim, exitanim, mist, empowered)
 
 /spell/targeted/ethereal_jaunt/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
+	if(upgrade_type == SP_POWER)
 		return "Makes you faster while jaunting."
 	return ..()
 
 /spell/targeted/ethereal_jaunt/empower_spell()
-	if(!can_improve(Sp_POWER))
+	if(!can_improve(SP_POWER))
 		return 0
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 	empowered = 1
 
 /proc/ethereal_jaunt(var/mob/living/carbon/target, duration, enteranim = "liquify", exitanim = "reappear", mist = 1, var/empowered)

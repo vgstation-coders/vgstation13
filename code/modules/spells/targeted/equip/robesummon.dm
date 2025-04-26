@@ -13,7 +13,7 @@
 	school = "evocation"
 	charge_max = 300
 
-	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
+	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)
 	invocation = "I PUT ON MY ROBE AND WIZARD HAT!"
 	invocation_type = SpI_SHOUT
 	range = SELFCAST
@@ -78,7 +78,7 @@
 /spell/targeted/equip_item/robesummon/empower_spell()
 	if(!valid_outfits.Find(ROBES_SUIT))
 		valid_outfits = list(ROBES_SUIT)
-		spell_levels[Sp_POWER]++
+		spell_levels[SP_POWER]++
 
 	name = "Summon Hardsuit"
 	desc = "A spell which will summon you a wizard hardsuit."
@@ -86,8 +86,8 @@
 
 
 /spell/targeted/equip_item/robesummon/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
-		if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+	if(upgrade_type == SP_POWER)
+		if(spell_levels[SP_POWER] >= level_max[SP_POWER])
 			return "It already summons a gem-encrusted hardsuit and internals!"
 		return "Make the spell summon a gem-encrusted hardsuit and internals."
 	return ..()

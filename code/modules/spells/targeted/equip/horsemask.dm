@@ -6,7 +6,7 @@
 	specialization = SSOFFENSIVE
 
 	school = "transmutation"
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 150
 	charge_counter = 0
 	invocation = "KN'A FTAGHU, PUCK 'BTHNK!"

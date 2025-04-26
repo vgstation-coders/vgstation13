@@ -10,7 +10,7 @@
 	cooldown_min = 20 SECONDS
 	spell_flags = NEEDSHUMAN
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	invocation_type = SpI_NONE
 	range = 0
 

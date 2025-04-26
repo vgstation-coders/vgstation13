@@ -6,8 +6,8 @@
 
 	summon_type = list(/mob/living/simple_animal/hostile/humanoid/wizard/doppelganger/melee)
 
-	price = Sp_BASE_PRICE / 2
-	level_max = list(Sp_TOTAL = 2, Sp_SPEED = 2)
+	price = SP_BASE_PRICE / 2
+	level_max = list(SP_TOTAL = 2, SP_SPEED = 2)
 	charge_max = 300
 	cooldown_reduc = 100
 	cooldown_min = 100

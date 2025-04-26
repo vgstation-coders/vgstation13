@@ -5,7 +5,7 @@
 
 	school = "evocation"
 	charge_max = 100
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	invocation_type = SpI_NONE
 
 	spell_flags = CONSTRUCT_CHECK

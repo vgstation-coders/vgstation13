@@ -5,7 +5,7 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
 
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3)
+	level_max = list(SP_TOTAL = 3, SP_SPEED = 3)
 	charge_max = 50
 	cooldown_min = 10
 	invocation = "I CAST FIST"

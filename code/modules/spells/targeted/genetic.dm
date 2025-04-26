@@ -58,7 +58,7 @@ code\game\\dna\genes\goon_powers.dm
 
 	hud_state = "wiz_blind"
 
-	price = 0.5 * Sp_BASE_PRICE //Half of the normal spell price
+	price = 0.5 * SP_BASE_PRICE //Half of the normal spell price
 	user_type = USER_TYPE_WIZARD
 	valid_targets = list(/mob/living/carbon) //Silicons don't have DNA
 

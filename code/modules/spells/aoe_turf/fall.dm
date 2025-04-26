@@ -19,7 +19,7 @@ var/global/list/falltempoverlays = list()
 	range = 6
 	cooldown_min = 200
 	cooldown_reduc = 100
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3, Sp_POWER = 3)
+	level_max = list(SP_TOTAL = 3, SP_SPEED = 3, SP_POWER = 3)
 	hud_state = "wiz_timestop"
 	var/image/aoe_underlay
 	var/list/oureffects = list()
@@ -31,9 +31,9 @@ var/global/list/falltempoverlays = list()
 #define duration_increase_per_level 10
 
 /spell/aoe_turf/fall/empower_spell()
-	if(!can_improve(Sp_POWER))
+	if(!can_improve(SP_POWER))
 		return 0
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 	range++
 	sleeptime += duration_increase_per_level
 	var/upgrade_desc = "Your control over time strengthens, you can now stop time for [sleeptime/10] second\s and in a radius of [range*2] meter\s."
@@ -41,8 +41,8 @@ var/global/list/falltempoverlays = list()
 	return upgrade_desc
 
 /spell/aoe_turf/fall/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
-		if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+	if(upgrade_type == SP_POWER)
+		if(spell_levels[SP_POWER] >= level_max[SP_POWER])
 			return "The spell can't be made any more powerful than this!"
 		return "Increase the spell's duration by [duration_increase_per_level/10] second\s and radius by 2 meters."
 	return ..()

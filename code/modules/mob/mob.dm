@@ -1476,11 +1476,11 @@ Use this proc preferably at the end of an equipment loadout
 				if((!S.connected_button) || !statpanel(S.panel))
 					continue //Not showing the noclothes spell
 				var/charge_type = S.charge_type
-				if(charge_type & Sp_HOLDVAR)
+				if(charge_type & SP_HOLDVAR)
 					statpanel(S.panel,"Required [S.holder_var_type]: [S.holder_var_amount]",S.connected_button)
-				else if(charge_type & Sp_CHARGES)
+				else if(charge_type & SP_CHARGES)
 					statpanel(S.panel,"[S.charge_max? "[S.charge_counter]/[S.charge_max] charges" : "Free"]",S.connected_button)
-				else if(charge_type & Sp_RECHARGE || charge_type & Sp_GRADUAL)
+				else if(charge_type & SP_RECHARGE || charge_type & SP_GRADUAL)
 					statpanel(S.panel,"[S.charge_max? "[S.charge_counter/10.0]/[S.charge_max/10] seconds" : "Free"]",S.connected_button)
 	sleep(world.tick_lag * 2)
 

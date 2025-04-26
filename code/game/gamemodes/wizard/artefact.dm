@@ -473,7 +473,7 @@
 
 	user_type = USER_TYPE_ARTIFACT
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 30 SECONDS
 	invocation_type = SpI_SHOUT
 	invocation = "FA'R N' AL'ENC'ED"

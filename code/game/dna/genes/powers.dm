@@ -37,7 +37,7 @@
 	desc = "Lets you see through the eyes of others."
 	panel = "Mutant Powers"
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 50
 
 	invocation_type = SpI_NONE
@@ -124,7 +124,7 @@
 	name = "Telepathy"
 	desc = "Speak into the minds of others. You must either hear them speak or examine them to make contact."
 	panel = "Mutant Powers"
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 0
 	invocation_type = SpI_NONE
 	range = GLOBALCAST //the world

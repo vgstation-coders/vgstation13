@@ -304,7 +304,7 @@
 		spell_icon = spell.hud_state
 	overlays -= spell_icon
 
-	if((spell.charge_type & Sp_RECHARGE) || (spell.charge_type & Sp_CHARGES) || (spell.charge_type & Sp_GRADUAL))
+	if((spell.charge_type & SP_RECHARGE) || (spell.charge_type & SP_CHARGES) || (spell.charge_type & SP_GRADUAL))
 		if(spell.charge_counter < spell.charge_max)
 			icon_state = "[spell_base]_spell_base"
 			if(spell.charge_counter > 0)

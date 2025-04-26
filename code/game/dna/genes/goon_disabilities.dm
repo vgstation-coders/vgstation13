@@ -256,7 +256,7 @@
 	panel = "Mutant Powers"
 	user_type = USER_TYPE_GENETIC
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 600
 
 	spell_flags = INCLUDEUSER
@@ -300,7 +300,7 @@
 	panel = "Mutant Powers"
 	user_type = USER_TYPE_GENETIC
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 200
 
 	spell_flags = INCLUDEUSER | STATALLOWED

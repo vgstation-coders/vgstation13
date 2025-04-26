@@ -8,7 +8,7 @@
 	user_type = USER_TYPE_GENETIC
 	range = SELFCAST
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 
 	spell_flags = INCLUDEUSER
 
@@ -31,7 +31,7 @@
 	override_base = "racial"
 	hud_state = "racial_regen_limbs"
 	spell_flags = INCLUDEUSER
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 100
 	range = SELFCAST
 	cast_sound = 'sound/effects/squelch1.ogg'

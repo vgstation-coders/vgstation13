@@ -114,7 +114,7 @@
 /spell/aoe_turf/corereturn
 	name = "Return to Core"
 	panel = "Malfunction"
-	charge_type = Sp_CHARGES
+	charge_type = SP_CHARGES
 	charge_max = 1
 	hud_state = "unshunt"
 

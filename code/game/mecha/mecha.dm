@@ -2076,7 +2076,7 @@
 	invocation_type = SpI_NONE
 	panel = "Mech Modules"
 	spell_flags = null
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 0
 	charge_counter = 0
 	hud_state = "mecha_equip"

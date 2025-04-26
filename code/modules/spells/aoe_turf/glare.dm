@@ -6,7 +6,7 @@
 	school = "vampire"
 	user_type = USER_TYPE_VAMPIRE
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	charge_max = 3 MINUTES
 	invocation_type = SpI_NONE
 	range = 3
