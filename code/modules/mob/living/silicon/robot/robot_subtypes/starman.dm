@@ -76,7 +76,7 @@
 	name = "Telepathic Binaural Attack"
 	desc = "Forces the menacing tunes of the Starman into the minds of all your enemies. And you."
 	hud_state = "time_future"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	charge_type = SP_RECHARGE
 	charge_max = 10
 	var/list/starman_music = list('sound/music/battle_against_a_machine.ogg', 'sound/music/imbossible.ogg')
@@ -107,7 +107,7 @@
 	school = "evocation"
 	charge_type = SP_RECHARGE
 	charge_max = 60
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 8
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK
@@ -141,7 +141,7 @@
 	hud_state = "psi_lifeup_alpha"
 	charge_type = SP_RECHARGE
 	charge_max = 250
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	var/heal_amount = 30
 
 /spell/aoe_turf/starman_heal/cast(list/targets, mob/living/user = user)
@@ -176,7 +176,7 @@
 	school = "evocation"
 	charge_type = SP_RECHARGE
 	charge_max = 150
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 8
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK
@@ -235,7 +235,7 @@
 	charge_max = 1800
 
 	charge_type = SP_RECHARGE
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 
 	duration = 100
 	range = 5
@@ -286,7 +286,7 @@
 	charge_max = 300
 
 	charge_type = SP_RECHARGE
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 
 	duration = 100
 	range = 6

@@ -11,7 +11,7 @@
 	spell_flags = NEEDSHUMAN
 
 	charge_type = SP_RECHARGE
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 
 	override_base = "vamp"

@@ -13,7 +13,7 @@ var/list/arcane_pockets = list()
 	desc = "Cast while holding an Arcane Tome to discretly store it through the veil."
 	hud_state = "cult_pocket_empty"
 
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	charge_type = SP_RECHARGE
 	charge_max = 0
 	range = 0

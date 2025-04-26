@@ -50,7 +50,7 @@
 	charge_max = 75
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK | WAIT_FOR_CLICK
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 7
 
 	override_base = "cult"

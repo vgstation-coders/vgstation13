@@ -5,7 +5,7 @@
 
 	school = "evocation"
 	invocation = "M'tch st'ck"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -23,7 +23,7 @@
 
 	school = "evocation"
 	invocation = "s'ap s'ds"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -44,7 +44,7 @@
 
 	school = "evocation"
 	invocation = "bl'odso'k"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -62,7 +62,7 @@
 
 	school = "evocation"
 	invocation = "Wh't 'f 't w's p'rpl'?!"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 6
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -80,7 +80,7 @@
 
 	school = "evocation"
 	invocation = "Id'e h'nds m'k' l'ght w'rk"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER
 	level_max = list()
@@ -144,7 +144,7 @@
 
 	school = "evocation"
 	invocation = "sp'cy k'ych'in"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -173,7 +173,7 @@
 
 	school = "evocation"
 	invocation = "I'ce c'ld!"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -201,7 +201,7 @@
 
 	school = "evocation"
 	invocation = "Splash"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()

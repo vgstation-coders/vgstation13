@@ -18,7 +18,7 @@
 	fall = new /spell/aoe_turf/fall
 	caster.add_spell(fall)
 	fall.spell_flags = 0
-	fall.invocation_type = SpI_NONE
+	fall.invocation_type = SP_INV_NONE
 	fall.the_world_chance = 0
 	chargelevelmax = rand(30, 200)
 	effectrange = rand(2, 15)

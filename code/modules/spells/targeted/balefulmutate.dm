@@ -5,7 +5,7 @@
 	school = "transmutation"
 	charge_max = 600
 	invocation = "MAHNSTUR MACH!"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 1
 	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK
 	hud_state = "wiz_bmutate"

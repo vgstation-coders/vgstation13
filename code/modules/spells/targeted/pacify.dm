@@ -13,7 +13,7 @@
 
 	spell_flags = WAIT_FOR_CLICK
 	invocation = "YUKKRI SHEETI NAY"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 6
 
 	max_targets = 1

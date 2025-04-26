@@ -14,7 +14,7 @@ Removes letters in the afflicted's sentences like the virology symptom, others m
 	charge_max = 500
 	spell_flags = null
 	invocation = "V_R'_ R_'UG_"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	selection_type = "range"
 	range = 3
 	inner_radius = -1

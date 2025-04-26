@@ -7,7 +7,7 @@
 	school = "evocation"
 	charge_max = 100
 	spell_flags = IS_HARMFUL
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 0
 	cooldown_min = 200
 

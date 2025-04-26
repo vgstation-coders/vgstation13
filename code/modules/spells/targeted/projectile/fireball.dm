@@ -11,7 +11,7 @@
 	charge_max = 100
 	spell_flags = IS_HARMFUL
 	invocation = "ONI SOMA"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 20
 	cooldown_min = 20 //10 deciseconds reduction per rank
 

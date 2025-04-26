@@ -12,7 +12,7 @@
 
 	spell_flags = INCLUDEUSER
 
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 
 	override_base = "genetic"
 	hud_state = "wiz_sleepold"
@@ -105,7 +105,7 @@
 
 	charge_max = 20
 
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 
 /spell/targeted/transfer_reagents/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	if(!istype(target, /obj/machinery/portable_atmospherics/hydroponics))

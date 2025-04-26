@@ -9,7 +9,7 @@
 	charge_max = 600
 	spell_flags = 0
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 
 	summon_type = list(/obj/structure/constructshell)
@@ -47,7 +47,7 @@
 	charge_max = 50
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 3
 	summon_type = list(/turf/simulated/floor/engine/cult)
 
@@ -89,7 +89,7 @@
 	charge_max = 100
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 3
 	summon_type = list(/turf/simulated/wall/cult)
 
@@ -131,7 +131,7 @@
 	charge_max = 100
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 3
 	summon_type = list(/obj/machinery/door/mineral/cult)
 
@@ -161,7 +161,7 @@
 	charge_max = 300
 	spell_flags = Z2NOCAST
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	cast_delay = 50
 	cast_sound = 'sound/items/welder.ogg'
@@ -176,7 +176,7 @@
 	charge_max = 3000
 	spell_flags = 0
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	cast_delay = 30
 
@@ -203,7 +203,7 @@
 	charge_max = 200
 	spell_flags = CONSTRUCT_CHECK|IGNORESPACE|IGNOREDENSE|NODUPLICATE
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	cast_delay = 20
 
@@ -232,7 +232,7 @@
 	charge_max = 300
 	spell_flags = 0
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	summon_type = list(/obj/effect/forcefield/cult)
 	duration = 200
@@ -266,7 +266,7 @@
 	charge_max = 250
 	spell_flags = 0
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	summon_type = list(/obj/effect/forcefield/cult/large)
 	duration = 200
@@ -356,7 +356,7 @@
 	charge_max = 600
 	spell_flags = 0
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	cast_delay = 60
 	summon_type = list(/mob/living/simple_animal/hostile/hex)
@@ -405,7 +405,7 @@
 	charge_max = 200
 	spell_flags = 0
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	cast_delay = 60
 	summon_type = list(/obj/structure/cult/altar)
@@ -462,7 +462,7 @@
 	charge_max = 600
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 1
 	summon_type = list(/obj/effect/rune)
 
@@ -505,7 +505,7 @@
 	charge_max = 600
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 1
 	summon_type = list(/obj/effect/rune)
 

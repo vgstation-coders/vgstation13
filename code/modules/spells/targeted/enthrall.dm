@@ -8,7 +8,7 @@
 
 	charge_type = SP_RECHARGE
 	charge_max = 3 MINUTES
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 1
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK | NEEDSHUMAN

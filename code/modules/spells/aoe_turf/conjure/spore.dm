@@ -3,7 +3,7 @@
 	desc = "It's nearly impossible to keep what is writhing inside you from breaking out. Release it."
 
 	school = "conjuration"
-	invocation_type = SpI_EMOTE
+	invocation_type = SP_INV_EMOTE
 	invocation = "kneels down as their eyes roll back and creatures emerge from their mouth."
 	still_recharging_msg = "<span class='notice'>You are still recovering.</span>"
 	spell_flags = 0

@@ -8,7 +8,7 @@
 	school = "evocation"
 	charge_max = 300
 	invocation = "GR'ESE LIT'NING"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 0
 	spell_flags = NEEDSCLOTHES | INCLUDEUSER
 	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)

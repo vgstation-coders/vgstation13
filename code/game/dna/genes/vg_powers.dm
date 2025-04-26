@@ -66,7 +66,7 @@ Obviously, requires DNA2.
 
 	spell_flags = INCLUDEUSER
 
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 
 	override_base = "genetic"
 	hud_state = "gen_hulk"
@@ -129,7 +129,7 @@ Obviously, requires DNA2.
 	range = SELFCAST
 	charge_type = SP_RECHARGE
 	charge_max = 50
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	spell_flags = INCLUDEUSER
 	override_base = "genetic"
 	hud_state = "wiz_sleepold"

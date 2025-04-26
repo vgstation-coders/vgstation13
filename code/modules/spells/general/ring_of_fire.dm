@@ -14,7 +14,7 @@
 	spell_aspect_flags = SPELL_FIRE
 	charge_type = SP_RECHARGE
 	invocation = "E ROHA"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	hud_state = "wiz_firering"
 	price = SP_BASE_PRICE / 2
 

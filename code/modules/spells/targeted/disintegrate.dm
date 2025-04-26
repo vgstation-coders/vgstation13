@@ -8,7 +8,7 @@
 	charge_max = 600
 	spell_flags = NEEDSCLOTHES | IS_HARMFUL
 	invocation = "EI NATH"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 1
 	cooldown_min = 200 //100 deciseconds reduction per rank
 

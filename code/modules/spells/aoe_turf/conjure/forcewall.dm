@@ -24,7 +24,7 @@
 	user_type = USER_TYPE_OTHER
 	panel = "Mime"
 	summon_type = list(/obj/effect/forcefield/mime)
-	invocation_type = SpI_EMOTE
+	invocation_type = SP_INV_EMOTE
 	invocation = "mimes placing their hands on a flat surface, and pushing against it."
 	charge_max = 300
 	cast_sound = null
@@ -52,7 +52,7 @@ Unwall spell, sadly has to be targeted to be any fun to use
 	spell_flags = WAIT_FOR_CLICK
 	range = 1
 	max_targets = 1
-	invocation_type = SpI_EMOTE
+	invocation_type = SP_INV_EMOTE
 	invocation = "mimes placing their hands on a flat surface, and pushing against it."
 
 	override_base = "grey"

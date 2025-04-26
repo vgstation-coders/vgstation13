@@ -82,7 +82,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	/// what is uttered when the wizard casts the spell
 	var/invocation = "HURP DURP"
 	/// can be none, whisper, shout, and emote
-	var/invocation_type = SpI_NONE
+	var/invocation_type = SP_INV_NONE
 	/// the range of the spell; outer radius for aoe spells
 	var/range = 7
 	/// whatever it says to the guy affected by it
@@ -507,7 +507,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			to_chat(user, "Not when you're incapacitated.")
 			return 0
 
-		if((ishuman(user) || ismonkey(user)) && !(invocation_type in list(SpI_EMOTE, SpI_NONE)))
+		if((ishuman(user) || ismonkey(user)) && !(invocation_type in list(SP_INV_EMOTE, SP_INV_NONE)))
 			if(user.wear_mask?.is_muzzle)
 				to_chat(user, "Mmmf mrrfff!")
 				return 0
@@ -600,17 +600,17 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 
 	switch(invocation_type)
-		if(SpI_SHOUT)
+		if(SP_INV_SHOUT)
 			if(prob(50))//Auto-mute? Fuck that noise
 				user.say(invocation)
 			else
 				user.say(replacetext(invocation," ","`"))
-		if(SpI_WHISPER)
+		if(SP_INV_WHISPER)
 			if(prob(50))
 				user.whisper(invocation)
 			else
 				user.whisper(replacetext(invocation," ","`"))
-		if(SpI_EMOTE)
+		if(SP_INV_EMOTE)
 			user.emote("me", 1, invocation) //the 1 means it's for everyone in view, the me makes it an emote, and the invocation is written accordingly.
 
 /////////////////////

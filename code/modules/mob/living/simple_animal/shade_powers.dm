@@ -95,7 +95,7 @@
 	desc = "(1 BLOOD) Move yourself without the need of being held."
 	hud_state = "souldblade_move"
 
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	charge_type = SP_RECHARGE
 	charge_max = 0
 	range = 0
@@ -116,7 +116,7 @@
 	desc = "(5 BLOOD) Stop your momentum and cut in front of you."
 	hud_state = "soulblade_spin"
 
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	charge_type = SP_RECHARGE
 	charge_max = 0
 	range = 0
@@ -233,7 +233,7 @@
 	desc = "(20 BLOOD) Hurl yourself through the air. You can cast this spell by doing a Drag n Drop with your mouse for more interesting trajectories. If you hit a cultist, they'll automatically grab you."
 	hud_state = "soulblade_perforate"
 
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	charge_type = SP_RECHARGE
 	charge_max = 40
 	range = 0
@@ -308,7 +308,7 @@
 	desc = "(10 BLOOD) Heal some of your wielder's brute damage using your blood."
 	hud_state = "soulblade_mend"
 
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	charge_type = SP_RECHARGE
 	charge_max = 20
 	range = 0
@@ -360,7 +360,7 @@
 	desc = "(FREE) Change whether you allow people who aren't either cultists or the person that soulstone'd you to wield you."
 	hud_state = "soulblade_harm"
 
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	charge_type = SP_RECHARGE
 	charge_max = 20
 	range = 0

@@ -10,7 +10,7 @@
 	charge_max = 150
 	charge_counter = 0
 	invocation = "KN'A FTAGHU, PUCK 'BTHNK!"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 7
 	max_targets = 1
 	cooldown_min = 30 //30 deciseconds reduction per rank

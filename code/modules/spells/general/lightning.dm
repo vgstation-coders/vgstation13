@@ -14,7 +14,7 @@
 	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
 	charge_type = SP_RECHARGE
 	invocation = "ZAP MUTHA FUH KA"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	hud_state = "wiz_zap"
 	valid_targets = list(/mob/living,/obj/machinery/bot,/obj/mecha)
 

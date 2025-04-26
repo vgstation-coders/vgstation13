@@ -9,7 +9,7 @@
 	range = 7
 	max_targets = 1
 	invocation = "W'APPIN' PR'SN'TS!"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	amt_stunned = 5//just exists to make sure the giftwrap "catches" them
 	cooldown_min = 30 //100 deciseconds reduction per rank
 	valid_targets = list(/mob/living)

@@ -8,7 +8,7 @@
 	charge_max = 400
 	spell_flags = NEEDSCLOTHES
 	invocation = "NEC CANTIO"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	selection_type = "range"
 	range = 0
 	inner_radius = -1

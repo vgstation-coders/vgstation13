@@ -2073,7 +2073,7 @@
 	user_type = USER_TYPE_MECH
 	range = 0
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	panel = "Mech Modules"
 	spell_flags = null
 	charge_type = SP_RECHARGE

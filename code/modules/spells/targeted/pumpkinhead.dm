@@ -11,7 +11,7 @@
 	range = 1
 	max_targets = 1
 	invocation = "H'T POT'TO"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	cooldown_min = 200 //100 deciseconds reduction per rank
 
 	hud_state = "pumpkin"

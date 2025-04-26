@@ -27,7 +27,7 @@
 
 	charge_max = 0
 	spell_flags = 0
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	summon_type = list(/obj/effect/spider/stickyweb)
 	range = 0
 

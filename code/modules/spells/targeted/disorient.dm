@@ -8,7 +8,7 @@
 	school = "transmutation"
 	charge_max = 300
 	invocation = "DII ODA BAJI"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	message = "<span class='danger'>You suddenly feel completely overwhelmed!<span>"
 	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)
 

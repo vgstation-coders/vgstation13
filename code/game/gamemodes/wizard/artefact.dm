@@ -475,7 +475,7 @@
 
 	charge_type = SP_RECHARGE
 	charge_max = 30 SECONDS
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	invocation = "FA'R N' AL'ENC'ED"
 	range = 0
 	spell_flags = NEEDSCLOTHES | NEEDSHUMAN

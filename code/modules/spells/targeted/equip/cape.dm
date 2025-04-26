@@ -7,7 +7,7 @@
 	user_type = USER_TYPE_VAMPIRE
 
 	charge_max = 300
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = SELFCAST
 	spell_flags = INCLUDEUSER
 

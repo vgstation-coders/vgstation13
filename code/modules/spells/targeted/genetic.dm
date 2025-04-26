@@ -46,7 +46,7 @@ code\game\\dna\genes\goon_powers.dm
 
 	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
 	invocation = "STI KALY"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	message = "<span class='danger'>Your eyes cry out in pain!</span>"
 	cooldown_min = 50
 
@@ -72,7 +72,7 @@ code\game\\dna\genes\goon_powers.dm
 	charge_max = 400
 	spell_flags = NEEDSCLOTHES | INCLUDEUSER
 	invocation = "BIRUZ BENNAR"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	message = "<span class='notice'>You feel strong!</span>"
 	range = 0
 	max_targets = 1

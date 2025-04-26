@@ -8,7 +8,7 @@
 	school = "transmutation"
 	charge_max = 300
 	spell_flags = Z2NOCAST | NEEDSCLOTHES | INCLUDEUSER
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = SELFCAST
 	max_targets = 1
 	cooldown_min = 100 //50 deciseconds reduction per rank
@@ -148,7 +148,7 @@
 
 	charge_max = 200
 	spell_flags = Z2NOCAST | INCLUDEUSER | CONSTRUCT_CHECK
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = SELFCAST
 	duration = 50 //in deciseconds
 
@@ -174,7 +174,7 @@
 	spell_flags = Z2NOCAST | INCLUDEUSER
 
 	charge_max = 1 MINUTES
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = SELFCAST
 	duration = 50 //in deciseconds
 

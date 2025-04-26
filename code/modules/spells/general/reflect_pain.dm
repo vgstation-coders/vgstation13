@@ -10,7 +10,7 @@
 	spell_flags = NEEDSCLOTHES
 
 	invocation = "KON TEAH STOV"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	cooldown_min = 10 SECONDS
 
 	hud_state = "wiz_reflect_pain"

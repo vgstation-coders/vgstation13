@@ -8,7 +8,7 @@
 	school = "conjuration"
 	spell_flags = Z2NOCAST
 	invocation = "SL'IGH B'LLS RIN'!"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 0
 
 	summon_type = list(/obj/structure/bed/chair/vehicle/firebird/santa)

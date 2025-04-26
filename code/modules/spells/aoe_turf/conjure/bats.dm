@@ -9,7 +9,7 @@
 	charge_max = 2 MINUTES
 	cooldown_min = 2 MINUTES
 	invocation = ""
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 
 	override_base = "vamp"
 

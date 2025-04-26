@@ -2071,7 +2071,7 @@ Use this proc preferably at the end of an equipment loadout
 	abbreviation = "RF"
 	charge_max = 1
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	hud_state = "wiz_mindswap"
 

@@ -13,7 +13,7 @@
 	charge_max = 150
 	spell_flags = NEEDSCLOTHES // now it's balanced
 	invocation = "E'MAGI!"
-	invocation_type = SpI_NONE // we say it in the arcane_acts
+	invocation_type = SP_INV_NONE // we say it in the arcane_acts
 	level_max = list(SP_TOTAL = 4, SP_SPEED = 2, SP_POWER = 2)
 	range = 1
 	cooldown_min = 100 // 50 deciseconds reduction per rank

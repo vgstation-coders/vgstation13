@@ -9,7 +9,7 @@
 	charge_max = 50
 	cooldown_min = 10
 	invocation = "I CAST FIST"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	max_targets = 3
 	spell_flags = NEEDSCLOTHES | LOSE_IN_TRANSFER | IS_HARMFUL
 

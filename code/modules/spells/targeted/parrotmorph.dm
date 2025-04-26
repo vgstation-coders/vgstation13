@@ -8,7 +8,7 @@
 	charge_type = SP_RECHARGE
 	charge_max = 600
 	invocation = "'P'Y W'NT A CRAC'K'R!"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 7
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK

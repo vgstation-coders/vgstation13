@@ -11,7 +11,7 @@
 	range = 1
 	max_targets = 1
 	invocation = "STAUN EI"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	amt_stunned = 5//just exists to make sure the statue "catches" them
 	cooldown_min = 200 //100 deciseconds reduction per rank
 	valid_targets = list(/mob/living)

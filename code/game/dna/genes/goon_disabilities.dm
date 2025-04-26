@@ -260,7 +260,7 @@
 	charge_max = 600
 
 	spell_flags = INCLUDEUSER
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = SELFCAST
 	max_targets = 1
 	selection_type = "range"
@@ -304,7 +304,7 @@
 	charge_max = 200
 
 	spell_flags = INCLUDEUSER | STATALLOWED
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = SELFCAST
 	max_targets = 1
 	selection_type = "range"

@@ -10,7 +10,7 @@
 	message = "<span class='danger'>You are punched with great force!<span>"
 	spell_flags = IS_HARMFUL | WAIT_FOR_CLICK | NEEDSCLOTHES
 	cooldown_min = 30
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	max_targets = 1
 	range = 1
 	valid_targets = list(/mob/living, /obj/mecha)
@@ -147,7 +147,7 @@
 	user_type = USER_TYPE_GYMRAT
 	charge_max = 300 // Much longer cooldown than the wizard spell
 	spell_flags = IS_HARMFUL | WAIT_FOR_CLICK
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	valid_targets = list(/mob/living) // Unlike the other version, this one can't target and destroy mechs
 	hud_state = "gen_hulk"
 	explosive_punches = 0

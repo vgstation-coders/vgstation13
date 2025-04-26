@@ -9,7 +9,7 @@
 	charge_max = 600
 	spell_flags = 0
 	invocation = "GIN'YU CAPAN"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	max_targets = 1
 	mind_affecting = 1
 	range = 1

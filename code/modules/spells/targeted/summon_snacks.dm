@@ -17,7 +17,7 @@
 	user_type = USER_TYPE_WIZARD
 	school = "conjuration"
 	invocation = "OR'DER UHP"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	message = "<span class='sinister'>Suddenly your hands are full of snacks!<span>"
 	charge_max = 300
 	cooldown_min = 150

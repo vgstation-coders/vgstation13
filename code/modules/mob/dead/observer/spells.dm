@@ -47,7 +47,7 @@ var/global/list/boo_phrases_silicon=list(
 	school = "transmutation"
 	charge_max = 60 SECONDS
 	invocation = ""
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 1 // Or maybe 3?
 
 	override_base = "grey"
@@ -73,7 +73,7 @@ var/global/list/boo_phrases_silicon=list(
 	charge_type = SP_RECHARGE
 	charge_max = 0
 	invocation = ""
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = SELFCAST
 	max_targets = 1
 
@@ -153,7 +153,7 @@ var/global/list/boo_phrases_silicon=list(
 	school = "transmutation"
 	charge_type = 0 // Apparently bypasses charge checks.
 	invocation = ""
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 
 	override_base = "grey"
 	hud_state = "stationmap"

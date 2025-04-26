@@ -13,7 +13,7 @@
 	cooldown_reduc = 100
 	cooldown_min = 100
 	invocation = "GR'T W'TH K'DS"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	spell_flags = NEEDSCLOTHES
 	hud_state = "pitbull"
 	cast_sound = 'sound/voice/pitbullbark.ogg'

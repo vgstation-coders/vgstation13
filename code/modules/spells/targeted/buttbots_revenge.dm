@@ -9,7 +9,7 @@
 	charge_max = 500
 	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
 	invocation = "ARSE NATH"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 1
 	cooldown_min = 200 //100 deciseconds reduction per rank
 	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)

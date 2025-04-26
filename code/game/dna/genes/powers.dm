@@ -40,7 +40,7 @@
 	charge_type = SP_RECHARGE
 	charge_max = 50
 
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = GLOBALCAST
 	max_targets = 1
 	spell_flags = SELECTABLE | TALKED_BEFORE
@@ -126,7 +126,7 @@
 	panel = "Mutant Powers"
 	charge_type = SP_RECHARGE
 	charge_max = 0
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = GLOBALCAST //the world
 	max_targets = 1
 	selection_type = "view"

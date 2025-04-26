@@ -15,7 +15,7 @@ var/global/list/falltempoverlays = list()
 	school = "transmutation"
 	charge_max = 500 // now 2min
 	invocation = "OMNIA RUINAM"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 6
 	cooldown_min = 200
 	cooldown_reduc = 100
@@ -245,7 +245,7 @@ var/global/list/falltempoverlays = list()
 	caster.flags = INVULNERABLE
 	caster.add_spell(fall)
 	fall.spell_flags = 0
-	fall.invocation_type = SpI_NONE
+	fall.invocation_type = SP_INV_NONE
 	fall.the_world_chance = 0
 	fall.range = range ? range : 7		//how big
 	fall.sleeptime = duration			//for how long

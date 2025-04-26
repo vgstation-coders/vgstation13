@@ -9,7 +9,7 @@
 
 	school = "conjuration"
 	invocation = "W'ZZ GO' T'E S'RE!"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	charge_max = 300
 	spell_flags = 0
 

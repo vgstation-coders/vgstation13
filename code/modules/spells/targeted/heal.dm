@@ -11,7 +11,7 @@
 	cooldown_reduc = 75
 	cooldown_min = 150
 	invocation = "DI TIUB SEEL IM"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	message = "<span class='sinister'>You feel refreshed.<span>"
 	level_max = list(SP_TOTAL = 3, SP_SPEED = 2, SP_POWER = 1, SP_RANGE = 1)
 	valid_targets = list(/mob/living)

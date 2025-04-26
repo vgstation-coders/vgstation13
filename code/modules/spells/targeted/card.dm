@@ -7,7 +7,7 @@
 	school = "transmutation"
 	charge_max = 100 //10 seconds
 	spell_flags = WAIT_FOR_CLICK
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	max_targets = 1
 	valid_targets = list(/mob/living/carbon/human)
 	level_max = list(SP_TOTAL = 0, SP_SPEED = 0, SP_POWER = 0) //You can't quicken this, this would be kind of useless

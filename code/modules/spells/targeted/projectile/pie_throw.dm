@@ -8,7 +8,7 @@
 	school = "evocation"
 	charge_max = 100
 	invocation = "FLA'K PA'STRY"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 20
 
 	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL

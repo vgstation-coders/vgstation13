@@ -9,7 +9,7 @@
 
 	charge_type = SP_RECHARGE
 	charge_max = 1 SECONDS
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 
 	cooldown_min = 1 SECONDS

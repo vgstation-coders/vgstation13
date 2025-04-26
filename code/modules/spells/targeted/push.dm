@@ -9,7 +9,7 @@
 	charge_max = 300
 	spell_flags = Z2NOCAST | WAIT_FOR_CLICK
 	invocation = "P'SH IT RE'L GUD"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 1
 	cooldown_min = 10
 	level_max = list(SP_TOTAL = 4, SP_SPEED = 4)

@@ -8,7 +8,7 @@
 	charge_max = 150
 	spell_flags = null
 	invocation = "EAIS' RAUG"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	selection_type = "range"
 	range = 7
 	inner_radius = -1

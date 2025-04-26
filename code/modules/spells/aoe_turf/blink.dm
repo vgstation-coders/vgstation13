@@ -9,7 +9,7 @@
 	charge_max = 20
 	spell_flags = IGNOREDENSE | IGNORESPACE
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 7
 	inner_radius = 1
 	cooldown_min = 5 //4 deciseconds reduction per rank

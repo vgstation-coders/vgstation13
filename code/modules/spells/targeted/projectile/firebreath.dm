@@ -12,7 +12,7 @@
 	charge_max = 100
 	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
 	invocation = "SPY'SI MEAT'A'BAL"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 20
 	cooldown_min = 20
 

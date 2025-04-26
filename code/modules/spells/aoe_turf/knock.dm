@@ -9,7 +9,7 @@
 	charge_max = 100
 	spell_flags = 0
 	invocation = "AULIE OXIN FIERA"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 3
 	cooldown_min = 20 //20 deciseconds reduction per rank
 

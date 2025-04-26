@@ -12,7 +12,7 @@
 	school = "conjuration"
 	spell_flags = Z2NOCAST
 	invocation = "NO F'AT C'HX"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	level_max = list(SP_TOTAL = 0)
 	range = 0
 

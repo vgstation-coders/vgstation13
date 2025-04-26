@@ -8,7 +8,7 @@
 	charge_max = 300 SECONDS
 	cooldown_min = 150 SECONDS
 	spell_flags = NEEDSCLOTHES | Z2NOCAST
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	invocation = "NAR'NI'AH"
 	summon_type = list(/obj/structure/closet/magical_wardrobe)
 	price = 0.75 * SP_BASE_PRICE

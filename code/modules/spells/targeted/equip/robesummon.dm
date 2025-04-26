@@ -15,7 +15,7 @@
 
 	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)
 	invocation = "I PUT ON MY ROBE AND WIZARD HAT!"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = SELFCAST
 	spell_flags = INCLUDEUSER | Z2NOCAST //z2nocast to prevent wizards from summoning the spacesuit and getting a refund
 

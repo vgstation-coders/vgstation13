@@ -9,7 +9,7 @@
 	charge_max = 150
 	spell_flags = NEEDSCLOTHES | IS_HARMFUL
 	invocation = "FORTI GY AMA"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 7
 	cooldown_min = 90 //15 deciseconds reduction per rank
 

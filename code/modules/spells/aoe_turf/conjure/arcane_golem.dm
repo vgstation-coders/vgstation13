@@ -14,7 +14,7 @@
 
 	spell_flags = NEEDSCLOTHES | Z2NOCAST | IS_HARMFUL
 	invocation = "ARCANUM VIRIUM CONGREGABO"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 0
 
 	summon_type = list(/mob/living/simple_animal/hostile/arcane_golem)

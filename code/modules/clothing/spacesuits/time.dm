@@ -94,7 +94,7 @@
 	panel = "Time Powers"
 	override_base = "time"
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	still_recharging_msg = "<span class='notice'>The suit is still recharging.</span>"
 	var/obj/item/clothing/suit/space/time/suit

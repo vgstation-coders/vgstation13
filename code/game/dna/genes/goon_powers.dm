@@ -150,7 +150,7 @@
 	charge_max = 600
 
 	spell_flags = WAIT_FOR_CLICK
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 7
 	max_targets = 1
 	selection_type = "range"
@@ -215,7 +215,7 @@
 	charge_type = SP_RECHARGE
 	charge_max = 300
 
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 1
 	max_targets = 1
 	selection_type = "view"
@@ -431,7 +431,7 @@
 	charge_max = 60
 
 	spell_flags = INCLUDEUSER
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 
 	duration = 10 //used for jump distance here
 
@@ -550,7 +550,7 @@
 	charge_max = 1800
 
 	spell_flags = 0
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 1
 	max_targets = 1
 	selection_type = "range"
@@ -600,7 +600,7 @@
 	range = 7
 	max_targets = 1
 	spell_flags = SELECTABLE
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 
 	charge_type = SP_RECHARGE
 	charge_max = 100

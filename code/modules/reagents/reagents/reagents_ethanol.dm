@@ -580,7 +580,7 @@
 		fakespell.desc = fromwhichwetake.desc
 		fakespell.hud_state = fromwhichwetake.hud_state
 		fakespell.invocation = "MAH'JIK"
-		fakespell.invocation_type = SpI_SHOUT
+		fakespell.invocation_type = SP_INV_SHOUT
 		fakespell.charge_type = SP_CHARGES
 		fakespell.charge_counter = 0
 		fakespell.charge_max = 1

@@ -19,7 +19,7 @@
 	charge_max = 1200
 	spell_flags = NEEDSCLOTHES
 	invocation = "NOUK FHUNMM SACP RISSKA"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 1
 
 	summon_type = list(/mob/living/simple_animal/hostile/carp)
@@ -35,7 +35,7 @@
 	charge_max = 1200
 	spell_flags = 0
 	invocation = "IA IA"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	summon_amt = 10
 	range = 3
 
@@ -52,7 +52,7 @@
 	charge_max = 1200
 	spell_flags = NEEDSCLOTHES
 	invocation = "What did the Gingerbread Man put on his bed? A cookie sheet!"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 1
 
 	summon_type = list(/mob/living/simple_animal/hostile/gingerbread)
