@@ -28,7 +28,7 @@
 /// ------------- Explode
 /datum/random_reagent_effect/explode
 	name = "Explode"
-	activation_chance = 20
+	activation_chance = 8
 	var/explode_strength
 
 #define NO_GIBS 0
@@ -72,7 +72,7 @@
 /// ------------- Healing
 /datum/random_reagent_effect/simple_heal_damage
 	name = "Simple heal/damage"
-	activation_chance = 100 // Always picked 
+	activation_chance = 100 // Always picked
 	var/list/healing_values = list(
 		"brute" = 0,
 		"oxy" = 0,
@@ -91,7 +91,7 @@
 			// 80% of the effect to heal (neg dmg)
 			if (prob(80))
 				healing_values[dmg_type] =- healing_values[dmg_type]
-			investigative_log += "damage [dmg_type]: [healing_values[dmg_type]] -- "
+			investigative_log += "-- damage [dmg_type]: [healing_values[dmg_type]] "
 
 /datum/random_reagent_effect/simple_heal_damage/on_human_life(mob/living/carbon/human/H)
 	// We hate hardcoding here
@@ -135,7 +135,7 @@
 /// --------- Kill users
 /datum/random_reagent_effect/kill
 	name = "Kill"
-	activation_chance = 4
+	activation_chance = 2
 	investigative_log = "kill user -- "
 
 /datum/random_reagent_effect/kill/on_human_life(mob/living/carbon/human/H)
@@ -266,7 +266,7 @@
 	var/total_hallucination_damage
 
 /datum/random_reagent_effect/hallucination/on_pick()
-	var/generator/value_rng = generator("num", 10, 0.2, LINEAR_RAND) // Uniform distribution for 10 to 0.2
+	var/generator/value_rng = generator("num", 10, 0.2, LINEAR_RAND).Rand() // Uniform distribution for 10 to 0.2
 	total_hallucination_damage = value_rng
 	investigative_log = "-- does hallucination damage for [total_hallucination_damage]"
 
