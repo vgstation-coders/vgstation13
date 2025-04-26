@@ -509,7 +509,7 @@
 			for(var/datum/organ/external/affecting in H.organs)
 				if(affecting.is_robotic()&& affecting.status != ORGAN_DESTROYED)
 					if((affecting.get_health() + (robolimb_damage_multiplier*volume)) >= melt_robolimb_threshold)
-						to_chat(H,"<span class = 'danger'>The [src.name] completely corrodes away your [affecting.display_name]!</span>")
+						to_chat(H,"<span class = 'danger'>\The [src.name] completely corrodes away your [affecting.display_name]!</span>")
 						affecting.dust()
 						continue
 					affecting.take_damage(ceil((robolimb_damage_multiplier*volume)/2),ceil((robolimb_damage_multiplier*volume)/2), 0, 0, used_weapon = "iron-rotting agent")
