@@ -34,6 +34,7 @@
 		return
 	if (my_appearance.permanently_bald && new_looks.h_style != "Bald")
 		to_chat(src, "<span class='warning'>It is no use! The Curse O' Norwood is too strong!</span>")
+		new_looks.h_style = "Bald"
 	my_appearance = new_looks
 	regenerate_icons()
 
