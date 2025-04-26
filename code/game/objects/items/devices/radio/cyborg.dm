@@ -109,7 +109,7 @@
 		for (var/ch_name in channels)
 			dat+=text_sec_channel(ch_name, channels[ch_name])
 	dat+={"[text_wires()]</TT></body></html>"}
-	user << browse(dat, "window=radio")
+	user << browse(HTML_SKELETON(dat), "window=radio")
 	onclose(user, "radio")
 	return
 

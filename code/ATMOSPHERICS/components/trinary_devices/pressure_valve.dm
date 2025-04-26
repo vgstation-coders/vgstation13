@@ -99,7 +99,7 @@
 				</body>
 			"}
 
-	user << browse(dat, "window=atmo_conditional_valve")
+	user << browse(HTML_SKELETON(dat), "window=atmo_conditional_valve")
 	onclose(user, "atmo_conditional_valve")
 	return
 

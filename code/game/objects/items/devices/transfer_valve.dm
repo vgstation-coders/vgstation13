@@ -94,7 +94,7 @@
 	<BR> <B> Valve attachment:</B> [attached_device ? "<A href='?src=\ref[src];device=1'>[attached_device]</A>" : "None"] [attached_device ? "<A href='?src=\ref[src];rem_device=1'>Remove</A>" : ""]
 	<BR> <B> Valve status: </B> [ valve_open ? "<A href='?src=\ref[src];open=1'>Closed</A> <B>Open</B>" : "<B>Closed</B> <A href='?src=\ref[src];open=1'>Open</A>"]"}
 
-	user << browse(dat, "window=trans_valve;size=600x300")
+	user << browse(HTML_SKELETON(dat), "window=trans_valve;size=600x300")
 	onclose(user, "trans_valve")
 	return
 

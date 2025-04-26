@@ -135,7 +135,7 @@
 					return
 
 
-	user << browse(dat, "window=traffic_control;size=575x400")
+	user << browse(HTML_SKELETON(dat), "window=traffic_control;size=575x400")
 	onclose(user, "server_control")
 
 	temp = ""

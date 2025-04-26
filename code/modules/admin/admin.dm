@@ -764,7 +764,7 @@ var/global/floorIsLava = 0
 		Curve width: <A href='?src=\ref[src];f_dynamic_roundstart_width=1'>-> [dynamic_curve_width] <-</A><br>
 		"}
 
-	user << browse(dat, "window=dyn_mode_options;size=900x650")
+	user << browse(HTML_SKELETON(dat), "window=dyn_mode_options;size=900x650")
 
 /datum/admins/proc/Secrets()
 	if(!check_rights(0))

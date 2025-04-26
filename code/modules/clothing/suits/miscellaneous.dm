@@ -90,7 +90,7 @@ var/list/tag_suits_list = list()
 		<br/>
 		<b><a href='?src=\ref[src]&edition_done=\ref[my_laser_tag_game]'>Done</a></b>
 	""}
-	user << browse(dat,"window=laser_tag_window2;size=250x250")
+	user << browse(HTML_SKELETON(dat),"window=laser_tag_window2;size=250x250")
 
 /obj/item/clothing/suit/tag/Topic(href, href_list)
 	if(..())

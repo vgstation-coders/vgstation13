@@ -283,7 +283,7 @@ log transactions
 			dat += "<span class='warning'>Unable to connect to accounts database, please retry and if the issue persists contact Nanotrasen IT support.</span>"
 			reconnect_database()
 
-		user << browse(dat,"window=atm;size=550x650")
+		user << browse(HTML_SKELETON(dat),"window=atm;size=550x650")
 	else
 		user << browse(null,"window=atm")
 

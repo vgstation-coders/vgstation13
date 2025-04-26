@@ -1240,7 +1240,7 @@ Use this proc preferably at the end of an equipment loadout
 	var/dat = {"	<title>/vg/station Github Ingame Reporting</title>
 					Version: [byond_version].[byond_build] Revision: [return_revision()]
 					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&byondver=[byond_version].[byond_build]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
-	src << browse(dat, "window=github;size=480x480")
+	src << browse(HTML_SKELETON(dat), "window=github;size=480x480")
 
 /client/verb/changes()
 	set name = "Changelog"

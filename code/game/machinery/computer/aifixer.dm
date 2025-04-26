@@ -67,7 +67,7 @@
 
 	user.set_machine(src)
 
-	user << browse(dat, "window=computer;size=400x500")
+	user << browse(HTML_SKELETON(dat), "window=computer;size=400x500")
 	onclose(user, "computer")
 	return
 

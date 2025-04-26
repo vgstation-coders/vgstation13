@@ -227,7 +227,7 @@
                         <h4>Record Deletion</h4>
                         <b><a href='byond://?src=\ref[src];del_rec=1'>Scan card to confirm.</a></b><br>
                         <b><a href='byond://?src=\ref[src];menu=3'>Return</a></b>"}
-	user << browse(dat, "window=cloning")
+	user << browse(HTML_SKELETON(dat), "window=cloning")
 	onclose(user, "cloning")
 	return
 

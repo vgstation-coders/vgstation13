@@ -142,7 +142,7 @@ var/list/static/list_of_animal_types = typesof(/mob/living/simple_animal)
 
 
 
-	user << browse(dat, "window=comm_monitor;size=575x400")
+	user << browse(HTML_SKELETON(dat), "window=comm_monitor;size=575x400")
 	onclose(user, "server_control")
 
 	temp = ""

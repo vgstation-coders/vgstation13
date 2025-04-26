@@ -662,7 +662,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	dat += {"<a href='?_src_=prefs;preference=reset_all'>Reset Setup</a>
 		</center></div></body></html>"}
 
-	//user << browse(dat, "window=preferences;size=560x580")
+	//user << browse(HTML_SKELETON(dat), "window=preferences;size=560x580")
 	var/datum/browser/popup = new(user, "preferences", "<div align='center'>Character Setup</div>", 680, 640)
 	popup.set_content(dat)
 	popup.open(0)

@@ -338,7 +338,7 @@
 		dat += "<BR>\n"
 
 	viewalerts = TRUE
-	src << browse(dat, "window=robotalerts&can_close=0")
+	src << browse(HTML_SKELETON(dat), "window=robotalerts&can_close=0")
 
 /mob/living/silicon/robot/can_diagnose()
 	return is_component_functioning("diagnosis unit")
@@ -1089,7 +1089,7 @@
 		else
 			dat += text("[obj]: <A HREF=?src=\ref[src];act=\ref[obj]>Activate</A><BR>")
 
-	src << browse(dat, "window=robotmod&can_close=1")
+	src << browse(HTML_SKELETON(dat), "window=robotmod&can_close=1")
 	onclose(src,"robotmod") // Register on-close shit, which unsets machinery.
 
 

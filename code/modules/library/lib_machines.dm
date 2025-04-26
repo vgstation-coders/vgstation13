@@ -169,7 +169,7 @@ var/global/datum/library_catalog/library_catalog = new()
 	else
 		dat += "<BR>"
 	dat+= "<BR><A href='?src=\ref[src];eject=1'>\[Remove Book\]</A>"
-	user << browse(dat, "window=scanner")
+	user << browse(HTML_SKELETON(dat), "window=scanner")
 	onclose(user, "scanner")
 
 /obj/machinery/libraryscanner/Topic(href, href_list)

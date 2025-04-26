@@ -112,7 +112,7 @@ var/list/anomaly_power_utilizers = list()
 	dat += "<hr>"
 	dat += "<a href='?src=\ref[src]'>Refresh</a> <a href='?src=\ref[src];close=1'>Close</a>"
 
-	user << browse(dat, "window=anodevice;size=400x500")
+	user << browse(HTML_SKELETON(dat), "window=anodevice;size=400x500")
 	onclose(user, "anodevice")
 
 /obj/item/weapon/anodevice/process()

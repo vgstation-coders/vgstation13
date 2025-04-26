@@ -420,7 +420,7 @@ a { color: white; }
 		dat += {"<dt><b>[s.name]</b> = <i>[s.value]</i> <A href='?src=\ref[src];changevar=[id]'>\[Change\]</A></dt>
 			<dd>[s.desc]</i></dd>"}
 	dat += "</dl></body></html>"
-	user << browse(dat,"window=settings")
+	user << browse(HTML_SKELETON(dat),"window=settings")
 
 /ZAS_Settings/Topic(href,href_list)
 	if("changevar" in href_list)

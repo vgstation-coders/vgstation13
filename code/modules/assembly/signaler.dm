@@ -109,7 +109,7 @@
 		<A href='byond://?src=\ref[src];code=5'>+</A><BR>
 		[t1]
 		</TT>"}
-	user << browse(dat, "window=radio")
+	user << browse(HTML_SKELETON(dat), "window=radio")
 	onclose(user, "radio")
 	return
 

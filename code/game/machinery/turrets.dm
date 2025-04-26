@@ -665,7 +665,7 @@
 
 				</body>
 				</html>"}
-	user << browse(dat, "window=turret")
+	user << browse(HTML_SKELETON(dat), "window=turret")
 	onclose(user, "turret")
 	return
 
