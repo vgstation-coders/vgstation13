@@ -17,14 +17,14 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	/// Used for what list they belong to in the spellbook. SSOFFENSIVE, SSDEFENSIVE, SSUTILITY
 	var/specialization
 
-	///can be recharge or charges, see charge_max and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that; can ALSO be made to gradually drain the charge with SP_GRADUAL
+	///can be recharge or charges, see charge_cooldown_max and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that; can ALSO be made to gradually drain the charge with SP_GRADUAL
 	///The following are allowed: SP_RECHARGE (Recharges), SP_CHARGES (Limited uses), SP_GRADUAL (Gradually lose charges), SP_PASSIVE (Does not cast)
 	var/charge_type = SP_RECHARGE
 
 	/// Used to calculate cooldown reduction
-	var/initial_charge_max = 10 SECONDS
+	var/initial_charge_cooldown_max = 10 SECONDS
 	/// recharge time in deciseconds if charge_type = SP_RECHARGE or starting charges if charge_type = SP_CHARGES
-	var/charge_max = 10 SECONDS
+	var/charge_cooldown_max = 10 SECONDS
 	/// can only cast spells if it equals recharge, ++ each decisecond if charge_type = SP_RECHARGE or -- each cast if charge_type = SP_CHARGES
 	var/charge_counter = 0
 	/// if set, the minimum charge_counter necessary to cast SP_GRADUAL spells
@@ -100,7 +100,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/list/spell_levels = list(SP_SPEED = 0, SP_POWER = 0)
 	/// maximum possible levels in each category. Total does cover both.
 	var/list/level_max = list(SP_TOTAL = 4, SP_SPEED = 4, SP_POWER = 0)
-	/// If set, defines how much charge_max drops by every speed upgrade
+	/// If set, defines how much charge_cooldown_max drops by every speed upgrade
 	var/cooldown_reduc = 0
 	/// For channelled spells (cast_delay > 0), reduces the delay before the spell is active.
 	var/delay_reduc = 0
@@ -171,8 +171,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	..()
 
 	//still_recharging_msg = "<span class='notice'>[name] is still recharging.</span>"
-	charge_counter = charge_max
-	initial_charge_max = charge_max //Let's not add charge_max_initial to roughly 80 (at the time of this comment) spells
+	charge_counter = charge_cooldown_max
+	initial_charge_cooldown_max = charge_cooldown_max //Let's not add charge_cooldown_max_initial to roughly 80 (at the time of this comment) spells
 
 /// Private: internal sanity check for setting holder
 /spell/proc/set_holder(var/new_holder)
@@ -182,7 +182,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /// Private: master proc for channelled spells, recharging cooldown, etc.
 /spell/proc/process()
-	spawn while(charge_counter < charge_max)
+	spawn while(charge_counter < charge_cooldown_max)
 		if(holder && !holder.timestopped)
 			if(gradual_casting)
 				if(charge_type & SP_HOLDVAR) //If the spell is both SP_GRADUAL and SP_HOLDVAR, decrement the holder var instead.
@@ -200,7 +200,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 					charge_counter--
 			else
 				charge_counter++
-		if(charge_counter >= charge_max)
+		if(charge_counter >= charge_cooldown_max)
 			return
 		sleep(1)
 	return
@@ -541,7 +541,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	if(!skipcharge)
 		if(charge_type & SP_RECHARGE)
-			if(charge_counter < charge_max)
+			if(charge_counter < charge_cooldown_max)
 				to_chat(user, still_recharging_msg)
 				return 0
 		if(charge_type & SP_CHARGES)
@@ -648,11 +648,11 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	if(charge_type == SP_RECHARGE)
 		if(cooldown_reduc)
-			charge_max = max(cooldown_min, charge_max - cooldown_reduc)
+			charge_cooldown_max = max(cooldown_min, charge_cooldown_max - cooldown_reduc)
 		else
-			charge_max = round(initial_charge_max - spell_levels[SP_SPEED] * (initial_charge_max - cooldown_min)/ level_max[SP_SPEED])
-	if(charge_max < charge_counter)
-		charge_counter = charge_max
+			charge_cooldown_max = round(initial_charge_cooldown_max - spell_levels[SP_SPEED] * (initial_charge_cooldown_max - cooldown_min)/ level_max[SP_SPEED])
+	if(charge_cooldown_max < charge_counter)
+		charge_counter = charge_cooldown_max
 
 	var/temp = ""
 	name = initial(name)
@@ -748,9 +748,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 				return "The spell can't be made any quicker than this!"
 			var/formula
 			if(cooldown_reduc)
-				formula = min(charge_max - cooldown_min, cooldown_reduc)
+				formula = min(charge_cooldown_max - cooldown_min, cooldown_reduc)
 			else
-				formula = round((initial_charge_max - cooldown_min)/level_max[SP_SPEED], 1)
+				formula = round((initial_charge_cooldown_max - cooldown_min)/level_max[SP_SPEED], 1)
 			return "Reduce this spell's cooldown by [formula/10] seconds."
 		if(SP_POWER)
 			if(spell_levels[SP_POWER] >= level_max[SP_POWER])
@@ -761,7 +761,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/generate_tooltip(var/previous_data = "")
 	var/dat = previous_data //In case you want to put some text at the top instead of bottom
 	if(charge_type & SP_RECHARGE)
-		dat += "<br>Cooldown: [charge_max/10] second\s"
+		dat += "<br>Cooldown: [charge_cooldown_max/10] second\s"
 	if(charge_type & SP_CHARGES)
 		dat += "<br>Has [charge_counter] charge\s left"
 	if(charge_type & SP_HOLDVAR)

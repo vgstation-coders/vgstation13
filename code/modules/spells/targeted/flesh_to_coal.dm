@@ -28,7 +28,7 @@
 	desc = "This spell turns a single person into a coal golem slaved to the caster."
 
 	school = "transmutation"
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 	spell_flags = NEEDSCLOTHES | SELECTABLE
 	range = 3
 	max_targets = 1

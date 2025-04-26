@@ -135,12 +135,13 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_neurotoxin"
 	override_base = "alien"
 
+	// Need 50 plasmas and will only fire every seconds
 	charge_type = SP_HOLDVAR|SP_RECHARGE
 	holder_var_type = "plasma"
 	holder_var_amount = 50
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 	still_recharging_msg = "<span class='alien'>You must regenerate your neurotoxin stores first.</span>"
-	charge_max = 50
+	charge_cooldown_max = 5 SECONDS
 
 	spell_flags = WAIT_FOR_CLICK
 	proj_type = /obj/item/projectile/energy/neurotoxin
@@ -206,7 +207,7 @@ Doesn't work on other aliens/AI.*/
 
 	spell_flags = WAIT_FOR_CLICK
 	charge_type = SP_HOLDVAR|SP_RECHARGE
-	charge_max = 8 SECONDS
+	charge_cooldown_max = 8 SECONDS
 	holder_var_type = "plasma"
 	holder_var_amount = 200
 	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
@@ -381,7 +382,7 @@ Doesn't work on other aliens/AI.*/
 	hud_state = "alien_hide"
 	override_base = "alien"
 
-	charge_max = 0
+	charge_cooldown_max = 0
 
 /spell/aoe_turf/alien_hide/cast(list/targets, mob/user)
 	if(user.plane != HIDING_MOB_PLANE)

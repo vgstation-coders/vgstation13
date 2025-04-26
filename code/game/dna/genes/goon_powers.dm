@@ -147,7 +147,7 @@
 	panel = "Mutant Powers"
 
 	charge_type = SP_RECHARGE
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 
 	spell_flags = WAIT_FOR_CLICK
 	invocation_type = SP_INV_NONE
@@ -213,7 +213,7 @@
 	panel = "Mutant Powers"
 
 	charge_type = SP_RECHARGE
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 
 	invocation_type = SP_INV_NONE
 	range = 1
@@ -428,12 +428,12 @@
 	range = SELFCAST
 
 	charge_type = SP_RECHARGE
-	charge_max = 60
+	charge_cooldown_max = 6 SECONDS
 
 	spell_flags = INCLUDEUSER
 	invocation_type = SP_INV_NONE
 
-	duration = 10 //used for jump distance here
+	duration = 1 SECONDS //used for jump distance here
 
 	cast_sound = 'sound/weapons/thudswoosh.ogg'
 
@@ -547,7 +547,7 @@
 	desc = "Mimic the appearance of others!"
 	panel = "Mutant Powers"
 	user_type = USER_TYPE_GENETIC
-	charge_max = 1800
+	charge_cooldown_max = 180 SECONDS
 
 	spell_flags = 0
 	invocation_type = SP_INV_NONE
@@ -603,7 +603,7 @@
 	invocation_type = SP_INV_NONE
 
 	charge_type = SP_RECHARGE
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 
 	valid_targets = list(/mob/living/carbon)
 

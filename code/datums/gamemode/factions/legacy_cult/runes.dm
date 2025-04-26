@@ -1451,7 +1451,7 @@
 								//ticker.mode.update_cult_icons_added(C.mind)
 								for(var/spell/S in C.spell_list)
 									if(S.charge_type & SP_RECHARGE)
-										if(S.charge_counter == S.charge_max) //Spell is fully charged - let the proc handle everything
+										if(S.charge_counter == S.charge_cooldown_max) //Spell is fully charged - let the proc handle everything
 											S.take_charge()
 										else //Spell is on cooldown and already recharging - there's no need to call S.process(), just reset charges to 0
 											S.charge_counter = 0

@@ -6,7 +6,7 @@
 	specialization = SSUTILITY
 
 	school = "transmutation"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	spell_flags = Z2NOCAST | NEEDSCLOTHES | INCLUDEUSER
 	invocation_type = SP_INV_NONE
 	range = SELFCAST
@@ -138,7 +138,7 @@
 	max_targets = 0
 	range = 3
 
-	charge_max = 600 //Double cooldown, makes it less spammable
+	charge_cooldown_max = 60 SECONDS //Double cooldown, makes it less spammable
 	duration = 10 SECONDS //Double jaunt time, makes it easier to cooperate
 
 /spell/targeted/ethereal_jaunt/shift
@@ -146,7 +146,7 @@
 	desc = "This spell allows you to pass through walls."
 	user_type = USER_TYPE_CULT
 
-	charge_max = 200
+	charge_cooldown_max = 20 SECONDS
 	spell_flags = Z2NOCAST | INCLUDEUSER | CONSTRUCT_CHECK
 	invocation_type = SP_INV_NONE
 	range = SELFCAST
@@ -160,7 +160,7 @@
 
 /spell/targeted/ethereal_jaunt/shift/alt
 	desc = "Vibrate through the veil for about 5 seconds, letting you move around freely through any obstacle."
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	hud_state = "const_phase"
 	enteranim = "wraith2_phaseenter"
 	exitanim = "wraith2_phaseexit"
@@ -173,7 +173,7 @@
 
 	spell_flags = Z2NOCAST | INCLUDEUSER
 
-	charge_max = 1 MINUTES
+	charge_cooldown_max = 1 MINUTES
 	invocation_type = SP_INV_NONE
 	range = SELFCAST
 	duration = 5 SECONDS

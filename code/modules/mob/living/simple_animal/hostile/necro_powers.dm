@@ -3,7 +3,7 @@
 	desc = "Decay further into undead"
 	user_type = USER_TYPE_ZOMBIE
 	insufficient_holder_msg = "<span class='notice'>You are not dead enough.</span>"
-	charge_max = 0
+	charge_cooldown_max = 0
 	hud_state = "decay"
 	holder_var_type = "death"
 

@@ -43,7 +43,7 @@
 	desc = "Reduce incoming damage in exchange for preventing movement."
 	hud_state = "durand-lockdown"
 	override_icon = 'icons/mecha/mecha.dmi'
-	charge_max = 10
+	charge_cooldown_max = 10
 	charge_counter = 10
 
 /spell/mech/durand/defence_mode/New()

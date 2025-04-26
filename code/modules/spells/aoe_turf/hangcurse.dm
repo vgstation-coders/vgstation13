@@ -11,7 +11,7 @@ Removes letters in the afflicted's sentences like the virology symptom, others m
 	specialization = SSUTILITY
 	abbreviation = "HM"
 
-	charge_max = 500
+	charge_cooldown_max = 50 SECONDS
 	spell_flags = null
 	invocation = "V_R'_ R_'UG_"
 	invocation_type = SP_INV_SHOUT

@@ -183,7 +183,7 @@
 	desc = "Activate the mech's thrusters to charge in a line and knock down anything in your way."
 	hud_state = "mech_dash"
 	override_icon = 'icons/mob/screen_spells.dmi'
-	charge_max = 30
+	charge_cooldown_max = 30
 	charge_counter = 30
 
 /spell/mech/marauder/dash/cast_check(skipcharge = FALSE, mob/user = usr)
@@ -204,7 +204,7 @@
 /spell/mech/marauder/smoke
 	name = "Smoke"
 	desc = "Deploy obscuring smoke to avoid retaliation."
-	charge_max = 100
+	charge_cooldown_max = 100
 	charge_counter = 100
 	override_icon = 'icons/mob/screen_spells.dmi'
 	hud_state = "wiz_smoke"

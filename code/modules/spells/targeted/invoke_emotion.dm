@@ -12,7 +12,7 @@ var/global/list/invoked_emotions = list()
 	spell_flags = WAIT_FOR_CLICK | SELECTABLE | INCLUDEUSER
 	price = 0.25 * SP_BASE_PRICE
 	range = 9
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	cooldown_min = 1 SECONDS
 	valid_targets = list(/mob/living/carbon)
 	spell_levels = list(SP_SPEED = 0, SP_POWER = 0, SP_MOVE = 0)

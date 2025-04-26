@@ -6,7 +6,7 @@
 	specialization = SSOFFENSIVE
 
 	school = "evocation"
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	invocation = "FLA'K PA'STRY"
 	invocation_type = SP_INV_SHOUT
 	range = 20

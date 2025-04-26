@@ -115,7 +115,7 @@
 	name = "Return to Core"
 	panel = "Malfunction"
 	charge_type = SP_CHARGES
-	charge_max = 1
+	charge_cooldown_max = 1 CHARGES
 	hud_state = "unshunt"
 
 /spell/aoe_turf/corereturn/before_target(mob/user)

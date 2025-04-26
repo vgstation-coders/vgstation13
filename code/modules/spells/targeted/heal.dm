@@ -7,7 +7,7 @@
 	spell_levels = list(SP_SPEED = 0, SP_POWER = 0, SP_RANGE = 0)
 
 	school = "transmutation"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	cooldown_reduc = 7.5 SECONDS
 	cooldown_min = 15 SECONDS
 	invocation = "DI TIUB SEEL IM"

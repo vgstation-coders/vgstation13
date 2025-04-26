@@ -6,7 +6,7 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSUTILITY
 
-	charge_max = 20 SECONDS
+	charge_cooldown_max = 20 SECONDS
 	cooldown_min = 1 SECONDS
 
 	spell_levels = list(SP_SPEED = 0, SP_AMOUNT = 0)

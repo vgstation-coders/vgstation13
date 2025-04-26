@@ -6,7 +6,7 @@
 	specialization = SSUTILITY
 
 	school = "transmutation"
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 	spell_flags = 0
 	invocation = "GIN'YU CAPAN"
 	invocation_type = SP_INV_WHISPER

@@ -13,7 +13,7 @@ var/global/list/falltempoverlays = list()
 
 	selection_type = "range"
 	school = "transmutation"
-	charge_max = 500 // now 2min
+	charge_cooldown_max = 50 SECONDS
 	invocation = "OMNIA RUINAM"
 	invocation_type = SP_INV_SHOUT
 	range = 6

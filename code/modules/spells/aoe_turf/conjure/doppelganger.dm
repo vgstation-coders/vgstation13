@@ -8,7 +8,7 @@
 
 	price = SP_BASE_PRICE / 2
 	level_max = list(SP_TOTAL = 2, SP_SPEED = 2)
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	cooldown_reduc = 10 SECONDS
 	cooldown_min = 10 SECONDS
 	invocation = "MY O'N CLO'N"

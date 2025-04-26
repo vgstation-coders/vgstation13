@@ -1319,7 +1319,7 @@
 
 /spell/mech/generator/New(var/obj/mecha/M, var/obj/item/mecha_parts/mecha_equipment/generator/ME)
 	src.linked_mech = M
-	charge_counter = charge_max
+	charge_counter = charge_cooldown_max
 	name = ME.name
 
 /spell/mech/generator/cast(list/targets, mob/user)

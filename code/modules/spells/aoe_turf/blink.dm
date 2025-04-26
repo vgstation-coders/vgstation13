@@ -6,7 +6,7 @@
 	abbreviation = "BL"
 
 	school = "abjuration"
-	charge_max = 20
+	charge_cooldown_max = 2 SECONDS
 	spell_flags = IGNOREDENSE | IGNORESPACE
 	invocation = "none"
 	invocation_type = SP_INV_NONE
@@ -42,7 +42,7 @@
 	override_base = "vamp"
 	hud_state = "vamp_blink"
 
-	charge_max = 20 SECONDS
+	charge_cooldown_max = 20 SECONDS
 	cooldown_min = 20 SECONDS
 
 	var/max_lum = 1

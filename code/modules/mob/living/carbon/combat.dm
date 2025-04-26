@@ -217,7 +217,7 @@
 		tR += 1
 	if(spell_list.len)
 		var/spell/targeted/leap/leapTackle = locate(/spell/targeted/leap) in spell_list
-		if(leapTackle && leapTackle.charge_counter >= leapTackle.charge_max)
+		if(leapTackle && leapTackle.charge_counter >= leapTackle.charge_cooldown_max)
 			tR += 2
 			leapTackle.take_charge()
 	return tR

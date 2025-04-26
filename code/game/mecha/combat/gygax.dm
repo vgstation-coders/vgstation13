@@ -57,7 +57,7 @@
 /spell/mech/gygax/overload
 	name = "Overload"
 	desc = "Greatly enhance the mech's speed at the cost of integrity per step."
-	charge_max = 10
+	charge_cooldown_max = 10
 	charge_counter = 10
 	hud_state = "gygax-gofast"
 	override_icon = 'icons/mecha/mecha.dmi'

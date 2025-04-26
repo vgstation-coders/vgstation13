@@ -6,7 +6,7 @@
 	abbreviation = "BO"
 
 	school = "abjuration"
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	minimum_charge = 10 //1 second delay
 	spell_flags = SELECTABLE | WAIT_FOR_CLICK
 	hud_state = "wiz_bound"
@@ -190,7 +190,7 @@
 	desc = "Dispells any objects bound to you, allowing a new object to be bound."
 
 	school = "abjuration"
-	charge_max = 10
+	charge_cooldown_max = 1 SECONDS
 	spell_flags = 0
 	hud_state = "wiz_unbind"
 	level_max = list(SP_TOTAL = 0)

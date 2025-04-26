@@ -16,7 +16,7 @@
 	user_type = USER_TYPE_OTHER
 
 	school = "conjuration"
-	charge_max = 1200
+	charge_cooldown_max = 120 SECONDS
 	spell_flags = NEEDSCLOTHES
 	invocation = "NOUK FHUNMM SACP RISSKA"
 	invocation_type = SP_INV_SHOUT
@@ -32,7 +32,7 @@
 	user_type = USER_TYPE_OTHER
 
 	school = "conjuration"
-	charge_max = 1200
+	charge_cooldown_max = 120 SECONDS
 	spell_flags = 0
 	invocation = "IA IA"
 	invocation_type = SP_INV_SHOUT
@@ -49,7 +49,7 @@
 	user_type = USER_TYPE_OTHER
 
 	school = "conjuration"
-	charge_max = 1200
+	charge_cooldown_max = 120 SECONDS
 	spell_flags = NEEDSCLOTHES
 	invocation = "What did the Gingerbread Man put on his bed? A cookie sheet!"
 	invocation_type = SP_INV_SHOUT

@@ -6,7 +6,7 @@
 	specialization = SSOFFENSIVE
 
 	school = "transmutation"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	invocation = "DII ODA BAJI"
 	invocation_type = SP_INV_WHISPER
 	message = "<span class='danger'>You suddenly feel completely overwhelmed!<span>"

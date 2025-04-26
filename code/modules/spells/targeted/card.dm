@@ -5,7 +5,7 @@
 	user_type = USER_TYPE_WIZARD // Now it's a meme available for wizards! //It's quite the exquisite meme
 	specialization = SSUTILITY
 	school = "transmutation"
-	charge_max = 100 //10 seconds
+	charge_cooldown_max = 10 SECONDS //10 seconds
 	spell_flags = WAIT_FOR_CLICK
 	invocation_type = SP_INV_SHOUT
 	max_targets = 1

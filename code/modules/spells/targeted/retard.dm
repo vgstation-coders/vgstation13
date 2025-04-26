@@ -5,7 +5,7 @@
 	abbreviation = "BD"
 	user_type = USER_TYPE_SPELLBOOK //Whereas previously this was a normal spell, it is now found only in the ancient spellbook.
 	school = "evocation"
-	charge_max = 200 // 20 seconds
+	charge_cooldown_max = 20 SECONDS // 20 seconds
 	//Invocation is noted below
 	invocation_type = SP_INV_SHOUT //Wizard will shout what they say
 	range = 3 // Target anyone within 3 tiles of you

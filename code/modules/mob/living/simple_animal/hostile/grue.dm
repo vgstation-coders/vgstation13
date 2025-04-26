@@ -702,7 +702,7 @@
 	//shadow shunt cooldown
 	for(var/spell/aoe_turf/grue_blink/thisspell in spell_list)
 		var/newcooldown = max(45 SECONDS - eatencount * 2 SECONDS, 8 SECONDS)
-		thisspell.charge_max = newcooldown
+		thisspell.charge_cooldown_max = newcooldown
 		thisspell.charge_counter = min(newcooldown, thisspell.charge_counter)
 
 //Drain the light from the surrounding area.
@@ -806,7 +806,7 @@
 		to_chat(src, "<span class='warning'>You reach into the darkness, but can't seem to find a way.</span>")
 		//set the remaining cooldown to one second if no valid location was found
 		for(var/spell/aoe_turf/grue_blink/thisspell in spell_list)
-			thisspell.charge_counter = thisspell.charge_max - 1 SECONDS
+			thisspell.charge_counter = thisspell.charge_cooldown_max - 1 SECONDS
 		return
 
 // Dark sparkles when a grue uses shadow shunt.

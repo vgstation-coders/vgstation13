@@ -5,7 +5,7 @@
 	user_type = USER_TYPE_SPELLBOOK
 
 	school = "evocation"
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 	spell_flags = NEEDSCLOTHES | IS_HARMFUL
 	invocation = "EI NATH"
 	invocation_type = SP_INV_SHOUT

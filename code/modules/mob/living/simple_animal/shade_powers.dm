@@ -97,7 +97,7 @@
 
 	invocation_type = SP_INV_NONE
 	charge_type = SP_RECHARGE
-	charge_max = 0
+	charge_cooldown_max = 0
 	range = 0
 	spell_flags = null
 	insufficient_holder_msg = ""
@@ -118,7 +118,7 @@
 
 	invocation_type = SP_INV_NONE
 	charge_type = SP_RECHARGE
-	charge_max = 0
+	charge_cooldown_max = 0
 	range = 0
 	spell_flags = null
 	insufficient_holder_msg = ""
@@ -235,7 +235,7 @@
 
 	invocation_type = SP_INV_NONE
 	charge_type = SP_RECHARGE
-	charge_max = 40
+	charge_cooldown_max = 4 SECONDS
 	range = 0
 	spell_flags = null
 	insufficient_holder_msg = ""
@@ -310,7 +310,7 @@
 
 	invocation_type = SP_INV_NONE
 	charge_type = SP_RECHARGE
-	charge_max = 20
+	charge_cooldown_max = 2 SECONDS
 	range = 0
 	spell_flags = null
 	insufficient_holder_msg = ""
@@ -362,7 +362,7 @@
 
 	invocation_type = SP_INV_NONE
 	charge_type = SP_RECHARGE
-	charge_max = 20
+	charge_cooldown_max = 2 SECONDS
 	range = 0
 	spell_flags = null
 	insufficient_holder_msg = ""

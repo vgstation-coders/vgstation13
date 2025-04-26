@@ -7,7 +7,7 @@
 
 	school = "evocation"
 	charge_type = SP_RECHARGE
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	invocation = "H'NK!"
 	invocation_type = SP_INV_SHOUT
 	range = 7

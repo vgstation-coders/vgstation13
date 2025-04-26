@@ -11,7 +11,7 @@
 	specialization = SSUTILITY
 
 	school = "evocation"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 
 	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)
 	invocation = "I PUT ON MY ROBE AND WIZARD HAT!"

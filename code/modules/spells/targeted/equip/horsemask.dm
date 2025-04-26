@@ -7,7 +7,7 @@
 
 	school = "transmutation"
 	charge_type = SP_RECHARGE
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	charge_counter = 0
 	invocation = "KN'A FTAGHU, PUCK 'BTHNK!"
 	invocation_type = SP_INV_SHOUT

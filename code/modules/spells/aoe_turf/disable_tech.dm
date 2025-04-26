@@ -5,7 +5,7 @@
 	specialization = SSUTILITY
 	abbreviation = "DT"
 
-	charge_max = 400
+	charge_cooldown_max = 40 SECONDS
 	spell_flags = NEEDSCLOTHES
 	invocation = "NEC CANTIO"
 	invocation_type = SP_INV_SHOUT

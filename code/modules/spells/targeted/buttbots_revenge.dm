@@ -6,7 +6,7 @@
 	abbreviation = "AN"
 
 	school = "evocation"
-	charge_max = 500
+	charge_cooldown_max = 50 SECONDS
 	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
 	invocation = "ARSE NATH"
 	invocation_type = SP_INV_SHOUT

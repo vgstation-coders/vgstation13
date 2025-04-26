@@ -4,7 +4,7 @@
 	desc = "Strike an enemy with a bolt of lightning."
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	cooldown_min = 4 SECONDS
 	cooldown_reduc = 3 SECONDS
 
@@ -45,11 +45,11 @@
 
 	if(charge_type == SP_RECHARGE)
 		if(cooldown_reduc)
-			charge_max = max(cooldown_min, charge_max - cooldown_reduc)
+			charge_cooldown_max = max(cooldown_min, charge_cooldown_max - cooldown_reduc)
 		else
-			charge_max = round( max(cooldown_min, initial(charge_max) * ((level_max[SP_SPEED] - spell_levels[SP_SPEED]) / level_max[SP_SPEED] ) ) ) //the fraction of the way you are to max speed levels is the fraction you lose
-	if(charge_max < charge_counter)
-		charge_counter = charge_max
+			charge_cooldown_max = round( max(cooldown_min, initial(charge_cooldown_max) * ((level_max[SP_SPEED] - spell_levels[SP_SPEED]) / level_max[SP_SPEED] ) ) ) //the fraction of the way you are to max speed levels is the fraction you lose
+	if(charge_cooldown_max < charge_counter)
+		charge_counter = charge_cooldown_max
 
 	var/temp = "You have improved [name]"
 	if(spell_levels[SP_SPEED] >= level_max[SP_SPEED])
@@ -95,7 +95,7 @@
 	else
 		//remove overlay
 		connected_button.name = name
-		charge_counter = charge_max
+		charge_counter = charge_cooldown_max
 		user.overlays -= chargeoverlay
 		if((zapzap != multicast) && (zapzap > 0)) //partial cast
 			take_charge(holder, 0)

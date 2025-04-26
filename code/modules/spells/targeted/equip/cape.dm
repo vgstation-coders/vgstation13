@@ -6,7 +6,7 @@
 	abbreviation = "SC"
 	user_type = USER_TYPE_VAMPIRE
 
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	invocation_type = SP_INV_NONE
 	range = SELFCAST
 	spell_flags = INCLUDEUSER
@@ -14,7 +14,7 @@
 	delete_old = 0 //Players shouldn't lose their hardsuits because they decided to summon some cape.
 
 	cooldown_min = 5 MINUTES
-	charge_max = 5 MINUTES
+	charge_cooldown_max = 5 MINUTES
 	duration = 0
 
 	override_base = "vamp"

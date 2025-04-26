@@ -116,7 +116,7 @@
 /obj/item/potion/mana/imbibe_effect(mob/user)
 	for(var/spell/SP in user.spell_list)
 		if(SP.panel == "Spells")
-			SP.charge_counter = SP.charge_max
+			SP.charge_counter = SP.charge_cooldown_max
 
 /obj/item/potion/invisibility
 	name = "potion of minor invisibility"

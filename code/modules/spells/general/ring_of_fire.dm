@@ -4,7 +4,7 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
 	school = "conjuration"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	cooldown_min = 10 SECONDS
 
 	spell_levels = list(SP_SPEED = 0, SP_MOVE = 0, SP_POWER = 0)

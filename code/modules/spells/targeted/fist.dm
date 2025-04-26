@@ -6,7 +6,7 @@
 	specialization = SSOFFENSIVE
 
 	level_max = list(SP_TOTAL = 3, SP_SPEED = 3)
-	charge_max = 50
+	charge_cooldown_max = 5 SECONDS
 	cooldown_min = 1 SECONDS
 	invocation = "I CAST FIST"
 	invocation_type = SP_INV_SHOUT

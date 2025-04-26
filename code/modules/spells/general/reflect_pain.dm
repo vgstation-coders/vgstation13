@@ -6,7 +6,7 @@
 	specialization = SSDEFENSIVE
 
 	school = "necromancy"
-	charge_max = 90 SECONDS
+	charge_cooldown_max = 90 SECONDS
 	spell_flags = NEEDSCLOTHES
 
 	invocation = "KON TEAH STOV"

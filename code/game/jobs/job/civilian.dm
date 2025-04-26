@@ -137,7 +137,7 @@
 	desc = "Break your oath of silence."
 	school = "mime"
 	panel = "Mime"
-	charge_max = 10
+	charge_cooldown_max = 1 SECONDS
 	spell_flags = INCLUDEUSER
 	range = 0
 	max_targets = 1

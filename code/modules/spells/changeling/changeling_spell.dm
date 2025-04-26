@@ -8,7 +8,7 @@
 	user_type = USER_TYPE_CHANGELING
 
 	charge_type = SP_RECHARGE
-	charge_max = 1 SECONDS
+	charge_cooldown_max = 1 SECONDS
 	invocation_type = SP_INV_NONE
 	range = 0
 

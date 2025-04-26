@@ -6,7 +6,7 @@
 	specialization = SSUTILITY
 
 	school = "transmutation"
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	spell_flags = 0
 	invocation = "AULIE OXIN FIERA"
 	invocation_type = SP_INV_WHISPER
@@ -55,7 +55,7 @@
 
 	spell_flags = CONSTRUCT_CHECK
 
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	invocation = ""
 	invocation_type = "silent"
 	range = 5

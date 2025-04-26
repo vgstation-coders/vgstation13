@@ -6,7 +6,7 @@
 	specialization = SSOFFENSIVE
 
 	school = "evocation"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	invocation = "GR'ESE LIT'NING"
 	invocation_type = SP_INV_SHOUT
 	range = 0

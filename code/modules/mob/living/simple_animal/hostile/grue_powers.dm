@@ -8,7 +8,7 @@
 
 	spell_flags = WAIT_FOR_CLICK
 	charge_type = SP_RECHARGE
-	charge_max = 0 SECONDS
+	charge_cooldown_max = 0 SECONDS
 	range = 1
 	valid_targets = list(/mob/living/carbon)
 
@@ -34,7 +34,7 @@
 	override_base = "grue"
 	range = 1
 	charge_type = SP_RECHARGE
-	charge_max = 0
+	charge_cooldown_max = 0
 
 /spell/aoe_turf/grue_ventcrawl/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
 	user.ventcrawl()
@@ -48,7 +48,7 @@
 	override_base = "grue"
 	range = 0
 	charge_type = SP_RECHARGE
-	charge_max = 0
+	charge_cooldown_max = 0
 
 /spell/aoe_turf/grue_hide/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
 	user.hide()
@@ -62,7 +62,7 @@
 	override_base = "grue"
 	range = 0
 	charge_type = SP_RECHARGE
-	charge_max = 0
+	charge_cooldown_max = 0
 
 /spell/aoe_turf/grue_egg/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
 	user.reproduce()
@@ -76,7 +76,7 @@
 	override_base = "grue"
 	range = 0
 	charge_type = SP_RECHARGE
-	charge_max = 0
+	charge_cooldown_max = 0
 
 /spell/aoe_turf/grue_moult/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
 	user.moult()
@@ -115,7 +115,7 @@
 	override_base = "grue"
 	range = 0
 	charge_type = SP_RECHARGE
-	charge_max = 45 SECONDS
+	charge_cooldown_max = 45 SECONDS
 	still_recharging_msg = "<span class='notice'>You need to reorient yourself before doing that again.</span>"
 
 /spell/aoe_turf/grue_blink/cast(list/targets, mob/living/simple_animal/hostile/grue/user)

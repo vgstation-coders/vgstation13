@@ -6,7 +6,7 @@
 	specialization = SSOFFENSIVE
 
 	school = "evocation"
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	spell_flags = NEEDSCLOTHES | IS_HARMFUL
 	invocation = "FORTI GY AMA"
 	invocation_type = SP_INV_SHOUT

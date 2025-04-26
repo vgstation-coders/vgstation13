@@ -6,7 +6,7 @@
 	specialization = SSDEFENSIVE //Provides cover
 
 	school = "conjuration"
-	charge_max = 120
+	charge_cooldown_max = 12 SECONDS
 	spell_flags = 0
 	invocation = "none"
 	invocation_type = SP_INV_NONE

@@ -257,7 +257,7 @@
 	user_type = USER_TYPE_GENETIC
 
 	charge_type = SP_RECHARGE
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 
 	spell_flags = INCLUDEUSER
 	invocation_type = SP_INV_NONE
@@ -301,7 +301,7 @@
 	user_type = USER_TYPE_GENETIC
 
 	charge_type = SP_RECHARGE
-	charge_max = 200
+	charge_cooldown_max = 20 SECONDS
 
 	spell_flags = INCLUDEUSER | STATALLOWED
 	invocation_type = SP_INV_NONE

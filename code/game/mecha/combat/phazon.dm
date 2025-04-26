@@ -59,7 +59,7 @@
 /spell/mech/phazon/phasing
 	name = "Phasing"
 	desc = "Phase through walls."
-	charge_max = 10
+	charge_cooldown_max = 10
 	charge_counter = 10
 	hud_state = "phazon-phase"
 	override_icon = 'icons/mecha/mecha.dmi'

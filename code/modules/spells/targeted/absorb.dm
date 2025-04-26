@@ -5,7 +5,7 @@
 	user_type = USER_TYPE_SPELLBOOK
 
 	school = "evocation"
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	spell_flags = IS_HARMFUL
 	invocation_type = SP_INV_SHOUT
 	range = 0

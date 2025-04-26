@@ -2,7 +2,7 @@
 	name = "Piercer"
 	desc = "Overload your flash bulb to blind a target creature."
 	hud_state = "amogusflash_piercer"
-	charge_max = 300 SECONDS
+	charge_cooldown_max = 300 SECONDS
 	range = 3
 	user_type = USER_TYPE_NOUSER
 	spell_flags = WAIT_FOR_CLICK
@@ -39,7 +39,7 @@
 	desc = "Blind a vulnerable target creature."
 	hud_state = "amogusflash_flasher"
 	range = 1
-	charge_max = 30 SECONDS
+	charge_cooldown_max = 30 SECONDS
 	user_type = USER_TYPE_NOUSER
 	spell_flags = WAIT_FOR_CLICK
 

@@ -121,7 +121,7 @@
 			//speed: 1/5 (upgrade) | power: 0/1 (upgrade)
 
 			var/spell_name = spell.name
-			var/spell_cooldown = get_spell_cooldown_string(spell.charge_max, spell.charge_type)
+			var/spell_cooldown = get_spell_cooldown_string(spell.charge_cooldown_max, spell.charge_type)
 			var/spell_range = get_spell_range_string(spell.range)
 
 			dat += "<strong>[spell_name]</strong>[spell_cooldown]<br>Range: [spell_range]<br>"
@@ -217,7 +217,7 @@
 	var/dat
 	var/spell/abstract_spell = spell_path
 	var/spell_name = initial(abstract_spell.name)
-	var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
+	var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_cooldown_max), initial(abstract_spell.charge_type))
 	var/spell_price = get_spell_price(abstract_spell)
 	dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
 	dat += "<em>[initial(abstract_spell.desc)]</em><br>"

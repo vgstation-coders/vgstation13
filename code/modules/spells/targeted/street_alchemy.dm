@@ -5,7 +5,7 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSUTILITY
 	school = "transmutation"
-	charge_max = 250
+	charge_cooldown_max = 25 SECONDS
 	cooldown_min = 3 SECONDS
 	invocation_type = SP_INV_SHOUT
 	range = 10 //If you can see it, you can steal it

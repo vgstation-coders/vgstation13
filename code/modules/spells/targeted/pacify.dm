@@ -4,7 +4,7 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSDEFENSIVE
 
-	charge_max = 45 SECONDS
+	charge_cooldown_max = 45 SECONDS
 	cooldown_reduc = 15 SECONDS
 	cooldown_min = 15 SECONDS
 

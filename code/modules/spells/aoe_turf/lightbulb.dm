@@ -5,7 +5,7 @@
 	specialization = SSUTILITY
 	abbreviation = "LB"
 
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	spell_flags = null
 	invocation = "EAIS' RAUG"
 	invocation_type = SP_INV_WHISPER

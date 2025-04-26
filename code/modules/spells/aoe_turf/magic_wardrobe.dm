@@ -5,7 +5,7 @@
 	specialization = SSUTILITY
 	abbreviation = "MW"
 	hud_state = "wardrobe_main"
-	charge_max = 300 SECONDS
+	charge_cooldown_max = 300 SECONDS
 	cooldown_min = 150 SECONDS
 	spell_flags = NEEDSCLOTHES | Z2NOCAST
 	invocation_type = SP_INV_SHOUT
@@ -76,7 +76,7 @@
 	if(upgrade_type == SP_SPEED)
 		if(spell_levels[SP_SPEED] >= level_max[SP_SPEED])
 			return "The spell can't be made any quicker than this!"
-		var/formula = round((initial_charge_max - cooldown_min)/level_max[SP_SPEED])
+		var/formula = round((initial_charge_cooldown_max - cooldown_min)/level_max[SP_SPEED])
 		return "Decreases the cooldown on summoning a new wardrobe by [formula/10]. Does not affect the recall or summon spells. Also increases its durability."
 	if(upgrade_type == SP_MOVE)
 		if(spell_levels[SP_MOVE] >= level_max[SP_MOVE])
@@ -131,7 +131,7 @@
 	desc = "Teleport back to your magical wardrobe, assuming it still exists."
 	abbreviation = "WR"
 	hud_state = "wardrobe_recall"
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	spell_flags = Z2NOCAST | INCLUDEUSER 	//Creating a wardrobe needs clothes, using it doesn't
 	range = SELFCAST
 	var/obj/structure/closet/magical_wardrobe/mCloset = null
@@ -151,7 +151,7 @@
 	desc = "Teleport your magical wardrobe back to you, assuming it still exists."
 	abbreviation = "WS"
 	hud_state = "wardrobe_summon"
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	spell_flags = Z2NOCAST
 	var/obj/structure/closet/magical_wardrobe/mCloset = null
 

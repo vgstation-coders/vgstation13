@@ -5,7 +5,7 @@
 	level_max = list(SP_TOTAL = 3, SP_SPEED = 2, SP_POWER = 1)
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
-	charge_max = 90
+	charge_cooldown_max = 9 SECONDS
 	invocation = "ROKETTOPANCHI"
 	message = "<span class='danger'>You are punched with great force!<span>"
 	spell_flags = IS_HARMFUL | WAIT_FOR_CLICK | NEEDSCLOTHES
@@ -145,7 +145,7 @@
 	desc = "This spell empowers your next close-and-personal unarmed attack to launch the enemy with great force"
 	abbreviation = "RP"
 	user_type = USER_TYPE_GYMRAT
-	charge_max = 300 // Much longer cooldown than the wizard spell
+	charge_cooldown_max = 30 SECONDS // Much longer cooldown than the wizard spell
 	spell_flags = IS_HARMFUL | WAIT_FOR_CLICK
 	invocation_type = SP_INV_NONE
 	valid_targets = list(/mob/living) // Unlike the other version, this one can't target and destroy mechs

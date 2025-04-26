@@ -1479,9 +1479,9 @@ Use this proc preferably at the end of an equipment loadout
 				if(charge_type & SP_HOLDVAR)
 					statpanel(S.panel,"Required [S.holder_var_type]: [S.holder_var_amount]",S.connected_button)
 				else if(charge_type & SP_CHARGES)
-					statpanel(S.panel,"[S.charge_max? "[S.charge_counter]/[S.charge_max] charges" : "Free"]",S.connected_button)
+					statpanel(S.panel,"[S.charge_cooldown_max? "[S.charge_counter]/[S.charge_cooldown_max] charges" : "Free"]",S.connected_button)
 				else if(charge_type & SP_RECHARGE || charge_type & SP_GRADUAL)
-					statpanel(S.panel,"[S.charge_max? "[S.charge_counter/10.0]/[S.charge_max/10] seconds" : "Free"]",S.connected_button)
+					statpanel(S.panel,"[S.charge_cooldown_max? "[S.charge_counter/10.0]/[S.charge_cooldown_max/10] seconds" : "Free"]",S.connected_button)
 	sleep(world.tick_lag * 2)
 
 
@@ -2069,7 +2069,7 @@ Use this proc preferably at the end of an equipment loadout
 	desc = "Morph back into your previous form."
 	spell_flags = GHOSTCAST
 	abbreviation = "RF"
-	charge_max = 1
+	charge_cooldown_max = 0.1 SECONDS
 	invocation = "none"
 	invocation_type = SP_INV_NONE
 	range = 0

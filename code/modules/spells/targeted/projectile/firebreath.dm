@@ -9,7 +9,7 @@
 
 	school = "evocation"
 	price = SP_BASE_PRICE / 2
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
 	invocation = "SPY'SI MEAT'A'BAL"
 	invocation_type = SP_INV_SHOUT

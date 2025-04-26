@@ -19,7 +19,7 @@
 	invocation = "OR'DER UHP"
 	invocation_type = SP_INV_SHOUT
 	message = "<span class='sinister'>Suddenly your hands are full of snacks!<span>"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	cooldown_min = 15 SECONDS
 	selection_type = "range"
 	range = 7

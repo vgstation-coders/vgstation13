@@ -78,7 +78,7 @@
 	hud_state = "time_future"
 	invocation_type = SP_INV_NONE
 	charge_type = SP_RECHARGE
-	charge_max = 10
+	charge_cooldown_max = 1 SECONDS
 	var/list/starman_music = list('sound/music/battle_against_a_machine.ogg', 'sound/music/imbossible.ogg')
 
 /spell/aoe_turf/starman_play_music/cast(list/targets, mob/user = user)
@@ -106,7 +106,7 @@
 	hud_state = "starman_warp"
 	school = "evocation"
 	charge_type = SP_RECHARGE
-	charge_max = 60
+	charge_cooldown_max = 6 SECONDS
 	invocation_type = SP_INV_NONE
 	range = 8
 	max_targets = 1
@@ -140,7 +140,7 @@
 	desc = "Slightly heal yourself."
 	hud_state = "psi_lifeup_alpha"
 	charge_type = SP_RECHARGE
-	charge_max = 250
+	charge_cooldown_max = 25 SECONDS
 	invocation_type = SP_INV_NONE
 	var/heal_amount = 30
 
@@ -175,7 +175,7 @@
 	hud_state = "psi_shield_beta"
 	school = "evocation"
 	charge_type = SP_RECHARGE
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	invocation_type = SP_INV_NONE
 	range = 8
 	max_targets = 1
@@ -232,7 +232,7 @@
 	desc = "Conjures a psionic starstorm that impacts around you."
 	hud_state = "psi_starstorm_omega"
 	school = "conjuration"
-	charge_max = 1800
+	charge_cooldown_max = 180 SECONDS
 
 	charge_type = SP_RECHARGE
 	invocation_type = SP_INV_NONE
@@ -283,7 +283,7 @@
 	desc = "Shocks the minds of all entities around you, causing severe mental distress."
 	hud_state = "psi_brainshock_omega"
 	school = "conjuration"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 
 	charge_type = SP_RECHARGE
 	invocation_type = SP_INV_NONE
@@ -320,7 +320,7 @@
 	desc = "Damn! Look at those moves!"
 	override_icon = 'icons/mob/robots.dmi'
 	hud_state = "starman"
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	spell_flags = INCLUDEUSER
 	range = 1
 

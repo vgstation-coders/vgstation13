@@ -6,7 +6,7 @@
 	specialization = SSOFFENSIVE
 
 	school = "evocation"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	spell_flags = Z2NOCAST | WAIT_FOR_CLICK
 	invocation = "P'SH IT RE'L GUD"
 	invocation_type = SP_INV_SHOUT

@@ -218,7 +218,7 @@
 
 	override_base = "pulsedemon"
 	hud_state = "pd_icon_base"
-	charge_max = 20 SECONDS
+	charge_cooldown_max = 20 SECONDS
 	cooldown_min = 1 SECONDS
 	var/charge_cost = 0
 	var/purchase_cost = 0
@@ -266,8 +266,8 @@
 		return 0
 	spell_levels[SP_SPEED]++
 	var/new_name = generate_name()
-	charge_max = round(charge_max/1.5, 1) // -33%/-56%/-70% cooldown reduction
-	. = "You have improved [name] into [new_name]. Its cooldown is now [round(charge_max/10, 1)] seconds."
+	charge_cooldown_max = round(charge_cooldown_max/1.5, 1) // -33%/-56%/-70% cooldown reduction
+	. = "You have improved [name] into [new_name]. Its cooldown is now [round(charge_cooldown_max/10, 1)] seconds."
 	name = new_name
 	quicken_cost = round(quicken_cost * 1.5, 1)
 
@@ -308,7 +308,7 @@
 	desc = "View and purchase abilities with your electrical charge."
 	abbreviation = "AB"
 	hud_state = "pd_closed"
-	charge_max = 0
+	charge_cooldown_max = 0
 	level_max = list()
 	invisible = 1
 
@@ -534,7 +534,7 @@
 
 /spell/pulse_demon/sustaincharge
 	level_max = list(SP_TOTAL = 2, SP_SPEED = 0, SP_POWER = 2) // Why would cooldown be here?
-	charge_max = 0 SECONDS // See?
+	charge_cooldown_max = 0 SECONDS // See?
 	hud_state = "pd_cableleave"
 	name = "Self-Sustaining Charge"
 	abbreviation = "SC"

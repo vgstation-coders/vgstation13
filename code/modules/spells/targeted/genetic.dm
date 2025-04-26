@@ -42,7 +42,7 @@ code\game\\dna\genes\goon_powers.dm
 	disabilities = 1
 	duration = 30 SECONDS
 
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 
 	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
 	invocation = "STI KALY"
@@ -69,7 +69,7 @@ code\game\\dna\genes\goon_powers.dm
 	specialization = SSUTILITY
 
 	school = "transmutation"
-	charge_max = 400
+	charge_cooldown_max = 40 SECONDS
 	spell_flags = NEEDSCLOTHES | INCLUDEUSER
 	invocation = "BIRUZ BENNAR"
 	invocation_type = SP_INV_SHOUT

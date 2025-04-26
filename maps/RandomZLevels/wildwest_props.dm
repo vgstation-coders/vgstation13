@@ -271,7 +271,7 @@
 /spell/mountup
 	name = "Mount Up"
 	desc = "Mount a steed."
-	charge_max = 0
+	charge_cooldown_max = 0 SECONDS
 	spell_flags = 0
 	cast_delay = 2 SECONDS
 	var/obj/effect/overlay/my_overlay

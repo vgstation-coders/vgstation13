@@ -4,7 +4,7 @@
 	user_type = USER_TYPE_OTHER // Unused as far as I am aware.
 
 	charge_type = SP_CHARGES
-	charge_max = 1
+	charge_cooldown_max = 1 CHARGES
 	school = "conjuration"
 	spell_flags = Z2NOCAST
 	invocation = "SL'IGH B'LLS RIN'!"

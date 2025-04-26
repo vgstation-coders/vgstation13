@@ -6,7 +6,7 @@
 	abbreviation = "FW"
 	summon_type = list(/obj/effect/forcefield/wizard)
 	duration = 30 SECONDS
-	charge_max = 10 SECONDS
+	charge_cooldown_max = 10 SECONDS
 	cooldown_min = 2 SECONDS
 	spell_flags = 0
 	invocation = "TARCOL MINTI ZHERI"
@@ -26,7 +26,7 @@
 	summon_type = list(/obj/effect/forcefield/mime)
 	invocation_type = SP_INV_EMOTE
 	invocation = "mimes placing their hands on a flat surface, and pushing against it."
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	cast_sound = null
 
 	override_base = "grey"
@@ -46,7 +46,7 @@ Unwall spell, sadly has to be targeted to be any fun to use
 	specialization = SSOFFENSIVE
 
 	school = "mime"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	cast_sound = null
 	cooldown_min = 2 SECONDS
 	spell_flags = WAIT_FOR_CLICK

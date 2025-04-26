@@ -6,7 +6,7 @@
 	specialization = SSOFFENSIVE
 
 	school = "transmutation"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	spell_flags = NEEDSCLOTHES
 	invocation_type = SP_INV_NONE
 	cooldown_min = 100 //50 deciseconds reduction per rank

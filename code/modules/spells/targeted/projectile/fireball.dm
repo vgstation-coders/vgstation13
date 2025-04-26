@@ -8,7 +8,7 @@
 	proj_type = /obj/item/projectile/spell_projectile/fireball
 
 	school = "evocation"
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	spell_flags = IS_HARMFUL
 	invocation = "ONI SOMA"
 	invocation_type = SP_INV_SHOUT

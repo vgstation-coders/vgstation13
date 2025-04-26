@@ -38,7 +38,7 @@
 	panel = "Mutant Powers"
 
 	charge_type = SP_RECHARGE
-	charge_max = 50
+	charge_cooldown_max = 5 SECONDS
 
 	invocation_type = SP_INV_NONE
 	range = GLOBALCAST
@@ -125,7 +125,7 @@
 	desc = "Speak into the minds of others. You must either hear them speak or examine them to make contact."
 	panel = "Mutant Powers"
 	charge_type = SP_RECHARGE
-	charge_max = 0
+	charge_cooldown_max = 0
 	invocation_type = SP_INV_NONE
 	range = GLOBALCAST //the world
 	max_targets = 1
