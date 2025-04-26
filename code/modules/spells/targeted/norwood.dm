@@ -8,7 +8,7 @@
 	charge_type = Sp_RECHARGE
 
 	school = "transmutation"
-	charge_max = 600
+	charge_max = 10 SECONDS
 	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
 	cooldown_min = 4 SECONDS
 	range = 1
