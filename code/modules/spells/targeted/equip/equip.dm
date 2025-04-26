@@ -5,12 +5,16 @@
 	user_type = USER_TYPE_NOUSER
 	spell_flags = SELECTABLE
 
-	var/list/equipped_summons = list() //assoc list of text ids and paths to spawn
+	/// assoc list of text ids and paths to spawn
+	var/list/equipped_summons = list()
 
-	var/list/summoned_items = list() //list of items we summoned and will dispose when the spell runs out
+	/// list of items we summoned and will dispose when the spell runs out
+	var/list/summoned_items = list() 
 
-	var/delete_old = 1 //if the item previously in the slot is deleted - otherwise, it's dropped
+	///if the item previously in the slot is deleted - otherwise, it's dropped
+	var/delete_old = TRUE 
 
+/// Public: handles the unequip/equip part of the spell
 /spell/targeted/equip_item/cast(list/targets, mob/user = usr)
 	..()
 	for(var/mob/living/L in targets)
@@ -37,5 +41,7 @@
 					M.remove_from_mob(to_remove)
 					qdel(to_remove)
 
+/// Public: automatically called when creating the item to equip
+/// Can override for special effects
 /spell/targeted/equip_item/proc/summon_item(var/newtype)
 	return new newtype

@@ -50,6 +50,7 @@ If the spell_projectile is seeking, it will update its target every process and 
 			projectile.process()
 	return
 
+/// Public: list of available targets for the projectile spell
 /spell/targeted/projectile/proc/choose_prox_targets(mob/user = usr, var/atom/movable/spell_holder)
 	var/list/targets = list()
 	for(var/mob/living/M in range(spell_holder, cast_prox_range))
@@ -63,5 +64,6 @@ If the spell_projectile is seeking, it will update its target every process and 
 			targets += M
 	return targets
 
+/// Public: what happens when the spell_projectile enters in contact with the targets
 /spell/targeted/projectile/proc/prox_cast(var/list/targets, var/atom/movable/spell_holder)
 	return targets
