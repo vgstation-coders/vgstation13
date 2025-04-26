@@ -197,7 +197,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		text += "<p><a href='?src=\ref[src];action=delete_area'>Erase this drawing</a></p>"
 
 	text += "</BODY></HTML>"
-	usr << browse(text, "window=blueprints")
+	usr << browse(text, "window=blueprints") // NB: no need for HTML_SKELETON as it already HTML'd
 	onclose(usr, "blueprints")
 
 /obj/item/blueprints/proc/get_area_type(var/area/A)

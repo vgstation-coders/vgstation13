@@ -35,7 +35,7 @@
 		output += "<li>Unconnected [plumbing.name] located at [formatJumpTo(plumbing.loc)]</li>"
 
 	output += "</ul>"
-	usr << browse(output,"window=pipereport;size=1000x500")
+	usr << browse(HTML_SKELETON(output),"window=pipereport;size=1000x500")
 /client/proc/powerdebug()
 	set category = "Mapping"
 	set name = "Check Power"
@@ -63,4 +63,4 @@
 				low_nets++
 
 	output += "</ul><br>[empty_nets] powernets without nodes detected, [low_nets] with less than 10 cables."
-	usr << browse(output,"window=pipereport;size=1000x500")
+	usr << browse(HTML_SKELETON(output),"window=pipereport;size=1000x500")

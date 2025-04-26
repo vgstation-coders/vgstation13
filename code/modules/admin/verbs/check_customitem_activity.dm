@@ -24,7 +24,7 @@ var/inactive_keys = "None<br>"
 	else
 		dat += "<a href='?src=\ref[src];_src_=holder;populate_inactive_customitems=1'>Populate list (requires an active database connection)</a><br>"
 
-	usr << browse(dat, "window=inactive_customitems;size=600x480")
+	usr << browse(HTML_SKELETON(dat), "window=inactive_customitems;size=600x480")
 
 /proc/populate_inactive_customitems_list(var/client/C)
 	//set background = 1

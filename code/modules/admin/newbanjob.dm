@@ -225,7 +225,7 @@ var/savefile/Banlistjob
 
 	dat += {"</table>
 		<HR><B>Bans:</B> <FONT COLOR=blue>(U) = Unban , </FONT> - <FONT COLOR=green>([count] Bans)</FONT><HR><table border=1 rules=all frame=void cellspacing=0 cellpadding=3 >[dat]"}
-	usr << browse(dat, "window=unbanp;size=875x400")
+	usr << browse(HTML_SKELETON(dat), "window=unbanp;size=875x400")
 
 /*/datum/admins/proc/permjobban(ckey, computerid, reason, bannedby, temp, minutes, rank)
 	if(AddBanjob(ckey, computerid, reason, usr.ckey, 0, 0, job))

@@ -105,7 +105,7 @@ var/global/list/banned_sandbox_types=list(
 		hsbpanel += "- <a href=\"?\ref[src];hsb=[T]\">[hrefs[T]]</a><br>"
 	if(hsboxspawn)
 		hsbpanel += "- <a href=\"?\ref[src];hsb=hsbobj\">Spawn Object</a><br><br>"
-	usr << browse(hsbpanel, "window=hsbpanel")
+	usr << browse(HTML_SKELETON(hsbpanel), "window=hsbpanel")
 
 /datum/hSB/Topic(href, href_list)
 	if(!(src.owner == usr.ckey))

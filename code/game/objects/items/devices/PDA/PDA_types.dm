@@ -559,7 +559,7 @@
 			usr << browse_rsc(img, "tmp_photo_[note].png")
 			dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
 	dat += "</body></html>"
-	usr << browse(dat, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
+	usr << browse(HTML_SKELETON(dat), "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
 
 /mob/living/silicon/ai/proc/cmd_show_message_log()
 	if(usr.isDead())
@@ -578,7 +578,7 @@
 				usr << browse_rsc(img, "tmp_photo_[note].png")
 				dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
 		dat += "</body></html>"
-		usr << browse(dat, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
+		usr << browse(HTML_SKELETON(dat), "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
 	else
 		to_chat(usr, "You do not have a PDA. You should make an issue report about this.")
 

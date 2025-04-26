@@ -33,4 +33,4 @@
 		</html>
 		"}
 
-	usr << browse(dat, "window=climatepanel;size=360x175")
+	usr << browse(HTML_SKELETON(dat), "window=climatepanel;size=360x175")

@@ -1277,7 +1277,7 @@ Use this proc preferably at the end of an equipment loadout
 	set category = "OOC"
 	var/output = {"Your BYOND version is: <b>[byond_version].[byond_build]</b><br>
 		You can view all of the latest server-compatible BYOND builds here: https://www.byond.com/download/build/[world.byond_version]/"}
-	usr << browse(output, "window=byond-version-data");
+	usr << browse(HTML_SKELETON(output), "window=byond-version-data");
 
 /mob/verb/observe()
 	set name = "Observe"

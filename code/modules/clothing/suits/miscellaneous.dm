@@ -100,7 +100,7 @@ var/list/tag_suits_list = list()
 		var/datum/laser_tag_game/game = locate(href_list["join_game"])
 		game.handle_new_player(player, usr)
 		my_laser_tag_game = game
-		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
+		usr << browse(HTML_SKELETON(get_window_text(usr)),"window=laser_tag_window;size=500x250")
 		return
 
 	if (href_list["create_game"])
@@ -110,7 +110,7 @@ var/list/tag_suits_list = list()
 		game.name = "[get_first_word(usr.name)]'s game"
 		game.handle_new_player(player, usr)
 		refresh_edit_window(usr, game)
-		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
+		usr << browse(HTML_SKELETON(get_window_text(usr)),"window=laser_tag_window;size=500x250")
 		return
 
 	// Game parametrisation
@@ -188,7 +188,7 @@ var/list/tag_suits_list = list()
 	if (href_list["leave_game"])
 		var/datum/laser_tag_game/game = locate(href_list["leave_game"])
 		game.kick_player(usr)
-		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
+		usr << browse(HTML_SKELETON(get_window_text(usr)),"window=laser_tag_window;size=500x250")
 		return
 
 	if (href_list["clear_gamertag"])

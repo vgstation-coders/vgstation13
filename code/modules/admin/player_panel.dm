@@ -340,7 +340,7 @@
 	</body></html>
 	"}
 
-	usr << browse(dat, "window=players;size=600x480")
+	usr << browse(HTML_SKELETON(dat), "window=players;size=600x480")
 
 //The old one
 /datum/admins/proc/player_panel_old()
@@ -402,4 +402,4 @@
 
 	dat += "</table></body></html>"
 
-	usr << browse(dat, "window=players;size=640x480")
+	usr << browse(HTML_SKELETON(dat), "window=players;size=640x480")

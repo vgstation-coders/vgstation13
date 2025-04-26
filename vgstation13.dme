@@ -39,6 +39,7 @@
 #include "__DEFINES\game.dm"
 #include "__DEFINES\gases.dm"
 #include "__DEFINES\global.dm"
+#include "__DEFINES\html_wrappers.dm"
 #include "__DEFINES\human.dm"
 #include "__DEFINES\hydroponics.dm"
 #include "__DEFINES\implants.dm"

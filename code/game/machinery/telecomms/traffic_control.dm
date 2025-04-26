@@ -188,7 +188,7 @@
 			return
 
 	if(href_list["print"])
-		usr << browse(print_logs(), "window=traffic_logs")
+		usr << browse(HTML_SKELETON(print_logs()), "window=traffic_logs")
 		return
 
 	if(!auth && !issilicon(usr) && !emagged)
