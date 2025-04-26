@@ -5,7 +5,7 @@
 	specialization = SSOFFENSIVE
 	school = "conjuration"
 	charge_max = 300
-	cooldown_min = 100
+	cooldown_min = 10 SECONDS
 
 	spell_levels = list(SP_SPEED = 0, SP_MOVE = 0, SP_POWER = 0)
 	level_max = list(SP_TOTAL = 5, SP_SPEED = 3, SP_MOVE = 1, SP_POWER = 1)
@@ -18,7 +18,7 @@
 	hud_state = "wiz_firering"
 	price = SP_BASE_PRICE / 2
 
-	duration = 100
+	duration = 10 SECONDS
 	range = 3
 	selection_type = "range"
 	var/move_with_user = 0

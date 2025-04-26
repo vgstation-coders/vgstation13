@@ -6,7 +6,7 @@
 	specialization = SSUTILITY
 	school = "transmutation"
 	charge_max = 250
-	cooldown_min = 30
+	cooldown_min = 3 SECONDS
 	invocation_type = SP_INV_SHOUT
 	range = 10 //If you can see it, you can steal it
 	max_targets = 1

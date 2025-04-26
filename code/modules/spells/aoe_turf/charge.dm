@@ -10,7 +10,7 @@
 	invocation = "DIRI CEL"
 	invocation_type = SP_INV_WHISPER
 	range = 0
-	cooldown_min = 400 //50 deciseconds reduction per rank
+	cooldown_min = 40 SECONDS //5 SECONDS reduction per rank
 
 	hud_state = "wiz_charge"
 

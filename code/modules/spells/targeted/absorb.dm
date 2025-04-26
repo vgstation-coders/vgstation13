@@ -9,7 +9,7 @@
 	spell_flags = IS_HARMFUL
 	invocation_type = SP_INV_SHOUT
 	range = 0
-	cooldown_min = 200
+	cooldown_min = 20 SECONDS
 
 	hud_state = "wiz_disint_old"
 

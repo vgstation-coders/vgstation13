@@ -13,7 +13,7 @@
 	range = 7
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK
-	cooldown_min = 30
+	cooldown_min = 3 SECONDS
 	selection_type = "range"
 
 	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)

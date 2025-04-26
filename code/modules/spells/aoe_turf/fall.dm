@@ -17,8 +17,8 @@ var/global/list/falltempoverlays = list()
 	invocation = "OMNIA RUINAM"
 	invocation_type = SP_INV_SHOUT
 	range = 6
-	cooldown_min = 200
-	cooldown_reduc = 100
+	cooldown_min = 20 SECONDS
+	cooldown_reduc = 10 SECONDS
 	level_max = list(SP_TOTAL = 3, SP_SPEED = 3, SP_POWER = 3)
 	hud_state = "wiz_timestop"
 	var/image/aoe_underlay

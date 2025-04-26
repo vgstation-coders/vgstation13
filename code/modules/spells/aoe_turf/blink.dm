@@ -12,7 +12,7 @@
 	invocation_type = SP_INV_NONE
 	range = 7
 	inner_radius = 1
-	cooldown_min = 5 //4 deciseconds reduction per rank
+	cooldown_min = 0.5 SECONDS //0.4 SECONDS reduction per rank
 	hud_state = "wiz_blink"
 	selection_type = "range"
 	quicken_price = SP_BASE_PRICE

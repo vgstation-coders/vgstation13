@@ -235,7 +235,7 @@
 	invocation_type = SP_INV_NONE
 	range = 0
 	summon_type = list(/obj/effect/forcefield/cult)
-	duration = 200
+	duration = 20 SECONDS
 
 	override_base = "cult"
 	hud_state = "const_juggwall"
@@ -269,7 +269,7 @@
 	invocation_type = SP_INV_NONE
 	range = 0
 	summon_type = list(/obj/effect/forcefield/cult/large)
-	duration = 200
+	duration = 20 SECONDS
 
 	hud_state = "const_juggwall2"
 	override_base = "cult"

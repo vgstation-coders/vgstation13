@@ -237,7 +237,7 @@
 	charge_type = SP_RECHARGE
 	invocation_type = SP_INV_NONE
 
-	duration = 100
+	duration = 10 SECONDS
 	range = 5
 	selection_type = "range"
 	var/meteor_count = 12
@@ -288,7 +288,7 @@
 	charge_type = SP_RECHARGE
 	invocation_type = SP_INV_NONE
 
-	duration = 100
+	duration = 10 SECONDS
 	range = 6
 	selection_type = "range"
 	var/move_with_user = 0

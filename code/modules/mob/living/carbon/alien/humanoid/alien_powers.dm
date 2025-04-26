@@ -145,7 +145,7 @@ Doesn't work on other aliens/AI.*/
 	spell_flags = WAIT_FOR_CLICK
 	proj_type = /obj/item/projectile/energy/neurotoxin
 	cast_sound = 'sound/weapons/pierce.ogg'
-	duration = 20
+	duration = 2 SECONDS
 	projectile_speed = 1
 
 /spell/targeted/projectile/alienneurotoxin/is_valid_target(atom/target, mob/user, options, bypass_range = 0)

@@ -12,7 +12,7 @@ code\game\\dna\genes\goon_powers.dm
 
 	var/disabilities = 0 //bits
 	var/list/mutations = list() //mutation strings
-	duration = 100 //deciseconds
+	duration = 10 SECONDS
 
 
 /spell/targeted/genetic/cast(list/targets)
@@ -40,7 +40,7 @@ code\game\\dna\genes\goon_powers.dm
 	abbreviation = "BD"
 	specialization = SSOFFENSIVE
 	disabilities = 1
-	duration = 300
+	duration = 30 SECONDS
 
 	charge_max = 300
 
@@ -48,7 +48,7 @@ code\game\\dna\genes\goon_powers.dm
 	invocation = "STI KALY"
 	invocation_type = SP_INV_WHISPER
 	message = "<span class='danger'>Your eyes cry out in pain!</span>"
-	cooldown_min = 50
+	cooldown_min = 5 SECONDS
 
 	range = 7
 	max_targets = 1
@@ -78,8 +78,8 @@ code\game\\dna\genes\goon_powers.dm
 	max_targets = 1
 
 	mutations = list(M_HULK)
-	duration = 300
-	cooldown_min = 300 //25 deciseconds reduction per rank
+	duration = 30 SECONDS
+	cooldown_min = 30 SECONDS //25 seconds reduction per rank
 
 	hud_state = "wiz_hulk"
 	user_type = USER_TYPE_WIZARD

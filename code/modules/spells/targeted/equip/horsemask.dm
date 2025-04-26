@@ -13,7 +13,7 @@
 	invocation_type = SP_INV_SHOUT
 	range = 7
 	max_targets = 1
-	cooldown_min = 30 //30 deciseconds reduction per rank
+	cooldown_min = 3 SECONDS //3 seconds reduction per rank
 	selection_type = "range"
 	spell_flags = WAIT_FOR_CLICK
 

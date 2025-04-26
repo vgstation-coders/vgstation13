@@ -5,7 +5,7 @@
 	specialization = SSDEFENSIVE
 	abbreviation = "FW"
 	summon_type = list(/obj/effect/forcefield/wizard)
-	duration = 300
+	duration = 30 SECONDS
 	charge_max = 10 SECONDS
 	cooldown_min = 2 SECONDS
 	spell_flags = 0
@@ -116,7 +116,7 @@ Unwall fields
 	density = TRUE
 	flow_flags = ON_BORDER
 	mouse_opacity = 1
-	var/duration = 300 // How long the wall lasts, in ticks
+	var/duration = 30 SECONDS // How long the wall lasts, in ticks
 	var/static/list/forbidden_passes = list(/turf/unsimulated/wall,/turf/simulated/wall/invulnerable,/obj/structure/grille/invulnerable) // To stop people breaking maps like centcomm or lamprey stuff
 
 /obj/effect/unwall_field/permanent // For future mapping or bus shenanigans

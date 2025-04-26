@@ -11,7 +11,7 @@
 	invocation = "AULIE OXIN FIERA"
 	invocation_type = SP_INV_WHISPER
 	range = 3
-	cooldown_min = 20 //20 deciseconds reduction per rank
+	cooldown_min = 2 SECONDS //2 seconds reduction per rank
 
 	hud_state = "wiz_knock"
 

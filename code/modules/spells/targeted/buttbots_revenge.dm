@@ -11,7 +11,7 @@
 	invocation = "ARSE NATH"
 	invocation_type = SP_INV_SHOUT
 	range = 1
-	cooldown_min = 200 //100 deciseconds reduction per rank
+	cooldown_min = 20 SECONDS //10 seconds reduction per rank
 	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)
 	sparks_spread = 1
 	sparks_amt = 4

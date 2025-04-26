@@ -20,7 +20,7 @@
 	invocation_type = SP_INV_SHOUT
 	message = "<span class='sinister'>Suddenly your hands are full of snacks!<span>"
 	charge_max = 300
-	cooldown_min = 150
+	cooldown_min = 15 SECONDS
 	selection_type = "range"
 	range = 7
 	valid_targets = list(/mob/living/carbon)

@@ -12,7 +12,7 @@
 	invocation_type = SP_INV_NONE
 	range = 1
 	inner_radius = -1
-	cooldown_min = 20 //25 deciseconds reduction per rank
+	cooldown_min = 2 SECONDS //2.5 seconds reduction per rank
 
 	smoke_spread = 2
 	smoke_amt = 5

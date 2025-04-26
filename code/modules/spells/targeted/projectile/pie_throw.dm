@@ -12,7 +12,7 @@
 	range = 20
 
 	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
-	duration = 20
+	duration = 2 SECONDS
 	projectile_speed = 1
 
 	level_max = list(SP_TOTAL = 5, SP_POWER = 5)

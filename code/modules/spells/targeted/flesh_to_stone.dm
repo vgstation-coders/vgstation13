@@ -13,7 +13,7 @@
 	invocation = "STAUN EI"
 	invocation_type = SP_INV_SHOUT
 	amt_stunned = 5//just exists to make sure the statue "catches" them
-	cooldown_min = 200 //100 deciseconds reduction per rank
+	cooldown_min = 20 SECONDS //10 SECONDS deciseconds reduction per rank
 	valid_targets = list(/mob/living)
 
 	hud_state = "wiz_statue"

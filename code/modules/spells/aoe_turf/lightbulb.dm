@@ -13,7 +13,7 @@
 	range = 7
 	inner_radius = -1
 
-	cooldown_min = 50
+	cooldown_min = 5 SECONDS
 
 	hud_state = "blackout"
 

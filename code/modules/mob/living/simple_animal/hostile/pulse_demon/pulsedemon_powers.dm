@@ -331,7 +331,7 @@
 
 	range = 10
 	spell_flags = WAIT_FOR_CLICK
-	duration = 20
+	duration = 2 SECONDS
 	level_max = list(SP_TOTAL = 2, SP_POWER = 0, SP_SPEED = 2)
 
 	hud_state = "pd_drain"
@@ -365,7 +365,7 @@
 
 	range = 5
 	spell_flags = WAIT_FOR_CLICK
-	duration = 20
+	duration = 2 SECONDS
 	level_max = list(SP_TOTAL = 3, SP_POWER = 0, SP_SPEED = 3)
 
 	hud_state = "pd_cablehop"
@@ -468,7 +468,7 @@
 
 	range = 10
 	spell_flags = WAIT_FOR_CLICK
-	duration = 20
+	duration = 2 SECONDS
 	level_max = list(SP_TOTAL = 2, SP_POWER = 0, SP_SPEED = 2)
 
 	hud_state = "pd_emag"
@@ -504,7 +504,7 @@
 
 	range = 10
 	spell_flags = WAIT_FOR_CLICK
-	duration = 20
+	duration = 2 SECONDS
 	level_max = list(SP_TOTAL = 2, SP_POWER = 0, SP_SPEED = 2)
 
 	hud_state = "wiz_tech"
@@ -587,7 +587,7 @@
 
 	range = 10
 	spell_flags = WAIT_FOR_CLICK
-	duration = 20
+	duration = 2 SECONDS
 	level_max = list(SP_TOTAL = 1, SP_POWER = 0, SP_SPEED = 1)
 
 	hud_state = "overload"

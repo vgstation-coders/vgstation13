@@ -7,7 +7,7 @@
 
 	level_max = list(SP_TOTAL = 3, SP_SPEED = 3)
 	charge_max = 50
-	cooldown_min = 10
+	cooldown_min = 1 SECONDS
 	invocation = "I CAST FIST"
 	invocation_type = SP_INV_SHOUT
 	max_targets = 3

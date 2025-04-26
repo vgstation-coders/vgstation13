@@ -11,7 +11,7 @@
 	invocation = "P'SH IT RE'L GUD"
 	invocation_type = SP_INV_SHOUT
 	range = 1
-	cooldown_min = 10
+	cooldown_min = 1 SECONDS
 	level_max = list(SP_TOTAL = 4, SP_SPEED = 4)
 	sparks_spread = 1
 	sparks_amt = 4

@@ -53,7 +53,7 @@
 	symptom = "Subject starts drooling uncontrollably."
 	treatment = "Inject small dose of dylovene."
 	effect = "Subject turns into monkey."
-	duration = 10*90
+	duration = 90 SECONDS
 
 	start(mob/living/carbon/human/H)
 		H.emote("me", 1, "has drool running down from his mouth.")
@@ -67,7 +67,7 @@
 	symptom = "Subject starts drooling uncontrollably."
 	treatment = "Inject small dose of dylovene."
 	effect = "Subject becomes confused."
-	duration = 10*30
+	duration = 30 SECONDS
 
 /datum/genetics/side_effect/confuse/start(mob/living/carbon/human/H)
 	H.emote("me", 1, "has drool running down from his mouth.")

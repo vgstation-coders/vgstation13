@@ -10,8 +10,8 @@
 	price = SP_BASE_PRICE
 	level_max = list(SP_TOTAL = 3, SP_SPEED = 2, SP_POWER = 1) //empower makes them SMASHED and SLAMMED
 	charge_max = 300
-	cooldown_reduc = 100
-	cooldown_min = 100
+	cooldown_reduc = 10 SECONDS
+	cooldown_min = 10 SECONDS
 	invocation = "GR'T W'TH K'DS"
 	invocation_type = SP_INV_SHOUT
 	spell_flags = NEEDSCLOTHES

@@ -12,7 +12,7 @@
 	range = 7
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK
-	cooldown_min = 200
+	cooldown_min = 20 SECONDS
 	selection_type = "range"
 
 

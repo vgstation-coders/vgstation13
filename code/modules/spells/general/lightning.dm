@@ -5,8 +5,8 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
 	charge_max = 100
-	cooldown_min = 40
-	cooldown_reduc = 30
+	cooldown_min = 4 SECONDS
+	cooldown_reduc = 3 SECONDS
 
 	spell_levels = list(SP_SPEED = 0, SP_POWER = 0)
 	level_max = list(SP_TOTAL = 3, SP_SPEED = 3, SP_POWER = 3) //each level of power grants 1 additional target.

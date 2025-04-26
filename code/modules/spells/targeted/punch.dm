@@ -9,7 +9,7 @@
 	invocation = "ROKETTOPANCHI"
 	message = "<span class='danger'>You are punched with great force!<span>"
 	spell_flags = IS_HARMFUL | WAIT_FOR_CLICK | NEEDSCLOTHES
-	cooldown_min = 30
+	cooldown_min = 3 SECONDS
 	invocation_type = SP_INV_SHOUT
 	max_targets = 1
 	range = 1

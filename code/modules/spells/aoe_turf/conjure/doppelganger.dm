@@ -9,8 +9,8 @@
 	price = SP_BASE_PRICE / 2
 	level_max = list(SP_TOTAL = 2, SP_SPEED = 2)
 	charge_max = 300
-	cooldown_reduc = 100
-	cooldown_min = 100
+	cooldown_reduc = 10 SECONDS
+	cooldown_min = 10 SECONDS
 	invocation = "MY O'N CLO'N"
 	invocation_type = SP_INV_SHOUT
 	spell_flags = NEEDSCLOTHES | IS_HARMFUL

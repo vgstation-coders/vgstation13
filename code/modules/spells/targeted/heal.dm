@@ -8,8 +8,8 @@
 
 	school = "transmutation"
 	charge_max = 300
-	cooldown_reduc = 75
-	cooldown_min = 150
+	cooldown_reduc = 7.5 SECONDS
+	cooldown_min = 15 SECONDS
 	invocation = "DI TIUB SEEL IM"
 	invocation_type = SP_INV_SHOUT
 	message = "<span class='sinister'>You feel refreshed.<span>"

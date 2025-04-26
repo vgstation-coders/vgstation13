@@ -21,7 +21,7 @@
 
 	delete_old = 0 //Players shouldn't lose their hardsuits because they decided to summon some robes.
 
-	cooldown_min = 50
+	cooldown_min = 5 SECONDS
 
 	valid_targets = list(/mob/living/carbon/human)
 

@@ -13,7 +13,7 @@
 	range = 0
 	inner_radius = -1
 
-	cooldown_min = 200 //50 deciseconds reduction per rank
+	cooldown_min = 20 SECONDS //0.5 seconds reduction per rank
 
 	var/emp_heavy = 6
 	var/emp_light = 10

@@ -11,8 +11,8 @@
 	invocation_type = SP_INV_NONE
 	range = SELFCAST
 	max_targets = 1
-	cooldown_min = 100 //50 deciseconds reduction per rank
-	duration = 50 //in deciseconds
+	cooldown_min = 10 SECONDS //5 SECONDS reduction per rank
+	duration = 5 SECONDS 
 	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)
 
 	hud_state = "wiz_jaunt"
@@ -139,7 +139,7 @@
 	range = 3
 
 	charge_max = 600 //Double cooldown, makes it less spammable
-	duration = 100 //Double jaunt time, makes it easier to cooperate
+	duration = 10 SECONDS //Double jaunt time, makes it easier to cooperate
 
 /spell/targeted/ethereal_jaunt/shift
 	name = "Phase Shift"
@@ -150,7 +150,7 @@
 	spell_flags = Z2NOCAST | INCLUDEUSER | CONSTRUCT_CHECK
 	invocation_type = SP_INV_NONE
 	range = SELFCAST
-	duration = 50 //in deciseconds
+	duration = 5 SECONDS
 
 	hud_state = "const_shift"
 
@@ -176,7 +176,7 @@
 	charge_max = 1 MINUTES
 	invocation_type = SP_INV_NONE
 	range = SELFCAST
-	duration = 50 //in deciseconds
+	duration = 5 SECONDS
 
 	override_base = "vamp"
 	hud_state = "vamp_mistform"

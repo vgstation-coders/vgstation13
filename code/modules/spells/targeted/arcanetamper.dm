@@ -16,7 +16,7 @@
 	invocation_type = SP_INV_NONE // we say it in the arcane_acts
 	level_max = list(SP_TOTAL = 4, SP_SPEED = 2, SP_POWER = 2)
 	range = 1
-	cooldown_min = 100 // 50 deciseconds reduction per rank
+	cooldown_min = 10 SECONDS // 5 seconds reduction per rank
 	hud_state = "wiz_arctam"
 	spell_flags = WAIT_FOR_CLICK
 	var/recursive = FALSE // does it curse contents too?

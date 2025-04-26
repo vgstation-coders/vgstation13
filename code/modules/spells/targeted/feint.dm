@@ -10,7 +10,7 @@
 	spell_flags = NEEDSCLOTHES
 	invocation_type = SP_INV_NONE
 	cooldown_min = 100 //50 deciseconds reduction per rank
-	duration = 30 //in deciseconds
+	duration = 3 SECONDS //in deciseconds
 
 	hud_state = "wiz_feint"
 

@@ -13,10 +13,10 @@
 	invocation = "ONI SOMA"
 	invocation_type = SP_INV_SHOUT
 	range = 20
-	cooldown_min = 20 //10 deciseconds reduction per rank
+	cooldown_min = 2 SECONDS //1 second reduction per rank
 
 	spell_aspect_flags = SPELL_FIRE
-	duration = 20
+	duration = 2 SECONDS
 	projectile_speed = 1
 	cast_prox_range = 0
 

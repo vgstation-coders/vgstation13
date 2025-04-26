@@ -10,7 +10,7 @@
 	max_targets = 1
 
 	amt_stunned = 5
-	cooldown_min = 30
+	cooldown_min = 3 SECONDS
 
 	hud_state = "ice_barrage"
 	valid_targets = list(/mob/living)

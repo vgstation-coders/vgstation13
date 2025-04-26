@@ -19,7 +19,7 @@ Removes letters in the afflicted's sentences like the virology symptom, others m
 	range = 3
 	inner_radius = -1
 
-	cooldown_min = 100
+	cooldown_min = 10 SECONDS
 	var/letters_retained = 12
 	level_max = list(SP_TOTAL = 6, SP_SPEED = 4, SP_POWER = 2)
 
