@@ -473,7 +473,7 @@
 
 	if(istype(T,/turf/simulated/floor) && volume >= 1)
 		var/turf/simulated/floor/F = T
-		if(F.floor_tile && F.floor_tile.material == "metal") //"rots away" metal floor tiles
+		if(F.floor_tile?.material == "metal") //"rots away" metal floor tiles
 			F.make_plating()
 	if(istype(T, /turf/simulated/wall) && volume >= 5 &&T.can_thermite)
 		var/turf/simulated/wall/W = T
