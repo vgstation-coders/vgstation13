@@ -614,7 +614,7 @@
 
 				dat += {"<FONT COLOR=red>Error: No growns inside.</FONT><BR>Please, put growns into reactor.<BR>
 					<A href='?src=\ref[src];action=menu'>Return to menu</A>"}
-	user << browse(dat, "window=biogenerator")
+	user << browse(HTML_SKELETON(dat), "window=biogenerator")
 	onclose(user, "biogenerator")
 	return
 
