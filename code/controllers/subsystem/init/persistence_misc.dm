@@ -243,7 +243,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 
 /datum/persistence_task/highscores/proc/insert_records(list/records)
 	data += records
-	cmp_field = "cash"
+	global.cmp_field = "cash"
 	sortTim(data, /proc/cmp_list_by_element_desc)
 	if (data.len > 5)
 		data.Cut(6) // we only store the top 5
