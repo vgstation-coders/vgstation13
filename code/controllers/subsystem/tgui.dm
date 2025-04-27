@@ -297,6 +297,13 @@ var/datum/subsystem/tgui/SStgui
 		open_uis_by_src[key] = list()
 	ui.user.tgui_open_uis |= ui
 	var/list/uis = open_uis_by_src[key]
+
+	// this feels a bit silly
+	if (ui.src_object.open_uis)
+		ui.src_object.open_uis += ui
+	else
+		ui.src_object.open_uis = list(ui)
+
 	uis |= ui
 	open_uis |= ui
 	all_uis |= ui
@@ -322,8 +329,13 @@ var/datum/subsystem/tgui/SStgui
 	// If the user exists, remove it from them too.
 	if(ui.user)
 		ui.user.tgui_open_uis -= ui
+
+	// basically a lazy remove
 	if(ui.src_object.open_uis)
 		ui.src_object.open_uis -= ui
+		if (!length(ui.src_object.open_uis))
+			ui.src_object.open_uis = null
+
 	return TRUE
 
 /**

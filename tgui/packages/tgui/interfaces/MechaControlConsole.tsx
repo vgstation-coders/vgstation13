@@ -69,12 +69,14 @@ const Mechas = (props) => {
               icon={mecha.status ? 'unlock' : 'lock'}
               color={mecha.status ? 'good' : 'default'}
               content={mecha.status ? 'Release' : 'Lockdown'}
+              confirmContent="Confirm?"
               onClick={() => act('lockdown', {
                 ref: mecha.ref,
               })} />
             <Button.Confirm
               icon="bomb"
               content="Overload Beacon"
+              confirmContent="Confirm?"
               color="bad"
               onClick={() => act('shock', {
                 ref: mecha.ref,

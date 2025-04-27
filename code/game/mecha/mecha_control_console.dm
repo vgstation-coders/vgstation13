@@ -50,7 +50,7 @@
 
 	return data
 
-/obj/machinery/computer/mecha/ui_act(action, params)
+/obj/machinery/computer/mecha/ui_act(action, list/params)
 	. = ..()
 	if(.)
 		return
