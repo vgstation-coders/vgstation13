@@ -55,7 +55,6 @@ var/datum/subsystem/tgui/SStgui
 	var/list/current_run = src.current_run
 	while(current_run.len)
 		var/datum/tgui/ui = current_run[current_run.len]
-		message_admins("processing [ui]... for [ui.user]")
 		current_run.len--
 		// TODO: Move user/src_object check to process()
 		if(ui?.user && ui.src_object)
@@ -256,12 +255,10 @@ var/datum/subsystem/tgui/SStgui
  * return int The number of UIs updated.
  */
 /datum/subsystem/tgui/proc/update_user_uis(mob/user, datum/src_object)
-	message_admins("update user UIs for [user] & [src_object]")
 	var/count = 0
 	if(length(user?.tgui_open_uis) == 0)
 		return count
 	for(var/datum/tgui/ui in user.tgui_open_uis)
-		to_chat("updating [src_object] 4 [user]")
 		if(isnull(src_object) || ui.src_object == src_object)
 			ui.process(wait * 0.1, force = 1)
 			count++
