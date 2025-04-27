@@ -83,7 +83,7 @@ export const CameraConsole = (props) => {
   return (
     <Window width={850} height={708}>
       <Window.Content>
-        <CameraContent />
+        <CameraContent props />
       </Window.Content>
     </Window>
   );
@@ -91,10 +91,26 @@ export const CameraConsole = (props) => {
 
 export const CameraContent = (props) => {
   const [searchText, setSearchText] = useState('');
-
+  const { act } = useBackend<Data>();
   return (
     <Stack fill>
       <Stack.Item grow>
+      {props.isSpessTV && (
+                <>
+                  <Button
+                    icon="heart"
+                    disabled={!activeCamera}
+                    onClick={() => act('follow')}>
+                    Follow
+                  </Button>
+                  <Button
+                    icon="star"
+                    disabled={!activeCamera}
+                    onClick={() => act('subscribe')}>
+                    Subscribe
+                  </Button>
+                </>
+              )}
         <CameraSelector searchText={searchText} setSearchText={setSearchText} />
       </Stack.Item>
       <Stack.Item grow={3}>
@@ -176,7 +192,6 @@ const CameraControls = (props: { searchText: string }) => {
                 <NoticeBox danger>No input signal</NoticeBox>
               )}
             </Stack.Item>
-
             <Stack.Item>
               <Button
                 icon="chevron-left"
