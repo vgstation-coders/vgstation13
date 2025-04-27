@@ -42,8 +42,8 @@ export const MechaControlConsole = (props) => {
 const Mechas = (props) => {
   const { act } = useBackend<Data>();
   const { mechas } = props;
-  const [messageMechas, setMessageMechas] = useState('messageMechas', []);
-  const [messageText, setMessageText] = useState('messageText', '');
+  const [messageMechas, setMessageMechas] = useState('');
+  const [messageText, setMessageText] = useState('');
 
   if (!mechas.length) {
     return (
@@ -86,7 +86,7 @@ const Mechas = (props) => {
         {messageMechas.includes(mecha.ref)
         && (
           <Modal align="center">
-            Send Message
+            Send Message:
             <Input
               value={messageText}
               placeholder="Enter Message"
@@ -98,9 +98,9 @@ const Mechas = (props) => {
                     ref: mecha.ref,
                   });
                 }
+                // Empty out the Message mecha window
                 setMessageText('');
-                setMessageMechas(messageMechas.filter(
-                  m => { return m !== mecha.ref; }));
+                setMessageMechas('');
               }} />
           </Modal>)}
         <Flex align="center" justify="space-evenly">
