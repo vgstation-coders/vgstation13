@@ -130,6 +130,11 @@
 			Tchangeling.absorbedcount = 0
 	changeling.absorbedcount++
 	user.updateChangelingHUD()
+	var/choice = alert(T, "JOIN US", "JOIN US", "Yes", "No")
+	sleep(30)
+	if (choice == "Yes")
+		var/mob/living/hivemind/hivemind = new /mob/living/hivemind(user)
+		hivemind.add_to_hivemind(T, user)
 
 	T.death(0)
 	T.ChangeToHusk()

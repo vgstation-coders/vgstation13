@@ -277,6 +277,8 @@
 
 #define iscultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
 
+#define ishivemindmember(H) (H.mind ? istype(H, /mob/living/hivemind) : FALSE)
+
 #define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
 
 #define isvoxraider(H) (H.mind && H.mind.GetRole(VOXRAIDER))

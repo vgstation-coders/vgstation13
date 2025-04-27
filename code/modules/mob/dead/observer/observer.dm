@@ -304,6 +304,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		qdel(src)
 		return
 
+	if (ishivemindmember(src))
+		var/mob/living/hivemind/hive = src
+		var/datum/role/changeling/changeling = hive.changeling_mob.mind.GetRole(CHANGELING)
+		to_chat(hive.changeling_mob, "[src] has left us.")
+		changeling.hivemind_members -= src
+
 	if(src.health < 0 && stat != DEAD) //crit people
 		succumb_proc(0)
 		ghostize(1)

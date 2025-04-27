@@ -21,7 +21,7 @@
 	var/sting_range = 1
 	var/changelingID = "Changeling"
 	var/geneticdamage = 0
-
+	var/hivemind_members = list()
 	powerpoints = 4	//evolve points
 	shows_spells = TRUE
 	spell_exclude = /spell/changeling/evolve
@@ -124,3 +124,76 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 		return
 
 	new_character.make_changeling() // Will also restore any & all genomes/powers we have
+
+
+
+#define COLOR_LING_HIVEMIND    "#583012"
+
+/mob/proc/relay_hivemind(var/message, var/mob/ling)
+	var/datum/role/changeling/changeling = ling.mind.GetRole(CHANGELING)
+	if(changeling)
+		for(var/H in changeling.hivemind_members) // tell the others in the hivemind
+			var/mob/M = changeling.hivemind_members[H]
+			to_chat(M, message)
+		to_chat(ling, message)
+
+/mob/proc/changeling_message_process(var/message)
+	return "<font color=[COLOR_LING_HIVEMIND]><b>[src]</b> says, \"[message]\"</font>"
+/mob/living/hivemind
+	name = "internal hivemind"
+	see_invisible = SEE_INVISIBLE_LIVING
+
+	var/mob/living/carbon/human/changeling_mob // the head honcho
+
+/mob/living/hivemind/Destroy()
+	changeling_mob = null
+	return ..()
+
+/mob/living/hivemind/proc/add_to_hivemind(var/mob/original_body, var/mob/living/carbon/human/ling)
+	name = original_body.real_name
+	languages = original_body.languages
+	for(var/language in ling.languages)
+		add_language(language)
+	if(original_body.ckey)
+		ckey = original_body.ckey
+		changeling_mob = ling
+	if(changeling_mob)
+		var/datum/role/changeling/changeling = changeling_mob.mind.GetRole(CHANGELING)
+		changeling.hivemind_members[name] = src
+		introduction(changeling_mob)
+
+/mob/living/hivemind/proc/introduction(var/mob/living/carbon/human/ling)
+	to_chat(src, "<span class = 'danger'>You are a member of a Changeling's Hivemind!")
+	to_chat(src, "<span class = 'danger'>You have been absorbed by [ling]! Do not fret.")
+	to_chat(src, "<span class = 'danger'>You are now a part of their hivemind.")
+	to_chat(src, "<span class = 'danger'>You can use 'say' to speak with them and the rest of the hivemind.")
+	to_chat(src, "<span class = 'danger'>What you say can only be heard by [ling] and the other members of their local hivemind.")
+
+
+/mob/living/hivemind/say(message)
+	message = sanitize_text(message)
+
+	if(!message)
+		return
+
+	var/turf/T = get_turf(src)
+	log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Changeling Hivemind: [message]")
+
+	relay_hivemind(changeling_message_process(message), changeling_mob)
+
+/mob/living/hivemind/emote(act, m_type = null, message = null, ignore_status = FALSE, var/arguments)
+	return
+
+/mob/living/hivemind/proc/release_hivemind_member()
+	relay_hivemind("<font color=[COLOR_LING_HIVEMIND]>Hivemind member [src] has been released into the outside world as a monster!</font>", changeling_mob)
+
+	log_admin("[key_name(changeling_mob)] has released [src] as a monster.")
+	message_admins("[key_name(changeling_mob)] has released [src] as a monster.")
+	var/mob/living/simple_animal/hostile/carp/M = new /mob/living/simple_animal/hostile/carp(get_turf(changeling_mob)) //PLACEHOLDER
+	M.ckey = ckey
+
+	var/datum/role/changeling/changeling = changeling_mob.mind.GetRole(CHANGELING)
+	changeling.hivemind_members -= src
+
+	qdel(src)
+
