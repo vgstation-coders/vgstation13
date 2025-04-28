@@ -23,9 +23,9 @@
 	. = ..()
 	if(startswithelectronics)
 		electronics = new(src)
-		if(req_access?.len)
+		if(req_access)
 			electronics.conf_access = req_access
-		else if(req_one_access?.len)
+		else if(req_one_access)
 			electronics.conf_access = req_one_access
 			electronics.one_access = 1
 
