@@ -13,6 +13,7 @@ var/list/ladders = list()
 	var/custom_upanddown = ""
 	var/custom_upanddown_up = ""
 	var/custom_upanddown_down = ""
+	var/custom_sound = null
 	var/id = null
 	var/height = 0							//the 'height' of the ladder. higher numbers are considered physically higher
 	var/obj/structure/ladder/down = null	//the ladder below this one
@@ -88,11 +89,15 @@ var/list/ladders = list()
 /obj/structure/ladder/proc/go_up(mob/user)
 	user.visible_message("<span class='notice'>[user] [custom_message_others_up? custom_message_others_up : "climbs up the ladder!"]</span>", \
 								"<span class='notice'>You [custom_message_up? custom_message_up : "climb up the ladder!"]</span>")
+	if (custom_sound)
+		playsound(src, custom_sound, 100, 0)
 	climb(user, get_turf(up))
 	up.add_fingerprint(user)
 /obj/structure/ladder/proc/go_down(mob/user)
 	user.visible_message("<span class='notice'>[user] [custom_message_others_down? custom_message_others_down : "climbs down the ladder!"]</span>", \
 								"<span class='notice'>You [custom_message_down? custom_message_down : "climb down the ladder!"]</span>")
+	if (custom_sound)
+		playsound(src, custom_sound, 100, 0)
 	climb(user, get_turf(down))
 	down.add_fingerprint(user)
 
