@@ -43,7 +43,7 @@
 /datum/reagent/aminocorydon
 	name = "Aminocorydon"
 	id = AMINOCORYDON
-	description = "This eldritch compound was pulled straight from the Honkonomicon and was explicitly banned by the Honkmother Herself. Creates untold horrors if mixed with equal parts Nutriment or 'Nothing'; or untold suffering if mixed with ten parts Honk Serum"
+	description = "This eldritch compound was pulled straight from the Honkonomicon and was explicitly banned by the Honkmother Herself. Creates untold horrors if mixed with equal parts Nutriment or 'Nothing'; or untold suffering if mixed with ten parts Honk Serum."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FFFF00" //rgb: pure yellow baybee
 	density = 15.49
