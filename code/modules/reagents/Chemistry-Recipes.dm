@@ -4121,6 +4121,11 @@
 	required_reagents = list(AMINOMICIN = 1, BANANA = 5)
 	result_amount = 1
 
+/datum/chemical_reaction/aminocorydon/required_condition_check(datum/reagents/holder)
+	if(istype(holder.my_atom, /obj/item/weapon/reagent_containers))
+		return (locate(/obj/item/stack/sheet/mineral/clown) in holder.my_atom.contents) //you need that bananium catalyst
+	return 0
+
 /datum/chemical_reaction/synthmob/synthclown
 	name = "Synthclown"
 	id = "synthclown"
@@ -4146,11 +4151,6 @@
 	customprob = 95 //we only rarely want a mime
 	mob2spawnA = /mob/living/simple_animal/hostile/retaliate/cluwne
 	mob2spawnB = /mob/living/simple_animal/hostile/retaliate/faguette
-
-/datum/chemical_reaction/aminocorydon/required_condition_check(datum/reagents/holder)
-	if(istype(holder.my_atom, /obj/item/weapon/reagent_containers))
-		return (locate(/obj/item/stack/sheet/mineral/clown) in holder.my_atom.contents) //you need that bananium catalyst
-	return 0
 
 /datum/chemical_reaction/ectoplasm
 	name = "Ectoplasm"
