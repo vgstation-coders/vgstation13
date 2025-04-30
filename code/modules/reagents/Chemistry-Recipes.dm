@@ -4124,7 +4124,7 @@
 /datum/chemical_reaction/aminocorydon/required_condition_check(datum/reagents/holder)
 	if(istype(holder.my_atom, /obj/item/weapon/reagent_containers))
 		return (locate(/obj/item/stack/sheet/mineral/clown) in holder.my_atom.contents) //you need that bananium catalyst
-	return 0
+	return FALSE
 
 /datum/chemical_reaction/synthmob/synthclown
 	name = "Synthclown"
