@@ -4006,7 +4006,7 @@
 	id = null
 	result = null
 	result_amount = 1
-	var/customprob = 80
+	var/mobAprob = 80
 	var/mob2spawnA = null
 	var/mob2spawnB = null
 
@@ -4046,7 +4046,7 @@
 	if(!location)
 		location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
-		if(prob(customprob)) //here so aminoblatella can spawn its two variants of roach on the mutagen reaction, does not affect aminocyprinidol, since that only makes baby carps
+		if(prob(mobAprob)) //here so aminoblatella can spawn its two variants of roach on the mutagen reaction, does not affect aminocyprinidol, since that only makes baby carps
 			new mob2spawnA(location)
 		else
 			new mob2spawnB(location)
