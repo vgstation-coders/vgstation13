@@ -4148,7 +4148,7 @@
 	result = null
 	required_reagents = list(HONKSERUM = 10, AMINOCORYDON = 1)
 	result_amount = 1
-	customprob = 95 //we only rarely want a mime
+	mobAprob = 95 //we only rarely want a mime
 	mob2spawnA = /mob/living/simple_animal/hostile/retaliate/cluwne
 	mob2spawnB = /mob/living/simple_animal/hostile/retaliate/faguette
 
