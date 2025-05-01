@@ -165,7 +165,8 @@
 
 /datum/random_reagent_effect/tf_simplemob/on_pick()
 	// This is a BIT ugly but eeeh
-	var/picked_number = generator("num", 0, 150, LINEAR_RAND).Rand()
+	var/random_generator = generator("num", 0, 150)
+	var/picked_pumber = random_generator.Rand()
 	switch(picked_number)
 		if (0 to 100)
 			picked_mob_type = pick(
