@@ -99705,7 +99705,7 @@
 /turf/space,
 /area)
 "dLy" = (
-/obj/effect/landmark/map_element/oldstation,
+/obj/effect/landmark/map_element/randomderelict,
 /turf/space,
 /area)
 "dOw" = (

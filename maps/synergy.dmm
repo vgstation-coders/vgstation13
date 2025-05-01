@@ -85288,2477 +85288,12 @@
 /obj/effect/landmark/map_element/djsat_notail,
 /turf/space,
 /area)
-"dje" = (
-/turf/simulated/wall/r_wall,
-/area/derelict/atmos)
-"djf" = (
-/obj/structure/sign/nosmoking_1,
-/turf/simulated/wall/r_wall,
-/area/derelict/atmos)
-"djg" = (
-/obj/machinery/door/airlock/external{
-	name = "Toxins Tank Access"
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/atmos)
-"djh" = (
-/obj/machinery/door/airlock/external{
-	name = "Air Bridge Access"
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"dji" = (
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djj" = (
-/obj/machinery/air_sensor{
-	frequency = 1438;
-	id_tag = "tox_sensor"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djk" = (
-/obj/machinery/power/rad_collector,
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djl" = (
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djm" = (
-/obj/machinery/atmospherics/miner/toxins,
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djn" = (
-/obj/machinery/light/small{
-	dir = 4
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djo" = (
-/obj/machinery/power/emitter/antique,
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djp" = (
-/obj/machinery/power/rad_collector,
-/obj/machinery/light/small{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djq" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	canSpawnMice = 0;
-	external_pressure_bound = 120;
-	frequency = 1438;
-	icon_state = "in";
-	id_tag = "tox_out";
-	initialize_directions = 1;
-	internal_pressure_bound = 4000;
-	on = 1;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djr" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "plasma"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djs" = (
-/obj/machinery/atmospherics/unary/outlet_injector{
-	frequency = 1438;
-	icon_state = "on";
-	id_tag = "tox_in";
-	on = 1
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djt" = (
-/obj/machinery/power/emitter/antique,
-/obj/machinery/light/small{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"dju" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/obj/machinery/atmospherics/pipe/simple/general/hidden,
-/obj/structure/grille,
-/turf/simulated/floor/plating/airless,
-/area/derelict/atmos)
-"djv" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/grille,
-/turf/simulated/floor/plating/airless,
-/area/derelict/atmos)
-"djw" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/grille,
-/obj/machinery/atmospherics/pipe/simple/general/hidden,
-/turf/simulated/floor/plating/airless,
-/area/derelict/atmos)
-"djx" = (
-/obj/machinery/atmospherics/unary/cap/visible{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djy" = (
-/obj/machinery/computer/general_air_control/large_tank_control{
-	frequency = 1438;
-	input_tag = "tox_in";
-	name = "Toxin Supply Control";
-	output_tag = "tox_out";
-	sensors = list("tox_sensor"="Tank")
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djz" = (
-/obj/machinery/light/small{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djA" = (
-/obj/machinery/light/small{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djB" = (
-/obj/machinery/light/small{
-	dir = 1
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djC" = (
-/obj/machinery/atmospherics/unary/outlet_injector{
-	dir = 4;
-	frequency = 1438;
-	icon_state = "on";
-	id_tag = "n2_in";
-	on = 1
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djD" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/grille,
-/obj/machinery/atmospherics/pipe/simple/general/hidden{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djE" = (
-/obj/machinery/atmospherics/unary/cap/visible{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djF" = (
-/obj/structure/closet/crate/secure/large/reinforced/shard,
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "unloading"
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djG" = (
-/obj/machinery/atmospherics/unary/cap/visible{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djH" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	canSpawnMice = 0;
-	dir = 8;
-	external_pressure_bound = 120;
-	frequency = 1438;
-	icon_state = "in";
-	id_tag = "o2_out";
-	initialize_directions = 1;
-	internal_pressure_bound = 4000;
-	on = 1;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djI" = (
-/obj/machinery/door/airlock/external{
-	name = "Nitrogen Tank Access"
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/atmos)
-"djJ" = (
-/obj/machinery/air_sensor{
-	frequency = 1438;
-	id_tag = "n2_sensor"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djK" = (
-/obj/machinery/atmospherics/miner/nitrogen,
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djL" = (
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "nitrogen"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djM" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djN" = (
-/obj/machinery/computer/general_air_control/large_tank_control{
-	frequency = 1438;
-	input_tag = "n2_in";
-	name = "Nitrogen Supply Control";
-	output_tag = "n2_out";
-	sensors = list("n2_sensor"="Tank")
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djO" = (
-/obj/effect/decal/warning_stripes{
-	dir = 4;
-	icon_state = "unloading"
-	},
-/obj/machinery/portable_atmospherics/canister/plasma,
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djP" = (
-/obj/machinery/computer/general_air_control/large_tank_control{
-	frequency = 1438;
-	input_tag = "o2_in";
-	name = "Oxygen Supply Control";
-	output_tag = "o2_out";
-	sensors = list("o2_sensor"="Tank")
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djQ" = (
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "oxygen"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djR" = (
-/obj/machinery/atmospherics/miner/oxygen,
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djS" = (
-/obj/machinery/air_sensor{
-	frequency = 1438;
-	id_tag = "o2_sensor"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djT" = (
-/obj/machinery/door/airlock/external{
-	name = "Oxygen Tank Access"
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/atmos)
-"djU" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	canSpawnMice = 0;
-	dir = 4;
-	external_pressure_bound = 120;
-	frequency = 1438;
-	icon_state = "in";
-	id_tag = "n2_out";
-	initialize_directions = 1;
-	internal_pressure_bound = 4000;
-	on = 1;
-	pressure_checks = 2;
-	pump_direction = 0
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djV" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/full/reinforced,
-/obj/machinery/atmospherics/pipe/simple/general/hidden{
-	dir = 4
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djW" = (
-/obj/machinery/atmospherics/unary/outlet_injector{
-	dir = 8;
-	frequency = 1438;
-	icon_state = "on";
-	id_tag = "o2_in";
-	on = 1
-	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "bot"
-	},
-/turf/simulated/floor/engine/vacuum,
-/area/derelict/atmos)
-"djX" = (
-/obj/machinery/power/apc{
-	dir = 8;
-	name = "_West APC";
-	pixel_x = -25
-	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djY" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"djZ" = (
-/obj/machinery/alarm{
-	dir = 8;
-	name = "Air Alarm (8)";
-	pixel_x = 24
-	},
-/turf/simulated/floor/plating,
-/area/derelict/atmos)
-"dka" = (
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/machinery/power/solar/panel{
-	id_tag = "derelictsolar";
-	name = "Derelict Solar Array"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "solarpanel"
-	},
-/area/solar/derelict_starboard)
-"dkb" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/turf/simulated/floor/plating/airless,
-/area/solar/derelict_starboard)
-"dkc" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/machinery/power/solar/panel{
-	id_tag = "derelictsolar";
-	name = "Derelict Solar Array"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "solarpanel"
-	},
-/area/solar/derelict_starboard)
-"dkd" = (
-/turf/simulated/wall,
-/area/derelict/research)
-"dke" = (
-/turf/simulated/wall/r_wall,
-/area/derelict/solar_control)
-"dkf" = (
-/obj/machinery/door/airlock/external{
-	name = "Atmospherics Access"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating,
-/area/derelict/solar_control)
-"dkg" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/obj/structure/cable,
-/turf/simulated/floor/plating/airless,
-/area/solar/derelict_starboard)
-"dkh" = (
-/turf/simulated/wall,
-/area/derelict/medical)
-"dki" = (
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning";
-	tag = "icon-warning (WEST)"
-	},
-/obj/machinery/atmospherics/unary/tank/nitrogen,
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dkj" = (
-/obj/machinery/light{
-	dir = 1
-	},
-/turf/simulated/floor/airless{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dkk" = (
-/obj/structure/table,
-/turf/simulated/floor/airless{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dkl" = (
-/obj/machinery/chem_dispenser,
-/turf/simulated/floor/airless{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dkm" = (
-/obj/structure/table,
-/obj/item/weapon/soap,
-/turf/simulated/floor/airless{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dkn" = (
-/obj/machinery/alarm{
-	name = "Air Alarm (2)";
-	pixel_y = 24
-	},
-/turf/simulated/floor/airless{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dko" = (
-/obj/machinery/power/apc{
-	cell_type = 0;
-	dir = 4;
-	icon_state = "apc1";
-	opened = 1;
-	pixel_x = 28
-	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dkp" = (
-/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe{
-	desc = "Your typical Autolathe. It appears to have much more options than your regular one, however...";
-	hacked = 1;
-	name = "Derelict Autolathe"
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dkq" = (
-/obj/machinery/vending/engineering,
-/turf/simulated/wall/r_wall,
-/area/derelict/solar_control)
-"dkr" = (
-/obj/machinery/light{
-	dir = 1
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dks" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dkt" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/obj/machinery/power/apc{
-	dir = 1;
-	name = "_North APC";
-	pixel_y = 24
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dku" = (
-/obj/machinery/vending/engivend,
-/obj/machinery/light{
-	dir = 1
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dkv" = (
-/obj/machinery/vending/tool,
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dkw" = (
-/turf/simulated/floor/plating/airless,
-/area/derelict/medical)
-"dkx" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
-/area/derelict/medical)
-"dky" = (
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dkz" = (
-/obj/structure/morgue,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dkA" = (
-/obj/structure/closet/body_bag,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dkB" = (
-/obj/structure/morgue{
-	dir = 8
-	},
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dkC" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
-	dir = 6
-	},
-/turf/simulated/floor/bluegrid{
-	icon_state = "dark";
-	name = "Mainframe Floor";
-	nitrogen = 100;
-	oxygen = 0;
-	temperature = 80
-	},
-/area/derelict/research)
-"dkD" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
-	dir = 4
-	},
-/turf/simulated/floor/bluegrid{
-	name = "Mainframe Base";
-	nitrogen = 100;
-	oxygen = 0;
-	temperature = 80
-	},
-/area/derelict/research)
-"dkE" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction{
-	dir = 8
-	},
-/turf/simulated/floor/bluegrid{
-	icon_state = "dark";
-	name = "Mainframe Floor";
-	nitrogen = 100;
-	oxygen = 0;
-	temperature = 80
-	},
-/area/derelict/research)
-"dkF" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/grille,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/research)
-"dkG" = (
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning";
-	tag = "icon-warning (WEST)"
-	},
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dkH" = (
-/turf/simulated/floor/airless{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dkI" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/machinery/light{
-	dir = 4
-	},
-/turf/simulated/floor/airless{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dkJ" = (
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dkK" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4";
-	tag = ""
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dkL" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8";
-	tag = ""
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dkM" = (
-/obj/machinery/computer/powermonitor,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dkN" = (
-/obj/machinery/power/battery/smes,
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dkO" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/obj/machinery/power/terminal{
-	dir = 8
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dkP" = (
-/obj/machinery/power/solar/control{
-	id_tag = "derelictsolar";
-	name = "Primary Solar Control"
-	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/obj/machinery/light{
-	dir = 1
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dkQ" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/obj/structure/cable,
-/turf/simulated/floor/plating/airless,
-/area/solar/derelict_starboard)
-"dkR" = (
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/obj/structure/cable,
-/obj/structure/lattice,
-/turf/space,
-/area/solar/derelict_starboard)
-"dkS" = (
-/obj/structure/closet/body_bag,
-/obj/effect/landmark/corpse/botanist,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dkT" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging,
-/turf/simulated/floor/bluegrid{
-	name = "Mainframe Base";
-	nitrogen = 100;
-	oxygen = 0;
-	temperature = 80
-	},
-/area/derelict/research)
-"dkU" = (
-/obj/machinery/r_n_d/server/derelict,
-/turf/simulated/floor/bluegrid{
-	icon_state = "dark";
-	name = "Mainframe Floor";
-	nitrogen = 100;
-	oxygen = 0;
-	temperature = 80
-	},
-/area/derelict/research)
-"dkV" = (
-/turf/simulated/floor/bluegrid{
-	name = "Mainframe Base";
-	nitrogen = 100;
-	oxygen = 0;
-	temperature = 80
-	},
-/area/derelict/research)
-"dkW" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/grille,
-/turf/simulated/floor/plating/airless,
-/area/derelict/research)
-"dkX" = (
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning";
-	tag = "icon-warning (WEST)"
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dkY" = (
-/obj/machinery/r_n_d/fabricator/circuit_imprinter,
-/obj/item/weapon/reagent_containers/glass/beaker/sulphuric,
-/obj/effect/decal/warning_stripes{
-	dir = 9;
-	icon_state = "warning";
-	tag = "icon-warning (NORTHWEST)"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "solarpanel"
-	},
-/area/derelict/research)
-"dkZ" = (
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "solarpanel"
-	},
-/area/derelict/research)
-"dla" = (
-/obj/effect/decal/warning_stripes{
-	dir = 5;
-	icon_state = "warning";
-	tag = "icon-warning (NORTHEAST)"
-	},
-/obj/machinery/computer/rdconsole/derelict,
-/turf/simulated/floor/airless{
-	icon_state = "solarpanel"
-	},
-/area/derelict/research)
-"dlb" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = ""
-	},
-/turf/simulated/floor/airless{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dlc" = (
-/obj/machinery/door/airlock/engineering{
-	name = "Power and Atmospherics";
-	req_access_txt = "11"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating,
-/area/derelict/research)
-"dld" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dle" = (
-/obj/item/taperoll/engineering,
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8";
-	tag = ""
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dlf" = (
-/obj/machinery/mommi_spawner,
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dlg" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4";
-	tag = ""
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = ""
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dlh" = (
-/obj/machinery/door/window,
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = ""
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dli" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dlj" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = ""
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dlk" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4";
-	tag = ""
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dll" = (
-/obj/machinery/door/airlock/engineering{
-	name = "Starboard Solar Access";
-	req_access_txt = "11"
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dlm" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating/airless,
-/area/solar/derelict_starboard)
-"dln" = (
-/obj/structure/cable,
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/turf/simulated/floor/plating/airless,
-/area/solar/derelict_starboard)
-"dlo" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating,
-/area/solar/derelict_starboard)
-"dlp" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable{
-	d2 = 2;
-	icon_state = "0-2"
-	},
-/obj/structure/cable,
-/turf/simulated/floor/plating/airless,
-/area/solar/derelict_starboard)
-"dlq" = (
-/obj/machinery/power/solar/panel/tracker,
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/turf/simulated/floor/plating/airless,
-/area/solar/derelict_starboard)
-"dlr" = (
-/obj/structure/girder,
-/turf/simulated/floor/plating/airless,
-/area/derelict/medical)
-"dls" = (
-/obj/structure/lattice,
-/turf/space,
-/area/derelict/medical)
-"dlt" = (
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
-	dir = 5
-	},
-/turf/simulated/floor/bluegrid{
-	icon_state = "dark";
-	name = "Mainframe Floor";
-	nitrogen = 100;
-	oxygen = 0;
-	temperature = 80
-	},
-/area/derelict/research)
-"dlu" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/full/reinforced,
-/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
-	dir = 4
-	},
-/obj/structure/grille,
-/turf/simulated/floor/plating/airless,
-/area/derelict/research)
-"dlv" = (
-/obj/machinery/r_n_d/destructive_analyzer,
-/obj/effect/decal/warning_stripes{
-	dir = 10;
-	icon_state = "warning";
-	tag = "icon-warning (SOUTHWEST)"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "solarpanel"
-	},
-/area/derelict/research)
-"dlw" = (
-/obj/effect/decal/warning_stripes{
-	icon_state = "warning";
-	tag = "icon-warning"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "solarpanel"
-	},
-/area/derelict/research)
-"dlx" = (
-/obj/machinery/r_n_d/fabricator/protolathe,
-/obj/effect/decal/warning_stripes{
-	dir = 6;
-	icon_state = "warning";
-	tag = "icon-warning (SOUTHEAST)"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "solarpanel"
-	},
-/area/derelict/research)
-"dly" = (
-/obj/structure/dispenser,
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dlz" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4";
-	tag = ""
-	},
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dlA" = (
-/obj/machinery/alarm{
-	dir = 1;
-	name = "Air Alarm (1)";
-	pixel_y = -24
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dlB" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dlC" = (
-/obj/item/stack/sheet/metal,
-/turf/simulated/floor/plating/airless,
-/area/derelict/medical)
-"dlD" = (
-/obj/machinery/door/airlock/medical{
-	name = "Morgue"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dlE" = (
-/obj/machinery/meter,
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning";
-	tag = "icon-warning (WEST)"
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/airless{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dlF" = (
-/obj/machinery/recharge_station,
-/turf/simulated/floor,
-/area/derelict/solar_control)
-"dlG" = (
-/obj/machinery/door/airlock/external{
-	name = "External Engineering"
-	},
-/turf/simulated/floor/plating,
-/area/derelict/solar_control)
-"dlH" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor4"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dlI" = (
-/obj/item/stack/sheet/metal,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dlJ" = (
-/obj/effect/decal/remains/human,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dlK" = (
-/obj/item/weapon/storage/firstaid,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dlL" = (
-/obj/machinery/atmospherics/unary/cold_sink/freezer{
-	current_temperature = 80;
-	dir = 1;
-	on = 1
-	},
-/obj/effect/decal/warning_stripes{
-	dir = 8;
-	icon_state = "warning";
-	tag = "icon-warning (WEST)"
-	},
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dlM" = (
-/obj/machinery/light,
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dlN" = (
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dlO" = (
-/obj/item/weapon/stock_parts/matter_bin,
-/obj/item/weapon/stock_parts/matter_bin,
-/obj/item/weapon/stock_parts/micro_laser,
-/obj/item/weapon/stock_parts/micro_laser,
-/obj/item/weapon/stock_parts/micro_laser,
-/obj/item/weapon/stock_parts/scanning_module,
-/obj/item/weapon/stock_parts/scanning_module,
-/obj/item/weapon/stock_parts/manipulator,
-/obj/item/weapon/stock_parts/manipulator,
-/obj/item/weapon/stock_parts/manipulator,
-/obj/structure/closet/secure_closet/scientist,
-/obj/machinery/light/small,
-/turf/simulated/floor/airless{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dlP" = (
-/obj/structure/reagent_dispensers/fueltank,
-/turf/simulated/floor/airless{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dlQ" = (
-/obj/machinery/vending/discount,
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dlR" = (
-/obj/machinery/door/airlock/engineering{
-	name = "Power and Atmospherics";
-	req_access_txt = "11"
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating,
-/area/derelict/solar_control)
-"dlS" = (
-/obj/structure/girder,
-/turf/space,
-/area)
-"dlT" = (
-/obj/structure/bed,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dlU" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor6"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dlV" = (
-/obj/structure/closet/body_bag,
-/obj/item/ammo_casing/a762,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dlW" = (
-/obj/machinery/iv_drip,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dlX" = (
-/turf/simulated/wall,
-/area/derelict/eva)
-"dlY" = (
-/obj/machinery/door/airlock/research{
-	name = "Research"
-	},
-/turf/simulated/floor{
-	icon_state = "white"
-	},
-/area/derelict/research)
-"dlZ" = (
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dma" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dmb" = (
-/turf/simulated/wall,
-/area/derelict/hallway)
-"dmc" = (
-/obj/structure/cable{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/structure/cable{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/cable,
-/turf/simulated/floor/plating/airless,
-/area/solar/derelict_starboard)
-"dmd" = (
-/obj/structure/girder,
-/turf/simulated/floor/plating/airless,
-/area)
-"dme" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
-/area)
-"dmf" = (
-/obj/structure/girder,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmg" = (
-/obj/item/weapon/storage/firstaid/fire/empty,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmh" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "gibbl4"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmi" = (
-/obj/structure/bed,
-/obj/effect/decal/remains/human,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmj" = (
-/obj/structure/rack,
-/turf/simulated/floor/airless,
-/area/derelict/eva)
-"dmk" = (
-/obj/structure/computerframe,
-/turf/simulated/floor/airless,
-/area/derelict/eva)
-"dml" = (
-/obj/structure/rack,
-/obj/item/clothing/shoes/magboots,
-/turf/simulated/floor/airless,
-/area/derelict/eva)
-"dmm" = (
-/obj/machinery/computer/security,
-/turf/simulated/floor/airless,
-/area/derelict/eva)
-"dmn" = (
-/obj/structure/rack,
-/obj/item/clothing/head/helmet/space/clown,
-/turf/simulated/floor/airless,
-/area/derelict/eva)
-"dmo" = (
-/obj/effect/decal/remains/human,
-/obj/item/device/flashlight/pen,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmp" = (
-/obj/item/weapon/paper/crumpled,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmq" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor3"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmr" = (
-/obj/item/ammo_casing/a762,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dms" = (
-/turf/simulated/floor/airless,
-/area/derelict/eva)
-"dmt" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/eva)
-"dmu" = (
-/obj/structure/cable{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4";
-	tag = ""
-	},
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dmv" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dmw" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dmx" = (
-/obj/machinery/light{
-	dir = 4
-	},
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dmy" = (
-/obj/item/weapon/pen,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
-/area)
-"dmz" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
-/area)
-"dmA" = (
-/obj/item/weapon/shard{
-	icon_state = "medium"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmB" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor7"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmC" = (
-/obj/item/weapon/shard,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmD" = (
-/obj/effect/decal/cleanable/blood,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmE" = (
-/obj/item/weapon/reagent_containers/syringe,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmF" = (
-/obj/item/device/flash/synthetic,
-/obj/item/ammo_casing/a762,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmG" = (
-/obj/structure/closet{
-	name = "Confiscated Goods"
-	},
-/obj/item/clothing/head/helmet/space/syndicate,
-/obj/item/clothing/suit/space/syndicate,
-/obj/item/weapon/storage/toolbox/syndicate,
-/turf/simulated/floor/airless,
-/area/derelict/eva)
-"dmH" = (
-/obj/machinery/portable_atmospherics/canister/oxygen,
-/turf/simulated/floor/airless,
-/area/derelict/eva)
-"dmI" = (
-/obj/item/ammo_casing/a762,
-/turf/simulated/floor/airless,
-/area/derelict/eva)
-"dmJ" = (
-/obj/item/clothing/shoes/magboots,
-/turf/simulated/floor/airless,
-/area/derelict/eva)
-"dmK" = (
-/obj/structure/grille/broken,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/eva)
-"dmL" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
-/area)
-"dmM" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor5"
-	},
-/obj/item/ammo_casing/a762,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmN" = (
-/obj/structure/closet/body_bag,
-/obj/effect/decal/remains/human,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmO" = (
-/obj/item/stack/rods,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmP" = (
-/obj/structure/closet{
-	name = "Confiscated Goods"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/eva)
-"dmQ" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/eva)
-"dmR" = (
-/turf/simulated/wall,
-/area/derelict/bar)
-"dmS" = (
-/turf/simulated/floor/airless,
-/area/derelict/bar)
-"dmT" = (
-/obj/structure/bed,
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor5"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmU" = (
-/obj/item/weapon/shard{
-	icon_state = "small"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmV" = (
-/obj/machinery/iv_drip,
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor5"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dmW" = (
-/obj/machinery/power/apc{
-	cell_type = 0;
-	icon_state = "apc1";
-	opened = 1;
-	pixel_y = -28
-	},
-/turf/simulated/floor/airless,
-/area/derelict/eva)
-"dmX" = (
-/obj/item/weapon/shard{
-	icon_state = "medium"
-	},
-/obj/item/ammo_casing/a762,
-/turf/simulated/floor/airless,
-/area/derelict/eva)
-"dmY" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
-/area/derelict/hallway)
-"dmZ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/hallway)
-"dna" = (
-/obj/item/weapon/table_parts,
-/turf/simulated/floor/wood,
-/area/derelict/bar)
-"dnb" = (
-/turf/simulated/floor/wood{
-	broken = 1;
-	icon_state = "wood-broken6"
-	},
-/area/derelict/bar)
-"dnc" = (
-/obj/machinery/constructable_frame/machine_frame,
-/turf/simulated/floor/wood,
-/area/derelict/bar)
-"dnd" = (
-/turf/simulated/floor/wood,
-/area/derelict/bar)
-"dne" = (
-/turf/simulated/floor/plating/airless,
-/area/derelict/bar)
-"dnf" = (
-/obj/item/weapon/table_parts,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
-/area)
-"dng" = (
-/turf/simulated/floor,
-/area)
-"dnh" = (
-/obj/structure/grille/broken,
-/turf/simulated/floor/plating/airless,
-/area/derelict/medical)
-"dni" = (
-/obj/structure/grille/broken,
-/obj/item/weapon/shard,
-/turf/simulated/floor/plating/airless,
-/area/derelict/medical)
-"dnj" = (
-/obj/machinery/door/airlock/medical{
-	name = "Medical Wing"
-	},
-/turf/simulated/floor,
-/area/derelict/medical)
-"dnk" = (
-/obj/structure/table/reinforced,
-/turf/simulated/floor/airless,
-/area/derelict/medical)
-"dnl" = (
-/obj/structure/grille/broken,
-/obj/item/weapon/shard{
-	icon_state = "medium"
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/medical)
-"dnm" = (
-/obj/structure/grille/broken,
-/obj/structure/window/reinforced,
-/obj/item/weapon/shard{
-	icon_state = "small"
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/medical)
-"dnn" = (
-/obj/structure/grille/broken,
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating/airless,
-/area/derelict/medical)
 "dno" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/item/weapon/shard{
-	icon_state = "small";
-	pixel_x = 5;
-	pixel_y = -5
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/eva)
-"dnp" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/eva)
-"dnq" = (
-/obj/structure/door_assembly/door_assembly_sec{
-	icon_state = "door_as_sec0"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/eva)
-"dnr" = (
-/obj/structure/grille,
-/turf/simulated/floor/plating/airless,
-/area/derelict/eva)
-"dns" = (
-/obj/structure/grille/broken,
-/obj/item/ammo_casing/a762,
-/turf/simulated/floor/plating/airless,
-/area/derelict/eva)
-"dnt" = (
-/turf/simulated/floor/plating/airless,
-/area/derelict/hallway)
-"dnu" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor4"
-	},
-/turf/simulated/floor/wood,
-/area/derelict/bar)
-"dnv" = (
-/obj/machinery/light{
-	dir = 4
-	},
-/turf/simulated/floor/wood,
-/area/derelict/bar)
-"dnw" = (
-/obj/item/weapon/shard{
-	icon_state = "small";
-	pixel_x = 5;
-	pixel_y = -5
-	},
+/obj/effect/landmark/map_element/randomderelict,
 /turf/space,
 /area)
-"dnx" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor4"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dny" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor7"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dnz" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
-/area/derelict/hallway)
-"dnA" = (
-/obj/item/stack/cable_coil{
-	amount = 1;
-	icon_state = "coil_red1"
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/hallway)
-"dnB" = (
-/obj/machinery/door/firedoor/red,
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dnC" = (
-/obj/item/stack/cable_coil{
-	amount = 1;
-	icon_state = "coil_red1"
-	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
-/area/derelict/hallway)
-"dnD" = (
-/obj/item/weapon/stool,
-/turf/simulated/floor/plating/airless,
-/area/derelict/bar)
-"dnE" = (
-/obj/item/weapon/stool,
-/turf/simulated/floor/wood,
-/area/derelict/bar)
-"dnF" = (
-/obj/structure/table/woodentable,
-/turf/simulated/floor/wood,
-/area/derelict/bar)
-"dnG" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/bar)
-"dnH" = (
-/obj/item/weapon/shard{
-	icon_state = "small";
-	pixel_x = 5;
-	pixel_y = -5
-	},
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dnI" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor5"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dnJ" = (
-/obj/item/ammo_casing/a762,
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dnK" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "panelscorched"
-	},
-/area/derelict/hallway)
-"dnL" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor7"
-	},
-/obj/item/ammo_casing/a762,
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dnM" = (
-/obj/effect/decal/cleanable/blood,
-/turf/simulated/floor/wood,
-/area/derelict/bar)
-"dnN" = (
-/obj/structure/grille/broken,
-/turf/simulated/floor/plating/airless,
-/area/derelict/bar)
-"dnO" = (
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
-/area)
-"dnP" = (
-/obj/item/weapon/paper,
-/turf/simulated/floor/plating/airless{
-	broken = 1;
-	icon_state = "platingdmg1"
-	},
-/area)
-"dnQ" = (
-/obj/item/weapon/table_parts,
-/turf/simulated/floor,
-/area)
-"dnR" = (
-/obj/effect/decal/cleanable/blood,
-/turf/simulated/floor/airless,
-/area/derelict/hallway)
-"dnS" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor3"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/bar)
-"dnT" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
-/area/derelict/bar)
-"dnU" = (
-/obj/item/ammo_casing/a762,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
-/area/derelict/bar)
-"dnV" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/bar)
-"dnW" = (
-/turf/simulated/wall,
-/area/derelict/crew_quarters)
-"dnX" = (
-/obj/structure/grille/broken,
-/turf/simulated/floor/plating/airless,
-/area/derelict/crew_quarters)
-"dnY" = (
-/turf/simulated/floor/airless,
-/area/derelict/crew_quarters)
-"dnZ" = (
-/obj/structure/grille/broken,
-/obj/item/weapon/shard{
-	icon_state = "small";
-	pixel_x = 5;
-	pixel_y = -5
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/crew_quarters)
-"doa" = (
-/turf/simulated/wall,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"dob" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"doc" = (
-/obj/structure/grille/broken,
-/turf/simulated/floor/plating/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"dod" = (
-/turf/simulated/floor,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"doe" = (
-/obj/structure/grille/broken,
-/obj/item/weapon/shard{
-	icon_state = "small";
-	pixel_x = 5;
-	pixel_y = -5
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"dof" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"dog" = (
-/obj/structure/displaycase/broken,
-/turf/simulated/floor/wood,
-/area/derelict/bar)
-"doh" = (
-/obj/item/weapon/shard,
-/turf/simulated/floor/plating/airless,
-/area)
-"doi" = (
-/obj/structure/girder,
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
-/area)
-"doj" = (
-/obj/structure/girder,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
-/area)
-"dok" = (
-/obj/structure/girder,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg3"
-	},
-/area)
-"dol" = (
-/obj/item/weapon/shard{
-	icon_state = "small";
-	pixel_x = 5;
-	pixel_y = -5
-	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
-/area/derelict/crew_quarters)
-"dom" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
-/area/derelict/crew_quarters)
-"don" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "damaged2"
-	},
-/area/derelict/crew_quarters)
-"doo" = (
-/turf/simulated/floor/airless{
-	icon_state = "damaged4"
-	},
-/area/derelict/crew_quarters)
-"dop" = (
-/obj/item/weapon/table_parts,
-/turf/simulated/floor/airless,
-/area/derelict/crew_quarters)
-"doq" = (
-/obj/machinery/vending/dinnerware,
-/turf/simulated/floor/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"dor" = (
-/obj/item/ammo_casing/a762,
-/turf/simulated/floor/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"dos" = (
-/turf/simulated/floor/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"dot" = (
-/turf/simulated/floor/plating/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"dou" = (
-/obj/structure/grille,
-/turf/simulated/floor/plating/airless,
-/area/derelict/bar)
-"dov" = (
-/obj/item/weapon/stool,
-/turf/simulated/floor/plating/airless{
-	icon_state = "platingdmg1"
-	},
-/area/derelict/bar)
-"dow" = (
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
-/area/derelict/hallway)
-"dox" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor4"
-	},
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
-/area/derelict/hallway)
-"doy" = (
-/turf/simulated/floor/plating/airless{
-	icon_state = "panelscorched"
-	},
-/area/derelict/hallway)
-"doz" = (
-/obj/structure/girder,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
-/area/derelict/crew_quarters)
-"doA" = (
-/obj/item/weapon/shard{
-	icon_state = "small";
-	pixel_x = 5;
-	pixel_y = -5
-	},
-/turf/simulated/floor/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"doB" = (
-/obj/structure/table/flipped,
-/obj/item/weapon/shard{
-	icon_state = "medium"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"doC" = (
-/obj/item/weapon/shard{
-	icon_state = "medium"
-	},
-/turf/simulated/floor/airless{
-	icon_state = "damaged4"
-	},
-/area/derelict/crew_quarters)
-"doD" = (
-/obj/structure/table,
-/obj/item/weapon/shard{
-	icon_state = "small"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"doE" = (
-/obj/structure/table,
-/turf/simulated/floor/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"doF" = (
-/turf/simulated/floor/wood{
-	icon_state = "wood-broken3";
-	tag = "icon-wood-broken3"
-	},
-/area/derelict/bar)
-"doG" = (
-/obj/structure/table/woodentable,
-/turf/simulated/floor/wood{
-	icon_state = "wood-broken4"
-	},
-/area/derelict/bar)
-"doH" = (
-/obj/machinery/computer/slot_machine,
-/turf/simulated/floor/wood,
-/area/derelict/bar)
-"doI" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/bar)
-"doJ" = (
-/obj/structure/closet/crate{
-	icon_state = "crateopen";
-	opened = 1
-	},
-/turf/simulated/floor/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"doK" = (
-/obj/item/weapon/shard,
-/turf/simulated/floor/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"doL" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor7"
-	},
-/turf/simulated/floor/wood{
-	icon_state = "wood-broken4"
-	},
-/area/derelict/bar)
 "doM" = (
 /turf/simulated/wall,
-/area)
-"doN" = (
-/obj/structure/lattice,
-/turf/space,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"doO" = (
-/obj/item/clothing/head/chefhat,
-/turf/simulated/floor/plating/airless,
-/area/derelict/eva{
-	icon_state = "kitchen";
-	name = "Derelict Kitchen"
-	})
-"doP" = (
-/turf/simulated/floor/wood{
-	broken = 1;
-	icon_state = "wood-broken4"
-	},
-/area/derelict/bar)
-"doQ" = (
-/obj/machinery/power/apc{
-	cell_type = 0;
-	icon_state = "apc1";
-	opened = 1;
-	pixel_y = -24
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/bar)
-"doR" = (
-/turf/simulated/floor/wood{
-	icon_state = "wood-broken4"
-	},
-/area/derelict/bar)
-"doS" = (
-/obj/machinery/door/airlock/external,
-/turf/simulated/floor/airless{
-	broken = 1;
-	icon_state = "floorscorched2"
-	},
-/area/derelict/hallway)
-"doT" = (
-/obj/machinery/door/firedoor,
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"doU" = (
-/obj/item/weapon/shard{
-	icon_state = "medium"
-	},
-/turf/simulated/floor/plating,
-/area)
-"doV" = (
-/turf/simulated/wall/shuttle,
-/area)
-"doW" = (
-/turf/simulated/wall/shuttle,
-/area/derelict/hallway)
-"doX" = (
-/obj/machinery/door/airlock/external{
-	name = "Emergency Escape"
-	},
-/turf/simulated/floor/plating,
-/area/derelict/hallway)
-"doY" = (
-/turf/simulated/wall,
-/area/derelict/bridge)
-"doZ" = (
-/obj/effect/decal/mecha_wreckage/vehicle/clowncart,
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpa" = (
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpb" = (
-/obj/structure/bed/chair/shuttle,
-/turf/simulated/floor/plating/airless,
-/area)
-"dpc" = (
-/obj/structure/bed/chair/shuttle,
-/turf/simulated/floor/shuttle,
-/area/derelict/hallway)
-"dpd" = (
-/obj/structure/grille/broken,
-/turf/simulated/floor/plating/airless,
-/area/derelict/bridge)
-"dpe" = (
-/turf/simulated/floor,
-/area/derelict/bridge)
-"dpf" = (
-/obj/structure/bed/chair/shuttle,
-/turf/simulated/floor/shuttle,
-/area)
-"dpg" = (
-/obj/item/weapon/shard{
-	icon_state = "small";
-	pixel_x = 5;
-	pixel_y = -5
-	},
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dph" = (
-/obj/item/ammo_casing/a762,
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpi" = (
-/obj/structure/bed/chair/office/dark,
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpj" = (
-/obj/machinery/power/apc{
-	cell_type = 0;
-	dir = 4;
-	icon_state = "apc1";
-	opened = 1;
-	pixel_x = 28
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/bridge)
-"dpk" = (
-/obj/structure/shuttle/diag_wall/smooth,
-/turf/space,
-/area)
-"dpl" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/grille/broken,
-/obj/item/weapon/shard,
-/turf/simulated/floor/shuttle/plating/airless,
-/area)
-"dpm" = (
-/obj/structure/shuttle/diag_wall/smooth{
-	dir = 4
-	},
-/turf/space,
-/area)
-"dpn" = (
-/obj/structure/shuttle/diag_wall/smooth,
-/turf/space,
-/area/derelict/hallway)
-"dpo" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/shuttle/plating/airless,
-/area/derelict/hallway)
-"dpp" = (
-/obj/structure/shuttle/diag_wall/smooth{
-	dir = 4
-	},
-/turf/space,
-/area/derelict/hallway)
-"dpq" = (
-/turf/simulated/floor/plating/airless,
-/area/derelict/bridge)
-"dpr" = (
-/obj/structure/bed/chair/office/dark{
-	dir = 4
-	},
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dps" = (
-/obj/item/ammo_casing/a762,
-/turf/simulated/floor/plating/airless,
-/area/derelict/bridge)
-"dpt" = (
-/obj/machinery/light{
-	dir = 8
-	},
-/turf/simulated/floor/plating/airless,
-/area/derelict/bridge)
-"dpu" = (
-/obj/item/clothing/under/gimmick/rank/head_of_personnel/suit,
-/obj/effect/decal/remains/human,
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpv" = (
-/obj/structure/table,
-/obj/item/weapon/shard{
-	icon_state = "small";
-	pixel_x = 5;
-	pixel_y = -5
-	},
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpw" = (
-/obj/structure/table,
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpx" = (
-/obj/structure/table,
-/obj/machinery/recharger{
-	pixel_y = 7
-	},
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpy" = (
-/obj/item/clothing/head/ushanka,
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpz" = (
-/obj/machinery/light{
-	dir = 4
-	},
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpA" = (
-/obj/item/weapon/shard{
-	icon_state = "medium"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpB" = (
-/obj/effect/decal/cleanable/blood{
-	icon_state = "floor7"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpC" = (
-/obj/item/clothing/under/gimmick/rank/captain/suit,
-/obj/effect/decal/remains/human,
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpD" = (
-/obj/item/stack/cable_coil{
-	amount = 1;
-	icon_state = "coil_red1"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpE" = (
-/obj/structure/computerframe,
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpF" = (
-/obj/structure/bed/chair/office/dark{
-	dir = 8
-	},
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpG" = (
-/obj/machinery/constructable_frame/machine_frame,
-/obj/item/stack/cable_coil{
-	amount = 1;
-	icon_state = "coil_red1"
-	},
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpH" = (
-/obj/machinery/computer/fluff/communications,
-/turf/simulated/floor/airless,
-/area/derelict/bridge)
-"dpI" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating/airless,
-/area/derelict/bridge)
-"dpJ" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating/airless,
-/area/derelict/bridge)
-"dpK" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating/airless,
-/area/derelict/bridge)
-"dpL" = (
-/obj/item/weapon/shard{
-	icon_state = "medium"
-	},
-/turf/space,
-/area)
-"dpM" = (
-/obj/item/weapon/shard,
-/turf/space,
 /area)
 "dpN" = (
 /obj/docking_port/destination/salvage/derelict,
@@ -907934,7 +905469,7 @@ aaa
 aaa
 aaa
 aaa
-aaa
+dno
 aaa
 aaa
 aaa
@@ -908423,7 +905958,7 @@ aaa
 aaa
 aaa
 aaa
-dnw
+aaa
 aaa
 aaa
 aaa
@@ -908921,7 +906456,7 @@ aaa
 aaa
 aaa
 aaa
-dgY
+aaa
 aaa
 aaa
 aaa
@@ -909416,7 +906951,6 @@ aaa
 aaa
 aaa
 aaa
-dgY
 aaa
 aaa
 aaa
@@ -909425,7 +906959,8 @@ aaa
 aaa
 aaa
 aaa
-dgY
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -909920,13 +907455,13 @@ aaa
 aaa
 aaa
 aaa
-dnw
-dgY
 aaa
 aaa
 aaa
 aaa
-dgY
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -910424,9 +907959,9 @@ aaa
 aaa
 aaa
 aaa
-dgY
 aaa
-dgY
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -910927,11 +908462,11 @@ aaa
 aaa
 aaa
 aaa
-dgY
-doh
-dgY
 aaa
-dgY
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -911421,15 +908956,6 @@ aaa
 aaa
 aaa
 aaa
-dgY
-aaa
-aaa
-aaa
-dgY
-aaa
-aaa
-aai
-dgY
 aaa
 aaa
 aaa
@@ -911437,7 +908963,16 @@ aaa
 aaa
 aaa
 aaa
-doV
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -911925,23 +909460,23 @@ aaa
 aaa
 aaa
 aaa
-dgY
-aaa
-aai
-aai
-aaa
-dnO
-dmz
-dnO
-aai
-aaa
-dgY
-dmd
-dlS
 aaa
 aaa
-doV
-dpk
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -912426,24 +909961,24 @@ aaa
 aaa
 aaa
 aaa
-dgY
-dgY
 aaa
-aai
 aaa
-dgY
-dnP
-dmL
-doi
-aai
-aai
-dgY
-dme
-dgY
-doU
-dpb
-dpf
-dpl
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -912925,27 +910460,27 @@ aaa
 aaa
 aaa
 aaa
-dgY
 aaa
 aaa
 aaa
 aaa
 aaa
-dgY
-dmL
-dgY
-dnO
-dmz
-doj
-aai
-dgY
-dgY
-dmd
 aaa
-doV
-doV
-doV
-dpm
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -913430,19 +910965,19 @@ aaa
 aaa
 aaa
 aaa
-dgY
-dmL
 aaa
-aai
-dgY
-aai
-dgY
-dme
-dok
-dmz
-dmz
-dmz
-doM
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -913933,23 +911468,23 @@ aaa
 aaa
 aaa
 aaa
-dgY
-aai
-aai
-dgY
-dmL
-dng
-dme
-dmb
-dmz
-dmL
-dmL
-dmb
-dmb
-doW
-doW
-doW
-dpn
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -914430,28 +911965,28 @@ aaa
 aaa
 aaa
 aaa
-dgY
 aaa
 aaa
 aaa
-dmy
-dmL
-dgY
-dgY
-dmz
-dmz
-dnQ
-dng
-dmb
-dow
-dmL
-dow
-dow
-doS
-doX
-dpc
-dpc
-dpo
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -914931,29 +912466,29 @@ aaa
 aaa
 aaa
 aaa
-aai
 aaa
 aaa
-dlS
-aai
-aai
-dmz
-dgY
-dnf
-dme
-dme
-dnQ
-dme
-dmb
-dow
-dow
-dow
-dmb
-dmb
-doW
-doW
-doW
-dpp
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -915436,21 +912971,21 @@ aaa
 aaa
 aaa
 aaa
-dmd
-aai
-dmz
-aai
-dmz
-dme
-dng
-dng
-dng
-dng
-dmb
-dow
-dow
-dow
-dmb
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -915937,27 +913472,27 @@ aaa
 aaa
 aaa
 aaa
-dlS
-dme
-dme
-dme
-dme
-dme
-dng
-dng
-dme
-dng
-dng
-dmb
-dow
-dow
-dow
-dmb
-dmb
-doW
-doW
-doW
-dpn
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -916432,34 +913967,34 @@ aaa
 aaa
 aaa
 aaa
-dgY
-aaa
-aai
 aaa
 aaa
-dkh
-dlr
-dkh
-dkh
-dlr
-dlr
-dkh
-dkh
-dkh
-dmb
-dmb
-dmb
-dmb
-dmb
-dow
-dow
-dow
-dow
-doS
-doX
-dpc
-dpc
-dpo
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -916934,34 +914469,34 @@ aaa
 aaa
 aaa
 aaa
-aai
 aaa
 aaa
-aai
-dlr
-dkh
-dky
-dlT
-dlT
-dky
-dmA
-dlT
-dlT
-dnh
-dnt
-dnt
-dlZ
-dnz
-dnB
-dox
-dow
-dow
-dmb
-dmb
-doW
-doW
-doW
-dpp
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -917436,29 +914971,29 @@ aaa
 aaa
 aaa
 aaa
-aai
 aaa
-dgY
-dkw
-dkx
-dlr
-dlH
-dlU
-dky
-dmo
-dky
-dky
-dlW
-dni
-dnt
-dnt
-dnx
-dlZ
-dnB
-doy
-dow
-dow
-dmb
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -917939,28 +915474,28 @@ aaa
 aaa
 aaa
 aaa
-dgY
-dkw
-dkw
-dls
-dkw
-dkw
-dkA
-dlW
-dky
-dmB
-dlT
-dmT
-dnh
-dnt
-dlZ
-dlZ
-dnz
-dnB
-dow
-dow
-dow
-dmb
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -918441,28 +915976,28 @@ aaa
 aaa
 aaa
 aaa
-aai
-dkx
-dkx
-dky
-dlC
-dky
-dlJ
-dmf
-dmp
-dky
-dmr
-dmU
-dnj
-dnt
-dnH
-dlZ
-dnW
-dnW
-doz
-dom
-doz
-dnW
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -918943,26 +916478,26 @@ aaa
 aaa
 aaa
 aaa
-dkh
-dky
-dky
-dky
-dkh
-dlI
-dkw
-dmg
-dky
-dmr
-dky
-dky
-dnk
-dlZ
-dnI
-dlZ
-dnW
-dol
-dom
-dom
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -919445,25 +916980,25 @@ aaa
 aaa
 aaa
 aaa
-dkh
-dkh
-dkh
-dkh
-dkh
-dlJ
-dky
-dmh
-dky
-dmC
-dmM
-dky
-dnk
-dnx
-dlZ
-dlZ
-dnX
-dom
-dol
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -919947,25 +917482,25 @@ aaa
 aaa
 aaa
 aaa
-dkh
-dkz
-dkz
-dkz
-dkh
-dky
-dky
-dky
-dmq
-dkA
-dky
-dky
-dnk
-dny
-dnJ
-dlZ
-dnX
-dom
-dom
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -920449,25 +917984,25 @@ aaa
 aaa
 aaa
 aaa
-dkh
-dky
-dky
-dky
-dlD
-dlH
-dlV
-dky
-dlW
-dky
-dmN
-dmA
-dnj
-dnz
-dlZ
-dlZ
-dnY
-don
-doo
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -920951,26 +918486,26 @@ aaa
 aaa
 aaa
 aaa
-dkh
-dkA
-dkS
-dkA
-dkh
-dky
-dlT
-dmi
-dmr
-dmD
-dlT
-dlT
-dnl
-dlZ
-dlZ
-dnJ
-dnZ
-doo
-don
-dnY
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -921453,29 +918988,29 @@ aaa
 aaa
 aaa
 aaa
-dkh
-dky
-dky
-dky
-dkh
-dky
-dlW
-dky
-dmr
-dmE
-dky
-dmV
-dnm
-dnz
-dnz
-dlZ
-dnX
-dop
-dnY
-doC
-dnY
-dnY
-dnW
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -921953,31 +919488,31 @@ aaa
 aaa
 aaa
 aaa
-aai
 aaa
-dkh
-dkB
-dkB
-dkB
-dkh
-dlK
-dky
-dlT
-dlT
-dmF
-dmO
-dlT
-dnn
-dlZ
-dlZ
-dlZ
-dnW
-dnY
-dnY
-dnY
-dnY
-don
-dnW
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -922455,31 +919990,31 @@ aaa
 aaa
 aaa
 aaa
-aai
-aai
-dkh
-dkh
-dkh
-dkh
-dkh
-dkh
-dlX
-dlX
-dlX
-dlX
-dlX
-dlX
-dlX
-dlZ
-dlZ
-dlZ
-doa
-doa
-doa
-doa
-doa
-doa
-doa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -922957,31 +920492,31 @@ aaa
 aaa
 aaa
 aaa
-aai
 aaa
-aai
-aai
-aai
-aai
-aai
-aai
-dlX
-dmj
-dms
-dmG
-dmP
-dmW
-dlX
-dlZ
-dlZ
-dlZ
-doa
-doq
-dos
-dos
-doJ
-dos
-doa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -923459,40 +920994,40 @@ aaa
 aaa
 aaa
 aaa
-aai
 aaa
-dkd
-dkd
-dkd
-dkd
-dkd
-aai
-dlX
-dmk
-dms
-dms
-dms
-dms
-dno
-dnA
-dnK
-dlZ
-dob
-dor
-dos
-dot
-dot
-dos
-doa
-aai
-aai
-aai
-aai
-aai
-aai
-aai
-aai
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -923960,32 +921495,6 @@ aaa
 aaa
 aaa
 aaa
-aai
-aai
-aai
-dkd
-dkC
-dkT
-dlt
-dkd
-aai
-dlX
-dml
-dms
-dms
-dms
-dmI
-dnp
-dlZ
-dlZ
-dlZ
-doc
-dos
-doA
-dot
-dot
-doN
-dot
 aaa
 aaa
 aaa
@@ -923995,7 +921504,33 @@ aaa
 aaa
 aaa
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -924463,41 +921998,41 @@ aaa
 aaa
 aaa
 aaa
-aai
 aaa
-dkd
-dkD
-dkU
-dkD
-dkd
-aai
-dlX
-dmm
-dms
-dmH
-dms
-dms
-dnq
-dlZ
-dnL
-dlZ
-dod
-dos
-doB
-dos
-dot
-dot
-doN
-aai
 aaa
-doY
-doY
-doY
-doY
-doY
-doY
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -924967,40 +922502,40 @@ aaa
 aaa
 aaa
 aaa
-dkd
-dkE
-dkV
-dkE
-dkd
-aai
-dlX
-dmn
-dms
-dms
-dms
-dms
-dnr
-dlZ
-dlZ
-dlZ
-doc
-dot
-dos
-doD
-dot
-doO
-dot
-aai
-aaa
-doY
-dpa
-dpt
-dpi
-dpE
-doY
 aaa
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -925468,41 +923003,41 @@ aaa
 aaa
 aaa
 aaa
-dkd
-dkd
-dkF
-dkW
-dlu
-dkd
-dkd
-dkd
-dmk
-dms
-dmI
-dms
-dmX
-dns
-dlZ
-dnA
-dnK
-doe
-dos
-dot
-doE
-dos
-dos
-doa
-aai
-doY
-doY
-dpa
-dpa
-dpa
-dpE
-doY
-doY
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -925958,7 +923493,6 @@ aaa
 aaa
 aaa
 aaa
-aai
 aaa
 aaa
 aaa
@@ -925970,41 +923504,42 @@ aaa
 aaa
 aaa
 aaa
-dkd
-dki
-dkG
-dkX
-dkG
-dlE
-dlL
-dkd
-dmj
-dms
-dmJ
-dms
-dms
-dnp
-dlZ
-dnt
-dny
-dof
-dos
-dos
-dos
-doK
-dos
-doa
-aai
-doY
-dpa
-dph
-dpu
-dpq
-dpq
-dpG
-dpI
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -926460,7 +923995,6 @@ aaa
 aaa
 aaa
 aaa
-aai
 aaa
 aaa
 aaa
@@ -926471,42 +924005,43 @@ aaa
 aaa
 aaa
 aaa
-aai
-dkd
-dkj
-dkH
-dkH
-dkH
-dkH
-dlM
-dkd
-dlX
-dmt
-dmK
-dmQ
-dlX
-dlX
-dnB
-dnB
-dnB
-doa
-doa
-doa
-doa
-doa
-doa
-doa
-doY
-doY
-dpg
-dpq
-dps
-dpq
-dpq
-dpE
-dpJ
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -926962,53 +924497,53 @@ aaa
 aaa
 aaa
 aaa
-aai
 aaa
 aaa
 aaa
 aaa
 aaa
 aaa
-aai
-aai
-aai
-aai
-aai
-dkd
-dkk
-dkH
-dkY
-dlv
-dkH
-dlN
-dkd
-dlZ
-dlZ
-dlZ
-dlZ
-dmY
-dlZ
-dnt
-dlZ
-dnR
-dlZ
-dlZ
-dlZ
-dlZ
-dlZ
-dlZ
-doT
-doZ
-dpd
-dpa
-dpr
-dpv
-dpA
-dpr
-dpE
-dpd
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -927463,54 +924998,54 @@ aaa
 aaa
 aaa
 aaa
-abM
-abM
-abM
-abM
-abM
-abM
-abM
-abM
-abM
-abM
-abM
-abM
-aai
-dkd
-dkl
-dkH
-dkZ
-dlw
-dkH
-dkH
-dlY
-dlZ
-dmu
-dma
-dma
-dmZ
-dmZ
-dnC
-dlZ
-dnt
-dny
-dlZ
-dnJ
-dlZ
-dnI
-dnJ
-doT
-dpa
-dpe
-dph
-dpa
-dpw
-dpa
-dpa
-dpH
-dpd
-dpL
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -927965,55 +925500,55 @@ aaa
 aaa
 aaa
 aaa
-abM
 aaa
 aaa
 aaa
 aaa
 aaa
 aaa
-dje
-dje
-djI
-dje
-dje
-aai
-dkd
-dkm
-dkH
-dla
-dlx
-dkH
-dlO
-dkd
-dlZ
-dmv
-dlZ
-dlZ
-dlZ
-dnt
-dlZ
-dlZ
-dlZ
-dlZ
-dlZ
-dlZ
-dlZ
-dnJ
-dlZ
-doT
-dpa
-dpd
-dpi
-dpa
-dpx
-dpB
-dpg
-dpE
-dpd
 aaa
-aai
-dpM
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -928467,54 +926002,54 @@ aaa
 aaa
 aaa
 aaa
-abM
 aaa
-dje
-dje
-dje
-dje
-dje
-dje
-dji
-djJ
-dji
-dje
-aai
-dkd
-dkn
-dkH
-dkH
-dkH
-dkH
-dlP
-dkd
-dlZ
-dmv
-dlZ
-dmR
-dmR
-dmR
-dmR
-dmR
-dnS
-dmR
-dou
-dnN
-dou
-dmR
-dmR
-dmR
-doY
-doY
-dpa
-dpa
-dph
-dpC
-dpa
-dpE
-dpJ
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -928969,54 +926504,54 @@ aaa
 aaa
 aaa
 aaa
-abM
 aaa
-dje
-djk
-djp
-djp
-djk
-dje
-djB
-djK
-dji
-dje
-aai
-dkd
-dko
-dkI
-dlb
-dkH
-dkd
-dkd
-dkd
-dlZ
-dmv
-dlZ
-dmR
-dna
-dnd
-dne
-dne
-dnT
-dnT
-dne
-dne
-dne
-dne
-dne
-dmR
-aai
-doY
-dpj
-dps
-dpa
-dpD
-dpF
-dpG
-dpK
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -929471,54 +927006,54 @@ aaa
 aaa
 aaa
 aaa
-abM
 aaa
-djh
-djl
-djl
-djl
-djl
-dje
-djC
-djL
-djU
-dje
-aai
-dkd
-dkd
-dkd
-dlc
-dkd
-dkd
-dlQ
-dlZ
-dlZ
-dmv
-dlZ
-dmR
-dnb
-dnd
-dnD
-dne
-dnU
-dnT
-dne
-dne
-dnT
-dne
-dnD
-dmR
-aai
-doY
-doY
-dpq
-dpy
-dpa
-dpE
-doY
-doY
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -929973,54 +927508,54 @@ aaa
 aaa
 aaa
 aaa
-abM
-aaa
-dje
-djk
-djk
-dje
-djh
-dje
-djD
-djM
-djV
-dje
-dje
-dke
-dkp
-dkJ
-dld
-dly
-dke
-dke
-dlZ
-dlZ
-dmv
-dlZ
-dmR
-dnc
-dnd
-dne
-dne
-dne
-dne
-dnb
-dne
-dne
-dne
-doP
-dmR
-aai
-aaa
-doY
-dpa
-dpz
-dpa
-dpE
-doY
 aaa
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -930475,53 +928010,53 @@ aaa
 aaa
 aaa
 aaa
-abM
-dje
-dje
-dje
-dje
-dje
-djl
-djz
-djE
-djN
-djE
-djz
-dje
-dke
-dkq
-dkJ
-dld
-dkJ
-dlF
-dke
-dlZ
-dlZ
-dmv
-dlZ
-dmS
-dnd
-dnb
-dnd
-dne
-dne
-dne
-dne
-dnd
-doF
-dnd
-doQ
-dmR
-aai
 aaa
-doY
-doY
-doY
-doY
-doY
-doY
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -930977,43 +928512,6 @@ aaa
 aaa
 aaa
 aaa
-abM
-djf
-dji
-dji
-djq
-dju
-djx
-djl
-djl
-djl
-djl
-djl
-djX
-dke
-dkr
-dkK
-dle
-dlj
-dlF
-dke
-dlZ
-dlZ
-dmv
-dlZ
-dmR
-dnd
-dnu
-dnd
-dnd
-dne
-dog
-dne
-dnd
-dnd
-dnb
-dnd
-dmR
 aaa
 aaa
 aaa
@@ -931023,7 +928521,44 @@ aaa
 aaa
 aaa
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -931479,52 +929014,52 @@ aaa
 aaa
 aaa
 aaa
-abM
-djg
-djj
-djm
-djr
-djv
-djy
-djl
-djF
-djO
-djO
-djl
-djY
-dkf
-dks
-dkL
-dlf
-dlz
-dks
-dlR
-dma
-dma
-dmw
-dlZ
-dmR
-dnd
-dna
-dnE
-dnd
-dne
-dne
-dne
-dnb
-doG
-doL
-doR
-dmR
-aai
-aai
-aai
-aai
-aai
-aai
-aai
-aai
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -931981,43 +929516,43 @@ aaa
 aaa
 aaa
 aaa
-abM
-dje
-dji
-djn
-djs
-djw
-djx
-djl
-djl
-djl
-djl
-djl
-djZ
-dke
-dkt
-dks
-dlg
-dli
-dlF
-dke
-dlZ
-dlZ
-dlZ
-dlZ
-dmR
-dne
-dnd
-dnF
-dnb
-dne
-dnT
-dov
-dne
-dne
-dnd
-dnd
-dmR
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -932483,43 +930018,43 @@ aaa
 aaa
 aaa
 aaa
-abM
-dje
-dje
-dje
-dje
-dje
-djl
-djA
-djG
-djP
-djG
-djA
-dje
-dke
-dku
-dkJ
-dld
-dkJ
-dlF
-dke
-dlZ
-dlZ
-dmx
-dlZ
-dmR
-dne
-dnv
-dnd
-dnM
-dne
-dne
-dne
-dne
-doH
-dnd
-dnc
-dmR
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -932985,43 +930520,43 @@ aaa
 aaa
 aaa
 aaa
-abM
 aaa
-dje
-djo
-djo
-dje
-djh
-dje
-djD
-djM
-djV
-dje
-dje
-dke
-dkv
-dkJ
-dld
-dlA
-dke
-dke
-dmb
-dmb
-dmb
-dmb
-dmR
-dmR
-dmR
-dnG
-dnN
-dnV
-dnN
-dnN
-dnV
-doI
-dmR
-dmR
-dmR
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -933487,26 +931022,26 @@ aaa
 aaa
 aaa
 aaa
-abM
 aaa
-djh
-djl
-djl
-djl
-djl
-dje
-djH
-djQ
-djW
-dje
-aai
-dke
-dke
-dkM
-dlh
-dlB
-dke
-abM
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -933989,26 +931524,26 @@ aaa
 aaa
 aaa
 aaa
-abM
 aaa
-dje
-djo
-djt
-djt
-djo
-dje
-djB
-djR
-dji
-dje
-aai
 aaa
-dke
-dkJ
-dld
-dkJ
-dke
-abM
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -934491,29 +932026,29 @@ aaa
 aaa
 aaa
 aaa
-abM
-aaa
-dje
-dje
-dje
-dje
-dje
-dje
-dji
-djS
-dji
-dje
-aai
-aai
-dke
-dkN
-dli
-dkJ
-dke
-abM
 aaa
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -934993,31 +932528,31 @@ aaa
 aaa
 aaa
 aaa
-abM
 aaa
 aaa
 aaa
 aaa
 aaa
 aaa
-dje
-dje
-djT
-dje
-dje
-aai
 aaa
-dke
-dkO
-dlj
-dkJ
-dlG
-abM
-aai
-aai
-aai
-aai
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -935495,29 +933030,29 @@ aaa
 aaa
 aaa
 aaa
-abM
-abM
-abM
-abM
-abM
-abM
-abM
-abM
-abM
-abM
-abM
-abM
-aai
-aai
-dke
-dkP
-dlk
-dkJ
-dke
-abM
 aaa
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -936007,19 +933542,19 @@ aaa
 aaa
 aaa
 aaa
-aai
-aaa
-aai
-aaa
-dke
-dke
-dll
-dke
-dke
-abM
 aaa
 aaa
-aai
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -936509,19 +934044,19 @@ aaa
 aaa
 aaa
 aaa
-aad
 aaa
 aaa
 aaa
 aaa
 aaa
-dlm
 aaa
 aaa
 aaa
 aaa
 aaa
-aad
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -937011,19 +934546,19 @@ aaa
 aaa
 aaa
 aaa
-aad
 aaa
-dka
-dka
-dka
 aaa
-dlm
 aaa
-dka
-dka
-dka
 aaa
-aad
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -937513,19 +935048,19 @@ aaa
 aaa
 aaa
 aaa
-aad
 aaa
-dkb
-dkg
-dkg
-dkQ
-dln
-dkQ
-dkg
-dkg
-dmc
 aaa
-aad
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -938015,19 +935550,19 @@ aaa
 aaa
 aaa
 aaa
-aad
 aaa
-dkc
-dkc
-dkc
 aaa
-dlm
 aaa
-dkc
-dkc
-dkc
 aaa
-aaz
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -938517,19 +936052,19 @@ aaa
 aaa
 aaa
 aaa
-aai
 aaa
 aaa
 aaa
 aaa
 aaa
-dlo
 aaa
 aaa
 aaa
 aaa
 aaa
-aai
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -939019,19 +936554,19 @@ aaa
 aaa
 aaa
 aaa
-aad
 aaa
-dka
-dka
-dka
 aaa
-dlm
 aaa
-dka
-dka
-dka
 aaa
-aad
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -939521,19 +937056,19 @@ aaa
 aaa
 aaa
 aaa
-aad
 aaa
-dkb
-dkg
-dkg
-dkQ
-dln
-dkQ
-dkg
-dkg
-dmc
 aaa
-aad
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -940023,19 +937558,19 @@ aaa
 aaa
 aaa
 aaa
-aad
 aaa
-dkc
-dkc
-dkc
 aaa
-dlm
 aaa
-dkc
-dkc
-dkc
 aaa
-aaz
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -940525,19 +938060,19 @@ aaa
 aaa
 aaa
 aaa
-aad
 aaa
 aaa
 aaa
 aaa
 aaa
-dlm
 aaa
 aaa
 aaa
 aaa
 aaa
-aaz
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -941027,19 +938562,19 @@ aaa
 aaa
 aaa
 aaa
-aaz
 aaa
-dka
-dka
-dka
 aaa
-dlm
 aaa
-dka
-dka
-dka
 aaa
-aad
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -941529,19 +939064,19 @@ aaa
 aaa
 aaa
 aaa
-aad
 aaa
-dkb
-dkg
-dkg
-dkR
-dlp
-dkQ
-dkg
-dkg
-dmc
 aaa
-aad
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -942031,19 +939566,19 @@ aaa
 aaa
 aaa
 aaa
-aad
 aaa
-dkc
-dkc
-dkc
 aaa
-dlm
 aaa
-dkc
-dkc
-dkc
 aaa
-aad
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -942533,19 +940068,19 @@ aaa
 aaa
 aaa
 aaa
-aad
 aaa
 aaa
 aaa
 aaa
 aaa
-dlm
 aaa
 aaa
 aaa
 aaa
 aaa
-aad
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -943035,19 +940570,19 @@ aaa
 aaa
 aaa
 aaa
-aad
-aad
 aaa
-aai
-aad
 aaa
-dlq
 aaa
-aad
-aai
-aad
-aad
-aad
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -943541,11 +941076,11 @@ aaa
 aaa
 aaa
 aaa
-aad
 aaa
 aaa
 aaa
-aad
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -944043,11 +941578,11 @@ aaa
 aaa
 aaa
 aaa
-aad
-aad
-aaz
-aad
-aad
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa

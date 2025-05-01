@@ -9336,7 +9336,7 @@
 	},
 /area/science/lab)
 "cku" = (
-/obj/effect/landmark/map_element/oldstation,
+/obj/effect/landmark/map_element/randomderelict,
 /turf/space,
 /area)
 "ckC" = (

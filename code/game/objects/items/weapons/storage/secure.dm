@@ -322,3 +322,8 @@
 
 /obj/item/weapon/storage/secure/safe/HoS
 	//items_to_spawn = list(/obj/item/weapon/storage/lockbox/clusterbang) This item is currently broken... and probably shouldnt exist to begin with (even though it's cool)
+
+//This makes loaded vaults have their safes correctly take map elements
+/obj/structure/safe/spawned_by_map_element()
+    ..()
+    store()
