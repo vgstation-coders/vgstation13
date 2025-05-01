@@ -40,7 +40,7 @@
 		},
 		{
 			"type": "shell",
-			"command": "bin/tgui-build RUST_BACKTRACK=full",
+			"command": "bin/tgui-build",
 			"windows": {
 				"command": ".\\bin\\tgui-build.cmd"
 			},
