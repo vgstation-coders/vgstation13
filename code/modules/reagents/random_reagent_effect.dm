@@ -165,8 +165,8 @@
 
 /datum/random_reagent_effect/tf_simplemob/on_pick()
 	// This is a BIT ugly but eeeh
-	var/random_generator = generator("num", 0, 150)
-	var/picked_pumber = random_generator.Rand()
+	var/generator/rand = generator("num", 0, 150)
+	var/picked_number = rand.Rand()
 	switch(picked_number)
 		if (0 to 100)
 			picked_mob_type = pick(
@@ -267,7 +267,8 @@
 	var/total_hallucination_damage
 
 /datum/random_reagent_effect/hallucination/on_pick()
-	var/generator/value_rng = generator("num", 10, 0.2, LINEAR_RAND).Rand() // Uniform distribution for 10 to 0.2
+	var/generator/rand = generator("num", 10, 0.2, LINEAR_RAND)
+	var/value_rng = rand.Rand()
 	total_hallucination_damage = value_rng
 	investigative_log = "-- does hallucination damage for [total_hallucination_damage]"
 
