@@ -1327,6 +1327,9 @@ FIRE ALARM
 	src.add_fingerprint(user)
 
 	if (istype(W,/obj/item/inflatable/shelter))
+		if(shelter)
+			to_chat(user, "<span class='warning'>[src] already has a shelter, remove it to put this one in.</span>")
+			return
 		qdel(W)
 		shelter = TRUE
 		update_icon()
