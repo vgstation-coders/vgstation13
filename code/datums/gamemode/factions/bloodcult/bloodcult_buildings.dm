@@ -1503,8 +1503,8 @@ var/list/cult_spires = list()
 	icon_state = "bloodstone-enter1"
 	icon = 'icons/obj/cult_64x64.dmi'
 	pixel_x = -16 * PIXEL_MULTIPLIER
-	health = 1800
-	maxHealth = 1800
+	health = 750
+	maxHealth = 750
 	sound_damaged = 'sound/effects/stone_hit.ogg'
 	sound_destroyed = 'sound/effects/stone_crumble.ogg'
 	plane = EFFECTS_PLANE
@@ -1663,16 +1663,6 @@ var/list/cult_spires = list()
 			takeDamage(50)
 		if (3)
 			takeDamage(10)
-
-/obj/structure/cult/bloodstone/singularity_act(var/singularity_size=0,var/obj/machinery/singularity/S)
-	switch(singularity_size)
-		if(1 to 4)
-			ex_act(3)
-		if(5 to 8)
-			ex_act(2)
-		if(9 to INFINITY)
-			ex_act(1)
-	return 0
 
 /obj/structure/cult/bloodstone/singularity_pull(S, current_size, repel = FALSE)//we don't want that one to come unanchored
 	return
