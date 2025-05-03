@@ -129,9 +129,9 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 	var/remote_access_pin = 0
 	var/money = 0
 	var/list/transaction_log = list()
-	var/security_level = 1	//0 - auto-identify from worn ID, require only account number
-							//1 - require manual login / account number and pin
-							//2 - require card and manual login
+	var/security_level = SECURITY_MANUAL_LOGIN	//0 - auto-identify from worn ID, require only account number
+												//1 - require manual login / account number and pin
+												//2 - require card and manual login
 	var/virtual = 0
 	var/virtual_wallet_wage_ratio = 50
 	var/wage_gain = 0 // How much an account gains per 'wage' tick.
