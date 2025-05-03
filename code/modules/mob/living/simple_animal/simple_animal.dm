@@ -735,6 +735,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		maxHealth = initial(maxHealth)
 		maxHealth -= (initial(maxHealth) / meat_amount) * meat_taken
 	health = maxHealth
+	bodytemperature = initial(bodytemperature)
 	..(0)
 
 /mob/living/simple_animal/proc/make_babies() // <3 <3 <3
