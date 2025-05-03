@@ -17,7 +17,7 @@
 
 	invocation_type = SpI_SHOUT
 
-	hud_state = "pumpkin"
+	hud_state = "norwood"
 
 /spell/targeted/norwood_curse/cast(var/list/targets, mob/user)
 	..()

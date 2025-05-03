@@ -571,7 +571,7 @@
 /obj/item/weapon/spellbook/oneuse/norwood
 	spell = /spell/targeted/norwood_curse
 	spellname = "norwood"
-	icon_state ="bookmindswap" // To fix!
+	icon_state ="booknorwood"
 	desc = "This book suddenly stops about 29 pages in. After, it is written 'it's over' in every language that has ever existed, will ever exist, and even in some which shouldn't theoretically exist."
 
 ///// ANCIENT SPELLBOOK /////
