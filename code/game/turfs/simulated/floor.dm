@@ -232,13 +232,27 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			return 0
 
 
-/turf/simulated/floor/attack_paw(mob/user as mob)
+/turf/simulated/floor/attack_paw(mob/user)
+	if (is_light_floor())
+		if (user.a_intent == I_HURT)
+			remove_floor_tile()
+			set_light(0)
+			spark(src, 1)
+			visible_message("<span class='warning'>\The [user] removes the light tile from \the [src]!</span>")
+			return
 	return src.attack_hand(user)
 
-/turf/simulated/floor/attack_animal(mob/user as mob)
+/turf/simulated/floor/attack_animal(mob/user)
+	if (is_light_floor())
+		if (user.a_intent == I_HURT)
+			visible_message("<span class='warning'>\The [user] removes the light tile from \the [src]!</span>")
+			set_light(0)
+			spark(src, 1)
+			remove_floor_tile()
+			return
 	return src.attack_hand(user)
 
-/turf/simulated/floor/attack_hand(mob/user as mob)
+/turf/simulated/floor/attack_hand(mob/user)
 	if (is_light_floor())
 		var/obj/item/stack/tile/light/T = floor_tile
 		T.on = !T.on
