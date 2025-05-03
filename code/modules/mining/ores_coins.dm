@@ -86,9 +86,9 @@
 /obj/item/stack/ore/glass/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W))
-		var/obj/item/weapon/bikehorn/HONKER = W
-		if(HONKER.can_honk_baton)
-			user.create_in_hands(src, /obj/item/weapon/bikehorn/ankhhorn, W, msg = "You call upon the blessings of the Sun God as you cover \the [W] with \the [src].")
+		var/obj/item/weapon/bikehorn/honker = W
+		if(honker.can_honk_baton)
+			user.create_in_hands(honker, /obj/item/weapon/bikehorn/ankhhorn, src, uses=1, msg = "<span class='notice'>You call upon the blessings of the Sun God as you cover \the [W] with \the [src].</span>")
 
 /obj/item/stack/ore/plasma
 	name = "\improper plasma ore"
