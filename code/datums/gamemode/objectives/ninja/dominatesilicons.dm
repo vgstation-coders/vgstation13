@@ -32,7 +32,7 @@
 	if(!any_borgs_alive)
 		return TRUE
 	var/collected = 0
-	for(var/obj/item/device/mmi/M in recursive_type_check(owner, /obj/item/device/mmi))
+	for(var/obj/item/device/mmi/M in recursive_type_check(owner.current, /obj/item/device/mmi))
 		if(istype(M,/obj/item/device/mmi/posibrain))
 			if(M.brainmob.mind)
 				collected++ //Only posibrains that had a mind

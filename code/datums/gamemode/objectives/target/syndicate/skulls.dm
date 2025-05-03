@@ -24,7 +24,7 @@
 	if (..())
 		return TRUE
 	var/collected = 0
-	for(var/obj/item/organ/external/head/H in recursive_type_check(owner, /obj/item/organ/external/head))
+	for(var/obj/item/organ/external/head/H in recursive_type_check(owner.current, /obj/item/organ/external/head))
 		if(!H.organ_data)
 			continue
 		var/mob/living/carbon/brain/B = H.brainmob
