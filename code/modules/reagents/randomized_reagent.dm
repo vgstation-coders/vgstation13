@@ -20,7 +20,6 @@
 
 		// Check if the effect can be picked
 		if (!the_effect.can_be_picked())
-			message_admins("[the_effect] couldn't be picked")
 			continue
 
 		the_effect.on_pick()
@@ -29,7 +28,7 @@
 
 	I.write("<small>[time_stamp()]</small> \ref[src] || Randomized <a href='?_src_=vars;Vars=\ref[src]'>[src]</a>[investigate_text]<br />")
 
-			
+
 /datum/randomized_reagent/all_effects
 	always_pick_effects = list(
 		/datum/random_reagent_effect/explode,
@@ -46,10 +45,10 @@
 	if(tick==0)
 		for (var/datum/random_reagent_effect/effect in picked_effects)
 			effect.on_human_life_zeroth(H)
-	
+
 	for (var/datum/random_reagent_effect/effect in picked_effects)
 		effect.on_human_life(H)
-		
+
 	H.updatehealth()
 
 /datum/randomized_reagent/proc/log_effect(var/mob/M, var/msg)
