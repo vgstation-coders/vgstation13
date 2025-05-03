@@ -14,8 +14,21 @@
 	var/stomp_boot = "magboot"
 	var/stomp_hit = "crushes"
 	var/anchoring_system_examine = "Its mag-pulse traction system appears to be"
+	var/anchoring_system_name = "mag-pulse traction system"
+	var/change_icon = TRUE
 
 	var/obj/item/clothing/shoes/stored_shoes = null	//Shoe holder
+
+/obj/item/clothing/shoes/magboots/sandal
+	name = "magic sandals"
+	icon_state = "wizard"
+	desc = "Those sandals have been carefully hand-enchanted by unionised, fairly-paid labour in the Wizard Federation and are rated for extravehicular activity."
+	anchoring_system_examine = "Its gravity anchoring enchantement appears to be"
+	anchoring_system_name = "gravity anchoring enchantement"
+	stomp_boot = "sandal"
+	change_icon = FALSE
+	mag_slow =  NO_SLOWDOWN
+	w_class = W_CLASS_SMALL
 
 /obj/item/clothing/shoes/magboots/mob_can_equip(mob/living/carbon/human/user, slot, disable_warning = 0)
 	var/mob/living/carbon/human/H = user
@@ -102,7 +115,7 @@
 	clothing_flags &= ~(NOSLIP | MAGPULSE)
 	slowdown = SHACKLE_SHOES_SLOWDOWN
 	icon_state = "[base_state]1"
-	to_chat(user, "<span class='danger'>You override the mag-pulse traction system!</span>")
+	to_chat(user, "<span class='danger'>You override the [anchoring_system_name]!</span>")
 	user.update_inv_shoes()	//so our mob-overlays update
 
 /obj/item/clothing/shoes/magboots/attackby(var/obj/item/O, var/mob/user)
@@ -114,25 +127,27 @@
 			emagged = FALSE
 			slowdown = NO_SLOWDOWN
 			icon_state = "[base_state]0"
-			to_chat(user, "<span class='notice'>You restore the mag-pulse traction system.</span>")
+			to_chat(user, "<span class='notice'>You restore the [anchoring_system_name].</span>")
 			user.update_inv_shoes()	//so our mob-overlays update
 
 /obj/item/clothing/shoes/magboots/togglemagpulse(var/mob/user = usr)
 	if(user.isUnconscious())
 		return
 	if(emagged)
-		to_chat(user, "<span class='warning'>The mag-pulse traction system cannot be turned off!</span>")
+		to_chat(user, "<span class='warning'>The [anchoring_system_name] cannot be turned off!</span>")
 		return
 	if(clothing_flags & MAGPULSE)
 		clothing_flags &= ~(NOSLIP | MAGPULSE)
 		slowdown = NO_SLOWDOWN
-		icon_state = "[base_state]0"
-		to_chat(user, "You disable the mag-pulse traction system.")
+		if (change_icon)
+			icon_state = "[base_state]0"
+		to_chat(user, "<span class='notice'>You disable the [anchoring_system_name].</span>")
 	else
 		clothing_flags |= (NOSLIP | MAGPULSE)
 		slowdown = mag_slow
-		icon_state = "[base_state]1"
-		to_chat(user, "You enable the mag-pulse traction system.")
+		if (change_icon)
+			icon_state = "[base_state]1"
+		to_chat(user, "<span class='notice'>You enable the [anchoring_system_name].</span>")
 	user.update_inv_shoes()	//so our mob-overlays update
 
 /obj/item/clothing/shoes/magboots/examine(mob/user)

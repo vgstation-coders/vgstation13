@@ -16,7 +16,13 @@
 /datum/outfit/special/rig/post_equip(var/mob/living/carbon/human/H)
 	..()
 	var/obj/item/clothing/suit/space/rig/R = H.wear_suit
-	R.toggle_suit()
+	if (istype(R))
+		R.toggle_suit()
+	else
+		// If the above check failed, this means we somehow couldn't remove the suit slot
+		// Which probably meant the admin forgot to toggle strip-items. For convenience we just spawn the suit
+		var/suit_type = items_to_spawn["Default"][slot_wear_suit_str]
+		new suit_type(get_turf(H))
 
 /datum/outfit/special/rig/gemsuit
 	outfit_name = "Wizard Gemsuit"
@@ -24,7 +30,7 @@
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/wizard,
 			slot_gloves_str = /obj/item/clothing/gloves/purple,
-			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_shoes_str = /obj/item/clothing/shoes/magboots/sandal,
 		),
 	)
 
@@ -36,12 +42,20 @@
 		),
 	)
 
+	items_to_collect = list(
+		/obj/item/clothing/shoes/magboots = GRASP_LEFT_HAND,
+	)
+
 /datum/outfit/special/rig/soviet_rig
 	outfit_name = "Soviet rigsuit"
 	items_to_spawn = list(
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/soviet,
 		),
+	)
+
+	items_to_collect = list(
+		/obj/item/clothing/shoes/magboots = GRASP_LEFT_HAND,
 	)
 
 /datum/outfit/special/rig/engineer_rig
@@ -54,6 +68,10 @@
 		),
 	)
 
+	items_to_collect = list(
+		/obj/item/clothing/shoes/magboots = GRASP_LEFT_HAND,
+	)
+
 /datum/outfit/special/rig/ce_rig
 	outfit_name = "Chief engineer rig suit"
 	items_to_spawn = list(
@@ -62,6 +80,10 @@
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
+	)
+
+	items_to_collect = list(
+		/obj/item/clothing/shoes/magboots = GRASP_LEFT_HAND,
 	)
 
 /datum/outfit/special/rig/mining_rig
@@ -74,6 +96,10 @@
 		),
 	)
 
+	items_to_collect = list(
+		/obj/item/clothing/shoes/magboots = GRASP_LEFT_HAND,
+	)
+
 /datum/outfit/special/rig/mining_rig
 	outfit_name = "Syndie rig suit"
 	items_to_spawn = list(
@@ -82,6 +108,10 @@
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
+	)
+
+	items_to_collect = list(
+		/obj/item/clothing/shoes/magboots = GRASP_LEFT_HAND,
 	)
 
 /datum/outfit/special/rig/medical_rig
@@ -94,6 +124,10 @@
 		),
 	)
 
+	items_to_collect = list(
+		/obj/item/clothing/shoes/magboots = GRASP_LEFT_HAND,
+	)
+
 /datum/outfit/special/rig/atmos_rig
 	outfit_name = "Atmos rig suit"
 	items_to_spawn = list(
@@ -102,6 +136,10 @@
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
+	)
+
+	items_to_collect = list(
+		/obj/item/clothing/shoes/magboots = GRASP_LEFT_HAND,
 	)
 
 // ----- Other suits
