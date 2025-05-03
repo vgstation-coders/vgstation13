@@ -67,7 +67,7 @@
 	if(target.anchored)
 		to_chat(user, "<span class='notice'>You can't get the wrapping around \the [target].</span>")
 		return
-	if(target in user && !(target in user.held_items)) // Can wrap things in held items.
+	if( (target in user) && !(target in user.held_items)) // Can wrap things in held items.
 		to_chat(user, "<span class='notice'>That's not gonna work.</span>")
 		return
 	if(!proximity_flag)
