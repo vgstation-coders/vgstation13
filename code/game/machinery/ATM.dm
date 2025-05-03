@@ -174,18 +174,18 @@ log transactions
 					if(CHANGE_SECURITY_LEVEL)
 						dat += "Select a new security level for this account:<br><hr>"
 						var/text = "Zero - Either the account number or card is required to access this account. Vendor transactions will pay from your bank account if your virtual wallet has insufficient funds."
-						if(authenticated_account.security_level != 0)
+						if(authenticated_account.security_level != SECURITY_AUTO_LOGIN)
 							if(authenticated_account.disabled)
 								text = "<b>ACCOUNT DISABLED CAN NOT USE</b><br><s>[text]</s>"
 							else
 								text = "<A href='?src=\ref[src];choice=change_security_level;new_security_level=0'>[text]</a>"
 						dat += "[text]<hr>"
 						text = "One - An account number and pin must be manually entered to access this account and process transactions."
-						if(authenticated_account.security_level != 1)
+						if(authenticated_account.security_level != SECURITY_MANUAL_LOGIN)
 							text = "<A href='?src=\ref[src];choice=change_security_level;new_security_level=1'>[text]</a>"
 						dat += "[text]<hr>"
 						text = "Two - In addition to account number and pin, a card is required to access this account and process transactions."
-						if(authenticated_account.security_level != 2)
+						if(authenticated_account.security_level != SECURITY_CARD_AND_MANUAL_LOGIN)
 							text = "<A href='?src=\ref[src];choice=change_security_level;new_security_level=2'>[text]</a>"
 						dat += {"[text]<hr><br>
 							<A href='?src=\ref[src];choice=view_screen;view_screen=0'>Back</a>"}
