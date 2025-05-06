@@ -4,9 +4,11 @@
 	desc = "Mirror mirror on the wall, who's the most robust of them all? Touching the mirror will bring out Nanotrasen's state of the art hair modification system."
 	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "mirror"
-	density = 0
-	anchored = 1
-	var/shattered = 0
+	density = FALSE
+	anchored = TRUE
+	var/shattered = FALSE
+	/// Whether or not using this mirror makes you permanently bald or not.
+	var/norwood_cursed = FALSE
 
 /obj/structure/mirror/proc/can_use(mob/living/user, mob/living/carbon/human/target)
 	if(shattered)
@@ -103,6 +105,13 @@
 			if(species_hair.len)
 				var/new_style = input(user, "Select a hair style", "Grooming", target.my_appearance.h_style) as null|anything in species_hair
 				if(!new_style || !attempt(user, target, which))
+					return
+				if (norwood_cursed)
+					to_chat(target, "<span class = 'userwarning'>Oh no! It's the curse of Norwood!</span>")
+					target.visible_message("<span class='warning'>[target]'s hair vanishes in a flash!</span>")
+					target.my_appearance.h_style = "Bald"
+					target.update_hair()
+					target.my_appearance.permanently_bald = TRUE
 					return
 				target.my_appearance.h_style = new_style
 				target.update_hair()

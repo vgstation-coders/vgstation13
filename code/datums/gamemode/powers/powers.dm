@@ -333,7 +333,7 @@
 	</body></html>
 	"}
 
-	usr << browse(dat, "window=powers;size=900x480")
+	usr << browse(HTML_SKELETON(dat), "window=powers;size=900x480")
 
 
 

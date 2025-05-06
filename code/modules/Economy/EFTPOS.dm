@@ -82,7 +82,7 @@
 				<a href='?src=\ref[src];choice=change_code'>Change access code</a><br/>
 				<a href='?src=\ref[src];choice=change_id'>Change EFTPOS ID</a><br/>
 				Scan card to reset access code <a href='?src=\ref[src];choice=reset'>\[------\]</a>"}
-		user << browse(dat,"window=eftpos")
+		user << browse(HTML_SKELETON(dat),"window=eftpos")
 	else
 		user << browse(null,"window=eftpos")
 

@@ -24,12 +24,17 @@
 	var/g_eyes = 0
 	var/b_eyes = 0
 
+	var/permanently_bald = FALSE
+
 /mob/living/carbon/human/
 	var/datum/human_appearance/my_appearance
 
 /mob/living/carbon/human/proc/switch_appearance(var/datum/human_appearance/new_looks)
 	if (!istype(new_looks))
 		return
+	if (my_appearance.permanently_bald && new_looks.h_style != "Bald")
+		to_chat(src, "<span class='warning'>It is no use! The Curse O' Norwood is too strong!</span>")
+		new_looks.h_style = "Bald"
 	my_appearance = new_looks
 	regenerate_icons()
 

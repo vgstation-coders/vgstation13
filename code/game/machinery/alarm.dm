@@ -1453,7 +1453,7 @@ FIRE ALARM
 		dat += "An emergency shelter is mounted within. <A href='?src=\ref[src];shelter=1'>Retrieve</A>"
 	else
 		dat += "The shelter has been removed. <A href='?src=\ref[src];shelter=1'>Insert</A>"
-	user << browse(dat, "window=firealarm")
+	user << browse(HTML_SKELETON(dat), "window=firealarm")
 	onclose(user, "firealarm")
 
 /obj/machinery/firealarm/Topic(href, href_list)
@@ -1609,7 +1609,7 @@ var/global/list/firealarms = list() //shrug
 		var/second = time % 60
 		var/minute = (time - second) / 60
 		var/dat = text("<HTML><HEAD></HEAD><BODY><TT><B>Party Button</B> []\n<HR>\nTimer System: []<BR>\nTime Left: [][] <A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT></BODY></HTML>", d1, d2, (minute ? text("[]:", minute) : null), second, src, src, src, src)
-		user << browse(dat, "window=partyalarm")
+		user << browse(HTML_SKELETON(dat), "window=partyalarm")
 		onclose(user, "partyalarm")
 	else
 		if (this_area.fire)
@@ -1623,7 +1623,7 @@ var/global/list/firealarms = list() //shrug
 		var/second = time % 60
 		var/minute = (time - second) / 60
 		var/dat = text("<HTML><HEAD></HEAD><BODY><TT><B>[]</B> []\n<HR>\nTimer System: []<BR>\nTime Left: [][] <A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT></BODY></HTML>", stars("Party Button"), d1, d2, (minute ? text("[]:", minute) : null), second, src, src, src, src)
-		user << browse(dat, "window=partyalarm")
+		user << browse(HTML_SKELETON(dat), "window=partyalarm")
 		onclose(user, "partyalarm")
 	return
 

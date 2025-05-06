@@ -294,7 +294,7 @@ var/runedec = 0 // Rune cap ?
 					[words[9]] is <a href='byond://?src=\ref[src];number=9;action=change'>[words[words[9]]]</A> <A href='byond://?src=\ref[src];number=9;action=clear'>Clear</A><BR>
 					[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
 					"}
-		usr << browse("[notedat]", "window=notes")
+		usr << browse(HTML_SKELETON(notedat), "window=notes")
 //		call(/obj/item/weapon/tome_legacy/proc/edit_notes)()
 	else
 		usr << browse(null, "window=notes")

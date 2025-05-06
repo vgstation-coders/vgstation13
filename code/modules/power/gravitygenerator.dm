@@ -106,7 +106,7 @@
 	else
 		dat += "No local gravity generator detected!"
 
-	user << browse(dat, "window=gravgen")
+	user << browse(HTML_SKELETON(dat), "window=gravgen")
 	onclose(user, "gravgen")
 
 

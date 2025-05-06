@@ -331,7 +331,7 @@
 	dat += "<HR><A href='?src=\ref[src];print=1'>Print</A><BR>"
 
 	dat += text("<BR><A href='?src=\ref[];mach_close=scanconsole'>Close</A>", user)
-	user << browse(dat, "window=scanconsole;size=430x600")
+	user << browse(HTML_SKELETON(dat), "window=scanconsole;size=430x600")
 	return
 
 

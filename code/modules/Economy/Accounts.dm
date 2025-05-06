@@ -326,7 +326,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 							<td><a href='?src=\ref[src];choice=view_account_detail;account_index=[i]'>View in detail</a></td>
 							</tr>"}
 					dat += "</table>"
-		user << browse(dat,"window=account_db;size=700x650")
+		user << browse(HTML_SKELETON(dat),"window=account_db;size=700x650")
 	else
 		user << browse(null,"window=account_db")
 

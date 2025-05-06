@@ -168,7 +168,7 @@
 		<br>DeMil Alerts: <A href='?src=\ref[src];action=senmode'>Turn [senset ? "Off" : "On"]</A></h4>
 		"}
 
-		user << browse(dat, "window=detector;size=575x300")
+		user << browse(HTML_SKELETON(dat), "window=detector;size=575x300")
 		onclose(user, "detector")
 		return
 

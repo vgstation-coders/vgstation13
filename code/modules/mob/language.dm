@@ -378,7 +378,7 @@
 	for(var/datum/language/L in languages)
 		dat += "<b>[L.name] (:[L.key])</b><br/>[L.desc]<br/><br/>"
 
-	src << browse(dat, "window=checklanguage")
+	src << browse(HTML_SKELETON(dat), "window=checklanguage")
 	return
 
 /mob/living/check_languages()
@@ -393,7 +393,7 @@
 		else
 			dat += "<b>[L.name] (:[L.key])</b> - <a href='byond://?src=\ref[src];default_lang=[L]'>set default</a><br/>[L.desc]<br/><br/>"
 
-	src << browse(dat, "window=checklanguage")
+	src << browse(HTML_SKELETON(dat), "window=checklanguage")
 
 /mob/living/Topic(href, href_list)
 	if(href_list["default_lang"])

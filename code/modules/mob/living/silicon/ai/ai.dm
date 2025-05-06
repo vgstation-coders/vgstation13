@@ -359,7 +359,7 @@ var/static/list/ai_icon_states = list(
 		dat += "<BR>\n"
 
 	viewalerts = TRUE
-	src << browse(dat, "window=aialerts&can_close=0")
+	src << browse(HTML_SKELETON(dat), "window=aialerts&can_close=0")
 
 // this verb lets the ai see the stations manifest
 /mob/living/silicon/ai/proc/ai_roster()

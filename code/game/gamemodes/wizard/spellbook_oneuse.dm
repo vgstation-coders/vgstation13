@@ -566,6 +566,14 @@
 	disabled_from_bundle = 1
 
 
+///// Norwood curse ////
+
+/obj/item/weapon/spellbook/oneuse/norwood
+	spell = /spell/targeted/norwood_curse
+	spellname = "norwood"
+	icon_state ="bookmindswap" // To fix!
+	desc = "This book suddenly stops about 29 pages in. After, it is written 'it's over' in every language that has ever existed, will ever exist, and even in some which shouldn't theoretically exist."
+
 ///// ANCIENT SPELLBOOK /////
 
 /obj/item/weapon/spellbook/oneuse/ancient //the ancient spellbook contains weird and dangerous spells that aren't otherwise available to purchase, only available via the spellbook bundle

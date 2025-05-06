@@ -559,7 +559,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				dat+="I'm sorry to break your immersion. This shit's bugged. Report this bug to Agouri, polyxenitopalidou@gmail.com"
 
 
-		M << browse(dat, "window=newscaster_main;size=400x600")
+		M << browse(HTML_SKELETON(dat), "window=newscaster_main;size=400x600")
 		onclose(M, "newscaster_main")
 
 /obj/machinery/newscaster/Topic(href, href_list)

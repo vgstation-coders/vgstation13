@@ -2052,16 +2052,15 @@ var/global/list/adminbusteleportlocs = list()
 	general_area_name = "Derelict Station"
 	shuttle_can_crush = FALSE
 
-/area/derelict/hallway
-	holomap_color = HOLOMAP_AREACOLOR_HALLWAYS
-
 /area/derelict/hallway/primary
 	name = "\improper Derelict Primary Hallway"
 	icon_state = "hallP"
+	holomap_color = HOLOMAP_AREACOLOR_HALLWAYS
 
 /area/derelict/hallway/secondary
 	name = "\improper Derelict Secondary Hallway"
 	icon_state = "hallS"
+	holomap_color = HOLOMAP_AREACOLOR_HALLWAYS
 
 /area/derelict/arrival
 	name = "\improper Derelict Arrival Centre"
@@ -2078,8 +2077,16 @@ var/global/list/adminbusteleportlocs = list()
 	name = "Derelict Engine Storage"
 	icon_state = "green"
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
+	
+/area/derelict/storage/tech_storage
+	name = "Derelict Tech Storage"
+	icon_state = "storage"
+	
+/area/derelict/storage/aux_storage
+	name = "Derelict Aux Storage"
+	icon_state = "auxstorage"
 
-/area/derelict/bridge
+/area/derelict/bridge/bridge
 	name = "\improper Derelict Control Room"
 	icon_state = "bridge"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
@@ -2118,7 +2125,7 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Derelict Crew Quarters"
 	icon_state = "fitness"
 
-/area/derelict/medical
+/area/derelict/medical/medbay
 	name = "Derelict Medbay"
 	icon_state = "medbay"
 	holomap_color = HOLOMAP_AREACOLOR_MEDICAL
@@ -2153,7 +2160,7 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/solar/derelict_aft
 	name = "\improper Derelict Aft Solar Array"
-	icon_state = "aft"
+	icon_state = "aderelict"
 
 /area/derelict/singularity_engine
 	name = "\improper Derelict Singularity Engine"

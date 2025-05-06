@@ -6,6 +6,13 @@ var/list/ladders = list()
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "ladder11"
 	anchored = 1
+	var/custom_message_up = ""
+	var/custom_message_down = ""
+	var/custom_message_others_up = ""
+	var/custom_message_others_down = ""
+	var/custom_upanddown = ""
+	var/custom_upanddown_up = ""
+	var/custom_upanddown_down = ""
 	var/id = null
 	var/height = 0							//the 'height' of the ladder. higher numbers are considered physically higher
 	var/obj/structure/ladder/down = null	//the ladder below this one
@@ -78,36 +85,32 @@ var/list/ladders = list()
 	else	//wtf make your ladders properly assholes
 		icon_state = "ladder00"
 
-/obj/structure/ladder/attack_hand(mob/user as mob)
+/obj/structure/ladder/proc/go_up(mob/user)
+	user.visible_message("<span class='notice'>[user] [custom_message_others_up? custom_message_others_up : "climbs up the ladder!"]</span>", \
+								"<span class='notice'>You [custom_message_up? custom_message_up : "climb up the ladder!"]</span>")
+	climb(user, get_turf(up))
+	up.add_fingerprint(user)
+/obj/structure/ladder/proc/go_down(mob/user)
+	user.visible_message("<span class='notice'>[user] [custom_message_others_down? custom_message_others_down : "climbs down the ladder!"]</span>", \
+								"<span class='notice'>You [custom_message_down? custom_message_down : "climb down the ladder!"]</span>")
+	climb(user, get_turf(down))
+	down.add_fingerprint(user)
+
+/obj/structure/ladder/attack_hand(mob/user)
 	if(up && down)
-		switch( alert("Go up or down the ladder?", "Ladder", "Up", "Down", "Cancel") )
-			if("Up")
-				user.visible_message("<span class='notice'>[user] climbs up \the [src]!</span>", \
-									 "<span class='notice'>You climb up \the [src]!</span>")
-				climb(user, get_turf(up))
-				up.add_fingerprint(user)
-			if("Down")
-				user.visible_message("<span class='notice'>[user] climbs down \the [src]!</span>", \
-									 "<span class='notice'>You climb down \the [src]!</span>")
-				climb(user, get_turf(down))
-				down.add_fingerprint(user)
-			if("Cancel")
-				return
-
+		var/choice = alert("[custom_upanddown?custom_upanddown : "Go up or down the ladder?"]", "[src]", "[custom_upanddown_up?custom_upanddown_up : "Up"]",  "[custom_upanddown_down?custom_upanddown_down : "Down"]", "Cancel")
+		if(choice == "[custom_upanddown_up]" || choice == "Up")
+			go_up(user)
+		if(choice == "[custom_upanddown_down]" || choice == "Down")
+			go_down(user)
+		if(choice == "Cancel")
+			return
 	else if(up)
-		user.visible_message("<span class='notice'>[user] climbs up \the [src]!</span>", \
-							 "<span class='notice'>You climb up \the [src]!</span>")
-		climb(user, get_turf(up))
-		up.add_fingerprint(user)
-
+		go_up(user)
 	else if(down)
-		user.visible_message("<span class='notice'>[user] climbs down \the [src]!</span>", \
-							 "<span class='notice'>You climb down \the [src]!</span>")
-		climb(user, get_turf(down))
-		down.add_fingerprint(user)
-
+		go_down(user)
 	else
-		to_chat(user, "<span class='notice'>This ladder is broken!</span>")
+		to_chat(user, "<span class='notice'>This [src] is broken!</span>")
 
 	add_fingerprint(user)
 

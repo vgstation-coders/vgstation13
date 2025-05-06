@@ -1,13 +1,16 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
 /obj/item/weapon/circuitboard/airlock
-	name = "airlock electronics"
+	name = "\proper access electronics"
+	desc = "A circuit board used to operate access controls on various machinery."
+	board_type= OTHER
 	icon = 'icons/obj/doors/door_assembly.dmi'
 	icon_state = "door_electronics"
 	w_class = W_CLASS_SMALL //It should be tiny! -Agouri
 	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 50)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_SILICON
+	//origin_tech = Tc_PROGRAMMING + "=2"
 
 	req_access = list(access_engine_minor)
 

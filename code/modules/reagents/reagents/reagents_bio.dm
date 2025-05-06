@@ -334,7 +334,7 @@
 			to_chat(M,"<span class='notice'>You feel [pick("further from danger", "like you're losing something chasing you", "less hunted down")]...</span>")
 
 	var/stench_radius = clamp(volume * 0.1, 1, 6) //Stench starts out with 1 tile radius and grows after every 10 reagents on you
-	
+
 	var/alerted = 0
 	for(var/mob/living/simple_animal/hostile/retaliate/R in view(stench_radius, M)) //All other retaliating hostile mobs in radius
 		if(R == M || R.stat || R.hostile || (M in R.enemies))
@@ -461,12 +461,21 @@
 	description = "A mutated fungal compound that causes rapid rotting in iron infrastructures."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#005200" //moldy green
+	var/roboorgan_damage=10
+	var/melt_robolimb_threshold = 70
+	var/robolimb_damage_multiplier =2 //all multiplier vars scale damage with volume
+	var/robot_damage_multiplier = 2
+	var/mecha_damage_multiplier = 2
 
 /datum/reagent/ironrot/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
 		return 1
 
-	if(volume >= 5 && T.can_thermite && istype(T, /turf/simulated/wall))
+	if(istype(T,/turf/simulated/floor) && volume >= 1)
+		var/turf/simulated/floor/F = T
+		if(F.floor_tile?.material == "metal") //"rots away" metal floor tiles
+			F.make_plating()
+	if(istype(T, /turf/simulated/wall) && volume >= 5 &&T.can_thermite)
 		var/turf/simulated/wall/W = T
 		W.rot()
 
@@ -474,14 +483,14 @@
 	if(..())
 		return 1
 
-	M.adjustToxLoss(2 * REM)
+	M.adjustToxLoss(1 * REM)
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/chest/C = H.get_organ(LIMB_CHEST)
 		for(var/datum/organ/internal/I in C.internal_organs)
 			if(I.robotic == 2)
-				I.take_damage(10, 0)//robo organs get damaged by ingested ironrot
+				I.take_damage(roboorgan_damage, 0)//robo organs get damaged by ingested ironrot
 
 /datum/reagent/ironrot/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
@@ -489,9 +498,45 @@
 
 	if(method == TOUCH)
 		if(issilicon(M))//borgs are hurt on touch by this chem
-			M.adjustFireLoss(10)
-			M.adjustBruteLoss(10)
-//todo : mech and pod damage
+			M.adjustFireLoss(ceil((robot_damage_multiplier*volume)/2))
+			M.adjustBruteLoss(ceil((robot_damage_multiplier*volume)/2))
+		if(M.mob_property_flags & MOB_ROBOTIC)
+			M.adjustFireLoss(ceil((robot_damage_multiplier*volume)/2))
+			M.adjustBruteLoss(ceil((robot_damage_multiplier*volume)/2))
+		if(ishuman(M))
+			var/mob/living/carbon/human/H=M
+			var/list/damaged_organs_list = new/list()
+			for(var/datum/organ/external/affecting in H.organs)
+				if(affecting.is_robotic()&& affecting.status != ORGAN_DESTROYED)
+					if((affecting.get_health() + (robolimb_damage_multiplier*volume)) >= melt_robolimb_threshold)
+						to_chat(H,"<span class = 'danger'>\The [src.name] completely corrodes away your [affecting.display_name]!</span>")
+						affecting.dust()
+						continue
+					affecting.take_damage(ceil((robolimb_damage_multiplier*volume)/2),ceil((robolimb_damage_multiplier*volume)/2), 0, 0, used_weapon = "iron-rotting agent")
+					damaged_organs_list.Add(affecting.display_name)
+			if(damaged_organs_list) //formats the string to be less spammy using the message multiplier.
+				var/ampersand = FALSE
+				var/damaged_organs_string = ""
+				for(var/organ_name in damaged_organs_list)
+					damaged_organs_string = "[damaged_organs_string][ampersand? " & ":""][organ_name]"
+					if(!ampersand)
+						ampersand=TRUE
+				to_chat(H, "<span class = 'warning'>The [src.name] burns your [damaged_organs_string]!</span>")
+
+/datum/reagent/ironrot/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	if(istype(O,/obj/mecha))
+		var/obj/mecha/ME=O
+		ME.take_damage(ceil((mecha_damage_multiplier*volume)/2), damage_type = "fire")
+		ME.take_damage(ceil((mecha_damage_multiplier*volume)/2), damage_type = "brute")
+		return
+	if(istype(O,/obj/machinery/turret))
+		var/obj/machinery/turret/TU = O
+		TU.health-=mecha_damage_multiplier*volume
+	if(O.w_type == RECYK_METAL)
+		O.acid_melt()
 
 /datum/reagent/mucus
 	name = "Mucus"

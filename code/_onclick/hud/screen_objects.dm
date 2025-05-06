@@ -165,8 +165,8 @@
 			return 1
 	if(master)
 		var/obj/item/I = usr.get_active_hand()
-		if(I)
-			master.attackby(I, usr, params)
+		if(I && master.can_quick_store(I))
+			master.quick_store(I, usr)
 			//usr.next_move = world.time+2
 	return 1
 

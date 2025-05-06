@@ -244,14 +244,14 @@
 		dat+= text("<font color ='black'>A small dial with a \"ë\" symbol embroidded on it. It's pointing towards a gauge that reads []</font>.<BR> <font color='blue'><A href='?src=\ref[];toggleUV=1'> Turn towards []</A><BR>",(issuperUV ? "15nm" : "185nm"),src,(issuperUV ? "185nm" : "15nm") )
 		dat+= text("<font color ='black'>A thick old-style button, with 2 grimy LED lights next to it. The [] LED is on.</font><BR><font color ='blue'><A href='?src=\ref[];togglesafeties=1'>Press button</a></font>",(safetieson? "<font color='green'><B>GREEN</B></font>" : "<font color='red'><B>RED</B></font>"),src)
 		dat+= text("<HR><BR><A href='?src=\ref[];mach_close=suit_storage_unit'>Close panel</A>", user)
-		//user << browse(dat, "window=ssu_m_panel;size=400x500")
+		//user << browse(HTML_SKELETON(dat), "window=ssu_m_panel;size=400x500")
 		//onclose(user, "ssu_m_panel")
 	else if(isUV) //The thing is running its cauterisation cycle. You have to wait.
 
 		dat += {"<HEAD><TITLE>Suit storage unit</TITLE></HEAD>
 			<font color ='red'><B>Unit is cauterising contents with selected UV ray intensity. Please wait.</font></B><BR>"}
 		//dat+= "<font colr='black'><B>Cycle end in: [cycletimeleft()] seconds. </font></B>"
-		//user << browse(dat, "window=ssu_cycling_panel;size=400x500")
+		//user << browse(HTML_SKELETON(dat), "window=ssu_cycling_panel;size=400x500")
 		//onclose(user, "ssu_cycling_panel")
 
 	else
@@ -287,17 +287,17 @@
 			dat+= text("Unit status: []",(islocked? "<font color ='red'><B>**LOCKED**</B></font><BR>" : "<font color ='green'><B>**UNLOCKED**</B></font><BR>") )
 			dat+= text("<A href='?src=\ref[];start_UV=1'>Start Disinfection cycle</A><BR>",src)
 			dat += text("<BR><BR><A href='?src=\ref[];mach_close=suit_storage_unit'>Close control panel</A>", user)
-			//user << browse(dat, "window=Suit Storage Unit;size=400x500")
+			//user << browse(HTML_SKELETON(dat), "window=Suit Storage Unit;size=400x500")
 			//onclose(user, "Suit Storage Unit")
 		else //Ohhhh shit it's dirty or broken! Let's inform the guy.
 
 			dat += {"<HEAD><TITLE>Suit storage unit</TITLE></HEAD>
 				<font color='maroon'><B>Unit chamber is too contaminated to continue usage. Please call for a qualified individual to perform maintenance.</font></B><BR><BR>"}
 			dat+= text("<HR><A href='?src=\ref[];mach_close=suit_storage_unit'>Close control panel</A>", user)
-			//user << browse(dat, "window=suit_storage_unit;size=400x500")
+			//user << browse(HTML_SKELETON(dat), "window=suit_storage_unit;size=400x500")
 			//onclose(user, "suit_storage_unit")
 
-	user << browse(dat, "window=suit_storage_unit;size=400x500")
+	user << browse(HTML_SKELETON(dat), "window=suit_storage_unit;size=400x500")
 	onclose(user, "suit_storage_unit")
 	return
 

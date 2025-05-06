@@ -1042,13 +1042,17 @@ var/global/list/charcoal_doesnt_remove=list(
 			for(var/datum/wound/internal_bleeding/W in E.wounds)
 				W.heal_damage(0.8, TRUE)
 				holder.remove_reagent(MEDNANOBOTS, 0.25)
+			if (E.status & ORGAN_BROKEN)
+				E.status &= ~ORGAN_BROKEN //What do I owe you?
+				E.status &= ~ORGAN_SPLINTED //Nothing, it's for free!
+				holder.remove_reagent(MEDNANOBOTS, 0.10)
+			if (E.status & ORGAN_BLEEDING)
+				E.status &= ~ORGAN_BLEEDING //FOR FREE?!
+				holder.remove_reagent(MEDNANOBOTS, 0.10)
 		for(var/datum/organ/internal/I in H.internal_organs)
 			if(I.damage)
 				I.damage = max(0, I.damage - 5) //Heals a whooping 5 organ damage.
 				holder.remove_reagent(MEDNANOBOTS, 0.10) //Less so it doesn't vanish the nanobot supply
-			I.status &= ~ORGAN_BROKEN //What do I owe you?
-			I.status &= ~ORGAN_SPLINTED //Nothing, it's for free!
-			I.status &= ~ORGAN_BLEEDING //FOR FREE?!
 	if(M.getOxyLoss() || M.getBruteLoss(TRUE) || M.getToxLoss() || M.getFireLoss(TRUE) || M.getCloneLoss())
 		M.adjustOxyLoss(-5)
 		M.heal_organ_damage(5, 5) //Heals Brute and Burn. It heals the mob, not individual organs.

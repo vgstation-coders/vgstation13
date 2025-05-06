@@ -228,7 +228,7 @@ List of hard deletions:"}
 	if(L.len == 1)
 		to_chat(usr, "No garbage collector deletions this round")
 		return
-	usr << browse(jointext(L,""),"window=harddellogs")
+	usr << browse(HTML_SKELETON(jointext(L, "")),"window=harddellogs")
 
 /*
  * NEVER USE THIS FOR /atom OTHER THAN /atom/movable

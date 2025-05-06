@@ -34,4 +34,4 @@
 	"<br/>"
 	"<a href='?src=\ref[src];change_zone_del=exec'>Delete it.</a>'"}
 
-	usr << browse(jointext(dat, ""), "window=mass_del_in_zone;size=490x310")
+	usr << browse(HTML_SKELETON(jointext(dat, "")), "window=mass_del_in_zone;size=490x310")

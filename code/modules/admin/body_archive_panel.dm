@@ -53,4 +53,4 @@
 		</html>
 		"}
 
-	usr << browse(dat, "window=bodyarchivepanel;size=860x640")
+	usr << browse(HTML_SKELETON(dat), "window=bodyarchivepanel;size=860x640")

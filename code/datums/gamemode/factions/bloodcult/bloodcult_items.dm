@@ -75,8 +75,11 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/tome/proc/tome_text()
 	var/page_data = null
-	var/dat = {"<title>arcane tome</title><body style="color:#FFFFFF" bgcolor="#110000">
-
+	var/title = "arcane tome"
+	var/body_style = {"
+	"color:#FFFFFF" bgcolor="#110000"
+	"}
+	var/dat = {"
 			<style>
 				label {display: inline-block; width: 50px;text-align: right;float: left;margin: 0 0 0 10px;}
 				ul {list-style-type: none;}
@@ -122,9 +125,9 @@ var/list/arcane_tomes = list()
 	else
 		dat += page_special()
 
-	dat += {"</div></div></div></body>"}
+	dat += {"</div></div></div>"}
 
-	return dat
+	return HTML_SKELETON_TITLE_STYLE(title, dat, body_style)
 
 /obj/item/weapon/tome/proc/page_special()
 	var/dat = null

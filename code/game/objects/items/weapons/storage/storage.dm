@@ -90,9 +90,10 @@
 /obj/item/weapon/storage/proc/empty_contents_to(var/atom/place)
 	var/turf = get_turf(place)
 	for(var/obj/objects in contents)
-		remove_from_storage(objects, turf)
-		objects.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
-		objects.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
+		if(obj_shows_to(objects))
+			remove_from_storage(objects, turf)
+			objects.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
+			objects.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/storage/proc/return_inv()
 	var/list/L = list(  )
@@ -130,9 +131,15 @@
 	user.client.screen += src.boxes
 	user.client.screen += src.closer
 	user.client.screen += src.xtra
-	user.client.screen += src.contents
+	for(var/atom/A in src.contents)
+		if(obj_shows_to(A))
+			user.client.screen += A
 	user.s_active = src
 	is_seeing |= user
+
+//Proc for hiding things from the inventory display, useful for things one wouldn't want removed via this interface.
+/obj/item/weapon/storage/proc/obj_shows_to(atom/A)
+	return TRUE
 
 /obj/item/weapon/storage/proc/hide_from(mob/user as mob)
 	if(!user.client)
@@ -158,12 +165,13 @@
 	var/cy = ty
 	src.boxes.screen_loc = "[tx],[ty] to [mx],[my]"
 	for(var/obj/O in src.contents)
-		O.screen_loc = "[cx],[cy]"
-		O.hud_layerise()
-		cx++
-		if (cx > mx)
-			cx = tx
-			cy--
+		if(obj_shows_to(O))
+			O.screen_loc = "[cx],[cy]"
+			O.hud_layerise()
+			cx++
+			if (cx > mx)
+				cx = tx
+				cy--
 	src.closer.screen_loc = "[mx+1],[my]"
 	src.xtra.screen_loc = src.closer.screen_loc
 	return
@@ -186,14 +194,15 @@
 				cy--
 	else
 		for(var/obj/O in contents)
-			O.mouse_opacity = 2 //This is here so storage items that spawn with contents correctly have the "click around item to equip"
-			O.screen_loc = "[cx]:[WORLD_ICON_SIZE/2],[cy]:[WORLD_ICON_SIZE/2]"
-			O.maptext = ""
-			O.hud_layerise()
-			cx++
-			if (cx > (4+cols))
-				cx = 4
-				cy--
+			if(obj_shows_to(O))
+				O.mouse_opacity = 2 //This is here so storage items that spawn with contents correctly have the "click around item to equip"
+				O.screen_loc = "[cx]:[WORLD_ICON_SIZE/2],[cy]:[WORLD_ICON_SIZE/2]"
+				O.maptext = ""
+				O.hud_layerise()
+				cx++
+				if (cx > (4+cols))
+					cx = 4
+					cy--
 	src.closer.screen_loc = "[4+cols+1]:[WORLD_ICON_SIZE/2],2:[WORLD_ICON_SIZE/2]"
 	src.xtra.screen_loc = src.closer.screen_loc
 
@@ -224,15 +233,16 @@
 		numbered_contents = list()
 		adjusted_contents = 0
 		for(var/obj/item/I in contents)
-			var/found = 0
-			for(var/datum/numbered_display/ND in numbered_contents)
-				if(ND.sample_object.type == I.type)
-					ND.number += I.get_storage_number_display_value()
-					found = 1
-					break
-			if(!found)
-				adjusted_contents++
-				numbered_contents.Add( new/datum/numbered_display(I) )
+			if(obj_shows_to(I))
+				var/found = 0
+				for(var/datum/numbered_display/ND in numbered_contents)
+					if(ND.sample_object.type == I.type)
+						ND.number += I.get_storage_number_display_value()
+						found = 1
+						break
+				if(!found)
+					adjusted_contents++
+					numbered_contents.Add( new/datum/numbered_display(I) )
 
 	//var/mob/living/carbon/human/H = user
 	var/row_num = 0
@@ -353,7 +363,7 @@
 				if(otherS.amount < otherS.max_amount)
 					return TRUE
 				stacktypefound = TRUE
-	if((storage_slots && (contents.len >= storage_slots)) || (get_sum_w_class() + W.w_class > max_combined_w_class))
+	if((storage_slots && (get_contents_len() >= storage_slots)) || (get_sum_w_class() + W.w_class > max_combined_w_class))
 		if(!stop_messages)
 			to_chat(usr, "<span class='notice'>\The [src] is full[stacktypefound ? " of this kind of stack": ""], make some space.</span>")
 		return 0 //Storage item is full
@@ -794,7 +804,14 @@
 /obj/item/weapon/storage/proc/get_sum_w_class()
 	. = 0
 	for(var/obj/item/I in contents)
-		. += I.w_class
+		if(obj_shows_to(I))
+			. += I.w_class
+
+/obj/item/weapon/storage/proc/get_contents_len()
+	. = 0
+	for(var/obj/item/I in contents)
+		if(obj_shows_to(I))
+			.++
 
 /obj/item/weapon/storage/proc/is_full()
 	return (storage_slots && (contents.len >= storage_slots)) || (get_sum_w_class() >= max_combined_w_class)
