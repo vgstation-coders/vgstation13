@@ -64,6 +64,7 @@
 			explosion(get_turf(H), 1, 3, 5, 7, whodunnit=H)
 	return
 
+#undef NO_GIBS
 #undef GIBS
 #undef SMALL_EXPLOSION
 #undef BREACH_NORMAL
@@ -100,7 +101,7 @@
 	H.adjustToxLoss(healing_values["tox"]*REM)
 	H.adjustFireLoss(healing_values["fire"]*REM)
 	H.adjustCloneLoss(healing_values["clone"]*REM)
-	H.adjustBrainLoss(healing_values["brain"]**REM)
+	H.adjustBrainLoss(healing_values["brain"]*REM)
 
 
 /// ------ Transform women into men
@@ -181,12 +182,12 @@
 				/mob/living/simple_animal/penguin, /mob/living/simple_animal/penguin/chick,
 				/mob/living/simple_animal/rabbit, /mob/living/simple_animal/rabbit/bunny,
 			)
-		if (100 to 130) // Uncommon
+		if (101 to 130) // Uncommon
 			picked_mob_type = pick(
 				/mob/living/simple_animal/borer, /mob/living/simple_animal/puddi/happy,
 				/mob/living/simple_animal/puddi/anger, /mob/living/simple_animal/spiderbot,
 			)
-		if (130 to 145) // Dangerous
+		if (131 to 145) // Dangerous
 			picked_mob_type = pick(
 				/mob/living/simple_animal/amogusflash,
 				/mob/living/simple_animal/hostile/asteroid/basilisk, /mob/living/simple_animal/hostile/asteroid/goldgrub,
@@ -195,7 +196,7 @@
 				/mob/living/simple_animal/hostile/giant_spider/hunter, /mob/living/simple_animal/hostile/pitbull,
 				/mob/living/simple_animal/slime, /mob/living/simple_animal/slime/adult,
 			)
-		if (145 to 150) // Owned
+		if (146 to 150) // Owned
 			picked_mob_type = pick(
 				/mob/living/simple_animal/hostile/retaliate/clown, /mob/living/simple_animal/hostile/retaliate/cluwne,
 				/mob/living/simple_animal/hostile/retaliate/faguette, /mob/living/simple_animal/hostile/retaliate/mime,
@@ -228,7 +229,6 @@
 	var/obj/effect/smoke/smoke = new /obj/effect/smoke(get_turf(H))
 	smoke.time_to_live = 1
 	qdel(H)
-	return
 
 /// ------- Scramble damage
 
