@@ -89,15 +89,11 @@ var/list/ladders = list()
 /obj/structure/ladder/proc/go_up(mob/user)
 	user.visible_message("<span class='notice'>[user] [custom_message_others_up? custom_message_others_up : "climbs up the ladder!"]</span>", \
 								"<span class='notice'>You [custom_message_up? custom_message_up : "climb up the ladder!"]</span>")
-	if (custom_sound)
-		playsound(src, custom_sound, 100, 0)
 	climb(user, get_turf(up))
 	up.add_fingerprint(user)
 /obj/structure/ladder/proc/go_down(mob/user)
 	user.visible_message("<span class='notice'>[user] [custom_message_others_down? custom_message_others_down : "climbs down the ladder!"]</span>", \
 								"<span class='notice'>You [custom_message_down? custom_message_down : "climb down the ladder!"]</span>")
-	if (custom_sound)
-		playsound(src, custom_sound, 100, 0)
 	climb(user, get_turf(down))
 	down.add_fingerprint(user)
 
@@ -132,6 +128,9 @@ var/list/ladders = list()
 	return attack_hand(user)
 
 /obj/structure/ladder/proc/climb(mob/user, turf/destination)
+	if (custom_sound)
+		playsound(src, custom_sound, 100, 0)
+
 	user.forceMove(destination)
 
 	for(var/obj/item/weapon/grab/G in user.held_items)
