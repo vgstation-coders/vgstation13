@@ -5,17 +5,17 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 
 	school = "transmutation"
-	charge_max = 10 SECONDS
+	charge_cooldown_max = 10 SECONDS
 	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
 	cooldown_min = 4 SECONDS
 	range = 1
 	max_targets = 1
 	invocation = "C'R'S O' N'WOOD!"
 
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 
 	hud_state = "norwood"
 
