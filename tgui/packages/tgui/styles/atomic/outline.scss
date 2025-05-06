@@ -37,11 +37,11 @@
   outline-style: outset !important;
 }
 
-$map-keys: colors.$color-map !default;
+$fg-map: colors.$fg-map !default;
+$bg-map: colors.$bg-map !default;
 
-@each $color-name, $color-value in $map-keys {
-  /* prettier-ignore */
+@each $color-name, $color-value in $fg-map {
   .outline-color-#{$color-name} {
-    outline: var(--border-thickness-small) solid hsl(from $color-value h s calc(l + var(--adjust-color))) !important;
+    outline: 0.167rem solid $color-value !important;
   }
 }

@@ -17,14 +17,12 @@
 .AlertModal__Loader {
   width: 100%;
   position: relative;
-  height: var(--border-thickness-large);
+  height: 4px;
 }
 
 .AlertModal__LoaderProgress {
   position: absolute;
-  transition-property: background-color, width;
-  transition-duration: var(--transition-time-slow);
-  transition-timing-function: ease-out;
-  background-color: var(--color-primary);
+  transition: background-color 500ms ease-out, width 500ms ease-out;
+  background-color: colors.bg(colors.$primary);
   height: 100%;
 }

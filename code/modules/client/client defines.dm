@@ -112,8 +112,5 @@
 	// Last Round Scoreboard images have been sent
 	var/received_last_round_images = FALSE
 
-	// Duplicate from /datum
-	var/list/active_timers = list()
-
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()

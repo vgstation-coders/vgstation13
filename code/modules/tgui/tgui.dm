@@ -11,7 +11,7 @@
 	var/mob/user
 	/// The object which owns the UI.
 	var/datum/src_object
-	/// The title of the UI.
+	/// The title of te UI.
 	var/title
 	/// The window_id for browse() and onclose().
 	var/datum/tgui_window/window
@@ -31,12 +31,8 @@
 	var/closing = FALSE
 	/// The status/visibility of the UI.
 	var/status = UI_INTERACTIVE
-	/// Timed refreshing state
-	var/refreshing = FALSE
 	/// Topic state used to determine status/interactability.
 	var/datum/ui_state/state = null
-	/// Rate limit client refreshes to prevent DoS.
-	var/refresh_cooldown = 0
 
 /**
  * public
@@ -58,7 +54,7 @@
 		src_object = src_object)
 	src.user = user
 	src.src_object = src_object
-	src.window_key = "\ref[src_object]-main"
+	src.window_key = "[ref(src_object)]-main"
 	src.interface = interface
 	if(title)
 		src.title = title
@@ -94,44 +90,21 @@
 	window.acquire_lock(src)
 	if(!window.is_ready())
 		window.initialize(
-			strict_mode = TRUE,
 			fancy = user.client.prefs.tgui_fancy,
-			assets = list(
-				get_tg_asset_datum(/datum/tg_asset/simple/tgui),
-			))
+			inline_assets = list(/datum/asset/simple/tgui)
+		)
 	else
 		window.send_message("ping")
-	send_assets()
+	window.send_asset(/datum/asset/simple/fontawesome)
+	window.send_asset(/datum/asset/simple/tgfont)
+	for(var/asset in src_object.ui_assets(user))
+		window.send_asset(asset)
 	window.send_message("update", get_payload(
 		with_data = TRUE,
 		with_static_data = TRUE))
 	SStgui.on_open(src)
 
 	return TRUE
-
-/datum/tgui/proc/send_assets()
-	var/flush_queue = window.send_asset(get_tg_asset_datum(
-		/datum/tg_asset/simple/fontawesome))
-	flush_queue |= window.send_asset(get_tg_asset_datum(
-		/datum/tg_asset/simple/tgfont))
-	flush_queue |= window.send_asset(get_tg_asset_datum(
-		/datum/tg_asset/json/icon_ref_map))
-	for(var/datum/tg_asset/asset in src_object.ui_assets(user))
-		flush_queue |= window.send_asset(asset)
-
-	// -- Legacy code for /vg/ style spritesheet datums --
-	// TOFIX!!! One thing at the time..
-	for(var/asset_type in src_object.ui_assets(user))
-		window.sent_assets |= list(asset_type)
-		var/datum/asset/instance = get_asset_datum(asset_type)
-		instance.send(window.client)
-		if(istype(instance, /datum/asset/spritesheet))
-			var/datum/asset/spritesheet/spritesheet = instance
-			window.send_message("asset/stylesheet", spritesheet.css_filename())
-		window.send_raw_message(TGUI_CREATE_MESSAGE("asset/mappings", instance.get_url_mappings()))
-	// -- END legacy code for /vg/ style spritesheet datums --
-	if (flush_queue)
-		user.client.tg_browse_queue_flush()
 
 /**
  * public
@@ -202,17 +175,11 @@
 /datum/tgui/proc/send_full_update(custom_data, force)
 	if(!user.client || !initialized || closing)
 		return
-	if(!COOLDOWN_FINISHED(src, refresh_cooldown))
-		refreshing = TRUE
-		add_timer(new /callback(src, PROC_REF(send_full_update), custom_data, force), COOLDOWN_TIMELEFT(src, refresh_cooldown), TIMER_UNIQUE)
-		return
-	refreshing = FALSE
 	var/should_update_data = force || status >= UI_UPDATE
 	window.send_message("update", get_payload(
 		custom_data,
 		with_data = should_update_data,
 		with_static_data = TRUE))
-	COOLDOWN_START(src, refresh_cooldown, TGUI_REFRESH_FULL_UPDATE_COOLDOWN)
 
 /**
  * public
@@ -242,17 +209,12 @@
 	json_data["config"] = list(
 		"title" = title,
 		"status" = status,
-		"interface" = list(
-			"name" = interface,
-			"layout" = user.client.prefs.layout_prefs_used,
-		),
-		"refreshing" = refreshing,
+		"interface" = interface,
 		"window" = list(
 			"key" = window_key,
 			"size" = window_size,
 			"fancy" = user.client.prefs.tgui_fancy,
-			"locked" = user.client.prefs.tgui_lock,
-			"scale" = user.client.prefs.tgui_scale,
+			"locked" = TRUE,
 		),
 		"client" = list(
 			"ckey" = user.client.ckey,
@@ -280,12 +242,12 @@
  * Run an update cycle for this UI. Called internally by SStgui
  * every second or so.
  */
-/datum/tgui/proc/process(seconds_per_tick, force = FALSE)
+/datum/tgui/proc/process(delta_time, force = FALSE)
 	if(closing)
 		return
 	var/datum/host = src_object.ui_host(user)
 	// If the object or user died (or something else), abort.
-	if(QDELETED(src_object) || QDELETED(host) || QDELETED(user) || QDELETED(window))
+	if(!src_object || !host || !user || !window)
 		close(can_be_suspended = FALSE)
 		return
 	// Validate ping
@@ -335,11 +297,8 @@
 		return FALSE
 	switch(type)
 		if("ready")
-			// Send a full update when the user manually refreshes the UI
-			if(initialized)
-				send_full_update()
 			initialized = TRUE
-		if("ping/reply")
+		if("pingReply")
 			initialized = TRUE
 		if("suspend")
 			close(can_be_suspended = TRUE)
@@ -351,13 +310,7 @@
 		if("setSharedState")
 			if(status != UI_INTERACTIVE)
 				return
-			LAZYINITLIST(src_object.tgui_shared_states)
+			if(!src_object.tgui_shared_states)
+				src_object.tgui_shared_states = list()
 			src_object.tgui_shared_states[href_list["key"]] = href_list["value"]
 			SStgui.update_uis(src_object)
-
-/// Wrapper for behavior to potentially wait until the next tick if the server is overloaded
-/datum/tgui/proc/on_act_message(act_type, payload, state)
-	if(QDELETED(src) || QDELETED(src_object))
-		return
-	if(src_object.ui_act(act_type, payload, src, state))
-		SStgui.update_uis(src_object)

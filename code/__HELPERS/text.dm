@@ -2,8 +2,6 @@
 #define UTF_LIMIT (1 << 20) + (1 << 16) - 1
 #define string2charlist(string) (splittext(string, regex("(.)")) - splittext(string, ""))
 
-#define PREVENT_CHARACTER_TRIM_LOSS(length) (length + 1)
-
 /*
  * Holds procs designed to help with filtering text
  * Contains groups:
@@ -129,15 +127,6 @@ var/list/whitelist_name_diacritics_cap = list(
 var/list/whitelist_name_diacritics_min = list(
 	"à", "á", "â", "ã", "ä", "ä", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó", "ô", "ö", "ø", "ù", "ú", "û", "ü", "ý",
 )
-
-/proc/stripped_multiline_input(mob/user, message = "", title = "", default = "", max_length=MAX_MESSAGE_LEN, no_trim=FALSE)
-	var/user_input = input(user, message, title, default) as message|null
-	if(isnull(user_input)) // User pressed cancel
-		return
-	if(no_trim)
-		return copytext_char(html_encode(user_input), 1, max_length)
-	else
-		return trim(html_encode(user_input), max_length)
 
 /proc/reject_bad_name(var/t_in, var/allow_numbers=0, var/max_length=MAX_NAME_LEN)
 	if(!t_in || length(t_in) > max_length)

@@ -97,9 +97,6 @@
 	if(modifiers["right"])
 		RightClickOn(A)
 		return
-	// Equivalent to button M4/M5 on gaming mouses.
-	if(modifiers["xbutton1"] || modifiers["xbutton2"])
-		return
 
 	if(attempt_crawling(A))
 		return

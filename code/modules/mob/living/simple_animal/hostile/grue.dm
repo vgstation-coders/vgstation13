@@ -430,7 +430,7 @@
 	if(dark_plane)
 		if(master_plane)
 			master_plane.blend_mode = BLEND_ADD
-		dark_plane.alphas["grue"] = 0 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
+		dark_plane.alphas["grue"] = 15 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
 		client.color = list(
 				1,0,0,0,
 				-1,0.2,0.2,0,

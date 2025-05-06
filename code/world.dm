@@ -5,8 +5,8 @@ var/world_startup_time
 var/date_string
 var/force_restart
 
-#if DM_VERSION < 516
-#error You need at least version 516 to compile.
+#if DM_VERSION < 515
+#error You need at least version 515 to compile
 #endif
 /world
 	mob = /mob/new_player

@@ -1,13 +1,13 @@
 .ExperimentTechwebServer__Web,
 .ExperimentConfigure__ExperimentPanel {
-  background: var(--color-black);
-  border: var(--border-thickness-tiny) solid var(--color-primary);
-  margin: var(--space-s) 0;
+  background: #000000;
+  border: 1px solid #40628a;
+  margin: 3px 0;
 }
 
 .ExperimentTechwebServer__WebHeader {
-  background: var(--color-primary);
-  padding: var(--space-xs);
+  background: #40628a;
+  padding: 2px;
 }
 
 .ExperimentTechwebServer__WebName {
@@ -15,11 +15,11 @@
 }
 
 .ExperimentTechwebServer__WebContent {
-  padding: var(--space-sm);
+  padding: 4px;
 }
 
 .ExperimentTechwebServer__WebContent > .LabeledList {
-  margin: var(--space-s) var(--space-s) var(--space-s) var(--space-xl);
+  margin: 0.25rem 0.25rem 0.25rem 1rem;
 }
 
 .ExperimentConfigure__ExperimentName {
@@ -28,13 +28,12 @@
 }
 
 .ExperimentConfigure__ExperimentContent {
-  /* prettier-ignore */
-  padding: var(--space-s) calc(var(--space-xl) * 1.5) var(--space-s) var(--space-s);
+  padding: 0.25rem 1.5rem 0.25rem 0.25rem;
 }
 
 .ExperimentStage__Indicator {
   font-weight: bold;
-  margin-right: var(--space-xl);
+  margin-right: 1rem;
   text-align: center;
 }
 
@@ -44,17 +43,17 @@
 }
 
 .ExperimentStage__StageContainer {
-  margin-bottom: var(--space-m);
+  margin-bottom: 5px;
 }
 
 .ExperimentStage__Table {
   border-collapse: separate;
-  border-spacing: var(--space-s) var(--space-s);
+  border-spacing: 0.25rem 0.25rem;
 }
 
 .ExperimentConfigure__PerformExperiment {
   text-align: center;
-  padding: var(--space-l) 0;
+  padding: 0.75rem 0;
 }
 
 .ExperimentConfigure__ExperimentsContainer {
@@ -65,6 +64,7 @@
 
 .ExperimentConfigure__ExperimentsContainer > :last-child {
   flex: 1;
+  overflow-y: auto;
 }
 
 // Required for the time being otherwise we'll end up coloring the tooltip
@@ -81,5 +81,5 @@
   height: 100%;
   right: 0;
   top: 0;
-  color: var(--color-text-translucent);
+  color: rgba(255, 255, 255, 0.5);
 }

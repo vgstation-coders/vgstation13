@@ -19,9 +19,6 @@
 /// Maximum ping timeout allowed to detect zombie windows
 #define TGUI_PING_TIMEOUT 4 SECONDS
 
-/// Used for rate-limiting to prevent DoS by excessively refreshing a TGUI window
-#define TGUI_REFRESH_FULL_UPDATE_COOLDOWN (1 SECONDS)
-
 /// Window does not exist
 #define TGUI_WINDOW_CLOSED 0
 /// Window was just opened, but is still not ready to be sent data
@@ -41,14 +38,3 @@
 #define TGUI_CREATE_MESSAGE(type, payload) ( \
 	"%7b%22type%22%3a%22[type]%22%2c%22payload%22%3a[url_encode(json_encode(payload))]%7d" \
 )
-
-// -- TG Style nameof() --
-#define PROC_REF(X) (nameof(.proc/##X))
-/**
- * NAMEOF: Compile time checked variable name to string conversion
- * evaluates to a string equal to "X", but compile errors if X isn't a var on datum.
- **/
-#define NAMEOF(datum, X) (#X || ##datum.##X)
-
-/// Call by name proc reference, checks if the proc exists on either the given type or as a global proc
-#define TYPE_PROC_REF(TYPE, X) (nameof(##TYPE.proc/##X))

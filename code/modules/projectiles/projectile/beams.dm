@@ -24,7 +24,7 @@ var/list/beam_master = list()
 	var/obj/item/projectile/beam/fired_beam
 	var/list/rayCastHit/hit_cache
 
-/ray/beam_ray/New(var/_vector/p_origin, var/_vector/p_direction, var/obj/item/projectile/beam/fired_beam)
+/ray/beam_ray/New(var/vector/p_origin, var/vector/p_direction, var/obj/item/projectile/beam/fired_beam)
 	..(p_origin, p_direction, fired_beam.starting.z)
 	src.fired_beam = fired_beam
 	original_damage = fired_beam.damage
@@ -90,9 +90,9 @@ var/list/beam_master = list()
 	..()
 
 
-/obj/item/projectile/beam/proc/fireto(var/_vector/origin, var/_vector/direction)
+/obj/item/projectile/beam/proc/fireto(var/vector/origin, var/vector/direction)
 	// + 0.5 because we want to start in the middle of the tile
-	var/ray/beam_ray/shot_ray = new /ray/beam_ray(origin + new /_vector(0.5, 0.5), direction, src)
+	var/ray/beam_ray/shot_ray = new /ray/beam_ray(origin + new /vector(0.5, 0.5), direction, src)
 	for(var/ray/beam_ray/other_ray in past_rays)
 		if(other_ray.equals(shot_ray))
 			return //we already went here
@@ -135,8 +135,8 @@ var/list/beam_master = list()
 		qdel(shot_ray)
 
 /obj/item/projectile/beam/process()
-	var/_vector/origin = atom2vector(starting)
-	var/_vector/direction = atoms2vector(starting, original)
+	var/vector/origin = atom2vector(starting)
+	var/vector/direction = atoms2vector(starting, original)
 
 	fireto(origin, direction)
 
@@ -149,8 +149,8 @@ var/list/beam_master = list()
 
 	//make new ray
 	var/list/rayCastHit/hit_cache = latest_ray.hit_cache
-	var/_vector/origin = hit_cache[hit_cache.len].point
-	var/_vector/direction = latest_ray.getReboundOnAtom(hit_cache[hit_cache.len])
+	var/vector/origin = hit_cache[hit_cache.len].point
+	var/vector/direction = latest_ray.getReboundOnAtom(hit_cache[hit_cache.len])
 
 	//check if raypath was already traveled
 	var/ray/temp_ray = new /ray(origin, direction)
@@ -173,8 +173,8 @@ var/list/beam_master = list()
 	var/ray/beam_ray/latest_ray = past_rays[past_rays.len]
 
 	//make new ray
-	var/_vector/origin = atom2vector(dest)
-	var/_vector/direction = latest_ray.direction
+	var/vector/origin = atom2vector(dest)
+	var/vector/direction = latest_ray.direction
 
 	fireto(origin, direction)
 	shot_from = dest
@@ -184,8 +184,8 @@ var/list/beam_master = list()
 	src.dir = dir || src.dir
 	src.starting = starting || loc
 
-	var/_vector/origin = atom2vector(src.starting)
-	var/_vector/direction = dir2vector(src.dir)
+	var/vector/origin = atom2vector(src.starting)
+	var/vector/direction = dir2vector(src.dir)
 	fireto(origin, direction)
 
 // Special laser the captains gun uses
@@ -971,7 +971,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 		has_splashed = TRUE
 	..()
 //I never want to deal wity ray casts ever again
-/obj/item/projectile/beam/liquid_stream/fireto(var/_vector/origin, var/_vector/direction)//splashes reagents on the turf if the projectile ran out
+/obj/item/projectile/beam/liquid_stream/fireto(var/vector/origin, var/vector/direction)//splashes reagents on the turf if the projectile ran out
 	..()
 	if (reagents && reagents.total_volume && final_turf && !has_splashed)
 		loc = final_turf

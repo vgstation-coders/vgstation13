@@ -1,26 +1,10 @@
-/**
- * Copyright (c) 2021 Celotajs (https://github.com/celotajstg)
- * SPDX-License-Identifier: MIT
- */
+@use '../colors.scss';
 
 a {
-  cursor: var(--cursor-pointer);
-  color: var(--color-hyperlink);
-  transition: color var(--transition-time-medium);
-
-  &:hover,
-  &:active {
-    color: hsl(from var(--color-hyperlink) h s calc(l + var(--adjust-hover)));
+  &:link, &:visited {
+    color: colors.$blue;
   }
-
-  &:visited {
-    color: var(--color-hyperlink-visited);
-
-    &:hover,
-    &:active {
-      color: hsl(
-        from var(--color-hyperlink-visited) h s calc(l + var(--adjust-hover))
-      );
-    }
+  &:hover, &:active {
+    color: colors.$primary;
   }
 }
