@@ -149,7 +149,7 @@ var/updated_stats = 0
 		bunker_setting = 1
 		load_bunker()
 	if(config)
-		winset(src, null, "window1.msay_output.style=[config.world_style_config];")
+		winset_wrapper() // The TG people told me to do it. If this fails for reason X or Y, the entire client/New() will runtime and we'll be in huge trouble.
 	else
 		to_chat(src, "<span class='warning'>The stylesheet wasn't properly setup call an administrator to reload the stylesheet or relog.</span>")
 
@@ -358,6 +358,9 @@ var/updated_stats = 0
 		tooltips = new /datum/tooltip(src)
 
 	fps = (prefs.fps < 0) ? RECOMMENDED_CLIENT_FPS : prefs.fps
+
+/client/proc/winset_wrapper()
+	winset(src, null, "window1.msay_output.style=[config.world_style_config];")
 
 	//////////////
 	//DISCONNECT//
