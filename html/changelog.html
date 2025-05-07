@@ -73,38 +73,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
-			<h2 class="date">2025.04.17</h2>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Chemical mutations in plants will not add produced chems if the plant had no produced chems in the first place, and will not remove the last chem.</li>
-			</ul>
-			<h3 class="author">RealestEstate updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed invisible Ripleydozer.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Escape pods must now exist before they can be sent crashing into the escape shuttle.</li>
-			</ul>
-			<h2 class="date">2025.04.14</h2>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Windows in the abandoned spaceship are now properly dense again.</li>
-			</ul>
-			<h2 class="date">2025.04.01</h2>
-			<h3 class="author">mentgah updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">YOU CAN NOW HOLD HANDS!!!</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added pixel shifting.</li>
-			</ul>
-			<h2 class="date">2025.03.31</h2>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">chicken-of-the-stars now works as wheat for vox chickens</li>
-			</ul>
 			<h2 class="date">2025.03.21</h2>
 			<h3 class="author">Kurfursten updated:</h3>
 			<ul class="changes bgimages16">
@@ -1329,6 +1297,66 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<ul class="changes bgimages16">
 				<li class="tweak">Cows and Goats make more milk, with cows outproducing goats.</li>
 				<li class="tweak">Goats can now store 100u of milk, Cows can store 150u.</li>
+			</ul>
+			<h2 class="date">2024.06.27</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">IEDs can now be made when not holding a can in hand again.</li>
+			</ul>
+			<h3 class="author">bathosbathtime updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Silicons now have a message clarifying a confusing set of rules and policies.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Magic is now stored in the brain, not the ass, which should also allow wizardly silicons to be made again.</li>
+			</ul>
+			<h2 class="date">2024.06.26</h2>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Dexalin and Dexplus should be cyan as intended (instead of orange).</li>
+				<li class="rscadd">Chocolate cows can be purchased from cargo for 45c, and can be milked for delicious chocolate milk.</li>
+				<li class="rscadd">Chocolate milk, made the same way as Hot Coco is (5 parts milk 1 part coco) but without heating, and requires a starter sample of chocolate milk as a catalyst. Alternatively, can be milked from the aforementioned cows.</li>
+				<li class="tweak">Chocolate milk can be turned into hot coco by heating it to 60°C.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The right click icon for lightswitches no longer has a big black box around the switch itself.</li>
+			</ul>
+			<h2 class="date">2024.06.25</h2>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Newer accounts may use the AAC, though the import functionality is still restricted</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Putting in hand adjacency now checks when inside things too again.</li>
+				<li class="bugfix">Wired rods, cattle prods and spears no longer teleport into user&#39;s hands on telekinesis when made anymore.</li>
+				<li class="bugfix">Items stuck to one&#39;s hand can no longer be removed by creating an item with it in many cases.</li>
+				<li class="bugfix">Superglue-laden items can no longer have the glue removed by creating an item on them in many cases.</li>
+				<li class="bugfix">Washing hands and mops in the sink now use the same delay bars as washing other items.</li>
+				<li class="tweak">Explosions now process more than twice as fast.</li>
+				<li class="bugfix">The &#34;you cannot add that component!&#34; error no longer shows up on stacks being added to machine frames if they&#39;re the right type.</li>
+				<li class="tweak">The parts to use list only gets updated and shown to the user on a successful change.</li>
+				<li class="tweak">Stacks can now be used on machine frames if under the required amount, although it will only reduce the requirement by that amount.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Improved the alien scorch/immolation/atomizing ray code, removing a few potential errors with the way it has been turning targets to dust.</li>
+				<li class="bugfix">Fixed a bug where AI-controlled grues could still reproduce even when the server setting to allow it was disabled.</li>
+				<li class="bugfix">Improved Push code to reduce the chances of failing to Push a target.</li>
+				<li class="bugfix">Fixed a bug where time-stopped targets of the Push spell couldn&#39;t be Pushed</li>
+				<li class="tweak">Skeletons and liches will no longer look bloody nor burnt when damaged by brute damage or burn damage respectively. Watch out for skeletons that are probably still alive!</li>
+				<li class="rscdel">The mouse plague can no longer penetrate hardsuits.</li>
+				<li class="tweak">The mouse plague now takes nearly twice as long to reach its final stage, giving the crew more time to come up with a cure.</li>
+				<li class="bugfix">Fixed a 2-months old bug where Bound Object could not actually recall items into the user&#39;s hand.</li>
+				<li class="tweak">Airflow mechanics now have a limit of knocking down unfortunate victims for a maximum of 10 seconds.</li>
+				<li class="rscadd">Improved the Absorb spell that Civil War of Casters wizards and Summon Magic survivors get; every spell that the absorber and the absorbed share will upgrade the absorber&#39;s respective spell, it now displays a message as to whether the target has any spells that could be stolen, and it will no longer attempt to absorb non-wizardly spells.</li>
+			</ul>
+			<h2 class="date">2024.06.22</h2>
+			<h3 class="author">Pancakemines updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug that caused boomerangs to kill the server.</li>
 			</ul>
 		</div>
 		<!--

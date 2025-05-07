@@ -216,7 +216,6 @@
 
 /obj/machinery/podcomputer/Destroy()
 	linked_pod?.podcomputer = null
-	linked_pod?.crashing_this_pod = FALSE
 	..()
 
 /obj/machinery/podcomputer/process()
