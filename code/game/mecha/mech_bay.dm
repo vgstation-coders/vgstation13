@@ -88,11 +88,11 @@
 /obj/machinery/mech_bay_recharge_floor/examine(mob/user)
 	. = ..()
 	if(recharge_port)
-		var/direction = getDirString(recharge_port)
-		to_chat(user,"<span class='notice'>Linked to \the [recharge_port] at the [direction].</span>")
+		var/direction = get_dir_as_string(recharge_port)
+		to_chat(user,"<span class='notice'>Linked to \the [recharge_port] at the [uppertext(direction)].</span>")
 	if(recharge_console)
-		var/direction = getDirString(recharge_console)
-		to_chat(user,"<span class='notice'>Linked to \the [recharge_console] at the [direction].</span>")
+		var/direction = get_dir_as_string(recharge_console)
+		to_chat(user,"<span class='notice'>Linked to \the [recharge_console] at the [uppertext(direction)].</span>")
 
 /obj/machinery/mech_bay_recharge_floor/proc/locate_and_link_port()
 	if(recharge_port)//we already have a port
@@ -102,7 +102,7 @@
 			continue
 		if(potential_recharge_port.recharge_floor) //it is already linked to another floor. do not link to it.
 			continue
-		potential_recharge_port.cardinalize_dir()
+		potential_recharge_port.force_cardinal_dir()
 		if(src in get_step(potential_recharge_port, potential_recharge_port.dir).contents) 	//check if dir of recharge port matches mechbay floor
 			recharge_port = potential_recharge_port
 			recharge_port.recharge_floor = src
@@ -211,11 +211,11 @@
 /obj/machinery/mech_bay_recharge_port/examine(mob/user)
 	. = ..()
 	if(recharge_floor)
-		var/direction = getDirString(recharge_floor)
-		to_chat(user,"<span class='notice'>Linked to \the [recharge_floor] at the [direction].</span>")
+		var/direction = get_dir_as_string(recharge_floor)
+		to_chat(user,"<span class='notice'>Linked to \the [recharge_floor] at the [uppertext(direction)].</span>")
 	if(recharge_console)
-		var/direction = getDirString(recharge_console)
-		to_chat(user,"<span class='notice'>Linked to \the [recharge_console] at the [direction].</span>")
+		var/direction = get_dir_as_string(recharge_console)
+		to_chat(user,"<span class='notice'>Linked to \the [recharge_console] at the [uppertext(direction)].</span>")
 
 /obj/machinery/mech_bay_recharge_port/Destroy()
 	delink_devices()
@@ -232,7 +232,7 @@
 /obj/machinery/mech_bay_recharge_port/proc/locate_and_link_station()
 	if(recharge_floor) // we already have a station
 		return 0
-	cardinalize_dir()
+	force_cardinal_dir()
 	for(var/obj/machinery/mech_bay_recharge_floor/potential_recharge_floor in get_step(src,dir))
 		if(!potential_recharge_floor.anchored)
 			continue
@@ -244,6 +244,28 @@
 		recharge_console.recharge_floor = recharge_floor
 		return 1
 	return 0
+
+/obj/machinery/mech_bay_recharge_port/verb/rotate_cw()
+	set name = "Rotate (Clockwise)"
+	set category = "Object"
+	set src in oview(1)
+
+	if(src.anchored || usr:stat)
+		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
+		return 0
+	src.dir = turn(src.dir, -90)
+	return 1
+
+/obj/machinery/mech_bay_recharge_port/verb/rotate_ccw()
+	set name = "Rotate (Counter-Clockwise)"
+	set category = "Object"
+	set src in oview(1)
+
+	if(src.anchored || usr:stat)
+		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
+		return 0
+	src.dir = turn(src.dir, 90)
+	return 1
 
 /datum/global_iterator/mech_bay_recharger
 	delay = 20
@@ -445,11 +467,11 @@
 /obj/machinery/computer/mech_bay_power_console/examine(mob/user)
 	. = ..()
 	if(recharge_floor)
-		var/direction = getDirString(recharge_floor)
-		to_chat(user,"<span class='notice'>Linked to \the [recharge_floor] at the [direction].</span>")
+		var/direction = get_dir_as_string(recharge_floor)
+		to_chat(user,"<span class='notice'>Linked to \the [recharge_floor] at the [uppertext(direction)].</span>")
 	if(recharge_port)
-		var/direction = getDirString(recharge_port)
-		to_chat(user,"<span class='notice'>Linked to \the [recharge_port] at the [direction].</span>")
+		var/direction = get_dir_as_string(recharge_port)
+		to_chat(user,"<span class='notice'>Linked to \the [recharge_port] at the [uppertext(direction)].</span>")
 
 
 /obj/machinery/computer/mech_bay_power_console/wrenchAnchor()
