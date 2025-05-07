@@ -245,28 +245,6 @@
 		return 1
 	return 0
 
-/obj/machinery/mech_bay_recharge_port/verb/rotate_cw()
-	set name = "Rotate (Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	if(src.anchored || usr:stat)
-		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
-		return 0
-	src.dir = turn(src.dir, -90)
-	return 1
-
-/obj/machinery/mech_bay_recharge_port/verb/rotate_ccw()
-	set name = "Rotate (Counter-Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	if(src.anchored || usr:stat)
-		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
-		return 0
-	src.dir = turn(src.dir, 90)
-	return 1
-
 /datum/global_iterator/mech_bay_recharger
 	delay = 20
 	var/max_charge = 450
