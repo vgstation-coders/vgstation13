@@ -1,19 +1,19 @@
-// Subsystem for things such as vaults and away mission init.
+// Subsystem for things such as vaults, away mission init, and procgen.
 
-var/datum/subsystem/map/SSmap
+var/datum/subsystem/mapping/SSmapping
 
 
-/datum/subsystem/map
+/datum/subsystem/mapping
 	name       = "Map"
 	init_order = SS_INIT_MAP
 	flags      = SS_NO_FIRE
 
 
-/datum/subsystem/map/New()
-	NEW_SS_GLOBAL(SSmap)
+/datum/subsystem/mapping/New()
+	NEW_SS_GLOBAL(SSmapping)
 
 
-/datum/subsystem/map/Initialize(timeofday)
+/datum/subsystem/mapping/Initialize(timeofday)
 	if (config.enable_roundstart_away_missions)
 		log_startup_progress("Attempting to generate an away mission...")
 		createRandomZlevel()
