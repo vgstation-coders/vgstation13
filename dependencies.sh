@@ -6,12 +6,12 @@
 #Currently, this is only used by build.cmd and TGS quick setup
 
 # byond version
-#export BYOND_MAJOR=514
-#export BYOND_MINOR=1566
+#export BYOND_MAJOR=516
+#export BYOND_MINOR=1659
 
 #node version
 export NODE_VERSION=16
-export NODE_VERSION_PRECISE=16.13.1
+export NODE_VERSION_PRECISE=22.10
 
 # SpacemanDMM git tag
 #export SPACEMAN_DMM_VERSION=suite-1.7.1

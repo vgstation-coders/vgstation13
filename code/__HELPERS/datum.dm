@@ -1,6 +1,7 @@
 /datum
 	var/list/datum_components
 	var/list/active_timers
+	var/list/open_uis
 
 /datum/proc/initialize()
 	return TRUE

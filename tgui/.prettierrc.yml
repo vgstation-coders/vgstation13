@@ -1,12 +1,6 @@
-arrowParens: always
-bracketSpacing: true
-endOfLine: lf
-jsxBracketSameLine: true
-jsxSingleQuote: false
-printWidth: 80
-proseWrap: preserve
-quoteProps: preserve
-semi: true
 singleQuote: true
-tabWidth: 2
-trailingComma: es5
+overrides:
+  - files: 'packages/tgui-setup/helpers.js'
+    options:
+      trailingComma: es5
+      arrowParens: always

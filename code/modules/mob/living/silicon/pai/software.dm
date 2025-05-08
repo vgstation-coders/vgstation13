@@ -762,7 +762,7 @@ Target Machine: "}
 		var/icon/img = message_app.imglist[note]
 		if(img)
 			usr << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
-			dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
+			dat += "<img src='tmp_photo_[note].png' width = '192' style='image-rendering: pixelated'><BR>"
 	return dat
 
 /mob/living/silicon/pai/proc/softwareHolomap()

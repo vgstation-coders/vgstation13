@@ -44,7 +44,7 @@ var/list/message_monitors = list()
 	..()
 	switchboard_headset = new /obj/item/telephone/switchboard (src)
 	message_monitors += src
-	
+
 /obj/machinery/computer/message_monitor/Destroy()
 	message_monitors -= src
 	if(switchboard_headset)
@@ -118,7 +118,7 @@ var/list/message_monitors = list()
 		dat += {"<h4><dd><A href='?src=\ref[src];auth=1'>&#09;<font color='red'>\[Unauthenticated\]</font></a>&#09;/
 			Server Power: <u>[src.linkedServer && src.linkedServer.is_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</u>"}
 		dat += {"  Landline auto-routing: [src.linkedServer && src.linkedServer.landlines_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</h4>"}
-	
+
 	if(hacking || emagged)
 		screen = 2
 	if(!linkedServer || (linkedServer.stat & (NOPOWER|BROKEN|FORCEDISABLE)))
@@ -151,7 +151,7 @@ var/list/message_monitors = list()
 				dat += "<br>"
 			dat += "<hr><A href='?src=\ref[src];switchboard=1'> Landline Switchboard</a><br>"
 			//TODO add exclamation marks here if someone's calling
-			
+
 			//Bottom message
 			if(!auth)
 				dat += "<br><hr><dd><span class='notice'>Please authenticate with the server in order to show additional options.</span>"
@@ -176,7 +176,7 @@ var/list/message_monitors = list()
 				var/imgdat = ""
 				if(pda.img_sent)
 					user << browse_rsc(pda.img_sent, "tmp_photo_[index].png")
-					imgdat = "<img src='tmp_photo_[index].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'>"
+					imgdat = "<img src='tmp_photo_[index].png' width = '192' style='image-rendering: pixelated'>"
 				dat += "<tr><td width = '5%'><center><A href='?src=\ref[src];delete=\ref[pda]' style='color: rgb(255,0,0)'>X</a></center></td><td width='15%'>[pda.sender]</td><td width='15%'>[pda.recipient]</td><td width='300px'>[pda.message]</td><th width='30%'>[imgdat]</th></tr>"
 			dat += "</table>"
 		//Hacking screen.
@@ -282,7 +282,7 @@ var/list/message_monitors = list()
 						callconnector = "<A href='?src=\ref[src];manualCall=\ref[RC.landline]'>o</A>"
 					else
 						callconnector = "<A href='?src=\ref[src];setLink=\ref[RC.landline]'> </A>"
-					
+
 				var/b = RC.landline.get_status()
 				if(b)
 					shortname = "<A href='?src=\ref[src];setCurrentLine=\ref[RC.landline]'><font color=[b]>[shortname]</font></A>"
@@ -558,7 +558,7 @@ var/list/message_monitors = list()
 						playsound(L.calling.linked_phone, switchboard_sound2, 100, 1)
 				L.last_call_log += text("call disconnected by operator<BR>")
 				if(L.linked_phone)
-					playsound(L.linked_phone, switchboard_sound2, 100, 1)	
+					playsound(L.linked_phone, switchboard_sound2, 100, 1)
 				L.calling = null
 			updateUsrDialog()
 			playsound(src, switchboard_sound2, 100, 1)

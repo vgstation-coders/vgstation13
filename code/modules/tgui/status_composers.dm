@@ -15,10 +15,10 @@
 /// far away users will be able to see, and anyone farther won't see anything.
 /// Dead users will receive updates no matter what, though you likely want to add
 /// a [`ui_status_only_living`] check for finer observer interactions.
-/proc/ui_status_user_is_adjacent(mob/user, atom/source)
+/proc/ui_status_user_is_adjacent(mob/user, atom/source, allow_tk = TRUE)
 	if (isliving(user))
 		var/mob/living/living_user = user
-		return living_user.shared_living_ui_distance(source)
+		return living_user.shared_living_ui_distance(source, allow_tk = allow_tk)
 	else
 		return UI_UPDATE
 
@@ -33,9 +33,8 @@
 			return UI_INTERACTIVE
 
 		// Regular ghosts can always at least view if in range.
-		var/client/client = user.client
-		if(client)
-			var/clientviewlist = getviewsize(client.view)
+		if(user.client)
+			var/clientviewlist = getviewsize(user.client.view)
 			if(get_dist(source, user) < max(clientviewlist[1], clientviewlist[2]))
 				return UI_UPDATE
 
@@ -50,13 +49,14 @@
 
 /// Returns a UI status such that those without blocked hands will be able to interact,
 /// but everyone else can only watch.
-/proc/ui_status_user_has_free_hands(mob/user, atom/source)
-	return user.find_empty_hand_index() ? UI_INTERACTIVE : UI_UPDATE
+/// TODO: implement (allowed source)
+/proc/ui_status_user_has_free_hands(mob/user, atom/source, allowed_source)
+	return user.find_empty_hand_index() ? UI_UPDATE : UI_INTERACTIVE
 
 /// Returns a UI status such that advanced tool users will be able to interact,
 /// but everyone else can only watch.
 /proc/ui_status_user_is_advanced_tool_user(mob/user)
-	return ishigherbeing(user) ? UI_INTERACTIVE : UI_UPDATE
+	return user.dexterity_check() ? UI_INTERACTIVE : UI_UPDATE
 
 /// Returns a UI status such that silicons will be able to interact with whatever
 /// they would have access to if this was a machine. For example, AIs can
@@ -81,13 +81,13 @@
 
 /mob/living/silicon/ai/get_ui_access(atom/source)
 	// The AI can interact with anything it can see nearby, or with cameras while wireless control is enabled.
-	if(!control_disabled && cameranet.checkTurfVis(get_turf(source)))
+	if(!control_disabled && can_see(source))
 		return UI_INTERACTIVE
 	return UI_CLOSE
 
 /mob/living/silicon/pai/get_ui_access(atom/source)
-	// pAIs can only use themselves and their contents.
-	if((source == src || source.loc == src) && !stat)
+	// pAIs can only use themselves and the owner's radio.
+	if((source == src || source == radio) && !stat)
 		return UI_INTERACTIVE
 	else
 		return UI_CLOSE
@@ -99,7 +99,7 @@
 		return UI_UPDATE
 
 	var/mob/living/living_user = user
-	return (living_user.lying && living_user.stat == CONSCIOUS) \
+	return ((living_user.resting > 0) && living_user.stat == CONSCIOUS) \
 		? UI_INTERACTIVE \
 		: UI_UPDATE
 
@@ -110,3 +110,11 @@
 		return UI_CLOSE
 
 	return UI_INTERACTIVE
+
+/// Return UI_INTERACTIVE if the user is inside the target atom, whether they can see it or not.
+/// Return UI_CLOSE otherwise.
+/proc/ui_status_user_inside(mob/user, atom/target)
+	if(target.contains(user))
+		return UI_INTERACTIVE
+
+	return UI_CLOSE

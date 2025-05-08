@@ -22,7 +22,7 @@ var/datum/ui_state/default/default_state = new
 	. = shared_ui_interaction(src_object)
 	if(. > UI_CLOSE && loc) //must not be in nullspace.
 		. = min(., shared_living_ui_distance(src_object)) // Check the distance...
-	if(. == UI_INTERACTIVE && !ishigherbeing(src)) // unhandy living mobs can only look, not touch.
+	if(. == UI_INTERACTIVE && !dexterity_check()) // unhandy living mobs can only look, not touch.
 		return UI_UPDATE
 
 /mob/living/silicon/robot/default_can_use_topic(src_object)
@@ -42,14 +42,13 @@ var/datum/ui_state/default/default_state = new
 		return
 
 	// The AI can interact with anything it can see nearby, or with cameras while wireless control is enabled.
-	if(!control_disabled && cameranet.checkTurfVis(get_turf(src_object)))
+	if(!control_disabled && can_see(src_object))
 		return UI_INTERACTIVE
 	return UI_CLOSE
 
 /mob/living/silicon/pai/default_can_use_topic(src_object)
-	// pAIs can only use themselves and itself.
-	var/atom/src_atom = src_object
-	if((src_object == src || istype(src_atom) && src_atom.loc == src) && !stat)
+	// pAIs can only use themselves and the owner's radio.
+	if((src_object == src || src_object == radio) && !stat)
 		return UI_INTERACTIVE
 	else
 		return min(..(), UI_UPDATE)

@@ -2,7 +2,7 @@
 	/* 64x64 futureproofing! */
 	width: 32px;
 	height: 32px;
-	-ms-interpolation-mode: nearest-neighbor;
+	image-rendering: pixelated;
 }
 
 .cropped img{

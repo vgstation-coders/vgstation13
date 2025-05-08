@@ -1,8 +1,8 @@
 /rayCastHit
 	var/ray/used_ray
 	var/datum/weakref/hit_atom
-	var/vector/point
-	var/vector/point_raw
+	var/_vector/point
+	var/_vector/point_raw
 	var/distance
 	var/hit_type // see defines in ray.dm
 
