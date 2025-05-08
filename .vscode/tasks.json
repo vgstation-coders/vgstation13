@@ -9,7 +9,7 @@
 			},
 			"options": {
 				"env": {
-					"DM_EXE": "${config:dreammaker.byondPath}"
+					"DM_EXE": "C:/Program Files (x86)/BYOND 515/bin"
 				}
 			},
 			"problemMatcher": [

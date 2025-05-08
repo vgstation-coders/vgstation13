@@ -95,6 +95,7 @@
 #include "code\_secrets.dm"
 #include "code\hub.dm"
 #include "code\names.dm"
+#include "code\tgs_event_handler.dm"
 #include "code\world.dm"
 #include "code\__HELPERS\angles_dirs.dm"
 #include "code\__HELPERS\clockwork.dm"

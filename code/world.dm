@@ -51,7 +51,7 @@ var/auxtools_path
 /world/New()
 	world_startup_time = world.timeofday
 
-	TgsNew(null, TGS_SECURITY_TRUSTED)
+	src.InitTgs()
 
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
@@ -113,6 +113,9 @@ var/auxtools_path
 	TgsInitializationComplete()
 
 	return ..()
+
+/world/proc/InitTgs()
+	TgsNew(new /datum/tgs_event_handler/impl, TGS_SECURITY_TRUSTED)
 
 /world/Topic(T, addr, master, key)
 	TGS_TOPIC
