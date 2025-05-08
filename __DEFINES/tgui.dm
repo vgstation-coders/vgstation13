@@ -42,8 +42,6 @@
 	"%7b%22type%22%3a%22[type]%22%2c%22payload%22%3a[url_encode(json_encode(payload))]%7d" \
 )
 
-// -- TG Style nameof() --
-#define PROC_REF(X) (nameof(.proc/##X))
 /**
  * NAMEOF: Compile time checked variable name to string conversion
  * evaluates to a string equal to "X", but compile errors if X isn't a var on datum.
