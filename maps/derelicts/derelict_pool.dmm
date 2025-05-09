@@ -3823,6 +3823,13 @@
 	icon_state = "bar"
 	},
 /area/derelict/bar)
+"yg" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 4
+	},
+/obj/machinery/meter,
+/turf/simulated/floor,
+/area/derelict/mommi_nest)
 "yi" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5
@@ -5706,8 +5713,8 @@
 "KP" = (
 /obj/machinery/atmospherics/unary/cold_sink/freezer{
 	current_temperature = 80;
-	dir = 1;
-	on = 1
+	on = 1;
+	dir = 8
 	},
 /turf/simulated/floor,
 /area/derelict/mommi_nest)
@@ -8919,7 +8926,7 @@ wg
 cX
 wg
 wg
-lJ
+yg
 lC
 lC
 lC
