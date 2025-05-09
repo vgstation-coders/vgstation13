@@ -362,10 +362,10 @@ var/list/global/id_cards = list()
 		"Obi Theelaw"
 		"Tazzhizzazz",
 		"Ziccurizzy",
-		"Kachaindaact"
-		"Wakitakiki"
-		"Kiyuritii"
-		"Yakkitisaks"
+		"Kachaindaact",
+		"Wakitakiki",
+		"Kiyuritii",
+		"Yakkitisaks",
 	)
 
 /obj/item/weapon/card/id/nt_disguise/attack_self(mob/user)
