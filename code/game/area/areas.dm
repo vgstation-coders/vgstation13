@@ -20,7 +20,7 @@ var/area/space_area
 	var/obj/effect/narration/narrator = null
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
-	flags = 0
+	flags = CAVES_ALLOWED
 
 /area/New()
 	area_turfs = list()

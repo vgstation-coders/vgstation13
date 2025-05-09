@@ -66,6 +66,8 @@
 
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
+#define ishostile(A) (istype(A, /mob/living/simple_animal/hostile))
+
 #define iszombie(A) istype(A, /mob/living/simple_animal/hostile/necro/zombie)
 
 #define isslime(A) (istype(A, /mob/living/carbon/slime) || istype(A, /mob/living/simple_animal/slime))

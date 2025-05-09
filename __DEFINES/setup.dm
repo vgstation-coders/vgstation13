@@ -260,7 +260,9 @@ var/MAX_EXPLOSION_RANGE = 32
 //turf-only flags
 #define NOJAUNT		1
 #define NO_MINIMAP  2 //Invisible to minimaps (fuck minimaps)
-
+#define CAN_BE_DIRTY_1 4 // If a procgen turf can be made dirty at roundstart. This is also used in areas.
+#define NO_LAVA_GEN_1 8 // Blocks lava rivers being generated on the turf
+#define NO_RUINS_1 16 // Blocks ruins spawning on the turf
 
 //slots
 #define slot_back 1
