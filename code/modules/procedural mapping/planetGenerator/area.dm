@@ -1,4 +1,11 @@
 //Collection of areas used only for procgen.
+
+/area/planetoid/beach
+	name = "Cave"
+	requires_power = 0
+	dynamic_lighting = 1
+	flags = CAVES_ALLOWED|NO_PERSISTENCE|FLORA_ALLOWED|MOB_SPAWN_ALLOWED
+
 /area/planetoid/cave
 	name = "Cave"
 	requires_power = 0

@@ -16,8 +16,15 @@
 
 
 /datum/planet_type/desert
-	name = "deset planetoid"
+	name = "desert planetoid"
 	desc = "A very weak energy signal originating from a very hot and harsh planet."
 	mapgen = /datum/planetGenerator/desert
 	default_baseturf = /turf/simulated/floor/plating/ironsand
 	ruin_type = RUINTYPE_LAVA
+
+/datum/planet_type/beach
+	name = "beach planetoid"
+	desc = "The platonic ideal of vacation spots. Warm, comfortable temperatures, and a breathable atmosphere."
+	mapgen = /datum/planetGenerator/beach
+	default_baseturf = /turf/unsimulated/beach/sand
+	ruin_type = RUINTYPE_BEACH

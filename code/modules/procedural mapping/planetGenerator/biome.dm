@@ -1,7 +1,7 @@
 
 /datum/biome
 	/// WEIGHTED list of open turfs that this biome can place
-	var/list/open_turf_types = list(/turf/unsimulated/floor/asteroid = 1)
+	var/list/open_turf_types = list(/turf/unsimulated/floor/cave = 1)
 	/// EXPANDED (no values) list of open turfs that this biome can place
 	var/list/open_turf_types_expanded
 	/// WEIGHTED list of flora that this biome can spawn.
@@ -125,7 +125,7 @@
 
 /datum/biome/cave
 	/// WEIGHTED list of closed turfs that this biome can place
-	var/list/closed_turf_types =  list(/turf/unsimulated/mineral/random/hive = 1)
+	var/list/closed_turf_types =  list(/turf/unsimulated/mineral/cave = 1)
 	/// EXPANDED (no values) list of closed turfs that this biome can place
 	var/list/closed_turf_types_expanded
 
