@@ -358,8 +358,8 @@ var/list/global/id_cards = list()
 		"Dee Tekteev",
 		"Scheitt Couritty",
 		"Valyd Huntre",
-		"Gunther Arrest"
-		"Obi Theelaw"
+		"Gunther Arrest",
+		"Obi Theelaw",
 		"Tazzhizzazz",
 		"Ziccurizzy",
 		"Kachaindaact",
