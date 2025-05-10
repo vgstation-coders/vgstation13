@@ -28,3 +28,17 @@
 	mapgen = /datum/planetGenerator/beach
 	default_baseturf = /turf/unsimulated/beach/sand
 	ruin_type = RUINTYPE_BEACH
+
+/datum/planet_type/snow
+	name = "frozen planetoid"
+	desc = "A frozen planet covered in thick snow, thicker ice, and dangerous predators."
+	mapgen = /datum/planetGenerator/snow
+	default_baseturf = /turf/unsimulated/floor/snow
+	ruin_type = RUINTYPE_SNOW
+
+/datum/planet_type/xeno
+	name = "unknown planetoid"
+	desc = "A distress signal eminates from this planetoid."
+	mapgen = /datum/planetGenerator/xeno
+	default_baseturf = /turf/unsimulated/floor/grey_sand
+	ruin_type = RUINTYPE_XENO

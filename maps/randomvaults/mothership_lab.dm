@@ -288,6 +288,16 @@
 	icon = 'icons/obj/flora/ausflora.dmi'
 	icon_state = "xeno_plant_2"
 
+/obj/structure/flora/xeno_flora/red
+	name = "zzyzzp vine"
+	icon = 'icons/obj/flora/ausflora.dmi'
+	icon_state = "xeno_plant_3"
+
+/obj/structure/flora/xeno_flora/orange
+	name = "quux sprout"
+	icon = 'icons/obj/flora/ausflora.dmi'
+	icon_state = "xeno_plant_4"
+
 /obj/structure/acid_puddle // What in the goddamn...
 	name = "sizzling puddle"
 	icon = 'icons/obj/acidcloset.dmi'

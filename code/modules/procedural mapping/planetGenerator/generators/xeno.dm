@@ -1,0 +1,119 @@
+/datum/planetGenerator/xeno
+	mountain_height = 0.8
+	perlin_zoom = 65
+
+	primary_area_type = /area/planetoid/xeno
+
+	biome_table = list(
+		BIOME_COLDEST = list(
+			BIOME_LOWEST_HUMIDITY = /datum/biome/xeno,
+			BIOME_LOW_HUMIDITY = /datum/biome/xeno,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/xeno,
+			BIOME_HIGH_HUMIDITY = /datum/biome/xeno,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/xeno
+		),
+		BIOME_COLD = list(
+			BIOME_LOWEST_HUMIDITY = /datum/biome/xeno,
+			BIOME_LOW_HUMIDITY = /datum/biome/xeno,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/xeno,
+			BIOME_HIGH_HUMIDITY = /datum/biome/xeno,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/xeno
+		),
+		BIOME_WARM = list(
+			BIOME_LOWEST_HUMIDITY = /datum/biome/xeno,
+			BIOME_LOW_HUMIDITY = /datum/biome/xeno,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/xeno,
+			BIOME_HIGH_HUMIDITY = /datum/biome/xeno,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/xeno
+		),
+		BIOME_TEMPERATE = list(
+			BIOME_LOWEST_HUMIDITY = /datum/biome/xeno,
+			BIOME_LOW_HUMIDITY = /datum/biome/xeno,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/xeno,
+			BIOME_HIGH_HUMIDITY = /datum/biome/xeno,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/xeno
+		),
+		BIOME_HOT = list(
+			BIOME_LOWEST_HUMIDITY = /datum/biome/xeno,
+			BIOME_LOW_HUMIDITY = /datum/biome/xeno,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/xeno,
+			BIOME_HIGH_HUMIDITY = /datum/biome/xeno,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/xeno
+		),
+		BIOME_HOTTEST = list(
+			BIOME_LOWEST_HUMIDITY = /datum/biome/xeno,
+			BIOME_LOW_HUMIDITY = /datum/biome/xeno,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/xeno,
+			BIOME_HIGH_HUMIDITY = /datum/biome/xeno,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/xeno
+		)
+	)
+
+	cave_biome_table = list(
+		BIOME_COLDEST_CAVE = list(
+			BIOME_LOWEST_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_LOW_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_HIGH_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/cave/xeno
+		),
+		BIOME_COLD_CAVE = list(
+			BIOME_LOWEST_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_LOW_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_HIGH_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/cave/xeno
+		),
+		BIOME_WARM_CAVE = list(
+			BIOME_LOWEST_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_LOW_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_HIGH_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/cave/xeno
+		),
+		BIOME_HOT_CAVE = list(
+			BIOME_LOWEST_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_LOW_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_HIGH_HUMIDITY = /datum/biome/cave/xeno,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/cave/xeno
+		)
+	)
+
+/datum/biome/xeno
+	open_turf_types = list(/turf/unsimulated/floor/grey_sand = 1)
+	flora_spawn_chance = 4
+	flora_spawn_list = list(
+		/obj/structure/flora/xeno_flora = 10,
+		/obj/structure/flora/xeno_flora/blue = 10,
+		/obj/structure/flora/xeno_flora/red = 10,
+		/obj/structure/flora/xeno_flora/orange = 10,
+		/obj/item/clothing/mask/facehugger = 1,
+		/obj/structure/acid_puddle = 5
+	)
+	mob_spawn_chance = 1
+	mob_spawn_list = list(
+		/mob/living/carbon/alien/humanoid/drone = 1,
+		/mob/living/carbon/alien/humanoid/hunter = 1,
+		/mob/living/carbon/alien/humanoid/sentinel = 1,
+		/mob/living/carbon/alien/larva = 5
+	)
+
+/datum/biome/cave/xeno
+	open_turf_types = list(/turf/unsimulated/floor/cave = 1)
+	closed_turf_types = list(/turf/unsimulated/wall/evil = 1)
+
+	mob_spawn_chance = 3
+	mob_spawn_list = list(
+		/mob/living/carbon/alien/humanoid/drone = 10,
+		/mob/living/carbon/alien/humanoid/hunter = 10,
+		/mob/living/carbon/alien/humanoid/queen = 1,
+		/mob/living/carbon/alien/humanoid/sentinel = 10,
+		/mob/living/carbon/alien/larva = 10
+	)
+
+	flora_spawn_chance = 0.4
+	flora_spawn_list = list(
+		/obj/item/clothing/mask/facehugger = 1,
+		/obj/structure/acid_puddle = 5
+	)

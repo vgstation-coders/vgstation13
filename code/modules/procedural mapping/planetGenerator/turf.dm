@@ -59,3 +59,39 @@
 	if(prob(20) && icon_state == "asteroid")
 		icon_state = "asteroid[rand(0,12)]"
 
+//Snow
+/turf/unsimulated/floor/snow/basalt
+	name = "basalt"
+	icon = 'icons/turf/new_snow.dmi'
+	icon_state = "concrete"
+	carbon_dioxide = 0
+	oxygen = MOLES_O2STANDARD
+	nitrogen = MOLES_N2STANDARD
+	temperature = T0C
+
+/turf/unsimulated/floor/snow/glacier
+	name = "glacier"
+	carbon_dioxide = 0
+	oxygen = MOLES_O2STANDARD
+	nitrogen = MOLES_N2STANDARD
+	temperature = T0C
+
+/turf/unsimulated/floor/snow/glacier/New()
+	..()
+	new	/obj/glacier(src, icon_update_later = 1)
+
+/turf/unsimulated/floor/lava
+	name = "lava"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "lava"
+	carbon_dioxide = 0
+	oxygen = MOLES_O2STANDARD
+	nitrogen = MOLES_N2STANDARD
+	temperature = MELTPOINT_GLASS
+
+/turf/unsimulated/floor/lava/Entered(atom/movable/A as mob|obj, atom/OldLoc)
+	..()
+	A.ignite()
+	if(istype(A, /mob))
+		var/mob/M = A
+		M.dust(FALSE)
