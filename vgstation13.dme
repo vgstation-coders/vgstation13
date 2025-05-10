@@ -2511,6 +2511,7 @@
 #include "code\modules\reagents\dartgun.dm"
 #include "code\modules\reagents\fission.dm"
 #include "code\modules\reagents\grenade_launcher.dm"
+#include "code\modules\reagents\random_reagent_effect.dm"
 #include "code\modules\reagents\randomized_reagent.dm"
 #include "code\modules\reagents\reagent_containers.dm"
 #include "code\modules\reagents\reagent_dispenser.dm"

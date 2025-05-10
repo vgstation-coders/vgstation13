@@ -1512,12 +1512,14 @@ var/global/list/charcoal_doesnt_remove=list(
 		return
 	var/mob/living/carbon/human/H = M
 
+	
 	if(!H.ckey)
 		H.adjustToxLoss(5)
 	if((!H.client) || H.client.is_afk())
 		if(prob(30))
 			H.vomit(0,1)
 		return
+	
 
 	randomized_reagents[SIMPOLINOL].on_human_life(H, tick)
 
