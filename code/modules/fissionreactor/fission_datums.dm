@@ -25,6 +25,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/control_rod_insertion=1  //phase 1 vars. modified during runtime
 	var/control_rod_target=1 // this is to create a bit of input lag to make things a bit more tense. also allows autoscram to work while the controller is unpowered.
 	var/SCRAM=FALSE //all caps because AAAAAAAAAAAAAAAAAAA EVERYBODY PANIC WE'RE ALL GONNA DIE.
+	var/coolant_input_amt=1
 	var/temperature=T20C //this is set last
 	
 	var/datum/gas_mixture/coolant
@@ -540,6 +541,11 @@ datums for the fission reactor, which includes the fuel and reactor
 	
 /datum/fission_reactor_holder/proc/coolantcycle()
 	var/dt=(world.time-time_last_ticked)/10
+	
+	coolant_input_amt=1.0
+	if (controller && controller.coolant_throttle)
+		coolant_input_amt = (temperature>FISSIONREACTOR_SAFEENUFFTEMP/2.0) ? 1.0 : 0.0 
+	
 	if(coolant_ports.len)
 		for(var/i=1, i<=coolant_ports.len,i++)
 			var/real_index= ((i+coolantport_counter)%coolant_ports.len)+1 //this way we spread out any first index prefrence.
