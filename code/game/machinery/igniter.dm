@@ -135,7 +135,7 @@ var/global/list/igniters = list()
 	if (!(powered()))
 		return
 
-	if ((src.disable) || (src.last_spark && world.time < src.last_spark + 50))
+	if ((src.disable) || (src.last_spark && world.time < src.last_spark + 5 SECONDS))
 		return
 
 

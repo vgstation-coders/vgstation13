@@ -143,7 +143,7 @@
 			else if (pack == 1)
 				return
 
-		if (world.time < src.last_use + 20)
+		if (world.time < src.last_use + 2 SECONDS)
 			return
 		user.delayNextAttack(5, 1)
 
@@ -237,7 +237,7 @@
 			else if (pack == 1)
 				return
 
-		if (world.time < src.last_use + 20)
+		if (world.time < src.last_use + 2 SECONDS)
 			return
 		user.delayNextAttack(5, 1)
 		src.last_use = world.time

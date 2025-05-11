@@ -136,7 +136,7 @@
     var/last_honk //No honk spamming
 
 /datum/pda_app/cart/honk/on_select(var/mob/user)
-    if (!(last_honk && world.time < last_honk + 20))
+    if (!(last_honk && world.time < last_honk + 2 SECONDS))
         playsound(get_turf(pda_device), 'sound/items/bikehorn.ogg', 50, 1)
         last_honk = world.time
 

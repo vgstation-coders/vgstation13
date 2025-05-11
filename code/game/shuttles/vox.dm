@@ -46,7 +46,7 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 /* USED IN HEIST
 /datum/shuttle/vox/travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
 	if(D == dock_home)
-		if(world.time < 6000)
+		if(world.time < 5 MINUTES)
 			to_chat(user, "<span class='notice'>Error: Bluespace engines are still cooling. We will be ready to return home in: [round(((6000 - world.time) / 10) / 60)] minutes.</span>")
 			return
 		else
