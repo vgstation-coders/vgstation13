@@ -258,7 +258,6 @@ Works together with spawning an observer, noted above.
 		if (deafmute)
 			ghostype = /mob/dead/observer/deafmute
 		var/mob/dead/observer/ghost = new ghostype(src, flags)	//Transfer safety to observer spawning proc.
-		ghost.attack_log += src.attack_log // Keep our attack logs.
 		var/timetocheck = timeofdeath
 		if (isbrain(src))
 			var/mob/living/carbon/brain/brainmob = src
