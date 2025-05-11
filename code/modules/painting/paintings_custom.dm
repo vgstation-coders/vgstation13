@@ -242,7 +242,9 @@
 	unlock_from()
 
 	// Painting info
-	P.set_painting_data(painting_data.Copy())
+	P.set_painting_data(painting_data)
+	painting_data = null //We're no longer the one holding the painting_data, so stop having vars pointing at it
+
 	P.rendered_icon = icon
 	P.rendered_nanomap = nanomap
 	P.base_name = base_name
@@ -456,7 +458,9 @@
 	var/obj/structure/painting/custom/P = new(user.loc)
 
 	// Painting info
-	P.set_painting_data(painting_data.Copy())
+	P.set_painting_data(painting_data)
+	painting_data = null //We're no longer the one holding the painting_data, so stop having vars pointing at it
+
 	P.icon = rendered_icon ? rendered_icon : icon(base_icon, base_icon_state)
 	P.nanomap = rendered_nanomap ? rendered_nanomap : image('icons/effects/32x32.dmi',P,"black")
 	P.icon_state = base_icon_state

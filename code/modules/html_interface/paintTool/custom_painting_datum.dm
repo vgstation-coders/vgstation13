@@ -171,7 +171,7 @@
 	var/author = ""
 	var/title = ""
 	var/description = ""
-	var/contributing_artists = list()
+	var/list/contributing_artists = list()
 	var/show_on_scoreboard = TRUE
 
 	var/copy = 0
@@ -201,17 +201,6 @@
 	QDEL_NULL(interface)
 
 	QDEL_NULL(mp_handler)
-
-/datum/custom_painting/proc/Copy()
-	var/datum/custom_painting/copy = new(parent, bitmap_width, bitmap_height, offset_x, offset_y, base_color)
-	copy.author = author
-	copy.title = title
-	copy.description = description
-	copy.bitmap = bitmap.Copy()
-	copy.nanomap = nanomap.Copy()
-	copy.components = components.Copy()
-	copy.has_nano_paint = has_nano_paint
-	return copy
 
 /datum/custom_painting/proc/set_parent(parent)
 	src.parent = parent
