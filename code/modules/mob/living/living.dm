@@ -1369,6 +1369,8 @@ Thanks.
 						var/mob/M = AM
 						INVOKE_EVENT(src, /event/before_move)
 						step(M, t)
+						M.last_bumped_by = "[key_name(src)] at \[ [timestamp()] \]"
+						M.last_bumped_by_timestamp = world.time
 						INVOKE_EVENT(src, /event/after_move)
 					else
 						step(AM, t)

@@ -1877,7 +1877,13 @@ Use this proc preferably at the end of an equipment loadout
 	if(SS)
 		SS.supermatter_act(source)
 	else
-
+		if (client)
+			if(pulledby) // If we have a client, we add attack logs
+				add_logs(pulledby, src, "pulled into a suppermatter object", TRUE, source, get_coordinates_string(source))
+			else if(last_bumped_by_timestamp - 0.1 SECONDS <= world.time <= last_bumped_by_timestamp + 0.1 SECONDS) // If got bumped into a grille
+				add_logs(last_bumped_by_timestamp, src, "bumped into a supermatter object", TRUE, source, get_coordinates_string(source))
+			else
+				attack_log += "\[[time_stamp()]\]: walked into supermatter (no bumper/no pusher)"
 		if(severity == SUPERMATTER_DUST)
 			dust()
 			return 1

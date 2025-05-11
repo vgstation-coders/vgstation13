@@ -297,3 +297,7 @@
 	var/list/huds = list() // List of active huds on a mob
 
 	var/is_dexterous = FALSE //allows mobs to be made dextrous, mostly for monkeys
+
+	// Log things.
+	var/last_bumped_by = ""
+	var/last_bumped_by_timestamp = -INFINITY
