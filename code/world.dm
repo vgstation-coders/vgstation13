@@ -94,7 +94,7 @@ var/auxtools_path
 	return ..()
 
 /world/proc/InitTgs()
-	TgsNew(new /datum/tgs_event_handler/impl, TGS_SECURITY_TRUSTED)
+	TgsNew(new /datum/tgs_event_handler, TGS_SECURITY_TRUSTED)
 
 /world/proc/InitializeLogs()
 	investigations[I_HREFS] = new /datum/log_controller(I_HREFS, filename="data/logs/[date_string] hrefs.htm", persist=TRUE)
