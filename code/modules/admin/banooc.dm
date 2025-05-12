@@ -21,7 +21,7 @@ var/oocban_keylist[0]
 			"ooc_perma" = "OOC_PERMABAN",
 			"ooc_temp" = "OOC_TEMPBAN",
 		))
-	if(!query.Execute())
+	if(!query.Execute(FALSE))
 		message_admins("Error: [query.ErrorMsg()]")
 		log_sql("Error: [query.ErrorMsg()]")
 		qdel(query)

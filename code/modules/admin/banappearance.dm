@@ -65,7 +65,7 @@ DEBUG
 			list(
 				"bantype" = "APPEARANCE_PERMABAN",
 			))
-		if(!query.Execute())
+		if(!query.Execute(FALSE))
 			log_sql("Error: [query.ErrorMsg()]")
 			qdel(query)
 			return
