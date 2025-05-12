@@ -3,6 +3,10 @@
 #define BRUSH_STRENGTH_MAX 1
 #define BRUSH_STRENGTH_MIN 0
 
+#define PAINTING_OC_ORIGINAL 0
+#define PAINTING_OC_COPY 1
+#define PAINTING_OC_MODIFIED_COPY 2
+
 /*
  * PAINTING UTENSIL DATUM
  *
@@ -174,7 +178,7 @@
 	var/list/contributing_artists = list()
 	var/show_on_scoreboard = TRUE
 
-	var/copy = 0
+	var/copy = PAINTING_OC_ORIGINAL
 
 	var/list/components = list()
 
@@ -372,6 +376,10 @@
 		for (var/i = 1; i <= nanomap.len; i++)
 			nanomap[i] = sanitize_hexcolor(nanomap[i])
 
+		if (copy == PAINTING_OC_COPY)
+			copy = PAINTING_OC_MODIFIED_COPY
+		show_on_scoreboard = TRUE
+
 		//Save and sanitize author, title and description
 		author = copytext(sanitize(url_decode(href_list["author"])), 1, MAX_NAME_LEN)
 		title = copytext(sanitize(url_decode(href_list["title"])), 1, MAX_NAME_LEN)
@@ -482,7 +490,7 @@
 	painting.title = title
 	painting.author = author
 	painting.description = description
-	painting.copy = 1
+	painting.copy = PAINTING_OC_COPY
 	painting.show_on_scoreboard = FALSE //sorry, OC only
 	return painting
 
