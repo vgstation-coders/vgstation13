@@ -63,10 +63,10 @@
 	// Close UIs if mindless.
 	if(!client)
 		return UI_CLOSE
-	// Disable UIs if unconscious.
+	// Disable UIs if unconcious.
 	else if(stat)
 		return UI_DISABLED
-	// Update UIs if incapicitated but conscious.
+	// Update UIs if incapicitated but concious.
 	else if(incapacitated())
 		return UI_UPDATE
 	return UI_INTERACTIVE
@@ -93,14 +93,7 @@
  *
  * return UI_state The state of the UI.
  */
-/mob/living/proc/shared_living_ui_distance(atom/movable/src_object, viewcheck = TRUE, allow_tk = TRUE)
-	/* Unimplemented : remote code
-	var/obj/item/item_in_hand = get_active_held_item()
-	if(istype(item_in_hand, /obj/item/machine_remote)) //snowflake, this lets you interact with all.
-		var/obj/item/machine_remote/remote = item_in_hand
-		if(remote.controlling_machine_or_bot == src_object)
-			return UI_INTERACTIVE
-	*/
+/mob/living/proc/shared_living_ui_distance(atom/movable/src_object, viewcheck = TRUE)
 	// If the object is obscured, close it.
 	if(viewcheck && !(src_object in view(src)))
 		return UI_CLOSE
@@ -117,7 +110,7 @@
 	// Otherwise, we got nothing.
 	return UI_CLOSE
 
-/mob/living/carbon/human/shared_living_ui_distance(atom/movable/src_object, viewcheck = TRUE, allow_tk = TRUE)
-	if(allow_tk && (M_TK in mutations))
+/mob/living/carbon/human/shared_living_ui_distance(atom/movable/src_object, viewcheck = TRUE)
+	if(M_TK in mutations)
 		return UI_INTERACTIVE
 	return ..()

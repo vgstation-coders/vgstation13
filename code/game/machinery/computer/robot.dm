@@ -71,28 +71,26 @@
 		if(!can_control(R,user))
 			continue
 		var/list/cyborg_data = list(
-			"name" = R.name,
-			"locked_down" = R.lockdown,
-			"status" = R.stat,
-			"charge" = R.cell ? R.cell.percent() : null,
-			"module" = R.module ? "[R.modtype] Module" : "No Module Installed",
-			"master" = R.connected_ai,
-			"emagged" = R.emagged,
-			"borgimage" = iconsouth2base64(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(R)), override_dir = SOUTH)),
-			"ref" = ref(R)
+			name = R.name,
+			locked_down = R.lockdown,
+			status = R.stat,
+			charge = R.cell ? R.cell.percent() : null,
+			module = R.module ? "[R.modtype] Module" : "No Module Installed",
+			master = R.connected_ai,
+			emagged = R.emagged,
+			borgimage = iconsouth2base64(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(R)), override_dir = SOUTH)),
+			ref = ref(R)
 		)
 		data["cyborgs"] += list(cyborg_data)
 
 	return data
 
 
-/obj/machinery/computer/robotics/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
-	message_admins("ui_act called on robotborg")
+/obj/machinery/computer/robotics/ui_act(action, params)
 	. = ..()
 	if(.)
-		message_admins("uuuh didn't work :)")
 		return
-	message_admins("action: [action], params: [json_encode(params)]")
+
 	switch(action)
 		if("killbot")
 			if(allowed(usr))
@@ -108,7 +106,7 @@
 					to_chat(R.connected_ai, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Slaved Cyborg [R.name] detonated. Signal traced to [get_area(src).name].</b></span>")
 					R.connected_ai << 'sound/machines/twobeep.ogg'
 				R.self_destruct()
-				SStgui.try_update_ui(ui.user, src, ui)
+
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 
@@ -130,7 +128,6 @@
 					else
 						to_chat(R.connected_ai, "<span style=\"font-family:Courier\"><b>\[<span class='notice'>INFO</span>\] The lockdown on cyborg [R.name] has been lifted. Signal traced to [get_area(src).name]</b></span>")
 						R.connected_ai << 'sound/misc/notice2.ogg'
-				SStgui.try_update_ui(ui.user, src, ui)
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 		if("hack")
@@ -140,7 +137,6 @@
 				log_game("[key_name(usr)] emagged [key_name(R)] using a robotics console!")
 				message_admins("[key_name(usr)] emagged [key_name(R)] using a robotics console!")
 				R.SetEmagged(TRUE)
-				SStgui.try_update_ui(ui.user, src, ui)
 			if(can_control(R, usr) && ismalf(usr))
 				if (!hacking)
 					hacking = 1
@@ -152,7 +148,6 @@
 					to_chat(usr, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ERROR</span>\] [R.name]: SAFETIES DISABLED.</b></span>")
 					usr << 'sound/misc/notice2.ogg'
 					hacking = 0
-					SStgui.try_update_ui(ui.user, src, ui)
 				else
 					to_chat(usr, "You are already hacking a cyborg.")
 		if("sequence")
@@ -164,7 +159,6 @@
 				stop_sequence()
 				message_admins("<span class='notice'>[key_name_admin(usr)] [formatJumpTo(usr)] has halted the global cyborg killswitch!</span>")
 				log_game("<span class='notice'>[key_name(usr)] has halted the global cyborg killswitch!</span>")
-			SStgui.try_update_ui(ui.user, src, ui)
 	return TRUE
 
 /obj/machinery/computer/robotics/proc/can_control(var/mob/living/silicon/robot/robot, var/mob/controller)

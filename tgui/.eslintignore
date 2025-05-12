@@ -3,15 +3,4 @@
 /**/*.bundle.*
 /**/*.chunk.*
 /**/*.hot-update.*
-**.lock
-**.log
-**.json
-**.svg
-**.scss
-**.md
-**.css
-**.txt
-**.woff2
-**.eot
-**.ttf
-/public
+/packages/inferno/**

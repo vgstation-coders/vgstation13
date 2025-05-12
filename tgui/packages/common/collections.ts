@@ -11,37 +11,43 @@
  *
  * If collection is 'null' or 'undefined', it will be returned "as is"
  * without emitting any errors (which can be useful in some cases).
+ *
+ * @returns {any[]}
  */
-export const filter = <T>(
+export const filter = <T>(iterateeFn: (
+  input: T,
+  index: number,
   collection: T[],
-  iterateeFn: (input: T, index: number, collection: T[]) => boolean,
-): T[] => {
-  if (collection === null || collection === undefined) {
-    return collection;
-  }
-  if (Array.isArray(collection)) {
-    const result: T[] = [];
-    for (let i = 0; i < collection.length; i++) {
-      const item = collection[i];
-      if (iterateeFn(item, i, collection)) {
-        result.push(item);
+) => boolean) =>
+    (collection: T[]): T[] => {
+      if (collection === null || collection === undefined) {
+        return collection;
       }
-    }
-    return result;
-  }
-  throw new Error(`filter() can't iterate on type ${typeof collection}`);
-};
+      if (Array.isArray(collection)) {
+        const result: T[] = [];
+        for (let i = 0; i < collection.length; i++) {
+          const item = collection[i];
+          if (iterateeFn(item, i, collection)) {
+            result.push(item);
+          }
+        }
+        return result;
+      }
+      throw new Error(`filter() can't iterate on type ${typeof collection}`);
+    };
 
 type MapFunction = {
-  <T, U>(
+  <T, U>(iterateeFn: (
+    value: T,
+    index: number,
     collection: T[],
-    iterateeFn: (value: T, index: number, collection: T[]) => U,
-  ): U[];
+  ) => U): (collection: T[]) => U[];
 
-  <T, U, K extends string | number>(
+  <T, U, K extends string | number>(iterateeFn: (
+    value: T,
+    index: K,
     collection: Record<K, T>,
-    iterateeFn: (value: T, index: K, collection: Record<K, T>) => U,
-  ): U[];
+  ) => U): (collection: Record<K, T>) => U[];
 };
 
 /**
@@ -52,30 +58,42 @@ type MapFunction = {
  * If collection is 'null' or 'undefined', it will be returned "as is"
  * without emitting any errors (which can be useful in some cases).
  */
-export const map: MapFunction = (collection, iterateeFn) => {
-  if (collection === null || collection === undefined) {
-    return collection;
-  }
-
-  if (Array.isArray(collection)) {
-    const result: unknown[] = [];
-    for (let i = 0; i < collection.length; i++) {
-      result.push(iterateeFn(collection[i], i, collection));
+export const map: MapFunction = <T, U>(iterateeFn) =>
+  (collection: T[]): U[] => {
+    if (collection === null || collection === undefined) {
+      return collection;
     }
-    return result;
-  }
 
-  if (typeof collection === 'object') {
-    const result: unknown[] = [];
-    for (let i in collection) {
-      if (Object.prototype.hasOwnProperty.call(collection, i)) {
-        result.push(iterateeFn(collection[i], i, collection));
-      }
+    if (Array.isArray(collection)) {
+      return collection.map(iterateeFn);
     }
-    return result;
+
+    if (typeof collection === 'object') {
+      return Object.entries(collection).map(([key, value]) => {
+        return iterateeFn(value, key, collection);
+      });
+    }
+
+    throw new Error(`map() can't iterate on type ${typeof collection}`);
+  };
+
+/**
+ * Given a collection, will run each element through an iteratee function.
+ * Will then filter out undefined values.
+ */
+export const filterMap = <T, U>(collection: T[], iterateeFn: (
+  value: T
+) => U | undefined): U[] => {
+  const finalCollection: U[] = [];
+
+  for (const value of collection) {
+    const output = iterateeFn(value);
+    if (output !== undefined) {
+      finalCollection.push(output);
+    }
   }
 
-  throw new Error(`map() can't iterate on type ${typeof collection}`);
+  return finalCollection;
 };
 
 const COMPARATOR = (objA, objB) => {
@@ -102,37 +120,38 @@ const COMPARATOR = (objA, objB) => {
  * Iteratees are called with one argument (value).
  */
 export const sortBy = <T>(
-  array: T[],
   ...iterateeFns: ((input: T) => unknown)[]
-): T[] => {
-  if (!Array.isArray(array)) {
-    return array;
-  }
-  let length = array.length;
-  // Iterate over the array to collect criteria to sort it by
-  let mappedArray: {
-    criteria: unknown[];
-    value: T;
-  }[] = [];
-  for (let i = 0; i < length; i++) {
-    const value = array[i];
-    mappedArray.push({
-      criteria: iterateeFns.map((fn) => fn(value)),
-      value,
-    });
-  }
-  // Sort criteria using the base comparator
-  mappedArray.sort(COMPARATOR);
+) => (array: T[]): T[] => {
+    if (!Array.isArray(array)) {
+      return array;
+    }
+    let length = array.length;
+    // Iterate over the array to collect criteria to sort it by
+    let mappedArray: {
+      criteria: unknown[],
+      value: T,
+    }[] = [];
+    for (let i = 0; i < length; i++) {
+      const value = array[i];
+      mappedArray.push({
+        criteria: iterateeFns.map(fn => fn(value)),
+        value,
+      });
+    }
+    // Sort criteria using the base comparator
+    mappedArray.sort(COMPARATOR);
 
-  // Unwrap values
-  const values: T[] = [];
-  while (length--) {
-    values[length] = mappedArray[length].value;
-  }
-  return values;
-};
+    // Unwrap values
+    const values: T[] = [];
+    while (length--) {
+      values[length] = mappedArray[length].value;
+    }
+    return values;
+  };
 
-export const sort = <T>(array: T[]): T[] => sortBy(array);
+export const sort = sortBy();
+
+export const sortStrings = sortBy<string>();
 
 /**
  * Returns a range of numbers from start to end, exclusively.
@@ -141,39 +160,18 @@ export const sort = <T>(array: T[]): T[] => sortBy(array);
 export const range = (start: number, end: number): number[] =>
   new Array(end - start).fill(null).map((_, index) => index + start);
 
-type ReduceFunction = {
-  <T, U>(
-    array: T[],
-    reducerFn: (
-      accumulator: U,
-      currentValue: T,
-      currentIndex: number,
-      array: T[],
-    ) => U,
-    initialValue: U,
-  ): U;
-  <T>(
-    array: T[],
-    reducerFn: (
-      accumulator: T,
-      currentValue: T,
-      currentIndex: number,
-      array: T[],
-    ) => T,
-  ): T;
-};
-
 /**
  * A fast implementation of reduce.
  */
-export const reduce: ReduceFunction = (array, reducerFn, initialValue?) => {
+export const reduce = (reducerFn, initialValue) => array => {
   const length = array.length;
-  let i: number;
+  let i;
   let result;
   if (initialValue === undefined) {
     i = 1;
     result = array[0];
-  } else {
+  }
+  else {
     i = 0;
     result = initialValue;
   }
@@ -195,15 +193,13 @@ export const reduce: ReduceFunction = (array, reducerFn, initialValue?) => {
  * invoked with one argument: value.
  */
 export const uniqBy = <T extends unknown>(
-  array: T[],
-  iterateeFn?: (value: T) => unknown,
-): T[] => {
-  const { length } = array;
-  const result: T[] = [];
-  const seen: unknown[] = iterateeFn ? [] : result;
-  let index = -1;
-  // prettier-ignore
-  outer:
+  iterateeFn?: (value: T) => unknown
+) => (array: T[]): T[] => {
+    const { length } = array;
+    const result: T[] = [];
+    const seen: unknown[] = iterateeFn ? [] : result;
+    let index = -1;
+    outer:
     while (++index < length) {
       let value: T | 0 = array[index];
       const computed = iterateeFn ? iterateeFn(value) : value;
@@ -218,17 +214,19 @@ export const uniqBy = <T extends unknown>(
           seen.push(computed);
         }
         result.push(value);
-      } else if (!seen.includes(computed)) {
+      }
+      else if (!seen.includes(computed)) {
         if (seen !== result) {
           seen.push(computed);
         }
         result.push(value);
       }
     }
-  return result;
-};
+    return result;
+  };
+/* eslint-enable indent */
 
-export const uniq = <T>(array: T[]): T[] => uniqBy(array);
+export const uniq = uniqBy();
 
 type Zip<T extends unknown[][]> = {
   [I in keyof T]: T[I] extends (infer U)[] ? U : never;
@@ -257,6 +255,16 @@ export const zip = <T extends unknown[][]>(...arrays: T): Zip<T> => {
   }
   return result;
 };
+
+/**
+ * This method is like "zip" except that it accepts iteratee to
+ * specify how grouped values should be combined. The iteratee is
+ * invoked with the elements of each group.
+ */
+export const zipWith = <T, U>(iterateeFn: (...values: T[]) => U) =>
+  (...arrays: T[][]): U[] => {
+    return map((values: T[]) => iterateeFn(...values))(zip(...arrays));
+  };
 
 const binarySearch = <T, U = unknown>(
   getKey: (value: T) => U,
@@ -293,58 +301,12 @@ const binarySearch = <T, U = unknown>(
   return compare > insertingKey ? middle : middle + 1;
 };
 
-export const binaryInsertWith = <T, U = unknown>(
-  collection: readonly T[],
-  value: T,
-  getKey: (value: T) => U,
-): T[] => {
-  const copy = [...collection];
-  copy.splice(binarySearch(getKey, collection, value), 0, value);
-  return copy;
-};
-
-/**
- * This method takes a collection of items and a number, returning a collection
- * of collections, where the maximum amount of items in each is that second arg
- */
-export const paginate = <T>(collection: T[], maxPerPage: number): T[][] => {
-  const pages: T[][] = [];
-  let page: T[] = [];
-  let itemsToAdd = maxPerPage;
-
-  for (const item of collection) {
-    page.push(item);
-    itemsToAdd--;
-    if (!itemsToAdd) {
-      itemsToAdd = maxPerPage;
-      pages.push(page);
-      page = [];
-    }
-  }
-  if (page.length) {
-    pages.push(page);
-  }
-  return pages;
-};
-
-const isObject = (obj: unknown): obj is object =>
-  typeof obj === 'object' && obj !== null;
-
-// Does a deep merge of two objects. DO NOT FEED CIRCULAR OBJECTS!!
-export const deepMerge = (...objects: any[]): any => {
-  const target = {};
-  for (const object of objects) {
-    for (const key of Object.keys(object)) {
-      const targetValue = target[key];
-      const objectValue = object[key];
-      if (Array.isArray(targetValue) && Array.isArray(objectValue)) {
-        target[key] = [...targetValue, ...objectValue];
-      } else if (isObject(targetValue) && isObject(objectValue)) {
-        target[key] = deepMerge(targetValue, objectValue);
-      } else {
-        target[key] = objectValue;
-      }
-    }
-  }
-  return target;
+export const binaryInsertWith = <T, U = unknown>(getKey: (value: T) => U):
+  ((collection: readonly T[], value: T) => T[]) =>
+{
+  return (collection, value) => {
+    const copy = [...collection];
+    copy.splice(binarySearch(getKey, collection, value), 0, value);
+    return copy;
+  };
 };

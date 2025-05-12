@@ -158,7 +158,7 @@ def main():
 
     del_after = []
     logging.info('Reading changelogs...')
-    for fileName in global.glob(os.path.join(args.ymlDir, "*.yml")):
+    for fileName in glob.glob(os.path.join(args.ymlDir, "*.yml")):
         name, _ = os.path.splitext(os.path.basename(fileName))
         if name.startswith('.'):
             continue

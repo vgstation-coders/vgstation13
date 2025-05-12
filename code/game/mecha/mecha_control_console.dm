@@ -33,24 +33,23 @@
 		var/area/A = get_area(M)
 		if(!M)
 			continue
-		var/icon/mech_icon = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 		var/list/mecha_data = list(
-			"name" = M.name,
-			"health" = round((M.health/initial(M.health))*100),
-			"charge" = M.cell ? round(M.cell.percent()) : null,
-			"pilot" = M.occupant || "None",
-			"location" = A.name || "Unknown",
-			"active" = M.selected ? M.selected.name : "None",
-			"status" = M.state,
-			"mechaimage" = iconsouth2base64(mech_icon),
-			"log" = TR.get_mecha_log(),
-			"ref" = ref(M)
+			name = M.name,
+			health = round((M.health/initial(M.health))*100),
+			charge = M.cell ? round(M.cell.percent()) : null,
+			pilot = M.occupant || "None",
+			location = A.name || "Unknown",
+			active = M.selected ? M.selected.name : "None",
+			status = M.state,
+			mechaimage = iconsouth2base64(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)),
+			log = TR.get_mecha_log(),
+			ref = ref(M)
 		)
 		data["mechas"] += list(mecha_data)
 
 	return data
 
-/obj/machinery/computer/mecha/ui_act(action, list/params)
+/obj/machinery/computer/mecha/ui_act(action, params)
 	. = ..()
 	if(.)
 		return

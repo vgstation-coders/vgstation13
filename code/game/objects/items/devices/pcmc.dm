@@ -199,7 +199,6 @@
 			transmitting = TRUE
 			set_light(1)
 			update_icon()
-			SStgui.try_update_ui(ui.user, src, ui)
 			return TRUE
 		if("turn_off")
 			if(emped || !transmitting || !Adjacent(usr) || usr.incapacitated())
@@ -207,16 +206,13 @@
 			transmitting = FALSE
 			set_light(0)
 			update_icon()
-			SStgui.try_update_ui(ui.user, src, ui)
 			return TRUE
 		if("toggle_refresh")
 			autorefreshing = !autorefreshing
-			SStgui.try_update_ui(ui.user, src, ui)
 			return TRUE
 		if("toggle_injury")
 			if(fullmode)
 				injuryonly = !injuryonly
-				SStgui.try_update_ui(ui.user, src, ui)
 				return TRUE
 			else
 				return FALSE

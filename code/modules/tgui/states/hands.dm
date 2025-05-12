@@ -20,7 +20,7 @@ var/datum/ui_state/hands_state/hands_state = new
 	return UI_CLOSE
 
 /mob/living/hands_can_use_topic(src_object)
-	if(get_active_hand() == src_object)
+	if(is_holding_item(src_object))
 		return UI_INTERACTIVE
 	return UI_CLOSE
 

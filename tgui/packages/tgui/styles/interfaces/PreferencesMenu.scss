@@ -1,47 +1,46 @@
 @use 'sass:color';
 @use 'sass:map';
+@use '../components/Button.scss';
 @use '../colors.scss';
-@use '../base.scss';
 
 $department_map: (
-  'Assistant': var(--color-gray),
-  'Captain': colors.fg(var(--color-blue)),
-  'Cargo': var(--color-brown),
-  'Command': var(--color-yellow),
-  'Security': var(--color-red),
-  'Engineering': hsl(from var(--color-orange) h s calc(l + 7.5)),
-  'Medical': var(--color-teal),
-  'Science': colors.fg(var(--color-purple)),
-  'Service': var(--color-green),
-  'Silicon': var(--color-pink),
+  'Assistant': colors.$grey,
+  'Captain': colors.fg(colors.$blue),
+  'Command': colors.$yellow,
+  'Security': colors.$red,
+  'Engineering': #f1a839,
+  'Medical': colors.$teal,
+  'Misc': colors.$white,
+  'Science': colors.fg(colors.$purple),
+  'Supply': colors.$brown,
+  'Service': colors.$green,
+  'Silicon': colors.$pink,
 );
-
-.ChoicedSelection {
-  padding: var(--space-m);
-  background-color: var(--color-base);
-  box-shadow: 0 0.5em 1em hsla(0, 0%, 0%, 0.5);
-}
 
 .PreferencesMenu {
   &__Antags {
     &__antagSelection {
-      gap: var(--space-l);
+      $antagonist_bottom_padding: 10px;
+
+      margin-bottom: -$antagonist_bottom_padding;
 
       @mixin animate-hover {
         .antagonist-icon-parent .antagonist-icon {
           &:hover {
             transform: scale(1.3);
-            transition: transform var(--transition-time-fast) ease-out;
+            transition: transform 1s ease-out;
           }
         }
       }
 
       &__antagonist {
+        padding-bottom: $antagonist_bottom_padding;
+        padding-right: 20px;
+
         .antagonist-icon-parent {
-          cursor: var(--cursor-pointer);
           border-style: solid;
-          border-radius: var(--border-radius-circular);
-          border-width: var(--border-thickness-large);
+          border-radius: 50%;
+          border-width: 4px;
           box-sizing: content-box;
           overflow: hidden;
           position: relative;
@@ -50,10 +49,10 @@ $department_map: (
           width: 96px;
 
           .antagonist-icon {
-            image-rendering: pixelated;
-            border-radius: var(--border-radius-circular);
+            border-radius: 50%;
+            -ms-interpolation-mode: nearest-neighbor;
             overflow: hidden;
-            transition: transform var(--transition-time-fast) ease-in;
+            transition: transform 0.1s ease-in;
           }
         }
 
@@ -61,7 +60,7 @@ $department_map: (
           @include animate-hover;
 
           .antagonist-icon-parent {
-            border-color: var(--color-red);
+            border-color: colors.$red;
 
             .antagonist-icon {
               opacity: 0.5;
@@ -77,13 +76,13 @@ $department_map: (
           @include animate-hover;
 
           .antagonist-icon-parent {
-            border-color: var(--color-green);
+            border-color: colors.$green;
           }
         }
 
         &--banned {
           .antagonist-icon-parent {
-            border-color: var(--color-grey);
+            border-color: colors.$grey;
           }
 
           .antagonist-icon {
@@ -92,7 +91,7 @@ $department_map: (
         }
 
         .antagonist-banned-slash {
-          background: var(--color-grey);
+          background: colors.$grey;
 
           width: 100%;
           height: 3px;
@@ -107,7 +106,7 @@ $department_map: (
 
         .antagonist-days-left {
           text-align: center;
-          text-shadow: 1px 1px 1px hsl(0, 0%, 13.3%);
+          text-shadow: 1px 1px 1px #222;
 
           width: 100%;
 
@@ -137,7 +136,9 @@ $department_map: (
           }
 
           background: colors.fg($color-value);
-          border: var(--border-thickness-small) outset colors.fg($color-value);
+          border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+          border-left: 2px solid rgba(0, 0, 0, 0.3);
+          border-right: 2px solid rgba(0, 0, 0, 0.3);
           color: black;
 
           > * {
@@ -145,22 +146,21 @@ $department_map: (
             padding-bottom: 0.2em;
           }
 
+          &:first-child {
+            border-top: 2px solid rgba(0, 0, 0, 0.3);
+          }
+
           .options {
-            margin-right: var(--space-xxs);
-            background: hsla(0, 0%, 0%, 0.2);
+            background: rgba(0, 0, 0, 0.2);
             height: 100%;
           }
         }
 
         &--Captain {
-          border: var(--border-thickness-medium)
-            outset
-            hsla(60, 100%, 39.2%, 1);
+          border: 3px solid rgba(200, 200, 0, 1);
 
           &:first-child {
-            border-top: var(--border-thickness-medium)
-              outset
-              hsla(60, 100%, 39.2%, 1);
+            border-top: 3px solid rgba(200, 200, 0, 1);
           }
 
           .job-name {
@@ -170,12 +170,12 @@ $department_map: (
       }
 
       &__priority {
-        border: var(--border-thickness-tiny) solid hsla(0, 0%, 0%, 0.3);
+        border: 1px solid rgba(0, 0, 0, 0.3);
 
         &--off::after {
-          content: '';
+          content: "";
 
-          background: hsla(0, 0%, 0%, 0.2);
+          background: rgba(0, 0, 0, 0.2);
           display: block;
           height: 80%;
           left: 50%;
@@ -189,7 +189,10 @@ $department_map: (
 
     &__PriorityHeader {
       font-weight: bold;
-      transform: translateX(-4px) translateY(-8px) rotate(315deg);
+      transform:
+        translateX(-4px)
+        translateY(-8px)
+        rotate(315deg);
       white-space: nowrap;
       width: 19px;
     }
@@ -197,40 +200,38 @@ $department_map: (
 
   &__Quirks {
     &__QuirkList {
-      scrollbar-color: var(--color-grey) transparent;
-      background-color: var(--color-light-grey);
-      width: 100%;
-      overflow-x: hidden;
+      background-color: colors.$light-grey;
+      height: calc(90vh - 170px);
+      min-height: 100%;
       overflow-y: scroll;
 
       &__quirk {
-        cursor: var(--cursor-pointer);
-        background-color: var(--color-white);
-        border-bottom: var(--border-thickness-tiny) solid var(--color-black);
-        color: hsl(0, 0%, 6.7%);
-        transition: background-color var(--transition-time-fast) ease-in;
+        background-color: colors.$white;
+        border-bottom: 1px solid black;
+        color: #111;
+        transition: background-color 0.1s ease-in;
 
         $quality_map: (
-          'positive': var(--color-green),
-          'neutral': var(--color-white),
-          'negative': var(--color-red),
+          "positive": colors.$green,
+          "neutral": colors.$white,
+          "negative": colors.$red,
         );
 
         @each $quality, $color-value in $quality_map {
           &--#{$quality} {
             background-color: $color-value;
-            transition: background-color var(--transition-time-fast) ease-in;
+            transition: background-color 0.1s ease-in;
           }
         }
 
         &:hover {
-          background-color: var(--color-grey);
-          transition: background-color var(--transition-time-fast) ease-out;
+          background-color: colors.$grey;
+          transition: background-color 0.1s ease-out;
 
           @each $quality, $color-value in $quality_map {
             .PreferencesMenu__Quirks__QuirkList__quirk--#{$quality} {
-              background-color: hsl(from $color-value h s calc(l - 10));
-              transition: background-color var(--transition-time-fast) ease-out;
+              background-color: color.scale($color-value, $lightness: -25%);
+              transition: background-color 0.1s ease-out;
             }
           }
         }

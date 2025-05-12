@@ -4,10 +4,8 @@
  * @license MIT
  */
 
+import { setupGlobalEvents } from 'tgui/events';
 import 'tgui/styles/main.scss';
-
-import { setupGlobalEvents } from 'tgui-core/events';
-
 import Benchmark from './lib/benchmark';
 
 const sendMessage = (obj: any) => {
@@ -64,7 +62,8 @@ const setupApp = async () => {
         }
         suite.run();
       });
-    } catch (error) {
+    }
+    catch (error) {
       sendMessage({ type: 'error', error });
     }
   }

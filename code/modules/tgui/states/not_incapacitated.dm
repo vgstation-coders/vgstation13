@@ -10,14 +10,13 @@
  */
 
 var/datum/ui_state/not_incapacitated_state/not_incapacitated_state = new
-
 /**
  * tgui state: not_incapacitated_turf_state
  *
  * Checks that the user isn't incapacitated and that their loc is a turf
  */
 
-var/datum/ui_state/not_incapacitated_state/not_incapacitated_turf_state = new
+var/datum/ui_state/not_incapacitated_state/not_incapacitated_turf_state = new(no_turfs = TRUE)
 
 /datum/ui_state/not_incapacitated_state
 	var/turf_check = FALSE

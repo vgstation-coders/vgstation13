@@ -1,3 +1,6 @@
+@use '../base.scss';
+@use '../colors.scss';
+
 .Roulette__container {
   display: flex;
 }
@@ -6,7 +9,7 @@
   display: table-cell;
   padding: 0;
   margin: 0;
-  border: var(--border-thickness-tiny) solid var(--color-white);
+  border: 1px solid colors.$white;
   vertical-align: bottom;
 }
 
@@ -31,6 +34,7 @@
   margin: 0;
   text-align: center;
   vertical-align: middle;
+  color: colors.$white !important;
 }
 
 .Roulette__board-button--rowspan-3 {
@@ -46,12 +50,12 @@
 .Roulette__lowertable {
   margin-top: 8px;
   border-collapse: collapse;
-  border: var(--border-thickness-tiny) solid var(--color-white);
+  border: 1px solid colors.$white;
   border-spacing: 0;
 }
 
 .Roulette__lowertable--cell {
-  border: var(--border-thickness-small) solid var(--color-white);
+  border: 2px solid colors.$white;
   padding: 0px;
   margin: 0px;
 }
@@ -68,15 +72,15 @@
 }
 
 .Roulette__lowertable--spinresult-black {
-  background-color: var(--color-black);
+  background-color: colors.$black;
 }
 
 .Roulette__lowertable--spinresult-red {
-  background-color: var(--color-red);
+  background-color: colors.$red;
 }
 
 .Roulette__lowertable--spinresult-green {
-  background-color: var(--color-green);
+  background-color: colors.$green;
 }
 
 .Roulette__lowertable--spinbutton {

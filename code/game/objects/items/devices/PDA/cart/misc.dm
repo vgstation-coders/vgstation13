@@ -250,7 +250,7 @@
 					if(7)
 						displaylength = 448
 
-				dat += {"<div style='float: left'> <img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='image-rendering: pixelated' /> </div>"}
+				dat += {"<div style='float: left'> <img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' /> </div>"}
 				i++
 	return dat
 

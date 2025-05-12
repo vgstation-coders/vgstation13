@@ -14,7 +14,7 @@
 	var/internal_volume = 10000
 	var/max_pressure = 10000
 
-	var/target_pressure = 2500	//Output pressure.
+	var/target_pressure = 4500	//Output pressure.
 
 	var/datum/gas_mixture/air				//Internal tank.
 
@@ -102,7 +102,7 @@
 		))
 	return data
 
-/obj/machinery/atmospherics/binary/msgs/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
+/obj/machinery/atmospherics/binary/msgs/ui_act(action, list/params)
 	. = ..()
 	if(.)
 		return
@@ -110,11 +110,9 @@
 		if("toggle_power")
 			on = !on
 			update_icon()
-			SStgui.try_update_ui(ui.user, src, ui)
 			return TRUE
 		if("set_pressure")
 			target_pressure = round(clamp(text2num(params["new_pressure"]), 0, 4500))
-			SStgui.try_update_ui(ui.user, src, ui)
 			update_icon()
 			return TRUE
 
