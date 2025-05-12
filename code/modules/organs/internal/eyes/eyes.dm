@@ -10,10 +10,6 @@
 	var/list/colourmatrix = list()
 
 /datum/organ/internal/eyes/proc/update_perception(var/mob/living/carbon/human/M)
-	// Bad hack but in 516 any non-zero value of the dark plane will result in glitch for night vision googles
-	// Fix by reworking dark planes?
-	if (istype(M.glasses, /obj/item/clothing/glasses/scanner/night))
-		return
 	M.dark_plane.alphas["human"] = 5
 
 /datum/organ/internal/eyes/process() //Eye damage replaces the old eye_stat var.

@@ -11,7 +11,6 @@
 	var/is_browser = FALSE
 	var/status = TGUI_WINDOW_CLOSED
 	var/locked = FALSE
-	var/visible = FALSE
 	var/datum/tgui/locked_by
 	var/datum/subscriber_object
 	var/subscriber_delegate
@@ -19,14 +18,8 @@
 	var/message_queue
 	var/sent_assets = list()
 	// Vars passed to initialize proc (and saved for later)
-	var/initial_strict_mode
-	var/initial_fancy
-	var/initial_assets
-	var/initial_inline_html
-	var/initial_inline_js
-	var/initial_inline_css
-
-	var/list/oversized_payloads = list()
+	var/inline_assets
+	var/fancy
 
 /**
  * public
@@ -51,30 +44,21 @@
  * state. You can begin sending messages right after initializing. Messages
  * will be put into the queue until the window finishes loading.
  *
- * optional strict_mode bool - Enables strict error handling and BSOD.
- * optional fancy bool - If TRUE and if this is NOT a panel, will hide the window titlebar.
- * optional assets list - List of assets to load during initialization.
- * optional inline_html string - Custom HTML to inject.
- * optional inline_js string - Custom JS to inject.
- * optional inline_css string - Custom CSS to inject.
+ * optional inline_assets list List of assets to inline into the html.
+ * optional inline_html string Custom HTML to inject.
+ * optional fancy bool If TRUE, will hide the window titlebar.
  */
 /datum/tgui_window/initialize(
-		strict_mode = FALSE,
-		fancy = FALSE,
-		assets = list(),
+		inline_assets = list(),
 		inline_html = "",
-		inline_js = "",
-		inline_css = "")
+		fancy = FALSE)
 	log_tgui(client,
 		context = "[id]/initialize",
 		window = src)
 	if(!client)
 		return
-	src.initial_fancy = fancy
-	src.initial_assets = assets
-	src.initial_inline_html = inline_html
-	src.initial_inline_js = inline_js
-	src.initial_inline_css = inline_css
+	src.inline_assets = inline_assets
+	src.fancy = fancy
 	status = TGUI_WINDOW_LOADING
 	fatally_errored = FALSE
 	// Build window options
@@ -87,11 +71,11 @@
 	// Generate page html
 	var/html = SStgui.basehtml
 	html = replacetextEx(html, "\[tgui:windowId]", id)
-	html = replacetextEx(html, "\[tgui:strictMode]", strict_mode)
-	// Inject assets
+	// Inject inline assets
 	var/inline_assets_str = ""
-	for(var/datum/tg_asset/asset in assets)
-		var/mappings = asset.get_url_mappings()
+	for(var/asset in inline_assets)
+		var/datum/asset/instance = new asset
+		var/mappings = instance.get_url_mappings()
 		for(var/name in mappings)
 			var/url = mappings[name]
 			// Not encoding since asset strings are considered safe
@@ -99,21 +83,12 @@
 				inline_assets_str += "Byond.loadCss('[url]', true);\n"
 			else if(copytext(name, -3) == ".js")
 				inline_assets_str += "Byond.loadJs('[url]', true);\n"
-		asset.send(client)
+		send_asset(asset)
 	if(length(inline_assets_str))
 		inline_assets_str = "<script>\n" + inline_assets_str + "</script>\n"
 	html = replacetextEx(html, "<!-- tgui:assets -->\n", inline_assets_str)
-	// Inject inline HTML
-	if (inline_html)
-		html = replacetextEx(html, "<!-- tgui:inline-html -->", isfile(inline_html) ? file2text(inline_html) : inline_html)
-	// Inject inline JS
-	if (inline_js)
-		inline_js = "<script>\n'use strict';\n[isfile(inline_js) ? file2text(inline_js) : inline_js]\n</script>"
-		html = replacetextEx(html, "<!-- tgui:inline-js -->", inline_js)
-	// Inject inline CSS
-	if (inline_css)
-		inline_css = "<style>\n[isfile(inline_css) ? file2text(inline_css) : inline_css]\n</style>"
-		html = replacetextEx(html, "<!-- tgui:inline-css -->", inline_css)
+	// Inject custom HTML
+	html = replacetextEx(html, "<!-- tgui:html -->\n", inline_html)
 	// Open the window
 	client << browse(html, "window=[id];[options]")
 	// Detect whether the control is a browser
@@ -121,23 +96,6 @@
 	// Instruct the client to signal UI when the window is closed.
 	if(!is_browser)
 		winset(client, id, "on-close=\"uiclose [id]\"")
-
-/**
- * public
- *
- * Reinitializes the panel with previous data used for initialization.
- */
-/datum/tgui_window/proc/reinitialize()
-	initialize(
-		strict_mode = initial_strict_mode,
-		fancy = initial_fancy,
-		assets = initial_assets,
-		inline_html = initial_inline_html,
-		inline_js = initial_inline_js,
-		inline_css = initial_inline_css)
-	// Resend assets
-	for(var/datum/tg_asset/asset in sent_assets)
-		send_asset(asset)
 
 /**
  * public
@@ -226,7 +184,6 @@
 		log_tgui(client,
 			context = "[id]/close (suspending)",
 			window = src)
-		visible = FALSE
 		status = TGUI_WINDOW_READY
 		send_message("suspend")
 		return
@@ -234,7 +191,6 @@
 		context = "[id]/close",
 		window = src)
 	release_lock()
-	visible = FALSE
 	status = TGUI_WINDOW_CLOSED
 	message_queue = null
 	// Do not close the window to give user some time
@@ -295,17 +251,16 @@
  *
  * return bool - TRUE if any assets had to be sent to the client
  */
-/datum/tgui_window/proc/send_asset(datum/tg_asset/asset)
+/datum/tgui_window/proc/send_asset(datum/asset/asset)
 	if(!client || !asset)
 		return
 	sent_assets |= list(asset)
-	. = asset.send(client)
-	/* FIXME : TG CSS
-	if(istype(asset, /datum/tg_asset/spritesheet))
-		var/datum/tg_asset/spritesheet/spritesheet = asset
+	var/datum/asset/instance = get_asset_datum(asset)
+	instance.send(client)
+	if(istype(instance, /datum/asset/spritesheet))
+		var/datum/asset/spritesheet/spritesheet = instance
 		send_message("asset/stylesheet", spritesheet.css_filename())
-	*/
-	send_raw_message(asset.get_serialized_url_mappings())
+	send_raw_message(TGUI_CREATE_MESSAGE("asset/mappings", instance.get_url_mappings()))
 
 /**
  * private
@@ -320,18 +275,6 @@
 			? "[id]:update" \
 			: "[id].browser:update")
 	message_queue = null
-
-/**
- * public
- *
- * Replaces the inline HTML content.
- *
- * required inline_html string HTML to inject
- */
-/datum/tgui_window/proc/replace_html(inline_html = "")
-	client << output(url_encode(inline_html), is_browser \
-		? "[id]:replaceHtml" \
-		: "[id].browser:replaceHtml")
 
 /**
  * private
@@ -367,12 +310,7 @@
 	// If not locked, handle these message types
 	switch(type)
 		if("ping")
-			send_message("ping/reply", payload)
-		/*
-		if("visible")
-			visible = TRUE
-			SEND_SIGNAL(src, COMSIG_TGUI_WINDOW_VISIBLE, client)
-		*/
+			send_message("pingReply", payload)
 		if("suspend")
 			close(can_be_suspended = TRUE)
 		if("close")
@@ -380,51 +318,8 @@
 		if("openLink")
 			client << link(href_list["url"])
 		if("cacheReloaded")
-			reinitialize()
-		/* Unimplemented
-		if("chat/resend")
-			SSchat.handle_resend(client, payload)
-		*/
-		if("oversizedPayloadRequest")
-			var/payload_id = payload["id"]
-			var/chunk_count = payload["chunkCount"]
-			var/permit_payload = chunk_count <= config.tgui_max_chunk_count
-			if(permit_payload)
-				create_oversized_payload(payload_id, payload["type"], chunk_count)
-			send_message("oversizePayloadResponse", list("allow" = permit_payload, "id" = payload_id))
-		if("payloadChunk")
-			var/payload_id = payload["id"]
-			append_payload_chunk(payload_id, payload["chunk"])
-			send_message("acknowlegePayloadChunk", list("id" = payload_id))
-
-/datum/tgui_window/variable_edited(variable_name, old_value, new_value)
-	return (variable_name != NAMEOF(src, id)) && ..()
-
-/datum/tgui_window/proc/create_oversized_payload(payload_id, message_type, chunk_count)
-	if(oversized_payloads[payload_id])
-		stack_trace("Attempted to create oversized tgui payload with duplicate ID.")
-		return
-	oversized_payloads[payload_id] = list(
-		"type" = message_type,
-		"count" = chunk_count,
-		"chunks" = list(),
-		"timeout" = add_timer(new /callback(src, PROC_REF(remove_oversized_payload), payload_id), 1 SECONDS)
-	)
-
-/datum/tgui_window/proc/append_payload_chunk(payload_id, chunk)
-	var/list/payload = oversized_payloads[payload_id]
-	if(!payload)
-		return
-	var/list/chunks = payload["chunks"]
-	chunks += chunk
-	if(length(chunks) >= payload["count"])
-		del_timer(payload["timeout"])
-		var/message_type = payload["type"]
-		var/final_payload = chunks.Join()
-		remove_oversized_payload(payload_id)
-		on_message(message_type, json_decode(final_payload), list("type" = message_type, "payload" = final_payload, "tgui" = TRUE, "window_id" = id))
-	else
-		payload["timeout"] = add_timer(new /callback(src, PROC_REF(remove_oversized_payload), payload_id), 1 SECONDS)
-
-/datum/tgui_window/proc/remove_oversized_payload(payload_id)
-	oversized_payloads -= payload_id
+			// Reinitialize
+			initialize(inline_assets = inline_assets, fancy = fancy)
+			// Resend the assets
+			for(var/asset in sent_assets)
+				send_asset(asset)

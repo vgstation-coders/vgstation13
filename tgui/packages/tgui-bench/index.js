@@ -27,11 +27,10 @@ const setup = async () => {
   assets += `</script>\n`;
 
   const publicDir = path.resolve(__dirname, '../../public');
-  const page = fs
-    .readFileSync(path.join(publicDir, 'tgui.html'), 'utf-8')
+  const page = fs.readFileSync(path.join(publicDir, 'tgui.html'), 'utf-8')
     .replace('<!-- tgui:assets -->\n', assets);
 
-  server.register(require('@fastify/static'), {
+  server.register(require('fastify-static'), {
     root: publicDir,
   });
 
@@ -68,7 +67,8 @@ const setup = async () => {
 
   try {
     await server.listen(3002, '0.0.0.0');
-  } catch (err) {
+  }
+  catch (err) {
     console.error(err);
     process.exit(1);
   }

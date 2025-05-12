@@ -58,7 +58,7 @@
 
 	if(img)
 		user << browse_rsc(img.img, "tmp_photo.png")
-		info_image = "<img src='tmp_photo.png' width='192' style='image-rendering: pixelated' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
+		info_image = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
 	user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_image][info_text][stamps]</BODY></HTML>", "window=[name];size=[display_x]x[display_y]")
 	onclose(user, "[name]")
 

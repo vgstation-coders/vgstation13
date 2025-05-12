@@ -239,8 +239,7 @@ For the main html chat area
 	iconCache[iconKey] << icon(icon, dir = SOUTH, frame = 1)
 	var/iconData = iconCache.ExportText(iconKey)
 	var/list/partial = splittext(iconData, "{")
-	var/list/partial2 = splittext(partial[2], "}")
-	return replacetext(copytext(partial2[1], 2, -1), "\n", "")
+	return replacetext(copytext(partial[2], 3, -5), "\n", "")
 
 /proc/bicon(var/obj)
 	if (!obj)

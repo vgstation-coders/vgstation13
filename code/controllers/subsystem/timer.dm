@@ -60,7 +60,7 @@ var/timer_id = 1
 	// Optimization or waste of time?
 	// If a datum has many timers it may be beneficial to check whether thing_to_call.gcDestroyed has been set,
 	// indicating there's no need to remove this timer from its active_timers list, as the list will be nulled right afterwards.
-	if(thing_to_call != GLOBAL_PROC && (isclient(thing_to_call) || !thing_to_call.gcDestroyed))
+	if(thing_to_call != GLOBAL_PROC && !thing_to_call.gcDestroyed)
 		thing_to_call.active_timers -= src
 		if(!thing_to_call.active_timers.len)
 			thing_to_call.active_timers = null

@@ -368,7 +368,7 @@ var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster =
 	appearance_flags = 0
 	plane = BASE_PLANE
 	mouse_opacity = 0
-	screen_loc = "SOUTHWEST,SOUTHWEST"
+	screen_loc = "CENTER,CENTER"
 	render_source = "*overdark"
 
 var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planemaster_target = new()

@@ -132,7 +132,6 @@ var/list/all_GPS_list = list()
 				return FALSE
 			transmitting = TRUE
 			update_icon()
-			SStgui.try_update_ui(ui.user, src, ui)
 			return TRUE
 		if("set_tag")
 			if(isobserver(usr))
@@ -149,11 +148,9 @@ var/list/all_GPS_list = list()
 			else
 				gpstag = new_tag
 				update_name()
-				SStgui.try_update_ui(ui.user, src, ui)
 			return TRUE
 		if("toggle_refresh")
 			autorefreshing = !autorefreshing
-			SStgui.try_update_ui(ui.user, src, ui)
 			return TRUE
 // end tgui
 

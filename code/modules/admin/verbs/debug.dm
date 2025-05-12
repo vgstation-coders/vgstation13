@@ -19,6 +19,7 @@
 	feedback_add_details("admin_verb","DG2") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
+
 /* 21st sept 2010
 Updated by Skie -- Still not perfect but better!
 Stuff you can't do:
@@ -36,7 +37,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		return
 
 	spawn(0)
-		var/datum/target = null
+		var/target = null
 		var/targetselected = 0
 		var/lst[] // List reference
 		lst = new/list() // Make the list

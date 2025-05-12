@@ -5,14 +5,14 @@
 
 .Notifications {
   position: absolute;
-  top: 1em;
+  bottom: 1em;
   left: 1em;
   right: 2em;
 }
 
 .Notification {
-  color: hsl(0, 0%, 100%);
-  background-color: hsl(348, 83%, 47%);
+  color: #fff;
+  background-color: crimson;
   padding: 0.5em;
   margin: 1em 0;
 

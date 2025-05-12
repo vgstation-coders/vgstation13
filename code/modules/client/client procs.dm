@@ -149,7 +149,7 @@ var/updated_stats = 0
 		bunker_setting = 1
 		load_bunker()
 	if(config)
-		winset_wrapper(null, "window1.msay_output.style=[config.world_style_config];") // The TG people told me to do it. If this fails for reason X or Y, the entire client/New() will runtime and we'll be in huge trouble.
+		winset(src, null, "window1.msay_output.style=[config.world_style_config];")
 	else
 		to_chat(src, "<span class='warning'>The stylesheet wasn't properly setup call an administrator to reload the stylesheet or relog.</span>")
 
@@ -331,22 +331,22 @@ var/updated_stats = 0
 		prefs.save_preferences_sqlite(src, src.ckey)
 
 	if(prefs.lastchangelog != changelog_hash) //bolds the changelog button on the interface so we know there are updates.
-		winset_wrapper("rpane.changelog", "background-color=#eaeaea;font-style=bold")
+		winset(src, "rpane.changelog", "background-color=#eaeaea;font-style=bold")
 		prefs.SetChangelog(ckey,changelog_hash)
 		to_chat(src, "<span class='info'>Changelog has changed since your last visit.</span>")
 
 	//Set map label to correct map name
-	winset_wrapper(src, "rpane.mapb", "text=\"[map.nameLong]\"")
+	winset(src, "rpane.mapb", "text=\"[map.nameLong]\"")
 
 	if (round_end_info)
-		winset_wrapper("rpane.round_end", "is-visible=true")
-		winset_wrapper("rpane.last_round_end", "is-visible=false")
+		winset(src, "rpane.round_end", "is-visible=true")
+		winset(src, "rpane.last_round_end", "is-visible=false")
 	else if (last_round_end_info)
-		winset_wrapper("rpane.round_end", "is-visible=false")
-		winset_wrapper("rpane.last_round_end", "is-visible=true")
+		winset(src, "rpane.round_end", "is-visible=false")
+		winset(src, "rpane.last_round_end", "is-visible=true")
 	else
-		winset_wrapper("rpane.round_end", "is-visible=false")
-		winset_wrapper("rpane.last_round_end", "is-visible=false")
+		winset(src, "rpane.round_end", "is-visible=false")
+		winset(src, "rpane.last_round_end", "is-visible=false")
 
 	if (runescape_pvp)
 		to_chat(src, "<span class='userdanger'>WARNING: Wilderness mode is enabled; players can only harm one another in maintenance areas!</span>")
@@ -358,10 +358,6 @@ var/updated_stats = 0
 		tooltips = new /datum/tooltip(src)
 
 	fps = (prefs.fps < 0) ? RECOMMENDED_CLIENT_FPS : prefs.fps
-
-// This is wrapped so that if the winset fucks up somehow, this doesn't crash the entire client login proc.
-/client/proc/winset_wrapper(control_id, params)
-	winset(src, control_id, params)
 
 	//////////////
 	//DISCONNECT//
@@ -522,7 +518,6 @@ var/updated_stats = 0
 	if(query_connection_log.ErrorMsg())
 		WARNING("FINGERPRINT: [query_connection_log.ErrorMsg()]")
 	qdel(query_connection_log)
-	connection_time = world.time
 
 #undef TOPIC_SPAM_DELAY
 #undef UPLOAD_LIMIT
