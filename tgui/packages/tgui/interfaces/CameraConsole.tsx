@@ -158,7 +158,7 @@ const CameraSelector = (props) => {
               ])}
               onClick={() =>
                 act('switch_camera', {
-                  name: camera.name,
+                  camera: camera.ref,
                 })
               }
             >
@@ -178,7 +178,7 @@ const CameraControls = (props: { searchText: string }) => {
 
   const cameras = selectCameras(data.cameras, searchText);
 
-  const [prevCamera, nextCamera] = prevNextCamera(cameras, activeCamera);
+  let [prevCamera, nextCamera] = prevNextCamera(cameras, activeCamera);
 
   return (
     <Section fill>
