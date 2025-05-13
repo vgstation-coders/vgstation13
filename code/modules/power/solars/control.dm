@@ -158,7 +158,7 @@ Manual Tracking Direction:"}
 		if(1)
 			t += "<B>CW</B> <A href='?src=\ref[src];trackdir=-1'>CCW</A><BR>"
 	t += "<A href='?src=\ref[src];close=1'>Close</A></TT>"
-	user << browse(t, "window=solcon")
+	user << browse(HTML_SKELETON(t), "window=solcon")
 	onclose(user, "solcon")
 	return
 
