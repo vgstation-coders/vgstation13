@@ -647,7 +647,7 @@ var/list/shuttle_log = list()
 		//	return
 
 		if(world.time < 90 MINUTES) // 90 minute grace period to let the game get going
-			to_chat(user, "The shuttle is refueling. Please wait another [round((90 MINUTES-world.time)/60 SECONDS)] minutes before trying again.")//may need to change "/600"
+			to_chat(user, "The shuttle is refueling. Please wait another [round((90 MINUTES-world.time)/(60 SECONDS))] minutes before trying again.")//may need to change "/600"
 
 			return
 
