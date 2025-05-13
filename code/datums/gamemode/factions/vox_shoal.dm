@@ -69,7 +69,8 @@ var/list/potential_bonus_items = list(
 
 	var/got_personnel = 0
 	var/got_items = 0
-
+	var/list/people_to_steal = list()
+	var/list/people_to_steal_counters = list()
 	var/total_points = 0
 	var/list/our_bounty_lockers = list()
 
@@ -78,33 +79,37 @@ var/list/potential_bonus_items = list(
 	load_dungeon(/datum/map_element/dungeon/vox_shuttle)
 	vox_shuttle.initialize() //As the area isn't loaded until the above call, its docking ports aren't populated until we call this
 
-/datum/faction/vox_shoal/forgeObjectives()
-	var/list/dept_of_choice = pick(
-		engineering_positions,
-		medical_positions,
-		science_positions,
-		civilian_positions,
-		cargo_positions,
-		security_positions,
+	var/list/all_depts = list(
+			"Engineering" = engineering_positions,
+			"Medbay" = medical_positions,
+			"Science" = science_positions,
+			"Service" = civilian_positions,
+			"Cargo" = cargo_positions,
+			"Security" = security_positions
 	)
-	var/dept = "None"
-	// I wish I could use a switch here, but byond won't let me.
-	if (dept_of_choice == engineering_positions)
-		dept = "Engineering"
-	else if (dept_of_choice == medical_positions)
-		dept = "Medbay"
-	else if (dept_of_choice == science_positions)
-		dept = "Science"
-	else if (dept_of_choice == civilian_positions)
-		dept = "Service"
-	else if (dept_of_choice == cargo_positions)
-		dept = "Cargo"
-	else if (dept_of_choice == security_positions)
-		dept = "Security"
 
-	var/datum/objective/abduct/A = new(dept)
-	AppendObjective(A)
-	dept_objective = dept_of_choice.Copy()
+	for (var/dept in all_depts)
+		var/list/available_jobs = all_depts[dept]
+		var/counter = 0
+
+		for(var/mob/living/M in player_list)
+			if (M.ckey && (M.mind?.assigned_role in available_jobs))
+				counter++
+
+		if (counter)
+			people_to_steal[dept] = available_jobs
+			people_to_steal_counters[dept] = counter
+
+/datum/faction/vox_shoal/forgeObjectives()
+
+	if (people_to_steal.len)
+		var/dept = pick(people_to_steal)
+		var/list/dept_of_choice = people_to_steal[dept]
+		var/max_abduct = people_to_steal_counters[dept]
+		var/datum/objective/abduct/A = new(dept, max_abduct)
+		AppendObjective(A)
+		dept_objective = dept_of_choice.Copy()
+
 
 	var/list/potential_bonus_items_temp = potential_bonus_items.Copy()
 

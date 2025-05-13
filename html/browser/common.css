@@ -352,7 +352,7 @@ div.notice
 }
 
 .charPreview{
-	-ms-interpolation-mode: nearest-neighbor;
+	image-rendering: pixelated;
 	width: 64px;
 	height:64px;
 }

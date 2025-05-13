@@ -557,7 +557,7 @@
 		var/icon/img = app.imglist[note]
 		if(img)
 			usr << browse_rsc(img, "tmp_photo_[note].png")
-			dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
+			dat += "<img src='tmp_photo_[note].png' width = '192' style='image-rendering: pixelated'><BR>"
 	dat += "</body></html>"
 	usr << browse(HTML_SKELETON(dat), "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
 
@@ -576,7 +576,7 @@
 			var/icon/img = app.imglist[note]
 			if(img)
 				usr << browse_rsc(img, "tmp_photo_[note].png")
-				dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
+				dat += "<img src='tmp_photo_[note].png' width = '192' style='image-rendering: pixelated'><BR>"
 		dat += "</body></html>"
 		usr << browse(HTML_SKELETON(dat), "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
 	else
