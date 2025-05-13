@@ -1,0 +1,4 @@
+author: Silkizuad
+delete-after: true
+changes:
+- bugfix: Fixed Derelict RnD server not being properly cooled in some derelicts.

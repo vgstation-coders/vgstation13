@@ -158,7 +158,7 @@
 		Starter: [ compressor.starter ? "<A href='?src=\ref[src];str=1'>Off</A> <B>On</B>" : "<B>Off</B> <A href='?src=\ref[src];str=1'>On</A>"]
 		</PRE><HR><A href='?src=\ref[src];close=1'>Close</A>
 		</TT>"}
-	user << browse(t, "window=turbine")
+	user << browse(HTML_SKELETON(t), "window=turbine")
 	onclose(user, "turbine")
 
 	return

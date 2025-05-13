@@ -71,7 +71,7 @@
 			for(var/obj/item/weapon/spacecash/C2 in get_contents_in_object(player, /obj/item/weapon/spacecash))
 				cashscore += (C2.amount * C2.worth)
 
-			var/datum/record/money/record = new(player.key, player.job, cashscore)
+			var/datum/data/record/money/record = new(player.key, player.job, cashscore)
 			rich_escapes += record
 
 			if(cashscore > score.richestcash)
@@ -91,7 +91,7 @@
 				if(TR.source_name == player.real_name)
 					shoal_amount += text2num(TR.amount)
 			if(shoal_amount > 0)
-				var/datum/record/money/record = new(player.key, player.job, shoal_amount)
+				var/datum/data/record/money/record = new(player.key, player.job, shoal_amount)
 				rich_shoals += record
 				if(shoal_amount > score.biggestshoalcash)
 					score.biggestshoalcash = shoal_amount
