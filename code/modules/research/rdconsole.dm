@@ -117,7 +117,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 /obj/machinery/computer/rdconsole/proc/GiveRandomResearch()
 	files.known_tech = tech_list.Copy()
-	var/datum/tech/KT = pick(files.known_tech)
+	var/tech_type = pick(files.known_tech)
+	var/datum/tech/KT = files.known_tech[tech_type]
 	if(KT.level < KT.max_level)
 		KT.level++
 

@@ -17,7 +17,7 @@
 		usr.set_machine(src)
 		if(href_list["tetrisScore"])
 			var/temp_score = text2num(href_list["tetrisScore"])
-			total_score[usr.key] += temp_score
+			total_score[usr.key] = temp_score
 			if(!next_tech_threshold[usr.key])
 				next_tech_threshold[usr.key] = 250
 			if(total_score[usr.key] > next_tech_threshold[usr.key])
