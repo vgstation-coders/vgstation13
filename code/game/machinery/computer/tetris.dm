@@ -153,6 +153,6 @@
 
 	</body>
 	</html>"}
-	user << browse(dat, "window=tetris;size=700x900")
+	user << browse(dat, "window=tetris;size=550x700")
 	user.set_machine(src)
 	onclose(user, "tetris")

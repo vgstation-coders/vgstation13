@@ -176,7 +176,7 @@
 /obj/item/weapon/circuitboard/tetris
 	name = "Circuit board (T.E.T.R.I.S.)"
 	desc = "A circuit board for the Telemetry Enhanced Testing and Research Informatic Simulator."
-	build_path = "/obj/machinery/computer/tetris"
+	build_path = /obj/machinery/computer/tetris
 	origin_tech = Tc_PROGRAMMING + "=1"
 
 /obj/item/weapon/circuitboard/turbine_control
