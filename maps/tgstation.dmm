@@ -32336,9 +32336,9 @@
 	},
 /obj/machinery/door/window{
 	base_state = "right";
+	dir = 8;
 	name = "Library Desk Door";
-	req_access_txt = "37";
-	dir = 8
+	req_access_txt = "37"
 	},
 /turf/simulated/floor/wood,
 /area/library)
@@ -36469,12 +36469,12 @@
 	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
+	desc = "Secret of the arts";
 	dir = 2;
 	icon_state = "shutter0";
 	id_tag = "art1";
 	name = "Art Shutters";
-	opacity = 0;
-	desc = "Secret of the arts"
+	opacity = 0
 	},
 /turf/simulated/floor/plating,
 /area/storage/art)
@@ -41804,6 +41804,7 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (WEST)"
 	},
+/obj/machinery/computer/tetris,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -60670,8 +60671,8 @@
 "cjC" = (
 /obj/machinery/door/airlock/medical{
 	name = "Patient Room 1";
-	req_access_txt = "5";
-	req_access_dir = 4
+	req_access_dir = 4;
+	req_access_txt = "5"
 	},
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -61990,8 +61991,8 @@
 "cme" = (
 /obj/machinery/door/airlock/medical{
 	name = "Patient Room 2";
-	req_access_txt = "5";
-	req_access_dir = 4
+	req_access_dir = 4;
+	req_access_txt = "5"
 	},
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -115550,12 +115551,12 @@
 /obj/structure/window/reinforced,
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
+	desc = "Secret of the arts";
 	dir = 2;
 	icon_state = "shutter0";
 	id_tag = "art1";
 	name = "Art Shutters";
-	opacity = 0;
-	desc = "Secret of the arts"
+	opacity = 0
 	},
 /turf/simulated/floor/plating,
 /area/storage/art)
@@ -116084,12 +116085,12 @@
 	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
+	desc = "Secret of the arts";
 	dir = 2;
 	icon_state = "shutter0";
 	id_tag = "art1";
 	name = "Art Shutters";
-	opacity = 0;
-	desc = "Secret of the arts"
+	opacity = 0
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor/plating,
@@ -116339,12 +116340,12 @@
 /obj/structure/window/reinforced,
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
+	desc = "Secret of the arts";
 	dir = 2;
 	icon_state = "shutter0";
 	id_tag = "art1";
 	name = "Art Shutters";
-	opacity = 0;
-	desc = "Secret of the arts"
+	opacity = 0
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,
