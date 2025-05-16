@@ -12,6 +12,28 @@ body {
     font-size:0.84em;
 }
 
+
+a.nav-link:link {
+	color: #f3e678 !important;
+	text-decoration: none;
+}
+
+a.nav-link:visited {
+	color: #f3e678;
+	text-decoration: none;
+}
+
+a.nav-link:hover
+{
+   color: #fb3f00;
+   text-decoration: none;
+}
+a.nav-link:active
+{
+   color: #f3e678;
+   text-decoration: none;
+}
+
 h1,h2,h3,h4,h5 {
     font-family:"Press Start 2P";
     text-align:center;
