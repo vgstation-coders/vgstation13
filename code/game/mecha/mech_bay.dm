@@ -250,8 +250,10 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(istype(usr,mob/living))
-		var/mob/living/U = usr
+	if(!istype(usr,/mob/living))
+		return
+
+	var/mob/living/U = usr
 	if(src.anchored || U.stat)
 		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
 		return 0
@@ -263,8 +265,10 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(istype(usr,mob/living))
-		var/mob/living/U = usr
+	if(!istype(usr,/mob/living))
+		return
+
+	var/mob/living/U = usr
 	if(src.anchored || U.stat)
 		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
 		return 0
