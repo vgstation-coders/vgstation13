@@ -83,13 +83,14 @@
 			to_chat(user, "<span class='warning'>You cannot deconstruct this item!</span>")
 			return
 
+		// Twice as fast as decon analyser
 		if(user.drop_item(I, src))
 			to_chat(user, "<span class='notice'>You deconstruct \the [I] for reverse telemetry.</span>")
 			for(var/T in temp_tech)
 				if (!loaded_techs[T])
-					loaded_techs[T] = 1
+					loaded_techs[T] = 2
 				else
-					loaded_techs[T]++
+					loaded_techs[T] = loaded_techs[T]+2
 			qdel(I)
 			return
 
