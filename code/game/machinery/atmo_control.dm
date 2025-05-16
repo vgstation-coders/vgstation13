@@ -10,15 +10,6 @@
 
 	var/on = 1
 	var/list/metrics_monitored = list("pressure", "temperature")
-	//Flags:
-	// 1 for pressure
-	// 2 for temperature
-	// Output >= 4 includes gas composition
-	// 4 for oxygen concentration
-	// 8 for toxins concentration
-	// 16 for nitrogen concentration
-	// 32 for carbon dioxide concentration
-	// 64 for nitrous oxide concentration
 
 	machine_flags = WRENCHMOVE | MULTITOOL_MENU
 
