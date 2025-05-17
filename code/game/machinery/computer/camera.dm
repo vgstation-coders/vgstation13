@@ -77,7 +77,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 			continue
 		var/list/tempnetwork = C.network & network
 		if(tempnetwork.len)
-			output["[C.c_tag]"] = C
+			output["\ref[C]"] = C
 	return output
 
 /obj/machinery/computer/security/attack_ai(var/mob/user)
@@ -125,21 +125,22 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	data["activeCamera"] = null
 	if(active_camera)
 		data["activeCamera"] = list(
-			name = active_camera.c_tag,
-			status = active_camera.status,
+			"name" = active_camera.c_tag,
+			"ref" = ref(active_camera),
+			"status" = active_camera.status,
 		)
 	return data
 
 /obj/machinery/computer/security/ui_static_data()
 	var/list/data = list()
-	data["title"] = name
 	data["mapRef"] = map_name
 	var/list/cameras = get_available_cameras()
 	data["cameras"] = list()
 	for(var/i in cameras)
 		var/obj/machinery/camera/C = cameras[i]
 		data["cameras"] += list(list(
-			name = C.c_tag,
+			"name" = C.c_tag,
+			"ref" = ref(C),
 		))
 
 	return data
@@ -150,9 +151,9 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		return
 
 	if(action == "switch_camera")
-		var/c_tag = params["name"]
+		var/c_ref = params["camera"]
 		var/list/cameras = get_available_cameras()
-		var/obj/machinery/camera/selected_camera = cameras[c_tag]
+		var/obj/machinery/camera/selected_camera = cameras[c_ref]
 		active_camera = selected_camera
 
 		if(!selected_camera)
@@ -161,6 +162,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		active_camera.camera_twitch()
 
 		update_active_camera_screen()
+		SStgui.update_uis(src) // Why do I have to this every time ?!
 
 		return TRUE
 

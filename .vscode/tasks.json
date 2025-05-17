@@ -89,6 +89,15 @@
 			],
 			"group": "build",
 			"label": "tgui: sonar"
+		},
+		{
+			"type": "npm",
+			"script": "install",
+			"path": "tgui",
+			"group": "clean",
+			"problemMatcher": [],
+			"label": "npm: install - tgui",
+			"detail": "install dependencies from package"
 		}
 	]
 }

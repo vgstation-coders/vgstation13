@@ -443,7 +443,7 @@
 	
 	)
 	name = "Fission reactor starter kit"
-	cost = 450 //Includes a lot of plasteel. Fuck you, ask the miners for more you socially inept jobbie.
+	cost = 300 //Includes a lot of plasteel. Fuck you, ask the miners for more you socially inept jobbie.
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "Fission reactor starter kit"
 	group = "Engineering"
@@ -463,7 +463,7 @@
 		/obj/item/weapon/storage/box/fissionsupply_casing,
 	)
 	name = "Fission reactor expansion pak"
-	cost = 175 //See above.
+	cost = 100 //See above.
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "Fission reactor expansion pak"
 	group = "Engineering"
@@ -475,7 +475,7 @@
 		/obj/item/weapon/fuelrod/large
 	)
 	name = "High-capacity fuel reservoir"
-	cost = 100 //It's a one time purchance, really. somewhat costy, but not that much for a department. watch for meltdowns.
+	cost = 75 //It's a one time purchase, really. somewhat costly, but not that much for a department. watch for meltdowns.
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "Large fuel reservoir"
 	group = "Engineering"

@@ -17,7 +17,7 @@ border-collapse:collapse;
 td{
 padding:0px;
 }
-a{
+a, a:hover{
 text-decoration:inherit;
 color:inherit;
 background-color:#00f;

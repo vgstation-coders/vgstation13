@@ -1,0 +1,4 @@
+author: mentgah
+delete-after: true
+changes:
+- bugfix: The shoal will no longer ask vox raiders for the impossible.

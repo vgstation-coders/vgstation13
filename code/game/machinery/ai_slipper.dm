@@ -64,7 +64,7 @@
 		t += text("Dispenser [src.disabled ? "unactive":"active"] - <A href='?src=\ref[src];toggleOn=1'>[src.disabled?"Enable":"Disable"]?</a><br>\n")
 		t += text("Uses Left: [uses]. <A href='?src=\ref[src];toggleUse=1'>Activate the dispenser?</A><br>\n")
 
-	user << browse(t, "window=computer;size=575x450")
+	user << browse(HTML_SKELETON(t), "window=computer;size=575x450")
 	onclose(user, "computer")
 	return
 

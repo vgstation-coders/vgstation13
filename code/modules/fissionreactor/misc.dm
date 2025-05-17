@@ -9,6 +9,12 @@ boxes used for cargo orders to make my life easier.
 	name="fission reactor controller parts"
 	desc="Contains all the materials needed to assemble a fission reactor controller."
 
+/obj/item/weapon/storage/box/fissionsupply_controller/attack_self(mob/user)
+	for(var/obj/O in contents)
+		O.forceMove(user.loc)
+	contents=null
+	..()
+	
 /obj/item/weapon/storage/box/fissionsupply_controller/New()
 	..()
 	new /obj/item/weapon/circuitboard/fission_reactor(src)
@@ -25,6 +31,12 @@ boxes used for cargo orders to make my life easier.
 	name="fission reactor assembly parts"
 	desc="Contains all the materials needed to assemble a fission assembly, minus the appropriate circuit board."
 
+/obj/item/weapon/storage/box/fissionsupply_genericassembly/attack_self(mob/user)
+	for(var/obj/O in contents)
+		O.forceMove(user.loc)
+	contents=null
+	..()
+	
 /obj/item/weapon/storage/box/fissionsupply_genericassembly/New()
 	..()
 	new /obj/item/stack/sheet/plasteel(src,5)//5 plasteel
@@ -38,6 +50,13 @@ boxes used for cargo orders to make my life easier.
 /obj/item/weapon/storage/box/fissionsupply_casing
 	name="fission reactor casing parts"
 	desc="Contains all the materials needed to assemble a single fission reactor casing."
+
+/obj/item/weapon/storage/box/fissionsupply_casing/attack_self(mob/user)
+	for(var/obj/O in contents)
+		O.forceMove(user.loc)
+	contents=null
+	..()
+	
 	
 /obj/item/weapon/storage/box/fissionsupply_casing/New()
 	..()
@@ -48,6 +67,12 @@ boxes used for cargo orders to make my life easier.
 /obj/item/weapon/storage/box/fissionsupply_fuelmaker
 	name="separational isotopic combiner parts"
 	desc="Contains all the materials needed to assemble a separational isotopic combiner."
+
+/obj/item/weapon/storage/box/fissionsupply_fuelmaker/attack_self(mob/user)
+	for(var/obj/O in contents)
+		O.forceMove(user.loc)
+	contents=null
+	..()
 	
 /obj/item/weapon/storage/box/fissionsupply_fuelmaker/New()
 	..()
@@ -66,9 +91,6 @@ boxes used for cargo orders to make my life easier.
 
 /obj/item/weapon/fuelrod/small/starter/New()
 	..()
-	//fueldata.fuel.add_reagent(URANIUM,150)
 	fueldata.add_shit_to(URANIUM,units_of_storage,fueldata.fuel)
 	fueldata.rederive_stats()
 	fueldata.life=1
-	
-	

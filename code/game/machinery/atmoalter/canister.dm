@@ -86,6 +86,12 @@
 	canister_color = "green"
 	can_label = 0
 
+/obj/machinery/portable_atmospherics/canister/cryotheum // see above
+	name = "Canister \[O2ß\]"
+	icon_state = "cyan"
+	canister_color = "cyan"
+	can_label = 0
+
 /obj/machinery/portable_atmospherics/canister/update_icon()
 	if(destroyed)
 		icon_state = "[canister_color]-1"
@@ -406,6 +412,7 @@
 				"\[Air\]" = "grey", \
 				"\[CAUTION\]" = "yellow", \
 				"\[Rn\]" = "green", \
+				"\[O2ß\]" = "cyan", \
 			)
 			var/label = input("Choose canister label", "Gas canister") as null|anything in colors
 			if (label)
@@ -458,6 +465,12 @@
 	..(loc)
 	air_contents.adjust_gas(GAS_RADON, (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()
+
+/obj/machinery/portable_atmospherics/canister/cryotheum/New(loc)
+	..(loc)
+	air_contents.adjust_gas(GAS_CRYOTHEUM, (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	update_icon()
+
 
 /obj/machinery/portable_atmospherics/canister/proc/weld(var/obj/item/tool/weldingtool/WT, var/mob/user)
 

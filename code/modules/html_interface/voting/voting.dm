@@ -489,7 +489,7 @@ var/global/datum/controller/vote/vote = new()
 		interface = new/datum/html_interface/nanotrasen/vote(src, "Voting Panel", 400, 400, vote_head)
 		interface.updateContent("content", "<div id='vote_main'></div><div id='vote_choices'></div><div id='vote_admin'></div>")
 
-	if(world.time < last_update + 2)
+	if(world.time < last_update + 0.2 SECONDS)
 		return
 	last_update = world.time
 	status_data.len = 0
