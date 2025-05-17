@@ -121,7 +121,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	while (!upgraded && list_tech_to_upgrade.len)
 		var/candidate_tech = pick(list_tech_to_upgrade)
 		var/max_upgraded_level = list_tech_to_upgrade[candidate_tech]
-		if (tech_list[candidate_tech])
+		if (!tech_list[candidate_tech])
 			CRASH("tetris gave us invalid upgrade tech: [candidate_tech]")
 		list_tech_to_upgrade -= candidate_tech
 		var/datum/tech/KT = files.known_tech[candidate_tech]
