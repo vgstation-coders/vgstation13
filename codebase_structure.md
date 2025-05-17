@@ -8,7 +8,7 @@ This file offers a rough map of the codebase, explainig what each folder does.
 As this codebase uses different languages and tools, the folders can be divided in the following categeories:
 
 	- `DM`: contains code written in the DM language, which is what players in the game interact with.
-	- `Ressources`: contains icons, sounds, or another media related to the game.
+	- `Resources`: contains icons, sounds, or another media related to the game.
 	- `Game files`: contains files produced by the game, such as logs.
 	- `External tool`: contains a tool using non-DM language which players interact with.
 	- `Build tool`: contains a tool which is used to build the project or in development.
@@ -77,14 +77,14 @@ Contains documentation related to the code. Currently only contains a diagram ex
 
 ##### html
 
-**Type:** Ressources. Contains assets used in the game such as the changelog, icons and the admin panel. TGUI assets and NanoUI assets are in *different* folders.
+**Type:** Resources. Contains assets used in the game such as the changelog, icons and the admin panel. TGUI assets and NanoUI assets are in *different* folders.
 
 - `font-awesome`: The free asset library we use for icons in NanoUI and TGUI.
 - `changlogs`: Exists for historical reasons. The actual changelog generation is now automated.
 
 ##### icons
 
-**Type:** Ressources. Contains most `.dmi` icons used in the game.
+**Type:** Resources. Contains most `.dmi` icons used in the game.
 
 ##### interface
 
@@ -104,7 +104,7 @@ Contains documentation related to the code. Currently only contains a diagram ex
 
 ##### nano
 
-**Type:** Ressources. Contains all assets related to NanoUI.
+**Type:** Resources. Contains all assets related to NanoUI.
 
 - `templates`: Contains the interfaces seen by players.
 
@@ -116,7 +116,7 @@ Contains documentation related to the code. Currently only contains a diagram ex
 
 ##### sound
 
-**Type:** Ressources. Contains all sound files used by the game, such as ambiant music, sound effects. Does *not* contain streamed/jukebox music, which is hosted seperately and is streamed synchronously to all players.
+**Type:** Resources. Contains all sound files used by the game, such as ambiant music, sound effects. Does *not* contain streamed/jukebox music, which is hosted seperately and is streamed synchronously to all players.
 
 ##### SQL
 
