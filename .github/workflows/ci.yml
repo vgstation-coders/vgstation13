@@ -49,7 +49,7 @@ jobs:
         #TODO: Cache Dreamchecker install
       - name: Run dreamchecker
         run: |
-          SPACEMAN_DMM_GIT_TAG="suite-1.8" tools/travis/install_spaceman_dmm.sh dreamchecker
+          SPACEMAN_DMM_GIT_TAG="suite-1.10" tools/travis/install_spaceman_dmm.sh dreamchecker
           ~/dreamchecker 2>&1 | bash tools/ci/annotate_dm.sh
 
       - name: Run map checker

@@ -1,0 +1,4 @@
+author: jellyveggie2
+delete-after: true
+changes:
+- bugfix: Printed paintings should no longer clutter the round end scoreboard.
