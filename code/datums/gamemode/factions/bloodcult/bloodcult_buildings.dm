@@ -110,9 +110,9 @@
 				playsound(src, sound_damaged, 75, 1)
 			if(isholyweapon(W))
 				playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
-				takeDamage(W.force*2)
+				takeDamage(W.force*8) //Extra weak to holy
 			else
-				takeDamage(W.force)
+				takeDamage(W.force*4) //Weak to melee
 			if (W.attack_verb)
 				visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
 			else

@@ -223,7 +223,7 @@
         if (!t || P_app.toff || U.stat || (!in_range(pda_device, U) && pda_device.loc != U)) //If no message, messaging is off, and we're either dead, unconscious, out of range or not in usr
             return
 
-        if (last_text && world.time < last_text + 5)
+        if (last_text && world.time < last_text + 0.5 SECONDS)
             return
         last_text = world.time
     // check if telecomms I/O route 1459 is stable

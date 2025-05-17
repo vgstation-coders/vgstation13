@@ -357,7 +357,7 @@
 		active = 0
 
 /obj/machinery/computer/HolodeckControl/proc/loadProgram(var/area/A, var/room_name, var/override=FALSE, var/bandaid=FALSE)
-	if(!override && (world.time < (last_change + 25)))
+	if(!override && (world.time < (last_change + 2.5 SECONDS)))
 		visible_message("[bicon(src)] <B>ERROR. Recalibrating projetion apparatus. wait a short moment.</B>")
 		return
 

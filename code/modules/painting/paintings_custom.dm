@@ -214,7 +214,9 @@
 		name = (painting_data.title ? ("\proper[painting_data.title]") : "untitled artwork") + (painting_data.author ? ", [comp ? "[comp] " : ""]by [painting_data.author]" : "[comp ? ", [comp]" : ""]")
 		desc = painting_data.description ? "A small plaque reads: \"<span class='info'>[painting_data.description]\"</span>" : "A painting... But what could it mean?"
 		if (painting_data.copy)
-			desc += "A tag on this artwork indicates that it's a replica reproduced from Nanotrasen's databanks."
+			desc += "\nA tag on this artwork indicates that it's a replica reproduced from Nanotrasen's databanks. "
+			if (painting_data.copy == PAINTING_OC_MODIFIED_COPY)
+				desc += "Seems like someone gave it a fresh coat of paint..."
 		if (render)
 			icon = painting_data.render_on(icon(base_icon, base_icon_state))
 			nanomap = painting_data.render_nanomap(icon(base_icon, "[base_icon_state]-nano"))
@@ -242,7 +244,9 @@
 	unlock_from()
 
 	// Painting info
-	P.set_painting_data(painting_data.Copy())
+	P.set_painting_data(painting_data)
+	painting_data = null //We're no longer the one holding the painting_data, so stop having vars pointing at it
+
 	P.rendered_icon = icon
 	P.rendered_nanomap = nanomap
 	P.base_name = base_name
@@ -439,6 +443,10 @@
 		var/comp = painting_data.get_components()
 		name = (painting_data.title ? ("\proper[painting_data.title]") : "untitled artwork") + (painting_data.author ? ", [comp ? "[comp] " : ""]by [painting_data.author]" : "[comp ? ", [comp]" : ""]")
 		desc = painting_data.description ? "A small plaque reads: \"<span class='info'>[painting_data.description]\"</span>" : "A painting... But what could it mean?"
+		if (painting_data.copy)
+			desc += "\nA tag on this artwork indicates that it's a replica reproduced from Nanotrasen's databanks. "
+			if (painting_data.copy == PAINTING_OC_MODIFIED_COPY)
+				desc += "Seems like someone gave it a fresh coat of paint..."
 		if (render)
 			rendered_icon = painting_data.render_on(icon(base_icon, base_icon_state))
 			rendered_nanomap = painting_data.render_nanomap(icon(base_icon, "[base_icon_state]-nano"))
@@ -456,7 +464,9 @@
 	var/obj/structure/painting/custom/P = new(user.loc)
 
 	// Painting info
-	P.set_painting_data(painting_data.Copy())
+	P.set_painting_data(painting_data)
+	painting_data = null //We're no longer the one holding the painting_data, so stop having vars pointing at it
+
 	P.icon = rendered_icon ? rendered_icon : icon(base_icon, base_icon_state)
 	P.nanomap = rendered_nanomap ? rendered_nanomap : image('icons/effects/32x32.dmi',P,"black")
 	P.icon_state = base_icon_state

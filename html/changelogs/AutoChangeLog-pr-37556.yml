@@ -1,0 +1,5 @@
+author: Kurfursten
+delete-after: true
+changes:
+- tweak: Bloodstones are now extremely vulnerable to melee damage, especially holy
+    melee damage like the null rod.
