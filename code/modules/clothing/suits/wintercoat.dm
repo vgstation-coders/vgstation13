@@ -488,7 +488,7 @@
 	name = "fur-trapper's coat"
 	icon_state = "furtrapper"
 	desc = "He may dress himself up as a trapper, Assemble the tools of the trade, the legends will surely poke fun at him, as God help him his fortune's made. But the forest is cruel to a young bagging fool..."
-	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, VOX_SHAPED)
 	allowed = list(
 		/obj/item/device/flashlight,
 		/obj/item/weapon/tank/emergency_oxygen,
