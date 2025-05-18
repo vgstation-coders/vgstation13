@@ -80,6 +80,7 @@
 	name = "mime shoes"
 	icon_state = "mime"
 	_color = "mime"
+	clothing_flags = SILENT_SHOES
 
 /obj/item/clothing/shoes/mime/biker
 	name = "Biker's shoes"
