@@ -1262,7 +1262,16 @@
 /obj/item/weapon/storage/box/smartbox/clothing_box/banana_set/New()
 	new /obj/item/clothing/suit/banana_suit(src)
 	new /obj/item/clothing/head/banana_hat(src)
+
 	..()
+/obj/item/weapon/storage/box/smartbox/clothing_box/furtrapper_set
+	name = "Fur trapper's outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/furtrapper_set/New()
+	new /obj/item/clothing/head/coonskin_cap(src)
+	new /obj/item/clothing/suit/storage/wintercoat/fur_trapper(src)
+	..()
+
 
 /obj/item/weapon/storage/box/biscuit
 	name = "biscuit box"
