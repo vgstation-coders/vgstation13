@@ -42,7 +42,7 @@
 			<A href='?src=\ref[src];op=temp;val=1'>+</A>
 			<A href='?src=\ref[src];op=temp;val=5'>+</A><BR>"}
 		user.set_machine(src)
-		user << browse("<HEAD><TITLE>Air Conditioner Control Panel</TITLE></HEAD><TT>[dat]</TT>", "window=aircond")
+		user << browse(HTML_SKELETON_TITLE(src.name, "<TT>[dat]</TT>"), "window=aircond")
 		onclose(user, "aircond")
 	else
 		on = !on

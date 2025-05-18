@@ -28,7 +28,7 @@
 	)
 
 	RefreshParts()
-	
+
 /obj/machinery/pipedispenser/RefreshParts()
 	var/manipulator_count = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
@@ -110,7 +110,7 @@
 "}
 //What number the make points to is in the define # at the top of construction.dm in same folder
 
-	user << browse("<HEAD><TITLE>[src]</TITLE></HEAD><TT>[dat]</TT>", "window=pipedispenser")
+	user << browse(HTML_SKELETON_TITLE(src, "<TT>[dat]</TT>"), "window=pipedispenser")
 	onclose(user, "pipedispenser")
 	return
 
@@ -243,7 +243,7 @@ Nah
 <A href='?src=\ref[src];dmake=[DISP_END_CHUTE]'>Chute</A><BR>
 "}
 
-	user << browse("<HEAD><TITLE>[src]</TITLE></HEAD><TT>[dat]</TT>", "window=pipedispenser")
+	user << browse(HTML_SKELETON_TITLE(src, "<TT>[dat]</TT>"), "window=pipedispenser")
 	return
 
 // 0=straight, 1=bent, 2=junction-j1, 3=junction-j2, 4=junction-y, 5=trunk

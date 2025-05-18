@@ -146,9 +146,9 @@ function SetMusic(url, time, volume) {
 // Actually pop open the player in the background.
 /datum/media_manager/proc/open()
 	owner << browse(null, "window=[window_odd]")
-	owner << browse(playerstyle, "window=[window_odd]")
+	owner << browse(HTML_SKELETON(playerstyle), "window=[window_odd]")
 	owner << browse(null, "window=[window_even]")
-	owner << browse(playerstyle, "window=[window_even]")
+	owner << browse(HTML_SKELETON(playerstyle), "window=[window_even]")
 	send_update()
 
 // Tell the player to play something via JS.

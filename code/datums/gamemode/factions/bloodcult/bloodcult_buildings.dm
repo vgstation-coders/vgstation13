@@ -596,7 +596,8 @@
 				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 				if (!cult)
 					return
-				var/dat = {"<body style="color:#FFFFFF" bgcolor="#110000">"}
+				var/dat = ""
+				style = "color:#FFFFFF" bgcolor="#110000"
 				dat += "<b>Our cult can currently grow up to [cult.cultist_cap] members.</b>"
 				dat += "<ul>"
 				for (var/datum/role/cultist/C in cult.members)
@@ -646,8 +647,8 @@
 								else if (C.isDead())
 									extra = " - <span style='color:#FF0000'>DEAD</span>"
 							dat += "<li><span style='color:#FFFF00'><b>[C.real_name]</b></span></li> - Prisoner of [gaoler.name][extra]"
-				dat += {"</ul></body>"}
-				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=600x400")
+				dat += {"</ul>"}
+				user << browse(HTML_SKELETON_TITLE_STYLE("Cult Roster", dat, style), "window=cultroster;size=600x400")
 				onclose(user, "cultroster")
 			if ("Look through Veil")
 				if(user.hud_used && user.hud_used.holomap_obj)
