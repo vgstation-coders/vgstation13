@@ -142,7 +142,7 @@ Auto Patrol: []"},
 "<A href='?src=\ref[src];operation=patrol'>[auto_patrol ? "On" : "Off"]</A>" )
 
 
-	user << browse(HTML_SKELETON_TITLE_STYLE("Securiton v2.5 controls", dat), "window=autosec")
+	user << browse(HTML_SKELETON_TITLE("Securiton v2.5 controls", dat), "window=autosec")
 	onclose(user, "autosec")
 	return
 

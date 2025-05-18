@@ -132,7 +132,7 @@
 				else
 		else
 			dat += text("<A href='?src=\ref[];login=1'>{Log In}</A>", src)
-	user << browse(HTML_SKELETON_TITLE_STYLE("Medical Records", "<TT>[dat]</TT>"), "window=med_rec")
+	user << browse(HTML_SKELETON_TITLE("Medical Records", "<TT>[dat]</TT>"), "window=med_rec")
 	onclose(user, "med_rec")
 	return
 

@@ -597,7 +597,7 @@
 				if (!cult)
 					return
 				var/dat = ""
-				style = "color:#FFFFFF" bgcolor="#110000"
+				var/style = {" "color:#FFFFFF" bgcolor="#110000" "}
 				dat += "<b>Our cult can currently grow up to [cult.cultist_cap] members.</b>"
 				dat += "<ul>"
 				for (var/datum/role/cultist/C in cult.members)
