@@ -199,7 +199,7 @@
 			stepstaken = 0
 			if (!sounds_to_play)
 				return
-			playsound(src, pick(sounds_to_play), step_volume, 1)
+			playsound(src, pick(sounds_to_play), step_volume, 1, -4)
 			
 
 
