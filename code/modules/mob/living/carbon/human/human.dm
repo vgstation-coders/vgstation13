@@ -9,7 +9,9 @@
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
-
+	var/footsound = FOOTSOUND_HUMAN
+	var/stepstaken = 0
+	var/modulo_step = 2
 	var/fartCooldown = 20 SECONDS
 
 /mob/living/carbon/human/dummy
@@ -42,6 +44,7 @@
 /mob/living/carbon/human/vox/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Vox")
 	my_appearance.h_style = "Short Vox Quills"
+	footsound = FOOTSOUND_VOX
 	regenerate_icons()
 
 /mob/living/carbon/human/diona/New(var/new_loc, delay_ready_dna = 0)
@@ -91,6 +94,7 @@
 /mob/living/carbon/human/insectoid/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Insectoid")
 	my_appearance.h_style = "Insectoid Antennae"
+	footsound = FOOTSOUND_VOX
 	regenerate_icons()
 
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
