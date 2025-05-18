@@ -108,7 +108,7 @@ air2.volume
 				[round(target_pressure,0.1)]kPa | <a href='?src=\ref[src];set_press=1'>Change</a>
 				"}
 
-	user << browse(HTML_SKELETON_TITLE(src.name, "<TT>[dat]</TT>"), "window=atmo_pump")
+	user << browse(HTML_SKELETON_TITLE("[src.name] control", "<TT>[dat]</TT>"), "window=atmo_pump")
 	onclose(user, "atmo_pump")
 
 /obj/machinery/atmospherics/binary/pump/initialize()

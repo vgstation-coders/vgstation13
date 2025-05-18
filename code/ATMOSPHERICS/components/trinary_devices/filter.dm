@@ -135,7 +135,7 @@
 	//else
 	//	src.on != src.on
 */
-	user << browse(HTML_SKELETON_TITLE(src.name, "<TT>[dat]</TT>"), "window=atmo_filter")
+	user << browse(HTML_SKELETON_TITLE("[src.name] control", "<TT>[dat]</TT>"), "window=atmo_filter")
 	onclose(user, "atmo_filter")
 	return
 

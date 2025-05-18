@@ -107,7 +107,7 @@
 				<a href='?src=\ref[src];node2_c=0.1'>+</a>
 				"}
 
-	user << browse(HTML_SKELETON_TITLE(src.name, "<TT>[dat]</TT>"), "window=atmo_mixer;size=450x110")
+	user << browse(HTML_SKELETON_TITLE("[src.name] control", "<TT>[dat]</TT>"), "window=atmo_mixer;size=450x110")
 	onclose(user, "atmo_mixer")
 	return
 
