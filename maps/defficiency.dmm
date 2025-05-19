@@ -10260,7 +10260,8 @@
 	department = "Medbay";
 	departmentType = 1;
 	name = "Medbay RC";
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Medbay Storage"
 	},
 /obj/structure/table/glass,
 /turf/simulated/floor{
@@ -13146,7 +13147,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_x = 32
+	pixel_x = 32;
+	phone_name = "Arrivals Checkpoint"
 	},
 /obj/machinery/light{
 	dir = 4
@@ -18885,7 +18887,8 @@
 	department = "Medbay";
 	departmentType = 1;
 	name = "Medbay RC";
-	pixel_x = -32
+	pixel_x = -32;
+	phone_name = "Patient Rooms"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -21513,7 +21516,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Toxins"
 	},
 /obj/item/device/transfer_valve{
 	pixel_x = 5
@@ -24608,7 +24612,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Brig Medbay"
 	},
 /obj/item/weapon/paper_bin/red{
 	pixel_x = 1;
@@ -25554,12 +25559,6 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/bar)
 "aWm" = (
-/obj/machinery/requests_console{
-	department = "Kitchen";
-	departmentType = 2;
-	name = "Requests Console";
-	pixel_y = 30
-	},
 /obj/machinery/cooking/still,
 /turf/simulated/floor/wood,
 /area/crew_quarters/bar)
@@ -27943,6 +27942,13 @@
 "baH" = (
 /obj/structure/table,
 /obj/machinery/chem_dispenser/brewer/mapping,
+/obj/machinery/requests_console{
+	department = "Bar";
+	departmentType = 2;
+	name = "Requests Console";
+	pixel_x = -30;
+	phone_name = "Bar"
+	},
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -30331,7 +30337,8 @@
 	department = "Medbay";
 	departmentType = 1;
 	name = "Medbay RC";
-	pixel_x = -32
+	pixel_x = -32;
+	phone_name = "Medbay Tubes"
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "oxygen";
@@ -33104,7 +33111,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_y = 28
+	pixel_y = 28;
+	phone_name = "Research And Development"
 	},
 /obj/machinery/light{
 	dir = 1
@@ -37268,7 +37276,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "Quartermaster's Office"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 10
@@ -60767,7 +60776,10 @@
 "ckZ" = (
 /obj/machinery/computer/secure_data/detective_computer,
 /obj/machinery/requests_console{
-	pixel_x = 32
+	pixel_x = 32;
+	department = "Security";
+	departmentType = 5;
+	phone_name = "Detective's Office"
 	},
 /turf/simulated/floor/carpet,
 /area/security/detectives_office)
@@ -62001,7 +62013,8 @@
 /area/storage/nuke_storage)
 "cnv" = (
 /obj/machinery/requests_console{
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Law Office"
 	},
 /turf/simulated/floor{
 	icon_state = "cult"
@@ -71206,7 +71219,8 @@
 	department = "Bridge";
 	departmentType = 5;
 	name = "Bridge RC";
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Heads of Staff Meeting Room"
 	},
 /turf/simulated/floor/wood,
 /area/bridge/meeting_room)
@@ -71509,7 +71523,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Brig Lobby"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -78203,7 +78218,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Warden's Office"
 	},
 /turf/simulated/floor{
 	dir = 4;

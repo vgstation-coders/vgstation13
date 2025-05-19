@@ -10618,7 +10618,10 @@
 	})
 "axH" = (
 /obj/machinery/requests_console{
-	pixel_y = 32
+	pixel_y = 32;
+	department = "Security";
+	departmentType = 5;
+	phone_name = "Detective's Office"
 	},
 /obj/machinery/computer/secure_data/detective_computer,
 /turf/simulated/floor{
@@ -21549,7 +21552,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_x = 32
+	pixel_x = 32;
+	phone_name = "Quartermaster's Office"
 	},
 /obj/item/weapon/coin/silver{
 	pixel_x = 8;
@@ -22411,7 +22415,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Cargo Lobby"
 	},
 /turf/simulated/floor{
 	dir = 9;
@@ -27893,7 +27898,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "Arrivals Checkpoint"
 	},
 /obj/machinery/computer/card,
 /turf/simulated/floor,
@@ -34839,7 +34845,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_y = -30
+	pixel_y = -30;
+	phone_name = "Disposals"
 	},
 /obj/item/stack/package_wrap{
 	pixel_x = 2;
@@ -42281,7 +42288,8 @@
 	department = "Atmospherics";
 	departmentType = 4;
 	name = "Atmos RC";
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Atmospherics Lobby"
 	},
 /obj/machinery/computer/general_air_control{
 	frequency = 1443;
@@ -62041,7 +62049,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "Telescience"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -62800,6 +62809,11 @@
 	dir = 4
 	},
 /obj/machinery/light/small,
+/obj/machinery/requests_console{
+	department = "Medbay";
+	pixel_y = -30;
+	phone_name = "Medbay Lobby"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -67655,7 +67669,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_y = -30
+	pixel_y = -30;
+	phone_name = "Research And Development"
 	},
 /turf/simulated/floor{
 	dir = 1
@@ -74991,7 +75006,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_y = -30
+	pixel_y = -30;
+	phone_name = "Toxins"
 	},
 /obj/machinery/light,
 /obj/structure/table,
@@ -103605,7 +103621,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_x = -32
+	pixel_x = -32;
+	phone_name = "Security Break Room"
 	},
 /turf/simulated/floor{
 	dir = 10;
