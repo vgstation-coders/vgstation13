@@ -72,6 +72,9 @@
 
 	if (ticker && ticker.mode)
 		ticker.mode.mob_destroyed(src)
+	QDEL_NULL(last_thrown_by)
+	QDEL_NULL(last_bumped_by)
+	QDEL_NULL(lastassailant)
 	..()
 
 /mob/projectile_check()
@@ -1877,7 +1880,17 @@ Use this proc preferably at the end of an equipment loadout
 	if(SS)
 		SS.supermatter_act(source)
 	else
-
+		if (client)
+			if(pulledby) // If we have a client, we add attack logs
+				add_logs(pulledby, src, "pulled into a suppermatter object", TRUE, source, get_coordinates_string(source))
+			else if(last_bumped_by_timestamp - 0.1 SECONDS <= world.time <= last_bumped_by_timestamp + 0.1 SECONDS) // If got bumped into a supermatter
+				var/mob/hostile = last_bumped_by.get()
+				add_logs(hostile, src, "bumped into a supermatter object", TRUE, source, get_coordinates_string(source))
+			else if(last_thrown_by_timestamp - 0.1 SECONDS <= world.time <= last_thrown_by_timestamp + 2 SECONDS) // If got thrown into a supermatter
+				var/mob/hostile = last_thrown_by.get()
+				add_logs(hostile, src, "thrown into a supermatter object", TRUE, source, get_coordinates_string(source))
+			else
+				attack_log += "\[[time_stamp()]\]: walked into supermatter (no bumper/no pusher)"
 		if(severity == SUPERMATTER_DUST)
 			dust()
 			return 1

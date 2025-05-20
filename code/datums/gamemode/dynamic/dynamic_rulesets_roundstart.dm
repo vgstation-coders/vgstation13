@@ -496,8 +496,7 @@ Assign your candidates in choose_candidates() instead.
 	name = "Malfunctioning AI"
 	role_category = /datum/role/malfAI
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
-	restricted_from_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Research Director", "Chief Engineer")
-	job_priority = list("AI","Cyborg")
+	restricted_from_jobs = list("Captain","Head of Personnel","Head of Security","Chief Engineer","Research Director","Chief Medical Officer","Station Engineer","Atmospheric Technician","Mechanic","Medical Doctor","Geneticist","Virologist","Paramedic","Chemist","Orderly","Research Director","Scientist","Roboticist","Bartender","Botanist","Chef","Janitor","Librarian","Internal Affairs Agent","Chaplain","Clown","Mime","Assistant","Quartermaster","Cargo Technician","Shaft Miner","Warden","Detective","Security Officer","Cyborg", "Mobile MMI")
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
