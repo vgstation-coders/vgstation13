@@ -163,6 +163,10 @@
 		//FOOTSTEPS
 		if (!on_foot()) //are our feet on the ground?
 			return
+		if (m_intent != "run")
+			return
+		if (mind?.miming)
+			return
 		stepstaken++
 		
 		var/modulo = modulo_step
@@ -172,7 +176,7 @@
 				return
 			modulo = S.modulo_steps<modulo? S.modulo_steps : modulo
 		if (stepstaken % modulo == 0) //once every other step by default, so that it doesn't spam too much (shoes override)
-			var/step_volume = m_intent == "run" ? 50 : 20
+			var/step_volume = 50
 			var/list/sounds_to_play
 			
 			var/turf/T = get_turf(src)
