@@ -323,7 +323,7 @@
 
 			//Lost the paper or lost consciousness
 			if(!Adjacent(usr, 1) || usr.isUnconscious()) //the 1 means that the paper can be in one other item and be written on
-				to_chat(usr, "<span class='warning'>You are to unable to write on this paper.</span>")
+				to_chat(usr, "<span class='warning'>You are unable to write on this paper.</span>")
 				continue
 
 		while(isnull(new_text))
