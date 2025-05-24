@@ -97,15 +97,15 @@ var/auxtools_path
 	TgsNew(new /datum/tgs_event_handler, TGS_SECURITY_TRUSTED)
 
 /world/proc/InitializeLogs()
-	investigations[I_HREFS] = new /datum/log_controller(I_HREFS, filename="data/logs/[date_string] hrefs.htm", persist=TRUE)
-	investigations[I_ATMOS] = new /datum/log_controller(I_ATMOS, filename="data/logs/[date_string] atmos.htm", persist=TRUE)
-	investigations[I_CHEMS] = new /datum/log_controller(I_CHEMS, filename="data/logs/[date_string] chemistry.htm", persist=TRUE)
-	investigations[I_WIRES] = new /datum/log_controller(I_WIRES, filename="data/logs/[date_string] wires.htm", persist=TRUE)
-	investigations[I_GHOST] = new /datum/log_controller(I_GHOST, filename="data/logs/[date_string] poltergeist.htm", persist=TRUE)
-	investigations[I_ARTIFACT] = new /datum/log_controller(I_ARTIFACT, filename="data/logs/[date_string] artifact.htm", persist=TRUE)
-	investigations[I_RCD] = new /datum/log_controller(I_RCD, filename="data/logs/[date_string] rcd.htm", persist=TRUE)
-
 	date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
+	investigations[I_HREFS] = new /datum/log_controller(I_HREFS, TRUE, "data/logs/[date_string] hrefs.htm")
+	investigations[I_ATMOS] = new /datum/log_controller(I_ATMOS, TRUE, "data/logs/[date_string] atmos.htm")
+	investigations[I_CHEMS] = new /datum/log_controller(I_CHEMS, TRUE, "data/logs/[date_string] chemistry.htm")
+	investigations[I_WIRES] = new /datum/log_controller(I_WIRES, TRUE, "data/logs/[date_string] wires.htm")
+	investigations[I_GHOST] = new /datum/log_controller(I_GHOST, TRUE, "data/logs/[date_string] poltergeist.htm")
+	investigations[I_ARTIFACT] = new /datum/log_controller(I_ARTIFACT, TRUE, "data/logs/[date_string] artifact.htm")
+	investigations[I_RCD] = new /datum/log_controller(I_RCD, TRUE, "data/logs/[date_string] rcd.htm")
+
 	diary = file("data/logs/[date_string].log")
 	panicfile = new/savefile("data/logs/profiling/proclogs/[date_string].sav")
 	diaryofmeanpeople = file("data/logs/[date_string] Attack.log")
