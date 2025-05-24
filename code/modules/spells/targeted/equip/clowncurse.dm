@@ -6,13 +6,13 @@
 	specialization = SSOFFENSIVE
 
 	school = "evocation"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	invocation = "L' C'MMEDIA E F'NITA!"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 1
 	spell_flags = WAIT_FOR_CLICK //SELECTABLE hinders you here, since the spell has a range of 1 and only works on adjacent guys. Having the TARGETTED flag here makes it easy for your target to run away from you!
 
-	cooldown_min = 50
+	cooldown_min = 5 SECONDS
 
 	sparks_spread = 1
 	sparks_amt = 4

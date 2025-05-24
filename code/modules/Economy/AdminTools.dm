@@ -100,4 +100,4 @@
                     </tr>"}
             dat += "</table>"
 
-    usr << browse(dat, "window=econ_panel")
+    usr << browse(HTML_SKELETON(dat), "window=econ_panel")

@@ -7,7 +7,7 @@
 	user_type = USER_TYPE_SPIDER
 	hud_state = "spiderling_evolution"
 	override_base = "spider"
-	charge_max = 0
+	charge_cooldown_max = 0
 	spell_flags = 0
 	range = 0
 
@@ -25,9 +25,9 @@
 	desc = "Weave a spider web over the floor, potentially blocking non-spiders walking through them."
 	user_type = USER_TYPE_SPIDER
 
-	charge_max = 0
+	charge_cooldown_max = 0
 	spell_flags = 0
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	summon_type = list(/obj/effect/spider/stickyweb)
 	range = 0
 
@@ -49,7 +49,7 @@
 	desc = "Wrap creatures and items on your tile inside a cocoon for later. You will also take a bite out of the creatures trapped this way."
 	user_type = USER_TYPE_SPIDER
 
-	charge_max = 0
+	charge_cooldown_max = 0
 	spell_flags = 0
 	range = 0
 
@@ -79,7 +79,7 @@
 	desc = "Lay some eggs that will give birth to more spiderlings after a few minutes."
 	user_type = USER_TYPE_SPIDER
 
-	charge_max = 0
+	charge_cooldown_max = 0
 	spell_flags = 0
 	range = 0
 
@@ -100,7 +100,7 @@
 	user_type = USER_TYPE_SPIDER
 	hud_state = "spider_queen"
 	override_base = "spider"
-	charge_max = 0
+	charge_cooldown_max = 0
 	spell_flags = 0
 	range = 0
 

@@ -3,7 +3,7 @@
 	desc = "Split your body into two lifeforms."
 	abbreviation = "SP"
 	hud_state = "split"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	cooldown_min = 30 SECONDS
 	still_recharging_msg = "<span class='warning'>We are not ready to do that!</span>"
 	chemcost = 40

@@ -7,23 +7,23 @@
 	summon_type = list(/mob/living/simple_animal/hostile/pitbull/summoned_pitbull)
 	summon_amt = 3
 
-	price = Sp_BASE_PRICE
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 2, Sp_POWER = 1) //empower makes them SMASHED and SLAMMED
-	charge_max = 300
-	cooldown_reduc = 100
-	cooldown_min = 100
+	price = SP_BASE_PRICE
+	level_max = list(SP_TOTAL = 3, SP_SPEED = 2, SP_POWER = 1) //empower makes them SMASHED and SLAMMED
+	charge_cooldown_max = 30 SECONDS
+	cooldown_reduc = 10 SECONDS
+	cooldown_min = 10 SECONDS
 	invocation = "GR'T W'TH K'DS"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	spell_flags = NEEDSCLOTHES
 	hud_state = "pitbull"
 	cast_sound = 'sound/voice/pitbullbark.ogg'
-	quicken_price = Sp_BASE_PRICE
+	quicken_price = SP_BASE_PRICE
 	var/empowered
 
 /spell/aoe_turf/conjure/pitbull/empower_spell()
 	..()
 	empowered += 1
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 	. = "You have perfected the SMASHED and SLAMMED summon."
 
 /spell/aoe_turf/conjure/pitbull/invocation(mob/user, list/targets)

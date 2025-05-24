@@ -662,7 +662,7 @@
 
 	dat += "</table>"
 	dat += "</center>"
-	src << browse(dat, "window=latechoices;size=360x640;can_close=1")
+	src << browse(HTML_SKELETON(dat), "window=latechoices;size=360x640;can_close=1")
 
 
 /mob/new_player/proc/create_human(var/datum/preferences/prefs)
@@ -829,14 +829,14 @@
 	<h4>High Job Preferences</h4>"}
 	dat += job_master.display_prediction()
 
-	src << browse(dat, "window=manifest;size=370x420;can_close=1")
+	src << browse(HTML_SKELETON(dat), "window=manifest;size=370x420;can_close=1")
 
 /mob/new_player/proc/ViewManifest()
 	var/dat = {"<html><body>
 <h4>Crew Manifest</h4>"}
 	dat += data_core.get_manifest(OOC = 1)
 
-	src << browse(dat, "window=manifest;size=370x420;can_close=1")
+	src << browse(HTML_SKELETON(dat), "window=manifest;size=370x420;can_close=1")
 
 /mob/new_player/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0

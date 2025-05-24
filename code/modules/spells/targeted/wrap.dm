@@ -4,14 +4,14 @@
 	user_type = USER_TYPE_ARTIFACT
 
 	school = "transmutation"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK
 	range = 7
 	max_targets = 1
 	invocation = "W'APPIN' PR'SN'TS!"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	amt_stunned = 5//just exists to make sure the giftwrap "catches" them
-	cooldown_min = 30 //100 deciseconds reduction per rank
+	cooldown_min = 3 SECONDS //10 seconds reduction per rank
 	valid_targets = list(/mob/living)
 
 	hud_state = "wrap"

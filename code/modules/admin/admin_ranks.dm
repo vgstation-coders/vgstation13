@@ -167,7 +167,6 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 			config.admin_legacy_system = 1
 			load_admins()
 			return
-
 	#ifdef TESTING
 	var/msg = "Admins Built:\n"
 	for(var/ckey in admin_datums)
@@ -176,7 +175,7 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 		if(D)
 			rank = D.rank
 		msg += "\t[ckey] - [rank]\n"
-	//testing(msg)
+	testing(msg)
 	#endif
 
 #ifdef TESTING

@@ -468,14 +468,6 @@ to destroy them and players will be able to make replacements.
 	icon_state = "door_electronics"
 	//origin_tech = Tc_PROGRAMMING + "=2"
 
-/obj/item/weapon/circuitboard/airlock
-	name = "Circuit board (Airlock)"
-	desc = "A circuit board used to operate airlocks and their access controls."
-	board_type= OTHER
-	icon = 'icons/obj/doors/door_assembly.dmi'
-	icon_state = "door_electronics"
-	//origin_tech = Tc_PROGRAMMING + "=2"
-
 /obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (R&D Server)"
 	desc = "A circuit board used to run a R&D server."

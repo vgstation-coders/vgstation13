@@ -5,7 +5,7 @@
 
 	school = "evocation"
 	invocation = "M'tch st'ck"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -23,7 +23,7 @@
 
 	school = "evocation"
 	invocation = "s'ap s'ds"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -44,7 +44,7 @@
 
 	school = "evocation"
 	invocation = "bl'odso'k"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -62,7 +62,7 @@
 
 	school = "evocation"
 	invocation = "Wh't 'f 't w's p'rpl'?!"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 6
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -80,7 +80,7 @@
 
 	school = "evocation"
 	invocation = "Id'e h'nds m'k' l'ght w'rk"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER
 	level_max = list()
@@ -98,7 +98,7 @@
 	var/static/list/trinkets_bauble = list(/obj/item/weapon/vectorreceiver, /obj/item/weapon/virusdish, /obj/item/weapon/shard, /obj/item/weapon/shard/plasma, /obj/item/weapon/ribbon, /obj/item/weapon/pai_cable, /obj/item/weapon/gavelblock, /obj/item/weapon/dart_cartridge, /obj/item/stack/chains, /obj/item/stack/teeth, /obj/item/stack/teeth/gold, /obj/item/gun_part/silencer, /obj/item/ice_crystal, /obj/item/claypot, /obj/item/cross_guard, /obj/item/sword_handle, /obj/item/weapon/dice/d00, /obj/item/weapon/dice/d10, /obj/item/weapon/dice/d12, /obj/item/weapon/dice/d2, /obj/item/weapon/dice/d20, /obj/item/weapon/dice/d4, /obj/item/weapon/dice/d8, /obj/item/weapon/dice/loaded/d20)+existing_typesof(/obj/item/stack/ore)+existing_typesof(/obj/item/ornament)-list(/obj/item/stack/ore)
 	var/list/categories = list("Coin", "Card", "Toy", "Accessory", "Gadget", "Grenade", "Widget", "Bauble", "Bullet")
 	var/item_choice = null
-	var/duration = 300
+	var/duration = 30 SECONDS
 	var/cat_choice = input("Select a kind of 'trinket'.") in categories | null
 	switch(cat_choice)
 		if(null)
@@ -107,28 +107,28 @@
 			item_choice = pick(trinkets_coin)
 		if("Card")
 			item_choice = pick(trinkets_card)
-			duration = 200
+			duration = 20 SECONDS
 		if("Grenade")
 			item_choice = pick(trinkets_grenade)
-			duration = 100
+			duration = 10 SECONDS
 		if("Toy")
 			item_choice = pick(trinkets_toy)
-			duration = 600
+			duration = 60 SECONDS
 		if("Bullet")
 			item_choice = pick(trinkets_bullet)
-			duration = 200
+			duration = 20 SECONDS
 		if("Accessory")
 			item_choice = pick(trinkets_accessory)
-			duration = 1800
+			duration = 180 SECONDS
 		if("Gadget")
 			item_choice = pick(trinkets_gadget)
-			duration = 1200
+			duration = 120 SECONDS
 		if("Widget")
 			item_choice = pick(trinkets_widget)
-			duration = 1200
+			duration = 120 SECONDS
 		if("Bauble")
 			item_choice = pick(trinkets_bauble)
-			duration = 1800
+			duration = 180 SECONDS
 	var/obj/item/I = new item_choice
 	user.put_in_hands(I)
 	spawn(duration)
@@ -144,7 +144,7 @@
 
 	school = "evocation"
 	invocation = "sp'cy k'ych'in"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -173,7 +173,7 @@
 
 	school = "evocation"
 	invocation = "I'ce c'ld!"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()
@@ -201,7 +201,7 @@
 
 	school = "evocation"
 	invocation = "Splash"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 4
 	spell_flags = INCLUDEUSER|WAIT_FOR_CLICK
 	level_max = list()

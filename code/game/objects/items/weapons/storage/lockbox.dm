@@ -1,6 +1,6 @@
 /obj/item/weapon/storage/lockbox
 	name = "lockbox"
-	desc = "A locked box."
+	desc = "A box that accepts and uses locking mechanisms."
 	icon_state = "lockbox+l"
 	item_state = "syringe_kit"
 	w_class = W_CLASS_LARGE
@@ -10,14 +10,37 @@
 	req_one_access = list(access_armory)
 	var/locked = 1
 	var/broken = 0
+	var/startswithelectronics = TRUE
 	var/icon_locked = "lockbox+l"
 	var/icon_closed = "lockbox"
 	var/icon_broken = "lockbox+b"
 	var/tracked_access = "It doesn't look like it's ever been used."
+	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	health = 50
+	starting_materials = list(MAT_PLASMA = 1000, MAT_IRON = 1875)
+
+/obj/item/weapon/storage/lockbox/New()
+	. = ..()
+	if(startswithelectronics)
+		electronics = new(src)
+		if(req_access)
+			electronics.conf_access = req_access
+		else if(req_one_access)
+			electronics.conf_access = req_one_access
+			electronics.one_access = 1
+
+/obj/item/weapon/storage/lockbox/Destroy()
+	QDEL_NULL(electronics)
+	. = ..()
+
+/obj/item/weapon/storage/lockbox/nolock
+	req_one_access = null
+	startswithelectronics = FALSE
+	locked = FALSE
+	icon_state = "lockbox+b"
 
 /obj/item/weapon/storage/lockbox/can_use()
-	return broken || !locked
+	return broken || !locked || !electronics
 
 /obj/item/weapon/storage/lockbox/attack_robot(var/mob/user)
 	to_chat(user, "<span class='rose'>This box was not designed for use by non-organics.</span>")
@@ -29,10 +52,7 @@
 		locked = !locked
 		user.visible_message("<span class='notice'>The lockbox has been [locked ? null : "un"]locked by [user].</span>", "<span class='rose'>You [locked ? null : "un"]lock the box.</span>")
 		tracked_access = "The tracker reads: 'Last locked by [id_name || get_id_name(user)].'"
-		if(locked)
-			icon_state = icon_locked
-		else
-			icon_state = icon_closed
+		update_icon()
 	else
 		to_chat(user, "<span class='notice'>Access Denied.</span>")
 		return FALSE
@@ -66,33 +86,71 @@
 		qdel(src)
 
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W, mob/user)
-	if (isID(W))
-		var/obj/item/weapon/card/id/I = W
-		if(broken)
-			to_chat(user, "<span class='rose'>It appears to be broken.</span>")
-			return
-		return toggle(user, I.registered_name)
-	if (isPDA(W))
-		var/obj/item/device/pda/P = W
-		var/obj/item/weapon/card/id/I = P.id
-		if (!I)
+	var/obj/item/weapon/card/id/I = W.GetID()
+	if (I)
+		if(!electronics)
+			to_chat(user, "<span class='warning'>There is nothing to unlock. Put an access electronics board in this to make it lockable.</span>")
 			return
 		if(broken)
-			to_chat(user, "<span class='rose'>It appears to be broken.</span>")
+			to_chat(user, "<span class='warning'>It appears to be broken.</span>")
 			return
 		return toggle(user, I.registered_name)
-	if(!locked)
+	if(!electronics && istype(W,/obj/item/weapon/circuitboard/airlock))
+		if(W.icon_state == "door_electronics_smoked")
+			to_chat(user, "<span class='warning'>Repair \the [W] before putting it in!</span>")
+		else if(user.drop_item(W,src))
+			electronics = W
+			to_chat(user, "<span class='notice'>You add \the [electronics] to \the [src].</span>")
+			playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
+			if(electronics.conf_access?.len)
+				if(electronics.one_access)
+					req_one_access = electronics.conf_access
+				else
+					req_access = electronics.conf_access
+			broken = 0
+			locked = 0
+			update_icon()
+			return
+	else if(broken && issolder(W))
+		var/obj/item/tool/solder/S = W
+		if(S.remove_fuel(4,user))
+			S.playtoolsound(loc, 100)
+			if(do_after(user, src,4 SECONDS * S.work_speed))
+				S.playtoolsound(loc, 100)
+				broken = 0
+				locked = 0
+				to_chat(user, "<span class='notice'>You repair the electronics inside the locking mechanism!</span>")
+				update_icon()
+		return
+	else if(!locked)
+		if(W.is_screwdriver() && electronics)
+			to_chat(user, "<span class='notice'>You unsecure \the [electronics] from \the [src].</span>")
+			W.playtoolsound(loc, 50)
+			electronics.forceMove(loc)
+			user.put_in_hands(electronics)
+			req_access = list()
+			req_one_access = list()
+			if(broken)
+				electronics.icon_state = "door_electronics_smoked"
+			electronics = null
+			broken = 0
+			locked = 0
+			update_icon()
+			return
 		. = ..()
 	else
 		to_chat(user, "<span class='warning'>It's locked!</span>")
 
+/obj/item/weapon/storage/lockbox/obj_shows_to(atom/A)
+	return A != electronics
+
 /obj/item/weapon/storage/lockbox/emag_act(var/mob/user)
-	if (broken)
+	if (!electronics || broken)
 		return FALSE
 	broken = 1
 	locked = 0
 	desc = "It appears to be broken."
-	icon_state = src.icon_broken
+	update_icon()
 	user.visible_message("<span class='danger'>\The [src] has been broken by \the [user] with an electromagnetic card!</span>", "<span class='notice'>You break open \the [src].</span>", "<span class='notice'>You hear a faint click sound.</span>", range = 3)
 	return TRUE
 
@@ -166,7 +224,7 @@
 
 /obj/item/weapon/storage/lockbox/update_icon()
 	..()
-	if (broken)
+	if (!electronics || broken)
 		icon_state = src.icon_broken
 	else if(locked)
 		icon_state = src.icon_locked
@@ -237,28 +295,11 @@
 
 /obj/item/weapon/storage/lockbox/examine(mob/user)
 	..()
+	if(!electronics)
+		to_chat(user, "<span class='info'>It has no access electronics and cannot be locked.</span>")
+	else if(broken)
+		to_chat(user, "<span class='info'>The access locking is broken!</span>")
 	to_chat(user, "<span class='info'>[tracked_access]</span>")
-
-/obj/item/weapon/storage/lockbox/unlockable/attackby(obj/O as obj, mob/user as mob)
-	if (istype(O, /obj/item/weapon/card/id))
-		var/obj/item/weapon/card/id/ID = O
-		if(src.broken)
-			to_chat(user, "<span class='rose'>It appears to be broken.</span>")
-			return
-		else
-			src.locked = !( src.locked )
-			if(src.locked)
-				src.icon_state = src.icon_locked
-				to_chat(user, "<span class='rose'>You lock the [src.name]!</span>")
-				tracked_access = "The tracker reads: 'Last locked by [ID.registered_name]'."
-				return
-			else
-				src.icon_state = src.icon_closed
-				to_chat(user, "<span class='rose'>You unlock the [src.name]!</span>")
-				tracked_access = "The tracker reads: 'Last unlocked by [ID.registered_name].'"
-				return
-	else
-		. = ..()
 
 /obj/item/weapon/storage/lockbox/unlockable/peace
 	name = "semi-secure lockbox (pax implants)"
@@ -281,8 +322,10 @@
 	icon_closed = "coinbox"
 	icon_broken = "coinbox+b"
 
-/obj/item/weapon/storage/lockbox/coinbox/allaccess	
+/obj/item/weapon/storage/lockbox/coinbox/nolock
 	req_one_access = null
+	startswithelectronics = FALSE
+	icon_state = "coinbox+b"
 
 /obj/item/weapon/storage/lockbox/lawgiver
 	name = "lockbox (lawgiver)"
@@ -314,7 +357,7 @@
 	if(!Adjacent(usr) || usr.loc == src)
 		return
 
-	if(src.broken)
+	if(!src.electronics || src.broken)
 		return
 
 	if (ishuman(usr))
@@ -342,6 +385,7 @@
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	storage_slots = 7
 	req_one_access = list()
+	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 200)
 	var/icon_alt = ""
 
 /obj/item/weapon/storage/lockbox/diskettebox/New()
@@ -352,15 +396,24 @@
 	icon_state = "map_diskbox_open"
 	locked = FALSE
 
+/obj/item/weapon/storage/lockbox/diskettebox/nolock
+	startswithelectronics = FALSE
+	locked = FALSE
+
 /obj/item/weapon/storage/lockbox/diskettebox/large
 	name = "large diskette box"
 	desc = "A bigger lockable box for storing data disks."
 	icon_state = "map_diskbox_large"
 	icon_alt = "_large"
 	storage_slots = 14
+	starting_materials = list(MAT_GLASS = 100, MAT_IRON = 400)
 
 /obj/item/weapon/storage/lockbox/diskettebox/large/open
 	icon_state = "map_diskbox_large_open"
+	locked = FALSE
+	
+/obj/item/weapon/storage/lockbox/diskettebox/large/nolock
+	startswithelectronics = FALSE
 	locked = FALSE
 
 //---------------------------------PRESETS---------------------------------
@@ -421,12 +474,12 @@
 	overlays.len = 0
 	icon_state = "diskbox[icon_alt]"
 	item_state = "diskbox"
-	if (!broken && !locked)
-		overlays += image('icons/obj/storage/datadisks.dmi',src,"cover[icon_alt]_open")
+	if (!broken && !locked && electronics)
+		overlays += image(icon,src,"cover[icon_alt]_open")
 
 	var/i = 0
 	for (var/obj/item/weapon/disk/disk in contents)
-		var/image/disk_image = image('icons/obj/storage/datadisks.dmi',src,disk.icon_state)
+		var/image/disk_image = image(icon,src,disk.icon_state)
 		if (icon_alt)
 			disk_image.pixel_x -= 3
 			if ((i % 2) != 0)
@@ -443,9 +496,9 @@
 		overlays += disk_image
 		i++
 
-	overlays += image('icons/obj/storage/datadisks.dmi',src,"overlay[icon_alt]")
+	overlays += image(icon,src,"overlay[icon_alt]")
 
-	if (!broken)
+	if (!broken && electronics)
 		overlays += image(icon, src, "led[locked]")
 		if(locked)
 			overlays += image(icon, src, "cover[icon_alt]")

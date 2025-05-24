@@ -131,7 +131,7 @@
 	if(..(user))
 		return
 	var/html=return_text()+"</body></html>"
-	user << browse(html,"window=gac")
+	user << browse(html,"window=gac") // Already well-formed HTML
 	user.set_machine(src)
 	onclose(user, "gac")
 

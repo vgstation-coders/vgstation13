@@ -580,10 +580,10 @@
 		fakespell.desc = fromwhichwetake.desc
 		fakespell.hud_state = fromwhichwetake.hud_state
 		fakespell.invocation = "MAH'JIK"
-		fakespell.invocation_type = SpI_SHOUT
-		fakespell.charge_type = Sp_CHARGES
+		fakespell.invocation_type = SP_INV_SHOUT
+		fakespell.charge_type = SP_CHARGES
 		fakespell.charge_counter = 0
-		fakespell.charge_max = 1
+		fakespell.charge_cooldown_max = 1 CHARGES
 		if(prob(20))
 			fakespell.name = name_modifier + fakespell.name
 		fake_spells += fakespell
@@ -597,9 +597,9 @@
 			var/mob/living/carbon/human/H = M
 			var/spell/thisisdumb = new /spell/targeted/equip_item/robesummon
 			H.add_spell(thisisdumb)
-			thisisdumb.charge_type = Sp_CHARGES
+			thisisdumb.charge_type = SP_CHARGES
 			thisisdumb.charge_counter = 1
-			thisisdumb.charge_max = 1
+			thisisdumb.charge_cooldown_max = 1 CHARGES
 			H.cast_spell(thisisdumb,list(H))
 		holder.remove_reagent(MAGICADELUXE,5)
 

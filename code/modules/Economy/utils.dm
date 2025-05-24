@@ -122,9 +122,9 @@ var/global/no_pin_for_debit = TRUE
 		to_chat(user, "[bicon(src)] <span class='warning'>Account disabled.</span>")
 		return CARD_CAPTURE_ACCOUNT_DISABLED
 	switch(account.security_level)
-		if (0, 1)
+		if (SECURITY_AUTO_LOGIN, SECURITY_MANUAL_LOGIN)
 			return CARD_CAPTURE_SUCCESS
-		if(2) // Only checking it at max level, this is too annoying otherwise...
+		if(SECURITY_CARD_AND_MANUAL_LOGIN) // Only checking it at max level, this is too annoying otherwise...
 			var/user_loc = user.loc
 			if(account.security_level >= 2 && !card)
 				// Security level is 2 and the card is not present, fail.

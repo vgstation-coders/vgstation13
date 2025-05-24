@@ -4,16 +4,16 @@
 	abbreviation = "HL"
 	user_type = USER_TYPE_WIZARD
 	specialization = SSUTILITY
-	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0, Sp_RANGE = 0)
+	spell_levels = list(SP_SPEED = 0, SP_POWER = 0, SP_RANGE = 0)
 
 	school = "transmutation"
-	charge_max = 300
-	cooldown_reduc = 75
-	cooldown_min = 150
+	charge_cooldown_max = 30 SECONDS
+	cooldown_reduc = 7.5 SECONDS
+	cooldown_min = 15 SECONDS
 	invocation = "DI TIUB SEEL IM"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	message = "<span class='sinister'>You feel refreshed.<span>"
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 2, Sp_POWER = 1, Sp_RANGE = 1)
+	level_max = list(SP_TOTAL = 3, SP_SPEED = 2, SP_POWER = 1, SP_RANGE = 1)
 	valid_targets = list(/mob/living)
 
 	max_targets = 1
@@ -29,43 +29,43 @@
 
 /spell/targeted/heal/cast(var/list/targets, mob/user)
 	for(var/atom/T in targets)
-		if(spell_levels[Sp_RANGE])
+		if(spell_levels[SP_RANGE])
 			if(T != user)
 				aoe_heal(T)
 		if(istype(T, /mob/living) && T != user)
 			var/mob/living/L = T
 			L.vis_contents += new /obj/effect/overlay/heal(L)
 			apply_spell_damage(L)
-			if(spell_levels[Sp_POWER] && istype(L, /mob/living/carbon/human))
+			if(spell_levels[SP_POWER] && istype(L, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = L
 				strong_heal(H)
 	playsound(user, 'sound/effects/aoeheal.ogg', 50, 100, extrarange = 3, gas_modified = 0)
 
 /spell/targeted/heal/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
+		if(SP_SPEED)
 			return quicken_spell()
-		if(Sp_POWER)
-			spell_levels[Sp_POWER]++
+		if(SP_POWER)
+			spell_levels[SP_POWER]++
 			name = "Superior " + name
 			return "The spell now has a chance to mend internal wounds."
-		if(Sp_RANGE)
-			spell_levels[Sp_RANGE]++
+		if(SP_RANGE)
+			spell_levels[SP_RANGE]++
 			name = "Splashing " + name
 			return "The spell will now affect a small area around the target."
 
 /spell/targeted/heal/get_upgrade_info(upgrade_type, level)
 	switch(upgrade_type)
-		if(Sp_SPEED)
-			if(spell_levels[Sp_SPEED] >= level_max[Sp_SPEED])
+		if(SP_SPEED)
+			if(spell_levels[SP_SPEED] >= level_max[SP_SPEED])
 				return "The spell can't be made any quicker than this!"
 			return "Reduce this spell's cooldown by [cooldown_reduc/10] seconds."
-		if(Sp_POWER)
-			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+		if(SP_POWER)
+			if(spell_levels[SP_POWER] >= level_max[SP_POWER])
 				return "This spell already has a chance of mending internal injuries!"
 			return "Grants the spell a chance of mending internal injuries in the primary target."
-		if(Sp_RANGE)
-			if(spell_levels[Sp_RANGE] >= level_max[Sp_RANGE])
+		if(SP_RANGE)
+			if(spell_levels[SP_RANGE] >= level_max[SP_RANGE])
 				return "This spell already affects a small area around the target!"
 			return "Expands the spell's effects to a small area around the target."
 

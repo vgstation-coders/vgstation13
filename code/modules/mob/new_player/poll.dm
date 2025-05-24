@@ -34,7 +34,7 @@
 
 		output += "</table>"
 		qdel(select_query)
-		src << browse(output,"window=playerpolllist;size=500x300")
+		src << browse(HTML_SKELETON(output),"window=playerpolllist;size=500x300")
 
 
 
@@ -134,7 +134,7 @@
 
 				output += "</div>"
 
-				src << browse(output,"window=playerpoll;size=500x250")
+				src << browse(HTML_SKELETON(output),"window=playerpoll;size=500x250")
 
 			//Polls with a text input
 			if("TEXT")
@@ -180,7 +180,7 @@
 				else
 					output += "[vote_text]"
 
-				src << browse(output,"window=playerpoll;size=500x500")
+				src << browse(HTML_SKELETON(output),"window=playerpoll;size=500x500")
 
 			//Polls with a text input
 			if("NUMVAL")
@@ -264,7 +264,7 @@
 						<p><input type='submit' value='Submit'>
 						</form>"}
 					qdel(option_query)
-				src << browse(output,"window=playerpoll;size=500x500")
+				src << browse(HTML_SKELETON(output),"window=playerpoll;size=500x500")
 			if("SELECT_ALL_THAT_APPLY")
 				var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT optionid FROM erro_poll_vote WHERE pollid = :id AND ckey = :ckey", list("id" = pollid, "ckey" = "[usr.ckey]"))
 				if(!voted_query.Execute())
@@ -334,7 +334,7 @@
 
 				output += "</div>"
 
-				src << browse(output,"window=playerpoll;size=500x250")
+				src << browse(HTML_SKELETON(output),"window=playerpoll;size=500x250")
 		return
 
 /mob/new_player/proc/vote_on_poll(var/pollid = -1, var/optionid = -1, var/select_all_that_apply = 0)

@@ -2,37 +2,58 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell
 	var/name = "Spell"
-	var/abbreviation = "" //Used for feedback gathering
+	/// Used for feedback gathering. Not implemented
+	var/abbreviation = ""
 
 	var/desc = "A spell."
 	parent_type = /datum
-	var/panel = "Spells"//What panel the proc holder needs to go on.
+	/// What panel the proc holder needs to go on.
+	var/panel = "Spells"
 
-	var/school = "evocation" //not relevant at now, but may be important later if there are changes to how spells work. the ones I used for now will probably be changed... maybe spell presets? lacking flexibility but with some other benefit?
-	var/user_type = USER_TYPE_NOUSER // What kind of mob uses this spell
-	var/specialization //Used for what list they belong to in the spellbook. SSOFFENSIVE, SSDEFENSIVE, SSUTILITY
+	/// Fluff. Unimplemented.
+	var/school = "evocation"
+	/// What kind of mob uses this spell. See 'spell_defines.dm'. Form: USER_TYPE_WIZARD, etc.
+	var/user_type = USER_TYPE_NOUSER
+	/// Used for what list they belong to in the spellbook. SSOFFENSIVE, SSDEFENSIVE, SSUTILITY
+	var/specialization
 
-	var/charge_type = Sp_RECHARGE //can be recharge or charges, see charge_max and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that; can ALSO be made to gradually drain the charge with Sp_GRADUAL
-	//The following are allowed: Sp_RECHARGE (Recharges), Sp_CHARGES (Limited uses), Sp_GRADUAL (Gradually lose charges), Sp_PASSIVE (Does not cast)
+	///can be recharge or charges, see charge_cooldown_max and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that; can ALSO be made to gradually drain the charge with SP_GRADUAL
+	///The following are allowed: SP_RECHARGE (Recharges), SP_CHARGES (Limited uses), SP_GRADUAL (Gradually lose charges), SP_PASSIVE (Does not cast)
+	var/charge_type = SP_RECHARGE
 
-	var/initial_charge_max = 100 //Used to calculate cooldown reduction
-	var/charge_max = 100 //recharge time in deciseconds if charge_type = Sp_RECHARGE or starting charges if charge_type = Sp_CHARGES
-	var/charge_counter = 0 //can only cast spells if it equals recharge, ++ each decisecond if charge_type = Sp_RECHARGE or -- each cast if charge_type = Sp_CHARGES
-	var/minimum_charge = 0 //if set, the minimum charge_counter necessary to cast Sp_GRADUAL spells
+	/// Used to calculate cooldown reduction
+	var/initial_charge_cooldown_max = 10 SECONDS
+	/// recharge time in deciseconds if charge_type = SP_RECHARGE or starting charges if charge_type = SP_CHARGES
+	var/charge_cooldown_max = 10 SECONDS
+	/// can only cast spells if it equals recharge, ++ each decisecond if charge_type = SP_RECHARGE or -- each cast if charge_type = SP_CHARGES
+	var/charge_counter = 0
+	/// if set, the minimum charge_counter necessary to cast SP_GRADUAL spells
+	var/minimum_charge = 0
+	/// Message to display if spell is recharging.
 	var/still_recharging_msg = "<span class='notice'>The spell is still recharging.</span>"
 
-	var/silenced = 0 //not a binary (though it seems that it is at the moment) - the length of time we can't cast this for, set by the spell_master silence_spells()
+	// Time in ticks until you can't cast a spell anymore. See spell_master silence_spells()
+	var/silenced = 0
 
-	var/price = Sp_BASE_PRICE //How much does it cost to buy this spell from a spellbook
-	var/quicken_price = Sp_BASE_PRICE * 0.5 //How much lowering the spell cooldown costs in the spellbook
-	var/refund_price = 0 //If 0, non-refundable
+	/// How much does it cost to buy this spell from a spellbook
+	var/price = SP_BASE_PRICE
+	/// How much lowering the spell cooldown costs in the spellbook
+	var/quicken_price = SP_BASE_PRICE * 0.5
+	/// If 0, non-refundable
+	var/refund_price = 0
 
-	var/holder_var_type = "bruteloss" //only used if charge_type equals to "holder_var"
-	var/holder_var_amount = 20 //Amount to adjust var when spell is used, THIS VALUE IS SUBTRACTED
-	var/holder_var_name		//Name of the holder var on the UI.
-	var/insufficient_holder_msg //Override for still recharging msg for holder variables
-	var/datum/special_var_holder //if a holder var is stored on a different object or a datum
+	/// Type of dmg dealt. only used if charge_type equals to "holder_var"
+	var/holder_var_type = "bruteloss"
+	/// Amount to adjust var when spell is used, THIS VALUE IS SUBTRACTED.
+	var/holder_var_amount = 20
+	/// Name of the holder var on the UI.
+	var/holder_var_name
+	/// Override for still recharging msg for holder variables
+	var/insufficient_holder_msg
+	/// if a holder var is stored on a different object or a datum
+	var/datum/special_var_holder
 
+	/// See var definition for potential flags spells.
 	var/spell_flags = NEEDSCLOTHES
 	//Possible spell flags:
 	//GHOSTCAST to make ghosts be able to cast this
@@ -52,26 +73,42 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		//IGNOREDENSE to ignore dense turfs in selection
 		//IGNORESPACE to ignore space turfs in selection
 
+	/// See var definition for possible spells. Implemented for golems.
 	var/autocast_flags
 	//Flags for making AI-controlled spellcasters' life easier
 	//Possible flags:
 	//AUTOCAST_NOTARGET means that the AI can't pick a target for this spell by itself - a target must be given to it
 
-	var/invocation = "HURP DURP"	//what is uttered when the wizard casts the spell
-	var/invocation_type = SpI_NONE	//can be none, whisper, shout, and emote
-	var/range = 7					//the range of the spell; outer radius for aoe spells
-	var/message = ""				//whatever it says to the guy affected by it
-	var/selection_type = "view"		//can be "range" or "view"
-	var/atom/movable/holder			//where the spell is. Normally the user, can be an item
-	var/duration = 0 //how long the spell lasts
+	/// what is uttered when the wizard casts the spell
+	var/invocation = "HURP DURP"
+	/// can be none, whisper, shout, and emote
+	var/invocation_type = SP_INV_NONE
+	/// the range of the spell; outer radius for aoe spells
+	var/range = 7
+	/// whatever it says to the guy affected by it
+	var/message = ""
+	/// can be "range" or "view"
+	var/selection_type = "view"
+	/// where the spell is. Normally the user, can be an item
+	var/atom/movable/holder
+	/// how long the spell lasts
+	var/duration = 0
+	/// Valid targets list. Can be overriden
 	var/list/valid_targets = list(/mob/living)
 
-	var/list/spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0) //the current spell levels - total spell levels can be obtained by just adding the two values
-	var/list/level_max = list(Sp_TOTAL = 4, Sp_SPEED = 4, Sp_POWER = 0) //maximum possible levels in each category. Total does cover both.
-	var/cooldown_reduc = 0		//If set, defines how much charge_max drops by every speed upgrade
+	/// the current spell levels - total spell levels can be obtained by just adding the two values
+	var/list/spell_levels = list(SP_SPEED = 0, SP_POWER = 0)
+	/// maximum possible levels in each category. Total does cover both.
+	var/list/level_max = list(SP_TOTAL = 4, SP_SPEED = 4, SP_POWER = 0)
+	/// If set, defines how much charge_cooldown_max drops by every speed upgrade
+	var/cooldown_reduc = 0
+	/// For channelled spells (cast_delay > 0), reduces the delay before the spell is active.
 	var/delay_reduc = 0
-	var/cooldown_min = 0 //minimum possible cooldown for a charging spell
+	/// minimum possible cooldown for a charging spell
+	var/cooldown_min = 0
 
+	// Nb: currently, this does nothing, and probably hasn't since this line was written.
+	/// Flags for what this spell is 'based' upon, for interacting with other spells
 	var/spell_aspect_flags
 	//Flags for what this spell is 'based' upon, for interacting with other spells
 	//For instance, a fire-based spell would have the FIRE flag
@@ -81,52 +118,74 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/overlay_icon_state = "spell"
 	var/overlay_lifespan = 0
 
+	/// If sparks caused by this spell spread.
 	var/sparks_spread = 0
-	var/sparks_amt = 0 //cropped at 10
-	var/smoke_spread = 0 //1 - harmless, 2 - harmful
-	var/smoke_amt = 0 //cropped at 10
+	/// cropped at 10
+	var/sparks_amt = 0
+	/// 1 - harmless, 2 - harmful
+	var/smoke_spread = 0
+	/// cropped at 10
+	var/smoke_amt = 0
 
+	/// probability (0-100) to call critfail()
 	var/critfailchance = 0
 
+	/// Delay before cast
 	var/cast_delay = 1
+	/// Soundfile for cast.
 	var/cast_sound = ""
+	/// Progress bar for longer cast sells.
 	var/use_progress_bar = FALSE
 
-	var/hud_state = "" //name of the icon used in generating the spell hud object
+	///name of the icon-state used in generating the spell hud icon.
+	var/hud_state = ""
+	/// icon used for the hud.
 	var/override_icon = ""
+	/// Background colour used in the HUD
 	var/override_base = ""
+	/// Dir used
 	var/icon_direction = SOUTH //Needs override_icon to be not null
 
+	/// Button atom to cast the spell
 	var/obj/abstract/screen/spell/connected_button
+	/// Is the spell being cast right now, or waiting a target for WAIT_CLICK
 	var/currently_channeled = 0
-	var/gradual_casting = FALSE //equals TRUE while a Sp_GRADUAL spell is actively being cast
+	/// equals TRUE while a SP_GRADUAL spell is actively being cast
+	var/gradual_casting = FALSE
 
-	var/list/holiday_required = list() // The holiday this spell is restricted to ! Leave empty if none.
-	var/block = 0//prevents some spells from being spamed
+	/// The holiday this spell is restricted to ! Leave empty if none.
+	var/list/holiday_required = list()
+	/// prevents some spells from being spamed
+	var/block = 0
+	/// The animation atom to be created during the cast
 	var/obj/delay_animation = null
-	var/user_dir //Used by NO_TURNING to memorize the user's direction and turn them around
+	/// Used by NO_TURNING to memorize the user's direction and turn them around
+	var/user_dir
 
 ///////////////////////
 ///SETUP AND PROCESS///
 ///////////////////////
 
+/// Constructor proc
 /spell/New()
 	..()
 
 	//still_recharging_msg = "<span class='notice'>[name] is still recharging.</span>"
-	charge_counter = charge_max
-	initial_charge_max = charge_max //Let's not add charge_max_initial to roughly 80 (at the time of this comment) spells
+	charge_counter = charge_cooldown_max
+	initial_charge_cooldown_max = charge_cooldown_max //Let's not add charge_cooldown_max_initial to roughly 80 (at the time of this comment) spells
 
+/// Private: internal sanity check for setting holder
 /spell/proc/set_holder(var/new_holder)
 	if(holder == new_holder)
 		world.log << "[src] is trying to set its holder to the same holder!"
 	holder = new_holder
 
+/// Private: master proc for channelled spells, recharging cooldown, etc.
 /spell/proc/process()
-	spawn while(charge_counter < charge_max)
+	spawn while(charge_counter < charge_cooldown_max)
 		if(holder && !holder.timestopped)
 			if(gradual_casting)
-				if(charge_type & Sp_HOLDVAR) //If the spell is both Sp_GRADUAL and Sp_HOLDVAR, decrement the holder var instead.
+				if(charge_type & SP_HOLDVAR) //If the spell is both SP_GRADUAL and SP_HOLDVAR, decrement the holder var instead.
 					if(holder.vars[holder_var_type] <= 0)
 						holder.vars[holder_var_type] = 0 //Assumes the minimum of the holder var is 0.
 						gradual_casting = FALSE
@@ -141,7 +200,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 					charge_counter--
 			else
 				charge_counter++
-		if(charge_counter >= charge_max)
+		if(charge_counter >= charge_cooldown_max)
 			return
 		sleep(1)
 	return
@@ -150,12 +209,17 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /////CASTING/////
 /////////////////
 
+/// Public: what happens when you right-click on the spell icon in the HUD (example: set different targetting mode)
 /spell/proc/on_right_click(mob/user)
 	return
 
+/// Public: returns the list of things the spell will use in invocation()
+/// Already implemented for targetted, aoe_turf, etc. Can be overriden for special target selection by the spell.
 /spell/proc/choose_targets(mob/user = usr) //depends on subtype - see targeted.dm, aoe_turf.dm, dumbfire.dm, or code in general folder
 	return
 
+/// Public: helper proc for checking if a target is valid.
+/// Call in `choose_targets`. Automatically called by targetted/aoe_turf spells.
 /spell/proc/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	if(ismob(target))
 		var/mob/M = target
@@ -169,6 +233,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return (target in options)
 	return ((target in view_or_range(range, user, selection_type)) && is_type_in_list(target, valid_targets))
 
+/// Private: master proc for the full spellcode
+/// Selects target, does the channel check, animate, casts the spell, etc.
 /spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override)
 	if(!holder)
 		set_holder(user) //just in case
@@ -225,7 +291,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			take_charge(user, skipcharge)
 		after_cast(targets) //generates the sparks, smoke, target messages etc.
 
-//This is used with the wait_for_click spell flag to prepare spells to be cast on your next click
+/// Private: This is used with the wait_for_click spell flag to prepare spells to be cast on your next click
 /spell/proc/channel_spell(mob/user = usr, skipcharge = 0, force_remove = 0)
 	if(!holder)
 		set_holder(user) //just in case
@@ -250,17 +316,19 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		connected_button.name = name
 	return 1
 
-//Used by NO_TURNING to turn the user around
-//Due to the way the code is structured (/event/uattack happens after the user has turned around)
-//we have to check for the only thing that happens before turning, /event/clickon.
-//but since that has no way of directly interfering with face_atom() we instead memorize the direction of the user at the time
-//and then flip them around at the start of proper spellcasting.
-//Unfortunately this means that the user is still technically turning around.
-//The only viable solution would be restructuring click.dm code to support not turning around but that might break too many things.
+/// Used by NO_TURNING to turn the user around
+/// Due to the way the code is structured (/event/uattack happens after the user has turned around)
+/// we have to check for the only thing that happens before turning, /event/clickon.
+/// but since that has no way of directly interfering with face_atom() we instead memorize the direction of the user at the time
+/// and then flip them around at the start of proper spellcasting.
+/// Unfortunately this means that the user is still technically turning around.
+/// The only viable solution would be restructuring click.dm code to support not turning around but that might break too many things.
+/// (Private)
 /spell/proc/memorize_user_direction(mob/user, list/modifiers, atom/target)
 	if(holder)
 		user_dir = holder.dir
 
+/// Private: internal master proc for channelled spells.
 /spell/proc/channeled_spell(atom/atom, bypassrange = 0)
 	var/list/target = list(atom)
 	var/mob/user = holder
@@ -288,24 +356,33 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return 1
 	return 0
 
+/// Public: automatically called in the master proc for channelled spells.
 /spell/proc/before_channel(mob/user)
 	return
 
+/// Public: automatically called in the spell before selecting targets.
 /spell/proc/before_target(mob/user)
 	return
 
-/spell/proc/cast(list/targets, mob/user) //the actual meat of the spell
+/// Public: the actual meat of the spell
+/spell/proc/cast(list/targets, mob/user)
 	return
 
+/// Public: Automatically called for channelled spells when they're no longer being cast.
+/// Should be manually called for wizard death, etc.
 /spell/proc/stop_casting(list/targets, mob/user)
 	if(gradual_casting)
 		gradual_casting = FALSE
 	return
 
-/spell/proc/critfail(list/targets, mob/user) //the wizman has fucked up somehow
+/// Public: the wizman has fucked up somehow
+/// Currently unimplemented asider from vampire code
+/spell/proc/critfail(list/targets, mob/user)
 	return
 
-/spell/proc/adjust_var(mob/living/target = usr, varname, amount) //handles the adjustment of the var when the spell is used. has some hardcoded types
+/// Private: handles the adjustment of the var when the spell is used. has some hardcoded types
+/// Should PROBABLY be reworked.............
+/spell/proc/adjust_var(mob/living/target = usr, varname, amount) //
 	if(!(varname in target.vars))
 		world.log << "Spell [varname] of user [usr] adjusting non-numeric value on [target], aborting"
 		return
@@ -333,6 +410,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /////CASTING WRAPPERS//////
 ///////////////////////////
 
+/// Public: wrapper before casting the spell. Default behaviour is to scan view/range, check everything for `is_valid_target`
+/// And then return the list of targets:
 /spell/proc/before_cast(list/targets, user, bypass_range = 0)
 	var/list/valid_targets = list()
 	var/list/options = view_or_range(range,user,selection_type)
@@ -357,6 +436,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 				QDEL_NULL(spell)
 	return valid_targets
 
+/// Public: wrapper AFTER casting the spell.
+/// Default behaviour: send `message` var, apply sparks, apply smoke
 /spell/proc/after_cast(list/targets)
 	for(var/atom/target in targets)
 		var/location = get_turf(target)
@@ -379,12 +460,14 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /////////////////////
 /*Checkers, cost takers, message makers, etc*/
 
+/// Public: check if spell can be cast.
+/// Default behaviour handles cooldown, z-level check, etc.
 /spell/proc/cast_check(skipcharge = 0,mob/user = usr) //checks if the spell can be cast based on its settings; skipcharge is used when an additional cast_check is called inside the spell
 	if(!(src in user.spell_list) && holder == user)
 		to_chat(user, "<span class='warning'>You shouldn't have this spell! Something's wrong.</span>")
 		return 0
 
-	if(charge_type == Sp_PASSIVE)
+	if(charge_type == SP_PASSIVE)
 		to_chat(user, "<span class='notice'>This is a passive spell, you cannot cast it!</span>")
 		return 0
 
@@ -424,7 +507,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			to_chat(user, "Not when you're incapacitated.")
 			return 0
 
-		if((ishuman(user) || ismonkey(user)) && !(invocation_type in list(SpI_EMOTE, SpI_NONE)))
+		if((ishuman(user) || ismonkey(user)) && !(invocation_type in list(SP_INV_EMOTE, SP_INV_NONE)))
 			if(user.wear_mask?.is_muzzle)
 				to_chat(user, "Mmmf mrrfff!")
 				return 0
@@ -441,29 +524,31 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	return 1
 
+/// Private: simple helper to check if the spell is typically used by wizards
 /spell/proc/is_wizard_spell()
 	if(user_type == USER_TYPE_WIZARD || USER_TYPE_SPELLBOOK)
 		return TRUE
 	return FALSE
 
+/// Semi-private: checks cooldown, charges, gradual.
 /spell/proc/check_charge(var/skipcharge, mob/user)
 	//Arcane golems have no cooldowns on their spells
 	if(istype(user, /mob/living/simple_animal/hostile/arcane_golem))
 		return 1
 
-	if(charge_type == Sp_PASSIVE)
+	if(charge_type == SP_PASSIVE)
 		return 1
 
 	if(!skipcharge)
-		if(charge_type & Sp_RECHARGE)
-			if(charge_counter < charge_max)
+		if(charge_type & SP_RECHARGE)
+			if(charge_counter < charge_cooldown_max)
 				to_chat(user, still_recharging_msg)
 				return 0
-		if(charge_type & Sp_CHARGES)
+		if(charge_type & SP_CHARGES)
 			if(!charge_counter)
 				to_chat(user, "<span class='notice'>[name] has no charges left.</span>")
 				return 0
-		if(charge_type & Sp_HOLDVAR)
+		if(charge_type & SP_HOLDVAR)
 			if(special_var_holder)
 				if(!(holder_var_type in special_var_holder.vars))
 					return 1 //ABORT
@@ -476,60 +561,66 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 				if(user.vars[holder_var_type] < holder_var_amount)
 					to_chat(user, holder_var_recharging_msg())
 					return 0
-		if(charge_type & Sp_GRADUAL)
+		if(charge_type & SP_GRADUAL)
 			if(charge_counter < minimum_charge)
 				to_chat(user, still_recharging_msg)
 				return 0
 	return 1
 
+/// Semi-private: what is sent to the user if a spell needs recharging.
+/// Default behaviour uses the spell `still_recharging_msg` and `insufficient_holder_msg`
 /spell/proc/holder_var_recharging_msg()
 	if(insufficient_holder_msg)
 		return insufficient_holder_msg
 	return still_recharging_msg
 
+/// Private: takes spell charges and apply cooldown
 /spell/proc/take_charge(mob/user = user, var/skipcharge)
 	if(!skipcharge)
-		if(charge_type & Sp_RECHARGE)
+		if(charge_type & SP_RECHARGE)
 			charge_counter = 0 //doesn't start recharging until the targets selecting ends
 			src.process()
-		if(charge_type & Sp_CHARGES)
+		if(charge_type & SP_CHARGES)
 			charge_counter-- //returns the charge if the targets selecting fails
-		if(charge_type & Sp_HOLDVAR)
+		if(charge_type & SP_HOLDVAR)
 			if(special_var_holder)
 				adjust_var(special_var_holder, holder_var_type, holder_var_amount)
 			else
 				adjust_var(user, holder_var_type, holder_var_amount)
-		if(charge_type & Sp_GRADUAL)
+		if(charge_type & SP_GRADUAL)
 			gradual_casting = TRUE
 			charge_counter -= 1
 			process()
-		if(charge_type & Sp_PASSIVE)
+		if(charge_type & SP_PASSIVE)
 			process()
 
-
+/// Semi-private: wrapper for shouting out the invocation
+/// Applying the spell cast, etc.
 /spell/proc/invocation(mob/user = usr, var/list/targets) //spelling the spell out and setting it on recharge/reducing charges amount
 
 
 	switch(invocation_type)
-		if(SpI_SHOUT)
+		if(SP_INV_SHOUT)
 			if(prob(50))//Auto-mute? Fuck that noise
 				user.say(invocation)
 			else
 				user.say(replacetext(invocation," ","`"))
-		if(SpI_WHISPER)
+		if(SP_INV_WHISPER)
 			if(prob(50))
 				user.whisper(invocation)
 			else
 				user.whisper(replacetext(invocation," ","`"))
-		if(SpI_EMOTE)
+		if(SP_INV_EMOTE)
 			user.emote("me", 1, invocation) //the 1 means it's for everyone in view, the me makes it an emote, and the invocation is written accordingly.
 
 /////////////////////
 ///UPGRADING PROCS///
 /////////////////////
 
+/// Public: checks if the spell can be improved
+/// Default behaviour: checks with `spell_levels` and `level_max`
 /spell/proc/can_improve(var/upgrade_type)
-	if(level_max[Sp_TOTAL] <= ( spell_levels[Sp_SPEED] + spell_levels[Sp_POWER] )) //too many levels, can't do it
+	if(level_max[SP_TOTAL] <= ( spell_levels[SP_SPEED] + spell_levels[SP_POWER] )) //too many levels, can't do it
 		return 0
 
 	if(upgrade_type && (upgrade_type in spell_levels) && (upgrade_type in level_max))
@@ -538,31 +629,34 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	return 1
 
+/// Public: proc to be called when purchasing `SP_POWER` upgrade
 /spell/proc/empower_spell()
 	return
 
+/// Public: proc to be called when purchasing `SP_SPEED` upgrade
+/// Default behaviour is to make it quicker (duh)
 /spell/proc/quicken_spell()
-	if(!can_improve(Sp_SPEED))
+	if(!can_improve(SP_SPEED))
 		return 0
 
-	spell_levels[Sp_SPEED]++
+	spell_levels[SP_SPEED]++
 
 	if(delay_reduc && cast_delay)
 		cast_delay = max(0, cast_delay - delay_reduc)
 	else if(cast_delay)
-		cast_delay = round( max(0, initial(cast_delay) * ((level_max[Sp_SPEED] - spell_levels[Sp_SPEED]) / level_max[Sp_SPEED] ) ) )
+		cast_delay = round( max(0, initial(cast_delay) * ((level_max[SP_SPEED] - spell_levels[SP_SPEED]) / level_max[SP_SPEED] ) ) )
 
-	if(charge_type == Sp_RECHARGE)
+	if(charge_type == SP_RECHARGE)
 		if(cooldown_reduc)
-			charge_max = max(cooldown_min, charge_max - cooldown_reduc)
+			charge_cooldown_max = max(cooldown_min, charge_cooldown_max - cooldown_reduc)
 		else
-			charge_max = round(initial_charge_max - spell_levels[Sp_SPEED] * (initial_charge_max - cooldown_min)/ level_max[Sp_SPEED])
-	if(charge_max < charge_counter)
-		charge_counter = charge_max
+			charge_cooldown_max = round(initial_charge_cooldown_max - spell_levels[SP_SPEED] * (initial_charge_cooldown_max - cooldown_min)/ level_max[SP_SPEED])
+	if(charge_cooldown_max < charge_counter)
+		charge_counter = charge_cooldown_max
 
 	var/temp = ""
 	name = initial(name)
-	switch(level_max[Sp_SPEED] - spell_levels[Sp_SPEED])
+	switch(level_max[SP_SPEED] - spell_levels[SP_SPEED])
 		if(3)
 			temp = "You have improved [name] into Efficient [name]."
 			name = "Efficient [name]"
@@ -578,7 +672,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	return temp
 
-/spell/proc/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
+/// Private: proc displays a progress bar and acts as a `do_after` check (mob stays still, target in range, etc)
+/// Automatically called if the spell has a `cast_delay`.
+/spell/proc/spell_do_after(var/mob/user, delay, var/numticks = 5)
 	if(!user || isnull(user))
 		return 0
 	if(numticks == 0)
@@ -626,52 +722,97 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		progbar.loc = null
 	return 1
 
-//UPGRADES
+/// Private: calls the relevant upgrade proc
 /spell/proc/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
+		if(SP_SPEED)
 			return quicken_spell()
-		if(Sp_POWER)
+		if(SP_POWER)
 			return empower_spell()
 
+/// Public: how much spell points it costs to upgrade the spell
+/// Can override if you want a finer control over balance. Default behaviour uses `quicken_price` and `price`
 /spell/proc/get_upgrade_price(upgrade_type)
-	if(upgrade_type == Sp_SPEED)
+	if(upgrade_type == SP_SPEED)
 		return quicken_price
 	return src.price
 
 ///INFO
 
+/// Public: return texts to be displayed in the spellbook for upgrade
+/// Should override to have better explanation for `SP_POWER` upgrades.
 /spell/proc/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
-			if(spell_levels[Sp_SPEED] >= level_max[Sp_SPEED])
+		if(SP_SPEED)
+			if(spell_levels[SP_SPEED] >= level_max[SP_SPEED])
 				return "The spell can't be made any quicker than this!"
 			var/formula
 			if(cooldown_reduc)
-				formula = min(charge_max - cooldown_min, cooldown_reduc)
+				formula = min(charge_cooldown_max - cooldown_min, cooldown_reduc)
 			else
-				formula = round((initial_charge_max - cooldown_min)/level_max[Sp_SPEED], 1)
+				formula = round((initial_charge_cooldown_max - cooldown_min)/level_max[SP_SPEED], 1)
 			return "Reduce this spell's cooldown by [formula/10] seconds."
-		if(Sp_POWER)
-			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+		if(SP_POWER)
+			if(spell_levels[SP_POWER] >= level_max[SP_POWER])
 				return "The spell can't be made any more powerful than this!"
 			return "Increase this spell's power."
 
-//Return a string that gets appended to the spell on the scoreboard
+/// Atomizes what data the spell shows, that way different spells such as pulse demon and vampire spells can have their own descriptions.
+/spell/proc/generate_tooltip(var/previous_data = "")
+	var/dat = previous_data //In case you want to put some text at the top instead of bottom
+	if(charge_type & SP_RECHARGE)
+		dat += "<br>Cooldown: [charge_cooldown_max/10] second\s"
+	if(charge_type & SP_CHARGES)
+		dat += "<br>Has [charge_counter] charge\s left"
+	if(charge_type & SP_HOLDVAR)
+		dat += "<br>Requires [charge_type & SP_GRADUAL ? "" : "[holder_var_amount]"] "
+		if(holder_var_name)
+			dat += "[holder_var_name]"
+		else
+			dat += "[holder_var_type]"
+		if(charge_type & SP_GRADUAL)
+			dat += " to sustain"
+	switch(range)
+		if(1)
+			dat += "<br>Range: Adjacency"
+		if(2 to INFINITY)
+			dat += "<br>Range: [range]"
+		if(GLOBALCAST)
+			dat += "<br>Range: Global"
+		if(SELFCAST)
+			dat += "<br>Range: Self"
+	if(desc)
+		dat += "<br>Desc: [desc]"
+	return dat
+
+/// Public: return a string that gets appended to the spell on the scoreboard
 /spell/proc/get_scoreboard_suffix()
 	return
 
+
+////////////////////
+// EVENTS         //
+////////////////////
+
+/// Public: called by event when the mob gets the spell
 /spell/proc/on_added(mob/user)
 	return
 
+/// Public: called by event when the mob loses the spell
 /spell/proc/on_removed(mob/user)
 	return
 
+/// Public: called by event when the mob fucking dies
 /spell/proc/on_holder_death(mob/user)
 	return
 
+/// Public: called by event when the mob switches minds
 /spell/proc/on_transfer(mob/user)
 	return
+
+////////////////////
+//WIZARD MOB PROCS//
+////////////////////
 
 //To batch-remove wizard spells. Linked to mind.dm.
 /mob/proc/spellremove(var/mob/M as mob)
@@ -716,6 +857,7 @@ Made a proc so this is not repeated 14 (or more) times.*/
 	return 1
 */
 
+/// Mob wears clothing that prevents him from casting spells.
 /mob/proc/is_gentled()
 	for(var/V in get_equipped_items())
 		if(isclothing(V))
@@ -724,31 +866,3 @@ Made a proc so this is not repeated 14 (or more) times.*/
 				to_chat(src, "<span class='warning'>You feel too humble to do that.</span>")
 				return TRUE
 	return FALSE
-
-//Atomizes what data the spell shows, that way different spells such as pulse demon and vampire spells can have their own descriptions.
-/spell/proc/generate_tooltip(var/previous_data = "")
-	var/dat = previous_data //In case you want to put some text at the top instead of bottom
-	if(charge_type & Sp_RECHARGE)
-		dat += "<br>Cooldown: [charge_max/10] second\s"
-	if(charge_type & Sp_CHARGES)
-		dat += "<br>Has [charge_counter] charge\s left"
-	if(charge_type & Sp_HOLDVAR)
-		dat += "<br>Requires [charge_type & Sp_GRADUAL ? "" : "[holder_var_amount]"] "
-		if(holder_var_name)
-			dat += "[holder_var_name]"
-		else
-			dat += "[holder_var_type]"
-		if(charge_type & Sp_GRADUAL)
-			dat += " to sustain"
-	switch(range)
-		if(1)
-			dat += "<br>Range: Adjacency"
-		if(2 to INFINITY)
-			dat += "<br>Range: [range]"
-		if(GLOBALCAST)
-			dat += "<br>Range: Global"
-		if(SELFCAST)
-			dat += "<br>Range: Self"
-	if(desc)
-		dat += "<br>Desc: [desc]"
-	return dat

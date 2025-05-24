@@ -72,6 +72,9 @@
 
 	if (ticker && ticker.mode)
 		ticker.mode.mob_destroyed(src)
+	QDEL_NULL(last_thrown_by)
+	QDEL_NULL(last_bumped_by)
+	QDEL_NULL(lastassailant)
 	..()
 
 /mob/projectile_check()
@@ -1240,7 +1243,7 @@ Use this proc preferably at the end of an equipment loadout
 	var/dat = {"	<title>/vg/station Github Ingame Reporting</title>
 					Version: [byond_version].[byond_build] Revision: [return_revision()]
 					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&byondver=[byond_version].[byond_build]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
-	src << browse(dat, "window=github;size=480x480")
+	src << browse(HTML_SKELETON(dat), "window=github;size=480x480")
 
 /client/verb/changes()
 	set name = "Changelog"
@@ -1277,7 +1280,7 @@ Use this proc preferably at the end of an equipment loadout
 	set category = "OOC"
 	var/output = {"Your BYOND version is: <b>[byond_version].[byond_build]</b><br>
 		You can view all of the latest server-compatible BYOND builds here: https://www.byond.com/download/build/[world.byond_version]/"}
-	usr << browse(output, "window=byond-version-data");
+	usr << browse(HTML_SKELETON(output), "window=byond-version-data");
 
 /mob/verb/observe()
 	set name = "Observe"
@@ -1476,12 +1479,12 @@ Use this proc preferably at the end of an equipment loadout
 				if((!S.connected_button) || !statpanel(S.panel))
 					continue //Not showing the noclothes spell
 				var/charge_type = S.charge_type
-				if(charge_type & Sp_HOLDVAR)
+				if(charge_type & SP_HOLDVAR)
 					statpanel(S.panel,"Required [S.holder_var_type]: [S.holder_var_amount]",S.connected_button)
-				else if(charge_type & Sp_CHARGES)
-					statpanel(S.panel,"[S.charge_max? "[S.charge_counter]/[S.charge_max] charges" : "Free"]",S.connected_button)
-				else if(charge_type & Sp_RECHARGE || charge_type & Sp_GRADUAL)
-					statpanel(S.panel,"[S.charge_max? "[S.charge_counter/10.0]/[S.charge_max/10] seconds" : "Free"]",S.connected_button)
+				else if(charge_type & SP_CHARGES)
+					statpanel(S.panel,"[S.charge_cooldown_max? "[S.charge_counter]/[S.charge_cooldown_max] charges" : "Free"]",S.connected_button)
+				else if(charge_type & SP_RECHARGE || charge_type & SP_GRADUAL)
+					statpanel(S.panel,"[S.charge_cooldown_max? "[S.charge_counter/10.0]/[S.charge_cooldown_max/10] seconds" : "Free"]",S.connected_button)
 	sleep(world.tick_lag * 2)
 
 
@@ -1877,7 +1880,17 @@ Use this proc preferably at the end of an equipment loadout
 	if(SS)
 		SS.supermatter_act(source)
 	else
-
+		if (client)
+			if(pulledby) // If we have a client, we add attack logs
+				add_logs(pulledby, src, "pulled into a suppermatter object", TRUE, source, get_coordinates_string(source))
+			else if(last_bumped_by_timestamp - 0.1 SECONDS <= world.time <= last_bumped_by_timestamp + 0.1 SECONDS) // If got bumped into a supermatter
+				var/mob/hostile = last_bumped_by.get()
+				add_logs(hostile, src, "bumped into a supermatter object", TRUE, source, get_coordinates_string(source))
+			else if(last_thrown_by_timestamp - 0.1 SECONDS <= world.time <= last_thrown_by_timestamp + 2 SECONDS) // If got thrown into a supermatter
+				var/mob/hostile = last_thrown_by.get()
+				add_logs(hostile, src, "thrown into a supermatter object", TRUE, source, get_coordinates_string(source))
+			else
+				attack_log += "\[[time_stamp()]\]: walked into supermatter (no bumper/no pusher)"
 		if(severity == SUPERMATTER_DUST)
 			dust()
 			return 1
@@ -2069,9 +2082,9 @@ Use this proc preferably at the end of an equipment loadout
 	desc = "Morph back into your previous form."
 	spell_flags = GHOSTCAST
 	abbreviation = "RF"
-	charge_max = 1
+	charge_cooldown_max = 0.1 SECONDS
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	hud_state = "wiz_mindswap"
 

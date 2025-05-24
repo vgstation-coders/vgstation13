@@ -629,7 +629,8 @@
 	flags = FPRINT
 	w_class = W_CLASS_TINY
 
-	var/shattered = 0
+	var/shattered = FALSE
+	var/norwood_cursed = FALSE
 
 /obj/item/weapon/pocket_mirror/attack_self(mob/user)
 	if(shattered)
@@ -666,6 +667,14 @@
 		H = user
 	if(!H)
 		return
+	if (norwood_cursed)
+		if (isjusthuman(H))
+			to_chat(H, "<span class = 'userwarning'>Oh no! It's the curse of Norwood!</span>")
+			H.visible_message("<span class='warning'>[H]'s hair vanishes in a flash!</span>")
+			H.my_appearance.h_style = "Bald"
+			H.update_hair()
+			H.my_appearance.permanently_bald = TRUE
+			return
 	if(arcanetampered)
 		to_chat(user, "<span class='sinister'>You feel different.</span>")
 		H.Humanize(pick("Unathi","Tajaran","Insectoid","Grey",/*and worst of all*/"Vox"))

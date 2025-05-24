@@ -6,7 +6,7 @@
 	spell_flags = NEEDSHUMAN
 	horrorallowed = 0
 
-	charge_max = 5 SECONDS
+	charge_cooldown_max = 5 SECONDS
 	cooldown_min = 5 SECONDS
 
 /spell/changeling/absorbdna/cast_check(skipcharge = 0,mob/user = usr, var/list/targets)

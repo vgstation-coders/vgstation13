@@ -2,15 +2,15 @@
 	name = "Punch"
 	desc = "This spell empowers your next close-and-personal unarmed attack to launch the enemy with such great force that they cause a small explosion where they land. The ensuing explosion won't harm you directly, but the after-effects might. Works against mechas."
 	abbreviation = "PU"
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 2, Sp_POWER = 1)
+	level_max = list(SP_TOTAL = 3, SP_SPEED = 2, SP_POWER = 1)
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
-	charge_max = 90
+	charge_cooldown_max = 9 SECONDS
 	invocation = "ROKETTOPANCHI"
 	message = "<span class='danger'>You are punched with great force!<span>"
 	spell_flags = IS_HARMFUL | WAIT_FOR_CLICK | NEEDSCLOTHES
-	cooldown_min = 30
-	invocation_type = SpI_SHOUT
+	cooldown_min = 3 SECONDS
+	invocation_type = SP_INV_SHOUT
 	max_targets = 1
 	range = 1
 	valid_targets = list(/mob/living, /obj/mecha)
@@ -29,14 +29,14 @@
 
 /spell/targeted/punch/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_POWER)
+		if(SP_POWER)
 			return "Make the explosion more devastating, allowing it to cause more damage and even breach the ground."
 	return ..()
 
 /spell/targeted/punch/empower_spell()
 	..()
 	empowered += 1
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 	. = "You have made the punch more devastating."
 
 /spell/targeted/punch/cast(var/list/targets)
@@ -145,9 +145,9 @@
 	desc = "This spell empowers your next close-and-personal unarmed attack to launch the enemy with great force"
 	abbreviation = "RP"
 	user_type = USER_TYPE_GYMRAT
-	charge_max = 300 // Much longer cooldown than the wizard spell
+	charge_cooldown_max = 30 SECONDS // Much longer cooldown than the wizard spell
 	spell_flags = IS_HARMFUL | WAIT_FOR_CLICK
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	valid_targets = list(/mob/living) // Unlike the other version, this one can't target and destroy mechs
 	hud_state = "gen_hulk"
 	explosive_punches = 0

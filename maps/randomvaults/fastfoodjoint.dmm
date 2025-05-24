@@ -430,6 +430,17 @@
 	icon_state = "bar"
 	},
 /area/vault/fastfood/dining)
+"iA" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/dining)
 "iD" = (
 /turf/unsimulated/floor/asteroid/underground,
 /area/vault/fastfood)
@@ -602,14 +613,6 @@
 	},
 /mob/living/simple_animal/hostile/retaliate/cookbot/waiter/kitchen{
 	dir = 4
-	},
-/obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/machinery/power/apc{
-	pixel_y = 24;
-	dir = 1]
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -1006,6 +1009,19 @@
 	icon_state = "bar"
 	},
 /area/vault/fastfood/misc)
+"vh" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/dining)
 "vi" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/airless{
@@ -1245,21 +1261,15 @@
 	},
 /area/vault/fastfood/dining)
 "BX" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
 	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
+/obj/structure/window/reinforced{
+	dir = 8
 	},
-/turf/simulated/floor{
-	icon_state = "freezerfloor"
-	},
-/area/vault/fastfood/kitchen)
+/turf/simulated/floor/plating,
+/area/vault/fastfood/dining)
 "Cb" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -1340,6 +1350,14 @@
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
+/area/vault/fastfood/dining)
+"Dw" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
 /area/vault/fastfood/dining)
 "DI" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1467,6 +1485,17 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/fastfood/kitchen)
+"Fl" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/fastfood/dining)
 "Fu" = (
 /obj/machinery/cooking/deepfryer,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -1489,7 +1518,17 @@
 	},
 /area/vault/fastfood)
 "Gb" = (
-/obj/structure/grille/window_spawner/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
 /turf/simulated/floor/plating,
 /area/vault/fastfood/misc)
 "Gf" = (
@@ -1628,8 +1667,18 @@
 	},
 /area/vault/fastfood/dining)
 "Jw" = (
-/obj/structure/grille/window_spawner/reinforced,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
 /turf/simulated/floor/plating,
 /area/vault/fastfood/dining)
 "JE" = (
@@ -1669,7 +1718,17 @@
 	},
 /area/vault/fastfood)
 "JJ" = (
-/obj/structure/grille/window_spawner/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
 /turf/simulated/floor/plating,
 /area/vault/fastfood/kitchen)
 "JK" = (
@@ -1735,7 +1794,17 @@
 	},
 /area/vault/fastfood/kitchen)
 "KI" = (
-/obj/structure/grille/window_spawner/reinforced,
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
 /turf/simulated/floor/plating,
 /area/vault/fastfood/dining)
 "KY" = (
@@ -2511,14 +2580,14 @@ tT
 wH
 wH
 wH
-KI
-KI
+vh
+iA
 wH
 wH
-KI
-KI
-KI
-KI
+vh
+BX
+BX
+Dw
 aa
 mS
 pC
@@ -2543,7 +2612,7 @@ Yh
 rP
 bu
 Wn
-KI
+Fl
 JQ
 HR
 mx
@@ -3039,7 +3108,7 @@ Ka
 XG
 mb
 mb
-BX
+mb
 mb
 IQ
 Le

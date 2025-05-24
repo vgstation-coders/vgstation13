@@ -527,6 +527,7 @@
 #define AMINOMICIAN		"aminomician"
 #define AMINOCYPRINIDOL	"aminocyprinidol"
 #define AMINOBLATELLA	"aminoblatella"
+#define AMINOCORYDON	"aminocorydon"
 #define TOMATO_SOUP		"tomato_soup"
 #define LUMINOL			"luminol"
 #define CAFFEINE		"caffeine"

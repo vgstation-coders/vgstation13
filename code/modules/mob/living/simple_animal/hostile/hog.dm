@@ -250,7 +250,7 @@ if ungreased adult: l containers
 
 	if(!client && isliving(target)) //automated headbutting if no client
 		for(var/spell/headbutt/M in spell_list)
-			if(M.charge_counter == M.charge_max)
+			if(M.charge_counter == M.charge_cooldown_max)
 				M.cast(list(target),src)
 				M.charge_counter = 0
 				M.process()
@@ -263,7 +263,7 @@ if ungreased adult: l containers
 /spell/headbutt
 	name = "Headbutt"
 	desc = "Knocks the target down."
-	charge_max = 10 SECONDS
+	charge_cooldown_max = 10 SECONDS
 	spell_flags = WAIT_FOR_CLICK
 	range = 1
 	hud_state = "wiz_fist"

@@ -346,7 +346,7 @@ function loadPage(list) {
 
 	html += "</html>"
 
-	usr << browse(html, "window=variables\ref[D];size=475x650")
+	usr << browse(HTML_SKELETON(html), "window=variables\ref[D];size=475x650")
 
 /client/proc/debug_variable(name, value, list/searched, var/datum/DA = null)
 	var/html = ""
@@ -453,7 +453,7 @@ function loadPage(list) {
 		html += "<hr>"
 		html += debug_variable(null, L)
 
-	usr << browse(html, "window=listedit\ref[L];size=475x650")
+	usr << browse(HTML_SKELETON(html), "window=listedit\ref[L];size=475x650")
 
 /client/proc/view_var_Topic(href, href_list, hsrc)
 	//This should all be moved over to datum/admins/Topic() or something ~Carn

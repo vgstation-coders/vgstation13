@@ -667,6 +667,17 @@
 			if(send_message)
 				to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
 			success = FALSE
+		var/mob/thrallcheck
+		if(client)
+			thrallcheck = src
+		else if(mind)
+			var/mob/dead/observer/ghost = mind_can_reenter(src.mind)
+			if(ghost)
+				thrallcheck = ghost.get_top_transmogrification()
+		if(isthrall(thrallcheck))
+			if(send_message)
+				to_chat(M.current, "<span class='warning'>This one's mind is already under the influence of another!</span>")
+			return FALSE
 		// Null rod nullifies vampire powers, unless we're a young vamp.
 		var/datum/role/vampire/V = M.GetRole(VAMPIRE)
 		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)

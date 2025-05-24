@@ -232,37 +232,37 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		log_debug("[name] task found an empty file on [file_path]")
 		return
 	for(var/list/L in to_read)
-		var/datum/record/money/record = new(L["ckey"], L["role"], L["cash"], L["shift_duration"], L["date"])
+		var/datum/data/record/money/record = new(L["ckey"], L["role"], L["cash"], L["shift_duration"], L["date"])
 		data += record
 
 /datum/persistence_task/highscores/on_shutdown()
 	var/list/L = list()
-	for(var/datum/record/money/record in data)
+	for(var/datum/data/record/money/record in data)
 		L += list(record.vars)
 	write_file(L)
 
 /datum/persistence_task/highscores/proc/insert_records(list/records)
 	data += records
-	cmp_field = "cash"
-	sortTim(data, /proc/cmp_list_by_element_desc)
+	global.cmp_field = "cash"
+	sortTim(data, /proc/cmp_records_numerically)
 	if (data.len > 5)
 		data.Cut(6) // we only store the top 5
-	for(var/datum/record/money/record in data)
+	for(var/datum/data/record/money/record in data)
 		if(record in records)
 			if(data[1] == record)
 				announce_new_highest_record(record)
 			else
 				announce_new_record(record)
 
-/datum/persistence_task/highscores/proc/announce_new_highest_record(var/datum/record/money/record)
+/datum/persistence_task/highscores/proc/announce_new_highest_record(var/datum/data/record/money/record)
 	var/name = "Richest escape ever"
-	var/desc = "You broke the record of the richest escape! $[record.cash] chips accumulated."
-	give_award(record.ckey, /obj/item/weapon/reagent_containers/food/drinks/golden_cup, name, desc)
+	var/desc = "You broke the record of the richest escape! $[record.fields["cash"]] chips accumulated."
+	give_award(record.fields["ckey"], /obj/item/weapon/reagent_containers/food/drinks/golden_cup, name, desc)
 
-/datum/persistence_task/highscores/proc/announce_new_record(var/datum/record/money/record)
+/datum/persistence_task/highscores/proc/announce_new_record(var/datum/data/record/money/record)
 	var/name = "Good rich escape"
-	var/desc = "You made it to the top 5! You accumulated $[record.cash]."
-	give_award(record.ckey, /obj/item/clothing/accessory/medal/gold, name, desc, FALSE)
+	var/desc = "You made it to the top 5! You accumulated $[record.fields["cash"]]."
+	give_award(record.fields["ckey"], /obj/item/clothing/accessory/medal/gold, name, desc, FALSE)
 
 /datum/persistence_task/highscores/proc/clear_records()
 	data = list()
@@ -273,15 +273,15 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	name = "Trader shoal highscores"
 	file_path = "data/persistence/trader_highscores.json"
 
-/datum/persistence_task/highscores/trader/announce_new_highest_record(var/datum/record/money/record)
+/datum/persistence_task/highscores/trader/announce_new_highest_record(var/datum/data/record/money/record)
 	var/name = "Richest shoal haul ever"
-	var/desc = "You broke the record of the richest shoal haul! $[record.cash] chips accumulated."
-	give_award(record.ckey, /obj/item/weapon/reagent_containers/food/drinks/golden_cup, name, desc)
+	var/desc = "You broke the record of the richest shoal haul! $[record.fields["cash"]] chips accumulated."
+	give_award(record.fields["ckey"], /obj/item/weapon/reagent_containers/food/drinks/golden_cup, name, desc)
 
-/datum/persistence_task/highscores/trader/announce_new_record(var/datum/record/money/record)
+/datum/persistence_task/highscores/trader/announce_new_record(var/datum/data/record/money/record)
 	var/name = "Good rich shoal haul"
-	var/desc = "You made it to the top 5! You accumulated $[record.cash]."
-	give_award(record.ckey, /obj/item/clothing/accessory/medal/gold, name, desc, FALSE)
+	var/desc = "You made it to the top 5! You accumulated $[record.fields["cash"]]."
+	give_award(record.fields["ckey"], /obj/item/clothing/accessory/medal/gold, name, desc, FALSE)
 
 //stores map votes for code/modules/html_interface/voting/voting.dm
 /datum/persistence_task/vote
