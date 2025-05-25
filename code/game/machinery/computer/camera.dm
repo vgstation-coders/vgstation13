@@ -31,13 +31,20 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		/datum/malfhack_ability/toggle/disable,
 		/datum/malfhack_ability/oneuse/overload_quiet
 	)
+	dontpool_tgui = TRUE
+
+	var/map_name_counter = 0
+	var/old_map_name = 0
 
 /obj/machinery/computer/security/initialize()
 	..()
 	tv_monitors += src
 	// Map name has to start and end with an A-Z character,
 	// and definitely NOT with a square bracket or even a number.
-	map_name = "camera_console_[ref(src)]_map"
+	map_name = "camera_console_[ref(src)]_map_[map_name_counter]"
+	initialize_map_objects()
+
+/obj/machinery/computer/security/proc/initialize_map_objects()
 	// Initialize map objects
 	cam_screen = new
 	cam_screen.name = "screen"
@@ -101,6 +108,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		return
 	if(!is_operational())
 		return
+	map_name_counter++ // For the next time we open the UI... to fix later....................
 	tgui_interact(user)
 
 /obj/machinery/computer/security/tgui_interact(mob/user, datum/tgui/ui)
@@ -108,6 +116,16 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 	// Update the camera, showing static if necessary and updating data if the location has moved.
 	update_active_camera_screen()
+
+	if (old_map_name != map_name_counter)
+		cam_screen.assigned_map = map_name
+		map_name = "camera_console_[ref(src)]_map_[map_name_counter]"
+		cam_screen.screen_loc = "[map_name]:1,1"
+		for (var/obj/abstract/screen/instance in cam_plane_masters)
+			instance.screen_loc = "[map_name]:CENTER"
+			instance.del_on_map_removal = FALSE
+		cam_background.assigned_map = map_name
+		old_map_name = map_name_counter
 
 	if(!ui)
 		// Register map objects
@@ -123,6 +141,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	var/list/data = list()
 	data["network"] = network
 	data["activeCamera"] = null
+	data["mapRef"] = map_name
 	if(active_camera)
 		data["activeCamera"] = list(
 			"name" = active_camera.c_tag,
@@ -133,7 +152,6 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 /obj/machinery/computer/security/ui_static_data()
 	var/list/data = list()
-	data["mapRef"] = map_name
 	var/list/cameras = get_available_cameras()
 	data["cameras"] = list()
 	for(var/i in cameras)
