@@ -223,9 +223,13 @@ List of hard deletions:"}
 
 	var/list/L = list()
 	L += "<b>Garbage Collector Forced Deletions in this round</b><br>"
+	L += "<i>Roundstart:</i>"
+	for(var/A in ghdel_profiling_roundstart)
+		L += "<br>[A] = [ghdel_profiling_roundstart[A]]"
+	L += "<br/><i>In round:</i>"
 	for(var/A in ghdel_profiling)
 		L += "<br>[A] = [ghdel_profiling[A]]"
-	if(L.len == 1)
+	if(L.len == 3)
 		to_chat(usr, "No garbage collector deletions this round")
 		return
 	usr << browse(HTML_SKELETON(jointext(L, "")),"window=harddellogs")
@@ -288,16 +292,21 @@ List of hard deletions:"}
 		return 1
 
 /proc/delete_profile(var/type, code = 0)
-	if(code == 0)
+	if(code == DIRECT_DEL_CALL)
 		if (!("[type]" in del_profiling))
 			del_profiling["[type]"] = 0
 
 		del_profiling["[type]"] += 1
-	else if(code == 1)
+	else if(code == HARD_DELETED_IN_ROUND)
 		if (!("[type]" in ghdel_profiling))
 			ghdel_profiling["[type]"] = 0
 
 		ghdel_profiling["[type]"] += 1
+	else if(code == HARD_DELETED_ROUNDSTART)
+		if (!("[type]" in ghdel_profiling_roundstart))
+			ghdel_profiling_roundstart["[type]"] = 0
+
+		ghdel_profiling_roundstart["[type]"] += 1
 	else
 		if (!("[type]" in gdel_profiling))
 			gdel_profiling["[type]"] = 0

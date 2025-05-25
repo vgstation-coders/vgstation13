@@ -111,12 +111,15 @@
 /atom/movable/Del()
 	if (gcDestroyed)
 		if (hard_deleted)
-			delete_profile("[type]", 1)
+			if (ticker.current_state == GAME_STATE_PLAYING)
+				delete_profile("[type]", HARD_DELETED_IN_ROUND)
+			else
+				delete_profile("[type]", HARD_DELETED_ROUNDSTART)
 		else
-			delete_profile("[type]", 2)
+			delete_profile("[type]", SOFT_DEL)
 
 	else // direct del calls or nulled explicitly.
-		delete_profile("[type]", 0)
+		delete_profile("[type]", DIRECT_DEL_CALL)
 		Destroy()
 
 	..()
