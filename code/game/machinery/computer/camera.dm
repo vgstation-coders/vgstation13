@@ -218,6 +218,9 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 /obj/machinery/computer/security/ui_close(mob/user)
 	// Unregister map objects
 	user.client.clear_map(map_name)
+	// Fully clear it while we're at it
+	var/datum/tgui/ui = SStgui.get_open_ui(user, src)
+	SStgui.force_close_window(user, ui.window.id)
 
 /obj/machinery/computer/security/proc/show_camera_static()
 	cam_screen.vis_contents.Cut()
