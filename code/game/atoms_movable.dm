@@ -72,10 +72,13 @@
 			materials.addAmount(matID, starting_materials[matID])
 
 /atom/movable/Destroy()
-	var/turf/T
-	if (opacity && isturf(loc))
-		T = loc // recalc_atom_opacity() is called later on this
-		T.reconsider_lights()
+	var/turf/T = loc
+	if (isturf(T))
+		if (opacity)
+			T.reconsider_lights()
+	if (istype(T, /turf/simulated))
+		var/turf/simulated/S = T
+		S.zone?.burnable_atoms -= src
 
 	if(materials)
 		QDEL_NULL(materials)
@@ -106,7 +109,7 @@
 	for(var/atom/movable/AM in src)
 		qdel(AM)
 
-	..()
+	. = ..()
 
 /atom/movable/Del()
 	if (gcDestroyed)

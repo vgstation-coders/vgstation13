@@ -28,6 +28,7 @@
 		icon = original
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
+	reagents.my_atom = null // This solves a really mysterious and frankly strange hard-delete
 	..()
 	if(poisonsacs)
 		QDEL_NULL(poisonsacs)
@@ -271,7 +272,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(FLOUR, 32)
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/cricket/king
 	name = "cricket king meat"
 	desc = "A royal bloodline was felled to make this. Tastes like regicide."
