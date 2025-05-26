@@ -12,9 +12,9 @@ Beyond that, we welcome absolutely anyone to learn to code with our mess of an e
 
 By opening a PR here you agree to not block any user involved with us via the native github blocking feature, else your PR will be closed until the users are unblocked.
 
-This is to avoid community conflicts since blocking a user [stops them from interacting with it](https://docs.github.com/en/communities/maintaining-your-safety-on-github/blocking-a-user-from-your-personal-account) in every way. 
+This is to avoid community conflicts since blocking a user [stops them from interacting with PRs and Issues](https://docs.github.com/en/communities/maintaining-your-safety-on-github/blocking-a-user-from-your-personal-account) in every way. 
 
-Use this [userscript](https://github.com/Mottie/GitHub-userscripts/blob/master/github-issue-comments.user.js) to block them on your end instead if you need to.
+Use this [userscript](https://github.com/Mottie/GitHub-userscripts/blob/master/github-issue-comments.user.js) to block them on your end instead if you need to, and report them to the collabs if you're genuinely being harassed.
 
 ##### Notes on content
 
