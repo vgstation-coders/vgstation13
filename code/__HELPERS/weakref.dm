@@ -28,14 +28,13 @@
 	var/ref
 
 /datum/weakref/Destroy()
-	var/datum/D = get()
-	D?.weakref = null
+	get()?.weakref = null
 	return ..()
 
 /**
  * Attempts to retrieve the object referenced by the weakref, returning null if the object no longer exists.
  */
-/datum/weakref/proc/get()
+/datum/weakref/proc/get() as /datum
 	var/datum/D = locate(ref)
 	if (!D || !istype(D) || D.gcDestroyed || D.weakref != src)
 		return null
