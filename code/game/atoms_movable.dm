@@ -72,12 +72,12 @@
 			materials.addAmount(matID, starting_materials[matID])
 
 /atom/movable/Destroy()
-	var/turf/T = loc
-	if (isturf(T))
-		if (opacity)
-			T.reconsider_lights()
-	if (istype(T, /turf/simulated))
-		var/turf/simulated/S = T
+	var/turf/T
+	if (isturf(loc) && opacity)
+		T = loc
+		T.reconsider_lights()
+	var/turf/simulated/S = get_turf(src)
+	if (istype(S))
 		S.zone?.burnable_atoms -= src
 
 	if(materials)
