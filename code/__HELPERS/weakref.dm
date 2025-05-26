@@ -27,6 +27,11 @@
 /datum/weakref
 	var/ref
 
+/datum/weakref/Destroy()
+	var/datum/D = get()
+	D?.weakref = null
+	return ..()
+
 /**
  * Attempts to retrieve the object referenced by the weakref, returning null if the object no longer exists.
  */
