@@ -949,15 +949,7 @@ var/global/maxStackDepth = 10
 	var/luminous_paint = FALSE
 
 /obj/item/clothing/shoes/proc/step_action()
-	stepstaken++
-	if(step_sound != "" && ishuman(loc))
-		var/mob/living/carbon/human/H = loc
-		switch(H.m_intent)
-			if("run")
-				if(stepstaken % modulo_steps == 0)
-					playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
-			if("walk")
-				playsound(H, step_sound, 20, 1)
+	return
 
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return

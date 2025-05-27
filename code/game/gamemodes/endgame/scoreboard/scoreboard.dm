@@ -18,6 +18,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/deadcrew			= 0 //Humans who died during the round
 	var/deadsilicon			= 0 //Silicons who died during the round
 	var/deadaipenalty		= 0 //AIs who died during the round
+	var/rescuedpets			= 0 //how many pets were brought back to centcomm (alive)
+	var/rescueianbonus		= 0 //ian is a special little guy :)
 	var/mess				= 0 //How much messes on the floor went uncleaned
 	var/litter				= 0 //How much trash is laying on the station floor
 	var/meals				= 0 //How much food was actively cooked that day
@@ -139,6 +141,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Cargo Crates Forwarded:</B> [score.stuffforwarded] ([score.stuffforwarded * 50] Points)<BR>"
 	if(score.oremined > 0)
 		dat += "<B>Ore Smelted:</B> [score.oremined] ([score.oremined] Points)<BR>"
+	if(score.rescuedpets)
+		dat += "<B>Rescued Pets:</B> [score.rescuedpets] ([score.rescuedpets*50 + score.rescueianbonus] Points<BR>)"	
 	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
 	dat += "<B>Whole Station Airtight:</B> [score.atmobonus ? "Yes" : "No"] ([score.atmobonus] Points)<BR>"
 	if (score.disease_vaccine_score > 0)

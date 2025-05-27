@@ -4216,7 +4216,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "Brig Break Room"
 	},
 /obj/machinery/computer/security_alerts,
 /turf/simulated/floor{
@@ -9054,7 +9055,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "Brig Lobby"
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -11775,7 +11777,10 @@
 /area/security/detectives_office)
 "asF" = (
 /obj/machinery/requests_console{
-	pixel_y = 32
+	pixel_y = 32;
+	phone_name = "Detective's Office";
+	department = "Security";
+	departmentType = 5
 	},
 /turf/simulated/floor{
 	icon_state = "grimy"
@@ -18388,7 +18393,8 @@
 /area/lawoffice)
 "aFL" = (
 /obj/machinery/requests_console{
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Law Office"
 	},
 /turf/simulated/floor{
 	icon_state = "cult"
@@ -23074,7 +23080,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "Arrivals Checkpoint"
 	},
 /obj/machinery/light_switch{
 	pixel_x = 27
@@ -32336,9 +32343,9 @@
 	},
 /obj/machinery/door/window{
 	base_state = "right";
+	dir = 8;
 	name = "Library Desk Door";
-	req_access_txt = "37";
-	dir = 8
+	req_access_txt = "37"
 	},
 /turf/simulated/floor/wood,
 /area/library)
@@ -36469,12 +36476,12 @@
 	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
+	desc = "Secret of the arts";
 	dir = 2;
 	icon_state = "shutter0";
 	id_tag = "art1";
 	name = "Art Shutters";
-	opacity = 0;
-	desc = "Secret of the arts"
+	opacity = 0
 	},
 /turf/simulated/floor/plating,
 /area/storage/art)
@@ -39545,7 +39552,8 @@
 	department = "Bridge";
 	departmentType = 5;
 	name = "Bridge RC";
-	pixel_y = -30
+	pixel_y = -30;
+	phone_name = "Heads of Staff Meeting Room"
 	},
 /turf/simulated/floor/wood,
 /area/bridge/meeting_room)
@@ -40190,7 +40198,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "Disposals"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -41804,6 +41813,7 @@
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner (WEST)"
 	},
+/obj/machinery/computer/tetris,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -42095,7 +42105,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "Cargo Unloading Area"
 	},
 /turf/simulated/floor,
 /area/supply/storage)
@@ -42821,7 +42832,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Research And Development"
 	},
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe,
 /obj/machinery/light{
@@ -47986,7 +47998,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Cargo Lobby"
 	},
 /obj/machinery/camera{
 	dir = 4;
@@ -50421,7 +50434,8 @@
 	department = "Medbay";
 	departmentType = 1;
 	name = "Medbay RC";
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Medbay Emergency Entrance"
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
@@ -52864,7 +52878,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Quartermaster's Office"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor,
@@ -53645,7 +53660,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Mining Dock"
 	},
 /turf/simulated/floor,
 /area/supply/miningdock)
@@ -53991,7 +54007,8 @@
 "bXL" = (
 /obj/machinery/requests_console{
 	department = "Medbay";
-	pixel_y = -30
+	pixel_y = -30;
+	phone_name = "Medbay Lobby"
 	},
 /turf/simulated/floor{
 	icon_state = "whiteblue"
@@ -58721,7 +58738,8 @@
 	department = "Medbay";
 	departmentType = 1;
 	name = "Medbay RC";
-	pixel_y = -30
+	pixel_y = -30;
+	phone_name = "Medbay Storage"
 	},
 /turf/simulated/floor{
 	icon_state = "whiteblue"
@@ -60670,8 +60688,8 @@
 "cjC" = (
 /obj/machinery/door/airlock/medical{
 	name = "Patient Room 1";
-	req_access_txt = "5";
-	req_access_dir = 4
+	req_access_dir = 4;
+	req_access_txt = "5"
 	},
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -61990,8 +62008,8 @@
 "cme" = (
 /obj/machinery/door/airlock/medical{
 	name = "Patient Room 2";
-	req_access_txt = "5";
-	req_access_dir = 4
+	req_access_dir = 4;
+	req_access_txt = "5"
 	},
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -67171,9 +67189,10 @@
 	icon_state = "bot"
 	},
 /obj/machinery/requests_console{
-	department = "Chemistry";
-	departmentType = 2;
-	pixel_y = 30
+	department = "Engineering";
+	departmentType = 4;
+	pixel_y = 30;
+	phone_name = "Technical Storage"
 	},
 /obj/abstract/map/spawner/pick_spawner/yellowgloves/technicalstorage,
 /turf/simulated/floor{
@@ -72138,7 +72157,8 @@
 	department = "Engineering";
 	departmentType = 4;
 	name = "Engineering RC";
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "TEG Room"
 	},
 /obj/structure/table,
 /obj/item/weapon/book/manual/engineering_guide,
@@ -72429,7 +72449,8 @@
 	department = "Engineering";
 	departmentType = 4;
 	name = "Engineering RC";
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Engineering Lobby"
 	},
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 4
@@ -100027,7 +100048,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Toxins"
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 5;
@@ -115550,12 +115572,12 @@
 /obj/structure/window/reinforced,
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
+	desc = "Secret of the arts";
 	dir = 2;
 	icon_state = "shutter0";
 	id_tag = "art1";
 	name = "Art Shutters";
-	opacity = 0;
-	desc = "Secret of the arts"
+	opacity = 0
 	},
 /turf/simulated/floor/plating,
 /area/storage/art)
@@ -116084,12 +116106,12 @@
 	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
+	desc = "Secret of the arts";
 	dir = 2;
 	icon_state = "shutter0";
 	id_tag = "art1";
 	name = "Art Shutters";
-	opacity = 0;
-	desc = "Secret of the arts"
+	opacity = 0
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor/plating,
@@ -116339,12 +116361,12 @@
 /obj/structure/window/reinforced,
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
+	desc = "Secret of the arts";
 	dir = 2;
 	icon_state = "shutter0";
 	id_tag = "art1";
 	name = "Art Shutters";
-	opacity = 0;
-	desc = "Secret of the arts"
+	opacity = 0
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,

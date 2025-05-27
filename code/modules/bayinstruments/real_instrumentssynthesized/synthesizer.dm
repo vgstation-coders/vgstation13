@@ -244,6 +244,8 @@
 
 
 /obj/structure/synthesized_instrument/synthesizer/ui_interact(mob/user, ui_key = "instrument", var/datum/nanoui/ui = null, var/force_open = 0)
+	if(!user || !anchored)
+		return
 	var/list/data
 	data = list(
 		"playback" = list(
@@ -360,4 +362,4 @@
 
 
 /obj/structure/synthesized_instrument/synthesizer/shouldStopPlaying(mob/user)
-	return !((src && in_range(src, user) && anchored) || player.song.autorepeat)
+	return !((src && in_range(src, user) && anchored))

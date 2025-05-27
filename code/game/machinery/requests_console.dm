@@ -17,6 +17,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 	var/list/master_department = list()
 	var/master_department_short = ""
 	var/list/messages = list() //List of all messages
+	var/phone_name = ""
 	var/departmentType = 0
 		// 0 = none (not listed, can only repeplied to)
 		// 1 = assistance
@@ -328,7 +329,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 			if(11) //select console to dial from previously chosen department
 				dat += text("Available [landline.chosen_department] telephones:<BR>")
 				for(var/obj/machinery/requests_console/subdept in requests_consoles_categorised[landline.chosen_department])
-					dat += ("<A href='?src=\ref[src];dialConsole=\ref[subdept]'>[subdept.department]</A><BR>")
+					dat += ("<A href='?src=\ref[src];dialConsole=\ref[subdept]'>[subdept.phone_name ? subdept.phone_name : subdept.department]</A><BR>")
 					//apostrophes in the string break the hrefs so i'm referencing and locate()ing the thing
 				dat += text("<BR><A href='?src=\ref[src];setScreen=4'>Back</A><BR>")
 				

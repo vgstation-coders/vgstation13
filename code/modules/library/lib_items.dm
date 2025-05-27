@@ -249,6 +249,24 @@
 		return
 	if (!isobserver(user))
 		playsound(user, "pageturn", 50, 1, -5)
+	if(wiki_page)
+		dat = {"
+		<html>
+		<body style="margin:5px;padding:0px;overflow:hidden">
+			<iframe width='100%' height='100%' frameborder="0" style="overflow:hidden;height:100%;width:100%" src="http://ss13.moe/wiki/index.php?title=[wiki_page]&printable=yes"></iframe>
+		</body>
+		</html>
+		"}
+		if(!isobserver(user))
+			user.visible_message("<span class='notice'>[user] opens a manual titled \"[src.title]\" and begins reading intently.</span>")
+		user << browse(dat, "window=[name];size=[book_width]x[book_height]")
+		return
+	// typechecking src is the big gay but here it's kinda the most straightforward way to handle.
+	// Manuals have well-formed HTML so HTML_SKELETON isn't needed here
+	if (istype(src, /obj/item/weapon/book/manual))
+		if(!isobserver(user))
+			user.visible_message("<span class='notice'>[user] opens a manual titled \"[src.title]\" and begins reading intently.</span>")
+		user << browse(dat, "window=[name];size=[book_width]x[book_height]")
 	if(src.dat)
 		user << browse(HTML_SKELETON("<TT><I>Penned by [author].</I></TT> <BR>[dat]"), "window=[name];size=[book_width]x[book_height]")
 		if(!isobserver(user))
