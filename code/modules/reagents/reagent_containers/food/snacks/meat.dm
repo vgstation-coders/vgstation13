@@ -28,7 +28,6 @@
 		icon = original
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
-	reagents.my_atom = null // This solves a really mysterious and frankly strange hard-delete
 	..()
 	if(poisonsacs)
 		QDEL_NULL(poisonsacs)
