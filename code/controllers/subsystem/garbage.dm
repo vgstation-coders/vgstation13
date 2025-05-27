@@ -1,6 +1,6 @@
 #define GC_COLLECTION_TIMEOUT (30 SECONDS)
 
-//#define GC_DEBUG
+#define GC_DEBUG
 //#define GC_FINDREF
 //#define GC_REFDEBUG
 
@@ -66,6 +66,7 @@ List of hard deletions:"}
 		return //don't even fucking bother, its over.
 	while(queue.len)
 		var/refID = queue[1]
+		to_chat(world, "[refID]")
 		var/destroyedAtTime = queue[refID]
 
 		if(destroyedAtTime > collectionTimeScope)
@@ -75,6 +76,7 @@ List of hard deletions:"}
 		if(D) // Something's still referring to the qdel'd object. del it.
 			if(isnull(D.gcDestroyed))
 				removeTrash(refID)
+				to_chat(world, "Remove trash [refID]")
 				continue
 
 			#ifdef GC_FINDREF
@@ -313,6 +315,15 @@ List of hard deletions:"}
 		gdel_profiling["[type]"] += 1
 		soft_dels += 1
 
+var/list/silly_global_list = list()
+
+/obj/item/silly
+
+/obj/item/silly/New()
+	. = ..()
+	silly_global_list += src
+
+
 #ifdef GC_FINDREF
 
 /obj/item/weapon/card/del_mag
@@ -341,6 +352,7 @@ List of hard deletions:"}
 		return
 	client.holder.marked_datum = D
 	to_chat(world, "Saved [D] ref:[string] as your marked datum.")
+
 
 #undef GC_FINDREF
 #endif
