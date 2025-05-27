@@ -48146,10 +48146,9 @@
 	},
 /area/supply/storage)
 "bLM" = (
-/obj/effect/decal/cleanable/cobweb,
-/obj/item/stack/rods,
-/obj/item/device/flashlight,
-/obj/effect/decal/cleanable/blood/gibs/robot,
+/obj/structure/closet,
+/obj/item/mounted/poster,
+/obj/item/mounted/poster,
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "bLN" = (
@@ -110244,9 +110243,10 @@
 /turf/simulated/floor,
 /area/engineering/break_room)
 "lWt" = (
-/obj/structure/closet,
-/obj/item/mounted/poster,
-/obj/item/mounted/poster,
+/obj/effect/decal/cleanable/cobweb,
+/obj/item/stack/rods,
+/obj/item/device/flashlight,
+/obj/effect/decal/cleanable/blood/gibs/robot,
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "mcs" = (
@@ -233916,7 +233916,7 @@ bJT
 bKR
 bLS
 btE
-bHO
+lWt
 bMD
 bNO
 bOI
@@ -234920,7 +234920,7 @@ bwZ
 bwZ
 bJR
 btE
-lWt
+bGI
 bMD
 bNO
 bOI
@@ -235924,7 +235924,7 @@ bvL
 bIL
 bJS
 btE
-bHO
+bGI
 bMD
 bHO
 bOL
