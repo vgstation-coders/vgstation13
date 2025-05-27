@@ -184,7 +184,7 @@ var/global/list/ghdel_profiling_roundstart = list()
 	INVOKE_EVENT(src, /event/throw_impact, "hit_atom" = hit_atom, "speed" = speed, "user" = user, "thrown_atom" = src)
 
 /atom/Destroy()
-	reagents.my_atom = null // This solves a really mysterious and frankly strange hard-delete
+	reagents?.my_atom = null // This solves a really mysterious and frankly strange hard-delete
 	QDEL_NULL(reagents)
 
 	if(density)
