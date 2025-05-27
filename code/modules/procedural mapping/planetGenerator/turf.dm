@@ -60,7 +60,7 @@
 		icon_state = "asteroid[rand(0,12)]"
 
 //Snow
-/turf/unsimulated/floor/snow/basalt
+/turf/unsimulated/floor/basalt
 	name = "basalt"
 	icon = 'icons/turf/new_snow.dmi'
 	icon_state = "concrete"

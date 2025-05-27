@@ -148,8 +148,7 @@
 
 /datum/biome/arctic
 	open_turf_types = list(
-		/turf/unsimulated/floor/snow = 4,
-		/turf/unsimulated/floor/snow/glacier = 1
+		/turf/unsimulated/floor/snow = 4
 	)
 	mob_spawn_list = list(
 		/mob/living/simple_animal/hostile/wolf = 10,
@@ -170,8 +169,6 @@
 
 /datum/biome/iceberg
 	open_turf_types = list(
-		/turf/unsimulated/floor/snow = 10,
-		/turf/unsimulated/floor/snow/glacier = 5,
 		/turf/unsimulated/floor/noblizz_permafrost/icecore = 1
 	)
 	mob_spawn_chance = 2
@@ -218,19 +215,18 @@
 
 /datum/biome/cave/snow/ice
 	open_turf_types = list(
-		/turf/unsimulated/floor/snow/cave = 10,
-		/turf/unsimulated/floor/noblizz_permafrost/icecore = 1
+		/turf/unsimulated/floor/snow/cave = 1
 	)
 	closed_turf_types = list(
-		/turf/unsimulated/floor/snow/cave = 1
+		/turf/unsimulated/wall/rock/ice = 1
 	)
 
 /datum/biome/cave/volcanic
 	open_turf_types = list(
-		/turf/unsimulated/floor/snow/basalt = 1
+		/turf/unsimulated/floor/basalt = 1
 	)
 	closed_turf_types = list(
-		/turf/unsimulated/floor/snow/cave = 1
+		/turf/unsimulated/wall/rock/ice = 1
 		)
 	mob_spawn_chance = 2
 	mob_spawn_list = list(
@@ -248,8 +244,7 @@
 
 /datum/biome/cave/volcanic/lava
 	open_turf_types = list(
-		/turf/unsimulated/floor/lava = 1,
-		/turf/unsimulated/floor/snow/basalt = 5
+		/turf/unsimulated/floor/lava = 1
 	)
 
 /datum/biome/cave/volcanic/lava/total
