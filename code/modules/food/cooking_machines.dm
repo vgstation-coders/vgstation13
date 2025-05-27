@@ -758,7 +758,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/grill/spit
 	name = "spit"
-	desc = "the prime in clown cooking technology."
+	desc = "The prime in clown cooking technology."
 	density = 0
 	icon_state = "spit"
 	icon_state_on = "spit"

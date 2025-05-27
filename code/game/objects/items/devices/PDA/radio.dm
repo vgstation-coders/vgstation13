@@ -47,7 +47,7 @@
 /obj/item/radio/integrated/signal/proc/send_signal(message="ACTIVATE")
 
 
-	if(last_transmission && world.time < (last_transmission + 5))
+	if(last_transmission && world.time < (last_transmission + 0.5 SECONDS))
 		return
 	last_transmission = world.time
 
