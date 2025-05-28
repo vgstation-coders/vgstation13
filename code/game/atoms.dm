@@ -184,8 +184,6 @@ var/global/list/ghdel_profiling_roundstart = list()
 	INVOKE_EVENT(src, /event/throw_impact, "hit_atom" = hit_atom, "speed" = speed, "user" = user, "thrown_atom" = src)
 
 /atom/Destroy()
-	if (!reagents)
-		to_chat(world, "[ref(src)] - [src] signals no reagents to delete")
 	QDEL_NULL(reagents)
 	if(density)
 		densityChanged()
