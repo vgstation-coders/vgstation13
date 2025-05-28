@@ -44,9 +44,8 @@
 	var/unmonkey_anim = "monkey2h"
 
 /mob/living/carbon/monkey/New()
-	var/datum/reagents/R = new/datum/reagents(1000)
-	reagents = R
-	R.my_atom = src
+	create_reagents(1000)
+
 
 	if(namenumbers)
 		name = "[name] ([rand(1, 1000)])"

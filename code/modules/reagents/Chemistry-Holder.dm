@@ -1113,6 +1113,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
  * max_vol is maximum volume of holder
  */
 /atom/proc/create_reagents(const/max_vol)
+	if (reagents)
+		stack_trace("double reagents creation for [type]")
+		QDEL_NULL(reagents)
 	reagents = new/datum/reagents(max_vol)
 	reagents.my_atom = src
 

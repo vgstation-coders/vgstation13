@@ -284,6 +284,10 @@
 		udder.my_atom = src
 	..()
 
+/mob/living/simple_animal/hostile/retaliate/polyp/Destroy()
+	QDEL_NULL(udder)
+	. = ..()
+
 /mob/living/simple_animal/hostile/retaliate/polyp/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -403,6 +407,10 @@
 		udder = new(50)
 		udder.my_atom = src
 	..()
+
+/mob/living/simple_animal/hostile/retaliate/cattle_specimen/Destroy()
+	QDEL_NULL(udder)
+	. = ..()
 
 /mob/living/simple_animal/hostile/retaliate/cattle_specimen/Life()
 	if(timestopped)

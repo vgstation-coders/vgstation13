@@ -150,6 +150,10 @@
 	milkable_reagents = new(150)
 	milkable_reagents.my_atom = src
 
+/mob/living/simple_animal/cow/Destroy()
+	QDEL_NULL(milkable_reagents)
+	return ..()
+
 /mob/living/simple_animal/cow/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")

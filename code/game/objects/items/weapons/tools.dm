@@ -964,6 +964,11 @@
 	reagents.add_reagent(FUEL, 50)
 	slotone.add_reagent(SACID, 50)
 
+/obj/item/weapon/reagent_containers/glass/fuelcan/Destroy()
+	QDEL_NULL(slotone)
+	QDEL_NULL(slotzero)
+	. = ..()
+
 /obj/item/weapon/reagent_containers/glass/fuelcan/attack_self(mob/user as mob)
 	if(!slot)
 		slotzero = reagents

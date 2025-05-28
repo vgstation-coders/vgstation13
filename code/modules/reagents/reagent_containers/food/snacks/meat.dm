@@ -28,9 +28,11 @@
 		icon = original
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
-	..()
+	if (reagents) // THE REAGENTS JUST DISSAPEAR IF YOU DON'T QDEL THEM EARLY IN THE DESTROY CHAIN I HAVE NO IDEA WHY
+		QDEL_NULL(reagents)
 	if(poisonsacs)
 		QDEL_NULL(poisonsacs)
+	return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal //This meat spawns when an animal is butchered, and its name is set to '[animal.species_name] meat' (like "cat meat")
 	var/animal_name = "animal"

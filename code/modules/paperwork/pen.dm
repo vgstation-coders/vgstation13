@@ -390,9 +390,7 @@
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=5"
 
 /obj/item/weapon/pen/paralysis/New()
-	var/datum/reagents/R = new/datum/reagents(25)
-	reagents = R
-	R.my_atom = src
-	R.add_reagent(ZOMBIEPOWDER, 10)
-	R.add_reagent(CRYPTOBIOLIN, 15)
+	create_reagents(25)
+	reagents.add_reagent(ZOMBIEPOWDER, 10)
+	reagents.add_reagent(CRYPTOBIOLIN, 15)
 	..()
