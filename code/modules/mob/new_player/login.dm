@@ -2,6 +2,8 @@
 	update_Login_details()	//handles setting lastKnownIP and computer_id for use by the ban systems as well as checking for multikeying
 	if(join_motd)
 		to_chat(src, "<div class=\"motd\">[join_motd]</div>")
+		if(DM_VERSION < 516)
+			to_chat(src, "<span class='sinisterbig'>Your BYOND version is out of date, expect things to be broken")
 
 	client.reset_screen()
 	
