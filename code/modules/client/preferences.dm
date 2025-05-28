@@ -838,7 +838,7 @@ var/const/MAX_SAVE_SLOTS = 16
 				var/datum/job/job = locate(href_list["job"])
 				if (job)
 					var/choices = list(job.title) + job.alt_titles
-					var/choice = input("Pick a title for [job.title].", "Character Generation", GetPlayerAltTitle(job)) as anything in choices | null
+					var/choice = input("Pick a title for [job.title].", "Character Generation", GetPlayerAltTitle(job)) as null|anything in choices
 					if(choice)
 						SetPlayerAltTitle(job, choice)
 						SetChoices(user)

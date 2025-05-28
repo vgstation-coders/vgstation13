@@ -170,6 +170,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 // Starts the mc, and sticks around to restart it if the loop ever ends.
 /datum/controller/master/proc/StartProcessing()
 	set waitfor = 0
+	usr = null
 	var/rtn = Loop()
 	if (rtn > 0 || processing < 0)
 		return //this was suppose to happen.
@@ -184,6 +185,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 
 // Main loop.
 /datum/controller/master/proc/Loop()
+	usr = null
 	. = -1
 	//Prep the loop (most of this is because we want MC restarts to reset as much state as we can, and because
 	//	local vars rock

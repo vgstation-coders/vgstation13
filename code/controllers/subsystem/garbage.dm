@@ -206,7 +206,6 @@ List of hard deletions:"}
 		if(islist(G))
 			. += LookForListRefs(G, targ, D, "[G] in list [V] at key [F]", foundcache)
 #undef FINDREF_OUTPUT
-#undef GC_FINDREF
 #endif
 
 /datum/subsystem/garbage/proc/debugqueue(i = 1) //Too lazy to add this to any menus so instead just use proccall
@@ -223,9 +222,13 @@ List of hard deletions:"}
 
 	var/list/L = list()
 	L += "<b>Garbage Collector Forced Deletions in this round</b><br>"
+	L += "<i>Roundstart:</i>"
+	for(var/A in ghdel_profiling_roundstart)
+		L += "<br>[A] = [ghdel_profiling_roundstart[A]]"
+	L += "<br/><i>In round:</i>"
 	for(var/A in ghdel_profiling)
 		L += "<br>[A] = [ghdel_profiling[A]]"
-	if(L.len == 1)
+	if(L.len == 3)
 		to_chat(usr, "No garbage collector deletions this round")
 		return
 	usr << browse(HTML_SKELETON(jointext(L, "")),"window=harddellogs")
@@ -288,19 +291,57 @@ List of hard deletions:"}
 		return 1
 
 /proc/delete_profile(var/type, code = 0)
-	if(code == 0)
+	if(code == DIRECT_DEL_CALL)
 		if (!("[type]" in del_profiling))
 			del_profiling["[type]"] = 0
 
 		del_profiling["[type]"] += 1
-	else if(code == 1)
+	else if(code == HARD_DELETED_IN_ROUND)
 		if (!("[type]" in ghdel_profiling))
 			ghdel_profiling["[type]"] = 0
 
 		ghdel_profiling["[type]"] += 1
+	else if(code == HARD_DELETED_ROUNDSTART)
+		if (!("[type]" in ghdel_profiling_roundstart))
+			ghdel_profiling_roundstart["[type]"] = 0
+
+		ghdel_profiling_roundstart["[type]"] += 1
 	else
 		if (!("[type]" in gdel_profiling))
 			gdel_profiling["[type]"] = 0
 
 		gdel_profiling["[type]"] += 1
 		soft_dels += 1
+
+#ifdef GC_FINDREF
+
+/obj/item/weapon/card/del_mag
+	desc = "Qdels everything it touches."
+	name = "Delographic sequencer"
+	icon_state = "emag"
+	item_state = "card-id"
+
+/obj/item/weapon/card/del_mag/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	return
+
+/obj/item/weapon/card/del_mag/attack()
+	return
+
+//perform individual emag_act() stuff on children overriding the method here
+/obj/item/weapon/card/del_mag/afterattack(var/atom/target, mob/user, proximity)
+	qdel(target)
+
+/mob/verb/find_ref_by_string(var/string as text)
+	var/datum/D = locate(string)
+	if (!D)
+		to_chat(world, "datum could not be located")
+		return
+	if (!client.holder)
+		to_chat(world, "this verb only works as admin")
+		return
+	client.holder.marked_datum = D
+	to_chat(world, "Saved [D] ref:[string] as your marked datum.")
+
+
+#undef GC_FINDREF
+#endif

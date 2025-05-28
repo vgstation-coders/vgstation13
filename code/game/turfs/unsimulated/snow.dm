@@ -47,6 +47,9 @@
 	global_snowtiles += src
 	if(real_snow_tile && !ignore_blizzard_updates)
 		environment_snowtiles += src
+	footstep_sound = sounds_snow
+	footstep_sound_barefoot = sounds_snow
+	footstep_sound_claw = sounds_snow
 
 /turf/unsimulated/floor/snow/Destroy()
 	if(real_snow_tile && !ignore_blizzard_updates)
@@ -127,9 +130,6 @@
 		if(H.client)
 			if(!istype(OL,/turf/unsimulated/floor/snow))
 				H << sound(snowstorm_ambience[snow_state+1], repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = snowstorm_ambience_volumes[snow_state+1])
-			if(isliving(H) && !H.locked_to && !H.lying && !H.flying)
-				if(snowsound?.len)
-					playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
 
 
 /turf/unsimulated/floor/snow/cultify()

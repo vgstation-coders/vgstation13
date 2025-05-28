@@ -687,6 +687,7 @@ var/datum/controller/gameticker/ticker
 	return roles
 
 /datum/controller/gameticker/proc/post_roundstart()
+	usr = null
 	//Handle all the cyborg syncing
 	var/list/active_ais = active_ais()
 	if(active_ais.len)

@@ -16255,7 +16255,8 @@
 	department = "Medbay";
 	departmentType = 1;
 	name = "Medbay RC";
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Medbay Storage"
 	},
 /obj/item/weapon/storage/firstaid/o2{
 	pixel_x = 6;
@@ -18701,7 +18702,8 @@
 	department = "Medbay";
 	departmentType = 1;
 	name = "Medbay RC";
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Fore Medbay Lobby"
 	},
 /obj/item/device/radio/intercom/medbay{
 	pixel_y = -30
@@ -33313,7 +33315,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Disposals"
 	},
 /turf/simulated/floor,
 /area/supply/sorting)
@@ -39584,7 +39587,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Cargo Lobby"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -42101,7 +42105,8 @@
 	department = "Medbay";
 	departmentType = 1;
 	name = "Medbay RC";
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Medbay Lobby"
 	},
 /obj/machinery/light{
 	dir = 8
@@ -43752,7 +43757,8 @@
 	department = "Medbay";
 	departmentType = 1;
 	name = "Medbay RC";
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Paramedic's Office"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -58211,7 +58217,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Research And Development"
 	},
 /obj/structure/table,
 /obj/structure/cable{
@@ -66423,7 +66430,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "Toxins"
 	},
 /turf/simulated/floor{
 	dir = 9;
@@ -72813,6 +72821,11 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
+/obj/machinery/requests_console{
+	department = "Bar";
+	departmentType = 2;
+	pixel_y = -30
+	},
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -74284,7 +74297,8 @@
 	},
 /obj/structure/filingcabinet/chestdrawer,
 /obj/machinery/requests_console{
-	pixel_x = 32
+	pixel_x = 32;
+	phone_name = "Abandoned Office"
 	},
 /turf/simulated/floor/wood,
 /area/security/vacantoffice)
@@ -85101,6 +85115,12 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/machinery/requests_console{
+	department = "Kitchen";
+	departmentType = 2;
+	name = "Requests Console";
+	pixel_y = -30
+	},
 /turf/simulated/floor{
 	icon_state = "bar"
 	},
@@ -94742,7 +94762,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_x = -29
+	pixel_x = -29;
+	phone_name = "Brig Lobby"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -95169,7 +95190,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_y = -32
+	pixel_y = -32;
+	phone_name = "Law Office"
 	},
 /obj/item/weapon/newspaper,
 /obj/structure/table/woodentable,
@@ -97458,7 +97480,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "Detective's Office"
 	},
 /turf/simulated/floor/carpet,
 /area/security/detectives_office)
@@ -102302,7 +102325,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_y = -32
+	pixel_y = -32;
+	phone_name = "Warden's Office"
 	},
 /obj/structure/bed/chair/office/dark{
 	dir = 4
@@ -104255,7 +104279,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_x = 32
+	pixel_x = 32;
+	phone_name = "Brig Break Room"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -132075,6 +132100,15 @@
 /obj/effect/decal/warning_stripes/siding/gold,
 /turf/simulated/floor/wood,
 /area/crew_quarters/bar)
+"nxY" = (
+/obj/structure/flora/ausbushes/ppflowers,
+/obj/machinery/requests_console{
+	department = "Hydroponics";
+	departmentType = 2;
+	pixel_y = -30
+	},
+/turf/simulated/floor/grass,
+/area/hydroponics)
 "nyr" = (
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 8
@@ -216636,7 +216670,7 @@ dia
 diB
 djm
 dhY
-diD
+nxY
 djS
 dau
 dau

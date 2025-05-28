@@ -1,0 +1,5 @@
+author: ShiftyRail
+delete-after: true
+changes:
+- tweak: replaced R&D with Tetris and clearing two lines gives you a random research
+    point

@@ -1,6 +1,7 @@
 var/global/list/del_profiling = list()
 var/global/list/gdel_profiling = list()
 var/global/list/ghdel_profiling = list()
+var/global/list/ghdel_profiling_roundstart = list()
 
 #define HOLYWATER_DURATION 8 MINUTES
 
@@ -183,6 +184,7 @@ var/global/list/ghdel_profiling = list()
 	INVOKE_EVENT(src, /event/throw_impact, "hit_atom" = hit_atom, "speed" = speed, "user" = user, "thrown_atom" = src)
 
 /atom/Destroy()
+	reagents?.my_atom = null // This solves a really mysterious and frankly strange hard-delete
 	QDEL_NULL(reagents)
 
 	if(density)
@@ -191,9 +193,6 @@ var/global/list/ghdel_profiling = list()
 	invisibility = 101
 	if(istype(beams, /list) && beams.len)
 		beams.len = 0
-	var/turf/simulated/T = get_turf(src)
-	if(istype(T))
-		T.zone?.burnable_atoms -= src
 	/*if(istype(beams) && beams.len)
 		for(var/obj/effect/beam/B in beams)
 			if(B && B.target == src)

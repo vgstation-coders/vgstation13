@@ -1,0 +1,5 @@
+author: ShiftyRail
+delete-after: true
+changes:
+- bugfix: Should fix rogue black squares in TGUI interfaces. Please do make a bug
+    report if you see them appearing again!

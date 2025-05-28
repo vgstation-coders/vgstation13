@@ -271,7 +271,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(FLOUR, 32)
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/cricket/king
 	name = "cricket king meat"
 	desc = "A royal bloodline was felled to make this. Tastes like regicide."

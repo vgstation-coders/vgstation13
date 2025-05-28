@@ -147,6 +147,7 @@
 		return 0*/
 
 	if(.)
+
 		if(shoes && istype(shoes, /obj/item/clothing/shoes))
 			var/obj/item/clothing/shoes/S = shoes
 			S.step_action()
@@ -158,6 +159,53 @@
 		for(var/obj/item/weapon/bomberman/dispenser in src)
 			if(dispenser.spam_bomb)
 				dispenser.attack_self(src)
+		
+		//FOOTSTEPS
+		if (!on_foot()) //are our feet on the ground?
+			return
+		if (m_intent != "run")
+			return
+		if (mind?.miming)
+			return
+		stepstaken++
+		
+		var/modulo = modulo_step
+		if(shoes && istype(shoes, /obj/item/clothing/shoes)) //shoes override
+			var/obj/item/clothing/shoes/S = shoes
+			if (S.clothing_flags & SILENT_SHOES)
+				return
+			modulo = S.modulo_steps<modulo? S.modulo_steps : modulo
+		if (stepstaken % modulo == 0) //once every other step by default, so that it doesn't spam too much (shoes override)
+			var/step_volume = 50
+			var/list/sounds_to_play
+			
+			var/turf/T = get_turf(src)
+			if (!T || !T.footstep_sound || istype(T, /turf/space))
+				return
+
+			if(shoes && istype(shoes, /obj/item/clothing/shoes)) //shoes
+				var/obj/item/clothing/shoes/S = shoes
+				if (S.step_sound) //shoes override
+					sounds_to_play = S.step_sound
+				else //otherwise just use the turf's sound
+					sounds_to_play = T.footstep_sound 
+			else
+				var/datum/organ/external/foot = has_vulnerable_foot()
+				if (foot)
+					switch(footsound)
+						if (FOOTSOUND_HUMAN)
+							sounds_to_play = T.footstep_sound_barefoot
+						if (FOOTSOUND_VOX)
+							sounds_to_play = T.footstep_sound_claw
+				else //check for robo limbs?
+					sounds_to_play = T.footstep_sound
+
+			stepstaken = 0
+			if (!sounds_to_play)
+				return
+			playsound(src, pick(sounds_to_play), step_volume, 1, -4)
+			
+
 
 /mob/living/carbon/human/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
 	var/shoes_slip_factor
@@ -177,3 +225,5 @@
 		return SLIP_HAS_MAGBOOTS
 	// We don't have magboots, or magboots can't protect us
 	return (. && !shoes_slip_factor)
+
+

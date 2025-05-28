@@ -115,6 +115,20 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		if(KT.level < KT.max_level)
 			KT.level=KT.max_level
 
+/obj/machinery/computer/rdconsole/proc/GiveRandomResearch(var/obj/machinery/computer/tetris/source)
+	var/list/list_tech_to_upgrade = source.loaded_techs.Copy()
+	var/upgraded = FALSE
+	while (!upgraded && list_tech_to_upgrade.len)
+		var/candidate_tech = pick(list_tech_to_upgrade)
+		var/max_upgraded_level = list_tech_to_upgrade[candidate_tech]
+		if (!tech_list[candidate_tech])
+			CRASH("tetris gave us invalid upgrade tech: [candidate_tech]")
+		list_tech_to_upgrade -= candidate_tech
+		var/datum/tech/KT = files.known_tech[candidate_tech]
+		if (KT.level < KT.max_level && KT.level < max_upgraded_level)
+			KT.level++
+			upgraded = 0
+
 /obj/machinery/computer/rdconsole/proc/CallTechName(var/ID) //A simple helper proc to find the name of a tech with a given ID.
 	var/datum/tech/check_tech
 	var/return_name = ""
