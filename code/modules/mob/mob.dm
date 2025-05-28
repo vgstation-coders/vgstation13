@@ -53,6 +53,11 @@
 	attack_delayer = null
 	special_delayer = null
 	throw_delayer = null
+
+	dark_plane = null
+	self_vision = null
+	master_plane = null
+
 	QDEL_NULL(hud_used)
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)

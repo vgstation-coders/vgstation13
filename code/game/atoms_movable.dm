@@ -76,9 +76,6 @@
 	if (isturf(loc) && opacity)
 		T = loc
 		T.reconsider_lights()
-	var/turf/simulated/S = get_turf(src)
-	if (istype(S))
-		S.zone?.burnable_atoms -= src
 
 	if(materials)
 		QDEL_NULL(materials)
@@ -98,6 +95,9 @@
 
 	break_all_tethers()
 
+	for(var/atom/movable/AM in src)
+		qdel(AM)
+
 	forceMove(null, harderforce = TRUE)
 
 	if (T)
@@ -105,9 +105,6 @@
 
 	if(virtualhearer)
 		QDEL_NULL(virtualhearer)
-
-	for(var/atom/movable/AM in src)
-		qdel(AM)
 
 	. = ..()
 
@@ -482,6 +479,12 @@
 	var/list/atom/old_locs = locs //locs is implicitly copied on assignment, not aliased
 	var/atom/old_loc = loc //Just for convenience; should be equivalent to old_locs[1].
 	var/list/atom/uncrossing
+
+	if (destination == null)
+		var/turf/simulated/S = get_turf(old_loc)
+		if (istype(S))
+			S.zone?.burnable_atoms -= src
+
 	if(isturf(loc)) //obounds() provides nonsense results when Ref.loc isn't a turf.
 		uncrossing = obounds(src)
 	else
