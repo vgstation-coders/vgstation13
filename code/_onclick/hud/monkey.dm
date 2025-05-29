@@ -253,10 +253,10 @@
 				if (mymob.client.target_can_run)
 					mymob.gun_run_icon.dir = 1
 				src.adding += mymob.gun_run_icon
-				mymob.item_use_icon.gun_run_icon = &src.adding
+				mymob.gun_run_icon.pointer_to_list = &src.adding
 
 			src.adding += mymob.gun_move_icon
-			mymob.item_use_icon.gun_move_icon = &src.adding
+			mymob.gun_move_icon.pointer_to_list = &src.adding
 
 	mymob.client.reset_screen()
 

@@ -266,7 +266,7 @@
 	using.alpha = ui_alpha
 	src.adding += using
 
-	inv_box.pointer_to_list = &src.alpha
+	inv_box.pointer_to_list = &src.adding
 
 	using = new /obj/abstract/screen
 	using.name = "equip"

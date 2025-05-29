@@ -55,7 +55,7 @@
 	inv_box.layer = HUD_BASE_LAYER
 	src.adding += inv_box
 
-	inv.pointer_to_list = &adding
+	inv_box.pointer_to_list = &adding
 
 	// Intent
 	using = new /obj/abstract/screen

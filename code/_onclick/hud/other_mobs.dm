@@ -331,7 +331,7 @@
 	vampire_blood_display.name = "Charge"
 	vampire_blood_display.icon_state = "dark128"
 	vampire_blood_display.screen_loc = ui_under_health
-	vampire_blood_display.pointer_to_var = &mymob.vampire_blood_display
+	vampire_blood_display.pointer_to_var = &vampire_blood_display
 
 	mymob.client.reset_screen()
 
