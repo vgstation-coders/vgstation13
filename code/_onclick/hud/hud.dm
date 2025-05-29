@@ -167,6 +167,10 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		src.hand_hud_objects += inv_box
 		src.adding += inv_box
 
+		inv_box.pointer_to_list = &src.other
+		inv_box.pointer_to_secondary_list = &src.other
+		inv_box.pointer_to_var = &null
+
 /datum/hud/proc/update_hand_icons()
 	var/obj/abstract/screen/inventory/example = locate(/obj/abstract/screen/inventory) in hand_hud_objects
 

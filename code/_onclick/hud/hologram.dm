@@ -179,6 +179,8 @@
 
 	//Handle the gun settings buttons
 	mymob.gun_setting_icon = new /obj/abstract/screen/gun/mode
+	mymob.healths.pointer_to_var = &mymob.gun_setting_icon
+
 	if (mymob.client)
 		if (mymob.client.gun_mode) // If in aim mode, correct the sprite
 			mymob.gun_setting_icon.dir = 2
@@ -188,6 +190,9 @@
 			if (mymob.client.target_can_click)
 				mymob.item_use_icon.dir = 1
 			src.adding += mymob.item_use_icon
+
+			mymob.item_use_icon.pointer_to_list = &src.adding
+
 			mymob.gun_move_icon = new /obj/abstract/screen/gun/move
 			if (mymob.client.target_can_move)
 				mymob.gun_move_icon.dir = 1
@@ -195,7 +200,10 @@
 				if (mymob.client.target_can_run)
 					mymob.gun_run_icon.dir = 1
 				src.adding += mymob.gun_run_icon
+				mymob.gun_run_icon.pointer_to_list = &src.adding
+
 			src.adding += mymob.gun_move_icon
+			mymob.gun_move_icon.pointer_to_list = &src.adding
 
 	mymob.client.reset_screen()
 

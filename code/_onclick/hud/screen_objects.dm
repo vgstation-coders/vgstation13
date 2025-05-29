@@ -20,6 +20,10 @@
 	appearance_flags = NO_CLIENT_COLOR
 	plane = HUD_PLANE
 
+	var/pointer_to_list
+	var/pointer_to_secondary_list
+	var/pointer_to_var
+
 /obj/abstract/screen/Destroy()
 	animate(src)
 	master = null
