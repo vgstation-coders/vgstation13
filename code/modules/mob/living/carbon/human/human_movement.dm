@@ -190,11 +190,9 @@
 				var/obj/item/clothing/shoes/S = shoes
 				if (S.step_sound) //shoes override
 					sounds_to_play = S.step_sound
+					range = S.footsteps_range
 				else //otherwise just use the turf's sound
 					sounds_to_play = T.footstep_sound
-				if (S.range_override != -10)
-					range = S.range_override
-
 			else
 				var/datum/organ/external/foot = has_vulnerable_foot()
 				if (foot)
