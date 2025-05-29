@@ -28,8 +28,6 @@
 		icon = original
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
-	if (reagents) // THE REAGENTS JUST DISSAPEAR IF YOU DON'T QDEL THEM EARLY IN THE DESTROY CHAIN I HAVE NO IDEA WHY
-		QDEL_NULL(reagents)
 	if(poisonsacs)
 		QDEL_NULL(poisonsacs)
 	return ..()
