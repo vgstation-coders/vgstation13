@@ -158,17 +158,15 @@
 	using.icon_state = "pull0"
 	using.name = "pull"
 	using.screen_loc = ui_borg_pull
-	mymob.album_icon = using
+	mymob.pullin = using
 
-	using.pointer_to_var  = &mymob.album_icon
+	using.pointer_to_var  = &mymob.pullin
 
-	mymob.zone_sel = new /obj/abstract/screen/zone_sel
-	mymob.zone_sel.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.zone_sel.overlays.len = 0
-	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
-	mymob.zone_sel = using
-
-	mymob.zone_sel.pointer_to_var  = &mymob.zone_sel
+	var/obj/abstract/screen/zone_sel/ZS = new /obj/abstract/screen/zone_sel
+	ZS.icon = 'icons/mob/screen1_robot.dmi'
+	ZS.overlays.len = 0
+	ZS.overlays += image('icons/mob/zone_sel.dmi', "[ZS.selecting]")
+	mymob.zone_sel = ZS
 
 	//Handle the gun settings buttons
 	mymob.gun_setting_icon = new /obj/abstract/screen/gun/mode
@@ -200,7 +198,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list( mymob.throw_icon, using, mymob.hands, mymob.healths, using, mymob.gun_setting_icon, using, using)
+	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.hands, mymob.healths, mymob.pullin, mymob.gun_setting_icon, mymob.camera_icon, mymob.album_icon)
 	mymob.client.screen += src.adding + src.other
 
 	return
