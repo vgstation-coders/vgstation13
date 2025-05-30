@@ -90,28 +90,10 @@
 	src.adding += using
 	action_intent = using
 
-	using.pointer_to_var = &R.robot_modules_background
+	using.pointer_to_var = &action_intent
 	using.pointer_to_list = &adding
 
-//Health
-	mymob.healths = new /obj/abstract/screen
-	mymob.healths.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.healths.icon_state = "health0"
-	mymob.healths.name = "health"
-	mymob.healths.screen_loc = ui_borg_health
-
-	using.pointer_to_var = &mymob.healths
-
-//Installed Module
-	mymob.hands = new /obj/abstract/screen
-	mymob.hands.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.hands.icon_state = "nomod"
-	mymob.hands.name = "module"
-	mymob.hands.screen_loc = ui_borg_module
-
-	using.pointer_to_var = &mymob.hands
-
-//Module Panel
+	//Module Panel
 	using = new /obj/abstract/screen
 	using.name = "panel"
 	using.icon = 'icons/mob/screen1_robot.dmi'
@@ -122,44 +104,69 @@
 
 	using.pointer_to_list = &adding
 
-//Store
-	mymob.throw_icon = new /obj/abstract/screen
-	mymob.throw_icon.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.throw_icon.icon_state = "store"
-	mymob.throw_icon.name = "store"
-	mymob.throw_icon.screen_loc = ui_borg_store
+//Health
+	using = new /obj/abstract/screen
+	using.icon = 'icons/mob/screen1_robot.dmi'
+	using.icon_state = "health0"
+	using.name = "health"
+	using.screen_loc = ui_borg_health
 
-	using.pointer_to_list = &adding
+	mymob.healths = using
+	using.pointer_to_var = &mymob.healths
+
+//Installed Module
+	using = new /obj/abstract/screen
+	using.icon = 'icons/mob/screen1_robot.dmi'
+	using.icon_state = "nomod"
+	using.name = "module"
+	using.screen_loc = ui_borg_module
+
+	mymob.hands = using
+	mymob.hands.pointer_to_var = &mymob.hands
+
+//Store
+	using = new /obj/abstract/screen
+	using.icon = 'icons/mob/screen1_robot.dmi'
+	using.icon_state = "store"
+	using.name = "store"
+	using.screen_loc = ui_borg_store
+
+	mymob.throw_icon = using
+	using.pointer_to_var = &mymob.throw_icon
 
 //Photography stuff
-	mymob.camera_icon = new /obj/abstract/screen
-	mymob.camera_icon.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.camera_icon.icon_state = "camera"
-	mymob.camera_icon.name = "Take Image"
-	mymob.camera_icon.screen_loc = ui_borg_camera
+	using = new /obj/abstract/screen
+	using.icon = 'icons/mob/screen1_robot.dmi'
+	using.icon_state = "camera"
+	using.name = "Take Image"
+	using.screen_loc = ui_borg_camera
+	mymob.camera_icon = using
 
-	mymob.camera_icon.pointer_to_var  = &mymob.camera_icon
+	using.pointer_to_var = &mymob.camera_icon
 
-	mymob.album_icon = new /obj/abstract/screen
-	mymob.album_icon.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.album_icon.icon_state = "album"
-	mymob.album_icon.name = "View Images"
-	mymob.album_icon.screen_loc = ui_borg_album
+	using = new /obj/abstract/screen
+	using.icon = 'icons/mob/screen1_robot.dmi'
+	using.icon_state = "album"
+	using.name = "View Images"
+	using.screen_loc = ui_borg_album
+	mymob.album_icon = using
 
-	mymob.album_icon.pointer_to_var  = &mymob.album_icon
+	using.pointer_to_var  = &mymob.album_icon
 
-	mymob.pullin = new /obj/abstract/screen
-	mymob.pullin.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.pullin.icon_state = "pull0"
-	mymob.pullin.name = "pull"
-	mymob.pullin.screen_loc = ui_borg_pull
+	using = new /obj/abstract/screen
+	using.icon = 'icons/mob/screen1_robot.dmi'
+	using.icon_state = "pull0"
+	using.name = "pull"
+	using.screen_loc = ui_borg_pull
+	mymob.album_icon = using
 
-	mymob.pullin.pointer_to_var  = &mymob.pullin
+	using.pointer_to_var  = &mymob.album_icon
 
 	mymob.zone_sel = new /obj/abstract/screen/zone_sel
 	mymob.zone_sel.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
+	mymob.zone_sel = using
 
 	mymob.zone_sel.pointer_to_var  = &mymob.zone_sel
 
@@ -193,7 +200,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.hands, mymob.healths, mymob.pullin, mymob.gun_setting_icon, mymob.camera_icon, mymob.album_icon)
+	mymob.client.screen += list( mymob.throw_icon, using, mymob.hands, mymob.healths, using, mymob.gun_setting_icon, using, using)
 	mymob.client.screen += src.adding + src.other
 
 	return

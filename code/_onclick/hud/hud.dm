@@ -277,6 +277,8 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	holomap_obj.mouse_opacity = 0
 	holomap_obj.alpha = 255
 
+	holomap_obj.pointer_to_var = &holomap_obj
+
 	mymob.client.screen += src.holomap_obj
 
 	reload_fullscreen()
