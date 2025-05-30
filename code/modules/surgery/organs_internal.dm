@@ -18,7 +18,7 @@
 /datum/surgery_step/internal/remove_embryo
 	allowed_tools = list(
 		/obj/item/tool/hemostat = 100,
-		/obj/item/tool/wirecutters = 75,
+		"wirecutters" = 75,
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
 	blood_level = 2
@@ -161,7 +161,7 @@
 	allowed_tools = list(
 		/obj/item/stack/nanopaste = 100,
 		/obj/item/tool/bonegel = 30,
-		/obj/item/tool/screwdriver = 70,
+		"screwdriver" = 70,
 		)
 
 	duration = 7 SECONDS
@@ -306,7 +306,7 @@
 
 	allowed_tools = list(
 		/obj/item/tool/hemostat = 100,
-		/obj/item/tool/wirecutters = 75,
+		"wirecutters" = 75,
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
 
