@@ -1272,6 +1272,33 @@
 	new /obj/item/clothing/suit/storage/wintercoat/fur_trapper(src)
 	..()
 
+/obj/item/weapon/storage/box/smartbox/clothing_box/trader
+	name = "Standard trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/trader/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader(src) // standard brownsuit and helmet
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/carapace
+	name = "Carapace trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/carapace/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader/carapace(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader/carapace(src) // carapace
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/aqua
+	name = "Aqua trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/aqua/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader/medic(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader/medic(src) // aqua coloured hardsuit
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/stealth
+	name = "Stealth trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/stealth/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src) // black hardsuit. Not capable of any form of stealth systems or shit like that
+	..()
 
 /obj/item/weapon/storage/box/biscuit
 	name = "biscuit box"

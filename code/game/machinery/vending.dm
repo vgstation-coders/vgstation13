@@ -3341,6 +3341,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/talonprosthetic = 3,
 		/obj/machinery/vending/sale/trader = 1,
 		/obj/item/weapon/storage/toolbox/paint = 1,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/trader = 3,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/carapace = 3,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/aqua = 3,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/stealth = 3,
 		)
 
 	prices = list(
@@ -3354,6 +3358,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/talonprosthetic = 80,
 		/obj/machinery/vending/sale/trader = 80,
 		/obj/item/weapon/storage/toolbox/paint = 40,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/trader = 30,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/carapace = 30,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/aqua = 30,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/stealth = 30,
 		)
 	slogan_languages = list(LANGUAGE_VOX)
 
