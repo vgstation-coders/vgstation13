@@ -163,8 +163,8 @@ List of hard deletions:"}
 	// 3 references which are a result of reference search:
 	// - FindRef(D) itself
 	// - garbage/fire(), where it has been located()
-	// - var/atom/movable/A, which is a local copying the thing
-	FINDREF_OUTPUT("we found [found]. Discarding this proc and callers, DM tells us there is [refcount(D) - 3] references hanging.")
+	// - var/atom/movable/A = D, which is a local copy of the thing
+	FINDREF_OUTPUT("we found [found]. Discarding this proc and callers, DM tells us we have [refcount(D) - 3] reference hanging.")
 
 /datum/subsystem/garbage/proc/LookForRefs(var/datum/D, var/datum/targ)
 	. = 0
