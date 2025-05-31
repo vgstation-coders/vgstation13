@@ -35942,19 +35942,6 @@
 	icon_state = "dark"
 	},
 /area/medical/sleeper)
-"bqV" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	dir = 1
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/medical/sleeper)
 "bqW" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -37655,15 +37642,6 @@
 	icon_state = "dark"
 	},
 /area/medical/sleeper)
-"bua" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "darkblue"
-	},
-/area/medical/sleeper)
 "bub" = (
 /turf/simulated/floor{
 	icon_state = "darkblue"
@@ -39114,21 +39092,6 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/medical/medbay3)
-"bwC" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/floor/plating,
 /area/medical/medbay3)
 "bwD" = (
 /obj/structure/sign/redcross,
@@ -228665,9 +228628,9 @@ bgz
 bdO
 blj
 blj
-bqV
-bua
-bwC
+bqW
+bjo
+bwv
 bzC
 bzt
 bzt
