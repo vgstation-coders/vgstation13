@@ -25,7 +25,7 @@
 	for(var/datum/reagent/R in reagent_list)
 		var/min_volume_per_tile = max(1,R.volume/hit_turfs.len)
 		//the volume is affected by the number of turfs hit. The less turfs hit, the more concentrated the splashing.
-		//and the closer to the epicenter, the more splashing as well
+		//and the closer to the epicenter, the more splashing as well.
 
 		for (var/turf/T in hit_turfs)
 			var/volume_for_this_tile = round((R.volume - min_volume_per_tile) / max(1,get_dist(epicenter,T))) + min_volume_per_tile
