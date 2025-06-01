@@ -515,7 +515,7 @@
 	var/holding = user.get_active_hand()
 	var/delayfraction = round(delay/numticks)
 	var/image/progbar
-	if(user && user.client && user.client.prefs.progress_bars)
+	if(user && user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars))
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 			progbar.plane = HUD_PLANE
@@ -526,7 +526,7 @@
 			//barbar.pixel_y = 36
 	//var/oldstate
 	for (var/i = 1 to numticks)
-		if(user && user.client && user.client.prefs.progress_bars && progbar)
+		if(user && user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars) && progbar)
 			//oldstate = progbar.icon_state
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 			user.client.images |= progbar
@@ -568,7 +568,7 @@
 	for(var/atom/target in targets)
 		initial_target_locations[target] = target.loc
 
-	if(user.client && user.client.prefs.progress_bars)
+	if(user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars))
 		for(var/target in targets)
 			if(!targets[target])
 				var/image/new_progress_bar = create_progress_bar_on(target)
@@ -672,7 +672,7 @@
 	var/target_location = target.loc
 	var/image/progbar
 	//var/image/barbar
-	if(user && user.client && user.client.prefs.progress_bars && target)
+	if(user && user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars) && target)
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 			progbar.pixel_z = WORLD_ICON_SIZE
@@ -680,7 +680,7 @@
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
 			progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 	for (var/i = 1 to numticks)
-		if(user && user.client && user.client.prefs.progress_bars && target)
+		if(user && user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars) && target)
 			if(!progbar)
 				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 				progbar.pixel_z = WORLD_ICON_SIZE
@@ -1222,12 +1222,12 @@ Game Mode config tags:
 			. += M.client
 
 /client/proc/output_to_special_tab(msg, force_focus = FALSE)
-	if(prefs.special_popup)
+	if(prefs.get_pref(/datum/preference_setting/enum/special_popup))
 		src << output("\[[time_stamp()]] [msg]", "window1.msay_output")
 		if(!holder) //Force normal players to see the admin message when it gets sent to them
 			winset(src, "rpane.special_button", "is-checked=true")
 			winset(src, null, "rpanewindow.left=window1")
-	if(prefs.special_popup == SPECIAL_POPUP_EXCLUSIVE)
+	if(prefs.get_pref(/datum/preference_setting/enum/special_popup) == SPECIAL_POPUP_EXCLUSIVE)
 		return
 	to_chat(src, msg)
 
@@ -1352,7 +1352,7 @@ Game Mode config tags:
         var/mob/M = C
         if(M.client)
             C = M.client
-    if(!istype(C) || (!C.prefs.window_flashing && !ignorepref))
+    if(!istype(C) || (!C.prefs.get_pref(/datum/preference_setting/toggle/window_flashing) && !ignorepref))
         return
     winset(C, "mainwindow", "flash=5")
 

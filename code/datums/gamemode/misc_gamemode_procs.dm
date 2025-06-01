@@ -61,9 +61,9 @@
 		if (man.mind.assigned_role == "MODE") // Wiz, nukies, ...
 			continue
 
-		if(man.client.prefs.nanotrasen_relation == "Opposed")
+		if(man.client.prefs.get_pref(/datum/preference_setting/enum/string/nanotrasen_relation) == "Opposed")
 			dudes += man
-		else if(man.client.prefs.nanotrasen_relation == "Skeptical" && prob(50))
+		else if(man.client.prefs.get_pref(/datum/preference_setting/enum/string/nanotrasen_relation) == "Skeptical" && prob(50))
 			dudes += man
 
 		else if( (man.mind.antag_roles[CULTIST] && prob(40)) || \

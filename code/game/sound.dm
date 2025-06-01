@@ -169,7 +169,7 @@ var/const/SURROUND_CAP = 7
 /client/proc/playtitlemusic()
 	if(!ticker || !ticker.login_music || config.no_lobby_music)
 		return
-	if(prefs.toggles & SOUND_LOBBY)
+	if(prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_LOBBY)
 		if(istype(src))
 			src << sound(ticker.login_music, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY) // MAD JAMS
 

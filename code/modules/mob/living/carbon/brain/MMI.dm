@@ -238,10 +238,13 @@
 	brainmob.dna = new()
 	brainmob.dna.ResetUI()
 	brainmob.dna.ResetSE()
-	if(P.be_random_name)
-		P.real_name = random_name(P.gender, P.species)
-	brainmob.name = P.real_name
-	brainmob.real_name = P.real_name
+	var/datum/preference_setting/name_pref = P.get_pref_datum(/datum/preference_setting/string/real_name)
+	var/species = P.get_pref(/datum/preference_setting/string/species)
+	var/gender = P.get_pref(/datum/preference_setting/enum/gender)
+	if(P.get_pref(/datum/preference_setting/toggle/be_random_name))
+		name_pref.setting = random_name(gender, species)
+	brainmob.name = name_pref.setting
+	brainmob.real_name = name_pref.setting
 	brainmob.container = src
 
 	name = "Man-Machine Interface: [brainmob.real_name]"
