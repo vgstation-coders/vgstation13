@@ -870,17 +870,17 @@
 /obj/item/tool/solder/update_icon()
 	..()
 	var/list/checked_reagents = accepts_pacids ? PACIDS + SACIDS : SACIDS
-	switch(reagents.get_reagent_amounts(checked_reagents))
-		if(((3*max_fuel)/4)+1 to INFINITY)
-			icon_state = "[icon_prefix]solder-20"
-		if((max_fuel/2)+1 to (3*max_fuel)/4)
-			icon_state = "[icon_prefix]solder-15"
-		if((max_fuel/4)+1 to max_fuel/2)
-			icon_state = "[icon_prefix]solder-10"
-		if(1 to max_fuel/4)
-			icon_state = "[icon_prefix]solder-5"
-		if(0)
-			icon_state = "[icon_prefix]solder-0"
+	var/total_amount = reagents.get_reagent_amounts(checked_reagents)
+	if(total_amount > ((3*max_fuel)/4)+1) //unfortunately switch blocks hate hard maths
+		icon_state = "[icon_prefix]solder-20"
+	else if(total_amount > (max_fuel/2)+1)
+		icon_state = "[icon_prefix]solder-15"
+	else if(total_amount > (max_fuel/4)+1)
+		icon_state = "[icon_prefix]solder-10"
+	else if(total_amount > 0)
+		icon_state = "[icon_prefix]solder-5"
+	else
+		icon_state = "[icon_prefix]solder-0"
 
 /obj/item/tool/solder/examine(mob/user)
 	..()
