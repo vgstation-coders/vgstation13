@@ -283,7 +283,7 @@
 	var/welding = 0 	//Whether or not the welding tool is off(0) or on(1)
 	var/status = 1 		//Whether the welder is secured or unsecured (able to attach rods to it to make a flamethrower)
 	var/max_fuel = 20 	//The max amount of fuel the welder can hold
-	var/start_fueled = 1 //Explicit, should the welder start with fuel in it ?
+	var/start_fueled = FUEL //Explicit, should the welder start with fuel in it ?
 	var/eye_damaging = TRUE	//Whether the welder damages unprotected eyes.
 	var/weld_speed = 1 //How much faster this welder is at welding. Higher number = faster
 	var/accepts_plasma = FALSE //Accepts plasma as fuel?
@@ -293,7 +293,7 @@
 	. = ..()
 	create_reagents(max_fuel)
 	if(start_fueled)
-		reagents.add_reagent(FUEL, max_fuel)
+		reagents.add_reagent(start_fueled, max_fuel)
 
 /obj/item/tool/weldingtool/examine(mob/user)
 	..()
@@ -671,6 +671,7 @@
 	starting_materials = list(MAT_IRON = 18750, MAT_GLASS = 18750)
 	origin_tech = Tc_ENGINEERING + "=4"
 	accepts_plasma = TRUE
+	start_fueled = PLASMA
 
 /obj/item/tool/weldingtool/gatling/empty
 	start_fueled = 0
