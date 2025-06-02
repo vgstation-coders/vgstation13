@@ -685,7 +685,6 @@
 	origin_tech = Tc_ENGINEERING + "=4;" + Tc_PLASMATECH + "=3"
 	icon_state = "ewelder"
 	weld_speed = 1.25
-	accepts_plasma = TRUE
 	var/last_gen = 0
 
 /obj/item/tool/weldingtool/experimental/empty
