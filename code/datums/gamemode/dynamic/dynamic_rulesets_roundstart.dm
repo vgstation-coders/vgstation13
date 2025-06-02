@@ -83,7 +83,7 @@
 	cost = 15
 	var/traitor_threshold = 4
 	var/additional_cost = 5
-	requirements = list(101,101,101,101,10,10,10,10,10,10)
+	requirements = list(101,101,101,20,10,10,10,10,10,10)
 	high_population_requirement = 15
 
 // -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
