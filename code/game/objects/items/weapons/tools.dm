@@ -888,7 +888,7 @@
 
 /obj/item/tool/solder/examine(mob/user)
 	..()
-	to_chat(user, "It contains [get_fuel(SACID)]/[src.max_fuel] units of fuel!")
+	to_chat(user, "It contains [get_fuel()]/[src.max_fuel] units of fuel![get_fuel(PACID) ? " ([get_fuel(PACID)] units polytrinic acid)" : ""]")
 
 /obj/item/tool/solder/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/reagent_containers/) && W.flags & OPENCONTAINER)
