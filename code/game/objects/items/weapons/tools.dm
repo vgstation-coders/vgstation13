@@ -466,7 +466,7 @@
 		var/plasma_amt = get_fuel(PLASMA)
 		var/mult = 1
 		if(plasma_amt)
-			mult += min(1,plasma_amt/amount)
+			mult += min(1,plasma_amt/fuelamt)
 			reagents.remove_reagent(PLASMA, amount)
 		reagents.remove_reagent(FUEL, amount)
 		check_fuel()
