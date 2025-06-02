@@ -867,10 +867,14 @@
 	create_reagents(max_fuel)
 	//Does not come fueled up
 
+/obj/item/tool/solder/proc/update_damage()
+	var/dmgmult = get_fuel(PACID) ? 1 + ((get_fuel(PACID) / get_fuel()) / 2) : 1 //divide by zero sanity
+	force = 3.0 * dmgmult
+	sharpness = 1.0 * dmgmult
+
 /obj/item/tool/solder/update_icon()
 	..()
-	var/list/checked_reagents = accepts_pacids ? PACIDS + SACIDS : SACIDS
-	var/total_amount = reagents.get_reagent_amounts(checked_reagents)
+	var/total_amount = get_fuel(accepts_pacids ? 0 : SACID)
 	if(total_amount > ((3*max_fuel)/4)+1) //unfortunately switch blocks hate hard maths
 		icon_state = "[icon_prefix]solder-20"
 	else if(total_amount > (max_fuel/2)+1)
@@ -884,7 +888,7 @@
 
 /obj/item/tool/solder/examine(mob/user)
 	..()
-	to_chat(user, "It contains [reagents.get_reagent_amount(SACID) + reagents.get_reagent_amount(FORMIC_ACID)]/[src.max_fuel] units of fuel!")
+	to_chat(user, "It contains [get_fuel(SACID)]/[src.max_fuel] units of fuel!")
 
 /obj/item/tool/solder/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/reagent_containers/) && W.flags & OPENCONTAINER)
@@ -915,22 +919,24 @@
 				G.reagents.trans_id_to(src,SACID,transfer_amount)
 			else
 				G.reagents.trans_id_to(src,FORMIC_ACID,transfer_amount)
+			update_damage()
 			update_icon()
 	else
 		return ..()
 
 /obj/item/tool/solder/proc/remove_fuel(var/amount, mob/user as mob)
-	var/list/removable_reagents = accepts_pacids ? PACIDS + SACIDS : SACIDS
-	var/rem_amt = reagents.get_reagent_amounts(removable_reagents)
+	var/rem_amt = get_fuel(accepts_pacids ? 0 : SACID)
 	if(rem_amt >= amount)
 		var/mult = 1
 		if(accepts_pacids)
-			mult += min(1,reagents.get_reagent_amounts(PACIDS)/rem_amt)
+			mult += min(1,get_fuel(PACID)/rem_amt)
+		var/list/removable_reagents = accepts_pacids ? PACIDS + SACIDS : SACIDS
 		for(var/reag in removable_reagents)
 			reagents.remove_reagent(reag, amount)
 			//still some of one reagent left, so job done
 			if(reagents.get_reagent_amount(reag))
 				break
+		update_damage()
 		update_icon()
 		return mult
 	else
@@ -945,6 +951,15 @@
 	playtoolsound(loc, volume)
 	return do_after(user, thing, (time/work_speed)/removemult)
 
+//Returns the amount of fuel in the welder
+/obj/item/tool/solder/proc/get_fuel(var/type = 0)
+	if(type == SACID)
+		return reagents.get_reagent_amounts(SACIDS)
+	else if(type == PACID)
+		return reagents.get_reagent_amounts(PACIDS)
+	else
+		return reagents.get_reagent_amounts(SACIDS + PACIDS)
+	
 /obj/item/tool/solder/pre_fueled/New()
 	. = ..()
 	reagents.add_reagent(SACID, 50)
