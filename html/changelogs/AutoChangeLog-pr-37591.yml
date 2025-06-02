@@ -1,0 +1,5 @@
+author: ShiftyRail
+delete-after: true
+changes:
+- bugfix: The CTRL+F and F5 control should now work again in HTML interfaces (and
+    are arguably more modern).

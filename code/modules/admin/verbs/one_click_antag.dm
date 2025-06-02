@@ -21,7 +21,7 @@
 		<a href='?src=\ref[src];makeAntag=8'>Make Aliens (Requires Ghosts)</a><br>
 		"}
 
-	usr << browse(dat, "window=oneclickantag;size=400x400")
+	usr << browse(HTML_SKELETON(dat), "window=oneclickantag;size=400x400")
 	return
 
 

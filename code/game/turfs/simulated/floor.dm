@@ -63,6 +63,9 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		icon_regular_floor = "floor"
 	else
 		icon_regular_floor = icon_state
+	footstep_sound = sounds_floor
+	footstep_sound_barefoot = sounds_floor_barefoot
+	footstep_sound_claw = sounds_floor_claw
 
 /turf/simulated/floor/proc/create_floor_tile()
 	if(!floor_tile)
@@ -232,13 +235,27 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			return 0
 
 
-/turf/simulated/floor/attack_paw(mob/user as mob)
+/turf/simulated/floor/attack_paw(mob/user)
+	if (is_light_floor())
+		if (user.a_intent == I_HURT)
+			remove_floor_tile()
+			set_light(0)
+			spark(src, 1)
+			visible_message("<span class='warning'>\The [user] removes the light tile from \the [src]!</span>")
+			return
 	return src.attack_hand(user)
 
-/turf/simulated/floor/attack_animal(mob/user as mob)
+/turf/simulated/floor/attack_animal(mob/user)
+	if (is_light_floor())
+		if (user.a_intent == I_HURT)
+			visible_message("<span class='warning'>\The [user] removes the light tile from \the [src]!</span>")
+			set_light(0)
+			spark(src, 1)
+			remove_floor_tile()
+			return
 	return src.attack_hand(user)
 
-/turf/simulated/floor/attack_hand(mob/user as mob)
+/turf/simulated/floor/attack_hand(mob/user)
 	if (is_light_floor())
 		var/obj/item/stack/tile/light/T = floor_tile
 		T.on = !T.on

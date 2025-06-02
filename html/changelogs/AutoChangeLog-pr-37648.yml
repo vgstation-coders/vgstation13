@@ -1,0 +1,5 @@
+author: mentgah
+delete-after: true
+changes:
+- bugfix: Clown shoes are 7 range again.
+- bugfix: People won't make sounds when they're on a conveyor belt anymore.

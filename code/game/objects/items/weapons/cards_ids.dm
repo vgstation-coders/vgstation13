@@ -357,6 +357,15 @@ var/list/global/id_cards = list()
 		"Nathan Aufweisser",
 		"Dee Tekteev",
 		"Scheitt Couritty",
+		"Valyd Huntre",
+		"Gunther Arrest",
+		"Obi Theelaw",
+		"Tazzhizzazz",
+		"Ziccurizzy",
+		"Kachaindaact",
+		"Wakitakiki",
+		"Kiyuritii",
+		"Yakkitisaks",
 	)
 
 /obj/item/weapon/card/id/nt_disguise/attack_self(mob/user)

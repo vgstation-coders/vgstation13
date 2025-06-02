@@ -17,6 +17,9 @@
 	src.adding += using
 	action_intent = using
 
+	using.pointer_to_list = &src.adding
+	using.pointer_to_var = &action_intent
+
 //intent small hud objects
 	var/icon/ico
 
@@ -31,6 +34,9 @@
 	src.adding += using
 	help_intent = using
 
+	using.pointer_to_list = &src.adding
+	using.pointer_to_var = &help_intent
+
 	ico = new(ui_style, "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
 	ico.DrawBox(rgb(255,255,255,1),ico.Width()/2,ico.Height()/2,ico.Width(),ico.Height())
@@ -41,6 +47,9 @@
 	using.layer = HUD_ABOVE_ITEM_LAYER
 	src.adding += using
 	disarm_intent = using
+
+	using.pointer_to_list = &src.adding
+	using.pointer_to_var = &disarm_intent
 
 	ico = new(ui_style, "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
@@ -53,6 +62,9 @@
 	src.adding += using
 	grab_intent = using
 
+	using.pointer_to_list = &src.adding
+	using.pointer_to_var = &grab_intent
+
 	ico = new(ui_style, "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
 	ico.DrawBox(rgb(255,255,255,1),1,1,ico.Width()/2,ico.Height()/2)
@@ -63,6 +75,9 @@
 	using.layer = HUD_ABOVE_ITEM_LAYER
 	src.adding += using
 	hurt_intent = using
+
+	using.pointer_to_list = &src.adding
+	using.pointer_to_var = &hurt_intent
 
 //end intent small hud objects
 
@@ -77,6 +92,9 @@
 	src.adding += using
 	move_intent = using
 
+	using.pointer_to_list = &src.adding
+	using.pointer_to_var = &move_intent
+
 	using = new /obj/abstract/screen
 	using.name = "drop"
 	using.icon = ui_style
@@ -86,6 +104,8 @@
 	using.color = ui_color
 	using.alpha = ui_alpha
 	src.hotkeybuttons += using
+
+	using.pointer_to_list = &src.hotkeybuttons
 
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "i_clothing"
@@ -99,6 +119,8 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
+	inv_box.pointer_to_list = &src.other
+
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "o_clothing"
 	inv_box.dir = SOUTH
@@ -110,6 +132,8 @@
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
+
+	inv_box.pointer_to_list = &src.other
 
 	init_hand_icons(ui_style, ui_color, ui_alpha)
 
@@ -124,6 +148,8 @@
 	using.alpha = ui_alpha
 	src.adding += using
 
+	inv_box.pointer_to_list = &src.adding
+
 	using = new /obj/abstract/screen/inventory
 	using.name = "hand"
 	using.dir = SOUTH
@@ -134,6 +160,8 @@
 	using.color = ui_color
 	using.alpha = ui_alpha
 	src.adding += using
+
+	inv_box.pointer_to_list = &src.adding
 
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "id"
@@ -147,6 +175,8 @@
 	inv_box.alpha = ui_alpha
 	src.adding += inv_box
 
+	inv_box.pointer_to_list = &src.adding
+
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "mask"
 	inv_box.dir = NORTH
@@ -158,6 +188,8 @@
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
+
+	inv_box.pointer_to_list = &src.adding
 
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "back"
@@ -171,6 +203,8 @@
 	inv_box.alpha = ui_alpha
 	src.adding += inv_box
 
+	inv_box.pointer_to_list = &src.adding
+
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "storage1"
 	inv_box.icon = ui_style
@@ -182,6 +216,8 @@
 	inv_box.alpha = ui_alpha
 	src.adding += inv_box
 
+	inv_box.pointer_to_list = &src.adding
+
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "storage2"
 	inv_box.icon = ui_style
@@ -192,6 +228,8 @@
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
 	src.adding += inv_box
+
+	inv_box.pointer_to_list = &src.adding
 
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "suit storage"
@@ -205,6 +243,8 @@
 	inv_box.alpha = ui_alpha
 	src.adding += inv_box
 
+	inv_box.pointer_to_list = &src.adding
+
 	using = new /obj/abstract/screen
 	using.name = "resist"
 	using.icon = ui_style
@@ -215,6 +255,8 @@
 	using.alpha = ui_alpha
 	src.hotkeybuttons += using
 
+	inv_box.pointer_to_list = &src.hotkeybuttons
+
 	using = new /obj/abstract/screen
 	using.name = "toggle"
 	using.icon = ui_style
@@ -224,6 +266,8 @@
 	using.alpha = ui_alpha
 	src.adding += using
 
+	inv_box.pointer_to_list = &src.adding
+
 	using = new /obj/abstract/screen
 	using.name = "equip"
 	using.icon = ui_style
@@ -232,6 +276,8 @@
 	using.color = ui_color
 	using.alpha = ui_alpha
 	src.adding += using
+
+	inv_box.pointer_to_list = &src.adding
 
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "gloves"
@@ -244,6 +290,8 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
+	inv_box.pointer_to_list = &src.other
+
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "eyes"
 	inv_box.icon = ui_style
@@ -254,6 +302,8 @@
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
+
+	inv_box.pointer_to_list = &src.other
 
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "ears"
@@ -266,6 +316,8 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
+	inv_box.pointer_to_list = &src.other
+
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "head"
 	inv_box.icon = ui_style
@@ -276,6 +328,8 @@
 	inv_box.color = ui_color
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
+
+	inv_box.pointer_to_list = &src.other
 
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "shoes"
@@ -288,6 +342,8 @@
 	inv_box.alpha = ui_alpha
 	src.other += inv_box
 
+	inv_box.pointer_to_list = &src.other
+
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "belt"
 	inv_box.icon = ui_style
@@ -299,6 +355,8 @@
 	inv_box.alpha = ui_alpha
 	src.adding += inv_box
 
+	inv_box.pointer_to_list = &src.adding
+
 	mymob.throw_icon = new /obj/abstract/screen
 	mymob.throw_icon.icon = ui_style
 	mymob.throw_icon.icon_state = "act_throw_off"
@@ -307,6 +365,9 @@
 	mymob.throw_icon.color = ui_color
 	mymob.throw_icon.alpha = ui_alpha
 	src.hotkeybuttons += mymob.throw_icon
+
+	mymob.throw_icon.pointer_to_list = &src.adding
+	mymob.throw_icon.pointer_to_var = &mymob.throw_icon
 
 	mymob.kick_icon = new /obj/abstract/screen
 	mymob.kick_icon.name = "kick"
@@ -317,6 +378,9 @@
 	mymob.kick_icon.alpha = ui_alpha
 	src.hotkeybuttons += mymob.kick_icon
 
+	mymob.kick_icon.pointer_to_list = &src.hotkeybuttons
+	mymob.kick_icon.pointer_to_var = &mymob.kick_icon
+
 	mymob.bite_icon = new /obj/abstract/screen
 	mymob.bite_icon.name = "bite"
 	mymob.bite_icon.icon = ui_style
@@ -326,17 +390,24 @@
 	mymob.bite_icon.alpha = ui_alpha
 	src.hotkeybuttons += mymob.bite_icon
 
+	mymob.bite_icon.pointer_to_list = &src.hotkeybuttons
+	mymob.bite_icon.pointer_to_var = &mymob.kick_icon
+
 	mymob.internals = new /obj/abstract/screen
 	mymob.internals.icon = ui_style
 	mymob.internals.icon_state = "internal0"
 	mymob.internals.name = "internal"
 	mymob.internals.screen_loc = ui_internal
 
+	mymob.internals.pointer_to_var = &mymob.internals
+
 	mymob.healths = new /obj/abstract/screen
 	mymob.healths.icon = ui_style
 	mymob.healths.icon_state = "health0"
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_health
+
+	mymob.healths.pointer_to_var = &mymob.healths
 
 	mymob.pullin = new /obj/abstract/screen
 	mymob.pullin.icon = ui_style
@@ -345,7 +416,8 @@
 	mymob.pullin.screen_loc = ui_pull_resist
 	src.hotkeybuttons += mymob.pullin
 
-	mymob.pain = new /obj/abstract/screen
+	mymob.bite_icon.pointer_to_list = &src.hotkeybuttons
+	mymob.healths.pointer_to_var = &mymob.pullin
 
 	mymob.zone_sel = new /obj/abstract/screen/zone_sel
 	mymob.zone_sel.icon = ui_style
@@ -356,6 +428,8 @@
 
 	//Handle the gun settings buttons
 	mymob.gun_setting_icon = new /obj/abstract/screen/gun/mode
+	mymob.healths.pointer_to_var = &mymob.gun_setting_icon
+
 	if (mymob.client)
 		if (mymob.client.gun_mode) // If in aim mode, correct the sprite
 			mymob.gun_setting_icon.dir = 2
@@ -365,6 +439,9 @@
 			if (mymob.client.target_can_click)
 				mymob.item_use_icon.dir = 1
 			src.adding += mymob.item_use_icon
+
+			mymob.item_use_icon.pointer_to_list = &src.adding
+
 			mymob.gun_move_icon = new /obj/abstract/screen/gun/move
 			if (mymob.client.target_can_move)
 				mymob.gun_move_icon.dir = 1
@@ -372,7 +449,10 @@
 				if (mymob.client.target_can_run)
 					mymob.gun_run_icon.dir = 1
 				src.adding += mymob.gun_run_icon
+				mymob.gun_run_icon.pointer_to_list = &src.adding
+
 			src.adding += mymob.gun_move_icon
+			mymob.gun_move_icon.pointer_to_list = &src.adding
 
 	mymob.client.reset_screen()
 

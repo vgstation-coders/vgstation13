@@ -10,23 +10,23 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSUTILITY
 	school = "transmutation"
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	spell_flags = NEEDSCLOTHES // now it's balanced
 	invocation = "E'MAGI!"
-	invocation_type = SpI_NONE // we say it in the arcane_acts
-	level_max = list(Sp_TOTAL = 4, Sp_SPEED = 2, Sp_POWER = 2)
+	invocation_type = SP_INV_NONE // we say it in the arcane_acts
+	level_max = list(SP_TOTAL = 4, SP_SPEED = 2, SP_POWER = 2)
 	range = 1
-	cooldown_min = 100 // 50 deciseconds reduction per rank
+	cooldown_min = 10 SECONDS // 5 seconds reduction per rank
 	hud_state = "wiz_arctam"
 	spell_flags = WAIT_FOR_CLICK
 	var/recursive = FALSE // does it curse contents too?
 
 /spell/targeted/arcane_tamper/empower_spell()
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 
 	var/oldname = name
 	var/description = ""
-	switch(spell_levels[Sp_POWER])
+	switch(spell_levels[SP_POWER])
 		if(0)
 			name = "Arcane Tamper"
 			description = "It will now make nearby items anomalous."
@@ -45,17 +45,17 @@
 
 /spell/targeted/arcane_tamper/get_upgrade_price(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
+		if(SP_SPEED)
 			return 10
-		if(Sp_POWER)
+		if(SP_POWER)
 			return 10
 
 /spell/targeted/arcane_tamper/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_POWER)
-			if(spell_levels[Sp_POWER] == 0)
+		if(SP_POWER)
+			if(spell_levels[SP_POWER] == 0)
 				return "Upgrades the range of the spell. At the second upgrade, improves the recursiveness of the spell, allowing it to affect the target's contents."
-			if(spell_levels[Sp_POWER] == 1)
+			if(spell_levels[SP_POWER] == 1)
 				return "Improves the recursiveness of the spell, allowing it to affect the target's contents."
 	return ..()
 

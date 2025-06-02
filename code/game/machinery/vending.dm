@@ -815,7 +815,7 @@ var/global/num_vending_terminals = 1
 		dat += {"<b>You have selected [currently_vending.product_name].<br>Please ensure your ID is in your ID holder or hand.</b><br>
 			<a href='byond://?src=\ref[src];buy=1'>Pay</a> |
 			<a href='byond://?src=\ref[src];cancel_buying=1'>Cancel</a>"}
-		user << browse(dat, "window=vending")
+		user << browse(HTML_SKELETON(dat), "window=vending")
 		onclose(user, "")
 		return
 
@@ -908,7 +908,7 @@ var/global/num_vending_terminals = 1
 		if(!account_first_linked)
 			dat += "<br><br><i>Note: Remember to slide your ID on this machine to link your account. Once this is done, sliding your ID will enable editing and loading.</i>"
 
-	user << browse(dat, "window=vending;size=400x[vertical]")
+	user << browse(HTML_SKELETON(dat), "window=vending;size=400x[vertical]")
 	onclose(user, "vending")
 
 // returns the wire panel text
@@ -2708,6 +2708,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/frank = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/mexican = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/banana_set = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/furtrapper_set = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/clothing/head/beret = 3,
 		/obj/item/clothing/suit/wcoat = 3,
 		/obj/item/clothing/under/suit_jacket = 3,
@@ -3340,6 +3341,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/talonprosthetic = 3,
 		/obj/machinery/vending/sale/trader = 1,
 		/obj/item/weapon/storage/toolbox/paint = 1,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/trader = 3,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/carapace = 3,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/aqua = 3,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/stealth = 3,
 		)
 
 	prices = list(
@@ -3353,6 +3358,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/talonprosthetic = 80,
 		/obj/machinery/vending/sale/trader = 80,
 		/obj/item/weapon/storage/toolbox/paint = 40,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/trader = 30,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/carapace = 30,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/aqua = 30,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/stealth = 30,
 		)
 	slogan_languages = list(LANGUAGE_VOX)
 

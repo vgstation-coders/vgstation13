@@ -18,6 +18,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/deadcrew			= 0 //Humans who died during the round
 	var/deadsilicon			= 0 //Silicons who died during the round
 	var/deadaipenalty		= 0 //AIs who died during the round
+	var/rescuedpets			= 0 //how many pets were brought back to centcomm (alive)
+	var/rescueianbonus		= 0 //ian is a special little guy :)
 	var/mess				= 0 //How much messes on the floor went uncleaned
 	var/litter				= 0 //How much trash is laying on the station floor
 	var/meals				= 0 //How much food was actively cooked that day
@@ -139,6 +141,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Cargo Crates Forwarded:</B> [score.stuffforwarded] ([score.stuffforwarded * 50] Points)<BR>"
 	if(score.oremined > 0)
 		dat += "<B>Ore Smelted:</B> [score.oremined] ([score.oremined] Points)<BR>"
+	if(score.rescuedpets)
+		dat += "<B>Rescued Pets:</B> [score.rescuedpets] ([score.rescuedpets*50 + score.rescueianbonus] Points<BR>)"	
 	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
 	dat += "<B>Whole Station Airtight:</B> [score.atmobonus ? "Yes" : "No"] ([score.atmobonus] Points)<BR>"
 	if (score.disease_vaccine_score > 0)
@@ -312,27 +316,27 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/datum/persistence_task/highscores/leaderboard = score.money_leaderboard
 	dat += "<b>MONTHLY TOP 5 RICHEST ESCAPEES:</b><br>"
 	var/i = 1
-	for(var/datum/record/money/entry in leaderboard.data)
-		var/cash = num2text(entry.cash, 12)
-		var/list/split_date = splittext(entry.date, "-")
+	for(var/datum/data/record/money/entry in leaderboard.data)
+		var/cash = num2text(entry.fields["cash"], 12)
+		var/list/split_date = splittext(entry.fields["date"], "-")
 		if(text2num(split_date[2]) != text2num(time2text(world.timeofday, "MM")))
 			leaderboard.clear_records()
 			dat += "No rich escapees yet!"
 			break
 		else
-			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
+			dat += "[i++]) <b>$[cash]</b> by <b>[entry.fields["ckey"]]</b> ([entry.fields["role"]]). That shift lasted [entry.fields["shift_duration"]]. Date: [entry.fields["date"]]<br>"
 	var/datum/persistence_task/highscores/trader/leaderboard2 = score.shoal_leaderboard
 	dat += "<br><b>MONTHLY TOP 5 RICHEST TRADERS:</b><br>"
 	i = 1
-	for(var/datum/record/money/entry in leaderboard2.data)
-		var/cash = num2text(entry.cash, 12)
-		var/list/split_date = splittext(entry.date, "-")
+	for(var/datum/data/record/money/entry in leaderboard2.data)
+		var/cash = num2text(entry.fields["cash"], 12)
+		var/list/split_date = splittext(entry.fields["date"], "-")
 		if(text2num(split_date[2]) != text2num(time2text(world.timeofday, "MM")))
 			leaderboard2.clear_records()
 			dat += "No rich traders yet!"
 			break
 		else
-			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b>. That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
+			dat += "[i++]) <b>$[cash]</b> by <b>[entry.fields["ckey"]]</b>. That shift lasted [entry.fields["shift_duration"]]. Date: [entry.fields["date"]]<br>"
 	return dat
 
 /mob/proc/display_round_end_scoreboard()

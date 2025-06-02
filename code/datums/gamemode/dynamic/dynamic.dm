@@ -146,7 +146,7 @@ var/stacking_limit = 90
 	out += "<B>Remaining threat/threat_level:</B> [threat]/[threat_level]<br/>"
 	out += "<B>Remaining midround threat/threat_level:</B> [midround_threat]/[midround_threat_level]"
 
-	usr << browse(out, "window=threatlog;size=700x500")
+	usr << browse(HTML_SKELETON(out), "window=threatlog;size=700x500")
 
 /datum/gamemode/dynamic/GetScoreboard()
 

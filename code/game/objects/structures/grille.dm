@@ -76,7 +76,19 @@
 
 /obj/structure/grille/Bumped(atom/user)
 	if(ismob(user))
-		shock(user, 60) //Give the user the benifit of the doubt
+		var/mob/M = user
+		var/damage_dealt = shock(M, 60) //Give the user the benifit of the doubt
+		if (damage_dealt && M.client)
+			if(M.pulledby)
+				add_logs(M.pulledby, M, "pulled into a shocked grille", TRUE, src, get_coordinates_string(src))
+			else if(M.last_bumped_by_timestamp - 0.1 SECONDS <= world.time <= M.last_bumped_by_timestamp + 0.1 SECONDS) // If got bumped into a grille
+				var/mob/hostile = M.last_bumped_by.get()
+				add_logs(hostile, M, "bumped into a shocked grille", TRUE, src, get_coordinates_string(src))
+			else if(M.last_thrown_by_timestamp - 0.1 SECONDS <= world.time <= M.last_thrown_by_timestamp + 2 SECONDS) // If got thrown into a grille
+				var/mob/hostile = M.last_thrown_by.get()
+				add_logs(hostile, src, "thrown into a shocked grilled", TRUE, src, get_coordinates_string(src))
+			else
+				M.attack_log += "\[[time_stamp()]\]: walked into a shocked grille (no bumper/no pusher)"
 
 /obj/structure/grille/hitby(var/atom/movable/AM)
 	. = ..()

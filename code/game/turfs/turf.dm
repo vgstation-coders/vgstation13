@@ -75,6 +75,10 @@
 
 	var/datum/paint_overlay/paint_overlay = null
 
+	var/list/footstep_sound = list()
+	var/list/footstep_sound_barefoot = list()
+	var/list/footstep_sound_claw = list()
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)

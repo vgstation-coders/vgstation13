@@ -14,6 +14,7 @@
 #define SS_INIT_MAP                20
 #define SS_INIT_COMPONENT          19.5
 #define SS_INIT_POWER              19
+#define SS_INIT_PERSISTENCE_MISC   18.5 // Because Tetris needs to read from previous rounds. It inits in 0 seconds anyway.
 #define SS_INIT_OBJECT             18
 #define SS_INIT_PIPENET            17.5
 #define SS_INIT_XENOARCH           17
@@ -27,7 +28,6 @@
 #define SS_INIT_FINISH            -22
 #define SS_INIT_MINIMAP           -23
 #define SS_INIT_PERSISTENCE_MAP	  -98
-#define SS_INIT_PERSISTENCE_MISC  -99
 #define SS_INIT_PATHFINDER        -100
 #define SS_INIT_DAYNIGHT		  -200
 

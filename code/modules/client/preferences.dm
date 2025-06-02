@@ -241,7 +241,16 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/obj_chat_on_map = FALSE
 	var/no_goonchat_for_obj = FALSE
 
+	// TGUI things
 	var/tgui_fancy = TRUE
+	//// -- Unimplemented for tgui alerts --
+	var/tgui_input = FALSE
+	var/tgui_input_large = FALSE
+	var/tgui_input_swapped = FALSE
+	var/tgui_lock = FALSE
+	var/tgui_scale = TRUE
+	var/layout_prefs_used = FALSE
+
 	var/fps = -1
 
 	var/client/client
@@ -662,7 +671,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	dat += {"<a href='?_src_=prefs;preference=reset_all'>Reset Setup</a>
 		</center></div></body></html>"}
 
-	//user << browse(dat, "window=preferences;size=560x580")
+	//user << browse(HTML_SKELETON(dat), "window=preferences;size=560x580")
 	var/datum/browser/popup = new(user, "preferences", "<div align='center'>Character Setup</div>", 680, 640)
 	popup.set_content(dat)
 	popup.open(0)
@@ -698,7 +707,7 @@ var/const/MAX_SAVE_SLOTS = 16
 		<a href=\"?_src_=prefs;task=reset;preference=disabilities\">\[Reset\]</a>
 		</center></tt>"}
 	user << browse(null, "window=preferences")
-	user << browse(HTML, "window=disabil;size=350x300")
+	user << browse(HTML_SKELETON(HTML), "window=disabil;size=350x300")
 	return
 
 /datum/preferences/proc/SetRecords(mob/user)
@@ -731,7 +740,7 @@ var/const/MAX_SAVE_SLOTS = 16
 		<a href=\"byond://?src=\ref[user];preference=records;records=-1\">\[Done\]</a>
 		</center></tt>"}
 	user << browse(null, "window=preferences")
-	user << browse(HTML, "window=records;size=350x300")
+	user << browse(HTML_SKELETON(HTML), "window=records;size=350x300")
 	return
 
 
@@ -829,7 +838,7 @@ var/const/MAX_SAVE_SLOTS = 16
 				var/datum/job/job = locate(href_list["job"])
 				if (job)
 					var/choices = list(job.title) + job.alt_titles
-					var/choice = input("Pick a title for [job.title].", "Character Generation", GetPlayerAltTitle(job)) as anything in choices | null
+					var/choice = input("Pick a title for [job.title].", "Character Generation", GetPlayerAltTitle(job)) as null|anything in choices
 					if(choice)
 						SetPlayerAltTitle(job, choice)
 						SetChoices(user)

@@ -4006,6 +4006,7 @@
 	id = null
 	result = null
 	result_amount = 1
+	var/mobAprob = 80
 	var/mob2spawnA = null
 	var/mob2spawnB = null
 
@@ -4045,7 +4046,7 @@
 	if(!location)
 		location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
-		if(prob(80)) //here so aminoblatella can spawn its two variants of roach on the mutagen reaction, does not affect aminocyprinidol, since that only makes baby carps
+		if(prob(mobAprob)) //here so aminoblatella can spawn its two variants of roach on the mutagen reaction, does not affect aminocyprinidol, since that only makes baby carps
 			new mob2spawnA(location)
 		else
 			new mob2spawnB(location)
@@ -4112,6 +4113,44 @@
 	result_amount = 1
 	mob2spawnA = /mob/living/simple_animal/hostile/bigroach
 	mob2spawnB = /mob/living/simple_animal/hostile/bigroach/queen //greater odds than getting a queen via mutating roaches (0.5%)
+
+/datum/chemical_reaction/aminocorydon
+	name = "Aminocorydon"
+	id = AMINOCORYDON
+	result = AMINOCORYDON
+	required_reagents = list(AMINOMICIN = 1, BANANA = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/aminocorydon/required_condition_check(datum/reagents/holder)
+	if(istype(holder.my_atom, /obj/item/weapon/reagent_containers))
+		return (locate(/obj/item/stack/sheet/mineral/clown) in holder.my_atom.contents) //you need that bananium catalyst
+	return FALSE
+
+/datum/chemical_reaction/synthmob/synthclown
+	name = "Synthclown"
+	id = "synthclown"
+	result = null
+	required_reagents = list(NUTRIMENT = 1, AMINOCORYDON = 1)
+	result_amount = 3
+	mob2spawn = /mob/living/simple_animal/hostile/retaliate/clown //don't do this
+
+/datum/chemical_reaction/synthmob/synthmime
+	name = "Synthmime"
+	id = "synthmime"
+	result = null
+	required_reagents = list(NOTHING = 1, AMINOCORYDON = 1)
+	result_amount = 3
+	mob2spawn = /mob/living/simple_animal/hostile/retaliate/mime
+
+/datum/chemical_reaction/synthmobhostile/synthcluwneguette
+	name = "Synthcluwneguette"
+	id = "synthcluwneguette"
+	result = null
+	required_reagents = list(HONKSERUM = 10, AMINOCORYDON = 1)
+	result_amount = 1
+	mobAprob = 95 //we only rarely want a mime
+	mob2spawnA = /mob/living/simple_animal/hostile/retaliate/cluwne
+	mob2spawnB = /mob/living/simple_animal/hostile/retaliate/faguette
 
 /datum/chemical_reaction/ectoplasm
 	name = "Ectoplasm"

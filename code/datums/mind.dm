@@ -95,7 +95,6 @@
 		transfer_to_without_current(new_character)
 		return
 
-	//new_character.attack_log += current.attack_log
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from [current] to [new_character]"
 
 	for (var/role in antag_roles)
@@ -224,7 +223,7 @@
 
 	//<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"} TODO: make sure that works
 
-	usr << browse(out, "window=role_panel[src];size=700x500")
+	usr << browse(HTML_SKELETON(out), "window=role_panel[src];size=700x500")
 
 /datum/mind/proc/role_purchase_log()
 	if(!ticker || !ticker.mode)
@@ -255,7 +254,7 @@
 				for(var/entry in W.potions_bought)
 					out += "[entry]<BR>"
 
-	usr << browse(out, "window=role_purchase_log[src];size=300x500")
+	usr << browse(HTML_SKELETON(out), "window=role_purchase_log[src];size=300x500")
 
 /datum/mind/proc/get_faction_list()
 	var/list/all_factions = list()

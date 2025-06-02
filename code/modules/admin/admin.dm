@@ -242,7 +242,7 @@ var/global/floorIsLava = 0
 		</body></html>
 	"}
 
-	usr << browse(body, "window=adminplayeropts-\ref[M];size=550x515")
+	usr << browse(HTML_SKELETON(body), "window=adminplayeropts-\ref[M];size=550x515")
 	feedback_add_details("admin_verb","SPP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
@@ -331,7 +331,7 @@ var/global/floorIsLava = 0
 			if(index == page)
 				dat += "</b>"
 
-	usr << browse(dat, "window=player_notes;size=400x400")
+	usr << browse(HTML_SKELETON(dat), "window=player_notes;size=400x400")
 
 
 /datum/admins/proc/player_has_info(var/key as text)
@@ -407,7 +407,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];add_player_info=[key]'>Add Comment</A><br>
 		</body></html>"}
 
-	usr << browse(dat, "window=adminplayerinfo;size=480x480")
+	usr << browse(HTML_SKELETON(dat), "window=adminplayerinfo;size=480x480")
 
 /datum/admins/proc/access_news_network() //MARKER
 	set category = "Fun"
@@ -650,7 +650,7 @@ var/global/floorIsLava = 0
 
 //	to_chat(world, "Channelname: [src.admincaster_feed_channel.channel_name] [src.admincaster_feed_channel.author]")
 //	to_chat(world, "Msg: [src.admincaster_feed_message.author] [src.admincaster_feed_message.body]")
-	usr << browse(dat, "window=admincaster_main;size=400x600")
+	usr << browse(HTML_SKELETON(dat), "window=admincaster_main;size=400x600")
 	onclose(usr, "admincaster_main")
 
 
@@ -666,7 +666,7 @@ var/global/floorIsLava = 0
 			r = copytext( r, 1, findtext(r,"##") )//removes the description
 		dat += text("<tr><td>[t] (<A href='?src=\ref[src];removejobban=[r]'>unban</A>)</td></tr>")
 	dat += "</table>"
-	usr << browse(dat, "window=ban;size=400x400")
+	usr << browse(HTML_SKELETON(dat), "window=ban;size=400x400")
 
 /datum/admins/proc/Game()
 	if(!check_rights(0))
@@ -728,7 +728,7 @@ var/global/floorIsLava = 0
 	dat += "<A href ='?src=\ref[src];econ_panel=open'>Manage accounts database</A><br>"
 	dat += "<A href ='?src=\ref[src];religions=1&display=1'>Manage religions</A><br>"
 
-	usr << browse(dat, "window=admin2;size=280x370")
+	usr << browse(HTML_SKELETON(dat), "window=admin2;size=280x370")
 	return
 
 /datum/admins/proc/dynamic_mode_options(mob/user)
@@ -764,7 +764,7 @@ var/global/floorIsLava = 0
 		Curve width: <A href='?src=\ref[src];f_dynamic_roundstart_width=1'>-> [dynamic_curve_width] <-</A><br>
 		"}
 
-	user << browse(dat, "window=dyn_mode_options;size=900x650")
+	user << browse(HTML_SKELETON(dat), "window=dyn_mode_options;size=900x650")
 
 /datum/admins/proc/Secrets()
 	if(!check_rights(0))
@@ -947,7 +947,7 @@ var/global/floorIsLava = 0
 		"}
 
 
-	usr << browse(dat, "window=secrets")
+	usr << browse(HTML_SKELETON(dat), "window=secrets")
 	return
 
 /datum/admins/var/datum/shuttle/selected_shuttle
@@ -986,7 +986,7 @@ var/global/floorIsLava = 0
 	<a href='?src=\ref[src];shuttle_add_docking_port=1'>Create a shuttle docking port</a><br>
 	<a href='?src=\ref[src];shuttle_mass_lockdown=1'>Lock down all shuttles</a><br>
 	"}
-	usr << browse(dat, "window=shuttlemagic")
+	usr << browse(HTML_SKELETON(dat), "window=shuttlemagic")
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////admins2.dm merge
@@ -1624,7 +1624,7 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 
 	dat += "<hr><br><center>ADVANCED: <a href='?_src_=vars;Vars=\ref[end_credits]'>Debug Credits Datum</A></center>"
 
-	usr << browse(dat, "window=creditspanel;size=600x800")
+	usr << browse(HTML_SKELETON(dat), "window=creditspanel;size=600x800")
 
 /datum/admins/proc/PersistencePanel()
 	if(!check_rights(0))
@@ -1646,7 +1646,7 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 		dat += "<b>[T.name]</b>: [T.tracking.len] entries - <A href='?src=\ref[src];persistencedatum=\ref[T];persistenceaction=qdelall'>(DELETE)</A><br>"
 		dat += "Max [T.max_per_turf] per turf. Lasts up to [T.max_age] rounds.<hr>"
 
-	usr << browse(dat, "window=persistencepanel;size=350x600")
+	usr << browse(HTML_SKELETON(dat), "window=persistencepanel;size=350x600")
 
 /datum/admins/proc/ViewAllRods()
 	if(!check_rights(0))
@@ -1660,4 +1660,4 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 			dat += "- <A href='?src=\ref[src];rod_to_untrack=\ref[rod]'>(UNTRACK)</A>"
 		dat += "<br/>"
 
-	usr << browse(dat, "window=rodswindow;size=350x300")
+	usr << browse(HTML_SKELETON(dat), "window=rodswindow;size=350x300")

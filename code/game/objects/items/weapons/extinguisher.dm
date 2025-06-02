@@ -143,7 +143,7 @@
 			else if (pack == 1)
 				return
 
-		if (world.time < src.last_use + 20)
+		if (world.time < src.last_use + 2 SECONDS)
 			return
 		user.delayNextAttack(5, 1)
 
@@ -185,7 +185,6 @@
 		for(var/a=0, a<REAGENT_USE, a++)
 			spawn(0)
 				var/datum/reagents/R = new/datum/reagents(5)
-				R.my_atom = src
 				reagents.trans_to_holder(R,1)
 				var/obj/effect/water/spray/W = new /obj/effect/water/spray/( get_turf(src))
 				var/ccolor = mix_color_from_reagents(R.reagent_list)
@@ -237,7 +236,7 @@
 			else if (pack == 1)
 				return
 
-		if (world.time < src.last_use + 20)
+		if (world.time < src.last_use + 2 SECONDS)
 			return
 		user.delayNextAttack(5, 1)
 		src.last_use = world.time
@@ -267,7 +266,6 @@
 		for(var/a=0, a<REAGENT_USE, a++)
 			spawn(0)
 				var/datum/reagents/R = new/datum/reagents(5)
-				R.my_atom = src
 				reagents.trans_to_holder(R,1)
 				var/obj/effect/foam/fire/W
 				if(has_slimes & SLIME_BLUE)

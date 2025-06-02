@@ -214,7 +214,7 @@
 	else
 		dat +=	"<br><b>Headset:</b> <a href='?src=\ref[src];add_inv=ears'>Nothing</a>"
 
-	user << browse(dat, "window=mob[real_name];size=325x500")
+	user << browse(HTML_SKELETON(dat), "window=mob[real_name];size=325x500")
 	onclose(user, "mob[real_name]")
 
 

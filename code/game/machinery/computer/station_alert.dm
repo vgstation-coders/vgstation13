@@ -74,7 +74,7 @@
 		else
 			dat += "-- All Systems Nominal<BR>\n"
 		dat += "<BR>\n"
-	user << browse(dat, "window=alerts")
+	user << browse(HTML_SKELETON(dat), "window=alerts")
 	onclose(user, "alerts")
 
 

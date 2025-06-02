@@ -129,6 +129,16 @@
 	category = "Medical"
 	build_path = /obj/item/device/antibody_scanner
 
+/datum/design/vial_box
+	name = "Vial Box"
+	desc = "A small box for storing vials."
+	id = "vial_box"
+	req_tech = list(Tc_MATERIALS = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_GLASS = 50, MAT_IRON = 200)
+	category = "Medical"
+	build_path = /obj/item/weapon/storage/lockbox/vials
+
 /datum/design/plasmabeaker
 	name = "Plasma Beaker"
 	desc = "A beaker designed to act as a catalyst in some reactions."

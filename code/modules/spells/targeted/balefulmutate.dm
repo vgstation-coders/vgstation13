@@ -3,9 +3,9 @@
 	desc = "A spell that gives its victm random limbs from different species."
 	user_type = USER_TYPE_SPELLBOOK
 	school = "transmutation"
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 	invocation = "MAHNSTUR MACH!"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 1
 	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK
 	hud_state = "wiz_bmutate"

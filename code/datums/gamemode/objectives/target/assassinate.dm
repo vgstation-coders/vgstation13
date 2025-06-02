@@ -109,7 +109,7 @@ var/list/assassination_objectives = list()
 		//Drains all TCs from the assassinated player's uplink even if it had less than 8.
 		if (enemy_uplink)
 			enemy_uplink.telecrystals = 0
-		var/obj/item/device/roganbot/killbot/killbotfound = recursive_type_check(owner,/obj/item/device/roganbot/killbot)
+		var/obj/item/device/roganbot/killbot/killbotfound = recursive_type_check(owner.current,/obj/item/device/roganbot/killbot)
 		//Checks if the new target would be the player themselves; if so, they have won.
 		if (A.target == owner)
 			to_chat(owner.current, "<span class='notice'>The Syndicate congratulates you on your victory. Look forward to be assigned on higher risk operations another day.</span>")

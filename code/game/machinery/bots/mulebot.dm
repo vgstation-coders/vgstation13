@@ -137,7 +137,7 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/attackby(obj/item/I, mob/user)
 	user.delayNextAttack(I.attack_delay)
 	if(emag_check(I,user))
-		return	
+		return
 	else if(istype(I, /obj/item/weapon/card/id))
 		if(toggle_lock(user))
 			to_chat(user, "<span class='notice'>Controls [(locked ? "locked" : "unlocked")].</span>")
@@ -286,7 +286,7 @@ var/global/mulebot_count = 0
 		else
 			dat += "The bot is in maintenance mode and cannot be controlled.<BR>"
 
-	user << browse("<HEAD><TITLE>Mulebot [suffix ? "([suffix])" : ""]</TITLE></HEAD>[dat]", "window=mulebot;size=350x500")
+	user << browse(HTML_SKELETON_TITLE("Mulebot [suffix ? "([suffix])" : ""]", dat), "window=mulebot;size=350x500")
 	onclose(user, "mulebot")
 	return
 

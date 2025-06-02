@@ -4,17 +4,17 @@
 	desc = "Strike an enemy with a bolt of lightning."
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
-	charge_max = 100
-	cooldown_min = 40
-	cooldown_reduc = 30
+	charge_cooldown_max = 10 SECONDS
+	cooldown_min = 4 SECONDS
+	cooldown_reduc = 3 SECONDS
 
-	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0)
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3, Sp_POWER = 3) //each level of power grants 1 additional target.
+	spell_levels = list(SP_SPEED = 0, SP_POWER = 0)
+	level_max = list(SP_TOTAL = 3, SP_SPEED = 3, SP_POWER = 3) //each level of power grants 1 additional target.
 
 	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	invocation = "ZAP MUTHA FUH KA"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	hud_state = "wiz_zap"
 	valid_targets = list(/mob/living,/obj/machinery/bot,/obj/mecha)
 
@@ -33,26 +33,26 @@
 	chargeoverlay = image("icon" = 'icons/mob/mob.dmi', "icon_state" = "sithlord")
 
 /spell/lightning/quicken_spell()
-	if(!can_improve(Sp_SPEED))
+	if(!can_improve(SP_SPEED))
 		return 0
 
-	spell_levels[Sp_SPEED]++
+	spell_levels[SP_SPEED]++
 
 	if(delay_reduc && cast_delay)
 		cast_delay = max(0, cast_delay - delay_reduc)
 	else if(cast_delay)
-		cast_delay = round( max(0, initial(cast_delay) * ((level_max[Sp_SPEED] - spell_levels[Sp_SPEED]) / level_max[Sp_SPEED] ) ) )
+		cast_delay = round( max(0, initial(cast_delay) * ((level_max[SP_SPEED] - spell_levels[SP_SPEED]) / level_max[SP_SPEED] ) ) )
 
-	if(charge_type == Sp_RECHARGE)
+	if(charge_type == SP_RECHARGE)
 		if(cooldown_reduc)
-			charge_max = max(cooldown_min, charge_max - cooldown_reduc)
+			charge_cooldown_max = max(cooldown_min, charge_cooldown_max - cooldown_reduc)
 		else
-			charge_max = round( max(cooldown_min, initial(charge_max) * ((level_max[Sp_SPEED] - spell_levels[Sp_SPEED]) / level_max[Sp_SPEED] ) ) ) //the fraction of the way you are to max speed levels is the fraction you lose
-	if(charge_max < charge_counter)
-		charge_counter = charge_max
+			charge_cooldown_max = round( max(cooldown_min, initial(charge_cooldown_max) * ((level_max[SP_SPEED] - spell_levels[SP_SPEED]) / level_max[SP_SPEED] ) ) ) //the fraction of the way you are to max speed levels is the fraction you lose
+	if(charge_cooldown_max < charge_counter)
+		charge_counter = charge_cooldown_max
 
 	var/temp = "You have improved [name]"
-	if(spell_levels[Sp_SPEED] >= level_max[Sp_SPEED])
+	if(spell_levels[SP_SPEED] >= level_max[SP_SPEED])
 		multicast = 2
 		temp += " and gain the ability to multicast, each incantation allows you to fire off two bolts of lightning before having to re-cast."
 	else
@@ -61,11 +61,11 @@
 	return temp
 
 /spell/lightning/empower_spell()
-	if(!can_improve(Sp_POWER))
+	if(!can_improve(SP_POWER))
 		return 0
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 	var/temp = ""
-	switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
+	switch(level_max[SP_POWER] - spell_levels[SP_POWER])
 		if(2)
 			temp = "You have improved [name] into Chain Lightning it will arc to one additional target."
 			name = "Chain Lightning"
@@ -95,7 +95,7 @@
 	else
 		//remove overlay
 		connected_button.name = name
-		charge_counter = charge_max
+		charge_counter = charge_cooldown_max
 		user.overlays -= chargeoverlay
 		if((zapzap != multicast) && (zapzap > 0)) //partial cast
 			take_charge(holder, 0)
@@ -211,7 +211,7 @@
 
 /spell/lightning/get_upgrade_info(upgrade_type, level)
 	switch(upgrade_type)
-		if(Sp_POWER)
+		if(SP_POWER)
 			switch(level)
 				if(1)
 					return "Allow the spell to arc to one additional target and slightly increases its damage."
@@ -219,8 +219,8 @@
 					return "Allow the spell to arc up to 3 targets and slightly increases its damage."
 				if(3)
 					return "Allow the spell to arc up to 5 targets and slightly increases its damage."
-		if(Sp_SPEED)
-			if(spell_levels[Sp_SPEED] == 2)
+		if(SP_SPEED)
+			if(spell_levels[SP_SPEED] == 2)
 				return "Allows you to multi-cast the spell, being able to fire up to two bolts of lightning before having to re-cast."
 	return ..()
 
