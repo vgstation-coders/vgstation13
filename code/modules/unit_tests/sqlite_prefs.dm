@@ -75,7 +75,7 @@
 		var/db_value = the_setting.load_sql(database_data[the_setting.sql_name])
 		var/actual_value = the_setting.setting
 
-		if(actual_value != db_value)
+		if(!(actual_value ~= db_value))
 			stack_trace("equal values test failed. actual_value = [actual_value], db_value = [db_value]. Setting type = [setting]")
 
 	// For body
@@ -102,14 +102,8 @@
 		var/db_value = the_setting.load_sql(preference_list[the_setting.sql_name])
 		var/actual_value = the_setting.setting
 
-		if (islist(actual_value))
-			actual_value = json_encode(actual_value)
-
-		if (islist(db_value))
-			db_value = json_encode(db_value)
-
-		if(actual_value != db_value)
-			stack_trace("equal values test failed. actual_value = [actual_value], db_value = [db_value]. Setting type = [setting]")
+		if(!(actual_value ~= db_value))
+			stack_trace("equal values test failed. actual_value = [islist(actual_value) ? json_encode(actual_value) : actual_value], db_value = [islist(db_value) ? json_encode(db_value) : db_value]. Setting type = [setting]")
 
 	// 7. Change some vars
 
