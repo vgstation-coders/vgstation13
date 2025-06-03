@@ -27,7 +27,7 @@
 	if(addicted_chems)
 		QDEL_NULL(addicted_chems)
 
-	var/datum/gamemode/dynamic/dyn_mode = ticker.mode
+	var/datum/gamemode/dynamic/dyn_mode = ticker?.mode
 	if (istype(dyn_mode))
 		dyn_mode.living_players -= src
 
