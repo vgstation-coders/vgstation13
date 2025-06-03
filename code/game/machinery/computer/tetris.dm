@@ -112,7 +112,7 @@ var/list/deleted_machines_tetris_highscores = list()
 		return
 
 	// Pasted from destructive analyzer
-	if(istype(I, /obj/item))
+	if(istype(I, /obj/item) && !istool(I))
 		if(!I.origin_tech)
 			to_chat(user, "<span class='warning'>This doesn't seem to have a tech origin!</span>")
 			return
