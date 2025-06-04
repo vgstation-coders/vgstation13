@@ -79,6 +79,9 @@
 	var/list/footstep_sound_barefoot = list()
 	var/list/footstep_sound_claw = list()
 
+	var/base_icon_state //used for procgen
+	var/floor_variance
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)

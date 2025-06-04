@@ -29,6 +29,13 @@
 	default_baseturf = /turf/unsimulated/beach/sand
 	ruin_type = RUINTYPE_BEACH
 
+/datum/planet_type/lava
+	name = "lava planetoid"
+	desc = "A planet rife with seismic and volcanic activity. High temperatures and dangerous xenofauna render it dangerous for the unprepared."
+	mapgen = /datum/planetGenerator/lava
+	default_baseturf = /turf/simulated/floor/plating/asteroid/basalt/lava
+	ruin_type = RUINTYPE_LAVA
+
 /datum/planet_type/snow
 	name = "frozen planetoid"
 	desc = "A frozen planet covered in thick snow, thicker ice, and dangerous predators."

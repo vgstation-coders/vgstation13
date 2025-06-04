@@ -64,7 +64,7 @@ var/datum/subsystem/mapping/SSmapping
 	..()
 
 /proc/generate_planet()//debug
-	return SSmapping.spawn_planetoid(/datum/planet_type/snow, /datum/map_element/mining_surprise/crashed_tradeship)
+	return SSmapping.spawn_planetoid(/datum/planet_type/lava, /datum/map_element/mining_surprise/crashed_tradeship)
 
 ///Initialize all biomes, assoc as type || instance
 /datum/subsystem/mapping/proc/initialize_biomes()
