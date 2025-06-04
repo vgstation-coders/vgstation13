@@ -1,4 +1,5 @@
 #define GC_COLLECTION_TIMEOUT (30 SECONDS)
+#define GC_COLLECTION_LONGER  (5 MINUTES)
 
 //#define GC_DEBUG
 //#define GC_FINDREF
@@ -18,15 +19,20 @@ var/soft_dels = 0
 	flags         = SS_BACKGROUND | SS_FIRE_IN_LOBBY
 
 	var/list/queue = new
+	var/list/second_chance_queue = new
 	var/del_everything = 0
 
 	// To let them know how hardworking am I :^).
 	var/dels_count = 0
 	var/hard_dels = 0
+	var/failures_first_run = 0
 	#ifdef GC_REFDEBUG
 	var/list/fakedels = list()
 	#endif
 
+	// This allows a "second pass" on a 5 minute timer for objects that failed to soft-deleted on the first time scope.
+	// This can be disabled at compile time for easier FINDREF tracking.
+	var/allow_second_chances = TRUE
 
 /datum/subsystem/garbage/New()
 	NEW_SS_GLOBAL(SSgarbage)
@@ -38,6 +44,7 @@ var/soft_dels = 0
 	world.log << {"
 Deletions this round:
 \tQueue length: [queue.len]
+\tLonger collection queue length: [second_chance_queue.len]
 \tDeletions count: [dels_count]
 \tSoft dels: [soft_dels]
 \tHard dels: [hard_dels]
@@ -46,6 +53,7 @@ List of hard deletions:"}
 		world.log << "\t[thing] : [ghdel_profiling[thing]]"
 	world.log << json_encode(list(
 		"queue" = queue.len,
+		"second_chance_queue" = second_chance_queue.len,
 		"dels" = dels_count,
 		"soft_dels" = soft_dels,
 		"hard_dels" = hard_dels,
@@ -54,7 +62,7 @@ List of hard deletions:"}
 
 /datum/subsystem/garbage/stat_entry()
 	var/msg = ""
-	msg += "Q:[queue.len]|TD:[dels_count]|SD:[soft_dels]|HD:[hard_dels]"
+	msg += "Q:[queue.len]|SQ:[second_chance_queue.len]|TD:[dels_count]|SD:[soft_dels]|HD:[hard_dels] (Fail. FR: [failures_first_run])"
 	if (del_everything)
 		msg += "|QDEL OFF"
 
@@ -65,59 +73,88 @@ List of hard deletions:"}
 	if(narsie_cometh)
 		return //don't even fucking bother, its over.
 	while(queue.len)
-		var/refID = queue[1]
-		var/destroyedAtTime = queue[refID]
-
+		var/datum/D = queue[1]
+		var/destroyedAtTime = queue[D]
 		if(destroyedAtTime > collectionTimeScope)
 			break
+		// 1 from the hard reference in the queue, and 1 from the variable used before this, 1 from being used as an index in queue[D]
+		#define REFS_WE_EXPECT 3
 
-		var/datum/D = locate(refID)
-		if(D) // Something's still referring to the qdel'd object. del it.
-			if(isnull(D.gcDestroyed))
-				removeTrash(refID)
-				continue
+		var/total_refs = refcount(D) - REFS_WE_EXPECT
 
-			#ifdef GC_FINDREF
-			FindRef(D)
-			#endif
+		// This effectively means it was "bye, world"s
+		if (total_refs == 0)
+			queue.Remove(D)
+			D = null
+			dels_count++
 
-
-			#ifdef GC_DEBUG
-			WARNING("gc process force delete [D.type]")
-			#endif
-
-			if(ismovable(D))
-				var/atom/movable/AM = D
-				AM.hard_deleted = 1
+		else // Something's still referring to the qdel'd object. del it.
+			if (allow_second_chances)
+				failures_first_run++
+				second_chance_queue.Add(D)
+				second_chance_queue[D] = queue[D]
+				queue.Remove(D)
 			else
-				delete_profile("[D.type]", 1) //This is handled in Del() for movables.
-				//There's not really a way to make the other kinds of delete profiling work for datums without defining /datum/Del(), but this is the most important one.
+				hard_delete(D)
 
-			#ifdef GC_REFDEBUG
-			fakedels += D
-			if(ismovable(D))
-				delete_profile("[D.type]", 1) //Del() doesn't get called in this case so it's not, in fact, handled for movables
-			to_chat(world, "<a href='?_src_=vars;Vars=[refID]'>["[D]" || "(Blank name)"]</a>")
-			#undef GC_REFDEBUG
-			#else
-			del D
-			#endif
-			removeTrash(refID)
-
-			hard_dels++
-
+	var/collectionTimeScopeSecondChances = world.timeofday - GC_COLLECTION_LONGER
+	while (second_chance_queue.len)
+		var/datum/D = second_chance_queue[1]
+		var/destroyedAtTime = second_chance_queue[D]
+		var/total_refs = refcount(D) - REFS_WE_EXPECT
+		if(destroyedAtTime > collectionTimeScopeSecondChances)
+			break
+		// This effectively means it was "bye, world"s
+		if (total_refs == 0)
+			second_chance_queue.Remove(D)
+			D = null
+			dels_count++
 		else
-			removeTrash(refID)
+			hard_delete(D)
 
-		if(MC_TICK_CHECK) //This pauses the system in addition to checking if it should pause.
-			state = SS_RUNNING //Don't ACTUALLY pause because that would cause the MC to resume it next tick.
-			return
+	if(MC_TICK_CHECK) //This pauses the system in addition to checking if it should pause.
+		state = SS_RUNNING //Don't ACTUALLY pause because that would cause the MC to resume it next tick.
+		return
 
 #undef GC_COLLECTION_TIMEOUT
+#undef GC_COLLECTION_LONGER
+
+/datum/subsystem/garbage/proc/hard_delete(const/datum/D)
+	queue.Remove(D)
+	second_chance_queue.Remove(D)
+	#ifdef GC_FINDREF
+	FindRef(D)
+	#endif
+
+
+	#ifdef GC_DEBUG
+	WARNING("gc process force delete [D.type]")
+	#endif
+
+	if(ismovable(D))
+		var/atom/movable/AM = D
+		AM.hard_deleted = 1
+	else
+		delete_profile("[D.type]", HARD_DELETED_IN_ROUND) //This is handled in Del() for movables.
+		//There's not really a way to make the other kinds of delete profiling work for datums without defining /datum/Del(), but this is the most important one.
+
+	#ifdef GC_REFDEBUG
+	fakedels += D
+	if(ismovable(D))
+		delete_profile("[D.type]", HARD_DELETED_IN_ROUND) //Del() doesn't get called in this case so it's not, in fact, handled for movables
+	to_chat(world, "<a href='?_src_=vars;Vars=[refID]'>["[D]" || "(Blank name)"]</a>")
+	#undef GC_REFDEBUG
+	#else
+	del D
+	#endif
+
+	hard_dels++
 
 #ifdef GC_DEBUG
 #undef GC_DEBUG
 #endif
+
+
 
 /datum/subsystem/garbage/proc/addTrash(const/datum/D)
 	if(istype(D, /atom) && !istype(D, /atom/movable))
@@ -129,12 +166,7 @@ List of hard deletions:"}
 		dels_count++
 		return
 
-	removeTrash("\ref[D]") //This makes sure the new entry is at the end in the event D is using a recycled ref already in the queue.
-	queue["\ref[D]"] = world.timeofday
-
-/datum/subsystem/garbage/proc/removeTrash(id)
-	if(queue.Remove(id))
-		dels_count++
+	queue[D] = world.timeofday
 
 #ifdef GC_FINDREF
 /world/loop_checks = 0
@@ -267,7 +299,10 @@ List of hard deletions:"}
 /datum/proc/Destroy()
 	SHOULD_CALL_PARENT(TRUE)
 	registered_events = null
-	gcDestroyed = "Bye, world!"
+	if (ticker?.current_state != GAME_STATE_PLAYING)
+		gcDestroyed = "Deleted roundstart!"
+	else
+		gcDestroyed = "Bye, world!"
 	tag = null
 	QDEL_LIST_NULL(active_timers)
 	for(var/component_type in datum_components)

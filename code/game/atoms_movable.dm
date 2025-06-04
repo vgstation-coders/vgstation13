@@ -111,7 +111,7 @@
 /atom/movable/Del()
 	if (gcDestroyed)
 		if (hard_deleted)
-			if (ticker.current_state == GAME_STATE_PLAYING)
+			if (ticker.current_state == GAME_STATE_PLAYING || gcDestroyed != "Deleted roundstart!")
 				delete_profile("[type]", HARD_DELETED_IN_ROUND)
 			else
 				delete_profile("[type]", HARD_DELETED_ROUNDSTART)
