@@ -319,12 +319,12 @@
 			//Not writing with a pen or crayon
 			if(!istype(i,/obj/item/weapon/pen) && !istype(i,/obj/item/toy/crayon))
 				to_chat(usr, "<span class='warning'>Please ensure your pen is in your active hand and that you're holding the paper.</span>")
-				continue
+				return
 
 			//Lost the paper or lost consciousness
 			if(!Adjacent(usr, 1) || usr.isUnconscious()) //the 1 means that the paper can be in one other item and be written on
 				to_chat(usr, "<span class='warning'>You are unable to write on this paper.</span>")
-				continue
+				return
 
 		while(isnull(new_text))
 

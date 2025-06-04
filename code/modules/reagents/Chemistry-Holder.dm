@@ -979,7 +979,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	reagent_list.Cut()
 
 	if(my_atom)
-		my_atom.reagents = null
+		// Sometimes atoms use /datum/reagents internal vars which are NOT their actual reagents datums
+		// This causes them to hard-del because the atom.reagents is nulled early in the Destroy() chain
+		// And is never deleted properly.
+		// The proper fix is of course to rework how datum/reagents work but I'll not do that.
+		if (my_atom.reagents == src)
+			my_atom.reagents = null
 		my_atom = null
 	..()
 
@@ -1113,6 +1118,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
  * max_vol is maximum volume of holder
  */
 /atom/proc/create_reagents(const/max_vol)
+	if (reagents)
+		stack_trace("double reagents creation for [type]")
+		QDEL_NULL(reagents)
 	reagents = new/datum/reagents(max_vol)
 	reagents.my_atom = src
 

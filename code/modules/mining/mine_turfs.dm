@@ -660,6 +660,7 @@ var/list/icon_state_to_appearance = list()
 	if(prob(20) && icon_state == "asteroid")
 		icon_state = "asteroid[rand(0,12)]"
 	add_rock_overlay()
+	footstep_sound = sounds_asteroid
 
 /turf/unsimulated/floor/asteroid/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', overlay_state,layer = SIDE_LAYER),var/offset=-4)
 	if(!overlay_state || overlay_state == "")
@@ -749,6 +750,9 @@ var/list/icon_state_to_appearance = list()
 		icon_state = "asteroid[rand(0,12)]"
 	icon_regular_floor = initial(icon_state)
 	add_rock_overlay()
+
+	footstep_sound = sounds_asteroid
+
 
 /turf/simulated/floor/asteroid/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', overlay_state,layer = SIDE_LAYER),var/offset=-4)
 	if(!overlay_state || overlay_state == "")

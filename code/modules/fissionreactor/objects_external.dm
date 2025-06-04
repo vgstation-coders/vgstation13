@@ -21,6 +21,7 @@ included:
 	active_power_usage = 0
 	var/pipename="fission reactor coolant port"
 	//this is so that we can call a proc with ourselves that will use a proc that shouldn't belong to this. this is probably very fragile, but just don't touch it and it'll be fine, i swear
+	starting_volume=1000 //5x normal size. should ease some issues with reactor cooling with small networks.
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/proc/get_pipe_dir() //the atmos gods demand a sacrifice.
 	return dir
 
@@ -365,6 +366,9 @@ CRITICAL<br>
 <a [talkmode_critical!=1 ?"" :"class='blocked'"] href='?src=\ref[interface];set_announce_critical=1'>\[NORMAL\]</a>&nbsp;
 <a [talkmode_critical!=2 ?"" :"class='blocked'"] href='?src=\ref[interface];set_announce_critical=2'>\[ENGINEERING\]</a>&nbsp;
 <a [talkmode_critical!=3 ?"" :"class='blocked'"] href='?src=\ref[interface];set_announce_critical=3'>\[PUBLIC\]</a>&nbsp;
+<br><br>
+<a [associated_reactor?.SCRAM ?"" :"class='blocked'"] href='?src=\ref[interface];scram_clear=yes'>\[CLEAR SCRAM\]</a>
+
 		"}
 	else
 	
@@ -782,6 +786,13 @@ CRITICAL<br>
 			to_chat(user,"access denied.")
 			return
 		talkmode_critical = text2num(href_list["set_announce_critical"]) || 0
+	if(href_list["scram_clear"])
+		if(!cando)
+			to_chat(user,"access denied.")
+			return
+		if(associated_reactor?.SCRAM)
+			playsound(src,'sound/machines/fission/rc_scram.ogg',50)
+		associated_reactor?.SCRAM=FALSE
 	
 	ask_remakeUI() //update it so that changes appear NOW.
 

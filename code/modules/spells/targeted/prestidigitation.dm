@@ -99,7 +99,7 @@
 	var/list/categories = list("Coin", "Card", "Toy", "Accessory", "Gadget", "Grenade", "Widget", "Bauble", "Bullet")
 	var/item_choice = null
 	var/duration = 30 SECONDS
-	var/cat_choice = input("Select a kind of 'trinket'.") in categories | null
+	var/cat_choice = input("Select a kind of 'trinket'.") as null|anything in categories
 	switch(cat_choice)
 		if(null)
 			return 0

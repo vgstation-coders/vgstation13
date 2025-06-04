@@ -12462,8 +12462,9 @@
 /area/security/brig)
 "auA" = (
 /obj/machinery/requests_console{
-	department = "Detective's office";
-	pixel_x = -30
+	department = "Security";
+	pixel_x = -30;
+	departmentType = 5
 	},
 /obj/machinery/computer/secure_data/detective_computer,
 /obj/effect/decal/warning_stripes{
@@ -13668,7 +13669,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_y = -30
+	pixel_y = -30;
+	phone_name = "Research And Development"
 	},
 /obj/item/weapon/paper_bin/purple{
 	pixel_x = 1;
@@ -27423,7 +27425,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_y = -30
+	pixel_y = -30;
+	phone_name = "Arrivals Checkpoint"
 	},
 /turf/simulated/floor{
 	icon_state = "red"
@@ -68191,7 +68194,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "Toxins"
 	},
 /turf/simulated/floor{
 	icon_state = "white"

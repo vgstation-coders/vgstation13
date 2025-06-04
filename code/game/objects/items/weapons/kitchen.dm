@@ -104,8 +104,7 @@
 
 /obj/item/weapon/kitchen/utensil/spoon/New()
 	..()
-	reagents = new(10)
-	reagents.my_atom = src
+	create_reagents(10)
 
 /obj/item/weapon/kitchen/utensil/spoon/examine(mob/user)
 	..()
@@ -207,8 +206,7 @@
 
 /obj/item/weapon/kitchen/utensil/spork/New()
 	..()
-	reagents = new(10)
-	reagents.my_atom = src
+	create_reagents(10)
 
 /obj/item/weapon/kitchen/utensil/spork/examine(mob/user)
 	..()
@@ -316,8 +314,7 @@
 
 /obj/item/weapon/kitchen/utensil/fork/New()
 	..()
-	reagents = new(10)
-	reagents.my_atom = src
+	create_reagents(10)
 
 /obj/item/weapon/kitchen/utensil/fork/attack(var/mob/living/carbon/M, var/mob/living/carbon/user)
 	if(!istype(M) || !istype(user))

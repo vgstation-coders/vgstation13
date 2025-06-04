@@ -1,6 +1,7 @@
 var/global/list/del_profiling = list()
 var/global/list/gdel_profiling = list()
 var/global/list/ghdel_profiling = list()
+var/global/list/ghdel_profiling_roundstart = list()
 
 #define HOLYWATER_DURATION 8 MINUTES
 
@@ -184,16 +185,12 @@ var/global/list/ghdel_profiling = list()
 
 /atom/Destroy()
 	QDEL_NULL(reagents)
-
 	if(density)
 		densityChanged()
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
 	if(istype(beams, /list) && beams.len)
 		beams.len = 0
-	var/turf/simulated/T = get_turf(src)
-	if(istype(T))
-		T.zone?.burnable_atoms -= src
 	/*if(istype(beams) && beams.len)
 		for(var/obj/effect/beam/B in beams)
 			if(B && B.target == src)

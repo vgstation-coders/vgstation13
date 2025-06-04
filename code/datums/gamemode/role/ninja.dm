@@ -775,7 +775,7 @@ Suit and assorted
 	item_state = "s-ninja"
 	permeability_coefficient = 0.01
 	mag_slow = NO_SLOWDOWN
-	clothing_flags = NOSLIP | MAGPULSE
+	clothing_flags = NOSLIP | MAGPULSE | SILENT_SHOES
 	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/ninja/redsun
