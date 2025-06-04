@@ -2406,6 +2406,7 @@
 #include "code\modules\procedural mapping\planetGenerator\turf.dm"
 #include "code\modules\procedural mapping\planetGenerator\generators\beach.dm"
 #include "code\modules\procedural mapping\planetGenerator\generators\desert.dm"
+#include "code\modules\procedural mapping\planetGenerator\generators\lava.dm"
 #include "code\modules\procedural mapping\planetGenerator\generators\snow.dm"
 #include "code\modules\procedural mapping\planetGenerator\generators\xeno.dm"
 #include "code\modules\projectiles\ammunition.dm"
