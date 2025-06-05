@@ -841,6 +841,12 @@
 /mob/new_player/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
+/mob/new_player/Destroy()
+	var/datum/gamemode/dynamic/dyn_mode = ticker.mode
+	if (istype(dyn_mode))
+		for (var/datum/dynamic_ruleset/DR in dyn_mode.roundstart_rules)
+			DR.candidates.Remove(src)
+	return ..()
 
 /mob/proc/close_spawn_windows()
 	src << browse(null, "window=latechoices") //closes late choices window

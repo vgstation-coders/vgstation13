@@ -124,6 +124,17 @@
 	for(var/mob/living/simple_animal/SA in dead_mob_list)
 		if(SA.is_pet)
 			score.deadpets++
+	for(var/mob/living/simple_animal/SA in mob_list)
+		if(SA.is_pet && SA.stat != DEAD)
+			var/turf/T = get_turf(SA)
+			if(!T)
+				continue
+			if(istype(T.loc, /area/shuttle/escape/centcom) || istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
+				score.rescuedpets++
+				if(SA.type==/mob/living/simple_animal/corgi/Ian) //VIC (very important corgi)
+					score.rescueianbonus=100
+	score.crewscore+=score.rescueianbonus
+	score.crewscore+=score.rescuedpets*50
 
 	score.time = round(world.time/10) //One point for every five seconds. One minute is 12 points, one hour 720 points
 	if(is_research_fully_archived())

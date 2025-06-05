@@ -547,6 +547,7 @@
 #define RADON			"radon"
 #define LEAD			"lead"
 #define THALLIUM		"thallium"
+#define THORIUM			"thorium"
 #define REGENERATECALCIUM	"regeneratecalcium"
 #define EQUALIZONE		"equalizone"
 

@@ -16,6 +16,7 @@
 	var/datum/construction/flatpack_unpack/unpacking
 	var/assembling = FALSE
 	var/list/image/stacked = list() //assoc ref list
+	var/override_icon_state=FALSE // if true, will not change the icon state in the update_icon proc.
 
 /obj/structure/closet/crate/flatpack/ancient
 	name = "ancient flatpack"
@@ -36,9 +37,10 @@
 
 /obj/structure/closet/crate/flatpack/update_icon()
 
-	icon_state = "flatpack"
+	if(!override_icon_state)
+		icon_state = "flatpack"
 
-	if(machine)
+	if(machine && !override_icon_state)
 		var/list/check_accesses = (machine.req_access | machine.req_one_access)
 		if(check_accesses && check_accesses.len)
 			for(var/i = 1 to 4) //if the machine's access lines up with security's - and so on
@@ -92,6 +94,7 @@
 					assembling = ASSEMBLING
 				else
 					machine.forceMove(src.loc)
+					after_machine_placed(user)
 					machine = null
 					qdel(src)
 			else
@@ -104,6 +107,9 @@
 	for(var/atom/movable/AM in src)
 		AM.forceMove(get_turf(src))
 	qdel(src)
+
+//fires when you crowbar a flatpack and it moves the machine into the new loc, just before the flatpack is qdel'd
+/obj/structure/closet/crate/flatpack/proc/after_machine_placed(var/mob/user)
 
 /obj/structure/closet/crate/flatpack/attack_hand(mob/user, params)
 	return unstack(user, params, get_turf(user))
@@ -298,6 +304,32 @@
 		return 1
 
 #undef Fl_ACTION
+
+
+/obj/structure/closet/crate/flatpack/configurable
+	name = "configurable flatpack"
+	desc = "The latest advancement in portable easy assembly technology. This model of a flatpack must be configured before construction"
+	var/list/machine_options = list()
+	
+/obj/structure/closet/crate/flatpack/configurable/attackby(var/atom/A, mob/user)
+	if(istype(A,/obj/item))
+		var/obj/item/I=A
+		if(I.is_multitool(user))
+			I.playtoolsound(src, 50)
+			configure(user)
+			return
+	if(iscrowbar(A) && !machine)
+		to_chat(user,"You need to configure \the [name] first!")
+		return
+	..()
+
+//set the machine var in here, among any other things
+/obj/structure/closet/crate/flatpack/configurable/proc/configure(var/mob/user)
+	if(machine) //reset the state
+		qdel(machine)
+		machine=null
+	machine_options=list()
+	
 
 
 /obj/structure/closet/crate/flatpack/suit_modifier/New()

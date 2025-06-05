@@ -26,6 +26,11 @@
 
 	if(addicted_chems)
 		QDEL_NULL(addicted_chems)
+
+	var/datum/gamemode/dynamic/dyn_mode = ticker?.mode
+	if (istype(dyn_mode))
+		dyn_mode.living_players -= src
+
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -1369,6 +1374,8 @@ Thanks.
 						var/mob/M = AM
 						INVOKE_EVENT(src, /event/before_move)
 						step(M, t)
+						M.last_bumped_by = makeweakref(src)
+						M.last_bumped_by_timestamp = world.time
 						INVOKE_EVENT(src, /event/after_move)
 					else
 						step(AM, t)
@@ -1535,11 +1542,14 @@ Thanks.
 				var/start_T_descriptor = "<font color='#6b5d00'>tile at [start_T.x], [start_T.y], [start_T.z] in area [get_area(start_T)]</font>"
 				var/end_T_descriptor = "<font color='#6b4400'>tile at [end_T.x], [end_T.y], [end_T.z] in area [get_area(end_T)]</font>"
 
-				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been thrown by [usr.name] ([usr.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
+				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been thrown by [src.name] ([src.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
+				src.attack_log += text("\[[time_stamp()]\] <font color='red'>Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
 
-				log_attack("<font color='red'>[usr.name] ([usr.ckey]) Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				M.assaulted_by(usr)
+				M.last_thrown_by = makeweakref(src)
+				M.last_thrown_by_timestamp = world.time
+
+				log_attack("<font color='red'>[src.name] ([src.ckey]) Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
+				M.assaulted_by(src)
 				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null

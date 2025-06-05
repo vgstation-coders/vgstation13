@@ -484,4 +484,19 @@
 	update_icon()
 
 
+/obj/item/clothing/suit/storage/wintercoat/fur_trapper
+	name = "fur-trapper's coat"
+	icon_state = "furtrapper"
+	desc = "He may dress himself up as a trapper, Assemble the tools of the trade, the legends will surely poke fun at him, as God help him his fortune's made. But the forest is cruel to a young bagging fool..."
+	species_fit = list(GREY_SHAPED, VOX_SHAPED)
+	allowed = list(
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank/emergency_oxygen,
+		/obj/item/weapon/tank/emergency_nitrogen,
+		/obj/item/weapon/gun/projectile,
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/kitchen/utensil/knife,
+		/obj/item/weapon/beartrap)
+	hood = null
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 

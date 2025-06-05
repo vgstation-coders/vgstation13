@@ -885,3 +885,10 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
 	item_state = "amyhead"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	body_parts_covered = HIDEHAIR
+/obj/item/clothing/head/coonskin_cap
+	name = "coonskin cap"
+	desc = "You may all well go to hell, and I will go to Space Texas."
+	icon_state = "coonskin_cap"
+	species_fit = list(GREY_SHAPED,VOX_SHAPED)
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY

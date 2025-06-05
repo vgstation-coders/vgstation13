@@ -1,0 +1,5 @@
+author: jellyveggie2
+delete-after: true
+changes:
+- tweak: Pipe meters linked to consoles scan now report the same gasses and be configured
+    the same way as gas sensors.

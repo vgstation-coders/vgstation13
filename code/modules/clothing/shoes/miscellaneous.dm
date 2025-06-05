@@ -80,6 +80,7 @@
 	name = "mime shoes"
 	icon_state = "mime"
 	_color = "mime"
+	clothing_flags = SILENT_SHOES
 
 /obj/item/clothing/shoes/mime/biker
 	name = "Biker's shoes"
@@ -159,6 +160,7 @@
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 
 	step_sound = "clownstep"
+	footsteps_range = 0
 
 /obj/item/clothing/shoes/clown_shoes/New()
 	..()

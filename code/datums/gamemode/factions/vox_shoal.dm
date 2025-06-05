@@ -305,7 +305,7 @@ var/list/potential_bonus_items = list(
 	var/vox_raider_data = SSpersistence_misc.read_data(/datum/persistence_task/vox_raiders)
 	var/score_to_beat = vox_raider_data["best_score"]
 	var/best_team = vox_raider_data["winning_team"]
-	info = {"<h4>The shoal needs us to gather ressources. </h4>
+	info = {"<h4>The shoal needs us to gather resources. </h4>
 	<br/>
 	Our best agents of all time were able to gather an estimate of [score_to_beat] voxcoins in assets, on [vox_raider_data["MM"]]/[vox_raider_data["DD"]]/[vox_raider_data["YY"]]. <br/>
 	Their names are as follows: [best_team]."}

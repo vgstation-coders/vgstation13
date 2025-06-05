@@ -79,8 +79,6 @@
 	description = "Plasma in its liquid form."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#500064" //rgb: 80, 0, 100
-	fission_time=18000 //5 hours.
-	fission_absorbtion=8333.333
 
 /datum/reagent/plasma/New()
 	..()
@@ -229,7 +227,6 @@
 
 
 
-//TODO: give these an effect.
 /datum/reagent/plutonium
 	name ="Plutonium"
 	id = PLUTONIUM
@@ -255,8 +252,7 @@
 	density = 9.73
 	specheatcap = 0.936
 	custom_metabolism = 1 //decays really fast, so it shouldn't linger long.
-	fission_time=1500 //25 minutes.
-	fission_power=1666.6666
+	fission_time=300 //5 minutes.
 	
 /datum/reagent/radon/on_mob_life(var/mob/living/M)
 	if(..())
@@ -294,3 +290,20 @@
 	if(..())
 		return 1
 	M.adjustToxLoss(0.5)
+
+
+/datum/reagent/thorium
+	name ="Thorium"
+	id = THORIUM
+	description = "A dark metallic chemical element in the actinide series, weakly radioactive."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#BABAA2"
+	density = 11.725
+	specheatcap = 0.124
+	fission_time=7200 //2 hours
+	//no fission power because thorium isn't actually fissile.
+	
+/datum/reagent/thorium/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.apply_radiation(0.5, RAD_INTERNAL)

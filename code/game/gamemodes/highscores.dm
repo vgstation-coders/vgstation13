@@ -11,5 +11,5 @@
 	fields["ckey"] = ckey
 	fields["role"] = role
 	fields["cash"] = cash
-	fields["shift_duration"]= shift_duration
+	fields["shift_duration"] = shift_duration
 	fields["date"] = date

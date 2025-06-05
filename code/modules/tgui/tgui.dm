@@ -37,6 +37,8 @@
 	var/datum/ui_state/state = null
 	/// Rate limit client refreshes to prevent DoS.
 	var/refresh_cooldown = 0
+	/// Should this be pooled or not
+	var/dontpool = FALSE
 
 /**
  * public
@@ -60,6 +62,7 @@
 	src.src_object = src_object
 	src.window_key = "\ref[src_object]-main"
 	src.interface = interface
+	dontpool = src_object.dontpool_tgui
 	if(title)
 		src.title = title
 	src.state = src_object.ui_state(user)
@@ -98,7 +101,8 @@
 			fancy = user.client.prefs.tgui_fancy,
 			assets = list(
 				get_tg_asset_datum(/datum/tg_asset/simple/tgui),
-			))
+			),
+			dontpool = src.dontpool)
 	else
 		window.send_message("ping")
 	send_assets()
