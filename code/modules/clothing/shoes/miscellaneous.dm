@@ -160,6 +160,7 @@
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 
 	step_sound = "clownstep"
+	footsteps_range = 0
 
 /obj/item/clothing/shoes/clown_shoes/New()
 	..()
@@ -656,3 +657,9 @@
 
 /obj/item/clothing/shoes/hunter/rangeTackleBonus()
 	return 1
+
+/obj/item/clothing/shoes/sonicman
+	name = "sonicman shoes"
+	icon_state = "sonicmanshoes"
+	item_state = "sonicmanshoes"
+	desc = "Lightspeed dash sold seperately."

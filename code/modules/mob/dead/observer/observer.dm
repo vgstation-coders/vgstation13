@@ -132,11 +132,14 @@ var/creating_arena = FALSE
 	..()
 
 /mob/dead/observer/Destroy()
-	..()
+	var/datum/gamemode/dynamic/dyn_mode = ticker.mode
+	if (istype(dyn_mode))
+		dyn_mode.dead_players -= src
 	unregister_event(/event/after_move, src, nameof(src::update_holomaps()))
 	QDEL_NULL(station_holomap)
 	ghostMulti = null
 	observers.Remove(src)
+	return ..()
 
 /mob/dead/observer/proc/update_holomaps()
 	if(station_holomap)

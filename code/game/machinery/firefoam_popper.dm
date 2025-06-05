@@ -152,10 +152,9 @@
 	for(var/turf/T in dview(covered_range, epicenter, INVISIBILITY_MAXIMUM))
 		if(cheap_pythag(T.x - epicenter.x,T.y - epicenter.y) <= covered_range + 0.5)
 			if(test_reach(epicenter,T,PASSTABLE|PASSGRILLE|PASSMOB|PASSMACHINE|PASSGIRDER|PASSRAILING))
-				var/datum/reagents/R = new/datum/reagents(5)
-				R.my_atom = T
-				R.add_reagent(WATER, 5)
-				var/obj/effect/foam/fire/F = new /obj/effect/foam/fire(T,R)
+				create_reagents(5)
+				reagents.add_reagent(WATER, 5)
+				var/obj/effect/foam/fire/F = new /obj/effect/foam/fire(T,reagents)
 				var/turf/F_turf = get_turf(F)
 				F.reagents.reaction(F_turf, TOUCH)
 				for(var/atom/atm in F_turf)

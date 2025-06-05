@@ -942,6 +942,7 @@ var/global/maxStackDepth = 10
 	var/step_sound = ""
 	var/stepstaken = 1
 	var/modulo_steps = 2 //if stepstaken is a multiplier of modulo_steps, play the sound. Does not work if modulo_steps < 1
+	var/footsteps_range = -4
 	cloth_layer = SHOES_LAYER
 	cloth_icon = 'icons/mob/feet.dmi'
 	starting_materials = list(MAT_FABRIC = 1250)

@@ -208,6 +208,7 @@ Class Procs:
 	for(var/datum/malfhack_ability/MH in hack_abilities)
 		MH.machine = null
 		qdel(MH)
+	hack_abilities = null
 	qdel(hack_overlay)
 
 	..()

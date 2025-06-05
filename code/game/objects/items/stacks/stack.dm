@@ -35,7 +35,6 @@
 /obj/item/stack/Destroy()
 	if (usr && usr.machine==src)
 		usr << browse(null, "window=stack")
-	src.forceMove(null)
 	..()
 
 /obj/item/stack/examine(mob/user)

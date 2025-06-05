@@ -97,6 +97,7 @@
 		qdel(query)
 
 /proc/statistic_cycle()
+	usr = null
 	if(!sqllogging)
 		return
 	while(1)

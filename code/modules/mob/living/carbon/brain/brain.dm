@@ -12,9 +12,7 @@
 	universal_understand = 1
 
 /mob/living/carbon/brain/New()
-	var/datum/reagents/R = new/datum/reagents(1000)
-	reagents = R
-	R.my_atom = src
+	create_reagents(1000)
 	..()
 	verbs -= /mob/living/carbon/verb/mob_sleep
 

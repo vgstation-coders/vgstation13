@@ -1,0 +1,4 @@
+author: Blonichu
+delete-after: true
+changes:
+- bugfix: Fixes error message while using wirecutters or screwdrivers for ghetto surgery.

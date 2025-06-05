@@ -160,7 +160,11 @@ List of hard deletions:"}
 		found += LookForRefs(R, D)
 	found += LookForRefs(world, D)
 	found += LookForListRefs(global.vars, D, null, "global.vars") //You can't pretend global is a datum like you can with clients and world. It'll compile, but throw completely nonsensical runtimes.
-	FINDREF_OUTPUT("we found [found]")
+	// 3 references which are a result of reference search:
+	// - FindRef(D) itself
+	// - garbage/fire(), where it has been located()
+	// - var/atom/movable/A = D, which is a local copy of the thing
+	FINDREF_OUTPUT("we found [found]. Discarding this proc and callers, DM tells us we have [refcount(D) - 3] reference hanging.")
 
 /datum/subsystem/garbage/proc/LookForRefs(var/datum/D, var/datum/targ)
 	. = 0
@@ -206,7 +210,6 @@ List of hard deletions:"}
 		if(islist(G))
 			. += LookForListRefs(G, targ, D, "[G] in list [V] at key [F]", foundcache)
 #undef FINDREF_OUTPUT
-#undef GC_FINDREF
 #endif
 
 /datum/subsystem/garbage/proc/debugqueue(i = 1) //Too lazy to add this to any menus so instead just use proccall
@@ -313,3 +316,36 @@ List of hard deletions:"}
 
 		gdel_profiling["[type]"] += 1
 		soft_dels += 1
+
+#ifdef GC_FINDREF
+
+/obj/item/weapon/card/del_mag
+	desc = "Qdels everything it touches."
+	name = "Delographic sequencer"
+	icon_state = "emag"
+	item_state = "card-id"
+
+/obj/item/weapon/card/del_mag/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	return
+
+/obj/item/weapon/card/del_mag/attack()
+	return
+
+//perform individual emag_act() stuff on children overriding the method here
+/obj/item/weapon/card/del_mag/afterattack(var/atom/target, mob/user, proximity)
+	qdel(target)
+
+/mob/verb/find_ref_by_string(var/string as text)
+	var/datum/D = locate(string)
+	if (!D)
+		to_chat(world, "datum could not be located")
+		return
+	if (!client.holder)
+		to_chat(world, "this verb only works as admin")
+		return
+	client.holder.marked_datum = D
+	to_chat(world, "Saved [D] ref:[string] as your marked datum.")
+
+
+#undef GC_FINDREF
+#endif

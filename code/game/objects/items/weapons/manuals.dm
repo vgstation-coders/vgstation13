@@ -1377,6 +1377,11 @@ background-color:darkolivegreen;
 color:white;
 }
 
+.reagent_thorium{
+display:inline-block;
+background-color:DarkSlateGray;
+color:white;
+}
 </style>
 </head>
 <body>
@@ -1649,7 +1654,7 @@ The design of a nuclear reactor is very important. Build it wrong, and you may f
 <h2>Standard Operation</h2>
 To avoid a catastrophic meltdown, a reactor must be monitored periodically to ensure that the temperature does NOT get too high.<br>
 Reactors can withstand temperatures up to 5500K, though the controller will activate a SCRAM protocol if the temperature exceeds 4500K. Once SCRAM is enabled, the control rods will be forced downwards and will remain down until the reactor has dropped below 1000K.<br>
-<sub>The circuitboard can able to be modified with a solder so that autoSCRAM is disabled, this practice is not endorsed by NanoTrasen, and the engineer assumes all liability for any damage to the station as a result of this.</sub>
+<sub>The autoSCRAM routine may be disabled in the controller options menu by an authenticated engineer. However, this practice is not endorsed by NanoTrasen, and the engineer assumes all liability for any damage to the station as a result of this.</sub>
 <br>
 Once your reactor is built, you will need to insert a fuel reservoir (one is provided in the starter kit). A reactor accepts only a single fuel reservoir, so it is encouraged to carefully prepare the fuel mixture beforehand in accordance to the design of the reactor.<br>
 Next, ensure that the coolant lines are operating as normal, and that there is adequate cooling for the output of your reactor. Too little cooling and it might overheat, but too much and it'll won't heat enough. Once this is verified, return to the controller, and raise the control rods. It is recommended that this is done gradually, so that the engineer operating it can determine how far it can be safely pushed.<br>
@@ -1696,9 +1701,7 @@ Different sizes of fuel reservoirs exist, with the starter kit coming with a fai
 
 <h2>Other notes</h2>
 	If you unscrew the maintenance hatch of a fuel rod assembly, you can add 4 metal sheets to it. Doing so will make the assembly not give any bonuses for adjacent fuel rods. You can undo this by removing said sheets with a crowbar.<br>
-	Some compounds will transform upon irradiation, such as Tricordrazine, Doctor's Delight, Degenerate Calcium, Plasma and Radium, give them a try and see what comes out, you might be surprised.
-	<br>
-	Standard fuel reservoirs can be made with 2 plasteel sheets. These are 3x bigger than the small one given by the starter kit, but still smaller than the specialized one orderable from cargo.
+	Some compounds will transform upon irradiation into novel chemicals. Try experimenting to see what can be made.
 
 <br>
 <br>
@@ -1727,6 +1730,12 @@ Different sizes of fuel reservoirs exist, with the starter kit coming with a fai
 	<td>1,667</td>
 	<td>25m</td>
 	<td class="byproduct_display"><span class="reagent_lead" style="width:100%;">Pb</span></td>
+</tr>
+<tr>
+	<td class="reagent_thorium">Thorium</td>
+	<td>0</td>
+	<td>2h</td>
+	<td class="byproduct_display"><span class="reagent_uranium" style="width:55%;">U</span><span class="reagent_radon" style="width:25%;">Rn</span><span class="reagent_lead" style="width:10%;">Pb</span><span class="reagent_thalium" style="width:10%;">Tl</span></td>
 </tr>
 
 </table>

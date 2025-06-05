@@ -2362,9 +2362,12 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/obj/item/weapon/reagent_containers/glass/rag{
-	desc = "For cleaning up messes. This one is a bit crusty...";
-	name = "crusty rag"
+/obj/machinery/door_control{
+	id_tag = "brig_toilet";
+	name = "Brig Toilet Bolts";
+	normaldoorcontrol = 1;
+	pixel_x = 25;
+	specialfunctions = 4
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
@@ -2634,6 +2637,7 @@
 	})
 "aeq" = (
 /obj/machinery/door/airlock{
+	id_tag = "brig_toilet";
 	name = "Brig Toilets"
 	},
 /turf/simulated/floor{
@@ -3379,7 +3383,6 @@
 	dir = 8
 	},
 /obj/structure/curtain/open/shower/left,
-/obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -3656,8 +3659,8 @@
 /turf/simulated/floor,
 /area/security/range)
 "afV" = (
-/obj/structure/closet/wardrobe/pjs,
 /obj/item/toy/gasha/femsec,
+/obj/structure/closet/secure_closet/personal,
 /turf/simulated/floor/wood,
 /area/security/toilet{
 	name = "Brig Dormitories"
@@ -3695,10 +3698,7 @@
 /obj/machinery/light_switch{
 	pixel_y = -25
 	},
-/obj/structure/bookcase{
-	name = "bookcase (Adult)"
-	},
-/obj/effect/decal/cleanable/cobweb2,
+/obj/structure/closet/wardrobe/pjs,
 /turf/simulated/floor/wood,
 /area/security/toilet{
 	name = "Brig Dormitories"
@@ -4206,7 +4206,6 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "red"
@@ -4737,9 +4736,7 @@
 /obj/structure/bed/chair/office/dark{
 	dir = 1
 	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "ahB" = (
 /obj/structure/disposalpipe/segment{
@@ -4755,24 +4752,19 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "ahD" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "ahE" = (
 /obj/structure/disposalpipe/segment{
 	dir = 8;
 	icon_state = "pipe-c"
 	},
-/obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "redcorner"
@@ -4788,9 +4780,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "ahG" = (
 /obj/structure/disposalpipe/segment,
@@ -5228,15 +5218,6 @@
 	},
 /turf/simulated/floor,
 /area/security/warden)
-"air" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/item/weapon/stool{
-	pixel_y = 8
-	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
-/area/security/main)
 "ais" = (
 /turf/simulated/floor{
 	dir = 8;
@@ -5268,9 +5249,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "aiv" = (
 /obj/structure/disposalpipe/segment,
@@ -5288,22 +5267,13 @@
 /obj/machinery/light{
 	dir = 8
 	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
-/area/security/main)
-"aix" = (
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "aiy" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 1
 	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "aiz" = (
 /obj/machinery/atmospherics/unary/vent_pump{
@@ -5318,9 +5288,7 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "aiB" = (
 /obj/structure/disposalpipe/segment,
@@ -5753,9 +5721,7 @@
 /obj/effect/landmark/start{
 	name = "Security Officer"
 	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "aji" = (
 /obj/machinery/atmospherics/unary/vent_pump{
@@ -5789,9 +5755,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "ajl" = (
 /obj/structure/disposalpipe/segment,
@@ -6413,9 +6377,7 @@
 	icon_state = "bot"
 	},
 /obj/structure/window/reinforced,
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "ake" = (
 /obj/structure/disposalpipe/segment,
@@ -6463,17 +6425,6 @@
 /obj/structure/table,
 /obj/item/weapon/storage/box/handcuffs,
 /obj/item/weapon/handcuffs,
-/turf/simulated/floor/carpet{
-	icon_state = "carpetnoconnect"
-	},
-/area/security/main)
-"akj" = (
-/obj/structure/bed/chair{
-	dir = 8
-	},
-/obj/effect/landmark/start{
-	name = "Security Officer"
-	},
 /turf/simulated/floor/carpet{
 	icon_state = "carpetnoconnect"
 	},
@@ -7012,8 +6963,6 @@
 "akU" = (
 /obj/structure/closet/wardrobe/red,
 /obj/item/weapon/storage/box/holobadge,
-/obj/item/toy/gasha/greytide,
-/obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "red"
@@ -7070,7 +7019,6 @@
 	},
 /area/security/main)
 "akZ" = (
-/obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
 /turf/simulated/floor/carpet{
 	icon_state = "carpetnoconnect"
@@ -7468,13 +7416,6 @@
 	icon_state = "dark"
 	},
 /area/security/warden)
-"alD" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/item/weapon/stool{
-	pixel_y = 8
-	},
-/turf/simulated/floor,
-/area/security/main)
 "alE" = (
 /turf/simulated/floor{
 	dir = 1;
@@ -7489,9 +7430,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "alG" = (
 /obj/structure/disposalpipe/segment,
@@ -7830,9 +7769,7 @@
 /obj/effect/landmark/start{
 	name = "Security Officer"
 	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "amn" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
@@ -7856,9 +7793,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "amq" = (
 /obj/structure/disposalpipe/segment,
@@ -7911,23 +7846,9 @@
 	icon_state = "red"
 	},
 /area/security/main)
-"amv" = (
-/obj/structure/bed/chair{
-	dir = 8
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/landmark/start{
-	name = "Security Officer"
-	},
-/turf/simulated/floor/carpet{
-	icon_state = "carpetnoconnect"
-	},
-/area/security/main)
 "amw" = (
 /obj/structure/disposalpipe/segment,
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "amx" = (
 /obj/structure/sign/securearea{
@@ -8220,9 +8141,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "amV" = (
 /obj/structure/disposalpipe/segment,
@@ -8241,9 +8160,7 @@
 /obj/machinery/light{
 	dir = 8
 	},
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "amX" = (
 /turf/simulated/floor,
@@ -8563,9 +8480,7 @@
 	icon_state = "1-2"
 	},
 /obj/structure/disposalpipe/segment,
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
+/turf/simulated/floor,
 /area/security/main)
 "anH" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -9589,6 +9504,7 @@
 /obj/structure/plasticflaps{
 	opacity = 1
 	},
+/obj/item/toy/gasha/greytide,
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "apA" = (
@@ -231320,11 +231236,11 @@ afR
 agu
 adR
 ahu
-air
+akb
 ajh
 akb
 akS
-alD
+akb
 amm
 akb
 anD
@@ -233830,7 +233746,7 @@ aep
 aep
 agT
 ahB
-aix
+amX
 ajo
 akh
 akY
@@ -234332,13 +234248,13 @@ afV
 aep
 agS
 ahA
-aix
+amX
 ajn
 ozD
 akX
 akg
 ams
-aix
+amX
 anI
 aon
 aoO
@@ -234834,13 +234750,13 @@ afX
 aep
 agV
 ahD
-aix
+amX
 ajq
-akj
+akk
 akX
 akk
 akk
-aix
+amX
 anL
 aoo
 aoO
@@ -235342,7 +235258,7 @@ aki
 akZ
 alI
 amt
-aix
+amX
 anK
 aoo
 aoO
@@ -235843,7 +235759,7 @@ ajs
 akk
 akX
 akk
-amv
+akk
 amZ
 anN
 aoo

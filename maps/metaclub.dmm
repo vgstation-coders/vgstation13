@@ -101037,13 +101037,20 @@
 	pixel_x = -32
 	},
 /obj/structure/safe,
-/obj/abstract/map/spawner/safe/any,
-/obj/abstract/map/spawner/safe/any,
-/obj/abstract/map/spawner/safe/any,
-/obj/abstract/map/spawner/safe/any,
-/obj/abstract/map/spawner/safe/any,
-/obj/abstract/map/spawner/safe/any,
-/obj/item/weapon/coin/trader,
+/obj/item/stack/sheet/mineral/silver{
+	amount = 20;
+	pixel_x = -8;
+	pixel_y = -3
+	},
+/obj/item/stack/sheet/mineral/gold{
+	amount = 20;
+	pixel_x = -4;
+	pixel_y = 5
+	},
+/obj/item/stack/sheet/mineral/diamond{
+	amount = 5
+	},
+/obj/item/weapon/spacecash/c1000,
 /turf/simulated/floor/vox{
 	icon_state = "dark"
 	},

@@ -1,0 +1,12 @@
+author: CrazyAmphibian
+delete-after: true
+changes:
+- tweak: reactor parts from cargo now come in flatpack form
+- tweak: made reactor cargo orders more worthwhile
+- rscadd: the NanoTrasen board of engineering has designed several fuel mixtures for
+    testing, orderable from cargo.
+- rscadd: 'New reagent: thorium. currently only from cargo orders.'
+- rscdel: Reactors can no longer make phazon
+- tweak: reduced radon's lifespan
+- spellcheck: revised fission reactor manual, added a unique name to shielded fuel
+    rods

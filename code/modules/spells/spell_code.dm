@@ -800,6 +800,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /// Public: called by event when the mob loses the spell
 /spell/proc/on_removed(mob/user)
+	holder = null
 	return
 
 /// Public: called by event when the mob fucking dies

@@ -250,6 +250,7 @@ var/auxtools_path
 	log_startup_progress("\[[time2text(world.realtime)]\]: preshutdown finished in [stop_watch(procWatch)]s")
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
 /world/proc/KickInactiveClients()
+	usr = null
 	spawn(-1)
 		//set background = 1
 		while(1)

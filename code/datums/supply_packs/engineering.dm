@@ -425,25 +425,22 @@
 	contains = list(
 		/obj/item/weapon/fuelrod/small/starter,
 		/obj/item/weapon/book/manual/engineering_fissionreactor_guide,
-		/obj/item/weapon/storage/box/fissionsupply_controller, //makes a crappy 1x2 interior. but it'll do.
-		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
-		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
+		/obj/structure/closet/crate/flatpack/fission_controller, //makes a crappy 1x2 interior. but it'll do.
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_interior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_interior,
 		/obj/item/weapon/storage/box/fissionsupply_fuelmaker,
-		/obj/item/weapon/circuitboard/fission_control_rod,
-		/obj/item/weapon/circuitboard/fission_fuel_rod,
-		/obj/item/weapon/storage/box/fissionsupply_casing,
-		/obj/item/weapon/storage/box/fissionsupply_casing,
-		/obj/item/weapon/storage/box/fissionsupply_casing,
-		/obj/item/weapon/storage/box/fissionsupply_casing,
-		/obj/item/weapon/storage/box/fissionsupply_casing,
-		/obj/item/weapon/storage/box/fissionsupply_casing,
-		/obj/item/weapon/storage/box/fissionsupply_casing,
-		/obj/item/weapon/storage/box/fissionsupply_casing,
-		/obj/item/weapon/storage/box/fissionsupply_casing,
-	
 	)
 	name = "Fission reactor starter kit"
-	cost = 300 //Includes a lot of plasteel. Fuck you, ask the miners for more you socially inept jobbie.
+	cost = 200 //Includes a lot of plasteel. Fuck you, ask the miners for more you socially inept jobbie.
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "Fission reactor starter kit"
 	group = "Engineering"
@@ -452,23 +449,21 @@
 	
 /datum/supply_packs/fissionreactor_expansion
 	contains = list(
-		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
-		/obj/item/weapon/storage/box/fissionsupply_genericassembly,
-		/obj/item/weapon/circuitboard/fission_control_rod, //gives you 2 expansion parts (control/fuel rod) and the casing needed to add. 
-		/obj/item/weapon/circuitboard/fission_fuel_rod,
-		/obj/item/weapon/circuitboard/fission_fuel_rod,
-		/obj/item/weapon/storage/box/fissionsupply_casing,
-		/obj/item/weapon/storage/box/fissionsupply_casing,
-		/obj/item/weapon/storage/box/fissionsupply_casing,
-		/obj/item/weapon/storage/box/fissionsupply_casing,
+		/obj/structure/closet/crate/flatpack/configurable/fission_interior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_interior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_interior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
+		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
 	)
 	name = "Fission reactor expansion pak"
-	cost = 100 //See above.
+	cost = 75 //See above.
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "Fission reactor expansion pak"
 	group = "Engineering"
 	access = list(access_engine_major)
-	containsdesc = "Contains supplies to expand an existing fission reactor. Remember to turn it off and drain the coolant first!"		
+	containsdesc = "Contains supplies to expand an existing fission reactor. Includes parts for 4 casings and 3 interior assemblies. Remember to turn it off and drain the coolant first!"		
 		
 /datum/supply_packs/fissionreactor_bigrod
 	contains = list(
@@ -483,7 +478,17 @@
 	containsdesc = "An extra-large fuel reservoir, for extra power or for more complex fuel mixes. Use with extreme caution and control rods inserted."
 		
 				
-		
-		
-		
+/datum/supply_packs/fissionreactor_randomrod
+	contains = list(
+		/obj/item/weapon/fuelrod/randomized
+	)
+	name = "Pre-filled fuel reservoir"
+	cost = 50 //expendable item. costs a decent bit because it's the standard size, and comes with materials in it. random materials, too. have fun!
+	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	containername = "Pre-filled fuel reservoir"
+	group = "Engineering"
+	access = list(access_engine_major)
+	containsdesc = "A standard fuel reservoir, filled with a unique mixture selected by NanoTransen's engineering team."	
+	
+	
 	

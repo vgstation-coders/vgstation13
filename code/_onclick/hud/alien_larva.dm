@@ -14,6 +14,9 @@
 	src.adding += using
 	action_intent = using
 
+	using.pointer_to_var = &action_intent
+	using.pointer_to_list = &adding
+
 	using = new /obj/abstract/screen
 	using.name = "mov_intent"
 	using.dir = SOUTHWEST
@@ -23,11 +26,16 @@
 	src.adding += using
 	move_intent = using
 
+	using.pointer_to_var = &move_intent
+	using.pointer_to_list = &adding
+
 	mymob.healths = new /obj/abstract/screen
 	mymob.healths.icon = 'icons/mob/screen1_alien.dmi'
 	mymob.healths.icon_state = "health0"
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_alien_health
+
+	mymob.healths.pointer_to_var = &mymob.healths
 
 	mymob.pullin = new /obj/abstract/screen
 	mymob.pullin.icon = 'icons/mob/screen1_alien.dmi'
@@ -35,9 +43,13 @@
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_pull_resist
 
+	mymob.pullin.pointer_to_var = &mymob.pullin
+
 	mymob.zone_sel = new /obj/abstract/screen/zone_sel
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image("icon" = 'icons/mob/zone_sel.dmi', "icon_state" = text("[]", mymob.zone_sel.selecting))
+
+	mymob.zone_sel.pointer_to_var = &mymob.zone_sel
 
 	mymob.client.reset_screen()
 

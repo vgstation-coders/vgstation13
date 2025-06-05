@@ -846,6 +846,46 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
 /obj/item/clothing/head/hunter/rangeTackleBonus()
 	return 1
 
+/obj/item/clothing/head/shadowhead
+	name = "shadow costume head"
+	desc = "Amnesia not included."
+	icon_state = "shadowhead"
+	item_state = "shadowhead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
+/obj/item/clothing/head/sonichead
+	name = "sonic costume head"
+	desc = "Formerly a pre-order bonus."
+	icon_state = "sonichead"
+	item_state = "sonichead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
+/obj/item/clothing/head/tailshead
+	name = "tails costume head"
+	desc = "Smells like mint."
+	icon_state = "tailshead"
+	item_state = "tailshead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
+/obj/item/clothing/head/knuckleshead
+	name = "knuckles costume head"
+	desc = "What a knucklehead."
+	icon_state = "knuckleshead"
+	item_state = "knuckleshead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
+/obj/item/clothing/head/amyhead
+	name = "amy costume head"
+	desc = "Pretty pink I think."
+	icon_state = "amyhead"
+	item_state = "amyhead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
 /obj/item/clothing/head/coonskin_cap
 	name = "coonskin cap"
 	desc = "You may all well go to hell, and I will go to Space Texas."

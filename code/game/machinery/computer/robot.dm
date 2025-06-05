@@ -87,12 +87,9 @@
 
 
 /obj/machinery/computer/robotics/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
-	message_admins("ui_act called on robotborg")
 	. = ..()
 	if(.)
-		message_admins("uuuh didn't work :)")
 		return
-	message_admins("action: [action], params: [json_encode(params)]")
 	switch(action)
 		if("killbot")
 			if(allowed(usr))

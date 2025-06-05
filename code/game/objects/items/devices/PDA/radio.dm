@@ -31,6 +31,10 @@
 	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 
+/obj/item/radio/integrated/signal/Destroy()
+	radio_controller.remove_object(src, frequency)
+	. = ..()
+
 /obj/item/radio/integrated/signal/initialize()
 	if (!radio_controller)
 		return

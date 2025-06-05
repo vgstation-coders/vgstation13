@@ -177,18 +177,22 @@
 			modulo = S.modulo_steps<modulo? S.modulo_steps : modulo
 		if (stepstaken % modulo == 0) //once every other step by default, so that it doesn't spam too much (shoes override)
 			var/step_volume = 50
+			var/range = -4
 			var/list/sounds_to_play
 			
 			var/turf/T = get_turf(src)
 			if (!T || !T.footstep_sound || istype(T, /turf/space))
+				return
+			if (locate(/obj/machinery/conveyor) in T.contents)
 				return
 
 			if(shoes && istype(shoes, /obj/item/clothing/shoes)) //shoes
 				var/obj/item/clothing/shoes/S = shoes
 				if (S.step_sound) //shoes override
 					sounds_to_play = S.step_sound
+					range = S.footsteps_range
 				else //otherwise just use the turf's sound
-					sounds_to_play = T.footstep_sound 
+					sounds_to_play = T.footstep_sound
 			else
 				var/datum/organ/external/foot = has_vulnerable_foot()
 				if (foot)
@@ -203,7 +207,7 @@
 			stepstaken = 0
 			if (!sounds_to_play)
 				return
-			playsound(src, pick(sounds_to_play), step_volume, 1, -4)
+			playsound(src, pick(sounds_to_play), step_volume, 1, range)
 			
 
 

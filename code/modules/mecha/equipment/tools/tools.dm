@@ -368,7 +368,6 @@
 				for(var/a=0, a<5, a++)
 					spawn(0)
 						var/datum/reagents/R = new/datum/reagents(5)
-						R.my_atom = src
 						reagents.trans_to_holder(R,1)
 						var/obj/effect/foam/fire/W = new /obj/effect/foam/fire(get_turf(chassis), R)
 						if(!W || !src)
