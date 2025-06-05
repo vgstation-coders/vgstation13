@@ -77,6 +77,7 @@ List of hard deletions:"}
 		var/destroyedAtTime = queue[D]
 		if(destroyedAtTime > collectionTimeScope)
 			break
+
 		// 1 from the hard reference in the queue, and 1 from the variable used before this, 1 from being used as an index in queue[D]
 		#define REFS_WE_EXPECT 3
 
