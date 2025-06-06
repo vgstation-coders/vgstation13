@@ -65,7 +65,7 @@
 /// if they can spawn at the tested turf. This method of checking reduces the amount of
 /// time spent populating a planet.
 /datum/biome/proc/populate_turf(turf/gen_turf, list/feature_list, list/mob_list)
-	if(iswall(gen_turf) || istype(gen_turf, /turf/unsimulated/mineral/cave)) //make helper
+	if(iswall(gen_turf) || istype(gen_turf, /turf/unsimulated/mineral)) //make helper
 		return
 	var/turf/simulated/floor/floor_turf = gen_turf
 	var/area/A = floor_turf.loc

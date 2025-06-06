@@ -791,6 +791,10 @@
 	light_power = 3
 	light_range = 2
 
+/obj/structure/flora/rock/lava/New()
+	. = ..()
+	icon_state = "[base_icon_state][rand(1,3)]"
+
 /obj/structure/flora/rock/pile/lava
 	name = "rock shards"
 	desc = "Jagged shards of volcanic rock protuding from the ground."
@@ -798,6 +802,10 @@
 	icon_state = "lavarocks1"
 	var/base_icon_state = "lavarocks"
 	gender = PLURAL
+
+/obj/structure/flora/rock/pile/lava/New()
+	. = ..()
+	icon_state = "[base_icon_state][rand(1,3)]"
 
 /obj/structure/flora/rock/asteroid
 	name = "pebbles"
@@ -831,6 +839,10 @@
 	light_color = LIGHT_COLOR_RED
 	light_range = 2
 	light_power = 0.85
+
+/obj/structure/flora/tree/dead/hell/New()
+	. = ..()
+	icon_state = "tree_[rand(1,6)]"
 
 /obj/structure/flora/tree/dead_pine
 	name = "dead pine"

@@ -234,7 +234,7 @@
 		/obj/structure/flora/ash/leaf_shroom = 1,
 		/obj/structure/flora/ash/cap_shroom = 2,
 		/obj/structure/flora/ash/stem_shroom = 2,
-		/obj/structure/flora/desert/saguaro = 1,
+		/obj/structure/flora/desert/saguaro/hell = 1,
 		/obj/structure/flora/ash/tall_shroom = 2,
 		/obj/structure/flora/ash/fern = 2,
 		/obj/structure/flora/ash/puce = 2,
@@ -255,14 +255,14 @@
 
 /datum/biome/cave/lavaland/mossy
 	open_turf_types = list(/turf/simulated/floor/plating/moss = 1)
-	flora_spawn_chance = 80
+	flora_spawn_chance = 8
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass/hell = 10,
 		/obj/structure/flora/ausbushes/sparsegrass/hell = 5,
 		/obj/structure/flora/ash/leaf_shroom = 1,
 		/obj/structure/flora/ash/cap_shroom = 2,
 		/obj/structure/flora/ash/stem_shroom = 2,
-		/obj/structure/flora/desert/saguaro = 1,
+		/obj/structure/flora/desert/saguaro/hell = 1,
 		/obj/structure/flora/ash/tall_shroom = 2,
 	)
 

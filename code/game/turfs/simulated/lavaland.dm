@@ -25,7 +25,7 @@
 	desc = "Sand, filled with a wide array of volcanic minerals have turned it a soft black color. Suprisingly good for plants, all things considered"
 	icon = 'icons/turf/planetary/volcanicsand.dmi'
 
-	icon_state = "sand-255"
+	icon_state = "sand_1"
 	base_icon_state = "sand"
 
 	light_color = COLOR_LAVAPLANET_LIGHT
@@ -47,10 +47,15 @@
 
 /turf/simulated/floor/plating/asteroid/dirt/grass/lavaland
 	name = "crimson grass"
-	desc = "This grass is actually native to Teceti. It has adapted extremely well to the hot enviroments of lava planets, as it is adept at absorbing the red light that passes the atmosphere."
+	desc = "This grass has adapted extremely well to the hot enviroments of lava planets, as it is adept at absorbing the red light that passes the atmosphere."
+	icon = 'icons/turf/planetary/redgrass.dmi'
+	base_icon_state = "grass"
 	light_range = 2
 	light_power = 0.6
 	light_color = COLOR_LAVAPLANET_LIGHT
+
+/turf/simulated/floor/plating/asteroid/dirt/grass/lavaland/New()
+	icon_state = "[base_icon_state]_[rand(1,3)]"
 
 ///The Moss
 /turf/simulated/floor/plating/moss
