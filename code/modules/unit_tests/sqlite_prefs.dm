@@ -1,3 +1,5 @@
+#include "sqlite_unit_testing_procs.dm"
+
 // -- Targets the empty file
 /datum/preferences/unit_testing
 	// We only target the baseline DB so that we cant EVER even accidentally touch player prefs
@@ -105,29 +107,18 @@
 		if(!(actual_value ~= db_value))
 			stack_trace("equal values test failed. actual_value = [islist(actual_value) ? json_encode(actual_value) : actual_value], db_value = [islist(db_value) ? json_encode(db_value) : db_value]. Setting type = [setting]")
 
-	// 7. Change some vars
+	// 7. Change some vars (will be checked later)
 
-	var/datum/preference_setting/name = test_prefs.get_pref_datum(/datum/preference_setting/string/real_name)
-	name.setting = "Jeanna F. Spesswoman"
-	var/datum/preference_setting/gender = test_prefs.get_pref_datum(/datum/preference_setting/enum/gender)
-	gender.setting = FEMALE
+	for (var/type, setting in test_prefs.preference_settings_client)
+		var/datum/preference_setting/the_setting = setting
+		the_setting.simulate_setting_change()
+
+	for (var/type, setting in test_prefs.preference_settings_character)
+		var/datum/preference_setting/the_setting = setting
+		the_setting.simulate_setting_change()
+
 	test_prefs.save_character_sqlite(dummy_ckey, null, DEFAULT_SLOT)
-
-	var/database/query/check_vars = new
-	var/list/data_check_vars = list()
-
-	check_vars.Add("SELECT real_name, gender FROM players WHERE player_ckey = ? AND player_slot = ? ;", dummy_ckey, DEFAULT_SLOT)
-	ASSERT(check_vars.Execute(test_prefs.db))
-	while(check_vars.NextRow())
-		var/list/row = check_vars.GetRowData()
-		for(var/a in row)
-			data_check_vars[a] = row[a]
-
-	var/db_name = name.load_sql(data_check_vars[name.sql_name])
-	var/db_gender = gender.load_sql(data_check_vars[gender.sql_name])
-
-	assert_eq(db_name, "Jeanna F. Spesswoman")
-	assert_eq(db_gender, FEMALE)
+	test_prefs.save_preferences_sqlite(null, dummy_ckey)
 
 	// 8. Creating a new slot on an unoccupied slot
 
@@ -160,9 +151,12 @@
 
 	// 11. Check if we get our vars back
 
-	var/current_name = test_prefs.get_pref(/datum/preference_setting/string/real_name)
-	assert_eq(current_name, "Jeanne F. Spesswoman")
-	var/current_gender = test_prefs.get_pref(/datum/preference_setting/enum/gender)
-	assert_eq(current_gender, FEMALE)
+	for (var/type, setting in test_prefs.preference_settings_client)
+		var/datum/preference_setting/the_setting = setting
+		the_setting.check_setting_change()
+
+	for (var/type, setting in test_prefs.preference_settings_character)
+		var/datum/preference_setting/the_setting = setting
+		the_setting.check_setting_change()
 
 	del test_prefs // Explicitly clears out the DB
