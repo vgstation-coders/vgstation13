@@ -173,3 +173,136 @@ Obviously, requires DNA2.
 		M.update_colour(NOIR_ANIM_TIME)
 		if(M.client)
 			M.client.screen -= noir_master
+
+//CHARGE
+
+/datum/dna/gene/basic/grant_spell/charge
+	name = "CHARGE"
+	desc = "Peform a short sprint, knocking down walls and people alike.</span>"
+	activation_messages = list("You feel a surge of energy in your body.")
+	deactivation_messages = list("You suddenly don't feel so pumped.")
+
+	drug_activation_messages = list()
+	drug_deactivation_messages = list()
+
+	spelltype = /spell/targeted/charge
+	flags = GENE_UNNATURAL // Do NOT spawn on roundstart.
+
+/datum/dna/gene/basic/grant_spell/charge/New()
+	..()
+	block = CHARGEBLOCK
+
+/spell/targeted/charge
+	name = "Charge"
+	desc = "Charge forward, knocking down walls and people alike.</span>"
+	panel = "Mutant Powers"
+	user_type = USER_TYPE_GENETIC
+	range = 4
+
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 15 SECONDS
+
+	spell_flags = WAIT_FOR_CLICK | CAN_CHANNEL_RESTRAINED
+	invocation_type = SP_INV_NONE
+
+	hud_state = "gen_leap"
+	override_base = "genetic"
+
+/spell/targeted/charge/choose_targets(var/mob/user = usr)
+	return list(user)
+
+/spell/targeted/charge/cast_check(var/skipcharge = FALSE, var/mob/user = usr)
+	if(user.throwing)
+		return FALSE
+	else
+		return ..()
+
+/spell/targeted/charge/cast(var/list/targets, var/mob/user)
+	playsound(user, 'sound/effects/chargeaction.ogg', 100, 1)
+	var/mob/living/carbon = user
+	var/landing = get_distant_turf(get_turf(user), carbon.dir, range)
+	carbon.throw_at(landing, range , 2)
+
+/mob/living/carbon/special_thrown_behaviour()
+	throwing = 2//dashing through windows and grilles
+
+/mob/living/carbon/to_bump(var/atom/obstacle)
+	var/dash_dir = null
+	var/turf/crashing = null
+	if(src.throwing)
+		var/breakthrough = 0
+		if(istype(obstacle, /obj/structure/window/))
+			var/obj/structure/window/W = obstacle
+			W.shatter()
+			breakthrough = 1
+
+		else if(istype(obstacle, /obj/structure/grille/))
+			var/obj/structure/grille/G = obstacle
+			G.health = (0.25*initial(G.health))
+			G.healthcheck()
+			breakthrough = 1
+
+		else if(istype(obstacle, /obj/structure/table))
+			var/obj/structure/table/T = obstacle
+			T.destroy()
+			breakthrough = 1
+
+		else if(istype(obstacle, /obj/structure/rack))
+			new /obj/item/weapon/rack_parts(obstacle.loc)
+			qdel(obstacle)
+			breakthrough = 1
+
+		else if(istype(obstacle, /turf/simulated/wall))
+			var/turf/simulated/wall/W = obstacle
+			if (W.hardness <= 60)
+				playsound(W, 'sound/weapons/chargeimpact.ogg', 75, 1)
+				W.dismantle_wall(1)
+				breakthrough = 1
+			else
+				src.throwing = 0
+
+		else if(istype(obstacle, /obj/structure/reagent_dispensers))
+			var/obj/structure/reagent_dispensers/R = obstacle
+			R.explode(src)
+
+		else if(istype(obstacle, /mob/living))
+			var/mob/living/L = obstacle
+			if (L.flags & INVULNERABLE)
+				src.throwing = 0
+			else if (!(L.status_flags & CANKNOCKDOWN) || (M_HULK in L.mutations) || istype(L,/mob/living/silicon))
+				//can't be knocked down? you'll still take the damage.
+				src.throwing = 0
+				L.take_overall_damage(5,0)
+				if(L.locked_to)
+					L.locked_to.unlock_atom(L)
+			else
+				L.take_overall_damage(5,0)
+				if(L.locked_to)
+					L.locked_to.unlock_atom(L)
+				L.Stun(2)
+				L.Knockdown(2)
+				L.apply_effect(5, STUTTER)
+				playsound(src, 'sound/weapons/heavysmash.ogg', 50, 0, 0)
+				breakthrough = 1
+		else
+			src.throwing = 0
+
+		if(breakthrough)
+			if(crashing && !istype(crashing,/turf/space))
+				spawn(1)
+					src.throw_at(crashing, 50, src.throw_speed)
+			else
+				spawn(1)
+					crashing = get_distant_turf(get_turf(src), dash_dir, 2)
+					src.throw_at(crashing, 50, src.throw_speed)
+
+	if(istype(obstacle, /obj))
+		var/obj/O = obstacle
+		if(!O.anchored)
+			step(obstacle,src.dir)
+		else
+			obstacle.Bumped(src)
+	else if(istype(obstacle, /mob))
+		step(obstacle,src.dir)
+	else
+		obstacle.Bumped(src)
