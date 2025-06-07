@@ -13,9 +13,9 @@
 // [config.vgws_base_url]/index.php/route?get_var=value
 // s is automatically added when admin=1.
 /datum/admins/proc/getVGPanel(var/route,var/list/query=list(),var/admin=0)
-	var/url="[config.vgws_base_url]/index.php/[route]"
+	var/url="[CONFIG_GET(vgws_base_url)]/index.php/[route]"
 	url += buildurlquery(query)
 	return url
 
 /proc/getVGWiki(var/route)
-	return "[config.vgws_base_url]/wiki/index.php/[route]"
+	return "[CONFIG_GET(vgws_base_url)]/wiki/index.php/[route]"

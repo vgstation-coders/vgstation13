@@ -10,8 +10,8 @@ var/savefile/Banlist
 
 	. = list()
 	var/appeal
-	if(config && config.banappeals)
-		appeal = "\nFor more information on your ban, or to appeal, head to <a href='[config.banappeals]'>[config.banappeals]</a>"
+	if(config && CONFIG_GET(banappeals))
+		appeal = "\nFor more information on your ban, or to appeal, head to <a href='[CONFIG_GET(banappeals)]'>[CONFIG_GET(banappeals)]</a>"
 	Banlist.cd = "/base"
 	if( "[ckey][id]" in Banlist.dir )
 		Banlist.cd = "[ckey][id]"
@@ -106,8 +106,8 @@ var/savefile/Banlist
 			log_admin("[key_name(usr)] has sticky banned [key_name(src)].")
 		to_chat(src, "<span class='warning'><BIG><B>You have been banned by [bannedby].\nReason: [reason].</B></BIG></span>")
 		to_chat(src, "<span class='warning'>This is a [temp ? "temporary" : "permanent"] ban[temp ? ", it will be removed in [minutes] minutes" : ""].</span>")
-		if(config.banappeals)
-			to_chat(src, "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>")
+		if(CONFIG_GET(banappeals))
+			to_chat(src, "<span class='warning'>To try to resolve this matter head to [CONFIG_GET(banappeals)]</span>")
 		else
 			to_chat(src, "<span class='warning'>No ban appeals URL has been set.</span>")
 		var/thisinfo = temp ? "will be removed in [minutes] minutes" : "is a permanent ban"

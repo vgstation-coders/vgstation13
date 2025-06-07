@@ -179,7 +179,7 @@
 
 /proc/cmd_admin_mute(mob/M as mob, mute_type, automute = 0)
 	if(automute)
-		if(!config.automute_on)
+		if(!CONFIG_GET(toggle/automute_on))
 			return
 	else
 		if(!usr || !usr.client)
@@ -342,7 +342,7 @@ Ccomp's first proc.
 		return
 
 	var/mob/dead/observer/G = ghosts[target]
-	if(G.has_enabled_antagHUD && config.antag_hud_restricted)
+	if(G.has_enabled_antagHUD && CONFIG_GET(toggle/antag_hud_restricted))
 		var/response = alert(src, "Are you sure you wish to allow this individual to play?","Ghost has used AntagHUD","Yes","No")
 		if(response == "No")
 			return
@@ -366,7 +366,7 @@ Ccomp's first proc.
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 	var/action=""
-	if(config.antag_hud_allowed)
+	if(CONFIG_GET(toggle/antag_hud_allowed))
 		for(var/mob/dead/observer/g in get_ghosts())
 			if(!g.client.holder)						//Remove the verb from non-admin ghosts
 				g.verbs -= /mob/dead/observer/verb/toggle_antagHUD
@@ -374,7 +374,8 @@ Ccomp's first proc.
 				g.antagHUD = 0						// Disable it on those that have it enabled
 				g.has_enabled_antagHUD = 2				// We'll allow them to respawn
 				to_chat(g, "<span class='danger'>The Administrator has disabled AntagHUD </span>")
-		config.antag_hud_allowed = 0
+		var/datum/config_flag/antag_hud_flag = config.config_flags[/datum/config_flag/toggle/antag_hud_allowed]
+		antag_hud_flag.value = 0
 		to_chat(src, "<span class='danger'>AntagHUD usage has been disabled</span>")
 		action = "disabled"
 	else
@@ -383,7 +384,8 @@ Ccomp's first proc.
 				g.verbs += /mob/dead/observer/verb/toggle_antagHUD
 				to_chat(g, "<span class='notice'><B>The Administrator has enabled AntagHUD </B></span>")// Notify all observers they can now use AntagHUD
 
-		config.antag_hud_allowed = 1
+		var/datum/config_flag/antag_hud_flag = config.config_flags[/datum/config_flag/toggle/antag_hud_allowed]
+		antag_hud_flag.value = 0
 		action = "enabled"
 		to_chat(src, "<span class='notice'><B>AntagHUD usage has been enabled</B></span>")
 
@@ -401,11 +403,12 @@ Ccomp's first proc.
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 	var/action=""
-	if(config.antag_hud_restricted)
+	if(CONFIG_GET(toggle/antag_hud_restricted))
 		for(var/mob/dead/observer/g in get_ghosts())
 			to_chat(g, "<span class='notice'><B>The administrator has lifted restrictions on joining the round if you use AntagHUD</B></span>")
 		action = "lifted restrictions"
-		config.antag_hud_restricted = 0
+		var/datum/config_flag/hud_restricted = config.config_flags[/datum/config_flag/toggle/antag_hud_restricted]
+		hud_restricted.value = 0
 		to_chat(src, "<span class='notice'><B>AntagHUD restrictions have been lifted</B></span>")
 	else
 		for(var/mob/dead/observer/g in get_ghosts())
@@ -414,7 +417,8 @@ Ccomp's first proc.
 			g.antagHUD = 0
 			g.has_enabled_antagHUD = 0
 		action = "placed restrictions"
-		config.antag_hud_restricted = 1
+		var/datum/config_flag/hud_restricted = config.config_flags[/datum/config_flag/toggle/antag_hud_restricted]
+		hud_restricted.value = 0
 		to_chat(src, "<span class='danger'>AntagHUD restrictions have been enabled</span>")
 
 	log_admin("[key_name(usr)] has [action] on joining the round if they use AntagHUD")
@@ -643,7 +647,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(!istype(M))
 		alert("Cannot revive a ghost")
 		return
-	if(config.allow_admin_rev)
+	if(CONFIG_GET(toggle/allow_admin_rev))
 		var/confirm = alert(src, "Rejuvenate [M]?", "Confirm", "Yes", "No")
 		if(confirm != "Yes")
 			return
@@ -877,7 +881,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 			log_admin("[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.")
 			message_admins("<span class='warning'>[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.</span>")
-			world.Export("http://216.38.134.132/adminlog.php?type=ban&key=[usr.client.key]&key2=[M.key]&msg=[html_decode(reason)]&time=[mins]&server=[replacetext(config.server_name, "#", "")]")
+			world.Export("http://216.38.134.132/adminlog.php?type=ban&key=[usr.client.key]&key2=[M.key]&msg=[html_decode(reason)]&time=[mins]&server=[replacetext(CONFIG_GET(server)_name, "#", "")]")
 			del(M.client)
 			qdel(M)
 		else
@@ -893,7 +897,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 		log_admin("[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis is a permanent ban.")
 		message_admins("<span class='warning'>[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis is a permanent ban.</span>")
-		world.Export("http://216.38.134.132/adminlog.php?type=ban&key=[usr.client.key]&key2=[M.key]&msg=[html_decode(reason)]&time=perma&server=[replacetext(config.server_name, "#", "")]")
+		world.Export("http://216.38.134.132/adminlog.php?type=ban&key=[usr.client.key]&key2=[M.key]&msg=[html_decode(reason)]&time=perma&server=[replacetext(CONFIG_GET(server)_name, "#", "")]")
 		del(M.client)
 		qdel(M)
 */
@@ -1048,13 +1052,15 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(!check_rights(R_SERVER))
 		return
 
-	if(!config.allow_random_events)
-		config.allow_random_events = 1
+	if(!CONFIG_GET(toggle/allow_random_events))
+		var/datum/config_flag/events_flag = config.config_flags[/datum/config_flag/toggle/allow_random_events]
+		events_flag.value = 1
 		to_chat(usr, "Random events enabled")
 		message_admins("Admin [key_name_admin(usr)] has enabled random events.", 1)
 
 	else
-		config.allow_random_events = 0
+		var/datum/config_flag/events_flag = config.config_flags[/datum/config_flag/toggle/allow_random_events]
+		events_flag.value = 0
 		to_chat(usr, "Random events disabled")
 		message_admins("Admin [key_name_admin(usr)] has disabled random events.", 1)
 

@@ -805,7 +805,7 @@ var/list/astral_projections = list()
 	. = ..(tangibility ? "[message]" : "..[message]",tangibility ? "" : "C")
 	//adding a few dots before the message when intangible so the message isn't truncated when formated for cult chat
 
-	if(tangibility && ishuman(anchor) && config.voice_noises && world.time>time_last_speech+5 SECONDS)
+	if(tangibility && ishuman(anchor) && CONFIG_GET(toggle/voice_noises) && world.time>time_last_speech+5 SECONDS)
 		time_last_speech = world.time
 		for(var/mob/O in hearers())
 			if(!O.is_deaf() && O.client)

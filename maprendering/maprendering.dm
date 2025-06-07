@@ -1,4 +1,4 @@
-#define MAPRENDER_IN_ROUND_CHECK_TICK ( !config.maprender_lags_game ? IN_ROUND_CHECK_TICK : 0 )
+#define MAPRENDER_IN_ROUND_CHECK_TICK ( !CONFIG_GET(toggle/maprender_lags_game) ? IN_ROUND_CHECK_TICK : 0 )
 
 /client/proc/maprender()
 	set category = "Mapping"
@@ -7,7 +7,7 @@
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
-	if(config.maprender_lags_game)
+	if(CONFIG_GET(toggle/maprender_lags_game))
 		if(alert("Sure you want to do this? It should NEVER be done in an active round and cannot be cancelled", "generate maps", "Yes", "No") == "No")
 			return
 

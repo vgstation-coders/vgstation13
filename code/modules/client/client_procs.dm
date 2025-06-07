@@ -76,7 +76,7 @@ var/updated_stats = 0
 		return chatOutput.Topic(href, href_list)
 
 	//Logs all hrefs
-	if(config && config.log_hrefs && investigations[I_HREFS])
+	if(config && CONFIG_GET(toggle/log_hrefs) && investigations[I_HREFS])
 		var/datum/log_controller/I = investigations[I_HREFS]
 		I.write("<small>[time_stamp()] [src] (usr:[usr])</small> || [hsrc ? "[hsrc] " : ""][copytext(sanitize(href), 1, 3000)]<br />")
 
@@ -109,7 +109,7 @@ var/updated_stats = 0
 		message_admins("[src] has been automuted [mute_type] for posting an onion link.")
 		log_admin("[src] has been automuted [mute_type] for posting an onion link.")
 		return 1
-	if(config.automute_on && !holder && src.last_message == message)
+	if(CONFIG_GET(toggle/automute_on) && !holder && src.last_message == message)
 		src.last_message_count++
 		if(src.last_message_count >= SPAM_TRIGGER_AUTOMUTE)
 			to_chat(src, "<span class='warning'>You have exceeded the spam filter limit for identical messages. An auto-mute was applied.</span>")
@@ -166,11 +166,11 @@ var/updated_stats = 0
 		else
 			return null
 
-	if(!updated_stats && config.stats_addr)
+	if(!updated_stats && CONFIG_GET(stats_addr))
 		updated_stats = 1
 		spawn(1)
 
-			world.Export("[config.stats_addr]")
+			world.Export("[CONFIG_GET(stats_addr)]")
 
 	if(byond_version < MIN_CLIENT_VERSION)		//Out of date client.
 		message_admins("[key]/[ckey] has connected with an out of date client! Their version: [byond_version]. They will be kicked shortly.")
@@ -178,17 +178,17 @@ var/updated_stats = 0
 		spawn(5 SECONDS)
 			del(src)
 
-	if(!guests_allowed && IsGuestKey(key))
+	if(CONFIG_GET(toggle/guest_ban) && IsGuestKey(key))
 		alert(src,"This server doesn't allow guest accounts to play. Please go to http://www.byond.com/ and register for a key.","Guest","OK")
 		del(src)
 		return
 
 	// Change the way they should download resources.
-	if(config.resource_urls)
-		src.preload_rsc = pick(config.resource_urls)
-	else if(config.rsclist && config.rscstring)
-		var/rsclist = flist("[config.rsclist]")
-		var/rscString = "[config.rscstring]"
+	if(CONFIG_GET(list_string/ressource_urls))
+		src.preload_rsc = pick(CONFIG_GET(list_string/ressource_urls))
+	else if(CONFIG_GET(rsclist) && CONFIG_GET(rscstring))
+		var/rsclist = flist("[CONFIG_GET(rsclist)]")
+		var/rscString = "[CONFIG_GET(rscstring)]"
 		try
 			rscString += rsclist[1]
 		catch(var/exception/e)
@@ -199,7 +199,7 @@ var/updated_stats = 0
 		world.log << "Setting [src.key] preload rsc to [rscString]"
 		preload_rsc = rscString
 	else
-		src.preload_rsc = 1 // If config.resource_urls is not set, preload like normal.
+		src.preload_rsc = 1 // If CONFIG_GET(list_string/ressource_urls) is not set, preload like normal.
 
 	to_chat(src, "<span class='warning'>If the title screen is black, resources are still downloading. Please be patient until the title screen appears.</span>")
 
@@ -231,7 +231,7 @@ var/updated_stats = 0
 		world.update_status()
 	//Admin Authorisation
 	var/static/list/localhost_addresses = list("127.0.0.1","::1")
-	if(config.localhost_autoadmin)
+	if(CONFIG_GET(toggle/localhost_autoadmin))
 		if((!address && !world.port) || (address in localhost_addresses))
 			holder = new /datum/admins("Host", R_HOST, src.ckey)
 	else

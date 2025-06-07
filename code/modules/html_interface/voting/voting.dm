@@ -100,12 +100,13 @@ var/global/datum/controller/vote/vote = new()
 		if (choices.len)
 			time_remaining = round((started_time + 600 - world.time)/10)
 		else
-			time_remaining = round((started_time + config.vote_period - world.time)/10)
+			time_remaining = round((started_time + CONFIG_GET(numerical/vote_period) - world.time)/10)
 
 		if(time_remaining <= 0 || player_list.len < 1)
 			//if no players, select at random
 			if(player_list.len < 1)
-				config.toggle_vote_method = RANDOM
+				var/datum/config_flag/toggle_vote_method_flag =  config.config_flags[/datum/config_flag/numerical/toggle_vote_method]
+				toggle_vote_method_flag.value = RANDOM
 			result()
 			for(var/ckey in voters) //hide voting interface using ckeys
 				var/client/C = directory[ckey]
@@ -121,7 +122,7 @@ var/global/datum/controller/vote/vote = new()
 	var/non_voters = clients.len - get_total()
 	currently_voting = FALSE
 
-	if(!config.vote_no_default && choices.len)
+	if(!CONFIG_GET(toggle/vote_no_default) && choices.len)
 		//clients with voting initialized
 		if(non_voters > 0)
 			if(mode == "restart")
@@ -134,7 +135,8 @@ var/global/datum/controller/vote/vote = new()
 				factor = max(factor,0.5)
 				tally["Initiate Crew Transfer"] = round(tally["Initiate Crew Transfer"] * factor)
 				to_chat(world, "<font color='purple'>Crew Transfer Factor: [factor]</font>")
-	switch(config.toggle_vote_method)
+	var/toggle_vote_method = CONFIG_GET(numerical/toggle_vote_method)
+	switch(toggle_vote_method)
 		if(WEIGHTED)
 			return weighted()
 		if(MAJORITY)
@@ -266,7 +268,7 @@ var/global/datum/controller/vote/vote = new()
 
 /datum/controller/vote/proc/submit_vote(var/mob/user, var/vote)
 	if(mode)
-		if(config.vote_no_dead && user.stat == DEAD && !user.client.holder)
+		if(CONFIG_GET(toggle/vote_no_dead) && user.stat == DEAD && !user.client.holder)
 			return 0
 		if (isnum(vote) && (1>vote) || (vote > choices.len))
 			return 0
@@ -334,7 +336,7 @@ var/global/datum/controller/vote/vote = new()
 		return
 	if(!mode)
 		if(started_time != null && !check_rights(R_ADMIN))
-			var/next_allowed_time = (started_time + config.vote_delay)
+			var/next_allowed_time = (started_time + CONFIG_GET(numerical/vote_delay))
 			if(next_allowed_time > world.time)
 				to_chat(user, "You must wait [(next_allowed_time - world.time)/10] seconds to call another vote.")
 				return 0
@@ -346,7 +348,8 @@ var/global/datum/controller/vote/vote = new()
 			if("gamemode")
 				if(ticker.current_state >= 2)
 					return 0
-				choices.Add(config.votable_modes)
+				var/list/votable_modes = CONFIG_GET(list_string/votable_modes)
+				choices.Add(votable_modes)
 				question = "What gamemode?"
 			if("crew_transfer")
 				if(ticker.current_state <= 2)
@@ -365,7 +368,7 @@ var/global/datum/controller/vote/vote = new()
 			if("map")
 				var/list/maps
 				question = "What should the next map be?"
-				if (config.toggle_maps)
+				if (CONFIG_GET(toggle/toggle_maps))
 					maps = get_all_maps()
 				else
 					maps = get_votable_maps()
@@ -389,7 +392,7 @@ var/global/datum/controller/vote/vote = new()
 		var/text = "[capitalize(mode)] vote started by [initiator]."
 		choices = shuffle(choices)
 		//initialize tally
-		if(config.toggle_vote_method == PERSISTENT && mode == "map")
+		if(CONFIG_GET(numerical/toggle_vote_method) == PERSISTENT && mode == "map")
 			var/datum/persistence_task/vote/task = SSpersistence_misc.tasks["/datum/persistence_task/vote"]
 			for(var/i = 1; i <= choices.len; i++)
 				if(isnull(task.data[choices[i]]))
@@ -424,7 +427,7 @@ var/global/datum/controller/vote/vote = new()
 			if(istype(user) && user.client)
 				interact(user.client)
 
-		to_chat(world, "<font color='purple'><b>[text]</b><br> <a href='?src=\ref[vote]'>Click here</a> or type 'vote' to place your votes.<br>You have [config.vote_period/10] seconds to vote.</font>")
+		to_chat(world, "<font color='purple'><b>[text]</b><br> <a href='?src=\ref[vote]'>Click here</a> or type 'vote' to place your votes.<br>You have [CONFIG_GET(numerical/vote_period)/10] seconds to vote.</font>")
 		switch(vote_type)
 			if("crew_transfer")
 				world << sound('sound/voice/Serithi/Shuttlehere.ogg')
@@ -439,7 +442,7 @@ var/global/datum/controller/vote/vote = new()
 			going = 0
 			to_chat(world, "<span class='red'><b>Round start has been delayed.</b></span>")
 
-		time_remaining = round(config.vote_period/10)
+		time_remaining = round(CONFIG_GET(numerical/vote_period)/10)
 		return 1
 	return 0
 
@@ -496,11 +499,11 @@ var/global/datum/controller/vote/vote = new()
 	status_data += list(mode)
 	status_data += list(question)
 	status_data += list(time_remaining)
-	if(config.toggle_maps)
+	if(CONFIG_GET(toggle/toggle_maps))
 		status_data += list(1)
 	else
 		status_data += list(0)
-	status_data += list(config.toggle_vote_method)
+	status_data += list(CONFIG_GET(numerical/toggle_vote_method))
 
 	if(refresh && interface)
 		updateFor()
@@ -572,12 +575,14 @@ var/global/datum/controller/vote/vote = new()
 				to_chat(user, "<span class='notice'> You can't do that!")
 		if("toggle_map")
 			if(user.client.holder)
-				config.toggle_maps = !config.toggle_maps
+				var/datum/config_flag/toggle_map_flag =  config.config_flags[/datum/config_flag/toggle/toggle_maps]
+				toggle_map_flag.value = !toggle_map_flag.value
 			else
 				to_chat(user, "<span class='notice'> You can't do that!")
 		if("toggle_vote_method")
 			if(user.client.holder)
-				config.toggle_vote_method = config.toggle_vote_method % 4 + 1
+				var/datum/config_flag/toggle_vote_method_flag =  config.config_flags[/datum/config_flag/numerical/toggle_vote_method]
+				toggle_vote_method_flag.value = toggle_vote_method_flag.value % 4 + 1
 			else
 				to_chat(user, "<span class='notice'> You can't do that!")
 		//If not calling a vote, submit a vote

@@ -24,7 +24,7 @@
 	var/datum/gas_mixture/environment = loc.return_air()
 	var/datum/gas_mixture/breath
 	//HACK NEED CHANGING LATER
-	if(health < config.health_threshold_crit || !L)
+	if(health < CONFIG_GET(numerical/health_threshold_crit) || !L)
 		losebreath++
 	if(losebreath > 0) //Suffocating so do not take a breath
 		losebreath--
@@ -145,7 +145,7 @@
 			failed_last_breath = 1
 			oxygen_alert = 1
 			return 0
-		if(health > config.health_threshold_crit)
+		if(health > CONFIG_GET(numerical/health_threshold_crit))
 			adjustOxyLoss(HUMAN_MAX_OXYLOSS)
 			failed_last_breath = 1
 		else

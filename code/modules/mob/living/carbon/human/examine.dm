@@ -192,7 +192,7 @@
 
 	if (isUnconscious())
 		msg += "<span class='warning'>[t_He] [t_is]n't responding to anything around [t_him] and seem[t_s] to be asleep.</span>\n"
-		if((isDead() || src.health < config.health_threshold_crit) && distance <= 3)
+		if((isDead() || src.health < CONFIG_GET(numerical/health_threshold_crit)) && distance <= 3)
 			msg += "<span class='warning'>[t_He] do[t_es] not appear to be breathing.</span>\n"
 
 		if(ishuman(user) && !user.isUnconscious() && distance <= 1)

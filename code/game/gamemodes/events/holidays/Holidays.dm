@@ -7,7 +7,7 @@
 var/global/Holiday = null
 
 /proc/Get_Holiday()
-	if(!Holiday)  //  Holiday stuff was not enabled in the config!
+	if(!CONFIG_GET(toggle/holiday))  //  Holiday stuff was not enabled in the config!
 		return
 
 	var/list/current_holidays = list()	//Because it's possible to have multiple holidays on the same day

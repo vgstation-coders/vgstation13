@@ -45,7 +45,7 @@
 	return "states, [text]";
 
 /mob/living/silicon/ai/IsVocal()
-	return !config.silent_ai
+	return !CONFIG_GET(toggle/silent_ai)
 
 /mob/living/silicon/ai/get_message_mode(message)
 	. = ..()

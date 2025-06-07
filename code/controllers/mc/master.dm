@@ -151,7 +151,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 	// Sort subsystems by display setting for easy access.
 	sortTim(subsystems, /proc/cmp_subsystem_display)
 	// Set world options.
-	world.tick_lag = config.Ticklag
+	world.tick_lag = CONFIG_GET(numerical/Ticklag)
 	sleep(1)
 	// Loop.
 	Master.StartProcessing()

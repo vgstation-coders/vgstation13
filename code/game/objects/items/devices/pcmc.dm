@@ -128,7 +128,7 @@
 					if (U.sensor_mode == 1)
 						life_status = CONSCIOUS
 					//show critical if they are actually hurt, not just sleeping
-					else if (U.sensor_mode >= 2 && H.health > config.health_threshold_crit)
+					else if (U.sensor_mode >= 2 && H.health > CONFIG_GET(numerical/health_threshold_crit))
 						life_status = CONSCIOUS
 
 				if(pos)

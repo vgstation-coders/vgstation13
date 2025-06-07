@@ -78,14 +78,15 @@ var/auxtools_path
 	LoadBans()
 
 	spawn() copy_logs() // Just copy the logs.
-	if(config && config.log_runtimes)
+	if(config && CONFIG_GET(toggle/log_runtimes))
 		log = file("data/logs/runtime/[time2text(world.realtime,"YYYY-MM-DD")]-runtime.log")
-	if(config && config.server_name != null && config.server_suffix && world.port > 0)
+	if(config && CONFIG_GET(server_name) != null && CONFIG_GET(numerical/server_suffix) && world.port > 0)
 		// dumb and hardcoded but I don't care~
-		config.server_name += " #[(world.port % 1000) / 100]"
+		var/datum/config_flag/server_name_flag = config.config_flags[/datum/config_flag/server_name]
+		server_name_flag.value += " #[(world.port % 1000) / 100]"
 
-	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
-	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
+	send2mainirc("Server starting up on [CONFIG_GET(server)? "byond://[CONFIG_GET(server)]" : "byond://[world.address]:[world.port]"]")
+	send2maindiscord("**Server starting up** on `[CONFIG_GET(server)? "byond://[CONFIG_GET(server)]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
 	Master.Setup()
 
@@ -144,7 +145,7 @@ var/auxtools_path
 		s["mode"] = master_mode
 		s["respawn"] = config ? abandon_allowed : 0
 		s["enter"] = enter_allowed
-		s["ai"] = config.allow_ai
+		s["ai"] = CONFIG_GET(toggle/allow_ai)
 		s["host"] = host ? host : null
 		s["players"] = list()
 		s["map_name"] = map.nameLong
@@ -174,7 +175,7 @@ var/auxtools_path
 
 		return list2params(s)
 	else if (findtext(T,"notes:"))
-		if (!config || addr != config.vgws_ip)
+		if (!config || addr != CONFIG_GET(vgws_ip))
 			return "Denied"
 
 		var/notekey = copytext(T, 7)
@@ -238,8 +239,8 @@ var/auxtools_path
 	log_startup_progress("\[[time2text(world.realtime)]\]: end_credits finished in [stop_watch(watch)]s")
 
 	for(var/client/C in clients)
-		if(config.server)	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
-			C << link("byond://[config.server]")
+		if(CONFIG_GET(server))	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
+			C << link("byond://[CONFIG_GET(server)]")
 
 		else
 			C << link("byond://[world.address]:[world.port]")
@@ -283,13 +284,14 @@ var/auxtools_path
 	config = new /datum/configuration()
 	config.load("config/config.txt")
 	config.load("config/game_options.txt","game_options")
+	// This has are untouched for now
 	config.loadsql("config/dbconfig.txt")
 	config.loadforumsql("config/forumdbconfig.txt")
 	// apply some settings from config..
-	abandon_allowed = config.respawn
+	abandon_allowed = !CONFIG_GET(toggle/no_respawn)
 
 /world/proc/load_mods()
-	if(config.admin_legacy_system)
+	if(CONFIG_GET(toggle/admin_legacy_system))
 		var/text = file2text("config/moderators.txt")
 		if (!text)
 			diary << "Failed to load config/mods.txt\n"

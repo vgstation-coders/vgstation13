@@ -1986,7 +1986,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 	return species.anatomy_flags & IS_BULKY
 
 /mob/living/carbon/human/isincrit()
-	if (health - halloss <= config.health_threshold_softcrit)
+	if (health - halloss <= CONFIG_GET(numerical/health_threshold_softcrit))
 		return 1
 
 /mob/living/carbon/human/get_broken_organs()
@@ -2105,7 +2105,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 
 	if(!can_be_fat)
 		species.anatomy_flags &= ~CAN_BE_FAT
-	
+
 	species.blood_color = get_random_colour()
 	species.flesh_color = get_random_colour()
 

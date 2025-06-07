@@ -13,7 +13,7 @@ var/datum/subsystem/minimap/SSminimap
 
 
 /datum/subsystem/minimap/Initialize(timeofday)
-	if (!config.skip_minimap_generation)
+	if (!CONFIG_GET(toggle/skip_minimap_generation))
 		generateMiniMaps()
 	else
 		minimapinit = 1 //Assume minimaps were prerendered, the worst thing that happens if they're missing is that the minimap consoles don't show a minimap

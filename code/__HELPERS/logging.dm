@@ -40,14 +40,14 @@
 
 	admin_log.Add(text_to_log)
 
-	if(config.log_admin)
+	if(CONFIG_GET(toggle/log_admin))
 		diary << html_decode(text_to_log)
 
-	if(config.log_admin_only)
+	if(CONFIG_GET(toggle/log_admin_only))
 		admin_diary << html_decode(text_to_log)
 
 /proc/log_debug(text, send2chat = TRUE)
-	if (!config || config.log_debug) // Sorry, if config isn't loaded we'll assume you want debug output.
+	if (!config || CONFIG_GET(toggle/log_debug)) // Sorry, if config isn't loaded we'll assume you want debug output.
 		diary << html_decode("\[[time_stamp()]]DEBUG: [text]")
 
 	if(send2chat)
@@ -56,11 +56,11 @@
 				to_chat(C, "DEBUG: [text]")
 
 /proc/log_sql(text)
-	if (!config || (config && config.log_sql))
+	if (!config || (config && CONFIG_GET(toggle/log_sql)))
 		diary << html_decode("\[[time_stamp()]]SQL: [text]")
 
 /proc/log_query_debug(text)
-	if (!config || (config && config.log_sql_queries))
+	if (!config || (config && CONFIG_GET(toggle/log_sql_queries)))
 		diary << html_decode("\[[time_stamp()]]SQL QUERY: [text]")
 
 /proc/log_world(text)
@@ -68,12 +68,12 @@
 	to_chat(world, "<span class='notice'>[text]</span>")
 
 /proc/log_adminghost(text)
-	if (config.log_adminghost)
+	if (CONFIG_GET(toggle/log_adminghost))
 		diary << html_decode("\[[time_stamp()]]ADMINGHOST: [text]")
 		message_admins("\[ADMINGHOST\] [text]")
 
 /proc/log_ghost(text)
-	if (config.log_adminghost)
+	if (CONFIG_GET(toggle/log_adminghost))
 		diary << html_decode("\[[time_stamp()]]GHOST: [text]")
 		message_admins("\[GHOST\] [text]")
 

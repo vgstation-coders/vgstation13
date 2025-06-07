@@ -43,7 +43,7 @@ DEBUG
 */
 
 /proc/appearance_loadbanfile()
-	if(config.ban_legacy_system)
+	if(CONFIG_GET(toggle/ban_legacy_system))
 		var/savefile/S=new("data/appearance_full.ban")
 		S["keys[0]"] >> appearance_keylist
 		world.log << S["keys[0]"]
@@ -56,7 +56,8 @@ DEBUG
 	else
 		if(!SSdbcore.Connect())
 			diary << "Database connection failed. Reverting to the legacy ban system."
-			config.ban_legacy_system = 1
+			var/datum/config_flag/ban_legacy = config.config_flags[/datum/config_flag/toggle/ban_legacy_system]
+			ban_legacy.value = 1
 			appearance_loadbanfile()
 			return
 

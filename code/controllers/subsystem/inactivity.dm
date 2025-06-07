@@ -13,7 +13,7 @@ var/datum/subsystem/inactivity/SSinactivity
 
 
 /datum/subsystem/inactivity/fire(resumed = FALSE)
-	if (config.kick_inactive)
+	if (CONFIG_GET(toggle/kick_inactive))
 		for (var/client/C in clients)
 			if (C.is_afk(INACTIVITY_KICK))
 				if (!istype(C.mob, /mob/dead))

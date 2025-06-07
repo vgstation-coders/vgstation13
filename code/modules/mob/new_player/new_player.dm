@@ -226,12 +226,13 @@
 
 	if(href_list["pollresult"])
 
-		if(!config.poll_results_url)
+		var/poll_results_url = CONFIG_GET(poll_results_url)
+		if(!poll_results_url)
 			return
 		if(alert("This will open the results page in your browser. Are you sure?",,"Yes","No")=="No")
 			return
 		var/pollid = href_list["pollresult"]
-		var/link = "[config.poll_results_url]/[pollid]"
+		var/link = "[poll_results_url]/[pollid]"
 		src << link(link)
 
 	if(href_list["votepollid"] && href_list["votetype"])
@@ -317,7 +318,7 @@
 		client.prefs.real_name = random_name(client.prefs.gender,client.prefs.species)
 	observer.real_name = client.prefs.real_name
 	observer.name = observer.real_name
-	if(!client.holder && !config.antag_hud_allowed)           // For new ghosts we remove the verb from even showing up if it's not allowed.
+	if(!client.holder && !CONFIG_GET(toggle/antag_hud_allowed))           // For new ghosts we remove the verb from even showing up if it's not allowed.
 		observer.verbs -= /mob/dead/observer/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
 	mind.transfer_to(observer)
 	log_admin("([observer.ckey]/[observer]) started the game as a ghost.")

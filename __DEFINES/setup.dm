@@ -123,8 +123,6 @@ var/global/disable_vents     = 0
 
 var/turf/space/Space_Tile = locate(/turf/space) // A space tile to reference when atmos wants to remove excess heat.
 
-//This was a define, but I changed it to a variable so it can be changed in-game.(kept the all-caps definition because... code...) -Errorage
-var/MAX_EXPLOSION_RANGE = 32
 
 #define HUMAN_STRIP_DELAY 40 //takes 40ds = 4s to strip someone.
 #define HUMAN_REVERSESTRIP_DELAY 20
@@ -1386,11 +1384,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 #else
 #define astar_debug(text)
 #define astar_debug_mulebots(text)
-#endif
-
-#define BSQL_DEBUG_CONNECTION 0
-#if BSQL_DEBUG_CONNECTION == 1
-#warn "BSQL_DEBUG_CONNECTION MUST BE SET TO 0 BEFORE COMMITING."
 #endif
 
 //#define JUSTFUCKMYSHITUP 1

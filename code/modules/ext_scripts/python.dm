@@ -22,7 +22,7 @@
 	if(world.system_type == MS_WINDOWS)
 		script = replacetext(script, "/", "\\")
 
-	var/command = config.python_path + " " + script + " " + args
+	var/command = CONFIG_GET(python_path) + " " + script + " " + args
 	if(log_command)
 		testing(command)
 	return shell(command)

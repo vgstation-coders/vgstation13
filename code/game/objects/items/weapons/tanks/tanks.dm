@@ -259,9 +259,9 @@
 		pressure = air_contents.return_pressure()
 		var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
 		score.largest_TTV = max(score.largest_TTV, range)
-		if(range > MAX_EXPLOSION_RANGE)
+		if(range > CONFIG_GET(numerical/max_explosion_range))
 			cap = range
-		range = min(range, MAX_EXPLOSION_RANGE)		// was 8 - - - Changed to a configurable define -- TLE
+		range = min(range, CONFIG_GET(numerical/max_explosion_range))		// was 8 - - - Changed to a configurable define -- TLE
 		var/turf/epicenter = get_turf(loc)
 
 //		to_chat(world, "<span class='notice'>Exploding Pressure: [pressure] kPa, intensity: [range]</span>")

@@ -4,7 +4,7 @@
 //2 = code red
 //3 = code delta
 
-//config.alert_desc_blue_downto
+//CONFIG_GET(alert_desc_blue_downto)
 
 /proc/set_security_level(var/level)
 	switch(level)
@@ -34,28 +34,28 @@
 			if(SEC_LEVEL_GREEN)
 				world << sound('sound/misc/notice2.ogg')
 				to_chat(world, "<font size=4 color='red'>Attention! Security level lowered to green</font>")
-				to_chat(world, "<span class='red'>[config.alert_desc_green]</span>")
+				to_chat(world, "<span class='red'>[CONFIG_GET(alert_desc_green)]</span>")
 				security_level = SEC_LEVEL_GREEN
 			if(SEC_LEVEL_BLUE)
 				if(security_level < SEC_LEVEL_BLUE)
 					world << sound('sound/misc/notice1.ogg')
 					to_chat(world, "<font size=4 color='red'>Attention! Security level elevated to blue</font>")
-					to_chat(world, "<span class='red'>[config.alert_desc_blue_upto]</span>")
+					to_chat(world, "<span class='red'>[CONFIG_GET(alert_desc_blue_upto)]</span>")
 				else
 					world << sound('sound/misc/notice2.ogg')
 					to_chat(world, "<font size=4 color='red'>Attention! Security level lowered to blue</font>")
-					to_chat(world, "<span class='red'>[config.alert_desc_blue_downto]</span>")
+					to_chat(world, "<span class='red'>[CONFIG_GET(alert_desc_blue_downto)]</span>")
 				security_level = SEC_LEVEL_BLUE
 
 			if(SEC_LEVEL_RED)
 				if(security_level < SEC_LEVEL_RED)
 					world << sound('sound/misc/redalert1.ogg')
 					to_chat(world, "<font size=4 color='red'>Attention! Code red!</font>")
-					to_chat(world, "<span class='red'>[config.alert_desc_red_upto]</span>")
+					to_chat(world, "<span class='red'>[CONFIG_GET(alert_desc_red_upto)]</span>")
 				else
 					world << sound('sound/misc/notice2.ogg')
 					to_chat(world, "<font size=4 color='red'>Attention! Code red!</font>")
-					to_chat(world, "<span class='red'>[config.alert_desc_red_downto]</span>")
+					to_chat(world, "<span class='red'>[CONFIG_GET(alert_desc_red_downto)]</span>")
 				security_level = SEC_LEVEL_RED
 
 				/*	- At the time of commit, setting status displays didn't work properly
@@ -65,7 +65,7 @@
 
 			if(SEC_LEVEL_DELTA)
 				to_chat(world, "<font size=4 color='red'>Attention! Delta security level reached!</font>")
-				to_chat(world, "<span class='red'>[config.alert_desc_delta]</span>")
+				to_chat(world, "<span class='red'>[CONFIG_GET(alert_desc_delta)]</span>")
 				security_level = SEC_LEVEL_DELTA
 
 		for(var/obj/machinery/firealarm/FA in firealarms)

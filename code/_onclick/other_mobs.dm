@@ -150,7 +150,7 @@
 		for(var/mob/O in viewers(ML, null))
 			O.show_message("<span class='danger'>[src] has attempted to bite [ML]!</span>", 1)
 
-//Humans being able to bite and kick while restrained, either generally or only when not being pulled or grabbed, according to config.human_captive_kickbite.
+//Humans being able to bite and kick while restrained, either generally or only when not being pulled or grabbed, according to CONFIG_GET(numerical/human_captive_kickbite).
 /mob/living/carbon/human/RestrainedClickOn(var/atom/A)
 	..()
 	if(a_intent != I_HURT || !attack_type || A.loc == src || !Adjacent(A))
@@ -158,7 +158,7 @@
 	if(is_pacified())
 		to_chat(src, "<span class = 'notice'>Violence is not the answer, you remind yourself.</span>")
 		return
-	if(!config.human_captive_kickbite)
+	if(!CONFIG_GET(toggle/human_captive_kickbite))
 		if(pulledby || grabbed_by.len || locked_to)
 			var/restrained_message = "<span class = 'notice'>You're [locked_to ? "buckled to [locked_to]" : "being restrained"]!"
 			switch(attack_type)

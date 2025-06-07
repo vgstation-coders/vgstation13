@@ -199,7 +199,8 @@
 		var/threshold_multiplier = 1
 		if(isslimeperson(owner))
 			threshold_multiplier = 0
-		if(config.limbs_can_break && get_health() >= max_damage * config.organ_health_multiplier * threshold_multiplier)
+		var/organ_health_multiplier = CONFIG_GET(numerical/organ_health_multiplier)
+		if(CONFIG_GET(toggle/limbs_can_break) && get_health() >= max_damage * organ_health_multiplier * threshold_multiplier)
 			if(isslimeperson(owner))
 				var/chance_multiplier = 1
 				if(istype(src, /datum/organ/external/head))
@@ -219,8 +220,7 @@
 				else if((brute > 20) && prob(2 * brute)) //non-sharp hits with force greater than 20 can cause limbs to sever, too (smaller chance)
 					droplimb(1)
 					return
-
-		else if((config.limbs_can_break && sharp == 100) || ((sharp >= 2) && (config.limbs_can_break && brute_dam + burn_dam >= (max_damage * config.organ_health_multiplier)/sharp))) //items of exceptional sharpness are capable of severing the limb below its damage threshold, the necessary threshold scaling inversely with sharpness
+		else if((CONFIG_GET(toggle/limbs_can_break) && sharp == 100) || ((sharp >= 2) && (CONFIG_GET(toggle/limbs_can_break) && brute_dam + burn_dam >= (max_damage * organ_health_multiplier)/sharp))) //items of exceptional sharpness are capable of severing the limb below its damage threshold, the necessary threshold scaling inversely with sharpness
 			if(prob((5 * (brute * sharp)) * (sharp - 1))) //the same chance multiplier based on sharpness applies here as well
 				droplimb(1)
 				return
@@ -242,7 +242,7 @@
 
 	var/can_cut = (prob(brute * 2) || sharp) && is_organic()
 	//If the limbs can break, make sure we don't exceed the maximum damage a limb can take before breaking
-	if((brute_dam + burn_dam + brute + burn) < max_damage || !config.limbs_can_break)
+	if((brute_dam + burn_dam + brute + burn) < max_damage || !CONFIG_GET(toggle/limbs_can_break))
 		if(brute)
 			if(can_cut)
 				createwound(CUT, brute)
@@ -253,7 +253,8 @@
 	else
 		//If we can't inflict the full amount of damage, spread the damage in other ways
 		//How much damage can we actually cause?
-		var/can_inflict = max_damage * config.organ_health_multiplier - (brute_dam + burn_dam)
+		var/organ_health_multiplier = CONFIG_GET(numerical/organ_health_multiplier)
+		var/can_inflict = max_damage * organ_health_multiplier - (brute_dam + burn_dam)
 		if(can_inflict > 0)
 			if(brute > 0)
 				//Inflict all brute damage we can
@@ -474,7 +475,7 @@
 
 	//Dismemberment
 	if(status & ORGAN_DESTROYED)
-		if(!destspawn && config.limbs_can_break)
+		if(!destspawn && CONFIG_GET(toggle/limbs_can_break))
 			droplimb()
 		return
 
@@ -486,7 +487,8 @@
 
 	//Bone fracurtes
 	var/datum/species/species = src.species || owner.species
-	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier && is_organic() && !(species.anatomy_flags & NO_BONES))
+	var/organ_health_multiplier = CONFIG_GET(numerical/organ_health_multiplier)
+	if(CONFIG_GET(toggle/bones_can_break) && brute_dam > min_broken_damage * organ_health_multiplier && is_organic() && !(species.anatomy_flags & NO_BONES))
 		src.fracture()
 	if(!is_broken())
 		perma_injury = 0
@@ -671,7 +673,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		//We only update wounds once in [wound_update_accuracy] ticks so have to emulate realtime
 		heal_amt = heal_amt * wound_update_accuracy
 		//Configurable regen speed woo, no-regen hardcore or instaheal hugbox, choose your destiny
-		heal_amt = heal_amt * config.organ_regeneration_multiplier
+		heal_amt = heal_amt * CONFIG_GET(numerical/organ_regeneration_multiplier)
 		if(M_REGEN in owner.mutations)
 			heal_amt = heal_amt * 2 // The heal rate is twice as much if you have regeneration
 		//Amount of healing is spread over all the wounds

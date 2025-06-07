@@ -175,7 +175,7 @@
 		if (M.check_bodypart_bleeding(HANDS) && check_bodypart_bleeding(FULL_TORSO))//both sides have to be bleeding to allow for blood infections
 			bleeding = 1
 		share_contact_diseases(M,block,bleeding)
-	if (src.health >= config.health_threshold_crit)
+	if (src.health >= CONFIG_GET(numerical/health_threshold_crit))
 		if(src == M && istype(src, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = src
 			src.visible_message( \
@@ -471,7 +471,7 @@
 
 /mob/living/carbon/proc/isInCrit()
 	// Health is in deep shit and we're not already dead
-	return (health < config.health_threshold_crit) && (stat != DEAD)
+	return (health < CONFIG_GET(numerical/health_threshold_crit)) && (stat != DEAD)
 
 /mob/living/carbon/get_default_language()
 	if(default_language)

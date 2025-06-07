@@ -14,12 +14,12 @@ var/datum/subsystem/map/SSmap
 
 
 /datum/subsystem/map/Initialize(timeofday)
-	if (config.enable_roundstart_away_missions)
+	if (CONFIG_GET(toggle/enable_roundstart_away_missions))
 		log_startup_progress("Attempting to generate an away mission...")
 		createRandomZlevel()
 
 	var/watch
-	if (!config.skip_fixedvault_generation)
+	if (!CONFIG_GET(toggle/skip_fixedvault_generation))
 		watch = start_watch()
 		log_startup_progress("Placing fixed space structures...")
 		generate_fixedvaults()
@@ -27,7 +27,7 @@ var/datum/subsystem/map/SSmap
 	else
 		log_startup_progress("Not generating fixed vaults - SKIP_VAULT_GENERATION found in config/config.txt")
 
-	if (!config.skip_vault_generation)
+	if (!CONFIG_GET(toggle/skip_vault_generation))
 		watch = start_watch()
 		log_startup_progress("Placing random space structures...")
 		generate_vaults()

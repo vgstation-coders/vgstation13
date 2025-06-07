@@ -605,9 +605,9 @@
 		if("run")
 			if(drowsyness > 0)
 				. += 6
-			. += MOB_RUN_TALLY+config.run_speed
+			. += MOB_RUN_TALLY+CONFIG_GET(numerical/run_speed)
 		if("walk")
-			. += MOB_WALK_TALLY+config.walk_speed
+			. += MOB_WALK_TALLY+CONFIG_GET(numerical/walk_speed)
 
 	var/obj/item/weapon/grab/Findgrab = locate() in src
 	if(Findgrab)

@@ -88,7 +88,7 @@ var/datum/subsystem/dbcore/SSdbcore
 		failed_connection_timeout = world.time + 5 SECONDS
 		return FALSE
 
-	if(!config.sql_enabled)
+	if(!CONFIG_GET(toggle/sql_enabled))
 		return FALSE
 
 	var/list/ids = get_db_ids()
@@ -98,8 +98,8 @@ var/datum/subsystem/dbcore/SSdbcore
 	var/db = ids["db"]
 	var/address = ids["address"]
 	var/port = ids["port"]
-	var/timeout = max(config.async_query_timeout, config.blocking_query_timeout)
-	var/thread_limit = config.bsql_thread_limit
+	var/timeout = max(CONFIG_GET(numerical/async_query_timeout), CONFIG_GET(numerical/blocking_query_timeout))
+	var/thread_limit = CONFIG_GET(numerical/bsql_thread_limit)
 
 	var/result = json_decode(rustg_sql_connect_pool(json_encode(list(
 		"host" = address,
@@ -129,7 +129,7 @@ var/datum/subsystem/dbcore/SSdbcore
 	connection = null
 
 /datum/subsystem/dbcore/proc/CheckSchemaVersion()
-	if(config.sql_enabled)
+	if(CONFIG_GET(toggle/sql_enabled))
 		if(Connect())
 			log_world("Database connection established.")
 			/*
@@ -197,14 +197,14 @@ var/datum/subsystem/dbcore/SSdbcore
 */
 
 /datum/subsystem/dbcore/proc/IsConnected()
-	if(!config.sql_enabled)
+	if(!CONFIG_GET(toggle/sql_enabled))
 		return FALSE
 	if (!connection)
 		return FALSE
 	return json_decode(rustg_sql_connected(connection))["status"] == "online"
 
 /datum/subsystem/dbcore/proc/ErrorMsg()
-	if(!config.sql_enabled)
+	if(!CONFIG_GET(toggle/sql_enabled))
 		return "Database disabled by configuration"
 	return last_error
 

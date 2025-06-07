@@ -5,7 +5,7 @@
 
 	var/health_percent = health * 100 / maxHealth
 
-	if(stat == UNCONSCIOUS && health_percent <= config.health_threshold_crit)
+	if(stat == UNCONSCIOUS && health_percent <= CONFIG_GET(numerical/health_threshold_crit))
 		var/severity = 0
 		switch(health_percent)
 			if(-20 to -10)

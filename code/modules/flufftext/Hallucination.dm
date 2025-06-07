@@ -246,7 +246,7 @@ Gunshots/explosions/opening doors/less rare audio (done)
 			if(77) //Sillycone
 				if(prob(5))
 					to_chat(src, "<font size=4 color='red'>Attention! Delta security level reached!</font>")
-					to_chat(src, "<span class='red'>[config.alert_desc_delta]</span>")
+					to_chat(src, "<span class='red'>[CONFIG_GET(alert_desc_delta)]</span>")
 					src << sound('sound/AI/aimalf.ogg')
 
 					if(src.client)

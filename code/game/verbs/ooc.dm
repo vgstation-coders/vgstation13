@@ -58,7 +58,7 @@ var/adminbus_ooc_color
 	if(global.adminbus_ooc_color)
 		admin_color = global.adminbus_ooc_color
 
-	if(holder && !holder.fakekey && (holder.rights & R_ADMIN) && config.allow_admin_ooccolor)
+	if(holder && !holder.fakekey && (holder.rights & R_ADMIN) && CONFIG_GET(toggle/allow_admin_ooccolor))
 		admin_color = src.prefs.ooccolor
 
 	for(var/client/C in clients)

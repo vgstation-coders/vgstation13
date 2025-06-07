@@ -37,13 +37,16 @@
 	var/configured_error_limit
 	var/configured_error_silence_time
 	if(config)
-		configured_error_cooldown = config.error_cooldown
-		configured_error_limit = config.error_limit
-		configured_error_silence_time = config.error_silence_time
+		configured_error_cooldown = CONFIG_GET(numerical/error_cooldown)
+		configured_error_limit = CONFIG_GET(numerical/error_limit)
+		configured_error_silence_time = CONFIG_GET(numerical/error_silence_time)
 	else
-		configured_error_cooldown = initial(config.error_cooldown)
-		configured_error_limit = initial(config.error_limit)
-		configured_error_silence_time = initial(config.error_silence_time)
+		var/datum/config_flag/numerical/error_cooldown/err_cd
+		configured_error_cooldown = initial(err_cd.value)
+		var/datum/config_flag/numerical/error_limit/err_limit
+		configured_error_limit = initial(err_limit.value)
+		var/datum/config_flag/numerical/error_silence_time/err_sil_time
+		configured_error_silence_time = initial(err_sil_time.value)
 
 	// Each occurrence of a unique error adds to its "cooldown" time...
 	cooldown = max(0, cooldown - (world.time - last_seen)) + configured_error_cooldown

@@ -206,7 +206,7 @@
 
 		if(bodytemperature <= (T0C - 50)) // hurt temperature
 			if(bodytemperature <= 50) // sqrting negative numbers is bad
-				adjustToxLoss(301)				//The config.health_threshold_dead is -100 by default, and slimes have 150hp (200hp for adults),
+				adjustToxLoss(301)				//The CONFIG_GET(numerical/health_threshold_dead) is -100 by default, and slimes have 150hp (200hp for adults),
 			else								//so the ToxLoss needs to be 300 or above to guarrantee an instant death -Deity Link
 				adjustToxLoss(round(sqrt(bodytemperature)) * 2)
 	else
@@ -257,11 +257,11 @@
 	else
 		health = 150 - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
 
-	if(health < config.health_threshold_dead && stat != 2)
+	if(health < CONFIG_GET(numerical/health_threshold_dead) && stat != 2)
 		death()
 		return
 
-	else if(src.health < config.health_threshold_crit)
+	else if(src.health < CONFIG_GET(numerical/health_threshold_crit))
 		// if(src.health <= 20 && prob(1)) spawn(0) emote("gasp")
 
 		//if(!src.rejuv) src.oxyloss++

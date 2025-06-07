@@ -18,7 +18,7 @@ var/datum/subsystem/assets/SSassets
 	populate_asset_cache()
 
 	var/newtransporttype = /datum/asset_transport
-	switch (config.tg_asset_transport)
+	switch (CONFIG_GET(tg_asset_transport))
 		if ("webroot")
 			newtransporttype = /datum/asset_transport/webroot
 

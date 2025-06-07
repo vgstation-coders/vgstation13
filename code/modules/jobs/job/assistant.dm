@@ -15,13 +15,13 @@
 	outfit_datum = /datum/outfit/assistant
 
 /datum/job/assistant/get_access()
-	if(config.assistant_maint)
+	if(CONFIG_GET(toggle/assistant_maint))
 		return list(access_maint_tunnels)
 	else
 		return list()
 
 /datum/job/assistant/get_total_positions()
-	if(!config.assistantlimit)
+	if(!CONFIG_GET(toggle/assistant_limit))
 		return 99
 
 	var/datum/job/officer = job_master.GetJob("Security Officer")
@@ -42,4 +42,4 @@
 	if(sec_jobs > 5)
 		return 99
 
-	return clamp(sec_jobs * config.assistantratio + xtra_positions + FREE_ASSISTANTS, total_positions, 99)
+	return clamp(sec_jobs * CONFIG_GET(numerical/assistant_ratio) + xtra_positions + FREE_ASSISTANTS, total_positions, 99)

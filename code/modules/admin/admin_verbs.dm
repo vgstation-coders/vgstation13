@@ -487,7 +487,7 @@ var/list/admin_verbs_mod = list(
 	set name = "Display Job bans"
 	set category = "Admin"
 	if(holder)
-		if(config.ban_legacy_system)
+		if(CONFIG_GET(toggle/ban_legacy_system))
 			holder.Jobbans()
 		else
 			holder.DB_ban_panel()
@@ -498,7 +498,7 @@ var/list/admin_verbs_mod = list(
 	set name = "Unban Panel"
 	set category = "Admin"
 	if(holder)
-		if(config.ban_legacy_system)
+		if(CONFIG_GET(toggle/ban_legacy_system))
 			holder.unbanpanel()
 		else
 			holder.DB_ban_panel()
@@ -810,11 +810,13 @@ var/list/admin_verbs_mod = list(
 	if(!holder)
 		return
 	if(config)
-		if(config.log_hrefs)
-			config.log_hrefs = 0
+		if(CONFIG_GET(toggle/log_hrefs))
+			var/datum/config_flag/hrefs_log = config.config_flags[/datum/config_flag/toggle/log_hrefs]
+			hrefs_log.value = 0
 			to_chat(src, "<b>Stopped logging hrefs</b>")
 		else
-			config.log_hrefs = 1
+			var/datum/config_flag/hrefs_log = config.config_flags[/datum/config_flag/toggle/log_hrefs]
+			hrefs_log.value = 1
 			to_chat(src, "<b>Started logging hrefs</b>")
 
 /client/proc/hub_panel()
@@ -895,7 +897,7 @@ var/list/admin_verbs_mod = list(
 	set category = "Admin"
 	set desc = "Regain your admin powers."
 	var/datum/admins/D = admin_datums[ckey]
-	if(config.admin_legacy_system)
+	if(CONFIG_GET(toggle/admin_legacy_system))
 		var/list/lines = file2list("config/admins.txt")
 		for(var/line in lines)
 			// if the line doesn't begin with our ckey we don't care

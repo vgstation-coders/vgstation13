@@ -124,7 +124,7 @@
 		return
 
 /datum/seed/proc/check_observer(var/mob/dead/observer/O)
-	if(O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
+	if(O.has_enabled_antagHUD == 1 && CONFIG_GET(toggle/antag_hud_restricted))
 		return 0
 
 	if(jobban_isbanned(O, "Dionaea"))

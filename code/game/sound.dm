@@ -167,7 +167,7 @@ var/const/SURROUND_CAP = 7
 	src << S
 
 /client/proc/playtitlemusic()
-	if(!ticker || !ticker.login_music || config.no_lobby_music)
+	if(!ticker || !ticker.login_music || CONFIG_GET(toggle/no_lobby_music))
 		return
 	if(prefs.toggles & SOUND_LOBBY)
 		if(istype(src))

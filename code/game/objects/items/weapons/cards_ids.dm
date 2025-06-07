@@ -106,17 +106,17 @@
 /obj/item/weapon/card/emag/initialize()
 	// Tuning tools.
 	//////////////////
-	if(config.emag_energy != -1)
-		max_energy = config.emag_energy
+	if(CONFIG_GET(numerical/emag_energy) != -1)
+		max_energy = CONFIG_GET(numerical/emag_energy)
 
-		if(config.emag_starts_charged)
+		if(CONFIG_GET(toggle/emag_starts_charged))
 			energy = max_energy
 
-	if(config.emag_recharge_rate != 0)
-		recharge_rate = config.emag_recharge_rate
+	if(CONFIG_GET(numerical/emag_recharge_rate) != 0)
+		recharge_rate = CONFIG_GET(numerical/emag_recharge_rate)
 
-	if(config.emag_recharge_ticks > 0)
-		recharge_ticks = config.emag_recharge_ticks
+	if(CONFIG_GET(numerical/emag_recharge_ticks) > 0)
+		recharge_ticks = CONFIG_GET(numerical/emag_recharge_ticks)
 
 /obj/item/weapon/card/emag/process()
 	if(loc && loc:timestopped)

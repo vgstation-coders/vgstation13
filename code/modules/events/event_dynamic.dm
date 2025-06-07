@@ -4,7 +4,7 @@ var/list/possibleEvents = list()
 //Always triggers an event when called, dynamically chooses events based on job population
 /proc/spawn_dynamic_event(var/forced=FALSE)
 	if(!forced)
-		if(!config.allow_random_events || (map && map.dorf))
+		if(!CONFIG_GET(toggle/allow_random_events) || (map && map.dorf))
 			return
 
 		var/minutes_passed = world.time/600

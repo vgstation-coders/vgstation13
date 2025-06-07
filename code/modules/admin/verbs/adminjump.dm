@@ -7,7 +7,7 @@
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	if(config.allow_admin_jump)
+	if(CONFIG_GET(toggle/allow_admin_jump))
 		var/sortedAreas = areas.Copy()
 		sortTim(sortedAreas, /proc/cmp_name_asc)
 		var/area/A = input(usr, "Choose the jump area", "Area") as null|anything in sortedAreas
@@ -44,7 +44,7 @@
 	if(!src.holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
-	if(config.allow_admin_jump)
+	if(CONFIG_GET(toggle/allow_admin_jump))
 		log_admin("[key_name(usr)] jumped to [T.x],[T.y],[T.z] in [T.loc]")
 		message_admins("[key_name_admin(usr)] jumped to [T.x],[T.y],[T.z] in [T.loc]", 1)
 		usr.unlock_from()
@@ -62,7 +62,7 @@
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	if(config.allow_admin_jump)
+	if(CONFIG_GET(toggle/allow_admin_jump))
 		log_admin("[key_name(usr)] jumped to [key_name(M)]")
 		message_admins("[key_name_admin(usr)] jumped to [key_name_admin(M)]", 1)
 		if(src.mob)
@@ -85,7 +85,7 @@
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	if (config.allow_admin_jump)
+	if (CONFIG_GET(toggle/allow_admin_jump))
 		if(src.mob)
 			src.mob.unlock_from()
 			var/mob/A = src.mob
@@ -106,7 +106,7 @@
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	if(config.allow_admin_jump)
+	if(CONFIG_GET(toggle/allow_admin_jump))
 		var/list/keys = list()
 		for(var/mob/M in player_list)
 			if(M.ckey)
@@ -131,7 +131,7 @@
 	if(!check_rights())
 		return
 
-	if(config.allow_admin_jump)
+	if(CONFIG_GET(toggle/allow_admin_jump))
 		var/list/vaults = list()
 
 		for(var/datum/map_element/V in map_elements)
@@ -161,7 +161,7 @@
 	if(!src.holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
-	if(config.allow_admin_jump)
+	if(CONFIG_GET(toggle/allow_admin_jump))
 		log_admin("[key_name(usr)] teleported [key_name(M)]")
 		message_admins("[key_name_admin(usr)] teleported [key_name_admin(M)]", 1)
 		M.unlock_from()
@@ -179,7 +179,7 @@
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	if(config.allow_admin_jump)
+	if(CONFIG_GET(toggle/allow_admin_jump))
 		var/list/keys = list()
 		for(var/mob/M in player_list)
 			if(M)
@@ -210,7 +210,7 @@
 	sortTim(sortedAreas, /proc/cmp_name_asc)
 	var/area/A = input(usr, "Pick an area.", "Pick an area") in sortedAreas
 	if(A)
-		if(config.allow_admin_jump)
+		if(CONFIG_GET(toggle/allow_admin_jump))
 			M.unlock_from()
 			M.teleport_to(pick(get_area_turfs(A)))
 			feedback_add_details("admin_verb","SMOB") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

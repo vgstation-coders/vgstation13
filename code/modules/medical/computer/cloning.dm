@@ -348,7 +348,7 @@
 			else if(pod1.mess)
 				temp = "Error: Clonepod malfunction."
 				return
-			else if(!config.revival_cloning)
+			else if(!CONFIG_GET(toggle/revival_cloning))
 				temp = "Error: Unable to initiate cloning cycle."
 				return
 

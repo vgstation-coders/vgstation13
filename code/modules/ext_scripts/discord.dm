@@ -15,8 +15,8 @@
 // AKA the MoMMI config file chooses where to send it based on this key.
 /proc/send2discord(var/msg, var/meta, var/ping = FALSE)
 	set waitfor = FALSE
-	if (!global.config.discord_url || !global.config.discord_password)
+	if (!global.CONFIG_GET(discord_url) || !global.CONFIG_GET(discord_password))
 		return
 
-	var/url = "[global.config.discord_url]?pass=[url_encode(global.config.discord_password)]&meta=[url_encode(meta)]&content=[url_encode(msg)]&ping=[ping ? "true" : "false"]"
+	var/url = "[global.CONFIG_GET(discord_url)]?pass=[url_encode(global.CONFIG_GET(discord_password))]&meta=[url_encode(meta)]&content=[url_encode(msg)]&ping=[ping ? "true" : "false"]"
 	world.Export(url)

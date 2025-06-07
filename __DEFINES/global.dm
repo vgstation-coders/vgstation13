@@ -100,7 +100,6 @@ var/dooc_allowed = 1
 var/traitor_scaling = 1
 var/abandon_allowed = 1
 var/enter_allowed = 1
-var/guests_allowed = 1
 var/tinted_weldhelh = 1
 
 var/list/bombers = list(  )

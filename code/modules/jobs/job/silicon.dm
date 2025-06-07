@@ -16,7 +16,7 @@
 	return 1
 
 /datum/job/ai/is_disabled()
-	return !config.allow_ai
+	return !CONFIG_GET(toggle/allow_ai)
 
 /datum/job/cyborg
 	title = "Cyborg"

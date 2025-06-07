@@ -462,7 +462,7 @@ var/list/seedbush_spawns = list(
 
 /obj/item/weapon/melee/defib_basic/proc/attempt_defib(mob/living/carbon/human/target, mob/user)
 	display_start_message(target, user)
-	if(target.mind && !target.client && target.get_heart() && target.get_organ(LIMB_HEAD) && target.has_brain() && !target.mind.suiciding && target.health+target.getOxyLoss() > config.health_threshold_dead)
+	if(target.mind && !target.client && target.get_heart() && target.get_organ(LIMB_HEAD) && target.has_brain() && !target.mind.suiciding && target.health+target.getOxyLoss() > CONFIG_GET(numerical/health_threshold_dead))
 		target.ghost_reenter_alert("Someone is about to try to defibrillate your body. Return to it if you want to be resurrected!")
 	if(do_after(user,target,defib_delay))
 		if(pre_defib_check(target, user))
@@ -517,7 +517,7 @@ var/list/seedbush_spawns = list(
 	target.apply_damage(-target.getOxyLoss(),OXY)
 	target.updatehealth()
 	target.visible_message("<span class='danger'>[target]'s body convulses a bit.</span>")
-	if(target.health > config.health_threshold_dead)
+	if(target.health > CONFIG_GET(numerical/health_threshold_dead))
 		target.timeofdeath = 0
 		target.visible_message("<span class='notice'>[src] beeps: Defibrillation successful.</span>")
 

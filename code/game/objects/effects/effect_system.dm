@@ -1081,8 +1081,8 @@ steam.start() -- spawns the effect
 		var/light = -1
 		var/flash = -1
 		var/range = 0
-		// Clamp all values to MAX_EXPLOSION_RANGE
-		range = min (MAX_EXPLOSION_RANGE, light + round(amount/3))
+		// Clamp all values to CONFIG_GET(numerical/max_explosion_range)
+		range = min (CONFIG_GET(numerical/max_explosion_range), light + round(amount/3))
 		devastation = !isnull(dev_override) ? dev_override : round(min(3, range * 0.25)) // clamps to 3 devastation for grenades
 		heavy = !isnull(heavy_override) ? heavy_override : round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
 		light = !isnull(light_override) ? light_override : min(7, range) // clamps to 7 light range for grenades

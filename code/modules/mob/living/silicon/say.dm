@@ -12,7 +12,7 @@
 	return ..(message, "R")
 
 /mob/living/silicon/robot/IsVocal()
-		return !config.silent_borg
+	return !CONFIG_GET(toggle/silent_borg)
 
 /mob/living/proc/robot_talk(var/message)
 

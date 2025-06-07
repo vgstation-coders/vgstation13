@@ -13,7 +13,7 @@
 	var/prevhealth = health
 	health = maxHealth - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
 	critlog(health,prevhealth)
-	if((maxHealth - total_burn) < config.health_threshold_dead)
+	if((maxHealth - total_burn) < CONFIG_GET(numerical/health_threshold_dead))
 		death(FALSE)
 		ChangeToHusk()
 	return
@@ -73,7 +73,8 @@
 
 	if(amount > 0)
 		take_overall_damage(0, amount)
-		if(config.burn_damage_ash && amount >= config.burn_damage_ash)
+		var/burnt_dmg_ash = CONFIG_GET(numerical/burn_damage_ash)
+		if(burnt_dmg_ash && amount >= burnt_dmg_ash)
 			dust(TRUE)
 			return
 	else

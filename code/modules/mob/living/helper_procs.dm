@@ -42,7 +42,7 @@ default behaviour is:
 	return TRUE
 
 /mob/living/proc/isDeadorDying()	//returns 1 if dead or in crit
-	if(stat == DEAD || health <= config.health_threshold_crit)
+	if(stat == DEAD || health <= CONFIG_GET(numerical/health_threshold_crit))
 		return TRUE
 
 /mob/living/proc/get_splash_burn_damage(splash_vol, splash_temp)

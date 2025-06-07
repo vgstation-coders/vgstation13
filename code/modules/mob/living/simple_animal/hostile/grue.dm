@@ -267,7 +267,7 @@
 			handle_feed(pick(feed_targets))
 
 	//Egglaying
-	if(config.grue_egglaying && (lifestage==GRUE_ADULT) && (eatencharge>0) && (lightparams.dark_dim_light==GRUE_DARK))
+	if(CONFIG_GET(toggle/grue_egglaying) && (lifestage==GRUE_ADULT) && (eatencharge>0) && (lightparams.dark_dim_light==GRUE_DARK))
 		reproduce()
 
 	//Movement
@@ -413,7 +413,7 @@
 		pass_flags = 0
 		reagents.maximum_volume = 1500
 		//Adult grue spells: eat, lay eggs, shadow shunt, and drain light
-		if(config.grue_egglaying)
+		if(CONFIG_GET(toggle/grue_egglaying))
 			add_spell(new /spell/aoe_turf/grue_egg, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/aoe_turf/grue_blink, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
 		add_spell(new /spell/aoe_turf/grue_drainlight/, "grue_spell_ready", /obj/abstract/screen/movable/spell_master/grue)
@@ -448,7 +448,7 @@
 		stat(null, "Nutritive energy: [round(nutrienergy,0.1)]/[round(maxnutrienergy,0.1)]")
 		if(lifestage>=GRUE_JUVENILE)
 			stat(null, "Sentient organisms eaten: [eatencount]")
-		if(config.grue_egglaying && lifestage==GRUE_ADULT)
+		if(CONFIG_GET(toggle/grue_egglaying) && lifestage==GRUE_ADULT)
 			stat(null, "Reproductive energy: [eatencharge]")
 
 /mob/living/simple_animal/hostile/grue/gruespawn
@@ -524,7 +524,7 @@
 		if(lifestage==GRUE_JUVENILE)
 			hintstring="a juvenile, and can eat sentient beings to gain their strength"
 		else if(lifestage==GRUE_ADULT)
-			hintstring="fully-grown[config.grue_egglaying ? ", and can lay eggs to spawn offspring" : ""]"
+			hintstring="fully-grown[CONFIG_GET(toggle/grue_egglaying) ? ", and can lay eggs to spawn offspring" : ""]"
 		visible_message("<span class='warning'>The chrysalis shifts and morphs into a grue!</span>","<span class='warning'>You finish moulting! You are now [hintstring].</span>")
 		playsound(src, 'sound/effects/grue_moult.ogg', 50, 1)
 	else

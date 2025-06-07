@@ -115,7 +115,7 @@
 
 /datum/map_element/dungeon/hell/load(x, y, z, rotate=0, overwrite = FALSE, override_can_rotate = FALSE)
 	. = ..()
-	if(islist(.) && config.bans_shown_in_hell_limit)
+	if(islist(.) && CONFIG_GET(numerical/bans_shown_in_hell_limit))
 		var/list/L = .
 		var/list/turf/turfs = list()
 		if(L.len)
@@ -134,7 +134,7 @@
 					return
 
 				var/bancount = 0
-				while(select_query.NextRow() && bancount <= config.bans_shown_in_hell_limit)
+				while(select_query.NextRow() && bancount <= CONFIG_GET(numerical/bans_shown_in_hell_limit))
 					var/list/row = select_query.GetRowData()
 					var/ckey = row[1]
 					var/reason = row[2]
@@ -143,8 +143,8 @@
 					H.flavor_text = "The soul of [ckey], damned to this realm for the following reason: [reason]"
 					bancount++
 				time2make = world.time - time2make
-				log_admin("Hell was populated successfully with [bancount] banned players out of a max of [config.bans_shown_in_hell_limit] in [time2make/10] seconds.")
-				message_admins("Hell was populated successfully with [bancount] banned players out of a max of [config.bans_shown_in_hell_limit] in [time2make/10] seconds.")
+				log_admin("Hell was populated successfully with [bancount] banned players out of a max of [CONFIG_GET(numerical/bans_shown_in_hell_limit)] in [time2make/10] seconds.")
+				message_admins("Hell was populated successfully with [bancount] banned players out of a max of [CONFIG_GET(numerical/bans_shown_in_hell_limit)] in [time2make/10] seconds.")
 
 /mob/living/carbon/human/proc/quick_copy_prefs()
 	var/list/preference_list = new
@@ -433,7 +433,7 @@
 		var/vault_x = new_spawn_point.x
 		var/vault_y = new_spawn_point.y
 		var/vault_z = new_spawn_point.z
-		var/vault_rotate = (config.disable_vault_rotation || !ME.can_rotate) ? 0 : pick(0,90,180,270)
+		var/vault_rotate = (CONFIG_GET(toggle/disable_vault_rotation) || !ME.can_rotate) ? 0 : pick(0,90,180,270)
 
 		if(population_density == POPULATION_SCARCE)
 			var/turf/t1 = locate(max(1, vault_x - MAX_VAULT_WIDTH - 1), max(1, vault_y - MAX_VAULT_HEIGHT - 1), vault_z)
@@ -444,11 +444,11 @@
 		if(ME.load(vault_x, vault_y, vault_z, vault_rotate, overwrites))
 			var/timetook2load = world.timeofday - timestart
 			spawned.Add(ME)
-			log_debug("Loaded [ME.file_path] in [timetook2load / 10] seconds at ([vault_x],[vault_y],[vault_z])[(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].",FALSE)
-			message_admins("<span class='info'>Loaded [ME.file_path] in [timetook2load / 10] seconds: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].</span>")
+			log_debug("Loaded [ME.file_path] in [timetook2load / 10] seconds at ([vault_x],[vault_y],[vault_z])[(CONFIG_GET(toggle/disable_vault_rotation) || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].",FALSE)
+			message_admins("<span class='info'>Loaded [ME.file_path] in [timetook2load / 10] seconds: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [(CONFIG_GET(toggle/disable_vault_rotation) || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].</span>")
 			if(!ME.can_rotate)
 				message_admins("<span class='info'>[ME.file_path] was not rotated, can_rotate was set to FALSE.</span>")
-			else if(config.disable_vault_rotation)
+			else if(CONFIG_GET(toggle/disable_vault_rotation))
 				message_admins("<span class='info'>[ME.file_path] was not rotated, DISABLE_VAULT_ROTATION enabled in config.</span>")
 			successes++
 			if(amount > 0)	//Allowing overflow is intentional, ie: 1 point left and the last picked vault costs 4 points

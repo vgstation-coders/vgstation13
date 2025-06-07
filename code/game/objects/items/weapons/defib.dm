@@ -129,7 +129,7 @@
 /obj/item/weapon/melee/defibrillator/proc/attemptDefib(mob/living/carbon/human/target,mob/user)
 	user.visible_message("<span class='notice'>[user] starts setting up the [defib_tool] on [target]'s chest.</span>", \
 	"<span class='notice'>You start setting up the [defib_tool] on [target]'s chest</span>")
-	if(target.mind && !target.client && target.get_heart() && target.get_organ(LIMB_HEAD) && target.has_brain() && !target.mind.suiciding && target.health+target.getOxyLoss() > config.health_threshold_dead)
+	if(target.mind && !target.client && target.get_heart() && target.get_organ(LIMB_HEAD) && target.has_brain() && !target.mind.suiciding && target.health+target.getOxyLoss() > CONFIG_GET(numerical/health_threshold_dead))
 		target.ghost_reenter_alert("Someone is about to try to defibrillate your body. Return to it if you want to be resurrected!")
 	if(do_after(user,target,defib_delay))
 		. = TRUE
@@ -174,7 +174,7 @@
 		target.apply_damage(-target.getOxyLoss(),OXY)
 		target.updatehealth()
 		target.visible_message("<span class='danger'>[target]'s body convulses a bit.</span>")
-		if(target.health > config.health_threshold_dead)
+		if(target.health > CONFIG_GET(numerical/health_threshold_dead))
 			target.timeofdeath = 0
 			defib_message_success(target, "<span class='notice'>[src] beeps: Defibrillation successful.</span>")
 

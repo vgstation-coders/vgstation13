@@ -97,7 +97,7 @@
 	set category = "Ghost"
 	set name = "Toggle AntagHUD"
 	set desc = "Toggles AntagHUD allowing you to see who is the antagonist"
-	if(!config.antag_hud_allowed && !client.holder)
+	if(!CONFIG_GET(toggle/antag_hud_allowed) && !client.holder)
 		to_chat(src, "<span class='warning'>Admins have disabled this for this round.</span>")
 		return
 	if(!client)
@@ -106,7 +106,7 @@
 	if(jobban_isbanned(M, "AntagHUD"))
 		to_chat(src, "<span class='danger'>You have been banned from using this feature.</span>")
 		return
-	if(config.antag_hud_restricted && !M.has_enabled_antagHUD && !client.holder)
+	if(CONFIG_GET(toggle/antag_hud_restricted) && !M.has_enabled_antagHUD && !client.holder)
 		var/response = alert(src, "If you turn this on, you will not be able to take any part in the round.","Are you sure you want to turn this feature on?","Yes","No")
 		if(response == "No")
 			return
@@ -146,7 +146,7 @@
 	set name = "Become mouse"
 	set category = "Ghost"
 
-	if(!config.respawn_as_mouse)
+	if(!CONFIG_GET(toggle/respawn_as_mouse))
 		to_chat(src, "<span class='warning'>Respawning as mouse is disabled.</span>")
 		return
 
@@ -178,7 +178,7 @@
 		to_chat(src, "<span class='warning'>Unable to find any unwelded vents to spawn mice at.</span>")
 
 	if(host)
-		if(config.uneducated_mice)
+		if(CONFIG_GET(toggle/uneducated_mice))
 			host.universal_understand = 0
 		host.ckey = src.ckey
 		log_admin("([host.ckey]/[host]) became a mouse as a ghost.")
@@ -312,14 +312,14 @@
 	set desc = "If the round is sufficiently spooky, write a short message in blood on the floor or a wall. Remember, no IC in OOC or OOC in IC."
 
 	//Some basic checks first
-	if(!(config.cult_ghostwriter))
+	if(!(CONFIG_GET(toggle/cult_ghostwriter)))
 		to_chat(src, "<span class='warning'>That verb is not currently permitted.</span>")
 		return
 
 	var/ghosts_can_write = FALSE
 	//legacy cult
 	var/datum/faction/cult/narsie/C = find_active_faction_by_type(/datum/faction/cult/narsie)
-	if(C && C.members.len > config.cult_ghostwriter_req_cultists)
+	if(C && C.members.len > CONFIG_GET(numerical/cult_ghostwriter_req_cultists))
 		ghosts_can_write = TRUE
 
 	if (invisibility == 0)//All ghosts become visible during the Eclipse ritual
@@ -508,7 +508,7 @@
 	set name = "Become MoMMI"
 	set category = "Ghost"
 
-	if(!config.respawn_as_mommi)
+	if(!CONFIG_GET(toggle/respawn_as_mommi))
 		to_chat(src, "<span class='warning'>Respawning as MoMMI is disabled..</span>")
 		return
 
@@ -546,7 +546,7 @@
 /mob/dead/observer/verb/become_hobo()
 	set name = "Become Space Hobo"
 	set category = "Ghost"
-	if(!config.respawn_as_hobo)
+	if(!CONFIG_GET(toggle/respawn_as_hobo))
 		to_chat(src, "<span class='warning'>Respawning as Space Hobo is disabled.</span>")
 		return
 	var/timedifference = world.time - client.time_died_as_mouse

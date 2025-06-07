@@ -4,22 +4,22 @@
 	set desc = "Shows a high scale rendering of the current map in your browser."
 	set hidden = 1
 
-	if(!config.renders_url || config.renders_url == "")
+	if(!CONFIG_GET(renders_url) || CONFIG_GET(renders_url) == "")
 		to_chat(src, "<span class='danger'>The Map Renders url has not been set in the server configuration.</span>")
 		return
 	if(alert("This will open the map render(s) in your browser. Are you sure?",,"Yes","No")=="No")
 		return
 	var/mapname = replacetext(map.nameLong, " ", "")
-	src << link("[config.renders_url]/images/maps/[mapname]")
+	src << link("[CONFIG_GET(renders_url)]/images/maps/[mapname]")
 
 /client/verb/wiki()
 	set name = "wiki"
 	set desc = "Visit the wiki."
 	set hidden = 1
-	if( config.wikiurl )
+	if( CONFIG_GET(wikiurl) )
 		if(alert("This will open the wiki in your browser. Are you sure?",,"Yes","No")=="No")
 			return
-		src << link(config.wikiurl)
+		src << link(CONFIG_GET(wikiurl))
 	else
 		to_chat(src, "<span class='danger'>The wiki URL is not set in the server configuration.</span>")
 	return
@@ -28,10 +28,10 @@
 	set name = "forum"
 	set desc = "Visit the forum."
 	set hidden = 1
-	if( config.forumurl )
+	if( CONFIG_GET(forumurl) )
 		if(alert("This will open the forum in your browser. Are you sure?",,"Yes","No")=="No")
 			return
-		src << link(config.forumurl)
+		src << link(CONFIG_GET(forumurl))
 	else
 		to_chat(src, "<span class='danger'>The forum URL is not set in the server configuration.</span>")
 	return

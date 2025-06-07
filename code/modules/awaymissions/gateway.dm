@@ -85,7 +85,7 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 
 /obj/machinery/gateway/center/initialize()
 	..()
-	wait = world.time + config.gateway_delay	//+ thirty minutes default
+	wait = world.time + CONFIG_GET(numerical/gateway_delay)	//+ thirty minutes default
 
 /obj/machinery/gateway/center/process()
 	if(stat & (NOPOWER|FORCEDISABLE))

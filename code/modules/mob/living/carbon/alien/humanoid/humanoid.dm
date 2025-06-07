@@ -129,7 +129,7 @@
 	switch(M.a_intent)
 
 		if(I_HELP)
-			if(health >= config.health_threshold_crit)
+			if(health >= CONFIG_GET(numerical/health_threshold_crit))
 				help_shake_act(M)
 				return TRUE
 			else if(ishuman(M))

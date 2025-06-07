@@ -103,8 +103,8 @@ var/religion_name = null
 			fullname += pick("13","XIII","Thirteen")
 
 	if(!just_get)
-		if (config && config.server_name)
-			world.name = "[config.server_name]: [name]"
+		if (config && CONFIG_GET(server_name))
+			world.name = "[CONFIG_GET(server_name)]: [name]"
 		else
 			world.name = fullname
 
@@ -119,8 +119,8 @@ var/religion_name = null
 
 	station_name = name
 
-	if (config && config.server_name)
-		world.name = "[config.server_name]: [name]"
+	if (config && CONFIG_GET(server_name))
+		world.name = "[CONFIG_GET(server_name)]: [name]"
 	else
 		world.name = name
 

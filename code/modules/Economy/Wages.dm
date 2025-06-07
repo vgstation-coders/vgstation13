@@ -1,12 +1,11 @@
 var/global/wages_enabled = 0
-var/global/roundstart_enable_wages = 0
 
 var/global/requested_payroll_amount = 0
 var/payroll_modifier = 1
 var/adjusted_wage_gain = 0
 
 /proc/wageSetup()
-	if(roundstart_enable_wages)
+	if(CONFIG_GET(toggle/roundstart_enable_wages))
 		wages_enabled = 1
 		stationAllowance()
 	WageLoop()

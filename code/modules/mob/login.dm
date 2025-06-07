@@ -16,7 +16,7 @@
 	lastKnownIP	= client.address
 	computer_id	= client.computer_id
 	log_access("Login: [key_name(src)] from [lastKnownIP ? lastKnownIP : "localhost"]-[computer_id] || BYOND v[client.byond_version].[client.byond_build]")
-	if(config.log_access)
+	if(CONFIG_GET(toggle/access_log))
 		if(lastKnownIP == "127.0.0.1") //localhost
 			return
 		for(var/mob/M in player_list)

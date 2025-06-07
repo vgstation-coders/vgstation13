@@ -15,7 +15,7 @@ var/datum/subsystem/ambientsound/SSambience
 
 
 /datum/subsystem/ambientsound/fire(resumed = FALSE)
-	if(config.no_ambience)
+	if(CONFIG_GET(toggle/no_ambience))
 		return
 	for (var/client/C in clients)
 		if(C && (C.prefs.toggles & SOUND_AMBIENCE))

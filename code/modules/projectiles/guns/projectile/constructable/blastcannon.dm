@@ -181,9 +181,9 @@
 			pressure = bomb_air_contents_2.return_pressure()
 			var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
 			score.largest_TTV = max(score.largest_TTV, range)
-			if(!ignorecap && (range > MAX_EXPLOSION_RANGE))
+			if(!ignorecap && (range > CONFIG_GET(numerical/max_explosion_range)))
 				overcap = range
-				range = min(range, MAX_EXPLOSION_RANGE)
+				range = min(range, CONFIG_GET(numerical/max_explosion_range))
 
 			var/transfer_moles1 = (bomb.tank_one.air_contents.return_pressure() * bomb.tank_one.air_contents.volume) / (bomb.tank_one.air_contents.temperature * R_IDEAL_GAS_EQUATION)
 			bomb.tank_one.air_contents.remove(transfer_moles1)

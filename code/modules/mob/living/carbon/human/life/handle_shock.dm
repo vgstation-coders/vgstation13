@@ -6,7 +6,7 @@
 		return 0
 	var/pain_goes_up = TRUE
 
-	if(health < config.health_threshold_softcrit) //Going under the crit threshold makes you immediately collapse
+	if(health < CONFIG_GET(numerical/health_threshold_softcrit)) //Going under the crit threshold makes you immediately collapse
 		pain_shock_stage = max(pain_shock_stage, 61)
 	else if(pain_level >= BASE_CARBON_PAIN_RESIST)//Remaining over the pain threshold causes shock to increase over time
 		pain_shock_stage += 1

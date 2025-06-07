@@ -26,7 +26,7 @@ var/datum/subsystem/more_init/SSmore_init
 	log_debug("  Finished caching space parallax simulation in [stop_watch(watch)]s.", FALSE)
 
 	init_sensed_explosions_list()
-	if (!config.skip_holominimap_generation)
+	if (!CONFIG_GET(toggle/skip_holominimap_generation))
 		watch=start_watch()
 		generateHoloMinimaps()
 		log_debug("  Finished holominimaps in [stop_watch(watch)]s.", FALSE)
@@ -34,7 +34,7 @@ var/datum/subsystem/more_init/SSmore_init
 		//holomaps_initialized = 1 //Assume holominimaps were prerendered, the worst thing that happens if they're missing is that the minimap consoles don't show a minimap - NO IT'S NOT YOU DUMBFUCK, THOSE VARS EXIST FOR A REASON
 		log_startup_progress("Not generating holominimaps - SKIP_HOLOMINIMAP_GENERATION found in config/config.txt")
 
-	if(config.media_base_url)
+	if(CONFIG_GET(media_base_url))
 		watch = start_watch()
 		load_juke_playlists()
 		log_debug("  Finished caching jukebox playlists in [stop_watch(watch)]s.", FALSE)

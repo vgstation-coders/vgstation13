@@ -90,7 +90,7 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 	for(var/A in world.GetConfig("admin"))
 		world.SetConfig("APP/admin", A, null)
 
-	if(config.admin_legacy_system)
+	if(CONFIG_GET(toggle/admin_legacy_system))
 		load_admin_ranks()
 
 		//load text from file
@@ -134,7 +134,8 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 		if(!SSdbcore.Connect())
 			world.log << "Failed to connect to database in load_admins(). Reverting to legacy system."
 			diary << "Failed to connect to database in load_admins(). Reverting to legacy system."
-			config.admin_legacy_system = 1
+			var/datum/config_flag/admin_legacy_flag = config.config_flags[/datum/config_flag/toggle/admin_legacy_system]
+			admin_legacy_flag.value = 1
 			load_admins()
 			return
 
@@ -164,7 +165,8 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 		if(!admin_datums)
 			world.log << "The database query in load_admins() resulted in no admins being added to the list. Reverting to legacy system."
 			diary << "The database query in load_admins() resulted in no admins being added to the list. Reverting to legacy system."
-			config.admin_legacy_system = 1
+			var/datum/config_flag/admin_legacy_flag = config.config_flags[/datum/config_flag/toggle/admin_legacy_system]
+			admin_legacy_flag.value = 1
 			load_admins()
 			return
 	#ifdef TESTING

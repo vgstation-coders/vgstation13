@@ -474,7 +474,7 @@ var/const/MAX_SAVE_SLOTS = 16
   </div>
 </div>"}
 
-	if(config.allow_Metadata)
+	if(CONFIG_GET(toggle/allow_Metadata))
 		dat += "<b>OOC Notes:</b> <a href='?_src_=prefs;preference=metadata;task=input'> Edit </a><br>"
 
 	return dat
@@ -1221,7 +1221,7 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_ADMINMUSIC)
 
 				if("lobby_music")
-					if(config.no_lobby_music)
+					if(CONFIG_GET(toggle/no_lobby_music))
 						to_chat(user, "DEBUG: Lobby music is globally disabled via server config.")
 					toggles ^= SOUND_LOBBY
 					if(toggles & SOUND_LOBBY)
@@ -1234,7 +1234,7 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 					user.client.set_new_volume()
 
 				if("ambience")
-					if(config.no_ambience)
+					if(CONFIG_GET(toggle/no_ambience))
 						to_chat(user, "DEBUG: Ambience is globally disabled via server config.")
 					toggles ^= SOUND_AMBIENCE
 					if(!(toggles & SOUND_AMBIENCE))
@@ -1412,7 +1412,7 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 /datum/preferences/proc/copy_to(mob/living/carbon/human/character, safety = 0)
 	if(be_random_name)
 		real_name = random_name(gender,species)
-	if(config.humans_need_surnames && species == "Human")
+	if(CONFIG_GET(toggle/humans_need_surnames) && species == "Human")
 		var/firstspace = findtext(real_name, " ")
 		var/name_length = length(real_name)
 		if(!firstspace)	//we need a surname

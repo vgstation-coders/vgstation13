@@ -203,7 +203,7 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 /datum/paiController/proc/check_recruit(var/mob/dead/observer/O)
 	if(jobban_isbanned(O, "pAI"))
 		return 0
-	if(O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
+	if(O.has_enabled_antagHUD == 1 && CONFIG_GET(toggle/antag_hud_restricted))
 		return 0
 	if(O.client)
 		return 1

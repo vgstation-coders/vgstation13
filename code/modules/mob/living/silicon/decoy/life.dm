@@ -6,7 +6,7 @@
 		return
 	else
 		updatehealth()
-		if (src.health <= config.health_threshold_dead && src.stat != 2)
+		if (src.health <= CONFIG_GET(numerical/health_threshold_dead) && src.stat != 2)
 			death()
 			return
 

@@ -360,8 +360,8 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 	// For those who wanted to be assistant if their preferences were filled, here you go.
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == BE_ASSISTANT)
-			if(config.assistantlimit)
-				if(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (config.assistantratio * count)) // Not enough sec...
+			if(CONFIG_GET(toggle/assistant_limit))
+				if(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (CONFIG_GET(numerical/assistant_ratio) * count)) // Not enough sec...
 					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide ; this block then doesn't get checked.
 						to_chat(player, "You have been returned to lobby because there's not enough security to make you an assistant.")
 						player.ready = 0
@@ -395,7 +395,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 					Debug("AC3: [player] is a security officer of some sort, noting in case of the assistant cap.")
 					secmod = 1
 			//and if there's enough security officers (assuming you lose your current job) to let you be an assistant...
-			if(!(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (config.assistantratio * (count-secmod))) || ((count-secmod) >= 5))
+			if(!(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (CONFIG_GET(numerical/assistant_ratio) * (count-secmod))) || ((count-secmod) >= 5))
 				//No need to check assistant prefs, if you're here then they're on the second_chance list
 				Debug("AC3: [player] got made an assistant as a second chance.")
 				UnassignRole(player)
@@ -449,7 +449,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 	var/count = GetSecurityCount()
 	Debug("DO, Running Assistant Check 1 for [player]")
 	var/datum/job/master_assistant = GetJob("Assistant")
-	var/not_enough_sec = (master_assistant.current_positions - FREE_ASSISTANTS_BRUT) > (config.assistantratio * count)
+	var/not_enough_sec = (master_assistant.current_positions - FREE_ASSISTANTS_BRUT) > (CONFIG_GET(numerical/assistant_ratio) * count)
 	if(not_enough_sec && (count < 5))
 		Debug("AC1 failed, not enough sec.")
 		// Does he want anything else...?
@@ -534,7 +534,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 	return 1
 
 /datum/controller/occupations/proc/LoadJobs(jobsfile) //ran during round setup, reads info from jobs.txt -- Urist
-	if(!config.load_jobs_from_txt)
+	if(!CONFIG_GET(toggle/load_jobs_from_txt))
 		return 0
 
 	var/list/jobEntries = file2list(jobsfile)

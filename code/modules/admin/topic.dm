@@ -260,19 +260,19 @@
 					return
 				if("*New Rank*")
 					new_rank = input("Please input a new rank", "New custom rank", null, null) as null|text
-					if(config.admin_legacy_system)
+					if(CONFIG_GET(toggle/admin_legacy_system))
 						new_rank = ckeyEx(new_rank)
 					if(!new_rank)
 						to_chat(usr, "<span class='red'>Error: Topic 'editrights': Invalid rank</span>")
 						return
-					if(config.admin_legacy_system)
+					if(CONFIG_GET(toggle/admin_legacy_system))
 						if(admin_ranks.len)
 							if(new_rank in admin_ranks)
 								rights = admin_ranks[new_rank]		//we typed a rank which already exists, use its rights
 							else
 								admin_ranks[new_rank] = 0			//add the new rank to admin_ranks
 				else
-					if(config.admin_legacy_system)
+					if(CONFIG_GET(toggle/admin_legacy_system))
 						new_rank = ckeyEx(new_rank)
 						rights = admin_ranks[new_rank]				//we input an existing rank, use its rights
 
@@ -933,8 +933,8 @@
 							feedback_inc("ban_ooc_tmp",1)
 							DB_ban_record(BANTYPE_OOC_TEMP, M, mins, reason)
 							feedback_inc("ban_ooc_tmp_mins",mins)
-							if(config.banappeals)
-								to_chat(M, "<span class='warning'>To try to resolve this matter head to [config.banappeals] or consider not being a shithead in OOC</span>")
+							if(CONFIG_GET(banappeals))
+								to_chat(M, "<span class='warning'>To try to resolve this matter head to [CONFIG_GET(banappeals)] or consider not being a shithead in OOC</span>")
 							else
 								to_chat(M, "<span class='warning'>No ban appeals URL has been set.</span>")
 							log_admin("[usr.client.ckey] has ooc banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.")
@@ -946,8 +946,8 @@
 								return
 							to_chat(M, "<span class='warning'><BIG><B>You have been ooc banned by [usr.client.ckey].\nReason: [reason].</B></BIG></span>")
 							to_chat(M, "<span class='warning'>This is a permanent ooc ban.</span>")
-							if(config.banappeals)
-								to_chat(M, "<span class='warning'>To try to resolve this matter head to [config.banappeals] or consider not being a shithead in OOC</span>")
+							if(CONFIG_GET(banappeals))
+								to_chat(M, "<span class='warning'>To try to resolve this matter head to [CONFIG_GET(banappeals)] or consider not being a shithead in OOC</span>")
 							else
 								to_chat(M, "<span class='warning'>No ban appeals URL has been set.</span>")
 							ban_unban_log_save("[usr.client.ckey] has perma-ooc-banned [M.ckey]. - Reason: [reason] - This is a permanent ooc ban.")
@@ -1001,8 +1001,8 @@
 				return
 			to_chat(M, "<span class='warning'><BIG><B>You have been PAX banned by [usr.client.ckey].\nReason: [reason].</B></BIG></span>")
 			to_chat(M, "<span class='warning'>This is a [istemp ? "temporary" : "permanent"] pax ban[istemp ? ", it will be removed in [mins] minutes" : ""].</span>")
-			if(config.banappeals)
-				to_chat(M, "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>")
+			if(CONFIG_GET(banappeals))
+				to_chat(M, "<span class='warning'>To try to resolve this matter head to [CONFIG_GET(banappeals)]</span>")
 			else
 				to_chat(M, "<span class='warning'>No ban appeals URL has been set.</span>")
 			var/resolvetext = istemp ? "This will be removed in [mins] minutes." : "This is a permanent pax ban."
@@ -1030,7 +1030,7 @@
 
 		var/banreason = appearance_isbanned(M)
 		if(banreason)
-	/*		if(!config.ban_legacy_system)
+	/*		if(!CONFIG_GET(toggle/ban_legacy_system))
 				to_chat(usr, "Unfortunately, database based unbanning cannot be done through this panel")
 				DB_ban_panel(M.ckey)
 				return	*/
@@ -1060,8 +1060,8 @@
 					to_chat(M, "<span class='warning'><BIG><B>You have been appearance banned by [usr.client.ckey].</B></BIG></span>")
 					to_chat(M, "<span class='danger'>The reason is: [reason]</span>")
 					to_chat(M, "<span class='warning'>Appearance ban can be lifted only upon request.</span>")
-					if(config.banappeals)
-						to_chat(M, "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>")
+					if(CONFIG_GET(banappeals))
+						to_chat(M, "<span class='warning'>To try to resolve this matter head to [CONFIG_GET(banappeals)]</span>")
 					else
 						to_chat(M, "<span class='warning'>No ban appeals URL has been set.</span>")
 				if("No")
@@ -1513,7 +1513,7 @@
 		if(notbannedlist.len) //at least 1 unbanned job exists in joblist so we have stuff to ban.
 			switch(alert("Temporary Ban?",,"Yes","No", "Cancel"))
 				if("Yes")
-					if(config.ban_legacy_system)
+					if(CONFIG_GET(toggle/ban_legacy_system))
 						to_chat(usr, "<span class='warning'>Your server is using the legacy banning system, which does not support temporary job bans. Consider upgrading. Aborting ban.</span>")
 						return
 					var/mins = input(usr,"How long (in minutes)?","Ban time",1440) as num|null
@@ -1570,7 +1570,7 @@
 		//Unbanning joblist
 		//all jobs in joblist are banned already OR we didn't give a reason (implying they shouldn't be banned)
 		if(joblist.len) //at least 1 banned job exists in joblist so we have stuff to unban.
-			if(!config.ban_legacy_system)
+			if(!CONFIG_GET(toggle/ban_legacy_system))
 				to_chat(usr, "Unfortunately, database based unbanning cannot be done through this panel")
 				DB_ban_panel(M.ckey)
 				return
@@ -1705,8 +1705,10 @@
 		if(!check_rights(R_ADMIN))
 			return
 		var/dat = {"<B>What mode do you wish to play?</B><HR>"}
-		for(var/mode in config.modes)
-			dat += {"<A href='?src=\ref[src];c_mode2=[mode]'>[config.mode_names[mode]]</A><br>"}
+		var/list/modes = CONFIG_GET(list_string/modes)
+		var/list/mode_names = CONFIG_GET(list_string/mode_names)
+		for(var/mode in modes)
+			dat += {"<A href='?src=\ref[src];c_mode2=[mode]'>[mode_names[mode]]</A><br>"}
 		dat += {"<A href='?src=\ref[src];c_mode2=secret'>Secret</A><br>"}
 		dat += {"<A href='?src=\ref[src];c_mode2=random'>Random</A><br>"}
 		dat += {"Now: [master_mode]"}
@@ -1721,8 +1723,10 @@
 		if(master_mode != "secret")
 			return alert(usr, "The game mode has to be secret!", null, null, null, null)
 		var/dat = {"<B>What game mode do you want to force secret to be? Use this if you want to change the game mode, but want the players to believe it's secret. This will only work if the current game mode is secret.</B><HR>"}
-		for(var/mode in config.modes)
-			dat += {"<A href='?src=\ref[src];f_secret2=[mode]'>[config.mode_names[mode]]</A><br>"}
+		var/list/modes = CONFIG_GET(list_string/modes)
+		var/list/mode_names = CONFIG_GET(list_string/mode_names)
+		for(var/mode in modes)
+			dat += {"<A href='?src=\ref[src];f_secret2=[mode]'>[mode_names[mode]]</A><br>"}
 		dat += {"<A href='?src=\ref[src];f_secret2=secret'>Random (default)</A><br>"}
 		dat += {"Now: [secret_force_mode]"}
 		usr << browse(HTML_SKELETON(dat), "window=f_secret")
@@ -2422,7 +2426,7 @@
 			to_chat(usr, "This can only be used on instances of type /mob/living")
 			return
 
-		if(config.allow_admin_rev)
+		if(CONFIG_GET(toggle/allow_admin_rev))
 			L.revive(0)
 			message_admins("<span class='warning'>Admin [key_name_admin(usr)] healed / revived [key_name_admin(L)]!</span>", 1)
 			log_admin("[key_name(usr)] healed / revived [key_name(L)]")
@@ -3237,7 +3241,7 @@
 		if(!check_rights(R_SPAWN))
 			return
 
-		if(!config.allow_admin_spawning)
+		if(!CONFIG_GET(toggle/allow_admin_spawning))
 			to_chat(usr, "Spawning of items is not allowed.")
 			return
 
@@ -3510,24 +3514,26 @@
 			if("togglebombcap")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BC")
-				switch(MAX_EXPLOSION_RANGE)
+				var/datum/config_flag/max_explosion_range = config.config_flags[/datum/config_flag/numerical/max_explosion_range]
+				var/current_max_explosion_range = max_explosion_range.value
+				switch(current_max_explosion_range)
 					if(14)
-						MAX_EXPLOSION_RANGE = 16
+						max_explosion_range.value = 16
 					if(16)
-						MAX_EXPLOSION_RANGE = 20
+						max_explosion_range.value = 20
 					if(20)
-						MAX_EXPLOSION_RANGE = 28
+						max_explosion_range.value = 28
 					if(28)
-						MAX_EXPLOSION_RANGE = 56
+						max_explosion_range.value = 56
 					if(56)
-						MAX_EXPLOSION_RANGE = 128
+						max_explosion_range.value = 128
 					else
-						MAX_EXPLOSION_RANGE = 14
-				var/range_dev = MAX_EXPLOSION_RANGE *0.25
-				var/range_high = MAX_EXPLOSION_RANGE *0.5
-				var/range_low = MAX_EXPLOSION_RANGE
+						max_explosion_range.value = 14
+				var/range_dev = CONFIG_GET(numerical/max_explosion_range) *0.25
+				var/range_high = CONFIG_GET(numerical/max_explosion_range) *0.5
+				var/range_low = CONFIG_GET(numerical/max_explosion_range)
 				message_admins("<span class='danger'> [key_name_admin(usr)] changed the bomb cap to [range_dev], [range_high], [range_low]</span>", 1)
-				log_admin("[key_name_admin(usr)] changed the bomb cap to [MAX_EXPLOSION_RANGE]")
+				log_admin("[key_name_admin(usr)] changed the bomb cap to [CONFIG_GET(numerical/max_explosion_range)]")
 
 			if("flicklights")
 				feedback_inc("admin_secrets_fun_used",1)
@@ -4030,7 +4036,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 							command_alert(/datum/command_alert/malf_announce)
 						to_chat(world, "<font size=4 color='red'>Attention! Delta security level reached!</font>")//Don't ACTUALLY set station alert to Delta to avoid fucking shit up for real
 
-						to_chat(world, "<span class='red'>[config.alert_desc_delta]</span>")
+						to_chat(world, "<span class='red'>[CONFIG_GET(alert_desc_delta)]</span>")
 
 						message_admins("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")
 						log_admin("[key_name_admin(usr)] triggered a FAKE Malfunction Takeover Alert (Hostile Runtimes alert [salertchoice == "Yes" ? "included":"excluded"])")

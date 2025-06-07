@@ -142,7 +142,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	if(score.oremined > 0)
 		dat += "<B>Ore Smelted:</B> [score.oremined] ([score.oremined] Points)<BR>"
 	if(score.rescuedpets)
-		dat += "<B>Rescued Pets:</B> [score.rescuedpets] ([score.rescuedpets*50 + score.rescueianbonus] Points<BR>)"	
+		dat += "<B>Rescued Pets:</B> [score.rescuedpets] ([score.rescuedpets*50 + score.rescueianbonus] Points<BR>)"
 	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
 	dat += "<B>Whole Station Airtight:</B> [score.atmobonus ? "Yes" : "No"] ([score.atmobonus] Points)<BR>"
 	if (score.disease_vaccine_score > 0)
@@ -200,7 +200,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	if(score.explosions > 0)
 		dat += "<B>Number of Explosions This Shift:</B> [score.explosions]<BR>"
 	if(score.largest_TTV > 0)
-		dat += "<B>Largest Tank Transfer Valve Explosion:</B> [round(score.largest_TTV*0.25)] / [round(score.largest_TTV*0.5)] / [round(score.largest_TTV)][(score.largest_TTV >= MAX_EXPLOSION_RANGE) ? " (That's a maxcap right there. Not bad!)" : ""]<BR>"
+		dat += "<B>Largest Tank Transfer Valve Explosion:</B> [round(score.largest_TTV*0.25)] / [round(score.largest_TTV*0.5)] / [round(score.largest_TTV)][(score.largest_TTV >= CONFIG_GET(numerical/max_explosion_range)) ? " (That's a maxcap right there. Not bad!)" : ""]<BR>"
 	if(score.arenafights > 0)
 		dat += "<B>Number of Arena Rounds:</B> [score.arenafights]<BR>"
 	if(score.totaltransfer > 0)

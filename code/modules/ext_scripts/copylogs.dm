@@ -1,6 +1,6 @@
 /proc/copy_logs()
-	if(config.copy_logs)
-		ext_python("copy_logs.py", "data/logs \"[config.copy_logs]\"")
+	if(CONFIG_GET(copy_logs))
+		ext_python("copy_logs.py", "data/logs \"[CONFIG_GET(copy_logs)]\"")
 
 ///////////////////////////////////////////////////////////////////////
 //Populate bracketed regions and uncomment the following to enable log copy exit codes and IRC notification:

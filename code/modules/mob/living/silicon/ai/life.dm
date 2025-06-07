@@ -1,7 +1,7 @@
 // returns TRUE if Life() needs to abort
 /mob/living/silicon/ai/proc/life_handle_health()
 	updatehealth()
-	if(health <= config.health_threshold_dead)
+	if(health <= CONFIG_GET(numerical/health_threshold_dead))
 		death()
 		return TRUE
 

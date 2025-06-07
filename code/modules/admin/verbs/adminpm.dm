@@ -111,7 +111,7 @@
 		receive_message = "<font color='[receive_color]' size='4'><b>-- Administrator private message --</b></font>\n"
 
 		//AdminPM popup for ApocStation and anybody else who wants to use it. Set it with POPUP_ADMIN_PM in config.txt ~Carn
-		if(config.popup_admin_pm)
+		if(CONFIG_GET(toggle/popup_admin_pm))
 			spawn(0)	//so we don't hold the caller proc up
 				var/sender = src
 				var/sendername = key

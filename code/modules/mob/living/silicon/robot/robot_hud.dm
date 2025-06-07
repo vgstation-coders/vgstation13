@@ -118,7 +118,7 @@
 	if(healths)
 		if(!isDead())
 			var/current_health = health/maxHealth
-			if(current_health in config.health_threshold_dead to 0)
+			if(current_health in CONFIG_GET(numerical/health_threshold_dead) to 0)
 				healths.icon_state = "health5"
 			else
 				switch(current_health)

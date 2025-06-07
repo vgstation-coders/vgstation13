@@ -337,7 +337,7 @@ HOLOMAP PROCS
 
 //sanity for the holomap
 /obj/machinery/computer/crew/proc/handle_sanity(var/mob/user)
-	if((!user) || (!user.client) || (user.isUnconscious() && !isobserver(user)) || (!(isobserver(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || config.skip_minimap_generation || (holoMiniMaps.len < loc.z) || (holoMiniMaps[loc.z] == null) )
+	if((!user) || (!user.client) || (user.isUnconscious() && !isobserver(user)) || (!(isobserver(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || CONFIG_GET(toggle/skip_minimap_generation) || (holoMiniMaps.len < loc.z) || (holoMiniMaps[loc.z] == null) )
 		return FALSE
 	return TRUE
 

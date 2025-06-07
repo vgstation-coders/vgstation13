@@ -75,7 +75,7 @@ var/datum/controller/gameticker/ticker
 	else
 		login_music = file("[path][pick(filenames)]")
 
-	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`", TRUE)
+	send2maindiscord("**Server is loaded** and in pre-game lobby at `[CONFIG_GET(server)? "byond://[CONFIG_GET(server)]" : "byond://[world.address]:[world.port]"]`", TRUE)
 	do
 #ifdef GAMETICKER_LOBBY_DURATION
 		var/delay_timetotal = GAMETICKER_LOBBY_DURATION
@@ -216,22 +216,22 @@ var/datum/controller/gameticker/ticker
 		CHECK_TICK
 
 	//Now that we have all of the occupied areas, we handle the lights being on or off, before actually putting the players into their bodies.
-	if(config.roundstart_lights_on || roundstart_occupied_area_paths.len)
+	if(CONFIG_GET(toggle/roundstart_lights_on) || roundstart_occupied_area_paths.len)
 		var/light_tick = get_game_time()
 		var/area/A
 		for(var/obj/item/device/flashlight/lamp/lampychan in lamps)
 			A = get_area(lampychan)
-			if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
+			if(CONFIG_GET(toggle/roundstart_lights_on) || (A.type in roundstart_occupied_area_paths))
 				lampychan.toggle_onoff(1)
 		for(var/obj/machinery/light_switch/LS in lightswitches)
 			A = get_area(LS)
-			if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
+			if(CONFIG_GET(toggle/roundstart_lights_on) || (A.type in roundstart_occupied_area_paths))
 				LS.toggle_switch(1, FALSE, FALSE)
 				roundstart_occupied_area_paths -= A.type // lights are covered by this so skip these areas
 		if(roundstart_occupied_area_paths.len)
 			for(var/obj/machinery/light/lightykun in alllights)
 				A = get_area(lightykun)
-				if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
+				if(CONFIG_GET(toggle/roundstart_lights_on) || (A.type in roundstart_occupied_area_paths))
 					lightykun.on = 1
 					lightykun.update()
 		//Force the lighting subsystem to update.
@@ -303,7 +303,7 @@ var/datum/controller/gameticker/ticker
 	run_unit_tests()
 #endif
 
-	if(config.sql_enabled)
+	if(CONFIG_GET(toggle/sql_enabled))
 		spawn(3000)
 		statistic_cycle() // Polls population totals regularly and stores them in an SQL DB -- TLE
 
@@ -738,7 +738,7 @@ var/datum/controller/gameticker/ticker
 
 		//		world << sound('sound/AI/welcome.ogg')// Skie //Out with the old, in with the new. - N3X15
 
-	if(!config.shut_up_automatic_diagnostic_and_announcement_system)
+	if(!CONFIG_GET(toggle/shut_up_automatic_diagnostic_and_announcement_system))
 		var/welcome_sentence=list('sound/AI/vox_login.ogg')
 		welcome_sentence += pick(
 			'sound/AI/vox_reminder1.ogg',

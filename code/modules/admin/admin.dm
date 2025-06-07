@@ -1131,8 +1131,9 @@ var/global/floorIsLava = 0
 	set desc="People can't be AI"
 	set name="Toggle AI"
 
-	config.allow_ai = !( config.allow_ai )
-	if (!( config.allow_ai ))
+	var/datum/config_flag/ai_enable_flag = config.config_flags[/datum/config_flag/toggle/allow_ai]
+	ai_enable_flag.value = !( ai_enable_flag.value )
+	if (!( ai_enable_flag.value ))
 		to_chat(world, "<B>The AI job is no longer chooseable.</B>")
 	else
 		to_chat(world, "<B>The AI job is chooseable now.</B>")
@@ -1207,8 +1208,9 @@ var/global/floorIsLava = 0
 	set desc="Toggle admin jumping"
 	set name="Toggle Jump"
 
-	config.allow_admin_jump = !(config.allow_admin_jump)
-	message_admins("<span class='notice'>Toggled admin jumping to [config.allow_admin_jump].</span>")
+	var/datum/config_flag/ad_jump_flag = config.config_flags[/datum/config_flag/toggle/allow_admin_jump]
+	ad_jump_flag.value = !(ad_jump_flag.value)
+	message_admins("<span class='notice'>Toggled admin jumping to [CONFIG_GET(toggle/allow_admin_jump)].</span>")
 	feedback_add_details("admin_verb","TJ") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/adspawn()
@@ -1216,8 +1218,10 @@ var/global/floorIsLava = 0
 	set desc="Toggle admin spawning"
 	set name="Toggle Spawn"
 
-	config.allow_admin_spawning = !(config.allow_admin_spawning)
-	message_admins("<span class='notice'>Toggled admin item spawning to [config.allow_admin_spawning].</span>")
+	var/datum/config_flag/ad_spawn_flag = config.config_flags[/datum/config_flag/toggle/allow_admin_spawning]
+	ad_spawn_flag.value = !(ad_spawn_flag.value)
+
+	message_admins("<span class='notice'>Toggled admin item spawning to [CONFIG_GET(toggle/allow_admin_spawning)].</span>")
 	feedback_add_details("admin_verb","TAS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/adrev()
@@ -1225,8 +1229,10 @@ var/global/floorIsLava = 0
 	set desc="Toggle admin revives"
 	set name="Toggle Revive"
 
-	config.allow_admin_rev = !(config.allow_admin_rev)
-	message_admins("<span class='notice'>Toggled reviving to [config.allow_admin_rev].</span>")
+	var/datum/config_flag/ad_rev_flag = config.config_flags[/datum/config_flag/toggle/allow_admin_rev]
+	ad_rev_flag.value = !(ad_rev_flag.value)
+
+	message_admins("<span class='notice'>Toggled reviving to [CONFIG_GET(toggle/allow_admin_rev)].</span>")
 	feedback_add_details("admin_verb","TAR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/immreboot()
@@ -1259,7 +1265,7 @@ var/global/floorIsLava = 0
 	set name = "Unprison"
 
 	if (M.z == map.zCentcomm)
-		if (config.allow_admin_jump)
+		if (CONFIG_GET(toggle/allow_admin_jump))
 			M.forceMove(pick(latejoin))
 			message_admins("[key_name_admin(usr)] has unprisoned [key_name_admin(M)]", 1)
 			log_admin("[key_name(usr)] has unprisoned [key_name(M)]")
@@ -1388,13 +1394,15 @@ var/global/floorIsLava = 0
 	set desc="Guests can't enter"
 	set name="Toggle guests"
 
-	guests_allowed = !( guests_allowed )
-	if (!( guests_allowed ))
+	var/datum/config_flag/guest_ban_flag = config.config_flags[/datum/config_flag/toggle/guest_ban]
+
+	guest_ban_flag.value = !( guest_ban_flag.value )
+	if (!( guest_ban_flag.value ))
 		to_chat(world, "<B>Guests may no longer enter the game.</B>")
 	else
 		to_chat(world, "<B>Guests may now enter the game.</B>")
-	log_admin("[key_name(usr)] toggled guests game entering [guests_allowed?"":"dis"]allowed.")
-	message_admins("<span class='notice'>[key_name_admin(usr)] toggled guests game entering [guests_allowed?"":"dis"]allowed.</span>", 1)
+	log_admin("[key_name(usr)] toggled guests game entering [!guest_ban_flag.value? "" : "dis" ]allowed.")
+	message_admins("<span class='notice'>[key_name_admin(usr)] toggled guests game entering [!guest_ban_flag.value?"":"dis"]allowed.</span>", 1)
 	feedback_add_details("admin_verb","TGU") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/unjobban_panel()

@@ -274,7 +274,7 @@
 		silent = 0
 	else				//ALIVE. LIGHTS ARE ON
 		updatehealth()
-		if((health < config.health_threshold_dead || !has_brain()) && !(status_flags & BUDDHAMODE))
+		if((health < CONFIG_GET(numerical/health_threshold_dead) || !has_brain()) && !(status_flags & BUDDHAMODE))
 			death()
 			blinded = 1
 			stat = DEAD
@@ -282,7 +282,7 @@
 			return 1
 
 		//UNCONSCIOUS. NO-ONE IS HOME
-		if( (getOxyLoss() > 25) || (config.health_threshold_crit > health) )
+		if( (getOxyLoss() > 25) || (CONFIG_GET(numerical/health_threshold_crit) > health) )
 			if( health <= 20 && prob(1) )
 				spawn(0)
 					emote("gasp")

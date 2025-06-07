@@ -66,7 +66,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	centcomm_last_order = world.time
 	centcomm_order_cooldown = rand(CENTCOMM_ORDER_DELAY_MIN,CENTCOMM_ORDER_DELAY_MAX)
 
-	if(config.cargo_forwarding_on_roundstart)
+	if(CONFIG_GET(toggle/cargo_forwarding_on_roundstart))
 		forwarding_on = TRUE
 	..()
 
@@ -399,7 +399,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		if (cooldown_left > 0)
 			log_debug("CARGO FORWARDING: Order happened before cooldown, no forwards. ([time2text(cooldown_left, "mm")] minutes [time2text(cooldown_left, "ss")] seconds left)")
 			return
-		var/amount_forwarded = config.cargo_forwarding_amount_override // Override in server config for debugging
+		var/amount_forwarded = CONFIG_GET(numerical/cargo_forwarding_amount_override) // Override in server config for debugging
 		if(!amount_forwarded) // If nothing from override
 			var/cargomen = 0 // How many people are working in cargo?
 			for(var/datum/data/record/t in sortRecord(data_core.general))

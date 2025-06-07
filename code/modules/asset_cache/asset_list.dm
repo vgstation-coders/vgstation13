@@ -59,7 +59,7 @@ var/list/tg_asset_datums = list()
 
 /// Returns whether or not the asset should attempt to read from cache
 /datum/tg_asset/proc/should_refresh()
-	return !cross_round_cachable || !config.cache_assets
+	return !cross_round_cachable || !CONFIG_GET(toggle/cache_assets)
 
 /// Immediately regenerate the asset, overwriting any cache.
 /datum/tg_asset/proc/regenerate()

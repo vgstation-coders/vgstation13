@@ -33,7 +33,7 @@
 			qdel(actual)
 		feedback_add_details("admin_verb","RO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	if(possessing_old != thing)
-		if(config.forbid_singulo_possession && istype(thing,/obj/machinery/singularity))
+		if(CONFIG_GET(toggle/forbid_singulo_possession) && istype(thing,/obj/machinery/singularity))
 			to_chat(mob, "It is forbidden to possess singularities.")
 			return
 

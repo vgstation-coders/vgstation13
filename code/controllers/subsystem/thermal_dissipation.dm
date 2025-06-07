@@ -34,7 +34,7 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 	var/c = currentrun_index
 
 	if(config.thermal_dissipation)
-		var/simulate_air = config.reagents_heat_air
+		var/simulate_air = CONFIG_GET(toggle/reagents_heat_air)
 		while (c)
 
 			currentrun[c]?.handle_thermal_dissipation(simulate_air)
@@ -53,13 +53,13 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 	switch (.)
 		if ("Full")
 			config.thermal_dissipation = TRUE
-			config.reagents_heat_air = TRUE
+			CONFIG_GET(toggle/reagents_heat_air) = TRUE
 		if ("Reagents Only")
 			config.thermal_dissipation = TRUE
-			config.reagents_heat_air = FALSE
+			CONFIG_GET(toggle/reagents_heat_air) = FALSE
 		if ("Off")
 			config.thermal_dissipation = FALSE
-			config.reagents_heat_air = FALSE
+			CONFIG_GET(toggle/reagents_heat_air) = FALSE
 
 	log_admin("[key_name(usr)] set thermal dissipation to [.].")
 	message_admins("[key_name(usr)] set thermal dissipation to [.].")

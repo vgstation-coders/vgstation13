@@ -392,7 +392,7 @@
 		if("oversizedPayloadRequest")
 			var/payload_id = payload["id"]
 			var/chunk_count = payload["chunkCount"]
-			var/permit_payload = chunk_count <= config.tgui_max_chunk_count
+			var/permit_payload = chunk_count <= CONFIG_GET(numerical/tgui_max_chunk_count)
 			if(permit_payload)
 				create_oversized_payload(payload_id, payload["type"], chunk_count)
 			send_message("oversizePayloadResponse", list("allow" = permit_payload, "id" = payload_id))

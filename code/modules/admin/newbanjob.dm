@@ -8,7 +8,7 @@ var/savefile/Banlistjob
 	var/id = clientvar.computer_id
 	var/key = clientvar.ckey
 	if (guest_jobbans(rank))
-		if(config.guest_jobban && IsGuestKey(key))
+		if(CONFIG_GET(toggle/guest_jobban) && IsGuestKey(key))
 			return 1
 	Banlistjob.cd = "/base"
 	if (Banlistjob.dir.Find("[key][id][rank]"))
@@ -231,8 +231,8 @@ var/savefile/Banlistjob
 	if(AddBanjob(ckey, computerid, reason, usr.ckey, 0, 0, job))
 		to_chat(M, "<span class='warning'><BIG><B>You have been banned from [job] by [usr.client.ckey].\nReason: [reason].</B></BIG></span>")
 		to_chat(M, "<span class='warning'>This is a permanent ban.</span>")
-		if(config.banappeals)
-			to_chat(M, "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>")
+		if(CONFIG_GET(banappeals))
+			to_chat(M, "<span class='warning'>To try to resolve this matter head to [CONFIG_GET(banappeals)]</span>")
 		else
 			to_chat(M, "<span class='warning'>No ban appeals URL has been set.</span>")
 		log_admin("[usr.client.ckey] has banned from [job] [ckey].\nReason: [reason]\nThis is a permanent ban.")
@@ -241,8 +241,8 @@ var/savefile/Banlistjob
 	if(AddBanjob(ckey, computerid, reason, usr.ckey, 1, mins, job))
 		to_chat(M, "<span class='warning'><BIG><B>You have been jobbanned from [job] by [usr.client.ckey].\nReason: [reason].</B></BIG></span>")
 		to_chat(M, "<span class='warning'>This is a temporary ban, it will be removed in [mins] minutes.</span>")
-		if(config.banappeals)
-			to_chat(M, "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>")
+		if(CONFIG_GET(banappeals))
+			to_chat(M, "<span class='warning'>To try to resolve this matter head to [CONFIG_GET(banappeals)]</span>")
 		else
 			to_chat(M, "<span class='warning'>No ban appeals URL has been set.</span>")
 		log_admin("[usr.client.ckey] has jobbanned from [job] [ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.")

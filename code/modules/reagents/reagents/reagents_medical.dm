@@ -1373,7 +1373,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	if(!iscarbon(M))
 		return //We can't do anything else for you
 	var/mob/living/carbon/C = M
-	if(C.health < config.health_threshold_crit + 10)
+	if(C.health < CONFIG_GET(numerical/health_threshold_crit) + 10)
 		C.adjustToxLoss(-2 * REM)
 		C.heal_organ_damage(0, 2 * REM)
 
@@ -1512,14 +1512,14 @@ var/global/list/charcoal_doesnt_remove=list(
 		return
 	var/mob/living/carbon/human/H = M
 
-	
+
 	if(!H.ckey)
 		H.adjustToxLoss(5)
 	if((!H.client) || H.client.is_afk())
 		if(prob(30))
 			H.vomit(0,1)
 		return
-	
+
 
 	randomized_reagents[SIMPOLINOL].on_human_life(H, tick)
 
@@ -1781,7 +1781,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism= 0.5 //the candle the burns twice as bright...
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#088c2e"
-	
+
 /datum/reagent/regenerate_calcium/on_mob_life(var/mob/living/M) //burns half as long...
 	if(..())
 		return 1
@@ -1796,8 +1796,8 @@ var/global/list/charcoal_doesnt_remove=list(
 		for(var/datum/organ/external/E in H.organs)
 			if(!E.is_organic())
 				continue
-			
-			for(var/datum/wound/W in E.wounds) 
+
+			for(var/datum/wound/W in E.wounds)
 				if(W.damage_type==CUT || W.damage_type==BRUISE) //fixes limb brute damage
 					remaininghealing=W.heal_damage(remaininghealing,1)
 					if(!remaininghealing)
@@ -1832,14 +1832,14 @@ var/global/list/charcoal_doesnt_remove=list(
 	var/toxmod=M.tox_damage_modifier
 	var/brutemod=M.brute_damage_modifier
 	var/firemod=M.burn_damage_modifier
-	
+
 	if(toxmod==0 || brutemod==0 || firemod==0) //no div 0 here, so sireeeeee, nope.
 		return 1
 
 	var/brut=M.getBruteLoss()
 	var/brn=M.getFireLoss()
 	var/tox=M.getToxLoss()
-	
+
 	var/totaldamage = brut+tox+brn
 	if(totaldamage>0.0) //no need to do anything if no damage.
 		totaldamage/=3.0 //average it
@@ -1847,10 +1847,10 @@ var/global/list/charcoal_doesnt_remove=list(
 		var/tox_target = tox*(1-efficacy) + efficacy*totaldamage //linear interpolation to get the damage.
 		var/brute_target = brut*(1-efficacy) + efficacy*totaldamage
 		var/burn_target = brn*(1-efficacy) + efficacy*totaldamage
-		
-		
+
+
 		M.adjustToxLoss(  0.2*ceil(  5.0*((tox_target-tox)/toxmod) )   )
 		M.adjustBruteLoss( 0.2*ceil(  5.0*( (brute_target-brut)/brutemod) ) ) //we divide by the damage modifier, because adjust_loss will multiply by it. we don't want that.
 		M.adjustFireLoss( 0.2*ceil(  5.0*( (burn_target-brn)/firemod) ) ) //why are we rounding to .2? because the damage system acts funky with low fractional numbers, so we avoid that. why ceil instead of floor? fuck you, that's why.
-		
+
 		M.updatehealth()

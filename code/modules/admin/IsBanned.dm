@@ -11,12 +11,12 @@
 			return list("reason"="invalid login data", "desc"="Error: Could not check ban status, Please try again. Error message: Your computer provided an invalid Computer ID.)")
 
 		//Guest Checking
-		if(!guests_allowed && IsGuestKey(key))
+		if(CONFIG_GET(toggle/guest_ban) && IsGuestKey(key))
 			log_access("Failed Login: [key] - Guests not allowed")
 			message_admins("<span class='notice'>Failed Login: [key] - Guests not allowed</span>")
 			return list("reason"="guest", "desc"="\nReason: Guests not allowed. Please sign in with a byond account.")
 
-	if(config.ban_legacy_system)
+	if(CONFIG_GET(toggle/ban_legacy_system))
 		//Ban Checking
 		. = CheckBan( ckey(key), computer_id, address )
 		if(.)
@@ -30,8 +30,8 @@
 			message_admins("Attempted stickyban login key: [what["keys"]] IP: [what["IP"]] CID: [what["computer_id"]] Admin: [what["admin"]]")
 			log_access("Attempted stickyban login key: [what["keys"]] IP: [what["IP"]] CID: [what["computer_id"]] Admin: [what["admin"]]")
 			var/desc
-			if(config.banappeals)
-				desc = "\nReason: You, or another user of this computer or connection ([ckey(key)]) is banned from playing here. The ban reason is:\n[what["message"]]\nThis ban was applied by [what["admin"]]\nBan type: PERMABAN \nExpires: NEVER \nFor more information on your ban, or to appeal, head to [config.banappeals]"
+			if(CONFIG_GET(banappeals))
+				desc = "\nReason: You, or another user of this computer or connection ([ckey(key)]) is banned from playing here. The ban reason is:\n[what["message"]]\nThis ban was applied by [what["admin"]]\nBan type: PERMABAN \nExpires: NEVER \nFor more information on your ban, or to appeal, head to [CONFIG_GET(banappeals)]"
 			else
 				desc = "\nReason: You, or another user of this computer or connection ([ckey(key)]) is banned from playing here. The ban reason is:\n[what["message"]]\nThis ban was applied by [what["admin"]]\nBan type: PERMABAN \nExpires: NEVER \nAppeal: <span class='warning'>No ban appeals link set</span>"
 				what.Remove("message")
@@ -86,8 +86,8 @@
 				expires = "The ban is for [duration] minutes and expires on [expiration] (server time)."
 			else
 				expires = "NEVER"
-			if(config.banappeals)
-				desc = "\nReason: You, or another user of this computer or connection ([pckey]) is banned from playing here. The ban reason is:\n[reason]\nThis ban was applied by [ackey] on [bantime] \nBan type: [bantype] \nExpires: [expires] \nFor more information on your ban, or to appeal, head to [config.banappeals]"
+			if(CONFIG_GET(banappeals))
+				desc = "\nReason: You, or another user of this computer or connection ([pckey]) is banned from playing here. The ban reason is:\n[reason]\nThis ban was applied by [ackey] on [bantime] \nBan type: [bantype] \nExpires: [expires] \nFor more information on your ban, or to appeal, head to [CONFIG_GET(banappeals)]"
 			else
 				desc = "\nReason: You, or another user of this computer or connection ([pckey]) is banned from playing here. The ban reason is:\n[reason]\nThis ban was applied by [ackey] on [bantime] \nBan type: [bantype] \nExpires: [expires] \nAppeal: <span class='warning'>No ban appeals link set</span>"
 			log_access("Failed Login: [key] [computer_id] [address] - Banned [desc]")
@@ -106,8 +106,8 @@
 			message_admins("Attempted stickyban login key: [what["keys"]] IP: [what["IP"]] CID: [what["computer_id"]] Admin: [what["admin"]]")
 			log_access("Attempted stickyban login key: [what["keys"]] IP: [what["IP"]] CID: [what["computer_id"]] Admin: [what["admin"]]")
 			var/desc
-			if(config.banappeals)
-				desc = "\nReason: You, or another user of this computer or connection ([ckey(key)]) is banned from playing here. The ban reason is:\n[what["message"]]\nThis ban was applied by [what["admin"]]\nBan type: PERMABAN \nExpires: NEVER \nFor more information on your ban, or to appeal, head to [config.banappeals]"
+			if(CONFIG_GET(banappeals))
+				desc = "\nReason: You, or another user of this computer or connection ([ckey(key)]) is banned from playing here. The ban reason is:\n[what["message"]]\nThis ban was applied by [what["admin"]]\nBan type: PERMABAN \nExpires: NEVER \nFor more information on your ban, or to appeal, head to [CONFIG_GET(banappeals)]"
 			else
 				desc = "\nReason: You, or another user of this computer or connection ([ckey(key)]) is banned from playing here. The ban reason is:\n[what["message"]]\nThis ban was applied by [what["admin"]]\nBan type: PERMABAN \nExpires: NEVER \nAppeal: <span class='warning'>No ban appeals link set</span>"
 				what.Remove("message")

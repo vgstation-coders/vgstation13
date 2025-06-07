@@ -7,10 +7,10 @@
 var/global/global_playlists = list()
 /proc/load_juke_playlists()
 	set waitfor = 0//tentative fix so the proc stops hanging if it takes too long
-	if(!config.media_base_url)
+	if(!CONFIG_GET(media_base_url))
 		return
 	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "idm", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "vidya", "SCOTLANDFOREVER", "halloween", "christmas"))
-		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
+		var/url="[CONFIG_GET(media_base_url)]/index.php?playlist=[playlist_id]"
 		log_debug("Begin updating playlist: [playlist_id]...")
 
 		//  Media Server 2 requires a secret key in order to tell the jukebox
@@ -18,8 +18,8 @@ var/global/global_playlists = list()
 		// and MUST be the same as the media server's.
 		//
 		//  Do NOT log this, it's like a password.
-		if(config.media_secret_key!="")
-			url += "&key=[config.media_secret_key]"
+		if(CONFIG_GET(media_secret_key)!="")
+			url += "&key=[CONFIG_GET(media_secret_key)]"
 
 		var/response = world.Export(url)
 		var/list/playlist=list()
@@ -43,7 +43,7 @@ var/global/global_playlists = list()
 			log_debug("Received no response from media server for [playlist_id]")
 
 /obj/machinery/media/jukebox/proc/retrieve_playlist(var/playlistid = playlist_id)
-	if(!config.media_base_url)
+	if(!CONFIG_GET(media_base_url))
 		return
 	playlist_id = playlistid
 	if(global_playlists["[playlistid]"])
@@ -51,7 +51,7 @@ var/global/global_playlists = list()
 		playlist = temp.Copy()
 
 	else
-		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
+		var/url="[CONFIG_GET(media_base_url)]/index.php?playlist=[playlist_id]"
 		//testing("[src] - Updating playlist from [url]...")
 
 		//  Media Server 2 requires a secret key in order to tell the jukebox
@@ -59,8 +59,8 @@ var/global/global_playlists = list()
 		// and MUST be the same as the media server's.
 		//
 		//  Do NOT log this, it's like a password.
-		if(config.media_secret_key!="")
-			url += "&key=[config.media_secret_key]"
+		if(CONFIG_GET(media_secret_key)!="")
+			url += "&key=[CONFIG_GET(media_secret_key)]"
 
 		var/response = world.Export(url)
 		playlist=list()

@@ -119,9 +119,10 @@
 		log_debug("Runtime in <b>[e.file]</b>, line <b>[e.line]</b>: <b>[html_encode(e.name)]</b> [error_entry.make_link(viewtext)]")
 		var/err_msg_delay
 		if(config)
-			err_msg_delay = config.error_msg_delay
+			err_msg_delay = CONFIG_GET(numerical/error_msg_delay)
 		else
-			err_msg_delay = initial(config.error_msg_delay)
+			var/datum/config_flag/numerical/error_msg_delay/err_msg_delay_flag
+			err_msg_delay = initial(err_msg_delay_flag.value)
 		error_source.next_message_at = world.time + err_msg_delay
 
 /datum/error_viewer/error_source

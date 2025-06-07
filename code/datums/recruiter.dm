@@ -103,7 +103,7 @@
 			subject.investigation_log(I_GHOST, "|| had a ghost sign up to become its personality: [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
 
 /datum/recruiter/proc/check_observer(var/mob/dead/observer/O)
-	if(reject_antag_hud && O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
+	if(reject_antag_hud && O.has_enabled_antagHUD == 1 && CONFIG_GET(toggle/antag_hud_restricted))
 		return 0
 
 	if(jobban_roles.len > 0)

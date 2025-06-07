@@ -1201,7 +1201,7 @@ Use this proc preferably at the end of an equipment loadout
 		var/deathtime = world.time - src.timeofdeath
 		if(istype(src,/mob/dead/observer))
 			var/mob/dead/observer/G = src
-			if(G.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
+			if(G.has_enabled_antagHUD == 1 && CONFIG_GET(toggle/antag_hud_restricted))
 				to_chat(usr, "<span class='notice'> <B>Upon using the antagHUD you forfeighted the ability to join the round.</B></span>")
 				return
 		var/deathtimeminutes = round(deathtime / 600)
@@ -1214,8 +1214,9 @@ Use this proc preferably at the end of an equipment loadout
 			pluralcheck = " [deathtimeminutes] minutes and"
 		var/deathtimeseconds = round((deathtime - deathtimeminutes * 600) / 10,1)
 		to_chat(usr, "You have been dead for[pluralcheck] [deathtimeseconds] seconds.")
-		if (deathtime < config.respawn_delay*600)
-			to_chat(usr, "You must wait [config.respawn_delay] minutes to respawn!")
+		var/respawn_delay = CONFIG_GET(numerical/respawn_delay)
+		if (deathtime < respawn_delay*600)
+			to_chat(usr, "You must wait [respawn_delay] minutes to respawn!")
 			return
 		else
 			to_chat(usr, "You can respawn now, enjoy your new life!")
