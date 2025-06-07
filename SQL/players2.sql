@@ -1,102 +1,148 @@
-CREATE TABLE `body` (
-        `ID`                            INTEGER PRIMARY KEY AUTOINCREMENT,
-        `player_ckey`           TEXT NOT NULL,
-        `player_slot`           INTEGER NOT NULL,
-        `hair_red`                      INTEGER,
-        `hair_green`            INTEGER,
-        `hair_blue`                     INTEGER,
-        `facial_red`            INTEGER,
-        `facial_green`          INTEGER,
-        `facial_blue`           INTEGER,
-        `skin_tone`                     INTEGER,
-        `hair_style_name`       TEXT,
-        `facial_style_name`     TEXT,
-        `eyes_red`                      INTEGER,
-        `eyes_green`            INTEGER,
-        `eyes_blue`                     INTEGER,
-        `underwear`                     INTEGER,
-        `backbag`                       INTEGER,
-        `b_type`                        TEXT,
-        FOREIGN KEY(player_ckey, player_slot) REFERENCES players(player_ckey, player_slot) ON DELETE CASCADE,
-        UNIQUE(player_ckey, player_slot)
+
+-- Table: players
+CREATE TABLE players (
+    ID                  INTEGER PRIMARY KEY AUTOINCREMENT,
+    player_ckey         TEXT    NOT NULL,
+    player_slot         INTEGER NOT NULL,
+    ooc_notes           TEXT,
+    real_name           TEXT,
+    random_name         INTEGER,
+    random_body         INTEGER,
+    gender              TEXT,
+    age                 INTEGER,
+    species             TEXT,
+    language            TEXT,
+    med_record          TEXT,
+    sec_record          TEXT,
+    gen_record          TEXT,
+    player_alt_titles   TEXT,
+    be_special          TEXT,
+    disabilities        INTEGER,
+    nanotrasen_relation TEXT,
+    bank_security 		INTEGER,
+    wage_ratio  		INTEGER,
+    UNIQUE ( player_ckey, player_slot )
 );
-CREATE TABLE `jobs` (
-        `ID`                            INTEGER PRIMARY KEY AUTOINCREMENT,
-        `player_ckey`           TEXT NOT NULL,
-        `player_slot`           INTEGER NOT NULL,
-        `alternate_option`      INTEGER,
-        `job_civilian_high`     INTEGER,
-        `job_civilian_med`      INTEGER,
-        `job_civilian_low`      INTEGER,
-        `job_medsci_high`       INTEGER,
-        `job_medsci_med`        INTEGER,
-        `job_medsci_low`        INTEGER,
-        `job_engsec_high`       INTEGER,
-        `job_engsec_med`        INTEGER,
-        `job_engsec_low`        INTEGER, jobs TEXT,
-        FOREIGN KEY(player_ckey, player_slot) REFERENCES players(player_ckey, player_slot) ON DELETE CASCADE,
-        UNIQUE(player_ckey, player_slot)
+
+
+-- Table: body
+CREATE TABLE body (
+    ID                INTEGER PRIMARY KEY AUTOINCREMENT,
+    player_ckey       TEXT    NOT NULL,
+    player_slot       INTEGER NOT NULL,
+    hair_red          INTEGER,
+    hair_green        INTEGER,
+    hair_blue         INTEGER,
+    facial_red        INTEGER,
+    facial_green      INTEGER,
+    facial_blue       INTEGER,
+    skin_tone         INTEGER,
+    hair_style_name   TEXT,
+    facial_style_name TEXT,
+    eyes_red          INTEGER,
+    eyes_green        INTEGER,
+    eyes_blue         INTEGER,
+    underwear         INTEGER,
+    backbag           INTEGER,
+    b_type            TEXT,
+    FOREIGN KEY ( player_ckey, player_slot ) REFERENCES players ( player_ckey, player_slot ) ON DELETE CASCADE,
+    UNIQUE ( player_ckey, player_slot )
 );
-CREATE TABLE `players` (
-        `ID`                                    INTEGER PRIMARY KEY AUTOINCREMENT,
-        `player_ckey`                   TEXT NOT NULL,
-        `player_slot`                   INTEGER NOT NULL,
-        `ooc_notes`                             TEXT,
-        `real_name`                             TEXT,
-        `random_name`                   INTEGER,
-        `gender`                                TEXT,
-        `age`                                   INTEGER,
-        `species`                               TEXT,
-        `language`                              TEXT,
-        `flavor_text`                   TEXT,
-        `med_record`                    TEXT,
-        `sec_record`                    TEXT,
-        `gen_record`                    TEXT,
-        `player_alt_titles`             TEXT,
-        `be_special`                    TEXT,
-        `disabilities`                  INTEGER,
-        `nanotrasen_relation`   TEXT, random_body INTEGER DEFAULT 0, bank_security INTEGER DEFAULT 1, wage_ratio,
-        UNIQUE(player_ckey, player_slot)
+
+
+-- Table: jobs
+CREATE TABLE jobs (
+    ID                INTEGER PRIMARY KEY AUTOINCREMENT,
+    player_ckey       TEXT    NOT NULL,
+    player_slot       INTEGER NOT NULL,
+    alternate_option  INTEGER,
+    job_civilian_high INTEGER,
+    job_civilian_med  INTEGER,
+    job_civilian_low  INTEGER,
+    job_medsci_high   INTEGER,
+    job_medsci_med    INTEGER,
+    job_medsci_low    INTEGER,
+    job_engsec_high   INTEGER,
+    job_engsec_med    INTEGER,
+    job_engsec_low    INTEGER,
+    jobs              TEXT,
+    FOREIGN KEY ( player_ckey, player_slot ) REFERENCES players ( player_ckey, player_slot ) ON DELETE CASCADE,
+    UNIQUE ( player_ckey, player_slot )
 );
-CREATE TABLE [client_roles] ([ckey] TEXT NOT NULL, [slot] INTEGER NOT NULL, [role] TEXT NOT NULL, [preference] INTEGER NOT NULL, PRIMARY KEY ([ckey], [slot], [role]), FOREIGN KEY ([ckey], [slot]) REFERENCES [players] ([player_ckey], [player_slot]) ON DELETE CASCADE);
-CREATE TABLE IF NOT EXISTS "limbs" (
-        `ID`    INTEGER PRIMARY KEY AUTOINCREMENT,
-        `player_ckey`   TEXT NOT NULL,
-        `player_slot`   INTEGER NOT NULL,
-        `l_arm` TEXT,
-        `r_arm` TEXT,
-        `l_leg` TEXT,
-        `r_leg` TEXT,
-        `l_foot`        TEXT,
-        `r_foot`        TEXT,
-        `l_hand`        TEXT,
-        `r_hand`        TEXT,
-        `heart` TEXT,
-        `eyes`  TEXT,
-        `lungs` TEXT,
-        `kidneys`       TEXT,
-        `liver` TEXT
+
+
+-- Table: limbs
+CREATE TABLE limbs (
+    ID          INTEGER PRIMARY KEY AUTOINCREMENT,
+    player_ckey TEXT    NOT NULL,
+    player_slot INTEGER NOT NULL,
+    l_arm       TEXT,
+    r_arm       TEXT,
+    l_leg       TEXT,
+    r_leg       TEXT,
+    l_foot      TEXT,
+    r_foot      TEXT,
+    l_hand      TEXT,
+    r_hand      TEXT,
+    heart       TEXT,
+    eyes        TEXT,
+    FOREIGN KEY ( player_ckey, player_slot ) REFERENCES players ( player_ckey, player_slot ) ON DELETE CASCADE,
+    UNIQUE ( player_ckey, player_slot )
 );
-CREATE TABLE IF NOT EXISTS "client" (
-        `ID`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        `ckey`  INTEGER UNIQUE,
-        `ooc_color`     TEXT,
-        `lastchangelog` TEXT,
-        `UI_style`      TEXT,
-        `default_slot`  INTEGER,
-        `toggles`       INTEGER,
-        `UI_style_color`        TEXT,
-        `UI_style_alpha`        INTEGER,
-        `randomslot`    INTEGER,
-        `volume`        INTEGER,
-        `special`       INTEGER,
-        `warns` INTEGER,
-        `warnbans`      INTEGER,
-        `usewmp`        INTEGER,
-        `usenanoui`     INTEGER
-, progress_bars INTEGER DEFAULT 1, space_parallax INTEGER DEFAULT 1, space_dust INTEGER DEFAULT 1, parallax_speed INTEGER DEFAULT 2, tooltips INTEGER DEFAULT 1, stumble INTEGER DEFAULT 0, attack_animation INTEGER DEFAULT 0, pulltoggle INTEGER DEFAULT 1, credits TEXT DEFAULT 'Always', jingle TEXT DEFAULT 'Classics', hear_voicesound INTEGER DEFAULT 0, hear_instruments INTEGER DEFAULT 1, ambience_volume INTEGER DEFAULT 25, credits_volume INTEGER DEFAULT 75, window_flashing INTEGER DEFAULT 1, antag_objectives INTEGER DEFAULT 0, typing_indicator INTEGER DEFAULT 0, mob_chat_on_map INTEGER DEFAULT 0, max_chat_length INTEGER DEFAULT 68, obj_chat_on_map INTEGER DEFAULT 0, no_goonchat_for_obj INTEGER DEFAULT 0, tgui_fancy INTEGER DEFAULT 1, show_warning_next_time INTEGER DEFAULT 0, last_warned_message TEXT DEFAULT '', warning_admin TEXT DEFAULT '', fps INTEGER DEFAULT 0, headset_sound);
-CREATE TABLE _migrations (
-        pkgID TEXT NOT NULL,
-        version INTEGER NOT NULL,
-        PRIMARY KEY(pkgID)
+
+
+-- Table: client
+CREATE TABLE client (
+    ID             INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    ckey           INTEGER UNIQUE,
+    ooc_color      TEXT,
+    lastchangelog  TEXT,
+    UI_style       TEXT,
+    default_slot   INTEGER,
+    toggles        INTEGER,
+    UI_style_color TEXT,
+    UI_style_alpha INTEGER,
+    randomslot     INTEGER,
+    volume         INTEGER,
+    special        INTEGER,
+    warns          INTEGER,
+    warnbans       INTEGER,
+    usewmp         INTEGER,
+    usenanoui      INTEGER,
+    tooltips       INTEGER,
+    space_parallax INTEGER,
+    space_dust     INTEGER,
+    parallax_speed INTEGER,
+    stumble        INTEGER,
+    attack_animation INTEGER,
+    pulltoggle     INTEGER,
+    credits        TEXT,
+    jingle         TEXT,
+    hear_voicesound INTEGER,
+    hear_instruments INTEGER,
+    ambience_volume INTEGER,
+    credits_volume INTEGER,
+    headset_sound INTEGER,
+    antag_objectives INTEGER,
+	typing_indicator INTEGER,
+	mob_chat_on_map INTEGER,
+	max_chat_length INTEGER,
+	obj_chat_on_map INTEGER,
+	no_goonchat_for_obj INTEGER,
+	tgui_fancy INTEGER,
+	show_warning_next_time INTEGER DEFAULT 0,
+	last_warned_message TEXT DEFAULT '',
+	warning_admin TEXT DEFAULT '',
+	fps INTEGER DEFAULT 0
+);
+
+
+-- Table: client_roles
+CREATE TABLE client_roles (
+    ckey       TEXT    NOT NULL,
+    slot       INTEGER NOT NULL,
+    role       TEXT    NOT NULL,
+    preference INTEGER NOT NULL,
+    PRIMARY KEY ( ckey, slot, role ),
+    FOREIGN KEY ( ckey, slot ) REFERENCES players ( player_ckey, player_slot ) ON DELETE CASCADE
 );
