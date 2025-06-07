@@ -62,7 +62,7 @@
 /obj/item/weapon/vacuumcleaner/attack_hand(var/mob/user)
 	..()
 	if (user)
-		user.register_event(/event/moved, src, src::mob_moved())
+		user.register_event(/event/moved, src, src.mob_moved())
 
 /obj/item/weapon/vacuumcleaner/attack_self(mob/user)
 	if (active)
@@ -128,7 +128,7 @@
 
 /obj/item/weapon/vacuumcleaner/dropped(mob/user as mob)
 	if (user)
-		user.unregister_event(/event/moved, src, src::mob_moved())
+		user.unregister_event(/event/moved, src, src.mob_moved())
 	..()
 	if (active)
 		switchOff()
