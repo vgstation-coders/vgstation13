@@ -182,3 +182,12 @@
 	if (findtextEx(haystack, "iVBORw0KGgoAAAANSUhEUgAAACAAAABg"))
 		return 8
 	return 0 //unknown pattern, most likely something animated, oh well. be sure to account for that in your proc call.
+
+//clamps the HSV brightness of an RGB color to [lower, upper]
+/proc/ColorVClamp(var/rgb, var/lower = 0, var/upper = 255)
+	var/list/hsv_list = ReadHSV(RGBtoHSV(rgb))
+	hsv_list[3] = clamp(hsv_list[3], lower, upper)
+	if (hsv_list.len == 4)
+		return HSVtoRGB(hsv(hsv_list[1], hsv_list[2], hsv_list[3], hsv_list[4]))
+	return HSVtoRGB(hsv(hsv_list[1], hsv_list[2], hsv_list[3]))
+

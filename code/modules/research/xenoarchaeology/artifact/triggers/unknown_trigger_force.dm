@@ -9,10 +9,10 @@
 
 /datum/artifact_trigger/force/New()
 	..()
-	my_artifact.register_event(/event/attackby, src, src::owner_attackby())
-	my_artifact.register_event(/event/explosion, src, src::owner_explode())
-	my_artifact.register_event(/event/projectile, src, src::owner_projectile())
-	my_artifact.register_event(/event/bumped, src, src::owner_bumped())
+	my_artifact.register_event(/event/attackby, src, nameof(src::owner_attackby()))
+	my_artifact.register_event(/event/explosion, src, nameof(src::owner_explode()))
+	my_artifact.register_event(/event/projectile, src, nameof(src::owner_projectile()))
+	my_artifact.register_event(/event/bumped, src, nameof(src::owner_bumped()))
 
 /datum/artifact_trigger/force/proc/owner_attackby(mob/living/attacker, obj/item/item)
 	if(item.force < FORCE_THRESHOLD)
@@ -40,8 +40,8 @@
 	Triggered(usr, "THROW", thrown_item)
 
 /datum/artifact_trigger/force/Destroy()
-	my_artifact.unregister_event(/event/attackby, src, src::owner_attackby())
-	my_artifact.unregister_event(/event/explosion, src, src::owner_explode())
-	my_artifact.unregister_event(/event/projectile, src, src::owner_projectile())
-	my_artifact.unregister_event(/event/bumped, src, src::owner_bumped())
+	my_artifact.unregister_event(/event/attackby, src, nameof(src::owner_attackby()))
+	my_artifact.unregister_event(/event/explosion, src, nameof(src::owner_explode()))
+	my_artifact.unregister_event(/event/projectile, src, nameof(src::owner_projectile()))
+	my_artifact.unregister_event(/event/bumped, src, nameof(src::owner_bumped()))
 	..()

@@ -25,7 +25,6 @@
 "af" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 1;
-	icon_state = "heater";
 	tag = "icon-heater (NORTH)"
 	},
 /obj/structure/window/reinforced/plasma,
@@ -39,7 +38,6 @@
 "ag" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 1;
-	icon_state = "heater";
 	tag = "icon-heater (NORTH)"
 	},
 /obj/structure/window/reinforced/plasma,
@@ -48,7 +46,6 @@
 "ah" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 1;
-	icon_state = "heater";
 	tag = "icon-heater (NORTH)"
 	},
 /obj/structure/window/reinforced/plasma,
@@ -82,7 +79,6 @@
 "ap" = (
 /obj/machinery/light/small{
 	dir = 1;
-	icon_state = "lbulb1";
 	tag = "icon-lbulb1 (NORTH)"
 	},
 /obj/machinery/nuclearbomb,
@@ -116,7 +112,6 @@
 "au" = (
 /obj/machinery/light/small{
 	dir = 4;
-	icon_state = "lbulb1";
 	tag = "icon-lbulb1 (EAST)"
 	},
 /obj/item/toy/foamblade,
@@ -150,7 +145,6 @@
 "ay" = (
 /obj/machinery/light/small{
 	dir = 8;
-	icon_state = "lbulb1";
 	tag = "icon-lbulb1 (WEST)"
 	},
 /turf/simulated/floor/shuttle/plating,
@@ -193,7 +187,6 @@
 "aI" = (
 /obj/machinery/light{
 	dir = 1;
-	icon_state = "ltube1";
 	tag = "icon-ltube1 (NORTH)"
 	},
 /turf/simulated/floor/shuttle{
@@ -387,7 +380,6 @@
 "bf" = (
 /obj/machinery/light{
 	dir = 8;
-	icon_state = "ltube1";
 	tag = "icon-ltube1 (WEST)"
 	},
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee,
@@ -408,7 +400,6 @@
 "bh" = (
 /obj/machinery/light{
 	dir = 4;
-	icon_state = "ltube1";
 	tag = "icon-ltube1 (EAST)"
 	},
 /turf/simulated/floor/shuttle{
@@ -507,7 +498,6 @@
 /obj/structure/closet/crate/bin,
 /obj/machinery/light/small{
 	dir = 8;
-	icon_state = "lbulb1";
 	tag = "icon-lbulb1 (WEST)"
 	},
 /turf/simulated/floor/shuttle/plating,
@@ -516,7 +506,6 @@
 /obj/structure/closet/emcloset,
 /obj/machinery/light/small{
 	dir = 4;
-	icon_state = "lbulb1";
 	tag = "icon-lbulb1 (EAST)"
 	},
 /turf/simulated/floor/shuttle/plating,

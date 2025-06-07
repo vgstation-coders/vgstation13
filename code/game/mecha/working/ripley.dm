@@ -88,7 +88,7 @@
 	step_energy_drain = 0
 	paintable = 0
 
-/obj/mecha/working/ripley/deathripley/New()
+/obj/mecha/working/ripley/mk2/firefighter/deathripley/New()
 	..()
 	new /obj/item/mecha_parts/mecha_equipment/tool/safety_clamp(src)
 	return

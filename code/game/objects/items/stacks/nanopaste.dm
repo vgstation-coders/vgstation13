@@ -6,6 +6,7 @@
 	icon_state = "tube"
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_ENGINEERING + "=3"
 	amount = 10
+	max_amount = 10
 	surgerysound = 'sound/items/bonegel.ogg'
 
 /obj/item/stack/nanopaste/attack(mob/living/M as mob, mob/user as mob)

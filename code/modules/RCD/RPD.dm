@@ -2,6 +2,8 @@
 	name       = "\improper Rapid-Piping-Device (RPD)"
 	desc       = "A device used to rapidly pipe things."
 	icon_state = "rpd"
+	frequency = 1439
+	id = null
 	var/has_metal_slime = 0
 	var/has_yellow_slime = 0
 	starting_materials = list(MAT_IRON = 75000, MAT_GLASS = 37500)
@@ -84,11 +86,11 @@
 
 /obj/item/device/rcd/rpd/pickup(var/mob/living/L)
 	..()
-	L.register_event(/event/clickon, src, src::mob_onclickon())
+	L.register_event(/event/clickon, src, nameof(src::mob_onclickon()))
 
 /obj/item/device/rcd/rpd/dropped(var/mob/living/L)
 	..()
-	L.unregister_event(/event/clickon, src, src::mob_onclickon())
+	L.unregister_event(/event/clickon, src, nameof(src::mob_onclickon()))
 	hook_key = null
 
 // If the RPD is held, some modifiers are removed.
@@ -195,9 +197,9 @@
 				our_schematic.set_layer(layer)
 				if(layer != 5 )
 					spawn(-1)
-						our_schematic.attack(A, user)
+						our_schematic.attack(A, user, frequency, id)
 				else
-					var/t = our_schematic.attack(A, user)
+					var/t = our_schematic.attack(A, user, frequency, id)
 					if(!t) // No errors
 						if(~our_schematic.flags & RCD_SELF_COST) // Handle energy costs unless the schematic does it itself.
 							use_energy(our_schematic.energy_cost, user)
@@ -211,7 +213,7 @@
 			return 1
 
 	busy  = TRUE // Busy to prevent switching schematic while it's in use.
-	var/t = selected.attack(A, user)
+	var/t = selected.attack(A, user, frequency, id)
 	if(!t) // No errors
 		if(~selected.flags & RCD_SELF_COST) // Handle energy costs unless the schematic does it itself.
 			use_energy(selected.energy_cost, user)

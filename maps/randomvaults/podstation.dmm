@@ -5,77 +5,125 @@
 	tag = ""
 	},
 /turf/simulated/wall,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "ai" = (
-/obj/structure/closet/crate/freezer,
-/obj/item/weapon/reagent_containers/food/condiment/ketchup,
-/obj/item/weapon/reagent_containers/food/condiment/vinegar,
-/obj/item/weapon/reagent_containers/food/condiment/small/mayo,
-/obj/item/weapon/reagent_containers/food/condiment/small/mayo,
-/obj/item/weapon/reagent_containers/food/condiment/small/vinegar,
-/obj/item/weapon/reagent_containers/food/condiment/small/ketchup,
-/obj/item/weapon/reagent_containers/food/condiment/small/ketchup,
-/obj/item/weapon/reagent_containers/food/condiment/small/ketchup,
-/obj/item/weapon/reagent_containers/food/condiment/flour,
-/obj/item/weapon/reagent_containers/food/condiment/flour,
-/obj/item/weapon/reagent_containers/food/condiment/hotsauce,
-/obj/item/weapon/reagent_containers/food/condiment/relish,
-/obj/item/weapon/storage/fancy/egg_box/empty,
-/obj/item/weapon/reagent_containers/food/condiment/spacemilk,
+/obj/structure/rack,
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/machinery/door/window{
+	base_state = "right";
+	icon_state = "right"
+	},
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear{
+	pixel_x = -6;
+	pixel_y = 6
+	},
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear{
+	pixel_x = -6;
+	pixel_y = 6
+	},
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear{
+	pixel_x = -6;
+	pixel_y = 6
+	},
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear{
+	pixel_x = -6;
+	pixel_y = 6
+	},
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser{
+	pixel_x = -3;
+	pixel_y = 3
+	},
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser{
+	pixel_x = -3;
+	pixel_y = 3
+	},
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser{
+	pixel_x = -3;
+	pixel_y = 3
+	},
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser{
+	pixel_x = -3;
+	pixel_y = 3
+	},
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon{
+	pixel_x = 3;
+	pixel_y = -3
+	},
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon{
+	pixel_x = 3;
+	pixel_y = -3
+	},
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon{
+	pixel_x = 3;
+	pixel_y = -3
+	},
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon{
+	pixel_x = 3;
+	pixel_y = -3
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "aI" = (
 /obj/structure/catwalk,
 /turf/space,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "aM" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "aN" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "aO" = (
 /obj/effect/decal/cleanable/blood/oil{
 	icon_state = "floor2"
 	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "aW" = (
 /obj/machinery/floodlight/on/infinite,
 /turf/unsimulated/floor/airless{
 	dir = 8;
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "ba" = (
 /obj/structure/cable/yellow,
 /obj/machinery/power/port_gen/pacman,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "bq" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "bB" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 10;
 	tag = "icon-intact (SOUTHWEST)"
 	},
 /turf/simulated/wall,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "bE" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/paper_bin/black,
@@ -92,13 +140,10 @@
 	pixel_x = -25
 	},
 /turf/simulated/floor/dark,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "bJ" = (
 /obj/structure/table/woodentable,
 /obj/item/device/flashlight/lamp,
-/obj/item/weapon/spacecash/c100,
-/obj/item/weapon/spacecash/c100,
-/obj/item/weapon/coin/gold,
 /obj/machinery/door_control{
 	id_tag = "podstationclosing";
 	name = "Closing Time";
@@ -107,28 +152,39 @@
 	range = 20;
 	specialfunctions = 4
 	},
+/obj/item/weapon/storage/wallet,
+/obj/item/weapon/coin/gold,
+/obj/item/clothing/accessory/holster/handgun,
+/obj/item/weapon/spacecash/c100,
+/obj/item/weapon/spacecash/c100,
+/obj/item/weapon/spacecash/c100,
+/obj/item/weapon/spacecash/c100,
 /turf/simulated/floor/dark,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "bP" = (
-/obj/window_grille_spawner/reinforced,
 /obj/structure/window/barricade/full/block,
-/turf/simulated/floor{
-	icon_state = "bluefull"
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/machinery/door/poddoor/shutters{
+	id_tag = "podstationkitchen";
+	name = "Kitchen Shutters";
+	dir = 2
 	},
-/area/vault/podstation)
+/turf/simulated/floor/plating,
+/area/vault/podstation/interior)
 "bX" = (
 /obj/structure/spacepod_frame/unarmored{
 	dir = 1
 	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "cd" = (
 /obj/item/weapon/tank/oxygen/red,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "cq" = (
 /mob/living/simple_animal/cockroach,
 /obj/effect/decal/cleanable/flour,
@@ -136,14 +192,17 @@
 	dir = 4;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "cx" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/airless{
 	dir = 8;
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
+"cE" = (
+/turf/simulated/wall,
+/area/vault/podstation/exterior)
 "cJ" = (
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb,
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb,
@@ -161,50 +220,60 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka,
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
 /obj/structure/closet/secure_closet/freezer,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee,
+/obj/item/weapon/reagent_containers/food/drinks/tomatosoup,
+/obj/item/weapon/reagent_containers/food/drinks/tomatosoup,
+/obj/item/weapon/reagent_containers/food/drinks/tomatosoup,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "cK" = (
 /obj/machinery/light/small{
 	dir = 1;
 	invisibility = 1
 	},
 /turf/space,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
+"df" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "blue"
+	},
+/area/vault/podstation/interior)
 "dp" = (
-/obj/window_grille_spawner/reinforced,
 /obj/machinery/door/poddoor/shutters{
 	dir = 8;
 	id_tag = "podstationoffice";
 	name = "Office Shutters"
 	},
-/turf/simulated/floor/dark,
-/area/vault/podstation)
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/podstation/interior)
 "dK" = (
 /obj/structure/bed/chair/office,
-/obj/item/weapon/reagent_containers/food/snacks/roach_eggs,
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/item/weapon/reagent_containers/food/snacks/roach_eggs,
 /turf/simulated/floor/carpet,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "dU" = (
 /obj/structure/fence/door,
-/turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "ev" = (
 /mob/living/simple_animal/hostile/bigroach,
-/obj/structure/mirror{
-	pixel_y = 33
-	},
-/obj/structure/sink{
-	pixel_y = 28
-	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on/layered{
 	dir = 4
 	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "eH" = (
 /obj/effect/decal/cleanable/dirt,
 /mob/living/simple_animal/hostile/bigroach/queen,
@@ -216,21 +285,27 @@
 	specialfunctions = 4
 	},
 /turf/simulated/floor/carpet,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "eS" = (
 /obj/machinery/chem_master/condimaster,
 /obj/effect/decal/cleanable/cobweb,
-/obj/machinery/light/broken{
-	dir = 1
-	},
 /obj/machinery/alarm{
 	pixel_y = 24
+	},
+/obj/machinery/light/broken{
+	dir = 1
 	},
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
+"eZ" = (
+/obj/structure/lattice,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "fx" = (
 /obj/structure/table/reinforced,
 /obj/machinery/microwave{
@@ -240,25 +315,26 @@
 	dir = 1;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "fI" = (
 /obj/machinery/cooking/grill,
 /obj/machinery/atmospherics/unary/vent_pump{
 	external_pressure_bound = 101;
 	on = 1
 	},
+/obj/item/weapon/reagent_containers/pan,
 /obj/item/trash/egg,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "fJ" = (
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "fZ" = (
 /obj/machinery/cooking/grill,
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs,
@@ -267,7 +343,13 @@
 	dir = 1;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
+"gm" = (
+/obj/structure/hanging_lantern,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "gp" = (
 /mob/living/simple_animal/cockroach,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -280,13 +362,13 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "gB" = (
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "gC" = (
 /obj/structure/window/barricade/full,
 /obj/effect/decal/cleanable/dirt,
@@ -294,18 +376,28 @@
 	icon_state = "unloading"
 	},
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "gM" = (
+/obj/structure/closet{
+	anchored = 1
+	},
+/obj/item/stack/sheet/cardboard,
+/obj/item/stack/sheet/cardboard,
+/obj/item/weapon/storage/backpack/satchel_norm,
+/obj/item/weapon/storage/backpack/satchel_norm,
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/media/receiver/boombox,
+/obj/item/stack/package_wrap,
+/obj/item/stack/package_wrap,
 /obj/effect/decal/cleanable/cobweb2,
-/obj/structure/closet,
-/obj/item/clothing/under/waiter,
-/obj/item/clothing/under/waiter,
-/obj/item/clothing/shoes/laceup,
-/obj/item/clothing/shoes/laceup,
-/obj/item/stack/sheet/cardboard,
-/obj/item/stack/sheet/cardboard,
+/obj/item/clothing/under/overalls,
+/obj/item/clothing/under/overalls,
+/obj/item/clothing/shoes/workboots,
+/obj/item/clothing/shoes/workboots,
+/obj/item/clothing/head/beanie/black,
+/obj/item/clothing/head/beanie/black,
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "gS" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/camera{
@@ -317,7 +409,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "hd" = (
 /obj/item/trash/lollipopstick,
 /obj/effect/decal/cleanable/dirt,
@@ -330,7 +422,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "hs" = (
 /obj/structure/closet/crate/freezer,
 /obj/item/weapon/reagent_containers/food/snacks/meat,
@@ -351,8 +443,8 @@
 	},
 /obj/item/weapon/reagent_containers/food/condiment/spacemilk,
 /obj/item/weapon/reagent_containers/food/condiment/spacemilk,
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "hw" = (
 /obj/item/weapon/reagent_containers/glass/bottle/insecticide,
 /obj/structure/closet/crate,
@@ -363,17 +455,20 @@
 	icon_state = "bot"
 	},
 /obj/item/weapon/reagent_containers/glass/bottle/insecticide,
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "hD" = (
 /mob/living/simple_animal/cockroach,
-/obj/effect/decal/cleanable/cobweb,
-/obj/structure/urinal{
-	dir = 4;
-	pixel_x = -30
+/obj/structure/sink{
+	dir = 8;
+	pixel_x = -12;
+	pixel_y = 2
+	},
+/obj/structure/mirror{
+	pixel_x = -26
 	},
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "hE" = (
 /obj/structure/closet/crate,
 /obj/item/weapon/reagent_containers/spray/cleaner,
@@ -383,13 +478,13 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "hL" = (
 /obj/effect/decal/warning_stripes/pathmarkers,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "hQ" = (
 /obj/structure/closet/crate/freezer,
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato,
@@ -405,8 +500,8 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "if" = (
 /mob/living/simple_animal/hostile/bigroach,
 /obj/effect/decal/cleanable/dirt,
@@ -418,16 +513,24 @@
 	tag = ""
 	},
 /turf/simulated/floor/carpet,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "iv" = (
-/mob/living/simple_animal/cockroach,
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/urinal{
 	dir = 4;
 	pixel_x = -30
 	},
+/obj/structure/mopbucket,
+/obj/item/weapon/mop,
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
+"iH" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/broken{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/vault/podstation/interior)
 "iS" = (
 /mob/living/simple_animal/hostile/bigroach,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -438,7 +541,7 @@
 	tag = "icon-intact (EAST)"
 	},
 /turf/simulated/floor/carpet,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "jd" = (
 /obj/machinery/door/airlock/highsecurity{
 	id_tag = "PodStationOffice";
@@ -453,7 +556,7 @@
 	tag = "icon-intact (EAST)"
 	},
 /turf/simulated/floor/dark,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "jn" = (
 /obj/effect/decal/cleanable/cockroach_remains,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -467,11 +570,29 @@
 	dir = 8;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
+"jU" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/machinery/portable_atmospherics/canister/air,
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "kb" = (
 /obj/machinery/floodlight/on/infinite,
 /turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
+"kp" = (
+/obj/structure/rack,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/item/weapon/cell/high/empty,
+/obj/item/weapon/cell/high/empty,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "kq" = (
 /mob/living/simple_animal/cockroach,
 /obj/effect/decal/cleanable/dirt,
@@ -485,7 +606,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "kC" = (
 /mob/living/simple_animal/cockroach,
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
@@ -498,7 +619,13 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
+"kD" = (
+/obj/structure/hanging_lantern{
+	dir = 8
+	},
+/turf/unsimulated/floor/asteroid,
+/area/vault/podstation/exterior)
 "kQ" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
@@ -507,28 +634,44 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "kS" = (
+/obj/machinery/door_control{
+	id_tag = "podstationregister";
+	name = "Register Shutters";
+	pixel_x = -25
+	},
+/obj/machinery/camera{
+	id_tag = "podstationcameras";
+	name = "Pod Station Register";
+	network = list("PODSTATION");
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "blue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "kU" = (
 /mob/living/simple_animal/hostile/bigroach,
 /turf/simulated/floor{
 	icon_state = "blue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "kW" = (
 /obj/effect/decal/cleanable/cockroach_remains,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "lj" = (
-/obj/window_grille_spawner/reinforced,
 /obj/structure/window/barricade/full/block,
-/turf/simulated/floor,
-/area/vault/podstation)
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/machinery/door/poddoor/shutters/preopen{
+	id_tag = "podstationregister";
+	name = "Register Shutters"
+	},
+/turf/simulated/floor/plating,
+/area/vault/podstation/interior)
 "lt" = (
 /obj/item/weapon/barricade_kit,
 /obj/effect/decal/cleanable/dirt,
@@ -536,12 +679,18 @@
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "lu" = (
-/obj/item/trash/cigbutt/cigarbutt,
-/obj/effect/decal/cleanable/ash,
-/turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/device/crank_charger,
+/obj/item/device/crank_charger,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "lz" = (
 /obj/structure/table/woodentable,
 /obj/machinery/light/small/broken{
@@ -558,17 +707,22 @@
 	network = list("PODSTATION")
 	},
 /turf/simulated/floor/dark,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "lR" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/black,
 /obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey,
-/obj/item/weapon/spacecash/c100,
-/obj/item/weapon/spacecash/c100,
 /obj/item/weapon/storage/belt/leather,
+/obj/item/clothing/shoes/laceup,
+/obj/item/ammo_storage/magazine/lr22,
+/obj/item/ammo_storage/magazine/lr22,
+/obj/item/weapon/gun/projectile/pistol/NT22,
+/obj/item/clothing/under/det/noir,
+/obj/item/clothing/head/soft/black,
+/obj/item/weapon/storage/backpack/satchel,
 /turf/simulated/floor/dark,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "mj" = (
 /obj/machinery/processor,
 /obj/item/trash/fries_cone,
@@ -576,13 +730,13 @@
 	dir = 8;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "mK" = (
 /obj/machinery/light/small/broken{
 	dir = 4
 	},
 /turf/space,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "mM" = (
 /obj/structure/table,
 /obj/item/weapon/kitchen/rollingpin,
@@ -594,16 +748,17 @@
 	dir = 9;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "mO" = (
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs,
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
-	dir = 9
-	},
+/obj/structure/table/reinforced,
+/obj/item/weapon/soap,
+/obj/item/weapon/storage/firstaid/regular,
+/obj/item/device/flashlight,
+/obj/effect/decal/cleanable/cobweb2,
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "mW" = (
 /obj/structure/table,
 /obj/item/trash/waffles,
@@ -613,7 +768,7 @@
 	dir = 5;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "nO" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/extinguisher_cabinet{
@@ -630,7 +785,7 @@
 	dir = 4;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "nY" = (
 /obj/structure/table/reinforced,
 /obj/machinery/pos{
@@ -644,12 +799,9 @@
 	name = "Register Shutters"
 	},
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "oj" = (
 /obj/structure/table/reinforced,
-/obj/item/weapon/spacecash/c10,
-/obj/item/weapon/spacecash/c10,
-/obj/item/weapon/spacecash/c10,
 /obj/machinery/atmospherics/unary/vent_pump{
 	external_pressure_bound = 101;
 	on = 1
@@ -662,22 +814,36 @@
 	id_tag = "podstationregister";
 	name = "Register Shutters"
 	},
+/obj/machinery/cell_charger,
+/obj/item/weapon/paper{
+	info = "I'm done with the slack, so here it is. Neither of you are getting another paycheck until the following are finished:<BR><BR> 1. Get rid of the roach problem. I ordered you a shipment of insecticide, get it done already.<BR> 2. Clean up the floors. The mop's in the restroom.<BR> 3. Take out any trash left after the roaches are gone and the floor is clean. <BR> 4. Take the new shipment of meat in and cook up some fresh burgers. Check if any in the freezer are going stale, and toss them if they are.<BR> 5. Clean up my office. Don't touch any of my shit.<BR> 6. Finish fixing up the pods in our lot.<BR><BR> If all of that isn't done by the time I get back from vacation, you're both fired. Get it done. <i>Big Boss</i>";
+	name = "note from the boss";
+	pixel_x = -4;
+	pixel_y = 4
+	},
+/obj/item/weapon/paper{
+	name = "note from an employee";
+	info = "Hi boss, you haven't seen these roaches. You have no idea how bad it is in the station these days. After they got into that barrel of Dan's Sauce last week they've been getting bigger and nastier. One nearly took Rick's hand off the last time we came in to work. So fuck you and fuck your to-do list. Find two new schmucks who'll wipe your ass for minimum wage. We quit."
+	},
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "ol" = (
-/obj/machinery/atmospherics/miner/oxygen,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
 /obj/machinery/light/small{
 	dir = 4
 	},
+/obj/machinery/atmospherics/miner/air{
+	desc = "Gasses mined from the gas giant below (above?) flow out through this massive vent.";
+	on = 1
+	},
 /turf/simulated/floor/engine{
 	name = "vacuum floor";
 	nitrogen = 0.01;
 	oxygen = 0.01
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "on" = (
 /obj/structure/table/reinforced,
 /obj/machinery/pos{
@@ -692,8 +858,10 @@
 	id_tag = "podstationregister";
 	name = "Register Shutters"
 	},
+/obj/item/weapon/spacecash/c10,
+/obj/item/weapon/spacecash/c10,
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "op" = (
 /obj/machinery/door/window{
 	dir = 2
@@ -703,19 +871,18 @@
 	id_tag = "podstationregister";
 	name = "Register Shutters"
 	},
-/turf/simulated/floor{
-	dir = 8;
-	icon_state = "blue"
-	},
-/area/vault/podstation)
+/turf/simulated/floor,
+/area/vault/podstation/interior)
 "or" = (
 /obj/structure/signpost,
-/turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "oZ" = (
 /obj/effect/decal/cleanable/blood/oil,
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "pn" = (
 /obj/structure/bed/chair{
 	dir = 1
@@ -730,14 +897,30 @@
 	dir = 5;
 	icon_state = "cafeteria"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "px" = (
 /obj/structure/window/barricade/full/block,
 /obj/machinery/door/airlock{
 	name = "Toilet"
 	},
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
+"pL" = (
+/obj/structure/closet/crate/freezer,
+/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
+/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
+/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
+/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
+/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
+/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
+/obj/item/weapon/reagent_containers/food/snacks/sundae,
+/obj/item/weapon/reagent_containers/food/snacks/sundae,
+/obj/item/weapon/reagent_containers/food/snacks/sundae,
+/obj/item/weapon/reagent_containers/food/snacks/sundae,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation/interior)
 "pU" = (
 /turf/space,
 /area)
@@ -755,14 +938,14 @@
 	dir = 10;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "qj" = (
 /mob/living/simple_animal/hostile/bigroach,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "whitebluecorner"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "qr" = (
 /obj/structure/table,
 /obj/item/weapon/reagent_containers/food/condiment/ketchup{
@@ -779,7 +962,7 @@
 	dir = 10;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "qs" = (
 /obj/structure/table,
 /obj/item/weapon/reagent_containers/glass/beaker{
@@ -794,7 +977,7 @@
 	dir = 6;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "qL" = (
 /obj/effect/decal/cleanable/cockroach_remains,
 /obj/machinery/door_control{
@@ -809,7 +992,7 @@
 	dir = 4;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "qT" = (
 /obj/effect/decal/cleanable/cockroach_remains,
 /obj/effect/decal/cleanable/dirt,
@@ -817,7 +1000,7 @@
 	dir = 1;
 	icon_state = "blue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "qY" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
@@ -825,7 +1008,7 @@
 	dir = 1;
 	icon_state = "blue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "rh" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/fence{
@@ -834,39 +1017,59 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
+"ru" = (
+/obj/structure/reagent_dispensers/silicate,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "rx" = (
 /obj/structure/fence/corner{
 	dir = 1
 	},
-/turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "rF" = (
 /mob/living/simple_animal/cockroach,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "blue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "sb" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/mayo_packet,
+/obj/machinery/light/small/broken{
+	dir = 4
+	},
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "sg" = (
 /obj/structure/catwalk{
 	icon_state = "catwalk1"
 	},
 /turf/simulated/wall,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "sF" = (
 /obj/structure/sign/nosmoking_2,
 /turf/simulated/wall,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "sK" = (
-/obj/structure/mopbucket,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	external_pressure_bound = 101;
+	on = 1
+	},
+/mob/living/simple_animal/cockroach,
+/obj/machinery/light/small/broken,
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "sN" = (
 /obj/structure/hanging_lantern{
 	dir = 8
@@ -875,19 +1078,19 @@
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "sX" = (
 /turf/unsimulated/floor/airless{
 	dir = 10;
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "tc" = (
 /turf/unsimulated/floor/airless{
 	dir = 6;
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "ui" = (
 /obj/structure/bed/chair,
 /obj/item/trash/cigbutt,
@@ -895,18 +1098,18 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "uy" = (
 /obj/structure/bed/chair,
 /obj/item/weapon/storage/fancy/cigarettes/spaceports,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "uF" = (
 /obj/structure/sign/securearea,
 /turf/simulated/wall,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "uJ" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/light/small/broken{
@@ -916,7 +1119,7 @@
 	dir = 8;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "uR" = (
 /mob/living/simple_animal/cockroach,
 /obj/effect/decal/cleanable/flour,
@@ -929,7 +1132,7 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "vG" = (
 /obj/structure/window/barricade/full/block,
 /obj/machinery/door/airlock{
@@ -939,11 +1142,12 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "vM" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/machinery/atmospherics/unary/vent_pump/high_volume{
 	canSpawnMice = 0;
-	dir = 8;
+	dir = 1;
 	external_pressure_bound = 0;
 	frequency = 1443;
 	icon_state = "in";
@@ -953,13 +1157,12 @@
 	pressure_checks = 2;
 	pump_direction = 0
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /turf/simulated/floor/engine{
 	name = "vacuum floor";
 	nitrogen = 0.01;
 	oxygen = 0.01
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "vW" = (
 /mob/living/simple_animal/hostile/bigroach,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -973,7 +1176,7 @@
 	dir = 4;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "we" = (
 /obj/structure/table/reinforced,
 /obj/machinery/door/poddoor/shutters{
@@ -990,12 +1193,14 @@
 /turf/simulated/floor{
 	icon_state = "bluefull"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "wh" = (
 /obj/item/trash/tray,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "wi" = (
 /obj/machinery/camera{
 	id_tag = "podstationcameras";
@@ -1005,7 +1210,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "wu" = (
 /obj/item/trash/plate,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -1018,7 +1223,7 @@
 /turf/simulated/floor{
 	icon_state = "bot"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "wB" = (
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs,
 /obj/effect/decal/cleanable/dirt,
@@ -1031,17 +1236,17 @@
 	},
 /obj/item/trash/sosjerky,
 /turf/simulated/floor/damaged,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "xb" = (
 /turf/simulated/floor{
 	icon_state = "bot"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "xk" = (
 /obj/item/trash/candy,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "xq" = (
 /obj/machinery/door/airlock/external{
 	id_tag = "podstationclosing";
@@ -1049,11 +1254,11 @@
 	},
 /obj/structure/window/barricade/full/block,
 /turf/simulated/floor/plating,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "xt" = (
 /obj/structure/closet/walllocker/emerglocker/north,
 /turf/simulated/floor/plating,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "yE" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 8;
@@ -1063,11 +1268,21 @@
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "yU" = (
 /obj/item/trash/candy,
 /turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
+"zr" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
+/obj/structure/lattice,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "zs" = (
 /mob/living/simple_animal/cockroach,
 /obj/effect/decal/cleanable/egg_smudge{
@@ -1077,7 +1292,7 @@
 	dir = 8;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "zu" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
@@ -1086,13 +1301,13 @@
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "zz" = (
 /mob/living/simple_animal/hostile/bigroach,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "zB" = (
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs,
 /obj/effect/decal/cleanable/dirt,
@@ -1100,26 +1315,26 @@
 	dir = 4;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "zL" = (
 /mob/living/simple_animal/cockroach,
 /turf/simulated/floor{
 	icon_state = "bot"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "zU" = (
 /obj/effect/decal/cleanable/cockroach_remains,
 /turf/simulated/floor{
 	icon_state = "bot"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Ah" = (
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "AD" = (
 /obj/machinery/light/small/broken,
 /turf/simulated/floor/plating,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "AF" = (
 /obj/effect/decal/cleanable/cockroach_remains,
 /obj/machinery/light_switch{
@@ -1129,7 +1344,7 @@
 	dir = 10;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "AH" = (
 /obj/machinery/camera{
 	dir = 4;
@@ -1138,7 +1353,7 @@
 	network = list("PODSTATION")
 	},
 /turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "AI" = (
 /mob/living/simple_animal/cockroach,
 /obj/effect/decal/cleanable/dirt,
@@ -1147,28 +1362,28 @@
 /turf/simulated/floor{
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "AK" = (
 /obj/structure/table/reinforced,
 /obj/machinery/chem_dispenser/brewer,
 /turf/simulated/floor{
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "BN" = (
 /obj/machinery/vending/dinnerware,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "whiteblue"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "BO" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
 	icon_state = "rampbottom";
 	tag = "icon-rampbottom"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Cb" = (
 /obj/docking_port/destination/salvage/pod_station{
 	dir = 2
@@ -1184,13 +1399,13 @@
 	icon_state = "rampbottom";
 	tag = "icon-rampbottom"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Cf" = (
 /turf/simulated/floor{
 	icon_state = "rampbottom";
 	tag = "icon-rampbottom"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Cz" = (
 /mob/living/simple_animal/cockroach,
 /obj/machinery/light/small/broken{
@@ -1200,29 +1415,29 @@
 	icon_state = "rampbottom";
 	tag = "icon-rampbottom"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "CD" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "CY" = (
 /turf/unsimulated/floor/airless{
 	dir = 9;
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "Db" = (
 /turf/unsimulated/floor/airless{
 	dir = 1;
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "Dq" = (
 /mob/living/simple_animal/cockroach,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Dx" = (
 /obj/item/trash/bustanuts,
 /obj/effect/decal/cleanable/dirt,
@@ -1230,46 +1445,53 @@
 	dir = 5;
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "Dz" = (
 /obj/structure/door_assembly,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "DR" = (
 /obj/item/weapon/storage/toolbox/emergency,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
+"DW" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
 "Ee" = (
 /obj/machinery/light/small,
 /turf/space,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "En" = (
-/obj/structure/reagent_dispensers/cauldron/barrel,
+/obj/structure/reagent_dispensers/cauldron/barrel{
+	name = "Discount Dan's Sauce Barrel"
+	},
+/obj/effect/decal/cleanable/greenglow,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "Eu" = (
 /obj/effect/decal/cleanable/greenglow,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "ED" = (
 /obj/machinery/light/small/broken{
 	dir = 1
 	},
 /turf/space,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "ES" = (
 /turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "Fe" = (
 /obj/structure/hanging_lantern{
 	dir = 4
@@ -1277,7 +1499,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "FB" = (
 /obj/machinery/door/airlock/freezer,
 /obj/structure/window/barricade/full/block,
@@ -1286,18 +1508,24 @@
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "FF" = (
 /obj/structure/bed/chair,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "cafeteria"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
+"FJ" = (
+/obj/machinery/light,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation/interior)
 "FL" = (
 /obj/machinery/light/small/broken,
 /turf/space,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "FQ" = (
 /mob/living/simple_animal/cockroach,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -1306,7 +1534,7 @@
 	dir = 5;
 	icon_state = "cafeteria"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "FZ" = (
 /obj/structure/bed/chair,
 /obj/effect/decal/cleanable/vomit/pre_dry,
@@ -1314,7 +1542,7 @@
 	dir = 5;
 	icon_state = "cafeteria"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Ga" = (
 /obj/item/trash/chicken_bucket,
 /obj/effect/decal/cleanable/dirt,
@@ -1322,66 +1550,94 @@
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "Gz" = (
 /obj/structure/rack,
-/obj/item/stack/sheet/metal/bigstack,
+/obj/item/weapon/storage/belt/utility/full,
 /obj/item/tool/solder,
+/obj/item/tool/solder,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/item/weapon/reagent_containers/glass/bottle/sacid,
+/obj/item/weapon/reagent_containers/glass/bottle/sacid,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "GO" = (
 /obj/structure/sink/kitchen,
 /turf/simulated/wall,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Hg" = (
 /obj/structure/rack,
-/obj/item/stack/sheet/glass/glass/bigstack,
+/obj/item/stack/sheet/glass/glass/bigstack{
+	pixel_x = 3;
+	pixel_y = 3
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/item/stack/sheet/metal/bigstack{
+	pixel_x = 1;
+	pixel_y = 1
+	},
 /obj/item/device/spacepod_equipment/locking/lock,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
-"HH" = (
-/obj/structure/table/reinforced,
-/obj/item/weapon/soap,
-/obj/machinery/light/small/broken,
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 1;
-	external_pressure_bound = 101;
-	on = 1
-	},
-/obj/item/weapon/storage/firstaid/regular,
-/obj/item/device/flashlight,
-/turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "HJ" = (
 /obj/structure/fence/corner{
 	dir = 8
 	},
-/turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "HV" = (
 /obj/structure/fence/door/opened,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
+"HW" = (
+/obj/effect/decal/cleanable/ash,
+/obj/item/trash/cigbutt/cigarbutt,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/podstation/exterior)
 "If" = (
 /obj/machinery/light/small{
 	dir = 8
 	},
 /turf/space,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "IC" = (
-/obj/machinery/portable_atmospherics/canister/air,
-/obj/machinery/atmospherics/unary/portables_connector,
+/obj/structure/rack,
+/obj/item/clothing/head/tinfoil,
+/obj/item/pod_parts/core,
+/obj/item/weapon/circuitboard/mecha/pod,
+/obj/item/weapon/storage/toolbox/mechanical,
+/obj/item/device/multitool,
+/obj/item/clothing/suit/space/ghettorig,
+/obj/item/clothing/suit/space/ghettorig,
+/obj/item/clothing/head/helmet/space/ghetto,
+/obj/item/clothing/head/helmet/space/ghetto,
+/obj/item/weapon/storage/toolbox/electrical,
+/obj/item/weapon/storage/belt/utility/full,
+/obj/item/weapon/storage/belt/utility/full,
+/obj/item/clothing/mask/gas,
+/obj/item/clothing/mask/gas,
+/obj/item/clothing/glasses/welding,
+/obj/item/clothing/glasses/welding,
 /turf/simulated/floor/plating,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "IJ" = (
 /turf/simulated/wall/r_wall,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "IQ" = (
 /obj/machinery/camera{
 	id_tag = "podstationcameras";
@@ -1392,12 +1648,12 @@
 	icon_state = "air"
 	},
 /turf/simulated/floor/plating,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "IZ" = (
 /obj/machinery/door/airlock/maintenance,
 /obj/structure/window/barricade/full/block,
 /turf/simulated/floor/plating,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "JY" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
@@ -1407,7 +1663,7 @@
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Kg" = (
 /obj/machinery/light/small{
 	dir = 1;
@@ -1419,10 +1675,10 @@
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Kk" = (
 /turf/simulated/wall,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Kv" = (
 /obj/item/weapon/reagent_containers/food/snacks/fries/cone,
 /obj/item/weapon/reagent_containers/food/snacks/fries/cone,
@@ -1433,14 +1689,39 @@
 /obj/item/weapon/reagent_containers/food/snacks/fries/cone,
 /obj/effect/decal/cleanable/cobweb2,
 /obj/item/weapon/reagent_containers/food/snacks/fries/cone,
+/obj/item/weapon/chipbasket,
+/obj/item/weapon/chipbasket,
+/obj/item/weapon/chipbasket,
+/obj/item/weapon/chipbasket,
+/obj/item/weapon/reagent_containers/food/snacks/potatosalad,
+/obj/item/weapon/reagent_containers/food/snacks/potatosalad,
+/obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato,
+/obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato,
+/obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato,
+/obj/item/weapon/reagent_containers/food/snacks/chilaquiles,
+/obj/item/weapon/reagent_containers/food/snacks/chilaquiles,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "KC" = (
 /obj/effect/decal/warning_stripes/pathmarkers,
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
+"Li" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	dir = 4;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/podstation/exterior)
+"Lv" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/item/device/silicate_sprayer,
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "LD" = (
 /obj/structure/table,
 /obj/machinery/light/broken{
@@ -1457,7 +1738,7 @@
 	dir = 5;
 	icon_state = "cafeteria"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "LL" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{
@@ -1471,7 +1752,7 @@
 	dir = 5;
 	icon_state = "cafeteria"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Mb" = (
 /obj/structure/table,
 /obj/item/trash/fries_cone,
@@ -1482,7 +1763,7 @@
 	dir = 5;
 	icon_state = "cafeteria"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Mx" = (
 /obj/structure/table,
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,
@@ -1490,40 +1771,40 @@
 	dir = 5;
 	icon_state = "cafeteria"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "MP" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
 /obj/machinery/cryopod,
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "Nl" = (
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/unary/vent{
 	dir = 1
 	},
 /turf/space,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "Np" = (
 /obj/structure/fence,
-/turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
-"NA" = (
-/obj/structure/hanging_lantern{
-	dir = 1
-	},
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
+"NA" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "NF" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/mayo_packet,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "NS" = (
 /obj/structure/closet/crate/trashcart,
 /obj/item/trash/chips,
@@ -1533,72 +1814,155 @@
 /obj/item/weapon/storage/fancy/cigarettes/shoalsticks,
 /obj/item/trash/zam_notraisins,
 /obj/item/weapon/newspaper,
+/obj/item/weapon/storage/fancy/cigarettes/ntstandard,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "Ov" = (
-/obj/structure/rack,
 /obj/machinery/light/small{
 	dir = 8
 	},
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
-	dir = 8
+/obj/machinery/atmospherics/unary/tank/air{
+	starting_volume = 3200
 	},
-/obj/item/clothing/head/tinfoil,
-/obj/item/pod_parts/core,
-/obj/item/weapon/circuitboard/mecha/pod,
-/obj/item/weapon/storage/toolbox/mechanical,
-/obj/item/device/multitool,
-/obj/item/clothing/suit/space/ghettorig,
-/obj/item/clothing/suit/space/ghettorig,
-/obj/item/clothing/head/helmet/space/ghetto,
-/obj/item/clothing/head/helmet/space/ghetto,
-/obj/item/weapon/storage/toolbox/electrical,
 /turf/simulated/floor/plating,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "OX" = (
 /obj/structure/spacepod_frame,
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "Qp" = (
-/obj/structure/table,
-/obj/item/weapon/tray,
-/obj/item/weapon/storage/box/condimentbottles,
-/obj/machinery/light/broken{
-	dir = 1
+/obj/structure/rack,
+/obj/item/weapon/storage/fancy/cigarettes/spaceports{
+	pixel_x = -2;
+	pixel_y = 2
 	},
-/obj/machinery/door_control{
-	id_tag = "podstationregister";
-	name = "Register Shutters";
-	pixel_y = 25
+/obj/item/weapon/storage/fancy/cigarettes/spaceports{
+	pixel_x = -2;
+	pixel_y = 2
 	},
-/turf/simulated/floor,
-/area/vault/podstation)
+/obj/item/weapon/storage/fancy/cigarettes/spaceports{
+	pixel_x = -2;
+	pixel_y = 2
+	},
+/obj/item/weapon/storage/fancy/cigarettes/spaceports{
+	pixel_x = -2;
+	pixel_y = 2
+	},
+/obj/item/weapon/storage/fancy/cigarettes/starlights,
+/obj/item/weapon/storage/fancy/cigarettes/starlights,
+/obj/item/weapon/storage/fancy/cigarettes/starlights,
+/obj/item/weapon/storage/fancy/cigarettes/starlights,
+/obj/item/weapon/storage/fancy/cigarettes/shoalsticks{
+	pixel_x = 4;
+	pixel_y = -4
+	},
+/obj/item/weapon/storage/fancy/cigarettes/shoalsticks{
+	pixel_x = 4;
+	pixel_y = -4
+	},
+/obj/item/weapon/storage/fancy/cigarettes/shoalsticks{
+	pixel_x = 4;
+	pixel_y = -4
+	},
+/obj/item/weapon/storage/fancy/cigarettes/shoalsticks{
+	pixel_x = 4;
+	pixel_y = -4
+	},
+/obj/item/weapon/storage/fancy/cigarettes/dromedaryco{
+	pixel_x = 6;
+	pixel_y = -6
+	},
+/obj/item/weapon/storage/fancy/cigarettes/dromedaryco{
+	pixel_x = 6;
+	pixel_y = -6
+	},
+/obj/item/weapon/storage/fancy/cigarettes/dromedaryco{
+	pixel_x = 6;
+	pixel_y = -6
+	},
+/obj/item/weapon/storage/fancy/cigarettes/dromedaryco{
+	pixel_x = 6;
+	pixel_y = -6
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/machinery/door/window{
+	dir = 2
+	},
+/obj/item/weapon/storage/fancy/cigarettes/luckystrike{
+	pixel_x = 7;
+	pixel_y = -7
+	},
+/obj/item/weapon/storage/fancy/cigarettes/luckystrike{
+	pixel_x = 7;
+	pixel_y = -7
+	},
+/obj/item/weapon/storage/fancy/cigarettes/luckystrike{
+	pixel_x = 7;
+	pixel_y = -7
+	},
+/obj/item/weapon/storage/fancy/cigarettes/luckystrike{
+	pixel_x = 7;
+	pixel_y = -7
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "blue"
+	},
+/area/vault/podstation/interior)
+"Qx" = (
+/obj/structure/closet/crate/freezer,
+/obj/item/weapon/reagent_containers/food/condiment/ketchup,
+/obj/item/weapon/reagent_containers/food/condiment/vinegar,
+/obj/item/weapon/reagent_containers/food/condiment/small/mayo,
+/obj/item/weapon/reagent_containers/food/condiment/small/mayo,
+/obj/item/weapon/reagent_containers/food/condiment/small/vinegar,
+/obj/item/weapon/reagent_containers/food/condiment/small/ketchup,
+/obj/item/weapon/reagent_containers/food/condiment/small/ketchup,
+/obj/item/weapon/reagent_containers/food/condiment/small/ketchup,
+/obj/item/weapon/reagent_containers/food/condiment/flour,
+/obj/item/weapon/reagent_containers/food/condiment/flour,
+/obj/item/weapon/reagent_containers/food/condiment/hotsauce,
+/obj/item/weapon/reagent_containers/food/condiment/relish,
+/obj/item/weapon/storage/fancy/egg_box/empty,
+/obj/item/weapon/reagent_containers/food/condiment/spacemilk,
+/obj/item/weapon/reagent_containers/food/dipping_sauce/queso,
+/obj/item/weapon/reagent_containers/food/dipping_sauce/queso,
+/obj/item/weapon/reagent_containers/food/dipping_sauce/guacamole,
+/obj/item/weapon/reagent_containers/food/dipping_sauce/salsa,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation/interior)
 "QK" = (
 /obj/structure/catwalk{
 	icon_state = "catwalk3"
 	},
 /turf/space,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "QW" = (
 /obj/structure/lattice,
 /obj/machinery/atmospherics/pipe/layer_adapter/scrubbers/hidden,
 /turf/space,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "RG" = (
-/obj/machinery/meter,
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
 /obj/effect/decal/cleanable/blood/oil{
 	icon_state = "floor6"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 6
 	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
+	},
 /turf/simulated/floor/plating,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "RO" = (
 /obj/structure/sign/electricshock,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -1609,7 +1973,7 @@
 	tag = "icon-intact (EAST)"
 	},
 /turf/simulated/wall,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "RX" = (
 /obj/structure/kitchenspike,
 /obj/effect/decal/cleanable/blood{
@@ -1622,7 +1986,7 @@
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Sc" = (
 /obj/item/weapon/reagent_containers/food/snacks/fishburger,
 /obj/item/weapon/reagent_containers/food/snacks/xenoburger,
@@ -1645,16 +2009,32 @@
 	},
 /obj/item/weapon/reagent_containers/food/snacks/meatpizzaslice,
 /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets,
+/obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme,
+/obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme,
+/obj/item/weapon/reagent_containers/food/snacks/chiliconcarne,
+/obj/item/weapon/reagent_containers/food/snacks/chiliconcarne,
+/obj/item/weapon/reagent_containers/food/snacks/chiliconcarne,
+/obj/item/weapon/reagent_containers/food/snacks/threebeanburrito,
+/obj/item/weapon/reagent_containers/food/snacks/threebeanburrito,
+/obj/item/weapon/reagent_containers/food/snacks/fishfingers,
+/obj/item/weapon/reagent_containers/food/snacks/fishfingers,
+/obj/item/weapon/reagent_containers/food/snacks/grilledcheese,
+/obj/item/weapon/reagent_containers/food/snacks/grilledcheese,
+/obj/item/weapon/reagent_containers/food/snacks/corndog,
+/obj/item/weapon/reagent_containers/food/snacks/corndog,
+/obj/item/weapon/reagent_containers/food/snacks/margheritaslice,
+/obj/item/weapon/reagent_containers/food/snacks/margheritaslice,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Si" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "Sn" = (
 /obj/structure/bed/chair{
 	dir = 1
@@ -1663,11 +2043,16 @@
 	dir = 5;
 	icon_state = "cafeteria"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "SS" = (
-/obj/structure/reagent_dispensers/fueltank,
-/turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/dispenser/oxygen,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "Ti" = (
 /obj/structure/bed/chair{
 	dir = 1
@@ -1678,76 +2063,101 @@
 	dir = 5;
 	icon_state = "cafeteria"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Ts" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "TC" = (
 /obj/structure/catwalk{
 	icon_state = "catwalk2"
 	},
 /turf/simulated/wall,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "TM" = (
 /obj/item/weapon/shard,
 /turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "TO" = (
 /obj/item/inflatable/shelter,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "TV" = (
 /turf/unsimulated/floor/airless{
 	dir = 4;
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "Uk" = (
 /obj/item/tool/wrench,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
+"UN" = (
+/obj/structure/window/barricade/full/block,
+/obj/machinery/door/poddoor/shutters/preopen{
+	id_tag = "podstationregister";
+	name = "Register Shutters"
+	},
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/podstation/interior)
+"Vb" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/reagent_dispensers/fueltank,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "VJ" = (
 /obj/structure/fence/corner{
 	dir = 10
 	},
-/turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "VP" = (
 /turf/unsimulated/floor/airless{
 	dir = 8;
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "VS" = (
 /obj/structure/lattice,
 /turf/space,
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "VT" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "VU" = (
 /obj/structure/fence{
 	dir = 4
 	},
-/turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "VW" = (
 /obj/structure/fence/corner{
 	dir = 5
 	},
-/turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "VX" = (
 /obj/machinery/camera{
 	dir = 10;
@@ -1758,18 +2168,20 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "VY" = (
 /obj/item/trash/cigbutt,
 /obj/item/weapon/storage/bag/trash,
-/turf/unsimulated/floor/asteroid,
-/area/vault/podstation)
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "Wu" = (
 /obj/machinery/cryopod,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "WT" = (
 /obj/structure/cable/yellow{
 	d1 = 2;
@@ -1784,29 +2196,111 @@
 /obj/item/trash/ketchup_packet,
 /obj/item/trash/vinegar_packet,
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/hanging_lantern{
+	dir = 4
+	},
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "Xi" = (
-/obj/structure/table,
-/obj/item/stack/package_wrap,
-/obj/item/stack/package_wrap,
-/obj/item/weapon/reagent_containers/food/snacks/roach_eggs,
-/obj/item/weapon/lighter/zippo,
-/obj/machinery/media/receiver/boombox,
-/obj/machinery/camera{
-	id_tag = "podstationcameras";
-	name = "Pod Station Register";
-	network = list("PODSTATION")
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/rack,
+/obj/structure/window/reinforced{
+	dir = 4
 	},
-/turf/simulated/floor,
-/area/vault/podstation)
+/obj/machinery/door/window{
+	dir = 2
+	},
+/obj/item/weapon/storage/fancy/matchbox{
+	pixel_x = -6;
+	pixel_y = 6
+	},
+/obj/item/weapon/storage/fancy/matchbox{
+	pixel_x = -6;
+	pixel_y = 6
+	},
+/obj/item/weapon/storage/fancy/matchbox{
+	pixel_x = -6;
+	pixel_y = 6
+	},
+/obj/item/weapon/storage/fancy/matchbox{
+	pixel_x = -6;
+	pixel_y = 6
+	},
+/obj/item/weapon/lighter/zippo{
+	pixel_x = 1
+	},
+/obj/item/weapon/lighter/zippo{
+	pixel_x = 1
+	},
+/obj/item/weapon/lighter/red{
+	pixel_x = 2;
+	pixel_y = -2
+	},
+/obj/item/weapon/lighter/red{
+	pixel_x = 2;
+	pixel_y = -2
+	},
+/obj/item/weapon/lighter/red{
+	pixel_x = 2;
+	pixel_y = -2
+	},
+/obj/item/weapon/lighter/red{
+	pixel_x = 2;
+	pixel_y = -2
+	},
+/obj/item/weapon/lighter/green{
+	pixel_x = 5;
+	pixel_y = -5
+	},
+/obj/item/weapon/lighter/green{
+	pixel_x = 5;
+	pixel_y = -5
+	},
+/obj/item/weapon/lighter/green{
+	pixel_x = 5;
+	pixel_y = -5
+	},
+/obj/item/weapon/lighter/green{
+	pixel_x = 5;
+	pixel_y = -5
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "blue"
+	},
+/area/vault/podstation/interior)
 "Xr" = (
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
+"XB" = (
+/obj/structure/closet/crate/freezer,
+/obj/item/weapon/reagent_containers/food/snacks/cinnamonroll,
+/obj/item/weapon/reagent_containers/food/snacks/cinnamonroll,
+/obj/item/weapon/reagent_containers/food/snacks/chococherrycakeslice,
+/obj/item/weapon/reagent_containers/food/snacks/chococherrycakeslice,
+/obj/item/weapon/reagent_containers/food/snacks/chococherrycakeslice,
+/obj/item/weapon/reagent_containers/food/snacks/muffin/berry,
+/obj/item/weapon/reagent_containers/food/snacks/muffin/berry,
+/obj/item/weapon/reagent_containers/food/snacks/poppypretzel,
+/obj/item/weapon/reagent_containers/food/snacks/poppypretzel,
+/obj/item/weapon/reagent_containers/food/snacks/poppypretzel,
+/obj/item/weapon/reagent_containers/food/snacks/bagel,
+/obj/item/weapon/reagent_containers/food/snacks/bagel,
+/obj/item/weapon/reagent_containers/food/snacks/bagel,
+/obj/item/weapon/reagent_containers/food/snacks/bagel,
+/obj/item/weapon/reagent_containers/food/snacks/croissant,
+/obj/item/weapon/reagent_containers/food/snacks/croissant,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/podstation/interior)
 "XS" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -1814,14 +2308,13 @@
 	icon_state = "4-8"
 	},
 /turf/simulated/wall,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Yt" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/rack,
 /obj/item/device/crank_charger,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
@@ -1829,7 +2322,6 @@
 	},
 /obj/item/pod_parts/armor/civ,
 /obj/item/pod_parts/armor/civ,
-/obj/item/weapon/storage/box/lights/mixed,
 /obj/item/weapon/circuitboard/mecha/pod,
 /obj/item/weapon/cell/high/empty,
 /obj/item/device/pod_key,
@@ -1837,13 +2329,21 @@
 /obj/item/weapon/tank/oxygen/red,
 /obj/item/weapon/cell/high/empty,
 /obj/item/inflatable/shelter,
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 8
+	},
+/obj/item/weapon/storage/box/lights/mixed,
+/obj/item/weapon/storage/box/lights/mixed,
+/obj/item/stack/sheet/mineral/plasma{
+	amount = 20
+	},
 /turf/simulated/floor/plating,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Yx" = (
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "YD" = (
 /obj/structure/cable/yellow{
 	d2 = 8;
@@ -1860,33 +2360,44 @@
 	dir = 9
 	},
 /obj/structure/window/reinforced,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 9
+	},
+/obj/machinery/meter,
 /turf/simulated/floor/plating,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "YT" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "Zo" = (
-/obj/item/weapon/reagent_containers/food/snacks/sundae,
-/obj/item/weapon/reagent_containers/food/snacks/sundae,
-/obj/item/weapon/reagent_containers/food/snacks/sundae,
-/obj/structure/closet/crate/freezer,
-/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
-/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
-/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
-/obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich,
+/obj/structure/rack,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/machinery/door/window{
+	base_state = "right";
+	icon_state = "right"
+	},
+/obj/item/weapon/storage/fancy/beer_box,
+/obj/item/weapon/storage/fancy/beer_box,
+/obj/item/weapon/reagent_containers/food/drinks/bottle/schnapps,
+/obj/item/weapon/reagent_containers/food/drinks/bottle/schnapps,
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
-/area/vault/podstation)
+/area/vault/podstation/interior)
 "Zy" = (
-/turf/unsimulated/floor/asteroid/underground,
-/area/vault/podstation)
+/turf/unsimulated/floor/asteroid/underground/airless,
+/area/vault/podstation/exterior)
 "ZI" = (
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidwarning"
 	},
-/area/vault/podstation)
+/area/vault/podstation/exterior)
 "ZP" = (
 /obj/structure/toilet{
 	dir = 8
@@ -1898,7 +2409,7 @@
 	dir = 4
 	},
 /turf/simulated/floor,
-/area/vault/podstation)
+/area/vault/podstation/interior)
 
 (1,1,1) = {"
 pU
@@ -1936,7 +2447,7 @@ ES
 HJ
 Np
 VJ
-VS
+ES
 VS
 aI
 pU
@@ -1975,14 +2486,14 @@ ES
 ES
 ES
 ES
-pU
+DW
 ES
 Yx
 HV
 Yx
 VU
 ES
-VS
+ES
 VS
 pU
 pU
@@ -2017,18 +2528,18 @@ Yx
 gS
 aM
 Yx
-Yx
+Fe
 Yx
 ES
 ES
 ES
 En
-Kk
-NA
+cE
+Yx
 VW
 Np
 rx
-VS
+ES
 pU
 pU
 pU
@@ -2067,14 +2578,14 @@ IJ
 ui
 yU
 ES
-Eu
-Kk
+gm
+cE
 NF
 VY
 wh
 dU
+eZ
 VS
-pU
 pU
 pU
 pU
@@ -2111,15 +2622,15 @@ lz
 IJ
 uy
 aM
+Eu
 Yx
-Fe
-Kk
+cE
 NS
 WT
 ba
 rh
 Yx
-pU
+VS
 pU
 pU
 pU
@@ -2163,9 +2674,9 @@ Kk
 XS
 Kk
 Kk
-wi
-pU
-pU
+Yx
+ES
+VS
 pU
 pU
 pU
@@ -2208,10 +2719,10 @@ Ov
 Yt
 vM
 af
+wi
 Yx
-pU
-pU
-pU
+Yx
+VS
 pU
 pU
 "}
@@ -2238,7 +2749,7 @@ pU
 pU
 ES
 ES
-VX
+Yx
 Kk
 eS
 jn
@@ -2255,8 +2766,8 @@ ol
 bB
 QW
 Nl
-pU
-pU
+eZ
+ES
 pU
 pU
 "}
@@ -2298,10 +2809,10 @@ RO
 Kk
 Kk
 Kk
-aM
-VS
-pU
-pU
+Kk
+Kk
+zr
+ES
 pU
 pU
 "}
@@ -2342,11 +2853,11 @@ JY
 RX
 Zo
 ai
+cJ
+pL
 Kk
 Yx
 ES
-pU
-pU
 pU
 pU
 "}
@@ -2386,12 +2897,12 @@ Kk
 Kg
 yE
 Xr
-cJ
+Xr
+Xr
+FJ
 Kk
 Yx
 ES
-pU
-pU
 pU
 pU
 "}
@@ -2418,7 +2929,7 @@ pU
 pU
 VS
 ES
-Yx
+gm
 GO
 gB
 cq
@@ -2430,13 +2941,13 @@ BN
 Kk
 Kv
 Sc
+XB
+Qx
 Xr
 Wu
 Kk
 Yx
 ES
-pU
-pU
 pU
 pU
 "}
@@ -2463,7 +2974,7 @@ pU
 pU
 VS
 ES
-Yx
+VX
 Kk
 gC
 Kk
@@ -2479,9 +2990,9 @@ Kk
 Kk
 Kk
 Kk
+Kk
 Yx
-pU
-pU
+ES
 pU
 pU
 "}
@@ -2510,7 +3021,7 @@ VS
 ES
 Yx
 Kk
-CD
+iH
 kS
 nY
 qT
@@ -2525,8 +3036,8 @@ hD
 iv
 Kk
 aM
-pU
-pU
+Yx
+ES
 pU
 pU
 "}
@@ -2556,7 +3067,7 @@ ES
 Yx
 Kk
 Qp
-kS
+df
 oj
 qY
 wB
@@ -2565,13 +3076,13 @@ Cd
 FQ
 LL
 FQ
-Kk
+vG
 ev
 sK
 Kk
 Yx
-pU
-pU
+ES
+ES
 pU
 pU
 "}
@@ -2610,13 +3121,13 @@ Cf
 FZ
 Mb
 pn
-vG
+Kk
 mO
-HH
+CD
 Kk
 Yx
-pU
-pU
+ES
+VS
 pU
 pU
 "}
@@ -2656,12 +3167,12 @@ FF
 Mx
 Ti
 Kk
+Kk
 px
 Kk
-Kk
 Yx
-pU
-pU
+ES
+VS
 pU
 pU
 "}
@@ -2691,7 +3202,7 @@ ES
 Yx
 Kk
 Kk
-lj
+UN
 Kk
 Kk
 xq
@@ -2700,12 +3211,12 @@ Kk
 lj
 lj
 lj
+Kk
 Kk
 ZP
 Kk
-Kk
-Yx
-pU
+aM
+ES
 pU
 pU
 pU
@@ -2745,12 +3256,12 @@ Kk
 Yx
 Yx
 Yx
+aM
 Kk
 Kk
 Kk
 aM
 VS
-pU
 pU
 pU
 pU
@@ -2790,10 +3301,10 @@ sF
 Yx
 ES
 ES
+ES
+ES
+kD
 AH
-ES
-ES
-ES
 ES
 pU
 pU
@@ -2837,7 +3348,7 @@ TV
 TV
 TV
 TV
-TV
+Li
 TV
 TV
 QK
@@ -3141,14 +3652,14 @@ ES
 ES
 ES
 ES
-ES
+kp
 or
 ZI
 Zy
 YT
 Db
 Gz
-ES
+ru
 TM
 ES
 kb
@@ -3193,7 +3704,7 @@ Zy
 Zy
 Db
 Hg
-ES
+Vb
 ES
 ES
 ES
@@ -3232,7 +3743,7 @@ bq
 fJ
 fJ
 fJ
-fJ
+HW
 tc
 Zy
 Zy
@@ -3278,10 +3789,10 @@ Zy
 hw
 Zy
 Zy
-Si
+NA
 YT
 Zy
-Si
+Lv
 Zy
 Zy
 TO
@@ -3326,7 +3837,7 @@ oZ
 cd
 Zy
 Zy
-Si
+NA
 Zy
 Zy
 Uk
@@ -3458,13 +3969,13 @@ Zy
 hs
 Zy
 Zy
-Si
+jU
 Zy
 Zy
 DR
 YT
 Zy
-Si
+NA
 aO
 Zy
 Db

@@ -145,11 +145,15 @@ var/global/list/organ_damage_overlays = list(
 				var/obj/location_as_object = loc
 				location_as_object.handle_internal_lifeform(src, 0)
 				last_processed = "Interacted with our container"
-		if(check_mutations)
-//			testing("Updating [src.real_name]'s mutations: "+english_list(mutations))
-			domutcheck(src,null,MUTCHK_FORCED)
-			update_mutations()
-			check_mutations = 0
+		switch(check_mutations)
+			if (M_CHECK_ALL)
+				domutcheck(src,null,MUTCHK_FORCED)
+				update_mutations()
+				check_mutations = 0
+			if (M_CHECK_JOB)
+				var/datum/job/J = job_master.GetJob(job)
+				J.post_init(src)
+				check_mutations = 0
 		//Updates the number of stored chemicals for powers
 		//handle_changeling()
 		//Mutations and radiation

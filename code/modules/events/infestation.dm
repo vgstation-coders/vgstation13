@@ -69,7 +69,10 @@
 			spawn_types = list(/mob/living/simple_animal/hostile/giant_spider/spiderling)
 			vermstring = "spiderlings"
 		if(VERM_SLIMES)
-			spawn_types = typesof(/mob/living/carbon/slime) - /mob/living/carbon/slime - typesof(/mob/living/carbon/slime/adult)
+			spawn_types = typesof(/mob/living/carbon/slime)
+			for (var/this_spawn_type in spawn_types.Copy())
+				if (findtext("[this_spawn_type]", "/adult")) //Only baby slimes.
+					spawn_types -= this_spawn_type
 			vermstring = "slimes"
 		if(VERM_BATS)
 			spawn_types = /mob/living/simple_animal/hostile/scarybat

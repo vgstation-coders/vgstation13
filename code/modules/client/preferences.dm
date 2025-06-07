@@ -135,7 +135,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/space_parallax = 1
 	var/space_dust = 1
 	var/parallax_speed = 2
-	var/special_popup = SPECIAL_POPUP_DISABLED
+	var/special_popup = SPECIAL_POPUP_USE_BOTH
 	var/tooltips = 1
 	var/stumble = 0						//whether the player pauses after their first step
 	var/hear_voicesound = 0				//Whether the player hears noises when somebody speaks.
@@ -165,7 +165,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/ambience_volume = 25
 	var/credits_volume = 75
 	var/window_flashing = 1
-	var/antag_objectives = 0 //If set to 1, solo antag roles will get the standard objectives. If set to 0, will give them a freeform objective instead.
+	var/antag_objectives = 1 //If set to 1, solo antag roles will get the standard objectives. If set to 0, will give them a freeform objective instead.
 	var/typing_indicator = 1
 
 		//Mob preview
@@ -221,7 +221,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/list/roles=list() // "role" => ROLEPREF_*
 
 	//attack animation type
-	var/attack_animation = NO_ANIMATION
+	var/attack_animation = ITEM_ANIMATION
 
 	var/usenanoui = 1 //Whether or not this client will use nanoUI, this doesn't do anything other than objects being able to check this.
 

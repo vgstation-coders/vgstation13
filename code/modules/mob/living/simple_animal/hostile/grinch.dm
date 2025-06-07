@@ -34,6 +34,12 @@
 	. = ..()
 	obj_overlays[BACK_LAYER]		= new /obj/abstract/Overlays/back_layer
 
+/mob/living/simple_animal/hostile/gremlin/grinch/Login()
+	..()
+	if (client)
+		for (var/obj/item/I in contents)
+			client.screen |= I//fixes items disappearing from your inventory if you disconnect/reconnect
+
 /mob/living/simple_animal/hostile/gremlin/grinch/u_equip(obj/item/W, dropped = 1)
 	var/success = 0
 
@@ -79,6 +85,20 @@
 	if(client)
 		client.screen |= W
 
+/mob/living/simple_animal/hostile/gremlin/grinch/generate_markov_chain() //replaces some words by HATE or CHRISTMAS, inspired by buttbottify()
+	var/list/split_phrase = splittext(..()," ")
+	var/list/prepared_words = split_phrase.Copy()
+	var/i = rand(round(split_phrase.len / 10),round(split_phrase.len / 2))
+	for(,i > 0,i--)
+		if (!prepared_words.len)
+			break
+		var/word = pick(prepared_words)
+		prepared_words -= word
+		var/index = split_phrase.Find(word)
+
+		split_phrase[index] = pick("HATE", "CHRISTMAS")
+	return jointext(split_phrase," ")
+
 // Return the item currently in the slot ID
 /mob/living/simple_animal/hostile/gremlin/grinch/get_item_by_slot(slot_id)
 	switch(slot_id)
@@ -92,7 +112,7 @@
 	for(var/i = 1 to held_items.len) //Hands
 		var/obj/item/I = held_items[i]
 		dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];hands=[i]'>[makeStrippingButton(I)]</A><BR>"
-	dat += "<BR><B>Backpack:</B> <A href='?src=\ref[src];item=[back]'>[makeStrippingButton(back)]</A>"
+	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=[slot_back]'>[makeStrippingButton(back)]</A>"
 	dat += {"
 	<BR>
 	<BR><A href='?src=\ref[user];mach_close=mob\ref[src]'>Close</A>
@@ -184,17 +204,17 @@
 	..()
 	if (healths)
 		switch(health)
-			if(100 to INFINITY)
+			if(125 to INFINITY)
 				healths.icon_state = "health0"
-			if(80 to 100)
+			if(100 to 125)
 				healths.icon_state = "health1"
-			if(60 to 80)
+			if(75 to 100)
 				healths.icon_state = "health2"
-			if(40 to 60)
+			if(50 to 75)
 				healths.icon_state = "health3"
-			if(20 to 40)
+			if(25 to 50)
 				healths.icon_state = "health4"
-			if(0 to 20)
+			if(0 to 25)
 				healths.icon_state = "health5"
 			else
 				healths.icon_state = "health6"
@@ -202,7 +222,7 @@
 
 /mob/living/simple_animal/hostile/gremlin/grinch/canEnterVentWith()
 	var/list/allowed = ..()
-	allowed += /obj/item/weapon/storage/backpack/holding/grinch
+	allowed += /obj/item/weapon/storage/backpack/santabag/grinch
 	return allowed
 
 /mob/living/simple_animal/hostile/gremlin/grinch/reagent_act(id, method, volume)
@@ -218,23 +238,33 @@
 /mob/living/simple_animal/hostile/gremlin/grinch/put_in_hand_check(obj/item/W, index)
 	return 1
 
+/mob/living/simple_animal/hostile/gremlin/grinch/attempt_suicide(forced = 0, suicide_set = 1)
+	var/obj/item/held_item = get_active_hand()
+	if(!held_item)
+		held_item = get_inactive_hand()
+	if (istype(held_item, /obj/item/weapon/storage/backpack/santabag/grinch))
+		visible_message("<span class = 'danger'><b>\The [src] puts their bag on their head and stretches the bag around themselves. With a sudden snapping sound, the bag shrinks to its original size, leaving no trace of \the [src].</b></span>")
+		drop_item(held_item)
+		qdel(src)
+	else
+		..()
+
 // -- Grinch items.
 
-// Modified BoH
-/obj/item/weapon/storage/backpack/holding/grinch
+// Modified Santa Bag
+/obj/item/weapon/storage/backpack/santabag/grinch
 	name = "Grinch's bag"
 	desc = "He's coming to steal your presents."
-	item_state = "grinchbag"
-	icon_state = "grinchbag"
-	origin_tech = null
+	item_state = "grinchbag0"
+	icon_state = "grinchbag0"
 
-/obj/item/weapon/storage/backpack/holding/grinch/mob_can_equip(var/mob/M, slot, disable_warning = 0, automatic = 0)
+/obj/item/weapon/storage/backpack/santabag/grinch/mob_can_equip(var/mob/M, slot, disable_warning = 0, automatic = 0)
 	if (!..())
 		return FALSE
 	return isgrinch(M)
 
-/obj/item/weapon/storage/backpack/holding/grinch/attackby(obj/item/weapon/W, mob/user)
-	var/list/recursive_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)
+/obj/item/weapon/storage/backpack/santabag/grinch/attackby(obj/item/weapon/W, mob/user)
+	var/list/recursive_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/santabag)
 	if(recursive_list.len)
 		return
 	return ..()

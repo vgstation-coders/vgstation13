@@ -1,0 +1,193 @@
+<input id="bitmap" type="hidden" value=""/>
+
+<div id = "secret class" class="hidden">
+
+			<div>
+				<label class="itemLabel">Title: </label><br/>
+				<input
+					id="title"
+					type="text"
+					maxlength="52"
+					onkeyup="sanitizeLength('title', 'titleLengthMeter');"
+				/>
+				<div id="titleLengthMeter">(0/52)</div>
+			</div><br>
+
+			<div>
+				<label class="itemLabel">Author: </label><br/>
+				<input
+					id="author"
+					type="text"
+					maxlength="52"
+					onkeyup="sanitizeLength('author', 'authorLengthMeter');"
+				/>
+				<div id="authorLengthMeter">(0/52)</div>
+			</div><br>
+
+			<div>
+				<label class="itemLabel">Description: </label><br/>
+				<textarea
+					id="description"
+					rows="5"
+					maxlength="1024"
+					onkeyup="sanitizeLength('description', 'descriptionLengthMeter');"
+				></textarea>
+				<div id="descriptionLengthMeter">(0/1024)</div>
+			</div><br>
+
+</div>
+
+<!-- Main Content -->
+<div class="mainPanel">
+	<!-- Control column -->
+	<div id="controlColumn" class="controlColumn">
+		<!-- Navigavtion -->
+		<div class="navigationBar">
+			<a
+				id="infoPanelButton"
+				class="button linkOn"
+				onclick="panelSelect('infoPanel');"
+			>Info</a><a
+				id="exportPanelButton"
+				class="button"
+				onclick="panelSelect('exportPanel');"
+			>Import</a><a
+				id="templatePanelButton"
+				class="button"
+				onclick="panelSelect('templatePanel');"
+			>Template</a>
+		</div>
+		<hr class="line">
+
+		<!-- Info panel -->
+		<div id="infoPanel" class="">
+			<div class="item">
+				<label class="itemLabelNarrow">Size: </label>
+				<span id="canvas_width">??</span>x<span id="canvas_height">??</span>
+			</div><br>
+			<a class="button" onclick="submitData();">Save changes</a>
+		</div>
+
+		<!-- Template import/export panel -->
+		<div id="exportPanel" class="hidden">
+			<div class="line"><a id="importHelpButton" class="button" onclick="toggleHelp('importHelpButton', 'importHelp');">Help</a></div><br/>
+			<div id="importHelp" class="hidden block">
+				<p>Templates define a number of same-color regions, and assigns each pixel on your painting to a region, allowing you to use the "<i>Template</i>" tab to paint faster.</p>
+				<p>Templates are formatted as <i>JSON</i> objects, using the following pattern:</p>
+				<code>{"w":2,"h":2,"rgn":[<br>
+				&nbsp;{"clr":"#ff0000","txt":"A"},<br>
+				&nbsp;{"clr":"#00ff00","txt":"B"},<br>
+				&nbsp;{"clr":"#0000ff","txt":""}<br>
+				], "bmp": [1,0,1,2]}</code>
+				<p>The first list (<code>"rgn"</code>) is a list of regions, each defining an hexadecimal RGB color hint (<code>"clr"</code>), and some text (<code>"txt"</code>).</p>
+				<p>The second list (<code>"bmp"</code>) assigns a region to each pixel, identified by their position on the <code>"rgn"</code> list: Pixels assigned to the first region will be marked with a "0", pixels assigned to the second with a "1", pixels assigned to the third with a "2", and so on.</p>
+				<p>The optional parameters <code>"w"</code> and <code>"h"</code> indicate the width and height of the template. Providing a width allows templates to retain their shape if used on a canvas size they weren't meant for, otherwise using a 14x14 template will look distorted on a 24x24 canvas. Specifying height does nothing, but can be useful to other players</p>
+				<p>The optional parameters <code>"ox"</code> and <code>"oy"</code> indicate the default offset of the template along the X and Y axes respectively, and are rarely needed.</p>
+				<p>You may also export your current painting as a template, but be aware it may result in dozens of regions, and they will not be given any description</p>
+			</div><br/>
+
+			<h3>Import</h3>
+			<div>
+				<textarea id="import-text" rows="5"></textarea>
+				<a class="button" onclick="loadTemplate(document.getElementById('import-text').value)">Import template</a><br/>
+			</div>
+			<!-- Error messages -->
+			<div class="item" id="template_import_errors" style="display:none"></div><br/>
+
+			<h3>Export</h3>
+			<div>
+				<textarea id="export-text" rows="5"></textarea>
+				<a class="button" onclick="exportTemplate()">Export painting as template</a>
+			</div><br/>
+		</div>
+
+		<!-- Template panel -->
+		<div id="templatePanel" class="hidden">
+			<div class="line"><a id="templateHelpButton" class="button" onclick="toggleHelp('templateHelpButton', 'templateHelp');">Help</a></div><br/>
+			<div id="templateHelp" class="block hidden">
+				<p>Use the "<i>Import</i>" tab to import a painting template, a list of regions meant to have the same color that will be displayed on this tab.</p>
+				<p>Use the "<i>X</i>" and "<i>Y</i>" controls to reposition the template template along either axis. An offset of (0, 0) will position the top left corner of the template at the top left corner of the canvas.</p>
+				<p>Use "<i>Paint Over</i>" to paint a given region with your currently selected color and opacity. Each region usually comes with a color hint you're meant to match (color square to the left of "<i>Paint Over</i>"), and hopefully some text explaining what each region is meant to be (info button).</p>
+				<p>You may move any region to "<i>Done</i>" at any time, so as to get it out of the way if you're done with it, or back to "<i>In Progress</i>" if you need to touch it up again.</p>
+			</div>
+
+			<h3>Info</h3>
+			<!-- Template Size -->
+			<div class="item" id="template_size" style="display: none">
+				<label class="itemLabelNarrow">Size: </label>
+				<span id="template_width">??</span>x<span id="template_height">??</span>
+			</div>
+			<!-- X Offset -->
+			<div class="item toolPanel">
+				<label class="itemLabelNarrow">X: </label>
+				<a id="template_offset_X_decrease" class="button" onclick="changeTemplateOffsetX(-1);"><div class="uiIcon16 icon-minus"></div></a>
+				<span class="statusValue">
+					&nbsp;<input type="text" id="template_offset_X" value="0" onchange="setTemplateOffsetX();"/>&nbsp;
+				</span>
+				<a id="template_offset_X_increase" class="button" onclick="changeTemplateOffsetX(1);"><div class="uiIcon16 icon-plus"></div></a>
+			</div>
+			<!-- Y Offset -->
+			<div class="item toolPanel">
+				<label class="itemLabelNarrow">Y: </label>
+				<a id="template_offset_Y_decrease" class="button" onclick="changeTemplateOffsetY(-1);"><div class="uiIcon16 icon-minus"></div></a>
+				<span class="statusValue">
+					&nbsp;<input type="text" id="template_offset_Y" value="0" onchange="setTemplateOffsetY();"/>&nbsp;
+				</span>
+				<a id="template_offset_Y_increase" class="button" onclick="changeTemplateOffsetY(1);"><div class="uiIcon16 icon-plus"></div></a>
+			</div>
+			<!-- Warning messages -->
+			<div class="item" id="template_import_warnings" style="display:none"></div>
+
+			<!-- Color region lists -->
+			<h3>In Progress</h3>
+			<ul id="pendingRegions">
+			</ul>
+
+			<h3>Done</h3>
+			<ul id="doneRegions">
+			</ul>
+		</div>
+	</div>
+
+	<!-- Canvas panel -->
+	<div id="paintColumn" class="paintColumn">
+
+		<!-- Canvas -->
+		<div class="canvasPanel">
+			<p id="canvas-error" style="">
+			If you can read this then either your version of Internet Explorer is too old (IE8 or older) or something went wrong.</p>
+			<canvas
+				id="canvas"
+				width="280" height="280"
+				onmousedown="is_mouse_down = true;"
+				onmousemove="draw_on_bitmap();">
+			</canvas><!--520x520-->
+		</div>
+
+		<!-- Paint Tool Controls -->
+		<div class="paintPanel">
+			<div class="item">
+				<span class="toolPanel item">
+					<label class="itemLabelNarrow">Opacity: </label>
+					<a id="paint_strength_decrease" class="button" onclick="changeStrength(-0.05);"><div class="uiIcon16 icon-minus"></div></a>
+					<span class="statusValue" id="tool_data_inputs">&nbsp;
+						<!-- Example. Replace with actual value using "interface.updateContent(...)"; -->
+						<input type="hidden" id="min_paint_strength" value="0"/>
+						<input type="hidden" id="max_paint_strength" value="1"/>
+						<input type="text" id="paint_strength" value="0.5" onchange="setStrength();"/>
+					&nbsp;</span>
+					<a id="paint_strength_increase" class="button" onclick="changeStrength(0.05);"><div class="uiIcon16 icon-plus"></div></a>
+					<a id="grid_button" class="button" onclick="toggleGrid();">Toggle grid</a>
+				</span>
+			</div>
+			<!-- Selected Color -->
+			<div class="item colorPanel">
+				<label class="selectedColor">
+					<div style="background: #000000" id="current_color"></div>
+				</label>
+				<!-- Color palette -->
+				<div id="palette_buttons" class="palette"></div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,1262 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"al" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/structure/reagent_dispensers/cauldron/laundromat/meth,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"bR" = (
+/obj/machinery/chem_master,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"dl" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug{
+	pixel_y = 14
+	},
+/obj/item/weapon/reagent_containers/food/drinks/mug/joe{
+	pixel_y = -5;
+	pixel_x = -4
+	},
+/obj/item/weapon/reagent_containers/food/drinks/mug/joe{
+	pixel_y = -5;
+	pixel_x = 7
+	},
+/obj/item/weapon/reagent_containers/food/drinks/mug/joe{
+	pixel_y = -5;
+	pixel_x = -4
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"dD" = (
+/obj/machinery/power/apc{
+	dir = 1;
+	pixel_y = 24;
+	cell_type_path = /obj/item/weapon/cell/rad/large
+	},
+/turf/simulated/floor/engine,
+/area/vault/laundromat/drug_lab)
+"dP" = (
+/obj/structure/table/reinforced,
+/obj/item/trash/plate/clean,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"ej" = (
+/obj/machinery/door/airlock/glass,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"em" = (
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = 11;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = 0;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = -10;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"et" = (
+/obj/effect/landmark/corpse/assistant/robust,
+/obj/effect/decal/cleanable/blood,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"eJ" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer{
+	pixel_y = 9
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"eY" = (
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = 11;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = 0;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = -10;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"fh" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/storage/box/pillbottles,
+/obj/item/weapon/storage/box/pillbottles,
+/obj/item/weapon/storage/box/pillbottles,
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"fB" = (
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	pixel_x = -16;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	icon_state = "m_pad";
+	icon = 'icons/mob/martian.dmi';
+	pixel_y = 11;
+	name = "drainage hole";
+	desc = "A hole leading to a containment chamber for all spilled fluids."
+	},
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"fH" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced/plasma,
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"jx" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"ka" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/hammer{
+	name = "cracking hammer";
+	desc = "Used to break solid methamphetamine into tiny crystal chunks."
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"la" = (
+/obj/machinery/camera{
+	dir = 9;
+	name = "Chemistry Laboratory Camera";
+	network = list("Interrogation")
+	},
+/obj/structure/table/reinforced,
+/obj/item/weapon/storage/box/pillbottles,
+/obj/item/weapon/storage/box/pillbottles,
+/obj/item/weapon/storage/box/pillbottles,
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"mB" = (
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"nn" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/glass/beaker/large,
+/obj/item/weapon/storage/bag/chem{
+	pixel_x = 3;
+	pixel_y = 9
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"np" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"nJ" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/turf/simulated/floor/engine{
+	dir = 8;
+	icon_state = "ramptop"
+	},
+/area/vault/laundromat/drug_lab)
+"nN" = (
+/obj/structure/reagent_dispensers/cauldron/barrel{
+	icon_state = "metalbarrel_horizontal";
+	pixel_y = -3;
+	pixel_x = -7;
+	name = "methylamine barrel"
+	},
+/obj/structure/reagent_dispensers/cauldron/barrel{
+	icon_state = "metalbarrel_horizontal";
+	pixel_y = 6;
+	pixel_x = -7;
+	name = "methylamine barrel"
+	},
+/obj/structure/reagent_dispensers/cauldron/barrel{
+	icon_state = "metalbarrel_horizontal";
+	pixel_y = -3;
+	pixel_x = 8;
+	name = "methylamine barrel"
+	},
+/obj/structure/reagent_dispensers/cauldron/barrel{
+	icon_state = "metalbarrel_horizontal";
+	pixel_y = 6;
+	pixel_x = 8;
+	name = "methylamine barrel"
+	},
+/obj/structure/reagent_dispensers/cauldron/barrel{
+	icon_state = "metalbarrel_horizontal";
+	pixel_y = 15;
+	pixel_x = -7;
+	name = "methylamine barrel"
+	},
+/obj/structure/reagent_dispensers/cauldron/barrel{
+	icon_state = "metalbarrel_horizontal";
+	pixel_y = 15;
+	pixel_x = 8;
+	name = "methylamine barrel"
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"of" = (
+/obj/effect/nmpi{
+	dir = 9;
+	tag = "icon-maintguide (NORTHWEST)";
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = 11;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	pixel_x = 11;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"os" = (
+/obj/machinery/light/he{
+	dir = 4
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"ql" = (
+/obj/structure/ladder{
+	pixel_y = 0;
+	id = "laundromat_drug_lab";
+	icon_state = "ladder10"
+	},
+/turf/simulated/floor/engine,
+/area/vault/laundromat/drug_lab)
+"re" = (
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	pixel_x = 11;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	pixel_x = -10;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 8
+	},
+/obj/machinery/light/he,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"rT" = (
+/turf/simulated/floor/engine,
+/area/vault/laundromat/drug_lab)
+"sT" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"uX" = (
+/obj/effect/decal/cleanable/blood,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"vx" = (
+/obj/machinery/chem_dispenser/laundromat,
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"wn" = (
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/structure/table/reinforced,
+/obj/item/weapon/storage/box/mugs,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"wx" = (
+/obj/structure/table/reinforced,
+/obj/item/clothing/glasses/scanner/science{
+	pixel_y = 4
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Bf" = (
+/obj/machinery/camera{
+	dir = 1;
+	name = "Chemistry Laboratory Camera"
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"DG" = (
+/turf/simulated/wall/r_wall,
+/area/vault/laundromat/drug_lab)
+"DO" = (
+/obj/effect/decal/cleanable/ash,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Fa" = (
+/obj/structure/closet/l3closet/virology,
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Fn" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/engine,
+/area/vault/laundromat/drug_lab)
+"Gt" = (
+/obj/structure/filingcabinet/chestdrawer{
+	name = "Autopsy Reports"
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Hu" = (
+/obj/machinery/camera{
+	dir = 4;
+	name = "Chemistry Laboratory Camera"
+	},
+/obj/structure/closet/l3closet/virology,
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"JD" = (
+/obj/structure/table/reinforced,
+/obj/item/trash/plate/clean{
+	name = "drying plate";
+	desc = "Used to dry the recently manufactured methamphetamine into crystals, to then crack with the cracking hammer."
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Kc" = (
+/obj/machinery/smartfridge/chemistry,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Lg" = (
+/obj/structure/closet/l3closet/virology,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Lh" = (
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	pixel_x = 11;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	pixel_x = -10;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Mv" = (
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"MI" = (
+/turf/simulated/wall/invulnerable/r_wall,
+/area/vault/laundromat/drug_lab)
+"Nc" = (
+/obj/structure/filingcabinet/chestdrawer{
+	name = "Autopsy Reports"
+	},
+/obj/machinery/camera{
+	dir = 9;
+	name = "Chemistry Laboratory Camera";
+	network = list("Interrogation")
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Nr" = (
+/obj/machinery/chem_dispenser/brewer/mapping{
+	desc = "That's some good brew, why are we even making meth?"
+	},
+/obj/structure/table/reinforced,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"NA" = (
+/obj/structure/reagent_dispensers/cauldron/barrel{
+	icon_state = "metalbarrel_horizontal";
+	pixel_y = -3;
+	pixel_x = -7;
+	name = "methylamine barrel"
+	},
+/obj/structure/reagent_dispensers/cauldron/barrel{
+	icon_state = "metalbarrel_horizontal";
+	pixel_y = 6;
+	pixel_x = -7;
+	name = "methylamine barrel"
+	},
+/obj/structure/reagent_dispensers/cauldron/barrel{
+	icon_state = "metalbarrel_horizontal";
+	pixel_y = -3;
+	pixel_x = 8;
+	name = "methylamine barrel"
+	},
+/obj/structure/reagent_dispensers/cauldron/barrel{
+	icon_state = "metalbarrel_horizontal";
+	pixel_y = 6;
+	pixel_x = 8;
+	name = "methylamine barrel"
+	},
+/obj/structure/reagent_dispensers/cauldron/barrel{
+	icon_state = "metalbarrel_horizontal";
+	pixel_y = 15;
+	pixel_x = -7;
+	name = "methylamine barrel"
+	},
+/obj/structure/reagent_dispensers/cauldron/barrel{
+	icon_state = "metalbarrel_horizontal";
+	pixel_y = 15;
+	pixel_x = 8;
+	name = "methylamine barrel"
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Oe" = (
+/obj/item/weapon/storage/bag/money/treasure{
+	name = "profits bag";
+	desc = "All profits made legitimately, trust me."
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Ox" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/simulated/wall/invulnerable/r_wall,
+/area/vault/laundromat/drug_lab)
+"PA" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/turf/simulated/floor/engine{
+	dir = 8;
+	icon_state = "rampbottom"
+	},
+/area/vault/laundromat/drug_lab)
+"PJ" = (
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	pixel_x = 11;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	pixel_x = -10;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/machinery/light/he,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Qi" = (
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = 11;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = 0;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = -10;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Rl" = (
+/obj/structure/reagent_dispensers/cauldron/laundromat/spessdrugs,
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"RG" = (
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	pixel_x = 10;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 4;
+	tag = "icon-maintguide (EAST)";
+	pixel_x = -10;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 4
+	},
+/obj/machinery/camera{
+	name = "Chemistry Laboratory Camera";
+	dir = 1
+	},
+/obj/machinery/light/he,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Sj" = (
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = 11;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = 0;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = -10;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"SU" = (
+/obj/structure/table/reinforced,
+/obj/machinery/bunsen_burner/mapping{
+	pixel_y = 9
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Te" = (
+/obj/structure/table/reinforced,
+/obj/machinery/chem_dispenser/brewer/mapping{
+	desc = "That's some good brew, why are we even making meth?"
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"TE" = (
+/obj/structure/bed/chair/office/dark{
+	dir = 1
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"TY" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/glass/beaker/bluespace/large{
+	pixel_y = 7
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Xy" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/obj/machinery/reagentgrinder{
+	pixel_y = 2
+	},
+/obj/structure/table/reinforced,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+
+(1,1,1) = {"
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+"}
+(2,1,1) = {"
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+"}
+(3,1,1) = {"
+MI
+MI
+rT
+rT
+rT
+Hu
+Fa
+Lg
+Fa
+Lg
+DG
+NA
+nN
+NA
+NA
+NA
+nN
+NA
+Ox
+MI
+"}
+(4,1,1) = {"
+MI
+MI
+rT
+ql
+rT
+np
+mB
+uX
+uX
+mB
+ej
+mB
+DO
+DO
+mB
+DO
+mB
+DO
+MI
+MI
+"}
+(5,1,1) = {"
+MI
+MI
+Fn
+rT
+rT
+np
+uX
+et
+uX
+Bf
+DG
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+MI
+MI
+"}
+(6,1,1) = {"
+MI
+MI
+rT
+rT
+rT
+np
+mB
+Mv
+Oe
+mB
+DG
+jx
+sT
+sT
+sT
+sT
+sT
+fH
+MI
+MI
+"}
+(7,1,1) = {"
+MI
+MI
+rT
+rT
+rT
+Qi
+Sj
+em
+em
+Sj
+eY
+Sj
+Sj
+Sj
+Sj
+Sj
+Sj
+of
+MI
+MI
+"}
+(8,1,1) = {"
+MI
+MI
+rT
+rT
+rT
+np
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+RG
+MI
+MI
+"}
+(9,1,1) = {"
+MI
+MI
+Fn
+rT
+rT
+np
+mB
+Xy
+mB
+SU
+Xy
+mB
+SU
+Xy
+mB
+SU
+mB
+wn
+MI
+MI
+"}
+(10,1,1) = {"
+MI
+MI
+rT
+rT
+rT
+np
+mB
+al
+mB
+TY
+al
+mB
+TY
+al
+mB
+TY
+mB
+Nr
+MI
+MI
+"}
+(11,1,1) = {"
+MI
+MI
+rT
+rT
+rT
+np
+mB
+vx
+TE
+wx
+vx
+TE
+wx
+vx
+TE
+wx
+mB
+Te
+MI
+MI
+"}
+(12,1,1) = {"
+MI
+MI
+rT
+rT
+rT
+np
+mB
+Rl
+mB
+eJ
+Rl
+mB
+eJ
+Rl
+mB
+eJ
+mB
+dl
+MI
+MI
+"}
+(13,1,1) = {"
+MI
+MI
+Fn
+rT
+rT
+np
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+re
+MI
+MI
+"}
+(14,1,1) = {"
+MI
+MI
+rT
+rT
+rT
+np
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+mB
+Lh
+MI
+MI
+"}
+(15,1,1) = {"
+MI
+MI
+rT
+rT
+rT
+np
+mB
+bR
+mB
+mB
+bR
+mB
+mB
+bR
+mB
+mB
+bR
+Lh
+MI
+MI
+"}
+(16,1,1) = {"
+MI
+MI
+rT
+rT
+rT
+np
+mB
+dP
+mB
+mB
+JD
+mB
+mB
+JD
+mB
+mB
+JD
+Lh
+MI
+MI
+"}
+(17,1,1) = {"
+MI
+MI
+Fn
+rT
+rT
+PA
+np
+ka
+mB
+mB
+ka
+mB
+mB
+ka
+mB
+mB
+ka
+PJ
+MI
+MI
+"}
+(18,1,1) = {"
+MI
+MI
+dD
+rT
+rT
+nJ
+np
+nn
+mB
+mB
+nn
+mB
+mB
+nn
+mB
+mB
+nn
+Lh
+MI
+MI
+"}
+(19,1,1) = {"
+MI
+MI
+rT
+rT
+rT
+rT
+os
+Nc
+fh
+Kc
+Gt
+fh
+Kc
+Gt
+la
+Kc
+Gt
+fB
+MI
+MI
+"}
+(20,1,1) = {"
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+"}
+(21,1,1) = {"
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+"}

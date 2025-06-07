@@ -158,8 +158,7 @@
 "ar" = (
 /obj/structure/cable{
 	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 0
+	icon_state = "0-2"
 	},
 /obj/machinery/power/solar/control/vault_listening,
 /obj/machinery/light/small{
@@ -739,7 +738,6 @@
 /area/vault/listening)
 "bH" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning_corner";
 	tag = "icon-warning_corner"
 	},
@@ -750,7 +748,6 @@
 /area/vault/listening)
 "bI" = (
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},

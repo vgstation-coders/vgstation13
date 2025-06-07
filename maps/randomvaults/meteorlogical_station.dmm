@@ -94,20 +94,14 @@
 	pixel_x = -8
 	},
 /obj/item/device/assembly/signaler{
-	pixel_x = -4;
-	pixel_y = 0
+	pixel_x = -4
 	},
 /obj/item/device/assembly/prox_sensor{
-	pixel_x = 0;
 	pixel_y = 6
 	},
+/obj/item/device/assembly/signaler,
 /obj/item/device/assembly/signaler{
-	pixel_x = 0;
-	pixel_y = 0
-	},
-/obj/item/device/assembly/signaler{
-	pixel_x = 4;
-	pixel_y = 0
+	pixel_x = 4
 	},
 /obj/item/stack/cable_coil,
 /turf/simulated/floor/shuttle/brig,
@@ -145,7 +139,7 @@
 /area/vault/meteorlogical)
 "ax" = (
 /obj/machinery/computer/crew{
-	holomap_filter = HOLOMAP_FILTER_NUKEOPS;
+	holomap_filter = 4;
 	name = "Syndie crew monitoring computer"
 	},
 /turf/simulated/floor/shuttle/brig,

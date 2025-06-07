@@ -4,7 +4,7 @@
 	name = "meat spike"
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "spike"
-	desc = "A spike for collecting meat from animals."
+	desc = "A spike for collecting meat and byproducts from animals. Meat can be harvested with an empty hand, a sharp object to skin the animal, and wirecutters to extract teeth and claws."
 	density = 1
 	anchored = 1
 
@@ -16,6 +16,15 @@
 		/mob/living/carbon/alien = "spikebloodygreen",
 		/mob/living/simple_animal/hostile/alien = "spikebloodygreen"
 		) //Associated with icon states
+
+/obj/structure/kitchenspike/examine(mob/user as mob)
+	..()
+	if(occupant && occupant.butchering_drops)
+		for (var/datum/butchering_product/P in occupant.butchering_drops)
+			if(P.amount)
+				to_chat(user,"<span class='info'>[P.result.name] can be extracted from \the [occupant.name].</span>")
+			else
+				to_chat(user,"<span class='warning'>\The [P.result.name] has already been extracted.</span>")
 
 /obj/structure/kitchenspike/attack_paw(mob/user as mob)
 	return src.attack_hand(usr)
@@ -30,9 +39,22 @@
 		M.amount = 2
 		qdel(src)
 		return
+	if(occupant && W.sharpness_flags && !W.is_wirecutter(user))
+		for(var/datum/butchering_product/skin/S in occupant.butchering_drops)
+			harvest_product(S,user,W)
+	if(occupant && W.is_wirecutter(user))
+		for(var/datum/butchering_product/teeth/T in occupant.butchering_drops)
+			harvest_product(T,user,W)
+		for(var/datum/butchering_product/xeno_claw/X in occupant.butchering_drops)
+			harvest_product(X,user,W)
 
 	if(istype(W,/obj/item/weapon/grab))
 		return handleGrab(W,user)
+
+/obj/structure/kitchenspike/proc/harvest_product(datum/butchering_product/P, mob/user as mob, obj/item/weapon/W as obj)
+	if(P.amount)
+		user.visible_message("<span class = 'notice'>[user] harvests \the [occupant.name]'s [P.result.name] with \the [W.name].</span>")
+		P.spawn_result(loc, P)
 
 /obj/structure/kitchenspike/proc/handleGrab(obj/item/weapon/grab/G as obj, mob/user as mob)
 	if(!istype(G))

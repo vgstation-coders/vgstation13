@@ -793,3 +793,16 @@ var/quote = ascii2text(34)
 		else if(copytext(input, inputlength, inputlength + 1) == "s") //If the second-to-last letter isn't "e", and the last letter is "s", remove the "s".
 			input = copytext(input, 1, inputlength)	//"gets" becomes "get"
 	return input + fromspace
+
+/proc/get_indefinite_article(input, gender = NEUTER)
+	if (!input)
+		return
+	if (gender == PLURAL)
+		return "some"
+	else
+		var/first = copytext(input, 1, 2)
+		var/upperfirst = uppertext(first)
+		if (first == upperfirst || findtext("AEIOU", upperfirst))
+			return "an"
+		else
+			return "a"

@@ -23,7 +23,7 @@ Thus, the two variables affect pump operation are set in New():
 
 	var/transfer_rate = MAX_TRANSFER_RATE
 
-	var/frequency = 0
+	frequency = 0
 	var/pump_stalled = 0
 
 	var/datum/radio_frequency/radio_connection
@@ -77,7 +77,7 @@ Thus, the two variables affect pump operation are set in New():
 
 	return 1
 
-/obj/machinery/atmospherics/binary/volume_pump/proc/set_frequency(new_frequency)
+/obj/machinery/atmospherics/binary/volume_pump/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
@@ -110,8 +110,6 @@ Thus, the two variables affect pump operation are set in New():
 
 	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_pump")
 	onclose(user, "atmo_pump")
-
-
 
 /obj/machinery/atmospherics/binary/volume_pump/initialize()
 	..()

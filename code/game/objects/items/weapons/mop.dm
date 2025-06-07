@@ -35,6 +35,12 @@
 	for(var/obj/effect/O in A)
 		if(iscleanaway(O))
 			qdel(O)
+
+	if (A.advanced_graffiti)
+		A.overlays -= A.advanced_graffiti_overlay
+		A.advanced_graffiti_overlay = null
+		qdel(A.advanced_graffiti)
+
 	reagents.reaction(A,1,10) //Mops magically make chems ten times more efficient than usual, aka equivalent of 50 units of whatever you're using
 	A.clean_blood()
 	playsound(src, get_sfx("mop"), 25, 1)

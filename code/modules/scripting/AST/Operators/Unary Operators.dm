@@ -5,7 +5,7 @@
 	Class: unary
 	Represents a unary operator in the AST. Unary operators take a single operand (referred to as x below) and return a value.
 */
-/datum/node/expression/operator/unary
+/datum/node/expression/operation/unary
 	precedence = OOP_UNARY
 
 /*
@@ -16,7 +16,7 @@
 	!true = false and !false = true
 */
 //
-/datum/node/expression/operator/unary/LogicalNot
+/datum/node/expression/operation/unary/LogicalNot
 	name = "logical not"
 
 /*
@@ -27,7 +27,7 @@
 	~10 (decimal 2) = 01 (decimal 1).
 */
 //
-/datum/node/expression/operator/unary/BitwiseNot
+/datum/node/expression/operation/unary/BitwiseNot
 	name = "bitwise not"
 
 /*
@@ -35,7 +35,7 @@
 	Returns -x.
 */
 //
-/datum/node/expression/operator/unary/Minus
+/datum/node/expression/operation/unary/Minus
 	name = "minus"
 
 /*
@@ -43,9 +43,9 @@
 	A special unary operator representing a value in parentheses.
 */
 //
-/datum/node/expression/operator/unary/group
+/datum/node/expression/operation/unary/group
 	precedence = OOP_GROUP
 
-/datum/node/expression/operator/unary/New(var/datum/node/expression/exp)
+/datum/node/expression/operation/unary/New(var/datum/node/expression/exp)
 	src.exp = exp
 	return ..()

@@ -115,15 +115,15 @@
 
 	for(var/turf/T in circlerange(src,2))
 		if(T.y > y)
-			T.register_event(/event/entered, src, src::give_transparency())
-			T.register_event(/event/exited, src, src::remove_transparency())
+			T.register_event(/event/entered, src, nameof(src::give_transparency()))
+			T.register_event(/event/exited, src, nameof(src::remove_transparency()))
 
 
 /obj/structure/flora/tree/Destroy()
 	for(var/turf/T in circlerange(src,2))
 		if(T.y > y)
-			T.unregister_event(/event/entered, src, src::give_transparency())
-			T.unregister_event(/event/exited, src, src::remove_transparency())
+			T.unregister_event(/event/entered, src, nameof(src::give_transparency()))
+			T.unregister_event(/event/exited, src, nameof(src::remove_transparency()))
 	..()
 
 /obj/structure/flora/tree/proc/update_transparency()
@@ -319,8 +319,8 @@
 	desc = "Oh, no. Not again."
 	icon = 'icons/obj/plants.dmi'
 	icon_state = "plant-26"
-	layer = FLY_LAYER
 	plane = ABOVE_HUMAN_PLANE
+	layer = POTTED_PLANT_LAYER
 
 /obj/structure/flora/pottedplant/Destroy()
 	for(var/I in contents)

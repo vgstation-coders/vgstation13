@@ -509,6 +509,10 @@
 	seed_type = "clover"
 	vending_cat = "weeds"
 
+/obj/item/seeds/flaxseed
+	name = "packet of flax seeds"
+	seed_type = "flax"
+
 // Chili plants/variants.
 /datum/seed/chili
 
@@ -520,7 +524,6 @@
 	chems = list(CAPSAICIN = list(3,5), NUTRIMENT = list(1,25))
 	mutants = list("icechili", "ghostpepper")
 	harvest_repeat = 1
-	molecule_type = list(CELLULOSE)
 
 	lifespan = 20
 	maturation = 5
@@ -563,7 +566,6 @@
 	mutants = list("glowberries","poisonberries")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 20
 	maturation = 5
@@ -623,7 +625,6 @@
 	mutants = list("deathnettle")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,50), FORMIC_ACID = list(0,1))
-	molecule_type = list(CELLULOSE)
 	lifespan = 30
 	maturation = 6
 	production = 6
@@ -653,7 +654,6 @@
 	mutants = list("bluetomato","bloodtomato")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 25
 	maturation = 8
@@ -720,7 +720,6 @@
 	mutants = list("realeggplant")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
-	molecule_type = list(CELLULOSE)
 
 	lifespan = 25
 	maturation = 6
@@ -752,7 +751,6 @@
 	mutants = list("poisonapple","goldapple")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 55
 	maturation = 6
@@ -791,7 +789,6 @@
 	mutants = list("ambrosiadeus")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1))
-	molecule_type = list(CELLULOSE)
 
 	lifespan = 60
 	maturation = 6
@@ -835,7 +832,6 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chanterelle)
 	mutants = list("reishi","amanita","plumphelmet")
 	chems = list(NUTRIMENT = list(1,25))
-	molecule_type = list(CHITIN)
 
 	lifespan = 35
 	maturation = 7
@@ -938,7 +934,6 @@
 	plant_dmi = 'icons/obj/hydroponics/towercap.dmi'
 	mutants = null
 	products = list(/obj/item/weapon/grown/log)
-	molecule_type = list(CELLULOSE)
 
 	lifespan = 80
 	maturation = 15
@@ -999,7 +994,6 @@
 	plant_dmi = 'icons/obj/hydroponics/harebell.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/harebell)
 	chems = list(NUTRIMENT = list(1,20))
-	molecule_type = list(CELLULOSE)
 
 	lifespan = 100
 	maturation = 7
@@ -1106,7 +1100,6 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grapes)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10), SUGAR = list(1,5))
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 50
 	maturation = 3
@@ -1137,7 +1130,6 @@
 	mutants = list("rocknut")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
-	molecule_type = list(PROTEIN)
 
 	lifespan = 55
 	maturation = 6
@@ -1154,7 +1146,6 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10),IRON = list(3,5))
-	molecule_type = list(PROTEIN)
 
 	lifespan = 70
 	maturation = 6
@@ -1171,7 +1162,6 @@
 	mutants = list("plasmacabbage")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
-	molecule_type = list(CELLULOSE)
 
 	lifespan = 50
 	maturation = 3
@@ -1191,7 +1181,8 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10),PLASMA = list(3,5))
-	molecule_type = list(CELLULOSE)
+	gas_absorb = 1
+	consume_gasses = list(GAS_PLASMA = 10)
 
 	lifespan = 30
 	maturation = 3
@@ -1210,7 +1201,6 @@
 	plant_dmi = 'icons/obj/hydroponics/shand.dmi'
 	products = list(/obj/item/stack/medical/bruise_pack/tajaran)
 	chems = list(OPIUM = list(0,10))
-	molecule_type = list(XENOPHYLL)
 
 	lifespan = 50
 	maturation = 3
@@ -1226,7 +1216,6 @@
 	plant_dmi = 'icons/obj/hydroponics/mtear.dmi'
 	products = list(/obj/item/stack/medical/ointment/tajaran)
 	chems = list(HONEY = list(1,10), TANNIC_ACID = list(3,5))
-	molecule_type = list(XENOPHYLL)
 
 	lifespan = 50
 	maturation = 3
@@ -1244,7 +1233,6 @@
 	harvest_repeat = 1
 	chems = list(BANANA = list(1,10), POTASSIUMCARBONATE = list(0.1,30))
 	mutants = list("bluespacebanana")
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 50
 	maturation = 6
@@ -1270,7 +1258,6 @@
 	plant_dmi = 'icons/obj/hydroponics/corn.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/corn)
 	chems = list(NUTRIMENT = list(1,10))
-	molecule_type = list(CELLULOSE)
 
 	lifespan = 25
 	maturation = 8
@@ -1290,7 +1277,6 @@
 	plant_dmi = 'icons/obj/hydroponics/potato.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/potato)
 	chems = list(NUTRIMENT = list(1,10))
-	molecule_type = list(STARCH)
 
 	lifespan = 30
 	maturation = 10
@@ -1309,7 +1295,6 @@
 	mutants = list("koibean")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,20))
-	molecule_type = list(PROTEIN)
 
 	lifespan = 25
 	maturation = 4
@@ -1325,7 +1310,6 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10),CARPOTOXIN = list(1,25))
-	molecule_type = list(PROTEIN)
 
 	lifespan = 25
 	maturation = 4
@@ -1340,7 +1324,6 @@
 	plant_dmi = 'icons/obj/hydroponics/wheat.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/wheat)
 	chems = list(NUTRIMENT = list(1,25))
-	molecule_type = list(STARCH)
 
 	lifespan = 25
 	maturation = 6
@@ -1357,7 +1340,6 @@
 	plant_dmi = 'icons/obj/hydroponics/rice.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk)
 	chems = list(NUTRIMENT = list(1,25))
-	molecule_type = list(STARCH)
 
 	lifespan = 25
 	maturation = 6
@@ -1376,7 +1358,6 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/carrot)
 	mutants = list("diamondcarrot")
 	chems = list(NUTRIMENT = list(1,20), ZEAXANTHIN = list(3,5))
-	molecule_type = list(CELLULOSE)
 
 	lifespan = 25
 	maturation = 10
@@ -1419,7 +1400,6 @@
 	plant_dmi = 'icons/obj/hydroponics/whitebeet.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet)
 	chems = list(NUTRIMENT = list(0,20), SUGAR = list(1,5))
-	molecule_type = list(STARCH)
 
 	lifespan = 60
 	maturation = 6
@@ -1436,7 +1416,6 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/sugarcane)
 	harvest_repeat = 1
 	chems = list(SUGAR = list(4,5))
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 60
 	maturation = 3
@@ -1454,7 +1433,6 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/watermelon)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,6))
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 50
 	maturation = 6
@@ -1473,7 +1451,6 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,6))
-	molecule_type = list(STARCH)
 
 	lifespan = 50
 	maturation = 6
@@ -1492,7 +1469,6 @@
 	harvest_repeat = 1
 	mutants = list("silicatecitrus")
 	chems = list(NUTRIMENT = list(1,20))
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 55
 	maturation = 6
@@ -1511,7 +1487,6 @@
 	harvest_repeat = 1
 	mutants = list("silicatecitrus")
 	chems = list(NUTRIMENT = list(1,20))
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 55
 	maturation = 6
@@ -1530,7 +1505,6 @@
 	harvest_repeat = 1
 	mutants = list("silicatecitrus")
 	chems = list(NUTRIMENT = list(1,20))
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 60
 	maturation = 6
@@ -1549,7 +1523,6 @@
 	harvest_repeat = 1
 	mutants = list("shardlime")
 	chems = list(SILICATE = list(3,5))
-	molecule_type = list(XENOPHYLL)
 
 	lifespan = 55
 	maturation = 6
@@ -1564,7 +1537,6 @@
 	products = list(/obj/item/weapon/shard)
 	mutants = list("purpleshardlime")
 	harvest_repeat = 1
-	molecule_type = list(XENOPHYLL)
 
 	lifespan = 70
 	maturation = 4
@@ -1582,7 +1554,6 @@
 	products = list(/obj/item/weapon/shard/plasma)
 	harvest_repeat = 1
 	mutants = null
-	molecule_type = list(XENOPHYLL)
 
 	lifespan = 70
 	maturation = 4
@@ -1599,7 +1570,6 @@
 	plant_dmi = 'icons/obj/hydroponics/grass.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grass)
 	harvest_repeat = 1
-	molecule_type = list(CELLULOSE)
 
 	lifespan = 60
 	maturation = 2
@@ -1617,7 +1587,6 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cocoapod)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10), COCO = list(4,5))
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 20
 	maturation = 5
@@ -1638,7 +1607,6 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cherries)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,15))
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 35
 	maturation = 5
@@ -1656,7 +1624,6 @@
 	plant_dmi = 'icons/obj/hydroponics/cinnamomum.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cinnamon)
 	chems = list(CINNAMON = list(4,3))
-	molecule_type = list(CELLULOSE)
 
 	lifespan = 80
 	maturation = 15
@@ -1675,7 +1642,6 @@
 	plant_dmi = 'icons/obj/hydroponics/kudzu.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod)
 	chems = list(NUTRIMENT = list(1,50), ALLICIN = list(2,10))
-	molecule_type = list(CELLULOSE)
 
 	lifespan = 20
 	maturation = 6
@@ -1697,7 +1663,6 @@
 	product_requires_player = 1
 	product_kill_inactive = FALSE
 	immutable = 1
-	molecule_type = list(CELLULOSE)
 
 	lifespan = 50
 	endurance = 35
@@ -1714,7 +1679,6 @@
 	plant_dmi = 'icons/obj/hydroponics/replicapod.dmi'
 	products = list(/mob/living/simple_animal/hostile/retaliate/clown)
 	product_requires_player = 1
-	molecule_type = list(XENOPHYLL)
 
 	lifespan = 100
 	endurance = 8
@@ -1734,7 +1698,6 @@
 	product_requires_player = TRUE
 	product_kill_inactive = FALSE
 	immutable = TRUE
-	molecule_type = list(XENOPHYLL)
 
 	lifespan = 50
 	endurance = 35
@@ -1752,7 +1715,6 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit)
 	chems = list(NOTHING = list(1,20))
 	immutable = 1
-	molecule_type = list(XENOPHYLL)
 
 	lifespan = 30
 	maturation = 5
@@ -1771,7 +1733,6 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/avocado)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,20))
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 55
 	maturation = 6
@@ -1791,7 +1752,6 @@
 	mutants = list("silverpear")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 55
 	maturation = 6
@@ -1839,7 +1799,6 @@
 	plant_dmi = 'icons/obj/hydroponics/woodapple.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/woodapple)
 	chems = list(SUGAR = list(1,10))
-	molecule_type = list(CELLULOSE)
 
 	growth_stages = 3
 	maturation = 4
@@ -1855,7 +1814,6 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/breadfruit)
 	harvest_repeat = 1
 	chems = list(FLOUR = list(2,10))
-	molecule_type = list(STARCH)
 
 	potency = 30
 	lifespan = 50
@@ -1874,7 +1832,6 @@
 	plant_dmi = 'icons/obj/hydroponics/garlic.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/garlic)
 	chems = list(HOLYWATER = list(1,25),NUTRIMENT = list(1,10), ALLICIN = list(5,10))
-	molecule_type = list(CELLULOSE)
 
 	potency = 15
 	lifespan = 200
@@ -1892,7 +1849,6 @@
 	plant_dmi = 'icons/obj/hydroponics/pitcher.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher)
 	chems = list(FORMIC_ACID = list(1,25))
-	molecule_type = list(CELLULOSE)
 
 	potency = 10
 	lifespan = 50
@@ -1914,7 +1870,6 @@
 	plant_dmi = 'icons/obj/hydroponics/aloe.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/aloe)
 	chems = list(KATHALAI = list(1,10)) //Not as good as poppy's opium for speedy heals, but general purpose.
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 30
 	maturation = 6
@@ -1932,7 +1887,6 @@
 	plant_dmi = 'icons/obj/hydroponics/vaporsac.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/vaporsac)
 	chems = list(VAPORSALT = list(1,2))
-	molecule_type = list(GLUCOSE)
 
 	lifespan = 50
 	maturation = 6
@@ -1941,7 +1895,7 @@
 	potency = 30
 	growth_stages = 3
 
-/datum/seed/clover/
+/datum/seed/clover
 	name = "clover"
 	seed_name = "clover"
 	display_name = "clover"
@@ -1949,7 +1903,6 @@
 	plant_icon_state = "clover"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/clover)
 	chems = list(NUTRIMENT = list(1,25))
-	molecule_type = list(CELLULOSE)
 	harvest_repeat = 1
 	lifespan = 60
 	maturation = 2
@@ -1959,3 +1912,17 @@
 	fluid_consumption = 0.5
 	nutrient_consumption = 0.15
 
+/datum/seed/flax
+	name = "flax"
+	seed_name = "flax"
+	display_name = "flax stalks"
+	plant_dmi = 'icons/obj/hydroponics/flax.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/flax)
+	chems = list(FLAXOIL = list(6,5))
+	lifespan = 25
+	maturation = 6
+	production = 1
+	yield = 4
+	potency = 5
+	ideal_light = 8
+	nutrient_consumption = 2

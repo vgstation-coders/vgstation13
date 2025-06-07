@@ -55,7 +55,7 @@ var/global/Holiday = null
 		if(5) // May
 			switch(DD)
 				if(1)
-					current_holidays += LABOUR_DAY
+					current_holidays += LABOR_DAY
 				if(4)
 					current_holidays += FIREFIGHTERS_DAY
 				if(9)

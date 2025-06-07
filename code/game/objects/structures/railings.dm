@@ -183,6 +183,28 @@
 		if(4, 8)
 			layer = RAILING_MID_LAYER
 
+/obj/structure/railing/verb/revrotate()
+	set name = "Rotate Railing Clockwise"
+	set category = "Object"
+	set src in oview(1)
+
+	if(anchored)
+		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
+		return
+
+	change_dir(turn(dir, 270))
+
+/obj/structure/railing/verb/rotate()
+	set name = "Rotate Railing Counter-Clockwise"
+	set category = "Object"
+	set src in oview(1)
+
+	if(anchored)
+		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
+		return
+
+	change_dir(turn(dir, 90))
+
 /obj/structure/railing/attackby(var/obj/item/C, var/mob/user)
 	if(..())
 		return 1

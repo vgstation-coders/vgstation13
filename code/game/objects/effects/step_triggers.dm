@@ -130,7 +130,7 @@
 	var/teleport_z_offset = 0
 
 /obj/effect/step_trigger/teleporter/random/Trigger(var/atom/movable/A)
-	if(!istype(A))
+	if(!istype(A) || isobserver(A))
 		return
 	if(istype(A,/obj/item/projectile/fire_breath/shuttle_exhaust))
 		qdel(A)

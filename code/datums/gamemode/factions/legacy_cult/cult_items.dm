@@ -68,6 +68,8 @@
 	allowed = list(/obj/item/weapon/tome_legacy,/obj/item/weapon/melee/legacy_cultblade)
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
 	siemens_coefficient = 0
+	hood = new /obj/item/clothing/head/legacy_culthood()
+	hood_suit_name = "robes"
 
 /obj/item/clothing/suit/legacy_cultrobes/cultify()
 	return

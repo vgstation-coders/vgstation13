@@ -18,7 +18,7 @@
 
 	hud_state = "wiz_push"
 
-/spell/targeted/push/before_cast(list/targets, user)
+/spell/targeted/push/before_cast(list/targets, user, bypass_range = 0)
 	var/list/valid_targets = list()
 	var/list/options = ..()
 	for(var/atom/movable/target in options)

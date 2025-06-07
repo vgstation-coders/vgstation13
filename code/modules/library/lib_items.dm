@@ -27,10 +27,15 @@
 								/obj/item/weapon/tome, \
 								/obj/item/weapon/tome_legacy, \
 								/obj/item/weapon/spellbook, \
-								/obj/item/weapon/storage/bible)
+								/obj/item/weapon/storage/bible, \
+								/obj/item/dictionary)
 
 /obj/structure/bookcase/cultify()
 	return
+
+/obj/structure/bookcase/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>It contains [english_list(contents)].</span>")
 
 /obj/structure/bookcase/initialize()
 	for(var/obj/item/I in loc)
@@ -48,7 +53,13 @@
 /obj/structure/bookcase/attackby(obj/item/O as obj, mob/user as mob)
 	if(busy) //So that you can't mess with it while deconstructing
 		return
-	if(is_type_in_list(O, valid_types))
+	if(istype(O,/obj/item/weapon/storage/bag/bookbag))
+		var/obj/item/weapon/storage/S = O
+		for(var/obj/item/I in S.contents)
+			if(is_type_in_list(I, valid_types))
+				S.remove_from_storage(I, src)
+		update_icon()
+	else if(is_type_in_list(O, valid_types))
 		user.drop_item(O, src)
 		update_icon()
 	else if(O.is_screwdriver(user) && user.a_intent == I_HELP) //They're probably trying to open the "maintenance panel" to deconstruct it. Let them know what's wrong.
@@ -195,7 +206,6 @@
 	attack_verb = list("bashes", "whacks", "educates")
 
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 3
 
 	var/dat			 // Actual page content
 	var/due_date = 0 // Game time in 1/10th seconds
@@ -208,6 +218,8 @@
 	var/obj/item/store	// What's in the book?
 	var/runestun = 0	//Does it have a stun talisman in it?
 	var/occult = 0 //Does this book contain forbidden and occult writings?
+
+	var/book_desc = ""
 
 	var/book_width = 600
 	var/book_height = 800
@@ -299,7 +311,7 @@
 		if(unique)
 			to_chat(user, "These pages don't seem to take the ink well. Looks like you can't modify it.")
 			return
-		var/choice = input("What would you like to change?") in list("Title", "Contents", "Author", "Cancel")
+		var/choice = input("What would you like to change?") in list("Title", "Contents", "Author", "Short Description", "Cancel")
 		switch(choice)
 			if("Title")
 				var/newtitle = reject_bad_text(stripped_input(usr, "Write a new title:"))
@@ -323,6 +335,13 @@
 					return
 				else
 					src.author = newauthor
+			if("Short Description")
+				var/newdesc = reject_bad_text(stripped_input(usr, "Write a new short description:"))
+				if(!newdesc)
+					to_chat(usr, "The description is invalid.")
+					return
+				else
+					src.book_desc = newdesc
 			else
 				return
 	else if(istype(W, /obj/item/weapon/barcodescanner))
@@ -432,3 +451,35 @@
 	else
 		to_chat(user, "<font color=red>No associated computer found. Only local scans will function properly.</font>")
 	to_chat(user, "\n")
+
+/obj/item/weapon/barcodescanner/Destroy()
+	book = null
+	..()
+
+/obj/structure/closet/secure_closet/library
+	name = "library cabinet"
+	desc = "Contains a variety of useful items for a library-dweller."
+	req_access = list(access_library)
+	icon_state = "cabinetdetective_locked"
+	icon_closed = "cabinetdetective"
+	icon_locked = "cabinetdetective_locked"
+	icon_opened = "cabinetdetective_open"
+	icon_broken = "cabinetdetective_broken"
+	icon_off = "cabinetdetective_broken"
+	is_wooden = TRUE
+	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
+	w_type = RECYK_WOOD
+	autoignition_temperature = AUTOIGNITION_WOOD
+
+
+/obj/structure/closet/secure_closet/library/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/suit/storage/lawyer/bluejacket,
+		/obj/item/clothing/under/suit_jacket/really_black,
+		/obj/item/clothing/under/suit_jacket/female,
+		/obj/item/clothing/shoes/brown,
+		/obj/item/clothing/accessory/tie/blue,
+		/obj/item/clothing/accessory/tie/red,
+		/obj/item/clothing/head/det_hat,
+		/obj/item/clothing/head/flatcap
+	)

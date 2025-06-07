@@ -89,7 +89,6 @@
 /obj/structure/sign/poster{
 	dir = 8;
 	icon_state = "poster6";
-	pixel_x = 0;
 	pixel_y = 30
 	},
 /turf/simulated/floor{

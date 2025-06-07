@@ -115,6 +115,12 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	endtime = world.time + delay * 10
 	timelimit = delay
 
+/datum/emergency_shuttle/proc/get_shuttle_timer()
+	var/shuttle_time_left = timeleft()
+	if(shuttle_time_left)
+		return "[add_zero(num2text((shuttle_time_left / 60) % 60),2)]:[add_zero(num2text(shuttle_time_left % 60), 2)]"
+	return ""
+
 // sets the shuttle direction
 // 1 = towards SS13, -1 = back to centcom
 /datum/emergency_shuttle/proc/setdirection(var/dirn)
@@ -143,6 +149,11 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 		if("transit")
 			if(!S.move_to_dock(S.transit_port, 0))
 				message_admins("Warning: [S] failed to move to transit.")
+		if("shuttle")
+			S.crashing_this_pod = 1
+			S.crash_into_shuttle()
+			playsound(shuttle.linked_port, 'sound/misc/weather_warning.ogg', 80, 0, 7, 0, 0)
+
 	spawn()
 		for(var/obj/machinery/door/D in S.linked_area)
 			if(destination == "transit" || destination == "shuttle")
@@ -258,10 +269,15 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				direction = 2 // heading to centcom
 				settimeleft(SHUTTLETRANSITTIME)
 
-				// Shuttle Radio
-				CallHook("EmergencyShuttleDeparture", list())
 				command_alert(/datum/command_alert/emergency_shuttle_left)
 				vote_preload()
+
+				/* Handle jukebox updates */
+				spawn()
+					for(var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)
+						SJ.playing=1
+						SJ.update_music()
+						SJ.update_icon()
 
 			if(shuttle && istype(shuttle,/datum/shuttle/escape))
 				var/datum/shuttle/escape/E = shuttle

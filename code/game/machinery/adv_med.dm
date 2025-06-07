@@ -176,6 +176,12 @@
 		set_light(light_range_on, light_power_on)
 	return
 
+/obj/machinery/bodyscanner/Exited(var/atom/movable/O) // Used for teleportation from within the scanner.
+	if (O == occupant)
+		occupant = null
+		update_icon()
+	..()
+
 /obj/machinery/bodyscanner/proc/go_out(var/exit = loc, var/mob/ejector)
 	if(!occupant)
 		return
@@ -184,7 +190,7 @@
 			continue
 		x.forceMove(loc)
 
-	if(!occupant.gcDestroyed)
+	if(occupant && !occupant.gcDestroyed)
 		occupant.forceMove(exit)
 		occupant.reset_view()
 		if(istype(ejector) && ejector != occupant)

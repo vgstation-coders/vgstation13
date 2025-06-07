@@ -161,7 +161,7 @@
 		user.visible_message("[user] is cutting the wires from [src].", "You start to cut the wires from [src].")
 
 		if(do_after(user, src, 40))
-			if(gcDestroyed)
+			if(gcDestroyed || !wired)
 				return
 			to_chat(user, "<span class='notice'>You cut \the [name] wires!</span>")
 			new /obj/item/stack/cable_coil(get_turf(user), 2)

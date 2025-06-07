@@ -1768,6 +1768,10 @@
 	})
 "bac" = (
 /obj/item/clothing/head/flatcap,
+/obj/item/painting_brush{
+	pixel_x = 8;
+	pixel_y = -4
+	},
 /turf/simulated/floor/asteroid/air,
 /area/library)
 "baJ" = (
@@ -1878,7 +1882,6 @@
 "bdG" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/paper{
-	desc = null;
 	info = "But an all oxygen atmosphere isn't that bad, is it? We left the nitrogen lying around somewhere, didn't have enough time to get it set up.";
 	name = "Sorry"
 	},
@@ -2725,13 +2728,13 @@
 /obj/item/clothing/head/bio_hood/janitor,
 /obj/item/device/radio/headset/ert,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/effect/decal/cleanable/dirt,
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = -2;
 	pixel_y = -2
 	},
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/unsimulated/floor{
 	icon_state = "dark purple stripe"
 	},
@@ -2929,7 +2932,6 @@
 	})
 "bAC" = (
 /obj/machinery/door/airlock/glass_medical{
-	id_tag = null;
 	name = "Medbay";
 	req_access_txt = "5"
 	},
@@ -3097,7 +3099,7 @@
 /obj/item/clothing/suit/bio_suit/anomaly,
 /obj/item/clothing/head/bio_hood/anomaly,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/clothing/gloves/latex,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
@@ -3403,10 +3405,6 @@
 /area/derelictparts/aft{
 	holomap_draw_override = 1
 	})
-"bMM" = (
-/turf/space,
-/turf/space,
-/area/mine/unexplored)
 "bMS" = (
 /obj/effect/landmark{
 	name = "ERT"
@@ -3476,7 +3474,6 @@
 	})
 "bOM" = (
 /obj/machinery/door/airlock/glass_medical{
-	id_tag = null;
 	name = "Medbay";
 	req_access_txt = "5"
 	},
@@ -9821,7 +9818,7 @@
 /obj/item/clothing/suit/bio_suit/anomaly,
 /obj/item/clothing/head/bio_hood/anomaly,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/clothing/gloves/latex,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
@@ -10772,7 +10769,6 @@
 /area/centcom/ert)
 "fVe" = (
 /obj/machinery/door/airlock/glass_medical{
-	id_tag = null;
 	name = "Escape Shuttle Infirmary"
 	},
 /turf/simulated/floor/shuttle{
@@ -12911,10 +12907,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/obj/effect/landmark{
-	name = "JoinLate"
-	},
-/obj/structure/bed/chair/shuttle/yellow,
+/obj/structure/closet/wardrobe/pjs,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
@@ -14365,7 +14358,7 @@
 /turf/unsimulated/floor/grass,
 /area/centcom/control)
 "hYY" = (
-/obj/machinery/smartfridge/medbay,
+/obj/machinery/smartfridge/chemistry,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -15592,7 +15585,6 @@
 	desc = "A specially-reinforced camera with a long lasting battery, used to monitor the bomb testing site. An external light is attached to the top.";
 	dir = 8;
 	invuln = 1;
-	light = null;
 	luminosity = 3;
 	name = "Hardened Bomb-Test Camera";
 	network = list("Toxins");
@@ -17472,6 +17464,12 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2";
+	tag = ""
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -19280,8 +19278,7 @@
 	})
 "kAc" = (
 /obj/machinery/door/airlock/external{
-	name = "Ruskie DJ Station";
-	req_access = null
+	name = "Ruskie DJ Station"
 	},
 /turf/simulated/floor/plating,
 /area/djstation)
@@ -20242,13 +20239,10 @@
 	},
 /area/shuttle/salvage/start)
 "kWD" = (
-/obj/effect/landmark{
-	name = "JoinLate"
-	},
 /obj/machinery/light{
 	dir = 8
 	},
-/obj/structure/bed/chair/shuttle/yellow,
+/obj/structure/closet/wardrobe/xenos,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
@@ -23469,7 +23463,6 @@
 /area/centcom/ferry)
 "mIM" = (
 /obj/machinery/door/airlock/glass_medical{
-	id_tag = null;
 	name = "Medbay Storage";
 	req_access_txt = "5"
 	},
@@ -27940,6 +27933,11 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -28894,7 +28892,7 @@
 /area/shuttle/escape/centcom)
 "pxF" = (
 /obj/structure/table/reinforced,
-/obj/item/clothing/glasses/sunglasses/sechud{
+/obj/item/clothing/glasses/hud/security/sunglasses{
 	pixel_y = 8
 	},
 /obj/item/weapon/gun/energy/taser,
@@ -29353,7 +29351,6 @@
 "pMX" = (
 /obj/machinery/door/airlock/command{
 	name = "E.V.A.";
-	req_access = null;
 	req_access_txt = "18"
 	},
 /turf/unsimulated/floor{
@@ -29900,7 +29897,6 @@
 "qah" = (
 /obj/machinery/door/airlock/command{
 	name = "E.V.A.";
-	req_access = null;
 	req_access_txt = "18"
 	},
 /turf/unsimulated/floor{
@@ -31946,7 +31942,6 @@
 "rfz" = (
 /obj/machinery/door/airlock/command{
 	name = "E.V.A.";
-	req_access = null;
 	req_access_txt = "18"
 	},
 /turf/unsimulated/floor{
@@ -33099,10 +33094,6 @@
 /area/crew_quarters/bar{
 	name = "Cafeteria"
 	})
-"rLO" = (
-/turf/space,
-/turf/space,
-/area)
 "rLQ" = (
 /obj/machinery/airlock_sensor{
 	id_tag = "tox_airlock_sensor";
@@ -34029,8 +34020,7 @@
 /area/shuttle/salvage/start)
 "smD" = (
 /obj/machinery/door/airlock/external{
-	name = "Ruskie DJ Station";
-	req_access = null
+	name = "Ruskie DJ Station"
 	},
 /obj/docking_port/destination/salvage/dj{
 	dir = 2
@@ -38974,6 +38964,12 @@
 	icon_state = "0-8"
 	},
 /obj/structure/window/reinforced,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2";
+	tag = ""
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -40450,10 +40446,7 @@
 	},
 /area/janitor)
 "vxZ" = (
-/obj/effect/landmark{
-	name = "JoinLate"
-	},
-/obj/structure/bed/chair/shuttle/yellow,
+/obj/structure/closet/wardrobe/mixed,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
@@ -43969,7 +43962,6 @@
 "xpP" = (
 /obj/machinery/door/airlock/security{
 	name = "Armory";
-	req_access = null;
 	req_access_txt = "3"
 	},
 /obj/structure/window/barricade/full/block,
@@ -45177,7 +45169,6 @@
 "xVW" = (
 /obj/machinery/door/airlock/security{
 	name = "Armory";
-	req_access = null;
 	req_access_txt = "3"
 	},
 /obj/structure/window/barricade/full/block,
@@ -45204,12 +45195,19 @@
 	icon_state = "0-2"
 	},
 /obj/machinery/power/battery/smes{
-	charge = 5e+006
+	charge = 5e+006;
+	name_tag = "Aккумулятор"
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2";
+	tag = ""
 	},
 /turf/simulated/floor/plating,
 /area/djstation)
@@ -107751,9 +107749,9 @@ bSR
 bSR
 bSR
 bSR
-rLO
 bSR
-rLO
+bSR
+bSR
 bSR
 bSR
 bSR
@@ -108252,11 +108250,11 @@ bSR
 bSR
 bSR
 bSR
-rLO
-rLO
 bSR
-rLO
-rLO
+bSR
+bSR
+bSR
+bSR
 bSR
 bSR
 bSR
@@ -108753,13 +108751,13 @@ bSR
 bSR
 bSR
 bSR
-rLO
-rLO
 bSR
 bSR
 bSR
-rLO
-rLO
+bSR
+bSR
+bSR
+bSR
 bSR
 bSR
 bSR
@@ -112267,13 +112265,13 @@ vKB
 vKB
 vKB
 vKB
-bMM
+vKB
 vKB
 bSR
 bSR
 bSR
 bSR
-rLO
+bSR
 bSR
 bSR
 bSR
@@ -319526,7 +319524,7 @@ utR
 uKs
 bSR
 hhI
-rLO
+bSR
 bSR
 bSR
 qrR
@@ -321534,7 +321532,7 @@ imF
 tvW
 bSR
 hhI
-rLO
+bSR
 bSR
 bSR
 qrR
@@ -324046,10 +324044,10 @@ bSR
 hhI
 bSR
 bSR
-rLO
 bSR
-rLO
-rLO
+bSR
+bSR
+bSR
 bSR
 bSR
 bSR
@@ -324547,10 +324545,10 @@ uMI
 hhI
 hhI
 bSR
-rLO
-rLO
 bSR
-rLO
+bSR
+bSR
+bSR
 bSR
 bSR
 bSR
@@ -325551,10 +325549,10 @@ tDb
 uPF
 hhI
 bSR
-rLO
-rLO
 bSR
-rLO
+bSR
+bSR
+bSR
 bSR
 bSR
 bSR
@@ -326054,10 +326052,10 @@ sOS
 hhI
 bSR
 bSR
-rLO
 bSR
-rLO
-rLO
+bSR
+bSR
+bSR
 bSR
 bSR
 bSR
@@ -385299,12 +385297,12 @@ bSR
 bSR
 bSR
 bSR
-rLO
 bSR
 bSR
 bSR
 bSR
-rLO
+bSR
+bSR
 bSR
 bSR
 bSR
@@ -385811,7 +385809,7 @@ bSR
 bSR
 bSR
 bSR
-rLO
+bSR
 bSR
 bSR
 bSR
@@ -396855,7 +396853,7 @@ bSR
 bSR
 bSR
 bSR
-rLO
+bSR
 bSR
 bSR
 bSR
@@ -397347,12 +397345,12 @@ bSR
 bSR
 bSR
 bSR
-rLO
 bSR
 bSR
 bSR
 bSR
-rLO
+bSR
+bSR
 bSR
 bSR
 bSR

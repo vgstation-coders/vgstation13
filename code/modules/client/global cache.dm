@@ -245,7 +245,7 @@ var/list/asset_datums = list()
 		"pda_snake_bodytail_south.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bodytail_south.png',
 		"pda_snake_bodytail_west.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bodytail_west.png',
 		"pda_snake_bonus1.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bonus1.png',
-		"pda_snake_bones2.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bonus2.png',
+		"pda_snake_bonus2.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bonus2.png',
 		"pda_snake_bonus3.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bonus3.png',
 		"pda_snake_bonus4.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bonus4.png',
 		"pda_snake_bonus5.png"		= 'icons/pda_icons/snake_icons/elements/pda_snake_bonus5.png',
@@ -375,12 +375,13 @@ var/list/asset_datums = list()
 		"cmc_6.png" = 'icons/cmc/css_icons/6.png',
 		"cmc_7.png" = 'icons/cmc/css_icons/7.png'
 	)
-
+/*
 /datum/asset/simple/nanoui_maps/New()
 	for(var/z in 1 to world.maxz)
 		if(z == map.zCentcomm)
 			continue
 		assets["[map.nameShort][z].png"] = file("[getMinimapFile(z)].png")
+*/
 
 //Registers HTML I assets.
 /datum/asset/HTML_interface/register()

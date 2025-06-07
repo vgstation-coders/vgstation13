@@ -16,8 +16,8 @@
 	effective_master = master
 	slave = S
 	effective_slave = slave
-	master.register_event(/event/moved, src, src::master_moved())
-	master.register_event(/event/moved, src, src::slave_moved())
+	master.register_event(/event/moved, src, nameof(src::master_moved()))
+	master.register_event(/event/moved, src, nameof(src::slave_moved()))
 	if(!master.current_tethers)
 		master.current_tethers = list()
 	master.current_tethers.Add(src)
@@ -27,17 +27,17 @@
 
 /datum/tether/Destroy()
 	if(effective_master != master)
-		effective_master.unregister_event(/event/moved, src, src::master_moved())
+		effective_master.unregister_event(/event/moved, src, nameof(src::master_moved()))
 		effective_master.current_tethers.Remove(src)
 		effective_master = null
-	master.unregister_event(/event/moved, src, src::master_moved())
+	master.unregister_event(/event/moved, src, nameof(src::master_moved()))
 	master.current_tethers.Remove(src)
 	master = null
 	if(effective_slave != slave)
-		effective_slave.unregister_event(/event/moved, src, src::slave_moved())
+		effective_slave.unregister_event(/event/moved, src, nameof(src::slave_moved()))
 		effective_slave.current_tethers.Remove(src)
 		effective_slave = null
-	slave.unregister_event(/event/moved, src, src::slave_moved())
+	slave.unregister_event(/event/moved, src, nameof(src::slave_moved()))
 	slave.current_tethers.Remove(src)
 	slave = null
 	..()
@@ -55,12 +55,12 @@
 /datum/tether/proc/master_moved()
 	if(effective_master != master)
 		if(!isturf(effective_master.loc) || isturf(master.loc))
-			effective_master.unregister_event(/event/moved, src, src::master_moved())
+			effective_master.unregister_event(/event/moved, src, nameof(src::master_moved()))
 			effective_master.current_tethers.Remove(src)
 			effective_master = master
 	if(!isturf(master.loc) && effective_master == master)
 		effective_master = get_holder_at_turf_level(master)
-		effective_master.register_event(/event/moved, src, src::master_moved())
+		effective_master.register_event(/event/moved, src, nameof(src::master_moved()))
 		if(!effective_master.current_tethers)
 			effective_master.current_tethers = list()
 		effective_master.current_tethers.Add(src)
@@ -72,12 +72,12 @@
 /datum/tether/proc/slave_moved()
 	if(effective_slave != slave)
 		if(!isturf(effective_slave.loc) || isturf(slave.loc))
-			effective_slave.unregister_event(/event/moved, src, src::slave_moved())
+			effective_slave.unregister_event(/event/moved, src, nameof(src::slave_moved()))
 			effective_slave.current_tethers.Remove(src)
 			effective_slave = slave
 	if(!isturf(slave.loc) && effective_slave == slave)
 		effective_slave = get_holder_at_turf_level(slave)
-		effective_slave.register_event(/event/moved, src, src::slave_moved())
+		effective_slave.register_event(/event/moved, src, nameof(src::slave_moved()))
 		if(!effective_slave.current_tethers)
 			effective_slave.current_tethers = list()
 		effective_slave.current_tethers.Add(src)

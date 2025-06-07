@@ -28,10 +28,12 @@ Aoe turf spells have two useful flags: IGNOREDENSE and IGNORESPACE. These are ex
 
 	return targets
 
-/spell/aoe_turf/is_valid_target(var/target, mob/user, options)
+/spell/aoe_turf/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	var/spell_center = user
 	if(center)
 		spell_center = center
+	if(bypass_range)
+		return TRUE
 	return ((target in view_or_range(range, spell_center, selection_type)))
 
 /spell/aoe_turf/perform(mob/user = usr, skipcharge = 0, list/target_override)

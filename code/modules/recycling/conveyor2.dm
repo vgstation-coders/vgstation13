@@ -26,7 +26,8 @@
 	var/frequency = 1367
 	var/datum/radio_frequency/radio_connection
 
-	var/max_moved = 25
+	var/max_moved = 25 //Max allowed to move at once
+	var/will_move = 25	//Amount currently attempting to move at once
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
 
@@ -254,7 +255,7 @@
 					if(A && A.loc == src.loc) //Check that our location didn't check from conveyor_acting on machinery.
 						A.set_glide_size(DELAY2GLIDESIZE(SS_WAIT_FAST_MACHINERY))
 						step(A,movedir)
-			if(items_checked >= max_moved)
+			if(items_checked >= will_move)
 				break
 
 /obj/machinery/conveyor/togglePanelOpen(var/obj/item/toggle_item, mob/user)
@@ -311,6 +312,8 @@
 			<a href="?src=\ref[src];setdir=[SOUTHWEST]" title="Southwest">[src.in_reverse ? "&#8599;" : "&#8601;"]</a>
 			<a href="?src=\ref[src];reverse" title="Reverse Direction">&#8644;</a>
 		</li>
+		<li><b>Moving at once:</b> <a href="?src=\ref[src];set_amount=[will_move]">[will_move] object(s)"</a>
+		</li>
 		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=1367">Reset</a>)</li>
 		<li><b>ID Tag:</b> <a href="?src=\ref[src];set_id=1">[dis_id_tag]</a></li>
 
@@ -337,6 +340,15 @@
 		in_reverse=!in_reverse
 		updateConfig()
 		return MT_UPDATE
+	if("set_amount" in href_list)
+		setAmount()
+		return MT_UPDATE
+
+/obj/machinery/conveyor/proc/setAmount()
+	var/newMove = text2num(input("Amount to move at once", "Set amount to move", will_move) as null|num)
+	if(newMove == null || newMove <0)
+		newMove = will_move
+	will_move = min(newMove, max_moved)
 
 /obj/machinery/conveyor/canClone(var/obj/machinery/O)
 	return is_type_in_list(O, list(/obj/machinery/conveyor_switch, /obj/machinery/conveyor))

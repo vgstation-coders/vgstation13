@@ -399,6 +399,19 @@
 		new /obj/item/weapon/disk(src)
 	update_icon()
 
+/obj/item/weapon/storage/lockbox/diskettebox/large/full/New()
+	..()
+	for(var/i = 1 to storage_slots)
+		new /obj/item/weapon/disk(src)
+	update_icon()
+
+/obj/item/weapon/storage/lockbox/diskettebox/archive
+	name = "archival diskette box"
+	desc = "Please copy in library."
+	storage_slots = 9
+	mech_flags = MECH_SCAN_FAIL
+
+
 //---------------------------------PRESETS END-----------------------------
 
 /obj/item/weapon/storage/lockbox/diskettebox/update_icon()
@@ -470,6 +483,7 @@
 	health = 200
 	storage_slots = 1
 	fits_max_w_class = W_CLASS_LARGE
+	req_one_access = null
 
 /obj/item/weapon/storage/lockbox/advanced/ex_act()
 	react()

@@ -11,7 +11,7 @@
 #define AUTISM_AWARENESS_DAY "Autism Awareness Day"
 #define FOUR_TWENTY "Four-Twenty"
 #define EARTH_DAY "Earth Day"
-#define LABOUR_DAY "Labour Day"
+#define LABOR_DAY "Labor Day"
 #define FIREFIGHTERS_DAY "FireFighter's Day"
 #define OWL_AND_PUSSYCAT_DAY "Owl and Pussycat Day"
 #define INTERNATIONAL_PICNIC_DAY "International Picnic Day"

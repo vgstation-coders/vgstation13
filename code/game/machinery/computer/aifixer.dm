@@ -2,6 +2,7 @@
 	name = "AI System Integrity Restorer"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "ai-fixer"
+	circuit = "/obj/item/weapon/circuitboard/aifixer"
 	req_access = list(access_captain, access_robotics, access_heads)
 	var/mob/living/silicon/ai/occupant = null
 	var/active = 0
@@ -110,6 +111,8 @@
 	// Broken / Unpowered
 	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		return
+
+	update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 
 	if (occupant)
 		switch (occupant.stat)

@@ -1,3 +1,4 @@
+/*
 var/datum/subsystem/minimap/SSminimap
 
 
@@ -18,3 +19,4 @@ var/datum/subsystem/minimap/SSminimap
 		minimapinit = 1 //Assume minimaps were prerendered, the worst thing that happens if they're missing is that the minimap consoles don't show a minimap
 		log_startup_progress("Not generating minimaps - SKIP_MINIMAP_GENERATION found in config/config.txt")
 	..()
+*/

@@ -56,7 +56,6 @@ var/list/wizard_apprentice_setups_by_name = list()
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "contract0"
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
 	throwforce = 0
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
@@ -148,11 +147,11 @@ var/list/wizard_apprentice_setups_by_name = list()
 		recruiter.jobban_roles = list("Syndicate")
 		recruiter.recruitment_timeout = 30 SECONDS
 	// Role set to Yes or Always
-	recruiter.player_volunteering = new /callback(src, src::recruiter_recruiting())
+	recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
 	// Role set to No or Never
-	recruiter.player_not_volunteering = new /callback(src, src::recruiter_not_recruiting())
+	recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
 
-	recruiter.recruited = new /callback(src, src::recruiter_recruited())
+	recruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
 
 	recruiter.request_player()
 

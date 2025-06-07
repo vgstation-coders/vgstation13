@@ -224,6 +224,7 @@
 	name = "honeycomb"
 	icon_state = "honeycomb"
 	desc = "Dripping with sugary sweetness. Grind it to separate the honey."
+	starting_materials = list(MAT_WAX = 4*CC_PER_SHEET_WAX)
 	var/list/authentic = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb/New()
@@ -236,7 +237,8 @@
 	var/image/I = image('icons/obj/food.dmi', icon_state="honeycomb-color")
 	I.color = mix_color_from_reagents(reagents.reagent_list)
 	icon_state = "honeycomb-base"
-	overlays += I
+	extra_food_overlay.overlays += I
+	update_icon()
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb/chill
 	name = "honeycomb"
@@ -253,7 +255,9 @@
 	var/image/I = image('icons/obj/food.dmi', icon_state="honeycomb-color")
 	I.color = mix_color_from_reagents(reagents.reagent_list)
 	icon_state = "chill_honeycomb-base"
-	overlays += I
+	extra_food_overlay.overlays.len = 0
+	extra_food_overlay.overlays += I
+	update_icon()
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb/proc/authentify()
 	authentic = list()
@@ -277,6 +281,7 @@
 	item_state ="bookHydroponicsBees"
 	author = "Beekeeper Dave"
 	title = "The Ins and Outs of Apiculture - A Precise Art"
+	id = 33
 	dat = {"<html>
 				<head>
 				<style>

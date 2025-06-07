@@ -101,7 +101,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 		if(B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
-		B.register_event(/event/beam_power_change, src, src::on_power_change())
+		B.register_event(/event/beam_power_change, src, nameof(src::on_power_change()))
 		update_beams()
 
 /obj/machinery/mirror/beam_disconnect(var/obj/effect/beam/emitter/B)
@@ -109,7 +109,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 		if(B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
-		B.unregister_event(/event/beam_power_change, src, src::on_power_change())
+		B.unregister_event(/event/beam_power_change, src, nameof(src::on_power_change()))
 		update_beams()
 
 // When beam power changes

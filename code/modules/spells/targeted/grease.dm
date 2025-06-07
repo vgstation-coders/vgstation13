@@ -9,10 +9,18 @@
 	charge_max = 300
 	invocation = "GR'ESE LIT'NING"
 	invocation_type = SpI_SHOUT
-	range = 1
+	range = 0
 	spell_flags = NEEDSCLOTHES | INCLUDEUSER
 	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
 	hud_state = "bucket"
+
+/spell/targeted/grease/get_upgrade_info(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_POWER)
+			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+				return "You can already emit grease at the targeted location!"
+			return "Allows you to target a different location within 4 tiles of you to cover it with grease."
+	return ..()
 
 
 /spell/targeted/grease/empower_spell()
@@ -25,7 +33,7 @@
 		if(1)
 			name = "Slick Grease"
 			range = 4
-			explosion_description = "You can now point to a location within [range] to become a grease slick. Has spell congruency with fire-based spells."
+			explosion_description = "You can now point to a location up to [range] tiles away to become slick greased. Has spell congruency with fire-based spells."
 			spell_flags |= WAIT_FOR_CLICK
 		else
 			return

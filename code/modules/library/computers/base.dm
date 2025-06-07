@@ -7,10 +7,14 @@
 	var/num_pages = 0
 	var/num_results = 0
 	var/datum/library_query/query = new()
+	var/library_table = "library"
 	computer_flags = NO_ONOFF_ANIMS
 	pass_flags = PASSTABLE
 	icon = 'icons/obj/library.dmi'
 	icon_state = "computer"
+	moody_state = "overlay_computer_old"
+
+	var/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", "Reference", "Religion")
 
 /obj/machinery/computer/library/proc/interact_check(var/mob/user)
 	if(stat & (FORCEDISABLE | BROKEN | NOPOWER))
@@ -26,30 +30,43 @@
 	return FALSE
 
 /obj/machinery/computer/library/proc/get_page(var/page_num)
-	var/searchquery = ""
-	if(query)
-		var/where = 0
-		if(query.title && query.title != "")
-//			to_chat(world, "\red query title ([query.title])")
-			searchquery += " WHERE title LIKE '%[query.title]%'"
-			where = 1
-		if(query.author && query.author != "")
-//			to_chat(world, "\red query author ([query.author])")
-			searchquery += " [!where ? "WHERE" : "AND"] author LIKE '%[query.author]%'"
-			where = 1
-		if(query.category && query.category != "")
-//			to_chat(world, "\red query category ([query.category])")
-			searchquery += " [!where ? "WHERE" : "AND"] category LIKE '%[query.category]%'"
-			if(query.category == "Fiction")
-				searchquery += " AND category NOT LIKE '%Non-Fiction%'"
-			where = 1
-	var/sql = "SELECT id, author, title, category, ckey FROM library [searchquery] LIMIT [page_num * LIBRARY_BOOKS_PER_PAGE], [LIBRARY_BOOKS_PER_PAGE]"
+	if(!query)
+		return
 
-	//if(query)
-		//sql += " [query.toSQL()]"
-	// Pagination
-//	to_chat(world, sql)
-	var/datum/DBQuery/_query = SSdbcore.NewQuery(sql)
+	var/list/arguments = list()
+	var/list/searchquery_parts = list()
+
+	if(query.title && query.title != "")
+//		to_chat(world, "\red query title ([query.title])")
+		searchquery_parts += "WHERE title LIKE :query_title"
+		arguments["query_title"] = "%[query.title]%"
+
+	if(query.author && query.author != "")
+//		to_chat(world, "\red query author ([query.author])")
+		searchquery_parts += "[searchquery_parts.len ? "AND" : "WHERE"] author LIKE :query_author"
+		arguments["query_author"] = "%[query.author]%"
+
+	if(query.categories && query.categories[1] != "")
+		var/list/in_placeholders = list()
+		for(var/i=1, i<=query.categories.len, i++)
+//		to_chat(world, "\red query category ([query.categories[i]])")
+			var/placeholder = ":query_category_[i]"
+			in_placeholders += placeholder
+			arguments["query_category_[i]"] = query.categories[i]
+		searchquery_parts += "[searchquery_parts.len ? "AND" : "WHERE"] category IN ([in_placeholders.Join(", ")])"
+
+	if(query.order_by && (query.order_by in list("author", "title", "category", "id")))
+//		to_chat(world, "\red query order_by ([query.order_by])")
+		var/option = query.descending ? "DESC" : "ASC"
+		searchquery_parts += "ORDER BY [query.order_by] [option]"
+
+	arguments["lim_inf"] = page_num * LIBRARY_BOOKS_PER_PAGE
+	arguments["lim_sup"] = LIBRARY_BOOKS_PER_PAGE
+
+	var/searchquery = searchquery_parts.Join(" ")
+	var/sql = "SELECT id, author, title, content, category, description, ckey FROM `[library_table]` [searchquery] LIMIT :lim_inf, :lim_sup"
+
+	var/datum/DBQuery/_query = SSdbcore.NewQuery(sql, arguments)
 	_query.Execute()
 	if(_query.ErrorMsg())
 		world.log << _query.ErrorMsg()
@@ -63,15 +80,17 @@
 			"id"      =_query.item[1],
 			"author"  =_query.item[2],
 			"title"   =_query.item[3],
-			"category"=_query.item[4],
-			"ckey"    =_query.item[5]
+			"content"   =_query.item[4],
+			"category"=_query.item[5],
+			"description" = _query.item[6],
+			"ckey"    =_query.item[7]
 		))
 		results += CB
 	qdel(_query)
 	return results
 
 /obj/machinery/computer/library/proc/get_num_results()
-	var/sql = "SELECT COUNT(*) FROM library"
+	var/sql = "SELECT COUNT(*) FROM `[library_table]`"
 	//if(query)
 		//sql += query.toSQL()
 
@@ -102,9 +121,14 @@
 	pagelist += "</div>"
 	return pagelist
 
-/obj/machinery/computer/library/proc/getBookByID(var/id as text)
-	return library_catalog.getBookByID(id)
+/obj/machinery/computer/library/proc/getItemByID(var/id, var/library_table)
+	return library_catalog.getItemByID(id, library_table)
 
 /obj/machinery/computer/library/cultify()
 	new /obj/structure/cult_legacy/tome(loc)
 	..()
+
+/obj/machinery/computer/library/proc/get_sort_arrow(var/column)
+	if(query.order_by == column)
+		return query.descending ? "↓" : "↑"
+	return ""

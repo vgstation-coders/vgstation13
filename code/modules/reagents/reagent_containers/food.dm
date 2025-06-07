@@ -10,9 +10,10 @@
 	volume = 50 //Food can contain a beaker's worth of reagents unless specified otherwise. Do note large servings of complex food items can contain well over 50 reagents total
 
 /obj/item/weapon/reagent_containers/food/New()
-		..()
-		src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER	//Randomizes position slightly.
-		src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
+	..()
+	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER	//Randomizes position slightly.
+	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/food/fits_in_iv_drip()
 	return 1
@@ -20,7 +21,18 @@
 /obj/item/weapon/reagent_containers/food/dipping_sauce
 	var/dip_message = ""
 
+/obj/item/weapon/reagent_containers/food/update_icon()
+	..()
+	overlays.len = 0
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
+	if (on_fire && fire_overlay)
+		overlays += fire_overlay
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /obj/item/weapon/reagent_containers/food/dipping_sauce/update_icon()
+	..()
 	if(!reagents || !reagents.has_reagent(DIPPING_SAUCE))
 		reagents.clear_reagents()
 		icon_state = "empty_dip"
@@ -84,6 +96,7 @@
 		new /obj/item/weapon/reagent_containers/food/snacks/tortillachip(src)
 
 /obj/item/weapon/chipbasket/update_icon()
+	..()
 	if(contents.len>5)
 		icon_state = "chipbasket-full"
 	else if(contents.len)

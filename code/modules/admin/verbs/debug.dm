@@ -1238,12 +1238,16 @@ var/global/blood_virus_spreading_disabled = 0
 		alert("Only observers can use this functionality")
 		return
 
-	if(adminmob.conversionHUD)
-		adminmob.conversionHUD = 0
-		to_chat(src, "<span class='notice'><B>conversionHUD Disabled</B></span>")
+	var/datum/visioneffect/cult_conversion/detected_hud = null
+	for(var/datum/visioneffect/cult_conversion/H in adminmob.huds)
+		detected_hud = H
+		break
+	if(detected_hud)
+		adminmob.remove_hud(detected_hud)
+		to_chat(src, "<span class='notice'><B>Conversion HUD disabled.</B></span>")
 	else
-		adminmob.conversionHUD = 1
-		to_chat(src, "<span class='notice'><B>conversionHUD Enabled</B></span>")
+		adminmob.apply_hud(new /datum/visioneffect/cult_conversion)
+		to_chat(src, "<span class='notice'><B>Conversion HUD enabled.</B></span>")
 
 /client/proc/spawn_datum(var/object as text)
 	set category = "Debug"
@@ -1443,3 +1447,97 @@ var/global/blood_virus_spreading_disabled = 0
 		return
 	sort = sortlist[sort]
 	profile_show(src, sort)
+
+var/blend_calling = FALSE
+var/obj/blend_test = null
+
+/client/proc/spam_blend_calls()
+	set category = "Debug"
+	set name = "Spam Blend Calls"
+	set desc = "There is no testing like stress testing."
+
+	if (!check_rights(R_DEBUG))
+		return
+	blend_calling = FALSE
+	var/blendlist = list(
+		"ICON_ADD"		=	ICON_ADD,
+		"ICON_SUBTRACT"	=	ICON_SUBTRACT,
+		"ICON_MULTIPLY"	=	ICON_MULTIPLY,
+		"ICON_OVERLAY"		=	ICON_OVERLAY,
+		"ICON_AND"	=	ICON_AND,
+		"ICON_OR"	=	ICON_OR,
+		"ICON_UNDERLAY"	=	ICON_UNDERLAY
+	)
+	var/blendmode = input(src, "Blend type?", "Blend Type", "ICON_ADD") as null|anything in blendlist
+	if (!blendmode)
+		return
+	blend_calling = TRUE
+	if (!blend_test || blend_test.gcDestroyed)
+		blend_test = new (mob.loc)
+	blend_test.loc = mob.loc
+	message_admins("<span class='adminnotice'>[key_name_admin(src)] started spamming icon.Blend() calls with blend mode [blendmode].</span>")
+	feedback_add_details("admin_verb","Start blend spamming")
+	log_admin("[key_name(src)] started blend spamming.")
+	blendmode = blendlist[blendmode]
+	spawn()
+		while(blend_calling)
+			var/icon/I = icon('icons/debug.dmi',"first")
+			var/icon/J = icon('icons/debug.dmi',"second")
+			I.Blend(J,blendmode,rand(-3,3),rand(-3,3))
+			blend_test.icon = I
+			sleep(1)
+		message_admins("<span class='adminnotice'>icon.Blend() spamming ended.</span>")
+		feedback_add_details("admin_verb","Finish blend spamming")
+		log_admin("[key_name(src)] finished blend spamming.")
+
+/client/proc/edit_motd()
+	set category = "Server"
+	set name = "Edit MotD"
+	set desc = "Appears to players upon lobby entry."
+
+	if(!check_rights(R_SERVER))
+		return
+	if(alert("You are about to edit the MotD, which is displayed to anyone who enters the lobby. All changes persist across rounds. Continue?", "Warning", "Yes", "Cancel") == "Cancel")
+		return
+
+	var/oldmotd = return_file_text("config/motd.txt")
+	message_admins("[key_name(usr)] has begun editing the message of the day. An archive of what the MotD was beforehand has been printed to the server logs in case a mistake was made.")
+	log_admin("[key_name(usr)] has begun editing the message of the day. An archive of the old MotD is as follows: [oldmotd]")
+
+	var/newmotd = input(usr, "These changes will be persistent across shifts!", "Edit MotD", "[oldmotd]") as message|null
+	if(!newmotd)
+		return
+	fdel("config/motd.txt")
+	text2file(newmotd, "config/motd.txt")
+	join_motd = newmotd	//Sets the current round's motd
+	log_admin("[key_name(usr)] has edited the message of the day. The new text is as follows: [newmotd].")
+	feedback_add_details("admin_verb", "Edit MotD")
+	message_admins("[key_name(usr)] has edited the message of the day. Check the game log for the full text.")
+
+/client/proc/force_next_map()
+	set category = "Debug"
+	set name = "Force Next Map"
+	set desc = "Sets the next map and skips the map vote."
+
+	if(!check_rights(R_FUN))
+		return
+
+	var/list/all_maps = get_all_maps()
+	all_maps += "RESET"
+	to_chat(usr,"<span class='warning'>This needs to be done BEFORE a map vote is called otherwise use the vote rigging option!</div>")
+	var/rigged_choice = input(usr, "Pick a map.") as null|anything in all_maps
+	if(!rigged_choice)
+		return
+	if(rigged_choice == "RESET")
+		log_admin("[key_name(usr)] has reset the forced map.")
+		feedback_add_details("admin_verb", "Force Next Map")
+		message_admins("[key_name(usr)] has reset the forced map.")
+		vote.forced_map = null
+		return
+	log_admin("[key_name(usr)] has forced the next map. The new map is: [rigged_choice].")
+	feedback_add_details("admin_verb", "Force Next Map")
+	message_admins("[key_name(usr)] has forced the next map. The new map is: [rigged_choice].")
+
+	vote.forced_map = rigged_choice
+
+

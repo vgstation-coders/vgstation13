@@ -125,6 +125,8 @@ var/list/bad_gremlin_items = list()
 	return ..()
 
 /mob/living/simple_animal/hostile/gremlin/Life()
+	if(timestopped)
+		return 0 //under effects of time magick
 	//Don't try to path to one target for too long. If it takes longer than a certain amount of time, assume it can't be reached and find a new one
 	if(!target)
 		time_chasing_target = 0
@@ -134,6 +136,11 @@ var/list/bad_gremlin_items = list()
 			time_chasing_target = 0
 
 	.=..()
+
+	if(.)
+		regular_hud_updates()
+
+		standard_damage_overlay_updates()
 
 /mob/living/simple_animal/hostile/gremlin/EscapeConfinement()
 	if(istype(loc, /obj) && CanAttack(loc)) //If we're inside a machine, screw with it

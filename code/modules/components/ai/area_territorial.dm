@@ -9,13 +9,13 @@
 /datum/component/ai/area_territorial/proc/SetArea(var/area/new_area)
 	unset_area()
 	territory = new_area
-	territory.register_event(/event/area_entered, src, src::area_enter())
-	territory.register_event(/event/area_exited, src, src::area_exit())
+	territory.register_event(/event/area_entered, src, nameof(src::area_enter()))
+	territory.register_event(/event/area_exited, src, nameof(src::area_exit()))
 
 /datum/component/ai/area_territorial/proc/unset_area()
 	if(territory)
-		territory.unregister_event(/event/area_entered, src, src::area_enter())
-		territory.unregister_event(/event/area_exited, src, src::area_exit())
+		territory.unregister_event(/event/area_entered, src, nameof(src::area_enter()))
+		territory.unregister_event(/event/area_exited, src, nameof(src::area_exit()))
 
 /datum/component/ai/area_territorial/Destroy()
 	unset_area()

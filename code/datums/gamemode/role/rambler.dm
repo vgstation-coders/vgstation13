@@ -80,28 +80,23 @@
 /obj/item/clothing/mask/necklace/crystal/attack_self(mob/user)
 	if(!isrambler(user))
 		return
-	var/list/possible_choices = get_list_of_elements(user.mind.heard_before)
+	var/list/possible_choices = get_list_of_keys(user.mind.heard_before)
 	if(!length(possible_choices))
 		to_chat(user,"<span class='warning'>You haven't heard anyone talk.</span>")
 		return
-	var/mob/chosen_mob = input(user, "Choose your suspect, from those whose voices you've heard before.", "Soul Inspiration") as null|mob in possible_choices
-	if(!chosen_mob)
-		return
-	if(!isliving(chosen_mob))
-		to_chat(user,"<span class='warning'>That is some kind of ghost or something!</span>")
-		return
-	if(chosen_mob == user)
-		to_chat(user,"<span class='warning'>You already know the crime was arson!</span>")
-		return
-	var/datum/mind/potential = chosen_mob.mind
-	if(!potential)
+	var/keyed = input(user, "Choose your suspect, from those whose voices you've heard before.", "Soul Inspiration") as null|anything in possible_choices
+	var/datum/mind/chosen_mind = user.mind.heard_before[keyed]
+	if(!chosen_mind)
 		to_chat(user,"<span class='warning'>To accuse the mindless? The scrawling of a madman!</span>")
 		return
-	if(potential == suspect)
+	if(chosen_mind.current == user)
+		to_chat(user,"<span class='warning'>You already know the crime was arson!</span>")
+		return
+	if(chosen_mind == suspect)
 		to_chat(user,"<span class='warning'>It is just as you suspected. The suspect is the suspicious suspect you have already suspected!</span>")
 		return
-	to_chat(user,"<span class='info'>Your new suspect is [chosen_mob].</span>")
-	suspect = potential
+	to_chat(user,"<span class='info'>Your new suspect is [chosen_mind].</span>")
+	suspect = chosen_mind
 
 /obj/item/clothing/mask/necklace/crystal/examine(mob/user)
 	..()

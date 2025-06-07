@@ -20,7 +20,8 @@
 
 /obj/item/projectile/teslaball/New()
 	..()
-	Pulse()
+	spawn()  
+		Pulse()
 
 /obj/item/projectile/teslaball/to_bump(atom/A)
 	..()

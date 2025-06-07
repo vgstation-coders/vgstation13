@@ -63,7 +63,7 @@ var/bee_mobs_count = 0
 
 	var/single_direction = TRUE
 
-/mob/living/simple_animal/bee/Move()
+/mob/living/simple_animal/bee/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if (single_direction)
 		dir = SOUTH

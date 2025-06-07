@@ -23,6 +23,7 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/blood/on_reagent_change()
+	..()
 	update_icon()
 
 	if (mode == BLOODPACK_CUT)

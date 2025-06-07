@@ -83,10 +83,6 @@ var/const/ALLOW_CENTCOMM = FALSE
 	var/current_git_hash = trim(return_revision())
 	var/delete_cache = !last_git_hash || !current_git_hash || last_git_hash != current_git_hash
 
-	if(delete_cache)
-		testing("MINIMAP: Deleting outdated cached minimaps")
-	else
-		testing("MINIMAP: Will attempt to use cached minimaps")
 	for (var/z = 1 to world.maxz)
 		if(z == map.zCentcomm && !ALLOW_CENTCOMM)
 			continue
@@ -94,10 +90,8 @@ var/const/ALLOW_CENTCOMM = FALSE
 			fdel("[getMinimapFile(z)].png")
 		generateMiniMap(z)
 
-	testing(fdel(last_git_hash_path))
 	text2file(current_git_hash, last_git_hash_path)
 
-	testing("MINIMAP: All minimaps have been generated.")
 	minimapinit = 1
 	// some idiot put HTML asset sending here.  In a spawn.  After a long wait for minimap generation.
 	// Dear Idiot: don't do that anymore.

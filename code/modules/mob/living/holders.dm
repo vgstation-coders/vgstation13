@@ -46,6 +46,12 @@
 	else if(istype(loc,/turf) || !(contents.len))
 		return qdel(src)
 
+/obj/item/weapon/holder/dropped()
+	..()
+	spawn(1) // im a cheater
+		if(istype(loc,/turf) || !(contents.len))
+			qdel(src)
+
 /obj/item/weapon/holder/relaymove(mob/M, direction)
 	qdel(src) //This calls Destroy(), and frees the mob
 
@@ -233,3 +239,44 @@
 	item_state = "pillow"
 	slot_flags = SLOT_HEAD
 	update_itemstate_on_twohand = TRUE
+
+
+/obj/item/weapon/holder/animal/borer
+	name = "borer holder"
+	desc = "It's wriggly and slimy."
+	item_state = "borer"
+
+/obj/item/weapon/holder/animal/borer/attack_self(mob/user)
+	if(user.a_intent != I_HURT || user.zone_sel.selecting != "mouth")
+		..()
+		return
+
+	user.visible_message("<span class='notice'>[user] bites the head off \the [stored_mob].</span>",\
+	isjusthuman(user) ? "<span class='warning'>You bite the head off \the [stored_mob]. Disgusting.</span>" :\
+	"<span class='notice'>You bite the head off \the [stored_mob]. Not bad!</span>")
+
+	playsound(user, 'sound/effects/crunch_meat.ogg', 30, 0)
+	blood_splatter(src,null,1)
+	user.u_equip(src, 0)
+	user.reagents.add_reagent(NUTRIMENT, 1)
+	user.reagents.add_reagent(GREYGOO, 0.5)
+	user.reagents.add_reagent(PERIDAXON, 0.5)
+
+	var/obj/item/weapon/reagent_containers/food/snacks/meat/borer/B = new(get_turf(src))
+	B.name = stored_mob.name
+
+	if(fingerprints)
+		B.fingerprints = fingerprints.Copy()
+	if(fingerprintshidden)
+		B.fingerprintshidden = fingerprintshidden.Copy()
+	if(fingerprintslast)
+		B.fingerprintslast = fingerprintslast
+
+	user.put_in_active_hand(B)
+	to_chat(stored_mob, "<span class='big danger'>Delicious!</span>")
+	stored_mob.ghostize(0)
+	qdel(stored_mob)
+	qdel(src)
+
+/obj/item/weapon/holder/animal/borer/relaymove(mob/M, direction)
+	return			// There is no escape.

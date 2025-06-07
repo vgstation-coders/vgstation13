@@ -6,7 +6,7 @@
 /datum/artifact_trigger/reagent/New()
 	..()
 	reagent_group = pick("WATER", "ACID", "VOLATILE", "TOXIN")
-	my_artifact.register_event(/event/attackby, src, src::owner_attackby())
+	my_artifact.register_event(/event/attackby, src, nameof(src::owner_attackby()))
 
 /datum/artifact_trigger/reagent/proc/owner_attackby(mob/living/attacker, obj/item/item)
 	if (istype(item, /obj/item/weapon/reagent_containers/glass) && item.is_open_container() ||\
@@ -21,5 +21,5 @@
 			Triggered(attacker, reagent_group, item)
 
 /datum/artifact_trigger/reagent/Destroy()
-	my_artifact.unregister_event(/event/attackby, src, src::owner_attackby())
+	my_artifact.unregister_event(/event/attackby, src, nameof(src::owner_attackby()))
 	..()

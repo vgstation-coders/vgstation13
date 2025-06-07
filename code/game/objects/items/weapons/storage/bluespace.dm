@@ -12,6 +12,9 @@
 	fits_max_w_class = W_CLASS_LARGE
 	max_combined_w_class = 28
 
+/obj/item/weapon/storage/backpack/holding/return_air()//prevents hot food from getting cold while in it.
+	return
+
 /obj/item/weapon/storage/backpack/holding/miniblackhole
 	name = "miniature black hole"
 	desc = "A miniature black hole that opens into a localized pocket of Blue Space."
@@ -33,8 +36,6 @@
 	. = ..()
 	if(W == src)
 		return // HOLY FUCKING SHIT WHY STORAGE CODE, WHY - pomf
-	if(istype(W, /obj/item/weapon/storage/backpack/holding/grinch))
-		return
 	var/list/recursive_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)
 	if(recursive_list.len) // Placing a bag of holding into another will singuloose when stored inside other objects too, such as when on your back or on a diona's back and stuffed in
 		singulocreate(recursive_list, user)

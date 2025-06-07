@@ -6,10 +6,12 @@
 	name = "Merch Computer"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "store"
+	desc = "A computer able to order high-priority, small items directly from Central Command."
 	circuit = "/obj/item/weapon/circuitboard/merch"
 	var/machine_id = ""
 	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | PURCHASER
 	light_color = LIGHT_COLOR_ORANGE
+	var/dispensing = FALSE
 
 /obj/machinery/computer/merch/New()
 	..()
@@ -60,13 +62,24 @@
 	. = ..()
 	if(.)
 		return
+	if(dispensing)
+		to_chat(usr, "[bicon(src)] <span class='notice'>Currently processing another transaction.</span>")
+		return
 	switch(action)
 		if("buy")
-			if(!centcomm_store.PlaceOrder(usr, params["name"], src))
-				to_chat(usr, "[bicon(src)]<span class='warning'>Unable to charge your account.</span>")
+			dispensing = TRUE
+			playsound(src, "sound/effects/typing[pick(1,2,3)].ogg", 50, 1)
+			if(do_after(usr, src, 20))
+				dispensing = FALSE
+				if(!centcomm_store.PlaceOrder(usr, params["name"], src))
+					playsound(src, 'sound/machines/alert.ogg', 50, 1)
+					to_chat(usr, "[bicon(src)] <span class='warning'>Unable to charge your account.</span>")
+				else
+					to_chat(usr, "[bicon(src)] <span class='notice'>Transaction complete! Enjoy your [params["name"]].</span>")
+				return TRUE
 			else
-				to_chat(usr, "[bicon(src)]<span class='notice'>Transaction complete! Enjoy your product.</span>")
-			return TRUE
+				to_chat(usr, "<span class='notice'>You fail to check out the [params["name"]].</span>")
+				dispensing = FALSE
 
 /obj/machinery/computer/merch/update_icon()
 	if(stat & BROKEN)

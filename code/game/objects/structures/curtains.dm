@@ -8,6 +8,8 @@
 	plane = ABOVE_HUMAN_PLANE
 	var/ctype = 1
 	var/holo = FALSE
+	autoignition_temperature = AUTOIGNITION_PLASTIC
+	fire_fuel = 2
 
 /obj/structure/curtain/closed/left
 	ctype = 2
@@ -107,3 +109,40 @@
 
 /obj/structure/curtain/open/shower/security
 	color = "#AA0000"
+
+/obj/structure/curtain/open/clownai
+	name = "AI"
+	desc = "Pay no attention to the clo- I mean, person behind this."
+	var/closed_icon = 'icons/mob/AI.dmi'
+	var/closed_state = "ai"
+	var/affects_opacity = TRUE
+
+/obj/structure/curtain/open/clownai/toggle()
+	if(affects_opacity)
+		opacity = !opacity
+	if(icon_state != closed_state)
+		icon = closed_icon
+		icon_state = closed_state
+		layer = CLOSED_CURTAIN_LAYER
+	else
+		icon = initial(icon)
+		icon_state = "open_[ctype]"
+		layer = OPEN_CURTAIN_LAYER
+
+/obj/structure/curtain/open/clownai/AltClick(mob/user)
+	if(closed_icon == 'icons/mob/AI.dmi')
+		var/selected = input("Select an icon!", "AI curtain", null, null) as null|anything in ai_icon_states
+		if(!selected)
+			return
+		var/chosen_state = ai_icon_states[selected]
+		ASSERT(chosen_state)
+		closed_state = chosen_state
+		if(opacity)
+			icon_state = closed_state
+	return ..()
+
+/obj/structure/curtain/open/clownai/floor
+	name = "floor"
+	closed_icon = 'icons/turf/floors.dmi'
+	closed_state = "bcircuit"
+	affects_opacity = FALSE

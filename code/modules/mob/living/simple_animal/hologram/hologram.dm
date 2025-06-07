@@ -88,6 +88,10 @@
 	if(transmogged_from)
 		to_chat(src, "Use the spell in the top-right corner of the screen to go back to being a ghost.")
 
+	if (client)
+		for (var/obj/item/I in contents)
+			client.screen |= I//fixes items disappearing from your inventory if you disconnect/reconnect
+
 /mob/living/simple_animal/hologram/advanced/Destroy()
 	head = null
 	w_uniform = null

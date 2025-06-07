@@ -1,118 +1,1176 @@
-"aa" = (/turf/space,/area)
-"ac" = (/obj/effect/decal/warning_stripes{icon_state = "1"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"ae" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'EXTERNAL AIRLOCK'"; icon_state = "space"; name = "EXTERNAL AIRLOCK"},/turf/simulated/wall/shuttle,/area/shuttle/brokeufo/start)
-"af" = (/obj/effect/decal/cleanable/blood{icon_state = "floor3"},/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"ag" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/turf/space,/area/shuttle/brokeufo/start)
-"ai" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/toolbox/electrical,/obj/item/device/flashlight/flare/ever_bright,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/shuttle/brokeufo/start)
-"am" = (/obj/effect/decal/warning_stripes{icon_state = "2"},/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"an" = (/obj/effect/decal/warning_stripes{icon_state = "3"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"ap" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/space,/area/shuttle/brokeufo/start)
-"aq" = (/obj/item/clothing/gloves/yellow,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/shuttle/brokeufo/start)
-"ar" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/space,/area/shuttle/brokeufo/start)
-"as" = (/turf/simulated/floor/carpet,/area/shuttle/brokeufo/start)
-"au" = (/obj/machinery/light/small{dir = 4},/obj/machinery/vending/medical{emagged = 1; req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"av" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/warning_stripes{icon_state = "bot"},/obj/structure/cage,/obj/effect/landmark/corpse/nazi,/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"aw" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/shuttle/brokeufo/start)
-"aB" = (/obj/structure/shuttle/engine/heater{dir = 1},/obj/structure/window/reinforced/plasma,/turf/simulated/floor{icon_state = "old_enginewarn"; tag = "icon-old_enginewarn"},/area/shuttle/brokeufo/start)
-"aC" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/shuttle/brokeufo/start)
-"aE" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/warning_stripes{icon_state = "bot"},/obj/structure/cage,/obj/effect/landmark/corpse/trader,/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"aF" = (/obj/machinery/light{dir = 8},/obj/machinery/vending/engivend,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/shuttle/brokeufo/start)
-"aG" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"aH" = (/obj/structure/closet/crate,/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped,/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky,/obj/item/weapon/reagent_containers/food/condiment/zamspices,/turf/simulated/floor/carpet,/area/shuttle/brokeufo/start)
-"aI" = (/obj/effect/decal/warning_stripes{icon_state = "bot"},/obj/structure/cage,/obj/effect/landmark/corpse/clown,/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"aJ" = (/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"aN" = (/obj/structure/bed,/obj/effect/decal/cleanable/dirt,/obj/item/trash/zam_sliderwrapper,/obj/item/weapon/bedsheet/green,/turf/simulated/floor/carpet,/area/shuttle/brokeufo/start)
-"aO" = (/obj/structure/bed,/obj/item/weapon/bedsheet/green,/turf/simulated/floor/carpet,/area/shuttle/brokeufo/start)
-"aP" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/door/airlock/vault{id_tag = "ufocell"; locked = 1; name = "Specimen Containment"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"aR" = (/obj/structure/rack,/obj/item/weapon/handcuffs,/obj/item/weapon/handcuffs,/obj/item/weapon/handcuffs,/obj/item/device/flashlight/flare/ever_bright,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"aT" = (/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/humanoid/grey/explorer/space/ranged{name = "Gort"},/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"aU" = (/obj/machinery/door/airlock/silver{name = "Xenobiology Research Bay"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"aW" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/blood/gibs{icon_state = "gibleg"},/obj/item/device/flashlight/flare/ever_bright,/obj/item/organ/external/l_arm,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"aX" = (/obj/machinery/door/airlock/silver{name = "Engine Access"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/shuttle/brokeufo/start)
-"aY" = (/obj/structure/table/reinforced,/obj/machinery/microwave/upgraded{pixel_y = 5},/obj/item/trash/used_tray,/obj/item/weapon/kitchen/utensil/fork/teflon{pixel_x = 6},/turf/simulated/floor/carpet,/area/shuttle/brokeufo/start)
-"aZ" = (/turf/simulated/wall/shuttle,/area/shuttle/brokeufo/start)
-"ba" = (/obj/structure/rack,/obj/item/weapon/storage/box/syringes,/obj/item/weapon/gun/syringe,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"bb" = (/obj/effect/decal/cleanable/blood/drip,/mob/living/simple_animal/hostile/humanoid/grey/explorer/space/scalpel{name = "Nikto"},/obj/machinery/vending/wallmed1{pixel_x = 28},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"bd" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/engine,/area/shuttle/brokeufo/start)
-"be" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/door/airlock/silver{name = "Crew Quarters"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/carpet,/area/shuttle/brokeufo/start)
-"bf" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/carpet,/area/shuttle/brokeufo/start)
-"bg" = (/obj/item/trash/zam_notraisins,/turf/simulated/floor/carpet,/area/shuttle/brokeufo/start)
-"bh" = (/obj/structure/bed,/obj/effect/decal/cleanable/dirt,/obj/item/weapon/soap,/obj/item/weapon/bedsheet/green,/turf/simulated/floor/carpet,/area/shuttle/brokeufo/start)
-"bi" = (/obj/structure/bed,/obj/machinery/light{dir = 4},/obj/item/weapon/bedsheet/green,/turf/simulated/floor/carpet,/area/shuttle/brokeufo/start)
-"bj" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/bag/zam_food,/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic,/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,/obj/effect/decal/cleanable/dirt,/obj/item/weapon/kitchen/utensil/fork/teflon,/obj/item/weapon/kitchen/utensil/fork/teflon,/turf/simulated/floor/carpet,/area/shuttle/brokeufo/start)
-"by" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/floor/carpet,/area/shuttle/brokeufo/start)
-"bH" = (/turf/simulated/floor{icon_state = "darkredfull"; tag = "icon-darkredfull"},/area/shuttle/brokeufo/start)
-"ca" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "darkredfull"; tag = "icon-darkredfull"},/area/shuttle/brokeufo/start)
-"cF" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/simulated/floor/plating,/area/shuttle/brokeufo/start)
-"cH" = (/obj/structure/table/reinforced,/obj/machinery/door_control{id_tag = "ufostorage"; name = "Storage Bolt Control"; normaldoorcontrol = 1; pixel_x = 25; specialfunctions = 4},/obj/machinery/recharger,/turf/simulated/floor{dir = 6; icon_state = "whitered"},/area/shuttle/brokeufo/start)
-"fd" = (/obj/structure/shuttle/diag_wall/smooth,/turf/simulated/floor/plating,/area/shuttle/brokeufo/start)
-"gw" = (/obj/machinery/light/small,/turf/simulated/floor/carpet,/area/shuttle/brokeufo/start)
-"gS" = (/obj/machinery/light/small,/turf/simulated/floor/plating,/area/shuttle/brokeufo/start)
-"gZ" = (/obj/item/device/flashlight/flare/ever_bright,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/shuttle/brokeufo/start)
-"hl" = (/obj/machinery/light/small{dir = 1},/turf/simulated/floor/plating,/area/shuttle/brokeufo/start)
-"hD" = (/obj/structure/shuttle/diag_wall/smooth,/turf/space,/area/shuttle/brokeufo/start)
-"iq" = (/obj/structure/shuttle/engine/propulsion/left{dir = 1},/turf/space,/area/shuttle/brokeufo/start)
-"iH" = (/obj/structure/closet/walllocker/emerglocker{pixel_y = -30},/obj/machinery/light/small{dir = 1},/turf/simulated/floor/plating,/area/shuttle/brokeufo/start)
-"iU" = (/obj/effect/decal/cleanable/dirt,/obj/item/device/flashlight/flare/ever_bright,/obj/machinery/light/small{dir = 1},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"iW" = (/obj/machinery/door/airlock/external{req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor/plating,/area/shuttle/brokeufo/start)
-"jP" = (/obj/structure/closet/walllocker/emerglocker{pixel_y = 30},/obj/machinery/light/small/broken,/turf/simulated/floor/plating,/area/shuttle/brokeufo/start)
-"jZ" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/simulated/floor/plating,/area/shuttle/brokeufo/start)
-"kc" = (/obj/machinery/computer/shuttle_control/brokeufo{req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{icon_state = "whitered"; tag = "icon-whitered"},/area/shuttle/brokeufo/start)
-"kD" = (/obj/docking_port/destination/brokeufo/start,/turf/space,/area)
-"lK" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/obj/machinery/door/poddoor{id_tag = "ufobridge"; name = "Blast Shield Shutters"},/obj/docking_port/shuttle{dir = 2},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"lV" = (/obj/structure/rack,/obj/item/weapon/cell/super,/obj/item/weapon/cell/super,/obj/item/weapon/electrolyzer,/obj/item/tool/solder/pre_fueled,/obj/item/tool/weldingtool/hugetank,/obj/item/weapon/switchtool/swiss_army_knife,/obj/item/tool/crowbar/red,/obj/item/stack/sheet/glass/glass/bigstack,/obj/item/stack/sheet/metal/bigstack,/obj/item/device/radio,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/item/device/multitool,/obj/item/weapon/storage/firstaid/adv,/obj/item/device/flashlight,/turf/simulated/floor{icon_state = "dark"},/area/shuttle/brokeufo/start)
-"mo" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/simulated/floor/plating,/area/shuttle/brokeufo/start)
-"nG" = (/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"oL" = (/obj/structure/table/reinforced,/obj/item/tool/bonesetter,/obj/item/tool/bonegel,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"qo" = (/obj/machinery/door/airlock/vault{id_tag = "ufostorage"; locked = 1; name = "Storage Access"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{icon_state = "dark"},/area/shuttle/brokeufo/start)
-"rH" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{dir = 1; icon_state = "darkredcorners"; tag = "icon-darkredcorners (NORTH)"},/area/shuttle/brokeufo/start)
-"tx" = (/obj/effect/decal/cleanable/blood/oil{icon_state = "floor6"},/mob/living/simple_animal/hostile/humanoid/grey/explorer/space/toolbox{name = "Klaatu"},/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/shuttle/brokeufo/start)
-"tS" = (/obj/structure/table/reinforced,/obj/item/stack/sheet/mineral/plastic{amount = 50},/obj/item/stack/sheet/metal{amount = 50},/obj/effect/decal/cleanable/dirt,/obj/item/weapon/storage/box/inflatables,/obj/machinery/power/apc{cell_type = 0; dir = 4; icon_state = "apc1"; opened = 1; pixel_x = 28},/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/shuttle/brokeufo/start)
-"uN" = (/mob/living/simple_animal/hostile/humanoid/grey/explorer/space/ranged{name = "Barada"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"ve" = (/obj/effect/decal/cleanable/dirt,/obj/structure/table/reinforced,/obj/machinery/light/small{dir = 8},/obj/item/weapon/storage/firstaid,/obj/item/weapon/storage/box/masks,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"xP" = (/obj/machinery/door/airlock/silver{name = "Bridge"; req_access_txt = "162"; req_one_access_txt = "162"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"xT" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/obj/machinery/door/poddoor{id_tag = "ufobridge"; name = "Blast Shield Shutters"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"zX" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/simulated/floor{icon_state = "darkredcorners"; tag = "icon-darkredcorners"},/area/shuttle/brokeufo/start)
-"Af" = (/obj/structure/dispenser/oxygen,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/simulated/floor{icon_state = "dark"},/area/shuttle/brokeufo/start)
-"Aw" = (/obj/structure/closet/secure_closet/medical2{req_access = null; req_access_txt = "162"; req_one_access_txt = "162"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"CM" = (/obj/structure/table/reinforced,/obj/item/stack/sheet/mineral/diamond{amount = 10},/turf/simulated/floor{dir = 8; icon_state = "whitered"},/area/shuttle/brokeufo/start)
-"DJ" = (/obj/machinery/light/small{dir = 1},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"Ek" = (/obj/structure/sign/poster{icon_state = "bsposter10"; pixel_x = -32},/turf/simulated/floor{dir = 1; icon_state = "darkredcorners"; tag = "icon-darkredcorners (NORTH)"},/area/shuttle/brokeufo/start)
-"FC" = (/obj/structure/table/reinforced,/obj/item/weapon/switchtool/surgery,/obj/item/organ/internal/lungs/filter,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"Gm" = (/obj/effect/decal/cleanable/dirt,/obj/item/organ/external/l_hand,/obj/effect/decal/cleanable/blood{icon_state = "gibbl4"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"Gt" = (/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"IH" = (/obj/machinery/optable,/obj/machinery/light,/obj/effect/landmark/corpse/tajaran,/obj/effect/decal/cleanable/blood{icon_state = "floor4"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"IX" = (/obj/structure/table/reinforced,/obj/effect/decal/cleanable/dirt,/obj/item/weapon/cell/super/empty,/obj/item/weapon/cell/super/empty,/obj/machinery/cell_charger,/turf/simulated/floor{dir = 6; icon_state = "whitered"},/area/shuttle/brokeufo/start)
-"Pb" = (/obj/structure/table/reinforced,/obj/item/weapon/gun/projectile/flare,/turf/simulated/floor{dir = 10; icon_state = "whitered"},/area/shuttle/brokeufo/start)
-"RO" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "dark"},/area/shuttle/brokeufo/start)
-"SG" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/space,/area/shuttle/brokeufo/start)
-"Tp" = (/turf/simulated/floor{icon_state = "dark"},/area/shuttle/brokeufo/start)
-"TL" = (/obj/machinery/light/small{dir = 1},/turf/simulated/floor{icon_state = "darkredcorners"; tag = "icon-darkredcorners"},/area/shuttle/brokeufo/start)
-"Ue" = (/obj/structure/bed/chair/shuttle/red,/obj/item/stack/cable_coil/random,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"Us" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/full/reinforced,/obj/machinery/door/poddoor{id_tag = "ufobridge"; name = "Blast Shield Shutters"},/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"UW" = (/obj/machinery/light,/obj/structure/rack,/obj/item/clothing/shoes/magboots,/obj/item/clothing/head/helmet/space/nasavoid,/obj/item/clothing/suit/space/nasavoid,/obj/item/weapon/tank/jetpack/carbondioxide,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/obj/item/weapon/gun/energy/smalldisintegrator,/turf/simulated/floor{icon_state = "dark"},/area/shuttle/brokeufo/start)
-"WO" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/pill_bottle/zambiscuits,/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter,/obj/item/weapon/reagent_containers/food/snacks/zambiscuit,/obj/item/weapon/reagent_containers/food/snacks/zambiscuit,/turf/simulated/floor{dir = 4; icon_state = "whitered"},/area/shuttle/brokeufo/start)
-"XF" = (/turf/simulated/floor/plating,/area/shuttle/brokeufo/start)
-"XU" = (/obj/structure/closet/crate/freezer/surgery,/obj/item/organ/internal/heart/insectoid,/obj/item/organ/internal/heart,/obj/item/organ/internal/heart,/obj/item/organ/internal/lungs,/obj/item/organ/internal/lungs/plasmaman,/obj/item/organ/internal/lungs/vox,/obj/item/organ/internal/lungs,/obj/item/organ/internal/liver,/obj/item/organ/internal/eyes/grey,/obj/item/organ/internal/eyes/tajaran,/obj/item/organ/internal/eyes/tajaran,/obj/item/organ/internal/kidneys,/obj/item/organ/internal/appendix,/obj/item/organ/internal/appendix,/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/simulated/floor{icon_state = "dark"},/area/shuttle/brokeufo/start)
-"Zo" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/fancy/flares,/obj/machinery/door_control{id_tag = "ufocell"; name = "Cell Bolt Control"; normaldoorcontrol = 1; pixel_x = -25; pixel_y = 5; specialfunctions = 4},/obj/machinery/door_control{id_tag = "ufobridge"; name = "Blast Shield Control"; pixel_x = -25; pixel_y = -5},/obj/item/weapon/card/id/mothership_soldier,/obj/item/weapon/card/id/mothership_soldier,/turf/simulated/floor{dir = 10; icon_state = "whitered"},/area/shuttle/brokeufo/start)
-"ZA" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "white"; tag = "icon-white"},/area/shuttle/brokeufo/start)
-"ZR" = (/obj/item/toy/gasha/wizard,/turf/space,/area)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/space,
+/area)
+"ac" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "1"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/engine,
+/area/shuttle/brokeufo/start)
+"ae" = (
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
+	icon_state = "space";
+	name = "EXTERNAL AIRLOCK"
+	},
+/turf/simulated/wall/shuttle,
+/area/shuttle/brokeufo/start)
+"af" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor3"
+	},
+/turf/simulated/floor/engine,
+/area/shuttle/brokeufo/start)
+"ag" = (
+/obj/structure/shuttle/engine/propulsion{
+	dir = 1
+	},
+/turf/space,
+/area/shuttle/brokeufo/start)
+"ai" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/storage/toolbox/electrical,
+/obj/item/device/flashlight/flare/ever_bright,
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "yellowfull"
+	},
+/area/shuttle/brokeufo/start)
+"am" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "2"
+	},
+/turf/simulated/floor/engine,
+/area/shuttle/brokeufo/start)
+"an" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "3"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/engine,
+/area/shuttle/brokeufo/start)
+"ap" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/space,
+/area/shuttle/brokeufo/start)
+"aq" = (
+/obj/item/clothing/gloves/yellow,
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "yellowfull"
+	},
+/area/shuttle/brokeufo/start)
+"ar" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/turf/space,
+/area/shuttle/brokeufo/start)
+"as" = (
+/turf/simulated/floor/carpet,
+/area/shuttle/brokeufo/start)
+"au" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/obj/machinery/vending/medical{
+	emagged = 1;
+	req_access = null;
+	req_access_txt = "162";
+	req_one_access_txt = "162"
+	},
+/turf/simulated/floor/engine,
+/area/shuttle/brokeufo/start)
+"av" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/cage,
+/obj/effect/landmark/corpse/nazi,
+/turf/simulated/floor/engine,
+/area/shuttle/brokeufo/start)
+"aw" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "yellowfull"
+	},
+/area/shuttle/brokeufo/start)
+"aB" = (
+/obj/structure/shuttle/engine/heater{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma,
+/turf/simulated/floor{
+	icon_state = "old_enginewarn";
+	tag = "icon-old_enginewarn"
+	},
+/area/shuttle/brokeufo/start)
+"aC" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating,
+/area/shuttle/brokeufo/start)
+"aE" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/cage,
+/obj/effect/landmark/corpse/trader,
+/turf/simulated/floor/engine,
+/area/shuttle/brokeufo/start)
+"aF" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/obj/machinery/vending/engivend,
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "yellowfull"
+	},
+/area/shuttle/brokeufo/start)
+"aG" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"aH" = (
+/obj/structure/bed/ayy1,
+/obj/item/trash/zam_sliderwrapper,
+/obj/structure/curtain/open/bed,
+/turf/simulated/floor/carpet,
+/area/shuttle/brokeufo/start)
+"aI" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/cage,
+/obj/effect/landmark/corpse/clown,
+/turf/simulated/floor/engine,
+/area/shuttle/brokeufo/start)
+"aJ" = (
+/turf/simulated/floor/engine,
+/area/shuttle/brokeufo/start)
+"aO" = (
+/obj/structure/bed/ayy1,
+/obj/structure/curtain/open/bed,
+/turf/simulated/floor/carpet,
+/area/shuttle/brokeufo/start)
+"aP" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/door/airlock/vault{
+	id_tag = "ufocell";
+	locked = 1;
+	name = "Specimen Containment";
+	req_access_txt = "162";
+	req_one_access_txt = "162"
+	},
+/turf/simulated/floor/engine,
+/area/shuttle/brokeufo/start)
+"aR" = (
+/obj/structure/rack,
+/obj/item/weapon/handcuffs,
+/obj/item/weapon/handcuffs,
+/obj/item/weapon/handcuffs,
+/obj/item/device/flashlight/flare/ever_bright,
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/turf/simulated/floor/engine,
+/area/shuttle/brokeufo/start)
+"aT" = (
+/obj/effect/decal/cleanable/dirt,
+/mob/living/simple_animal/hostile/humanoid/grey/explorer/space/ranged{
+	name = "Gort"
+	},
+/turf/simulated/floor/engine,
+/area/shuttle/brokeufo/start)
+"aU" = (
+/obj/machinery/door/airlock/silver{
+	name = "Xenobiology Research Bay";
+	req_access_txt = "162";
+	req_one_access_txt = "162"
+	},
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"aW" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/blood/gibs{
+	icon_state = "gibleg"
+	},
+/obj/item/device/flashlight/flare/ever_bright,
+/obj/item/organ/external/l_arm,
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"aX" = (
+/obj/machinery/door/airlock/silver{
+	name = "Engine Access";
+	req_access_txt = "162";
+	req_one_access_txt = "162"
+	},
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "yellowfull"
+	},
+/area/shuttle/brokeufo/start)
+"aZ" = (
+/turf/simulated/wall/shuttle,
+/area/shuttle/brokeufo/start)
+"ba" = (
+/obj/structure/rack,
+/obj/item/weapon/storage/box/syringes,
+/obj/item/weapon/gun/syringe,
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/turf/simulated/floor/engine,
+/area/shuttle/brokeufo/start)
+"bb" = (
+/obj/effect/decal/cleanable/blood/drip,
+/mob/living/simple_animal/hostile/humanoid/grey/explorer/space/scalpel{
+	name = "Nikto"
+	},
+/obj/machinery/vending/wallmed1{
+	pixel_x = 28
+	},
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"bd" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/engine,
+/area/shuttle/brokeufo/start)
+"be" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/door/airlock/silver{
+	name = "Crew Quarters";
+	req_access_txt = "162";
+	req_one_access_txt = "162"
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/brokeufo/start)
+"bf" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/carpet,
+/area/shuttle/brokeufo/start)
+"bg" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/trash/zam_notraisins,
+/turf/simulated/floor/carpet,
+/area/shuttle/brokeufo/start)
+"bh" = (
+/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped,
+/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky,
+/obj/item/weapon/reagent_containers/food/condiment/zamspices,
+/obj/machinery/light{
+	dir = 4
+	},
+/obj/structure/table/reinforced,
+/turf/simulated/floor/carpet,
+/area/shuttle/brokeufo/start)
+"bi" = (
+/obj/structure/table/reinforced,
+/obj/machinery/microwave/upgraded{
+	pixel_y = 5
+	},
+/obj/item/weapon/kitchen/utensil/fork/teflon{
+	pixel_x = 6
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/brokeufo/start)
+"bj" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/storage/bag/zam_food,
+/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic,
+/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/kitchen/utensil/fork/teflon,
+/obj/item/weapon/kitchen/utensil/fork/teflon,
+/turf/simulated/floor/carpet,
+/area/shuttle/brokeufo/start)
+"by" = (
+/obj/structure/bed/chair/comfy/ayy1{
+	dir = 4
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/brokeufo/start)
+"bH" = (
+/turf/simulated/floor{
+	icon_state = "darkredfull";
+	tag = "icon-darkredfull"
+	},
+/area/shuttle/brokeufo/start)
+"ca" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "darkredfull";
+	tag = "icon-darkredfull"
+	},
+/area/shuttle/brokeufo/start)
+"cF" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/brokeufo/start)
+"cH" = (
+/obj/structure/table/reinforced,
+/obj/machinery/door_control{
+	id_tag = "ufostorage";
+	name = "Storage Bolt Control";
+	normaldoorcontrol = 1;
+	pixel_x = 25;
+	specialfunctions = 4
+	},
+/obj/machinery/recharger,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "whitered"
+	},
+/area/shuttle/brokeufo/start)
+"fd" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/floor/plating,
+/area/shuttle/brokeufo/start)
+"gw" = (
+/obj/machinery/light/small,
+/turf/simulated/floor/carpet,
+/area/shuttle/brokeufo/start)
+"gS" = (
+/obj/machinery/light/small,
+/turf/simulated/floor/plating,
+/area/shuttle/brokeufo/start)
+"gZ" = (
+/obj/item/device/flashlight/flare/ever_bright,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating,
+/area/shuttle/brokeufo/start)
+"hl" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/brokeufo/start)
+"hD" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/space,
+/area/shuttle/brokeufo/start)
+"iq" = (
+/obj/structure/shuttle/engine/propulsion/left{
+	dir = 1
+	},
+/turf/space,
+/area/shuttle/brokeufo/start)
+"iH" = (
+/obj/structure/closet/walllocker/emerglocker{
+	pixel_y = -30
+	},
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/brokeufo/start)
+"iU" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/device/flashlight/flare/ever_bright,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"iW" = (
+/obj/machinery/door/airlock/external{
+	req_access_txt = "162";
+	req_one_access_txt = "162"
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/brokeufo/start)
+"jP" = (
+/obj/structure/closet/walllocker/emerglocker{
+	pixel_y = 30
+	},
+/obj/machinery/light/small/broken,
+/turf/simulated/floor/plating,
+/area/shuttle/brokeufo/start)
+"jZ" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/brokeufo/start)
+"kc" = (
+/obj/machinery/computer/shuttle_control/brokeufo{
+	req_access_txt = "162";
+	req_one_access_txt = "162"
+	},
+/turf/simulated/floor{
+	icon_state = "whitered";
+	tag = "icon-whitered"
+	},
+/area/shuttle/brokeufo/start)
+"kD" = (
+/obj/docking_port/destination/brokeufo/start,
+/turf/space,
+/area)
+"lK" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/obj/machinery/door/poddoor{
+	id_tag = "ufobridge";
+	name = "Blast Shield Shutters"
+	},
+/obj/docking_port/shuttle{
+	dir = 2
+	},
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"lV" = (
+/obj/structure/rack,
+/obj/item/weapon/cell/super,
+/obj/item/weapon/cell/super,
+/obj/item/weapon/electrolyzer,
+/obj/item/tool/solder/pre_fueled,
+/obj/item/tool/weldingtool/hugetank,
+/obj/item/weapon/switchtool/swiss_army_knife,
+/obj/item/tool/crowbar/red,
+/obj/item/stack/sheet/glass/glass/bigstack,
+/obj/item/stack/sheet/metal/bigstack,
+/obj/item/device/radio,
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/obj/item/device/multitool,
+/obj/item/weapon/storage/firstaid/adv,
+/obj/item/device/flashlight,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/brokeufo/start)
+"mo" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/shuttle/brokeufo/start)
+"nG" = (
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"oL" = (
+/obj/structure/table/reinforced,
+/obj/item/tool/bonesetter,
+/obj/item/tool/bonegel,
+/obj/item/tool/FixOVein,
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"qo" = (
+/obj/machinery/door/airlock/vault{
+	id_tag = "ufostorage";
+	locked = 1;
+	name = "Storage Access";
+	req_access_txt = "162";
+	req_one_access_txt = "162"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/brokeufo/start)
+"rH" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "darkredcorners";
+	tag = "icon-darkredcorners (NORTH)"
+	},
+/area/shuttle/brokeufo/start)
+"tx" = (
+/obj/effect/decal/cleanable/blood/oil{
+	icon_state = "floor6"
+	},
+/mob/living/simple_animal/hostile/humanoid/grey/explorer/space/toolbox{
+	name = "Klaatu"
+	},
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "yellowfull"
+	},
+/area/shuttle/brokeufo/start)
+"tS" = (
+/obj/structure/table/reinforced,
+/obj/item/stack/sheet/mineral/plastic{
+	amount = 50
+	},
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/storage/box/inflatables,
+/obj/machinery/power/apc{
+	cell_type = 0;
+	dir = 4;
+	icon_state = "apc1";
+	opened = 1;
+	pixel_x = 28
+	},
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "yellowfull"
+	},
+/area/shuttle/brokeufo/start)
+"uN" = (
+/mob/living/simple_animal/hostile/humanoid/grey/explorer/space/ranged{
+	name = "Barada"
+	},
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"ve" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/table/reinforced,
+/obj/machinery/light/small{
+	dir = 8
+	},
+/obj/item/weapon/storage/firstaid,
+/obj/item/weapon/storage/box/masks,
+/obj/item/tool/cautery,
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"xP" = (
+/obj/machinery/door/airlock/silver{
+	name = "Bridge";
+	req_access_txt = "162";
+	req_one_access_txt = "162"
+	},
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"xT" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/obj/machinery/door/poddoor{
+	id_tag = "ufobridge";
+	name = "Blast Shield Shutters"
+	},
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"zX" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "darkredcorners";
+	tag = "icon-darkredcorners"
+	},
+/area/shuttle/brokeufo/start)
+"Af" = (
+/obj/structure/dispenser/oxygen,
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/brokeufo/start)
+"Aw" = (
+/obj/structure/closet/secure_closet/medical2{
+	req_access = null;
+	req_access_txt = "162";
+	req_one_access_txt = "162"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"CM" = (
+/obj/structure/table/reinforced,
+/obj/item/stack/sheet/mineral/diamond{
+	amount = 10
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "whitered"
+	},
+/area/shuttle/brokeufo/start)
+"DJ" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"Ek" = (
+/obj/structure/sign/poster{
+	icon_state = "bsposter10";
+	pixel_x = -32
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "darkredcorners";
+	tag = "icon-darkredcorners (NORTH)"
+	},
+/area/shuttle/brokeufo/start)
+"FC" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/switchtool/surgery,
+/obj/item/organ/internal/lungs/filter,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"Gm" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/organ/external/l_hand,
+/obj/effect/decal/cleanable/blood{
+	icon_state = "gibbl4"
+	},
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"Gt" = (
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"IH" = (
+/obj/machinery/optable,
+/obj/machinery/light,
+/obj/effect/landmark/corpse/tajaran,
+/obj/effect/decal/cleanable/blood{
+	icon_state = "floor4"
+	},
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"IX" = (
+/obj/structure/table/reinforced,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/cell/super/empty,
+/obj/item/weapon/cell/super/empty,
+/obj/machinery/cell_charger,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "whitered"
+	},
+/area/shuttle/brokeufo/start)
+"Pb" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/gun/projectile/flare,
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "whitered"
+	},
+/area/shuttle/brokeufo/start)
+"RO" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/brokeufo/start)
+"SG" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/space,
+/area/shuttle/brokeufo/start)
+"Tp" = (
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/brokeufo/start)
+"TL" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "darkredcorners";
+	tag = "icon-darkredcorners"
+	},
+/area/shuttle/brokeufo/start)
+"Ue" = (
+/obj/structure/bed/chair/shuttle/red,
+/obj/item/stack/cable_coil/random,
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"Us" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/obj/machinery/door/poddoor{
+	id_tag = "ufobridge";
+	name = "Blast Shield Shutters"
+	},
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"UW" = (
+/obj/machinery/light,
+/obj/structure/rack,
+/obj/item/clothing/shoes/magboots,
+/obj/item/clothing/head/helmet/space/nasavoid,
+/obj/item/clothing/suit/space/nasavoid,
+/obj/item/weapon/tank/jetpack/carbondioxide,
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/obj/item/weapon/gun/energy/smalldisintegrator,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/brokeufo/start)
+"WO" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter,
+/obj/item/weapon/reagent_containers/food/snacks/zambiscuit,
+/obj/item/weapon/reagent_containers/food/snacks/zambiscuit,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "whitered"
+	},
+/area/shuttle/brokeufo/start)
+"XF" = (
+/turf/simulated/floor/plating,
+/area/shuttle/brokeufo/start)
+"XU" = (
+/obj/structure/closet/crate/freezer/surgery,
+/obj/item/organ/internal/heart/insectoid,
+/obj/item/organ/internal/heart,
+/obj/item/organ/internal/heart,
+/obj/item/organ/internal/lungs,
+/obj/item/organ/internal/lungs/plasmaman,
+/obj/item/organ/internal/lungs/vox,
+/obj/item/organ/internal/lungs,
+/obj/item/organ/internal/liver,
+/obj/item/organ/internal/eyes/grey,
+/obj/item/organ/internal/eyes/tajaran,
+/obj/item/organ/internal/eyes/tajaran,
+/obj/item/organ/internal/kidneys,
+/obj/item/organ/internal/appendix,
+/obj/item/organ/internal/appendix,
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/shuttle/brokeufo/start)
+"YX" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/acidsink{
+	pixel_y = 28
+	},
+/turf/simulated/floor/carpet,
+/area/shuttle/brokeufo/start)
+"Zo" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/storage/fancy/flares,
+/obj/machinery/door_control{
+	id_tag = "ufocell";
+	name = "Cell Bolt Control";
+	normaldoorcontrol = 1;
+	pixel_x = -25;
+	pixel_y = 5;
+	specialfunctions = 4
+	},
+/obj/machinery/door_control{
+	id_tag = "ufobridge";
+	name = "Blast Shield Control";
+	pixel_x = -25;
+	pixel_y = -5
+	},
+/obj/item/weapon/card/id/mothership_soldier,
+/obj/item/weapon/card/id/mothership_soldier,
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "whitered"
+	},
+/area/shuttle/brokeufo/start)
+"ZA" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "white";
+	tag = "icon-white"
+	},
+/area/shuttle/brokeufo/start)
+"ZR" = (
+/obj/item/toy/gasha/wizard,
+/turf/space,
+/area)
 
 (1,1,1) = {"
-aaaaaaaaaaapaZagiqagaZaraaaaaaaaaa
-aaaaaaapaZaZaZaBaBaBaZaZaZaraaaaaa
-aaaaapaZavaEaZaFaitSaZaHaNaZaraaaa
-aaapaZaIamanaZawtxaqaZaOasbiaZaraa
-aaaZaRacafauaZaZaXaZaZaYbfbgbhaZaa
-aaaZbaaJaTbdaJaPXFbegwbfasbybjaZaa
-apaeaZaZaZaZaZcFaCfdaZaZaZaZaZaZar
-iWiHiWXFaCgSXFgZXFXFXFhlaCaCiWjPiW
-hDaZaZaZaZaZaZjZaCmoaZaZaZaZaZaeSG
-aaaZoLFCGmGtZAaUXFqoROTpTLbHAfaZaa
-aaaZveaWnGaGaZaZxPaZaZzXcarHXUaZaa
-aahDaZAwbbaZCMiUGtDJWOaZEklVaZSGaa
-aaaahDaZIHaZPbZAUeuNIXaZUWaZSGaaaa
-aaaaaahDaZaZaZZokccHaZaZaZSGaaaaaa
-aaaaaaaaaahDaZUslKxTaZSGaaaaaaZRaa
-aaaaaaaaaaaaaaaakDaaaaaaaaaaaaaaaa
+aa
+aa
+aa
+aa
+aa
+aa
+ap
+iW
+hD
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(2,1,1) = {"
+aa
+aa
+aa
+ap
+aZ
+aZ
+ae
+iH
+aZ
+aZ
+aZ
+hD
+aa
+aa
+aa
+aa
+"}
+(3,1,1) = {"
+aa
+aa
+ap
+aZ
+aR
+ba
+aZ
+iW
+aZ
+oL
+ve
+aZ
+hD
+aa
+aa
+aa
+"}
+(4,1,1) = {"
+aa
+ap
+aZ
+aI
+ac
+aJ
+aZ
+XF
+aZ
+FC
+aW
+Aw
+aZ
+hD
+aa
+aa
+"}
+(5,1,1) = {"
+aa
+aZ
+av
+am
+af
+aT
+aZ
+aC
+aZ
+Gm
+nG
+bb
+IH
+aZ
+aa
+aa
+"}
+(6,1,1) = {"
+ap
+aZ
+aE
+an
+au
+bd
+aZ
+gS
+aZ
+Gt
+aG
+aZ
+aZ
+aZ
+hD
+aa
+"}
+(7,1,1) = {"
+aZ
+aZ
+aZ
+aZ
+aZ
+aJ
+aZ
+XF
+aZ
+ZA
+aZ
+CM
+Pb
+aZ
+aZ
+aa
+"}
+(8,1,1) = {"
+ag
+aB
+aF
+aw
+aZ
+aP
+cF
+gZ
+jZ
+aU
+aZ
+iU
+ZA
+Zo
+Us
+aa
+"}
+(9,1,1) = {"
+iq
+aB
+ai
+tx
+aX
+XF
+aC
+XF
+aC
+XF
+xP
+Gt
+Ue
+kc
+lK
+kD
+"}
+(10,1,1) = {"
+ag
+aB
+tS
+aq
+aZ
+be
+fd
+XF
+mo
+qo
+aZ
+DJ
+uN
+cH
+xT
+aa
+"}
+(11,1,1) = {"
+aZ
+aZ
+aZ
+aZ
+aZ
+gw
+aZ
+XF
+aZ
+RO
+aZ
+WO
+IX
+aZ
+aZ
+aa
+"}
+(12,1,1) = {"
+ar
+aZ
+aH
+aO
+aO
+bf
+aZ
+hl
+aZ
+Tp
+zX
+aZ
+aZ
+aZ
+SG
+aa
+"}
+(13,1,1) = {"
+aa
+aZ
+YX
+as
+bg
+as
+aZ
+aC
+aZ
+TL
+ca
+Ek
+UW
+aZ
+aa
+aa
+"}
+(14,1,1) = {"
+aa
+ar
+aZ
+bi
+by
+by
+aZ
+aC
+aZ
+bH
+rH
+lV
+aZ
+SG
+aa
+aa
+"}
+(15,1,1) = {"
+aa
+aa
+ar
+aZ
+bh
+bj
+aZ
+iW
+aZ
+Af
+XU
+aZ
+SG
+aa
+aa
+aa
+"}
+(16,1,1) = {"
+aa
+aa
+aa
+ar
+aZ
+aZ
+aZ
+jP
+ae
+aZ
+aZ
+SG
+aa
+aa
+ZR
+aa
+"}
+(17,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ar
+iW
+SG
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 "}

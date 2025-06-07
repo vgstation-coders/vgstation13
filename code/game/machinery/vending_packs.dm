@@ -147,21 +147,6 @@
 /obj/structure/vendomatpack/discount
 	name = "Discount Dan's recharge pack"
 	targetvendomat = /obj/machinery/vending/discount
-	icon_state = "discout"
-
-/obj/structure/vendomatpack/groans
-	name = "Groans Soda recharge pack"
-	targetvendomat = /obj/machinery/vending/groans
-	icon_state = "groans"
-
-/obj/structure/vendomatpack/shoedispenser
-	name = "Shoelord 9000 recharge pack"
-	targetvendomat = /obj/machinery/vending/shoedispenser
-	icon_state = "shoes"
-
-/obj/structure/vendomatpack/discount
-	name = "Discount Dan's recharge pack"
-	targetvendomat = /obj/machinery/vending/discount
 	icon_state = DISCOUNT
 
 /obj/structure/vendomatpack/groans
@@ -248,8 +233,7 @@
 	var/foldable = /obj/item/stack/sheet/cardboard
 	var/foldable_amount = 4
 
-	autoignition_temperature = 522 // Kelvin
-	fire_fuel = 2
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/emptyvendomatpack/attack_self()
 	to_chat(usr, "<span class='notice'>You fold [src] flat.</span>")
@@ -322,3 +306,8 @@
 	desc = "You could return it to cargo or just flatten it. The label looks like it was partially cut off."
 	targetvendomat = /obj/machinery/vending/meat
 	icon_state = "meat"
+
+/obj/structure/vendomatpack/artsupply
+	name = "\improper Le Patron des Arts recharge pack"
+	targetvendomat = /obj/machinery/vending/art
+	icon_state = "circus"

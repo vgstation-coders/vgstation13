@@ -502,27 +502,27 @@
 	block = SOBERBLOCK
 	..()
 
-/obj/item/weapon/dnainjector/nofail/jamsignals
-	name = "DNA-Injector (Jam Signals)"
-	desc = "Hidden in plain sight"
+/obj/item/weapon/dnainjector/nofail/psychic_resist
+	name = "DNA-Injector (Psychic Resist)"
+	desc = "Not today, mind hippies."
 	datatype = DNA2_BUF_SE
 	value = 0xFFF
 	//block = 2
 
-/obj/item/weapon/dnainjector/nofail/JAMSIGNALS/initialize()
-	block = JAMSIGNALSBLOCK
+/obj/item/weapon/dnainjector/nofail/psychic_resist/initialize()
+	block = PSYRESISTBLOCK
 	..()
 
 
-/obj/item/weapon/dnainjector/nofail/antijamsignals
-	name = "DNA-Injector (Anti-Jamming)"
-	desc = "There are eyes everywhere"
+/obj/item/weapon/dnainjector/nofail/antipsychic_resist
+	name = "DNA-Injector (Anti-Psychic Resist)"
+	desc = "Im thinking about furry porn 24/7. Come at me."
 	datatype = DNA2_BUF_SE
 	value = 0x001
 	//block = 2
 
-/obj/item/weapon/dnainjector/nofail/antijamsignals/initialize()
-	block = JAMSIGNALSBLOCK
+/obj/item/weapon/dnainjector/nofail/antipsychic_resist/initialize()
+	block = PSYRESISTBLOCK
 	..()
 
 /*/obj/item/weapon/dnainjector/nofail/darkcloak
@@ -733,6 +733,16 @@
 
 /obj/item/weapon/dnainjector/nofail/epimut/initialize()
 	block = HEADACHEBLOCK
+	..()
+
+/obj/item/weapon/dnainjector/nofail/eat
+	name = "DNA-Injector (Eat)"
+	desc = "Now I am become gut, devourer of worlds."
+	datatype = DNA2_BUF_SE
+	value = 0xFFF
+
+/obj/item/weapon/dnainjector/nofail/eat/initialize()
+	block = EATBLOCK
 	..()
 
 /obj/item/weapon/dnainjector/nofail/antiepi
@@ -1382,7 +1392,7 @@
         /obj/item/weapon/dnainjector/nofail/insulation,
         /obj/item/weapon/dnainjector/nofail/midgit,
         /obj/item/weapon/dnainjector/nofail/sober,
-        /obj/item/weapon/dnainjector/nofail/jamsignals,
+		/obj/item/weapon/dnainjector/nofail/psychic_resist,
         /obj/item/weapon/dnainjector/nofail/chameleon,
         /obj/item/weapon/dnainjector/nofail/cryo,
         /obj/item/weapon/dnainjector/nofail/mattereater,

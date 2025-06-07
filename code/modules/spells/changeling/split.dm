@@ -39,11 +39,11 @@
 		recruiter.jobban_roles = list("Syndicate")
 		recruiter.recruitment_timeout = 30 SECONDS
 	// Role set to Yes or Always
-	recruiter.player_volunteering = new /callback(src, src::recruiter_recruiting())
+	recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
 	// Role set to No or Never
-	recruiter.player_not_volunteering = new /callback(src, src::recruiter_not_recruiting())
+	recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
 
-	recruiter.recruited = new /callback(src, src::recruiter_recruited())
+	recruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
 	recruiter.request_player()
 
 /spell/changeling/split/proc/checkSplit(var/success)
@@ -66,7 +66,7 @@
 	if(!player)
 		checkSplit(FALSE)
 		polling_ghosts = FALSE
-		qdel(recruiter)
+		QDEL_NULL(recruiter)
 		return
 	polling_ghosts = FALSE
 	var/turf/this_turf = get_turf(owner.current.loc)
@@ -101,4 +101,4 @@
 	update_faction_icons()
 
 	feedback_add_details("changeling_powers","SP")
-	qdel(recruiter)
+	QDEL_NULL(recruiter)

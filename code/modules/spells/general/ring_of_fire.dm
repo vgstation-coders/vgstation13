@@ -76,8 +76,12 @@
 /spell/aoe_turf/ring_of_fire/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
 		if(Sp_MOVE)
+			if(spell_levels[Sp_MOVE] >= level_max[Sp_MOVE])
+				return "The ring already moves together with you!"
 			return "Make the ring move together with you."
 		if(Sp_POWER)
+			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+				return "The ring already casts living flames when it is over!"
 			return "Make the ring cast living flames when it is over."
 
 	return ..()

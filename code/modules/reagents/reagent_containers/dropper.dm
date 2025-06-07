@@ -23,7 +23,7 @@
 	icon_state = "dropper[(reagents.total_volume ? 1 : 0)]"
 
 /obj/item/weapon/reagent_containers/dropper/attack(var/mob/M, var/mob/user)
-	if(!reagents.total_volume && M.is_open_container())
+	if(!reagents.total_volume)
 		to_chat(user, "<span class='warning'>That doesn't make much sense.</span>")
 		return
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Squirt attempt with [src.name] by [user.name] ([user.ckey]). Reagents: [reagents.get_reagent_ids(1)]</font>")

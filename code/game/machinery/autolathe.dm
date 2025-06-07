@@ -24,7 +24,8 @@
 
 	allowed_materials = list(
 						MAT_IRON,
-						MAT_GLASS
+						MAT_GLASS,
+						MAT_PLASTIC,
 	)
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE | WRENCHMOVE | FIXED2WORK | MULTIOUTPUT
@@ -53,6 +54,7 @@
 		"Containers"=list(
 		new /obj/item/weapon/reagent_containers/glass/beaker(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker/large(), \
+		new /obj/item/weapon/reagent_containers/glass/metal_bucket(), \
 		new /obj/item/weapon/reagent_containers/glass/bucket(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
 		new /obj/item/weapon/reagent_containers/food/drinks/mug(), \
@@ -140,6 +142,7 @@
 		new /obj/item/device/rcd/rpd(),\
 		new /obj/item/device/radio/electropack(), \
 		new /obj/item/tool/weldingtool/largetank/empty(), \
+		new /obj/item/clothing/glasses/welding(), \
 		new /obj/item/weapon/handcuffs(), \
 		new /obj/item/ammo_storage/box/a357(), \
 		new /obj/item/ammo_casing/shotgun(), \

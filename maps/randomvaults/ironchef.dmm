@@ -38,7 +38,6 @@
 /obj/machinery/gibber,
 /obj/machinery/light/he,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -55,7 +54,6 @@
 "ai" = (
 /obj/machinery/cooking/deepfryer,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -65,7 +63,6 @@
 	},
 /obj/structure/windoor_assembly/secure,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -249,7 +246,6 @@
 	name = "Iron Chef 1"
 	},
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -260,7 +256,6 @@
 /obj/item/fish_eggs/salmon,
 /obj/item/fish_eggs/salmon,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -276,7 +271,6 @@
 	name = "Storage"
 	},
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -315,13 +309,11 @@
 	req_access = null
 	},
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
 "aW" = (
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -359,7 +351,6 @@
 	name = "Iron Chef 2"
 	},
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -383,7 +374,6 @@
 	auto_patrol = 0
 	},
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -405,7 +395,6 @@
 	icon_state = "1"
 	},
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -489,7 +478,6 @@
 "br" = (
 /obj/machinery/processor,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -499,7 +487,6 @@
 /obj/item/clothing/under/rank/chef,
 /obj/item/clothing/suit/chef,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -521,14 +508,12 @@
 /obj/machinery/cooking/cerealmaker,
 /obj/machinery/light/he,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
 "bw" = (
 /obj/machinery/cooking/candy,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -544,7 +529,6 @@
 	},
 /obj/item/weapon/reagent_containers/dropper/baster,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -553,7 +537,6 @@
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver,
 /obj/structure/table/reinforced,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -564,7 +547,6 @@
 	pixel_y = 6
 	},
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -575,7 +557,6 @@
 	},
 /obj/structure/table/reinforced,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -583,14 +564,12 @@
 /obj/machinery/reagentgrinder,
 /obj/structure/table/reinforced,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
 "bC" = (
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -599,7 +578,6 @@
 /obj/structure/table/reinforced,
 /obj/item/trash/plate/clean/stack,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -607,14 +585,12 @@
 /obj/structure/table/reinforced,
 /obj/structure/window/reinforced,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
 "bF" = (
 /obj/machinery/bot/chefbot,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -625,7 +601,6 @@
 	dir = 8
 	},
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -648,7 +623,6 @@
 	icon_state = "2"
 	},
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -676,7 +650,6 @@
 	dir = 4
 	},
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)
@@ -894,7 +867,6 @@
 "Rr" = (
 /obj/machinery/smartfridge/condiments,
 /turf/simulated/floor{
-	blocks_air = 0;
 	icon_state = "dark"
 	},
 /area/vault/ironchef)

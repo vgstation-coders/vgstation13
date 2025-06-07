@@ -426,11 +426,17 @@
 	icon_state = ""
 	mineral = "gold"
 
+/obj/structure/falsewall/gold/gold_old
+	mineral = "gold_old"
+
 /obj/structure/falsewall/silver
 	name = "silver wall"
 	desc = "A wall with silver plating. Shiny."
 	icon_state = ""
 	mineral = "silver"
+
+/obj/structure/falsewall/silver/silver_old
+	mineral = "silver_old"
 
 /obj/structure/falsewall/diamond
 	name = "diamond wall"

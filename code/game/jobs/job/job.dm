@@ -61,6 +61,8 @@
 
 	var/outfit_datum = null
 
+	var/additional_information = ""
+
 /datum/job/proc/is_disabled()
 	return FALSE
 
@@ -122,6 +124,9 @@
 	to_chat(M, "<B>You are the [job_title].</B>")
 	to_chat(M, "<b>As the [job_title] you answer directly to [src.supervisors]. Special circumstances may change this.</b>")
 
+	if (additional_information)
+		to_chat(M, "<span class='notice'>[additional_information]</span>")
+
 	if(src.req_admin_notify)
 		to_chat(M, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
@@ -132,3 +137,6 @@
 
 /datum/job/proc/get_wage()
 	return wage_payout
+
+/datum/job/proc/post_init(var/mob/living/carbon/human/H)
+	return

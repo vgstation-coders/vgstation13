@@ -59,12 +59,21 @@
 
 // Kill ourselves.
 /datum/light_source/proc/destroy()
+	if(destroyed)
+		log_debug("[src] had destroy() called after already being destroyed! coords: [get_coordinates_string(src)], area: [get_area(src)]")
+		return
 	destroyed = TRUE
 	force_update()
-	if (source_atom)
+	if(source_atom)
+		if(!source_atom.light_sources)
+			log_debug("[src] was not in its source atom's light_sources when destroy() was called! coords: [get_coordinates_string(src)], area: [get_area(src)]")
+			return
 		source_atom.light_sources -= src
 
-	if (top_atom)
+	if(top_atom)
+		if(!top_atom.light_sources)
+			log_debug("[src] was not in its top atom's light_sources when destroy() was called! coords: [get_coordinates_string(src)], area: [get_area(src)]")
+			return
 		top_atom.light_sources    -= src
 
 #ifdef LIGHTING_INSTANT_UPDATES

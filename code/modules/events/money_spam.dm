@@ -55,7 +55,7 @@
 				if(3)
 					sender = pick("Galactic Payments Association", "Better Business Bureau", "Tau Ceti E-Payments", "Nanotrasen Finance Department", "Luxury Replicas")
 					message = pick("Luxury watches for Blowout sale prices!", \
-					"Watches, Jewelry & Accessories, Bags & Wallets !", \
+					"Watches, Jewelry & Accessories, Bags & Wallets!", \
 					"Deposit 100$ and get 300$ totally free!", \
 					" 100K NT.|WOWGOLD �nly $89            <HOT>", \
 					"We have been filed with a complaint from one of your customers in respect of their business relations with you.", \

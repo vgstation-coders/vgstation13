@@ -83,7 +83,11 @@
 		signal.source = src
 		signal.transmission_method = 1
 		signal.data["target"] = href_list["bot"]
-		signal.data["command"] = href_list["command"]
+		if(href_list["command"] == "send_to")
+			log_astar_command("Sending to: [locate(href_list["bot"])]")
+			signal.data["command"] = locate(href_list["place"])
+		else
+			signal.data["command"] = href_list["command"]
 		radio_connection.post_signal(src, signal)
 
 		if (istype(loc.loc, /obj/item/device/pda))

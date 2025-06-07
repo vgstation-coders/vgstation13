@@ -19,7 +19,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/head_of_security,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots/knifeholster,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/armor/hos/jensen,
 			slot_s_store_str = /obj/item/weapon/gun/energy/gun,
 		),
@@ -28,7 +28,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/head_of_security,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots/knifeholster,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/security/hos,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/security/hos,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
@@ -39,7 +39,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/head_of_security,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots/knifeholster,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/security,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
@@ -98,7 +98,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/warden,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_l_store_str = /obj/item/device/flash,
 		),
 		/datum/species/plasmaman = list(
@@ -106,7 +106,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/warden,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/security,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
@@ -117,7 +117,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/warden,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/security,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
@@ -183,7 +183,7 @@
 				"Detective" = /obj/item/clothing/head/det_hat,
 			),
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = list(
 				"Forensic Technician" = /obj/item/clothing/suit/storage/forensics/blue,
 				"Gumshoe" = /obj/item/clothing/suit/storage/det_suit/noir,
@@ -207,7 +207,7 @@
 				"Detective" = /obj/item/clothing/shoes/brown,
 			),
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/security/detective,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/security/detective,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
@@ -228,7 +228,7 @@
 				"Detective" = /obj/item/clothing/shoes/brown,
 			),
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/security,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
@@ -269,8 +269,7 @@
 	H.dna.SetSEState(SOBERBLOCK,1)
 	if (H.mind.role_alt_title == "Gumshoe" || H.mind.role_alt_title == "Private Eye")
 		H.dna.SetSEState(NOIRBLOCK,1)
-		genemutcheck(H, NOIRBLOCK)
-	genemutcheck(H, SOBERBLOCK)
+	H.check_mutations = M_CHECK_JOB
 
 /datum/outfit/detective/post_equip_priority(var/mob/living/carbon/human/H)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
@@ -299,7 +298,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/security,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/armor/vest/security,
 			slot_s_store_str = /obj/item/weapon/gun/energy/taser,
 			slot_l_store_str = /obj/item/device/flash,
@@ -309,7 +308,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/security,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/security,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
@@ -320,7 +319,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/security,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/security,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,

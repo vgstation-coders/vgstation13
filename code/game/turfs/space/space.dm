@@ -206,7 +206,9 @@
 		for(var/obj/effect/beam/B in src)
 			B.Crossed(A)
 
-/turf/space/can_place_cables()
+/turf/space/can_place_cables(var/override_space = FALSE)
+	if (override_space)
+		return TRUE
 	var/obj/structure/catwalk/support = locate() in src
 	return !isnull(support)
 

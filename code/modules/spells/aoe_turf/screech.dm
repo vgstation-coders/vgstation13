@@ -25,38 +25,35 @@
 	if (!user.vampire_power(blood_cost, 0, FALSE))
 		return FALSE
 
-/spell/aoe_turf/screech/choose_targets(var/mob/user = usr)
-	var/list/targets = list()
-
-	for(var/mob/living/carbon/C in hearers(user, 4))
-		if(C == user)
-			continue
-		if(ishuman(C))
-			var/mob/living/carbon/human/H = C
-			if(H.earprot())
-				continue
-			var/success = C.vampire_affected(user.mind)
-			switch (success)
-				if (TRUE)
-					targets += C
-				if (FALSE)
-					continue
-				if (VAMP_FAILURE)
-					critfail(targets, user)
-	return targets
-
 /spell/aoe_turf/screech/cast(var/list/targets, var/mob/user)
-	for (var/T in targets)
-		var/mob/living/carbon/C = T
-		if(C.is_deaf())
+	var/critical_fail = FALSE
+	var/list/mob_targets = hearers(user, 4)
+	var/list/immune_targets = list() //Helps keep things tidy by telling the vampire everyone who is divinely-shielded
+	for(var/mob/living/carbon/affected in mob_targets) //First we see the status of each target
+		var/success = affected.vampire_affected(user.mind, FALSE) //Don't send any messages
+		switch (success)
+			if (FALSE)
+				immune_targets += affected
+			if (VAMP_FAILURE)
+				affected.vampire_affected(user.mind)
+				critical_fail = TRUE
+				break
+	if(critical_fail) //Cancel the spell because a null rod caused a backlash against the vampire
+		critfail(targets, user)
+		return
+	playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
+	for (var/mob/living/carbon/C in mob_targets)
+		if(C.is_deaf() || C.earprot())
 			continue
-		playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
-		to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
+		if(C in immune_targets)
+			C.vampire_affected(user.mind)
+			continue
+		to_chat(C, "<span class='danger'><font size='3'>You hear an ear piercing shriek and your senses dull!</font></span>")
 		C.Knockdown(8)
 		C.ear_deaf = 20
 		C.stuttering = 20
 		C.Stun(8)
-		C.Jitter(150)
+		C.Jitter(20)
 	for(var/obj/structure/window/W in view(4))
 		W.shatter()
 	for(var/obj/machinery/light/L in view(7))

@@ -615,7 +615,7 @@
 "bR" = (
 /obj/structure/closet,
 /obj/item/clothing/head/helmet/dredd,
-/obj/item/clothing/suit/armor/xcomsquaddie/dredd,
+/obj/item/clothing/suit/armor/dredd,
 /turf/simulated/floor/shuttle/brig,
 /area/vault/oldarmory)
 "bS" = (

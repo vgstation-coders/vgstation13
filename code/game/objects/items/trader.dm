@@ -239,10 +239,10 @@
 
 /obj/item/vachandle/pickup(mob/user)
 	..()
-	user.register_event(/event/moved, src, src::mob_moved())
+	user.register_event(/event/moved, src, nameof(src::mob_moved()))
 
 /obj/item/vachandle/dropped(mob/user)
-	user.unregister_event(/event/moved, src, src::mob_moved())
+	user.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 	if(loc != myvac)
 		retract()
 

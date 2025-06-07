@@ -24,6 +24,7 @@
 	size = SIZE_BIG
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES
 	speak_override = TRUE
+	treadmill_speed = 1.5	//What is a goat if not a tiny horse?
 
 	var/anger_chance = 1
 
@@ -131,6 +132,7 @@
 	attacktext = "kicks"
 	health = 50
 	speak_override = TRUE
+	treadmill_speed = 1		//What is a cow if not a large goat?
 
 	size = SIZE_BIG
 	holder_type = /obj/item/weapon/holder/animal/cow
@@ -203,6 +205,7 @@
 	pass_flags = PASSTABLE | PASSGRILLE
 	size = SIZE_TINY
 	speak_override = TRUE
+	treadmill_speed = 0
 
 /mob/living/simple_animal/chick/New()
 	..()

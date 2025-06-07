@@ -1,0 +1,101 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/obj/structure/grille,
+/turf/space,
+/area)
+"e" = (
+/obj/item/trash/popcorn,
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area)
+"k" = (
+/obj/structure/lattice,
+/obj/structure/grille,
+/turf/space,
+/area)
+"o" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"r" = (
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area)
+"v" = (
+/obj/effect/landmark/keycard,
+/turf/simulated/floor/engine/acoustic,
+/area)
+"A" = (
+/turf/space,
+/area)
+"N" = (
+/obj/structure/grille,
+/obj/structure/lattice,
+/turf/space,
+/area)
+
+(1,1,1) = {"
+k
+a
+k
+o
+a
+a
+N
+"}
+(2,1,1) = {"
+a
+o
+A
+A
+A
+o
+k
+"}
+(3,1,1) = {"
+a
+A
+r
+o
+r
+A
+a
+"}
+(4,1,1) = {"
+A
+o
+r
+v
+o
+A
+o
+"}
+(5,1,1) = {"
+a
+A
+o
+o
+e
+A
+a
+"}
+(6,1,1) = {"
+k
+o
+o
+A
+o
+o
+a
+"}
+(7,1,1) = {"
+k
+a
+a
+A
+a
+k
+k
+"}

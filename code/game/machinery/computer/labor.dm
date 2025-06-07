@@ -16,6 +16,7 @@ var/list/labor_console_categories = list(
 	light_color = LIGHT_COLOR_GREEN
 	req_access = list(access_hop)
 	circuit = "/obj/item/weapon/circuitboard/labor"
+	moody_state = "overlay_labor"
 
 	var/awaiting_swipe = FALSE
 	var/verifying = FALSE
@@ -207,7 +208,7 @@ var/list/labor_console_categories = list(
 
 /obj/machinery/computer/labor/update_icon()
 	..()
-	overlays = 0
+	overlays -= awaiting_overlay
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(awaiting_swipe || verifying)

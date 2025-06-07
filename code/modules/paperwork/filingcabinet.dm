@@ -94,6 +94,14 @@
 			updateUsrDialog()
 			flick("[initial(icon_state)]-open",src)
 
+/obj/structure/filingcabinet/chestdrawer/hop
+	name = "Head of Personnel's form hard copy drawer"
+	desc = "This is the drawer for original copies of all personnel forms - make copies instead of using the originals!"
+
+/obj/structure/filingcabinet/chestdrawer/hop/initialize()
+	..()
+	for(var/path in subtypesof(/obj/item/weapon/paper/hop))
+		new path(src)
 
 /*
  * Security Record Cabinets

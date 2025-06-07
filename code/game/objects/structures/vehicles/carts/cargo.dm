@@ -67,6 +67,8 @@
 
 /obj/machinery/cart/cargo/MouseDropTo(var/atom/movable/C, mob/user)
 	..()
+	if(!istype(C))
+		return
 	if(C.anchored)
 		to_chat(user, "\The [C] is fastened to the floor!")
 		return

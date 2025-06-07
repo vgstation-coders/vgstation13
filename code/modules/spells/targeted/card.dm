@@ -16,7 +16,7 @@
 	var/list/card_type = list("Hearts", "Spades", "Clubs", "Diamonds")
 	var/list/card_number = list("2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace")
 
-/spell/targeted/card/before_cast(list/targets, user)
+/spell/targeted/card/before_cast(list/targets, user, bypass_range = 0)
 	. = ..()
 	current_card = "[pick(card_number)] of [pick(card_type)]"
 

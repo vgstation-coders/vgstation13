@@ -347,7 +347,6 @@
 	for(var/atom/movable/extremity in list(extremity_A,extremity_B))
 		if(extremity && (loc != extremity.loc))
 			var/image/chain_img = image(icon,src,"[overlay_name]",dir=get_dir(src,extremity))
-			chain_img.plane = OBJ_PLANE
 			overlays += chain_img
 
 /obj/effect/overlay/chain/proc/update_overlays(var/obj/effect/overlay/chain/C)

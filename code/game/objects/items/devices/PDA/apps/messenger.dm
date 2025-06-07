@@ -90,6 +90,8 @@
                 return
         if("Message")
             var/obj/item/device/pda/P = locate(href_list["target"])
+            P.overlays.len = 0  // replying to a message from chat clears alert
+            P.update_icon()
             src.create_message(U, P)
         if("viewPhoto")
             var/obj/item/weapon/photo/PH = locate(href_list["image"])

@@ -10,8 +10,8 @@
 	..()
 	heat_triggered = prob(50)
 
-	my_artifact.register_event(/event/attackby, src, src::owner_attackby())
-	my_artifact.register_event(/event/explosion, src, src::owner_explode())
+	my_artifact.register_event(/event/attackby, src, nameof(src::owner_attackby()))
+	my_artifact.register_event(/event/explosion, src, nameof(src::owner_explode()))
 
 /datum/artifact_trigger/temperature/CheckTrigger()
 	var/turf/T = get_turf(my_artifact)
@@ -36,6 +36,6 @@
 	Triggered(0, "EXPLOSION", 0)
 
 /datum/artifact_trigger/temperature/Destroy()
-	my_artifact.unregister_event(/event/attackby, src, src::owner_attackby())
-	my_artifact.unregister_event(/event/explosion, src, src::owner_explode())
+	my_artifact.unregister_event(/event/attackby, src, nameof(src::owner_attackby()))
+	my_artifact.unregister_event(/event/explosion, src, nameof(src::owner_explode()))
 	..()

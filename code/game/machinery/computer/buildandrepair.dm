@@ -72,7 +72,7 @@
 	name = "Circuit board (Long Range AI Upload)"
 	desc = "A circuit board for running a computer used for modifying AI laws."
 	build_path = /obj/machinery/computer/aiupload/longrange
-	origin_tech = Tc_PROGRAMMING + "=4" + Tc_MATERIALS + "=9" + Tc_BLUESPACE + "=3" + Tc_MAGNETS + "=5"
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_MATERIALS + "=9;" + Tc_BLUESPACE + "=3;" + Tc_MAGNETS + "=5"
 /obj/item/weapon/circuitboard/borgupload
 	name = "Circuit board (Cyborg Upload)"
 	desc = "A circuit board for running a computer used for modifying cyborg laws."

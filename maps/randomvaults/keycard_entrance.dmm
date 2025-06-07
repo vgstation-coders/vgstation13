@@ -1,0 +1,77 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/wall/invulnerable/r_wall,
+/area/vault/keycard)
+"c" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"h" = (
+/turf/portal,
+/area/vault/keycard)
+"m" = (
+/obj/machinery/door/airlock/highsecurity/keycard,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"w" = (
+/turf/portal{
+	opacity = 1
+	},
+/area/vault/keycard)
+"K" = (
+/obj/structure/catwalk/invulnerable,
+/turf/space,
+/area)
+"M" = (
+/obj/machinery/light/he,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+
+(1,1,1) = {"
+c
+K
+K
+K
+K
+c
+"}
+(2,1,1) = {"
+c
+a
+a
+m
+a
+c
+"}
+(3,1,1) = {"
+c
+a
+h
+M
+a
+c
+"}
+(4,1,1) = {"
+c
+a
+w
+a
+a
+c
+"}
+(5,1,1) = {"
+c
+a
+a
+a
+a
+c
+"}
+(6,1,1) = {"
+c
+c
+c
+c
+c
+c
+"}

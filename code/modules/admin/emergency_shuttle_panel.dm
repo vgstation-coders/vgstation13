@@ -57,11 +57,13 @@
 	dat += "<h2>Escape Pods Control</h2>"
 	for (var/pod in emergency_shuttle.escape_pods)
 		var/datum/shuttle/escape/S = pod
-		var/turf/T = pick(S.linked_area.area_turfs)
-		dat += "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[S.linked_area.name]</a> : [(emergency_shuttle.escape_pods[pod] == "station") ? "<b>station</b>" : "<a href='?src=\ref[src];move_escape_pod=\ref[pod];move_destination=station'>station</a>"] - [(emergency_shuttle.escape_pods[pod] == "transit") ? "<b>transit</b>" : "<a href='?src=\ref[src];move_escape_pod=\ref[pod];move_destination=transit'>transit</a>"] - [(emergency_shuttle.escape_pods[pod] == "centcom") ? "<b>centcom</b>" : "<a href='?src=\ref[src];move_escape_pod=\ref[pod];move_destination=centcom'>centcom</a>"]<br>"
-
+		if (S.linked_area.area_turfs.len > 0)
+			var/turf/T = pick(S.linked_area.area_turfs)
+			dat += "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[S.linked_area.name]</a> : [(emergency_shuttle.escape_pods[pod] == "station") ? "<b>station</b>" : "<a href='?src=\ref[src];move_escape_pod=\ref[pod];move_destination=station'>station</a>"] - [(emergency_shuttle.escape_pods[pod] == "transit") ? "<b>transit</b>" : "<a href='?src=\ref[src];move_escape_pod=\ref[pod];move_destination=transit'>transit</a>"] - [(emergency_shuttle.escape_pods[pod] == "centcom") ? "<b>centcom</b>" : "<a href='?src=\ref[src];move_escape_pod=\ref[pod];move_destination=centcom'>centcom</a>"] - <a href='?src=\ref[src];move_escape_pod=\ref[pod];move_destination=shuttle'>crash into shuttle</a><br>"
+		else
+			dat += "<i>[S.linked_area.name] : missing on current map</i><br>"
 	if (emergency_shuttle.escape_pods.len > 1)
-		dat += "Move All Pods : <a href='?src=\ref[src];move_escape_pod=all;move_destination=station'>station</a> - <a href='?src=\ref[src];move_escape_pod=all;move_destination=transit'>transit</a> - <a href='?src=\ref[src];move_escape_pod=all;move_destination=centcom'>centcom</a><br>"
+		dat += "Move All Pods : <a href='?src=\ref[src];move_escape_pod=all;move_destination=station'>station</a> - <a href='?src=\ref[src];move_escape_pod=all;move_destination=transit'>transit</a> - <a href='?src=\ref[src];move_escape_pod=all;move_destination=centcom'>centcom</a> - <a href='?src=\ref[src];move_escape_pod=all;move_destination=shuttle'>crash into shuttle</a><br>"
 
 	dat += "</body></html>"
 	usr << browse(dat, "window=emergencyshuttle;size=440x500")

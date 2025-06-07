@@ -1,0 +1,92 @@
+<script type='text/javascript'>
+	function markGreen(){
+		var toColor = document.getElementById('diffinput');
+		toColor.style.backgroundColor = '#DDFFDD';
+		var elem = document.getElementById('regid');
+		var body = $('body');
+		elem.value = body.data('urlParameters')['src'];
+		toColor.focus();
+	}
+</script>
+<div class='statusDisplay'>
+	<div class='item'>
+		Record to Present
+	</div>
+	<div class='item'>
+		<div class='itemLabel'>
+			Savings (Current Cycle)
+		</div>
+		<div class='itemContent'>
+			{{:data.savings}}
+		</div>
+	</div>
+	<div class='item'>
+		<div class='itemLabel'>
+			Last Query
+		</div>
+		{{if data.oldgood == -1}}
+			<div class='itemContent'>
+				<span class='average'>No queries this cycle</span>
+			</div>
+		{{else}}
+			<div class='itemContent'>
+				{{:data.oldquery}}
+			</div>
+			<div class='itemLabel'>
+				Last Entry
+			</div>
+			<div class='itemContent'>
+				{{if data.oldgood == 1}}
+					<span class='good'>{{:data.oldentry}}</span>
+				{{else}}
+					<span class='bad'>{{:data.oldentry}}</span>
+				{{/if}}
+			</div>
+		{{/if}}
+	</div>
+</div>
+<div class='statusDisplay'>
+	<div class='item'>
+		<h2>Overages for {{:data.currentqueryname}}</h2>
+	</div>
+	<div class='item'>
+		<div class='itemLabel'>
+			Projected Costs
+		</div>
+		<div class='itemContent'>
+			{{:data.minuend}}
+		</div>
+	</div>
+	<div class='item'>
+		<div class='itemLabel'>
+			Actual Costs
+		</div>
+		<div class='itemContent'>
+			{{:data.subtrahend}}
+		</div>
+	</div>
+	<form name='accountcomp' action='?src={{:data.src}}' method='get'>
+		<div class='item'>
+			<div class='itemLabel'>
+				<input type='hidden' name='src' value='' id='regid'>
+				<input type='hidden' name='choice' value='reg'>
+				Difference
+			</div>
+			<div class='itemContent'>
+				<input type='text' id='diffinput' name='reg'>
+				<input type='submit' value='Solve' onclick='markGreen()'>
+			</div>
+		</div>
+	</form>
+</div>
+<div class='statusDisplay'>
+	<div class='item'>
+		<h2>Next</h2>
+	</div>
+	<div class='itemLabel'>
+		<span class='average'>Next Query</span>
+	</div>
+	<div class='itemContent'>
+		<span class='average'>{{:data.nextquery}}</span>
+	</div>
+</div>

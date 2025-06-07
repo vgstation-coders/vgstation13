@@ -1,6 +1,5 @@
 #define LIMB_MODE_AFFECT_CHILD 1
 #define LIMB_MODE_AFFECT_PARENT 2
-#define LIMB_MODE_SPECIAL_SNOWFLAKE 3
 
 /datum/preferences_subsection/limbs
 	registered_paths = list("limbs")
@@ -21,11 +20,14 @@
 
 	var/static/list/peg_limb_data = list(
 		"internal_name" = "peg",
-		"mode" = LIMB_MODE_SPECIAL_SNOWFLAKE,
+		"mode" = LIMB_MODE_AFFECT_CHILD,
 	)
 
 	var/static/list/leg_configurable_states = list(
 		"Peg leg" = peg_limb_data,
+	)
+	var/static/list/foot_configurable_states = list(
+		"Wooden prosthesis" = peg_limb_data,
 	)
 	var/static/list/arm_configurable_states = list(
 		"Wooden prosthesis" = peg_limb_data,
@@ -61,6 +63,7 @@
 		),
 		"Left foot" = list(
 			"internal_name" = LIMB_LEFT_FOOT,
+			"extra_states" = foot_configurable_states,
 			"parent_limb" = LIMB_LEFT_ARM,
 		),
 		"Right leg" = list(
@@ -70,6 +73,7 @@
 		),
 		"Right foot" = list(
 			"internal_name" = LIMB_RIGHT_FOOT,
+			"extra_states" = foot_configurable_states,
 			"parent_limb" = LIMB_RIGHT_LEG,
 		),
 	)
@@ -128,13 +132,6 @@
 			var/parent_limb = configurable_limb_data["parent_limb"]
 			if(parent_limb)
 				prefs.organ_data[parent_limb] = limb_internal_state
-		if(LIMB_MODE_SPECIAL_SNOWFLAKE) // this is so sad
-			var/child_limb = configurable_limb_data["child_limb"]
-			if(child_limb)
-				if(limb_internal_name == LIMB_LEFT_ARM || limb_internal_name == LIMB_RIGHT_ARM)
-					prefs.organ_data[child_limb] = "peg"
-				else
-					prefs.organ_data[child_limb] = "amputated"
 
 	return TRUE
 
@@ -158,4 +155,3 @@
 
 #undef LIMB_MODE_AFFECT_CHILD
 #undef LIMB_MODE_AFFECT_PARENT
-#undef LIMB_MODE_SPECIAL_SNOWFLAKE

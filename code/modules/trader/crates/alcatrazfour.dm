@@ -9,7 +9,7 @@ var/global/list/alcatraz_stuff = list(
 	//2 of a kind
 	/obj/item/weapon/autocuffer,/obj/item/weapon/autocuffer,
 	/obj/item/clothing/mask/gas/hecu,/obj/item/clothing/mask/gas/hecu,
-	/obj/item/clothing/gloves/swat/operator,/obj/item/clothing/gloves/swat/operator,
+	/obj/item/clothing/gloves/swat/specops,/obj/item/clothing/gloves/swat/specops,
 	//1 of a kind
 	/obj/item/clothing/under/securityskirt/elite,
 	/obj/item/clothing/head/helmet/donutgiver,
@@ -581,11 +581,11 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/pedometer/pickup(mob/user)
 	..()
-	user.register_event(/event/moved, src, src::mob_moved())
+	user.register_event(/event/moved, src, nameof(src::mob_moved()))
 
 /obj/item/pedometer/dropped(mob/user)
 	..()
-	user.unregister_event(/event/moved, src, src::mob_moved())
+	user.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 
 /obj/item/pedometer/proc/mob_moved(atom/movable/mover)
 	var/turf/T = get_turf(src)

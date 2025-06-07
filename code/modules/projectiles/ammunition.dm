@@ -66,6 +66,10 @@
 	on_armory_manifest = TRUE
 	var/list/stored_ammo = list()
 	var/ammo_type = "/obj/item/ammo_casing/a357"
+	var/reloading = FALSE // Flag to stop multi-box loading
+	var/reload_delay = 5 // Delay for do_after() call of reloading
+	var/reload_sound = 'sound/weapons/magazine_load_click.ogg'
+	var/fumble_sound = 'sound/weapons/casing_drop.ogg'
 	var/exact = 1 //whether or not the item only takes ammo_type, or also subtypes. Set to 1 to only take the specified ammo
 	var/caliber = POINT357 //lets us define what magazines can go into guns
 	var/max_ammo = 7
@@ -98,6 +102,7 @@
 		if(AC.BB && accepted && stored_ammo.len < max_ammo)
 			if(user.drop_item(A, src))
 				to_chat(user, "<span class='notice'>You successfully load the [src] with \the [AC]. </span>")
+				playsound(usr, reload_sound, 100, 1)
 			else
 				to_chat(user, "<span class='warning'>You can't let go of \the [A]!</span>")
 				return
@@ -143,75 +148,99 @@
 		update_icon()
 		to_chat(user, "<span class='notice'>You remove \a [dropped] from \the [src].</span>")
 
-//used for loading from or to boxes. Has the fumble check
-//this doesn't load any bullets by itself, but is a check for the slow loading used by boxes
-/obj/item/ammo_storage/proc/slowLoad(var/obj/item/ammo_storage/bullets_from, var/obj/item/target)
-	if(!bullets_from || !istype(bullets_from)) //fuck you for calling this with the wrong arguments
+/obj/item/ammo_storage/proc/loadGun(var/obj/item/ammo_storage/bullets_from, var/obj/item/target)
+	var/obj/item/weapon/gun/projectile/PW = target
+	var/trying_to_load = min(PW.max_shells - PW.loaded.len - PW.refuse.len, bullets_from.stored_ammo.len) // Either we fill to max, or we fill as much as possible
+
+	if (!trying_to_load || !usr || bullets_from.reloading)
 		return 0
-	if(!target || !istype(target))
+
+	bullets_from.reloading = TRUE
+	var/bullets_loaded = 0
+
+	for (var/i = 1; i <= trying_to_load; i++)
+		var/obj/item/ammo_casing/loading = bullets_from.stored_ammo[1] // Grab bullet from top of stack
+
+		if (PW.loaded.len + PW.refuse.len >= PW.max_shells)
+			break
+		if (!(PW.caliber && PW.caliber[loading.caliber]))
+			break
+		if (!do_after(usr, target, reload_delay, 5))
+			return fumbleLoad(bullets_from, target)
+
+		bullets_from.stored_ammo -= loading
+		PW.loaded += loading
+		loading.forceMove(PW)
+		bullets_loaded++
+		bullets_from.update_icon()
+		target.update_icon()
+
+		if (reload_delay == 0 && i > 1)	// When reload delay is 0 (speedloaders by default), play the reload sound on first iteration only
+			continue
+		playsound(usr, reload_sound, 100, 1)
+
+	bullets_from.reloading = FALSE
+	return bullets_loaded
+
+/obj/item/ammo_storage/proc/loadAmmoStorage(var/obj/item/ammo_storage/bullets_from, var/obj/item/target)
+	var/obj/item/ammo_storage/AS = target
+	var/trying_to_load = min(AS.max_ammo - AS.stored_ammo.len, bullets_from.stored_ammo.len) // Either we fill to max, or we fill as much as possible
+
+	if (!trying_to_load || !usr || bullets_from.reloading)
 		return 0
-	var/trying_to_load = 0
-	if(istype(target, /obj/item/weapon/gun/projectile))
-		var/obj/item/weapon/gun/projectile/PW = target
-		trying_to_load = min(PW.max_shells - PW.loaded.len - PW.refuse.len, bullets_from.stored_ammo.len) //either we fill to max, or we fill as much as possible
-	else
-		var/obj/item/ammo_storage/AS = target
-		trying_to_load = min(AS.max_ammo - AS.stored_ammo.len, bullets_from.stored_ammo.len) //either we fill to max, or we fill as much as possible
-	if(usr && trying_to_load)
-		to_chat(usr, "You begin loading \the [target]...")
-	if(trying_to_load && do_after(usr,target,trying_to_load * 5)) //bit of a wait, but that's why it's SLOW
-		return 1
-	else if(trying_to_load)
-		var/dropped_bullets = 0
-		var/to_drop = rand(1, trying_to_load) //yeah, drop some on the floor!
-		for(var/i = 1; i<=min(to_drop, bullets_from.stored_ammo.len); i++)
-			var/obj/item/ammo_casing/AC = bullets_from.stored_ammo[1]
-			bullets_from.stored_ammo -= AC
-			AC.forceMove(get_turf(target))
-			dropped_bullets++
-			bullets_from.update_icon()
-		if(usr)
-			to_chat(usr, "<span class='rose'>You fumble around and drop [dropped_bullets] shell\s!</span>")
-		return 0
+
+	bullets_from.reloading = TRUE
+	var/bullets_loaded = 0
+
+	for (var/i = 1; i <= trying_to_load; i++)
+		var/obj/item/ammo_casing/loading = bullets_from.stored_ammo[1] // Grab bullet from top of stack
+
+		if (AS.stored_ammo.len >= AS.max_ammo)
+			break
+		if (!((AS.exact && (loading.type == text2path(AS.ammo_type))) || (!AS.exact && (bullets_from.caliber == caliber)))) // If not exact, check if same caliber
+			break
+		if (!do_after(usr, target, 5, 5))
+			return fumbleLoad(bullets_from, target)
+
+		bullets_from.stored_ammo -= loading
+		AS.stored_ammo += loading
+		loading.forceMove(AS)
+		bullets_loaded++
+		playsound(usr, reload_sound, 100, 1)
+		bullets_from.update_icon()
+		target.update_icon()
+
+	bullets_from.reloading = FALSE
+	return bullets_loaded
+
+// Aborting a reload (Bullet by bullet from a box or similar) causes you to fumble and drop a shell
+/obj/item/ammo_storage/proc/fumbleLoad(var/obj/item/ammo_storage/bullets_from, var/obj/item/target)
+	var/obj/item/ammo_casing/AC = bullets_from.stored_ammo[1]
+	bullets_from.stored_ammo -= AC
+	AC.forceMove(get_turf(target))
+	bullets_from.update_icon()
+
+	if (usr)
+		to_chat(usr, "<span class='rose'>You fumble around and drop a shell!</span>")
+		playsound(usr, fumble_sound, 100, 1)
+
+	bullets_from.reloading = FALSE
 	return 0
 
 //used to load bullets from ammo storage into other ammo storage or guns
 //bullets_from is the origin, target is the gun or targetted box
 /obj/item/ammo_storage/proc/LoadInto(var/obj/item/ammo_storage/bullets_from, var/obj/item/target)
-	if(!bullets_from || !istype(bullets_from))
+	if (!bullets_from || !istype(bullets_from))
 		return 0
-	if(!target || !istype(target))
+	if (!target || !istype(target))
 		return 0
-	var/bullets_loaded = 0
-	if(istype(target, /obj/item/ammo_storage))
-		if(istype(bullets_from, /obj/item/ammo_storage/box) || istype(target, /obj/item/ammo_storage/box))
-			if(!slowLoad(bullets_from, target))
-				return 0
-		var/obj/item/ammo_storage/AS = target
-		for(var/obj/item/ammo_casing/loading in bullets_from.stored_ammo)
-			if(AS.stored_ammo.len >= AS.max_ammo)
-				break
-			if((AS.exact && (loading.type == text2path(AS.ammo_type))) || (!AS.exact && (bullets_from.caliber == caliber))) //If not exact, check if same caliber
-				bullets_from.stored_ammo -= loading
-				AS.stored_ammo += loading
-				loading.forceMove(AS)
-				bullets_loaded++
-	if(istype(target, /obj/item/weapon/gun/projectile)) //if we load directly, this is what we want to do
-		if(istype(bullets_from, /obj/item/ammo_storage/box))
-			if(!slowLoad(bullets_from, target))
-				return 0
-		var/obj/item/weapon/gun/projectile/PW = target
-		for(var/obj/item/ammo_casing/loading in bullets_from.stored_ammo)
-			if(PW.loaded.len + PW.refuse.len >= PW.max_shells)
-				break
-			if(PW.caliber && PW.caliber[loading.caliber]) //hurrah for gun variables.
-				bullets_from.stored_ammo -= loading
-				PW.loaded += loading
-				loading.forceMove(PW)
-				bullets_loaded++
-	bullets_from.update_icon()
-	target.update_icon()
-	return bullets_loaded
+
+	if (istype(target, /obj/item/weapon/gun/projectile))
+		return loadGun(bullets_from, target)
+	else if (istype(target, /obj/item/ammo_storage))
+		return loadAmmoStorage(bullets_from, target)
+	return 0
+
 
 /obj/item/ammo_storage/proc/get_round(var/keep = 0)
 	if(!ammo_count())

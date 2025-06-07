@@ -161,9 +161,10 @@
 		if(user.stat > stat_allowed)
 			to_chat(user, "<span class='warning'>You cannot [key] while unconscious.</span>")
 			return FALSE
-		if(restraint_check && (user.restrained() || user.locked_to))
-			to_chat(user, "<span class='warning'>You cannot [key] while restrained.</span>")
-			return FALSE
+		if(restraint_check)
+			if(user.restrained() || (user.locked_to && !user.can_use_hands()))
+				to_chat(user, "<span class='warning'>You cannot [key] while restrained.</span>")
+				return FALSE
 
 	if(isliving(user))
 		var/mob/living/L = user

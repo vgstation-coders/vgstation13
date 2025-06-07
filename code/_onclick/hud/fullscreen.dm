@@ -19,7 +19,7 @@
 		if(screen.anim_state)
 			flick("[screen.anim_state][severity]",screen)
 		client.screen += screen
-		if (screen.screen_loc == "CENTER-7,CENTER-7" && screen.view != client.view)
+		if (screen.screen_loc == "CENTER-7,CENTER-7" && screen.view != client.view && screen.scaling)
 			var/scale = (1 + 2 * client.view) / 15
 			screen.view = client.view
 			screen.transform = matrix(scale, 0, 0, 0, scale, 0)
@@ -88,6 +88,7 @@
 	var/severity = 0
 	var/anim_state
 	var/clear_after_length // also doubles as the length of the animation
+	var/scaling = 1
 
 /obj/abstract/screen/fullscreen/Destroy()
 	severity = 0
@@ -121,7 +122,7 @@
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	icon_state = "blurry"
-	
+
 /obj/abstract/screen/fullscreen/nearsighted
 	icon = 'icons/mob/screen1_blindness.dmi'
 	icon_state = "eye"
@@ -210,3 +211,11 @@
 /obj/abstract/screen/fullscreen/snowfall_average
 	icon_state = "oxydamageoverlay2"
 	layer = DAMAGE_HUD_LAYER
+
+/obj/abstract/screen/fullscreen/client_fadein
+	layer = BLIND_LAYER
+	scaling = 0
+
+/obj/abstract/screen/fullscreen/client_fadein/New()
+	. = ..()
+	icon = current_round_splashscreen

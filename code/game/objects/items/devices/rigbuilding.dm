@@ -149,3 +149,29 @@
 /obj/item/device/rigparts/arch
 	name = "Archaeology hardsuit parts kit"
 	result = /obj/item/clothing/suit/space/rig/arch
+
+// Ayy RIG Parts Kits
+
+/obj/item/device/rigparts/ayy_worker
+	name = "Laborer rig parts kit"
+	icon_state = "ayymodkit_worker_1"
+	result = /obj/item/clothing/suit/space/rig/grey/worker
+
+/obj/item/device/rigparts/ayy_worker/dissolvable()
+	return WATER
+
+/obj/item/device/rigparts/ayy_researcher
+	name = "Researcher rig parts kit"
+	icon_state = "ayymodkit_researcher_1"
+	result = /obj/item/clothing/suit/space/rig/grey/researcher
+
+/obj/item/device/rigparts/ayy_researcher/dissolvable()
+	return WATER
+
+/obj/item/device/rigparts/ayy_soldier
+	name = "Soldier rig parts kit"
+	icon_state = "ayymodkit_soldier_1"
+	result = /obj/item/clothing/suit/space/rig/grey/soldier
+
+/obj/item/device/rigparts/ayy_soldier/dissolvable()
+	return WATER

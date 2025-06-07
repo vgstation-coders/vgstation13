@@ -48,6 +48,16 @@
 	gender = FEMALE
 	is_pet = TRUE
 
+/mob/living/simple_animal/cat/Runtime/on_reagent_change()
+	if(src.icon_living != "original")
+		var/m_amount = reagents.get_reagent_amount(METHYLIN)
+		if(m_amount >= 4) /* We want 5 units, but we're accounting for metabolism ticks here. */
+			reagents.remove_reagent_by_type(METHYLIN, m_amount)
+			playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
+			for(var/mob/M in view())
+				to_chat(M, "<span class='notice'>\The [src]'s fur vibrates and shimmers as a mind-enhancing solution flows through \his... and \she transforms!</span>") /* BYOND doesn't have an equivalent macro for "her"... */
+			espify()
+
 /mob/living/simple_animal/cat/Proc
 	name = "Proc"
 
@@ -132,6 +142,12 @@
 			if(I_HURT)
 				playsound(loc, 'sound/voice/cathiss.ogg', 50, 1)
 				emote("me", EMOTE_AUDIBLE, "hisses.")
+
+/mob/living/simple_animal/cat/proc/espify()
+	desc = "The product of irresponsible chemistry. She's acutely aware of your presence."
+	icon_state = "original"
+	icon_living = "original"
+	icon_dead = "original_dead"
 
 /mob/living/simple_animal/cat/snek/react_to_touch(mob/M)
 	return 0 // SNAKES DO NOT MEOW. WHY ARE THEY A CAT SUBTYPE?

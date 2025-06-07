@@ -10,7 +10,7 @@
 /datum/artifact_trigger/pressure/New()
 	..()
 	high_triggered = prob(50)
-	my_artifact.register_event(/event/explosion, src, src::owner_explode())
+	my_artifact.register_event(/event/explosion, src, nameof(src::owner_explode()))
 
 /datum/artifact_trigger/pressure/CheckTrigger()
 	var/turf/T = get_turf(my_artifact)
@@ -31,5 +31,5 @@
 	Triggered(0, "EXPLOSION", 0)
 
 /datum/artifact_trigger/pressure/Destroy()
-	my_artifact.register_event(/event/explosion, src, src::owner_explode())
+	my_artifact.register_event(/event/explosion, src, nameof(src::owner_explode()))
 	..()

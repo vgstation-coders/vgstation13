@@ -3,11 +3,11 @@
 	var/max_pressure_diff = -1
 
 /datum/component/ai/door_opener/initialize()
-	parent.register_event(/event/comp_ai_cmd_attack, src, src::cmd_attack())
+	parent.register_event(/event/comp_ai_cmd_attack, src, nameof(src::cmd_attack()))
 	return TRUE
 
 /datum/component/ai/door_opener/Destroy()
-	parent.unregister_event(/event/comp_ai_cmd_attack, src, src::cmd_attack())
+	parent.unregister_event(/event/comp_ai_cmd_attack, src, nameof(src::cmd_attack()))
 	..()
 
 /datum/component/ai/door_opener/proc/cmd_attack(atom/target)

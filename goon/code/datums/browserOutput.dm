@@ -291,7 +291,6 @@ For the main html chat area
 				continue
 			to_chat(M, message)
 		return
-
 	if (istype(message, /image) || istype(message, /sound) || istype(target, /savefile) || !(ismob(target) || islist(target) || isclient(target) || istype(target, /datum/log) || target == world))
 
 		target << message
@@ -337,5 +336,39 @@ For the main html chat area
 
 		target << output(url_encode(message), "browseroutput:output")
 
+/proc/get_deadchat_hearers()
+	var/list/hearers = list()
+	for(var/mob/M in player_list)
+		if(!M.client)
+			continue
+		if(istype(M, /mob/new_player))
+			continue
+
+		else if(M.client.prefs.toggles & CHAT_DEAD)
+			if(M.client.holder && M.client.holder.rights & R_ADMIN) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
+				hearers += M
+				continue
+			else if(M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute))
+				hearers += M
+				continue
+			else if(istype(M,/mob/living/carbon/brain))
+				var/mob/living/carbon/brain/B = M
+				if(B.brain_dead_chat())
+					hearers += M
+					continue
+	. = hearers
+	return .
+
+/* This proc only handles sending the message to everyone who can hear deadchat. Formatting that message is up to you! Consider using <span class='game deadsay'></span> on your message! */
+/* Kinda useless if your message needs to include an href, though... */
+/proc/to_deadchat(message)
+	var/list/hearers = get_deadchat_hearers()
+	if(!hearers || !message)
+		return
+	for(var/mob/M in hearers)
+		to_chat(M, message)
+	log_game("DEADCHAT: [message]")
+	return 1
+		
 /datum/log	//exists purely to capture to_chat() output
 	var/log = ""

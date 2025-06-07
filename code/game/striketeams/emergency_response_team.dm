@@ -15,9 +15,23 @@ var/list/response_team_members = list()
 
 /datum/striketeam/ert/failure()
 	command_alert(/datum/command_alert/ert_fail)
+	if(antag_madness != ANTAG_MADNESS_OFF)
+		var/datum/faction/nanotrasen/nanotrasen = find_active_faction_by_type(/datum/faction/nanotrasen)
+		if (!nanotrasen)
+			nanotrasen = ticker.mode.CreateFaction(/datum/faction/nanotrasen, null, 1)
+		nanotrasen.delta = 2
+		//latejoin traitors now know that antag madness is underway
+		//latejoin heads are told "best of luck!"
 
 /datum/striketeam/ert/extras()
 	command_alert(/datum/command_alert/ert_success)
+	if(antag_madness != ANTAG_MADNESS_OFF)
+		var/datum/faction/nanotrasen/nanotrasen = find_active_faction_by_type(/datum/faction/nanotrasen)
+		if (!nanotrasen)
+			nanotrasen = ticker.mode.CreateFaction(/datum/faction/nanotrasen, null, 1)
+		nanotrasen.delta = 1
+		//latejoin traitors now know that antag madness is underway
+		//latejoin heads are told to try and find the ERT
 
 /datum/striketeam/ert/greet_commando(var/mob/living/carbon/human/H)
 	if(H.key == leader_key)

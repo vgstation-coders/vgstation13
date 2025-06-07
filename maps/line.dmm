@@ -7642,9 +7642,6 @@
 /area/turret_protected/ai)
 "bWC" = (
 /obj/structure/closet/secure_closet/detective,
-/obj/item/weapon/storage/box/nt_disguise_kit{
-	pixel_x = 3
-	},
 /obj/machinery/alarm{
 	dir = 4;
 	pixel_x = -22
@@ -8109,7 +8106,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/simulated/floor/plating,
 /area/maintenance/fore)
 "cdw" = (
@@ -18813,7 +18810,7 @@
 /area/centcom/ert)
 "dqc" = (
 /obj/structure/table/reinforced,
-/obj/item/clothing/glasses/sunglasses/sechud{
+/obj/item/clothing/glasses/hud/security/sunglasses{
 	pixel_y = 8
 	},
 /obj/item/weapon/gun/energy/taser,
@@ -19583,13 +19580,13 @@
 /obj/item/clothing/head/bio_hood/janitor,
 /obj/item/device/radio/headset/ert,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/effect/decal/cleanable/dirt,
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = -2;
 	pixel_y = -2
 	},
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/unsimulated/floor{
 	icon_state = "dark purple stripe"
 	},
@@ -19702,12 +19699,6 @@
 	dir = 8
 	},
 /turf/simulated/floor/shuttle/plating,
-/area/shuttle/escape/centcom)
-"dsk" = (
-/obj/structure/shuttle/diag_wall/smooth{
-	dir = 1
-	},
-/turf/space,
 /area/shuttle/escape/centcom)
 "dsl" = (
 /obj/structure/grille,
@@ -20896,7 +20887,6 @@
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 1
 	},
-/turf/space,
 /turf/space,
 /area/shuttle/transport1/centcom)
 "dvd" = (
@@ -23702,10 +23692,6 @@
 /area/construction/hallway{
 	name = "\improper MiniSat Exterior"
 	})
-"dDX" = (
-/turf/space,
-/turf/space,
-/area)
 "dDY" = (
 /obj/machinery/light/small,
 /turf/simulated/floor{
@@ -24846,6 +24832,11 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -24985,6 +24976,11 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -25086,12 +25082,17 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/obj/structure/cable,
+/obj/structure/cable/yellow,
 /obj/structure/cable/yellow{
 	d2 = 8;
 	icon_state = "0-8"
 	},
 /obj/structure/window/reinforced,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -25169,12 +25170,18 @@
 	icon_state = "0-2"
 	},
 /obj/machinery/power/battery/smes{
-	charge = 5e+006
+	charge = 5e+006;
+	name_tag = "Aккумулятор"
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor/plating,
 /area/djstation)
@@ -33211,7 +33218,7 @@
 /obj/item/clothing/suit/bio_suit/anomaly,
 /obj/item/clothing/head/bio_hood/anomaly,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/clothing/gloves/latex,
 /obj/structure/window/reinforced{
 	dir = 1
@@ -33509,7 +33516,7 @@
 /obj/item/clothing/suit/bio_suit/anomaly,
 /obj/item/clothing/head/bio_hood/anomaly,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/clothing/gloves/latex,
 /obj/machinery/camera{
 	dir = 8;
@@ -33918,7 +33925,7 @@
 /obj/item/clothing/suit/bio_suit/anomaly,
 /obj/item/clothing/head/bio_hood/anomaly,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/clothing/gloves/latex,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
@@ -43795,7 +43802,7 @@
 	},
 /obj/structure/cable,
 /obj/structure/closet/secure_closet/CMO,
-/obj/item/toy/gasha/cattoy,
+/obj/item/toy/plushie/cat,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "barber"
@@ -52639,11 +52646,11 @@
 	departmentType = 2;
 	pixel_x = 30
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 2;
 	pixel_y = -17
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = -2;
 	pixel_y = -14
 	},
@@ -59354,7 +59361,7 @@
 	pixel_x = -5;
 	pixel_y = 32
 	},
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/simulated/floor/plating,
 /area/storage/emergency2)
 "hEe" = (
@@ -67282,9 +67289,6 @@
 /area/science/telescience)
 "jOG" = (
 /obj/structure/closet/wardrobe/xenos,
-/obj/item/clothing/under/vox/vox_casual,
-/obj/item/clothing/under/vox/vox_casual,
-/obj/item/clothing/under/vox/vox_casual,
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "jON" = (
@@ -69642,15 +69646,15 @@
 /area/supply/storage)
 "krP" = (
 /obj/structure/table/reinforced,
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 2;
 	pixel_y = 6
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 2;
 	pixel_y = 6
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 2;
 	pixel_y = 6
 	},
@@ -70651,7 +70655,7 @@
 /area/medical/storage)
 "kDe" = (
 /obj/structure/closet/secure_closet/personal/cabinet,
-/obj/item/toy/gasha/beartoy,
+/obj/item/toy/plushie/spacebear,
 /obj/machinery/light/small,
 /obj/item/weapon/storage/wallet,
 /turf/simulated/floor/carpet,
@@ -76086,11 +76090,11 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = -2;
 	pixel_y = -14
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 2;
 	pixel_y = -12
 	},
@@ -82321,7 +82325,7 @@
 	name = "\improper Internal Affairs Office"
 	})
 "nuU" = (
-/obj/item/toy/gasha/carptoy,
+/obj/item/toy/plushie/carp,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -97355,7 +97359,6 @@
 	dir = 1
 	},
 /turf/space,
-/turf/space,
 /area/shuttle/escape/centcom)
 "qYx" = (
 /obj/structure/ore_box,
@@ -105768,6 +105771,10 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
+/obj/item/weapon/circuitboard/circuit_imprinter{
+	pixel_y = -3;
+	pixel_x = 3
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -111991,7 +111998,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "urk" = (
@@ -115177,7 +115184,7 @@
 	},
 /area/crew_quarters/kitchen)
 "vhV" = (
-/obj/structure/closet/wardrobe/grey,
+/obj/structure/closet/wardrobe/pjs,
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "vib" = (
@@ -127749,7 +127756,7 @@
 /area/security/lobby)
 "xIm" = (
 /obj/machinery/computer/HolodeckControl,
-/obj/item/toy/gasha/carptoy,
+/obj/item/toy/plushie/carp,
 /turf/simulated/floor/wood,
 /area/crew_quarters/sleep)
 "xIq" = (
@@ -130551,7 +130558,7 @@
 /area/shuttle/salvage/derelict)
 "yjl" = (
 /obj/structure/closet/secure_closet/engineering_chief,
-/obj/item/toy/gasha/parrottoy,
+/obj/item/toy/plushie/parrot,
 /obj/structure/disposalpipe/segment{
 	dir = 2;
 	icon_state = "pipe-c"
@@ -457508,7 +457515,7 @@ aaa
 aaa
 aaa
 aaa
-dsk
+qYv
 dtM
 dzO
 dtM
@@ -485627,7 +485634,7 @@ aaa
 aaa
 aaa
 aaa
-dDX
+aaa
 aaa
 aaa
 aaa
@@ -491649,7 +491656,7 @@ aaa
 aaa
 aaa
 aaa
-dDX
+aaa
 aaa
 aaa
 aaa

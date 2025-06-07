@@ -222,6 +222,7 @@
 	set src in usr
 	set name = "Threaten to push the button!"
 	set desc = "BOOOOM!"
+	set category = "Object"
 
 	if(usr && !usr.incapacitated())
 		var/mob/user = usr

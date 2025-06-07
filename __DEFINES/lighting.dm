@@ -54,6 +54,12 @@
 #define LIGHT_COLOR_GREEN      "#64C864" //Bright but quickly dissipating neon green. rgb(100, 200, 100)
 #define LIGHT_COLOR_BLUE       "#6496FA" //Cold, diluted blue. rgb(100, 150, 250)
 
+#define LIGHT_COLOR_APC_RED		"#F86060"
+#define LIGHT_COLOR_APC_YELLOW	"#DCDC28"
+#define LIGHT_COLOR_APC_GREEN	"#82FF4C"
+#define LIGHT_COLOR_APC_BLUE	"#0026FF"
+#define LIGHT_COLOR_APC_SHUNT	"#F87370"
+
 #define LIGHT_COLOR_CYAN       "#7DE1E1" //Diluted cyan. rgb(125, 225, 225)
 #define LIGHT_COLOR_PINK       "#E17DE1" //Diluted, mid-warmth pink. rgb(225, 125, 225)
 #define LIGHT_COLOR_YELLOW     "#E1E17D" //Dimmed yellow, leaning kaki. rgb(225, 225, 125)

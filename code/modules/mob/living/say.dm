@@ -216,8 +216,9 @@ var/list/headset_modes = list(
 			if(findtext(speech.message, syn))
 				score.syndisponses += 1
 
-	var/message_range = 7
-	treat_speech(speech)
+	var/message_range = SPEECH_RANGE
+	if(!isDead()) //Dead players can still talk from dead bodies and it would be inconvenient to have these.
+		treat_speech(speech)
 	if(!speech.message)
 		qdel(speech)
 		return
@@ -246,9 +247,13 @@ var/list/headset_modes = list(
 	else
 		send_speech(speech, message_range, bubble_type)
 	radio(speech, message_mode) //Sends the radio signal
-	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message_mode ? "([message_mode]):":""] [message]")
+	log_say_message(speech, message_mode, message)
 	qdel(speech)
 	return 1
+
+/mob/living/proc/log_say_message(var/datum/speech/speech, var/message_mode, var/message)
+	var/turf/T = get_turf(src)
+	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message_mode ? "([message_mode]):":""] [message]")
 
 /mob/living/proc/resist_memes(var/datum/speech/speech)
 	if(stat || ear_deaf || speech.frequency || speech.speaker == src || !isliving(speech.speaker))
@@ -303,9 +308,14 @@ var/list/headset_modes = list(
 	if(isAI(src) && speech.frequency && !findtextEx(speech.job,"AI") && (speech.name != name))
 		var/mob/living/silicon/ai/ai = src
 		if(ai.mentions_on)
-			if(findtextEx(speech.message, "AI") || findtext(speech.message, ai.real_name))
+			/* Find "AI", "AI...", or "... AI ...", case-insensitive. Global flag set so regex.Replace() hits all matches. 					*/
+			/* We use a raw string (@"...") to avoid escaping all of the backslashes used in the pattern, as well as for readability.		*/
+			/* The first pattern is meant to help find "AI" all on its own, WITHOUT including "AI" when surrounded by letters, i.e. (rain) 	*/
+			/* It's also necessary to ensure "AI" is found when surrounded by, say, quotation marks in rendered_message, which is HTML.		*/
+			var/static/regex/pattern = regex(@"(?<!\l)AI(?!\l)|\Aai\Z|\Aai(?=\s)|(?<=\s)ai(?=\s)", "gi")
+			if(pattern.Find(speech.message) || findtext(speech.message, ai.real_name))
 				ai << 'sound/machines/twobeep.ogg'
-				rendered_message = replacetextEx(rendered_message, "AI", "<i style='color: blue;'>AI</i>")
+				rendered_message = pattern.Replace(rendered_message, "<i style='color: blue;'>AI</i>")
 				rendered_message = replacetext(rendered_message, ai.real_name, "<i style='color: blue;'>[ai.real_name]</i>")
 
 	// Runechat messages
@@ -717,7 +727,8 @@ var/list/headset_modes = list(
 	var/critical = InCritical()
 
 	log_whisper("[key_name(src)] ([formatLocation(src)]): [message]")
-	treat_speech(speech)
+	if(!isDead())
+		treat_speech(speech)
 	if(!speech.message)
 		qdel(speech)
 		return
@@ -732,7 +743,8 @@ var/list/headset_modes = list(
 		speech.mode= SPEECH_MODE_FINAL
 		whispers = "whispers with their final breath"
 		said_last_words = src.stat
-	treat_speech(speech)
+	if(!isDead())
+		treat_speech(speech)
 	if(!speech.message)
 		qdel(speech)
 		return

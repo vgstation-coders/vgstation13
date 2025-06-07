@@ -8,6 +8,7 @@
 
 #define MINIMUM_VAULT_AMOUNT 5 //Amount of guaranteed vault spawns
 #define MAXIMUM_VAULT_AMOUNT 15
+#define VAULT_POINT_MULTIPLIER 3
 
 #define MAX_VAULT_WIDTH  80 //Vaults bigger than that have a slight chance of overlapping with other vaults
 #define MAX_VAULT_HEIGHT 80
@@ -69,7 +70,7 @@
 
 	var/list/list_of_vaults = get_map_element_objects()
 
-	var/vault_number = rand(MINIMUM_VAULT_AMOUNT, min(list_of_vaults.len, MAXIMUM_VAULT_AMOUNT))
+	var/vault_number = (rand(MINIMUM_VAULT_AMOUNT, min(list_of_vaults.len, MAXIMUM_VAULT_AMOUNT)) * VAULT_POINT_MULTIPLIER)
 
 	#ifdef SPAWN_ALL_VAULTS
 	#warn Spawning ALL vaults!
@@ -445,11 +446,14 @@
 			else if(config.disable_vault_rotation)
 				message_admins("<span class='info'>[ME.file_path] was not rotated, DISABLE_VAULT_ROTATION enabled in config.</span>")
 			successes++
-			if(amount > 0)
-				amount--
-
-				if(amount == 0)
-					break
+			if(amount > 0)	//Allowing overflow is intentional, ie: 1 point left and the last picked vault costs 4 points
+				if(istype(ME, /datum/map_element/vault))
+					var/datum/map_element/vault/VE = ME
+					amount -= VE.spawn_cost
+				else
+					amount--
+			if(amount <= 0)
+				break
 		else
 			message_admins("<span class='danger'>Can't find [ME.file_path]!</span>")
 

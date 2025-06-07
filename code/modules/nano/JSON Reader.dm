@@ -214,4 +214,4 @@
 /json_reader/proc/die(json_token/T)
 	if(!T)
 		T = get_token()
-	CRASH("Unexpected token: [T.value] [json] index:[i] .")
+	CRASH("Unexpected token: [T.value] [json] index:[i].")

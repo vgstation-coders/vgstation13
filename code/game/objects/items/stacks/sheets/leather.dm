@@ -218,20 +218,25 @@
 //Step one - dehairing.
 
 /obj/item/stack/sheet/animalhide/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W.is_sharp() >= 1.2 && W.sharpness_flags & SHARP_BLADE)
+	if(W.sharpness_flags & SHARP_BLADE)
 
-		//visible message on mobs is defined as visible_message(var/message, var/self_message, var/blind_message)
-		user.visible_message("<span class='notice'>\the [usr] starts cutting hair off \the [src]</span>", "<span class='notice'>You start cutting the hair off \the [src]</span>", "You hear the sound of a knife rubbing against flesh")
+		if(!(W.is_sharp() >= 1.2))
+			to_chat(user, "<span class='notice'>[W]'s edge is too dull.</span>")
+			..()
 
-		spawn()
-			if(do_after(user, src, 50))
-				to_chat(user, "<span class='notice'>You cut the hair from this [src.singular_name]</span>")
-
-				if(src.use(1))
-					var/obj/item/stack/sheet/hairlesshide/H = drop_stack(/obj/item/stack/sheet/hairlesshide, user.loc, 1, user)
-					H.source_string = source_string
-					H.name = source_string ? "hairless [source_string] hide" : "hairless hide"
-		return 1
+		else
+			//visible message on mobs is defined as visible_message(var/message, var/self_message, var/blind_message)
+			user.visible_message("<span class='notice'>\the [usr] starts cutting hair off \the [src]</span>", "<span class='notice'>You start cutting the hair off \the [src]</span>", "You hear the sound of a knife rubbing against flesh")
+	
+			spawn()
+				if(do_after(user, src, 5 SECONDS))
+					to_chat(user, "<span class='notice'>You cut the hair from this [src.singular_name]</span>")
+	
+					if(src.use(1))
+						var/obj/item/stack/sheet/hairlesshide/H = drop_stack(/obj/item/stack/sheet/hairlesshide, user.loc, 1, user)
+						H.source_string = source_string
+						H.name = source_string ? "hairless [source_string] hide" : "hairless hide"
+			return 1
 	else
 		..()
 

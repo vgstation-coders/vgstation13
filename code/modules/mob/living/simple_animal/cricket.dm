@@ -115,6 +115,26 @@
 		if(TOXIN, INSECTICIDE)
 			if(method != INGEST)
 				death(gore = 0)
+		if(CREATINE)
+			if(prob(50)) //50% chance to become SWOLE
+
+				//Unless there are already a lot of creatine crickets
+				if(animal_count[/mob/living/simple_animal/hostile/retaliate/creatinecricket] >= ANIMAL_CHILD_CAP)
+					death(gore = 0)
+					return
+
+				visible_message("<span class='danger'>\The [src] is turning SWOLE!</span>")
+				message_admins("A CRICKET IS GETTING SWOLE AT [formatJumpTo(get_turf(src))]; usr = [key_name(usr)]")
+				grow_up(/mob/living/simple_animal/hostile/retaliate/creatinecricket)
+				
+			else if(prob(20)) //After that, 20% chance to die
+				death(gore = 0)
+				
+			else if(prob(0.5)) //After that, 0.5% chance to become a cricket king
+				playsound(src, 'sound/weapons/pan_miss_02.ogg', 100)
+				visible_message("<span class='userdanger'>\The [src] rapidly evolves, a small exoskeleton crown forming atop its head. It is ascending to peak form in front of your eyes!</span>")
+				message_admins("A cricket became a cricket king at [formatJumpTo(get_turf(src))]; usr = [key_name(usr)]")
+				grow_up(/mob/living/simple_animal/hostile/retaliate/creatinecricket/king)
 
 /mob/living/simple_animal/cricket/bite_act(mob/living/carbon/human/H)
 	if(size >= H.size)

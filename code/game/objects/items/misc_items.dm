@@ -17,7 +17,7 @@
 		stop_using(mover)
 
 /obj/item/seeing_stone/proc/start_using(mob/user)
-	user.register_event(/event/moved, src, src::mob_moved())
+	user.register_event(/event/moved, src, nameof(src::mob_moved()))
 	user.visible_message("\The [user] holds \the [src] up to \his eye.","You hold \the [src] up to your eye.")
 	user.see_invisible = INVISIBILITY_MAXIMUM
 	user.see_invisible_override = INVISIBILITY_MAXIMUM
@@ -30,7 +30,7 @@
 	using = TRUE
 
 /obj/item/seeing_stone/proc/stop_using(mob/user)
-	user.unregister_event(/event/moved, src, src::mob_moved())
+	user.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 	user.visible_message("\The [user] lowers \the [src].","You lower \the [src].")
 	user.see_invisible = initial(user.see_invisible)
 	user.see_invisible_override = 0

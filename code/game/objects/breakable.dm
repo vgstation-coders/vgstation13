@@ -137,11 +137,11 @@
 /obj/item/transfer_obj_blood_data(obj/item/A, obj/item/B)
 	..()
 	if(!blood_overlays[B.type]) //If there isn't a precreated blood overlay make one
-		B.generate_blood_overlay()
+		B.set_blood_overlay()
 	if(B.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
 		B.overlays.Remove(B.blood_overlay)
 	else
-		B.blood_overlay = blood_overlays[B.type]
+		B.blood_overlay = blood_overlays["[B.type][B.icon_state]"]
 	B.blood_overlay.color = B.blood_color
 	B.overlays += B.blood_overlay
 
@@ -343,9 +343,9 @@
 		if(kicker.loc == loc)
 			kick_dir = kicker.dir
 		var/turf/T = get_edge_target_turf(loc, kick_dir)
-		var/kick_power = max((kicker.get_strength() * 10 - (get_total_scaled_w_class(2))), 1) //The range of the kick is (strength)*10. Strength ranges from 1 to 3, depending on the kicker's genes. Range is reduced by w_class^2, and can't be reduced below 1.
+		var/kick_power = get_kick_power(kicker)
 		var/thispropel = new /datum/throwparams(T, kick_power, 1)
-		if(kick_power < 6)
+		if(kick_power < 1)
 			kick_power = 0
 			thispropel = null
 		if(try_break(thispropel))

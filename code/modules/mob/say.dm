@@ -66,36 +66,19 @@ var/list/global_deadchat_listeners = list()
 	if(name != real_name)
 		alt_name = " (died as [real_name])"
 
-
-	var/turf/T = get_turf(src)
 	var/ckey = "[key_name(src)]"
 	for(var/datum/deadchat_listener/listener in global_deadchat_listeners)
 		listener.deadchat_event(ckey,message)
 	message = src.say_quote("\"[html_encode(message)]\"")
-	var/location_text = loc ? "[T.x],[T.y],[T.z]" : "nullspace"
+	var/location_text = get_coordinates_string(src)
 	log_say("[name]/[key_name(src)] (@[location_text]) Deadsay: [message]")
 
-	for(var/mob/M in player_list)
-		if(!M.client)
-			continue
-		if(istype(M, /mob/new_player))
-			continue
-			
-		var/datum/role/vampire/V = isvampire(M)
-		if(V && V.deadchat)
-			var/rendered = "<span class='game deadsay'><span class='name'> [name]</span>[alt_name] <span class='message'>[message]</span></span>"
-			to_chat(M, rendered)
-		else if(M.client.prefs.toggles & CHAT_DEAD)
+	var/list/hearers = get_deadchat_hearers()
+	if(hearers)
+		for(var/mob/M in hearers)
 			var/rendered = "<span class='game deadsay'><a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a>"
 			rendered += "<span class='name'> [name]</span>[alt_name] <span class='message'>[message]</span></span>"
-			if(M.client.holder && M.client.holder.rights & R_ADMIN) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
-				to_chat(M, rendered)//Admins can hear deadchat, if they choose to, no matter if they're blind/deaf or not.
-			else if(M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute))
-				to_chat(M, rendered)
-			else if(istype(M,/mob/living/carbon/brain))
-				var/mob/living/carbon/brain/B = M
-				if(B.brain_dead_chat())
-					to_chat(M, rendered)
+			to_chat(M, rendered)
 
 /mob/proc/get_ear()
 	// returns an atom representing a location on the map from which this

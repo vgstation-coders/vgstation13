@@ -99,7 +99,7 @@
 			linked_area = starting_area
 			warning("Unable to find area [starting_area] in world - [src.type] ([src.name]) won't be able to function properly.")
 
-	if(istype(linked_area) && linked_area.contents.len) //Only add the shuttle to the list if its area exists and it has something in it
+	if(istype(linked_area)) //Only add the shuttle to the list if its area exists and it has something in it
 		shuttles |= src
 	if(password)
 		password = rand(10000,99999)
@@ -465,7 +465,6 @@
 		after_flight() //Shake the shuttle, weaken unbuckled mobs, etc.
 
 		return 1
-
 	return
 
 /datum/shuttle/proc/close_all_doors()
@@ -728,6 +727,19 @@
 			new_turf.layer = old_turf.layer
 			new_turf.color = old_turf.color
 
+			//***Moving the paint overlay****
+			new_turf.paint_overlay = old_turf.paint_overlay
+			if (new_turf.paint_overlay)
+				new_turf.paint_overlay.my_turf = new_turf
+				new_turf.update_paint_overlay()
+				old_turf.overlays.len = 0
+				old_turf.paint_overlay = null
+
+			//***Moving decals****
+			if (old_turf.turfdecals && old_turf.turfdecals.len > 0)
+				for (var/image/decal in old_turf.turfdecals)
+					new_turf.AddDecal(decal)
+
 		// Hack: transfer the ownership of old_turf's floor_tile to new_tile.
 		// Floor turfs create their `floor_tile` in New() if it's null.
 		// The better solution would be to not do that at all in New(), or use
@@ -813,10 +825,7 @@
 		AM.map_element_rotate(rotate)
 
 /proc/setup_shuttles()
-	world.log << "Setting up all shuttles..."
 
-	var/all_count = 0
-	var/count = 0
 	for(var/datum/shuttle/S in shuttles)
 		switch(S.initialize())
 			if(INIT_NO_AREA)
@@ -836,19 +845,13 @@
 					warning("[S.name] ([S.type]) couldn't connect to a destination port on init - unless this is intended, there might be problems.")
 				else
 					world.log << "[S.name] ([S.type]) couldn't connect to a destination port on init - unless this is intended, there might be problems."
-			else
-				count++
-		all_count++
 
-	world.log << "[all_count] shuttles initialized, of them [count] were initialized properly."
 
 	//THE MOST IMPORTANT PIECE OF CODE HERE
 	emergency_shuttle.shuttle = escape_shuttle
 
 	if(!emergency_shuttle || !emergency_shuttle.shuttle)
 		warning("Emergency shuttle is broken.")
-	else
-		world.log << "Emergency shuttle has been successfully set up."
 
 //Custom shuttles
 /datum/shuttle/custom

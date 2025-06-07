@@ -111,7 +111,7 @@
 				slime.Discipline = 0
 
 			if(power >= 3)
-				if(istype(slime, /mob/living/carbon/slime/adult))
+				if(slime.slime_lifestage == SLIME_ADULT)
 					if(prob(5 + round(power/2)))
 
 						if(slime.Victim)

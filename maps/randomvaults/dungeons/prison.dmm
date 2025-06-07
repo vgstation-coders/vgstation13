@@ -1,160 +1,2257 @@
-"aa" = (/turf/unsimulated/wall/rock,/area)
-"ab" = (/turf/unsimulated/floor/mars,/area)
-"ac" = (/turf/unsimulated/floor/mars/border,/area)
-"ad" = (/obj/structure/fence/corner{dir = 8},/turf/unsimulated/floor/mars/border,/area)
-"ae" = (/obj/structure/fence{dir = 4},/turf/unsimulated/floor/mars/border,/area)
-"af" = (/obj/structure/fence/post{dir = 4},/turf/unsimulated/floor/mars/border,/area)
-"ag" = (/obj/structure/fence/corner{dir = 4},/turf/unsimulated/floor/mars/border,/area)
-"ah" = (/obj/structure/fence,/turf/unsimulated/floor/mars/border,/area)
-"ai" = (/obj/structure/fence/post,/turf/unsimulated/floor/mars/border,/area)
-"aj" = (/turf/simulated/wall/r_wall,/area/vault/prison)
-"ak" = (/obj/item/weapon/bedsheet,/obj/structure/bed,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/prison)
-"al" = (/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/prison)
-"am" = (/obj/structure/window/reinforced/tinted,/obj/structure/table/woodentable,/obj/item/toy/cards,/obj/item/toy/cards,/obj/item/weapon/light/tube,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/prison)
-"an" = (/obj/structure/window/reinforced/tinted,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/prison)
-"ao" = (/obj/structure/window/reinforced/tinted{dir = 1},/obj/structure/bookcase{name = "bookcase (Adult)"},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/prison)
-"ap" = (/obj/structure/window/reinforced/tinted{dir = 1},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/prison)
-"aq" = (/obj/structure/toilet{dir = 4},/obj/machinery/shower{dir = 4},/turf/simulated/floor{icon_state = "cmo"},/area/vault/prison)
-"ar" = (/obj/structure/sink{dir = 4; pixel_x = 11},/obj/structure/mirror{pixel_x = 32},/obj/item/toy/crayon/red,/obj/machinery/light/small{dir = 1},/turf/simulated/floor{icon_state = "cmo"},/area/vault/prison)
-"as" = (/obj/machinery/light_construct,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/prison)
-"at" = (/obj/structure/disposalpipe/trunk,/obj/machinery/disposal,/turf/simulated/floor{icon_state = "cmo"},/area/vault/prison)
-"au" = (/turf/simulated/floor{icon_state = "cmo"},/area/vault/prison)
-"av" = (/obj/machinery/door/airlock{name = "Dormitory"},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/prison)
-"aw" = (/obj/machinery/door/airlock/external,/obj/docking_port/destination/vault/prison,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"ax" = (/obj/machinery/door/airlock/external,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"ay" = (/obj/structure/disposalpipe/segment,/turf/simulated/wall,/area/vault/prison)
-"az" = (/obj/machinery/door/airlock{name = "Bathroom"},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/prison)
-"aA" = (/obj/structure/table/reinforced,/obj/machinery/microwave,/turf/simulated/floor{icon_state = "cafeteria"},/area/vault/prison)
-"aB" = (/obj/machinery/light{dir = 1},/turf/simulated/floor{icon_state = "cafeteria"},/area/vault/prison)
-"aC" = (/turf/simulated/floor{icon_state = "cafeteria"},/area/vault/prison)
-"aD" = (/obj/structure/disposalpipe/trunk,/obj/machinery/disposal,/turf/simulated/floor{icon_state = "hydrofloor"},/area/vault/prison)
-"aE" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/drinks/mug,/obj/item/weapon/reagent_containers/food/drinks/mug,/obj/item/device/flashlight,/turf/simulated/floor{icon_state = "hydrofloor"},/area/vault/prison)
-"aF" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/sosjerky,/turf/simulated/floor{icon_state = "hydrofloor"},/area/vault/prison)
-"aG" = (/obj/structure/table,/obj/machinery/light{dir = 1},/turf/simulated/floor{icon_state = "hydrofloor"},/area/vault/prison)
-"aH" = (/obj/structure/table,/obj/item/toy/crayon/rainbow,/turf/simulated/floor{icon_state = "hydrofloor"},/area/vault/prison)
-"aI" = (/obj/structure/closet/walllocker/emerglocker{pixel_x = -32},/obj/machinery/light/small{dir = 1},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"aJ" = (/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"aK" = (/obj/structure/closet/emcloset,/obj/machinery/light/small{dir = 1},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"aL" = (/obj/machinery/computer/arcade,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"aM" = (/obj/machinery/light{dir = 1},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"aN" = (/obj/structure/disposalpipe/segment,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"aO" = (/obj/machinery/light{dir = 4},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"aP" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/box/donkpockets/random_amount,/turf/simulated/floor{icon_state = "cafeteria"},/area/vault/prison)
-"aQ" = (/obj/structure/disposalpipe/segment,/turf/simulated/floor{icon_state = "hydrofloor"},/area/vault/prison)
-"aR" = (/obj/structure/bed/chair{dir = 1},/turf/simulated/floor{icon_state = "hydrofloor"},/area/vault/prison)
-"aS" = (/obj/item/weapon/stool,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"aT" = (/obj/structure/disposalpipe/segment{dir = 4; icon_state = "pipe-c"},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"aU" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"aV" = (/obj/structure/disposalpipe/junction,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"aW" = (/obj/item/weapon/storage/box/mugs,/obj/structure/table/reinforced,/turf/simulated/floor{icon_state = "cafeteria"},/area/vault/prison)
-"aX" = (/obj/structure/disposalpipe/segment{dir = 1; icon_state = "pipe-c"},/turf/simulated/floor{icon_state = "hydrofloor"},/area/vault/prison)
-"aY" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/floor{icon_state = "hydrofloor"},/area/vault/prison)
-"aZ" = (/obj/structure/disposalpipe/segment{dir = 4},/obj/machinery/door/airlock{name = "Kitchen"},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"ba" = (/obj/structure/disposalpipe/segment{dir = 4},/obj/machinery/light{dir = 1},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bb" = (/obj/structure/disposalpipe/junction{dir = 1; icon_state = "pipe-j2"},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bc" = (/turf/simulated/wall,/area/vault/prison)
-"bd" = (/obj/machinery/door/airlock/maintenance,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"be" = (/obj/structure/reagent_dispensers/watertank,/turf/simulated/floor{icon_state = "cafeteria"},/area/vault/prison)
-"bf" = (/turf/simulated/floor{icon_state = "hydrofloor"},/area/vault/prison)
-"bg" = (/obj/item/toy/crayon/purple,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bh" = (/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor/plating,/area/vault/prison)
-"bi" = (/obj/structure/disposalpipe/segment,/turf/simulated/floor/plating,/area/vault/prison)
-"bj" = (/turf/simulated/floor/plating,/area/vault/prison)
-"bk" = (/obj/structure/reagent_dispensers/watertank,/obj/machinery/light/small{dir = 4},/turf/simulated/floor/plating,/area/vault/prison)
-"bl" = (/obj/machinery/door/airlock/glass_security{name = "Prison Wing"; req_access_txt = ""},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bm" = (/obj/machinery/vending,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bn" = (/obj/structure/disposalpipe/trunk{dir = 1},/obj/machinery/disposal,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bo" = (/obj/structure/disposalpipe/segment{dir = 4; icon_state = "pipe-c"},/obj/item/weapon/storage/toolbox/mechanical{pixel_y = 16},/turf/simulated/floor/plating,/area/vault/prison)
-"bp" = (/obj/structure/disposalpipe/junction{icon_state = "pipe-j2"; dir = 4},/turf/simulated/floor/plating,/area/vault/prison)
-"bq" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/floor/plating,/area/vault/prison)
-"br" = (/obj/structure/disposalpipe/segment{dir = 2; icon_state = "pipe-c"},/turf/simulated/floor/plating,/area/vault/prison)
-"bs" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor/plating,/area/vault/prison)
-"bt" = (/obj/structure/table/reinforced,/obj/effect/decal/cleanable/cobweb,/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bu" = (/obj/structure/table/reinforced,/obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full,/obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full,/obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bv" = (/obj/structure/table/reinforced,/obj/item/trash/plate,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bw" = (/obj/structure/table/reinforced,/obj/machinery/light{dir = 1},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bx" = (/obj/structure/table/reinforced,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"by" = (/obj/machinery/floodlight,/turf/simulated/floor/plating,/area/vault/prison)
-"bz" = (/obj/structure/disposalpipe/segment,/obj/machinery/floodlight,/turf/simulated/floor/plating,/area/vault/prison)
-"bA" = (/obj/item/trash/semki,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bB" = (/obj/structure/reagent_dispensers/watertank,/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/prison)
-"bC" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,/obj/item/tool/circular_saw,/obj/item/tool/retractor,/obj/machinery/light/small{dir = 1},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/prison)
-"bD" = (/obj/structure/table,/obj/item/weapon/reagent_containers/syringe/giant/chloral{pixel_y = 6},/obj/item/weapon/reagent_containers/syringe/giant/chloral,/obj/item/weapon/reagent_containers/syringe/giant{name = "Lethal Injection Syringe"; pixel_y = -6},/obj/item/weapon/lighter{pixel_x = -7},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/prison)
-"bE" = (/obj/structure/disposalpipe/trunk{dir = 1},/obj/machinery/disposal/deliveryChute{name = "trash chute"},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/prison)
-"bF" = (/obj/structure/disposalpipe/segment,/turf/simulated/wall/r_wall,/area/vault/prison)
-"bG" = (/obj/structure/fence{dir = 4},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bH" = (/obj/structure/fence/door/secure/from_north,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bI" = (/obj/structure/fence/post{dir = 4},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bJ" = (/obj/structure/fence/corner{dir = 4},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bK" = (/obj/item/weapon/mop,/obj/structure/mopbucket,/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/prison)
-"bL" = (/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/prison)
-"bM" = (/obj/item/tool/surgicaldrill,/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/prison)
-"bN" = (/obj/effect/decal/remains/human,/obj/effect/landmark/corpse/civilian{brute_dmg = 200; burn_dmg = 100; oxy_dmg = 0},/turf/unsimulated/floor/mars,/area)
-"bO" = (/obj/structure/disposalpipe/trunk{dir = 1},/obj/structure/disposaloutlet,/turf/unsimulated/floor/mars,/area)
-"bP" = (/obj/effect/landmark/corpse/syndicatesoldier{brute_dmg = 600; burn_dmg = 100},/turf/unsimulated/floor/mars,/area)
-"bQ" = (/obj/structure/fence,/turf/unsimulated/floor/mars,/area)
-"bR" = (/obj/effect/landmark/corpse/civilian,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bS" = (/obj/structure/fence,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bT" = (/obj/effect/decal/cleanable/vomit,/obj/item/weapon/reagent_containers/glass/bucket{pixel_x = 8; pixel_y = 2},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bU" = (/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bV" = (/obj/structure/fence/door/secure/from_east{dir = 4},/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bW" = (/obj/machinery/door/airlock/hatch,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"bX" = (/obj/item/tool/scalpel,/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/prison)
-"bY" = (/obj/structure/bed/chair{dir = 4},/obj/effect/decal/cleanable/blood,/obj/item/weapon/skull,/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/prison)
-"bZ" = (/obj/item/weapon/handcuffs,/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/prison)
-"ca" = (/obj/item/weapon/reagent_containers/food/snacks/donkpocket,/turf/unsimulated/floor/mars,/area)
-"cb" = (/obj/effect/decal/remains/xeno,/turf/unsimulated/floor/mars,/area)
-"cc" = (/obj/effect/decal/remains/human/noskull,/obj/effect/landmark/corpse/civilian{brute_dmg = 200; burn_dmg = 100; oxy_dmg = 0},/turf/unsimulated/floor/mars,/area)
-"cd" = (/obj/item/weapon/reagent_containers/glass/bucket{pixel_x = -6; pixel_y = 2},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"ce" = (/obj/item/stack/sheet/cardboard,/obj/item/stack/sheet/cardboard{pixel_x = -9; pixel_y = 3},/obj/item/stack/sheet/cardboard{pixel_x = 12; pixel_y = 2},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"cf" = (/obj/item/stack/sheet/cardboard,/obj/item/stack/sheet/cardboard{pixel_x = 6; pixel_y = -2},/obj/item/stack/sheet/cardboard{pixel_x = -16; pixel_y = -2},/obj/effect/landmark/corpse/civilian,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"cg" = (/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"ch" = (/obj/structure/fence,/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/blood{pixel_y = -32},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"ci" = (/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/cleanable/blood{pixel_y = -32},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"cj" = (/obj/effect/landmark/corpse/mutilated{burn_dmg = 50},/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"ck" = (/obj/structure/fence/post,/obj/effect/decal/cleanable/blood{pixel_y = -32},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/prison)
-"cl" = (/obj/item/tool/wirecutters/clippers,/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/prison)
-"cm" = (/obj/machinery/light/small,/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/prison)
-"cn" = (/obj/item/weapon/broken_bottle,/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/prison)
-"co" = (/obj/structure/sink{dir = 4; pixel_x = 11},/turf/simulated/floor{icon_state = "showroomfloor"},/area/vault/prison)
-"cp" = (/obj/effect/landmark/corpse/mutilated,/turf/unsimulated/floor/mars,/area)
-"cq" = (/obj/effect/landmark/corpse/civilian{brute_dmg = 200; burn_dmg = 100; oxy_dmg = 0},/obj/item/weapon/reagent_containers/food/snacks/donkpocket,/turf/unsimulated/floor/mars,/area)
-"cr" = (/obj/structure/fence/post,/turf/unsimulated/floor/mars,/area)
-"cs" = (/obj/structure/fence{dir = 4},/turf/unsimulated/floor/mars,/area)
-"ct" = (/obj/structure/fence/post{dir = 4},/turf/unsimulated/floor/mars,/area)
-"cu" = (/obj/structure/fence/corner,/turf/unsimulated/floor/mars,/area)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/unsimulated/wall/rock,
+/area)
+"ab" = (
+/turf/unsimulated/floor/mars,
+/area)
+"ac" = (
+/turf/unsimulated/floor/mars/border,
+/area)
+"ad" = (
+/obj/structure/fence/corner{
+	dir = 8
+	},
+/turf/unsimulated/floor/mars/border,
+/area)
+"ae" = (
+/obj/structure/fence{
+	dir = 4
+	},
+/turf/unsimulated/floor/mars/border,
+/area)
+"af" = (
+/obj/structure/fence/post{
+	dir = 4
+	},
+/turf/unsimulated/floor/mars/border,
+/area)
+"ag" = (
+/obj/structure/fence/corner{
+	dir = 4
+	},
+/turf/unsimulated/floor/mars/border,
+/area)
+"ah" = (
+/obj/structure/fence,
+/turf/unsimulated/floor/mars/border,
+/area)
+"ai" = (
+/obj/structure/fence/post,
+/turf/unsimulated/floor/mars/border,
+/area)
+"aj" = (
+/turf/simulated/wall/r_wall,
+/area/vault/prison)
+"ak" = (
+/obj/item/weapon/bedsheet,
+/obj/structure/bed,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/prison)
+"al" = (
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/prison)
+"am" = (
+/obj/structure/window/reinforced/tinted,
+/obj/structure/table/woodentable,
+/obj/item/toy/cards,
+/obj/item/toy/cards,
+/obj/item/weapon/light/tube,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/prison)
+"an" = (
+/obj/structure/window/reinforced/tinted,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/prison)
+"ao" = (
+/obj/structure/window/reinforced/tinted{
+	dir = 1
+	},
+/obj/structure/bookcase{
+	name = "bookcase (Adult)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/prison)
+"ap" = (
+/obj/structure/window/reinforced/tinted{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/prison)
+"aq" = (
+/obj/structure/toilet{
+	dir = 4
+	},
+/obj/machinery/shower{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "cmo"
+	},
+/area/vault/prison)
+"ar" = (
+/obj/structure/sink{
+	dir = 4;
+	pixel_x = 11
+	},
+/obj/structure/mirror{
+	pixel_x = 32
+	},
+/obj/item/toy/crayon/red,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "cmo"
+	},
+/area/vault/prison)
+"as" = (
+/obj/machinery/light_construct,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/prison)
+"at" = (
+/obj/structure/disposalpipe/trunk,
+/obj/machinery/disposal,
+/turf/simulated/floor{
+	icon_state = "cmo"
+	},
+/area/vault/prison)
+"au" = (
+/turf/simulated/floor{
+	icon_state = "cmo"
+	},
+/area/vault/prison)
+"av" = (
+/obj/machinery/door/airlock{
+	name = "Dormitory"
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/prison)
+"aw" = (
+/obj/machinery/door/airlock/external,
+/obj/docking_port/destination/vault/prison,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"ax" = (
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"ay" = (
+/obj/structure/disposalpipe/segment,
+/turf/simulated/wall,
+/area/vault/prison)
+"az" = (
+/obj/machinery/door/airlock{
+	name = "Bathroom"
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/prison)
+"aA" = (
+/obj/structure/table/reinforced,
+/obj/machinery/microwave,
+/turf/simulated/floor{
+	icon_state = "cafeteria"
+	},
+/area/vault/prison)
+"aB" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "cafeteria"
+	},
+/area/vault/prison)
+"aC" = (
+/turf/simulated/floor{
+	icon_state = "cafeteria"
+	},
+/area/vault/prison)
+"aD" = (
+/obj/structure/disposalpipe/trunk,
+/obj/machinery/disposal,
+/turf/simulated/floor{
+	icon_state = "hydrofloor"
+	},
+/area/vault/prison)
+"aE" = (
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/food/drinks/mug,
+/obj/item/weapon/reagent_containers/food/drinks/mug,
+/obj/item/device/flashlight,
+/turf/simulated/floor{
+	icon_state = "hydrofloor"
+	},
+/area/vault/prison)
+"aF" = (
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/food/snacks/sosjerky,
+/turf/simulated/floor{
+	icon_state = "hydrofloor"
+	},
+/area/vault/prison)
+"aG" = (
+/obj/structure/table,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "hydrofloor"
+	},
+/area/vault/prison)
+"aH" = (
+/obj/structure/table,
+/obj/item/toy/crayon/rainbow,
+/turf/simulated/floor{
+	icon_state = "hydrofloor"
+	},
+/area/vault/prison)
+"aI" = (
+/obj/structure/closet/walllocker/emerglocker{
+	pixel_x = -32
+	},
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"aJ" = (
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"aK" = (
+/obj/structure/closet/emcloset,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"aL" = (
+/obj/machinery/computer/arcade,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"aM" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"aN" = (
+/obj/structure/disposalpipe/segment,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"aO" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"aP" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/storage/box/donkpockets/random_amount,
+/turf/simulated/floor{
+	icon_state = "cafeteria"
+	},
+/area/vault/prison)
+"aQ" = (
+/obj/structure/disposalpipe/segment,
+/turf/simulated/floor{
+	icon_state = "hydrofloor"
+	},
+/area/vault/prison)
+"aR" = (
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "hydrofloor"
+	},
+/area/vault/prison)
+"aS" = (
+/obj/item/weapon/stool,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"aT" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4;
+	icon_state = "pipe-c"
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"aU" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"aV" = (
+/obj/structure/disposalpipe/junction,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"aW" = (
+/obj/item/weapon/storage/box/mugs,
+/obj/structure/table/reinforced,
+/turf/simulated/floor{
+	icon_state = "cafeteria"
+	},
+/area/vault/prison)
+"aX" = (
+/obj/structure/disposalpipe/segment{
+	dir = 1;
+	icon_state = "pipe-c"
+	},
+/turf/simulated/floor{
+	icon_state = "hydrofloor"
+	},
+/area/vault/prison)
+"aY" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "hydrofloor"
+	},
+/area/vault/prison)
+"aZ" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/obj/machinery/door/airlock{
+	name = "Kitchen"
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"ba" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bb" = (
+/obj/structure/disposalpipe/junction{
+	dir = 1;
+	icon_state = "pipe-j2"
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bc" = (
+/turf/simulated/wall,
+/area/vault/prison)
+"bd" = (
+/obj/machinery/door/airlock/maintenance,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"be" = (
+/obj/structure/reagent_dispensers/watertank,
+/turf/simulated/floor{
+	icon_state = "cafeteria"
+	},
+/area/vault/prison)
+"bf" = (
+/turf/simulated/floor{
+	icon_state = "hydrofloor"
+	},
+/area/vault/prison)
+"bg" = (
+/obj/item/toy/crayon/purple,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bh" = (
+/obj/item/weapon/storage/toolbox/mechanical,
+/turf/simulated/floor/plating,
+/area/vault/prison)
+"bi" = (
+/obj/structure/disposalpipe/segment,
+/turf/simulated/floor/plating,
+/area/vault/prison)
+"bj" = (
+/turf/simulated/floor/plating,
+/area/vault/prison)
+"bk" = (
+/obj/structure/reagent_dispensers/watertank,
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/prison)
+"bl" = (
+/obj/machinery/door/airlock/glass_security{
+	name = "Prison Wing";
+	req_access_txt = ""
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bm" = (
+/obj/machinery/vending,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bn" = (
+/obj/structure/disposalpipe/trunk{
+	dir = 1
+	},
+/obj/machinery/disposal,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bo" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4;
+	icon_state = "pipe-c"
+	},
+/obj/item/weapon/storage/toolbox/mechanical{
+	pixel_y = 16
+	},
+/turf/simulated/floor/plating,
+/area/vault/prison)
+"bp" = (
+/obj/structure/disposalpipe/junction{
+	icon_state = "pipe-j2";
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/prison)
+"bq" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/prison)
+"br" = (
+/obj/structure/disposalpipe/segment{
+	dir = 2;
+	icon_state = "pipe-c"
+	},
+/turf/simulated/floor/plating,
+/area/vault/prison)
+"bs" = (
+/obj/structure/reagent_dispensers/fueltank,
+/turf/simulated/floor/plating,
+/area/vault/prison)
+"bt" = (
+/obj/structure/table/reinforced,
+/obj/effect/decal/cleanable/cobweb,
+/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bu" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full,
+/obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full,
+/obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bv" = (
+/obj/structure/table/reinforced,
+/obj/item/trash/plate,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bw" = (
+/obj/structure/table/reinforced,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bx" = (
+/obj/structure/table/reinforced,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"by" = (
+/obj/machinery/floodlight,
+/turf/simulated/floor/plating,
+/area/vault/prison)
+"bz" = (
+/obj/structure/disposalpipe/segment,
+/obj/machinery/floodlight,
+/turf/simulated/floor/plating,
+/area/vault/prison)
+"bA" = (
+/obj/item/trash/semki,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bB" = (
+/obj/structure/reagent_dispensers/watertank,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/prison)
+"bC" = (
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
+/obj/item/tool/circular_saw,
+/obj/item/tool/retractor,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/prison)
+"bD" = (
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/syringe/giant/chloral{
+	pixel_y = 6
+	},
+/obj/item/weapon/reagent_containers/syringe/giant/chloral,
+/obj/item/weapon/reagent_containers/syringe/giant{
+	name = "Lethal Injection Syringe";
+	pixel_y = -6
+	},
+/obj/item/weapon/lighter{
+	pixel_x = -7
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/prison)
+"bE" = (
+/obj/structure/disposalpipe/trunk{
+	dir = 1
+	},
+/obj/machinery/disposal/deliveryChute{
+	name = "trash chute"
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/prison)
+"bF" = (
+/obj/structure/disposalpipe/segment,
+/turf/simulated/wall/r_wall,
+/area/vault/prison)
+"bG" = (
+/obj/structure/fence{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bH" = (
+/obj/structure/fence/door/secure/from_north,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bI" = (
+/obj/structure/fence/post{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bJ" = (
+/obj/structure/fence/corner{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bK" = (
+/obj/item/weapon/mop,
+/obj/structure/mopbucket,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/prison)
+"bL" = (
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/prison)
+"bM" = (
+/obj/item/tool/surgicaldrill,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/prison)
+"bN" = (
+/obj/effect/decal/remains/human,
+/obj/effect/landmark/corpse/civilian{
+	brute_dmg = 200;
+	burn_dmg = 100;
+	oxy_dmg = 0
+	},
+/turf/unsimulated/floor/mars,
+/area)
+"bO" = (
+/obj/structure/disposalpipe/trunk{
+	dir = 1
+	},
+/obj/structure/disposaloutlet,
+/turf/unsimulated/floor/mars,
+/area)
+"bP" = (
+/obj/effect/landmark/corpse/syndicatesoldier{
+	brute_dmg = 600;
+	burn_dmg = 100
+	},
+/turf/unsimulated/floor/mars,
+/area)
+"bQ" = (
+/obj/structure/fence,
+/turf/unsimulated/floor/mars,
+/area)
+"bR" = (
+/obj/effect/landmark/corpse/civilian,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bS" = (
+/obj/structure/fence,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bT" = (
+/obj/effect/decal/cleanable/vomit,
+/obj/item/weapon/reagent_containers/glass/bucket{
+	pixel_x = 8;
+	pixel_y = 2
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bU" = (
+/obj/effect/decal/cleanable/blood,
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bV" = (
+/obj/structure/fence/door/secure/from_east{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bW" = (
+/obj/machinery/door/airlock/hatch,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"bX" = (
+/obj/item/tool/scalpel,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/prison)
+"bY" = (
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/blood,
+/obj/item/weapon/skull,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/prison)
+"bZ" = (
+/obj/item/weapon/handcuffs,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/prison)
+"ca" = (
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket,
+/turf/unsimulated/floor/mars,
+/area)
+"cb" = (
+/obj/effect/decal/remains/xeno,
+/turf/unsimulated/floor/mars,
+/area)
+"cc" = (
+/obj/effect/decal/remains/human/noskull,
+/obj/effect/landmark/corpse/civilian{
+	brute_dmg = 200;
+	burn_dmg = 100;
+	oxy_dmg = 0
+	},
+/turf/unsimulated/floor/mars,
+/area)
+"cd" = (
+/obj/item/weapon/reagent_containers/glass/bucket{
+	pixel_x = -6;
+	pixel_y = 2
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"ce" = (
+/obj/item/stack/sheet/cardboard,
+/obj/item/stack/sheet/cardboard{
+	pixel_x = -9;
+	pixel_y = 3
+	},
+/obj/item/stack/sheet/cardboard{
+	pixel_x = 12;
+	pixel_y = 2
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"cf" = (
+/obj/item/stack/sheet/cardboard,
+/obj/item/stack/sheet/cardboard{
+	pixel_x = 6;
+	pixel_y = -2
+	},
+/obj/item/stack/sheet/cardboard{
+	pixel_x = -16;
+	pixel_y = -2
+	},
+/obj/effect/landmark/corpse/civilian,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"cg" = (
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"ch" = (
+/obj/structure/fence,
+/obj/effect/decal/cleanable/blood,
+/obj/effect/decal/cleanable/blood{
+	pixel_y = -32
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"ci" = (
+/obj/effect/decal/cleanable/blood,
+/obj/effect/decal/cleanable/blood/drip,
+/obj/effect/decal/cleanable/blood{
+	pixel_y = -32
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"cj" = (
+/obj/effect/landmark/corpse/mutilated{
+	burn_dmg = 50
+	},
+/obj/effect/decal/cleanable/blood,
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"ck" = (
+/obj/structure/fence/post,
+/obj/effect/decal/cleanable/blood{
+	pixel_y = -32
+	},
+/turf/simulated/floor{
+	icon_state = "pattern_red"
+	},
+/area/vault/prison)
+"cl" = (
+/obj/item/tool/wirecutters/clippers,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/prison)
+"cm" = (
+/obj/machinery/light/small,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/prison)
+"cn" = (
+/obj/item/weapon/broken_bottle,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/prison)
+"co" = (
+/obj/structure/sink{
+	dir = 4;
+	pixel_x = 11
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/prison)
+"cp" = (
+/obj/effect/landmark/corpse/mutilated,
+/turf/unsimulated/floor/mars,
+/area)
+"cq" = (
+/obj/effect/landmark/corpse/civilian{
+	brute_dmg = 200;
+	burn_dmg = 100;
+	oxy_dmg = 0
+	},
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket,
+/turf/unsimulated/floor/mars,
+/area)
+"cr" = (
+/obj/structure/fence/post,
+/turf/unsimulated/floor/mars,
+/area)
+"cs" = (
+/obj/structure/fence{
+	dir = 4
+	},
+/turf/unsimulated/floor/mars,
+/area)
+"ct" = (
+/obj/structure/fence/post{
+	dir = 4
+	},
+/turf/unsimulated/floor/mars,
+/area)
+"cu" = (
+/obj/structure/fence/corner,
+/turf/unsimulated/floor/mars,
+/area)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaabababababaaaaaaaaaaaaaaaaaaaaaaababababaaaaaaaaaaabaaaaaaaaaaabababababababaa
-aaabababababababaaaaaaaaaaaaaaabababababababaaaaabababaaaaaaaaababababababababaa
-aaabababababababaaaaaaaaaaaaaaabababababababababababababaaababababababababababaa
-aaababababababababaaaaaaacacacacacacacacacacacacacacacacabababababababababababaa
-aaabababababababababababacadaeafaeaeafaeaeafaeaeafaeagacabababababababababababaa
-aaabababababababababababacahababababababababababababahacabababababababababababaa
-aaababababababacacacacacacaiababababababababababababaiacabababababababababababaa
-aaababababababacajajajajajajababababababababababababajacabababababababababababaa
-aaababababababacajakalalakajababababababababababababajacacacacababababababababaa
-aaababababababacajamalalanajababababababababababababajajajajacababababababababaa
-aaababababababacajaoalalapajababababababababababababajaqarajacababababababababaa
-aaababababababacajakasalakajababababababababababababajatauajacacabababababababaa
-aaababababababacajajajavajajajajajajajawaxajajajajajajayazajajacabababababababaa
-aaababababababacajaAaBaCaDaEaFaGaHajaIaJaJaKajaLaJaMaJaNaJaOajacacababababababaa
-aaababababababacajaPaCaCaQaRaRaRaRajajaxaxajajaSaTaUaUaVaJaJajajacababababababaa
-aaababababababacajaWaCaCaXaYaYaYaYaZbaaUaUbaaUaUbbbcbcaybdbcbcajacababababababaa
-aaababababababacajbebebebfbfbfbfbfbcaJaJaJbgaJaJaNbcbhbibjbjbkajacababababababaa
-aaababababababacajbcbcbcbcbcbcbcbcbcblbcbcbcbcbmbnbcbobpbqbrbsajacababababababaa
-aaababababababacajbtbubvbwbxbxbxaMaJaJaJaMaJbcbcbcbcaybcbybzbyajacababababababaa
-aaababababababacajaJaJaJaJbAaJaJaJaJaJaJaJaJbcbBbCbDbEajajbFajajacababababababaa
-aaababababababacajbGbHbGbIbGbHbGbIbGbGbJaJaJbcbKbLbLbMajbNbObPbQacababababababaa
-aaababababababacajbRaJaJbSaJaJbTbSbUaJbVaJaJbWbLbXbYbZajcacbccbQacababababababaa
-aaababababababacajcdaJcebSaJcfcgchcicjckaJaJbcclcmcncoajcpcqcacracababababababaa
-aaababababababacajajajajajajajajajajajajajajajajajajajajcscsctcuacababababababaa
-aaababababababacacacacacacacacacacacacacacacacacacacacacacacacacacababababababaa
-aaababababababababababababababababababababababababababababababababababababababaa
-aaababababababababababababababababababababababababababababababababababababababaa
-aaababababababababababababababababababababababababababababababababababababababaa
-aaababababababababababababababababababababababababababababababababababababababaa
-aaababababababababababababababababababababababababababababababababababababababaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(2,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(3,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(4,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(5,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(6,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(7,1,1) = {"
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(8,1,1) = {"
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(9,1,1) = {"
+aa
+aa
+aa
+aa
+ab
+ab
+ab
+ac
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(10,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+ac
+aj
+ak
+am
+ao
+ak
+aj
+aA
+aP
+aW
+be
+bc
+bt
+aJ
+bG
+bR
+cd
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(11,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+ac
+aj
+al
+al
+al
+as
+aj
+aB
+aC
+aC
+be
+bc
+bu
+aJ
+bH
+aJ
+aJ
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(12,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+ac
+aj
+al
+al
+al
+al
+av
+aC
+aC
+aC
+be
+bc
+bv
+aJ
+bG
+aJ
+ce
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(13,1,1) = {"
+aa
+aa
+aa
+aa
+ac
+ac
+ac
+ac
+aj
+ak
+an
+ap
+ak
+aj
+aD
+aQ
+aX
+bf
+bc
+bw
+aJ
+bI
+bS
+bS
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(14,1,1) = {"
+aa
+aa
+aa
+aa
+ac
+ad
+ah
+ai
+aj
+aj
+aj
+aj
+aj
+aj
+aE
+aR
+aY
+bf
+bc
+bx
+bA
+bG
+aJ
+aJ
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(15,1,1) = {"
+aa
+aa
+aa
+aa
+ac
+ae
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aj
+aF
+aR
+aY
+bf
+bc
+bx
+aJ
+bH
+aJ
+cf
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(16,1,1) = {"
+aa
+aa
+ab
+ab
+ac
+af
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aj
+aG
+aR
+aY
+bf
+bc
+bx
+aJ
+bG
+bT
+cg
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(17,1,1) = {"
+aa
+aa
+ab
+ab
+ac
+ae
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aj
+aH
+aR
+aY
+bf
+bc
+aM
+aJ
+bI
+bS
+ch
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(18,1,1) = {"
+aa
+ab
+ab
+ab
+ac
+ae
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aj
+aj
+aj
+aZ
+bc
+bc
+aJ
+aJ
+bG
+bU
+ci
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(19,1,1) = {"
+aa
+ab
+ab
+ab
+ac
+af
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aj
+aI
+aj
+ba
+aJ
+bl
+aJ
+aJ
+bG
+aJ
+cj
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(20,1,1) = {"
+aa
+ab
+ab
+ab
+ac
+ae
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aw
+aJ
+ax
+aU
+aJ
+bc
+aJ
+aJ
+bJ
+bV
+ck
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(21,1,1) = {"
+aa
+ab
+ab
+ab
+ac
+ae
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ax
+aJ
+ax
+aU
+aJ
+bc
+aM
+aJ
+aJ
+aJ
+aJ
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(22,1,1) = {"
+aa
+aa
+ab
+ab
+ac
+af
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aj
+aK
+aj
+ba
+bg
+bc
+aJ
+aJ
+aJ
+aJ
+aJ
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(23,1,1) = {"
+aa
+aa
+aa
+ab
+ac
+ae
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aj
+aj
+aj
+aU
+aJ
+bc
+bc
+bc
+bc
+bW
+bc
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(24,1,1) = {"
+aa
+aa
+aa
+ab
+ac
+ae
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aj
+aL
+aS
+aU
+aJ
+bm
+bc
+bB
+bK
+bL
+cl
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(25,1,1) = {"
+aa
+aa
+ab
+ab
+ac
+af
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aj
+aJ
+aT
+bb
+aN
+bn
+bc
+bC
+bL
+bX
+cm
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(26,1,1) = {"
+aa
+aa
+ab
+ab
+ac
+ae
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aj
+aM
+aU
+bc
+bc
+bc
+bc
+bD
+bL
+bY
+cn
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(27,1,1) = {"
+aa
+ab
+ab
+ab
+ac
+ag
+ah
+ai
+aj
+aj
+aj
+aj
+aj
+aj
+aJ
+aU
+bc
+bh
+bo
+ay
+bE
+bM
+bZ
+co
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(28,1,1) = {"
+aa
+aa
+aa
+ab
+ac
+ac
+ac
+ac
+ac
+ac
+aj
+aq
+at
+ay
+aN
+aV
+ay
+bi
+bp
+bc
+aj
+aj
+aj
+aj
+aj
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(29,1,1) = {"
+aa
+aa
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ac
+aj
+ar
+au
+az
+aJ
+aJ
+bd
+bj
+bq
+by
+aj
+bN
+ca
+cp
+cs
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(30,1,1) = {"
+aa
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ac
+aj
+aj
+aj
+aj
+aO
+aJ
+bc
+bj
+br
+bz
+bF
+bO
+cb
+cq
+cs
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(31,1,1) = {"
+aa
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ac
+ac
+ac
+ac
+aj
+aj
+aj
+bc
+bk
+bs
+by
+aj
+bP
+cc
+ca
+ct
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(32,1,1) = {"
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ac
+ac
+ac
+aj
+aj
+aj
+aj
+aj
+aj
+bQ
+bQ
+cr
+cu
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(33,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(34,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(35,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(36,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(37,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(38,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(39,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+"}
+(40,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 "}

@@ -196,9 +196,10 @@
 	update_icon()
 
 /obj/structure/bed/guillotine/proc/untie_blade(mob/user)
-	user.attack_log += "\[[time_stamp()]\] [key_name(user)] has started to execute [key_name(victim)] with \the [src]."
-	victim.attack_log += "\[[time_stamp()]\] [key_name(user)] has started to execute [key_name(victim)] with \the [src]."
-	message_admins("\[[time_stamp()]\] [key_name(user)] has started to execute [key_name(victim)] with \the [src]. @[formatJumpTo(src)]")
+	if(victim)
+		user.attack_log += "\[[time_stamp()]\] [key_name(user)] has started to execute [key_name(victim)] with \the [src]."
+		src.victim.attack_log += "\[[time_stamp()]\] [key_name(user)] has started to execute [key_name(victim)] with \the [src]."
+		message_admins("\[[time_stamp()]\] [key_name(user)] has started to execute [key_name(victim)] with \the [src]. @[formatJumpTo(src)]")
 	user.visible_message("<span class='danger'>\The [user] begins untying the rope holding \the [src]'s blade!</span>",\
 							"You begin untying the rope holding \the [src]'s blade.")
 	if(do_after(user, src, 100))

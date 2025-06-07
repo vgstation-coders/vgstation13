@@ -114,13 +114,15 @@
 
 		var/lineCount = 1;
 		for(var/line in lines)
-			//world << line
+			//to_chat(world, "line: [line]")
 			var/chordCount = 1;
 			for(var/beat in splittext(lowertext(line), ","))
-				//world << "beat: [beat]"
+				//to_chat(world, "beat: [beat] / beat length: [length(beat)]")
+				if(!length(beat)) //This occurs when a comma is at the end of a line
+					beat = " " //It's intended to be a space so here we make it a space
 				var/list/notes = splittext(beat, "/")
 				for(var/note in splittext(notes[1], "-"))
-					//world << "note: [note]"
+					//to_chat(world, "note: [note]")
 					if(!playing || shouldStopPlaying(user))//If the instrument is playing, or special case
 						playing = 0
 						return

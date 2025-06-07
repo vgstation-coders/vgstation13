@@ -56,7 +56,7 @@
 }
 
 .canvasPanel canvas {
-	background: #202020;
+	background: #0000;
 	z-index: 1;
 	position: relative;
 }

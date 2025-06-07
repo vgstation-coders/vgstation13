@@ -50,6 +50,11 @@
 	projectile_type = /obj/item/projectile/beam
 	charge_cost = 50
 
+/obj/item/weapon/gun/energy/laser/rifle/syndie
+	icon_state = "exaltlasergun"
+	item_state = "exaltlasergun"
+	fire_sound = 'sound/weapons/laserriflefire.ogg'
+
 /obj/item/weapon/gun/energy/laser/failure_check(var/mob/living/carbon/human/M)
 	if(istext(projectile_type))
 		projectile_type = text2path(projectile_type)

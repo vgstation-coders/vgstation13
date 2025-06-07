@@ -256,6 +256,9 @@ var/list/shuttle_log = list()
 				return
 			if(issilicon(usr))
 				return
+			if (istype(usr, /mob/living/simple_animal/hostile/pulse_demon))
+				to_chat(usr, "<span class='warning'>This machinery resists your hijacking attempt!</span>")
+				return FALSE
 			if(authenticated || isAdminGhost(usr))
 				var/response = alert("Are you sure you wish to recall the shuttle?", "Confirm", "Yes", "No")
 				if(response == "Yes")
@@ -409,7 +412,6 @@ var/list/shuttle_log = list()
 /obj/machinery/computer/communications/attack_paw(var/mob/user as mob)
 	return src.attack_hand(user)
 
-
 /obj/machinery/computer/communications/attack_hand(var/mob/user as mob)
 	if(..(user))
 		return
@@ -557,40 +559,47 @@ var/list/shuttle_log = list()
 	if(!universe.OnShuttleCall(user))
 		return
 	if(!map.linked_to_centcomm)
-		to_chat(usr, "<span class='danger'>Error: No connection can be made to central command .</span>")
+		if (user)
+			to_chat(user, "<span class='danger'>Error: No connection can be made to central command .</span>")
 		return
 
-	//if(sent_strike_team == 1)
-	//	to_chat(user, "Centcom will not allow the shuttle to be called. Consider all contracts terminated.")
-	//	return
-
 	if(emergency_shuttle.shutdown)
-		to_chat(user, "The emergency shuttle has been disabled.")
+		if (user)
+			to_chat(user, "The emergency shuttle has been disabled.")
 		return
 
 	if(ticker && (world.time / 10 < ticker.gamestart_time + SHUTTLEGRACEPERIOD)) // Five minute grace period to let the game get going without lolmetagaming. -- TLE
-		to_chat(user, "The emergency shuttle is refueling. Please wait another [round((ticker.gamestart_time + SHUTTLEGRACEPERIOD - world.time / 10) / 60, 1)] minute\s before trying again.")
+		if (user)
+			to_chat(user, "The emergency shuttle is refueling. Please wait another [round((ticker.gamestart_time + SHUTTLEGRACEPERIOD - world.time / 10) / 60, 1)] minute\s before trying again.")
 		return
 
 	if(emergency_shuttle.direction == -1)
-		to_chat(user, "The emergency shuttle may not be called while returning to CentCom.")
+		if (user)
+			to_chat(user, "The emergency shuttle may not be called while returning to CentCom.")
 		return
 
 	if(emergency_shuttle.online)
-		to_chat(user, "The emergency shuttle is already on its way.")
+		if (user)
+			to_chat(user, "The emergency shuttle is already on its way.")
 		return
 
-	if(ticker.mode.name == "blob")
-		to_chat(user, "Under directive 7-10, [station_name()] is quarantined until further notice.")
-		return
+	for(var/datum/faction/F in ticker.mode.factions)
+		if (F.emergency_shuttle_lockdown)
+			if (user)
+				to_chat(user,F.emergency_shuttle_lockdown)
+			return
 
 	emergency_shuttle.incall()
 	if(!justification)
 		justification = "#??!7E/_1$*/ARR-CON�FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
 	if(!isobserver(user))
 		shuttle_log += "\[[worldtime2text()]] Called from [get_area(user)] ([user.x-WORLD_X_OFFSET[user.z]], [user.y-WORLD_Y_OFFSET[user.z]], [user.z])."
-	log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
-	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'.", 1)
+	if (user)
+		log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
+		message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'.", 1)
+	else
+		log_game("The shuttle has been called. Justification given : '[justification]'")
+		message_admins("The shuttle has been called. Justification given : '[justification]'.", 1)
 	var/datum/command_alert/emergency_shuttle_called/CA = new /datum/command_alert/emergency_shuttle_called
 	CA.justification = justification
 	command_alert(CA)

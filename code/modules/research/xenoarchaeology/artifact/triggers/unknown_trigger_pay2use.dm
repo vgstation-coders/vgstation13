@@ -11,8 +11,8 @@
 
 /datum/artifact_trigger/pay2use/New()
 	..()
-	my_artifact.register_event(/event/attackhand, src, src::owner_attackhand())
-	my_artifact.register_event(/event/attackby, src, src::owner_attackby())
+	my_artifact.register_event(/event/attackhand, src, nameof(src::owner_attackhand()))
+	my_artifact.register_event(/event/attackby, src, nameof(src::owner_attackby()))
 	mode = rand(0,2)
 	var/where = pick("on one of its sides","at the top","hidden underneath", "on the front")
 	switch(mode)
@@ -189,7 +189,7 @@
 		payviacard(500, 3600, usr)
 
 /datum/artifact_trigger/pay2use/Destroy()
-	my_artifact.unregister_event(/event/attackhand, src, src::owner_attackhand())
-	my_artifact.unregister_event(/event/attackby, src, src::owner_attackby())
+	my_artifact.unregister_event(/event/attackhand, src, nameof(src::owner_attackhand()))
+	my_artifact.unregister_event(/event/attackby, src, nameof(src::owner_attackby()))
 	linked_db = null
 	..()

@@ -104,7 +104,6 @@
 /obj/structure/button{
 	activate_id = "6";
 	name = "drawbridge (6)";
-	pixel_x = 0;
 	pixel_y = 32
 	},
 /turf/simulated/floor,
@@ -718,7 +717,6 @@
 /area/awaymission/tomb/tower_of_madness)
 "cB" = (
 /obj/structure/ladder{
-	height = 0;
 	id = "5-6";
 	name = "Tower of Madness level 6"
 	},
@@ -1063,7 +1061,6 @@
 /area/awaymission/tomb/outside/pyramid_outside)
 "dF" = (
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "ramptop"
 	},
 /area/awaymission/tomb/tomb_of_rafid)
@@ -1222,7 +1219,6 @@
 /area/awaymission/tomb/tower_of_madness)
 "ea" = (
 /obj/structure/ladder{
-	height = 0;
 	id = "4-5";
 	name = "Tower of Madness level 5"
 	},
@@ -1312,8 +1308,7 @@
 "eo" = (
 /turf/unsimulated/floor{
 	dir = 1;
-	icon_state = "ramptop";
-	name = "floor"
+	icon_state = "ramptop"
 	},
 /area/awaymission/tomb/outside/pyramid_outside)
 "ep" = (
@@ -1480,15 +1475,13 @@
 "eP" = (
 /turf/unsimulated/floor{
 	dir = 8;
-	icon_state = "ramptop";
-	name = "floor"
+	icon_state = "ramptop"
 	},
 /area/awaymission/tomb/outside/pyramid_outside)
 "eQ" = (
 /turf/unsimulated/floor{
 	dir = 4;
-	icon_state = "ramptop";
-	name = "floor"
+	icon_state = "ramptop"
 	},
 /area/awaymission/tomb/outside/pyramid_outside)
 "eR" = (
@@ -1836,7 +1829,6 @@
 /area/awaymission/tomb/tower_of_madness)
 "fT" = (
 /obj/structure/ladder{
-	height = 0;
 	id = "3-4";
 	name = "Tower of Madness level 4"
 	},
@@ -2269,7 +2261,6 @@
 /area/awaymission/tomb/tomb_of_rafid)
 "gV" = (
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "ramptop"
 	},
 /area/awaymission/tomb/tower_of_madness)
@@ -2473,7 +2464,6 @@
 /area/awaymission/tomb/tower_of_madness)
 "hB" = (
 /obj/structure/ladder{
-	height = 0;
 	id = "2-3";
 	name = "Tower of Madness level 3"
 	},
@@ -2894,8 +2884,7 @@
 "iO" = (
 /obj/item/weapon/skull/rigged{
 	desc = "It's stuck to the floor!";
-	name = "cursed skull";
-	pixel_y = 0
+	name = "cursed skull"
 	},
 /turf/simulated/floor,
 /area/awaymission/tomb/tomb_of_rafid)
@@ -2937,7 +2926,6 @@
 	dir = 4
 	},
 /obj/structure/ladder{
-	height = 0;
 	id = "1-2";
 	name = "Tower of Madness level 2"
 	},
@@ -2978,7 +2966,6 @@
 /area/awaymission/tomb/tower_of_madness)
 "iZ" = (
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "ramptop"
 	},
 /area/awaymission/tomb/sewers)

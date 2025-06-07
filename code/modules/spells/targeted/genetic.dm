@@ -55,6 +55,7 @@ code\game\\dna\genes\goon_powers.dm
 
 	price = 0.5 * Sp_BASE_PRICE //Half of the normal spell price
 	user_type = USER_TYPE_WIZARD
+	compatible_mobs = list(/mob/living/carbon) //Silicons don't have DNA
 
 /spell/targeted/genetic/mutate
 	name = "Mutate"

@@ -4,8 +4,8 @@
 
 /datum/artifact_trigger/touch/New()
 	..()
-	my_artifact.register_event(/event/attackhand, src, src::owner_attackhand())
-	my_artifact.register_event(/event/bumped, src, src::owner_bumped())
+	my_artifact.register_event(/event/attackhand, src, nameof(src::owner_attackhand()))
+	my_artifact.register_event(/event/bumped, src, nameof(src::owner_bumped()))
 
 /datum/artifact_trigger/touch/proc/activate(mob/user, context)
 	Triggered(user, "TOUCH", 0)
@@ -26,6 +26,6 @@
 	activate(user, "TOUCH")
 
 /datum/artifact_trigger/touch/Destroy()
-	my_artifact.unregister_event(/event/attackhand, src, src::owner_attackhand())
-	my_artifact.unregister_event(/event/bumped, src, src::owner_bumped())
+	my_artifact.unregister_event(/event/attackhand, src, nameof(src::owner_attackhand()))
+	my_artifact.unregister_event(/event/bumped, src, nameof(src::owner_bumped()))
 	..()

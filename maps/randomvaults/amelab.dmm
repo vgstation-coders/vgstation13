@@ -569,7 +569,6 @@
 /area/vault/amelab)
 "yK" = (
 /obj/structure/extinguisher_cabinet{
-	dir = 2;
 	pixel_y = 30
 	},
 /obj/machinery/light{
@@ -1192,7 +1191,7 @@
 /obj/item/clothing/suit/bio_suit/anomaly,
 /obj/item/clothing/head/bio_hood/anomaly,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/clothing/gloves/latex,
 /obj/machinery/light,
 /obj/effect/decal/warning_stripes{

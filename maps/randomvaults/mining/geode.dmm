@@ -1,7 +1,7 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
 /turf/unsimulated/mineral/random/high_chance,
-/area/asteroid)
+/area/mining_surprise)
 "c" = (
 /obj/item/stack/ore/telecrystal{
 	pixel_x = 5;
@@ -13,28 +13,28 @@
 	},
 /obj/item/stack/ore/telecrystal,
 /turf/unsimulated/floor/asteroid/underground,
-/area/asteroid)
+/area/mining_surprise)
 "e" = (
 /obj/item/stack/ore/diamond,
 /turf/unsimulated/floor/asteroid/underground,
-/area/asteroid)
+/area/mining_surprise)
 "j" = (
 /obj/structure/crystal,
 /turf/unsimulated/floor/asteroid/underground,
-/area/asteroid)
+/area/mining_surprise)
 "y" = (
 /obj/item/stack/ore/telecrystal,
 /turf/unsimulated/floor/asteroid/underground,
-/area/asteroid)
+/area/mining_surprise)
 "z" = (
 /turf/unsimulated/floor/asteroid/underground,
-/area/asteroid)
+/area/mining_surprise)
 "D" = (
 /obj/structure/crystal,
 /turf/unsimulated/mineral/snow{
 	mined_type = /turf/unsimulated/floor/asteroid/underground
 	},
-/area/asteroid)
+/area/mining_surprise)
 "E" = (
 /obj/item/stack/ore/diamond{
 	pixel_x = 3;
@@ -42,12 +42,12 @@
 	},
 /obj/item/stack/ore/diamond,
 /turf/unsimulated/floor/asteroid/underground,
-/area/asteroid)
+/area/mining_surprise)
 "O" = (
 /turf/unsimulated/mineral/snow{
 	mined_type = /turf/unsimulated/floor/asteroid/underground
 	},
-/area/asteroid)
+/area/mining_surprise)
 "X" = (
 /obj/item/stack/ore/telecrystal,
 /obj/item/stack/ore/telecrystal{
@@ -55,7 +55,7 @@
 	pixel_y = 10
 	},
 /turf/unsimulated/floor/asteroid/underground,
-/area/asteroid)
+/area/mining_surprise)
 
 (1,1,1) = {"
 a

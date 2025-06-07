@@ -89,6 +89,7 @@
 		/obj/item/clothing/shoes/white,
 		/obj/item/device/radio/headset/headset_med,
 		/obj/item/weapon/storage/belt/medical,
+		/obj/item/clothing/glasses/hud/health,
 		/obj/item/clothing/glasses/hud/health/prescription,
 	)
 

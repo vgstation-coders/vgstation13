@@ -9,7 +9,6 @@
 	pressure_resistance = 2
 
 	autoignition_temperature = 522 // Kelvin
-	fire_fuel = 1
 	var/crayon = null
 
 /obj/item/weapon/folder/New()

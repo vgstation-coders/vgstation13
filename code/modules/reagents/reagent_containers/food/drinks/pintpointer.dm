@@ -41,6 +41,7 @@
 			. = 0
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/on_reagent_change()
+	..()
 	update_icon()
 	if(reagents.get_master_reagent_id() != PINTPOINTER && !smashed)
 		var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D = new (get_turf(src))

@@ -321,6 +321,16 @@
 
 #define DNASCANNER_MESSAGE_INTERVAL 1 SECONDS
 
+/obj/machinery/dna_scannernew/Exited(var/atom/movable/O) // Used for teleportation from within the scanner.
+	if (O == occupant)
+		occupant = null
+		icon_state = "scanner_0"
+		for(dir in cardinal)
+			var/obj/machinery/computer/cloning/C = locate(/obj/machinery/computer/cloning) in get_step(src, dir)
+			if(C)
+				C.update_icon()
+				C.updateUsrDialog()
+
 /obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc, var/mob/ejector)
 	if(!occupant)
 		for(var/mob/M in src)//Failsafe so you can get mobs out

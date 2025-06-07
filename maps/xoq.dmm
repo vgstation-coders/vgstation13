@@ -12145,7 +12145,7 @@
 /obj/item/clothing/glasses/scanner/meson,
 /obj/effect/decal/cleanable/cobweb,
 /obj/machinery/light/small,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "atW" = (
@@ -15589,7 +15589,7 @@
 /obj/structure/bed,
 /obj/item/weapon/bedsheet/red,
 /obj/machinery/light/small,
-/obj/item/toy/gasha/beartoy,
+/obj/item/toy/plushie/spacebear,
 /turf/simulated/floor/wood,
 /area/crew_quarters/sleep)
 "aAT" = (
@@ -17613,7 +17613,7 @@
 	},
 /area/crew_quarters/fitness)
 "aFj" = (
-/obj/item/toy/gasha/carptoy,
+/obj/item/toy/plushie/carp,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -20743,7 +20743,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aMb" = (
-/obj/item/weapon/reagent_containers/glass/paint,
+/obj/item/weapon/reagent_containers/glass/metal_bucket/paint,
 /obj/machinery/light/small{
 	dir = 4;
 	flickering = 1
@@ -21925,9 +21925,6 @@
 /area/shuttle/arrival/station)
 "aOB" = (
 /obj/structure/closet/wardrobe/xenos,
-/obj/item/clothing/under/vox/vox_casual,
-/obj/item/clothing/under/vox/vox_casual,
-/obj/item/clothing/under/vox/vox_casual,
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "aOC" = (
@@ -21935,7 +21932,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "aOD" = (
-/obj/structure/closet/wardrobe/grey,
+/obj/structure/closet/wardrobe/pjs,
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "aOE" = (
@@ -25295,7 +25292,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aVj" = (
-/obj/item/weapon/reagent_containers/glass/paint,
+/obj/item/weapon/reagent_containers/glass/metal_bucket/paint,
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aVk" = (
@@ -26750,7 +26747,7 @@
 	pixel_x = -5;
 	pixel_y = 32
 	},
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/simulated/floor/plating,
 /area/storage/emergency)
 "aYg" = (
@@ -29744,13 +29741,21 @@
 /area/crew_quarters/locker)
 "bec" = (
 /obj/structure/table,
+/obj/item/stack/cable_coil/random{
+	pixel_y = 3;
+	pixel_x = 3
+	},
+/obj/item/stack/cable_coil/random{
+	pixel_x = 3;
+	pixel_y = -1
+	},
 /obj/item/stack/cable_coil/random,
-/obj/item/stack/cable_coil/random,
-/obj/item/weapon/chisel,
-/obj/item/weapon/chisel,
+/obj/item/stack/cable_coil/random{
+	pixel_y = 4
+	},
 /obj/machinery/alarm{
 	dir = 8;
-	pixel_x = 22
+	pixel_x = 24
 	},
 /turf/simulated/floor,
 /area/storage/art)
@@ -29765,9 +29770,13 @@
 /area/storage/art)
 "bee" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/machinery/firealarm{
-	dir = 8;
-	pixel_x = -24
+/obj/structure/table,
+/obj/item/weapon/storage/toolbox/paint{
+	pixel_y = 8
+	},
+/obj/item/weapon/reagent_containers/glass/bottle/acetone{
+	pixel_x = 6;
+	pixel_y = 2
 	},
 /turf/simulated/floor,
 /area/storage/art)
@@ -30453,8 +30462,24 @@
 /area/crew_quarters/locker)
 "bfF" = (
 /obj/structure/table,
-/obj/item/stack/cable_coil/random,
-/obj/item/stack/cable_coil/random,
+/obj/item/weapon/chisel{
+	pixel_x = -8;
+	pixel_y = 3
+	},
+/obj/item/weapon/chisel{
+	pixel_y = 6;
+	pixel_x = -3
+	},
+/obj/item/painting_brush{
+	pixel_y = -10
+	},
+/obj/item/paint_roller{
+	pixel_y = -16
+	},
+/obj/machinery/firealarm{
+	dir = 4;
+	pixel_x = 24
+	},
 /turf/simulated/floor,
 /area/storage/art)
 "bfG" = (
@@ -30465,6 +30490,10 @@
 	},
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
+	},
+/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random{
+	pixel_x = -8;
+	pixel_y = 12
 	},
 /turf/simulated/floor,
 /area/storage/art)
@@ -30478,6 +30507,10 @@
 	pixel_x = -24
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on,
+/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random{
+	pixel_x = -8;
+	pixel_y = -6
+	},
 /turf/simulated/floor,
 /area/storage/art)
 "bfI" = (
@@ -31122,23 +31155,36 @@
 /area/crew_quarters/locker)
 "bhf" = (
 /obj/structure/table,
-/obj/item/weapon/storage/box/labels,
-/obj/item/weapon/hand_labeler,
+/obj/item/weapon/storage/box/labels{
+	pixel_y = 8
+	},
+/obj/item/weapon/hand_labeler{
+	pixel_x = 4
+	},
 /turf/simulated/floor,
 /area/storage/art)
 "bhg" = (
+/obj/item/weapon/storage/fancy/crayons,
 /obj/structure/table,
-/obj/item/weapon/storage/fancy/crayons,
-/obj/item/weapon/storage/fancy/crayons,
 /obj/machinery/light/small{
 	dir = 1
+	},
+/obj/item/weapon/storage/fancy/crayons{
+	pixel_x = -2;
+	pixel_y = 8
 	},
 /turf/simulated/floor,
 /area/storage/art)
 "bhh" = (
 /obj/structure/table,
-/obj/item/device/camera_film,
-/obj/item/device/camera,
+/obj/item/device/camera_film{
+	pixel_x = 4;
+	pixel_y = 8
+	},
+/obj/item/device/camera{
+	pixel_y = 2;
+	pixel_x = -8
+	},
 /obj/machinery/light_switch{
 	pixel_y = 25
 	},
@@ -39645,11 +39691,11 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = -2;
 	pixel_y = -14
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 2;
 	pixel_y = -12
 	},
@@ -42340,11 +42386,11 @@
 	departmentType = 2;
 	pixel_x = 30
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 2;
 	pixel_y = -17
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = -2;
 	pixel_y = -14
 	},
@@ -47293,7 +47339,7 @@
 "bMt" = (
 /obj/structure/closet/secure_closet/hop2,
 /obj/item/clothing/suit/armor/hos,
-/obj/item/toy/gasha/corgitoy,
+/obj/item/toy/plushie/corgi,
 /turf/simulated/floor,
 /area/crew_quarters/hop)
 "bMu" = (
@@ -52930,7 +52976,7 @@
 	},
 /obj/structure/cable,
 /obj/structure/closet/secure_closet/CMO,
-/obj/item/toy/gasha/cattoy,
+/obj/item/toy/plushie/cat,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "barber"
@@ -58096,7 +58142,7 @@
 "cgj" = (
 /obj/structure/rack,
 /obj/item/airbag,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "cgk" = (
@@ -59068,15 +59114,15 @@
 /area/science/telescience)
 "chN" = (
 /obj/structure/table/reinforced,
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = -2;
 	pixel_y = -6
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = -2;
 	pixel_y = -6
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = -2;
 	pixel_y = -6
 	},
@@ -65531,6 +65577,10 @@
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
+	},
+/obj/item/weapon/circuitboard/circuit_imprinter{
+	pixel_y = 0;
+	pixel_x = 1
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -73140,7 +73190,7 @@
 /area/engineering/ce)
 "cHG" = (
 /obj/structure/closet/secure_closet/engineering_chief,
-/obj/item/toy/gasha/parrottoy,
+/obj/item/toy/plushie/parrot,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "neutralfull"
@@ -74029,7 +74079,7 @@
 	pixel_x = 3;
 	pixel_y = 2
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = -4;
 	pixel_y = 12
 	},
@@ -90291,7 +90341,7 @@
 /area/shuttle/vox/station)
 "dsX" = (
 /obj/structure/table/reinforced,
-/obj/item/clothing/glasses/sunglasses/sechud{
+/obj/item/clothing/glasses/hud/security/sunglasses{
 	pixel_y = 8
 	},
 /obj/item/weapon/gun/energy/taser,
@@ -90377,7 +90427,7 @@
 "dtj" = (
 /obj/structure/closet/vox_raiders,
 /obj/item/weapon/storage/backpack,
-/obj/item/clothing/glasses/thermal/monocle,
+/obj/item/clothing/glasses/hud/thermal/monocle,
 /obj/item/device/radio/headset/raider/pretuned,
 /turf/simulated/floor/shuttle/vox{
 	icon_state = "floor4"
@@ -90816,13 +90866,13 @@
 /obj/item/clothing/head/bio_hood/janitor,
 /obj/item/device/radio/headset/ert,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/effect/decal/cleanable/dirt,
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = -2;
 	pixel_y = -2
 	},
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/unsimulated/floor{
 	icon_state = "dark purple stripe"
 	},
@@ -94872,6 +94922,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
+/obj/structure/cable,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -94998,6 +95049,11 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -95123,6 +95179,11 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -95198,11 +95259,17 @@
 "dDr" = (
 /obj/structure/cable,
 /obj/machinery/power/battery/smes{
-	charge = 5e+006
+	charge = 5e+006;
+	name_tag = "Aккумулятор"
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor/plating,
 /area/djstation)
@@ -104368,7 +104435,7 @@
 /obj/item/clothing/suit/bio_suit/anomaly,
 /obj/item/clothing/head/bio_hood/anomaly,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/clothing/gloves/latex,
 /obj/structure/window/reinforced,
 /obj/effect/decal/warning_stripes{
@@ -104770,7 +104837,7 @@
 /obj/item/clothing/suit/bio_suit/anomaly,
 /obj/item/clothing/head/bio_hood/anomaly,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/clothing/gloves/latex,
 /obj/machinery/camera{
 	dir = 4;
@@ -105234,7 +105301,7 @@
 /obj/item/clothing/suit/bio_suit/anomaly,
 /obj/item/clothing/head/bio_hood/anomaly,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/clothing/gloves/latex,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"

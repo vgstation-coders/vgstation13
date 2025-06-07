@@ -79,6 +79,12 @@
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
 
+/datum/role/cultist/loggedOutHow()
+	for (var/mob/living/simple_animal/astral_projection/AP in astral_projections)
+		if (AP.key == antag.key)
+			return {"<a href='?_src_=holder;adminplayeropts=\ref[AP]'>astral projecting</a>"}
+	return "logged out"
+
 /datum/role/cultist/process()
 	..()
 	if (holywarning_cooldown > 0)
@@ -87,7 +93,7 @@
 		FindMentor()
 
 
-// 2022 - Commenting out some part of the greeting message and spacing it out a bit. 
+// 2022 - Commenting out some part of the greeting message and spacing it out a bit.
 //  Getting converted floods the chat with a lot of unncessary information
 
 /datum/role/cultist/Greet(var/greeting,var/custom)
@@ -136,7 +142,7 @@
 	to_chat(antag.current, "<br>")
 	spawn(1)
 		if (faction)
-			/* 
+			/*
 			var/datum/objective_holder/OH = faction.objective_holder
 			if (OH.objectives.len > 0)
 				var/datum/objective/O = OH.objectives[OH.objectives.len] //Gets the latest objective.
@@ -248,7 +254,7 @@
 	if (potential_mentor)
 		mentor = potential_mentor
 		potential_mentor.acolytes |= src
-		to_chat(antag.current, "<span class='sinister'>You are now in a mentorship under <span class='danger'>[mentor.name], the [mentor.antag.assigned_role=="MODE" ? (mentor.antag.special_role) : (mentor.antag.assigned_role)]</span>. Seek their help to learn the ways of our cult.</span>")
+		to_chat(antag.current, "<span class='sinister'>You are now in a mentorship under <span class='danger'>[mentor.antag.name], the [mentor.antag.assigned_role=="MODE" ? (mentor.antag.special_role) : (mentor.antag.assigned_role)]</span>. Seek their help to learn the ways of our cult.</span>")
 		to_chat(mentor.antag.current, "<span class='sinister'>You are now mentoring <span class='danger'>[antag.name], the [antag.assigned_role=="MODE" ? (antag.special_role) : (antag.assigned_role)]</span>. </span>")
 		message_admins("[mentor.antag.key]/([mentor.antag.name]) is now mentoring [antag.name]")
 		log_admin("[mentor.antag.key]/([mentor.antag.name]) is now mentoring [antag.name]")

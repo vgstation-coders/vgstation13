@@ -143,3 +143,14 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
 	build_path = /obj/item/weapon/circuitboard/weathercontrol
+
+/datum/design/suitstorageunit
+	name = "Circuit Design(Suit Storage Unit)"
+	desc = "The circuit board for a Suit Storage Unit."
+	id = "suitstorageunit"
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_ENGINEERING = 2, Tc_POWERSTORAGE = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 15)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/suit_storage_unit
+	

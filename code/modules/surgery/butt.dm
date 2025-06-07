@@ -291,6 +291,9 @@
 	affected.status |= ORGAN_BLEEDING
 
 	var/obj/item/clothing/head/butt/B = tool
+	if(B.spells)
+		for(var/spell/spell in B.spells)
+			target.add_spell(spell, iswizard = TRUE)
 	user.u_equip(B,1)
 	qdel(B)
 

@@ -216,8 +216,6 @@
 	needs_treatment = 1 // this only heals when bandaged
 	damage_type = BRUISE
 
-/datum/wound/bruise/monumental
-
 // implement sub-paths by starting at a later stage
 
 /datum/wound/bruise/tiny
@@ -237,6 +235,8 @@
 
 /datum/wound/bruise/huge
 	current_stage = 1
+
+/datum/wound/bruise/monumental
 
 /** BURNS **/
 /datum/wound/burn/moderate

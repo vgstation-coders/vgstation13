@@ -161,7 +161,7 @@
 
 /obj/item/weapon/hatchet/tomahawk/pipe/Destroy()
 	if(current_blunt)
-		current_blunt.unregister_event(/event/destroyed, src, src::burnout())
+		current_blunt.unregister_event(/event/destroyed, src, nameof(src::burnout()))
 		QDEL_NULL(current_blunt)
 	..()
 
@@ -179,7 +179,7 @@
 			return
 		to_chat(user, "<span class='notice'>You crush \the [W] into \the [src].</span>")
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/rolled(src)
-		B.register_event(/event/destroyed, src, src::burnout())
+		B.register_event(/event/destroyed, src, nameof(src::burnout()))
 		B.inside_item = 1
 		W.reagents.trans_to(B, (W.reagents.total_volume))
 		B.update_brightness()
@@ -321,7 +321,7 @@
 			return
 		to_chat(user, "<span class='notice'>You crush \the [W] into \the [src].</span>")
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/rolled(src)
-		B.register_event(/event/destroyed, src, src::burnout())
+		B.register_event(/event/destroyed, src, nameof(src::burnout()))
 		B.inside_item = 1
 		W.reagents.trans_to(B, (W.reagents.total_volume))
 		B.update_brightness()

@@ -4,6 +4,7 @@
 	var/track_blood = 0
 	var/list/feet_blood_DNA
 	var/feet_blood_color
+	var/feet_blood_lum = 0
 	var/track_blood_type
 
 /obj/item/clothing/shoes
@@ -23,7 +24,14 @@
 	body_parts_covered = MOUTH
 	goes_in_mouth = TRUE
 	is_muzzle = MUZZLE_SOFT
+	autoignition_temperature = AUTOIGNITION_FABRIC
+	w_type = RECYK_FABRIC
+	starting_materials = list(MAT_FABRIC = 50)
 	var/mob/current_target = null
+
+/obj/item/weapon/reagent_containers/glass/rag/robo
+	name = "roborag"
+	desc = "A non-detachable rag attached to a manipulator arm, for cleaning up messes."
 
 /obj/item/weapon/reagent_containers/glass/rag/attack_self(mob/user as mob)
 	return
@@ -31,11 +39,11 @@
 /obj/item/weapon/reagent_containers/glass/rag/mop_act(obj/item/weapon/mop/M, mob/user)
 	return 0
 
-/obj/item/weapon/reagent_containers/glass/rag/attack(var/mob/living/M, var/mob/living/user, var/def_zone)
+/obj/item/weapon/reagent_containers/glass/rag/attack(var/mob/living/M, var/mob/living/user, var/def_zone, var/allowsmother = TRUE, var/allowbandage = TRUE)
 	if (!ismob(M))
 		..()
 	current_target = null
-	if(user.zone_sel.selecting == "mouth" && ishuman(M))
+	if(allowsmother && user.zone_sel.selecting == "mouth" && ishuman(M))
 		var/mob/living/carbon/human/H = M
 		current_target = H
 		var/self_smother = FALSE
@@ -62,7 +70,7 @@
 			return 1
 		else
 			to_chat(user, "<span class='warning'>There is nothing on the rag to smother them with.</span>")
-	else
+	else if(allowbandage)
 		var/datum/organ/external/targetorgan = M.get_organ(user.zone_sel.selecting)
 		var/list/bleeding_organs = M.get_bleeding_organs()
 		if(targetorgan in bleeding_organs) //rags work as bandages
@@ -78,6 +86,16 @@
 			else
 				to_chat(user, "<span class='notice'>[M]'s [targetorgan.display_name] is cut wide open, you'll need more than a rag!</span>")
 				return
+
+/obj/item/weapon/reagent_containers/glass/rag/robo/attack(var/mob/living/M, var/mob/living/user, var/def_zone)
+	if(!isrobot(user))
+		return ..()
+	var/mob/living/silicon/robot/R = user
+	if(R.emagged)
+		. = ..(M, user, def_zone, allowsmother = TRUE, allowbandage = FALSE)
+	else
+		. = ..(M, user, def_zone, allowsmother = FALSE, allowbandage = FALSE)
+
 
 /obj/item/weapon/reagent_containers/glass/rag/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if (target == current_target)

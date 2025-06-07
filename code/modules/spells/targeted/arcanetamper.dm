@@ -32,11 +32,11 @@
 			description = "It will now make nearby items anomalous."
 		if(1)
 			name = "Ranged Arcane Tamper"
-			description = "It will now make all items in normal view anomalous."
+			description = "It can now affect any item in view."
 			range = 7
 		if(2)
-			name = "Ranged Recurisve Arcane Tamper"
-			description = "It will now make all items in normal view anomalous along with their contents."
+			name = "Ranged Recursive Arcane Tamper"
+			description = "It will now make any item in normal view anomalous along with their contents."
 			recursive = TRUE
 		else
 			return
@@ -52,10 +52,12 @@
 
 /spell/targeted/arcane_tamper/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
-			return "Lowers the cooldown of the spell."
 		if(Sp_POWER)
-			return "Upgrades the range, then recursiveness, of the spell"
+			if(spell_levels[Sp_POWER] == 0)
+				return "Upgrades the range of the spell. At the second upgrade, improves the recursiveness of the spell, allowing it to affect the target's contents."
+			if(spell_levels[Sp_POWER] == 1)
+				return "Improves the recursiveness of the spell, allowing it to affect the target's contents."
+	return ..()
 
 /spell/targeted/arcane_tamper/cast(list/targets, mob/user)
 	..()

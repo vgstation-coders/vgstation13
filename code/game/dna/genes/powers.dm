@@ -72,8 +72,13 @@
 		user.reset_view(0)
 		return
 
-	for(var/mob/living/target in targets)
-		if (can_mind_interact(target.mind))
+	for(var/T in targets)
+		var/mob/living/target
+		if (isliving(T))
+			target = T
+		if (istype (T, /datum/mind))
+			target = user.can_mind_interact(T)
+		if(target)
 			user.remoteview_target = target
 			user.reset_view(target)
 			break
@@ -130,6 +135,9 @@
 	hud_state = "gen_project"
 	compatible_mobs = list(/mob/living/carbon/human, /datum/mind)
 	mind_affecting = 1
+	var/telepathy_type = SPECIFIC_TELEPATHY
+	var/targeted = 0
+
 /spell/targeted/telepathy/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
 	if (!.)
@@ -139,8 +147,9 @@
 	if(user.mind.miming)
 		to_chat(user, "<span class = 'warning'>You find yourself unable to convey your thoughts outside of gestures.</span>")
 		return
+
 /spell/targeted/telepathy/cast(var/list/targets, mob/living/carbon/human/user)
-	var/datum/species/mushroom/M = user.species
+	var/datum/species/mushroom/M = user.species //Mushmen will set their target for regular speech instead
 	var/message
 	if(!istype(M))
 		message = stripped_input(user, "What do you wish to say?", "Telepathy")
@@ -148,19 +157,22 @@
 			return 1
 	else
 		M.telepathic_target.len = 0
+		M.telepathy_type = telepathy_type
 
 	var/all_switch = TRUE
-	for(var/mob/living/T in targets)
-		if(!istype(T) && !can_mind_interact(T.mind))
-			to_chat(M,"<span class='notice'>[T] cannot sense your telepathy.</span>")
+	for(var/T in targets)
+		var/mob/living/target
+		if (isliving(T))
+			target = T
+		if (istype (T, /datum/mind))
+			target = user.can_mind_interact(T)
+		if(!T || !istype(target) || tinfoil_check(target) || !user.can_mind_interact(target))
+			user.show_message("<span class='notice'>You are unable to use telepathy with [target].</span>")
 			continue
-		if(istype(M))
-			M.telepathic_target += T
+		else if(istype(M))
+			M.telepathic_target += target
 			continue
-		if(T == user) //Talking to ourselves
-			to_chat(user,"<span class='notice'>Projected to self: \"[message]\"</span>")
-			return
-		if(M_TELEPATHY in T.mutations)
+		if(M_TELEPATHY in target.mutations)
 			to_chat(T, "<span class='notice'>You hear [user.real_name]'s voice:</span><span class='bold'> \"[message]\"</span>")
 		else
 			to_chat(T,"<span class='notice'>You hear a voice inside your head:</span><span class='bold'> \"[message]\"</span>")
@@ -170,6 +182,18 @@
 			for(var/mob/dead/observer/G in dead_mob_list)
 				G.show_message("<i>Telepathy, <b>[user]</b> to [english_list(targets)]</b>:<b> \"[message]\"</b></i>")
 			log_admin("[key_name(user)] projects his mind towards to [english_list(targets)]: [message]")
+
+/spell/targeted/telepathy/on_right_click(mob/user)
+	..()
+	if(!targeted)
+		targeted = TRUE
+		to_chat(user, "<span class='notice'>You will now target the spell to immediately communicate to someone in view.</span>")
+		spell_flags |=  WAIT_FOR_CLICK
+	else
+		targeted = FALSE
+		to_chat(user, "<span class='notice'>You will now select from a list of people to communicate to.</span>")
+		spell_flags &= ~WAIT_FOR_CLICK
+	return 1 //So that the spellmaster does not try to perform it
 
 /datum/dna/gene/basic/morph
 	name = "Morph"

@@ -46,31 +46,27 @@ proc/admin_spawn_room_at_pos()
 
 	return 1
 
-/proc/make_mining_asteroid_secret()
+/proc/make_mining_asteroid_secrets()
 	var/turf/T = null
 	var/sanity = 0
 	var/list/turfs = null
-
-	turfs = get_area_turfs(/area/mine/unexplored)
+	var/area/A = locate(/area/mine/unexplored)
+	turfs = A.contents.Copy()
 
 	if(!turfs.len)
 		return 0
-
-	while(1)
+	while(spawned_surprises.len < max_secret_rooms)
 		sanity++
 		if(sanity > 100)
-			//testing("Tried to place complex too many times.  Aborting.")
+			log_debug("Tried to place secret asteroid complex too many times. Aborting.")
 			return 0
 
 		T=pick(turfs)
 
 		var/complex_type=pick(mining_surprises)
 		var/mining_surprise/complex = new complex_type
-
 		if(complex.spawn_complex(T))
 			spawned_surprises += complex
-			return 1
+			continue
 
-	return 0
-
-
+	return 1

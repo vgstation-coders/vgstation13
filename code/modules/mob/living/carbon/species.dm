@@ -169,15 +169,18 @@ var/global/list/playable_species = list("Human")
 		myhuman = null
 	..()
 
-/datum/species/proc/gib(var/mob/living/carbon/human/H)
+/datum/species/proc/gib(var/mob/living/carbon/human/H, animation, meat)
 	if(H.status_flags & BUDDHAMODE)
 		H.adjustBruteLoss(200)
 		return
-	H.death(1)
-	H.monkeyizing = 1
-	H.canmove = 0
-	H.icon = null
-	H.invisibility = 101
+	if(!H.isUnconscious())
+		H.forcesay("-")
+	H.default_gib(H, animation, meat)
+
+/datum/species/proc/dust(var/mob/living/carbon/human/H, drop_everything)
+	if(!H.isUnconscious())
+		H.forcesay("-")
+	H.default_dust(H, drop_everything)
 
 /datum/species/proc/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if(speech_filter)
@@ -282,7 +285,7 @@ var/global/list/playable_species = list("Human")
 	else
 		return capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
 
-/datum/species/proc/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
+/datum/species/proc/handle_death(var/mob/living/carbon/human/H, var/gibbed = 0) //Handles any species-specific death events (such as dionaea nymph spawns).
 	return
 
 /datum/species/proc/can_artifact_revive()
@@ -328,10 +331,6 @@ var/global/list/playable_species = list("Human")
 
 	max_skin_tone = 220
 
-/datum/species/human/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
-
 /datum/species/manifested
 	name = "Manifested"
 	icobase = 'icons/mob/human_races/r_manifested.dmi'
@@ -356,7 +355,7 @@ var/global/list/playable_species = list("Human")
 	heat_level_2 = 420 //Default 400
 	heat_level_3 = 1200 //Default 1000
 
-	flags = WHITELISTED | NO_PAIN
+	flags = NO_PAIN
 	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | HAS_SWEAT_GLANDS
 
 	blood_color = PALE_BLOOD
@@ -413,10 +412,6 @@ var/global/list/playable_species = list("Human")
 /datum/species/unathi/New()
 	..()
 	speech_filter = new /datum/speech_filter/unathi
-
-/datum/species/unathi/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
 
 /datum/species/skellington // /vg/
 	name = "Skellington"
@@ -596,10 +591,6 @@ var/global/list/playable_species = list("Human")
 		speech.message += pick("KILL ME", "END MY SUFFERING", "I CAN'T DO THIS ANYMORE")
 	return ..()
 
-/datum/species/tajaran/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
-
 /datum/species/grey // /vg/
 	name = "Grey"
 	icobase = 'icons/mob/human_races/grey/r_grey.dmi'
@@ -652,6 +643,25 @@ var/global/list/playable_species = list("Human")
 					You are particularly allergic to water, which acts like acid to you, but the inverse is so for acid, so you're fun at parties.<br>\
 					You're not as good at swinging a toolbox or throwing a punch as a baseline human, but you make up for this by bullying them from afar by talking directly into peoples minds."
 
+/datum/species/grey/makeName(var/gender,var/mob/living/carbon/human/H=null) // Grey names are hard to pin down. Some have surnames, some lack surnames. And due to their long period of contact with humanity, a few have more humanized names
+	if(prob(90)) // More alien sounding name
+		switch(rand(0,1))
+			if(0) // No surname. Maybe we're a clone who has forgotten it, or we don't care
+				if(gender==FEMALE)
+					return capitalize(pick(grey_first_female))
+				else
+					return capitalize(pick(grey_first_male))
+			if(1) // Surname present. Maybe we held on to one for sentimental reasons, or wanted to feel more important
+				if(gender==FEMALE)
+					return capitalize(pick(grey_first_female)) + " " + capitalize(pick(grey_last))
+				else
+					return capitalize(pick(grey_first_male)) + " " + capitalize(pick(grey_last))
+	else // More humanized name
+		if(gender==FEMALE)
+			return capitalize(pick(grey_first_female_h)) + " " + capitalize(pick(grey_last_h))
+		else
+			return capitalize(pick(grey_first_male_h)) + " " + capitalize(pick(grey_last_h))
+
 /datum/species/grey/handle_post_spawn(var/mob/living/carbon/human/H)
 	if(myhuman != H)
 		return
@@ -672,9 +682,6 @@ var/global/list/playable_species = list("Human")
 		else
 			icobase = 'icons/mob/human_races/grey/r_grey.dmi'
 			deform = 'icons/mob/human_races/grey/r_def_grey.dmi'
-/datum/species/grey/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
 
 /datum/species/muton // /vg/
 	name = "Muton"
@@ -713,10 +720,6 @@ var/global/list/playable_species = list("Human")
 	H.u_equip(H.head,1)
 	move_speed_mod = 1
 
-/datum/species/muton/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
-
 /datum/species/skrell
 	name = "Skrell"
 	icobase = 'icons/mob/human_races/r_skrell.dmi'
@@ -732,10 +735,6 @@ var/global/list/playable_species = list("Human")
 
 	head_icons      = 'icons/mob/species/skrell/head.dmi'
 	wear_suit_icons = 'icons/mob/species/skrell/suit.dmi'
-
-/datum/species/skrell/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
 
 /datum/species/vox
 	name = "Vox"
@@ -780,7 +779,7 @@ var/global/list/playable_species = list("Human")
 
 	has_mutant_race = 0
 	has_organ = list(
-		"heart" =    /datum/organ/internal/heart,
+		"heart" =    /datum/organ/internal/heart/vox,
 		"lungs" =    /datum/organ/internal/lungs/vox,
 		"liver" =    /datum/organ/internal/liver,
 		"kidneys" =  /datum/organ/internal/kidney,
@@ -845,10 +844,6 @@ var/global/list/playable_species = list("Human")
 			icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 
-/datum/species/vox/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
-
 /datum/species/diona
 	name = "Diona"
 	icobase = 'icons/mob/human_races/r_plant.dmi'
@@ -883,7 +878,7 @@ var/global/list/playable_species = list("Human")
 	has_mutant_race = 0
 	burn_mod = 2.5 //treeeeees
 
-	move_speed_mod = 7
+	move_speed_mod = 4
 
 	species_intro = "You are a Diona.<br>\
 					You are a plant, so light is incredibly helpful for you, in both photosynthesis, and regenerating damage you have received.<br>\
@@ -901,10 +896,6 @@ var/global/list/playable_species = list("Human")
 		"appendix" = /datum/organ/internal/appendix,
 		"eyes" =     /datum/organ/internal/eyes
 	)
-
-/datum/species/diona/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
 
 /datum/species/golem
 	name = "Golem"
@@ -958,7 +949,7 @@ var/global/list/playable_species = list("Human")
 
 var/list/has_died_as_golem = list()
 
-/datum/species/golem/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
+/datum/species/golem/handle_death(var/mob/living/carbon/human/H, gibbed) //Handles any species-specific death events (such as dionaea nymph spawns).
 	if(!isgolem(H))
 		return
 	var/datum/mind/golemmind = H.mind
@@ -977,13 +968,34 @@ var/list/has_died_as_golem = list()
 			A.real_name = H.real_name
 			A.desc = "The remains of what used to be [A.real_name]."
 		A.key = H.key
-	qdel(H)
 
 /datum/species/golem/can_artifact_revive()
-	return 0
+	return FALSE
 
-/datum/species/golem/gib(mob/living/carbon/human/H)
-	handle_death()
+/datum/species/golem/gib(var/mob/living/carbon/human/H, animation, meat)
+	if(H.status_flags & BUDDHAMODE)
+		H.adjustBruteLoss(200)
+		return
+	if(!H.isUnconscious())
+		H.forcesay("-")
+	H.death(1)
+	H.handle_body_destroyed()
+	var/gib_radius = 0
+	if(H.reagents.has_reagent(LUBE))
+		gib_radius = 6
+	hgibs(H.loc, H.virus2, H.dna, flesh_color, blood_color, gib_radius)
+	spawn()
+		qdel(H)
+
+/datum/species/golem/dust(var/mob/living/carbon/human/H, drop_everything)
+	if(!H.isUnconscious())
+		H.forcesay("-")
+	H.death(1)
+	H.handle_body_destroyed()
+	if(drop_everything)
+		H.drop_all()
+	spawn()
+		qdel(H)
 
 /mob/living/adamantine_dust //serves as the corpse of adamantine golems
 	name = "adamantine dust"
@@ -1049,10 +1061,6 @@ var/list/has_died_as_golem = list()
 /datum/species/vampire/makeName()
 	return "vampire"
 
-/datum/species/vampire/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
-
 /datum/species/ghoul
 	name = "Ghoul"
 	icobase = 'icons/mob/human_races/r_ghoul.dmi'
@@ -1069,10 +1077,6 @@ var/list/has_died_as_golem = list()
 	blood_color = GHOUL_BLOOD
 
 	primitive = /mob/living/carbon/monkey //Just to keep them SoC friendly.
-
-/datum/species/ghoul/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
 
 /datum/species/slime
 	name = "Slime"
@@ -1111,11 +1115,35 @@ var/list/has_died_as_golem = list()
 		"brain" =    /datum/organ/internal/brain/slime_core,
 		)
 
-/datum/species/slime/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
-	H.dropBorers()
+/datum/species/slime/handle_death(var/mob/living/carbon/human/H, gibbed) //Handles any species-specific death events (such as dionaea nymph spawns).
+	H.dropBorers(gibbed)
 	for(var/atom/movable/I in H.contents)
 		I.forceMove(H.loc)
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", sleeptime = 15)
+	if(!gibbed)
+		handle_slime_puddle(H)
+
+/datum/species/slime/gib(mob/living/carbon/human/H)
+	handle_slime_puddle(H)
+	..()
+	H.monkeyizing = TRUE
+	for(var/datum/organ/external/E in H.organs)
+		if(istype(E, /datum/organ/external/chest) || istype(E, /datum/organ/external/groin) || istype(E, /datum/organ/external/head))
+			continue
+		//Only make the limb drop if it's not too damaged
+		if(prob(100 - E.get_damage()))
+			//Override the current limb status and don't cause an explosion
+			E.droplimb(1, 1)
+	var/gib_radius = 0
+	if(H.reagents.has_reagent(LUBE))
+		gib_radius = 6
+
+	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
+	hgibs(H.loc, H.virus2, H.dna, flesh_color, blood_color, gib_radius)
+
+/datum/species/slime/proc/handle_slime_puddle(var/mob/living/carbon/human/H)
+	if(!H)
+		return
 	var/mob/living/slime_pile/S = new(H.loc)
 	if(H.real_name)
 		S.real_name = H.real_name
@@ -1126,10 +1154,6 @@ var/list/has_died_as_golem = list()
 	//Transfer the DNA and mind into the slime puddle.
 	S.dna=H.dna
 	S.mind=H.mind
-
-/datum/species/slime/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
 
 /mob/living/slime_pile //serves as the corpse of slime people
 	name = "puddle of slime"
@@ -1260,9 +1284,6 @@ var/list/has_died_as_golem = list()
 		newname += pick(insectoid_name_syllables)
 	return capitalize(newname)
 
-/datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
-	H.default_gib()
-
 /datum/species/mushroom
 	name = "Mushroom"
 	icobase = 'icons/mob/human_races/r_mushman.dmi'
@@ -1321,16 +1342,13 @@ var/list/has_died_as_golem = list()
 	species_intro = "You are a Mushroom Person.<br>\
 					You are an odd creature. Your lack of a mouth prevents you from eating, but you can stand or lay on food to absorb it.<br>\
 					You have a resistance to burn and toxin, but you are vulnerable to brute attacks.<br>\
-					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the target chosen with your Fungal Telepathy.<br>\
+					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the targets chosen with your Fungal Telepathy.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
 	var/mob/living/telepathic_target[] = list()
+	var/telepathy_type = LOCAL_TELEPATHY
 
 /datum/species/mushroom/makeName()
 	return capitalize(pick(mush_first)) + " " + capitalize(pick(mush_last))
-
-/datum/species/mushroom/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
 
 /datum/species/mushroom/silent_speech(mob/M, message)
 	if(!message)
@@ -1342,17 +1360,24 @@ var/list/has_died_as_golem = list()
 		to_chat(M, "<span class='warning'>You must be conscious to do this!</span>")
 		return
 
+	if(telepathy_type & (LOCAL_TELEPATHY | GLOBAL_TELEPATHY))
+		telepathic_target.len = 0
+		var/list/possible_targets = M.mind.heard_before
+		var/datum/mind/temp_target
+		for(var/T in possible_targets)
+			temp_target = possible_targets[T]
+			if(!temp_target.current || ((telepathy_type & LOCAL_TELEPATHY) && !(get_dist(temp_target.current, M) <= SPEECH_RANGE)))
+				continue
+			telepathic_target += temp_target.current
+
 	if(!telepathic_target.len)
 		var/mob/living/L = M
 		telepathic_target += L
 
 	var/all_switch = TRUE
 	for(var/mob/living/T in telepathic_target)
-		if(istype(T) && can_mind_interact(T.mind))
-			to_chat(T,"<span class='mushroom'>You feel <b>[M]</b>'s thoughts: \"[message]\"</span>")
-		else
-			to_chat(M,"<span class='notice'>[T] cannot sense your telepathy.</span>")
-			continue
+		if(istype(T) && M.can_mind_interact(T))
+			to_chat(T,"<span class='mushroom'>You feel <b>[M]</b>'s thoughts: </span><span class='mushroom'>[message]</span>")
 		if(all_switch)
 			all_switch = FALSE
 			if(T != M)

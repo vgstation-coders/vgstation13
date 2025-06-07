@@ -22,6 +22,8 @@
 	var/vector/origin_floored //the floored origin vector
 	var/vector/direction //direction of the ray
 	var/original_damage //original damage of the ray when applicable
+	var/turf/final_turf
+	var/turf/previous_turf
 
 /ray/proc/toString()
 	return "\[Ray\](\n- origin = " + origin.toString() + "\n- origin_floored = "+ origin_floored.toString() + "\n- direction = " + direction.toString() + "\n- z-level = " + num2text(z) + "\n)"
@@ -112,6 +114,10 @@
 	//our result
 	var/list/rayCastHit/hits = list()
 
+	var/turf/T = vector2turf(origin.floored(), z)
+	previous_turf = T
+	final_turf = T
+
 	while(distance < max_distance)
 		//moving one step further
 		pointer += a_step
@@ -134,7 +140,10 @@
 			continue
 
 		//getting the turf at our current (floored) vector
-		var/turf/T = vector2turf(new_position, z)
+		T = vector2turf(new_position, z)
+		if (!T.density)
+			previous_turf = final_turf
+			final_turf = T
 
 		//trying hit at turf
 		var/rayCastHitInfo/info = new /rayCastHitInfo(src, makeweakref(T), new_position, new_position_unfloored, distance)

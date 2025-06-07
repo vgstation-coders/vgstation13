@@ -25,7 +25,7 @@
 
 	hud_state = "wiz_tele"
 
-/spell/area_teleport/before_cast(list/targets, user)
+/spell/area_teleport/before_cast(list/targets, user, bypass_range = 0)
 	return targets
 
 /spell/area_teleport/choose_targets()
@@ -37,6 +37,9 @@
 		A = pick(teleportlocs)
 
 	var/area/thearea = teleportlocs[A]
+	if(!thearea) //Wizard didn't pick an area
+		to_chat(holder, "<span class='warning'>You cancel the teleportation.</span>")
+		return
 
 	return list(thearea)
 

@@ -78,6 +78,8 @@
 	slot_flags = SLOT_BACK
 	w_class = W_CLASS_LARGE
 	charge_cost = 200
+	rechargeable = FALSE
+	non_rechargeable_reason = "<span class='notice'>The recharger rejects the magical apparatus.</span>"
 	projectile_type = "/obj/item/projectile/change"
 	origin_tech = null
 	clumsy_check = 0
@@ -271,7 +273,7 @@
 				H.zombify(user)
 		else
 			success = FALSE
-
+			
 	else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/))
 		success = TRUE
 		var/mob/living/simple_animal/S = target
@@ -443,7 +445,7 @@
 	modifystate = "floramut"
 	var/charge_tick = 0
 	var/mode = 1
-	var/list/genes = list(GENE_PHYTOCHEMISTRY, GENE_BIOMOLECULES, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_DEVELOPMENT, GENE_XENOPHYSIOLOGY)
+	var/list/genes = list(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_DEVELOPMENT, GENE_XENOPHYSIOLOGY)
 	var/emagged = FALSE
 	var/isSomatoraying = FALSE
 
@@ -552,7 +554,7 @@
 			playsound(user,'sound/effects/stealthoff.ogg', 50)
 			if((H.species.flags & IS_PLANT) && (H.nutrition < 500))
 				H.nutrition += 30
-			else
+			else 
 				H.show_message("<span class='notice'>The radiation beam dissipates harmlessly through your body.</span>")
 	isSomatoraying = FALSE
 

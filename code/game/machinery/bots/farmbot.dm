@@ -38,8 +38,6 @@
 	req_access =list(access_hydroponics)
 	bot_flags = BOT_DENSE|BOT_NOT_CHASING
 
-	var/Max_Fertilizers = 10
-
 	var/setting_water = 1
 	var/setting_refill = 1
 	var/setting_fertilize = 1
@@ -51,8 +49,7 @@
 
 /obj/machinery/bot/farmbot/vox_garden_farmbot
 	name = "Special Vox Trader Farmbot"
-	req_access = list()
-	req_one_access =  list(access_hydroponics, access_trade)
+	req_access = list(access_trade)
 
 /obj/machinery/bot/farmbot/New()
 	..()
@@ -61,9 +58,11 @@
 	src.botcard.access = req_access
 
 	if ( !tank ) //Should be set as part of making it... but lets check anyway
-		tank = locate(/obj/structure/reagent_dispensers/watertank/) in contents
+		tank = locate(/obj/structure/reagent_dispensers/watertank) in contents
 	if ( !tank ) //An admin must have spawned the farmbot! Better give it a tank.
 		tank = new /obj/structure/reagent_dispensers/watertank(src)
+
+	create_reagents(300) //For fertilizer
 
 /obj/machinery/bot/farmbot/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if (istype(mover,/mob/living/simple_animal/bee))
@@ -72,26 +71,25 @@
 
 /obj/machinery/bot/farmbot/turn_on()
 	. = ..()
-	src.icon_state = "[src.icon_initial][src.on]"
-	src.updateUsrDialog()
+	icon_state = "[icon_initial][on]"
+	updateUsrDialog()
 
 /obj/machinery/bot/farmbot/turn_off()
 	..()
-	src.path = list()
-	src.icon_state = "[src.icon_initial][src.on]"
-	src.updateUsrDialog()
+	path = list()
+	icon_state = "[icon_initial][on]"
+	updateUsrDialog()
 
 /obj/machinery/bot/farmbot/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
+/obj/machinery/bot/farmbot/attack_hand(mob/user)
+	if(..())
+		return
+	user.set_machine(src)
+	interact(user)
 
-/obj/machinery/bot/farmbot/proc/get_total_ferts()
-	var total_fert = 0
-	for(var/obj/item/weapon/reagent_containers/glass/fert in contents)
-		total_fert++
-	return total_fert
-
-/obj/machinery/bot/farmbot/attack_hand(mob/user as mob)
+/obj/machinery/bot/farmbot/interact(mob/user)
 	. = ..()
 	if (.)
 		return
@@ -105,7 +103,7 @@
 	else
 		dat += "Error: Water Tank not Found"
 
-	dat += "<br>Fertilizer Storage: <A href='?src=\ref[src];eject=1'>\[[get_total_ferts()]/[Max_Fertilizers]\]</a>"
+	dat += "<br>Fertilizer Storage: \[[reagents.total_volume]/[reagents.maximum_volume]\]"
 
 	dat += "<br>Behaviour controls are [src.locked ? "locked" : "unlocked"]<hr>"
 	if(!src.locked)
@@ -121,15 +119,14 @@
 
 	user << browse("<HEAD><TITLE>Farmbot v1.0 controls</TITLE></HEAD>[dat]", "window=autofarm")
 	onclose(user, "autofarm")
-	return
 
 /obj/machinery/bot/farmbot/Topic(href, href_list)
 	if(..())
 		return
 	usr.machine = src
-	src.add_fingerprint(usr)
-	if ((href_list["power"]) && (src.allowed(usr)))
-		if (src.on)
+	add_fingerprint(usr)
+	if (href_list["power"] && allowed(usr))
+		if(on)
 			turn_off()
 		else
 			turn_on()
@@ -144,32 +141,28 @@
 		setting_weed = !setting_weed
 	else if((href_list["ignoreEmpty"]) && (!src.locked))
 		setting_ignoreEmpty = !setting_ignoreEmpty
-	else if (href_list["eject"] )
-		flick("[src.icon_initial]_hatch",src)
-		for (var/obj/item/weapon/reagent_containers/glass/fert in contents)
-			fert.forceMove(get_turf(src))
 
-	src.updateUsrDialog()
-	return
+	updateUsrDialog()
 
 /obj/machinery/bot/farmbot/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
-		if (src.allowed(user))
-			src.locked = !src.locked
+	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+		if(allowed(user))
+			locked = !src.locked
 			to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")
-			src.updateUsrDialog()
+			updateUsrDialog()
+			return 1
 		else
 			to_chat(user, "<span class='warning'>Access denied.</span>")
 
-	else if (istype(W, /obj/item/weapon/reagent_containers/glass))
-		if ( get_total_ferts() >= Max_Fertilizers )
-			to_chat(user, "The fertilizer storage is full!")
-			return
-		if(user.drop_item(W, src))
-			to_chat(user, "You insert [W].")
-			flick("[src.icon_initial]_hatch",src)
-			src.updateUsrDialog()
-			return
+	if(W.flags & OPENCONTAINER)
+		W.reagents.trans_id_to(tank,WATER,1000) //max volume of our tank
+		for(var/datum/reagent/R in W.reagents.reagent_list)
+			if(istype(R,/datum/reagent/fertilizer))
+				W.reagents.trans_id_to(src,R.id,300) //max volume of our fertilizer reserve
+		to_chat(user, "<span class='notice'>You pour \the [W] into \the [src].</span>")
+		flick("[src.icon_initial]_hatch",src)
+		updateUsrDialog()
+		return 1
 
 	else
 		..()
@@ -182,17 +175,14 @@
 		for(var/mob/O in hearers(src, null))
 			O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 	flick("[src.icon_initial]_broke", src)
-	src.emagged = 1
-	src.on = 1
-	src.icon_state = "[src.icon_initial][src.on]"
+	emagged = 1
+	on = 1
+	icon_state = "[icon_initial][on]"
 	target = null
-	mode = FARMBOT_MODE_WAITING //Give the emagger a chance to get away! 15 seconds should be good.
-	spawn(150)
-		mode = 0
-
+	mode = FARMBOT_MODE_WAITING //Give the emagger a chance to get away!
 
 /obj/machinery/bot/farmbot/explode()
-	src.on = 0
+	on = 0
 	visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
@@ -204,10 +194,6 @@
 	if ( tank )
 		tank.forceMove(Tsec)
 
-	for ( var/obj/item/weapon/reagent_containers/glass/fert in contents )
-		if ( prob(50) )
-			fert.forceMove(Tsec)
-
 	if (prob(50))
 		new /obj/item/robot_parts/l_arm(Tsec)
 
@@ -216,33 +202,35 @@
 	return
 
 /obj/machinery/bot/farmbot/can_path()
-	return !mode
+	return (mode!=FARMBOT_MODE_WAITING)
 
 /obj/machinery/bot/farmbot/process_bot()
 	//set background = 1
 
-	if(!src.on)
+	if(!on)
 		return
 
-	if ( emagged && prob(1) )
-		flick("[src.icon_initial]_broke", src)
+	if(emagged && prob(1) )
+		flick("[icon_initial]_broke", src)
 
-	if ( mode == FARMBOT_MODE_WAITING )
-		find_target()
-		return
+	if(mode == FARMBOT_MODE_WAITING)
+		frustration++
+		if(frustration>5) //10 seconds
+			mode = 0
+		else
+			return
 
-	if ( !mode || !target || !(target in view(7,src)) ) //Don't bother chasing down targets out of view
+	if(!mode || !target || !(target in view(7,src)) ) //Don't bother chasing down targets out of view
 
 		mode = 0
 		target = null
-		if ( !find_target() )
+		find_target()
+		if(!target)
 			// Couldn't find a target, wait a while before trying again.
 			mode = FARMBOT_MODE_WAITING
-			spawn(100)
-				mode = 0
 			return
 
-	if ( mode && target )
+	if(mode && target)
 		if ( get_dist(target,src) <= 1 || ( emagged && mode == FARMBOT_MODE_FERTILIZE ) )
 			path = list() // Kill our path
 			// If we are in emagged fertilize mode, we throw the fertilizer, so distance doesn't matter
@@ -251,31 +239,22 @@
 
 
 /obj/machinery/bot/farmbot/proc/use_farmbot_item()
-	if ( !target )
+	if (!target )
 		mode = 0
-		return 0
+		return
 
-	if ( emagged && !ismob(target) ) // Humans are plants!
-		mode = 0
-		target = null
-		return 0
-
-	if ( !emagged && !istype(target,/obj/machinery/portable_atmospherics/hydroponics) && !istype(target,/obj/structure/sink) ) // Humans are not plants!
+	if (emagged && !ismob(target) ) // Humans are plants!
 		mode = 0
 		target = null
-		return 0
+		return
 
-	if ( mode == FARMBOT_MODE_FERTILIZE )
-		//Find which fertilizer to use
-		var/obj/item/weapon/reagent_containers/glass/fert
-		for ( var/obj/item/weapon/reagent_containers/glass/nut in contents )
-			fert = nut
-			break
-		if ( !fert )
-			target = null
-			mode = 0
-			return
-		fertilize(fert)
+	if (!emagged && !istype(target,/obj/machinery/portable_atmospherics/hydroponics) && !istype(target,/obj/structure/sink) ) // Humans are not plants!
+		mode = 0
+		target = null
+		return
+
+	if(mode == FARMBOT_MODE_FERTILIZE)
+		fertilize()
 
 	if(mode == FARMBOT_MODE_WEED)
 		weed()
@@ -290,96 +269,87 @@
 
 
 /obj/machinery/bot/farmbot/target_selection()
-	if ( emagged ) //Find a human and help them!
-		for ( var/mob/living/carbon/human/human in view(7,src) )
-			if (human.isDead())
+	if (emagged) //Find a human and help them!
+		for (var/mob/living/carbon/human/human in view(7,src))
+			if(human.isDead())
 				continue
 
 			var list/options = list(FARMBOT_MODE_WEED)
-			if ( get_total_ferts() )
+			if(!reagents.is_empty())
 				options.Add(FARMBOT_MODE_FERTILIZE)
-			if ( tank && tank.reagents.total_volume >= 1 )
+			if(tank && !tank.reagents.is_empty())
 				options.Add(FARMBOT_MODE_WATER)
 			mode = pick(options)
 			target = human
 			return mode
 		return 0
 	else
-		if ( setting_refill && tank && tank.reagents.total_volume < 100 )
-			for ( var/obj/structure/sink/source in view(7,src) )
+		if(setting_refill && tank && tank.reagents.total_volume < 500 )
+			for(var/obj/structure/sink/source in view(7,src) )
 				target = source
 				mode = FARMBOT_MODE_REFILL
 				return 1
-		for ( var/obj/machinery/portable_atmospherics/hydroponics/tray in view(7,src) )
+		for(var/obj/machinery/portable_atmospherics/hydroponics/tray in view(7,src) )
 			var newMode = GetNeededMode(tray)
-			if ( newMode )
+			if(newMode)
 				mode = newMode
 				target = tray
 				return 1
 		return 0
 
 /obj/machinery/bot/farmbot/proc/GetNeededMode(obj/machinery/portable_atmospherics/hydroponics/tray)
-	if ( tray.dead )
+	if (tray.dead)
 		return 0
 
-	if ( setting_ignoreEmpty && !tray.seed )
+	if (setting_ignoreEmpty && !tray.seed)
 		return 0
 
-	if ( setting_water && tray.get_waterlevel() < WATERLEVEL_MAX/5 && tank && tank.reagents.total_volume >= 1 )
+	if (setting_water && (tray.get_waterlevel()+tray.reagents.get_reagent_amount(WATER)) < WATERLEVEL_MAX/5 && tank && !tank.reagents.is_empty())
 		return FARMBOT_MODE_WATER
 
-	if ( setting_weed && tray.get_weedlevel() >= WEEDLEVEL_MAX/2 )
+	if (setting_weed && tray.get_weedlevel() >= WEEDLEVEL_MAX/2)
 		return FARMBOT_MODE_WEED
-	if ( setting_fertilize && tray.get_nutrientlevel() <= NUTRIENTLEVEL_MAX/5 && get_total_ferts() && (!tray.seed || !tray.seed.hematophage) )
-		return FARMBOT_MODE_FERTILIZE
+
+	if(setting_fertilize && tray.get_nutrientlevel() <= NUTRIENTLEVEL_MAX/5 && reagents.total_volume && (!tray.seed || !tray.seed.hematophage) )
+		if(!(locate(/datum/reagent/fertilizer) in tray.reagents.reagent_list)) //Skip if it has any fertilizer in it
+			return FARMBOT_MODE_FERTILIZE
 	return 0
 
 
-/obj/machinery/bot/farmbot/proc/fertilize(var/obj/item/weapon/reagent_containers/glass/fert)
-	if ( !fert )
+/obj/machinery/bot/farmbot/proc/fertilize()
+	if(reagents.is_empty())
 		target = null
 		mode = 0
 		return 0
+	mode = FARMBOT_MODE_WAITING
 
-	if ( emagged ) // Warning, hungry humans detected: throw fertilizer at them
+	if(emagged) // Warning, hungry humans detected: throw fertilizer at them
+		var/obj/item/weapon/reagent_containers/glass/bottle/fert = new(loc)
+		reagents.trans_to(fert,30)
 		spawn(0)
-			fert.forceMove(src.loc)
 			fert.throw_at(target, 16, 3)
-		src.visible_message("<span class='danger'>[src] launches [fert.name] at [target.name]!</span>")
-		flick("[src.icon_initial]_broke", src)
-		spawn (FARMBOT_EMAG_DELAY)
-			mode = 0
-			target = null
-		return 1
-
+		visible_message("<span class='danger'>[src] launches \the [fert.name] at [target.name]!</span>")
+		flick("[icon_initial]_broke", src)
 	else // feed them plants~
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
-		tray.add_nutrientlevel(10)
-		fert.reagents.trans_to(tray, fert.reagents.total_volume)
-		QDEL_NULL (fert)
-		//tray.updateicon()
-		icon_state = "[src.icon_initial]_fertile"
-		mode = FARMBOT_MODE_WAITING
-
-		spawn (FARMBOT_ACTION_DELAY)
-			mode = 0
-			target = null
+		reagents.trans_to(tray, 10) //10 should be enough to fertilize most, and we'll stop looking at it until it uses this
+		icon_state = "[icon_initial]_fertile"
 		spawn (FARMBOT_ANIMATION_TIME)
 			icon_state = "[src.icon_initial][src.on]"
-		return 1
+	return 1
 
 /obj/machinery/bot/farmbot/proc/weed()
 	icon_state = "[src.icon_initial]_hoe"
 	spawn(FARMBOT_ANIMATION_TIME)
 		icon_state = "[src.icon_initial][src.on]"
 
-	if ( emagged ) // Warning, humans infested with weeds!
+	if (emagged) // Warning, humans infested with weeds!
 		mode = FARMBOT_MODE_WAITING
 		spawn(FARMBOT_EMAG_DELAY)
 			mode = 0
 
-		if ( prob(30) ) // better luck next time little guy
-			src.visible_message("<span class='danger'>[src] swings wildly at [target] with a minihoe, missing completely!</span>")
+		if(prob(30)) // better luck next time little guy
+			visible_message("<span class='danger'>[src] swings wildly at [target] with a minihoe, missing completely!</span>")
 
 		else // yayyy take that weeds~
 			var/attackVerb = pick("slashes", "slices", "cuts", "claws")
@@ -427,8 +397,8 @@
 			mode = 0
 	else
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
-		var/b_amount = tank.reagents.remove_reagent(WATER, WATERLEVEL_MAX - tray.get_waterlevel())
-		tray.add_waterlevel(b_amount)
+		var/b_amount = WATERLEVEL_MAX - tray.get_waterlevel()
+		tank.reagents.trans_to(tray, b_amount)
 		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 
 		//tray.updateicon()
@@ -444,11 +414,11 @@
 
 	mode = FARMBOT_MODE_WAITING
 	playsound(src, 'sound/effects/slosh.ogg', 25, 1)
-	src.visible_message("<span class='notice'>[src] starts filling it's tank from [target].</span>")
-	spawn(300)
-		src.visible_message("<span class='notice'>[src] finishes filling it's tank.</span>")
-		src.mode = 0
-		tank.reagents.add_reagent(WATER, tank.reagents.maximum_volume - tank.reagents.total_volume )
+	src.visible_message("<span class='notice'>[src] starts filling its tank from \the [target].</span>")
+	spawn(3 SECONDS)
+		visible_message("<span class='notice'>[src] finishes filling its tank.</span>")
+		mode = 0
+		tank.reagents.add_reagent(WATER, 150 )
 		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 
 

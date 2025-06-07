@@ -77,9 +77,6 @@
 /area/shuttle/arrival/station)
 "aan" = (
 /obj/structure/closet/wardrobe/xenos,
-/obj/item/clothing/under/vox/vox_casual,
-/obj/item/clothing/under/vox/vox_casual,
-/obj/item/clothing/under/vox/vox_casual,
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "aao" = (
@@ -87,7 +84,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "aap" = (
-/obj/structure/closet/wardrobe/grey,
+/obj/structure/closet/wardrobe/pjs,
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "aaq" = (
@@ -7274,7 +7271,7 @@
 	},
 /area/lamprey/warzonemaintenanceblob)
 "aqC" = (
-/obj/item/clothing/glasses/thermal,
+/obj/item/clothing/glasses/hud/thermal,
 /obj/structure/rack,
 /turf/simulated/floor/plating,
 /area/lamprey/kitchen)
@@ -34541,15 +34538,15 @@
 /area/lamprey/permabrig)
 "bAv" = (
 /obj/structure/table/reinforced,
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 2;
 	pixel_y = 6
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 2;
 	pixel_y = 6
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 2;
 	pixel_y = 6
 	},
@@ -43331,6 +43328,10 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
+/obj/item/weapon/circuitboard/circuit_imprinter{
+	pixel_x = 3;
+	pixel_y = -3
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -44414,11 +44415,11 @@
 	pixel_x = -8;
 	pixel_y = -1
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 10;
 	pixel_y = 6
 	},
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_x = 13;
 	pixel_y = 8
 	},
@@ -59357,7 +59358,7 @@
 /area/lamprey/medbay)
 "cDe" = (
 /obj/structure/rack,
-/obj/item/clothing/glasses/thermal,
+/obj/item/clothing/glasses/hud/thermal,
 /turf/simulated/floor/plating,
 /area/lamprey/aftstarboardhallways)
 "cDf" = (
@@ -61188,6 +61189,13 @@
 "cHm" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/light,
+/obj/item/high_roller{
+	pixel_x = -4
+	},
+/obj/item/weapon/reagent_containers/glass/metal_bucket/nanopaint/filled/red{
+	pixel_y = 8;
+	pixel_x = 8
+	},
 /turf/simulated/floor,
 /area/lamprey/tinyroomzone)
 "cHn" = (
@@ -66565,7 +66573,7 @@
 /obj/structure/window/reinforced/tinted{
 	dir = 1
 	},
-/obj/item/toy/gasha/carptoy,
+/obj/item/toy/plushie/carp,
 /turf/simulated/floor/engine{
 	name = "Holodeck Projector Floor"
 	},
@@ -69926,7 +69934,7 @@
 "dau" = (
 /obj/structure/table/reinforced,
 /obj/item/toy/bomb,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/simulated/floor{
 	icon_state = "whitepurplecorner"
 	},
@@ -70158,7 +70166,7 @@
 "dbb" = (
 /obj/structure/closet/secure_closet/hop2,
 /obj/item/clothing/suit/armor/hos,
-/obj/item/toy/gasha/corgitoy,
+/obj/item/toy/plushie/corgi,
 /turf/simulated/floor{
 	icon_state = "darkblue"
 	},
@@ -72518,7 +72526,7 @@
 	icon_state = "bot"
 	},
 /obj/structure/closet/crate/chest,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "brown"
@@ -80036,7 +80044,7 @@
 /area/lamprey/engineering)
 "dtD" = (
 /obj/structure/rack,
-/obj/item/clothing/glasses/thermal,
+/obj/item/clothing/glasses/hud/thermal,
 /turf/simulated/floor/plating,
 /area/lamprey/engineering)
 "dtE" = (
@@ -100201,7 +100209,7 @@
 	dir = 4;
 	icon_state = "warning"
 	},
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "whitepurple"
@@ -104795,7 +104803,7 @@
 	},
 /area/lamprey/moon)
 "esY" = (
-/obj/item/toy/gasha/corgitoy,
+/obj/item/toy/plushie/corgi,
 /turf/simulated/floor/airless{
 	dir = 5;
 	icon_state = "asteroidfloor"
@@ -107406,7 +107414,7 @@
 "exY" = (
 /obj/structure/table/reinforced,
 /obj/item/toy/bomb,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/tool/wrench,
 /turf/simulated/floor{
 	icon_state = "whitepurplecorner"
@@ -107501,9 +107509,6 @@
 /area/shuttle/arrival/station)
 "eyh" = (
 /obj/structure/closet/wardrobe/xenos,
-/obj/item/clothing/under/vox/vox_casual,
-/obj/item/clothing/under/vox/vox_casual,
-/obj/item/clothing/under/vox/vox_casual,
 /obj/item/tool/wrench,
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
@@ -112089,7 +112094,7 @@
 	},
 /area/lamprey/headofpersonnelline)
 "eHG" = (
-/obj/item/weapon/reagent_containers/glass/paint,
+/obj/item/weapon/reagent_containers/glass/metal_bucket/paint,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
 	dir = 8;
@@ -114054,7 +114059,7 @@
 /area/lamprey/catchall)
 "eLg" = (
 /obj/structure/rack,
-/obj/item/clothing/glasses/thermal,
+/obj/item/clothing/glasses/hud/thermal,
 /obj/effect/step_trigger/teleporter{
 	name = "best hallway";
 	teleport_x = 300;
@@ -118308,7 +118313,7 @@
 /area/lamprey/catchall)
 "eUz" = (
 /obj/machinery/computer/HolodeckControl,
-/obj/item/toy/gasha/carptoy,
+/obj/item/toy/plushie/carp,
 /turf/simulated/floor/wood,
 /area/lamprey/catchall)
 "eUA" = (
@@ -118615,7 +118620,7 @@
 /area/lamprey/catchall)
 "eUZ" = (
 /obj/structure/closet/secure_closet/personal/cabinet,
-/obj/item/toy/gasha/beartoy,
+/obj/item/toy/plushie/spacebear,
 /obj/machinery/light/small,
 /turf/simulated/floor/carpet,
 /area/lamprey/catchall)
@@ -126834,7 +126839,7 @@
 /area/centcom/ert)
 "fnO" = (
 /obj/structure/table/reinforced,
-/obj/item/clothing/glasses/sunglasses/sechud{
+/obj/item/clothing/glasses/hud/security/sunglasses{
 	pixel_y = 8
 	},
 /obj/item/weapon/gun/energy/taser,
@@ -127758,7 +127763,7 @@
 /obj/item/clothing/head/bio_hood/janitor,
 /obj/item/device/radio/headset/ert,
 /obj/item/clothing/mask/breath,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor{
 	icon_state = "dark purple stripe"
@@ -137495,7 +137500,7 @@
 "fMZ" = (
 /obj/structure/closet/vox_raiders,
 /obj/item/weapon/storage/backpack,
-/obj/item/clothing/glasses/thermal/monocle,
+/obj/item/clothing/glasses/hud/thermal/monocle,
 /obj/item/device/radio/headset/raider/pretuned,
 /turf/simulated/floor/shuttle/vox{
 	icon_state = "floor4"
@@ -148546,7 +148551,7 @@
 /area)
 "gkx" = (
 /obj/machinery/computer/HolodeckControl,
-/obj/item/toy/gasha/carptoy,
+/obj/item/toy/plushie/carp,
 /turf/space,
 /area)
 "gky" = (
@@ -148876,7 +148881,7 @@
 /area)
 "glg" = (
 /obj/structure/closet/secure_closet/personal/cabinet,
-/obj/item/toy/gasha/beartoy,
+/obj/item/toy/plushie/spacebear,
 /turf/space,
 /area)
 "glh" = (
@@ -151164,7 +151169,7 @@
 /turf/space,
 /area)
 "gpx" = (
-/obj/item/toy/gasha/corgitoy,
+/obj/item/toy/plushie/corgi,
 /turf/space,
 /area)
 "gpy" = (
@@ -151636,7 +151641,8 @@
 	icon_state = "0-2"
 	},
 /obj/machinery/power/battery/smes{
-	charge = 5e+006
+	charge = 5e+006;
+	name_tag = "Батарея"
 	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
@@ -152017,8 +152023,8 @@
 /obj/item/device/gps/science,
 /obj/item/device/gps/science,
 /obj/item/device/gps/science,
-/obj/item/clothing/glasses/science,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/space,
 /area)
 "grj" = (
@@ -153971,8 +153977,8 @@
 /area)
 "guN" = (
 /obj/structure/table,
-/obj/item/clothing/glasses/science,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/clothing/gloves/latex,
 /obj/item/clothing/gloves/latex,
 /turf/space,
@@ -156348,7 +156354,7 @@
 /obj/machinery/light_switch{
 	pixel_x = 24
 	},
-/obj/item/toy/gasha/cattoy,
+/obj/item/toy/plushie/cat,
 /turf/space,
 /area)
 "gzp" = (
@@ -163989,9 +163995,9 @@
 "gNY" = (
 /obj/structure/table,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/item/clothing/glasses/science,
-/obj/item/clothing/glasses/science,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
+/obj/item/clothing/glasses/scanner/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/weapon/storage/box/syringes{
 	pixel_x = 6;
 	pixel_y = 6
@@ -170523,7 +170529,7 @@
 /area)
 "hab" = (
 /obj/structure/closet/secure_closet/engineering_chief,
-/obj/item/toy/gasha/parrottoy,
+/obj/item/toy/plushie/parrot,
 /obj/item/weapon/storage/box/foam,
 /obj/item/clothing/suit/storage/wintercoat/engineering/ce,
 /obj/structure/painting/random{
@@ -187706,7 +187712,7 @@
 /area/lamprey/excavationtunnels)
 "hGV" = (
 /obj/structure/table,
-/obj/item/clothing/glasses/thermal,
+/obj/item/clothing/glasses/hud/thermal,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -187864,7 +187870,7 @@
 /area/lamprey/excavationtunnels)
 "hHv" = (
 /obj/structure/rack,
-/obj/item/clothing/glasses/thermal,
+/obj/item/clothing/glasses/hud/thermal,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -196179,7 +196185,7 @@
 /obj/structure/bed/chair{
 	dir = 4
 	},
-/obj/item/clothing/glasses/thermal,
+/obj/item/clothing/glasses/hud/thermal,
 /turf/simulated/floor/plating{
 	icon_state = "asteroidfloor"
 	},
@@ -196930,10 +196936,18 @@
 "iaC" = (
 /turf/space,
 /area/lamprey/asteroid)
+"mGT" = (
+/obj/machinery/electric_loom,
+/turf/simulated/floor/plating,
+/area/lamprey/engineeringmaintenanceblob)
 "nlh" = (
 /obj/structure/shuttle/diag_wall/smooth,
 /turf/unsimulated/mineral,
 /area/asteroid/clown)
+"rXL" = (
+/obj/structure/spinning_wheel,
+/turf/simulated/floor/plating,
+/area/lamprey/engineeringmaintenanceblob)
 "tRh" = (
 /obj/machinery/crate_weigher,
 /turf/simulated/floor{
@@ -196941,6 +196955,11 @@
 	icon_state = "brown"
 	},
 /area/lamprey/barndgo)
+"uwA" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/rcl/pre_loaded,
+/turf/simulated/floor/plating,
+/area/lamprey/engineering)
 
 (1,1,1) = {"
 aaa
@@ -294146,7 +294165,7 @@ dbm
 dFm
 dGQ
 dIt
-dJM
+mGT
 dKO
 dJM
 dJL
@@ -294659,7 +294678,7 @@ dGQ
 dGQ
 dGQ
 dGQ
-dJM
+rXL
 dJL
 dVJ
 dGQ
@@ -302170,7 +302189,7 @@ cXx
 doD
 dqj
 drL
-drL
+uwA
 dvd
 dwp
 dxS
@@ -302672,7 +302691,7 @@ cXx
 doE
 dqk
 drM
-drL
+uwA
 dve
 dwq
 dxT
@@ -303174,7 +303193,7 @@ cXx
 doF
 dql
 drL
-drL
+uwA
 dvf
 dwr
 dxU

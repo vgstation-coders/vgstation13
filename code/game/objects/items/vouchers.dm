@@ -45,7 +45,7 @@
 
 /obj/item/voucher/warp/kinetic_accelerator/vouch_condition()
 	var/turf/T = get_turf(src)
-	if(istype(T.loc, /area/mine/explored)||istype(T.loc, /area/mine/unexplored))
+	if(istype(T.loc, /area/mine/explored)||istype(T.loc, /area/mine/unexplored)||istype(T.loc, /area/surface/mine))
 		return TRUE
 	return FALSE
 

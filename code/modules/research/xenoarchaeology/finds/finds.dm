@@ -165,6 +165,17 @@
 	"It's a mystery how anyone is supposed to eat with this",\
 	"You wonder what the creator's mouth was shaped like")]."
 
+/datum/find/sewing_needles
+	find_ID = ARCHAEO_SEWING_NEEDLES
+	responsive_reagent = IRON
+	apply_material_decorations = TRUE
+	apply_image_decorations = TRUE
+
+/datum/find/sewing_needles/spawn_item()
+	var/obj/item/knitting_needles/alien/new_item = new /obj/item/knitting_needles/alien
+	item_type = new_item.name
+	return new_item
+
 /datum/find/statuette
 	find_ID = ARCHAEO_STATUETTE
 	item_type = "statuette"
@@ -492,9 +503,7 @@
 	//6.6% chance to get legacy cult helmet/armor
 
 	var/choice = pick(
-	75;/obj/item/clothing/head/culthood,
 	25;/obj/item/clothing/suit/cultrobes,
-	60;/obj/item/clothing/head/culthood/old,
 	20;/obj/item/clothing/suit/cultrobes/old,
 	45;/obj/item/clothing/head/magus,
 	15;/obj/item/clothing/suit/magusred,
@@ -1098,6 +1107,15 @@
 		return new /obj/item/pocketwatch/luna_dial
 	else
 		return new /obj/item/pocketwatch
+
+/datum/find/mirror
+	find_ID = ARCHAEO_MIRROR
+	anomaly_factor = 4
+	apply_material_decorations = FALSE
+	responsive_reagent = MERCURY
+
+/datum/find/mirror/spawn_item()
+	return new /obj/item/weapon/pocket_mirror/arcane
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Strange rocks

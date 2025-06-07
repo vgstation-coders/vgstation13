@@ -53,6 +53,8 @@
 	icon_state = "nucgun"
 	item_state = "nucgun"
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=5;" + Tc_POWERSTORAGE + "=3"
+	rechargeable = FALSE
+	non_rechargeable_reason = "<span class='notice'>Your gun's recharge port was removed to make room for a miniaturized reactor.</span>"
 	clowned = UNCLOWN
 	var/core_stability = 10
 	var/charge_tick = 0

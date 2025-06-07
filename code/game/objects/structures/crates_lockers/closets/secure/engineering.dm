@@ -25,21 +25,17 @@
 		/obj/item/weapon/cartridge/ce,
 		/obj/item/device/radio/headset/heads/ce,
 		/obj/item/weapon/storage/box/inflatables,
-		/obj/item/weapon/inflatable_dispenser,
-		/obj/item/weapon/storage/toolbox/mechanical,
-		/obj/item/device/t_scanner/advanced,
 		/obj/item/device/device_analyser/advanced,
 		/obj/item/clothing/suit/storage/hazardvest,
 		/obj/item/clothing/mask/gas,
-		/obj/item/device/multitool,
 		/obj/item/device/flash,
 		/obj/item/device/gps/engineering,
-		/obj/item/weapon/storage/belt/utility/chief,
+		/obj/item/weapon/storage/belt/utility/chief/full,
 		/obj/item/clothing/glasses/scanner/material,
 		/obj/item/weapon/card/debit/preferred/department/engineering,
 		/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger,
-		/obj/item/tool/solder/screw,
-		/obj/item/tool/crowbar/halligan
+		/obj/item/clothing/glasses/scanner/dual/chiefengineer,
+		/obj/item/device/pager,
 	)
 
 /obj/structure/closet/secure_closet/engineering_electrical
@@ -108,6 +104,7 @@
 		/obj/item/taperoll/engineering,
 		/obj/item/device/gps/engineering,
 		/obj/item/clothing/glasses/scanner/material,
+		/obj/item/device/pager,
 	)
 
 /obj/structure/closet/secure_closet/engineering_atmos
@@ -145,6 +142,7 @@
 		/obj/item/clothing/glasses/scanner/material,
 		/obj/item/device/gps/engineering,
 		/obj/item/tool/crowbar/halligan,
+		/obj/item/device/pager,
 	)
 
 /obj/structure/closet/secure_closet/engineering_mechanic

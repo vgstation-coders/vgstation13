@@ -134,8 +134,8 @@
 
 	updateicon()
 
-	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
-	hud_list[DIAG_CELL_HUD] = image('icons/mob/hud.dmi', src, "hudbattmax")
+	hud_list[DIAG_HEALTH_HUD] = new/image/hud('icons/mob/hud.dmi', src, "huddiagmax")
+	hud_list[DIAG_CELL_HUD] = new/image/hud('icons/mob/hud.dmi', src, "hudbattmax")
 
 	..()
 
@@ -1339,14 +1339,6 @@
 			client.screen -= A
 	module.remove_languages(src)
 	module = null
-
-/mob/living/silicon/robot/hasHUD(var/hud_kind)
-	switch(hud_kind)
-		if(HUD_MEDICAL)
-			return sensor_mode == 2
-		if(HUD_SECURITY)
-			return sensor_mode == 1
-	return FALSE
 
 /mob/living/silicon/robot/identification_string()
 	return "[name] ([modtype] [braintype])"

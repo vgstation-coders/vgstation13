@@ -222,7 +222,7 @@
 	throw_speed = 1
 	throw_range = 3
 	origin_tech = Tc_COMBAT + "=3"
-	attack_verb = list("stings, pricks")
+	attack_verb = list("stings", "pricks")
 
 /obj/item/weapon/grown/deathnettle/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")

@@ -338,35 +338,31 @@
 			//Can't clone without someone to clone.  Or a pod.  Or if the pod is busy. Or full of gibs.
 			if(!pod1 || !canLink(pod1)) //If the pod exists BUT it's too far away from the console
 				temp = "Error: No Clonepod detected."
+				return
 			else if(pod1.occupant)
 				temp = "Error: Clonepod is currently occupied."
+				return
 			else if(pod1.biomass < CLONE_BIOMASS)
 				temp = "Error: Not enough biomass."
+				return
 			else if(pod1.mess)
 				temp = "Error: Clonepod malfunction."
+				return
 			else if(!config.revival_cloning)
 				temp = "Error: Unable to initiate cloning cycle."
+				return
+
+			if(pod1.growclone(C))
+				temp = "Initiating cloning cycle..."
+				records.Remove(C)
+				QDEL_NULL(C)
+				menu = 1
+
 			else
-				if(pod1.growclone(C))
-					temp = "Initiating cloning cycle..."
-					records.Remove(C)
-					QDEL_NULL(C)
-					menu = 1
-				else
-					//if growclone() failed, we can't clone the guy, so what is this even DOING here?
-					var/mob/selected = find_dead_player("[C.ckey]")
-					if(!selected)
-						temp = "Initiating cloning cycle...<br>Error: Post-initialisation failed. Cloning cycle aborted."
-						src.updateUsrDialog()
-						return
-					selected << 'sound/effects/adminhelp.ogg'
-					if(alert(selected,"Your DNA has been selected for cloning. Do you want to return to life?","Cloning","Yes","No") == "Yes" && pod1.growclone(C))
-						temp = "Initiating cloning cycle..."
-						records.Remove(C)
-						QDEL_NULL(C)
-						menu = 1
-					else
-						temp = "Initiating cloning cycle...<br>Error: Post-initialisation failed. Cloning cycle aborted."
+				temp = "Initiating cloning cycle...<br>Error: Post-initialisation failed. Cloning cycle aborted."
+				src.updateUsrDialog()
+				return
+
 		else
 			temp = "Error: Data corruption."
 
@@ -393,6 +389,13 @@
 	if((isnull(subject)) || (!ishuman(subject) && !istype(subject, /mob/living/slime_pile)) || (!subject.dna) || (ismanifested(subject)))
 		scantemp = "Error: Unable to locate valid genetic data." //Something went very wrong here
 		return
+	if(istype(subject, /mob/living/slime_pile))
+		var/mob/living/slime_pile/P = subject
+		if(P.slime_person && P.slime_person.has_brain())
+			subject = P.slime_person
+		else
+			scantemp = "Unable to locate genetic base within the slime puddle. Micro-MRI scans indicate its brain is missing."
+			return
 	if(!subject.has_brain())
 		scantemp = "Error: No signs of intelligence detected." //Self explainatory
 		return

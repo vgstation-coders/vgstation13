@@ -1,9 +1,37 @@
+
+
+/obj/item/clothing/under/color
+	name = "jumpsuit"
+	icon_state = "white"
+	item_state = "w_suit"
+	_color = "white"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	color = COLOR_LINEN
+	clothing_flags = ONESIZEFITSALL | COLORS_OVERLAY
+	dyeable_parts = list("top","top-sleeves-whole","top-sleeves-tip","top-shoulders","top-trim","pants","pants-tip","belt")
+	dye_base_iconstate_override = "white"//so we can dye the other jumpsuits without having to add additional icon states
+	dye_base_itemstate_override = "w_suit"
+
+/obj/item/clothing/under/color/linen
+	//sub-type to track manually crafted jumpsuits for centcomm orders
+
+/obj/item/clothing/under/color/white
+	name = "white jumpsuit"
+	icon_state = "white"
+	item_state = "w_suit"
+	_color = "white"
+	color = null
+	clothing_flags = ONESIZEFITSALL | COLORS_OVERLAY
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/under/color/black
 	name = "black jumpsuit"
 	icon_state = "black"
 	item_state = "bl_suit"
 	_color = "black"
-	clothing_flags = ONESIZEFITSALL
+	color = null
+	clothing_flags = ONESIZEFITSALL | COLORS_OVERLAY
 	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/blackf
@@ -12,15 +40,19 @@
 	icon_state = "black"
 	item_state = "bl_suit"
 	_color = "blackf"
+	color = null
 	flags = FPRINT
 	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
+	clothing_flags = 0
+	dyeable_parts = list()
 
 /obj/item/clothing/under/color/blue
 	name = "blue jumpsuit"
 	icon_state = "blue"
 	item_state = "b_suit"
 	_color = "blue"
-	clothing_flags = ONESIZEFITSALL
+	color = null
+	clothing_flags = ONESIZEFITSALL | COLORS_OVERLAY
 	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/green
@@ -28,7 +60,8 @@
 	icon_state = "green"
 	item_state = "g_suit"
 	_color = "green"
-	clothing_flags = ONESIZEFITSALL
+	color = null
+	clothing_flags = ONESIZEFITSALL | COLORS_OVERLAY
 	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/grey
@@ -37,7 +70,8 @@
 	icon_state = "grey"
 	item_state = "gy_suit"
 	_color = "grey"
-	clothing_flags = ONESIZEFITSALL
+	color = null
+	clothing_flags = ONESIZEFITSALL | COLORS_OVERLAY
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/orange
@@ -45,7 +79,8 @@
 	icon_state = "orange"
 	item_state = "o_suit"
 	_color = "orange"
-	clothing_flags = ONESIZEFITSALL
+	color = null
+	clothing_flags = ONESIZEFITSALL | COLORS_OVERLAY
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/prisoner
@@ -56,7 +91,8 @@
 	_color = "prisoner"
 	has_sensor = 2
 	sensor_mode = 3
-	clothing_flags = ONESIZEFITSALL
+	color = null
+	clothing_flags = ONESIZEFITSALL | COLORS_OVERLAY
 	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/pink
@@ -64,7 +100,8 @@
 	icon_state = "pink"
 	item_state = "p_suit"
 	_color = "pink"
-	clothing_flags = ONESIZEFITSALL
+	color = null
+	clothing_flags = ONESIZEFITSALL | COLORS_OVERLAY
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/red
@@ -72,23 +109,17 @@
 	icon_state = "red"
 	item_state = "r_suit"
 	_color = "red"
-	clothing_flags = ONESIZEFITSALL
+	color = null
+	clothing_flags = ONESIZEFITSALL | COLORS_OVERLAY
 	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
-
-/obj/item/clothing/under/color/white
-	name = "white jumpsuit"
-	icon_state = "white"
-	item_state = "w_suit"
-	_color = "white"
-	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/yellow
 	name = "yellow jumpsuit"
 	icon_state = "yellow"
 	item_state = "y_suit"
 	_color = "yellow"
-	clothing_flags = ONESIZEFITSALL
+	color = null
+	clothing_flags = ONESIZEFITSALL | COLORS_OVERLAY
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/psyche
@@ -212,3 +243,4 @@
 	gender = PLURAL
 	body_parts_covered = LOWER_TORSO|LEGS
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+

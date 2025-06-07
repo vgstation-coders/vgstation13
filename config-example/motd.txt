@@ -1,9 +1,12 @@
-<h1>Welcome to Space Station 13!</h1>
-
--<i>This server is running <a href="http://baystation12.net/">Baystation 12's</a> modification of the <a href="http://ss13.eu/">/tg/station13</a> SS13 code.</i>
-<br><br>
-<strong>Bugtracker:</strong> <a href="https://github.com/Baystation12/Baystation12/issues">https://github.com/Baystation12/Baystation12/issues</a>
-<br>
-<strong>Rules and roleplaying tips:</strong> <a href="http://baystation12.net/wiki/index.php/Rules">http://baystation12.net/wiki/index.php/Rules</a> or the Rules command.
-<br><br>
-This is a roleplaying server, so don't forget to remain in character while playing. Make sure to read and abide by the rules and if you have any questions, feel free to adminhelp! Remember that even when there are no admins on, adminhelps are being sent to IRC and it is possible for an administrator to see it and respond.
+<p><b><font size="32">Welcome to /vg/station</font></b>
+<b><font size = "4">The current thread can be found by <font color="purple"><a href="https://boards.4channel.org/vg/catalog#s=ss13g">(clicking here)</a></font></font><br></b>
+<font size = "4">Server's byond version is: <a href="https://www.byond.com/docs/notes/515.html">515.1608</a></font>
+<font size = "4">Read the <a href="http://ss13.moe/wiki/">wiki,</a> and consider <a href="http://ss13.moe/wiki/index.php/Guide_to_Contributing_to_the_Wiki">contributing!</a></font><br>
+<font color="#DF0101" size=5>Donate to help keep the server running: <a href="http://ss13.moe/donate">Paypal</a> or <a href="http://patreon.com/pomf">Patreon</a>.</font><br>
+-------- Info --------
+• <b>New player resources:</b> <a href="http://ss13.moe/wiki/index.php/The_Basics">The Basics</a> | <a href="http://ss13.moe/sekrit/rurus.html">Server Rules</a> | <a href="http://ss13.moe/wiki/index.php/Guides">Guides</a>
+• This server's code is <b>open-source</b>, running the Bleeding-Edge branch of /vg/ code. <a href="https://github.com/d3athrow/vgstation13">(Get it here)</a>
+• You can join our official Discord server <a href="https://discord.gg/RYnQZvxrmH">here.</a>
+• If you have a concern about a player or the round, please press F1 to adminhelp it.
+• Admins need to know about problems to fix them, so help us help you!
+----------------------<br>

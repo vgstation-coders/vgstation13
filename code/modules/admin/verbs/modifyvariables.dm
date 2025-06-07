@@ -146,7 +146,7 @@ var/list/forbidden_varedit_object_types = list(
 
 		if(!new_variable_type)
 			new_variable_type = input("What kind of variable?","Variable Type") as null|anything in choices
-		var/selected_type = choices[new_variable_type]
+		var/selected_type = !new_variable_type ? V_CANCEL : choices[new_variable_type]
 		var/window_title = "Varedit [edited_datum]"
 
 		switch(selected_type)
@@ -338,6 +338,10 @@ var/list/forbidden_varedit_object_types = list(
 
 	if(tocheck == "bounds")
 		to_chat(usr, "Editing this variable is forbidden. Edit bound_width or bound_height instead.")
+		return FALSE
+
+	if(tocheck == "library_table") // prevent SQL injections
+		to_chat(usr, "No.")
 		return FALSE
 
 	if(tocheck in lockedvars)

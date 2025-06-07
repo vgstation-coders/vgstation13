@@ -6,7 +6,7 @@ var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold!","You sh
 		return NO_HYPOTHERMIA
 	var/body_temp_celcius = src.bodytemperature - T0C
 	switch(body_temp_celcius)
-		if(32 to 35)
+		if(32 to 34)
 			return MILD_HYPOTHERMIA // awake and shivering
 		if(28 to 32)
 			return MODERATE_HYPOTHERMIA // drowsy and not shivering
