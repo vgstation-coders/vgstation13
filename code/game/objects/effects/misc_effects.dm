@@ -326,7 +326,7 @@ We don't care about names, DNA, accounts, activity, any of that. We're just gonn
 		if(!player.ready)
 			continue
 
-		var/list/jobs = player.client.prefs.jobs
+		var/list/jobs = player.client.prefs.get_pref(/datum/preference_setting/assoc_list_setting/jobs)
 
 		for(var/job in jobs)
 			if((jobs[job] == JOB_PREF_HIGH) && GetJob(job))

@@ -52,7 +52,7 @@
 
 	if(send2chat)
 		for(var/client/C in admins)
-			if(C.prefs.toggles & CHAT_DEBUGLOGS)
+			if(C.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEBUGLOGS)
 				to_chat(C, "DEBUG: [text]")
 
 /proc/log_sql(text)

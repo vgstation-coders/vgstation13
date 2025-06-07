@@ -13,6 +13,52 @@ var/static/list/ALL_LIMBS = list(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN,
 
 	return h_style
 
+/proc/random_hair_color()
+	var/red = 0
+	var/green = 0
+	var/blue = 0
+
+	var/col = pick("blonde", "black", "chestnut", "copper", "brown", "wheat", "old", 15;"punk")
+	switch(col)
+		if("blonde")
+			red = 255
+			green = 255
+			blue = 0
+		if("black")
+			red = 0
+			green = 0
+			blue = 0
+		if("chestnut")
+			red = 153
+			green = 102
+			blue = 51
+		if("copper")
+			red = 255
+			green = 153
+			blue = 0
+		if("brown")
+			red = 102
+			green = 51
+			blue = 0
+		if("wheat")
+			red = 255
+			green = 255
+			blue = 153
+		if("old")
+			red = rand (100, 255)
+			green = red
+			blue = red
+		if("punk")
+			red = rand(0, 255)
+			green = rand(0, 255)
+			blue = rand(0, 255)
+
+	red = max(min(red + rand (-25, 25), 255), 0)
+	green = max(min(green + rand (-25, 25), 255), 0)
+	blue = max(min(blue + rand (-25, 25), 255), 0)
+	return list(red, green, blue)
+
+
 /proc/GetOppositeDir(var/dir)
 	switch(dir)
 		if(NORTH)

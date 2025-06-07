@@ -209,9 +209,9 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		ui_color = null
 		ui_alpha = 255
 	else
-		ui_style = ui_style2icon(mymob.client.prefs.UI_style)
-		ui_color = mymob.client.prefs.UI_style_color
-		ui_alpha = mymob.client.prefs.UI_style_alpha
+		ui_style = ui_style2icon(mymob.client.prefs.get_pref(/datum/preference_setting/string/UI_style))
+		ui_color = mymob.client.prefs.get_pref(/datum/preference_setting/string/UI_style_color)
+		ui_alpha = mymob.client.prefs.get_pref(/datum/preference_setting/numerical/UI_style_alpha)
 
 	if(ishuman(mymob))
 		human_hud(ui_style, ui_color, ui_alpha) // Pass the player the UI style chosen in preferences

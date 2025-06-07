@@ -7,6 +7,7 @@
 	// There's no consistency as to what goes in one and what goes into the other.
 	// You're on your own
 	var/category = "config"
+	var/protected = 0
 
 /datum/config_flag/proc/load(var/raw_string)
 	value = raw_string
@@ -42,3 +43,10 @@
 		// Just reinforcing it
 		else
 			value = TRUE
+
+// This is to prevent admins `accidentally` breaking the database.
+/datum/config_flag/can_edit_var(var/edited_variable)
+	if (protected)
+		return FALSE
+	else
+		return ..()

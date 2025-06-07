@@ -39,7 +39,7 @@
 	.=..()
 
 /datum/role/traitor/ForgeObjectives()
-	if(!antag.current.client.prefs.antag_objectives)
+	if(!antag.current.client.prefs.get_pref(/datum/preference_setting/toggle/antag_objectives))
 		AppendObjective(/datum/objective/freeform/syndicate)
 		return
 	if(istype(antag.current, /mob/living/silicon))

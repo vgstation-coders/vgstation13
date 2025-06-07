@@ -56,7 +56,7 @@
  */
 /datum/tgui/New(mob/user, datum/src_object, interface, title, ui_x, ui_y)
 	log_tgui(user,
-		"new [interface] fancy [user?.client?.prefs.tgui_fancy]",
+		"new [interface] fancy [user?.client?.prefs.get_pref(/datum/preference_setting/toggle/tgui_fancy)]",
 		src_object = src_object)
 	src.user = user
 	src.src_object = src_object
@@ -98,7 +98,7 @@
 	if(!window.is_ready())
 		window.initialize(
 			strict_mode = TRUE,
-			fancy = user.client.prefs.tgui_fancy,
+			fancy = user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_fancy),
 			assets = list(
 				get_tg_asset_datum(/datum/tg_asset/simple/tgui),
 			),
@@ -248,15 +248,15 @@
 		"status" = status,
 		"interface" = list(
 			"name" = interface,
-			"layout" = user.client.prefs.layout_prefs_used,
+			"layout" = user.client.prefs.get_pref(/datum/preference_setting/toggle/layout_prefs_used),
 		),
 		"refreshing" = refreshing,
 		"window" = list(
 			"key" = window_key,
 			"size" = window_size,
-			"fancy" = user.client.prefs.tgui_fancy,
-			"locked" = user.client.prefs.tgui_lock,
-			"scale" = user.client.prefs.tgui_scale,
+			"fancy" = user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_fancy),
+			"locked" = user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_lock),
+			"scale" = user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_scale),
 		),
 		"client" = list(
 			"ckey" = user.client.ckey,

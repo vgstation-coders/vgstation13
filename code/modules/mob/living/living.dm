@@ -27,7 +27,7 @@
 	if(addicted_chems)
 		QDEL_NULL(addicted_chems)
 
-	var/datum/gamemode/dynamic/dyn_mode = ticker.mode
+	var/datum/gamemode/dynamic/dyn_mode = ticker?.mode
 	if (istype(dyn_mode))
 		dyn_mode.living_players -= src
 
@@ -657,7 +657,7 @@ Thanks.
 
 	if(CONFIG_GET(toggle/allow_Metadata))
 		if(client)
-			to_chat(usr, "[src]'s Metainfo:<br>[client.prefs.metadata]")
+			to_chat(usr, "[src]'s Metainfo:<br>[client.prefs.get_pref(/datum/preference_setting/string/metadata)]")
 		else
 			to_chat(usr, "[src] does not have any stored infomation!")
 	else

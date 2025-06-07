@@ -62,9 +62,9 @@
 			if(!M.client || isnewplayer(M))
 				continue
 			var/T = get_turf(user)
-			if(isobserver(M) && M.client && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(T)))
+			if(isobserver(M) && M.client && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_GHOSTSIGHT) && !(M in viewers(T)))
 				M.show_message(formatFollow(user) + " " + msg)
-				if (user.client && M?.client?.prefs.mob_chat_on_map && get_dist(M, user) < M?.client.view)
+				if (user.client && M?.client?.prefs.get_pref(/datum/preference_setting/toggle/mob_chat_on_map) && get_dist(M, user) < M?.client.view)
 					M.create_chat_message(user, null, msg_runechat, "", list("italics"))
 
 	if(emote_type & EMOTE_VISIBLE)
@@ -72,13 +72,13 @@
 		if(!(emote_type & EMOTE_NO_RUNECHAT))
 			for(var/z0 in GetOpenConnectedZlevels(user))
 				for (var/mob/O in viewers(world.view, locate(user.x,user.y,z0)))
-					if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !(isinvisible(user)))
+					if (user.client && O?.client?.prefs.get_pref(/datum/preference_setting/toggle/mob_chat_on_map) && O.stat != UNCONSCIOUS && !(isinvisible(user)))
 						O.create_chat_message(user, null, msg_runechat, "", list("italics"))
 	else if(emote_type & EMOTE_AUDIBLE)
 		for(var/mob/O in get_hearers_in_view(world.view, user))
 			O.show_message(msg)
 			if(!(emote_type & EMOTE_NO_RUNECHAT))
-				if(user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !O.is_deaf())
+				if(user.client && O?.client?.prefs.get_pref(/datum/preference_setting/toggle/mob_chat_on_map) && O.stat != UNCONSCIOUS && !O.is_deaf())
 					O.create_chat_message(user, null, msg_runechat, "", list("italics"))
 
 	var/turf/T = get_turf(user)

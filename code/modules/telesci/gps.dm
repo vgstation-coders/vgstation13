@@ -60,7 +60,7 @@ var/list/all_GPS_list = list()
 		SStgui.update_uis(src)
 
 /obj/item/device/gps/attack_self(mob/user)
-	if(user.client.prefs.tgui_fancy)
+	if(user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_fancy))
 		tgui_interact(user)
 	else
 		ui_interact(user)

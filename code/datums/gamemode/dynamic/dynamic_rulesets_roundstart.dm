@@ -564,9 +564,9 @@ Assign your candidates in choose_candidates() instead.
 			if(job_master.TryAssignJob(old_AI,level,job))
 				break
 	if(!old_AI.mind.assigned_role) // still no job
-		if(old_AI.client.prefs.alternate_option == GET_RANDOM_JOB)
+		if(old_AI.client.prefs.get_pref(/datum/preference_setting/enum/alternate_option) == GET_RANDOM_JOB)
 			job_master.GiveRandomJob(old_AI)
-		else if(old_AI.client.prefs.alternate_option == BE_ASSISTANT)
+		else if(old_AI.client.prefs.get_pref(/datum/preference_setting/enum/alternate_option) == BE_ASSISTANT)
 			job_master.AssignRole(old_AI, "Assistant")
 	if(!old_AI.mind.assigned_role)
 		to_chat(old_AI, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")

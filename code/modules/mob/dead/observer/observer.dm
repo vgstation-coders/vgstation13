@@ -577,7 +577,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 				sHuman.real_name = real_name
 				concrete_outfit.equip(sHuman, TRUE)
 				client?.prefs.copy_to(sHuman)
-				sHuman.add_language(client?.prefs.language)
+				sHuman.add_language(client?.prefs.get_pref(/datum/preference_setting/string/language))
 				sHuman.dna.UpdateSE()
 				sHuman.dna.UpdateUI()
 				sHuman.ckey = ckey

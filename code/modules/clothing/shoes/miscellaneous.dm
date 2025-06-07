@@ -634,3 +634,9 @@
 
 /obj/item/clothing/shoes/hunter/rangeTackleBonus()
 	return 1
+
+/obj/item/clothing/shoes/sonicman
+	name = "sonicman shoes"
+	icon_state = "sonicmanshoes"
+	item_state = "sonicmanshoes"
+	desc = "Lightspeed dash sold seperately."

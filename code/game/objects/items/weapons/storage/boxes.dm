@@ -1361,3 +1361,53 @@
 	new /obj/item/clothing/shoes/hunter(src)
 	new /obj/item/clothing/head/hunter(src)
 	new /obj/item/clothing/gloves/hunter(src)
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/shadowsuit
+	name = "Shadow costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/shadowsuit/New()
+	new /obj/item/clothing/suit/shadowsuit(src)
+	new	/obj/item/clothing/head/shadowhead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicsuit
+	name = "Sonic costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicsuit/New()
+	new /obj/item/clothing/suit/sonicsuit(src)
+	new	/obj/item/clothing/head/sonichead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/tailssuit
+	name = "Tails costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/tailssuit/New()
+	new /obj/item/clothing/suit/tailssuit(src)
+	new	/obj/item/clothing/head/tailshead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/knucklessuit
+	name = "Knuckles costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/knucklessuit/New()
+	new /obj/item/clothing/suit/knucklessuit(src)
+	new	/obj/item/clothing/head/knuckleshead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/amysuit
+	name = "Amy costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/amysuit/New()
+	new /obj/item/clothing/suit/amysuit(src)
+	new	/obj/item/clothing/head/amyhead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicman
+	name = "Sonicman costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicman/New()
+	new /obj/item/clothing/under/sonicman(src)
+	new	/obj/item/clothing/head/helmet/sonicman(src)
+	new	/obj/item/clothing/gloves/sonicman(src)
+	new	/obj/item/clothing/shoes/sonicman(src)
+	..()
