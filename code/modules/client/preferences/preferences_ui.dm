@@ -297,7 +297,7 @@
   </div>
 </div>"}
 
-	if(config.allow_Metadata)
+	if(CONFIG_GET(toggle/allow_Metadata))
 		dat += "<b>OOC Notes:</b> <a href='?_src_=prefs;preference=metadata;task=input'> Edit </a><br>"
 
 	return dat

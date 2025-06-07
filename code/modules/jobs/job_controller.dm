@@ -361,7 +361,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 	// For those who wanted to be assistant if their preferences were filled, here you go.
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.get_pref(/datum/preference_setting/enum/alternate_option) == BE_ASSISTANT)
-			if(config.assistantlimit)
+			if(CONFIG_GET(toggle/assistant_limit))
 				if(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (CONFIG_GET(numerical/assistant_ratio) * count)) // Not enough sec...
 					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide ; this block then doesn't get checked.
 						to_chat(player, "You have been returned to lobby because there's not enough security to make you an assistant.")

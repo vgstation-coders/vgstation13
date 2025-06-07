@@ -446,7 +446,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/gender= get_pref(/datum/preference_setting/enum/gender)
 	if(get_pref(/datum/preference_setting/toggle/be_random_name))
 		name_setting.setting = random_name(gender,species)
-	if(config.humans_need_surnames && species == "Human")
+	if(CONFIG_GET(toggle/humans_need_surnames) && species == "Human")
 		var/firstspace = findtext(name_setting.setting, " ")
 		var/name_length = length(name_setting.setting)
 		if(!firstspace)	//we need a surname
