@@ -282,7 +282,7 @@ Obviously, requires DNA2.
 				L.Stun(2)
 				L.Knockdown(2)
 				L.apply_effect(5, STUTTER)
-				playsound(src, 'sound/weapons/heavysmash.ogg', 50, 0, 0)
+				playsound(src, 'sound/weapons/chargeimpact.ogg', 50, 0, 0)
 				breakthrough = 1
 		else
 			src.throwing = 0
