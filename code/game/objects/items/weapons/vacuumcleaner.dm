@@ -23,7 +23,6 @@
 	var/obj/item/weapon/cell/cell = null
 	var/active = 0 //means the cleaner is powered in any capacity
 	var/cover_open = 0
-	var/emagged = 0
 	var/held = 0
 	var/turning_on = 0 //means the cleaner is turning on (this is for sound control)
 
