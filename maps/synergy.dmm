@@ -55957,6 +55957,9 @@
 /area/crew_quarters/theatre)
 "bVI" = (
 /obj/machinery/light,
+/obj/structure/bed/chair/office/dark{
+	dir = 8
+	},
 /turf/simulated/floor/wood,
 /area/library)
 "bVJ" = (
@@ -99087,6 +99090,12 @@
 	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/bar)
+"nGG" = (
+/obj/structure/table/woodentable,
+/obj/machinery/disk_duplicator,
+/obj/item/weapon/storage/lockbox/diskettebox/large/full,
+/turf/simulated/floor/wood,
+/area/library)
 "nLg" = (
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 8
@@ -99216,6 +99225,10 @@
 	},
 /turf/simulated/floor,
 /area/hallway/primary/starboard)
+"psD" = (
+/obj/machinery/researcharchive,
+/turf/simulated/floor/wood,
+/area/library)
 "pLQ" = (
 /obj/machinery/hologram/holopad,
 /turf/simulated/floor/carpet,
@@ -241421,8 +241434,8 @@ bOl
 bPU
 bPU
 bPU
-bPU
 sPR
+psD
 bMW
 bMW
 bMW
@@ -242927,7 +242940,7 @@ bOo
 xBz
 bRA
 bSN
-bRA
+nGG
 bRC
 bXi
 bYn
