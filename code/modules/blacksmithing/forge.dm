@@ -15,6 +15,7 @@
 	var/fuel_time //How long is left, in deciseconds
 	var/current_temp
 	var/current_thermal_energy
+	light_color = LIGHT_COLOR_ORANGE
 
 /obj/structure/forge/update_icon()
 	if(status)
@@ -39,6 +40,7 @@
 			if(current_temp < TEMPERATURE_PLASMA)
 				current_temp = TEMPERATURE_PLASMA
 			fuel_time+= 10
+			fuel_update_light()
 			return 1
 	else if(istype(I, /obj/item/stack/ore/plasma))
 		to_chat(user, "<span class = 'notice'>You toss \the [I] into \the [src].</span>")
@@ -47,6 +49,7 @@
 			if(current_temp < TEMPERATURE_PLASMA)
 				current_temp = TEMPERATURE_PLASMA
 			fuel_time += 15
+			fuel_update_light()
 			return 1
 	else if(istype(I, /obj/item/stack/sheet/wood))
 		var/obj/item/stack/sheet/wood/W = I
@@ -55,6 +58,7 @@
 			if(current_temp < MELTPOINT_GOLD)
 				current_temp = MELTPOINT_GOLD
 			fuel_time += 10
+			fuel_update_light()
 			return 1
 	else if(istype(I, /obj/item/weapon/grown/log))
 		to_chat(user, "<span class = 'notice'>You toss \the [I] into \the [src].</span>")
@@ -63,14 +67,16 @@
 		if(current_temp < MELTPOINT_STEEL)
 			current_temp = MELTPOINT_STEEL
 		fuel_time += 5
+		fuel_update_light()
 		return 1
 	else if(I.is_hot() && status == FALSE)
 		to_chat(user, "<span class = 'notice'>You attempt to light \the [src] with \the [I].</span>")
-		if(do_after(user, I, 3 SECONDS))
+		if(do_after(user, src, 3 SECONDS))
 			if(!has_fuel())
 				to_chat(user, "<span class = 'warning'>\The [src] does not light.</span>")
 				return 0
-			toggle_lit()
+			if(status == FALSE) //spam clicking the forge is bad
+				toggle_lit()
 			return 1
 	else if(iscrowbar(I))
 		to_chat(user, "<span class = 'notice'>You begin to disassemble \the [src].</span>")
@@ -95,9 +101,24 @@
 		if(FALSE)//turning it on
 			status = TRUE
 			processing_objects.Add(src)
+	fuel_update_light()
 	on_fire = status
 	update_icon()
 	return status
+
+/obj/structure/forge/proc/fuel_update_light()
+	if(!status) //Forge is off
+		set_light(0,0)
+	else //Forge is lit!
+		switch(current_temp)
+			if(MELTPOINT_GOLD)
+				set_light(2,2)
+			if(MELTPOINT_STEEL)
+				set_light(2,3)
+			if(TEMPERATURE_PLASMA to INFINITY)
+				set_light(3,3)
+			else
+				set_light(2,2)
 
 /obj/structure/forge/attack_hand(mob/user)
 	if(heating)

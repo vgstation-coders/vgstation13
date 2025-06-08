@@ -274,11 +274,7 @@
 	user.attack_log += "\[[time_stamp()]\] Gibbed <B>[key_name(src.occupant)]</B>"
 	log_attack("<B>[key_name(user)]</B> gibbed <B>[key_name(src.occupant)]</B>")
 
-	if(!iscarbon(user))
-		src.occupant.LAssailant = null
-	else
-		src.occupant.LAssailant = user
-		occupant.assaulted_by(user)
+	src.occupant.assaulted_by(user)
 
 	spawn(src.gibtime)//finally we throw both the meat and gibs in front of the gibber.
 		playsound(src, 'sound/effects/gib2.ogg', 50, 1)

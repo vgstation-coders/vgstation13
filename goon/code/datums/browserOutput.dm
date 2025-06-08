@@ -239,7 +239,8 @@ For the main html chat area
 	iconCache[iconKey] << icon(icon, dir = SOUTH, frame = 1)
 	var/iconData = iconCache.ExportText(iconKey)
 	var/list/partial = splittext(iconData, "{")
-	return replacetext(copytext(partial[2], 3, -5), "\n", "")
+	var/list/partial2 = splittext(partial[2], "}")
+	return replacetext(copytext(partial2[1], 2, -1), "\n", "")
 
 /proc/bicon(var/obj)
 	if (!obj)
@@ -277,7 +278,7 @@ For the main html chat area
 	if (isicon(obj))
 		return bicon(obj)
 
-	var/icon/I = getFlatIcon(obj)
+	var/icon/I = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(obj)))
 	return bicon(I)
 
 /proc/to_chat(target, message)
@@ -337,27 +338,28 @@ For the main html chat area
 		target << output(url_encode(message), "browseroutput:output")
 
 /proc/get_deadchat_hearers()
-	var/list/hearers = list()
+	. = list()
 	for(var/mob/M in player_list)
 		if(!M.client)
 			continue
 		if(istype(M, /mob/new_player))
 			continue
 
-		else if(M.client.prefs.toggles & CHAT_DEAD)
+		else if(M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD)
 			if(M.client.holder && M.client.holder.rights & R_ADMIN) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
-				hearers += M
-				continue
+				. += M
 			else if(M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute))
-				hearers += M
-				continue
+				. += M
 			else if(istype(M,/mob/living/carbon/brain))
 				var/mob/living/carbon/brain/B = M
 				if(B.brain_dead_chat())
-					hearers += M
-					continue
-	. = hearers
-	return .
+					. += M
+
+/proc/formatFollow(var/mob/target,var/custom_text="(Follow)")
+	return "<a href='?src=\ref[SSmob];follow=\ref[target]'>[custom_text]</a>"
+
+/proc/formatGhostJump(var/mob/target,var/custom_text="Teleport")
+	return "<a href='?src=\ref[SSmob];jump=\ref[target]'>[custom_text]</a>"
 
 /* This proc only handles sending the message to everyone who can hear deadchat. Formatting that message is up to you! Consider using <span class='game deadsay'></span> on your message! */
 /* Kinda useless if your message needs to include an href, though... */
@@ -369,6 +371,6 @@ For the main html chat area
 		to_chat(M, message)
 	log_game("DEADCHAT: [message]")
 	return 1
-		
+
 /datum/log	//exists purely to capture to_chat() output
 	var/log = ""

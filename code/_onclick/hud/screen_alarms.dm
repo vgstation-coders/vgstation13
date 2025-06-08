@@ -103,7 +103,7 @@ var/global/list/screen_alarms_locs = list(
 		var/obj/abstract/screen/alert/alert = mobalerts[mobalerts[i]]
 		if(alert.icon_state == "template")
 			if(!icon_pref)
-				icon_pref = ui_style2icon(mymob.client.prefs.UI_style)
+				icon_pref = ui_style2icon(mymob.client.prefs.get_pref(/datum/preference_setting/string/UI_style))
 			alert.icon = icon_pref
 		alert.screen_loc = screen_alarms_locs[i]
 		mymob.client.screen |= alert

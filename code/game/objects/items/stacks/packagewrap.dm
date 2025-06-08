@@ -5,10 +5,11 @@
 	icon_state = "deliveryPaper"
 	singular_name = "paper sheet"
 	w_class = W_CLASS_SMALL
+	w_type = RECYK_WOOD
 	amount = 24
 	max_amount = 24
 	restock_amount = 2
-	autoignition_temperature = AUTOIGNITION_PAPER
+	flammable = TRUE
 	//If it's null, it can't wrap that type.
 	var/smallpath = /obj/item/delivery //We use this for items
 	var/bigpath = /obj/item/delivery/large //We use this for structures (crates, closets, recharge packs, etc.)
@@ -39,6 +40,8 @@
 		return
 	if(istype(target,/obj/machinery/autoprocessor/wrapping))
 		return
+	if(issilicon(user) && istype(target.loc,/obj/item/weapon/robot_module))
+		return
 	if(!is_type_in_list(target, cannot_wrap))
 		if(istype(target, /obj/item/weapon/storage))
 			to_chat(user, "<span class='notice'>You start wrapping \the [target] with \the [src].</span>")
@@ -56,13 +59,15 @@
 		return
 	if(istype(target,/obj/machinery/autoprocessor/wrapping))
 		return
+	if(issilicon(user) && istype(target.loc,/obj/item/weapon/robot_module))
+		return
 	if(is_type_in_list(target, cannot_wrap))
 		to_chat(user, "<span class='notice'>You can't wrap that.</span>")
 		return
 	if(target.anchored)
 		to_chat(user, "<span class='notice'>You can't get the wrapping around \the [target].</span>")
 		return
-	if(target in user)
+	if( (target in user) && !(target in user.held_items)) // Can wrap things in held items.
 		to_chat(user, "<span class='notice'>That's not gonna work.</span>")
 		return
 	if(!proximity_flag)
@@ -80,13 +85,17 @@
 	if(istype(target, /obj/item) && smallpath)
 		if (amount >= 1)
 			var/obj/item/I = target
-			var/obj/item/P = new smallpath(get_turf(target.loc),target,round(I.w_class))
+			var/gift_in_hands = user.is_holding_item(target)
+			var/obj/item/P = new smallpath(get_turf(target),target,round(I.w_class))
 			if(!istype(target.loc, /turf))
 				if(user.client)
 					user.client.screen -= target
+			user.drop_item(target, force_drop = 1)
 			target.forceMove(P)
 			P.add_fingerprint(user)
 			use(1)
+			if (gift_in_hands)
+				user.put_in_hands(P)
 			to_chat(user, "<span class='notice'>You wrap \the [target] with \the [src].</span>")
 		else
 			to_chat(user, "<span class='warning'>You need more paper!</span>")
@@ -100,7 +109,7 @@
 			if(MC.angry)
 				return
 		if(amount >= 3)
-			var/obj/item/P = new bigpath(get_turf(target.loc),target)
+			var/obj/item/P = new bigpath(get_turf(target), target)
 			target.forceMove(P)
 			P.add_fingerprint(user)
 			use(3)
@@ -126,11 +135,7 @@
 			H.forceMove(present)
 			H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been wrapped with [src.name]  by [user.name] ([user.ckey])</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to wrap [H.name] ([H.ckey])</font>")
-			if(!iscarbon(user))
-				H.LAssailant = null
-			else
-				H.LAssailant = user
-				H.assaulted_by(user)
+			H.assaulted_by(user)
 			log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to wrap [H.name] ([H.ckey])</font>")
 			use(2)
 			return 1

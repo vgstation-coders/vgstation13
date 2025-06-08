@@ -3,7 +3,7 @@
 	desc = "Split your body into two lifeforms."
 	abbreviation = "SP"
 	hud_state = "split"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	cooldown_min = 30 SECONDS
 	still_recharging_msg = "<span class='warning'>We are not ready to do that!</span>"
 	chemcost = 40
@@ -78,7 +78,7 @@
 	newbody.real_name = owner.current.real_name
 	newbody.name = owner.current.name
 	newbody.flavor_text = owner.current.flavor_text
-	newbody.mind.memory = owner.memory
+	newbody.mind.memory = owner.memory.Copy()
 	if(oldspecies != newbody.dna.species)
 		newbody.set_species(newbody.dna.species, 0)
 	newbody.UpdateAppearance()

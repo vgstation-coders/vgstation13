@@ -29,9 +29,9 @@
 	item_state = "box"
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
 	starting_materials = list(MAT_CARDBOARD = 3750)
-	w_type=RECYK_MISC
-	autoignition_temperature = AUTOIGNITION_PAPER
-	autoignition_temperature = AUTOIGNITION_PAPER
+	w_type=RECYK_WOOD
+	flammable = TRUE
+
 	on_armory_manifest = TRUE
 
 /obj/item/weapon/storage/box/large
@@ -45,8 +45,6 @@
 	starting_materials = list(MAT_CARDBOARD = 15000)
 	storage_slots = 21
 	max_combined_w_class = 42 // 21*2
-
-	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/weapon/storage/box/surveillance
 	name = "\improper DromedaryCo packet"
@@ -576,6 +574,12 @@
 	icon_state = "frag_shells"
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/frag = 16)
+
+/obj/item/weapon/storage/box/rocksaltshells
+	name = "12-gauge rocksalt shells"
+	icon_state = "rocksalt_shells"
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/rocksalt = 16)
 
 /obj/item/weapon/storage/box/labels
 	name = "label roll box"
@@ -1258,6 +1262,42 @@
 /obj/item/weapon/storage/box/smartbox/clothing_box/banana_set/New()
 	new /obj/item/clothing/suit/banana_suit(src)
 	new /obj/item/clothing/head/banana_hat(src)
+
+	..()
+/obj/item/weapon/storage/box/smartbox/clothing_box/furtrapper_set
+	name = "Fur trapper's outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/furtrapper_set/New()
+	new /obj/item/clothing/head/coonskin_cap(src)
+	new /obj/item/clothing/suit/storage/wintercoat/fur_trapper(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/trader
+	name = "Standard trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/trader/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader(src) // standard brownsuit and helmet
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/carapace
+	name = "Carapace trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/carapace/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader/carapace(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader/carapace(src) // carapace
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/aqua
+	name = "Aqua trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/aqua/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader/medic(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader/medic(src) // aqua coloured hardsuit
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/stealth
+	name = "Stealth trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/stealth/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src) // black hardsuit. Not capable of any form of stealth systems or shit like that
 	..()
 
 /obj/item/weapon/storage/box/biscuit
@@ -1308,3 +1348,66 @@
 		/obj/item/device/modkit/demolition,
 		/obj/item/ammo_storage/magazine/lawgiver/demolition = 2,
 	)
+
+/obj/item/weapon/storage/box/castlevania
+	name = "modern vampire hunter set box"
+	desc = "Apparel for the cooler vampire hunters."
+	icon_state = "castlevania_box"
+
+/obj/item/weapon/storage/box/castlevania/New()
+	..()
+	new /obj/item/clothing/under/hunter(src)
+	new /obj/item/clothing/suit/hunter(src)
+	new /obj/item/clothing/shoes/hunter(src)
+	new /obj/item/clothing/head/hunter(src)
+	new /obj/item/clothing/gloves/hunter(src)
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/shadowsuit
+	name = "Shadow costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/shadowsuit/New()
+	new /obj/item/clothing/suit/shadowsuit(src)
+	new	/obj/item/clothing/head/shadowhead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicsuit
+	name = "Sonic costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicsuit/New()
+	new /obj/item/clothing/suit/sonicsuit(src)
+	new	/obj/item/clothing/head/sonichead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/tailssuit
+	name = "Tails costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/tailssuit/New()
+	new /obj/item/clothing/suit/tailssuit(src)
+	new	/obj/item/clothing/head/tailshead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/knucklessuit
+	name = "Knuckles costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/knucklessuit/New()
+	new /obj/item/clothing/suit/knucklessuit(src)
+	new	/obj/item/clothing/head/knuckleshead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/amysuit
+	name = "Amy costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/amysuit/New()
+	new /obj/item/clothing/suit/amysuit(src)
+	new	/obj/item/clothing/head/amyhead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicman
+	name = "Sonicman costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicman/New()
+	new /obj/item/clothing/under/sonicman(src)
+	new	/obj/item/clothing/head/helmet/sonicman(src)
+	new	/obj/item/clothing/gloves/sonicman(src)
+	new	/obj/item/clothing/shoes/sonicman(src)
+	..()

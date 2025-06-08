@@ -241,7 +241,7 @@
 		else
 			visible_message("[user] places \the [L] into \the [src].")
 	else
-		visible_message("\the [L] is placed into \the [src].")
+		visible_message("\The [L] is placed into \the [src].")
 
 	sedativeblock = TRUE
 	sleep(drag_delay)
@@ -641,7 +641,7 @@
 	dat += "[(emagged) ? "<A href='?src=\ref[src];security=1'>Re-enable Security Features.</A><BR>" : ""]"
 	dat += "[(on) ? "<A href='?src=\ref[src];turnoff=1'>\[EMERGENCY STOP\]</A> <i>: cancels the current job.</i><BR>" : ""]"
 	dat += text("<BR><BR><A href='?src=\ref[];mach_close=\ref[src]'>Close</A>", user)
-	user << browse(dat, "window=\ref[src];size=400x500")
+	user << browse(HTML_SKELETON(dat), "window=\ref[src];size=400x500")
 	onclose(user, "\ref[src]")
 
 

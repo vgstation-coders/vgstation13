@@ -50,6 +50,7 @@
 	throwforce = 15.0
 	icon_state = "plasmalarge"
 	item_state = "shard-plasglass"
+	starting_materials = list(MAT_PLASMA = CC_PER_SHEET_MISC, MAT_GLASS = CC_PER_SHEET_GLASS)
 	glass = /obj/item/stack/sheet/glass/plasmaglass
 	shrapnel_type = /obj/item/projectile/bullet/shrapnel/small/plasma
 

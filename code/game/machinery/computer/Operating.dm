@@ -77,7 +77,7 @@
 <B>No Patient Detected</B><BR>
 <BR>
 <A HREF='?src=\ref[user];mach_close=op'>Close</A>"}
-	user << browse(dat, "window=op")
+	user << browse(HTML_SKELETON(dat), "window=op")
 	user.set_machine(src)
 	onclose(user, "op")
 

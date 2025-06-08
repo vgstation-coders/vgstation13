@@ -753,35 +753,20 @@
 	if (mob.reagents.get_reagent_amount(ANTI_TOXIN) < 1)
 		mob.reagents.add_reagent(ANTI_TOXIN, 1)
 
-/datum/disease2/effect/cult_vomit
+/datum/disease2/effect/cult_confusion
 	name = "Hemoptysis"
 	desc = "Causes the infected to cough up blood."
 	stage = 2
 	restricted = 2
 	badness = EFFECT_DANGER_HINDRANCE
-	var/active = 0
 
-/datum/disease2/effect/cult_vomit/activate(mob/living/carbon/M)
-	if(!ishuman(M) || active)
-		return
+/datum/disease2/effect/cult_confusion/activate(mob/living/carbon/M)
 	if(istype(get_area(M), /area/chapel))
 		return
 	if(iscultist(M))
 		return
 
-	var/mob/living/carbon/human/mob = M
-	active = 1
-	to_chat(mob, "<span class='warning'>You feel a burning sensation in your throat.</span>")
-	sleep(10 SECONDS)
-	to_chat(mob, "<span class='danger'>You feel an agonizing pain in your throat!</span>")
-	sleep(10 SECONDS)
-	mob.visible_message("<span class='danger'>[mob] vomits up blood!</span>", "<span class='danger'>You vomit up blood!</span>")
-	var/obj/effect/decal/cleanable/blood/splatter/S = new(loc = get_turf(mob), color = mob.species.blood_color)
-	S.amount = 1
-	playsound(mob, 'sound/effects/splat.ogg', 50, 1)
-	mob.Stun(5)
-	mob.vessel.remove_reagent(BLOOD,8)
-	active = 0
+	new /obj/effect/cult_ritual/confusion(M,100,25,M)
 
 /datum/disease2/effect/limedisease
 	name = "Chronic Lime Disease"

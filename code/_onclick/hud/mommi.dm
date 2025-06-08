@@ -17,6 +17,8 @@
 	using.screen_loc = ui_movi	// Set the location
 	src.adding += using			// Place using in our adding list
 
+	using.pointer_to_list = &adding
+
 	// Module select
 	using = new /obj/abstract/screen
 	using.name = INV_SLOT_TOOL
@@ -26,6 +28,9 @@
 	using.screen_loc = ui_inv2
 	src.adding += using			// Place using in our adding list
 	M.inv_tool = using			// Save this using as our MoMMI's inv_sight
+
+	using.pointer_to_list = &adding
+	using.pointer_to_var = &M.inv_tool
 
 	using = new /obj/abstract/screen
 	using.name = INV_SLOT_SIGHT
@@ -37,6 +42,9 @@
 	M.sensor = using
 	// End of module select
 
+	using.pointer_to_list = &adding
+	using.pointer_to_var = &M.sensor
+
 	// Head
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "head"
@@ -46,6 +54,8 @@
 	inv_box.slot_id = slot_head
 	inv_box.layer = HUD_BASE_LAYER
 	src.adding += inv_box
+
+	inv_box.pointer_to_list = &adding
 
 	// Intent
 	using = new /obj/abstract/screen
@@ -57,6 +67,9 @@
 	src.adding += using
 	action_intent = using
 
+	using.pointer_to_list = &adding
+	using.pointer_to_var = &action_intent
+
 	// Health
 	mymob.healths = new /obj/abstract/screen
 	mymob.healths.icon = 'icons/mob/screen1_robot.dmi'
@@ -64,12 +77,16 @@
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_borg_health
 
+	mymob.healths.pointer_to_var = &mymob.healths
+
 	// Installed Module
 	mymob.hands = new /obj/abstract/screen
 	mymob.hands.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.hands.icon_state = "nomod"
 	mymob.hands.name = "module"
 	mymob.hands.screen_loc = ui_mommi_module
+
+	mymob.hands.pointer_to_var = &mymob.healths
 
 	// Module Panel
 	using = new /obj/abstract/screen
@@ -80,6 +97,8 @@
 	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
+	using.pointer_to_list = &adding
+
 	//Robot Module Hud
 	using = new /obj/abstract/screen
 	using.dir = SOUTHWEST
@@ -89,12 +108,17 @@
 	src.adding += using
 	M.robot_modules_background = using
 
+	using.pointer_to_list = &adding
+	using.pointer_to_var = &M.robot_modules_background
+
 	// Store
 	mymob.throw_icon = new /obj/abstract/screen
 	mymob.throw_icon.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.throw_icon.icon_state = "store"
 	mymob.throw_icon.name = "store"
 	mymob.throw_icon.screen_loc = ui_mommi_store
+
+	mymob.throw_icon.pointer_to_var = &mymob.throw_icon
 
 	// Pulling
 	mymob.pullin = new /obj/abstract/screen
@@ -103,11 +127,15 @@
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_borg_pull
 
+	mymob.pullin.pointer_to_var = &mymob.pullin
+
 	// Zone
 	mymob.zone_sel = new /obj/abstract/screen/zone_sel
 	mymob.zone_sel.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
+
+	mymob.zone_sel.pointer_to_var = &mymob.zone_sel
 
 	// Reset the client's screen
 	mymob.client.reset_screen()

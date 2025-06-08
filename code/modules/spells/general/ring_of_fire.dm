@@ -4,21 +4,21 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
 	school = "conjuration"
-	charge_max = 300
-	cooldown_min = 100
+	charge_cooldown_max = 30 SECONDS
+	cooldown_min = 10 SECONDS
 
-	spell_levels = list(Sp_SPEED = 0, Sp_MOVE = 0, Sp_POWER = 0)
-	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 3, Sp_MOVE = 1, Sp_POWER = 1)
+	spell_levels = list(SP_SPEED = 0, SP_MOVE = 0, SP_POWER = 0)
+	level_max = list(SP_TOTAL = 5, SP_SPEED = 3, SP_MOVE = 1, SP_POWER = 1)
 
 	spell_flags = NEEDSCLOTHES | IS_HARMFUL
 	spell_aspect_flags = SPELL_FIRE
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	invocation = "E ROHA"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	hud_state = "wiz_firering"
-	price = Sp_BASE_PRICE / 2
+	price = SP_BASE_PRICE / 2
 
-	duration = 100
+	duration = 10 SECONDS
 	range = 3
 	selection_type = "range"
 	var/move_with_user = 0
@@ -60,13 +60,13 @@
 
 /spell/aoe_turf/ring_of_fire/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_MOVE)
-			spell_levels[Sp_MOVE]++
+		if(SP_MOVE)
+			spell_levels[SP_MOVE]++
 			move_with_user = 1
 			desc += " The ring moves together with you."
 			return "The ring will now move together with you."
-		if(Sp_POWER)
-			spell_levels[Sp_POWER]++
+		if(SP_POWER)
+			spell_levels[SP_POWER]++
 			living_fire = 1
 			desc += " Once the spell is finished, the flames will look for nearby targets and lock on them. Scary!"
 			return "The ring will now cast living flames after it's done burning."
@@ -75,12 +75,12 @@
 
 /spell/aoe_turf/ring_of_fire/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_MOVE)
-			if(spell_levels[Sp_MOVE] >= level_max[Sp_MOVE])
+		if(SP_MOVE)
+			if(spell_levels[SP_MOVE] >= level_max[SP_MOVE])
 				return "The ring already moves together with you!"
 			return "Make the ring move together with you."
-		if(Sp_POWER)
-			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+		if(SP_POWER)
+			if(spell_levels[SP_POWER] >= level_max[SP_POWER])
 				return "The ring already casts living flames when it is over!"
 			return "Make the ring cast living flames when it is over."
 

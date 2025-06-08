@@ -4760,7 +4760,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
 "Qc" = (
-/obj/item/trash/zamitos_sj,
+/obj/item/trash/chips/zamitos_sj,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
 "Ql" = (
@@ -5068,7 +5068,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/administration)
 "SF" = (
-/obj/item/trash/zamitos_bg,
+/obj/item/trash/chips/zamitos_bg,
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic{
 	dir = 4
 	},

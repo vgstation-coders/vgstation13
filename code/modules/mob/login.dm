@@ -15,7 +15,7 @@
 	//Multikey checks and logging
 	lastKnownIP	= client.address
 	computer_id	= client.computer_id
-	log_access("Login: [key_name(src)] from [lastKnownIP ? lastKnownIP : "localhost"]-[computer_id] || BYOND v[client.byond_version]")
+	log_access("Login: [key_name(src)] from [lastKnownIP ? lastKnownIP : "localhost"]-[computer_id] || BYOND v[client.byond_version].[client.byond_build]")
 	if(config.log_access)
 		if(lastKnownIP == "127.0.0.1") //localhost
 			return
@@ -131,6 +131,8 @@
 		client.haszoomed = 0
 
 	update_colour()
+	if (client.byond_version >= 516)
+		winset(client, null, list("browser-options"="find,refresh,byondstorage"))
 
 	if(client)
 		client.CAN_MOVE_DIAGONALLY = 0

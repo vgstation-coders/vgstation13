@@ -21,7 +21,7 @@
 	emote_hear = list("squeeks","squeaks","squiks")
 	emote_see = list("runs in a circle", "shakes", "scritches at something")
 	emote_sound = list('sound/effects/mousesqueek.ogg')
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	flags = HEAR_ALWAYS | PROXMOVE
 	speak_chance = 1
 	turns_per_move = 5
@@ -540,6 +540,7 @@
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm   = "tenderizes"
+	is_pet=TRUE
 
 /mob/living/simple_animal/mouse/mouse_op
 	name = "mouse operative"

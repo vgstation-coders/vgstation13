@@ -112,3 +112,13 @@
 	materials = list(MAT_IRON = 100, MAT_GLASS = 100)
 	category = "Misc"
 	build_path = /obj/item/device/mech_painter
+
+/datum/design/killdozer_modkit
+	name = "Ripley Killdozer kit"
+	desc = "this never even shows up ingame???"
+	id = "killdozer_modkit"
+	req_tech = list(Tc_MATERIALS = 3, Tc_MAGNETS = 3, Tc_SYNDICATE = 2)
+	build_type = PROTOLATHE | MECHFAB
+	materials = list(MAT_IRON = 275000, MAT_GLASS = 1000) //LODSOFMETAL
+	category = "Robotics"
+	build_path = /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit

@@ -137,7 +137,7 @@
 
 	//play the receiving admin the adminhelp sound (if they have them enabled)
 	//non-admins shouldn't be able to disable this
-	if(C.prefs.toggles & SOUND_ADMINHELP)
+	if(C.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_ADMINHELP)
 		C << 'sound/effects/adminhelp.ogg'
 
 	/*

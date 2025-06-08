@@ -357,7 +357,7 @@
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/regular/Life()
 	..()
 	if(scramble == 0)
-		projectiletype = /obj/item/projectile/beam/immolationray
+		projectiletype = /obj/item/projectile/beam/scorchray/immolationray
 		projectilesound = 'sound/weapons/ray1.ogg'
 		icon_state = "greysoldier"
 		icon_living = "greysoldier"
@@ -543,7 +543,7 @@
 	waterproof = 1
 	var/shield_up = 0
 
-	projectiletype = /obj/item/projectile/beam/immolationray
+	projectiletype = /obj/item/projectile/beam/scorchray/immolationray
 	projectilesound = 'sound/weapons/ray1.ogg'
 	retreat_distance = 3
 	minimum_distance = 3
@@ -707,7 +707,7 @@
 	speak = list("Sweeping sector, prepared for EVA maneuvers.","Praise the mothership, and all hail the Chairman.","Air supply capacity check is green.","Terminate all unauthorized personnel and unidentified xenofauna.")
 	speak_chance = 1
 
-	projectiletype = /obj/item/projectile/beam/immolationray
+	projectiletype = /obj/item/projectile/beam/scorchray/immolationray
 	projectilesound = 'sound/weapons/ray1.ogg'
 	retreat_distance = 5
 	minimum_distance = 5
@@ -1041,7 +1041,7 @@
 
 	faction = "mothership"
 
-	projectiletype = /obj/item/projectile/beam/atomizationray
+	projectiletype = /obj/item/projectile/beam/scorchray/atomizationray
 	projectilesound = 'sound/weapons/ray1.ogg'
 	retreat_distance = 8
 	minimum_distance = 8

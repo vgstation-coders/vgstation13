@@ -93,7 +93,7 @@
 	..()
 	overlays.len = 0
 	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
+	set_blood_overlay()//re-applying blood stains
 
 //OOP, HO!
 /obj/item/weapon/reagent_containers/pill/proc/ingest(mob/M as mob)
@@ -357,7 +357,7 @@
 		return
 	var/timer = round(reagents.get_reagent_amount(SUGAR),1)
 	forceMove(M)
-	spawn(timer*30)
+	spawn(timer*10 SECONDS) //10 seconds per unit of sugar
 		reagents.del_reagent(SUGAR)
 		reagents.reaction(M, INGEST)
 		reagents.trans_to(M, reagents.total_volume)

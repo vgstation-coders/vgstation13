@@ -416,8 +416,12 @@
 
 /obj/item/weapon/melee/energy/hfmachete/proc/mob_moved(atom/movable/mover)
 	if(iscarbon(mover) && active)
-		for(var/obj/effect/plantsegment/P in range(mover,0))
-			qdel(P)
+		for(var/obj/P in range(mover,0))
+			if(istype(P, /obj/structure/cable/powercreeper))
+				var/obj/structure/cable/powercreeper/C = P
+				C.die()
+			else if(istype(P, /obj/effect/plantsegment))
+				qdel(P)
 
 /obj/item/weapon/melee/energy/hfmachete/attackby(obj/item/weapon/W, mob/living/user)
 	..()

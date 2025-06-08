@@ -10,6 +10,12 @@
 /datum/malfhack_ability/New(var/obj/machinery/M)
 	machine = M
 
+/datum/malfhack_ability/Destroy()
+	if (machine) // In case we got destroyed but the machine wasn't, this can happen in edge cases.
+		machine.hack_abilities -= src
+		machine = null
+	. = ..()
+
 /datum/malfhack_ability/proc/activate(var/mob/living/silicon/A)
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(A) || !istype(M))
@@ -241,7 +247,7 @@
 			T.cover.shake_animation(4, 4, 0.2 SECONDS, 20)
 	else
 		machine.shake_animation(4, 4, 0.2 SECONDS, 20)
-	spark(machine)
+	spark(machine, surfaceburn = TRUE)
 	spawn(4 SECONDS)
 		if(machine)
 			explosion(get_turf(machine), -1, 2, 3, 4) // Welding tank sized explosion

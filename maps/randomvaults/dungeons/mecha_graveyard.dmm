@@ -42,7 +42,7 @@
 /turf/unsimulated/floor/asteroid,
 /area/vault/mecha_graveyard)
 "aj" = (
-/turf/unsimulated/mineral/random,
+/turf/unsimulated/mineral/random/high_chance/mecha,
 /area/vault/mecha_graveyard)
 "ak" = (
 /turf/unsimulated/floor/airless{
@@ -76,6 +76,7 @@
 /area/vault/mecha_graveyard)
 "aq" = (
 /obj/effect/decal/cleanable/blood/gibs/robot/limb,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_equip,
 /turf/unsimulated/floor/asteroid,
 /area/vault/mecha_graveyard)
 "ar" = (
@@ -85,13 +86,14 @@
 	},
 /area/vault/mecha_graveyard)
 "as" = (
-/obj/effect/decal/mecha_wreckage/graveyard_ripley,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage,
 /turf/unsimulated/floor/asteroid{
 	icon_state = "asteroid_dug"
 	},
 /area/vault/mecha_graveyard)
 "at" = (
 /obj/effect/decal/cleanable/soot,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage,
 /turf/unsimulated/floor/asteroid{
 	icon_state = "asteroid_dug"
 	},
@@ -104,13 +106,16 @@
 /area/vault/mecha_graveyard)
 "av" = (
 /obj/structure/hanging_lantern,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
 /area/vault/mecha_graveyard)
 "aw" = (
-/obj/effect/decal/mecha_wreckage/graveyard_ripley,
-/turf/unsimulated/floor/asteroid,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
 /area/vault/mecha_graveyard)
 "ax" = (
 /obj/structure/girder,
@@ -145,6 +150,7 @@
 /area/vault/mecha_graveyard)
 "aD" = (
 /obj/effect/decal/cleanable/blood/gibs/robot,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_good,
 /turf/unsimulated/floor/asteroid{
 	icon_state = "asteroid_dug"
 	},
@@ -153,8 +159,7 @@
 /obj/machinery/status_display{
 	pixel_y = 32
 	},
-/obj/effect/decal/mecha_wreckage/durand,
-/obj/effect/decal/cleanable/soot,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_good,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
@@ -167,17 +172,16 @@
 /area/vault/mecha_graveyard)
 "aG" = (
 /obj/item/stack/sheet/plasteel,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage,
 /turf/unsimulated/floor/asteroid,
 /area/vault/mecha_graveyard)
 "aH" = (
-/obj/effect/decal/mecha_wreckage/marauder,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage,
 /turf/unsimulated/floor/asteroid,
 /area/vault/mecha_graveyard)
 "aI" = (
-/obj/item/mecha_parts/mecha_equipment/repair_droid,
-/turf/unsimulated/floor/airless{
-	icon_state = "asteroidfloor"
-	},
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_good,
+/turf/unsimulated/floor/asteroid,
 /area/vault/mecha_graveyard)
 "aJ" = (
 /obj/effect/decal/cleanable/blood/gibs/robot,
@@ -187,15 +191,20 @@
 /area/vault/mecha_graveyard)
 "aK" = (
 /obj/item/stack/ore/slag,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage,
 /turf/unsimulated/floor/asteroid,
 /area/vault/mecha_graveyard)
 "aL" = (
 /obj/effect/decal/cleanable/soot,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_good,
 /turf/unsimulated/floor/asteroid,
 /area/vault/mecha_graveyard)
 "aM" = (
-/obj/effect/decal/mecha_wreckage/durand,
-/turf/unsimulated/floor/asteroid,
+/obj/effect/decal/cleanable/dirt,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_equip,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
 /area/vault/mecha_graveyard)
 "aN" = (
 /turf/unsimulated/floor/airless{
@@ -210,8 +219,8 @@
 	},
 /area/vault/mecha_graveyard)
 "aP" = (
-/obj/effect/decal/mecha_wreckage/gygax,
 /obj/effect/decal/cleanable/soot,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
@@ -299,12 +308,13 @@
 /area/vault/mecha_graveyard)
 "bc" = (
 /obj/effect/decal/remains/human,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage,
 /turf/simulated/floor/airless{
 	icon_state = "damaged5"
 	},
 /area/vault/mecha_graveyard)
 "bd" = (
-/obj/effect/decal/mecha_wreckage/graveyard_clarke,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_equip,
 /turf/unsimulated/floor/asteroid,
 /area/vault/mecha_graveyard)
 "be" = (
@@ -392,6 +402,7 @@
 	dir = 4;
 	id_tag = "mining_west"
 	},
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_equip,
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
@@ -451,6 +462,79 @@
 "bA" = (
 /turf/space/transit/south,
 /area)
+"bV" = (
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_equip,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidplating"
+	},
+/area/vault/mecha_graveyard)
+"hN" = (
+/obj/item/stack/rods,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_good,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"ll" = (
+/obj/item/stack/rods,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"ok" = (
+/obj/item/stack/ore/iron,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage,
+/turf/unsimulated/floor/asteroid{
+	icon_state = "asteroid_dug"
+	},
+/area/vault/mecha_graveyard)
+"pd" = (
+/obj/item/stack/ore/iron,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_equip,
+/turf/unsimulated/floor/asteroid{
+	icon_state = "asteroid_dug"
+	},
+/area/vault/mecha_graveyard)
+"rc" = (
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidplating"
+	},
+/area/vault/mecha_graveyard)
+"LN" = (
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_equip,
+/turf/unsimulated/floor/asteroid{
+	icon_state = "asteroid_dug"
+	},
+/area/vault/mecha_graveyard)
+"OU" = (
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_good,
+/turf/unsimulated/floor/asteroid{
+	icon_state = "asteroid_dug"
+	},
+/area/vault/mecha_graveyard)
+"Tw" = (
+/mob/living/simple_animal/hostile/asteroid/basilisk/skullbot,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"Uj" = (
+/obj/item/stack/ore/glass,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_good,
+/turf/unsimulated/floor/asteroid{
+	icon_state = "asteroid_dug"
+	},
+/area/vault/mecha_graveyard)
+"Vg" = (
+/obj/item/stack/ore/glass,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage_equip,
+/turf/unsimulated/floor/asteroid{
+	icon_state = "asteroid_dug"
+	},
+/area/vault/mecha_graveyard)
+"ZZ" = (
+/obj/item/stack/ore/glass,
+/obj/abstract/map/spawner/pick_spawner/mecha_wreckage,
+/turf/unsimulated/floor/asteroid{
+	icon_state = "asteroid_dug"
+	},
+/area/vault/mecha_graveyard)
 
 (1,1,1) = {"
 aa
@@ -990,7 +1074,7 @@ ai
 ax
 ai
 ai
-aM
+ai
 ai
 ae
 ae
@@ -1032,11 +1116,11 @@ ae
 ae
 ae
 ai
-ai
+aH
 ai
 ai
 az
-am
+aM
 aN
 ai
 ax
@@ -1083,7 +1167,7 @@ ai
 ai
 ay
 ai
-aI
+ak
 aO
 aR
 ai
@@ -1124,16 +1208,16 @@ ae
 ae
 ae
 ae
-ai
+aH
 ai
 ak
-ak
+aw
 ah
 aE
 ak
-ak
+aw
 ah
-al
+ll
 ai
 ae
 ae
@@ -1176,12 +1260,12 @@ ai
 ai
 av
 ah
+aw
 ak
-ak
-ak
+aw
 ah
 aG
-ai
+bd
 ae
 ae
 ae
@@ -1221,9 +1305,9 @@ ai
 aq
 ai
 ai
-ai
+aH
 ah
-ak
+aw
 aJ
 aP
 aS
@@ -1262,7 +1346,7 @@ ad
 ae
 ae
 ah
-ak
+aw
 ai
 ai
 ai
@@ -1275,7 +1359,7 @@ am
 ak
 aT
 aZ
-be
+rc
 be
 be
 ae
@@ -1309,8 +1393,8 @@ ad
 ae
 ae
 ah
-ak
-am
+aw
+aM
 ao
 ai
 ai
@@ -1402,15 +1486,15 @@ aa
 ad
 ae
 ae
+aH
+aI
+aH
 ai
 ai
 ai
-ai
-ai
-ai
-ai
+bd
 aj
-ai
+aH
 ai
 ai
 ai
@@ -1418,7 +1502,7 @@ ai
 al
 be
 bl
-be
+bV
 ai
 ah
 ae
@@ -1454,12 +1538,12 @@ ai
 ai
 ai
 ai
-ai
+Tw
 aj
 aj
 aj
 aG
-ak
+aw
 ai
 aW
 ai
@@ -1500,9 +1584,9 @@ ai
 ai
 ai
 an
-ar
+ZZ
 an
-an
+as
 aj
 aj
 aj
@@ -1543,13 +1627,13 @@ aa
 ad
 ae
 ae
-ai
-ai
+aH
+aH
+as
 an
-an
-ar
-ar
-au
+Vg
+Uj
+ok
 aj
 aj
 aj
@@ -1593,11 +1677,11 @@ ae
 aj
 aj
 aj
+as
 an
 an
-an
-au
-aw
+pd
+ai
 aj
 aj
 aK
@@ -1640,13 +1724,13 @@ ae
 aj
 aj
 aj
-an
+as
 an
 at
 an
 au
-au
-an
+ok
+as
 ai
 ai
 aY
@@ -1688,14 +1772,14 @@ aj
 aj
 aj
 aj
-an
+OU
 an
 ar
 ar
 an
 ai
 ai
-ai
+aH
 ah
 bb
 bh
@@ -1737,16 +1821,16 @@ aj
 aj
 as
 au
-ar
+Vg
 ar
 aC
 an
 ai
-ai
+aH
 ah
 bc
 aT
-al
+hN
 bn
 ae
 bw
@@ -1783,13 +1867,13 @@ ae
 aj
 aj
 aj
+as
 an
-an
-an
+as
 an
 ar
 aL
-ai
+aH
 ah
 bd
 bi
@@ -1830,7 +1914,7 @@ ae
 aj
 aj
 aj
-an
+as
 an
 au
 aD
@@ -1877,10 +1961,10 @@ ae
 aj
 aj
 aj
+as
+LN
 an
-an
-an
-an
+as
 an
 ai
 ai
@@ -1924,13 +2008,13 @@ ae
 aj
 aj
 aj
-an
+as
 au
 ar
 an
-an
+LN
 ai
-ai
+aH
 ai
 ae
 ae
@@ -1971,12 +2055,12 @@ ae
 ae
 ae
 aj
-an
+OU
 an
 ao
+as
 an
-an
-an
+as
 aj
 ae
 ae
@@ -2018,7 +2102,7 @@ ae
 ae
 ae
 aj
-ai
+aH
 ai
 ai
 an
@@ -2065,11 +2149,11 @@ ae
 ae
 ae
 aj
+aH
+bd
 ai
-ai
-ai
-an
-an
+as
+LN
 ae
 ae
 ae

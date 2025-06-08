@@ -50,3 +50,4 @@
 
 	desc = "This penguin knows how to party."
 	icon_state = "penguin_sombrero"
+	is_pet=TRUE

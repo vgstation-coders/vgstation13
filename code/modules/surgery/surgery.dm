@@ -10,7 +10,6 @@
 	var/list/disallowed_species = null
 
 	var/duration = 0
-
 	var/list/mob/doing_surgery = list() //who's doing this RIGHT NOW
 
 	// evil infection stuff that will make everyone hate me
@@ -21,9 +20,17 @@
 	var/digging = FALSE
 
 	//returns how well tool is suited for this step
-/datum/surgery_step/proc/tool_quality(obj/item/tool)
+/datum/surgery_step/proc/tool_quality(obj/item/tool, mob/living/user)
 	for (var/T in allowed_tools)
-		if (istype(tool,T))
+		if (!istext(T) && istype(tool,T))
+			return allowed_tools[T]
+		if (!istype(tool,/obj/item))
+			continue
+		if (T == "screwdriver" && tool.is_screwdriver(user))
+			return allowed_tools[T]
+		if (T == "wrench" && tool.is_wrench(user))
+			return allowed_tools[T]
+		if (T == "wirecutter" && tool.is_wirecutter(user))
 			return allowed_tools[T]
 	return 0
 
@@ -65,7 +72,7 @@
 	if (can_infect && affected)
 		spread_germs_to_organ(affected, user)
 
-	if(!(affected.status & (ORGAN_ROBOT|ORGAN_PEG)))//robot organs and pegs can't spread diseases or splatter blood
+	if((!(affected.status & (ORGAN_ROBOT|ORGAN_PEG))) && !affected.cosmetic_only)//robot organs and pegs can't spread diseases or splatter blood
 		var/block = user.check_contact_sterility(HANDS)
 		var/bleeding = user.check_bodypart_bleeding(HANDS)
 		target.oneway_contact_diseases(user,block,bleeding)//potentially spreads diseases from us to them, wear latex gloves!
@@ -108,7 +115,7 @@
 	return null
 
 /proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
-	if(!istype(user) || !istype(E))
+	if(!istype(user) || !istype(E) || E.cosmetic_only)
 		return
 
 	var/germ_level = user.germ_level
@@ -131,11 +138,10 @@
 		clumsy = 1
 
 	var/target_area = user.zone_sel ? user.zone_sel.selecting : get_random_zone_sel()
-
 	for(var/datum/surgery_step/S in surgery_steps)
 		//check if tool is right or close enough and if this step is possible
 		sleep_fail = 0
-		if(S.tool_quality(tool))
+		if(S.tool_quality(tool, user))
 			var/canuse = S.can_use(user, M, target_area, tool)
 			if(canuse == -1)
 				sleep_fail = 1
@@ -150,7 +156,7 @@
 
 				var/selection = user.zone_sel ? user.zone_sel.selecting : null //Check if the zone selection hasn't changed
 				//We had proper tools! (or RNG smiled.) and user did not move or change hands.
-				if(do_mob(user, M, S.duration * tool.toolspeed) && (success_override == SURGERY_SUCCESS_ALWAYS || (success_override == SURGERY_SUCCESS_NORMAL && (prob(S.tool_quality(tool) / (sleep_fail + clumsy + 1))))) && (!user.zone_sel || selection == user.zone_sel.selecting)) //Last part checks whether the zone selection hasn't changed
+				if(do_mob(user, M, S.duration * tool.toolspeed) && (success_override == SURGERY_SUCCESS_ALWAYS || (success_override == SURGERY_SUCCESS_NORMAL && (prob(S.tool_quality(tool, user) / (sleep_fail + clumsy + 1))))) && (!user.zone_sel || selection == user.zone_sel.selecting)) //Last part checks whether the zone selection hasn't changed
 					M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] successfully completed by [user.name] ([user.ckey])</font>")
 					user.attack_log += text("\[[time_stamp()]\] <font color='red'>Successfully completed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
 					log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to successfully complete surgery type [S.type] on [M.name] ([M.ckey])</font>")

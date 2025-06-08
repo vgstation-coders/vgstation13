@@ -67,8 +67,10 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 /turf/simulated/open/proc/update()
 	plane = OPENSPACE_PLANE + src.z
 	below = GetBelow(src)
-	//turf_changed_event.register(below, src, /turf/simulated/open/update_icon)
-	universe.OnTurfChange(below) //I think this is equivalent??
+	if(below)
+		//turf_changed_event.register(below, src, /turf/simulated/open/update_icon)
+		universe.OnTurfChange(below) //I think this is equivalent??
+		below.openspace_update(src)
 	levelupdate()
 	for(var/atom/movable/A in src)
 		A.fall()
@@ -98,29 +100,35 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 	layer = ABOVE_LIGHTING_LAYER
 	plane = OPEN_OVERLAY_PLANE
 
+var/list/open_overlay_depths
+
 /turf/simulated/open/update_icon()
 	make_openspace_view()
 
 /turf/simulated/proc/make_openspace_view()
-	var/alpha_to_subtract = 127
+	var/alpha_to_use = 127
 	overlays.Cut()
 	vis_contents.Cut()
 	var/turf/bottom
 	var/list/checked_belows = list()
 	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
-		alpha_to_subtract /= 2
+		alpha_to_use /= 2
 		if(bottom.z in checked_belows) // To stop getting caught on this in infinite loops
 			return // Don't even render anything
 		checked_belows.Add(bottom.z)
-
 	if(!bottom || bottom == src)
 		return
-	var/obj/effect/open_overlay/overimage = new /obj/effect/open_overlay
-	overimage.alpha = 255 - alpha_to_subtract
-	overimage.color = rgb(0,0,0,overimage.alpha)
+	alpha_to_use = 255 - alpha_to_use
+	if(!open_overlay_depths)
+		open_overlay_depths = list()
+	if(!("[alpha_to_use]" in open_overlay_depths))
+		var/obj/effect/open_overlay/overimage = new /obj/effect/open_overlay
+		overimage.alpha = alpha_to_use
+		overimage.color = rgb(0,0,0,overimage.alpha)
+		open_overlay_depths["[alpha_to_use]"] = overimage
 	vis_contents += bottom
 	if(!istype(bottom,/turf/space)) // Space below us
-		vis_contents.Add(overimage)
+		vis_contents.Add(open_overlay_depths["[alpha_to_use]"])
 		return 1
 	return 0
 
@@ -128,6 +136,29 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 	overlays.Cut()
 	vis_contents.Cut()
 	..()
+
+/turf/proc/openspace_update(var/turf/above) // function for changes in stuff if above is no longer open
+	return
+
+/turf/initialize()
+	. = ..()
+	if(HasBelow(src.z))
+		var/turf/below = GetBelow(src)
+		if(below)
+			below.openspace_update(src)
+
+/turf/unsimulated/floor/snow/openspace_update(var/turf/above)
+	if(above && !isopenspace(above))
+		snow_intensity_override = SNOW_CALM // should be at least a bit chilly
+		ignore_blizzard_updates = TRUE
+		vis_contents.Cut()
+	else
+		snow_intensity_override = 0
+		ignore_blizzard_updates = FALSE
+		if(!blizzard_image)
+			blizzard_image = new
+		if(!(blizzard_image in vis_contents))
+			vis_contents += blizzard_image
 
 /turf/simulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	var/turf/simulated/open/BS = GetBelow(src)
@@ -202,6 +233,10 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 			user.emote("flip")
 		return SUICIDE_ACT_CUSTOM
 
+/turf/simulated/floor/glass
+	var/obj/effect/glass_open_overlay/damage/overdamage
+	var/list/obj/effect/glass_open_overlay/decal/overdecals
+
 /turf/simulated/floor/glass/New(loc)
 	..(loc)
 	if(get_base_turf(src.z) == /turf/simulated/open)
@@ -210,33 +245,76 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 		layer = 0
 		update_icon()
 
-/obj/effect/open_overlay/glass
+/turf/simulated/floor/glass/Destroy()
+	if(overdamage)
+		QDEL_NULL(overdamage)
+	if(overdecals)
+		QDEL_LIST(overdecals)
+	. = ..()
+
+/obj/effect/glass_open_overlay
 	name = "glass open overlay"
 	desc = "The window over the darkness of the abyss below"
 	icon = 'icons/turf/overlays.dmi'
-	icon_state = ""
+	icon_state = "glass_floor"
 	layer = 0
 	plane = GLASSTILE_PLANE
 
-/obj/effect/open_overlay/glass/damage
+/obj/effect/glass_open_overlay/plasma
+	icon_state = "plasma_glass_floor"
+
+var/obj/effect/glass_open_overlay/opengfloor
+var/obj/effect/glass_open_overlay/plasma/openpgfloor
+
+/obj/effect/glass_open_overlay/damage
 	name = "glass open overlay cracks"
 	desc = "The dent in the window over the darkness of the abyss below"
 	icon = 'icons/obj/structures.dmi'
 
+/obj/effect/glass_open_overlay/decal
+	name = "glass open overlay decal"
+	desc = "The decoration on the window over the darkness of the abyss below"
+	icon = 'icons/effects/floor_decals.dmi'
+
 /turf/simulated/floor/glass/update_icon()
-	..()
 	if(get_base_turf(src.z) == /turf/simulated/open)
+		vis_contents.Cut()
+		overlays.Cut()
 		if(make_openspace_view()) // Space below us
 			icon_state = "" // Remove any previous space stuff, if any
 		else
 			// We space background now, forget the vis contentsing of it
 			icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
-		var/obj/effect/open_overlay/glass/overglass = new /obj/effect/open_overlay/glass
-		overglass.icon_state = glass_state
-		vis_contents.Add(overglass)
-		var/obj/effect/open_overlay/glass/damage/overdamage = new /obj/effect/open_overlay/glass/damage
-		overdamage.icon_state = icon_state
-		vis_contents.Add(overdamage)
+			return ..()
+		switch(glass_state)
+			if("glass_floor")
+				if(!opengfloor)
+					opengfloor = new
+				vis_contents.Add(opengfloor)
+			if("plasma_glass_floor")
+				if(!openpgfloor)
+					openpgfloor = new
+				vis_contents.Add(openpgfloor)
+		if(health < initial(health))
+			if(!overdamage)
+				overdamage = new
+			overdamage.icon_state = icon_state
+			vis_contents.Add(overdamage)
+	else
+		..()
+
+/turf/simulated/floor/glass/AddDecal(var/image/decal)
+	if(get_base_turf(src.z) == /turf/simulated/open)
+		var/obj/effect/glass_open_overlay/decal/overdecal = new /obj/effect/glass_open_overlay/decal
+		overdecal.icon = decal.icon
+		overdecal.icon_state = decal.icon_state
+		overdecal.dir = decal.dir
+		vis_contents.Add(overdecal)
+		if(!overdecals)
+			overdecals = list()
+		overdecals += overdecal
+	else
+		..()
 
 /turf/simulated/floor/glass/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	vis_contents.Cut()

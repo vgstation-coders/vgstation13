@@ -20,7 +20,7 @@
 			else
 				lawsync()
 				to_chat(src, "<b>Laws synced with AI, be sure to note any changes.</b>")
-				if(istraitor(src))
+				if(check_traitorborg(src))
 					to_chat(src, "<b>Remember, your AI does NOT share or know about your law 0.")
 		else
 			to_chat(src, "<b>No AI selected to sync laws with, disabling lawsync protocol.</b>")
@@ -28,7 +28,7 @@
 
 	to_chat(who, "<b>Obey these laws:</b>")
 	laws.show_laws(who)
-	if (istraitor(src) && connected_ai)
+	if (check_traitorborg(src) && connected_ai)
 		to_chat(who, "<b>Remember, [connected_ai.name] is technically your master, but your objective comes first.</b>")
 	else if (connected_ai)
 		to_chat(who, "<b>Remember, [connected_ai.name] is your master, other AIs can be ignored.</b>")

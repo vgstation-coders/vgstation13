@@ -9,6 +9,27 @@
 	pass_flags_self = PASSGLASS
 	var/airtight = 0
 
+/obj/effect/plasticflaps_overlay
+	icon = 'icons/obj/stationobjs.dmi' //Change this.
+	icon_state = "plasticflaps_over"
+	plane = FLOAT_PLANE
+
+var/obj/effect/plasticflaps_overlay/PO
+
+/obj/structure/plasticflaps/New()
+	..()
+	if(!PO)
+		PO = new
+	vis_contents.Add(PO)
+
+//Destruction ZAS sanity
+/obj/structure/plasticflaps/Destroy()
+	airtight = 0
+	update_nearby_tiles()
+	vis_contents.Cut()
+	..()
+
+
 /obj/structure/plasticflaps/attackby(obj/item/I as obj, mob/user as mob)
 	if(iscrowbar(I) && anchored == 1)
 		if(airtight == 0)
@@ -56,12 +77,6 @@
 	if(!istype(mover)) // Aircheck!
 		return !airtight
 	return 1
-	
-//Destruction ZAS sanity
-/obj/structure/plasticflaps/Destroy()
-	airtight = 0
-	update_nearby_tiles()
-	..()
 
 /obj/structure/plasticflaps/ex_act(severity)
 	switch(severity)

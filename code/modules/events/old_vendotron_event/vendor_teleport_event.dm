@@ -48,7 +48,7 @@
 /datum/event/old_vendotron_teleport/proc/fancyEntrance(var/obj/machinery/vending/vendToReplace)
 	var/obj/effect/old_vendotron_entrance/vendPortal = new /obj/effect/old_vendotron_entrance(vendToReplace.loc)
 	vendPortal.aestheticEntrance()
-	playsound(E, 'sound/effects/eleczap.ogg', 100, 1)
+	playsound(vendPortal, 'sound/effects/eleczap.ogg', 100, 1)
 	spawn(3 SECONDS)
 		var/obj/machinery/vending/old_vendotron/OV = new /obj/machinery/vending/old_vendotron(vendToReplace.loc)
 		if(!vendToReplace.gcDestroyed)
@@ -64,7 +64,7 @@
 /obj/effect/old_vendotron_entrance/New()
 	..()
 	for(var/mob/dead/observer/people in observers)
-		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, <a href='?src=\ref[people];follow=\ref[src]'>Follow it</a></span>")
+		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, [formatFollow(src,"Follow it")]</span>")
 
 /obj/effect/old_vendotron_entrance/proc/aestheticEntrance()
 	animate(src, alpha = 255, transform = matrix()*2, time = 3 SECONDS)

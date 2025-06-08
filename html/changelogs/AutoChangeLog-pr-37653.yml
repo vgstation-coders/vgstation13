@@ -1,0 +1,6 @@
+author: mentgah
+delete-after: true
+changes:
+- tweak: Removed the default trader suit from vox lockers, allowing the other suits
+    to spawn more often.
+- rscadd: All trader suits are now available in the vox trader vendor.

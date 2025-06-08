@@ -88,17 +88,14 @@
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "beerglass"
 	glass_desc = "A cold pint of pale lager."
+	plant_nutrition = 1
+	plant_watering = 1
 
 /datum/reagent/ethanol/beer/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
 	M.jitteriness = max(M.jitteriness - 3, 0)
-
-/datum/reagent/ethanol/beer/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(1)
-	T.add_waterlevel(1)
 
 /datum/reagent/ethanol/whiskey
 	name = "Whiskey"
@@ -583,10 +580,10 @@
 		fakespell.desc = fromwhichwetake.desc
 		fakespell.hud_state = fromwhichwetake.hud_state
 		fakespell.invocation = "MAH'JIK"
-		fakespell.invocation_type = SpI_SHOUT
-		fakespell.charge_type = Sp_CHARGES
+		fakespell.invocation_type = SP_INV_SHOUT
+		fakespell.charge_type = SP_CHARGES
 		fakespell.charge_counter = 0
-		fakespell.charge_max = 1
+		fakespell.charge_cooldown_max = 1 CHARGES
 		if(prob(20))
 			fakespell.name = name_modifier + fakespell.name
 		fake_spells += fakespell
@@ -600,9 +597,9 @@
 			var/mob/living/carbon/human/H = M
 			var/spell/thisisdumb = new /spell/targeted/equip_item/robesummon
 			H.add_spell(thisisdumb)
-			thisisdumb.charge_type = Sp_CHARGES
+			thisisdumb.charge_type = SP_CHARGES
 			thisisdumb.charge_counter = 1
-			thisisdumb.charge_max = 1
+			thisisdumb.charge_cooldown_max = 1 CHARGES
 			H.cast_spell(thisisdumb,list(H))
 		holder.remove_reagent(MAGICADELUXE,5)
 
@@ -1294,7 +1291,7 @@
 	color = "#b01522" //176, 21, 34
 	glass_icon_state = "dragonsblood"
 	glass_name = "\improper Dragon's Blood"
-	flammable = 1
+	can_be_lit = 1
 	light_color = "#540303"
 
 /datum/reagent/ethanol/drink/dragonspit
@@ -1306,7 +1303,7 @@
 	glass_icon_state = "dragonsspit"
 	glass_name = "\improper Dragon's Spit"
 	light_color = "#ff7003"
-	flammable = 1
+	can_be_lit = 1
 
 /datum/reagent/ethanol/drink/firecider
 	name = "Fire Cider"
@@ -1337,7 +1334,7 @@
 	glass_icon_state = "manhattanfireball"
 	glass_name = "\improper Manhattan Fireball"
 	light_color = "#540303"
-	flammable = 1
+	can_be_lit = 1
 
 /datum/reagent/ethanol/drink/fireballcola
 	name = "Fireball Cola"
@@ -1378,7 +1375,7 @@
 	glass_icon_state = "b52glass"
 	glass_name = "\improper B-52"
 	light_color = "#000080"
-	flammable = 1
+	can_be_lit = 1
 
 /datum/reagent/ethanol/drink/irishcoffee
 	name = "Irish Coffee"

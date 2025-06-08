@@ -56,14 +56,14 @@ default behaviour is:
 	if (the_temp > maxbodytemp)
 		return the_temp - maxbodytemp
 	else if (the_temp < minbodytemp)
-		return the_temp - minbodytemp
+		return minbodytemp - the_temp
 	return 0
 
 /mob/living/carbon/monkey/get_safe_temperature_excursion(the_temp)
 	if (the_temp > BODYTEMP_HEAT_DAMAGE_LIMIT)
 		return the_temp - BODYTEMP_HEAT_DAMAGE_LIMIT
 	else if (the_temp < BODYTEMP_COLD_DAMAGE_LIMIT)
-		return the_temp - BODYTEMP_COLD_DAMAGE_LIMIT
+		return BODYTEMP_COLD_DAMAGE_LIMIT - the_temp
 	return 0
 
 /mob/living/carbon/human/get_safe_temperature_excursion(the_temp)
@@ -71,11 +71,11 @@ default behaviour is:
 		if (the_temp > species.heat_level_1)
 			return the_temp - species.heat_level_1
 		else if (the_temp < FRIDGETEMP_DEFAULT)//Something below freezing temperature should feel adequately freezing.
-			return the_temp - FRIDGETEMP_DEFAULT
+			return FRIDGETEMP_DEFAULT - the_temp
 		//else if (the_temp < species.cold_level_1)
 		//	return the_temp - species.cold_level_1
 	else if (the_temp > BODYTEMP_HEAT_DAMAGE_LIMIT)
 		return the_temp - BODYTEMP_HEAT_DAMAGE_LIMIT
 	else if (the_temp < BODYTEMP_COLD_DAMAGE_LIMIT)
-		return the_temp - BODYTEMP_COLD_DAMAGE_LIMIT
+		return BODYTEMP_COLD_DAMAGE_LIMIT - the_temp
 	return 0

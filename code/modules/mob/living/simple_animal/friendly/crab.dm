@@ -22,6 +22,9 @@
 	var/obj/item/inventory_mask
 	held_items = list()
 
+/mob/living/simple_animal/crab/get_butchering_products()
+	return list(/datum/butchering_product/claws/crab)
+
 /mob/living/simple_animal/crab/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -86,7 +89,7 @@
 		'sound/misc/malescream3.ogg',
 		'sound/misc/malescream4.ogg',
 		'sound/misc/malescream5.ogg',
-		'sound/misc/wilhelm.ogg', 
+		'sound/misc/wilhelm.ogg',
 		'sound/misc/goofy.ogg',
 		'sound/misc/femalescream1.ogg',
 		'sound/misc/femalescream2.ogg',

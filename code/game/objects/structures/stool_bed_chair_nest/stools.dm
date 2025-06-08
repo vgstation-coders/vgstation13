@@ -26,7 +26,9 @@
 	name = "piano stool"
 	desc = "Apply butt. Become Mozart."
 	icon_state = "stool_piano"
-	autoignition_temperature = AUTOIGNITION_WOOD
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	sheet_type = /obj/item/stack/sheet/wood
 
 /obj/item/weapon/stool/piano/initialize()

@@ -27,8 +27,8 @@
 	holomap_offset_x = list(0,0,0,86,4,0,0,)
 	holomap_offset_y = list(0,0,0,94,10,0,0,)
 
-	center_x = 226
-	center_y = 254
+	center_x = 256
+	center_y = 256
 
 	disable_holominimap_generation = 1 // else the server gets fucking kneecapped. TODO SOMEDAY: fix minimap generation alongside, it's dirty code
 

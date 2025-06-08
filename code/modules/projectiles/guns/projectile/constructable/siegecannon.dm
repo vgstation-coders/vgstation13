@@ -1,5 +1,5 @@
 /obj/structure/siege_cannon
-	name = "Siege Cannon"
+	name = "\improper Siege Cannon"
 	desc = "A heavy-duty cannon. Capable of knocking down walls and fortifications when loaded with the right munitions."
 	icon = 'icons/obj/siege_cannon.dmi'
 	icon_state = "siege_cannon"
@@ -33,7 +33,7 @@
 	if(istype(W, /obj/item/weapon/reagent_containers))
 		fillCannon(W, user)
 		return 1
-	if(W.is_wrench())
+	if(W.is_wrench(user))
 		wrenchAnchor(user, W, 5)	//Half a second to wrench. Being able to turn it via verb while anchored is intentional.
 	else if((istype(W, /obj/item/weapon/stamp/clown) || istype(W, /obj/item/toy/crayon/rainbow)) && !beenClowned)
 		becomeClownnon(W, user)
@@ -53,7 +53,7 @@
 		loadCannon(G, user)
 		return
 	if(wFuel >= maxFuel)
-		to_chat(user,"<span class='warning'>The [src] is already full.</span>" )
+		to_chat(user,"<span class='warning'>\The [src] is already full.</span>" )
 		return
 	for(var/datum/reagent/R in G.reagents.reagent_list)
 		if(R.id != FUEL)
@@ -81,7 +81,7 @@
 		if(istype(cAmmo, /obj/item/anvil))
 			to_chat(user,"<span class='warning'>You force \the [cAmmo] into \the [src], somehow.</span>")	//Terrifying
 		else
-			to_chat(user,"<span class='warning'>The [cAmmo] is too large to fit in \the [src].</span>")
+			to_chat(user,"<span class='warning'>\The [cAmmo] is too large to fit in \the [src].</span>")
 			return
 	if(user.drop_item(cAmmo, src))
 		loadedItem = cAmmo

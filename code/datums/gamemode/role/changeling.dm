@@ -23,6 +23,8 @@
 	var/geneticdamage = 0
 
 	powerpoints = 4	//evolve points
+	shows_spells = TRUE
+	spell_exclude = /spell/changeling/evolve
 
 	var/mimicing = ""
 	var/disease_immunity = 0 //If on, the changeling doesn't suffer any symptoms from diseases
@@ -69,7 +71,7 @@
 	antag.current << sound('sound/effects/ling_intro.ogg')
 
 /datum/role/changeling/ForgeObjectives()
-	if(!antag.current.client.prefs.antag_objectives)
+	if(!antag.current.client.prefs.get_pref(/datum/preference_setting/toggle/antag_objectives))
 		AppendObjective(/datum/objective/freeform/changeling)
 		return
 	AppendObjective(/datum/objective/absorb)

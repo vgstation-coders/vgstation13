@@ -59,7 +59,7 @@
 
 				if(!breath || breath.total_moles < BREATH_MOLES / 5 || breath.total_moles > BREATH_MOLES * 5)
 					if(prob(20))
-						L.damage += 1
+						L.take_damage(1,1)
 					if(!is_lung_ruptured() && L.damage > 2)
 						var/chance_break = (L.damage / L.min_broken_damage)*100
 						if(prob(chance_break))
@@ -93,6 +93,11 @@
 			if(istype(loc, /obj/))
 				var/obj/location_as_object = loc
 				location_as_object.handle_internal_lifeform(src, 0)
+
+	if(wear_mask)//Insulated masks will protect you from the elements you breath somewhat
+		var/temp_difference = bodytemperature - breath.temperature
+		var/temp_change = (1 - wear_mask.heat_conductivity) * temp_difference
+		breath.temperature += temp_change
 
 	handle_breath(breath)
 

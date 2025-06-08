@@ -150,6 +150,8 @@
 	var/list/Targets = list()
 	var/Target
 	for(var/atom/A in ListTargets())
+		if (!isValidTarget(A))
+			break
 		if(Found(A))//Just in case people want to override targetting
 			var/list/FoundTarget = list()
 			FoundTarget += A
@@ -164,6 +166,9 @@
 
 /mob/living/simple_animal/hostile/proc/Found(var/atom/A)//This is here as a potential override to pick a specific target if available
 	return
+
+/mob/living/simple_animal/hostile/proc/isValidTarget(var/atom/A)//we should have made that proc long ago instead of expanding CanAttack()
+	return TRUE
 
 /mob/living/simple_animal/hostile/proc/PickTarget(var/list/Targets)//Step 3, pick amongst the possible, attackable targets
 	if(target != null)//If we already have a target, but are told to pick again, calculate the lowest distance between all possible, and pick from the lowest distance targets
@@ -483,6 +488,7 @@
 					 /obj/structure/grille,
 					 /obj/structure/girder,
 					 /obj/structure/rack,
+					 /obj/structure/railing,
 					 /obj/machinery/door/window,
 					 /obj/item/tape,
 					 /obj/item/toy/balloon/inflated/decoy,

@@ -5979,9 +5979,7 @@
 /obj/item/device/radio/intercom{
 	pixel_y = -27
 	},
-/obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 8
-	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on,
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -16457,7 +16455,7 @@
 /area/hallway/secondary/exit)
 "aIR" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /turf/simulated/floor,
 /area/hallway/secondary/exit)
@@ -27288,13 +27286,28 @@
 /turf/simulated/floor/plating,
 /area/maintenance/disposal)
 "beD" = (
-/obj/machinery/conveyor{
-	dir = 4;
-	id_tag = "garbage"
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
 	},
-/obj/machinery/atmospherics/unary/vent_scrubber/on,
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/obj/machinery/door/poddoor{
+	density = 0;
+	icon_state = "pdoor0";
+	id_tag = "Secure Gate";
+	name = "Security Blast Door";
+	opacity = 0
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
 /turf/simulated/floor/plating,
-/area/maintenance/disposal)
+/area/hallway/primary/fore)
 "beE" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -28319,10 +28332,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/machinery/computer/smelting{
-	name = "recycling furnace console";
-	smelter_tag = "recycling_smelter"
-	},
+/obj/machinery/computer/smelting/recycling,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "neutral"
@@ -28950,7 +28960,7 @@
 "bhx" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1;
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -30782,7 +30792,6 @@
 /obj/item/weapon/folder/white,
 /obj/item/weapon/pen,
 /obj/item/device/flashlight/lamp/green{
-	on = 0;
 	pixel_x = -3;
 	pixel_y = 8
 	},
@@ -32374,7 +32383,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/obj/machinery/atmospherics/unary/tank/nitrogen{
+/obj/machinery/atmospherics/unary/tank/nitrogen/coldroom{
 	dir = 8;
 	initialize_directions = 4
 	},
@@ -43848,8 +43857,8 @@
 /area/science/telescience)
 "bJP" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
-	scrub_CO2 = 0;
-	scrub_Toxins = 0
+	default_scrubbed_gases = list("plasma");
+	default_scrubbed_gases = list("carbon_dioxide")
 	},
 /turf/simulated/floor/engine,
 /area/science/telescience)
@@ -48142,7 +48151,7 @@
 "bRn" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8;
-	scrub_Toxins = 0
+	default_scrubbed_gases = list("carbon_dioxide")
 	},
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -48304,7 +48313,7 @@
 "bRH" = (
 /obj/machinery/air_sensor{
 	id_tag = "tcomms_sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /turf/simulated/floor/bluegrid{
 	name = "Mainframe Base";
@@ -50300,7 +50309,7 @@
 /obj/machinery/air_sensor{
 	frequency = 1441;
 	id_tag = "waste_sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /obj/machinery/light/small{
 	dir = 8
@@ -53073,7 +53082,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "caR" = (
-/obj/machinery/atmospherics/unary/tank/nitrogen{
+/obj/machinery/atmospherics/unary/tank/nitrogen/coldroom{
 	dir = 4;
 	initialize_directions = 4
 	},
@@ -53309,7 +53318,7 @@
 "cbl" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 1;
-	filter_type = 4;
+	filtered_gas = "sleeping_agent";
 	icon_state = "intact_on";
 	name = "Gas filter (N2O tank)";
 	on = 1
@@ -54707,7 +54716,7 @@
 "cdW" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 1;
-	filter_type = 1;
+	filtered_gas = "oxygen";
 	icon_state = "intact_on";
 	name = "Gas filter (Xeno cell 1)";
 	on = 1;
@@ -57250,7 +57259,7 @@
 "cik" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 1;
-	filter_type = 1;
+	filtered_gas = "oxygen";
 	icon_state = "intact_on";
 	name = "Gas filter (Xeno cell 2)";
 	on = 1;
@@ -57629,7 +57638,7 @@
 "ciX" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 1;
-	filter_type = 3;
+	filtered_gas = "carbon_dioxide";
 	icon_state = "intact_on";
 	name = "Gas filter (CO2 tank)";
 	on = 1
@@ -59592,7 +59601,7 @@
 "cml" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 1;
-	filter_type = 1;
+	filtered_gas = "oxygen";
 	icon_state = "intact_on";
 	name = "Gas filter (Xeno cell 3)";
 	on = 1;
@@ -60050,7 +60059,7 @@
 "cna" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 4;
-	filter_type = 2;
+	filtered_gas = "nitrogen";
 	icon_state = "intact_on";
 	name = "Gas filter (N2 tank)";
 	on = 1
@@ -60091,7 +60100,7 @@
 "cnd" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 4;
-	filter_type = 1;
+	filtered_gas = "oxygen";
 	icon_state = "intact_on";
 	name = "Gas filter (O2 tank)";
 	on = 1
@@ -63099,7 +63108,7 @@
 "crX" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1;
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /turf/simulated/floor/engine,
 /area/science/xenobiology/specimen_4)
@@ -63117,7 +63126,7 @@
 "csa" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1;
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /turf/simulated/floor/engine,
 /area/science/xenobiology/specimen_5)
@@ -63135,7 +63144,7 @@
 "csd" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1;
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /turf/simulated/floor/engine,
 /area/science/xenobiology/specimen_6)
@@ -64128,7 +64137,7 @@
 /obj/machinery/air_sensor{
 	frequency = 1443;
 	id_tag = "air_sensor";
-	output = 7
+	metrics_monitored = list("pressure", "temperature", "oxygen")
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
@@ -64269,7 +64278,7 @@
 /obj/machinery/air_sensor{
 	frequency = 1449;
 	id_tag = "inc_sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /turf/simulated/floor/engine{
 	name = "vacuum floor";
@@ -65076,7 +65085,7 @@
 "cvr" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 8;
-	filter_type = 1;
+	filtered_gas = "oxygen";
 	icon_state = "intact_on";
 	name = "Gas filter (Xeno cell 4)";
 	on = 1;
@@ -65097,7 +65106,7 @@
 "cvt" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 8;
-	filter_type = 1;
+	filtered_gas = "oxygen";
 	icon_state = "intact_on";
 	name = "Gas filter (Xeno cell 5)";
 	on = 1;
@@ -65702,7 +65711,7 @@
 "cwn" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 1;
-	filter_type = 1;
+	filtered_gas = "oxygen";
 	icon_state = "intact_on";
 	name = "Gas filter (Xeno cell 6)";
 	on = 1;
@@ -67357,7 +67366,7 @@
 	pixel_x = 24
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	scrub_Toxins = 0
+	default_scrubbed_gases = list("carbon_dioxide")
 	},
 /obj/structure/window/reinforced{
 	dir = 1
@@ -68441,7 +68450,7 @@
 /obj/machinery/air_sensor{
 	frequency = 1441;
 	id_tag = "sme_sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /turf/simulated/floor/plating,
 /area/engineering/supermatter_room)
@@ -68532,8 +68541,7 @@
 /area/engineering/supermatter_room)
 "cCh" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	scrub_CO2 = 0;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "plasma", "oxygen" )
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -68542,8 +68550,7 @@
 /area/engineering/supermatter_room)
 "cCi" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	scrub_CO2 = 0;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "plasma", "oxygen" )
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -69351,6 +69358,7 @@
 /area/shuttle/nuclearops)
 "cEd" = (
 /obj/structure/table,
+/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers,
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -69373,7 +69381,7 @@
 	},
 /area/shuttle/nuclearops)
 "cEg" = (
-/obj/machinery/computer/security,
+/obj/machinery/computer/security/nukies,
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -69590,9 +69598,6 @@
 /area)
 "cEK" = (
 /obj/structure/table,
-/obj/item/stack/sheet/glass/glass{
-	amount = 10
-	},
 /obj/item/weapon/cell{
 	charge = 100;
 	maxcharge = 15000
@@ -70768,10 +70773,13 @@
 	},
 /area/shuttle/nuclearops)
 "cHP" = (
+/obj/structure/table,
+/obj/item/tool/surgicaldrill,
+/obj/item/tool/circular_saw,
 /obj/structure/closet/walllocker/defiblocker{
 	pixel_y = 32
 	},
-/turf/unsimulated/floor{
+/turf/simulated/floor{
 	icon_state = "white"
 	},
 /area/shuttle/nuclearops)
@@ -70802,6 +70810,7 @@
 /area/shuttle/nuclearops)
 "cHT" = (
 /obj/structure/closet/crate,
+/obj/item/weapon/storage/toolbox,
 /obj/item/ammo_casing/rocket_rpg,
 /obj/item/ammo_casing/rocket_rpg,
 /obj/item/ammo_casing/rocket_rpg,
@@ -70817,6 +70826,14 @@
 /obj/machinery/cell_charger,
 /obj/machinery/light{
 	dir = 1
+	},
+/obj/item/device/assembly/infra{
+	pixel_x = -5;
+	pixel_y = 5
+	},
+/obj/item/device/assembly/infra{
+	pixel_x = 5;
+	pixel_y = 5
 	},
 /turf/unsimulated/floor{
 	icon_state = "floor4"
@@ -70866,7 +70883,6 @@
 /obj/item/device/assembly/signaler{
 	pixel_x = 4
 	},
-/obj/item/stack/cable_coil,
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -70932,7 +70948,6 @@
 "cIe" = (
 /obj/structure/table,
 /obj/item/weapon/storage/toolbox/syndicate,
-/obj/effect/spawner/newbomb/timer/syndicate,
 /obj/item/weapon/storage/belt/slim,
 /turf/unsimulated/floor{
 	icon_state = "floor4"
@@ -71064,17 +71079,39 @@
 	dir = 10
 	},
 /obj/structure/table,
-/obj/effect/spawner/newbomb/timer/syndicate,
+/obj/item/tool/crowbar{
+	pixel_x = 7;
+	pixel_y = -7
+	},
+/obj/item/tool/crowbar{
+	pixel_x = 4;
+	pixel_y = -4
+	},
+/obj/item/tool/crowbar{
+	pixel_x = 1;
+	pixel_y = -1
+	},
+/obj/item/tool/crowbar{
+	pixel_x = -4;
+	pixel_y = 4
+	},
+/obj/item/tool/crowbar{
+	pixel_x = -1;
+	pixel_y = 1
+	},
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
 /area/shuttle/nuclearops)
 "cIE" = (
-/obj/machinery/door/airlock/glass{
-	name = "Teleporter Room"
+/obj/structure/table,
+/obj/item/stack/medical/bruise_pack,
+/obj/item/tool/retractor{
+	pixel_y = 6
 	},
-/turf/unsimulated/floor{
-	icon_state = "floor4"
+/obj/item/tool/scalpel,
+/turf/simulated/floor{
+	icon_state = "white"
 	},
 /area/shuttle/nuclearops)
 "cIG" = (
@@ -71126,11 +71163,14 @@
 	},
 /area/shuttle/nuclearops)
 "cIQ" = (
-/obj/machinery/light{
-	dir = 1
+/obj/structure/table,
+/obj/item/tool/bonegel{
+	pixel_x = 4;
+	pixel_y = 3
 	},
-/turf/unsimulated/floor{
-	icon_state = "floor4"
+/obj/item/tool/bonesetter,
+/turf/simulated/floor{
+	icon_state = "white"
 	},
 /area/shuttle/nuclearops)
 "cIR" = (
@@ -71144,17 +71184,8 @@
 /turf/simulated/floor/plating/airless,
 /area/shuttle/syndicate_elite/mothership)
 "cIY" = (
-/obj/structure/closet/crate,
-/obj/item/tool/FixOVein,
-/obj/item/tool/bonegel,
-/obj/item/tool/bonesetter,
-/obj/item/tool/cautery,
-/obj/item/tool/circular_saw,
-/obj/item/tool/hemostat,
-/obj/item/tool/retractor,
-/obj/item/tool/scalpel,
-/obj/item/tool/surgicaldrill,
-/turf/unsimulated/floor{
+/obj/structure/closet/crate/freezer/surgery,
+/turf/simulated/floor{
 	icon_state = "white"
 	},
 /area/shuttle/nuclearops)
@@ -83121,7 +83152,7 @@
 /turf/space,
 /area)
 "dnt" = (
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/space,
 /area)
 "dnu" = (
@@ -90002,7 +90033,7 @@
 /area/research_outpost/xenobot)
 "dKh" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -90632,7 +90663,7 @@
 "dLF" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1;
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/atmos)
@@ -91322,7 +91353,7 @@
 "dNo" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1;
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -92428,7 +92459,7 @@
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1;
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
@@ -94227,7 +94258,7 @@
 "dSt" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1;
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /obj/structure/disposalpipe/segment{
 	dir = 4;
@@ -94300,7 +94331,7 @@
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1;
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -98199,7 +98230,7 @@
 "dYN" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1;
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
@@ -98507,7 +98538,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox,
 /area/vox_trading_post/eva)
@@ -99106,7 +99137,7 @@
 "eaw" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1;
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -99130,7 +99161,7 @@
 "eaz" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1;
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -99154,7 +99185,7 @@
 "eaC" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1;
-	scrub_CO2 = 0
+	default_scrubbed_gases = list("plasma")
 	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
@@ -99823,7 +99854,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -100043,7 +100074,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /obj/machinery/firealarm{
 	dir = 1;
@@ -100499,7 +100530,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox/wood,
 /area/vox_trading_post/dorms)
@@ -100536,7 +100567,7 @@
 /area/vox_trading_post/vault)
 "edB" = (
 /obj/machinery/atmospherics/unary/vent_pump{
-	dir = 8;
+	dir = 4;
 	on = 1
 	},
 /turf/simulated/floor/vox{
@@ -100943,7 +100974,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -100990,7 +101021,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -101008,7 +101039,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -101087,7 +101118,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -101472,7 +101503,7 @@
 "efx" = (
 /obj/structure/closet,
 /obj/machinery/door_control{
-	desc = "A remote control-switch..";
+	desc = "A remote control-switch.";
 	id_tag = "tradefloor";
 	name = "Trade Shutters";
 	pixel_x = 22;
@@ -101941,7 +101972,7 @@
 /obj/machinery/air_sensor{
 	frequency = 1441;
 	id_tag = "vox_sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /turf/simulated/floor/engine{
 	name = "n2 floor";
@@ -102297,7 +102328,7 @@
 /area/vox_trading_post/atmos)
 "egU" = (
 /obj/machinery/atmospherics/trinary/filter{
-	filter_type = 2;
+	filtered_gas = "nitrogen";
 	icon_state = "intact_on";
 	name = "Gas filter (Vox N2 tank)";
 	on = 1
@@ -102417,7 +102448,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -102748,7 +102779,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -103520,7 +103551,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -103685,7 +103716,7 @@
 /obj/item/weapon/pen,
 /obj/item/weapon/reagent_containers/glass/bottle/mutagen,
 /obj/item/device/analyzer/plant_analyzer,
-/obj/item/weapon/gun/energy/floragun,
+/obj/item/floral_somatoray,
 /turf/simulated/floor/vox{
 	icon_state = "dark"
 	},
@@ -103732,7 +103763,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/docking)
@@ -103966,7 +103997,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -104012,7 +104043,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -104074,7 +104105,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /obj/machinery/portable_atmospherics/hydroponics,
 /turf/simulated/floor/vox{
@@ -104254,7 +104285,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/docking)
@@ -104372,7 +104403,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /obj/item/weapon/reagent_containers/spray/cleaner{
 	pixel_x = -3;
@@ -109634,6 +109665,14 @@
 "mJV" = (
 /turf/simulated/wall/r_wall,
 /area/science/podbay)
+"mKn" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/manifold/supply,
+/turf/space,
+/area/mine/living_quarters)
 "mMg" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -109651,6 +109690,25 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
+"nbD" = (
+/obj/structure/table,
+/obj/item/tool/hemostat{
+	pixel_y = 4
+	},
+/obj/item/tool/cautery{
+	pixel_y = 4
+	},
+/obj/item/tool/FixOVein{
+	pixel_x = -6;
+	pixel_y = 1
+	},
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/shuttle/nuclearops)
 "neG" = (
 /obj/item/weapon/kitchen/utensil/knife/large/butch,
 /obj/item/weapon/kitchen/rollingpin,
@@ -110498,6 +110556,16 @@
 	icon_state = "dark"
 	},
 /area/maintenance/fpmaint)
+"xBl" = (
+/obj/structure/table,
+/obj/item/stack/sheet/glass/glass{
+	amount = 10
+	},
+/obj/item/stack/cable_coil,
+/turf/unsimulated/floor{
+	icon_state = "floor4"
+	},
+/area/shuttle/nuclearops)
 "xJW" = (
 /obj/structure/closet/secure_closet/bar{
 	req_access_txt = "25"
@@ -197185,7 +197253,7 @@ arJ
 baE
 bbF
 bdl
-beD
+bdl
 bgw
 aZO
 bbb
@@ -221242,7 +221310,7 @@ aaa
 aak
 aaa
 aaa
-yaY
+beD
 acd
 aeV
 afI
@@ -573187,12 +573255,12 @@ cDR
 cDR
 cDR
 cDR
-cHN
+cIE
+nbD
+cIY
+cJa
 cIb
 cIm
-cHO
-cIb
-cIY
 cJb
 cJk
 cCZ
@@ -573689,12 +573757,12 @@ cGL
 cFY
 cFY
 cDR
-cHO
-cHO
-cHO
-cHO
+cIQ
 cHO
 cIZ
+cHO
+cHO
+cHO
 cJb
 cJr
 cCZ
@@ -574196,7 +574264,7 @@ cHO
 cHO
 cHO
 cHO
-cJa
+cHN
 cJb
 cJm
 cCZ
@@ -578712,7 +578780,7 @@ cDR
 cHT
 cEc
 cEc
-cDR
+xBl
 cDR
 cDR
 cDR
@@ -579214,7 +579282,7 @@ cDR
 cHU
 cEc
 cEc
-cIE
+cEc
 cEc
 cJc
 cJb
@@ -579716,8 +579784,8 @@ cDR
 cHV
 cEc
 cEc
-cDR
-cIQ
+cEc
+cEc
 cJd
 cJb
 cJr
@@ -580218,7 +580286,7 @@ cDR
 cHW
 cIe
 cIe
-cDR
+cEw
 cEc
 cJe
 cJb
@@ -1245931,7 +1245999,7 @@ aaa
 aaa
 epT
 eqx
-erd
+mKn
 aaa
 dNe
 dNe

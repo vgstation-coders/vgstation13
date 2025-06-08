@@ -28,7 +28,7 @@
 
 
 //////CUT WITH LASER(cut+clamp)//////////
-/datum/surgery_step/generic/cut_with_laser/tool_quality(obj/item/tool)
+/datum/surgery_step/generic/cut_with_laser/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -40,7 +40,6 @@
 		)
 
 	priority = 0.1 //so the tool checks for this step before /generic/cut_open
-
 	duration = 4 SECONDS
 
 /datum/surgery_step/generic/cut_with_laser/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -88,7 +87,6 @@
 		)
 
 	priority = 0.1 //so the tool checks for this step before /generic/cut_open
-
 	duration = 8 SECONDS
 
 /datum/surgery_step/generic/incision_manager/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -132,7 +130,7 @@
 
 
 ////////CUT OPEN/////////
-/datum/surgery_step/generic/cut_open/tool_quality(obj/item/tool)
+/datum/surgery_step/generic/cut_open/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -148,7 +146,6 @@
 		)
 
 	priority = 0
-
 	duration = 4 SECONDS
 
 /datum/surgery_step/generic/cut_open/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -193,7 +190,6 @@
 		/obj/item/weapon/talisman = 70,
 		/obj/item/device/assembly/mousetrap = 20,
 		)
-
 	duration = 3 SECONDS
 
 /datum/surgery_step/generic/clamp_bleeders/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -234,7 +230,6 @@
 		/obj/item/tool/crowbar = 75,
 		/obj/item/weapon/kitchen/utensil/fork = 50
 		)
-
 	duration = 3 SECONDS
 
 /datum/surgery_step/generic/retract_skin/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -289,12 +284,11 @@
 
 
 /////////CAUTERIZE///////
-/datum/surgery_step/generic/cauterize/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/generic/cauterize/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/generic/cauterize
 	allowed_tools = list(
 	/obj/item/tool/cautery = 100,
@@ -303,7 +297,6 @@
 	/obj/item/weapon/lighter = 50,
 	/obj/item/tool/weldingtool = 25,
 	)
-
 	duration = 3 SECONDS
 
 /datum/surgery_step/generic/cauterize/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -345,7 +338,6 @@
 		/obj/item/weapon/kitchen/utensil/knife/large/butch = 75,
 		/obj/item/weapon/hatchet = 75,
 		)
-
 	duration = 11 SECONDS
 
 /datum/surgery_step/generic/cut_limb/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -386,7 +378,7 @@
 
 
 /////////BIOFOAM INJECTION///////
-/datum/surgery_step/generic/injectfoam/tool_quality(obj/item/tool)
+/datum/surgery_step/generic/injectfoam/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -397,7 +389,6 @@
 	)
 
 	priority = 0.1 //Tries to inject biofoam before other steps
-
 	duration = 1 SECONDS
 
 /datum/surgery_step/generic/injectfoam/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

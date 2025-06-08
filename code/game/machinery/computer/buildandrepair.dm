@@ -103,7 +103,7 @@
 	build_path = /obj/machinery/computer/card
 /obj/item/weapon/circuitboard/card/centcom
 	name = "Circuit board (CentCom ID Computer)"
-	desc = "A circuit board for running a computer used for granting access to areas at Central Command.."
+	desc = "A circuit board for running a computer used for granting access to areas at Central Command."
 	build_path = /obj/machinery/computer/card/centcom
 //obj/item/weapon/circuitboard/shield
 //	name = "Circuit board (Shield Control)"
@@ -172,6 +172,13 @@
 	build_path = /obj/machinery/computer/arcade
 	origin_tech = Tc_PROGRAMMING + "=1"
 	var/list/game_data = list()
+
+/obj/item/weapon/circuitboard/tetris
+	name = "Circuit board (T.E.T.R.I.S.)"
+	desc = "A circuit board for the Telemetry Enhanced Testing and Research Informatic Simulator."
+	build_path = /obj/machinery/computer/tetris
+	origin_tech = Tc_PROGRAMMING + "=1"
+
 /obj/item/weapon/circuitboard/turbine_control
 	name = "Circuit board (Turbine control)"
 	desc = "A circuit board for running an obsolete computer used for controlling a gas turbine."
@@ -355,6 +362,8 @@
 	build_path = /obj/machinery/computer/stacking_unit
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
+
+
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
 		var/obj/item/tool/solder/S = I
@@ -363,15 +372,10 @@
 	else if(iswelder(I))
 		var/obj/item/tool/weldingtool/WT = I
 		if(WT.remove_fuel(1,user))
-			var/obj/item/weapon/circuitboard/blank/B = new /obj/item/weapon/circuitboard/blank(src.loc)
-			to_chat(user, "<span class='notice'>You melt away the circuitry, leaving behind a blank.</span>")
-			I.playtoolsound(B.loc, 30)
-			if(user.get_inactive_hand() == src)
-				user.before_take_item(src)
-				user.put_in_hands(B)
-			qdel(src)
-			return
-	return
+			I.playtoolsound(loc, 30)
+			user.create_in_hands(src, /obj/item/weapon/circuitboard/blank, msg = "<span class='notice'>You melt away the circuitry, leaving behind a blank.</span>")
+	else
+		return ..()
 
 /obj/item/weapon/circuitboard/proc/solder_improve(mob/user)
 	to_chat(user, "<span class='warning'>You fiddle with a few random fuses but can't find a routing that doesn't short the board.</span>")
@@ -395,6 +399,8 @@
 /obj/item/weapon/circuitboard/supplycomp/solder_improve(mob/user)
 	to_chat(user, "<span class='notice'>You [contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>")
 	contraband_enabled = !contraband_enabled
+
+
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)

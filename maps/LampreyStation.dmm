@@ -2818,7 +2818,7 @@
 /area/lamprey/catchall)
 "agm" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/lamprey/warzonemaintenanceblob)
 "agn" = (
@@ -7614,7 +7614,7 @@
 /obj/structure/bed/chair/comfy/couch/right/teal{
 	dir = 4
 	},
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor{
 	dir = 4;
@@ -13077,7 +13077,7 @@
 	},
 /area/lamprey/foreporthallways)
 "aDB" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/lamprey/ghettosecuritymaintenanceblob)
 "aDC" = (
@@ -13999,7 +13999,7 @@
 /area/lamprey/bronxmaintenanceblob)
 "aGb" = (
 /obj/structure/table/woodentable/poker,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /obj/item/pizzabox/margherita,
 /turf/simulated/floor/plating,
 /area/lamprey/bronxmaintenanceblob)
@@ -15088,7 +15088,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/bronxmaintenanceblob)
 "aIQ" = (
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor/plating,
 /area/lamprey/bronxmaintenanceblob)
 "aIR" = (
@@ -16960,7 +16960,7 @@
 	icon_state = "radiation-w"
 	},
 /obj/item/weapon/table_parts/glass,
-/obj/item/weapon/gun/energy/floragun,
+/obj/item/floral_somatoray,
 /turf/simulated/floor/plating,
 /area/lamprey/ghettosecuritymaintenanceblob)
 "aNC" = (
@@ -18023,7 +18023,7 @@
 /area/lamprey/security)
 "aQi" = (
 /obj/structure/grille/broken,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor/plating,
 /area/lamprey/security)
 "aQj" = (
@@ -18393,7 +18393,7 @@
 /obj/item/weapon/spacecash/c10,
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/bustanuts,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /obj/item/trash/oldempirebar,
 /obj/item/trash/plate,
 /obj/item/trash/pistachios,
@@ -19878,7 +19878,7 @@
 /area/lamprey/voxtradepost)
 "aUr" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/wood,
 /area/lamprey/voxtradepost)
@@ -19971,7 +19971,7 @@
 	},
 /area/lamprey/foreporthallways)
 "aUB" = (
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /turf/simulated/floor/plating{
 	icon_state = "panelscorched"
 	},
@@ -20671,7 +20671,7 @@
 /obj/item/weapon/spacecash/c10,
 /obj/item/organ/external/head/with_teeth,
 /obj/effect/decal/cleanable/dirt,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /obj/item/trash/pistachios,
 /obj/item/trash/syndi_cakes,
 /obj/item/trash/tray,
@@ -26677,7 +26677,7 @@
 /obj/structure/bed/chair/comfy/beige{
 	dir = 8
 	},
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor{
 	icon_state = "checker";
 	tag = "icon-yellowcornersiding (WEST)"
@@ -36010,7 +36010,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor/plating,
 /area/lamprey/virology)
 "bDy" = (
@@ -37887,7 +37887,7 @@
 /area/lamprey/originmaintenanceblob)
 "bHA" = (
 /obj/effect/mine/stun,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /turf/simulated/floor/plating,
 /area/lamprey/originmaintenanceblob)
 "bHB" = (
@@ -39749,7 +39749,7 @@
 /obj/item/trash/syndi_cakes,
 /obj/item/trash/semki,
 /obj/item/trash/pistachios,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /turf/simulated/floor/plating,
 /area/lamprey/originmaintenanceblob)
 "bLz" = (
@@ -40471,7 +40471,7 @@
 /area/lamprey/originmaintenanceblob)
 "bNh" = (
 /obj/effect/mine/stun,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1";
 	tag = "icon-platingdmg1"
@@ -45046,7 +45046,7 @@
 /obj/item/trash/syndi_cakes,
 /obj/item/trash/semki,
 /obj/item/trash/pistachios,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /obj/machinery/light/small{
 	dir = 1
 	},
@@ -50928,7 +50928,7 @@
 /area/lamprey/botaneva)
 "cks" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "vault";
@@ -52414,7 +52414,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cnC" = (
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor/plating,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "cnD" = (
@@ -67909,7 +67909,7 @@
 	},
 /area/lamprey/warzonemaintenanceblob)
 "cVI" = (
-/obj/item/weapon/toolbox_tiles_sensor,
+/obj/item/weapon/toolbox_tiles/sensor,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
 /turf/simulated/floor/plating{
@@ -68857,7 +68857,7 @@
 "cXW" = (
 /obj/structure/lattice,
 /obj/structure/closet/crate/hydroponics,
-/obj/item/weapon/gun/energy/floragun,
+/obj/item/floral_somatoray,
 /obj/abstract/map/spawner/maint,
 /turf/space,
 /area)
@@ -70338,7 +70338,7 @@
 /area/lamprey/centralhallways)
 "dbt" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor/plating,
 /area/lamprey/centralhallways)
 "dbu" = (
@@ -87593,7 +87593,7 @@
 /obj/item/weapon/stock_parts/subspace/analyzer,
 /obj/item/weapon/stock_parts/subspace/analyzer,
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	scrub_Toxins = 0
+	default_scrubbed_gases = list( "carbon_dioxide" )
 	},
 /obj/item/weapon/stock_parts/subspace/treatment,
 /obj/item/weapon/stock_parts/subspace/treatment,
@@ -91702,8 +91702,7 @@
 /area/lamprey/enginerooms)
 "dQq" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	scrub_CO2 = 0;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "plasma", "oxygen" )
 	},
 /obj/structure/reagent_dispensers/fueltank,
 /obj/structure/reagent_dispensers/fueltank,
@@ -93857,7 +93856,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/thebelt)
 "dUB" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/lamprey/thebelt)
 "dUC" = (
@@ -96771,7 +96770,7 @@
 /area/lamprey/engineeringmaintenanceblob)
 "ebm" = (
 /obj/machinery/atmospherics/pipe/simple/supply/visible,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /obj/effect/decal/warning_stripes{
 	dir = 4;
 	icon_state = "warning";
@@ -101252,7 +101251,7 @@
 /turf/simulated/floor/plating,
 /area/lamprey/hell)
 "elh" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/lamprey/bridge)
 "eli" = (
@@ -101504,7 +101503,7 @@
 /turf/unsimulated/beach/sand,
 /area/lamprey/hell)
 "elQ" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/lamprey/hell)
 "elR" = (
@@ -103530,7 +103529,7 @@
 /turf/simulated/floor/carpet,
 /area/lamprey/barattheedgeoftheworld)
 "eqo" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/lamprey/barattheedgeoftheworld)
 "eqp" = (
@@ -109911,7 +109910,7 @@
 /obj/item/weapon/spacecash/c10,
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/bustanuts,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /obj/item/trash/oldempirebar,
 /obj/item/trash/plate,
 /obj/item/trash/pistachios,
@@ -111962,7 +111961,7 @@
 /obj/item/clothing/gloves/black,
 /obj/item/weapon/extinguisher,
 /obj/item/weapon/tank/oxygen/red,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor/plating,
 /area/lamprey/medbaywarehousemaintenanceblob)
 "eHr" = (
@@ -113335,7 +113334,7 @@
 	},
 /area/lamprey/voxmetaclub)
 "eJK" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/vox{
 	icon = 'icons/turf/overlays.dmi';
 	icon_state = "black_box";
@@ -114778,7 +114777,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/wood,
 /area/lamprey/catchall)
@@ -114969,7 +114968,7 @@
 /turf/space,
 /area)
 "eNf" = (
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
@@ -139576,7 +139575,7 @@
 	},
 /obj/machinery/air_sensor{
 	id_tag = "satellite_coldroom";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
@@ -143170,10 +143169,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/obj/machinery/computer/smelting{
-	name = "recycling furnace console";
-	smelter_tag = "recycling_smelter"
-	},
+/obj/machinery/computer/smelting/recycling,
 /turf/space,
 /area)
 "fZh" = (
@@ -149829,7 +149825,7 @@
 /turf/space,
 /area)
 "gnb" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/space,
 /area)
 "gnc" = (
@@ -156816,7 +156812,7 @@
 /turf/space,
 /area)
 "gAq" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating/airless,
 /area)
 "gAr" = (
@@ -157519,7 +157515,7 @@
 /area)
 "gBN" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	scrub_Toxins = 0
+	default_scrubbed_gases = list( "carbon_dioxide" )
 	},
 /turf/space,
 /area)
@@ -166296,7 +166292,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4;
 	name = "Telecomms Scrubber";
-	scrub_CO2 = 0
+	default_scrubbed_gases = list( "plasma" )
 	},
 /turf/space,
 /area)
@@ -166307,7 +166303,7 @@
 /obj/machinery/air_sensor{
 	id_tag = "tcomms_sensor";
 	name = "Telecomms Gas Sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /turf/space,
 /area)
@@ -175406,7 +175402,7 @@
 /turf/space,
 /area)
 "him" = (
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/space,
 /area)
 "hin" = (
@@ -178580,9 +178576,9 @@
 "hnZ" = (
 /obj/structure/table/glass,
 /obj/structure/window/reinforced,
-/obj/item/seeds/weeds,
-/obj/item/seeds/weeds,
-/obj/item/seeds/weeds,
+/obj/item/seeds/dandelionseed,
+/obj/item/seeds/dandelionseed,
+/obj/item/seeds/dandelionseed,
 /obj/item/weapon/reagent_containers/spray/plantbgone,
 /turf/space,
 /area)
@@ -183017,7 +183013,7 @@
 	frequency = 1441;
 	id_tag = "waste_sensor";
 	name = "Mix Sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -183924,7 +183920,7 @@
 	frequency = 1443;
 	id_tag = "air_sensor";
 	name = "Air Sensor";
-	output = 7
+	metrics_monitored = list("pressure", "temperature", "oxygen")
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -185400,7 +185396,7 @@
 "hBo" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 8;
-	filter_type = 1;
+	filtered_gas = "oxygen";
 	icon_state = "intact_on";
 	name = "Gas filter (O2 Tank)";
 	on = 1
@@ -185416,7 +185412,7 @@
 "hBq" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 8;
-	filter_type = 2;
+	filtered_gas = "nitrogen";
 	icon_state = "intact_on";
 	name = "Gas filter (N2 Tank)";
 	on = 1
@@ -185426,7 +185422,7 @@
 "hBr" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 8;
-	filter_type = 3;
+	filtered_gas = "carbon_dioxide";
 	icon_state = "intact_on";
 	name = "Gas filter(CO2 Tank)";
 	on = 1
@@ -185445,7 +185441,7 @@
 "hBt" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 8;
-	filter_type = 4;
+	filtered_gas = "sleeping_agent";
 	icon_state = "intact_on";
 	name = "Gas filter (N2O Tank)";
 	on = 1
@@ -185847,7 +185843,7 @@
 /obj/machinery/air_sensor{
 	frequency = 1441;
 	id_tag = "sme_sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /obj/effect/decal/warning_stripes{
 	color = "#ffff00";
@@ -186228,7 +186224,7 @@
 "hDc" = (
 /obj/machinery/atmospherics/trinary/filter{
 	dir = 4;
-	filter_type = 2;
+	filtered_gas = "nitrogen";
 	icon_state = "intact_on";
 	name = "Gas filter (N2)";
 	on = 1
@@ -191548,7 +191544,7 @@
 /turf/simulated/wall/r_wall,
 /area/lamprey/combooutpost)
 "hPd" = (
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /turf/simulated/floor,
 /area/lamprey/combooutpost)
 "hPe" = (
@@ -193135,7 +193131,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -193497,7 +193493,7 @@
 /obj/machinery/air_sensor{
 	frequency = 1441;
 	id_tag = "vox_sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /turf/simulated/floor/engine{
 	name = "n2 floor";
@@ -193646,7 +193642,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/plating/vox,
 /area/lamprey/combooutpost)
@@ -193723,7 +193719,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /obj/item/weapon/reagent_containers/spray/cleaner{
 	pixel_x = -3;
@@ -193986,7 +193982,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -194250,7 +194246,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/plating/vox,
 /area/lamprey/combooutpost)
@@ -194909,7 +194905,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -195235,7 +195231,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /obj/structure/window{
 	dir = 4
@@ -195276,7 +195272,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox/wood,
 /area/lamprey/combooutpost)
@@ -195525,7 +195521,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox,
 /area/lamprey/combooutpost)
@@ -195574,7 +195570,7 @@
 /obj/item/weapon/pen,
 /obj/item/weapon/reagent_containers/glass/bottle/mutagen,
 /obj/item/device/analyzer/plant_analyzer,
-/obj/item/weapon/gun/energy/floragun,
+/obj/item/floral_somatoray,
 /turf/simulated/floor/vox{
 	icon_state = "dark"
 	},
@@ -195694,7 +195690,7 @@
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
 	on = 1;
-	scrub_O2 = 1
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"

@@ -56,7 +56,6 @@
 	mob_push_flags = ALLMOBS //trundle trundle
 
 	var/opened = FALSE
-	var/emagged = FALSE
 	var/pulsecompromised = FALSE //Used for pulsedemons
 	var/illegal_weapons = FALSE
 	var/wiresexposed = FALSE
@@ -144,7 +143,7 @@
 
 	if(mind && !stored_freqs)
 		spawn(1)
-			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
+			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>", category=MIND_MEMORY_GENERAL, forced=TRUE)
 		stored_freqs = 1
 
 	if(cell)
@@ -339,7 +338,7 @@
 		dat += "<BR>\n"
 
 	viewalerts = TRUE
-	src << browse(dat, "window=robotalerts&can_close=0")
+	src << browse(HTML_SKELETON(dat), "window=robotalerts&can_close=0")
 
 /mob/living/silicon/robot/can_diagnose()
 	return is_component_functioning("diagnosis unit")
@@ -819,6 +818,8 @@
 				updateicon()
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
+	else if(isEmag(W))
+		emag_check(W,user)
 	else if(istype(W, /obj/item/device/toner))
 		if(toner >= tonermax)
 			to_chat(user, "The toner level of [src] is at its highest level possible")
@@ -945,6 +946,7 @@
 
 /mob/living/silicon/robot/attack_animal(mob/living/simple_animal/M)
 	M.unarmed_attack_mob(src)
+	return 1
 
 /mob/living/silicon/robot/attack_hand(mob/living/user)
 	add_fingerprint(user)
@@ -1087,7 +1089,7 @@
 		else
 			dat += text("[obj]: <A HREF=?src=\ref[src];act=\ref[obj]>Activate</A><BR>")
 
-	src << browse(dat, "window=robotmod&can_close=1")
+	src << browse(HTML_SKELETON(dat), "window=robotmod&can_close=1")
 	onclose(src,"robotmod") // Register on-close shit, which unsets machinery.
 
 
@@ -1371,3 +1373,9 @@
 //Currently only used for borg movement, to avoid awkward situations where borgs with RTG or basic cells are always slowed down
 /mob/living/silicon/robot/proc/get_percentage_power_for_movement()
 	return clamp(round(cell.maxcharge/4), 0, SILI_LOW_TRIGGER)
+
+/mob/living/silicon/robot/ignite()
+	if(module && locate(/obj/item/borg/fire_shield, module.modules))
+		return
+	else
+		..()

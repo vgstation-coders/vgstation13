@@ -5,6 +5,8 @@
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
 
+	mymob.zone_sel.pointer_to_var = &mymob.zone_sel
+
 	mymob.client.reset_screen()
 
 	mymob.client.screen += list(mymob.zone_sel)

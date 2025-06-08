@@ -59,7 +59,6 @@
 /datum/next_map/deff
 	name = "Defficiency"
 	path = "Defficiency"
-	min_players = 25
 
 /datum/next_map/dorf
 	name = "DorfStation"
@@ -116,7 +115,6 @@
 /datum/next_map/metaclub
 	name = "Meta Club"
 	path = "Metaclub"
-	min_players = 20
 
 /datum/next_map/packed
 	name = "Packed Station"
@@ -126,7 +124,6 @@
 /datum/next_map/roid
 	name = "Asteroid Station"
 	path = "RoidStation"
-	min_players = 25
 
 /datum/next_map/snaxi
 	name = "Snow Station"
@@ -177,11 +174,6 @@
 		warning(msg)
 		return FALSE
 	return ..()
-
-/datum/next_map/nerve
-	name = "Nerve Station"
-	path = "nervestation"
-	min_players = 20
 
 /datum/next_map/wheelstation
 	name = "Wheelstation"

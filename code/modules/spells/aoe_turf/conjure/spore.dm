@@ -3,12 +3,12 @@
 	desc = "It's nearly impossible to keep what is writhing inside you from breaking out. Release it."
 
 	school = "conjuration"
-	invocation_type = SpI_EMOTE
+	invocation_type = SP_INV_EMOTE
 	invocation = "kneels down as their eyes roll back and creatures emerge from their mouth."
 	still_recharging_msg = "<span class='notice'>You are still recovering.</span>"
 	spell_flags = 0
 	user_type = USER_TYPE_OTHER
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	summon_type = list(/mob/living/simple_animal/hostile/blobspore/small)
 	summon_amt = 2
 
@@ -44,7 +44,7 @@
 	playsound(pos, 'sound/effects/splat.ogg', 50, 1)
 
 /mob/living/simple_animal/hostile/blobspore/small
-	pass_flags = PASSTABLE | PASSMOB | PASSBLOB
+	pass_flags = PASSTABLE | PASSMOB | PASSBLOB | PASSRAILING
 	size = SIZE_TINY
 	flying = TRUE
 	health = 15

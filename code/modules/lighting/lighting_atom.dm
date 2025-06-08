@@ -11,6 +11,14 @@
 // The proc you should always use to set the light of this atom.
 // Nonesensical value for l_color default, so we can detect if it gets set to null.
 #define NONSENSICAL_VALUE -99999
+
+/**
+  * Changes the lighting of the atom, then calls update_light. Arguments left null will not be changed.
+  * Arguments:
+  * * l_range - Range of the light in tiles. 0 is off, and anything higher than 0 that's below 1.4 is floored to 1.4
+  * * l_power - Intensity of the light
+  * * l_color - Color of the light in hex
+  */
 /atom/proc/set_light(var/l_range, var/l_power, var/l_color = NONSENSICAL_VALUE)
 	if(l_range > 0 && l_range < MINIMUM_USEFUL_LIGHT_RANGE)
 		l_range = MINIMUM_USEFUL_LIGHT_RANGE	//Brings the range up to 1.4, which is just barely brighter than the soft lighting that surrounds players.
@@ -54,6 +62,7 @@
 	if (light)
 		light.destroy()
 		light = null
+	QDEL_NULL(firelightdummy)
 	. = ..()
 
 // Should always be used to change the opacity of an atom.

@@ -20,11 +20,12 @@ effective or pretty fucking useless.
 	icon_state = "batterer"
 	throwforce = 5
 	w_class = W_CLASS_TINY
+	w_type = RECYK_ELECTRONIC
 	throw_speed = 4
 	throw_range = 10
 	flags = FPRINT
 	siemens_coefficient = 1
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	item_state = "electronic"
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_COMBAT + "=3;" + Tc_SYNDICATE + "=3"
 
@@ -49,11 +50,7 @@ effective or pretty fucking useless.
 				if(prob(25))
 					M.Stun(rand(5,10))
 				to_chat(M, "<span class='danger'>You feel a tremendous, paralyzing wave flood your mind.</span>")
-				if(!iscarbon(user))
-					M.LAssailant = null
-				else
-					M.LAssailant = user
-					M.assaulted_by(user)
+				M.assaulted_by(user)
 
 			else
 				to_chat(M, "<span class='danger'>You feel a sudden, electric jolt travel through your head.</span>")

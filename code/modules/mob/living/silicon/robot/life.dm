@@ -135,7 +135,7 @@
 
 /mob/living/silicon/robot/proc/handle_sensor_modes()
 	change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS|BLIND)
-	see_invisible = SEE_INVISIBLE_LEVEL_TWO
+	see_invisible = SEE_INVISIBLE_LEVEL_ONE
 	see_in_dark = 8
 
 	if(client)
@@ -165,21 +165,22 @@
 /mob/living/silicon/robot/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(!module)
 		..()
-		return
-	if(module && locate(/obj/item/borg/fire_shield, module.modules))
+	if(locate(/obj/item/borg/fire_shield, module.modules))
 		return
 	..()
 
 //Robots on fire
 /mob/living/silicon/robot/handle_fire()
-	if(..())
+	if(!module)
+		return
+	if(..() || locate(/obj/item/borg/fire_shield, module.modules))
 		return
 	adjustFireLoss(3)
 
 /mob/living/silicon/robot/update_fire()
-	overlays -= image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing")
+	overlays -= mutable_appearance(icon='icons/mob/OnFire.dmi', icon_state="Standing")
 	if(on_fire)
-		overlays += image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing")
+		overlays += mutable_appearance(icon='icons/mob/OnFire.dmi', icon_state="Standing")
 	update_icons()
 
 /mob/living/silicon/robot/update_canmove()

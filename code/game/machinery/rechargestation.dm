@@ -275,7 +275,7 @@
 	src.use_power = MACHINE_POWER_USE_IDLE
 	// Removes dropped items/magically appearing mobs from the charger too
 	for (var/atom/movable/x in src.contents)
-		if(!(x in upgrade_holder | component_parts))
+		if(!(x in (upgrade_holder | component_parts)))
 			x.forceMove(src.loc)
 	return
 

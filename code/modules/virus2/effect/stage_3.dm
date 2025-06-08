@@ -891,6 +891,29 @@
 	speech.message = piratespeech(speech.message)
 
 
+/datum/disease2/effect/cult_vomit
+	name = "Hemoptysis"
+	desc = "Causes the infected to cough up blood."
+	stage = 3
+	restricted = 2
+	badness = EFFECT_DANGER_HARMFUL
+
+/datum/disease2/effect/cult_vomit/activate(mob/living/carbon/M)
+	if(!ishuman(M))
+		return
+	if(istype(get_area(M), /area/chapel))
+		return
+	if(iscultist(M))
+		return
+
+	var/mob/living/carbon/human/mob = M
+	mob.visible_message("<span class='danger'>[mob] vomits up blood!</span>", "<span class='danger'>You vomit up blood!</span>")
+	var/obj/effect/decal/cleanable/blood/splatter/S = new(loc = get_turf(mob), color = mob.species.blood_color)
+	S.amount = 1
+	playsound(mob, 'sound/effects/splat.ogg', 50, 1)
+	mob.vessel.remove_reagent(BLOOD,8)
+
+/*
 /datum/disease2/effect/cult_teleport
 	name = "Temporal Displacement"
 	desc = "UNKNOWN"
@@ -970,3 +993,4 @@
 		if(is_type_in_list(A, blacklisted_areas))
 			continue
 		valid_areas += A
+*/

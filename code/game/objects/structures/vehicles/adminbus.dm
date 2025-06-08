@@ -324,7 +324,7 @@
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/capture_mob(atom/A, var/selfclimb=0)
 	if(passengers.len >= ADMINBUS_MAX_CAPACITY)
-		to_chat(A, "<span class='warning'>\the [src] is full!</span>")
+		to_chat(A, "<span class='warning'>\The [src] is full!</span>")
 		return
 	if(unloading)
 		return
@@ -341,7 +341,7 @@
 		M.update_canmove()
 		passengers += M
 		if(!selfclimb)
-			to_chat(M, "<span class='warning'>\the [src] picks you up!</span>")
+			to_chat(M, "<span class='warning'>\The [src] picks you up!</span>")
 			if(occupant)
 				to_chat(occupant, "[M.name] captured!")
 		to_chat(M, "<span class='notice'>Welcome aboard \the [src]. Please keep your hands and arms inside the bus at all times.</span>")

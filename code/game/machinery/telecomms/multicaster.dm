@@ -53,7 +53,7 @@ var/list/pda_multicasters = list()
 
 /obj/machinery/pda_multicaster/proc/toggle_power(mob/user)
 	on = !on
-	visible_message("\the [user] turns \the [src] [on ? "on" : "off"].")
+	visible_message("\The [user] turns \the [src] [on ? "on" : "off"].")
 	update_icon()
 
 /obj/machinery/pda_multicaster/proc/check_status()
