@@ -13,7 +13,7 @@
 	w_class = W_CLASS_LARGE
 	autoignition_temperature = AUTOIGNITION_PLASTIC
 	flags = FPRINT
-	attack_verb = list("bashes", "vacuums", "smashes", "whacks", "staves") //TODO suggestions pls
+	attack_verb = list("bashes", "vacuums", "smashes", "whacks", "staves")
 
 	var/power_usage = 75
 
@@ -26,9 +26,44 @@
 	var/held = 0
 	var/turning_on = 0 //means the cleaner is turning on (this is for sound control)
 
+	var/sound/runningsound = sound()
+	var/sound/turningoffsound = sound()
+	var/sound/turningonsound = sound()
+	var/sound/wheelssound = sound()
+	var/sound/nullsound = sound(file = null)
+
 /obj/item/weapon/vacuumcleaner/New()
 	. = ..()
 	vacuumcleaner_list.Add(src)
+
+	runningsound.file = 'sound/effects/vacuumcleaner_running.ogg'
+	runningsound.repeat = 1
+	runningsound.volume = 50
+	runningsound.environment = 0
+	runningsound.atom = src
+	runningsound.transform = matrix(1, 0, 0, 0, 1, 0)
+
+	turningoffsound.file = 'sound/effects/vacuumcleaner_off.ogg'
+	turningoffsound.repeat = 0
+	turningoffsound.volume = 50
+	runningsound.environment = 0
+	turningoffsound.atom = src
+	turningoffsound.transform = matrix(1, 0, 0, 0, 1, 0)
+
+	turningonsound.file = 'sound/effects/vacuumcleaner_on.ogg'
+	turningonsound.repeat = 0
+	turningonsound.volume = 50
+	runningsound.environment = 0
+	turningonsound.atom = src
+	turningonsound.transform = matrix(1, 0, 0, 0, 1, 0)
+
+	wheelssound.file = 'sound/effects/vacuumcleaner_wheels.ogg'
+	wheelssound.repeat = 0
+	wheelssound.volume = 70
+	runningsound.environment = 0
+	wheelssound.atom = src
+	wheelssound.transform = matrix(1, 0, 0, 0, 1, 0)
+
 
 /obj/item/weapon/vacuumcleaner/Destroy()
 	vacuumcleaner_list.Remove(src)
@@ -61,16 +96,18 @@
 /obj/item/weapon/vacuumcleaner/attack_hand(var/mob/user)
 	..()
 	if (user)
-		user.register_event(/event/moved, src, src.mob_moved())
+		user.register_event(/event/moved, src, nameof(src::mob_moved()))
+		set_sound_atom(user) // sound emits from the mob's atom as the vacuum cleaner is no longer "visible" on a turf
 
 /obj/item/weapon/vacuumcleaner/attack_self(mob/user)
+	src.add_fingerprint(user)
 	if (active)
 		switchOff()
-	else
-		if (!cell || cover_open || !cell.charge || (!bag && !emagged))
-			to_chat(user, "<span class='warning'>It won't turn on!")
-		switchOn(user)
-	src.add_fingerprint(user)
+		return
+	if (!cell || cover_open || !cell.charge || (!bag && !emagged))
+		to_chat(user, "<span class='warning'>It won't turn on!")
+		return
+	switchOn(user)
 
 /obj/item/weapon/vacuumcleaner/attackby(obj/item/W, mob/user)
 	if (istype(W, /obj/item/weapon/storage/bag/trash))
@@ -127,8 +164,9 @@
 
 /obj/item/weapon/vacuumcleaner/dropped(mob/user as mob)
 	if (user)
-		user.unregister_event(/event/moved, src, src.mob_moved())
+		user.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 	..()
+	set_sound_atom(src) // sound emits from vacuum cleaner's atom as it is now "visible" on a turf
 	if (active)
 		switchOff()
 		// should it? i find the idea of a mid-ZAS vacuum cleaner pulling in
@@ -137,8 +175,8 @@
 /obj/item/weapon/vacuumcleaner/proc/switchOff(mob/user)
 	turning_on = 0 //definitely shouldnt be doing this right now
 	active = 0
-	playsound(src, null, 100, wait = 0, channel = 764) //purge channel before we leave
-	playsound(src, 'sound/effects/vacuumcleaner_off.ogg', 50, wait = 0, channel = 764)
+	emitsound(nullsound)
+	emitsound(turningoffsound)
 
 /obj/item/weapon/vacuumcleaner/proc/switchOn(mob/user)
 	if (!active && cell.charge)
@@ -151,30 +189,48 @@
 		//  then "free" the channel after switchOff sound
 		//  or is this C-brain
 		turning_on = 1
-		playsound(src, 'sound/effects/vacuumcleaner_on.ogg', 50, wait = 0, channel = 764)
+		emitsound(nullsound)
+		emitsound(turningonsound)
 		sleep(10) //length of uninterruptible section of above sound (1 sec)
 		turning_on = 0 //you may now interrupt and work and stuff
 		if (active && cell.charge) //this is necessary because we slept
-			update_sound(a_wait = 1) //queue looping running sound, try to wait if you can
+			update_sound()
 			vacuum() //clean the tile we're standing on
 
-/obj/item/weapon/vacuumcleaner/proc/update_sound(var/a_wait = 0)
+/obj/item/weapon/vacuumcleaner/proc/emitsound(sound/S)
+	for (var/mob/living/M in viewers())
+		world << M
+		if (M.client)
+			M << S
+
+/obj/item/weapon/vacuumcleaner/proc/set_sound_atom(atom/A)
+	if (A)
+		runningsound.atom = A
+		turningoffsound.atom = A
+		turningonsound.atom = A
+		wheelssound.atom = A
+	else
+		runningsound.atom = null
+		turningoffsound.atom = null
+		turningonsound.atom = null
+		wheelssound.atom = null
+
+/obj/item/weapon/vacuumcleaner/proc/update_sound()
 	if (active)
-		if (turning_on)
-			a_wait = 1 //overridden for length of uninterruptible section
 		if (bag && bag.is_full())
 			//play at higher pitch if bag is full
-			playsound(src, 'sound/effects/vacuumcleaner_running.ogg', 50, wait = a_wait, channel = 764, repeat = 2, frequency = 45500, vary = 1)
+			var/sound/fullsound = runningsound
+			fullsound.frequency = 45500
+			emitsound(fullsound)
 		else
-			//regular idling sound
-			playsound(src, 'sound/effects/vacuumcleaner_running.ogg', 50, wait = a_wait, channel = 764, repeat = 2)
+			emitsound(runningsound)
 
 /obj/item/weapon/vacuumcleaner/proc/mob_moved(atom/movable/mover)
 	if (usr) //only play wheels sound if someones using it
-		playsound(src, 'sound/effects/vacuumcleaner_wheels.ogg', 70, vary = 1, frequency = rand(42000, 46000)) //too much frequency variation sounds really bad
+		emitsound(wheelssound)
 	if (active)
 		vacuum()
-		update_sound(a_wait = 0) //directional sound/volume needs recalculation when moving
+		update_sound()
 
 /obj/item/weapon/vacuumcleaner/proc/vacuum()
 	if (!active)
