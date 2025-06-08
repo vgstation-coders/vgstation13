@@ -36766,7 +36766,6 @@
 "bjW" = (
 /obj/machinery/camera/autoname,
 /obj/structure/table,
-/obj/machinery/camera,
 /obj/machinery/alarm{
 	pixel_y = 23
 	},
