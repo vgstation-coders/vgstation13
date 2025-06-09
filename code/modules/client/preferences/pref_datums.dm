@@ -149,7 +149,7 @@
 // Binary flags
 /datum/preference_setting/binary_flag
 	default_setting = 0
-	var/max_binary_value = (1 << 12)
+	var/max_binary_value = (1 << 20)
 	var/toggles = list() // The actual flag toggles this is checking against
 
 /datum/preference_setting/binary_flag/sanitize_setting(var/new_setting)

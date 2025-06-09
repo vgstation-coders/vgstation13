@@ -66974,7 +66974,9 @@
 /turf/simulated/floor/plating,
 /area/maintenance/incinerator)
 "cwe" = (
-/obj/machinery/power/battery/smes,
+/obj/machinery/power/battery/smes{
+	charge = 5e+006
+	},
 /obj/structure/cable/white{
 	d2 = 4;
 	icon_state = "0-4"

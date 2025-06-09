@@ -1,6 +1,11 @@
 var/list/tetris_machines = list()
 var/list/deleted_machines_tetris_highscores = list()
 
+// 5 lines at once for perfect score
+#define PERFECT_SCORE 500
+// Only can update score every 0.5 seconds
+#define MINIMAL_SCORE_INTERVAL (0.5 SECONDS)
+
 /obj/machinery/computer/tetris
 	name = "T.E.T.R.I.S."
 	desc = "The pinnacle of human technology."
@@ -14,8 +19,7 @@ var/list/deleted_machines_tetris_highscores = list()
 	var/next_tech_threshold = list()
 
 	// Basic anti-cheat prevention (doesn't really matter)
-	var/init_times = list()
-	var/secret_pass_key
+	var/last_scored_time = list()
 
 	var/list/leaderboard_init = list()
 
@@ -32,7 +36,6 @@ var/list/deleted_machines_tetris_highscores = list()
 	)
 
 /obj/machinery/computer/tetris/New()
-	secret_pass_key = rand(1, 9999)
 	tetris_machines += src
 	return ..()
 
@@ -54,17 +57,16 @@ var/list/deleted_machines_tetris_highscores = list()
 			updateUsrDialog()
 			return
 		if(href_list["tetrisScore"])
-			if (text2num(href_list["init_time"]) != init_times[usr.key])
-				say("CHEATERS NEVER PROPSER.")
-				return
-			if (text2num(href_list["secretPassKey"]) != secret_pass_key)
-				say("CHEATERS NEVER PROPSER.")
-				return
 			var/temp_score = text2num(href_list["tetrisScore"])
+			var/score_delta = temp_score - total_score[usr.key]
+			if (score_delta > PERFECT_SCORE)
+				say("CHEATERS NEVER PROSPER.")
+			if (world.time - MINIMAL_SCORE_INTERVAL < last_scored_time[usr.key])
+				say("CHEATERS NEVER PROSPER.")
 			if (temp_score < total_score[usr.key]) // Means they restarted!
 				next_tech_threshold[usr.key] = 100
 			total_score[usr.key] = temp_score
-
+			last_scored_time[usr.key] = world.time
 			if (isliving(usr)) // Sorry ghosts
 				if(!next_tech_threshold[usr.key])
 					next_tech_threshold[usr.key] = 100
@@ -146,10 +148,6 @@ var/list/deleted_machines_tetris_highscores = list()
 		var/datum/asset/simple/C = new/datum/asset/simple/tetris()
 		send_asset_list(user.client, C.assets)
 
-	var/init_time = world.time
-
-	init_times[user.key] = init_time
-
 	var/dat ={"<!DOCTYPE html><html><head><title>Telemetry Enhanced Testing and Research Informatic Simulator (BLOX)</title>
 	<meta charset="utf-8">
 	<meta name="description" content="Using Blox, from https://github.com/gdaws/tetris">
@@ -160,7 +158,7 @@ var/list/deleted_machines_tetris_highscores = list()
 	<!-- MUST BE INCLUDED BEFORE -->
 	<script language='JavaScript'>
 	function submitScore(s){
-		window.location.href = 'byond://?src=\ref[src];init_time=[init_time];secretPassKey=[secret_pass_key];tetrisScore=' + s;
+		window.location.href = 'byond://?src=\ref[src];tetrisScore=' + s;
 	}
 	function ShowMain(){
 		$('.container').css('display', '');
@@ -352,3 +350,6 @@ var/list/deleted_machines_tetris_highscores = list()
 		<center><a class="nav-link" href=?src=\ref[src];refresh=1>Refresh</a></center>
 	"}
 	return dat
+
+#undef PERFECT_SCORE
+#undef MINIMAL_SCORE_INTERVAL
