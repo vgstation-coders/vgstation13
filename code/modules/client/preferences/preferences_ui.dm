@@ -579,7 +579,6 @@
 /datum/preferences/proc/open_load_dialog(mob/user)
 	var/database/query/q = new
 	var/list/name_list[MAX_SAVE_SLOTS]
-	message_admins("open load dialog for [user]")
 	q.Add("select real_name, player_slot from players where player_ckey=?", user.ckey)
 	if(q.Execute(db))
 		while(q.NextRow())
