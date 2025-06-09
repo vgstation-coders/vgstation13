@@ -326,6 +326,11 @@
 	for(var/i = 0 to 5)
 		insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
 
+/obj/machinery/smartfridge/bloodbank/filled/New()
+	. = ..()
+	if (ticker?.current_state == GAME_STATE_PLAYING)
+		initialize()
+
 /*******************
 *   Item Adding
 ********************/
