@@ -116,7 +116,7 @@
 		// I can't think of any other way to check this pre-toggling. Probably overloaded but I want to replicate it, just ion case.
 		switch (toggle)
 			// Admin toggle, do not pass if we're not admin
-			if (SOUND_ADMINHELP, CHAT_PRAYER, CHAT_GHOSTRADIO, CHAT_ATTACKLOGS, CHAT_DEBUGLOGS, AUTO_DEADMIN)
+			if (SOUND_ADMINHELP, CHAT_PRAYER, CHAT_ATTACKLOGS, CHAT_DEBUGLOGS, AUTO_DEADMIN)
 				if (!user.client.holder)
 					return
 
