@@ -326,10 +326,7 @@ Obviously, requires DNA2.
 
     // Normal tackle or throw logic
     else if(src.throwing)
-        // Place your normal tackle/slip bump logic here
-        // Example: knockdown, damage, or just call the parent proc
         ..() // or custom normal bump code
-
-    // Default bump logic for walking, etc.
+	 // Default bump logic for walking, etc.
     else
         ..()
