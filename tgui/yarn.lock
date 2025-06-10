@@ -19709,15 +19709,15 @@ __metadata:
   linkType: soft
 
 "tgui-core@npm:^4.0.2":
-  version: 4.0.3
-  resolution: "tgui-core@npm:4.0.3"
+  version: 4.0.2
+  resolution: "tgui-core@npm:4.0.2"
   dependencies:
     "@floating-ui/react": "npm:^0.27.8"
     "@nozbe/microfuzz": "npm:^1.0.0"
   peerDependencies:
     react: ^19.1.0
     react-dom: ^19.1.0
-  checksum: 10c0/01b5a4144931bf89113b0c263db86020fbf46398eb4c982a26781a9565f41fb204e07dd9c57e9bd2f4bd6ada9029d9618560dab47b3ecfaf91ecb76295a9248f
+  checksum: 10c0/685b933d0083a1bf2349d8a86aa8b16ca8da0d0ac83cd0e287f7450b88c08bb41a53140561c77269ad73de030401742dae3fd011113c38e07fbc3f233ddcb1af
   languageName: node
   linkType: hard
 
