@@ -1,7 +1,7 @@
 // Copyright (c) 2020 /vg/station coders
 // SPDX-License-Identifier: MIT
 
-import { Button, Flex, Icon, LabeledList, Modal, Section } from 'tgui-core/components';
+import { Button, Flex, Icon, Input, LabeledList, Modal, Section } from 'tgui-core/components';
 
 import { useBackend } from '../backend';
 import { Window } from '../layouts';
@@ -66,10 +66,12 @@ export const Gps = (props) => {
               onClick={() => act('toggle_refresh')}>
               Auto-update
             </Button.Checkbox>
-            <Button.Input
-              content={"Set tag: "+gpstag}
-              currentValue={gpstag}
-              onCommit={(e, value) => (act('set_tag', { 'new_tag': value }))} />
+              Tag:
+              <Button.Input
+                content={gpstag}
+                currentValue={gpstag}
+                onCommit={(e, value) => (act('set_tag', { 'new_tag': value }))}
+              />
           </Section>
         )}
         {!emped && !!transmitting && (
