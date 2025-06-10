@@ -654,7 +654,11 @@
 	enabled = FALSE
 
 	default_setting = null
-	allowed_values = list(null, "cyborg", "amputated")
+	allowed_values = list(null, "cyborg", "amputated", "peg")
+
+/datum/preference_setting/enum/organ_data/sanitize_setting(var/new_setting)
+	. = ..()
+	parent.organ_data[sql_name] = setting
 
 /datum/preference_setting/enum/organ_data/limb_left_arm
 	name = "Left Arm"

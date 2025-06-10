@@ -84,8 +84,8 @@
 	var/b_hair = get_pref(/datum/preference_setting/numerical/b_hair)
 
 	var/r_eyes = get_pref(/datum/preference_setting/numerical/r_eyes)
-	var/g_eyes = get_pref(/datum/preference_setting/numerical/b_eyes)
-	var/b_eyes = get_pref(/datum/preference_setting/numerical/g_eyes)
+	var/g_eyes = get_pref(/datum/preference_setting/numerical/g_eyes)
+	var/b_eyes = get_pref(/datum/preference_setting/numerical/b_eyes)
 
 	var/r_facial = get_pref(/datum/preference_setting/numerical/r_facial)
 	var/g_facial = get_pref(/datum/preference_setting/numerical/g_facial)

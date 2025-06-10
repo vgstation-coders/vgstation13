@@ -28,7 +28,6 @@
 
 	var/list/oversized_payloads = list()
 
-	var/dontpool
 /**
  * public
  *
@@ -65,12 +64,10 @@
 		assets = list(),
 		inline_html = "",
 		inline_js = "",
-		inline_css = "",
-		dontpool = FALSE)
+		inline_css = "")
 	log_tgui(client,
 		context = "[id]/initialize",
-		window = src,
-		)
+		window = src)
 	if(!client)
 		return
 	src.initial_fancy = fancy
@@ -79,7 +76,6 @@
 	src.initial_inline_js = inline_js
 	src.initial_inline_css = inline_css
 	status = TGUI_WINDOW_LOADING
-	src.dontpool = dontpool
 	fatally_errored = FALSE
 	// Build window options
 	var/options = "file=[id].html;can_minimize=0;auto_format=0;"
