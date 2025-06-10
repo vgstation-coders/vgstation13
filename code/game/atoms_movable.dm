@@ -598,6 +598,9 @@
 		if ("richter tackle")
 			var/obj/effect/afterimage/richter_tackle/RT = new (loc,src)
 			RT.overlays += image('icons/effects/effects.dmi', src, "castlevania_tackle", dir = turn(SOUTH, 90 * afterimage_step))
+		if("charge")
+			var/obj/effect/afterimage/charge/RT = new (loc,src)
+			RT.overlays += image(dir = turn(SOUTH, 90 * afterimage_step))
 
 /atom/movable/proc/throw_at(atom/target, range, speed, override = TRUE, var/fly_speed = 0, var/list/whitelist) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
 	set waitfor = FALSE

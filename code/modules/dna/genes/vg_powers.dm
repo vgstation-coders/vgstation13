@@ -217,92 +217,119 @@ Obviously, requires DNA2.
 	else
 		return ..()
 
+/mob/living/carbon/human/var/charge_gene_active = FALSE
+
+/mob/living/carbon/human/var/throw_source = null
+
 /spell/targeted/charge/cast(var/list/targets, var/mob/user)
-	playsound(user, 'sound/effects/chargeaction.ogg', 100, 1)
-	var/mob/living/carbon = user
-	var/landing = get_distant_turf(get_turf(user), carbon.dir, range)
-	carbon.throw_at(landing, range , 2)
+    playsound(user, 'sound/effects/chargeaction.ogg', 100, 1)
+    var/mob/living/carbon/human/human = user
+    human.charge_gene_active = TRUE
+    human.throw_source = "charge"
+    var/landing = get_distant_turf(get_turf(user), human.dir, range)
+    human.throw_at(landing, range, 2)
 
-/mob/living/carbon/special_thrown_behaviour()
-	throwing = 2//dashing through windows and grilles
+/mob/living/carbon/human/special_thrown_behaviour()
+    if(src.throw_source == "charge" && src.charge_gene_active)
+        throwing = 2 // charge throw
+    else
+        throwing = 1 // normal throw (tackle, slip, etc.)
 
-/mob/living/carbon/to_bump(var/atom/obstacle)
-	var/dash_dir = null
-	var/turf/crashing = null
-	if(src.throwing)
-		var/breakthrough = 0
-		if(istype(obstacle, /obj/structure/window/))
-			var/obj/structure/window/W = obstacle
-			W.shatter()
-			breakthrough = 1
+/mob/living/carbon/human/to_bump(var/atom/obstacle)
+    var/dash_dir = null
+    var/turf/crashing = null
 
-		else if(istype(obstacle, /obj/structure/grille/))
-			var/obj/structure/grille/G = obstacle
-			G.health = (0.25*initial(G.health))
-			G.healthcheck()
-			breakthrough = 1
+    // Charge bump logic
+    if(src.throwing && src.throw_source == "charge" && src.charge_gene_active)
+        var/breakthrough = 0
 
-		else if(istype(obstacle, /obj/structure/table))
-			var/obj/structure/table/T = obstacle
-			T.destroy()
-			breakthrough = 1
+        // Break all windows, grilles, tables, racks on this tile
+        for(var/obj/O in get_turf(obstacle))
+            if(istype(O, /obj/structure/window/))
+                var/obj/structure/window/W = O
+                W.shatter()
+                breakthrough = 1
+            else if(istype(O, /obj/structure/grille/))
+                var/obj/structure/grille/G = O
+                G.health = 0
+                G.healthcheck()
+                breakthrough = 1
+            else if(istype(O, /obj/structure/table))
+                var/obj/structure/table/T = O
+                T.destroy()
+                breakthrough = 1
+            else if(istype(O, /obj/structure/rack))
+                new /obj/item/weapon/rack_parts(O.loc)
+                qdel(O)
+                breakthrough = 1
 
-		else if(istype(obstacle, /obj/structure/rack))
-			new /obj/item/weapon/rack_parts(obstacle.loc)
-			qdel(obstacle)
-			breakthrough = 1
+        // Handle walls as before
+        if(istype(obstacle, /turf/simulated/wall))
+            var/turf/simulated/wall/W = obstacle
+            if (W.hardness <= 60)
+                playsound(W, 'sound/weapons/chargeimpact.ogg', 75, 1)
+                W.dismantle_wall(1)
+                breakthrough = 1
+                src.throwing = 0
+                src.charge_gene_active = FALSE
+                src.throw_source = null
+            else
+                src.throwing = 0
+                src.charge_gene_active = FALSE
+                src.throw_source = null
 
-		else if(istype(obstacle, /turf/simulated/wall))
-			var/turf/simulated/wall/W = obstacle
-			if (W.hardness <= 60)
-				playsound(W, 'sound/weapons/chargeimpact.ogg', 75, 1)
-				W.dismantle_wall(1)
-				breakthrough = 1
-			else
-				src.throwing = 0
+        else if(istype(obstacle, /obj/structure/reagent_dispensers))
+            var/obj/structure/reagent_dispensers/R = obstacle
+            R.explode(src)
 
-		else if(istype(obstacle, /obj/structure/reagent_dispensers))
-			var/obj/structure/reagent_dispensers/R = obstacle
-			R.explode(src)
+        else if(istype(obstacle, /mob/living))
+            var/mob/living/L = obstacle
+            if (L.flags & INVULNERABLE)
+                src.throwing = 0
+                src.charge_gene_active = FALSE
+                src.throw_source = null
+            else if (!(L.status_flags & CANKNOCKDOWN) || (M_HULK in L.mutations) || istype(L,/mob/living/silicon))
+                src.throwing = 0
+                src.charge_gene_active = FALSE
+                src.throw_source = null
+                L.take_overall_damage(5,0)
+                if(L.locked_to)
+                    L.locked_to.unlock_atom(L)
+            else
+                L.take_overall_damage(5,0)
+                if(L.locked_to)
+                    L.locked_to.unlock_atom(L)
+                L.Stun(2)
+                L.Knockdown(2)
+                L.apply_effect(5, STUTTER)
+                playsound(src, 'sound/weapons/chargeimpact.ogg', 50, 0, 0)
+                breakthrough = 1
+        else
+            src.throwing = 0
+            src.charge_gene_active = FALSE
+            src.throw_source = null
 
-		else if(istype(obstacle, /mob/living))
-			var/mob/living/L = obstacle
-			if (L.flags & INVULNERABLE)
-				src.throwing = 0
-			else if (!(L.status_flags & CANKNOCKDOWN) || (M_HULK in L.mutations) || istype(L,/mob/living/silicon))
-				//can't be knocked down? you'll still take the damage.
-				src.throwing = 0
-				L.take_overall_damage(5,0)
-				if(L.locked_to)
-					L.locked_to.unlock_atom(L)
-			else
-				L.take_overall_damage(5,0)
-				if(L.locked_to)
-					L.locked_to.unlock_atom(L)
-				L.Stun(2)
-				L.Knockdown(2)
-				L.apply_effect(5, STUTTER)
-				playsound(src, 'sound/weapons/chargeimpact.ogg', 50, 0, 0)
-				breakthrough = 1
-		else
-			src.throwing = 0
+        if(breakthrough)
+            dash_dir = src.dir
+            crashing = get_step(get_turf(src), dash_dir)
+            if(crashing && !istype(crashing, /turf/space))
+                spawn(1)
+                    src.throw_at(crashing, 50, src.throw_speed)
+            else
+                src.throwing = 0
+                src.charge_gene_active = FALSE
+                src.throw_source = null
+        else
+            src.throwing = 0
+            src.charge_gene_active = FALSE
+            src.throw_source = null
 
-		if(breakthrough)
-			if(crashing && !istype(crashing,/turf/space))
-				spawn(1)
-					src.throw_at(crashing, 50, src.throw_speed)
-			else
-				spawn(1)
-					crashing = get_distant_turf(get_turf(src), dash_dir, 2)
-					src.throw_at(crashing, 50, src.throw_speed)
+    // Normal tackle or throw logic
+    else if(src.throwing)
+        // Place your normal tackle/slip bump logic here
+        // Example: knockdown, damage, or just call the parent proc
+        ..() // or custom normal bump code
 
-	if(istype(obstacle, /obj))
-		var/obj/O = obstacle
-		if(!O.anchored)
-			step(obstacle,src.dir)
-		else
-			obstacle.Bumped(src)
-	else if(istype(obstacle, /mob))
-		step(obstacle,src.dir)
-	else
-		obstacle.Bumped(src)
+    // Default bump logic for walking, etc.
+    else
+        ..()

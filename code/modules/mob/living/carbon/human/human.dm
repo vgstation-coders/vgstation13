@@ -2105,7 +2105,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 
 	if(!can_be_fat)
 		species.anatomy_flags &= ~CAN_BE_FAT
-	
+
 	species.blood_color = get_random_colour()
 	species.flesh_color = get_random_colour()
 
@@ -2254,6 +2254,9 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 		playsound(src, 'sound/weapons/authenticrichtertackleslide.ogg', 70, 0)
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "castlevania_tackle_flick", plane = ABOVE_LIGHTING_PLANE)
 		return "richter tackle"
+	if (src.charge_gene_active)
+		anim(target=src)
+		return "charge"
 
 /mob/living/carbon/human/throw_item(var/atom/target,var/atom/movable/what=null)
 	var/atom/movable/item = get_active_hand()
