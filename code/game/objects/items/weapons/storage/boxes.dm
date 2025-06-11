@@ -580,7 +580,31 @@
 	icon_state = "rocksalt_shells"
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/rocksalt = 16)
-
+		
+/obj/item/weapon/storage/box/superbeanbagshells
+	name = "12-gauge super beanbag shells"
+	icon_state = "superbeanbag_shells"
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/superbeanbag = 16)
+	
+/obj/item/weapon/storage/box/concussiveblastshells
+	name = "12-gauge concussive blast shells"
+	icon_state = "frag_shells"
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/concussiveblast = 16)
+	
+/obj/item/weapon/storage/box/pepperballshells
+	name = "12-gauge pepperball shells"
+	icon_state = "pepper_shells"
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/pepperball = 16)
+	
+/obj/item/weapon/storage/box/duckshotshells
+	name = "12-gauge duckshot shells"
+	icon_state = "duckshot_shells"
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/duckshot = 16)
+	
 /obj/item/weapon/storage/box/labels
 	name = "label roll box"
 	desc = "A box of refill rolls for a hand labeler."
