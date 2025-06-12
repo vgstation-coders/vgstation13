@@ -869,7 +869,7 @@
 
 /obj/item/tool/solder/update_icon()
 	..()
-	var/total_amount = get_fuel(accepts_pacids ? 0 : SACID)
+	var/total_amount = get_fuel()
 	if(total_amount > ((3*max_fuel)/4)+1) //unfortunately switch blocks hate hard maths
 		icon_state = "[icon_prefix]solder-20"
 	else if(total_amount > (max_fuel/2)+1)
