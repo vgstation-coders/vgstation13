@@ -243,6 +243,7 @@
 /obj/item/tool/wirecutters/scissors/New()
 	. = ..()
 	icon_state = "scissors"
+
 /*
  * Welding Tool
  */
@@ -299,7 +300,7 @@
 	..()
 	if (!status)
 		to_chat(user, "<span class='notice'>The welder is unsecured.</span>")
-	to_chat(user, "It contains [get_fuel()]/[src.max_fuel] units of fuel![get_fuel(PLASMA) ? " ([get_fuel(PLASMA)] units plasma)" : ""]")
+	to_chat(user, "It contains [get_fuel()]/[src.max_fuel] units of fuel![reagents.get_reagent_amount(PLASMA) ? " ([reagents.get_reagent_amount(PLASMA)] units plasma)" : ""]")
 
 /obj/item/tool/weldingtool/attackby(obj/item/W as obj, mob/user as mob)
 	if(user.is_in_modules(src))
@@ -360,13 +361,13 @@
 		//Welders left on now use up fuel, but lets not have them run out quite that fast
 		if(1)
 			if(icon_state != "welder1") //Check that the sprite is correct, if it isnt, it means toggle() was not called
-				var/dmgmult = get_fuel(PLASMA) ? 1 + ((get_fuel(PLASMA) / get_fuel()) / 2) : 1 //divide by zero sanity
+				var/dmgmult = reagents.get_reagent_amount(PLASMA) ? 1 + ((reagents.get_reagent_amount(PLASMA) / get_fuel()) / 2) : 1 //divide by zero sanity
 				force = 15 * dmgmult
 				sharpness = 0.8 * dmgmult
 				sharpness_flags = INSULATED_EDGE | HOT_EDGE
 				damtype = "fire"
 				heat_production = 3800
-				source_temperature = get_fuel(PLASMA) ? TEMPERATURE_PLASMA : TEMPERATURE_WELDER
+				source_temperature = reagents.get_reagent_amount(PLASMA) ? TEMPERATURE_PLASMA : TEMPERATURE_WELDER
 				update_icon()
 				hitsound = "sound/weapons/welderattack.ogg"
 			if(prob(5))
@@ -442,14 +443,8 @@
 	toggle(user)
 
 //Returns the amount of fuel in the welder
-/obj/item/tool/weldingtool/proc/get_fuel(var/type = 0)
-	if(type == FUEL)
-		return reagents.get_reagent_amount(FUEL)
-	else if(type == PLASMA)
-		return reagents.get_reagent_amount(PLASMA)
-	else
-		return reagents.get_reagent_amount(FUEL) + reagents.get_reagent_amount(PLASMA)
-
+/obj/item/tool/weldingtool/proc/get_fuel()
+	return reagents.get_reagent_amount(FUEL) + reagents.get_reagent_amount(PLASMA)
 
 //Removes fuel from the welding tool. If a mob is passed, it will perform an eyecheck on the mob. This should probably be renamed to use()
 /obj/item/tool/weldingtool/proc/remove_fuel(var/amount = 1, var/mob/M = null)
@@ -463,7 +458,7 @@
 			to_chat(M, "<span class='notice'>Your welding tool has to be lit first.</span>")
 		return 0
 	if(fuelamt >= amount)
-		var/plasma_amt = get_fuel(PLASMA)
+		var/plasma_amt = reagents.get_reagent_amount(PLASMA)
 		var/mult = 1
 		if(plasma_amt)
 			mult += min(1,plasma_amt/fuelamt)
@@ -868,7 +863,7 @@
 	//Does not come fueled up
 
 /obj/item/tool/solder/proc/update_damage()
-	var/dmgmult = get_fuel(PACID) ? 1 + ((get_fuel(PACID) / get_fuel()) / 2) : 1 //divide by zero sanity
+	var/dmgmult = reagents.get_reagent_amounts(PACIDS) ? 1 + ((reagents.get_reagent_amounts(PACIDS) / get_fuel()) / 2) : 1 //divide by zero sanity
 	force = 3.0 * dmgmult
 	sharpness = 1.0 * dmgmult
 
@@ -888,7 +883,7 @@
 
 /obj/item/tool/solder/examine(mob/user)
 	..()
-	to_chat(user, "It contains [get_fuel()]/[src.max_fuel] units of fuel![get_fuel(PACID) ? " ([get_fuel(PACID)] units polytrinic acid)" : ""]")
+	to_chat(user, "It contains [get_fuel()]/[src.max_fuel] units of fuel![reagents.get_reagent_amounts(PACIDS) ? " ([reagents.get_reagent_amounts(PACIDS)] units polytrinic acid)" : ""]")
 
 /obj/item/tool/solder/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/reagent_containers/) && W.flags & OPENCONTAINER)
@@ -929,7 +924,7 @@
 	if(rem_amt >= amount)
 		var/mult = 1
 		if(accepts_pacids)
-			mult += min(1,get_fuel(PACID)/rem_amt)
+			mult += min(1,reagents.get_reagent_amounts(PACIDS)/rem_amt)
 		var/list/removable_reagents = accepts_pacids ? PACIDS + SACIDS : SACIDS
 		for(var/reag in removable_reagents)
 			reagents.remove_reagent(reag, amount)
@@ -952,13 +947,8 @@
 	return do_after(user, thing, (time/work_speed)/removemult)
 
 //Returns the amount of fuel in the welder
-/obj/item/tool/solder/proc/get_fuel(var/type = 0)
-	if(type == SACID)
-		return reagents.get_reagent_amounts(SACIDS)
-	else if(type == PACID)
-		return reagents.get_reagent_amounts(PACIDS)
-	else
-		return reagents.get_reagent_amounts(SACIDS + PACIDS)
+/obj/item/tool/solder/proc/get_fuel()
+	return reagents.get_reagent_amounts(SACIDS + PACIDS)
 	
 /obj/item/tool/solder/pre_fueled/New()
 	. = ..()
