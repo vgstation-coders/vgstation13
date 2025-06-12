@@ -312,7 +312,7 @@
 	construct_type = "Juggernaut"
 
 /mob/living/simple_animal/construct/armoured/proc/juggerblock(var/damage, var/atom/A)//juggernauts ignore damage of 10 when above 66% hp
-	if(istype(P, /obj/item/projectile/bullet/rocksalt))
+	if(istype(A, /obj/item/projectile/bullet/rocksalt))
 		return
 	var/hurt = maxHealth - health
 	if (hurt <= (maxHealth/3) && (!damage || damage <= damageblock))//when cracks start to appear

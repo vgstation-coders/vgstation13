@@ -85,12 +85,18 @@
 	caliber = POINT380
 	projectile_type = /obj/item/projectile/bullet/auto380/practice
 	icon_state = "s-p-casing"
+	var/building = null
 
 /obj/item/ammo_casing/c380auto/rubber
 	desc = "A .380AUTO rubber bullet casing."
 	caliber = POINT380
 	projectile_type = /obj/item/projectile/bullet/auto380/rubber
 	icon_state = "s-r-casing"
+	
+/obj/item/ammo_casing/c380auto/pepperball
+	desc = "A .380AUTO pepperball bullet casing."
+	caliber = POINT380
+	projectile_type = /obj/item/projectile/bullet/pepperball
 
 /obj/item/ammo_casing/lr22
 	desc = "A .22LR bullet casing."
@@ -222,6 +228,34 @@
 	projectile_type = /obj/item/projectile/bullet/rocksalt
 	starting_materials = list(MAT_IRON = 250)
 
+/obj/item/ammo_casing/shotgun/superbeanbag
+	name = "super beanbag shell"
+	desc = "An advanced less-lethal 12 gauge shell intended for asimov-compliant riot control."
+	icon_state = "sbshell"
+	projectile_type = /obj/item/projectile/bullet/superbeanbag
+	starting_materials = list(MAT_IRON = 250)
+	
+/obj/item/ammo_casing/shotgun/concussiveblast
+	name = "concussive blast shell"
+	desc = "A less-lethal 12 gauge shell that produces a bright flash and loud noise shortly after leaving the muzzle."
+	icon_state = "cbshell"
+	projectile_type = /obj/item/projectile/bullet/concussiveblast
+	starting_materials = list(MAT_IRON = 250)
+	
+/obj/item/ammo_casing/shotgun/pepperball
+	name = "pepperball shell"
+	desc = "A less-lethal 12 gauge shell containing a number of small pepperball rounds."
+	icon_state = "pbshell"
+	projectile_type = /obj/item/projectile/bullet/buckshot/pepperblast
+	starting_materials = list(MAT_IRON = 250)
+
+/obj/item/ammo_casing/shotgun/duckshot
+	name = "duckshot shell"
+	desc = "A novelty 12 gauge shell containing a number of plastic ducks and BBs. Warning: not a toy!"
+	icon_state = "dsshell"
+	projectile_type = /obj/item/projectile/bullet/buckshot/duckshot 
+	starting_materials = list(MAT_IRON = 250)	
+	
 /obj/item/ammo_casing/a762
 	desc = "A 7.62x51mm bullet casing."
 	caliber = POINT762
@@ -259,31 +293,3 @@
 	desc = "An invisible bullet casing, it's hard to tell if it's been spent or not."
 	projectile_type = /obj/item/projectile/bullet/invisible
 	icon_state = null
-
-/obj/item/ammo_casing/shotgun/superbeanbag
-	name = "super beanbag shell"
-	desc = "An advanced less-lethal 12 gauge shell intended for asimov-compliant riot control."
-	icon_state = "sbshell"
-	projectile_type = /obj/item/projectile/bullet/superbeanbag
-	starting_materials = list(MAT_IRON = 250)
-	
-/obj/item/ammo_casing/shotgun/concussiveblast
-	name = "concussive blast shell"
-	desc = "A less-lethal 12 gauge shell that produces a bright flash and loud noise shortly after leaving the muzzle."
-	icon_state = "cbshell"
-	projectile_type = /obj/item/projectile/bullet/concussiveblast
-	starting_materials = list(MAT_IRON = 250)
-	
-/obj/item/ammo_casing/shotgun/pepperball
-	name = "pepperball shell"
-	desc = "A less-lethal 12 gauge shell containing a number of small pepperball rounds."
-	icon_state = "pbshell"
-	projectile_type = /obj/item/projectile/bullet/buckshot/pepperblast
-	starting_materials = list(MAT_IRON = 250)
-
-/obj/item/ammo_casing/shotgun/duckshot
-	name = "duckshot shell"
-	desc = "A novelty 12 gauge shell containing a number of plastic ducks and BBs. Warning: not a toy!"
-	icon_state = "dsshell"
-	projectile_type = /obj/item/projectile/bullet/buckshot/duckshot 
-	starting_materials = list(MAT_IRON = 250)	
