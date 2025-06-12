@@ -67,7 +67,7 @@ var/list/all_doors = list()
 	new /obj/effect/decal/cleanable/dirt(get_turf(src))
 	qdel(src)
 
-/obj/machinery/door/kick_act/(mob/living/carbon/human/kicker)
+/obj/machinery/door/kick_act(mob/living/carbon/human/kicker)
 	..()
 	var/obj/item/clothing/shoes/S = kicker.shoes
 	if(istype(S))
