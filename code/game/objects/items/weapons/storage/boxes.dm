@@ -253,6 +253,7 @@
 
 /obj/item/weapon/storage/box/blanks
 	name = "box of blank shells"
+	icon_state = "dart_shells"
 	desc = "It has a picture of a shotgun shell and several warning symbols on the front."
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/blank = BOX_SPACE)
 
@@ -613,7 +614,7 @@
 /obj/item/weapon/storage/box/duckshotshells
 	name = "12-gauge duckshot shells"
 	icon_state = "duckshot_shells"
-	desc = "A small label below the festively printed duck states "\Not a toy - keep away from children\"."
+	desc = "A small label below the festively printed duck states \"Not a toy - keep away from children\"."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/duckshot = 16)
 	

@@ -154,7 +154,7 @@
 			if(user.drop_item(W, src))
 				user.create_in_hands(src, /obj/item/ammo_casing/shotgun/rocksalt, W, vismsg = "<span class='notice'>You stuff \the [W] into \the [src], finishing the new shell.</span>")			
 		else
-			to_chat(user,"<span class='notice'>This [src] already has [building] in it.</span>")
+			to_chat(user,"<span class='warning'>\The [src] already has [building] in it.</span>")
 			return
 	else 
 		if(istype(W,/obj/item/weapon/reagent_containers))
