@@ -47,32 +47,5 @@ var/datum/subsystem/sounds/SSsounds
 						//world.log << "Sound emitter [E] in range of player [player] at [receiver]."
 						in_range += player
 		//world.log << "Sound emitter [E] has [in_range.len] hearers in range."
-		E.update_hearers(in_range)
-
-// /datum/subsystem/sounds
-// 	name = "Sounds"
-// 	wait = 1
-// 	priority = SS_PRIORITY_SOUNDS
-// 	flags = SS_NO_INIT | SS_KEEP_TIMING
-// 	var/datum/controller/sounds/sound_controller
-
-// /datum/subsystem/sounds/New()
-// 	NEW_SS_GLOBAL(SSsounds)
-// 	sound_controller = global.sound_controller
-
-// /datum/subsystem/sounds/fire(resumed = FALSE)
-// 	if (!sound_controller)
-// 		world.log << "Sound subsystem: No sound controller found, skipping processing."
-// 		return
-
-// 	var/list/datum/sound_emitter/emitters = sound_controller.sound_emitters_by_channel
-// 	//world.log << "Sound subsystem processing [emitters.len] sound emitters."
-// 	for (var/i=1,i<=emitters.len,i++)
-// 		var/datum/sound_emitter/emitter = emitters[i]
-// 		if (!emitter)
-// 			world.log << "Sound emitter is null at index [i] in [emitters.len] emitters."
-// 			continue
-// 		if (!emitter.current_repeating_sound)
-// 			world.log << "Sound emitter at index [i] has no current repeating sound."
-// 			continue
-// 		emitter.update_hearers()
+		E.update_hearers(in_range) // send sounds to new hearers, stop sounds on lost hearers
+		E.update_sound_params() // apply any environmental/deafness/whatever related attenuation and update hearers

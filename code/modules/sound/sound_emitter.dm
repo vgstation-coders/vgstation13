@@ -55,6 +55,42 @@
 		for (var/mob/player in hearers)
 			send_sound_norepeat(player, S)
 
+/datum/sound_emitter/proc/apply_env_effects(sound/s)
+
+	// if an emitter is behind glass in a spaced area, listener shouldnt magically hear it in non-spaced nearby area
+	var/p_effect = turf_volume_coeff(s.atom)
+	s.volume *= p_effect
+
+	return s
+
+/datum/sound_emitter/proc/apply_player_effects(sound/s, var/mob/player)
+
+	if (player.ear_deaf > 0)
+		s.volume = s.volume / (1 + player.ear_deaf)
+
+	// loosely simulate some obstruction muffling the sound
+	if (!(source in view(range, player))) // TODO cache this
+		s.volume /= 5 // TODO this needs tuning
+
+	// similarly if player is in spaced area and emitter is in non-spaced nearby, shouldn't hear it
+	var/p_effect = turf_volume_coeff(s.atom)
+	s.volume *= p_effect
+
+	return s
+
+/datum/sound_emitter/proc/turf_volume_coeff(atom/a)
+	if (!a)
+		return 1 // ?:D?
+	var/turf/t = get_turf(a)
+	if (!t)
+		return 0 // no sound for the damned
+	var/datum/gas_mixture/environment = t.return_air()
+	var/atm = 0
+	if (environment)
+		atm = environment.return_pressure()
+	if (atm < MIN_SOUND_PRESSURE)
+		return 0 // also damned
+	return min(atm / ONE_ATMOSPHERE, 1)
 
 /datum/sound_emitter/proc/send_sound_norepeat(var/mob/player, var/sound/s, var/interrupt = FALSE)
 	world.log << "Sound emitter send_sound called for [player] on channel [s.channel] with sound [s.file]"
@@ -94,20 +130,19 @@
 	channel = null
 	active_key = null
 
-/datum/sound_emitter/proc/update_sound_params(volume = null, pitch = null)
+/datum/sound_emitter/proc/update_sound_params()
 	if (!channel || !active_key)
 		return
-	var/sound/S = sounds[active_key]
+	var/sound/S = copy_sound(sounds[active_key])
 	if (!S)
 		world.log << "Sound emitter update_sound_params called for key [active_key] on channel [channel], but sound does not exist."
 		return
-	if (volume != null)
-		S.volume = volume
-	if (pitch != null)
-		S.pitch = pitch
+
+	apply_env_effects(S)
 	S.status |= SOUND_UPDATE
 	for (var/mob/player in hearers)
-		player << S
+		var/sound/Stwo = apply_player_effects(copy_sound(S), player)
+		player << Stwo
 		//if (player.client && channel)
 			//player.client.audible_channels |= channel
 
@@ -123,6 +158,7 @@
 				continue
 			S.status &= ~SOUND_UPDATE // clear update status for new hearers, else they cant hear it lmao
 			S.channel = channel
+			world.log << "Sending sound to [player]: [S.file] V: [S.volume] C: [S.channel]"
 			player << S
 			//player.client.audible_channels[channel] = src
 
@@ -130,7 +166,22 @@
 		var/sound/nullsound = sound(file = null)
 		nullsound.channel = channel
 		nullsound.status = SOUND_UPDATE | SOUND_MUTE
+		world.log << "Stopping sound for [player] on channel [channel]"
 		player << nullsound
 		//player.client.audible_channels -= channel
 
 	hearers = nearby.Copy()
+
+// put this somewhere better than here
+/proc/copy_sound(sound/s)
+	if (!s)
+		return
+	var/sound/S = sound(s.file)
+	S.atom = s.atom
+	S.channel = s.channel
+	S.frequency = s.frequency
+	S.repeat = s.repeat
+	S.status = s.status
+	S.transform = s.transform
+	S.volume = s.volume
+	return S
