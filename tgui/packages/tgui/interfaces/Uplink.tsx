@@ -154,7 +154,7 @@ export const GenericUplink = (props) => {
           <Input
             autoFocus
             value={searchText}
-            onInput={(e, value) => setSearchText(value)}
+            onChange={setSearchText}
             mx={1} />
           <Button
             icon={compactMode ? 'list' : 'info'}
