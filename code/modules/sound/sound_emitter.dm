@@ -6,6 +6,8 @@
 	var/list/hearers = list()
 	var/range = 7
 
+	var/debug = FALSE
+
 /datum/sound_emitter/New(atom/s)
 	..()
 	source = s
@@ -52,8 +54,7 @@
 	else
 		// non-looping sounds do not need a channel reservation
 		// just send it
-		for (var/mob/player in hearers)
-			send_sound_norepeat(player, S)
+		send_nearby_norepeat(S)
 
 /datum/sound_emitter/proc/apply_env_effects(sound/s)
 
@@ -92,8 +93,17 @@
 		return 0 // also damned
 	return min(atm / ONE_ATMOSPHERE, 1)
 
-/datum/sound_emitter/proc/send_sound_norepeat(var/mob/player, var/sound/s, var/interrupt = FALSE)
-	world.log << "Sound emitter send_sound called for [player] on channel [s.channel] with sound [s.file]"
+/datum/sound_emitter/proc/send_nearby_norepeat(var/sound/s, var/interrupt = FALSE)
+	if (debug)
+		world.log << "Sound emitter send_nearby_norepeat called with sound [s.file]"
+
+	var/sound/S = copy_sound(s)
+	apply_env_effects(S)
+
+	for (var/mob/player in players_in_range())
+		send_norepeat(player, S, interrupt)
+
+/datum/sound_emitter/proc/send_norepeat(var/mob/player, var/sound/s, var/interrupt = FALSE)
 	if(!player || !player.client)
 		return
 
@@ -102,12 +112,16 @@
 		// ask the SOUND CONTROLLER to do this?
 		return
 
+	apply_player_effects(s, player)
+
 	if (interrupt)
 		var/sound/nullsound = sound(file = null, repeat = 0, wait = 0, channel = s.channel)
-		world.log << "Sound emitter interrupting sound for [player] on channel [s.channel] with null sound."
+		if (debug)
+			world.log << "Sound emitter send_norepeat interrupting sound for [player] on channel [s.channel] with null sound."
 		player << nullsound
 
-	world.log << "Sound emitter playing sound [s.file] for [player] on channel [s.channel] at volume [s.volume]"
+	if (debug)
+		world.log << "Sound emitter send_norepeat playing sound [s.file] for [player] on channel [s.channel] at volume [s.volume]"
 	player << s
 
 /datum/sound_emitter/proc/stop()
@@ -117,7 +131,8 @@
 	for (var/mob/player in hearers)
 		var/sound/nullsound = sound(file = null, repeat = 0, wait = 0, channel = channel)
 		nullsound.status = SOUND_UPDATE | SOUND_MUTE
-		world.log << "Sound emitter stopping sound for [player] on channel [channel]"
+		if (debug)
+			world.log << "Sound emitter stopping sound for [player] on channel [channel]"
 		player << nullsound
 		//player.client.audible_channels -= channel
 	hearers.Cut()
@@ -146,7 +161,9 @@
 		//if (player.client && channel)
 			//player.client.audible_channels |= channel
 
-/datum/sound_emitter/proc/update_hearers(list/nearby)
+/datum/sound_emitter/proc/update_hearers()
+	var/list/nearby = players_in_range()
+
 	var/list/new_hearers = nearby - hearers
 	var/list/lost_hearers = hearers - nearby
 
@@ -158,7 +175,8 @@
 				continue
 			S.status &= ~SOUND_UPDATE // clear update status for new hearers, else they cant hear it lmao
 			S.channel = channel
-			world.log << "Sending sound to [player]: [S.file] V: [S.volume] C: [S.channel]"
+			if (debug)
+				world.log << "Sending sound to [player]: [S.file] V: [S.volume] C: [S.channel]"
 			player << S
 			//player.client.audible_channels[channel] = src
 
@@ -166,11 +184,42 @@
 		var/sound/nullsound = sound(file = null)
 		nullsound.channel = channel
 		nullsound.status = SOUND_UPDATE | SOUND_MUTE
-		world.log << "Stopping sound for [player] on channel [channel]"
+		if (debug)
+			world.log << "Stopping sound for [player] on channel [channel]"
 		player << nullsound
 		//player.client.audible_channels -= channel
 
 	hearers = nearby.Copy()
+
+/datum/sound_emitter/proc/players_in_range()
+	var/list/in_range = list()
+	var/turf/t_source = get_turf(source)
+	if (debug)
+		if (!t_source)
+			world.log << "get_turf([source]) returned null"
+		var/source_loc = source.loc
+		if (!source_loc)
+			world.log << "[source].loc returned null"
+		else
+			world.log << "[source].loc = [source_loc]"
+	for (var/mob/player in player_list)
+		if (!player || !player.client)
+			continue
+		var/turf/receiver = get_turf(player)
+		// lovingly stolen from sound.dm
+		if (debug)
+			var/list/oczl = GetOpenConnectedZlevels(t_source)
+			world.log << "[oczl.len] open z levels from emitter"
+		for(var/z0 in GetOpenConnectedZlevels(t_source))
+			if (receiver && t_source && receiver.z == z0)
+				var/turf/portal/P1 = locate(/turf/portal) in receiver.vis_locs
+				var/turf/portal/P2 = locate(/turf/portal) in t_source.vis_locs
+				if (debug)
+					var/zdist = get_z_dist(receiver, t_source)
+					world.log << "zdist between player and emitter is [zdist]"
+				if((get_z_dist(receiver, t_source) <= range) || (P1 && get_z_dist(P1, t_source) <= range) || (P2 && get_z_dist(receiver, P2) <= range) || (P1 && P2 && get_z_dist(P1, P2) <= range))
+					in_range += player
+	return in_range
 
 // put this somewhere better than here
 /proc/copy_sound(sound/s)
