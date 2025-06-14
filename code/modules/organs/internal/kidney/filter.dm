@@ -27,7 +27,7 @@
 	if(owner.reagents.has_any_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE)))
 		owner.reagents.remove_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE), REM)
 	if(owner.reagents.has_any_reagents(STOXINS))
-		owner.reagents.remove_reagents(STOXINS, 1)
+		owner.reagents.remove_reagents(STOXINS, 2 * REM)
 	if(owner.reagents.has_any_reagents(SACIDS))
 		owner.reagents.remove_reagents(SACIDS, 0.5 * REM)
 	if(owner.reagents.has_any_reagents(list(PLASMA, SUX, CARPOTOXIN)))
