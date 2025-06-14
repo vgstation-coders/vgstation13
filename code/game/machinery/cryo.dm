@@ -20,6 +20,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/obj/effect/cryo_overlay/glass = null
 	var/mob/living/occupant = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
+	var/datum/sound_emitter/sound_emitter
 
 	var/current_heat_capacity = 50
 	var/running_bob_animation = 0 // This is used to prevent threads from building up if update_icons is called multiple times
@@ -82,6 +83,13 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		node1 = findConnecting(cdir)
 		if(node1)
 			break
+	sound_emitter = new /datum/sound_emitter(src)
+	if (sound_emitter)
+		var/sound/bubbles = sound()
+		bubbles.file = 'sound/machines/looping/bubbles.ogg'
+		bubbles.repeat = 1
+		bubbles.volume = 3
+		sound_emitter.add(bubbles, "bubbles")
 	update_icon()
 
 /obj/machinery/atmospherics/unary/cryo_cell/Destroy()
@@ -324,10 +332,12 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			return
 		on = 1
 		update_icon()
+		update_sound()
 
 	if(href_list["switchOff"])
 		on = 0
 		update_icon()
+		update_sound()
 
 	if(href_list["ejectBeaker"])
 		if(beaker)
@@ -462,6 +472,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if (on && (beaker == null || beaker.reagents.total_volume == 0))
 		overlays += "nomix"
 
+/obj/machinery/atmospherics/unary/cryo_cell/proc/update_sound()
+	if (on)
+		sound_emitter.play("bubbles")
+	else
+		sound_emitter.stop()
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/process_occupant()
 	if(air_contents.total_moles() < 10)
@@ -691,6 +706,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		else
 			on = 1
 		update_icon()
+		update_sound()
 
 		message_admins("[key_name(L)] has turned \the [src] [on?"on":"off"]! [formatJumpTo(src)]")
 	else if(occupant && !ejecting) //Eject occupant
