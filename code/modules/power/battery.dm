@@ -45,6 +45,19 @@ var/global/list/battery_online =	list(
 		overlays += battery_charge[clevel]
 	return
 
+/obj/machinery/power/battery/proc/update_sound()
+	if(!sound_emitter)
+		return
+
+	if(stat & (BROKEN | FORCEDISABLE | EMPED))
+		sound_emitter.stop()
+		return
+
+	if(online)
+		sound_emitter.play("smes_hum")
+	else
+		sound_emitter.stop()
+
 #define SMESRATE 0.05 				// rate of internal charge to external power
 
 /obj/machinery/power/battery
@@ -93,6 +106,22 @@ var/global/list/battery_online =	list(
 	var/last_online = 0
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY
+
+	// for emitting sound, duh
+	var/datum/sound_emitter/sound_emitter
+
+
+/obj/machinery/power/battery/initialize()
+	..()
+	sound_emitter = new /datum/sound_emitter(src)
+	if(sound_emitter)
+		var/sound/smes_hum = sound()
+		smes_hum.file = 'sound/machines/looping/smes_hum.ogg'
+		smes_hum.repeat = 1
+		smes_hum.volume = 15
+		smes_hum.atom = src
+		sound_emitter.add(smes_hum, "smes_hum")
+	update_sound()
 
 /obj/machinery/power/battery/RefreshParts()
 	var/capcount = 0
@@ -164,9 +193,10 @@ var/global/list/battery_online =	list(
 			online = FALSE
 			output = 0
 
-	// Only update icon if state changed
+	// Reflect state change
 	if(_charging != charging || _online != online || _chargedisplay != chargedisplay())
 		update_icon()
+		update_sound()
 
 /obj/machinery/power/battery/proc/chargedisplay()
 	return clamp(round(5.5*charge/(capacity ? capacity : 5e6)), 0, battery_charge.len)
@@ -285,6 +315,7 @@ var/global/list/battery_online =	list(
 	else if( href_list["online"] )
 		online = !online
 		update_icon()
+		update_sound()
 	else if( href_list["input"] )
 		switch( href_list["input"] )
 			if("min")
@@ -355,6 +386,7 @@ var/global/list/battery_online =	list(
 	if(prob(50)) //Toggle on/off
 		online = !online
 		update_icon()
+		update_sound()
 	else //Screw up power input/output
 		chargelevel = rand(0, max_input)
 		outputlevel = rand(0, max_output)
