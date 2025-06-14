@@ -7,7 +7,7 @@
 
 /datum/organ/internal/kidney/process()
 
-	if((owner.life_tick % 10 == 0) && (owner.getToxLoss(TRUE) <= 30) && (damage < min_broken_damage))
+	if((owner.life_tick % 10 == 0) && (owner.getToxLoss(TRUE) <= 15) && (damage < min_broken_damage))
 		owner.adjustToxLoss(-0.5)
 
 // Kidney upgrade
@@ -22,27 +22,17 @@
 
 /datum/organ/internal/kidney/filter/process()
 
-	if(owner.life_tick % 5 == 0)
+	if((owner.life_tick % 5 == 0) && (damage < min_broken_damage))
 		owner.adjustToxLoss(-0.5)
 	if(owner.reagents.has_any_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE)))
 		owner.reagents.remove_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE), REM)
 	if(owner.reagents.has_any_reagents(STOXINS))
 		owner.reagents.remove_reagents(STOXINS, 1)
-	if(owner.reagents.has_reagent(PLASMA))
-		owner.reagents.remove_reagent(PLASMA, 0.5 * REM)
 	if(owner.reagents.has_any_reagents(SACIDS))
 		owner.reagents.remove_reagents(SACIDS, 0.5 * REM)
-	if(owner.reagents.has_reagent(POTASSIUM_HYDROXIDE))
-		owner.reagents.remove_reagent(POTASSIUM_HYDROXIDE, REM)
-	if(owner.reagents.has_reagent(CYANIDE))
-		owner.reagents.remove_reagent(CYANIDE, REM)
-	if(owner.reagents.has_reagent(AMATOXIN))
-		owner.reagents.remove_reagent(AMATOXIN, REM)
+	if(owner.reagents.has_any_reagents(list(PLASMA, SUX, CARPOTOXIN)))
+		owner.reagents.remove_reagents(list(PLASMA, SUX, CARPOTOXIN), 0.5 * REM)
+	if(owner.reagents.has_any_reagents(list(POTASSIUM_HYDROXIDE, CYANIDE, AMATOXIN, MINDBREAKER)))
+		owner.reagents.remove_reagents(list(POTASSIUM_HYDROXIDE, CYANIDE, AMATOXIN, MINDBREAKER), REM)
 	if(owner.reagents.has_reagent(CHLORALHYDRATE))
 		owner.reagents.remove_reagent(CHLORALHYDRATE, 2 * REM)
-	if(owner.reagents.has_reagent(SUX))
-		owner.reagents.remove_reagent(SUX, 0.5 * REM)
-	if(owner.reagents.has_reagent(CARPOTOXIN))
-		owner.reagents.remove_reagent(CARPOTOXIN, 0.5 * REM)
-	if(owner.reagents.has_reagent(MINDBREAKER))
-		owner.reagents.remove_reagent(MINDBREAKER, REM)
