@@ -19,8 +19,8 @@
 /datum/speech_filter/proc/addWordReplacement(var/orig,var/replacement, var/case_sensitive=0)
 	return addReplacement("\\b[orig]\\b",replacement, case_sensitive)
 
-/datum/speech_filter/proc/addCallback(var/orig,var/callback,var/list/args)
-	return addExpression(orig,callback,args)
+/datum/speech_filter/proc/addCallback(var/orig,var/callback,var/list/arguments)
+	return addExpression(orig,callback,arguments)
 
 /datum/speech_filter/proc/addExpression(var/orig,var/action,var/list/replacetext, var/flags)
 	expressions[orig]=new action(orig,replacetext,flags)

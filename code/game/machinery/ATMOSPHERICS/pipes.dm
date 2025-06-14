@@ -149,7 +149,7 @@
 			initialize_directions = SOUTH|WEST
 	..()
 
-/obj/machinery/atmospherics/pipe/simple/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/pipe/simple/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
@@ -157,7 +157,7 @@
 	update_planes_and_layers()
 	initialize(1)
 	if(!node1&&!node2)
-		to_chat(usr, "<span class='warning'>There's nothing to connect this pipe section to! A pipe segment must be connected to at least one other object!</span>")
+		to_chat(user, "<span class='warning'>There's nothing to connect this pipe section to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon()
 	build_network()
@@ -453,7 +453,7 @@
 	layer = PIPE_LAYER
 	var/global/image/manifold_centre = image('icons/obj/pipes.dmi',"manifold_centre")
 
-/obj/machinery/atmospherics/pipe/manifold/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/pipe/manifold/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
@@ -462,7 +462,7 @@
 
 	initialize(1)
 	if(!node1&&!node2&&!node3)
-		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
+		to_chat(user, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon() // Skipped in initialize()!
 	build_network()
@@ -703,7 +703,7 @@
 	var/global/image/manifold4w_centre = image('icons/obj/pipes.dmi',"manifold4w_centre")
 
 
-/obj/machinery/atmospherics/pipe/manifold4w/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/pipe/manifold4w/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
@@ -711,7 +711,7 @@
 	update_planes_and_layers()
 	initialize(1)
 	if(!node1 && !node2 && !node3 && !node4)
-		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
+		to_chat(user, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon()
 	build_network()
@@ -985,7 +985,7 @@
 /obj/machinery/atmospherics/pipe/layer_manifold/setPipingLayer(var/new_layer = PIPING_LAYER_DEFAULT)
 	piping_layer = PIPING_LAYER_DEFAULT
 
-/obj/machinery/atmospherics/pipe/layer_manifold/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/pipe/layer_manifold/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
@@ -993,7 +993,7 @@
 	update_planes_and_layers()
 	initialize(1)
 	if(!(locate(/obj/machinery/atmospherics) in layer_nodes) && !other_node)
-		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
+		to_chat(user, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon()
 	build_network()
@@ -1195,7 +1195,7 @@
 /obj/machinery/atmospherics/pipe/layer_adapter/setPipingLayer(var/new_layer = PIPING_LAYER_DEFAULT)
 	piping_layer = new_layer
 
-/obj/machinery/atmospherics/pipe/layer_adapter/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/pipe/layer_adapter/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
@@ -1203,7 +1203,7 @@
 	update_planes_and_layers()
 	initialize(1)
 	if(!mid_node && !layer_node)
-		to_chat(usr, "<span class='warning'>There's nothing to connect this adapter to! A pipe segment must be connected to at least one other object!</span>")
+		to_chat(user, "<span class='warning'>There's nothing to connect this adapter to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon()
 	build_network()

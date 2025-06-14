@@ -934,9 +934,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 // So we can hear our host doing things.
 // NOTE:  We handle both visible and audible emotes because we're a brainslug that can see the impulses and shit.
-/mob/living/simple_animal/borer/proc/host_emote(var/list/args)
-	src.show_message(args["message"], args["m_type"])
-	host_brain.show_message(args["message"], args["m_type"])
+/mob/living/simple_animal/borer/proc/host_emote(var/list/arguments)
+	src.show_message(arguments["message"], arguments["m_type"])
+	host_brain.show_message(arguments["message"], arguments["m_type"])
 
 /mob/living/simple_animal/borer/proc/ventcrawl()
 	set name = "Crawl through Vent"
