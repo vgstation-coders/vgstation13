@@ -1420,6 +1420,8 @@ var/proccalls = 1
 //SOUND CHANNELS
 #define CHANNEL_RESERVABLE_MIN		1
 #define CHANNEL_RESERVABLE_MAX		512
+#define CHANNEL_MUS_RESERVABLE_MIN  513
+#define CHANNEL_MUS_RESERVABLE_MAX  1017	// todo check if it even needs nearly this many
 #define CHANNEL_WEATHER				1018
 #define CHANNEL_MEDBOTS				1019
 #define CHANNEL_BALLOON				1020
