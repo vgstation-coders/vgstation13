@@ -61,6 +61,9 @@
 /mob/living/simple_animal/cat/Proc
 	name = "Proc"
 
+/mob/living/simple_animal/cat/Felix
+	name = "Felixtest"
+
 /mob/living/simple_animal/cat/salem
 	name = "Salem"
 	desc = "Meow."
