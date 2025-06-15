@@ -17,7 +17,6 @@ var/global/datum/sound_channel_manager/sound_channel_manager = new
 	var/channel = free_channels[1]
 	free_channels -= channel
 	reserved_channels += channel
-	SSsounds.register(emitter)
 	return channel
 
 /datum/sound_channel_manager/proc/release_channel(var/channel, var/datum/sound_emitter/emitter)
@@ -27,5 +26,4 @@ var/global/datum/sound_channel_manager/sound_channel_manager = new
 		return
 	reserved_channels -= channel
 	free_channels += channel
-	SSsounds.unregister(emitter)
 	// free_channels.Sort() // probably not necessary

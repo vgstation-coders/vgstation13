@@ -11,6 +11,8 @@
 /datum/sound_emitter/New(atom/s)
 	..()
 	source = s
+	range = world.view
+	SSsounds.register(src)
 
 /datum/sound_emitter/Destroy()
 	if (sounds)
@@ -22,8 +24,8 @@
 	hearers.Cut()
 	source = null
 	active_key = null
+	SSsounds.unregister(src)
 	. = ..()
-	range = world.view / 2
 
 /datum/sound_emitter/proc/add(sound/s, var/key)
 	if (!s || !istype(s, /sound))
@@ -48,6 +50,7 @@
 			if (!channel)
 				world.log << "Sound emitter could not reserve channel for sound [S.file]."
 				return
+		SSsounds.register_repeating_emitter(src)
 		S.channel = channel
 		active_key = key
 		// dispatch to hearers handled by SSsounds
@@ -98,6 +101,7 @@
 		world.log << "Sound emitter send_nearby_norepeat called with sound [s.file]"
 
 	var/sound/S = copy_sound(s)
+	S.atom = source
 	apply_env_effects(S)
 
 	for (var/mob/player in players_in_range())
@@ -137,6 +141,7 @@
 		//player.client.audible_channels -= channel
 	hearers.Cut()
 	release_channel()
+	SSsounds.unregister_repeating_emitter(src)
 
 /datum/sound_emitter/proc/release_channel()
 	if (!channel)
