@@ -10,6 +10,12 @@
 	..()
 	update_icon()
 
+/obj/structure/flora/Destroy()
+	..()
+	if(istype(loc,/turf/unsimulated/floor/jungle/grass))
+		var/turf/unsimulated/floor/jungle/grass/G=loc
+		G.turf_speed_multiplier=1.1
+
 /obj/structure/flora/update_icon()
 	clicked = new/icon(src.icon, src.icon_state, src.dir)
 

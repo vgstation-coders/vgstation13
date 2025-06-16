@@ -657,7 +657,7 @@ Thanks.
 
 	if(config.allow_Metadata)
 		if(client)
-			to_chat(usr, "[src]'s Metainfo:<br>[client.prefs.metadata]")
+			to_chat(usr, "[src]'s Metainfo:<br>[client.prefs.get_pref(/datum/preference_setting/string/metadata)]")
 		else
 			to_chat(usr, "[src] does not have any stored infomation!")
 	else

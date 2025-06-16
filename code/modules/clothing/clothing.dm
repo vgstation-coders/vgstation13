@@ -955,6 +955,9 @@ var/global/maxStackDepth = 10
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return
 
+/obj/item/clothing/shoes/proc/on_kick_obj(mob/living/user, obj/target)
+	return
+
 /obj/item/clothing/shoes/defenseTackleBonus()
 	if(clothing_flags & MAGPULSE)
 		return 40

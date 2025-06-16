@@ -264,10 +264,10 @@ Frequency:
 		turfs += T
 	return pick(turfs)
 
-/obj/item/weapon/hand_tele/AltClick(var/mob/usr)
-	if((usr.incapacitated() || !Adjacent(usr)))
+/obj/item/weapon/hand_tele/AltClick(var/mob/user)
+	if((user.incapacitated() || !Adjacent(user)))
 		return
-	choose_destination(usr)
+	choose_destination(user)
 
 /obj/item/weapon/hand_tele/process()
 	charge = min(HANDTELE_MAX_CHARGE,charge+1)

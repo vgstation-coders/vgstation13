@@ -222,7 +222,8 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 		if(flag && !player.client.desires_role(job.title))
 			Debug("FOC flag failed, Player: [player], Flag: [flag], ")
 			continue
-		if(player.client.prefs.jobs[job.title] == level)
+		var/list/jobs = player.client.prefs.get_pref(/datum/preference_setting/assoc_list_setting/jobs)
+		if(jobs[job.title] == level)
 			Debug("FOC pass, Player: [player], Level:[level]")
 			candidates += player
 	return candidates
@@ -306,7 +307,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 	for(var/mob/new_player/player in player_list)
 		if(player.ready && player.mind && !player.mind.assigned_role)
 			unassigned += player
-			if(player.client.prefs.randomslot)
+			if(player.client.prefs.get_pref(/datum/preference_setting/toggle/randomslot))
 				player.client.prefs.random_character_sqlite(player, player.ckey)
 	Debug("DO, Len: [unassigned.len]")
 	if(unassigned.len == 0)
@@ -333,7 +334,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 
 		// Loop through all unassigned players
 		for(var/mob/new_player/player in unassigned)
-			if(player.client.prefs.alternate_option == GET_EMPTY_JOB)
+			if(player.client.prefs.get_pref(/datum/preference_setting/enum/alternate_option) == GET_EMPTY_JOB)
 				continue //This player doesn't want to share a job title. We need to deal with them last.
 
 			// Loop through all jobs
@@ -346,7 +347,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 	// Also makes sure that they got their preference correct
 
 	for(var/mob/new_player/player in unassigned)
-		if(player.client.prefs.alternate_option == GET_RANDOM_JOB)
+		if(player.client.prefs.get_pref(/datum/preference_setting/enum/alternate_option) == GET_RANDOM_JOB)
 			GiveRandomJob(player)
 
 	Debug("DO, Standard Check end")
@@ -359,7 +360,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 
 	// For those who wanted to be assistant if their preferences were filled, here you go.
 	for(var/mob/new_player/player in unassigned)
-		if(player.client.prefs.alternate_option == BE_ASSISTANT)
+		if(player.client.prefs.get_pref(/datum/preference_setting/enum/alternate_option) == BE_ASSISTANT)
 			if(config.assistantlimit)
 				if(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (config.assistantratio * count)) // Not enough sec...
 					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide ; this block then doesn't get checked.
@@ -368,7 +369,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 						unassigned -= player
 						continue
 
-			if(master_assistant.species_blacklist.len && master_assistant.species_blacklist.Find(player.client.prefs.species))
+			if(master_assistant.species_blacklist.len && master_assistant.species_blacklist.Find(player.client.prefs.get_pref(/datum/preference_setting/string/species)))
 				to_chat(player, "You have been returned to lobby because your species is blacklisted from assistant.")
 				player.ready = 0
 				unassigned -= player
@@ -410,7 +411,7 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 	//Final pass - first deal with the empty job group, otherwise send any leftovers to the lobby
 	final_pass: //this is a loop label
 		for(var/mob/new_player/player in unassigned)
-			if(player.client.prefs.alternate_option == GET_EMPTY_JOB)
+			if(player.client.prefs.get_pref(/datum/preference_setting/enum/alternate_option) == GET_EMPTY_JOB)
 				for(var/level = 3 to 1 step -1)
 					for(var/datum/job/job in shuffledoccupations)
 						if(job.current_positions) //already someone in this job title
@@ -434,7 +435,8 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 		Debug("DO player not old enough, Player: [player], Job:[job.title]")
 		return FALSE
 	// If the player wants that job on this level, then try give it to him.
-	if(player.client.prefs.jobs[job.title] == level)
+	var/list/jobs = player.client.prefs.get_pref(/datum/preference_setting/assoc_list_setting/jobs)
+	if(jobs[job.title] == level)
 		if (job.title == "Assistant" && !CheckAssistantCount(player, level))
 			return FALSE
 		// If the job isn't filled
@@ -453,8 +455,9 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 	if(not_enough_sec && (count < 5))
 		Debug("AC1 failed, not enough sec.")
 		// Does he want anything else...?
+		var/list/jobs = player.client.prefs.get_pref(/datum/preference_setting/assoc_list_setting/jobs)
 		for (var/datum/job/J in occupations)
-			if (player.client.prefs.jobs[J.title] == level)
+			if (jobs[J.title] == level)
 				Debug("AC1 failed, but other job slots for [player]. Adding them to the list of backup assistant slots.")
 				assistant_second_chance[player.ckey] = level
 				return FALSE
@@ -475,9 +478,9 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 		// Total between $200 and $500
 		var/balance_bank = rand(100,250)
 		var/balance_wallet = rand(100,250)
-		var/bank_pref_number = H.client.prefs.bank_security
+		var/bank_pref_number = H.client.prefs.get_pref(/datum/preference_setting/enum/bank_security)
 		var/bank_pref = bank_security_num2text(bank_pref_number)
-		var/pref_wage_ratio = H.client.prefs.wage_ratio
+		var/pref_wage_ratio = H.client.prefs.get_pref(/datum/preference_setting/numerical/wage_ratio)
 		if(centcomm_account_db)
 			var/wage = job.get_wage()
 			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = wage, security_pref = bank_pref_number, ratio_pref = pref_wage_ratio)
@@ -588,7 +591,8 @@ var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
 			if(!job.player_old_enough(player.client))
 				level6++
 				continue
-			switch(player.client.prefs.jobs[job.title])
+			var/list/jobs = player.client.prefs.get_pref(/datum/preference_setting/assoc_list_setting/jobs)
+			switch(jobs[job.title])
 				if(JOB_PREF_LOW)
 					level1++
 				if(JOB_PREF_MED)

@@ -745,7 +745,7 @@
 		// The better solution would be to not do that at all in New(), or use
 		// something like the map loader's atom preloader to transfer the
 		// floor_tile before New().
-		if(istype(old_turf, /turf/simulated/floor))
+		if(istype(old_turf, /turf/simulated/floor) && istype(new_turf, /turf/simulated/floor))
 			var/turf/simulated/floor/ancient = old_turf
 			var/turf/simulated/floor/modern = new_turf
 			modern.floor_tile = ancient.floor_tile

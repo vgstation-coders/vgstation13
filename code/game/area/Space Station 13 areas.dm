@@ -2030,6 +2030,71 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Southeast Reaches"
 	icon_state = "tundra4"
 
+//JUNGLE STATION
+/area/surface/jungle
+	name = "\improper Untamed Wilderness"
+	icon_state="jungle_wild"
+
+/area/surface/jungle/fenced
+	name = "\improper Outdoors"
+	icon_state="jungle_fenced"
+	
+/area/surface/jungle/underground
+	name = "\improper Underground"
+	icon_state="jungle_wild"	
+
+/area/surface/jungle/underground/zoned
+	forbid_apc=FALSE
+	construction_zone=FALSE
+	icon_state="jungle_zone"
+
+/area/surface/jungle/underground/zoned/speakeasy
+	name = "\improper Speakeasy"
+
+/area/surface/jungle/underground/zoned/ghettosurgery
+	name = "\improper Ghetto Surgery"
+	
+
+/area/surface/jungle/zoned
+	forbid_apc=FALSE
+	construction_zone=FALSE
+	icon_state="jungle_zone"
+
+/area/surface/jungle/zoned/prison_yard
+	name = "\improper Prison Yard"
+
+/area/surface/jungle/zoned/outdoor_bar
+	name = "\improper Outdoor Dining Area"
+
+/area/surface/jungle/zoned/atmos_outside
+	name = "\improper Exterior Atmospherics"
+
+/area/surface/jungle/zoned/sme_outside
+	name = "\improper Supermatter Cooling Zone"
+
+/area/surface/jungle/zoned/reactor_outside
+	name = "\improper Reactor Cooling Zone"
+
+/area/surface/jungle/zoned/botanty_outside
+	name = "\improper Outdoor Botany Area"
+
+/area/surface/jungle/zoned/storage_shed
+	name = "\improper Tool Shed"
+
+/area/surface/jungle/zoned/tradearea
+	name = "\improper Bazaar"
+
+/area/surface/jungle/zoned/art_zone
+	name = "\improper Portrait Zone"	
+
+/area/surface/jungle/zoned/dump
+	name = "\improper Dump"
+
+/area/surface/jungle/landing
+	name = "\improper Landing Area"
+	icon_state="jungle_landing"
+	base_turf_type=/turf/unsimulated/floor/jungle/concrete
+
 //DJSTATION
 
 /area/djstation

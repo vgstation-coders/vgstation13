@@ -163,9 +163,9 @@ var/const/PLAYER_OLD_HTML=PLAYER_HTML
 	src.mob=holder
 	owner=src.mob.client
 	if(owner.prefs)
-		if(!isnull(owner.prefs.volume))
-			volume = owner.prefs.volume
-		if(owner.prefs.usewmp)
+		if(!isnull(owner.prefs.get_pref(/datum/preference_setting/numerical/volume)))
+			volume = owner.prefs.get_pref(/datum/preference_setting/numerical/volume)
+		if(owner.prefs.get_pref(/datum/preference_setting/toggle/usewmp))
 			playerstyle = PLAYER_OLD_HTML
 		else
 			playerstyle = PLAYER_HTML
@@ -186,11 +186,11 @@ var/const/PLAYER_OLD_HTML=PLAYER_HTML
 /datum/media_manager/proc/send_update(var/target_url)
 	if(!(owner.prefs))
 		return
-	if(!(owner.prefs.toggles & SOUND_STREAMING) && target_url != "")
+	if(!(owner.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_STREAMING) && target_url != "")
 		return // Nope.
 	MP_DEBUG("<span class='good'>Sending update to media player ([target_url])...</span>")
 	var/window_playing
-	if(owner.prefs.usewmp)
+	if(owner.prefs.get_pref(/datum/preference_setting/toggle/usewmp))
 		stop_music()
 		MP_DEBUG("<span class='good'>WMP user, no switching, going to even window.<span>")
 		currently_broadcasting = JUKEBOX_EVEN_PLAYER
@@ -226,7 +226,7 @@ var/const/PLAYER_OLD_HTML=PLAYER_HTML
 
 /datum/media_manager/proc/push_music(var/targetURL,var/targetStartTime,var/targetVolume)
 	var/current_url
-	if (owner && owner.prefs.usewmp)
+	if (owner && owner.prefs.get_pref(/datum/preference_setting/toggle/usewmp))
 		current_url = url_even
 	else
 		switch (currently_broadcasting)
@@ -266,7 +266,7 @@ var/const/PLAYER_OLD_HTML=PLAYER_HTML
 	var/obj/machinery/media/M = A.media_source // TODO: turn into a list, then only play the first one that's playing.
 
 	var/current_url
-	if (owner.prefs.usewmp) // WMP only uses the even broadcaster
+	if (owner.prefs.get_pref(/datum/preference_setting/toggle/usewmp)) // WMP only uses the even broadcaster
 		current_url = url_even
 	else
 		switch (currently_broadcasting)
@@ -311,12 +311,13 @@ var/const/PLAYER_OLD_HTML=PLAYER_HTML
 
 /client/proc/set_new_volume()
 	if(!media || !istype(media))
-		to_chat(usr, "You have no media datum to change, if you're not in the lobby tell an admin.")
+		to_chat(usr, "<span class='warning'>You have no media datum to change, if you're not in the lobby tell an admin.</span>")
 		return
-	var/oldvolume = prefs.volume
+	var/oldvolume = prefs.get_pref(/datum/preference_setting/numerical/volume)
 	var/value = input("Choose your Jukebox volume.", "Jukebox volume", media.volume)
 	value = round(max(0, min(100, value)))
 	media.update_volume(value)
 	if(prefs && (oldvolume != value))
-		prefs.volume = value
+		var/datum/preference_setting/volume_pref = prefs.get_pref_datum(/datum/preference_setting/numerical/volume)
+		volume_pref.setting = value
 		prefs.save_preferences_sqlite(src, ckey)

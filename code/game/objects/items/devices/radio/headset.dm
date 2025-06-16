@@ -35,7 +35,7 @@
 /obj/item/device/radio/headset/talk_into(datum/speech/speech_orig, channel=null)
 	if(!broadcasting)
 		return
-	if(usr?.client?.prefs.headset_sound)
+	if(usr?.client?.prefs.get_pref(/datum/preference_setting/numerical/headset_sound))
 		playsound(usr, 'sound/effects/radio_chatter.ogg', 100, 1, vary = 0)
 	return ..()
 
@@ -43,7 +43,7 @@
 	if(ishuman(src.loc))
 		var/mob/living/carbon/human/H = src.loc
 		if(H.ears == src)
-			if(H.client && (H.client.prefs.headset_sound == HEADSET_SOUND_ALL))
+			if(H.client && (H.client.prefs.get_pref(/datum/preference_setting/numerical/headset_sound) == HEADSET_SOUND_ALL))
 				playsound(H, 'sound/effects/radio_chatter.ogg', 100, 1, vary = 0)
 			return ..(freq, level)
 	return -1

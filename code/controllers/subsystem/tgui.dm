@@ -88,7 +88,7 @@ var/datum/subsystem/tgui/SStgui
 		if(!window)
 			window = new(user.client, window_id, pooled = TRUE)
 		// Skip windows with acquired locks
-		if(window.locked || window.dontpool)
+		if(window.locked)
 			continue
 		if(window.status == TGUI_WINDOW_READY)
 			return window

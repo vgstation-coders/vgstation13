@@ -36,14 +36,14 @@
 	initialize_directions_he = initialize_directions	// The auto-detection from /pipe is good enough for a simple HE pipe
 	// BubbleWrap END
 
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions = 0
 	initialize_directions_he = pipe.get_pipe_dir()
 	//var/turf/T = loc
 	//level = T.intact ? 2 : 1
 	if(!initialize(1))
-		to_chat(usr, "Unable to build pipe here;  It must be connected to a machine, or another pipe that has a connection.")
+		to_chat(user, "Unable to build pipe here;  It must be connected to a machine, or another pipe that has a connection.")
 		return 0
 	build_network()
 	if (node1)
@@ -181,12 +181,12 @@
 			initialize_directions_he = WEST
 	// BubbleWrap END
 
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions = pipe.get_pdir()
 	initialize_directions_he = pipe.get_hdir()
 	if (!initialize(1))
-		to_chat(usr, "There's nothing to connect this junction to! (with how the pipe code works, at least one end needs to be connected to something, otherwise the game deletes the segment)")
+		to_chat(user, "There's nothing to connect this junction to! (with how the pipe code works, at least one end needs to be connected to something, otherwise the game deletes the segment)")
 		return 0
 	build_network()
 	if (node1)
@@ -242,12 +242,12 @@
 		if(WEST)
 			initialize_directions_he = NORTH|EAST|SOUTH
 
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions_he = pipe.get_hdir()
 	initialize(1)
 	if (!node1 && !node2 && !node3)
-		to_chat(usr, "There's nothing to connect this manifold to!")
+		to_chat(user, "There's nothing to connect this manifold to!")
 		return 0
 	build_network()
 	if (node1)
@@ -312,12 +312,12 @@
 	..()
 	initialize_directions_he = NORTH|SOUTH|EAST|WEST
 
-/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions_he = pipe.get_hdir()
 	initialize(1)
 	if (!node1 && !node2 && !node3 && !node4)
-		to_chat(usr, "There's nothing to connect this manifold to!")
+		to_chat(user, "There's nothing to connect this manifold to!")
 		return 0
 	build_network()
 	if (node1)

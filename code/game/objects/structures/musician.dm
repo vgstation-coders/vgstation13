@@ -72,7 +72,7 @@
 		if(istype(instrumentObj,/obj/item/device/instrument))
 			var/obj/item/device/instrument/INS = instrumentObj
 			INS.OnPlayed(user,M)
-		if(!M.client.prefs.hear_instruments)
+		if(!M.client.prefs.get_pref(/datum/preference_setting/toggle/hear_instruments))
 			continue
 		M.playsound_local(source, soundfile, 100, falloff = 5)
 	if(recording && live)
@@ -120,7 +120,7 @@
 				//to_chat(world, "beat: [beat] / beat length: [length(beat)]")
 				if(!length(beat)) //This occurs when a comma is at the end of a line
 					beat = " " //It's intended to be a space so here we make it a space
-				
+
 				var/list/notes = splittext(beat, "/")
 				var/delta = length(notes)==2 && text2num(notes[2]) ? text2num(notes[2]) : 1
 				var/note_str = splittext(notes[1], "-")

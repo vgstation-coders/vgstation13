@@ -99,7 +99,7 @@
 	// if(action == "change_ui_state")
 	// 	var/mob/living/user = ui.user
 	// 	//write_preferences will make sure it's valid for href exploits.
-	// 	user.client.prefs.layout_prefs_used = params["new_state"]
+	// 	user.client.prefs.get_pref(/datum/preference_setting/toggle/layout_prefs_used) = params["new_state"]
 
 /**
  * public

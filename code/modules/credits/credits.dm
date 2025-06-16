@@ -160,7 +160,7 @@ var/global/datum/credits/end_credits = new
 	for(var/client/C in clients)
 		if(!C.prefs)
 			continue
-		switch(C.prefs.credits)
+		switch(C.prefs.get_pref(/datum/preference_setting/enum/credits))
 			if(CREDITS_ALWAYS)
 				C.credits_audio()
 			if(CREDITS_NO_RERUNS) //The time has come to decide. Shall we play credits audio, or preload the jingle audio instead?
@@ -171,7 +171,7 @@ var/global/datum/credits/end_credits = new
 			if(CREDITS_NEVER)
 				C.jingle_audio(preload_only = TRUE)
 			else
-				log_debug("[C] somehow had an unknown credits preference of: [C.prefs.credits]")
+				log_debug("[C] somehow had an unknown credits preference of: [C.prefs.get_pref(/datum/preference_setting/enum/credits)]")
 
 /*
  * on_world_reboot_end:

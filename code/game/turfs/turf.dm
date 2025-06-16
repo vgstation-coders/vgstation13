@@ -322,6 +322,7 @@
 
 //Creates a new turf
 /turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+	var/area/original_area=loc
 	if(loc)
 		var/area/A = loc
 		A.area_turfs -= src
@@ -442,6 +443,15 @@
 	registered_events = old_registered_events
 	if(density != old_density)
 		densityChanged()
+	if(istype(loc,/area/surface/jungle) && !istype(original_area,/area/surface/jungle) ) //outdoor areas need to be illuminated.
+		if(SSDayNightJungle && .)
+			var/turf/NewTurf=.
+			NewTurf.affecting_lights=list()
+			NewTurf.lighting_clear_overlay()
+			NewTurf.lighting_build_overlay()
+			NewTurf.set_light(SSDayNightJungle.next_light_range,SSDayNightJungle.next_light_power,SSDayNightJungle.current_timeOfDay)
+			
+			
 
 /turf/proc/AddDecal(var/image/decal)
 	if(!turfdecals)

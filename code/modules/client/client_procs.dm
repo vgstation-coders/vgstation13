@@ -23,6 +23,7 @@ var/bunker_up = 0 //this round
 var/bunker_saved = 0 //saved to file
 var/bunker_setting = 0
 var/updated_stats = 0
+
 /client
 	var/account_joined = ""
 	var/account_age
@@ -238,7 +239,7 @@ var/updated_stats = 0
 		holder = admin_datums[ckey]
 
 	if(holder)
-		if(prefs.toggles & AUTO_DEADMIN)
+		if(prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & AUTO_DEADMIN)
 			message_admins("[src] was automatically de-admined.")
 			deadmin()
 			verbs += /client/proc/readmin
@@ -322,15 +323,16 @@ var/updated_stats = 0
 			qdel(update_query)
 	qdel(query)
 
-	if (prefs && prefs.show_warning_next_time)
-		to_chat(src, "<span class='notice'><b>You, or another user of this ckey ([ckey]) were warned by [prefs.warning_admin].</b></span>")
-		to_chat(src, "<span class='notice'>The reason was: '[prefs.last_warned_message]'.</span>")
+	if (prefs && prefs.get_pref(/datum/preference_setting/toggle/show_warning_next_time))
+		to_chat(src, "<span class='notice'><b>You, or another user of this ckey ([ckey]) were warned by [prefs.get_pref(/datum/preference_setting/string/warning_admin)].</b></span>")
+		to_chat(src, "<span class='notice'>The reason was: '[prefs.get_pref(/datum/preference_setting/string/last_warned_message)]'.</span>")
 		to_chat(src, "<span class='notice'>For more information, you can ask admins in ahelps or at https://ss13.moe. </span>")
 		to_chat(src, "<span class='notice'><b>You can now play the game.</b></span>")
-		prefs.show_warning_next_time = 0
+		var/datum/preference_setting/show_warning_next_time = prefs.get_pref_datum(/datum/preference_setting/toggle/show_warning_next_time)
+		show_warning_next_time.setting = 0
 		prefs.save_preferences_sqlite(src, src.ckey)
 
-	if(prefs.lastchangelog != changelog_hash) //bolds the changelog button on the interface so we know there are updates.
+	if(prefs.get_pref(/datum/preference_setting/string/changelog) != changelog_hash) //bolds the changelog button on the interface so we know there are updates.
 		winset_wrapper("rpane.changelog", "background-color=#eaeaea;font-style=bold")
 		prefs.SetChangelog(ckey,changelog_hash)
 		to_chat(src, "<span class='info'>Changelog has changed since your last visit.</span>")
@@ -357,7 +359,7 @@ var/updated_stats = 0
 	if(!tooltips)
 		tooltips = new /datum/tooltip(src)
 
-	fps = (prefs.fps < 0) ? RECOMMENDED_CLIENT_FPS : prefs.fps
+	fps = (prefs.get_pref(/datum/preference_setting/numerical/fps) < 0) ? RECOMMENDED_CLIENT_FPS : prefs.get_pref(/datum/preference_setting/numerical/fps)
 
 // This is wrapped so that if the winset fucks up somehow, this doesn't crash the entire client login proc.
 /client/proc/winset_wrapper(control_id, params)
@@ -501,7 +503,7 @@ var/updated_stats = 0
 		player_age = 0
 	if(age < MINIMUM_NON_SUS_ACCOUNT_AGE)
 		for(var/client/X in admins)
-			if(X.prefs.toggles & SOUND_ADMINHELP)
+			if(X.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_ADMINHELP)
 				X << 'sound/effects/adminhelp.ogg'
 		message_admins("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age]  First seen = [player_age]")
 		log_admin(("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age] First seen = [player_age]"))
@@ -752,7 +754,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 	return
 
 /client/proc/update_special_views()
-	if(prefs.space_parallax)	//Updating parallax for clients that have parallax turned on.
+	if(prefs.get_pref(/datum/preference_setting/toggle/space_parallax))	//Updating parallax for clients that have parallax turned on.
 		if(parallax_initialized)
 			mob.hud_used.update_parallax_values()
 
@@ -803,7 +805,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 	ViewFilter = newimages
 
 /client/proc/handle_hear_voice(var/mob/origin)
-	if(prefs.hear_voicesound)
+	if(prefs.get_pref(/datum/preference_setting/toggle/hear_voicesound))
 		if(issilicon(origin))
 			mob.playsound_local(get_turf(origin), get_sfx("voice-silicon"),50,1)
 		if(isvox(origin))

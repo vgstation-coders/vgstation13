@@ -195,8 +195,10 @@ var/auxtools_path
 			// To prevent the server shutting down before logs get to the admins or some nonsense.
 			sleep(1)
 
-		to_chat(world, "<span class='danger big'>Rebooting World immediately due to host request!</span>")
-		..()
+		to_chat(world, "<span class='danger big'>Sending kill signal due to host request!</span>")
+		force_restart = 1
+
+		//..()
 		return
 
 	if((vote.winner || vote.forced_map) && vote.map_paths)
@@ -213,7 +215,8 @@ var/auxtools_path
 	pre_shutdown()
 
 	TgsReboot()
-	..()
+	force_restart = 1
+	//..()
 
 /world/proc/pre_shutdown()
 	var/procWatch = start_watch()

@@ -2,7 +2,6 @@
 	var/list/datum_components
 	var/list/active_timers
 	var/list/open_uis
-	var/dontpool_tgui = FALSE
 
 /datum/proc/initialize()
 	return TRUE

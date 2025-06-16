@@ -237,7 +237,7 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 		return 0
 	else
 		delayNextpAIMove(getpAIMovementDelay())
-		if (user.client.prefs.stumble && ((world.time - user.last_movement) > 5) && getpAIMovementDelay() < 2)
+		if (user.client.prefs.get_pref(/datum/preference_setting/toggle/stumble) && ((world.time - user.last_movement) > 5) && getpAIMovementDelay() < 2)
 			delayNextpAIMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 		user.last_movement=world.time
 		return 1

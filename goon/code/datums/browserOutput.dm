@@ -345,7 +345,7 @@ For the main html chat area
 		if(istype(M, /mob/new_player))
 			continue
 
-		else if(M.client.prefs.toggles & CHAT_DEAD)
+		else if(M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD)
 			if(M.client.holder && M.client.holder.rights & R_ADMIN) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
 				. += M
 			else if(M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute))
