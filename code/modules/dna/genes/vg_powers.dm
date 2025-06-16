@@ -324,9 +324,5 @@ Obviously, requires DNA2.
             src.charge_gene_active = FALSE
             src.throw_source = null
 
-    // Normal tackle or throw logic
-    else if(src.throwing)
-        ..() // or custom normal bump code
-	 // Default bump logic for walking, etc.
     else
         ..()
