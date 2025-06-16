@@ -270,13 +270,9 @@ Obviously, requires DNA2.
                 playsound(W, 'sound/weapons/chargeimpact.ogg', 75, 1)
                 W.dismantle_wall(1)
                 breakthrough = 1
-                src.throwing = 0
-                src.charge_gene_active = FALSE
-                src.throw_source = null
-            else
-                src.throwing = 0
-                src.charge_gene_active = FALSE
-                src.throw_source = null
+            src.throwing = 0
+            src.charge_gene_active = FALSE
+            src.throw_source = null
 
         else if(istype(obstacle, /obj/structure/reagent_dispensers))
             var/obj/structure/reagent_dispensers/R = obstacle
