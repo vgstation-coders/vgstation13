@@ -299,7 +299,10 @@
 	irradiate = 10
 	knockdown_chance = 80
 	icon_state = "mooninite"
-	projectile_speed = 50 //it takes a while!
+	projectile_speed = 50 //it takes a while
+	bounce_sound = 'sound/effects/mooninitebleep.ogg'
+	bounce_type = PROJREACT_WALLS
+	bounces = -1
 
 /obj/item/projectile/energy/plasma/mooninite/process_step()
 	..()
