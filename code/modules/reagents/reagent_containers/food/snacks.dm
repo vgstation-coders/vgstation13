@@ -5779,7 +5779,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/nothing/New()
 	..()
-	reagents.add_reagent(NOTHING, 10) //spawns 4
+	reagents.add_reagent(NOTHING, 10)
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/slippery
 	name = "slippery sliders"
