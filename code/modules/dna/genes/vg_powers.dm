@@ -311,11 +311,7 @@ Obviously, requires DNA2.
             if(crashing && !istype(crashing, /turf/space))
                 spawn(1)
                     src.throw_at(crashing, 50, src.throw_speed)
-            else
-                src.throwing = 0
-                src.charge_gene_active = FALSE
-                src.throw_source = null
-        else
+                return
             src.throwing = 0
             src.charge_gene_active = FALSE
             src.throw_source = null
