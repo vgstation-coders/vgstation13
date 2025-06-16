@@ -288,3 +288,15 @@
 			P.OnFired(T)
 			P.process()
 	..()
+
+
+//Mooninite laser gun "bullet", moves 1 tile every 3ish seconds, but only "hits" if you are on its target tile
+//you cannot walk into the bullet, the bullet must slowly bleep towards you
+/obj/item/projectile/energy/plasma/mooninite
+	name = "laser bullet"
+	desc = "The bullet is enormous, there is no escaping!"
+	damage = 60
+	irradiate = 10
+	knockdown_chance = 80
+	icon_state = "mooninite"
+	projectile_speed = 50 //it takes a while!
