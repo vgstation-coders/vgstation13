@@ -300,6 +300,7 @@
 	knockdown_chance = 80
 	icon_state = "mooninite"
 	projectile_speed = 50 //it takes a while
+	lock_angle = 1
 	bounce_sound = 'sound/effects/mooninitebleep.ogg'
 	bounce_type = PROJREACT_WALLS
 	bounces = -1
