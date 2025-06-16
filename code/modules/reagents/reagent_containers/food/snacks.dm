@@ -1663,6 +1663,18 @@
 	reagents.add_reagent(SILENCER, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/nothingburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(NOTHING, 6)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/nothingburger
+	name = "nothingburger"
+	desc = "The chef really oversold these."
+	icon_state = "nothingburger"
+	base_crumb_chance = 20
+
 /obj/item/weapon/reagent_containers/food/snacks/donutburger
 	name = "donut burger"
 	desc = "Illegal to have out on code green."
@@ -5754,6 +5766,20 @@
 	name = "quiet slider"
 	desc = "..."
 	icon_state = "slider_mime"
+
+/obj/item/weapon/reagent_containers/food/snacks/slider/nothing
+	name = "nothingslider"
+	desc = "It's less than nothing!"
+	icon_state = "slider_nothing"
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/nothing
+	name = "nothingsliders"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/slider/nothing
+	child_volume = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/nothing/New()
+	..()
+	reagents.add_reagent(NOTHING, 10) //spawns 4
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/slippery
 	name = "slippery sliders"
