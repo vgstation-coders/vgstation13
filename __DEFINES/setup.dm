@@ -108,6 +108,9 @@ var/global/disable_vents     = 0
 #define SNOWGEAR_HEAT_CONDUCTIVITY 		0.2	// for now
 #define SPACESUIT_HEAT_CONDUCTIVITY		0	// until a time where space is no longer cold
 
+//Wasn't sure where to put this, so I put it here.
+#define MIN_BODYTEMP 80 //Only relevant for iced beer.
+
 // Doors!
 #define DOOR_CRUSH_DAMAGE 10
 

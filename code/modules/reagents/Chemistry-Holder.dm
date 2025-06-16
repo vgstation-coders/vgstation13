@@ -400,16 +400,19 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return total_transfered
 */
 
-/datum/reagents/proc/metabolize(var/mob/living/M, var/alien)
+/datum/reagents/proc/metabolize(mob/living/M, alien)
 	if(M && chem_temp != M.bodytemperature)
 		chem_temp = M.bodytemperature
 		handle_reactions()
+	var/lowest_temp = null
 	for(var/A in reagent_list)
 		var/datum/reagent/R = A
 		if(M && R)
 			R.on_mob_life(M, alien)
 			if(R)
 				R.metabolize(M)
+	if(!isnull(lowest_temp))
+		M.bodytemperature = max(M.bodytemperature + lowest_temp, MIN_BODYTEMP)
 	if(M.addicted_chems)
 		for(var/B in M.addicted_chems.reagent_list)
 			var/datum/reagent/R2 = B
