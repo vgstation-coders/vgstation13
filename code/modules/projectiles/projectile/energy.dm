@@ -295,8 +295,12 @@
 /obj/item/projectile/energy/plasma/mooninite
 	name = "laser bullet"
 	desc = "The bullet is enormous, there is no escaping!"
-	damage = 60
+	damage = 100 //OH GOD MY BACK!
 	irradiate = 10
 	knockdown_chance = 80
 	icon_state = "mooninite"
 	projectile_speed = 50 //it takes a while!
+
+/obj/item/projectile/energy/plasma/mooninite/process_step()
+	..()
+	playsound(src,'sound/effects/mooninitebleep.ogg',100)
