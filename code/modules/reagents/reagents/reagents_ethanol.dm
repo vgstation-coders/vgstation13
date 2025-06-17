@@ -1582,15 +1582,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "iced_beerglass"
-
-/datum/reagent/ethanol/drink/iced_beer/on_mob_life(mob/living/M)
-	if(..())
-		return 1
-
-	// Only apply the effect if body temp is above the lower limit
-	if(M.bodytemperature > T0C+33) //310 is the normal bodytemp. 310.055
-		return -4 // Lower temp by 4K this tick
-	return null // No effect if already cold enough
+	adj_temp=-4
 
 /datum/reagent/ethanol/drink/grog
 	name = "Grog"
