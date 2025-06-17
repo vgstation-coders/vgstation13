@@ -1203,9 +1203,7 @@
 	anim(target = atarget, a_icon = 'icons/effects/effects.dmi', a_icon_state = "pepper", sleeptime = 5)
 	if(!blocked && ishuman(atarget))
 		reagents.trans_to(atarget, reagents.total_volume/2)
-		reagents.reaction(atarget)
-	else
-		reagents.reaction(atarget)
+	reagents.reaction(atarget)
 
 /obj/item/projectile/bullet/duckshotduck
 	name = "duckshot"
