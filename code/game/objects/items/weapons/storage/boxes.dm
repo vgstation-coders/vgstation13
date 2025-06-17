@@ -579,7 +579,7 @@
 /obj/item/weapon/storage/box/fragshells
 	name = "12-gauge high-explosive fragmentation shells"
 	icon_state = "frag_shells"
-	desc = "Rule 78 of the Geneva Conventions forbids the use of projectiles that explode within the human body. Therefor these are only to be used on non-humans."
+	desc = "Rule 78 of the Geneva Conventions forbids the use of projectiles that explode within the human body. Therefore these are only to be used on non-humans."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/frag = 16)
 
