@@ -1582,7 +1582,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "iced_beerglass"
-	adj_temp=-4
+	adj_temp = -4
 
 /datum/reagent/ethanol/drink/grog
 	name = "Grog"
