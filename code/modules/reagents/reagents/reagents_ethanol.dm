@@ -1582,13 +1582,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "iced_beerglass"
-
-/datum/reagent/ethanol/drink/iced_beer/on_mob_life(var/mob/living/M)
-	if(..())
-		return 1
-
-	if(M.bodytemperature < T0C+33)
-		M.bodytemperature = min(T0C+33, M.bodytemperature - 4) //310 is the normal bodytemp. 310.055
+	adj_temp = -4
 
 /datum/reagent/ethanol/drink/grog
 	name = "Grog"
