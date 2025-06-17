@@ -17,13 +17,13 @@ var/datum/subsystem/sounds/SSsounds
 	NEW_SS_GLOBAL(SSsounds)
 
 /datum/subsystem/sounds/proc/register_repeating_emitter(datum/sound_emitter/E)
-	repeating_sound_emitters += E
+	repeating_sound_emitters |= E
 
 /datum/subsystem/sounds/proc/unregister_repeating_emitter(datum/sound_emitter/E)
 	repeating_sound_emitters -= E
 
 /datum/subsystem/sounds/proc/register(datum/sound_emitter/E)
-	all_sound_emitters += E
+	all_sound_emitters |= E
 
 /datum/subsystem/sounds/proc/unregister(datum/sound_emitter/E)
 	all_sound_emitters -= E
@@ -41,7 +41,7 @@ var/datum/subsystem/sounds/SSsounds
 	var/list/use_emitters = list()
 	for (var/datum/sound_emitter/E in all_sound_emitters)
 		if (istype(E.source, target_type))
-			use_emitters += E
+			use_emitters |= E
 
 	for (var/datum/sound_emitter/E in use_emitters)
 		E.send_nearby_norepeat(s)

@@ -40,16 +40,14 @@
 /datum/sound_emitter/proc/play(key)
 	var/sound/S = sounds[key]
 	if (!S)
-		world.log << "Sound emitter play called for key [key] on channel [channel], but sound does not exist."
-		return
+		CRASH("Sound emitter play called for key [key] on channel [channel], but sound does not exist.")
 
 	if (S.repeat == 1)
 		// looping sounds need channel reservation so they can be stopped later
 		if (!channel)
 			channel = sound_channel_manager.reserve_channel(src)
 			if (!channel)
-				world.log << "Sound emitter could not reserve channel for sound [S.file]."
-				return
+				CRASH("Sound emitter could not reserve channel for sound [S.file].")
 		SSsounds.register_repeating_emitter(src)
 		S.channel = channel
 		active_key = key
@@ -155,8 +153,7 @@
 		return
 	var/sound/S = copy_sound(sounds[active_key])
 	if (!S)
-		world.log << "Sound emitter update_sound_params called for key [active_key] on channel [channel], but sound does not exist."
-		return
+		CRASH("Sound emitter update_sound_params called for key [active_key] on channel [channel], but sound does not exist.")
 
 	apply_env_effects(S)
 	S.status |= SOUND_UPDATE
