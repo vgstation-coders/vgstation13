@@ -181,3 +181,10 @@
 	baseprice = 30
 	maxunits = 3
 	sales_category = TRADE_VARIETY
+	
+/datum/trade_product/exoticshotgunshells
+	name = "Exotic shotgun shells crate"
+	path = /obj/structure/closet/crate/chest/exoticshotgunshells
+	baseprice = 100
+	maxunits = 3
+	sales_category = TRADE_VARIETY

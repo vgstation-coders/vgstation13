@@ -253,7 +253,8 @@
 
 /obj/item/weapon/storage/box/blanks
 	name = "box of blank shells"
-	desc = "It has a picture of a gun and several warning symbols on the front."
+	icon_state = "dart_shells"
+	desc = "It has a picture of a shotgun shell and several warning symbols on the front."
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/blank = BOX_SPACE)
 
 /obj/item/weapon/storage/box/flashbangs
@@ -536,51 +537,87 @@
 /obj/item/weapon/storage/box/lethalshells
 	name = "12-gauge slugs"
 	icon_state = "slug_shells"
+	desc = "The box claims that these slugs have a near-perfect accuracy rating when used in defense situations."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun = 16)
 
 /obj/item/weapon/storage/box/beanbagshells
 	name = "12-gauge beanbag shells"
 	icon_state = "beanbag_shells"
+	desc = "A warning sticker states that improper aim can cause grievous injury with this less-than-lethal ammunition."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/beanbag = 16)
 
 /obj/item/weapon/storage/box/stunshells
 	name = "12-gauge stun shells"
 	icon_state = "stun_shells"
+	desc = "The box claims to only cause minor bruising and discomfort in \"neutralized hostiles\"."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/stunshell = 16)
 
 /obj/item/weapon/storage/box/dartshells
 	name = "12-gauge darts"
 	icon_state = "dart_shells"
+	desc = "Fujinsei brand toxic darts. A red label forbids modifying these shells with alterative chemical payloads."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/dart = 16)
 
 /obj/item/weapon/storage/box/buckshotshells
 	name = "12-gauge 00 buckshot shells"
 	icon_state = "buckshot_shells"
+	desc = "Covered in bright labels showing the number 9 in large print."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/buckshot = 16)
 
 /obj/item/weapon/storage/box/dragonsbreathshells
 	name = "12-gauge dragon's breath shells"
 	icon_state = "dragonsbreath_shells"
+	desc = "The box smells of burned cardboard."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/dragonsbreath = 16)
 
 /obj/item/weapon/storage/box/fragshells
 	name = "12-gauge high-explosive fragmentation shells"
 	icon_state = "frag_shells"
+	desc = "Rule 78 of the Geneva Conventions forbids the use of projectiles that explode within the human body. Therefore these are only to be used on non-humans."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/frag = 16)
 
 /obj/item/weapon/storage/box/rocksaltshells
 	name = "12-gauge rocksalt shells"
 	icon_state = "rocksalt_shells"
+	desc = "Someone has scribbled \"DIE, SATANSPAWN\" below the picture of the shell."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/rocksalt = 16)
-
+		
+/obj/item/weapon/storage/box/superbeanbagshells
+	name = "12-gauge super beanbag shells"
+	icon_state = "superbeanbag_shells"
+	desc = "The box claims that these cause zero injuries, no matter the target."
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/superbeanbag = 16)
+	
+/obj/item/weapon/storage/box/concussiveblastshells
+	name = "12-gauge concussive blast shells"
+	icon_state = "frag_shells"
+	desc = "The box has seventeen seperate labels instructing to always wear ear and eye protection while shooting."
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/concussiveblast = 16)
+	
+/obj/item/weapon/storage/box/pepperballshells
+	name = "12-gauge pepperball shells"
+	icon_state = "pepper_shells"
+	desc = "The box warns not to ingest the contents of these shells."
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/pepperball = 16)
+	
+/obj/item/weapon/storage/box/duckshotshells
+	name = "12-gauge duckshot shells"
+	icon_state = "duckshot_shells"
+	desc = "A small label below the festively printed duck states \"Not a toy - keep away from children\"."
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/duckshot = 16)
+	
 /obj/item/weapon/storage/box/labels
 	name = "label roll box"
 	desc = "A box of refill rolls for a hand labeler."
