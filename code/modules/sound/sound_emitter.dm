@@ -166,16 +166,16 @@
 /datum/sound_emitter/proc/add_hearer(mob/player)
 	hearers |= player
 	if (channel && active_key)
-			var/sound/S = sounds[active_key]
-			if (!S)
-				world.log << "Sound emitter update_hearers called for key [active_key] on channel [channel], but sound does not exist."
-				continue
-			S.status &= ~SOUND_UPDATE // clear update status for new hearers, else they cant hear it lmao
-			S.channel = channel
-			if (debug)
-				world.log << "Sending sound to [player]: [S.file] V: [S.volume] C: [S.channel]"
-			player << S
-			//player.client.audible_channels[channel] = src
+		var/sound/S = sounds[active_key]
+		if (!S)
+			world.log << "Sound emitter update_hearers called for key [active_key] on channel [channel], but sound does not exist."
+			continue
+		S.status &= ~SOUND_UPDATE // clear update status for new hearers, else they cant hear it lmao
+		S.channel = channel
+		if (debug)
+			world.log << "Sending sound to [player]: [S.file] V: [S.volume] C: [S.channel]"
+		player << S
+		//player.client.audible_channels[channel] = src
 
 /datum/sound_emitter/proc/remove_hearer(mob/player)
 	hearers -= player
