@@ -108,7 +108,6 @@ var/global/disable_vents     = 0
 #define SNOWGEAR_HEAT_CONDUCTIVITY 		0.2	// for now
 #define SPACESUIT_HEAT_CONDUCTIVITY		0	// until a time where space is no longer cold
 
-
 // Doors!
 #define DOOR_CRUSH_DAMAGE 10
 

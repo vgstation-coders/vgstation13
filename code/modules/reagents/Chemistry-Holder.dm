@@ -400,7 +400,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return total_transfered
 */
 
-/datum/reagents/proc/metabolize(mob/living/M, alien)
+/datum/reagents/proc/metabolize(var/mob/living/M, var/alien)
 	if(M && chem_temp != M.bodytemperature)
 		chem_temp = M.bodytemperature
 		handle_reactions()
