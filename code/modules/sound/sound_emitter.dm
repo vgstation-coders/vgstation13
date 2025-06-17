@@ -180,12 +180,12 @@
 /datum/sound_emitter/proc/remove_hearer(mob/player)
 	hearers -= player
 	var/sound/nullsound = sound(file = null)
-		nullsound.channel = channel
-		nullsound.status = SOUND_UPDATE | SOUND_MUTE
-		if (debug)
-			world.log << "Stopping sound for [player] on channel [channel]"
-		player << nullsound
-		//player.client.audible_channels -= channel
+	nullsound.channel = channel
+	nullsound.status = SOUND_UPDATE | SOUND_MUTE
+	if (debug)
+		world.log << "Stopping sound for [player] on channel [channel]"
+	player << nullsound
+	//player.client.audible_channels -= channel
 
 /datum/sound_emitter/proc/update_hearers()
 	var/list/nearby = players_in_range()
