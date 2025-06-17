@@ -1231,7 +1231,7 @@
 /obj/item/projectile/bullet/buckshot/duckshot/OnFired()
 	for(var/I = 1; I <=9; I++)
 		var/proj
-		if(I % 3 == 0)
+		if(!(I % 3))
 			proj = /obj/item/projectile/bullet/duckshotduck
 		else
 			proj = /obj/item/projectile/bullet/bb
