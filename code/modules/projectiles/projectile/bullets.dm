@@ -3,7 +3,7 @@
 	icon_state = "bullet"
 	damage = 60
 	damage_type = BRUTE
-	nodamage = 0
+	nodamage = FALSE
 	phase_type = PROJREACT_WINDOWS
 	penetration = 5 //bullets can now by default move through up to 5 windows, or 2 reinforced windows, or 1 plasma window. (reinforced plasma windows still have enough dampening to completely block them)
 	flag = "bullet"
@@ -1040,7 +1040,7 @@
 	name = "syringe"
 	icon_state = "syringe"
 	damage = 0
-	nodamage = 1
+	nodamage = TRUE
 	phase_type = null
 	penetration = 0
 	fire_sound = 'sound/items/syringeproj.ogg'
@@ -1101,7 +1101,7 @@
 /obj/item/projectile/bullet/syringe/candycane
 	name = "Candycane"
 	icon_state = "candycane"
-	nodamage = 0
+	nodamage = FALSE
 	damage = 20
 	capacity = 15
 	decay_type = null
@@ -1131,3 +1131,112 @@
 		reagents.trans_to(atarget, reagents.total_volume)
 	else
 		reagents.reaction(atarget)
+		
+/obj/item/projectile/bullet/superbeanbag
+	name = "super beanbag"
+	icon_state = "bbshell"
+	damage = 0
+	nodamage = TRUE
+	stun = 5
+	weaken = 10
+	stutter = 5
+	embed = 0
+	penetration = 0
+	
+/obj/item/projectile/bullet/concussiveblast
+	name = "concussive blast"
+	icon_state = "bolter"
+	damage_type = BURN
+	damage = 0
+	penetration = -1
+	embed = 0
+	bounce_sound = null
+	custom_impact = 1
+	penetration_message = 0
+	var/max_range = 1
+	var/stepped_range = 0
+	
+/obj/item/projectile/bullet/concussiveblast/to_bump(var/atom/target)
+	bullet_die()
+	
+/obj/item/projectile/bullet/concussiveblast/process_step()
+	..()
+	if(stepped_range <= max_range)
+		stepped_range++
+	else
+		bullet_die()
+		return
+
+/obj/item/projectile/bullet/concussiveblast/OnDeath()
+	var/turf/T = get_turf(src)
+	anim(location = T, a_icon = 'icons/effects/effects.dmi', a_icon_state = "explosionpulse", sleeptime = 5)
+	flashbangprime(TRUE,FALSE,FALSE)
+	..()
+	
+/obj/item/projectile/bullet/buckshot/pepperblast 
+	name = "pepperblast shell"
+	damage = 1
+	penetration = 0
+	embed = 0
+	icon_state = null
+	variance_angle = 33
+	total_amount_to_fire = 6
+	type_to_fire = /obj/item/projectile/bullet/pepperball
+	
+/obj/item/projectile/bullet/pepperball
+	name = "pepperball"
+	damage = 1
+	icon_state = "pbshell"
+	penetration = 0
+	embed = 0
+	
+/obj/item/projectile/bullet/pepperball/New()
+	..()
+	create_reagents(10)
+	reagents.add_reagent(CONDENSEDCAPSAICIN, 10)
+	
+/obj/item/projectile/bullet/pepperball/OnDeath()
+	..()
+
+/obj/item/projectile/bullet/pepperball/on_hit(var/atom/atarget, var/blocked = 0)
+	..()
+	anim(target = atarget, a_icon = 'icons/effects/effects.dmi', a_icon_state = "pepper", sleeptime = 5)
+	if(!blocked && ishuman(atarget))
+		reagents.trans_to(atarget, reagents.total_volume/2)
+	reagents.reaction(atarget)
+
+/obj/item/projectile/bullet/duckshotduck
+	name = "duckshot"
+	damage = 3
+	penetration = 0
+	embed = 0
+	icon_state = "duck"
+	
+/obj/item/projectile/bullet/bb
+	name = "bb"
+	damage = 2
+	penetration = 0
+	embed = 0
+	icon_state = "tinybullet"
+	projectile_speed = 0.5
+
+/obj/item/projectile/bullet/buckshot/duckshot 
+	name = "duckshot shell"
+	damage = 1
+	penetration = 0
+	embed = 0
+	icon_state = null
+	variance_angle = 33
+	
+/obj/item/projectile/bullet/buckshot/duckshot/OnFired()
+	for(var/I = 1; I <=9; I++)
+		var/proj
+		if(!(I % 3))
+			proj = /obj/item/projectile/bullet/duckshotduck
+		else
+			proj = /obj/item/projectile/bullet/bb
+		var/obj/item/projectile/P = new proj(src.loc)
+		P.firer = firer
+		P.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
+	bullet_die() 
+	
