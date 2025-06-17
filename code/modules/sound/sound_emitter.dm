@@ -168,8 +168,8 @@
 	if (channel && active_key)
 		var/sound/S = sounds[active_key]
 		if (!S)
-			world.log << "Sound emitter update_hearers called for key [active_key] on channel [channel], but sound does not exist."
-			continue
+			CRASH("Sound emitter update_hearers called for key [active_key] on channel [channel], but sound does not exist.")
+			return
 		S.status &= ~SOUND_UPDATE // clear update status for new hearers, else they cant hear it lmao
 		S.channel = channel
 		if (debug)
