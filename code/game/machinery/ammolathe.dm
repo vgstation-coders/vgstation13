@@ -37,7 +37,6 @@
 		new /obj/item/ammo_storage/box/b380auto(), \
 		new /obj/item/ammo_storage/box/b380auto/practice(), \
 		new /obj/item/ammo_storage/box/b380auto/rubber(), \
-		new /obj/item/ammo_storage/box/b380auto/pepperball(), \
 		new /obj/item/ammo_storage/box/c9mm(), \
 		new /obj/item/ammo_storage/box/c38(), \
 		new /obj/item/ammo_storage/box/a357(), \

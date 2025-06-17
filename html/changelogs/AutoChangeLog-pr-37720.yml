@@ -1,8 +1,0 @@
-author: SonixApache
-delete-after: true
-changes:
-- rscadd: Added 4 new exotic shotgun shells, available at your local vox trader
-- rscadd: added pepperball glock ammo, available at the ammolathe
-- rscadd: you can now craft rock salt shells by putting salt in them and then wadding
-    them with a piece of paper.
-- tweak: rock-salt shells now penetrate juggernaut shields
