@@ -13,6 +13,7 @@
 	source = s
 	range = world.view
 	SSsounds.register(src)
+	sound_zone_manager.register_emitter(src)
 
 /datum/sound_emitter/Destroy()
 	if (sounds)
@@ -169,7 +170,6 @@
 		var/sound/S = sounds[active_key]
 		if (!S)
 			CRASH("Sound emitter update_hearers called for key [active_key] on channel [channel], but sound does not exist.")
-			return
 		S.status &= ~SOUND_UPDATE // clear update status for new hearers, else they cant hear it lmao
 		S.channel = channel
 		if (debug)
@@ -179,6 +179,8 @@
 
 /datum/sound_emitter/proc/remove_hearer(mob/player)
 	hearers -= player
+	if (!channel)
+		return
 	var/sound/nullsound = sound(file = null)
 	nullsound.channel = channel
 	nullsound.status = SOUND_UPDATE | SOUND_MUTE

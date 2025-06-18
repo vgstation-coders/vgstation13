@@ -8,7 +8,7 @@ var/datum/subsystem/sounds/SSsounds
 	name = "Sounds"
 	wait = 1
 	priority = SS_PRIORITY_SOUNDS
-	flags = SS_NO_INIT | SS_KEEP_TIMING
+	flags = SS_NO_INIT | SS_KEEP_TIMING | SS_NO_FIRE
 
 	var/list/repeating_sound_emitters = list()
 	var/list/all_sound_emitters = list()
@@ -29,11 +29,11 @@ var/datum/subsystem/sounds/SSsounds
 	all_sound_emitters -= E
 
 /datum/subsystem/sounds/fire(resumed = FALSE)
-	for (var/datum/sound_emitter/E in repeating_sound_emitters)
-		if (!E.channel)
-			continue
-		E.update_hearers() // send sounds to new hearers, stop sounds on lost hearers
-		E.update_sound_params() // apply any environmental/deafness/whatever related attenuation to active sound
+	//for (var/datum/sound_emitter/E in repeating_sound_emitters)
+	//	if (!E.channel)
+	//		continue
+	//	E.update_hearers() // send sounds to new hearers, stop sounds on lost hearers
+	//	E.update_sound_params() // apply any environmental/deafness/whatever related attenuation to active sound
 
 // eg. SSsounds.play_global_sound_on_type(/obj/machinery/firealarm, sound(file='bikehorn.ogg'))
 //  makes all firealarms play bikehorn.ogg. requires a sound_emitter var on the type

@@ -19,7 +19,6 @@
 	minY = T.y - r
 	maxX = T.x + r
 	maxY = T.y + r
-	sound_zone_manager.add_sound_zone(src)
 
 /datum/sound_zone/proc/contains(mob/M)
 	if (!M)
@@ -29,10 +28,10 @@
 		return
 	return (minX <= T.x && T.x <= maxX && minY <= T.y && T.y < maxY )
 
-/datum/sound_zone/proc/on_enter(mob/player/P)
-	sound_emitter.add_hearer(P)
-	P.current_sound_zones |= src
+/datum/sound_zone/proc/on_enter(mob/player)
+	sound_emitter.add_hearer(player)
+	player.current_sound_zones |= src
 
-/datum/sound_zone/proc/on_leave(mob/player/P)
-	sound_emitter.remove_hearer(P)
-	P.current_sound_zones -= src
+/datum/sound_zone/proc/on_leave(mob/player)
+	sound_emitter.remove_hearer(player)
+	player.current_sound_zones -= src
