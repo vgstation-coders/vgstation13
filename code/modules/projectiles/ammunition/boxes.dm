@@ -106,7 +106,7 @@
 	
 /obj/item/ammo_storage/box/b380auto/pepperball
 	name = "pistol ammo box (.380AUTO pepperball)"
-	desc = "A box of .380AUTO pepperabll bullets. Holds 30 rounds."
+	desc = "A box of .380AUTO pepperball bullets. Holds 30 rounds."
 	icon_state = "9mmred"
 	ammo_type = "/obj/item/ammo_casing/c380auto/pepperball"
 
