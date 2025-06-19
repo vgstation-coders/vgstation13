@@ -1,3 +1,6 @@
+
+// spatial hashing algo based on https://www.beosil.com/download/CollisionDetectionHashing_VMV03.pdf
+
 var/global/datum/sound_zone_manager/sound_zone_manager = new
 
 /datum/sound_zone_manager
@@ -16,7 +19,7 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 	return hash(index(x), index(y), z) // not considering multi-z yet (ever)
 
 /datum/sound_zone_manager/proc/index(v)
-	return (v - (v % cell_size)) / cell_size // floor integer division
+	return (v - (v % cell_size)) / cell_size // floor integer division - is this retarded, does floor(a/b) or round(a/b, -1) do a faster job
 
 /datum/sound_zone_manager/proc/get_candidate_zones(x, y, z)
 	var/list/zones = list()
@@ -27,7 +30,7 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 			var/h = hash(X + dx, Y + dy, z)
 			if (buckets[h])
 				for (var/datum/sound_zone/Z in buckets[h])
-					zones |= Z
+					zones |= Z // this line is a bottleneck, can be solved with some smart caching
 	return zones
 
 /datum/sound_zone_manager/proc/register_emitter(datum/sound_emitter/E)
@@ -69,11 +72,9 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 			bucket -= Z
 
 /datum/sound_zone_manager/proc/register_listener(mob/player)
-	//player.register_event(/event/entered, src, nameof(src::on_player_move()))
 	player.register_event(/event/moved, src, nameof(src::on_player_move()))
 
 /datum/sound_zone_manager/proc/on_player_move(mob/mover)
-///datum/sound_zone_manager/proc/on_player_move(mob/mover, turf/location, atom/oldloc)
 	if (!mover || !mover.client)
 		return
 
