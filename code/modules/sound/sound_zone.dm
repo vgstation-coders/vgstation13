@@ -20,10 +20,8 @@
 	maxX = T.x + r
 	maxY = T.y + r
 
-/datum/sound_zone/proc/contains(mob/M)
-	if (!M)
-		return
-	var/turf/T = get_turf(M)
+// minimal axis-aligned bounds check
+/datum/sound_zone/proc/contains(turf/T)
 	if (!T)
 		return
 	return (minX <= T.x && T.x <= maxX && minY <= T.y && T.y < maxY )
