@@ -1688,6 +1688,7 @@ var/global/objects_thrown_when_explode = FALSE
 		armor["melee"] = min(90, armor["melee"]*(material_type.armor_mod*(quality/B_AVERAGE)))
 		armor["bullet"] = min(90, armor["bullet"]*(material_type.armor_mod*(quality/B_AVERAGE)))
 		armor["laser"] = min(90, armor["laser"]*(material_type.armor_mod*(quality/B_AVERAGE)))
+	toolspeed = fancytrunc(toolspeed * (0.6687**(quality-4)),2)
 
 /////// DISEASE STUFF //////////////////////////////////////////////////////////////////////////
 
