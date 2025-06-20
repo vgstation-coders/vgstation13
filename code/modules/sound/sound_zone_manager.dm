@@ -13,7 +13,7 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 	cell_size = world.view
 
 /datum/sound_zone_manager/proc/hash(x, y, z)
-	return num2text(z << 42 | y << 21 | x)
+	return "[x],[y],[z]"
 
 /datum/sound_zone_manager/proc/hash_coord(x, y, z)
 	return hash(index(x), index(y), z) // not considering multi-z yet (ever)
@@ -21,17 +21,28 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 /datum/sound_zone_manager/proc/index(v)
 	return (v - (v % cell_size)) / cell_size // floor integer division - is this retarded, does floor(a/b) or round(a/b, -1) do a faster job
 
-/datum/sound_zone_manager/proc/get_candidate_zones(x, y, z)
+/datum/sound_zone_manager/proc/get_candidate_zones(turf/T)
 	var/list/zones = list()
-	var/X = index(x)
-	var/Y = index(y)
+	var/X = index(T.x)
+	var/Y = index(T.y)
 	for (var/dx in -1 to 1)
 		for (var/dy in -1 to 1)
-			var/h = hash(X + dx, Y + dy, z)
+			var/h = hash(X + dx, Y + dy, T.z)
 			if (buckets[h])
 				for (var/datum/sound_zone/Z in buckets[h])
-					zones |= Z // this line is a bottleneck, can be solved with some smart caching
+					zones |= Z
 	return zones
+
+/datum/sound_zone_manager/proc/get_candidate_hashes(turf/T)
+	var/list/hashes = list()
+	var/X = index(T.x)
+	var/Y = index(T.y)
+	for (var/dx in -1 to 1)
+		for (var/dy in -1 to 1)
+			var/h = hash(X + dx, Y + dy, T.z)
+			if (buckets[h])
+				hashes |= h
+	return hashes
 
 /datum/sound_zone_manager/proc/register_emitter(datum/sound_emitter/E)
 	if (!E.source)
@@ -78,15 +89,30 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 	if (!mover || !mover.client)
 		return
 
-	var/turf/location = get_turf(mover)
+	var/turf/location = mover.loc //apparently get_turf called extremely often can be expensive?
+	if (!isturf(location))
+		location = get_turf(mover)
 	if (!location)
 		return
 
-	var/list/candidate_zones = get_candidate_zones(location.x, location.y, location.z)
-	for (var/datum/sound_zone/Z in candidate_zones)
-		if (Z.contains(location) && !(Z in mover.current_sound_zones))
-			Z.on_enter(mover)
 
+	var/list/current = list()
 	for (var/datum/sound_zone/Z in mover.current_sound_zones)
-		if (!Z.contains(location))
+		current[Z] = TRUE // evil assoc list level hacking
+	var/list/fresh = list()
+
+	var/hashes = get_candidate_hashes(location)
+	for (var/H in hashes)
+		var/B = buckets[H]
+		for (var/datum/sound_zone/Z in B)
+			if (Z.contains(location))
+				fresh[Z] = TRUE
+				if (!current[Z])	// what the fuck?
+					Z.on_enter(mover)
+
+	for (var/z in current)
+		var/datum/sound_zone/Z = z
+		if (!fresh[Z])
 			Z.on_leave(mover)
+
+	mover.current_sound_zones = fresh.Copy()

@@ -24,7 +24,7 @@
 /datum/sound_zone/proc/contains(turf/T)
 	if (!T)
 		return
-	return (minX <= T.x && T.x <= maxX && minY <= T.y && T.y < maxY )
+	return (minX <= T.x && T.x <= maxX && minY <= T.y && T.y <= maxY)
 
 /datum/sound_zone/proc/on_enter(mob/player)
 	sound_emitter.add_hearer(player)

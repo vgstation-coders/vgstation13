@@ -165,6 +165,8 @@
 			//player.client.audible_channels |= channel
 
 /datum/sound_emitter/proc/add_hearer(mob/player)
+	if (player in hearers)
+		return
 	hearers |= player
 	if (channel && active_key)
 		var/sound/S = sounds[active_key]
