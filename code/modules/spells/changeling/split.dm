@@ -51,9 +51,9 @@
 	if (success)
 		changeling.splitcount += 1
 		(owner.current).visible_message("<span class='danger'>[(owner.current)] splits!</span>")
-		playsound(owner.current, 'sound/effects/flesh_squelch.ogg', 30, 1)
+		playsound_local(owner.current.loc, 'sound/effects/flesh_squelch.ogg', 30, 1)
 	else
-		(owner.current).visible_message("[(owner.current)] was unable to split at this time.")
+		to_chat(owner.current, "You were unable to split at this time.")
 		changeling.chem_charges = max(changeling.chem_charges, chemcost)
 
 /spell/changeling/split/proc/recruiter_recruiting(mob/dead/observer/player, controls)
