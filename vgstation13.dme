@@ -2779,7 +2779,6 @@
 #include "code\modules\shuttles\vox.dm"
 #include "code\modules\sound\sound_channel_manager.dm"
 #include "code\modules\sound\sound_emitter.dm"
-#include "code\modules\sound\sound_zone.dm"
 #include "code\modules\sound\sound_zone_manager.dm"
 #include "code\modules\spacepods\actions.dm"
 #include "code\modules\spacepods\construction.dm"

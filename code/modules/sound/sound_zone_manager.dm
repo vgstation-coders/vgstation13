@@ -21,18 +21,6 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 /datum/sound_zone_manager/proc/index(v)
 	return (v - (v % cell_size)) / cell_size // floor integer division - is this retarded, does floor(a/b) or round(a/b, -1) do a faster job
 
-/datum/sound_zone_manager/proc/get_candidate_zones(turf/T)
-	var/list/zones = list()
-	var/X = index(T.x)
-	var/Y = index(T.y)
-	for (var/dx in -1 to 1)
-		for (var/dy in -1 to 1)
-			var/h = hash(X + dx, Y + dy, T.z)
-			if (buckets[h])
-				for (var/datum/sound_zone/Z in buckets[h])
-					zones |= Z
-	return zones
-
 /datum/sound_zone_manager/proc/get_candidate_hashes(turf/T)
 	var/list/hashes = list()
 	var/X = index(T.x)
@@ -54,38 +42,44 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 	var/X = index(T.x)
 	var/Y = index(T.y)
 	var/h = hash(X, Y, T.z)
-	var/datum/sound_zone/Z = new /datum/sound_zone(E)
-	Z.last_hash = h
+	E.last_hash = h
 	if (!buckets[h])
 		buckets[h] = list()
-	buckets[h] |= Z
+	buckets[h] |= E
 
-/datum/sound_zone_manager/proc/move_sound_zone(datum/sound_zone/Z, x, y, z)
-	var/h = hash_coord(x, y, z)
-	if (Z.last_hash != null && Z.last_hash != h)
-		var/list/old_bucket = buckets[Z.last_hash]
-		if (old_bucket)
-			old_bucket -= Z
+/datum/sound_zone_manager/proc/unregister_emitter(datum/sound_emitter/E)
+	var/h = E.last_hash
+	if (!h)
+		CRASH("Attempted to unregister an emitter with no prior hash")
+	var/bucket = buckets[h]
+	if (!bucket)
+		CRASH("Failed to find bucket for emitter with prior hash [h]")
+	bucket -= E
 
-	var/list/new_bucket = buckets[h]
-	if (!buckets[h])
-		new_bucket = buckets[h] = list()
+/datum/sound_zone_manager/proc/update_emitter(datum/sound_emitter/E, newX, newY, newZ)
+	var/newHash = hash_coord(newX, newY, newZ)
+	if (!E.last_hash)
+		CRASH("Tried to update an emitter with no prior hash")
+	if (E.last_hash == newHash)
+		return // nothing to do
 
-	if (!(Z in new_bucket))
-		new_bucket |= Z
+	var/list/old_bucket = buckets[E.last_hash]
+	if (!old_bucket)
+		CRASH("Failed to find bucket for emitter with prior hash [E.last_hash]")
+	old_bucket -= E
 
-	Z.last_hash = h
+	var/list/new_bucket = buckets[newHash]
+	if (!buckets[newHash])
+		new_bucket = buckets[newHash] = list()
+	new_bucket |= E
 
-/datum/sound_zone_manager/proc/remove_sound_zone(datum/sound_zone/Z)
-	if (Z.last_hash != null)
-		var/list/bucket = buckets[Z.last_hash]
-		if (bucket)
-			bucket -= Z
+	E.last_hash = newHash
 
 /datum/sound_zone_manager/proc/register_listener(mob/player)
 	player.register_event(/event/moved, src, nameof(src::on_player_move()))
 
 /datum/sound_zone_manager/proc/on_player_move(mob/mover)
+	//var/start = world.tick_usage
 	if (!mover || !mover.client)
 		return
 
@@ -95,24 +89,40 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 	if (!location)
 		return
 
+	//first remove old zones so we dont check them again immediately after adding
+	// for (var/datum/sound_zone/Z in mover.current_sound_zones)
+	// 	if (!Z.contains(location))
+	// 		Z.on_leave(mover)
+
+	// var/hashes = get_candidate_hashes(location)
+	// for (var/H in hashes)
+	// 	var/bucket = buckets[H]
+	// 	for (var/datum/sound_zone/Z in bucket)
+	// 		if (Z.contains(location) && !(Z in mover.current_sound_zones))
+	// 			Z.on_enter(mover)
+	//var/end = world.tick_usage
+	//world.log << "start: [start] end: [end] diff: [end - start]"
 
 	var/list/current = list()
-	for (var/datum/sound_zone/Z in mover.current_sound_zones)
-		current[Z] = TRUE // evil assoc list level hacking
+	for (var/datum/sound_emitter/E in mover.current_sound_emitters)
+		current[E] = TRUE // evil assoc list level hacking
 	var/list/fresh = list()
 
 	var/hashes = get_candidate_hashes(location)
 	for (var/H in hashes)
-		var/B = buckets[H]
-		for (var/datum/sound_zone/Z in B)
-			if (Z.contains(location))
-				fresh[Z] = TRUE
-				if (!current[Z])	// what the fuck?
-					Z.on_enter(mover)
+		var/list/B = buckets[H]
+		world.log << "bucket contains [B.len] active emitters"
+		for (var/datum/sound_emitter/E in B)
+			if (E.contains(location))
+				fresh[E] = TRUE
+				if (!current[E])	// what the fuck?
+					E.on_enter_range(mover)
+				else
+					E.update_params_for_player(mover)
 
-	for (var/z in current)
-		var/datum/sound_zone/Z = z
-		if (!fresh[Z])
-			Z.on_leave(mover)
+	for (var/e in current)
+		var/datum/sound_emitter/E = e
+		if (!fresh[E])
+			E.on_exit_range(mover)
 
-	mover.current_sound_zones = fresh.Copy()
+	mover.current_sound_emitters = fresh.Copy()
