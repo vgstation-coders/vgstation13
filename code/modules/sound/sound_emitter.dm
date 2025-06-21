@@ -58,6 +58,20 @@
 		send_nearby_norepeat(S) //mimic legacy behaviour
 		//send_global(S) // implement if send_nearby_norepeat is slow
 
+/datum/sound_emitter/proc/update_active_sound_param(volume = null, frequency = null)
+	if (!active_key)
+		return
+	var/sound/S = sounds[active_key]
+
+	if (volume)
+		S.volume = volume
+	if (frequency)
+		S.frequency = frequency
+	S.status |= SOUND_UPDATE
+	for (var/mob/player in hearers)
+		S = apply_player_effects(copy_sound(S), player)
+		player << S
+
 /datum/sound_emitter/proc/stop()
 	if (!channel)
 		return
