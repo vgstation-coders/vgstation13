@@ -335,6 +335,10 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	udder.my_atom = src
 	..()
 
+/mob/living/silicon/robot/mommi/Destroy()
+	QDEL_NULL(udder)
+	return ..()
+
 /mob/living/silicon/robot/mommi/Life()
 	if(timestopped)
 		return 0 //under effects of time magick

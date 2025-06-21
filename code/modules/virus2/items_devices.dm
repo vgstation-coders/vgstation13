@@ -170,8 +170,7 @@ var/list/virusdishes = list()
 
 /obj/item/weapon/virusdish/New(loc)
 	..()
-	reagents = new(10)
-	reagents.my_atom = src
+	create_reagents(10)
 	virusdishes.Add(src)
 
 /obj/item/weapon/virusdish/Destroy()

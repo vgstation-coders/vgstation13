@@ -64,6 +64,8 @@
 	minbodytemp = 0
 	held_items = list()
 
+	avoids_poisonous=TRUE
+	
 	//keeping this here for later color matrix testing
 	var/a_matrix_testing_override = FALSE
 	var/a_11 = 1
@@ -130,6 +132,7 @@
 
 /mob/living/simple_animal/hostile/giant_spider/get_butchering_products()
 	return list(/datum/butchering_product/spider_legs)
+
 
 //Can we actually attack a possible target?
 /mob/living/simple_animal/hostile/giant_spider/CanAttack(var/atom/the_target)
@@ -217,3 +220,6 @@
 			healths.icon_state = "health4"
 		else
 			healths.icon_state = "health5"
+
+/mob/living/simple_animal/hostile/giant_spider/jungle
+	faction="jungle"

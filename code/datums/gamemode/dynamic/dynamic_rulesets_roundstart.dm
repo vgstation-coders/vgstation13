@@ -83,7 +83,7 @@
 	cost = 15
 	var/traitor_threshold = 4
 	var/additional_cost = 5
-	requirements = list(101,101,101,101,10,10,10,10,10,10)
+	requirements = list(101,101,101,20,10,10,10,10,10,10)
 	high_population_requirement = 15
 
 // -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
@@ -496,8 +496,7 @@ Assign your candidates in choose_candidates() instead.
 	name = "Malfunctioning AI"
 	role_category = /datum/role/malfAI
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
-	restricted_from_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Research Director", "Chief Engineer")
-	job_priority = list("AI","Cyborg")
+	restricted_from_jobs = list("Captain","Head of Personnel","Head of Security","Chief Engineer","Research Director","Chief Medical Officer","Station Engineer","Atmospheric Technician","Mechanic","Medical Doctor","Geneticist","Virologist","Paramedic","Chemist","Orderly","Research Director","Scientist","Roboticist","Bartender","Botanist","Chef","Janitor","Librarian","Internal Affairs Agent","Chaplain","Clown","Mime","Assistant","Quartermaster","Cargo Technician","Shaft Miner","Warden","Detective","Security Officer","Cyborg", "Mobile MMI")
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
@@ -565,9 +564,9 @@ Assign your candidates in choose_candidates() instead.
 			if(job_master.TryAssignJob(old_AI,level,job))
 				break
 	if(!old_AI.mind.assigned_role) // still no job
-		if(old_AI.client.prefs.alternate_option == GET_RANDOM_JOB)
+		if(old_AI.client.prefs.get_pref(/datum/preference_setting/enum/alternate_option) == GET_RANDOM_JOB)
 			job_master.GiveRandomJob(old_AI)
-		else if(old_AI.client.prefs.alternate_option == BE_ASSISTANT)
+		else if(old_AI.client.prefs.get_pref(/datum/preference_setting/enum/alternate_option) == BE_ASSISTANT)
 			job_master.AssignRole(old_AI, "Assistant")
 	if(!old_AI.mind.assigned_role)
 		to_chat(old_AI, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")

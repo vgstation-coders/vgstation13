@@ -9393,6 +9393,12 @@
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/machinery/requests_console{
+	pixel_y = 32;
+	phone_name = "Detective's Office";
+	department = "Security";
+	departmentType = 5
+	},
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -18552,6 +18558,12 @@
 /area/security/lobby)
 "aGy" = (
 /obj/machinery/light,
+/obj/machinery/requests_console{
+	pixel_y = -30;
+	phone_name = "Brig Lobby";
+	department = "Security";
+	departmentType = 5
+	},
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "redfull"
@@ -18717,6 +18729,12 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/light,
+/obj/machinery/requests_console{
+	pixel_y = -30;
+	phone_name = "Brig Break Room";
+	department = "Security";
+	departmentType = 5
+	},
 /turf/simulated/floor,
 /area/security/main)
 "aGL" = (
@@ -32656,6 +32674,13 @@
 	pixel_x = 3;
 	pixel_y = -3
 	},
+/obj/machinery/requests_console{
+	department = "Engineering";
+	departmentType = 4;
+	name = "Engineering RC";
+	phone_name = "Engineering Lobby";
+	pixel_y = -30
+	},
 /turf/simulated/floor{
 	icon_state = "dark brown stripe";
 	tag = "icon-dark brown stripe"
@@ -43196,6 +43221,11 @@
 	dir = 8;
 	name = "Medbay Lobby"
 	},
+/obj/machinery/requests_console{
+	department = "Medbay";
+	phone_name = "Medbay Lobby";
+	pixel_x = 30
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "bluefull"
@@ -45901,6 +45931,11 @@
 	},
 /obj/machinery/bunsen_burner{
 	pixel_y = 6
+	},
+/obj/machinery/requests_console{
+	department = "Chemistry";
+	departmentType = 2;
+	pixel_x = -30
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -51482,7 +51517,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Research And Development"
 	},
 /obj/structure/cable{
 	d1 = 1;
@@ -54588,12 +54624,6 @@
 "bTp" = (
 /obj/structure/table,
 /obj/item/weapon/stock_parts/console_screen,
-/obj/machinery/requests_console{
-	department = "Science";
-	departmentType = 2;
-	name = "Science Requests Console";
-	pixel_x = 30
-	},
 /obj/structure/disposalpipe/segment,
 /obj/item/weapon/stock_parts/matter_bin,
 /obj/item/weapon/stock_parts/matter_bin,
@@ -55931,6 +55961,9 @@
 /area/crew_quarters/theatre)
 "bVI" = (
 /obj/machinery/light,
+/obj/structure/bed/chair/office/dark{
+	dir = 8
+	},
 /turf/simulated/floor/wood,
 /area/library)
 "bVJ" = (
@@ -57645,6 +57678,11 @@
 	},
 /obj/machinery/light,
 /obj/machinery/computer/cloning,
+/obj/machinery/requests_console{
+	department = "Genetics";
+	name = "Genetics Requests Console";
+	pixel_y = -30
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -99066,6 +99104,12 @@
 	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/bar)
+"nGG" = (
+/obj/structure/table/woodentable,
+/obj/machinery/disk_duplicator,
+/obj/item/weapon/storage/lockbox/diskettebox/large/full,
+/turf/simulated/floor/wood,
+/area/library)
 "nLg" = (
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 8
@@ -99195,6 +99239,10 @@
 	},
 /turf/simulated/floor,
 /area/hallway/primary/starboard)
+"psD" = (
+/obj/machinery/researcharchive,
+/turf/simulated/floor/wood,
+/area/library)
 "pLQ" = (
 /obj/machinery/hologram/holopad,
 /turf/simulated/floor/carpet,
@@ -241400,8 +241448,8 @@ bOl
 bPU
 bPU
 bPU
-bPU
 sPR
+psD
 bMW
 bMW
 bMW
@@ -242906,7 +242954,7 @@ bOo
 xBz
 bRA
 bSN
-bRA
+nGG
 bRC
 bXi
 bYn

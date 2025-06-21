@@ -15,6 +15,9 @@
 	src.adding += using
 	action_intent = using
 
+	using.pointer_to_list = &adding
+	using.pointer_to_var = &action_intent
+
 //intent small hud objects
 	var/icon/ico
 
@@ -29,6 +32,9 @@
 	src.adding += using
 	help_intent = using
 
+	using.pointer_to_list = &adding
+	using.pointer_to_var = &help_intent
+
 	ico = new(ui_style, "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
 	ico.DrawBox(rgb(255,255,255,1),ico.Width()/2,ico.Height()/2,ico.Width(),ico.Height())
@@ -39,6 +45,9 @@
 	using.layer = HUD_ABOVE_ITEM_LAYER
 	src.adding += using
 	disarm_intent = using
+
+	using.pointer_to_list = &adding
+	using.pointer_to_var = &disarm_intent
 
 	ico = new(ui_style, "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
@@ -51,6 +60,9 @@
 	src.adding += using
 	grab_intent = using
 
+	using.pointer_to_list = &adding
+	using.pointer_to_var = &grab_intent
+
 	ico = new(ui_style, "black")
 	ico.MapColors(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, -1,-1,-1,-1)
 	ico.DrawBox(rgb(255,255,255,1),1,1,ico.Width()/2,ico.Height()/2)
@@ -61,6 +73,9 @@
 	using.layer = HUD_ABOVE_ITEM_LAYER
 	src.adding += using
 	hurt_intent = using
+
+	using.pointer_to_list = &adding
+	using.pointer_to_var = &hurt_intent
 
 //end intent small hud objects
 
@@ -73,6 +88,9 @@
 	src.adding += using
 	move_intent = using
 
+	using.pointer_to_list = &adding
+	using.pointer_to_var = &move_intent
+
 	using = new /obj/abstract/screen
 	using.name = "drop"
 	using.icon = ui_style
@@ -80,6 +98,8 @@
 	using.screen_loc = ui_drop_throw
 	using.layer = HUD_BASE_LAYER
 	src.adding += using
+
+	using.pointer_to_list = &adding
 
 	init_hand_icons(ui_style)
 
@@ -96,6 +116,8 @@
 	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
+	using.pointer_to_list = &adding
+
 	using = new /obj/abstract/screen/inventory
 	using.name = "hand"
 	using.dir = SOUTH
@@ -104,6 +126,8 @@
 	using.screen_loc = ui_swaphand2
 	using.layer = HUD_BASE_LAYER
 	src.adding += using
+
+	using.pointer_to_list = &adding
 
 	#undef ui_equip_hologram
 	#undef ui_swaphand_hologram1
@@ -115,6 +139,9 @@
 	using.icon_state = "act_equip"
 	using.screen_loc = ui_equip
 	src.adding += using
+
+	using.pointer_to_list = &adding
+
 /*
 	using = new /obj/abstract/screen
 	using.name = "resist"
@@ -135,6 +162,8 @@
 	inv_box.layer = HUD_BASE_LAYER
 	src.adding += inv_box
 
+	inv_box.pointer_to_list = &adding
+
 	inv_box = new /obj/abstract/screen/inventory
 	inv_box.name = "i_clothing"
 	inv_box.dir = SOUTH
@@ -145,11 +174,15 @@
 	inv_box.layer = HUD_BASE_LAYER
 	src.adding += inv_box
 
+	inv_box.pointer_to_list = &adding
+
 	mymob.throw_icon = new /obj/abstract/screen
 	mymob.throw_icon.icon = ui_style
 	mymob.throw_icon.icon_state = "act_throw_off"
 	mymob.throw_icon.name = "throw"
 	mymob.throw_icon.screen_loc = ui_drop_throw
+
+	mymob.throw_icon.pointer_to_var = &mymob.throw_icon
 
 	mymob.healths = new /obj/abstract/screen
 	mymob.healths.icon = ui_style
@@ -157,16 +190,22 @@
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_health
 
+	mymob.healths.pointer_to_var = &mymob.healths
+
 	mymob.pullin = new /obj/abstract/screen
 	mymob.pullin.icon = ui_style
 	mymob.pullin.icon_state = "pull0"
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_pull_resist
 
+	mymob.pullin.pointer_to_var = &mymob.pullin
+
 	mymob.zone_sel = new /obj/abstract/screen/zone_sel
 	mymob.zone_sel.icon = ui_style
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
+
+	mymob.zone_sel.pointer_to_var = &mymob.pullin
 
 	mymob.client.reset_screen()
 

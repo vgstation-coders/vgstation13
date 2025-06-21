@@ -84,7 +84,6 @@
 			if(recharge_console)
 				recharge_console.mecha_out()
 
-
 /obj/machinery/mech_bay_recharge_floor/examine(mob/user)
 	. = ..()
 	if(recharge_port)

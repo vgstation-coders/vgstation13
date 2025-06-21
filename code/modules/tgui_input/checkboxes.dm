@@ -25,7 +25,7 @@
 	if(isnull(user.client))
 		return null
 
-	if(!user.client.prefs.tgui_input)
+	if(!user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_input))
 		return input(user, message, title) as null|anything in items
 	var/datum/tgui_checkbox_input/input = new(user, message, title, items, min_checked, max_checked, timeout, ui_state)
 	input.ui_interact(user)
@@ -108,9 +108,9 @@
 	data["items"] = items
 	data["min_checked"] = min_checked
 	data["max_checked"] = max_checked
-	data["large_buttons"] = user.client.prefs.tgui_input_large
+	data["large_buttons"] = user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_input_large)
 	data["message"] = message
-	data["swapped_buttons"] = user.client.prefs.tgui_input_swapped
+	data["swapped_buttons"] = user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_input_swapped)
 	data["title"] = title
 
 	return data

@@ -20,7 +20,42 @@
 	appearance_flags = NO_CLIENT_COLOR
 	plane = HUD_PLANE
 
+	var/pointer_to_list
+	var/pointer_to_secondary_list
+	var/pointer_to_var
+
 /obj/abstract/screen/Destroy()
+	// Screens live in many places, in many lists, and many vars.
+	// Ideally, you should want to null the screen vars when the parent object is qdeleted.
+	// However, this cannot always be possible due to either technical debt, or in some cases the screen object being deleted without its parent being deleted.
+	// This pointer is here to tell the screen object where it lives and to `null` it appropriately.
+	// As a note, DM pointers are not *really* pointers. They can rather be viewed as tunnels.
+	// var/pointer = &object is basically creating a {object_holder_var, read_var["object"]} instruction.
+	// And *pointer = null is basically telling DM {object_holder_var, set_var["object"] = null} instruction [roughly speaking]..
+	// So this clever trick allows us to null the var holding us hostage WITHOUT knowing it by name.
+	// This is, by the way, an intended usage of pointers according to the ref.
+
+	// One weakness of this implementation is that the instruction {object_holder_var, read_var["object"]} holds an internal reference to object_holder_var.
+	// This should only be a problem if the screen obj's object_holder_var is destroyed but the HUD/screen obj isn't.
+	// This shouldn't happen.
+
+	// This block is wrapped in try/catch because if you use pointers wrong it throws a runtime and could crash the entire Destroy() proc. Better be safe than sorry.
+	try
+		if (pointer_to_var)
+			*pointer_to_var = null
+		if (pointer_to_list)
+			var/list/L = *pointer_to_list
+			L -= src
+		if (pointer_to_secondary_list)
+			var/list/L = *pointer_to_secondary_list
+			L -= src
+	catch (var/exception/E)
+		log_debug("Error in handling screen objects pointers. [E.name] at file [E.file] and [E.line]")
+
+	pointer_to_var = null
+	pointer_to_list = null
+	pointer_to_secondary_list = null
+
 	animate(src)
 	master = null
 	..()

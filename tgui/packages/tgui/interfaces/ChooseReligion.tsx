@@ -125,7 +125,7 @@ export const DefinedReligionSelector = ({
           fluid
           mt={1}
           placeholder="Search for a religion"
-          onInput={(e, value) => setSearchText(value)}
+          onChange={setSearchText}
           value={searchText}
         />
         <Section fill scrollable>

@@ -443,6 +443,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_TALONS		12  // Bonus kick damage
 #define M_STONE_SKIN	13  // hard skin
 #define M_THERMALS		14	//see mobs through walls
+#define M_CHARGE		15	//charge at a target, knocking them down and dealing damage
 
 //#define HEAL			12 	// (Not implemented) healing people with hands
 //#define SHADOW		13 	// (Not implemented) shadow teleportation (create in/out portals anywhere) (25%)
@@ -1789,7 +1790,7 @@ var/proccalls = 1
 #define ESPORTS_CULTISTS "Team Geometer"
 #define ESPORTS_SECURITY "Team Security"
 
-#define DNA_SE_LENGTH 60
+#define DNA_SE_LENGTH 61
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
 #define GREY_SHAPED "Grey"

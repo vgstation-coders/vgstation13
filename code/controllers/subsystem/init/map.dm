@@ -38,9 +38,10 @@ var/datum/subsystem/map/SSmap
 		log_startup_progress("Not generating vaults - SKIP_VAULT_GENERATION found in config/config.txt")
 
 	//hobo shack generation, one shack will spawn, 1/3 chance of two shacks
-	generate_hoboshack()
-	if (rand(1,3) == 3)
+	if(!map.skip_hobo_shack)
 		generate_hoboshack()
+		if (rand(1,3) == 3)
+			generate_hoboshack()
 
 	watch = start_watch()
 	for(var/datum/zLevel/z in map.zLevels)

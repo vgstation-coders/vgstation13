@@ -287,6 +287,7 @@
 	amount = 2 //not a magic number, frogs have 2 legs
 	butcher_time = 10
 
+
 /datum/butchering_product/frog_leg/desc_modifier()
 	if(amount < 2)
 		return "It only has [amount] [amount==1 ? "leg" : "legs"]. "

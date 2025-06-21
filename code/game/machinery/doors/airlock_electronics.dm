@@ -33,10 +33,7 @@
 	if(issolder(W))
 		var/obj/item/tool/solder/S = W
 		if(icon_state == "door_electronics_smoked")
-			if(!S.remove_fuel(4,user))
-				return
-			S.playtoolsound(loc, 100)
-			if(do_after(user, src,4 SECONDS * S.work_speed))
+			if(S.do_solder(user, src,4 SECONDS,4))
 				S.playtoolsound(loc, 100)
 				icon_state = "door_electronics"
 				to_chat(user, "<span class='notice'>You repair the blown fuses on the circuitboard.</span>")

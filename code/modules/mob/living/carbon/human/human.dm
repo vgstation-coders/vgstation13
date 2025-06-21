@@ -9,7 +9,9 @@
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
-
+	var/footsound = FOOTSOUND_HUMAN
+	var/stepstaken = 0
+	var/modulo_step = 2
 	var/fartCooldown = 20 SECONDS
 
 /mob/living/carbon/human/dummy
@@ -42,6 +44,7 @@
 /mob/living/carbon/human/vox/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Vox")
 	my_appearance.h_style = "Short Vox Quills"
+	footsound = FOOTSOUND_VOX
 	regenerate_icons()
 
 /mob/living/carbon/human/diona/New(var/new_loc, delay_ready_dna = 0)
@@ -91,6 +94,7 @@
 /mob/living/carbon/human/insectoid/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Insectoid")
 	my_appearance.h_style = "Insectoid Antennae"
+	footsound = FOOTSOUND_VOX
 	regenerate_icons()
 
 /mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
@@ -2101,7 +2105,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 
 	if(!can_be_fat)
 		species.anatomy_flags &= ~CAN_BE_FAT
-	
+
 	species.blood_color = get_random_colour()
 	species.flesh_color = get_random_colour()
 
@@ -2250,6 +2254,9 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 		playsound(src, 'sound/weapons/authenticrichtertackleslide.ogg', 70, 0)
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "castlevania_tackle_flick", plane = ABOVE_LIGHTING_PLANE)
 		return "richter tackle"
+	if (src.charge_gene_active)
+		anim(target=src)
+		return "charge"
 
 /mob/living/carbon/human/throw_item(var/atom/target,var/atom/movable/what=null)
 	var/atom/movable/item = get_active_hand()

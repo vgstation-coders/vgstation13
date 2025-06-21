@@ -1,0 +1,5 @@
+author: mentgah
+delete-after: true
+changes:
+- rscadd: Added a new Vox traitor item, high frequency vox boots, that deal 25 damage
+    on kick and can slice open doors.

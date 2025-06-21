@@ -69,9 +69,7 @@
 
 /mob/living/carbon/slime/New()
 	lifestage_updates() //Set values according to whether the slime is a baby or an adult.
-	var/datum/reagents/R = new/datum/reagents(100)
-	reagents = R
-	R.my_atom = src
+	create_reagents(100)
 	name = "[colour] slime ([rand(1, 1000)])"
 	desc = "\An [lifestage_name()] [colour] slime."
 	icon_state = "[iconstate_color()] [lifestage_name()] slime"
@@ -527,9 +525,7 @@
 
 /obj/item/slime_extract/New()
 	..()
-	var/datum/reagents/R = new/datum/reagents(100)
-	reagents = R
-	R.my_atom = src
+	create_reagents(100)
 	icon_state_backup = icon_state
 	if (Uses > 1)
 		update_icon()
@@ -1078,9 +1074,7 @@
 
 /obj/item/slime_core/New()
 		..()
-		var/datum/reagents/R = new/datum/reagents(100)
-		reagents = R
-		R.my_atom = src
+		create_reagents(100)
 		POWERFLAG = rand(1,10)
 		Uses = rand(7, 25)
 		//flags |= NOREACT

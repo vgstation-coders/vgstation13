@@ -1348,6 +1348,15 @@ var/list/discounted_items_of_the_round = list()
 	jobs_exclusive = list("Trader","Vox","Skeletal Vox")
 	jobs_with_discount = list("Trader","Cargo Technician","Quartermaster")
 
+/datum/uplink_item/jobspecific/trader/hfboots
+	name = "High Frequency Vox Boots"
+	desc = "A modified pair of Vox boots, its magnetic grip technology replaced with high frequency talon blades that can kick doors open."
+	item = /obj/item/clothing/shoes/knifeboot/vox
+	cost = 7
+	discounted_cost = 5
+	jobs_exclusive = list("Trader","Vox","Skeletal Vox")
+	jobs_with_discount = list("Trader")
+
 /datum/uplink_item/jobspecific/cannedmatter
 	category = "Skrell Specials"
 	name = "Canned Compressed Matter"

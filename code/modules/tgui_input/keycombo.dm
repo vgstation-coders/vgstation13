@@ -22,7 +22,7 @@
 		return null
 
 	// Client does NOT have tgui_input on: Returns regular input
-	if(!user.client.prefs.tgui_input)
+	if(!user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_input))
 		var/input_key = input(user, message, title + "(Modifiers are TGUI only, sorry!)", default) as null|text
 		return input_key[1]
 	var/datum/tgui_input_keycombo/key_input = new(user, message, title, default, timeout, ui_state)
@@ -96,9 +96,9 @@
 /datum/tgui_input_keycombo/ui_static_data(mob/user)
 	var/list/data = list()
 	data["init_value"] = default // Default is a reserved keyword
-	data["large_buttons"] = user.client.prefs.tgui_input_large
+	data["large_buttons"] = user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_input_large)
 	data["message"] = message
-	data["swapped_buttons"] = user.client.prefs.tgui_input_swapped
+	data["swapped_buttons"] = user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_input_swapped)
 	data["title"] = title
 	return data
 

@@ -94,3 +94,127 @@ boxes used for cargo orders to make my life easier.
 	fueldata.add_shit_to(URANIUM,units_of_storage,fueldata.fuel)
 	fueldata.rederive_stats()
 	fueldata.life=1
+
+
+/obj/item/weapon/fuelrod/randomized
+	icon_state="i_fuelrod"
+
+/obj/item/weapon/fuelrod/randomized/New()
+	..()	
+	var/list/mats_std	=	list(URANIUM,THORIUM) //conventional nuclear fuel
+	var/list/mats_uncommon=	list(PLUTONIUM,RADIUM) // exotic fuels or nuclear things
+	var/list/mats_rare	=	list(RADON) // reactor adjacent things or stuff notable to engineering
+	var/list/mats_exotic=	list(TRICORDRAZINE,DEGENERATECALCIUM) // for experimentation and learning
+	
+	var/current_units=fueldata.fuel.total_volume
+	while (current_units<units_of_storage)
+		var/r=rand()
+		var/material=null
+		var/amount_to_add=rand(1, ceil((units_of_storage-current_units)*0.8) )
+		if(amount_to_add>units_of_storage/6) //if we are adding a large amount, skew the randomness so that we don't give a huge amount of rare stuff. with current vars, max 15 units of rare things per roll.
+			r+=0.25
+		if(r<0.05)		//  5%  skewed 0%
+			material=pick(mats_exotic)
+		else if(r<0.20)	// 15%  skewed 0%
+			material=pick(mats_rare)
+		else if(r<0.50)	// 30%  skewed 25%
+			material=pick(mats_uncommon)
+		else			// 50%  skewed 75%
+			material=pick(mats_std)				
+
+		//add a random amount of the chosen material, between 1 and 80% the remaining volume (rounded up)
+		//if we roll the highest number always, this gives us 3 calls (with 90 units)
+		fueldata.add_shit_to(material,amount_to_add,fueldata.fuel)
+		current_units=fueldata.fuel.total_volume
+	fueldata.rederive_stats()
+	fueldata.life=1
+
+
+
+/obj/structure/closet/crate/flatpack/fission_controller
+	name = "flatpack (fission reactor controller)"
+	override_icon_state=TRUE
+
+/obj/structure/closet/crate/flatpack/fission_controller/New()
+	..()
+	icon_state = "flatpackeng"
+	machine = new /obj/machinery/fissioncontroller(src)
+
+/obj/structure/closet/crate/flatpack/fission_controller/after_machine_placed()
+	machine.update_icon()
+	..()
+	for(var/obj/structure/fission_reactor_case/part in range(machine,1) )
+		part.update_icon()
+	for(var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/part in range(machine,1) )
+		part.update_icon()	
+
+
+/obj/structure/closet/crate/flatpack/configurable/fission_exterior
+	name = "configurable flatpack (fission reactor casing part)"
+	override_icon_state=TRUE
+	var/intact = TRUE //atmospherics code. oof.
+
+/obj/structure/closet/crate/flatpack/configurable/fission_exterior/New()
+	..()
+	icon_state = "flatpackeng"
+
+/obj/structure/closet/crate/flatpack/configurable/fission_exterior/after_machine_placed()
+	..()
+	machine.update_icon()
+
+	for(var/obj/structure/fission_reactor_case/part in range(machine,1) )
+		part.update_icon()
+	for(var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/part in range(machine,1) )
+		part.update_icon()
+	for(var/obj/structure/closet/crate/flatpack/fission_controller/part in range(machine,1) )
+		part.update_icon()
+	if(istype(machine,/obj/machinery/atmospherics/unary/fissionreactor_coolantport))
+		var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/C=machine
+		C.initialize_directions=machine_options["direction"]
+		C.buildFrom(usr,C)
+
+
+/obj/structure/closet/crate/flatpack/configurable/fission_exterior/configure(var/mob/user)
+	..()
+	var/choice=input(user,"Select a schematic",name) in list("Reactor casing","Coolant port")
+	if(choice=="Reactor casing")
+		machine = new/obj/structure/fission_reactor_case(src)
+	else if(choice=="Coolant port")
+		var/des_dir=input(user,"Select port direction",name) in list("NORTH","SOUTH","EAST","WEST")
+		switch(des_dir)
+			if("NORTH")
+				machine_options["direction"]=NORTH
+			if("SOUTH")
+				machine_options["direction"]=SOUTH
+			if("EAST")
+				machine_options["direction"]=EAST
+			if("WEST")
+				machine_options["direction"]=WEST
+			else
+				return
+		machine = new/obj/machinery/atmospherics/unary/fissionreactor_coolantport(src)
+		machine.dir=machine_options["direction"]
+
+/obj/structure/closet/crate/flatpack/configurable/fission_interior
+	name = "configurable flatpack (fission reactor internal assembly)"
+	override_icon_state=TRUE
+
+/obj/structure/closet/crate/flatpack/configurable/fission_interior/New()
+	..()
+	icon_state = "flatpackeng"
+
+/obj/structure/closet/crate/flatpack/configurable/fission_interior/after_machine_placed()
+	..()
+	machine.update_icon()
+	
+/obj/structure/closet/crate/flatpack/configurable/fission_interior/configure(var/mob/user)
+	..()
+	var/choice=input(user,"Select a schematic",name) in list("Control rod","Fuel rod assembly","Fuel rod assembly (shielded)")
+	switch(choice)
+		if("Control rod")
+			machine = new/obj/machinery/fissionreactor/fissionreactor_controlrod(src)
+		if("Fuel rod assembly")
+			machine = new/obj/machinery/fissionreactor/fissionreactor_fuelrod(src)
+		if("Fuel rod assembly (shielded)")
+			machine = new/obj/machinery/fissionreactor/fissionreactor_fuelrod/inert(src)
+

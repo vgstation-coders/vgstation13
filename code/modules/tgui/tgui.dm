@@ -37,6 +37,8 @@
 	var/datum/ui_state/state = null
 	/// Rate limit client refreshes to prevent DoS.
 	var/refresh_cooldown = 0
+	/// The id of any ByondUi elements that we have opened
+	var/list/open_byondui_elements
 
 /**
  * public
@@ -54,7 +56,7 @@
  */
 /datum/tgui/New(mob/user, datum/src_object, interface, title, ui_x, ui_y)
 	log_tgui(user,
-		"new [interface] fancy [user?.client?.prefs.tgui_fancy]",
+		"new [interface] fancy [user?.client?.prefs.get_pref(/datum/preference_setting/toggle/tgui_fancy)]",
 		src_object = src_object)
 	src.user = user
 	src.src_object = src_object
@@ -95,7 +97,7 @@
 	if(!window.is_ready())
 		window.initialize(
 			strict_mode = TRUE,
-			fancy = user.client.prefs.tgui_fancy,
+			fancy = user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_fancy),
 			assets = list(
 				get_tg_asset_datum(/datum/tg_asset/simple/tgui),
 			))
@@ -154,8 +156,23 @@
 		window.close(can_be_suspended)
 		src_object.ui_close(user)
 		SStgui.on_close(src)
+		if(user.client)
+			terminate_byondui_elements()
 	state = null
 	qdel(src)
+
+/**
+ * public
+ *
+ * Closes all ByondUI elements, left dangling by a forceful TGUI exit,
+ * such as via Alt+F4, closing in non-fancy mode, or terminating the process
+ *
+ */
+/datum/tgui/proc/terminate_byondui_elements()
+	set waitfor = FALSE
+
+	for(var/byondui_element in open_byondui_elements)
+		winset(user.client, byondui_element, list("parent" = ""))
 
 /**
  * public
@@ -244,15 +261,15 @@
 		"status" = status,
 		"interface" = list(
 			"name" = interface,
-			"layout" = user.client.prefs.layout_prefs_used,
+			"layout" = 0, // user.client.prefs.get_pref(/datum/preference_setting/toggle/layout_prefs_used), // not implemented yet!
 		),
 		"refreshing" = refreshing,
 		"window" = list(
 			"key" = window_key,
 			"size" = window_size,
-			"fancy" = user.client.prefs.tgui_fancy,
-			"locked" = user.client.prefs.tgui_lock,
-			"scale" = user.client.prefs.tgui_scale,
+			"fancy" = user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_fancy),
+			"locked" = 0, // user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_lock), //not implemented yet!
+			"scale" = 0, // user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_scale),
 		),
 		"client" = list(
 			"ckey" = user.client.ckey,
@@ -354,6 +371,26 @@
 			LAZYINITLIST(src_object.tgui_shared_states)
 			src_object.tgui_shared_states[href_list["key"]] = href_list["value"]
 			SStgui.update_uis(src_object)
+
+		// Handles clearing out byondUI elements, which may cause black squares to appear
+		if(TGUI_MANAGED_BYONDUI_TYPE_RENDER)
+			var/byond_ui_id = payload[TGUI_MANAGED_BYONDUI_PAYLOAD_ID]
+			if(!byond_ui_id || open_byondui_elements?.len > TGUI_MANAGED_BYONDUI_LIMIT)
+				return
+
+			append_ui_element(byond_ui_id)
+
+		if(TGUI_MANAGED_BYONDUI_TYPE_UNMOUNT)
+			var/byond_ui_id = payload[TGUI_MANAGED_BYONDUI_PAYLOAD_ID]
+			if(!byond_ui_id)
+				return
+
+			append_ui_element(byond_ui_id)
+
+/datum/tgui/proc/append_ui_element(var/ui_element_id)
+	if (!open_byondui_elements)
+		open_byondui_elements = list()
+	open_byondui_elements |= ui_element_id
 
 /// Wrapper for behavior to potentially wait until the next tick if the server is overloaded
 /datum/tgui/proc/on_act_message(act_type, payload, state)

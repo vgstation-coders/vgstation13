@@ -486,6 +486,7 @@
 #define BLOBANINE		"blobanine"
 #define BLOB_ESSENCE	"blob_essence"
 #define METHAMPHETAMINE "methamphetamine"
+#define GRUGZONE		"grugzone"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -547,6 +548,7 @@
 #define RADON			"radon"
 #define LEAD			"lead"
 #define THALLIUM		"thallium"
+#define THORIUM			"thorium"
 #define REGENERATECALCIUM	"regeneratecalcium"
 #define EQUALIZONE		"equalizone"
 

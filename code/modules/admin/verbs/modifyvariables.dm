@@ -5,6 +5,9 @@ var/list/forbidden_varedit_object_types = list(
 										/datum/subsystem/dbcore/,			// No messing with the database.
 									)
 
+/datum/proc/can_edit_var(var/edited_variable)
+	return TRUE
+
 //Interface for editing a variable. It returns its new value. If edited_datum, it automatically changes the edited datum's value
 //If called with just [user] argument, it allows you to create a value such as a string, a number, an empty list, a nearby object, etc...
 //If called with [edited_datum] and [edited_variable], you gain the ability to get the variable's initial value.
@@ -22,6 +25,9 @@ var/list/forbidden_varedit_object_types = list(
 		return
 
 	if(!C.can_edit_var(edited_variable, edited_datum?.type))
+		return
+
+	if(!edited_datum.can_edit_var(edited_variable))
 		return
 
 	//Special case for "appearance", because appearance values can't be stored anywhere.

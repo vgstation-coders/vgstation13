@@ -154,15 +154,15 @@ export const GenericUplink = (props) => {
           <Input
             autoFocus
             value={searchText}
-            onInput={(e, value) => setSearchText(value)}
+            onChange={setSearchText}
             mx={1} />
           <Button
             icon={compactMode ? 'list' : 'info'}
             content={compactMode ? 'Compact' : 'Detailed'}
             onClick={() => act('compact_toggle')} />
           <Button.Input
-            content={<Box><Icon name="coins" /> Withdraw</Box>}
-            onCommit={(e, value) => act('get_tc', { 'amount': value })} />
+            buttonText={<Box><Icon name="coins" /> Withdraw</Box>}
+            onCommit={(value) => act('get_tc', { 'amount': value })} />
 
           {!!lockable && (
             <Button

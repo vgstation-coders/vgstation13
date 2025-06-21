@@ -88,7 +88,7 @@
 			if (some_hearer.ear_deaf > 0)
 				continue
 //			var/dist = get_dist(some_hearer, src)
-			if (!some_hearer.client.prefs.hear_instruments)
+			if (!some_hearer.client.prefs.get_pref(/datum/preference_setting/toggle/hear_instruments))
 				continue
 			present_listeners += some_hearer
 			last_updated_listeners = world.time

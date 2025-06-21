@@ -172,7 +172,7 @@
 	if(istype(T,/turf/simulated/floor))
 		costtouse=cost
 	else
-		if(istype(T,/turf/space))
+		if(istype(T,/turf/space) || istype(T,/turf/unsimulated/floor) )
 			costtouse=cost+1 //add cost to make the floor
 		else
 			costtouse=0
@@ -223,7 +223,7 @@
 		costtouse=cost+3 //add cost to make a regular wall
 		timetaken = 4 SECONDS
 	else
-		if(istype(T,/turf/space))
+		if(istype(T,/turf/space) || istype(T,/turf/unsimulated/floor))
 			costtouse=cost+1+3 //add cost to make the floor and the wall
 			timetaken = 4 SECONDS
 		else
@@ -266,7 +266,7 @@
 	if(istype(T,/turf/simulated/floor))
 		costtouse=cost
 	else
-		if(istype(T,/turf/space))
+		if(istype(T,/turf/space) || istype(T,/turf/unsimulated/floor))
 			costtouse=cost+1 //add cost to make the floor
 		else
 			costtouse=0
@@ -307,7 +307,7 @@
 /datum/rcd_grouped_schematic/girder/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
 	var/truecost=0
-	if(istype(T,/turf/space))
+	if(istype(T,/turf/space) || istype(T,/turf/unsimulated/floor))
 		truecost=cost+1
 	else if(istype(T,/turf/simulated/floor) )
 		truecost=cost
@@ -382,7 +382,7 @@
 	
 /datum/rcd_grouped_schematic/floor/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
-	if(!istype(T,/turf/space))
+	if(!istype(T,/turf/space) && !istype(T,/turf/unsimulated/floor))
 		to_chat(user, "You can only build this floor in space!")
 		return 0
 	if(linked_rcd.get_energy(user) < cost)
@@ -403,7 +403,7 @@
 	
 /datum/rcd_grouped_schematic/plating/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
-	if(!istype(T,/turf/space))
+	if(!istype(T,/turf/space) && !istype(T,/turf/unsimulated/floor))
 		to_chat(user, "You can only build this floor in space!")
 		return 0
 	if(linked_rcd.get_energy(user) < cost)
@@ -424,11 +424,11 @@
 	
 /datum/rcd_grouped_schematic/rfloor/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
-	var/cc=cost
+	var/cc=0
 	if(T.type==/turf/simulated/floor/engine)
 		to_chat(user, "The floor is already a [name]!")
 		return 0
-	if(istype(T,/turf/space))
+	if(istype(T,/turf/space) || istype(T,/turf/unsimulated/floor))
 		cc=cost+1
 	else
 		if(T.type==/turf/simulated/floor || T.type==/turf/simulated/floor/plating )
@@ -505,7 +505,7 @@
 	
 /datum/rcd_grouped_schematic/lattice/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
-	if(!istype(T,/turf/space))
+	if(!istype(T,/turf/space) && !istype(T,/turf/unsimulated/floor))
 		to_chat(user, "You can only build this in space!")
 		return 0
 	if(linked_rcd.get_energy(user) < cost)
@@ -528,7 +528,7 @@
 	
 /datum/rcd_grouped_schematic/catwalk/build(var/atom/A, var/mob/user)
 	var/turf/T=get_turf(A)
-	if(!istype(T,/turf/space))
+	if(!istype(T,/turf/space) && !istype(T,/turf/unsimulated/floor))
 		to_chat(user, "You can only build this in space!")
 		return 0
 	if(linked_rcd.get_energy(user) < cost)
@@ -639,7 +639,7 @@
 		return 0
 	if(istype(T,/turf/simulated/floor))
 		cc=(nowindows ? 1 : cost)
-	if(istype(T,/turf/space))
+	if(istype(T,/turf/space) || istype(T,/turf/unsimulated/floor))
 		cc=(nowindows ? 1 : cost)+1
 	
 	if(!cc)
@@ -653,7 +653,7 @@
 		
 	playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
 	
-	if(istype(T,/turf/space))
+	if(istype(T,/turf/space)|| istype(T,/turf/unsimulated/floor))
 		T.ChangeTurf(/turf/simulated/floor)
 	if( (!locate(/obj/structure/grille) in T.contents) && !skipgrile)
 		new /obj/structure/grille(T)
@@ -905,9 +905,9 @@
 	var/cc=0
 	if(!T)
 		return 0
-	if(istype(T, /turf/space))
+	if(istype(T, /turf/space) || istype(T,/turf/unsimulated/floor))
 		cc=cost+1
-	else if (istype(T, /turf/simulated/floor))
+	else if (istype(T, /turf/simulated/floor) || istype(T,/turf/unsimulated/floor))
 		cc=cost
 	else
 		to_chat(user, "You can't place a [name] here!")
@@ -1092,7 +1092,7 @@
 		return 0
 	if(istype(T, /turf/space))
 		cc=cost+1
-	else if (istype(T, /turf/simulated/floor))
+	else if (istype(T, /turf/simulated/floor) || istype(T,/turf/unsimulated/floor))
 		cc=cost
 	else
 		to_chat(user, "You can't place a [name] here!")

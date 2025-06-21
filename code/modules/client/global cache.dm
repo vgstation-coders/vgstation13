@@ -190,6 +190,23 @@ var/list/asset_datums = list()
 
 //DEFINITIONS FOR ASSET DATUMS START HERE.
 
+/datum/asset/simple/tetris
+	assets = list(
+		"tetris.css" = 'html/tetris/public/css/tetris.css',
+
+		"jquery.min.js" = 'code/modules/html_interface/jquery.min.js',
+
+		"main_tetris.js" = 'html/tetris/tetris_browser_compile.js',
+
+		"stardust.png" = 'html/tetris/public/img/stardust.png',
+		"classy_fabric.png" = 'html/tetris/public/img/stardust.png',
+		"beep1.mp3" = 'html/tetris/public/sounds/beep1.mp3',
+		"beep2.mp3" = 'html/tetris/public/sounds/beep2.mp3',
+		"beep3.mp3" = 'html/tetris/public/sounds/beep3.mp3',
+		"beep4.mp3" = 'html/tetris/public/sounds/beep4.mp3',
+
+		"Start2P.woff2" = 'html/tetris/public/fonts/Start2P.woff2'
+	)
 
 /datum/asset/simple/pda
 	assets = list(

@@ -6825,9 +6825,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "neutralcorner"
@@ -6841,9 +6838,6 @@
 	},
 /obj/machinery/door/airlock/maintenance{
 	req_access_txt = "12"
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/crew_quarters/fitness{
@@ -10624,7 +10618,10 @@
 	})
 "axH" = (
 /obj/machinery/requests_console{
-	pixel_y = 32
+	pixel_y = 32;
+	department = "Security";
+	departmentType = 5;
+	phone_name = "Detective's Office"
 	},
 /obj/machinery/computer/secure_data/detective_computer,
 /turf/simulated/floor{
@@ -21555,7 +21552,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_x = 32
+	pixel_x = 32;
+	phone_name = "Quartermaster's Office"
 	},
 /obj/item/weapon/coin/silver{
 	pixel_x = 8;
@@ -22417,7 +22415,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Cargo Lobby"
 	},
 /turf/simulated/floor{
 	dir = 9;
@@ -27899,7 +27898,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "Arrivals Checkpoint"
 	},
 /obj/machinery/computer/card,
 /turf/simulated/floor,
@@ -34845,7 +34845,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_y = -30
+	pixel_y = -30;
+	phone_name = "Disposals"
 	},
 /obj/item/stack/package_wrap{
 	pixel_x = 2;
@@ -42287,7 +42288,8 @@
 	department = "Atmospherics";
 	departmentType = 4;
 	name = "Atmos RC";
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Atmospherics Lobby"
 	},
 /obj/machinery/computer/general_air_control{
 	frequency = 1443;
@@ -48016,9 +48018,16 @@
 /turf/simulated/floor/wood,
 /area/library)
 "bMu" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/turf/simulated/wall,
-/area/storage/art)
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 5
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "neutralcorner"
+	},
+/area/crew_quarters/fitness{
+	name = "\improper Recreation Area"
+	})
 "bMv" = (
 /obj/machinery/bookbinder,
 /turf/simulated/floor/wood,
@@ -49699,6 +49708,9 @@
 	dir = 4;
 	name = "Firelock East"
 	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "showroomfloor";
@@ -50410,17 +50422,17 @@
 /turf/simulated/floor/wood,
 /area/library)
 "bRc" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 5
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "neutralcorner"
 	},
-/turf/simulated/floor/plating{
-	icon_state = "platingdmg2";
-	tag = "icon-platingdmg2"
-	},
-/area/maintenance/fore)
+/area/crew_quarters/fitness{
+	name = "\improper Recreation Area"
+	})
 "bRd" = (
 /obj/machinery/status_display{
 	pixel_x = -32
@@ -51216,14 +51228,13 @@
 	},
 /area/hallway/primary/central)
 "bSu" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/plating,
-/area/maintenance/fore)
+/turf/simulated/floor,
+/area/crew_quarters/fitness{
+	name = "\improper Recreation Area"
+	})
 "bSv" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	req_access_txt = 1
@@ -62040,7 +62051,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "Telescience"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -62799,6 +62811,11 @@
 	dir = 4
 	},
 /obj/machinery/light/small,
+/obj/machinery/requests_console{
+	department = "Medbay";
+	pixel_y = -30;
+	phone_name = "Medbay Lobby"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -67654,7 +67671,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_y = -30
+	pixel_y = -30;
+	phone_name = "Research And Development"
 	},
 /turf/simulated/floor{
 	dir = 1
@@ -74994,7 +75012,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_y = -30
+	pixel_y = -30;
+	phone_name = "Toxins"
 	},
 /obj/machinery/light,
 /obj/structure/table,
@@ -101030,13 +101049,20 @@
 	pixel_x = -32
 	},
 /obj/structure/safe,
-/obj/abstract/map/spawner/safe/any,
-/obj/abstract/map/spawner/safe/any,
-/obj/abstract/map/spawner/safe/any,
-/obj/abstract/map/spawner/safe/any,
-/obj/abstract/map/spawner/safe/any,
-/obj/abstract/map/spawner/safe/any,
-/obj/item/weapon/coin/trader,
+/obj/item/stack/sheet/mineral/silver{
+	amount = 20;
+	pixel_x = -8;
+	pixel_y = -3
+	},
+/obj/item/stack/sheet/mineral/gold{
+	amount = 20;
+	pixel_x = -4;
+	pixel_y = 5
+	},
+/obj/item/stack/sheet/mineral/diamond{
+	amount = 5
+	},
+/obj/item/weapon/spacecash/c1000,
 /turf/simulated/floor/vox{
 	icon_state = "dark"
 	},
@@ -103614,7 +103640,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_x = -32
+	pixel_x = -32;
+	phone_name = "Security Break Room"
 	},
 /turf/simulated/floor{
 	dir = 10;
@@ -118208,6 +118235,17 @@
 	icon_state = "red"
 	},
 /area/security/brig)
+"fTo" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 10
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "neutralcorner"
+	},
+/area/crew_quarters/fitness{
+	name = "\improper Recreation Area"
+	})
 "fTP" = (
 /obj/item/weapon/storage/box/stunshells{
 	pixel_y = 7
@@ -118931,6 +118969,15 @@
 	},
 /area/security/vacantoffice2{
 	name = "Security Lounge"
+	})
+"jNH" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "neutralcorner"
+	},
+/area/crew_quarters/fitness{
+	name = "\improper Recreation Area"
 	})
 "jWg" = (
 /obj/structure/table,
@@ -119766,6 +119813,9 @@
 	})
 "nBF" = (
 /obj/machinery/light,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "showroomfloor";
@@ -120387,7 +120437,9 @@
 	icon_state = "poster4";
 	pixel_y = -32
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 5
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "showroomfloor";
@@ -247447,8 +247499,8 @@ ajg
 nYQ
 bxJ
 pYE
-bMu
-bRc
+brJ
+aqj
 arC
 atf
 auu
@@ -247950,7 +248002,7 @@ ame
 ame
 nBF
 brJ
-bSu
+aqi
 adX
 atf
 auv
@@ -248952,7 +249004,7 @@ aia
 agf
 akK
 amf
-amf
+bRc
 aoN
 aqk
 arD
@@ -249454,9 +249506,9 @@ agh
 agh
 akM
 agh
-agh
+bSu
 aoO
-aqn
+bMu
 arF
 atg
 auy
@@ -249956,9 +250008,9 @@ agY
 aji
 akL
 amg
-agi
-agi
-aqm
+fTo
+jNH
+aqn
 arE
 atg
 aux

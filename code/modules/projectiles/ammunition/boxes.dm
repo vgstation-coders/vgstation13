@@ -103,6 +103,12 @@
 	desc = "A box of .380AUTO rubber bullets. Holds 30 rounds."
 	icon_state = "9mmblue"
 	ammo_type = "/obj/item/ammo_casing/c380auto/rubber"
+	
+/obj/item/ammo_storage/box/b380auto/pepperball
+	name = "pistol ammo box (.380AUTO pepperball)"
+	desc = "A box of .380AUTO pepperabll bullets. Holds 30 rounds."
+	icon_state = "9mmred"
+	ammo_type = "/obj/item/ammo_casing/c380auto/pepperball"
 
 /obj/item/ammo_storage/box/BMG50
 	name = "ammo box (.50 BMG)"

@@ -983,7 +983,7 @@ var/global/blood_virus_spreading_disabled = 0
 		"15x15 (4 players)",
 		"39x23 (10 players)",
 		)
-	var/arena_type = input("What size for the arena?", "Arena Construction") in arena_sizes | null
+	var/arena_type = input("What size for the arena?", "Arena Construction") as null|anything in arena_sizes
 
 	if(!arena_type)
 		return

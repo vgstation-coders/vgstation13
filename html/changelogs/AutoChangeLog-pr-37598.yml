@@ -1,0 +1,4 @@
+author: ShiftyRail
+delete-after: true
+changes:
+- bugfix: Fixes some more HTML interfaces errors (notably, shuttles)

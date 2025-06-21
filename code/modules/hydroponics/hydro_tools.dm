@@ -218,7 +218,7 @@
 
 /obj/item/device/analyzer/plant_analyzer/attack_self(mob/user as mob)
 	if(last_data)
-		user << browse(last_data,"window=plant_analyzer_\ref[src];size=400x500")
+		user << browse(HTML_SKELETON(last_data),"window=plant_analyzer_\ref[src];size=400x500")
 	else
 		to_chat(user, "<span class='notice'>[bicon(src)] No plant scan data in memory.</span>")
 	return 0

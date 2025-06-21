@@ -3666,7 +3666,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Research And Development"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -20375,7 +20376,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_x = -30
+	pixel_x = -30;
+	phone_name = "Brig"
 	},
 /obj/structure/closet/wardrobe/red,
 /obj/structure/window/reinforced,
@@ -30491,7 +30493,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Mining Dock"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -38782,7 +38785,8 @@
 /obj/item/weapon/book/manual/detective,
 /obj/machinery/requests_console{
 	department = "Detective's office";
-	pixel_y = -30
+	pixel_y = -30;
+	departmentType = 5
 	},
 /turf/simulated/floor/carpet,
 /area/security/detectives_office)
@@ -45320,7 +45324,8 @@
 /obj/machinery/requests_console{
 	department = "Security";
 	departmentType = 5;
-	pixel_y = -30
+	pixel_y = -30;
+	phone_name = "Arrivals Checkpoint"
 	},
 /turf/simulated/floor{
 	icon_state = "red"
@@ -74370,7 +74375,8 @@
 	department = "Science";
 	departmentType = 2;
 	name = "Science Requests Console";
-	pixel_y = 30
+	pixel_y = 30;
+	phone_name = "Toxins"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -75333,7 +75339,8 @@
 /obj/machinery/requests_console{
 	department = "Cargo Bay";
 	departmentType = 2;
-	pixel_x = 30
+	pixel_x = 30;
+	phone_name = "Cargo Lobby"
 	},
 /turf/simulated/floor{
 	dir = 4;
