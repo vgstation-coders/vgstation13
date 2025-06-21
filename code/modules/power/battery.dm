@@ -107,10 +107,6 @@ var/global/list/battery_online =	list(
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 
-	// for emitting sound, duh
-	var/datum/sound_emitter/sound_emitter
-
-
 /obj/machinery/power/battery/initialize()
 	..()
 	sound_emitter = new /datum/sound_emitter(src)
