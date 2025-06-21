@@ -188,11 +188,11 @@
 					stand_broken = 1 //We can't stand like this
 
 	//We risk falling because stuff is broken bad
-	if(stand_broken && !paralysis && !(lying || resting) && prob(5))
-		if(feels_pain())
-			audible_scream()
-		emote("collapse")
-		Paralyse(10)
+	//if(stand_broken && !paralysis && !(lying || resting) && prob(5))
+	//	if(feels_pain())
+	//		audible_scream()
+	//	emote("collapse")
+	//	Paralyse(10)
 
 	can_stand = check_stand_ability()
 	has_limbs = check_crawl_ability()
