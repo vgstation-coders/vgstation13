@@ -79,43 +79,27 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 	player.register_event(/event/moved, src, nameof(src::on_player_move()))
 
 /datum/sound_zone_manager/proc/on_player_move(mob/mover)
-	//var/start = world.tick_usage
 	if (!mover || !mover.client)
 		return
 
-	var/turf/location = mover.loc //apparently get_turf called extremely often can be expensive?
+	var/turf/location = mover.loc
 	if (!isturf(location))
 		location = get_turf(mover)
 	if (!location)
 		return
 
-	//first remove old zones so we dont check them again immediately after adding
-	// for (var/datum/sound_zone/Z in mover.current_sound_zones)
-	// 	if (!Z.contains(location))
-	// 		Z.on_leave(mover)
-
-	// var/hashes = get_candidate_hashes(location)
-	// for (var/H in hashes)
-	// 	var/bucket = buckets[H]
-	// 	for (var/datum/sound_zone/Z in bucket)
-	// 		if (Z.contains(location) && !(Z in mover.current_sound_zones))
-	// 			Z.on_enter(mover)
-	//var/end = world.tick_usage
-	//world.log << "start: [start] end: [end] diff: [end - start]"
-
 	var/list/current = list()
 	for (var/datum/sound_emitter/E in mover.current_sound_emitters)
-		current[E] = TRUE // evil assoc list level hacking
+		current[E] = TRUE
 	var/list/fresh = list()
 
 	var/hashes = get_candidate_hashes(location)
 	for (var/H in hashes)
 		var/list/B = buckets[H]
-		world.log << "bucket contains [B.len] active emitters"
 		for (var/datum/sound_emitter/E in B)
 			if (E.contains(location))
 				fresh[E] = TRUE
-				if (!current[E])	// what the fuck?
+				if (!current[E])
 					E.on_enter_range(mover)
 				else
 					E.update_params_for_player(mover)
