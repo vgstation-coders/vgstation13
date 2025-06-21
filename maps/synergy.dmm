@@ -8915,7 +8915,9 @@
 	},
 /area/security/warden)
 "aqa" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/machinery/light{
 	dir = 1
 	},
@@ -8931,7 +8933,7 @@
 	},
 /area/security/warden)
 "aqc" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/machinery/camera{
 	name = "Armory"
 	},
@@ -11713,8 +11715,8 @@
 	pixel_y = 4
 	},
 /obj/item/weapon/storage/fancy/crayons{
-	pixel_y = 2;
-	pixel_x = -4
+	pixel_x = -4;
+	pixel_y = 2
 	},
 /obj/item/weapon/storage/fancy/crayons,
 /obj/structure/cable{
@@ -41592,7 +41594,9 @@
 	},
 /area/science/chargebay)
 "bup" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -41605,7 +41609,7 @@
 	},
 /area/science/chargebay)
 "bur" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/machinery/light{
 	dir = 4
 	},
@@ -43629,7 +43633,7 @@
 	},
 /area/science/chargebay)
 "byl" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/machinery/light{
 	dir = 4
 	},
@@ -58489,7 +58493,9 @@
 /turf/simulated/floor/plating,
 /area/maintenance/starboard)
 "caN" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/simulated/floor/plating,
 /area/maintenance/starboard)
 "caO" = (
@@ -58497,7 +58503,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/starboard)
 "caP" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/machinery/light{
 	dir = 4
 	},
@@ -73298,7 +73304,9 @@
 	},
 /area/syndicate_mothership/elite_squad)
 "cDh" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -77085,7 +77093,9 @@
 	},
 /area/centcom/test)
 "cNj" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -77097,7 +77107,7 @@
 	},
 /area/centcom/test)
 "cNl" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -80893,7 +80903,9 @@
 /turf/space,
 /area/centcom/specops)
 "cVF" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "dark-markings"
@@ -80914,7 +80926,7 @@
 	},
 /area/centcom/specops)
 "cVH" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -85752,8 +85764,8 @@
 /area/vox_trading_post/atmos)
 "dqV" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	name = "Vox Air Scrubber (2)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
+	name = "Vox Air Scrubber (2)"
 	},
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/atmos)
@@ -86059,9 +86071,9 @@
 /area/vox_trading_post/atmos)
 "drD" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
-	name = "Vox Air Scrubber (4)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	name = "Vox Air Scrubber (4)"
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -86244,9 +86256,9 @@
 /area/vox_trading_post/hallway)
 "dsa" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 8;
-	name = "Vox Air Scrubber (8)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	name = "Vox Air Scrubber (8)"
 	},
 /obj/machinery/alarm/vox{
 	pixel_y = 24
@@ -86596,9 +86608,9 @@
 /area/vox_trading_post/docking)
 "dsL" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
-	name = "Vox Air Scrubber (4)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	name = "Vox Air Scrubber (4)"
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -86970,9 +86982,9 @@
 /area/vox_trading_post/gardens)
 "dts" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 8;
-	name = "Vox Air Scrubber (8)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	name = "Vox Air Scrubber (8)"
 	},
 /obj/structure/cable{
 	d1 = 1;
@@ -87208,9 +87220,9 @@
 /area/vox_trading_post/gardens)
 "dtR" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 8;
-	name = "Vox Air Scrubber (8)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	name = "Vox Air Scrubber (8)"
 	},
 /obj/structure/cable{
 	d1 = 1;
@@ -87288,9 +87300,9 @@
 /area/vox_trading_post/armory)
 "dtZ" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
-	name = "Vox Air Scrubber (4)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	name = "Vox Air Scrubber (4)"
 	},
 /turf/simulated/floor/vox{
 	icon_state = "rockvault"
@@ -87779,8 +87791,8 @@
 /obj/item/weapon/kitchen/utensil/knife,
 /obj/structure/table,
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	name = "Vox Air Scrubber (2)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
+	name = "Vox Air Scrubber (2)"
 	},
 /turf/simulated/floor/vox{
 	icon_state = "checker";
@@ -88053,8 +88065,8 @@
 /area/vox_trading_post/hallway)
 "dvy" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	name = "Vox Air Scrubber (2)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
+	name = "Vox Air Scrubber (2)"
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -88123,9 +88135,9 @@
 	amount = 50
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
-	name = "Vox Air Scrubber (4)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	name = "Vox Air Scrubber (4)"
 	},
 /turf/simulated/floor/vox{
 	icon_state = "rockvault"
@@ -88800,9 +88812,9 @@
 /area/vox_trading_post/hallway)
 "dwM" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 1;
-	name = "Vox Air Scrubber (1)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	name = "Vox Air Scrubber (1)"
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -89002,9 +89014,9 @@
 	req_access = null
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 1;
-	name = "Vox Air Scrubber (1)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	name = "Vox Air Scrubber (1)"
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -89259,9 +89271,9 @@
 /area/vox_trading_post/dorms)
 "dxI" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 1;
-	name = "Vox Air Scrubber (1)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	name = "Vox Air Scrubber (1)"
 	},
 /turf/simulated/floor/vox/wood,
 /area/vox_trading_post/dorms)
@@ -89303,9 +89315,9 @@
 /area/vox_trading_post/medbay)
 "dxN" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 1;
-	name = "Vox Air Scrubber (1)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	name = "Vox Air Scrubber (1)"
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -89487,9 +89499,9 @@
 /area/vox_trading_post/dorms)
 "dyi" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 1;
-	name = "Vox Air Scrubber (1)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	name = "Vox Air Scrubber (1)"
 	},
 /obj/item/weapon/soap,
 /turf/simulated/floor/vox{
@@ -90029,7 +90041,9 @@
 /turf/simulated/floor/plating,
 /area/mine/production)
 "dzB" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/machinery/camera{
 	dir = 1;
 	name = "Mining Station Exterior";
@@ -90049,7 +90063,7 @@
 	},
 /area/mine/production)
 "dzD" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/unsimulated/floor/airless{
 	dir = 6;
 	icon_state = "asteroidwarning"
@@ -99248,8 +99262,8 @@
 	pixel_y = -8
 	},
 /obj/item/painting_brush{
-	pixel_y = -6;
-	pixel_x = -4
+	pixel_x = -4;
+	pixel_y = -6
 	},
 /turf/simulated/floor,
 /area/storage/art)

@@ -32336,9 +32336,9 @@
 	},
 /obj/machinery/door/window{
 	base_state = "right";
+	dir = 8;
 	name = "Library Desk Door";
-	req_access_txt = "37";
-	dir = 8
+	req_access_txt = "37"
 	},
 /turf/simulated/floor/wood,
 /area/library)
@@ -36469,12 +36469,12 @@
 	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
+	desc = "Secret of the arts";
 	dir = 2;
 	icon_state = "shutter0";
 	id_tag = "art1";
 	name = "Art Shutters";
-	opacity = 0;
-	desc = "Secret of the arts"
+	opacity = 0
 	},
 /turf/simulated/floor/plating,
 /area/storage/art)
@@ -43603,7 +43603,9 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint)
 "bEY" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/structure/cable/yellow{
 	d2 = 2;
 	icon_state = "0-2"
@@ -43632,7 +43634,7 @@
 /turf/simulated/floor/plating,
 /area/science/robotics)
 "bFc" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/structure/cable/yellow{
 	d2 = 2;
 	icon_state = "0-2"
@@ -60670,8 +60672,8 @@
 "cjC" = (
 /obj/machinery/door/airlock/medical{
 	name = "Patient Room 1";
-	req_access_txt = "5";
-	req_access_dir = 4
+	req_access_dir = 4;
+	req_access_txt = "5"
 	},
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -61990,8 +61992,8 @@
 "cme" = (
 /obj/machinery/door/airlock/medical{
 	name = "Patient Room 2";
-	req_access_txt = "5";
-	req_access_dir = 4
+	req_access_dir = 4;
+	req_access_txt = "5"
 	},
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -70852,12 +70854,14 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "cCA" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/effect/decal/cleanable/cobweb2,
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "cCB" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/structure/window/reinforced{
 	dir = 8
 	},
@@ -83993,7 +83997,9 @@
 	},
 /area/syndicate_mothership)
 "dbz" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -87658,7 +87664,9 @@
 	},
 /area/centcom/test)
 "dlt" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -87691,7 +87699,7 @@
 	},
 /area/centcom/test)
 "dlx" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -91297,7 +91305,7 @@
 /turf/space,
 /area/centcom/specops)
 "dtw" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -91317,7 +91325,9 @@
 	},
 /area/centcom/specops)
 "dty" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "dark-markings"
@@ -106200,7 +106210,9 @@
 	},
 /area/mine/explored)
 "eoW" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/structure/window/reinforced{
 	dir = 8
 	},
@@ -106230,7 +106242,7 @@
 	},
 /area/mine/explored)
 "eoY" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
@@ -111460,7 +111472,7 @@
 /turf/simulated/floor,
 /area/mine/west_outpost)
 "ezJ" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/structure/window/reinforced{
 	dir = 4
 	},
@@ -111469,7 +111481,9 @@
 	},
 /area/mine/west_outpost)
 "ezK" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/structure/window/reinforced{
 	dir = 8
 	},
@@ -112028,7 +112042,7 @@
 /turf/simulated/floor/plating,
 /area/mine/production)
 "eBe" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/structure/window/reinforced{
 	dir = 4
 	},
@@ -112037,7 +112051,9 @@
 	},
 /area/mine/eva)
 "eBf" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/structure/window/reinforced{
 	dir = 8
 	},
@@ -115550,12 +115566,12 @@
 /obj/structure/window/reinforced,
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
+	desc = "Secret of the arts";
 	dir = 2;
 	icon_state = "shutter0";
 	id_tag = "art1";
 	name = "Art Shutters";
-	opacity = 0;
-	desc = "Secret of the arts"
+	opacity = 0
 	},
 /turf/simulated/floor/plating,
 /area/storage/art)
@@ -116084,12 +116100,12 @@
 	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
+	desc = "Secret of the arts";
 	dir = 2;
 	icon_state = "shutter0";
 	id_tag = "art1";
 	name = "Art Shutters";
-	opacity = 0;
-	desc = "Secret of the arts"
+	opacity = 0
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor/plating,
@@ -116339,12 +116355,12 @@
 /obj/structure/window/reinforced,
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
+	desc = "Secret of the arts";
 	dir = 2;
 	icon_state = "shutter0";
 	id_tag = "art1";
 	name = "Art Shutters";
-	opacity = 0;
-	desc = "Secret of the arts"
+	opacity = 0
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/plating,

@@ -1068,10 +1068,10 @@
 	tag = "icon-adapter_2 (EAST)"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 8;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /obj/item/weapon/stool,
 /obj/structure/cable/green{
@@ -1595,10 +1595,10 @@
 	tag = "icon-adapter_2 (WEST)"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/trading_floor)
@@ -5753,10 +5753,10 @@
 	pixel_x = 11
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 8;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /obj/structure/mirror{
 	pixel_x = 24
@@ -12321,8 +12321,8 @@
 "cTK" = (
 /obj/structure/bed/chair,
 /obj/machinery/atmospherics/unary/vent_scrubber{
-	on = 1;
-	default_scrubbed_gases = list("carbon_dioxide")
+	default_scrubbed_gases = list("carbon_dioxide");
+	on = 1
 	},
 /obj/structure/cable/orange{
 	d1 = 1;
@@ -14691,9 +14691,9 @@
 /area/maintenance/aft)
 "duS" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /obj/structure/cable/green{
 	icon_state = "6-10"
@@ -19898,7 +19898,9 @@
 	name = "Starboard Backrooms"
 	})
 "eMz" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/machinery/firealarm{
 	pixel_y = 24
 	},
@@ -21551,7 +21553,9 @@
 	name = "\improper AIShip Docking Moors"
 	})
 "faI" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/simulated/floor/plating,
 /area/research_outpost/hallway{
 	icon_state = "hallA";
@@ -22573,7 +22577,9 @@
 	},
 /area/hallway/primary/aft)
 "fnY" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/simulated/floor/plating,
 /area/science/chargebay)
 "fnZ" = (
@@ -25099,9 +25105,9 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -25308,10 +25314,10 @@
 	name = "Trader"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /obj/structure/cable/green{
 	icon_state = "1-6"
@@ -26027,10 +26033,10 @@
 	tag = "icon-adapter_2 (WEST)"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "checker";
@@ -28184,7 +28190,9 @@
 	name = "Xenoarchaeology Hallway"
 	})
 "gKc" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -31079,10 +31087,10 @@
 /area/centcom/suppy)
 "hvG" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 8;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -35274,9 +35282,9 @@
 	tag = "icon-adapter_2 (NORTH)"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -42071,7 +42079,9 @@
 	},
 /area/centcom/test)
 "kiN" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -42108,7 +42118,7 @@
 	name = "Lower Backrooms"
 	})
 "kjs" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -43573,9 +43583,9 @@
 	req_access = null
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 1;
-	name = "Vox Air Scrubber (1)";
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	name = "Vox Air Scrubber (1)"
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -52205,7 +52215,9 @@
 /turf/space,
 /area/centcom/specops)
 "mDm" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "dark-markings"
@@ -52235,7 +52247,7 @@
 	},
 /area/hydroponics)
 "mDC" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -60791,8 +60803,8 @@
 	icon_state = "warning_corner"
 	},
 /obj/machinery/atmospherics/binary/volume_pump{
-	name = "Cold Gas Circulator";
-	dir = 8
+	dir = 8;
+	name = "Cold Gas Circulator"
 	},
 /turf/simulated/floor,
 /area/engineering/burn_chamber{
@@ -64905,8 +64917,8 @@
 	})
 "pPx" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 8;
-	default_scrubbed_gases = list("carbon_dioxide")
+	default_scrubbed_gases = list("carbon_dioxide");
+	dir = 8
 	},
 /turf/simulated/floor/engine,
 /area/science/breakroom{
@@ -65991,10 +66003,10 @@
 /area/medical/medbay)
 "qkl" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 8;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -67048,10 +67060,10 @@
 /area/crew_quarters/theatre)
 "qHq" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 8;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{
 	dir = 4;
@@ -71717,10 +71729,10 @@
 	})
 "sGa" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 8;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /obj/machinery/alarm/vox{
 	alarm_frequency = 1331;
@@ -73450,10 +73462,10 @@
 	})
 "tyt" = (
 /obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
 	frequency = 1331;
 	name = "Outpost Air Vent";
-	on = 1;
-	dir = 1
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -73617,10 +73629,10 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 8;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -77157,11 +77169,11 @@
 "vkJ" = (
 /obj/machinery/atmospherics/pipe/layer_adapter/supply/hidden,
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 1;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -77574,10 +77586,10 @@
 "vvt" = (
 /obj/machinery/washing_machine,
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 8;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox/wood,
 /area/vox_trading_post/dorms)
@@ -78708,7 +78720,9 @@
 /turf/simulated/floor,
 /area/engineering/atmos)
 "vZi" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/structure/window/reinforced{
 	dir = 8
 	},
@@ -83168,8 +83182,8 @@
 	},
 /obj/item/weapon/circuitboard/mining,
 /obj/item/weapon/circuitboard/circuit_imprinter{
-	pixel_y = -3;
-	pixel_x = 3
+	pixel_x = 3;
+	pixel_y = -3
 	},
 /turf/simulated/floor/plating,
 /area/storage/tech)
