@@ -83,6 +83,7 @@
 
 	output += "</ul>"
 	usr << browse(HTML_SKELETON(output),"window=airreport;size=1000x500")
+	winset(usr, "airreport", "size=1000x500")
 	feedback_add_details("admin_verb","mCRP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/intercom_view()
@@ -420,7 +421,7 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 		neighbour = locate() in get_step(get_turf(C),C.d2)
 		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
 			error_str += "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span><br>"
-	
+
 	var/datum/browser/popup = new(usr, "Wire connections", usr.name, 300, 400)
 	popup.set_content(error_str)
 	popup.open()
@@ -497,3 +498,4 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 
 	output += "</ul><br>[bad_pipes] bad pipes detected."
 	usr << browse(HTML_SKELETON(output),"window=distrowastemixreport;size=1000x500")
+	winset(usr, "distrowastemixreport", "size=1000x500")

@@ -93,6 +93,7 @@
 				else
 					dat += "<li><em>No pathogen</em></li>"
 	user << browse(HTML_SKELETON_TITLE("Pathogenic Isolator", "Isolator menu:<BR><BR>[dat]</ul>"), "window=isolator;size=575x400")
+	winset(user, "isolator", "size=575x400")
 	onclose(user, "isolator")
 	return
 

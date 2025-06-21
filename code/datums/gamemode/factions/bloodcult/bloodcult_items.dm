@@ -187,6 +187,7 @@ var/list/arcane_tomes = list()
 
 	usr << browse_rsc('icons/tomebg.png', "tomebg.png")
 	usr << browse(tome_text(), "window=arcanetome;size=900x600")
+	winset(usr, "arcanetome", "size=900x600")
 
 /obj/item/weapon/tome/attack(var/mob/living/M, var/mob/living/user)
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had the [name] used on him by [user.name] ([user.ckey])</font>")
@@ -234,6 +235,7 @@ var/list/arcane_tomes = list()
 	if(iscultist(user) && state == TOME_OPEN)
 		usr << browse_rsc('icons/tomebg.png', "tomebg.png")
 		usr << browse(tome_text(), "window=arcanetome;size=900x600")
+		winset(usr, "arcanetome", "size=900x600")
 
 /obj/item/weapon/tome/dropped(var/mob/user)
 	usr << browse(null, "window=arcanetome")
@@ -262,6 +264,7 @@ var/list/arcane_tomes = list()
 			state = TOME_OPEN
 			usr << browse_rsc('icons/tomebg.png', "tomebg.png")
 			usr << browse(tome_text(), "window=arcanetome;size=900x600")
+			winset(usr, "arcanetome", "size=900x600")
 		else
 			icon_state = "tome"
 			item_state = "tome"
@@ -298,6 +301,7 @@ var/list/arcane_tomes = list()
 				if (state == TOME_OPEN)
 					usr << browse_rsc('icons/tomebg.png', "tomebg.png")
 					usr << browse(tome_text(), "window=arcanetome;size=900x600")
+					winset(usr, "arcanetome", "size=900x600")
 		else
 			to_chat(user, "<span class='warning'>This tome cannot contain any more talismans. Use or remove some first.</span>")
 
@@ -456,6 +460,7 @@ var/list/arcane_tomes = list()
 				T.talismans.Remove(src)
 				user << browse_rsc('icons/tomebg.png', "tomebg.png")
 				user << browse(T.tome_text(), "window=arcanetome;size=900x600")
+				winset(user, "arcanetome", "size=900x600")
 				user.put_in_hands(src)
 		return
 

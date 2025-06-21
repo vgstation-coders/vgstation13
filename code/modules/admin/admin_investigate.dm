@@ -58,6 +58,7 @@ var/global/list/investigations=list(
 
 /datum/log_controller/proc/read(var/mob/user)
 	user << browse(HTML_SKELETON_TITLE(subject, file2text(handle)),"window=investigate[subject];size=800x300")
+	winset(user, "investigate[subject]", "size=800x300")
 
 // Calls our own formatting functions, but then appends to the global log.
 /atom/proc/investigation_log(var/subject, var/message)

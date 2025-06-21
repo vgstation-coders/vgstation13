@@ -1403,6 +1403,7 @@
 		body = "<body>[jobs]</body>"
 		dat = "<tt>[header][body]</tt>"
 		usr << browse(HTML_SKELETON(dat), "window=jobban2;size=800x490")
+		winset(usr, "jobban2", "size=800x490")
 		return
 
 	//JOBBAN'S INNARDS
@@ -4437,6 +4438,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				for(var/sig in lawchanges)
 					dat += "[sig]<BR>"
 				usr << browse(HTML_SKELETON(dat), "window=lawchanges;size=800x500")
+				winset(usr, "lawchanges", "size=800x500")
 			if("list_job_debug")
 				var/dat = "<B>Job Debug info.</B><HR>"
 				if(job_master)
@@ -4448,6 +4450,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 							continue
 						dat += "job: [job.title], current_positions: [job.current_positions], total_positions: [job.get_total_positions()] <BR>"
 					usr << browse(HTML_SKELETON(dat), "window=jobdebug;size=600x500")
+					winset(usr, "jobdebug", "size=600x500")
 			if("showailaws")
 				output_ai_laws()
 			if("showgm")
@@ -4465,6 +4468,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 						dat += text("<tr><td>[]</td><td>[]</td></tr>", H.name, H.get_assignment())
 				dat += "</table>"
 				usr << browse(HTML_SKELETON(dat), "window=manifest;size=440x410")
+				winset(usr, "manifest", "size=440x410")
 			// if("check_antagonist")
 			// 	check_antagonists()
 			if("emergency_shuttle_panel")
@@ -4477,6 +4481,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 						dat += "<tr><td>[H]</td><td>[H.dna.unique_enzymes]</td><td>[H.dna.b_type]</td></tr>"
 				dat += "</table>"
 				usr << browse(HTML_SKELETON(dat), "window=DNA;size=440x410")
+				winset(usr, "DNA", "size=440x410")
 			if("fingerprints")
 				var/dat = "<B>Showing Fingerprints.</B><HR>"
 				dat += "<table cellspacing=5><tr><th>Name</th><th>Fingerprints</th></tr>"
@@ -4490,6 +4495,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 							dat += "<tr><td>[H]</td><td>H.dna = null</td></tr>"
 				dat += "</table>"
 				usr << browse(HTML_SKELETON(dat), "window=fingerprints;size=440x410")
+				winset(usr, "fingerprints", "size=440x410")
 			if("show_admin_log")
 				var/dat = "<B>Admin Log<HR></B>"
 				for(var/l in admin_log)
@@ -5945,3 +5951,4 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			text += "<A HREF='?src=\ref[src];religions=global_subtle_pm&rel=\ref[R]'>Subtle PM all believers</a> <br/>"
 	text += "<A HREF='?src=\ref[src];religions=new'>Bus in a new religion</a> <br/>"
 	usr << browse(HTML_SKELETON(jointext(text, "")), "window=admin2;size=300x370")
+	winset(usr, "admin2", "size=300x370")

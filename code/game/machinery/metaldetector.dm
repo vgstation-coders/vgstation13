@@ -169,6 +169,7 @@
 		"}
 
 		user << browse(HTML_SKELETON(dat), "window=detector;size=575x300")
+		winset(user, "magnet", "size=575x300")
 		onclose(user, "detector")
 		return
 

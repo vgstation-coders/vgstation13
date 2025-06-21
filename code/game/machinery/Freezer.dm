@@ -107,6 +107,7 @@
 	"}
 
 	user << browse(HTML_SKELETON(dat), "window=freezer;size=400x500")
+	winset(user, "freezer", "size=400x500")
 	onclose(user, "freezer")
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/Topic(href, href_list)
@@ -275,6 +276,7 @@
 	"}
 
 	user << browse(HTML_SKELETON(dat), "window=heater;size=400x500")
+	winset(user, "heater", "size=400x500")
 	onclose(user, "heater")
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/Topic(href, href_list)

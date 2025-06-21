@@ -8,7 +8,7 @@
 		create_object_html = replacetext(create_object_html, "null /* object types */", "\"[objectjs]\"")
 
 	user << browse(replacetext(create_object_html, "/* ref src */", "\ref[src]"), "window=create_object;size=700x500")
-
+	winset(user, "create_object", "size=700x500")
 
 /datum/admins/proc/quick_create_object(var/mob/user)
 
@@ -27,3 +27,4 @@
 		quick_create_object_html = replacetext(quick_create_object_html, "null /* object types */", "\"[objectjs]\"")
 
 	user << browse(replacetext(quick_create_object_html, "/* ref src */", "\ref[src]"), "window=quick_create_object;size=700x500")
+	winset(user, "quick_create_object", "size=700x500")

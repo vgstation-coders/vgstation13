@@ -42,6 +42,7 @@
 	set desc = "Show Server Rules."
 	set hidden = 1
 	src << browse(file(RULES_FILE), "window=rules;size=480x320")
+	winset(src, "rules", "size=480x320")
 #undef RULES_FILE
 
 /client/verb/hotkeys_help()

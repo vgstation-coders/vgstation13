@@ -42,6 +42,7 @@ var/global/byond_hub_playercount = OPEN_TO_HUB_PLAYERCOUNT_DEFAULT
 	"}
 
 	usr << browse(HTML_SKELETON(dat), "window=admin2;size=600x400")
+	winset(usr, "admin2", "size=600x400")
 	return
 
 /world/proc/update_status()

@@ -183,3 +183,4 @@
 		"}
 
 	usr << browse(HTML_SKELETON(dat), "window=artifactspanel;size=840x450")
+	winset(usr, "artifactspanel", "size=840x450")

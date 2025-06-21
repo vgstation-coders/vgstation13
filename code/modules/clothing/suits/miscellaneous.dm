@@ -53,6 +53,7 @@ var/list/tag_suits_list = list()
 		return
 	else
 		H << browse(get_window_text(H),"window=laser_tag_window;size=700x500")
+		winset(H, "laser_tag_window", "size=700x500")
 
 /obj/item/clothing/suit/tag/proc/get_window_text(var/mob/living/carbon/human/H)
 	var/dat = list()
@@ -91,6 +92,7 @@ var/list/tag_suits_list = list()
 		<b><a href='?src=\ref[src]&edition_done=\ref[my_laser_tag_game]'>Done</a></b>
 	""}
 	user << browse(HTML_SKELETON(dat),"window=laser_tag_window2;size=250x250")
+	winset(user, "laser_tag_window2", "size=250x250")
 
 /obj/item/clothing/suit/tag/Topic(href, href_list)
 	if(..())
@@ -101,6 +103,7 @@ var/list/tag_suits_list = list()
 		game.handle_new_player(player, usr)
 		my_laser_tag_game = game
 		usr << browse(HTML_SKELETON(get_window_text(usr)),"window=laser_tag_window;size=500x250")
+		winset(usr, "laser_tag_window", "size=500x250")
 		return
 
 	if (href_list["create_game"])
@@ -111,6 +114,7 @@ var/list/tag_suits_list = list()
 		game.handle_new_player(player, usr)
 		refresh_edit_window(usr, game)
 		usr << browse(HTML_SKELETON(get_window_text(usr)),"window=laser_tag_window;size=500x250")
+		winset(usr, "laser_tag_window", "size=500x250")
 		return
 
 	// Game parametrisation
@@ -189,6 +193,7 @@ var/list/tag_suits_list = list()
 		var/datum/laser_tag_game/game = locate(href_list["leave_game"])
 		game.kick_player(usr)
 		usr << browse(HTML_SKELETON(get_window_text(usr)),"window=laser_tag_window;size=500x250")
+		winset(usr, "laser_tag_window", "size=500x250")
 		return
 
 	if (href_list["clear_gamertag"])

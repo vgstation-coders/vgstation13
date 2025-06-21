@@ -332,6 +332,7 @@
 
 	dat += text("<BR><A href='?src=\ref[];mach_close=scanconsole'>Close</A>", user)
 	user << browse(HTML_SKELETON(dat), "window=scanconsole;size=430x600")
+	winset(user, "spellbook", "size=430x600")
 	return
 
 

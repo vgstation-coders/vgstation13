@@ -341,6 +341,7 @@
 	"}
 
 	usr << browse(HTML_SKELETON(dat), "window=players;size=600x480")
+	winset(usr, "players", "size=600x480")
 
 //The old one
 /datum/admins/proc/player_panel_old()

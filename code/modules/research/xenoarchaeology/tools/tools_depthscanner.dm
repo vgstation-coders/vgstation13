@@ -118,6 +118,7 @@
 	dat += "<A href='?src=\ref[src];refresh=1'>Refresh</a><br>"
 	dat += "<A href='?src=\ref[src];close=1'>Close</a><br>"
 	user << browse(HTML_SKELETON(dat),"window=depth_scanner;size=300x500")
+	winset(user, "depth_scanner", "size=300x500")
 	onclose(user, "depth_scanner")
 
 /obj/item/device/depth_scanner/Topic(href, href_list)

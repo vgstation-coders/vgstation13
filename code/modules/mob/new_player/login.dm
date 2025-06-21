@@ -67,6 +67,7 @@
 					'html/changelog.html'
 					)
 				src << browse('html/changelog.html', "window=changes;size=675x650")
+				winset(src, "changes", "size=675x650")
 				client.prefs.SetChangelog(ckey, changelog_hash)
 				winset(client, "rpane.changelog", "background-color=none;font-style=;")
 #endif

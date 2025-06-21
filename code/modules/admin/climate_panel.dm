@@ -34,3 +34,4 @@
 		"}
 
 	usr << browse(HTML_SKELETON(dat), "window=climatepanel;size=360x175")
+	winset(usr, "climatepanel", "size=360x175")

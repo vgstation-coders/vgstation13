@@ -1249,6 +1249,7 @@ Use this proc preferably at the end of an equipment loadout
 					Version: [byond_version].[byond_build] Revision: [return_revision()]
 					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&byondver=[byond_version].[byond_build]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
 	src << browse(HTML_SKELETON(dat), "window=github;size=480x480")
+	winset(src, "github", "size=480x480")
 
 /client/verb/changes()
 	set name = "Changelog"
@@ -1275,6 +1276,7 @@ Use this proc preferably at the end of an equipment loadout
 		'html/changelog.html'
 		)
 	src << browse('html/changelog.html', "window=changes;size=675x650")
+	winset(src, "changes", "size=675x650")
 
 	if(prefs.get_pref(/datum/preference_setting/string/changelog) != changelog_hash)
 		prefs.SetChangelog(ckey, changelog_hash)

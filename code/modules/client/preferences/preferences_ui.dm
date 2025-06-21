@@ -537,6 +537,7 @@
 		</center></tt>"}
 	user << browse(null, "window=preferences")
 	user << browse(HTML_SKELETON(HTML), "window=disabil;size=350x300")
+	winset(user, "disabil", "size=350x300")
 	return
 
 /datum/preferences/proc/SetRecords(mob/user)
@@ -573,6 +574,7 @@
 		</center></tt>"}
 	user << browse(null, "window=preferences")
 	user << browse(HTML_SKELETON(HTML), "window=records;size=350x300")
+	winset(user, "records", "size=350x300")
 	return
 
 

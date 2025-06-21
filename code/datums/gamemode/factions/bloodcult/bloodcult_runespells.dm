@@ -747,6 +747,7 @@
 			var/mob/M = target.loc
 			M << browse_rsc('icons/tomebg.png', "tomebg.png")
 			M << browse(target.tome_text(), "window=arcanetome;size=537x375")
+			winset(M, "arcanetome", "size=537x375")
 	else
 		to_chat(activator, "<span class='warning'>This tome cannot contain any more talismans.</span>")
 	qdel(src)

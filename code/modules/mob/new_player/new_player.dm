@@ -667,6 +667,7 @@
 	dat += "</table>"
 	dat += "</center>"
 	src << browse(HTML_SKELETON(dat), "window=latechoices;size=360x640;can_close=1")
+	winset(src, "latechoices", "size=360x640")
 
 
 /mob/new_player/proc/create_human(var/datum/preferences/prefs)
@@ -843,6 +844,7 @@
 	dat += job_master.display_prediction()
 
 	src << browse(HTML_SKELETON(dat), "window=manifest;size=370x420;can_close=1")
+	winset(src, "manifest", "size=370x420")
 
 /mob/new_player/proc/ViewManifest()
 	var/dat = {"<html><body>
@@ -850,6 +852,7 @@
 	dat += data_core.get_manifest(OOC = 1)
 
 	src << browse(HTML_SKELETON(dat), "window=manifest;size=370x420;can_close=1")
+	winset(src, "manifest", "size=370x420")
 
 /mob/new_player/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0

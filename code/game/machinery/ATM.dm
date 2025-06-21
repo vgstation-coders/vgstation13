@@ -284,6 +284,7 @@ log transactions
 			reconnect_database()
 
 		user << browse(HTML_SKELETON(dat),"window=atm;size=550x650")
+		winset(user, "atm", "size=550x650")
 	else
 		user << browse(null,"window=atm")
 

@@ -51,6 +51,7 @@
 		var/dat
 		dat = format_host_data(get_host_data())
 		src << browse(HTML_SKELETON(dat), "window=borerscan;size=430x600")
+		winset(src, "borerscan", "size=430x600")
 		return
 
 /mob/living/simple_animal/borer/proc/get_host_data()

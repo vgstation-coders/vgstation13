@@ -287,6 +287,7 @@ var/global/mulebot_count = 0
 			dat += "The bot is in maintenance mode and cannot be controlled.<BR>"
 
 	user << browse(HTML_SKELETON_TITLE("Mulebot [suffix ? "([suffix])" : ""]", dat), "window=mulebot;size=350x500")
+	winset(user, "mulebot", "size=350x500")
 	onclose(user, "mulebot")
 	return
 

@@ -206,6 +206,7 @@
 		else
 			dat += text("<A href='?src=\ref[];choice=Log In'>{Log In}</A>", src)
 	user << browse(HTML_SKELETON_TITLE("Security Records", "<TT>[dat]</TT>"), "window=secure_rec;size=600x400")
+	winset(user, "secure_rec", "size=600x400")
 	onclose(user, "secure_rec")
 	return
 

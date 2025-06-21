@@ -196,7 +196,7 @@
 		if (faith.religiousLeader == src)
 			output += "You can convert people by [faith.convert_method] <br />"
 	recipient << browse(output,"window=memory;size=700x500")
-
+	winset(recipient, "memory", "size=700x500")
 
 /datum/mind/proc/role_panel()
 	if(!ticker || !ticker.mode)
@@ -224,6 +224,7 @@
 	//<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"} TODO: make sure that works
 
 	usr << browse(HTML_SKELETON(out), "window=role_panel[src];size=700x500")
+	winset(usr, "role_panel[src]", "size=700x500")
 
 /datum/mind/proc/role_purchase_log()
 	if(!ticker || !ticker.mode)
@@ -255,6 +256,7 @@
 					out += "[entry]<BR>"
 
 	usr << browse(HTML_SKELETON(out), "window=role_purchase_log[src];size=300x500")
+	winset(usr, "role_panel[src]", "size=700x500")
 
 /datum/mind/proc/get_faction_list()
 	var/list/all_factions = list()

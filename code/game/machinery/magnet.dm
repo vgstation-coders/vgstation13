@@ -266,6 +266,7 @@
 		Path: {<a href='?src=\ref[src];operation=setpath'>[path]</a>}<br>
 		Moving: <a href='?src=\ref[src];operation=togglemoving'>[moving ? "Enabled":"Disabled"]</a>"}
 	user << browse(HTML_SKELETON(dat), "window=magnet;size=400x500")
+	winset(user, "magnet", "size=400x500")
 	onclose(user, "magnet")
 
 /obj/machinery/magnetic_controller/Topic(href, href_list)

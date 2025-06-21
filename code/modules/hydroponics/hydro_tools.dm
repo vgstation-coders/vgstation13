@@ -214,6 +214,7 @@
 		last_data = dat
 		dat += "<br>\[<a href='?src=\ref[src];print=1'>print report</a>\] \[<a href='?src=\ref[src];clear=1'>clear</a>\]"
 		user << browse(HTML_SKELETON(dat),"window=plant_analyzer_\ref[src];size=500x600")
+		winset(user, "account_db", "size=700x650")
 	return
 
 /obj/item/device/analyzer/plant_analyzer/attack_self(mob/user as mob)

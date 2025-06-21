@@ -274,6 +274,7 @@
 		dat += "<span class='warning'><B>No compatible attached compressor found.</span>"
 
 	user << browse(HTML_SKELETON(dat), "window=computer;size=400x500")
+	winset(user, "computer", "size=400x500")
 	onclose(user, "computer")
 	return
 

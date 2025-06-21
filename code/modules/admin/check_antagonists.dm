@@ -45,3 +45,4 @@
 
 	dat += "</body></html>"
 	usr << browse(HTML_SKELETON(dat), "window=roundstatus;size=750x500")
+	winset(usr, "roundstatus", "size=750x500")

@@ -171,6 +171,7 @@
 
 	dat += "<BR><BR><A href='?src=\ref[user];mach_close=computer'>Close</A></TT></BODY></HTML>"
 	user << browse(HTML_SKELETON(dat), "window=computer;size=400x500")
+	winset(user, "computer", "size=400x500")
 	add_fingerprint(usr)
 	onclose(user, "computer")
 	return

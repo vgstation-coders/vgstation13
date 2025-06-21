@@ -642,6 +642,7 @@
 	dat += "[(on) ? "<A href='?src=\ref[src];turnoff=1'>\[EMERGENCY STOP\]</A> <i>: cancels the current job.</i><BR>" : ""]"
 	dat += text("<BR><BR><A href='?src=\ref[];mach_close=\ref[src]'>Close</A>", user)
 	user << browse(HTML_SKELETON(dat), "window=\ref[src];size=400x500")
+	winset(usr, "\ref[src]", "size=400x500")
 	onclose(user, "\ref[src]")
 
 

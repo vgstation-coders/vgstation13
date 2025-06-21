@@ -136,6 +136,7 @@
 
 
 	user << browse(HTML_SKELETON(dat), "window=traffic_control;size=575x400")
+	winset(user, "traffic_control", "size=575x450")
 	onclose(user, "server_control")
 
 	temp = ""

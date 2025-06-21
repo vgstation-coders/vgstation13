@@ -334,7 +334,7 @@
 	"}
 
 	usr << browse(HTML_SKELETON(dat), "window=powers;size=900x480")
-
+	winset(usr, "powers", "size=900x480")
 
 
 

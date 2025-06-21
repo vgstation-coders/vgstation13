@@ -50,6 +50,7 @@ var/const/max_assembly_amount = 300
 	t += {"<hr>
 		<A href='?src=\ref[src];close=1'>Close</A><BR>"}
 	user << browse(HTML_SKELETON(t), "window=fuelcomp;size=500x300")
+	winset(user, "fuelcomp", "size=500x300")
 	user.set_machine(src)
 
 	//var/locked

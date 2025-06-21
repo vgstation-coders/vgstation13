@@ -540,3 +540,4 @@
 		qdel(select_query)
 
 	usr << browse(HTML_SKELETON(output),"window=lookupbans;size=900x500")
+	winset(usr, "lookupbans", "size=900x500")

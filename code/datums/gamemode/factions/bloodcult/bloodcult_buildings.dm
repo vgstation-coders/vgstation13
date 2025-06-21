@@ -649,6 +649,7 @@
 							dat += "<li><span style='color:#FFFF00'><b>[C.real_name]</b></span></li> - Prisoner of [gaoler.name][extra]"
 				dat += {"</ul>"}
 				user << browse(HTML_SKELETON_TITLE_STYLE("Cult Roster", dat, style), "window=cultroster;size=600x400")
+				winset(usr, "cultroster", "size=600x400")
 				onclose(user, "cultroster")
 			if ("Look through Veil")
 				if(user.hud_used && user.hud_used.holomap_obj)

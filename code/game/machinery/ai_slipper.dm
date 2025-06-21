@@ -65,6 +65,7 @@
 		t += text("Uses Left: [uses]. <A href='?src=\ref[src];toggleUse=1'>Activate the dispenser?</A><br>\n")
 
 	user << browse(HTML_SKELETON(t), "window=computer;size=575x450")
+	winset(user, "computer", "size=575x450")
 	onclose(user, "computer")
 	return
 

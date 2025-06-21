@@ -306,6 +306,7 @@ var/list/message_monitors = list()
 	dat += "</body>"
 	message = defaultmsg
 	user << browse(HTML_SKELETON(dat), "window=message;size=700x700")
+	winset(user, "message", "size=700x700")
 	onclose(user, "message")
 	return
 

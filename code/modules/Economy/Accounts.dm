@@ -327,6 +327,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 							</tr>"}
 					dat += "</table>"
 		user << browse(HTML_SKELETON(dat),"window=account_db;size=700x650")
+		winset(user, "account_db", "size=700x650")
 	else
 		user << browse(null,"window=account_db")
 

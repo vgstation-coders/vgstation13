@@ -287,6 +287,7 @@
 			<a href='?src=\ref[src];admin_reset=1'>Reset shuttle</a><br><i>Revert the shuttle's areas to initial state</i><br>"}
 
 	user << browse(HTML_SKELETON(dat), "window=shuttle_control;size=575x450")
+	winset(user, "shuttle_control", "size=575x450")
 	onclose(user, "shuttle_control")
 
 /// Only pass `user` if the mob is directly interacting through the UI.

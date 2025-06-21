@@ -214,6 +214,7 @@ var/global/msg_id = 0
 	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
 
 	user << browse(HTML_SKELETON(dat), "window=pda;size=400x444;border=1;can_resize=1;can_minimize=0")
+	winset(user, "pda", "size=400x444")
 	onclose(user, "pda", src)
 
 /obj/item/device/pda/Topic(href, href_list)

@@ -36,6 +36,8 @@
 
 	output += "</ul>"
 	usr << browse(HTML_SKELETON(output),"window=pipereport;size=1000x500")
+	winset(usr, "pipereport", "size=1000x500")
+
 /client/proc/powerdebug()
 	set category = "Mapping"
 	set name = "Check Power"
@@ -64,3 +66,4 @@
 
 	output += "</ul><br>[empty_nets] powernets without nodes detected, [low_nets] with less than 10 cables."
 	usr << browse(HTML_SKELETON(output),"window=pipereport;size=1000x500")
+	winset(usr, "pipereport", "size=1000x500")

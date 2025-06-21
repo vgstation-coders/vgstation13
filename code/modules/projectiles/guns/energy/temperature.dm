@@ -37,6 +37,7 @@
 	update_dat()
 
 	user << browse("<TITLE>Temperature Gun Configuration</TITLE><HR>[dat]", "window=tempgun;size=510x102")
+	winset(user, "tempgun", "size=510x102")
 	onclose(user, "tempgun")
 
 /obj/item/weapon/gun/energy/temperature/emag_act(mob/user)
@@ -108,7 +109,7 @@
 			if (src == M.machine)
 				update_dat()
 				M << browse("<TITLE>Temperature Gun Configuration</TITLE><HR>[dat]", "window=tempgun;size=510x102")
-
+				winset(M, "tempgun", "size=510x102")
 
 	if(power_supply)
 		power_supply.give(50)

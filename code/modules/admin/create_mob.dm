@@ -7,3 +7,4 @@
 		create_mob_html = replacetext(create_mob_html, "null /* object types */", "\"[mobjs]\"")
 
 	user << browse(replacetext(create_mob_html, "/* ref src */", "\ref[src]"), "window=create_mob;size=700x500")
+	winset(user, "create_mob", "size=700x500")

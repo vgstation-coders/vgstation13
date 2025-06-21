@@ -274,6 +274,7 @@ var/list/deleted_machines_tetris_highscores = list()
 	</body>
 	</html>"}
 	user << browse(dat, "window=tetris;size=600x850")
+	winset(user, "tetris", "size=600x850")
 	user.set_machine(src)
 	onclose(user, "tetris")
 

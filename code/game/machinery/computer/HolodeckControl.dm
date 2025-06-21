@@ -188,6 +188,7 @@
 	user.set_machine(src)
 	var/dat = ui_text(user)
 	user << browse(HTML_SKELETON(jointext(dat, null)), "window=computer;size=400x500")
+	winset(user, "computer", "size=400x500")
 	onclose(user, "computer")
 
 /obj/machinery/computer/HolodeckControl/Topic(href, href_list)

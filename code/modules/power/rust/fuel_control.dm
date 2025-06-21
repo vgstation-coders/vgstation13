@@ -114,6 +114,7 @@
 		<A href='?src=\ref[src];refresh=1'>Refresh</A>
 		<A href='?src=\ref[src];close=1'>Close</A><BR>"}
 	user << browse(HTML_SKELETON(dat), "window=fuel_control;size=800x400")
+	winset(user, "fuel_control", "size=800x400")
 	user.set_machine(src)
 
 /obj/machinery/computer/rust_fuel_control/Topic(href, href_list)

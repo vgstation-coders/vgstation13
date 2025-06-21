@@ -7,3 +7,4 @@
 		create_turf_html = replacetext(create_turf_html, "null /* object types */", "\"[turfjs]\"")
 
 	user << browse(replacetext(create_turf_html, "/* ref src */", "\ref[src]"), "window=create_turf;size=700x500")
+	winset(user, "create_turf", "size=700x500")

@@ -17,7 +17,7 @@
 		return FALSE
 
 	src = usr.client.holder // why lummox why
-	
+
 	var/list/dat = list()
 	dat += {"<h3>Mass deletion in a zone</h3>"
 	"Delete all the atoms of a given type in a zone given by z, x, and y coordinates."
@@ -35,3 +35,4 @@
 	"<a href='?src=\ref[src];change_zone_del=exec'>Delete it.</a>'"}
 
 	usr << browse(HTML_SKELETON(jointext(dat, "")), "window=mass_del_in_zone;size=490x310")
+	winset(usr, "mass_del_in_zone", "size=490x310")

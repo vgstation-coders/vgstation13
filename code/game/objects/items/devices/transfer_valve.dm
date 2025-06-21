@@ -95,6 +95,7 @@
 	<BR> <B> Valve status: </B> [ valve_open ? "<A href='?src=\ref[src];open=1'>Closed</A> <B>Open</B>" : "<B>Closed</B> <A href='?src=\ref[src];open=1'>Open</A>"]"}
 
 	user << browse(HTML_SKELETON(dat), "window=trans_valve;size=600x300")
+	winset(user, "trans_valve", "size=600x300")
 	onclose(user, "trans_valve")
 	return
 

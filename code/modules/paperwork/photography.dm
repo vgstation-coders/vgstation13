@@ -83,6 +83,7 @@
 		+ "<img src='tmp_photo.png' width='[displaylength]' style='image-rendering: pixelated' />" \
 		+ "[scribble ? "<br>Written on the back:<br><i>[scribble]</i>" : ""]"\
 		+ "</body></html>", "window=book;size=[displaylength]x[scribble ? displaylength+108 : displaylength]")
+	winset(user, "book", "size=[displaylength]x[scribble ? displaylength+108 : displaylength]")
 	if(info) //Would rather not display a blank line of text
 		to_chat(user, info)
 	onclose(user, "[name]")

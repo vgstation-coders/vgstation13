@@ -22,6 +22,7 @@
 		"}
 
 	usr << browse(HTML_SKELETON(dat), "window=oneclickantag;size=400x400")
+	winset(usr, "oneclickantag", "size=400x400")
 	return
 
 

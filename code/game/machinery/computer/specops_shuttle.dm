@@ -274,6 +274,7 @@ var/specops_shuttle_timeleft = 0
 		\n<A href='?src=\ref[user];mach_close=computer'>Close</A>"}
 
 	user << browse(HTML_SKELETON(dat), "window=computer;size=575x450")
+	winset(user, "computer", "size=575x450")
 	onclose(user, "computer")
 	return
 

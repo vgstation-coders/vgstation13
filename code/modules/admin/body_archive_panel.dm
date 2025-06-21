@@ -54,3 +54,4 @@
 		"}
 
 	usr << browse(HTML_SKELETON(dat), "window=bodyarchivepanel;size=860x640")
+	winset(usr, "bodyarchivepanel", "size=860x640")

@@ -64,6 +64,7 @@
 		dat = "Please insert a container."
 
 	user << browse(HTML_SKELETON(dat), "window=computer;size=400x500")
+	winset(user, "computer", "size=400x500")
 	onclose(user, "computer")
 	return
 

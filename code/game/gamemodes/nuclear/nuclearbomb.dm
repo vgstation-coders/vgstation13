@@ -154,6 +154,7 @@ var/list/nuclear_bombs = list()
 		<A href='?src=\ref[src];type=7'>7</A>-<A href='?src=\ref[src];type=8'>8</A>-<A href='?src=\ref[src];type=9'>9</A><BR>\n
 		<A href='?src=\ref[src];type=R'>R</A>-<A href='?src=\ref[src];type=0'>0</A>-<A href='?src=\ref[src];type=E'>E</A><BR>\n</TT>"}
 		user << browse(HTML_SKELETON(dat), "window=nuclearbomb;size=300x400")
+		winset(user, "nuclearbomb", "size=300x400")
 		onclose(user, "nuclearbomb")
 	else if (src.deployable)
 		if(removal_stage < 5)

@@ -909,6 +909,7 @@ var/global/num_vending_terminals = 1
 			dat += "<br><br><i>Note: Remember to slide your ID on this machine to link your account. Once this is done, sliding your ID will enable editing and loading.</i>"
 
 	user << browse(HTML_SKELETON(dat), "window=vending;size=400x[vertical]")
+	winset(user, "vending", "size=400x[vertical]")
 	onclose(user, "vending")
 
 // returns the wire panel text

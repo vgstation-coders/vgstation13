@@ -53,6 +53,7 @@
 </html>"}
 
 	usr << browse(HTML_SKELETON(output),"window=editrights;size=600x500")
+	winset(usr, "editrights", "size=600x500")
 
 /datum/admins/proc/log_admin_rank_modification(var/adm_ckey, var/new_rank)
 	if(config.admin_legacy_system)

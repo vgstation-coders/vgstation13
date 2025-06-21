@@ -66,4 +66,4 @@
 		"}
 
 	usr << browse(HTML_SKELETON(dat), "window=diseasespanel;size=705x450")
-
+	winset(usr, "diseasespanel", "size=705x450")

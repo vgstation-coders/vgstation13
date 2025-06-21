@@ -560,6 +560,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 
 		M << browse(HTML_SKELETON(dat), "window=newscaster_main;size=400x600")
+		winset(M, "newscaster_main", "size=400x600")
 		onclose(M, "newscaster_main")
 
 /obj/machinery/newscaster/Topic(href, href_list)
@@ -1266,6 +1267,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		dat+="<BR><HR><div align='center'>[curr_page+1]</div>"
 		usr << browse("<body style='background-color:#969696;color:black;'>[dat]</body>", "window=newspaper_main;size=400x400")
+		winset(usr, "newspaper_main", "size=400x400")
 		onclose(usr, "newspaper_main")
 	else
 		to_chat(user, "The paper is full of intelligible symbols!")

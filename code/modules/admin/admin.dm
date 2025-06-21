@@ -243,6 +243,7 @@ var/global/floorIsLava = 0
 	"}
 
 	usr << browse(HTML_SKELETON(body), "window=adminplayeropts-\ref[M];size=550x515")
+	winset(usr, "adminplayeropts-\ref[M]", "size=550x515")
 	feedback_add_details("admin_verb","SPP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
@@ -332,7 +333,7 @@ var/global/floorIsLava = 0
 				dat += "</b>"
 
 	usr << browse(HTML_SKELETON(dat), "window=player_notes;size=400x400")
-
+	winset(usr, "player_notes", "size=400x400")
 
 /datum/admins/proc/player_has_info(var/key as text)
 	var/savefile/info = new("data/player_saves/[copytext(key, 1, 2)]/[key]/info.sav")
@@ -408,6 +409,7 @@ var/global/floorIsLava = 0
 		</body></html>"}
 
 	usr << browse(HTML_SKELETON(dat), "window=adminplayerinfo;size=480x480")
+	winset(usr, "adminplayerinfo", "size=480x480")
 
 /datum/admins/proc/access_news_network() //MARKER
 	set category = "Fun"
@@ -651,6 +653,7 @@ var/global/floorIsLava = 0
 //	to_chat(world, "Channelname: [src.admincaster_feed_channel.channel_name] [src.admincaster_feed_channel.author]")
 //	to_chat(world, "Msg: [src.admincaster_feed_message.author] [src.admincaster_feed_message.body]")
 	usr << browse(HTML_SKELETON(dat), "window=admincaster_main;size=400x600")
+	winset(usr, "admincaster_main", "size=400x600")
 	onclose(usr, "admincaster_main")
 
 
@@ -667,6 +670,7 @@ var/global/floorIsLava = 0
 		dat += text("<tr><td>[t] (<A href='?src=\ref[src];removejobban=[r]'>unban</A>)</td></tr>")
 	dat += "</table>"
 	usr << browse(HTML_SKELETON(dat), "window=ban;size=400x400")
+	winset(usr, "ban", "size=400x400")
 
 /datum/admins/proc/Game()
 	if(!check_rights(0))
@@ -729,6 +733,7 @@ var/global/floorIsLava = 0
 	dat += "<A href ='?src=\ref[src];religions=1&display=1'>Manage religions</A><br>"
 
 	usr << browse(HTML_SKELETON(dat), "window=admin2;size=280x370")
+	winset(usr, "admin2", "size=280x370")
 	return
 
 /datum/admins/proc/dynamic_mode_options(mob/user)
@@ -765,6 +770,7 @@ var/global/floorIsLava = 0
 		"}
 
 	user << browse(HTML_SKELETON(dat), "window=dyn_mode_options;size=900x650")
+	winset(usr, "dyn_mode_options", "size=900x650")
 
 /datum/admins/proc/Secrets()
 	if(!check_rights(0))
@@ -1625,6 +1631,7 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 	dat += "<hr><br><center>ADVANCED: <a href='?_src_=vars;Vars=\ref[end_credits]'>Debug Credits Datum</A></center>"
 
 	usr << browse(HTML_SKELETON(dat), "window=creditspanel;size=600x800")
+	winset(usr, "creditspanel", "size=600x800")
 
 /datum/admins/proc/PersistencePanel()
 	if(!check_rights(0))
@@ -1647,6 +1654,7 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 		dat += "Max [T.max_per_turf] per turf. Lasts up to [T.max_age] rounds.<hr>"
 
 	usr << browse(HTML_SKELETON(dat), "window=persistencepanel;size=350x600")
+	winset(usr, "persistencepanel", "size=350x600")
 
 /datum/admins/proc/ViewAllRods()
 	if(!check_rights(0))
@@ -1661,3 +1669,4 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 		dat += "<br/>"
 
 	usr << browse(HTML_SKELETON(dat), "window=rodswindow;size=350x300")
+	winset(usr, "rodswindow", "size=350x300")

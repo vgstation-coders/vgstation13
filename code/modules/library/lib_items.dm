@@ -260,6 +260,7 @@
 		if(!isobserver(user))
 			user.visible_message("<span class='notice'>[user] opens a manual titled \"[src.title]\" and begins reading intently.</span>")
 		user << browse(dat, "window=[name];size=[book_width]x[book_height]")
+		winset(user, name, "size=[book_width]x[book_height]")
 		return
 	// typechecking src is the big gay but here it's kinda the most straightforward way to handle.
 	// Manuals have well-formed HTML so HTML_SKELETON isn't needed here
@@ -267,8 +268,10 @@
 		if(!isobserver(user))
 			user.visible_message("<span class='notice'>[user] opens a manual titled \"[src.title]\" and begins reading intently.</span>")
 		user << browse(dat, "window=[name];size=[book_width]x[book_height]")
+		winset(user, name, "size=[book_width]x[book_height]")
 	if(src.dat)
 		user << browse(HTML_SKELETON("<TT><I>Penned by [author].</I></TT> <BR>[dat]"), "window=[name];size=[book_width]x[book_height]")
+		winset(user, name, "size=[book_width]x[book_height]")
 		if(!isobserver(user))
 			user.visible_message("<span class='notice'>[user] opens a book titled \"[src.title]\" and begins reading intently.</span>")
 		onclose(user, "book")

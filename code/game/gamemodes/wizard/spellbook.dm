@@ -211,6 +211,7 @@
 	dat += "</body>"
 
 	user << browse(HTML_SKELETON(dat), "window=spellbook;size=[book_window_size]")
+	winset(user, "spellbook", "size=[book_window_size]")
 	onclose(user, "spellbook")
 
 /obj/item/weapon/spellbook/proc/build_description(var/mob/user, var/spell_path) //Building sounds more coderlike doesn't it
