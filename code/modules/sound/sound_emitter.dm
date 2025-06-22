@@ -15,13 +15,17 @@
 
 	var/debug = FALSE
 	var/datum/sound_zone_manager/szm
+	var/datum/sound_channel_manager/scm // not strictly necessary but its here for easy debugging in this early stage
 
 /datum/sound_emitter/New(atom/A)
 	..()
 	source = A
 	range = world.view
+	sound_emitter_collection.add(src)
 	if (sound_zone_manager)
 		szm = sound_zone_manager
+	if (sound_channel_manager)
+		scm = sound_channel_manager
 
 /datum/sound_emitter/Destroy()
 	source = null
@@ -32,7 +36,7 @@
 	. = ..()
 
 /*
-		CALLED FROM ATOM
+		GENERAL USE INTERFACE - SETUP, PLAY/STOP CONTROL
 */
 
 /datum/sound_emitter/proc/add(sound/s, key)
@@ -46,7 +50,6 @@
 	sounds[key] = s
 
 /datum/sound_emitter/proc/play(key)
-	world.log << "[source] called play([key]) at [source.loc.x] [source.loc.y] [source.loc.z]"
 	var/sound/S = sounds[key]
 	if (!S)
 		CRASH("Sound emitter play called for key [key] on channel [channel.value], but sound does not exist.")
@@ -77,6 +80,8 @@
 	if (!active_key)
 		return
 	var/sound/S = sounds[active_key]
+	S = apply_env_effects(copy_sound(S))
+	S.atom = source
 
 	if (volume)
 		S.volume = volume
@@ -92,9 +97,34 @@
 		return
 	deactivate()
 
+/datum/sound_emitter/proc/update_source(atom/new_source)
+	sound_emitter_collection.remove(src)
+	sound_zone_manager.unregister_emitter(src)
+	source.unregister_event(/event/moved, src, nameof(src::on_source_moved()))
+
+	source = new_source
+	for (var/key in sounds)
+		var/sound/S = sounds[key]
+		S.atom = source
+	update_active_sound_param()
+
+	sound_emitter_collection.add(src)
+	sound_zone_manager.register_emitter(src)
+	source.register_event(/event/moved, src, nameof(src::on_source_moved()))
+
 /*
-		CALLED BY SOUND_ZONE_MANAGER
+		SYSTEMS-FACING INTERFACE
 */
+
+/datum/sound_emitter/proc/on_source_moved(atom/mover)
+	if (mover != source)
+		CRASH("Called on_source_moved while mover != source")
+	var/turf/T = source.loc
+	if (!isturf(T))
+		T = get_turf(source)
+	if (!T)
+		CRASH("Failed to get source turf")
+	sound_zone_manager.update_emitter(src, T.x, T.y, T.z)
 
 /datum/sound_emitter/proc/on_enter_range(mob/player)
 	if (player in hearers)
@@ -132,14 +162,14 @@
 		S = get_turf(source)
 	if (!S)
 		CRASH("Failed to get source turf in in_range")
-	var/minX = S.x - range //TODO cache these, update on movement
+	var/minX = S.x - range
 	var/maxX = S.x + range
 	var/minY = S.y - range
 	var/maxY = S.y + range
 	return (minX <= T.x && T.x <= maxX && minY <= T.y && T.y <= maxY)
 
 /*
-		INTERNAL
+		INTERNAL, DON'T CALL THESE DIRECTLY YOU
 */
 
 /datum/sound_emitter/proc/activate()
@@ -167,37 +197,6 @@
 	sound_channel_manager.release_channel(channel, src)
 	channel = null
 
-/datum/sound_emitter/proc/send_nearby_norepeat(var/sound/s, var/interrupt = FALSE)
-	if (debug)
-		world.log << "Sound emitter send_nearby_norepeat called with sound [s.file]"
-
-	var/sound/S = copy_sound(s)
-	S.atom = source
-	//apply_env_effects(S)
-
-	for (var/mob/player in players_in_range())
-		send_norepeat(player, S, interrupt)
-
-/datum/sound_emitter/proc/send_norepeat(var/mob/player, var/sound/s, var/interrupt = FALSE)
-	if(!player || !player.client)
-		return
-
-	if(player.is_deaf())
-		// TODO - when a player is deafened, play null sound on all their sound channels to flush anything still looping
-		return
-
-	apply_player_effects(s, player)
-
-	if (interrupt)
-		var/sound/nullsound = sound(file = null, repeat = 0, wait = 0, channel = s.channel)
-		if (debug)
-			world.log << "Sound emitter send_norepeat interrupting sound for [player] on channel [s.channel] with null sound."
-		player << nullsound
-
-	if (debug)
-		world.log << "Sound emitter send_norepeat playing sound [s.file] for [player] on channel [s.channel] at volume [s.volume]"
-	player << s
-
 /datum/sound_emitter/proc/init_hearers()
 	hearers = players_in_range()
 
@@ -215,18 +214,23 @@
 		player << S
 
 /datum/sound_emitter/proc/apply_player_effects(sound/s, var/mob/player)
-
-	if (player.ear_deaf > 0)
-		s.volume = s.volume / (1 + player.ear_deaf)
+	if (player.is_deaf())
+		s.volume = 0
+		return s
 
 	// loosely simulate some obstruction muffling the sound
-	if (!(source in view(range, player))) // TODO cache this
-		s.volume /= 5 // TODO this needs tuning
+	if (!(source in view(range, player)))
+		s.volume /= 5
 
 	// similarly if player is in spaced area and emitter is in non-spaced nearby, shouldn't hear it
 	var/p_effect = turf_volume_coeff(player)
 	s.volume *= p_effect
 
+	return s
+
+/datum/sound_emitter/proc/apply_env_effects(sound/s)
+	var/p_effect = turf_volume_coeff(source)
+	s.volume *= p_effect
 	return s
 
 /datum/sound_emitter/proc/turf_volume_coeff(atom/a)
@@ -269,21 +273,9 @@
 		var/turf/receiver = get_turf(player)
 		if (!receiver)
 			continue
-		// lovingly stolen from sound.dm
-		if (debug)
-			var/list/oczl = GetOpenConnectedZlevels(t_source)
-			world.log << "[oczl.len] open z levels from emitter"
+
 		if((get_z_dist(receiver, t_source) <= range))
 			in_range += player
-		//for(var/z0 in GetOpenConnectedZlevels(t_source))
-		//	if (receiver && t_source && receiver.z == z0)
-		//		var/turf/portal/P1 = locate(/turf/portal) in receiver.vis_locs
-		//		var/turf/portal/P2 = locate(/turf/portal) in t_source.vis_locs
-		//		if (debug)
-		//			var/zdist = get_z_dist(receiver, t_source)
-		//			world.log << "zdist between player and emitter is [zdist]"
-		//		if((get_z_dist(receiver, t_source) <= range) || (P1 && get_z_dist(P1, t_source) <= range) || (P2 && get_z_dist(receiver, P2) <= range) || (P1 && P2 && get_z_dist(P1, P2) <= range))
-		//			in_range += player
 	return in_range
 
 // put this somewhere better than here
