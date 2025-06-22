@@ -55,8 +55,23 @@
 		active_key = key
 		activate()
 	else
-		send_nearby_norepeat(S) //mimic legacy behaviour
-		//send_global(S) // implement if send_nearby_norepeat is slow
+		play_once(S)
+
+/datum/sound_emitter/proc/play_once(sound/s, interrupt = FALSE)
+	var/sound/S = copy_sound(s)
+	S.atom = source
+	S.repeat = 0 //no repeat - no need for channel reservation
+	S.wait = 0
+	if (interrupt)
+		stop()
+	S = apply_env_effects(S)
+	if (!S.volume)
+		return
+	var/vicinity = players_in_range()
+	for (var/mob/player in vicinity)
+		var/sound/PS = apply_player_effects(copy_sound(S), player)
+		if (PS.volume)
+			player << PS
 
 /datum/sound_emitter/proc/update_active_sound_param(volume = null, frequency = null)
 	if (!active_key)
