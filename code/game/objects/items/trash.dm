@@ -222,10 +222,10 @@
 	w_type=RECYK_WAX
 	var/image/wick
 
-/obj/item/trash/candle/New(turf/loc, var/obj/item/candle/source)
+/obj/item/trash/candle/New(turf/loc)
 	..()
-	if (istype(source, /obj/item/candle))
-		color = source.color
+	if (istype(src, /obj/item/candle))
+		color = src.color
 	else
 		color = COLOR_DEFAULT_CANDLE
 	wick = image(icon,src,"candle4-wick")
