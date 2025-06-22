@@ -75,6 +75,25 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 
 	E.last_hash = newHash
 
+// check if a sound channel is already in use in any nearby cell
+// we could do a more accurate check if the turf itself is in range but this should be accurate and quick enough
+/datum/sound_zone_manager/proc/conflict(atom/source, datum/sound_channel/shared/C)
+	if (!source)
+		CRASH("Conflict check failed on emitter with null source")
+	var/T = get_turf(source)
+	if (!T)
+		CRASH("Conflict check failed on emitter with a source but no turf")
+
+	var/channel = C.value
+	var/hashes = get_candidate_hashes(T)
+	for (var/hash in hashes)
+		var/bucket = buckets[hash]
+		if (bucket)
+			for (var/datum/sound_emitter/e in bucket)
+				if (e.channel.value == channel)
+					return TRUE
+	return FALSE
+
 /datum/sound_zone_manager/proc/register_listener(mob/player)
 	player.register_event(/event/moved, src, nameof(src::on_player_move()))
 

@@ -8,7 +8,7 @@
 	var/atom/source = null
 	var/list/sounds = list()
 	var/active_key = null
-	var/channel = null
+	var/datum/sound_channel/channel = null
 	var/list/mob/hearers = list()
 	var/range
 	var/last_hash = null
@@ -49,7 +49,7 @@
 	world.log << "[source] called play([key]) at [source.loc.x] [source.loc.y] [source.loc.z]"
 	var/sound/S = sounds[key]
 	if (!S)
-		CRASH("Sound emitter play called for key [key] on channel [channel], but sound does not exist.")
+		CRASH("Sound emitter play called for key [key] on channel [channel.value], but sound does not exist.")
 
 	if (S.repeat == 1)
 		active_key = key
@@ -89,9 +89,9 @@
 	if (channel && active_key)
 		var/sound/S = sounds[active_key]
 		if (!S)
-			CRASH("Sound emitter update_hearers called for key [active_key] on channel [channel], but sound does not exist.")
+			CRASH("Sound emitter update_hearers called for key [active_key] on channel [channel.value], but sound does not exist.")
 		S.status &= ~SOUND_UPDATE // clear update status for new hearers, else they cant hear it lmao
-		S.channel = channel
+		S.channel = channel.value
 		if (debug)
 			world.log << "Sending sound to [player]: [S.file] V: [S.volume] C: [S.channel]"
 		S = apply_player_effects(copy_sound(S), player)
@@ -103,10 +103,10 @@
 	if (!channel)
 		return
 	var/sound/nullsound = sound(file = null)
-	nullsound.channel = channel
+	nullsound.channel = channel.value
 	nullsound.status = SOUND_UPDATE | SOUND_MUTE
 	if (debug)
-		world.log << "Stopping sound for [player] on channel [channel]"
+		world.log << "Stopping sound for [player] on channel [channel.value]"
 	player << nullsound
 
 /datum/sound_emitter/proc/contains(turf/T)
@@ -195,7 +195,7 @@
 		S = sound()
 		S.file = null
 		S.status = SOUND_UPDATE | SOUND_MUTE
-	S.channel = channel
+	S.channel = channel.value
 	for (var/mob/player in hearers)
 		player << S
 
