@@ -2053,7 +2053,12 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/surface/jungle/underground/zoned/ghettosurgery
 	name = "\improper Ghetto Surgery"
-	
+
+/area/surface/jungle/underground/zoned/ghettomining
+	name = "\improper Refinery"	
+
+/area/surface/jungle/underground/zoned/casino
+	name = "\improper Casino"	
 
 /area/surface/jungle/zoned
 	forbid_apc=FALSE

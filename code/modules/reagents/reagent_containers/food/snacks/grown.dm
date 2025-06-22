@@ -1203,3 +1203,17 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#7E80DE"
 	plantname = "flax"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle
+	icon = 'icons/obj/hydroponics/berry.dmi'
+	icon_state = "produce2"
+	desc = "They taste like... burning."
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle/New()
+	..()
+	icon_state = "produce2" //the icon state is set in ..()
+	reagents.add_reagent(NUTRIMENT,1) //we want 3 total. there's already 2 from ..()
+	bitesize=3 //consume it in 1 bite.
+	if(prob(33))
+		reagents.add_reagent(TOXIN,1)
+		bitesize=4

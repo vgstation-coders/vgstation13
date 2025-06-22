@@ -16,6 +16,7 @@ var/list/junglemobs_safe=list(
 /mob/living/simple_animal/hostile/lizard/frog,
 /mob/living/simple_animal/parrot/jungle,
 /mob/living/simple_animal/capybara/jungle,
+/mob/living/carbon/monkey,
 )
 
 

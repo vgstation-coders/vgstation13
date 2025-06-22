@@ -128,6 +128,7 @@ var/list/foliage_choices=list(
 /obj/structure/flora/ausbushes/sparsegrass,
 /obj/structure/flora/ausbushes/stalkybush,
 /obj/structure/flora/ausbushes/sunnybush,
+/obj/structure/flora/jungle_berries,
 )
 
 var/list/foliage_replacments=list(
