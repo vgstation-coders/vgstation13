@@ -1,7 +1,3 @@
-//Items labled as 'trash' for the trash bag.
-//TODO: Make this an item var or something...
-
-//Added by Jack Rost
 /obj/item/trash
 	icon = 'icons/obj/trash.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/trash.dmi', "right_hand" = 'icons/mob/in-hand/right/trash.dmi')
@@ -228,7 +224,7 @@
 
 /obj/item/trash/candle/New(turf/loc, var/obj/item/candle/source)
 	..()
-	if (source)
+	if (istype(source, /obj/item/candle))
 		color = source.color
 	else
 		color = COLOR_DEFAULT_CANDLE
