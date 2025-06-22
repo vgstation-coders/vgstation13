@@ -96,6 +96,15 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 
 /datum/sound_zone_manager/proc/register_listener(mob/player)
 	player.register_event(/event/moved, src, nameof(src::on_player_move()))
+	on_player_move(player)
+
+/datum/sound_zone_manager/proc/unregister_listener(mob/player)
+	// stop them from picking up new emitters
+	player.unregister_event(/event/moved, src, nameof(src::on_player_move()))
+	// stop everything they can hear and clear out their current emitters list
+	var/list/emitters = player.current_sound_emitters.Copy()
+	for (var/datum/sound_emitter/E in emitters)
+		E.on_exit_range(player)
 
 /datum/sound_zone_manager/proc/on_player_move(mob/mover)
 	if (!mover || !mover.client)

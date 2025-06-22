@@ -115,10 +115,6 @@
 	client.media.open()
 	client.media.update_music()
 
-	// Register as something able to receive sounds from sound_emitters
-	if (sound_zone_manager)
-		sound_zone_manager.register_listener(src)
-
 	register_event(/event/mob_area_changed, src, nameof(src::OnMobAreaChanged()))
 
 	if(spell_masters)
