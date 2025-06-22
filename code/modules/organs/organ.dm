@@ -111,7 +111,7 @@
 /mob/living/carbon/human/proc/handle_organs(var/force_process = 0)
 
 	number_wounds = 0
-	var/stand_broken = 0 //We cannot stand because one of our legs or foot is completely broken and unsplinted, or missing
+	//var/stand_broken = 0 //We cannot stand because one of our legs or foot is completely broken and unsplinted, or missing
 	var/damage_this_tick = getBruteLoss() + getFireLoss() + getToxLoss()
 	if(damage_this_tick > last_dam)
 		force_process = 1
@@ -183,9 +183,9 @@
 				E.process_grasp(held_items[E.grasp_id], get_index_limb_name(E.grasp_id))
 
 			//Special effects for legs and foot
-			else if((E.name in list(LIMB_LEFT_LEG, LIMB_LEFT_FOOT, LIMB_RIGHT_LEG, LIMB_RIGHT_FOOT)) && !lying)
-				if(E.is_malfunctioning() || E.is_broken())
-					stand_broken = 1 //We can't stand like this
+			//else if((E.name in list(LIMB_LEFT_LEG, LIMB_LEFT_FOOT, LIMB_RIGHT_LEG, LIMB_RIGHT_FOOT)) && !lying)
+			//	if(E.is_malfunctioning() || E.is_broken())
+			//		stand_broken = 1 //We can't stand like this
 
 	//We risk falling because stuff is broken bad
 	//if(stand_broken && !paralysis && !(lying || resting) && prob(5))
