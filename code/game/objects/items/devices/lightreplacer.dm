@@ -459,12 +459,12 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 	return best_light
 
 /obj/item/device/lightreplacer/proc/is_light_better(var/obj/item/weapon/light/tested, var/obj/item/weapon/light/comparison)
+	if(tested?.status) //Is tested empty? If so, either it must be a tie or comparison wins, so tested cannot win.
+		return 0
 	if(tested.status >= LIGHT_BROKEN) //Is tested broken or burnt out? If so, it cannot win.
 		return 0
 	if(tested.status < comparison.status) //Is tested closer to functional than comparison? If so, it wins.
 		return 1
-	if(tested.status) //Is tested empty? If so, either it must be a tie or comparison wins, so tested cannot win.
-		return 0
 
 	//Now we know both work, so all that is left is to test if tested wins by being HE.
 	if(findtextEx(tested.base_state, "he", 1, 3) && !findtextEx(comparison.base_state, "he", 1, 3))
