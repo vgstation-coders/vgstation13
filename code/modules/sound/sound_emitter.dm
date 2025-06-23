@@ -1,6 +1,9 @@
 /atom
 	var/datum/sound_emitter/sound_emitter
 
+/atom/proc/setup_sound()
+	return
+
 /mob
 	var/list/current_sound_emitters = list()
 
@@ -12,24 +15,31 @@
 	var/list/mob/hearers = list()
 	var/range
 	var/last_hash = null
+	var/use_unique_pool = TRUE
 
 	var/debug = FALSE
 	var/datum/sound_zone_manager/szm
 	var/datum/sound_channel_manager/scm // not strictly necessary but its here for easy debugging in this early stage
 
-/datum/sound_emitter/New(atom/A)
+// for static things (e.g. machines that must be bolted to work) pass is_static = TRUE
+//  this causes the reserved channel to be taken from a shared pool, as static objects won't move close
+//  to eachother and won't contend. There is no overlap between the shared and unique pools, so no contention
+//  for example if someone carrying something noisy (mobile -> unique pool) walks close to something in the shared pool.
+// Dimensional Push is the exception to this, the sound messing up is part of the !!! fun !!!
+/datum/sound_emitter/New(atom/A, is_static = FALSE)
 	..()
 	source = A
 	range = world.view
 	sound_emitter_collection.add(src)
+	use_unique_pool = !is_static
 	if (sound_zone_manager)
 		szm = sound_zone_manager
 	if (sound_channel_manager)
 		scm = sound_channel_manager
 
 /datum/sound_emitter/Destroy()
-	source = null
-	active_key = null
+	sound_emitter_collection.remove(src)
+	deactivate();
 	if (sounds)
 		sounds.Cut()
 		sounds = null
@@ -175,7 +185,7 @@
 /datum/sound_emitter/proc/activate()
 	// expect active_key to be already set and validated
 	if (!channel)
-		channel = sound_channel_manager.reserve_channel(src)
+		channel = sound_channel_manager.reserve_channel(src, use_unique_pool)
 		if (!channel)
 			CRASH("Sound emitter was unable to reserve a channel for sound [sounds[active_key].file]")
 		sound_zone_manager.register_emitter(src)
@@ -183,13 +193,12 @@
 	update_hearers()
 
 /datum/sound_emitter/proc/deactivate()
-	if (!channel)
-		CRASH("Tried to deactivate a SOUND_EMITTER with no channel")
-	sound_zone_manager.unregister_emitter(src)
 	active_key = null
 	update_hearers()
-	release_channel()
 	hearers.Cut()
+	if (channel)
+		sound_zone_manager.unregister_emitter(src)
+		release_channel()
 
 /datum/sound_emitter/proc/release_channel()
 	if (!channel)

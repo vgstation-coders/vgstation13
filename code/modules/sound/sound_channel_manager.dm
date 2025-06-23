@@ -21,7 +21,7 @@ var/global/datum/sound_channel_manager/sound_channel_manager = new
 
 // prioritise shared if possible
 // recommend using `get_unique` if its a mobile source so it wont contend by accident when moving near a sharing emitter
-/datum/sound_channel_manager/proc/reserve_channel(datum/sound_emitter/emitter, get_unique = FALSE)
+/datum/sound_channel_manager/proc/reserve_channel(datum/sound_emitter/emitter, get_unique = TRUE)
 	var/channel = null
 	if (!get_unique)
 		channel = try_get_shared(emitter)

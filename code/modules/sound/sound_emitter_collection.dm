@@ -26,6 +26,7 @@ var/global/datum/sound_emitter_collection/sound_emitter_collection = new
 		return
 	L -= E
 
+// While sound_emitter is an atom var, this will only work on atoms that have initialised that var
 /datum/sound_emitter_collection/proc/play_global_sound_on_type(atom/target_type, sound/S)
 	if (!target_type)
 		return
