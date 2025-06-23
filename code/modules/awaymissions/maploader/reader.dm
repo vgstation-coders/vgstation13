@@ -331,8 +331,11 @@ var/list/map_dimension_cache = list()
 	if(!isarea(instance))
 		WARNING("Instance at [members[index]] is not an area!")
 	if(!isspace(instance)) //Space is the default area and contains every loaded turf by default
-		instance.contents.Add(locate(xcrd,ycrd,zcrd))
-		spawned_atoms.Add(instance)
+		var/turf/T = locate(xcrd,ycrd,zcrd)
+		if(T)
+			var/area/old_area = get_area(T)  // Use get_area() instead of direct access
+			T.change_area(old_area, instance)
+			spawned_atoms.Add(instance)
 
 	if(use_preloader && instance)
 		_preloader.load(instance)
