@@ -76,39 +76,45 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 
 	new /datum/transaction(station_account,"Nanotrasen station allowance","[station_allowance]","Nanotrasen Payroll Server",send2PDAs=FALSE)
 
-
 /proc/wagePayout()
 	if(!station_account)
 		message_admins("Wage payout skipped, no station account found.")
 		return
-	//adding extra allowance due to latejoiners
+
+	// Adding extra allowance due to latejoiners
 	if (latejoiner_allowance > 0)
 		station_allowance += latejoiner_allowance
 		station_account.money += latejoiner_allowance
 
-		new /datum/transaction(station_account,"Nanotrasen new employee allowance","[latejoiner_allowance]","Nanotrasen Payroll Server",send2PDAs=FALSE)
+		new /datum/transaction(station_account, "Nanotrasen new employee allowance", "[latejoiner_allowance]", "Nanotrasen Payroll Server", send2PDAs=FALSE)
 		latejoiner_allowance = 0
 
-	//checking for wage raises/decreases and emptying station account
+	// Checking for wage raises/decreases and calculating payroll modifier
 	requested_payroll_amount = 0
 	for(var/datum/money_account/Acc in all_station_accounts)
 		if(Acc.wage_gain)
 			requested_payroll_amount += Acc.wage_gain
-	if(requested_payroll_amount>0)
-		payroll_modifier = station_account.money / requested_payroll_amount
+
+	var/payroll_funds = station_account.money // Use a temporary variable for calculations
+	if(requested_payroll_amount > 0)
+		payroll_modifier = payroll_funds / requested_payroll_amount
 	else
 		payroll_modifier = 1
-	message_admins("Wages: Payroll Modifier is [round(100*payroll_modifier - 100)]%.")
+	message_admins("Wages: Payroll Modifier is [round(100 * payroll_modifier - 100)]%.")
 
-	new /datum/transaction(station_account,"Employee and Department salaries","-[station_account.money]","Account Database",send2PDAs=FALSE)
+	new /datum/transaction(station_account, "Employee and Department salaries", "-[payroll_funds]", "Account Database", send2PDAs=FALSE)
 
-	station_account.money = 0
+	// Reset station account money after transaction
+	station_account.money = max(0, station_account.money - payroll_funds)
 
-	//actually paying the departments and employees
+	// Actually paying the departments and employees
 	for(var/datum/money_account/Acc in all_money_accounts)
+		if(Acc == station_account)
+			continue
+
 		if(locate(Acc) in all_station_accounts)
 			if(Acc.wage_gain)
-				adjusted_wage_gain = round((Acc.wage_gain)*payroll_modifier)
+				adjusted_wage_gain = round((Acc.wage_gain) * payroll_modifier)
 				var/left_from_virtual_wallet = adjusted_wage_gain
 				var/decimal_wage_ratio = 0
 				var/list/obj/item/device/pda/matching_PDAs = list()
@@ -119,31 +125,31 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 						if(app && app.linked_db && Acc == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
 							matching_PDAs.Add(PDA)
 				if(matching_PDAs.len)
-					decimal_wage_ratio = Acc.virtual_wallet_wage_ratio/100
+					decimal_wage_ratio = Acc.virtual_wallet_wage_ratio / 100
 				for(var/obj/item/device/pda/PDA in matching_PDAs)
-					left_from_virtual_wallet -= round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len))
-					PDA.id.virtual_wallet.money += round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len))
-					if(round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len)) > 0)
-						new /datum/transaction(PDA.id.virtual_wallet,"Nanotrasen employee payroll","[round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len))]",station_account.owner_name)
+					left_from_virtual_wallet -= round(adjusted_wage_gain * (decimal_wage_ratio / matching_PDAs.len))
+					PDA.id.virtual_wallet.money += round(adjusted_wage_gain * (decimal_wage_ratio / matching_PDAs.len))
+					if(round(adjusted_wage_gain * (decimal_wage_ratio / matching_PDAs.len)) > 0)
+						new /datum/transaction(PDA.id.virtual_wallet, "Nanotrasen employee payroll", "[round(adjusted_wage_gain * (decimal_wage_ratio / matching_PDAs.len))]", station_account.owner_name)
 				Acc.money += left_from_virtual_wallet
 
 				if(left_from_virtual_wallet > 0)
-					new /datum/transaction(Acc,"Nanotrasen employee payroll","[left_from_virtual_wallet]",station_account.owner_name)
+					new /datum/transaction(Acc, "Nanotrasen employee payroll", "[left_from_virtual_wallet]", station_account.owner_name)
 
-		else 	//non-station accounts get their money from magic, not that these accounts have any wages anyway
+		else // Non-station accounts get their money from magic, not that these accounts have any wages anyway
 			Acc.money += Acc.wage_gain
 			if(Acc.wage_gain > 0)
-				new /datum/transaction(Acc,"mysterious transaction","[Acc.wage_gain]","unknown")
+				new /datum/transaction(Acc, "mysterious transaction", "[Acc.wage_gain]", "unknown")
 
-	//telling the crew
-	if(payroll_modifier > 1.1)//taking the overhead into account
+	// Telling the crew
+	if(payroll_modifier > 1.1) // Taking the overhead into account
 		command_alert(/datum/command_alert/wage_increase)
 	else if(payroll_modifier < 1)
 		command_alert(/datum/command_alert/wage_reduction)
 	else
 		command_alert(/datum/command_alert/wages)
 
-	//refuelling the station account for the next salary
+	// Refueling the station account for the next salary
 	stationAllowance()
 
 /proc/WageBonuses()		//Add any conditions that increase wages here
