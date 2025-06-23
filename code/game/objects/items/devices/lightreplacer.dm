@@ -459,7 +459,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 	return best_light
 
 /obj/item/device/lightreplacer/proc/is_light_better(var/obj/item/weapon/light/tested, var/obj/item/weapon/light/comparison)
-	if(tested.status) //Is tested empty? If so, either it must be a tie or comparison wins, so tested cannot win.
+	if(tested?.status) //Is tested empty? If so, either it must be a tie or comparison wins, so tested cannot win.
 		return 0
 	if(tested.status >= LIGHT_BROKEN) //Is tested broken or burnt out? If so, it cannot win.
 		return 0
