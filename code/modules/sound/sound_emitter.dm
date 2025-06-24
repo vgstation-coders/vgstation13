@@ -18,14 +18,14 @@
 	var/use_unique_pool = TRUE
 
 	var/debug = FALSE
-	var/datum/sound_zone_manager/szm
-	var/datum/sound_channel_manager/scm // not strictly necessary but its here for easy debugging in this early stage
+	var/datum/sound_zone_manager/szm // not strictly necessary but its here for easy debugging in this early stage
+	var/datum/sound_channel_manager/scm // also not strictly necessary
 
 // for static things (e.g. machines that must be bolted to work) pass is_static = TRUE
 //  this causes the reserved channel to be taken from a shared pool, as static objects won't move close
 //  to eachother and won't contend. There is no overlap between the shared and unique pools, so no contention
 //  for example if someone carrying something noisy (mobile -> unique pool) walks close to something in the shared pool.
-// Dimensional Push is the exception to this, the sound messing up is part of the !!! fun !!!
+// Dimensional Push is the exception to this (probably), the sound messing up is part of the !!! fun !!!
 /datum/sound_emitter/New(atom/A, is_static = FALSE)
 	..()
 	source = A
@@ -85,6 +85,9 @@
 		var/sound/PS = apply_player_effects(copy_sound(S), player)
 		if (PS.volume)
 			player << PS
+
+/datum/sound_emitter/proc/is_currently_playing()
+	return ((active_key != null) && (channel != null))
 
 /datum/sound_emitter/proc/update_active_sound_param(volume = null, frequency = null)
 	if (!active_key)
