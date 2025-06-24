@@ -51,7 +51,7 @@
 	if (success)
 		changeling.splitcount += 1
 		to_chat(owner.current, "<span class='danger'>You split!</span>")
-		(owner.current).playsound_local(src, 'sound/effects/flesh_squelch.ogg', 30, 1)
+		owner.current.playsound_local(src, 'sound/effects/flesh_squelch.ogg', 30, 1)
 	else
 		to_chat(owner.current, "You were unable to split at this time.")
 		changeling.chem_charges = max(changeling.chem_charges, chemcost)
