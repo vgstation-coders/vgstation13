@@ -354,7 +354,7 @@
 
 /mob/living/simple_animal/hostile/gremlin/greytide/adjustBruteLoss(var/damage)
 	..()
-	var/proc_chance = var/proc_chance = clamp(damage*(maxHealth/min(health,1)),0,100)
+	var/proc_chance = clamp(damage*(maxHealth/min(health,1)),0,100)
 	if(!isDead() && prob(proc_chance))
 		visible_message("<span class = 'warning'>\The [src] looks to be annoyed!</span>")
 		annoyed = 1
