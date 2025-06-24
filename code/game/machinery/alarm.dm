@@ -408,7 +408,7 @@ var/global/list/air_alarms = list()
 	..()
 
 /obj/machinery/alarm/setup_sound()
-	sound_emitter = new /datum/sound_emitter(src)
+	sound_emitter = new /datum/sound_emitter(src, is_static = TRUE)
 	if (sound_emitter)
 		var/sound/warn_sound = sound()
 		warn_sound.file = 'sound/machines/effects/air_alarm_warning.ogg'
