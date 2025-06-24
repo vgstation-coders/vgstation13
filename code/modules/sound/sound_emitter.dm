@@ -17,7 +17,6 @@
 	var/last_hash = null
 	var/use_unique_pool = TRUE
 
-	var/debug = FALSE
 	var/datum/sound_zone_manager/szm // not strictly necessary but its here for easy debugging in this early stage
 	var/datum/sound_channel_manager/scm // also not strictly necessary
 
@@ -150,8 +149,6 @@
 			CRASH("Sound emitter update_hearers called for key [active_key] on channel [channel.value], but sound does not exist.")
 		S.status &= ~SOUND_UPDATE // clear update status for new hearers, else they cant hear it lmao
 		S.channel = channel.value
-		if (debug)
-			world.log << "Sending sound to [player]: [S.file] V: [S.volume] C: [S.channel]"
 		S = apply_player_effects(copy_sound(S), player)
 		player << S
 
@@ -163,8 +160,6 @@
 	var/sound/nullsound = sound(file = null)
 	nullsound.channel = channel.value
 	nullsound.status = SOUND_UPDATE | SOUND_MUTE
-	if (debug)
-		world.log << "Stopping sound for [player] on channel [channel.value]"
 	player << nullsound
 
 /datum/sound_emitter/proc/contains(turf/T)
@@ -271,14 +266,6 @@
 /datum/sound_emitter/proc/players_in_range()
 	var/list/in_range = list()
 	var/turf/t_source = get_turf(source)
-	if (debug)
-		if (!t_source)
-			world.log << "get_turf([source]) returned null"
-		var/source_loc = source.loc
-		if (!source_loc)
-			world.log << "[source].loc returned null"
-		else
-			world.log << "[source].loc = [source_loc]"
 	for (var/mob/player in player_list)
 		if (!player || !player.client)
 			continue
