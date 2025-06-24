@@ -442,3 +442,5 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 
 // Call by name proc references, checks if the proc exists on either this type () (AND ONLY THIS TYPE) or as a global proc.
 #define PROC_REF(X) (nameof(.proc/##X))
+
+#define has_initialized_sound_emitter(A) (A.sound_emitter != null)
