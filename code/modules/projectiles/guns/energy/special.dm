@@ -264,6 +264,10 @@
 		success = TRUE
 		var/mob/living/carbon/human/H = target
 		if(H.stat)
+			if(H.locked_to)
+				H.locked_to = 0
+				H.anchored = 0
+			
 			if(raisetype)
 				H.dropBorers()
 				var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
