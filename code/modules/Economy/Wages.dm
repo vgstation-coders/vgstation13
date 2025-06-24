@@ -107,6 +107,8 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 
 	//actually paying the departments and employees
 	for(var/datum/money_account/Acc in all_money_accounts)
+		if(Acc == station_account)
+			continue
 		if(locate(Acc) in all_station_accounts)
 			if(Acc.wage_gain)
 				adjusted_wage_gain = round((Acc.wage_gain)*payroll_modifier)
