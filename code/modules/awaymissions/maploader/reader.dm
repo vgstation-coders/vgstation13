@@ -330,7 +330,7 @@ var/list/map_dimension_cache = list()
 	instance = locate(members[index])
 	if(!isarea(instance))
 		WARNING("Instance at [members[index]] is not an area!")
-	if(!isspace(instance))
+	if(!isspace(instance)) //Space is the default area and contains every loaded turf by default
 		var/turf/T = locate(xcrd,ycrd,zcrd)
 		if(T)
 			var/area/old_area = get_area(T) // Use get_area() instead of direct access
