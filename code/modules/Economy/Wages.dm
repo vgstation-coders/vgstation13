@@ -95,7 +95,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 		if(Acc.wage_gain)
 			requested_payroll_amount += Acc.wage_gain
 	if(requested_payroll_amount > 0)
-		payroll_modifier = min(1, station_account.money / requested_payroll_amount)
+		payroll_modifier = station_account.money / requested_payroll_amount
 	else
 		payroll_modifier = 1
 	message_admins("Wages: Payroll Modifier is [round(100 * payroll_modifier - 100)]%.")
