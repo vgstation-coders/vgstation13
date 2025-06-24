@@ -149,7 +149,8 @@
 			CRASH("Sound emitter update_hearers called for key [active_key] on channel [channel.value], but sound does not exist.")
 		S.status &= ~SOUND_UPDATE // clear update status for new hearers, else they cant hear it lmao
 		S.channel = channel.value
-		S = apply_player_effects(copy_sound(S), player)
+		S = apply_env_effects(copy_sound(S))
+		S = apply_player_effects(S, player)
 		player << S
 
 /datum/sound_emitter/proc/on_exit_range(mob/player)
@@ -244,9 +245,14 @@
 	if (!a)
 		return 1 // ?:D?
 	var/turf/t = get_turf(a)
-	if (!t || !t.air)
+	if (!t)
 		return 0 // no sound for the damned
-	var/pressure = t.air.return_pressure()
+	var/datum/gas_mixture/current_air = t.return_air()
+	var/pressure
+	if (current_air)
+		pressure = current_air.return_pressure()
+	else
+		return 0 // damned
 	if (pressure < MIN_SOUND_PRESSURE)
 		return 0 // also damned
 	return min(pressure / ONE_ATMOSPHERE, 1)
@@ -259,6 +265,7 @@
 	var/sound/S = copy_sound(sounds[active_key])
 	if (!S)
 		CRASH("active_key not found in sounds")
+	apply_env_effects(S)
 	apply_player_effects(S, player)
 	S.status |= SOUND_UPDATE
 	player << S
