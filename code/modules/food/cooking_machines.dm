@@ -486,11 +486,7 @@ var/global/ingredientLimit = 10
 	var/fry_reagent_temp = T0C + 170 //target temperature of the frying reagent
 
 /obj/machinery/cooking/deepfryer/initialize()
-	..()
-	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
-		reagents.add_reagent(fry_reagent, 300)
-	else
-		reagents.add_reagent(fry_reagent, 300, reagtemp = fry_reagent_temp)
+	. = ..() // Call parent initialize
 
 /obj/machinery/cooking/deepfryer/process()
 	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
@@ -691,6 +687,9 @@ var/global/ingredientLimit = 10
 	cooks_in_reagents = 1
 
 	is_cooktop = TRUE //Allows frying pans to be placed on top of it.
+
+/obj/machinery/cooking/grill/initialize()
+	. = ..() // Call parent initialize
 
 /obj/machinery/cooking/grill/validateIngredient(var/obj/item/I)
 	. = ..()
