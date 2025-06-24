@@ -5,7 +5,7 @@ var/global/requested_payroll_amount = 0
 var/payroll_modifier = 1
 var/adjusted_wage_gain = 0
 
-#define WAGE_INTERVAL (1 MINUTES)
+#define WAGE_INTERVAL (15 MINUTES)
 #define PRISONER_BONUS 1000
 
 /proc/wageSetup()
