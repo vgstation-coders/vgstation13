@@ -82,6 +82,7 @@
 	if(oldspecies != newbody.dna.species)
 		newbody.set_species(newbody.dna.species, 0)
 	newbody.UpdateAppearance()
+	newbody.update_name()
 	domutcheck(newbody, null)
 	var/datum/role/changeling/newChangeling = new(newbody.mind)
 	newChangeling.OnPostSetup()
