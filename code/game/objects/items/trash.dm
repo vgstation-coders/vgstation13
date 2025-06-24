@@ -228,7 +228,7 @@
 
 /obj/item/trash/candle/New(turf/loc, var/obj/item/source)
 	..()
-	if (istype(source, /obj/item/candle))
+	if (source && istype(source, /obj/item/candle))
 		color = source.color
 	else
 		color = COLOR_DEFAULT_CANDLE
