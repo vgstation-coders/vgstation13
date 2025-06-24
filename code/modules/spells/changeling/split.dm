@@ -23,10 +23,10 @@
 	owner = user.mind
 	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
 	if (changeling.splitcount < 1)
-		user.visible_message("[user] is preparing to generate a new form.")
+		to_chat(user, "You are preparing to generate a new form.")
 		Splitting()
 	else
-		user.visible_message("You are unable to split again.")
+		to_chat(user, "You are unable to split again.")
 	..()
 
 /spell/changeling/split/proc/Splitting()
@@ -51,7 +51,7 @@
 	if (success)
 		changeling.splitcount += 1
 		to_chat(owner.current, "<span class='danger'>You split!</span>")
-		playsound(owner.current, 'sound/effects/flesh_squelch.ogg', 30, 1)
+		(owner.current).playsound_local(src, 'sound/effects/flesh_squelch.ogg', 30, 1)
 	else
 		to_chat(owner.current, "You were unable to split at this time.")
 		changeling.chem_charges = max(changeling.chem_charges, chemcost)
