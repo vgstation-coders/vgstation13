@@ -82,13 +82,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		node1 = findConnecting(cdir)
 		if(node1)
 			break
-	sound_emitter = new /datum/sound_emitter(src)
-	if (sound_emitter)
-		var/sound/bubbles = sound()
-		bubbles.file = 'sound/machines/looping/bubbles.ogg'
-		bubbles.repeat = 1
-		bubbles.volume = 3
-		sound_emitter.add(bubbles, "bubbles")
+	setup_sound()
 	update_icon()
 
 /obj/machinery/atmospherics/unary/cryo_cell/Destroy()
@@ -112,6 +106,15 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(!istype(L))
 		return
 	put_mob(L, user)
+
+/obj/machinery/atmospherics/unary/cryo_cell/setup_sound()
+	sound_emitter = new(src, is_static = TRUE)
+	if (sound_emitter)
+		var/sound/bubbles = sound()
+		bubbles.file = 'sound/machines/looping/bubbles.ogg'
+		bubbles.repeat = 1
+		bubbles.volume = 3
+		sound_emitter.add(bubbles, "bubbles")
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/get_floaters()
 	var/list/floaters = list()
