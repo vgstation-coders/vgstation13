@@ -95,14 +95,15 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 		if(Acc.wage_gain)
 			requested_payroll_amount += Acc.wage_gain
 	if(requested_payroll_amount > 0)
-		payroll_modifier = station_account.money / requested_payroll_amount
+		payroll_modifier = min(1, station_account.money / requested_payroll_amount)
 	else
 		payroll_modifier = 1
 	message_admins("Wages: Payroll Modifier is [round(100 * payroll_modifier - 100)]%.")
 
-	new /datum/transaction(station_account, "Employee and Department salaries", "-[station_account.money]", "Account Database", send2PDAs=FALSE)
+	var/actual_payout = min(station_account.money, requested_payroll_amount * payroll_modifier)
+	new /datum/transaction(station_account, "Employee and Department salaries", "-[actual_payout]", "Account Database", send2PDAs=FALSE)
 
-	station_account.money = 0
+	station_account.money = max(0, station_account.money - actual_payout)
 
 	//actually paying the departments and employees
 	for(var/datum/money_account/Acc in all_money_accounts)
