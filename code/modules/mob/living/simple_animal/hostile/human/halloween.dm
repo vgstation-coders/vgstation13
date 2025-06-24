@@ -78,7 +78,7 @@
 	..()
 
 /mob/living/simple_animal/hostile/humanoid/kitchen/meatballer/adjustBruteLoss(var/damage)
-	var/proc_chance = min(100, damage + (100 - health/maxHealth*100))
+	var/proc_chance = min(100, (130 - health/maxHealth*100))
 	if(!isDead() && prob(proc_chance))
 		fire_everything()
 	..()
@@ -354,7 +354,7 @@
 
 /mob/living/simple_animal/hostile/gremlin/greytide/adjustBruteLoss()
 	..()
-	var/proc_chance = min(100, 30 + (100 - health/maxHealth*100))
+	var/proc_chance = min(100, (130 - health/maxHealth*100))
 	if(!isDead() && prob(proc_chance))
 		visible_message("<span class = 'warning'>\The [src] looks to be annoyed!</span>")
 		annoyed = 1
