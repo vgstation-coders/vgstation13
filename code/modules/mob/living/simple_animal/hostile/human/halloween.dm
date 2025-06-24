@@ -78,7 +78,7 @@
 	..()
 
 /mob/living/simple_animal/hostile/humanoid/kitchen/meatballer/adjustBruteLoss(var/damage)
-	var/proc_chance = min(100, (130 - health/maxHealth*100))
+	var/proc_chance = clamp(damage*(maxHealth/min(health,1)),0,100)
 	if(!isDead() && prob(proc_chance))
 		fire_everything()
 	..()
