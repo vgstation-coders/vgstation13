@@ -205,7 +205,7 @@
 					sounds_to_play = T.footstep_sound
 
 			stepstaken = 0
-			if (!sounds_to_play)
+			if (!sounds_to_play?.len)
 				return
 			playsound(src, pick(sounds_to_play), step_volume, 1, range)
 			
