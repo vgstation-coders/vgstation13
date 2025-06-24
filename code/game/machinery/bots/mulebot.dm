@@ -44,7 +44,7 @@ var/global/mulebot_count = 0
 	suffix = ""
 
 	var/home_destination = "" 	// tag of home beacon
-	req_access = list(access_cargo) // added robotics access so assembly line drop-off works properly -veyveyr //I don't think so, Tim. You need to add it to the MULE's hidden robot ID card. -NEO
+	req_access = list(access_cargo_bot) // added robotics access so assembly line drop-off works properly -veyveyr //I don't think so, Tim. You need to add it to the MULE's hidden robot ID card. -NEO
 	var/mode = MODE_IDLE		//0 = idle/ready
 						//1 = loading/unloading
 						//2 = moving to deliver
