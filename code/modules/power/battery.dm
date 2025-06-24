@@ -50,12 +50,18 @@ var/global/list/battery_online =	list(
 		return
 
 	if(stat & (BROKEN | FORCEDISABLE | EMPED))
+		if (sound_emitter.is_currently_playing())
+			sound_emitter.play("smes_switch")
 		sound_emitter.stop()
 		return
 
 	if(online)
+		if (!sound_emitter.is_currently_playing())
+			sound_emitter.play("smes_switch")
 		sound_emitter.play("smes_hum")
 	else
+		if (sound_emitter.is_currently_playing())
+			sound_emitter.play("smes_switch")
 		sound_emitter.stop()
 
 #define SMESRATE 0.05 				// rate of internal charge to external power
@@ -109,15 +115,23 @@ var/global/list/battery_online =	list(
 
 /obj/machinery/power/battery/initialize()
 	..()
-	sound_emitter = new /datum/sound_emitter(src)
+	setup_sound()
+	update_sound()
+
+/obj/machinery/power/battery/setup_sound()
+	sound_emitter = new /datum/sound_emitter(src, is_static = TRUE)
 	if(sound_emitter)
 		var/sound/smes_hum = sound()
 		smes_hum.file = 'sound/machines/looping/smes_hum.ogg'
 		smes_hum.repeat = 1
 		smes_hum.volume = 15
-		smes_hum.atom = src
 		sound_emitter.add(smes_hum, "smes_hum")
-	update_sound()
+
+		var/sound/smes_switch = sound()
+		smes_switch.file = 'sound/machines/effects/smes_switch.ogg'
+		smes_switch.repeat = 0
+		smes_switch.volume = 30
+		sound_emitter.add(smes_switch, "smes_switch")
 
 /obj/machinery/power/battery/RefreshParts()
 	var/capcount = 0
