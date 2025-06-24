@@ -408,7 +408,8 @@
 		message = replacetext(message, duplicate, "") //duplicate letters into one letter, for all words
 	if(prob(20)) //occasionally replaces one word with umm.
 		var/list/words = splittext(message, " ")
-		words[rand(0, words.len)] = pick("um,", "umm,", "uh,", "uhh,")
+		if(words.len > 0) // Check if the list has any words
+			words[rand(1, words.len)] = pick("um,", "umm,", "uh,", "uhh,")
 		message = jointext(words, " ")
 			
 	if(prob(35))
