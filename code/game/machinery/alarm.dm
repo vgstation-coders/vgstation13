@@ -390,6 +390,7 @@ var/global/list/air_alarms = list()
 			src.initialize()
 		return
 
+	setup_sound()
 	first_run()
 	update_icon()
 
@@ -405,6 +406,19 @@ var/global/list/air_alarms = list()
 		this_area.air_alarms.Remove(src)
 	air_alarms -= src
 	..()
+
+/obj/machinery/alarm/setup_sound()
+	sound_emitter = new /datum/sound_emitter(src)
+	if (sound_emitter)
+		var/sound/warn_sound = sound()
+		warn_sound.file = 'sound/machines/effects/air_alarm_warning.ogg'
+		warn_sound.volume = 50
+		sound_emitter.add(warn_sound, "warn_sound")
+
+		var/sound/danger_sound = sound()
+		danger_sound.file = 'sound/machines/effects/air_alarm_danger.ogg'
+		danger_sound.volume = 50
+		sound_emitter.add(danger_sound, "danger_sound")
 
 /obj/machinery/alarm/proc/apply_preset(var/no_cycle_after=0, var/propagate=1)
 	if(airalarm_presets[preset_key])
@@ -510,6 +524,7 @@ var/global/list/air_alarms = list()
 	if (old_level < new_danger || (danger_averted_confidence >= 5 && new_danger < old_level))
 		setDangerLevel(new_danger)
 		update_icon()
+		update_sound()
 		danger_averted_confidence = 0 // Reset counter.
 		use_power = MACHINE_POWER_USE_ACTIVE
 
@@ -591,6 +606,16 @@ var/global/list/air_alarms = list()
 		if (2)
 			icon_state = "alarm1"
 			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_alarm1")
+
+/obj/machinery/alarm/proc/update_sound()
+	var/area/this_area = get_area(src)
+	switch(max(local_danger_level, this_area.atmosalm-1))
+		if (0)
+			sound_emitter.stop()
+		if (1)
+			sound_emitter.play("warn_sound")
+		if (2)
+			sound_emitter.play("danger_sound")
 
 /obj/machinery/alarm/receive_signal(datum/signal/signal)
 	var/area/this_area = get_area(src)
