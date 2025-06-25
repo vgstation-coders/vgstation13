@@ -96,8 +96,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	allowed = list(/obj/item/weapon/reagent_containers/food/snacks/grown/banana, /obj/item/weapon/bananapeel, /obj/item/weapon/soap, /obj/item/weapon/reagent_containers/spray, /obj/item/weapon/tank)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
-
-	var/list/step_sound = sounds_clownstep
+	var/step_sound = "clownstep"
 	var/footstep = 1	//used for squeeks whilst walking
 
 /obj/item/clothing/suit/space/clown/step_action()
