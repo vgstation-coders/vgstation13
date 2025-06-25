@@ -282,6 +282,8 @@
 		if(random_sound)
 			step_sound = sound_list[pick(sound_list)]
 
+	..()
+
 /obj/item/clothing/shoes/clown_shoes/advanced/emag_act(var/mob/user) //Causes the shoes to play a sound every step instead of 2
 	..()
 	if(!emagged)
