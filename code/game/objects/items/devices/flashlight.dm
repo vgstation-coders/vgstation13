@@ -288,7 +288,7 @@ var/list/obj/item/device/flashlight/lamp/lamps = list()
 
 /obj/item/device/flashlight/flare
 	name = "flare"
-	desc = "A red Nanotrasen issued flare. There are instructions on the side, it reads 'pull cord, make light'."
+	desc = "A red flare, issued by Nanotrasen. There are instructions on the side, it reads 'pull cord, make light'."
 	w_class = W_CLASS_SMALL
 	brightness_on = 1
 	range_on = 4
