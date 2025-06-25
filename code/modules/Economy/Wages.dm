@@ -71,10 +71,12 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 
 	for(var/obj/machinery/computer/accounting/A in machines)
 		A.new_cycle()
-	station_account.money += station_allowance + WageBonuses() + station_funding + station_bonus
+
+	var/total_allowance = station_allowance + WageBonuses() + station_funding + station_bonus
+	station_account.money += total_allowance
 	station_bonus = 0
 
-	new /datum/transaction(station_account,"Nanotrasen station allowance","[station_allowance]","Nanotrasen Payroll Server",send2PDAs=FALSE)
+	new /datum/transaction(station_account, "Nanotrasen station allowance", "[total_allowance]", "Nanotrasen Payroll Server", send2PDAs=FALSE)
 
 
 /proc/wagePayout()
@@ -100,12 +102,14 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 		payroll_modifier = 1
 	message_admins("Wages: Payroll Modifier is [round(100*payroll_modifier - 100)]%.")
 
-	new /datum/transaction(station_account,"Employee and Department salaries","-[station_account.money]","Account Database",send2PDAs=FALSE)
-
-	station_account.money = 0
+	var/actual_payout = min(station_account.money, requested_payroll_amount * payroll_modifier)
+	new /datum/transaction(station_account, "Employee and Department salaries", "-[actual_payout]", "Account Database", send2PDAs=FALSE)
+	station_account.money = max(0, station_account.money - actual_payout)
 
 	//actually paying the departments and employees
 	for(var/datum/money_account/Acc in all_money_accounts)
+		if(Acc == station_account || !Acc.wage_gain)
+			continue
 		if(locate(Acc) in all_station_accounts)
 			if(Acc.wage_gain)
 				adjusted_wage_gain = round((Acc.wage_gain)*payroll_modifier)
