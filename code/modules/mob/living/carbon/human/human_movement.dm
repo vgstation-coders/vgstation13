@@ -205,10 +205,13 @@
 					sounds_to_play = T.footstep_sound
 
 			stepstaken = 0
-			if (!sounds_to_play?.len)
+			if(!sounds_to_play)
 				return
-			playsound(src, pick(sounds_to_play), step_volume, 1, range)
-			
+			if (istype(sounds_to_play, /list) && sounds_to_play.len)
+				playsound(src, pick(sounds_to_play), step_volume, 1, range)
+			else
+				playsound(src, sounds_to_play, step_volume, 1, range)
+				
 
 
 /mob/living/carbon/human/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
