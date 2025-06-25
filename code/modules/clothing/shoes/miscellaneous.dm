@@ -617,8 +617,9 @@
 	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/clownshoespsyche/New()
-	step_sound = sounds_clownstep
 	..()
+	step_sound = sounds_clownstep
+
 
 /obj/item/clothing/shoes/clownshoespsyche/attackby(obj/item/weapon/W, mob/user)
 	..()
