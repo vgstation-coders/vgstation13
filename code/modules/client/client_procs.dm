@@ -338,7 +338,7 @@ var/updated_stats = 0
 		to_chat(src, "<span class='info'>Changelog has changed since your last visit.</span>")
 
 	//Set map label to correct map name
-	winset_wrapper("rpane.mapb", "text=[map.nameLong]") 
+	winset_wrapper("rpane.mapb", "text=\"[map.nameLong]\"")
 
 	if (round_end_info)
 		winset_wrapper("rpane.round_end", "is-visible=true")
