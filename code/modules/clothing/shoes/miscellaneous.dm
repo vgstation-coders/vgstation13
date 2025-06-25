@@ -255,7 +255,7 @@
 
 	if(Adjacent(user))
 		if(step_sound == CLOWNSHOES_RANDOM_SOUND)
-			step_sound = sounds_clownstep
+			step_sound = "clownstep"
 			to_chat(user, "<span class='sinister'>You set [src]'s step sound to always be random!</span>")
 			random_sound = 1
 		else
@@ -281,7 +281,6 @@
 
 		if(random_sound)
 			step_sound = sound_list[pick(sound_list)]
-	..()
 
 /obj/item/clothing/shoes/clown_shoes/advanced/emag_act(var/mob/user) //Causes the shoes to play a sound every step instead of 2
 	..()
