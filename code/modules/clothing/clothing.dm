@@ -939,7 +939,7 @@ var/global/maxStackDepth = 10
 	sterility = 50
 
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
-	var/step_sound = ""
+	var/list/step_sound = null
 	var/stepstaken = 1
 	var/modulo_steps = 2 //if stepstaken is a multiplier of modulo_steps, play the sound. Does not work if modulo_steps < 1
 	var/footsteps_range = -4
