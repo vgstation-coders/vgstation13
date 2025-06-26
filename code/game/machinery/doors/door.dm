@@ -407,29 +407,34 @@ var/list/all_doors = list()
 	// Cache current z-level for comparison
 	var/current_z = src.z
 	
-	// Filter valid doors with optimized conditions
-	var/list/valid_doors = list()
-	for(var/obj/machinery/door/door in all_doors)
-		if(door.z != current_z)
-			continue
-		if(!door.arcane_linkable())
-			continue
-		if(door == src)
-			continue
-		valid_doors += door
+	// Track doors we've tested and found invalid
+	var/list/tested_invalid = list()
+	var/attempts = 0
+	var/max_attempts = all_doors.len // Can't be more attempts than total doors
 	
-	// No valid doors found
-	if(!valid_doors.len)
-		return ""
+	while(attempts < max_attempts)
+		// Create candidate pool excluding tested invalid doors and self
+		var/list/candidates = all_doors - tested_invalid - src
+		
+		// No more candidates to test
+		if(!candidates.len)
+			break
+		
+		var/obj/machinery/door/candidate = pick(candidates)
+		
+		// Check if this door is valid
+		if(candidate.z == current_z && candidate.arcane_linkable())
+			// Found valid door - set up bidirectional linking
+			arcane_linked_door = candidate
+			candidate.arcanetampered = arcanetampered
+			candidate.arcane_linked_door = src
+			return "D'R ST'K!"
+		
+		// Door was invalid - add to exclusion list for next iteration
+		tested_invalid += candidate
+		attempts++
 	
-	// Select a random valid door
-	arcane_linked_door = pick(valid_doors)
-	
-	// Set up bidirectional linking
-	arcane_linked_door.arcanetampered = arcanetampered
-	arcane_linked_door.arcane_linked_door = src
-	
-	return "D'R ST'K!"
+	return ""
 
 /obj/machinery/door/proc/arcane_linkable()
 	// no windoors, blocked doors or centcomm pls
