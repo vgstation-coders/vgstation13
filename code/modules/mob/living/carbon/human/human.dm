@@ -2588,11 +2588,11 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 			return list(/datum/butchering_product/teeth/human)
 		if ("Tajaran")
 			return list(/datum/butchering_product/teeth/human, /datum/butchering_product/skin/cat/lots)
+		if ("Vox")
+			return list(/datum/butchering_product/feathers)
 	return list()
 		/*	Missing Sprites, pls contribute
 
-		if ("Vox")
-			return list(
 		if ("Diona")
 			return list(
 		if ("Skeletal Vox")

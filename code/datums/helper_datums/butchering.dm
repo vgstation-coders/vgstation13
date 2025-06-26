@@ -122,6 +122,50 @@
 
 #undef ALL_TEETH
 
+//===============Feathers=============
+/datum/butchering_product/feathers
+	result = /obj/item/stack/feather
+	verb_name = "pluck"
+	verb_gerund = "plucking"
+	radial_icon = "radial_pluck"
+	amount = 3
+
+/datum/butchering_product/feathers/proc/get_vox_feather_color(mob/parent)
+	var/color_name = null
+	if(ishuman(parent) && istype(parent, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = parent
+		if(istype(H.species, /datum/species/vox))
+			if(H.my_appearance && H.my_appearance.hexcode)
+				color_name = H.get_vox_feather_color_name()
+				return list(hex = H.my_appearance.hexcode, color_name = color_name)
+			var/hex = H.get_vox_feather_hex()
+			color_name = H.get_vox_feather_color_name()
+			return list(hex = hex, color_name = color_name)
+	return list(hex = "#FFFFFF", color_name = "white")
+
+/datum/butchering_product/feathers/proc/after_pluck(mob/parent)
+	if(amount == 0 && ismob(parent))
+		parent.update_icons()
+		// Vox plucking: update to plucked icon
+		if(ishuman(parent))
+			var/mob/living/carbon/human/H = parent
+			if(istype(H.species, /datum/species/vox))
+				if(H.my_appearance && H.my_appearance.s_tone != VOXPLUCKED)
+					H.set_vox_plucked_appearance()
+				H.start_feather_regeneration()
+
+/datum/butchering_product/feathers/spawn_result(location, mob/parent, drop_amount = 1)
+	if(amount <= 0)
+		return
+	var/color_info = get_vox_feather_color(parent)
+	var/obj/item/stack/feather/F = new result(location, drop_amount, color_info["hex"], color_info["color_name"])
+	if(drop_amount >= amount)
+		amount = 0
+	else
+		amount -= drop_amount
+	after_pluck(parent)
+	return F
+
 //===============Skin=============
 
 /datum/butchering_product/skin

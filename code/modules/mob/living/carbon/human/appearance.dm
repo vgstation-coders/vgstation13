@@ -26,6 +26,8 @@
 
 	var/permanently_bald = FALSE
 
+	var/hexcode = null // Vox feather color hexcode
+
 /mob/living/carbon/human/
 	var/datum/human_appearance/my_appearance
 

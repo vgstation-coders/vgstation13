@@ -104,12 +104,37 @@
 		if(VOXBROWN)
 			icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxbrn.dmi'
+		if(VOXPLUCKED)
+			icobase = 'icons/mob/human_races/vox/r_voxplucked.dmi'
+			deform = 'icons/mob/human_races/vox/r_def_voxplucked.dmi'
 		else
 			icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 	if(vox_tail && (vox_tail.status & ORGAN_DESTROYED))
 		return
 	vox_tail.update_tail(vox)
+
+	// I don't know why this is needed, but it's the only thing that worked.
+	if(vox.my_appearance && vox.my_appearance.s_tone == VOXPLUCKED)
+		if(vox_tail)
+			vox_tail.icon_name = "plucked"
+
+	// If feathers are regenerating, force plucked appearance regardless of genetics
+	if(vox.my_appearance && vox.feather_regen_timer)
+		if(vox.my_appearance.s_tone != VOXPLUCKED)
+			// Save the new color for when feathers regrow
+			vox.original_vox_s_tone = vox.my_appearance.s_tone
+			vox.my_appearance.s_tone = VOXPLUCKED
+			icobase = 'icons/mob/human_races/vox/r_voxplucked.dmi'
+			deform = 'icons/mob/human_races/vox/r_def_voxplucked.dmi'
+			if(vox_tail)
+				vox_tail.icon_name = "plucked"
+			return // Do not update further if plucked
+
+	// Ensure plucked Vox tail uses plucked icon name
+	if(vox.my_appearance && vox.my_appearance.s_tone == VOXPLUCKED)
+		if(vox_tail)
+			vox_tail.icon_name = "plucked"
 
 	if(/datum/dna/gene/disability/lisp in vox.active_genes) //!! Vox Beaks !!
 		switch(vox.my_appearance.s_tone)
@@ -128,6 +153,9 @@
 			if(VOXBROWN)
 				icobase = 'icons/mob/human_races/vox/r_voxbrn_duck.dmi'
 				deform = 'icons/mob/human_races/vox/r_def_voxbrn_duck.dmi'
+			if(VOXPLUCKED)
+				icobase = 'icons/mob/human_races/vox/r_voxplucked.dmi'
+				deform = 'icons/mob/human_races/vox/r_def_voxplucked.dmi'
 			else
 				icobase = 'icons/mob/human_races/vox/r_vox_duck.dmi'
 				deform = 'icons/mob/human_races/vox/r_def_vox_duck.dmi'
@@ -182,3 +210,103 @@
 
 /datum/species/skellington/skelevox/fallback()
 	return "Vox"
+
+/mob/living/carbon/human
+	var/feather_regen_timer = null
+	var/original_vox_s_tone = null
+
+	/// Called when feathers are depleted and Vox is plucked
+	proc/start_feather_regeneration()
+		if(!istype(src.species, /datum/species/vox))
+			return
+		if(src.feather_regen_timer)
+			return // Already running
+		if(src.stat == DEAD)
+			return // Only start if alive
+		src.feather_regen_timer = 1
+		spawn(900)
+			if(src && src.stat != DEAD)
+				src.restore_feathers()
+
+	/// Set Vox to plucked appearance and store original s_tone
+	proc/set_vox_plucked_appearance()
+		if(istype(src.species, /datum/species/vox))
+			if(src.my_appearance && src.my_appearance.s_tone != VOXPLUCKED)
+				if(isnull(src.original_vox_s_tone))
+					src.original_vox_s_tone = src.my_appearance.s_tone
+				if(isnull(src.my_appearance.hexcode))
+					src.my_appearance.hexcode = src.get_vox_feather_hex()
+				src.my_appearance.s_tone = VOXPLUCKED
+				src.species.updatespeciescolor(src)
+				src.update_icon()
+				src.regenerate_icons()
+
+	/// Returns the feather hexcode for this Vox
+	proc/get_vox_feather_hex()
+		// Map s_tone to a hexcode, or use a custom field
+		if(src.my_appearance && src.my_appearance.s_tone)
+			switch(src.my_appearance.s_tone)
+				if(VOXEMERALD)
+					return "#3de47b"
+				if(VOXAZURE)
+					return "#3dbbe4"
+				if(VOXLGREEN)
+					return "#a3e43d"
+				if(VOXGRAY)
+					return "#bfc1c2"
+				if(VOXBROWN)
+					return "#bfa97a"
+				if(VOXPLUCKED)
+					return "#e4d13d"
+				else
+					return "#e4e4e4"
+		return "#e4e4e4"
+
+	/// Returns the feather color name for this Vox
+	proc/get_vox_feather_color_name()
+		if(src.my_appearance && src.my_appearance.s_tone)
+			switch(src.my_appearance.s_tone)
+				if(VOXEMERALD)
+					return "emerald"
+				if(VOXAZURE)
+					return "azure"
+				if(VOXLGREEN)
+					return "light green"
+				if(VOXGRAY)
+					return "gray"
+				if(VOXBROWN)
+					return "brown"
+				if(VOXPLUCKED)
+					return "plucked"
+				else
+					return "white"
+			return "white"
+
+	/// Restores feathers and original appearance
+	proc/restore_feathers()
+		if(!istype(src.species, /datum/species/vox))
+			return
+		if(src.stat && src.stat == DEAD)
+			return // Only restore if alive
+		// Restore feather butchering product
+		for(var/datum/butchering_product/feathers/F in src.butchering_drops)
+			F.amount = F.initial_amount
+		// Restore appearance
+		if(src.my_appearance && src.my_appearance.s_tone == VOXPLUCKED)
+			if(!isnull(src.original_vox_s_tone))
+				src.my_appearance.s_tone = src.original_vox_s_tone
+				src.original_vox_s_tone = null
+			else
+				src.my_appearance.s_tone = VOXBROWN // fallback
+			src.species.updatespeciescolor(src)
+			src.update_icon()
+			src.regenerate_icons()
+		src.feather_regen_timer = null
+
+	/// Called when the mob is revived from death
+	/mob/living/carbon/human/revive()
+		..()
+		if(istype(src.species, /datum/species/vox))
+			if(src.my_appearance && src.my_appearance.s_tone == VOXPLUCKED)
+				if(!src.feather_regen_timer)
+					src.start_feather_regeneration()
