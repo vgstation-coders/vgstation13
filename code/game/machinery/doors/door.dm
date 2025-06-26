@@ -399,16 +399,37 @@ var/list/all_doors = list()
 
 /obj/machinery/door/arcane_act(mob/user)
 	..()
-	if(arcane_linkable() && all_doors.len > 1)
-		var/list/door_selection = all_doors.Copy()
-		while(!arcane_linked_door || arcane_linked_door == src || arcane_linked_door.z != src.z || !arcane_linked_door.arcane_linkable())
-			arcane_linked_door = pick_n_take(door_selection)
-			if(!door_selection.len)
-				break
-		if(arcane_linked_door)
-			arcane_linked_door.arcanetampered = arcanetampered
-			arcane_linked_door.arcane_linked_door = src
-		return "D'R ST'K!"
+	
+	// Early exit if linking isn't possible
+	if(!arcane_linkable() || all_doors.len <= 1)
+		return ""
+	
+	// Cache current z-level for comparison
+	var/current_z = src.z
+	
+	// Filter valid doors with optimized conditions
+	var/list/valid_doors = list()
+	for(var/obj/machinery/door/door in all_doors)
+		if(door.z != current_z)
+			continue
+		if(!door.arcane_linkable())
+			continue
+		if(door == src)
+			continue
+		valid_doors += door
+	
+	// No valid doors found
+	if(!valid_doors.len)
+		return ""
+	
+	// Select a random valid door
+	arcane_linked_door = pick(valid_doors)
+	
+	// Set up bidirectional linking
+	arcane_linked_door.arcanetampered = arcanetampered
+	arcane_linked_door.arcane_linked_door = src
+	
+	return "D'R ST'K!"
 
 /obj/machinery/door/proc/arcane_linkable()
 	// no windoors, blocked doors or centcomm pls
