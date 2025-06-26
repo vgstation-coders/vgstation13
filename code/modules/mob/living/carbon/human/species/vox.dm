@@ -224,7 +224,7 @@
 		if(src.stat == DEAD)
 			return // Only start if alive
 		src.feather_regen_timer = 1
-		spawn(900)
+		spawn(9000)
 			if(src && src.stat != DEAD)
 				src.restore_feathers()
 
