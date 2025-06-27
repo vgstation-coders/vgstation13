@@ -84,7 +84,6 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		return 0
 	var/obj/item/weapon/light/best_light = get_best_light(lightfixture)
 	if(!best_light)
-		to_chat(user, span_warning("No suitable light bulbs available in [src]."))
 		return 0
 	if(lightfixture && lightfixture.current_bulb && is_light_better(best_light, lightfixture.current_bulb))
 		. = ReplaceLight(lightfixture, usr)
