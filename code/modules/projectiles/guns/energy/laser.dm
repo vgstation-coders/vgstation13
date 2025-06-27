@@ -489,3 +489,16 @@
 	. = ..()
 	if(.)
 		charged = FALSE
+
+/obj/item/weapon/gun/energy/plasma/mooninite
+	name = "Mr. Laser" //it's only the quad laser when both mooninites are dual wielding
+	desc = "The explosion will be of EXTRAORDINARY MAGNITUDE. Hang on, it takes a while."
+	icon_state = "mooninite"
+	fire_sound = 'sound/weapons/mrlaser.ogg' //todo: make it so it doesn't pitch shift
+	item_state = null
+	w_class = W_CLASS_TINY
+	projectile_type = /obj/item/projectile/energy/plasma/mooninite
+	charge_cost = 40
+
+/obj/item/weapon/gun/energy/plasma/mooninite/isHandgun()
+	return TRUE
