@@ -84,9 +84,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		// No light fixture found, try to gather light items from the turf
 		for(var/obj/O in gather_loc.contents)
 			. = insert_if_possible(O)
-			if(.)
-				return .
-		return 0
+		return .
 	
 	var/obj/item/weapon/light/best_light = get_best_light(lightfixture)
 	if(!best_light)
