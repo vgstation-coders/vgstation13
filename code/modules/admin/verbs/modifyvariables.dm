@@ -27,7 +27,7 @@ var/list/forbidden_varedit_object_types = list(
 	if(!C.can_edit_var(edited_variable, edited_datum?.type))
 		return
 
-	if(!edited_datum.can_edit_var(edited_variable))
+	if(istype(edited_datum, /datum) && !edited_datum.can_edit_var(edited_variable))
 		return
 
 	//Special case for "appearance", because appearance values can't be stored anywhere.
