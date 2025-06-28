@@ -157,7 +157,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
 	dat += "<B>Whole Station Airtight:</B> [score.atmobonus ? "Yes" : "No"] ([score.atmobonus] Points)<BR>"
 	if (score.machineupgrades > 0)
-		dat += "<B>Total Machine Upgrade Ratings:</B> [score.machineupgrades] ([score.machineupgrades * 10] Points)<BR>"
+		dat += "<B>Total Machine Upgrade Ratings:</B> [score.machineupgrades] ([score.machineupgrades * 5] Points)<BR>"
 	if (score.disease_vaccine_score > 0)
 		dat += "<B>Isolated Vaccines:</B> [score.disease_vaccine] ([score.disease_vaccine_score] Points)<BR>"
 	if (score.disease_extracted > 0)

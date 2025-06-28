@@ -73,7 +73,7 @@
 	score.crewscore += score.powerbonus
 	score.crewscore -= score.atmoloss * 50 //You too, atmos techs
 	score.crewscore += score.atmobonus
-	score.crewscore += score.machineupgrades * 10 //Mechanics reap rewards too now
+	score.crewscore += score.machineupgrades * 5 //Mechanics reap rewards too now
 
 /datum/controller/gameticker/scoreboard/proc/service_score()
 	//Janitor
