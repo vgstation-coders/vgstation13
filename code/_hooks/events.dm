@@ -352,6 +352,13 @@
 		var/procName = handler[EVENT_HANDLER_PROCNAME_INDEX]
 		// not |= because `null |= list()` is a runtime error
 		// but `null = null | list()` is not.
+
+		// Check if object still exists
+		if(isnull(objRef) || QDELETED(objRef))
+			// Clean up dead reference
+			event_handlers -= key
+			continue
+
 		. = . | call(objRef, procName)(arglist(arguments))
 
 /**
