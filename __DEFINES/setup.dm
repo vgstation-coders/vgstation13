@@ -1213,6 +1213,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define SHUTTLEWRENCH	1024 //if this flag exists, the computer can be wrenched on shuttle floors
 #define SECUREDPANEL 2048 //it won't let you open the deconstruction panel if you don't have the linked account number. Originally used for custom vending machines
 #define MULTIOUTPUT 4096 //Let's you set the output location with a multitool
+#define UPGRADENOSCORE 8192 //Incase the machine use is nothing but malicious
 
 #define MAX_N_OF_ITEMS 999 // Used for certain storage machinery, BYOND infinite loop detector doesn't look things over 1000.
 

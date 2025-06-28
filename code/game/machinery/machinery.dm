@@ -159,8 +159,6 @@ Class Procs:
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
 	var/id_tag = null // Identify the machine
 
-	var/upgrades_to_score = TRUE //Incase the machine use is nothing but malicious
-
 /obj/machinery/cultify()
 	var/list/random_structure = list(
 		/obj/structure/cult_legacy/talisman,
@@ -819,12 +817,12 @@ Class Procs:
 
 /obj/machinery/proc/add_part(obj/item/weapon/stock_parts/S, atom/location)
 	component_parts += S
-	if(upgrades_to_score && istype(S) && (S.rating > 1))
+	if(!(machine_flags & UPGRADENOSCORE) && istype(S) && (S.rating > 1))
 		score.machineupgrades += (S.rating - 1)
 
 /obj/machinery/proc/remove_part(obj/item/weapon/stock_parts/S)
 	component_parts -= S
-	if(upgrades_to_score && istype(S) && (S.rating > 1))
+	if(!(machine_flags & UPGRADENOSCORE) && istype(S) && (S.rating > 1))
 		score.machineupgrades -= (S.rating - 1)
 
 //exclusively for use with machines being made from the flatpacker
