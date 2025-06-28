@@ -102,7 +102,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 		payroll_modifier = 1
 	message_admins("Wages: Payroll Modifier is [round(100*payroll_modifier - 100)]%.")
 
-	new /datum/transaction(station_account, "Employee and Department salaries", "-[station_account.money]", "Account Database", send2PDAs=FALSE)
+	new /datum/transaction(station_account,"Employee and Department salaries","-[station_account.money]","Account Database",send2PDAs=FALSE)
 	station_account.money = 0
 
 	//actually paying the departments and employees
