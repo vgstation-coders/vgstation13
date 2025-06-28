@@ -159,6 +159,8 @@ Class Procs:
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
 	var/id_tag = null // Identify the machine
 
+	var/upgrades_to_score = TRUE //Incase the machine use is nothing but malicious
+
 /obj/machinery/cultify()
 	var/list/random_structure = list(
 		/obj/structure/cult_legacy/talisman,
@@ -204,7 +206,8 @@ Class Procs:
 			AM.forceMove(loc)
 			component_parts -= AM
 */
-	component_parts = null
+	for(var/part in component_parts)
+		remove_part(part)
 	for(var/datum/malfhack_ability/MH in hack_abilities)
 		MH.machine = null
 		qdel(MH)
@@ -561,6 +564,7 @@ Class Procs:
 
 /obj/machinery/proc/spillContents(var/destroy_chance = 0)
 	for(var/obj/I in component_parts)
+		remove_part(I)
 		if(prob(destroy_chance))
 			qdel(I)
 		else
@@ -797,8 +801,8 @@ Class Procs:
 						if(B.get_rating() > A.get_rating())
 							W.remove_from_storage(B, src)
 							W.handle_item_insertion(A, 1)
-							component_parts -= A
-							component_parts += B
+							remove_part(A)
+							add_part(B)
 							B.forceMove(null)
 							to_chat(user, "<span class='notice'>[A.name] replaced with [B.name].</span>")
 							shouldplaysound = 1 //Only play the sound when parts are actually replaced!
@@ -812,6 +816,16 @@ Class Procs:
 				to_chat(user, "<span class='notice'>    [C.name]</span>")
 		return 1
 	return 0
+
+/obj/machinery/proc/add_part(obj/item/weapon/stock_parts/S, atom/location)
+	component_parts += S
+	if(upgrades_to_score && istype(S) && (S.rating > 1))
+		score.machineupgrades += (S.rating - 1)
+
+/obj/machinery/proc/remove_part(obj/item/weapon/stock_parts/S)
+	component_parts -= S
+	if(upgrades_to_score && istype(S) && (S.rating > 1))
+		score.machineupgrades -= (S.rating - 1)
 
 //exclusively for use with machines being made from the flatpacker
 //works like the parts exchange but because we only call this from a certain location
@@ -834,8 +848,8 @@ Class Procs:
 			for(var/obj/item/B in M)
 				if(istype(B, P) && istype(A, P))
 					if(B.get_rating() > A.get_rating()) //base rating parts should not be added (they already shouldn't be in this list, but whatever)
-						component_parts -= A
-						component_parts += B
+						remove_part(A)
+						add_part(B)
 						M -= B //if you don't remove the part, one upgraded part will replace everything in the recipe
 						B.forceMove(null)
 						break

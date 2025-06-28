@@ -197,7 +197,7 @@
 									O.forceMove(components_in_use)
 								else
 									O.forceMove(null)
-								new_machine.component_parts += O
+								new_machine.add_part(O)
 							if(circuit.contain_parts)
 								circuit.forceMove(components_in_use)
 							else

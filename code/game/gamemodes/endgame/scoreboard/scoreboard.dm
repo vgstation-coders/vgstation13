@@ -2,29 +2,39 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 
 /datum/controller/gameticker/scoreboard
 	var/crewscore 			= 0 //This is the overall var/score for the whole round
+
 	var/plasmashipped		= 0 //How much plasma has been sent to centcom?
 	var/stuffshipped		= 0 //How many centcom orders have cargo fulfilled?
 	var/stuffforwarded		= 0 //How many cargo forwards have been fulfilled?
 	var/stuffnotforwarded	= 0 //How many cargo forwards have not been fulfilled?
+
 	var/stuffharvested		= 0 //How many harvests have hydroponics done (per crop)?
 	var/oremined			= 0 //How many chunks of ore were smelted
+	var/meals				= 0 //How much food was actively cooked that day
+	var/slimes				= 0 //How many slimes were harvested
+	var/artifacts			= 0 //How many large artifacts were analyzed and activated
+
 	var/eventsendured		= 0 //How many random events did the station endure?
+
 	var/powerloss			= 0 //How many APCs have alarms (under 30 %)?
 	var/atmoloss			= 0 //How many air alarms are giving issues?
 	var/powerbonus			= 0 //If all APCs on the station are running optimally, big bonus
 	var/atmobonus			= 0 //If all air alarms on the station are running optimally, big bonus
 	var/maxpower			= 0 //Most watts in grid on any of the world's powergrids.
+
+	var/machineupgrades		= 0 //How many machines were upgraded?
+
 	var/escapees			= 0 //How many people got out alive?
 	var/deadcrew			= 0 //Humans who died during the round
 	var/deadsilicon			= 0 //Silicons who died during the round
 	var/deadaipenalty		= 0 //AIs who died during the round
 	var/rescuedpets			= 0 //how many pets were brought back to centcomm (alive)
 	var/rescueianbonus		= 0 //ian is a special little guy :)
+
 	var/mess				= 0 //How much messes on the floor went uncleaned
 	var/litter				= 0 //How much trash is laying on the station floor
-	var/meals				= 0 //How much food was actively cooked that day
-	var/slimes				= 0 //How many slimes were harvested
-	var/artifacts			= 0 //How many large artifacts were analyzed and activated
+	var/messbonus			= 0 //If there are no messes on the station anywhere, huge bonus
+
 	var/disease_good		= 0 //How many unique diseases currently affecting living mobs of cumulated danger <3
 	var/disease_vaccine		= null //Which many vaccine antibody isolated
 	var/disease_vaccine_score= 0 //the associated score
@@ -33,11 +43,12 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/disease_bad			= 0 //How many unique diseases currently affecting living mobs of cumulated danger >= 3
 	var/disease_most		= null //Most spread disease
 	var/disease_most_count	= 0 //Most spread disease
+
 	var/turfssingulod		= 0 //Amount of turfs eaten by singularities.
+
 	var/static/list/badvars		= list("deadcrew","deadsilicon","deadaipenalty","mess","litter","powerloss","atmoloss","stuffnotforwarded","disease_bad","turfssingulod")
 
 	//These ones are mainly for the stat panel
-	var/messbonus			= 0 //If there are no messes on the station anywhere, huge bonus
 	var/foodeaten			= 0 //How much food was consumed
 	var/clownabuse			= 0 //How many times a clown was punched, struck or otherwise maligned
 	var/slips				= 0 //How many people have slipped during this round
@@ -145,6 +156,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Rescued Pets:</B> [score.rescuedpets] ([score.rescuedpets*50 + score.rescueianbonus] Points<BR>)"	
 	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
 	dat += "<B>Whole Station Airtight:</B> [score.atmobonus ? "Yes" : "No"] ([score.atmobonus] Points)<BR>"
+	if (score.machineupgrades > 0)
+		dat += "<B>Total Machine Upgrade Ratings:</B> [score.machineupgrades] ([score.machineupgrades * 10] Points)<BR>"
 	if (score.disease_vaccine_score > 0)
 		dat += "<B>Isolated Vaccines:</B> [score.disease_vaccine] ([score.disease_vaccine_score] Points)<BR>"
 	if (score.disease_extracted > 0)
