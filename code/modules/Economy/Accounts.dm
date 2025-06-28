@@ -433,13 +433,18 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 				station_bonus = new_bonus
 			if("toggle_account")
 				if(detailed_account_view)
-					detailed_account_view.disabled = detailed_account_view.disabled ? 0 : 2
+					if(detailed_account_view == station_account)
+						visible_message("<span class='warning'>The station account cannot be modified in this way.</span>")
+					else
+						detailed_account_view.disabled = detailed_account_view.disabled ? 0 : 2
 			if("edit_wage_payout")
 				var/acc_num = text2num(href_list["account_num"])
 				var/datum/money_account/acc = get_money_account_global(acc_num)
-				if(acc)
+				if(acc == station_account)
+					visible_message("<span class='warning'>The station account cannot be modified in this way.</span>")
+				else if(acc)
 					var/new_payout = input(usr, "Select a new payout for this account", "New payout", acc.wage_gain) as null|num
-					if(new_payout >= 0 && new_payout != null)
+					if(new_payout != null && new_payout >= 0)
 						if(new_payout > ARBITRARILY_LARGE_NUMBER)
 							//10x what the entire station should be earning
 							spark(loc, 3, FALSE)
