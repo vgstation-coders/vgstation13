@@ -36,7 +36,7 @@
 		if(stock_rating > 1)
 			for(var/part in subtypesof(/obj/item/weapon/stock_parts))
 				var/obj/item/weapon/stock_parts/S = part
-				if(initial(S.rating) >= stock_rating)
+				if(initial(S.rating) == stock_rating)
 					for(var/i in 1 to 10)
 						new part(src)
 						handle_item_insertion(S, 1)	
