@@ -23,6 +23,7 @@
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/bluespace/admin
 	var/stock_rating = 4
+	admin_desc = "This one seems to have infinite parts. Use this in hand to change the ratings of stock parts applied."
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/bluespace/admin/attack_self(mob/user)
 	if(user.check_rights(R_ADMIN))
