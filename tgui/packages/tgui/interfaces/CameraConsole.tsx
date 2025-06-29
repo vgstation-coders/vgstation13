@@ -67,13 +67,11 @@ const prevNextCamera = (
  */
 const selectCameras = (cameras: Camera[], searchText = ''): Camera[] => {
   let queriedCameras = filter(cameras, (camera: Camera) => !!camera.name);
-  if (searchText) {
-    const testSearch = createSearch(
-      searchText,
-      (camera: Camera) => camera.name,
-    );
+  const testSearch = searchText
+  ? createSearch(searchText, (camera: Camera) => camera.name)
+  : null;
+  if (testSearch)
     queriedCameras = filter(queriedCameras, testSearch);
-  }
   queriedCameras = sort(queriedCameras);
 
   return queriedCameras;
