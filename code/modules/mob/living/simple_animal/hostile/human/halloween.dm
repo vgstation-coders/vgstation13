@@ -78,7 +78,7 @@
 	..()
 
 /mob/living/simple_animal/hostile/humanoid/kitchen/meatballer/adjustBruteLoss(var/damage)
-	var/proc_chance = clamp(damage*(maxHealth/min(health,1)),0,100)
+	var/proc_chance = clamp(damage*(maxHealth/max(health,1)),0,100)
 	if(!isDead() && prob(proc_chance))
 		fire_everything()
 	..()
@@ -224,7 +224,7 @@
 			return unlock_atom(L)
 
 /mob/living/simple_animal/hostile/humanoid/vampire/adjustBruteLoss(var/damage)
-	var/proc_chance = clamp(damage*(maxHealth/min(health,1)),0,100)
+	var/proc_chance = clamp(damage*(maxHealth/max(health,1)),0,100)
 	if(!isDead() && prob(proc_chance) && world.time > last_jaunt + JAUNT_COOLDOWN)
 		last_jaunt = world.time
 		jaunt_away()
@@ -354,7 +354,7 @@
 
 /mob/living/simple_animal/hostile/gremlin/greytide/adjustBruteLoss(var/damage)
 	..()
-	var/proc_chance = clamp(damage*(maxHealth/min(health,1)),0,100)
+	var/proc_chance = clamp(damage*(maxHealth/max(health,1)),0,100)
 	if(!isDead() && prob(proc_chance))
 		visible_message("<span class = 'warning'>\The [src] looks to be annoyed!</span>")
 		annoyed = 1
