@@ -354,7 +354,7 @@
 		// but `null = null | list()` is not.
 
 		// Check if object still exists
-		if(isnull(objRef) || QDELETED(objRef))
+		if(isnull(objRef))
 			// Clean up dead reference
 			event_handlers -= key
 			continue
