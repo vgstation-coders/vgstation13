@@ -129,6 +129,8 @@
 	verb_gerund = "plucking"
 	radial_icon = "radial_pluck"
 	amount = 3
+	var/feather_hex
+	var/feather_color_name
 
 /datum/butchering_product/feathers/proc/get_vox_feather_color(mob/parent)
 	var/color_name = null
@@ -152,19 +154,68 @@
 			if(istype(H.species, /datum/species/vox))
 				if(H.my_appearance && H.my_appearance.s_tone != VOXPLUCKED)
 					H.set_vox_plucked_appearance()
-				H.start_feather_regeneration()
+				if(H.radiation >= 30)
+					H.start_feather_regeneration()
+				else
+					H.check_vox_feather_regen_ready()
 
 /datum/butchering_product/feathers/spawn_result(location, mob/parent, drop_amount = 1)
 	if(amount <= 0)
 		return
-	var/color_info = get_vox_feather_color(parent)
-	var/obj/item/stack/feather/F = new result(location, drop_amount, color_info["hex"], color_info["color_name"])
+	var/color_info
+	var/product_name = src.product_name
+	if(src.feather_hex && src.feather_color_name)
+		color_info = list(hex = src.feather_hex, color_name = src.feather_color_name)
+	else
+		color_info = get_vox_feather_color(parent)
+	var/obj/item/stack/feather/F = new result(location, drop_amount, color_info["hex"], color_info["color_name"], product_name)
 	if(drop_amount >= amount)
 		amount = 0
 	else
 		amount -= drop_amount
 	after_pluck(parent)
 	return F
+
+/mob/living/simple_animal/chicken/get_butchering_products()
+	var/feather_hex = "#FFFFFF"
+	var/feather_color_name = "white"
+	if(istype(src))
+		var/body_color = src.body_color
+		if(body_color == "brown")
+			feather_hex = "#bfa97a"
+			feather_color_name = "brown"
+		else if(body_color == "black")
+			feather_hex = "#bfc1c2"
+			feather_color_name = "gray"
+		else if(body_color == "white")
+			feather_hex = "#FFFFFF"
+			feather_color_name = "white"
+	var/datum/butchering_product/feathers/feather_product = new
+	feather_product.amount = 2
+	feather_product.initial_amount = 2
+	feather_product.feather_hex = feather_hex
+	feather_product.feather_color_name = feather_color_name
+	feather_product.product_name = "[feather_color_name] chicken feathers"
+	return list(feather_product)
+
+/mob/living/carbon/monkey/vox/get_butchering_products()
+	// Vox feather pool (excluding black, white, brown, and plucked)
+	var/list/vox_feather_colors = list(
+		list(hex = "#3de47b", color_name = "emerald"),
+		list(hex = "#3dbbe4", color_name = "azure"),
+		list(hex = "#a3e43d", color_name = "light green"),
+		list(hex = "#4be43d", color_name = "green"),
+	)
+	var/color_info = pick(vox_feather_colors)
+	var/feather_hex = color_info["hex"]
+	var/feather_color_name = color_info["color_name"]
+	var/datum/butchering_product/feathers/feather_product = new
+	feather_product.amount = 2
+	feather_product.initial_amount = 2
+	feather_product.feather_hex = feather_hex
+	feather_product.feather_color_name = feather_color_name
+	feather_product.product_name = "[feather_color_name] vox feathers"
+	return list(feather_product)
 
 //===============Skin=============
 

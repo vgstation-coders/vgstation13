@@ -14,14 +14,66 @@
 	var/eggsleft
 	var/eggcost = 250
 	languagetoadd = LANGUAGE_VOX
+	var/vox_feather_regenerating = FALSE
+	var/original_icon_state = null
 
 /mob/living/carbon/monkey/vox/attack_hand(mob/living/carbon/human/M as mob)
-
-
 	if((M.a_intent == I_HELP) && !(locked_to) && (isturf(src.loc)) && (M.get_active_hand() == null)) //Unless their location isn't a turf!
 		scoop_up(M)
 
+	// Feather plucking logic for Vox chickens (on grab intent)
+	if(!stat && M.a_intent == I_GRAB && icon_state != "chickengreen_dead")
+		if(butchering_drops && butchering_drops.len)
+			for(var/datum/butchering_product/BP in butchering_drops)
+				if(istype(BP, /datum/butchering_product/feathers))
+					var/datum/butchering_product/feathers/FBP = BP
+					if(FBP.amount > 0)
+						FBP.amount--
+						var/feather_hex = "#3de47b" // Default green
+						var/feather_color_name = "green"
+						// Use the butchering product's color if set
+						if(FBP.feather_hex) feather_hex = FBP.feather_hex
+						if(FBP.feather_color_name) feather_color_name = FBP.feather_color_name
+						var/obj/item/stack/feather/F = new /obj/item/stack/feather(get_turf(src), 1, feather_hex, feather_color_name, "[feather_color_name] vox feather")
+						F.animal_type = src.type
+						M.visible_message("<span class='notice'>[M] plucks a feather from [src]!</span>", "<span class='notice'>You pluck a feather from [src].</span>")
+						playsound(src, 'sound/voice/chicken.ogg', rand(10,30), 1)
+						// If this was the last feather, bite the player and make them drop the chicken if held
+						if(FBP.amount == 0)
+							M.visible_message("<span class='warning'>[src] bites [M] as you pluck the last feather!</span>", "<span class='warning'>[src] bites you as you pluck the last feather!</span>")
+							playsound(src, 'sound/voice/chicken.ogg', 50, 1)
+							icon_state = "chickengreen_plucked"
+							update_icons()
+							M.u_equip(src)
+							src.forceMove(get_turf(M))
+							// Start feather regeneration for Vox chickens
+							src.start_vox_feather_regeneration()
+						return
+			to_chat(M, "<span class='warning'>[src] has no feathers to pluck!</span>")
+			return
 	..()
+
+
+// Start feather regeneration for Vox chickens
+/mob/living/carbon/monkey/vox/proc/start_vox_feather_regeneration()
+	if(vox_feather_regenerating)
+		return
+	vox_feather_regenerating = TRUE
+	if(isnull(original_icon_state))
+		original_icon_state = "chickengreen"
+	spawn(54000) // 15 minutes
+		if(src && !stat)
+			src.regenerate_vox_feathers()
+
+// Restore feathers and icon for Vox chickens
+/mob/living/carbon/monkey/vox/proc/regenerate_vox_feathers()
+	if(butchering_drops && butchering_drops.len)
+		for(var/datum/butchering_product/BP in butchering_drops)
+			if(istype(BP, /datum/butchering_product/feathers))
+				BP.amount = BP.initial_amount
+	icon_state = original_icon_state || "chickengreen"
+	update_icons()
+	vox_feather_regenerating = FALSE
 
 
 /mob/living/carbon/monkey/vox/New()
@@ -33,6 +85,7 @@
 	alien = 1
 	eggsleft = rand(1,6)
 	set_hand_amount(1)
+	butchering_drops = get_butchering_products()
 
 /mob/living/carbon/monkey/vox/skeletal
 	name = "skeleton chicken"

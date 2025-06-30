@@ -20,6 +20,12 @@
 		if(!gene.block)
 			continue
 		gene.OnMobLife(src)
+	// Makes it so vox can go REALLY bald.
+	if(istype(species, /datum/species/vox))
+		if(radiation >= 50 && my_appearance && my_appearance.s_tone != VOXPLUCKED)
+			set_vox_plucked_appearance()
+			to_chat(src, "<span class='warning'>The intense radiation causes your feathers to fall out!</span>")
+			// Regen handled in vox.dm
 
 	if(radiation)
 		if(radiation < 0)

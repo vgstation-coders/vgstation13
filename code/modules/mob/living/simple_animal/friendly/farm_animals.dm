@@ -270,9 +270,50 @@
 	health = 10
 	var/eggsleft = 0
 	var/body_color
+	var/feather_regenerating = FALSE
 	pass_flags = PASSTABLE
 	size = SIZE_SMALL
 	speak_override = TRUE
+
+// Pluck feather on grab intent
+
+/mob/living/simple_animal/chicken/attack_hand(mob/living/carbon/M as mob)
+	if(!stat && M.a_intent == I_GRAB && icon_state != icon_dead)
+		if(butchering_drops && butchering_drops.len)
+			for(var/datum/butchering_product/BP in butchering_drops)
+				if(istype(BP, /datum/butchering_product/feathers))
+					if(BP.amount > 0)
+						BP.amount--
+						// Use the same color logic as get_butchering_products
+						var/feather_hex = "#FFFFFF"
+						var/feather_color_name = "white"
+						if(src.body_color == "brown")
+							feather_hex = "#bfa97a"
+							feather_color_name = "brown"
+						else if(src.body_color == "black")
+							feather_hex = "#bfc1c2"
+							feather_color_name = "gray"
+						else if(src.body_color == "white")
+							feather_hex = "#FFFFFF"
+							feather_color_name = "white"
+						var/obj/item/stack/feather/F = new /obj/item/stack/feather(get_turf(src), 1, feather_hex, feather_color_name, "[feather_color_name] chicken feather")
+						F.animal_type = src.type
+						M.visible_message("<span class='notice'>[M] plucks a feather from [src]!</span>", "<span class='notice'>You pluck a feather from [src].</span>")
+						playsound(src, 'sound/voice/chicken.ogg', rand(10,30), 1)
+						// If this was the last feather, bite the player and make them drop the chicken if held
+						if(BP.amount == 0)
+							M.visible_message("<span class='warning'>[src] bites [M] as you pluck the last feather!</span>", "<span class='warning'>[src] bites you as you pluck the last feather!</span>")
+							playsound(src, 'sound/voice/chicken.ogg', 50, 1)
+							icon_state = "chicken_plucked"
+							icon_living = "chicken_plucked"
+							icon_dead = "chicken_plucked_dead"
+							update_icons()
+							M.u_equip(src)
+							src.forceMove(get_turf(M))
+						return
+			to_chat(M, "<span class='warning'>[src] has no feathers to pluck!</span>")
+			return
+		..()
 
 /mob/living/simple_animal/chicken/New()
 	if(prob(5))
@@ -287,6 +328,7 @@
 	..() //call this after icons to generate the proper static overlays
 	pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
 	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
+	butchering_drops = get_butchering_products()
 
 /mob/living/simple_animal/chicken/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
@@ -312,6 +354,20 @@
 	. =..()
 	if(!.)
 		return
+	// Checks for feathers and starts regeneration if needed
+	if(butchering_drops && butchering_drops.len)
+		for(var/datum/butchering_product/BP in butchering_drops)
+			if(istype(BP, /datum/butchering_product/feathers))
+				if(BP.amount == 0 && !feather_regenerating)
+					if(icon_state != "chicken_plucked")
+						icon_state = "chicken_plucked"
+						icon_living = "chicken_plucked"
+						icon_dead = "chicken_plucked_dead"
+						update_icons()
+					feather_regenerating = TRUE
+					spawn(9000) // 15 minutes
+						regenerate_feathers()
+				break
 	if(!stat && prob(3) && eggsleft > 0)
 		visible_message("[src] [pick("lays an egg.","squats down and croons.","begins making a huge racket.","begins clucking raucously.")]")
 		eggsleft--
@@ -320,6 +376,18 @@
 		E.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
 			processing_objects.Add(E)
+
+/mob/living/simple_animal/chicken/proc/regenerate_feathers()
+	if(!src) return
+	if(butchering_drops && butchering_drops.len)
+		for(var/datum/butchering_product/BP in butchering_drops)
+			if(istype(BP, /datum/butchering_product/feathers))
+				BP.amount = BP.initial_amount
+	icon_state = "chicken_[body_color]"
+	icon_living = "chicken_[body_color]"
+	icon_dead = "chicken_[body_color]_dead"
+	update_icons()
+	feather_regenerating = FALSE
 
 /mob/living/simple_animal/chicken/pomf
 	name = "Pomf chicken"

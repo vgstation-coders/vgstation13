@@ -33,7 +33,7 @@
 	if(feather_color)
 		color = feather_color
 
-/obj/item/stack/feather/New(loc, amount, color, color_name)
+/obj/item/stack/feather/New(loc, amount, color, color_name, product_name)
 	. = ..()
 	recipes = feather_recipes // Allow feather crafting from feather stacks
 	pixel_x = rand(-8,8) * PIXEL_MULTIPLIER
@@ -43,6 +43,10 @@
 		color = feather_color // Set icon color
 	if(color_name)
 		feather_color_name = color_name
+	if(product_name)
+		name = product_name
+		singular_name = "[feather_color_name] chicken feather"
+	else if(feather_color_name)
 		name = "[feather_color_name] vox feathers"
 		singular_name = "[feather_color_name] vox feather"
 	update_icon()

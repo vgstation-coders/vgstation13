@@ -56,7 +56,10 @@
 			var/mob/living/carbon/human/H = target
 			if(istype(H.species, /datum/species/vox))
 				H.set_vox_plucked_appearance()
-				H.start_feather_regeneration()
+				if(H.radiation >= 30)
+					H.start_feather_regeneration()
+				else
+					H.check_vox_feather_regen_ready()
 
 /datum/surgery_step/feather_pluck/pluck_feather/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)

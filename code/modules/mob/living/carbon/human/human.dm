@@ -2153,8 +2153,8 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 		O.send_to_past(duration)
 	for(var/datum/organ/external/O in organs)
 		O.send_to_past(duration)
-	 if(vessel)
-	 	vessel.send_to_past(duration)
+	if(vessel)
+		vessel.send_to_past(duration)
 	if(my_appearance)
 		my_appearance.send_to_past(duration)
 
@@ -2617,3 +2617,29 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 			return list(
 
 		*/
+/mob/living/carbon/human/attack_hand(mob/living/carbon/human/M)
+	// this is here because, it turns out, latejoining vox don't have feathers!
+	if(M == src && istype(src.species, /datum/species/vox))
+		if(src.a_intent == I_GRAB)
+			var/datum/butchering_product/feathers/F = locate(/datum/butchering_product/feathers) in src.butchering_drops
+			if(istype(F))
+				if(F.amount > 0)
+					to_chat(src, "<span class='notice'>You begin to preen yourself, plucking out a feather...</span>")
+					var/success = do_after(src, src, 30, 10, TRUE, FALSE)
+					if(!success)
+						to_chat(src, "<span class='warning'>You stop preening yourself.</span>")
+						return
+					F.spawn_result(get_turf(src), src, 1)
+					to_chat(src, "<span class='notice'>You preen yourself, plucking out a feather!</span>")
+					if(F.amount == 0 && !src.feather_regen_timer && src.my_appearance && src.my_appearance.s_tone != VOXPLUCKED)
+						src.set_vox_plucked_appearance()
+						if(src.radiation >= 30)
+							src.start_feather_regeneration()
+						else
+							src.check_vox_feather_regen_ready()
+					return
+				else
+					to_chat(src, "<span class='warning'>You have no feathers left to pluck!</span>")
+					return
+	// fallback to default
+	return ..(M)
