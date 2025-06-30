@@ -147,7 +147,34 @@
 
 /datum/butchering_product/feathers/proc/after_pluck(mob/parent)
 	if(amount == 0 && ismob(parent))
-		parent.update_icons()
+		// Chicken plucking: update to plucked icon
+		if(istype(parent, /mob/living/simple_animal/chicken))
+			var/mob/living/simple_animal/chicken/C = parent
+			if(C.stat == DEAD)
+				if(C.icon_state != "chicken_plucked_dead")
+					C.icon_state = "chicken_plucked_dead"
+					C.icon_living = "chicken_plucked"
+					C.icon_dead = "chicken_plucked_dead"
+					C.update_icons()
+			else
+				if(C.icon_state != "chicken_plucked")
+					C.icon_state = "chicken_plucked"
+					C.icon_living = "chicken_plucked"
+					C.icon_dead = "chicken_plucked_dead"
+					C.update_icons()
+		// Vox chicken plucking: update to plucked icon
+		else if(istype(parent, /mob/living/carbon/monkey/vox))
+			var/mob/living/carbon/monkey/vox/V = parent
+			if(V.stat == DEAD)
+				if(V.icon_state != "chickengreen_plucked")
+					V.icon_state = "chickengreen_plucked"
+					V.update_icons()
+			else
+				if(V.icon_state != "chickengreen_plucked")
+					V.icon_state = "chickengreen_plucked"
+					V.update_icons()
+		else
+			parent.update_icons()
 		// Vox plucking: update to plucked icon
 		if(ishuman(parent))
 			var/mob/living/carbon/human/H = parent
