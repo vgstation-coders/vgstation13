@@ -494,13 +494,20 @@
 	nutriment_factor = 10 * REAGENTS_METABOLISM
 	color = "#E7A568"
 
+
+// When gravy is metabolized, apply normal effects and always trigger feather regen check for Vox
 /datum/reagent/gravy/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
 		return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.species.name == "Vox")
+		if(istype(H.species, /datum/species/vox))
 			M.adjustToxLoss(-4 * REM) //chicken and gravy just go together
+			// Always trigger feather regeneration check for Vox
+			H.check_vox_feather_regen_ready()
+		else if(H.species.name == "Vox")
+			M.adjustToxLoss(-4 * REM)
+	return
 
 /datum/reagent/hell_ramen
 	name = "Hell Ramen"

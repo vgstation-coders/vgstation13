@@ -234,6 +234,7 @@
 /mob/living/carbon/human
 	var/feather_regen_timer = null
 	var/original_vox_s_tone = null
+	var/vox_full_regen_active = null
 
 /// Called when Vox has at least one feather left but not full, triggers 5-minute regeneration (no radiation required)
 /mob/living/carbon/human/proc/start_partial_feather_regeneration()
@@ -262,29 +263,40 @@
 /mob/living/carbon/human/proc/start_feather_regeneration()
 	if(!istype(src.species, /datum/species/vox))
 		return
+	// If partial regen is running, cancel it and start full regen
 	if(src.feather_regen_timer)
-		return // Already running
+		// If already running full regen, do nothing
+		if(src.vox_full_regen_active)
+			return
+		// Otherwise, cancel partial regen and proceed
+		src.feather_regen_timer = null
+		src.vox_full_regen_active = null
 	if(src.stat == DEAD)
 		return // Only start if alive
 	src.feather_regen_timer = 1
+	src.vox_full_regen_active = 1
 	to_chat(src, "<span class='notice'>You feel your feathers start to regrow, this could take a while...</span>")
 	spawn(9000)
 		if(src && src.stat != DEAD)
 			src.restore_feathers()
 		src.feather_regen_timer = null
+		src.vox_full_regen_active = null
 
-/// Periodically check if Vox meets the radiation threshold to start feather regeneration
+/// Periodically check if Vox has gravy in their system to start feather regeneration
 /mob/living/carbon/human/proc/check_vox_feather_regen_ready()
 	if(!istype(src.species, /datum/species/vox))
 		return
-	if(src.feather_regen_timer)
-		return // Already regenerating
 	if(src.stat == DEAD)
 		return
 	if(!src.my_appearance || src.my_appearance.s_tone != VOXPLUCKED)
 		return // Only check if plucked
-	if(src.radiation >= 30)
+	// Check for gravy in reagents
+	if(src.reagents && src.reagents.has_reagent("gravy"))
+		// Always trigger full regeneration, even if partial is running
 		src.start_feather_regeneration()
+		return
+	// If already regenerating (partial), do nothing else
+	if(src.feather_regen_timer)
 		return
 	// Otherwise, check again in 20 ticks
 	spawn(20)
