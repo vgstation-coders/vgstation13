@@ -222,20 +222,22 @@ Obviously, requires DNA2.
 /mob/living/carbon/human/var/throw_source = null
 
 /spell/targeted/charge/cast(var/list/targets, var/mob/user)
-// Only proceed if the spell is not on cooldown and can be cast
-	if (!src.cast_check(FALSE, user))
-		// Reset throw_source if charge can't be cast
-		if (istype(user, /mob/living/carbon/human))
-			var/mob/living/carbon/human/human = user
-			human.throw_source = null
-			human.charge_gene_active = FALSE
-		return
-	playsound(user, 'sound/effects/chargeaction.ogg', 100, 1)
-	var/mob/living/carbon/human/human = user
-	human.charge_gene_active = TRUE
-	human.throw_source = "charge"
-	var/landing = get_distant_turf(get_turf(user), human.dir, range)
-	human.throw_at(landing, range, 2)
+    var/mob/living/carbon/human/human = null
+    if (istype(user, /mob/living/carbon/human))
+        human = user
+    // Only proceed if the spell is not on cooldown and can be cast
+    if (!src.cast_check(FALSE, user))
+        // Reset throw_source if charge can't be cast
+        if (human)
+            human.throw_source = null
+            human.charge_gene_active = FALSE
+        return
+    playsound(user, 'sound/effects/chargeaction.ogg', 100, 1)
+    if (human)
+        human.charge_gene_active = TRUE
+        human.throw_source = "charge"
+        var/landing = get_distant_turf(get_turf(user), human.dir, range)
+        human.throw_at(landing, range, 2)
 
 /mob/living/carbon/human/special_thrown_behaviour()
 	if(src.throw_source == "charge" && src.charge_gene_active)
