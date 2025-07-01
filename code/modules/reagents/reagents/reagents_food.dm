@@ -778,6 +778,23 @@
 		var/obj/effect/decal/cleanable/flour/F = new (T)
 		F.color = "#B22222" //dark red
 
+/datum/reagent/peanut
+	name = "Peanut"
+	id = PEANUT
+	description = "A nutty, protein-rich legume."
+	reagent_state = REAGENT_STATE_SOLID
+	nutriment_factor = 8 * REAGENTS_METABOLISM
+	color = "#857e27"
+
+/datum/reagent/peanut/on_mob_life(var/mob/living/M, var/alien)
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(istype(H.species, /datum/species/vox))
+			// This will also trigger feather regen.
+			H.check_vox_feather_regen_ready()
+
 /datum/reagent/polypgelatin
 	name = "Polyp Gelatin"
 	id = POLYPGELATIN

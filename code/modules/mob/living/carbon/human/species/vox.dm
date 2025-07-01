@@ -290,8 +290,8 @@
 		return
 	if(!src.my_appearance || src.my_appearance.s_tone != VOXPLUCKED)
 		return // Only check if plucked
-	// Check for gravy in reagents
-	if(src.reagents && src.reagents.has_reagent("gravy"))
+	// Check for gravy or peanuts in reagents
+	if(src.reagents && (src.reagents.has_reagent("gravy") || src.reagents.has_reagent("peanut")))
 		// Always trigger full regeneration, even if partial is running
 		src.start_feather_regeneration()
 		return

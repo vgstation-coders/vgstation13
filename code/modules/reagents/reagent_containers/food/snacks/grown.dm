@@ -407,7 +407,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 /obj/item/weapon/reagent_containers/food/snacks/grown/peanut
 	name = "peanut"
 	desc = "Nuts!"
-	filling_color = "857e27"
+	filling_color = "#857e27"
 	potency = 25
 	plantname = "peanut"
 	harmfultocorgis = TRUE

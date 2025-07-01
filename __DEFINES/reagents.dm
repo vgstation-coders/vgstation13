@@ -537,6 +537,7 @@
 #define FEVERFEW		"feverfew"
 #define SQUASH			"squash"
 #define PRIAXATE		"priaxate"
+#define PEANUT			"peanut"
 
 #define ACRYLIC			"acrylic"
 #define ACETONE			"acetone"
