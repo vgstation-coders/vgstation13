@@ -92,8 +92,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 	
 	// Replace light if fixture has no bulb or if we have a better bulb
 	if(!lightfixture.current_bulb || is_light_better(best_light, lightfixture.current_bulb))
-		. = ReplaceLight(lightfixture, user)
-		return .
+		return ReplaceLight(lightfixture, user)
 	
 	return 0
 
