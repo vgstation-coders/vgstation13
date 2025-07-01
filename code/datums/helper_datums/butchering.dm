@@ -201,6 +201,8 @@
 	else
 		amount -= drop_amount
 	after_pluck(parent)
+	if(istype(parent, /mob/living/carbon/human) && istype(parent:species, /datum/species/vox))
+		parent:check_vox_partial_feather_regen()
 	return F
 
 /mob/living/simple_animal/chicken/get_butchering_products()

@@ -235,7 +235,29 @@
 	var/feather_regen_timer = null
 	var/original_vox_s_tone = null
 
-	/// Called when feathers are depleted and Vox is plucked
+/// Called when Vox has at least one feather left but not full, triggers 5-minute regeneration (no radiation required)
+/mob/living/carbon/human/proc/start_partial_feather_regeneration()
+	if(!istype(src.species, /datum/species/vox))
+		return
+	if(src.feather_regen_timer)
+		return // Already running
+	if(src.stat == DEAD)
+		return // Only start if alive
+	var/datum/butchering_product/feathers/F = locate(/datum/butchering_product/feathers) in src.butchering_drops
+	if(!F || F.amount == F.initial_amount || F.amount <= 0)
+		return // Only if missing some feathers but not plucked
+	src.feather_regen_timer = 1
+	spawn(3)
+		if(src)
+			to_chat(src, "<span class='notice'>Your feathers begin to regrow. They'll be fully restored in a few minutes.</span>")
+	spawn(3000)
+		if(src && src.stat != DEAD && F && F.amount > 0 && F.amount < F.initial_amount)
+			F.amount = F.initial_amount
+			to_chat(src, "<span class='notice'>Your feathers have fully regrown!</span>")
+			src.update_icons()
+		src.feather_regen_timer = null
+
+
 /// Called when feathers are depleted and Vox is plucked
 /mob/living/carbon/human/proc/start_feather_regeneration()
 	if(!istype(src.species, /datum/species/vox))
@@ -249,6 +271,7 @@
 	spawn(9000)
 		if(src && src.stat != DEAD)
 			src.restore_feathers()
+		src.feather_regen_timer = null
 
 /// Periodically check if Vox meets the radiation threshold to start feather regeneration
 /mob/living/carbon/human/proc/check_vox_feather_regen_ready()
@@ -267,6 +290,16 @@
 	spawn(20)
 		if(src && !src.feather_regen_timer && src.my_appearance && src.my_appearance.s_tone == VOXPLUCKED && src.stat != DEAD)
 			src.check_vox_feather_regen_ready()
+
+/// Called after a feather is plucked, checks if partial regeneration should start
+/mob/living/carbon/human/proc/check_vox_partial_feather_regen()
+	if(!istype(src.species, /datum/species/vox))
+		return
+	if(src.feather_regen_timer)
+		return
+	var/datum/butchering_product/feathers/F = locate(/datum/butchering_product/feathers) in src.butchering_drops
+	if(F && F.amount > 0 && F.amount < F.initial_amount)
+		src.start_partial_feather_regeneration()
 
 
 /// Set Vox to plucked appearance and store original s_tone
@@ -380,6 +413,7 @@
 				return
 			F.spawn_result(get_turf(src), src, 1)
 			to_chat(src, "<span class='notice'>You preen yourself, plucking out a feather!</span>")
+			src.check_vox_partial_feather_regen()
 			if(F.amount == 0 && !src.feather_regen_timer && src.my_appearance && src.my_appearance.s_tone != VOXPLUCKED)
 				src.set_vox_plucked_appearance()
 				if(src.radiation >= 30)

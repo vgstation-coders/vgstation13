@@ -49,6 +49,10 @@
 	var/datum/butchering_product/feathers/F = locate(/datum/butchering_product/feathers) in target.butchering_drops
 	if(istype(F) && F.amount > 0)
 		F.spawn_result(get_turf(target), target, 1)
+		if(istype(target, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = target
+			if(istype(H.species, /datum/species/vox))
+				H.check_vox_partial_feather_regen()
 	if(istype(F) && F.amount == 0)
 		target.update_icons()
 		// Vox plucking: update to plucked icon (surgery)
