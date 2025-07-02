@@ -39,7 +39,7 @@
 		QDEL_NULL(power_connection)
 	. = ..()
 
-/obj/machinery/media/transmitter/broadcast/proc/cable_power_change(var/list/args)
+/obj/machinery/media/transmitter/broadcast/proc/cable_power_change(var/list/arguments)
 	if(power_connection.powered())
 		stat &= ~NOPOWER
 	else
