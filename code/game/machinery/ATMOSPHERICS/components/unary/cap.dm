@@ -95,7 +95,7 @@
 	alpha = invisibility ? 128 : 255
 	icon_state = "he_cap"
 
-/obj/machinery/atmospherics/unary/cap/heat/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/unary/cap/heat/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions = 0
 	initialize_directions_he = pipe.get_hdir()
