@@ -112,7 +112,7 @@
 	else
 		broadcast_status()
 
-/obj/machinery/atmospherics/unary/vent_scrubber/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/unary/vent_scrubber/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	..()
 	src.broadcast_status()
 	return 1
