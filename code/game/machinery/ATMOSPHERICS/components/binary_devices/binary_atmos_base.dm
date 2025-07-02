@@ -96,7 +96,7 @@
 
 /obj/machinery/atmospherics/binary/proc/set_frequency(new_frequency)
 
-/obj/machinery/atmospherics/binary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/binary/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	if (pipe.pipename)
