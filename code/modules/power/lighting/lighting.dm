@@ -144,6 +144,7 @@ var/global/list/obj/machinery/light/alllights = list()
 		lights_area.lights += src
 
 	if(map.broken_lights)
+		//var/failure_mult = clamp(-(last_crewscore/10000),0,1) // 25% at highest, 0% at lowest
 		switch(fitting)
 			if("tube")
 				if(prob(2))
