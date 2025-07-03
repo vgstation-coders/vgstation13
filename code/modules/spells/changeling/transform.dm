@@ -39,8 +39,10 @@
 	user.dna = chosen_dna.Clone()
 	user.real_name = chosen_dna.real_name
 	user.flavor_text = chosen_dna.flavor_text
-	user.set_species(user.dna.species, 1)
+	user.set_species(chosen_dna.species, 1, transfer_damage=TRUE)
 	user.UpdateAppearance()
+	user.update_perception()
+	user.update_name()
 
 	domutcheck(user, null)
 	feedback_add_details("changeling_powers","TR")

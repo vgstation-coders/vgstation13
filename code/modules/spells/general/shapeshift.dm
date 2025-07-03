@@ -41,6 +41,7 @@
 		user.set_default_language(user.init_language)
 		user.name = identity.real_name
 		user.real_name = identity.real_name
+		user.flavor_text = identity.flavor_text
 		user.dna = identity
 		humanform = TRUE
 	user.UpdateAppearance()
