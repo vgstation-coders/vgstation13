@@ -16,12 +16,9 @@
 	cost = 0
 	spellpath = /spell/targeted/hypnotise
 
-/*
-// Who will fix Adacovsk's code? Not me.
 /datum/power/vampire/shapeshift
 	cost = 0
 	spellpath = /spell/shapeshift
-*/
 
 /datum/power/vampire/silentbite
 	cost = 0
