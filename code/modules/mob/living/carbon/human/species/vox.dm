@@ -134,11 +134,6 @@
 		return
 	vox_tail.update_tail(vox)
 
-	// I don't know why this is needed, but it's the only thing that worked.
-	if(vox.my_appearance && vox.my_appearance.s_tone == VOXPLUCKED)
-		if(vox_tail)
-			vox_tail.icon_name = "plucked"
-
 	// If feathers are regenerating, force plucked appearance regardless of genetics
 	if(vox.my_appearance && vox.feather_regen_timer)
 		if(vox.my_appearance.s_tone != VOXPLUCKED)
