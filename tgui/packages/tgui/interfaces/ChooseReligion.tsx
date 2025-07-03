@@ -52,7 +52,6 @@ export const selectReligions = (religions: Religion[], searchText = ''): Religio
     religions = filter(religions, testSearch);
   religions = sort(religions);
   return religions;
-
 };
 
 const isBlank = function (str) {

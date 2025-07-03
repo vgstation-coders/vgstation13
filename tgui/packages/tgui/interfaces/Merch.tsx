@@ -71,7 +71,7 @@ export const MerchUplink = (props) => {
       .find(category => category.name === selectedCategory)
       ?.items
     // If none of that results in a list, return an empty list
-    || []; 
+    || [];
   return (
     <Section
       title={"Merch"}
