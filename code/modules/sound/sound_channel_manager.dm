@@ -43,7 +43,6 @@ var/global/datum/sound_channel_manager/sound_channel_manager = new
 		inuse_shared_channels += free
 		free.users += emitter
 		return free
-	return
 
 /datum/sound_channel_manager/proc/try_get_unique()
 	var/channel = null
