@@ -134,7 +134,7 @@
 
 /datum/next_map/snaxi/is_votable()
 	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
-	var/allowed_months = list(1, 2, 7, 12)
+	var/allowed_months = list(1, 2, 12)
 	if (!(MM in allowed_months))
 		var/msg = "Skipping map [name] as this is no longer the Christmas season."
 		message_admins(msg)
