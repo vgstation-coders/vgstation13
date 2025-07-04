@@ -90,6 +90,9 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/list/implant_phrases = list()
 	var/list/global_paintings = list()
 
+	var/badmin_score		= 0
+	var/badmin_override		= FALSE
+
 /datum/controller/gameticker/scoreboard/proc/main(var/dat)
 	ticker.mode.declare_completion()
 	dat += "[ticker.mode.dat]<HR>"
@@ -269,6 +272,9 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/list/dept_leaderboard = get_dept_leaderboard()
 	for (var/i = 1 to dept_leaderboard.len)
 		dat += "<B>#[i] - </B>[dept_leaderboard[i]] ($[dept_leaderboard[dept_leaderboard[i]]])<BR>"
+	
+	if(score.badmin_score)
+		dat += "<BR><span class='sinister'><B>Mysterious circumstances:</B> [score.badmin_score] Points)</span><BR>"
 
 	dat += "<HR><BR>"
 	dat += "<B><U>FINAL SCORE: [score.crewscore]</U></B><BR>"
