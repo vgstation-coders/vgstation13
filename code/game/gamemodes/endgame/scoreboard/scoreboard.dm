@@ -2,26 +2,39 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 
 /datum/controller/gameticker/scoreboard
 	var/crewscore 			= 0 //This is the overall var/score for the whole round
+
 	var/plasmashipped		= 0 //How much plasma has been sent to centcom?
 	var/stuffshipped		= 0 //How many centcom orders have cargo fulfilled?
 	var/stuffforwarded		= 0 //How many cargo forwards have been fulfilled?
 	var/stuffnotforwarded	= 0 //How many cargo forwards have not been fulfilled?
+
 	var/stuffharvested		= 0 //How many harvests have hydroponics done (per crop)?
 	var/oremined			= 0 //How many chunks of ore were smelted
+	var/meals				= 0 //How much food was actively cooked that day
+	var/slimes				= 0 //How many slimes were harvested
+	var/artifacts			= 0 //How many large artifacts were analyzed and activated
+
 	var/eventsendured		= 0 //How many random events did the station endure?
+
 	var/powerloss			= 0 //How many APCs have alarms (under 30 %)?
 	var/atmoloss			= 0 //How many air alarms are giving issues?
 	var/powerbonus			= 0 //If all APCs on the station are running optimally, big bonus
 	var/atmobonus			= 0 //If all air alarms on the station are running optimally, big bonus
 	var/maxpower			= 0 //Most watts in grid on any of the world's powergrids.
+
+	var/machineupgrades		= 0 //How many machines were upgraded?
+
 	var/escapees			= 0 //How many people got out alive?
 	var/deadcrew			= 0 //Humans who died during the round
 	var/deadsilicon			= 0 //Silicons who died during the round
 	var/deadaipenalty		= 0 //AIs who died during the round
 	var/rescuedpets			= 0 //how many pets were brought back to centcomm (alive)
 	var/rescueianbonus		= 0 //ian is a special little guy :)
+
 	var/mess				= 0 //How much messes on the floor went uncleaned
 	var/litter				= 0 //How much trash is laying on the station floor
+	var/messbonus			= 0 //If there are no messes on the station anywhere, huge bonus
+
 	var/meals				= 0 //How much food was actively cooked that day
 	var/slimes				= 0 //How many slimes were harvested
 	var/artifacts			= 0 //How many large artifacts were analyzed and activated
