@@ -35,9 +35,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/litter				= 0 //How much trash is laying on the station floor
 	var/messbonus			= 0 //If there are no messes on the station anywhere, huge bonus
 
-	var/meals				= 0 //How much food was actively cooked that day
-	var/slimes				= 0 //How many slimes were harvested
-	var/artifacts			= 0 //How many large artifacts were analyzed and activated
 	var/disease_good		= 0 //How many unique diseases currently affecting living mobs of cumulated danger <3
 	var/disease_vaccine		= null //Which many vaccine antibody isolated
 	var/disease_vaccine_score= 0 //the associated score
