@@ -153,6 +153,6 @@
 			score.arenabest += "[x] "
 
 	if(score.badmin_score)
-		score.crewscore = score.badmin_score + (badmin_override ? 0 : score.crewscore)
+		score.crewscore = score.badmin_score + (score.badmin_override ? 0 : score.crewscore)
 
 	return completions
