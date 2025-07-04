@@ -43,11 +43,12 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/disease_bad			= 0 //How many unique diseases currently affecting living mobs of cumulated danger >= 3
 	var/disease_most		= null //Most spread disease
 	var/disease_most_count	= 0 //Most spread disease
+
 	var/turfssingulod		= 0 //Amount of turfs eaten by singularities.
+
 	var/static/list/badvars		= list("deadcrew","deadsilicon","deadaipenalty","mess","litter","powerloss","atmoloss","stuffnotforwarded","disease_bad","turfssingulod")
 
 	//These ones are mainly for the stat panel
-	var/messbonus			= 0 //If there are no messes on the station anywhere, huge bonus
 	var/foodeaten			= 0 //How much food was consumed
 	var/clownabuse			= 0 //How many times a clown was punched, struck or otherwise maligned
 	var/slips				= 0 //How many people have slipped during this round
@@ -155,6 +156,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Rescued Pets:</B> [score.rescuedpets] ([score.rescuedpets*50 + score.rescueianbonus] Points<BR>)"	
 	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
 	dat += "<B>Whole Station Airtight:</B> [score.atmobonus ? "Yes" : "No"] ([score.atmobonus] Points)<BR>"
+	if (score.machineupgrades > 0)
+		dat += "<B>Total Upgraded Machines Rating:</B> [score.machineupgrades] ([score.machineupgrades * 5] Points)<BR>"
 	if (score.disease_vaccine_score > 0)
 		dat += "<B>Isolated Vaccines:</B> [score.disease_vaccine] ([score.disease_vaccine_score] Points)<BR>"
 	if (score.disease_extracted > 0)
