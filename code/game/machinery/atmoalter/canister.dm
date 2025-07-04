@@ -97,7 +97,7 @@
 	can_label = 0
 
 /obj/machinery/portable_atmospherics/canister/cryotheum // see above
-	name = "Canister \[O2ß\]"
+	name = "Canister \[O2β\]"
 	icon_state = "cyan"
 	canister_color = "cyan"
 	can_label = 0
@@ -425,7 +425,7 @@
 				"\[Air\]" = "grey", \
 				"\[CAUTION\]" = "yellow", \
 				"\[Rn\]" = "green", \
-				"\[O2ß\]" = "cyan", \
+				"\[O2β\]" = "cyan", \
 			)
 			var/label = input("Choose canister label", "Gas canister") as null|anything in colors
 			if (label)
