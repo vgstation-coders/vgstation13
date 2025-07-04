@@ -274,7 +274,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>#[i] - </B>[dept_leaderboard[i]] ($[dept_leaderboard[dept_leaderboard[i]]])<BR>"
 	
 	if(score.badmin_score)
-		dat += "<BR><span class='sinister'><B>Mysterious circumstances:</B> [score.badmin_score] Points)</span><BR>"
+		dat += "<BR><span class='sinister'><B>Mysterious circumstances:</B> [score.badmin_score] Points</span><BR>"
 
 	dat += "<HR><BR>"
 	dat += "<B><U>FINAL SCORE: [score.crewscore]</U></B><BR>"
