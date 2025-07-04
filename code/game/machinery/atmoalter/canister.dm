@@ -97,7 +97,7 @@
 	can_label = 0
 
 /obj/machinery/portable_atmospherics/canister/cryotheum // see above
-	name = "Canister \[O2�\]"
+	name = "Canister \[O2ß\]"
 	icon_state = "cyan"
 	canister_color = "cyan"
 	can_label = 0
