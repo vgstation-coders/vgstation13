@@ -130,7 +130,7 @@
 
 /datum/sound_emitter/proc/on_source_moved(atom/mover)
 	if (mover != source)
-		CRASH("Called on_source_moved while mover != source")
+		CRASH("Called on_source_moved while mover ([mover]) != source ([source])")
 	var/turf/T = source.loc
 	if (!isturf(T))
 		T = get_turf(source)
@@ -285,15 +285,15 @@
 	return in_range
 
 // put this somewhere better than here
-/proc/copy_sound(sound/s)
-	if (!s)
+/proc/copy_sound(sound/copy_from)
+	if (!copy_from)
 		return
-	var/sound/S = sound(s.file)
-	S.atom = s.atom
-	S.channel = s.channel
-	S.frequency = s.frequency
-	S.repeat = s.repeat
-	S.status = s.status
-	S.transform = s.transform
-	S.volume = s.volume
-	return S
+	var/sound/new_sound = sound(copy_from.file)
+	new_sound.atom = copy_from.atom
+	new_sound.channel = copy_from.channel
+	new_sound.frequency = copy_from.frequency
+	new_sound.repeat = copy_from.repeat
+	new_sound.status = copy_from.status
+	new_sound.transform = copy_from.transform
+	new_sound.volume = copy_from.volume
+	return new_sound

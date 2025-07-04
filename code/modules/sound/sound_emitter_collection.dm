@@ -12,7 +12,7 @@ var/global/datum/sound_emitter_collection/sound_emitter_collection = new
 
 /datum/sound_emitter_collection/proc/add(datum/sound_emitter/E)
 	if (!E.source)
-		CRASH("Attempted to add a sound_emitter with no source")
+		CRASH("Attempted to add a sound_emitter ([E]) with no source")
 	var/L = emitters_by_type[E.source.type]
 	if (!L)
 		L = emitters_by_type[E.source.type] = list()
@@ -20,7 +20,7 @@ var/global/datum/sound_emitter_collection/sound_emitter_collection = new
 
 /datum/sound_emitter_collection/proc/remove(datum/sound_emitter/E)
 	if (!E.source)
-		CRASH("Attempted to add a sound_emitter with no source")
+		CRASH("Attempted to add a sound_emitter ([E]) with no source")
 	var/L = emitters_by_type[E.source.type]
 	if (!L)
 		return

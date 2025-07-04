@@ -19,7 +19,7 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 	return hash(index(x), index(y), z) // not considering multi-z yet (ever)
 
 /datum/sound_zone_manager/proc/index(v)
-	return (v - (v % cell_size)) / cell_size // floor integer division - is this retarded, does floor(a/b) or round(a/b, -1) do a faster job
+	return floor(v / cell_size)
 
 /datum/sound_zone_manager/proc/get_candidate_hashes(turf/T)
 	var/list/hashes = list()
@@ -37,7 +37,7 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 		CRASH("sound_zone_manager: Attempted to register an emitter with no source")
 	var/turf/T = get_turf(E.source)
 	if (!T)
-		CRASH("sound_zone_manager: Failed to get turf in register_emitter")
+		CRASH("sound_zone_manager: Failed to get turf in register_emitter on sound emitter [E]")
 
 	var/X = index(T.x)
 	var/Y = index(T.y)
@@ -59,7 +59,7 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 /datum/sound_zone_manager/proc/update_emitter(datum/sound_emitter/E, newX, newY, newZ)
 	var/newHash = hash_coord(newX, newY, newZ)
 	if (!E.last_hash)
-		CRASH("Tried to update an emitter with no prior hash")
+		CRASH("Tried to update emitter [E] with no prior hash")
 	if (E.last_hash == newHash)
 		return // nothing to do
 
