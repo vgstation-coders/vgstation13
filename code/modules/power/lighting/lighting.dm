@@ -144,7 +144,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	if(lights_area)
 		lights_area.lights += src
 
-	if(map.broken_lights)
+	if(map.broken_lights && break_chance)
 		if(ticker && ticker.current_state == GAME_STATE_PREGAME)
 			break_chance = clamp(break_chance-(last_crewscore/5000),0,10) // 10% at highest, 0% at lowest
 		if(prob(break_chance))
