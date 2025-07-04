@@ -146,7 +146,7 @@ var/global/list/obj/machinery/light/alllights = list()
 
 	if(map.broken_lights && break_chance)
 		if(ticker && ticker.current_state == GAME_STATE_PREGAME) // only change the chance before roundstart
-			break_chance = clamp(break_chance-(last_crewscore/5000),0,10) // 10% at highest, 0% at lowest
+			break_chance = clamp(break_chance-(last_crewscore/5000),0,break_chance*2) // 10% at highest, 0% at lowest
 		if(prob(break_chance))
 			broken(1)
 
