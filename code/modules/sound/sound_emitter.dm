@@ -186,7 +186,8 @@
 	if (!channel)
 		channel = sound_channel_manager.reserve_channel(src, use_unique_pool)
 		if (!channel)
-			CRASH("Sound emitter was unable to reserve a channel for sound [sounds[active_key].file]")
+			var/sound/S = sounds[active_key]
+			CRASH("Sound emitter was unable to reserve a channel for sound [S.file]")
 		sound_zone_manager.register_emitter(src)
 		init_hearers()
 	update_hearers()
