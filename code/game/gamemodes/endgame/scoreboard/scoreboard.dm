@@ -205,9 +205,9 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += "<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"
 	var/profit = totalfunds - init_station_funds
 	if (profit > 0)
-		dat += "<B>Station Profit:</B> +[num2text(profit,50)]<BR>"
+		dat += "<B>Station Profit:</B> +$[num2text(profit,50)]<BR>"
 	else if (profit < 0)
-		dat += "<B>Station Deficit:</B> [num2text(profit,50)]<BR>"
+		dat += "<B>Station Deficit:</B> -$[num2text(abs(profit),50)]<BR>"
 	if(score.foodeaten > 0)
 		dat += "<B>Food Eaten:</b> [score.foodeaten]<BR>"
 	if(score.clownabuse > 0)
