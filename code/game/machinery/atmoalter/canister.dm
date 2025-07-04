@@ -425,7 +425,7 @@
 				"\[Air\]" = "grey", \
 				"\[CAUTION\]" = "yellow", \
 				"\[Rn\]" = "green", \
-				"\[O2�\]" = "cyan", \
+				"\[O2ß\]" = "cyan", \
 			)
 			var/label = input("Choose canister label", "Gas canister") as null|anything in colors
 			if (label)
