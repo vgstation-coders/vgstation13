@@ -42,7 +42,6 @@
 			I.brute_damage = brute_damage
 			I.electronics_damage = electronics_damage
 			I.isupgrade = upgraded
-		return wrapped
 
 /datum/robot_component/proc/destroy()
 	var/obj/item/broken_device/G = new/obj/item/broken_device
@@ -115,17 +114,7 @@
 	owner.updateicon()
 
 /datum/robot_component/cell/install(var/mob/user,var/obj/item/robot_parts/robot_component/I)
-	user.drop_item(I, src)
-	if(owner.cell)
-		to_chat(user, "You swap the power cell within with the new cell in your hand.")
-		var/obj/item/weapon/cell/oldpowercell = owner.cell
-		oldpowercell.electronics_damage = electronics_damage
-		oldpowercell.brute_damage = brute_damage
-		user.put_in_hands(oldpowercell)
-		if(owner.can_diagnose())
-			to_chat(owner, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
-	else
-		to_chat(user, "You insert the power cell.")
+	to_chat(user, "You insert \the [I].")
 	owner.cell = I
 	installed = COMPONENT_INSTALLED
 	wrapped = I
@@ -142,6 +131,15 @@
 		to_chat(src, "<span class='danger'>ERRORERRORERROR</span>")
 		spawn(2 SECONDS)
 			to_chat(src, "<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
+
+/datum/robot_component/cell/uninstall(var/mob/user)
+	installed = COMPONENT_MISSING
+	if(owner.cell)
+		to_chat(user, "You remove \the [owner.cell].")
+		owner.cell.electronics_damage = electronics_damage
+		owner.cell.brute_damage = brute_damage
+		if(owner.can_diagnose())
+			to_chat(owner, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
 
 /datum/robot_component/radio
 	name = "radio"

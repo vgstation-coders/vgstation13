@@ -707,7 +707,11 @@
 			to_chat(user, "Close the panel first.")
 			return
 		var/datum/robot_component/C = components["power cell"]
-		C.install(user)
+		user.drop_item(W, src)
+		if(cell)
+			C.uninstall(user)
+			user.put_in_hands(cell)
+		C.install(user,W)
 		updateicon()
 
 	else if(iswiretool(W))
