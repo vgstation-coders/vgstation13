@@ -37,7 +37,6 @@
 	var/mob/living/silicon/ai/connected_ai = null
 	var/AIlink = TRUE //Do we start linked to an AI?
 
-	var/obj/item/weapon/cell/cell = null
 	var/cell_type = /obj/item/weapon/cell/high/cyborg //The cell_type we're actually using.
 
 	var/obj/machinery/camera/camera = null
@@ -123,13 +122,10 @@
 
 	initialize_components()
 	// Create all the robot parts.
-	for(var/V in components) if(V != "power cell")
+	for(var/V in components)
 		var/datum/robot_component/C = components[V]
 		C.installed = COMPONENT_INSTALLED
 		C.wrapped = new C.external_type
-
-	if(!cell)
-		cell = new cell_type(src)
 
 	updateicon()
 
@@ -145,11 +141,6 @@
 		spawn(1)
 			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>", category=MIND_MEMORY_GENERAL, forced=TRUE)
 		stored_freqs = 1
-
-	if(cell)
-		var/datum/robot_component/cell_component = components["power cell"]
-		cell_component.wrapped = cell
-		cell_component.installed = COMPONENT_INSTALLED
 
 	playsound(src, startup_sound, 75, startup_vary)
 
@@ -419,6 +410,7 @@
 
 // this function displays the cyborgs current cell charge in the stat panel
 /mob/living/silicon/robot/proc/show_cell_power()
+	var/obj/item/weapon/cell/cell = get_cell()
 	if(cell)
 		stat(null, text("Charge Left: [cell.charge]/[cell.maxcharge]"))
 	else
@@ -653,7 +645,7 @@
 
 	else if(iscrowbar(W))	// crowbar means open or close the cover
 		if(opened)
-			if(cell)
+			if(get_cell())
 				to_chat(user, "You close the cover.")
 				if(can_diagnose())
 					to_chat(src, "<span class='info' style=\"font-family:Courier\">Cover closed.</span>")
@@ -708,6 +700,7 @@
 			return
 		var/datum/robot_component/C = components["power cell"]
 		user.drop_item(W, src)
+		var/obj/item/weapon/cell/cell = get_cell()
 		if(cell)
 			C.uninstall(user)
 			user.put_in_hands(cell)
@@ -720,14 +713,14 @@
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(W.is_screwdriver(user) && opened && !cell)	// haxing
+	else if(W.is_screwdriver(user) && opened && !get_cell())	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		if(can_diagnose())
 			to_chat(src, "<span class='info' style=\"font-family:Courier\">Internal wiring [wiresexposed ? "exposed" : "unexposed"].</span>")
 		updateicon()
 
-	else if(W.is_screwdriver(user) && opened && cell)	// radio
+	else if(W.is_screwdriver(user) && opened && get_cell())	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
 			if(can_diagnose())
@@ -896,6 +889,7 @@
 
 	if(opened && !wiresexposed && (!istype(user, /mob/living/silicon)))
 		var/datum/robot_component/cell_component = components["power cell"]
+		var/obj/item/weapon/cell/cell = get_cell()
 		if(cell)
 			cell_component.uninstall(user,TRUE)
 			cell.updateicon()
@@ -969,6 +963,7 @@
 /mob/living/silicon/robot/proc/updateicon(var/overlay_layer = ABOVE_LIGHTING_LAYER, var/overlay_plane = ABOVE_LIGHTING_PLANE)
 	overlays.Cut()
 	update_fire()
+	var/obj/item/weapon/cell/cell = get_cell()
 	if(!stat && cell != null)
 		eyes = image(icon,"eyes-[icon_state]", overlay_layer)
 		eyes.plane = overlay_plane
@@ -1261,10 +1256,12 @@
 		component.electronics_damage = 0
 		component.brute_damage = 0
 		component.installed = COMPONENT_INSTALLED
-	if(!cell)
-		cell = new(src)
-	cell.maxcharge = max(15000, cell.maxcharge)
-	cell.charge = cell.maxcharge
+		if(C == "power cell")
+			if(!component.wrapped)
+				component.wrapped = new(src)
+			var/obj/item/weapon/cell/cell = component.wrapped
+			cell.maxcharge = max(15000, cell.maxcharge)
+			cell.charge = cell.maxcharge
 	..()
 	updatehealth()
 
@@ -1305,7 +1302,6 @@
 	var/datum/robot_component/C = components["power cell"]
 	if(C)
 		return C.wrapped
-	return cell
 
 /mob/living/silicon/robot/proc/toggle_modulelock()
 	modulelock = !modulelock
@@ -1313,7 +1309,8 @@
 
 //Currently only used for borg movement, to avoid awkward situations where borgs with RTG or basic cells are always slowed down
 /mob/living/silicon/robot/proc/get_percentage_power_for_movement()
-	return clamp(round(cell.maxcharge/4), 0, SILI_LOW_TRIGGER)
+	var/obj/item/weapon/cell/cell = get_cell()
+	return cell ? clamp(round(cell.maxcharge/4), 0, SILI_LOW_TRIGGER) : 0
 
 /mob/living/silicon/robot/ignite()
 	if(module && locate(/obj/item/borg/fire_shield, module.modules))

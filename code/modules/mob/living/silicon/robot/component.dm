@@ -18,8 +18,9 @@
 /datum/robot_component/New(mob/living/silicon/robot/R)
 	src.owner = R
 
-/datum/robot_component/proc/install(var/mob/user,var/obj/item/robot_parts/robot_component/I)
-	if(istype(I))
+/datum/robot_component/proc/install(var/mob/user,var/obj/item/W)
+	if(istype(W,/obj/item/robot_parts/robot_component))
+		var/obj/item/robot_parts/robot_component/I = W
 		installed = COMPONENT_INSTALLED
 		wrapped = I
 		electronics_damage = I.electronics_damage
@@ -86,8 +87,9 @@
 	if(toggled == FALSE)
 		powered = FALSE
 		return
-	if(owner.cell.charge >= energy_consumption)
-		owner.cell.use(energy_consumption)
+	var/obj/item/weapon/cell/cell = owner.get_cell()
+	if(cell && cell.charge >= energy_consumption)
+		cell.use(energy_consumption)
 		powered = TRUE
 	else
 		powered = FALSE
@@ -108,42 +110,47 @@
 	name = "power cell"
 	max_damage = 50
 
+/datum/robot_component/cell/New(mob/living/silicon/robot/R)
+	. = ..()
+	external_type = R.cell_type
+
 /datum/robot_component/cell/destroy()
 	..()
-	owner.cell = null
 	owner.updateicon()
 
-/datum/robot_component/cell/install(var/mob/user,var/obj/item/robot_parts/robot_component/I)
-	to_chat(user, "You insert \the [I].")
-	owner.cell = I
-	installed = COMPONENT_INSTALLED
-	wrapped = I
-	electronics_damage = owner.cell.electronics_damage
-	brute_damage = owner.cell.brute_damage
-	if(owner.can_diagnose())
-		to_chat(src, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [owner.cell.name]. Charge: [owner.cell.charge] out of [owner.cell.maxcharge].</span>")
-	if(owner.cell.occupant)
-		to_chat(owner.cell.occupant,"<span class='notice'>You are now inside \the [src], in control of its targeting.</span>")
-		owner.pulsecompromised = 1
-		owner.cell.occupant.loc = src
-		owner.cell.occupant.current_robot = src
-		owner.cell.occupant = null
-		to_chat(src, "<span class='danger'>ERRORERRORERROR</span>")
-		spawn(2 SECONDS)
-			to_chat(src, "<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
+/datum/robot_component/cell/install(var/mob/user,var/obj/item/W)
+	if(istype(W,/obj/item/weapon/cell))
+		var/obj/item/weapon/cell/I = W
+		to_chat(user, "You insert \the [I].")
+		installed = COMPONENT_INSTALLED
+		wrapped = I
+		electronics_damage = I.electronics_damage
+		brute_damage = I.brute_damage
+		if(owner.can_diagnose())
+			to_chat(src, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [I.name]. Charge: [I.charge] out of [I.maxcharge].</span>")
+		if(I.occupant)
+			to_chat(I.occupant,"<span class='notice'>You are now inside \the [src], in control of its targeting.</span>")
+			owner.pulsecompromised = 1
+			I.occupant.loc = src
+			I.occupant.current_robot = src
+			I.occupant = null
+			to_chat(src, "<span class='danger'>ERRORERRORERROR</span>")
+			spawn(2 SECONDS)
+				to_chat(src, "<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
 
 /datum/robot_component/cell/uninstall(var/mob/user,var/loud = FALSE)
 	installed = COMPONENT_MISSING
-	if(owner.cell)
-		if(loud)
-			user.visible_message("<span class='warning'>[user] removes [owner]'s [owner.cell.name].</span>", \
-			"<span class='notice'>You remove [owner]'s [owner.cell.name].</span>")
-		else
-			to_chat(user, "You remove \the [owner.cell].")
-		owner.cell.electronics_damage = electronics_damage
-		owner.cell.brute_damage = brute_damage
-		if(owner.can_diagnose())
-			to_chat(owner, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
+	if(loud)
+		user.visible_message("<span class='warning'>[user] removes [owner]'s [wrapped.name].</span>", \
+		"<span class='notice'>You remove [owner]'s [wrapped.name].</span>")
+	else
+		to_chat(user, "You remove \the [wrapped].")
+	if(owner.can_diagnose())
+		to_chat(owner, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
+	if(istype(wrapped,/obj/item/weapon/cell))
+		var/obj/item/weapon/cell/I = wrapped
+		I.electronics_damage = electronics_damage
+		I.brute_damage = brute_damage
 
 /datum/robot_component/radio
 	name = "radio"

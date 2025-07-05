@@ -275,8 +275,9 @@
 /obj/item/weapon/melee/baton/loaded/borg/deductcharge(var/chrgdeductamt)
 	if (isrobot(loc))
 		var/mob/living/silicon/robot/R = loc
-		if (R.cell)
-			R.cell.use(hitcost)
+		var/obj/item/weapon/cell/Rcell = R.get_cell()
+		if (Rcell)
+			Rcell.use(hitcost)
 
 /obj/item/weapon/melee/baton/harm
 	desc = "A baton for permanently incapacitating people with."
