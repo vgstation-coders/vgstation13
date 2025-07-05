@@ -90,8 +90,10 @@
 	// Delete the items or they'll all pile up in a single tile and lag
 	// skipnaming disables namepick on New(). It's annoying as fuck on malf.  Later on, we enable or disable namepick.
 	if(R)
-		R.cell.maxcharge = robot_cell_charge
-		R.cell.charge = robot_cell_charge
+		var/obj/item/weapon/cell/Rcell = R.get_cell()
+		if (Rcell)
+			Rcell.maxcharge = robot_cell_charge
+			Rcell.charge = robot_cell_charge
 
 	 	// So he can't jump out the gate right away.
 		R.SetKnockdown(5)
