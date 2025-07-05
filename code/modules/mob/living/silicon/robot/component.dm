@@ -208,7 +208,13 @@
 							shouldplaysound = TRUE //Only play the sound when parts are actually replaced!
 							break
 		if(shouldplaysound)
-			W.play_rped_sound()*/
+			W.play_rped_sound()
+		else
+			to_chat(user, "<span class='notice'>Following components detected in [src]:</span>")
+			for(var/V2 in components)
+				var/datum/robot_component/C = components[V2]
+				if(C.wrapped)
+					to_chat(user, "<span class='notice'>    [C.wrapped.name]</span>")*/
 	return
 
 /obj/item/broken_device
