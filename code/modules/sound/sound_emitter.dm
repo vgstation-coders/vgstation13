@@ -258,15 +258,14 @@
 	var/turf/t = get_turf(a)
 	if (!t)
 		return 0 // no sound for the damned
-	var/datum/gas_mixture/current_air = t.return_air()
-	var/pressure
-	if (current_air)
-		pressure = current_air.return_pressure()
-	else
-		return 0 // damned
-	if (pressure < MIN_SOUND_PRESSURE)
-		return 0 // also damned
-	return min(pressure / ONE_ATMOSPHERE, 1)
+	if (!istype(t, /turf/simulated))
+		return 0 //damned
+	var/turf/simulated/sim = t
+	if (!sim.zone)
+		return 0 //damned
+	if (!sim.zone.air)
+		return 0 //damned
+	return sim.zone.air.sound_coeff
 
 /datum/sound_emitter/proc/update_params_for_player(mob/player)
 	if (!channel || !active_key)
