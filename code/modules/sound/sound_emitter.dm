@@ -18,6 +18,9 @@
 	var/last_hash = null
 	var/use_unique_pool = TRUE
 
+	// update driven by subsystem via update_active_sound_param
+	var/env_volume_coeff = 1
+
 	var/datum/sound_zone_manager/szm // not strictly necessary but its here for easy debugging in this early stage
 	var/datum/sound_channel_manager/scm // also not strictly necessary
 
@@ -77,7 +80,8 @@
 	S.wait = 0
 	if (interrupt)
 		stop()
-	S = apply_env_effects(S)
+	// reduce volume if emitter is in low pressure
+	S.volume *= turf_volume_coeff(source)
 	if (!S.volume)
 		return
 	var/vicinity = players_in_range()
@@ -93,6 +97,7 @@
 	if (!active_key)
 		return
 	var/sound/S = sounds[active_key]
+	env_volume_coeff = turf_volume_coeff(source)
 	S = apply_env_effects(copy_sound(S))
 	S.atom = source
 
@@ -248,8 +253,7 @@
 	return s
 
 /datum/sound_emitter/proc/apply_env_effects(sound/s)
-	var/p_effect = turf_volume_coeff(source)
-	s.volume *= p_effect
+	s.volume *= env_volume_coeff
 	return s
 
 /datum/sound_emitter/proc/turf_volume_coeff(atom/a)
