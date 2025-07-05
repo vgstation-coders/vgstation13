@@ -225,11 +225,8 @@
 
 	if(!power_supply)
 		return 0 //sanity
-	if(isrobot(src.loc))
-		var/mob/living/silicon/robot/R = src.loc
-		if(R && R.cell)
-			R.cell.use(charge_cost) 		//Take power from the borg...
-			power_supply.give(charge_cost)	//... to recharge the shot
+	if(use_borg_cellcharge(src.loc,charge_cost)) //Take power from the borg...
+		power_supply.give(charge_cost) // ...to recharge the shot
 
 	update_icon()
 	return 1
@@ -263,11 +260,9 @@
 /obj/item/weapon/gun/energy/laser/cannon/cyborg/process_chambered()
 	if(in_chamber)
 		return 1
-	if(isrobot(src.loc))
-		var/mob/living/silicon/robot/R = src.loc
-		if(R && R.cell && R.cell.use(250))
-			in_chamber = new/obj/item/projectile/beam/heavylaser(src)
-			return 1
+	if(use_borg_cellcharge(src.loc,250))
+		in_chamber = new/obj/item/projectile/beam/heavylaser(src)
+		return 1
 	return 0
 
 /obj/item/weapon/gun/energy/laser/cannon/cyborg/restock()

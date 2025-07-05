@@ -287,4 +287,4 @@ var/static/list/mat2type = list(
 	return 0
 
 /obj/item/device/material_synth/robot/TakeCost(var/spawned, var/modifier, mob/user)
-	return use_borg_cellcharge(spawned * modifier * MAT_SYNTH_ROBO)
+	return use_borg_cellcharge(user,spawned * modifier * MAT_SYNTH_ROBO)
