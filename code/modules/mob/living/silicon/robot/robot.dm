@@ -1298,10 +1298,40 @@
 /mob/living/silicon/robot/hasFullAccess()
 	return FALSE
 
+/mob/living/silicon/robot/proc/add_cell(var/obj/item/weapon/cell/C,var/mob/user)
+	var/datum/robot_component/C = components["power cell"]
+	C.install(user,C)
+
+/mob/living/silicon/robot/proc/clear_cell(var/obj/item/weapon/cell/C,var/mob/user)
+	var/datum/robot_component/C = components["power cell"]
+	C.wrapped = null
+
 /mob/living/silicon/robot/get_cell()
 	var/datum/robot_component/C = components["power cell"]
 	if(C)
 		return C.wrapped
+
+/mob/living/silicon/robot/get_cell_charge()
+	var/obj/item/weapon/cell/C = get_cell()
+	return C ? C.charge : 0
+
+/mob/living/silicon/robot/get_cell_charge_fraction()
+	var/obj/item/weapon/cell/C = get_cell()
+	return C ? C.charge/C.maxcharge : 0
+
+/mob/living/silicon/robot/get_cell_maxcharge()
+	var/obj/item/weapon/cell/C = get_cell()
+	return C ? C.maxcharge : 0
+
+/mob/living/silicon/robot/use_cell_charge(var/amount)
+	var/obj/item/weapon/cell/C = get_cell()
+	if(C)
+		C.use(amount)
+
+/mob/living/silicon/robot/set_cell_charge(var/amount)
+	var/obj/item/weapon/cell/C = get_cell()
+	if(C)
+		C.charge = amount
 
 /mob/living/silicon/robot/proc/toggle_modulelock()
 	modulelock = !modulelock
@@ -1309,8 +1339,7 @@
 
 //Currently only used for borg movement, to avoid awkward situations where borgs with RTG or basic cells are always slowed down
 /mob/living/silicon/robot/proc/get_percentage_power_for_movement()
-	var/obj/item/weapon/cell/cell = get_cell()
-	return cell ? clamp(round(cell.maxcharge/4), 0, SILI_LOW_TRIGGER) : 0
+	clamp(round(get_cell_maxcharge()/4), 0, SILI_LOW_TRIGGER)
 
 /mob/living/silicon/robot/ignite()
 	if(module && locate(/obj/item/borg/fire_shield, module.modules))

@@ -132,11 +132,11 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	else if(istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
 		if(wiresexposed)
 			to_chat(user, "Close the panel first.")
-		else if(cell)
+		else if(get_cell())
 			to_chat(user, "There is a power cell already installed.")
 		else
 			user.drop_item(W, src)
-			cell = W
+			add_cell(W,user)
 			to_chat(user, "You insert the power cell.")
 		updateicon()
 
@@ -146,12 +146,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(W.is_screwdriver(user) && opened && !cell)	// haxing
+	else if(W.is_screwdriver(user) && opened && !get_cell())	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		updateicon()
 
-	else if(W.is_screwdriver(user) && opened && cell)	// radio
+	else if(W.is_screwdriver(user) && opened && get_cell())	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
 		else
@@ -189,12 +189,13 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	add_fingerprint(user)
 
 	if(opened && !wiresexposed && (!isMoMMI(user)))
+		var/obj/item/weapon/cell/cell = get_cell()
 		if(cell)
 			cell.updateicon()
 			cell.add_fingerprint(user)
 			user.put_in_active_hand(cell)
 			to_chat(user, "You remove \the [cell].")
-			cell = null
+			clear_cell()
 			updateicon()
 			return
 
