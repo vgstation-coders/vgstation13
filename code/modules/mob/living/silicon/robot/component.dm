@@ -58,7 +58,6 @@
 
 	// The thing itself isn't there anymore, but some fried remains are.
 	installed = COMPONENT_BROKEN
-	uninstall()
 	if(owner.can_diagnose())
 		to_chat(owner, "<span class='alert' style=\"font-family:Courier\">Warning: Critical damage to [brokenpartname] sustained. Component offline.</span>")
 
@@ -114,6 +113,35 @@
 	..()
 	owner.cell = null
 	owner.updateicon()
+
+/datum/robot_component/cell/install(var/mob/user,var/obj/item/robot_parts/robot_component/I)
+	user.drop_item(I, src)
+	if(owner.cell)
+		to_chat(user, "You swap the power cell within with the new cell in your hand.")
+		var/obj/item/weapon/cell/oldpowercell = owner.cell
+		oldpowercell.electronics_damage = electronics_damage
+		oldpowercell.brute_damage = brute_damage
+		user.put_in_hands(oldpowercell)
+		if(owner.can_diagnose())
+			to_chat(owner, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
+	else
+		to_chat(user, "You insert the power cell.")
+	owner.cell = I
+	installed = COMPONENT_INSTALLED
+	wrapped = I
+	electronics_damage = owner.cell.electronics_damage
+	brute_damage = owner.cell.brute_damage
+	if(owner.can_diagnose())
+		to_chat(src, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [owner.cell.name]. Charge: [owner.cell.charge] out of [owner.cell.maxcharge].</span>")
+	if(owner.cell.occupant)
+		to_chat(owner.cell.occupant,"<span class='notice'>You are now inside \the [src], in control of its targeting.</span>")
+		owner.pulsecompromised = 1
+		owner.cell.occupant.loc = src
+		owner.cell.occupant.current_robot = src
+		owner.cell.occupant = null
+		to_chat(src, "<span class='danger'>ERRORERRORERROR</span>")
+		spawn(2 SECONDS)
+			to_chat(src, "<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
 
 /datum/robot_component/radio
 	name = "radio"
