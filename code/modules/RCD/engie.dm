@@ -380,7 +380,7 @@
 	else
 		use_energy(c, user)
 		
-		var/cellcharge = get_borg_cellcharge()
+		cellcharge = get_borg_cellcharge()
 		matter= cellcharge ? cellcharge / cell_power_per_energy : 0
 		
 		rebuild_ui()
