@@ -327,7 +327,6 @@
 	build_icon()
 	src.use_power = MACHINE_POWER_USE_ACTIVE
 	if(isrobot(R))
-		var/mob/living/silicon/robot/RR = R
 		for(var/obj/O in upgrade_holder)
 			if(istype(O, /obj/item/weapon/cell))
 				var/obj/item/weapon/cell/some_cell = O
