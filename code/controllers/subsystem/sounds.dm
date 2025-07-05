@@ -13,4 +13,12 @@ var/datum/subsystem/sounds/SSsounds
 	NEW_SS_GLOBAL(SSsounds)
 
 /datum/subsystem/sounds/fire(resumed = FALSE)
-	sound_zone_manager.update_audible_emitters()
+	var/list/done = list()
+	for (var/mob/player in player_list)
+		for (var/datum/sound_emitter/E in player.current_sound_emitters)
+			if (done[E]) // only need to run update_active_sound_param once per emitter
+				continue
+			spawn()
+				// recalc volume and such for when player/emitter isn't raising move events
+				E.update_active_sound_param()
+				done[E] = TRUE
