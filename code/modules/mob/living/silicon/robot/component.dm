@@ -36,7 +36,7 @@
 	if(wrapped)
 		to_chat(user, "You remove \the [wrapped].")
 		if(owner.can_diagnose())
-			to_chat(owner, "<span class='info' style=\"font-family:Courier\">[istype(wrapped, /obj/item/broken_device) ? "Destroyed [src]" : "Functional [wrapped.name]"] removed.</span>")
+			to_chat(owner, "<span class='info' style=\"font-family:Courier\">[installed == COMPONENT_BROKEN ? "Destroyed [src]" : "Functional [wrapped.name]"] removed.</span>")
 		if(istype(wrapped,/obj/item/robot_parts/robot_component))
 			var/obj/item/robot_parts/robot_component/I = wrapped
 			I.brute_damage = brute_damage
