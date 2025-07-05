@@ -35,12 +35,9 @@
 /obj/item/weapon/gun/energy/pulse_rifle/cyborg/process_chambered()
 	if(in_chamber)
 		return 1
-	if(isrobot(src.loc))
-		var/mob/living/silicon/robot/R = src.loc
-		if(R && R.cell)
-			R.cell.use(charge_cost)
-			in_chamber = new/obj/item/projectile/beam(src)
-			return 1
+	if(use_borg_cellcharge(src.loc,charge_cost))
+		in_chamber = new/obj/item/projectile/beam(src)
+		return 1
 	return 0
 
 

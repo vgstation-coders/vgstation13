@@ -45,11 +45,8 @@
 
 	if(!power_supply)
 		return 0 //sanity
-	if(isrobot(src.loc))
-		var/mob/living/silicon/robot/R = src.loc
-		if(R && R.cell)
-			R.cell.use(charge_cost) 		//Take power from the borg...
-			power_supply.give(charge_cost)	//... to recharge the shot
+	if(use_borg_cellcharge(src.loc,charge_cost)) //Take power from the borg...
+		power_supply.give(charge_cost) // ...to recharge the shot
 
 	update_icon()
 	return 1

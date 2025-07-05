@@ -232,11 +232,8 @@
 /obj/item/device/rcd/borg/engineering/attack_self(var/mob/user)
 	if(!isrobot(user))
 		return
-	var/mob/living/silicon/robot/R = user
-	if(!R.cell)
-		matter=0
-	else
-		matter=R.cell.charge / cell_power_per_energy
+	var/cellcharge = get_borg_cellcharge()
+	matter= cellcharge ? cellcharge / cell_power_per_energy : 0
 
 	rebuild_ui()	
 	interface.show(user)
@@ -374,11 +371,8 @@
 
 	if(!isrobot(user))
 		return 1
-	var/mob/living/silicon/robot/R = user
-	if(!R.cell)
-		matter=0
-	else
-		matter=R.cell.charge / cell_power_per_energy
+	var/cellcharge = get_borg_cellcharge()
+	matter= cellcharge ? cellcharge / cell_power_per_energy : 0
 
 	var/c=selected_schem.build(A,user)
 	if(!c)
@@ -386,10 +380,8 @@
 	else
 		use_energy(c, user)
 		
-		if(!R.cell)
-			matter=0
-		else
-			matter=R.cell.charge / cell_power_per_energy
+		var/cellcharge = get_borg_cellcharge()
+		matter= cellcharge ? cellcharge / cell_power_per_energy : 0
 		
 		rebuild_ui()
 	return 1	

@@ -317,7 +317,7 @@
 	if(!cellcharge)
 		return
 
-	return cellcharge ? cellcharge / cell_power_per_energy
+	return cellcharge / cell_power_per_energy
 
 //Matter based RCDs.
 /obj/item/device/rcd/matter
