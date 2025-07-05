@@ -42,7 +42,15 @@
 	var/obj/machinery/camera/camera = null
 
 	// Components are basically robot organs.
-	var/list/components = list()
+	var/list/components = list(
+		"actuator" = /datum/robot_component/actuator
+		"radio" = /datum/robot_component/radio
+		"power cell" = /datum/robot_component/cell
+		"diagnosis unit" = /datum/robot_component/diagnosis_unit
+		"camera" = /datum/robot_component/camera
+		"comms" = /datum/robot_component/binary_communication
+		"armour" = /datum/robot_component/armour
+	)
 	var/component_extension = null
 
 	var/obj/item/device/mmi/mmi = null
@@ -120,9 +128,9 @@
 		if(wires.IsCameraCut()) // 5 = BORG CAMERA
 			camera.status = 0
 
-	initialize_components()
 	// Create all the robot parts.
 	for(var/V in components)
+		components[V] = new components[V](src)
 		var/datum/robot_component/C = components[V]
 		C.installed = COMPONENT_INSTALLED
 		C.wrapped = new C.external_type
