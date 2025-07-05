@@ -204,3 +204,20 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 			E.on_exit_range(mover)
 
 	mover.current_sound_emitters = fresh.Copy()
+
+// this nesting looks terrifying but the innermost block should only be hit a small handful of times
+/datum/sound_zone_manager/proc/update_audible_emitters()
+	var/list/done = list()
+	for (var/key in listener_buckets)
+		var/list/L = listener_buckets[key]
+		// 97% of the time L will be empty
+		// you can think of a bucket as roughly a screen so sometimes when players are VERY grouped up
+		//  you'll get at most that number of players in a single bucket
+		for (var/mob/player in L)
+			for (var/datum/sound_emitter/E in player.current_sound_emitters)
+				if (done[E]) // only need to run update_active_sound_param once per emitter
+					continue
+				spawn()
+					// recalc volume and such for when player/emitter isn't raising move events
+					E.update_active_sound_param()
+					done[E] = TRUE
