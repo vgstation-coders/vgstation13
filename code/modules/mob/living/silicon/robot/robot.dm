@@ -1302,6 +1302,9 @@
 	return FALSE
 
 /mob/living/silicon/robot/get_cell()
+	var/datum/robot_component/C = components["power cell"]
+	if(C)
+		return C.wrapped
 	return cell
 
 /mob/living/silicon/robot/proc/toggle_modulelock()
