@@ -130,7 +130,8 @@
 
 	// Create all the robot parts.
 	for(var/V in components)
-		components[V] = new components[V](src)
+		var/type = components[V]
+		components[V] = new type(src)
 		var/datum/robot_component/C = components[V]
 		C.installed = COMPONENT_INSTALLED
 		C.wrapped = new C.external_type
