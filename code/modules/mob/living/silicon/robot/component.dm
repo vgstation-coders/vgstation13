@@ -181,8 +181,8 @@
 	var/datum/robot_component/C = components[module_name]
 	return C && C.installed == COMPONENT_INSTALLED && C.toggled && C.is_powered()
 
-/mob/living/silicon/robot/proc/exchange_parts(mob/user, obj/item/weapon/storage/bag/gadgets/part_replacer/W)
-	/*if (W.bluespace || wiresexposed || opened)
+/*/mob/living/silicon/robot/proc/exchange_parts(mob/user, obj/item/weapon/storage/bag/gadgets/part_replacer/W)
+	if (W.bluespace || wiresexposed || opened)
 		var/shouldplaysound = FALSE
 		for(var/V in components)
 			var/datum/robot_component/C = components[V]
@@ -215,7 +215,6 @@
 				var/datum/robot_component/C = components[V2]
 				if(C.wrapped)
 					to_chat(user, "<span class='notice'>    [C.wrapped.name]</span>")*/
-	return
 
 /obj/item/broken_device
 	name = "broken component"
