@@ -265,11 +265,7 @@
 	if (!istype(t, /turf/simulated))
 		return 0 //damned
 	var/turf/simulated/sim = t
-	if (!sim.zone)
-		return 0 //damned
-	if (!sim.zone.air)
-		return 0 //damned
-	return sim.zone.air.sound_coeff
+	return sim.zone?.air?.sound_coeff
 
 /datum/sound_emitter/proc/update_params_for_player(mob/player)
 	if (!channel || !active_key)
