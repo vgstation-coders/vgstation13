@@ -6,6 +6,7 @@
 
 /mob
 	var/list/current_sound_emitters = list()
+	var/last_sound_zone_hash = null
 
 /datum/sound_emitter
 	var/atom/source = null
@@ -111,7 +112,9 @@
 
 /datum/sound_emitter/proc/update_source(atom/new_source)
 	sound_emitter_collection.remove(src)
-	sound_zone_manager.unregister_emitter(src)
+	if (channel)
+		sound_zone_manager.unregister_emitter(src)
+	//old source should no longer fire move events
 	source.unregister_event(/event/moved, src, nameof(src::on_source_moved()))
 
 	source = new_source
@@ -121,7 +124,9 @@
 	update_active_sound_param()
 
 	sound_emitter_collection.add(src)
-	sound_zone_manager.register_emitter(src)
+	if (channel)
+		sound_zone_manager.register_emitter(src)
+	//new source
 	source.register_event(/event/moved, src, nameof(src::on_source_moved()))
 
 /*
@@ -147,6 +152,11 @@
 		var/sound/S = sounds[active_key]
 		if (!S)
 			CRASH("Sound emitter update_hearers called for key [active_key] on channel [channel.value], but sound does not exist.")
+		// important note - clearing SOUND_UPDATE means that the sound will play FROM THE BEGINNING.
+		// this system was originally built with short repeating sounds in mind (machine hum, etc) however
+		// if you try to do something longer and more varied like music then this is very noticeable and unwanted.
+		// such support goes beyond scope for v1 but may be solvable using sound.len, tracking playback progress and modifying
+		// S.offset to start at the correct point
 		S.status &= ~SOUND_UPDATE // clear update status for new hearers, else they cant hear it lmao
 		S.channel = channel.value
 		S = apply_env_effects(copy_sound(S))
