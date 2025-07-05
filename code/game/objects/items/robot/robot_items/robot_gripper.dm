@@ -175,13 +175,14 @@
 
 	else if(isrobot(target))//Robots repairing themselves? What can go wrong.
 		var/mob/living/silicon/robot/A = target
-		if(A.opened && A.cell)
-			if(!gripper_safety_check(user, A.cell))//Only allowed if the user pass the safety check.
-				if(grip_item(A.cell, user, FALSE))
-					A.cell.update_icon()
+		var/obj/item/weapon/cell/cell = A.get_cell()
+		if(A.opened && cell)
+			if(!gripper_safety_check(user, cell))//Only allowed if the user pass the safety check.
+				if(grip_item(cell, user, FALSE))
+					cell.update_icon()
 					A.updateicon()
-					A.cell = null
-					user.visible_message("<span class='danger'>[user] removes the power cell from [A]!</span>", "You remove the power cell.")
+					cell = null
+					user.visible_message("<span class='danger'>[user] removes \the [cell] from [A]!</span>", "You remove \the [cell].")
 
 /obj/item/weapon/gripper/chemistry //Used to handle glass containers and pills.
 	name = "chemistry gripper"
