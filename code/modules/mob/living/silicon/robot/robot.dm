@@ -1311,24 +1311,24 @@
 	if(cellcomp)
 		return cellcomp.wrapped
 
-/mob/living/silicon/robot/get_cell_charge()
+/mob/living/silicon/robot/proc/get_cell_charge()
 	var/obj/item/weapon/cell/cell = get_cell()
 	return cell ? cell.charge : 0
 
-/mob/living/silicon/robot/get_cell_charge_fraction()
+/mob/living/silicon/robot/proc/get_cell_charge_fraction()
 	var/obj/item/weapon/cell/cell = get_cell()
 	return cell ? cell.charge/cell.maxcharge : 0
 
-/mob/living/silicon/robot/get_cell_maxcharge()
+/mob/living/silicon/robot/proc/get_cell_maxcharge()
 	var/obj/item/weapon/cell/cell = get_cell()
 	return cell ? cell.maxcharge : 0
 
-/mob/living/silicon/robot/use_cell_charge(var/amount)
+/mob/living/silicon/robot/proc/use_cell_charge(var/amount)
 	var/obj/item/weapon/cell/cell = get_cell()
 	if(cell)
 		cell.use(amount)
 
-/mob/living/silicon/robot/drain_cell()
+/mob/living/silicon/robot/proc/drain_cell()
 	var/obj/item/weapon/cell/cell = get_cell()
 	if(cell)
 		cell.charge = 0
