@@ -210,6 +210,7 @@
 			if(initial(I.isupgrade))
 				I = new NC
 				C.installed = COMPONENT_INSTALLED
+				C.upgraded = TRUE
 				qdel(C.wrapped)
 				C.wrapped = I
 				C.vulnerability = I.vulnerability
@@ -616,20 +617,9 @@
 		for(var/V in components)
 			var/datum/robot_component/C = components[V]
 			if(!C.installed && istype(W, C.external_type))
-				var/obj/item/robot_parts/robot_component/I = W
-				C.installed = COMPONENT_INSTALLED
-				C.wrapped = W
-				C.electronics_damage = I.electronics_damage
-				C.brute_damage = I.brute_damage
-				C.vulnerability = I.vulnerability
-				C.install()
+				C.install(user,W)
 				user.drop_item(W)
 				W.forceMove(null)
-
-				to_chat(usr, "<span class='notice'>You install the [W.name].</span>")
-				if(can_diagnose())
-					to_chat(src, "<span class='info' style=\"font-family:Courier\">New [W.name] installed.</span>")
-
 				return
 
 	if(iswelder(W))
@@ -698,24 +688,9 @@
 				if(!remove)
 					return
 				var/datum/robot_component/C = components[remove]
-				if(istype(C.wrapped, /obj/item/broken_device))
-					var/obj/item/broken_device/I = C.wrapped
-					to_chat(user, "You remove \the [I].")
-					if(can_diagnose())
-						to_chat(src, "<span class='info' style=\"font-family:Courier\">Destroyed [C] removed.</span>")
-					I.forceMove(loc)
-				else
-					var/obj/item/robot_parts/robot_component/I = C.wrapped
-					I.brute_damage = C.brute_damage
-					I.electronics_damage = C.electronics_damage
-					to_chat(user, "You remove \the [I].")
-					if(can_diagnose())
-						to_chat(src, "<span class='info' style=\"font-family:Courier\">Functional [I.name] removed.</span>")
-					I.forceMove(loc)
-
-				if(C.installed == COMPONENT_INSTALLED)
-					C.uninstall()
-				C.installed = FALSE
+				if(C.wrapped)
+					C.wrapped.forceMove(loc)
+				C.uninstall(user)
 
 		else
 			if(locked)
@@ -839,6 +814,9 @@
 	else if(istype(W, /obj/item/device/camera_bug))
 		help_shake_act(user)
 		return FALSE
+
+	else if(istype(W, /obj/item/weapon/storage/bag/gadgets/part_replacer))
+		return exchange_parts(user, W)
 
 	else
 		if(W.force > 0)
