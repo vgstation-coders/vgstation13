@@ -30,7 +30,7 @@
 		if(owner.can_diagnose())
 			to_chat(owner, "<span class='info' style=\"font-family:Courier\">New [I.name] installed.</span>")
 
-/datum/robot_component/proc/uninstall(var/mob/user)
+/datum/robot_component/proc/uninstall(var/mob/user,var/loud = FALSE)
 	if(installed == COMPONENT_INSTALLED)
 		installed = FALSE
 	if(wrapped)
@@ -132,10 +132,14 @@
 		spawn(2 SECONDS)
 			to_chat(src, "<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
 
-/datum/robot_component/cell/uninstall(var/mob/user)
+/datum/robot_component/cell/uninstall(var/mob/user,var/loud = FALSE)
 	installed = COMPONENT_MISSING
 	if(owner.cell)
-		to_chat(user, "You remove \the [owner.cell].")
+		if(loud)
+			user.visible_message("<span class='warning'>[user] removes [owner]'s [owner.cell.name].</span>", \
+			"<span class='notice'>You remove [owner]'s [owner.cell.name].</span>")
+		else
+			to_chat(user, "You remove \the [owner.cell].")
 		owner.cell.electronics_damage = electronics_damage
 		owner.cell.brute_damage = brute_damage
 		if(owner.can_diagnose())

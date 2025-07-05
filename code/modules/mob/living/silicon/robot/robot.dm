@@ -897,15 +897,10 @@
 	if(opened && !wiresexposed && (!istype(user, /mob/living/silicon)))
 		var/datum/robot_component/cell_component = components["power cell"]
 		if(cell)
-			cell.electronics_damage = cell_component.electronics_damage
-			cell.brute_damage = cell_component.brute_damage
+			cell_component.uninstall(user,TRUE)
 			cell.updateicon()
 			cell.add_fingerprint(user)
 			user.put_in_hands(cell)
-			user.visible_message("<span class='warning'>[user] removes [src]'s [cell.name].</span>", \
-			"<span class='notice'>You remove [src]'s [cell.name].</span>")
-			if(can_diagnose())
-				to_chat(src, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
 			attack_log += "\[[time_stamp()]\] <font color='orange'>Has had their [cell.name] removed by [user.name] ([user.ckey])</font>"
 			user.attack_log += "\[[time_stamp()]\] <font color='red'>Removed the [cell.name] of [name] ([ckey])</font>"
 			log_attack("<font color='red'>[user.name] ([user.ckey]) removed [src]'s [cell.name] ([ckey])</font>")
