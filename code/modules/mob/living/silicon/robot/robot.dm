@@ -1328,10 +1328,10 @@
 	if(C)
 		C.use(amount)
 
-/mob/living/silicon/robot/set_cell_charge(var/amount)
+/mob/living/silicon/robot/drain_cell()
 	var/obj/item/weapon/cell/C = get_cell()
 	if(C)
-		C.charge = amount
+		C.charge = 0
 
 /mob/living/silicon/robot/proc/toggle_modulelock()
 	modulelock = !modulelock

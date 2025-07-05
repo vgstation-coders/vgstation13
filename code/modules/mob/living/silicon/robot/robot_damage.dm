@@ -101,7 +101,7 @@
 
 		use_cell_charge(cost)
 		if(get_cell_charge() <= 0)
-			set_cell_charge(0)
+			drain_cell()
 			to_chat(src, "<span class='warning'>Your shield has overloaded!</span>")
 		else
 			brute -= absorb_brute
@@ -147,7 +147,7 @@
 
 		use_cell_charge(cost)
 		if(get_cell_charge() <= 0)
-			set_cell_charge(0)
+			drain_cell()
 			to_chat(src, "<span class='warning'>Your shield has overloaded!</span>")
 		else
 			brute -= absorb_brute
