@@ -1299,39 +1299,39 @@
 	return FALSE
 
 /mob/living/silicon/robot/proc/add_cell(var/obj/item/weapon/cell/C,var/mob/user)
-	var/datum/robot_component/C = components["power cell"]
-	C.install(user,C)
+	var/datum/robot_component/cellcomp = components["power cell"]
+	cellcomp.install(user,C)
 
-/mob/living/silicon/robot/proc/clear_cell(var/obj/item/weapon/cell/C,var/mob/user)
-	var/datum/robot_component/C = components["power cell"]
-	C.wrapped = null
+/mob/living/silicon/robot/proc/clear_cell()
+	var/datum/robot_component/cellcomp = components["power cell"]
+	cellcomp.wrapped = null
 
 /mob/living/silicon/robot/get_cell()
-	var/datum/robot_component/C = components["power cell"]
-	if(C)
-		return C.wrapped
+	var/datum/robot_component/cellcomp = components["power cell"]
+	if(cellcomp)
+		return cellcomp.wrapped
 
 /mob/living/silicon/robot/get_cell_charge()
-	var/obj/item/weapon/cell/C = get_cell()
-	return C ? C.charge : 0
+	var/obj/item/weapon/cell/cell = get_cell()
+	return cell ? cell.charge : 0
 
 /mob/living/silicon/robot/get_cell_charge_fraction()
-	var/obj/item/weapon/cell/C = get_cell()
-	return C ? C.charge/C.maxcharge : 0
+	var/obj/item/weapon/cell/cell = get_cell()
+	return cell ? cell.charge/cell.maxcharge : 0
 
 /mob/living/silicon/robot/get_cell_maxcharge()
-	var/obj/item/weapon/cell/C = get_cell()
-	return C ? C.maxcharge : 0
+	var/obj/item/weapon/cell/cell = get_cell()
+	return cell ? cell.maxcharge : 0
 
 /mob/living/silicon/robot/use_cell_charge(var/amount)
-	var/obj/item/weapon/cell/C = get_cell()
-	if(C)
-		C.use(amount)
+	var/obj/item/weapon/cell/cell = get_cell()
+	if(cell)
+		cell.use(amount)
 
 /mob/living/silicon/robot/drain_cell()
-	var/obj/item/weapon/cell/C = get_cell()
-	if(C)
-		C.charge = 0
+	var/obj/item/weapon/cell/cell = get_cell()
+	if(cell)
+		cell.charge = 0
 
 /mob/living/silicon/robot/proc/toggle_modulelock()
 	modulelock = !modulelock
