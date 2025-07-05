@@ -197,15 +197,27 @@
 		var/shouldplaysound = FALSE
 		for(var/V in components)
 			var/datum/robot_component/C = components[V]
-			for(var/obj/item/robot_parts/robot_component/I in W.contents)
-				if(!C.installed || (I.isupgrade && !C.upgraded) && istype(I, C.external_type))
-					C.uninstall(user)
-					if(C.wrapped)
-						W.handle_item_insertion(C.wrapped, 1)
-					C.install(user,I)
-					W.remove_from_storage(I, null)
-					shouldplaysound = TRUE //Only play the sound when parts are actually replaced!
-					break
+			if(!C.installed)
+				for(var/obj/item/robot_parts/robot_component/I in W.contents)
+					if((I.isupgrade && !C.upgraded) && istype(I, C.external_type))
+						C.uninstall(user)
+						if(C.wrapped)
+							W.handle_item_insertion(C.wrapped, 1)
+						C.install(user,I)
+						W.remove_from_storage(I, null)
+						shouldplaysound = TRUE //Only play the sound when parts are actually replaced!
+						break
+				if(istype(C.wrapped,/obj/item/weapon/cell))
+					var/obj/item/weapon/cell/cell = C.wrapped
+					for(var/obj/item/weapon/cell/I2 in W.contents)
+						if((I2.rating > cell.rating))
+							C.uninstall(user)
+							if(C.wrapped)
+								W.handle_item_insertion(C.wrapped, 1)
+							C.install(user,I2)
+							W.remove_from_storage(I2, null)
+							shouldplaysound = TRUE //Only play the sound when parts are actually replaced!
+							break
 		if(shouldplaysound)
 			W.play_rped_sound()
 
