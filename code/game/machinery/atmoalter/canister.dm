@@ -224,7 +224,10 @@
 		var/env_pressure = environment.return_pressure()
 		var/pressure_delta = min(release_pressure - env_pressure, (air_contents.return_pressure() - env_pressure)/2)
 		//Can not have a pressure delta that would cause environment pressure > tank pressure
-		sound_emitter.update_active_sound_param(volume = pressure_delta / env_pressure)
+		var/soundvol = 0
+		if (env_pressure > 0.01)
+			soundvol = min(100, pressure_delta / env_pressure)
+		sound_emitter.update_active_sound_param(volume = soundvol)
 
 		var/transfer_moles = 0
 		if((air_contents.temperature > 0) && (pressure_delta > 0))
