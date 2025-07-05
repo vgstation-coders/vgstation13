@@ -193,7 +193,7 @@
 	return C && C.installed == COMPONENT_INSTALLED && C.toggled && C.is_powered()
 
 /mob/living/silicon/robot/proc/exchange_parts(mob/user, obj/item/weapon/storage/bag/gadgets/part_replacer/W)
-	if (W.bluespace || wiresexposed || opened)
+	/*if (W.bluespace || wiresexposed || opened)
 		var/shouldplaysound = FALSE
 		for(var/V in components)
 			var/datum/robot_component/C = components[V]
@@ -219,7 +219,8 @@
 							shouldplaysound = TRUE //Only play the sound when parts are actually replaced!
 							break
 		if(shouldplaysound)
-			W.play_rped_sound()
+			W.play_rped_sound()*/
+	return
 
 /obj/item/broken_device
 	name = "broken component"
