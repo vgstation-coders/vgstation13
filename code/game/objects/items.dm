@@ -1796,3 +1796,18 @@ var/global/objects_thrown_when_explode = FALSE
 		var/mob/living/L = user
 		L.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
 		L.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src], burning your hand in the process.")
+
+/obj/item/proc/get_borg_cellcharge(var/mob/living/silicon/robot/R)
+	if(istype(R))
+		var/obj/item/weapon/cell/Rcell = R.get_cell()
+		if(Rcell)
+			return Rcell.charge
+	return null
+
+/obj/item/proc/use_borg_cellcharge(var/mob/living/silicon/robot/R,var/amount)
+	if(istype(R))
+		var/obj/item/weapon/cell/Rcell = R.get_cell()
+		if(!Rcell || Rcell.charge < amount)
+			to_chat(R, "<span class='warning'>You don't have enough charge to use \the [src].</span>")
+		else
+			Rcell.use(amount)

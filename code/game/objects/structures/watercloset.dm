@@ -584,7 +584,9 @@
 			user.Knockdown(10)
 			if(isrobot(user))
 				var/mob/living/silicon/robot/R = user
-				R.cell.charge -= 20
+				var/obj/item/weapon/cell/Rcell = R.get_cell()
+				if(Rcell)
+					Rcell.charge -= 20
 			else
 				B.deductcharge(1)
 			user.visible_message( \

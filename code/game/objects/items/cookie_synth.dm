@@ -44,8 +44,7 @@
 	if(!(istype(A, /obj/structure/table) || isturf(A) || put_in_hands)) //if it's a table, a turf, or it's being activated via AltClick()
 		return
 	if(isrobot(user))
-		var/mob/living/silicon/robot/R = user
-		if(!R.cell || R.cell.charge < 400)
+		if(get_borg_cellcharge() < 400)
 			to_chat(user,"<span class='warning'>You do not have enough power to use [src].</span>")
 			return
 	if(cooldown > world.time)
@@ -60,7 +59,7 @@
 		S.reagents.add_reagent(toxin_type, toxin_amount)
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
-		R.cell.charge -= 100
+		use_borg_cellcharge(100)
 	cooldown = world.time + delay
 	return S
 

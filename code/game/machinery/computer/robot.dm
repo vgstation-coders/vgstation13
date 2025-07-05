@@ -73,7 +73,7 @@
 		var/percent = null
 		var/obj/item/weapon/cell/Rcell = get_cell()
 		if(Rcell)
-			percent = Rcell.percent
+			percent = Rcell.percent()
 		var/list/cyborg_data = list(
 			"name" = R.name,
 			"locked_down" = R.lockdown,
