@@ -43,12 +43,12 @@
 
 	// Components are basically robot organs.
 	var/list/components = list(
-		"actuator" = /datum/robot_component/actuator
-		"radio" = /datum/robot_component/radio
-		"power cell" = /datum/robot_component/cell
-		"diagnosis unit" = /datum/robot_component/diagnosis_unit
-		"camera" = /datum/robot_component/camera
-		"comms" = /datum/robot_component/binary_communication
+		"actuator" = /datum/robot_component/actuator,
+		"radio" = /datum/robot_component/radio,
+		"power cell" = /datum/robot_component/cell,
+		"diagnosis unit" = /datum/robot_component/diagnosis_unit,
+		"camera" = /datum/robot_component/camera,
+		"comms" = /datum/robot_component/binary_communication,
 		"armour" = /datum/robot_component/armour
 	)
 	var/component_extension = null
