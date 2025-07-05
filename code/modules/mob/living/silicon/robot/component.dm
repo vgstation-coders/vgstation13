@@ -54,7 +54,8 @@
 			owner.visible_message("A click sounds from <span class='name'>[owner]</span>, indicating the automatic cover release failsafe.")
 			if(owner.can_diagnose())
 				to_chat(owner, "<span class='notice' style=\"font-family:Courier\">Cover auto-unlocked.</span>")
-	wrapped = G
+	else
+		wrapped = G
 
 	// The thing itself isn't there anymore, but some fried remains are.
 	installed = COMPONENT_BROKEN
