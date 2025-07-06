@@ -1307,17 +1307,20 @@
 	return FALSE
 
 /mob/living/silicon/robot/proc/add_cell(var/obj/item/weapon/cell/C,var/mob/user)
-	var/datum/robot_component/cellcomp = components["power cell"]
-	cellcomp.install(user,C)
+	if(components && components.len)
+		var/datum/robot_component/cellcomp = components["power cell"]
+		cellcomp.install(user,C)
 
 /mob/living/silicon/robot/proc/clear_cell()
-	var/datum/robot_component/cellcomp = components["power cell"]
-	cellcomp.wrapped = null
+	if(components && components.len)
+		var/datum/robot_component/cellcomp = components["power cell"]
+		cellcomp.wrapped = null
 
 /mob/living/silicon/robot/get_cell()
-	var/datum/robot_component/cellcomp = components["power cell"]
-	if(cellcomp)
-		return cellcomp.wrapped
+	if(components && components.len)
+		var/datum/robot_component/cellcomp = components["power cell"]
+		if(cellcomp)
+			return cellcomp.wrapped
 
 /mob/living/silicon/robot/proc/get_cell_charge()
 	var/obj/item/weapon/cell/cell = get_cell()
