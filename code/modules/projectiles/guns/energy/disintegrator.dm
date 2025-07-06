@@ -103,14 +103,5 @@
 /obj/item/weapon/gun/energy/advdisintegrator/isHandgun()
 	return TRUE
 
-/obj/item/weapon/gun/energy/advdisintegrator/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/advdisintegrator/Destroy()
-	processing_objects.Remove(src)
-	..()
-
 /obj/item/weapon/gun/energy/advdisintegrator/dissolvable() // Can't be destroyed by polyacid
 	return 0

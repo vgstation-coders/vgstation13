@@ -98,12 +98,7 @@
 
 /obj/item/weapon/gun/energy/tag/New()
 	..()
-	processing_objects.Add(src)
 	makeLaser()
-
-/obj/item/weapon/gun/energy/tag/Destroy()
-	processing_objects.Remove(src)
-	..()
 
 /obj/item/weapon/gun/energy/tag/proc/cooldown(var/time)
 	if (time > 0)

@@ -27,15 +27,6 @@
 	cell_type = "/obj/item/weapon/cell/secborg"
 	recharge_time = 10 //Time it takes for shots to recharge (in ticks)
 
-/obj/item/weapon/gun/energy/taser/cyborg/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/taser/cyborg/Destroy()
-	processing_objects.Remove(src)
-	..()
-
 /obj/item/weapon/gun/energy/taser/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
 	charge_tick++
 	if(charge_tick < recharge_time)

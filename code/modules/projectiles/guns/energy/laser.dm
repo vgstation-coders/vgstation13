@@ -195,15 +195,6 @@
 /obj/item/weapon/gun/energy/laser/cyborg
 	recharge_time = 3
 
-/obj/item/weapon/gun/energy/laser/cyborg/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/laser/cyborg/Destroy()
-	processing_objects.Remove(src)
-	..()
-
 /obj/item/weapon/gun/energy/laser/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
 	charge_tick++
 	if(charge_tick < recharge_time)

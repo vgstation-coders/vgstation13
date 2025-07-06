@@ -604,15 +604,6 @@
 /obj/item/weapon/gun/energy/radgun/isHandgun()
 	return TRUE
 
-/obj/item/weapon/gun/energy/radgun/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/radgun/Destroy()
-	processing_objects.Remove(src)
-	..()
-
 /obj/item/weapon/gun/energy/ricochet
 	name = "ricochet rifle"
 	desc = "They say that these were originally designed for duck games. Not that there's any duck in this part of space."

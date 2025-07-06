@@ -20,6 +20,16 @@
 	var/charge_tick = 0
 	var/recharge_time = 0 //Time it takes for shots to recharge (in ticks)
 
+/obj/item/weapon/gun/energy/advdisintegrator/New()
+	..()
+	if(recharge_time)
+		processing_objects.Add(src)
+
+/obj/item/weapon/gun/energy/advdisintegrator/Destroy()
+	if(recharge_time)
+		processing_objects.Remove(src)
+	..()
+
 /obj/item/weapon/gun/energy/process()
 	if(recharge_time)
 		charge_tick++
