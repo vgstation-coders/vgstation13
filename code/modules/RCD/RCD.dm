@@ -310,9 +310,6 @@
 	use_borg_cellcharge(user,amount * cell_power_per_energy)
 
 /obj/item/device/rcd/borg/get_energy(var/mob/user)
-	if(!isrobot(user))
-		return 0
-
 	var/cellcharge = get_borg_cellcharge(user)
 	return cellcharge ? cellcharge / cell_power_per_energy : 0
 
