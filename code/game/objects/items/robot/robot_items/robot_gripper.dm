@@ -179,9 +179,9 @@
 		if(A.opened && cell)
 			if(!gripper_safety_check(user, cell))//Only allowed if the user pass the safety check.
 				if(grip_item(cell, user, FALSE))
+					A.clear_cell()
 					cell.update_icon()
 					A.updateicon()
-					cell = null
 					user.visible_message("<span class='danger'>[user] removes \the [cell] from [A]!</span>", "You remove \the [cell].")
 
 /obj/item/weapon/gripper/chemistry //Used to handle glass containers and pills.
