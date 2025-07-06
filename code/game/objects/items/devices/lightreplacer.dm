@@ -478,7 +478,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		added_glass = clamp(added_glass, 7500, (glass_max - glass))
 		if(use_borg_cellcharge(user,added_glass * 0.1))
 			add_glass(added_glass, 2)
-			to_chat(usr, "<span class='notice'>\The [src] synthesizes[added_glass] units of glass.</span>")
+			to_chat(usr, "<span class='notice'>\The [src] synthesizes [added_glass] units of glass.</span>")
 			return 1
 	return 0
 
