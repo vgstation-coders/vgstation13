@@ -70,7 +70,7 @@
 	for(var/mob/living/silicon/robot/R in cyborg_list)
 		if(!can_control(R,user))
 			continue
-		var/obj/item/weapon/cell/Rcell = get_cell()
+		var/obj/item/weapon/cell/Rcell = R.get_cell()
 		var/list/cyborg_data = list(
 			"name" = R.name,
 			"locked_down" = R.lockdown,
