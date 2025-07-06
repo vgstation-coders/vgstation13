@@ -277,6 +277,8 @@
 		choose_icon()
 
 	SetEmagged(emagged) // Update emag status and give/take emag modules away
+	if(check_rights(R_ADMIN))
+		throw_alert(SCREEN_ALARM_ROBOT_RESET, /obj/abstract/screen/alert/robot/reset_self, 0)
 
 /mob/living/silicon/robot/proc/set_module_sprites(var/list/new_sprites)
 	if(new_sprites && new_sprites.len)
