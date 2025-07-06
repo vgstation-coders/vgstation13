@@ -1809,6 +1809,5 @@ var/global/objects_thrown_when_explode = FALSE
 		if(!Rcell || Rcell.charge < amount)
 			to_chat(R, "<span class='warning'>You don't have enough charge to use \the [src].</span>")
 			return FALSE
-		Rcell.use(amount)
-		return TRUE
+		return Rcell.use(amount)
 	return FALSE
