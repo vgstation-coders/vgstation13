@@ -92,7 +92,7 @@
 	qdel(aicamera)
 	if(camera)
 		qdel(camera)
-	QDEL_LIST_ASSOC(components)
+	QDEL_LIST_ASSOC_VALUES_NULL(components)
 	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
 		if(T)
