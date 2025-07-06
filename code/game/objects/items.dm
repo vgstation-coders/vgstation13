@@ -1802,12 +1802,13 @@ var/global/objects_thrown_when_explode = FALSE
 		var/obj/item/weapon/cell/Rcell = R.get_cell()
 		if(Rcell)
 			return Rcell.charge
-	return null
 
 /obj/item/proc/use_borg_cellcharge(var/mob/living/silicon/robot/R,var/amount)
 	if(istype(R))
 		var/obj/item/weapon/cell/Rcell = R.get_cell()
 		if(!Rcell || Rcell.charge < amount)
 			to_chat(R, "<span class='warning'>You don't have enough charge to use \the [src].</span>")
-		else
-			Rcell.use(amount)
+			return FALSE
+		Rcell.use(amount)
+		return TRUE
+	return FALSE
