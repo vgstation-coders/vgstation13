@@ -20,13 +20,7 @@
 /obj/item/weapon/gun/energy/taser/cyborg
 	cell_type = "/obj/item/weapon/cell/secborg"
 	recharge_time = 10 //Time it takes for shots to recharge (in ticks)
-
-/obj/item/weapon/gun/energy/taser/cyborg/restock()
-	if(power_supply.charge < power_supply.maxcharge)
-		power_supply.give(charge_cost)
-		update_icon()
-	else
-		charge_tick = 0
+	borg_restocks = TRUE
 
 /obj/item/weapon/gun/energy/taser/team_security
 	name = "\improper Team Security sniper taser gun"
