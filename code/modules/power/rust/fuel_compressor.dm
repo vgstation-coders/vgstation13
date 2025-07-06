@@ -82,7 +82,8 @@ var/const/max_assembly_amount = 300
 			var/req_matter = round(new_assembly_quantities[reagent] / 30)
 //			to_chat(world, "[reagent] matter: [req_matter]/[compressed_matter]")
 			if(req_matter <= compressed_matter)
-				F.rod_quantities[reagent] = new_assembly_quantities[reagent]
+				F.rod_current_quantities[reagent] = new_assembly_quantities[reagent]
+				F.rod_starting_quantities[reagent] = new_assembly_quantities[reagent]
 				compressed_matter -= req_matter
 				if(compressed_matter < 1)
 					compressed_matter = 0

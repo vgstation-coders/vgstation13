@@ -240,11 +240,13 @@
 		return
 	if(cur_assembly)
 		var/amount_left = 0
-		for(var/reagent in cur_assembly.rod_quantities)
+		var/max_amount = 0
+		for(var/reagent in cur_assembly.rod_current_quantities)
 //			to_chat(world, "checking [reagent]")
-			if(cur_assembly.rod_quantities[reagent] > 0)
+			max_amount += cur_assembly.rod_starting_quantities[reagent]
+			if(cur_assembly.rod_current_quantities[reagent] > 0)
 //					to_chat(world, "	rods left: [cur_assembly.rod_quantities[reagent]]")
-				var/amount = cur_assembly.rod_quantities[reagent] * fuel_usage
+				var/amount = cur_assembly.rod_current_quantities[reagent] * fuel_usage
 				var/numparticles = round(amount * 1000)
 				if(numparticles < 1)
 					numparticles = 1
@@ -258,9 +260,9 @@
 				//A.target = target_field
 				A.startMove(1)
 
-				cur_assembly.rod_quantities[reagent] -= amount
-				amount_left += cur_assembly.rod_quantities[reagent]
-		cur_assembly.percent_depleted = amount_left / 300
+				cur_assembly.rod_current_quantities[reagent] -= amount
+				amount_left += cur_assembly.rod_current_quantities[reagent]
+		cur_assembly.percent_depleted = (max_amount - amount_left) / 300
 		flick("injector-emitting",src)
 	else
 		stop_injecting()
