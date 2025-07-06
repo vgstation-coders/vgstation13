@@ -38,7 +38,9 @@
 		charge_tick = 0
 		if(!power_supply)
 			return 0
-		power_supply.give(100)
+		if(isrobot(loc) && !use_borg_cellcharge(src.loc,charge_cost))
+			return 0
+		power_supply.give(charge_cost)
 		update_icon()
 		return 1
 

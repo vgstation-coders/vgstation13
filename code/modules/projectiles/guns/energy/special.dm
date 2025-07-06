@@ -86,27 +86,6 @@
 	honor_check = 0
 	recharge_time = 4
 
-
-/obj/item/weapon/gun/energy/staff/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/staff/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-
-/obj/item/weapon/gun/energy/staff/process()
-	charge_tick++
-	if(charge_tick < recharge_time)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(200)
-	return 1
-
 /obj/item/weapon/gun/energy/staff/update_icon()
 	return
 
@@ -560,29 +539,6 @@
 	charge_cost = 50
 	recharge_time = 3
 
-/obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-/obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
-	charge_tick++
-	if(charge_tick < recharge_time)
-		return 0
-	charge_tick = 0
-
-	if(!power_supply)
-		return 0 //sanity
-	if(use_borg_cellcharge(src.loc,charge_cost)) //Take power from the borg...
-		power_supply.give(charge_cost) // ...to recharge the shot
-
-	update_icon()
-	return 1
-
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/restock()
 	if(power_supply.charge < power_supply.maxcharge)
 		power_supply.give(charge_cost)
@@ -773,25 +729,10 @@
 	projectile_type = "/obj/item/projectile/spur"
 	recharge_time = 2
 
-/obj/item/weapon/gun/energy/polarstar/spur/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/polarstar/spur/Destroy()
-	processing_objects.Remove(src)
-	..()
-
 /obj/item/weapon/gun/energy/polarstar/spur/process()
-	charge_tick++
-	if(charge_tick < recharge_time)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
-	levelChange()
-	return 1
+	. = ..()
+	if(.)
+		levelChange()
 
 #undef SPUR_FULL_POWER
 #undef SPUR_HIGH_POWER
