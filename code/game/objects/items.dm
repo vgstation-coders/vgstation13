@@ -1802,6 +1802,7 @@ var/global/objects_thrown_when_explode = FALSE
 		var/obj/item/weapon/cell/Rcell = R.get_cell()
 		if(Rcell)
 			return Rcell.charge
+	return 0
 
 /obj/item/proc/use_borg_cellcharge(var/mob/living/silicon/robot/R,var/amount)
 	if(istype(R))
