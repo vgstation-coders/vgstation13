@@ -313,7 +313,7 @@
 	if(!isrobot(user))
 		return 0
 
-	var/cellcharge = get_borg_cellcharge()
+	var/cellcharge = get_borg_cellcharge(user)
 	if(!cellcharge)
 		return
 
