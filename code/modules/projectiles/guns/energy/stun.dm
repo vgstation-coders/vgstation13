@@ -27,20 +27,6 @@
 	cell_type = "/obj/item/weapon/cell/secborg"
 	recharge_time = 10 //Time it takes for shots to recharge (in ticks)
 
-/obj/item/weapon/gun/energy/taser/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
-	charge_tick++
-	if(charge_tick < recharge_time)
-		return 0
-	charge_tick = 0
-
-	if(!power_supply)
-		return 0 //sanity
-	if(use_borg_cellcharge(src.loc,charge_cost)) //Take power from the borg...
-		power_supply.give(charge_cost) // ...to recharge the shot
-
-	update_icon()
-	return 1
-
 /obj/item/weapon/gun/energy/taser/cyborg/restock()
 	if(power_supply.charge < power_supply.maxcharge)
 		power_supply.give(charge_cost)
