@@ -529,13 +529,7 @@
 	charge_cost = 50
 	recharge_time = 3
 	recharges_borg_cell = TRUE
-
-/obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/restock()
-	if(power_supply.charge < power_supply.maxcharge)
-		power_supply.give(charge_cost)
-		update_icon()
-	else
-		charge_tick = 0
+	borg_restocks = TRUE
 
 /obj/item/weapon/gun/energy/radgun
 	name = "radgun"

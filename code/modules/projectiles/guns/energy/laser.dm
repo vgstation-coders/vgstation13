@@ -182,13 +182,7 @@
 /obj/item/weapon/gun/energy/laser/cyborg
 	recharge_time = 3
 	recharges_borg_cell = TRUE
-
-/obj/item/weapon/gun/energy/laser/cyborg/restock()
-	if(power_supply.charge < power_supply.maxcharge)
-		power_supply.give(charge_cost)
-		update_icon()
-	else
-		charge_tick = 0
+	borg_restocks = TRUE
 
 /obj/item/weapon/gun/energy/laser/cannon
 	name = "laser cannon"
@@ -211,11 +205,7 @@
 /obj/item/weapon/gun/energy/laser/cannon/cyborg
 	charge_cost = 250
 	uses_borg_cell = TRUE
-
-/obj/item/weapon/gun/energy/laser/cannon/cyborg/restock()
-	if(power_supply.charge < power_supply.maxcharge)
-		power_supply.give(charge_cost)
-		update_icon()
+	borg_restocks = TRUE
 
 /obj/item/weapon/gun/energy/xray
 	name = "xray laser gun"

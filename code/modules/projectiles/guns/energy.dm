@@ -22,6 +22,7 @@
 	var/recharge_mult = 1
 	var/uses_borg_cell = FALSE
 	var/recharges_borg_cell = FALSE
+	var/borg_restocks = FALSE
 
 /obj/item/weapon/gun/energy/New()
 	..()
@@ -46,6 +47,14 @@
 		power_supply.give(charge_cost*recharge_mult)
 		update_icon()
 		return 1
+
+/obj/item/weapon/gun/energy/restock()
+	if(borg_restocks)
+		if(power_supply.charge < power_supply.maxcharge)
+			power_supply.give(charge_cost)
+			update_icon()
+		else
+			charge_tick = 0
 
 /obj/item/weapon/gun/energy/get_cell()
 	return power_supply
