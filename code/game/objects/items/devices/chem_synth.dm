@@ -284,7 +284,7 @@
 	return 0
 
 /obj/item/device/chem_synth/robot/take_cost(var/amount, var/rarity_multiplier, mob/user)
-	return use_borg_cellcharge(amount * rarity_multiplier * POWER_PER_REAGENT) || 0
+	return use_borg_cellcharge(user,amount * rarity_multiplier * POWER_PER_REAGENT) || 0
 
 /obj/item/device/chem_synth/admin/take_cost(var/amount, var/rarity_multiplier, mob/user)
 	return 1
