@@ -258,13 +258,17 @@
 
 /datum/sound_emitter/proc/turf_volume_coeff(atom/a)
 	if (!a)
+		return 1 // ?:D?
+	var/turf/t = get_turf(a)
+	if (!t)
+		return 0 // no sound for the damned
+	if (istype(t, /turf/unsimulated))
 		return 1
-
-	var/turf/simulated/sim = get_turf(a)
-	if (!sim || !sim.zone || !sim.zone.air)
-		return 0
-
-	return sim.zone.air.sound_coeff
+	if (istype(t, /turf/simulated))
+		var/turf/simulated/sim = t
+		if (sim.zone?.air?.sound_coeff)
+			return sim.zone.air.sound_coeff
+	return 0 //damned
 
 /datum/sound_emitter/proc/update_params_for_player(mob/player)
 	if (!channel || !active_key)
