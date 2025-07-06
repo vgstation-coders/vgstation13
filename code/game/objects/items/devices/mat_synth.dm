@@ -141,7 +141,7 @@ var/static/list/mat2type = list(
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
 		if(R && R.get_cell())
-			if(get_borg_cellcharge())
+			if(get_borg_cellcharge(R))
 				var/obj/item/stack/sheet/material_type = material
 				if(material_type)
 					var/modifier = get_mat_cost(initial(active_material.perunit))

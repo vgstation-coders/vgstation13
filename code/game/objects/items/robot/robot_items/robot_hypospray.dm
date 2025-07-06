@@ -43,7 +43,7 @@
 
 	charge_tick = 0
 
-	if(get_borg_cellcharge())
+	if(get_borg_cellcharge(loc))
 		var/datum/reagents/reagents = reagent_list[mode]
 		if(reagents.total_volume < reagents.maximum_volume) // don't recharge reagents and drain power if the storage is full
 			use_borg_cellcharge(loc,charge_cost) // take power from borg
