@@ -427,18 +427,8 @@
 	clumsy_check = 0 //Admin spawn only, might as well let clowns use it.
 	recharge_time = 5
 
-/obj/item/weapon/gun/energy/meteorgun/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/meteorgun/Destroy()
-	processing_objects.Remove(src)
-	..()
-
 /obj/item/weapon/gun/energy/meteorgun/update_icon()
 	return
-
 
 /obj/item/weapon/gun/energy/meteorgun/pen
 	name = "meteor pen"
@@ -538,6 +528,7 @@
 	cell_type = "/obj/item/weapon/cell/miningborg"
 	charge_cost = 50
 	recharge_time = 3
+	recharges_borg_cell = TRUE
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/restock()
 	if(power_supply.charge < power_supply.maxcharge)

@@ -99,6 +99,7 @@
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=3" + Tc_POWERSTORAGE + "=4"
 	fire_delay = 0.6 SECONDS // Barely noticeable, mostly here to allow the firing noise .ogg to finish ~0.55 seconds
 	recharge_time = 4 // This one charges itself like the Captain's laser, at the cost of fun alternate modes
+	recharge_mult = 2
 
 /obj/item/weapon/gun/energy/advdisintegrator/isHandgun()
 	return TRUE

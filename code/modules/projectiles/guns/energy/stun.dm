@@ -92,14 +92,6 @@
 /obj/item/weapon/gun/energy/crossbow/isHandgun()
 	return TRUE
 
-/obj/item/weapon/gun/energy/crossbow/New()
-	..()
-	processing_objects.Add(src)
-
-/obj/item/weapon/gun/energy/crossbow/Destroy()
-	processing_objects.Remove(src)
-	..()
-
 /obj/item/weapon/gun/energy/crossbow/update_icon()
 	return
 

@@ -19,13 +19,16 @@
 	var/icon_charge_multiple = 25 //Spacing of the charge level sprites
 	var/charge_tick = 0
 	var/recharge_time = 0 //Time it takes for shots to recharge (in ticks)
+	var/recharge_mult = 1
+	var/uses_borg_cell = FALSE
+	var/recharges_borg_cell = FALSE
 
-/obj/item/weapon/gun/energy/advdisintegrator/New()
+/obj/item/weapon/gun/energy/New()
 	..()
 	if(recharge_time)
 		processing_objects.Add(src)
 
-/obj/item/weapon/gun/energy/advdisintegrator/Destroy()
+/obj/item/weapon/gun/energy/Destroy()
 	if(recharge_time)
 		processing_objects.Remove(src)
 	..()
@@ -38,9 +41,9 @@
 		charge_tick = 0
 		if(!power_supply)
 			return 0
-		if(isrobot(loc) && !use_borg_cellcharge(src.loc,charge_cost))
+		if(recharges_borg_cell && isrobot(loc) && !use_borg_cellcharge(src.loc,charge_cost))
 			return 0
-		power_supply.give(charge_cost)
+		power_supply.give(charge_cost*recharge_mult)
 		update_icon()
 		return 1
 
@@ -66,7 +69,7 @@
 /obj/item/weapon/gun/energy/process_chambered()
 	if(in_chamber)
 		return 1
-	if(isrobot(loc))
+	if(uses_borg_cell && isrobot(loc))
 		if(!use_borg_cellcharge(src.loc,charge_cost))
 			return 0
 	else if(!power_supply || !power_supply.use(charge_cost))

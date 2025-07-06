@@ -179,21 +179,9 @@
 /obj/item/weapon/gun/energy/laser/captain/alien
 	name = "alien gun"
 
-
-
-/*/obj/item/weapon/gun/energy/laser/cyborg/load_into_chamber()
-	if(in_chamber)
-		return 1
-	if(isrobot(src.loc))
-		var/mob/living/silicon/robot/R = src.loc
-		if(R && R.cell)
-			R.cell.use(100)
-			in_chamber = new/obj/item/projectile/beam(src)
-			return 1
-	return 0*/
-
 /obj/item/weapon/gun/energy/laser/cyborg
 	recharge_time = 3
+	recharges_borg_cell = TRUE
 
 /obj/item/weapon/gun/energy/laser/cyborg/restock()
 	if(power_supply.charge < power_supply.maxcharge)
@@ -201,7 +189,6 @@
 		update_icon()
 	else
 		charge_tick = 0
-
 
 /obj/item/weapon/gun/energy/laser/cannon
 	name = "laser cannon"
@@ -223,6 +210,7 @@
 
 /obj/item/weapon/gun/energy/laser/cannon/cyborg
 	charge_cost = 250
+	uses_borg_cell = TRUE
 
 /obj/item/weapon/gun/energy/laser/cannon/cyborg/restock()
 	if(power_supply.charge < power_supply.maxcharge)

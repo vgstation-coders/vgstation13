@@ -34,6 +34,7 @@
 
 /obj/item/weapon/gun/energy/pulse_rifle/cyborg
 	projectile_type = "/obj/item/projectile/beam"
+	uses_borg_cell = TRUE
 
 /obj/item/weapon/gun/energy/pulse_rifle/destroyer
 	name = "pulse destroyer"
