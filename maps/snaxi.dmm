@@ -39847,6 +39847,9 @@
 /obj/structure/bed/chair/office/dark{
 	dir = 8
 	},
+/obj/effect/landmark/start{
+	name = "Librarian"
+	},
 /turf/simulated/floor/carpet/shag,
 /area/library)
 "bJJ" = (
@@ -43254,11 +43257,11 @@
 	icon_state = "2-8";
 	tag = ""
 	},
-/obj/structure/disposalpipe/sortjunction/Library{
-	dir = 4
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
+	},
+/obj/structure/disposalpipe/sortjunction/Library/mirrored{
+	dir = 8
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint3)
