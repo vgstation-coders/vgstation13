@@ -244,7 +244,7 @@
 		sensor = null
 
 /mob/living/silicon/robot/proc/getModules()
-	return getAvailableRobotModules()
+	return getAvailableRobotModules(src)
 
 // /vg/: Enable forcing module type
 /mob/living/silicon/robot/proc/pick_module(var/forced_module=null)
