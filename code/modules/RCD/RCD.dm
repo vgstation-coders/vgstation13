@@ -314,10 +314,7 @@
 		return 0
 
 	var/cellcharge = get_borg_cellcharge(user)
-	if(!cellcharge)
-		return
-
-	return cellcharge / cell_power_per_energy
+	return cellcharge ? cellcharge / cell_power_per_energy : 0
 
 //Matter based RCDs.
 /obj/item/device/rcd/matter
