@@ -32,14 +32,8 @@
 			to_chat(user, "<span class='warning'>\The [src] is now set to DESTROY.</span>")
 			projectile_type = "/obj/item/projectile/beam/pulse"
 
-/obj/item/weapon/gun/energy/pulse_rifle/cyborg/process_chambered()
-	if(in_chamber)
-		return 1
-	if(use_borg_cellcharge(src.loc,charge_cost))
-		in_chamber = new/obj/item/projectile/beam(src)
-		return 1
-	return 0
-
+/obj/item/weapon/gun/energy/pulse_rifle/cyborg
+	projectile_type = "/obj/item/projectile/beam"
 
 /obj/item/weapon/gun/energy/pulse_rifle/destroyer
 	name = "pulse destroyer"

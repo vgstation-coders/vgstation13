@@ -84,7 +84,7 @@
 	origin_tech = null
 	clumsy_check = 0
 	honor_check = 0
-	var/charge_tick = 0
+	recharge_time = 4
 
 
 /obj/item/weapon/gun/energy/staff/New()
@@ -99,7 +99,7 @@
 
 /obj/item/weapon/gun/energy/staff/process()
 	charge_tick++
-	if(charge_tick < 4)
+	if(charge_tick < recharge_time)
 		return 0
 	charge_tick = 0
 	if(!power_supply)
@@ -446,8 +446,7 @@
 	charge_cost = 100
 	cell_type = "/obj/item/weapon/cell/potato"
 	clumsy_check = 0 //Admin spawn only, might as well let clowns use it.
-	var/charge_tick = 0
-	var/recharge_time = 5 //Time it takes for shots to recharge (in ticks)
+	recharge_time = 5
 
 /obj/item/weapon/gun/energy/meteorgun/New()
 	..()
@@ -457,15 +456,6 @@
 /obj/item/weapon/gun/energy/meteorgun/Destroy()
 	processing_objects.Remove(src)
 	..()
-
-/obj/item/weapon/gun/energy/meteorgun/process()
-	charge_tick++
-	if(charge_tick < recharge_time)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
 
 /obj/item/weapon/gun/energy/meteorgun/update_icon()
 	return
@@ -568,7 +558,7 @@
 	projectile_type = "/obj/item/projectile/kinetic"
 	cell_type = "/obj/item/weapon/cell/miningborg"
 	charge_cost = 50
-	var/charge_tick = 0
+	recharge_time = 3
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/New()
 	..()
@@ -581,7 +571,7 @@
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
 	charge_tick++
-	if(charge_tick < 3)
+	if(charge_tick < recharge_time)
 		return 0
 	charge_tick = 0
 
@@ -608,7 +598,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	fire_sound = 'sound/weapons/radgun.ogg'
 	charge_cost = 100
-	var/charge_tick = 0
+	recharge_time = 4
 	projectile_type = "/obj/item/projectile/energy/rad"
 
 /obj/item/weapon/gun/energy/radgun/isHandgun()
@@ -622,17 +612,6 @@
 /obj/item/weapon/gun/energy/radgun/Destroy()
 	processing_objects.Remove(src)
 	..()
-
-/obj/item/weapon/gun/energy/radgun/process()
-	charge_tick++
-	if(charge_tick < 4)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
-	update_icon()
-	return 1
 
 /obj/item/weapon/gun/energy/ricochet
 	name = "ricochet rifle"
@@ -801,7 +780,7 @@
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_POWERSTORAGE + "=4;" + Tc_COMBAT + "=5"
 	fire_delay = 0
 	projectile_type = "/obj/item/projectile/spur"
-	var/charge_tick = 0
+	recharge_time = 2
 
 /obj/item/weapon/gun/energy/polarstar/spur/New()
 	..()
@@ -814,7 +793,7 @@
 
 /obj/item/weapon/gun/energy/polarstar/spur/process()
 	charge_tick++
-	if(charge_tick < 2)
+	if(charge_tick < recharge_time)
 		return 0
 	charge_tick = 0
 	if(!power_supply)

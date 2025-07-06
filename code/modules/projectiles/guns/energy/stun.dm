@@ -25,8 +25,7 @@
 	charge_cost = 100
 	projectile_type = "/obj/item/projectile/energy/electrode"
 	cell_type = "/obj/item/weapon/cell/secborg"
-	var/charge_tick = 0
-	var/recharge_time = 10 //Time it takes for shots to recharge (in ticks)
+	recharge_time = 10 //Time it takes for shots to recharge (in ticks)
 
 /obj/item/weapon/gun/energy/taser/cyborg/New()
 	..()
@@ -117,7 +116,7 @@
 	cell_type = "/obj/item/weapon/cell/crap"
 	rechargeable = FALSE
 	non_rechargeable_reason = "<span class='notice'>Your gun's recharge port was removed to make room for a miniaturized reactor.</span>"
-	var/charge_tick = 0
+	recharge_time = 4
 
 /obj/item/weapon/gun/energy/crossbow/isHandgun()
 	return TRUE
@@ -126,22 +125,9 @@
 	..()
 	processing_objects.Add(src)
 
-
 /obj/item/weapon/gun/energy/crossbow/Destroy()
 	processing_objects.Remove(src)
 	..()
-
-
-/obj/item/weapon/gun/energy/crossbow/process()
-	charge_tick++
-	if(charge_tick < 4)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
-	return 1
-
 
 /obj/item/weapon/gun/energy/crossbow/update_icon()
 	return

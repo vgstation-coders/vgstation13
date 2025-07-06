@@ -161,9 +161,8 @@
 	desc = "This is an antique laser gun. All craftsmanship is of the highest quality. It is decorated with assistant leather and chrome. The object menaces with spikes of energy. On the item is an image of Space Station 13. The station is exploding."
 	force = 10
 	origin_tech = null
-	var/charge_tick = 0
-	var/charge_wait = 4
 	projectile_type = "/obj/item/projectile/beam/captain"
+	recharge_time = 4
 
 /obj/item/weapon/gun/energy/laser/captain/isHandgun()
 	return TRUE
@@ -176,18 +175,6 @@
 /obj/item/weapon/gun/energy/laser/captain/Destroy()
 	processing_objects.Remove(src)
 	..()
-
-
-/obj/item/weapon/gun/energy/laser/captain/process()
-	charge_tick++
-	if(charge_tick < charge_wait)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
-	update_icon()
-	return 1
 
 /obj/item/weapon/gun/energy/laser/captain/alien
 	name = "alien gun"
@@ -206,7 +193,7 @@
 	return 0*/
 
 /obj/item/weapon/gun/energy/laser/cyborg
-	var/charge_tick = 0
+	recharge_time = 3
 
 /obj/item/weapon/gun/energy/laser/cyborg/New()
 	..()
@@ -219,7 +206,7 @@
 
 /obj/item/weapon/gun/energy/laser/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
 	charge_tick++
-	if(charge_tick < 3)
+	if(charge_tick < recharge_time)
 		return 0
 	charge_tick = 0
 
@@ -257,13 +244,8 @@
 		power_supply.charge = 0
 		update_icon()
 
-/obj/item/weapon/gun/energy/laser/cannon/cyborg/process_chambered()
-	if(in_chamber)
-		return 1
-	if(use_borg_cellcharge(src.loc,250))
-		in_chamber = new/obj/item/projectile/beam/heavylaser(src)
-		return 1
-	return 0
+/obj/item/weapon/gun/energy/laser/cannon/cyborg
+	charge_cost = 250
 
 /obj/item/weapon/gun/energy/laser/cannon/cyborg/restock()
 	if(power_supply.charge < power_supply.maxcharge)
@@ -463,7 +445,7 @@
 	charge_cost = 1000	//one shot per charge
 	fire_sound = null
 	projectile_type = "/obj/item/projectile/beam/combustion"
-	charge_wait = 2	//40 seconds to fully charge
+	recharge_time = 2	//40 seconds to fully charge
 	slot_flags = 0
 	w_class = W_CLASS_HUGE
 	var/charged = TRUE
