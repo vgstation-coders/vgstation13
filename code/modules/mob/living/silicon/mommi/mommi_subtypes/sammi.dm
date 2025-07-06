@@ -164,7 +164,7 @@
 			to_chat(user, "<span class='notice'>You anchor the SAMMI to the floor.</span>")
 			anchored = 1
 			add_cell(cellhold)
-			clear_cell()
+			cellhold = null
 			if(icon_state == "sammi_offline")
 				icon_state = "sammi_offline_a"
 			else
