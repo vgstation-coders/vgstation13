@@ -129,6 +129,7 @@
 		brute_damage = I.brute_damage
 		if(owner.can_diagnose())
 			to_chat(owner, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [I.name]. Charge: [I.charge] out of [I.maxcharge].</span>")
+		owner.updateicon()
 		if(I.occupant)
 			to_chat(I.occupant,"<span class='notice'>You are now inside \the [owner], in control of its targeting.</span>")
 			owner.pulsecompromised = 1
