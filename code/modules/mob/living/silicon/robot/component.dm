@@ -128,16 +128,16 @@
 		electronics_damage = I.electronics_damage
 		brute_damage = I.brute_damage
 		if(owner.can_diagnose())
-			to_chat(src, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [I.name]. Charge: [I.charge] out of [I.maxcharge].</span>")
+			to_chat(owner, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [I.name]. Charge: [I.charge] out of [I.maxcharge].</span>")
 		if(I.occupant)
-			to_chat(I.occupant,"<span class='notice'>You are now inside \the [src], in control of its targeting.</span>")
+			to_chat(I.occupant,"<span class='notice'>You are now inside \the [owner], in control of its targeting.</span>")
 			owner.pulsecompromised = 1
-			I.occupant.loc = src
-			I.occupant.current_robot = src
+			I.occupant.loc = owner
+			I.occupant.current_robot = owner
 			I.occupant = null
-			to_chat(src, "<span class='danger'>ERRORERRORERROR</span>")
+			to_chat(owner, "<span class='danger'>ERRORERRORERROR</span>")
 			spawn(2 SECONDS)
-				to_chat(src, "<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
+				to_chat(owner, "<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
 
 /datum/robot_component/cell/uninstall(var/mob/user,var/loud = FALSE)
 	installed = COMPONENT_MISSING
