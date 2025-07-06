@@ -45,17 +45,16 @@
 		return src.attack_hand(user)
 	if (iscrowbar(W))
 		if(opened)
-			if(has_electronics & 1)
+			if(has_electronics == 1)
 				W.playtoolsound(src, 50)
-				to_chat(user, "You begin removing the circuitboard")//lpeters - fixed grammar issues
+				to_chat(user, "You begin removing the circuitboard.")//lpeters - fixed grammar issues
 
 				if(do_after(user, src, 50))
 					user.visible_message(\
 						"<span class='warning'>[user.name] has removed the circuitboard from [src.name]!</span>",\
 						"<span class='notice'>You remove the circuitboard board.</span>")
-					has_electronics = 0
 					new /obj/item/weapon/module/rust_fuel_compressor(loc)
-					has_electronics &= ~1
+					has_electronics = 0
 			else
 				opened = 0
 				icon_state = "fuel_compressor0"
@@ -93,7 +92,7 @@
 			user.visible_message(\
 				"<span class='warning'>[user.name] has added cables to the compressor frame!</span>",\
 				"You add cables to the port frame.")
-			has_electronics &= 2
+			has_electronics |= 2
 		return
 
 	else if (W.is_wirecutter(user) && opened && (has_electronics & 2))
@@ -107,11 +106,11 @@
 			has_electronics &= ~2
 		return
 
-	else if (istype(W, /obj/item/weapon/module/rust_fuel_compressor) && opened && !(has_electronics & 1))
+	else if (istype(W, /obj/item/weapon/module/rust_fuel_compressor) && opened && has_electronics == 2)
 		to_chat(user, "You try to insert the circuitboard into the frame...")
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 10))
-			has_electronics &= 1
+			has_electronics |= 1
 			to_chat(user, "You place the circuitboard inside the frame.")
 			qdel(W)
 		return

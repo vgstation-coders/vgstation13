@@ -13,11 +13,29 @@ var/const/max_assembly_amount = 300
 	var/locked = 0
 	var/has_electronics = 0 // 0 - none, bit 1 - circuitboard, bit 2 - wires
 
+/obj/machinery/rust_fuel_compressor/examine(mob/user)
+	..()
+	if(stat & BROKEN)
+		to_chat(user, "Looks broken.")
+		return
+	if(opened)
+		to_chat(user, "The maintenance panel is open.")
+		if (has_electronics == 3)
+			to_chat(user, "The circuitboard inside is fixed and wired.")
+		else if (has_electronics == 2)
+			to_chat(user, "There is some loose wiring inside. A slot for a circuit board is exposed.")
+		else if (has_electronics == 1)
+			to_chat(user, "There is an unwired circuit board inside.")
+	else
+		to_chat(user, "The cover is closed.")
+
 
 /obj/machinery/rust_fuel_compressor/attack_hand(mob/user)
 	add_fingerprint(user)
-	/*if(stat & (BROKEN|NOPOWER))
-		return*/
+	if(stat & (BROKEN|NOPOWER))
+		return
+	else if(opened)
+		to_chat(user, "The cover is open and the controls are disabled.")
 	interact(user)
 
 /obj/machinery/rust_fuel_compressor/attackby(obj/item/stack/S as obj, mob/user as mob)
