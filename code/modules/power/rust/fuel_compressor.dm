@@ -4,6 +4,7 @@ var/const/max_assembly_amount = 300
 	icon = 'icons/obj/machines/rust.dmi'
 	icon_state = "fuel_compressor1"
 	name = "Fuel Compressor"
+	desc = "A machine that uses compressed matter units to form fuel rods for the R-UST fuel injector."
 	var/list/new_assembly_quantities = list("Deuterium" = 150,"Tritium" = 150,"Rodinium-6" = 0,"Stravium-7" = 0, "Pergium" = 0, "Dilithium" = 0)
 	var/compressed_matter = 0
 	anchored = 1
@@ -23,6 +24,7 @@ var/const/max_assembly_amount = 300
 	if (istype(S, /obj/item/stack/rcd_ammo))
 		compressed_matter += 10
 		S.use(1)
+		to_chat(user, "You add a cartridge of compressed matter to the compressor.")
 		return
 	..()
 
@@ -64,12 +66,19 @@ var/const/max_assembly_amount = 300
 
 	if( href_list["eject_matter"] )
 		var/ejected = 0
-		while(compressed_matter > 10)
-			new /obj/item/stack/rcd_ammo(get_step(get_turf(src), src.dir))
-			compressed_matter -= 10
-			ejected = 1
+		var/lost = 0
+		while(compressed_matter > 0)
+			if(compressed_matter >= 10)
+				new /obj/item/stack/rcd_ammo(get_step(get_turf(src), src.dir))
+				compressed_matter -= 10
+				ejected = 1
+			else
+				compressed_matter = 0
+				lost = 1
 		if(ejected)
 			to_chat(usr, "<span class='notice'>[bicon(src)] [src] ejects some compressed matter units.</span>")
+		else if(lost)
+			to_chat(usr, "<span class='notice'>[bicon(src)] [src] sputters and ejects some unusable scraps of compressed matter.</span>")
 		else
 			to_chat(usr, "<span class='warning'>[bicon(src)] there are no more compressed matter units in [src].</span>")
 
