@@ -262,12 +262,12 @@
 	var/turf/t = get_turf(a)
 	if (!t)
 		return 0 // no sound for the damned
-	if (istype(t, /turf/unsimulated))
-		return 1
 	if (istype(t, /turf/simulated))
 		var/turf/simulated/sim = t
 		if (sim.zone?.air?.sound_coeff)
 			return sim.zone.air.sound_coeff
+	if (istype(t, /turf/unsimulated))
+		return 1
 	return 0 //damned
 
 /datum/sound_emitter/proc/update_params_for_player(mob/player)
