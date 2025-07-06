@@ -714,7 +714,6 @@
 			C.uninstall(user)
 			user.put_in_hands(cell)
 		C.install(user,W)
-		updateicon()
 
 	else if(iswiretool(W))
 		if(wiresexposed)
