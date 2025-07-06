@@ -70,15 +70,12 @@
 	for(var/mob/living/silicon/robot/R in cyborg_list)
 		if(!can_control(R,user))
 			continue
-		var/percent = null
 		var/obj/item/weapon/cell/Rcell = get_cell()
-		if(Rcell)
-			percent = Rcell.percent()
 		var/list/cyborg_data = list(
 			"name" = R.name,
 			"locked_down" = R.lockdown,
 			"status" = R.stat,
-			"charge" = percent,
+			"charge" = Rcell ? Rcell.percent() : null,
 			"module" = R.module ? "[R.modtype] Module" : "No Module Installed",
 			"master" = R.connected_ai,
 			"emagged" = R.emagged,

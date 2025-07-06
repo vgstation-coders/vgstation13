@@ -1335,7 +1335,7 @@
 /mob/living/silicon/robot/proc/use_cell_charge(var/amount)
 	var/obj/item/weapon/cell/cell = get_cell()
 	if(cell)
-		cell.use(amount)
+		return cell.use(amount)
 
 /mob/living/silicon/robot/proc/drain_cell()
 	var/obj/item/weapon/cell/cell = get_cell()
