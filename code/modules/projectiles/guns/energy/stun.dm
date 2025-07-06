@@ -18,12 +18,6 @@
 	projectile_type = "/obj/item/projectile/ricochet/taser"
 
 /obj/item/weapon/gun/energy/taser/cyborg
-	name = "taser gun"
-	desc = "A small, low capacity gun used for non-lethal takedowns."
-	icon_state = "taser"
-	fire_sound = 'sound/weapons/Taser.ogg'
-	charge_cost = 100
-	projectile_type = "/obj/item/projectile/energy/electrode"
 	cell_type = "/obj/item/weapon/cell/secborg"
 	recharge_time = 10 //Time it takes for shots to recharge (in ticks)
 
