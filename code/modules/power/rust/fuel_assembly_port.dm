@@ -3,18 +3,32 @@
 /obj/machinery/rust_fuel_assembly_port
 	name = "Fuel Assembly Port"
 	icon = 'icons/obj/machines/rust.dmi'
+	desc = "A machine that accepts compressed fuel assemblies and inserts them into a fuel injector.""
 	icon_state = "port2"
 	density = FALSE
 	var/obj/item/weapon/fuel_assembly/cur_assembly
 	var/busy = 0
 	anchored = 1
 	ghost_read = 0
+	var/construct_progress = 0 // 3 is fully built
 
-	var/opened = 1 //0=closed, 1=opened
-	var/has_electronics = 0 // 0 - none, bit 1 - circuitboard, bit 2 - wires
+/obj/machinery/rust_fuel_assembly_port/examine(mob/user)
+	..()
+	if(stat & BROKEN)
+		to_chat(user, "Looks broken.")
+		return
+	switch(construct_progress)
+		if (3)
+			to_chat(user, "The cover is closed.")
+		if (2)
+			to_chat(user, "The cover is open and the wiring is exposed.")
+		if (1)
+			to_chat(user, "The cover is open and you can see unwired electronics inside.")
+		else
+			to_chat(user, "The cover is open and shows an empty slot for a circuit board.")
 
 /obj/machinery/rust_fuel_assembly_port/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
-	if(istype(AM,/obj/item/weapon/fuel_assembly) && !opened)
+	if(istype(AM,/obj/item/weapon/fuel_assembly) && construct_progress == 3)
 		if(cur_assembly)
 			return FALSE
 		else
@@ -26,7 +40,7 @@
 	return FALSE
 
 /obj/machinery/rust_fuel_assembly_port/attackby(var/obj/item/I, var/mob/user)
-	if(istype(I,/obj/item/weapon/fuel_assembly) && !opened)
+	if(istype(I,/obj/item/weapon/fuel_assembly) && construct_progress == 3)
 		if(cur_assembly)
 			to_chat(user, "<span class='warning'>There is already a fuel rod assembly in there!</span>")
 		else
@@ -38,9 +52,8 @@
 /obj/machinery/rust_fuel_assembly_port/attack_hand(mob/user)
 	if(..())
 		return
-	if(opened)
+	if(construct_progress < 3)
 		return
-
 	if(cur_assembly)
 		if(try_insert_assembly())
 			to_chat(user, "<span class='notice'>[bicon(src)] [src] inserts it's fuel rod assembly into an injector.</span>")

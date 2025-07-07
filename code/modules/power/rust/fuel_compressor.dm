@@ -9,33 +9,29 @@ var/const/max_assembly_amount = 300
 	var/compressed_matter = 0
 	anchored = 1
 	machine_flags = EMAGGABLE
-	var/opened = 1 //0=closed, 1=opened
 	var/locked = 0
-	var/has_electronics = 0 // 0 - none, bit 1 - circuitboard, bit 2 - wires
+	var/construct_progress = 0 // 3 is fully built
 
 /obj/machinery/rust_fuel_compressor/examine(mob/user)
 	..()
 	if(stat & BROKEN)
 		to_chat(user, "Looks broken.")
 		return
-	if(opened)
-		to_chat(user, "The maintenance panel is open.")
-		if (has_electronics == 3)
-			to_chat(user, "The circuitboard inside is fixed and wired.")
-		else if (has_electronics == 2)
-			to_chat(user, "There is some loose wiring inside. A slot for a circuit board is exposed.")
-		else if (has_electronics == 1)
-			to_chat(user, "There is an unwired circuit board inside.")
-	else
-		to_chat(user, "The cover is closed.")
+	switch(construct_progress)
+		if (3)
+			to_chat(user, "The cover is closed.")
+		if (2)
+			to_chat(user, "The cover is open and the wiring is exposed.")
+		if (1)
+			to_chat(user, "The cover is open and you can see unwired electronics inside.")
+		else
+			to_chat(user, "The cover is open and shows an empty slot for a circuit board.")
 
 
 /obj/machinery/rust_fuel_compressor/attack_hand(mob/user)
 	add_fingerprint(user)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER) || construct_progress < 3)
 		return
-	else if(opened)
-		to_chat(user, "The cover is open and the controls are disabled.")
 	interact(user)
 
 /obj/machinery/rust_fuel_compressor/attackby(obj/item/stack/S as obj, mob/user as mob)
