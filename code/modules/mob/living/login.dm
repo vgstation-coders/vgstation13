@@ -18,9 +18,6 @@
 	if(iscultist(src) && hud_used && !hud_used.cult_Act_display)
 		hud_used.cult_hud()
 
-	// Register as something able to receive sounds from sound_emitters
-	if (sound_zone_manager)
-		sound_zone_manager.register_listener(src)
 
 	//Round specific stuff like hud updates
 	if(ticker && ticker.mode)
