@@ -3,6 +3,7 @@
 	icon = 'icons/obj/machines/rust.dmi'
 	icon_state = "fuel_assembly"
 	name = "fuel rod assembly"
+	desc = "A bundle of R-UST fuel rods compressed together into a portable assembly. Inert outside of a fuel injector."
 	var/list/rod_current_quantities
 	var/list/rod_starting_quantities
 	var/percent_depleted = 1
@@ -28,7 +29,6 @@
 	for(var/k, v in rod_starting_quantities)
 		out += "[k]: [v]<br>"
 	var/completetext = jointext(out, "")
-//	completetext = splicetext(completetext, length(completetext) - 1, 0, "")
 	to_chat(user, completetext)
 
 
