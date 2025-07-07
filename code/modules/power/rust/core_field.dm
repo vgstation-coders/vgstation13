@@ -305,10 +305,10 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 /obj/effect/rust_em_field/proc/React()
 	//loop through the reactants in random order
 	var/list/reactants_reacting_pool = dormant_reactant_quantities.Copy()
-	/*
+
 	for(var/reagent in dormant_reactant_quantities)
 			to_chat(world, "	before: [reagent]: [dormant_reactant_quantities[reagent]]")
-		*/
+
 
 	//cant have any reactions if there aren't any reactants present
 	if(reactants_reacting_pool.len)
@@ -327,7 +327,7 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 			//pick one of the unprocessed reacting reagents randomly
 			var/cur_primary_reactant = pick(primary_reactant_pool)
 			primary_reactant_pool.Remove(cur_primary_reactant)
-//			to_chat(world, "<span class='notice'>primary reactant chosen: [cur_primary_reactant]</span>")
+			to_chat(world, "<span class='notice'>primary reactant chosen: [cur_primary_reactant]</span>")
 
 			//grab all the possible reactants to have a reaction with
 			var/list/possible_secondary_reactants = reactants_reacting_pool.Copy()
@@ -343,12 +343,12 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 					continue
 				var/datum/fusion_reaction/cur_reaction = get_fusion_reaction(cur_primary_reactant, cur_secondary_reactant)
 				if(cur_reaction)
-//					to_chat(world, "<span class='notice'>secondary reactant: [cur_secondary_reactant], [reaction_products.len]</span>")
+					to_chat(world, "<span class='notice'>secondary reactant: [cur_secondary_reactant], [reaction_products.len]</span>")
 					possible_reactions.Add(cur_reaction)
 
 			//if there are no possible reactions here, abandon this primary reactant and move on
 			if(!possible_reactions.len)
-//				to_chat(world, "<span class='notice'>no reactions</span>")
+				to_chat(world, "<span class='notice'>no reactions</span>")
 				continue
 
 			//split up the reacting atoms between the possible reactions
@@ -421,12 +421,12 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 		//var/list/protonic_radiation = new
 		for(var/reactant in produced_reactants)
 			AddParticles(reactant, produced_reactants[reactant])
-//			to_chat(world, "produced: [reactant], [dormant_reactant_quantities[reactant]]")
+			to_chat(world, "produced: [reactant], [dormant_reactant_quantities[reactant]]")
 
 		//check whether there are reactants left, and add them back to the pool
 		for(var/reactant in reactants_reacting_pool)
 			AddParticles(reactant, reactants_reacting_pool[reactant])
-//			to_chat(world, "retained: [reactant], [reactants_reacting_pool[reactant]]")
+			to_chat(world, "retained: [reactant], [reactants_reacting_pool[reactant]]")
 
 /obj/effect/rust_em_field/Destroy()
 	//radiate everything in one giant burst
