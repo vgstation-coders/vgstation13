@@ -307,7 +307,7 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	var/list/reactants_reacting_pool = dormant_reactant_quantities.Copy()
 
 	for(var/reagent in dormant_reactant_quantities)
-			to_chat(world, "	before: [reagent]: [dormant_reactant_quantities[reagent]]")
+		to_chat(world, "	before: [reagent]: [dormant_reactant_quantities[reagent]]")
 
 
 	//cant have any reactions if there aren't any reactants present
@@ -343,7 +343,7 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 					continue
 				var/datum/fusion_reaction/cur_reaction = get_fusion_reaction(cur_primary_reactant, cur_secondary_reactant)
 				if(cur_reaction)
-					to_chat(world, "<span class='notice'>secondary reactant: [cur_secondary_reactant], [reaction_products.len]</span>")
+					to_chat(world, "<span class='notice'>secondary reactant: [cur_secondary_reactant]</span>")
 					possible_reactions.Add(cur_reaction)
 
 			//if there are no possible reactions here, abandon this primary reactant and move on
