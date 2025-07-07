@@ -331,10 +331,13 @@
 			if(istype(O, /obj/item/weapon/cell))
 				var/obj/item/weapon/cell/some_cell = O
 				var/obj/item/weapon/cell/Rcell = R.get_cell()
+				var/word = null
 				if(!Rcell)
-					to_chat(R, "<big><span class='notice'>Power Cell replacement available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
+					word = "replacement"
 				else if(some_cell.maxcharge > Rcell.maxcharge)
-					to_chat(R, "<span class='notice'>Power Cell upgrade available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span>")
+					word = "upgrade"
+				if(word)
+					to_chat(R, "<big><span class='notice'>Power Cell replacement available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
 	else if(ishuman(R) && autoborger && !is_borging)
 		do_autoborg()
 
