@@ -4,7 +4,7 @@
 /obj/item/mounted/frame/rust_fuel_compressor
 	name = "Fuel Compressor frame"
 	icon = 'icons/obj/machines/rust.dmi'
-	icon_state = "fuel_compressor0"
+	icon_state = "fuel_compressor1"
 	w_class = W_CLASS_LARGE
 	mount_reqs = list("simfloor", "nospace")
 	flags = FPRINT
