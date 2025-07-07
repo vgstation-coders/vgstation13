@@ -347,7 +347,7 @@ var/global/list/air_alarms = list()
 
 	machine_flags = WIREJACK
 
-	var/auto_suppress = FALSE //automatically switch to the fire suppression preset when a fire is detected
+	var/auto_suppress = TRUE //automatically switch to the fire suppression preset when a fire is detected
 
 /obj/machinery/alarm/xenobio
 	req_one_access = list(access_rd, access_atmospherics, access_engine_minor, access_xenobiology)
