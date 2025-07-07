@@ -3,7 +3,7 @@
 /obj/machinery/rust_fuel_assembly_port
 	name = "Fuel Assembly Port"
 	icon = 'icons/obj/machines/rust.dmi'
-	desc = "A machine that accepts compressed fuel assemblies and inserts them into a fuel injector.""
+	desc = "A machine that accepts compressed fuel assemblies and inserts them into a fuel injector."
 	icon_state = "port2"
 	density = FALSE
 	var/obj/item/weapon/fuel_assembly/cur_assembly
