@@ -81,13 +81,16 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	if(ticker)
 		initialize()
 
+/obj/machinery/power/rust_core/Destroy()
+	qdel(owned_field)
+	..()
+
 /obj/machinery/power/rust_core/initialize()
 	if(!id_tag)
 		assign_uid()
 		id_tag = uid
 
 /obj/machinery/power/rust_core/process()
-	if(stat & BROKEN || !powernet)
 		Shutdown()
 
 /obj/machinery/power/rust_core/weldToFloor(var/obj/item/tool/weldingtool/WT, mob/user)
