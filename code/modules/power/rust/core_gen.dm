@@ -91,6 +91,7 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 		id_tag = uid
 
 /obj/machinery/power/rust_core/process()
+	if(stat & (BROKEN|NOPOWER))
 		Shutdown()
 
 /obj/machinery/power/rust_core/weldToFloor(var/obj/item/tool/weldingtool/WT, mob/user)
