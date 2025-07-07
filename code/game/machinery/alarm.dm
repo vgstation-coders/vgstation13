@@ -118,7 +118,7 @@
 	// What gasses are scrubbed on this preset.
 	var/list/scrubbed_gases = list()
 	// Automatically switch to the fire suppression preset when a fire is detected.
-	var/suppression_mode = FALSE
+	var/suppression_mode = TRUE
 
 /datum/airalarm_configuration/proc/deep_config_copy()
 	var/datum/airalarm_configuration/to_return = new /datum/airalarm_configuration()
