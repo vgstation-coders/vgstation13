@@ -337,7 +337,7 @@
 				else if(some_cell.maxcharge > Rcell.maxcharge)
 					word = "upgrade"
 				if(word)
-					to_chat(R, "<big><span class='notice'>Power Cell replacement available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
+					to_chat(R, "<big><span class='notice'>Power Cell [word] available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
 	else if(ishuman(R) && autoborger && !is_borging)
 		do_autoborg()
 
