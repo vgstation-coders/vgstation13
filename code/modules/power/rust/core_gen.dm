@@ -44,6 +44,7 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 #define MIN_FIELD_FREQ 1
 #define MAX_FIELD_STR 1000
 #define MIN_FIELD_STR 1
+#define RUST_CORE_STR_COST 500
 
 /obj/machinery/power/rust_core
 	name = "R-UST Mk 7 Tokamak core"
