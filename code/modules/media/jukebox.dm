@@ -1201,7 +1201,7 @@ var/global/list/loopModeNames=list(
 	formatted = "Folk"
 /obj/item/weapon/vinyl/idm
 	name = "nanovinyl - 90's IDM"
-	unformatted = "idm"
+	unformatted = "IDM"
 	formatted = "90's IDM"
 /obj/item/weapon/vinyl/jazz
 	name = "nanovinyl - jazz & swing"
