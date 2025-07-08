@@ -117,7 +117,7 @@
 
 	// Register as something able to receive sounds from sound_emitters
 	if (sound_zone_manager)
-		sound_zone_manager.register_listener(src)
+		sound_zone_manager.register_listener(client, src)
 
 	register_event(/event/mob_area_changed, src, nameof(src::OnMobAreaChanged()))
 

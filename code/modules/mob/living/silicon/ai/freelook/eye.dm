@@ -90,8 +90,8 @@
 /mob/living/silicon/ai/Destroy()
 	if(eyeobj)
 		eyeobj.ai = null
-		if (sound_zone_manager)
-			sound_zone_manager.unregister_listener(eyeobj)
+		//if (sound_zone_manager)
+		//	sound_zone_manager.unregister_listener(eyeobj)
 		QDEL_NULL(eyeobj) // No AI, no Eye
 	..()
 
@@ -195,10 +195,8 @@
 	eyeobj.ai = src
 	refresh_eyeobj_name()
 	eyeobj.forceMove(loc)
-	if (sound_zone_manager)
-		sound_zone_manager.unregister_listener(src)
-		sound_zone_manager.register_listener(eyeobj)
-		eyeobj.sound_endpoint = src
+	if (client?.listener_context)
+		client.listener_context.reset_proxy(eyeobj)
 
 /mob/living/silicon/ai/proc/refresh_eyeobj_name()
 	eyeobj.name = "[name] (AI Eye)"

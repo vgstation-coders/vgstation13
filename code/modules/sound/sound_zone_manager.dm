@@ -91,70 +91,72 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 	var/hashes = listener_candidate_hashes(newX, newY, newZ)
 	for (var/H  in hashes)
 		var/list/B = listener_buckets[H]
-		for (var/mob/player in B)
-			if (E in player.current_sound_emitters)
-				if (!E.contains(player))
-					E.on_exit_range(player)
+		for (var/mob/listener in B)
+			var/client/client = listener.client
+			if (!client) // e.g. AI eye has no client, endpoint must be overridden
+				client = listener.sound_endpoint.client
+			if (!client || !client.listener_context)
+				CRASH("Found a listener with no client or endpoint client")
+
+			if (E in client.listener_context.current_channels_by_emitter)
+				if (!E.contains(listener))
+					E.on_exit_range(client)
 				else
-					E.update_params_for_player(player)
+					E.update_params_for_player(client)
 			else
-				E.on_enter_range(player)
+				E.on_enter_range(client)
 
-// check if a sound channel is already in use in any nearby cell
-// we could do a more accurate check if the turf itself is in range but this should be accurate and quick enough
-/datum/sound_zone_manager/proc/conflict(atom/source, datum/sound_channel/shared/C)
-	if (!source)
-		CRASH("Conflict check failed on emitter with null source")
-	var/T = get_turf(source)
+// most of the time we want to send to client C sounds relevant to C.mob
+//  however for things like the AI eye we want to send to client AICore the sounds relevant to AIEye
+// typically this will be called as register_listener(client, client.mob)
+/datum/sound_zone_manager/proc/register_listener(client/C, mob/proxy)
+	if (!C || !proxy)
+		return // nothing to register
+	if (!C.mob)
+		CRASH("Tried to register_listener client [C] with no mob")
+
+	if (C.listener_context)
+		var/datum/sound_listener_context/context = C.listener_context
+		if (context.proxy != proxy)
+			context.reset_proxy(proxy)
+	else
+		C.listener_context = new /datum/sound_listener_context(C, proxy)
+
+	var/turf/T = get_turf(proxy)
 	if (!T)
-		CRASH("Conflict check failed on emitter with a source but no turf")
-
-	var/channel = C.value
-	var/hashes = emitter_candidate_hashes(T)
-	for (var/hash in hashes)
-		var/bucket = emitter_buckets[hash]
-		if (bucket)
-			for (var/datum/sound_emitter/e in bucket)
-				if (e.channel.value == channel)
-					return TRUE
-	return FALSE
-
-/datum/sound_zone_manager/proc/register_listener(mob/player)
-	if (!player)
-		return
-	var/turf/T = get_turf(player)
-	if (!T)
-		CRASH("sound_zone_manager: Failed to get turf in register_listener for player [player]")
+		CRASH("sound_zone_manager: Failed to get turf in register_listener for target mob [proxy] for client [C]")
 
 	var/X = index(T.x)
 	var/Y = index(T.y)
 	var/h = hash(X, Y, T.z)
-	player.last_sound_zone_hash = h
+	proxy.last_sound_zone_hash = h
 	if (!listener_buckets[h])
 		listener_buckets[h] = list()
-	listener_buckets[h] |= player
+	listener_buckets[h] |= proxy
 
-	player.register_event(/event/moved, src, nameof(src::on_player_move()))
-	on_player_move(player)
-	player.sound_endpoint = player
-	if (istype(player, /mob/camera/aiEye))
-		var/mob/camera/aiEye/eye = player
-		eye.sound_endpoint = eye.ai
+	proxy.sound_endpoint = C.mob
+	proxy.register_event(/event/moved, src, nameof(src::on_player_move()))
+	on_player_move(proxy)
 
-/datum/sound_zone_manager/proc/unregister_listener(mob/player)
-	var/h = player.last_sound_zone_hash
-	if (h)
-		var/bucket = listener_buckets[h]
+/datum/sound_zone_manager/proc/unregister_listener(client/C)
+	if (!C || !C.listener_context)
+		return
+	var/mob/M = C.listener_context.proxy
+	if (!M)
+		CRASH("Tried to unregister a client with no proxy")
+	var/H = M.last_sound_zone_hash
+	if (H)
+		var/bucket = listener_buckets[H]
 		if (bucket)
-			bucket -= player
+			bucket -= M
 
 	// stop them from picking up new emitters
-	player.unregister_event(/event/moved, src, nameof(src::on_player_move()))
+	M.unregister_event(/event/moved, src, nameof(src::on_player_move()))
 	// stop everything they can hear and clear out their current emitters list
-	var/list/emitters = player.current_sound_emitters.Copy()
+	var/list/emitters = C.listener_context.current_channels_by_emitter.Copy()
 	for (var/datum/sound_emitter/E in emitters)
-		E.on_exit_range(player)
-	player.sound_endpoint = null
+		E.on_exit_range(C)
+	M.sound_endpoint = null
 
 /datum/sound_zone_manager/proc/update_listener(mob/player)
 	var/newHash = hash_coord(player.x, player.y, player.z)
@@ -178,8 +180,8 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 /datum/sound_zone_manager/proc/on_player_move(mob/mover)
 	if (!mover)
 		return
-	if (!mover.client && !mover.sound_endpoint) // nowhere to send the sound
-		return
+	if (!mover.sound_endpoint)
+		return // nowhere to send the sound
 
 	var/turf/location = mover.loc
 	if (!isturf(location))
@@ -189,8 +191,14 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 
 	update_listener(mover)
 
+	var/client/receive_client = mover.sound_endpoint.client
+	if (!receive_client || !receive_client.listener_context)
+		return
+
+	var/datum/sound_listener_context/context = receive_client.listener_context
+
 	var/list/current = list()
-	for (var/datum/sound_emitter/E in mover.current_sound_emitters)
+	for (var/datum/sound_emitter/E in context.current_channels_by_emitter)
 		current[E] = TRUE
 	var/list/fresh = list()
 
@@ -201,13 +209,11 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 			if (E.contains(location))
 				fresh[E] = TRUE
 				if (!current[E])
-					E.on_enter_range(mover)
+					E.on_enter_range(receive_client)
 				else
-					E.update_params_for_player(mover)
+					E.update_params_for_player(receive_client)
 
 	for (var/e in current)
 		var/datum/sound_emitter/E = e
 		if (!fresh[E])
-			E.on_exit_range(mover)
-
-	mover.current_sound_emitters = fresh.Copy()
+			E.on_exit_range(receive_client)

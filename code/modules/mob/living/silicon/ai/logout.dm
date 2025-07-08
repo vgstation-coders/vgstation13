@@ -1,7 +1,4 @@
 /mob/living/silicon/ai/Logout()
-	if (sound_zone_manager && eyeobj)
-		sound_zone_manager.unregister_listener(eyeobj)
-
 	..()
 
 	for(var/obj/machinery/ai_status_display/O in machines) //change status
