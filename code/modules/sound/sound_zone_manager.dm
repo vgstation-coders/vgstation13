@@ -136,6 +136,10 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 
 	player.register_event(/event/moved, src, nameof(src::on_player_move()))
 	on_player_move(player)
+	player.sound_endpoint = player
+	if (istype(player, /mob/camera/aiEye))
+		var/mob/camera/aiEye/eye = player
+		eye.sound_endpoint = eye.ai
 
 /datum/sound_zone_manager/proc/unregister_listener(mob/player)
 	var/h = player.last_sound_zone_hash
@@ -150,6 +154,7 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 	var/list/emitters = player.current_sound_emitters.Copy()
 	for (var/datum/sound_emitter/E in emitters)
 		E.on_exit_range(player)
+	player.sound_endpoint = null
 
 /datum/sound_zone_manager/proc/update_listener(mob/player)
 	var/newHash = hash_coord(player.x, player.y, player.z)
@@ -171,7 +176,9 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 	player.last_sound_zone_hash = newHash
 
 /datum/sound_zone_manager/proc/on_player_move(mob/mover)
-	if (!mover || !mover.client)
+	if (!mover)
+		return
+	if (!mover.client && !mover.sound_endpoint) // nowhere to send the sound
 		return
 
 	var/turf/location = mover.loc

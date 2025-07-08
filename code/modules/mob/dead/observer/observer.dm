@@ -115,6 +115,15 @@ var/creating_arena = FALSE
 
 		mind = body.mind	//we don't transfer the mind but we keep a reference to it.
 
+		if (sound_zone_manager && body)
+			// client is null in Logout so need to flush old sounds here
+			// ghost registering as a listener happens in Login
+			sound_zone_manager.unregister_listener(body)
+			// AI Eye picks up sounds separately so disgusting special handling here... heaven forgive me
+			var/mob/living/silicon/ai/ai = body
+			if (istype(ai))
+				sound_zone_manager.unregister_listener(ai.eyeobj)
+
 	if(!T)
 		T = pick(latejoin)			//Safety in case we cannot find the body's position
 	loc = T

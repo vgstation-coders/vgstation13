@@ -41,6 +41,7 @@
 			for(destination = destination.loc; !isturf(destination); destination = destination.loc);
 
 		forceEnter(destination)
+		INVOKE_EVENT(src, /event/moved, "mover" = src)
 
 		cameranet.visibility(src)
 		if(ai.client && ai.client.eye != src) // Set the eye to us and give the AI the sight & visibility flags it needs.
@@ -89,6 +90,8 @@
 /mob/living/silicon/ai/Destroy()
 	if(eyeobj)
 		eyeobj.ai = null
+		if (sound_zone_manager)
+			sound_zone_manager.unregister_listener(eyeobj)
 		QDEL_NULL(eyeobj) // No AI, no Eye
 	..()
 
@@ -192,6 +195,10 @@
 	eyeobj.ai = src
 	refresh_eyeobj_name()
 	eyeobj.forceMove(loc)
+	if (sound_zone_manager)
+		sound_zone_manager.unregister_listener(src)
+		sound_zone_manager.register_listener(eyeobj)
+		eyeobj.sound_endpoint = src
 
 /mob/living/silicon/ai/proc/refresh_eyeobj_name()
 	eyeobj.name = "[name] (AI Eye)"

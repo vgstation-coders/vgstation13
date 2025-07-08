@@ -7,6 +7,11 @@
 /mob
 	var/list/current_sound_emitters = list()
 	var/last_sound_zone_hash = null
+	// proxy for when the sound needs to be sent to some other mob, e.g. aiEye mob movement needs sounds sent to AI Core mob
+	//  this is because the AI Eye client is null and mob/proc/operator<< tries to send to client
+	var/mob/sound_endpoint = null
+/mob/New()
+	sound_endpoint = src
 
 /datum/sound_emitter
 	var/atom/source = null
@@ -88,7 +93,7 @@
 	for (var/mob/player in vicinity)
 		var/sound/PS = apply_player_effects(copy_sound(S), player)
 		if (PS.volume)
-			player << PS
+			player.sound_endpoint << PS
 
 /datum/sound_emitter/proc/is_currently_playing()
 	return ((active_key != null) && (channel != null))
@@ -108,7 +113,7 @@
 	S.status |= SOUND_UPDATE
 	for (var/mob/player in hearers)
 		S = apply_player_effects(copy_sound(S), player)
-		player << S
+		player.sound_endpoint << S
 
 /datum/sound_emitter/proc/stop()
 	if (!channel)
@@ -166,7 +171,7 @@
 		S.channel = channel.value
 		S = apply_env_effects(copy_sound(S))
 		S = apply_player_effects(S, player)
-		player << S
+		player.sound_endpoint << S
 
 /datum/sound_emitter/proc/on_exit_range(mob/player)
 	hearers -= player
@@ -176,7 +181,7 @@
 	var/sound/nullsound = sound(file = null)
 	nullsound.channel = channel.value
 	nullsound.status = SOUND_UPDATE | SOUND_MUTE
-	player << nullsound
+	player.sound_endpoint << nullsound
 
 /datum/sound_emitter/proc/contains(turf/T)
 	if (!T)
@@ -235,7 +240,7 @@
 		S.status = SOUND_UPDATE | SOUND_MUTE
 	S.channel = channel.value
 	for (var/mob/player in hearers)
-		player << S
+		player.sound_endpoint << S
 
 /datum/sound_emitter/proc/apply_player_effects(sound/s, var/mob/player)
 	if (player.is_deaf())
@@ -281,7 +286,7 @@
 	apply_env_effects(S)
 	apply_player_effects(S, player)
 	S.status |= SOUND_UPDATE
-	player << S
+	player.sound_endpoint << S
 
 /datum/sound_emitter/proc/players_in_range()
 	var/list/in_range = list()

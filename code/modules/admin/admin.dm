@@ -1556,6 +1556,10 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 
 	tomob.ghostize(0) //boot the old mob out
 
+	if (sound_zone_manager)
+		// flush sounds from old ghost before assigning ckey
+		sound_zone_manager.unregister_listener(frommob)
+
 	message_admins("<span class='adminnotice'>[key_name_admin(usr)] has put [frommob.ckey] in control of [tomob.name].</span>")
 	log_admin("[key_name(usr)] stuffed [frommob.ckey] into [tomob.name].")
 	feedback_add_details("admin_verb","CGD")
