@@ -397,3 +397,6 @@ BRANCH_HEAD .git/refs/heads/Bleeding-Edge
 
 ## Location of rsc string
 # RSCSTRING
+
+# Is dynamic+ enabled, allowing persistence to adjust antag weights?
+# DYNAMIC_PLUS
