@@ -286,7 +286,7 @@
 			<a href='?src=\ref[src];admin_toggle_silicon_use=1'>[allow_silicons ? "Forbid silicons from using this computer" : "Allow silicons to use this computer"]</a><br>
 			<a href='?src=\ref[src];admin_reset=1'>Reset shuttle</a><br><i>Revert the shuttle's areas to initial state</i><br>"}
 
-	user << browse("[dat]", "window=shuttle_control;size=575x450")
+	user << browse(HTML_SKELETON(dat), "window=shuttle_control;size=575x450")
 	onclose(user, "shuttle_control")
 
 /// Only pass `user` if the mob is directly interacting through the UI.

@@ -23,6 +23,9 @@
 	slot_flags = SLOT_HEAD
 	armor = list(melee = 30, bullet = 30, laser = 30, energy = 10, bomb = 25, bio = 0, rad = 0)
 	body_parts_covered = HEAD
+	slimeadd_message = "You spread the slime extract on the SRCTAG"
+	slimes_accepted = SLIME_SILVER
+	slimeadd_success_message = "It gives off a distinct shine as a result"
 	var/mob/chef //The mob who most recently added a non-reagent ingredient to or picked up the pan.
 	var/limit = 10 //Number of ingredients that the pan can hold at once.
 	var/speed_multiplier = 1 //Can be changed to modify cooking speed.
@@ -76,19 +79,15 @@
 		average_chem_temp = reagents.chem_temp
 		chem_temps = 1
 	for(var/atom/content in contents)
-		average_chem_temp += content.reagents.chem_temp
-		chem_temps++
+		if(content.reagents)
+			average_chem_temp += content.reagents.chem_temp
+			chem_temps++
 	if (chem_temps)
 		average_chem_temp /= chem_temps
 	steam_spawn_adjust(average_chem_temp)
 
 /obj/item/weapon/reagent_containers/pan/update_icon()
-
 	overlays.len = 0
-
-	if(blood_overlay)
-		overlays += blood_overlay
-
 	//reagents:
 	if(reagents.total_volume)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "pan20")
@@ -126,24 +125,14 @@
 		//put a front over the ingredients where they're occluded from view by the side of the pan
 		var/image/pan_front = image('icons/obj/pan.dmi', src, "pan_front")
 		overlays += pan_front
-		//put blood back onto the pan front
-		if(blood_overlay)
-
-			var/icon/I = new /icon('icons/obj/pan.dmi', "pan_front")
-			I.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD) //fills the icon_state with white (except where it's transparent)
-			I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY) //adds blood and the remaining white areas become transparant
-
-			var/image/frontblood = image(I)
-			frontblood.color = blood_color
-
-			overlays += frontblood
 		update_temperature_overlays()
 	else
-		remove_particles("Steam")
+		remove_particles(PS_STEAM)
 
 		//Note: an alternative to the above might be to overlay all of the non-reagent ingredients onto a single icon, then mask it with the "pan_mask" icon_state.
 		//This would obviate the need to regenerate the blood overlay, and help avoid anomalies with large ingredient sprites.
 		//However I'm not totally sure how to do this nicely.
+	set_blood_overlay()
 
 /////////////////////Dumping-and-splashing-related stuff/////////////////////
 
@@ -419,9 +408,10 @@
 		chem_temps = 1
 	//If there are non-reagent contents (meat etc), heat them as well
 	for(var/atom/content in contents)
-		content.reagents.heating(cook_energy / contents.len, cook_temperature)
-		average_chem_temp += content.reagents.chem_temp
-		chem_temps++
+		if(content.reagents)
+			content.reagents.heating(cook_energy / contents.len, cook_temperature)
+			average_chem_temp += content.reagents.chem_temp
+			chem_temps++
 
 	//making the pan steam when its content is hot enough
 	if (chem_temps)
@@ -451,8 +441,8 @@
 			cooked = cook_fail()
 
 		if(cooked)
-			if (cooked.reagents.chem_temp < COOKTEMP_READY)
-				cooked.reagents.chem_temp = COOKTEMP_READY//so cooking with frozen meat doesn't produce frozen steaks
+			if (cooked.reagents?.chem_temp < COOKTEMP_READY)
+				cooked.reagents?.chem_temp = COOKTEMP_READY//so cooking with frozen meat doesn't produce frozen steaks
 				cooked.update_icon()
 			cooked.forceMove(src)
 			update_icon()
@@ -464,7 +454,8 @@
 
 	//Hotspot expose
 	var/turf/T = get_turf(src)
-	T?.hotspot_expose(O ? O.cook_temperature() : COOKTEMP_DEFAULT, 500, 1, surfaces = 0) //Everything but the first arg is taken from igniter.
+	if(T)
+		try_hotspot_expose(O ? O.cook_temperature() : COOKTEMP_DEFAULT, MEDIUM_FLAME, 0) //Everything but the first arg is taken from igniter.
 
 /obj/item/weapon/reagent_containers/pan/proc/reset_cooking_progress()
 	cookingprogress = 0

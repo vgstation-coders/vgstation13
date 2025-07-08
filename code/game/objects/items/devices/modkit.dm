@@ -197,3 +197,19 @@
 	parts[1] =	1
 	original[1] = /obj/item/weapon/fireaxe
 	finished[1] = /obj/item/weapon/fireaxe/antimatter
+
+/obj/item/device/modkit/kineticshotgun
+	name = "proto-kinetic pump-shotgun conversion kit"
+	desc = "A set of tools that enables conversion of a proto-kinetic accelerator into a proto-kinetic pump-shotgun, capable of pump-action self-charging."
+	icon_state = "modkit_kinetic"
+	item_state = "modkit"
+
+/obj/item/device/modkit/kineticshotgun/New()
+	..()
+	parts = new/list(1)
+	original = new/list(1)
+	finished = new/list(1)
+
+	parts[1] =	1
+	original[1] = /obj/item/weapon/gun/energy/kinetic_accelerator
+	finished[1] = /obj/item/weapon/gun/energy/kinetic_accelerator/shotgun

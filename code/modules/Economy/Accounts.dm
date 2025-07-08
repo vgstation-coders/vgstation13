@@ -129,9 +129,9 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 	var/remote_access_pin = 0
 	var/money = 0
 	var/list/transaction_log = list()
-	var/security_level = 1	//0 - auto-identify from worn ID, require only account number
-							//1 - require manual login / account number and pin
-							//2 - require card and manual login
+	var/security_level = SECURITY_MANUAL_LOGIN	//0 - auto-identify from worn ID, require only account number
+												//1 - require manual login / account number and pin
+												//2 - require card and manual login
 	var/virtual = 0
 	var/virtual_wallet_wage_ratio = 50
 	var/wage_gain = 0 // How much an account gains per 'wage' tick.
@@ -326,7 +326,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 							<td><a href='?src=\ref[src];choice=view_account_detail;account_index=[i]'>View in detail</a></td>
 							</tr>"}
 					dat += "</table>"
-		user << browse(dat,"window=account_db;size=700x650")
+		user << browse(HTML_SKELETON(dat),"window=account_db;size=700x650")
 	else
 		user << browse(null,"window=account_db")
 
@@ -348,11 +348,8 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 					access_level = 1
 	if(issolder(O) && emagged)
 		var/obj/item/tool/solder/S = O
-		if(!S.remove_fuel(4,user))
-			return
-		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
-		if(do_after(user, src,4 SECONDS * S.work_speed))
-			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+		if(S.do_solder(user, src,4 SECONDS,4))
+			S.playtoolsound(loc, 100)
 			emagged = FALSE
 			access_level = 0
 			to_chat(user, "<span class='notice'>You repair the security checks on \the [src].</span>")
@@ -406,8 +403,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 						access_level = 0
 				else
 					var/obj/item/I = usr.get_active_hand()
-					if(isEmag(I))
-						emag_act(usr)
+					if(emag_check(I,usr))
 						return
 					if (istype(I, /obj/item/weapon/card/id))
 						var/obj/item/weapon/card/id/C = I
@@ -437,13 +433,18 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 				station_bonus = new_bonus
 			if("toggle_account")
 				if(detailed_account_view)
-					detailed_account_view.disabled = detailed_account_view.disabled ? 0 : 2
+					if(detailed_account_view == station_account)
+						visible_message("<span class='warning'>The station account cannot be modified in this way.</span>")
+					else
+						detailed_account_view.disabled = detailed_account_view.disabled ? 0 : 2
 			if("edit_wage_payout")
 				var/acc_num = text2num(href_list["account_num"])
 				var/datum/money_account/acc = get_money_account_global(acc_num)
-				if(acc)
+				if(acc == station_account)
+					visible_message("<span class='warning'>The station account cannot be modified in this way.</span>")
+				else if(acc)
 					var/new_payout = input(usr, "Select a new payout for this account", "New payout", acc.wage_gain) as null|num
-					if(new_payout >= 0 && new_payout != null)
+					if(new_payout != null && new_payout >= 0)
 						if(new_payout > ARBITRARILY_LARGE_NUMBER)
 							//10x what the entire station should be earning
 							spark(loc, 3, FALSE)

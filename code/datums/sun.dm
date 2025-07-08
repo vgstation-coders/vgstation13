@@ -14,9 +14,16 @@ var/global/datum/sun/sun
 	var/nextTime
 	var/lastAngle = 0
 	var/rotationRate = 1 //A pretty average way of setting up station rotation direction AND absolute speed
+	var/eclipse = ECLIPSE_NOT_YET
+	var/eclipse_rate = 1
+	var/eclipse_color_red = 1
+	var/eclipse_color_green = 1
+	var/eclipse_color_blue = 1
+	var/datum/eclipse_manager/eclipse_manager
 
 /datum/sun/New()
 
+	eclipse_manager = new
 	solars = solars_list
 	nextTime = updatePer
 
@@ -68,6 +75,12 @@ var/global/datum/sun/sun
 //For a solar panel, trace towards sun to see if we're in shadow.
 
 /datum/sun/proc/occlusion(const/obj/machinery/power/solar/panel/S)
+	if (eclipse == ECLIPSE_ONGOING)
+		S.obscured = 1
+		S.update_solar_exposure()
+		S.update_icon()
+		return
+
 	var/ax = S.x //Start at the solar panel.
 	var/ay = S.y
 	var/i

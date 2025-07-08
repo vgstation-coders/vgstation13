@@ -31,6 +31,10 @@
 	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 
+/obj/item/radio/integrated/signal/Destroy()
+	radio_controller.remove_object(src, frequency)
+	. = ..()
+
 /obj/item/radio/integrated/signal/initialize()
 	if (!radio_controller)
 		return
@@ -47,7 +51,7 @@
 /obj/item/radio/integrated/signal/proc/send_signal(message="ACTIVATE")
 
 
-	if(last_transmission && world.time < (last_transmission + 5))
+	if(last_transmission && world.time < (last_transmission + 0.5 SECONDS))
 		return
 	last_transmission = world.time
 

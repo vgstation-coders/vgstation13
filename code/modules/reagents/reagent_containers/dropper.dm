@@ -47,11 +47,7 @@
 	msg_admin_attack("[user.name] ([user.ckey]) squirted [M.name] ([M.key]) with [src.name]. Reagents: [reagents.get_reagent_ids(1)] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 	src.reagents.reaction_dropper(M)
 	src.reagents.remove_any(amount_per_transfer_from_this)
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 	update_icon()
 	return
 

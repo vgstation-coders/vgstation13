@@ -37,7 +37,6 @@
 	var/static/list/smoothables = list(
 		/turf/simulated/wall,
 		/obj/structure/falsewall,
-		/obj/structure/falserwall,
 	)
 	return smoothables
 
@@ -79,7 +78,8 @@
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
 
-	reset_view()
+	if(peepers)
+		reset_view()
 	ChangeTurf(dismantle_type)
 	update_near_walls()
 
@@ -164,6 +164,8 @@
 					new /obj/effect/cult_shortcut(src)
 					user.visible_message("<span class='warning'>[user] has painted a strange sigil on \the [src].</span>", \
 						"<span class='notice'>You finish drawing the sigil.</span>")
+					var/datum/role/cultist/cul = iscultist(user)
+					cul.gain_devotion(5, DEVOTION_TIER_4, "shortcut_sigil", src)
 			return
 
 	if(bullet_marks)
@@ -187,6 +189,8 @@
 	return ..()
 
 /turf/simulated/wall/proc/reset_view(atom/movable/mover, var/adjacency_check = TRUE)
+	if(!peepers)
+		return
 	var/list/mob/living/mobs2reset
 	if(isliving(mover) && (mover in peepers))
 		if(adjacency_check && Adjacent(mover))
@@ -202,15 +206,13 @@
 		peepers -= L
 
 /turf/simulated/wall/proc/attack_rotting(mob/user as mob)
-	if(istype(src, /turf/simulated/wall/r_wall)) //I wish I didn't have to do typechecks
-		to_chat(user, "<span class='notice'>This [src] feels rather unstable.</span>")
-		return
-	else
-		//Should be a normal wall or a mineral wall, SHOULD
-		user.visible_message("<span class='warning'>\The [src] crumbles under [user]'s touch.</span>", \
-		"<span class='notice'>\The [src] crumbles under your touch.</span>")
-		dismantle_wall()
-		return
+	//Should be a normal wall or a mineral wall, SHOULD
+	user.visible_message("<span class='warning'>\The [src] crumbles under [user]'s touch.</span>", \
+	"<span class='notice'>\The [src] crumbles under your touch.</span>")
+	dismantle_wall()
+	
+/turf/simulated/wall/r_wall/attack_rotting(mob/user as mob)
+	to_chat(user, "<span class='notice'>This [src] feels rather unstable.</span>")
 
 /turf/simulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(W.attack_delay)
@@ -226,7 +228,8 @@
 		to_chat(user, "<span class='notice'>You remove the hole[bullet_marks > 1 ? "s" : ""] with \the [W].</span>")
 		bullet_marks = 0
 		icon = initial(icon)
-		reset_view()
+		if(peepers)
+			reset_view()
 		return
 
 	//Get the user's location
@@ -415,7 +418,7 @@
 		investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been thermited through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 		message_admins("\The [src] with a pdiff of [pdiff] has been thermited by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 
-	hotspot_expose(3000, 125, surfaces = 1) //Only works once when the thermite is created, but else it would need to not be an effect to work
+	hotspot_expose(3000, LARGE_FLAME, 1) //Only works once when the thermite is created, but else it would need to not be an effect to work
 	spawn(100)
 		if(O)
 			visible_message("<span class='danger'>\The [O] melts right through \the [src].</span>")
@@ -447,7 +450,10 @@
 /turf/simulated/wall/cultify()
 	ChangeTurf(/turf/simulated/wall/cult)
 	turf_animation('icons/effects/effects.dmi',"cultwall", 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
-	return
+
+/turf/simulated/wall/decultify()
+	..()
+	ChangeTurf(/turf/simulated/wall)
 
 /turf/simulated/wall/attack_construct(mob/user as mob)
 	if(istype(user,/mob/living/simple_animal/construct/builder))

@@ -824,11 +824,7 @@
 /turf/simulated/floor/carpet,
 /area/vault/ironchef)
 "dt" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/ironchef)
 "jl" = (
@@ -838,17 +834,6 @@
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
-/area/vault/ironchef)
-"mN" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
 /area/vault/ironchef)
 "vi" = (
 /obj/structure/closet/crate/hydroponics,
@@ -869,17 +854,6 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/vault/ironchef)
-"Zp" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
 /area/vault/ironchef)
 
 (1,1,1) = {"
@@ -1030,7 +1004,7 @@ aW
 bD
 bT
 ar
-Zp
+dt
 aa
 aa
 aa
@@ -1118,7 +1092,7 @@ aW
 bK
 bR
 ar
-mN
+dt
 aa
 aa
 aa
@@ -1162,7 +1136,7 @@ aW
 bG
 bR
 ar
-Zp
+dt
 aa
 aa
 aa
@@ -1250,7 +1224,7 @@ bf
 bD
 aZ
 ar
-mN
+dt
 aa
 aa
 aa

@@ -19,7 +19,7 @@
 	_color = "wristwatch"
 	accessory_exclusion = WRISTWATCH
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = FALSE
 	var/last_hour = 12
 	var/last_minute = 12
 	var/luminescent = TRUE
@@ -192,7 +192,7 @@
 	fall = new /spell/aoe_turf/fall
 	caster.add_spell(fall)
 	fall.spell_flags = 0
-	fall.invocation_type = SpI_NONE
+	fall.invocation_type = SP_INV_NONE
 	fall.the_world_chance = 0
 	fall.range = 3
 	fall.sleeptime = 5 SECONDS

@@ -192,7 +192,7 @@ var/list/datum/stack_recipe/chain_recipes = list (
 
 /obj/item/stack/bolts
 	name = "plasteel bolts"
-	singular name = "bag of plasteel bolts"
+	singular_name = "bag of plasteel bolts"
 	desc = "Plasteel bolts are used in the anchoring of structures, though they can also be applied to reinforced flooring to make it difficult to crawl across."
 	icon_state = "bagofbolts"
 	flags = FPRINT

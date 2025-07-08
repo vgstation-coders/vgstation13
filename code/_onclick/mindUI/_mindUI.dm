@@ -107,15 +107,16 @@ var/list/mind_ui_ID2type = list()
 	var/datum/mind_ui/parent = null
 	var/offset_x = 0 //KEEP THESE AT 0, they are set by /obj/abstract/mind_ui_element/hoverable/movable/
 	var/offset_y = 0
+	var/offset_layer = MIND_UI_GROUP_A
 
 	var/x = "CENTER"
 	var/y = "CENTER"
-
 
 	var/list/element_types_to_spawn = list()
 	var/list/sub_uis_to_spawn = list()
 
 	var/display_with_parent = FALSE
+	var/never_move = FALSE	//for when you don't want a child UI to get moved along with its parent
 
 	var/active = TRUE
 
@@ -247,7 +248,9 @@ var/list/mind_ui_ID2type = list()
 	var/base_icon_state
 
 	var/datum/mind_ui/parent = null
-	var/element_flags = 0	// PROCESSING
+	var/element_flags = 0
+	//MINDUI_FLAG_PROCESSING - Adds the element to processing_objects and calls process()
+	//MINDUI_FLAG_TOOLTIP	 - Displays a tooltip upon mouse hovering (only for /obj/abstract/mind_ui_element/hoverable !)
 
 	var/offset_x = 0
 	var/offset_y = 0
@@ -260,6 +263,17 @@ var/list/mind_ui_ID2type = list()
 	base_icon_state = icon_state
 	parent = P
 	UpdateUIScreenLoc()
+
+	if (element_flags & MINDUI_FLAG_PROCESSING)
+		processing_objects.Add(src)
+
+/obj/abstract/mind_ui_element/Destroy()
+	if (element_flags & MINDUI_FLAG_PROCESSING)
+		processing_objects.Remove(src)
+	..()
+
+/obj/abstract/mind_ui_element/proc/CanAppear()
+	return TRUE
 
 /obj/abstract/mind_ui_element/proc/Appear()
 	if (invisibility)
@@ -283,20 +297,45 @@ var/list/mind_ui_ID2type = list()
 
 /obj/abstract/mind_ui_element/proc/UpdateUIScreenLoc()
 	screen_loc = "[parent.x]:[offset_x + parent.offset_x],[parent.y]:[offset_y+parent.offset_y]"
+	layer = initial(layer) + parent.offset_layer
 
 /obj/abstract/mind_ui_element/proc/UpdateIcon(var/appear = FALSE)
 	return
 
-/obj/abstract/mind_ui_element/proc/String2Image(var/string) // only supports numbers right now
+/obj/abstract/mind_ui_element/proc/String2Image(var/string,var/spacing=6,var/image_font='icons/ui/font_8x8.dmi',var/_color="#FFFFFF",var/_pixel_x = 0,var/_pixel_y = 0) // only supports numbers right now
 	if (!string)
-		return image('icons/ui/16x16.dmi',"")
+		return image(image_font,"")
 
-	var/image/result = image('icons/ui/16x16.dmi',"")
+	var/image/result = image(image_font,"")
 	for (var/i = 1 to length(string))
-		var/image/I = image('icons/ui/16x16.dmi',copytext(string,i,i+1))
-		I.pixel_x = (i - 1) * 6
+		var/image/I = image(image_font,copytext(string,i,i+1))
+		I.pixel_x = (i - 1) * spacing
 		result.overlays += I
+	result.color = _color
+	result.pixel_x = _pixel_x
+	result.pixel_y = _pixel_y
 	return result
+
+/obj/abstract/mind_ui_element/proc/String2Maptext(var/string,var/font="Consolas",var/font_size="8pt",var/_color="#FFFFFF",var/_pixel_x = 0,var/_pixel_y = 0)
+	if (!string)
+		return image(icon = null)
+
+	var/image/I_shadow = image(icon = null)
+	I_shadow.maptext = {"<span style="color:#000000;font-size:[font_size];font-family:'[font]';">[string]</span>"}
+	I_shadow.maptext_height = 512
+	I_shadow.maptext_width = 512
+	I_shadow.maptext_x = 1 + _pixel_x
+	I_shadow.maptext_y = -1 + _pixel_y
+	var/image/I = image(icon = null)
+	I.maptext = {"<span style="color:[_color];font-size:[font_size];font-family:'[font]';">[string]</span>"}
+	I.maptext_height = 512
+	I.maptext_width = 512
+	I.maptext_x = _pixel_x
+	I.maptext_y = _pixel_y
+
+	overlays += I_shadow
+	overlays += I
+
 
 /obj/abstract/mind_ui_element/proc/SlideUIElement(var/new_x = 0, var/new_y = 0, var/duration, var/layer = MIND_UI_BACK, var/hide_after = FALSE)
 	invisibility = 101
@@ -321,18 +360,63 @@ var/list/mind_ui_ID2type = list()
 // Make use of MouseEntered/MouseExited to allow for effects and behaviours related to simply hovering above the element
 
 /obj/abstract/mind_ui_element/hoverable
+	var/hovering = FALSE
+	var/tooltip_title = "Undefined UI Element"
+	var/tooltip_content = ""
+	var/tooltip_theme = "default"
+	var/hover_state = TRUE
 
 /obj/abstract/mind_ui_element/hoverable/MouseEntered(location,control,params)
-	StartHovering()
+	StartHovering(location,control,params)
+	hovering = 1
 
 /obj/abstract/mind_ui_element/hoverable/MouseExited()
 	StopHovering()
+	hovering = 0
 
-/obj/abstract/mind_ui_element/hoverable/proc/StartHovering()
-	icon_state = "[base_icon_state]-hover"
+/obj/abstract/mind_ui_element/hoverable/Hide()
+	..()
+	StopHovering()
+	hovering = 0
+
+/obj/abstract/mind_ui_element/hoverable/Disappear()
+	..()
+	StopHovering()
+	hovering = 0
+
+/obj/abstract/mind_ui_element/hoverable/proc/StartHovering(var/location,var/control,var/params)
+	if (hover_state)
+		icon_state = "[base_icon_state]-hover"
+	if (element_flags & MINDUI_FLAG_TOOLTIP)
+		var/mob/M = GetUser()
+		if (M)
+			//I hate this, I hate this, but somehow the tooltips won't appear in the right place unless I do this black magic
+			//this only happens with mindUI elements, but the more offset from the center the elements are, tooltips become even more offset.
+			//this code corrects this extra offset.
+			var/list/param_list = params2list(params)
+			var/screenloc = param_list["screen-loc"]
+			var/x_index = findtext(screenloc, ":", 1, 0)
+			var/comma_index = findtext(screenloc,",", x_index, 0)
+			var/y_index = findtext(screenloc,":", comma_index, 0)
+			var/x_loc = text2num(copytext(screenloc, 1, x_index))
+			var/y_loc = text2num(copytext(screenloc, comma_index+1, y_index))
+			if (x_loc <= 7)
+				x_loc = 7
+			else
+				x_loc = 9
+			if (y_loc <= 7)
+				y_loc = 7
+			else
+				y_loc = 9
+			openToolTip(M,src,"icon-x=1;icon-y=1;screen-loc=[x_loc]:1,[y_loc]:1",title = tooltip_title,content = tooltip_content,theme = tooltip_theme)
 
 /obj/abstract/mind_ui_element/hoverable/proc/StopHovering()
-	icon_state = "[base_icon_state]"
+	if (hover_state)
+		icon_state = "[base_icon_state]"
+	if (element_flags & MINDUI_FLAG_TOOLTIP)
+		var/mob/M = GetUser()
+		if (M)
+			closeToolTip(M)
 
 
 ////////////////// MOVABLE ////////////////////////
@@ -432,6 +516,11 @@ var/list/mind_ui_ID2type = list()
 		parent.offset_x += dest_x_val - start_x_val
 		parent.offset_y += dest_y_val - start_y_val
 		parent.UpdateUIScreenLoc()
+		for (var/datum/mind_ui/sub in parent.subUIs)
+			if (!sub.never_move)
+				sub.offset_x += dest_x_val - start_x_val
+				sub.offset_y += dest_y_val - start_y_val
+				sub.UpdateUIScreenLoc()
 	else
 		offset_x += dest_x_val - start_x_val
 		offset_y += dest_y_val - start_y_val

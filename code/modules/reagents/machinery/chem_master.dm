@@ -145,8 +145,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		if(B.w_class > W_CLASS_SMALL)
 			to_chat(user, "<span class='warning'>\The [B] is too big to fit.</span>")
 			return
-		if(!user.drop_item(B, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [B]!</span>")
+		if(!user.drop_item(B, src, failmsg = TRUE))
 			return
 
 		src.container = B
@@ -164,8 +163,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		if(src.loaded_pill_bottle)
 			to_chat(user, "<span class='warning'>There already is a pill bottle loaded in the machine.</span>")
 			return
-		if(!user.drop_item(B, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [B]!</span>")
+		if(!user.drop_item(B, src, failmsg = TRUE))
 			return
 
 		src.loaded_pill_bottle = B

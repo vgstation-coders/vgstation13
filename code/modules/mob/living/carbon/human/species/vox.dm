@@ -39,7 +39,7 @@
 	wear_suit_icons = 'icons/mob/species/vox/suit.dmi'
 	wear_mask_icons = 'icons/mob/species/vox/masks.dmi'
 	back_icons      = 'icons/mob/species/vox/back.dmi'
-
+	accessory_icons = 'icons/mob/species/vox/clothing_accessories.dmi'
 	has_mutant_race = 0
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart/vox,
@@ -111,6 +111,27 @@
 		return
 	vox_tail.update_tail(vox)
 
+	if(/datum/dna/gene/disability/lisp in vox.active_genes) //!! Vox Beaks !!
+		switch(vox.my_appearance.s_tone)
+			if(VOXEMERALD)
+				icobase = 'icons/mob/human_races/vox/r_voxemrl_duck.dmi'
+				deform = 'icons/mob/human_races/vox/r_def_voxemrl_duck.dmi'
+			if(VOXAZURE)
+				icobase = 'icons/mob/human_races/vox/r_voxazu_duck.dmi'
+				deform = 'icons/mob/human_races/vox/r_def_voxazu_duck.dmi'
+			if(VOXLGREEN)
+				icobase = 'icons/mob/human_races/vox/r_voxlgrn_duck.dmi'
+				deform = 'icons/mob/human_races/vox/r_def_voxlgrn_duck.dmi'
+			if(VOXGRAY)
+				icobase = 'icons/mob/human_races/vox/r_voxgry_duck.dmi'
+				deform = 'icons/mob/human_races/vox/r_def_voxgry_duck.dmi'
+			if(VOXBROWN)
+				icobase = 'icons/mob/human_races/vox/r_voxbrn_duck.dmi'
+				deform = 'icons/mob/human_races/vox/r_def_voxbrn_duck.dmi'
+			else
+				icobase = 'icons/mob/human_races/vox/r_vox_duck.dmi'
+				deform = 'icons/mob/human_races/vox/r_def_vox_duck.dmi'
+
 /datum/species/skellington/skelevox // Science never goes too far, it's the public that's too conservative
 	name = "Skeletal Vox"
 	icobase = 'icons/mob/human_races/vox/r_voxboney.dmi'
@@ -145,7 +166,7 @@
 	wear_suit_icons = 'icons/mob/species/vox/suit.dmi'
 	wear_mask_icons = 'icons/mob/species/vox/masks.dmi'
 //	back_icons      = 'icons/mob/back.dmi'
-
+	accessory_icons = 'icons/mob/species/vox/clothing_accessories.dmi'
 	has_organ = list(
 		"brain" =    /datum/organ/internal/brain,
 		"eyes" =     /datum/organ/internal/eyes/vox
@@ -158,3 +179,6 @@
 	for(var/i = 1 to sounds)
 		newname += pick(vox_name_syllables)
 	return capitalize(newname)
+
+/datum/species/skellington/skelevox/fallback()
+	return "Vox"

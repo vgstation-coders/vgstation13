@@ -212,11 +212,6 @@ For vending packs, see vending_packs.dm*/
 
 	add_fingerprint(user)
 
-	if(istype(I,/obj/item/weapon/card/emag) && !hacked)
-		to_chat(user, "<span class='notice'>Special supplies unlocked.</span>")
-		hacked = 1
-		can_order_contraband = 1
-		return
 	if(I.is_screwdriver(user))
 		I.playtoolsound(loc, 50)
 		if(do_after(user, src, 20))
@@ -251,11 +246,13 @@ For vending packs, see vending_packs.dm*/
 	else
 		return ..()
 
-/obj/machinery/computer/supplycomp/emag_ai(mob/living/silicon/ai/A)
-	to_chat(A, "<span class='warning'>Special supplies unlocked.</span>")
-	hacked = 1
-	can_order_contraband = 1
-
+/obj/machinery/computer/supplycomp/emag_act(mob/user)
+	if(!hacked)
+		to_chat(user, "<span class='warning'>Special supplies unlocked.</span>")
+		hacked = 1
+		can_order_contraband = 1
+	else
+		return ..()
 
 /obj/machinery/computer/supplycomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(!current_acct)
@@ -470,7 +467,10 @@ For vending packs, see vending_packs.dm*/
 		// check they can afford the order
 		if(P.cost * crates + total_money_req > account.money)
 			var/max_crates = round((account.money - total_money_req) / P.cost)
-			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
+			if(max_crates > 0)
+				to_chat(usr, "<span class='warning'>You can only afford [max_crates] crate[max_crates == 1 ? "" : "s"].</span>")
+			else
+				to_chat(usr, "<span class='warning'>You cannot afford any crates.</span>")
 			return
 		var/timeout = world.time + 600
 		var/reason = stripped_input(usr,"Why do you want this crate and where/to whom would you like it sent?","Reason/Destination:","",REASON_LEN)
@@ -836,7 +836,10 @@ For vending packs, see vending_packs.dm*/
 		if((P.cost * crates + total_money_req > account.money))
 			// Tell them how many they can actually afford if they can't afford their order
 			var/max_crates = round((account.money - total_money_req) / P.cost)
-			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
+			if(max_crates > 0)
+				to_chat(usr, "<span class='warning'>You can only afford [max_crates] crate[max_crates == 1 ? "" : "s"].</span>")
+			else
+				to_chat(usr, "<span class='warning'>You cannot afford any crates.</span>")
 			return
 		var/reason = stripped_input(usr,"Why do you want this crate and where/to whom would you like it sent?","Reason/Destination:","",REASON_LEN)
 		if(world.time > timeout)

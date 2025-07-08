@@ -44,17 +44,11 @@
 	icon_state = "queen_s"
 	pixel_x = -16 * PIXEL_MULTIPLIER
 
-/mob/living/carbon/alien/humanoid/queen/large/update_icons()
-	lying_prev = lying	//so we don't update overlays for lying/standing unless our stance changes again
-	update_hud()		//TODO: remove the need for this to be here
-	overlays.len = 0
+/mob/living/carbon/alien/humanoid/queen/large/update_icon_state()
 	if(lying)
 		if(resting)
 			icon_state = "queen_sleep"
-		else						icon_state = "queen_l"
-		for(var/image/I in overlays_lying)
-			overlays += I
+		else
+			icon_state = "queen_l"
 	else
 		icon_state = "queen_s"
-		for(var/image/I in overlays_standing)
-			overlays += I

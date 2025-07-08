@@ -77,11 +77,7 @@
 
 	M.attack_log += text("\[[time_stamp()]\] <font color='red'>bit [src.name] ([src.ckey]) for [damage] damage</font>")
 	src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bitten by [M.name] ([M.ckey]) for [damage] damage</font>")
-	if(!iscarbon(M))
-		LAssailant = null
-	else
-		LAssailant = M
-		assaulted_by(M)
+	assaulted_by(M)
 	log_attack("[src.name] ([src.ckey]) bitten by [M.name] ([M.ckey])")
 
 	return
@@ -177,11 +173,7 @@
 
 	M.attack_log += text("\[[time_stamp()]\] <font color='red'>Kicked [src.name] ([src.ckey]) for [damage] damage</font>")
 	src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been kicked by [M.name] ([M.ckey]) for [damage] damage</font>")
-	if(!iscarbon(M))
-		LAssailant = null
-	else
-		LAssailant = M
-		assaulted_by(M)
+	assaulted_by(M)
 	log_attack("[src.name] ([src.ckey]) kicked by [M.name] ([M.ckey])")
 
 /mob/living/carbon/human/proc/attack_hand_contact_diseases(var/mob/living/carbon/human/M, var/datum/organ/external/affecting_override = null, var/kick = FALSE, var/bite = FALSE)

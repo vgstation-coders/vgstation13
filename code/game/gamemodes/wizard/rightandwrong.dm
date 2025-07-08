@@ -60,219 +60,280 @@
 		else
 			return equip_guns(R)
 
+//Reworked summoning code
+//Will now track spawned items so that they show up at the round-end scoreboard
+//selected_path: The item to be spawned and the main item which will determine what name and image show up
+//override_icon: When you want the image to have a different icon
+//override_icon_state: Ditto for icon state
+//override_item_name: Can make the item show up with a different name as needed
+//Clothes-giving code remains relatively untouched
+
 /mob/living/carbon/human/proc/equip_guns(var/datum/role/R)
-	var/randomizeguns = pick("taser","stunrevolver","egun","laser", "lasmusket", "retro","disintegrator","heavydisintegrator","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","mosin","obrez","beegun","chillgun","hornetgun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ionpistol", "ioncarbine", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver", "nt12", "automag", "lolly_lobber")
-	switch (randomizeguns)
-		if("taser")
-			new /obj/item/weapon/gun/energy/taser(get_turf(src))
-		if("stunrevolver")
-			new /obj/item/weapon/gun/energy/stunrevolver(get_turf(src))
-		if("egun")
-			new /obj/item/weapon/gun/energy/gun(get_turf(src))
-		if("laser")
-			new /obj/item/weapon/gun/energy/laser(get_turf(src))
-		if("lasmusket")
-			new /obj/item/weapon/gun/energy/lasmusket/preloaded(get_turf(src))
-		if("retro")
-			new /obj/item/weapon/gun/energy/laser/retro(get_turf(src))
-		if("disintegrator")
-			new /obj/item/weapon/gun/energy/smalldisintegrator(get_turf(src))
-		if("heavydisintegrator")
-			new /obj/item/weapon/gun/energy/heavydisintegrator(get_turf(src))
-		if("laserak")
-			new /obj/item/weapon/gun/energy/laser/LaserAK(get_turf(src))
-		if("plasmapistol")
-			new /obj/item/weapon/gun/energy/plasma/pistol(get_turf(src))
-		if("plasmarifle")
-			new /obj/item/weapon/gun/energy/plasma/light(get_turf(src))
-		if("revolver")
-			new /obj/item/weapon/gun/projectile/revolver(get_turf(src))
-		if("detective")
-			new /obj/item/weapon/gun/projectile/detective(get_turf(src))
-		if("c20r")
-			new /obj/item/weapon/gun/projectile/automatic/c20r(get_turf(src))
-		if("nuclear")
-			new /obj/item/weapon/gun/energy/gun/nuclear(get_turf(src))
-		if("deagle")
-			new /obj/item/weapon/gun/projectile/deagle/camo(get_turf(src))
-		if("gyrojet")
-			new /obj/item/weapon/gun/projectile/gyropistol(get_turf(src))
-		if("pulse")
-			new /obj/item/weapon/gun/energy/pulse_rifle(get_turf(src))
-		if("silenced")
-			new /obj/item/weapon/gun/projectile/pistol(get_turf(src))
+	var/randomizeguns = pick("Taser", "Stun Revolver", "Energy Gun", "Laser Gun", "Laser Musket", "Retro Laser Gun",
+							"Disintegrator", "Heavy Disintegrator", "Laser AK470", "Plasma Pistol", "Plasma Rifle",
+							"Revolver", "Detective's Revolver", "C-20r SMG", "Advanced Energy Gun", "Desert Eagle",
+							"Gyrojet Pistol", "Pulse Rifle", "Silenced Pistol", "Laser Cannon", "Double-barreled Shotgun",
+							"Shotgun", "Combat Shotgun", "Mateba", "Submachine Gun", "Uzi", "Micro Uzi",
+							"Mini Energy-Crossbow", "L6 SAW", "PGM Hécate II", "Overwatch Standard Issue Pulse Rifle",
+							"Gatling Gun", "Righteous Bison", "Ricochet Rifle", "Spur", "Mosin Nagant", "Obrez",
+							"Bee Gun", "Chillbug Gun", "Hornet Gun", "Beretta 92FS", "NT USP", "NT Glock", "Luger P08",
+							"Colt Single Action Army", "Lawgiver", "Ion Pistol", "Ion Carbine", "Combustion Cannon",
+							"Laser Pistol", "Siren", "Bullet Storm", "NT-12", "Prestige Automag VI", "Lolly Lobber")
+	var/selected_path //Used for determining icon and name so that it shows up at the scoreboard
+	var/override_icon //In case an item should look like something else, such as the Spur
+	var/override_icon_state
+	var/override_item_name //In case you want the randomizeguns to say a different name instead
+	switch(randomizeguns)
+		if("Taser")
+			selected_path = /obj/item/weapon/gun/energy/taser
+		if("Stun Revolver")
+			selected_path = /obj/item/weapon/gun/energy/stunrevolver
+		if("Energy Gun")
+			selected_path = /obj/item/weapon/gun/energy/gun
+		if("Laser Gun")
+			selected_path = /obj/item/weapon/gun/energy/laser
+		if("Laser Musket")
+			selected_path = /obj/item/weapon/gun/energy/lasmusket/preloaded
+		if("Retro Laser Gun")
+			selected_path = /obj/item/weapon/gun/energy/laser/retro
+		if("Disintegrator")
+			selected_path = /obj/item/weapon/gun/energy/smalldisintegrator
+		if("Heavy Disintegrator")
+			selected_path = /obj/item/weapon/gun/energy/heavydisintegrator
+		if("Laser AK470")
+			selected_path = /obj/item/weapon/gun/energy/laser/LaserAK
+		if("Plasma Pistol")
+			selected_path = /obj/item/weapon/gun/energy/plasma/pistol
+		if("Plasma Rifle")
+			selected_path = /obj/item/weapon/gun/energy/plasma/light
+		if("Revolver")
+			selected_path = /obj/item/weapon/gun/projectile/revolver
+		if("Detective's Revolver")
+			selected_path = /obj/item/weapon/gun/projectile/detective
+		if("C-20r SMG")
+			selected_path = /obj/item/weapon/gun/projectile/automatic/c20r
+		if("Advanced Energy Gun")
+			selected_path = /obj/item/weapon/gun/energy/gun/nuclear
+		if("Desert Eagle")
+			selected_path = /obj/item/weapon/gun/projectile/deagle/camo
+		if("Gyrojet Pistol")
+			selected_path = /obj/item/weapon/gun/projectile/gyropistol
+		if("Pulse Rifle")
+			selected_path = /obj/item/weapon/gun/energy/pulse_rifle
+		if("Silenced Pistol")
+			override_item_name = "Silenced Pistol"
+			selected_path = /obj/item/weapon/gun/projectile/pistol
+			override_icon_state = "pistol-silencer"
 			new /obj/item/gun_part/silencer(get_turf(src))
-		if("cannon")
-			new /obj/item/weapon/gun/energy/laser/cannon(get_turf(src))
-		if("doublebarrel")
-			new /obj/item/weapon/gun/projectile/shotgun/pump/(get_turf(src))
-		if("shotgun")
-			new /obj/item/weapon/gun/projectile/shotgun/pump/(get_turf(src))
-		if("combatshotgun")
-			new /obj/item/weapon/gun/projectile/shotgun/pump/combat(get_turf(src))
-		if("mateba")
-			new /obj/item/weapon/gun/projectile/mateba(get_turf(src))
-		if("smg")
-			new /obj/item/weapon/gun/projectile/automatic(get_turf(src))
-		if("uzi")
-			new /obj/item/weapon/gun/projectile/automatic/uzi(get_turf(src))
-		if("microuzi")
-			new /obj/item/weapon/gun/projectile/automatic/microuzi(get_turf(src))
-		if("crossbow")
-			new /obj/item/weapon/gun/energy/crossbow(get_turf(src))
-		if("saw")
-			new /obj/item/weapon/gun/projectile/automatic/l6_saw(get_turf(src))
-		if("hecate")
-			new /obj/item/weapon/gun/projectile/hecate(get_turf(src))
+		if("Laser Cannon")
+			selected_path = /obj/item/weapon/gun/energy/laser/cannon
+		if("Double-barreled Shotgun")
+			selected_path = /obj/item/weapon/gun/projectile/shotgun/doublebarrel
+		if("Shotgun")
+			selected_path = /obj/item/weapon/gun/projectile/shotgun/pump
+		if("Combat Shotgun")
+			selected_path = /obj/item/weapon/gun/projectile/shotgun/pump/combat
+		if("Mateba")
+			selected_path = /obj/item/weapon/gun/projectile/mateba
+		if("Submachine Gun")
+			selected_path = /obj/item/weapon/gun/projectile/automatic
+		if("Uzi")
+			selected_path = /obj/item/weapon/gun/projectile/automatic/uzi
+		if("Micro Uzi")
+			selected_path = /obj/item/weapon/gun/projectile/automatic/microuzi
+		if("Mini Energy-Crossbow")
+			selected_path = /obj/item/weapon/gun/energy/crossbow
+		if("L6 SAW")
+			selected_path = /obj/item/weapon/gun/projectile/automatic/l6_saw
+		if("PGM Hécate II")
+			selected_path = /obj/item/weapon/gun/projectile/hecate
 			new /obj/item/ammo_casing/BMG50(get_turf(src))//can't give a full box of such deadly bullets. 3 shots is plenty.
 			new /obj/item/ammo_casing/BMG50(get_turf(src))
-		if("osipr")
-			new /obj/item/weapon/gun/osipr(get_turf(src))
-		if("gatling")
-			new /obj/item/weapon/gun/gatling(get_turf(src))
-		if("bison")
-			new /obj/item/weapon/gun/energy/bison(get_turf(src))
-		if("ricochet")
-			new /obj/item/weapon/gun/energy/ricochet(get_turf(src))
-		if("spur")
-			new /obj/item/weapon/gun/energy/polarstar(get_turf(src))
+		if("Overwatch Standard Issue Pulse Rifle")
+			selected_path = /obj/item/weapon/gun/osipr
+		if("Gatling Gun")
+			selected_path = /obj/item/weapon/gun/gatling
+		if("Righteous Bison")
+			selected_path = /obj/item/weapon/gun/energy/bison
+		if("Ricochet Rifle")
+			selected_path = /obj/item/weapon/gun/energy/ricochet
+		if("Spur")
+			selected_path = /obj/item/weapon/gun/energy/polarstar
+			override_icon_state = "spur"
+			override_item_name = "Spur"
 			new /obj/item/device/modkit/spur_parts(get_turf(src))
-		if("mosin")
-			new /obj/item/weapon/gun/projectile/mosin(get_turf(src))
-		if("obrez")
-			new /obj/item/weapon/gun/projectile/mosin/obrez(get_turf(src))
-		if("beegun")
-			new /obj/item/weapon/gun/gatling/beegun(get_turf(src))
-		if("chillgun")
-			new /obj/item/weapon/gun/gatling/beegun/chillgun(get_turf(src))
-		if("hornetgun")
-			new /obj/item/weapon/gun/gatling/beegun/hornetgun(get_turf(src))
-		if("beretta")
-			new /obj/item/weapon/gun/projectile/beretta(get_turf(src))
-		if("usp")
-			new /obj/item/weapon/gun/projectile/NTUSP/fancy(get_turf(src))
-		if("glock")
-			new /obj/item/weapon/gun/projectile/glock/fancy(get_turf(src))
-		if("luger")
-			new /obj/item/weapon/gun/projectile/luger(get_turf(src))
-		if("colt")
-			new /obj/item/weapon/gun/projectile/colt(get_turf(src))
-		if("lawgiver")
-			new /obj/item/weapon/gun/lawgiver(get_turf(src))
-		if("ionpistol")
-			new /obj/item/weapon/gun/energy/ionrifle/ioncarbine/ionpistol(get_turf(src))
-		if("ioncarbine")
-			new /obj/item/weapon/gun/energy/ionrifle/ioncarbine(get_turf(src))
-		if("combustioncannon")
-			new /obj/item/weapon/gun/energy/laser/captain/combustion(get_turf(src))
-		if("laserpistol")
-			new /obj/item/weapon/gun/energy/laser/pistol(get_turf(src))
-		if("siren")
-			new /obj/item/weapon/gun/siren(get_turf(src))
-		if("bulletstorm")
-			new /obj/item/weapon/gun/bulletstorm(get_turf(src))
-		if("nt12")
-			new /obj/item/weapon/gun/projectile/shotgun/nt12(get_turf(src))
-		if("automag")
-			new /obj/item/weapon/gun/projectile/automag/prestige(get_turf(src))
-		if("lolly_lobber")
-			new /obj/item/weapon/gun/lolly_lobber(get_turf(src))
+		if("Mosin Nagant")
+			selected_path = /obj/item/weapon/gun/projectile/mosin
+		if("Obrez")
+			selected_path = /obj/item/weapon/gun/projectile/mosin/obrez
+		if("Bee Gun")
+			selected_path = /obj/item/weapon/gun/gatling/beegun
+		if("Chillbug Gun")
+			selected_path = /obj/item/weapon/gun/gatling/beegun/chillgun
+		if("Hornet Gun")
+			selected_path = /obj/item/weapon/gun/gatling/beegun/hornetgun
+		if("Beretta 92FS")
+			selected_path = /obj/item/weapon/gun/projectile/beretta
+		if("NT USP")
+			selected_path = /obj/item/weapon/gun/projectile/NTUSP/fancy
+		if("NT Glock")
+			selected_path = /obj/item/weapon/gun/projectile/glock/fancy
+		if("Luger P08")
+			selected_path = /obj/item/weapon/gun/projectile/luger
+		if("Colt Single Action Army")
+			selected_path = /obj/item/weapon/gun/projectile/colt
+		if("Lawgiver")
+			selected_path = /obj/item/weapon/gun/lawgiver
+		if("Ion Pistol")
+			selected_path = /obj/item/weapon/gun/energy/ionrifle/ioncarbine/ionpistol
+		if("Ion Carbine")
+			selected_path = /obj/item/weapon/gun/energy/ionrifle/ioncarbine
+		if("Combustion Cannon")
+			selected_path = /obj/item/weapon/gun/energy/laser/captain/combustion
+		if("Laser Pistol")
+			selected_path = /obj/item/weapon/gun/energy/laser/pistol
+		if("Siren")
+			selected_path = /obj/item/weapon/gun/siren
+		if("Bullet Storm")
+			selected_path = /obj/item/weapon/gun/bulletstorm
+		if("NT-12")
+			selected_path = /obj/item/weapon/gun/projectile/shotgun/nt12
+		if("Prestige Automag VI")
+			selected_path = /obj/item/weapon/gun/projectile/automag/prestige
+		if("Lolly Lobber")
+			selected_path = /obj/item/weapon/gun/lolly_lobber
 
+	var/atom/spawned_gun = new selected_path(get_turf(src))
 	var/datum/role/survivor/S = R
 	if(istype(S))
-		S.summons_received = randomizeguns
+		var/icon_to_use = override_icon ? override_icon : spawned_gun.icon
+		var/icon_state_to_use = override_icon_state ? override_icon_state : spawned_gun.icon_state
+		var/icon/gun_sprite = icon(icon_to_use, icon_state_to_use)
+		var/list/data_list = list(
+		"item_name" = "[override_item_name ? override_item_name : capitalize(spawned_gun.name)]",
+		"icon" = "<img class='icon' src='data:image/png;base64,[iconsouth2base64(gun_sprite)]'>",
+		)
+		S.summons_received += list(data_list)
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
 	score.gunsspawned++
 
 /mob/living/carbon/human/proc/equip_swords(var/datum/role/R)
-	var/randomizeswords = pick("unlucky", "misc", "throw", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "medieval", "katana", "axe", "boot", "saw", "scalpel", "switchtool", "shitcurity", "whip")
-	var/randomizeknightcolor = pick("green", "yellow", "blue", "red", "templar", "roman")
+	var/selected_path
+	var/override_icon
+	var/override_icon_state
+	var/override_item_name
+	var/randomizeknightcolor = pick("Green", "Yellow", "Blue", "Red", "Templar", "Roman")
 	switch (randomizeknightcolor) //everyone gets some armor as well
-		if("green")
+		if("Green")
 			new /obj/item/clothing/suit/armor/knight(get_turf(src))
 			new /obj/item/clothing/head/helmet/knight(get_turf(src))
 			if(prob(50)) //chance for a shield
 				new /obj/item/weapon/shield/riot/buckler(get_turf(src))
-		if("yellow")
+		if("Yellow")
 			new /obj/item/clothing/suit/armor/knight/yellow(get_turf(src))
 			new /obj/item/clothing/head/helmet/knight/yellow(get_turf(src))
 			if(prob(50))
 				new /obj/item/weapon/shield/riot/buckler(get_turf(src))
-		if("blue")
+		if("Blue")
 			new /obj/item/clothing/suit/armor/knight/blue(get_turf(src))
 			new /obj/item/clothing/head/helmet/knight/blue(get_turf(src))
 			if(prob(50))
 				new /obj/item/weapon/shield/riot/buckler(get_turf(src))
-		if("red")
+		if("Red")
 			new /obj/item/clothing/suit/armor/knight/red(get_turf(src))
 			new /obj/item/clothing/head/helmet/knight/red(get_turf(src))
 			if(prob(50))
 				new /obj/item/weapon/shield/riot/buckler(get_turf(src))
-		if("templar")
+		if("Templar")
 			new /obj/item/clothing/suit/armor/knight/templar(get_turf(src))
 			new /obj/item/clothing/head/helmet/knight/templar(get_turf(src))
 			if(prob(50))
 				new /obj/item/weapon/shield/riot/buckler(get_turf(src))
-		if("roman")
+		if("Roman")
 			new /obj/item/clothing/under/roman(get_turf(src))
 			new /obj/item/clothing/head/helmet/roman(get_turf(src))
 			new /obj/item/clothing/shoes/roman(get_turf(src))
 			new /obj/item/weapon/shield/riot/roman(get_turf(src)) //guaranteed shield to make up for the lack of armor. Also fits the theme better.
 
+
+	var/randomizeswords = pick("Unlucky", "Miscellaneous", "Throwable", "Armblade", "Pickaxe", "Plasma Cutter",
+								"Energy Sword", "Alternate Energy Sword", "Machete", "Kitchen Knife", "Medieval",
+								"Katana", "Axe", "Bootknife", "Circular Saw", "Scalpel", "Switchtool", "Shitcurity", "Whip")
 	switch (randomizeswords)
-		if("unlucky") //so the chance to get an unlucky item does't clutter the main pool of swords
-			var/noluck = pick(/obj/item/weapon/kitchen/utensil/knife/plastic, /obj/item/tool/screwdriver, /obj/item/tool/wirecutters, /obj/item/toy/foamblade, /obj/item/toy/sword, /obj/item/weapon/shard, /obj/item/weapon/shard/plasma, /obj/abstract/map/spawner/space/drinks, /obj/item/weapon/sord, /obj/item/weapon/melee/training_sword, /obj/item/weapon/macuahuitl, /obj/item/weapon/gavelhammer, /obj/item/weapon/banhammer, /obj/item/weapon/veilrender/vealrender, /obj/item/weapon/bikehorn/baton)
-			new noluck(get_turf(src))
-		if("misc")
-			var/miscpick = pick(/obj/item/weapon/scythe, /obj/item/weapon/harpoon, /obj/item/weapon/sword, /obj/item/weapon/sword/executioner, /obj/item/weapon/claymore, /obj/item/weapon/melee/cultblade/nocult, /obj/item/weapon/sword/venom)
-			new miscpick(get_turf(src))
-		if("throw")
+		if("Unlucky") //so the chance to get an unlucky item does't clutter the main pool of swords
+			var/noluck = pick(/obj/item/weapon/kitchen/utensil/knife/plastic, /obj/item/tool/screwdriver,
+								/obj/item/tool/wirecutters, /obj/item/toy/foamblade, /obj/item/toy/sword,
+								/obj/item/weapon/shard, /obj/item/weapon/shard/plasma,
+								/obj/abstract/map/spawner/space/drinks, /obj/item/weapon/sord,
+								/obj/item/weapon/melee/training_sword, /obj/item/weapon/macuahuitl,
+								/obj/item/weapon/gavelhammer, /obj/item/weapon/banhammer,
+								/obj/item/weapon/veilrender/vealrender, /obj/item/weapon/bikehorn/baton)
+			selected_path = noluck
+		if("Miscellaneous")
+			var/miscpick = pick(/obj/item/weapon/scythe, /obj/item/weapon/harpoon,
+								/obj/item/weapon/sword, /obj/item/weapon/sword/executioner,
+								/obj/item/weapon/claymore, /obj/item/weapon/melee/cultblade/nocult,
+								/obj/item/weapon/sword/venom)
+			selected_path = miscpick
+		if("Throwable")
 			if(prob(20))
-				new /obj/item/weapon/kitchen/utensil/knife/nazi(get_turf(src))
+				selected_path = /obj/item/weapon/kitchen/utensil/knife/nazi
 			else
-				new /obj/item/weapon/hatchet(get_turf(src))
-		if("armblade") // good luck getting it off. Maybe cut your own arm off :^)
-			new /obj/item/weapon/armblade(get_turf(src))
-		if("pickaxe")
-			var/pickedaxe = pick(/obj/item/weapon/pickaxe, /obj/item/weapon/pickaxe/silver, /obj/item/weapon/pickaxe/gold, /obj/item/weapon/pickaxe/diamond)
-			new pickedaxe(get_turf(src))
-		if("pcutter")
-			new /obj/item/weapon/pickaxe/plasmacutter(get_turf(src))
-		if("esword")
-			new /obj/item/weapon/melee/energy/sword(get_turf(src))
+				selected_path = /obj/item/weapon/hatchet
+		if("Armblade") // good luck getting it off. Maybe cut your own arm off :^)
+			selected_path = /obj/item/weapon/armblade
+		if("Pickaxe")
+			var/pickedaxe = pick(/obj/item/weapon/pickaxe, /obj/item/weapon/pickaxe/silver,
+								/obj/item/weapon/pickaxe/gold, /obj/item/weapon/pickaxe/diamond)
+			selected_path = pickedaxe
+		if("Plasma Cutter")
+			selected_path = /obj/item/weapon/pickaxe/plasmacutter
+		if("Energy Sword")
+			selected_path = /obj/item/weapon/melee/energy/sword
+			override_icon_state = "swordred"
 			if(prob(70)) //chance for a second one to make a double esword
-				new /obj/item/weapon/melee/energy/sword(get_turf(src))
-		if("alt-esword")
+				override_item_name = "Double-bladed Energy Sword"
+				override_icon_state = "dualsaberredred"
+				new /obj/item/weapon/melee/energy/sword
+		if("Alternate Energy Sword")
 			if(prob(75))
-				new /obj/item/weapon/melee/energy/sword/pirate(get_turf(src))
+				selected_path = /obj/item/weapon/melee/energy/sword/pirate
+				override_icon_state = "cutlass1"
 				if(prob(70))
-					new /obj/item/weapon/melee/energy/sword/pirate(get_turf(src))
+					override_item_name = "TWO Pirate Cutlasses!"
+					new /obj/item/weapon/melee/energy/sword/pirate
 			else //hope you're the clown
-				new /obj/item/weapon/melee/energy/sword/bsword(get_turf(src))
+				selected_path = /obj/item/weapon/melee/energy/sword/bsword
+				override_item_name = "Energized Bananium Sword"
+				override_icon_state = "bsword1"
 				if(prob(70))
-					new /obj/item/weapon/melee/energy/sword/bsword(get_turf(src))
-		if("machete")
-			new /obj/item/weapon/melee/energy/hfmachete(get_turf(src))
+					override_icon_state = "bananabunch1"
+					override_item_name = "Bunch of Energized Bananium Swords"
+					new /obj/item/weapon/melee/energy/sword/bsword
+		if("High-Frequency Machete")
+			selected_path = /obj/item/weapon/melee/energy/hfmachete
 			if(prob(70))
-				new /obj/item/weapon/melee/energy/hfmachete(get_turf(src))
-		if("kitchen")
+				override_icon_state = "bloodlust0"
+				override_item_name = "High-Frequency Pincer Blade \"Bloodlust\""
+				new /obj/item/weapon/melee/energy/hfmachete
+		if("Kitchen Knife")
 			if(prob(60))
 				if(prob(25))
-					new /obj/item/weapon/kitchen/utensil/knife/large(get_turf(src))
+					selected_path = /obj/item/weapon/kitchen/utensil/knife/large
 				else
-					new /obj/item/weapon/kitchen/utensil/knife/large/butch(get_turf(src))
+					selected_path = /obj/item/weapon/kitchen/utensil/knife/large/butch
 			else
-				new /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver(get_turf(src))
-		if("medieval")
+				selected_path = /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver
+		if("Medieval")
 			if(prob(70))
 				if(prob(50))
-					new /obj/item/weapon/spear/wooden(get_turf(src))
+					selected_path = /obj/item/weapon/spear/wooden
 				else
-					new /obj/item/weapon/melee/lance(get_turf(src))
+					selected_path = /obj/item/weapon/melee/lance
 			else
-				new /obj/item/weapon/melee/morningstar(get_turf(src))
-		if("katana")
-			new /obj/item/weapon/katana(get_turf(src))
+				selected_path = /obj/item/weapon/melee/morningstar
+		if("Katana")
+			selected_path = /obj/item/weapon/katana
 			if(prob(25))
 				new /obj/item/clothing/head/kitty(get_turf(src))
 					//No fun allowed, maybe nerf later and readd
@@ -282,279 +343,362 @@
 					else
 						new /obj/item/weapon/katana(get_turf(src))
 					*/
-		if("axe")
+		if("Axe")
 			if(prob(50))
-				new /obj/item/weapon/melee/energy/axe/rusty(get_turf(src))
+				selected_path = /obj/item/weapon/melee/energy/axe/rusty
+				override_icon_state = "axe1"
 			else
-				new /obj/item/weapon/fireaxe(get_turf(src))
-		if("boot")
+				selected_path = /obj/item/weapon/fireaxe
+		if("Bootknife")
 			if(prob(50))
-				new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical(get_turf(src))
+				selected_path = /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical
+				override_icon = 'icons/obj/weapons.dmi'
+				override_icon_state = "tacknife"
 			else
-				new /obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning(get_turf(src))
-		if("saw")
+				selected_path = /obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning
+				override_icon = 'icons/obj/weapons.dmi'
+				override_icon_state = "skinningknife"
+
+		if("Circular Saw")
 			if(prob(40))
-				new /obj/item/tool/circular_saw/plasmasaw(get_turf(src))
+				selected_path = /obj/item/tool/circular_saw/plasmasaw
 			else
-				new /obj/item/tool/circular_saw(get_turf(src))
-		if("scalpel")
+				selected_path = /obj/item/tool/circular_saw
+		if("Scalpel")
 			if(prob(60))
 				if(prob(50))
-					new /obj/item/tool/scalpel/laser(get_turf(src))
+					selected_path = /obj/item/tool/scalpel/laser
 				else
-					new /obj/item/tool/scalpel/laser/tier2(get_turf(src))
+					selected_path = /obj/item/tool/scalpel/laser/tier2
 			else
-				new /obj/item/tool/scalpel(get_turf(src))
-		if("switchtool")
+				selected_path = /obj/item/tool/scalpel
+		if("Switchtool")
 			if(prob(40))
 				if(prob(50))
-					new /obj/item/weapon/switchtool(get_turf(src))
+					selected_path = /obj/item/weapon/switchtool
 				else
-					new /obj/item/weapon/switchtool/surgery(get_turf(src))
+					selected_path = /obj/item/weapon/switchtool/surgery
 			else
-				new /obj/item/weapon/switchtool/swiss_army_knife(get_turf(src))
-		if("shitcurity") //Might as well give the Redtide a taste of their own medicine.
-			var/shitcurity = pick(/obj/item/weapon/melee/telebaton, /obj/item/weapon/melee/classic_baton, /obj/item/weapon/melee/baton/loaded, /obj/item/weapon/melee/baton/cattleprod,/obj/item/weapon/melee/chainofcommand)
-			new shitcurity(get_turf(src))
-		if("whip")
+				selected_path = /obj/item/weapon/switchtool/swiss_army_knife
+		if("Shitcurity") //Might as well give the Redtide a taste of their own medicine.
+			var/shitcurity = pick(/obj/item/weapon/melee/telebaton, /obj/item/weapon/melee/classic_baton,
+								/obj/item/weapon/melee/baton/loaded, /obj/item/weapon/melee/baton/cattleprod,
+								/obj/item/weapon/melee/chainofcommand)
+			selected_path = shitcurity
+		if("Whip")
 			if(prob(50))
-				new /obj/item/weapon/gun/hookshot/whip(get_turf(src))
+				selected_path = /obj/item/weapon/gun/hookshot/whip
 			else
-				new /obj/item/projectile/hookshot/whip/liquorice(get_turf(src))
+				selected_path = /obj/item/projectile/hookshot/whip/liquorice
 
+	var/atom/spawned_melee = new selected_path(get_turf(src))
 	var/datum/role/survivor/crusader/S = R
 	if(istype(S))
-		S.summons_received = randomizeswords
+		var/icon_to_use = override_icon ? override_icon : spawned_melee.icon
+		var/icon_state_to_use = override_icon_state ? override_icon_state : spawned_melee.icon_state
+		var/icon/melee_sprite = icon(icon_to_use, icon_state_to_use)
+		var/list/data_list = list(
+		"item_name" = "[override_item_name ? override_item_name : capitalize(spawned_melee.name)]",
+		"icon" = "<img class='icon' src='data:image/png;base64,[iconsouth2base64(melee_sprite)]'>",
+		)
+		S.summons_received += list(data_list)
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
 
 /mob/living/carbon/human/proc/equip_magician(var/datum/role/R)
-	var/randomizemagic = pick("fireball","smoke","blind","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie", "alchemy")
-	var/randomizemagecolor = pick("magician", "magusred", "magusblue", "blue", "red", "necromancer", "clown", "purple", "lich", "skelelich", "marisa", "fake")
+	var/selected_path
+	var/override_icon
+	var/override_icon_state
+	var/override_item_name
+	var/randomizemagecolor = pick("Magician", "Red Magus", "Blue Magus", "Blue", "Red", "Necromancer",
+								"Clown", "Purple", "Lich", "Skeleton Lich", "Marisa", "Fake")
 	switch (randomizemagecolor) //everyone can put on their robes and their wizard hat
-		if("magician")
+		if("Magician")
 			new /obj/item/clothing/head/that/magic(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/magician(get_turf(src))
 			new /obj/item/clothing/shoes/sandal/marisa/leather(get_turf(src))
-		if("magusred")
+		if("Red Magus")
 			new /obj/item/clothing/head/wizard/magus(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/magusred(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("magusblue")
+		if("Blue Magus")
 			new /obj/item/clothing/head/wizard/magus(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/magusblue(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("blue")
+		if("Blue")
 			new /obj/item/clothing/head/wizard(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("red")
+		if("Red")
 			new /obj/item/clothing/head/wizard/red(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/red(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("necromancer")
+		if("Necromancer")
 			new /obj/item/clothing/suit/wizrobe/necro(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("clown")
+		if("Clown")
 			new /obj/item/clothing/head/wizard/clown(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/clown(get_turf(src))
 			new /obj/item/clothing/mask/gas/clown_hat/wiz(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("purple")
+		if("Purple")
 			new /obj/item/clothing/head/wizard/amp(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/psypurple(get_turf(src))
 			new /obj/item/clothing/shoes/sandal/marisa/leather(get_turf(src))
-		if("lich")
+		if("Lich")
 			new /obj/item/clothing/head/wizard/lich(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/lich(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("skelelich")
+		if("Skeleton Lich")
 			new /obj/item/clothing/head/wizard/skelelich(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/skelelich(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("marisa")
+		if("Marisa")
 			new /obj/item/clothing/head/wizard/marisa(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/marisa(get_turf(src))
 			new /obj/item/clothing/shoes/sandal/marisa(get_turf(src))
-		if("fake")
+		if("Fake")
 			new /obj/item/clothing/head/wizard/fake(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/fake(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
 
+	var/randomizemagic = pick("Fireball","Smoke","Blind","Force Wall","Knock","Horse Mask","Blink","Disorient","Clown Curse",
+							"Mime Curse", "Shoe Snatch","EMP", "Magic Missile", "Mutate", "Teleport", "Jaunt", "Buttbot",
+							"Lightning", "Time Stop", "Ring of Fire", "Pain Mirror", "Bind Object", "Fire Breath", "Snakes",
+							"Push", "Pie", "Ice Barrage", "Alchemy")
 	switch (randomizemagic)
-		if("fireball")
-			new /obj/item/weapon/spellbook/oneuse/fireball(get_turf(src))
-		if("smoke")
-			new /obj/item/weapon/spellbook/oneuse/smoke(get_turf(src))
-		if("blind")
-			new /obj/item/weapon/spellbook/oneuse/blind(get_turf(src))
-		if("forcewall")
-			new /obj/item/weapon/spellbook/oneuse/forcewall(get_turf(src))
-		if("knock")
-			new /obj/item/weapon/spellbook/oneuse/knock(get_turf(src))
-		if("horsemask")
-			new /obj/item/weapon/spellbook/oneuse/horsemask(get_turf(src))
-		if("blink")
-			new /obj/item/weapon/spellbook/oneuse/teleport/blink(get_turf(src))
-		if("disorient")
-			new /obj/item/weapon/spellbook/oneuse/disorient(get_turf(src))
-		if("clowncurse")
-			new /obj/item/weapon/spellbook/oneuse/clown(get_turf(src))
-		if("mimecurse")
-			new /obj/item/weapon/spellbook/oneuse/mime(get_turf(src))
-		if("shoesnatch")
-			new /obj/item/weapon/spellbook/oneuse/shoesnatch(get_turf(src))
-		if("emp")
-			new /obj/item/weapon/spellbook/oneuse/disabletech(get_turf(src))
-		if("magicmissile")
-			new /obj/item/weapon/spellbook/oneuse/magicmissle(get_turf(src))
-		if("mutate")
-			new /obj/item/weapon/spellbook/oneuse/mutate(get_turf(src))
-		if("teleport")
-			new /obj/item/weapon/spellbook/oneuse/teleport(get_turf(src))
-		if("jaunt")
-			new /obj/item/weapon/spellbook/oneuse/teleport/jaunt(get_turf(src))
-		if("buttbot")
-			new /obj/item/weapon/spellbook/oneuse/buttbot(get_turf(src))
-		if("lightning")
-			new /obj/item/weapon/spellbook/oneuse/lightning(get_turf(src))
-		if("timestop")
-			new /obj/item/weapon/spellbook/oneuse/timestop(get_turf(src))
-		if("ringoffire")
-			new /obj/item/weapon/spellbook/oneuse/ringoffire(get_turf(src))
-		if("painmirror")
-			new /obj/item/weapon/spellbook/oneuse/mirror_of_pain(get_turf(src))
-		if("bound_object") //at least they can bind the Supermatter.
-			new /obj/item/weapon/spellbook/oneuse/bound_object(get_turf(src))
-		if("firebreath")
-			new /obj/item/weapon/spellbook/oneuse/firebreath(get_turf(src))
-		if("snakes")
-			new /obj/item/weapon/spellbook/oneuse/snakes(get_turf(src))
-		if("push")
-			new /obj/item/weapon/spellbook/oneuse/push(get_turf(src))
-		if("pie")
-			new /obj/item/weapon/spellbook/oneuse/pie(get_turf(src))
-		if("ice_barrage")
-			new /obj/item/weapon/spellbook/oneuse/ice_barrage(get_turf(src))
-		if("alchemy")
-			new /obj/item/weapon/spellbook/oneuse/alchemy(get_turf(src))
+		if("Fireball")
+			override_item_name = "Fireball"
+			selected_path = /obj/item/weapon/spellbook/oneuse/fireball
+		if("Smoke")
+			override_item_name = "Smoke"
+			selected_path = /obj/item/weapon/spellbook/oneuse/smoke
+		if("Blind")
+			override_item_name = "Blind"
+			selected_path = /obj/item/weapon/spellbook/oneuse/blind
+		if("Force Wall")
+			override_item_name = "Force Wall"
+			selected_path = /obj/item/weapon/spellbook/oneuse/forcewall
+		if("Knock")
+			override_item_name = "Knock"
+			selected_path = /obj/item/weapon/spellbook/oneuse/knock
+		if("Horse Mask")
+			override_item_name = "Curse of the Horseman"
+			selected_path = /obj/item/weapon/spellbook/oneuse/horsemask
+		if("Blink")
+			override_item_name = "Blink"
+			selected_path = /obj/item/weapon/spellbook/oneuse/teleport/blink
+		if("Disorient")
+			override_item_name = "Disorient"
+			selected_path = /obj/item/weapon/spellbook/oneuse/disorient
+		if("Clown Curse")
+			override_item_name = "The Clown Curse"
+			selected_path = /obj/item/weapon/spellbook/oneuse/clown
+		if("Mime Curse")
+			override_item_name = "French Curse"
+			selected_path = /obj/item/weapon/spellbook/oneuse/mime
+		if("Shoe Snatch")
+			override_item_name = "Shoe Snatching Charm"
+			selected_path = /obj/item/weapon/spellbook/oneuse/shoesnatch
+		if("EMP")
+			override_item_name = "Disable Tech"
+			selected_path = /obj/item/weapon/spellbook/oneuse/disabletech
+		if("Magic Missile")
+			override_item_name = "Magic Missile"
+			selected_path = /obj/item/weapon/spellbook/oneuse/magicmissle
+		if("Mutate")
+			override_item_name = "Mutate"
+			selected_path = /obj/item/weapon/spellbook/oneuse/mutate
+		if("Teleport")
+			override_item_name = "Teleport"
+			selected_path = /obj/item/weapon/spellbook/oneuse/teleport
+		if("Jaunt")
+			override_item_name = "Ethereal Jaunt"
+			selected_path = /obj/item/weapon/spellbook/oneuse/teleport/jaunt
+		if("Buttbot")
+			override_item_name = "Butt-Bot's Revenge"
+			selected_path = /obj/item/weapon/spellbook/oneuse/buttbot
+		if("Lightning")
+			override_item_name = "Lightning"
+			selected_path = /obj/item/weapon/spellbook/oneuse/lightning
+		if("Time Stop")
+			override_item_name = "Time Stop"
+			selected_path = /obj/item/weapon/spellbook/oneuse/timestop
+		if("Ring of Fire")
+			override_item_name = "Ring of Fire"
+			selected_path = /obj/item/weapon/spellbook/oneuse/ringoffire
+		if("Pain Mirror")
+			override_item_name = "Pain Mirror"
+			selected_path = /obj/item/weapon/spellbook/oneuse/mirror_of_pain
+		if("Bind Object") //at least they can bind the Supermatter. //No they can't
+			override_item_name = "Bind Object"
+			selected_path = /obj/item/weapon/spellbook/oneuse/bound_object
+		if("Fire Breath")
+			override_item_name = "Fire Breath"
+			selected_path = /obj/item/weapon/spellbook/oneuse/firebreath
+		if("Snakes")
+			override_item_name = "Become Snakes"
+			selected_path = /obj/item/weapon/spellbook/oneuse/snakes
+		if("Push")
+			override_item_name = "Dimensional Push"
+			selected_path = /obj/item/weapon/spellbook/oneuse/push
+		if("Pie")
+			override_item_name = "Projectile Pastry"
+			selected_path = /obj/item/weapon/spellbook/oneuse/pie
+		if("Ice Barrage")
+			override_item_name = "Ice Barrage"
+			selected_path = /obj/item/weapon/spellbook/oneuse/ice_barrage
+		if("Alchemy")
+			override_item_name = "Street Alchemy"
+			selected_path = /obj/item/weapon/spellbook/oneuse/alchemy
 
 	var/receive_absorb = !(locate(/spell/targeted/absorb) in spell_list)
 
 	if(receive_absorb)
 		add_spell(/spell/targeted/absorb)
 
+	var/atom/spawned_spellbook = new selected_path(get_turf(src))
 	var/datum/role/wizard/summon_magic/S = R
 	if(istype(S))
-		S.summons_received = randomizemagic
+		var/icon_to_use = override_icon ? override_icon : spawned_spellbook.icon
+		var/icon_state_to_use = override_icon_state ? override_icon_state : spawned_spellbook.icon_state
+		var/icon/spellbook_sprite = icon(icon_to_use, icon_state_to_use)
+		var/list/data_list = list(
+		"item_name" = "[override_item_name ? override_item_name : spawned_spellbook.name]",
+		"icon" = "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellbook_sprite)]'>",
+		)
+		S.summons_received += list(data_list)
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
 
 
 /mob/living/carbon/human/proc/equip_artifact(var/datum/role/R)
-	var/randomizeartifact = pick("staffswap", "staffmental", "soulstone", "rigsuit", "staffanimate", "staffnecro", "apprentice", "scyingorb", "cloak", "gloworb", "phylactery", "speedboots")
-	var/randomizemagecolor = pick("magician", "magusred", "magusblue", "blue", "red", "necromancer", "clown", "purple", "lich", "skelelich", "marisa", "fake")
+	var/selected_path
+	var/override_icon
+	var/override_icon_state
+	var/override_item_name
+	var/randomizemagecolor = pick("Magician", "Red Magus", "Blue Magus", "Blue", "Red", "Necromancer",
+								"Clown", "Purple", "Lich", "Skeleton Lich", "Marisa", "Fake")
 	switch (randomizemagecolor) //everyone can put on their robes and their wizard hat
-		if("magician")
+		if("Magician")
 			new /obj/item/clothing/head/that/magic(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/magician(get_turf(src))
 			new /obj/item/clothing/shoes/sandal/marisa/leather(get_turf(src))
-		if("magusred")
+		if("Red Magus")
 			new /obj/item/clothing/head/wizard/magus(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/magusred(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("magusblue")
+		if("Blue Magus")
 			new /obj/item/clothing/head/wizard/magus(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/magusblue(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("blue")
+		if("Blue")
 			new /obj/item/clothing/head/wizard(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("red")
+		if("Red")
 			new /obj/item/clothing/head/wizard/red(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/red(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("necromancer")
+		if("Necromancer")
 			new /obj/item/clothing/suit/wizrobe/necro(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("clown")
+		if("Clown")
 			new /obj/item/clothing/head/wizard/clown(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/clown(get_turf(src))
 			new /obj/item/clothing/mask/gas/clown_hat/wiz(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("purple")
+		if("Purple")
 			new /obj/item/clothing/head/wizard/amp(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/psypurple(get_turf(src))
 			new /obj/item/clothing/shoes/sandal/marisa/leather(get_turf(src))
-		if("lich")
+		if("Lich")
 			new /obj/item/clothing/head/wizard/lich(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/lich(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("skelelich")
+		if("Skeleton Lich")
 			new /obj/item/clothing/head/wizard/skelelich(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/skelelich(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
-		if("marisa")
+		if("Marisa")
 			new /obj/item/clothing/head/wizard/marisa(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/marisa(get_turf(src))
 			new /obj/item/clothing/shoes/sandal/marisa(get_turf(src))
-		if("fake")
+		if("Fake")
 			new /obj/item/clothing/head/wizard/fake(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/fake(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
 
+	var/randomizeartifact = pick("Staff of Swip-Swap", "Staff of Mental Focus", "Soulstone", "Gem-encrusted Hardsuit",
+								"Staff of Animation", "Staff of Necromancy", "Contract of Apprenticeship", "Scrying Orb",
+								"Cloak of Cloaking", "Glowing Orb", "Phylactery", "Boots of Blinding Speed")
 	switch (randomizeartifact)
 //		if("staffchange")
 //			new /obj/item/weapon/gun/energy/staff/change(get_turf(src))
-		if("staffswap")
-			new /obj/item/weapon/gun/energy/staff/swapper(get_turf(src))
-		if("staffmental")
-			new /obj/item/weapon/gun/energy/staff/focus(get_turf(src))
-		if("soulstone")
-			new /obj/item/weapon/storage/belt/soulstone/full(get_turf(src))
+		if("Staff of Swip-Swap")
+			selected_path = /obj/item/weapon/gun/energy/staff/swapper
+		if("Staff of Mental Focus")
+			selected_path = /obj/item/weapon/gun/energy/staff/focus
+		if("Soulstone")
+			selected_path = /obj/item/weapon/storage/belt/soulstone/full
 			add_spell(new /spell/aoe_turf/conjure/construct, iswizard = TRUE)
 			add_language(LANGUAGE_CULT)
-		if("rigsuit")
+		if("Gem-encrusted Hardsuit")
+			selected_path = /obj/item/clothing/suit/space/rig/wizard
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
 			new /obj/item/clothing/gloves/purple/wizard(get_turf(src))
-			new /obj/item/clothing/suit/space/rig/wizard(get_turf(src))
 			new /obj/item/weapon/tank/emergency_oxygen/double/wizard(get_turf(src))
-		if("staffanimate")
-			new /obj/item/weapon/gun/energy/staff/animate(get_turf(src))
-		if("staffnecro")
-			new /obj/item/weapon/gun/energy/staff/necro(get_turf(src))
-		if("apprentice") //lol
-			new /obj/item/wizard_apprentice_contract(get_turf(src))
-		if("scyingorb")
-			new /obj/item/weapon/scrying(get_turf(src))
+		if("Staff of Animation")
+			selected_path = /obj/item/weapon/gun/energy/staff/animate
+		if("Staff of Necromancy")
+			selected_path = /obj/item/weapon/gun/energy/staff/necro
+		if("Contract of Apprenticeship") //lol
+			selected_path = /obj/item/wizard_apprentice_contract
+		if("Scrying Orb")
+			selected_path = /obj/item/weapon/scrying
 			mutations.Add(M_XRAY)
 			change_sight(adding = SEE_MOBS|SEE_OBJS|SEE_TURFS)
 			see_in_dark = 8
 			see_invisible = SEE_INVISIBLE_LEVEL_TWO
-		if("cloak")
-			new /obj/item/weapon/cloakingcloak(get_turf(src))
-		if("gloworb")
-			new /obj/item/weapon/glow_orb(get_turf(src))
+		if("Cloak of Cloaking")
+			selected_path = /obj/item/weapon/cloakingcloak
+		if("Glowing Orb")
+			selected_path = /obj/item/weapon/glow_orb
+			override_item_name = "Glowing Orbs"
+			override_icon = 'icons/obj/wizard.dmi'
+			override_icon_state = "glow_stone_active"
 			new /obj/item/weapon/glow_orb(get_turf(src))
 			new /obj/item/weapon/glow_orb(get_turf(src))
 //		if("knife")
 //			new /obj/item/weapon/butterflyknife/viscerator/magic(get_turf(src))
-		if("phylactery")
-			new /obj/item/phylactery(get_turf(src))
-		if("speedboots")
-			new /obj/item/clothing/shoes/blindingspeed(get_turf(src))
+		if("Phylactery")
+			selected_path = /obj/item/phylactery
+		if("Boots of Blinding Speed")
+			selected_path = /obj/item/clothing/shoes/blindingspeed
 
+	var/atom/spawned_artifact = new selected_path(get_turf(src))
 	var/datum/role/wizard/summon_magic/artifact/S = R
 	if(istype(S))
-		S.summons_received = randomizeartifact
+		var/icon_to_use = override_icon ? override_icon : spawned_artifact.icon
+		var/icon_state_to_use = override_icon_state ? override_icon_state : spawned_artifact.icon_state
+		var/icon/artifact_sprite = icon(icon_to_use, icon_state_to_use)
+		var/list/data_list = list(
+		"item_name" = "[override_item_name ? override_item_name : spawned_artifact.name]",
+		"icon" = "<img class='icon' src='data:image/png;base64,[iconsouth2base64(artifact_sprite)]'>",
+		)
+		S.summons_received += list(data_list)
 
 /mob/living/carbon/human/proc/equip_potions(var/datum/role/R)
-	var/datum/role/survivor/S = R
+	var/datum/role/wizard/summon_potions/S = R
 	for(var/i=0, i<3, i++)
 		var/obj/item/potion/randompotion = get_random_potion()
 		var/obj/item/potion/P = new randompotion(get_turf(src))
 		if(istype(S))
-			S.summons_received = P.name
+			var/icon/potion_sprite = icon(P.icon, P.icon_state)
+			var/list/data_list = list(
+			"item_name" = "[P.name]",
+			"icon" = "<img class='icon' src='data:image/png;base64,[iconsouth2base64(potion_sprite)]'>",
+			)
+			S.summons_received += list(data_list)
 		if(istype(P, /obj/item/potion/deception))	//Warn someone if that healing potion they just got is a fake one.
 			to_chat(src, "You feel like it's a bad idea to drink the [P.name] yourself...")
 

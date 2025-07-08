@@ -61,9 +61,9 @@
 		if (man.mind.assigned_role == "MODE") // Wiz, nukies, ...
 			continue
 
-		if(man.client.prefs.nanotrasen_relation == "Opposed")
+		if(man.client.prefs.get_pref(/datum/preference_setting/enum/string/nanotrasen_relation) == "Opposed")
 			dudes += man
-		else if(man.client.prefs.nanotrasen_relation == "Skeptical" && prob(50))
+		else if(man.client.prefs.get_pref(/datum/preference_setting/enum/string/nanotrasen_relation) == "Skeptical" && prob(50))
 			dudes += man
 
 		else if( (man.mind.antag_roles[CULTIST] && prob(40)) || \
@@ -179,7 +179,7 @@
 	if(!apprentice)
 		to_chat(wizard_mob, "You will find a list of available spells in your spell book. Choose your magic arsenal carefully.")
 		to_chat(wizard_mob, "In your pockets you will find a teleport scroll. Use it as needed.")
-		wizard_mob.mind.store_memory("<B>Remember:</B> do not forget to prepare your spells.")
+		wizard_mob.mind.store_memory("<B>Remember:</B> do not forget to prepare your spells.", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 	return 1
 
 /proc/name_wizard(mob/living/carbon/human/wizard_mob, role_name = "Space Wizard")
@@ -297,6 +297,14 @@
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
 
+/proc/check_traitorborg(mob/living/silicon/killer)
+	if(!isrobot(killer))
+		return FALSE
+	var/mob/living/silicon/robot/KR = killer
+	if(KR.laws?.zeroth == "Accomplish your objectives at all costs.")
+		return TRUE
+	return FALSE
+
 /proc/equip_time_agent(var/mob/living/carbon/human/H, var/datum/role/time_agent/T, var/is_twin = FALSE)
 	H.delete_all_equipped_items()
 
@@ -338,13 +346,13 @@
 	if (syndicate_code_phrase)
 		var/phrases = syndicate_code_phrase.Join(", ")
 		words += "<span class='warning'>Code Phrases: </span>[phrases].<br>"
-		agent.mind.store_memory("<b>Code Phrases</b>: [phrases].")
+		agent.mind.store_memory("<b>Code Phrases</b>: [phrases].", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code phrase.<br>"
 	if (syndicate_code_response)
 		var/response = syndicate_code_response.Join(", ")
 		words += "<span class='warning'>Code Response: </span>[response].<br>"
-		agent.mind.store_memory("<b>Code Response</b>: [response].")
+		agent.mind.store_memory("<b>Code Response</b>: [response].", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code response.<br>"
 

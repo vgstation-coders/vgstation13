@@ -21,7 +21,7 @@
 	starting_materials = list(MAT_IRON = 700, MAT_PLASTIC = 200, MAT_URANIUM = 50, MAT_SILVER = 50, MAT_GOLD = 50)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_MAGNETS + "=4;" + Tc_BIOTECH + "=4"
 	attack_delay = 0
 	var/last_scantime = 0
@@ -63,7 +63,7 @@
 		to_chat(user, "<span class='warning'>Printing energy spent, please wait a moment.</span>")
 		return
 
-	visible_message("<span class='warning'>\the [src] rattles and prints out a sheet of paper.</span>", 1)
+	visible_message("<span class='warning'>\The [src] rattles and prints out a sheet of paper.</span>", 1)
 	last_print = world.time
 	sleep(1 SECONDS)
 	var/obj/item/weapon/paper/R = new(loc)
@@ -107,7 +107,7 @@
 		if(!user.hallucinating())
 			to_chat(user, "<span class='bnotice'>Accessing Prior Scan Result</span>")
 			if(mode == PRO_AUTOPSY_SCAN || mode == PRO_BODY_SCAN)
-				user << browse(last_reading, "window=borerscan;size=430x600")
+				user << browse(HTML_SKELETON(last_reading), "window=borerscan;size=430x600")
 			else
 				to_chat(user, last_reading)
 		else
@@ -165,7 +165,7 @@
 			to_chat(user, "<span class='warning'>Insuffient data retrieved. Please ensure that subject has proper surgical incisions.</span>")
 		else
 			to_chat(user, "<span class='info'>Autopsy analysis of [M] concluded.</span>")
-			user << browse(dat, "window=borerscan;size=430x600")
+			user << browse(HTML_SKELETON(dat), "window=borerscan;size=430x600")
 			last_reading = dat
 			last_scantime = world.time
 
@@ -189,7 +189,7 @@
 		to_chat(user, "<span class='info'>Showing medical statistics of [M]...</span>")
 		var/dat
 		dat = format_occupant_data(get_occupant_data(M),1) //basic scan in unupgraded body analyzer
-		user << browse(dat, "window=borerscan;size=430x600")
+		user << browse(HTML_SKELETON(dat), "window=borerscan;size=430x600")
 		last_reading = dat
 		last_scantime = world.time
 	return

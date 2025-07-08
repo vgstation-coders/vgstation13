@@ -116,14 +116,7 @@
 		to_chat(user, "You begin drilling holes into the bottom of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 60))
-			to_chat(user, "You drill six holes through the bottom of \the [src].")
-			if(src.loc == user)
-				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/cylinder/I = new (get_turf(user))
-				user.put_in_hands(I)
-			else
-				new /obj/item/weapon/cylinder(get_turf(src.loc))
-			qdel(src)
+			user.create_in_hands(src, /obj/item/weapon/cylinder, msg = "You drill six holes through the bottom of \the [src].")
 		return
 	return ..()
 
@@ -208,7 +201,7 @@
 		overlays += lid
 
 	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
+	set_blood_overlay()//re-applying blood stains
 
 /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer
 	name = "small erlenmeyer flask"
@@ -407,9 +400,9 @@
 	item_state = "bucket"
 	species_fit = list(INSECT_SHAPED)
 	starting_materials = list(MAT_PLASTIC = 200)
-	autoignition_temperature = AUTOIGNITION_PLASTIC
-	w_type = RECYK_PLASTIC
+	w_type = RECYK_PLASTIC //>implying this is a glass bucket
 	w_class = W_CLASS_MEDIUM
+	flammable = TRUE
 	amount_per_transfer_from_this = 20
 	possible_transfer_amounts = list(10,20,25,30,50,100,150)
 	armor = list(melee = 8, bullet = 3, laser = 3, energy = 0, bomb = 1, bio = 1, rad = 0)
@@ -464,11 +457,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bucket/attackby(var/obj/D, mob/user as mob)
 	if(isprox(D))
-		to_chat(user, "You add \the [D] to \the [src].")
-		QDEL_NULL(D)
-		user.put_in_hands(new /obj/item/weapon/bucket_sensor)
-		user.drop_from_inventory(src)
-		qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/bucket_sensor, D, msg = "You add \the [D] to \the [src].")
 		return
 	attempt_heating(D, user)
 	process_temperature()
@@ -489,7 +478,7 @@
 		overlays += filling
 
 	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
+	set_blood_overlay()//re-applying blood stains
 
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
 	..()
@@ -524,7 +513,7 @@
 		overlays += filling
 
 	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
+	set_blood_overlay()//re-applying blood stains
 
 /*
 /obj/item/weapon/reagent_containers/glass/blender_jug
@@ -582,9 +571,9 @@
 	thermal_variation_modifier = 0.01
 
 /obj/item/weapon/reagent_containers/glass/kettle/steam_spawn_adjust(var/_temp)
-	if (!("Steam" in particle_systems))
-		add_particles("Steam")
-	var/obj/abstract/particles_holder/steam_holder = particle_systems["Steam"]
+	if (!(PS_STEAM in particle_systems))
+		add_particles(PS_STEAM)
+	var/obj/abstract/particles_holder/steam_holder = particle_systems[PS_STEAM]
 	if (_temp < STEAMTEMP)
 		steam_holder.particles.spawning = 0
 	else
@@ -608,3 +597,11 @@
 	..()
 	icon_state = "kettle[pick("_red","_blue","_purple","_green")]"
 	reagents.add_reagent(TEA,75)
+
+/obj/item/weapon/reagent_containers/glass/bucket/wooden
+	name = "wooden bucket"
+	icon_state = "woodenbucket"
+	item_state = "woodenbucket"
+	species_fit = list(INSECT_SHAPED)
+	starting_materials = list(MAT_WOOD = 4000)
+	w_type = RECYK_WOOD //wood

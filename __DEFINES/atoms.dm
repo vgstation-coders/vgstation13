@@ -16,3 +16,10 @@
 #define BLOB_ACT_WEAK 3
 #define BLOB_ACT_MEDIUM 2
 #define BLOB_ACT_STRONG 1
+
+// GC
+
+#define DIRECT_DEL_CALL 0
+#define HARD_DELETED_IN_ROUND 1
+#define HARD_DELETED_ROUNDSTART 1.5
+#define SOFT_DEL 2

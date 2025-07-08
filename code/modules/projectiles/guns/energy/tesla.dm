@@ -1,7 +1,7 @@
 #define MIN_TO_FIRE MEGAWATT
 
 /obj/item/weapon/gun/tesla
-	name = "\improper Telsa Cannon"
+	name = "\improper Tesla Cannon"
 	desc = "It's a tesla cannon."
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "teslacannon_ready"

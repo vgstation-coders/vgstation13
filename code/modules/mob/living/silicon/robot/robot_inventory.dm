@@ -277,7 +277,7 @@
 		return drop_item(force_drop = TRUE)
 	return FALSE
 
-/mob/living/silicon/robot/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = FALSE, dontsay = null)
+/mob/living/silicon/robot/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = FALSE, dontsay = null, failmsg)
 	if(!target)
 		target = loc
 	for(var/obj/item/weapon/gripper/G in get_all_slots())

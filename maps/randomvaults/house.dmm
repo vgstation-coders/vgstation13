@@ -182,23 +182,6 @@
 /obj/effect/decal/cleanable/soot,
 /turf/simulated/floor/plating,
 /area/vault/zathura)
-"aC" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4;
-	tag = "icon-rwindow (EAST)"
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1;
-	tag = "icon-rwindow (NORTH)"
-	},
-/obj/structure/window/reinforced{
-	dir = 8;
-	tag = "icon-rwindow (WEST)"
-	},
-/turf/simulated/floor/plating,
-/area/vault/zathura)
 "aD" = (
 /obj/machinery/door/mineral/wood,
 /turf/simulated/floor/wood,
@@ -421,22 +404,6 @@
 	},
 /turf/simulated/floor/wood,
 /area/vault/zathura)
-"bp" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4;
-	tag = "icon-rwindow (EAST)"
-	},
-/obj/structure/window/reinforced{
-	dir = 1;
-	tag = "icon-rwindow (NORTH)"
-	},
-/obj/structure/window/reinforced{
-	dir = 8;
-	tag = "icon-rwindow (WEST)"
-	},
-/turf/simulated/floor/plating,
-/area/vault/zathura)
 "bq" = (
 /obj/effect/decal/cleanable/soot{
 	alpha = 120
@@ -494,16 +461,7 @@
 	},
 /area/vault/zathura/surroundings)
 "bx" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4;
-	tag = "icon-rwindow (EAST)"
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 8;
-	tag = "icon-rwindow (WEST)"
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/zathura)
 "by" = (
@@ -950,7 +908,7 @@ aA
 aA
 aA
 aA
-bp
+bx
 bx
 aA
 aA
@@ -1105,7 +1063,7 @@ aj
 ag
 aq
 ai
-aC
+bx
 aF
 aN
 aY
@@ -1169,7 +1127,7 @@ aa
 ag
 ai
 ai
-aC
+bx
 aI
 aI
 aI
@@ -1393,7 +1351,7 @@ aa
 aa
 ag
 ai
-aC
+bx
 aI
 aI
 bc
@@ -1457,7 +1415,7 @@ aa
 aa
 an
 ai
-aC
+bx
 aI
 aI
 be
@@ -1521,7 +1479,7 @@ aa
 aa
 av
 ai
-aC
+bx
 aI
 aT
 bg
@@ -1627,7 +1585,7 @@ bx
 aA
 aA
 aA
-bp
+bx
 bx
 aA
 aA

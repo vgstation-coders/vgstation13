@@ -314,9 +314,8 @@
 	RefreshParts()
 
 //Separate subtype for mapping so that all newly constructed blood banks don't get filled with blood packs
-/obj/machinery/smartfridge/bloodbank/filled/New()
+/obj/machinery/smartfridge/bloodbank/filled/initialize()
 	. = ..()
-
 	for(var/i = 0 to 2)
 		insert_item(new /obj/item/weapon/reagent_containers/blood/APlus(src))
 		insert_item(new /obj/item/weapon/reagent_containers/blood/AMinus(src))
@@ -326,6 +325,11 @@
 		insert_item(new /obj/item/weapon/reagent_containers/blood/OMinus(src))
 	for(var/i = 0 to 5)
 		insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
+
+/obj/machinery/smartfridge/bloodbank/filled/New()
+	. = ..()
+	if (ticker?.current_state == GAME_STATE_PLAYING)
+		initialize()
 
 /*******************
 *   Item Adding
@@ -533,10 +537,10 @@
 /obj/machinery/smartfridge/Topic(href, href_list)
 	. = ..()
 	if(stat & BROKEN)
-		to_chat(usr, "<span class='warning'>The [src] has broken down and must be re-assembled.</span>")
+		to_chat(usr, "<span class='warning'>\The [src] has broken down and must be re-assembled.</span>")
 		return 1
 	if(stat & (NOPOWER|FORCEDISABLE))
-		to_chat(usr, "<span class='warning'>The [src] doesn't respond as it is unpowered.</span>")
+		to_chat(usr, "<span class='warning'>\The [src] doesn't respond as it is unpowered.</span>")
 		return 1
 
 	if(.)

@@ -3,6 +3,7 @@
 #define LIMB_GROIN			"groin"
 #define LIMB_LEFT_ARM		"l_arm"
 #define LIMB_RIGHT_ARM		"r_arm"
+#define LIMB_HAND			"hand"
 #define LIMB_LEFT_HAND		"l_hand"
 #define LIMB_RIGHT_HAND		"r_hand"
 #define LIMB_LEFT_LEG		"l_leg"
@@ -11,6 +12,12 @@
 #define LIMB_RIGHT_FOOT		"r_foot"
 #define TARGET_MOUTH		"mouth"
 #define TARGET_EYES		    "eyes"
+
+#define LIMB_HEART			"heart"
+#define LIMB_EYES			"eyes"
+#define LIMB_LUNG			"lungs"
+#define LIMB_LIVER			"liver"
+#define LIMB_KIDNEYS		"kidneys"
 
 #define UNCUFF_LEGS			-1
 #define UNCUFF_BOTH			0

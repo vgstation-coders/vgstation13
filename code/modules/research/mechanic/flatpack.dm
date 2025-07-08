@@ -16,6 +16,7 @@
 	var/datum/construction/flatpack_unpack/unpacking
 	var/assembling = FALSE
 	var/list/image/stacked = list() //assoc ref list
+	var/override_icon_state=FALSE // if true, will not change the icon state in the update_icon proc.
 
 /obj/structure/closet/crate/flatpack/ancient
 	name = "ancient flatpack"
@@ -36,9 +37,10 @@
 
 /obj/structure/closet/crate/flatpack/update_icon()
 
-	icon_state = "flatpack"
+	if(!override_icon_state)
+		icon_state = "flatpack"
 
-	if(machine)
+	if(machine && !override_icon_state)
 		var/list/check_accesses = (machine.req_access | machine.req_one_access)
 		if(check_accesses && check_accesses.len)
 			for(var/i = 1 to 4) //if the machine's access lines up with security's - and so on
@@ -92,6 +94,7 @@
 					assembling = ASSEMBLING
 				else
 					machine.forceMove(src.loc)
+					after_machine_placed(user)
 					machine = null
 					qdel(src)
 			else
@@ -104,6 +107,9 @@
 	for(var/atom/movable/AM in src)
 		AM.forceMove(get_turf(src))
 	qdel(src)
+
+//fires when you crowbar a flatpack and it moves the machine into the new loc, just before the flatpack is qdel'd
+/obj/structure/closet/crate/flatpack/proc/after_machine_placed(var/mob/user)
 
 /obj/structure/closet/crate/flatpack/attack_hand(mob/user, params)
 	return unstack(user, params, get_turf(user))
@@ -238,19 +244,19 @@
 							Fl_ACTION = "weld the plates",
 							Co_DELAY = 30)
 			if("screwdriver")
-				steps[steps.len] = list(Co_KEY=/obj/item/tool/screwdriver,
+				steps[steps.len] = list(Co_KEY="is_screwdriver",
 							Co_VIS_MSG = "{USER} tighten{S} the screws in {HOLDER}",
 							Co_START_MSG = "{USER} start{s} tightening the screws in {HOLDER}",
 							Fl_ACTION = "tighten the screws",
 							Co_DELAY = 30)
 			if("wrench")
-				steps[steps.len] = list(Co_KEY=/obj/item/tool/wrench,
+				steps[steps.len] = list(Co_KEY="is_wrench",
 							Co_VIS_MSG = "{USER} secure{S} the bolts in {HOLDER}",
 							Co_START_MSG = "{USER} start{s} securing the bolts in {HOLDER}",
 							Fl_ACTION = "secure the bolts",
 							Co_DELAY = 30)
 			if("wirecutter")
-				steps[steps.len] = list(Co_KEY=/obj/item/tool/wirecutters,
+				steps[steps.len] = list(Co_KEY="is_wirecutter",
 							Co_VIS_MSG = "{USER} strip{s} the wiring in {HOLDER}",
 							Co_START_MSG = "{USER} start{s} stripping the wiring in {HOLDER}",
 							Fl_ACTION = "strip the wiring",
@@ -267,7 +273,16 @@
 			current_step = steps[rand(1, steps.len)] //misprints ahoy
 			misprinted = 1
 
-		var/obj/item/current_tool = current_step[Co_KEY]
+		var/obj/item/current_tool
+		switch(current_step[Co_KEY])
+			if("is_screwdriver")
+				current_tool = /obj/item/tool/screwdriver
+			if("is_wrench")
+				current_tool = /obj/item/tool/wrench
+			if("is_wirecutter")
+				current_tool = /obj/item/tool/wirecutters
+			else
+				current_tool = current_step[Co_KEY]
 
 		instructions += "<b>You see a small pictogram of \a [initial(current_tool.name)].</b><br> The minute script says: \"Be sure to [current_step[Fl_ACTION]] [pick("on a clear carpet", "with an adult", "with your friends", "under the captain's watchful gaze")].\"<br>"
 	return list("instructions" = instructions, "misprint" = misprinted)
@@ -289,6 +304,32 @@
 		return 1
 
 #undef Fl_ACTION
+
+
+/obj/structure/closet/crate/flatpack/configurable
+	name = "configurable flatpack"
+	desc = "The latest advancement in portable easy assembly technology. This model of a flatpack must be configured before construction"
+	var/list/machine_options = list()
+	
+/obj/structure/closet/crate/flatpack/configurable/attackby(var/atom/A, mob/user)
+	if(istype(A,/obj/item))
+		var/obj/item/I=A
+		if(I.is_multitool(user))
+			I.playtoolsound(src, 50)
+			configure(user)
+			return
+	if(iscrowbar(A) && !machine)
+		to_chat(user,"You need to configure \the [name] first!")
+		return
+	..()
+
+//set the machine var in here, among any other things
+/obj/structure/closet/crate/flatpack/configurable/proc/configure(var/mob/user)
+	if(machine) //reset the state
+		qdel(machine)
+		machine=null
+	machine_options=list()
+	
 
 
 /obj/structure/closet/crate/flatpack/suit_modifier/New()

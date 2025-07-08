@@ -80,6 +80,9 @@
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun"
 	silencer_offset = list(28,5)
+	
+/obj/item/weapon/gun/projectile/shotgun/pump/combat/empty
+	ammo_type = null
 
 /obj/item/weapon/gun/projectile/shotgun/pump/combat/shorty //nuke op engineering special
 	name = "combat shorty"

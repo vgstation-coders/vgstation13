@@ -49,7 +49,7 @@
 
 
 ///////sepARATE ANUS///////
-/datum/surgery_step/butt/seperate_anus/tool_quality(obj/item/tool)
+/datum/surgery_step/butt/seperate_anus/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -122,12 +122,11 @@
 
 
 ///////CAUTERIZE BUTT/////////
-/datum/surgery_step/butt/cauterize_butt/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/butt/cauterize_butt/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/butt/cauterize_butt
 	allowed_tools = list(
 		/obj/item/tool/cautery = 100,
@@ -152,10 +151,6 @@
 	user.visible_message("<span class='notice'>[user] finishes cauterizing [target]'s ass with \the [tool].</span>",		\
 	"<span class='notice'>You have cauterized [target]'s ass with \the [tool].</span>")
 	var/obj/item/clothing/head/butt/B = new(target.loc)
-	if(target.mind.wizard_spells)
-		B.spells.Add(target.mind.wizard_spells)
-		for(var/spell/spell in target.mind.wizard_spells)
-			target.remove_spell(spell)
 	B.transfer_buttdentity(target)
 	target.op_stage.butt = SURGERY_NO_BUTT
 
@@ -213,7 +208,7 @@
 	allowed_tools = list(
 		/obj/item/tool/bonegel = 100,
 		/obj/item/tool/bonesetter/bone_mender = 100,
-		/obj/item/tool/screwdriver = 75,
+		"screwdriver" = 75,
 		)
 
 	duration = 5 SECONDS
@@ -295,9 +290,6 @@
 	affected.status |= ORGAN_BLEEDING
 
 	var/obj/item/clothing/head/butt/B = tool
-	if(B.spells)
-		for(var/spell/spell in B.spells)
-			target.add_spell(spell, iswizard = TRUE)
 	user.u_equip(B,1)
 	qdel(B)
 
@@ -310,12 +302,11 @@
 
 
 ///////CAUTERIZE NEW BUTT/////////
-/datum/surgery_step/butt_replace/cauterize/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/butt_replace/cauterize/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/butt_replace/cauterize
 	allowed_tools = list(
 		/obj/item/tool/cautery = 100,

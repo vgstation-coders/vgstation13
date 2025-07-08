@@ -137,9 +137,11 @@
 					if(!istype(W, keytype))
 						to_chat(user, "<span class='warning'>\The [W] doesn't fit into \the [src]'s ignition.</span>")
 						return
+					var/obj/item/key/K=W
 					if(mykey && mykey != W)
-						to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
-						return
+						if(!vin || !K.vin || K.vin!=vin) //if neither have a vin id, or they don't match (since they default as null)
+							to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
+							return
 				if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
 					to_chat(user, "<span class='warning'>You try to insert \the [W] to \the [src]'s ignition but you miss the slot!</span>")
 					return
@@ -170,7 +172,6 @@
 	if(heldkey && !user.incapacitated() && Adjacent(user) && user.dexterity_check())
 		to_chat(user, "<span class='notice'>You remove \the [heldkey] from \the [src]'s ignition.</span>")
 		user.visible_message("<span class='notice'>\The [src]'s engine shuts off.</span>")
-		heldkey.forceMove(get_turf(user))
 		user.put_in_hands(heldkey)
 		heldkey = null
 	else
@@ -179,12 +180,19 @@
 /obj/structure/bed/chair/vehicle/proc/check_key(var/mob/user)
 	if(!keytype)
 		return 1
+	if(vin)
+		if(heldkey && heldkey.vin == vin)
+			return TRUE
+		for(var/obj/item/key/K in user.held_items)
+			if(istype(K,keytype) && K.vin==vin)
+				return TRUE
 	if(mykey)
 		return heldkey == mykey || user.is_holding_item(mykey)
 	return istype(heldkey, keytype) || user.find_held_item_by_type(keytype)
 
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
+	..()
 	if(user.incapacitated())
 		unlock_atom(user)
 		return
@@ -359,7 +367,7 @@
 /obj/structure/bed/chair/vehicle/bullet_act(var/obj/item/projectile/Proj)
 	var/hitrider = 0
 	if(istype(Proj, /obj/item/projectile/ion))
-		Proj.on_hit(src, 2)
+		Proj.on_hit(src, 100)
 		return
 
 	if(occupant)

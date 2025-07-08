@@ -62,6 +62,7 @@
 	var/organ_internal_state = valid_states[target_state]
 
 	prefs.organ_data[organ_internal_name] = organ_internal_state
+	prefs.change_pref_datum_limb(organ_internal_name, organ_internal_state)
 	return TRUE
 
 /datum/preferences_subsection/organs/process_link(var/mob/user, var/list/href_list)

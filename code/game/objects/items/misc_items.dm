@@ -47,7 +47,6 @@
 	slot_flags = SLOT_BELT
 	canremove = 0
 	cant_remove_msg = " is fused to your body!"
-	autoignition_temperature = AUTOIGNITION_FABRIC
 
 /obj/item/red_ribbon_arm/equipped(mob/living/carbon/human/H, equipped_slot)
 	..()
@@ -67,7 +66,7 @@
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_PLASTIC = 3*CC_PER_SHEET_PLASTIC)//Same as plastic bag
 	w_type = RECYK_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 
 /obj/item/folded_bag/attack_self(mob/user)
 	to_chat(user, "<span class = 'notice'>You unfold \the [src].</span>")

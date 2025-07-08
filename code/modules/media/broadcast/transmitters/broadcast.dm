@@ -1,5 +1,5 @@
 /obj/machinery/media/transmitter/broadcast
-	name = "Radio Transmitter"
+	name = "\improper Radio Transmitter"
 	desc = "A huge hulk of steel containing high-powered phase-modulating radio transmitting equipment."
 
 	icon = 'icons/obj/machines/broadcast.dmi'
@@ -39,7 +39,7 @@
 		QDEL_NULL(power_connection)
 	. = ..()
 
-/obj/machinery/media/transmitter/broadcast/proc/cable_power_change(var/list/args)
+/obj/machinery/media/transmitter/broadcast/proc/cable_power_change(var/list/arguments)
 	if(power_connection.powered())
 		stat &= ~NOPOWER
 	else
@@ -98,11 +98,8 @@
 			to_chat(user, "<span class='warning'>[src] doesn't need to be repaired!</span>")
 			return
 		var/obj/item/tool/solder/S = W
-		if(!S.remove_fuel(4,user))
-			return
-		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
-		if(do_after(user, src,4 SECONDS * S.work_speed))
-			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+		if(S.do_solder(user, src,4 SECONDS, 4))
+			S.playtoolsound(loc, 100)
 			integrity = 100
 			to_chat(user, "<span class='notice'>You repair the blown fuses on [src].</span>")
 
@@ -179,7 +176,7 @@
 /obj/machinery/media/transmitter/broadcast/examine(mob/user)
 	..()
 	if (integrity <= 75)
-		to_chat(user,"<span class='warning'>The [src] appears damaged. A solder can be used to repair it.</span>")
+		to_chat(user,"<span class='warning'>\The [src] appears damaged. A solder can be used to repair it.</span>")
 
 /obj/machinery/media/transmitter/broadcast/update_icon()
 	overlays = 0

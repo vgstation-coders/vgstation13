@@ -38,6 +38,7 @@ var/datum/controller/failsafe/Failsafe
 */
 
 /datum/controller/failsafe/proc/Loop()
+	usr = null
 	while(1)
 		lasttick = world.time
 		if(!Master)

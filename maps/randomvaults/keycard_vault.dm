@@ -43,8 +43,9 @@
 		new key_type(get_turf(LM))
 		qdel(LM)
 
-/datum/map_element/vault/keycards/load()
-	var/list/turfs = ..()
+/datum/map_element/vault/keycards/load(x,y,z,rotate=0,overwrite=FALSE,override_can_rotate=FALSE)
+	. = ..()
+	var/list/turfs = .
 	ASSERT(thevault)
 	ASSERT(turfs.len)
 	var/offset = -1
@@ -74,8 +75,9 @@
 	file_path = "maps/randomvaults/dungeons/keycard_vault_normal.dmm"
 	var/datum/map_element/vault/keycards/parent
 
-/datum/map_element/dungeon/keycard_vault/load()
-	var/list/turfs = ..()
+/datum/map_element/dungeon/keycard_vault/load(x,y,z,rotate=0,overwrite=FALSE,override_can_rotate=FALSE)
+	. = ..()
+	var/list/turfs = .
 	ASSERT(parent)
 	ASSERT(turfs.len)
 	var/offset = -1

@@ -293,6 +293,7 @@ var/list/animals_with_wings = list(
 	key_third_person = "surrenders"
 	key_shorthand = "sur"
 	message = "puts their hands on their head and falls to the ground. They surrender%s!"
+	message_mobtype = list(/mob/living/silicon/robot = "powers down its systems and lies still. It surrenders!")
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/surrender/run_emote(mob/user, params)
@@ -397,3 +398,10 @@ var/list/animals_with_wings = list(
 
 	to_chat(user, message)
 	return TRUE
+
+/datum/emote/living/gibber
+    key = "gibber"
+    key_third_person = "gibbers"
+    message = "gibbers incoherently!"
+    message_mime = "rapidly moves their hands around incoherently."
+    emote_type = EMOTE_AUDIBLE

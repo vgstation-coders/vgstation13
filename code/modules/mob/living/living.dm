@@ -26,6 +26,11 @@
 
 	if(addicted_chems)
 		QDEL_NULL(addicted_chems)
+
+	var/datum/gamemode/dynamic/dyn_mode = ticker?.mode
+	if (istype(dyn_mode))
+		dyn_mode.living_players -= src
+
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -86,7 +91,7 @@
 	if(istype(get_turf(src),/turf/unsimulated/floor/brimstone))
 		FireBurn(11, 9001, ONE_ATMOSPHERE) // lag free weird way of doing it
 		fire_stacks = 11
-		IgniteMob() // ffffFIRE!!!! FIRE!!! FIRE!!
+		ignite() // ffffFIRE!!!! FIRE!!! FIRE!!
 	return 1
 
 // Apply connect damage
@@ -123,19 +128,19 @@
 			G.overlays = 0
 			if(istype(G.mind.current, /mob/living/carbon/human/))
 				var/mob/living/carbon/human/H = G.mind.current
-				G.overlays += H.obj_overlays[ID_LAYER]
-				G.overlays += H.obj_overlays[EARS_LAYER]
-				G.overlays += H.obj_overlays[SUIT_LAYER]
-				G.overlays += H.obj_overlays[GLASSES_LAYER]
-				G.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
-				G.overlays += H.obj_overlays[BELT_LAYER]
-				G.overlays += H.obj_overlays[BACK_LAYER]
-				G.overlays += H.obj_overlays[HEAD_LAYER]
-				G.overlays += H.obj_overlays[HANDCUFF_LAYER]
+				G.overlays += H.overlays_standing[ID_LAYER]
+				G.overlays += H.overlays_standing[EARS_LAYER]
+				G.overlays += H.overlays_standing[SUIT_LAYER]
+				G.overlays += H.overlays_standing[GLASSES_LAYER]
+				G.overlays += H.overlays_standing[GLASSES_OVER_HAIR_LAYER]
+				G.overlays += H.overlays_standing[BELT_LAYER]
+				G.overlays += H.overlays_standing[BACK_LAYER]
+				G.overlays += H.overlays_standing[HEAD_LAYER]
+				G.overlays += H.overlays_standing[HANDCUFF_LAYER]
 			G.invisibility = 0
 			to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
 		spawn(1)
-			dust()
+			gib()
 
 /mob/living/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
@@ -433,7 +438,7 @@
 /mob/living/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
 		if(B.stuck_to)
-			visible_message("<span class='warning'>\the [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
+			visible_message("<span class='warning'>\The [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
 			B.deactivate()
 			B.unstick()
 
@@ -567,7 +572,7 @@ Thanks.
 	else
 		reagents.clear_reagents()
 	heal_overall_damage(1000, 1000)
-	ExtinguishMob()
+	extinguish()
 	fire_stacks = 0
 	/*
 	if(locked_to)
@@ -652,7 +657,7 @@ Thanks.
 
 	if(config.allow_Metadata)
 		if(client)
-			to_chat(usr, "[src]'s Metainfo:<br>[client.prefs.metadata]")
+			to_chat(usr, "[src]'s Metainfo:<br>[client.prefs.get_pref(/datum/preference_setting/string/metadata)]")
 		else
 			to_chat(usr, "[src] does not have any stored infomation!")
 	else
@@ -860,7 +865,7 @@ Thanks.
 		if(!istype(CM) || !CM.handcuffed)
 			var/datum/chain/tether_datum = L.tether.chain_datum
 			if(tether_datum.extremity_B == src)
-				L.visible_message("<span class='danger'>\the [L] quickly grabs and removes \the [L.tether] tethered to his body!</span>",
+				L.visible_message("<span class='danger'>\The [L] quickly grabs and removes \the [L.tether] tethered to his body!</span>",
 							  "<span class='warning'>You quickly grab and remove \the [L.tether] tethered to your body.</span>")
 				L.tether = null
 				tether_datum.extremity_B = null
@@ -869,7 +874,7 @@ Thanks.
 	//Trying to unstick a stickybomb
 	for(var/obj/item/stickybomb/B in L)
 		if(B.stuck_to)
-			L.visible_message("<span class='danger'>\the [L] is trying to reach and pull off \the [B] stuck on his body!</span>",
+			L.visible_message("<span class='danger'>\The [L] is trying to reach and pull off \the [B] stuck on his body!</span>",
 						  "<span class='warning'>You reach for \the [B] stuck on your body and start pulling.</span>")
 			if(do_after(L, src, 30, 10, FALSE))
 				L.visible_message("<span class='danger'>After struggling for an instant, \the [L] manages unstick \the [B] from his body!</span>",
@@ -1017,6 +1022,16 @@ Thanks.
 		var/obj/structure/closet/C = L.loc
 		if(C.opened)
 			return //Door's open... wait, why are you in it's contents then?
+		if(istype(C.loc, /obj/structure/rack/crate_shelf) && istype(C,/obj/structure/closet/crate))
+			var/obj/structure/closet/crate/R = C
+			var/obj/structure/rack/crate_shelf/CS = C.loc
+			CS.relay_container_resist_act(src,R)
+			return
+		if(istype(C.loc, /obj/spacepod/) && istype(C,/obj/structure/closet/crate)) //todo - make this generic for future space pod cargo systems
+			var/obj/structure/closet/crate/R = C
+			var/obj/spacepod/speesepod = C.loc
+			speesepod.attempt_cargo_resist(src,R)
+			return
 		if(!istype(C.loc, /obj/item/delivery/large)) //Wouldn't want to interrupt escaping being wrapped over the next few trivial checks
 			if(istype(C, /obj/structure/closet/secure_closet))
 				var/obj/structure/closet/secure_closet/SC = L.loc
@@ -1027,7 +1042,7 @@ Thanks.
 					return //closed but not welded...
 
 		//okay, so the closet is either welded or locked... resist!!!
-		L.visible_message("<span class='danger'>The [C] begins to shake violenty!</span>",
+		L.visible_message("<span class='danger'>\The [C] begins to shake violenty!</span>",
 						  "<span class='warning'>You lean on the back of [C] and start pushing the door open (this will take about [breakout_time] minutes).</span>")
 		spawn(0)
 			if(do_after(usr, C, breakout_time * 60 * 10, 30, custom_checks = new /callback(C, /obj/structure/closet/proc/on_do_after))) 	//minutes * 60seconds * 10deciseconds
@@ -1055,21 +1070,15 @@ Thanks.
 					sleep(10)
 					SC.broken = SC.locked // If it's only welded just break the welding, dont break the lock.
 					SC.locked = 0
-					SC.welded = 0
-					L.visible_message("<span class='danger'>[L] successfully breaks out of [SC]!</span>",
-									  "<span class='notice'>You successfully break out!</span>")
-					if(istype(SC.loc, /obj/item/delivery/large)) //Do this to prevent contents from being opened into nullspace (read: bluespace)
-						var/obj/item/delivery/large/BD = SC.loc
-						BD.attack_hand(usr)
-					SC.open()
-				else
-					C.welded = 0
-					L.visible_message("<span class='danger'>[L] successfully breaks out of [C]!</span>",
-									  "<span class='notice'>You successfully break out!</span>")
-					if(istype(C.loc, /obj/item/delivery/large)) //nullspace ect.. read the comment above
-						var/obj/item/delivery/large/BD = C.loc
-						BD.attack_hand(usr)
-					C.open()
+				C.welded = 0
+				if(C.arcanetampered)
+					C.bless() // so it doesn't just close again, fairness on the user
+				L.visible_message("<span class='danger'>[L] successfully breaks out of [C]!</span>",
+									"<span class='notice'>You successfully break out!</span>")
+				if(istype(C.loc, /obj/item/delivery/large)) //Do this to prevent contents from being opened into nullspace (read: bluespace)
+					var/obj/item/delivery/large/BD = C.loc
+					BD.attack_hand(usr)
+				C.open()
 
 	//Removing a headcrab
 	if(ishuman(L))
@@ -1136,7 +1145,7 @@ Thanks.
 				sleep(1 SECONDS)
 			CM.fire_stacks = 0
 			CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>","<span class='notice'>You extinguish yourself.</span>")
-			ExtinguishMob()
+			extinguish()
 			return
 
 		CM.resist_restraints()
@@ -1342,7 +1351,6 @@ Thanks.
 				now_pushing = 0
 				return
 
-			tmob.LAssailant = src
 			tmob.assaulted_by(src, TRUE)
 
 		now_pushing = 0
@@ -1366,6 +1374,8 @@ Thanks.
 						var/mob/M = AM
 						INVOKE_EVENT(src, /event/before_move)
 						step(M, t)
+						M.last_bumped_by = makeweakref(src)
+						M.last_bumped_by_timestamp = world.time
 						INVOKE_EVENT(src, /event/after_move)
 					else
 						step(AM, t)
@@ -1532,15 +1542,14 @@ Thanks.
 				var/start_T_descriptor = "<font color='#6b5d00'>tile at [start_T.x], [start_T.y], [start_T.z] in area [get_area(start_T)]</font>"
 				var/end_T_descriptor = "<font color='#6b4400'>tile at [end_T.x], [end_T.y], [end_T.z] in area [get_area(end_T)]</font>"
 
-				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been thrown by [usr.name] ([usr.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
+				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been thrown by [src.name] ([src.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
+				src.attack_log += text("\[[time_stamp()]\] <font color='red'>Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
 
-				log_attack("<font color='red'>[usr.name] ([usr.ckey]) Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				if(!iscarbon(usr))
-					M.LAssailant = null
-				else
-					M.LAssailant = usr
-					M.assaulted_by(usr)
+				M.last_thrown_by = makeweakref(src)
+				M.last_thrown_by_timestamp = world.time
+
+				log_attack("<font color='red'>[src.name] ([src.ckey]) Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
+				M.assaulted_by(src)
 				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null
@@ -1550,7 +1559,7 @@ Thanks.
 			to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
 			return FAILED_THROW
 
-		if(I.pre_throw(target))
+		if(I.pre_throw(target,src))
 			return FAILED_THROW
 
 	remove_from_mob(item)

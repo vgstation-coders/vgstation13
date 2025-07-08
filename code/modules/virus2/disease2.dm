@@ -61,6 +61,8 @@ var/global/list/disease2_list = list()
 
 	var/list/type_weight = list(1,1,1,1) //weight that it will appear in dish, new player, mouse; 4 is base
 
+	var/category = ""
+
 /datum/disease2/disease/virus
 	form = "Virus"
 	max_stage = 4
@@ -118,6 +120,12 @@ var/global/list/disease2_list = list()
 	allowed_transmission = SPREAD_BLOOD | SPREAD_MEMETIC
 	type_weight = list(0,0,0,0) //rare in dishes and never in mice, very common in people
 	//Note: if more types of creatures become infectable than humans/monkeys/mice, give them HEAR_ALWAYS
+
+/datum/disease2/disease/meme/super //A more powerful version that supports all 4 stages, acquired from traders.
+	form = "Anomalous Meme"
+	origin =  "X Laboratory"
+	max_stage = 4
+	speed = 2
 
 /datum/disease2/disease/proc/update_global_log()
 	if ("[uniqueID]-[subID]" in disease2_list)
@@ -828,6 +836,7 @@ var/global/list/disease2_list = list()
 	disease.pattern_color = pattern_color
 	disease.can_kill = can_kill.Copy()
 	disease.mutation_modifier = mutation_modifier
+	disease.category = category
 	for(var/datum/disease2/effect/e in effects)
 		disease.effects += e.getcopy(disease)
 	return disease

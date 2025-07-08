@@ -210,6 +210,8 @@ var/const/INGEST = 2
 		var/current_reagent_transfer = current_reagent.volume * part
 		if(preserve_data)
 			trans_data = current_reagent.data
+		if(current_reagent.id in reagents_to_always_log)
+			log_transfer = TRUE
 		if(log_transfer)
 			logged_message += "[current_reagent_transfer]u of [current_reagent.name]"
 			if(current_reagent.id in reagents_to_log)
@@ -616,10 +618,11 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	total_thermal_mass = get_thermal_mass()
 	return 0
 
-/datum/reagents/proc/clear_reagents()
+/datum/reagents/proc/clear_reagents(var/preserve_unremovable=FALSE)
 	amount_cache.len = 0
 	for(var/datum/reagent/R in reagent_list)
-		del_reagent(R.id,update_totals=0)
+		if(!preserve_unremovable || (R.flags & CHEMFLAG_NOTREMOVABLE) )
+			del_reagent(R.id,update_totals=0)
 	// Only call ONCE. -- N3X
 	update_total()
 	if(my_atom)
@@ -915,6 +918,11 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /datum/reagents/proc/get_reagent_amount(var/reagent)
 	return amount_cache[reagent] + 0 //Convert null to 0.
 
+/datum/reagents/proc/get_reagent_amounts(var/list/input_reagents)
+	. = 0
+	for(var/i in input_reagents)
+		. += get_reagent_amount(i)
+
 /datum/reagents/proc/get_reagents()
 	var/res = ""
 	for(var/datum/reagent/A in reagent_list)
@@ -976,7 +984,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	reagent_list.Cut()
 
 	if(my_atom)
-		my_atom.reagents = null
+		// Sometimes atoms use /datum/reagents internal vars which are NOT their actual reagents datums
+		// This causes them to hard-del because the atom.reagents is nulled early in the Destroy() chain
+		// And is never deleted properly.
+		// The proper fix is of course to rework how datum/reagents work but I'll not do that.
+		if (my_atom.reagents == src)
+			my_atom.reagents = null
 		my_atom = null
 	..()
 
@@ -1069,9 +1082,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if (istype(my_atom,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) && reagent_list.len)
 		to_chat(user, "<span class='info'>It contains [total_volume] units of what looks like [get_master_reagent_name()].</span>")
 		return
-	to_chat(user, "It contains:")
 	if(!user.hallucinating())
 		if(reagent_list.len)
+			to_chat(user, "It contains:")
 			for(var/datum/reagent/R in reagent_list)
 				if(blood_type && R.id == BLOOD)
 					var/type = R.data["blood_type"]
@@ -1079,9 +1092,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				else
 					to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
 		else
-			to_chat(user, "<span class='info'>Nothing.</span>")
+			if (istype(my_atom,/obj/machinery/portable_atmospherics/hydroponics))
+				to_chat(user, "It contains <span class='info'>no reagents</span>.")//I mean, there's probably a big ass plant in there.
+			else
+				to_chat(user, "It contains <span class='info'>nothing</span>.")
 
 	else //Show stupid things to hallucinating mobs
+		to_chat(user, "It contains:")
 		var/list/fake_reagents = list("Water", "Orange juice", "Banana juice", "Tungsten", "Chloral Hydrate", "Helium",\
 			"Sea water", "Energy drink", "Gushin' Granny", "Salt", "Sugar", "something yellow", "something red", "something blue",\
 			"something suspicious", "something smelly", "something sweet", "Soda", "something that reminds you of home",\
@@ -1106,6 +1123,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
  * max_vol is maximum volume of holder
  */
 /atom/proc/create_reagents(const/max_vol)
+	if (reagents)
+		stack_trace("double reagents creation for [type]")
+		QDEL_NULL(reagents)
 	reagents = new/datum/reagents(max_vol)
 	reagents.my_atom = src
 

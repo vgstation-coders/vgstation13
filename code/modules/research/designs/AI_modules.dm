@@ -104,7 +104,7 @@
 
 /datum/design/asimov
 	name = "Core Module Design (Asimov)"
-	desc = "Allows for the construction of a Asimov AI Core Module."
+	desc = "Allows for the construction of an Asimov AI Core Module."
 	id = "asimov_module"
 	req_tech = list(Tc_PROGRAMMING = 3, Tc_MATERIALS = 6)
 	build_type = IMPRINTER

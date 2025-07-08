@@ -6,7 +6,7 @@
 
 /obj/item/weapon/paper/Toxin
 	name = "paper- 'Chemical Information'"
-	info = "Known Onboard Toxins:<br>n\tGrade A Semi-Liquid Plasma:<br>n\t\tHighly poisonous. You cannot sustain concentrations above 15 units.<br>n\t\tA gas mask fails to filter plasma after 50 units.<br>n\t\tWill attempt to diffuse like a gas.<br>n\t\tFiltered by scrubbers.<br>n\t\tThere is a bottled version which is very different<br>n\t\t\tfrom the version found in canisters!<br>n<br>n\t\tWARNING: Highly Flammable. Keep away from heat sources<br>n\t\texcept in a enclosed fire area!<br>n\t\tWARNING: It is a crime to use this without authorization.<br>nKnown Onboard Anti-Toxin:<br>n\tAnti-Toxin Type 01P: Works against Grade A Plasma.<br>n\t\tBest if injected directly into bloodstream.<br>n\t\tA full injection is in every regular Med-Kit.<br>n\t\tSpecial toxin Kits hold around 7.<br>n<br>nKnown Onboard Chemicals (other):<br>n\tRejuvenation T#001:<br>n\t\tEven 1 unit injected directly into the bloodstream<br>n\t\t\twill cure paralysis and sleep toxins.<br>n\t\tIf administered to a dying patient it will prevent<br>n\t\t\tfurther damage for about units*3 seconds.<br>n\t\t\tit will not cure them or allow them to be cured.<br>n\t\tIt can be administeredd to a non-dying patient<br>n\t\t\tbut the chemicals disappear just as fast.<br>n\tSleep Toxin T#054:<br>n\t\t5 units wilkl induce precisely 1 minute of sleep.<br>n\t\t\tThe effect are cumulative.<br>n\t\tWARNING: It is a crime to use this without authorization"
+	info = "Known Onboard Toxins:<br>n\tGrade A Semi-Liquid Plasma:<br>n\t\tHighly poisonous. You cannot sustain concentrations above 15 units.<br>n\t\tA gas mask fails to filter plasma after 50 units.<br>n\t\tWill attempt to diffuse like a gas.<br>n\t\tFiltered by scrubbers.<br>n\t\tThere is a bottled version which is very different<br>n\t\t\tfrom the version found in canisters!<br>n<br>n\t\tWARNING: Highly Flammable. Keep away from heat sources<br>n\t\texcept in an enclosed fire area!<br>n\t\tWARNING: It is a crime to use this without authorization.<br>nKnown Onboard Anti-Toxin:<br>n\tAnti-Toxin Type 01P: Works against Grade A Plasma.<br>n\t\tBest if injected directly into bloodstream.<br>n\t\tA full injection is in every regular Med-Kit.<br>n\t\tSpecial toxin Kits hold around 7.<br>n<br>nKnown Onboard Chemicals (other):<br>n\tRejuvenation T#001:<br>n\t\tEven 1 unit injected directly into the bloodstream<br>n\t\t\twill cure paralysis and sleep toxins.<br>n\t\tIf administered to a dying patient it will prevent<br>n\t\t\tfurther damage for about units*3 seconds.<br>n\t\t\tit will not cure them or allow them to be cured.<br>n\t\tIt can be administeredd to a non-dying patient<br>n\t\t\tbut the chemicals disappear just as fast.<br>n\tSleep Toxin T#054:<br>n\t\t5 units will induce precisely 1 minute of sleep.<br>n\t\t\tThe effect are cumulative.<br>n\t\tWARNING: It is a crime to use this without authorization"
 
 /obj/item/weapon/paper/courtroom
 	name = "paper- 'A Crash Course in Legal SOP on SS13'"
@@ -69,12 +69,17 @@
 *     Head of Personnel     *
 *                           *
 ****************************/
+/obj/item/weapon/paper/hop
+	info = "paperwork goblin"
+
 /obj/item/weapon/paper/hop/additional_access
 	name = "Form AA/422"
 	fields = 8
+
+/obj/item/weapon/paper/hop/additional_access/New()
 	info = {"<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center> <br>
 	<span style=\"font-size:25px\"><center><b><i>AA/422: Additional Access Application</center></b></i></span> <br>
-	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station </b><span class=\"paper_field\"></span> </center></i></b></span> <br>
+	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station [station_name()] </b><span class=\"paper_field\"></span> </center></i></b></span> <br>
 	<hr> <br>
 	<b>Employee Name: </b><span class=\"paper_field\"></span> <br>
 	<b>Employee Signature: </b><span class=\"paper_field\"></span> <br>
@@ -88,13 +93,16 @@
 	<hr>
 	<b>I, the undersigned, approve the requested access for the oversigned:</b> <span class=\"paper_field\"></span><br>
 	<i><span style=\"font-size:15px\">The Head of Personnel must sign above and stamp this form to authorize the request before additional access can be applied to the requesting employee's ID. The Head(s) of Staff for the department(s) to which access is being granted must also be contacted and verbally authorize the request, where applicable. These guidelines must be followed or this form is void and illegal.</span></i>"}
+	..()
 
 /obj/item/weapon/paper/hop/job_transfer
 	name = "Form JBE/27"
 	fields = 8
+	
+/obj/item/weapon/paper/hop/job_transfer/New()	
 	info = {"<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center> <br>
 	<span style=\"font-size:25px\"><center><b><i>JBE/27: Job Transfer Request</center></b></i></span> <br>
-	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station Exodus </center></i></b></span> <br>
+	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station [station_name()] </center></i></b></span> <br>
 	<hr> <br>
 	<b>Employee Name: </b><span class=\"paper_field\"></span> <br>
 	<b>Employee Signature: </b><span class=\"paper_field\"></span> <br>
@@ -110,13 +118,16 @@
 	<b>HoP Name: </b><span class=\"paper_field\"></span> <br>
 	<b>HoP Signature: </b><span class=\"paper_field\"></span> <br>
 	<i><span style=\"font-size:15px\">The Head of Personnel must sign above and stamp this form to authorize the request before a job transfer can be applied to the requesting employee's ID. The Head(s) of Staff for the department(s) involved with the transfer must also be contacted and verbally authorize the transfer, where applicable. These guidelines must be followed or this form is void and illegal.</span></i>"}
+	..()
 
 /obj/item/weapon/paper/hop/demotion
 	name = "Form SLH/3A"
 	fields = 4
+	
+/obj/item/weapon/paper/hop/demotion/New()
 	info = {"<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center> <br>
 	<span style=\"font-size:25px\"><center><b><i>SLH-3A: Human Resources Demotion Record</center></b></i></span> <br>
-	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station Exodus </center></i></b></span> <br>
+	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station [station_name()] </center></i></b></span> <br>
 	<hr> <br>
 	<b>Demoted Employee: </b><span class=\"paper_field\"></span> <br>
 	<b>Former Assignment: </b><span class=\"paper_field\"></span> <br>
@@ -126,13 +137,16 @@
 	<hr> <br>
 	<b>Supervisor Signature: </b><span class=\"paper_field\"></span> <br>
 	<i><span style=\"font-size:15px\">If authorized, the document must be signed and stamped by the employee's supervisor. The Head of Personnel on site may then remove all departmental access from the ID and apply a <br>"Demoted\" job title. Incomplete or unstamped demotion records are void, and illegal demotions will be prosecuted in accordance with the law.</i></span>"}
+	..()
 
 /obj/item/weapon/paper/hop/replacement
 	name = "Form AA/418"
 	fields = 6
+	
+/obj/item/weapon/paper/hop/replacement/New()
 	info = {"<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center> <br>
 	<span style=\"font-size:25px\"><center><b><i>AA/418: ID Card / PDA Replacement Request</center></b></i></span> <br>
-	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station Exodus </center></i></b></span> <br>
+	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station [station_name()] </center></i></b></span> <br>
 	<hr> <br>
 	<b>Employee Name: </b><span class=\"paper_field\"></span> <br>
 	<b>Employee Signature: </b><span class=\"paper_field\"></span> <br>
@@ -144,13 +158,16 @@
 	<b>HoP Name: </b><span class=\"paper_field\"></span> <br>
 	<b>HoP Signature: </b><span class=\"paper_field\"></span> <br>
 	<i><span style=\"font-size:15px\">The Head of Personnel must sign above and stamp this form to authorize the request before a replacement identification card and/or personal data assistant may be issued. These guidelines must be followed or this form is void and illegal.</span></i>"}
+	..()
 
 /obj/item/weapon/paper/hop/evaluation
 	name = "Form SLH/5"
 	fields = 8
+	
+/obj/item/weapon/paper/hop/evaluation/New()
 	info = {"<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center> <br>
 	<span style=\"font-size:25px\"><center><b><i>SLH-5: Human Resources Employee Evaluation</center></b></i></span> <br>
-	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station Exodus </center></i></b></span> <br>
+	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station [station_name()] </center></i></b></span> <br>
 	<hr> <br>
 	<b>Employee: </b><span class=\"paper_field\"></span> <br>
 	<b>Assignment: </b><span class=\"paper_field\"></span> <br>
@@ -174,13 +191,16 @@
 	<hr> <br>
 	<b>Supervisor Signature: </b><span class=\"paper_field\"></span> <br>
 	<i><span style=\"font-size:15px\">To complete the evaluation, the employee's supervisor must sign above and stamp the document with the department stamp. Incomplete or unstamped evaluations will not be processed.</span></i>"}
+	..()
 
 /obj/item/weapon/paper/hop/weapon_permit
 	name = "Form AK/74"
 	fields = 7
+	
+/obj/item/weapon/paper/hop/weapon_permit/New()
 	info = {"<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center> <br>
 	<span style=\"font-size:25px\"><center><b><i>AK/74: Weapons Permit Application</center></b></i></span> <br>
-	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station Exodus </center></i></b></span> <br>
+	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station [station_name()] </center></i></b></span> <br>
 	<hr> <br>
 	<b>Employee Name: </b><span class=\"paper_field\"></span> <br>
 	<b>Employee Signature: </b><span class=\"paper_field\"></span> <br>
@@ -196,6 +216,7 @@
 	<b>HoP Name: </b><span class=\"paper_field\"></span> <br>
 	<b>HoP Signature: </b><span class=\"paper_field\"></span> <br>
 	<i><span style=\"font-size:15px\">The Head of Personnel must sign above and stamp this form to authorize this application before a weapon permit can be applied to the requesting employee's ID. The Warden or Head of Security must also approve the issuing of any firearms from the armory, where applicable. These guidelines must be followed or this form is void and illegal.</span></i>"}
+	..()
 
 
 /****************************

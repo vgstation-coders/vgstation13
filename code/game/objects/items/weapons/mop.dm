@@ -9,7 +9,8 @@
 	throw_speed = 5
 	throw_range = 3
 	w_class = W_CLASS_MEDIUM
-	autoignition_temperature = AUTOIGNITION_FABRIC
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	flags = FPRINT
 	attack_verb = list("mops", "bashes", "bludgeons", "whacks", "slaps", "whips")
 

@@ -1,4 +1,4 @@
-#define STARTING_USES 5 * Sp_BASE_PRICE
+#define STARTING_USES 5 * SP_BASE_PRICE
 
 /obj/item/weapon/spellbook
 	name = "spell book"
@@ -22,30 +22,30 @@
 	var/list/available_artifacts = list()
 
 	var/static/list/available_potions = list(
-		/obj/item/potion/healing = Sp_BASE_PRICE,
-		/obj/item/potion/transform = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/toxin = Sp_BASE_PRICE*0.75,
-		/obj/item/potion/mana = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/invisibility/major = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/stoneskin = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/speed/major = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/zombie = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/mutation/truesight/major = Sp_BASE_PRICE*0.25,
-		/obj/item/potion/mutation/strength/major = Sp_BASE_PRICE*0.25,
-		/obj/item/potion/speed = Sp_BASE_PRICE*0.25,
-		/obj/item/potion/random = Sp_BASE_PRICE*0.2,
-		/obj/item/potion/sword = Sp_BASE_PRICE*0.1,
-		/obj/item/potion/deception = Sp_BASE_PRICE*0.1,
-		/obj/item/potion/levitation = Sp_BASE_PRICE*0.1,
-		/obj/item/potion/fireball = Sp_BASE_PRICE*0.1,
-		/obj/item/potion/invisibility = Sp_BASE_PRICE*0.1,
-		/obj/item/potion/light = Sp_BASE_PRICE*0.05,
-		/obj/item/potion/fullness = Sp_BASE_PRICE*0.05,
-		/obj/item/potion/transparency = Sp_BASE_PRICE*0.05,
-		/obj/item/potion/paralysis = Sp_BASE_PRICE*0.05,
-		/obj/item/potion/mutation/strength = Sp_BASE_PRICE*0.05,
-		/obj/item/potion/mutation/truesight = Sp_BASE_PRICE*0.05,
-		/obj/item/potion/teleport = Sp_BASE_PRICE*0.05)
+		/obj/item/potion/healing = SP_BASE_PRICE,
+		/obj/item/potion/transform = SP_BASE_PRICE*0.5,
+		/obj/item/potion/toxin = SP_BASE_PRICE*0.75,
+		/obj/item/potion/mana = SP_BASE_PRICE*0.5,
+		/obj/item/potion/invisibility/major = SP_BASE_PRICE*0.5,
+		/obj/item/potion/stoneskin = SP_BASE_PRICE*0.5,
+		/obj/item/potion/speed/major = SP_BASE_PRICE*0.5,
+		/obj/item/potion/zombie = SP_BASE_PRICE*0.5,
+		/obj/item/potion/mutation/truesight/major = SP_BASE_PRICE*0.25,
+		/obj/item/potion/mutation/strength/major = SP_BASE_PRICE*0.25,
+		/obj/item/potion/speed = SP_BASE_PRICE*0.25,
+		/obj/item/potion/random = SP_BASE_PRICE*0.2,
+		/obj/item/potion/sword = SP_BASE_PRICE*0.1,
+		/obj/item/potion/deception = SP_BASE_PRICE*0.1,
+		/obj/item/potion/levitation = SP_BASE_PRICE*0.1,
+		/obj/item/potion/fireball = SP_BASE_PRICE*0.1,
+		/obj/item/potion/invisibility = SP_BASE_PRICE*0.1,
+		/obj/item/potion/light = SP_BASE_PRICE*0.05,
+		/obj/item/potion/fullness = SP_BASE_PRICE*0.05,
+		/obj/item/potion/transparency = SP_BASE_PRICE*0.05,
+		/obj/item/potion/paralysis = SP_BASE_PRICE*0.05,
+		/obj/item/potion/mutation/strength = SP_BASE_PRICE*0.05,
+		/obj/item/potion/mutation/truesight = SP_BASE_PRICE*0.05,
+		/obj/item/potion/teleport = SP_BASE_PRICE*0.05)
 
 	var/uses = STARTING_USES
 	var/max_uses = STARTING_USES
@@ -53,7 +53,7 @@
 	var/op = 1
 
 /obj/item/weapon/spellbook/admin
-	uses = 30 * Sp_BASE_PRICE
+	uses = 30 * SP_BASE_PRICE
 	op = 0
 
 /obj/item/weapon/spellbook/New()
@@ -94,12 +94,6 @@
 	if(user.is_blind())
 		to_chat(user, "<span class='info'>You open \the [src] and run your fingers across the parchment. Suddenly, the pages coalesce in your mind!</span>")
 
-	if(istype(user,/mob/living/carbon))
-		var/mob/living/carbon/C = user
-		if(C.op_stage.butt == SURGERY_NO_BUTT)
-			to_chat(user, "<span class='info'>You are missing your ass! It would be pointless to attempt to learn magic without an ass to store it in.</span>")
-			return
-
 	user.set_machine(src)
 
 	var/dat
@@ -127,7 +121,7 @@
 			//speed: 1/5 (upgrade) | power: 0/1 (upgrade)
 
 			var/spell_name = spell.name
-			var/spell_cooldown = get_spell_cooldown_string(spell.charge_max, spell.charge_type)
+			var/spell_cooldown = get_spell_cooldown_string(spell.charge_cooldown_max, spell.charge_type)
 			var/spell_range = get_spell_range_string(spell.range)
 
 			dat += "<strong>[spell_name]</strong>[spell_cooldown]<br>Range: [spell_range]<br>"
@@ -216,14 +210,14 @@
 
 	dat += "</body>"
 
-	user << browse(dat, "window=spellbook;size=[book_window_size]")
+	user << browse(HTML_SKELETON(dat), "window=spellbook;size=[book_window_size]")
 	onclose(user, "spellbook")
 
 /obj/item/weapon/spellbook/proc/build_description(var/mob/user, var/spell_path) //Building sounds more coderlike doesn't it
 	var/dat
 	var/spell/abstract_spell = spell_path
 	var/spell_name = initial(abstract_spell.name)
-	var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_max), initial(abstract_spell.charge_type))
+	var/spell_cooldown = get_spell_cooldown_string(initial(abstract_spell.charge_cooldown_max), initial(abstract_spell.charge_type))
 	var/spell_price = get_spell_price(abstract_spell)
 	dat += "<strong>[spell_name]</strong>[spell_cooldown] ([buy_href_link(spell_path, spell_price, "buy for [spell_price] point\s")])<br>"
 	dat += "<em>[initial(abstract_spell.desc)]</em><br>"
@@ -264,9 +258,9 @@
 		return
 
 	switch(charge_type)
-		if(Sp_CHARGES)
+		if(SP_CHARGES)
 			return " - [charges] charge\s"
-		if(Sp_RECHARGE)
+		if(SP_RECHARGE)
 			return " - cooldown: [(charges/10)]s"
 
 /obj/item/weapon/spellbook/proc/get_spell_range_string(var/range)
@@ -307,9 +301,12 @@
 
 		//stat collection: spellbook purchases
 		var/datum/role/wizard/W = user.mind.GetRole(WIZARD)
-		if(istype(W) && istype(W.stat_datum, /datum/stat/role/wizard))
-			var/datum/stat/role/wizard/WD = W.stat_datum
-			WD.spellbook_purchases.Add("REFUND-" + S.name)
+		if(istype(W))
+			W.spells_from_spellbook -= S
+			W.spells_from_absorb -= S //Those get removed too
+			if(istype(W.stat_datum, /datum/stat/role/wizard))
+				var/datum/stat/role/wizard/WD = W.stat_datum
+				WD.spellbook_purchases.Add("REFUND-" + S.name)
 
 		return 1
 
@@ -322,7 +319,7 @@
 		return
 
 	if(L.mind.special_role == "apprentice")
-		to_chat(L, "If you got caught sneaking a peak from your teacher's spellbook, you'd likely be expelled from the Wizard Academy. Better not.")
+		to_chat(L, "If you got caught sneaking a peak from a senior wizard's spellbook, you'd likely be expelled from the Wizard Academy. Better not.")
 		return
 
 	if(href_list["refund"])
@@ -351,9 +348,11 @@
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
 					feedback_add_details("wizard_spell_learned", added.abbreviation)
 					var/datum/role/wizard/W = usr.mind.GetRole(WIZARD)
-					if(istype(W) && istype(W.stat_datum, /datum/stat/role/wizard))
-						var/datum/stat/role/wizard/WD = W.stat_datum
-						WD.spellbook_purchases.Add(added.name)
+					if(istype(W))
+						W.spells_from_spellbook += added
+						if(istype(W.stat_datum, /datum/stat/role/wizard))
+							var/datum/stat/role/wizard/WD = W.stat_datum
+							WD.spellbook_purchases.Add(added.name)
 
 		else if(ispath(buy_type, /obj/item/potion))
 			if(buy_type in available_potions)
