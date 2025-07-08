@@ -44,7 +44,6 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 #define MIN_FIELD_FREQ 1
 #define MAX_FIELD_STR 1000
 #define MIN_FIELD_STR 1
-#define RUST_CORE_STR_COST 5
 
 /obj/machinery/power/rust_core
 	name = "R-UST Mk 7 Tokamak core"
@@ -61,6 +60,8 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	var/field_frequency = 1
 
 	use_power = MACHINE_POWER_USE_IDLE
+	var/field_strength = MIN_FIELD_STR//0.01
+	var/field_frequency = MIN_FIELD_FREQ
 	idle_power_usage = 50
 	active_power_usage = 500	//multiplied by field strength
 	anchored = 0
@@ -114,7 +115,7 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	if(href_list["str"])
 		var/dif = text2num(href_list["str"])
 		field_strength = min(max(field_strength + dif, MIN_FIELD_STR), MAX_FIELD_STR)
-		active_power_usage = 5 * field_strength	//change to 500 later
+		active_power_usage = RUST_CORE_STR_COST * field_strength	//change to 500 later
 		if(owned_field)
 			owned_field.ChangeFieldStrength(field_strength)
 
