@@ -48313,7 +48313,8 @@
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "bHJ" = (
-/obj/machinery/computer/merch,
+/obj/structure/table,
+/obj/item/weapon/storage/box/donkpockets/random_amount,
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "bHK" = (
@@ -48994,7 +48995,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/obj/structure/closet/emcloset,
+/obj/machinery/computer/merch,
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "bJc" = (
@@ -49766,7 +49767,6 @@
 	},
 /area/hallway/secondary/entry)
 "bKx" = (
-/obj/structure/lattice,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
@@ -99204,6 +99204,21 @@
 	},
 /turf/simulated/wall,
 /area/crew_quarters/fitness)
+"olu" = (
+/obj/structure/window/full/plasma,
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/bridge)
 "olS" = (
 /obj/item/clothing/accessory/storage/bandolier,
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel,
@@ -211613,7 +211628,7 @@ aEz
 aTk
 aUP
 aWr
-aDc
+olu
 aaa
 baz
 bbL
