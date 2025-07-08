@@ -98704,6 +98704,15 @@
 	icon_state = "dark"
 	},
 /area/storage/tech)
+"fzj" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/obj/structure/extinguisher_cabinet{
+	pixel_y = 30
+	},
+/turf/simulated/floor,
+/area/hallway/primary/fore)
 "fCB" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -218615,7 +218624,7 @@ atL
 avf
 awB
 aqR
-ayY
+fzj
 aAe
 aBR
 aDn
