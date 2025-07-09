@@ -68,25 +68,26 @@
 		to_chat(user, "<span class='warning'>[bicon(src)] [src] was unable to draw a fuel rod assembly from an injector.</span>")
 
 /obj/machinery/rust_fuel_assembly_port/proc/try_insert_assembly()
-	var/success = 0
 	if(cur_assembly)
-		var/turf/check_turf = get_step(get_turf(src), src.dir)
-		check_turf = get_step(check_turf, src.dir)
-		for(var/obj/machinery/power/rust_fuel_injector/I in check_turf)
-			if(I.stat & (BROKEN|NOPOWER|FORCEDISABLE))
-				break
-			if(I.cur_assembly)
-				break
-			if(I.state != 2)
-				break
+		var/turf/turf_were_on = get_step(get_turf(src), src.dir)
+		var/dir_of_check = opposite_dirs[src.dir]
+		for(var/i = 0, i < 3, i++)
+			dir_of_check = counterclockwise_perpendicular_dirs[dir_of_check]
+			var/turf_to_check = get_step(turf_were_on, dir_of_check)
+			for(var/obj/machinery/power/rust_fuel_injector/I in turf_to_check)
+				if(I.stat & (BROKEN|NOPOWER|FORCEDISABLE))
+					continue
+				if(I.cur_assembly)
+					continue
+				if(I.state != 2)
+					continue
 
-			I.cur_assembly = cur_assembly
-			cur_assembly.forceMove(I)
-			cur_assembly = null
-			icon_state = "port0"
-			success = 1
-
-	return success
+				I.cur_assembly = cur_assembly
+				cur_assembly.forceMove(I)
+				cur_assembly = null
+				icon_state = "port0"
+				return 1
+	return 0
 
 /obj/machinery/rust_fuel_assembly_port/proc/eject_assembly()
 	if(cur_assembly)
@@ -96,28 +97,26 @@
 		return 1
 
 /obj/machinery/rust_fuel_assembly_port/proc/try_draw_assembly()
-	var/success = 0
 	if(!cur_assembly)
-		var/turf/check_turf = get_step(get_turf(src), src.dir)
-		check_turf = get_step(check_turf, src.dir)
-		for(var/obj/machinery/power/rust_fuel_injector/I in check_turf)
-			if(I.stat & (BROKEN|NOPOWER|FORCEDISABLE))
-				break
-			if(!I.cur_assembly)
-				break
-			if(I.injecting)
-				break
-			if(I.state != 2)
-				break
+		var/turf/turf_were_on = get_step(get_turf(src), src.dir)
+		var/dir_of_check = opposite_dirs[src.dir]
+		for(var/i = 0, i < 3, i++)
+			dir_of_check = counterclockwise_perpendicular_dirs[dir_of_check]
+			var/turf_to_check = get_step(turf_were_on, dir_of_check)
+			for(var/obj/machinery/power/rust_fuel_injector/I in turf_to_check)
+				if(I.stat & (BROKEN|NOPOWER|FORCEDISABLE))
+					continue
+				if(!I.cur_assembly)
+					continue
+				if(I.state != 2)
+					continue
 
-			cur_assembly = I.cur_assembly
-			cur_assembly.forceMove(src)
-			I.cur_assembly = null
-			icon_state = "port1"
-			success = 1
-			break
-
-	return success
+				cur_assembly = I.cur_assembly
+				cur_assembly.forceMove(src)
+				I.cur_assembly = null
+				icon_state = "port1"
+				return 1
+	return 0
 
 /obj/machinery/rust_fuel_assembly_port/verb/eject_assembly_verb()
 	set name = "Eject assembly from port"

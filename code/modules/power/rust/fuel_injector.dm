@@ -268,26 +268,38 @@
 		stop_injecting()
 
 /obj/machinery/power/rust_fuel_injector/proc/attempt_fuel_swap()
-	var/rev_dir = opposite_dirs[dir]
-	var/turf/mid = get_step(src, rev_dir)
-	var/success = 0
-	for(var/obj/machinery/rust_fuel_assembly_port/check_port in get_step(mid, rev_dir))
-		if(cur_assembly)
-			if(!check_port.cur_assembly)
-				check_port.cur_assembly = cur_assembly
-				cur_assembly.forceMove(check_port)
-				cur_assembly = null
-				check_port.icon_state = "port1"
-				success = 1
-		else
-			if(check_port.cur_assembly)
-				cur_assembly = check_port.cur_assembly
-				cur_assembly.forceMove(src)
-				check_port.cur_assembly = null
-				check_port.icon_state = "port0"
-				success = 1
 
-		break
+	var/success = 0
+	var/adjacent_dir = dir
+	outerloop: // a bit complex so let's go step by step
+		for(var/i = 0, i < 3, i++)
+			adjacent_dir = counterclockwise_perpendicular_dirs[adjacent_dir] //for each adjacent turf to the injector (except in front of it)
+			var/turf/adjacent_wall = get_step(get_turf(src), adjacent_dir) //find the wall
+			if(!istype(adjacent_wall, /turf/simulated/wall)) // check if it's a wall, if not, it can't have anything attached to it, duh
+				continue // if it's not a wall, check the next adjacent turf
+			var/dir_of_check = opposite_dirs[adjacent_dir]
+			for(var/j = 0, j < 3, j++) //now since the fuel port is like an APC, it is actually on the floor and only looks like it's in a wall, so you need to check all adjacent turfs of the wall if they have a port
+				dir_of_check = counterclockwise_perpendicular_dirs[dir_of_check]
+				var/turf_to_check = get_step(adjacent_wall, dir_of_check)
+				for(var/obj/machinery/rust_fuel_assembly_port/check_port in turf_to_check)
+					if(check_port.dir != opposite_dirs[dir_of_check]) // the fuel port actually needs to face the wall to be attached to it, if it isn't, it's on another wall
+						continue
+					if(cur_assembly)
+						if(!check_port.cur_assembly)
+							check_port.cur_assembly = cur_assembly
+							cur_assembly.forceMove(check_port)
+							cur_assembly = null
+							check_port.icon_state = "port1"
+							success = 1
+							break outerloop //we break on the first valid find for simplicity
+					else
+						if(check_port.cur_assembly)
+							cur_assembly = check_port.cur_assembly
+							cur_assembly.forceMove(src)
+							check_port.cur_assembly = null
+							check_port.icon_state = "port0"
+							success = 1
+							break outerloop
 	if(success)
 		visible_message("<span class='notice'>[bicon(src)] A green light flashes on \the [src].</span>")
 		updateDialog()
