@@ -3,7 +3,7 @@
 /*
  * A large number of misc global procs.
  */
-#if DM_VERSION < 516
+#ifndef SPACEMAN_DMM
 /proc/sign(x)
 	return x!=0?x/abs(x):0
 #endif
