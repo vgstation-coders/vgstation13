@@ -33,7 +33,7 @@
 	if(!.)
 		return
 	if(state) //We're set to anchored again.
-		for(var/obj/machinery/rust/gyrotron/gyro in linked_gyrotrons)
+		for(var/obj/machinery/power/gyrotron/gyro in linked_gyrotrons)
 			if(get_dist(src, gyro) > RUST_GYROTRON_RANGE) //We've been moved so far we're out of range.
 				linked_gyrotrons -= gyro
 
@@ -51,7 +51,7 @@
 				<th>Frequency (GHz)</th>
 			</tr>
 	"}
-	for(var/obj/machinery/rust/gyrotron/gyro in linked_gyrotrons)
+	for(var/obj/machinery/power/gyrotron/gyro in linked_gyrotrons)
 		//These vars are here because muh readable HTML code.
 		var/gyro_id = linked_gyrotrons.Find(gyro)
 		var/status = ((gyro.state != 2 || gyro.stat & (FORCEDISABLE | NOPOWER | BROKEN)) ? "<span style='color: red'>Unresponsive</span>" : "<span style='color: green'>Operational</span>")
@@ -92,7 +92,7 @@
 		return
 
 	var/idx = clamp(text2num(href_list["gyro"]), 1, linked_gyrotrons.len)
-	var/obj/machinery/rust/gyrotron/gyro = linked_gyrotrons[idx]
+	var/obj/machinery/power/gyrotron/gyro = linked_gyrotrons[idx]
 
 	if(!gyro || gyro.stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		return
@@ -148,21 +148,21 @@
 /obj/machinery/computer/rust_gyrotron_controller/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	. = "Linked gyrotrons:<br><lu>"
 
-	for(var/obj/machinery/rust/gyrotron/G in linked_gyrotrons)
+	for(var/obj/machinery/power/gyrotron/G in linked_gyrotrons)
 		. += "<li><b>[G.id_tag]</b> <a href='?src=\ref[src];unlink=[linked_gyrotrons.Find(G)]'>\[X\]</a></li>"
 	. += "</ul>"
 
-/obj/machinery/computer/rust_gyrotron_controller/linkMenu(var/obj/machinery/rust/gyrotron/O)
+/obj/machinery/computer/rust_gyrotron_controller/linkMenu(var/obj/machinery/power/gyrotron/O)
 	if(istype(O))
 		. = "<a href='?src=\ref[src];link=1'>\[LINK\]</a> "
 
-/obj/machinery/computer/rust_gyrotron_controller/canLink(var/obj/machinery/rust/gyrotron/O, var/list/context)
+/obj/machinery/computer/rust_gyrotron_controller/canLink(var/obj/machinery/power/gyrotron/O, var/list/context)
 	. = (istype(O) && get_dist(src, O) < RUST_GYROTRON_RANGE)
 
 /obj/machinery/computer/rust_gyrotron_controller/isLinkedWith(var/obj/O)
 	. = (O in linked_gyrotrons)
 
-/obj/machinery/computer/rust_gyrotron_controller/linkWith(var/mob/user, var/obj/machinery/rust/gyrotron/O, var/list/context)
+/obj/machinery/computer/rust_gyrotron_controller/linkWith(var/mob/user, var/obj/machinery/power/gyrotron/O, var/list/context)
 	linked_gyrotrons += O
 	. = 1
 

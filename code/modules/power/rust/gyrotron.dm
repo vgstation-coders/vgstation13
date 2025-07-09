@@ -19,25 +19,25 @@
 	idle_power_usage = 10
 	active_power_usage = 100000 //Yes that is a shitton. No you're not running this engine on an SE/AME you SE/AME scrubs.
 
-/obj/machinery/rust/gyrotron/initialize()
+/obj/machinery/power/gyrotron/initialize()
 	if(!id_tag)
 		assign_uid()
 		id_tag = uid
 
 	. = ..()
 
-/obj/machinery/rust/gyrotron/New()
+/obj/machinery/power/gyrotron/New()
 	. = ..()
 
 	if(ticker)
 		initialize()
 
-/obj/machinery/rust/gyrotron/proc/stop_emitting()
+/obj/machinery/power/gyrotron/proc/stop_emitting()
 	emitting = 0
 	use_power = MACHINE_POWER_USE_IDLE
 	update_icon()
 
-/obj/machinery/rust/gyrotron/proc/start_emitting()
+/obj/machinery/power/gyrotron/proc/start_emitting()
 	if(stat & (FORCEDISABLE | NOPOWER | BROKEN) || emitting && state == 2) //Sanity.
 		return
 
@@ -64,43 +64,43 @@
 
 	flick("emitter-active", src)
 
-/obj/machinery/rust/gyrotron/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+/obj/machinery/power/gyrotron/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return {"
 		<ul>
 			<li>[format_tag("ID Tag","id_tag")]</li>
 		</ul>
 	"}
 
-/obj/machinery/rust/gyrotron/canLink(var/obj/machinery/computer/rust_gyrotron_controller/object, var/list/context)
+/obj/machinery/power/gyrotron/canLink(var/obj/machinery/computer/rust_gyrotron_controller/object, var/list/context)
 	return istype(object) && get_dist(src, object) < RUST_GYROTRON_RANGE
 
-/obj/machinery/rust/gyrotron/isLinkedWith(var/obj/machinery/computer/rust_gyrotron_controller/object)
+/obj/machinery/power/gyrotron/isLinkedWith(var/obj/machinery/computer/rust_gyrotron_controller/object)
 	return istype(object) && (src in object.linked_gyrotrons)
 
-/obj/machinery/rust/gyrotron/linkWith(var/mob/user, var/obj/machinery/computer/rust_gyrotron_controller/buffered, var/list/context)
+/obj/machinery/power/gyrotron/linkWith(var/mob/user, var/obj/machinery/computer/rust_gyrotron_controller/buffered, var/list/context)
 	buffered.linked_gyrotrons += src
 	return 1
 
-/obj/machinery/rust/gyrotron/power_change()
+/obj/machinery/power/gyrotron/power_change()
 	. =..()
 	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		stop_emitting()
 
 	update_icon()
 
-/obj/machinery/rust/gyrotron/update_icon()
+/obj/machinery/power/gyrotron/update_icon()
 	if(!(stat & (FORCEDISABLE | NOPOWER | BROKEN)) && emitting)
 		icon_state = "emitter-on"
 	else
 		icon_state = "emitter-off"
 
-/obj/machinery/rust/gyrotron/weldToFloor(var/obj/item/tool/weldingtool/WT, var/mob/user)
+/obj/machinery/power/gyrotron/weldToFloor(var/obj/item/tool/weldingtool/WT, var/mob/user)
 	if(emitting)
 		to_chat(user, "<span class='warning'>Turn \the [src] off first!</span>")
 		return -1
 	. = ..()
 
-/obj/machinery/rust/gyrotron/verb/rotate_cw()
+/obj/machinery/power/gyrotron/verb/rotate_cw()
 	set name = "Rotate (Clockwise)"
 	set src in oview(1)
 	set category = "Object"
@@ -114,7 +114,7 @@
 
 	dir = turn(dir, -90)
 
-/obj/machinery/rust/gyrotron/verb/rotate_ccw()
+/obj/machinery/power/gyrotron/verb/rotate_ccw()
 	set name = "Rotate (Counter-Clockwise)"
 	set src in oview(1)
 	set category = "Object"
@@ -128,7 +128,7 @@
 
 	dir = turn(dir, 90)
 
-/obj/machinery/rust/gyrotron/AltClick(mob/user)
+/obj/machinery/power/gyrotron/AltClick(mob/user)
 	if(user.incapacitated() || !Adjacent(user))
 		return
 	rotate_cw()
