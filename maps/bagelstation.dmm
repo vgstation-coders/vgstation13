@@ -113547,7 +113547,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/obj/machinery/rust/gyrotron{
+/obj/machinery/power/gyrotron{
 	anchored = 1;
 	dir = 8;
 	state = 2
@@ -114580,7 +114580,7 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/obj/machinery/rust/gyrotron{
+/obj/machinery/power/gyrotron{
 	anchored = 1;
 	dir = 4;
 	state = 2
@@ -114686,7 +114686,7 @@
 /turf/space,
 /area/engineering/engine)
 "wRF" = (
-/obj/machinery/rust/gyrotron{
+/obj/machinery/power/gyrotron{
 	anchored = 1;
 	dir = 8;
 	state = 2

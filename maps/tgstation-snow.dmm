@@ -101056,7 +101056,7 @@
 /turf/simulated/floor/airless,
 /area/surface/snow)
 "rKm" = (
-/obj/machinery/rust/gyrotron{
+/obj/machinery/power/gyrotron{
 	anchored = 1;
 	dir = 8;
 	state = 2
@@ -109270,7 +109270,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/locker)
 "uKZ" = (
-/obj/machinery/rust/gyrotron{
+/obj/machinery/power/gyrotron{
 	anchored = 1;
 	dir = 4;
 	state = 2

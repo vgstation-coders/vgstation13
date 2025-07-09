@@ -67,7 +67,7 @@
 /area/vault/rust)
 "ar" = (
 /obj/structure/lattice,
-/obj/machinery/rust/gyrotron{
+/obj/machinery/power/gyrotron{
 	name = "girotron"
 	},
 /turf/space,

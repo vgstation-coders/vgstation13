@@ -1,4 +1,4 @@
-/obj/machinery/rust/gyrotron
+/obj/machinery/power/gyrotron
 	icon = 'icons/obj/machines/rust.dmi'
 	icon_state = "emitter-off"
 	name = "gyrotron"

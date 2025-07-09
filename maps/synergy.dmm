@@ -24906,7 +24906,7 @@
 /turf/simulated/floor/plating,
 /area/engine/rust_control)
 "aRe" = (
-/obj/machinery/rust/gyrotron,
+/obj/machinery/power/gyrotron,
 /turf/simulated/floor/plating,
 /area/engine/rust_control)
 "aRf" = (
