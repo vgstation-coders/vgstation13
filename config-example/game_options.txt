@@ -43,7 +43,7 @@ RESPAWN_DELAY 30
 ## These values get directly added to values and totals in-game. To speed things up make the number negative, to slow things down, make the number positive.
 
 
-## These modify the run/walk speed of all mobs before the mob-specific modifiers are applied. 
+## These modify the run/walk speed of all mobs before the mob-specific modifiers are applied.
 RUN_DELAY 0
 WALK_DELAY 0
 
@@ -87,3 +87,6 @@ HARDCORE_MODE 0
 
 # Whether when people talk, some voice noises are played
 # HUMANS_SPEAK
+
+# Is dynamic+ enabled, allowing persistence to adjust antag weights?
+# DYNAMIC_PLUS
