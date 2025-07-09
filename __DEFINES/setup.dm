@@ -1,6 +1,9 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 #ifndef SPACEMAN_DMM
-#error Your version of byond is too old, you need version 513 or higher
+#define MIN_COMPILER_VERSION 515
+#if DM_VERSION < MIN_COMPILER_VERSION
+#error Your version of byond is too old, you need version 516 or higher
+#endif
 #endif
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X

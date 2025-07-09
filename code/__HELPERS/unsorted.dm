@@ -3,10 +3,8 @@
 /*
  * A large number of misc global procs.
  */
-#ifndef SPACEMAN_DMM
-/proc/sign(x)
-	return x!=0?x/abs(x):0
-#endif
+///proc/sign(x)
+//	return x!=0?x/abs(x):0
 
 /// Return html to load a url.
 /// for use inside of browse() calls to html assets that might be loaded on a cdn.
