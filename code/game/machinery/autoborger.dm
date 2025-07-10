@@ -208,7 +208,7 @@
 			enable_namepick=!enable_namepick
 		if("force_class")
 			var/list/modules = list("(Robot's Choice)")
-			modules += getAvailableRobotModules()
+			modules += getAvailableRobotModules(usr)
 			var/sel_mod = input("Please, select a module!", "Robot", null, null) as null|anything in modules
 			if(!sel_mod)
 				return

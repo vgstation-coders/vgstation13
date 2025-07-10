@@ -41,7 +41,7 @@
 		if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
 			. *= SILICON_MOBILITY_MODULE_SPEED_MODIFIER
 		var/low_movement_speed_trigger = get_percentage_power_for_movement()
-		var/cellcharge = get_cell_charge()
+		var/cellcharge = get_cell_charge(src)
 		if(cellcharge <= low_movement_speed_trigger) //25% of the cell OR 25% of a normal cell, whatever is lower
 			if(cellcharge <= 0)
 				. *= SILICON_NO_CELL_SLOWDOWN

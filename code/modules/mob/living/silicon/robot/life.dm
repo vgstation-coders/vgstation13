@@ -46,15 +46,15 @@
 
 /mob/living/silicon/robot/proc/use_power()
 	if(get_cell() && is_component_functioning("power cell"))
-		if(get_cell_charge() <= 0)
+		if(get_cell_charge(src) <= 0)
 			uneq_all()
 		else
-			if(get_cell_charge() <= ROBOT_LOW_POWER)
+			if(get_cell_charge(src) <= ROBOT_LOW_POWER)
 				uneq_all()
-				use_cell_charge(1)
+				use_cell_charge(src,1)
 			else
 				for(var/M in get_all_slots())
-					use_cell_charge(3)
+					use_cell_charge(src,3)
 
 			for(var/V in components)
 				var/datum/robot_component/C = components[V]

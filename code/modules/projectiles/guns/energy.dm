@@ -42,7 +42,7 @@
 		charge_tick = 0
 		if(!power_supply)
 			return 0
-		if(recharges_borg_cell && isrobot(loc) && !use_borg_cellcharge(src.loc,charge_cost))
+		if(recharges_borg_cell && isrobot(loc) && !use_cell_charge(src.loc,charge_cost))
 			return 0
 		power_supply.give(charge_cost*recharge_mult)
 		update_icon()
@@ -79,7 +79,7 @@
 	if(in_chamber)
 		return 1
 	if(uses_borg_cell && isrobot(loc))
-		if(!use_borg_cellcharge(src.loc,charge_cost))
+		if(!use_cell_charge(src.loc,charge_cost))
 			return 0
 	else if(!power_supply || !power_supply.use(charge_cost))
 		return 0

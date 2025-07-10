@@ -1264,7 +1264,7 @@
 		component.electronics_damage = 0
 		component.brute_damage = 0
 		component.installed = COMPONENT_INSTALLED
-		if(C == "power cell")
+		if(istype(component.type,/datum/robot_component/cell))
 			if(!component.wrapped)
 				component.wrapped = new(src)
 			var/obj/item/weapon/cell/cell = component.wrapped
@@ -1322,10 +1322,6 @@
 		if(cellcomp)
 			return cellcomp.wrapped
 
-/mob/living/silicon/robot/proc/get_cell_charge()
-	var/obj/item/weapon/cell/cell = get_cell()
-	return cell ? cell.charge : 0
-
 /mob/living/silicon/robot/proc/get_cell_charge_fraction()
 	var/obj/item/weapon/cell/cell = get_cell()
 	return cell ? cell.charge/cell.maxcharge : 0
@@ -1333,11 +1329,6 @@
 /mob/living/silicon/robot/proc/get_cell_maxcharge()
 	var/obj/item/weapon/cell/cell = get_cell()
 	return cell ? cell.maxcharge : 0
-
-/mob/living/silicon/robot/proc/use_cell_charge(var/amount)
-	var/obj/item/weapon/cell/cell = get_cell()
-	if(cell)
-		return cell.use(amount)
 
 /mob/living/silicon/robot/proc/drain_cell()
 	var/obj/item/weapon/cell/cell = get_cell()

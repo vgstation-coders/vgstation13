@@ -141,7 +141,7 @@ var/static/list/mat2type = list(
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
 		if(R && R.get_cell())
-			if(get_borg_cellcharge(R))
+			if(get_cell_charge(R))
 				var/obj/item/stack/sheet/material_type = material
 				if(material_type)
 					var/modifier = get_mat_cost(initial(active_material.perunit))
@@ -287,4 +287,4 @@ var/static/list/mat2type = list(
 	return 0
 
 /obj/item/device/material_synth/robot/TakeCost(var/spawned, var/modifier, mob/user)
-	return use_borg_cellcharge(user,spawned * modifier * MAT_SYNTH_ROBO)
+	return use_cell_charge(user,spawned * modifier * MAT_SYNTH_ROBO)

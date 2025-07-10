@@ -292,7 +292,7 @@
 /mob/living/silicon/robot/put_in_hands(var/obj/item/W)
 	if(!W)
 		return FALSE
-	if(get_cell_charge() <= ROBOT_LOW_POWER)
+	if(get_cell_charge(src) <= ROBOT_LOW_POWER)
 		drop_from_inventory(W)
 		return FALSE
 	for(var/obj/item/weapon/gripper/G in get_all_slots())

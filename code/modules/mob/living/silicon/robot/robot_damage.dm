@@ -99,8 +99,8 @@
 		var/absorb_burn = burn*shield.shield_level
 		var/cost = (absorb_brute+absorb_burn)*100
 
-		use_cell_charge(cost)
-		if(get_cell_charge() <= 0)
+		use_cell_charge(src,cost)
+		if(get_cell_charge(src) <= 0)
 			drain_cell()
 			to_chat(src, "<span class='warning'>Your shield has overloaded!</span>")
 		else
@@ -145,8 +145,8 @@
 		var/absorb_burn = burn*shield.shield_level
 		var/cost = (absorb_brute+absorb_burn)*100
 
-		use_cell_charge(cost)
-		if(get_cell_charge() <= 0)
+		use_cell_charge(src,cost)
+		if(get_cell_charge(src) <= 0)
 			drain_cell()
 			to_chat(src, "<span class='warning'>Your shield has overloaded!</span>")
 		else

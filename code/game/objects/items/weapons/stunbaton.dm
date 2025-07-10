@@ -273,7 +273,7 @@
 	return
 
 /obj/item/weapon/melee/baton/loaded/borg/deductcharge(var/chrgdeductamt)
-	use_borg_cellcharge(loc,hitcost)
+	use_cell_charge(loc,hitcost)
 
 /obj/item/weapon/melee/baton/harm
 	desc = "A baton for permanently incapacitating people with."

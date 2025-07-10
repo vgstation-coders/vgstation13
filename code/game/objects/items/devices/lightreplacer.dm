@@ -473,10 +473,10 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		return 0
 
 /obj/item/device/lightreplacer/proc/recharge(mob/user)
-	if(get_borg_cellcharge(user) && (glass < glass_max))
+	if(get_cell_charge(user) && (glass < glass_max))
 		var/added_glass = 0
 		added_glass = clamp(added_glass, 7500, (glass_max - glass))
-		if(use_borg_cellcharge(user,added_glass * 0.1))
+		if(use_cell_charge(user,added_glass * 0.1))
 			add_glass(added_glass, 2)
 			to_chat(usr, "<span class='notice'>\The [src] synthesizes [added_glass] units of glass.</span>")
 			return 1

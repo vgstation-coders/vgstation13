@@ -53,7 +53,7 @@
 
 /obj/item/weapon/pickaxe/plasmacutter/heat_axe/process()
 	var/consume = rand(100,250)
-	if(!use_borg_cellcharge(loc,consume))
+	if(!use_cell_charge(loc,consume))
 		toggleActive()
 
 /obj/item/weapon/pickaxe/plasmacutter/heat_axe/proc/HellFire(var/mob/living/victim)

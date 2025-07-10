@@ -307,10 +307,10 @@
 	var/cell_power_per_energy = 30
 
 /obj/item/device/rcd/borg/use_energy(var/amount, var/mob/user)
-	use_borg_cellcharge(user,amount * cell_power_per_energy)
+	use_cell_charge(user,amount * cell_power_per_energy)
 
 /obj/item/device/rcd/borg/get_energy(var/mob/user)
-	return get_borg_cellcharge(user) / cell_power_per_energy
+	return get_cell_charge(user) / cell_power_per_energy
 
 //Matter based RCDs.
 /obj/item/device/rcd/matter

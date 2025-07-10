@@ -12,7 +12,7 @@
 
 	M.assaulted_by(user)
 
-	use_borg_cellcharge(user,30)
+	use_cell_charge(user,30)
 
 	M.Knockdown(5)
 	if (M.stuttering < 5)

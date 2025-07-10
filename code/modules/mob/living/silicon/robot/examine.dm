@@ -28,7 +28,7 @@
 	else
 		msg += "Its cover is closed.\n"
 
-	if(!get_cell_charge())
+	if(!get_cell_charge(src))
 		msg += "<span class='warning'>Its battery indicator is blinking red!</span>\n"
 
 	switch(stat)
