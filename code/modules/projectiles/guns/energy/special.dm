@@ -300,15 +300,10 @@
 				success = TRUE
 				if(H.stat)
 					if(H.locked_to)
-					H.locked_to = 0
-					H.anchored = 0
-				H.zombify(user, cannot_evolve = TRUE) //Necromancer zombies can't evolve
-
-			if(raisetype)
+						H.locked_to = 0
+						H.anchored = 0
 				H.dropBorers()
-				var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
-				H.gib()
-				spooky.faction = "\ref[user]"
+				H.zombify(user, cannot_evolve = TRUE) //Necromancer zombies can't evolve
 			else
 				to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")
 				return 1
