@@ -15,6 +15,7 @@
 	var/list/components_in_use = null
 	var/build_state = 1
 	var/build_path = 0 //0 = Default path. 1 = Glass Frame
+	var/required_circuit_type = null
 
 	// For pods
 	var/list/connected_parts = list()
@@ -42,6 +43,9 @@
 	for(var/path in req_components)
 		amt += req_components[path]
 	return amt
+
+/obj/machinery/constructable_frame/machine_frame
+	required_circuit_type=MACHINE
 
 /obj/machinery/constructable_frame/machine_frame/attackby(obj/item/P as obj, mob/user as mob)
 	if(P.crit_fail)
@@ -125,9 +129,8 @@
 			if(!..())
 				if(istype(P, /obj/item/weapon/circuitboard))
 					var/obj/item/weapon/circuitboard/B = P
-					if(B.board_type == MACHINE)
-						if(!user.drop_item(B, src))
-							user << "<span class='warning'>You can't let go of \the [B]!</span>"
+					if(B.board_type == required_circuit_type)
+						if(!user.drop_item(B, src, failmsg = TRUE))
 							return
 
 						playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -194,7 +197,7 @@
 									O.forceMove(components_in_use)
 								else
 									O.forceMove(null)
-								new_machine.component_parts += O
+								new_machine.add_part(O)
 							if(circuit.contain_parts)
 								circuit.forceMove(components_in_use)
 							else
@@ -234,34 +237,39 @@
 
 						else
 							if(istype(P, /obj/item/weapon) || istype(P, /obj/item/stack))
+								var/matched = FALSE
 								for(var/I in req_components)
 									if(istype(P, I) && (req_components[I] > 0))
+										matched = TRUE
+										var/wentin = FALSE
 										playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 										if(istype(P, /obj/item/stack))
 											var/obj/item/stack/CP = P
-											if(CP.amount >= req_components[I])
-												var/camt = min(CP.amount, req_components[I]) // amount of the stack to take, idealy amount required, but limited by amount provided
-												var/obj/item/stack/CC = new I(src)
-												CC.amount = camt
-												CC.update_icon()
-												CP.use(camt)
+											var/camt = min(CP.amount, req_components[I]) // amount of the stack to take, idealy amount required, but limited by amount provided
+											var/obj/item/stack/CC = locate() in src
+											if(!CC)
+												CC = new I(src)
+											CC.amount = camt
+											CC.update_icon()
+											CP.use(camt)
+											if(!(CC in components))
 												components += CC
-												req_components[I] -= camt
-												update_desc()
-												break
-											else
-												to_chat(user, "<span class='warning'>You do not have enough [P]!</span>")
+											req_components[I] -= camt
+											wentin = TRUE
 
-										if(user.drop_item(P, src))
+										else if(user.drop_item(P, src))
 											components += P
 											req_components[I]--
-											update_desc()
 											if(P.is_open_container())
 												. = 1
-											break
-								to_chat(user, desc)
+											wentin = TRUE
 
-								if(P && P.loc != src && ! (istype(P, /obj/item/stack/cable_coil)))
+										if(wentin)
+											update_desc()
+											to_chat(user, desc)
+											break
+
+								if(!matched)
 									to_chat(user, "<span class='warning'>You cannot add that component to the machine!</span>")
 
 /obj/machinery/constructable_frame/machine_frame/proc/set_build_state(var/state)
@@ -274,7 +282,7 @@
 		if(3)
 			icon_state = "box_2"
 
-/obj/item/weapon/circuitboard/proc/finish_building(var/obj/machinery/new_machine, var/mob/user) //Something that will get done after the last step of construction. Currently unused.
+/obj/item/weapon/circuitboard/proc/finish_building(var/obj/machinery/new_machine, var/mob/user) //Something that will get done after the last step of construction.
 	return
 
 //Machine Frame Circuit Boards
@@ -332,20 +340,14 @@ to destroy them and players will be able to make replacements.
 	else
 		*/if(!soldering&&issolder(O))
 		//local_fuses.Interact(user)
-		var/t = input(user, "Which board should be designed?") as null|anything in allowed_boards
-		if(!t)
+		var/choice = input(user, "Which board should be designed?") as null|anything in allowed_boards
+		if(!choice)
 			return
 		var/obj/item/tool/solder/S = O
-		if(!S.remove_fuel(4,user))
-			return
-		S.playtoolsound(loc, 50)
 		soldering = 1
-		if(do_after(user, src,4 SECONDS * S.work_speed))
-			var/boardType = allowed_boards[t]
-			var/obj/item/I = new boardType(get_turf(user))
-			to_chat(user, "<span class='notice'>You fashion a crude [I] from the blank circuitboard.</span>")
-			qdel(src)
-			user.put_in_hands(I)
+		if(S.do_solder(user, src,4 SECONDS,4,50))
+			user.create_in_hands(src, allowed_boards[choice], msg = "<span class='notice'>You fashion a crude [choice] board from the blank circuitboard.</span>")
+			return
 		soldering = 0
 	else if(iswelder(O))
 		var/obj/item/tool/weldingtool/WT = O
@@ -463,14 +465,6 @@ to destroy them and players will be able to make replacements.
 	icon_state = "door_electronics"
 	//origin_tech = Tc_PROGRAMMING + "=2"
 
-/obj/item/weapon/circuitboard/airlock
-	name = "Circuit board (Airlock)"
-	desc = "A circuit board used to operate airlocks and their access controls."
-	board_type= OTHER
-	icon = 'icons/obj/doors/door_assembly.dmi'
-	icon_state = "door_electronics"
-	//origin_tech = Tc_PROGRAMMING + "=2"
-
 /obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (R&D Server)"
 	desc = "A circuit board used to run a R&D server."
@@ -492,6 +486,17 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/manipulator = 2,
 							/obj/item/weapon/stock_parts/micro_laser = 2,
 							/obj/item/weapon/stock_parts/console_screen = 1)
+
+/obj/item/weapon/circuitboard/spiderbot_fabricator
+	name = "Circuit board (Spiderbot Fabricator)"
+	desc = "A circuit board used to run a spiderbot fabricator."
+	build_path = /obj/machinery/spiderbot_fabricator
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
+	req_components = list(
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 1)
 
 /obj/item/weapon/circuitboard/podfab
 	name = "Circuit board (Spacepod Fabricator)"
@@ -796,7 +801,7 @@ to destroy them and players will be able to make replacements.
 
 /obj/item/weapon/circuitboard/reagentgrinder
 	name = "Circuit Board (All-In-One Grinder)"
-	desc = "A circuit board used to run a machine that grinds or juices solid items.."
+	desc = "A circuit board used to run a machine that grinds or juices solid items."
 	build_path = /obj/machinery/reagentgrinder
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
@@ -876,6 +881,10 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/capacitor = 1,
 							/obj/item/weapon/reagent_containers/glass/beaker = 2,
 							/obj/item/weapon/stock_parts/console_screen = 1)
+
+/obj/item/weapon/circuitboard/hydroponics/finish_building(var/obj/machinery/portable_atmospherics/hydroponics/new_machine, var/mob/user)
+	new_machine.waterlevel = 0
+	new_machine.update_icon(TRUE)
 
 /obj/item/weapon/circuitboard/gibber
 	name = "Circuit Board (Gibber)"
@@ -1165,7 +1174,8 @@ to destroy them and players will be able to make replacements.
 	req_components = list(
 							/obj/item/weapon/stock_parts/matter_bin = 1,
 							/obj/item/weapon/stock_parts/manipulator = 1,
-							/obj/item/weapon/stock_parts/scanning_module = 1)
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/storage/lockbox/coinbox = 1)
 
 /obj/item/weapon/circuitboard/pdapainter
 	name = "Circuit Board (PDA Painter)"
@@ -1712,3 +1722,4 @@ to destroy them and players will be able to make replacements.
 		/obj/item/weapon/stock_parts/manipulator = 2,
 		/obj/item/weapon/stock_parts/matter_bin = 1,
 	)
+

@@ -26,13 +26,20 @@
 
 */
 
+//General character knowledge, e.g. blood type, bank details, radio channels
+#define MIND_MEMORY_GENERAL "General"
+//Antagonist specific knowledge, e.g. uplink codes
+#define MIND_MEMORY_ANTAGONIST "Antagonist"
+//User-created notes, appears at the bottom of the list
+#define MIND_MEMORY_CUSTOM "Custom"
+
 /datum/mind
 	var/key
 	var/name				//replaces mob/var/original_name
 	var/mob/current
 	var/active = 0
 
-	var/memory
+	var/list/memory = list(MIND_MEMORY_GENERAL = "", MIND_MEMORY_ANTAGONIST = "", MIND_MEMORY_CUSTOM = "")
 	var/datum/body_archive/body_archive
 
 	var/assigned_role
@@ -88,7 +95,6 @@
 		transfer_to_without_current(new_character)
 		return
 
-	//new_character.attack_log += current.attack_log
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from [current] to [new_character]"
 
 	for (var/role in antag_roles)
@@ -138,17 +144,21 @@
 
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
+	INVOKE_EVENT(src, /event/after_mind_transfer, "mind" = src)
 
-/datum/mind/proc/store_memory(new_text, var/forced)
+/datum/mind/proc/store_memory(new_text, var/category = MIND_MEMORY_GENERAL, var/forced = FALSE)
+	if(!category || !(category in memory))
+		category = MIND_MEMORY_CUSTOM
+
 	if(!forced)
-		if(length(memory) > MAX_PAPER_MESSAGE_LEN)
+		if(length(memory[category]) > MAX_PAPER_MESSAGE_LEN)
 			to_chat(current, "<span class = 'warning'>Your memory, however hazy, is full.</span>")
 			return
 		if(length(new_text) > MAX_MESSAGE_LEN)
 			to_chat(current, "<span class = 'warning'>That's a lot to memorize at once.</span>")
 			return
 	if(new_text)
-		memory += "[new_text]<BR>"
+		memory[category] += "[new_text]<BR>"
 
 
 /datum/mind/proc/hasFactionsWithHUDIcons()
@@ -162,8 +172,15 @@
 	var/output = "<TITLE>Your memory</TITLE><B>[current.real_name]'s memory</B><HR>"
 
 	if (memory)
-		output += memory
-		output += "<hr>"
+		if(length(memory[MIND_MEMORY_GENERAL]) > 0)
+			output += memory[MIND_MEMORY_GENERAL]
+			output += "<hr>"
+		if(length(memory[MIND_MEMORY_ANTAGONIST]) > 0)
+			output += memory[MIND_MEMORY_ANTAGONIST]
+			output += "<hr>"
+		if(length(memory[MIND_MEMORY_CUSTOM]) > 0)
+			output += memory[MIND_MEMORY_CUSTOM]
+			output += "<hr>"
 
 	if(antag_roles.len)
 		for(var/role in antag_roles)
@@ -206,13 +223,14 @@
 
 	//<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"} TODO: make sure that works
 
-	usr << browse(out, "window=role_panel[src];size=700x500")
+	usr << browse(HTML_SKELETON(out), "window=role_panel[src];size=700x500")
 
 /datum/mind/proc/role_purchase_log()
 	if(!ticker || !ticker.mode)
 		alert("Ticker and Game Mode aren't initialized yet!", "Alert")
 		return
-
+	if(!check_rights(R_ADMIN))
+		return
 	var/out = {"<TITLE>Role purchase log</TITLE><B>[name]</B>[(current&&(current.real_name!=name))?" (as [current.real_name])":""]<BR>Assigned job: [assigned_role]<hr>"}
 	if(current.spell_list && current.spell_list.len)
 		out += "Known spells:<BR>"
@@ -236,7 +254,7 @@
 				for(var/entry in W.potions_bought)
 					out += "[entry]<BR>"
 
-	usr << browse(out, "window=role_purchase_log[src];size=300x500")
+	usr << browse(HTML_SKELETON(out), "window=role_purchase_log[src];size=300x500")
 
 /datum/mind/proc/get_faction_list()
 	var/list/all_factions = list()

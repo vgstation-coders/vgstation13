@@ -145,8 +145,7 @@ var/list/labor_console_categories = list(
 			verified(user)
 	if(istype(W,/obj/item/weapon/disk/jobdisk))
 		to_chat(user, "<span class='notice'>You begin installing the alternate database.</span>")
-		if(!user.drop_item(W))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
+		if(!user.drop_item(W, failmsg = TRUE))
 			return
 		W.forceMove(src)
 		if(do_after(user,src,30))

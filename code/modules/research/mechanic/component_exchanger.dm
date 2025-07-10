@@ -15,7 +15,6 @@
 	starting_materials = null
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=5;" + Tc_PROGRAMMING + "=3"
-	var/emagged = 0 //So we can emag it for "improved" functionality
 	var/working = 0 //Busy check to make sure the user doesn't try to multi-task (this causes serious problems)
 
 	allow_quick_gather = 1
@@ -183,10 +182,10 @@
 
 
 	//Move the old part into our component exchanger
-	M.component_parts -= P
+	M.remove_part(P)
 	handle_item_insertion(P, 1)
 	//Move the new part into the machine
 	remove_from_storage(R, M)
-	M.component_parts += R
+	M.add_part(R)
 	//Update the machine's parts
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1) //User feedback

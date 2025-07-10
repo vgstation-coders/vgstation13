@@ -142,7 +142,7 @@
 		new_uplink.locked = FALSE
 		U.show_message("<span class='notice'>Success! Unlock the PDA by entering [new_uplink.unlock_code] into it.</span>", 1)
 		if(U.mind)
-			U.mind.store_memory("<B>Uplink Passcode:</B> [new_uplink.unlock_code] ([P.name]).")
+			U.mind.store_memory("<B>Uplink Passcode:</B> [new_uplink.unlock_code] ([P.name]).", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 
 /obj/item/weapon/cartridge/syndicatedoor
 	name = "\improper Doorman Cartridge"
@@ -250,7 +250,7 @@
 					if(7)
 						displaylength = 448
 
-				dat += {"<div style='float: left'> <img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' /> </div>"}
+				dat += {"<div style='float: left'> <img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='image-rendering: pixelated' /> </div>"}
 				i++
 	return dat
 

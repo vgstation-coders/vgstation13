@@ -18,6 +18,7 @@
 	data = list(
 		"color" = "#FFFFFF",
 		)
+	plant_toxins = 5
 
 //Mixing Acrylic paints together blends them together using the RYB color space
 /datum/reagent/paint/handle_data_mix(var/list/added_data=null, var/added_volume, var/mob/admin)
@@ -119,6 +120,7 @@
 	id = NANOPAINT
 	description = "A paint with unaturally bright properties."
 	paint_light = PAINTLIGHT_FULL
+	plant_toxins = 10
 
 //Mixing Nano-paints together adds them together using the RGB color space
 /datum/reagent/paint/nanopaint/handle_data_mix(var/list/added_data=null, var/added_volume, var/mob/admin)
@@ -172,6 +174,7 @@
 		"color" = "#E6C530",
 		"alpha" = 50,
 		)
+	plant_nutrition = 1
 
 /datum/reagent/flaxoil/handle_data_mix(var/list/added_data=null, var/added_volume, var/mob/admin)
 	var/base_color = data["color"]
@@ -285,6 +288,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#303030"
 	alpha = 100
+	plant_toxins = 2
 
 /datum/reagent/acetone/reaction_turf(var/turf/T, var/volume)
 	if(..())

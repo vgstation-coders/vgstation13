@@ -194,7 +194,7 @@
 
 /obj/structure/fence/door/New()
 	..()
-
+	set_up_access()
 	update_door_status()
 
 /obj/structure/fence/door/opened
@@ -203,8 +203,10 @@
 
 /obj/structure/fence/door/attack_hand(mob/user)
 	if(can_open(user))
-		toggle(user)
-
+		if(open || check_access(user))
+			toggle(user)
+		else
+			playsound(loc, 'sound/machines/denied.ogg', 50, 1)
 	return 1
 
 /obj/structure/fence/door/proc/toggle(mob/user)

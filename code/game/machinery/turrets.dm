@@ -235,6 +235,9 @@
 	else
 		var/obj/item/weapon/gun/energy/E = installed
 		A = new E.projectile_type(loc)
+	var/obj/item/weapon/gun/G = installed
+	if(G.bullet_type_override && ispath(G.bullet_type_override, /obj/item/projectile))
+		A = new G.bullet_type_override
 	A.original = target
 	A.starting = T
 	A.shot_from = installed
@@ -243,6 +246,11 @@
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
 	A.OnFired()
+	if(G.bullet_overrides)
+		for(var/bvar in A.vars)
+			for(var/o in G.bullet_overrides)
+				if(bvar == o)
+					A.vars[bvar] = G.bullet_overrides[o]
 	spawn()
 		A.process()
 	return
@@ -485,7 +493,7 @@
 		t += "Turrets [enabled ? "activated":"deactivated"] - <A href='?src=\ref[src];toggleOn=1'>[enabled ? "Disable":"Enable"]?</a><br>\n"
 		t += "Currently set to [lethal ? "lethal":"stun"] - <A href='?src=\ref[src];toggleLethal=1'>Change to [lethal ? "Stun":"Lethal"]?</a><br>\n"
 
-	user << browse(t, "window=turretid")
+	user << browse(HTML_SKELETON(t), "window=turretid")
 	onclose(user, "turretid")
 
 /obj/machinery/turretid/npc_tamper_act(mob/living/L)
@@ -657,7 +665,7 @@
 
 				</body>
 				</html>"}
-	user << browse(dat, "window=turret")
+	user << browse(HTML_SKELETON(dat), "window=turret")
 	onclose(user, "turret")
 	return
 
@@ -696,7 +704,7 @@
 		if(!check_rights(R_ADMIN))
 			return
 		var/list/valid_turret_projectiles = existing_typesof(/obj/item/projectile/bullet) + existing_typesof(/obj/item/projectile/energy)
-		var/userinput = filter_list_input("New projectile typepath", "You can only pick one!", valid_turret_projectiles)
+		var/userinput = filter_typelist_input("New projectile typepath", "You can only pick one!", valid_turret_projectiles)
 		if(!userinput)
 			to_chat(usr, "<span class='warning'><b>No projetile typepath entered. The turret's projectile remains unchanged.</b></span>")
 			return

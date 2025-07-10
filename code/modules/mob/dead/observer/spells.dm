@@ -45,9 +45,9 @@ var/global/list/boo_phrases_silicon=list(
 	spell_flags = STATALLOWED | GHOSTCAST
 
 	school = "transmutation"
-	charge_max = 60 SECONDS
+	charge_cooldown_max = 60 SECONDS
 	invocation = ""
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 1 // Or maybe 3?
 
 	override_base = "grey"
@@ -70,10 +70,10 @@ var/global/list/boo_phrases_silicon=list(
 	spell_flags = STATALLOWED | GHOSTCAST | INCLUDEUSER
 
 	school = "transmutation"
-	charge_type = Sp_RECHARGE
-	charge_max = 0
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 0
 	invocation = ""
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = SELFCAST
 	max_targets = 1
 
@@ -153,7 +153,7 @@ var/global/list/boo_phrases_silicon=list(
 	school = "transmutation"
 	charge_type = 0 // Apparently bypasses charge checks.
 	invocation = ""
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 
 	override_base = "grey"
 	hud_state = "stationmap"

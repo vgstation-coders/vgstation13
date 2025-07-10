@@ -7,7 +7,6 @@
 	var/toxin = FALSE
 	var/toxin_type = CHLORALHYDRATE
 	var/toxin_amount = 10
-	var/emagged = FALSE
 	var/sound_type = 'sound/machines/click.ogg'
 	var/cooldown = 0
 	var/delay = 15 SECONDS

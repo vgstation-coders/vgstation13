@@ -274,7 +274,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			dat += text("[module.emag]: <B>Activated</B><BR>")
 		else
 			dat += text("[module.emag]: <A HREF=?src=\ref[src];act=\ref[module.emag]>Activate</A><BR>")
-	src << browse(dat, "window=robotmod&can_close=1")
+	src << browse(HTML_SKELETON(dat), "window=robotmod&can_close=1")
 	onclose(src,"robotmod") // Register on-close shit, which unsets machinery.
 
 
@@ -335,9 +335,19 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	udder.my_atom = src
 	..()
 
+/mob/living/silicon/robot/mommi/Destroy()
+	QDEL_NULL(udder)
+	return ..()
+
 /mob/living/silicon/robot/mommi/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
 	if(gives_milk && udder && prob(5))
 		udder.add_reagent(MOMMIMILK, rand(5, 10))
 	..()
+
+/mob/living/silicon/robot/mommi/ignite()
+	return 0
+
+/mob/living/silicon/robot/mommi/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	return 0

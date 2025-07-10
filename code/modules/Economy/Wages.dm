@@ -71,10 +71,12 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 
 	for(var/obj/machinery/computer/accounting/A in machines)
 		A.new_cycle()
-	station_account.money += station_allowance + WageBonuses() + station_funding + station_bonus
+
+	var/total_allowance = station_allowance + WageBonuses() + station_funding + station_bonus
+	station_account.money += total_allowance
 	station_bonus = 0
 
-	new /datum/transaction(station_account,"Nanotrasen station allowance","[station_allowance]","Nanotrasen Payroll Server",send2PDAs=FALSE)
+	new /datum/transaction(station_account, "Nanotrasen station allowance", "[total_allowance]", "Nanotrasen Payroll Server", send2PDAs=FALSE)
 
 
 /proc/wagePayout()
@@ -101,34 +103,34 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 	message_admins("Wages: Payroll Modifier is [round(100*payroll_modifier - 100)]%.")
 
 	new /datum/transaction(station_account,"Employee and Department salaries","-[station_account.money]","Account Database",send2PDAs=FALSE)
-
 	station_account.money = 0
 
 	//actually paying the departments and employees
 	for(var/datum/money_account/Acc in all_money_accounts)
+		if(Acc == station_account || !Acc.wage_gain)
+			continue
 		if(locate(Acc) in all_station_accounts)
-			if(Acc.wage_gain)
-				adjusted_wage_gain = round((Acc.wage_gain)*payroll_modifier)
-				var/left_from_virtual_wallet = adjusted_wage_gain
-				var/decimal_wage_ratio = 0
-				var/list/obj/item/device/pda/matching_PDAs = list()
-				for(var/obj/item/device/pda/PDA in PDAs)
-					// Only works and does this if ID is in PDA
-					if(PDA?.id?.virtual_wallet)
-						var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications
-						if(app && app.linked_db && Acc == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
-							matching_PDAs.Add(PDA)
-				if(matching_PDAs.len)
-					decimal_wage_ratio = Acc.virtual_wallet_wage_ratio/100
-				for(var/obj/item/device/pda/PDA in matching_PDAs)
-					left_from_virtual_wallet -= round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len))
-					PDA.id.virtual_wallet.money += round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len))
-					if(round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len)) > 0)
-						new /datum/transaction(PDA.id.virtual_wallet,"Nanotrasen employee payroll","[round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len))]",station_account.owner_name)
-				Acc.money += left_from_virtual_wallet
+			adjusted_wage_gain = round((Acc.wage_gain)*payroll_modifier)
+			var/left_from_virtual_wallet = adjusted_wage_gain
+			var/decimal_wage_ratio = 0
+			var/list/obj/item/device/pda/matching_PDAs = list()
+			for(var/obj/item/device/pda/PDA in PDAs)
+				// Only works and does this if ID is in PDA
+				if(PDA?.id?.virtual_wallet)
+					var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications
+					if(app && app.linked_db && Acc == app.linked_db.attempt_account_access(PDA.id.associated_account_number, 0, 2, 0))
+						matching_PDAs.Add(PDA)
+			if(matching_PDAs.len)
+				decimal_wage_ratio = Acc.virtual_wallet_wage_ratio/100
+			for(var/obj/item/device/pda/PDA in matching_PDAs)
+				left_from_virtual_wallet -= round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len))
+				PDA.id.virtual_wallet.money += round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len))
+				if(round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len)) > 0)
+					new /datum/transaction(PDA.id.virtual_wallet,"Nanotrasen employee payroll","[round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len))]",station_account.owner_name)
+			Acc.money += left_from_virtual_wallet
 
-				if(left_from_virtual_wallet > 0)
-					new /datum/transaction(Acc,"Nanotrasen employee payroll","[left_from_virtual_wallet]",station_account.owner_name)
+			if(left_from_virtual_wallet > 0)
+				new /datum/transaction(Acc,"Nanotrasen employee payroll","[left_from_virtual_wallet]",station_account.owner_name)
 
 		else 	//non-station accounts get their money from magic, not that these accounts have any wages anyway
 			Acc.money += Acc.wage_gain

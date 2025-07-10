@@ -59,7 +59,7 @@
 			dat += {"No personality is installed.<br>
 				<A href='byond://?src=\ref[src];request=1'>\[Request personal AI personality\]</a><br>
 				Each time this button is pressed, a request will be sent out to any available personalities. Check back often and alot time for personalities to respond. This process could take anywhere from 15 seconds to several minutes, depending on the available personalities' timeliness."}
-	user << browse(dat, "window=paicard")
+	user << browse(HTML_SKELETON(dat), "window=paicard")
 	onclose(user, "paicard")
 
 /obj/item/device/paicard/attack_ghost(var/mob/dead/observer/O)

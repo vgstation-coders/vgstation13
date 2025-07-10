@@ -295,3 +295,12 @@
 	var/list/crit_rampup = list() // Of the form timestamp/damage
 
 	var/list/huds = list() // List of active huds on a mob
+
+	var/is_dexterous = FALSE //allows mobs to be made dextrous, mostly for monkeys
+
+	// Log things.
+	var/datum/weakref/last_bumped_by = null // weakrefs
+	var/last_bumped_by_timestamp = -INFINITY
+
+	var/datum/weakref/last_thrown_by = null // weakrefs
+	var/last_thrown_by_timestamp = -INFINITY

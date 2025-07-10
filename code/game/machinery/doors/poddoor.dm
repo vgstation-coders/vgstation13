@@ -51,10 +51,14 @@ var/list/poddoors = list()
 /obj/machinery/door/poddoor/New()
 	. = ..()
 	poddoors += src
+	update_moody_light(icon, "[icon_state]-moody")
 
 /obj/machinery/door/poddoor/Destroy()
 	poddoors -= src
 	..()
+
+/obj/machinery/door/poddoor/update_icon()
+	return
 
 /obj/machinery/door/poddoor/Bumped(atom/AM)
 	if(!density)
@@ -82,7 +86,10 @@ var/list/poddoors = list()
 				flick(openingicon, src)
 				icon_state = openicon
 				set_opacity(FALSE)
+				kill_moody_light()
+				anim(target = src, a_icon = icon, flick_anim = "[openingicon]-moody", sleeptime = animation_delay, plane = ABOVE_LIGHTING_PLANE, blend = BLEND_ADD)
 				sleep(animation_delay)
+				update_moody_light(icon, "[icon_state]-moody")
 				setDensity(FALSE)
 				operating = FALSE
 
@@ -102,7 +109,10 @@ var/list/poddoors = list()
 	flick(openingicon, src)
 	icon_state = openicon
 	set_opacity(0)
+	kill_moody_light()
+	anim(target = src, a_icon = icon, flick_anim = "[openingicon]-moody", sleeptime = animation_delay, plane = ABOVE_LIGHTING_PLANE, blend = BLEND_ADD)
 	sleep(animation_delay)
+	update_moody_light(icon, "[icon_state]-moody")
 	layer = open_layer
 	setDensity(FALSE)
 	update_nearby_tiles()
@@ -125,10 +135,13 @@ var/list/poddoors = list()
 	flick(closingicon, src)
 	icon_state = closedicon
 	setDensity(TRUE)
+	kill_moody_light()
+	anim(target = src, a_icon = icon, flick_anim = "[closingicon]-moody", sleeptime = animation_delay, plane = ABOVE_LIGHTING_PLANE, blend = BLEND_ADD)
 	set_opacity(initial(opacity))
 	update_nearby_tiles()
 
 	sleep(animation_delay)
+	update_moody_light(icon, "[icon_state]-moody")
 	src.operating = 0
 	return
 

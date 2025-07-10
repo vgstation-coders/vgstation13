@@ -145,8 +145,7 @@
 	if(istype(W, /obj/item/bluespace_crystal))
 		if(loaded_crystal)
 			to_chat(user, "<span class='warning'>There is already \a [loaded_crystal.name] loaded into \the [src].</span>")
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return 1
 		loaded_crystal = W
 		user.visible_message("[user] inserts \the [W] into \the [src].","You insert \the [W] into \the [src].")
@@ -154,8 +153,7 @@
 		if(loaded_matter_bin)
 			to_chat(user, "<span class='warning'>There is already \a [loaded_matter_bin.name] attached to \the [src].</span>")
 			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return 1
 		loaded_matter_bin = W
 		user.visible_message("[user] attaches \the [W] into \the [src].","You attach \the [W] into \the [src].")

@@ -21,7 +21,7 @@ var/adminbus_ooc_color
 	if(!msg)
 		return
 
-	if(!(prefs.toggles & CHAT_OOC))
+	if(!(prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_OOC))
 		to_chat(src, "<span class='warning'>You have OOC muted.</span>")
 		return
 
@@ -59,10 +59,10 @@ var/adminbus_ooc_color
 		admin_color = global.adminbus_ooc_color
 
 	if(holder && !holder.fakekey && (holder.rights & R_ADMIN) && config.allow_admin_ooccolor)
-		admin_color = src.prefs.ooccolor
+		admin_color = src.prefs.get_pref(/datum/preference_setting/string/ooc_color)
 
 	for(var/client/C in clients)
-		if(!(C.prefs.toggles & CHAT_OOC) || iscluwnebanned(C.mob))
+		if(!(C.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_OOC) || iscluwnebanned(C.mob))
 			continue
 
 		var/display_name = src.key
@@ -111,7 +111,7 @@ var/adminbus_ooc_color
 	if(!msg)
 		return
 
-	if(!(prefs.toggles & CHAT_LOOC))
+	if(!(prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_LOOC))
 		to_chat(src, "<span class='warning'>You have LOOC muted.</span>")
 		return
 
@@ -159,7 +159,7 @@ var/adminbus_ooc_color
 			var/mob/camera/aiEye/E = M
 			if(E.ai)
 				C = E.ai.client
-		if(C.prefs.toggles & CHAT_LOOC)
+		if(C.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_LOOC)
 			var/display_name = src.key
 			var/is_living = isliving(src.mob) //Ghosts will show up with their ckey, living people show up with their names
 			if(holder)
@@ -171,7 +171,7 @@ var/adminbus_ooc_color
 			to_chat(C, "<font color='#6699CC'><span class='looc'><span class='prefix'>LOOC:</span> <EM>[is_living ? src.mob.name : display_name]:</EM> <span class='message'>[msg]</span></span></font>")
 
 	for(var/client/C in admins)
-		if(C.prefs.toggles & CHAT_LOOC)
+		if(C.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_LOOC)
 			var/prefix = "(R)LOOC"
 			if (C.mob in heard)
 				prefix = "LOOC"
@@ -181,7 +181,7 @@ var/adminbus_ooc_color
 		if (C in admins)
 			return //already been handled
 
-		if(C.prefs.toggles & CHAT_LOOC)
+		if(C.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_LOOC)
 			var/display_name = src.key
 			var/is_living = isliving(src.mob)
 			if(holder)

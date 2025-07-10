@@ -36,6 +36,7 @@
 	var/list/target_rules = list()
 
 	var/can_ventcrawl = FALSE // If the mob can ventcrawl
+	var/avoids_poisonous = FALSE
 	var/mob/living/simple_animal/hostile/asteroid/hivelord/hivelord = null
 
 /mob/living/simple_animal/hostile/New()
@@ -168,6 +169,12 @@
 	return
 
 /mob/living/simple_animal/hostile/proc/isValidTarget(var/atom/A)//we should have made that proc long ago instead of expanding CanAttack()
+	if(istype(A,/mob/living/simple_animal))
+		var/mob/living/simple_animal/SA=A
+		if(SA.is_poisonous && avoids_poisonous )
+			return FALSE
+		if(SA.pacify_aura)
+			return FALSE
 	return TRUE
 
 /mob/living/simple_animal/hostile/proc/PickTarget(var/list/Targets)//Step 3, pick amongst the possible, attackable targets
@@ -219,6 +226,13 @@
 		for(var/datum/weakref/ref in friends)
 			if (ref.get() == L)
 				return 0
+		
+		//don't attack things which pacify (eg pillows or capybaras)
+		if(istype(L,/mob/living/simple_animal))
+			var/mob/living/simple_animal/SA = L
+			if (SA.pacify_aura)
+				return 0
+				
 		return 1
 	if(isobj(the_target))
 		//if(the_target.type in wanted_objects)

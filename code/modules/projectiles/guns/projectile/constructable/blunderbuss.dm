@@ -102,8 +102,7 @@
 			var/Y = new W.type(src, 1)
 			loaded_item = Y
 		else
-			if(!user.drop_item(W, src))
-				to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+			if(!user.drop_item(W, src, failmsg = TRUE))
 				return 1
 			loaded_item = W
 		user.visible_message("[user] jams \the [W] into the muzzle of the [src].","You jam \the [W] into the muzzle of \the [src].")

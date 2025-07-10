@@ -233,12 +233,10 @@
 	else if(istype(used_item, /obj/item/tool/cautery/laser))
 		if(held)
 			to_chat(user, "<span class='notice'>There's already a cautery attached to \the [src].</span>")
-		else if(!held && user.drop_item(used_item, src))
+		else if(!held && user.drop_item(used_item, src, failmsg = TRUE))
 			to_chat(user, "<span class='notice'>You attach \the [used_item] to \the [src].</span>")
 			playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 			src.held = used_item
-		else
-			to_chat(user, "<span class='danger'>You can't let go of \the [used_item]!</span>")
 
 /*
 /obj/item/tool/scalpel/laser/old //unused laser scalpel

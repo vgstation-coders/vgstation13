@@ -5,7 +5,7 @@
 
 	school = "evocation"
 	invocation = "Th's'n"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	range = 7
 	spell_flags = GHOSTCAST|STATALLOWED|WAIT_FOR_CLICK
 	level_max = list()

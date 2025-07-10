@@ -9,8 +9,8 @@
 
 	school = "conjuration"
 	invocation = "W'ZZ GO' T'E S'RE!"
-	invocation_type = SpI_SHOUT
-	charge_max = 300
+	invocation_type = SP_INV_SHOUT
+	charge_cooldown_max = 30 SECONDS
 	spell_flags = 0
 
 	hud_state = "wiz_spare"

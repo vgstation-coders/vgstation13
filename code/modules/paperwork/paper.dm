@@ -58,7 +58,7 @@
 
 	if(img)
 		user << browse_rsc(img.img, "tmp_photo.png")
-		info_image = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
+		info_image = "<img src='tmp_photo.png' width='192' style='image-rendering: pixelated' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
 	user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_image][info_text][stamps]</BODY></HTML>", "window=[name];size=[display_x]x[display_y]")
 	onclose(user, "[name]")
 
@@ -319,12 +319,12 @@
 			//Not writing with a pen or crayon
 			if(!istype(i,/obj/item/weapon/pen) && !istype(i,/obj/item/toy/crayon))
 				to_chat(usr, "<span class='warning'>Please ensure your pen is in your active hand and that you're holding the paper.</span>")
-				continue
+				return
 
 			//Lost the paper or lost consciousness
 			if(!Adjacent(usr, 1) || usr.isUnconscious()) //the 1 means that the paper can be in one other item and be written on
-				to_chat(usr, "<span class='warning'>You are to unable to write on this paper.</span>")
-				continue
+				to_chat(usr, "<span class='warning'>You are unable to write on this paper.</span>")
+				return
 
 		while(isnull(new_text))
 

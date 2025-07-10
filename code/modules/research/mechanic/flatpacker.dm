@@ -47,7 +47,7 @@
 	if(!part)
 		return
 
-	if(!remove_materials(part))
+	if(!remove_materials(part) && !bluespace_materials(part))
 		stopped = 1
 		src.visible_message("<span class='notice'>The [src.name] beeps, \"Not enough materials to complete item.\"</span>")
 		return

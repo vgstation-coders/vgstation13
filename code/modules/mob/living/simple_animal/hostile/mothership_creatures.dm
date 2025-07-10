@@ -123,7 +123,7 @@
 	speed = 3
 
 	ranged = 1
-	projectiletype = /obj/item/projectile/beam/immolationray/upgraded // A unique beam that deals more damage than a regular immolation ray and can destroy walls
+	projectiletype = /obj/item/projectile/beam/scorchray/immolationray/upgraded // A unique beam that deals more damage than a regular immolation ray and can destroy walls
 	projectilesound = 'sound/weapons/ray1.ogg'
 	retreat_distance = 8 // It will attempt to linger at a distance just outside of a player's typical field of view, firing shots while deflecting return fire off its armor
 	minimum_distance = 8
@@ -284,6 +284,10 @@
 		udder.my_atom = src
 	..()
 
+/mob/living/simple_animal/hostile/retaliate/polyp/Destroy()
+	QDEL_NULL(udder)
+	. = ..()
+
 /mob/living/simple_animal/hostile/retaliate/polyp/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -403,6 +407,10 @@
 		udder = new(50)
 		udder.my_atom = src
 	..()
+
+/mob/living/simple_animal/hostile/retaliate/cattle_specimen/Destroy()
+	QDEL_NULL(udder)
+	. = ..()
 
 /mob/living/simple_animal/hostile/retaliate/cattle_specimen/Life()
 	if(timestopped)

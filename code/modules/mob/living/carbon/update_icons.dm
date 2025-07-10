@@ -58,7 +58,7 @@
 		overlays -= I
 		overlays_standing[cache_index] = null
 
-/mob/living/carbo/update_inv_r_hand(update_icons = TRUE)
+/mob/living/carbon/update_inv_r_hand(update_icons = TRUE)
 	return update_inv_hand(GRASP_RIGHT_HAND, update_icons)
 
 /mob/living/carbon/update_inv_l_hand(update_icons = TRUE)

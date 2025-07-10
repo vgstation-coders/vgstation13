@@ -8,11 +8,11 @@
 	user_type = USER_TYPE_GENETIC
 	range = SELFCAST
 
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 
 	spell_flags = INCLUDEUSER
 
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 
 	override_base = "genetic"
 	hud_state = "wiz_sleepold"
@@ -31,8 +31,8 @@
 	override_base = "racial"
 	hud_state = "racial_regen_limbs"
 	spell_flags = INCLUDEUSER
-	charge_type = Sp_RECHARGE
-	charge_max = 100
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 10 SECONDS
 	range = SELFCAST
 	cast_sound = 'sound/effects/squelch1.ogg'
 	still_recharging_msg = "<span class='notice'>You're still regaining your strength.</span>"
@@ -54,6 +54,10 @@
 		for(var/organ_name in H.organs_by_name)
 			if(!(H.organs_by_name[organ_name] in priority_organs))
 				priority_organs.Add(H.organs_by_name[organ_name])
+
+		if(!priority_organs.len)
+			to_chat(user, "<span class='notice'>You have nothing to regenerate.</span>")
+			return
 
 		var/has_regenerated = FALSE
 		for(var/datum/organ/external/O in priority_organs)
@@ -99,9 +103,9 @@
 	override_base = "racial"
 	hud_state = "transfer_reagents"
 
-	charge_max = 20
+	charge_cooldown_max = 2 SECONDS
 
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 
 /spell/targeted/transfer_reagents/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	if(!istype(target, /obj/machinery/portable_atmospherics/hydroponics))

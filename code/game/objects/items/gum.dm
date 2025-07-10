@@ -113,7 +113,7 @@
 /obj/item/gum/attackby(var/obj/item/W, var/mob/user)
 	if(locked_to)
 		var/datum/locking_category/category = locked_to.get_lock_cat_for(src)
-		if(istype(category, /datum/locking_category/gum_stuck) && is_type_in_list(W, list(/obj/item/weapon/chisel, /obj/item/tool/screwdriver)))
+		if(istype(category, /datum/locking_category/gum_stuck) && is_type_in_list(W, list(/obj/item/weapon/chisel, /obj/item/tool/screwdriver, /obj/item/tool/solder/screw)))
 			playsound(src, "sound/items/screwdriver.ogg", 10, 1, -1)
 			if(do_after(user, src, 5 SECONDS) && locked_to)
 				to_chat(user, "You pry \the [src] loose from \the [locked_to].")

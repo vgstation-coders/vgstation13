@@ -132,11 +132,14 @@ var/creating_arena = FALSE
 	..()
 
 /mob/dead/observer/Destroy()
-	..()
+	var/datum/gamemode/dynamic/dyn_mode = ticker.mode
+	if (istype(dyn_mode))
+		dyn_mode.dead_players -= src
 	unregister_event(/event/after_move, src, nameof(src::update_holomaps()))
 	QDEL_NULL(station_holomap)
 	ghostMulti = null
 	observers.Remove(src)
+	return ..()
 
 /mob/dead/observer/proc/update_holomaps()
 	if(station_holomap)
@@ -253,12 +256,14 @@ Works together with spawning an observer, noted above.
 
 /mob/proc/ghostize(var/flags = GHOST_CAN_REENTER,var/deafmute = 0)
 	if(key && !(copytext(key,1,2)=="@"))
-		log_admin("[key_name(src)] is now a[src.client.holder ? "n admin-" : " "]ghost.")
+		if((src && src.client && src.client.holder))
+			log_admin("[key_name(src)] is now a[src.client.holder ? "n admin-" : " "]ghost.")
 		var/ghostype = /mob/dead/observer
 		if (deafmute)
 			ghostype = /mob/dead/observer/deafmute
 		var/mob/dead/observer/ghost = new ghostype(src, flags)	//Transfer safety to observer spawning proc.
-		ghost.attack_log += src.attack_log // Keep our attack logs.
+		if (sound_zone_manager)
+			sound_zone_manager.unregister_listener(src)
 		var/timetocheck = timeofdeath
 		if (isbrain(src))
 			var/mob/living/carbon/brain/brainmob = src
@@ -575,7 +580,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 				sHuman.real_name = real_name
 				concrete_outfit.equip(sHuman, TRUE)
 				client?.prefs.copy_to(sHuman)
-				sHuman.add_language(client?.prefs.language)
+				sHuman.add_language(client?.prefs.get_pref(/datum/preference_setting/string/language))
 				sHuman.dna.UpdateSE()
 				sHuman.dna.UpdateUI()
 				sHuman.ckey = ckey

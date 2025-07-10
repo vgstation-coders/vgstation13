@@ -231,16 +231,7 @@
 /turf/simulated/floor,
 /area/vault/ejectedengine/SMES)
 "aN" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/ejectedengine/SMES)
 "aO" = (
@@ -324,18 +315,12 @@
 /turf/simulated/floor,
 /area/vault/ejectedengine/SMES)
 "aW" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /obj/structure/cable{
 	d1 = 2;
 	d2 = 8;
 	icon_state = "2-8"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/ejectedengine/SMES)
 "aX" = (
@@ -421,19 +406,12 @@
 /turf/simulated/floor,
 /area/vault/ejectedengine/SMES)
 "be" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/ejectedengine/SMES)
 "bf" = (
@@ -735,40 +713,14 @@
 /obj/structure/grille/broken,
 /turf/space,
 /area)
-"bS" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/vault/ejectedengine/monitoring)
 "bT" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/vault/ejectedengine/monitoring)
 "bU" = (
 /obj/structure/grille,
 /obj/structure/window/full/reinforced,
 /obj/machinery/atmospherics/pipe/simple/general/visible,
-/turf/simulated/floor/plating,
-/area/vault/ejectedengine/monitoring)
-"bV" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
 /turf/simulated/floor/plating,
 /area/vault/ejectedengine/monitoring)
 "bW" = (
@@ -787,7 +739,6 @@
 "bY" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	dir = 4;
-	default_scrubbed_gases = list("plasma");
 	default_scrubbed_gases = list("carbon_dioxide")
 	},
 /turf/simulated/floor/engine/old,
@@ -925,18 +876,9 @@
 /turf/simulated/floor/engine/old,
 /area/vault/ejectedengine/burnroom)
 "cu" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
-/area/vault/ejectedengine/monitoring)
+/area/vault/ejectedengine/burnroom)
 "cv" = (
 /obj/machinery/atmospherics/unary/portables_connector{
 	dir = 1
@@ -1070,15 +1012,10 @@
 /turf/simulated/floor/engine/old,
 /area/vault/ejectedengine/burnroom)
 "cJ" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
+/obj/machinery/atmospherics/pipe/simple/general/visible,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
-/area/vault/ejectedengine/monitoring)
+/area/vault/ejectedengine/burnroom)
 "cK" = (
 /obj/item/clothing/head/welding,
 /obj/machinery/ignition_switch{
@@ -1604,17 +1541,6 @@
 	},
 /turf/space,
 /area)
-"dV" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/vault/ejectedengine/monitoring)
 "dW" = (
 /obj/structure/cable,
 /obj/machinery/computer/general_air_control{
@@ -2593,11 +2519,11 @@ bk
 aH
 aH
 aH
-cu
-cJ
+bT
+bT
 dk
-cJ
-dV
+bT
+bT
 aH
 aH
 aH
@@ -2653,7 +2579,7 @@ aI
 aI
 bk
 aH
-bS
+bT
 ch
 cv
 cL
@@ -2661,7 +2587,7 @@ dm
 dD
 dW
 cl
-bS
+bT
 aH
 av
 aI
@@ -2777,7 +2703,7 @@ aI
 aI
 bl
 aH
-bV
+bT
 cl
 cy
 cO
@@ -2785,7 +2711,7 @@ cL
 dD
 dY
 cg
-bV
+bT
 aH
 aw
 aI
@@ -2872,11 +2798,11 @@ aI
 aI
 bk
 bt
-cA
+cJ
 cR
 bX
 dG
-cA
+cJ
 em
 av
 aI
@@ -2903,11 +2829,11 @@ aI
 aI
 bl
 bt
-cA
+cJ
 cS
 bX
 dH
-cA
+cJ
 em
 aw
 aI
@@ -3089,11 +3015,11 @@ aH
 bD
 bY
 bm
-cz
+cu
 cW
 dt
 dL
-cz
+cu
 aH
 aH
 aH

@@ -77,14 +77,14 @@
 	if(istype(L))
 		if(prob(15))
 			L.Stun(1)
-			L.visible_message("<span class='danger'>\the [src] scares \the [L]!</span>")
+			L.visible_message("<span class='danger'>\The [src] scares \the [L]!</span>")
 
 /mob/living/simple_animal/hostile/scarybat/cult
 	faction = "cult"
 	var/shuttletarget = null
 	var/enroute = 0
 
-	supernatural = 1
+	supernatural = TRUE
 
 
 /mob/living/simple_animal/hostile/scarybat/cult/Found(var/atom/the_target)
@@ -166,6 +166,7 @@
 	speed = 5
 	maxHealth = 15
 	health = 15
+	supernatural = TRUE
 	var/book_cover
 
 	harm_intent_damage = 8

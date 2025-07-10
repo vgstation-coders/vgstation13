@@ -206,7 +206,11 @@
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
 
-#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod) || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller))
+#define isholyweapon(I) (istype(I, /obj/item/weapon/storage/bible)\
+						 || istype(I, /obj/item/weapon/nullrod)\
+						 || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller/true)\
+						 || istype(I, /obj/item/projectile/hookshot/whip/vampkiller/true)\
+						 || istype(I, /obj/item/weapon/boomerang/cross))
 
 #define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
 
@@ -329,6 +333,8 @@
 
 #define istimeagent(H) (H.mind && (H.mind.GetRole(TIMEAGENT) || (H.mind.GetRole(TIMEAGENTTWIN))))
 
+#define isdivergentclone(H) (H.mind && (H.mind.GetRole(DIVERGENTCLONE)))
+
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 
 #define isclownling(H) (H.mind && H.mind.GetRole(CLOWN_LING))
@@ -433,3 +439,8 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 #define OMNI_LINK(A,B) isliving(A) && A:omnitool_connect(B)
 
 #define is_real_champion(A) ismob(A) && A.is_wearing_item(/obj/item/weapon/storage/belt/champion) && A.is_wearing_item(/obj/item/clothing/mask/luchador)
+
+// Call by name proc references, checks if the proc exists on either this type () (AND ONLY THIS TYPE) or as a global proc.
+#define PROC_REF(X) (nameof(.proc/##X))
+
+#define has_initialized_sound_emitter(A) (isatom(A) && A.sound_emitter)

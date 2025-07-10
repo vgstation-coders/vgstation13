@@ -44,7 +44,7 @@ var/global/mulebot_count = 0
 	suffix = ""
 
 	var/home_destination = "" 	// tag of home beacon
-	req_access = list(access_cargo) // added robotics access so assembly line drop-off works properly -veyveyr //I don't think so, Tim. You need to add it to the MULE's hidden robot ID card. -NEO
+	req_access = list(access_cargo_bot) // added robotics access so assembly line drop-off works properly -veyveyr //I don't think so, Tim. You need to add it to the MULE's hidden robot ID card. -NEO
 	var/mode = MODE_IDLE		//0 = idle/ready
 						//1 = loading/unloading
 						//2 = moving to deliver
@@ -136,11 +136,8 @@ var/global/mulebot_count = 0
 // other: chance to knock rider off bot
 /obj/machinery/bot/mulebot/attackby(obj/item/I, mob/user)
 	user.delayNextAttack(I.attack_delay)
-	if(istype(I,/obj/item/weapon/card/emag))
-		toggle_lock(user, TRUE)
-		to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] [src]'s controls!</span>")
-		flick("[icon_initial]-emagged", src)
-		playsound(src, 'sound/effects/sparks1.ogg', 100, 0)
+	if(emag_check(I,user))
+		return
 	else if(istype(I, /obj/item/weapon/card/id))
 		if(toggle_lock(user))
 			to_chat(user, "<span class='notice'>Controls [(locked ? "locked" : "unlocked")].</span>")
@@ -150,7 +147,7 @@ var/global/mulebot_count = 0
 		if(user.drop_item(C, src))
 			cell = C
 			updateDialog()
-	else if((istype(I,/obj/item/tool/wirecutters)||istype(I,/obj/item/device/multitool)) && user.a_intent != I_HURT)
+	else if((I.is_wirecutter(user) || I.is_multitool(user)) && user.a_intent != I_HURT)
 		attack_hand(user)
 	else if(I.is_screwdriver(user) && user.a_intent != I_HURT)
 		if(locked)
@@ -187,6 +184,11 @@ var/global/mulebot_count = 0
 			user.visible_message("<span class='warning'>[user] knocks [load] off [src] with \the [I]!</span>", "<span class='warning'>You knock [load] off [src] with \the [I]!</span>")
 		. = ..()
 
+/obj/machinery/bot/mulebot/emag_act(mob/user)
+	toggle_lock(user, TRUE)
+	to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] [src]'s controls!</span>")
+	flick("[icon_initial]-emagged", src)
+	playsound(src, 'sound/effects/sparks1.ogg', 100, 0)
 
 /obj/machinery/bot/mulebot/ex_act(var/severity)
 	unload(0)
@@ -284,7 +286,7 @@ var/global/mulebot_count = 0
 		else
 			dat += "The bot is in maintenance mode and cannot be controlled.<BR>"
 
-	user << browse("<HEAD><TITLE>Mulebot [suffix ? "([suffix])" : ""]</TITLE></HEAD>[dat]", "window=mulebot;size=350x500")
+	user << browse(HTML_SKELETON_TITLE("Mulebot [suffix ? "([suffix])" : ""]", dat), "window=mulebot;size=350x500")
 	onclose(user, "mulebot")
 	return
 

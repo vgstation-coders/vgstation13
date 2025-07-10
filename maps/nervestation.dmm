@@ -6797,7 +6797,7 @@
 "bqw" = (
 /obj/machinery/portable_atmospherics/canister/nitrogen,
 /obj/machinery/door_control{
-	desc = "A remote control-switch..";
+	desc = "A remote control-switch.";
 	id_tag = "tradefloor";
 	name = "Trade Shutters";
 	pixel_y = -22;
@@ -13739,7 +13739,7 @@
 	},
 /area/shuttle/nuclearops)
 "cXq" = (
-/obj/machinery/computer/security,
+/obj/machinery/computer/security/nukies,
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -27889,7 +27889,7 @@
 	},
 /area/science/lab)
 "dGK" = (
-/obj/machinery/atmospherics/unary/tank/nitrogen,
+/obj/machinery/atmospherics/unary/tank/nitrogen/coldroom,
 /obj/machinery/light{
 	dir = 1
 	},
@@ -60248,8 +60248,8 @@
 "lsb" = (
 /obj/structure/table/glass,
 /obj/item/weapon/reagent_containers/spray/plantbgone,
-/obj/item/seeds/weeds,
-/obj/item/seeds/weeds,
+/obj/item/seeds/dandelionseed,
+/obj/item/seeds/dandelionseed,
 /obj/item/seeds/wheatseed,
 /obj/item/seeds/wheatseed,
 /turf/simulated/floor/grass,
@@ -99979,10 +99979,7 @@
 /area/gateway)
 "wqZ" = (
 /obj/structure/window/reinforced,
-/obj/machinery/computer/smelting{
-	name = "recycling furnace console";
-	smelter_tag = "recycling_smelter"
-	},
+/obj/machinery/computer/smelting/recycling,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},

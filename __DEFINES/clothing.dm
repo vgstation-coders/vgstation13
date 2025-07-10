@@ -18,6 +18,7 @@
 #define MAGPULSE		        (1 << 12) //prevents slipping in space, singulo pulling, etc
 #define GENDERFIT			    (1 << 13) //Toggles gender fitting so it appends _f for female mob icon.
 #define COLORS_OVERLAY          (1 << 14)//if toggled on, the color variable will also modify the color of how it looks on the wearer
+#define SILENT_SHOES            (1 << 15) //makes the shoes not make any noise
 
 //clothing audible emote flags
 #define CLOTHING_SOUND_SCREAM "scream"

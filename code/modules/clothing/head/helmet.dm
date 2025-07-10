@@ -184,7 +184,7 @@
 	name = "DRN-001 Helmet"
 	desc = "The helmet of the DRN-001 model. A simple, sturdy blue helmet."
 	icon_state = "megahelmet"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	flags = FPRINT
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 	item_state = "megahelmet"
@@ -381,3 +381,13 @@
 					item_state = "xcombalaclava_f3"
 
 		H.update_inv_head()
+
+/obj/item/clothing/head/helmet/sonicman
+	name = "sonicman helmet"
+	desc = "A helmet made with speed on the mind."
+	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
+	icon_state = "sonicmanhead"
+	item_state = "sonicmanhead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	body_parts_covered = HEAD|EARS|MASKHEADHAIR

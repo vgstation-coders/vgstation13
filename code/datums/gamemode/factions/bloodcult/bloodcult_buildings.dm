@@ -110,9 +110,9 @@
 				playsound(src, sound_damaged, 75, 1)
 			if(isholyweapon(W))
 				playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
-				takeDamage(W.force*2)
+				takeDamage(W.force*8) //Extra weak to holy
 			else
-				takeDamage(W.force)
+				takeDamage(W.force*4) //Weak to melee
 			if (W.attack_verb)
 				visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
 			else
@@ -596,7 +596,8 @@
 				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 				if (!cult)
 					return
-				var/dat = {"<body style="color:#FFFFFF" bgcolor="#110000">"}
+				var/dat = ""
+				var/style = {" "color:#FFFFFF" bgcolor="#110000" "}
 				dat += "<b>Our cult can currently grow up to [cult.cultist_cap] members.</b>"
 				dat += "<ul>"
 				for (var/datum/role/cultist/C in cult.members)
@@ -646,8 +647,8 @@
 								else if (C.isDead())
 									extra = " - <span style='color:#FF0000'>DEAD</span>"
 							dat += "<li><span style='color:#FFFF00'><b>[C.real_name]</b></span></li> - Prisoner of [gaoler.name][extra]"
-				dat += {"</ul></body>"}
-				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=600x400")
+				dat += {"</ul>"}
+				user << browse(HTML_SKELETON_TITLE_STYLE("Cult Roster", dat, style), "window=cultroster;size=600x400")
 				onclose(user, "cultroster")
 			if ("Look through Veil")
 				if(user.hud_used && user.hud_used.holomap_obj)

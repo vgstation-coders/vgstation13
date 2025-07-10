@@ -6,9 +6,9 @@
 
 	summon_type = list(/mob/living/simple_animal/cat/snek/wizard)
 
-	price = Sp_BASE_PRICE / 2
+	price = SP_BASE_PRICE / 2
 	range = 3
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	invocation = "WI'L OV SHNISSUGAH"
 	hud_state = "wiz_snakes"
 

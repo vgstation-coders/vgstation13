@@ -101,8 +101,19 @@
 		return 1
 	return ..()
 
-/obj/item/weapon/gun/energy/attack_self(mob/user)
-	return detach_cell(user)
+//There is a verb for this!
+// /obj/item/weapon/gun/energy/attack_self(mob/user)
+// 	return detach_cell(user)
+
+//Handles the detach cell verb for the energy gun, so that admins can adminbus it
+/obj/item/weapon/gun/energy/variable_edited(variable_name, old_value, new_value)
+	if(variable_name == "detachable_cell")
+		if(new_value) //New value is not 0 or null, give the verb
+			if(!verbs.Find(/obj/item/weapon/gun/energy/verb/detach_cell_verb))
+				verbs += /obj/item/weapon/gun/energy/verb/detach_cell_verb
+		else
+			verbs -= /obj/item/weapon/gun/energy/verb/detach_cell_verb
+	return ..()
 
 /obj/item/weapon/gun/energy/verb/detach_cell_verb()
 	set name = "Detach cell"

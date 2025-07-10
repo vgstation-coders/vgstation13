@@ -116,14 +116,7 @@
 		to_chat(user, "You begin drilling holes into the bottom of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 60))
-			to_chat(user, "You drill six holes through the bottom of \the [src].")
-			if(src.loc == user)
-				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/cylinder/I = new (get_turf(user))
-				user.put_in_hands(I)
-			else
-				new /obj/item/weapon/cylinder(get_turf(src.loc))
-			qdel(src)
+			user.create_in_hands(src, /obj/item/weapon/cylinder, msg = "You drill six holes through the bottom of \the [src].")
 		return
 	return ..()
 
@@ -464,11 +457,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bucket/attackby(var/obj/D, mob/user as mob)
 	if(isprox(D))
-		to_chat(user, "You add \the [D] to \the [src].")
-		QDEL_NULL(D)
-		user.put_in_hands(new /obj/item/weapon/bucket_sensor)
-		user.drop_from_inventory(src)
-		qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/bucket_sensor, D, msg = "You add \the [D] to \the [src].")
 		return
 	attempt_heating(D, user)
 	process_temperature()
@@ -608,3 +597,11 @@
 	..()
 	icon_state = "kettle[pick("_red","_blue","_purple","_green")]"
 	reagents.add_reagent(TEA,75)
+
+/obj/item/weapon/reagent_containers/glass/bucket/wooden
+	name = "wooden bucket"
+	icon_state = "woodenbucket"
+	item_state = "woodenbucket"
+	species_fit = list(INSECT_SHAPED)
+	starting_materials = list(MAT_WOOD = 4000)
+	w_type = RECYK_WOOD //wood

@@ -89,6 +89,7 @@
 	flags = FPRINT
 	starting_materials = list(MAT_PLASTIC = 200)
 	w_type = RECYK_ELECTRONIC
+	var/examine_text = TRUE //Lazy proc for determining whether the examine text shows up, overridden by the self-refilling autoinjector
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/attack(mob/M as mob, mob/user as mob)
 	..()
@@ -102,10 +103,11 @@
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/examine(mob/user)
 	..()
-	if(reagents && reagents.reagent_list.len)
-		to_chat(user, "<span class='info'>It is ready for injection.</span>")
-	else
-		to_chat(user, "<span class='info'>The [name] has been spent.</span>")
+	if(examine_text)
+		if(reagents && reagents.reagent_list.len)
+			to_chat(user, "<span class='info'>It is ready for injection.</span>")
+		else
+			to_chat(user, "<span class='info'>The [name] has been spent.</span>")
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector
 	name = "biofoam injector"
@@ -136,6 +138,20 @@
 		icon_state = "paralytic1"
 	else
 		icon_state = "paralytic0"
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/priaxate
+	name = "priaxate injector"
+	desc = "A rapid and safe way to administer small amounts of drugs by untrained or trained personnel. More effective on vox."
+	icon_state = "turkey1"
+	item_state = "turkey"
+	flags = FPRINT
+	refill_reagent_list = list(PRIAXATE = 5)
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/priaxate/update_icon()
+	if(reagents.total_volume > 0)
+		icon_state = "turkey1"
+	else
+		icon_state = "turkey0"
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/admin // TESTING!
 	name = "dummy autoinjector"

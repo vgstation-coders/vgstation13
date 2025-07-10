@@ -9,7 +9,7 @@ var/global/global_playlists = list()
 	set waitfor = 0//tentative fix so the proc stops hanging if it takes too long
 	if(!config.media_base_url)
 		return
-	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "idm", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "vidya", "SCOTLANDFOREVER", "halloween", "christmas"))
+	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "IDM", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "vidya", "SCOTLANDFOREVER", "halloween", "christmas"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		log_debug("Begin updating playlist: [playlist_id]...")
 
@@ -26,7 +26,9 @@ var/global/global_playlists = list()
 		if(response)
 			log_debug("Received response from media server for [playlist_id], with a length of [length(response)]")
 			var/json = file2text(response["CONTENT"])
-			if("/>" in json)
+			//i don't think this works as a string search
+			//if("/>" in json)
+			if(findtext(json, "/>"))
 				continue
 			var/songdata = json_decode(json)
 			log_debug("Successfully decoded media server's response for [playlist_id]")
@@ -116,6 +118,8 @@ var/global/global_playlists = list()
 
 	var/emagged = 0
 
+	var/is_video = 0 //uhh?
+
 /datum/song_info/New(var/list/json)
 	title  = json["title"]
 	artist = json["artist"]
@@ -127,7 +131,9 @@ var/global/global_playlists = list()
 	crossfade_time = text2num(json["crossfade_time"])
 	if (isnull(crossfade_time))
 		crossfade_time = 0
-
+	is_video = text2num(json["isvideo"])
+	if(isnull(is_video))
+		is_video = 0
 /datum/song_info/proc/display()
 	var/str="\"[title]\""
 	if(artist!="")
@@ -158,6 +164,7 @@ var/global/list/loopModeNames=list(
 	JUKEMODE_PLAY_ONCE   = "Once"
 )
 /obj/machinery/media/jukebox
+
 	name = "Jukebox"
 	desc = "A bastion of goodwill, peace, and hope."
 	icon = 'icons/obj/jukebox.dmi'
@@ -216,7 +223,8 @@ var/global/list/loopModeNames=list(
 		/datum/malfhack_ability/oneuse/overload_quiet,
 		/datum/malfhack_ability/oneuse/emag
 	)
-
+	var/list/debug_last_params = new
+	var/list/debug_temp_params = new
 /obj/machinery/media/jukebox/New(loc)
 	..(loc)
 	allowed_modes = loopModeNames.Copy()
@@ -610,7 +618,7 @@ var/global/list/loopModeNames=list(
 
 				change_cost = max(0,text2num(href_list["set_change_cost"]))
 				linked_account = new_linked_account
-				if("lock" in href_list && href_list["lock"] != "")
+				if(("lock" in href_list) && href_list["lock"] != "")
 					change_access = list(text2num(href_list["lock"]))
 				else
 					change_access = list()
@@ -631,18 +639,50 @@ var/global/list/loopModeNames=list(
 
 			for(var/line in splittext(choice, "\n"))
 				var/list/L = params2list(line)
+				to_chat(usr,"Params given: [line]")
+				to_chat(usr,"List back to params: [list2params(L)]")
+				debug_last_params = L.Copy()
 				if(L.len >= 3)
 					var/list/params = list()
-					params["url"]   = L[1]
-					params["length"]= text2num(L[2])*10 //The song_info datum stores this value in deciseconds
-					params["title"] = L[3]
-					params["artist"]= ""
-					params["album"] = ""
+					if(!text2num(L[2])) //we caught something other than a length for our second paramter so it was probably an ampersand or semicolon in the url so add it back..
+						var/list/temp_params = list()
+						for(var/p in L)
+							to_chat(usr,"Got param named [p], associated value is ''[L[p]]''")
+							temp_params += p
+						var/url = L[1]
+						var/param_track = 1
+						for(var/i = 1; i <= temp_params.len; i++) //rebuild the url if params2list mangled it
+							param_track = i
+							var/pval = temp_params[i]
+							if(text2num(pval)) break //didn't have to do this if this param is a number.
+							if(L[pval])
+								if(i == 1) //starting url params would be ?param=value
+									url += "[(findtext(L[1],"?") ? "=" : "")][L[pval]]"
+								else //otherwise it's &param=value
+									url += "&[pval]=[L[pval]]"
+						to_chat(usr,"built URL [url]")
+						params["url"] = url
+						params["length"]= text2num(temp_params[param_track])*10 //The song_info datum stores this value in deciseconds
+						params["title"] = temp_params[param_track+1]
+						params["artist"]= ""
+						params["album"] = ""
+						if(temp_params.len >= param_track+2)
+							params["artist"]= param_track+2
+						if(temp_params.len >= param_track+3)
+							params["album"] = param_track+3
+						debug_temp_params = temp_params.Copy()
+						params["isvideo"] = findtext(url,".mp4") || findtext(url,".webm") || findtext(url,".mkv") || findtext(url,".avi") || findtext(url,".m4v") || findtext(url,".mov")
+					else
+						params["url"]   = L[1]
+						params["length"]= text2num(L[2])*10 //The song_info datum stores this value in deciseconds
+						params["title"] = L[3]
+						params["artist"]= ""
+						params["album"] = ""
 
-					if(L.len >= 4)
-						params["artist"]= L[4]
-					if(L.len >= 5)
-						params["album"] = L[5]
+						if(L.len >= 4)
+							params["artist"]= L[4]
+						if(L.len >= 5)
+							params["album"] = L[5]
 
 					//Initialize playlist if needed
 					if(!playlist)
@@ -874,7 +914,7 @@ var/global/list/loopModeNames=list(
 		"filk" = "Filk",
 		"funk" = "Funk",
 		"folk" = "Folk",
-		"idm" = "90's IDM",
+		"IDM" = "90's IDM",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
 		"muzakjazz" = "Muzak",
@@ -912,7 +952,7 @@ var/global/list/loopModeNames=list(
 		"filk" = "Filk",
 		"funk" = "Funk",
 		"folk" = "Folk",
-		"idm" = "90's IDM",
+		"IDM" = "90's IDM",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
 		"muzakjazz" = "Muzak",
@@ -947,7 +987,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)
 	// NO FUN ALLOWED.  Emag list is included, anyway.
-	if(istype(W, /obj/item/weapon/card/emag))
+	if(isEmag(W))
 		to_chat(user, "<span class='warning'>Your [W] refuses to touch \the [src]!</span>")
 		return
 	..()
@@ -1074,7 +1114,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/holyjuke/attackby(obj/item/W, mob/user)
 	// EMAG DOES NOTHING
-	if(istype(W, /obj/item/weapon/card/emag))
+	if(isEmag(W))
 		to_chat(user, "<span class='warning'>A guiltiness fills your heart as a higher power pushes away \the [W]!</span>")
 		return
 	..()
@@ -1161,7 +1201,7 @@ var/global/list/loopModeNames=list(
 	formatted = "Folk"
 /obj/item/weapon/vinyl/idm
 	name = "nanovinyl - 90's IDM"
-	unformatted = "idm"
+	unformatted = "IDM"
 	formatted = "90's IDM"
 /obj/item/weapon/vinyl/jazz
 	name = "nanovinyl - jazz & swing"

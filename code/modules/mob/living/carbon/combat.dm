@@ -1,6 +1,6 @@
 
 /mob/living/carbon/hitby(var/obj/item/I, var/speed, var/dir)
-	if(istype(I) && isturf(I.loc) && in_throw_mode) //Only try to catch things while we have throwing mode active (also only items please)
+	if(istype(I) && (isturf(I.loc) || istype(I,/obj/item/weapon/boomerang)) && in_throw_mode) //Only try to catch things while we have throwing mode active (also only items please)
 		if(can_catch(I, speed) && put_in_hands(I))
 			visible_message("<span class='warning'>\The [src] catches \the [I][speed > EMBED_THROWING_SPEED ? ". Wow!" : "!"]</span>")
 			throw_mode_off()
@@ -217,7 +217,7 @@
 		tR += 1
 	if(spell_list.len)
 		var/spell/targeted/leap/leapTackle = locate(/spell/targeted/leap) in spell_list
-		if(leapTackle && leapTackle.charge_counter >= leapTackle.charge_max)
+		if(leapTackle && leapTackle.charge_counter >= leapTackle.charge_cooldown_max)
 			tR += 2
 			leapTackle.take_charge()
 	return tR

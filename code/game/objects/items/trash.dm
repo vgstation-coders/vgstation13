@@ -14,7 +14,7 @@
 	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
 	//var/global/list/trash_items = list()
 
-/obj/item/trash/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
+/obj/item/trash/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/obj/item/source)
 	if(age)
 		setPersistenceAge(age)
 	if(icon_state)
@@ -168,26 +168,11 @@
 
 /obj/item/trash/pietin/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/trash/pietin))
-		var/obj/item/I = new /obj/item/clothing/head/tinfoil(get_turf(src))
-		qdel(W)
-		qdel(src)
-		user.put_in_hands(I)
+		user.create_in_hands(src, /obj/item/clothing/head/tinfoil, W)
 	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/doughslice))
-		if(user.drop_item(W))
-			new/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie(get_turf(src),W)
-			qdel(W)
-			qdel(src)
+		user.create_in_hands(src, new /obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie(loc, W), W)
 	if (iscablecoil(W))
-		var/obj/item/stack/cable_coil/coil = W
-		if(coil.amount < 5)
-			to_chat(user, "<span class='notice'>There are not enough cables in the stack.</span>")
-			return
-
-		var/obj/item/I = new /obj/item/trash/wired_pietin_assembly(get_turf(src))
-		coil.use(5)
-		to_chat(user, "<span class='notice'>You remove the insulation and wrap the cables around the pie tin.</span>")
-		qdel(src)
-		user.put_in_hands(I)
+		user.create_in_hands(src, /obj/item/trash/wired_pietin_assembly, W, 5, "<span class='notice'>You remove the insulation and wrap the cables around the pie tin.</span>")
 
 /obj/item/trash/wired_pietin_assembly
 	name = "wired pie tin assembly"
@@ -241,9 +226,9 @@
 	w_type=RECYK_WAX
 	var/image/wick
 
-/obj/item/trash/candle/New(turf/loc, var/obj/item/candle/source)
+/obj/item/trash/candle/New(turf/loc, var/obj/item/source)
 	..()
-	if (source)
+	if (source && istype(source, /obj/item/candle))
 		color = source.color
 	else
 		color = COLOR_DEFAULT_CANDLE
@@ -465,4 +450,23 @@ var/list/crushed_cans_cache = list()
 	desc = "What a shame it's too small to fly in."
 	icon_state	= "emptysaucerbowl"
 	starting_materials = list(MAT_IRON = 100)
-	w_type=RECYK_METAL
+	w_type = RECYK_METAL
+
+/obj/item/trash/broken_ashtray
+	name = "broken ashtray"
+	desc = "Pieces of plastic with ash on them."
+	icon_state = "ashtray_bork_bl"
+	starting_materials = list(MAT_PLASTIC = 50)
+	w_type = RECYK_PLASTIC
+
+/obj/item/trash/broken_ashtray/bronze
+	desc = "Pieces of bronze with ash on them."
+	icon_state = "ashtray_bork_br"
+	starting_materials = list(MAT_IRON = 80)
+	w_type = RECYK_METAL
+
+/obj/item/trash/broken_ashtray/glass
+	desc = "Shards of glass with ash on them."
+	icon_state = "ashtray_bork_gl"
+	starting_materials = list(MAT_GLASS = 60)
+	w_type = RECYK_GLASS
