@@ -108,10 +108,10 @@
 	category = "Tools"
 
 /datum/storeitem/swiss_army_knife
-	name = "Swiss Army Knife"
-	desc = "A multitool for everyday tasks."
-	typepath = /obj/item/weapon/switchtool/swiss_army_knife
-	cost = 50
+	name = "Collectable Swiss Army Knife"
+	desc = "A multitool for everyday tasks. Comes in a variety of brands and styles!"
+	typepath = /obj/item/collectible_switchtool
+	cost = 150
 	category = "Tools"
 
 

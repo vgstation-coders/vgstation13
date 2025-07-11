@@ -2454,6 +2454,12 @@
 		return pop_open(user)
 	..()
 
+/obj/item/weapon/reagent_containers/food/snacks/dangles/attackby(var/obj/item/I, mob/user as mob)
+	..()
+	if(istype(I, /obj/item/weapon/kitchen/canopener))
+		if(!popped)
+			return pop_open(user)
+
 /obj/item/weapon/reagent_containers/food/snacks/dangles/proc/pop_open(var/mob/user)
 	to_chat(user, "You pop the top off \the [src].")
 	playsound(user, 'sound/effects/opening_snack_tube.ogg', 50, 1)

@@ -866,6 +866,12 @@
 		overlays += image(icon = icon, icon_state = "soda_open")
 		set_blood_overlay()
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(var/obj/item/I, mob/user as mob)
+	..()
+	if(istype(I, /obj/item/weapon/kitchen/canopener))
+		if(!is_open_container())
+			return pop_open(user)
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(var/mob/user)
 	if(!is_open_container())
 		return pop_open(user)
