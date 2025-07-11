@@ -423,10 +423,7 @@
 			src.check_vox_partial_feather_regen()
 			if(F.amount == 0 && !src.feather_regen_timer && src.my_appearance && src.my_appearance.s_tone != VOXPLUCKED)
 				src.set_vox_plucked_appearance()
-				if(src.radiation >= 30)
-					src.start_feather_regeneration()
-				else
-					src.check_vox_feather_regen_ready()
+				src.check_vox_feather_regen_ready()
 			return
 		else
 			to_chat(src, "<span class='warning'>You have no feathers left to pluck!</span>")

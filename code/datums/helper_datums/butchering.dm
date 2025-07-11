@@ -150,29 +150,22 @@
 		// Chicken plucking: update to plucked icon
 		if(istype(parent, /mob/living/simple_animal/chicken))
 			var/mob/living/simple_animal/chicken/C = parent
+			C.icon_living = "chicken_plucked"
+			C.icon_dead = "chicken_plucked_dead"
 			if(C.stat == DEAD)
 				if(C.icon_state != "chicken_plucked_dead")
 					C.icon_state = "chicken_plucked_dead"
-					C.icon_living = "chicken_plucked"
-					C.icon_dead = "chicken_plucked_dead"
 					C.update_icons()
 			else
 				if(C.icon_state != "chicken_plucked")
 					C.icon_state = "chicken_plucked"
-					C.icon_living = "chicken_plucked"
-					C.icon_dead = "chicken_plucked_dead"
 					C.update_icons()
 		// Vox chicken plucking: update to plucked icon
 		else if(istype(parent, /mob/living/carbon/monkey/vox))
 			var/mob/living/carbon/monkey/vox/V = parent
-			if(V.stat == DEAD)
-				if(V.icon_state != "chickengreen_plucked")
-					V.icon_state = "chickengreen_plucked"
-					V.update_icons()
-			else
-				if(V.icon_state != "chickengreen_plucked")
-					V.icon_state = "chickengreen_plucked"
-					V.update_icons()
+			if(V.icon_state != "chickengreen_plucked")
+				V.icon_state = "chickengreen_plucked"
+				V.update_icons()
 		else
 			parent.update_icons()
 		// Vox plucking: update to plucked icon
@@ -181,8 +174,6 @@
 			if(istype(H.species, /datum/species/vox))
 				if(H.my_appearance && H.my_appearance.s_tone != VOXPLUCKED)
 					H.set_vox_plucked_appearance()
-				if(H.radiation >= 30)
-					H.start_feather_regeneration()
 				else
 					H.check_vox_feather_regen_ready()
 
@@ -208,17 +199,16 @@
 /mob/living/simple_animal/chicken/get_butchering_products()
 	var/feather_hex = "#FFFFFF"
 	var/feather_color_name = "white"
-	if(istype(src))
-		var/body_color = src.body_color
-		if(body_color == "brown")
-			feather_hex = "#bfa97a"
-			feather_color_name = "brown"
-		else if(body_color == "black")
-			feather_hex = "#bfc1c2"
-			feather_color_name = "gray"
-		else if(body_color == "white")
-			feather_hex = "#FFFFFF"
-			feather_color_name = "white"
+	var/body_color = src.body_color
+	if(body_color == "brown")
+		feather_hex = "#bfa97a"
+		feather_color_name = "brown"
+	else if(body_color == "black")
+		feather_hex = "#bfc1c2"
+		feather_color_name = "gray"
+	else if(body_color == "white")
+		feather_hex = "#FFFFFF"
+		feather_color_name = "white"
 	var/datum/butchering_product/feathers/feather_product = new
 	feather_product.amount = 2
 	feather_product.initial_amount = 2
