@@ -46,7 +46,6 @@
 				<th>ID tag</th>
 				<th>Status</th>
 				<th>Mode</th>
-				<th>Emissions rate (1/10th sec)</th>
 				<th>Beam Output (TJ)</th>
 				<th>Frequency (GHz)</th>
 			</tr>
@@ -126,7 +125,7 @@
 			to_chat(usr, "<span class='warning'>That's not a valid number.</span>")
 			return 1
 
-		gyro.frequency = clamp(new_val, 1, 50000)
+		gyro.frequency = clamp(new_val, MIN_GYRO_FREQ, 50000)
 
 		updateUsrDialog()
 		return 1

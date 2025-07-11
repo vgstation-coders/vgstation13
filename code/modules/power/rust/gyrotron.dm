@@ -1,3 +1,10 @@
+#define MIN_MEGA_ENERGY 0.001
+#define MAX_MEGA_ENERGY 0.01
+#define MAX_GYRO_FREQ 1000
+#define MIN_GYRO_FREQ 1
+#define GYRO_MEGA_COST 100000000 //Yes, original code made it that big
+
+
 /obj/machinery/power/gyrotron
 	icon = 'icons/obj/machines/rust.dmi'
 	icon_state = "emitter-off"
@@ -17,7 +24,7 @@
 
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
-	active_power_usage = 100000 //Yes that is a shitton. No you're not running this engine on an SE/AME you SE/AME scrubs.
+	active_power_usage = GYRO_MEGA_COST * MIN_MEGA_ENERGY
 
 /obj/machinery/power/gyrotron/initialize()
 	if(!id_tag)
