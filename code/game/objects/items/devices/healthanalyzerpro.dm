@@ -52,16 +52,21 @@
 	if(usr.is_holding_item(src))
 		toggle_mode()
 		
-/obj/item/weapon/autopsy_scanner/healthanalyzerpro/CtrlClick((mob/living/user))
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/CtrlClick(mob/living/user)
 	read_log(user)
 
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro/proc/fold_scanner()
 	if(usr.is_holding_item(src))
-		folded = !folded
-		icon_state = "adv_health[folded ? "_folded" : ""]"
-		to_chat(usr, "<span class='info'>You [(folded ? "fold" : "unfold")] \the [src].</span>")
-		w_class = (folded ? W_CLASS_SMALL : W_CLASS_MEDIUM)
-		update_icon()
+		usr.playsound_local(usr, 'sound/misc/metal_drag3.ogg', 30, 0, 30000, TRUE, 0, FALSE)
+		if(do_after(usr, src, 3 SECONDS))
+			if(folded)
+				usr.playsound_local(usr, 'sound/machines/HAPF2.ogg', 30, 0, 30000, TRUE, 0, FALSE)
+				flick("adv_health_start", src)
+			folded = !folded
+			icon_state = "adv_health[folded ? "_folded" : ""]"
+			to_chat(usr, "<span class='info'>You [(folded ? "fold" : "unfold")] \the [src].</span>")
+			w_class = (folded ? W_CLASS_SMALL : W_CLASS_MEDIUM)
+			update_icon()
 
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro/print_data() //verb from autopsy scanner changed to work differently here
 	var/mob/user = usr
