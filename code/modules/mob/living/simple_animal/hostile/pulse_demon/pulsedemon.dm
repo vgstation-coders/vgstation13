@@ -533,7 +533,8 @@
 	maxcharge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER //multiplier to balance the pitiful powercells in APCs
 	charge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER
 	current_apc.cell.use(amount_to_drain)
-
+	if(health < maxHealth)
+		health = min(maxHealth, health + round(amount_to_drain/100, 1))
 	// Add to stats if any
 	if(mind && mind.GetRole(PULSEDEMON))
 		var/datum/role/pulse_demon/PD = mind.GetRole(PULSEDEMON)
