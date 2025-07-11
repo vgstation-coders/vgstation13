@@ -234,7 +234,7 @@
 	if(current_cable?.powernet)
 		current_cable.powernet.haspulsedemon = FALSE
 	. = ..()
-	
+
 /mob/living/simple_animal/hostile/pulse_demon/proc/is_under_tile()
 	var/turf/simulated/floor/F = get_turf(src)
 	return istype(F,/turf/simulated/floor) && F.floor_tile
@@ -515,6 +515,8 @@
 	var/amount_added = min(maxcharge-charge,amount_to_drain)
 	charge += amount_added
 	current_battery.charge -= amount_added
+	if(health < maxHealth) // Pulse demons will also regenerate health at a rate of 1 point for every 100 power absorbed. A typical 2.5kw APC will provide 25 health points.
+		health = min(maxHealth, health + round(amount_added/100, 1))
 	// Add to stats if any
 	if(mind && mind.GetRole(PULSEDEMON))
 		var/datum/role/pulse_demon/PD = mind.GetRole(PULSEDEMON)
