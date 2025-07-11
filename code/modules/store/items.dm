@@ -111,7 +111,7 @@
 	name = "Collectable Swiss Army Knife"
 	desc = "A multitool for everyday tasks. Comes in a variety of brands and styles!"
 	typepath = /obj/item/collectible_switchtool
-	cost = 150
+	cost = 100
 	category = "Tools"
 
 
