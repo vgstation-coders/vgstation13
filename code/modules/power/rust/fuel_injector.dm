@@ -160,9 +160,9 @@
 	data["has_assembly"] = !!cur_assembly
 	data["emergency_insert_ready"] = emergency_insert_ready
 	data["power_status_class"] = "good"
-	if(round(last_power_request * get_satisfaction()) < active_power_usage)
+	if(round(last_power_request * get_satisfaction()) < (attempt_activate ? active_power_usage : idle_power_usage))
 		data["power_status_class"] = "bad"
-	data["active_power_usage"] = round(active_power_usage)
+	data["active_power_usage"] = attempt_activate ? active_power_usage : idle_power_usage
 	data["power_received"] = round(last_power_request * get_satisfaction())
 	data["remote_access_enabled"] = remote_access_enabled
 
