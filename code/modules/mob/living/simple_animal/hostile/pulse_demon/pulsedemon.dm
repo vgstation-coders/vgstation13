@@ -516,7 +516,10 @@
 	charge += amount_added
 	current_battery.charge -= amount_added
 	if(health < maxHealth) // Pulse demons will also regenerate health at a rate of 1 point for every 100 power absorbed. A typical 2.5kw APC will provide 25 health points.
+		var/previous_health = health
 		health = min(maxHealth, health + round(amount_added/100, 1))
+		if((health - previous_health) >= 1)
+			to_chat(src, span_notice("You regenerate [previous_health - health] health."))
 	// Add to stats if any
 	if(mind && mind.GetRole(PULSEDEMON))
 		var/datum/role/pulse_demon/PD = mind.GetRole(PULSEDEMON)
@@ -534,7 +537,10 @@
 	charge += amount_to_drain * PULSEDEMON_APC_CHARGE_MULTIPLIER
 	current_apc.cell.use(amount_to_drain)
 	if(health < maxHealth)
+		var/previous_health = health
 		health = min(maxHealth, health + round(amount_to_drain/100, 1))
+		if((health - previous_health) >= 1)
+			to_chat(src, span_notice("You regenerate [previous_health - health] health."))
 	// Add to stats if any
 	if(mind && mind.GetRole(PULSEDEMON))
 		var/datum/role/pulse_demon/PD = mind.GetRole(PULSEDEMON)
