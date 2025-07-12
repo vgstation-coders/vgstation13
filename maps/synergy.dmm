@@ -10798,6 +10798,10 @@
 	name = "Prison Blast Door";
 	opacity = 0
 	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 4;
+	name = "Firelock East"
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark vault stripe"
@@ -10806,6 +10810,11 @@
 "auc" = (
 /obj/structure/closet/secure_closet/personal,
 /obj/item/toy/gasha/bangerboy,
+/obj/machinery/firealarm{
+	dir = 1;
+	name = "_South Fire Alarm";
+	pixel_y = -26
+	},
 /turf/simulated/floor/wood,
 /area/security/toilet)
 "aud" = (
@@ -12233,6 +12242,9 @@
 	name = "Security Blast Door";
 	opacity = 0
 	},
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
 /turf/simulated/floor/plating,
 /area/security/prison)
 "awK" = (
@@ -12267,6 +12279,9 @@
 	name = "Security Blast Door";
 	opacity = 0
 	},
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
 /turf/simulated/floor/plating,
 /area/security/prison)
 "awL" = (
@@ -12289,6 +12304,9 @@
 	opacity = 0
 	},
 /obj/structure/grille/window_spawner/reinforced/full,
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
 /turf/simulated/floor/plating,
 /area/security/prison)
 "awM" = (
@@ -12319,6 +12337,9 @@
 	opacity = 0
 	},
 /obj/structure/grille/window_spawner/reinforced/full,
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
 /turf/simulated/floor/plating,
 /area/security/prison)
 "awN" = (
@@ -12341,6 +12362,9 @@
 	opacity = 0
 	},
 /obj/structure/grille/window_spawner/reinforced/full,
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
 /turf/simulated/floor/plating,
 /area/security/prison)
 "awO" = (
@@ -16510,6 +16534,10 @@
 	pixel_y = -24
 	},
 /obj/structure/cable,
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -21314,6 +21342,9 @@
 	pixel_y = -24
 	},
 /obj/structure/cable,
+/obj/machinery/camera{
+	dir = 1
+	},
 /turf/simulated/floor/carpet{
 	icon_state = "carpetnoconnect"
 	},
@@ -21335,7 +21366,6 @@
 /obj/structure/bed/chair{
 	dir = 1
 	},
-/obj/machinery/camera,
 /turf/simulated/floor/carpet{
 	icon_state = "carpetnoconnect"
 	},
@@ -98112,6 +98142,11 @@
 /turf/simulated/floor,
 /area/hydroponics)
 "eIN" = (
+/obj/machinery/firealarm{
+	dir = 1;
+	name = "_South Fire Alarm";
+	pixel_y = -26
+	},
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "darkred";
@@ -98911,6 +98946,7 @@
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/machinery/camera,
 /turf/simulated/floor,
 /area/security/range)
 "jQU" = (
@@ -99270,6 +99306,10 @@
 	dir = 8;
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
 	},
 /turf/simulated/floor{
 	dir = 8;
