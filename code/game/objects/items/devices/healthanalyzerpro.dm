@@ -31,6 +31,7 @@
 	var/obj/item/device/antibody_scanner/immune
 	var/last_print
 	var/folded = TRUE
+	var/folding = FALSE
 
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro/examine(mob/user)
 	..()
@@ -67,6 +68,7 @@
 			to_chat(usr, "<span class='info'>You [(folded ? "fold" : "unfold")] \the [src].</span>")
 			w_class = (folded ? W_CLASS_SMALL : W_CLASS_MEDIUM)
 			update_icon()
+	folding = FALSE
 
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro/print_data() //verb from autopsy scanner changed to work differently here
 	var/mob/user = usr
@@ -127,7 +129,11 @@
 	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
-	fold_scanner()
+	if(!folding)
+		folding = TRUE
+		fold_scanner()
+	else
+		to_chat(user, "<span class='warning'>You're already fiddling with it.</span>")
 
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro/proc/read_log(mob/living/user) //old attack_self is a verb now
 	if(!user.dexterity_check())
