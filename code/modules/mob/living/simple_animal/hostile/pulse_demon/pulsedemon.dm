@@ -234,7 +234,7 @@
 	if(current_cable?.powernet)
 		current_cable.powernet.haspulsedemon = FALSE
 	. = ..()
-	
+
 /mob/living/simple_animal/hostile/pulse_demon/proc/is_under_tile()
 	var/turf/simulated/floor/F = get_turf(src)
 	return istype(F,/turf/simulated/floor) && F.floor_tile
@@ -555,3 +555,12 @@
 				CI.plane = ABOVE_LIGHTING_PLANE
 				cables_shown += CI
 				client.images += CI
+
+//Can't be scooped up
+/mob/living/simple_animal/hostile/pulse_demon/scoop_up(mob/M)
+	to_chat(M, span_warning("You attempt to grab \the [src] but it slips out of your hands!"))
+
+//Can't be dragged either
+/mob/living/simple_animal/hostile/pulse_demon/can_be_pulled(mob/user)
+	to_chat(user, span_warning("You attempt to grab \the [src] but it slips out of your hands!"))
+	return 0
