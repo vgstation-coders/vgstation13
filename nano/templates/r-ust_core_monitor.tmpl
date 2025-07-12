@@ -19,11 +19,11 @@
 					Device Power Status:
 				</div>
 				<div class = "itemContentSmall">
-					{{:helper.displayBar(data.powerAvailable, 0, data.powerNeeded, null, data.powerAvailable + '/' + data.powerNeeded)}}
+					{{:helper.displayBar(data.power_available, 0, data.power_needed, null, data.power_available + '/' + data.power_needed)}}
 <!--					{{if data.power_color == "orange"}}
-					<span style='color: orange'>{{:data.powerAvailable}}/{{:data.powerNeeded}}</span>
+					<span style='color: orange'>{{:data.power_available}}/{{:data.power_needed}}</span>
 					{{else}}
-					<span style='color: green'>{{:data.powerAvailable}}/{{:data.powerNeeded}}</span>
+					<span style='color: green'>{{:data.power_available}}/{{:data.power_needed}}</span>
 					{{/if}} -->
 				</div>
 			</div>
@@ -107,7 +107,7 @@
 							<th>Name</th>
 							<th>Amount</th>
 						</tr>
-						{{for data.listOfReagents}}
+						{{for data.list_of_reagents}}
 							<tr><td>{{:value.key1}}</td><td>{{:value.key2}}</td></tr>
 						{{/for}}
 					</table>

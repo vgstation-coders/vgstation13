@@ -60,8 +60,8 @@
 			"idtag" = linked_core.id_tag,
 			"core_status" = check_core_status(),
 			"power_color" = power_color,
-			"powerAvailable" = avail_power,
-			"powerNeeded" = linked_core.last_power_request,
+			"power_available" = avail_power,
+			"power_needed" = linked_core.last_power_request,
 			"owned_field" = !!linked_core.owned_field,
 			"field_color" = field_colour,
 			"field_string" = field_string,
@@ -74,14 +74,14 @@
 				"field_strength" = linked_core.owned_field.field_strength,
 				"field_mega_energy" = linked_core.owned_field.mega_energy,
 				"field_sub_mega_energy" = linked_core.owned_field.energy,
-				"listOfReagents" = list()
+				"list_of_reagents" = list()
 			)
 			for(var/reagent in linked_core.owned_field.dormant_reactant_quantities)
 				var/list/reactant_data = list(
 					"key1" = reagent,
 					"key2" = linked_core.owned_field.dormant_reactant_quantities[reagent]
 				)
-				data["listOfReagents"] += list(reactant_data)
+				data["list_of_reagents"] += list(reactant_data)
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
