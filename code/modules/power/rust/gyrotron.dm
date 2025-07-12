@@ -1,10 +1,3 @@
-#define MIN_MEGA_ENERGY 0.001
-#define MAX_MEGA_ENERGY 0.01
-#define MAX_GYRO_FREQ 1000
-#define MIN_GYRO_FREQ 1
-#define GYRO_MEGA_COST 100000000 //Yes, original code made it that big
-
-
 /obj/machinery/power/gyrotron
 	icon = 'icons/obj/machines/rust.dmi'
 	icon_state = "emitter-off"
