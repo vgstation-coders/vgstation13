@@ -143,6 +143,7 @@
 		/obj/item/device/gps/engineering,
 		/obj/item/tool/crowbar/halligan,
 		/obj/item/device/pager,
+		/obj/item/firefoam_popper = 2,
 	)
 
 /obj/structure/closet/secure_closet/engineering_mechanic
