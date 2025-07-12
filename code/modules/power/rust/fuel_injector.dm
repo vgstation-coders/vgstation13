@@ -153,7 +153,6 @@
 
 /obj/machinery/power/rust_fuel_injector/ui_interact(var/mob/user, var/ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
-	var/free_power = max(surplus() + round(last_power_request * get_satisfaction()), 0)
 	data["locked"] = locked && !issilicon(user) && !isAdminGhost(user)
 	data["id_tag"] = id_tag
 	data["injecting"] = (attempt_activate || injecting)
@@ -161,10 +160,10 @@
 	data["has_assembly"] = !!cur_assembly
 	data["emergency_insert_ready"] = emergency_insert_ready
 	data["power_status_class"] = "good"
-	if(free_power < active_power_usage)
+	if(round(last_power_request * get_satisfaction()) < active_power_usage)
 		data["power_status_class"] = "bad"
 	data["active_power_usage"] = round(active_power_usage)
-	data["power_received"] = free_power
+	data["power_received"] = round(last_power_request * get_satisfaction())
 	data["remote_access_enabled"] = remote_access_enabled
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
