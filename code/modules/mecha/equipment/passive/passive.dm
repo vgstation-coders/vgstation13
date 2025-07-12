@@ -67,20 +67,20 @@
 	is_activateable = FALSE
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=2;"
 	starting_materials = list(MAT_IRON = 112500, MAT_GLASS = 500)
-	
+
 /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit/can_attach(obj/mecha/working/W)
 	if(!..())
 		return 0
 	if(istype(W,/obj/mecha/working/ripley))
 		return 1
-	
+
 /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit/attach(obj/mecha/working/ripley/R)
 	..()
 	R.mech_sprites = list("killdozer","killdozer_clean")
 	R.icon_state = "killdozer"
 	R.initial_icon = "killdozer"
 	R.silicon_icon_state = "killdozer"
-	R.damage_absorption = list("brute"=0.01,"fire"=0.05,"bullet"=0.01,"laser"=0.05,"energy"=0.05,"bomb"=0.1) //good fucking luck killing it without ions
+	R.damage_absorption = list("brute"=0.1,"fire"=0.25,"bullet"=0.1,"laser"=0.25,"energy"=0.25,"bomb"=0.5) //good fucking luck killing it without ions
 	R.step_in = 2.5 //make it as slow as the mk2 ripley
 	R.fast_pressure_step_in = 2.5
 	R.slow_pressure_step_in = 4
