@@ -162,6 +162,8 @@
 		stat(null, text("APC takeover time: [takeover_time] seconds"))
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_glow()
+	if(charge < 10000)
+		set_light(0)
 	var/range = 2 + (log(2,charge+1)-log(2,50000)) / 2
 	range = max(range, 1.5)  //negative lights due to logarithms when?
 	//1.5 <= 25k
@@ -234,7 +236,7 @@
 	if(current_cable?.powernet)
 		current_cable.powernet.haspulsedemon = FALSE
 	. = ..()
-	
+
 /mob/living/simple_animal/hostile/pulse_demon/proc/is_under_tile()
 	var/turf/simulated/floor/F = get_turf(src)
 	return istype(F,/turf/simulated/floor) && F.floor_tile
