@@ -29,7 +29,7 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	var/mega_energy = 0
 	var/radiation = 0
 	var/frequency = 1
-	var/field_strength = 0.01						//in teslas, max is 50T
+	var/field_strength = MIN_FIELD_STR						//in teslas, max is 50T
 
 	var/obj/machinery/rust/rad_source/radiator
 	var/datum/gas_mixture/held_plasma = new
@@ -261,6 +261,8 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	environment.merge(held_plasma)
 
 /obj/effect/rust_em_field/proc/change_size(var/newsize = 1)
+	if(newsize == size)
+		return
 	//
 	var/changed = 0
 	switch(newsize)

@@ -53,7 +53,17 @@
 	for(var/obj/machinery/power/gyrotron/gyro in linked_gyrotrons)
 		//These vars are here because muh readable HTML code.
 		var/gyro_id = linked_gyrotrons.Find(gyro)
-		var/status = ((gyro.state != 2 || gyro.stat & (FORCEDISABLE | NOPOWER | BROKEN)) ? "<span style='color: red'>Unresponsive</span>" : "<span style='color: green'>Operational</span>")
+		var/status
+		if(gyro.state != 2 || gyro.stat & (FORCEDISABLE | NOPOWER | BROKEN))
+			status = "<span style='color: red'>Unresponsive</span>"
+		else if(gyro.targeted_mega_energy > gyro.last_mega_energy || gyro.last_power_request > gyro.last_power_received)
+			status = "<span style='color: orange'>Underpowered</span>"
+		else if(gyro.attempt_activate && !gyro.emitting)
+			status = "<span style ='color: green'>Booting up</span>"
+		else if(gyro.emitting)
+			status = "<span style='color: green'>Emitting</span>"
+		else
+			status = "<span style='color: green'>Operational</span>"
 		dat += {"
 			</tr>
 				<td>[gyro.id_tag]</td>
@@ -64,14 +74,12 @@
 				<td><span style='color: red'>ERROR</span></td>
 				<td><span style='color: red'>ERROR</span></td>
 				<td><span style='color: red'>ERROR</span></td>
-				<td><span style='color: red'>ERROR</span></td>
 			"}
 		else
-			var/mode = (gyro.emitting ? "<a href='?src=\ref[src];deactivate=1;gyro=[gyro_id]'>Emitting</a>" : "<a href='?src=\ref[src];activate=1;gyro=[gyro_id]'>Stand-By</a>")//See how long this is?
+			var/mode = (gyro.attempt_activate ? "<a href='?src=\ref[src];deactivate=1;gyro=[gyro_id]'>Enabled</a>" : "<a href='?src=\ref[src];activate=1;gyro=[gyro_id]'>Stand-By</a>")//See how long this is?
 			dat += {"
 				<td>[mode]</td>
-				<td><a href='?src=\ref[src];modifyrate=1;gyro=[gyro_id]'>[gyro.rate]</a></td>
-				<td><a href='?src=\ref[src];modifypower=1;gyro=[gyro_id]'>[gyro.mega_energy]</a></td>
+				<td><a href='?src=\ref[src];modifypower=1;gyro=[gyro_id]'>[gyro.targeted_mega_energy]</a></td>
 				<td><a href='?src=\ref[src];modifyfreq=1;gyro=[gyro_id]'>[gyro.frequency]</a></td>
 			"}
 		dat += "</tr>"
@@ -102,23 +110,11 @@
 			to_chat(usr, "<span class='warning'>That's not a valid number.</span>")
 			return 1
 
-		gyro.mega_energy = clamp(new_val, 0.001, 0.01)
-		gyro.active_power_usage = gyro.mega_energy * 100000000 //1 MW for 0.01 TJ, 100 KW for 0.001 TJ.
+		gyro.targeted_mega_energy = clamp(new_val, 0.001, 0.01)
+		gyro.active_power_usage = gyro.targeted_mega_energy * GYRO_MEGA_COST
 
 		updateUsrDialog()
 		return 1
-
-	if(href_list["modifyrate"])
-		var/new_val = input("Enter new emission rate (1 - 10)", "Modifying emission rate (1/10th sec)", gyro.rate) as num
-		if(!new_val)
-			to_chat(usr, "<span class='warning'>That's not a valid number.</span>")
-			return 1
-
-		gyro.rate = clamp(new_val, 10, 100)
-
-		updateUsrDialog()
-		return 1
-
 	if(href_list["modifyfreq"])
 		var/new_val = input("Enter new emission frequency (1 - 50000)", "Modifying emission frequency (GHz)", gyro.frequency) as num
 		if(!new_val)
@@ -131,13 +127,13 @@
 		return 1
 
 	if(href_list["activate"])
-		gyro.start_emitting()
+		gyro.activate()
 
 		updateUsrDialog()
 		return 1
 
 	if(href_list["deactivate"])
-		gyro.stop_emitting()
+		gyro.deactivate()
 
 		updateUsrDialog()
 		return 1
