@@ -4,9 +4,10 @@
 	name = "plug-in device"
 	desc = "Some device with a bunch of semi-standardized connectors. You can't tell what device this would fit into."
 	icon_state = "modkit"
+	item_state = "modkit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	force = 3
 	throwforce = 5
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=4"
 	//Will forcibly eject all other plugins from the machine when installed
 	var/solo = FALSE
@@ -14,7 +15,8 @@
 /obj/item/device/plugin/sleeper
 	name = "sleeper plug-in device"
 	desc = "A plug-in device that looks like it can connect to a sleeper."
-
+	icon = 'icons/obj/machines/plugins/sleeperplugin.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sleeperplugins.dmi', "right_hand" = 'icons/mob/in-hand/right/sleeperplugins.dmi')
 	//Which chemicals are provided based on upgrade tier of the sleeper
 	var/list/t1chems = list()
 	var/list/t2chems = list()
@@ -50,12 +52,10 @@
 
 /obj/item/device/plugin/sleeper/ntbasic
 	name = "Nanotrasen Simple Sleeper Upgrade Module"
-	icon = 'icons/obj/machines/plugins/sleeperplugin.dmi'
 	icon_state = "ntbasic"
 	item_state = "ntbasic"
 	force = 6
 	throwforce = 15 //usually 6 damage when thrown, it's a monitor
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sleeperplugins.dmi', "right_hand" = 'icons/mob/in-hand/right/sleeperplugins.dmi')
 	flags = TWOHANDABLE | MUSTTWOHAND
 	t1chems = list(
 		MANNITOL = "Mannitol",
@@ -77,6 +77,9 @@
 
 /obj/item/device/plugin/sleeper/ntresearch
 	name = "Nanotrasen Experimental Sleeper Upgrade Module"
+	icon_state = "miniconsole"
+	item_state = "modkit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	t1chems = list(
 		MAHKOEXPITOL = "Mahkoexpitol",
 		DEXALINP = "Dexalin+",
@@ -94,6 +97,8 @@
 
 /obj/item/device/plugin/sleeper/dan
 	name = "Discount Dan's Discount Nutrition Injectors"
+	icon_state = "dan"
+	item_state = "danplug"
 	advertisements = list("This injection was brought to you by Discount Dan!",
 		"Discount Dan, he's the man!",
 		"There ain't nothing better in this world than an injection of mystery.",
@@ -126,6 +131,10 @@
 
 /obj/item/device/plugin/sleeper/trader
 	name = "Vox Shoal Sleeper Optimization Kit"
+	icon = 'icons/obj/device.dmi'
+	icon_state = "modkit"
+	item_state = "modkit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	mech_flags = MECH_SCAN_FAIL
 	t1chems = list(
 		NITROGEN = "Nitrogen",
@@ -139,6 +148,8 @@
 /obj/item/device/plugin/sleeper/alien
 	name = "unknown device"
 	desc = "A strange object. It has an image of what looks like a sleeper on it."
+	icon_state = "alien"
+	item_state = "alienplug"
 	override_chems = TRUE
 	override_crit = TRUE
 	hides_info = TRUE
@@ -191,6 +202,8 @@
 /obj/item/device/plugin/sleeper/clown
 	name = "funny looking device"
 	desc = "A strange object. It has an image of what looks like a sleeper on it."
+	icon_state = "clown"
+	item_state = "clownplug"
 	custom_hiss = 'sound/items/bikehorn.ogg'
 	funny = TRUE
 	t1chems = list(
@@ -209,14 +222,17 @@
 	//rainbow glass
 	if(my_sleeper.occupant)
 		my_sleeper.overlays += new /image('icons/obj/machines/plugins/sleeperplugin.dmi', "clown_closed_[(my_sleeper.stat & (BROKEN|NOPOWER|FORCEDISABLE)) ? "off" : "on"]")
+		//the hugger
+		my_sleeper.overlays += new /image('icons/obj/machines/plugins/sleeperplugin.dmi', "clown_hug_closed")
 	else
 		my_sleeper.overlays += new /image('icons/obj/machines/plugins/sleeperplugin.dmi', "clown_open")
-	//the hugger
-	my_sleeper.overlays += new /image('icons/obj/machines/plugins/sleeperplugin.dmi', "clown_hug")
+		my_sleeper.overlays += new /image('icons/obj/machines/plugins/sleeperplugin.dmi', "clown_hug")
 
 /obj/item/device/plugin/sleeper/gunk
 	name = "damaged device"
 	desc = "This looks like it was once a high tech piece of equipment, but now it's covered in toxic waste. You can vaguely make out what looks like an image of a sleeper under the mess."
+	icon_state = "gunk"
+	item_state = "gunkplug"
 	override_chems = TRUE
 	t1chems = list(
 		TOXICWASTE = "Toxic Waste",
@@ -233,3 +249,6 @@
 		//watch out this is literal garbage
 		CHUMPARI = "Waste Water"
 		)
+
+/obj/item/device/plugin/sleeper/gunk/provide_overlay(var/obj/machinery/sleeper/my_sleeper)
+	my_sleeper.overlays += new /image('icons/obj/machines/plugins/sleeperplugin.dmi', "vomit")

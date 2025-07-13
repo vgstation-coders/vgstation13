@@ -49,6 +49,7 @@
 		/datum/malfhack_ability/oneuse/overload_quiet,
 		/datum/malfhack_ability/oneuse/emag
 	)
+	var/awaken = FALSE //turn to true to do cursed and terrible things
 
 /obj/machinery/sleeper/splashable()
 	return FALSE
@@ -608,6 +609,8 @@
 	var/mob/old_occupant = occupant
 	if(!occupant)
 		return FALSE
+	if(awaken) //no escape
+		return FALSE
 	for(var/atom/movable/x in contents)
 		if(x in component_parts)
 			continue
@@ -726,11 +729,31 @@
 			visible_message("<span class='notice'>\The [src] pings softly: 'Initiating wake-up cycle...' </span>")
 
 /obj/machinery/sleeper/process()
+	if(awaken && occupant && !(stat & FORCEDISABLE))
+		awaken_clown()
+	if(funny && occupant)
+		occupant.druggy = max(occupant.druggy, 2)
 	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	updateUsrDialog()
 	return
 
+/obj/machinery/sleeper/proc/awaken_clown()
+	awaken = TRUE //next person who's inside is locked in.
+	if(!occupant)
+		return
+	overlays = null
+	stat |= FORCEDISABLE
+	flick('icons/obj/machines/plugins/clownawakens.dmi',src)
+	sleep(8)
+	playsound(src, 'sound/items/cardshuffle.ogg', 70, 1)
+	sleep(13)
+	playsound(src, 'sound/items/AirHorn.ogg', 70, 1)
+	sleep(9)
+	var/mob/living/simple_animal/rampagingspacehog/sleeperclown/curse = new(loc)
+	occupant.nobreath = 15
+	occupant.forceMove(curse)
+	qdel(src)
 
 /obj/machinery/sleeper/upgraded
 	name = "advanced sleeper"

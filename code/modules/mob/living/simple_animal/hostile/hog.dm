@@ -395,6 +395,8 @@ if ungreased adult: l containers
 	var/obj/item/weapon/card/id/captains_spare/CS
 	var/target //Where we're heading
 	var/list/path = list()
+	var/hurt_sound = 'sound/voice/pigsqueal.ogg'
+	var/snort_sound = 'sound/voice/pigsnort.ogg'
 
 /mob/living/simple_animal/rampagingspacehog/New()
 	..()
@@ -426,7 +428,7 @@ if ungreased adult: l containers
 		homes += get_open_maintenance_turfs(4)
 	if(nextsqueal < world.time)
 		nextsqueal = world.time + (2 SECONDS)
-		playsound(loc, 'sound/voice/pigsqueal.ogg', 50, 0)
+		playsound(loc, hurt_sound, 50, 0)
 	target = pick(homes)
 	path = get_path_to(src, target, max_distance=500, id = CS)
 	pathers += src
@@ -444,11 +446,85 @@ if ungreased adult: l containers
 	if(gcDestroyed || stat == DEAD)
 		return FALSE
 	if(!path || !path.len)
-		playsound(loc, 'sound/voice/pigsnort.ogg', 50, 0)
+		playsound(loc, snort_sound, 50, 0)
 		return FALSE
 	Move(path[1])
 	path.Remove(path[1])
 	if(!path.len)
-		playsound(loc, 'sound/voice/pigsnort.ogg', 50, 0)
+		playsound(loc, snort_sound, 50, 0)
 		return FALSE
 	return TRUE
+
+//This is a new forme of your living nightmares
+/mob/living/simple_animal/rampagingspacehog/sleeperclown
+	name = "overly protective sleeper clownspider"
+	icon = 'icons/mob/clown_mobs.dmi'
+	icon_state = "sleeperclown"
+	icon_living = "sleeperclown"
+	icon_dead = "sleeperclown_dead"
+	speak = list("Honk!","Squee!","Sqwaa!","Hounk!", "SQUEEEEE!","Honk...","Honk, honk", "Honk, honk, honk", "Honk!", "Hooonk.")
+	emote_hear = list("honks hauntingly")
+	emote_see = list("scours about","honks its horn hauntingly")
+	emote_sound = list("sound/items/bikehorn.ogg")
+	response_help = "pats"
+	response_disarm = "shoves"
+	response_harm = "hits"
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
+	meat_amount = 12
+	can_butcher = TRUE
+	size = SIZE_BIG
+	mob_property_flags = MOB_NO_PETRIFY | MOB_NO_LAZ
+	attack_sound = 'sound/items/bikehorn.ogg'
+	hurt_sound = 'sound/items/bikehorn_curaracha.ogg'
+	snort_sound = 'sound/items/bikehorn.ogg'
+
+/mob/living/simple_animal/rampagingspacehog/Life()
+	..()
+	for(var/mob/living/person in contents)
+		//weird nullspace can't breet problem, this fixes it
+		person.nobreath = 15
+		//rainbow colored glass
+		person.druggy = max(person.druggy, 3)
+		//it captures and then protects you
+		if(person.getOxyLoss())
+			person.adjustOxyLoss(-2)
+		if(person.getBruteLoss())
+			person.heal_organ_damage(2, 0)
+		if(person.getFireLoss())
+			person.heal_organ_damage(0, 2)
+		if(person.getToxLoss())
+			person.adjustToxLoss(-2)
+
+/mob/living/simple_animal/rampagingspacehog/sleeperclown/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	playsound(src, "clownstep", 50, 1)
+	..()
+
+/mob/living/simple_animal/rampagingspacehog/sleeperclown/emp_act(severity)
+	if(flags & INVULNERABLE)
+		return
+	//EMP Vulnerability!
+	switch (severity)
+		if (1)
+			adjustBruteLoss(50)
+		if (2)
+			adjustBruteLoss(25)
+
+/mob/living/simple_animal/rampagingspacehog/sleeperclown/death(gibbed)
+	playsound(src, 'sound/machines/pressurehiss.ogg', 70, 1)
+	for(var/mob/person in contents)
+		person.forceMove(loc)
+		visible_message("\The [name] releases \the [person] as they die!")
+	playsound(src, 'sound/misc/sadtrombone.ogg', 70, 1)
+	..()
+
+/mob/living/simple_animal/rampagingspacehog/sleeperclown/gib(animation = FALSE, meat = TRUE)
+	new /obj/item/clothing/mask/gas/clown_hat(loc)
+	..()
+
+/mob/living/simple_animal/rampagingspacehog/sleeperclown/Destroy()
+	for(var/mob/person in contents)
+		person.forceMove(loc)
+	..()
+
+/mob/living/simple_animal/rampagingspacehog/sleeperclown/get_butchering_products()
+	return list(/datum/butchering_product/spider_legs/sleeperclown, /datum/butchering_product/hivelord_core/sleeperclown)
