@@ -4,8 +4,12 @@
 	name = "plug-in device"
 	desc = "Some device with a bunch of semi-standardized connectors. You can't tell what device this would fit into."
 	icon_state = "modkit"
+	force = 3
+	throwforce = 5
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=4"
+	//Will forcibly eject all other plugins from the machine when installed
+	var/solo = FALSE
 
 /obj/item/device/plugin/sleeper
 	name = "sleeper plug-in device"
@@ -49,6 +53,8 @@
 	icon = 'icons/obj/machines/plugins/sleeperplugin.dmi'
 	icon_state = "ntbasic"
 	item_state = "ntbasic"
+	force = 6
+	throwforce = 15 //usually 6 damage when thrown, it's a monitor
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sleeperplugins.dmi', "right_hand" = 'icons/mob/in-hand/right/sleeperplugins.dmi')
 	flags = TWOHANDABLE | MUSTTWOHAND
 	t1chems = list(
@@ -136,6 +142,7 @@
 	override_chems = TRUE
 	override_crit = TRUE
 	hides_info = TRUE
+	solo = TRUE
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/device/plugin/sleeper/alien/New()
@@ -171,6 +178,15 @@
 	for(var/i = 1 to pick(2,3,3,4))
 		genned += pick(syllables)
 	return capitalize(genned)
+
+/obj/item/device/plugin/sleeper/alien/provide_overlay(var/obj/machinery/sleeper/my_sleeper)
+	my_sleeper.icon = 'maps/defficiency/medbay.dmi'
+	my_sleeper.overlays += new /image('icons/obj/machines/plugins/sleeperplugin.dmi', "alien_[my_sleeper.occupant ? "closed" : "open"]")
+
+/obj/item/device/plugin/sleeper/alien/provide_extra_overlay(var/obj/machinery/sleeper/my_sleeper)
+	//the evil light
+	if(!(my_sleeper.stat & (BROKEN|NOPOWER|FORCEDISABLE)))
+		my_sleeper.overlays += new /image('icons/obj/machines/plugins/sleeperplugin.dmi', "alien_effect_on")
 
 /obj/item/device/plugin/sleeper/clown
 	name = "funny looking device"

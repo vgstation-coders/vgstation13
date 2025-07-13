@@ -39,7 +39,7 @@
 
 	//TODO - plugin system
 	var/accepts_plugins = TRUE
-	var/obj/item/plugins = list()
+	var/list/plugins = list()
 	var/advertising = FALSE
 	var/ad_cooldown = FALSE
 	var/ad_list = list()
@@ -295,7 +295,7 @@
 			if(info_hidden)
 				to_chat(usr, "<span class='danger'>The sleeper shows some information, but it's unintelligible.</span>")
 			else if(reagent_name(href_list["info"]))
-				to_chat(usr, "<span class='notice'>[reagent_name(href_list["info"])]: [reagent_info(href_list["info"])]</span>")
+				to_chat(usr, "<span class='notice'>[available_options[href_list["info"]]]: [reagent_info(href_list["info"])]</span>")
 		if(href_list["wakeup"])
 			wakeup(usr)
 		if(href_list["eject"])
@@ -453,6 +453,9 @@
 			to_chat(user, "<span class='warning'>The sleeper must be empty in order to install this device.</span>")
 			return
 		for(var/obj/item/device/plugin/plug in plugins)
+			if(plug.solo)
+				to_chat(user, "<span class='warning'>There's nowhere to plug it in, all the plugs are used or gone!</span>")
+				return
 			if(istype(obj_used, plug))
 				to_chat(user, "<span class='warning'>This device is already installed.</span>")
 				return
@@ -465,11 +468,25 @@
 			if(occupant)
 				to_chat(user, "<span class='warning'>A red light flashes on the module, someone must have gotten in during the installation process!</span>")
 				return
+			for(var/obj/item/device/plugin/plug in plugins)
+				if(plug.solo)
+					to_chat(user, "<span class='warning'>There's nowhere to plug it in, some plugs must have vanished while you were working!</span>")
+					return
 			if(!user.drop_item(obj_used, src))
 				to_chat(user, "<span class='warning'>You can't let go of \the [obj_used]!</span>")
 				return
+			to_chat(user, "You install \the [obj_used] to \the [src].")
+			var/obj/item/device/plugin/installed_plug = obj_used
+			if(plugins.len && installed_plug.solo)
+				for(var/atom/movable/AM in plugins)
+					var/target = get_offset_target_turf(src.loc, rand(5)-rand(5), rand(5)-rand(5))
+					AM.forceMove(src.loc)
+					spawn(1)
+						if(AM)
+							AM.throw_at(target, 5, 1)
+				visible_message("<span class='danger'>\The [src] suddenly ejects its other plugins!</span>")
+				plugins = list()
 			plugins += obj_used
-			to_chat(user, "You install \the [obj_used] to the machine.")
 			RefreshParts()
 
 	if(!istype(obj_used, /obj/item/weapon/grab))
