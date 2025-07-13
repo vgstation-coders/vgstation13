@@ -13,7 +13,7 @@
 	var/mob/living/occupant = null
 	var/available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
 	var/crit_injectables = list(INAPROVALINE = "Inaprovaline", NITROGEN = "Nitrogen", LOCUTOGEN = "Locutogen")
-	var/amounts = list(5, 10)
+	var/amounts = list(5, 10, 20)
 	var/sedativeblock = FALSE //To prevent people from being surprisesoporific'd
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | EMAGGABLE
 	component_parts = newlist(
@@ -35,7 +35,7 @@
 	var/works_in_crit = FALSE //Will it let you inject chemicals into people in critical condition
 	var/hiss_noise = 'sound/machines/pressurehiss.ogg'
 	var/funny = FALSE //clown time?
-
+	var/info_hidden = FALSE //hides information about chems when set to true
 
 	//TODO - plugin system
 	var/accepts_plugins = TRUE
@@ -64,6 +64,7 @@
 		set_light(light_range_on, light_power_on)
 	else
 		set_light(0)
+	update_icon()
 
 /obj/machinery/sleeper/New()
 	..()
@@ -78,32 +79,14 @@
 /obj/machinery/sleeper/update_icon()
 	overlays = list()
 	icon_state = "[base_icon]_[occupant ? "1" : "0"]"
-	var/image/I
-	I = new('icons/obj/machines/plugins/sleeperplugin.dmi', "dan_blue_[occupant ? "closed" : "open"]")
-	overlays += I
+	for(var/obj/item/device/plugin/sleeper/plug in plugins)
+		plug.provide_overlay(src)
+	for(var/obj/item/device/plugin/sleeper/plug in plugins)
+		plug.provide_extra_overlay(src)
 	if(panel_open)
 		overlays += "sleeper-panel"
 	else
 		overlays -= "sleeper-panel"
-	I = new('icons/obj/machines/plugins/sleeperplugin.dmi', "dan_beff")
-	overlays += I
-	for(var/obj/plug in plugins)
-		if(istype(plug,/obj/item/device/plugin/sleeper/ntbasic))
-			I = new('icons/obj/machines/plugins/sleeperplugin64x32.dmi', "ntbasic_on")
-			I.pixel_x = -16
-			overlays += I
-			continue
-		if(istype(plug,/obj/item/device/plugin/sleeper/ntresearch))
-			I = new('icons/obj/machines/plugins/sleeperplugin.dmi', "miniconsole_on")
-			overlays += I
-			continue
-	//I = new('icons/obj/machines/plugins/sleeperplugin.dmi', "clown_hug")
-	//overlays += I
-	//if(occupant)
-	//	I = new('icons/obj/machines/plugins/sleeperplugin.dmi', "clown_closed_on")
-	//else
-	//	I = new('icons/obj/machines/plugins/sleeperplugin.dmi', "clown_open")
-	//overlays += I
 
 /obj/machinery/sleeper/RefreshParts()
 	var/T = 0
@@ -156,6 +139,8 @@
 			works_in_crit = TRUE
 		if(plug.funny)
 			funny = TRUE
+		if(plug.hides_info)
+			info_hidden = TRUE
 
 	if(overriding_chems)
 		for(var/obj/item/device/plugin/sleeper/plug in plugins)
@@ -240,26 +225,36 @@
 
 			var/paralysissum = max(occupant.paralysis, occupant.sleeping)
 			dat += "<hr>Paralysis summary: [paralysissum] ([round(paralysissum * 2)] seconds left!)<br>"
-			dat += "<a href='?src=\ref[src];wakeup=1'>Begin wake-up cycle</a><br>"
+			dat += "<a href='?src=\ref[src];eject=1'>Eject</a><a href='?src=\ref[src];wakeup=1'>Begin wake-up cycle</a><br>"
 			if(occupant.reagents)
 				for(var/chemical in available_options)
 					if (emagged && (occupant.reagents.get_reagent_amount(chemical) > 20))
 						dat += "<span style='float: left'>[available_options[chemical]]: 20 units</span><span style='float: right'>"
 					else
 						dat += "<span style='float: left'>[available_options[chemical]]: [round(occupant.reagents.get_reagent_amount(chemical), 0.1)] units</span><span style='float: right'>"
-
+					var/injecttext = "Inject "
 					for(var/amount in amounts)
-						dat += " <a href='?src=\ref[src];chemical=[chemical];amount=[amount]'>Inject [amount]u</a>"
+						dat += " <a href='?src=\ref[src];chemical=[chemical];amount=[amount]'"
+						if((!works_in_crit && occupant.health < 0) && !(chemical in crit_injectables))
+							dat += "class='darkred'"
+						dat += ">[injecttext][amount]u</a>"
+						injecttext = null
+					dat += "<a href='?src=\ref[src];info=[chemical]'>&#9432;</a>"
 					dat += "</span><br>"
 
 			dat += "<HR><A href='?src=\ref[src];refresh=1'>Refresh</A><BR>"
 
 		else
-			dat += "The sleeper is empty."
+			dat += "The sleeper is empty.<br><hr>"
+			for(var/chemical in available_options)
+				dat += "<span style='float: left'>[available_options[chemical]]: </span><span style='float: right'><a href='?src=\ref[src];info=[chemical]'>&#9432;</a></span><br>"
 	if(funny)
 		dat += "</font>"
 	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "\ref[src]", name, 400, 500)
+	if(funny)
+		popup.remove_stylesheets()
+		popup.add_stylesheet("clown", 'html/browser/clown.css')
 	popup.set_content(dat)
 	popup.open()
 
@@ -296,8 +291,15 @@
 					to_chat(usr, "<span class='danger'>This person is not in good enough condition for sleepers to be effective! Use another means of treatment, such as cryogenics!</span>")
 				else
 					inject_chemical(usr,href_list["chemical"],text2num(href_list["amount"]))
+		if(href_list["info"])
+			if(info_hidden)
+				to_chat(usr, "<span class='danger'>The sleeper shows some information, but it's unintelligible.</span>")
+			else if(reagent_name(href_list["info"]))
+				to_chat(usr, "<span class='notice'>[reagent_name(href_list["info"])]: [reagent_info(href_list["info"])]</span>")
 		if(href_list["wakeup"])
 			wakeup(usr)
+		if(href_list["eject"])
+			go_out(ejector = usr)
 		if(href_list["toggle_autoeject"])
 			auto_eject_after = !auto_eject_after
 		if(href_list["refresh"])
@@ -576,7 +578,8 @@
 		on = FALSE
 		if(auto_eject_after)
 			go_out(ejector = user)
-		process()
+		else
+			process()
 
 /obj/machinery/sleeper/Exited(var/atom/movable/O) // Used for teleportation from within the sleeper.
 	if (O == occupant)
@@ -604,6 +607,7 @@
 				ejector.start_pulling(B)
 	update_icon()
 	playsound(src, hiss_noise, 40, 1)
+	process()
 	return TRUE
 
 /obj/machinery/sleeper/proc/inject_chemical(mob/living/user as mob, chemical, amount)
@@ -622,12 +626,12 @@
 		var/reason = stripped_input(usr,"Please encode your message.","Locutogen Autoencoder","",REASON_LEN)
 		if(!reason)
 			return
-		occupant.reagents.add_reagent(chemical, amount)
+		occupant.reagents.add_reagent(chemical, amount, name_override = available_options[chemical])
 		var/datum/reagent/temp_hearer/D = occupant.reagents.get_reagent(LOCUTOGEN)
 		playsound(occupant, 'sound/effects/bubbles.ogg', 20, -3)
 		D.set_phrase(sanitize(reason))
 	else
-		occupant.reagents.add_reagent(chemical, amount)
+		occupant.reagents.add_reagent(chemical, amount, name_override = available_options[chemical])
 
 	//Advertising. Thanks, Dan!
 	if(advertising && !ad_cooldown)

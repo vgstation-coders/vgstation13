@@ -712,7 +712,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		warning("[usr] tried to equalize the temperature of a thermally-massless mixture.")
 		return T0C+20 //Sanity but this shouldn't happen.
 
-/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20, var/temp_adj = 0, var/mob/admin, var/list/additional_data=null)
+/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20, var/temp_adj = 0, var/mob/admin, var/list/additional_data=null, var/name_override = null)
 	if(!my_atom)
 		return 0
 	if(!amount)
@@ -723,7 +723,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(total_volume + amount > maximum_volume)
 		amount = (maximum_volume - total_volume) //Doesnt fit in. Make it disappear. Shouldn't happen. Will happen.
 	for (var/datum/reagent/R in reagent_list)
-		if (R.id == reagent)
+		if (R.id == reagent) //target already has reagent in their system
 
 			//Equalize temperatures
 			chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap * CC_PER_U)
@@ -739,37 +739,36 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			return 0
 
 	var/datum/reagent/D = chemical_reagents_list[reagent]
-	if(D)
-
-		var/datum/reagent/R = new D.type()
-
-		//Equalize temperatures
-		if(!total_volume)
-			chem_temp = reagtemp//adding reagents to an empty container? reset chem_temp
-		chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap * CC_PER_U)
-
-		reagent_list += R
-		R.holder = src
-		R.handle_data_copy(data, amount, admin)
-		if (additional_data)
-			R.handle_additional_data(additional_data)
-		R.volume = amount
-		if (temp_adj)
-			R.adj_temp = temp_adj
-
-		R.on_introduced()
-
-		update_total()
-		handle_special_behaviours()
-		my_atom.on_reagent_change()
-		handle_reactions()
-		return 0
-	else
+	if(!D)
 		warning("[my_atom] attempted to add a reagent called '[reagent]' which doesn't exist. ([usr])")
+		handle_reactions()
+		return 1
 
+	//target does not have the reagent in their system
+	var/datum/reagent/R = new D.type()
+	//Equalize temperatures
+	if(!total_volume)
+		chem_temp = reagtemp//adding reagents to an empty container? reset chem_temp
+	chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap * CC_PER_U)
+
+	reagent_list += R
+	R.holder = src
+	if(name_override)
+		R.name = name_override
+	R.handle_data_copy(data, amount, admin)
+	if (additional_data)
+		R.handle_additional_data(additional_data)
+	R.volume = amount
+	if (temp_adj)
+		R.adj_temp = temp_adj
+
+	R.on_introduced()
+
+	update_total()
+	handle_special_behaviours()
+	my_atom.on_reagent_change()
 	handle_reactions()
-
-	return 1
+	return 0
 
 /datum/reagents/proc/handle_special_behaviours()
 	for (var/datum/reagent/R in reagent_list)
@@ -1112,11 +1111,21 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 ///////////////////////////////////////////////////////////////////////////////////
 
-
+/*
+  * Helper proc that gets a default name from a reagent ID.
+  */
 /proc/reagent_name(id)
 	var/datum/reagent/D = chemical_reagents_list[id]
 	if(D)
 		return D.name
+
+/*
+  * Helper proc that gets a default description from a reagent ID.
+  */
+/proc/reagent_info(id)
+	var/datum/reagent/D = chemical_reagents_list[id]
+	if(D)
+		return D.description
 
 /*
  * Convenience proc to create a reagents holder for an atom

@@ -148,3 +148,13 @@
 	materials = list(MAT_IRON = 3750, MAT_PLASMA = 8000)
 	category = "Medical"
 	build_path = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+
+/datum/design/ntresearchsleeper
+	name = "Experimental Sleeper Upgrade Module"
+	desc = "An advanced module for sleepers, adding several advanced capabilities depending on hardware."
+	id = "ntresearchsleeper"
+	req_tech = list(Tc_ENGINEERING = 5, Tc_BIOTECH = 7, Tc_NANOTRASEN = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 7500, MAT_GLASS = 3750, MAT_PLASMA = 3750, MAT_DIAMOND = 200)
+	category = "Medical"
+	build_path = /obj/item/device/plugin/sleeper/ntresearch
