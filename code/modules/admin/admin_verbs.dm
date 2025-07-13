@@ -807,6 +807,7 @@ var/list/admin_verbs_mod = list(
 				send2adminirc("[key_name(src, showantag = FALSE)] deadminned themself - no more non-AFK admins online. - [admin_number_afk] AFK.")
 				send2admindiscord("[key_name(src, showantag = FALSE)] deadminned themself. **No more non-AFK admins online.** - **[admin_number_afk]** AFK", TRUE)
 		deadmin()
+		winset(src, null, list("browser-options"="-devtools"))
 		verbs += /client/proc/readmin
 		deadmins += ckey
 		to_chat(src, "<span class='interface'>You are now a normal player.</span>")
