@@ -685,7 +685,7 @@
 	can_only_hold = list(
 		"/obj/item/weapon/gun/energy/smalldisintegrator",
 		"/obj/item/weapon/gun/energy/ionrifle/ioncarbine/ionpistol",
-		"/obj/item/weapon/melee/stunprobe",
+		"/obj/item/weapon/melee/baton/stunprobe",
 		"/obj/item/device/flash",
 		"/obj/item/weapon/grenade",
 		"/obj/item/weapon/handcuffs",
@@ -962,201 +962,35 @@
 // AYY-THEMED STUN BATON (I tried several times to make this a child of the stun baton, but couldn't get it to play nice with the sprites. My apologies for what you're about to see)
 //////////////////////////////
 
-/obj/item/weapon/melee/stunprobe
+/obj/item/weapon/melee/baton/stunprobe
 	name = "stun probe"
 	desc = "An unusual baton used by MDF pacifiers. Less than lethal, not quite nonlethal."
 	icon_state = "stun probe"
 	item_state = "s_probe0"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	flags = FPRINT
-	slot_flags = SLOT_BELT
-	force = 10
-	throwforce = 7
-	w_class = W_CLASS_MEDIUM
 	origin_tech = Tc_COMBAT + "=3" + Tc_POWERSTORAGE + "=2"
-	attack_verb = list("beats")
-	var/status = 0
-	var/obj/item/weapon/cell/bcell = null
-	var/hitcost = 50 // 20 stuns with integrated cell, but can't upgrade or remove it. Doesn't have a normal baton's vulnerability to emp blasts. Compatible with rechargers
-	var/stunsound = 'sound/weapons/electriczap.ogg'
-	var/swingsound = "swing_hit"
+	hitcost = 50 // 20 stuns with integrated cell, but can't upgrade or remove it. Doesn't have a normal baton's vulnerability to emp blasts. Compatible with rechargers
+	can_swap_cell = FALSE
+	has_stun_message = FALSE
+	stunsound = 'sound/weapons/electriczap.ogg'
 
-/obj/item/weapon/melee/stunprobe/get_cell()
-	return bcell
-
-/obj/item/weapon/melee/stunprobe/suicide_act(var/mob/living/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is putting the live [src.name] in \his mouth! It looks like \he's trying to commit suicide.</span>")
-	return (SUICIDE_ACT_FIRELOSS)
-
-/obj/item/weapon/melee/stunprobe/New() // Should always start with a cell integrated
+/obj/item/weapon/melee/baton/stunprobe/New() // Should always start with a cell integrated
 	..()
 	bcell = new(src)
 	bcell.charge=bcell.maxcharge // Charge this shit
 	update_icon()
 
-/obj/item/weapon/melee/stunprobe/Destroy()
-	if (bcell)
-		QDEL_NULL(bcell)
+/obj/item/weapon/melee/baton/stunprobe/canbehonkified()
+	return FALSE
 
-	return ..()
-
-/obj/item/weapon/melee/stunprobe/proc/deductcharge(var/chrgdeductamt)
-	if(bcell)
-		if(bcell.use(chrgdeductamt))
-			if(bcell.charge < hitcost)
-				status = 0
-				update_icon()
-				depower()
-			return 1
-		else
-			status = 0
-			update_icon()
-			depower()
-			return 0
-
-/obj/item/weapon/melee/stunprobe/update_icon()
-	if(status)
-		icon_state = "[initial(name)]_active"
-		item_state = "s_probe1"
-	else if(!bcell)
-		icon_state = "[initial(name)]_nocell"
-		item_state = "s_probe0"
-	else
-		icon_state = "[initial(name)]"
-		item_state = "s_probe0"
-
-	if (istype(loc,/mob/living/carbon))
-		var/mob/living/carbon/M = loc
-		M.update_inv_back()
-		M.update_inv_hands()
-
-/obj/item/weapon/melee/stunprobe/examine(mob/user)
-	..()
-	if(bcell)
-		to_chat(user, "<span class='info'>The probe is [round(bcell.percent())]% charged.</span>")
-	if(!bcell)
-		to_chat(user, "<span class='warning'>The probe does not have a power source installed.</span>")
-
-/obj/item/weapon/melee/stunprobe/proc/shockAttack(mob/living/carbon/human/target) // The main difference between this and a stun baton. It uses an electric shock attack, so genetics can make a player resistant
+/obj/item/weapon/melee/baton/stunprobe/apply_baton_effect(mob/living/L) // The main difference between this and a stun baton. It uses an electric shock attack, so genetics can make a player resistant
 	var/damage = rand(5, 10)
-	target.electrocute_act(damage, src, incapacitation_duration = 20 SECONDS, def_zone = LIMB_CHEST) // 20 code seconds is more like 10 real seconds, thus making the stun equal to the stun baton
-	if(iscarbon(target))
-		var/mob/living/L = target
-		L.apply_effect(10, STUTTER)
-	return
-
-/obj/item/weapon/melee/stunprobe/attack_self(mob/user)
-	if(status && clumsy_check(user) && prob(50))
-		user.simple_message("<span class='warning'>You grab the [src] on the wrong side.</span>",
-			"<span class='danger'>The [name] blasts you with its power!</span>")
-		shockAttack(user)
-		playsound(loc, "sparks", 75, 1, -1)
-		deductcharge(hitcost)
-		return
-	if(bcell && bcell.charge >= hitcost)
-		status = !status
-		user.simple_message("<span class='notice'>[src] is now [status ? "on" : "off"].</span>",
-			"<span class='notice'>[src] is now [pick("drowsy","hungry","thirsty","bored","unhappy")].</span>")
-		playsound(loc, "sparks", 75, 1, -1)
-		update_icon()
+	if(ishuman(L))
+		var/mob/living/carbon/human/H = L
+		H.electrocute_act(damage, src, incapacitation_duration = 20 SECONDS, def_zone = LIMB_CHEST) // 20 code seconds is more like 10 real seconds, thus making the stun equal to the stun baton
 	else
-		status = 0
-		if(!bcell)
-			user.simple_message("<span class='warning'>[src] does not have a power source!</span>",
-				"<span class='warning'>[src] has no pulse and its soul has departed...</span>")
-		else if (bcell.maxcharge < hitcost)
-			to_chat(user, "<span class='warning'>[src] clicks but nothing happens. Something must be wrong with the battery.</span>")
-		else
-			user.simple_message("<span class='warning'>[src] is out of charge.</span>",
-				"<span class='warning'>[src] refuses to obey you.</span>")
-
-	add_fingerprint(user)
-
-/obj/item/weapon/melee/stunprobe/attack(mob/M, mob/user)
-	if(status && clumsy_check(user) && prob(50))
-		user.simple_message("<span class='danger'>You accidentally hit yourself with [src]!</span>",
-			"<span class='danger'>The [name] goes mad!</span>")
-		shockAttack(user)
-		deductcharge(hitcost)
-		return
-
-	if(isrobot(M))
-		..()
-		return
-	if(!isliving(M))
-		return
-
-	var/mob/living/L = M
-
-	if(user.a_intent == I_HURT) // Harm intent : possibility to miss (in exchange for doing actual damage)
-		. = ..() // Does the actual damage and missing chance. Returns null on sucess ; 0 on failure (blame oldcoders)
-		playsound(loc, swingsound, 50, 1, -1)
-
-	else
-		if(!status) // Help intent + no charge = nothing
-			L.visible_message("<span class='attack'>\The [L] has been prodded with \the [src] by \the [user]. Luckily it was off.</span>",
-				self_drugged_message="<span class='warning'>\The [name] decides to spare this one.</span>")
-			return
-
+		L.electrocute_act(damage, src)
 	if(iscarbon(L))
-		var/mob/living/carbon/C = L
-		if(C.check_shields(force,src))
-			return FALSE //That way during a harmbaton it will not check for the shield twice
-
-	if(status && . != FALSE) // This is charged : we stun
-		user.lastattacked = L
-		L.lastattacker = user
-
-		shockAttack(L)
-		playsound(loc, stunsound, 50, 1, -1)
-
-		deductcharge(hitcost)
-
-		L.forcesay(hit_appends)
-
-		user.attack_log += "\[[time_stamp()]\]<font color='red'> Zapped [L.name] ([L.ckey]) with [name]</font>"
-		L.attack_log += "\[[time_stamp()]\]<font color='orange'> Zapped by [user.name] ([user.ckey]) with [name]</font>"
-		log_attack("<font color='red'>[user.name] ([user.ckey]) zapped [L.name] ([L.ckey]) with [name]</font>" )
-		M.assaulted_by(user)
-
-/obj/item/weapon/melee/stunprobe/throw_impact(atom/hit_atom)
-	if(prob(50))
-		return ..()
-	if(!isliving(hit_atom) || !status)
-		return
-	var/client/foundclient = directory[ckey(fingerprintslast)]
-	var/mob/foundmob = foundclient.mob
-	var/mob/living/L = hit_atom
-	if(foundmob && ismob(foundmob))
-		foundmob.lastattacked = L
-		L.lastattacker = foundmob
-
-	shockAttack(L)
-	playsound(loc, stunsound, 50, 1, -1)
-
-	deductcharge(hitcost)
-
-	L.forcesay(hit_appends)
-
-	foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Zapped [L.name] ([L.ckey]) with [name]</font>"
-	L.attack_log += "\[[time_stamp()]\]<font color='orange'> Zapped by thrown [src] by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""])</font>"
-	log_attack("<font color='red'>Flying [src.name], thrown by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) zapped [L.name] ([L.ckey])</font>" )
-	L.assaulted_by(foundmob)
-
-/obj/item/weapon/melee/stunprobe/emp_act(severity)
-	if(bcell)
-		deductcharge(1000 / severity)
-		if(bcell.reliability != 100 && prob(50/severity))
-			bcell.reliability -= 10 / severity
-	..()
-
-/obj/item/weapon/melee/stunprobe/restock()
-	if(bcell)
-		bcell.charge = bcell.maxcharge
-
-/obj/item/weapon/melee/stunprobe/proc/depower()
-	force = initial(force)
-	throwforce = initial(throwforce)
+		L.apply_effect(10, STUTTER)
 
 //////////////////////////////
 // AYY SINKS, TOILETS, AND SHOWERS (Only attainable via the vault and bussing for now. Coders forgive me for this terrible copy-paste apocalypse.)
