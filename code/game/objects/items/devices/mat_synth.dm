@@ -97,7 +97,11 @@ var/static/list/mat2type = list(
 							 "diamond" = /obj/item/stack/sheet/mineral/diamond,
 							 "plasma" = /obj/item/stack/sheet/mineral/plasma,
 							 "uranium" = /obj/item/stack/sheet/mineral/uranium,
-							 "plastic" = /obj/item/stack/sheet/mineral/plastic)
+							 "plastic" = /obj/item/stack/sheet/mineral/plastic,
+							 "bananium" = /obj/item/stack/sheet/mineral/clown,
+							 "phazon" = /obj/item/stack/sheet/mineral/phazon,
+							 "sandstone" = /obj/item/stack/sheet/mineral/sandstone,
+							 "wooden planks" = /obj/item/stack/sheet/wood)
 
 /obj/item/device/material_synth/update_icon()
 	icon_state = "mat_synth[mode ? "on" : "off"]"
