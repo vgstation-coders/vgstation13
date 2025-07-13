@@ -175,10 +175,12 @@
 
 	var/mob/living/L = M
 
-	var/harm_intent = FALSE //Used in determining if the stun is applied
+	var/baton_tap = TRUE //Used in determining if the stun is applied
 	if(user.a_intent == I_HURT) // Harm intent : possibility to miss (in exchange for doing actual damage)
 		. = ..() // Does the actual damage and missing chance. Returns 1 on success, 0 on failure.
-		harm_intent = TRUE
+		if(!.) //We didn't hit, do not attempt to stun.
+			return
+		baton_tap = FALSE
 
 	else
 		if(!status) // Help intent + no charge = nothing
@@ -186,15 +188,15 @@
 				self_drugged_message="<span class='warning'>\The [name] decides to spare this one.</span>")
 			return
 
-	if(iscarbon(L) && !harm_intent) //Shield checking is already handled in ..(), this is for non-harmful stunbatons.
+	if(baton_tap && iscarbon(L)) //Shield checking is already handled in ..(), this is for non-harmful stunbatons.
 		var/mob/living/carbon/C = L
 		if(C.check_shields(force,src))
 			return FALSE
 
 	//Has to be turned on.
-	//Either hit (returned 1 on ..()), or didn't hit (returned 0 or was not defined) but isn't on harm intent (thus it's a non-harmful baton attack).
+	//Either hit (returned 1 on harm intent attack), or isn't on harm intent (we quit early).
 	//Help intent has no chance to miss on an attack.
-	if(status && (. || (!. && !harm_intent))) // This is charged : we stun
+	if(status && (. || baton_tap)) // This is charged : we stun
 		user.lastattacked = L
 		L.lastattacker = user
 
@@ -215,7 +217,7 @@
 		M.assaulted_by(user)
 
 /obj/item/weapon/melee/baton/throw_impact(atom/hit_atom)
-	if(prob(50)) //Landed handle-first into the target
+	if(prob(50) || isrobot(hit_atom)) //Landed handle-first into the target, or is a robot that's not supposed to be affected by baton effects.
 		return ..()
 	if(!isliving(hit_atom) || !status)
 		return
@@ -301,7 +303,6 @@
 	L.apply_effect(10, STUTTER) //sanity
 	L.apply_effect(stunforce, AGONY) //apply pain by throwing, it doesn't damage them though
 	L.audible_scream()
-	return
 
 /obj/item/weapon/melee/baton/harm/attack_self(mob/user) //putting this here because having damage increases closer to harm baton is more clear
 	if(status && clumsy_check(user) && prob(50))
