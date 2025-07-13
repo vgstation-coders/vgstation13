@@ -194,7 +194,7 @@
 			return FALSE
 
 	//Has to be turned on.
-	//Either hit (returned 1 on harm intent attack), or isn't on harm intent (we quit early).
+	//Either hit (returned 1 on harm intent attack), or isn't on harm intent (we quit early if it is on harm intent and failed).
 	//Help intent has no chance to miss on an attack.
 	if(status && (. || baton_tap)) // This is charged : we stun
 		user.lastattacked = L
