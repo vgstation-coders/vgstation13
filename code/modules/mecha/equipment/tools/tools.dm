@@ -995,7 +995,7 @@
 	name = "\improper Energy Relay Module"
 	desc = "Wirelessly drains energy from any available power channel in area. The performance index is quite low."
 	icon_state = "tesla"
-	origin_tech = Tc_MAGNETS + "=4;" + Tc_SYNDICATE + "=2"
+	origin_tech = Tc_MAGNETS + "=4;" + Tc_POWERSTORAGE + "=3"
 	equip_cooldown = 10
 	energy_drain = 0
 	range = 0
