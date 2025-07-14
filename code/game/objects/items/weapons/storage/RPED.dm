@@ -23,6 +23,7 @@
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/bluespace/admin
 	var/stock_rating = 4
+	var/cell_rating = 15
 	admin_desc = "This one seems to have infinite parts. Use this in hand to change the ratings of stock parts applied."
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/bluespace/admin/attack_self(mob/user)
@@ -39,8 +40,20 @@
 				var/obj/item/weapon/stock_parts/S = part
 				if(initial(S.rating) == stock_rating)
 					for(var/i in 1 to 10)
-						new part(src)
+						S = new part(src)
 						handle_item_insertion(S, 1)	
+			for(var/part2 in subtypesof(/obj/item/weapon/cell))
+				var/obj/item/weapon/cell/C = part2
+				if(initial(C.rating) == cell_rating)
+					for(var/i in 1 to 10)
+						C = new part2(src)
+						handle_item_insertion(C, 1)	
+			for(var/part3 in subtypesof(/obj/item/robot_parts/robot_component))
+				var/obj/item/robot_parts/robot_component/R = part3
+				if(initial(R.isupgrade))
+					for(var/i in 1 to 10)
+						R = new part3(src)
+						handle_item_insertion(R, 1)
 		to_chat(user,"[src] contains: [counted_english_list(contents)]")
 	. = ..()
 
