@@ -328,8 +328,6 @@
         if(L)
             var/list/pollreplies = list()
             if(polloptions?.len)
-                polls += list(t)
-                polls[t] = polloptions.Copy()
                 for(var/opt in polloptions)
                     pollreplies += list("<a href='byond://?src=\ref[P_app];choice=Message;setmsg=[opt];pollmsg=[t];skiprefresh=1;target=\ref[reply_to]'>[opt]</a>")
             var/pollreply = ""
@@ -381,6 +379,8 @@
     if (message_app.last_text && world.time < message_app.last_text + 5)
         return
     message_app.last_text = world.time
+    if(newpoll)
+        message_app.polls[t] = newpoll.Copy()
     for(var/obj/machinery/pda_multicaster/multicaster in pda_multicasters)
         if(multicaster.check_status())
             var/datum/signal/signal = pda_device.telecomms_process()
