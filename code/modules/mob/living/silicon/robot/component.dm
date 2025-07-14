@@ -191,21 +191,23 @@
 				var/obj/item/weapon/cell/cell = C.wrapped
 				for(var/obj/item/weapon/cell/I2 in W.contents)
 					if((I2.rating > cell.rating))
-						C.uninstall(user)
 						if(C.wrapped)
 							W.handle_item_insertion(C.wrapped, 1)
+						C.uninstall(user)
 						C.install(user,I2)
-						W.remove_from_storage(I2, src)
+						W.remove_from_storage(I2, null)
+						I2.forceMove(src)
 						shouldplaysound = TRUE //Only play the sound when parts are actually replaced!
 						break
 			else
 				for(var/obj/item/robot_parts/robot_component/I in W.contents)
 					if((I.isupgrade && !C.upgraded) && istype(I, C.external_type))
-						C.uninstall(user)
 						if(C.wrapped)
 							W.handle_item_insertion(C.wrapped, 1)
+						C.uninstall(user)
 						C.install(user,I)
-						W.remove_from_storage(I, src)
+						W.remove_from_storage(I, null)
+						I.forceMove(src)
 						shouldplaysound = TRUE //Only play the sound when parts are actually replaced!
 						break
 		if(shouldplaysound)
