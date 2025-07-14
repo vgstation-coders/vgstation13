@@ -335,8 +335,6 @@
             var/pollreply = ""
             if(pollreplies.len)
                 pollreply = jointext(pollreplies," | ")
-            if(pollmessage && (pollmessage in P_app.polls) && (t in P_app.polls[pollmessage]))
-                P_app.polls[pollmessage][t]++
             L.show_message("[bicon(P)] <b>Message from [pda_device.owner] ([pda_device.ownjob]),</b> \"[t]\" \
             [pollreply != "" ? " ([pollreply]) " : ""]\
             [pollmessage && (pollmessage in P_app.polls) && (t in P_app.polls[pollmessage]) ? " (Current votes: [P_app.polls[pollmessage][t]]) " : ""]\
