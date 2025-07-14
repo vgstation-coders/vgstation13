@@ -496,6 +496,8 @@ if ungreased adult: l containers
 			person.heal_organ_damage(0, 2)
 		if(person.getToxLoss())
 			person.adjustToxLoss(-2)
+	if(prob(3)) //life proc 2 seconds, this will give approximately one spiderling a minute
+		new /mob/living/simple_animal/hostile/giant_spider/spiderling/clownling(loc)
 
 /mob/living/simple_animal/rampagingspacehog/sleeperclown/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	playsound(src, "clownstep", 50, 1)
