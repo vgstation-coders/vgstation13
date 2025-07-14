@@ -58,8 +58,8 @@
 
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro/proc/fold_scanner()
 	if(usr.is_holding_item(src))
-		usr.playsound_local(usr, 'sound/misc/metal_drag3.ogg', 30, 0, 30000, TRUE, 0, FALSE)
-		if(do_after(usr, src, 3 SECONDS))
+		if(do_after(usr, src, 1 SECONDS))
+			usr.playsound_local(usr, (folded ? 'sound/misc/cartridge_in.ogg' : 'sound/misc/cartridge_out.ogg'), 30, 0, 30000, TRUE, 0, FALSE)	
 			if(folded)
 				usr.playsound_local(usr, 'sound/machines/HAPF2.ogg', 30, 0, 30000, TRUE, 0, FALSE)
 				flick("adv_health_start", src)
