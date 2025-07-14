@@ -391,6 +391,7 @@ if ungreased adult: l containers
 	size = SIZE_BIG
 	var/dashspeed = 3 //How fast it paths!
 	var/nextsqueal = 0
+	var/squeal_delay = 2 SECONDS
 	var/list/homes = list() //Places the rampaging hog will try to go
 	var/obj/item/weapon/card/id/captains_spare/CS
 	var/target //Where we're heading
@@ -427,7 +428,7 @@ if ungreased adult: l containers
 	if(homes.len<2)
 		homes += get_open_maintenance_turfs(4)
 	if(nextsqueal < world.time)
-		nextsqueal = world.time + (2 SECONDS)
+		nextsqueal = world.time + squeal_delay
 		playsound(loc, hurt_sound, 50, 0)
 	target = pick(homes)
 	path = get_path_to(src, target, max_distance=500, id = CS)
@@ -477,6 +478,7 @@ if ungreased adult: l containers
 	attack_sound = 'sound/items/bikehorn.ogg'
 	hurt_sound = 'sound/items/bikehorn_curaracha.ogg'
 	snort_sound = 'sound/items/bikehorn.ogg'
+	squeal_delay = 4 SECONDS
 
 /mob/living/simple_animal/rampagingspacehog/Life()
 	..()
