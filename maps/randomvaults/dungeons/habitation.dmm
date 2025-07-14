@@ -53,7 +53,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
 "az" = (
-/obj/structure/acidtoilet{
+/obj/structure/toilet/acid{
 	dir = 4
 	},
 /obj/machinery/light/small/broken{
@@ -279,7 +279,7 @@
 /area/vault/mothership_lab/cave)
 "cB" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/acidtoilet,
+/obj/structure/toilet/acid,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/hobo)
 "cF" = (
@@ -468,7 +468,7 @@
 /obj/structure/mirror{
 	pixel_y = 33
 	},
-/obj/structure/acidsink{
+/obj/structure/sink/acid{
 	dir = 8;
 	pixel_x = 10
 	},
@@ -1001,7 +1001,7 @@
 /area/vault/mothership_lab/hobo)
 "iC" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 8
 	},
 /obj/structure/curtain/open/shower/left,
@@ -1202,7 +1202,7 @@
 /area/vault/mothership_lab/raidtunnel_lower)
 "ku" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/acidsink{
+/obj/structure/sink/acid{
 	dir = 1;
 	pixel_y = -18
 	},
@@ -1212,7 +1212,7 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/administration)
 "kF" = (
-/obj/structure/acidsink{
+/obj/structure/sink/acid{
 	dir = 1;
 	pixel_y = -18
 	},
@@ -1840,7 +1840,7 @@
 /turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/administration)
 "pr" = (
-/obj/structure/acidsink{
+/obj/structure/sink/acid{
 	dir = 8;
 	pixel_x = 10
 	},
@@ -2247,7 +2247,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/administration)
 "sU" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 4
 	},
 /obj/structure/curtain/open/shower/right,
@@ -2342,7 +2342,7 @@
 /area/vault/mothership_lab/habitation)
 "tI" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/acidtoilet,
+/obj/structure/toilet/acid,
 /obj/machinery/light/small/broken{
 	dir = 1
 	},
@@ -2453,7 +2453,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "vd" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 4
 	},
 /obj/machinery/door/window/plasma{
@@ -2632,7 +2632,7 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
 "wB" = (
-/obj/structure/acidtoilet,
+/obj/structure/toilet/acid,
 /obj/machinery/light/small{
 	dir = 1
 	},
@@ -2884,7 +2884,7 @@
 /area/vault/mothership_lab/habitation)
 "yE" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 8
 	},
 /turf/unsimulated/floor,
@@ -3100,7 +3100,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/habitation)
 "Bb" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 8
 	},
 /obj/structure/curtain/open/shower/left,
@@ -3343,7 +3343,7 @@
 /area/vault/mothership_lab/habitation)
 "DH" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 4
 	},
 /turf/unsimulated/floor,
@@ -3373,7 +3373,7 @@
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/habitation)
 "DU" = (
-/obj/structure/acidsink{
+/obj/structure/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -3558,7 +3558,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/habitation)
 "Fq" = (
-/obj/machinery/acidshower{
+/obj/machinery/shower/acid{
 	dir = 4
 	},
 /turf/unsimulated/floor/lab_sterile,
@@ -3796,7 +3796,7 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
 	},
-/obj/structure/acidsink{
+/obj/structure/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -4904,7 +4904,7 @@
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/cave)
 "Rk" = (
-/obj/structure/acidsink{
+/obj/structure/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -5358,7 +5358,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/obj/structure/acidsink{
+/obj/structure/sink/acid{
 	dir = 1;
 	pixel_y = -18
 	},
@@ -5409,7 +5409,7 @@
 /area/vault/mothership_lab/cave)
 "Vz" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/acidsink{
+/obj/structure/sink/acid{
 	dir = 4;
 	pixel_x = -11
 	},
@@ -5562,7 +5562,7 @@
 	blood_color = "#2299FC";
 	icon_state = "floor5"
 	},
-/obj/structure/acidsink{
+/obj/structure/sink/acid{
 	pixel_y = 28
 	},
 /obj/item/weapon/kitchen/utensil/knife/tactical,
@@ -5665,7 +5665,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
 "Xq" = (
-/obj/structure/acidtoilet{
+/obj/structure/toilet/acid{
 	dir = 8
 	},
 /turf/unsimulated/floor/lab_sterile,
