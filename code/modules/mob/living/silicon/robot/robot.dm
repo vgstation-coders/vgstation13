@@ -782,8 +782,8 @@
 		help_shake_act(user)
 		return FALSE
 
-	/*else if(istype(W, /obj/item/weapon/storage/bag/gadgets/part_replacer))
-		return exchange_parts(user, W)*/
+	else if(istype(W, /obj/item/weapon/storage/bag/gadgets/part_replacer))
+		return exchange_parts(user, W)
 
 	else
 		if(W.force > 0)
