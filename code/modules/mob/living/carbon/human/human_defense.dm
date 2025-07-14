@@ -235,7 +235,7 @@ emp_act
 	..()
 
 
-/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
+/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor, var/force)
 	if(!..())
 		return
 	var/power = I.force
