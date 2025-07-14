@@ -328,7 +328,8 @@
         if(L)
             var/list/pollreplies = list()
             if(polloptions?.len)
-                polls[t] = polloptions
+                polls += list(t)
+                polls[t] = polloptions.Copy()
                 for(var/opt in polloptions)
                     pollreplies += list("<a href='byond://?src=\ref[P_app];choice=Message;setmsg=[opt];pollmsg=[t];skiprefresh=1;target=\ref[reply_to]'>[opt]</a>")
             var/pollreply = ""
