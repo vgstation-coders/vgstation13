@@ -73,6 +73,7 @@
 	update_icon()
 
 /obj/structure/toilet/proc/get_contents_w_class()
+	. = 0
 	for(var/obj/item/I in contents)
 		. += I.w_class
 
