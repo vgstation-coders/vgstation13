@@ -70,7 +70,7 @@
                 for(var/poll in polls)
                     dat += "Poll name: [poll]<br>Results:<br>"
                     for (var/answer in polls[poll])
-                        dat += " * [polls[poll]]: [polls[poll][answer]]<br>"
+                        dat += " * [answer]: [polls[poll][answer]]<br>"
             dat += "<br>"
     return dat
 
