@@ -363,16 +363,16 @@
         return
     var/t = input(user, "Please enter message", "Message to [target]", null) as text|null
     var/pollamt = clamp(input(user, "Create poll? (2 or more choices, less skips)", "Message to [target]", 0) as num|null,0,5)
-    var/list/polls = null
+    var/list/newpoll = null
     if(pollamt > 1)
-        polls = list()
+        newpoll = list()
         for(var/i in 1 to pollamt)
             var/inpt = input(user, "Please enter poll option ([i] of [pollamt])", "Message to [target]", "") as text
             inpt = copytext(sanitize(inpt), 1, MAX_MESSAGE_LEN)
             if(!inpt || inpt == "")
-                polls = null
+                newpoll = null
                 break
-            polls += list(inpt)
+            newpoll += list(inpt)
     t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
 
     var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in pda_device.applications
@@ -392,7 +392,7 @@
                         //Let's make this barely readable
                         if(signal.data["compression"] > 0)
                             t = Gibberish(t, signal.data["compression"] + 50)
-                        multicaster.multicast(target,pda_device,user,t,polls)
+                        multicaster.multicast(target,pda_device,user,t,newpoll)
                         message_app.tnote["[msg_id]"] = "<i><b>&rarr; To [target]:</b></i><br>[t]<br>"
                         msg_id++
                         return
