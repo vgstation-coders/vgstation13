@@ -2005,3 +2005,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PVAR_FADE		"fade"
 
 #define ZAS_DUST_TURFS_PER_TICK	20
+
+#define LOBBY_TICKING_STOPPED 0
+#define LOBBY_TICKING 1
+#define LOBBY_TICKING_RESTARTED 2

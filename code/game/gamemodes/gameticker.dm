@@ -53,9 +53,6 @@ var/datum/controller/gameticker/ticker
 	// Tag mode!
 	var/tag_mode_enabled = FALSE
 
-
-#define LOBBY_TICKING 1
-#define LOBBY_TICKING_RESTARTED 2
 /datum/controller/gameticker/proc/pregame()
 	var/path = "sound/music/login/"
 	if(Holiday == APRIL_FOOLS_DAY)
@@ -86,11 +83,20 @@ var/datum/controller/gameticker/ticker
 			pregame_timeleft = world.timeofday + delay_timetotal
 			to_chat(world, "<B><span class='notice'>Welcome to the pre-game lobby!</span></B>")
 			to_chat(world, "Please, setup your character and select ready. Game will start in [(delay_timetotal) / 10] seconds.")
+		var/noplayers = FALSE
 		while(current_state <= GAME_STATE_PREGAME)
 			for(var/i=0, i<10, i++)
 				sleep(1)
 				vote.process()
 				watchdog.check_for_update()
+			if(!player_list.len)
+				going = LOBBY_TICKING_STOPPED
+				noplayers = TRUE
+				continue
+			else if(!going && noplayers)
+				going = LOBBY_TICKING
+				pregame_timeleft = world.timeofday + delay_timetotal
+				noplayers = FALSE
 			if (world.timeofday < (863800 -  delay_timetotal) &&  pregame_timeleft > 863950) // having a remaining time > the max of time of day is bad....
 				pregame_timeleft -= 864000
 			if(!going && !remaining_time)
@@ -102,8 +108,6 @@ var/datum/controller/gameticker/ticker
 			if(going && world.timeofday >= pregame_timeleft)
 				current_state = GAME_STATE_SETTING_UP
 	while (!setup())
-#undef LOBBY_TICKING
-#undef LOBBY_TICKING_RESTARTED
 
 /datum/controller/gameticker/proc/IsThematic(var/playlist)
 	if(!theme)
