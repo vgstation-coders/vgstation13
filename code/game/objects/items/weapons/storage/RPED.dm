@@ -24,6 +24,7 @@
 /obj/item/weapon/storage/bag/gadgets/part_replacer/bluespace/admin
 	var/stock_rating = 4
 	var/cell_rating = 15
+	var/borg_upgrades = TRUE
 	admin_desc = "This one seems to have infinite parts. Use this in hand to change the ratings of stock parts applied."
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/bluespace/admin/attack_self(mob/user)
@@ -41,13 +42,15 @@
 				if(initial(S.rating) == stock_rating)
 					for(var/i in 1 to 10)
 						S = new part(src)
-						handle_item_insertion(S, 1)	
+						handle_item_insertion(S, 1)
+		if(cell_rating > 1)
 			for(var/part2 in subtypesof(/obj/item/weapon/cell))
 				var/obj/item/weapon/cell/C = part2
 				if(initial(C.rating) == cell_rating)
 					for(var/i in 1 to 10)
 						C = new part2(src)
-						handle_item_insertion(C, 1)	
+						handle_item_insertion(C, 1)
+		if(borg_upgrades)
 			for(var/part3 in subtypesof(/obj/item/robot_parts/robot_component))
 				var/obj/item/robot_parts/robot_component/R = part3
 				if(initial(R.isupgrade))
