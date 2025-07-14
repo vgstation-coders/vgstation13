@@ -72,7 +72,8 @@ var/list/pda_multicasters = list()
 		"Medical" = list(/obj/item/device/pda/medical,/obj/item/device/pda/viro,/obj/item/device/pda/chemist,/obj/item/device/pda/geneticist,/obj/item/device/pda/heads/cmo),
 		"Research" = list(/obj/item/device/pda/toxins,/obj/item/device/pda/roboticist,/obj/item/device/pda/mechanic,/obj/item/device/pda/geneticist,/obj/item/device/pda/heads/rd),
 		"Cargo" = list(/obj/item/device/pda/cargo,/obj/item/device/pda/shaftminer,/obj/item/device/pda/quartermaster),
-		"Service" = list(/obj/item/device/pda/botanist,/obj/item/device/pda/chef,/obj/item/device/pda/bar)
+		"Service" = list(/obj/item/device/pda/botanist,/obj/item/device/pda/chef,/obj/item/device/pda/bar),
+		"Everyone" = list(/obj/item/device/pda)
 	)
 
 	var/list/available_pdas = CAMO.available_pdas() //Let's not recalculate this every time.

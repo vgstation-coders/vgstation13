@@ -359,11 +359,8 @@
     var/target = input("Select a department", "CAMO Service") as null|anything in department_list
     if(!target)
         return
-    var/list/targets = list(target)
-    if(target == "Everyone")
-        targets = department_list.Copy()
     var/t = input(user, "Please enter message", "Message to [target]", null) as text|null
-    var/pollamt = clamp(input(user, "Create poll? (2 or more choices, less skips)", "Message to [target]", 0) as num|null,2,5)
+    var/pollamt = clamp(input(user, "Create poll? (2 or more choices, less skips)", "Message to [target]", 0) as num|null,0,5)
     var/list/polls = null
     if(pollamt > 1)
         polls = list()
@@ -393,8 +390,7 @@
                         //Let's make this barely readable
                         if(signal.data["compression"] > 0)
                             t = Gibberish(t, signal.data["compression"] + 50)
-                        for(var/targ in targets)
-                            multicaster.multicast(targ,pda_device,user,t,polls)
+                        multicaster.multicast(target,pda_device,user,t,polls)
                         message_app.tnote["[msg_id]"] = "<i><b>&rarr; To [target]:</b></i><br>[t]<br>"
                         msg_id++
                         return
