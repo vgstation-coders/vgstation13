@@ -159,6 +159,7 @@
 		if(user.drop_item(I, src))
 			w_items += I.w_class
 			to_chat(user, "You carefully place \the [I] into the cistern.")
+			watersource.reagents.reaction(I, TOUCH) // Handles water affecting items, such as making dissolvable items dissolve.
 			return
 
 /obj/structure/toilet/bite_act(mob/user)
