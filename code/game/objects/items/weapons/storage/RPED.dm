@@ -49,16 +49,14 @@
 			for(var/part2 in subtypesof(/obj/item/weapon/cell))
 				var/obj/item/weapon/cell/C = part2
 				if(initial(C.rating) == cell_rating)
-					for(var/i in 1 to 10)
-						C = new part2(src)
-						handle_item_insertion(C, 1)
+					C = new part2(src)
+					handle_item_insertion(C, 1)
 		if(borg_upgrades)
 			for(var/part3 in subtypesof(/obj/item/robot_parts/robot_component))
 				var/obj/item/robot_parts/robot_component/R = part3
 				if(initial(R.isupgrade))
-					for(var/i in 1 to 10)
-						R = new part3(src)
-						handle_item_insertion(R, 1)
+					R = new part3(src)
+					handle_item_insertion(R, 1)
 		to_chat(user,"[src] contains: [counted_english_list(contents)]")
 	. = ..()
 
