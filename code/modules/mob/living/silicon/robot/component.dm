@@ -195,7 +195,7 @@
 						if(C.wrapped)
 							W.handle_item_insertion(C.wrapped, 1)
 						C.install(user,I2)
-						W.remove_from_storage(I2, null)
+						W.remove_from_storage(I2, src)
 						shouldplaysound = TRUE //Only play the sound when parts are actually replaced!
 						break
 			else
@@ -205,7 +205,7 @@
 						if(C.wrapped)
 							W.handle_item_insertion(C.wrapped, 1)
 						C.install(user,I)
-						W.remove_from_storage(I, null)
+						W.remove_from_storage(I, src)
 						shouldplaysound = TRUE //Only play the sound when parts are actually replaced!
 						break
 		if(shouldplaysound)
