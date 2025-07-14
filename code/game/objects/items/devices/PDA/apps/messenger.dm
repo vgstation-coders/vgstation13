@@ -334,9 +334,11 @@
             var/pollreply = ""
             if(pollreplies.len)
                 pollreply = jointext(pollreplies," | ")
+            if(pollmessage && (pollmessage in P_app.polls) && (t in P_app.polls[pollmessage]))
+                P_app.polls[pollmessage][t]++
             L.show_message("[bicon(P)] <b>Message from [pda_device.owner] ([pda_device.ownjob]),</b> \"[t]\" \
             [pollreply != "" ? " ([pollreply]) " : ""]\
-            [(pollmessage in P_app.polls) && (t in P_app.polls[pollmessage]) && P_app.polls[pollmessage][t] > 0 ? " (Current votes: [P_app.polls[pollmessage][t]]) " : ""]\
+            [pollmessage && (pollmessage in P_app.polls) && (t in P_app.polls[pollmessage]) ? " (Current votes: [P_app.polls[pollmessage][t]]) " : ""]\
             [pda_device.photo ? "(<a href='byond://?src=\ref[P_app];choice=viewPhoto;image=\ref[pda_device.photo];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)" : ""] \
             (<a href='byond://?src=\ref[P_app];choice=Message;skiprefresh=1;target=\ref[reply_to]'>Reply</a>)", 2)
         U.show_message("[bicon(pda_device)] <span class='notice'>Message for <a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[P]'>[P]</a> has been sent.</span>")
