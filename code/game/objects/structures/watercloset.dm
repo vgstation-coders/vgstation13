@@ -12,7 +12,6 @@
 	var/state = 0			//1 if rods added; 0 if not
 	var/open = 0			//if the lid is up
 	var/cistern = 0			//if the cistern bit is open
-	var/w_items = 0			//the combined w_class of all the items in the cistern
 	var/mob/living/swirlie = null	//the mob being given a swirlie
 	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
 	var/watertype = /obj/item/weapon/reagent_containers/glass/beaker/water
@@ -63,16 +62,19 @@
 			return
 		else
 			var/obj/item/I = pick(contents)
-			if(ishuman(user))
+			if(ishuman(user) && istype(I))
 				user.put_in_hands(I)
 			else
 				I.forceMove(get_turf(src))
 			to_chat(user, "<span class='notice'>You find \an [I] in the cistern.</span>")
-			w_items -= I.w_class
 			return
 
 	open = !open
 	update_icon()
+
+/obj/structure/toilet/proc/get_contents_w_class()
+	for(var/obj/item/I in contents)
+		. += I.w_class
 
 /obj/structure/toilet/update_icon()
 	icon_state = "[base_icon][open][cistern]"
@@ -153,11 +155,10 @@
 		if(I.w_class > W_CLASS_MEDIUM)
 			to_chat(user, "<span class='notice'>\The [I] does not fit.</span>")
 			return
-		if(w_items + I.w_class > W_CLASS_HUGE)
+		if(get_contents_w_class() + I.w_class > W_CLASS_HUGE)
 			to_chat(user, "<span class='notice'>The cistern is full.</span>")
 			return
 		if(user.drop_item(I, src))
-			w_items += I.w_class
 			to_chat(user, "You carefully place \the [I] into the cistern.")
 			watersource.reagents.reaction(I, TOUCH) // Handles water affecting items, such as making dissolvable items dissolve.
 			return
@@ -562,7 +563,6 @@
 	busy = TRUE
 	if (do_after(user,src, 40))
 		if(M.dissolvable() == dissolver)
-			user.visible_message("<span class='danger'>\The [M] melts under the flow of the [reagent_name]!</span>")
 			M.acid_melt(user.loc)
 		else
 			M.clean_blood()
