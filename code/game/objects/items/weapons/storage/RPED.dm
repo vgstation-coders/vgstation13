@@ -25,11 +25,13 @@
 	var/stock_rating = 4
 	var/cell_rating = 15
 	var/borg_upgrades = TRUE
-	admin_desc = "This one seems to have infinite parts. Use this in hand to change the ratings of stock parts applied."
+	admin_desc = "This one seems to have infinite parts. Use this in hand to change the ratings of stock parts, power cells and robot upgrades applied."
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/bluespace/admin/attack_self(mob/user)
 	if(user.check_rights(R_ADMIN))
-		stock_rating = clamp(input(user,"Which part rating to use?","Part ratings",4) as num,2,4)
+		stock_rating = clamp(input(user,"Which part rating to use?","Part ratings",stock_rating) as num,2,4)
+		cell_rating = clamp(input(user,"Which cell rating to use?","Cell ratings",cell_rating) as num,1,15)
+		borg_upgrades = alert(user,"Use borg upgrades?","Borg upgrades","Yes","No") == "Yes"
 	else
 		..()
 
