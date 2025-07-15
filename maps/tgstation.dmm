@@ -34614,10 +34614,6 @@
 /obj/machinery/light{
 	dir = 8
 	},
-/obj/machinery/power/apc{
-	dir = 8;
-	pixel_x = -24
-	},
 /turf/simulated/floor,
 /area/hallway/primary/starboard)
 "bnQ" = (
