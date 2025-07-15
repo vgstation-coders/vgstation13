@@ -43,7 +43,7 @@
 	var/obj/item/weapon/grab/G = user.get_active_hand() //You need to be grabbing the target
 	var/mob/living/carbon/human/T = G.affecting
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-	var/absorbtime = 15 SECONDS
+	var/absorbtime = changeling.faster_suck ? 8 SECONDS : 15 SECONDS
 	inuse = TRUE
 	for(var/stage in 1 to 3)
 		switch(stage)

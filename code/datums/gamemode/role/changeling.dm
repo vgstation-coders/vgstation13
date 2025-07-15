@@ -27,7 +27,8 @@
 	spell_exclude = /spell/changeling/evolve
 
 	var/mimicing = ""
-	var/disease_immunity = 0 //If on, the changeling doesn't suffer any symptoms from diseases
+	var/disease_immunity = FALSE //If on, the changeling doesn't suffer any symptoms from diseases
+	var/faster_suck = FALSE //If on, reduces the delay between the changeling's absorb DNA stages from 15 seconds to 8 seconds.
 
 /datum/role/changeling/OnPostSetup(var/laterole = FALSE)
 	. = ..()
