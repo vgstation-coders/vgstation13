@@ -151,7 +151,7 @@
 					/obj/item/pizzabox/blingpizza)
 	name = "Surprise pack of five pizzas"
 	cost = 75
-	containertype = /obj/structure/closet/crate/freezer
+	containertype = /obj/structure/closet/crate/basic
 	containername = "pizza crate"
 	containsicon = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/margherita
 	containsdesc = "Order a bunch of pizza from the local pizza joint. It's run by assistants, so expect your order to get mixed up. They deliver in sets of five."
@@ -292,3 +292,13 @@
 	containername = "big band musical instruments crate"
 	group = "Hospitality"
 	containsdesc = "One way around the strange space law is to just order the whole band. Contains one of every instrument."
+
+/datum/supply_packs/synthesizer
+	contains = list(/obj/structure/synthesized_instrument/synthesizer)
+	name = "Synthesizer crate"
+	cost = 50
+	containertype = /obj/structure/closet/crate/basic
+	containername = "new age synthesizer crate"
+	containsdesc = "A new synthesizer has hit the market! Get it while it's still hot!"
+
+	group = "Hospitality"

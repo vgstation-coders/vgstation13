@@ -11,7 +11,7 @@
 		to_chat(src, "<span class='warning'>You cannot send DSAY messages (muted).</span>")
 		return
 
-	if(!(prefs.toggles & CHAT_DEAD))
+	if(!(prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD))
 		to_chat(src, "<span class='warning'>You have deadchat muted.</span>")
 		return
 
@@ -30,10 +30,10 @@
 		if (istype(M, /mob/new_player) || !M.client)
 			continue
 
-		if(M.client && M.client.holder && (M.client.prefs.toggles & CHAT_DEAD)) // show the message to admins who have deadchat toggled on
+		if(M.client && M.client.holder && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD)) // show the message to admins who have deadchat toggled on
 			M.show_message(rendered, 2)
 
-		else if(M.client && M.stat == DEAD && (M.client) && (M.client.prefs.toggles & CHAT_DEAD)) // show the message to regular ghosts who have deadchat toggled on
+		else if(M.client && M.stat == DEAD && (M.client) && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD)) // show the message to regular ghosts who have deadchat toggled on
 			M.show_message(rendered, 2)
 
 	feedback_add_details("admin_verb","D") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

@@ -5,8 +5,8 @@
 	specialization = SSDEFENSIVE
 	abbreviation = "FW"
 	summon_type = list(/obj/effect/forcefield/wizard)
-	duration = 300
-	charge_max = 10 SECONDS
+	duration = 30 SECONDS
+	charge_cooldown_max = 10 SECONDS
 	cooldown_min = 2 SECONDS
 	spell_flags = 0
 	invocation = "TARCOL MINTI ZHERI"
@@ -15,7 +15,7 @@
 
 	hud_state = "wiz_shield"
 
-	price = 0.5 * Sp_BASE_PRICE //Half of the normal spell price
+	price = 0.5 * SP_BASE_PRICE //Half of the normal spell price
 
 /spell/aoe_turf/conjure/forcewall/mime
 	name = "Invisible wall"
@@ -24,9 +24,9 @@
 	user_type = USER_TYPE_OTHER
 	panel = "Mime"
 	summon_type = list(/obj/effect/forcefield/mime)
-	invocation_type = SpI_EMOTE
+	invocation_type = SP_INV_EMOTE
 	invocation = "mimes placing their hands on a flat surface, and pushing against it."
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	cast_sound = null
 
 	override_base = "grey"
@@ -46,13 +46,13 @@ Unwall spell, sadly has to be targeted to be any fun to use
 	specialization = SSOFFENSIVE
 
 	school = "mime"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	cast_sound = null
 	cooldown_min = 2 SECONDS
 	spell_flags = WAIT_FOR_CLICK
 	range = 1
 	max_targets = 1
-	invocation_type = SpI_EMOTE
+	invocation_type = SP_INV_EMOTE
 	invocation = "mimes placing their hands on a flat surface, and pushing against it."
 
 	override_base = "grey"
@@ -116,7 +116,7 @@ Unwall fields
 	density = TRUE
 	flow_flags = ON_BORDER
 	mouse_opacity = 1
-	var/duration = 300 // How long the wall lasts, in ticks
+	var/duration = 30 SECONDS // How long the wall lasts, in ticks
 	var/static/list/forbidden_passes = list(/turf/unsimulated/wall,/turf/simulated/wall/invulnerable,/obj/structure/grille/invulnerable) // To stop people breaking maps like centcomm or lamprey stuff
 
 /obj/effect/unwall_field/permanent // For future mapping or bus shenanigans

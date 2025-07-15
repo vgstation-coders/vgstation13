@@ -104,8 +104,7 @@
 
 /obj/item/weapon/kitchen/utensil/spoon/New()
 	..()
-	reagents = new(10)
-	reagents.my_atom = src
+	create_reagents(10)
 
 /obj/item/weapon/kitchen/utensil/spoon/examine(mob/user)
 	..()
@@ -207,8 +206,7 @@
 
 /obj/item/weapon/kitchen/utensil/spork/New()
 	..()
-	reagents = new(10)
-	reagents.my_atom = src
+	create_reagents(10)
 
 /obj/item/weapon/kitchen/utensil/spork/examine(mob/user)
 	..()
@@ -316,8 +314,7 @@
 
 /obj/item/weapon/kitchen/utensil/fork/New()
 	..()
-	reagents = new(10)
-	reagents.my_atom = src
+	create_reagents(10)
 
 /obj/item/weapon/kitchen/utensil/fork/attack(var/mob/living/carbon/M, var/mob/living/carbon/user)
 	if(!istype(M) || !istype(user))
@@ -403,7 +400,7 @@
  */
 /obj/item/weapon/kitchen/utensil/knife
 	name = "small knife"
-	desc = "A round tipped knife used to cut food food."
+	desc = "A round tipped knife used to cut food."
 	icon_state = "smallknife"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 5.0

@@ -239,7 +239,8 @@ For the main html chat area
 	iconCache[iconKey] << icon(icon, dir = SOUTH, frame = 1)
 	var/iconData = iconCache.ExportText(iconKey)
 	var/list/partial = splittext(iconData, "{")
-	return replacetext(copytext(partial[2], 3, -5), "\n", "")
+	var/list/partial2 = splittext(partial[2], "}")
+	return replacetext(copytext(partial2[1], 2, -1), "\n", "")
 
 /proc/bicon(var/obj)
 	if (!obj)
@@ -344,7 +345,7 @@ For the main html chat area
 		if(istype(M, /mob/new_player))
 			continue
 
-		else if(M.client.prefs.toggles & CHAT_DEAD)
+		else if(M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD)
 			if(M.client.holder && M.client.holder.rights & R_ADMIN) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
 				. += M
 			else if(M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute))

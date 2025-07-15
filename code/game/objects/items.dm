@@ -92,6 +92,7 @@
 	var/list/quick_equip_priority = list() //stuff to override the quick equip thing so it goes in this first
 
 	var/last_burn
+	var/vent_use = FALSE //can this be used while ventcrawling
 
 /obj/item/New()
 	..()
@@ -479,6 +480,8 @@ var/global/objects_thrown_when_explode = FALSE
 	for(var/X in actions)
 		var/datum/action/A = X
 		A.Remove(user)
+	if (sound_emitter)
+		sound_emitter.update_source(src)
 
 ///called when an item is stripped off by another person, called BEFORE it is dropped. return 1 to prevent it from actually being stripped.
 /obj/item/proc/before_stripped(mob/wearer as mob, mob/stripper as mob, slot)
@@ -495,6 +498,8 @@ var/global/objects_thrown_when_explode = FALSE
 
 // called after an item is picked up (loc has already changed)
 /obj/item/proc/pickup(mob/user)
+	if (sound_emitter)
+		sound_emitter.update_source(user)
 	return
 
 // called before an item is passed to another person through the give proc - TRUE allows the give, see carbon/give.dm
@@ -1687,6 +1692,7 @@ var/global/objects_thrown_when_explode = FALSE
 		armor["melee"] = min(90, armor["melee"]*(material_type.armor_mod*(quality/B_AVERAGE)))
 		armor["bullet"] = min(90, armor["bullet"]*(material_type.armor_mod*(quality/B_AVERAGE)))
 		armor["laser"] = min(90, armor["laser"]*(material_type.armor_mod*(quality/B_AVERAGE)))
+	toolspeed = fancytrunc(toolspeed * (0.6687**(quality-4)),2)
 
 /////// DISEASE STUFF //////////////////////////////////////////////////////////////////////////
 
@@ -1773,7 +1779,7 @@ var/global/objects_thrown_when_explode = FALSE
 	extinguish_with_hands(user)
 
 /obj/item/proc/extinguish_with_hands(var/mob/user)
-	if(!isliving(user))
+	if(user.stat || !Adjacent(user, src) || !isliving(user))
 		return
 	if(src.on_fire)
 		extinguish()

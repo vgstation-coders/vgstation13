@@ -194,7 +194,7 @@
 		nuke_name_assign(nuke_last_name(synd_mind.current), title, members) //Allows time for the rest of the syndies to be chosen
 
 	if(nuke_code)
-		synd_mind.store_memory("<B>Syndicate Nuclear Bomb Code</B>: [nuke_code]", 0, 0)
+		synd_mind.store_memory("<B>Syndicate Nuclear Bomb Code</B>: [nuke_code]", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 		to_chat(synd_mind.current, "The nuclear authorization code is: <B>[nuke_code]</B><br>Make sure to share it with your subordinates.")
 		var/obj/item/weapon/paper/P = new
 		P.info = "The nuclear authorization code is: <b>[nuke_code]</b>"

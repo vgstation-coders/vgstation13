@@ -9,9 +9,9 @@
 	spell_flags = NEEDSCLOTHES
 	autocast_flags = AUTOCAST_NOTARGET
 	invocation = "SCYAR NILA"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 
-	charge_max = 45 SECONDS
+	charge_cooldown_max = 45 SECONDS
 	cooldown_min = 5 SECONDS
 	cooldown_reduc = 10 SECONDS
 

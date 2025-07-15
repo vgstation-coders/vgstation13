@@ -1,5 +1,5 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-#if DM_VERSION < 513
+#if DM_VERSION < 516
 #error Your version of byond is too old, you need version 513 or higher
 #endif
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
@@ -443,6 +443,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_TALONS		12  // Bonus kick damage
 #define M_STONE_SKIN	13  // hard skin
 #define M_THERMALS		14	//see mobs through walls
+#define M_CHARGE		15	//charge at a target, knocking them down and dealing damage
 
 //#define HEAL			12 	// (Not implemented) healing people with hands
 //#define SHADOW		13 	// (Not implemented) shadow teleportation (create in/out portals anywhere) (25%)
@@ -1212,6 +1213,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define SHUTTLEWRENCH	1024 //if this flag exists, the computer can be wrenched on shuttle floors
 #define SECUREDPANEL 2048 //it won't let you open the deconstruction panel if you don't have the linked account number. Originally used for custom vending machines
 #define MULTIOUTPUT 4096 //Let's you set the output location with a multitool
+#define UPGRADENOSCORE 8192 //Incase the machine use is nothing but malicious
 
 #define MAX_N_OF_ITEMS 999 // Used for certain storage machinery, BYOND infinite loop detector doesn't look things over 1000.
 
@@ -1418,6 +1420,12 @@ var/proccalls = 1
 #define ORE_PROCESSING_ALLOY 2
 
 //SOUND CHANNELS
+#define CHANNEL_SHARED_MIN			1
+#define CHANNEL_SHARED_MAX			256
+#define CHANNEL_UNIQUE_MIN			257
+#define CHANNEL_UNIQUE_MAX			512
+#define CHANNEL_MUS_RESERVABLE_MIN  513
+#define CHANNEL_MUS_RESERVABLE_MAX  1017	// todo check if it even needs nearly this many
 #define CHANNEL_WEATHER				1018
 #define CHANNEL_MEDBOTS				1019
 #define CHANNEL_BALLOON				1020
@@ -1732,8 +1740,6 @@ var/proccalls = 1
 #define JINGLE_CLASSIC "Classics"
 #define JINGLE_ALL "All"
 
-#define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
-
 #define BEESPECIES_NORMAL	"bee"
 #define BEESPECIES_VOX		"chill bug"
 #define BEESPECIES_HORNET	"hornet"
@@ -1777,6 +1783,7 @@ var/proccalls = 1
 #define COMPUTER "computer"
 #define EMBEDDED_CONTROLLER "embedded controller"
 #define OTHER "other"
+#define MACHINE_REINFORCED "reinforced machine"
 
 // Bedsheet altering
 #define PLAIDPATTERN_INCOMPATIBLE	0
@@ -1790,7 +1797,7 @@ var/proccalls = 1
 #define ESPORTS_CULTISTS "Team Geometer"
 #define ESPORTS_SECURITY "Team Security"
 
-#define DNA_SE_LENGTH 60
+#define DNA_SE_LENGTH 61
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
 #define GREY_SHAPED "Grey"

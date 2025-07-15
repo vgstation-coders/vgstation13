@@ -815,7 +815,7 @@ var/global/num_vending_terminals = 1
 		dat += {"<b>You have selected [currently_vending.product_name].<br>Please ensure your ID is in your ID holder or hand.</b><br>
 			<a href='byond://?src=\ref[src];buy=1'>Pay</a> |
 			<a href='byond://?src=\ref[src];cancel_buying=1'>Cancel</a>"}
-		user << browse(dat, "window=vending")
+		user << browse(HTML_SKELETON(dat), "window=vending")
 		onclose(user, "")
 		return
 
@@ -908,7 +908,7 @@ var/global/num_vending_terminals = 1
 		if(!account_first_linked)
 			dat += "<br><br><i>Note: Remember to slide your ID on this machine to link your account. Once this is done, sliding your ID will enable editing and loading.</i>"
 
-	user << browse(dat, "window=vending;size=400x[vertical]")
+	user << browse(HTML_SKELETON(dat), "window=vending;size=400x[vertical]")
 	onclose(user, "vending")
 
 // returns the wire panel text
@@ -957,8 +957,11 @@ var/global/num_vending_terminals = 1
 		coin = null
 	usr.set_machine(src)
 
+	if(!src.vend_ready)
+		to_chat(usr, "<span class='warning'>[src] is busy, this action is unavailable.</span>")
+		return
 
-	if (href_list["vend"] && src.vend_ready && !currently_vending)
+	if (href_list["vend"] && !currently_vending)
 		//testing("vend: [href]")
 
 		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
@@ -984,7 +987,7 @@ var/global/num_vending_terminals = 1
 
 		return
 
-	else if (href_list["set_price"] && src.vend_ready && !currently_vending && edit_mode)
+	else if (href_list["set_price"] && !currently_vending && edit_mode)
 		//testing("vend: [href]")
 
 		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
@@ -1007,7 +1010,7 @@ var/global/num_vending_terminals = 1
 
 		R.price = new_price
 
-	else if (href_list["delete_entry"] && src.vend_ready && !currently_vending && edit_mode)
+	else if (href_list["delete_entry"] && !currently_vending && edit_mode)
 		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
 			to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
 
@@ -1079,7 +1082,6 @@ var/global/num_vending_terminals = 1
 
 		flick(src.icon_deny,src)
 		return
-	src.vend_ready = 0 //One thing at a time!!
 
 	if (!by_voucher && (R in coin_records))
 		if (isnull(coin))
@@ -1124,6 +1126,7 @@ var/global/num_vending_terminals = 1
 	visible_message("\The [src.name] whirrs as it vends.", "You hear a whirr.")
 	if (vend_sound)
 		playsound(loc, vend_sound, 50, 0)
+	src.vend_ready = 0 //One thing at a time!!
 	spawn(vend_delay)
 		if(!R.custom)
 			var/path2use = R.product_path
@@ -2705,6 +2708,13 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/frank = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/mexican = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/banana_set = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/furtrapper_set = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/sonicman = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/sonicsuit = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/tailssuit = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/knucklessuit = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/amysuit = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/shadowsuit = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/clothing/head/beret = 3,
 		/obj/item/clothing/suit/wcoat = 3,
 		/obj/item/clothing/under/suit_jacket = 3,
@@ -3337,6 +3347,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/talonprosthetic = 3,
 		/obj/machinery/vending/sale/trader = 1,
 		/obj/item/weapon/storage/toolbox/paint = 1,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/trader = 3,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/carapace = 3,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/aqua = 3,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/stealth = 3,
 		)
 
 	prices = list(
@@ -3350,6 +3364,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/talonprosthetic = 80,
 		/obj/machinery/vending/sale/trader = 80,
 		/obj/item/weapon/storage/toolbox/paint = 40,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/trader = 30,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/carapace = 30,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/aqua = 30,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/stealth = 30,
 		)
 	slogan_languages = list(LANGUAGE_VOX)
 

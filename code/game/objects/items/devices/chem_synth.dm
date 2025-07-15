@@ -284,13 +284,7 @@
 	return 0
 
 /obj/item/device/chem_synth/robot/take_cost(var/amount, var/rarity_multiplier, mob/user)
-	if(isrobot(user))
-		var/mob/living/silicon/robot/robo = user
-		var/used = robo.cell.use(amount * rarity_multiplier * POWER_PER_REAGENT)
-		if(!used)
-			to_chat(user, "<span class='warning'>You cannot synthesize this much without shutting down!</span>")
-		return used
-	return 0
+	return use_cell_charge(user,amount * rarity_multiplier * POWER_PER_REAGENT) || 0
 
 /obj/item/device/chem_synth/admin/take_cost(var/amount, var/rarity_multiplier, mob/user)
 	return 1

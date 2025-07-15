@@ -652,15 +652,30 @@
 		if(!map.climate)
 			return
 		var/datum/climate/C = map.climate
-		var/nu = input(usr, "Select New Weather", "Adjust Weather", C.current_weather.type) as null|anything in typesof(/datum/weather)
-		if(!nu || nu == C.current_weather.type)
+
+		var/list/valid_climates = list()
+
+		for(var/subtype in subtypesof(/datum/weather))
+			var/datum/weather/instance = subtype
+			var/weather_name = initial(instance.name)
+			if (weather_name != "weather")
+				valid_climates[weather_name] = subtype
+
+		if (valid_climates.len <= 0)
+			alert(usr, "There are somehow no weather subtypes!", "Error", "Wtf?")
 			return
-		if(!ispath(nu))
+
+		var/nu = input(usr, "Select New Weather", "Adjust Weather", null) as null|anything in valid_climates
+		if(!nu)
+			to_chat(usr, "Weather change canceled.")
 			return
-		C.change_weather(nu)
+		if(nu == C.current_weather.name)
+			to_chat(usr, "That's already the current weather you dummy.")
+			return
+		C.change_weather(valid_climates[nu])
 		C.forecast()
-		log_admin("[key_name(usr)] adjusted weather type.")
-		message_admins("<span class='notice'>[key_name(usr)] adjusted weather type.</span>", 1)
+		log_admin("[key_name(usr)] changed the weather to [nu].")
+		message_admins("<span class='notice'>[key_name(usr)] changed the weather to [nu].</span>", 1)
 		climate_panel()
 
 	else if(href_list["delay_round_end"])
@@ -1387,7 +1402,7 @@
 
 		body = "<body>[jobs]</body>"
 		dat = "<tt>[header][body]</tt>"
-		usr << browse(dat, "window=jobban2;size=800x490")
+		usr << browse(HTML_SKELETON(dat), "window=jobban2;size=800x490")
 		return
 
 	//JOBBAN'S INNARDS
@@ -1695,7 +1710,7 @@
 		dat += {"<A href='?src=\ref[src];c_mode2=secret'>Secret</A><br>"}
 		dat += {"<A href='?src=\ref[src];c_mode2=random'>Random</A><br>"}
 		dat += {"Now: [master_mode]"}
-		usr << browse(dat, "window=c_mode")
+		usr << browse(HTML_SKELETON(dat), "window=c_mode")
 
 	else if(href_list["f_secret"])
 		if(!check_rights(R_ADMIN))
@@ -1710,7 +1725,7 @@
 			dat += {"<A href='?src=\ref[src];f_secret2=[mode]'>[config.mode_names[mode]]</A><br>"}
 		dat += {"<A href='?src=\ref[src];f_secret2=secret'>Random (default)</A><br>"}
 		dat += {"Now: [secret_force_mode]"}
-		usr << browse(dat, "window=f_secret")
+		usr << browse(HTML_SKELETON(dat), "window=f_secret")
 
 	else if(href_list["f_dynamic_roundstart"])
 		if(!check_rights(R_ADMIN))
@@ -2622,7 +2637,7 @@
 				foo += text("<A HREF='?src=\ref[];forcespeech=\ref[]'>Say</A> \]", src, M)
 			dat += text("N: [] R: [] (K: []) (IP: []) []<BR>", M.name, M.real_name, (M.client ? M.client : "No client"), M.lastKnownIP, foo)
 
-		usr << browse(dat, "window=players;size=900x480")
+		usr << browse(HTML_SKELETON(dat), "window=players;size=900x480")
 
 *****************AFTER******************/
 
@@ -3066,7 +3081,14 @@
 		if(P.img)
 			usr << browse_rsc(P.img.img, "tmp_photo.png")
 			info_2 = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br>"
-		usr << browse("<HTML><HEAD><TITLE>Centcomm Fax Message</TITLE></HEAD><BODY>[info_2][P.info][P.stamps]</BODY></HTML>", "window=Centcomm Fax Message")
+		var/text = {"<!DOCTYPE html><HEAD>
+		<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+		<TITLE>Centcomm Fax Message</TITLE></HEAD>
+		<BODY>[info_2][P.info][P.stamps]</BODY>
+		</HTML>
+		"}
+		usr << browse(text, "window=Centcomm Fax Message") // No need to HTML_SKELETON() this
 
 	else if(href_list["CentcommFaxReply"])
 		var/mob/living/carbon/human/H = locate(href_list["CentcommFaxReply"])
@@ -4409,12 +4431,12 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				var/dat = "<B>Bombing List<HR>"
 				for(var/l in bombers)
 					dat += text("[l]<BR>")
-				usr << browse(dat, "window=bombers")
+				usr << browse(HTML_SKELETON(dat), "window=bombers")
 			if("list_lawchanges")
 				var/dat = "<B>Showing last [length(lawchanges)] law changes.</B><HR>"
 				for(var/sig in lawchanges)
 					dat += "[sig]<BR>"
-				usr << browse(dat, "window=lawchanges;size=800x500")
+				usr << browse(HTML_SKELETON(dat), "window=lawchanges;size=800x500")
 			if("list_job_debug")
 				var/dat = "<B>Job Debug info.</B><HR>"
 				if(job_master)
@@ -4425,7 +4447,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 						if(!job)
 							continue
 						dat += "job: [job.title], current_positions: [job.current_positions], total_positions: [job.get_total_positions()] <BR>"
-					usr << browse(dat, "window=jobdebug;size=600x500")
+					usr << browse(HTML_SKELETON(dat), "window=jobdebug;size=600x500")
 			if("showailaws")
 				output_ai_laws()
 			if("showgm")
@@ -4442,7 +4464,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 					if(H.ckey)
 						dat += text("<tr><td>[]</td><td>[]</td></tr>", H.name, H.get_assignment())
 				dat += "</table>"
-				usr << browse(dat, "window=manifest;size=440x410")
+				usr << browse(HTML_SKELETON(dat), "window=manifest;size=440x410")
 			// if("check_antagonist")
 			// 	check_antagonists()
 			if("emergency_shuttle_panel")
@@ -4454,7 +4476,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 					if(H.dna && H.ckey)
 						dat += "<tr><td>[H]</td><td>[H.dna.unique_enzymes]</td><td>[H.dna.b_type]</td></tr>"
 				dat += "</table>"
-				usr << browse(dat, "window=DNA;size=440x410")
+				usr << browse(HTML_SKELETON(dat), "window=DNA;size=440x410")
 			if("fingerprints")
 				var/dat = "<B>Showing Fingerprints.</B><HR>"
 				dat += "<table cellspacing=5><tr><th>Name</th><th>Fingerprints</th></tr>"
@@ -4467,14 +4489,14 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 						else if(!H.dna)
 							dat += "<tr><td>[H]</td><td>H.dna = null</td></tr>"
 				dat += "</table>"
-				usr << browse(dat, "window=fingerprints;size=440x410")
+				usr << browse(HTML_SKELETON(dat), "window=fingerprints;size=440x410")
 			if("show_admin_log")
 				var/dat = "<B>Admin Log<HR></B>"
 				for(var/l in admin_log)
 					dat += "<li>[l]</li>"
 				if(!admin_log.len)
 					dat += "No-one has done anything this round!"
-				usr << browse(dat, "window=admin_log")
+				usr << browse(HTML_SKELETON(dat), "window=admin_log")
 
 		if (usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsadmin"]]")
@@ -5922,4 +5944,4 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			text +="</ul>"
 			text += "<A HREF='?src=\ref[src];religions=global_subtle_pm&rel=\ref[R]'>Subtle PM all believers</a> <br/>"
 	text += "<A HREF='?src=\ref[src];religions=new'>Bus in a new religion</a> <br/>"
-	usr << browse(jointext(text, ""), "window=admin2;size=300x370")
+	usr << browse(HTML_SKELETON(jointext(text, "")), "window=admin2;size=300x370")

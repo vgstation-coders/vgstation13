@@ -182,4 +182,4 @@
 		</html>
 		"}
 
-	usr << browse(dat, "window=artifactspanel;size=840x450")
+	usr << browse(HTML_SKELETON(dat), "window=artifactspanel;size=840x450")

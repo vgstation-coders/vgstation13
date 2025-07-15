@@ -1206,6 +1206,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		baseicon = 'icons/mob/human_races/o_peg.dmi'
 	else if(is_robotic())
 		baseicon = 'icons/mob/human_races/o_robot.dmi'
+		icon_state = icon_name
 	if(forced_icon_file)
 		baseicon = forced_icon_file
 	return icon(baseicon, icon_state)
@@ -1704,6 +1705,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		return ..()
 
 	var/baseicon = (species ? species.icobase : owner.race_icon)
+	var/icon_state = "[icon_name]_[gender]"
 	if(status & ORGAN_MUTATED)
 		baseicon = (species ? species.deform : owner.deform_icon)
 
@@ -1711,7 +1713,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		baseicon = 'icons/mob/human_races/o_peg.dmi'
 	if(is_robotic())
 		baseicon = 'icons/mob/human_races/o_robot.dmi'
-	return new /icon(baseicon, "[icon_name]_[gender]")
+		icon_state = icon_name
+	return icon(baseicon, icon_state)
 
 /datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list(), no_damage_modifier, spread_damage)
 	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs, no_damage_modifier, spread_damage)

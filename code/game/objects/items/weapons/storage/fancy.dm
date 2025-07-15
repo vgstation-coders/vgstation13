@@ -567,6 +567,11 @@
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	storage_slots = 6
 	req_one_access = list(access_virology) //Obj was inheriting from obj/storage/lockbox which requires armory access.  This behavior is overridden here.
+	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 200)
+
+/obj/item/weapon/storage/lockbox/vials/nolock
+	startswithelectronics = FALSE
+	locked = FALSE
 
 /obj/item/weapon/storage/lockbox/vials/New()
 	..()
@@ -598,7 +603,7 @@
 		overlays += vial_image
 		i++
 
-	if (!broken)
+	if (!broken && electronics)
 		overlays += image(icon, src, "led[locked]")
 		if(locked)
 			overlays += image(icon, src, "cover")

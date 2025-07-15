@@ -71,7 +71,7 @@
 	antag.current << sound('sound/effects/ling_intro.ogg')
 
 /datum/role/changeling/ForgeObjectives()
-	if(!antag.current.client.prefs.antag_objectives)
+	if(!antag.current.client.prefs.get_pref(/datum/preference_setting/toggle/antag_objectives))
 		AppendObjective(/datum/objective/freeform/changeling)
 		return
 	AppendObjective(/datum/objective/absorb)

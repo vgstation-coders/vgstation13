@@ -6,14 +6,14 @@
 	specialization = SSUTILITY
 
 	school = "transmutation"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	spell_flags = Z2NOCAST | NEEDSCLOTHES | INCLUDEUSER
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = SELFCAST
 	max_targets = 1
-	cooldown_min = 100 //50 deciseconds reduction per rank
-	duration = 50 //in deciseconds
-	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
+	cooldown_min = 10 SECONDS //5 SECONDS reduction per rank
+	duration = 5 SECONDS 
+	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)
 
 	hud_state = "wiz_jaunt"
 
@@ -34,14 +34,14 @@
 		ethereal_jaunt(targets[1], duration, enteranim, exitanim, mist, empowered)
 
 /spell/targeted/ethereal_jaunt/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
+	if(upgrade_type == SP_POWER)
 		return "Makes you faster while jaunting."
 	return ..()
 
 /spell/targeted/ethereal_jaunt/empower_spell()
-	if(!can_improve(Sp_POWER))
+	if(!can_improve(SP_POWER))
 		return 0
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 	empowered = 1
 
 /proc/ethereal_jaunt(var/mob/living/carbon/target, duration, enteranim = "liquify", exitanim = "reappear", mist = 1, var/empowered)
@@ -138,19 +138,19 @@
 	max_targets = 0
 	range = 3
 
-	charge_max = 600 //Double cooldown, makes it less spammable
-	duration = 100 //Double jaunt time, makes it easier to cooperate
+	charge_cooldown_max = 60 SECONDS //Double cooldown, makes it less spammable
+	duration = 10 SECONDS //Double jaunt time, makes it easier to cooperate
 
 /spell/targeted/ethereal_jaunt/shift
 	name = "Phase Shift"
 	desc = "This spell allows you to pass through walls."
 	user_type = USER_TYPE_CULT
 
-	charge_max = 200
+	charge_cooldown_max = 20 SECONDS
 	spell_flags = Z2NOCAST | INCLUDEUSER | CONSTRUCT_CHECK
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = SELFCAST
-	duration = 50 //in deciseconds
+	duration = 5 SECONDS
 
 	hud_state = "const_shift"
 
@@ -160,7 +160,7 @@
 
 /spell/targeted/ethereal_jaunt/shift/alt
 	desc = "Vibrate through the veil for about 5 seconds, letting you move around freely through any obstacle."
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	hud_state = "const_phase"
 	enteranim = "wraith2_phaseenter"
 	exitanim = "wraith2_phaseexit"
@@ -173,10 +173,10 @@
 
 	spell_flags = Z2NOCAST | INCLUDEUSER
 
-	charge_max = 1 MINUTES
-	invocation_type = SpI_NONE
+	charge_cooldown_max = 1 MINUTES
+	invocation_type = SP_INV_NONE
 	range = SELFCAST
-	duration = 50 //in deciseconds
+	duration = 5 SECONDS
 
 	override_base = "vamp"
 	hud_state = "vamp_mistform"

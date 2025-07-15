@@ -26,7 +26,7 @@
 	gift = target
 	update_icon()
 
-/obj/item/weapon/gift/attackby(obj/item/W as obj, mob/user as mob)
+/obj/item/weapon/gift/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/pen))
 		var/str = copytext(sanitize(input(user,"What should the label read? (max 52 characters)","Write a personal message!","") as message|null),1,MAX_NAME_LEN * 2)
 		if (!Adjacent(user) || user.stat)
@@ -51,9 +51,7 @@
 			icon_state = "gift-large"
 			item_state = "gift-large"
 
-/obj/item/weapon/gift/attack_self(mob/user as mob)
-	for(var/I in contents)
-		user.put_in_hands(I)
+/obj/item/weapon/gift/attack_self(mob/user)
 	user.drop_item(src, force_drop = 1)
 	if(gift)
 		user.put_in_active_hand(gift)
@@ -61,6 +59,8 @@
 		to_chat(user, "<span class='notice'>You unwrapped \a [gift]!</span>")
 	else
 		to_chat(user, "<span class='notice'>The gift was empty!</span>")
+	for (var/obj/item/I in contents)
+		I.forceMove(get_turf(user))
 	qdel(src)
 	return
 

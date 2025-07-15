@@ -23,7 +23,7 @@
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
 	if(W.material_type)
 		W.material_type.on_use(W, src, user)
-	return emag_check()
+	return emag_check(W,user)
 
 /atom/movable/proc/emag_check(obj/item/weapon/card/emag/E, mob/user)
 	if(can_emag() && istype(E) && E.canUse(user,src))

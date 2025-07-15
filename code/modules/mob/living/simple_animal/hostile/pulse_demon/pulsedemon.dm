@@ -115,9 +115,9 @@
 	..()
 	for(var/spell/S in possible_spells)
 		add_spell(S, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
-		while(S.can_improve(Sp_POWER))
+		while(S.can_improve(SP_POWER))
 			S.empower_spell()
-		while(S.can_improve(Sp_SPEED))
+		while(S.can_improve(SP_SPEED))
 			S.quicken_spell()
 		possible_spells -= S
 	QDEL_LIST_CUT(possible_upgrades)

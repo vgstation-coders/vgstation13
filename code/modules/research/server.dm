@@ -305,7 +305,7 @@
 			for(var/obj/machinery/r_n_d/server/S in servers)
 				dat += "[S.name] <A href='?src=\ref[src];send_to=[S.server_id]'> (Transfer)</A><BR>"
 			dat += "<HR><A href='?src=\ref[src];main=1'>Main Menu</A>"
-	user << browse("<TITLE>R&D Server Control</TITLE><HR>[dat]", "window=server_control;size=575x400")
+	user << browse(HTML_SKELETON_TITLE("R&D Server Control", dat), "window=server_control;size=575x400")
 	onclose(user, "server_control")
 	return
 
@@ -341,7 +341,7 @@
 				A.anchored = 1
 				src.transfer_fingerprints_to(A)
 				qdel(src)
-	else 
+	else
 		return ..()
 
 /obj/machinery/computer/rdservercontrol/emag_act(mob/user)

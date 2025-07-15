@@ -130,7 +130,7 @@
 		temperature_alert = TEMP_ALARM_HEAT_STRONG
 	else if(has_reagent_in_blood(FROSTOIL))
 		temperature_alert = TEMP_ALARM_COLD_STRONG
-	else if(!(get_thermal_loss(loc.return_air()) > 0.1) || bodytemperature > T0C + 50)
+	else if(!(get_thermal_loss(loc.return_air()) > 0.1) || bodytemperature > T0C + 50 || undergoing_hypothermia() || undergoing_hyperthermia())
 		switch(bodytemperature) //310.055 optimal body temp
 			if(370 to INFINITY)
 				temperature_alert = TEMP_ALARM_HEAT_STRONG

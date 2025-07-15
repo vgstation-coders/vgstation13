@@ -301,7 +301,7 @@
 	for(var/channel in frequency_list)
 		var/frequency = frequency_list[channel]
 		text += "<b>[channel]:</b> [format_frequency(frequency)] <br>"
-	mind.store_memory(jointext(text, null))
+	mind.store_memory(jointext(text, null), category=MIND_MEMORY_GENERAL, forced=TRUE)
 
 // -- Things to do AFTER all the equipment is given (ex: accessories)
 /datum/outfit/proc/post_equip(var/mob/living/carbon/human/H)

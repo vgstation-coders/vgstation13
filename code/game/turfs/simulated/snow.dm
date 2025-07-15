@@ -25,6 +25,9 @@
 		overlays += snowfx2
 		icon_state_to_appearance[icon_state] = appearance
 	snowballs = rand(5, 10) //Used to be (30, 50). A quick way to overload the server with atom instances.
+	footstep_sound = sounds_snow
+	footstep_sound_barefoot = sounds_snow
+	footstep_sound_claw = sounds_snow
 
 /turf/simulated/floor/plating/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
@@ -102,11 +105,6 @@
 	else if(locate(/obj/structure/lattice) in contents)
 		return BUILD_SUCCESS
 	return BUILD_FAILURE
-
-/turf/simulated/floor/plating/snow/Entered(mob/user)
-	..()
-	if(isliving(user) && !user.locked_to && !user.lying && !user.flying)
-		playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
 
 /turf/simulated/floor/plating/snow/cold
 	temperature = T_ARCTIC

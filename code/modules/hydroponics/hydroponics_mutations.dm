@@ -43,15 +43,18 @@
 					seed.potency += round(min(hardcap - hardcap/2*log(10,seed.potency/hardcap*100),max_change*hardcap),0.1)
 					generic_mutation_message("quivers!")
 				if(PLANT_CHEMICAL)
-					var/check_success = FALSE
-					if(prob(50))
-						check_success = seed.remove_random_chemical()
-						if(check_success)
-							visible_message("<span class='notice'>\A gland on the [seed.display_name] withers and dies.</span>")
-					if(prob(50))
-						check_success = seed.add_random_chemical()
-						if(check_success)
-							visible_message("<span class='notice'>\The [seed.display_name] develops a strange-looking gland.</span>")
+					if(!seed.chems.len)
+						visible_message("<span class='notice'>\The [seed.display_name] grows an empty gland.</span>")
+					else
+						var/check_success = FALSE
+						if(prob(50) && seed.chems.len > 0)
+							check_success = seed.remove_random_chemical()
+							if(check_success)
+								visible_message("<span class='notice'>\A gland on the [seed.display_name] withers and dies.</span>")
+						if(prob(50))
+							check_success = seed.add_random_chemical()
+							if(check_success)
+								visible_message("<span class='notice'>\The [seed.display_name] develops a strange-looking gland.</span>")
 
 		if(GENE_MORPHOLOGY)
 			if(!specific_gene)

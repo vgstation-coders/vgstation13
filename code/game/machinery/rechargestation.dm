@@ -108,12 +108,14 @@
 		return
 	if(world.timeofday >= upgrade_finished && upgrade_finished != -1)
 		if(istype(upgrading, /obj/item/weapon/cell))
-			if(R.cell)
-				R.cell.updateicon()
-				R.cell.forceMove(get_turf(src))
+			var/obj/item/weapon/cell/Rcell = R.get_cell()
+			if (Rcell)
+				Rcell.updateicon()
+				Rcell.forceMove(get_turf(src))
 			upgrade_holder -= upgrading
 			upgrading.forceMove(R)
-			R.cell = upgrading
+			var/datum/robot_component/cell_component = R.components["power cell"]
+			cell_component.install(null,upgrading)
 			upgrading = 0
 			upgrade_finished = -1
 			to_chat(R, "<span class='notice'>Upgrade completed.</span>")
@@ -325,15 +327,17 @@
 	build_icon()
 	src.use_power = MACHINE_POWER_USE_ACTIVE
 	if(isrobot(R))
-		var/mob/living/silicon/robot/RR = R
 		for(var/obj/O in upgrade_holder)
 			if(istype(O, /obj/item/weapon/cell))
 				var/obj/item/weapon/cell/some_cell = O
-				if(!RR.cell)
-					to_chat(usr, "<big><span class='notice'>Power Cell replacement available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
-				else
-					if(some_cell.maxcharge > RR.cell.maxcharge)
-						to_chat(usr, "<span class='notice'>Power Cell upgrade available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
+				var/obj/item/weapon/cell/Rcell = R.get_cell()
+				var/word = null
+				if(!Rcell)
+					word = "replacement"
+				else if(some_cell.maxcharge > Rcell.maxcharge)
+					word = "upgrade"
+				if(word)
+					to_chat(R, "<big><span class='notice'>Power Cell [word] available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
 	else if(ishuman(R) && autoborger && !is_borging)
 		do_autoborg()
 
@@ -413,8 +417,10 @@
 		is_borging = FALSE
 		return
 
-	R.cell.maxcharge = 5000
-	R.cell.charge = 5000
+	var/obj/item/weapon/cell/Rcell = R.get_cell()
+	if(Rcell)
+		Rcell.maxcharge = 5000
+		Rcell.charge = 5000
 	R.SetKnockdown(3)
 
 	R.custom_name = pick(autoborg_silly_names)

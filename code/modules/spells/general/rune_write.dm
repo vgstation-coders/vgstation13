@@ -4,9 +4,9 @@
 	user_type = USER_TYPE_CULT
 
 	school = "evocation"
-	charge_max = 100
-	charge_type = Sp_RECHARGE
-	invocation_type = SpI_NONE
+	charge_cooldown_max = 10 SECONDS
+	charge_type = SP_RECHARGE
+	invocation_type = SP_INV_NONE
 
 	spell_flags = CONSTRUCT_CHECK
 

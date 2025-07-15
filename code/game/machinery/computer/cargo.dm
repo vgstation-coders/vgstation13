@@ -467,7 +467,10 @@ For vending packs, see vending_packs.dm*/
 		// check they can afford the order
 		if(P.cost * crates + total_money_req > account.money)
 			var/max_crates = round((account.money - total_money_req) / P.cost)
-			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
+			if(max_crates > 0)
+				to_chat(usr, "<span class='warning'>You can only afford [max_crates] crate[max_crates == 1 ? "" : "s"].</span>")
+			else
+				to_chat(usr, "<span class='warning'>You cannot afford any crates.</span>")
 			return
 		var/timeout = world.time + 600
 		var/reason = stripped_input(usr,"Why do you want this crate and where/to whom would you like it sent?","Reason/Destination:","",REASON_LEN)
@@ -833,7 +836,10 @@ For vending packs, see vending_packs.dm*/
 		if((P.cost * crates + total_money_req > account.money))
 			// Tell them how many they can actually afford if they can't afford their order
 			var/max_crates = round((account.money - total_money_req) / P.cost)
-			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
+			if(max_crates > 0)
+				to_chat(usr, "<span class='warning'>You can only afford [max_crates] crate[max_crates == 1 ? "" : "s"].</span>")
+			else
+				to_chat(usr, "<span class='warning'>You cannot afford any crates.</span>")
 			return
 		var/reason = stripped_input(usr,"Why do you want this crate and where/to whom would you like it sent?","Reason/Destination:","",REASON_LEN)
 		if(world.time > timeout)

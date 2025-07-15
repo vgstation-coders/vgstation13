@@ -90,7 +90,7 @@ var/list/tag_suits_list = list()
 		<br/>
 		<b><a href='?src=\ref[src]&edition_done=\ref[my_laser_tag_game]'>Done</a></b>
 	""}
-	user << browse(dat,"window=laser_tag_window2;size=250x250")
+	user << browse(HTML_SKELETON(dat),"window=laser_tag_window2;size=250x250")
 
 /obj/item/clothing/suit/tag/Topic(href, href_list)
 	if(..())
@@ -100,7 +100,7 @@ var/list/tag_suits_list = list()
 		var/datum/laser_tag_game/game = locate(href_list["join_game"])
 		game.handle_new_player(player, usr)
 		my_laser_tag_game = game
-		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
+		usr << browse(HTML_SKELETON(get_window_text(usr)),"window=laser_tag_window;size=500x250")
 		return
 
 	if (href_list["create_game"])
@@ -110,7 +110,7 @@ var/list/tag_suits_list = list()
 		game.name = "[get_first_word(usr.name)]'s game"
 		game.handle_new_player(player, usr)
 		refresh_edit_window(usr, game)
-		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
+		usr << browse(HTML_SKELETON(get_window_text(usr)),"window=laser_tag_window;size=500x250")
 		return
 
 	// Game parametrisation
@@ -188,7 +188,7 @@ var/list/tag_suits_list = list()
 	if (href_list["leave_game"])
 		var/datum/laser_tag_game/game = locate(href_list["leave_game"])
 		game.kick_player(usr)
-		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
+		usr << browse(HTML_SKELETON(get_window_text(usr)),"window=laser_tag_window;size=500x250")
 		return
 
 	if (href_list["clear_gamertag"])
@@ -505,7 +505,7 @@ var/list/tag_suits_list = list()
 	item_state = "strait_jacket"
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|HIDETAIL
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/ianshirt
 	name = "worn shirt"
@@ -967,7 +967,7 @@ var/list/tag_suits_list = list()
 
 /obj/item/clothing/suit/kimono/sakura
 	name = "sakura kimono"
-	desc = "A pale-pink, nearly white, kimono with a red and gold obi. There is a embroidered design of cherry blossom flowers covering the kimono."
+	desc = "A pale-pink, nearly white, kimono with a red and gold obi. There is an embroidered design of cherry blossom flowers covering the kimono."
 	icon_state = "sakura_kimono"
 	item_state = "sakura_kimono"
 	species_fit = list(INSECT_SHAPED)
@@ -1207,3 +1207,48 @@ var/list/tag_suits_list = list()
 	item_state = "wftr"
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 	body_parts_covered = FULL_TORSO
+
+/obj/item/clothing/suit/shadowsuit
+	name = "shadow suit"
+	desc = "A costume good enough to belong to a faker."
+	icon_state = "shadowsuit"
+	item_state = "shadowsuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/sonicsuit
+	name = "sonic suit"
+	desc = "A costume based on a true blue."
+	icon_state = "sonicsuit"
+	item_state = "sonicsuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/tailssuit
+	name = "tails suit"
+	desc = "A costume based on a bonafide sidekick."
+	icon_state = "tailssuit"
+	item_state = "tailssuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/knucklessuit
+	name = "knuckles suit"
+	desc = "A costume designed for protecting oversized jewels."
+	icon_state = "knucklessuit"
+	item_state = "knucklessuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/amysuit
+	name = "amy suit"
+	desc = "Piko-piko hammer not included."
+	icon_state = "amysuit"
+	item_state = "amysuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL

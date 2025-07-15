@@ -1,6 +1,7 @@
 var/global/list/del_profiling = list()
 var/global/list/gdel_profiling = list()
 var/global/list/ghdel_profiling = list()
+var/global/list/ghdel_profiling_roundstart = list()
 
 #define HOLYWATER_DURATION 8 MINUTES
 
@@ -184,16 +185,12 @@ var/global/list/ghdel_profiling = list()
 
 /atom/Destroy()
 	QDEL_NULL(reagents)
-
 	if(density)
 		densityChanged()
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
 	if(istype(beams, /list) && beams.len)
 		beams.len = 0
-	var/turf/simulated/T = get_turf(src)
-	if(istype(T))
-		T.zone?.burnable_atoms -= src
 	/*if(istype(beams) && beams.len)
 		for(var/obj/effect/beam/B in beams)
 			if(B && B.target == src)
@@ -988,6 +985,23 @@ its easier to just keep the beam vertical.
 
 /atom/proc/get_cell()
 	return
+
+/atom/proc/get_cell_charge(var/mob/living/silicon/robot/R)
+	if(istype(R))
+		var/obj/item/weapon/cell/Rcell = R.get_cell()
+		if(Rcell)
+			return Rcell.charge
+	return 0
+
+/atom/proc/use_cell_charge(var/mob/living/silicon/robot/R,var/amount,var/silent=FALSE)
+	if(istype(R))
+		var/obj/item/weapon/cell/Rcell = R.get_cell()
+		if(!Rcell || Rcell.charge < amount)
+			if(!silent)
+				to_chat(R, "<span class='warning'>You don't have enough charge to use \the [src].</span>")
+			return FALSE
+		return Rcell.use(amount)
+	return FALSE
 
 /atom/proc/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
 	if(!reagents)

@@ -235,7 +235,7 @@
 	if(data_core)
 		dat += data_core.get_manifest(1) // make it monochrome
 	dat += "<br>"
-	src << browse(dat, "window=airoster")
+	src << browse(HTML_SKELETON(dat), "window=airoster")
 	onclose(src, "airoster")
 
 /mob/living/silicon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
@@ -311,7 +311,7 @@
 		var/synth = (L in speech_synthesizer_langs)
 		dat += "<b>[L.name] (:[L.key])</b>[synth ? default_str : null]<br/>Speech Synthesizer: <i>[synth ? "YES" : "NOT SUPPORTED"]</i><br/>[L.desc]<br/><br/>"
 
-	src << browse(dat, "window=checklanguage")
+	src << browse(HTML_SKELETON(dat), "window=checklanguage")
 	return
 
 /mob/living/silicon/dexterity_check()

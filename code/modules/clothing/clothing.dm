@@ -939,9 +939,10 @@ var/global/maxStackDepth = 10
 	sterility = 50
 
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
-	var/step_sound = ""
+	var/list/step_sound = null
 	var/stepstaken = 1
 	var/modulo_steps = 2 //if stepstaken is a multiplier of modulo_steps, play the sound. Does not work if modulo_steps < 1
+	var/footsteps_range = -4
 	cloth_layer = SHOES_LAYER
 	cloth_icon = 'icons/mob/feet.dmi'
 	starting_materials = list(MAT_FABRIC = 1250)
@@ -949,17 +950,12 @@ var/global/maxStackDepth = 10
 	var/luminous_paint = FALSE
 
 /obj/item/clothing/shoes/proc/step_action()
-	stepstaken++
-	if(step_sound != "" && ishuman(loc))
-		var/mob/living/carbon/human/H = loc
-		switch(H.m_intent)
-			if("run")
-				if(stepstaken % modulo_steps == 0)
-					playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
-			if("walk")
-				playsound(H, step_sound, 20, 1)
+	return
 
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
+	return
+
+/obj/item/clothing/shoes/proc/on_kick_obj(mob/living/user, obj/target)
 	return
 
 /obj/item/clothing/shoes/defenseTackleBonus()

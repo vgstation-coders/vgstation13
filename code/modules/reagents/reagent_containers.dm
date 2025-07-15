@@ -79,7 +79,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return ..()
 
 /obj/item/weapon/reagent_containers/MiddleAltClick(var/mob/living/user)
-	if(!Adjacent(user, src))
+	if(user.stat || !Adjacent(user, src))
 		return
 	if(!reagents || !reagents.total_volume)
 		to_chat(user, "<span class='warning'>\The [src] is desperately empty.</span>")
@@ -505,7 +505,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 /obj/item/weapon/reagent_containers/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	..()
-	process_temperature()
+	if (!harderforce) // This causes hard del to happen.
+		process_temperature()
 
 /obj/item/weapon/reagent_containers/dropped(var/mob/user)
 	..()

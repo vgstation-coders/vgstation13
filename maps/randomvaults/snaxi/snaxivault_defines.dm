@@ -151,6 +151,7 @@ Included in this file
 	icon_living = "capybara"
 	icon_dead = "capybara-dead"
 	response_help = "pets"
+	var/rest_time = 1 MINUTES
 
 /mob/living/simple_animal/capybara/examine(mob/user)
 	..()
@@ -168,7 +169,7 @@ Included in this file
 		lying = TRUE
 		wander = FALSE
 		update_icons()
-		spawn(1 MINUTES)
+		spawn(rest_time)
 			lying = FALSE
 			wander = TRUE
 			update_icons()

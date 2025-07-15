@@ -138,19 +138,16 @@
 	temperature = T20C
 	plane = PLATING_PLANE
 
+/turf/unsimulated/floor/ayy/New()
+	..()
+	footstep_sound = sounds_ayy
+
+
 /turf/unsimulated/floor/ayy/Entered(atom/A, atom/OL) // Ayy alloy tiles play walking sound effects!
 	..()
 	if(istype(A,/mob/living/simple_animal))
 		var/mob/living/simple_animal/L = A
 		if(L.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
-			if(prob(50))
-				playsound(src, 'sound/effects/metal_walk.ogg', 50, 0)
-			else
-				playsound(src, 'sound/effects/metal_walk2.ogg', 50, 0)
-
-	if(istype(A,/mob/living/carbon))
-		var/mob/living/carbon/M = A
-		if(M.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
 			if(prob(50))
 				playsound(src, 'sound/effects/metal_walk.ogg', 50, 0)
 			else
@@ -1694,8 +1691,7 @@
 			user.stuttering = 10
 			user.Knockdown(10)
 			if(isrobot(user))
-				var/mob/living/silicon/robot/R = user
-				R.cell.charge -= 20
+				use_cell_charge(user,20)
 			else
 				B.deductcharge(1)
 			user.visible_message( \

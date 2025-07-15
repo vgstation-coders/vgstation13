@@ -125,12 +125,12 @@
 	if (istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
 		if(wiresexposed)
 			to_chat(user, "Close the wiring panel first.")
-		else if(cell || cellhold)
+		else if(get_cell() || cellhold)
 			to_chat(user, "There is a power cell already installed.")
 		else
 			user.drop_item(W, src)
 			if(anchored)
-				cell = W
+				add_cell(W,user)
 			else
 				cellhold = W
 			to_chat(user, "You insert the power cell.")
@@ -152,8 +152,8 @@
 		if(anchored)
 			to_chat(user, "<span class='notice'>You unbolt the SAMMI from the floor.</span>")
 			anchored = 0
-			cellhold = cell
-			cell = null
+			cellhold = get_cell()
+			clear_cell()
 			if(icon_state == "sammi_offline_a")
 				icon_state = "sammi_offline"
 			else
@@ -163,7 +163,7 @@
 		else
 			to_chat(user, "<span class='notice'>You anchor the SAMMI to the floor.</span>")
 			anchored = 1
-			cell = cellhold
+			add_cell(cellhold)
 			cellhold = null
 			if(icon_state == "sammi_offline")
 				icon_state = "sammi_offline_a"
@@ -201,9 +201,10 @@
 
 	if(user != src)
 		if(opened && !wiresexposed)
+			var/obj/item/weapon/cell/cell = get_cell()
 			if(cell || cellhold)
 				if(cellhold)
-					cell = cellhold
+					add_cell(cellhold)
 					cellhold = null
 				if(cell)
 					cell.updateicon()
@@ -221,8 +222,8 @@
 	..()
 	laws = new sammi_base_law_type
 	module = new /obj/item/weapon/robot_module/sammi(src)
-	cellhold = cell
-	cell = null
+	cellhold = get_cell()
+	clear_cell()
 
 /mob/living/silicon/robot/mommi/sammi/ghost()
 	//if(src.subtype == "sammi")

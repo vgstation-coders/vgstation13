@@ -55,7 +55,7 @@
 				var/icon/img = imglist[note]
 				if(img)
 					user << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
-					dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
+					dat += "<img src='tmp_photo_[note].png' width = '192' style='image-rendering: pixelated'><BR>"
 			dat += "<br>"
 	return dat
 
@@ -223,7 +223,7 @@
         if (!t || P_app.toff || U.stat || (!in_range(pda_device, U) && pda_device.loc != U)) //If no message, messaging is off, and we're either dead, unconscious, out of range or not in usr
             return
 
-        if (last_text && world.time < last_text + 5)
+        if (last_text && world.time < last_text + 0.5 SECONDS)
             return
         last_text = world.time
     // check if telecomms I/O route 1459 is stable
@@ -273,7 +273,7 @@
         P_app.tnote["[msg_id]"] = "<i><b>&larr; From <a href='byond://?src=\ref[P_app];choice=Message;target=\ref[reply_to]'>[pda_device.owner]</a> ([pda_device.ownjob]):</b></i><br>[t]<br>"
         msg_id++
         for(var/mob/dead/observer/M in player_list)
-            if(!multicast_message && M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
+            if(!multicast_message && M.stat == DEAD && M.client && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
                 M.show_message("[formatFollow(U)] <span class='game say'>PDA Message - <span class='name'>\
                     [U.real_name][U.real_name == pda_device.owner ? "" : " (as [pda_device.owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span>\
                     [pda_device.photo ? " (<a href='byond://?src=\ref[P_app];choice=viewPhoto;image=\ref[pda_device.photo];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)</span>" : ""]")

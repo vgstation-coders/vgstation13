@@ -21,6 +21,29 @@
 	storage_slots = 200
 	bluespace = TRUE
 
+/obj/item/weapon/storage/bag/gadgets/part_replacer/bluespace/admin
+	var/stock_rating = 4
+	admin_desc = "This one seems to have infinite parts. Use this in hand to change the ratings of stock parts applied."
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/bluespace/admin/attack_self(mob/user)
+	if(user.check_rights(R_ADMIN))
+		stock_rating = clamp(input(user,"Which part rating to use?","Part ratings",4) as num,2,4)
+	else
+		..()
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/bluespace/admin/preattack(atom/target, mob/user, adjacent, params)
+	if(user.check_rights(R_ADMIN))
+		QDEL_LIST(contents)
+		if(stock_rating > 1)
+			for(var/part in subtypesof(/obj/item/weapon/stock_parts))
+				var/obj/item/weapon/stock_parts/S = part
+				if(initial(S.rating) == stock_rating)
+					for(var/i in 1 to 10)
+						new part(src)
+						handle_item_insertion(S, 1)	
+		to_chat(user,"[src] contains: [counted_english_list(contents)]")
+	. = ..()
+
 /obj/item/weapon/storage/bag/gadgets/part_replacer/proc/play_rped_sound()
 	//Plays the sound for RPED exhanging or installing parts.
 	playsound(src, 'sound/items/rped.ogg', 40, 1)

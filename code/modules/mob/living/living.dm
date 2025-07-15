@@ -26,6 +26,11 @@
 
 	if(addicted_chems)
 		QDEL_NULL(addicted_chems)
+
+	var/datum/gamemode/dynamic/dyn_mode = ticker?.mode
+	if (istype(dyn_mode))
+		dyn_mode.living_players -= src
+
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -652,7 +657,7 @@ Thanks.
 
 	if(config.allow_Metadata)
 		if(client)
-			to_chat(usr, "[src]'s Metainfo:<br>[client.prefs.metadata]")
+			to_chat(usr, "[src]'s Metainfo:<br>[client.prefs.get_pref(/datum/preference_setting/string/metadata)]")
 		else
 			to_chat(usr, "[src] does not have any stored infomation!")
 	else
@@ -1022,6 +1027,11 @@ Thanks.
 			var/obj/structure/rack/crate_shelf/CS = C.loc
 			CS.relay_container_resist_act(src,R)
 			return
+		if(istype(C.loc, /obj/spacepod/) && istype(C,/obj/structure/closet/crate)) //todo - make this generic for future space pod cargo systems
+			var/obj/structure/closet/crate/R = C
+			var/obj/spacepod/speesepod = C.loc
+			speesepod.attempt_cargo_resist(src,R)
+			return
 		if(!istype(C.loc, /obj/item/delivery/large)) //Wouldn't want to interrupt escaping being wrapped over the next few trivial checks
 			if(istype(C, /obj/structure/closet/secure_closet))
 				var/obj/structure/closet/secure_closet/SC = L.loc
@@ -1060,21 +1070,15 @@ Thanks.
 					sleep(10)
 					SC.broken = SC.locked // If it's only welded just break the welding, dont break the lock.
 					SC.locked = 0
-					SC.welded = 0
-					L.visible_message("<span class='danger'>[L] successfully breaks out of [SC]!</span>",
-									  "<span class='notice'>You successfully break out!</span>")
-					if(istype(SC.loc, /obj/item/delivery/large)) //Do this to prevent contents from being opened into nullspace (read: bluespace)
-						var/obj/item/delivery/large/BD = SC.loc
-						BD.attack_hand(usr)
-					SC.open()
-				else
-					C.welded = 0
-					L.visible_message("<span class='danger'>[L] successfully breaks out of [C]!</span>",
-									  "<span class='notice'>You successfully break out!</span>")
-					if(istype(C.loc, /obj/item/delivery/large)) //nullspace ect.. read the comment above
-						var/obj/item/delivery/large/BD = C.loc
-						BD.attack_hand(usr)
-					C.open()
+				C.welded = 0
+				if(C.arcanetampered)
+					C.bless() // so it doesn't just close again, fairness on the user
+				L.visible_message("<span class='danger'>[L] successfully breaks out of [C]!</span>",
+									"<span class='notice'>You successfully break out!</span>")
+				if(istype(C.loc, /obj/item/delivery/large)) //Do this to prevent contents from being opened into nullspace (read: bluespace)
+					var/obj/item/delivery/large/BD = C.loc
+					BD.attack_hand(usr)
+				C.open()
 
 	//Removing a headcrab
 	if(ishuman(L))
@@ -1370,6 +1374,8 @@ Thanks.
 						var/mob/M = AM
 						INVOKE_EVENT(src, /event/before_move)
 						step(M, t)
+						M.last_bumped_by = makeweakref(src)
+						M.last_bumped_by_timestamp = world.time
 						INVOKE_EVENT(src, /event/after_move)
 					else
 						step(AM, t)
@@ -1536,11 +1542,14 @@ Thanks.
 				var/start_T_descriptor = "<font color='#6b5d00'>tile at [start_T.x], [start_T.y], [start_T.z] in area [get_area(start_T)]</font>"
 				var/end_T_descriptor = "<font color='#6b4400'>tile at [end_T.x], [end_T.y], [end_T.z] in area [get_area(end_T)]</font>"
 
-				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been thrown by [usr.name] ([usr.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
+				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been thrown by [src.name] ([src.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
+				src.attack_log += text("\[[time_stamp()]\] <font color='red'>Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
 
-				log_attack("<font color='red'>[usr.name] ([usr.ckey]) Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				M.assaulted_by(usr)
+				M.last_thrown_by = makeweakref(src)
+				M.last_thrown_by_timestamp = world.time
+
+				log_attack("<font color='red'>[src.name] ([src.ckey]) Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
+				M.assaulted_by(src)
 				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null

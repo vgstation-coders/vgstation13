@@ -32,8 +32,7 @@
 
 	/* With the disease set-up, store the detials of the disease in the mouse's memory */
 	var/datum/mind/mouse_mind = R.antag
-	mouse_mind.store_memory(plague.get_info(TRUE), forced = 1)
-	mouse_mind.store_memory("<hr>", forced = 1)
+	mouse_mind.store_memory(plague.get_info(TRUE), category=MIND_MEMORY_ANTAGONIST, forced = 1)
 	var/dat = "<span class='notice'>You carry a deadly plague with the following traits:</span>"
 	dat += "<br><span class='notice'>Strength / Robustness:</span> <b>[plague.strength]%</b> / <b>[plague.robustness]%</b>"
 	dat += "<br><span class='notice'>Infection chance:</span> <b>[plague.infectionchance]%</b>"

@@ -493,7 +493,7 @@
 		t += "Turrets [enabled ? "activated":"deactivated"] - <A href='?src=\ref[src];toggleOn=1'>[enabled ? "Disable":"Enable"]?</a><br>\n"
 		t += "Currently set to [lethal ? "lethal":"stun"] - <A href='?src=\ref[src];toggleLethal=1'>Change to [lethal ? "Stun":"Lethal"]?</a><br>\n"
 
-	user << browse(t, "window=turretid")
+	user << browse(HTML_SKELETON(t), "window=turretid")
 	onclose(user, "turretid")
 
 /obj/machinery/turretid/npc_tamper_act(mob/living/L)
@@ -665,7 +665,7 @@
 
 				</body>
 				</html>"}
-	user << browse(dat, "window=turret")
+	user << browse(HTML_SKELETON(dat), "window=turret")
 	onclose(user, "turret")
 	return
 

@@ -122,16 +122,20 @@
 	var/limb_internal_state = state_data["internal_name"]
 
 	prefs.organ_data[limb_internal_name] = limb_internal_state
+	prefs.change_pref_datum_limb(limb_internal_name, limb_internal_state)
 
 	switch(state_data["mode"])
 		if(LIMB_MODE_AFFECT_CHILD)
 			var/child_limb = configurable_limb_data["child_limb"]
 			if(child_limb)
 				prefs.organ_data[child_limb] = limb_internal_state
+				prefs.change_pref_datum_limb(child_limb, limb_internal_state)
+
 		if(LIMB_MODE_AFFECT_PARENT)
 			var/parent_limb = configurable_limb_data["parent_limb"]
 			if(parent_limb)
 				prefs.organ_data[parent_limb] = limb_internal_state
+				prefs.change_pref_datum_limb(parent_limb, limb_internal_state)
 
 	return TRUE
 

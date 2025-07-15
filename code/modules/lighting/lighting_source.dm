@@ -31,8 +31,11 @@ var/list/all_light_sources = list()
 	var/needs_update    // Whether we are queued for an update.
 	var/destroyed       // Whether we are destroyed and need to stop emitting light.
 	var/force_update
+	
+	var/lowpriority=FALSE
 
-/datum/light_source/New(var/atom/owner, var/atom/top)
+/datum/light_source/New(var/atom/owner, var/atom/top, var/lowp=FALSE)
+	lowpriority=lowp
 	all_light_sources += src
 	source_atom = owner // Set our new owner.
 	if (!source_atom.light_sources)
@@ -101,7 +104,10 @@ var/list/all_light_sources = list()
 #define effect_update(BYOND)            \
 	if (!needs_update)                  \
 	{                                   \
-		lighting_update_lights += src;  \
+		if(lowpriority)					\
+			lighting_update_lights_lowpriority+= src;  \
+		else							\
+			lighting_update_lights+= src;  \
 		needs_update            = TRUE; \
 	}
 #endif

@@ -1095,3 +1095,84 @@
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	logo = "gun-logo"
 	repeatable = TRUE
+
+//////////////////////////////////////////////
+//                                          //
+//       DIVERGENT CLONE                    //
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/divergentclone
+	name = "Divergent Clone"
+	role_category = /datum/role/divergentclone
+	required_candidates = 1
+	weight = 3
+	weight_category = "Clone"
+	cost = 5
+	requirements = list(40,30,20,10,10,10,10,10,10,10)
+	high_population_requirement = 10
+	logo = "divergentclone-logo"
+	repeatable = TRUE
+	makeBody = FALSE
+	flags = MINOR_RULESET
+
+/datum/dynamic_ruleset/midround/from_ghosts/divergentclone/trim_candidates()
+	..()
+	for(var/mob/M in dead_players)
+		if(isdivergentclone(M))
+			dead_players -= M
+	for(var/mob/M in list_observers)
+		if(isdivergentclone(M))
+			list_observers -= M
+
+
+/datum/dynamic_ruleset/midround/from_ghosts/divergentclone/ready(var/forced = 0)
+	if(!config.revival_cloning)
+		return 0
+	
+	//Check that we have at least one ghost who isn't already a clone waiting to spawn
+	var/list/candies = dead_players + list_observers
+	var/list/valids[0]
+	for(var/mob/dead/observer/G in candies)
+		if(isdivergentclone(G))
+			continue
+		valids += G
+	if(valids.len == 0)
+		if(forced)
+			message_admins("Tried to force divergent clone, but no valid candidates found.")
+		return 0
+
+	var/list/clonepods = list()
+	for(var/obj/machinery/cloning/clonepod/pod in machines)
+		//Check that the pod has cloned something before
+		if(pod.cloned_records.len)
+			clonepods += pod
+	if(!forced && clonepods.len == 0)
+		return 0
+	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/divergentclone/finish_setup(mob/new_character, index)
+	//Create a new dummy body to create a new mind for the ghost.
+	var/L = get_turf(new_character)
+	var/mob/living/carbon/human/H = new /mob/living/carbon/human(pick(latejoin))
+	H.ckey = new_character.ckey
+	H.fully_replace_character_name(null, "\improper spirit of a divergent clone")
+
+	//Give the about-to-be-a-ghost mob the provisional role and objective
+	var/datum/role/divergentclone/new_role = new /datum/role/divergentclone(H.mind, override=TRUE)
+	new_role.ForgeObjectives()
+	new_role.AnnounceObjectives()
+
+	var/mob/dead/observer/G = H.ghostize(FALSE)
+	//Give it a more spirity looking icon.
+	G.icon = initial(G.icon)
+	G.icon_state = initial(G.icon_state)
+	QDEL_NULL(H)
+	G.forceMove(L)
+	G.add_spell(new /spell/targeted/ghost/divergentclone)
+
+	to_chat(G, "<span class='notice'><b>You were selected to be a divergent clone, but will not be spawned in yet!</b></span>")
+	to_chat(G, "<span class='notice'>You have been granted the \"Spawn as Divergent Clone\" ghost spell. Use this near a cloning pod to spawn in as a divergent clone of someone who was cloned, or is currently being cloned, in that pod.</span>")
+	to_chat(G, "<span class='notice'>Using this spell on an unoccupied cloning pod will allow you to choose a record of a person previously cloned in that pod. Using it on an occupied pod will cause you to become a twin of the person currently in the pod, and be ejected from the pod at the same time as them.</span>")
+	to_chat(G, "<span class='notice'>Remember: you can only use this spell once, and re-entering your corpse will remove it permanently. In fact, for your convenience we have removed your ability to re-enter your corpse.</span>")	
+

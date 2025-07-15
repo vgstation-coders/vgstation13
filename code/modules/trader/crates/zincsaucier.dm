@@ -379,6 +379,15 @@ var/global/global_cricket_population = 0
 		update_icon_after_process = TRUE
 	..()
 
+//works as a lawnmower
+/obj/structure/bed/chair/vehicle/mower/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
+	//if we successfully moved clear the flora in the current tile. We can't use newloc because we can't really check if we actually moved. i tried checking, and it doesn't work.
+	if(istype(loc,/turf))
+		var/turf/T=loc
+		for(var/obj/structure/flora/F in T.contents)
+			qdel(F)
+	return ..()
+
 /obj/effect/plantsegment/Crossed(var/atom/movable/AM)
 	if(istype(AM,/obj/structure/bed/chair/vehicle/mower))
 		die_off()

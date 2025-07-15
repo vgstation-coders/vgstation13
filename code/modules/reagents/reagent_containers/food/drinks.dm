@@ -290,9 +290,7 @@
 			spawn(5)
 				reagents.trans_to(M, gulp_size)
 
-		if(isrobot(user)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
-			var/mob/living/silicon/robot/bro = user
-			bro.cell.use(30)
+		if(use_cell_charge(user,30)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
 			var/refill = reagents.get_master_reagent_id()
 			spawn(600)
 				reagents.add_reagent(refill, gulp_size)
@@ -2331,8 +2329,8 @@
 				return ..()
 
 			// Geometrically checking if we're on a straight line.
-			var/vector/V = atoms2vector(src, over_location)
-			var/vector/V_norm = V.normalized()
+			var/_vector/V = atoms2vector(src, over_location)
+			var/_vector/V_norm = V.normalized()
 			if (!V_norm.is_integer())
 				return ..() // Only a cardinal vector (north, south, east, west) can pass this test
 
@@ -2343,7 +2341,7 @@
 			do
 				temp_turf = temp_turf.get_translated_turf(V_norm)
 				if (!locate(/obj/structure/table) in temp_turf)
-					var/vector/V2 = atoms2vector(src, temp_turf)
+					var/_vector/V2 = atoms2vector(src, temp_turf)
 					vector_translate(V2, 0.1 SECONDS)
 					user.visible_message("<span class='warning'>\The [user] slides \the [src] down the table... and straight into the ground!</span>", "<span class='warning'>You slide \the [src] down the table, and straight into the ground!</span>")
 					create_broken_bottle()

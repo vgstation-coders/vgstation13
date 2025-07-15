@@ -56,6 +56,7 @@
 */
 var/list/shitlist = list()
 /proc/__secret__hwcheck_loop()
+	usr = null
 	// List of clients that have been warned last iteration.
 	while (TRUE)
 		for (var/client/C in clients)

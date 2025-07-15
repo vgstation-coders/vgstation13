@@ -484,6 +484,8 @@
 			return
 		src.welded =! src.welded
 		src.update_icon()
+		if(!welded && arcanetampered)
+			bless()
 		for(var/mob/M in viewers(src))
 			M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
 	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && src.has_lock_type) //testing with crowbars for now, will use circuits later

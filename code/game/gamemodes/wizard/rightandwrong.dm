@@ -650,7 +650,7 @@
 		if("Staff of Animation")
 			selected_path = /obj/item/weapon/gun/energy/staff/animate
 		if("Staff of Necromancy")
-			selected_path = /obj/item/weapon/gun/energy/staff/necro
+			selected_path = /obj/item/weapon/staff/necro
 		if("Contract of Apprenticeship") //lol
 			selected_path = /obj/item/wizard_apprentice_contract
 		if("Scrying Orb")

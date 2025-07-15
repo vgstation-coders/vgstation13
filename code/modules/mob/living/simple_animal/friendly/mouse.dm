@@ -540,6 +540,7 @@
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm   = "tenderizes"
+	is_pet=TRUE
 
 /mob/living/simple_animal/mouse/mouse_op
 	name = "mouse operative"

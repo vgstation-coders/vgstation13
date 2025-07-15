@@ -210,6 +210,8 @@ var/const/INGEST = 2
 		var/current_reagent_transfer = current_reagent.volume * part
 		if(preserve_data)
 			trans_data = current_reagent.data
+		if(current_reagent.id in reagents_to_always_log)
+			log_transfer = TRUE
 		if(log_transfer)
 			logged_message += "[current_reagent_transfer]u of [current_reagent.name]"
 			if(current_reagent.id in reagents_to_log)
@@ -616,10 +618,11 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	total_thermal_mass = get_thermal_mass()
 	return 0
 
-/datum/reagents/proc/clear_reagents()
+/datum/reagents/proc/clear_reagents(var/preserve_unremovable=FALSE)
 	amount_cache.len = 0
 	for(var/datum/reagent/R in reagent_list)
-		del_reagent(R.id,update_totals=0)
+		if( !(preserve_unremovable && (R.flags & CHEMFLAG_NOTREMOVABLE)) )
+			del_reagent(R.id,update_totals=0)
 	// Only call ONCE. -- N3X
 	update_total()
 	if(my_atom)
@@ -915,6 +918,11 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /datum/reagents/proc/get_reagent_amount(var/reagent)
 	return amount_cache[reagent] + 0 //Convert null to 0.
 
+/datum/reagents/proc/get_reagent_amounts(var/list/input_reagents)
+	. = 0
+	for(var/i in input_reagents)
+		. += get_reagent_amount(i)
+
 /datum/reagents/proc/get_reagents()
 	var/res = ""
 	for(var/datum/reagent/A in reagent_list)
@@ -976,7 +984,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	reagent_list.Cut()
 
 	if(my_atom)
-		my_atom.reagents = null
+		// Sometimes atoms use /datum/reagents internal vars which are NOT their actual reagents datums
+		// This causes them to hard-del because the atom.reagents is nulled early in the Destroy() chain
+		// And is never deleted properly.
+		// The proper fix is of course to rework how datum/reagents work but I'll not do that.
+		if (my_atom.reagents == src)
+			my_atom.reagents = null
 		my_atom = null
 	..()
 
@@ -1110,6 +1123,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
  * max_vol is maximum volume of holder
  */
 /atom/proc/create_reagents(const/max_vol)
+	if (reagents)
+		stack_trace("double reagents creation for [type]")
+		QDEL_NULL(reagents)
 	reagents = new/datum/reagents(max_vol)
 	reagents.my_atom = src
 

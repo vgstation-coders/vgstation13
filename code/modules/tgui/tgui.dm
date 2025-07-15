@@ -11,7 +11,7 @@
 	var/mob/user
 	/// The object which owns the UI.
 	var/datum/src_object
-	/// The title of te UI.
+	/// The title of the UI.
 	var/title
 	/// The window_id for browse() and onclose().
 	var/datum/tgui_window/window
@@ -31,8 +31,14 @@
 	var/closing = FALSE
 	/// The status/visibility of the UI.
 	var/status = UI_INTERACTIVE
+	/// Timed refreshing state
+	var/refreshing = FALSE
 	/// Topic state used to determine status/interactability.
 	var/datum/ui_state/state = null
+	/// Rate limit client refreshes to prevent DoS.
+	var/refresh_cooldown = 0
+	/// The id of any ByondUi elements that we have opened
+	var/list/open_byondui_elements
 
 /**
  * public
@@ -50,11 +56,11 @@
  */
 /datum/tgui/New(mob/user, datum/src_object, interface, title, ui_x, ui_y)
 	log_tgui(user,
-		"new [interface] fancy [user?.client?.prefs.tgui_fancy]",
+		"new [interface] fancy [user?.client?.prefs.get_pref(/datum/preference_setting/toggle/tgui_fancy)]",
 		src_object = src_object)
 	src.user = user
 	src.src_object = src_object
-	src.window_key = "[ref(src_object)]-main"
+	src.window_key = "\ref[src_object]-main"
 	src.interface = interface
 	if(title)
 		src.title = title
@@ -90,21 +96,44 @@
 	window.acquire_lock(src)
 	if(!window.is_ready())
 		window.initialize(
-			fancy = user.client.prefs.tgui_fancy,
-			inline_assets = list(/datum/asset/simple/tgui)
-		)
+			strict_mode = TRUE,
+			fancy = user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_fancy),
+			assets = list(
+				get_tg_asset_datum(/datum/tg_asset/simple/tgui),
+			))
 	else
 		window.send_message("ping")
-	window.send_asset(/datum/asset/simple/fontawesome)
-	window.send_asset(/datum/asset/simple/tgfont)
-	for(var/asset in src_object.ui_assets(user))
-		window.send_asset(asset)
+	send_assets()
 	window.send_message("update", get_payload(
 		with_data = TRUE,
 		with_static_data = TRUE))
 	SStgui.on_open(src)
 
 	return TRUE
+
+/datum/tgui/proc/send_assets()
+	var/flush_queue = window.send_asset(get_tg_asset_datum(
+		/datum/tg_asset/simple/fontawesome))
+	flush_queue |= window.send_asset(get_tg_asset_datum(
+		/datum/tg_asset/simple/tgfont))
+	flush_queue |= window.send_asset(get_tg_asset_datum(
+		/datum/tg_asset/json/icon_ref_map))
+	for(var/datum/tg_asset/asset in src_object.ui_assets(user))
+		flush_queue |= window.send_asset(asset)
+
+	// -- Legacy code for /vg/ style spritesheet datums --
+	// TOFIX!!! One thing at the time..
+	for(var/asset_type in src_object.ui_assets(user))
+		window.sent_assets |= list(asset_type)
+		var/datum/asset/instance = get_asset_datum(asset_type)
+		instance.send(window.client)
+		if(istype(instance, /datum/asset/spritesheet))
+			var/datum/asset/spritesheet/spritesheet = instance
+			window.send_message("asset/stylesheet", spritesheet.css_filename())
+		window.send_raw_message(TGUI_CREATE_MESSAGE("asset/mappings", instance.get_url_mappings()))
+	// -- END legacy code for /vg/ style spritesheet datums --
+	if (flush_queue)
+		user.client.tg_browse_queue_flush()
 
 /**
  * public
@@ -127,8 +156,23 @@
 		window.close(can_be_suspended)
 		src_object.ui_close(user)
 		SStgui.on_close(src)
+		if(user.client)
+			terminate_byondui_elements()
 	state = null
 	qdel(src)
+
+/**
+ * public
+ *
+ * Closes all ByondUI elements, left dangling by a forceful TGUI exit,
+ * such as via Alt+F4, closing in non-fancy mode, or terminating the process
+ *
+ */
+/datum/tgui/proc/terminate_byondui_elements()
+	set waitfor = FALSE
+
+	for(var/byondui_element in open_byondui_elements)
+		winset(user.client, byondui_element, list("parent" = ""))
 
 /**
  * public
@@ -175,11 +219,17 @@
 /datum/tgui/proc/send_full_update(custom_data, force)
 	if(!user.client || !initialized || closing)
 		return
+	if(!COOLDOWN_FINISHED(src, refresh_cooldown))
+		refreshing = TRUE
+		add_timer(new /callback(src, PROC_REF(send_full_update), custom_data, force), COOLDOWN_TIMELEFT(src, refresh_cooldown), TIMER_UNIQUE)
+		return
+	refreshing = FALSE
 	var/should_update_data = force || status >= UI_UPDATE
 	window.send_message("update", get_payload(
 		custom_data,
 		with_data = should_update_data,
 		with_static_data = TRUE))
+	COOLDOWN_START(src, refresh_cooldown, TGUI_REFRESH_FULL_UPDATE_COOLDOWN)
 
 /**
  * public
@@ -209,12 +259,17 @@
 	json_data["config"] = list(
 		"title" = title,
 		"status" = status,
-		"interface" = interface,
+		"interface" = list(
+			"name" = interface,
+			"layout" = 0, // user.client.prefs.get_pref(/datum/preference_setting/toggle/layout_prefs_used), // not implemented yet!
+		),
+		"refreshing" = refreshing,
 		"window" = list(
 			"key" = window_key,
 			"size" = window_size,
-			"fancy" = user.client.prefs.tgui_fancy,
-			"locked" = TRUE,
+			"fancy" = user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_fancy),
+			"locked" = 0, // user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_lock), //not implemented yet!
+			"scale" = 0, // user.client.prefs.get_pref(/datum/preference_setting/toggle/tgui_scale),
 		),
 		"client" = list(
 			"ckey" = user.client.ckey,
@@ -242,12 +297,12 @@
  * Run an update cycle for this UI. Called internally by SStgui
  * every second or so.
  */
-/datum/tgui/proc/process(delta_time, force = FALSE)
+/datum/tgui/proc/process(seconds_per_tick, force = FALSE)
 	if(closing)
 		return
 	var/datum/host = src_object.ui_host(user)
 	// If the object or user died (or something else), abort.
-	if(!src_object || !host || !user || !window)
+	if(QDELETED(src_object) || QDELETED(host) || QDELETED(user) || QDELETED(window))
 		close(can_be_suspended = FALSE)
 		return
 	// Validate ping
@@ -297,8 +352,11 @@
 		return FALSE
 	switch(type)
 		if("ready")
+			// Send a full update when the user manually refreshes the UI
+			if(initialized)
+				send_full_update()
 			initialized = TRUE
-		if("pingReply")
+		if("ping/reply")
 			initialized = TRUE
 		if("suspend")
 			close(can_be_suspended = TRUE)
@@ -310,7 +368,33 @@
 		if("setSharedState")
 			if(status != UI_INTERACTIVE)
 				return
-			if(!src_object.tgui_shared_states)
-				src_object.tgui_shared_states = list()
+			LAZYINITLIST(src_object.tgui_shared_states)
 			src_object.tgui_shared_states[href_list["key"]] = href_list["value"]
 			SStgui.update_uis(src_object)
+
+		// Handles clearing out byondUI elements, which may cause black squares to appear
+		if(TGUI_MANAGED_BYONDUI_TYPE_RENDER)
+			var/byond_ui_id = payload[TGUI_MANAGED_BYONDUI_PAYLOAD_ID]
+			if(!byond_ui_id || open_byondui_elements?.len > TGUI_MANAGED_BYONDUI_LIMIT)
+				return
+
+			append_ui_element(byond_ui_id)
+
+		if(TGUI_MANAGED_BYONDUI_TYPE_UNMOUNT)
+			var/byond_ui_id = payload[TGUI_MANAGED_BYONDUI_PAYLOAD_ID]
+			if(!byond_ui_id)
+				return
+
+			append_ui_element(byond_ui_id)
+
+/datum/tgui/proc/append_ui_element(var/ui_element_id)
+	if (!open_byondui_elements)
+		open_byondui_elements = list()
+	open_byondui_elements |= ui_element_id
+
+/// Wrapper for behavior to potentially wait until the next tick if the server is overloaded
+/datum/tgui/proc/on_act_message(act_type, payload, state)
+	if(QDELETED(src) || QDELETED(src_object))
+		return
+	if(src_object.ui_act(act_type, payload, src, state))
+		SStgui.update_uis(src_object)

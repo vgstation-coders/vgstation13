@@ -52,14 +52,8 @@
 	(active && isrobot(loc)) ? processing_objects.Add(src) : processing_objects.Remove(src)
 
 /obj/item/weapon/pickaxe/plasmacutter/heat_axe/process()
-	if(isrobot(loc)) //Sanity is never enough.
-		var/mob/living/silicon/robot/robot = loc
-		if(active && robot && robot.cell)
-			var/consume = rand(100,250)
-			if(robot.cell.charge <= consume)
-				toggleActive()
-			robot.cell.use(consume)
-	else
+	var/consume = rand(100,250)
+	if(!use_cell_charge(loc,consume))
 		toggleActive()
 
 /obj/item/weapon/pickaxe/plasmacutter/heat_axe/proc/HellFire(var/mob/living/victim)

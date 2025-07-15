@@ -250,7 +250,7 @@ if ungreased adult: l containers
 
 	if(!client && isliving(target)) //automated headbutting if no client
 		for(var/spell/headbutt/M in spell_list)
-			if(M.charge_counter == M.charge_max)
+			if(M.charge_counter == M.charge_cooldown_max)
 				M.cast(list(target),src)
 				M.charge_counter = 0
 				M.process()
@@ -263,7 +263,7 @@ if ungreased adult: l containers
 /spell/headbutt
 	name = "Headbutt"
 	desc = "Knocks the target down."
-	charge_max = 10 SECONDS
+	charge_cooldown_max = 10 SECONDS
 	spell_flags = WAIT_FOR_CLICK
 	range = 1
 	hud_state = "wiz_fist"
@@ -365,3 +365,90 @@ if ungreased adult: l containers
 
 /mob/living/simple_animal/hostile/spacehog/piglet/set_mood(var/mood)
 	..(HOG_SKITTISH)
+
+
+//This is not a subtype of spacehog because it is very different than other spacehogs. It does not fight, it has no moods, foraging, hunger needs, etc.
+/mob/living/simple_animal/rampagingspacehog
+	name = "rampaging overgreased feral space hog"
+	desc = "It leaves a sickly trail of grease and knocks over anyone in its way."
+	speed = 1 //moves at same speed as a person when not dashing
+	maxHealth = 300
+	health = 300
+	icon = 'icons/mob/hog.dmi'
+	icon_state = "hog_overgreased"
+	icon_living = "hog_overgreased"
+	icon_dead = "hog_overgreased_dead"
+	speak = list("Oink!","Squee!","Sqwaa!","Ounch!", "SQUEEEEE!","Oink...","Oink, oink", "Oink, oink, oink", "Oink!", "Oiiink.")
+	emote_hear = list("squeals hauntingly")
+	emote_see = list("roots about","squeals hauntingly")
+	emote_sound = list("sound/voice/pigsnort.ogg","sound/voice/pigsqueal.ogg")
+	response_help = "pats"
+	response_disarm = "shoves"
+	response_harm = "hits"
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/box/pig
+	meat_amount = 24
+	can_butcher = TRUE
+	size = SIZE_BIG
+	var/dashspeed = 3 //How fast it paths!
+	var/nextsqueal = 0
+	var/list/homes = list() //Places the rampaging hog will try to go
+	var/obj/item/weapon/card/id/captains_spare/CS
+	var/target //Where we're heading
+	var/list/path = list()
+
+/mob/living/simple_animal/rampagingspacehog/New()
+	..()
+	homes += loc
+	CS = new(src) //The hog can already squeeze through any door, but this makes sure he knows it.
+
+/mob/living/simple_animal/rampagingspacehog/Destroy()
+	QDEL_NULL(CS)
+	..()
+
+/mob/living/simple_animal/rampagingspacehog/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	//Before departing
+	var/turf/simulated/T = loc
+	if(istype(T) && !T.is_wet())
+		new /obj/effect/overlay/puddle(T, TURF_WET_LUBE, 5 SECONDS) //leave 5 seconds of lube behind
+	..() //move on
+
+/mob/living/simple_animal/rampagingspacehog/to_bump(var/atom/movable/AM)
+	if(ishuman(AM))
+		var/mob/living/carbon/human/H = AM
+		H.Knockdown(5)
+	..()
+
+/mob/living/simple_animal/rampagingspacehog/adjustBruteLoss(var/damage)
+	..()
+	if(health<=0)
+		return
+	if(homes.len<2)
+		homes += get_open_maintenance_turfs(4)
+	if(nextsqueal < world.time)
+		nextsqueal = world.time + (2 SECONDS)
+		playsound(loc, 'sound/voice/pigsqueal.ogg', 50, 0)
+	target = pick(homes)
+	path = get_path_to(src, target, max_distance=500, id = CS)
+	pathers += src
+
+/mob/living/simple_animal/rampagingspacehog/Life()
+	..()
+
+	for(var/i = 1 to dashspeed)
+		if(path.len>0)
+			process_astar_path()
+		else
+			break
+
+/mob/living/simple_animal/rampagingspacehog/process_astar_path()
+	if(gcDestroyed || stat == DEAD)
+		return FALSE
+	if(!path || !path.len)
+		playsound(loc, 'sound/voice/pigsnort.ogg', 50, 0)
+		return FALSE
+	Move(path[1])
+	path.Remove(path[1])
+	if(!path.len)
+		playsound(loc, 'sound/voice/pigsnort.ogg', 50, 0)
+		return FALSE
+	return TRUE
