@@ -197,6 +197,7 @@
 				var/law = "Directive 7-12 has been authorized. Allow no sentient being to escape the purge. The nuclear failsafe must be activated at any cost, the code is: [nukecode]."
 				aiPlayer.set_zeroth_law(law)
 				to_chat(aiPlayer, "Laws Updated: [law]")
+			stage = FACTION_ENDGAME
 		/*	..() //Set thematic
 		This goes to the faction endgame stuff, but all of that is done here already and it would interfere with the thematic to have this uncommented. Break glass in case of emergency. */
 		if (FACTION_DEFEATED) //Cleanup time
