@@ -100,6 +100,7 @@ var/static/list/mat2type = list(
 							 "plastic" = /obj/item/stack/sheet/mineral/plastic,
 							 "sandstone" = /obj/item/stack/sheet/mineral/sandstone,
 							 "wooden planks" = /obj/item/stack/sheet/wood,
+							 "cloth" = /obj/item/stack/sheet/cloth
 							 "bricks" = /obj/item/stack/sheet/mineral/brick)
 
 /obj/item/device/material_synth/update_icon()
