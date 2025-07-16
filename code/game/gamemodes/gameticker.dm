@@ -99,6 +99,7 @@ var/datum/controller/gameticker/ticker
 				noplayers = FALSE
 			if (world.timeofday < (863800 -  delay_timetotal) &&  pregame_timeleft > 863950) // having a remaining time > the max of time of day is bad....
 				pregame_timeleft -= 864000
+				time_taken_in_lobby -= 864000
 			if(!going && !remaining_time)
 				remaining_time = pregame_timeleft - world.timeofday
 			if(going == LOBBY_TICKING_RESTARTED)
