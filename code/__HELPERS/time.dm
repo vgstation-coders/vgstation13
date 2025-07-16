@@ -40,7 +40,7 @@
 		timestamp -= time_taken_to_init
 		if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
 			timestamp -= time_taken_in_lobby
-	return "[add_zero((round(timestamp / 36000) + 12) % 24, 2)]:[add_zero(timestamp / 600 % 60, 2)]\
+	return "[add_zero((round(timestamp / 36000) + 12) % 24, 2)]:[add_zero(round(timestamp / 600) % 60, 2)]\
 	[give_seconds ? ":[add_zero(round(timestamp / 10) % 60, 2)]" : ""]"
 
 /proc/formatTimeDuration(var/deciseconds)
