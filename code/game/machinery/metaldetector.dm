@@ -198,10 +198,10 @@
 					Clear subjects: <A href='?src=\ref[src];action=clearlogs;logflag=[LOG_CLEAR]'>(Clear)</A><br><br>"}
 			for(var/name in clear_logs)
 				dat += "[name] - [clear_logs[name]]<br>"
-			dat += "<br>Analysis needed: <A href='?src=\ref[src];action=clearlogs;logflag=[LOG_CLEAR]'>(Clear)</A><br><br>"
+			dat += "<br>Analysis needed: <A href='?src=\ref[src];action=clearlogs;logflag=[LOG_SUS]'>(Clear)</A><br><br>"
 			for(var/name in sus_logs)
 				dat += "[name] - [sus_logs[name]]<br>"
-			dat += "<br>Threats detected: <A href='?src=\ref[src];action=clearlogs;logflag=[LOG_CLEAR]'>(Clear)</A><br><br>"
+			dat += "<br>Threats detected: <A href='?src=\ref[src];action=clearlogs;logflag=[LOG_THREAT]'>(Clear)</A><br><br>"
 			for(var/name in threat_logs)
 				dat += "[name] - [threat_logs[name]]<br>"
 			dat += "</h4><h3><A href='?src=\ref[src];action=viewlogs'>Return</A></h3>"
