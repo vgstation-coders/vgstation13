@@ -38,7 +38,7 @@
 /proc/worldtime2text(timestamp = world.time, give_seconds = FALSE)
 	if(timestamp == world.time)
 		timestamp -= time_taken_to_init - time_taken_in_lobby
-	return "[(round(timestamp / 36000) + 12) % 24]:[(timestamp / 600 % 60) < 10 ? add_zero(timestamp / 600 % 60, 1) : timestamp / 600 % 60]\
+	return "[(round(timestamp / 36000) + 12) % 24]:[(timestamp / 600 % 60) < 10 ? add_zero(timestamp / 600 % 60, 2) : timestamp / 600 % 60]\
 	[give_seconds ? ":[add_zero(round(timestamp / 10) % 60, 2)]" : ""]"
 
 /proc/formatTimeDuration(var/deciseconds)
