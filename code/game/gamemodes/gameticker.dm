@@ -731,6 +731,7 @@ var/datum/controller/gameticker/ticker
 
 		to_chat(world, "<span class='notice'><B>Enjoy the game!</B></span>")
 		roundstart_timestamp = world.time
+		time_taken_in_lobby = world.timeofday - time_taken_in_lobby
 
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
