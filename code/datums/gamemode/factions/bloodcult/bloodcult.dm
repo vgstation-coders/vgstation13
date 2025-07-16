@@ -91,6 +91,7 @@
 			eclipse_trigger_cult()
 			for(var/obj/structure/cult/spire/S in cult_spires)
 				S.upgrade(3)
+			ticker.StartThematic("eclipse")
 		if (BLOODCULT_STAGE_MISSED)
 			for (var/datum/role/cultist in members)
 				var/mob/M = cultist.antag.current
@@ -98,6 +99,7 @@
 					to_chat(M, "<span class='sinister'>The Eclipse has passed. You won't be able to tear reality aboard this station anymore. Escape the station alive with your fellow cultists so you may try again another day.</span>")
 			for(var/obj/structure/cult/spire/S in cult_spires)
 				S.upgrade(1)
+			ticker.StopThematic()
 		if (BLOODCULT_STAGE_ECLIPSE)
 			update_all_parallax()
 			var/datum/zLevel/ZL = map.zLevels[map.zMainStation]

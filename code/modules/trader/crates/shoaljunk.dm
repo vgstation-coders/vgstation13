@@ -9,7 +9,6 @@ var/global/list/shoal_stuff = list(
 	/obj/item/clothing/accessory/wristwatch/black,/obj/item/clothing/accessory/wristwatch/black,/obj/item/clothing/accessory/wristwatch/black,
 	//1 of a kind
 	/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
-	/obj/item/weapon/vinyl/echoes,
 	/obj/item/fish_eggs/seadevil,
 	/obj/structure/bed/therapy,
 	/obj/item/weapon/grenade/station/discount,

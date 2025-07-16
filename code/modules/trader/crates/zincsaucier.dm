@@ -7,7 +7,6 @@ var/global/list/chef_stuff = list(
 	/obj/item/fish_eggs/seadevil,/obj/item/fish_eggs/seadevil, //fish_items.dm
 	/obj/item/apiary/langstroth,/obj/item/apiary/langstroth,
 	//one of a kind
-	/obj/item/weapon/vinyl/echoes, //media/jukebox.dm
 	/obj/item/sushimat,
 	/obj/structure/dishwasher,
 	/obj/item/cricketfarm,
