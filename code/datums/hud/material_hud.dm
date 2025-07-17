@@ -29,6 +29,5 @@
 	. = list()
 	for (var/turf/TT in trange(view, T))
 		if (TT.holomap_data)
-			for (var/image/I in TT.holomap_data)
-				I.plane = OBJ_PLANE
-				. += I
+			. += TT.holomap_data
+			

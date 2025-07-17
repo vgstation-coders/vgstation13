@@ -700,7 +700,7 @@
 	I.alpha = 128
 	// Since holomaps are overlays of the turf
 	// This'll make them always be just above the turf and not block interaction.
-	I.plane = FLOAT_PLANE + 1 //Yes, there's a define equal to this value, but what we specifically want here is one plane above the parent, which is what this means.
+	I.plane = OBJ_PLANE //Yes, there's a define equal to this value, but what we specifically want here is one plane above the parent, which is what this means.
 	// When I said above turfs I mean it.
 	I.layer = HOLOMAP_LAYER
 
