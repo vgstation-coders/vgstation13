@@ -2778,6 +2778,7 @@
 #include "code\modules\shuttles\syndicate.dm"
 #include "code\modules\shuttles\trade.dm"
 #include "code\modules\shuttles\vox.dm"
+#include "code\modules\sound\managed_sound.dm"
 #include "code\modules\sound\sound_emitter.dm"
 #include "code\modules\sound\sound_emitter_collection.dm"
 #include "code\modules\sound\sound_listener_context.dm"

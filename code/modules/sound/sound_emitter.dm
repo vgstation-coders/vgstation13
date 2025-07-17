@@ -14,8 +14,8 @@
 
 /datum/sound_emitter
 	var/atom/source = null
-	var/list/sounds = list()
-	var/active_key = null
+	var/list/sounds = list() // list of managed_sound
+	var/datum/managed_sound/active_sound = null
 	var/list/client/hearers = list()
 	var/range
 	var/last_hash = null
@@ -58,21 +58,19 @@
 	s.atom = source
 	s.environment = -1 // byond bug(?) if you set this to anything else, it will permanently set the channel environment to it
 	s.transform = matrix(1, 0, 0, 0, 1, 0) //dont think theres a good reason for this to be anything else
-	sounds[key] = s
+	sounds[key] = new /datum/managed_sound(s)
 
 /datum/sound_emitter/proc/play(key)
-	var/sound/S = sounds[key]
+	var/datum/managed_sound/S = sounds[key]
 	if (!S)
 		CRASH("Sound emitter play called for key [key], but sound does not exist.")
 
-	if (S.repeat == 1)
-		active_key = key
-		activate()
+	if (S.base_sound.repeat == 1)
+		activate(key)
 	else
-		play_once(S)
+		play_once(copy_sound(S.base_sound))
 
-/datum/sound_emitter/proc/play_once(sound/s, interrupt = FALSE)
-	var/sound/S = copy_sound(s)
+/datum/sound_emitter/proc/play_once(sound/S, interrupt = FALSE)
 	S.atom = source
 	S.repeat = 0 //no repeat - no need for channel reservation
 	S.wait = 0
@@ -90,24 +88,29 @@
 			C << PS
 
 /datum/sound_emitter/proc/is_currently_playing()
-	return (active_key != null)
+	return (active_sound != null)
 
 /datum/sound_emitter/proc/update_active_sound_param(volume = null, frequency = null)
-	if (!active_key)
+	if (!is_currently_playing())
 		return
-	var/sound/S = sounds[active_key]
-	env_volume_coeff = turf_volume_coeff(source)
-	S = apply_env_effects(copy_sound(S))
-	S.atom = source
-
+	// update active_sound overrides
 	if (volume)
-		S.volume = volume
+		active_sound.volume_override = volume
 	if (frequency)
-		S.frequency = frequency
+		active_sound.frequency_override = frequency
+
+	// update environmental effect cache
+	env_volume_coeff = turf_volume_coeff(source)
+	apply_env_effects(active_sound)
+
+	var/sound/S = active_sound.get()
 	S.status |= SOUND_UPDATE
 	for (var/client/C in hearers)
 		var/datum/sound_listener_context/context = C.listener_context
 		S = apply_player_effects(copy_sound(S), context.proxy)
+		var/chan = context.assign_channel(src) // TODO safety proc "get_active_channel" with check that src is on that channel
+		S.channel = chan
+		world.log << "Sending [S.file] to [C] on channel [S.channel], volume [S.volume]"
 		C << S
 
 /datum/sound_emitter/proc/stop()
@@ -124,8 +127,8 @@
 
 	source = new_source
 	for (var/key in sounds)
-		var/sound/S = sounds[key]
-		S.atom = source
+		var/datum/managed_sound/S = sounds[key]
+		S.update_atom(new_source)
 	update_active_sound_param()
 
 	sound_emitter_collection.add(src)
@@ -155,15 +158,13 @@
 	if (!C || !C.listener_context || (C in hearers))
 		return //nowhere to send the sound, client can't hear at all or client can already hear it
 
-	var/sound/S = sounds[active_key]
-	if (!S)
-		CRASH("Sound emitter update_hearers called for key [active_key], but sound does not exist.")
 	var/datum/sound_listener_context/context = C.listener_context
 	var/chan = context.assign_channel(src)
 	if (!chan)
 		CRASH("Sound emitter on [source] failed to reserve a channel for [C]")
 
 	hearers |= C
+	var/sound/S = active_sound.get()
 	// important note - clearing SOUND_UPDATE means that the sound will play FROM THE BEGINNING.
 	// this system was originally built with short repeating sounds in mind (machine hum, etc) however
 	// if you try to do something longer and more varied like music then this is very noticeable and unwanted.
@@ -171,8 +172,7 @@
 	// S.offset to start at the correct point
 	S.status &= ~SOUND_UPDATE // clear update status for new hearers, else they cant hear it lmao
 	S.channel = chan
-	S = apply_env_effects(copy_sound(S))
-	S = apply_player_effects(S, context.proxy)
+	S = apply_player_effects(copy_sound(S), context.proxy)
 	C << S
 
 // called when an active emitter and player are no longer in audible range, emitter deactivates while in range or
@@ -203,15 +203,17 @@
 */
 
 // push sounds to any clients in range, register with sound_zone_manager for dynamic updates
-/datum/sound_emitter/proc/activate()
-	// expect active_key to be already set and validated
+/datum/sound_emitter/proc/activate(key)
+	active_sound = sounds[key]
+	if (!active_sound)
+		CRASH("[key] not found in sounds cache for emitter on [source]")
 	sound_zone_manager.register_emitter(src)
 	init_hearers()
 	update_hearers()
 
 // halt sounds to clients in range, unregister from dynamic updates
 /datum/sound_emitter/proc/deactivate()
-	active_key = null
+	active_sound = null
 	update_hearers()
 	hearers.Cut()
 	sound_zone_manager.unregister_emitter(src)
@@ -221,8 +223,8 @@
 
 /datum/sound_emitter/proc/update_hearers()
 	var/sound/S = null
-	if (active_key)
-		S = sounds[active_key]
+	if (active_sound)
+		S = active_sound.get()
 		S.status &= ~SOUND_UPDATE
 	else
 		S = sound()
@@ -235,8 +237,7 @@
 		var/chan = context.assign_channel(src)
 		S.channel = chan
 		if (S.file)
-			S = apply_env_effects(copy_sound(S))
-			apply_player_effects(S, context.proxy)
+			S = apply_player_effects(copy_sound(S), context.proxy) // dont bother doing this for null sounds
 		client << S
 
 /datum/sound_emitter/proc/apply_player_effects(sound/s, var/mob/player)
@@ -254,9 +255,8 @@
 
 	return s
 
-/datum/sound_emitter/proc/apply_env_effects(sound/s)
-	s.volume *= env_volume_coeff
-	return s
+/datum/sound_emitter/proc/apply_env_effects(datum/managed_sound/s)
+	s.volume_mutator = env_volume_coeff
 
 /datum/sound_emitter/proc/turf_volume_coeff(atom/a)
 	if (!a)
@@ -273,7 +273,7 @@
 	return 0 //damned
 
 /datum/sound_emitter/proc/update_params_for_player(client/C)
-	if (!active_key)
+	if (!active_sound)
 		return
 	if (!C || !C.listener_context)
 		return
@@ -282,10 +282,7 @@
 		CRASH("tried to update_params_for_player on [C] on emitter [source] but it wasn't in hearers")
 		//return // client can't hear this emitter anyway, why are we even here
 
-	var/sound/S = copy_sound(sounds[active_key])
-	if (!S)
-		CRASH("active_key not found in sounds")
-	apply_env_effects(S)
+	var/sound/S = active_sound.get()
 	apply_player_effects(S, C.listener_context.proxy)
 	S.status |= SOUND_UPDATE
 	var/chan = C.listener_context.assign_channel(src)
@@ -308,17 +305,3 @@
 		if((get_z_dist(receiver, t_source) <= range))
 			in_range += client
 	return in_range
-
-// put this somewhere better than here
-/proc/copy_sound(sound/copy_from)
-	if (!copy_from)
-		return
-	var/sound/new_sound = sound(copy_from.file)
-	new_sound.atom = copy_from.atom
-	new_sound.channel = copy_from.channel
-	new_sound.frequency = copy_from.frequency
-	new_sound.repeat = copy_from.repeat
-	new_sound.status = copy_from.status
-	new_sound.transform = copy_from.transform
-	new_sound.volume = copy_from.volume
-	return new_sound
