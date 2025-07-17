@@ -460,3 +460,17 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	var/name = "Brightest minds of Nanotrasen"
 	var/desc = "You made it to the top 5! You accumulated [record.fields["cash"]]  research points."
 	give_award(record.fields["ckey"], /obj/item/clothing/accessory/medal/gold, name, desc, FALSE)
+
+//Crew Score
+/datum/persistence_task/crewscore
+	execute = TRUE
+	name = "Crew Score"
+	file_path = "data/persistence/crewscore.json"
+
+var/last_crewscore = 0
+
+/datum/persistence_task/crewscore/on_init()
+	last_crewscore = read_file()
+
+/datum/persistence_task/crewscore/on_shutdown()
+	write_file(score.crewscore)

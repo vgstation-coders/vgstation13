@@ -133,6 +133,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/add_centcomm_order,
 	/client/proc/apes,
 	/client/proc/force_next_map,
+	/client/proc/rig_crew_score,
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
@@ -807,6 +808,7 @@ var/list/admin_verbs_mod = list(
 				send2adminirc("[key_name(src, showantag = FALSE)] deadminned themself - no more non-AFK admins online. - [admin_number_afk] AFK.")
 				send2admindiscord("[key_name(src, showantag = FALSE)] deadminned themself. **No more non-AFK admins online.** - **[admin_number_afk]** AFK", TRUE)
 		deadmin()
+		winset(src, null, list("browser-options"="-devtools"))
 		verbs += /client/proc/readmin
 		deadmins += ckey
 		to_chat(src, "<span class='interface'>You are now a normal player.</span>")

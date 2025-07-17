@@ -1691,8 +1691,7 @@
 			user.stuttering = 10
 			user.Knockdown(10)
 			if(isrobot(user))
-				var/mob/living/silicon/robot/R = user
-				R.cell.charge -= 20
+				use_cell_charge(user,20)
 			else
 				B.deductcharge(1)
 			user.visible_message( \

@@ -1,27 +1,48 @@
-// TODO: remove the robot.mmi and robot.cell variables and completely rely on the robot component system
+// TODO: remove the robot.mmi variable and completely rely on the robot component system
 
-/datum/robot_component/var/name
-/datum/robot_component/var/installed = COMPONENT_MISSING
-/datum/robot_component/var/powered = FALSE
-/datum/robot_component/var/toggled = TRUE
-/datum/robot_component/var/brute_damage = 0
-/datum/robot_component/var/electronics_damage = 0
-/datum/robot_component/var/vulnerability = 1
-/datum/robot_component/var/energy_consumption = 0
-/datum/robot_component/var/max_damage = 30 //WHY THE FUCK IS THE DEFAULT MAX DAMAGE 30 ARE YOU STUPID
-/datum/robot_component/var/mob/living/silicon/robot/owner
-
-// The actual device object that has to be installed for this.
-/datum/robot_component/var/external_type = null
-
-// The wrapped device(e.g. radio), only set if external_type isn't null
-/datum/robot_component/var/obj/item/wrapped = null
+/datum/robot_component
+	var/name
+	var/installed = COMPONENT_MISSING
+	var/powered = FALSE
+	var/toggled = TRUE
+	var/brute_damage = 0
+	var/electronics_damage = 0
+	var/vulnerability = 1
+	var/energy_consumption = 0
+	var/max_damage = 30 //WHY THE FUCK IS THE DEFAULT MAX DAMAGE 30 ARE YOU STUPID
+	var/mob/living/silicon/robot/owner
+	var/upgraded = FALSE
+	var/external_type = null // The actual device object that has to be installed for this.
+	var/obj/item/wrapped = null // The wrapped device(e.g. radio), only set if external_type isn't null
 
 /datum/robot_component/New(mob/living/silicon/robot/R)
 	src.owner = R
 
-/datum/robot_component/proc/install()
-/datum/robot_component/proc/uninstall()
+/datum/robot_component/proc/install(var/mob/user,var/obj/item/W)
+	if(istype(W,/obj/item/robot_parts/robot_component))
+		var/obj/item/robot_parts/robot_component/I = W
+		installed = COMPONENT_INSTALLED
+		wrapped = I
+		electronics_damage = I.electronics_damage
+		brute_damage = I.brute_damage
+		vulnerability = I.vulnerability
+		upgraded = I.isupgrade
+		to_chat(user, "<span class='notice'>You install the [I.name].</span>")
+		if(owner.can_diagnose())
+			to_chat(owner, "<span class='info' style=\"font-family:Courier\">New [I.name] installed.</span>")
+
+/datum/robot_component/proc/uninstall(var/mob/user,var/loud = FALSE)
+	if(installed == COMPONENT_INSTALLED)
+		installed = FALSE
+	if(wrapped)
+		to_chat(user, "You remove \the [wrapped].")
+		if(owner.can_diagnose())
+			to_chat(owner, "<span class='info' style=\"font-family:Courier\">[installed == COMPONENT_BROKEN ? "Destroyed [src]" : "Functional [wrapped.name]"] removed.</span>")
+		if(istype(wrapped,/obj/item/robot_parts/robot_component))
+			var/obj/item/robot_parts/robot_component/I = wrapped
+			I.brute_damage = brute_damage
+			I.electronics_damage = electronics_damage
+			I.isupgrade = upgraded
 
 /datum/robot_component/proc/destroy()
 	var/obj/item/broken_device/G = new/obj/item/broken_device
@@ -33,11 +54,11 @@
 			owner.visible_message("A click sounds from <span class='name'>[owner]</span>, indicating the automatic cover release failsafe.")
 			if(owner.can_diagnose())
 				to_chat(owner, "<span class='notice' style=\"font-family:Courier\">Cover auto-unlocked.</span>")
-	wrapped = G
+	else
+		wrapped = G
 
 	// The thing itself isn't there anymore, but some fried remains are.
 	installed = COMPONENT_BROKEN
-	uninstall()
 	if(owner.can_diagnose())
 		to_chat(owner, "<span class='alert' style=\"font-family:Courier\">Warning: Critical damage to [brokenpartname] sustained. Component offline.</span>")
 
@@ -67,8 +88,9 @@
 	if(toggled == FALSE)
 		powered = FALSE
 		return
-	if(owner.cell.charge >= energy_consumption)
-		owner.cell.use(energy_consumption)
+	var/obj/item/weapon/cell/cell = owner.get_cell()
+	if(cell && cell.charge >= energy_consumption)
+		cell.use(energy_consumption)
 		powered = TRUE
 	else
 		powered = FALSE
@@ -89,10 +111,48 @@
 	name = "power cell"
 	max_damage = 50
 
+/datum/robot_component/cell/New(mob/living/silicon/robot/R)
+	. = ..()
+	external_type = R.cell_type
+
 /datum/robot_component/cell/destroy()
 	..()
-	owner.cell = null
 	owner.updateicon()
+
+/datum/robot_component/cell/install(var/mob/user,var/obj/item/W)
+	if(istype(W,/obj/item/weapon/cell))
+		var/obj/item/weapon/cell/I = W
+		to_chat(user, "You insert \the [I].")
+		installed = COMPONENT_INSTALLED
+		wrapped = I
+		electronics_damage = I.electronics_damage
+		brute_damage = I.brute_damage
+		if(owner.can_diagnose())
+			to_chat(owner, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [I.name]. Charge: [I.charge] out of [I.maxcharge].</span>")
+		owner.updateicon()
+		if(I.occupant)
+			to_chat(I.occupant,"<span class='notice'>You are now inside \the [owner], in control of its targeting.</span>")
+			owner.pulsecompromised = 1
+			I.occupant.loc = owner
+			I.occupant.current_robot = owner
+			I.occupant = null
+			to_chat(owner, "<span class='danger'>ERRORERRORERROR</span>")
+			spawn(2 SECONDS)
+				to_chat(owner, "<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
+
+/datum/robot_component/cell/uninstall(var/mob/user,var/loud = FALSE)
+	installed = COMPONENT_MISSING
+	if(loud)
+		user.visible_message("<span class='warning'>[user] removes [owner]'s [wrapped.name].</span>", \
+		"<span class='notice'>You remove [owner]'s [wrapped.name].</span>")
+	else
+		to_chat(user, "You remove \the [wrapped].")
+	if(owner.can_diagnose())
+		to_chat(owner, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
+	if(istype(wrapped,/obj/item/weapon/cell))
+		var/obj/item/weapon/cell/I = wrapped
+		I.electronics_damage = electronics_damage
+		I.brute_damage = brute_damage
 
 /datum/robot_component/radio
 	name = "radio"
@@ -118,20 +178,44 @@
 	energy_consumption = 0
 	max_damage = 30
 
-/mob/living/silicon/robot/proc/initialize_components()
-	// This only initializes the components, it doesn't set them to installed.
-
-	components["actuator"] = new/datum/robot_component/actuator(src)
-	components["radio"] = new/datum/robot_component/radio(src)
-	components["power cell"] = new/datum/robot_component/cell(src)
-	components["diagnosis unit"] = new/datum/robot_component/diagnosis_unit(src)
-	components["camera"] = new/datum/robot_component/camera(src)
-	components["comms"] = new/datum/robot_component/binary_communication(src)
-	components["armour"] = new/datum/robot_component/armour(src)
-
 /mob/living/silicon/robot/proc/is_component_functioning(module_name)
 	var/datum/robot_component/C = components[module_name]
 	return C && C.installed == COMPONENT_INSTALLED && C.toggled && C.is_powered()
+
+/*/mob/living/silicon/robot/proc/exchange_parts(mob/user, obj/item/weapon/storage/bag/gadgets/part_replacer/W)
+	if (W.bluespace || wiresexposed || opened)
+		var/shouldplaysound = FALSE
+		for(var/V in components)
+			var/datum/robot_component/C = components[V]
+			if(!C.installed)
+				for(var/obj/item/robot_parts/robot_component/I in W.contents)
+					if((I.isupgrade && !C.upgraded) && istype(I, C.external_type))
+						C.uninstall(user)
+						if(C.wrapped)
+							W.handle_item_insertion(C.wrapped, 1)
+						C.install(user,I)
+						W.remove_from_storage(I, null)
+						shouldplaysound = TRUE //Only play the sound when parts are actually replaced!
+						break
+				if(istype(C.wrapped,/obj/item/weapon/cell))
+					var/obj/item/weapon/cell/cell = C.wrapped
+					for(var/obj/item/weapon/cell/I2 in W.contents)
+						if((I2.rating > cell.rating))
+							C.uninstall(user)
+							if(C.wrapped)
+								W.handle_item_insertion(C.wrapped, 1)
+							C.install(user,I2)
+							W.remove_from_storage(I2, null)
+							shouldplaysound = TRUE //Only play the sound when parts are actually replaced!
+							break
+		if(shouldplaysound)
+			W.play_rped_sound()
+		else
+			to_chat(user, "<span class='notice'>Following components detected in [src]:</span>")
+			for(var/V2 in components)
+				var/datum/robot_component/C = components[V2]
+				if(C.wrapped)
+					to_chat(user, "<span class='notice'>    [C.wrapped.name]</span>")*/
 
 /obj/item/broken_device
 	name = "broken component"

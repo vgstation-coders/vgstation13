@@ -88,9 +88,9 @@
 
 /datum/spellbook_artifact/staff_of_necro
 	name = "Staff of Necromancy"
-	desc = "An arcane staff capable of summoning undying minions from the corpses of your enemies. This magic doesn't affect machines."
+	desc = "An arcane staff capable of summoning undying minions from the corpses of your organic enemies. Stores 3 charges, and takes 20 seconds to gain a charge. Recharges twice as fast and provides a slight brute-healing effect when wielded by a lich."
 	abbreviation = "SN"
-	spawned_items = list(/obj/item/weapon/gun/energy/staff/necro)
+	spawned_items = list(/obj/item/weapon/staff/necro)
 
 /datum/spellbook_artifact/apprentice
 	name = "Contract of Apprenticeship"

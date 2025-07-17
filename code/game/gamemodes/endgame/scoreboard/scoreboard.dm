@@ -101,6 +101,9 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/list/implant_phrases = list()
 	var/list/global_paintings = list()
 
+	var/badmin_score		= 0
+	var/badmin_override		= FALSE
+
 /datum/controller/gameticker/scoreboard/proc/main(var/dat)
 	ticker.mode.declare_completion()
 	dat += "[ticker.mode.dat]<HR>"
@@ -198,12 +201,16 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Nothing bad to report! Good job, crew!</B><BR>"
 
 	dat += "<BR><U>THE WEIRD</U><BR>"
-/*	<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"
-	var/profit = totalfunds - 100000
+	var/totalfunds = 0
+	for(var/dept in department_accounts)
+		var/datum/money_account/act = department_accounts[dept]
+		totalfunds += act.money
+	dat += "<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"
+	var/profit = totalfunds - init_station_funds
 	if (profit > 0)
-		dat += "<B>Station Profit:</B> +[num2text(profit,50)]<BR>"
+		dat += "<B>Station Profit:</B> +$[num2text(profit,50)]<BR>"
 	else if (profit < 0)
-		dat += "<B>Station Deficit:</B> [num2text(profit,50)]<BR>"*/
+		dat += "<B>Station Deficit:</B> -$[num2text(abs(profit),50)]<BR>"
 	if(score.foodeaten > 0)
 		dat += "<B>Food Eaten:</b> [score.foodeaten]<BR>"
 	if(score.clownabuse > 0)
@@ -282,6 +289,9 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/list/dept_leaderboard = get_dept_leaderboard()
 	for (var/i = 1 to dept_leaderboard.len)
 		dat += "<B>#[i] - </B>[dept_leaderboard[i]] ($[dept_leaderboard[dept_leaderboard[i]]])<BR>"
+	
+	if(score.badmin_score)
+		dat += "<BR><span class='sinister'><B>Mysterious circumstances:</B> [score.badmin_score] Points</span><BR>"
 
 	dat += "<HR><BR>"
 	dat += "<B><U>FINAL SCORE: [score.crewscore]</U></B><BR>"

@@ -86,6 +86,13 @@
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 /mob/living/silicon/robot/Destroy()
 	cyborg_list -= src
+	qdel(wires)
+	qdel(station_holomap)
+	qdel(radio)
+	qdel(aicamera)
+	if(camera)
+		qdel(camera)
+	QDEL_LIST_ASSOC_VALUES_NULL(components)
 	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
 		if(T)

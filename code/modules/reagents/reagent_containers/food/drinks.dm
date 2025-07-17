@@ -290,9 +290,7 @@
 			spawn(5)
 				reagents.trans_to(M, gulp_size)
 
-		if(isrobot(user)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
-			var/mob/living/silicon/robot/bro = user
-			bro.cell.use(30)
+		if(use_cell_charge(user,30)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
 			var/refill = reagents.get_master_reagent_id()
 			spawn(600)
 				reagents.add_reagent(refill, gulp_size)

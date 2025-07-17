@@ -133,8 +133,11 @@
 			if(!S.invisible) //Do not list abilities that aren't meant to be shown, like drain toggling or abilities
 				var/icon/spellimg = icon('icons/mob/screen_spells.dmi', S.hud_state)
 				dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> <B>[S.name]</B> "
-				dat += "[S.can_improve(SP_SPEED) ? "<A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken for [S.quicken_cost]W ([S.spell_levels[SP_SPEED]]/[S.level_max[SP_SPEED]])</A>" : "Quicken (MAXED)"] "
-				dat += "[S.can_improve(SP_POWER) ? "<A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower for [S.empower_cost]W ([S.spell_levels[SP_POWER]]/[S.level_max[SP_POWER]])</A>" : "Empower (MAXED)"]<BR>"
+				if(S.level_max[SP_SPEED] > 1)
+					dat += "[S.can_improve(SP_SPEED) ? "<A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken for [S.quicken_cost]W ([S.spell_levels[SP_SPEED]]/[S.level_max[SP_SPEED]])</A>" : "Quicken (MAXED)"] "
+				if(S.level_max[SP_POWER] > 1)
+					dat += "[S.can_improve(SP_POWER) ? "<A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower for [S.empower_cost]W ([S.spell_levels[SP_POWER]]/[S.level_max[SP_POWER]])</A>" : "Empower (MAXED)"]"
+				dat += "<BR>"
 				if(show_desc)
 					dat += "<I>[S.desc]</I><BR>"
 		dat += "<HR>"
