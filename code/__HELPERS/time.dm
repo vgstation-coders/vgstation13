@@ -37,10 +37,9 @@
 //Returns the world time in english
 /proc/worldtime2text(timestamp = world.time, give_seconds = FALSE)
 	if(timestamp == world.time)
-		timestamp -= time_taken_to_init
-		if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
-			timestamp -= time_taken_in_lobby
-		timestamp = max(0,timestamp)
+		if(ticker && ticker.current_state < GAME_STATE_PLAYING)
+			return "12:00[give_seconds ? ":00" : ""]"
+		timestamp = max(0,timestamp - time_taken_to_init - time_taken_in_lobby)
 	return "[add_zero((round(timestamp / 36000) + 12) % 24, 2)]:[add_zero(round(timestamp / 600) % 60, 2)]\
 	[give_seconds ? ":[add_zero(round(timestamp / 10) % 60, 2)]" : ""]"
 
