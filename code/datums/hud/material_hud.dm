@@ -30,5 +30,6 @@
 	for (var/turf/TT in trange(view, T))
 		if (TT.holomap_data)
 			for (var/image/I in TT.holomap_data)
-				I.plane = HUD_PLANE
-				. += I
+				var/image/img = I
+				img.plane = OBJ_PLANE
+				. += img
