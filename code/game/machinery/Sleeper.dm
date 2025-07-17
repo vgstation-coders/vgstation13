@@ -12,7 +12,7 @@
 	var/base_icon = "sleeper"
 	var/mob/living/occupant = null
 	var/available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
-	var/crit_injectables = list(INAPROVALINE = "Inaprovaline", NITROGEN = "Nitrogen", LOCUTOGEN = "Locutogen")
+	var/crit_injectables = list(INAPROVALINE)
 	var/amounts = list(5, 10, 20)
 	var/sedativeblock = FALSE //To prevent people from being surprisesoporific'd
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | EMAGGABLE
@@ -92,6 +92,7 @@
 /obj/machinery/sleeper/RefreshParts()
 	var/T = 0
 	available_options = list()
+	crit_injectables = list()
 	funny = FALSE
 	advertising = FALSE
 	ad_list = list()
@@ -128,7 +129,7 @@
 			hiss_noise = plug.custom_hiss
 		//Replacing the standard chemical list with its own
 		//Multiple plugins: stack... for now
-		if(plug.override_chems)
+		if(plug.override_all_chems)
 			overriding_chems = TRUE
 		//Plugins can provide advertisements on injection
 		//Multiple plugins: Stack, the messages are randomly picked from the entire list
@@ -136,16 +137,22 @@
 			advertising = TRUE
 			ad_list += plug.advertisements
 		//Plugins can manually enable injecting in crit
-		if(plug.override_crit)
+		if(plug.override_all_crit)
 			works_in_crit = TRUE
 		if(plug.funny)
 			funny = TRUE
 		if(plug.hides_info)
 			info_hidden = TRUE
 
+	//Builds list of chemicals injectable on crit
+	crit_injectables = list(INAPROVALINE)
+	for(var/obj/item/device/plugin/sleeper/plug in plugins)
+		if(plug.override_crit_chems.len)
+			crit_injectables += plug.override_crit_chems
+
 	if(overriding_chems)
 		for(var/obj/item/device/plugin/sleeper/plug in plugins)
-			if(plug.override_chems)
+			if(plug.override_all_chems)
 				available_options += plug.t1chems
 				if(T >= 6)
 					available_options += plug.t2chems
@@ -165,7 +172,7 @@
 		if(plug.t1chems.len)
 			available_options += plug.t1chems
 	if(T >= 6) // Tier 2
-		available_options += list(IMIDAZOLINE = "Imidazoline", INACUSIATE = "Inacusiate",  TRICORDRAZINE = "Tricordrazine")
+		available_options += list(IMIDAZOLINE = "Imidazoline", INACUSIATE = "Inacusiate", TRICORDRAZINE = "Tricordrazine")
 		for(var/obj/item/device/plugin/sleeper/plug in plugins)
 			if(plug.t2chems.len)
 				available_options += plug.t2chems
@@ -183,6 +190,10 @@
 		for(var/obj/item/device/plugin/sleeper/plug in plugins)
 			if(plug.emagchems.len)
 				available_options += plug.emagchems
+
+	for(var/obj/item/device/plugin/sleeper/plug in plugins)
+		if(plug.remove_chems.len)
+			available_options -= plug.remove_chems
 
 /obj/machinery/sleeper/emag_act(mob/user)
 	if(!emagged)

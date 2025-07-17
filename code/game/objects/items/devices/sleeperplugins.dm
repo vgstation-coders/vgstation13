@@ -28,9 +28,13 @@
 	//Hiss on exiting, good for honking clown plugins
 	var/custom_hiss = null
 	//Replace ALL other chems in the sleeper with this plugin's
-	var/override_chems = FALSE
-	//Able to inject chems on crit patients. Used mostly for terrible plugins that also override chems like above.
-	var/override_crit = FALSE
+	var/override_all_chems = FALSE
+	//Able remove specific chemicals from the list completely. Usually used to remove specific base sleeper chemicals from being used.
+	var/list/remove_chems = list()
+	//Able to inject all chems on crit patients. Used mostly for terrible plugins that also override chems like above.
+	var/override_all_crit = FALSE
+	//Able to inject specific chems on crit patients. Used as a list.
+	var/list/override_crit_chems = list()
 	//List of advertisements to speak on injection. Will not speak if empty. Will combine if multiple.
 	var/list/advertisements = list()
 	//Will make the sleeper UI very colorful if set to TRUE
@@ -57,16 +61,16 @@
 	force = 6
 	throwforce = 15 //usually 6 damage when thrown, it's a monitor
 	flags = TWOHANDABLE | MUSTTWOHAND
+	override_crit_chems = list(STOXIN2, LOCUTOGEN)
 	t1chems = list(
-		MANNITOL = "Mannitol",
+		IRON = "Iron",
 		PICCOLYN = "Piccolyn",
-		SPRINKLES = "Sprinkles",
 		)
 	t2chems = list(
-		ANTI_TOXIN = "Dylovene"
+		SPRINKLES = "Sprinkles",
+		MANNITOL = "Mannitol"
 		)
 	t3chems = list(
-		IRON = "Iron",
 		LOCUTOGEN = "Locutogen"
 		)
 
@@ -89,7 +93,7 @@
 		MEDCOFFEE = "Lifeline"
 		)
 	t3chems = list(
-		MORATHIAL = "MorathialL"
+		MORATHIAL = "Morathial"
 		)
 
 /obj/item/device/plugin/sleeper/ntresearch/provide_extra_overlay(var/obj/machinery/sleeper/my_sleeper)
@@ -136,13 +140,18 @@
 	item_state = "modkit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	mech_flags = MECH_SCAN_FAIL
+	override_crit_chems = list(NITROGEN)
+	remove_chems = list(TRICORDRAZINE)
 	t1chems = list(
 		NITROGEN = "Nitrogen",
+		CHILLWAX = "Chillwax",
+		)
+	t2chems = list(
+		MAPLESYRUP = "Maple Syrup",
 		GRAVY = "Gravy"
 		)
 	t3chems = list(
-		MAPLESYRUP = "Maple Syrup",
-		CHILLWAX = "Chillwax"
+		PRIAXATE = "Priaxate"
 		)
 
 /obj/item/device/plugin/sleeper/alien
@@ -150,8 +159,8 @@
 	desc = "A strange object. It has an image of what looks like a sleeper on it."
 	icon_state = "alien"
 	item_state = "alienplug"
-	override_chems = TRUE
-	override_crit = TRUE
+	override_all_chems = TRUE
+	override_all_crit = TRUE
 	hides_info = TRUE
 	solo = TRUE
 	mech_flags = MECH_SCAN_FAIL
@@ -233,7 +242,7 @@
 	desc = "This looks like it was once a high tech piece of equipment, but now it's covered in toxic waste. You can vaguely make out what looks like an image of a sleeper under the mess."
 	icon_state = "gunk"
 	item_state = "gunkplug"
-	override_chems = TRUE
+	override_all_chems = TRUE
 	t1chems = list(
 		TOXICWASTE = "Toxic Waste",
 		CHEMICAL_WASTE = "Chemical Waste",
