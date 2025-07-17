@@ -1385,6 +1385,7 @@
 	if(world.time < last_speech + 20)
 		return ..(message)
 	last_speech = world.time
-	if(trim(message)) // Only play sound if something is actually said
-		playsound(src, "voice-silicon", 50)
+	for(var/mob/M in hearers(src))
+		if(M.client)
+			M.client.handle_hear_voice(src)
 	return ..(message)
