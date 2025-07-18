@@ -1154,7 +1154,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	description = "A very powerful healing chemical, made to be used in small doses."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#285a35"
-	overdose_tick = 51 //triggers immediately after 10u have been processed
+	overdose_tick = 101 //triggers immediately after 20u have been processed
 	specheatcap = 1.23
 	density = 0.968
 
@@ -1172,6 +1172,7 @@ var/global/list/charcoal_doesnt_remove=list(
 					W.heal_damage(0.2, TRUE)
 
 /datum/reagent/morathial/on_overdose(var/mob/living/M)
+	..()
 	M.adjustToxLoss(2)
 	M.adjustCloneLoss(2)
 	var/mob/living/carbon/human/H = M
