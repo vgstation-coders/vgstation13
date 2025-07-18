@@ -1,5 +1,4 @@
 //Plug-in Upgrade System, designed for Sleepers
-//WIP VERSION DO NOT MERGE
 /obj/item/device/plugin
 	name = "plug-in device"
 	desc = "Some device with a bunch of semi-standardized connectors. You can't tell what device this would fit into."
@@ -60,6 +59,7 @@
 	item_state = "ntbasic"
 	flags = TWOHANDABLE | MUSTTWOHAND
 	override_crit_chems = list(STOXIN2, LOCUTOGEN)
+	//Additional effect located in reagents_medical.dm for STOXIN2 - doubles the sleep speed
 	t1chems = list(
 		IRON = "Iron",
 		PICCOLYN = "Piccolyn",
@@ -69,7 +69,7 @@
 		MANNITOL = "Mannitol"
 		)
 	t3chems = list(
-		LOCUTOGEN = "Locutogen"
+		HYRONALIN = "Hyronalin"
 		)
 
 /obj/item/device/plugin/sleeper/ntbasic/provide_extra_overlay(var/obj/machinery/sleeper/my_sleeper)
@@ -84,15 +84,17 @@
 	force = 3
 	throwforce = 6
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
+	override_crit_chems = list(STOXIN2, LOCUTOGEN)
 	t1chems = list(
 		MAHKOEXPITOL = "Mahkoexpitol",
-		DEXALINP = "Dexalin+",
 		BIOFOAM = "Biofoam"
 		)
 	t2chems = list(
+		DEXALINP = "Dexalin Plus",
 		MEDCOFFEE = "Lifeline"
 		)
 	t3chems = list(
+		LOCUTOGEN = "Locutogen",
 		MORATHIAL = "Morathial"
 		)
 
@@ -114,11 +116,11 @@
 	t1chems = list(
 		DISCOUNT = "Discount Dan's Sauce",
 		GRAPEJUICE = "Discount Raisin Juice",
-		TENDIES = "Discount Chicken Tenders"
+		TENDIES = "Discount Tenders"
 		)
 	t2chems = list(
-		REFRIEDBEANS = "Discount Re-Fried Beans",
-		OFFCOLORCHEESE = "Discount American Cheese"
+		REFRIEDBEANS = "Discount Beans",
+		OFFCOLORCHEESE = "Discount Cheese"
 		)
 	t3chems = list(
 		BEFF = "Discount Beef"

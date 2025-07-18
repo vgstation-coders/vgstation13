@@ -285,7 +285,7 @@
 					return
 				if(occupant.stat == DEAD)
 					to_chat(usr, "<span class='danger'>This person has no life for to preserve anymore. Take them to a department capable of reanimating them.</span>")
-				else if(href_list["chemical"] == STOXIN2 && sedativeblock)
+				else if((href_list["chemical"] == STOXIN2 || href_list["chemical"] == CHILLWAX) && sedativeblock)
 					if(sedativeblock < 3)
 						to_chat(usr, "<span class='warning'>Sedative injections not yet ready. Please try again in a few seconds.</span>")
 					else //if this guy is seriously just mashing the soporific button...
