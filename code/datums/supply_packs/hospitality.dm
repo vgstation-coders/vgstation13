@@ -302,3 +302,13 @@
 	containsdesc = "A new synthesizer has hit the market! Get it while it's still hot!"
 
 	group = "Hospitality"
+
+/datum/supply_packs/dansleeper
+	name = "Discount sleeper upgrade"
+	contains = list (
+					/obj/item/device/plugin/sleeper/dan)
+	cost = 30
+	containertype = /obj/structure/largecrate
+	containername = "Discount sleeper upgrade crate"
+	group = "Hospitality"
+	containsdesc = "An upgrade system for a sleeper. Sounds delicious and sponsored by Discount Dan!"

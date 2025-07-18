@@ -183,7 +183,7 @@
 	containsdesc = "Surplus wound-stitching supplies. Contains two lines and two grafts."
 
 /datum/supply_packs/ntbasicsleeper
-	name = "NT Sleeper Upgrade"
+	name = "NT sleeper upgrade"
 	contains = list (
 					/obj/item/device/plugin/sleeper/ntbasic)
 	cost = 30

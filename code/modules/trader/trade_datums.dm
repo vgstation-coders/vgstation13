@@ -190,7 +190,7 @@
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/voxsleeper
-	name = "Vox Shoal Sleeper Optimization Kit"
+	name = "Vox Shoal sleeper optimization kit"
 	path = /obj/item/device/plugin/sleeper/trader
 	baseprice = 75
 	maxunits = 1
