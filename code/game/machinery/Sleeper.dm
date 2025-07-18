@@ -247,7 +247,7 @@
 					var/injecttext = "Inject "
 					for(var/amount in amounts)
 						dat += " <a href='?src=\ref[src];chemical=[chemical];amount=[amount]'"
-						if((!works_in_crit && occupant.health < 0) && !(chemical in crit_injectables))
+						if(occupant.stat == DEAD || ((!works_in_crit && occupant.health < 0) && !(chemical in crit_injectables)))
 							dat += "class='darkred'"
 						dat += ">[injecttext][amount]u</a>"
 						injecttext = null

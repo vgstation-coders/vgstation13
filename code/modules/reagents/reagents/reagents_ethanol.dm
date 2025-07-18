@@ -496,7 +496,7 @@
 		glass_icon_state = "scientists_serendipity"
 		glass_name = "\improper Scientist's Sapience"
 		glass_desc = "Why research what has already been catalogued?"
-		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5;illegal=1;nanotrasen=1;syndicate=2" //Maxes everything but Illegal and Anomaly
+		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=6;combat=6;magnets=6;programming=5;syndicate=2" //Maxes everything but Illegal and Anomaly //the heck is illegal research...
 
 /datum/reagent/ethanol/beepskyclassic
 	name = "Beepsky Classic"

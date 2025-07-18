@@ -6,8 +6,8 @@
 	icon_state = "modkit"
 	item_state = "modkit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
-	force = 3
-	throwforce = 5
+	force = 6
+	throwforce = 15
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=4"
 	//Will forcibly eject all other plugins from the machine when installed
 	var/solo = FALSE
@@ -58,8 +58,6 @@
 	name = "Nanotrasen Simple Sleeper Upgrade Module"
 	icon_state = "ntbasic"
 	item_state = "ntbasic"
-	force = 6
-	throwforce = 15 //usually 6 damage when thrown, it's a monitor
 	flags = TWOHANDABLE | MUSTTWOHAND
 	override_crit_chems = list(STOXIN2, LOCUTOGEN)
 	t1chems = list(
@@ -83,6 +81,8 @@
 	name = "Nanotrasen Experimental Sleeper Upgrade Module"
 	icon_state = "miniconsole"
 	item_state = "modkit"
+	force = 3
+	throwforce = 6
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	t1chems = list(
 		MAHKOEXPITOL = "Mahkoexpitol",
@@ -114,14 +114,14 @@
 	t1chems = list(
 		DISCOUNT = "Discount Dan's Sauce",
 		GRAPEJUICE = "Discount Raisin Juice",
-		TENDIES = "Chicken Tenders"
+		TENDIES = "Discount Chicken Tenders"
 		)
 	t2chems = list(
-		REFRIEDBEANS = "Re-Fried Beans",
-		OFFCOLORCHEESE = "American Cheese"
+		REFRIEDBEANS = "Discount Re-Fried Beans",
+		OFFCOLORCHEESE = "Discount American Cheese"
 		)
 	t3chems = list(
-		BEFF = "Beff"
+		BEFF = "Discount Beef"
 		)
 	//Example of use, not implemented because gloop is owchies
 	//emagchems = list(CHEESYGLOOP = "Cheesy Gloop")
@@ -134,11 +134,10 @@
 	my_sleeper.overlays += new /image('icons/obj/machines/plugins/sleeperplugin.dmi', "dan_beff")
 
 /obj/item/device/plugin/sleeper/trader
-	name = "Vox Shoal Sleeper Optimization Kit"
-	icon = 'icons/obj/device.dmi'
-	icon_state = "modkit"
-	item_state = "modkit"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
+	name = "Vox Shoal Sleeper Optimization kit"
+	icon_state = "vox"
+	item_state = "voxplug"
+	flags = TWOHANDABLE | MUSTTWOHAND
 	mech_flags = MECH_SCAN_FAIL
 	override_crit_chems = list(NITROGEN)
 	remove_chems = list(TRICORDRAZINE)
@@ -154,11 +153,15 @@
 		PRIAXATE = "Priaxate"
 		)
 
+/obj/item/device/plugin/sleeper/trader/provide_overlay(var/obj/machinery/sleeper/my_sleeper)
+	my_sleeper.overlays += new /image('icons/obj/machines/plugins/sleeperplugin.dmi', "vox_[my_sleeper.occupant ? "closed" : "open"]")
+
 /obj/item/device/plugin/sleeper/alien
 	name = "unknown device"
 	desc = "A strange object. It has an image of what looks like a sleeper on it."
 	icon_state = "alien"
 	item_state = "alienplug"
+	flags = TWOHANDABLE | MUSTTWOHAND
 	override_all_chems = TRUE
 	override_all_crit = TRUE
 	hides_info = TRUE
@@ -213,6 +216,7 @@
 	desc = "A strange object. It has an image of what looks like a sleeper on it."
 	icon_state = "clown"
 	item_state = "clownplug"
+	flags = TWOHANDABLE | MUSTTWOHAND
 	custom_hiss = 'sound/items/bikehorn.ogg'
 	funny = TRUE
 	t1chems = list(
@@ -242,6 +246,7 @@
 	desc = "This looks like it was once a high tech piece of equipment, but now it's covered in toxic waste. You can vaguely make out what looks like an image of a sleeper under the mess."
 	icon_state = "gunk"
 	item_state = "gunkplug"
+	flags = TWOHANDABLE | MUSTTWOHAND
 	override_all_chems = TRUE
 	t1chems = list(
 		TOXICWASTE = "Toxic Waste",
