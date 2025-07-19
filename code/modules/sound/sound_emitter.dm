@@ -172,7 +172,7 @@
 	// S.offset to start at the correct point
 	S.status &= ~SOUND_UPDATE // clear update status for new hearers, else they cant hear it lmao
 	S.channel = chan
-	S = apply_player_effects(copy_sound(S), context.proxy)
+	apply_player_effects(S, context.proxy)
 	C << S
 
 // called when an active emitter and player are no longer in audible range, emitter deactivates while in range or
