@@ -34,7 +34,6 @@
 /datum/sound_listener_context/proc/assign_channel(datum/sound_emitter/E)
 	if (E in current_channels_by_emitter)
 		var/chan = current_channels_by_emitter[E]
-		world.log << "client [client] emitter [E] already on channel [chan]"
 		return current_channels_by_emitter[E]
 
 	var/channel = null
@@ -43,12 +42,13 @@
 		free_channels -= channel
 	if (channel)
 		current_channels_by_emitter[E] = channel
-		world.log << "client [client] assigned emitter [E] to channel [channel]"
 		return channel
 
 /datum/sound_listener_context/proc/release(datum/sound_emitter/E)
 	// which channel this client is using for this emitter
 	var/chan = current_channels_by_emitter[E]
+	if (!isnum(chan))
+		CRASH("Attempted to release a null channel, possible evidence of double-release or other fuckery")
 	// flush it
 	var/sound/nullsound = sound(file = null)
 	nullsound.channel = chan
