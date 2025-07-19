@@ -107,11 +107,11 @@
 	S.status |= SOUND_UPDATE
 	for (var/client/C in hearers)
 		var/datum/sound_listener_context/context = C.listener_context
-		S = apply_player_effects(copy_sound(S), context.proxy)
+		var/sound/PS = apply_player_effects(copy_sound(S), context.proxy)
 		var/chan = context.assign_channel(src) // TODO safety proc "get_active_channel" with check that src is on that channel
-		S.channel = chan
-		world.log << "Sending [S.file] to [C] on channel [S.channel], volume [S.volume]"
-		C << S
+		PS.channel = chan
+		world.log << "Sending [PS.file] to [C] on channel [PS.channel], volume [PS.volume]"
+		C << PS
 
 /datum/sound_emitter/proc/stop()
 	if (!is_currently_playing())
