@@ -27,6 +27,7 @@
 	var/datum/state_laws_ui/state_laws_ui = new() //holds the UI state for the State Laws verb. See: state_laws.dm
 
 	var/stored_freqs = 0
+	var/time_last_speech = 0 // Used to prevent spam, put here so silicons can properly talk.
 
 /mob/living/silicon/hasFullAccess()
 	return 1
