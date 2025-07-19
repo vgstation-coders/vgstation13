@@ -31,6 +31,20 @@
 	for (var/i = CHANNEL_RESERVABLE_MIN, i <= CHANNEL_RESERVABLE_MAX, i++)
 		free_channels += i
 
+/datum/sound_listener_context/Destroy()
+	for (var/datum/sound_emitter/E in current_channels_by_emitter)
+		var/chan = current_channels_by_emitter[E]
+		if (chan)
+			var/sound/nullsound = sound(file = null)
+			nullsound.channel = chan
+			nullsound.status = SOUND_UPDATE | SOUND_MUTE
+			client << nullsound
+	free_channels.Cut()
+	current_channels_by_emitter.Cut()
+	client = null
+	proxy = null
+	. = ..()
+
 /datum/sound_listener_context/proc/assign_channel(datum/sound_emitter/E)
 	if (E in current_channels_by_emitter)
 		var/chan = current_channels_by_emitter[E]

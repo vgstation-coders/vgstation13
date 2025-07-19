@@ -157,6 +157,8 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 	for (var/datum/sound_emitter/E in emitters)
 		E.on_exit_range(C)
 	M.sound_endpoint = null
+	C.listener_context.Destroy()
+	C.listener_context = null
 
 /datum/sound_zone_manager/proc/update_listener(mob/player)
 	var/newHash = hash_coord(player.x, player.y, player.z)
