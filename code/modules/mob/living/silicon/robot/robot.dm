@@ -15,7 +15,6 @@
 	//Sound
 	var/startup_sound = 'sound/voice/liveagain.ogg'
 	var/startup_vary = TRUE //Does the startup sounds vary?
-	var/last_speech = 0 //Used to prevent spam
 
 	var/obj/item/device/station_map/station_holomap = null
 
@@ -1349,11 +1348,3 @@
 		return
 	else
 		..()
-
-/mob/living/silicon/robot/say(message)
-	if(world.time < last_speech + 20)
-		return ..(message)
-	last_speech = world.time
-	if(trim(message)) // Only play sound if something is actually said
-		playsound(src, "voice-silicon", 50)
-	return ..(message)
