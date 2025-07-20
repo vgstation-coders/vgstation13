@@ -162,10 +162,14 @@
 		stat(null, text("APC takeover time: [takeover_time] seconds"))
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_glow()
-	if(charge < 10000)
+	if((charge < 10000) && is_under_tile())
 		set_light(0)
+		return
+	var/modifier = 1
+	if(is_under_tile()) // Weaker light when under tiles.
+		modifier = 0.5
 	var/range = 2 + (log(2,charge+1)-log(2,50000)) / 2
-	range = max(range, 1.5)  //negative lights due to logarithms when?
+	range = max(range * modifier, 1.5)  //negative lights due to logarithms when?
 	//1.5 <= 25k
 	//2   at 50k
 	//2.5 at 100k
@@ -247,11 +251,14 @@
 	if(!can_leave_cable) // If the ability isn't on
 		if(!new_cable && !new_power) // Restrict movement to cables
 			return
+	var/was_under_tile = is_under_tile()
 	var/moved = FALSE // To stop unnecessary forceMove calls
 	if(..())
 		moved = TRUE
 	if(!is_under_tile() && prob(25))
 		spark(src,rand(2,4))
+	if(was_under_tile != is_under_tile()) // They glow stronger when not under a tile and weaker when under one.
+		update_glow()
 	if(new_power)
 		current_power = new_power
 		if(current_cable?.powernet)
