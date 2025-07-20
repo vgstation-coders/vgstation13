@@ -558,9 +558,17 @@
 
 //Can't be scooped up
 /mob/living/simple_animal/hostile/pulse_demon/scoop_up(mob/M)
-	to_chat(M, span_warning("You attempt to grab \the [src] but it slips out of your hands!"))
+	var/obj/item/clothing/gloves/golden/G = M.get_item_by_slot(slot_gloves)
+	if(istype(G))
+		return ..()
+	M.visible_message(span_warning("[M] attempted to grab the [src] but it slipped right through their hands!"))
+	shockMob(M)
 
 //Can't be dragged either
 /mob/living/simple_animal/hostile/pulse_demon/can_be_pulled(mob/user)
-	to_chat(user, span_warning("You attempt to grab \the [src] but it slips out of your hands!"))
+	var/obj/item/clothing/gloves/golden/G = user.get_item_by_slot(slot_gloves)
+	if(istype(G))
+		return ..()
+	user.visible_message(span_warning("[user] attempted to grab the [src] but it slipped right through their hands!"))
+	shockMob(user)
 	return 0
