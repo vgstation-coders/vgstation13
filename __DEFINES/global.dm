@@ -323,6 +323,7 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/pulse_demon,						// Your motherfucking life ends in 0 seconds.
 		/mob/living/simple_animal/hostile/pulse_demon/maxedout,				// Admin testing mob, do not ever spawn otherwise.
 		/mob/living/simple_animal/hostile/slime,							// Instantly kills player and destroys the MC.
+		/mob/living/simple_animal/hostile/asteroid/goldgrub,                 // High chance of running off and disappearing.
 		)
 
 //Boss monster list
