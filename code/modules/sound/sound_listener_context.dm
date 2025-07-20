@@ -11,11 +11,27 @@
 	  is maintained at the client level where such transfers are much cleaner to work with.
 	It also makes sense because sounds are sent to the client anyway, not to the mob.
 
-	These are constructed and destructed from sound_zone_manager's registration procs.
+	These are constructed in `mob/Login() - if one is already initialised (e.g. if the client is being
+	  reassigned to a new mob, such as via ghosting) then `reset_proxy` is called instead.
+	  This triggers reregistration with the SZM which itself forces an `on_player_move` call, which
+	  flushes old emitters and updates with new ones.
+	Lifetime is otherwise tied to the client and so is destructed when the client iself is deleted,
+	  such as on disconnect.
 */
 
 /client
 	var/datum/sound_listener_context/listener_context = null
+
+/client/Del()
+	qdel(listener_context)
+	return ..()
+
+/mob/Login()
+	if (client.listener_context) // already initialised -> here from mob transfer
+		client.listener_context.reset_proxy(src)
+	else // client is connecting
+		client.listener_context = new /datum/sound_listener_context(client, src)
+	return ..()
 
 /datum/sound_listener_context
 	var/client/client = null
@@ -32,17 +48,14 @@
 	for (var/i = CHANNEL_RESERVABLE_MIN, i <= CHANNEL_RESERVABLE_MAX, i++)
 		free_channels += i
 	range = hearing_range
+	sound_zone_manager.register_listener(src)
 
 /datum/sound_listener_context/Destroy()
 	for (var/datum/sound_emitter/E in current_channels_by_emitter)
-		var/chan = current_channels_by_emitter[E]
-		if (chan)
-			var/sound/nullsound = sound(file = null)
-			nullsound.channel = chan
-			nullsound.status = SOUND_UPDATE | SOUND_MUTE
-			client << nullsound
+		release(E)
 	free_channels.Cut()
 	current_channels_by_emitter.Cut()
+	sound_zone_manager.unregister_listener(src)
 	client = null
 	proxy = null
 	. = ..()
@@ -63,7 +76,7 @@
 	// which channel this client is using for this emitter
 	var/chan = current_channels_by_emitter[E]
 	if (!chan)
-		CRASH("Attempted to release an emitter with no channel, possible evidence of double-release or other fuckery")
+		CRASH("listener_context attempted to release [E] with no channel, possible double-release or other fuckery")
 	// flush it
 	var/sound/nullsound = sound(file = null)
 	nullsound.channel = chan
@@ -76,9 +89,9 @@
 	unsubscribe_from(E)
 
 /datum/sound_listener_context/proc/reset_proxy(mob/P)
-	sound_zone_manager.unregister_listener(client)
+	sound_zone_manager.unregister_listener(src)
 	proxy = P
-	sound_zone_manager.register_listener(client, proxy)
+	sound_zone_manager.register_listener(src)
 
 /datum/sound_listener_context/proc/apply_proxymob_effects(sound/S)
 	if (proxy.is_deaf())

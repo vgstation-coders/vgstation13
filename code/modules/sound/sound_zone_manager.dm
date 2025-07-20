@@ -109,50 +109,37 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 			else
 				context.on_enter_range(E)
 
-// most of the time we want to send to client C sounds relevant to C.mob
-//  however for things like the AI eye we want to send to client AICore the sounds relevant to AIEye
-// typically this will be called as register_listener(client, client.mob)
-/datum/sound_zone_manager/proc/register_listener(client/C, mob/proxy)
-	if (!C || !proxy)
+/datum/sound_zone_manager/proc/register_listener(datum/sound_listener_context/SLC)
+	if (!SLC || !SLC.client || !SLC.proxy)
 		return // nothing to register
-	if (!C.mob)
-		CRASH("Tried to register_listener client [C] with no mob")
 
-	if (C.listener_context)
-		var/datum/sound_listener_context/context = C.listener_context
-		if (context.proxy != proxy)
-			context.reset_proxy(proxy)
-	else
-		C.listener_context = new /datum/sound_listener_context(C, proxy)
-
-	var/turf/T = get_turf(proxy)
+	var/turf/T = get_turf(SLC.proxy)
 	if (!T)
-		CRASH("sound_zone_manager: Failed to get turf in register_listener for target mob [proxy] for client [C]")
+		CRASH("sound_zone_manager: Failed to get turf in register_listener for target mob [SLC.proxy] for client [SLC.client]")
 
 	var/X = index(T.x)
 	var/Y = index(T.y)
 	var/h = hash(X, Y, T.z)
-	proxy.last_sound_zone_hash = h
+	SLC.proxy.last_sound_zone_hash = h
 	if (!listener_buckets[h])
 		listener_buckets[h] = list()
-	listener_buckets[h] |= proxy
+	listener_buckets[h] |= SLC.proxy
 
-	proxy.sound_endpoint = C.mob
-	proxy.register_event(/event/moved, src, nameof(src::on_player_move()))
-	on_player_move(proxy)
+	SLC.proxy.sound_endpoint = SLC.client.mob
+	SLC.proxy.register_event(/event/moved, src, nameof(src::on_player_move()))
+	on_player_move(SLC.proxy)
 
-/datum/sound_zone_manager/proc/unregister_listener(client/C)
-	if (!C || !C.listener_context)
+/datum/sound_zone_manager/proc/unregister_listener(datum/sound_listener_context/SLC)
+	if (!SLC)
 		return
-	var/mob/M = C.listener_context.proxy
+	var/mob/M = SLC.proxy
 	if (!M)
-		CRASH("Tried to unregister a client with no proxy")
+		return
 	var/H = M.last_sound_zone_hash
 	if (H)
 		var/bucket = listener_buckets[H]
 		if (bucket)
 			bucket -= M
-
 	// stop them from picking up new emitters
 	M.unregister_event(/event/moved, src, nameof(src::on_player_move()))
 	M.sound_endpoint = null
