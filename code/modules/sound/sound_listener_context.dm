@@ -22,14 +22,16 @@
 	var/mob/proxy = null
 	var/list/current_channels_by_emitter = list()
 	var/list/free_channels = list()
+	var/range = null
 
-/datum/sound_listener_context/New(client/C, mob/P)
+/datum/sound_listener_context/New(client/C, mob/P, hearing_range)
 	client = C
 	proxy = P
 	current_channels_by_emitter = list()
 	free_channels = list()
 	for (var/i = CHANNEL_RESERVABLE_MIN, i <= CHANNEL_RESERVABLE_MAX, i++)
 		free_channels += i
+	range = hearing_range
 
 /datum/sound_listener_context/Destroy()
 	for (var/datum/sound_emitter/E in current_channels_by_emitter)
@@ -47,7 +49,6 @@
 
 /datum/sound_listener_context/proc/assign_channel(datum/sound_emitter/E)
 	if (E in current_channels_by_emitter)
-		var/chan = current_channels_by_emitter[E]
 		return current_channels_by_emitter[E]
 
 	var/channel = null
@@ -61,8 +62,8 @@
 /datum/sound_listener_context/proc/release(datum/sound_emitter/E)
 	// which channel this client is using for this emitter
 	var/chan = current_channels_by_emitter[E]
-	if (!isnum(chan))
-		CRASH("Attempted to release a null channel, possible evidence of double-release or other fuckery")
+	if (!chan)
+		CRASH("Attempted to release an emitter with no channel, possible evidence of double-release or other fuckery")
 	// flush it
 	var/sound/nullsound = sound(file = null)
 	nullsound.channel = chan
@@ -72,7 +73,85 @@
 	current_channels_by_emitter -= E
 	free_channels += chan
 
+	unsubscribe_from(E)
+
 /datum/sound_listener_context/proc/reset_proxy(mob/P)
 	sound_zone_manager.unregister_listener(client)
 	proxy = P
 	sound_zone_manager.register_listener(client, proxy)
+
+/datum/sound_listener_context/proc/apply_proxymob_effects(sound/S)
+	if (proxy.is_deaf())
+		S.volume = 0
+		return S
+	if (!(S.atom in view(range, proxy)))
+		S.volume /= 5
+
+	var/p_effect = turf_volume_coeff(proxy)
+	S.volume *= p_effect
+
+	return S
+
+/datum/sound_listener_context/proc/subscribe_to(datum/sound_emitter/E)
+	E.register_event(/event/sound_updated, src, nameof(src::on_sound_update()))
+	E.register_event(/event/sound_started, src, nameof(src::start_hearing()))
+	E.register_event(/event/sound_stopped, src, nameof(src::stop_hearing()))
+	E.register_event(/event/sound_pushed, src, nameof(src::hear_once()))
+
+
+/datum/sound_listener_context/proc/unsubscribe_from(datum/sound_emitter/E)
+	E.unregister_event(/event/sound_updated, src, nameof(src::on_sound_update()))
+	E.unregister_event(/event/sound_started, src, nameof(src::start_hearing()))
+	E.unregister_event(/event/sound_stopped, src, nameof(src::stop_hearing()))
+	E.unregister_event(/event/sound_pushed, src, nameof(src::hear_once()))
+
+/datum/sound_listener_context/proc/start_hearing(datum/sound_emitter/emitter)
+	if (!emitter.is_currently_playing())
+		return // start hearing what?
+	var/chan = assign_channel(emitter)
+	if (!chan)
+		CRASH("Sound emitter on [emitter.source] failed to reserve a channel for [src]")
+	var/sound/S = emitter.active_sound.get()
+
+	// important note - clearing SOUND_UPDATE means that the sound will play FROM THE BEGINNING.
+	// this system was originally built with short repeating sounds in mind (machine hum, etc) however
+	// if you try to do something longer and more varied like music then this is very noticeable and unwanted.
+	// such support goes beyond scope for v1 but may be solvable using sound.len, tracking playback
+	// progress and modifying S.offset to start at the correct point.
+	// TODO /datum/managed_sound should do this!
+	S.status &= ~SOUND_UPDATE
+	S.channel = chan
+	apply_proxymob_effects(S)
+	client << S
+
+/datum/sound_listener_context/proc/hear_once(sound/S)
+	apply_proxymob_effects(S)
+	client << S
+
+/datum/sound_listener_context/proc/stop_hearing(datum/sound_emitter/emitter)
+	var/chan = assign_channel(emitter)
+	if (!chan)
+		return
+	var/sound/nullsound = sound(file = null)
+	nullsound.channel = chan
+	nullsound.status = SOUND_UPDATE | SOUND_MUTE
+	client << nullsound
+
+/datum/sound_listener_context/proc/on_sound_update(datum/sound_emitter/emitter)
+	var/chan = current_channels_by_emitter[emitter]
+	if (!chan)
+		CRASH("Failed to get channel for sound update from [emitter] on [client]")
+	if (!emitter.active_sound)
+		return // emitter isn't playing anything, get out of here
+	var/sound/S = emitter.active_sound.get()
+	S.status |= SOUND_UPDATE
+	S.channel = chan
+	apply_proxymob_effects(S)
+	client << S
+
+/datum/sound_listener_context/proc/on_enter_range(datum/sound_emitter/E)
+	start_hearing(E) // this can throw if channel reservation fails, subscribe after its safe
+	subscribe_to(E)
+
+/datum/sound_listener_context/proc/on_exit_range(datum/sound_emitter/E)
+	release(E)

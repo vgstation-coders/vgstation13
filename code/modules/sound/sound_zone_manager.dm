@@ -47,10 +47,12 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 
 /datum/sound_zone_manager/proc/register_emitter(datum/sound_emitter/E)
 	if (!E.source)
-		CRASH("sound_zone_manager: Attempted to register an emitter with no source")
+		CRASH("sound_zone_manager: Attempted to register [E] with no source")
 	var/turf/T = get_turf(E.source)
 	if (!T)
-		CRASH("sound_zone_manager: Failed to get turf in register_emitter on sound emitter [E]")
+		// eg. pods have an internal air canister, that has an emitter but no turf
+		log_debug("sound_zone_manager: Failed to get turf in register_emitter on [E]")
+		return
 
 	var/X = index(T.x)
 	var/Y = index(T.y)
@@ -63,16 +65,16 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 /datum/sound_zone_manager/proc/unregister_emitter(datum/sound_emitter/E)
 	var/h = E.last_hash
 	if (!h)
-		CRASH("Attempted to unregister emitter [E] with no prior hash")
+		CRASH("Attempted to unregister [E] with no prior hash")
 	var/bucket = emitter_buckets[h]
 	if (!bucket)
-		CRASH("Failed to find bucket for emitter [E] with prior hash [h]")
+		CRASH("Failed to find bucket for [E] with prior hash [h]")
 	bucket -= E
 
 /datum/sound_zone_manager/proc/update_emitter(datum/sound_emitter/E, newX, newY, newZ)
 	var/newHash = hash_coord(newX, newY, newZ)
 	if (!E.last_hash)
-		CRASH("Tried to update emitter [E] with no prior hash")
+		CRASH("Tried to update [E] with no prior hash")
 	if (E.last_hash != newHash)
 		// update emitter hash table
 		var/list/old_bucket = emitter_buckets[E.last_hash]
@@ -97,14 +99,15 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 				client = listener.sound_endpoint.client
 			if (!client || !client.listener_context)
 				CRASH("Found a listener with no client or endpoint client")
+			var/datum/sound_listener_context/context = client.listener_context
 
-			if (E in client.listener_context.current_channels_by_emitter)
+			if (E in context.current_channels_by_emitter)
 				if (!E.contains(listener))
-					E.on_exit_range(client)
+					context.on_exit_range(E)
 				else
-					E.update_params_for_player(client)
+					context.on_sound_update(E)
 			else
-				E.on_enter_range(client)
+				context.on_enter_range(E)
 
 // most of the time we want to send to client C sounds relevant to C.mob
 //  however for things like the AI eye we want to send to client AICore the sounds relevant to AIEye
@@ -152,10 +155,6 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 
 	// stop them from picking up new emitters
 	M.unregister_event(/event/moved, src, nameof(src::on_player_move()))
-	// stop everything they can hear and clear out their current emitters list
-	var/list/emitters = C.listener_context.current_channels_by_emitter.Copy()
-	for (var/datum/sound_emitter/E in emitters)
-		E.on_exit_range(C)
 	M.sound_endpoint = null
 	C.listener_context.Destroy()
 	C.listener_context = null
@@ -211,11 +210,11 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 			if (E.contains(location))
 				fresh[E] = TRUE
 				if (!current[E])
-					E.on_enter_range(receive_client)
+					context.on_enter_range(E)
 				else
-					E.update_params_for_player(receive_client)
+					context.on_sound_update(E)
 
 	for (var/e in current)
 		var/datum/sound_emitter/E = e
 		if (!fresh[E])
-			E.on_exit_range(receive_client)
+			context.on_exit_range(E)
