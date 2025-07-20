@@ -156,8 +156,6 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 	// stop them from picking up new emitters
 	M.unregister_event(/event/moved, src, nameof(src::on_player_move()))
 	M.sound_endpoint = null
-	C.listener_context.Destroy()
-	C.listener_context = null
 
 /datum/sound_zone_manager/proc/update_listener(mob/player)
 	var/newHash = hash_coord(player.x, player.y, player.z)
