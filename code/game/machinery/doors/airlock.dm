@@ -553,10 +553,7 @@ About the new airlock wires panel:
 		return //So i heard you tried to interface with doors you have no access to
 	src.add_hiddenprint(user)
 	//Cyborgs can still walk into the airlocks.
-	var/area/A = get_area(src)
-	var/obj/machinery/power/apc/apc = A.areaapc
-	if(apc && !(apc.stat & (BROKEN|MAINT|FORCEDISABLE)) && A.requires_power && apc.pulselock)
-		to_chat(user, span_warning("Electromagnetic anomalies are preventing you from interfacing with the area's machinery!"))
+	if(is_pulselocked(user))
 		return
 	if(isAI(user))
 		if(!src.canAIControl(user))
