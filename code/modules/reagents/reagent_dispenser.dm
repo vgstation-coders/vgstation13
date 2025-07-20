@@ -360,7 +360,7 @@
 	name = "beer keg"
 	desc = "A massive keg with a bottle of beer painted on the front."
 	icon = 'icons/obj/objects.dmi'
-	icon_state = "beertankTEMP"
+	icon_state = "beertank"
 	amount_per_transfer_from_this = 10
 
 /obj/structure/reagent_dispensers/beerkeg/New()
@@ -383,7 +383,7 @@
 	//name and desc are defined in the New() call
 	desc = ""
 	icon = 'icons/obj/objects.dmi'
-	icon_state = "beertankTEMP"
+	icon_state = "beertank"
 	amount_per_transfer_from_this = 10
 	var/basechem = BEER
 	var/dangerchance = 0
@@ -483,7 +483,10 @@
 
 	name = "[(selectedfirstname)] [(selectedsecondname)][pickweight(thirdname)] beer keg"
 	desc = "Guaranteed quality from [pickweight(firstname)] [pickweight(secondname)] brewery, best before [rand(2300,2540)].[initial(desc)]"
-	color = rgb(rand(75,255),rand(75,255),rand(75,255)) //randomized color in place of assorted random icons
+	icon_state = pick(list("beertank","bloodkeg","liquidtank"))
+	var/image/kegoverlay = image(icon, "[icon_state]_colorbase")
+	kegoverlay.color = rgb(rand(75,255),rand(75,255),rand(75,255)) //randomized color in place of assorted random icons
+	overlays += kegoverlay
 
 	if(station_does_not_tip) //good luck with your cyanide beer I guess
 		dangerchance = 60
@@ -501,7 +504,6 @@
 
 /obj/structure/reagent_dispensers/brewerybeerkeg/New()
 	. = ..()
-
 	makerandomkeg() //selects name, desc, randomized chems, etc
 
 /obj/structure/reagent_dispensers/brewerybeerkeg/suicide_act(var/mob/living/user)
