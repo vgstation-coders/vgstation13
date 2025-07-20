@@ -51,11 +51,17 @@
 
 /obj/machinery/ai_slipper/attack_ai(mob/user as mob)
 	add_hiddenprint(user)
+	if(is_pulselocked(user))
+		return
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		return
+	var/area/this_area = get_area(src)
+	var/obj/machinery/power/apc/apc = this_area.areaapc
+	if(apc && !(apc.stat & (BROKEN|MAINT|FORCEDISABLE)) && this_area.requires_power && apc.pulselock)
+		to_chat(user, span_warning("Electromagnetic anomalies are preventing you from interfacing with the area's machinery!"))
 		return
 
 	user.set_machine(src)
-	var/area/this_area = get_area(src)
 	var/t = "<TT><B>Foam Dispenser</B> ([this_area.name])<HR>"
 
 	if(src.locked && !istype(user, /mob/living/silicon) && !isAdminGhost(user))
@@ -70,12 +76,16 @@
 
 /obj/machinery/ai_slipper/AICtrlClick(mob/user as mob)
 	src.add_hiddenprint(user)
+	if(is_pulselocked(user))
+		return
 	src.disabled = !src.disabled
 	icon_state = src.disabled? "motion0":"motion3"
 	return
 
 /obj/machinery/ai_slipper/AIShiftClick(mob/user as mob)
 	src.add_hiddenprint(user)
+	if(is_pulselocked(user))
+		return
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(src.cooldown_on)

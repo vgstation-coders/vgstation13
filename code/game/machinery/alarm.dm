@@ -1325,6 +1325,8 @@ FIRE ALARM
 			alarm()
 
 /obj/machinery/firealarm/AICtrlClick()
+	if(is_pulselocked(usr))
+		return
 	if(alarm == 1)
 		reset()
 	else

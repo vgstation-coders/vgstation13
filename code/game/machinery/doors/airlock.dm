@@ -552,6 +552,12 @@ About the new airlock wires panel:
 	if(!allowed(user) && !isobserver(user))
 		return //So i heard you tried to interface with doors you have no access to
 	src.add_hiddenprint(user)
+	//Cyborgs can still walk into the airlocks.
+	var/area/A = get_area(src)
+	var/obj/machinery/power/apc/apc = A.areaapc
+	if(apc && !(apc.stat & (BROKEN|MAINT|FORCEDISABLE)) && A.requires_power && apc.pulselock)
+		to_chat(user, span_warning("Electromagnetic anomalies are preventing you from interfacing with the area's machinery!"))
+		return
 	if(isAI(user))
 		if(!src.canAIControl(user))
 			if(src.canAIHack())
@@ -664,6 +670,8 @@ About the new airlock wires panel:
 
 //Migrated from onclick
 /obj/machinery/door/airlock/AIAltClick() // Eletrifies doors.
+	if(is_pulselocked(usr))
+		return
 	if(allowed(usr))
 		if(!secondsElectrified)
 			// permenant shock
@@ -673,6 +681,8 @@ About the new airlock wires panel:
 			Topic("aiDisable=5", list("aiDisable"="5"), 1)
 
 /obj/machinery/door/airlock/AICtrlClick() // Bolts doors
+	if(is_pulselocked(usr))
+		return
 	if(allowed(usr))
 		if(locked)
 			Topic("aiEnable=4", list("aiEnable"="4"), 1)
@@ -680,6 +690,8 @@ About the new airlock wires panel:
 			Topic("aiDisable=4", list("aiDisable"="4"), 1)
 
 /obj/machinery/door/airlock/AIShiftClick()  // Opens and closes doors!
+	if(is_pulselocked(usr))
+		return
 	if(allowed(usr))
 		if(density)
 			Topic("aiEnable=7", list("aiEnable"="7"), 1)
@@ -693,6 +705,8 @@ About the new airlock wires panel:
 		break
 
 /obj/machinery/door/airlock/AIMiddleShiftClick()  // Turn safeties on and off
+	if(is_pulselocked(usr))
+		return
 	if(allowed(usr))
 		if(!safe)
 			Topic("aiEnable=8", list("aiEnable"="8"), 1)
