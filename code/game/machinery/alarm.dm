@@ -551,6 +551,8 @@ var/global/list/air_alarms = list()
 		if(this_area.fire)
 			preset_key = "Fire Suppression"
 			apply_preset(1)
+			auto_suppress = FALSE
+			config.suppression_mode = FALSE
 	return
 
 /obj/machinery/alarm/proc/calculate_local_danger_level(const/datum/gas_mixture/environment)
