@@ -495,6 +495,10 @@ Class Procs:
 
 /obj/machinery/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
+	var/area/A = get_area(src)
+	if(A.areaapc && A.areaapc.pulselocked)
+		to_chat(user, span_warning("Electromagnetic anomalies are preventing you from interfacing with the area's machinery!"))
+		return
 	if(isrobot(user))
 		// For some reason attack_robot doesn't work
 		// This is to stop robots from using cameras to remotely control machines.

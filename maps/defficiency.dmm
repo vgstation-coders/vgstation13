@@ -18378,6 +18378,9 @@
 	codes_txt = "patrol;next_patrol=ArrivalsR";
 	location = "Engineering"
 	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},

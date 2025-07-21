@@ -621,7 +621,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /datum/reagents/proc/clear_reagents(var/preserve_unremovable=FALSE)
 	amount_cache.len = 0
 	for(var/datum/reagent/R in reagent_list)
-		if(!preserve_unremovable || (R.flags & CHEMFLAG_NOTREMOVABLE) )
+		if( !(preserve_unremovable && (R.flags & CHEMFLAG_NOTREMOVABLE)) )
 			del_reagent(R.id,update_totals=0)
 	// Only call ONCE. -- N3X
 	update_total()

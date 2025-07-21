@@ -152,4 +152,7 @@
 		if(arena_leaderboard[x] == arena_top_score)
 			score.arenabest += "[x] "
 
+	if(score.badmin_score)
+		score.crewscore = score.badmin_score + (score.badmin_override ? 0 : score.crewscore)
+
 	return completions

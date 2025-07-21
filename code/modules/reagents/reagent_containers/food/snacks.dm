@@ -130,7 +130,8 @@
 /obj/item/weapon/reagent_containers/food/snacks/proc/make_poisonous(var/list/additional_poisons)
 	var/original_total_volume = reagents.total_volume
 	reagents.clear_reagents()
-	var/static/list/possible_poisons = list(
+	//Generic poisonous chemicals
+	var/list/possible_poisons = list(
 		BLEACH,
 		PLASMA,
 		TOXIN,
@@ -1536,6 +1537,12 @@
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/make_poisonous(var/list/additional_poisons)
+	var/original_total_volume = reagents.total_volume
+	reagents.clear_reagents()
+	reagents.add_reagent(BEFF, original_total_volume/2)
+	reagents.add_reagent(HEARTBREAKER, original_total_volume/2)
+
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/on_vending_machine_spawn()//Fast-Food Menu
 	reagents.chem_temp = COOKTEMP_READY
 
@@ -2470,6 +2477,12 @@
 		return pop_open(user)
 	..()
 
+/obj/item/weapon/reagent_containers/food/snacks/dangles/attackby(var/obj/item/I, mob/user as mob)
+	..()
+	if(istype(I, /obj/item/weapon/kitchen/canopener))
+		if(!popped)
+			return pop_open(user)
+
 /obj/item/weapon/reagent_containers/food/snacks/dangles/proc/pop_open(var/mob/user)
 	to_chat(user, "You pop the top off \the [src].")
 	playsound(user, 'sound/effects/opening_snack_tube.ogg', 50, 1)
@@ -2565,6 +2578,12 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/fries/make_poisonous(var/list/additional_poisons)
+	var/original_total_volume = reagents.total_volume
+	reagents.clear_reagents()
+	reagents.add_reagent(SODIUMCHLORIDE, original_total_volume/2)
+	reagents.add_reagent(DIAMONDDUST, original_total_volume/2)
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/processed/New()
 	..()
@@ -2685,6 +2704,13 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/make_poisonous(var/list/additional_poisons)
+	var/original_total_volume = reagents.total_volume
+	reagents.clear_reagents()
+	reagents.add_reagent(SODIUMCHLORIDE, original_total_volume/3)
+	reagents.add_reagent(DIAMONDDUST, original_total_volume/3)
+	reagents.add_reagent(CHEESYGLOOP, original_total_volume/3)
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet
 	name = "punnet of Cheesy Fries"
@@ -3113,6 +3139,12 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/bigbiteburger/on_vending_machine_spawn()//Fast-Food Menu XL
 	reagents.chem_temp = COOKTEMP_READY
+
+/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger/make_poisonous(var/list/additional_poisons)
+	var/original_total_volume = reagents.total_volume
+	reagents.clear_reagents()
+	reagents.add_reagent(BEFF, original_total_volume/2)
+	reagents.add_reagent(HEARTBREAKER, original_total_volume/2)
 
 /obj/item/weapon/reagent_containers/food/snacks/enchiladas
 	name = "Enchiladas"
@@ -4404,6 +4436,25 @@
 	reagents.add_reagent(TOMATOJUICE, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/margherita/make_poisonous(var/list/additional_poisons)
+	var/original_total_volume = reagents.total_volume
+	reagents.clear_reagents()
+	var/list/possible_poisons = list(
+		BLEACH,
+		PLASMA,
+		TOXIN,
+		SOLANINE,
+		PLASTICIDE,
+		RADIUM,
+		CRYPTOBIOLIN,
+		IMPEDREZENE,
+		SOYSAUCE
+	)
+	if(additional_poisons && additional_poisons.len)
+		possible_poisons += additional_poisons.Copy()
+	while(reagents.total_volume < original_total_volume)
+		reagents.add_reagent(pick(possible_poisons), rand(5, 10))
+
 /obj/item/weapon/reagent_containers/food/snacks/margheritaslice
 	name = "Margherita slice"
 	desc = "A slice of the most cheesy pizza in galaxy."
@@ -4437,6 +4488,43 @@
 	reagents.add_reagent(NUTRIMENT, 50)
 	reagents.add_reagent(TOMATOJUICE, 6)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza/make_poisonous(var/list/additional_poisons)
+	var/original_total_volume = reagents.total_volume
+	reagents.clear_reagents()
+
+	var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
+	var/datum/disease2/disease/new_virus = new virus_choice
+
+	var/list/anti = list(
+		ANTIGEN_BLOOD	= 0,
+		ANTIGEN_COMMON	= 1,
+		ANTIGEN_RARE	= 2,
+		ANTIGEN_ALIEN	= 0,
+		)
+	var/list/bad = list(
+		EFFECT_DANGER_HELPFUL	= 0,
+		EFFECT_DANGER_FLAVOR	= 0,
+		EFFECT_DANGER_ANNOYING	= 1,
+		EFFECT_DANGER_HINDRANCE	= 2,
+		EFFECT_DANGER_HARMFUL	= 4,
+		EFFECT_DANGER_DEADLY	= 0,
+		)
+
+	new_virus.origin = "Poisoned Pizza"
+
+	new_virus.makerandom(list(40,60),list(20,90),anti,bad,src)
+
+	var/list/blood_data = list(
+		"viruses" = null,
+		"blood_DNA" = null,
+		"blood_type" = "O-",
+		"resistances" = null,
+		"trace_chem" = null,
+		"virus2" = list()
+	)
+	blood_data["virus2"]["[new_virus.uniqueID]-[new_virus.subID]"] = new_virus
+	reagents.add_reagent(BLOOD, original_total_volume, blood_data)
 
 /obj/item/weapon/reagent_containers/food/snacks/meatpizzaslice
 	name = "Meatpizza slice"
@@ -4477,6 +4565,15 @@
 	reagents.add_reagent(NUTRIMENT, 35)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/mushroompizza/make_poisonous(var/list/additional_poisons)
+	var/original_total_volume = reagents.total_volume
+	reagents.clear_reagents()
+	var/static/list/possible_poisons = list(
+		MINDBREAKER,
+		SPIRITBREAKER
+	)
+	reagents.add_reagent(pick(possible_poisons), original_total_volume)
+
 /obj/item/weapon/reagent_containers/food/snacks/mushroompizzaslice
 	name = "Mushroompizza slice"
 	desc = "Maybe it's the last slice of pizza in your life."
@@ -4498,6 +4595,11 @@
 	reagents.add_reagent(TOMATOJUICE, 6)
 	reagents.add_reagent(IMIDAZOLINE, 12)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/vegetablepizza/make_poisonous(var/list/additional_poisons)
+	var/original_total_volume = reagents.total_volume
+	reagents.clear_reagents()
+	reagents.add_reagent(MUTAGEN, original_total_volume)
 
 /obj/item/weapon/reagent_containers/food/snacks/vegetablepizzaslice
 	name = "Vegetable pizza slice"
@@ -4522,6 +4624,23 @@
 	reagents.add_reagent(DIAMONDDUST, 3)
 	reagents.add_reagent(TRICORDRAZINE, 8) //ambrosia's medical chems replacement
 	bitesize = 2
+
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/blingpizza/make_poisonous(var/list/additional_poisons)
+	var/original_total_volume = reagents.total_volume
+	reagents.clear_reagents()
+	var/list/possible_poisons = list(
+		CYANIDE,
+		DIAMONDDUST,
+		RADIUM,
+		MERCURY,
+		URANIUM,
+		LEAD,
+	)
+	if(additional_poisons && additional_poisons.len)
+		possible_poisons += additional_poisons.Copy()
+	while(reagents.total_volume < original_total_volume)
+		reagents.add_reagent(pick(possible_poisons), rand(5, 10))
 
 /obj/item/weapon/reagent_containers/food/snacks/blingpizzaslice
 	name = "Blingpizza slice"

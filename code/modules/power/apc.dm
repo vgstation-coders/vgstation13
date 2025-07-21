@@ -121,6 +121,8 @@
 
 	var/recharge_load = 0 // How much power we've requested for recharging purposes
 
+	var/pulselocked = 0 // Determines in process() how long silicons are locked out from interacting with machinery in the APC's area
+
 /obj/machinery/power/apc/get_cell()
 	return cell
 
@@ -1149,7 +1151,7 @@
 		return 0
 
 /obj/machinery/power/apc/process()
-
+	pulselocked = max(0, --pulselocked)
 	if(stat & (BROKEN|MAINT|FORCEDISABLE))
 		return
 	var/area/this_area = get_area(src)

@@ -81,7 +81,7 @@ export const CameraConsole = (props) => {
   return (
     <Window width={850} height={708}>
       <Window.Content>
-        <CameraContent props />
+        <CameraContent {...props} />
       </Window.Content>
     </Window>
   );
@@ -89,7 +89,8 @@ export const CameraConsole = (props) => {
 
 export const CameraContent = (props) => {
   const [searchText, setSearchText] = useState('');
-  const { act } = useBackend<Data>();
+  const { act, data } = useBackend<Data>();
+  const { activeCamera } = data;
   return (
     <Stack fill>
       <Stack.Item grow>

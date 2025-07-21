@@ -863,3 +863,19 @@
 /obj/item/weapon/tray/proc/whoops()
 	playsound(src, "trayhit", 35, 1)
 	send_items_flying()
+
+
+/obj/item/weapon/kitchen/canopener
+	name = "can opener"
+	desc = "Open soda cans in style."
+	icon_state = "can_opener"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	force = 7
+	w_class = W_CLASS_TINY
+	throwforce = 5
+	throw_speed = 3
+	throw_range = 5
+	flags = FPRINT
+	siemens_coefficient = 1
+	origin_tech = Tc_MATERIALS + "=1"
+	attack_verb = list("attacks", "stabs", "pokes")

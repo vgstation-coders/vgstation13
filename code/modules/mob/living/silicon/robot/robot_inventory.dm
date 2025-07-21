@@ -292,7 +292,7 @@
 /mob/living/silicon/robot/put_in_hands(var/obj/item/W)
 	if(!W)
 		return FALSE
-	if(cell && cell.charge <= ROBOT_LOW_POWER)
+	if(get_cell_charge(src) <= ROBOT_LOW_POWER)
 		drop_from_inventory(W)
 		return FALSE
 	for(var/obj/item/weapon/gripper/G in get_all_slots())
@@ -314,7 +314,7 @@
 	if(client)
 		client.screen -= contents
 		for(var/obj/I in contents)
-			if(I!=cell && I!=radio && I!=camera && I!=mmi && I!=rbPDA && I!=aicamera)
+			if(I!=get_cell() && I!=radio && I!=camera && I!=mmi && I!=rbPDA && I!=aicamera)
 				client.screen += I
 	if(module_state_1)
 		module_state_1:screen_loc = ui_inv1

@@ -126,7 +126,7 @@
 	set name = "Power Warning"
 
 	if(stat != DEAD)
-		if(!cell || !cell.charge)
+		if(!get_cell_charge(src))
 			visible_message("The power warning light on <span class='name'>[src]</span> flashes urgently.")
 			to_chat(src, "<span class='info' style=\"font-family:Courier\">You announce you are operating in low power mode.</span>")
 			playsound(loc, 'sound/machines/buzz-two.ogg', 50, 0)

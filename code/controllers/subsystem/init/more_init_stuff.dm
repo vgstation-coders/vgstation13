@@ -9,6 +9,8 @@ var/datum/subsystem/more_init/SSmore_init
 	NEW_SS_GLOBAL(SSmore_init)
 
 /datum/subsystem/more_init/Initialize(timeofday)
+	log_debug("Last crew score: [last_crewscore], camera break chance: [clamp(10-(last_crewscore/1000),0,25)], \
+		light tube break chance: [clamp(2-(last_crewscore/5000),0,4)], light bulb break chance: [clamp(5-(last_crewscore/2000),0,10)]")
 	initialize_rune_words()
 	library_catalog.initialize()
 	init_mind_ui()

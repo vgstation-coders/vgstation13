@@ -75,8 +75,9 @@
 		//M.custom_name = created_name
 
 		brainmob.mind.transfer_to(M)
-		M.cell = locate(/obj/item/weapon/cell) in contents
-		M.cell.forceMove(M)
+		var/obj/item/weapon/cell/ourcell = locate(/obj/item/weapon/cell) in contents
+		ourcell.forceMove(M)
+		M.add_cell(ourcell)
 		src.forceMove(M)//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
 		M.mmi = src
 

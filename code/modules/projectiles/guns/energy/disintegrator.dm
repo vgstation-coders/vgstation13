@@ -98,32 +98,11 @@
 	projectile_type = "/obj/item/projectile/beam/scorchray/atomizationray"
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=3" + Tc_POWERSTORAGE + "=4"
 	fire_delay = 0.6 SECONDS // Barely noticeable, mostly here to allow the firing noise .ogg to finish ~0.55 seconds
-
-	var/charge_tick = 0
-	var/charge_wait = 4 // This one charges itself like the Captain's laser, at the cost of fun alternate modes
+	recharge_time = 4 // This one charges itself like the Captain's laser, at the cost of fun alternate modes
+	recharge_mult = 2
 
 /obj/item/weapon/gun/energy/advdisintegrator/isHandgun()
 	return TRUE
-
-/obj/item/weapon/gun/energy/advdisintegrator/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/advdisintegrator/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-/obj/item/weapon/gun/energy/advdisintegrator/process()
-	charge_tick++
-	if(charge_tick < charge_wait)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
-	update_icon()
-	return 1
 
 /obj/item/weapon/gun/energy/advdisintegrator/dissolvable() // Can't be destroyed by polyacid
 	return 0

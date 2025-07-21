@@ -148,14 +148,25 @@
 	weight = BASE_RULESET_WEIGHT
 	weight_category = "Changeling"
 	cost = 18
+	var/additional_cost = 9
+	var/maximum_lings = 2
+	var/pop_per_ling = 12
 	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
 
 // -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
 /datum/dynamic_ruleset/roundstart/changeling/choose_candidates()
-	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
+	//Check to see how many lings the ruleset supports and if there are enough candidates.
+	var/num_changelings = min(min(floor(mode.roundstart_pop_ready / pop_per_ling), maximum_lings), candidates.len)
+	for (var/i = 1 to num_changelings)
+		if(i > 1)
+			if((mode.threat > additional_cost))
+				mode.spend_threat(additional_cost)
+			else
+				break
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/changeling/execute()
