@@ -9,7 +9,7 @@ var/global/global_playlists = list()
 	set waitfor = 0//tentative fix so the proc stops hanging if it takes too long
 	if(!config.media_base_url)
 		return
-	for(var/playlist_id in list("bar", "jazzswing", "bomberman", "depresso", "eclipse", "electronica", "emagged", "endgame", "filk", "funk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "vidya", "SCOTLANDFOREVER", "halloween", "christmas"))
+	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "IDM", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "vidya", "SCOTLANDFOREVER", "halloween", "christmas"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		log_debug("Begin updating playlist: [playlist_id]...")
 
@@ -878,6 +878,7 @@ var/global/list/loopModeNames=list(
 	playlist_id="bar"
 	// Must be defined on your server.
 	playlists=list(
+		"lilslugger" = "Battle of Lil Slugger",
 		"bar"  = "Bar Mix",
 		"jazzswing" = "Jazz & Swing",
 		"depresso" ="Depresso",
@@ -913,6 +914,7 @@ var/global/list/loopModeNames=list(
 		"filk" = "Filk",
 		"funk" = "Funk",
 		"folk" = "Folk",
+		"IDM" = "90's IDM",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
 		"muzakjazz" = "Muzak",
@@ -942,6 +944,7 @@ var/global/list/loopModeNames=list(
 	playlist_id="bar"
 	// Must be defined on your server.
 	playlists=list(
+		"lilslugger" = "Battle of Lil' Slugger",
 		"bar"  = "Bar Mix",
 		"jazzswing" = "Jazz & Swing",
 		"depresso" ="Depresso",
@@ -949,6 +952,7 @@ var/global/list/loopModeNames=list(
 		"filk" = "Filk",
 		"funk" = "Funk",
 		"folk" = "Folk",
+		"IDM" = "90's IDM",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
 		"muzakjazz" = "Muzak",
@@ -969,7 +973,7 @@ var/global/list/loopModeNames=list(
 		"malfdelta"= "Silicon Assault",
 		"bomberman" = "Bomberman",
 		"SCOTLANDFOREVER"= "Highlander",
-		"eclipse" = "Eclipse"
+		"echoes" = "Echoes"
 	)
 
 /obj/machinery/media/jukebox/superjuke/New()
@@ -1166,11 +1170,10 @@ var/global/list/loopModeNames=list(
 	unformatted = "depresso"
 	formatted = "Depresso"
 	mask = "#000000"//black
-/obj/item/weapon/vinyl/eclipse
-	name = "nanovinyl - Vague Threat"
-	unformatted = "eclipse"
-	formatted = "Eclipse"
-	desc = "For when a vague threat plagues the station."
+/obj/item/weapon/vinyl/echoes
+	name = "nanovinyl - echoes"
+	unformatted = "echoes"
+	formatted = "Echoes"
 /obj/item/weapon/vinyl/electronica
 	name = "nanovinyl - electronic"
 	unformatted = "electronica"
@@ -1196,6 +1199,10 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - folk"
 	unformatted = "folk"
 	formatted = "Folk"
+/obj/item/weapon/vinyl/idm
+	name = "nanovinyl - 90's IDM"
+	unformatted = "IDM"
+	formatted = "90's IDM"
 /obj/item/weapon/vinyl/jazz
 	name = "nanovinyl - jazz & swing"
 	unformatted = "jazzswing"
@@ -1266,6 +1273,11 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - halloween"
 	unformatted = "halloween"
 	formatted = "Halloween"
+/obj/item/weapon/vinyl/slugger
+	name = "nanovynil - slugger"
+	desc = "A go-to for bars all over the sector. Every time you walk in one, you can almost bet it's playing."
+	unformatted = "lilslugger"
+	formatted = "Battle of Lil Slugger"
 /obj/item/weapon/vinyl/christmas
 	name = "nanovynil - christmas"
 	unformatted = "christmas"
