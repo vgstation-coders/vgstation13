@@ -2413,7 +2413,6 @@
 #include "code\modules\procedural mapping\planetGenerator\generators\grass.dm"
 #include "code\modules\procedural mapping\planetGenerator\generators\jungle.dm"
 #include "code\modules\procedural mapping\planetGenerator\generators\lava.dm"
-#include "code\modules\procedural mapping\planetGenerator\generators\rock.dm"
 #include "code\modules\procedural mapping\planetGenerator\generators\snow.dm"
 #include "code\modules\procedural mapping\planetGenerator\generators\urban.dm"
 #include "code\modules\procedural mapping\planetGenerator\generators\xeno.dm"
