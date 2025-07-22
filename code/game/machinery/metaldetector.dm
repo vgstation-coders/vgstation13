@@ -29,7 +29,6 @@
 		/obj/item/weapon/gun/energy/tag,
 		/obj/item/weapon/gun/energy/laser/practice,
 		/obj/item/weapon/gun/hookshot,
-		/obj/item/weapon/gun/energy/floragun,
 		/obj/item/weapon/melee/defibrillator
 		)
 
@@ -169,7 +168,7 @@
 		<br>DeMil Alerts: <A href='?src=\ref[src];action=senmode'>Turn [senset ? "Off" : "On"]</A></h4>
 		"}
 
-		user << browse(dat, "window=detector;size=575x300")
+		user << browse(HTML_SKELETON(dat), "window=detector;size=575x300")
 		onclose(user, "detector")
 		return
 
@@ -181,7 +180,7 @@
 	if (!(powered()))
 		return
 
-	if ((src.disable) || (src.last_read && world.time < src.last_read + 20))
+	if ((src.disable) || (src.last_read && world.time < src.last_read + 2 SECONDS))
 		return
 
 
@@ -249,7 +248,7 @@
 	emagged = TRUE
 
 /obj/machinery/detector/HasProximity(atom/movable/AM as mob|obj)
-	if ((src.disable) || (src.last_read && world.time < src.last_read + 30))
+	if ((src.disable) || (src.last_read && world.time < src.last_read + 3 SECONDS))
 		return
 
 	if(istype(AM, /mob/living/carbon))

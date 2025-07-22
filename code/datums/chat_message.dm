@@ -84,7 +84,7 @@ var/runechat_icon = null
 	owner.register_event(/event/destroyed, src, nameof(src::qdel_self()))
 
 	// Clip message
-	var/maxlen = owned_by.prefs.max_chat_length
+	var/maxlen = owned_by.prefs.get_pref(/datum/preference_setting/numerical/max_chat_length)
 	if (length_char(text) > maxlen)
 		text = copytext_char(text, 1, maxlen + 1) + "..." // BYOND index moment
 
@@ -217,6 +217,7 @@ var/runechat_icon = null
 	if(loneliness_affected(speaker))
 		return
 
+	raw_message = html_encode(raw_message)
 	var/list/extra_classes = list()
 	extra_classes += existing_extra_classes
 

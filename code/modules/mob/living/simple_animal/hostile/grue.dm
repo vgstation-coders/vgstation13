@@ -430,7 +430,7 @@
 	if(dark_plane)
 		if(master_plane)
 			master_plane.blend_mode = BLEND_ADD
-		dark_plane.alphas["grue"] = 15 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
+		dark_plane.alphas["grue"] = 0 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
 		client.color = list(
 				1,0,0,0,
 				-1,0.2,0.2,0,
@@ -665,7 +665,7 @@
 /mob/living/simple_animal/hostile/grue/proc/grue_stat_updates(var/feed_verbose = FALSE) //update stats, called by lifestage_updates() as well as handle_feed()
 
 	//health regen in darkness
-	lightparams.regenbonus = lightparams.base_regenbonus * (1.5 ** eatencount) //increased health regen in darkness
+	lightparams.regenbonus = lightparams.base_regenbonus * (1.1 ** eatencount) //increased health regen in darkness
 
 	//melee damage, 50 damage limit
 	melee_damage_lower = min(50, base_melee_dam_lw + (5 * eatencount))
@@ -702,7 +702,7 @@
 	//shadow shunt cooldown
 	for(var/spell/aoe_turf/grue_blink/thisspell in spell_list)
 		var/newcooldown = max(45 SECONDS - eatencount * 2 SECONDS, 8 SECONDS)
-		thisspell.charge_max = newcooldown
+		thisspell.charge_cooldown_max = newcooldown
 		thisspell.charge_counter = min(newcooldown, thisspell.charge_counter)
 
 //Drain the light from the surrounding area.
@@ -806,7 +806,7 @@
 		to_chat(src, "<span class='warning'>You reach into the darkness, but can't seem to find a way.</span>")
 		//set the remaining cooldown to one second if no valid location was found
 		for(var/spell/aoe_turf/grue_blink/thisspell in spell_list)
-			thisspell.charge_counter = thisspell.charge_max - 1 SECONDS
+			thisspell.charge_counter = thisspell.charge_cooldown_max - 1 SECONDS
 		return
 
 // Dark sparkles when a grue uses shadow shunt.

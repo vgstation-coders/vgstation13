@@ -9,6 +9,7 @@
 #define CHEMFLAG_DISHONORABLE 1
 #define CHEMFLAG_OBSCURING	2
 #define CHEMFLAG_PIGMENT	4
+#define CHEMFLAG_NOTREMOVABLE	8 //cannot be rid of by charcoal (or other reagent tomfoolery means).
 
 #define EXPLICITLY_INVALID_REAGENT_ID "Use this ID if the reagent is not supposed to be used, like for the base type of other reagents."
 
@@ -38,6 +39,7 @@
 #define STOXIN 			"stoxin"
 #define INAPROVALINE 			"inaprovaline"
 #define HOLYWATER 			"holywater"
+#define SACREDWATER 		"sacredwater"
 #define SEROTROTIUM 			"serotrotium"
 #define SILICATE 			"silicate"
 #define OXYGEN 			"oxygen"
@@ -165,6 +167,7 @@
 #define HOLYSALTS 			"holysalts"
 #define CREATINE 			"creatine"
 #define CARPPHEROMONES 			"carppheromones"
+#define KILLERPHEROMONES 		"killerpheromones"
 #define BLACKPEPPER 			"blackpepper"
 #define CINNAMON 			"cinnamon"
 #define ZAMSPICES			"zamspices"
@@ -433,6 +436,8 @@
 #define MUSTARD			"mustard"
 #define RELISH			"relish"
 #define UNTABLE_MUTAGEN		"untable"
+#define METATABLE_MUTAGEN	"metatable"
+#define METASTABLE_MUTAGEN	"metastable"
 #define ELECTRIC_SHEEP		"electric_sheep"
 #define SCIENTISTS_SERENDIPITY		"scientists_serendipity"
 #define METABUDDY		"metabuddy"
@@ -460,6 +465,7 @@
 #define GEOMETER		"geometer"
 #define EGG_YOLK		"egg_yolk"
 #define PANCAKE			"pancake"
+#define PAINCAKE		"paincake"
 #define SPAGHETTI		"spaghetti"
 #define MUSTARD_POWDER	"mustard_powder"
 #define MAYO			"mayo"
@@ -480,6 +486,7 @@
 #define BLOBANINE		"blobanine"
 #define BLOB_ESSENCE	"blob_essence"
 #define METHAMPHETAMINE "methamphetamine"
+#define GRUGZONE		"grugzone"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -521,6 +528,7 @@
 #define AMINOMICIAN		"aminomician"
 #define AMINOCYPRINIDOL	"aminocyprinidol"
 #define AMINOBLATELLA	"aminoblatella"
+#define AMINOCORYDON	"aminocorydon"
 #define TOMATO_SOUP		"tomato_soup"
 #define LUMINOL			"luminol"
 #define CAFFEINE		"caffeine"
@@ -528,12 +536,21 @@
 #define LEMONDROP		"lemondrop"
 #define FEVERFEW		"feverfew"
 #define SQUASH			"squash"
+#define PRIAXATE		"priaxate"
 
 #define ACRYLIC			"acrylic"
 #define ACETONE			"acetone"
 #define NANOPAINT		"nano_paint"
 #define FLAXOIL			"flax_oil"
 #define WAX				"wax"
+
+#define PLUTONIUM		"plutonium"
+#define RADON			"radon"
+#define LEAD			"lead"
+#define THALLIUM		"thallium"
+#define THORIUM			"thorium"
+#define REGENERATECALCIUM	"regeneratecalcium"
+#define EQUALIZONE		"equalizone"
 
 #define DYE_DANDELIONS	"dandelion_dye"
 
@@ -590,7 +607,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define ALLNANITES list(NANITES, AUTISTNANITES)
 #define SUGARS list(SUGAR, CORNSYRUP)
 #define GUNKS list(CHEMICAL_WASTE, TOXICWASTE, VOMIT, TOXIN, SOLANINE, RADIUM, MUTAGEN, UNTABLE_MUTAGEN, SPIDERS)
-#define COLDDRINKS list(ICECOFFEE, ICETEA, ARNOLDPALMER, TONIC, SODAWATER, ICE, COLA, NUKA_COLA, GEOMETER, SPACEMOUNTAINWIND, DR_GIBB, SPACE_UP, LEMON_LIME, LEMONADE, KIRASPECIAL, MILKSHAKE, BROWNSTAR, REWRITER, DIY_SODA)
+#define COLDDRINKS list(ICECOFFEE, ICETEA, ICED_BEER, ARNOLDPALMER, TONIC, SODAWATER, ICE, COLA, NUKA_COLA, GEOMETER, SPACEMOUNTAINWIND, DR_GIBB, SPACE_UP, LEMON_LIME, LEMONADE, KIRASPECIAL, MILKSHAKE, BROWNSTAR, REWRITER, DIY_SODA)
 #define HOTDRINKS list(COFFEE, SOY_LATTE, TEA, GATORMIX, HOT_COCO, HOT_COCO_SUBHUMAN, CREAMY_HOT_COCO) //Blisterol not included as that's medicine, not a warm drink
 //HOT and COLD drinks defines used for the mint toxin/mint essence checks for tooth pain and shit, maybe you can find another use for it
 

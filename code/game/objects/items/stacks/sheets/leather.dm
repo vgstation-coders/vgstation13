@@ -229,7 +229,7 @@
 
 		else
 			//visible message on mobs is defined as visible_message(var/message, var/self_message, var/blind_message)
-			user.visible_message("<span class='notice'>\the [usr] starts cutting hair off \the [src].</span>", "<span class='notice'>You start cutting the hair off \the [src].</span>", "You hear the sound of a knife rubbing against flesh.")
+			user.visible_message("<span class='notice'>\The [usr] starts cutting hair off \the [src].</span>", "<span class='notice'>You start cutting the hair off \the [src].</span>", "You hear the sound of a knife rubbing against flesh.")
 
 			spawn()
 				if(do_after(user, src, 5 SECONDS))

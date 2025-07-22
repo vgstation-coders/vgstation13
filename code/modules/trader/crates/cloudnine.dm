@@ -187,10 +187,10 @@ var/global/list/cloudnine_stuff = list(
 	mode = !mode
 	to_chat(user, "<span class='notice'>You toggle the tool into [mode ? "multitool" : "wirecutter"] mode.</span>")
 
-/obj/item/device/multitool/omnitool/is_wirecutter()
+/obj/item/device/multitool/omnitool/is_wirecutter(mob/user)
 	return !mode
 
-/obj/item/device/multitool/omnitool/is_multitool()
+/obj/item/device/multitool/omnitool/is_multitool(mob/user)
 	return mode
 
 var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)

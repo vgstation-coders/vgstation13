@@ -7,8 +7,8 @@
 	override_base = "grue"
 
 	spell_flags = WAIT_FOR_CLICK
-	charge_type = Sp_RECHARGE
-	charge_max = 0 SECONDS
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 0 SECONDS
 	range = 1
 	valid_targets = list(/mob/living/carbon)
 
@@ -33,8 +33,8 @@
 	hud_state = "grue_vent"
 	override_base = "grue"
 	range = 1
-	charge_type = Sp_RECHARGE
-	charge_max = 0
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 0
 
 /spell/aoe_turf/grue_ventcrawl/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
 	user.ventcrawl()
@@ -47,8 +47,8 @@
 	hud_state = "grue_hide"
 	override_base = "grue"
 	range = 0
-	charge_type = Sp_RECHARGE
-	charge_max = 0
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 0
 
 /spell/aoe_turf/grue_hide/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
 	user.hide()
@@ -61,8 +61,8 @@
 	hud_state = "grue_egg"
 	override_base = "grue"
 	range = 0
-	charge_type = Sp_RECHARGE
-	charge_max = 0
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 0
 
 /spell/aoe_turf/grue_egg/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
 	user.reproduce()
@@ -75,8 +75,8 @@
 	hud_state = "grue_moult"
 	override_base = "grue"
 	range = 0
-	charge_type = Sp_RECHARGE
-	charge_max = 0
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 0
 
 /spell/aoe_turf/grue_moult/cast(list/targets, mob/living/simple_animal/hostile/grue/user)
 	user.moult()
@@ -89,7 +89,7 @@
 	panel = "Grue"
 	override_base = "grue"
 	range = 0
-	charge_type = Sp_GRADUAL | Sp_HOLDVAR
+	charge_type = SP_GRADUAL | SP_HOLDVAR
 	holder_var_type = "nutrienergy"
 	holder_var_amount = 0.1 //Around 1 nutrienergy per second.
 	holder_var_name = "nutritive energy"
@@ -114,8 +114,8 @@
 	hud_state = "grue_blink"
 	override_base = "grue"
 	range = 0
-	charge_type = Sp_RECHARGE
-	charge_max = 45 SECONDS
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 45 SECONDS
 	still_recharging_msg = "<span class='notice'>You need to reorient yourself before doing that again.</span>"
 
 /spell/aoe_turf/grue_blink/cast(list/targets, mob/living/simple_animal/hostile/grue/user)

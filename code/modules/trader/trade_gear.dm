@@ -75,7 +75,7 @@
 
 /obj/item/dictionary/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
 	. =  do_after_default_checks(arglist(args))
-	if(. && prob(35))
+	if(. && !user.mind.miming && prob(35))
 		practice(user)
 	return .
 

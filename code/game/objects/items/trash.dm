@@ -14,7 +14,7 @@
 	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
 	//var/global/list/trash_items = list()
 
-/obj/item/trash/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
+/obj/item/trash/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/obj/item/source)
 	if(age)
 		setPersistenceAge(age)
 	if(icon_state)
@@ -226,9 +226,9 @@
 	w_type=RECYK_WAX
 	var/image/wick
 
-/obj/item/trash/candle/New(turf/loc, var/obj/item/candle/source)
+/obj/item/trash/candle/New(turf/loc, var/obj/item/source)
 	..()
-	if (source)
+	if (source && istype(source, /obj/item/candle))
 		color = source.color
 	else
 		color = COLOR_DEFAULT_CANDLE
@@ -450,4 +450,23 @@ var/list/crushed_cans_cache = list()
 	desc = "What a shame it's too small to fly in."
 	icon_state	= "emptysaucerbowl"
 	starting_materials = list(MAT_IRON = 100)
-	w_type=RECYK_METAL
+	w_type = RECYK_METAL
+
+/obj/item/trash/broken_ashtray
+	name = "broken ashtray"
+	desc = "Pieces of plastic with ash on them."
+	icon_state = "ashtray_bork_bl"
+	starting_materials = list(MAT_PLASTIC = 50)
+	w_type = RECYK_PLASTIC
+
+/obj/item/trash/broken_ashtray/bronze
+	desc = "Pieces of bronze with ash on them."
+	icon_state = "ashtray_bork_br"
+	starting_materials = list(MAT_IRON = 80)
+	w_type = RECYK_METAL
+
+/obj/item/trash/broken_ashtray/glass
+	desc = "Shards of glass with ash on them."
+	icon_state = "ashtray_bork_gl"
+	starting_materials = list(MAT_GLASS = 60)
+	w_type = RECYK_GLASS

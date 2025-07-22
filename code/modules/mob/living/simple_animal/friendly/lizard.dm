@@ -117,3 +117,36 @@
 
 /mob/living/simple_animal/hostile/lizard/frog/get_butchering_products()
 	return list(/datum/butchering_product/frog_leg)
+
+
+/mob/living/simple_animal/hostile/lizard/frog/poison
+	species_type = /mob/living/simple_animal/hostile/lizard/frog/poison
+	name = "poison dart frog"
+	desc = "Poisonous, not venomous."
+	icon_state = "poison_dart_frog"
+	icon_living = "poison_dart_frog"
+	icon_dead = "poison_dart_frog_dead"
+	is_poisonous=TRUE
+	
+/mob/living/simple_animal/hostile/lizard/frog/poison/react_to_touch(mob/M)	
+	..()
+	if(istype(M,/mob/living/carbon/human)) //don't touch with bare hands.
+		var/mob/living/carbon/human/H = M
+		if(H.gloves)
+			return	
+	M.reagents.add_reagent(CARPOTOXIN, 10)
+	
+/mob/living/simple_animal/hostile/lizard/frog/get_butchering_products()
+	return list(/datum/butchering_product/frog_leg)
+
+/mob/living/simple_animal/hostile/lizard/frog/poison/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)	
+	..()
+	if(istype(mover,/mob))
+		var/mob/M=mover
+		if(istype(M,/mob/living/carbon/human))
+			var/mob/living/carbon/human/H = M
+			if(!H.shoes) //don't tread on him (without footwear).
+				H.reagents.add_reagent(CARPOTOXIN, 10)
+		else		
+			M.reagents.add_reagent(CARPOTOXIN, 10)
+

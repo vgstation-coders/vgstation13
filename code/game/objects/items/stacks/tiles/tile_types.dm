@@ -152,3 +152,19 @@
 	else
 		current_slowdown *= 0.01
 	..()
+
+/obj/item/stack/tile/plated_catwalk
+	name = "plated catwalk frame"
+	singular_name = "plated catwalk frame"
+	desc = "A frame for a plated catwalk. Add rods after installing."
+	icon_state = "ptile"
+	force = 1.0
+	throwforce = 5
+	throw_speed = 5
+	throw_range = 10
+	material = "metal"
+	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_METAL
+	flags = FPRINT
+	siemens_coefficient = 0
+	max_amount = 60

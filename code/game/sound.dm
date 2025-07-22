@@ -33,7 +33,7 @@ var/list/card_swipe_sound = list('sound/effects/cardswipe1.ogg', 'sound/effects/
 var/list/mop_sound = list('sound/effects/mop1.ogg', 'sound/effects/mop2.ogg', 'sound/effects/mop3.ogg', 'sound/effects/mop4.ogg', 'sound/effects/mop5.ogg')
 var/list/voice_human_sound = list('sound/misc/Vocal1.ogg','sound/misc/Vocal2.ogg','sound/misc/Vocal3.ogg','sound/misc/Vocal4.ogg','sound/misc/Vocal5.ogg')
 var/list/voice_vox_sound = list('sound/misc/voxvocal1.ogg','sound/misc/voxvocal2.ogg','sound/misc/voxvocal3.ogg','sound/misc/voxvocal4.ogg','sound/misc/voxvocal5.ogg')
-var/list/voice_silicon_sound = list('sound/misc/silicon-vocal1.ogg','sound/misc/silicon-vocal2.ogg','sound/misc/silicon-vocal3.ogg','sound/misc/silicon-vocal4.ogg','sound/misc/silicon-vocal5.ogg')
+var/list/voice_silicon_sound = list('sound/misc/silicon-vocal1.ogg','sound/misc/silicon-vocal2.ogg','sound/misc/silicon-vocal3.ogg','sound/misc/silicon-vocal4.ogg')
 var/list/windows_error = list('sound/machines/WXP_error.ogg', 'sound/machines/W95_error.ogg', 'sound/machines/W98_error.ogg', 'sound/machines/W7_error.ogg')
 var/list/fuckup_step = list('sound/effects/fuckupstep1.ogg', 'sound/effects/fuckupstep2.ogg')
 var/list/jingle_sound = list('sound/items/jinglebell1.ogg', 'sound/items/jinglebell2.ogg', 'sound/items/jinglebell3.ogg')
@@ -41,6 +41,7 @@ var/list/disappear_sound = list('sound/effects/disappear_1.ogg', 'sound/effects/
 var/list/pd_wail_sound = list('sound/voice/pdwail1.ogg', 'sound/voice/pdwail2.ogg', 'sound/voice/pdwail3.ogg')
 var/list/procgun_sound = list('sound/weapons/procgun1.ogg', 'sound/weapons/procgun2.ogg')
 var/list/trayhit_sound = list('sound/items/trayhit1.ogg', 'sound/items/trayhit2.ogg')
+var/list/sand_sound = list('sound/effects/sand_walk1.ogg', 'sound/effects/sand_walk2.ogg')
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
@@ -172,7 +173,7 @@ var/const/SURROUND_CAP = 7
 /client/proc/playtitlemusic()
 	if(!ticker || !ticker.login_music || config.no_lobby_music)
 		return
-	if(prefs.toggles & SOUND_LOBBY)
+	if(prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_LOBBY)
 		if(istype(src))
 			src << sound(ticker.login_music, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY) // MAD JAMS
 
@@ -261,6 +262,8 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(procgun_sound)
 			if ("trayhit")
 				soundin = pick(trayhit_sound)
+			if ("sand")
+				soundin = pick(sand_sound)
 			//if ("gunshot") soundin = pick(gun_sound)
 	else if(islist(soundin))
 		soundin = pick(soundin)

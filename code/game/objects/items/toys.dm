@@ -912,10 +912,9 @@
 	name = "toy nuke-op"
 	desc = "Mildly explosive."
 	icon_state = "newcop"
-	var/emagged = 0
 
-/obj/item/toy/gasha/newcop/attackby(obj/item/I, mob/user)
-	if(isEmag(I) && !emagged)
+/obj/item/toy/gasha/newcop/emag_act(mob/user)
+	if(!emagged)
 		to_chat(user, "<span class='warning'>You turned the toy into a bomb!</span>")
 		emagged = 1
 
@@ -926,10 +925,6 @@
 		sleep(5)
 		explosion(get_turf(src), -1,1,4, whodunnit = user)
 		qdel(src)
-	else
-		return
-
-
 
 /obj/item/toy/gasha/jani
 	name = "toy janitor"

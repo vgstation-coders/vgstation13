@@ -75,13 +75,20 @@
 		for(var/atom/atm in T) //extinguishing things
 			if(isliving(atm)) // For extinguishing mobs on fire
 				var/mob/living/M = atm
-				M.ExtinguishMob()
+				M.extinguish()
 			if(atm.on_fire) // For extinguishing objects on fire
 				atm.extinguish()
 
 /obj/item/stack/ore/glass/New(var/loc, var/amount=null)
 	recipes = sand_recipes
 	..()
+
+/obj/item/stack/ore/glass/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W))
+		var/obj/item/weapon/bikehorn/honker = W
+		if(honker.can_honk_baton)
+			user.create_in_hands(honker, /obj/item/weapon/bikehorn/ankhhorn, src, uses=1, msg = "<span class='notice'>You call upon the blessings of the Sun God as you cover \the [W] with \the [src].</span>")
 
 /obj/item/stack/ore/plasma
 	name = "\improper plasma ore"
@@ -533,7 +540,7 @@
 		string_attached = 1
 		to_chat(user, "<span class='notice'>You attach a string to \the [name].</span>")
 		CC.use(1)
-	else if(istype(W,/obj/item/tool/wirecutters) )
+	else if(W.is_wirecutter(user))
 		if(!string_attached)
 			..()
 			return

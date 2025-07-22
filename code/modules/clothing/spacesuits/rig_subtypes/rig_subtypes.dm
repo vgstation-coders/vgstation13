@@ -35,6 +35,7 @@
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 	clothing_flags = PLASMAGUARD
 	dyeable_parts = list()
 
@@ -46,6 +47,7 @@
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 	clothing_flags = PLASMAGUARD
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/tool/wrench/socket, /obj/item/tool/irons)
 	cell_type = /obj/item/weapon/cell/super
@@ -365,6 +367,7 @@
 	clothing_flags = PLASMAGUARD
 	armor = list(melee = 40, bullet = 0, laser = 0, energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 	dyeable_parts = list("visor","primary","secondary")
 	dye_base_iconstate_override = "rig0-atmos"
 
@@ -378,6 +381,7 @@
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	armor = list(melee = 40, bullet = 0, laser = 0, energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/atmos
 	dyeable_parts = list("visor","primary","secondary")
 
@@ -386,6 +390,7 @@
 /obj/item/clothing/head/helmet/space/rig/atmos/gold
 	desc = "A special helmet designed for work in hazardous low pressure environments and extreme temperatures. In other words, perfect for atmos."
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE*2
+	pressure_resistance = 800 * ONE_ATMOSPHERE
 	name = "atmos hardsuit helmet"
 	icon_state = "rig0-atmos_gold"
 	item_state = "atmos_gold_helm"
@@ -397,6 +402,7 @@
 /obj/item/clothing/suit/space/rig/atmos/gold
 	desc = "A special suit that protects against hazardous low pressure environments and extreme temperatures. In other words, perfect for atmos."
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE*4
+	pressure_resistance = 800 * ONE_ATMOSPHERE
 	gas_transfer_coefficient = 0.80
 	permeability_coefficient = 0.25
 	icon_state = "rig-atmos_gold"

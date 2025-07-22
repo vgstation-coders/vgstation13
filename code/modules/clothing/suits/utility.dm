@@ -130,6 +130,7 @@
 	species_fit = list(INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	siemens_coefficient = 0
+	clothing_flags = ONESIZEFITSALL
 
 /*
  * Radiation protection

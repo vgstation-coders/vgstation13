@@ -18,6 +18,9 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	attack_verb = list("slams", "whacks", "bashes", "thunks", "batters", "bludgeons", "thrashes")
+	slimeadd_message = "You attach the slime extract to the extinguisher's funnel"
+	slimes_accepted = SLIME_BLUE
+	slimeadd_success_message = "It feels much colder now"
 	var/max_water = 50
 	var/last_use = 1.0
 	var/safety = 1
@@ -81,13 +84,6 @@
 	to_chat(user, "The safety is [safety ? "on" : "off"].")
 	return
 
-/obj/item/weapon/extinguisher/foam/slime_act(primarytype, mob/user)
-	..()
-	if(primarytype == /mob/living/carbon/slime/blue)
-		has_slime=1
-		to_chat(user, "You attach the slime extract to the extinguisher's funnel.")
-		return TRUE
-
 /obj/item/weapon/extinguisher/attackby(obj/item/W, mob/user)
 	if(user.stat || user.restrained() || user.lying)
 		return
@@ -147,7 +143,7 @@
 			else if (pack == 1)
 				return
 
-		if (world.time < src.last_use + 20)
+		if (world.time < src.last_use + 2 SECONDS)
 			return
 		user.delayNextAttack(5, 1)
 
@@ -241,7 +237,7 @@
 			else if (pack == 1)
 				return
 
-		if (world.time < src.last_use + 20)
+		if (world.time < src.last_use + 2 SECONDS)
 			return
 		user.delayNextAttack(5, 1)
 		src.last_use = world.time
@@ -274,7 +270,7 @@
 				R.my_atom = src
 				reagents.trans_to_holder(R,1)
 				var/obj/effect/foam/fire/W
-				if(has_slime)
+				if(has_slimes & SLIME_BLUE)
 					W=new /obj/effect/foam/fire/enhanced(get_turf(src),R)
 				else
 					W = new /obj/effect/foam/fire(get_turf(src),R)
@@ -294,7 +290,7 @@
 						if(W.reagents.has_reagent(WATER))
 							if(isliving(atm)) // For extinguishing mobs on fire
 								var/mob/living/M = atm                           // Why isn't this handled by the reagent? - N3X
-								M.ExtinguishMob()
+								M.extinguish()
 							if(atm.on_fire) // For extinguishing objects on fire
 								atm.extinguish()
 							if(atm.molten) // Molten shit.

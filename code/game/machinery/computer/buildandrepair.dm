@@ -103,7 +103,7 @@
 	build_path = /obj/machinery/computer/card
 /obj/item/weapon/circuitboard/card/centcom
 	name = "Circuit board (CentCom ID Computer)"
-	desc = "A circuit board for running a computer used for granting access to areas at Central Command.."
+	desc = "A circuit board for running a computer used for granting access to areas at Central Command."
 	build_path = /obj/machinery/computer/card/centcom
 //obj/item/weapon/circuitboard/shield
 //	name = "Circuit board (Shield Control)"
@@ -172,6 +172,13 @@
 	build_path = /obj/machinery/computer/arcade
 	origin_tech = Tc_PROGRAMMING + "=1"
 	var/list/game_data = list()
+
+/obj/item/weapon/circuitboard/tetris
+	name = "Circuit board (T.E.T.R.I.S.)"
+	desc = "A circuit board for the Telemetry Enhanced Testing and Research Informatic Simulator."
+	build_path = /obj/machinery/computer/tetris
+	origin_tech = Tc_PROGRAMMING + "=1"
+
 /obj/item/weapon/circuitboard/turbine_control
 	name = "Circuit board (Turbine control)"
 	desc = "A circuit board for running an obsolete computer used for controlling a gas turbine."
@@ -355,6 +362,8 @@
 	build_path = /obj/machinery/computer/stacking_unit
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
+
+
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
 		var/obj/item/tool/solder/S = I
@@ -390,6 +399,8 @@
 /obj/item/weapon/circuitboard/supplycomp/solder_improve(mob/user)
 	to_chat(user, "<span class='notice'>You [contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>")
 	contraband_enabled = !contraband_enabled
+
+
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)

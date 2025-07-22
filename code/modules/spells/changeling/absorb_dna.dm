@@ -6,7 +6,7 @@
 	spell_flags = NEEDSHUMAN
 	horrorallowed = 0
 
-	charge_max = 5 SECONDS
+	charge_cooldown_max = 5 SECONDS
 	cooldown_min = 5 SECONDS
 
 /spell/changeling/absorbdna/cast_check(skipcharge = 0,mob/user = usr, var/list/targets)
@@ -43,7 +43,7 @@
 	var/obj/item/weapon/grab/G = user.get_active_hand() //You need to be grabbing the target
 	var/mob/living/carbon/human/T = G.affecting
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-	var/absorbtime = 15 SECONDS
+	var/absorbtime = changeling.faster_suck ? 8 SECONDS : 15 SECONDS
 	inuse = TRUE
 	for(var/stage in 1 to 3)
 		switch(stage)
@@ -89,7 +89,14 @@
 	user.changeling_update_languages(changeling.absorbed_languages)
 
 	//Steal their memories! (using this instead of mind.store_memory so the lings own notes and stuff are always at the bottom)
-	var/newmemory = "<BR><B>[T.real_name]'s memories:</B><BR><BR>[T.mind.memory]<BR><BR><B>[user.real_name]'s memories:</B><BR><BR>[user.mind.memory]"
+	var/list/newmemory = list(MIND_MEMORY_GENERAL = "", MIND_MEMORY_ANTAGONIST = "", MIND_MEMORY_CUSTOM = "")
+	for(var/M in newmemory)
+		if(T.mind.memory[M] && user.mind.memory[M])
+			newmemory[M] = "<B>[T.real_name]'s memories:</B><BR><BR>[T.mind.memory[M]]<BR><BR><B>[user.real_name]'s memories:</B><BR><BR>[user.mind.memory[M]]"
+		else if(T.mind.memory[M])
+			newmemory[M] = "<B>[T.real_name]'s memories:</B><BR><BR>[T.mind.memory[M]]"
+		else if(user.mind.memory[M])
+			newmemory[M] = "<B>[user.real_name]'s memories:</B><BR><BR>[user.mind.memory[M]]"
 	user.mind.memory = newmemory
 
 	//Steal their species!

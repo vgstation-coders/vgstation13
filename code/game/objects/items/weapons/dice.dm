@@ -283,12 +283,12 @@
 							to_chat(user, "<span class=danger><B>You have been granted protection! </span></B>")
 						if(4)
 							new /obj/item/stack/sheet/mineral/gold(user.loc, 25)
-							to_chat(user, "<span class=danger)(B>You have been reward in gold! </span></B>")
+							to_chat(user, "<span class=danger)(B>You have been rewarded in gold! </span></B>")
 						if(5)
 							new /obj/item/stack/sheet/mineral/silver(user.loc, 25)
 							to_chat(user, "<span class=danger><B>You have been rewarded in silver! </span></B>")
 						if(6)
-							to_chat(user, "<span class=danger><B>You have been reward with a fancy new costume! </span></B>")
+							to_chat(user, "<span class=danger><B>You have been rewarded with a fancy new costume! </span></B>")
 							switch(pick(1,2,3))
 								if(1)
 									new /obj/item/clothing/under/bikersuit(user.loc, user)
@@ -304,7 +304,7 @@
 									new /obj/item/clothing/head/helmet/richard(user.loc, user)
 									new /obj/item/clothing/under/jacketsuit(user.loc, user)
 						if(7)
-							to_chat(user, "<span class=danger><B>You have been reward with a selection of random potions! </span></B>")
+							to_chat(user, "<span class=danger><B>You have been rewarded with a selection of random potions! </span></B>")
 							new /obj/item/weapon/storage/bag/potion/dice_potion_bundle(user.loc, user)
 
 

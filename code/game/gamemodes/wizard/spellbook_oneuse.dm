@@ -419,7 +419,7 @@
 
 /obj/item/weapon/spellbook/oneuse/ringoffire/recoil(mob/living/carbon/user as mob)
 	user.adjust_fire_stacks(10)
-	user.IgniteMob()
+	user.ignite()
 	to_chat(user, "<span class = 'warning'>The book sets you alight!</span>")
 
 /obj/item/weapon/spellbook/oneuse/mirror_of_pain
@@ -462,7 +462,7 @@
 /obj/item/weapon/spellbook/oneuse/firebreath/recoil(mob/living/carbon/user)
 	to_chat(user, "<span class = 'warning'>You burst into flames!</span>")
 	user.adjust_fire_stacks(0.5)
-	user.IgniteMob()
+	user.ignite()
 
 /obj/item/weapon/spellbook/oneuse/snakes
 	spell = /spell/aoe_turf/conjure/snakes
@@ -565,6 +565,14 @@
 	desc = "This book glows with sinister energy."
 	disabled_from_bundle = 1
 
+
+///// Norwood curse ////
+
+/obj/item/weapon/spellbook/oneuse/norwood
+	spell = /spell/targeted/norwood_curse
+	spellname = "norwood"
+	icon_state ="booknorwood"
+	desc = "This book suddenly stops about 29 pages in. After, it is written 'it's over' in every language that has ever existed, will ever exist, and even in some which shouldn't theoretically exist."
 
 ///// ANCIENT SPELLBOOK /////
 

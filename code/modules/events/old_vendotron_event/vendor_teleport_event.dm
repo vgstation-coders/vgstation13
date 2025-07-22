@@ -48,7 +48,7 @@
 /datum/event/old_vendotron_teleport/proc/fancyEntrance(var/obj/machinery/vending/vendToReplace)
 	var/obj/effect/old_vendotron_entrance/vendPortal = new /obj/effect/old_vendotron_entrance(vendToReplace.loc)
 	vendPortal.aestheticEntrance()
-	playsound(E, 'sound/effects/eleczap.ogg', 100, 1)
+	playsound(vendPortal, 'sound/effects/eleczap.ogg', 100, 1)
 	spawn(3 SECONDS)
 		var/obj/machinery/vending/old_vendotron/OV = new /obj/machinery/vending/old_vendotron(vendToReplace.loc)
 		if(!vendToReplace.gcDestroyed)

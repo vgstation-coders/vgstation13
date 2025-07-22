@@ -6,12 +6,12 @@
 	abbreviation = "BO"
 
 	school = "abjuration"
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	minimum_charge = 10 //1 second delay
 	spell_flags = SELECTABLE | WAIT_FOR_CLICK
 	hud_state = "wiz_bound"
-	level_max = list(Sp_TOTAL = 4, Sp_SPEED = 2, Sp_POWER = 2)
-	price = 0.5 * Sp_BASE_PRICE
+	level_max = list(SP_TOTAL = 4, SP_SPEED = 2, SP_POWER = 2)
+	price = 0.5 * SP_BASE_PRICE
 
 	var/has_object = 0
 	var/obj/bound
@@ -59,9 +59,9 @@
 
 /spell/targeted/bound_object/get_upgrade_price(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
+		if(SP_SPEED)
 			return 5
-		if(Sp_POWER)
+		if(SP_POWER)
 			return 20
 
 /spell/targeted/bound_object/is_valid_target(obj/target, mob/user, options, bypass_range = 0)
@@ -109,7 +109,7 @@
 /spell/targeted/bound_object/cast(list/targets, mob/user = user)
 	for(var/obj/target in targets)
 		if(!has_object)
-			if(spell_levels[Sp_POWER] < 2) //Moving this check here because if it returned 0 on is_valid_target it would force the character to touch it if in range. Ouch.
+			if(spell_levels[SP_POWER] < 2) //Moving this check here because if it returned 0 on is_valid_target it would force the character to touch it if in range. Ouch.
 				for(var/E in empower_limited)
 					if(istype(target, E))
 						to_chat(user, "<span class='warning'>This is too powerful to bind to yourself. Empower your spell sufficiently enough first!</span>")
@@ -132,20 +132,20 @@
 
 /spell/targeted/bound_object/empower_spell()
 	var/upgrade_desc
-	if(spell_levels[Sp_POWER] == 0)
-		spell_levels[Sp_POWER]++
+	if(spell_levels[SP_POWER] == 0)
+		spell_levels[SP_POWER]++
 		allow_anchored = 1
 		upgrade_desc = "You have reduced the restrictions on your binding."
 	else
-		spell_levels[Sp_POWER]++
+		spell_levels[SP_POWER]++
 		upgrade_desc = "You can now bind far more destructive objects to yourself."
 	return upgrade_desc
 
 /spell/targeted/bound_object/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
-		if(spell_levels[Sp_POWER] == 0)
+	if(upgrade_type == SP_POWER)
+		if(spell_levels[SP_POWER] == 0)
 			return "Increases your binding skill, allowing otherwise immobile structures and machines to be moved."
-		if(spell_levels[Sp_POWER] == 1)
+		if(spell_levels[SP_POWER] == 1)
 			return "Further increases your binding skill, allowing you to bind [types_to_english_list(empower_limited)]."
 		else
 			return "You can already bind a great amount of things."
@@ -190,10 +190,10 @@
 	desc = "Dispells any objects bound to you, allowing a new object to be bound."
 
 	school = "abjuration"
-	charge_max = 10
+	charge_cooldown_max = 1 SECONDS
 	spell_flags = 0
 	hud_state = "wiz_unbind"
-	level_max = list(Sp_TOTAL = 0)
+	level_max = list(SP_TOTAL = 0)
 
 	var/spell/targeted/bound_object/linked_spell
 

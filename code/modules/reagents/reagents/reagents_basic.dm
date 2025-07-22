@@ -161,6 +161,8 @@
 	specheatcap = 0.094
 	flags = CHEMFLAG_PIGMENT
 	paint_light = PAINTLIGHT_LIMITED
+	fission_time=4500 //75 minutes. (1hr 15)
+	fission_absorbtion = 3333.3 // 5:1 ratio with uranium
 
 /datum/reagent/radium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -265,7 +267,7 @@
 			M.remove_silence()
 		if(isliving(M))
 			var/mob/living/L = M
-			L.ExtinguishMob()
+			L.extinguish()
 
 	//Water now directly damages slimes instead of being a turf check
 	if(isslime(M))

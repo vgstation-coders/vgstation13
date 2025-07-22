@@ -923,6 +923,8 @@
 	desc = "Do you know the definition of insanity?"
 	icon_state = "clownpsyche"
 	item_state = "clownpsyche"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	luminosity = 2
 	_color = "clownpsyche"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(INSECT_SHAPED)
@@ -1001,6 +1003,20 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
+
+/obj/item/clothing/under/hunter
+	name = "modern vampire hunter's attire"
+	desc = "A tough leather vest with stylish white pants"
+	icon_state = "hunter"
+	item_state = "hunter_uniform"
+	_color = "hunter"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
+
+/obj/item/clothing/under/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/under/hunter/rangeTackleBonus()
+	return 1
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -1095,3 +1111,12 @@
 	dyeable_parts = list("drape","trim")
 	clothing_flags = COLORS_OVERLAY
 	color = COLOR_LINEN
+
+/obj/item/clothing/under/sonicman
+	name = "sonicman suit"
+	desc = "Did you call me?"
+	icon_state = "sonicmansuit"
+	item_state = "sonicmansuit"
+	_color = "sonicmansuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
+	clothing_flags = ONESIZEFITSALL

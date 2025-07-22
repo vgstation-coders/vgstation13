@@ -178,6 +178,11 @@ var/list/particle_string_to_type = list(
 	PS_NARSIEHASRISEN3 = /particles/narsie_has_risen/last,
 	PS_ZAS_DUST = /particles/zas_dust,
 	PS_DANDELIONS = /particles/dandelions,
+	PS_CROSS_DUST = /particles/cross_dust,
+	PS_CROSS_ORB = /particles/cross_orb,
+	PS_SACRED_FLAME = /particles/sacred_flame,
+	PS_SACRED_FLAME2 = /particles/sacred_flame/alt,
+	PS_BIBLE_PAGE = /particles/bible_page,
 	)
 
 /particles
@@ -486,3 +491,81 @@ var/list/particle_string_to_type = list(
 	spawn(SSair.wait)
 		if (last_pollen_time == this_pollen_time)
 			adjust_particles(PVAR_SPAWNING, 0, pollen)
+
+//CROSS DUST & ORBB
+/particles/cross_dust
+	width = 64
+	height = 64
+	count = 10
+
+	lifespan = 10
+	fade = 2
+	spawning = 1.5
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = list("cross_dust_1","cross_dust_2","cross_dust_3")
+	position = generator("box", list(-12,-12), list(12,12))
+	velocity = list(0,-2)
+	drift = generator("box", list(-0.2,-0.2), list(0.2,0.2))
+
+	appearance_flags = RESET_COLOR|RESET_ALPHA
+	blend_mode = BLEND_ADD
+	plane = ABOVE_LIGHTING_PLANE
+
+
+/particles/cross_orb
+	count = 2
+
+	lifespan = 10
+	spawning = 0.5
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = list("cross_orb")
+	position = generator("box", list(-12,-12), list(12,12))
+	velocity = list(0,-2)
+	friction = 0.1
+	drift = generator("box", list(-0.2,-0.2), list(0.2,0.2))
+	grow = list(-0.2, -0.2)
+
+	appearance_flags = RESET_COLOR|RESET_ALPHA
+	plane = ABOVE_LIGHTING_PLANE
+
+//SACRED FLAME
+/particles/sacred_flame
+	width = 96
+	height = 96
+	count = 30
+
+	lifespan = 10
+	fade = 5
+	spawning = 1.5
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "sacred_flame"
+	position = generator("box", list(-15,-15), list(15,15))
+	friction = 0.1
+	drift = generator("box", list(-0.2,-0.2), list(0.2,0.2))
+	scale = list(0.6, 0.6)
+	grow = list(0.1, 0.1)
+
+/particles/sacred_flame/alt
+	plane = LIGHTING_PLANE
+
+//BIBLE PAGE
+/particles/bible_page
+	width = 96
+	height = 96
+	count = 1
+
+	lifespan = 10
+	fade = 5
+	spawning = 0//we set the spawning after velocity has been adjusted
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "bible_page"
+	rotation = generator("num", 0,360)
+	spin = 10
+	grow = generator("box", list(-0.3,-0.3), list(0,0))
+
+	appearance_flags = RESET_COLOR|RESET_ALPHA
+	plane = ABOVE_LIGHTING_PLANE

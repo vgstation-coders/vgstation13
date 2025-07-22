@@ -473,9 +473,9 @@
 
 	user_type = USER_TYPE_ARTIFACT
 
-	charge_type = Sp_RECHARGE
-	charge_max = 30 SECONDS
-	invocation_type = SpI_SHOUT
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 30 SECONDS
+	invocation_type = SP_INV_SHOUT
 	invocation = "FA'R N' AL'ENC'ED"
 	range = 0
 	spell_flags = NEEDSCLOTHES | NEEDSHUMAN

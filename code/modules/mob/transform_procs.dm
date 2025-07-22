@@ -316,7 +316,7 @@
 
 /mob/proc/Animalize()
 	var/mobtext = input("Filter to a type name", "Choose a type") as text
-	var/mobpath = filter_list_input("Which type of mob should [src] turn into?", "Choose a type", get_matching_types(mobtext, /mob/living/simple_animal))
+	var/mobpath = filter_typelist_input("Which type of mob should [src] turn into?", "Choose a type", get_matching_types(mobtext, /mob/living/simple_animal))
 	if(!mobpath)
 		return
 	if(!safe_animal(mobpath))

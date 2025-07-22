@@ -6,10 +6,10 @@
 	user_type = USER_TYPE_ARTIFACT
 
 	school = "conjuration"
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 	spell_flags = 0
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 
 	summon_type = list(/obj/structure/constructshell)
@@ -19,7 +19,7 @@
 /spell/aoe_turf/conjure/construct/lesser
 	user_type = USER_TYPE_CULT
 
-	charge_max = 1800
+	charge_cooldown_max = 180 SECONDS
 	summon_type = list(/obj/structure/constructshell/cult)
 	hud_state = "const_shell"
 	override_base = "cult"
@@ -44,10 +44,10 @@
 	desc = "This spell conjures a cult floor. You can also click existing floors up to 3 tiles away to convert them."
 	user_type = USER_TYPE_CULT
 
-	charge_max = 50
+	charge_cooldown_max = 5 SECONDS
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 3
 	summon_type = list(/turf/simulated/floor/engine/cult)
 
@@ -66,9 +66,9 @@
 	. = ..()
 	if (!.)
 		if (convert_floor)
-			charge_max = 10
+			charge_cooldown_max = 1 SECONDS
 		else
-			charge_max = 50
+			charge_cooldown_max = 5 SECONDS
 
 /spell/aoe_turf/conjure/floor/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
 	animation.icon_state = "cultfloor"
@@ -86,10 +86,10 @@
 	desc = "This spell conjures a cult wall. You can also click existing non-reinforced walls up to 3 tiles away to convert them."
 	user_type = USER_TYPE_CULT
 
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 3
 	summon_type = list(/turf/simulated/wall/cult)
 
@@ -108,9 +108,9 @@
 	. = ..()
 	if (!.)
 		if (convert_wall)
-			charge_max = 20
+			charge_cooldown_max = 2 SECONDS
 		else
-			charge_max = 100
+			charge_cooldown_max = 10 SECONDS
 
 /spell/aoe_turf/conjure/wall/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
 	animation.icon_state = "cultwall"
@@ -128,10 +128,10 @@
 	desc = "This spell conjures a cult door. Those automatically open and close upon the passage of a cultist, construct or shade."
 	user_type = USER_TYPE_CULT
 
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 3
 	summon_type = list(/obj/machinery/door/mineral/cult)
 
@@ -158,10 +158,10 @@
 	desc = "This spell constructs a reinforced metal wall."
 	user_type = USER_TYPE_CULT//why?
 
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	spell_flags = Z2NOCAST
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	cast_delay = 50
 	cast_sound = 'sound/items/welder.ogg'
@@ -173,10 +173,10 @@
 	desc = "This spell reaches into Nar-Sie's realm, summoning one of the legendary fragments across time and space. An altar would let you let you conjure a perfect Soul Gem instead, producing better constructs."
 	user_type = USER_TYPE_CULT
 
-	charge_max = 3000
+	charge_cooldown_max = 300 SECONDS
 	spell_flags = 0
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	cast_delay = 30
 
@@ -200,10 +200,10 @@
 	desc = "This spell conjures a fragile crystal from Nar-Sie's realm. Makes for a convenient light source, or a weak obstacle."
 	user_type = USER_TYPE_CULT
 
-	charge_max = 200
+	charge_cooldown_max = 20 SECONDS
 	spell_flags = CONSTRUCT_CHECK|IGNORESPACE|IGNOREDENSE|NODUPLICATE
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	cast_delay = 20
 
@@ -229,13 +229,13 @@
 	desc = "Allows you to pull up a shield to protect yourself and allies from incoming threats."
 	user_type = USER_TYPE_CULT
 
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	spell_flags = 0
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	summon_type = list(/obj/effect/forcefield/cult)
-	duration = 200
+	duration = 20 SECONDS
 
 	override_base = "cult"
 	hud_state = "const_juggwall"
@@ -263,13 +263,13 @@
 	desc = "Raise a temporary line of indestructible walls to block your enemies' path and protect your allies."
 	user_type = USER_TYPE_CULT
 
-	charge_max = 250
+	charge_cooldown_max = 25 SECONDS
 	spell_flags = 0
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	summon_type = list(/obj/effect/forcefield/cult/large)
-	duration = 200
+	duration = 20 SECONDS
 
 	hud_state = "const_juggwall2"
 	override_base = "cult"
@@ -353,10 +353,10 @@
 	desc = "Build a lesser construct to defend an area."
 	user_type = USER_TYPE_CULT
 
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 	spell_flags = 0
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	cast_delay = 60
 	summon_type = list(/mob/living/simple_animal/hostile/hex)
@@ -402,10 +402,10 @@
 	desc = "Raise a cult structure that you may then operate, such as an altar, a forge, or a spire."
 	user_type = USER_TYPE_CULT
 
-	charge_max = 200
+	charge_cooldown_max = 20 SECONDS
 	spell_flags = 0
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	cast_delay = 60
 	summon_type = list(/obj/structure/cult/altar)
@@ -459,10 +459,10 @@
 	desc = "Place an entrance to a shortcut through the veil between this world and the other one."
 	user_type = USER_TYPE_CULT
 
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 1
 	summon_type = list(/obj/effect/rune)
 
@@ -502,10 +502,10 @@
 	desc = "Place an exit to a shotcut through the veil between this world and the other one."
 	user_type = USER_TYPE_CULT
 
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 1
 	summon_type = list(/obj/effect/rune)
 

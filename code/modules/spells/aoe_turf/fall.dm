@@ -13,13 +13,13 @@ var/global/list/falltempoverlays = list()
 
 	selection_type = "range"
 	school = "transmutation"
-	charge_max = 500 // now 2min
+	charge_cooldown_max = 50 SECONDS
 	invocation = "OMNIA RUINAM"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 6
-	cooldown_min = 200
-	cooldown_reduc = 100
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3, Sp_POWER = 3)
+	cooldown_min = 20 SECONDS
+	cooldown_reduc = 10 SECONDS
+	level_max = list(SP_TOTAL = 3, SP_SPEED = 3, SP_POWER = 3)
 	hud_state = "wiz_timestop"
 	var/image/aoe_underlay
 	var/list/oureffects = list()
@@ -31,9 +31,9 @@ var/global/list/falltempoverlays = list()
 #define duration_increase_per_level 10
 
 /spell/aoe_turf/fall/empower_spell()
-	if(!can_improve(Sp_POWER))
+	if(!can_improve(SP_POWER))
 		return 0
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 	range++
 	sleeptime += duration_increase_per_level
 	var/upgrade_desc = "Your control over time strengthens, you can now stop time for [sleeptime/10] second\s and in a radius of [range*2] meter\s."
@@ -41,8 +41,8 @@ var/global/list/falltempoverlays = list()
 	return upgrade_desc
 
 /spell/aoe_turf/fall/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
-		if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+	if(upgrade_type == SP_POWER)
+		if(spell_levels[SP_POWER] >= level_max[SP_POWER])
 			return "The spell can't be made any more powerful than this!"
 		return "Increase the spell's duration by [duration_increase_per_level/10] second\s and radius by 2 meters."
 	return ..()
@@ -245,7 +245,7 @@ var/global/list/falltempoverlays = list()
 	caster.flags = INVULNERABLE
 	caster.add_spell(fall)
 	fall.spell_flags = 0
-	fall.invocation_type = SpI_NONE
+	fall.invocation_type = SP_INV_NONE
 	fall.the_world_chance = 0
 	fall.range = range ? range : 7		//how big
 	fall.sleeptime = duration			//for how long

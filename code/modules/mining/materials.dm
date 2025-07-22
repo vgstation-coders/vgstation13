@@ -47,11 +47,19 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 //Gives total value, doing mat value * stored mat
 /datum/materials/proc/getValue()
-	var/value=0
+	. = 0
 	for(var/mat_id in storage)
-		var/datum/material/mat = getMaterial(mat_id)
-		value += mat.value * (storage[mat_id]/mat.cc_per_sheet)
-	return value
+		. += getValueByMaterial(mat_id)
+
+//Same as above but for individual mats
+
+/datum/materials/proc/getValueByAmount(var/mat_id,var/amount)
+	. = 0
+	var/datum/material/mat = getMaterial(mat_id)
+	. = mat.value * (amount/mat.cc_per_sheet)
+
+/datum/materials/proc/getValueByMaterial(var/mat_id)
+	return getValueByAmount(mat_id,storage[mat_id])
 
 //Returns however much we have of that material
 /datum/materials/proc/getAmount(var/mat_id)
@@ -77,6 +85,14 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	// I HATE BYOND
 	// storage[mat_id].stored++
 	storage[mat_id] = max(0, storage[mat_id] + amount)
+
+/datum/materials/proc/GetAmountByValue(var/mat_id,var/amount)
+	. = 0
+	var/datum/material/mat = getMaterial(mat_id)
+	. = mat.value ? ((amount/mat.value) * mat.cc_per_sheet) : 0
+
+/datum/materials/proc/addAmountByValue(var/mat_id,var/amount)
+	addAmount(mat_id,GetAmountByValue(mat_id,amount))
 
 //Adds all of the given materials datum's resources to ours. If zero_after, we set their storage amounts to 0
 /datum/materials/proc/addFrom(var/datum/materials/mats, var/zero_after=0)
@@ -128,6 +144,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	addAmount(mat_id,-amount)
 
 
+/datum/materials/proc/removeAmountByValue(var/mat_id,var/amount)
+	addAmountByValue(mat_id,-amount)
+
 /datum/materials/proc/makeSheets(var/atom/loc)
 	for (var/id in storage)
 		var/amount = getAmount(id)
@@ -165,7 +184,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/oretype=null
 	var/sheettype=null
 	var/cointype=null
-	var/value=0
+	var/value=VALUE_MISC
 	var/color
 	var/color_matrix
 	var/alpha = 255
@@ -372,59 +391,41 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/plastic
 	name="Plastic"
 	id=MAT_PLASTIC
-	value=0
-	oretype=null
 	sheettype=/obj/item/stack/sheet/mineral/plastic
-	cointype=null
 	color = "#F8F8FF" //rgb: 248, 248, 255
 	cc_per_sheet = CC_PER_SHEET_PLASTIC
 
 /datum/material/cardboard
 	name="Cardboard"
 	id=MAT_CARDBOARD
-	value=0
-	oretype=null
 	sheettype=/obj/item/stack/sheet/cardboard
-	cointype=null
 	cc_per_sheet = CC_PER_SHEET_CARDBOARD
 
 /datum/material/wood
 	name="Wood"
 	id=MAT_WOOD
-	value=0
-	oretype=null
 	sheettype=/obj/item/stack/sheet/wood
-	cointype=null
 	cc_per_sheet = CC_PER_SHEET_WOOD
 	color = "#663300" //rgb: 102, 51, 0
 
 /datum/material/fabric
 	name="Fabric"
 	id=MAT_FABRIC
-	value=0
-	oretype=null
 	sheettype=/obj/item/stack/sheet/cloth
-	cointype=null
 	cc_per_sheet = CC_PER_SHEET_FABRIC
 	color = COLOR_LINEN
 
 /datum/material/wax
 	name="Wax"
 	id=MAT_WAX
-	value=0
-	oretype=null
 	sheettype=/obj/item/stack/sheet/wax
-	cointype=null
 	cc_per_sheet = CC_PER_SHEET_WAX
 	color = COLOR_BEESWAX
 
 /datum/material/brass
 	name = "Brass"
 	id = MAT_BRASS
-	value = 0
-	oretype = null
 	sheettype = /obj/item/stack/sheet/brass
-	cointype = null
 	cc_per_sheet = CC_PER_SHEET_BRASS
 	color = "#A97F1B"
 	melt_temperature = MELTPOINT_BRASS
@@ -432,10 +433,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/ralloy
 	name = "Replicant Alloy"
 	id = MAT_RALLOY
-	value = 0
-	oretype = null
 	sheettype = /obj/item/stack/sheet/ralloy
-	cointype = null
 	cc_per_sheet = CC_PER_SHEET_RALLOY
 	color = "#363636"
 
@@ -466,7 +464,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value=VALUE_TELECRYSTAL
 	oretype=/obj/item/stack/ore/telecrystal
 	sheettype=/obj/item/bluespace_crystal
-	cointype=null
 	cc_per_sheet = CC_PER_SHEET_TELECRYSTAL
 
 
@@ -476,7 +473,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value=10
 	oretype=/obj/item/stack/ore/pharosium
 	sheettype=/obj/item/stack/sheet/mineral/pharosium
-	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_PHAROSIUM
 
@@ -487,7 +483,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value=5
 	oretype=/obj/item/stack/ore/char
 	sheettype=/obj/item/stack/sheet/mineral/char
-	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_CHAR
 
@@ -498,7 +493,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value=50
 	oretype=/obj/item/stack/ore/claretine
 	sheettype=/obj/item/stack/sheet/mineral/claretine
-	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_CLARETINE
 
@@ -509,7 +503,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value=50
 	oretype=/obj/item/stack/ore/bohrum
 	sheettype=/obj/item/stack/sheet/mineral/bohrum
-	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_BOHRUM
 
@@ -520,7 +513,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value=70
 	oretype=/obj/item/stack/ore/syreline
 	sheettype=/obj/item/stack/sheet/mineral/syreline
-	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_SYRELINE
 
@@ -531,7 +523,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value=50
 	oretype=/obj/item/stack/ore/erebite
 	sheettype=/obj/item/stack/sheet/mineral/erebite
-	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_EREBITE
 
@@ -542,7 +533,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value=30
 	oretype=/obj/item/stack/ore/cytine
 	sheettype=/obj/item/stack/sheet/mineral/cytine
-	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_CYTINE
 
@@ -553,7 +543,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value=90
 	oretype=/obj/item/stack/ore/uqill
 	sheettype=/obj/item/stack/sheet/mineral/uqill
-	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_UQILL
 
@@ -564,7 +553,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value=5
 	oretype=/obj/item/stack/ore/mauxite
 	sheettype=/obj/item/stack/sheet/mineral/mauxite
-	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_MAUXITE
 
@@ -575,7 +563,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value=30
 	oretype=/obj/item/stack/ore/cobryl
 	sheettype=/obj/item/stack/sheet/mineral/cobryl
-	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_COBRYL
 
@@ -586,7 +573,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value=50
 	oretype=/obj/item/stack/ore/cerenkite
 	sheettype=/obj/item/stack/sheet/mineral/cerenkite
-	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_CERENKITE
 
@@ -596,16 +582,12 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value=10
 	oretype=/obj/item/stack/ore/molitz
 	sheettype=/obj/item/stack/sheet/mineral/molitz
-	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_MOLITZ
 
 /datum/material/gingerbread
 	name="Gingerbread"
 	id=MAT_GINGERBREAD
-	value=null
-	oretype=null
 	sheettype=/obj/item/stack/sheet/mineral/gingerbread
-	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_GINGERBREAD

@@ -68,12 +68,11 @@
 			if(environment.total_moles && ((environment[GAS_OXYGEN] / environment.total_moles) >= OXYCONCEN_PLASMEN_IGNITION)) //How's the concentration doing?
 				if(!host.on_fire)
 					to_chat(host, "<span class='warning'>Your body reacts with the atmosphere and bursts into flame!</span>")
-				host.adjust_fire_stacks(0.5)
-				host.IgniteMob()
+				host.ignite()
 	else
 		var/obj/item/clothing/suit/PS=host.wear_suit
 		if(istype(PS))
-			if(host.fire_stacks > 0)
+			if(host.on_fire)
 				PS.Extinguish(host)
 			else
 				PS.regulate_temp_of_wearer(host)

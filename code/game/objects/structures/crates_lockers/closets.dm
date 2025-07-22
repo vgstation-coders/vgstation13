@@ -32,8 +32,6 @@
 	w_type = RECYK_METAL
 	ignoreinvert = 1
 
-	var/time_initialized_at = 0
-
 /obj/structure/closet/splashable()
 	return FALSE
 
@@ -70,20 +68,15 @@
 		return 1
 
 /obj/structure/closet/initialize()
-	..()
-	if (!time_initialized_at)
-		time_initialized_at = world.time
+	//haha, so you'd like to initialize twice huh? you got some explaining to do kid.
+	if(~flags & ATOM_INITIALIZED)
 		spawn_contents()
-	else
-		//haha, so you'd like to initialize twice huh? you got some explaining to do kid.
-		message_admins("[src] at ([x],[y],[z]) tried to initialize at time = [world.time] despite having already initialized at time = [time_initialized_at]")
-		ASSERT(!time_initialized_at)
-		return
-	if(!opened)		// if closed, any item at the crate's loc is put in the contents
-		if(!ticker || ticker.current_state < GAME_STATE_PLAYING)
-			take_contents()
-	else
-		setDensity(FALSE)
+		if(!opened)		// if closed, any item at the crate's loc is put in the contents
+			if(!ticker || ticker.current_state < GAME_STATE_PLAYING)
+				take_contents()
+		else
+			setDensity(FALSE)
+		..()
 
 /obj/structure/closet/spawned_by_map_element()
 	..()
@@ -491,6 +484,8 @@
 			return
 		src.welded =! src.welded
 		src.update_icon()
+		if(!welded && arcanetampered)
+			bless()
 		for(var/mob/M in viewers(src))
 			M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
 	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && src.has_lock_type) //testing with crowbars for now, will use circuits later

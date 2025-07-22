@@ -87,9 +87,12 @@
 
 	var/is_cookvessel //If true, the item is a cooking vessel.
 
+	var/blocks_tracking = FALSE //Blocks mind and AI tracking
+
 	var/list/quick_equip_priority = list() //stuff to override the quick equip thing so it goes in this first
 
 	var/last_burn
+	var/vent_use = FALSE //can this be used while ventcrawling
 
 /obj/item/New()
 	..()
@@ -110,6 +113,11 @@
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
 	for(var/x in actions)
 		qdel(x)
+	if(istype(loc, /obj/item/weapon/storage)) //Update the storage screen for current users.
+		var/obj/item/weapon/storage/S = loc
+		spawn() //Allows properly removing the item from storage so that there's not an unused slot in the middle of its inventory until next refresh.
+			if(S && !S.gcDestroyed) //Double check to see if the storage still exists.
+				S.refresh_all()
 	..()
 
 
@@ -192,7 +200,7 @@
 			return SUICIDE_ACT_BRUTELOSS
 	else if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
-		user.IgniteMob()
+		user.ignite()
 		return SUICIDE_ACT_FIRELOSS
 	else if (force >= 10)
 		user.visible_message("<span class='danger'>[user] is bludgeoning \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
@@ -477,6 +485,8 @@ var/global/objects_thrown_when_explode = FALSE
 	for(var/X in actions)
 		var/datum/action/A = X
 		A.Remove(user)
+	if (sound_emitter)
+		sound_emitter.update_source(src)
 
 ///called when an item is stripped off by another person, called BEFORE it is dropped. return 1 to prevent it from actually being stripped.
 /obj/item/proc/before_stripped(mob/wearer as mob, mob/stripper as mob, slot)
@@ -493,6 +503,8 @@ var/global/objects_thrown_when_explode = FALSE
 
 // called after an item is picked up (loc has already changed)
 /obj/item/proc/pickup(mob/user)
+	if (sound_emitter)
+		sound_emitter.update_source(user)
 	return
 
 // called before an item is passed to another person through the give proc - TRUE allows the give, see carbon/give.dm
@@ -1323,10 +1335,10 @@ var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/proc/copy_blood_from_item(var/obj/item/other_item)
 	virus2 = virus_copylist(other_item.virus2)
-	if (!other_item.blood_overlay)
+	if (!other_item.blood_overlay || !other_item.blood_color)
 		return
 	blood_color = other_item.blood_color
-	blood_DNA = other_item.blood_DNA.Copy()
+	blood_DNA = other_item.blood_DNA?.Copy()
 	had_blood = TRUE
 	set_blood_overlay()
 
@@ -1642,7 +1654,7 @@ var/global/objects_thrown_when_explode = FALSE
 		usr.put_in_hand(OI.hand_index, src)
 		add_fingerprint(usr)
 
-/obj/item/proc/pre_throw(atom/movable/target)
+/obj/item/proc/pre_throw(var/atom/movable/target,var/mob/living/user)
 	return
 
 /obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)
@@ -1685,6 +1697,7 @@ var/global/objects_thrown_when_explode = FALSE
 		armor["melee"] = min(90, armor["melee"]*(material_type.armor_mod*(quality/B_AVERAGE)))
 		armor["bullet"] = min(90, armor["bullet"]*(material_type.armor_mod*(quality/B_AVERAGE)))
 		armor["laser"] = min(90, armor["laser"]*(material_type.armor_mod*(quality/B_AVERAGE)))
+	toolspeed = fancytrunc(toolspeed * (0.6687**(quality-4)),2)
 
 /////// DISEASE STUFF //////////////////////////////////////////////////////////////////////////
 
@@ -1771,7 +1784,7 @@ var/global/objects_thrown_when_explode = FALSE
 	extinguish_with_hands(user)
 
 /obj/item/proc/extinguish_with_hands(var/mob/user)
-	if(!isliving(user))
+	if(user.stat || !Adjacent(user, src) || !isliving(user))
 		return
 	if(src.on_fire)
 		extinguish()

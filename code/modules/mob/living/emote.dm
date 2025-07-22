@@ -398,3 +398,10 @@ var/list/animals_with_wings = list(
 
 	to_chat(user, message)
 	return TRUE
+
+/datum/emote/living/gibber
+    key = "gibber"
+    key_third_person = "gibbers"
+    message = "gibbers incoherently!"
+    message_mime = "rapidly moves their hands around incoherently."
+    emote_type = EMOTE_AUDIBLE

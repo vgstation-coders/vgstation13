@@ -304,12 +304,12 @@
 		spell_icon = spell.hud_state
 	overlays -= spell_icon
 
-	if((spell.charge_type & Sp_RECHARGE) || (spell.charge_type & Sp_CHARGES) || (spell.charge_type & Sp_GRADUAL))
-		if(spell.charge_counter < spell.charge_max)
+	if((spell.charge_type & SP_RECHARGE) || (spell.charge_type & SP_CHARGES) || (spell.charge_type & SP_GRADUAL))
+		if(spell.charge_counter < spell.charge_cooldown_max)
 			icon_state = "[spell_base]_spell_base"
 			if(spell.charge_counter > 0)
 				var/icon/partial_charge = icon(src.icon, "[spell_base]_spell_ready")
-				partial_charge.Crop(1, 1, partial_charge.Width(), round(partial_charge.Height() * spell.charge_counter / spell.charge_max))
+				partial_charge.Crop(1, 1, partial_charge.Width(), round(partial_charge.Height() * spell.charge_counter / spell.charge_cooldown_max))
 				overlays += partial_charge
 				if(last_charged_icon)
 					overlays -= last_charged_icon

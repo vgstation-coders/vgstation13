@@ -719,7 +719,7 @@ var/global/ingredientLimit = 10
 				if(use_power != MACHINE_POWER_USE_NONE)
 					playsound(src,cookSound,100,1)
 				else
-					visible_message("<span class='notice'>\the [foodname] looks ready to eat!</span>")
+					visible_message("<span class='notice'>\The [foodname] looks ready to eat!</span>")
 	active = 0
 	update_icon()
 	return
@@ -758,7 +758,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/grill/spit
 	name = "spit"
-	desc = "the prime in clown cooking technology."
+	desc = "The prime in clown cooking technology."
 	density = 0
 	icon_state = "spit"
 	icon_state_on = "spit"

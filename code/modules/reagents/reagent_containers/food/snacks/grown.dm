@@ -394,6 +394,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	desc = "Nutritious!"
 	filling_color = "#A332AD"
 	plantname = "grapes"
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes
 	name = "bunch of green grapes"
@@ -401,6 +402,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 25
 	filling_color = "#A6FFA3"
 	plantname = "greengrapes"
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/peanut
 	name = "peanut"
@@ -408,6 +410,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "857e27"
 	potency = 25
 	plantname = "peanut"
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/rocknut
 	name = "rocknut"
@@ -486,6 +489,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 50
 	filling_color = "#9C8E54"
 	plantname = "cocoa"
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/sugarcane
 	name = "sugarcane"
@@ -902,6 +906,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "EDEDE1"
 	plantname = "garlic"
 	hydroflags = HYDRO_VOX
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/breadfruit
 	name = "breadfruit"
@@ -1041,6 +1046,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	icon = 'icons/obj/hydroponics/avocado.dmi'
 	filling_color = "#EAE791"
 	plantname = "avocado"
+	harmfultocorgis = TRUE
 	var/cant_eat_msg = "'s skin is much too tough to chew."
 	var/cut = FALSE
 
@@ -1197,3 +1203,17 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#7E80DE"
 	plantname = "flax"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle
+	icon = 'icons/obj/hydroponics/berry.dmi'
+	icon_state = "produce2"
+	desc = "They taste like... burning."
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle/New()
+	..()
+	icon_state = "produce2" //the icon state is set in ..()
+	reagents.add_reagent(NUTRIMENT,1) //we want 3 total. there's already 2 from ..()
+	bitesize=3 //consume it in 1 bite.
+	if(prob(33))
+		reagents.add_reagent(TOXIN,1)
+		bitesize=4

@@ -75,8 +75,11 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/tome/proc/tome_text()
 	var/page_data = null
-	var/dat = {"<title>arcane tome</title><body style="color:#FFFFFF" bgcolor="#110000">
-
+	var/title = "arcane tome"
+	var/body_style = {"
+	"color:#FFFFFF" bgcolor="#110000"
+	"}
+	var/dat = {"
 			<style>
 				label {display: inline-block; width: 50px;text-align: right;float: left;margin: 0 0 0 10px;}
 				ul {list-style-type: none;}
@@ -122,9 +125,9 @@ var/list/arcane_tomes = list()
 	else
 		dat += page_special()
 
-	dat += {"</div></div></div></body>"}
+	dat += {"</div></div></div>"}
 
-	return dat
+	return HTML_SKELETON_TITLE_STYLE(title, dat, body_style)
 
 /obj/item/weapon/tome/proc/page_special()
 	var/dat = null
@@ -1402,7 +1405,7 @@ var/list/arcane_tomes = list()
 
 	next_extinguish = world.time + extinguish_cooldown
 	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
-	H.ExtinguishMob()
+	H.extinguish()
 
 //plasmaman stuff
 /obj/item/clothing/suit/cultrobes/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
@@ -1519,7 +1522,7 @@ var/list/arcane_tomes = list()
 
 	next_extinguish = world.time + extinguish_cooldown
 	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
-	H.ExtinguishMob()
+	H.extinguish()
 
 //plasmaman stuff
 /obj/item/clothing/suit/space/cult/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
@@ -1888,8 +1891,9 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/blood_tesseract/throw_impact(atom/hit_atom)
 	var/turf/T = get_turf(src)
-	playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
-	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "tesseract_break", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+	if(T)
+		playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "tesseract_break", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 	qdel(src)
 
 /obj/item/weapon/blood_tesseract/examine(var/mob/user)

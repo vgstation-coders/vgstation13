@@ -289,6 +289,7 @@ var/list/valid_ninja_suits = list(
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	pressure_resistance = 200 * ONE_ATMOSPHERE
+	blocks_tracking = TRUE
 	var/cooldown = 0
 	var/shuriken_icon = "radial_print"
 	actions_types = list(
@@ -774,7 +775,7 @@ Suit and assorted
 	item_state = "s-ninja"
 	permeability_coefficient = 0.01
 	mag_slow = NO_SLOWDOWN
-	clothing_flags = NOSLIP | MAGPULSE
+	clothing_flags = NOSLIP | MAGPULSE | SILENT_SHOES
 	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/ninja/redsun

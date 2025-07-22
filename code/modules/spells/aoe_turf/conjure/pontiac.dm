@@ -7,13 +7,13 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSUTILITY
 
-	charge_type = Sp_CHARGES
-	charge_max = 1
+	charge_type = SP_CHARGES
+	charge_cooldown_max = 1 CHARGES
 	school = "conjuration"
 	spell_flags = Z2NOCAST
 	invocation = "NO F'AT C'HX"
-	invocation_type = SpI_SHOUT
-	level_max = list(Sp_TOTAL = 0)
+	invocation_type = SP_INV_SHOUT
+	level_max = list(SP_TOTAL = 0)
 	range = 0
 
 	summon_type = list(/obj/structure/bed/chair/vehicle/firebird)

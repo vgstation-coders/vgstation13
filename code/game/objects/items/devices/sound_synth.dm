@@ -8,12 +8,12 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	flammable = TRUE
+	vent_use = TRUE
 
 	var/tmp/spam_flag = 0 //To prevent mashing the button to cause annoyance like a huge idiot.
 	var/selected_sound = "sound/items/bikehorn.ogg"
 	var/shiftpitch = 1
 	var/volume = 50
-	var/emagged = 0
 
 	var/list/sound_list_emagged = list(
 	"Blob Pulse" = "selected_sound=sound/effects/blob_pulse.ogg&shiftpitch=1&volume=100",

@@ -28,14 +28,14 @@
 	desc = "This spell turns a single person into a coal golem slaved to the caster."
 
 	school = "transmutation"
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 	spell_flags = NEEDSCLOTHES | SELECTABLE
 	range = 3
 	max_targets = 1
 	invocation = "NAUGHTY"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	amt_stunned = 5//just exists to make sure the statue "catches" them
-	cooldown_min = 200 //100 deciseconds reduction per rank
+	cooldown_min = 20 SECONDS //10 seconds reduction per rank
 
 	hud_state = "wiz_statue"
 

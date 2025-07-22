@@ -33,7 +33,7 @@
 			M.make_visible(INVISIBLESPRAY)
 		if(isliving(M))
 			var/mob/living/L = M
-			L.ExtinguishMob()
+			L.extinguish()
 
 	//Water now directly damages slimes instead of being a turf check
 	if(isslime(M))
@@ -89,6 +89,72 @@
 			C.purge = 3
 			C.adjustBruteLoss(5)
 			C.visible_message("<span class='danger'>The [src] erodes \the [M].</span>")
+
+
+/datum/reagent/holywater/sacredwater
+	name = "Sacred Water"
+	id = SACREDWATER
+	description = "Water-like liquid that combusts when thrown upon a floor. The flames produced only harm the unholy."
+	color = "#017AFF" //rgb: 1, 122, 255
+
+/datum/reagent/holywater/sacredwater/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	if(volume >= 1)
+		var/obj/effect/overlay/sacred_flames/flames = locate() in T
+		if (flames)
+			flames.lifetime = initial(flames.lifetime)
+		else
+			new /obj/effect/overlay/sacred_flames(T)
+
+/datum/reagent/holywater/sacredwater/special_behaviour()
+	//I sure hope allowing castlevania chaplains to produce infinite sacred flames doesn't turn out to be a bad idea
+	for (var/datum/reagent/R in holder.reagent_list)
+		if (R.id == HOLYWATER)
+			var/added_volume = R.volume
+			holder.del_reagent(R.id)
+			volume += added_volume
+
+////////////////////////////////////////////////////////////////////////////////
+/obj/effect/overlay/sacred_flames
+	mouse_opacity = 0
+	icon = 'icons/effects/fireblue.dmi'
+	icon_state = "1"
+	plane = OBJ_PLANE
+	layer = BELOW_OBJ_LAYER
+	var/lifetime = 3//seconds
+
+/obj/effect/overlay/sacred_flames/New()
+	..()
+	icon_state = pick("1","2","3")
+	add_particles(PS_CROSS_DUST)
+	adjust_particles(PVAR_VELOCITY, list(0,4), PS_CROSS_DUST)
+	add_particles(PS_SACRED_FLAME)
+	add_particles(PS_SACRED_FLAME2)
+	set_light(3,0.5,"#1414A4")
+	spawn()
+		process_flames()
+
+/obj/effect/overlay/sacred_flames/proc/process_flames()
+	set waitfor = 0
+	while(lifetime > 0)
+		harm_unholy()
+		lifetime--
+		sleep(1 SECONDS)
+	set_light(0)
+	icon = 'icons/effects/32x32.dmi'
+	icon_state = "blank"
+	adjust_particles(PVAR_SPAWNING, 0)
+	sleep(1 SECONDS)
+	qdel(src)
+
+/obj/effect/overlay/sacred_flames/proc/harm_unholy()
+	var/turf/T = get_turf(src)
+	for (var/mob/living/L in T)
+		if (L.isUnholy())
+			L.take_overall_damage(0,15)
+////////////////////////////////////////////////////////////////////////////////
 
 /datum/reagent/holysalts
 	name = "Holy Salts"

@@ -49,7 +49,7 @@
 
 
 ///////sepARATE ANUS///////
-/datum/surgery_step/butt/seperate_anus/tool_quality(obj/item/tool)
+/datum/surgery_step/butt/seperate_anus/tool_quality(obj/item/tool, mob/living/user)
 	. = ..()
 	if(!tool.is_sharp())
 		return 0
@@ -122,12 +122,11 @@
 
 
 ///////CAUTERIZE BUTT/////////
-/datum/surgery_step/butt/cauterize_butt/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/butt/cauterize_butt/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/butt/cauterize_butt
 	allowed_tools = list(
 		/obj/item/tool/cautery = 100,
@@ -209,7 +208,7 @@
 	allowed_tools = list(
 		/obj/item/tool/bonegel = 100,
 		/obj/item/tool/bonesetter/bone_mender = 100,
-		/obj/item/tool/screwdriver = 75,
+		"screwdriver" = 75,
 		)
 
 	duration = 5 SECONDS
@@ -303,12 +302,11 @@
 
 
 ///////CAUTERIZE NEW BUTT/////////
-/datum/surgery_step/butt_replace/cauterize/tool_quality(obj/item/tool)
-	if(tool.is_hot())
-		for (var/T in allowed_tools)
-			if (istype(tool,T))
-				return allowed_tools[T]
-	return 0
+/datum/surgery_step/butt_replace/cauterize/tool_quality(obj/item/tool, mob/living/user)
+	. = ..()
+	if(!tool.is_hot())
+		return 0
+
 /datum/surgery_step/butt_replace/cauterize
 	allowed_tools = list(
 		/obj/item/tool/cautery = 100,

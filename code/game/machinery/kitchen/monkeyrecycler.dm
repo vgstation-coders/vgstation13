@@ -84,9 +84,9 @@
 			use_power(500)
 			src.grinded[ourtype]++
 			if(user)
-				to_chat(user, "<span class='notice'>\the [src] now has [grinded[ourtype]] animals worth of material of this type stored.</span>")
+				to_chat(user, "<span class='notice'>\The [src] now has [grinded[ourtype]] animals worth of material of this type stored.</span>")
 			else
-				visible_message("<span class='notice'>\the [src] now has [grinded[ourtype]] animals worth of material of this type stored.</span>")
+				visible_message("<span class='notice'>\The [src] now has [grinded[ourtype]] animals worth of material of this type stored.</span>")
 			return TRUE
 	else
 		failmsg = "\the [src] only accepts animals!"

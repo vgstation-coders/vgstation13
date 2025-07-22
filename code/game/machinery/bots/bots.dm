@@ -26,6 +26,7 @@
 	luminosity = 3
 	use_power = MACHINE_POWER_USE_NONE
 	pAImovement_delay = 1
+	machine_flags = EMAGGABLE
 	var/icon_initial //To get around all that pesky hardcoding of icon states, don't put modifiers on this one
 	var/obj/item/weapon/card/id/botcard			// the ID card that the bot "holds"
 	var/mob/living/simple_animal/hostile/pulse_demon/PD_occupant // for when they take over them
@@ -621,12 +622,14 @@
 		src.explode()
 
 /obj/machinery/bot/emag_act(mob/user)
+	if(emagged >= 2)
+		return
 	if(locked)
 		locked = 0
 		emagged = 1
 		if(user)
 			to_chat(user, "<span class='warning'>You remove [src]'s control restrictions. Opening up its maintenance panel and swiping again will cause [src] to malfunction.</span>")
-	if(!locked && open)
+	else if(open)
 		emagged = 2
 		if(user)
 			to_chat(user, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
@@ -715,8 +718,6 @@
 				to_chat(user, "<span class='notice'>Unable to repair with the maintenance panel closed.</span>")
 		else
 			to_chat(user, "<span class='notice'>[src] does not need a repair.</span>")
-	else if (istype(W, /obj/item/weapon/card/emag) && emagged < 2)
-		emag_act(user)
 	else
 		if(isobj(W))
 			W.on_attack(src, user)

@@ -249,6 +249,9 @@
 					if(prob(50))
 						to_chat(user, "<span class='notice'>You manage to yank \the [C] back out before the machine swallows it!</span>")
 						user.put_in_hands(O)
+					else if(prob(C.luckiness/10))
+						to_chat(user, "<SPAN CLASS='notice'>You just barely manage to yank \the [C] out before machine swallows it! Lucky!</SPAN>")
+						user.put_in_hands(O)
 					else
 						to_chat(user, "<span class='notice'>You weren't able to pull \the [C] out in time and the machine swallows it, string and all.</span>")
 						qdel(O)

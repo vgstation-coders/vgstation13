@@ -4,10 +4,10 @@
 	user_type = USER_TYPE_CULT
 
 	school = "transmutation"
-	charge_max = 200
+	charge_cooldown_max = 20 SECONDS
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK | INCLUDEUSER
 	invocation = ""
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	max_targets = 0
 

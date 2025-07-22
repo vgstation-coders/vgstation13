@@ -113,6 +113,7 @@
 	category = "Misc"
 	build_path = /obj/item/device/mech_painter
 
+/* Perhaps this can come back one day in the future, when one can't spam them every round
 /datum/design/killdozer_modkit
 	name = "Ripley Killdozer kit"
 	desc = "this never even shows up ingame???"
@@ -122,3 +123,4 @@
 	materials = list(MAT_IRON = 275000, MAT_GLASS = 1000) //LODSOFMETAL
 	category = "Robotics"
 	build_path = /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit
+*/

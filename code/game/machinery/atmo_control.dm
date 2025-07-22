@@ -10,15 +10,6 @@
 
 	var/on = 1
 	var/list/metrics_monitored = list("pressure", "temperature")
-	//Flags:
-	// 1 for pressure
-	// 2 for temperature
-	// Output >= 4 includes gas composition
-	// 4 for oxygen concentration
-	// 8 for toxins concentration
-	// 16 for nitrogen concentration
-	// 32 for carbon dioxide concentration
-	// 64 for nitrous oxide concentration
 
 	machine_flags = WRENCHMOVE | MULTITOOL_MENU
 
@@ -62,7 +53,7 @@
 
 	if("toggle_monitoring" in href_list)
 		var/toggle_target = href_list["toggle_monitoring"]
-		if(toggle_target in XGM.gases || toggle_target == "pressure" || toggle_target == "temperature")
+		if((toggle_target in XGM.gases) || toggle_target == "pressure" || toggle_target == "temperature")
 			toggle_monitoring(toggle_target)
 		return MT_UPDATE
 
@@ -131,7 +122,7 @@
 	if(..(user))
 		return
 	var/html=return_text()+"</body></html>"
-	user << browse(html,"window=gac")
+	user << browse(html,"window=gac") // Already well-formed HTML
 	user.set_machine(src)
 	onclose(user, "gac")
 
@@ -305,7 +296,7 @@ font-weight:bold;
 
 /obj/machinery/computer/general_air_control/unlinkFrom(var/mob/user, var/obj/O)
 	..()
-	if("id_tag" in O.vars && (istype(O,/obj/machinery/air_sensor) || istype(O, /obj/machinery/meter)))
+	if(("id_tag" in O.vars) && (istype(O,/obj/machinery/air_sensor) || istype(O, /obj/machinery/meter)))
 		sensors.Remove(O:id_tag)
 		return 1
 	return 0

@@ -53,6 +53,12 @@
 	message = "The microdosimetry meter onboard [station_name()] has been tripped by recent cosmic interference. Automated Bragg Curve calculations show a threat of ion implantation in crew members, which may lead to sickness or organ failure. Central Command advises regular health screening of staff displaying symptoms of malaise."
 	..()
 
+/datum/command_alert/hog
+	name = "HOG"
+	alert_title = "HOG"
+	force_report = 1
+	message = "A Hazardous Organic Grease-source (HOG) has been detected in your station maintenance. Remove it before its secretions damage station equipment."
+
 ///////HISS
 
 /datum/command_alert/xenomorph_station_lockdown
@@ -727,7 +733,14 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Machine Learning Alert"
 
 /datum/command_alert/vending_machines/announce()
-	message = "Rampant brand intelligence has been detected aboard [station_name()], please stand-by."
+	message = "Rampant brand intelligence has been detected aboard [station_name()], be watchful for aggressive vending machines. If you find one of them broadcasting unusually agressive slogans, shut its speakers down."
+
+/datum/command_alert/vending_machines_end
+	name = "Rampant Brand Intelligence Purged"
+	alert_title = "Machine Learning Alert End"
+
+/datum/command_alert/vending_machines_end/announce()
+	message = "The rampant brand intelligence aboard [station_name()] has been purged. Vending machine behaviour should return to normal."
 
 /datum/command_alert/comms_blackout
 	name = "Ionospheric Anomalies - Telecommunications Failure"

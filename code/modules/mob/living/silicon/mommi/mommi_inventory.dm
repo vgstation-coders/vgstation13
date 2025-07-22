@@ -12,7 +12,7 @@
 	// And before you ask, this is how /mob handles NULLs, too.
 	if(!W)
 		return FALSE
-	if(cell && cell.charge <= ROBOT_LOW_POWER)
+	if(get_cell_charge(src) <= ROBOT_LOW_POWER)
 		if(!is_in_modules(W))
 			drop_item(W)
 			return FALSE

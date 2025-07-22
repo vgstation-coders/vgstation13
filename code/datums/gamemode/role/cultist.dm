@@ -552,7 +552,7 @@
 		H.stuttering = max(H.stuttering, 12)
 		H.Jitter(12)
 
-/datum/role/cultist/handle_splashed_reagent(var/reagent_id)//also proc'd when holy water is drinked or ingested in any way
+/datum/role/cultist/handle_splashed_reagent(var/reagent_id, var/method, var/volume)//also proc'd when holy water is drinked or ingested in any way
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))
 		return
@@ -561,11 +561,17 @@
 			holywarning_cooldown = 5
 			to_chat(H, "<span class='danger'>The cold touch of holy water makes your head spin, you're having trouble walking straight.</span>")
 
-	if (reagent_id == HOLYWATER || reagent_id == INCENSE_HAREBELLS)
-		H.eye_blurry = max(H.eye_blurry, 12)
-		H.Dizzy(12)
-		H.stuttering = max(H.stuttering, 12)
-		H.Jitter(12)
+	if (reagent_id == SACREDWATER)
+		if (holywarning_cooldown <= 0)
+			holywarning_cooldown = 5
+			to_chat(H, "<span class='danger'>The burning touch of sacred water sears your skin.</span>")
+
+	switch(reagent_id)
+		if (HOLYWATER,INCENSE_HAREBELLS,SACREDWATER)
+			H.eye_blurry = max(H.eye_blurry, 12)
+			H.Dizzy(12)
+			H.stuttering = max(H.stuttering, 12)
+			H.Jitter(12)
 
 /datum/role/cultist/proc/write_rune(var/word_to_draw)
 	var/mob/living/user = antag.current

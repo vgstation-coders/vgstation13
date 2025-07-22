@@ -183,6 +183,7 @@
 	description = "Freshly squeezed juice from red grapes. Quite sweet."
 	color = "#512284" //rgb: 81, 34, 132
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
+	harms_animal_type = /mob/living/simple_animal/corgi
 
 /datum/reagent/drink/ggrapejuice
 	name = "Green Grape Juice"
@@ -190,6 +191,7 @@
 	description = "Freshly squeezed juice from green grapes. Smoothly sweet."
 	color = "#B79E42" //rgb: 183, 158, 66
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
+	harms_animal_type = /mob/living/simple_animal/corgi
 
 /datum/reagent/drink/berryjuice
 	name = "Berry Juice"
@@ -694,6 +696,8 @@
 	glass_icon_state = "doctorsdelightglass"
 	glass_name = "\improper Doctor's Delight"
 	glass_desc = "A rejuvenating mixture of juices, guaranteed to keep you healthy until the next toolboxing takes place."
+	fission_time=3500 // 50 minutes (0hr 50m)
+	fission_absorbtion=3000
 
 /datum/reagent/drink/doctor_delight/on_mob_life(var/mob/living/M)
 	if(..())
