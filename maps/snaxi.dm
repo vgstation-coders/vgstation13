@@ -45,9 +45,6 @@
 **	Day and Night Lighting **
 **	See: daynightcycle.dm  **
 ****************************/
-/datum/subsystem/daynightcycle
-	flags = SS_FIRE_IN_LOBBY
-
 /datum/map/active/New()
 	. = ..()
 
@@ -57,6 +54,7 @@
 	mining_shuttle.req_access = list()
 	security_shuttle.name = "Northeast Station Shuttle"
 	security_shuttle.req_access = list()
+	daynight_z_lvls = list(zLevels[1])
 
 /datum/map/active/special_ui(var/obj/abstract/screen/S, mob/user)
 	if(!user)
