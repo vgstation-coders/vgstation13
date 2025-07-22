@@ -76,7 +76,6 @@ Basically, you are going to overwrite the flags.
 			currentrun = daynight_turfs.Copy()
 
 /datum/subsystem/daynightcycle/proc/get_turflist()
-	message_admins("get_turflist fired")
 	for(var/z in daynight_z_lvls)
 		for(var/turf/T in block(locate(1, 1, z), locate(world.maxx, world.maxy, z)))
 			if(IsEven(T.x)) //If we are also even.
@@ -90,7 +89,6 @@ Basically, you are going to overwrite the flags.
 							var/area/A1 = get_area(T1)
 							if(istype(A1, /area/surface)) //If we are outside.
 								daynight_turfs += T
-	message_admins("daynight_turfs: [daynight_turfs.len] turfs")
 
 /datum/subsystem/daynightcycle/proc/play_globalsound()
 	for(var/mob/M in player_list)
