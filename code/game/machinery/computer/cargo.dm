@@ -592,7 +592,7 @@ For vending packs, see vending_packs.dm*/
 			if(O.id == text2num(href_list["printreq"]))
 				O.generate_form(loc)
 				last_print = world.time
-				say("Printed request number [O.id].")
+				say("Printed request #[O.id].")
 				break
 		return 1
 	else if (href_list["close"])

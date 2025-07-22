@@ -435,6 +435,11 @@ div.notice {
     float: right;
 }
 
+.floatNone {
+    float: none;
+	width: max-content;
+}
+
 .noOverflow {
 	white-space: nowrap;
 	overflow: hidden;
