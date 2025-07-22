@@ -516,7 +516,7 @@ if ungreased adult: l containers
 /mob/living/simple_animal/rampagingspacehog/sleeperclown/death(gibbed)
 	playsound(src, 'sound/machines/pressurehiss.ogg', 70, 1)
 	for(var/mob/person in contents)
-		person.forceMove(loc)
+		person.forceMove(get_turf(src))
 		visible_message("\The [name] releases \the [person] as they die!")
 	playsound(src, 'sound/misc/sadtrombone.ogg', 70, 1)
 	..()
@@ -527,7 +527,7 @@ if ungreased adult: l containers
 
 /mob/living/simple_animal/rampagingspacehog/sleeperclown/Destroy()
 	for(var/mob/person in contents)
-		person.forceMove(loc)
+		person.forceMove(get_turf(src))
 	..()
 
 /mob/living/simple_animal/rampagingspacehog/sleeperclown/get_butchering_products()

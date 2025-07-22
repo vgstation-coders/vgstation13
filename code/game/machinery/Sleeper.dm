@@ -33,16 +33,16 @@
 	var/drag_delay = 20
 	var/cools = 0
 	var/works_in_crit = FALSE //Will it let you inject chemicals into people in critical condition
-	var/hiss_noise = 'sound/machines/pressurehiss.ogg'
-	var/funny = FALSE //clown time?
-	var/info_hidden = FALSE //hides information about chems when set to true
 
-	//TODO - plugin system
+	//Plugin System-related Variables
 	var/accepts_plugins = TRUE
 	var/list/plugins = list()
 	var/advertising = FALSE
 	var/ad_cooldown = FALSE
 	var/ad_list = list()
+	var/hiss_noise = 'sound/machines/pressurehiss.ogg'
+	var/funny = FALSE //clown time?
+	var/info_hidden = FALSE //hides information about chems when set to true
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
@@ -153,15 +153,15 @@
 	if(overriding_chems)
 		for(var/obj/item/device/plugin/sleeper/plug in plugins)
 			if(plug.override_all_chems)
-				available_options += plug.t1chems
+				available_options |= plug.t1chems
 				if(T >= 6)
-					available_options += plug.t2chems
+					available_options |= plug.t2chems
 				if(T >= 9)
-					available_options += plug.t3chems
+					available_options |= plug.t3chems
 				if(T >= 12)
-					available_options += plug.t4chems
+					available_options |= plug.t4chems
 				if(emagged)
-					available_options += plug.emagchems
+					available_options |= plug.emagchems
 		return
 
 
@@ -170,26 +170,26 @@
 	available_options += list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", KELOTANE = "Kelotane", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
 	for(var/obj/item/device/plugin/sleeper/plug in plugins)
 		if(plug.t1chems.len)
-			available_options += plug.t1chems
+			available_options |= plug.t1chems
 	if(T >= 6) // Tier 2
 		available_options += list(IMIDAZOLINE = "Imidazoline", INACUSIATE = "Inacusiate", TRICORDRAZINE = "Tricordrazine")
 		for(var/obj/item/device/plugin/sleeper/plug in plugins)
 			if(plug.t2chems.len)
-				available_options += plug.t2chems
+				available_options |= plug.t2chems
 	if(T >= 9) // Tier 3
 		available_options += list(ALKYSINE = "Alkysine", TRAMADOL = "Tramadol", PEPTOBISMOL  = "Peptobismol")
 		for(var/obj/item/device/plugin/sleeper/plug in plugins)
 			if(plug.t3chems.len)
-				available_options += plug.t3chems
+				available_options |= plug.t3chems
 	if(T >= 12) // Tier 4
 		available_options += list(DOCTORSDELIGHT = "Doctor's Delight", REZADONE = "Rezadone", PERIDAXON = "Peridaxon")
 		for(var/obj/item/device/plugin/sleeper/plug in plugins)
 			if(plug.t4chems.len)
-				available_options += plug.t4chems
+				available_options |= plug.t4chems
 	if(emagged)
 		for(var/obj/item/device/plugin/sleeper/plug in plugins)
 			if(plug.emagchems.len)
-				available_options += plug.emagchems
+				available_options |= plug.emagchems
 
 	for(var/obj/item/device/plugin/sleeper/plug in plugins)
 		if(plug.remove_chems.len)

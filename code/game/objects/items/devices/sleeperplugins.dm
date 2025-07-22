@@ -125,8 +125,8 @@
 	t3chems = list(
 		BEFF = "Discount Beef"
 		)
-	//Example of use, not implemented because gloop is owchies
-	//emagchems = list(CHEESYGLOOP = "Cheesy Gloop")
+	//west demanded this, so i've uncommented it. The murder sleeper is here.
+	emagchems = list(CHEESYGLOOP = "Cheesy Gloop")
 
 /obj/item/device/plugin/sleeper/dan/provide_overlay(var/obj/machinery/sleeper/my_sleeper)
 	my_sleeper.overlays += new /image('icons/obj/machines/plugins/sleeperplugin.dmi', "dan_blue_[my_sleeper.occupant ? "closed" : "open"]")
