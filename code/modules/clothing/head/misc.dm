@@ -655,7 +655,7 @@
 	icon_state = "birthdayhat"
 	item_state = "birthdayhat"
 	w_class = W_CLASS_SMALL //Fits several in a box!
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
 	vertical_offset = 4
 
 /obj/item/clothing/head/snake
