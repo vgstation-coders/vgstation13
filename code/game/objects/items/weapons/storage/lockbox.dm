@@ -150,7 +150,6 @@
 		return FALSE
 	emagged = 1
 	locked = 0
-	desc = "It appears to be broken."
 	update_icon()
 	user.visible_message("<span class='danger'>\The [src] has been broken by \the [user] with an electromagnetic card!</span>", "<span class='notice'>You break open \the [src].</span>", "<span class='notice'>You hear a faint click sound.</span>", range = 3)
 	return TRUE
