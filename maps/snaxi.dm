@@ -54,7 +54,7 @@
 	mining_shuttle.req_access = list()
 	security_shuttle.name = "Northeast Station Shuttle"
 	security_shuttle.req_access = list()
-	daynight_z_lvls = list(zLevels[1])
+	daynight_z_lvls = list(zMainStation)
 
 /datum/map/active/special_ui(var/obj/abstract/screen/S, mob/user)
 	if(!user)

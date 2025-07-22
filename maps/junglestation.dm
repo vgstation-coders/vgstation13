@@ -46,7 +46,7 @@
 	world.name = "NT Colony Gamma-8"
 	station_name="NT Colony Gamma-8"
 
-	daynight_z_lvls = list(zLevels[1])
+	daynight_z_lvls = list(zMainStation)
 
 /****************************
 **	Day and Night Lighting **

@@ -77,9 +77,8 @@ Basically, you are going to overwrite the flags.
 
 /datum/subsystem/daynightcycle/proc/get_turflist()
 	message_admins("get_turflist fired")
-	for(var/datum/zLevel/Z in daynight_z_lvls)
-		message_admins("[Z] in daynight_z_lvls [daynight_z_lvls]")
-		for(var/turf/T in block(locate(1, 1, Z.z), locate(world.maxx, world.maxy, Z.z)))
+	for(var/z in daynight_z_lvls)
+		for(var/turf/T in block(locate(1, 1, z), locate(world.maxx, world.maxy, z)))
 			if(IsEven(T.x)) //If we are also even.
 				if(IsEven(T.y)) //If we are also even.
 					var/area/A = get_area(T)
