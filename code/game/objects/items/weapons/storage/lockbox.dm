@@ -122,6 +122,8 @@
 				to_chat(user, "<span class='notice'>You repair the electronics inside the locking mechanism!</span>")
 				update_icon()
 		return
+	else if(isEmag(W))
+		emag_act(user)
 	else if(!locked)
 		if(W.is_screwdriver() && electronics)
 			to_chat(user, "<span class='notice'>You unsecure \the [electronics] from \the [src].</span>")
@@ -137,8 +139,6 @@
 			locked = 0
 			update_icon()
 			return
-		. = ..()
-	else if(isEmag(W))
 		. = ..()
 	else
 		to_chat(user, "<span class='warning'>It's locked!</span>")
