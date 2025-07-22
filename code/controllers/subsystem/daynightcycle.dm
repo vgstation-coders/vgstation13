@@ -2,7 +2,7 @@ var/datum/subsystem/daynightcycle/SSDayNight
 
 var/list/daynight_turfs = list()
 var/list/daynight_z_lvls = list()
-/* Original Plan
+/* Default Timing
 Morning	  - 2 Mins
 Sunrise   - 2 Mins
 Daytime   - 16 Minutes
@@ -25,14 +25,10 @@ Nighttime - 36 Minutes
 	priority      = SS_PRIORITY_DAYNIGHT
 	wait          = 1 MINUTES
 /*
-On the map dm file, append the following to activate day/night lighting.
-Basically, you are going to overwrite the flags.
-
-/datum/subsystem/daynightcycle
-	flags = SS_FIRE_IN_LOBBY       This is basically how you want it to run.
-	daynight_z_lvl = 1   This basically is the z level it will be on. Defaults to main station unless specified here.
-
-	See: Both of them right here!
+On the map dm file, redefine the following:
+	- 'daynight_z_lvls' to change the zLevels that the day/night cycle applies to. Do not redefine if you want this subsystem disabled.
+	- 'process_lighting()' to change the lighting scheme.
+	- 'play_globalsound()' to change or disable the sound played at sunrise and sunset (if process_lighting() is unchanged).
 */
 	flags = SS_FIRE_IN_LOBBY
 
