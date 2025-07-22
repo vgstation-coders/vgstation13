@@ -246,6 +246,8 @@ var/global/current_centcomm_order_id=124901
 
 //Returns a paper request form
 /datum/centcomm_order/proc/generate_form(var/target)
+	if(!target)
+		return //target required, or it winds up in nullspace!
 	var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(target)
 	reqform.name = "External order form - [name] order number [id]"
 	reqform.info = {"<h3>Central Command supply requisition form</h3><hr>

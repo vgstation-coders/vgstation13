@@ -127,7 +127,7 @@ For vending packs, see vending_packs.dm*/
 	var/list/current_acct
 	var/list/current_acct_override
 	var/screen = SCR_MAIN
-	var/printccrequests = TRUE
+	var/printccrequests = FALSE
 	var/printordermanifests = TRUE
 	var/printshuttlemanifests = TRUE
 	var/last_print = 0 //prevent paper flood spam
