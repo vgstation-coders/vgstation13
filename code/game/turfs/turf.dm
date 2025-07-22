@@ -459,7 +459,7 @@
 	if(density != old_density)
 		densityChanged()
 	if(istype(loc,/area/surface/jungle) && !istype(original_area,/area/surface/jungle) ) //outdoor areas need to be illuminated.
-		if(SSDayNight && .)
+		if(.)
 			var/turf/NewTurf=.
 			NewTurf.affecting_lights=list()
 			NewTurf.lighting_clear_overlay()

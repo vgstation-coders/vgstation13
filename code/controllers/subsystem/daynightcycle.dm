@@ -34,7 +34,7 @@ Basically, you are going to overwrite the flags.
 
 	See: Both of them right here!
 */
-	flags 		  = SS_FIRE_IN_LOBBY
+	flags = SS_FIRE_IN_LOBBY
 
 	var/current_timeOfDay = TOD_DAYTIME //This is more or less the color and duration since its in a switch.
 	var/next_light_power = 10 // As much as you would want to change these for cool factor.

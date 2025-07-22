@@ -134,6 +134,9 @@
 	next_firetime=world.time + 5 MINUTES //station is too big to tick at 2 minutes. not without severe sever raep, at least.
 	solartime++
 
+
+/datum/subsystem/daynightcycle/get_turflist()
+
 /datum/subsystem/daynightcycle/play_globalsound()
 	return
 
