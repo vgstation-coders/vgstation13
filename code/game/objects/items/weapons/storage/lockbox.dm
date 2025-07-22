@@ -138,6 +138,8 @@
 			update_icon()
 			return
 		. = ..()
+	else if(isEmag(W))
+		. = ..()
 	else
 		to_chat(user, "<span class='warning'>It's locked!</span>")
 
