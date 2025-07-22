@@ -654,6 +654,7 @@
 	desc = "A party cone. Not useful to disguise one's self as a unicorn or to impale one's foes."
 	icon_state = "birthdayhat"
 	item_state = "birthdayhat"
+	w_class = W_CLASS_SMALL //Fits several in a box!
 	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/snake
