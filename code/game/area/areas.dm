@@ -341,7 +341,7 @@ var/area/space_area
 				ambience_list.Add(/datum/ambience/AI/harmonica)
 			break
 	if(prob(10) && user.loneliness_affected())
-		ambience_list.add(/datum/ambience/nobodyhere)
+		ambience_list.Add(/datum/ambience/nobodyhere)
 	if(ambience_list.len > 0)
 		return ambience_list
 
