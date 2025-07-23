@@ -1210,7 +1210,7 @@
 					animate(I, alpha = 0, time = 20)
 	
 /datum/disease2/effect/loneliness/side_effect(var/mob/living/mob)
-	if(world.time - activated > 20)
+	if(mob && mob.client && world.time - activated > 20)
 		QDEL_LIST_CUT(null_images)
 		for(var/mob/other in mob_list)
 			if(other != mob)
