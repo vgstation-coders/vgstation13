@@ -340,7 +340,7 @@ var/area/space_area
 			if(AI?.laws.name == "Asimov's Three Laws of Robotics")
 				ambience_list.Add(/datum/ambience/AI/harmonica)
 			break
-	if(prob(10) && user.loneliness_affected())
+	if(user.loneliness_affected())
 		ambience_list.Add(/datum/ambience/nobodyhere)
 	if(ambience_list.len > 0)
 		return ambience_list
