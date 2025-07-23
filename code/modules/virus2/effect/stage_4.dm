@@ -1223,10 +1223,18 @@
 /datum/disease2/effect/loneliness/deactivate(mob/living/carbon/mob)
 	to_chat(mob,pick("Everybody is back now.","You feel more in with the crowd again."))
 	if(mob.client)
-		for(var/image/I in null_images)
-			animate(I, alpha = 255, time = 20)
-		sleep(20)
 		mob.client.images.Remove(null_images)
+		QDEL_LIST_CUT(null_images)
+		for(var/mob/other in mob_list)
+			if(other != mob)
+				var/image/I = image(other.icon,other.icon_state)
+				I.overlays = other.overlays
+				I.override = 1
+				I.loc = other
+				I.alpha = 0
+				mob.client.images += I
+				null_images += I
+				animate(I, alpha = 255, time = 20)
 	QDEL_LIST_CUT(null_images)
 	activated = 0
 
