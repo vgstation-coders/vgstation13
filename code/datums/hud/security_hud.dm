@@ -11,6 +11,8 @@
 	..()
 	if(!M.client)
 		return
+	if(M.loneliness_affected())
+		return
 	if(!(M in sec_hud_users))
 		sec_hud_users += M
 	var/client/C = M.client

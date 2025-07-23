@@ -9,6 +9,8 @@
 		med_hud_users += M
 	if(!M.client)
 		return
+	if(M.loneliness_affected())
+		return
 	var/client/C = M.client
 	var/image/holder
 	var/turf/T

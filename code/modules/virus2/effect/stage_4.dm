@@ -1230,15 +1230,15 @@
 	QDEL_LIST_CUT(null_images)
 	activated = 0
 
-/mob/proc/loneliness_affected(atom/source)
+/mob/proc/loneliness_affected(atom/source = src)
 	return FALSE
 
-/mob/living/loneliness_affected(atom/source)
+/mob/living/loneliness_affected(atom/source = src)
 	if(virus2.len)
 		for(var/ID in virus2)
 			var/datum/disease2/disease/V = virus2[ID]
 			for(var/datum/disease2/effect/e in V.effects)
-				if(e.type == /datum/disease2/effect/loneliness)
+				if(e.count > 0 && e.type == /datum/disease2/effect/loneliness)
 					return ismob(source)
 	return FALSE
 
