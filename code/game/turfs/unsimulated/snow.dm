@@ -162,6 +162,7 @@
 
 /obj/effect/blizzard_holder/New()
 	..()
+	add_particles(PS_SNOW)
 	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
 		var/datum/weather/snow/S = map.climate.current_weather
 		UpdateSnowfall(S.snow_intensity)
@@ -169,19 +170,35 @@
 		UpdateSnowfall(SNOW_CALM)
 
 /obj/effect/blizzard_holder/proc/UpdateSnowfall(var/snow_state)
-	if(!snow_state_to_texture["[snow_state]"])
-		cache_snowtile(snow_state)
-	appearance = snow_state_to_texture["[snow_state]"]
-
-/obj/effect/blizzard_holder/proc/cache_snowtile(var/snow_state)
-	overlays.Cut()
-	var/list/snowfall_overlays = list("snowfall_calm","snowfall_average","snowfall_hard","snowfall_blizzard")
-	var/list/overlay_counts = list(2,2,2,3)
-	for(var/i = 1 to overlay_counts[snow_state+1])
-		var/image/snowfx = image('icons/turf/snowfx.dmi', "[snowfall_overlays[snow_state+1]][i]",SNOW_OVERLAY_LAYER)
-		snowfx.plane = EFFECTS_PLANE
-		overlays += snowfx
-	snow_state_to_texture["[snow_state]"] = appearance
+	var/list/_velocity = list(0,-4)
+	var/suf = 1
+	var/_spawning = 2
+	var/_color = "#ffffff99"
+	switch(snow_state)
+		if(SNOW_CALM)
+			_velocity = list(0,-2)
+			suf = 1
+			_spawning = 2
+			_color = "#ffffff99"
+		if(SNOW_AVERAGE)
+			_velocity = list(0,-3)
+			suf = 2
+			_spawning = 2
+			_color = "#ffffffb9"
+		if(SNOW_HARD)
+			_velocity = list(2,-3)
+			suf = 3
+			_spawning = 3
+			_color = "#ffffffe8"
+		if(SNOW_BLIZZARD)
+			_velocity = list(3,-2)
+			suf = 4
+			_spawning = 4
+			_color = "#ffffffff"
+	adjust_particles(PVAR_VELOCITY, _velocity, PS_SNOW)
+	adjust_particles(PVAR_ICON_STATE, "snow[suf]", PS_SNOW)
+	adjust_particles(PVAR_SPAWNING, _spawning, PS_SNOW)
+	adjust_particles(PVAR_COLOR, _color, PS_SNOW)
 
 /turf/unsimulated/floor/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
@@ -369,9 +386,6 @@ var/obj/effect/blizzard_holder/heavy/heavy_blizzard_image = null
 	UpdateSnowfall(SNOW_BLIZZARD)
 
 /obj/effect/blizzard_holder/heavy/UpdateSnowfall(var/snow_state)
-	..(SNOW_BLIZZARD)
-
-/obj/effect/blizzard_holder/heavy/cache_snowtile(var/snow_state)
 	..(SNOW_BLIZZARD)
 
 /turf/unsimulated/floor/noblizz_permafrost

@@ -183,6 +183,7 @@ var/list/particle_string_to_type = list(
 	PS_SACRED_FLAME = /particles/sacred_flame,
 	PS_SACRED_FLAME2 = /particles/sacred_flame/alt,
 	PS_BIBLE_PAGE = /particles/bible_page,
+	PS_SNOW = /particles/snow,
 	)
 
 /particles
@@ -192,6 +193,9 @@ var/list/particle_string_to_type = list(
 	var/pixel_y = 0
 	var/appearance_flags = 0
 	var/blend_mode = 0
+
+/particles/proc/post_setup() //used for particle-specific setup
+	return
 
 //STEAM
 /particles/steam
@@ -569,3 +573,20 @@ var/list/particle_string_to_type = list(
 
 	appearance_flags = RESET_COLOR|RESET_ALPHA
 	plane = ABOVE_LIGHTING_PLANE
+
+///WEATHER PARTICLES
+/particles/snow
+	width = 96
+	height = 96
+	count = 30
+	spawning = 2
+	color = "#ffffff99"
+	fade = 0.3 SECONDS
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "snow1"
+	lifespan = 1.5 SECONDS
+	friction = 0.2
+	drift = generator("circle", list(-0.3,0), list(0.3,0))
+	position = generator("box", list(-18,-18), list(18,18))
+	plane = EFFECTS_PLANE
+	layer = SNOW_OVERLAY_LAYER
