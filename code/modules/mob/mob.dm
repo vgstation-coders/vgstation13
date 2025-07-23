@@ -302,7 +302,7 @@
 
 /mob/proc/show_message(var/msg, var/type, var/alt, var/alt_type, var/mob/speaker, atom/source)//Message, type of message (1=visible or 2=hearable), alternative message, alt message type (1=if blind or 2=if deaf), and optionally the speaker
 	//Because the person who made this is a fucking idiot, let's clarify. 1 is sight-related messages (aka emotes in general), 2 is hearing-related (aka HEY DUMBFUCK I'M TALKING TO YOU)
-	if(loneliness_affected(source))
+	if(loneliness_affected(source || speaker))
 		return
 	
 	if(!client) //We dun goof
