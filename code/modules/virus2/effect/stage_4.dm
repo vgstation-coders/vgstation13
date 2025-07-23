@@ -1235,6 +1235,8 @@
 				mob.client.images += I
 				null_images += I
 				animate(I, alpha = 255, time = 20)
+		sleep(20)
+		mob.client.images.Remove(null_images)
 	QDEL_LIST_CUT(null_images)
 	activated = 0
 
