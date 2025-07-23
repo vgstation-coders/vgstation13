@@ -52,6 +52,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/oxygen_alert = 0
 	var/toxins_alert = 0
 	var/temperature_alert = 0
+	var/original_bodytemperature = 0  // So that we do not call initial(bodytemperature) over and over again, used in temperature calculations
 
 	var/show_stat_health = 1	//does the percentage health show in the stat panel for the mob
 
@@ -139,6 +140,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/New()
 	..()
+	original_bodytemperature = bodytemperature
 	if(!(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC)))
 		create_reagents(100)
 	verbs -= /mob/verb/observe
@@ -363,14 +365,35 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(!atmos_suitable)
 		adjustOxyLoss(unsuitable_atmos_damage)
 
-	if(bodytemperature < minbodytemp)
-		temperature_alert = TEMP_ALARM_COLD_STRONG
-		adjustBruteLoss(cold_damage_per_tick)
-	else if(bodytemperature > maxbodytemp)
-		temperature_alert = TEMP_ALARM_HEAT_STRONG
-		adjustBruteLoss(heat_damage_per_tick)
-	else
-		temperature_alert = 0
+	if(bodytemperature < original_bodytemperature)
+		if(minbodytemp) //It's not at 0
+			//Extract a percentage out of this
+			var/temp_difference = original_bodytemperature - bodytemperature
+			var/cold_difference = original_bodytemperature - minbodytemp
+			//Converts difference into a value from 0 to 1, 0.01 = 1%, 1 = 100%
+			var/percentage_to_minbodytemp = round(cold_difference/temp_difference, 0.01)
+			if(percentage_to_minbodytemp <= round(1/3, 0.01))
+				temperature_alert = 0
+			else if(percentage_to_minbodytemp <= round(2/3, 0.01))
+				temperature_alert = TEMP_ALARM_COLD_WEAK
+			else if(percentage_to_minbodytemp <= 1)
+				temperature_alert = TEMP_ALARM_COLD_MILD
+			else
+				temperature_alert = TEMP_ALARM_COLD_STRONG
+				adjustBruteLoss(heat_damage_per_tick)
+	else //bodytemperature is at or higher than original_bodytemperature
+		var/temp_difference = bodytemperature - original_bodytemperature
+		var/heat_difference = minbodytemp - original_bodytemperature
+		var/percentage_to_maxbodytemp = round(temp_difference/heat_difference, 0.01)
+		if(percentage_to_maxbodytemp <= round(1/3, 0.01))
+			temperature_alert = 0
+		else if(percentage_to_maxbodytemp <= round(2/3, 0.01))
+			temperature_alert = TEMP_ALARM_HEAT_WEAK
+		else if(percentage_to_maxbodytemp <= 1)
+			temperature_alert = TEMP_ALARM_HEAT_MILD
+		else
+			temperature_alert = TEMP_ALARM_HEAT_STRONG
+			adjustBruteLoss(heat_damage_per_tick)
 
 /mob/living/simple_animal/gib(var/animation = 0, var/meat = 1)
 	if(status_flags & BUDDHAMODE)
