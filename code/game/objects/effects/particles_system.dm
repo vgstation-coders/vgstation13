@@ -194,9 +194,6 @@ var/list/particle_string_to_type = list(
 	var/appearance_flags = 0
 	var/blend_mode = 0
 
-/particles/proc/post_setup() //used for particle-specific setup
-	return
-
 //STEAM
 /particles/steam
 	width = 64
