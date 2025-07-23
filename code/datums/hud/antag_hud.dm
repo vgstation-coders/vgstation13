@@ -12,7 +12,7 @@
 	var/client/C = M.client
 	var/turf/T
 	T = get_turf(M)
-	for(var/mob/living/target in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+	for(var/mob/living/target in (M.loneliness_affected() ? list(M) : range(C.view+DATAHUD_RANGE_OVERHEAD,T)))
 		if(target.mind && (target.mind.antag_roles.len > 0 || issilicon(target) || target.hud_list[SPECIALROLE_HUD]) )
 			M.client.images -= target.hud_list[SPECIALROLE_HUD]
 			var/icon/I_base = new
