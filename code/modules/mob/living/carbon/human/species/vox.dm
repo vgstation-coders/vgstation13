@@ -226,12 +226,7 @@
 /datum/species/skellington/skelevox/fallback()
 	return "Vox"
 
-/mob/living/carbon/human
-	var/feather_regen_timer = null
-	var/original_vox_s_tone = null
-	var/vox_full_regen_active = null
-
-/// Called when Vox has at least one feather left but not full, triggers 5-minute regeneration (no radiation required)
+/// Called when Vox has at least one feather left but not full, triggers 5-minute regeneration
 /mob/living/carbon/human/proc/start_partial_feather_regeneration()
 	if(!istype(src.species, /datum/species/vox))
 		return
@@ -243,10 +238,8 @@
 	if(!F || F.amount == F.initial_amount || F.amount <= 0)
 		return // Only if missing some feathers but not plucked
 	src.feather_regen_timer = 1
-	spawn(3)
-		if(src)
-			to_chat(src, "<span class='notice'>Your feathers begin to regrow. They'll be fully restored in a few minutes.</span>")
-	spawn(3000)
+	to_chat(src, "<span class='notice'>Your feathers will come back in a bit.</span>")
+	spawn(5 MINUTES)
 		if(src && src.stat != DEAD && F && F.amount > 0 && F.amount < F.initial_amount)
 			F.amount = F.initial_amount
 			to_chat(src, "<span class='notice'>Your feathers have fully regrown!</span>")
@@ -271,7 +264,7 @@
 	src.feather_regen_timer = 1
 	src.vox_full_regen_active = 1
 	to_chat(src, "<span class='notice'>You feel your feathers start to regrow, this could take a while...</span>")
-	spawn(9000)
+	spawn(15 MINUTES)
 		if(src && src.stat != DEAD)
 			src.restore_feathers()
 		src.feather_regen_timer = null

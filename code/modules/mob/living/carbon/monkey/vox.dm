@@ -42,12 +42,9 @@
 						if(FBP.amount == 0)
 							M.visible_message("<span class='warning'>[src] bites [M] as you pluck the last feather!</span>", "<span class='warning'>[src] bites you as you pluck the last feather!</span>")
 							playsound(src, 'sound/voice/chicken.ogg', 50, 1)
-							icon_state = "chickengreen_plucked"
-							update_icons()
+							get_plucked()
 							M.u_equip(src)
 							src.forceMove(get_turf(M))
-							// Start feather regeneration for Vox chickens
-							src.start_vox_feather_regeneration()
 						return
 			to_chat(M, "<span class='warning'>[src] has no feathers to pluck!</span>")
 			return
@@ -61,7 +58,7 @@
 	vox_feather_regenerating = TRUE
 	if(isnull(original_icon_state))
 		original_icon_state = "chickengreen"
-	spawn(54000) // 15 minutes
+	spawn(5 MINUTES)
 		if(src && !stat)
 			src.regenerate_vox_feathers()
 
@@ -75,6 +72,11 @@
 	update_icons()
 	vox_feather_regenerating = FALSE
 
+/mob/living/carbon/monkey/vox/get_plucked()
+	if(icon_state != "chickengreen_plucked")
+		icon_state = "chickengreen_plucked"
+		update_icons()
+		start_vox_feather_regeneration()
 
 /mob/living/carbon/monkey/vox/New()
 

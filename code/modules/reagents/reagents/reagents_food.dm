@@ -779,7 +779,7 @@
 		F.color = "#B22222" //dark red
 
 /datum/reagent/peanut
-	name = "Peanut"
+	name = "peanut"
 	id = PEANUT
 	description = "A nutty, protein-rich legume."
 	reagent_state = REAGENT_STATE_SOLID

@@ -729,30 +729,16 @@ var/list/datum/stack_recipe/feather_recipes = list(
 	if(istype(S, /obj/item/stack/feather))
 		var/obj/item/stack/feather/FS = S
 		if(istype(R, /obj/item/weapon/pillow))
-			var/obj/item/weapon/pillow/P = new /obj/item/weapon/pillow(R.loc, FS.feather_color, FS.feather_color_name)
+			var/obj/item/weapon/pillow/new_pillow = new /obj/item/weapon/pillow(R.loc, FS.feather_color, FS.feather_color_name)
 			qdel(R)
-			R = P
+			R = new_pillow
 		// For all feather items that support color, set their vars
 		if(istype(R, /obj/item/clothing/suit/feathercoat) || istype(R, /obj/item/clothing/suit/feathervest) || istype(R, /obj/item/mounted/frame/wreath/feather) || istype(R, /obj/item/mounted/frame/dreamcatcher) || istype(R, /obj/item/weapon/pen/quill) || istype(R, /obj/item/weapon/featherduster) || istype(R, /obj/item/clothing/head/headdress))
 			if(FS.feather_color)
 				R:feather_color = FS.feather_color
-				R:color = FS.feather_color
+				R.color = FS.feather_color
 			if(FS.feather_color_name)
 				R:feather_color_name = FS.feather_color_name
-				if(istype(R, /obj/item/clothing/suit/feathercoat))
-					R:name = "[FS.feather_color_name] feather coat"
-				else if(istype(R, /obj/item/clothing/suit/feathervest))
-					R:name = "[FS.feather_color_name] feather vest"
-				else if(istype(R, /obj/item/mounted/frame/wreath/feather))
-					R:name = "[FS.feather_color_name] feather wreath"
-				else if(istype(R, /obj/item/mounted/frame/dreamcatcher))
-					R:name = "[FS.feather_color_name] feather dreamcatcher"
-				else if(istype(R, /obj/item/weapon/pen/quill))
-					R:name = "[FS.feather_color_name] quill pen"
-				else if(istype(R, /obj/item/weapon/featherduster))
-					R:name = "[FS.feather_color_name] feather duster"
-				else if(istype(R, /obj/item/clothing/head/headdress))
-					R:name = "[FS.feather_color_name] feather headdress"
-			if(hascall(R, "update_icon"))
-				call(R, "update_icon")()
+				R.name = "[FS.feather_color_name] [R.name]"
+			call(R, "update_icon")()
 	return R

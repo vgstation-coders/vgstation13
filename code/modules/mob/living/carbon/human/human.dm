@@ -13,6 +13,10 @@
 	var/stepstaken = 0
 	var/modulo_step = 2
 	var/fartCooldown = 20 SECONDS
+	//variables only for vox, here because of the little quirk roundstart voxes have
+	var/feather_regen_timer = null
+	var/original_vox_s_tone = null
+	var/vox_full_regen_active = null
 
 /mob/living/carbon/human/dummy
 	real_name = "Test Dummy"
@@ -2631,6 +2635,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 						return
 					F.spawn_result(get_turf(src), src, 1)
 					to_chat(src, "<span class='notice'>You preen yourself, plucking out a feather!</span>")
+					src.check_vox_partial_feather_regen()
 					if(F.amount == 0 && !src.feather_regen_timer && src.my_appearance && src.my_appearance.s_tone != VOXPLUCKED)
 						src.set_vox_plucked_appearance()
 						src.check_vox_feather_regen_ready()
@@ -2640,3 +2645,12 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 					return
 	// fallback to default
 	return ..(M)
+
+//A man wearing a Vox suit...
+/mob/living/carbon/human/get_plucked()
+	if(istype(species, /datum/species/vox))
+		if(my_appearance && my_appearance.s_tone != VOXPLUCKED)
+			set_vox_plucked_appearance()
+		else
+			check_vox_feather_regen_ready()
+

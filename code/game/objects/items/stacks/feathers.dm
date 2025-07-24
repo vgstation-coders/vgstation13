@@ -1,5 +1,5 @@
 // Vox feathers stack item
-#define PIXEL_MULTIPLIER 1
+#define FEATHER_SPREAD 1
 
 /obj/item/stack/feather
 	name = "feathers"
@@ -28,19 +28,18 @@
 		icon_state = "feather-single"
 		// Keep random offset for single feathers
 		if(isnull(pixel_x) || isnull(pixel_y) || pixel_x == 0 && pixel_y == 0)
-			pixel_x = rand(-8,8) * PIXEL_MULTIPLIER
-			pixel_y = rand(-8,8) * PIXEL_MULTIPLIER
+			pixel_x = rand(-8,8) * FEATHER_SPREAD
+			pixel_y = rand(-8,8) * FEATHER_SPREAD
 	if(feather_color)
 		color = feather_color
 
 /obj/item/stack/feather/New(loc, amount, color, color_name, product_name)
 	. = ..()
 	recipes = feather_recipes // Allow feather crafting from feather stacks
-	pixel_x = rand(-8,8) * PIXEL_MULTIPLIER
-	pixel_y = rand(-8,8) * PIXEL_MULTIPLIER
+	pixel_x = rand(-8,8) * FEATHER_SPREAD
+	pixel_y = rand(-8,8) * FEATHER_SPREAD
 	if(color)
 		feather_color = color
-		color = feather_color // Set icon color
 	if(color_name)
 		feather_color_name = color_name
 	if(product_name)
@@ -76,8 +75,6 @@
 				parent_species_name = lowertext(H.species.name)
 			else
 				parent_species_name = "human"
-			if(parent_species_name == "vox")
-				parent_species_name = "vox"
 
 		name = "[parent_species_name] feathers"
 		singular_name = "[parent_species_name] feather"

@@ -24,6 +24,11 @@
 	if(istype(species, /datum/species/vox))
 		if(radiation >= 50 && my_appearance && my_appearance.s_tone != VOXPLUCKED)
 			set_vox_plucked_appearance()
+			var/datum/butchering_product/feathers/F = locate(/datum/butchering_product/feathers) in butchering_drops
+			if(F && F.amount > 0)
+				for(var/i = 1 to F.amount)
+					F.spawn_result(get_turf(src), src, 1)
+				F.amount = 0
 			to_chat(src, "<span class='warning'>The intense radiation causes your feathers to fall out!</span>")
 			// Regen handled in vox.dm
 

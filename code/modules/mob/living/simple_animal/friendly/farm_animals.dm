@@ -278,7 +278,7 @@
 // Pluck feather on grab intent
 
 /mob/living/simple_animal/chicken/attack_hand(mob/living/carbon/M as mob)
-	if(!stat && M.a_intent == I_GRAB && icon_state != icon_dead)
+	if(!stat && M.a_intent == I_GRAB)
 		if(butchering_drops && butchering_drops.len)
 			for(var/datum/butchering_product/BP in butchering_drops)
 				if(istype(BP, /datum/butchering_product/feathers))
@@ -304,16 +304,25 @@
 						if(BP.amount == 0)
 							M.visible_message("<span class='warning'>[src] bites [M] as you pluck the last feather!</span>", "<span class='warning'>[src] bites you as you pluck the last feather!</span>")
 							playsound(src, 'sound/voice/chicken.ogg', 50, 1)
-							icon_state = "chicken_plucked"
-							icon_living = "chicken_plucked"
-							icon_dead = "chicken_plucked_dead"
-							update_icons()
+							get_plucked()
 							M.u_equip(src)
 							src.forceMove(get_turf(M))
 						return
 			to_chat(M, "<span class='warning'>[src] has no feathers to pluck!</span>")
 			return
 		..()
+
+/mob/living/simple_animal/chicken/get_plucked()
+	icon_living = "chicken_plucked"
+	icon_dead = "chicken_plucked_dead"
+	if(stat == DEAD)
+		if(icon_state != "chicken_plucked_dead")
+			icon_state = "chicken_plucked_dead"
+			update_icons()
+	else
+		if(icon_state != "chicken_plucked")
+			icon_state = "chicken_plucked"
+			update_icons()
 
 /mob/living/simple_animal/chicken/New()
 	if(prob(5))
@@ -365,7 +374,7 @@
 						icon_dead = "chicken_plucked_dead"
 						update_icons()
 					feather_regenerating = TRUE
-					spawn(9000) // 15 minutes
+					spawn(5 MINUTES)
 						regenerate_feathers()
 				break
 	if(!stat && prob(3) && eggsleft > 0)

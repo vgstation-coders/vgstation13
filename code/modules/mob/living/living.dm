@@ -1931,3 +1931,7 @@ Thanks.
 			for(var/role in mind.antag_roles)
 				var/datum/role/R = mind.antag_roles[role]
 				stat(R.StatPanel())
+
+//heh, heh, get plucked.
+/mob/living/proc/get_plucked()
+	return null

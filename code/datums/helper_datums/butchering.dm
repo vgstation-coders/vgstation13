@@ -146,36 +146,9 @@
 	return list(hex = "#FFFFFF", color_name = "white")
 
 /datum/butchering_product/feathers/proc/after_pluck(mob/parent)
-	if(amount == 0 && ismob(parent))
-		// Chicken plucking: update to plucked icon
-		if(istype(parent, /mob/living/simple_animal/chicken))
-			var/mob/living/simple_animal/chicken/C = parent
-			C.icon_living = "chicken_plucked"
-			C.icon_dead = "chicken_plucked_dead"
-			if(C.stat == DEAD)
-				if(C.icon_state != "chicken_plucked_dead")
-					C.icon_state = "chicken_plucked_dead"
-					C.update_icons()
-			else
-				if(C.icon_state != "chicken_plucked")
-					C.icon_state = "chicken_plucked"
-					C.update_icons()
-		// Vox chicken plucking: update to plucked icon
-		else if(istype(parent, /mob/living/carbon/monkey/vox))
-			var/mob/living/carbon/monkey/vox/V = parent
-			if(V.icon_state != "chickengreen_plucked")
-				V.icon_state = "chickengreen_plucked"
-				V.update_icons()
-		else
-			parent.update_icons()
-		// Vox plucking: update to plucked icon
-		if(ishuman(parent))
-			var/mob/living/carbon/human/H = parent
-			if(istype(H.species, /datum/species/vox))
-				if(H.my_appearance && H.my_appearance.s_tone != VOXPLUCKED)
-					H.set_vox_plucked_appearance()
-				else
-					H.check_vox_feather_regen_ready()
+	if(amount == 0 && ismob(parent) && istype(parent, /mob/living))
+		var/mob/living/L = parent
+		L.get_plucked()
 
 /datum/butchering_product/feathers/spawn_result(location, mob/parent, drop_amount = 1)
 	if(amount <= 0)
@@ -192,8 +165,6 @@
 	else
 		amount -= drop_amount
 	after_pluck(parent)
-	if(istype(parent, /mob/living/carbon/human) && istype(parent:species, /datum/species/vox))
-		parent:check_vox_partial_feather_regen()
 	return F
 
 /mob/living/simple_animal/chicken/get_butchering_products()

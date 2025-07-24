@@ -1179,7 +1179,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/peanut)
 	mutants = list("rocknut")
 	harvest_repeat = 1
-	chems = list(NUTRIMENT = list(1,10))
+	chems = list(NUTRIMENT = list(1,10), PEANUT = list(1,5))
 
 	lifespan = 55
 	maturation = 6
