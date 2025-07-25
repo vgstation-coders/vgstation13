@@ -1219,6 +1219,11 @@
 				I.loc = other
 				mob.client.images += I
 				null_images += I
+		var/image/I2 = image(null)
+		I2.override = 1
+		I2.loc = typing_indicator
+		mob.client.images += I2
+		null_images += I2
 
 /datum/disease2/effect/loneliness/deactivate(mob/living/carbon/mob)
 	to_chat(mob,pick("Everybody is back now.","You feel more in with the crowd again."))
