@@ -194,10 +194,10 @@
 	// Grues will only spawn during certain times of the day to avoid getting into a very disadvantageous position where there's light everywhere outside
 	if(ispath(DR.role_category,/datum/role/grue))
 		if(SSDayNight) // Double-check to avoid runtimes
-			// The night should come within 5 minutes after they have spawned. They just have to be patient.
+			// The night should come within 6 minutes after they have spawned. They just have to be patient.
 			if((SSDayNight.current_timeOfDay == TOD_AFTERNOON) && (SSDayNight.next_firetime <= (world.time + 3 MINUTES)))
 				return TRUE
-			// By the time they will spawn during sunset it will be within 2 minutes.
+			// By the time they will spawn during sunset it will be within 3 minutes.
 			else if(SSDayNight.current_timeOfDay == TOD_SUNSET)
 				return TRUE
 			// If night ends within 5 minutes they can't do much.
