@@ -475,6 +475,7 @@
 /obj/item/tool/weldingtool/proc/setWelding(var/turn_on = TRUE)
 	//If we're turning it on
 	if(turn_on)
+		welding = 1
 		if (remove_fuel(1))
 			playsound(src,pick('sound/items/lighter1.ogg','sound/items/lighter2.ogg'),40,1)
 			set_light(2)
@@ -486,7 +487,6 @@
 			heat_production = reagents.get_reagent_amount(PLASMA) ? possible_fuels[PLASMA]["thermal_energy_transfer"] : possible_fuels[FUEL]["thermal_energy_transfer"]  //Thermal transfer from liquid fuel list
 			source_temperature = reagents.get_reagent_amount(PLASMA) ? TEMPERATURE_PLASMA : TEMPERATURE_WELDER
 			hitsound = "sound/weapons/welderattack.ogg"
-			welding = 1
 			update_icon()
 			processing_objects.Add(src)
 		else
