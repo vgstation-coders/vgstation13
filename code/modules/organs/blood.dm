@@ -260,6 +260,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 /mob/living/carbon/human/spray_blood(splat_dir, splat_strength = 3)
 	if(!isturf(loc))
 		return
+	if(species && species.anatomy_flags & NO_BLOOD)
+		return
 	var/obj/effect/decal/cleanable/blood/hitsplatter/splat = new(loc)
 	splat.add_blood(src)
 	splat.blood_data = get_blood_data()
