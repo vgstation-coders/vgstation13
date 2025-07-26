@@ -7,7 +7,7 @@
 	var/food_candle = "foodcandle"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/candles.dmi', "right_hand" = 'icons/mob/in-hand/right/candles.dmi')
 	w_class = W_CLASS_TINY
-	heat_production = 1000
+	heat_production = 5000
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
 	w_type = RECYK_WAX

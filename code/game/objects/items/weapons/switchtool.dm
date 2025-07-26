@@ -838,13 +838,17 @@
 		return FALSE
 	if(iswelder(deployed))
 		var/obj/item/tool/weldingtool/W = deployed
-		W.welding = 1
+		W.setWelding(TRUE)
 		W.status = 1
 	if(istype(deployed, /obj/item/device/t_scanner))
 		var/obj/item/device/t_scanner/T = deployed
 		T.attack_self()
 
 /obj/item/weapon/switchtool/engineering/undeploy(mob/user)
+	if(iswelder(deployed))
+		var/obj/item/tool/weldingtool/W = deployed
+		W.setWelding(FALSE)
+		W.status = 0
 	if(istype(deployed, /obj/item/device/t_scanner))
 		var/obj/item/device/t_scanner/T = deployed
 		T.attack_self()
