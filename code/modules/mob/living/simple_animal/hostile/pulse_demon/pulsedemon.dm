@@ -1,4 +1,5 @@
 #define PULSEDEMON_APC_CHARGE_MULTIPLIER 2
+#define PULSELOCK_DURATION 3 // In seconds
 
 /mob/living/simple_animal/hostile/pulse_demon
 	name = "Pulse Demon"
@@ -214,7 +215,9 @@
 			var/obj/machinery/power/apc/current_apc = current_power
 			if(draining)
 				drainAPC(current_apc)
-			current_apc.pulselocked = min(current_apc.pulselocked + 2, 5) //Up to 10 seconds of locking silicons out of controlling an area's machinery
+			if(current_apc.pulsecompromised)
+				spawn()
+					pulselockAPC(current_apc) //Up to 3 seconds of locking silicons out of controlling an area's machinery
 		if(current_power.avail() < amount_per_regen)
 			power_lost()
 		else
@@ -278,7 +281,8 @@
 				controlling_area = get_area(current_power)
 				PCC.Grant(src)
 				to_chat(src, "<span class='notice'>You can interact with various electronic objects in the room while connected to the APC.</span>")
-				current_apc.pulselocked = 5
+				spawn()
+					pulselockAPC(current_apc)
 			else
 				hijackAPC(current_apc)
 			if(draining)
@@ -560,6 +564,78 @@
 		if(PD)
 			PD.charge_absorbed += amount_to_drain
 
+/mob/living/simple_animal/hostile/pulse_demon/proc/pulselockAPC(var/obj/machinery/power/apc/current_apc)
+	if(current_apc.stat & (BROKEN|MAINT|FORCEDISABLE))
+		return
+	var/area/apc_area = get_area(current_apc)
+	if(!apc_area.requires_power)
+		return
+	var/datum/pulselock/P = current_apc.pulselock
+	if(!P)
+		P = new(current_apc)
+	else
+		P.duration = PULSELOCK_DURATION
+
+//Normally this would be a machine-level proc but some objects such as intercoms are not a machine sub-type
+/obj/proc/is_pulselocked(var/mob/user)
+	var/area/A = get_area(src)
+	var/obj/machinery/power/apc/apc = A.areaapc
+	if(!issilicon(user)) //User is not a silicon
+		return 0
+	if(!apc) //No APC
+		return 0
+	if(!apc.pulselock) //Not pulselocked
+		return 0
+	if(apc.stat & (BROKEN|MAINT|FORCEDISABLE)) //APC is broken
+		return 0
+	if(!A.requires_power) //No reason to rely on APC
+		return 0
+	if(isAdminGhost(user)) //User is actually an admin ghost
+		return 0
+	to_chat(user, span_warning("Electromagnetic anomalies are preventing you from interfacing with the area's machinery!"))
+	return 1
+
+
+// PULSELOCKING
+// Prevents silicons from interacting with the machinery of an area where a pulselocked APC is.
+// Used as a datum with its own processing loop for performance reasons
+// So that every single APC in the game doesn't check whether it's supposed to be pulselocked.
+
+/datum/pulselock
+	var/duration = PULSELOCK_DURATION
+	var/obj/machinery/power/apc/apc = null
+
+/datum/pulselock/New(var/obj/machinery/power/apc/new_apc)
+	..()
+	apc = new_apc
+	apc.pulselock = src
+	apc.pulselock_overlay = image(apc.icon, "apcpulse")
+	apc.update_icon()
+	spawn()
+		process_loop()
+
+/datum/pulselock/Destroy()
+	apc.pulselock = null
+	apc.pulselock_overlay = null
+	apc.update_icon()
+	apc = null
+	..()
+
+/datum/pulselock/proc/process_loop()
+	while(duration)
+		if(deactivate_conditions())
+			break
+		duration--
+		sleep(1 SECONDS)
+	qdel(src)
+
+/datum/pulselock/proc/deactivate_conditions()
+	if(duration <= 0) //Timer's out, disable it
+		return 1
+	if(apc.stat & (BROKEN|MAINT|FORCEDISABLE)) //APC's broken, stop doing it
+		return 1
+	return 0
+
 // Helper for client image managing
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_cableview()
 	// Make sure we have a client
@@ -577,3 +653,5 @@
 				CI.plane = ABOVE_LIGHTING_PLANE
 				cables_shown += CI
 				client.images += CI
+
+#undef PULSELOCK_DURATION

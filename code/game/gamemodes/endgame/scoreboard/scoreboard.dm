@@ -96,6 +96,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/shuttlebombed		= 0
 	var/bagelscooked		= 0
 	var/disease				= 0
+	var/summon_guns_count   = 0 //Tracked by the Summon Guns artifact to determine if special audio is guaranteed to play.
 	var/list/money_leaderboard = list()
 	var/list/shoal_leaderboard = list()
 	var/list/implant_phrases = list()
@@ -156,7 +157,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	if(score.oremined > 0)
 		dat += "<B>Ore Smelted:</B> [score.oremined] ([score.oremined] Points)<BR>"
 	if(score.rescuedpets)
-		dat += "<B>Rescued Pets:</B> [score.rescuedpets] ([score.rescuedpets*50 + score.rescueianbonus] Points<BR>)"	
+		dat += "<B>Rescued Pets:</B> [score.rescuedpets] ([score.rescuedpets*50 + score.rescueianbonus] Points<BR>)"
 	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
 	dat += "<B>Whole Station Airtight:</B> [score.atmobonus ? "Yes" : "No"] ([score.atmobonus] Points)<BR>"
 	if (score.machineupgrades > 0)
@@ -289,7 +290,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/list/dept_leaderboard = get_dept_leaderboard()
 	for (var/i = 1 to dept_leaderboard.len)
 		dat += "<B>#[i] - </B>[dept_leaderboard[i]] ($[dept_leaderboard[dept_leaderboard[i]]])<BR>"
-	
+
 	if(score.badmin_score)
 		dat += "<BR><span class='sinister'><B>Mysterious circumstances:</B> [score.badmin_score] Points</span><BR>"
 
