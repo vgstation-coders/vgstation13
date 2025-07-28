@@ -83,12 +83,15 @@ var/datum/controller/gameticker/ticker
 			pregame_timeleft = world.timeofday + delay_timetotal
 			to_chat(world, "<B><span class='notice'>Welcome to the pre-game lobby!</span></B>")
 			to_chat(world, "Please, setup your character and select ready. Game will start in [(delay_timetotal) / 10] seconds.")
+		#ifndef UNIT_TESTS_AUTORUN
 		var/noplayers = FALSE
+		#endif
 		while(current_state <= GAME_STATE_PREGAME)
 			for(var/i=0, i<10, i++)
 				sleep(1)
 				vote.process()
 				watchdog.check_for_update()
+		#ifndef UNIT_TESTS_AUTORUN
 			if(!player_list.len)
 				going = LOBBY_TICKING_STOPPED
 				noplayers = TRUE
@@ -97,6 +100,7 @@ var/datum/controller/gameticker/ticker
 				going = LOBBY_TICKING
 				pregame_timeleft = world.timeofday + delay_timetotal
 				noplayers = FALSE
+		#endif
 			if (world.timeofday < (863800 -  delay_timetotal) &&  pregame_timeleft > 863950) // having a remaining time > the max of time of day is bad....
 				pregame_timeleft -= 864000
 				time_taken_in_lobby -= 864000
