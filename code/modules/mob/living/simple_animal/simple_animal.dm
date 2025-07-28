@@ -371,7 +371,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			var/temp_difference = original_bodytemperature - bodytemperature
 			var/cold_difference = original_bodytemperature - minbodytemp
 			//Converts difference into a value from 0 to 1, 0.01 = 1%, 1 = 100%
-			var/percentage_to_minbodytemp = round(cold_difference/temp_difference, 0.01)
+			var/percentage_to_minbodytemp = round(temp_difference/cold_difference, 0.01)
 			if(percentage_to_minbodytemp <= round(1/3, 0.01))
 				temperature_alert = 0
 			else if(percentage_to_minbodytemp <= round(2/3, 0.01))
@@ -383,7 +383,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				adjustBruteLoss(heat_damage_per_tick)
 	else //bodytemperature is at or higher than original_bodytemperature
 		var/temp_difference = bodytemperature - original_bodytemperature
-		var/heat_difference = minbodytemp - original_bodytemperature
+		var/heat_difference = maxbodytemp - original_bodytemperature
 		var/percentage_to_maxbodytemp = round(temp_difference/heat_difference, 0.01)
 		if(percentage_to_maxbodytemp <= round(1/3, 0.01))
 			temperature_alert = 0
