@@ -277,8 +277,6 @@
             to_chat(U, "ERROR: Cannot reach recepient.")
             return
 
-        last_messaged = world.time
-
         var/obj/item/weapon/photo/current_photo = null
 
         if(pda_device.photo)
