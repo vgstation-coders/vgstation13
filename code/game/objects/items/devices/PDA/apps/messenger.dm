@@ -11,6 +11,8 @@
     var/list/icon/imglist = list() // Viewable message photos
     var/list/incoming_transactions = list()
     var/list/polls = list()
+    var/last_messaged = 0
+    var/message_cooldown = 1 SECONDS
 
 /datum/pda_app/messenger/get_dat(var/mob/user)
     var/dat = ""
@@ -227,6 +229,9 @@
 	incoming_transactions = list()
 
 /datum/pda_app/messenger/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P, var/multicast_message = null, obj/item/device/pda/reply_to, var/overridemessage, var/pollmessage, var/list/polloptions)
+    if(world.time - last_messaged < message_cooldown)
+        to_chat(U, "ERROR: Please wait a while before sending another message.")
+        return
     if(!reply_to)
         reply_to = pda_device
     if (!istype(P))
@@ -274,6 +279,8 @@
         if(!useTC) // Does our recepient have a broadcaster on their level?
             to_chat(U, "ERROR: Cannot reach recepient.")
             return
+
+        last_messaged = world.time
 
         var/obj/item/weapon/photo/current_photo = null
 
