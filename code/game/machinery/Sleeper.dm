@@ -456,7 +456,8 @@
 		return 0
 	return ..()
 
-/obj/machinery/sleeper/attackby(obj/item/weapon/obj_used, mob/user)
+//Handles installing a plugin for the specific machine, checking compatibility and other such functions.
+/obj/machinery/sleeper/install_plugin(obj/item/weapon/obj_used, mob/user)
 	if(istype(obj_used, /obj/item/device/plugin))
 		if(!panel_open)
 			to_chat(user, "<span class='warning'>You need to open the maintenance panel to install this device.</span>")
@@ -501,6 +502,10 @@
 			plugins += obj_used
 			RefreshParts()
 
+/obj/machinery/sleeper/attackby(obj/item/weapon/obj_used, mob/user)
+	if(istype(obj_used, /obj/item/device/plugin))
+		install_plugin(obj_used, user)
+		return
 	if(!istype(obj_used, /obj/item/weapon/grab))
 		return ..()
 	else
@@ -960,6 +965,10 @@
 					H.GALize()
 			go_out()
 		update_icon()
+
+/obj/machinery/sleeper/mancrowave/install_plugin(obj/item/weapon/obj_used, mob/user)
+	//does not accept plugins
+	return
 
 /obj/machinery/sleeper/mancrowave/galo
 	name = "tanning bed"

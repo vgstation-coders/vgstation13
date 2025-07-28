@@ -459,6 +459,7 @@ if ungreased adult: l containers
 //This is a new forme of your living nightmares
 /mob/living/simple_animal/rampagingspacehog/sleeperclown
 	name = "overly protective sleeper clownspider"
+	desc = "There are too many legs to count. You can vaguely make out a sleeper inside of the twisted horror."
 	icon = 'icons/mob/clown_mobs.dmi'
 	icon_state = "sleeperclown"
 	icon_living = "sleeperclown"
