@@ -877,7 +877,45 @@
 	glass_icon_state = "pinklady"
 	glass_desc = "A delightful blush-pink cocktail, garnished with a cherry and the rind of a lemon."
 
+/datum/reagent/ethanol/drink/cider
+	name = "Cider"
+	id = CIDER
+	description = "Alcoholic, fermented apples."
+	nutriment_factor = 2 * REAGENTS_METABOLISM
+	color = "#ffee88"
+	glass_icon_state = "beerglass"
+	glass_desc = "The hard kind. Alcoholic."
+
+/datum/reagent/ethanol/drink/scrumpy
+	name = "Scrumpy"
+	id = SCRUMPY
+	description = "Alcoholic, fermented lemons."
+	nutriment_factor = 2 * REAGENTS_METABOLISM
+	color = "#887722"
+	glass_icon_state = "beerglass"
+	glass_desc = "Ayy... me bottle a scrumpy!"
+
+/datum/reagent/ethanol/drink/stout
+	name = "Stout"
+	id = STOUT
+	description = "Warm fermented alcohol. A good source of iron."
+	nutriment_factor = 4 * REAGENTS_METABOLISM
+	color = "#301000"
+	glass_icon_state = "beerglass"
+	glass_desc = "The black shtuff. A day's meal in a glass."
+	plant_nutrition = 2
+	plant_watering = 2
+
 /////////////////////////////////////////////////////////////////Cocktail Entities//////////////////////////////////////////////
+
+/datum/reagent/ethanol/drink/snakebite
+	name = "Snakebite"
+	id = SNAKEBITE
+	description = "This appears to be beer mixed with cider."
+	nutriment_factor = 2 * REAGENTS_METABOLISM
+	color = "#802000"
+	glass_icon_state = "beerglass"
+	glass_desc = "This cocktail was illegal to serve from the same booze dispenser's taps until 2510."
 
 /datum/reagent/ethanol/drink/bilk
 	name = "Bilk"

@@ -1184,8 +1184,8 @@
 	icon_state = "gibness"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness/New()
 	..()
-	reagents.add_reagent(BEER, 25)
-	reagents.add_reagent(POTATO, 25)
+	reagents.add_reagent(STOUT, 45)
+	reagents.add_reagent(POTATO, 5)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/geometer
 	name = "Geometer"
@@ -1214,8 +1214,7 @@
 	icon_state = "orchardtides"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides/New()
 	..()
-	reagents.add_reagent(BEER, 20)
-	reagents.add_reagent(APPLEJUICE, 30)
+	reagents.add_reagent(CIDER, 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken
 	name = "Sleimiken"
@@ -1232,8 +1231,7 @@
 	icon_state = "strongebow"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow/New()
 	..()
-	reagents.add_reagent(BEER, 30)
-	reagents.add_reagent(APPLEJUICE, 20)
+	reagents.add_reagent(CIDER, 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee
 	name = "Kiririn FIRE"
