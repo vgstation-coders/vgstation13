@@ -480,6 +480,7 @@ if ungreased adult: l containers
 	hurt_sound = 'sound/items/bikehorn_curaracha.ogg'
 	snort_sound = 'sound/items/bikehorn.ogg'
 	squeal_delay = 4 SECONDS
+	pixel_x = -6
 
 /mob/living/simple_animal/rampagingspacehog/Life()
 	..()
@@ -497,7 +498,7 @@ if ungreased adult: l containers
 			person.heal_organ_damage(0, 2)
 		if(person.getToxLoss())
 			person.adjustToxLoss(-2)
-	if(prob(3)) //life proc 2 seconds, this will give approximately one spiderling a minute
+	if(stat != DEAD && prob(3)) //life proc 2 seconds, this will give approximately one spiderling a minute
 		new /mob/living/simple_animal/hostile/giant_spider/spiderling/clownling(loc)
 
 /mob/living/simple_animal/rampagingspacehog/sleeperclown/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
@@ -518,7 +519,7 @@ if ungreased adult: l containers
 	playsound(src, 'sound/machines/pressurehiss.ogg', 70, 1)
 	for(var/mob/person in contents)
 		person.forceMove(get_turf(src))
-		visible_message("\The [name] releases \the [person] as they die!")
+		visible_message("\The [name] releases \the [person] as it dies!")
 	playsound(src, 'sound/misc/sadtrombone.ogg', 70, 1)
 	..()
 

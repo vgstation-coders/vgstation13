@@ -457,7 +457,7 @@
 	return ..()
 
 //Handles installing a plugin for the specific machine, checking compatibility and other such functions.
-/obj/machinery/sleeper/install_plugin(obj/item/weapon/obj_used, mob/user)
+/obj/machinery/sleeper/proc/install_plugin(obj/item/weapon/obj_used, mob/user)
 	if(istype(obj_used, /obj/item/device/plugin))
 		if(!panel_open)
 			to_chat(user, "<span class='warning'>You need to open the maintenance panel to install this device.</span>")
@@ -769,6 +769,7 @@
 	var/mob/living/simple_animal/rampagingspacehog/sleeperclown/curse = new(loc)
 	occupant.nobreath = 15
 	occupant.forceMove(curse)
+	icon = null
 	qdel(src)
 
 /obj/machinery/sleeper/upgraded
@@ -780,6 +781,12 @@
 		/obj/item/weapon/stock_parts/manipulator/nano/pico
 	)
 
+/obj/machinery/sleeper/clown
+	name = "clown sleeper"
+
+/obj/machinery/sleeper/clown/New()
+	plugins += new /obj/item/device/plugin/sleeper/clown()
+	..()
 
 /////////////////////////////////////////
 // MANCROWAVE
