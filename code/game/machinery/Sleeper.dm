@@ -12,7 +12,8 @@
 	var/base_icon = "sleeper"
 	var/mob/living/occupant = null
 	var/available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
-	var/amounts = list(5, 10)
+	var/crit_injectables = list(INAPROVALINE)
+	var/amounts = list(5, 10, 20)
 	var/sedativeblock = FALSE //To prevent people from being surprisesoporific'd
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | EMAGGABLE
 	component_parts = newlist(
@@ -33,14 +34,30 @@
 	var/cools = 0
 	var/works_in_crit = FALSE //Will it let you inject chemicals into people in critical condition
 
+	//Plugin System-related Variables
+	var/accepts_plugins = TRUE
+	var/list/plugins = list()
+	var/advertising = FALSE
+	var/ad_cooldown = FALSE
+	var/ad_list = list()
+	var/hiss_noise = 'sound/machines/pressurehiss.ogg'
+	var/funny = FALSE //clown time?
+	var/info_hidden = FALSE //hides information about chems when set to true
+
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
 		/datum/malfhack_ability/oneuse/overload_quiet,
 		/datum/malfhack_ability/oneuse/emag
 	)
+	var/awaken = FALSE //turn to true to do cursed and terrible things
 
 /obj/machinery/sleeper/splashable()
 	return FALSE
+
+/obj/machinery/sleeper/spillContents()
+	for(var/obj/plug in plugins)
+		plug.forceMove(src.loc)
+	..()
 
 /obj/machinery/sleeper/power_change()
 	..()
@@ -48,6 +65,7 @@
 		set_light(light_range_on, light_power_on)
 	else
 		set_light(0)
+	update_icon()
 
 /obj/machinery/sleeper/New()
 	..()
@@ -60,39 +78,135 @@
 	..()
 
 /obj/machinery/sleeper/update_icon()
+	overlays = list()
 	icon_state = "[base_icon]_[occupant ? "1" : "0"]"
+	for(var/obj/item/device/plugin/sleeper/plug in plugins)
+		plug.provide_overlay(src)
+	for(var/obj/item/device/plugin/sleeper/plug in plugins)
+		plug.provide_extra_overlay(src)
+	if(panel_open)
+		overlays += "sleeper-panel"
+	else
+		overlays -= "sleeper-panel"
 
 /obj/machinery/sleeper/RefreshParts()
 	var/T = 0
+	available_options = list()
+	crit_injectables = list()
+	funny = FALSE
+	advertising = FALSE
+	ad_list = list()
+	hiss_noise = 'sound/machines/pressurehiss.ogg'
+
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		T += SP.rating
-	if(T >= 12 || (emagged)) //Congrats you got T4 components... or an emag.
+
+	//Override the CRIT injection rule with high tier parts/emag
+	if(T >= 12 || (emagged))
 		works_in_crit = TRUE
 	else
 		works_in_crit = FALSE
+
+	update_icon()
+
+	//Better upgrades means faster wake-up-patient speeds
 	switch(T)
-		if(0 to 5) // Tier 1
-			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", KELOTANE = "Kelotane", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
+		if(0 to 5)
 			sleeptime = 6 SECONDS
-		if(6 to 8) // Tier 2
-			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine")
+		if(6 to 8)
 			sleeptime = 4 SECONDS
-		if(9 to 11) // Tier 3
-			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol")
+		if(9 to 11)
 			sleeptime = 2 SECONDS
-		if(12 to INFINITY) // Tier 4
-			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol", DOCTORSDELIGHT = "Doctor's Delight", REZADONE = "Rezadone", PERIDAXON = "Peridaxon")
+		if(12 to INFINITY)
 			sleeptime = 0.1 SECONDS
+
+	//Handles custom rules from the plugin system
+	var/overriding_chems = FALSE
+	for(var/obj/item/device/plugin/sleeper/plug in plugins)
+		//Custom exit hissing noises
+		//Multiple plugins: Only the latest installed is applied
+		if(plug.custom_hiss)
+			hiss_noise = plug.custom_hiss
+		//Replacing the standard chemical list with its own
+		//Multiple plugins: stack... for now
+		if(plug.override_all_chems)
+			overriding_chems = TRUE
+		//Plugins can provide advertisements on injection
+		//Multiple plugins: Stack, the messages are randomly picked from the entire list
+		if(plug.advertisements.len)
+			advertising = TRUE
+			ad_list += plug.advertisements
+		//Plugins can manually enable injecting in crit
+		if(plug.override_all_crit)
+			works_in_crit = TRUE
+		if(plug.funny)
+			funny = TRUE
+		if(plug.hides_info)
+			info_hidden = TRUE
+
+	//Builds list of chemicals injectable on crit
+	crit_injectables = list(INAPROVALINE)
+	for(var/obj/item/device/plugin/sleeper/plug in plugins)
+		if(plug.override_crit_chems.len)
+			crit_injectables += plug.override_crit_chems
+
+	if(overriding_chems)
+		for(var/obj/item/device/plugin/sleeper/plug in plugins)
+			if(plug.override_all_chems)
+				available_options |= plug.t1chems
+				if(T >= 6)
+					available_options |= plug.t2chems
+				if(T >= 9)
+					available_options |= plug.t3chems
+				if(T >= 12)
+					available_options |= plug.t4chems
+				if(emagged)
+					available_options |= plug.emagchems
+		return
+
+
+	//Build a standard chem list
+	//Tier 1, all sleepers have this
+	available_options += list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", KELOTANE = "Kelotane", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
+	for(var/obj/item/device/plugin/sleeper/plug in plugins)
+		if(plug.t1chems.len)
+			available_options |= plug.t1chems
+	if(T >= 6) // Tier 2
+		available_options += list(IMIDAZOLINE = "Imidazoline", INACUSIATE = "Inacusiate", TRICORDRAZINE = "Tricordrazine")
+		for(var/obj/item/device/plugin/sleeper/plug in plugins)
+			if(plug.t2chems.len)
+				available_options |= plug.t2chems
+	if(T >= 9) // Tier 3
+		available_options += list(ALKYSINE = "Alkysine", TRAMADOL = "Tramadol", PEPTOBISMOL  = "Peptobismol")
+		for(var/obj/item/device/plugin/sleeper/plug in plugins)
+			if(plug.t3chems.len)
+				available_options |= plug.t3chems
+	if(T >= 12) // Tier 4
+		available_options += list(DOCTORSDELIGHT = "Doctor's Delight", REZADONE = "Rezadone", PERIDAXON = "Peridaxon")
+		for(var/obj/item/device/plugin/sleeper/plug in plugins)
+			if(plug.t4chems.len)
+				available_options |= plug.t4chems
+	if(emagged)
+		for(var/obj/item/device/plugin/sleeper/plug in plugins)
+			if(plug.emagchems.len)
+				available_options |= plug.emagchems
+
+	for(var/obj/item/device/plugin/sleeper/plug in plugins)
+		if(plug.remove_chems.len)
+			available_options -= plug.remove_chems
 
 /obj/machinery/sleeper/emag_act(mob/user)
 	if(!emagged)
 		to_chat(user, "<span class='warning'>You short out the overdose prevention system on \the [src].</span>")
 		emagged = 1
+		RefreshParts()
 		return 1
 	return
 
 /obj/machinery/sleeper/interact(var/mob/user)
 	var/dat = list()
+	if(funny)
+		dat += "<font face=\"Comic Sans MS\">"
 	if(on)
 		dat += "<B>Performing anaesthesic emergence...</B><BR>" //Best I could come up with
 		dat += "<B>Purging sleep-inducing chemicals...</B>" //Same
@@ -123,24 +237,36 @@
 
 			var/paralysissum = max(occupant.paralysis, occupant.sleeping)
 			dat += "<hr>Paralysis summary: [paralysissum] ([round(paralysissum * 2)] seconds left!)<br>"
-			dat += "<a href='?src=\ref[src];wakeup=1'>Begin wake-up cycle</a><br>"
+			dat += "<a href='?src=\ref[src];eject=1'>Eject</a><a href='?src=\ref[src];wakeup=1'>Begin wake-up cycle</a><br>"
 			if(occupant.reagents)
 				for(var/chemical in available_options)
 					if (emagged && (occupant.reagents.get_reagent_amount(chemical) > 20))
 						dat += "<span style='float: left'>[available_options[chemical]]: 20 units</span><span style='float: right'>"
 					else
 						dat += "<span style='float: left'>[available_options[chemical]]: [round(occupant.reagents.get_reagent_amount(chemical), 0.1)] units</span><span style='float: right'>"
-
+					var/injecttext = "Inject "
 					for(var/amount in amounts)
-						dat += " <a href='?src=\ref[src];chemical=[chemical];amount=[amount]'>Inject [amount]u</a>"
+						dat += " <a href='?src=\ref[src];chemical=[chemical];amount=[amount]'"
+						if(occupant.stat == DEAD || ((!works_in_crit && occupant.health < 0) && !(chemical in crit_injectables)))
+							dat += "class='darkred'"
+						dat += ">[injecttext][amount]u</a>"
+						injecttext = null
+					dat += "<a href='?src=\ref[src];info=[chemical]'>&#9432;</a>"
 					dat += "</span><br>"
 
 			dat += "<HR><A href='?src=\ref[src];refresh=1'>Refresh</A><BR>"
 
 		else
-			dat += "The sleeper is empty."
+			dat += "The sleeper is empty.<br><hr>"
+			for(var/chemical in available_options)
+				dat += "<span style='float: left'>[available_options[chemical]]: </span><span style='float: right'><a href='?src=\ref[src];info=[chemical]'>&#9432;</a></span><br>"
+	if(funny)
+		dat += "</font>"
 	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "\ref[src]", name, 400, 500)
+	if(funny)
+		popup.remove_stylesheets()
+		popup.add_stylesheet("clown", 'html/browser/clown.css')
 	popup.set_content(dat)
 	popup.open()
 
@@ -153,9 +279,13 @@
 		usr.set_machine(src)
 		if(href_list["chemical"])
 			if(occupant)
+				if(!(href_list["chemical"] in available_options)) //href exploitu go home
+					to_chat(usr,"<span class='warning'>That's odd. You could've sworn the [href_list["chemical"]] button was there just a second ago!")
+					add_fingerprint(usr)
+					return
 				if(occupant.stat == DEAD)
 					to_chat(usr, "<span class='danger'>This person has no life for to preserve anymore. Take them to a department capable of reanimating them.</span>")
-				else if(href_list["chemical"] == STOXIN2 && sedativeblock)
+				else if((href_list["chemical"] == STOXIN2 || href_list["chemical"] == CHILLWAX) && sedativeblock)
 					if(sedativeblock < 3)
 						to_chat(usr, "<span class='warning'>Sedative injections not yet ready. Please try again in a few seconds.</span>")
 					else //if this guy is seriously just mashing the soporific button...
@@ -169,15 +299,19 @@
 						"<span class='warning'>Sorry pal, safety procedures.</span>", \
 						"<span class='warning'>But it's not bedtime yet!</span>")]")
 					sedativeblock++
-				else if((!works_in_crit && occupant.health < 0) && (href_list["chemical"] != INAPROVALINE))
+				else if((!works_in_crit && occupant.health < 0) && !(href_list["chemical"] in crit_injectables))
 					to_chat(usr, "<span class='danger'>This person is not in good enough condition for sleepers to be effective! Use another means of treatment, such as cryogenics!</span>")
 				else
-					if(!(href_list["chemical"] in available_options)) //href exploitu go home
-						to_chat(usr,"<span class='warning'>That's odd. You could've sworn the [href_list["chemical"]] button was there just a second ago!")
-					else
-						inject_chemical(usr,href_list["chemical"],text2num(href_list["amount"]))
+					inject_chemical(usr,href_list["chemical"],text2num(href_list["amount"]))
+		if(href_list["info"])
+			if(info_hidden)
+				to_chat(usr, "<span class='danger'>The sleeper shows some information, but it's unintelligible.</span>")
+			else if(reagent_name(href_list["info"]))
+				to_chat(usr, "<span class='notice'>[available_options[href_list["info"]]]: [reagent_info(href_list["info"])]</span>")
 		if(href_list["wakeup"])
 			wakeup(usr)
+		if(href_list["eject"])
+			go_out(ejector = usr)
 		if(href_list["toggle_autoeject"])
 			auto_eject_after = !auto_eject_after
 		if(href_list["refresh"])
@@ -229,6 +363,8 @@
 	to_chat(L, "<span class='notice'><b>You feel an anaesthetising air surround you. You go numb as your senses turn inward.</b></span>")
 	process()
 	for(var/obj/OO in src)
+		if(OO in plugins)
+			continue
 		OO.forceMove(loc)
 	add_fingerprint(user)
 	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
@@ -307,6 +443,8 @@
 /obj/machinery/sleeper/blob_act()
 	if(prob(75))
 		for(var/atom/movable/A as mob|obj in src)
+			if(A in plugins)
+				continue
 			A.forceMove(loc)
 			A.blob_act()
 		qdel(src)
@@ -319,6 +457,49 @@
 	return ..()
 
 /obj/machinery/sleeper/attackby(obj/item/weapon/obj_used, mob/user)
+	if(istype(obj_used, /obj/item/device/plugin))
+		if(!panel_open)
+			to_chat(user, "<span class='warning'>You need to open the maintenance panel to install this device.</span>")
+			return
+		if(occupant)
+			to_chat(user, "<span class='warning'>The sleeper must be empty in order to install this device.</span>")
+			return
+		for(var/obj/item/device/plugin/plug in plugins)
+			if(plug.solo)
+				to_chat(user, "<span class='warning'>There's nowhere to plug it in, all the plugs are used or gone!</span>")
+				return
+			if(istype(obj_used, plug))
+				to_chat(user, "<span class='warning'>This device is already installed.</span>")
+				return
+		to_chat(user, "You start installing \the [obj_used] to the machine.")
+		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		if(do_after(user, src, 40))
+			if(!panel_open)
+				to_chat(user, "<span class='warning'>You go to plug the last cable in, but the panel was closed!</span>")
+				return
+			if(occupant)
+				to_chat(user, "<span class='warning'>A red light flashes on the module, someone must have gotten in during the installation process!</span>")
+				return
+			for(var/obj/item/device/plugin/plug in plugins)
+				if(plug.solo)
+					to_chat(user, "<span class='warning'>There's nowhere to plug it in, some plugs must have vanished while you were working!</span>")
+					return
+			if(!user.drop_item(obj_used, src))
+				to_chat(user, "<span class='warning'>You can't let go of \the [obj_used]!</span>")
+				return
+			to_chat(user, "You install \the [obj_used] to \the [src].")
+			var/obj/item/device/plugin/installed_plug = obj_used
+			if(plugins.len && installed_plug.solo)
+				for(var/atom/movable/AM in plugins)
+					var/target = get_offset_target_turf(src.loc, rand(5)-rand(5), rand(5)-rand(5))
+					AM.forceMove(src.loc)
+					spawn(1)
+						if(AM)
+							AM.throw_at(target, 5, 1)
+				visible_message("<span class='danger'>\The [src] suddenly ejects its other plugins!</span>")
+				plugins = list()
+			plugins += obj_used
+			RefreshParts()
 
 	if(!istype(obj_used, /obj/item/weapon/grab))
 		return ..()
@@ -355,6 +536,8 @@
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/A as mob|obj in src)
+				if(A in plugins)
+					continue
 				A.forceMove(loc)
 				ex_act(severity)
 			qdel(src)
@@ -362,6 +545,8 @@
 		if(2.0)
 			if(prob(50))
 				for(var/atom/movable/A as mob|obj in src)
+					if(A in plugins)
+						continue
 					A.forceMove(loc)
 					ex_act(severity)
 				qdel(src)
@@ -369,6 +554,8 @@
 		if(3.0)
 			if(prob(25))
 				for(var/atom/movable/A as mob|obj in src)
+					if(A in plugins)
+						continue
 					A.forceMove(loc)
 					ex_act(severity)
 				qdel(src)
@@ -420,7 +607,8 @@
 		on = FALSE
 		if(auto_eject_after)
 			go_out(ejector = user)
-		process()
+		else
+			process()
 
 /obj/machinery/sleeper/Exited(var/atom/movable/O) // Used for teleportation from within the sleeper.
 	if (O == occupant)
@@ -432,8 +620,12 @@
 	var/mob/old_occupant = occupant
 	if(!occupant)
 		return FALSE
+	if(awaken) //no escape
+		return FALSE
 	for(var/atom/movable/x in contents)
 		if(x in component_parts)
+			continue
+		if(x in plugins)
 			continue
 		x.forceMove(loc)
 	if(!old_occupant.gcDestroyed)
@@ -445,7 +637,8 @@
 				B.buckle_mob(old_occupant, ejector)
 				ejector.start_pulling(B)
 	update_icon()
-	playsound(src, 'sound/machines/pressurehiss.ogg', 40, 1)
+	playsound(src, hiss_noise, 40, 1)
+	process()
 	return TRUE
 
 /obj/machinery/sleeper/proc/inject_chemical(mob/living/user as mob, chemical, amount)
@@ -458,7 +651,25 @@
 	if(!emagged && occupant.reagents.get_reagent_amount(chemical) + amount > 20)
 		to_chat(user, "<span class='warning'>Overdose Prevention System: The occupant already has enough [available_options[chemical]] in their system.</span>")
 		return
-	occupant.reagents.add_reagent(chemical, amount)
+
+	//Handle Locutogen messaging, otherwise, inject the chemical
+	if(chemical == LOCUTOGEN)
+		var/reason = stripped_input(usr,"Please encode your message.","Locutogen Autoencoder","",REASON_LEN)
+		if(!reason)
+			return
+		occupant.reagents.add_reagent(chemical, amount, name_override = available_options[chemical])
+		var/datum/reagent/temp_hearer/D = occupant.reagents.get_reagent(LOCUTOGEN)
+		playsound(occupant, 'sound/effects/bubbles.ogg', 20, -3)
+		D.set_phrase(sanitize(reason))
+	else
+		occupant.reagents.add_reagent(chemical, amount, name_override = available_options[chemical])
+
+	//Advertising. Thanks, Dan!
+	if(advertising && !ad_cooldown)
+		say(pick(ad_list))
+		ad_cooldown = TRUE
+		spawn(120 SECONDS)
+			ad_cooldown = FALSE
 
 	if(emagged) // Fake reagent chat reports if over 20 units.
 		if(occupant.reagents.get_reagent_amount(chemical) < 20)
@@ -512,6 +723,8 @@
 		occupant = usr
 		process()
 		for(var/obj/O in src)
+			if(O in plugins)
+				continue
 			qdel(O)
 		add_fingerprint(usr)
 		if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
@@ -527,11 +740,31 @@
 			visible_message("<span class='notice'>\The [src] pings softly: 'Initiating wake-up cycle...' </span>")
 
 /obj/machinery/sleeper/process()
+	if(awaken && occupant && !(stat & FORCEDISABLE))
+		awaken_clown()
+	if(funny && occupant)
+		occupant.druggy = max(occupant.druggy, 2)
 	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	updateUsrDialog()
 	return
 
+/obj/machinery/sleeper/proc/awaken_clown()
+	awaken = TRUE //next person who's inside is locked in.
+	if(!occupant)
+		return
+	overlays = null
+	stat |= FORCEDISABLE
+	flick('icons/obj/machines/plugins/clownawakens.dmi',src)
+	sleep(8)
+	playsound(src, 'sound/items/cardshuffle.ogg', 70, 1)
+	sleep(13)
+	playsound(src, 'sound/items/AirHorn.ogg', 70, 1)
+	sleep(9)
+	var/mob/living/simple_animal/rampagingspacehog/sleeperclown/curse = new(loc)
+	occupant.nobreath = 15
+	occupant.forceMove(curse)
+	qdel(src)
 
 /obj/machinery/sleeper/upgraded
 	name = "advanced sleeper"
@@ -565,6 +798,7 @@
 	drag_delay = 0
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE | EJECTNOTDEL
 	var/galize = 0
+	accepts_plugins = FALSE
 
 /obj/machinery/sleeper/mancrowave/New()
 	..()

@@ -10,54 +10,69 @@
     var/ttone = "beep" //The ringtone!
     var/list/icon/imglist = list() // Viewable message photos
     var/list/incoming_transactions = list()
+    var/list/polls = list()
 
 /datum/pda_app/messenger/get_dat(var/mob/user)
-	var/dat = ""
-	switch(mode)
-		if (0)
-			dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
-				<a href='byond://?src=\ref[src];choice=Toggle Ringer'><span class='pda_icon pda_bell'></span> Ringer: [silent == 1 ? "Off" : "On"]</a> |
-				<a href='byond://?src=\ref[src];choice=Toggle Messenger'><span class='pda_icon pda_mail'></span> Send / Receive: [toff == 1 ? "Off" : "On"]</a> |
-				<a href='byond://?src=\ref[src];choice=Ringtone'><span class='pda_icon pda_bell'></span> Set Ringtone</a> |
-				<a href='byond://?src=\ref[src];choice=1'><span class='pda_icon pda_mail'></span> Messages</a>"}
-			dat += "<br>"
-			for(var/datum/pda_app/cart/virus/V in pda_device.applications)
-				dat += "<b>[V.charges] [V.virus_type] left.</b><HR>"
+    var/dat = ""
+    switch(mode)
+        if (0)
+            dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
+                <a href='byond://?src=\ref[src];choice=Toggle Ringer'><span class='pda_icon pda_bell'></span> Ringer: [silent == 1 ? "Off" : "On"]</a> |
+                <a href='byond://?src=\ref[src];choice=Toggle Messenger'><span class='pda_icon pda_mail'></span> Send / Receive: [toff == 1 ? "Off" : "On"]</a> |
+                <a href='byond://?src=\ref[src];choice=Ringtone'><span class='pda_icon pda_bell'></span> Set Ringtone</a> |
+                <a href='byond://?src=\ref[src];choice=1'><span class='pda_icon pda_mail'></span> Messages</a>"}
+            if(polls.len)
+                dat += " | <a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span>Polls</a>"
+            dat += "<br>"
+            for(var/datum/pda_app/cart/virus/V in pda_device.applications)
+                dat += "<b>[V.charges] [V.virus_type] left.</b><HR>"
 
-			dat += {"<h4><span class='pda_icon pda_menu'></span> Detected PDAs</h4>
-				<ul>"}
-			var/count = 0
+            dat += {"<h4><span class='pda_icon pda_menu'></span> Detected PDAs</h4>
+                <ul>"}
+            var/count = 0
 
-			if (!toff)
-				for (var/obj/item/device/pda/P in sortNames(get_viewable_pdas()))
-					if (P == src)
-						continue
-					if(P.hidden)
-						continue
-					dat += "<li><a href='byond://?src=\ref[src];choice=Message;target=\ref[P]'>[P]</a>"
-					if (pda_device.id && !istype(P,/obj/item/device/pda/ai))
-						dat += " (<a href='byond://?src=\ref[src];choice=transferFunds;target=\ref[P]'><span class='pda_icon pda_money'></span>*Send Money*</a>)"
+            if (!toff)
+                for (var/obj/item/device/pda/P in sortNames(get_viewable_pdas()))
+                    if (P == src)
+                        continue
+                    if(P.hidden)
+                        continue
+                    dat += "<li><a href='byond://?src=\ref[src];choice=Message;target=\ref[P]'>[P]</a>"
+                    if (pda_device.id && !istype(P,/obj/item/device/pda/ai))
+                        dat += " (<a href='byond://?src=\ref[src];choice=transferFunds;target=\ref[P]'><span class='pda_icon pda_money'></span>*Send Money*</a>)"
 
-					for(var/datum/pda_app/cart/virus/V in pda_device.applications)
-						if (P.accepted_viruses && P.accepted_viruses.len && (V.type in P.accepted_viruses))
-							dat += " (<a href='byond://?src=\ref[V];target=\ref[P]'>[V.icon ? "<span class='pda_icon [V.icon]'></span>" : ""]*[V.name]*</a>)"
-					dat += "</li>"
-					count++
-			dat += "</ul>"
-			if (count == 0)
-				dat += "None detected.<br>"
-		if(1)
-			dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
-				<a href='byond://?src=\ref[src];choice=Clear'><span class='pda_icon pda_blank'></span> Clear Messages</a>
-				<h4><span class='pda_icon pda_mail'></span> Messages</h4>"}
-			for(var/note in tnote)
-				dat += tnote[note]
-				var/icon/img = imglist[note]
-				if(img)
-					user << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
-					dat += "<img src='tmp_photo_[note].png' width = '192' style='image-rendering: pixelated'><BR>"
-			dat += "<br>"
-	return dat
+                    for(var/datum/pda_app/cart/virus/V in pda_device.applications)
+                        if (P.accepted_viruses && P.accepted_viruses.len && (V.type in P.accepted_viruses))
+                            dat += " (<a href='byond://?src=\ref[V];target=\ref[P]'>[V.icon ? "<span class='pda_icon [V.icon]'></span>" : ""]*[V.name]*</a>)"
+                    dat += "</li>"
+                    count++
+            dat += "</ul>"
+            if (count == 0)
+                dat += "None detected.<br>"
+        if(1)
+            dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
+                <a href='byond://?src=\ref[src];choice=Clear'><span class='pda_icon pda_blank'></span> Clear Messages</a>
+                <h4><span class='pda_icon pda_mail'></span> Messages</h4>"}
+            for(var/note in tnote)
+                dat += tnote[note]
+                var/icon/img = imglist[note]
+                if(img)
+                    user << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
+                    dat += "<img src='tmp_photo_[note].png' width = '192' style='image-rendering: pixelated'><BR>"
+            dat += "<br>"
+        if(2)
+            dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
+                <a href='byond://?src=\ref[src];choice=Clearpolls'><span class='pda_icon pda_blank'></span> Clear Polls</a>
+                <h4><span class='pda_icon pda_mail'></span> Polls</h4>"}
+            if(!polls.len)
+                dat += "No polls found. Create one using a multimessage app."
+            else
+                for(var/poll in polls)
+                    dat += "Poll name: [poll]<br>Results:<br>"
+                    for (var/answer in polls[poll])
+                        dat += " * [answer]: [polls[poll][answer]]<br>"
+            dat += "<br>"
+    return dat
 
 /datum/pda_app/messenger/Topic(href, href_list)
     if(..())
@@ -66,6 +81,8 @@
     switch(href_list["choice"])
         if("1")
             mode = 1
+        if("2")
+            mode = 2
         if("Toggle Messenger")
             toff = !toff
         if("Toggle Ringer")//If viewing texts then erase them, if not then toggle silent status
@@ -73,6 +90,8 @@
         if("Clear")//Clears messages
             imglist.Cut()
             tnote.Cut()
+        if("Clearpolls")//Clears poll results. Stop the count!
+            polls.Cut()
         if("Ringtone")
             var/t = input(U, "Please enter new ringtone", name, ttone) as text
             if (pda_device.loc == U)
@@ -92,7 +111,10 @@
             var/obj/item/device/pda/P = locate(href_list["target"])
             P.overlays.len = 0  // replying to a message from chat clears alert
             P.update_icon()
-            src.create_message(U, P)
+            if(href_list["setmsg"] && href_list["pollmsg"])
+                src.create_message(U, P, overridemessage=href_list["setmsg"], pollmessage=href_list["pollmsg"])
+            else
+                src.create_message(U, P)
         if("viewPhoto")
             var/obj/item/weapon/photo/PH = locate(href_list["image"])
             PH.show(U)
@@ -204,7 +226,7 @@
 
 	incoming_transactions = list()
 
-/datum/pda_app/messenger/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P, var/multicast_message = null, obj/item/device/pda/reply_to, var/overridemessage)
+/datum/pda_app/messenger/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P, var/multicast_message = null, obj/item/device/pda/reply_to, var/overridemessage, var/pollmessage, var/list/polloptions)
     if(!reply_to)
         reply_to = pda_device
     if (!istype(P))
@@ -271,6 +293,8 @@
 
         tnote["[msg_id]"] = "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
         P_app.tnote["[msg_id]"] = "<i><b>&larr; From <a href='byond://?src=\ref[P_app];choice=Message;target=\ref[reply_to]'>[pda_device.owner]</a> ([pda_device.ownjob]):</b></i><br>[t]<br>"
+        if(pollmessage && (pollmessage in P_app.polls) && (t in P_app.polls[pollmessage]))
+            P_app.polls[pollmessage][t]++
         msg_id++
         for(var/mob/dead/observer/M in player_list)
             if(!multicast_message && M.stat == DEAD && M.client && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
@@ -302,7 +326,18 @@
             L = get_holder_of_type(P, /mob/living/silicon)
 
         if(L)
-            L.show_message("[bicon(P)] <b>Message from [pda_device.owner] ([pda_device.ownjob]), </b>\"[t]\" [pda_device.photo ? "(<a href='byond://?src=\ref[P_app];choice=viewPhoto;image=\ref[pda_device.photo];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)" : ""] (<a href='byond://?src=\ref[P_app];choice=Message;skiprefresh=1;target=\ref[reply_to]'>Reply</a>)", 2)
+            var/list/pollreplies = list()
+            if(polloptions?.len)
+                for(var/opt in polloptions)
+                    pollreplies += list("<a href='byond://?src=\ref[P_app];choice=Message;setmsg=[opt];pollmsg=[t];skiprefresh=1;target=\ref[reply_to]'>[opt]</a>")
+            var/pollreply = ""
+            if(pollreplies.len)
+                pollreply = jointext(pollreplies," | ")
+            L.show_message("[bicon(P)] <b>Message from [pda_device.owner] ([pda_device.ownjob]),</b> \"[t]\" \
+            [pollreply != "" ? " ([pollreply]) " : ""]\
+            [pollmessage && (pollmessage in P_app.polls) && (t in P_app.polls[pollmessage]) ? " (Current votes: [P_app.polls[pollmessage][t]]) " : ""]\
+            [pda_device.photo ? "(<a href='byond://?src=\ref[P_app];choice=viewPhoto;image=\ref[pda_device.photo];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)" : ""] \
+            (<a href='byond://?src=\ref[P_app];choice=Message;skiprefresh=1;target=\ref[reply_to]'>Reply</a>)", 2)
         U.show_message("[bicon(pda_device)] <span class='notice'>Message for <a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[P]'>[P]</a> has been sent.</span>")
         log_pda("[key_name(usr)] (PDA: [pda_device.name]) sent \"[t]\" to [P.name]")
         P.overlays.len = 0
@@ -319,11 +354,22 @@
     icon = "pda_mail"
 
 /datum/pda_app/multimessage/on_select(var/mob/user)
-    var/list/department_list = list("security","engineering","medical","research","cargo","service")
+    var/list/department_list = list("Security","Engineering","Medical","Research","Cargo","Service","Everyone")
     var/target = input("Select a department", "CAMO Service") as null|anything in department_list
     if(!target)
         return
     var/t = input(user, "Please enter message", "Message to [target]", null) as text|null
+    var/pollamt = clamp(input(user, "Create poll? (2 or more choices, less skips)", "Message to [target]", 0) as num|null,0,5)
+    var/list/newpoll = null
+    if(pollamt > 1)
+        newpoll = list()
+        for(var/i in 1 to pollamt)
+            var/inpt = input(user, "Please enter poll option ([i] of [pollamt])", "Message to [target]", "") as text
+            inpt = copytext(sanitize(inpt), 1, MAX_MESSAGE_LEN)
+            if(!inpt || inpt == "")
+                newpoll = null
+                break
+            newpoll += list(inpt)
     t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
 
     var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in pda_device.applications
@@ -333,6 +379,8 @@
     if (message_app.last_text && world.time < message_app.last_text + 5)
         return
     message_app.last_text = world.time
+    if(newpoll)
+        message_app.polls[t] = newpoll.Copy()
     for(var/obj/machinery/pda_multicaster/multicaster in pda_multicasters)
         if(multicaster.check_status())
             var/datum/signal/signal = pda_device.telecomms_process()
@@ -343,8 +391,8 @@
                         //Let's make this barely readable
                         if(signal.data["compression"] > 0)
                             t = Gibberish(t, signal.data["compression"] + 50)
-                        multicaster.multicast(target,pda_device,user,t)
-                        message_app.tnote["msg_id"] = "<i><b>&rarr; To [target]:</b></i><br>[t]<br>"
+                        multicaster.multicast(target,pda_device,user,t,newpoll)
+                        message_app.tnote["[msg_id]"] = "<i><b>&rarr; To [target]:</b></i><br>[t]<br>"
                         msg_id++
                         return
     to_chat(user, "[bicon(pda_device)]<span class='warning'>The PDA's screen flashes, 'Error, CAMO server is not responding.'</span>")

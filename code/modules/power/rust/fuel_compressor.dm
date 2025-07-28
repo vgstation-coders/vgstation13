@@ -1,28 +1,49 @@
 var/const/max_assembly_amount = 300
+var/const/max_fuel_amount = 24
 
 /obj/machinery/rust_fuel_compressor
 	icon = 'icons/obj/machines/rust.dmi'
 	icon_state = "fuel_compressor1"
 	name = "Fuel Compressor"
+	desc = "A machine that uses compressed matter units to form fuel assemblies for the R-UST fuel injector."
 	var/list/new_assembly_quantities = list("Deuterium" = 150,"Tritium" = 150,"Rodinium-6" = 0,"Stravium-7" = 0, "Pergium" = 0, "Dilithium" = 0)
 	var/compressed_matter = 0
 	anchored = 1
 	machine_flags = EMAGGABLE
-	var/opened = 1 //0=closed, 1=opened
 	var/locked = 0
-	var/has_electronics = 0 // 0 - none, bit 1 - circuitboard, bit 2 - wires
+	var/construct_progress = 0 // 3 is fully built
+
+/obj/machinery/rust_fuel_compressor/examine(mob/user)
+	..()
+	if(stat & BROKEN)
+		to_chat(user, "Looks broken.")
+		return
+	switch(construct_progress)
+		if (3)
+			to_chat(user, "The cover is closed.")
+		if (2)
+			to_chat(user, "The cover is open and the wiring is exposed.")
+		if (1)
+			to_chat(user, "The cover is open and you can see unwired electronics inside.")
+		else
+			to_chat(user, "The cover is open and shows an empty slot for a circuit board.")
 
 
 /obj/machinery/rust_fuel_compressor/attack_hand(mob/user)
 	add_fingerprint(user)
-	/*if(stat & (BROKEN|NOPOWER))
-		return*/
+	if(stat & (BROKEN|NOPOWER) || construct_progress < 3)
+		return
 	interact(user)
 
 /obj/machinery/rust_fuel_compressor/attackby(obj/item/stack/S as obj, mob/user as mob)
 	if (istype(S, /obj/item/stack/rcd_ammo))
-		compressed_matter += 10
-		S.use(1)
+		if(max_fuel_amount == compressed_matter)
+			to_chat(usr, "<span class='warning'>[bicon(src)] [src] flashes red: \'Compressed matter storage is at maximum capacity.\'</span>")
+			return
+		var/to_add = min(max_fuel_amount - compressed_matter, S.amount)
+		compressed_matter += to_add
+		S.use(to_add)
+		to_chat(user, "You add [to_add == 1 ? "a cartridge" : "some cartridges"] of compressed matter to the compressor.")
 		return
 	..()
 
@@ -40,8 +61,8 @@ var/const/max_assembly_amount = 300
 		t += "Swipe your ID to unlock this console."
 	else
 
-		t += {"Compressed matter in storage: [compressed_matter] <A href='?src=\ref[src];eject_matter=1'>\[Eject all\]</a><br>
-			<A href='?src=\ref[src];activate=1'><b>Activate Fuel Synthesis</b></A><BR> (fuel assemblies require no more than [max_assembly_amount] rods).<br>
+		t += {"Compressed matter cartridges in storage: [compressed_matter] <A href='?src=\ref[src];eject_matter=1'>\[Eject all\]</a><br>
+			<A href='?src=\ref[src];activate=1'><b>Activate Fuel Synthesis</b></A><BR> (fuel assemblies require exactly [max_assembly_amount] rods in total).<br>
 			<hr>
 			- New fuel assembly constituents:- <br>"}
 		for(var/reagent in new_assembly_quantities)
@@ -64,45 +85,39 @@ var/const/max_assembly_amount = 300
 
 	if( href_list["eject_matter"] )
 		var/ejected = 0
-		while(compressed_matter > 10)
-			new /obj/item/stack/rcd_ammo(get_step(get_turf(src), src.dir))
-			compressed_matter -= 10
-			ejected = 1
+		while(compressed_matter > 0)
+			var/obj/item/stack/rcd_ammo/ejectedmatter = new /obj/item/stack/rcd_ammo(get_step(get_turf(src), src.dir))
+			if(compressed_matter >= ejectedmatter.max_amount)
+				ejectedmatter.amount = ejectedmatter.max_amount
+				compressed_matter -= ejectedmatter.max_amount
+				ejected = 1
+			else
+				ejectedmatter.amount = compressed_matter
+				compressed_matter = 0
+				ejected = 1
 		if(ejected)
 			to_chat(usr, "<span class='notice'>[bicon(src)] [src] ejects some compressed matter units.</span>")
 		else
 			to_chat(usr, "<span class='warning'>[bicon(src)] there are no more compressed matter units in [src].</span>")
-
 	if( href_list["activate"] )
-//		to_chat(world, "<span class='notice'>New fuel rod assembly</span>")
-		var/obj/item/weapon/fuel_assembly/F = new(src)
-		var/fail = 0
-		var/old_matter = compressed_matter
-		for(var/reagent in new_assembly_quantities)
-			var/req_matter = round(new_assembly_quantities[reagent] / 30)
-//			to_chat(world, "[reagent] matter: [req_matter]/[compressed_matter]")
-			if(req_matter <= compressed_matter)
-				F.rod_quantities[reagent] = new_assembly_quantities[reagent]
-				compressed_matter -= req_matter
-				if(compressed_matter < 1)
-					compressed_matter = 0
-			else
-/*
-				to_chat(world, "bad reagent: [reagent], [req_matter > compressed_matter ? "req_matter > compressed_matter"\)
-				 : (req_matter < compressed_matter ? "req_matter < compressed_matter" : "req_matter == compressed_matter")]"
-*/
-				fail = 1
-				break
-//			to_chat(world, "<span class='notice'>[reagent]: new_assembly_quantities[reagent]<br></span>")
-		if(fail)
-			qdel(F)
-			compressed_matter = old_matter
-			to_chat(usr, "<span class='warning'>[bicon(src)] [src] flashes red: \'Out of matter.\'</span>")
+		if(compressed_matter < 1)
+			to_chat(usr, "<span class='warning'>[bicon(src)] [src] flashes red: \'Insufficient matter. Add more matter and try again.\'</span>")
 		else
-			F.forceMove(src.loc)//get_step(get_turf(src), src.dir)
-			F.percent_depleted = 0
-			if(compressed_matter < 0.034)
-				compressed_matter = 0
+			var/obj/item/weapon/fuel_assembly/F = new(src)
+			var/rodcount = 0
+			for(var/reagent in new_assembly_quantities)
+				if(new_assembly_quantities[reagent] == 0) continue
+				rodcount += new_assembly_quantities[reagent]
+				F.rod_current_quantities[reagent] = new_assembly_quantities[reagent]
+				F.rod_starting_quantities[reagent] = new_assembly_quantities[reagent]
+			if(rodcount != 300)
+				qdel(F)
+				to_chat(usr, "<span class='warning'>[bicon(src)] [src] flashes red: \'Incomplete assembly. Ensure there are 300 rods total in the assembly.\'</span>")
+			else
+				F.forceMove(src.loc)
+				F.percent_depleted = 0
+				compressed_matter--
+				visible_message("<span class='notice'>[bicon(src)] [src] compresses a fuel rod assembly and ejects it to the floor.</span>")
 
 	if( href_list["change_reagent"] )
 		var/cur_reagent = href_list["change_reagent"]

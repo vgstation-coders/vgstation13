@@ -6045,7 +6045,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/machinery/rust/gyrotron,
+/obj/machinery/power/gyrotron,
 /obj/structure/cable/yellow{
 	d2 = 8;
 	icon_state = "0-8"
@@ -7009,13 +7009,13 @@
 /turf/simulated/floor/plating,
 /area/engine/rust_control)
 "aoD" = (
-/obj/machinery/rust/gyrotron,
+/obj/machinery/power/gyrotron,
 /turf/simulated/floor/plating/airless{
 	icon_state = "platingdmg1"
 	},
 /area/engine/rust_control)
 "aoE" = (
-/obj/machinery/rust/gyrotron,
+/obj/machinery/power/gyrotron,
 /turf/simulated/floor/plating/airless,
 /area/engine/rust_control)
 "aoF" = (

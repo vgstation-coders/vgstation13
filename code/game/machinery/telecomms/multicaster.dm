@@ -65,14 +65,15 @@ var/list/pda_multicasters = list()
 		if(app)
 			app.toff = turn_off
 
-/obj/machinery/pda_multicaster/proc/multicast(var/target,var/obj/item/device/pda/sender,var/mob/living/U,var/message)
+/obj/machinery/pda_multicaster/proc/multicast(var/target,var/obj/item/device/pda/sender,var/mob/living/U,var/message,var/list/polls)
 	var/list/redirection_list = list(
-		"security" = list(/obj/item/device/pda/warden,/obj/item/device/pda/detective,/obj/item/device/pda/security,/obj/item/device/pda/heads/hos),
-		"engineering" = list(/obj/item/device/pda/engineering,/obj/item/device/pda/atmos,/obj/item/device/pda/mechanic,/obj/item/device/pda/heads/ce),
-		"medical" = list(/obj/item/device/pda/medical,/obj/item/device/pda/viro,/obj/item/device/pda/chemist,/obj/item/device/pda/geneticist,/obj/item/device/pda/heads/cmo),
-		"research" = list(/obj/item/device/pda/toxins,/obj/item/device/pda/roboticist,/obj/item/device/pda/mechanic,/obj/item/device/pda/geneticist,/obj/item/device/pda/heads/rd),
-		"cargo" = list(/obj/item/device/pda/cargo,/obj/item/device/pda/shaftminer,/obj/item/device/pda/quartermaster),
-		"service" = list(/obj/item/device/pda/botanist,/obj/item/device/pda/chef,/obj/item/device/pda/bar)
+		"Security" = list(/obj/item/device/pda/warden,/obj/item/device/pda/detective,/obj/item/device/pda/security,/obj/item/device/pda/heads/hos),
+		"Engineering" = list(/obj/item/device/pda/engineering,/obj/item/device/pda/atmos,/obj/item/device/pda/mechanic,/obj/item/device/pda/heads/ce),
+		"Medical" = list(/obj/item/device/pda/medical,/obj/item/device/pda/viro,/obj/item/device/pda/chemist,/obj/item/device/pda/geneticist,/obj/item/device/pda/heads/cmo),
+		"Research" = list(/obj/item/device/pda/toxins,/obj/item/device/pda/roboticist,/obj/item/device/pda/mechanic,/obj/item/device/pda/geneticist,/obj/item/device/pda/heads/rd),
+		"Cargo" = list(/obj/item/device/pda/cargo,/obj/item/device/pda/shaftminer,/obj/item/device/pda/quartermaster),
+		"Service" = list(/obj/item/device/pda/botanist,/obj/item/device/pda/chef,/obj/item/device/pda/bar),
+		"Everyone" = list(/obj/item/device/pda)
 	)
 
 	var/list/available_pdas = CAMO.available_pdas() //Let's not recalculate this every time.
@@ -82,7 +83,7 @@ var/list/pda_multicasters = list()
 			CAMO.ownjob = "[sender.owner]"
 			var/datum/pda_app/messenger/camo/app = locate(/datum/pda_app/messenger/camo) in CAMO.applications
 			if(app)
-				app.create_message(U, P, message, sender)
+				app.create_message(U, P, message, sender, polloptions = polls)
 
 /obj/item/device/pda/camo
 	name = "Centralized Autonomous Messaging Operator"
@@ -98,6 +99,6 @@ var/list/pda_multicasters = list()
 /datum/pda_app/messenger/camo
 	can_purchase = FALSE
 
-/datum/pda_app/messenger/camo/create_message(var/mob/living/U,var/obj/item/device/pda/P,var/multicast_message = null)
+/datum/pda_app/messenger/camo/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P, var/multicast_message = null, obj/item/device/pda/reply_to, var/overridemessage, var/pollmessage, var/list/polloptions)
 	..()
 	last_text = 0 //CAMO can text as much as it pleases

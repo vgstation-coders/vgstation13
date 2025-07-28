@@ -161,6 +161,7 @@ var/const/MAX_SAVE_SLOTS = 16
 		if(!IsGuestKey(thekey))
 			var/load_pref = try_load_preferences(theckey, C.mob)
 			var/default_slot = get_pref(/datum/preference_setting/numerical/default_slot)
+			slot = default_slot
 			if(load_pref)
 				to_chat(C, "Successfully loaded preferences.")
 				while(!SS_READY(SShumans))

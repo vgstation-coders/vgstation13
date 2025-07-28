@@ -11834,7 +11834,7 @@
 /turf/simulated/floor/plating/airless,
 /area/engineering/burn_chamber)
 "czY" = (
-/obj/machinery/rust/gyrotron,
+/obj/machinery/power/gyrotron,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -52674,7 +52674,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/maintcentral)
 "jjD" = (
-/obj/machinery/rust/gyrotron,
+/obj/machinery/power/gyrotron,
 /obj/machinery/camera/emp_proof{
 	dir = 6;
 	name = "Engineering - Singularity - NE";
@@ -70830,7 +70830,7 @@
 	},
 /area/mine/production)
 "oiR" = (
-/obj/machinery/rust/gyrotron,
+/obj/machinery/power/gyrotron,
 /obj/machinery/light{
 	dir = 1
 	},

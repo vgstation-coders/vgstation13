@@ -32,8 +32,7 @@
 			to_chat(owner, "<span class='info' style=\"font-family:Courier\">New [I.name] installed.</span>")
 
 /datum/robot_component/proc/uninstall(var/mob/user,var/loud = FALSE)
-	if(installed == COMPONENT_INSTALLED)
-		installed = FALSE
+	installed = FALSE
 	if(wrapped)
 		to_chat(user, "You remove \the [wrapped].")
 		if(owner.can_diagnose())

@@ -78,6 +78,15 @@
 	if(prob(20))
 		M.adjustToxLoss(1)
 
+/datum/reagent/toxicwaste/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	if(istype(O,/obj/item/device/plugin/sleeper) && !istype(O,/obj/item/device/plugin/sleeper/gunk))
+		playsound(O, 'sound/effects/grue_burn.ogg', 100, 1)
+		new /obj/item/device/plugin/sleeper/gunk(get_turf(O))
+		qdel(O)
+
 /datum/reagent/refriedbeans
 	name = "Re-Fried Beans"
 	id = REFRIEDBEANS

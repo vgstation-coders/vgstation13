@@ -82,6 +82,65 @@ var/global/list/blood_list = list()
 	random_icon_states = list("mgibbl1", "mgibbl2", "mgibbl3", "mgibbl4", "mgibbl5")
 	amount = 2
 
+/obj/effect/decal/cleanable/blood/hitsplatter
+	name = "blood splatter"
+	pass_flags = PASSTABLE
+	icon_state = "hitsplatter1"
+	random_icon_states = list("hitsplatter1", "hitsplatter2", "hitsplatter3")
+	/// The turf we just came from, so we can back up when we hit a wall
+	var/turf/prev_loc
+	/// Skip making the final blood splatter when we're done, like if we're not in a turf
+	var/skip = FALSE
+	/// How many tiles/items/people we can paint red
+	var/splatter_strength = 3
+	/// Insurance so that we don't keep moving once we hit a stoppoint
+	var/hit_endpoint = FALSE
+	var/list/blood_data = list()
+
+/// Set the splatter up to fly through the air until it rounds out of steam or hits something.
+/obj/effect/decal/cleanable/blood/hitsplatter/proc/fly_towards(turf/target_turf, range)
+	splatter_strength = range
+
+	for(var/i in 1 to range)
+		step_towards(src,target_turf)
+		sleep(2)
+		for(var/atom/iter_atom in get_turf(src))
+			if(hit_endpoint)
+				return
+			if(splatter_strength <= 0)
+				break
+
+			iter_atom.add_blood_from_data(blood_data)
+			splatter_strength--
+
+		if(splatter_strength <= 0) // we used all the puff so we delete it.
+			qdel(src)
+			return
+
+		var/obj/effect/decal/cleanable/blood/newsplatter = new /obj/effect/decal/cleanable/blood/splatter(get_turf(src))
+		newsplatter.add_blood_from_data(blood_data)
+		newsplatter.basecolor = blood_data["blood_colour"]
+		newsplatter.color = blood_data["blood_colour"]
+		prev_loc = loc
+
+	qdel(src)
+	return
+
+/obj/effect/decal/cleanable/blood/hitsplatter/to_bump(atom/bumped_atom)
+	if(!iswall(bumped_atom) && !istype(bumped_atom, /obj/structure/window))
+		qdel(src)
+		return
+	var/turf/newloc = get_turf(bumped_atom)
+	hit_endpoint = TRUE
+	if(isturf(prev_loc))
+		forceMove(newloc)
+		skip = TRUE
+		var/obj/effect/decal/cleanable/blood/finalsplatter = new(newloc)
+		finalsplatter.add_blood_from_data(blood_data)
+		finalsplatter.basecolor = blood_data["blood_colour"]
+		finalsplatter.color = blood_data["blood_colour"]
+		qdel(src)
+
 /obj/effect/decal/cleanable/blood/drip
 	name = "drips of blood"
 	desc = "Dried, crusty, and slightly upsetting."

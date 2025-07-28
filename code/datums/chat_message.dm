@@ -213,7 +213,7 @@ var/runechat_icon = null
 	// Check for virtual speakers (aka hearing a message through a radio)
 	if (existing_extra_classes.Find("radio"))
 		return
-
+	raw_message = html_encode(raw_message)
 	var/list/extra_classes = list()
 	extra_classes += existing_extra_classes
 

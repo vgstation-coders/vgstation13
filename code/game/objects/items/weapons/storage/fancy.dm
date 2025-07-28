@@ -581,7 +581,7 @@
 	overlays.len = 0
 	icon_state = "vialbox"
 	item_state = "vialbox"
-	if (!broken && !locked)
+	if (!emagged && !locked)
 		overlays += image('icons/obj/vialbox.dmi',src,"cover_open")
 
 	var/i = 0
@@ -603,7 +603,7 @@
 		overlays += vial_image
 		i++
 
-	if (!broken && electronics)
+	if (!emagged && electronics)
 		overlays += image(icon, src, "led[locked]")
 		if(locked)
 			overlays += image(icon, src, "cover")

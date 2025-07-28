@@ -691,6 +691,7 @@
 				var/datum/robot_component/C = components[remove]
 				if(C.wrapped)
 					C.wrapped.forceMove(loc)
+					user.put_in_hands(C.wrapped)
 				C.uninstall(user)
 
 		else
