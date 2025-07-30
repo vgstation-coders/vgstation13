@@ -2135,7 +2135,6 @@ Use this proc preferably at the end of an equipment loadout
 	alphas[source_define] = alpha_value
 	handle_alpha()
 	regenerate_icons()
-	handle_regular_hud_updates()
 	if(time > 0)
 		spawn(time)
 			make_visible(source_define)
