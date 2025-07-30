@@ -31,6 +31,7 @@
 	var/zDerelict = 4
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
+	var/zProcGen = 7 //temporary until dynamic z levels are implemented
 
 	var/zAdditionalStationZlevel = -1 // -1 because surely nothing will ever go to Z -1, right? why not null? because nullspace
 

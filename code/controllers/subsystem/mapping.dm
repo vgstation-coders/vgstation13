@@ -40,9 +40,10 @@ var/datum/subsystem/mapping/SSmapping
 		log_startup_progress("Not generating vaults - SKIP_VAULT_GENERATION found in config/config.txt")
 
 	//hobo shack generation, one shack will spawn, 1/3 chance of two shacks
-	generate_hoboshack()
-	if (rand(1,3) == 3)
+	if(!map.skip_hobo_shack)
 		generate_hoboshack()
+		if (rand(1,3) == 3)
+			generate_hoboshack()
 
 	watch = start_watch()
 	for(var/datum/zLevel/z in map.zLevels)
@@ -64,7 +65,7 @@ var/datum/subsystem/mapping/SSmapping
 	..()
 
 /proc/generate_planet()//debug
-	return SSmapping.spawn_planetoid(/datum/planet_type/lava, /datum/map_element/mining_surprise/crashed_tradeship)
+	return SSmapping.spawn_planetoid(/datum/planet_type/desert, /datum/map_element/mining_surprise/crashed_tradeship)
 
 ///Initialize all biomes, assoc as type || instance
 /datum/subsystem/mapping/proc/initialize_biomes()
@@ -110,5 +111,9 @@ var/datum/subsystem/mapping/SSmapping
 	// WITHOUT needing to fill the reservation with a bunch of dummy turfs
 	message_admins("Populating turfs")
 	mapgen.populate_turfs()
+	message_admins("Finished populating turfs")
+	message_admins("Starting day/night cycle")
+	SSDayNight.get_turflist()
+	SSDayNight.process_lighting()
 
 	return world.maxz
