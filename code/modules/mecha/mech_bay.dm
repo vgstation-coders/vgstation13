@@ -32,10 +32,14 @@
 
 /obj/machinery/mech_bay_recharge_floor/process()
 	..()
-	if(recharging_mecha&&capacitor_stored)
-		var/obj/item/weapon/cell/C = recharging_mecha.get_cell()
-		C.give(capacitor_stored)
-		capacitor_stored = 0
+	if(recharge_port&&recharging_mecha&&capacitor_stored)
+		if(!recharge_console)
+			recharge_port.stop_charge()
+			return
+		if(src in get_step(recharge_port, recharge_port.dir).contents)
+			var/obj/item/weapon/cell/C = recharging_mecha.get_cell()
+			C.give(capacitor_stored)
+			capacitor_stored = 0
 	else if(capacitor_stored<capacitor_max && recharge_port && !recharging_mecha)
 		var/delta = min(recharge_port.pr_recharger.max_charge,capacitor_max-capacitor_stored)
 		use_power(delta*150)
@@ -54,11 +58,14 @@
 		return
 
 	to_mech(O,"<b>Initializing power control devices.</b>")
-	init_devices()
+
 	if(recharge_console && recharge_port)
-		recharging_mecha = O
-		recharge_console.mecha_in(O)
-		return
+		if(src in get_step(recharge_port,recharge_port.dir).contents)//double check the port to make sure its still facing the station.
+			recharging_mecha = O
+			recharge_console.mecha_in(O)
+			return
+		else
+			to_mech(O,"<span class='rose'>Power port orientation improper. Terminating.</span>")
 	else if(!recharge_console)
 		to_mech(O,"<span class='rose'>Control console not found. Terminating.</span>")
 	else if(!recharge_port)
@@ -77,19 +84,43 @@
 			if(recharge_console)
 				recharge_console.mecha_out()
 
-/obj/machinery/mech_bay_recharge_floor/proc/init_devices()
-	recharge_console = locate() in range(1,src)
-	recharge_port = locate(/obj/machinery/mech_bay_recharge_port, get_step(src, WEST))
-	if(recharge_console)
-		recharge_console.recharge_floor = src
-		if(recharge_port)
-			recharge_console.recharge_port = recharge_port
+/obj/machinery/mech_bay_recharge_floor/examine(mob/user)
+	. = ..()
 	if(recharge_port)
-		recharge_port.recharge_floor = src
-		if(recharge_console)
-			recharge_port.recharge_console = recharge_console
-	return
+		var/direction = get_dir_as_string(recharge_port)
+		to_chat(user,"<span class='notice'>Linked to \the [recharge_port] at the [uppertext(direction)].</span>")
+	if(recharge_console)
+		var/direction = get_dir_as_string(recharge_console)
+		to_chat(user,"<span class='notice'>Linked to \the [recharge_console] at the [uppertext(direction)].</span>")
 
+/obj/machinery/mech_bay_recharge_floor/proc/locate_and_link_port()
+	if(recharge_port)//we already have a port
+		return 0
+	for(var/obj/machinery/mech_bay_recharge_port/potential_recharge_port in range(1,src))
+		if(!potential_recharge_port.anchored)
+			continue
+		if(potential_recharge_port.recharge_floor) //it is already linked to another floor. do not link to it.
+			continue
+		potential_recharge_port.force_cardinal_dir()
+		if(src in get_step(potential_recharge_port, potential_recharge_port.dir).contents) 	//check if dir of recharge port matches mechbay floor
+			recharge_port = potential_recharge_port
+			recharge_port.recharge_floor = src
+			recharge_port.recharge_console = recharge_console
+			recharge_console.recharge_port = recharge_port
+			return 1
+	return 0
+
+/obj/machinery/mech_bay_recharge_floor/proc/delink_devices()
+	if(recharge_port)
+		recharge_port.recharge_floor = null
+		recharge_port = null
+	if(recharge_console)
+		recharge_console.recharge_floor = null
+		recharge_console = null
+
+/obj/machinery/mech_bay_recharge_floor/Destroy()
+	delink_devices()
+	..()
 
 /obj/machinery/mech_bay_recharge_port
 	name = "Mech Bay Power Port"
@@ -101,7 +132,7 @@
 	var/obj/machinery/computer/mech_bay_power_console/recharge_console
 	var/datum/global_iterator/mech_bay_recharger/pr_recharger
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | SHUTTLEWRENCH
 
 /obj/machinery/mech_bay_recharge_port/New()
 	..()
@@ -165,6 +196,83 @@
 	else
 		return 0
 
+/obj/machinery/mech_bay_recharge_port/update_icon()
+	. = ..()
+	icon_state = "[initial(icon_state)][anchored? "":"-unwrenched"]"
+
+/obj/machinery/mech_bay_recharge_port/wrenchAnchor()
+	. = ..()
+	update_icon()
+	if(!anchored)
+		stop_charge()
+		delink_devices()
+
+/obj/machinery/mech_bay_recharge_port/examine(mob/user)
+	. = ..()
+	if(recharge_floor)
+		var/direction = get_dir_as_string(recharge_floor)
+		to_chat(user,"<span class='notice'>Linked to \the [recharge_floor] at the [uppertext(direction)].</span>")
+	if(recharge_console)
+		var/direction = get_dir_as_string(recharge_console)
+		to_chat(user,"<span class='notice'>Linked to \the [recharge_console] at the [uppertext(direction)].</span>")
+
+/obj/machinery/mech_bay_recharge_port/Destroy()
+	delink_devices()
+	..()
+
+/obj/machinery/mech_bay_recharge_port/proc/delink_devices()
+	if(recharge_floor)
+		recharge_floor.recharge_port = null
+		recharge_floor = null
+	if(recharge_console)
+		recharge_console.recharge_port = null
+		recharge_console = null
+
+/obj/machinery/mech_bay_recharge_port/proc/locate_and_link_station()
+	if(recharge_floor) // we already have a station
+		return 0
+	force_cardinal_dir()
+	for(var/obj/machinery/mech_bay_recharge_floor/potential_recharge_floor in get_step(src,dir))
+		if(!potential_recharge_floor.anchored)
+			continue
+		if(potential_recharge_floor.recharge_port) //it is already linked
+			continue
+		recharge_floor = potential_recharge_floor
+		recharge_floor.recharge_port = src
+		recharge_floor.recharge_console = recharge_console
+		recharge_console.recharge_floor = recharge_floor
+		return 1
+	return 0
+
+/obj/machinery/mech_bay_recharge_port/verb/rotate_cw()
+	set name = "Rotate (Clockwise)"
+	set category = "Object"
+	set src in oview(1)
+
+	if(!istype(usr,/mob/living))
+		return
+
+	var/mob/living/U = usr
+	if(src.anchored || U.stat)
+		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
+		return 0
+	src.dir = turn(src.dir, -90)
+	return 1
+
+/obj/machinery/mech_bay_recharge_port/verb/rotate_ccw()
+	set name = "Rotate (Counter-Clockwise)"
+	set category = "Object"
+	set src in oview(1)
+
+	if(!istype(usr,/mob/living))
+		return
+
+	var/mob/living/U = usr
+	if(src.anchored || U.stat)
+		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
+		return 0
+	src.dir = turn(src.dir, 90)
+	return 1
 
 /datum/global_iterator/mech_bay_recharger
 	delay = 20
@@ -262,9 +370,151 @@
 		output += "</div>"
 	if(!recharge_port)
 		output += "<span class='rose'>Mech Bay Power Port not initialized.</span><br>"
+	else if(!recharge_floor || !(recharge_floor in get_step(recharge_port,recharge_port.dir)))
+		output += "<span class='rose'>Mech Bay Power Port misaligned. Realign manually then perform Device Link protocol.</span><br>"
 	else
 		output += "<b>Mech Bay Power Port Status: </b>[recharge_port.active()?"Now charging":"On hold"]<br>"
 
+	if(!recharge_floor || !recharge_port)
+		output += "</ul><A href='?src=\ref[src];device_linkage=1'>Link Devices to Console</A>"
+	if(recharge_floor || recharge_port)
+		output += "</ul><A href='?src=\ref[src];delink_devices=1'>Delink Devices</A>"
 	output += "</ body></html>"
 	user << browse(output, "window=mech_bay_console")
 	onclose(user, "mech_bay_console")
+
+/obj/machinery/computer/mech_bay_power_console/Topic(href,href_list)
+	..()
+	if ((!Adjacent(usr) && !istype(usr,/mob/living/silicon/) )|| usr.incapacitated())
+		usr << browse(null, "window=mech_bay_console")
+		return
+	if(href_list["device_linkage"])
+		if(recharge_floor && recharge_port)
+			say("Device Linkage failed. This console is already linked to a Port and Station. Unlink it before reinitiating linkage protocol.")
+			updateUsrDialog()
+			return
+		//we've previously linked to a port or floor, but they're missing a valid candidate. lets run a check to see if one is present.
+		if(recharge_floor && !recharge_port) //we seem to have a floor, but no port.
+			if(recharge_floor.recharge_port) //our floor has a port but we don't. we'll take theirs
+				recharge_port = recharge_floor.recharge_port
+				recharge_port.recharge_console = src
+				say("Station and Port successfully linked.")
+				updateUsrDialog()
+				return
+			if (recharge_floor.locate_and_link_port()) //the target will search for a port
+				say("Station and Port successfully linked.")
+				updateUsrDialog()
+				return
+			say("Valid Port not found.")
+			updateUsrDialog()
+			return
+		if(recharge_port && !recharge_floor)//we seem to have a port, but no floor.
+			if(recharge_port.recharge_floor)//our port has a floor but we don't. we'll take theirs
+				recharge_floor = recharge_port.recharge_floor
+				recharge_floor.recharge_console = src
+			if(recharge_port.locate_and_link_station())
+				say("Port and Station succesfully linked.")
+				updateUsrDialog()
+				return
+			say("Valid Station not found.")
+			updateUsrDialog()
+			return
+		//we have no port or station linked, therefore choose a direction and begin device linkage.
+		var/inputdir
+		switch(input(usr, "Which direction are you linking to?","Mech-Console Linkage Menu","SOUTH") in list("NORTH","EAST","SOUTH","WEST"))
+			if("NORTH")
+				inputdir =NORTH
+			if("SOUTH")
+				inputdir =SOUTH
+			if("EAST")
+				inputdir =EAST
+			if("WEST")
+				inputdir =WEST
+		device_linkage(inputdir)
+		updateUsrDialog()
+		return
+	if(href_list["delink_devices"]) //not working some reaseon
+		master_delink_devices()
+		updateUsrDialog()
+
+/obj/machinery/computer/mech_bay_power_console/proc/device_linkage(var/direction)
+	//targetting station
+	for(var/obj/machinery/mech_bay_recharge_floor/rc_floor in get_step(src,direction).contents)
+		if(!rc_floor.recharge_console)  //only link to it if it is not currently linked to some other console
+			recharge_floor = rc_floor
+			recharge_floor.recharge_console = src
+			if(recharge_floor.recharge_port)//it's already linked to a port.
+				recharge_port = recharge_floor.recharge_port
+				recharge_port.recharge_console = src
+				say("Port and Station successfully linked to Console.")
+				return 1
+			if(recharge_floor.locate_and_link_port()) //have the station try to find a valid port and link to it
+				say("Station and Port successfully linked to Console.")
+				return 1
+			say("Station found, but valid port candidate not found. Please make adjustments and reinitiate linkage protocol.")
+			return 0
+	//targetting port
+	for(var/obj/machinery/mech_bay_recharge_port/rc_port in get_step(src,direction).contents)
+		if(!rc_port.recharge_console && rc_port.anchored) //same as above. don't link if its already linked to something or unwrenched
+			recharge_port = rc_port
+			recharge_port.recharge_console = src
+			if(recharge_port.recharge_floor)//it's already linked to a floor.
+				recharge_floor = recharge_port.recharge_floor
+				recharge_floor.recharge_console = src
+				say("Port and Station successfully linked to Console.")
+				return 1
+			if(recharge_port.locate_and_link_station())//have the port try to find a valid station and link to it
+				say("Port and Station successfully linked to Console.")
+				return 1
+			say("Port found, but valid station candidate not found. Please make adjustments and reinitiate linkage protocol.")
+			return 0
+	say("No valid candidates found in that direction.")
+	return 0
+
+/obj/machinery/computer/mech_bay_power_console/examine(mob/user)
+	. = ..()
+	if(recharge_floor)
+		var/direction = get_dir_as_string(recharge_floor)
+		to_chat(user,"<span class='notice'>Linked to \the [recharge_floor] at the [uppertext(direction)].</span>")
+	if(recharge_port)
+		var/direction = get_dir_as_string(recharge_port)
+		to_chat(user,"<span class='notice'>Linked to \the [recharge_port] at the [uppertext(direction)].</span>")
+
+
+/obj/machinery/computer/mech_bay_power_console/wrenchAnchor()
+	. = ..()
+	if(!anchored)
+		if(recharge_floor)
+			recharge_floor.recharge_console = null
+			recharge_floor = null
+		if(recharge_port)
+			recharge_port.stop_charge()
+			recharge_port.recharge_console = null
+			recharge_port = null
+
+/obj/machinery/computer/mech_bay_power_console/proc/master_delink_devices()
+	if(recharge_floor)
+		recharge_floor.delink_devices()
+	if(recharge_port)
+		recharge_port.delink_devices()
+
+/obj/machinery/computer/mech_bay_power_console/Destroy()
+	master_delink_devices()
+	..()
+
+//for mappers. these subclasses will attempt to automatically link to recharge stations on spawn in that direction.
+/obj/machinery/computer/mech_bay_power_console/autolink_north/New()
+	. = ..()
+	device_linkage(NORTH)
+
+/obj/machinery/computer/mech_bay_power_console/autolink_south/New()
+	. = ..()
+	device_linkage(SOUTH)
+
+/obj/machinery/computer/mech_bay_power_console/autolink_east/New()
+	. = ..()
+	device_linkage(EAST)
+
+/obj/machinery/computer/mech_bay_power_console/autolink_west/New()
+	. = ..()
+	device_linkage(WEST)

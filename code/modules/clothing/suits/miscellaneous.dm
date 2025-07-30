@@ -1207,3 +1207,48 @@ var/list/tag_suits_list = list()
 	item_state = "wftr"
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 	body_parts_covered = FULL_TORSO
+
+/obj/item/clothing/suit/shadowsuit
+	name = "shadow suit"
+	desc = "A costume good enough to belong to a faker."
+	icon_state = "shadowsuit"
+	item_state = "shadowsuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/sonicsuit
+	name = "sonic suit"
+	desc = "A costume based on a true blue."
+	icon_state = "sonicsuit"
+	item_state = "sonicsuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/tailssuit
+	name = "tails suit"
+	desc = "A costume based on a bonafide sidekick."
+	icon_state = "tailssuit"
+	item_state = "tailssuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/knucklessuit
+	name = "knuckles suit"
+	desc = "A costume designed for protecting oversized jewels."
+	icon_state = "knucklessuit"
+	item_state = "knucklessuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/suit/amysuit
+	name = "amy suit"
+	desc = "Piko-piko hammer not included."
+	icon_state = "amysuit"
+	item_state = "amysuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
+	clothing_flags = ONESIZEFITSALL

@@ -253,6 +253,7 @@ Works together with spawning an observer, noted above.
 			visible.icon_state = "visible1"
 		else
 			visible.icon_state = "visible0"
+
 /mob/proc/ghostize(var/flags = GHOST_CAN_REENTER,var/deafmute = 0)
 	if(key && !(copytext(key,1,2)=="@"))
 		if((src && src.client && src.client.holder))
@@ -261,6 +262,8 @@ Works together with spawning an observer, noted above.
 		if (deafmute)
 			ghostype = /mob/dead/observer/deafmute
 		var/mob/dead/observer/ghost = new ghostype(src, flags)	//Transfer safety to observer spawning proc.
+		if (sound_zone_manager)
+			sound_zone_manager.unregister_listener(src)
 		var/timetocheck = timeofdeath
 		if (isbrain(src))
 			var/mob/living/carbon/brain/brainmob = src
@@ -577,7 +580,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 				sHuman.real_name = real_name
 				concrete_outfit.equip(sHuman, TRUE)
 				client?.prefs.copy_to(sHuman)
-				sHuman.add_language(client?.prefs.language)
+				sHuman.add_language(client?.prefs.get_pref(/datum/preference_setting/string/language))
 				sHuman.dna.UpdateSE()
 				sHuman.dna.UpdateUI()
 				sHuman.ckey = ckey

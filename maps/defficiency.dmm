@@ -6045,7 +6045,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/machinery/rust/gyrotron,
+/obj/machinery/power/gyrotron,
 /obj/structure/cable/yellow{
 	d2 = 8;
 	icon_state = "0-8"
@@ -7009,13 +7009,13 @@
 /turf/simulated/floor/plating,
 /area/engine/rust_control)
 "aoD" = (
-/obj/machinery/rust/gyrotron,
+/obj/machinery/power/gyrotron,
 /turf/simulated/floor/plating/airless{
 	icon_state = "platingdmg1"
 	},
 /area/engine/rust_control)
 "aoE" = (
-/obj/machinery/rust/gyrotron,
+/obj/machinery/power/gyrotron,
 /turf/simulated/floor/plating/airless,
 /area/engine/rust_control)
 "aoF" = (
@@ -18377,6 +18377,9 @@
 /obj/machinery/navbeacon{
 	codes_txt = "patrol;next_patrol=ArrivalsR";
 	location = "Engineering"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -47606,7 +47609,9 @@
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "bKA" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/item/device/radio/intercom{
 	name = "Station Intercom (General)";
 	pixel_x = -29
@@ -47627,7 +47632,9 @@
 /turf/simulated/wall/r_wall,
 /area/science/chargebay)
 "bKD" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/simulated/floor/plating,
 /area/science/chargebay)
 "bKE" = (
@@ -47636,7 +47643,7 @@
 /turf/simulated/floor,
 /area/science/chargebay)
 "bKF" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/simulated/floor,
 /area/science/chargebay)
 "bKG" = (
@@ -82038,13 +82045,15 @@
 /turf/simulated/floor/plating,
 /area/security/hos)
 "cXZ" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/security/armory)
 "cYa" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -84932,7 +84941,9 @@
 	},
 /area/syndicate_mothership)
 "deN" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -88414,7 +88425,9 @@
 	},
 /area/centcom/test)
 "dog" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -88447,7 +88460,7 @@
 	},
 /area/centcom/test)
 "dok" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -92129,7 +92142,7 @@
 /turf/space,
 /area/centcom/specops)
 "dws" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -92149,7 +92162,9 @@
 	},
 /area/centcom/specops)
 "dwu" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "dark-markings"
@@ -106460,7 +106475,9 @@
 	},
 /area/mine/explored)
 "epD" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/structure/window/reinforced{
 	dir = 8
 	},
@@ -106477,7 +106494,7 @@
 	},
 /area/mine/explored)
 "epF" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/structure/window/reinforced{
 	dir = 4
 	},
@@ -107184,11 +107201,13 @@
 /turf/simulated/floor,
 /area/mine/eva)
 "erx" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/simulated/floor,
 /area/mine/eva)
 "ery" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/simulated/floor/plating,
 /area/mine/eva)
 "erz" = (
@@ -108275,7 +108294,9 @@
 	},
 /area/mine/production)
 "etI" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},
@@ -108312,7 +108333,7 @@
 	},
 /area/mine/eva)
 "etO" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
 	},

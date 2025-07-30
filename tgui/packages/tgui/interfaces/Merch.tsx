@@ -57,9 +57,9 @@ export const MerchUplink = (props) => {
     selectedCategory,
     setSelectedCategory,
   ] = useState(categories[0]?.name);
-  const testSearch = createSearch(searchText, (item: Item) => {
-    return item.name + item.desc;
-  });
+  const testSearch = searchText
+  ? createSearch(searchText, (item: Item) => item.name + item.desc)
+  : null;
   const items = searchText.length > 0
     // Flatten all categories and apply search to it
     && categories
@@ -81,7 +81,7 @@ export const MerchUplink = (props) => {
           <Input
             autoFocus
             value={searchText}
-            onInput={(e, value) => setSearchText(value)}
+            onChange={setSearchText}
             mx={1} />
         </>
       )}>

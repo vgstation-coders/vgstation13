@@ -48,9 +48,9 @@
 
 #define islich(A)  (ishuman(A) && istype(A:species, /datum/species/lich))
 
-#define istruelich(A) ((islich(A) && (iswizard(A) || iswearinglichcrown(A))
+#define istruelich(A) (islich(A) && (iswizard(A) || iswearinglichcrown(A)))
 
-#define iswearinglichcrown(A) (ishuman(A) && (istype(A:head, /obj/item/clothing/head/wizard/skelelich)) //|| istype(A:head, /obj/item/clothing
+#define iswearinglichcrown(A) (ishuman(A) && (istype(A:head, /obj/item/clothing/head/wizard/skelelich))) //|| istype(A:head, /obj/item/clothing
 
 #define ishologram(A) (istype(A, /mob/living/simple_animal/hologram/advanced))
 
@@ -444,3 +444,5 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 
 // Call by name proc references, checks if the proc exists on either this type () (AND ONLY THIS TYPE) or as a global proc.
 #define PROC_REF(X) (nameof(.proc/##X))
+
+#define has_initialized_sound_emitter(A) (isatom(A) && A.sound_emitter)

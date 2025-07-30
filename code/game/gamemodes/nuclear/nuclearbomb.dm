@@ -380,7 +380,7 @@ var/area/nuked_area
 		for(A=src, A && A.loc && !isturf(A.loc), A=A.loc);  // semicolon is for the empty statement
 		message_admins("\The [src] ended up in nullspace somehow, and has been replaced.[loc ? " It was contained in [A] when it was nullspaced." : ""]")
 		qdel(src)
-	if(T.z != map.zMainStation && T.z != map.zCentcomm)
+	if(T.z != map.zMainStation && T.z != map.zCentcomm && T.z != map.zAdditionalStationZlevel)
 		var/atom/A
 		for(A=src, A && A.loc && !isturf(A.loc), A=A.loc);  // semicolon is for the empty statement
 		message_admins("\The [src] ended up in a non-authorised z-Level somehow, and has been replaced.[loc ? " It was contained in [A] when it was moved." : ""]")

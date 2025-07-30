@@ -173,7 +173,7 @@
 	else
 		broadcast_status()
 
-/obj/machinery/atmospherics/unary/vent_pump/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/unary/vent_pump/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	..()
 	src.broadcast_status()
 	return 1

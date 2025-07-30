@@ -22,6 +22,9 @@
 	var/hmodule = null
 	var/index = 0
 	var/fakename = ""
+	var/brightness_max = 4
+	var/brightness_min = 0
+	var/shield_chance = 0
 
 	//the colon separates the typepath from the name
 	var/list/obj/item/stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
@@ -73,6 +76,9 @@
 	for(var/module in stored_modules) //making the modules
 		var/new_type = text2path(get_module_type(module))
 		stored_modules[module] = new new_type(src)
+		var/matrix/shrink = matrix()
+		shrink.Scale(0.5, 0.5)
+		stored_modules[module].transform = shrink
 
 /obj/item/weapon/switchtool/examine(mob/user)
 	..()
@@ -88,7 +94,8 @@
 		to_chat(user, "You store \the [arcanetampered ? fakename : deployed].")
 		undeploy(user)
 	else
-		choose_deploy(user)
+		if(choose_deploy(user))
+			edit_deploy(1)
 
 /obj/item/weapon/switchtool/attackby(var/obj/item/used_item, mob/user)
 	if(can_remove_items && used_item.is_screwdriver(user)) //if it's the thing that lets us remove tools and we have something to remove
@@ -106,6 +113,12 @@
 	if(add_module(used_item, user))
 		return TRUE
 	else
+/*		//use this block to enable putting stuff into switchtool reagent containers if you ever add in switchbeakers or something insane in 2058
+		if(deployed && istype(used_item,/obj/item/weapon/reagent_containers) && istype(deployed, /obj/item/weapon/reagent_containers))
+			deployed.attackby(used_item, user)
+			used_item.afterattack(deployed, user)
+		else
+			return ..()*/
 		return ..()
 
 /obj/item/weapon/switchtool/MouseWheeled(var/mob/user, var/delta_x, var/delta_y, var/params)
@@ -200,7 +213,8 @@
 	w_class = initial(w_class)
 	update_icon()
 	dynamic_overlay.len = 0
-	user.update_inv_hands()
+	user?.update_inv_hands()
+	set_light(0)
 
 /obj/item/weapon/switchtool/proc/deploy(var/module, mob/user)
 	if(arcanetampered)
@@ -226,8 +240,10 @@
 	if(arcanetampered)
 		module = pick(stored_modules)
 		fakename = "[stored_modules[module]]"
-	edit_deploy(1)
 	playsound(src, deploy_sound, 10, 1)
+	set_light(brightness_min)
+	if(istype(deployed, /obj/item/device/flashlight))
+		set_light(brightness_max)
 	return TRUE
 
 /obj/item/weapon/switchtool/proc/edit_deploy(var/doedit)
@@ -301,6 +317,11 @@
 /obj/item/weapon/switchtool/is_multitool(mob/user)
 	return deployed?.is_multitool(user)
 
+/obj/item/weapon/switchtool/IsShield()
+	if(istype(deployed, /obj/item/weapon/shield))
+		return prob(shield_chance) //Manually set because energy shields have custom stuff that the holotool ignores
+	else
+		return FALSE
 
 /obj/item/weapon/switchtool/surgery
 	name = "surgeon's switchtool"
@@ -401,6 +422,176 @@
 			light_color = LIGHT_COLOR_FIRE
 			set_light(match.brightness_on)
 
+/obj/item/collectible_switchtool
+	name = "collectible swiss army knife"
+	icon = 'icons/obj/switchtool.dmi'
+	icon_state = "s_a_k"
+	item_state = "s_a_k"
+
+/obj/item/collectible_switchtool/New()
+	var/random = typesof(/obj/item/weapon/switchtool/swiss_army_knife/)
+	var/to_spawn = pick(random)
+	new to_spawn(loc)
+	qdel(src)
+
+/obj/item/weapon/switchtool/swiss_army_knife/dan
+	name = "Discount Dan's discount crowrench"
+	desc = "The finest in budget tools that fit in your pocket. It's two-in-one! The plastic feels a little cheap..."
+	icon_state = "dantool"
+	item_state = "dantool"
+	stored_modules = list("/obj/item/tool/crowbar:crowbar" = null,
+						"/obj/item/tool/wrench:wrench" = null,)
+
+/obj/item/weapon/switchtool/swiss_army_knife/dan/New()
+	..()
+	stored_modules += list("/obj/item/weapon/reagent_containers/food/condiment/small:sauce packet" = null)
+	stored_modules["/obj/item/weapon/reagent_containers/food/condiment/small:sauce packet"] = new /obj/item/weapon/reagent_containers/food/condiment/small/discount(src)
+	var/matrix/shrink = matrix()
+	shrink.Scale(0.5, 0.5)
+	stored_modules["/obj/item/weapon/reagent_containers/food/condiment/small:sauce packet"].transform = shrink
+
+/obj/item/weapon/switchtool/swiss_army_knife/dan/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	. = ..()
+	if(!deployed)
+		return
+	if(istype(deployed, /obj/item/weapon/reagent_containers/food/condiment/small))
+		var/obj/item/weapon/reagent_containers/food/condiment/small/sauce_packet = deployed
+		if(sauce_packet.is_empty() && sauce_packet.trash_type)
+			var/obj/item/trash/trash = new sauce_packet.trash_type(get_turf(src))
+			for(var/module in stored_modules)
+				if(stored_modules[module] == deployed)
+					stored_modules[module] = null
+					break
+			edit_deploy(0)
+			to_chat(user, "Now empty, \the [trash] suddenly pops out of \the [src]!")
+			trash.throw_at(target, 1, 1)
+			undeploy(user)
+			qdel(sauce_packet)
+			return
+	if(prob(99))
+		return
+	edit_deploy(0)
+	deployed.forceMove(get_turf(user))
+	for(var/module in stored_modules)
+		if(stored_modules[module] == deployed)
+			stored_modules[module] = null
+			break
+	to_chat(user, "\The [arcanetampered ? fakename : deployed] suddenly pops out of \the [src]!")
+	playsound(src, "sound/items/screwdriver.ogg", 10, 1)
+	deployed.throw_at(target, 1, 1)
+	undeploy(user)
+
+/obj/item/weapon/switchtool/swiss_army_knife/magi
+	name = "MagiVend's Magic Tool"
+	desc = "A magical pocket tool, powered by magic, that can do quite magical things!"
+	icon_state = "magitool"
+	item_state = "magitool"
+	light_color = LIGHT_COLOR_YELLOW
+	brightness_min = 2
+	shield_chance = 33
+	stored_modules = list("/obj/item/tool/screwdriver:magic wand" = null,
+						"/obj/item/device/flashlight:magic light" = null,
+						"/obj/item/weapon/shield/riot/buckler:magic shield" = null,
+						"/obj/item/tool/crowbar:magic cane" = null,)
+
+/obj/item/weapon/switchtool/swiss_army_knife/sec
+	name = "Team Security swiss army knife"
+	desc = "Security helmet: on. Knuckles: cracked. Clown: brutalized. Yep...it's Team Security time."
+	icon_state = "sectool"
+	item_state = "sectool"
+	stored_modules = list("/obj/item/tool/crowbar:crowbar" = null,
+						"/obj/item/tool/bonesetter:bone setter" = null,
+						"/obj/item/weapon/kitchen/utensil/knife:knife" = null,
+						"/obj/item/weapon/hatchet/metalhandle:hatchet" = null,
+						"/obj/item/weapon/lighter/zippo:Zippo lighter" = null,
+						"/obj/item/weapon/pen:pen" = null)
+
+/obj/item/weapon/switchtool/swiss_army_knife/zam
+	name = "Zam! knife"
+	desc = "An efficient tool, popular on the Mothership."
+	icon_state = "zamtool"
+	item_state = "zamtool"
+	stored_modules = list("/obj/item/device/multitool:multitool" = null,
+						"/obj/item/tool/scalpel:scalpel" = null,
+						"/obj/item/device/flashlight:flashlight" = null,
+						"/obj/item/tool/screwdriver:screwdriver" = null,
+						"/obj/item/tool/hemostat:hemostat" = null,
+						"/obj/item/tool/crowbar:crowbar" = null)
+
+/obj/item/weapon/switchtool/swiss_army_knife/nt
+	name = "NanoTrasen army knife"
+	desc = "Standard issue in most NT gift boxes."
+	icon_state = "nttool"
+	item_state = "nttool"
+	stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
+						"/obj/item/tool/crowbar:crowbar" = null,
+						"/obj/item/tool/wrench:wrench" = null,
+						"/obj/item/tool/wirecutters:wirecutters" = null,
+						"/obj/item/device/flashlight:flashlight" = null,
+						"/obj/item/weapon/pen:pen" = null)
+
+/obj/item/weapon/switchtool/swiss_army_knife/gib
+	name = "Gibness swiss army knife"
+	desc = "Good gibs come to those who wait."
+	icon_state = "gibtool"
+	item_state = "gibtool"
+	stored_modules = list("/obj/item/weapon/kitchen/canopener:can opener" = null,
+						"/obj/item/tool/wrench:wrench" = null,
+						"/obj/item/tool/wirecutters/scissors:scissors" = null,
+						"/obj/item/weapon/kitchen/utensil/knife:knife" = null,
+						"/obj/item/weapon/kitchen/utensil/fork:fork" = null,
+						"/obj/item/weapon/match/strike_anywhere/s_a_k:strike-anywhere match" = null,
+						"/obj/item/weapon/pen:pen" = null)
+
+/obj/item/weapon/switchtool/swiss_army_knife/trade
+	name = "trader swiss army knife"
+	desc = "A perfect tool for a wandering space traveler looking for deals."
+	icon_state = "tradetool"
+	item_state = "tradetool"
+	stored_modules = list("/obj/item/tool/crowbar:crowbar" = null,
+						"/obj/item/tool/wrench:wrench" = null,
+						"/obj/item/tool/wirecutters/scissors:scissors" = null,
+						"/obj/item/weapon/chisel:chisel" = null,
+						"/obj/item/device/multitool:multitool" = null)
+
+/obj/item/weapon/switchtool/swiss_army_knife/blue
+	name = "Bluespace Ribbon swiss army knife"
+	desc = "What'll you have? Bluespace Ribbon."
+	icon_state = "bluetool"
+	item_state = "bluetool"
+	stored_modules = list("/obj/item/weapon/kitchen/canopener:can opener" = null,
+						"/obj/item/tool/wrench:wrench" = null,
+						"/obj/item/tool/wirecutters/scissors:scissors" = null,
+						"/obj/item/weapon/kitchen/utensil/knife:knife" = null,
+						"/obj/item/weapon/kitchen/utensil/fork:fork" = null,
+						"/obj/item/weapon/match/strike_anywhere/s_a_k:strike-anywhere match" = null,
+						"/obj/item/weapon/pen:pen" = null)
+
+/obj/item/weapon/switchtool/swiss_army_knife/codeone
+	name = "Code One swiss army knife"
+	desc = "The best tool for cracking one open with the boys."
+	icon_state = "codeonetool"
+	item_state = "codeonetool"
+	stored_modules = list("/obj/item/weapon/kitchen/canopener:can opener" = null,
+						"/obj/item/tool/wrench:wrench" = null,
+						"/obj/item/tool/wirecutters/scissors:scissors" = null,
+						"/obj/item/weapon/kitchen/utensil/knife:knife" = null,
+						"/obj/item/weapon/kitchen/utensil/fork:fork" = null,
+						"/obj/item/weapon/match/strike_anywhere/s_a_k:strike-anywhere match" = null,
+						"/obj/item/weapon/pen:pen" = null)
+
+/obj/item/weapon/switchtool/swiss_army_knife/luckystrike
+	name = "Lucky Strikes Lucky army knife"
+	desc = "It's toasted."
+	icon_state = "striketool"
+	item_state = "striketool"
+	stored_modules = list(
+						"/obj/item/weapon/lighter/zippo:Zippo lighter" = null,
+						"/obj/item/weapon/kitchen/utensil/knife:knife" = null,
+						"/obj/item/weapon/pocket_mirror/comb:comb" = null,
+						"/obj/item/tool/wirecutters/scissors:scissors" = null,
+						"/obj/item/device/flashlight:flashlight" = null,)
+
 /obj/item/weapon/switchtool/switchblade
 	name = "switchblade"
 	icon_state = "switchblade"
@@ -423,8 +614,8 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/HTool_cyan.dmi', "right_hand" = 'icons/mob/in-hand/right/HTool_cyan.dmi')
 	item_state = "Hswitchtool"
 	desc = "A switchtool that can take on the form of nearly any tool. Its experimental hardlight emitter requires tech disks to help define its shape."
-	var/brightness_max = 4
-	var/brightness_min = 2
+	brightness_max = 4
+	brightness_min = 2
 	deploy_sound = "sound/weapons/switchsound.ogg"
 	undeploy_sound = "sound/weapons/switchsound.ogg"
 	light_color =  LIGHT_COLOR_CYAN
@@ -433,6 +624,7 @@
 	var/has_tech = 0
 	var/hcolor = "CYAN"
 	starting_materials = null
+	shield_chance = 100
 
 	stored_modules = list(//scalpel and flashlight are available to start and the scalpel is logically a laser one but the basic kind.
 						"/obj/item/device/flashlight:flashlight" = null,
@@ -561,24 +753,15 @@
 		var/mob/M = loc
 		M.update_inv_hands()
 
-/obj/item/weapon/switchtool/holo/IsShield()
-	if(istype(deployed, /obj/item/weapon/shield/energy))
-		return TRUE
-	else
-		return FALSE
-
 //All modules make small amounts of light, flashlight making more.
 /obj/item/weapon/switchtool/holo/deploy(var/module)
 	if(!..())
 		return FALSE
 	dynamic_overlay.len = 0
-	set_light(brightness_min)
 	hmodule = capitalize(hmodule)
 	overlays += "[hmodule]"
 	edit_deploy(1)
 	update_icon()
-	if(istype(deployed, /obj/item/device/flashlight))
-		set_light(brightness_max)
 
 //Since you can't turn off the welder inside the tool, I'm using the unused welder that very slowly regens fuel, 5 fuel per process().
 //It can be refulled manually, but since it starts active you will blow up welder tanks if deployed and then put to a tank.
@@ -591,7 +774,6 @@
 		var/obj/item/tool/weldingtool/experimental/weldingtool = deployed
 		weldingtool.setWelding(0)
 	..()
-	set_light(0)
 
 //switchtools maxed out intended for testing/spawning and maybe as loot. Don't forget to add any more tools added to these lists later
 /obj/item/weapon/switchtool/holo/maxed

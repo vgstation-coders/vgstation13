@@ -23,10 +23,10 @@
 	owner = user.mind
 	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
 	if (changeling.splitcount < 1)
-		user.visible_message("[user] is preparing to generate a new form.")
+		to_chat(user, "You are preparing to generate a new form.")
 		Splitting()
 	else
-		user.visible_message("You are unable to split again.")
+		to_chat(user, "You are unable to split again.")
 	..()
 
 /spell/changeling/split/proc/Splitting()
@@ -50,10 +50,10 @@
 	var/datum/role/changeling/changeling = owner.GetRole(CHANGELING)
 	if (success)
 		changeling.splitcount += 1
-		(owner.current).visible_message("<span class='danger'>[(owner.current)] splits!</span>")
-		playsound(owner.current, 'sound/effects/flesh_squelch.ogg', 30, 1)
+		to_chat(owner.current, "<span class='danger'>You split!</span>")
+		owner.current.playsound_local(src, 'sound/effects/flesh_squelch.ogg', 30, 1)
 	else
-		(owner.current).visible_message("[(owner.current)] was unable to split at this time.")
+		to_chat(owner.current, "You were unable to split at this time.")
 		changeling.chem_charges = max(changeling.chem_charges, chemcost)
 
 /spell/changeling/split/proc/recruiter_recruiting(mob/dead/observer/player, controls)
@@ -82,6 +82,7 @@
 	if(oldspecies != newbody.dna.species)
 		newbody.set_species(newbody.dna.species, 0)
 	newbody.UpdateAppearance()
+	newbody.update_name()
 	domutcheck(newbody, null)
 	var/datum/role/changeling/newChangeling = new(newbody.mind)
 	newChangeling.OnPostSetup()

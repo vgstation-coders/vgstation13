@@ -39,6 +39,16 @@
 /obj/machinery/portable_atmospherics/canister/New()
 	..()
 	old_color = canister_color
+	setup_sound()
+
+/obj/machinery/portable_atmospherics/canister/setup_sound()
+	sound_emitter = new(src)
+	if (sound_emitter)
+		var/sound/hiss = sound()
+		hiss.file = 'sound/machines/looping/gas_hiss.ogg'
+		hiss.repeat = 1
+		hiss.volume = 100
+		sound_emitter.add(hiss, "gas_hiss")
 
 /obj/machinery/portable_atmospherics/canister/sleeping_agent
 	name = "Canister: \[N2O\]"
@@ -87,7 +97,7 @@
 	can_label = 0
 
 /obj/machinery/portable_atmospherics/canister/cryotheum // see above
-	name = "Canister \[O2ß\]"
+	name = "Canister \[O2Î²\]"
 	icon_state = "cyan"
 	canister_color = "cyan"
 	can_label = 0
@@ -214,6 +224,10 @@
 		var/env_pressure = environment.return_pressure()
 		var/pressure_delta = min(release_pressure - env_pressure, (air_contents.return_pressure() - env_pressure)/2)
 		//Can not have a pressure delta that would cause environment pressure > tank pressure
+		var/soundvol = 0
+		if (env_pressure > 0.01)
+			soundvol = min(100, pressure_delta / env_pressure)
+		sound_emitter.update_active_sound_param(volume = soundvol)
 
 		var/transfer_moles = 0
 		if((air_contents.temperature > 0) && (pressure_delta > 0))
@@ -369,6 +383,7 @@
 				investigation_log(I_ATMOS, "had its valve <b>closed</b> by [key_name(usr)], stopping transfer into \the [holding].")
 			else
 				investigation_log(I_ATMOS, "had its valve <b>closed</b> by [key_name(usr)], stopping transfer into the <font color='red'><b>air</b></font>")
+			sound_emitter.stop()
 		else
 			if (holding && !arcanetampered)
 				investigation_log(I_ATMOS, "had its valve <b>OPENED</b> by [key_name(usr)], starting transfer into \the [holding]")
@@ -378,6 +393,7 @@
 				if(naughty_stuff)
 					message_admins("[usr.real_name] ([formatPlayerPanel(usr,usr.ckey)]) opened a[arcanetampered ? "n arcane tampered" : ""] canister that contains [naughty_stuff] at [formatJumpTo(loc)]!")
 					log_admin("[usr]([ckey(usr.key)]) opened a[arcanetampered ? "n arcane tampered" : ""] canister that contains [naughty_stuff] at [loc.x], [loc.y], [loc.z]")
+			sound_emitter.play("gas_hiss")
 
 		valve_open = !valve_open
 
@@ -412,7 +428,7 @@
 				"\[Air\]" = "grey", \
 				"\[CAUTION\]" = "yellow", \
 				"\[Rn\]" = "green", \
-				"\[O2ß\]" = "cyan", \
+				"\[O2Î²\]" = "cyan", \
 			)
 			var/label = input("Choose canister label", "Gas canister") as null|anything in colors
 			if (label)

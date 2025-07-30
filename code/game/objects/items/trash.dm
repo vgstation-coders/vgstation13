@@ -14,7 +14,7 @@
 	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
 	//var/global/list/trash_items = list()
 
-/obj/item/trash/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
+/obj/item/trash/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/obj/item/source)
 	if(age)
 		setPersistenceAge(age)
 	if(icon_state)
@@ -226,9 +226,9 @@
 	w_type=RECYK_WAX
 	var/image/wick
 
-/obj/item/trash/candle/New(turf/loc, var/obj/item/candle/source)
+/obj/item/trash/candle/New(turf/loc, var/obj/item/source)
 	..()
-	if (source)
+	if (source && istype(source, /obj/item/candle))
 		color = source.color
 	else
 		color = COLOR_DEFAULT_CANDLE

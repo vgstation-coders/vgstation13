@@ -685,7 +685,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/Location = user.loc
 	var/image/progbar
-	if(user && user.client && user.client.prefs.progress_bars)
+	if(user && user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars))
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "prog_bar_0")
 			progbar.pixel_z = WORLD_ICON_SIZE
@@ -694,7 +694,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			progbar.appearance_flags = RESET_COLOR
 
 	for (var/i = 1 to numticks)
-		if(user && user.client && user.client.prefs.progress_bars)
+		if(user && user.client && user.client.prefs.get_pref(/datum/preference_setting/toggle/progress_bars))
 			if(!progbar)
 				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "prog_bar_0")
 				progbar.pixel_z = WORLD_ICON_SIZE

@@ -230,6 +230,8 @@
 	// tg asset cdn via webroot systme. Currently unused.
 	var/asset_cdn_webroot = ""
 	var/asset_cdn_url = ""
+	//Is Dynamic+ Enabled
+	var/dynamic_plus = FALSE
 
 
 /datum/configuration/New()
@@ -734,6 +736,8 @@
 					hardcore_mode = value
 				if("humans_speak")
 					voice_noises = 1
+				if("dynamic_plus")
+					config.dynamic_plus = TRUE
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

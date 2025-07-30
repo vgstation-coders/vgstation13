@@ -67,6 +67,12 @@ var/list/all_doors = list()
 	new /obj/effect/decal/cleanable/dirt(get_turf(src))
 	qdel(src)
 
+/obj/machinery/door/kick_act(mob/living/carbon/human/kicker)
+	..()
+	var/obj/item/clothing/shoes/S = kicker.shoes
+	if(istype(S))
+		S.on_kick_obj(kicker, src)
+		
 /obj/machinery/door/proc/attempt_slicing(mob/user)
 	being_cut = TRUE
 	user.visible_message("<span class='warning'>[user] begins slicing through \the [src]!</span>", \

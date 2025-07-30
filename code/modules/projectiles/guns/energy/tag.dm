@@ -13,7 +13,7 @@
 	nymph_check = 0
 	hulk_check = 0
 	golem_check = 0
-	var/charge_tick = 0
+	recharge_time = 4
 	var/score = 0
 	var/last_disable_time = -1
 
@@ -98,23 +98,7 @@
 
 /obj/item/weapon/gun/energy/tag/New()
 	..()
-	processing_objects.Add(src)
 	makeLaser()
-
-/obj/item/weapon/gun/energy/tag/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-/obj/item/weapon/gun/energy/tag/process()
-	charge_tick++
-	if(charge_tick < 4)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
-	update_icon()
-	return 1
 
 /obj/item/weapon/gun/energy/tag/proc/cooldown(var/time)
 	if (time > 0)

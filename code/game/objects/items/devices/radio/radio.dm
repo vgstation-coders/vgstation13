@@ -708,6 +708,9 @@
 /obj/item/device/radio/phone/surveillance/attackby(obj/item/I, mob/user)
 	cigbox.attackby(I,user)
 
+/obj/item/device/radio/phone/surveillance/MouseDropFrom(obj/over_object)
+	cigbox.MouseDropFrom(over_object)
+
 /obj/item/device/radio/bug
 	name = "cigarette butt"
 	desc = "A manky old cigarette butt."

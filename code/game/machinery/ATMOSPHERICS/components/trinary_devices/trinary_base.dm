@@ -56,13 +56,13 @@
 	
 /obj/machinery/atmospherics/trinary/proc/set_frequency(new_frequency)
 
-/obj/machinery/atmospherics/trinary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/trinary/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	if(!(pipe.dir in list(NORTH, SOUTH, EAST, WEST)) && src.mirror) //because the dir isn't in the right set, we want to make the mirror kind
 		var/obj/machinery/atmospherics/trinary/mirrored_pipe = new mirror(src.loc)
 		pipe.dir = turn(pipe.dir, -45)
 		qdel(src)
 		mirrored_pipe.setPipingLayer(pipe.piping_layer)
-		return mirrored_pipe.buildFrom(usr, pipe)
+		return mirrored_pipe.buildFrom(user, pipe)
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	if (pipe.pipename)

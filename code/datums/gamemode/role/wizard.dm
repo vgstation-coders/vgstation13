@@ -20,7 +20,7 @@
 	var/list/potions_bought = list()
 
 /datum/role/wizard/ForgeObjectives()
-	if(!antag.current.client.prefs.antag_objectives)
+	if(!antag.current.client.prefs.get_pref(/datum/preference_setting/toggle/antag_objectives))
 		AppendObjective(/datum/objective/freeform/wizard)
 		return
 	switch(rand(1,100))

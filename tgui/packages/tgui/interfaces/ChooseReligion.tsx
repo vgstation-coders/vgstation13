@@ -40,17 +40,17 @@ type Religion = {
  * Filters religions, applies search terms.
  */
 export const selectReligions = (religions: Religion[], searchText = ''): Religion[] => {
-  if (searchText) {
-      const testSearch = createSearch(
-        searchText,
-        (religion: Religion) =>
-        [religion.name,
-        (religion.keywords || [])].join(' ')
-      );
+  const testSearch = searchText
+    ? createSearch(
+      searchText,
+      (religion: Religion) =>
+      [religion.name,
+      (religion.keywords || [])].join(' ')
+    ): null;
+  
+  if (testSearch)
     religions = filter(religions, testSearch);
-    religions = sort(religions);
-    return religions;
-  }
+  religions = sort(religions);
   return religions;
 };
 
@@ -125,7 +125,7 @@ export const DefinedReligionSelector = ({
           fluid
           mt={1}
           placeholder="Search for a religion"
-          onInput={(e, value) => setSearchText(value)}
+          onChange={setSearchText}
           value={searchText}
         />
         <Section fill scrollable>

@@ -2406,7 +2406,7 @@
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_lower)
 "uE" = (
-/obj/item/weapon/melee/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/habitation)
 "uF" = (

@@ -27,6 +27,7 @@
 	var/datum/state_laws_ui/state_laws_ui = new() //holds the UI state for the State Laws verb. See: state_laws.dm
 
 	var/stored_freqs = 0
+	var/time_last_speech = 0 // Used to prevent spam, put here so silicons can properly talk.
 
 /mob/living/silicon/hasFullAccess()
 	return 1
@@ -362,3 +363,11 @@
 		return
 	if(ui_key == "state_laws")
 		return state_laws_ui_interact(user, ui_key, ui, force_open) //state_laws.dm
+
+//A separate check from attacked_by (a carbon-level proc), with only a fragment in order to play hitsounds
+/mob/living/silicon/attacked_by(var/obj/item/I, var/mob/living/user, def_zone, originator, crit, flavor, force)
+	if(!..())
+		return FALSE
+	if(I.hitsound)
+		playsound(loc, I.hitsound, 50, 1, -1)
+	return TRUE

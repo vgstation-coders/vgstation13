@@ -41,21 +41,16 @@
 
 		//No breath from internal atmosphere so get breath from location
 		if(!breath)
-			if(head && (head.clothing_flags & BLOCK_BREATHING)) //Worn items which block breathing are handled first
-				//
+			if(head && (head.clothing_flags & BLOCK_BREATHING))
+				// Breathing blocked by head item
 			else if(wear_mask && (wear_mask.clothing_flags & BLOCK_BREATHING))
-				//
+				// Breathing blocked by mask
 			else if(isobj(loc))
 				var/obj/location_as_object = loc
 				breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
 			else if(isturf(loc))
-				/*if(environment.return_pressure() > ONE_ATMOSPHERE)
-					//Loads of air around (pressure effect will be handled elsewhere), so lets just take a enough to fill our lungs at normal atmos pressure (using n = Pv/RT)
-					breath_moles = (ONE_ATMOSPHERE*BREATH_VOLUME/R_IDEAL_GAS_EQUATION*environment.temperature)
-				else
-					*/
-					//Not enough air around, take a percentage of what's there to model this properly
-				breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
+				if(environment)
+					breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
 
 				if(!breath || breath.total_moles < BREATH_MOLES / 5 || breath.total_moles > BREATH_MOLES * 5)
 					if(prob(20))
@@ -65,36 +60,34 @@
 						if(prob(chance_break))
 							rupture_lung()
 
-				//Handle filtering
+				if(breath)
+					var/block = 0
+					var/list/blockers = list(wear_mask,glasses,head)
+					for (var/item in blockers)
+						var/obj/item/I = item
+						if (!istype(I))
+							continue
+						if (I.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+							block = 1
+							break
 
-				var/block = 0
-				var/list/blockers = list(wear_mask,glasses,head)
-				for (var/item in blockers)
-					var/obj/item/I = item
-					if (!istype(I))
-						continue
-					if (I.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
-						block = 1
-						break
+					if(!block)
+						for(var/obj/effect/smoke/chem/smoke in view(1, src))
+							if(smoke.reagents && smoke.reagents.total_volume)
+								smoke.reagents.reaction(src, INGEST, amount_override = min(smoke.reagents.total_volume,10)/(smoke.reagents.reagent_list.len))
+								spawn(5)
+									if(smoke && smoke.reagents)
+										smoke.reagents.copy_to(src, 10)
+								break
 
-				if(!block)
-					for(var/obj/effect/smoke/chem/smoke in view(1, src)) //If there is smoke within one tile
-						if(smoke.reagents.total_volume)
-							smoke.reagents.reaction(src, INGEST, amount_override = min(smoke.reagents.total_volume,10)/(smoke.reagents.reagent_list.len))
-							spawn(5)
-								if(smoke)
-									smoke.reagents.copy_to(src, 10) //I dunno, maybe the reagents enter the blood stream through the lungs?
-							break //If they breathe in the nasty stuff once, no need to continue checking
+						breath_airborne_diseases()
 
-					//airborne viral spread/breathing
-					breath_airborne_diseases()
-
-		else //Still give containing object the chance to interact
+		else
 			if(istype(loc, /obj/))
 				var/obj/location_as_object = loc
 				location_as_object.handle_internal_lifeform(src, 0)
 
-	if(wear_mask)//Insulated masks will protect you from the elements you breath somewhat
+	if(breath && wear_mask && wear_mask.heat_conductivity < 1)
 		var/temp_difference = bodytemperature - breath.temperature
 		var/temp_change = (1 - wear_mask.heat_conductivity) * temp_difference
 		breath.temperature += temp_change
@@ -103,8 +96,6 @@
 
 	if(species)
 		species.handle_environment(environment, src)
-
-
 
 	if(breath)
 		loc.assume_air(breath)

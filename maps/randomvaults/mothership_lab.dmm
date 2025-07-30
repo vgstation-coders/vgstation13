@@ -1620,8 +1620,8 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "xX" = (
-/obj/item/weapon/melee/stunprobe,
-/obj/item/weapon/melee/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
 /obj/structure/closet/secure_closet/ayy2{
 	anchored = 1;
 	req_access_txt = "162";
@@ -3338,7 +3338,7 @@
 "YU" = (
 /obj/structure/table/reinforced,
 /obj/structure/window/reinforced/plasma,
-/obj/item/weapon/melee/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/control_room)
 "Zh" = (

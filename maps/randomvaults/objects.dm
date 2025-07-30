@@ -421,7 +421,9 @@
 
 /obj/item/weapon/fuel_assembly/trilithium/New()
 	. = ..()
-	rod_quantities["Trilithium"] = 300
+	rod_current_quantities["Trilithium"] = 300
+	rod_starting_quantities["Trilithium"] = 300
+	percent_depleted = 0
 
 /obj/machinery/power/apc/frame/rust_vault
 	make_alerts = FALSE

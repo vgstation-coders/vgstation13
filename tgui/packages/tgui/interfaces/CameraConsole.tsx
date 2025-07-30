@@ -67,13 +67,11 @@ const prevNextCamera = (
  */
 const selectCameras = (cameras: Camera[], searchText = ''): Camera[] => {
   let queriedCameras = filter(cameras, (camera: Camera) => !!camera.name);
-  if (searchText) {
-    const testSearch = createSearch(
-      searchText,
-      (camera: Camera) => camera.name,
-    );
+  const testSearch = searchText
+  ? createSearch(searchText, (camera: Camera) => camera.name)
+  : null;
+  if (testSearch)
     queriedCameras = filter(queriedCameras, testSearch);
-  }
   queriedCameras = sort(queriedCameras);
 
   return queriedCameras;
@@ -83,7 +81,7 @@ export const CameraConsole = (props) => {
   return (
     <Window width={850} height={708}>
       <Window.Content>
-        <CameraContent props />
+        <CameraContent {...props} />
       </Window.Content>
     </Window>
   );
@@ -91,7 +89,8 @@ export const CameraConsole = (props) => {
 
 export const CameraContent = (props) => {
   const [searchText, setSearchText] = useState('');
-  const { act } = useBackend<Data>();
+  const { act, data } = useBackend<Data>();
+  const { activeCamera } = data;
   return (
     <Stack fill>
       <Stack.Item grow>
@@ -135,7 +134,7 @@ const CameraSelector = (props) => {
           fluid
           mt={1}
           placeholder="Search for a camera"
-          onInput={(e, value) => setSearchText(value)}
+          onChange={setSearchText}
           value={searchText}
         />
       </Stack.Item>

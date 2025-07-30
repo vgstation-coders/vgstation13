@@ -199,7 +199,7 @@
 		/obj/machinery/power/battery/smes,
 		/obj/machinery/processor,
 		/obj/machinery/recharge_station,
-		/obj/machinery/rust/gyrotron,
+		/obj/machinery/power/gyrotron,
 		/obj/machinery/shield_gen,
 		/obj/machinery/shieldgen,
 		/obj/machinery/shieldwallgen,

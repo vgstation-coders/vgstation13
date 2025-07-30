@@ -1,6 +1,11 @@
 #define FOOTSOUND_HUMAN 1
 #define FOOTSOUND_VOX 2
 
+var/list/sounds_clownstep = list(
+	'sound/effects/footstep/clownstep1.ogg',
+	'sound/effects/footstep/clownstep2.ogg'
+	)
+
 var/list/sounds_asteroid = list(
 	'sound/effects/footstep/asteroid1.ogg',
 	'sound/effects/footstep/asteroid2.ogg',

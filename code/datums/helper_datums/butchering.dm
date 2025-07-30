@@ -247,6 +247,22 @@
 	if(amount < 8)
 		return "It only has [amount] [amount==1 ? "leg" : "legs"]. "
 
+
+/datum/butchering_product/spider_legs/sleeperclown
+	result = /obj/item/weapon/reagent_containers/food/snacks/meat/clownleg
+
+/datum/butchering_product/spider_legs/sleeperclown/New()
+	amount = rand(6,10) * 2 //yeah uhhh.. yeah. honk honk honk
+
+/datum/butchering_product/spider_legs/sleeperclown/spawn_result(location, mob/parent)
+	if (..() && amount % 2)
+		return new /obj/item/clothing/shoes/clown_shoes(location)
+
+/datum/butchering_product/spider_legs/sleeperclown/desc_modifier()
+	if(amount >= 8)
+		return "It has legs for days."
+	..()
+
 //=============Claws========
 
 /datum/butchering_product/claws
@@ -287,6 +303,7 @@
 	amount = 2 //not a magic number, frogs have 2 legs
 	butcher_time = 10
 
+
 /datum/butchering_product/frog_leg/desc_modifier()
 	if(amount < 2)
 		return "It only has [amount] [amount==1 ? "leg" : "legs"]. "
@@ -309,6 +326,10 @@
 
 /datum/butchering_product/hivelord_core/heart
 	result = /obj/item/organ/internal/heart/hivelord
+
+/datum/butchering_product/hivelord_core/sleeperclown
+	result = /obj/item/weapon/circuitboard/sleeper
+	butcher_time = 20
 
 //======deer head
 

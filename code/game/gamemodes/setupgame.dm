@@ -62,6 +62,7 @@ var/EMPATHBLOCK = 0
 var/SUPERFARTBLOCK = 0
 var/IMMOLATEBLOCK = 0
 var/POLYMORPHBLOCK = 0
+var/CHARGEBLOCK = 0
 
 ///////////////////////////////
 // /vg/ Mutations
@@ -172,6 +173,7 @@ var/LACTOSEBLOCK = 0
 	EMPATHBLOCK    = getAssignedBlock("EMPATH",     numsToAssign, DNA_HARD_BOUNDS, good=1)
 	SUPERFARTBLOCK = getAssignedBlock("SUPERFART",  numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	POLYMORPHBLOCK = getAssignedBlock("POLYMORPH",  numsToAssign, DNA_HARDER_BOUNDS, good=1)
+	CHARGEBLOCK    = getAssignedBlock("CHARGE",     numsToAssign, DNA_HARDER_BOUNDS, good=1)
 
 	//
 	// /vg/ Blocks

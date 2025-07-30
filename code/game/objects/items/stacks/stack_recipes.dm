@@ -31,39 +31,39 @@
 	src.z_up_required = z_up_required
 	src.z_down_required = z_down_required
 
-/datum/stack_recipe/proc/can_build_here(var/mob/usr, var/turf/T)
+/datum/stack_recipe/proc/can_build_here(var/mob/user, var/turf/T)
 	if(one_per_turf && locate(result_type) in T)
-		to_chat(usr, "<span class='warning'>There is another [title] here!</span>")
+		to_chat(user, "<span class='warning'>There is another [title] here!</span>")
 		return 0
 	if(on_floor && (istype(T, /turf/space)))
-		to_chat(usr, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
+		to_chat(user, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
 		return 0
 	return 1
 
-/datum/stack_recipe/proc/finish_building(var/mob/usr, var/obj/item/stack/S, var/R) //This will be called after the recipe is done building, useful for doing something to the result if you want.
+/datum/stack_recipe/proc/finish_building(var/mob/user, var/obj/item/stack/S, var/R) //This will be called after the recipe is done building, useful for doing something to the result if you want.
 	return R
 
 /datum/stack_recipe/proc/before_build(var/mob/user)
 	return TRUE
 
-/datum/stack_recipe/proc/build(var/mob/usr, var/obj/item/stack/S, var/multiplier = 1, var/turf/construct_loc)
-	if (!before_build(usr))
+/datum/stack_recipe/proc/build(var/mob/user, var/obj/item/stack/S, var/multiplier = 1, var/turf/construct_loc)
+	if (!before_build(user))
 		return
 	if (S.amount < req_amount*multiplier)
 		if (res_amount*multiplier>1)
-			to_chat(usr, "<span class='warning'>You haven't got enough [S.irregular_plural ? S.irregular_plural : "[S.singular_name]\s"] to build [res_amount*multiplier] [title]\s!</span>")
+			to_chat(user, "<span class='warning'>You haven't got enough [S.irregular_plural ? S.irregular_plural : "[S.singular_name]\s"] to build [res_amount*multiplier] [title]\s!</span>")
 		else
-			to_chat(usr, "<span class='warning'>You haven't got enough [S.irregular_plural ? S.irregular_plural : "[S.singular_name]\s"] to build \the [title]!</span>")
+			to_chat(user, "<span class='warning'>You haven't got enough [S.irregular_plural ? S.irregular_plural : "[S.singular_name]\s"] to build \the [title]!</span>")
 		return
 	if(!construct_loc)
-		construct_loc = usr.loc
-	if (!can_build_here(usr, construct_loc))
+		construct_loc = user.loc
+	if (!can_build_here(user, construct_loc))
 		return
 	var/current_work = round(world.time)
 	S.last_work = current_work
 	if (time)
 		var/actual_time = S.time_modifier(time)
-		if (!do_after(usr, get_turf(S), actual_time))
+		if (!do_after(user, get_turf(S), actual_time))
 			S.stop_build(current_work == S.last_work)
 			return
 	if (S.amount < req_amount*multiplier)
@@ -77,17 +77,17 @@
 			var/found = FALSE
 			if(ispath(looking_for, /obj/item/stack))
 				req_amount = other_reqs[looking_for]
-			if(ispath(usr.get_inactive_hand(), looking_for))
+			if(ispath(user.get_inactive_hand(), looking_for))
 				found = TRUE
 				if(req_amount) //It's of a stack/sheet subtype
-					var/obj/item/stack/SS = usr.get_inactive_hand()
+					var/obj/item/stack/SS = user.get_inactive_hand()
 					if(SS.amount < req_amount)
 						found = FALSE
 					else
 						stacks_to_consume.Add(SS)
 						stacks_to_consume[S] = req_amount
 					continue
-			for(var/obj/I in range(get_turf(usr),1))
+			for(var/obj/I in range(get_turf(user),1))
 				if(ispath(looking_for, I))
 					found = TRUE
 					if(req_amount) //It's of a stack/sheet subtype
@@ -102,7 +102,7 @@
 				return
 	var/atom/O
 	if(ispath(result_type, /obj/item/stack))
-		O = drop_stack(result_type, construct_loc, (max_res_amount>1 ? res_amount*multiplier : 1), usr)
+		O = drop_stack(result_type, construct_loc, (max_res_amount>1 ? res_amount*multiplier : 1), user)
 		var/obj/item/stack/SS = O
 		SS.update_materials()
 	else
@@ -110,25 +110,25 @@
 			O = new result_type(construct_loc)
 
 	S.stop_build(current_work == S.last_work)
-	O.change_dir(usr.dir)
+	O.change_dir(user.dir)
 	if(start_unanchored)
 		var/obj/A = O
 		A.anchored = 0
-	var/put_in_hand = finish_building(usr, S, O)
+	var/put_in_hand = finish_building(user, S, O)
 
 	//if (R.max_res_amount>1)
 	//	var/obj/item/stack/new_item = O
 	//	new_item.amount = R.res_amount*multiplier
-	//	//new_item.add_to_stacks(usr)
+	//	//new_item.add_to_stacks(user)
 
 	S.use(req_amount*multiplier)
 	for(var/obj/item/stack/SS in stacks_to_consume)
 		SS.use(stacks_to_consume[SS])
 	if (S.amount<=0)
-		usr.before_take_item(S)
+		user.before_take_item(S)
 		if(put_in_hand && istype(O,/obj/item))
-			usr.put_in_hands(O)
-	O.add_fingerprint(usr)
+			user.put_in_hands(O)
+	O.add_fingerprint(user)
 	//BubbleWrap - so newly formed boxes are empty //This is pretty shitcode but I'm not fixing it because even if sloth is a sin I am already going to hell anyways
 	if (istype(O, /obj/item/weapon/storage) )
 		for(var/obj/item/I in O)
@@ -150,28 +150,28 @@
 /* =====================================================================
 							METAL RECIPES
 ===================================================================== */
-/datum/stack_recipe/chair/can_build_here(var/mob/usr, var/turf/T)
+/datum/stack_recipe/chair/can_build_here(var/mob/user, var/turf/T)
 	if(one_per_turf)
 		for(var/atom/movable/AM in T)
 			if(istype(AM, /obj/structure/bed/chair/vehicle)) //Bandaid to allow people in vehicles (and wheelchairs) build chairs
 				continue
 			else if(istype(AM, /obj/structure/bed/chair))
-				to_chat(usr, "<span class='warning'>There is already a chair here!</span>")
+				to_chat(user, "<span class='warning'>There is already a chair here!</span>")
 				return 0
 	if(on_floor && (istype(T, /turf/space)))
-		to_chat(usr, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
+		to_chat(user, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
 		return 0
 	return 1
 
-/datum/stack_recipe/chair/finish_building(var/mob/usr, var/obj/item/stack/S, var/R) //This will be called after the recipe is done building, useful for doing something to the result if you want.
+/datum/stack_recipe/chair/finish_building(var/mob/user, var/obj/item/stack/S, var/R) //This will be called after the recipe is done building, useful for doing something to the result if you want.
 	var/obj/structure/bed/chair/new_chair = R
 	if (istype(new_chair))
 		new_chair.handle_layer()
 	return R
 
-/datum/stack_recipe/conveyor_frame/can_build_here(var/mob/usr, var/turf/T)
+/datum/stack_recipe/conveyor_frame/can_build_here(var/mob/user, var/turf/T)
 	if(on_floor && (istype(T, /turf/space)))
-		to_chat(usr, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
+		to_chat(user, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
 		return 0
 	return 1
 
@@ -185,7 +185,7 @@
 	src.gen_quality = gen_quality
 
 
-/datum/stack_recipe/dorf/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
+/datum/stack_recipe/dorf/finish_building(mob/user, var/obj/item/stack/S, var/obj/R)
 	if(inherit_material)
 		var/datum/material/mat
 		var/datum/materials/materials_list = new
@@ -224,7 +224,7 @@
 	..()
 	src.req_strikes = required_strikes
 
-/datum/stack_recipe/blacksmithing/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
+/datum/stack_recipe/blacksmithing/finish_building(mob/user, var/obj/item/stack/S, var/obj/R)
 	// Figure out main material from stack
 	if(istype(S, /obj/item/stack/sheet/))
 		var/obj/item/stack/sheet/SS = S
@@ -251,7 +251,7 @@
 			R.materials.addRatioFrom(A.materials, other_reqs[req]/res_amount)
 
 	//Yeah nah let's put you in a blacksmith_placeholder
-	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc, S, R, req_strikes)
+	var/obj/item/I = new /obj/item/smithing_placeholder(user.loc, S, R, req_strikes)
 	I.name = "unforged [R.name]"
 	return I
 
@@ -612,11 +612,11 @@ var/list/datum/stack_recipe/cloth_recipes_with_tool = list (
 
 	return TRUE
 
-/datum/stack_recipe/cloth/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/R)
+/datum/stack_recipe/cloth/finish_building(var/mob/user, var/obj/item/stack/S, var/obj/R)
 	R.color = S.color
 	return R
 
-/datum/stack_recipe/cloth/composite/finish_building(var/mob/usr, var/obj/item/stack/S, var/R)
+/datum/stack_recipe/cloth/composite/finish_building(var/mob/user, var/obj/item/stack/S, var/R)
 	var/obj/item/clothing/under/composite/new_clothing = R
 	new_clothing.color = S.color
 	new_clothing.permanent_parts =  extra_data.Copy()
@@ -631,7 +631,7 @@ var/list/datum/stack_recipe/wax_recipes = list (
 	new/datum/stack_recipe/wax("candle",                           /obj/item/candle                            ),
 	)
 
-/datum/stack_recipe/wax/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/R)
+/datum/stack_recipe/wax/finish_building(var/mob/user, var/obj/item/stack/S, var/obj/R)
 	R.color = S.color
 	if (R.color in colors_all)
 		R.name = "[colors_all[R.color]] [R.name]"
@@ -640,7 +640,7 @@ var/list/datum/stack_recipe/wax_recipes = list (
 /* ========================================================================
 							LEATHER RECIPES
 ======================================================================== */
-/datum/stack_recipe/leather/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/R)
+/datum/stack_recipe/leather/finish_building(var/mob/user, var/obj/item/stack/S, var/obj/R)
 	if(istype(S, /obj/item/stack/sheet/leather))
 		var/obj/item/stack/sheet/leather/L = S
 		if(findtext(lowertext(R.name), "leather"))

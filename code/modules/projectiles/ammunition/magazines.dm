@@ -257,6 +257,12 @@
 /obj/item/ammo_storage/magazine/m380auto/extended/empty
 	starting_ammo = 0
 
+/obj/item/ammo_storage/magazine/m380auto/pepperball
+	name = "magazine (.380AUTO pepperball)"
+	desc = "A magazine designed for common .380AUTO pistols. This one has a red marking to indicate it should contain pepperball bullets. Holds 10 rounds."
+	icon_state = "m380AUTO-PP"
+	ammo_type = "/obj/item/ammo_casing/c380auto/pepperball"
+
 /obj/item/ammo_storage/magazine/lr22
 	name = "magazine (22LR)"
 	icon_state = "22LR"

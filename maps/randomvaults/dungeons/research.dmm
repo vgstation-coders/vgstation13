@@ -54,9 +54,9 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "au" = (
-/obj/item/weapon/melee/stunprobe,
-/obj/item/weapon/melee/stunprobe,
-/obj/item/weapon/melee/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
 /obj/structure/closet/secure_closet/ayy2{
 	anchored = 1;
 	req_access_txt = "162";
@@ -4948,7 +4948,7 @@
 	icon_state = "gib4"
 	},
 /obj/machinery/light/he/broken,
-/obj/item/weapon/melee/stunprobe,
+/obj/item/weapon/melee/baton/stunprobe,
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "Zs" = (

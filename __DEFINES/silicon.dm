@@ -50,9 +50,11 @@ var/global/list/mommi_modules = list(
 //Global list of all Cyborg/MoMMI modules. If you add a new list and forget to add it to this one i'll fucking break your neck.
 var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency_nanotrasen_robot_modules + syndicate_robot_modules + special_robot_modules + mommi_modules
 
-/proc/getAvailableRobotModules()
+/proc/getAvailableRobotModules(mob/user)
 	var/list/pickable_modules = default_nanotrasen_robot_modules.Copy()
-	if(security_level >= SEC_LEVEL_RED)
+	if(user && user.check_rights(R_ADMIN))
+		pickable_modules += (emergency_nanotrasen_robot_modules + syndicate_robot_modules + special_robot_modules)
+	else if(security_level >= SEC_LEVEL_RED)
 		pickable_modules += emergency_nanotrasen_robot_modules
 	return pickable_modules
 

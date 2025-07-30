@@ -113,6 +113,11 @@
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
 	for(var/x in actions)
 		qdel(x)
+	if(istype(loc, /obj/item/weapon/storage)) //Update the storage screen for current users.
+		var/obj/item/weapon/storage/S = loc
+		spawn() //Allows properly removing the item from storage so that there's not an unused slot in the middle of its inventory until next refresh.
+			if(S && !S.gcDestroyed) //Double check to see if the storage still exists.
+				S.refresh_all()
 	..()
 
 
@@ -480,6 +485,8 @@ var/global/objects_thrown_when_explode = FALSE
 	for(var/X in actions)
 		var/datum/action/A = X
 		A.Remove(user)
+	if (sound_emitter)
+		sound_emitter.update_source(src)
 
 ///called when an item is stripped off by another person, called BEFORE it is dropped. return 1 to prevent it from actually being stripped.
 /obj/item/proc/before_stripped(mob/wearer as mob, mob/stripper as mob, slot)
@@ -496,6 +503,8 @@ var/global/objects_thrown_when_explode = FALSE
 
 // called after an item is picked up (loc has already changed)
 /obj/item/proc/pickup(mob/user)
+	if (sound_emitter)
+		sound_emitter.update_source(user)
 	return
 
 // called before an item is passed to another person through the give proc - TRUE allows the give, see carbon/give.dm
@@ -1688,6 +1697,7 @@ var/global/objects_thrown_when_explode = FALSE
 		armor["melee"] = min(90, armor["melee"]*(material_type.armor_mod*(quality/B_AVERAGE)))
 		armor["bullet"] = min(90, armor["bullet"]*(material_type.armor_mod*(quality/B_AVERAGE)))
 		armor["laser"] = min(90, armor["laser"]*(material_type.armor_mod*(quality/B_AVERAGE)))
+	toolspeed = fancytrunc(toolspeed * (0.6687**(quality-4)),2)
 
 /////// DISEASE STUFF //////////////////////////////////////////////////////////////////////////
 

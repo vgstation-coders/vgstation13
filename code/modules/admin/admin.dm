@@ -16,7 +16,7 @@ var/global/floorIsLava = 0
 	log_adminwarn(rendered)
 	for(var/client/C in admins)
 		if(R_ADMIN & C.holder.rights)
-			if(C.prefs.toggles & CHAT_ATTACKLOGS)
+			if(C.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_ATTACKLOGS)
 				var/msg = rendered
 				to_chat(C, msg)
 

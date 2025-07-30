@@ -31,6 +31,9 @@
 	// to this list are defined by whether /datum/gas_reaction/proc/reaction_is_possible( datum/gas_mixture/mixture ) returns true or not.
 	var/list/possible_reactions = list()
 
+	// a factor between 0 and 1 for how much a sound volume is reduced by low pressure
+	var/sound_coeff
+
 /datum/gas_mixture/New(datum/gas_mixture/to_copy)
 	..()
 	if(istype(to_copy))
@@ -245,6 +248,10 @@
 		pressure = total_moles * R_IDEAL_GAS_EQUATION * temperature / volume
 	else
 		pressure = 0
+
+	if (pressure < MIN_SOUND_PRESSURE)
+		sound_coeff = 0
+	sound_coeff = min(pressure / ONE_ATMOSPHERE, 1)
 
 
 /datum/gas_mixture/proc/total_moles()

@@ -1010,7 +1010,7 @@ Use this proc preferably at the end of an equipment loadout
 			// Are we trying to pull something we are already pulling?
 			// Then we want to either toggle pulling (stop pulling and quit), or keep pulling (just quit) if client preferences want otherwise.
 			if(pulling == P)
-				if(client && !client.prefs.pulltoggle)
+				if(client && !client.prefs.get_pref(/datum/preference_setting/toggle/pulltoggle))
 					return
 				else
 					stop_pulling()
@@ -1276,7 +1276,7 @@ Use this proc preferably at the end of an equipment loadout
 		)
 	src << browse('html/changelog.html', "window=changes;size=675x650")
 
-	if(prefs.lastchangelog != changelog_hash)
+	if(prefs.get_pref(/datum/preference_setting/string/changelog) != changelog_hash)
 		prefs.SetChangelog(ckey, changelog_hash)
 		winset(src, "rpane.changelog", "background-color=none;font-style=;")
 

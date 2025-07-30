@@ -3,7 +3,7 @@
 	playing = 0 ;\
 	current_line = 0 ;\
 	return
-	
+
 
 /datum/synthesized_song
 	var/list/lines = list()
@@ -44,7 +44,7 @@
 
 /datum/synthesized_song/proc/occupy_channels()
 	if (!global.musical_config.free_channels_populated)
-		for (var/i=1 to 1024) // Currently only 1024 channels are allowed
+		for (var/i=CHANNEL_MUS_RESERVABLE_MIN to CHANNEL_MUS_RESERVABLE_MAX)
 			global.musical_config.free_channels += i
 		global.musical_config.free_channels_populated = 1 // Only once
 

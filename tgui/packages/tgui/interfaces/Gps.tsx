@@ -66,10 +66,11 @@ export const Gps = (props) => {
               onClick={() => act('toggle_refresh')}>
               Auto-update
             </Button.Checkbox>
-            <Button.Input
-              content={"Set tag: "+gpstag}
-              currentValue={gpstag}
-              onCommit={(e, value) => (act('set_tag', { 'new_tag': value }))} />
+                <Button.Input
+                    buttonText={"Set tag: "+gpstag}
+                    value={gpstag}
+                    onCommit={(value) => (act('set_tag', { new_tag: value }))}
+                  />
           </Section>
         )}
         {!emped && !!transmitting && (

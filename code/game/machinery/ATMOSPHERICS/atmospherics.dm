@@ -290,7 +290,7 @@ Pipelines + Other Objects -> Pipe network
 /obj/machinery/atmospherics/proc/disconnect(obj/machinery/atmospherics/reference)
 	update_icon()
 
-/obj/machinery/atmospherics/proc/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+/obj/machinery/atmospherics/proc/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	error("[src] does not define a buildFrom!")
 	return FALSE
 

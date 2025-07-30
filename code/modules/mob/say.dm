@@ -55,7 +55,7 @@ var/list/global_deadchat_listeners = list()
 		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
 
-	if(client && !(client.prefs.toggles & CHAT_DEAD))
+	if(client && !(client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD))
 		to_chat(usr, "<span class='danger'>You have deadchat muted.</span>")
 		return
 

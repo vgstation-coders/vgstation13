@@ -1,4 +1,0 @@
-author: mentgah
-delete-after: true
-changes:
-- bugfix: You can no longer interact with synthesizers when they are unwrenched.

@@ -123,6 +123,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	var/area/lights_area
 	var/spawn_with_bulb = /obj/item/weapon/light/tube
 	var/fitting = "tube"
+	var/break_chance = 2
 	var/rgb_upgrade = FALSE //add plastic to enable RGB mode
 
 	// No ghost interaction.
@@ -143,14 +144,11 @@ var/global/list/obj/machinery/light/alllights = list()
 	if(lights_area)
 		lights_area.lights += src
 
-	if(map.broken_lights)
-		switch(fitting)
-			if("tube")
-				if(prob(2))
-					broken(1)
-			if("bulb")
-				if(prob(5))
-					broken(1)
+	if(map.broken_lights && break_chance)
+		if(ticker && ticker.current_state == GAME_STATE_PREGAME) // only change the chance before roundstart
+			break_chance = clamp(break_chance-(last_crewscore/(10000/break_chance)),0,break_chance*2) // 10% at highest, 0% at lowest
+		if(prob(break_chance))
+			broken(1)
 
 /obj/machinery/light/supports_holomap()
 	return TRUE
@@ -199,8 +197,9 @@ var/global/list/obj/machinery/light/alllights = list()
 
 /obj/machinery/light/small
 	icon_state = "lbulb1"
-	fitting = "bulb"
 	desc = "A small lighting fixture."
+	fitting = "bulb"
+	break_chance = 5
 	spawn_with_bulb = /obj/item/weapon/light/bulb
 
 /obj/machinery/light/small/broken
@@ -210,6 +209,7 @@ var/global/list/obj/machinery/light/alllights = list()
 /obj/machinery/light/spot
 	name = "spotlight"
 	fitting = "large tube"
+	break_chance = 0
 	spawn_with_bulb = /obj/item/weapon/light/tube/large
 
 /obj/machinery/light/built

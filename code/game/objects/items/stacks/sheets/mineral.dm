@@ -221,7 +221,7 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 	recipes = plastic_recipes
 	..()
 
-/datum/stack_recipe/hydro_tray/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/machinery/portable_atmospherics/hydroponics/plastic/R)
+/datum/stack_recipe/hydro_tray/finish_building(var/mob/user, var/obj/item/stack/S, var/obj/machinery/portable_atmospherics/hydroponics/plastic/R)
 	R.waterlevel = 0
 	R.update_icon(TRUE)
 	return R

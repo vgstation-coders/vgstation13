@@ -590,3 +590,14 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	reagents.add_reagent(NUTRIMENT, 12)
 	reagents.add_reagent(BICARIDINE, 5)
 	bitesize = 3
+
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/oogabooga 
+	name = "prehistoric meat"
+	desc = "Ooga booga, boo. booga ooga ooga booga."
+	icon_state = "bearmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/oogabooga/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(GRUGZONE, 4)
