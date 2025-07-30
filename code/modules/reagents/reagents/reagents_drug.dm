@@ -75,11 +75,11 @@
 						dehulk(H)
 					else if(prob(1))
 						H.say(pick("YOU TRYIN' BUILD SUM MUSSLE?", "TOO SWOLE TO CONTROL", "HEY MANG", "HEY MAAAANG"))
-			if(ismouse(M)) //If mouse, become a gym rat. With a 1 in 20 chance of becoming a roid rat
+			if(ismouse(M)) //If mouse, become a gym rat. With a 1 in 10 chance of becoming a roid rat
 				if(has_mouse_bulked == 0)
-					if(prob(95))
+					if(prob(90))
 						has_mouse_bulked = 1
-						if(prob(95))
+						if(prob(90))
 							M.visible_message("<span class='warning'>[M] suddenly grows significantly in size, the color draining from its fur as its muscles expand!</span>")
 							M.transmogrify(/mob/living/simple_animal/hostile/retaliate/gym_rat)
 						else
