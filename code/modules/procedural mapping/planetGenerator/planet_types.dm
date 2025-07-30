@@ -36,13 +36,6 @@
 	default_baseturf = /turf/simulated/floor/plating/asteroid/basalt/lava
 	ruin_type = RUINTYPE_LAVA
 
-/datum/planet_type/rock
-	name = "rock planetoid"
-	desc = "A rocky red world in the midst of terraforming. While some plants have taken hold, it is widely hostile to life."
-	mapgen = /datum/planetGenerator/rock
-	default_baseturf = /turf/simulated/floor/plating/asteroid
-	ruin_type = RUINTYPE_ROCK
-
 /datum/planet_type/snow
 	name = "frozen planetoid"
 	desc = "A frozen planet covered in thick snow, thicker ice, and dangerous predators."
