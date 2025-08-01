@@ -1194,7 +1194,7 @@
 	var/activated = 0
 
 /datum/disease2/effect/loneliness/activate(var/mob/living/mob)
-	if(count % 10 == 0)
+	if(count % 10 == 1)
 		to_chat(mob,pick("Where did everybody go?","It's so lonely now.","It's just you.","There's nobody here."))
 	if(!activated)
 		activated = world.time
