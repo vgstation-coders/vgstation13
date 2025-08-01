@@ -102,14 +102,11 @@
 		var/obj/item/I = user.get_inactive_hand()
 		if(I && I.is_hot() && reagents.has_any_reagents(possible_fuels))
 			reagents.remove_from_all(transfer_amount)
-			var/has_gloves = user.get_item_by_slot(slot_gloves)
-			var/clumsy = clumsy_check(user)
-			if(clumsy || (!has_gloves && prob(10)))
+			if(clumsy_check(user))
 				user.ignite()
-				if(clumsy)
-					user.visible_message("<span class='danger'>[user] tried to spray a plume of fire from \his [src] but ignited himself!</span>","<span class='danger'>You try to spray a plume of fire from your [src] but only ignite yourself!</span>")
-					return
-			if(!has_gloves && prob(10))
+				user.visible_message("<span class='danger'>[user] tried to spray a plume of fire from \his [src] but ignited himself!</span>","<span class='danger'>You try to spray a plume of fire from your [src] but only ignite yourself!</span>")
+				return
+			if(!user.get_item_by_slot(slot_gloves) && prob(10))
 				to_chat(user,"<span class='danger'>The heat from the spray bottle burns your hand!</span>")
 				user.drop_item(src)
 				if(isliving(user))
