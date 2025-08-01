@@ -100,40 +100,41 @@
 		transfer_amount = reagents.total_volume
 	if(user.a_intent == I_HURT)
 		var/obj/item/I = user.get_inactive_hand()
-		if(I?.is_hot() && reagents.has_any_reagents(possible_fuels))
-			reagents.remove_from_all(transfer_amount)
-			var/has_gloves = user.get_item_by_slot(slot_gloves)
-			var/clumsy = clumsy_check(user)
-			if(clumsy || (!has_gloves && prob(10)))
-				user.ignite()
-				if(clumsy)
-					user.visible_message("<span class='danger'>[user] tried to spray a plume of fire from \his [src] but ignited himself!</span>","<span class='danger'>You try to spray a plume of fire from your [src] but only ignite yourself!</span>")
-					return
-			if(!has_gloves && prob(10))
-				to_chat(user,"<span class='danger'>The heat from the spray bottle burns your hand!</span>")
-				user.drop_item(src)
-				if(isliving(user))
-					var/mob/living/L = user
-					L.apply_damage(rand(5,10), BURN, L.active_hand == GRASP_RIGHT_HAND ? LIMB_RIGHT_HAND : LIMB_LEFT_HAND)
+		if(I && reagents.has_any_reagents(possible_fuels))
 			var/highesttemp = TEMPERATURE_FLAME
 			for(var/reag in possible_fuels)
 				if(possible_fuels[reag]["max_temperature"] > highesttemp && reagents.has_reagent(reag))
 					highesttemp = possible_fuels[reag]["max_temperature"]
-			var/obj/item/projectile/fire_breath/sprayer/projectile = new /obj/item/projectile/fire_breath/sprayer(get_turf(src),user.dir,Temp=highesttemp)
-			projectile.original = target
-			projectile.starting = get_turf(user)
-			projectile.target = get_turf(target)
-			projectile.shot_from = user //fired from the user
-			projectile.current = projectile.original
-			projectile.yo = target.y - user.y
-			projectile.xo = target.x - user.x
-			spawn()
-				projectile.OnFired()
-				projectile.process()
-			user.visible_message("<span class='danger'>[user] sprays a plume of fire from \his [src]!</span>","<span class='danger'>You spray a plume of fire from your [src]!</span>")
-			update_icon()
-			playsound(user, 'sound/weapons/flamethrower.ogg', 50, 1)
-			return
+			if(I.is_hot() >= highesttemp)
+				reagents.remove_from_all(transfer_amount)
+				var/has_gloves = user.get_item_by_slot(slot_gloves)
+				var/clumsy = clumsy_check(user)
+				if(clumsy || (!has_gloves && prob(10)))
+					user.ignite()
+					if(clumsy)
+						user.visible_message("<span class='danger'>[user] tried to spray a plume of fire from \his [src] but ignited himself!</span>","<span class='danger'>You try to spray a plume of fire from your [src] but only ignite yourself!</span>")
+						return
+				if(!has_gloves && prob(10))
+					to_chat(user,"<span class='danger'>The heat from the spray bottle burns your hand!</span>")
+					user.drop_item(src)
+					if(isliving(user))
+						var/mob/living/L = user
+						L.apply_damage(rand(5,10), BURN, L.active_hand == GRASP_RIGHT_HAND ? LIMB_RIGHT_HAND : LIMB_LEFT_HAND)
+				var/obj/item/projectile/fire_breath/sprayer/projectile = new /obj/item/projectile/fire_breath/sprayer(get_turf(src),user.dir,Temp=highesttemp)
+				projectile.original = target
+				projectile.starting = get_turf(user)
+				projectile.target = get_turf(target)
+				projectile.shot_from = user //fired from the user
+				projectile.current = projectile.original
+				projectile.yo = target.y - user.y
+				projectile.xo = target.x - user.x
+				spawn()
+					projectile.OnFired()
+					projectile.process()
+				user.visible_message("<span class='danger'>[user] sprays a plume of fire from \his [src]!</span>","<span class='danger'>You spray a plume of fire from your [src]!</span>")
+				update_icon()
+				playsound(user, 'sound/weapons/flamethrower.ogg', 50, 1)
+				return
 	var/mix_color = mix_color_from_reagents(reagents.reagent_list)
 	var/obj/effect/decal/chemical_puff/D = new /obj/effect/decal/chemical_puff(get_turf(src), mix_color, amount_per_transfer_from_this)
 	reagents.trans_to(D, transfer_amount, 1/3)
