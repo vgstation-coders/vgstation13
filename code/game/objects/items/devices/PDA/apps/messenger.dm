@@ -297,9 +297,9 @@
         P_app.tnote["[msg_id]"] = "<i><b>&larr; From <a href='byond://?src=\ref[P_app];choice=Message;target=\ref[reply_to]'>[pda_device.owner]</a> ([pda_device.ownjob]):</b></i><br>[t]<br>"
         if(pollmessage)
             if((pollmessage in P_app.polls_used) && (t in P_app.polls_used[pollmessage]))
-                if(P_app.polls_used[pollmessage][t] == src)
+                if(P_app.polls_used[pollmessage][t] == pda_device)
                     return
-                P_app.polls_used[pollmessage][t] = src
+                P_app.polls_used[pollmessage][t] = pda_device
             if((pollmessage in P_app.polls) && (t in P_app.polls[pollmessage]))
                 P_app.polls[pollmessage][t]++
         msg_id++
