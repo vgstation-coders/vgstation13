@@ -1,4 +1,4 @@
-client/verb/discon_pipes()
+/client/verb/discon_pipes()
 	set name = "Show Disconnected Pipes"
 	set category = "Debug"
 

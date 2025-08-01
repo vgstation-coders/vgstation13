@@ -459,14 +459,14 @@
 	if(density != old_density)
 		densityChanged()
 	if(istype(loc,/area/surface/jungle) && !istype(original_area,/area/surface/jungle) ) //outdoor areas need to be illuminated.
-		if(SSDayNightJungle && .)
+		if(.)
 			var/turf/NewTurf=.
 			NewTurf.affecting_lights=list()
 			NewTurf.lighting_clear_overlay()
 			NewTurf.lighting_build_overlay()
-			NewTurf.set_light(SSDayNightJungle.next_light_range,SSDayNightJungle.next_light_power,SSDayNightJungle.current_timeOfDay)
-			
-			
+			NewTurf.set_light(SSDayNight.next_light_range,SSDayNight.next_light_power,SSDayNight.current_timeOfDay)
+
+
 
 /turf/proc/AddDecal(var/image/decal)
 	if(!turfdecals)
@@ -779,7 +779,7 @@
 				OnEmptyReagents()
 		return TRUE
 	return ..()
-		
+
 //Pathnode stuff
 
 /turf/proc/FindPathNode(var/id)
@@ -803,7 +803,7 @@
 		return
 	if(turf_reagent_amount==null)
 		return
-	
+
 	for(var/RID in turf_reagents)
 		var/datum/reagent/D = chemical_reagents_list[RID]
 		if(D)
@@ -820,7 +820,7 @@
 						R.reaction_mob(A, turf_reagent_method , turf_reagent_amount, ALL_LIMBS)
 			else if ( istype(A,/obj/machinery) || istype(A,/obj/item)  || istype(A,/obj/structure) )
 				R.reaction_obj(A, turf_reagent_amount)
-			
+
 			qdel(R)
 
 	if(turf_reagents_limited!=null)

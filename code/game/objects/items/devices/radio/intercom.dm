@@ -249,6 +249,8 @@
 	src.listening = copy.listening
 
 /obj/item/device/radio/intercom/AIShiftClick(var/mob/living/silicon/ai/clicker)
+	if(is_pulselocked(clicker))
+		return
 	if(clicker.intercom_clipboard)
 		src.frequency = clicker.intercom_clipboard.frequency
 		src.broadcasting = clicker.intercom_clipboard.broadcasting
@@ -261,5 +263,7 @@
 		to_chat(clicker, "<span class='warn'>You don't have any intercom settings copied to clipboard!</span>")
 
 /obj/item/device/radio/intercom/AICtrlClick(var/mob/living/silicon/ai/clicker)
+	if(is_pulselocked(clicker))
+		return
 	clicker.intercom_clipboard = new /datum/intercom_settings(src)
 	to_chat(clicker, "<span class='confirm'>Copied settings from \the [src].</span>")

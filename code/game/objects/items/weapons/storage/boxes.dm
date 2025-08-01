@@ -365,7 +365,26 @@
 /obj/item/weapon/storage/box/drinkingglasses
 	name = "box of drinking glasses"
 	desc = "It has a picture of drinking glasses on it."
+	icon_state = "glass_box"
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/drinks/drinkingglass = BOX_SPACE)
+
+/obj/item/weapon/storage/box/partyhats
+	name = "box of party hats"
+	desc = "It has a picture of party hats on it."
+	icon_state = "party_box"
+	items_to_spawn = list(/obj/item/clothing/head/party_hat = BOX_SPACE)
+
+/obj/item/weapon/storage/box/partyjunk
+	name = "box of party supplies"
+	desc = "It has a picture of someone in a party hat screaming in joy."
+	items_to_spawn = list(
+					/obj/item/weapon/reagent_containers/food/drinks/discount_shaker,
+					/obj/item/weapon/reagent_containers/food/drinks/bottle/patron,
+					/obj/item/weapon/reagent_containers/food/drinks/bottle/goldschlager,
+					/obj/item/weapon/storage/fancy/cigarettes/dromedaryco,
+					/obj/item/weapon/lipstick/random,
+					/obj/item/device/maracas = 2,
+					)
 
 /obj/item/weapon/storage/box/cdeathalarm_kit
 	name = "Death Alarm Kit"
@@ -589,35 +608,35 @@
 	desc = "Someone has scribbled \"DIE, SATANSPAWN\" below the picture of the shell."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/rocksalt = 16)
-		
+
 /obj/item/weapon/storage/box/superbeanbagshells
 	name = "12-gauge super beanbag shells"
 	icon_state = "superbeanbag_shells"
 	desc = "The box claims that these cause zero injuries, no matter the target."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/superbeanbag = 16)
-	
+
 /obj/item/weapon/storage/box/concussiveblastshells
 	name = "12-gauge concussive blast shells"
 	icon_state = "frag_shells"
 	desc = "The box has seventeen seperate labels instructing to always wear ear and eye protection while shooting."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/concussiveblast = 16)
-	
+
 /obj/item/weapon/storage/box/pepperballshells
 	name = "12-gauge pepperball shells"
 	icon_state = "pepper_shells"
 	desc = "The box warns not to ingest the contents of these shells."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/pepperball = 16)
-	
+
 /obj/item/weapon/storage/box/duckshotshells
 	name = "12-gauge duckshot shells"
 	icon_state = "duckshot_shells"
 	desc = "A small label below the festively printed duck states \"Not a toy - keep away from children\"."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/duckshot = 16)
-	
+
 /obj/item/weapon/storage/box/labels
 	name = "label roll box"
 	desc = "A box of refill rolls for a hand labeler."

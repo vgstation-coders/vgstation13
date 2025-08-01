@@ -2,8 +2,9 @@ body
 {
 	padding: 0;
 	margin: 0;
-	background-color: #272727;
 	font-size: 12px;
+    font-family: "Comic Sans MS";
+    background-color: #FF69B4;
 	color: #ffffff;
 	line-height: 170%;
 }
@@ -18,11 +19,30 @@ a, a:link, a:visited, a:active, .linkOn, .linkOff
 {
 	color: #ffffff;
 	text-decoration: none;
-	background: #40628a;
+    background-color: rgba(255, 0, 0, 1);
 	border: 1px solid #161616;
 	padding: 1px 4px 1px 4px;
 	margin: 0 2px 0 0;
 	cursor:default;
+	animation-name: buttonfunny;
+	animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes buttonfunny
+{
+    0% {background-color: hsl(0,100%,50%)}
+    10% {background-color: hsl(36,100%,50%)}
+    20% {background-color: hsl(72,100%,50%); color: #000000;}
+    30% {background-color: hsl(108,100%,50%)}
+    40% {background-color: hsl(144,100%,50%)}
+    50% {background-color: hsl(180,100%,50%)}
+    60% {background-color: hsl(216,100%,50%); color: #FFFFFF;}
+    70% {background-color: hsl(252,100%,50%)}
+    80% {background-color: hsl(288,100%,50%); color: #000000;}
+    90% {background-color: hsl(324,100%,50%)}
+    100% {background-color: hsl(360,100%,50%)}
 }
 
 a.darkred, a.darkred:link, a.darkred:visited, a.darkred:active
@@ -34,6 +54,7 @@ a.darkred, a.darkred:link, a.darkred:visited, a.darkred:active
 	padding: 1px 4px 1px 4px;
 	margin: 0 2px 0 0;
 	cursor:default;
+	animation-name: none;
 }
 
 a.nobg, a.nobg:link, a.nobg:visited, a.nobg:active
@@ -135,7 +156,21 @@ h1, h2, h3, h4, h5, h6
 {
 	margin: 0;
 	padding: 16px 0 8px 0;
-	color: #517087;
+    background: linear-gradient(
+    45deg,
+    rgba(255, 0, 0, 1) 0%,
+    rgba(255, 154, 0, 1) 10%,
+    rgba(208, 222, 33, 1) 20%,
+    rgba(79, 220, 74, 1) 30%,
+    rgba(63, 218, 216, 1) 40%,
+    rgba(47, 201, 226, 1) 50%,
+    rgba(28, 127, 238, 1) 60%,
+    rgba(95, 21, 242, 1) 70%,
+    rgba(186, 12, 248, 1) 80%,
+    rgba(251, 7, 217, 1) 90%,
+    rgba(255, 0, 0, 1) 100%
+    );
+	color: #FFFFFF;
 }
 
 h1
@@ -170,9 +205,49 @@ h4
 	clear: both;
 	padding: 6px 8px 6px 8px;
 	border-bottom: 2px solid #161616;
-	background: #383838;
+    background: linear-gradient(
+    45deg,
+    rgba(255, 0, 0, 1) 0%,
+    rgba(255, 154, 0, 1) 5%,
+    rgba(208, 222, 33, 1) 10%,
+    rgba(79, 220, 74, 1) 15%,
+    rgba(63, 218, 216, 1) 20%,
+    rgba(47, 201, 226, 1) 25%,
+    rgba(28, 127, 238, 1) 30%,
+    rgba(95, 21, 242, 1) 35%,
+    rgba(186, 12, 248, 1) 40%,
+    rgba(251, 7, 217, 1) 45%,
+    rgba(255, 0, 0, 1) 50%,
+    rgba(255, 154, 0, 1) 55%,
+    rgba(208, 222, 33, 1) 60%,
+    rgba(79, 220, 74, 1) 65%,
+    rgba(63, 218, 216, 1) 70%,
+    rgba(47, 201, 226, 1) 75%,
+    rgba(28, 127, 238, 1) 80%,
+    rgba(95, 21, 242, 1) 85%,
+    rgba(186, 12, 248, 1) 90%,
+    rgba(251, 7, 217, 1) 95%,
+    rgba(255, 0, 0, 1) 100%
+    );
+	animation-name: gradient;
+	animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
 	color: #98B0C3;
 	font-size: 16px;
+    background-size: 200% 100%;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 100%;
+	}
+	50% {
+		background-position: 50% 100%;
+	}
+	100% {
+		background-position: 103% 100%;
+	}
 }
 
 .uiTitle.icon
@@ -196,7 +271,7 @@ h4
 
 .average
 {
-	color: #d09000;
+	color: #ffb4e2;
 }
 
 .bad

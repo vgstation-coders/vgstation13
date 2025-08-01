@@ -184,7 +184,9 @@
 					/obj/item/weapon/pen/red,
 					/obj/item/weapon/pen/fountain,
 					/obj/item/device/flashlight/lamp,
-					/obj/item/device/flashlight/lamp)
+					/obj/item/device/flashlight/lamp,
+					/obj/item/weapon/stamp,
+					/obj/item/weapon/stamp/denied,)
 	cost = 15
 	containertype = /obj/structure/closet/crate/basic
 	containername = "office supply crate"

@@ -69,6 +69,8 @@
 	if(!P.nodamage)
 		var/damage = run_armor_absorb(def_zone, P.flag, P.damage)
 		apply_damage(damage, P.damage_type, def_zone, absorb, P.is_sharp(), used_weapon = P)
+		if(damage >= 15 && P.damage_type == BRUTE && (!absorb || prob(40) || damage >=25))
+			spray_blood(get_dir(P.starting,src),damage/5)
 		regenerate_icons()
 	P.on_hit(src, absorb)
 	if(istype(P, /obj/item/projectile/beam/lightning))

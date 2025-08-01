@@ -127,9 +127,10 @@ For vending packs, see vending_packs.dm*/
 	var/list/current_acct
 	var/list/current_acct_override
 	var/screen = SCR_MAIN
-	var/printccrequests = TRUE
+	var/printccrequests = FALSE
 	var/printordermanifests = TRUE
 	var/printshuttlemanifests = TRUE
+	var/last_print = 0 //prevent paper flood spam
 	light_color = LIGHT_COLOR_BROWN
 
 	hack_abilities = list(
@@ -581,6 +582,18 @@ For vending packs, see vending_packs.dm*/
 			screen = result
 		return 1
 	else if (href_list["updateclock"])
+		return 1
+	else if (href_list["printreq"])
+		if(!check_restriction(usr))
+			return
+		if(world.time < last_print+1)
+			return
+		for(var/datum/centcomm_order/O in SSsupply_shuttle.centcomm_orders)
+			if(O.id == text2num(href_list["printreq"]))
+				O.generate_form(loc)
+				last_print = world.time
+				say("Printed request #[O.id].")
+				break
 		return 1
 	else if (href_list["close"])
 		current_acct = null

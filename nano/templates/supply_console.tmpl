@@ -225,7 +225,7 @@ Permissions Panel
 					<br>
 					{{for data.centcomm_orders}}
 						<div class="line">
-							#{{:value.id}}<br>
+							{{:helper.link('#' + value.id, 'document', {'printreq' : value.id}, null,'floatNone')}}
 							Requested:<br>
 								{{:value.requested}}<br>
 								{{if value.extra}}
