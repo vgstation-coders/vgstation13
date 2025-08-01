@@ -16,7 +16,9 @@
 	var/obj/item/weapon/cell/bcell = null
 	var/hitcost = 100 // 10 hits on crap cell
 	var/stunsound = 'sound/weapons/Egloves.ogg'
-	var/swingsound = "swing_hit"
+	var/can_swap_cell = TRUE // Determines whether the cell can be swapped
+	var/has_stun_message = TRUE // Determines if it'll say that the target has been stunned. Only important for the alien stun probe currently
+	hitsound = "swing_hit"
 
 /obj/item/weapon/melee/baton/get_cell()
 	return bcell
@@ -78,9 +80,9 @@
 /obj/item/weapon/melee/baton/examine(mob/user)
 	..()
 	if(bcell)
-		to_chat(user, "<span class='info'>The baton is [round(bcell.percent())]% charged.</span>")
+		to_chat(user, "<span class='info'>\The [src] is [round(bcell.percent())]% charged.</span>")
 	if(!bcell)
-		to_chat(user, "<span class='warning'>The baton does not have a power source installed.</span>")
+		to_chat(user, "<span class='warning'>\The [src] does not have a power source installed.</span>")
 
 /obj/item/weapon/melee/baton/attackby(obj/item/weapon/W, mob/user)
 	if(ispowercell(W))
@@ -93,7 +95,7 @@
 			to_chat(user, "<span class='notice'>[src] already has a cell.</span>")
 
 	else if(W.is_screwdriver(user))
-		if(bcell)
+		if(bcell && can_swap_cell)
 			bcell.updateicon()
 			bcell.forceMove(get_turf(src.loc))
 			bcell = null
@@ -125,13 +127,11 @@
 				qdel(HONKER)
 				qdel(src)
 
-/obj/item/weapon/melee/baton/proc/apply_baton_effect(mob/victim)
-	victim.Knockdown(stunforce)
-	victim.Stun(stunforce)
-	if(iscarbon(victim))
-		var/mob/living/L = victim
+/obj/item/weapon/melee/baton/proc/apply_baton_effect(mob/living/L)
+	L.Knockdown(stunforce)
+	L.Stun(stunforce)
+	if(iscarbon(L))
 		L.apply_effect(10, STUTTER)
-	return
 
 /obj/item/weapon/melee/baton/attack_self(mob/user)
 	if(status && clumsy_check(user) && prob(50))
@@ -169,16 +169,18 @@
 		return
 
 	if(isrobot(M))
-		..()
-		return
+		return ..()
 	if(!isliving(M))
 		return
 
 	var/mob/living/L = M
 
+	var/baton_tap = TRUE //Used in determining if the stun is applied
 	if(user.a_intent == I_HURT) // Harm intent : possibility to miss (in exchange for doing actual damage)
-		. = ..() // Does the actual damage and missing chance. Returns null on sucess ; 0 on failure (blame oldcoders)
-		playsound(loc, swingsound, 50, 1, -1)
+		. = ..() // Does the actual damage and missing chance. Returns 1 on success, 0 on failure.
+		if(!.) //We didn't hit, do not attempt to stun.
+			return
+		baton_tap = FALSE
 
 	else
 		if(!status) // Help intent + no charge = nothing
@@ -186,20 +188,23 @@
 				self_drugged_message="<span class='warning'>\The [name] decides to spare this one.</span>")
 			return
 
-	if(iscarbon(L))
+	if(baton_tap && iscarbon(L)) //Shield checking is already handled in ..(), this is for non-harmful stunbatons.
 		var/mob/living/carbon/C = L
 		if(C.check_shields(force,src))
-			return FALSE //That way during a harmbaton it will not check for the shield twice
+			return FALSE
 
-	if(status && . != FALSE) // This is charged : we stun
+	//Has to be turned on.
+	//Either hit (returned 1 on harm intent attack), or isn't on harm intent (we quit early if it is on harm intent and failed).
+	//Help intent has no chance to miss on an attack.
+	if(status && (. || baton_tap)) // This is charged : we stun
 		user.lastattacked = L
 		L.lastattacker = user
 
 		apply_baton_effect(L)
-
-		L.visible_message("<span class='danger'>\The [L] has been stunned with \the [src] by [user]!</span>",\
-			"<span class='userdanger'>You have been stunned with \the [src] by \the [user]!</span>",\
-			self_drugged_message="<span class='userdanger'>\The [user]'s [src] sucks the life right out of you!</span>")
+		if(has_stun_message)
+			L.visible_message("<span class='danger'>\The [L] has been stunned with \the [src] by [user]!</span>",\
+				"<span class='userdanger'>You have been stunned with \the [src] by \the [user]!</span>",\
+				self_drugged_message="<span class='userdanger'>\The [user]'s [src] sucks the life right out of you!</span>")
 		playsound(loc, stunsound, 50, 1, -1)
 
 		deductcharge(hitcost)
@@ -212,7 +217,7 @@
 		M.assaulted_by(user)
 
 /obj/item/weapon/melee/baton/throw_impact(atom/hit_atom)
-	if(prob(50)) //Landed handle-first into the target
+	if(prob(50) || isrobot(hit_atom)) //Landed handle-first into the target, or is a robot that's not supposed to be affected by baton effects.
 		return ..()
 	if(!isliving(hit_atom) || !status)
 		return
@@ -225,7 +230,8 @@
 
 	apply_baton_effect(L)
 
-	L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
+	if(has_stun_message)
+		L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
 	playsound(loc, stunsound, 50, 1, -1)
 
 	deductcharge(hitcost)
@@ -294,7 +300,6 @@
 	L.apply_effect(10, STUTTER) //sanity
 	L.apply_effect(stunforce, AGONY) //apply pain by throwing, it doesn't damage them though
 	L.audible_scream()
-	return
 
 /obj/item/weapon/melee/baton/harm/attack_self(mob/user) //putting this here because having damage increases closer to harm baton is more clear
 	if(status && clumsy_check(user) && prob(50))

@@ -9,7 +9,6 @@
 	storage_slots = 4
 	req_one_access = list(access_armory)
 	var/locked = 1
-	var/broken = 0
 	var/startswithelectronics = TRUE
 	var/icon_locked = "lockbox+l"
 	var/icon_closed = "lockbox"
@@ -40,7 +39,7 @@
 	icon_state = "lockbox+b"
 
 /obj/item/weapon/storage/lockbox/can_use()
-	return broken || !locked || !electronics
+	return emagged || !locked || !electronics
 
 /obj/item/weapon/storage/lockbox/attack_robot(var/mob/user)
 	to_chat(user, "<span class='rose'>This box was not designed for use by non-organics.</span>")
@@ -91,7 +90,7 @@
 		if(!electronics)
 			to_chat(user, "<span class='warning'>There is nothing to unlock. Put an access electronics board in this to make it lockable.</span>")
 			return
-		if(broken)
+		if(emagged)
 			to_chat(user, "<span class='warning'>It appears to be broken.</span>")
 			return
 		return toggle(user, I.registered_name)
@@ -107,21 +106,23 @@
 					req_one_access = electronics.conf_access
 				else
 					req_access = electronics.conf_access
-			broken = 0
+			emagged = 0
 			locked = 0
 			update_icon()
 			return
-	else if(broken && issolder(W))
+	else if(emagged && issolder(W))
 		var/obj/item/tool/solder/S = W
 		if(S.remove_fuel(4,user))
 			S.playtoolsound(loc, 100)
 			if(do_after(user, src,4 SECONDS * S.work_speed))
 				S.playtoolsound(loc, 100)
-				broken = 0
+				emagged = 0
 				locked = 0
 				to_chat(user, "<span class='notice'>You repair the electronics inside the locking mechanism!</span>")
 				update_icon()
 		return
+	else if(isEmag(W) && !emagged && electronics)
+		emag_act(user)
 	else if(!locked)
 		if(W.is_screwdriver() && electronics)
 			to_chat(user, "<span class='notice'>You unsecure \the [electronics] from \the [src].</span>")
@@ -130,10 +131,10 @@
 			user.put_in_hands(electronics)
 			req_access = list()
 			req_one_access = list()
-			if(broken)
+			if(emagged)
 				electronics.icon_state = "door_electronics_smoked"
 			electronics = null
-			broken = 0
+			emagged = 0
 			locked = 0
 			update_icon()
 			return
@@ -145,11 +146,10 @@
 	return A != electronics
 
 /obj/item/weapon/storage/lockbox/emag_act(var/mob/user)
-	if (!electronics || broken)
+	if (!electronics || emagged)
 		return FALSE
-	broken = 1
+	emagged = 1
 	locked = 0
-	desc = "It appears to be broken."
 	update_icon()
 	user.visible_message("<span class='danger'>\The [src] has been broken by \the [user] with an electromagnetic card!</span>", "<span class='notice'>You break open \the [src].</span>", "<span class='notice'>You hear a faint click sound.</span>", range = 3)
 	return TRUE
@@ -201,7 +201,7 @@
 
 /obj/item/weapon/storage/lockbox/emp_act(severity)
 	..()
-	if(!broken)
+	if(!emagged)
 		var/probab
 		switch(severity)
 			if(1)
@@ -224,7 +224,7 @@
 
 /obj/item/weapon/storage/lockbox/update_icon()
 	..()
-	if (!electronics || broken)
+	if (!electronics || emagged)
 		icon_state = src.icon_broken
 	else if(locked)
 		icon_state = src.icon_locked
@@ -297,7 +297,7 @@
 	..()
 	if(!electronics)
 		to_chat(user, "<span class='info'>It has no access electronics and cannot be locked.</span>")
-	else if(broken)
+	else if(emagged)
 		to_chat(user, "<span class='info'>The access locking is broken!</span>")
 	to_chat(user, "<span class='info'>[tracked_access]</span>")
 
@@ -357,7 +357,7 @@
 	if(!Adjacent(usr) || usr.loc == src)
 		return
 
-	if(!src.electronics || src.broken)
+	if(!src.electronics || src.emagged)
 		return
 
 	if (ishuman(usr))
@@ -474,7 +474,7 @@
 	overlays.len = 0
 	icon_state = "diskbox[icon_alt]"
 	item_state = "diskbox"
-	if (!broken && !locked && electronics)
+	if (!emagged && !locked && electronics)
 		overlays += image(icon,src,"cover[icon_alt]_open")
 
 	var/i = 0
@@ -498,7 +498,7 @@
 
 	overlays += image(icon,src,"overlay[icon_alt]")
 
-	if (!broken && electronics)
+	if (!emagged && electronics)
 		overlays += image(icon, src, "led[locked]")
 		if(locked)
 			overlays += image(icon, src, "cover[icon_alt]")

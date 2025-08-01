@@ -12,14 +12,15 @@
 	var/state = 0			//1 if rods added; 0 if not
 	var/open = 0			//if the lid is up
 	var/cistern = 0			//if the cistern bit is open
-	var/w_items = 0			//the combined w_class of all the items in the cistern
 	var/mob/living/swirlie = null	//the mob being given a swirlie
 	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
+	var/watertype = /obj/item/weapon/reagent_containers/glass/beaker/water
+	var/base_icon = "toilet"
 
 /obj/structure/toilet/New()
 	. = ..()
 	open = round(rand(0, 1))
-	watersource = new /obj/item/weapon/reagent_containers/glass/beaker/water()
+	watersource = new watertype
 	update_icon()
 
 /obj/structure/toilet/verb/empty_container_into()
@@ -61,19 +62,23 @@
 			return
 		else
 			var/obj/item/I = pick(contents)
-			if(ishuman(user))
+			if(ishuman(user) && istype(I))
 				user.put_in_hands(I)
 			else
 				I.forceMove(get_turf(src))
 			to_chat(user, "<span class='notice'>You find \an [I] in the cistern.</span>")
-			w_items -= I.w_class
 			return
 
 	open = !open
 	update_icon()
 
+/obj/structure/toilet/proc/get_contents_w_class()
+	. = 0
+	for(var/obj/item/I in contents)
+		. += I.w_class
+
 /obj/structure/toilet/update_icon()
-	icon_state = "toilet[open][cistern]"
+	icon_state = "[base_icon][open][cistern]"
 
 /obj/structure/toilet/attackby(obj/item/I as obj, mob/living/user as mob)
 	if(I.is_wrench(user))
@@ -151,12 +156,12 @@
 		if(I.w_class > W_CLASS_MEDIUM)
 			to_chat(user, "<span class='notice'>\The [I] does not fit.</span>")
 			return
-		if(w_items + I.w_class > W_CLASS_HUGE)
+		if(get_contents_w_class() + I.w_class > W_CLASS_HUGE)
 			to_chat(user, "<span class='notice'>The cistern is full.</span>")
 			return
 		if(user.drop_item(I, src))
-			w_items += I.w_class
 			to_chat(user, "You carefully place \the [I] into the cistern.")
+			watersource.reagents.reaction(I, TOUCH) // Handles water affecting items, such as making dissolvable items dissolve.
 			return
 
 /obj/structure/toilet/bite_act(mob/user)
@@ -229,11 +234,17 @@
 	anchored = 1
 	use_power = MACHINE_POWER_USE_NONE
 	var/on = 0
-	var/obj/effect/mist/mymist = null
+	var/obj/effect/mymist = null
+	var/misttype = /obj/effect/mist
+	var/overlay_state = "water"
 	var/ismist = 0 //Needs a var so we can make it linger~
 	var/watertemp = "cool" //Freezing, normal, or boiling
 	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
+	var/watertype = /obj/item/weapon/reagent_containers/glass/beaker/water
 	var/clean_power = CLEANLINESS_SPACECLEANER//Nanotrasen showers scrub you clean
+	var/reagent_refill = WATER
+	var/coldtemp = -137
+	var/hottemp = 60
 
 	machine_flags = SCREWTOGGLE
 
@@ -242,7 +253,7 @@
 
 /obj/machinery/shower/New() //Our showers actually wet people and floors now
 	..()
-	watersource = new /obj/item/weapon/reagent_containers/glass/beaker/water()
+	watersource = new watertype
 
 //Add heat controls? When emagged, you can freeze to death in it?
 
@@ -276,7 +287,10 @@
 	update_icon()
 	if(on)
 		for(var/atom/movable/G in get_turf(src))
-			G.clean_act(clean_power)
+			if(clean_power)
+				G.clean_act(clean_power)
+			else
+				G.clean_blood()
 
 /obj/machinery/shower/attackby(obj/item/I as obj, mob/user as mob)
 
@@ -322,22 +336,22 @@
 		QDEL_NULL(mymist)
 
 	if(on)
-		var/image/water = image('icons/obj/watercloset.dmi', src, "water", BELOW_OBJ_LAYER, dir)
+		var/image/water = image(icon, src, overlay_state, BELOW_OBJ_LAYER, dir)
 		water.plane = relative_plane(ABOVE_HUMAN_PLANE)
 		overlays += water
-		if(watertemp == "freezing") //No mist if the water is really cold
+		if(watertemp == "freezing cold") //No mist if the water is really cold
 			return
 		if(!ismist)
 			spawn(50)
 				if(src && on)
 					ismist = 1
-					mymist = new /obj/effect/mist(get_turf(src))
+					mymist = new misttype(get_turf(src))
 		else
 			ismist = 1
-			mymist = new /obj/effect/mist(get_turf(src))
+			mymist = new misttype(get_turf(src))
 	else if(ismist)
 		ismist = 1
-		mymist = new /obj/effect/mist(get_turf(src))
+		mymist = new misttype(get_turf(src))
 		spawn(250)
 			if(src && !on)
 				QDEL_NULL(mymist)
@@ -364,7 +378,8 @@
 		for(var/obj/item/I in M.held_items)
 			if(prob(CLEAN_PROB))
 				I.clean_blood()
-				I.clean_act(clean_power)
+				if(clean_power)
+					I.clean_act(clean_power)
 				M.update_inv_hand(M.is_holding_item(I))
 		if(M.back && prob(CLEAN_PROB))
 			if(M.back.clean_blood())
@@ -426,7 +441,8 @@
 	else
 		if(prob(CLEAN_PROB))
 			O.clean_blood()
-			O.clean_act(clean_power)
+			if(clean_power)
+				O.clean_act(clean_power)
 
 	var/turf/turf = get_turf(src)
 	if(prob(CLEAN_PROB))
@@ -446,7 +462,7 @@
 		watersource.reagents.reaction(O, TOUCH)
 		if(istype(O, /obj/item/weapon/reagent_containers/glass))
 			var/obj/item/weapon/reagent_containers/glass/G = O
-			G.reagents.add_reagent(WATER, 5)
+			G.reagents.add_reagent(reagent_refill, 5)
 	watersource.reagents.reaction(get_turf(src), TOUCH)
 
 /obj/machinery/shower/proc/check_heat(mob/living/carbon/C as mob)
@@ -456,10 +472,10 @@
 	//Note : Remember process() rechecks this, so the mix/max procs slowly increase/decrease body temperature
 	//Every second under the shower adjusts body temperature by 1 degree Celsius. Water conducts heat pretty efficiently in real life too
 	if(watertemp == "freezing cold") //Down to -137 degree Celsius, water's glass transition temperature. we don't need cryo tubes where we're going
-		C.bodytemperature = max(T0C - 137, C.bodytemperature - 1)
+		C.bodytemperature = max(T0C + coldtemp, C.bodytemperature - 1)
 		return
 	if(watertemp == "searing hot") //Up to 60 degree Celsius, upper limit for common water boilers. Getting super hot easily in space is hard.
-		C.bodytemperature = min(T0C + 60, C.bodytemperature + 1)
+		C.bodytemperature = min(T0C + hottemp, C.bodytemperature + 1)
 		return
 	if(watertemp == "cool") //Adjusts towards "perfect" body temperature, 37.5 degree Celsius. Actual showers tend to average at 40 degree Celsius, but it's the future
 		if(C.bodytemperature > T0C + 37.5) //Cooling down
@@ -480,6 +496,9 @@
 	anchored = 1
 	var/clean_power = CLEANLINESS_SPACECLEANER//Nanotrasen sinks are equipped with state of the art water propulsion for extra cleanliness
 	var/busy = 0 	//Something's being washed at the moment
+	var/dissolver = WATER
+	var/reagent = WATER
+	var/reagent_name = "water"
 
 /obj/structure/sink/splashable()
 	return FALSE
@@ -522,29 +541,39 @@
 	if (do_after(M,src, 40))
 		M.clean_blood()
 		if(ishuman(M))
-			M:update_inv_gloves()
 			var/mob/living/carbon/human/HM = M
-
-			if(!HM.gloves && HM.species && HM.species.anatomy_flags & ACID4WATER)
-				HM.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
-				HM.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
-
+			HM.update_inv_gloves()
+			if(HM.species)
+				var/flag = HM.species.anatomy_flags & ACID4WATER
+				if(dissolver == PACID)
+					flag = !flag
+				if(flag)
+					if(HM.gloves) //This should make it so any ayy who isn't wearing gloves will get some burns
+						to_chat(HM, "<span class='warning'>Your gloves block direct contact with the [reagent_name].</span>")
+					else
+						to_chat(HM, "<span class='warning'>The [reagent_name] burns your hands!</span>")
+						HM.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
+						HM.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
 		M.visible_message("<span class='notice'>[M] washes \his hands using \the [src].</span>","<span class='notice'>You wash your hands using \the [src].</span>")
 	busy = FALSE
 
 /obj/structure/sink/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(busy)
 		return 1
-	user.visible_message("<span class='notice'>[user] puts \the [M] underneath the running water.","<span class='notice'>You put \the [M] underneath the running water.</span>")
+	user.visible_message("<span class='notice'>[user] puts \the [M] underneath the running [reagent_name].","<span class='notice'>You put \the [M] underneath the running [reagent_name].</span>")
 	busy = TRUE
 	if (do_after(user,src, 40))
-		M.clean_blood()
-		if(M.reagents.maximum_volume > M.reagents.total_volume)
-			playsound(src, 'sound/effects/slosh.ogg', 25, 1)
-			M.reagents.add_reagent(WATER, min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
-			user.visible_message("<span class='notice'>[user] finishes soaking \the [M], \he could clean the entire station with that.</span>","<span class='notice'>You finish soaking \the [M], you feel as if you could clean anything now, even the Chef's backroom...</span>")
+		if(M.dissolvable() == dissolver)
+			M.acid_melt(user.loc)
 		else
-			user.visible_message("<span class='notice'>[user] removes \the [M], cleaner than before.</span>","<span class='notice'>You remove \the [M] from \the [src], it's all nice and sparkly now but somehow didnt get it any wetter.</span>")
+			M.clean_blood()
+			if(M.reagents.maximum_volume > M.reagents.total_volume)
+				playsound(src, 'sound/effects/slosh.ogg', 25, 1)
+				M.reagents.add_reagent(reagent, min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
+				user.visible_message("<span class='notice'>[user] finishes soaking \the [M], \he could clean the entire station with that.</span>","<span class='notice'>You finish soaking \the [M], you feel as if you could clean anything now, even the Chef's backroom...</span>")
+			else
+				user.visible_message("<span class='notice'>[user] removes \the [M], cleaner than before.</span>","<span class='notice'>You remove \the [M] from \the [src], it's all nice and sparkly now but somehow didnt get it any wetter.</span>")
+
 	busy = FALSE
 	return 1
 
@@ -569,9 +598,9 @@
 			return
 		if (istype(RG, /obj/item/weapon/reagent_containers/chempack)) //Chempack can't use amount_per_transfer_from_this, so it needs its own if statement.
 			var/obj/item/weapon/reagent_containers/chempack/C = RG
-			C.reagents.add_reagent(WATER, C.fill_amount)
+			C.reagents.add_reagent(reagent, C.fill_amount)
 		else
-			RG.reagents.add_reagent(WATER, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
+			RG.reagents.add_reagent(reagent, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
 		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill the [RG] using \the [src].</span>")
 		return
 
@@ -601,7 +630,7 @@
 
 	else if(istype(O, /obj/item/stack/sheet/hairlesshide))
 		var/obj/item/stack/sheet/hairlesshide/H = O
-		user.visible_message("<span class='notice'>[user] puts \the [H] underneath the running water and begins soaking it.","<span class='notice'>You put \the [H] underneath the running water and begin soaking it.</span>")
+		user.visible_message("<span class='notice'>[user] puts \the [H] underneath the running [reagent_name] and begins soaking it.","<span class='notice'>You put \the [H] underneath the running [reagent_name] and begin soaking it.</span>")
 		busy = TRUE
 		if (do_after(user, src, 10*H.amount))
 			var/obj/item/stack/sheet/wetleather/WL = new(src)
@@ -623,10 +652,16 @@
 		busy = TRUE
 
 		if (do_after(user,src, 40))
-			O.clean_act(clean_power)//removes blood, unglues, etc
 			user.visible_message( \
 				"<span class='notice'>[user] washes \the [O] using \the [src].</span>", \
 				"<span class='notice'>You wash \the [O] using \the [src].</span>")
+			if(O.dissolvable() == dissolver)
+				O.acid_melt()
+			else
+				if(clean_power)
+					O.clean_act(clean_power)//removes blood, unglues, etc
+				else
+					O.clean_blood()
 			..()
 
 		busy = FALSE

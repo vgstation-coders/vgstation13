@@ -1017,6 +1017,20 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	M.overeatduration = 0
 
+/datum/reagent/mahkoexpitol
+	name = "Mahkoexpitol"
+	id = MAHKOEXPITOL
+	description = "An unusual chemical that annihilates other chemicals on contact."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#808080" //rgb: 128, 128, 128
+	specheatcap = 1.23
+	density = 0.968
+
+/datum/reagent/mahkoexpitol/on_introduced(var/data)
+	..()
+	playsound(holder, "sound/effects/bubbles.ogg", 75, 1)
+	holder.clear_reagents()
+
 //Great healing powers. Metabolizes extremely slowly, but gets used up when it heals damage.
 //Dangerous in amounts over 5 units, healing that occurs while over 5 units adds to a counter. That counter affects gib chance. Guaranteed gib over 20 units.
 /datum/reagent/mednanobots
@@ -1133,6 +1147,37 @@ var/global/list/charcoal_doesnt_remove=list(
 /datum/reagent/methylin/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
 	M.adjustBrainLoss(1)
+
+/datum/reagent/morathial
+	name = "Morathial"
+	id = MORATHIAL
+	description = "A very powerful healing chemical, made to be used in small doses."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#285a35"
+	overdose_tick = 101 //triggers immediately after 20u have been processed
+	specheatcap = 1.23
+	density = 0.968
+
+/datum/reagent/morathial/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		for(var/datum/organ/external/E in H.organs)
+			for(var/datum/wound/W in E.wounds)
+				if(istype(W,/datum/wound/internal_bleeding))
+					W.heal_damage(0.3, TRUE)
+				else
+					W.heal_damage(0.2, TRUE)
+
+/datum/reagent/morathial/on_overdose(var/mob/living/M)
+	..()
+	M.adjustToxLoss(2)
+	M.adjustCloneLoss(2)
+	var/mob/living/carbon/human/H = M
+	if(istype(H) && prob(20))
+		H.custom_pain("Your entire body feels like it's melting!", 1, scream = TRUE)
 
 /datum/reagent/nanobots
 	name = "Nanobots"
@@ -1512,14 +1557,14 @@ var/global/list/charcoal_doesnt_remove=list(
 		return
 	var/mob/living/carbon/human/H = M
 
-	
+
 	if(!H.ckey)
 		H.adjustToxLoss(5)
 	if((!H.client) || H.client.is_afk())
 		if(prob(30))
 			H.vomit(0,1)
 		return
-	
+
 
 	randomized_reagents[SIMPOLINOL].on_human_life(H, tick)
 
@@ -1550,7 +1595,13 @@ var/global/list/charcoal_doesnt_remove=list(
 			M.drowsyness  = max(M.drowsyness, 10) //Drowsiness even outside of the sleeper
 
 	//This handles sleeper/cryo vs out of sleeper/cryo behaviors
-	if (istype(M.loc,/obj/machinery/sleeper) || M.bodytemperature < 170)
+	var/obj/machinery/sleeper/my_sleeper = M.loc
+	if (istype(my_sleeper) || M.bodytemperature < 170)
+		//Specific upgraded sleepers speed up the effects of stoxin2
+		if(istype(my_sleeper))
+			for(var/plugin in my_sleeper.plugins)
+				if(istype(plugin, /obj/item/device/plugin/sleeper/ntbasic))
+					tick += 1
 		//If the patient is in a sleeper/cryo and it's been at least 20 seconds...
 		if(tick >= 10)
 			M.sleeping = max(M.sleeping, 15) //Put to sleep, lasts 30 seconds from exiting the sleeper/running out
@@ -1781,7 +1832,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism= 0.5 //the candle the burns twice as bright...
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#088c2e"
-	
+
 /datum/reagent/regenerate_calcium/on_mob_life(var/mob/living/M) //burns half as long...
 	if(..())
 		return 1
@@ -1796,8 +1847,8 @@ var/global/list/charcoal_doesnt_remove=list(
 		for(var/datum/organ/external/E in H.organs)
 			if(!E.is_organic())
 				continue
-			
-			for(var/datum/wound/W in E.wounds) 
+
+			for(var/datum/wound/W in E.wounds)
 				if(W.damage_type==CUT || W.damage_type==BRUISE) //fixes limb brute damage
 					remaininghealing=W.heal_damage(remaininghealing,1)
 					if(!remaininghealing)
@@ -1832,14 +1883,14 @@ var/global/list/charcoal_doesnt_remove=list(
 	var/toxmod=M.tox_damage_modifier
 	var/brutemod=M.brute_damage_modifier
 	var/firemod=M.burn_damage_modifier
-	
+
 	if(toxmod==0 || brutemod==0 || firemod==0) //no div 0 here, so sireeeeee, nope.
 		return 1
 
 	var/brut=M.getBruteLoss()
 	var/brn=M.getFireLoss()
 	var/tox=M.getToxLoss()
-	
+
 	var/totaldamage = brut+tox+brn
 	if(totaldamage>0.0) //no need to do anything if no damage.
 		totaldamage/=3.0 //average it
@@ -1847,10 +1898,10 @@ var/global/list/charcoal_doesnt_remove=list(
 		var/tox_target = tox*(1-efficacy) + efficacy*totaldamage //linear interpolation to get the damage.
 		var/brute_target = brut*(1-efficacy) + efficacy*totaldamage
 		var/burn_target = brn*(1-efficacy) + efficacy*totaldamage
-		
-		
+
+
 		M.adjustToxLoss(  0.2*ceil(  5.0*((tox_target-tox)/toxmod) )   )
 		M.adjustBruteLoss( 0.2*ceil(  5.0*( (brute_target-brut)/brutemod) ) ) //we divide by the damage modifier, because adjust_loss will multiply by it. we don't want that.
 		M.adjustFireLoss( 0.2*ceil(  5.0*( (burn_target-brn)/firemod) ) ) //why are we rounding to .2? because the damage system acts funky with low fractional numbers, so we avoid that. why ceil instead of floor? fuck you, that's why.
-		
+
 		M.updatehealth()

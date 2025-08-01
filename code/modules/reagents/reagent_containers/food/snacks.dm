@@ -1355,6 +1355,22 @@
 	reagents.add_reagent(TOXIN, 2)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/clownleg
+	name = "giant clown spider leg"
+	desc = "A still twitching leg of a giant spider... you don't really want to eat this, do you?"
+	icon_state = "clownleg"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 15
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/clownleg/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(BANANA, 1)
+	reagents.add_reagent(HONKSERUM, 1)
+	reagents.add_reagent(LUBE, 1)
+	reagents.add_reagent(COLORFUL_REAGENT, 1)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/faggot
 	name = "faggot"
 	desc = "A great meal all round. Not a cord of wood."

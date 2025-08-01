@@ -43,7 +43,7 @@
 	toolspeed = active ? 0.15 : initial(toolspeed)
 	toolsounds = active ? activated_toolsounds : initial(toolsounds)
 	sharpness = active ? 1.4 : initial(sharpness)
-	heat_production = active ? 5000 : initial(heat_production)
+	heat_production = active ? 54000 : initial(heat_production)
 	w_class = active? W_CLASS_LARGE : initial(w_class)
 	sharpness_flags = active ? (INSULATED_EDGE | SHARP_BLADE | HOT_EDGE) : initial(sharpness_flags)
 	hitsound = active ? 'sound/weapons/blade1.ogg' : 'sound/weapons/empty.ogg'

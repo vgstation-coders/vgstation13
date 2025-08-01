@@ -185,7 +185,7 @@
 		if("Vox")
 			var/new_hair_vox = input(user, "Choose your character's hair color:", "Character Preference") as null|anything in list("Green", "Azure", "Brown", "Emerald", "Gray", "Light Green", "Green-Brown")
 			if(new_hair_vox)
-				r_hair = haircolordesc(new_hair_vox) // Yeah, vox uses r_hair number as an index for discrete colour values.
+				r_hair.setting = haircolordesc(new_hair_vox) // Yeah, vox uses r_hair number as an index for discrete colour values.
 				// Why is that? Historical reasons
 				to_chat(user,"<span class='notice'>Your hair will now be [new_hair_vox] in color.</span>")
 

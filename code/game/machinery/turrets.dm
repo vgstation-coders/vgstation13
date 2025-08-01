@@ -545,6 +545,8 @@
 
 //All AI shortcuts. Basing this on what airlocks do, so slight clash with user (Alt is dangerous so toggle stun/lethal, Ctrl is bolts so lock, Shift is 'open' so toggle turrets)
 /obj/machinery/turretid/AIAltClick(mob/living/silicon/ai/user) //Stun/lethal toggle
+	if(is_pulselocked(user))
+		return
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(!ailock || is_malf_owner(user))
@@ -553,6 +555,8 @@
 		updateTurrets()
 
 /obj/machinery/turretid/AICtrlClick(mob/living/silicon/ai/user) //Lock the device
+	if(is_pulselocked(user))
+		return
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(!ailock || is_malf_owner(user))
@@ -560,6 +564,8 @@
 		to_chat(usr, "<span class='notice'>You [locked ? "lock" : "unlock"] the switchboard panel.</span>")
 
 /obj/machinery/turretid/AIShiftClick(mob/living/silicon/ai/user)  //Toggle the turrets on/off
+	if(is_pulselocked(user))
+		return
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(!ailock || is_malf_owner(user))

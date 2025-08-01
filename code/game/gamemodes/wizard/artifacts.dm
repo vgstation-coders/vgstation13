@@ -194,6 +194,12 @@
 
 	H.rightandwrong("guns")
 	to_chat(H, "<span class='userdanger'>You have summoned guns.</span>")
+	score.summon_guns_count++
+	if(prob(20) || ((score.summon_guns_count % 5) == 0)) // 20% chance, or every time guns are summoned 5 times.
+		for(var/mob/M in player_list)
+			if(!M.client)
+				continue
+			M.playsound_local(M, 'sound/misc/ak47.ogg', 50)
 
 //SUMMON MAGIC
 /datum/spellbook_artifact/summon_magic
