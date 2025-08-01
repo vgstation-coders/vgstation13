@@ -1194,7 +1194,8 @@
 	var/activated = 0
 
 /datum/disease2/effect/loneliness/activate(var/mob/living/mob)
-	to_chat(mob,pick("Where did everybody go?","It's so lonely now.","It's just you.","There's nobody here."))
+	if(count % 10 == 0)
+		to_chat(mob,pick("Where did everybody go?","It's so lonely now.","It's just you.","There's nobody here."))
 	if(!activated)
 		activated = world.time
 		QDEL_LIST_CUT(null_images)
