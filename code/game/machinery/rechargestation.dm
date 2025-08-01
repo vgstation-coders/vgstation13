@@ -65,7 +65,7 @@
 		to_chat(user,"<span class='notice'>It currently has [occupant] inside.</span>")
 		if(isrobot(occupant))
 			var/mob/living/silicon/robot/R = occupant
-			to_chat(user,"<span class='notice'>[R] cell charge: [R.get_cell_charge()]/[R.get_cell_maxcharge()]</span>")
+			to_chat(user,"<span class='notice'>[R] cell charge: [R.get_cell_charge(R)]/[R.get_cell_maxcharge()]</span>")
 		if(upgrading && istype(upgrading))
 			to_chat(user,"<span class='notice'>Currently installing: [upgrading]</span>")
 
