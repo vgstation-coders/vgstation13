@@ -11,6 +11,7 @@
     var/list/icon/imglist = list() // Viewable message photos
     var/list/incoming_transactions = list()
     var/list/polls = list()
+    var/list/polls_used = list()
 
 /datum/pda_app/messenger/get_dat(var/mob/user)
     var/dat = ""
@@ -92,6 +93,7 @@
             tnote.Cut()
         if("Clearpolls")//Clears poll results. Stop the count!
             polls.Cut()
+            polls_used.Cut()
         if("Ringtone")
             var/t = input(U, "Please enter new ringtone", name, ttone) as text
             if (pda_device.loc == U)
@@ -293,8 +295,13 @@
 
         tnote["[msg_id]"] = "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
         P_app.tnote["[msg_id]"] = "<i><b>&larr; From <a href='byond://?src=\ref[P_app];choice=Message;target=\ref[reply_to]'>[pda_device.owner]</a> ([pda_device.ownjob]):</b></i><br>[t]<br>"
-        if(pollmessage && (pollmessage in P_app.polls) && (t in P_app.polls[pollmessage]))
-            P_app.polls[pollmessage][t]++
+        if(pollmessage)
+            if((pollmessage in P_app.polls_used) && (t in P_app.polls_used[pollmessage]))
+                if(P_app.polls_used[pollmessage][t] == src)
+                    return
+                P_app.polls_used[pollmessage][t] = src
+            if((pollmessage in P_app.polls) && (t in P_app.polls[pollmessage]))
+                P_app.polls[pollmessage][t]++
         msg_id++
         for(var/mob/dead/observer/M in player_list)
             if(!multicast_message && M.stat == DEAD && M.client && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
@@ -381,6 +388,7 @@
     message_app.last_text = world.time
     if(newpoll)
         message_app.polls[t] = newpoll.Copy()
+        message_app.polls_used[t] = newpoll.Copy()
     for(var/obj/machinery/pda_multicaster/multicaster in pda_multicasters)
         if(multicaster.check_status())
             var/datum/signal/signal = pda_device.telecomms_process()
