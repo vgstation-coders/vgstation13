@@ -102,6 +102,7 @@
 		var/obj/item/I = user.get_inactive_hand()
 		if(I && I.is_hot() && reagents.has_any_reagents(possible_fuels))
 			reagents.remove_from_all(transfer_amount)
+			reagents.heating(I.thermal_energy_transfer()*(rand(5,10)/10), I.is_hot())
 			if(clumsy_check(user))
 				user.ignite()
 				user.visible_message("<span class='danger'>[user] tried to spray a plume of fire from \his [src] but ignited himself!</span>","<span class='danger'>You try to spray a plume of fire from your [src] but only ignite yourself!</span>")
