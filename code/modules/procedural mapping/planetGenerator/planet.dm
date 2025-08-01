@@ -73,8 +73,8 @@
 	turf_biome_cache = list()
 	return ..()
 
-/datum/planetGenerator/proc/generate_turfs()
-	for(var/turf/T in block(locate(1,1,world.maxz),locate(100,100,world.maxz)))
+/datum/planetGenerator/proc/generate_turfs(var/list/turfs)
+	for(var/turf/T in turfs)
 		generate_turf(T)
 		CHECK_TICK
 
@@ -89,10 +89,10 @@
 	var/area/used_area = istype(turf_biome, /datum/biome/cave) ? cave_area : primary_area
 	turf_biome.generate_turf(gen_turf, used_area, string_gen)
 
-/datum/planetGenerator/proc/populate_turfs()
+/datum/planetGenerator/proc/populate_turfs(var/list/turfs)
 	created_features = list()
 	created_mobs = list()
-	for(var/turf/T in block(locate(1,1,world.maxz),locate(100,100,world.maxz)))
+	for(var/turf/T in turfs)
 		populate_turf(T)
 		CHECK_TICK
 	// clear the lists, so we don't get harddels
