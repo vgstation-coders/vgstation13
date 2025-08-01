@@ -27,7 +27,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/lit = 0
 	var/smoketime = 10
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
-	heat_production = 1000
+	heat_production = 5000
 	source_temperature = TEMPERATURE_FLAME
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
@@ -211,7 +211,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/list/unlit_attack_verb = list("prods", "pokes")
 	var/list/lit_attack_verb = list("burns", "singes")
 	attack_verb = list("prods", "pokes")
-	heat_production = 1000
+	heat_production = 5000
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
 	slot_flags = SLOT_MASK|SLOT_EARS
@@ -928,7 +928,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/lightersound = list('sound/items/lighter1.ogg','sound/items/lighter2.ogg')
 	var/fuel = 20
 	var/fueltime
-	heat_production = 1500
+	heat_production = 10000
 	source_temperature = TEMPERATURE_FLAME
 	slot_flags = SLOT_BELT
 	var/list/unlit_attack_verb = list("prods", "pokes")

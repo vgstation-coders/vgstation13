@@ -136,8 +136,8 @@
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
-/obj/item/acid_melt()
-	var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(loc)
+/obj/item/acid_melt(atom/customloc = null)
+	var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(customloc || loc)
 	I.desc = "Looks like this was \a [src] some time ago."
 	visible_message("<span class='warning'>\The [src] melts.</span>")
 	qdel(src)

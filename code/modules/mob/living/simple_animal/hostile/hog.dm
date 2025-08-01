@@ -482,7 +482,7 @@ if ungreased adult: l containers
 	squeal_delay = 4 SECONDS
 	pixel_x = -6
 
-/mob/living/simple_animal/rampagingspacehog/Life()
+/mob/living/simple_animal/rampagingspacehog/sleeperclown/Life()
 	..()
 	for(var/mob/living/person in contents)
 		//weird nullspace can't breet problem, this fixes it

@@ -267,7 +267,7 @@
 	w_class = W_CLASS_SMALL
 	sharpness = 0.8
 	sharpness_flags = INSULATED_EDGE | HOT_EDGE // A gas flame is pretty insulated, is it?
-	heat_production = 3800
+	heat_production = 16200
 	source_temperature = TEMPERATURE_WELDER
 	light_color = LIGHT_COLOR_FIRE
 
@@ -347,29 +347,13 @@
 		//If off
 		if(0)
 			if(icon_state != "welder") //Check that the sprite is correct, if it isnt, it means toggle() was not called
-				force = 3
-				sharpness = 0
-				sharpness_flags = 0
-				damtype = "brute"
-				heat_production = 0
-				source_temperature = 0
-				update_icon()
-				hitsound = "sound/weapons/toolhit.ogg"
-				welding = 0
+				setWelding(FALSE)
 			processing_objects.Remove(src)
 			return
 		//Welders left on now use up fuel, but lets not have them run out quite that fast
 		if(1)
 			if(icon_state != "welder1") //Check that the sprite is correct, if it isnt, it means toggle() was not called
-				var/dmgmult = reagents.get_reagent_amount(PLASMA) ? 1 + ((reagents.get_reagent_amount(PLASMA) / get_fuel()) / 2) : 1 //divide by zero sanity
-				force = 15 * dmgmult
-				sharpness = 0.8 * dmgmult
-				sharpness_flags = INSULATED_EDGE | HOT_EDGE
-				damtype = "fire"
-				heat_production = 3800
-				source_temperature = reagents.get_reagent_amount(PLASMA) ? TEMPERATURE_PLASMA : TEMPERATURE_WELDER
-				update_icon()
-				hitsound = "sound/weapons/welderattack.ogg"
+				setWelding(TRUE)
 			if(prob(5))
 				remove_fuel(1)
 
@@ -487,31 +471,42 @@
 
 //Sets the welding state of the welding tool. If you see W.welding = 1 anywhere, please change it to W.setWelding(1)
 //so that the welding tool updates accordingly
-/obj/item/tool/weldingtool/proc/setWelding(var/temp_welding)
+//Returns if the welder is on or not
+/obj/item/tool/weldingtool/proc/setWelding(var/turn_on = TRUE)
 	//If we're turning it on
-	if(temp_welding > 0)
-		src.welding = 1
+	if(turn_on)
+		welding = 1
 		if (remove_fuel(1))
-			to_chat(usr, "<span class='notice'>\The [src] switches on.</span>")
 			playsound(src,pick('sound/items/lighter1.ogg','sound/items/lighter2.ogg'),40,1)
 			set_light(2)
-			src.force = 15
-			src.damtype = "fire"
+			var/dmgmult = reagents.get_reagent_amount(PLASMA) ? 1 + ((reagents.get_reagent_amount(PLASMA) / get_fuel()) / 2) : 1 //divide by zero sanity
+			force = 15 * dmgmult
+			sharpness = 0.8 * dmgmult
+			sharpness_flags = INSULATED_EDGE | HOT_EDGE
+			damtype = "fire"
+			heat_production = reagents.get_reagent_amount(PLASMA) ? possible_fuels[PLASMA]["thermal_energy_transfer"] : possible_fuels[FUEL]["thermal_energy_transfer"]  //Thermal transfer from liquid fuel list
+			source_temperature = reagents.get_reagent_amount(PLASMA) ? TEMPERATURE_PLASMA : TEMPERATURE_WELDER
+			hitsound = "sound/weapons/welderattack.ogg"
 			update_icon()
 			processing_objects.Add(src)
 		else
-			to_chat(usr, "<span class='notice'>Need more fuel!</span>")
-			src.welding = 0
-			return
+			welding = 0
+			processing_objects.Remove(src)
 	//Otherwise
 	else
-		to_chat(usr, "<span class='notice'>\The [src] switches off.</span>")
 		playsound(src,'sound/effects/zzzt.ogg',20,1)
 		set_light(0)
-		src.force = 3
-		src.damtype = "brute"
+		force = 3
+		sharpness = 0
+		sharpness_flags = 0
+		damtype = "brute"
+		heat_production = 0
+		source_temperature = 0
 		update_icon()
-		src.welding = 0
+		hitsound = "sound/weapons/toolhit.ogg"
+		welding = 0
+		processing_objects.Remove(src)
+	return welding
 
 //Turns off the welder if there is no more fuel (does this really need to be its own proc?)
 /obj/item/tool/weldingtool/proc/check_fuel()
@@ -528,39 +523,24 @@
 		return
 	src.welding = !( src.welding )
 	if (src.welding)
-		if (remove_fuel(1))
+		if (setWelding(TRUE))
 			if(user && istype(user))
 				to_chat(user, "<span class='notice'>You switch the [src] on.</span>")
-			playsound(src,pick('sound/items/lighter1.ogg','sound/items/lighter2.ogg'),40,1)
-			set_light(2)
-			src.force = 15
-			src.damtype = "fire"
-			update_icon()
-			processing_objects.Add(src)
 		else
 			if(user && istype(user))
 				to_chat(user, "<span class='notice'>Need more fuel!</span>")
-			src.welding = 0
 			return
 	else
 		if(user && istype(user))
 			to_chat(usr, "<span class='notice'>You switch the [src] off.</span>")
 		else
 			visible_message("<span class='notice'>\The [src] shuts off!</span>")
-		shut_off()
+		setWelding(FALSE)
 
 /obj/item/tool/weldingtool/extinguish()
 	..()
 	if (welding)
-		shut_off()
-
-/obj/item/tool/weldingtool/proc/shut_off()
-	playsound(src,'sound/effects/zzzt.ogg',20,1)
-	set_light(0)
-	force = 3
-	damtype = "brute"
-	update_icon()
-	welding = 0
+		setWelding(FALSE)
 
 //Decides whether or not to damage a player's eyes based on what they're wearing as protection
 //Note: This should probably be moved to mob
@@ -949,7 +929,7 @@
 //Returns the amount of fuel in the welder
 /obj/item/tool/solder/proc/get_fuel()
 	return reagents.get_reagent_amounts(SACIDS + PACIDS)
-	
+
 /obj/item/tool/solder/pre_fueled/New()
 	. = ..()
 	reagents.add_reagent(SACID, 50)
