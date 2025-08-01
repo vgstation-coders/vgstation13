@@ -994,3 +994,36 @@
 
 /datum/outfit/special/tribalfemale/equip_backbag(var/mob/living/carbon/human/H)
 	return FALSE
+
+
+/datum/outfit/special/robust_tournament_red
+	outfit_name = "Robust Tournament Team Red"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/color/red,
+			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
+			slot_ears_str = /obj/item/device/radio/headset,
+		),
+		/datum/species/vox = list(
+			slot_w_uniform_str = /obj/item/clothing/under/color/red,
+			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
+			slot_ears_str = /obj/item/device/radio/headset,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
+		),
+	)
+
+/datum/outfit/special/robust_tournament_green
+	outfit_name = "Robust Tournament Team Green"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/color/green,
+			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
+			slot_ears_str = /obj/item/device/radio/headset,
+		),
+		/datum/species/vox = list(
+			slot_w_uniform_str = /obj/item/clothing/under/color/green,
+			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
+			slot_ears_str = /obj/item/device/radio/headset,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
+		),
+	)

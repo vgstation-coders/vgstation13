@@ -5,8 +5,11 @@ var/world_startup_time
 var/date_string
 var/force_restart
 
-#if DM_VERSION < 516
+#ifndef SPACEMAN_DMM //bandaid until SDMM is updated for 516
+#define MIN_COMPILER_VERSION 515
+#if DM_VERSION < MIN_COMPILER_VERSION
 #error You need at least version 516 to compile.
+#endif
 #endif
 /world
 	mob = /mob/new_player

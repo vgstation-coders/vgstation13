@@ -91,12 +91,13 @@
 	var/recharge_rate = 0
 
 	var/nticks=0
+	var/disable_config_sync = FALSE
 
 /obj/item/weapon/card/emag/New(var/loc, var/disable_tuning=0)
 	..(loc)
 
 	// For standardized subtypes, once they're established.
-	if(disable_tuning)
+	if(disable_tuning || disable_config_sync)
 		return
 
 	if(ticker)

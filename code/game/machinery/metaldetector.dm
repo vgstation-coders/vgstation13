@@ -1,5 +1,6 @@
-
-
+#define LOG_CLEAR 1
+#define LOG_SUS 2
+#define LOG_THREAT 4
 
 /obj/machinery/detector
 	name = "Mr. V.A.L.I.D. Portable Threat Detector"
@@ -17,6 +18,7 @@
 	var/idmode = 0
 	var/scanmode = 0
 	var/senset = 0
+	var/logview = 0
 
 	req_access = list(access_security)
 
@@ -25,12 +27,16 @@
 	on_armory_manifest = TRUE
 
 	//List of weapons that metaldetector will not flash for, also copypasted in secbot.dm and ed209bot.dm
-	var/safe_weapons = list(
+	var/list/safe_weapons = list(
 		/obj/item/weapon/gun/energy/tag,
 		/obj/item/weapon/gun/energy/laser/practice,
 		/obj/item/weapon/gun/hookshot,
 		/obj/item/weapon/melee/defibrillator
 		)
+	var/list/threat_logs = list()
+	var/list/sus_logs = list()
+	var/list/clear_logs = list()
+	var/log_level = LOG_SUS | LOG_THREAT
 
 //THIS CODE IS COPYPASTED IN ed209bot.dm AND secbot.dm, with slight variations
 /obj/machinery/detector/proc/assess_perp(mob/living/carbon/human/perp as mob)
@@ -140,13 +146,29 @@
 			scanmode = !scanmode
 		if("senmode")
 			senset = !senset
+		if("setlogs")
+			toggle_logflag(href_list["logflag"])
+		if("viewlogs")
+			logview = !logview
+		if("clearlogs")
+			switch(href_list["logflag"])
+				if(LOG_CLEAR)
+					clear_logs.Cut()
+				if(LOG_SUS)
+					sus_logs.Cut()
+				if(LOG_THREAT)
+					threat_logs.Cut()
 		else
 			return
 
 	src.updateUsrDialog()
 	return 1
 
-
+/obj/machinery/detector/proc/toggle_logflag(flag)
+	if (log_level & flag)
+		log_level &= ~flag
+	else
+		log_level |= flag
 
 /obj/machinery/detector/attack_hand(mob/user as mob)
 
@@ -158,16 +180,31 @@
 		if(!src.anchored)
 			return
 
-		var/dat = {"
-		<TITLE>Mr. V.A.L.I.D. Portable Threat Detector</TITLE><h3>Menu:</h3><h4>
-
-		<br>Citizens must carry ID: <A href='?src=\ref[src];action=idmode'>Turn [idmode ? "Off" : "On"]</A>
-
-		<br>Intrusive Scan: <A href='?src=\ref[src];action=scanmode'>Turn [scanmode ? "Off" : "On"]</A>
-
-		<br>DeMil Alerts: <A href='?src=\ref[src];action=senmode'>Turn [senset ? "Off" : "On"]</A></h4>
-		"}
-
+		var/dat = "<TITLE>Mr. V.A.L.I.D. Portable Threat Detector</TITLE>"
+		if(!logview)
+			dat += {"<h3>Menu:</h3><h4><br>
+			Citizens must carry ID: <A href='?src=\ref[src];action=idmode'>Turn [idmode ? "Off" : "On"]</A><br>
+			Intrusive Scan: <A href='?src=\ref[src];action=scanmode'>Turn [scanmode ? "Off" : "On"]</A><br>
+			DeMil Alerts: <A href='?src=\ref[src];action=senmode'>Turn [senset ? "Off" : "On"]</A></h4>
+			<h3>Logging:</h3><h4><br>
+			Clear subjects: <A href='?src=\ref[src];action=setlogs;logflag=[LOG_CLEAR]'>Turn [(log_level & LOG_CLEAR) ? "Off" : "On"]</A><br>
+			Suspicious subjects: <A href='?src=\ref[src];action=setlogs;logflag=[LOG_SUS]'>Turn [(log_level & LOG_SUS) ? "Off" : "On"]</A><br>
+			Threats: <A href='?src=\ref[src];action=setlogs;logflag=[LOG_THREAT]'>Turn [(log_level & LOG_THREAT) ? "Off" : "On"]</A></h4>
+			"}
+			if(clear_logs.len || sus_logs.len || threat_logs.len)
+				dat += "<h3><A href='?src=\ref[src];action=viewlogs'>View logs</A></h3>"
+		else
+			dat += {"<h3>Logs:</h3><h4><br>
+					Clear subjects: <A href='?src=\ref[src];action=clearlogs;logflag=[LOG_CLEAR]'>(Clear)</A><br><br>"}
+			for(var/name in clear_logs)
+				dat += "[name] - [clear_logs[name]]<br>"
+			dat += "<br>Analysis needed: <A href='?src=\ref[src];action=clearlogs;logflag=[LOG_SUS]'>(Clear)</A><br><br>"
+			for(var/name in sus_logs)
+				dat += "[name] - [sus_logs[name]]<br>"
+			dat += "<br>Threats detected: <A href='?src=\ref[src];action=clearlogs;logflag=[LOG_THREAT]'>(Clear)</A><br><br>"
+			for(var/name in threat_logs)
+				dat += "[name] - [threat_logs[name]]<br>"
+			dat += "</h4><h3><A href='?src=\ref[src];action=viewlogs'>Return</A></h3>"
 		user << browse(HTML_SKELETON(dat), "window=detector;size=575x300")
 		onclose(user, "detector")
 		return
@@ -219,10 +256,19 @@
 
 	if(threat_carbons.len)
 		say("Threat detected! Subject[threat_carbons.len > 1 ? "s" : ""]: [threat_carbons.Join(", ")].")
+		if(log_level & LOG_THREAT)
+			for(var/logname in threat_carbons)
+				threat_logs[logname] = worldtime2text(give_seconds = TRUE)
 	if(clear_carbons.len)
 		say("Clear. Subject[clear_carbons.len > 1 ? "s" : ""]: [clear_carbons.Join(", ")].")
+		if(log_level & LOG_CLEAR)
+			for(var/logname in clear_carbons)
+				clear_logs[logname] = worldtime2text(give_seconds = TRUE)
 	if(mildly_threatening_carbons.len)
 		say("Additional screening required! Subject[threat_carbons.len > 1 ? "s" : ""]: [mildly_threatening_carbons.Join(", ")].")
+		if(log_level & LOG_SUS)
+			for(var/logname in mildly_threatening_carbons)
+				sus_logs[logname] = worldtime2text(give_seconds = TRUE)
 
 	flick("[base_state]_flash", src)
 	playsound(src, sndstr, 100, 1)
@@ -263,3 +309,7 @@
 	overlays.len = 0
 	if(anchored)
 		src.overlays += image(icon = icon, icon_state = "[base_state]-s")
+
+#undef LOG_CLEAR
+#undef LOG_SUS
+#undef LOG_THREAT
