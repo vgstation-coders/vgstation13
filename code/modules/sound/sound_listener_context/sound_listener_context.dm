@@ -30,10 +30,15 @@
 	if (client.listener_context)
 		// results in sounds restarting when switching mobs... not great, not terrible
 		qdel(client.listener_context)
-	if (istype(src, /mob/living/silicon/ai))
-		client.listener_context = new /datum/sound_listener_context/ai(client, src, src, world.view)
-	else
 		client.listener_context = new /datum/sound_listener_context(client, src, world.view)
+	return ..()
+
+/mob/living/silicon/ai/Login()
+	if (client.listener_context)
+		qdel(client.listener_context)
+		client.listener_context = new /datum/sound_listener_context/ai(client, src, src)
+		if (eyeobj)
+			client.listener_context.reset_proxy(eyeobj)
 	return ..()
 
 
