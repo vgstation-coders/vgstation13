@@ -873,6 +873,12 @@
 	plant_nutrition = 2
 	plant_watering = 2
 
+/datum/reagent/ethanol/drink/stout/on_mob_life(mob/living/M)
+	if(..())
+		return 1
+
+	M.reagents.add_reagent(IRON,REAGENTS_METABOLISM)
+
 /datum/reagent/ethanol/drink/thirteenloko
 	name = "Thirteen Loko"
 	id = THIRTEENLOKO
