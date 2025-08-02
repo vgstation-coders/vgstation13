@@ -346,14 +346,10 @@
 	switch(welding)
 		//If off
 		if(0)
-			if(icon_state != "welder") //Check that the sprite is correct, if it isnt, it means toggle() was not called
-				setWelding(FALSE)
 			processing_objects.Remove(src)
 			return
 		//Welders left on now use up fuel, but lets not have them run out quite that fast
 		if(1)
-			if(icon_state != "welder1") //Check that the sprite is correct, if it isnt, it means toggle() was not called
-				setWelding(TRUE)
 			if(prob(5))
 				remove_fuel(1)
 
