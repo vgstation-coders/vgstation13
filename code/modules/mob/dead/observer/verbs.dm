@@ -30,7 +30,6 @@
 			to_chat(usr, "<span class='warning'>The astral cord that ties your body and your spirit has been severed. You are likely to wander the realm beyond until your body is finally dead and thus reunited with you.</span>")
 			return
 	completely_untransmogrify()
-
 	mind.current.key = key
 	mind.isScrying = 0
 	return 1

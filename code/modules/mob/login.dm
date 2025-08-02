@@ -115,7 +115,6 @@
 	client.media.open()
 	client.media.update_music()
 
-
 	register_event(/event/mob_area_changed, src, nameof(src::OnMobAreaChanged()))
 
 	if(spell_masters)

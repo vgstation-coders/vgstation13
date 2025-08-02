@@ -90,8 +90,6 @@
 /mob/living/silicon/ai/Destroy()
 	if(eyeobj)
 		eyeobj.ai = null
-		//if (sound_zone_manager)
-		//	sound_zone_manager.unregister_listener(eyeobj)
 		QDEL_NULL(eyeobj) // No AI, no Eye
 	..()
 
