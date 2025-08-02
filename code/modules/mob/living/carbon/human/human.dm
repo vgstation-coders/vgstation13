@@ -697,6 +697,7 @@
 	. = 0
 	var/obj/item/clothing/head/headwear = src.head
 	var/obj/item/clothing/glasses/eyewear = src.glasses
+	var/obj/item/clothing/mask/mask = wear_mask
 	var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 
 	if (istype(headwear))
@@ -704,6 +705,9 @@
 
 	if (istype(eyewear))
 		. += eyewear.eyeprot
+
+	if(istype(mask))
+		. += mask.eyeprot
 
 	for(var/datum/visioneffect/V in huds)
 		. += V.eyeprot

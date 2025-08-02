@@ -800,7 +800,7 @@ Suit and assorted
 
 /obj/item/clothing/mask/gas/voice/ninja
 	name = "ninja mask"
-	desc = "A close-fitting mask that acts both as an air filter and a post-modern fashion statement."
+	desc = "A close-fitting mask that acts both as an air filter and a post-modern fashion statement. The adaptive lenses protect against bright lights."
 	icon_state = "s-ninja"
 	mode = 2 //Does this even do anything?
 	canstage = 0
@@ -808,6 +808,7 @@ Suit and assorted
 	species_fit = list("Human")
 	species_restricted = list("Human")
 	body_parts_covered = FACE
+	eyeprot = 2
 
 /*******************************************
 ****          WEEABOO VARIANTS          ****
