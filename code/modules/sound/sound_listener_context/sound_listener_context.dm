@@ -27,11 +27,18 @@
 	return ..()
 
 /mob/Login()
-	if (client.listener_context) // already initialised -> here from mob transfer
-		client.listener_context.reset_proxy(src)
-	else // client is connecting
-		client.listener_context = new /datum/sound_listener_context(client, src)
+	if (client.listener_context)
+		// results in sounds restarting when switching mobs... not great, not terrible
+		qdel(client.listener_context)
+	if (istype(src, /mob/living/silicon/ai))
+		client.listener_context = new /datum/sound_listener_context/ai(client, src, src, world.view)
+	else
+		client.listener_context = new /datum/sound_listener_context(client, src, world.view)
 	return ..()
+
+
+
+
 
 /datum/sound_listener_context
 	var/client/client = null
@@ -39,8 +46,9 @@
 	var/list/current_channels_by_emitter = list()
 	var/list/free_channels = list()
 	var/range = null
+	var/datum/sound_listen_strategy/strategy = null
 
-/datum/sound_listener_context/New(client/C, mob/P, hearing_range)
+/datum/sound_listener_context/New(client/C, mob/P, hearing_range = world.view)
 	client = C
 	proxy = P
 	current_channels_by_emitter = list()
@@ -51,6 +59,7 @@
 	sound_zone_manager.register_listener(src)
 
 /datum/sound_listener_context/Destroy()
+	world.log << "in Destroy() for [src]"
 	for (var/datum/sound_emitter/E in current_channels_by_emitter)
 		release(E)
 	free_channels.Cut()
@@ -94,16 +103,16 @@
 	sound_zone_manager.register_listener(src)
 
 /datum/sound_listener_context/proc/apply_proxymob_effects(sound/S)
+	. = S
 	if (proxy.is_deaf())
 		S.volume = 0
-		return S
+		return
+
 	if (!(S.atom in view(range, proxy)))
 		S.volume /= 5
 
 	var/p_effect = turf_volume_coeff(proxy)
 	S.volume *= p_effect
-
-	return S
 
 /datum/sound_listener_context/proc/subscribe_to(datum/sound_emitter/E)
 	E.register_event(/event/sound_updated, src, nameof(src::on_sound_update()))
@@ -142,9 +151,9 @@
 	client << S
 
 /datum/sound_listener_context/proc/stop_hearing(datum/sound_emitter/emitter)
-	var/chan = assign_channel(emitter)
+	var/chan = current_channels_by_emitter[emitter]
 	if (!chan)
-		return
+		return // already can't hear it (probably)
 	var/sound/nullsound = sound(file = null)
 	nullsound.channel = chan
 	nullsound.status = SOUND_UPDATE | SOUND_MUTE
@@ -153,7 +162,7 @@
 /datum/sound_listener_context/proc/on_sound_update(datum/sound_emitter/emitter)
 	var/chan = current_channels_by_emitter[emitter]
 	if (!chan)
-		CRASH("Failed to get channel for sound update from [emitter] on [client]")
+		return // we aren't hearing this emitter anyway
 	if (!emitter.active_sound)
 		return // emitter isn't playing anything, get out of here
 	var/sound/S = emitter.active_sound.get()

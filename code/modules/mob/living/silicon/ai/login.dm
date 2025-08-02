@@ -24,8 +24,11 @@
 	client.CAN_MOVE_DIAGONALLY = TRUE
 	client.screen += aistatic
 
-	if (client.listener_context && eyeobj)
-		client.listener_context.reset_proxy(eyeobj)
+	if (client.listener_context)
+		qdel(client.listener_context)
+		client.listener_context = new /datum/sound_listener_context/ai(client, src, src)
+		if (eyeobj)
+			client.listener_context.reset_proxy(eyeobj)
 
 /mob/living/silicon/ai/proc/show_intro_text()
 	to_chat(src, "<B>You are playing the station's AI. The AI cannot move, but can interact with many objects while viewing them (through cameras).</B>")
