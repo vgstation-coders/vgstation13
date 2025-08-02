@@ -26,12 +26,14 @@
 
 			log_debug("Wormhole event in overtime. Ending the event")
 
+/obj/effect/portal/wormhole
+	name = "wormhole"
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "anom"
+
 //maybe this proc can even be used as an admin tool for teleporting players without ruining immulsions?
 /proc/create_wormhole(var/turf/enter as turf, var/turf/exit as turf)
-	var/obj/effect/portal/P = new /obj/effect/portal( enter )
+	var/obj/effect/portal/wormhole/P = new(enter)
 	P.target = exit
-	P.icon = 'icons/obj/objects.dmi'
-	P.icon_state = "anom"
-	P.name = "wormhole"
 	spawn(rand(300,600)) //This isn't useful, the new in hand tele will likely override it
 		qdel(P)
