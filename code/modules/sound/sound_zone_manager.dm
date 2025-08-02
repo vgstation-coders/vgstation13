@@ -1,5 +1,18 @@
 
-// spatial hashing algo based on https://www.beosil.com/download/CollisionDetectionHashing_VMV03.pdf
+/*
+	The sound_zone_manager (SZM) is the main event driver of the sound system.
+	During /mob/Login, a sound_listener_context (SLC) is created on the client. The SLC registers with
+	  the SZM such that the SLC proxy (typically whichever mob the client is controlling, though special
+	  cases exist, such as AI eye) move events are picked up by the SZM. These events allow the SZM to
+	  track a /mob's movement relative to sound_emitters, which are stored in a spatial hash map based on
+	  the following paper: https://www.beosil.com/download/CollisionDetectionHashing_VMV03.pdf (fundamentally
+	  its just a neighbour search).
+	The SZM maintains a hashmap of sound_emitters as well as one for listeners - this is because the system
+	  is two-way. Listener /mobs moving towards a static sound_emitter need to be pushed any playing sound
+	  as it enters range, similarly a moving sound_emitter has to push to a static listener.
+*/
+
+
 
 var/global/datum/sound_zone_manager/sound_zone_manager = new
 

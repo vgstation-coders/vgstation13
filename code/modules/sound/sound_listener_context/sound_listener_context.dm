@@ -11,12 +11,12 @@
 	  is maintained at the client level where such transfers are much cleaner to work with.
 	It also makes sense because sounds are sent to the client anyway, not to the mob.
 
-	These are constructed in `mob/Login() - if one is already initialised (e.g. if the client is being
-	  reassigned to a new mob, such as via ghosting) then `reset_proxy` is called instead.
-	  This triggers reregistration with the SZM which itself forces an `on_player_move` call, which
-	  flushes old emitters and updates with new ones.
-	Lifetime is otherwise tied to the client and so is destructed when the client iself is deleted,
-	  such as on disconnect.
+	Lifetime is largely tied to the mob, as mob changes typically imply a change in audible sounds.
+	When an SLC is constructed/destructed it registers/unregisters the the sound_zone_manager, which
+	  requires access to the SLC proxy (a /mob) for event handling. When anything registers with the
+	  SZM it triggers an `on_player_move` call, which flushes old emitters/channels and updates with
+	  new ones.
+	Client deletion (such as on disconnect) requires this to be cleaned up.
 */
 
 /client

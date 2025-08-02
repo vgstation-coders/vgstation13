@@ -1,7 +1,10 @@
 
 /*
 	Wrapper for /datum/sound for use in sound_emitters.
-	Facilitates temporarily overriding sound datum vars without messing up the master copy
+	Facilitates temporarily overriding sound datum vars without messing up the master copy.
+
+	TODO: Support tracking of how much a sound has played-back and set `offset` accordingly
+	  for pausing/resuming sounds.
 */
 
 /datum/managed_sound

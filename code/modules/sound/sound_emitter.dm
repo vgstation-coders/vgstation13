@@ -1,3 +1,16 @@
+
+/*
+	This is a sound_emitter. It is made of /sounds and var/atom/source
+	These are passive data sources that hold information about which sound an atom is currently emitting.
+	The sound_emitter is the primary means by which developers interact with the sound system. For example,
+	  when writing an /obj/machine that needs to emit some sound (either one-off or looping ambient sounds),
+	  the user need only call `play` or `stop`. The sound_emitter maintains an internal container of sounds
+	  it can play which must be referenced with a key in `play`.
+	They are registered with the sound_zone_manager (SZM) on construction and invoke events when
+	  starting, updating or stopping a sound. These events are subscribed to by /mobs that enter range.
+	  The subscription is driven by the SZM, which maintains a hashmap of sound_emitter locations.
+*/
+
 /atom
 	var/datum/sound_emitter/sound_emitter
 
