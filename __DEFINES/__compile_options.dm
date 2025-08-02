@@ -23,7 +23,7 @@
 // roidstation.dm
 //#define MAP_OVERRIDE 4
 // test_tiny.dm:
-#define MAP_OVERRIDE 6
+//#define MAP_OVERRIDE 6
 // tgstation.dm:
 //#define MAP_OVERRIDE 7
 // snaxi.dm
