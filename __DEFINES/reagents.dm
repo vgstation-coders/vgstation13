@@ -245,7 +245,6 @@
 #define CIDER 			"cider"
 #define STOUT 			"stout"
 #define SNAKEBITE 		"snakebite"
-#define SCRUMPY 		"scrumpy"
 #define WHISKEY 			"whiskey"
 #define SPECIALWHISKEY 			"specialwhiskey"
 #define GIN 			"gin"

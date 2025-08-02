@@ -862,15 +862,6 @@
 	glass_icon_state = "ciderglass"
 	glass_desc = "The hard kind. Alcoholic."
 
-/datum/reagent/ethanol/drink/scrumpy
-	name = "Scrumpy"
-	id = SCRUMPY
-	description = "Alcoholic, fermented lemons."
-	nutriment_factor = 2 * REAGENTS_METABOLISM
-	color = "#887722"
-	glass_icon_state = "ciderglass"
-	glass_desc = "Ayy... me bottle a scrumpy!"
-
 /datum/reagent/ethanol/drink/stout
 	name = "Stout"
 	id = STOUT

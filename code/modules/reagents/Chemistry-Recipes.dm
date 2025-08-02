@@ -2747,14 +2747,6 @@
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 10
 
-/datum/chemical_reaction/scrumpy
-	name = "Scrumpy"
-	id = SCRUMPY
-	result = SCRUMPY
-	required_reagents = list(LEMONJUICE = 10)
-	required_catalysts = list(ENZYME = 5)
-	result_amount = 10
-
 /datum/chemical_reaction/snakebite
 	name = "Snakebite"
 	id = SNAKEBITE
