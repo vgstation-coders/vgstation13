@@ -348,6 +348,21 @@
 		var/obj/item/weapon/storage/S = loc
 		S.update_icon()
 
+/obj/item/weapon/reagent_containers/glass/beaker/vial/bluespace
+	name = "bluespace vial"
+	desc = "A small glass vial. Can hold up to 25 units."
+	icon_state = "vial"
+	starting_materials = list(MAT_DIAMOND = 250, MAT_IRON = 250, MAT_GLASS = 250, MAT_URANIUM = 250)
+	volume = 50
+	possible_transfer_amounts = list(5,10,15,25,50)
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/noreact
+	name = "stasis vial"
+	desc = "A small glass vial. Can hold up to 25 units."
+	icon_state = "vial"
+	starting_materials = list(MAT_DIAMOND = 250, MAT_IRON = 250, MAT_GLASS = 250, MAT_URANIUM = 250)
+	flags = FPRINT | OPENCONTAINER | NOREACT
+
 /obj/item/weapon/reagent_containers/glass/beaker/vial/uranium/New()
 	..()
 	reagents.add_reagent(URANIUM, 25)
