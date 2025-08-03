@@ -132,21 +132,6 @@
 	*/
 	return 0
 
-#warn cleanup
-/*
-/obj/item/mecha_parts/mecha_equipment/proc/attach(obj/mecha/M as obj)
-	M.equipment += src
-	chassis = M
-	src.forceMove(M)
-	M.log_message("[src] initialized.")
-	if(!M.selected)
-		M.selected = src
-	src.update_chassis_page()
-	if(is_activateable)
-		linked_spell = new /spell/mech(M, src)
-	M.refresh_spells()
-	return
-*/
 /obj/item/mecha_parts/mecha_equipment/proc/attach(obj/mecha/M as obj)
 	//M.equipment += src
 	var/has_equipped = 0
@@ -165,6 +150,10 @@
 	if(equip_type != EQUIP_SPECIAL && M.universal_equipment.len < M.max_universal_equip && !has_equipped)
 		M.universal_equipment += src
 	M.equipment += src
+	src.update_chassis_page()
+	if(is_activateable)
+		linked_spell = new /spell/mech(M, src)
+	M.refresh_spells()
 	chassis = M
 	src.loc = M
 
