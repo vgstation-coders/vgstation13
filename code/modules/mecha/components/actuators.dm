@@ -9,7 +9,7 @@
 	start_damaged = FALSE
 	step_delay = 0
 	emp_resistance = 1
-	required_type = null	// List, if it exists. Exosuits meant to use the component.
+	optimal_type = null	// List, if it exists. Exosuits meant to use the component.
 	integrity_danger_mod = 0.6	// Multiplier for comparison to max_integrity before problems start.
 	max_integrity = 50
 	relative_size = 10

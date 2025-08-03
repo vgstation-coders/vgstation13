@@ -21,7 +21,7 @@
 		"pobeda"
 	)
 
-	damage_minimum = 5
+	damage_minimum = 0
 	encumbrance_gap = 2.5
 	penetration_reduction = 3 // blocks .380
 

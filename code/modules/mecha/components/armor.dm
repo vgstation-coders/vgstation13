@@ -3,24 +3,15 @@
 	icon = 'icons/mecha/mech_component.dmi'
 	icon_state = "armor"
 	w_class = W_CLASS_GIANT
-
 	component_type = MECH_ARMOR
-
 	start_damaged = FALSE
-
 	emp_resistance = 4
-
-	required_type = null	// List, if it exists. Exosuits meant to use the component.
-
+	optimal_type = null	// List, if it exists. Exosuits meant to use the component.
 	integrity_danger_mod = 0.4	// Multiplier for comparison to max_integrity before problems start.
 	max_integrity = 100
-
 	internal_damage_flag = MECHA_INT_TEMP_CONTROL
-
 	step_delay = 1
-
 	var/pen_reduction = 1
-
 	var/deflect_chance = 10
 	var/list/damage_absorption = list(
 		"brute"=	0.8,
@@ -44,12 +35,13 @@
 	step_delay = 2
 	max_integrity = 100
 	pen_reduction = 2
+	damage_minimum = 3
 
 	damage_absorption = list(
 									"brute"=0.75,
 									"fire"=0.8,
-									"bullet"=1,
-									"laser"=1,
+									"bullet"=0.9,
+									"laser"=0.85,
 									"energy"=1,
 									"bomb"=0.5,
 									"bio"=1,
@@ -65,6 +57,7 @@
 	max_integrity = 50
 	step_delay = 0
 	pen_reduction = 1
+	damage_minimum = 0
 
 	damage_absorption = list(
 									"brute"=1,
@@ -85,7 +78,8 @@
 	icon_state = "armor_durable"
 	step_delay = 3
 	max_integrity = 125
-	pen_reduction = 5
+	pen_reduction = 3
+	damage_minimum = 3
 	damage_absorption = list(
 		"brute"=0.65,
 		"fire"=1,
@@ -104,14 +98,15 @@
 	step_delay = 4
 	max_integrity = 150
 	emp_resistance = 2
-	required_type = list(/obj/mecha/combat)
+	optimal_type = list(/obj/mecha/combat)
 	damage_minimum = 15
 	pen_reduction = 5
+	damage_minimum = 5
 	damage_absorption = list(
 		"brute"=0.5,
 		"fire"=1.1,
 		"bullet"=0.6,
-		"laser"=0.85,
+		"laser"=0.8,
 		"energy"=0.9,
 		"bomb"=0.8
 		)
@@ -122,7 +117,7 @@
 	. = ..()
 	if(.)
 		var/typepass = FALSE
-		for(var/type in required_type)
+		for(var/type in optimal_type)
 			if(istype(chassis, type))
 				typepass = TRUE
 
@@ -140,7 +135,8 @@
 	emp_resistance = 3
 	deflect_chance = 5
 	pen_reduction = 5
-	required_type = list(/obj/mecha/combat)
+	damage_minimum = 0
+	optimal_type = list(/obj/mecha/combat)
 	damage_absorption = list(
 		"brute"=0.7,
 		"fire"=1,
@@ -156,7 +152,7 @@
 	. = ..()
 	if(.)
 		var/typepass = FALSE
-		for(var/type in required_type)
+		for(var/type in optimal_type)
 			if(istype(chassis, type))
 				typepass = TRUE
 
@@ -172,6 +168,7 @@
 	max_integrity = 150
 	deflect_chance = 10
 	pen_reduction = 10
+	damage_minimum = 5
 	damage_absorption = list(
 		"brute"=0.6,
 		"fire"=0.8,
@@ -189,9 +186,9 @@
 	step_delay = 3
 	max_integrity = 200
 	emp_resistance = 3
-	required_type = list(/obj/mecha/combat/marauder)
+	optimal_type = list(/obj/mecha/combat/marauder)
 	deflect_chance = 25
-	damage_minimum = 30
+	damage_minimum = 10
 	pen_reduction = 10 // blocks .50 BMG, on the Marauder
 	damage_absorption = list(
 		"brute"=0.5,
@@ -209,7 +206,7 @@
 	. = ..()
 	if(.)
 		var/typepass = FALSE
-		for(var/type in required_type)
+		for(var/type in optimal_type)
 			if(istype(chassis, type))
 				typepass = TRUE
 
@@ -225,6 +222,7 @@
 	step_delay = 2
 	max_integrity = 100
 	var/self_repair = 0.5
+	damage_minimum = 3
 	damage_absorption = list(
 		"brute"=0.7,
 		"fire"=0.7,

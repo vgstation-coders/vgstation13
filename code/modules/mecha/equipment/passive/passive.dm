@@ -109,7 +109,7 @@
 	desc = "System enhancements and overdrives to make a ripley's legs move faster."
 	icon_state = "tesla"
 	origin_tech = list( TECH_POWER = 5, TECH_MATERIAL = 4, TECH_ENGINEERING = 4)
-	required_type = list(/obj/mecha/working/ripley)
+	optimal_type = list(/obj/mecha/working/ripley)
 
 	equip_type = EQUIP_HULL
 

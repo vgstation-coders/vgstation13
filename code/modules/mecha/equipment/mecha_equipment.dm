@@ -23,7 +23,7 @@
 	var/is_activateable = TRUE
 	var/spell/mech/linked_spell //Default action is to make the make it the active equipment
 
-	var/required_type = /obj/mecha //may be either a type or a list of allowed types
+	var/optimal_type = /obj/mecha //may be either a type or a list of allowed types
 	var/equip_type = null //mechaequip2
 	var/step_delay = 0	// Does the component slow/speed up the suit?
 	var/enable_special = FALSE	// Will the tool do its special?
@@ -246,10 +246,10 @@
 	return step_delay
 
 /obj/item/mecha_parts/mecha_equipment/proc/enable_special_checks(atom/target)
-	if(ispath(required_type))
-		return istype(target, required_type)
+	if(ispath(optimal_type))
+		return istype(target, optimal_type)
 
-	for (var/path in required_type)
+	for (var/path in optimal_type)
 		if (istype(target, path))
 			return 1
 

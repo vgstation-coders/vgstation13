@@ -4,24 +4,16 @@
 	icon_state = "component"
 	w_class = W_CLASS_GIANT
 	origin_tech = list(TECH_DATA = 2, TECH_ENGINEERING = 2)
-
 	var/component_type = null
-
 	var/obj/mecha/chassis = null
 	var/start_damaged = FALSE
-
 	var/emp_resistance = 0	// Amount of emp 'levels' removed.
-
-	var/list/required_type = null	// List, if it exists. Exosuits meant to use the component (Unique var changes / effects)
-
+	var/list/optimal_type = null	// List, if it exists. Exosuits meant to use the component (Unique var changes / effects)
 	var/integrity
 	var/integrity_danger_mod = 0.5	// Multiplier for comparison to max_integrity before problems start.
 	var/max_integrity = 100
-
 	var/step_delay = 0
-
 	var/relative_size = 30	// Percent chance for the component to be hit.
-
 	var/internal_damage_flag	// If set, the component will toggle the flag on or off if it is destroyed / severely damaged.
 
 /obj/item/mecha_parts/component/examine(mob/user)

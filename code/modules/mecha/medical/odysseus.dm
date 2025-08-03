@@ -5,7 +5,7 @@
 	initial_icon = "odysseus"
 	step_in = 2
 	max_temperature = 15000
-	health = 120
+	health = 100
 	wreckage = /obj/effect/decal/mecha_wreckage/odysseus
 	internal_damage_threshold = 35
 	deflect_chance = 5
@@ -21,12 +21,21 @@
 
 	encumbrance_gap = 2
 	penetration_reduction = 0
+	damage_minimum = 0
 
 	max_hull_equip = 1
 	max_weapon_equip = 0
 	max_utility_equip = 2
 	max_universal_equip = 1
 	max_special_equip = 1
+
+	starting_components = list(
+		/obj/item/mecha_parts/component/hull/lightweight,
+		/obj/item/mecha_parts/component/actuator/hispeed,
+		/obj/item/mecha_parts/component/armor/lightweight,
+		/obj/item/mecha_parts/component/gas,
+		/obj/item/mecha_parts/component/electrical
+		)
 
 /obj/mecha/medical/odysseus/New()
 	..()

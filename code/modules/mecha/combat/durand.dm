@@ -22,8 +22,8 @@
 	paintable = 1
 
 
-	damage_minimum = 10			//Big stompy
-	encumbrance_gap = 2
+	damage_minimum = 5 			//Big stompy
+	encumbrance_gap = 3
 	penetration_reduction = 5 // blocks 9mm, up to 7.62 with armor
 
 	max_hull_equip = 2

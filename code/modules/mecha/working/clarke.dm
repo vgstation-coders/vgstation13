@@ -10,7 +10,6 @@
 	wreckage = /obj/effect/decal/mecha_wreckage/clarke
 	cargo_capacity = 20
 	rad_protection = 100
-	penetration_reduction = 1
 	var/image/thruster_overlay
 	var/overlay_applied = FALSE
 	var/obj/machinery/portable_atmospherics/scrubber/mech/scrubber
@@ -23,7 +22,8 @@
 		"veteranclarke"
 	)
 	paintable = 1
-
+	penetration_reduction = 1
+	damage_minimum = 0
 	encumbrance_gap = 2.5
 
 	starting_components = list(

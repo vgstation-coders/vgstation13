@@ -5,18 +5,12 @@
 	icon_state = "hull"
 	w_class = W_CLASS_GIANT
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
-
 	component_type = MECH_HULL
-
 	emp_resistance = 0	// Amount of emp 'levels' removed.
-
-	required_type = null	// List, if it exists. Exosuits meant to use the component.
-
+	optimal_type = null	// List, if it exists. Exosuits meant to use the component.
 	integrity_danger_mod = 0.5	// Multiplier for comparison to max_integrity before problems start.
 	max_integrity = 50
-
 	internal_damage_flag = MECHA_INT_FIRE
-
 	step_delay = 1
 
 /obj/item/mecha_parts/component/hull/lightweight

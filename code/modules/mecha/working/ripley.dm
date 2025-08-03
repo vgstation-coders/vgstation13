@@ -9,7 +9,6 @@
 	var/fast_pressure_step_in = 1.5
 	/// How fast the mech is in normal pressure
 	var/slow_pressure_step_in = 2.5
-	penetration_reduction = 0
 	max_temperature = 20000
 	health = 200
 	damage_absorption = list("brute"=0.85,"fire"=1.2,"bullet"=1,"laser"=1,"energy"=1,"bomb"=1)
@@ -22,8 +21,9 @@
 		"hauler"
 	)
 	paintable = 1
-
 	encumbrance_gap = 2
+	damage_minimum = 0
+	penetration_reduction = 0
 
 	starting_components = list(
 		/obj/item/mecha_parts/component/hull/durable,
@@ -59,7 +59,6 @@
 	fast_pressure_step_in = 2
 	/// How fast the mech is in normal pressure
 	slow_pressure_step_in = 3
-	penetration_reduction = 2
 	health = 250
 	damage_absorption = list("brute"=0.8,"fire"=1.2,"bullet"=1,"laser"=1,"energy"=1,"bomb"=0.8)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/mk2
@@ -73,6 +72,8 @@
 		"hivisripley"
 	)
 	paintable = 1
+	penetration_reduction = 2
+	damage_minimum = 2
 
 /obj/mecha/working/ripley/mk2/firefighter
 	desc = "Standard APLU MK-II chassis, refitted with additional thermal protection and cistern."
@@ -80,24 +81,24 @@
 	icon_state = "firefighter"
 	initial_icon = "firefighter"
 	max_temperature = 65000
-	penetration_reduction = 3 // blocks .380
 	health = 300
 	light_range_on = 10
 	light_brightness_on = 3
 	damage_absorption = list("brute"=0.7,"fire"=0.5,"bullet"= 1,"laser"=1, "bomb"=0.8)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/firefighter
-	paintable = 1
 	mech_sprites = list(
 		"firefighter",
 		"aluminizer"
 		)
+	paintable = 1
+	penetration_reduction = 3 // blocks .380
+	damage_minimum = 3
 
 /obj/mecha/working/ripley/mk2/firefighter/deathripley
 	desc = "OH SHIT IT'S THE DEATHSQUAD WE'RE ALL GONNA DIE"
 	name = "DEATH-RIPLEY"
 	icon_state = "deathripley"
 	initial_icon = "deathripley"
-	penetration_reduction = 5
 	step_in = 2
 	opacity = 0
 	light_range_on = 12
@@ -107,6 +108,8 @@
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/deathripley
 	step_energy_drain = 0
 	paintable = 0
+	penetration_reduction = 5 // blocks .380
+	damage_minimum = 5
 
 	max_hull_equip = 2
 	max_weapon_equip = 1
