@@ -579,6 +579,19 @@
 	to_chat(hobo, "<b>Despite not being a member of the crew, by default you are <u>not</u> an antagonist. Cooperating with antagonists is allowed - within reason. Ask admins via adminhelp if you're not sure.</b>")
 	hoboamount++
 
+/mob/dead/observer/verb/obs_lounge()
+	set name = "Go to observer lounge"
+	set category = "Ghost"
+	if(!started_as_observer)
+		to_chat(src, "<span class='warning'>This feature is for obsgang only.</span>")
+		return
+	if(!(/datum/map_element/dungeon/obslounge in existing_dungeons))
+		load_dungeon(/datum/map_element/dungeon/obslounge)
+	var/datum/map_element/dungeon/obslounge/OBSGAAANG = locate() in existing_dungeons
+	if(OBSGAAANG?.obs_spawner)
+		var/mob/living/carbon/human/dummy/obser = new(OBSGAAANG.obs_spawner)
+		obser.key = src.key
+
 /mob/dead/observer/verb/pai_signup()
 	set name = "Sign up as pAI"
 	set category = "Ghost"

@@ -3029,6 +3029,7 @@
 #include "maps\derelicts\derelicts.dm"
 #include "maps\fixedvaults\fixedvaults.dm"
 #include "maps\lampreystation\lamprey.dm"
+#include "maps\misc\obslounge.dm"
 #include "maps\packedstation\telecomms.dm"
 #include "maps\randomvaults\advanced_pocketsat.dm"
 #include "maps\randomvaults\dance_revolution.dm"
