@@ -29,7 +29,7 @@
 	role_category = /datum/role/traitor
 	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective",
 							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
-	restricted_from_jobs = list("AI","Mobile MMI")
+	restricted_from_jobs = list("Mobile MMI")
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	weight_category = "Traitor"
