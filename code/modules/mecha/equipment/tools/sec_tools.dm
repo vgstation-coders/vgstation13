@@ -10,6 +10,7 @@
 	var/list/cells = list("cell1" = null, "cell2" = null)
 	var/datum/global_iterator/pr_mech_jail
 	salvageable = 0
+	equip_type = EQUIP_UTILITY
 
 /obj/item/mecha_parts/mecha_equipment/tool/jail/can_attach(obj/mecha/combat/G)
 	if(..())

@@ -3,8 +3,8 @@
 	name = "H.O.N.K"
 	icon_state = "honker"
 	initial_icon = "honker"
-	step_in = 2
-	health = 140
+	step_in = 1.5
+	health = 150
 	deflect_chance = 60
 	internal_damage_threshold = 60
 	damage_absorption = list("brute"=1.2,"fire"=1.5,"bullet"=1,"laser"=1,"energy"=1,"bomb"=1)
@@ -13,8 +13,9 @@
 	operation_req_access = list(access_clown)
 	wreckage = /obj/effect/decal/mecha_wreckage/honker
 	add_req_access = 0
-	max_equip = 3
 	var/squeak = 0
+
+	penetration_reduction = 3 // blocks .380
 
 /*
 /obj/mecha/combat/honker/New()

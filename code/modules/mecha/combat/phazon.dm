@@ -3,12 +3,12 @@
 	name = "Phazon"
 	icon_state = "phazon"
 	initial_icon = "phazon"
-	step_in = 1
+	step_in = 0.75
 	dir_in = 1 //Facing North.
 	step_energy_drain = 3
-	health = 200
-	deflect_chance = 30
-	damage_absorption = list("brute"=0.7,"fire"=0.7,"bullet"=0.7,"laser"=0.7,"energy"=0.7,"bomb"=0.7)
+	health = 150
+	deflect_chance = 10
+	damage_absorption = list("brute"=0.85,"fire"=0.85,"bullet"=0.85,"laser"=0.85,"energy"=0.85,"bomb"=0.85)
 	max_temperature = 25000
 	infra_luminosity = 3
 	wreckage = /obj/effect/decal/mecha_wreckage/phazon
@@ -18,7 +18,6 @@
 	force = 15
 	var/phasing = 0
 	var/phasing_energy_drain = 200
-	max_equip = 4
 	mech_sprites = list(
 		"phazon",
 		"phazon_blanco",
@@ -27,6 +26,27 @@
 		"janus",
 	)
 	paintable = 1
+
+	damage_minimum = 0
+
+	encumbrance_gap = 2
+	penetration_reduction = 5 // blocks 9mm
+
+	max_hull_equip = 2
+	max_weapon_equip = 2
+	max_utility_equip = 2
+	max_universal_equip = 1
+	max_special_equip = 1
+
+	encumbrance_gap = 2
+
+	starting_components = list(
+		/obj/item/mecha_parts/component/hull/durable,
+		/obj/item/mecha_parts/component/actuator,
+		/obj/item/mecha_parts/component/armor/alien,
+		/obj/item/mecha_parts/component/gas,
+		/obj/item/mecha_parts/component/electrical
+		)
 
 /obj/mecha/combat/phazon/New()
 	..()

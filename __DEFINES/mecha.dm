@@ -1,0 +1,5 @@
+#define MECH_HULL		"Hull"
+#define MECH_ACTUATOR	"Actuator"
+#define MECH_ARMOR		"Plating"
+#define MECH_GAS		"Life Support"
+#define MECH_ELECTRIC	"Firmware"

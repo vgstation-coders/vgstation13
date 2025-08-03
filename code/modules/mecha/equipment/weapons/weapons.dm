@@ -4,7 +4,7 @@
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_COMBAT + "=3"
 	var/projectile
 	var/fire_sound
-
+	equip_type = EQUIP_WEAPON
 
 /obj/item/mecha_parts/mecha_equipment/weapon/can_attach(var/obj/mecha/combat/M as obj, var/override = FALSE)
 	if(..())
@@ -166,6 +166,8 @@
 	var/projectiles
 	var/projectile_energy_cost
 
+	var/projectiles_cache
+
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/New()
 	..()
 	projectiles = max_projectiles
@@ -211,6 +213,8 @@
 		src.rearm()
 	return
 
+#define MODE_BUCKSHOT 1
+#define MODE_SLUG 2
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot
 	name = "\improper LBX AC 10 \"Scattershot\""
@@ -222,6 +226,26 @@
 	projectile_energy_cost = 25
 	var/projectiles_per_shot = 1
 	var/deviation = 0.7  //the shots were perfectly accurate no matter what this was set to
+	var/mode = MODE_BUCKSHOT
+
+///obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/get_equip_info()
+//	return "[..()] [mode==1?"([locked||"Nothing"])":null] \[<a href='?src=\ref[src];mode=1'>S</a>|<a href='?src=\ref[src];mode=2'>P</a>\]"
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/Topic(href, href_list)
+	if(..())
+		return TRUE
+	if(href_list["mode"])
+		mode = text2num(href_list["mode"])
+		send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
+	return
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/alt_action()
+	if(mode == MODE_BUCKSHOT)
+		mode = MODE_SLUG
+		to_chat(chassis.occupant, "<span class='notice'>Now firing: slugs.</span>")
+	else
+		mode = MODE_BUCKSHOT
+		to_chat(chassis.occupant, "<span class='notice'>Now firing: buckshot.</span>")
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/action(atom/target)
 	if(!action_checks(target))
@@ -231,12 +255,14 @@
 	var/turf/targloc = get_turf(target)
 	if(!curloc || !targloc)
 		return
-//	var/target_x = targloc.x
-//	var/target_y = targloc.y
-//	var/target_z = targloc.z
-//	targloc = null
+	switch(mode)
+		if(MODE_BUCKSHOT)
+			projectile = /obj/item/projectile/bullet/buckshot
+			equip_cooldown = 20
+		if(MODE_SLUG)
+			projectile = /obj/item/projectile/bullet
+			equip_cooldown = 30
 	for(var/i=1 to min(projectiles, projectiles_per_shot))
-//		targloc = locate(target_x+GaussRandRound(deviation,1),target_y+GaussRandRound(deviation,1),target_z)
 		if(defective)
 			target = get_inaccuracy(originaltarget, 2, chassis)
 			targloc = get_turf(target)
@@ -260,7 +286,8 @@
 	do_after_cooldown()
 	return
 
-
+#undef MODE_BUCKSHOT
+#undef MODE_SLUG
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg
 	name = "\improper Ultra AC 2"
@@ -313,6 +340,30 @@
 	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
 	do_after_cooldown()
 	return
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg/smg
+	name = "\improper exosuit-mounted Uzi"
+	desc = "A exosuit-mounted submachine gun firing 9mm rounds."
+	icon_state = "mecha_uac2"
+	equip_cooldown = 5
+	projectile = /obj/item/projectile/bullet/midbullet2
+	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
+	max_projectiles = 100
+	projectile_energy_cost = 20
+	projectiles_cache = 100
+	projectiles_per_shot = 1
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg/assault_rifle
+	name = "\improper exosuit-mounted assault rifle"
+	desc = "A exosuit-mounted assault rifle firing 12mm rounds."
+	icon_state = "mecha_uac2"
+	equip_cooldown = 10
+	projectile = /obj/item/projectile/bullet/midbullet/assault
+	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
+	max_projectiles = 50
+	projectile_energy_cost = 20
+	projectiles_cache = 50
+	projectiles_per_shot = 1
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack
 	name = "\improper SRM-8 Missile Rack"

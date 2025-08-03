@@ -116,7 +116,8 @@
 	siemens_coefficient = 0
 	w_class = W_CLASS_SMALL
 	var/working = FALSE
-
+#warn Edit this so it asks the user what equipment slot they'd like to expand (Polaris mechport)
+/*
 /obj/item/weapon/mech_expansion_kit/preattack(atom/target, mob/user , proximity)
 	if(!proximity)
 		return
@@ -140,7 +141,7 @@
 		to_chat(user,"<span class='notice'>You stop modifying the exosuit.</span>")
 		working = FALSE
 	return 1
-
+*/
 /obj/structure/wetdryvac
 	name = "wet/dry vacuum"
 	desc = "A powerful vacuum cleaner that can collect both trash and fluids."
