@@ -263,6 +263,78 @@
 		return "It has legs for days."
 	..()
 
+//=============Feathers========
+/datum/butchering_product/feathers
+	result = /obj/item/stack/sheet/feather
+	verb_name = "pluck"
+	verb_gerund = "plucking"
+	radial_icon = "radial_pluck"
+
+/datum/butchering_product/feathers/vox
+	result = /obj/item/stack/sheet/feather
+	amount = 6
+	initial_amount = 6
+
+/datum/butchering_product/feathers/vox/spawn_result(location, mob/parent)
+	if(!amount)
+		return
+	amount--
+	var/obj/item/stack/sheet/feather/F = new result(location)
+	if(isvox(parent))
+		var/mob/living/carbon/human/vox/H = parent
+		if(!H.original_vox_tone) // Store original tone on first pluck
+			H.original_vox_tone = H.my_appearance.s_tone
+		var/color_key = get_vox_color_key(H.my_appearance.s_tone)
+		var/list/color_data = feather_colors[color_key]
+		if(color_data)
+			F.color = color_data["hex"]
+			F.name = "[color_data["name"]] feather"
+	return F
+
+/datum/butchering_product/feathers/chicken
+	result = /obj/item/stack/sheet/feather
+	amount = 3
+	initial_amount = 3
+
+/datum/butchering_product/feathers/chicken/spawn_result(location, mob/parent)
+	if(!amount)
+		return
+	amount--
+	var/obj/item/stack/sheet/feather/F = new result(location)
+	if(istype(parent, /mob/living/simple_animal/chicken))
+		var/mob/living/simple_animal/chicken/C = parent
+		var/color_key = C.body_color
+		// Only allow brown, black, or white
+		if(!(color_key in list("brown", "black", "white")))
+			color_key = "brown" // fallback
+		var/list/color_data = feather_colors[color_key]
+		if(color_data)
+			F.color = color_data["hex"]
+			F.name = "[color_data["name"]] feather"
+	return F
+
+/datum/butchering_product/feathers/voxchicken
+	result = /obj/item/stack/sheet/feather
+	amount = 3
+	initial_amount = 3
+
+/datum/butchering_product/feathers/voxchicken/spawn_result(location, mob/parent)
+	if(!amount)
+		return
+	amount--
+	var/obj/item/stack/sheet/feather/F = new result(location)
+	// Exclude certain colors
+	var/list/excluded = list("brown", "white", "gray")
+	var/list/color_keys = list()
+	for(var/key in feather_colors)
+		if(!(key in excluded))
+			color_keys += key
+	var/color_key = pick(color_keys)
+	var/list/color_data = feather_colors[color_key]
+	if(color_data)
+		F.color = color_data["hex"]
+		F.name = "[color_data["name"]] feather"
+	return F
 //=============Claws========
 
 /datum/butchering_product/claws

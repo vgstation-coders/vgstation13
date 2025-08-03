@@ -104,6 +104,9 @@
 		if(VOXBROWN)
 			icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxbrn.dmi'
+		if(VOXPLUCKED)
+			icobase = 'icons/mob/human_races/vox/r_voxplucked.dmi'
+			deform = 'icons/mob/human_races/vox/r_def_voxplucked.dmi'
 		else
 			icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_vox.dmi'

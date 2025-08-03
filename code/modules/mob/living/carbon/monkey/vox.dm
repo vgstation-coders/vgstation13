@@ -23,6 +23,8 @@
 
 	..()
 
+/mob/living/carbon/monkey/vox/get_butchering_products()
+	return list(/datum/butchering_product/feathers/voxchicken)
 
 /mob/living/carbon/monkey/vox/New()
 

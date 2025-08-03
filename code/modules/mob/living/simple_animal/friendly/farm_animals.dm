@@ -325,6 +325,9 @@
 	name = "Pomf chicken"
 	body_color = "white"
 
+/mob/living/simple_animal/chicken/get_butchering_products()
+	return list(/datum/butchering_product/feathers/chicken)
+
 #define BOX_GROWTH_BAR 200
 /mob/living/simple_animal/hostile/retaliate/box
 	name = "box"
