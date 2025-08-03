@@ -74,7 +74,7 @@
 				"}
 
 	dat += "<A href='?src=\ref[src];close=1'>Close</a><br>"
-	user << browse(dat,"window=locater;size=300x150")
+	user << browse(HTML_SKELETON(dat),"window=locater;size=300x150")
 	onclose(user, "locater")
 
 /obj/item/device/beacon_locator/Topic(href, href_list)

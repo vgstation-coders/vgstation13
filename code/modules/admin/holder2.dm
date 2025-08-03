@@ -36,6 +36,8 @@ var/list/admin_datums = list()
 		owner = C
 		owner.holder = src
 		owner.add_admin_verbs()	//TODO
+		if(C.byond_version >= 516 && C.holder.rights & R_DEBUG)
+			winset(C, null, list("browser-options"="+devtools"))
 		admins |= C
 		owner.verbs -= /client/proc/readmin
 

@@ -137,9 +137,11 @@
 					if(!istype(W, keytype))
 						to_chat(user, "<span class='warning'>\The [W] doesn't fit into \the [src]'s ignition.</span>")
 						return
+					var/obj/item/key/K=W
 					if(mykey && mykey != W)
-						to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
-						return
+						if(!vin || !K.vin || K.vin!=vin) //if neither have a vin id, or they don't match (since they default as null)
+							to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
+							return
 				if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
 					to_chat(user, "<span class='warning'>You try to insert \the [W] to \the [src]'s ignition but you miss the slot!</span>")
 					return
@@ -178,6 +180,12 @@
 /obj/structure/bed/chair/vehicle/proc/check_key(var/mob/user)
 	if(!keytype)
 		return 1
+	if(vin)
+		if(heldkey && heldkey.vin == vin)
+			return TRUE
+		for(var/obj/item/key/K in user.held_items)
+			if(istype(K,keytype) && K.vin==vin)
+				return TRUE
 	if(mykey)
 		return heldkey == mykey || user.is_holding_item(mykey)
 	return istype(heldkey, keytype) || user.find_held_item_by_type(keytype)

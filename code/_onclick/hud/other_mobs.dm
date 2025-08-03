@@ -9,6 +9,8 @@
 	mymob.visible.name = "visible"
 	mymob.visible.screen_loc = ui_health
 
+	mymob.visible.pointer_to_var = &mymob.visible
+
 	mymob.client.reset_screen()
 
 	mymob.client.screen += list(mymob.visible)
@@ -21,11 +23,15 @@
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_health
 
+	mymob.healths.pointer_to_var = &mymob.healths
+
 	mymob.pullin = new /obj/abstract/screen
 	mymob.pullin.icon = 'icons/mob/screen1_corgi.dmi'
 	mymob.pullin.icon_state = "pull0"
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_construct_pull
+
+	mymob.pullin.pointer_to_var = &mymob.pullin
 
 	mymob.client.reset_screen()
 
@@ -41,11 +47,15 @@
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_construct_health
 
+	mymob.healths.pointer_to_var = &mymob.healths
+
 	mymob.pullin = new /obj/abstract/screen
 	mymob.pullin.icon = 'icons/mob/screen1_slime.dmi'
 	mymob.pullin.icon_state = "pull0"
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_construct_pull
+
+	mymob.pullin.pointer_to_var = &mymob.pullin
 
 	mymob.zone_sel = new /obj/abstract/screen/zone_sel
 	mymob.zone_sel.icon = 'icons/mob/screen1_slime.dmi'
@@ -64,17 +74,22 @@
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_construct_health
 
+	mymob.healths.pointer_to_var = &mymob.healths
+
 	mymob.pullin = new /obj/abstract/screen
 	mymob.pullin.icon = 'icons/mob/screen1_shade.dmi'
 	mymob.pullin.icon_state = "pull0"
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_construct_pull
 
+	mymob.pullin.pointer_to_var = &mymob.pullin
+
 	mymob.zone_sel = new /obj/abstract/screen/zone_sel
 	mymob.zone_sel.icon = 'icons/mob/screen1_shade.dmi'
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
 
+	mymob.zone_sel.pointer_to_var = &mymob.zone_sel
 
 	////////SOUL BLADE HUD ELEMENTS////////
 	mymob.healths2 = new /obj/abstract/screen
@@ -82,6 +97,8 @@
 	mymob.healths2.icon_state = "blade_ok"
 	mymob.healths2.name = "blade integrity"
 	mymob.healths2.screen_loc = ui_construct_sword
+
+	mymob.healths2.pointer_to_var = &mymob.healths2
 	///////////////////////////////////////
 
 	mymob.client.reset_screen()
@@ -95,11 +112,13 @@
 	mymob.healths.icon_state = "borer_health0"
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_construct_health
+	mymob.healths.pointer_to_var = &mymob.healths2
 
 	mymob.zone_sel = new /obj/abstract/screen/zone_sel
 	mymob.zone_sel.icon = 'icons/mob/screen1_borer.dmi'
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
+	mymob.zone_sel.pointer_to_var = &mymob.zone_sel
 
 	mymob.client.reset_screen()
 
@@ -123,17 +142,20 @@
 		mymob.healths.icon_state = "[constructtype]_health0"
 		mymob.healths.name = "health"
 		mymob.healths.screen_loc = ui_construct_health
+		mymob.healths.pointer_to_var = &mymob.healths
 
 		mymob.pullin = new /obj/abstract/screen
 		mymob.pullin.icon = 'icons/mob/screen1_construct.dmi'
 		mymob.pullin.icon_state = "pull0"
 		mymob.pullin.name = "pull"
 		mymob.pullin.screen_loc = ui_construct_pull
+		mymob.pullin.pointer_to_var = &mymob.pullin
 
 		mymob.zone_sel = new /obj/abstract/screen/zone_sel
 		mymob.zone_sel.icon = 'icons/mob/screen1_construct.dmi'
 		mymob.zone_sel.overlays.len = 0
 		mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
+		mymob.zone_sel.pointer_to_var = &mymob.zone_sel
 
 	mymob.client.reset_screen()
 
@@ -145,6 +167,7 @@
 	vampire_blood_display.name = "Vampire Blood"
 	vampire_blood_display.icon_state = "dark128"
 	vampire_blood_display.screen_loc = ui_under_health
+	vampire_blood_display.pointer_to_var = &vampire_blood_display
 
 	mymob.client.screen += list(vampire_blood_display)
 
@@ -153,6 +176,7 @@
 	streamer_display.name = "Streaming Stats"
 	streamer_display.icon = null
 	streamer_display.screen_loc = ui_more_under_health_and_to_the_left
+	streamer_display.pointer_to_var = &streamer_display
 
 	mymob.client.screen += list(streamer_display)
 
@@ -162,9 +186,9 @@
 	vampire_blood_display.name = "Changeling Chems"
 	vampire_blood_display.icon_state = "dark128"
 	vampire_blood_display.screen_loc = ui_under_health
+	vampire_blood_display.pointer_to_var = &vampire_blood_display
 
 	mymob.client.screen += list(vampire_blood_display)
-
 
 /datum/hud/proc/countdown_blob()
 
@@ -173,6 +197,7 @@
 	countdown_display.name = "Burst Countdown"
 	countdown_display.icon_state = "countdown_blob"
 	countdown_display.screen_loc = ui_under_health
+	countdown_display.pointer_to_var = &countdown_display
 
 	mymob.client.screen += list(countdown_display)
 
@@ -183,6 +208,7 @@
 	countdown_display.name = "Primitive Countdown"
 	countdown_display.icon_state = "countdown_monkey"
 	countdown_display.screen_loc = ui_under_health
+	countdown_display.pointer_to_var = &countdown_display
 
 	mymob.client.screen += list(countdown_display)
 
@@ -193,9 +219,9 @@
 	countdown_display.icon = 'icons/mob/screen_countdowns.dmi'
 	countdown_display.icon_state = "countdown_default"
 	countdown_display.screen_loc = ui_under_health
+	countdown_display.pointer_to_var = &countdown_display
 
 	mymob.client.screen += list(countdown_display)
-
 
 /datum/hud/proc/cult_hud(ui_style = 'icons/mob/screen1_cult.dmi')
 
@@ -205,12 +231,15 @@
 	cult_Act_display.icon_state = ""
 	cult_Act_display.screen_loc = ui_cult_Act
 	pulse_atom(cult_Act_display)
+	cult_Act_display.pointer_to_var = &cult_Act_display
 
 	cult_tattoo_display = new /obj/abstract/screen
 	cult_tattoo_display.icon = ui_style
 	cult_tattoo_display.name = "Arcane Tattoos: none"
 	cult_tattoo_display.icon_state = ""
 	cult_tattoo_display.screen_loc = ui_cult_tattoos
+	cult_tattoo_display.pointer_to_var = &cult_tattoo_display
+
 	//pulse_atom(cult_tattoo_display)
 
 	if (mymob?.client)
@@ -242,17 +271,20 @@
 	mymob.healths.icon_state = "health0"
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_construct_health
+	mymob.healths.pointer_to_var = &mymob.healths
 
 	mymob.pullin = new /obj/abstract/screen
 	mymob.pullin.icon = 'icons/mob/screen1_spider.dmi'
 	mymob.pullin.icon_state = "pull0"
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_construct_pull
+	mymob.pullin.pointer_to_var = &mymob.pullin
 
 	mymob.zone_sel = new /obj/abstract/screen/zone_sel
 	mymob.zone_sel.icon = 'icons/mob/screen1_spider.dmi'
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
+	mymob.zone_sel.pointer_to_var = &mymob.zone_sel
 
 	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel)
 
@@ -263,7 +295,7 @@
 		spider_food_display.icon_state = "spider_spell_base"
 		spider_food_display.name = "Food"
 		spider_food_display.screen_loc = ui_under_health
-
+		spider_food_display.pointer_to_var = &spider_food_display
 		mymob.client.screen += list(spider_food_display)
 
 		if (!istype(mymob,/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider))
@@ -272,7 +304,7 @@
 			spider_queen_counter.icon_state = "spider_spell_base"
 			spider_queen_counter.name = "Queen Requirement"
 			spider_queen_counter.screen_loc = ui_more_under_health
-
+			spider_queen_counter.pointer_to_var = &spider_queen_counter
 			mymob.client.screen += list(spider_queen_counter)
 
 	//Spiderling
@@ -282,6 +314,7 @@
 		spiderling_growth_display.icon_state = "spider_spell_base"
 		spiderling_growth_display.name = "Growth"
 		spiderling_growth_display.screen_loc = ui_under_health
+		spiderling_growth_display.pointer_to_var = &spiderling_growth_display
 
 		mymob.client.screen += list(spiderling_growth_display)
 
@@ -292,11 +325,13 @@
 	mymob.healths.icon_state = "health0"
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_health
+	mymob.healths.pointer_to_var = &mymob.healths
 
 	vampire_blood_display = new /obj/abstract/screen
 	vampire_blood_display.name = "Charge"
 	vampire_blood_display.icon_state = "dark128"
 	vampire_blood_display.screen_loc = ui_under_health
+	vampire_blood_display.pointer_to_var = &vampire_blood_display
 
 	mymob.client.reset_screen()
 
@@ -309,11 +344,13 @@
 	mymob.healths.icon_state = "health0"
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_health
+	mymob.healths.pointer_to_var = &mymob.healths
 
 	mymob.healths2 = new /obj/abstract/screen
 	mymob.healths2.icon= 'icons/mob/screen1_grue.dmi'
 	mymob.healths2.icon_state= "lightlevel_dim"
 	mymob.healths2.name= "darkness"
 	mymob.healths2.screen_loc=ui_under_health
+	mymob.healths2.pointer_to_var = &mymob.healths2
 
 	mymob.client.screen += list(mymob.healths,mymob.healths2)

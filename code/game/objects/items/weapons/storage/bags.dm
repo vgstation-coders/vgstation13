@@ -423,6 +423,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	name = "Sheet Snatcher"
 	desc = "A patented Nanotrasen storage system designed for any kind of mineral sheet."
 	w_class = W_CLASS_MEDIUM
+	fits_max_w_class = W_CLASS_MEDIUM
 	storage_slots = 50
 	max_combined_w_class = 18
 	can_only_hold = list("/obj/item/stack/sheet")
@@ -448,7 +449,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	storage_slots = 50;
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
-	can_only_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell", "/obj/item/weapon/circuitboard")
+	can_only_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell", "/obj/item/weapon/circuitboard", "/obj/item/robot_parts/robot_component")
 	display_contents_with_number = TRUE
 
 /obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)

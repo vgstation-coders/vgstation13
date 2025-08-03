@@ -261,7 +261,7 @@
 	dat += text("Power current: [(powernet == null ? "Unconnected" : "[avail()]")]<br>")
 	dat += text("Heat: [heat]<br>")
 	dat += "<br><A href='?src=\ref[src];action=close'>Close</A>"
-	user << browse("[dat]", "window=port_gen")
+	user << browse(HTML_SKELETON(dat), "window=port_gen")
 	onclose(user, "port_gen")
 
 /obj/machinery/power/port_gen/pacman/Topic(href, href_list)
@@ -344,7 +344,7 @@
 
 /obj/machinery/power/port_gen/pacman/baby/overheat()
 	explosion(src.loc, 5, 5, 5, -1)
-	
+
 /obj/machinery/power/port_gen/pacman/professor
 	name = "P.R.O.F.E.S.S.O.R.P.A.C.M.A.N.-type Portable Generator"
 	desc = "The most expensive-to-run portable engine ever devised."

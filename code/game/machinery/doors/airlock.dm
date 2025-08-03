@@ -552,6 +552,9 @@ About the new airlock wires panel:
 	if(!allowed(user) && !isobserver(user))
 		return //So i heard you tried to interface with doors you have no access to
 	src.add_hiddenprint(user)
+	//Cyborgs can still walk into the airlocks.
+	if(is_pulselocked(user))
+		return
 	if(isAI(user))
 		if(!src.canAIControl(user))
 			if(src.canAIHack())
@@ -655,7 +658,7 @@ About the new airlock wires panel:
 			t1 += text("<A href='?src=\ref[];aiDisable=7'>Close door</a><br>\n", src)
 
 	t1 += text("<p><a href='?src=\ref[];close=1'>Close</a></p>\n", src)
-	user << browse(t1, "window=airlock")
+	user << browse(HTML_SKELETON(t1), "window=airlock")
 	onclose(user, "airlock")
 
 //aiDisable - 1 idscan, 2 disrupt main power, 3 disrupt backup power, 4 drop door bolts, 5 un-electrify door, 7 close door
@@ -664,6 +667,8 @@ About the new airlock wires panel:
 
 //Migrated from onclick
 /obj/machinery/door/airlock/AIAltClick() // Eletrifies doors.
+	if(is_pulselocked(usr))
+		return
 	if(allowed(usr))
 		if(!secondsElectrified)
 			// permenant shock
@@ -673,6 +678,8 @@ About the new airlock wires panel:
 			Topic("aiDisable=5", list("aiDisable"="5"), 1)
 
 /obj/machinery/door/airlock/AICtrlClick() // Bolts doors
+	if(is_pulselocked(usr))
+		return
 	if(allowed(usr))
 		if(locked)
 			Topic("aiEnable=4", list("aiEnable"="4"), 1)
@@ -680,6 +687,8 @@ About the new airlock wires panel:
 			Topic("aiDisable=4", list("aiDisable"="4"), 1)
 
 /obj/machinery/door/airlock/AIShiftClick()  // Opens and closes doors!
+	if(is_pulselocked(usr))
+		return
 	if(allowed(usr))
 		if(density)
 			Topic("aiEnable=7", list("aiEnable"="7"), 1)
@@ -693,6 +702,8 @@ About the new airlock wires panel:
 		break
 
 /obj/machinery/door/airlock/AIMiddleShiftClick()  // Turn safeties on and off
+	if(is_pulselocked(usr))
+		return
 	if(allowed(usr))
 		if(!safe)
 			Topic("aiEnable=8", list("aiEnable"="8"), 1)
@@ -1323,7 +1334,7 @@ About the new airlock wires panel:
 			I.playtoolsound(loc, 100)
 			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 			// TODO: refactor the called proc
-			to_chat(user, "<span class='notice'>You removed the airlock electronics!</span>")
+			to_chat(user, "<span class='notice'>You removed the access electronics!</span>")
 			revert(user,null)
 			qdel(src)
 			return

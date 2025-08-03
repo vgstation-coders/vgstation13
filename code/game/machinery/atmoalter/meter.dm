@@ -14,6 +14,8 @@
 	active_power_usage = 4
 	machine_flags = MULTITOOL_MENU
 
+	var/list/metrics_monitored = list("pressure", "temperature", GAS_OXYGEN, GAS_PLASMA, GAS_NITROGEN, GAS_CARBON)
+
 /obj/machinery/meter/New(newloc, new_target, freq, id)
 	..(newloc)
 	src.target = new_target
@@ -88,22 +90,22 @@
 		signal.data = list(
 			"tag" = id_tag,
 			"device" = "AM",
-			"pressure" = round(env_pressure),
-			"temperature" = round(environment.temperature),
 			"sigtype" = "status"
 		)
 
+		signal.data["timestamp"] = world.time
+
 		var/total_moles = environment.total_moles
-		if(total_moles > 0)
-			signal.data["oxygen"] = round(100*environment[GAS_OXYGEN]/total_moles,0.1)
-			signal.data["toxins"] = round(100*environment[GAS_PLASMA]/total_moles,0.1)
-			signal.data["nitrogen"] = round(100*environment[GAS_NITROGEN]/total_moles,0.1)
-			signal.data["carbon_dioxide"] = round(100*environment[GAS_CARBON]/total_moles,0.1)
-		else
-			signal.data["oxygen"] = 0
-			signal.data["toxins"] = 0
-			signal.data["nitrogen"] = 0
-			signal.data["carbon_dioxide"] = 0
+		for(var/metric in metrics_monitored)
+			if(metric == "pressure")
+				signal.data["pressure"] = round(environment.return_pressure(), 0.1)
+			if(metric == "temperature")
+				signal.data["temperature"] = round(environment.temperature, 0.1)
+			else if(metric in XGM.gases)
+				signal.data[metric] = total_moles ? round(100 * environment[metric] / total_moles, 0.1) : 0
+		for(var/gas_ID in XGM.gases)
+			if(!signal.data[gas_ID])
+				signal.data[gas_ID] = 0
 
 		radio_connection.post_signal(src, signal)
 
@@ -142,12 +144,43 @@
 	return 1
 
 /obj/machinery/meter/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
-	return {"
+	var/dat = {"
 	<b>Main</b>
 	<ul>
 		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)</li>
 		<li>[format_tag("ID Tag","id_tag")]</li>
-	</ul>"}
+		<li>Monitor Pressure: <a href="?src=\ref[src];toggle_monitoring=pressure">[is_monitoring("pressure") ? "Yes" : "No"]</a>
+		<li>Monitor Temperature: <a href="?src=\ref[src];toggle_monitoring=temperature">[is_monitoring("temperature") ? "Yes" : "No"]</a>"}
+
+	for(var/gas_ID in XGM.gases)
+		var/datum/gas/gas_datum = XGM.gases[gas_ID]
+		dat += {"<li>Monitor [gas_datum.name] Concentration: <a href="?src=\ref[src];toggle_monitoring=[gas_ID]">[is_monitoring(gas_ID) ? "Yes" : "No"]</a>"}
+	dat += "</ul>"
+	return dat
+
+/obj/machinery/meter/multitool_topic(var/mob/user, var/list/href_list, var/obj/item/device/multitool/P)
+	. = ..()
+	if(.)
+		return .
+
+	if("toggle_monitoring" in href_list)
+		var/toggle_target = href_list["toggle_monitoring"]
+		if((toggle_target in XGM.gases) || toggle_target == "pressure" || toggle_target == "temperature")
+			toggle_monitoring(toggle_target)
+		return MT_UPDATE
+
+/obj/machinery/meter/proc/add_monitoring(var/input)
+	metrics_monitored |= input
+
+/obj/machinery/meter/proc/remove_monitoring(var/input)
+	metrics_monitored -= input
+
+/obj/machinery/meter/proc/toggle_monitoring(var/input)
+	if(!metrics_monitored.Remove(input))
+		metrics_monitored += input
+
+/obj/machinery/meter/proc/is_monitoring(var/input)
+	return metrics_monitored.Find(input)
 
 /obj/machinery/meter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if(!W.is_wrench(user))

@@ -5,8 +5,11 @@ var/world_startup_time
 var/date_string
 var/force_restart
 
-#if DM_VERSION < 515
-#error You need at least version 515 to compile
+#ifndef SPACEMAN_DMM //bandaid until SDMM is updated for 516
+#define MIN_COMPILER_VERSION 515
+#if DM_VERSION < MIN_COMPILER_VERSION
+#error You need at least version 516 to compile.
+#endif
 #endif
 /world
 	mob = /mob/new_player
@@ -51,36 +54,15 @@ var/auxtools_path
 /world/New()
 	world_startup_time = world.timeofday
 
-	TgsNew(null, TGS_SECURITY_TRUSTED)
+	src.InitTgs()
 
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
 		WORLD_Y_OFFSET += rand(-50,50)
 
 	// logs
-	date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
 
-	investigations[I_HREFS] = new /datum/log_controller(I_HREFS, filename="data/logs/[date_string] hrefs.htm", persist=TRUE)
-	investigations[I_ATMOS] = new /datum/log_controller(I_ATMOS, filename="data/logs/[date_string] atmos.htm", persist=TRUE)
-	investigations[I_CHEMS] = new /datum/log_controller(I_CHEMS, filename="data/logs/[date_string] chemistry.htm", persist=TRUE)
-	investigations[I_WIRES] = new /datum/log_controller(I_WIRES, filename="data/logs/[date_string] wires.htm", persist=TRUE)
-	investigations[I_GHOST] = new /datum/log_controller(I_GHOST, filename="data/logs/[date_string] poltergeist.htm", persist=TRUE)
-	investigations[I_ARTIFACT] = new /datum/log_controller(I_ARTIFACT, filename="data/logs/[date_string] artifact.htm", persist=TRUE)
-	investigations[I_RCD] = new /datum/log_controller(I_RCD, filename="data/logs/[date_string] rcd.htm", persist=TRUE)
-
-	diary = file("data/logs/[date_string].log")
-	panicfile = new/savefile("data/logs/profiling/proclogs/[date_string].sav")
-	diaryofmeanpeople = file("data/logs/[date_string] Attack.log")
-	admin_diary = file("data/logs/[date_string] admin only.log")
-
-	var/now = time_stamp()
-	var/log_start = "---------------------\n\[[now]\]WORLD: starting up..."
-
-	diary << log_start
-	diaryofmeanpeople << log_start
-	admin_diary << log_start
-	panicfile.cd = now
-
+	InitializeLogs()
 	changelog_hash = md5('html/changelog.html')					//used for telling if the changelog has changed recently
 
 	load_configuration()
@@ -113,6 +95,33 @@ var/auxtools_path
 	TgsInitializationComplete()
 
 	return ..()
+
+/world/proc/InitTgs()
+	TgsNew(new /datum/tgs_event_handler, TGS_SECURITY_TRUSTED)
+
+/world/proc/InitializeLogs()
+	date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
+	investigations[I_HREFS] = new /datum/log_controller(I_HREFS, TRUE, "data/logs/[date_string] hrefs.htm")
+	investigations[I_ATMOS] = new /datum/log_controller(I_ATMOS, TRUE, "data/logs/[date_string] atmos.htm")
+	investigations[I_CHEMS] = new /datum/log_controller(I_CHEMS, TRUE, "data/logs/[date_string] chemistry.htm")
+	investigations[I_WIRES] = new /datum/log_controller(I_WIRES, TRUE, "data/logs/[date_string] wires.htm")
+	investigations[I_GHOST] = new /datum/log_controller(I_GHOST, TRUE, "data/logs/[date_string] poltergeist.htm")
+	investigations[I_ARTIFACT] = new /datum/log_controller(I_ARTIFACT, TRUE, "data/logs/[date_string] artifact.htm")
+	investigations[I_RCD] = new /datum/log_controller(I_RCD, TRUE, "data/logs/[date_string] rcd.htm")
+
+	diary = file("data/logs/[date_string].log")
+	panicfile = new/savefile("data/logs/profiling/proclogs/[date_string].sav")
+	diaryofmeanpeople = file("data/logs/[date_string] Attack.log")
+	admin_diary = file("data/logs/[date_string] admin only.log")
+
+	var/now = time_stamp()
+	var/log_start = "---------------------\n\[[now]\]WORLD: starting up..."
+
+	diary << log_start
+	diaryofmeanpeople << log_start
+	admin_diary << log_start
+	panicfile.cd = now
+
 
 /world/Topic(T, addr, master, key)
 	TGS_TOPIC
@@ -189,8 +198,10 @@ var/auxtools_path
 			// To prevent the server shutting down before logs get to the admins or some nonsense.
 			sleep(1)
 
-		to_chat(world, "<span class='danger big'>Rebooting World immediately due to host request!</span>")
-		..()
+		to_chat(world, "<span class='danger big'>Sending kill signal due to host request!</span>")
+		force_restart = 1
+
+		//..()
 		return
 
 	if((vote.winner || vote.forced_map) && vote.map_paths)
@@ -207,19 +218,30 @@ var/auxtools_path
 	pre_shutdown()
 
 	TgsReboot()
-	..()
+	force_restart = 1
+	//..()
 
 /world/proc/pre_shutdown()
+	var/procWatch = start_watch()
+	log_startup_progress("\[[time2text(world.realtime)]\]: Preshutdown begin")
+	var/watch = start_watch()
 	stop_all_media()
-
+	log_startup_progress("\[[time2text(world.realtime)]\]: stop_all_media finished in [stop_watch(watch)]s")
+	log_startup_progress("\[[time2text(world.realtime)]\]: beginning html_interfaces shutdown")
+	watch = start_watch()
 	for(var/datum/html_interface/D in html_interfaces)
 		D.closeAll()
-
+	log_startup_progress("\[[time2text(world.realtime)]\]: html_interfaces finished in [stop_watch(watch)]s")
+	log_startup_progress("\[[time2text(world.realtime)]\]: beginning master controller shutdown")
+	watch = start_watch()
 	Master.Shutdown()
-
+	log_startup_progress("\[[time2text(world.realtime)]\]: master controller finished in [stop_watch(watch)]s")
+	log_startup_progress("\[[time2text(world.realtime)]\]: beginning end_credits")
+	watch = start_watch()
 	end_credits.on_world_reboot_start()
 	sleep(max(10, end_credits.audio_post_delay))
 	end_credits.on_world_reboot_end()
+	log_startup_progress("\[[time2text(world.realtime)]\]: end_credits finished in [stop_watch(watch)]s")
 
 	for(var/client/C in clients)
 		if(config.server)	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
@@ -231,9 +253,10 @@ var/auxtools_path
 	#if AUXTOOLS_DEBUGGER
 	call_ext(auxtools_path, "auxtools_shutdown")()
 	#endif
-
+	log_startup_progress("\[[time2text(world.realtime)]\]: preshutdown finished in [stop_watch(procWatch)]s")
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
 /world/proc/KickInactiveClients()
+	usr = null
 	spawn(-1)
 		//set background = 1
 		while(1)

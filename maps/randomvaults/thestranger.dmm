@@ -188,7 +188,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/thestranger)
 "uU" = (
-/obj/structure/acidsink{
+/obj/structure/sink/acid{
 	dir = 8;
 	pixel_x = 10
 	},

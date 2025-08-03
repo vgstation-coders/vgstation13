@@ -11,23 +11,23 @@ Removes letters in the afflicted's sentences like the virology symptom, others m
 	specialization = SSUTILITY
 	abbreviation = "HM"
 
-	charge_max = 500
+	charge_cooldown_max = 50 SECONDS
 	spell_flags = null
 	invocation = "V_R'_ R_'UG_"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	selection_type = "range"
 	range = 3
 	inner_radius = -1
 
-	cooldown_min = 100
+	cooldown_min = 10 SECONDS
 	var/letters_retained = 12
-	level_max = list(Sp_TOTAL = 6, Sp_SPEED = 4, Sp_POWER = 2)
+	level_max = list(SP_TOTAL = 6, SP_SPEED = 4, SP_POWER = 2)
 
 	hud_state = "wiz_hangman"
 
 /spell/aoe_turf/hangman/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
-		if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+	if(upgrade_type == SP_POWER)
+		if(spell_levels[SP_POWER] >= level_max[SP_POWER])
 			if(prob(10))
 				return "Th__ _p_ll _lr__dy r_mov__ __ m_ny l_tt_r_ __ _t c_n!"
 			return "This spell already removes as many letters as it can!"
@@ -35,11 +35,11 @@ Removes letters in the afflicted's sentences like the virology symptom, others m
 	return ..()
 
 /spell/aoe_turf/hangman/empower_spell()
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 
 	letters_retained /= 1.5
 
-	switch(spell_levels[Sp_POWER])
+	switch(spell_levels[SP_POWER])
 		if(0)
 			name = "Curse of the Hangman"
 			invocation = "VIR'O RO'UGE"

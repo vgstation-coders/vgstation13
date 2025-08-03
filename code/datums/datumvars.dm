@@ -141,6 +141,9 @@
 		body += "<option value='?_src_=vars;toggle_aliasing=\ref[D]'>Toggle Transform Aliasing</option>"
 	if(istype(D,/obj/item/weapon/gun))
 		body += "<option value='?_src_=vars;projectile_edit=\ref[D]'>Edit Projectile Variables</option>"
+	if(has_initialized_sound_emitter(D))
+		body += "<option value='?_src_=vars;halt_sound=\ref[D]'>Stop Sound</option>"
+
 
 	body += "<option value='?_src_=vars;proc_call=\ref[D]'>Proc call</option>"
 	body += "<option value>---</option>"
@@ -346,7 +349,7 @@ function loadPage(list) {
 
 	html += "</html>"
 
-	usr << browse(html, "window=variables\ref[D];size=475x650")
+	usr << browse(HTML_SKELETON(html), "window=variables\ref[D];size=475x650")
 
 /client/proc/debug_variable(name, value, list/searched, var/datum/DA = null)
 	var/html = ""
@@ -453,7 +456,7 @@ function loadPage(list) {
 		html += "<hr>"
 		html += debug_variable(null, L)
 
-	usr << browse(html, "window=listedit\ref[L];size=475x650")
+	usr << browse(HTML_SKELETON(html), "window=listedit\ref[L];size=475x650")
 
 /client/proc/view_var_Topic(href, href_list, hsrc)
 	//This should all be moved over to datum/admins/Topic() or something ~Carn
@@ -985,10 +988,22 @@ function loadPage(list) {
 
 		var/obj/item/weapon/gun/G = locate(href_list["projectile_edit"])
 		if(!istype(G))
-			to_chat(src, "Target must be a obj/item/weapon/gun!")
+			to_chat(src, "Target must be an obj/item/weapon/gun!")
 			return
 
 		gun_override(G)
+
+	else if(href_list["halt_sound"])
+		if (!check_rights(R_DEBUG))
+			return
+
+		var/atom/A = locate(href_list["halt_sound"])
+		if(!istype(A) || !has_initialized_sound_emitter(A))
+			to_chat(src, "This can only be done to atoms that have an initialized sound emitter")
+			return
+
+		A.sound_emitter.stop()
+
 
 	else if(href_list["toggle_aliasing"])
 		if(!check_rights(R_DEBUG))

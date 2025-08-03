@@ -54,16 +54,10 @@
 		user.u_equip(slot, 1)
 	user.update_icons()
 
-	user.canmove = 0
-	user.delayNextAttack(50)
-	user.icon = null
 	user.set_species("Horror")
 	playsound(user, 'sound/effects/greaterling.ogg', 100, 0, 10)
 	user.visible_message("<span class = 'sinister'>A roar pierces the air and makes your blood curdle.</span>", ignore_self = TRUE, range = 10)
 
-	user.canmove = 1
-	user.delayNextAttack(0)
-	user.icon = null
 	user.make_changeling()
 
 	return

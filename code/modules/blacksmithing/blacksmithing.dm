@@ -92,7 +92,7 @@
 /obj/item/smithing_placeholder/attackby(obj/item/I, mob/user)
 	if(ishammer(I))
 		strike(I, user)
-		user.delayNextAttack(1 SECONDS)
+		user.delayNextAttack(1.4-(0.1*I.quality) SECONDS)
 	else if (I.is_hot())
 		heat(I.is_hot(), I, user)
 

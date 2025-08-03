@@ -609,6 +609,8 @@ var/list/shuttle_log = list()
 
 	return 1
 
+// -- Nota Bene: UNUSED, Baycode-era crew transfer vote.
+// Trivia : for how-many-years (at least 12) there was a math error ; the minimal shift length was supposed to be 30 minutes. It was, instead, 90.
 /proc/init_shift_change(var/mob/user, var/force = 0)
 	if (!ticker)
 		return
@@ -644,8 +646,8 @@ var/list/shuttle_log = list()
 		//	to_chat(user, "Centcom will not allow the shuttle to be called. Consider all contracts terminated.")
 		//	return
 
-		if(world.time < 54000) // 30 minute grace period to let the game get going
-			to_chat(user, "The shuttle is refueling. Please wait another [round((54000-world.time)/600)] minutes before trying again.")//may need to change "/600"
+		if(world.time < 90 MINUTES) // 90 minute grace period to let the game get going
+			to_chat(user, "The shuttle is refueling. Please wait another [round((90 MINUTES-world.time)/(60 SECONDS))] minutes before trying again.")//may need to change "/600"
 
 			return
 

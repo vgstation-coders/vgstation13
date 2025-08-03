@@ -14,13 +14,15 @@
 	var/fuel_usage = 0.0001			//percentage of available fuel to use per cycle
 
 	var/injecting = FALSE
+	var/attempt_activate = FALSE
 
-	use_power = MACHINE_POWER_USE_IDLE
+	use_power = MACHINE_POWER_USE_NONE
+	power_priority = POWER_PRIORITY_POWER_EQUIPMENT
 	idle_power_usage = 10
 	active_power_usage = 500
 	var/remote_access_enabled = TRUE
-	var/cached_power_avail = 0
 	var/emergency_insert_ready = FALSE
+	var/last_power_request = 0
 
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL | WELD_FIXED
 
@@ -65,13 +67,23 @@
 	to_chat(user, jointext(out, ""))
 
 /obj/machinery/power/rust_fuel_injector/process()
+
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE) || state != 2 || (!powernet && active_power_usage))
+		deactivate()
+		return
+	var/cur_satisfaction = get_satisfaction()
+	add_load((attempt_activate || injecting) ? active_power_usage : idle_power_usage)
+	var/power_received = cur_satisfaction * last_power_request
+	if(attempt_activate)
+		if(!injecting && power_received >= active_power_usage)
+			begin_injecting()
 	if(injecting)
-		if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
-			stop_injecting()
+		if(power_received < active_power_usage)
+			deactivate()
 		else
 			inject()
 
-	cached_power_avail = avail()
+	last_power_request = (injecting || attempt_activate) ? active_power_usage : idle_power_usage
 
 /obj/machinery/power/rust_fuel_injector/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(injecting)
@@ -143,17 +155,15 @@
 	var/data[0]
 	data["locked"] = locked && !issilicon(user) && !isAdminGhost(user)
 	data["id_tag"] = id_tag
-	data["injecting"] = injecting
+	data["injecting"] = (attempt_activate || injecting)
 	data["fuel_usage"] = fuel_usage * 100 // Rounded client-side
 	data["has_assembly"] = !!cur_assembly
 	data["emergency_insert_ready"] = emergency_insert_ready
 	data["power_status_class"] = "good"
-	if(cached_power_avail < active_power_usage)
+	if(round(last_power_request * get_satisfaction()) < (attempt_activate ? active_power_usage : idle_power_usage))
 		data["power_status_class"] = "bad"
-	else if(cached_power_avail < active_power_usage * 2)
-		data["power_status_class"] = "average"
-	data["active_power_usage"] = round(active_power_usage)
-	data["cached_power_avail"] = round(cached_power_avail)
+	data["active_power_usage"] = attempt_activate ? active_power_usage : idle_power_usage
+	data["power_received"] = round(last_power_request * get_satisfaction())
 	data["remote_access_enabled"] = remote_access_enabled
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
@@ -161,6 +171,7 @@
 		ui = new(user, src, ui_key, "r-ust_fuel_injector.tmpl", name, 500, 360)
 		ui.set_initial_data(data)
 		ui.open()
+		ui.set_auto_update(1)
 
 /obj/machinery/power/rust_fuel_injector/Topic(href, href_list)
 	if(..())
@@ -189,10 +200,10 @@
 		return 1
 
 	if(href_list["toggle_injecting"])
-		if(injecting)
-			stop_injecting()
+		if(attempt_activate)
+			deactivate()
 		else
-			begin_injecting()
+			activate()
 		return 1
 
 	if(href_list["toggle_remote"])
@@ -222,17 +233,22 @@
 /obj/machinery/power/rust_fuel_injector/update_icon()
 	icon_state = injecting ? "injector1" : "injector0"
 
+/obj/machinery/power/rust_fuel_injector/proc/activate()
+	attempt_activate = TRUE
+
+/obj/machinery/power/rust_fuel_injector/proc/deactivate()
+	attempt_activate = FALSE
+	stop_injecting()
+
+
 /obj/machinery/power/rust_fuel_injector/proc/begin_injecting()
 	if(!injecting && cur_assembly)
 		injecting = TRUE
-		use_power = MACHINE_POWER_USE_IDLE
 		update_icon()
 
 /obj/machinery/power/rust_fuel_injector/proc/stop_injecting()
 	if(injecting)
 		injecting = FALSE
-		icon_state = "injector0"
-		use_power = MACHINE_POWER_USE_NONE
 		update_icon()
 
 /obj/machinery/power/rust_fuel_injector/proc/inject()
@@ -240,11 +256,14 @@
 		return
 	if(cur_assembly)
 		var/amount_left = 0
-		for(var/reagent in cur_assembly.rod_quantities)
+		var/max_amount = 0
+		for(var/reagent in cur_assembly.rod_current_quantities)
 //			to_chat(world, "checking [reagent]")
-			if(cur_assembly.rod_quantities[reagent] > 0)
+			max_amount += cur_assembly.rod_starting_quantities[reagent]
+			if(cur_assembly.rod_current_quantities[reagent] > 0)
 //					to_chat(world, "	rods left: [cur_assembly.rod_quantities[reagent]]")
-				var/amount = cur_assembly.rod_quantities[reagent] * fuel_usage
+				var/amount = cur_assembly.rod_starting_quantities[reagent] * fuel_usage
+				amount = min(amount, cur_assembly.rod_current_quantities[reagent])
 				var/numparticles = round(amount * 1000)
 				if(numparticles < 1)
 					numparticles = 1
@@ -258,34 +277,48 @@
 				//A.target = target_field
 				A.startMove(1)
 
-				cur_assembly.rod_quantities[reagent] -= amount
-				amount_left += cur_assembly.rod_quantities[reagent]
-		cur_assembly.percent_depleted = amount_left / 300
-		flick("injector-emitting",src)
+				cur_assembly.rod_current_quantities[reagent] -= amount
+				amount_left += cur_assembly.rod_current_quantities[reagent]
+		cur_assembly.percent_depleted = (max_amount - amount_left) / 300
+		if(cur_assembly.percent_depleted == 1)
+			qdel(cur_assembly)
+			cur_assembly = null
 	else
-		stop_injecting()
+		deactivate()
 
 /obj/machinery/power/rust_fuel_injector/proc/attempt_fuel_swap()
-	var/rev_dir = opposite_dirs[dir]
-	var/turf/mid = get_step(src, rev_dir)
-	var/success = 0
-	for(var/obj/machinery/rust_fuel_assembly_port/check_port in get_step(mid, rev_dir))
-		if(cur_assembly)
-			if(!check_port.cur_assembly)
-				check_port.cur_assembly = cur_assembly
-				cur_assembly.forceMove(check_port)
-				cur_assembly = null
-				check_port.icon_state = "port1"
-				success = 1
-		else
-			if(check_port.cur_assembly)
-				cur_assembly = check_port.cur_assembly
-				cur_assembly.forceMove(src)
-				check_port.cur_assembly = null
-				check_port.icon_state = "port0"
-				success = 1
 
-		break
+	var/success = 0
+	var/adjacent_dir = dir
+	outerloop: // a bit complicated so let's go step by step
+		for(var/i = 0, i < 3, i++)
+			adjacent_dir = counterclockwise_perpendicular_dirs[adjacent_dir] //for each adjacent turf to the injector (except in front of it)
+			var/turf/adjacent_wall = get_step(get_turf(src), adjacent_dir) //find the wall
+			if(!istype(adjacent_wall, /turf/simulated/wall)) // check if it's a wall, if not, it can't have anything attached to it, duh
+				continue // if it's not a wall, check the next adjacent turf
+			var/dir_of_check = opposite_dirs[adjacent_dir]
+			for(var/j = 0, j < 3, j++) //now since the fuel port is like an APC, it is actually on the floor and only looks like it's in a wall, so you need to check all adjacent turfs of the wall if they have a port
+				dir_of_check = counterclockwise_perpendicular_dirs[dir_of_check]
+				var/turf_to_check = get_step(adjacent_wall, dir_of_check)
+				for(var/obj/machinery/rust_fuel_assembly_port/check_port in turf_to_check)
+					if(check_port.dir != opposite_dirs[dir_of_check]) // the fuel port actually needs to face the wall to be attached to it, if it isn't, it's on another wall
+						continue
+					if(cur_assembly)
+						if(!check_port.cur_assembly)
+							check_port.cur_assembly = cur_assembly
+							cur_assembly.forceMove(check_port)
+							cur_assembly = null
+							check_port.icon_state = "port1"
+							success = 1
+							break outerloop //we break on the first valid find for simplicity
+					else
+						if(check_port.cur_assembly)
+							cur_assembly = check_port.cur_assembly
+							cur_assembly.forceMove(src)
+							check_port.cur_assembly = null
+							check_port.icon_state = "port0"
+							success = 1
+							break outerloop
 	if(success)
 		visible_message("<span class='notice'>[bicon(src)] A green light flashes on \the [src].</span>")
 		updateDialog()

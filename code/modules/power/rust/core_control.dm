@@ -31,8 +31,8 @@
 		dat += {"
 			<a href='?src=\ref[src];goto_scanlist=1'>Back to overview</a><hr>
 			<b>Device tag:</b> [cur_viewed_device.id_tag]<br>
-			<span style='color: [cur_viewed_device.owned_field ? "green" : "red"]'>Device [cur_viewed_device.owned_field ? "activated" : "deactivated"].</span><br>
-			<a href='?src=\ref[src];toggle_active=1'>Bring field [cur_viewed_device.owned_field ? "offline" : "online"]</a><br>
+			<span style='color: [cur_viewed_device.attempt_activate ? "green" : "red"]'>Device [cur_viewed_device.attempt_activate ? "activated" : "deactivated"].</span><br>
+			<a href='?src=\ref[src];toggle_active=1'>[cur_viewed_device.attempt_activate ? "Shut down" : "Boot up"] field</a><br>
 			<hr>
 
 			<b>Field encumbrance:</b> [cur_viewed_device.owned_field ? 0 : "N/A"]<br>
@@ -41,7 +41,7 @@
 			<a href='?src=\ref[src];str=-100'>--- </a>
 			<a href='?src=\ref[src];str=-10'>--  </a>
 			<a href='?src=\ref[src];str=-1'>-   </a>
-			<a href='?src=\ref[src];str=0'>[cur_viewed_device.field_strength]</a>
+			<a href='?src=\ref[src];str=0'>[cur_viewed_device.targeted_field_strength]</a>
 			<a href='?src=\ref[src];str=1'>+   </a>
 			<a href='?src=\ref[src];str=10'>++  </a>
 			<a href='?src=\ref[src];str=100'>+++ </a>
@@ -80,7 +80,7 @@
 				if(!check_core_status(C))
 					status = "<span style='color: red'>Unresponsive</span>"
 					can_access = 0
-				else if(C.avail() < C.active_power_usage)
+				else if(C.surplus() + round(C.get_satisfaction() * C.last_power_request) < C.active_power_usage)
 					status = "<span style='color: orange'>Underpowered</span>"
 				else
 					status = "<span style='color: green'>Good</span>"
@@ -117,7 +117,7 @@
 		return
 
 	if(href_list["access_device"])
-		var/idx = clamp(text2num(href_list["toggle_active"]), 1, connected_devices.len)
+		var/idx = clamp(text2num(href_list["access_device"]), 1, connected_devices.len)
 		cur_viewed_device = connected_devices[idx]
 		updateUsrDialog()
 		return 1
@@ -139,9 +139,9 @@
 	if(href_list["str"])
 		var/val = text2num(href_list["str"])
 		if(!val) //Value is 0, which is manual entering.
-			cur_viewed_device.set_strength(input("Enter the new field power density (W.m^-3)", "R-UST Mk. 7 Tokamak Controls", cur_viewed_device.field_strength) as num)
+			cur_viewed_device.set_targeted_strength(input("Enter the new field power density (W.m^-3)", "R-UST Mk. 7 Tokamak Controls", cur_viewed_device.targeted_field_strength) as num)
 		else
-			cur_viewed_device.set_strength(cur_viewed_device.field_strength + val)
+			cur_viewed_device.set_targeted_strength(cur_viewed_device.targeted_field_strength + val)
 		updateUsrDialog()
 		return 1
 
@@ -166,7 +166,7 @@
 	if(C.state != 2)
 		return
 
-	if(C.idle_power_usage > C.avail())
+	if(!C.powered)
 		return
 
 	. = 1

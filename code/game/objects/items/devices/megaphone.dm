@@ -55,9 +55,9 @@ var/list/megaphone_channels = list("DISABLE" = 0) + stationchannels
 /obj/item/device/megaphone/madscientist/pickup(mob/user)
 	INVOKE_EVENT(user, /event/camera_sight_changed, "mover" = user)
 
-/*/obj/item/device/megaphone/madscientist/dropped(mob/user)
+/obj/item/device/megaphone/madscientist/dropped(mob/user)
 	..()
-	INVOKE_EVENT(user, /event/camera_sight_changed, "mover" = user)*/ // Allows retracking, uncomment to enable
+	INVOKE_EVENT(user, /event/camera_sight_changed, "mover" = user)
 
 /obj/item/device/megaphone/madscientist/attack_self(mob/living/user as mob)
 	show_ui(user)
@@ -76,7 +76,7 @@ var/list/megaphone_channels = list("DISABLE" = 0) + stationchannels
 			dat += "<a href='?src=\ref[src];setfreq=[megaphone_channels[index]]'>[index]</a>"
 		dat += "<BR>"
 	dat+={"</TT></body></html>"}
-	user << browse(dat, "window=megaphone")
+	user << browse(HTML_SKELETON(dat), "window=megaphone")
 	onclose(user, "megaphone")
 
 /obj/item/device/megaphone/madscientist/Topic(href,href_list)

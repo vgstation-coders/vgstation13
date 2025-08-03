@@ -150,11 +150,11 @@
 			return_sample(environment, removed)
 		//src.update_icon()
 		nanomanager.update_uis(src)
-	//Updating the pipenet if we're on a connector
-	if (on && connected_port)
-		var/datum/pipe_network/P = connected_port.return_network(src)
-		if (P)
-			P.update = 1
+		//Updating the pipenet if we're on a connector
+		if (on && connected_port)
+			var/datum/pipe_network/P = connected_port.return_network(src)
+			if (P)
+				P.update = 1
 	//src.updateDialog()
 	return
 

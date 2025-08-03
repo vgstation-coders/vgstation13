@@ -69,6 +69,7 @@
 	icon_dead= "salem_dead"
 	gender = FEMALE
 	holder_type = /obj/item/weapon/holder/animal/salem
+	is_pet=TRUE
 
 /mob/living/simple_animal/cat/kitten
 	name = "kitten"
@@ -175,6 +176,7 @@
 /mob/living/simple_animal/cat/snek/corpus
 	name = "Corpus"
 	density = 0
+	is_pet=TRUE
 
 var/list/wizard_snakes = list()
 

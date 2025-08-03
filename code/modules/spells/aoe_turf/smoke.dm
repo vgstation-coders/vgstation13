@@ -6,13 +6,13 @@
 	specialization = SSDEFENSIVE //Provides cover
 
 	school = "conjuration"
-	charge_max = 120
+	charge_cooldown_max = 12 SECONDS
 	spell_flags = 0
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 1
 	inner_radius = -1
-	cooldown_min = 20 //25 deciseconds reduction per rank
+	cooldown_min = 2 SECONDS //2.5 seconds reduction per rank
 
 	smoke_spread = 2
 	smoke_amt = 5

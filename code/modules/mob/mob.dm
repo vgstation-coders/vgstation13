@@ -53,6 +53,11 @@
 	attack_delayer = null
 	special_delayer = null
 	throw_delayer = null
+
+	dark_plane = null
+	self_vision = null
+	master_plane = null
+
 	QDEL_NULL(hud_used)
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
@@ -72,6 +77,9 @@
 
 	if (ticker && ticker.mode)
 		ticker.mode.mob_destroyed(src)
+	QDEL_NULL(last_thrown_by)
+	QDEL_NULL(last_bumped_by)
+	QDEL_NULL(lastassailant)
 	..()
 
 /mob/projectile_check()
@@ -1002,7 +1010,7 @@ Use this proc preferably at the end of an equipment loadout
 			// Are we trying to pull something we are already pulling?
 			// Then we want to either toggle pulling (stop pulling and quit), or keep pulling (just quit) if client preferences want otherwise.
 			if(pulling == P)
-				if(client && !client.prefs.pulltoggle)
+				if(client && !client.prefs.get_pref(/datum/preference_setting/toggle/pulltoggle))
 					return
 				else
 					stop_pulling()
@@ -1047,12 +1055,12 @@ Use this proc preferably at the end of an equipment loadout
 	if(istype(loc,/obj/mecha))
 		return
 
-	if(isVentCrawling())
-		to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
-		return
-
 	var/obj/item/W = get_held_item_by_index(active_hand)
+
 	if(W)
+		if(isVentCrawling() && !W.vent_use)
+			to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
+			return
 		W.attack_self(src)
 		update_inv_hand(active_hand)
 
@@ -1085,10 +1093,11 @@ Use this proc preferably at the end of an equipment loadout
 	message_admins("[usr.key]/([usr.name]) added the following message to their memory. [msg]")
 	log_admin("[usr.key]/([usr.name]) added the following message to their memory. [msg]")
 	if(mind)
-		mind.store_memory(msg)
+		mind.store_memory(msg, category = MIND_MEMORY_CUSTOM)
 	else
 		to_chat(src, "The game appears to have misplaced your mind datum, so we can't show you your notes.")
 
+/*
 /mob/proc/store_memory(msg as message, popup, sane = 1)
 	msg = copytext(msg, 1, MAX_MESSAGE_LEN)
 
@@ -1102,6 +1111,7 @@ Use this proc preferably at the end of an equipment loadout
 
 	if (popup)
 		memory()
+*/
 
 //mob verbs are faster than object verbs. See http://www.byond.com/forum/?post=1326139&page=2#comment8198716 for why this isn't atom/verb/examine()
 /mob/verb/examination(atom/A as mob|obj|turf in view(src)) //It used to be oview(12), but I can't really say why
@@ -1238,7 +1248,7 @@ Use this proc preferably at the end of an equipment loadout
 	var/dat = {"	<title>/vg/station Github Ingame Reporting</title>
 					Version: [byond_version].[byond_build] Revision: [return_revision()]
 					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&byondver=[byond_version].[byond_build]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
-	src << browse(dat, "window=github;size=480x480")
+	src << browse(HTML_SKELETON(dat), "window=github;size=480x480")
 
 /client/verb/changes()
 	set name = "Changelog"
@@ -1266,7 +1276,7 @@ Use this proc preferably at the end of an equipment loadout
 		)
 	src << browse('html/changelog.html', "window=changes;size=675x650")
 
-	if(prefs.lastchangelog != changelog_hash)
+	if(prefs.get_pref(/datum/preference_setting/string/changelog) != changelog_hash)
 		prefs.SetChangelog(ckey, changelog_hash)
 		winset(src, "rpane.changelog", "background-color=none;font-style=;")
 
@@ -1275,7 +1285,7 @@ Use this proc preferably at the end of an equipment loadout
 	set category = "OOC"
 	var/output = {"Your BYOND version is: <b>[byond_version].[byond_build]</b><br>
 		You can view all of the latest server-compatible BYOND builds here: https://www.byond.com/download/build/[world.byond_version]/"}
-	usr << browse(output, "window=byond-version-data");
+	usr << browse(HTML_SKELETON(output), "window=byond-version-data");
 
 /mob/verb/observe()
 	set name = "Observe"
@@ -1474,12 +1484,12 @@ Use this proc preferably at the end of an equipment loadout
 				if((!S.connected_button) || !statpanel(S.panel))
 					continue //Not showing the noclothes spell
 				var/charge_type = S.charge_type
-				if(charge_type & Sp_HOLDVAR)
+				if(charge_type & SP_HOLDVAR)
 					statpanel(S.panel,"Required [S.holder_var_type]: [S.holder_var_amount]",S.connected_button)
-				else if(charge_type & Sp_CHARGES)
-					statpanel(S.panel,"[S.charge_max? "[S.charge_counter]/[S.charge_max] charges" : "Free"]",S.connected_button)
-				else if(charge_type & Sp_RECHARGE || charge_type & Sp_GRADUAL)
-					statpanel(S.panel,"[S.charge_max? "[S.charge_counter/10.0]/[S.charge_max/10] seconds" : "Free"]",S.connected_button)
+				else if(charge_type & SP_CHARGES)
+					statpanel(S.panel,"[S.charge_cooldown_max? "[S.charge_counter]/[S.charge_cooldown_max] charges" : "Free"]",S.connected_button)
+				else if(charge_type & SP_RECHARGE || charge_type & SP_GRADUAL)
+					statpanel(S.panel,"[S.charge_cooldown_max? "[S.charge_counter/10.0]/[S.charge_cooldown_max/10] seconds" : "Free"]",S.connected_button)
 	sleep(world.tick_lag * 2)
 
 
@@ -1875,7 +1885,17 @@ Use this proc preferably at the end of an equipment loadout
 	if(SS)
 		SS.supermatter_act(source)
 	else
-
+		if (client)
+			if(pulledby) // If we have a client, we add attack logs
+				add_logs(pulledby, src, "pulled into a suppermatter object", TRUE, source, get_coordinates_string(source))
+			else if(last_bumped_by_timestamp - 0.1 SECONDS <= world.time <= last_bumped_by_timestamp + 0.1 SECONDS) // If got bumped into a supermatter
+				var/mob/hostile = last_bumped_by.get()
+				add_logs(hostile, src, "bumped into a supermatter object", TRUE, source, get_coordinates_string(source))
+			else if(last_thrown_by_timestamp - 0.1 SECONDS <= world.time <= last_thrown_by_timestamp + 2 SECONDS) // If got thrown into a supermatter
+				var/mob/hostile = last_thrown_by.get()
+				add_logs(hostile, src, "thrown into a supermatter object", TRUE, source, get_coordinates_string(source))
+			else
+				attack_log += "\[[time_stamp()]\]: walked into supermatter (no bumper/no pusher)"
 		if(severity == SUPERMATTER_DUST)
 			dust()
 			return 1
@@ -2067,9 +2087,9 @@ Use this proc preferably at the end of an equipment loadout
 	desc = "Morph back into your previous form."
 	spell_flags = GHOSTCAST
 	abbreviation = "RF"
-	charge_max = 1
+	charge_cooldown_max = 0.1 SECONDS
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 0
 	hud_state = "wiz_mindswap"
 

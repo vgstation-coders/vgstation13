@@ -110,7 +110,7 @@
 				</div>
 			</body>
 			</html>"}
-	src << browse(dat, "window=pai;size=640x480;border=0;can_close=1;can_resize=1;can_minimize=1;titlebar=1")
+	src << browse(HTML_SKELETON(dat), "window=pai;size=640x480;border=0;can_close=1;can_resize=1;can_minimize=1;titlebar=1")
 	onclose(usr, "pai")
 	temp = null
 	return
@@ -762,7 +762,7 @@ Target Machine: "}
 		var/icon/img = message_app.imglist[note]
 		if(img)
 			usr << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
-			dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
+			dat += "<img src='tmp_photo_[note].png' width = '192' style='image-rendering: pixelated'><BR>"
 	return dat
 
 /mob/living/silicon/pai/proc/softwareHolomap()

@@ -41,7 +41,7 @@ var/global/byond_hub_playercount = OPEN_TO_HUB_PLAYERCOUNT_DEFAULT
 		<i>\[station_name\], \[map_name\], \[roundtime\], \[playercount\] can all be used to substitute their respective values.</i>
 	"}
 
-	usr << browse(dat, "window=admin2;size=600x400")
+	usr << browse(HTML_SKELETON(dat), "window=admin2;size=600x400")
 	return
 
 /world/proc/update_status()

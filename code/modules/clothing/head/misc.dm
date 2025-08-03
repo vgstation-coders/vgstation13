@@ -654,7 +654,9 @@
 	desc = "A party cone. Not useful to disguise one's self as a unicorn or to impale one's foes."
 	icon_state = "birthdayhat"
 	item_state = "birthdayhat"
-	species_fit = list(INSECT_SHAPED)
+	w_class = W_CLASS_SMALL //Fits several in a box!
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED)
+	vertical_offset = 4
 
 /obj/item/clothing/head/snake
 	name = "snake head"
@@ -845,3 +847,51 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
 
 /obj/item/clothing/head/hunter/rangeTackleBonus()
 	return 1
+
+/obj/item/clothing/head/shadowhead
+	name = "shadow costume head"
+	desc = "Amnesia not included."
+	icon_state = "shadowhead"
+	item_state = "shadowhead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
+/obj/item/clothing/head/sonichead
+	name = "sonic costume head"
+	desc = "Formerly a pre-order bonus."
+	icon_state = "sonichead"
+	item_state = "sonichead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
+/obj/item/clothing/head/tailshead
+	name = "tails costume head"
+	desc = "Smells like mint."
+	icon_state = "tailshead"
+	item_state = "tailshead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
+/obj/item/clothing/head/knuckleshead
+	name = "knuckles costume head"
+	desc = "What a knucklehead."
+	icon_state = "knuckleshead"
+	item_state = "knuckleshead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
+/obj/item/clothing/head/amyhead
+	name = "amy costume head"
+	desc = "Pretty pink I think."
+	icon_state = "amyhead"
+	item_state = "amyhead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	body_parts_covered = HIDEHAIR
+
+/obj/item/clothing/head/coonskin_cap
+	name = "coonskin cap"
+	desc = "You may all well go to hell, and I will go to Space Texas."
+	icon_state = "coonskin_cap"
+	species_fit = list(GREY_SHAPED,VOX_SHAPED)
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY

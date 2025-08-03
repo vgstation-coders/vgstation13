@@ -534,7 +534,6 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 /datum/subsystem/supply_shuttle/proc/add_centcomm_order(var/datum/centcomm_order/C)
 	centcomm_orders.Add(C)
-	var/name = "External order form - [C.name] order number [C.id]"
 	var/info = {"<h3>Central Command supply requisition form</h3><hr>
 	 			INDEX: #[C.id]<br>
 	 			REQUESTED BY: [C.name]<br>
@@ -547,10 +546,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		return
 	for(var/obj/machinery/computer/supplycomp/S in supply_consoles)
 		if(S.printccrequests)
-			var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(S.loc)
-			reqform.name = name
-			reqform.info = info
-			reqform.update_icon()
+			C.generate_form(S.loc)
 		S.say("New Central Command request available!")
 		playsound(S, 'sound/machines/twobeep.ogg', 50, 1)
 

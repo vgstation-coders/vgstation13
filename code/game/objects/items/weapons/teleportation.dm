@@ -42,7 +42,7 @@ Frequency:
 <A href='byond://?src=\ref[src];freq=10'>+</A><BR>
 
 <A href='?src=\ref[src];refresh=1'>Refresh</A>"}
-	user << browse(dat, "window=radio")
+	user << browse(HTML_SKELETON(dat), "window=radio")
 	onclose(user, "radio")
 	return
 
@@ -173,7 +173,7 @@ Frequency:
 
 /obj/item/weapon/hand_tele/attack_self(mob/user as mob)
 	var/turf/current_location = get_turf(user)//What turf is the user on?
-	if(!current_location||current_location.z==2||current_location.z>=7)//If turf was not found or they're on z level 2 or >7 which does not currently exist.
+	if(!current_location||current_location.z==map.zCentcomm||current_location.z>=7)//If turf was not found or they're on z level 2 or >7 which does not currently exist.
 		to_chat(user, "<span class='notice'>\The [src] is malfunctioning.</span>")
 		return
 
@@ -264,10 +264,10 @@ Frequency:
 		turfs += T
 	return pick(turfs)
 
-/obj/item/weapon/hand_tele/AltClick(var/mob/usr)
-	if((usr.incapacitated() || !Adjacent(usr)))
+/obj/item/weapon/hand_tele/AltClick(var/mob/user)
+	if((user.incapacitated() || !Adjacent(user)))
 		return
-	choose_destination(usr)
+	choose_destination(user)
 
 /obj/item/weapon/hand_tele/process()
 	charge = min(HANDTELE_MAX_CHARGE,charge+1)

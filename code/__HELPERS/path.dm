@@ -9,7 +9,7 @@
  * If no path was found, returns an empty list, which is important for bots like medibots who expect an empty list rather than nothing.
  *
  * Arguments:
- * * caller: The movable atom that's trying to find the path
+ * * path_caller: The movable atom that's trying to find the path
  * * end: What we're trying to path to. It doesn't matter if this is a turf or some other atom, we're gonna just path to the turf it's on anyway
  * * max_distance: The maximum number of steps we can take in a given path to search (default: 30, 0 = infinite)
  * * mintargetdistance: Minimum distance to the target before path returns, could be used to get near a target, but not right to it - for an AI mob with a gun, for example.
@@ -18,17 +18,17 @@
  * * exclude: If we want to avoid a specific turf, like if we're a mulebot who already got blocked by some turf
  * * skip_first: Whether or not to delete the first item in the path. This would be done because the first item is the starting tile, which can break movement for some creatures.
  */
-/proc/get_path_to(caller, end, max_distance = 30, mintargetdist, id=null, simulated_only = TRUE, turf/exclude, skip_first=TRUE)
-	if(!caller || !get_turf(end))
+/proc/get_path_to(path_caller, end, max_distance = 30, mintargetdist, id=null, simulated_only = TRUE, turf/exclude, skip_first=TRUE)
+	if(!path_caller || !get_turf(end))
 		return
 
-	var/l = SSpathfinder.mobs.getfree(caller)
+	var/l = SSpathfinder.mobs.getfree(path_caller)
 	while(!l)
 		stoplag(3)
-		l = SSpathfinder.mobs.getfree(caller)
+		l = SSpathfinder.mobs.getfree(path_caller)
 
 	var/list/path
-	var/datum/pathfind/pathfind_datum = new(caller, end, id, max_distance, mintargetdist, simulated_only, exclude)
+	var/datum/pathfind/pathfind_datum = new(path_caller, end, id, max_distance, mintargetdist, simulated_only, exclude)
 	path = pathfind_datum.search()
 	qdel(pathfind_datum)
 
@@ -44,7 +44,7 @@
  * Note that this can only be used inside the [datum/pathfind][pathfind datum] since it uses variables from said datum.
  * If you really want to optimize things, optimize this, cuz this gets called a lot.
  */
-#define CAN_STEP(cur_turf, next) (next && !next.density && cur_turf.Adjacent(next) && !(simulated_only && SSpathfinder.space_type_cache[next.type]) && !cur_turf.LinkBlockedWithAccess(next,caller, id) && (next != avoid))
+#define CAN_STEP(cur_turf, next) (next && !next.density && cur_turf.Adjacent(next) && !(simulated_only && SSpathfinder.space_type_cache[next.type]) && !cur_turf.LinkBlockedWithAccess(next,path_caller, id) && (next != avoid))
 /// Another helper macro for JPS, for telling when a node has forced neighbors that need expanding
 #define STEP_NOT_HERE_BUT_THERE(cur_turf, dirA, dirB) ((!CAN_STEP(cur_turf, get_step(cur_turf, dirA)) && CAN_STEP(cur_turf, get_step(cur_turf, dirB))))
 
@@ -97,7 +97,7 @@
 /// The datum used to handle the JPS pathfinding, completely self-contained
 /datum/pathfind
 	/// The thing that we're actually trying to path for
-	var/atom/movable/caller
+	var/atom/movable/path_caller
 	/// The turf where we started at
 	var/turf/start
 	/// The turf we're trying to path to (note that this won't track a moving target)
@@ -121,8 +121,8 @@
 	/// A specific turf we're avoiding, like if a mulebot is being blocked by someone t-posing in a doorway we're trying to get through
 	var/turf/avoid
 
-/datum/pathfind/New(atom/movable/caller, atom/goal, id, max_distance, mintargetdist, simulated_only, avoid)
-	src.caller = caller
+/datum/pathfind/New(atom/movable/path_caller, atom/goal, id, max_distance, mintargetdist, simulated_only, avoid)
+	src.path_caller = path_caller
 	end = get_turf(goal)
 	open = new /datum/heap(/proc/HeapPathWeightCompare)
 	sources = new()
@@ -139,7 +139,7 @@
  * return null, which [/proc/get_path_to] translates to an empty list (notable for simple bots, who need empty lists)
  */
 /datum/pathfind/proc/search()
-	start = get_turf(caller)
+	start = get_turf(path_caller)
 	if(!start || !end)
 		stack_trace("Invalid A* start or destination")
 		return
@@ -155,7 +155,7 @@
 
 	//then run the main loop
 	while(!open.is_empty() && !path)
-		if(!caller)
+		if(!path_caller)
 			return
 		current_processed_node = open.pop() //get the lower f_value turf in the open list
 		if(max_distance && (current_processed_node.number_tiles > max_distance))//if too many steps, don't process that path
@@ -330,14 +330,14 @@
 			return
 
 /**
- * For seeing if we can actually move between 2 given turfs while accounting for our access and the caller's pass_flags
+ * For seeing if we can actually move between 2 given turfs while accounting for our access and the path_caller's pass_flags
  *
  * Arguments:
- * * caller: The movable, if one exists, being used for mobility checks to see what tiles it can reach
+ * * path_caller: The movable, if one exists, being used for mobility checks to see what tiles it can reach
  * * ID: An ID card that decides if we can gain access to doors that would otherwise block a turf
  * * simulated_only: Do we only worry about turfs with simulated atmos, most notably things that aren't space?
 */
-/turf/proc/LinkBlockedWithAccess(turf/destination_turf, caller, ID)
+/turf/proc/LinkBlockedWithAccess(turf/destination_turf, path_caller, ID)
 	var/actual_dir = get_dir(src, destination_turf)
 
 	for(var/obj/structure/window/iter_window in src)
@@ -350,7 +350,7 @@
 
 	var/reverse_dir = get_dir(destination_turf, src)
 	for(var/obj/iter_object in destination_turf)
-		if(!iter_object.CanAStarPass(ID, reverse_dir, caller))
+		if(!iter_object.CanAStarPass(ID, reverse_dir, path_caller))
 			return TRUE
 
 	return FALSE

@@ -56,17 +56,12 @@
 	rechargeable = FALSE
 	non_rechargeable_reason = "<span class='notice'>Your gun's recharge port was removed to make room for a miniaturized reactor.</span>"
 	clowned = UNCLOWN
+	recharge_time = 4
 	var/core_stability = 10
-	var/charge_tick = 0
 
 /obj/item/weapon/gun/energy/gun/nuclear/New()
 	..()
-	processing_objects.Add(src)
 	update_icon()
-
-/obj/item/weapon/gun/energy/gun/nuclear/Destroy()
-	processing_objects.Remove(src)
-	..()
 
 /obj/item/weapon/gun/energy/gun/nuclear/process()
 	if (core_stability < 10)
@@ -75,7 +70,7 @@
 			update_icon()
 	if(power_supply && core_stability > 0)
 		charge_tick++
-		if(charge_tick < 4)
+		if(charge_tick < recharge_time)
 			return
 		charge_tick = 0
 		if(power_supply.charge < power_supply.maxcharge)

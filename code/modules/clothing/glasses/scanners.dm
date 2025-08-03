@@ -242,7 +242,7 @@
 
 /obj/item/clothing/glasses/scanner/science
 	name = "science goggles"
-	desc = "almost nothing."
+	desc = "Almost nothing."
 	icon_state = "purple"
 	item_state = "glasses"
 	origin_tech = Tc_MATERIALS + "=1"

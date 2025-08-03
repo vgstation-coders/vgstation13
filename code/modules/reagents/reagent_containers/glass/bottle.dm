@@ -299,12 +299,10 @@
 	amount_per_transfer_from_this = 5
 
 /obj/item/weapon/reagent_containers/glass/bottle/gbs/New()
-	var/datum/reagents/R = new/datum/reagents(20)
-	reagents = R
-	R.my_atom = src
+	create_reagents(20)
 	var/datum/disease/F = new /datum/disease/gbs
 	var/list/data = list("virus"= F)
-	R.add_reagent(BLOOD, 20, data)
+	reagents.add_reagent(BLOOD, 20, data)
 
 /obj/item/weapon/reagent_containers/glass/bottle/fake_gbs
 	name = "GBS culture bottle"
@@ -336,9 +334,7 @@
 	amount_per_transfer_from_this = 5
 
 /obj/item/weapon/reagent_containers/glass/bottle/rhumba_beat/New()
-	var/datum/reagents/R = new/datum/reagents(20)
-	reagents = R
-	R.my_atom = src
+	create_reagents(20)
 	var/datum/disease/F = new /datum/disease/rhumba_beat
 	var/list/data = list("virus"= F)
 	R.add_reagent(BLOOD, 20, data)

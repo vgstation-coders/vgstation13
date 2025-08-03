@@ -256,7 +256,7 @@
 				colour1 = "#000000"
 				colour2 = "#6D6D6D"
 				to_chat(user, "Selected color: Boring Black")
-		
+
 /obj/structure/bed/chair/vehicle/clowncart/emag_act(mob/user)
 	if(!emagged)
 		emagged = 1
@@ -301,10 +301,14 @@
 			draw_graffiti(old_pos)
 		else if(mode == MODE_PEELS)
 			if(!emagged)
-				new /obj/item/weapon/bananapeel/(old_pos)
+				var/atom/peel = new /obj/item/weapon/bananapeel/(old_pos)
+				peel.pixel_x = rand(-12,12)
+				peel.pixel_y = rand(-12,12)
 				reagents.remove_reagent(BANANA,BANANA_FOR_NORMAL_PEEL)
 			else
-				new /obj/item/weapon/bananapeel/traitorpeel/(old_pos)
+				var/atom/peel = new /obj/item/weapon/bananapeel/traitorpeel/(old_pos)
+				peel.pixel_x = rand(-12,12)
+				peel.pixel_y = rand(-12,12)
 				reagents.remove_reagent(BANANA,BANANA_FOR_TRAITOR_PEEL)
 	else
 		if(can_warn())

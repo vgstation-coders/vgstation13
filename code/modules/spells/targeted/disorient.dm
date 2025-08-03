@@ -6,11 +6,11 @@
 	specialization = SSOFFENSIVE
 
 	school = "transmutation"
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 	invocation = "DII ODA BAJI"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	message = "<span class='danger'>You suddenly feel completely overwhelmed!<span>"
-	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
+	level_max = list(SP_TOTAL = 5, SP_SPEED = 4, SP_POWER = 1)
 
 	max_targets = 1
 
@@ -26,7 +26,7 @@
 
 /spell/targeted/disorient/cast(var/list/targets)
 	..()
-	if(spell_levels[Sp_POWER] >= 1)
+	if(spell_levels[SP_POWER] >= 1)
 		for(var/mob/target in targets)
 			var/angle = pick(90, 180, 270)
 			var/client/C = target.client
@@ -37,12 +37,12 @@
 						C.dir = turn(C.dir, -angle)
 
 /spell/targeted/disorient/empower_spell()
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 	name = "Empowered Disorient"
 	desc = "This spell will very thoroughly disorient a target for 30 seconds."
 	return "You have upgraded the spell to turn the target's perception in another direction, further debilitating them."
 
 /spell/targeted/disorient/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
+	if(upgrade_type == SP_POWER)
 		return "Gives an additional effect to the spell that turns the target's view of reality in a direction, debilitating them a lot."
 	return ..()

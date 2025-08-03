@@ -1111,3 +1111,12 @@
 	dyeable_parts = list("drape","trim")
 	clothing_flags = COLORS_OVERLAY
 	color = COLOR_LINEN
+
+/obj/item/clothing/under/sonicman
+	name = "sonicman suit"
+	desc = "Did you call me?"
+	icon_state = "sonicmansuit"
+	item_state = "sonicmansuit"
+	_color = "sonicmansuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
+	clothing_flags = ONESIZEFITSALL

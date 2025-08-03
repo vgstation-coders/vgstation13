@@ -303,7 +303,7 @@
 	dat += "<h4>Crew Manifest</h4>"
 	dat += data_core.get_manifest(OOC = 1)
 
-	src << browse(dat, "window=manifest;size=370x420;can_close=1")
+	src << browse(HTML_SKELETON(dat), "window=manifest;size=370x420;can_close=1")
 
 //Used for drawing on walls with blood puddles as a spooky ghost.
 /mob/dead/verb/bloody_doodle()

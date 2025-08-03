@@ -88,10 +88,8 @@
 	to_chat(user, "<span class='notice'>You switched [amount_per_transfer_from_this == 10 ? "on" : "off"] the pressure nozzle. You'll now use [amount_per_transfer_from_this] units per spray.</span>")
 
 /obj/item/weapon/reagent_containers/spray/restock()
-	if(name == "Polyacid spray")
-		reagents.add_reagent(PACID, 2)
-	else if(name == "Lube spray")
-		reagents.add_reagent(LUBE, 2)
+	if(preset_reagent)
+		reagents.add_reagent(preset_reagent, 2)
 
 /obj/item/weapon/reagent_containers/spray/proc/make_puff(var/atom/target, var/mob/user)
 	if((has_slimes & slimes_accepted) && preset_reagent)
@@ -187,6 +185,15 @@
 	desc = "You're unsure if this is meant to cull or create weeds. The Discount Dan logo is haphazardly slapped on top of a faded yellow 'W' and gray 'Y'"
 	slimes_accepted = SLIME_PYRITE
 	preset_reagent = FAKE_CREEP
+
+
+/obj/item/weapon/reagent_containers/spray/pacid
+	name = "Polyacid spray"
+	preset_reagent = PACID
+	
+/obj/item/weapon/reagent_containers/spray/lube
+	name = "Lube spray"
+	preset_reagent = LUBE
 
 //chemsprayer
 /obj/item/weapon/reagent_containers/spray/chemsprayer

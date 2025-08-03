@@ -28,9 +28,9 @@
 		icon = original
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
-	..()
 	if(poisonsacs)
 		QDEL_NULL(poisonsacs)
+	return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal //This meat spawns when an animal is butchered, and its name is set to '[animal.species_name] meat' (like "cat meat")
 	var/animal_name = "animal"
@@ -271,7 +271,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(FLOUR, 32)
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/cricket/king
 	name = "cricket king meat"
 	desc = "A royal bloodline was felled to make this. Tastes like regicide."
@@ -590,3 +590,14 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	reagents.add_reagent(NUTRIMENT, 12)
 	reagents.add_reagent(BICARIDINE, 5)
 	bitesize = 3
+
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/oogabooga 
+	name = "prehistoric meat"
+	desc = "Ooga booga, boo. booga ooga ooga booga."
+	icon_state = "bearmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/oogabooga/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(GRUGZONE, 4)

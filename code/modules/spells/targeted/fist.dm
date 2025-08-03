@@ -5,11 +5,11 @@
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
 
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3)
-	charge_max = 50
-	cooldown_min = 10
+	level_max = list(SP_TOTAL = 3, SP_SPEED = 3)
+	charge_cooldown_max = 5 SECONDS
+	cooldown_min = 1 SECONDS
 	invocation = "I CAST FIST"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	max_targets = 3
 	spell_flags = NEEDSCLOTHES | LOSE_IN_TRANSFER | IS_HARMFUL
 

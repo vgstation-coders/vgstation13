@@ -322,9 +322,9 @@
     step_sound = "clownstep"
 
 /obj/item/clothing/suit/space/vox/civ/trader/stealth/step_action()
-    if(ishuman(loc)&&Holiday == APRIL_FOOLS_DAY)
-        var/mob/living/carbon/human/H = loc
-        playsound(H, step_sound, 20, 1)
+	if(ishuman(loc)&&Holiday == APRIL_FOOLS_DAY)
+		var/mob/living/carbon/human/H = loc
+		playsound(H, step_sound, 20, 1)
 
 /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "alien stealth helmet"

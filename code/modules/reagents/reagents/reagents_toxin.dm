@@ -148,6 +148,7 @@
 /datum/reagent/chefspecial/on_overdose(var/mob/living/M)
 	M.death(0)
 	M.attack_log += "\[[time_stamp()]\]<font color='red'>Died a quick and painless death by <font color='green'>Chef Excellence's Special Sauce</font>.</font>"
+	log_attack("[key_name(M)] was killed by Chef Excellence's Special Sauce (CHEFSPECIAL).")
 
 //Otherwise known as a "Mickey Finn"
 /datum/reagent/chloralhydrate

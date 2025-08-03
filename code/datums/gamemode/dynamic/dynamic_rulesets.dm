@@ -166,7 +166,7 @@
 
 	result = previous_rounds_odds_reduction(result)
 
-	if (weight_category in mode.ruleset_category_weights)
+	if (config.dynamic_plus && (weight_category in mode.ruleset_category_weights))
 		result *= mode.ruleset_category_weights[weight_category]
 
 	if (mode.highlander_rulesets_favoured && (flags & HIGHLANDER_RULESET))

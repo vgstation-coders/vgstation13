@@ -116,7 +116,7 @@
 	stat = DEAD
 	tod = worldtime2text()
 	if(mind)
-		mind.store_memory("Time of death: [tod]", 0)
+		mind.store_memory("Time of death: [tod]", category=MIND_MEMORY_GENERAL, forced=TRUE)
 		if(!(mind && mind.suiciding)) //Cowards don't count
 			score.deadcrew++
 	if (dorfpod)
