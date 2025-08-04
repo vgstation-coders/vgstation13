@@ -27015,7 +27015,7 @@
 /obj/machinery/newscaster{
 	pixel_y = 32
 	},
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /turf/simulated/floor/wood,
 /area/crew_quarters/theatre)
 "aXb" = (

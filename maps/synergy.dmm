@@ -57279,7 +57279,7 @@
 /area/crew_quarters/theatre)
 "bZv" = (
 /obj/structure/table/woodentable,
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/item/weapon/storage/fancy/cigarettes,
 /obj/item/weapon/lipstick,
 /obj/item/weapon/bikehorn{
