@@ -499,7 +499,7 @@
 /obj/machinery/turretid/npc_tamper_act(mob/living/L)
 	enabled = rand(0, 1)
 	lethal = rand(0, 1)
-	updateTurrets()
+	updateTurrets(L)
 
 /obj/machinery/turretid/Topic(href, href_list)
 	if(..())
@@ -513,12 +513,12 @@
 			enabled = !enabled
 			usr.visible_message("<span class='warning'>[usr] [enabled ? "enables":"disables"] the turrets.</span>",
 			"<span class='notice'>You [enabled ? "enable":"disable"] the turrets.</span>")
-			updateTurrets()
+			updateTurrets(usr)
 		else if(href_list["toggleLethal"])
 			lethal = !lethal
 			usr.visible_message("<span class='warning'>[usr] switches the turrets to [lethal ? "lethal":"stun"].</span>",
 			"<span class='notice'>You switch the turrets to [lethal ? "lethal":"stun"].</span>")
-			updateTurrets()
+			updateTurrets(usr)
 	attack_hand(usr)
 
 //Regular Alt Click (not AI) allows users to immediately turn the turrets on or off, assuming the rest of the steps are done (notably interface unlocked)
@@ -527,7 +527,7 @@
 		enabled = !enabled
 		usr.visible_message("<span class='warning'>[usr] [enabled ? "enables":"disables"] the turrets.</span>",
 		"<span class='notice'>You [enabled ? "enable":"disable"] the turrets.</span>")
-		updateTurrets()
+		updateTurrets(user)
 		return
 	return ..()
 
@@ -552,7 +552,7 @@
 	if(!ailock || is_malf_owner(user))
 		lethal = !lethal
 		to_chat(usr, "<span class='notice'>You switch the turrets to [lethal ? "lethal":"stun"].</span>")
-		updateTurrets()
+		updateTurrets(user)
 
 /obj/machinery/turretid/AICtrlClick(mob/living/silicon/ai/user) //Lock the device
 	if(is_pulselocked(user))
@@ -571,12 +571,17 @@
 	if(!ailock || is_malf_owner(user))
 		enabled = !enabled
 		to_chat(usr, "<span class='notice'>You [enabled ? "enable":"disable"] the turrets.</span>")
-		updateTurrets()
+		updateTurrets(user)
 
-/obj/machinery/turretid/proc/updateTurrets()
+/obj/machinery/turretid/proc/updateTurrets(mob/user)
 	if(control_area)
 		for(var/obj/machinery/turret/aTurret in control_area.contents)
 			aTurret.setState(enabled, lethal)
+	if(lethal && issilicon(user))
+		var/mob/living/silicon/S = user
+		if(S.is_asimov())
+			log_admin("[key_name(S)] just set [formatLocation(src)] to lethal while on asimov lawset!")
+			message_admins("<span class='danger'>[key_name(S)] just set [formatJumpTo(src)] to lethal while on asimov lawset!</span>")
 	update_icon()
 
 /obj/machinery/turretid/update_icon()

@@ -47,6 +47,9 @@
 /mob/living/silicon/proc/triggerAlarm()
 	return
 
+/mob/living/silicon/proc/is_asimov()
+	return !emagged && laws && (laws.type == /datum/ai_laws/asimov || laws.type == /datum/ai_laws/lazymov)
+
 /mob/living/silicon/proc/show_laws()
 	return
 

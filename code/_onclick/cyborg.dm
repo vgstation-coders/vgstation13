@@ -85,18 +85,29 @@
 			next_move += 5
 		*/
 		var/resolved = W.preattack(A, src, 1, params)
-		if(!resolved)
+		if(resolved)
+			log_harm(W,A)
+		else
 			resolved = A.attackby(W,src,params)
+			if(resolved)		
+				log_harm(W,A)
 			if(ismob(A) || istype(A, /obj/mecha))
 				delayNextAttack(10)
 			if(!resolved && A && W)
 				W.afterattack(A,src,1,params) // 1 indicates adjacency
+				log_harm(W,A)
 			else
 				delayNextAttack(10)
 		return
 	else
 		//next_move = world.time + 10
 		W.afterattack(A, src, 0, params)
+		log_harm(W,A)
+
+/mob/living/silicon/robot/proc/log_harm(obj/item/W,mob/living/carbon/human/target)
+	if(a_intent == I_HURT && is_asimov() && istype(W) && isjusthuman(target))
+		log_admin("[key_name(src)] just attacked [formatLocation(target)] on harm intent with \a [W] while on asimov lawset!")
+		message_admins("<span class='danger'>[key_name(src)] just attacked [formatJumpTo(target)] on harm intent with \a [W] while on asimov lawset!</span>")
 
 //Gripper Handling
 //This is used when a gripper is used on anything. It does all the handling for it.
