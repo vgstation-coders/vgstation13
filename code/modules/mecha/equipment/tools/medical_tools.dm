@@ -1,8 +1,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper
 	name = "\improper Mounted Sleeper"
 	desc = "Mounted Sleeper. (Can be attached to: Medical Exosuits)"
-	icon = 'icons/obj/Cryogenic2.dmi'
-	icon_state = "sleeper_0"
+	icon_state = "mecha_sleeper"
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=3"
 	energy_drain = 20
 	equip_slot = BACK
@@ -408,8 +407,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun
 	name = "\improper Exosuit-Mounted Syringe Gun"
 	desc = "Exosuit-mounted chem synthesizer with syringe gun. Reagents inside are held in stasis, so no reactions will occur. (Can be attached to: Medical Exosuits)"
-	icon = 'icons/obj/gun.dmi'
-	icon_state = "syringegun"
+	icon_state = "mecha_syringe_gun"
 	var/list/syringes
 	var/list/known_reagents
 	var/list/processed_reagents
