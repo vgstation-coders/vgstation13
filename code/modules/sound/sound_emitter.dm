@@ -20,7 +20,7 @@
 /mob
 	var/last_sound_zone_hash = null
 	// proxy for when the sound needs to be sent to some other mob, e.g. aiEye mob movement needs sounds sent to AI Core mob
-	//  this is because the AI Eye client is null and mob/proc/operator<< tries to send to client
+	//  this is because the AI Eye client is null so we can't get to the SLC via the aiEye mob
 	var/mob/sound_endpoint = null
 /mob/New()
 	..()

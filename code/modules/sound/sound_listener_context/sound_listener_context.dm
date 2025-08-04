@@ -29,17 +29,21 @@
 /mob/Login()
 	if (client.listener_context)
 		// results in sounds restarting when switching mobs... not great, not terrible
-		qdel(client.listener_context)
+		var/slc = client.listener_context
+		qdel(slc)
+		client.listener_context = null
 		client.listener_context = new /datum/sound_listener_context(client, src, world.view)
 	return ..()
 
 /mob/living/silicon/ai/Login()
+	..()
 	if (client.listener_context)
-		qdel(client.listener_context)
-		client.listener_context = new /datum/sound_listener_context/ai(client, src, src)
-		if (eyeobj)
-			client.listener_context.reset_proxy(eyeobj)
-	return ..()
+		var/slc = client.listener_context
+		qdel(slc)
+		client.listener_context = null
+	client.listener_context = new /datum/sound_listener_context/ai(client, src, src, world.view)
+	if (eyeobj)
+		client.listener_context.reset_proxy(eyeobj)
 
 
 
@@ -51,7 +55,6 @@
 	var/list/current_channels_by_emitter = list()
 	var/list/free_channels = list()
 	var/range = null
-	var/datum/sound_listen_strategy/strategy = null
 
 /datum/sound_listener_context/New(client/C, mob/P, hearing_range = world.view)
 	client = C
@@ -64,7 +67,6 @@
 	sound_zone_manager.register_listener(src)
 
 /datum/sound_listener_context/Destroy()
-	world.log << "in Destroy() for [src]"
 	for (var/datum/sound_emitter/E in current_channels_by_emitter)
 		release(E)
 	free_channels.Cut()
@@ -72,7 +74,7 @@
 	sound_zone_manager.unregister_listener(src)
 	client = null
 	proxy = null
-	. = ..()
+	return ..()
 
 /datum/sound_listener_context/proc/assign_channel(datum/sound_emitter/E)
 	if (E in current_channels_by_emitter)
