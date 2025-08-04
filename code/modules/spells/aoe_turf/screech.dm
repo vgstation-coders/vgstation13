@@ -49,11 +49,13 @@
 			C.vampire_affected(user.mind)
 			continue
 		to_chat(C, "<span class='danger'><font size='3'>You hear an ear piercing shriek and your senses dull!</font></span>")
-		C.Knockdown(8)
+		var/obj/item/I = C.get_active_hand()
+		if(I)
+			C.drop_item(I)
 		C.ear_deaf = 20
 		C.stuttering = 20
-		C.Stun(8)
 		C.Jitter(20)
+		C.confused += 5
 	for(var/obj/structure/window/W in view(4))
 		W.shatter()
 	for(var/obj/machinery/light/L in view(7))
