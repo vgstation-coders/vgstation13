@@ -35,7 +35,7 @@
 /datum/sound_listener_context/ai/hear_once(sound/S, datum/sound_emitter/emitter)
 	// special handling because fuck AIs
 	// prioritise aiEye if it exists
-	if (emitter.source in range(range, proxy) && is_emitter_audible(emitter))
+	if ((emitter.source in range(range, proxy)) && is_emitter_audible(emitter))
 		return ..()
 	// otherwise fall back to something like legacy behaviour for the core
 	if (emitter.source in range(range, core_mob))
