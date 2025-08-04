@@ -529,6 +529,7 @@
 					to_chat(src, "<span class='danger'>You continue to burn!</span>")
 				fire_stacks += 5
 				ignite()
+				adjustFireLoss(5)
 		audible_scream()
 	else
 		switch(health)
