@@ -397,11 +397,16 @@
 	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
 
 	if(AC)
-		to_chat(user, "<span class='info'> It has [AC] attached. [AC.get_efficiency()<0.5?"It is severely damaged.":""]</span>")
+		to_chat(user, "<span class='info'> It has [AC] attached. [AC.get_efficiency()<0.5?"It is severely damaged.":""] </span>")
+	if(AC && AC.get_efficiency() < 0.1)
+		to_chat(user, "<span class='danger'> The [AC] is completely broken.</span>")
 	else
 		to_chat(user, "<span class='info'> It has no armor plating.</span>")
+
 	if(HC)
 		to_chat(user, "<span class='info'> It has [HC] attached. [HC.get_efficiency()<0.5?"It is severely damaged.":""]</span>")
+	if(HC && HC.get_efficiency() < 0.1)
+		to_chat(user, "<span class='danger'> The [HC] is completely broken.</span>")
 	else
 		to_chat(user, "<span class='info'>It does not seem to have a completed hull.</span>")
 
@@ -430,6 +435,8 @@ Add camera and radio components
 Add binary radio (?)
 Add cell EMP protection via mech electrical hub
 Make maints panel be unlocked if there's no electric hub
+Hull / Armor break visibly when broken
+Breaking SFX and text when components break
 
 
 */
@@ -1151,7 +1158,7 @@ Make maints panel be unlocked if there's no electric hub
 	if(get_charge())
 		if(!zap || zap.integrity <= 0) // Only EMP the cell if there's no electrical hub
 			cell.emp_act(severity*1.25)
-		take_damage(10 / severity, damage_type = "energy")
+		take_damage(25 / severity, damage_type = "energy")
 		src.log_message("EMP detected",1)
 		check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
 		for(var/obj/item/mecha_parts/mecha_equipment/M in equipment)
@@ -1234,7 +1241,6 @@ Make maints panel be unlocked if there's no electric hub
 //////////////////////
 ////// AttackBy //////
 //////////////////////
-removable_components
 /obj/mecha/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 

@@ -11,7 +11,7 @@
 	/// How fast the mech is in normal pressure
 	var/slow_pressure_step_in = 2.5
 	max_temperature = 20000
-	health = 200
+	health = 150
 	damage_absorption = list("brute"=0.85,"fire"=1.2,"bullet"=1,"laser"=1,"energy"=1,"bomb"=1)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley
 	enclosed = FALSE
@@ -60,7 +60,7 @@
 	fast_pressure_step_in = 2
 	/// How fast the mech is in normal pressure
 	slow_pressure_step_in = 3
-	health = 250
+	health = 200
 	damage_absorption = list("brute"=0.8,"fire"=1.2,"bullet"=1,"laser"=1,"energy"=1,"bomb"=0.8)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/mk2
 	enclosed = TRUE
@@ -82,7 +82,7 @@
 	icon_state = "firefighter"
 	initial_icon = "firefighter"
 	max_temperature = 65000
-	health = 300
+	health = 250
 	light_range_on = 10
 	light_brightness_on = 3
 	damage_absorption = list("brute"=0.7,"fire"=0.5,"bullet"= 1,"laser"=1, "bomb"=0.8)
