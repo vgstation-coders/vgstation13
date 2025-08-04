@@ -3,6 +3,7 @@
 	name = "Odysseus"
 	icon_state = "odysseus"
 	initial_icon = "odysseus"
+	base_color = "#FFFFFF"
 	step_in = 2
 	max_temperature = 15000
 	health = 100

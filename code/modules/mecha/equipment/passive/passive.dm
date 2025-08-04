@@ -108,7 +108,7 @@
 	icon_state = "tesla"
 	origin_tech = Tc_POWERSTORAGE + "=6" + Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;"
 	optimal_type = list(/obj/mecha/working/ripley)
-
+	has_equip_overlay = FALSE
 	equip_type = EQUIP_HULL
 
 	var/slowdown_multiplier = 0.75	// How much does the exosuit multiply its slowdown by if it's the proper type?

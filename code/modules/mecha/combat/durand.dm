@@ -3,6 +3,7 @@
 	name = "Durand Mk. II"
 	icon_state = "durand"
 	initial_icon = "durand"
+	base_color = "#A8ABB3"
 	step_in = 3
 	dir_in = 1 //Facing North.
 	health = 300

@@ -387,7 +387,7 @@
 	else
 		to_chat(user, "<span class='info'> It has no armor plating.</span>")
 	if(HC)
-		if(!AC || AC.get_efficiency() < 0.7)
+		if(!HC || HC.get_efficiency() < 0.7)
 			to_chat(user, "<span class='info'> It has [HC] attached. [HC.get_efficiency()<0.5?"It is severely damaged.":""]</span>")
 		else
 			to_chat(user, "<span class='info'> You cannot tell what type of hull it has.</span>")
@@ -423,10 +423,10 @@
 
 /obj/mecha/proc/draw_layer(obj/item/mecha_parts/mecha_equipment/equip, entry)
 	var/icon_name = "[equip.icon_state][entry ? "_r" : "_l"]"
-	var/icon/weapon = icon("icons/mecha/mecha_overlay.dmi", icon_name)
+	var/icon/weapon = icon("icons/mecha/mecha_overlays.dmi", icon_name)
 	src.overlays.Add(weapon)
 	if(equip.need_colorize)
-		var/icon/padding = icon("icons/mecha/mecha_overlay.dmi", "[icon_name]_padding")
+		var/icon/padding = icon("icons/mecha/mecha_overlays.dmi", "[icon_name]_padding")
 		padding.Blend(base_color, ICON_MULTIPLY)
 		src.overlays.Add(padding)
 

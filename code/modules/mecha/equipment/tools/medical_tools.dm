@@ -5,6 +5,7 @@
 	icon_state = "sleeper_0"
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=3"
 	energy_drain = 20
+	equip_slot = BACK
 	range = MELEE
 	reliability = 1000
 	equip_cooldown = 20
@@ -418,6 +419,8 @@
 	energy_drain = 10
 	var/mode = 0 //0 - fire syringe, 1 - analyze reagents.
 	var/datum/global_iterator/mech_synth/synth
+	equip_slot = BACK
+	need_colorize = FALSE
 	range = MELEE|RANGED
 	equip_cooldown = 10
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_BIOTECH + "=4;" + Tc_MAGNETS + "=4;" + Tc_PROGRAMMING + "=3"

@@ -4,6 +4,7 @@
 	icon_state = "ripley"
 	initial_icon = "ripley"
 	silicon_icon_state = "ripley-empty"
+	base_color = "#DFD472"
 	step_in = 2 //Move speed, lower is faster.
 	/// How fast the mech is in low pressure
 	var/fast_pressure_step_in = 1.5
@@ -99,6 +100,7 @@
 	name = "DEATH-RIPLEY"
 	icon_state = "deathripley"
 	initial_icon = "deathripley"
+	base_color = "#880015"
 	step_in = 2
 	opacity = 0
 	light_range_on = 12

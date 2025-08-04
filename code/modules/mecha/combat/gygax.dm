@@ -3,6 +3,7 @@
 	name = "Gygax"
 	icon_state = "gygax"
 	initial_icon = "gygax"
+	base_color = "#ED5F3B"
 	step_in = 2
 	dir_in = 1 //Facing North.
 	health = 250
@@ -45,6 +46,7 @@
 	name = "Dark Gygax"
 	icon_state = "darkgygax"
 	initial_icon = "darkgygax"
+	base_color = "#4E4E4E"
 	health = 300
 	deflect_chance = 10
 	damage_absorption = list("brute"=0.8,"fire"=1,"bullet"=0.8,"laser"=0.7,"energy"=0.8,"bomb"=1)

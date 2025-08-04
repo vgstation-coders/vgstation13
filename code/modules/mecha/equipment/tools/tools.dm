@@ -342,6 +342,7 @@
 	equip_cooldown = 15
 	energy_drain = 0
 	range = MELEE|RANGED
+	need_colorize = FALSE
 	equip_type = EQUIP_UTILITY
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/can_attach(obj/mecha/working/M)
@@ -613,6 +614,7 @@
 	origin_tech = Tc_BLUESPACE + "=10"
 	equip_cooldown = 150
 	energy_drain = 1000
+	equip_slot = BACK
 	range = RANGED
 	equip_type = EQUIP_UTILITY
 
@@ -684,6 +686,7 @@
 	origin_tech = Tc_BLUESPACE + "=2;" + Tc_MAGNETS + "=3"
 	equip_cooldown = 10
 	energy_drain = 100
+	equip_slot = BACK
 	range = MELEE|RANGED
 	equip_type = EQUIP_SPECIAL
 	var/atom/movable/locked
@@ -773,6 +776,7 @@
 	equip_cooldown = 10
 	energy_drain = 50
 	range = 0
+	has_equip_overlay = FALSE
 	var/deflect_coeff = 1.15
 	var/damage_coeff = 0.8
 	is_activateable = 0
@@ -826,6 +830,7 @@
 	equip_cooldown = 10
 	energy_drain = 50
 	range = 0
+	has_equip_overlay = FALSE
 	var/deflect_coeff = 1.15
 	var/damage_coeff = 0.8
 	is_activateable = 0
@@ -903,6 +908,7 @@
 	equip_cooldown = 20
 	energy_drain = 100
 	range = 0
+	has_equip_overlay = FALSE
 	var/health_boost = 2
 	var/datum/global_iterator/pr_repair_droid
 	var/icon/droid_overlay
@@ -1010,6 +1016,7 @@
 	equip_cooldown = 10
 	energy_drain = 0
 	range = 0
+	has_equip_overlay = FALSE
 	var/datum/global_iterator/pr_energy_relay
 	var/coeff = 100
 	var/list/use_channels = list(EQUIP,ENVIRON,LIGHT)
@@ -1146,6 +1153,7 @@
 	equip_cooldown = 10
 	energy_drain = 0
 	range = MELEE
+	has_equip_overlay = FALSE
 	var/datum/global_iterator/pr_mech_generator
 	var/coeff = 100
 	var/obj/item/stack/sheet/fuel
@@ -1346,6 +1354,7 @@
 	var/dam_force = 0
 	var/obj/mecha/working/ripley/cargo_holder
 	equip_type = EQUIP_UTILITY
+	need_colorize = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/tool/safety_clamp/can_attach(obj/mecha/working/ripley/M as obj)
 	if(..())

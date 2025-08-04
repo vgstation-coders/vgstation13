@@ -107,6 +107,8 @@
 	icon_state = "mecha_honker"
 	energy_drain = 200
 	equip_cooldown = 150
+	equip_slot = BACK
+	need_colorize = FALSE
 	range = MELEE|RANGED
 
 /obj/item/mecha_parts/mecha_equipment/weapon/honker/can_attach(obj/mecha/combat/honker/M as obj)
@@ -373,6 +375,7 @@
 	max_projectiles = 8
 	projectile_energy_cost = 1000
 	equip_cooldown = 60
+	equip_slot = BACK
 	var/missile_speed = 2
 	var/missile_range = 30
 
@@ -535,6 +538,7 @@
 	missile_speed = 1.5
 	projectile_energy_cost = 100
 	equip_cooldown = 20
+	need_colorize = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar/can_attach(obj/mecha/combat/honker/M as obj)
 	if(..())
@@ -565,6 +569,7 @@
 	missile_speed = 1.5
 	projectile_energy_cost = 100
 	equip_cooldown = 10
+	need_colorize = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/mousetrap_mortar/can_attach(obj/mecha/combat/honker/M as obj)
 	if(..())

@@ -3,6 +3,7 @@
 	name = "Phazon"
 	icon_state = "phazon"
 	initial_icon = "phazon"
+	base_color = "#4D79A0"
 	step_in = 0.75
 	dir_in = 1 //Facing North.
 	step_energy_drain = 3
