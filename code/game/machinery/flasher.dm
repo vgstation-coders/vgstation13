@@ -62,11 +62,11 @@ var/list/obj/machinery/flasher/flashers = list()
 //Let the AI trigger them directly.
 /obj/machinery/flasher/attack_ai(var/mob/user)
 	if (src.anchored)
-		return src.flash()
+		return src.flash(user)
 	else
 		return
 
-/obj/machinery/flasher/proc/flash()
+/obj/machinery/flasher/proc/flash(var/mob/user)
 	if (!(powered()))
 		return
 
@@ -80,6 +80,7 @@ var/list/obj/machinery/flasher/flashers = list()
 		return //Still "flashes," so power is used and the noise is made, etc., but it doesn't actually flash anyone.
 	flick("[base_state]_flash", src)
 
+	var/livingfound = FALSE
 	for (var/mob/O in viewers(src, null))
 		if(isobserver(O))
 			continue
@@ -106,6 +107,12 @@ var/list/obj/machinery/flasher/flashers = list()
 		else
 			O.Knockdown(strength)
 			O.Stun(strength)
+		livingfound = TRUE
+	if(livingfound && issilicon(user))
+		var/mob/living/silicon/S = usr
+		if(S.is_keeper())
+			log_admin("[key_name(S)] just used [formatLocation(src)] on beings while on KEEPER lawset!")
+			message_admins("<span class='danger'>[key_name(S)] just used [formatJumpTo(src)] on beings while on KEEPER lawset!</span>")
 
 
 /obj/machinery/flasher/emp_act(severity)
