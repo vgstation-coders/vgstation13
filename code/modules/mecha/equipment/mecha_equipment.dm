@@ -182,7 +182,7 @@
 	update_chassis_page()
 	chassis.log_message("[src] removed from equipment.")
 	chassis = null
-	chassis.update_icon()
+	chassis.UpdateIcon()()
 	set_ready_state(TRUE)
 	enable_special = FALSE
 	return

@@ -180,7 +180,7 @@
 	mechas_list += src //global mech list
 	icon_state = initial_icon
 	icon_state += "-open"
-	update_icon()
+	UpdateIcon()
 
 /obj/mecha/Destroy()
 	go_out(loc, TRUE)
@@ -1255,7 +1255,7 @@ removable_components
 				user.drop_item()
 				E.attach(src)
 				user.visible_message("[user] attaches [W] to [src]", "You attach [W] to [src]")
-				update_icon()
+				UpdateIcon()
 			else
 				to_chat(user, "You were unable to attach [W] to [src]")
 		return
@@ -1763,7 +1763,7 @@ removable_components
 		src.forceMove(src.loc)
 		src.log_append_to_last("[H] moved in as pilot.")
 		src.icon_state = src.initial_icon
-		update_icon()
+		UpdateIcon()
 		dir = dir_in
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
@@ -1958,7 +1958,7 @@ removable_components
 		for(var/turf/simulated/T in turf_candidates)
 			if(!is_blocked_turf(T) && Adjacent(T))
 				exit = T
-				update_icon()
+				UpdateIcon()
 				break
 
 	var/atom/movable/mob_container
@@ -2359,7 +2359,7 @@ removable_components
 			src.occupant_message("You switch to [equip]")
 			src.visible_message("[src] raises [equip]")
 			send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
-			update_icon()
+			UpdateIcon()
 		return
 	if(href_list["eject"])
 		if(usr != src.occupant && (get_dist(usr, src) > 1 || state != STATE_BOLTSEXPOSED))
