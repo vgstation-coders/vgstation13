@@ -406,6 +406,7 @@
 				to_chat(H, "<span class='danger'>Your skin catches fire!</span>")
 			else if(prob(35))
 				to_chat(H, "<span class='danger'>The holy flames continue to burn your flesh!</span>")
+			H.adjustFireLoss(5)
 			H.fire_stacks += 5
 			H.ignite()
 
