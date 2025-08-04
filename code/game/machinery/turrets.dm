@@ -577,11 +577,14 @@
 	if(control_area)
 		for(var/obj/machinery/turret/aTurret in control_area.contents)
 			aTurret.setState(enabled, lethal)
-	if(lethal && issilicon(user))
+	if(issilicon(user))
 		var/mob/living/silicon/S = user
-		if(S.is_asimov())
+		if(lethal && S.is_asimov())
 			log_admin("[key_name(S)] just set [formatLocation(src)] to lethal while on asimov lawset!")
 			message_admins("<span class='danger'>[key_name(S)] just set [formatJumpTo(src)] to lethal while on asimov lawset!</span>")
+		else if(S.is_keeper())
+			log_admin("[key_name(S)] just messed with [formatLocation(src)] while on KEEPER lawset!")
+			message_admins("<span class='danger'>[key_name(S)] just messed with [formatJumpTo(src)] while on KEEPER lawset!</span>")
 	update_icon()
 
 /obj/machinery/turretid/update_icon()

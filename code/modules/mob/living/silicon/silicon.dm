@@ -50,6 +50,9 @@
 /mob/living/silicon/proc/is_asimov()
 	return laws && !laws.zeroth && (laws.type == /datum/ai_laws/asimov || laws.type == /datum/ai_laws/lazymov)
 
+/mob/living/silicon/proc/is_keeper()
+	return laws && !laws.zeroth && (laws.type == /datum/ai_laws/keeper)
+
 /mob/living/silicon/proc/show_laws()
 	return
 
