@@ -11,6 +11,9 @@
 #define STATE_BOLTSEXPOSED 1
 #define STATE_BOLTSOPENED 2
 
+#define HAND 1
+#define BACK 2
+
 /obj/mecha
 	name = "Mecha"
 	desc = "Exosuit"
@@ -149,6 +152,8 @@
 	var/overload = FALSE
 	var/defense_mode = FALSE
 
+	var/base_color = null // Mecha padding color. Used to paint visible equipment in special color.
+
 /obj/mecha/get_cell()
 	return cell
 
@@ -176,6 +181,7 @@
 	mechas_list += src //global mech list
 	icon_state = initial_icon
 	icon_state += "-open"
+	update_icon()
 
 /obj/mecha/Destroy()
 	go_out(loc, TRUE)
@@ -398,6 +404,31 @@
 
 /obj/mecha/proc/drop_item()//Derpfix, but may be useful in future for engineering exosuits.
 	return
+
+/obj/mecha/proc/UpdateIcon()
+	return
+
+/obj/mecha/UpdateIcon()
+	src.overlays.Remove()
+	var/hand = 0
+	var/back = 0
+	for(var/obj/item/mecha_parts/mecha_equipment/i in equipment)
+		if(i.has_equip_overlay)
+			if(i.equip_slot == HAND && hand < 2)
+				draw_layer(i, hand)
+				hand++
+			else if(i.equip_slot == BACK && back < 2)
+				draw_layer(i, back)
+				back++
+
+/obj/mecha/proc/draw_layer(obj/item/mecha_parts/mecha_equipment/equip, entry)
+	var/icon_name = "[equip.icon_state][entry ? "_r" : "_l"]"
+	var/icon/weapon = icon("icons/mecha/mecha_overlay.dmi", icon_name)
+	src.overlays.Add(weapon)
+	if(equip.need_colorize)
+		var/icon/padding = icon("icons/mecha/mecha_overlay.dmi", "[icon_name]_padding")
+		padding.Blend(base_color, ICON_MULTIPLY)
+		src.overlays.Add(padding)
 
 /obj/mecha/Hear(var/datum/speech/speech, var/rendered_message="")
 	if(speech.speaker == occupant && radio.broadcasting)
@@ -1186,6 +1217,7 @@ removable_components
 				user.drop_item()
 				E.attach(src)
 				user.visible_message("[user] attaches [W] to [src]", "You attach [W] to [src]")
+				update_icon()
 			else
 				to_chat(user, "You were unable to attach [W] to [src]")
 		return
@@ -1678,6 +1710,7 @@ removable_components
 		src.forceMove(src.loc)
 		src.log_append_to_last("[H] moved in as pilot.")
 		src.icon_state = src.initial_icon
+		update_icon()
 		dir = dir_in
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
@@ -1872,6 +1905,7 @@ removable_components
 		for(var/turf/simulated/T in turf_candidates)
 			if(!is_blocked_turf(T) && Adjacent(T))
 				exit = T
+				update_icon()
 				break
 
 	var/atom/movable/mob_container
@@ -2272,6 +2306,7 @@ removable_components
 			src.occupant_message("You switch to [equip]")
 			src.visible_message("[src] raises [equip]")
 			send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
+			update_icon()
 		return
 	if(href_list["eject"])
 		if(usr != src.occupant && (get_dist(usr, src) > 1 || state != STATE_BOLTSEXPOSED))
