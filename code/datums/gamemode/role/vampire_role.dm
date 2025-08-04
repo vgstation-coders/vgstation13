@@ -528,15 +528,15 @@
 				else
 					to_chat(src, "<span class='danger'>You continue to burn!</span>")
 				fire_stacks += 5
+				adjustFireLoss(2) //For a total of 8 burn damage per tick.
 				ignite()
-				adjustFireLoss(5)
 		audible_scream()
 	else
 		switch(health)
 			if((-INFINITY) to 60)
 				fire_stacks++
 				ignite()
-	adjustFireLoss(3)
+	adjustFireLoss(6)
 
 /*
  -- Thralls --
