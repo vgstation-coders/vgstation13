@@ -46,14 +46,16 @@
 
 /obj/item/mecha_parts/component/proc/BreakComponent()
 	var/obj/item/mecha_parts/component/component
-	name = "broken [component]"
-	desc = "A completely broken mecha component. It appears as though it used to be a [component]."
-	icon_state = "[icon_state]_broken"
-	can_repair = FALSE
-	playsound(src, "shatter", 70, 1)
-
-	if(istype(component, /obj/item/mecha_parts/component/hull | /obj/item/mecha_parts/component/armor))
-		to_chat(user, "<span class='danger'>\The [component] completely breaks apart!</span>")
+	if(integrity <= 0)
+		name = "broken [component]"
+		desc = "A completely broken mecha component. It appears as though it used to be a [component]."
+		icon_state = "[icon_state]_broken"
+		can_repair = FALSE
+		playsound(src, "shatter", 70, 1)
+		if(istype(component, /obj/item/mecha_parts/component/hull | /obj/item/mecha_parts/component/armor))
+			to_chat(src, "<span class='danger'>\The [component] completely breaks apart!</span>")
+	else
+		return
 
 	return
 
@@ -64,6 +66,7 @@
 		return
 	severity = clamp(severity + emp_resistance, 1, 4)
 	take_damage((4 - severity) * round(integrity * 0.1, 0.1))
+	BreakComponent()
 
 /obj/item/mecha_parts/component/proc/adjust_integrity(var/amt = 0)
 	integrity = clamp(integrity + amt, 0, max_integrity)
