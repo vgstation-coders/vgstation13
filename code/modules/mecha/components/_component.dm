@@ -36,10 +36,8 @@
 /obj/item/mecha_parts/component/New()
 	. = ..()
 	integrity = max_integrity
-
 	if(start_damaged)
 		integrity = round(integrity * integrity_danger_mod)
-
 /obj/item/mecha_parts/component/Destroy()
 	detach()
 	return ..()
@@ -49,9 +47,7 @@
 /obj/item/mecha_parts/component/emp_act(var/severity = 4)
 	if(severity + emp_resistance > 4)
 		return
-
 	severity = clamp(severity + emp_resistance, 1, 4)
-
 	take_damage((4 - severity) * round(integrity * 0.1, 0.1))
 
 /obj/item/mecha_parts/component/proc/adjust_integrity(var/amt = 0)
@@ -61,21 +57,16 @@
 /obj/item/mecha_parts/component/proc/damage_part(var/dam_amt = 0, var/type = BRUTE)
 	if(dam_amt <= 0)
 		return FALSE
-
 	adjust_integrity(-1 * dam_amt)
-
 	if(chassis && internal_damage_flag)
 		if(get_efficiency() < 0.5)
 			chassis.check_for_internal_damage(list(internal_damage_flag), TRUE)
-
 	return TRUE
 
 /obj/item/mecha_parts/component/proc/get_efficiency()
 	var/integ_limit = round(max_integrity * integrity_danger_mod)
-
 	if(integrity < integ_limit)
 		var/int_percent = round(integrity / integ_limit, 0.1)
-
 		return int_percent
 
 	return 1
@@ -104,7 +95,6 @@
 
 			else
 				chassis.check_for_internal_damage(list(internal_damage_flag))
-
 		chassis.internal_components[component_type] = src
 
 		if(user)

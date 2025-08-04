@@ -30,7 +30,7 @@
 
 	damage_minimum = 0
 
-	encumbrance_gap = 2
+	encumbrance_gap = 3
 	penetration_reduction = 5 // blocks 9mm
 
 	max_hull_equip = 2

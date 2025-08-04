@@ -109,8 +109,6 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/can_attach(obj/mecha/M as obj)
-	//if(M.equipment.len >= M.max_equip)
-	//	return 0
 //	if(!allow_duplicate)
 //		for(var/obj/item/mecha_parts/mecha_equipment/ME in M.equipment) //Exact duplicate components aren't allowed.
 //			if(ME.type == src.type)
@@ -127,17 +125,9 @@
 		if(equip_type == EQUIP_WEAPON && !istype(M, /obj/mecha/combat))
 			return 0
 		return 1
-	/*if (ispath(required_type))
-		return istype(M, required_type)
-
-	for (var/path in required_type)
-		if (istype(M, path))
-			return 1
-	*/
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/proc/attach(obj/mecha/M as obj)
-	//M.equipment += src
 	var/has_equipped = 0
 	if(equip_type == EQUIP_HULL && M.hull_equipment.len < M.max_hull_equip && !has_equipped)
 		M.hull_equipment += src

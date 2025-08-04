@@ -1,6 +1,7 @@
 
 /obj/item/mecha_parts/component/electrical
-	name = "mecha electrical harness"
+	name = "mecha electrical & data processing core"
+	desc = "A standard issue electrical and data hub for a mecha."
 	icon = 'icons/mecha/mech_component.dmi'
 	icon_state = "board"
 	w_class = W_CLASS_GIANT
@@ -15,7 +16,8 @@
 	var/charge_cost_mod = 1
 
 /obj/item/mecha_parts/component/electrical/high_current
-	name = "efficient mecha electrical harness"
+	name = "efficient mecha electrical & data core"
+	desc = "A data and electrical hub optimized for higher energy throughput."
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=3"
 	emp_resistance = -1
 	max_integrity = 25
@@ -23,7 +25,8 @@
 	charge_cost_mod = 0.5
 
 /obj/item/mecha_parts/component/electrical/durable
-	name = "reinforced mecha electrical harness"
+	name = "armoured mecha electrical & data core"
+	desc = "A standard data and electrical hub, covered by a sheath of armour."
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=3"
 	emp_resistance = 1
 	max_integrity = 100

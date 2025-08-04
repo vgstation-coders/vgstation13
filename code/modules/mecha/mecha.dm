@@ -59,12 +59,13 @@
 	var/obj/machinery/atmospherics/unary/portables_connector/connected_port = null
 
 	var/cursor_enabled = 0 //whether to display the mecha cursor
-
+/*
 	var/obj/item/mecha_parts/component/hull/hull = null
 	var/obj/item/mecha_parts/component/armor/armor = null
 	var/obj/item/mecha_parts/component/actuator/motor = null
 	var/obj/item/mecha_parts/component/gas/gas = null
 	var/obj/item/mecha_parts/component/electrical/zap = null
+*/
 
 	var/obj/item/device/radio/radio = null
 	var/obj/item/device/radio/electropack/electropack = null
@@ -111,12 +112,10 @@
 	var/paintable = 0
 
 	var/damage_minimum = 5				//Incoming damage lower than this won't actually deal damage. Scrapes shouldn't be a real thing.
-
 	var/internal_damage_minimum = 15	//At least this much damage to trigger some real bad hurt.
-
 	var/encumbrance_gap = 1			//How many points of slowdown are negated from equipment? Added to the mech's base step_in.
-
 	var/penetration_reduction = 1
+	var/can_lock = TRUE // If the mecha can be dna or id locked
 
 //mechaequipt2 stuffs
 	var/list/hull_equipment = new
@@ -241,6 +240,7 @@
 				qdel(C)
 	equipment.Cut() //Equipment is handled above, either by being deleted, or by being moved to the wreckage.
 	mech_parts.Cut() //We don't need this list anymore, too.
+	internal_components.Cut()
 	mechas_list -= src //global mech list
 	if(cell)
 		QDEL_NULL(cell)
@@ -265,6 +265,7 @@
 		QDEL_NULL(pr_give_air)
 	if(pr_internal_damage)
 		QDEL_NULL(pr_internal_damage)
+/*
 	if(hull)
 		QDEL_NULL(hull)
 	if(armor)
@@ -275,7 +276,7 @@
 		QDEL_NULL(motor)
 	if(zap)
 		QDEL_NULL(zap)
-
+*/
 	selected = null
 	..()
 
@@ -323,6 +324,19 @@
 	fist = new
 	fist.name = "[src]'s fist"
 	fist.force = src.force
+
+/obj/mecha/proc/check_locks()
+	var/obj/item/mecha_parts/component/electrical/zap = internal_components[MECH_ELECTRIC]
+	if(!zap || zap.integrity <= 0)
+		dna = null
+		operation_req_access = list()
+		internals_req_access = list()
+		can_lock = FALSE
+		src.maint_access = TRUE
+		return 0
+	else
+		can_lock = TRUE
+		return 1
 
 /obj/mecha/proc/check_enclosed()
 	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
@@ -387,11 +401,7 @@
 	else
 		to_chat(user, "<span class='info'> It has no armor plating.</span>")
 	if(HC)
-		if(!HC || HC.get_efficiency() < 0.7)
-			to_chat(user, "<span class='info'> It has [HC] attached. [HC.get_efficiency()<0.5?"It is severely damaged.":""]</span>")
-		else
-			to_chat(user, "<span class='info'> You cannot tell what type of hull it has.</span>")
-
+		to_chat(user, "<span class='info'> It has [HC] attached. [HC.get_efficiency()<0.5?"It is severely damaged.":""]</span>")
 	else
 		to_chat(user, "<span class='info'>It does not seem to have a completed hull.</span>")
 
@@ -405,11 +415,26 @@
 /obj/mecha/proc/drop_item()//Derpfix, but may be useful in future for engineering exosuits.
 	return
 
-/obj/mecha/proc/UpdateIcon()
-	return
 
-/obj/mecha/UpdateIcon()
-	src.overlays.Remove()
+#warn //
+/*
+Issues:
+
+Armor/hull balance
+Aux components not being hit/damaged (gas, motor, electric)
+Port wiring from spcr-paradise
+Slowdown not working
+Icons not showing
+Make melee and proj penetration hit components
+Add camera and radio components
+Add binary radio (?)
+Add cell EMP protection via mech electrical hub
+Make maints panel be unlocked if there's no electric hub
+
+
+*/
+/obj/mecha/proc/UpdateIcon()
+	overlays.Cut()
 	var/hand = 0
 	var/back = 0
 	for(var/obj/item/mecha_parts/mecha_equipment/i in equipment)
@@ -421,14 +446,14 @@
 				draw_layer(i, back)
 				back++
 
-/obj/mecha/proc/draw_layer(obj/item/mecha_parts/mecha_equipment/equip, entry)
+/obj/mecha/proc/draw_layer(var/obj/item/mecha_parts/mecha_equipment/equip, entry)
 	var/icon_name = "[equip.icon_state][entry ? "_r" : "_l"]"
 	var/icon/weapon = icon("icons/mecha/mecha_overlays.dmi", icon_name)
-	src.overlays.Add(weapon)
+	overlays += weapon
 	if(equip.need_colorize)
 		var/icon/padding = icon("icons/mecha/mecha_overlays.dmi", "[icon_name]_padding")
 		padding.Blend(base_color, ICON_MULTIPLY)
-		src.overlays.Add(padding)
+		overlays += padding
 
 /obj/mecha/Hear(var/datum/speech/speech, var/rendered_message="")
 	if(speech.speaker == occupant && radio.broadcasting)
@@ -537,14 +562,11 @@
 	var/obj/item/mecha_parts/component/actuator/actuator = internal_components[MECH_ACTUATOR]
 
 	if(!actuator)	// Relying purely on hydraulic pumps. You're going nowhere fast.
-		tally = 2 SECONDS
+		tally = 2
 
 		return tally
 
-	tally += 0.5 SECONDS * (1 - actuator.get_efficiency())	// Damaged actuators run slower, slowing as damage increases beyond its threshold.
-
-	if(lock_dir)
-		tally = round(tally)
+	tally += 0.5 * (1 - actuator.get_efficiency())	// Damaged actuators run slower, slowing as damage increases beyond its threshold.
 
 	for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
 		if(istype(ME, /obj/item/mecha_parts/mecha_equipment/speedboost))
@@ -844,6 +866,7 @@
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 		src.check_enclosed()
+		src.check_locks()
 		user.visible_message("<span class='red'><b>[user] hits [src.name], doing some damage.</b></span>", "<span class='red'><b>You hit [src.name] with all your might. The metal creaks and bends.</b></span>")
 	else
 		user.visible_message("<span class='red'><b>[user] hits [src.name]. Nothing happens.</b></span>","<span class='red'><b>You hit [src.name] with no visible effect.</b></span>")
@@ -872,6 +895,7 @@
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 		src.check_enclosed()
+		src.check_locks()
 		playsound(src, 'sound/weapons/slash.ogg', 50, 1, -1)
 		to_chat(user, "<span class='warning'>You slash at the armored suit!</span>")
 		visible_message("<span class='warning'>The [user] slashes at [src.name]'s armor!</span>")
@@ -906,6 +930,7 @@
 			src.take_damage(damage)
 			src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 			src.check_enclosed()
+			src.check_locks()
 			visible_message("<span class='warning'><B>[user]</B> [user.attacktext] [src]!</span>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
 		else
@@ -970,6 +995,7 @@
 			pass_damage = (pass_damage*pass_damage_reduc_mod)//Applying damage reduction
 			src.take_damage(pass_damage)	//The take_damage() proc handles armor values
 			src.check_enclosed()
+			src.check_locks()
 			if(pass_damage > internal_damage_minimum)	//Only decently painful attacks trigger a chance of mech damage.
 				src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 	return
@@ -1030,6 +1056,7 @@
 
 		src.take_damage(damage, Proj.flag)	//The take_damage() proc handles armor values
 		src.check_enclosed()
+		src.check_locks()
 		if(prob(25))
 			spark(src, 2, FALSE)
 		if(damage >= internal_damage_minimum)	//Only decently painful attacks trigger a chance of mech damage.
@@ -1080,14 +1107,17 @@
 				src.take_damage(initial(src.health)*1.5, "bomb")
 				src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
 				src.check_enclosed()
+				src.check_locks()
 			else
 				src.take_damage(initial(src.health))
 				src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
 				src.check_enclosed()
+				src.check_locks()
 		if(3.0)
 			src.take_damage(initial(src.health)/5, "bomb")
 			src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
 			src.check_enclosed()
+			src.check_locks()
 	return
 
 /*Will fix later -Sieve
@@ -1117,20 +1147,27 @@
 	return
 
 /obj/mecha/emp_act(severity)
+	var/obj/item/mecha_parts/component/electrical/zap = internal_components[MECH_ELECTRIC]
 	if(get_charge())
-		cell.emp_act(severity*1.25)
-		take_damage(50 / severity, damage_type = "energy")
-	src.log_message("EMP detected",1)
-	check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
-	for(var/obj/item/mecha_parts/mecha_equipment/M in equipment)
-		M.emp_act(severity)
-	return
+		if(!zap || zap.integrity <= 0) // Only EMP the cell if there's no electrical hub
+			cell.emp_act(severity*1.25)
+		take_damage(10 / severity, damage_type = "energy")
+		src.log_message("EMP detected",1)
+		check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
+		for(var/obj/item/mecha_parts/mecha_equipment/M in equipment)
+			M.emp_act(severity)
+		for(var/slot in internal_components)
+			var/obj/item/mecha_parts/component/C = internal_components[slot]
+			if(istype(C))
+				C.emp_act(severity)
+		return
 
 /obj/mecha/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature>src.max_temperature)
 		src.log_message("Exposed to dangerous temperature.",1)
 		src.take_damage(5, damage_type = "fire")
 		src.check_enclosed()
+		src.check_locks()
 		src.check_for_internal_damage(list(MECHA_INT_FIRE, MECHA_INT_TEMP_CONTROL))
 
 	if(enclosed)// || mecha_flags & SILICON_PILOT)
@@ -1178,6 +1215,7 @@
 			pass_damage = ME.handle_projectile_contact(W, user, pass_damage)
 		src.take_damage(pass_damage,W.damtype)	//The take_damage() proc handles armor values
 		src.check_enclosed()
+		src.check_locks()
 		if(pass_damage > internal_damage_minimum)	//Only decently painful attacks trigger a chance of mech damage.
 			src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 	return
@@ -1285,7 +1323,11 @@ removable_components
 				return
 			var/obj/item/mecha_parts/component/RmC = removable_components[remove]
 			RmC.detach()
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+			to_chat(user, "<span class='notice'>You pry out \the [RmC] from \the [src].</span>")
+			src.log_message("Internal component removed - [RmC]")
 			check_enclosed()
+			src.check_locks()
 		return
 
 	else if(iscrowbar(W))
@@ -1372,6 +1414,17 @@ removable_components
 			else
 				to_chat(user, "There's already an electropack installed.")
 		return
+
+	if(istype(W, /obj/item/mecha_parts/component) && state == STATE_BOLTSOPENED)
+		var/obj/item/mecha_parts/component/MC = W
+		spawn()
+			if(MC.attach(src))
+				user.drop_item()
+				MC.forceMove(src)
+				user.visible_message("[user] installs \the [W] in \the [src]", "You install \the [W] in \the [src].")
+		return
+
+/*
 	else if(istype(W, /obj/item/mecha_parts/component/hull))
 		if(state==STATE_BOLTSOPENED)
 			if(!hull)
@@ -1427,7 +1480,7 @@ removable_components
 			else
 				to_chat(user, "There's already a zap installed.")
 		return
-
+*/
 	else if(iswelder(W) && user.a_intent != I_HURT)
 		var/obj/item/tool/weldingtool/WT = W
 		if (WT.remove_fuel(0,user))
@@ -2388,11 +2441,17 @@ removable_components
 	if(href_list["toggle_maint_access"])
 		if(usr != src.occupant)
 			return
+		var/obj/item/mecha_parts/component/electrical/zap = internal_components[MECH_ELECTRIC]
+		var/mob/user = topic_filter.getMob("user")
 		if(state)
 			occupant_message("<span class='red'>Maintenance protocols in effect.</span>")
 			return
-		maint_access = !maint_access
-		send_byjax(src.occupant,"exosuit.browser","t_maint_access","[maint_access?"Forbid":"Permit"] maintenance protocols")
+		if(zap && zap.integrity > 0)
+			maint_access = !maint_access
+			send_byjax(src.occupant,"exosuit.browser","t_maint_access","[maint_access?"Forbid":"Permit"] maintenance protocols")
+		else
+			to_chat(user, "Error: locking data not found. Aborting.")
+			return
 		return
 	if(href_list["req_access"] && add_req_access)
 		if(!in_range(src, usr))
@@ -2418,9 +2477,9 @@ removable_components
 				if(occupant)
 					occupant_message("Maintenance protocols terminated.")
 					occupant << sound('sound/mecha/mechentry.ogg',wait=0)
-			else
-				to_chat(user, "You can't toggle maintenance mode with the securing bolts unfastened.")
-			output_maintenance_dialog(topic_filter.getObj("id_card"),user)
+		else
+			to_chat(user, "You can't toggle maintenance mode with the securing bolts unfastened.")
+		output_maintenance_dialog(topic_filter.getObj("id_card"),user)
 		return
 	if(href_list["set_internal_tank_valve"] && state >=STATE_BOLTSEXPOSED)
 		if(!in_range(src, usr))
@@ -2434,11 +2493,19 @@ removable_components
 	if(href_list["add_req_access"] && add_req_access && topic_filter.getObj("id_card"))
 		if(!in_range(src, usr))
 			return
+		var/mob/user = topic_filter.getMob("user")
+		if(!can_lock)
+			to_chat(user, "The exosuit panel fails to respond to your input.") // No/Broken data core
+			return
 		operation_req_access += topic_filter.getNum("add_req_access")
 		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return
 	if(href_list["add_all_req_access"] && add_req_access && topic_filter.getObj("id_card"))
 		if(!in_range(src, usr))
+			return
+		var/mob/user = topic_filter.getMob("user")
+		if(!can_lock)
+			to_chat(user, "The exosuit panel fails to respond to your input.")
 			return
 		var/obj/item/weapon/card/id/mycard = topic_filter.getObj("id_card")
 		var/list/myaccess = mycard.access
@@ -2449,11 +2516,19 @@ removable_components
 	if(href_list["del_req_access"] && add_req_access && topic_filter.getObj("id_card"))
 		if(!in_range(src, usr))
 			return
+		var/mob/user = topic_filter.getMob("user")
+		if(!can_lock)
+			to_chat(user, "The exosuit panel fails to respond to your input.")
+			return
 		operation_req_access -= topic_filter.getNum("del_req_access")
 		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return
 	if(href_list["del_all_req_access"] && add_req_access && topic_filter.getObj("id_card"))
 		if(!in_range(src, usr))
+			return
+		var/mob/user = topic_filter.getMob("user")
+		if(!can_lock)
+			to_chat(user, "The exosuit panel fails to respond to your input.")
 			return
 		operation_req_access = list()
 		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
@@ -2461,16 +2536,23 @@ removable_components
 	if(href_list["finish_req_access"])
 		if(!in_range(src, usr))
 			return
-		add_req_access = 0
 		var/mob/user = topic_filter.getMob("user")
+		if(!can_lock)
+			to_chat(user, "The exosuit panel fails to respond to your input.")
+			return
+		add_req_access = 0
 		user << browse(null,"window=exosuit_add_access")
 		return
 	if(href_list["dna_lock"])
 		if(usr != src.occupant)
 			return
 		if(src.occupant && (!istype(src.occupant, /obj/item/device/mmi/posibrain) || !istype(src.occupant, /obj/item/device/mmi)))
-			src.dna = src.occupant.dna.unique_enzymes
-			src.occupant_message("You feel a prick as the needle takes your DNA sample.")
+			if(can_lock)
+				src.dna = src.occupant.dna.unique_enzymes
+				src.occupant_message("You feel a prick as the needle takes your DNA sample.")
+			else
+				src.occupant_message("Error: data storage device not found. Aborting.")
+				return
 		return
 	if(href_list["reset_dna"])
 		if(usr != src.occupant)
@@ -2644,12 +2726,26 @@ removable_components
 	return call((proc_res["dynusepower"]||src), "dynusepower")(amount)
 
 /obj/mecha/proc/dynusepower(amount)
+	var/obj/item/mecha_parts/component/electrical/EC = internal_components[MECH_ELECTRIC]
+
+	if(EC)
+		amount = amount * (2 - EC.get_efficiency()) * EC.charge_cost_mod
+	else
+		amount *= 5
+
 	if(get_charge())
 		cell.use(amount)
 		return 1
 	return 0
 
 /obj/mecha/proc/give_power(amount)
+	var/obj/item/mecha_parts/component/electrical/EC = internal_components[MECH_ELECTRIC]
+
+	if(!EC)
+		amount /= 4
+	else
+		amount *= EC.get_efficiency()
+
 	if(!isnull(get_charge()))
 		cell.give(amount)
 		return 1

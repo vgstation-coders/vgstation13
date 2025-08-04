@@ -22,7 +22,7 @@
 		"hauler"
 	)
 	paintable = 1
-	encumbrance_gap = 2
+	encumbrance_gap = 5
 	damage_minimum = 0
 	penetration_reduction = 0
 

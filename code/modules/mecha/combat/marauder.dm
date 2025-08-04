@@ -28,7 +28,7 @@
 	paintable = 0
 
 	damage_minimum = 10
-	encumbrance_gap = 3
+	encumbrance_gap = 5
 	penetration_reduction = 10 // blocks 7.62x55
 
 	max_hull_equip = 3

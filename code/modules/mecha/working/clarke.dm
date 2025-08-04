@@ -24,7 +24,7 @@
 	paintable = 1
 	penetration_reduction = 1
 	damage_minimum = 0
-	encumbrance_gap = 2.5
+	encumbrance_gap = 4
 
 	starting_components = list(
 		/obj/item/mecha_parts/component/hull/lightweight,

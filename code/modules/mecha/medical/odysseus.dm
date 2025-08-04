@@ -20,7 +20,7 @@
 		"urinetrouble"
 	)
 
-	encumbrance_gap = 2
+	encumbrance_gap = 3
 	penetration_reduction = 0
 	damage_minimum = 0
 

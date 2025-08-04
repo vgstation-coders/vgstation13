@@ -23,7 +23,7 @@
 	)
 
 	damage_minimum = 0
-	encumbrance_gap = 2.5
+	encumbrance_gap = 4
 	penetration_reduction = 3 // blocks .380
 
 	max_hull_equip = 1
@@ -61,6 +61,7 @@
 	cell_type = /obj/item/weapon/cell/hyper
 
 	penetration_reduction = 5
+	encumbrance_gap = 5
 
 	max_hull_equip = 1
 	max_weapon_equip = 2
