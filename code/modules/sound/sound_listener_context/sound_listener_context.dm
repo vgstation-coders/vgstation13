@@ -30,7 +30,7 @@
 	if (client.listener_context)
 		// results in sounds restarting when switching mobs... not great, not terrible
 		var/slc = client.listener_context
-		qdel(slc)
+		qdel(slc) // dont ask me why its like this. i wont tell you (i dont know)
 		client.listener_context = null
 		client.listener_context = new /datum/sound_listener_context(client, src, world.view)
 	return ..()
@@ -153,7 +153,7 @@
 	apply_proxymob_effects(S)
 	client << S
 
-/datum/sound_listener_context/proc/hear_once(sound/S)
+/datum/sound_listener_context/proc/hear_once(sound/S, datum/sound_emitter/emitter)
 	apply_proxymob_effects(S)
 	client << S
 

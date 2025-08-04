@@ -32,9 +32,18 @@
 		return
 	. = ..()
 
-/datum/sound_listener_context/ai/hear_once(sound/S)
-	// TODO add emitter to args, check if audible
-	. = ..()
+/datum/sound_listener_context/ai/hear_once(sound/S, datum/sound_emitter/emitter)
+	// special handling because fuck AIs
+	// prioritise aiEye if it exists
+	if (emitter.source in range(range, proxy) && is_emitter_audible(emitter))
+		return ..()
+	// otherwise fall back to something like legacy behaviour for the core
+	if (emitter.source in range(range, core_mob))
+		var/turf/T = get_turf(emitter.source)
+		S.atom = null
+		core_mob.playsound_local(T, S, S.volume, 0, 0, 0, 1, 0, 0) //yep
+
+
 
 /datum/sound_listener_context/ai/on_sound_update(datum/sound_emitter/emitter)
 	// check is copypasted from ..() but delays the `is_emitter_audible` call

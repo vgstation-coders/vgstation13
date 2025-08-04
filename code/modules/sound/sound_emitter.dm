@@ -45,7 +45,7 @@
 // Remember that SOUND_UPDATE will NOT start playing a sound!
 // You must first send the sound WITHOUT SOUND_UPDATE for the client to start
 //   hearing it if they couldn't before
-// Also remember that sounds are DATUMS and hence REFERENCE TYPES so copy it
+// Also remember that sounds are DATUMS and hence REFERENCE TYPES so copy
 //   in whatever you registered to the event!!!
 /event/sound_updated
 
@@ -59,6 +59,7 @@
 
 // Arguments:
 //   /sound/S: The sound that was pushed
+//   /datum/sound_emitter/emitter: The emitter that played the sound
 /event/sound_pushed
 
 /datum/sound_emitter
@@ -131,7 +132,7 @@
 	if (!S.volume)
 		return
 
-	INVOKE_EVENT(src, /event/sound_pushed, "S" = copy_sound(S))
+	INVOKE_EVENT(src, /event/sound_pushed, "S" = copy_sound(S), "emitter" = src)
 
 /datum/sound_emitter/proc/is_currently_playing()
 	return (active_sound != null)
