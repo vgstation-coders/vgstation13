@@ -673,13 +673,28 @@
 	spawning = TRUE
 	close_spawn_windows()
 
-	var/mob/living/carbon/human/new_character = new(loc)
 	var/datum/species/chosen_species
 	var/late_join = ticker.current_state == GAME_STATE_PLAYING ? TRUE : FALSE
 
 	var/species = prefs.get_pref(/datum/preference_setting/string/species)
 	var/language = prefs.get_pref(/datum/preference_setting/string/language)
 	var/datum/preference_setting/name_pref = prefs.get_pref_datum(/datum/preference_setting/string/real_name)
+
+	if(species)
+		chosen_species = all_species[species]
+
+    // Determine mob type based on species. This means every player is no longer a human
+	var/mob_type = /mob/living/carbon/human
+	if(chosen_species)
+		switch(chosen_species.name)
+			if("Vox") mob_type = /mob/living/carbon/human/vox
+			if("Unathi") mob_type = /mob/living/carbon/human/unathi
+			if("Skrell") mob_type = /mob/living/carbon/human/skrell
+			if("Tajaran") mob_type = /mob/living/carbon/human/tajaran
+			if("Diona") mob_type = /mob/living/carbon/human/diona
+			if("Plasmaman") mob_type = /mob/living/carbon/human/plasmaman
+
+	var/mob/living/carbon/human/new_character = new mob_type(loc)
 
 	if(species)
 		chosen_species = all_species[species]
