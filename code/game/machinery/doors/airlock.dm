@@ -673,11 +673,6 @@ About the new airlock wires panel:
 		if(!secondsElectrified)
 			// permenant shock
 			Topic("aiEnable=6", list("aiEnable"="6"), 1) // 1 meaning no window (consistency!)
-			if(issilicon(usr))
-				var/mob/living/silicon/S = usr
-				if(S.is_asimov() || S.is_keeper())
-					log_admin("[key_name(S)] just set [formatLocation(src)] to shock while on a no-harm lawset!")
-					message_admins("<span class='danger'>[key_name(S)] just set [formatJumpTo(src)] to shock while on a no-harm lawset!</span>")
 		else
 			// disable/6 is not in Topic; disable/5 disables both temporary and permenant shock
 			Topic("aiDisable=5", list("aiDisable"="5"), 1)
@@ -1109,6 +1104,11 @@ About the new airlock wires panel:
 						src.updateUsrDialog()
 					else
 						to_chat(usr, text("Door bolt lights are already enabled!"))
+			if ((code == 5 || code == 6) && issilicon(usr))
+				var/mob/living/silicon/S = usr
+				if(S.is_asimov() || S.is_keeper())
+					log_admin("[key_name(S)] just set [formatLocation(src)] to shock while on a no-harm lawset!")
+					message_admins("<span class='danger'>[key_name(S)] just set [formatJumpTo(src)] to shock while on a no-harm lawset!</span>")
 
 	add_fingerprint(usr)
 	update_icon()
