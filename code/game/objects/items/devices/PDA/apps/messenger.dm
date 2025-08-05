@@ -11,6 +11,7 @@
     var/list/icon/imglist = list() // Viewable message photos
     var/list/incoming_transactions = list()
     var/list/polls = list()
+    var/message_cooldown = 0.5 SECONDS
 
 /datum/pda_app/messenger/get_dat(var/mob/user)
     var/dat = ""
@@ -227,6 +228,9 @@
 	incoming_transactions = list()
 
 /datum/pda_app/messenger/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P, var/multicast_message = null, obj/item/device/pda/reply_to, var/overridemessage, var/pollmessage, var/list/polloptions)
+    if(world.time - last_text < message_cooldown)
+        to_chat(U, "ERROR: Please wait a while before sending another message.")
+        return
     if(!reply_to)
         reply_to = pda_device
     if (!istype(P))
@@ -237,15 +241,13 @@
     var/t = null
     if(overridemessage)
         t = overridemessage
+        last_text = world.time
     if(multicast_message)
         t = multicast_message
     if(!t)
         t = input(U, "Please enter message", "Message to [P]", null) as text|null
         t = copytext(parse_emoji(sanitize(t)), 1, MAX_MESSAGE_LEN)
         if (!t || P_app.toff || U.stat || (!in_range(pda_device, U) && pda_device.loc != U)) //If no message, messaging is off, and we're either dead, unconscious, out of range or not in usr
-            return
-
-        if (last_text && world.time < last_text + 0.5 SECONDS)
             return
         last_text = world.time
     // check if telecomms I/O route 1459 is stable

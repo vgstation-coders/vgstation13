@@ -73,6 +73,25 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2025.08.05</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">PDA message cooldown is now displayed to players if a message is sent before it&#39;s ready.</li>
+				<li class="bugfix">PDA poll responses now obey the message cooldown of regular messages.</li>
+			</ul>
+			<h3 class="author">gallywix4 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">Removed the cooldown from the changeling regenerative stasis</li>
+			</ul>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Bullet casings now get tossed out of bullet-using guns that have casings.</li>
+			</ul>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed blood splatters failing to despawn.</li>
+				<li class="bugfix">Fixed blood splatters spawning in space.</li>
+			</ul>
 			<h2 class="date">2025.08.02</h2>
 			<h3 class="author">jwhitak updated:</h3>
 			<ul class="changes bgimages16">
@@ -1379,32 +1398,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<ul class="changes bgimages16">
 				<li class="bugfix">Fixed a bug where players would appear to be on fire without actually burning.</li>
 				<li class="tweak">Mobs will now catch on fire as soon as they step into a fire.</li>
-			</ul>
-			<h2 class="date">2024.08.29</h2>
-			<h3 class="author">CrazyAmphibian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Changed the RPD menu so that the options are always visible</li>
-			</ul>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Moody Lights have been added to all airlocks, firelocks, and blast doors.</li>
-				<li class="bugfix">Fixed christmas lights now actually emitting any light. Their lit up sprite also now appears over darkness.</li>
-				<li class="bugfix">Fixed snow tiles not regenerating snow like they should sometimes.</li>
-				<li class="bugfix">Fixed each snow tile and christmas light having a duplicate on top of them.</li>
-				<li class="tweak">Reworked the way snow tiles hold snow so instead of losing snow from the duplicate tile you get even more! Each tile now has 10 snow which it regenerates by one every 30 seconds. You can grab 1 snow by hand, or 3 at a time by shovel. If the tile reaches 0 snow it disappears.</li>
-				<li class="imageadd">Re-added the grabbed and digged snow tile sprites so you can easily see whether a tile is full of snow, or whether it&#39;s one shovel hit away from disappearing.</li>
-			</ul>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Cows will mutate their milk type when exposed to Phazon, unless they themselves can make Phazon, in which case they will not mutate their milk further.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Coinboxes can now come out of vending machines again.</li>
-				<li class="tweak">Coinboxes and vendpacks now eject from crowbar destroying vending machines. Vendpacks still require inserted cardboard for this.</li>
-				<li class="tweak">Coinboxes can now be recycled for metal, under the electronics category.</li>
-				<li class="tweak">To compensate coinboxes being recyclable, and as to not be an infinite metal source, they are now required in their frame build step. A no access requirement version of them can be built as a metal stack recipe to aid this.</li>
-				<li class="bugfix">Mech syringe guns now actually fire their syringes properly, making them finally useful for something other than getting fast research done.</li>
 			</ul>
 		</div>
 		<!--

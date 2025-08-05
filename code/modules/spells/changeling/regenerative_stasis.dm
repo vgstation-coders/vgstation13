@@ -5,8 +5,6 @@
 	hud_state = "regenstasis"
 
 	spell_flags = NEEDSHUMAN | STATALLOWED
-	charge_cooldown_max = 8 MINUTES
-	cooldown_min = 8 MINUTES
 	horrorallowed = 0
 	chemcost = 20
 
@@ -58,16 +56,18 @@
 /datum/action/lingrevive/Trigger()
 	var/datum/role/changeling/changeling = owner.mind.GetRole(CHANGELING)
 	var/mob/living/carbon/C = owner
-
-	C.mind.suiciding = 0
-	C.rejuvenate(0)
-	C.visible_message("<span class='warning'>[owner] appears to wake from the dead, having healed all wounds.</span>")
-	if(M_HUSK in C.mutations) //Yes you can regenerate from being husked if you played dead beforehand, but unless you find a new body, you can not regenerate again.
-		to_chat(C, "<span class='notice'>This host body has become corrupted, either through a mishap, or betrayal by a member of the hivemind. We must find a new form, lest we lose ourselves to the void and become dust.</span>")
-		if(C.dna in changeling.absorbed_dna)
-			changeling.absorbed_dna.Remove(C.dna)
-	feedback_add_details("changeling_powers","RJ")
+	//makes it so the revive only happens if the changeling is dead or faking his death
+	if(C.stat == DEAD || C.status_flags & FAKEDEATH)
+		C.mind.suiciding = 0
+		C.rejuvenate(0)
+		C.visible_message("<span class='warning'>[owner] appears to wake from the dead, having healed all wounds.</span>")
+		if(M_HUSK in C.mutations) //Yes you can regenerate from being husked if you played dead beforehand, but unless you find a new body, you can not regenerate again.
+			to_chat(C, "<span class='notice'>This host body has become corrupted, either through a mishap, or betrayal by a member of the hivemind. We must find a new form, lest we lose ourselves to the void and become dust.</span>")
+			if(C.dna in changeling.absorbed_dna)
+				changeling.absorbed_dna.Remove(C.dna)
+		feedback_add_details("changeling_powers","RJ")
 	Remove(owner)
 
 /spell/changeling/regenerate/after_cast(list/targets,var/mob/living/carbon/human/user)
 	inuse = FALSE
+
