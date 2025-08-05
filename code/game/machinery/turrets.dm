@@ -584,7 +584,7 @@
 			message_admins("<span class='danger'>[key_name(S)] just set [formatJumpTo(src,src)] to lethal while on asimov lawset!</span>")
 		else if(S.is_keeper())
 			log_admin("[key_name(S)] just messed with [src] ([formatLocation(src)]) while on KEEPER lawset!")
-			message_admins("<span class='danger'>[key_name(S)] just messed with [formatJumpTo(src,src)] while on KEEPER lawset!</span>")
+			message_admins("<span class='danger'>[key_name(S)] just messed with [src] ([formatJumpTo(src)]) while on KEEPER lawset!</span>")
 	update_icon()
 
 /obj/machinery/turretid/update_icon()
