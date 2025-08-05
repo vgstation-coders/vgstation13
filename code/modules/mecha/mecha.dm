@@ -1289,6 +1289,7 @@ Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool 
 		if(MC.attach(src))
 			user.drop_item()
 			MC.forceMove(src)
+			mech_parts.Add(MC)
 			user.visible_message("[user] installs \the [W] in \the [src]", "You install \the [W] in \the [src].")
 			CheckEnclosed()
 		return
@@ -1334,6 +1335,7 @@ Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool 
 				return
 			var/obj/item/mecha_parts/component/RmC = removable_components[remove]
 			RmC.detach()
+			mech_parts.Remove(RmC)
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You pry out \the [RmC] from \the [src].</span>")
 			src.log_message("Internal component removed - [RmC]")
