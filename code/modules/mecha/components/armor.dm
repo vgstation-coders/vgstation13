@@ -33,7 +33,7 @@
 	desc = "A durable metal and foam plating designed to provide good protection from explosions, and to a lesser extent, kinetic impacts."
 	icon_state = "armor_mining"
 	step_delay = 2
-	max_integrity = 100
+	max_integrity = 75
 	pen_reduction = 2
 	damage_minimum = 3
 
@@ -54,7 +54,7 @@
 	name = "lightweight mecha plating"
 	desc = "A very lightweight foam panel that covers the internals of the mech."
 	icon_state = "armor_light"
-	max_integrity = 50
+	max_integrity = 35
 	step_delay = 0
 	pen_reduction = 1
 	damage_minimum = 0
@@ -77,7 +77,7 @@
 	desc = "A heavy armour panel made out of reinforced steel."
 	icon_state = "armor_durable"
 	step_delay = 3
-	max_integrity = 125
+	max_integrity = 100
 	pen_reduction = 3
 	damage_minimum = 3
 	damage_absorption = list(
@@ -261,6 +261,7 @@
 		)
 
 	pen_reduction = 20 // blocks .50 BMG
+
 /* // killdozer
 /obj/item/mecha_parts/component/armor/alien/attach(var/obj/mecha/target, var/mob/living/user)
 	. = ..()

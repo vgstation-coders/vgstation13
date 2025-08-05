@@ -79,7 +79,7 @@
 	if(chassis && internal_damage_flag)
 		if(get_efficiency() < 0.5)
 			chassis.check_for_internal_damage(list(internal_damage_flag), TRUE)
-	if(integrity <= 0)
+	if(integrity <= 0 && chassis.health > 0)
 		BreakComponent()
 	return TRUE
 

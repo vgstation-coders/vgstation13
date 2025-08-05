@@ -913,7 +913,7 @@
 	var/datum/global_iterator/pr_repair_droid
 	var/icon/droid_overlay
 	var/list/repairable_damage = list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH)
-	equip_type = EQUIP_HULL
+	equip_type = EQUIP_UTILITY
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/New()
 	..()

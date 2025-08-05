@@ -63,7 +63,7 @@
 	penetration_reduction = 5
 	encumbrance_gap = 5
 
-	max_hull_equip = 1
+	max_hull_equip = 2
 	max_weapon_equip = 2
 	max_utility_equip = 2
 	max_universal_equip = 1

@@ -137,7 +137,9 @@
 		MECH_ACTUATOR = null,
 		MECH_ARMOR = null,
 		MECH_GAS = null,
-		MECH_ELECTRIC = null
+		MECH_ELECTRIC = null,
+		MECH_CAMERA = null,
+		MECH_RADIO = null
 		)
 
 	var/list/starting_components = list(
@@ -145,7 +147,9 @@
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor,
 		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/camera,
+		/obj/item/mecha_parts/component/communications
 		)
 
 	var/overload = FALSE
@@ -398,17 +402,20 @@
 
 	if(AC)
 		to_chat(user, "<span class='info'> It has [AC] attached. [AC.get_efficiency()<0.5?"It is severely damaged.":""] </span>")
+	else
+		to_chat(user, "<span class='info'>It does not seem to have a completed hull.</span>")
+
 	if(AC && AC.get_efficiency() < 0.1)
 		to_chat(user, "<span class='danger'> The [AC] is completely broken.</span>")
-	else
-		to_chat(user, "<span class='info'> It has no armor plating.</span>")
 
 	if(HC)
 		to_chat(user, "<span class='info'> It has [HC] attached. [HC.get_efficiency()<0.5?"It is severely damaged.":""]</span>")
-	if(HC && HC.get_efficiency() < 0.1)
-		to_chat(user, "<span class='danger'> The [HC] is completely broken.</span>")
 	else
 		to_chat(user, "<span class='info'>It does not seem to have a completed hull.</span>")
+
+	if(HC && HC.get_efficiency() < 0.1)
+		to_chat(user, "<span class='danger'> The [HC] is completely broken.</span>")
+
 
 	if(enclosed)
 		return
@@ -463,9 +470,13 @@ Breaking SFX and text when components break
 		overlays += padding
 
 /obj/mecha/Hear(var/datum/speech/speech, var/rendered_message="")
-	if(speech.speaker == occupant && radio.broadcasting)
-		radio.talk_into(speech)
- 	return
+	var/obj/item/mecha_parts/component/communications/COM = internal_components[MECH_RADIO]
+	if(COM)
+		if(prob(COM.get_efficiency()))
+			if(speech.speaker == occupant && radio.broadcasting)
+				radio.talk_into(speech)
+	else
+		return 0
 
 /obj/mecha/proc/click_action(atom/target,mob/user)
 	if(!src.occupant || src.occupant != user )

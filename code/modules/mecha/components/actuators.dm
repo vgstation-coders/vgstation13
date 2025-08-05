@@ -14,6 +14,8 @@
 	max_integrity = 50
 	relative_size = 10
 	internal_damage_flag = MECHA_INT_CONTROL_LOST
+	var/turn_delay = 1
+	var/equipment_delay = 1
 
 /obj/item/mecha_parts/component/actuator/get_step_delay()
 	return step_delay
@@ -21,6 +23,8 @@
 /obj/item/mecha_parts/component/actuator/hispeed
 	name = "overclocked mecha actuator"
 	step_delay = -1
+	turn_delay = -1
+	equipment_delay = -1
 	relative_size = 20
 	emp_resistance = -1
 	integrity_danger_mod = 0.7
@@ -29,6 +33,8 @@
 /obj/item/mecha_parts/component/actuator/durable
 	name = "reinforced mecha actuator"
 	step_delay = 1
+	turn_delay = 1.5
+	equipment_delay = 1.5
 	relative_size = 25
 	emp_resistance = 1
 	integrity_danger_mod = 0.5
