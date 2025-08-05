@@ -121,9 +121,14 @@
 	cooldown_time = world.timeofday + 100
 	if(issilicon(user))
 		var/mob/living/silicon/S = user
-		if(S.is_keeper())
-			log_admin("[key_name(S)] just used [src] ([formatLocation(src)]) while on KEEPER lawset!")
-			message_admins("<span class='danger'>[key_name(S)] just used [src] ([formatJumpTo(src)]) while on KEEPER lawset!</span>")
+		var/slipper = FALSE
+		for(var/mob/living/L in range(3,loc))
+			if(L.CheckSlip() > 0)
+				slipper = TRUE
+				break
+		if(slipper && S.is_keeper())
+			log_admin("[key_name(S)] just used [src] ([formatLocation(src)]) on slippable beings while on KEEPER lawset!")
+			message_admins("<span class='danger'>[key_name(S)] just used [src] ([formatJumpTo(src)]) on slippable beings while on KEEPER lawset!</span>")
 	while(cooldown_time - world.timeofday > 0)
 		var/ticksleft = cooldown_time - world.timeofday
 
