@@ -90,11 +90,7 @@
 		to_chat(user, "It's turned off!")
 		return
 
-	new /obj/effect/foam(src.loc)
-	src.uses--
-	cooldown_on = 1
-	cooldown_time = world.timeofday + 100
-	slip_process()
+	slip_process(user)
 	to_chat(user, "Uses left: [uses].")
 	return
 
@@ -112,17 +108,22 @@
 		if(cooldown_on || disabled)
 			return
 		else
-			new /obj/effect/foam(src.loc)
-			src.uses--
-			cooldown_on = 1
-			cooldown_time = world.timeofday + 100
-			slip_process()
+			slip_process(usr)
 			return
 
 	src.attack_hand(usr)
 	return
 
-/obj/machinery/ai_slipper/proc/slip_process()
+/obj/machinery/ai_slipper/proc/slip_process(mob/user)
+	new /obj/effect/foam(src.loc)
+	src.uses--
+	cooldown_on = 1
+	cooldown_time = world.timeofday + 100
+	if(issilicon(user))
+		var/mob/living/silicon/S = user
+		if(S.is_keeper())
+			log_admin("[key_name(S)] just used [src] ([formatLocation(src)]) while on KEEPER lawset!")
+			message_admins("<span class='danger'>[key_name(S)] just used [src] ([formatJumpTo(src)]) while on KEEPER lawset!</span>")
 	while(cooldown_time - world.timeofday > 0)
 		var/ticksleft = cooldown_time - world.timeofday
 
