@@ -7,7 +7,7 @@
 	step_in = 4
 	health = 400
 	deflect_chance = 10
-	damage_absorption = list("brute"=0.5,"fire"=0.7,"bullet"=0.45,"laser"=0.6,"energy"=0.7,"bomb"=0.7)
+	damage_absorption = list("brute"=0.7,"fire"=0.7,"bullet"=0.75,"laser"=0.8,"energy"=0.8,"bomb"=0.8)
 	max_temperature = 60000
 	infra_luminosity = 3
 	cell_type = /obj/item/weapon/cell/super
@@ -40,7 +40,7 @@
 	starting_components = list(
 		/obj/item/mecha_parts/component/hull/durable,
 		/obj/item/mecha_parts/component/actuator,
-		/obj/item/mecha_parts/component/armor/military,
+		/obj/item/mecha_parts/component/armor/military/marauder,
 		/obj/item/mecha_parts/component/gas,
 		/obj/item/mecha_parts/component/electrical
 		)

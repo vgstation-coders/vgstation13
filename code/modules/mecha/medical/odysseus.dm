@@ -6,7 +6,7 @@
 	base_color = "#FFFFFF"
 	step_in = 2
 	max_temperature = 15000
-	health = 100
+	health = 75
 	wreckage = /obj/effect/decal/mecha_wreckage/odysseus
 	internal_damage_threshold = 35
 	deflect_chance = 5

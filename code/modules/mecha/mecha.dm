@@ -269,18 +269,6 @@
 		QDEL_NULL(pr_give_air)
 	if(pr_internal_damage)
 		QDEL_NULL(pr_internal_damage)
-/*
-	if(hull)
-		QDEL_NULL(hull)
-	if(armor)
-		QDEL_NULL(armor)
-	if(gas)
-		QDEL_NULL(gas)
-	if(motor)
-		QDEL_NULL(motor)
-	if(zap)
-		QDEL_NULL(zap)
-*/
 	selected = null
 	..()
 
@@ -342,7 +330,7 @@
 		can_lock = TRUE
 		return 1
 
-/obj/mecha/proc/check_enclosed()
+/obj/mecha/proc/CheckEnclosed()
 	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
 	if(enclosed)
 		if(!HC || HC.integrity <= 0)
@@ -352,6 +340,25 @@
 	else
 		if(HC && HC.integrity > 0)
 			enclosed = TRUE
+
+/obj/mecha/proc/TryWeldBreak(var/obj/item/mecha_parts/component/component, var/mob/living/user, obj/item/weapon/W as obj) // Heeeeeeeeere's Johnny
+	if(!component || !user || !W)
+		return
+	to_chat(user, "<span class='warning'>You cut apart the [src]'s [component]!</span>")
+	visible_message("<span class='warning'>The [src]'s [component] is cut apart by [user]!</span>")
+	playsound(src, 'sound/items/Welder2.ogg', 100, 1)
+	component.damage_part(1000, BRUTE)
+
+/obj/mecha/proc/TryMaints(mob/user as mob)
+	if(!occupant)
+		maint_access = TRUE
+	else
+		if(user in range(1))
+			visible_message("<span class='warning'>[user] is attempting to force maintenance protocols on [src]!</span>")
+			spawn(3)
+			if(user in range(1))
+				visible_message("<span class='warning'>[user] enables !</span>")
+				maint_access = TRUE
 
 /obj/mecha/proc/add_radio()
 	radio = new(src)
@@ -401,21 +408,14 @@
 	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
 
 	if(AC)
-		to_chat(user, "<span class='info'> It has [AC] attached. [AC.get_efficiency()<0.5?"It is severely damaged.":""] </span>")
+		to_chat(user, "<span class='notice'> It has [AC] attached. [AC.get_efficiency()<0.5?"It is severely damaged.":""] </span>")
 	else
-		to_chat(user, "<span class='info'>It does not seem to have a completed hull.</span>")
-
-	if(AC && AC.get_efficiency() < 0.1)
-		to_chat(user, "<span class='danger'> The [AC] is completely broken.</span>")
+		to_chat(user, "<span class='notice'>It does not seem to have armor plating.</span>")
 
 	if(HC)
-		to_chat(user, "<span class='info'> It has [HC] attached. [HC.get_efficiency()<0.5?"It is severely damaged.":""]</span>")
+		to_chat(user, "<span class='notice'> It has [HC] attached. [HC.get_efficiency()<0.5?"It is severely damaged.":""]</span>")
 	else
-		to_chat(user, "<span class='info'>It does not seem to have a completed hull.</span>")
-
-	if(HC && HC.get_efficiency() < 0.1)
-		to_chat(user, "<span class='danger'> The [HC] is completely broken.</span>")
-
+		to_chat(user, "<span class='notice'>It does not seem to have a completed hull.</span>")
 
 	if(enclosed)
 		return
@@ -434,17 +434,20 @@ Issues:
 
 Armor/hull balance
 Aux components not being hit/damaged (gas, motor, electric)
-Port wiring from spcr-paradise
-Slowdown not working
-Icons not showing
+Slowdown not working Done?
+Icons not showing DONE!
 Make melee and proj penetration hit components
 Add camera and radio components
 Add binary radio (?)
 Add cell EMP protection via mech electrical hub
 Make maints panel be unlocked if there's no electric hub
-Hull / Armor break visibly when broken
-Breaking SFX and text when components break
+Hull / Armor break visibly when broken Done?
+Breaking SFX and text when components break Done?
+Add way for data core to be soldered, to not allow locks
 
+Change locks to be clearable via maints protocol
+Change maints accessibility to be based on the Hull
+Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool and a very long delay. DONE!
 
 */
 /obj/mecha/proc/UpdateIcon()
@@ -883,7 +886,6 @@ Breaking SFX and text when components break
 	if ((M_HULK in user.mutations) && !prob(temp_deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-		src.check_enclosed()
 		src.check_locks()
 		user.visible_message("<span class='red'><b>[user] hits [src.name], doing some damage.</b></span>", "<span class='red'><b>You hit [src.name] with all your might. The metal creaks and bends.</b></span>")
 	else
@@ -912,7 +914,6 @@ Breaking SFX and text when components break
 	if(!prob(temp_deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-		src.check_enclosed()
 		src.check_locks()
 		playsound(src, 'sound/weapons/slash.ogg', 50, 1, -1)
 		to_chat(user, "<span class='warning'>You slash at the armored suit!</span>")
@@ -947,7 +948,6 @@ Breaking SFX and text when components break
 			var/damage = rand(user.melee_damage_lower, user.melee_damage_upper)
 			src.take_damage(damage)
 			src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-			src.check_enclosed()
 			src.check_locks()
 			visible_message("<span class='warning'><B>[user]</B> [user.attacktext] [src]!</span>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
@@ -1012,7 +1012,6 @@ Breaking SFX and text when components break
 
 			pass_damage = (pass_damage*pass_damage_reduc_mod)//Applying damage reduction
 			src.take_damage(pass_damage)	//The take_damage() proc handles armor values
-			src.check_enclosed()
 			src.check_locks()
 			if(pass_damage > internal_damage_minimum)	//Only decently painful attacks trigger a chance of mech damage.
 				src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
@@ -1073,7 +1072,6 @@ Breaking SFX and text when components break
 			return
 
 		src.take_damage(damage, Proj.flag)	//The take_damage() proc handles armor values
-		src.check_enclosed()
 		src.check_locks()
 		if(prob(25))
 			spark(src, 2, FALSE)
@@ -1124,17 +1122,14 @@ Breaking SFX and text when components break
 			if (prob(30))
 				src.take_damage(initial(src.health)*1.5, "bomb")
 				src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
-				src.check_enclosed()
 				src.check_locks()
 			else
 				src.take_damage(initial(src.health))
 				src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
-				src.check_enclosed()
 				src.check_locks()
 		if(3.0)
 			src.take_damage(initial(src.health)/5, "bomb")
 			src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
-			src.check_enclosed()
 			src.check_locks()
 	return
 
@@ -1184,7 +1179,6 @@ Breaking SFX and text when components break
 	if(exposed_temperature>src.max_temperature)
 		src.log_message("Exposed to dangerous temperature.",1)
 		src.take_damage(5, damage_type = "fire")
-		src.check_enclosed()
 		src.check_locks()
 		src.check_for_internal_damage(list(MECHA_INT_FIRE, MECHA_INT_TEMP_CONTROL))
 
@@ -1232,7 +1226,6 @@ Breaking SFX and text when components break
 		for(var/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/ME in equipment)
 			pass_damage = ME.handle_projectile_contact(W, user, pass_damage)
 		src.take_damage(pass_damage,W.damtype)	//The take_damage() proc handles armor values
-		src.check_enclosed()
 		src.check_locks()
 		if(pass_damage > internal_damage_minimum)	//Only decently painful attacks trigger a chance of mech damage.
 			src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
@@ -1297,6 +1290,7 @@ Breaking SFX and text when components break
 			user.drop_item()
 			MC.forceMove(src)
 			user.visible_message("[user] installs \the [W] in \the [src]", "You install \the [W] in \the [src].")
+			CheckEnclosed()
 		return
 	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if(add_req_access || maint_access)
@@ -1343,7 +1337,7 @@ Breaking SFX and text when components break
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You pry out \the [RmC] from \the [src].</span>")
 			src.log_message("Internal component removed - [RmC]")
-			check_enclosed()
+			CheckEnclosed()
 			src.check_locks()
 		return
 
@@ -1441,64 +1435,38 @@ Breaking SFX and text when components break
 				user.visible_message("[user] installs \the [W] in \the [src]", "You install \the [W] in \the [src].")
 		return
 
+	if(iswelder(W) && user.a_intent == I_DISARM) // You can weldbreak into a mech
+		var/obj/item/tool/weldingtool/WT = W
+		var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
+		var/obj/item/mecha_parts/component/armor/AC = internal_components[MECH_ARMOR]
+
+//		var/obj/item/mecha_parts/component/target_component = (AC && AC.integrity > 0) ? AC : ((HC && HC.integrity > 0) ? HC : null)
+
 /*
-	else if(istype(W, /obj/item/mecha_parts/component/hull))
-		if(state==STATE_BOLTSOPENED)
-			if(!hull)
-				if(user.drop_item(W, src))
-					to_chat(user, "You attach the [hull.name].")
-					hull = W
-					mech_parts.Add(hull)
-					log_message("[hull.name] attached.")
-			else
-				to_chat(user, "There's already a hull installed.")
-		return
-	else if(istype(W, /obj/item/mecha_parts/component/armor))
-		if(state==STATE_BOLTSOPENED)
-			if(!armor)
-				if(user.drop_item(W, src))
-					to_chat(user, "You attach the [armor.name].")
-					armor = W
-					mech_parts.Add(armor)
-					log_message("[armor.name] attached.")
-			else
-				to_chat(user, "There's already a armor installed.")
-		return
-	else if(istype(W, /obj/item/mecha_parts/component/gas))
-		if(state==STATE_BOLTSOPENED)
-			if(!gas)
-				if(user.drop_item(W, src))
-					to_chat(user, "You attach the [gas.name].")
-					gas = W
-					mech_parts.Add(gas)
-					log_message("[gas.name] attached.")
-			else
-				to_chat(user, "There's already a gas installed.")
-		return
-	else if(istype(W, /obj/item/mecha_parts/component/actuator))
-		if(state==STATE_BOLTSOPENED)
-			if(!motor)
-				if(user.drop_item(W, src))
-					to_chat(user, "You attach the [motor.name].")
-					motor = W
-					mech_parts.Add(motor)
-					log_message("[motor.name] attached.")
-			else
-				to_chat(user, "There's already a motor installed.")
-		return
-	else if(istype(W, /obj/item/mecha_parts/component/electrical))
-		if(state==STATE_BOLTSOPENED)
-			if(!zap)
-				if(user.drop_item(W, src))
-					to_chat(user, "You attach the [zap.name].")
-					zap = W
-					mech_parts.Add(zap)
-					log_message("[zap.name] attached.")
-			else
-				to_chat(user, "There's already a zap installed.")
-		return
+		if(AC && AC.integrity > 0)
+			if(WT.do_weld(user, src, 15 SECONDS, 5))
+				TryWeldBreak(AC)
+
+			else if(HC && HC.integrity > 0)
+				if(WT.do_weld(user, src, 15 SECONDS, 5))
+					TryWeldBreak(HC)
+				return
 */
-	else if(iswelder(W) && user.a_intent != I_HURT)
+		if(AC && AC.integrity > 0)
+			user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s armor plating.</span>", \
+				"<span class='notice'>You begin slicing through \the [src]'s armor plating.</span>", \
+				"<span class='warning'>You hear welding noises.</span>")
+			if(WT.do_weld(user, src, 15 SECONDS, 5))
+				TryWeldBreak(AC, user, WT)
+
+		else if(HC && HC.integrity > 0)
+			user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s hull.</span>", \
+				"<span class='notice'>You begin slicing through \the [src]'s hull.</span>", \
+				"<span class='warning'>You hear welding noises.</span>")
+			if(WT.do_weld(user, src, 15 SECONDS, 5))
+				TryWeldBreak(HC, user, WT)
+
+	if(iswelder(W) && user.a_intent != I_HURT)
 		var/obj/item/tool/weldingtool/WT = W
 		if (WT.remove_fuel(0,user))
 			if (hasInternalDamage(MECHA_INT_TANK_BREACH))
@@ -1512,12 +1480,9 @@ Breaking SFX and text when components break
 		else
 			to_chat(user, "The [src.name] is at full integrity")
 		return
-
 	else
 		call((proc_res["dynattackby"]||src), "dynattackby")(W,user)
 	return
-
-
 
 /*
 /obj/mecha/attack_ai(var/mob/living/silicon/ai/user as mob)
@@ -2276,12 +2241,12 @@ Breaking SFX and text when components break
 						</style>
 						</head>
 						<body>
-						<h1>Following keycodes are present in this system:</h1>"}
+						<h1>Following keycodes/genetic information are present in this system:</h1>"} // Word this better
 
 	for(var/a in operation_req_access)
 		output += "[get_access_desc(a)] - <a href='?src=\ref[src];del_req_access=[a];user=\ref[user];id_card=\ref[id_card]'>Delete</a><br>"
 
-	output += "<a href='?src=\ref[src];del_all_req_access=1;user=\ref[user];id_card=\ref[id_card]'><br><b>Delete All</b></a><br>"
+	output += "<a href='?src=\ref[src];del_all_req_access=1;user=\ref[user];id_card=\ref[id_card]'><br><b>Delete All (Keycodes & Genetic Data)</b></a><br>"
 
 	output += "<hr><h1>Following keycodes were detected on portable device:</h1>"
 	for(var/a in id_card.access)
@@ -2548,6 +2513,8 @@ Breaking SFX and text when components break
 			to_chat(user, "The exosuit panel fails to respond to your input.")
 			return
 		operation_req_access = list()
+		internals_req_access = list()
+		dna = null
 		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return
 	if(href_list["finish_req_access"])

@@ -49,7 +49,7 @@
 	base_color = "#4E4E4E"
 	health = 300
 	deflect_chance = 10
-	damage_absorption = list("brute"=0.8,"fire"=1,"bullet"=0.8,"laser"=0.7,"energy"=0.8,"bomb"=1)
+	damage_absorption = list("brute"=0.8,"fire"=1,"bullet"=0.8,"laser"=0.8,"energy"=0.8,"bomb"=1)
 	max_temperature = 45000
 	overload_coeff = 1
 	wreckage = /obj/effect/decal/mecha_wreckage/gygax/dark
@@ -63,11 +63,20 @@
 	penetration_reduction = 5
 	encumbrance_gap = 5
 
-	max_hull_equip = 2
+	max_hull_equip = 3
 	max_weapon_equip = 2
 	max_utility_equip = 2
 	max_universal_equip = 1
 	max_special_equip = 2
+
+	starting_components = list(
+		/obj/item/mecha_parts/component/hull,
+		/obj/item/mecha_parts/component/actuator/hispeed,
+		/obj/item/mecha_parts/component/armor/marshal/reinforced,
+		/obj/item/mecha_parts/component/gas,
+		/obj/item/mecha_parts/component/electrical
+		)
+
 
 /obj/mecha/combat/gygax/New()
 	..()

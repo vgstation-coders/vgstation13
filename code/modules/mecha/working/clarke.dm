@@ -6,7 +6,7 @@
 	step_in = 0.75
 	step_energy_drain = 2
 	max_temperature = 100000
-	health = 100
+	health = 75
 	wreckage = /obj/effect/decal/mecha_wreckage/clarke
 	cargo_capacity = 20
 	rad_protection = 100

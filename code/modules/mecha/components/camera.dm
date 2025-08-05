@@ -11,6 +11,7 @@
 	max_integrity = 50
 	step_delay = 0
 	relative_size = 15
+	broken_icon = "camera_broken"
 
 /obj/item/mecha_parts/component/camera/night
 	name = "night-vision mecha imaging system"

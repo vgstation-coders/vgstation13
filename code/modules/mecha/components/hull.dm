@@ -12,6 +12,7 @@
 	max_integrity = 50
 	internal_damage_flag = MECHA_INT_FIRE
 	step_delay = 1
+	broken_icon = "hull_broken"
 
 /obj/item/mecha_parts/component/hull/lightweight
 	name = "lightweight mecha hull"

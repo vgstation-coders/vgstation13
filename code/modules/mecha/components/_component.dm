@@ -16,6 +16,8 @@
 	var/relative_size = 30	// Percent chance for the component to be hit.
 	var/internal_damage_flag	// If set, the component will toggle the flag on or off if it is destroyed / severely damaged.
 	var/can_repair = TRUE
+	var/broken_icon
+	var/weldbreak_resist = 1
 
 /obj/item/mecha_parts/component/examine(mob/user)
 	. = ..()
@@ -26,13 +28,13 @@
 		if(65 to 85)
 			to_chat(user, "It's slightly damaged.")
 		if(45 to 65)
-			. += "<span class='notice'>It's badly damaged.</span>"
+			to_chat(user, "<span class='notice'>It's badly damaged.</span>")
 		if(25 to 45)
-			. += "<span class='warning'>It's heavily damaged.</span>"
+			to_chat(user, "<span class='warning'>It's heavily damaged.</span>")
 		if(2 to 25)
-			. += "<span class='warning'><b>It's falling apart.</b></span>"
+			to_chat(user, "<span class='warning'><b>It's falling apart.</b></span>")
 		if(0 to 1)
-			. += "<span class='warning'><b>It is completely destroyed.</b></span>"
+			to_chat(user, "<span class='warning'><b>It is completely destroyed.</b></span>")
 
 /obj/item/mecha_parts/component/New()
 	. = ..()
@@ -44,20 +46,19 @@
 	detach()
 	return ..()
 
-/obj/item/mecha_parts/component/proc/BreakComponent()
-	var/obj/item/mecha_parts/component/component
-	if(integrity <= 0)
-		name = "broken [component]"
-		desc = "A completely broken mecha component. It appears as though it used to be a [component]."
-		icon_state = "[icon_state]_broken"
+/obj/item/mecha_parts/component/proc/TryBreakComponent() // Doesn't actually break the component. // Breaks the component
+	if(get_efficiency() <= 0.1)
+		integrity = 0
+		name = "broken " + initial(name)
+		desc = "A completely broken mecha component. It appears as though it used to be a [name]."
+		icon_state = "[broken_icon]"
 		can_repair = FALSE
+		visible_message("<span class='danger'>\The [initial(name)] blows apart!</span>")
 		playsound(src, "shatter", 70, 1)
-		if(istype(component, /obj/item/mecha_parts/component/hull | /obj/item/mecha_parts/component/armor))
-			to_chat(src, "<span class='danger'>\The [component] completely breaks apart!</span>")
+		if(istype(src, /obj/item/mecha_parts/component/hull))
+			chassis.CheckEnclosed()
 	else
 		return
-
-	return
 
 // Damage code.
 
@@ -66,7 +67,7 @@
 		return
 	severity = clamp(severity + emp_resistance, 1, 4)
 	take_damage((4 - severity) * round(integrity * 0.1, 0.1))
-	BreakComponent()
+	TryBreakComponent()
 
 /obj/item/mecha_parts/component/proc/adjust_integrity(var/amt = 0)
 	integrity = clamp(integrity + amt, 0, max_integrity)
@@ -79,9 +80,14 @@
 	if(chassis && internal_damage_flag)
 		if(get_efficiency() < 0.5)
 			chassis.check_for_internal_damage(list(internal_damage_flag), TRUE)
-	if(integrity <= 0 && chassis.health > 0)
-		BreakComponent()
+	if(get_efficiency() <= 0.1 && chassis.health > 0)
+		TryBreakComponent()
 	return TRUE
+
+/obj/item/mecha_parts/component/take_damage()
+	.=..()
+	chassis.CheckEnclosed()
+	TryBreakComponent()
 
 /obj/item/mecha_parts/component/proc/get_efficiency()
 	var/integ_limit = round(max_integrity * integrity_danger_mod)

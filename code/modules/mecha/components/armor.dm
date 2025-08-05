@@ -11,6 +11,7 @@
 	max_integrity = 100
 	internal_damage_flag = MECHA_INT_TEMP_CONTROL
 	step_delay = 1
+	broken_icon = "armor_broken"
 	var/pen_reduction = 1
 	var/deflect_chance = 10
 	var/list/damage_absorption = list(
@@ -173,7 +174,7 @@
 		"brute"=0.6,
 		"fire"=0.8,
 		"bullet"=0.6,
-		"laser"=0.5,
+		"laser"=0.6,
 		"energy"=0.65,
 		"bomb"=0.8
 		)
@@ -193,8 +194,8 @@
 	damage_absorption = list(
 		"brute"=0.5,
 		"fire"=0.7,
-		"bullet"=0.45,
-		"laser"=0.5,
+		"bullet"=0.5,
+		"laser"=0.6,
 		"energy"=0.7,
 		"bomb"=0.7
 		)
@@ -251,6 +252,7 @@
 	name = "concrete mecha plating"
 	desc = "An absurdly heavy matrix of steel and concrete."
 	max_integrity = 1000
+	weldbreak_resist = 3
 	damage_absorption = list(
 		"brute"=0.01,
 		"fire"=0.1,

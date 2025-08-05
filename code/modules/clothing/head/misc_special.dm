@@ -24,7 +24,7 @@
 	w_type = RECYK_MISC
 	var/up = 1
 	eyeprot = 0
-	var/visionworsen = 5
+	var/visionworsen = 0
 	nearsighted_modifier = 0
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	body_parts_covered = HEAD
@@ -33,6 +33,7 @@
 	species_fit = list(VOX_SHAPED,INSECT_SHAPED, GREY_SHAPED)
 	flammable = FALSE
 
+#warn revert this visionworsen = 5
 
 /obj/item/clothing/head/welding/attack_self()
 	toggle()

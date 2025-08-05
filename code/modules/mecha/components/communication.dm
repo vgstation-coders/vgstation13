@@ -11,6 +11,7 @@
 	max_integrity = 50
 	step_delay = 0
 	relative_size = 15
+	broken_icon = "radio_broken"
 	var/can_use_binary = FALSE
 	var/obj/item/device/radio/radio
 

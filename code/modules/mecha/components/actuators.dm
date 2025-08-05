@@ -14,6 +14,7 @@
 	max_integrity = 50
 	relative_size = 10
 	internal_damage_flag = MECHA_INT_CONTROL_LOST
+	broken_icon = "motor_broken"
 	var/turn_delay = 1
 	var/equipment_delay = 1
 

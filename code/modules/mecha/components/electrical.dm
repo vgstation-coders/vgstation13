@@ -13,8 +13,21 @@
 	step_delay = 0
 	relative_size = 10
 	internal_damage_flag = MECHA_INT_SHORT_CIRCUIT
+	broken_icon = "board_broken"
 	var/charge_cost_mod = 1
-
+	var/can_lock = TRUE
+/*
+/obj/item/mecha_parts/component/electrical/attackby(obj/item/W as obj, mob/user as mob) // todo: Add soldering interaction
+	if(issolder(W))
+		var/obj/item/tool/solder/S = W
+			if(S.do_solder(user, src, 2 SECONDS, 4))
+				S.playtoolsound(loc, 100)
+				to_chat(user, "<span class='notice'>You can_lock ? disable : enable the core's locking system.</span>")
+				if(can_lock)
+					can_lock = FALSE
+				else
+					can_lock = TRUE
+*/
 /obj/item/mecha_parts/component/electrical/high_current
 	name = "efficient mecha electrical & data core"
 	desc = "A data and electrical hub optimized for higher energy throughput."

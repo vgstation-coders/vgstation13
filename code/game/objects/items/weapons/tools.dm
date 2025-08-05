@@ -286,10 +286,10 @@
 	var/max_fuel = 20 	//The max amount of fuel the welder can hold
 	var/start_fueled = FUEL //Explicit, should the welder start with fuel in it ?
 	var/eye_damaging = TRUE	//Whether the welder damages unprotected eyes.
-	var/weld_speed = 1 //How much faster this welder is at welding. Higher number = faster
+	var/weld_speed = 5 //How much faster this welder is at welding. Higher number = faster
 	var/accepts_plasma = FALSE //Accepts plasma as fuel?
 	toolsounds = list('sound/items/Welder.ogg', 'sound/items/Welder2.ogg')
-
+#warn revert this weld_speed 1
 /obj/item/tool/weldingtool/New()
 	. = ..()
 	create_reagents(max_fuel)
@@ -949,7 +949,7 @@
 //Returns the amount of fuel in the welder
 /obj/item/tool/solder/proc/get_fuel()
 	return reagents.get_reagent_amounts(SACIDS + PACIDS)
-	
+
 /obj/item/tool/solder/pre_fueled/New()
 	. = ..()
 	reagents.add_reagent(SACID, 50)
