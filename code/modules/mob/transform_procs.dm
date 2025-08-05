@@ -381,5 +381,3 @@
 		my_appearance.b_facial = my_appearance.b_hair = 5
 		update_hair() //wie zal dat zijn?
 
-
-#undef MONKEY_ANIM_TIME
