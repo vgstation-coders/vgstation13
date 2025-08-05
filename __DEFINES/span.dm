@@ -3,3 +3,4 @@
 #define span_info(str) ("<span class='info'>" + str + "</span>")
 #define span_notice(str) ("<span class='notice'>" + str + "</span>")
 #define span_warning(str) ("<span class='warning'>" + str + "</span>")
+#define span_big_warning(str) ("<span class='big warning'>" + str + "</span>")

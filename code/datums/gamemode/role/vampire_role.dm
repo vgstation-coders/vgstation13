@@ -560,6 +560,7 @@
 	ForgeObjectives()
 	AnnounceObjectives()
 	OnPostSetup()
+	register_event(/event/death, src, nameof(src::Drop(killed = TRUE)))
 
 /datum/role/thrall/Greet(var/you_are = TRUE)
 	var/dat
@@ -575,7 +576,7 @@
 	P.set_target(master.antag)
 	AppendObjective(P)
 
-/datum/role/thrall/Drop(var/deconverted = FALSE)
+/datum/role/thrall/Drop(var/deconverted = FALSE, var/killed = FALSE)
 	var/mob/M = antag.current
 	message_admins("[key_name(M)] was dethralled, his master was [key_name(master.antag)]. [formatJumpTo(get_turf(antag.current))]")
 	log_admin("[key_name(M)] was dethralled, his master was [key_name(master.antag)]. [formatJumpTo(get_turf(antag.current))]")
@@ -583,7 +584,10 @@
 		M.visible_message("<span class='big danger'>[M] suddenly becomes calm and collected again, \his eyes clear up.</span>",
 		"<span class='warning'><b>Your blood cools down and you are inhabited by a sensation of untold calmness.</b></span>")
 		to_chat(M, "<span class='big warning'>You are no longer a slave to [master.antag.current]'s whims, having <b>escaped your thralldom.<b></span>")
+	if(killed)
+		to_chat(M, span_big_warning("Due to being killed you are no longer a slave to [master.antag.current]'s whims, having <b>escaped your thralldom.<b>"))
 	update_faction_icons()
+	unregister_event(/event/death, src, nameof(src::Drop()))
 	return ..()
 
 /datum/role/thrall/handle_reagent(var/reagent_id)
