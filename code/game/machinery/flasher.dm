@@ -111,8 +111,8 @@ var/list/obj/machinery/flasher/flashers = list()
 	if(livingfound && issilicon(user))
 		var/mob/living/silicon/S = usr
 		if(S.is_keeper())
-			log_admin("[key_name(S)] just used [formatLocation(src)] on beings while on KEEPER lawset!")
-			message_admins("<span class='danger'>[key_name(S)] just used [formatJumpTo(src)] on beings while on KEEPER lawset!</span>")
+			log_admin("[key_name(S)] just used [src] ([formatLocation(src)]) on beings while on KEEPER lawset!")
+			message_admins("<span class='danger'>[key_name(S)] just used [formatJumpTo(src,src)] on beings while on KEEPER lawset!</span>")
 
 
 /obj/machinery/flasher/emp_act(severity)

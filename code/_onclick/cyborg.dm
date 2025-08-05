@@ -106,11 +106,11 @@
 
 /mob/living/silicon/robot/proc/log_harm(obj/item/W,mob/target)
 	if(a_intent == I_HURT && is_asimov() && isjusthuman(target))
-		log_admin("[key_name(src)] just attacked [formatLocation(target)] on harm intent with \a [W] while on asimov lawset!")
-		message_admins("<span class='danger'>[key_name(src)] just attacked [formatJumpTo(target)] on harm intent with \a [W] while on asimov lawset!</span>")
+		log_admin("[key_name(src)] just attacked [target] ([formatLocation(target)]) on harm intent with \a [W] while on asimov lawset!")
+		message_admins("<span class='danger'>[key_name(src)] just attacked [formatJumpTo(target,target)] on harm intent with \a [W] while on asimov lawset!</span>")
 	else if(is_keeper())
-		log_admin("[key_name(src)] just interfered with [formatLocation(target)] with \a [W] while on KEEPER lawset!")
-		message_admins("<span class='danger'>[key_name(src)] just interfered with [formatJumpTo(target)] with \a [W] while on KEEPER lawset!</span>")
+		log_admin("[key_name(src)] just interfered with [target] ([formatLocation(target)]) with \a [W] while on KEEPER lawset!")
+		message_admins("<span class='danger'>[key_name(src)] just interfered with [formatJumpTo(target,target)] with \a [W] while on KEEPER lawset!</span>")
 
 //Gripper Handling
 //This is used when a gripper is used on anything. It does all the handling for it.
