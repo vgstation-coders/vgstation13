@@ -90,7 +90,7 @@
 	if(user.a_intent == I_HURT && issilicon(user))
 		var/mob/living/silicon/S = user
 		if(S.is_asimov())
-			lawset_txt = " on the asimov lawset"
+			lawset_txt = " on the [S.laws.name] lawset"
 	var/intent_txt = (user ? " (INTENT: [uppertext(user.a_intent)])" : "")
 	var/addition_txt = (addition ? " ([addition])" : "")
 
