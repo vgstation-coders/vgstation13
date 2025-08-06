@@ -89,7 +89,7 @@
 	var/lawset_txt = ""
 	if(issilicon(user))
 		var/mob/living/silicon/S = user
-		lawset_txt = " on the [S.laws.name] lawset"
+		lawset_txt = " on [S.laws.zeroth ? "a law zero" : "the [S.laws.name]"] lawset"
 	var/intent_txt = (user ? " (INTENT: [uppertext(user.a_intent)])" : "")
 	var/addition_txt = (addition ? " ([addition])" : "")
 
