@@ -86,21 +86,26 @@
 	var/user_txt = "[user][user.ckey ? " ([user.ckey])" : " (no key)"]"
 	var/target_txt = (target ? ismob(target) ? "[target][target.ckey ? " ([target.ckey])" : " (no key)"]" : "[target]" : "")
 	var/object_txt = (object ? " with \the [object]" : "")
+	var/lawset_txt = ""
+	if(user.a_intent == I_HURT && issilicon(user))
+		var/mob/living/silicon/S = user
+		if(S.is_asimov())
+			lawset_txt = " on the asimov lawset"
 	var/intent_txt = (user ? " (INTENT: [uppertext(user.a_intent)])" : "")
 	var/addition_txt = (addition ? " ([addition])" : "")
 
 	if (ismob(user))
-		user.attack_log += text("\[[time_stamp()]\] <span class='danger'>Has [what_done] [target_txt][object_txt].[intent_txt][addition_txt]</span>")
+		user.attack_log += text("\[[time_stamp()]\] <span class='danger'>Has [what_done] [target_txt][object_txt][lawset_txt].[intent_txt][addition_txt]</span>")
 
 	if (ismob(target))
-		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [what_done] by [user_txt][object_txt].[intent_txt][addition_txt]</font>")
+		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [what_done] by [user_txt][object_txt][lawset_txt].[intent_txt][addition_txt]</font>")
 		if (!iscarbon(user))
 			target.lastassailant = null
 
 	if (ismob(user) && ismob(target))
 		target.assaulted_by(user)
 
-	var/log_msg = "<span class='danger'>[user_txt] [what_done] [target_txt][object_txt][intent_txt].</span>[addition_txt] ([formatJumpTo(user, "JMP")])"
+	var/log_msg = "<span class='danger'>[user_txt] [what_done] [target_txt][object_txt][lawset_txt][intent_txt].</span>[addition_txt] ([formatJumpTo(user, "JMP")])"
 	log_attack(log_msg)
 	if (admin_warn)
 		msg_admin_attack(log_msg)

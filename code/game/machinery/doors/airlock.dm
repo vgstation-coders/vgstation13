@@ -1104,11 +1104,6 @@ About the new airlock wires panel:
 						src.updateUsrDialog()
 					else
 						to_chat(usr, text("Door bolt lights are already enabled!"))
-			if ((code == 5 || code == 6) && issilicon(usr))
-				var/mob/living/silicon/S = usr
-				if(S.is_asimov() || S.is_keeper())
-					log_admin("[key_name(S)] just set [src] ([formatLocation(src)]) to shock while on a no-harm lawset!")
-					message_admins("<span class='danger'>[key_name(S)] just set [src] ([formatJumpTo(src)]) to shock while on a no-harm lawset!</span>")
 
 	add_fingerprint(usr)
 	update_icon()
