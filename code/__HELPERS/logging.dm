@@ -87,10 +87,9 @@
 	var/target_txt = (target ? ismob(target) ? "[target][target.ckey ? " ([target.ckey])" : " (no key)"]" : "[target]" : "")
 	var/object_txt = (object ? " with \the [object]" : "")
 	var/lawset_txt = ""
-	if(user.a_intent == I_HURT && issilicon(user))
+	if(issilicon(user))
 		var/mob/living/silicon/S = user
-		if(S.is_asimov())
-			lawset_txt = " on the [S.laws.name] lawset"
+		lawset_txt = " on the [S.laws.name] lawset"
 	var/intent_txt = (user ? " (INTENT: [uppertext(user.a_intent)])" : "")
 	var/addition_txt = (addition ? " ([addition])" : "")
 
