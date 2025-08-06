@@ -214,7 +214,7 @@ var/runechat_icon = null
 	if (existing_extra_classes.Find("radio"))
 		return
 	
-	if(loneliness_affected(speaker))
+	if(speaker != src && loneliness_affected(speaker))
 		return
 
 	raw_message = html_encode(raw_message)
