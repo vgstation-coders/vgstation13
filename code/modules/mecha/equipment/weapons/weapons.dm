@@ -168,7 +168,10 @@
 	var/projectiles
 	var/projectile_energy_cost
 
-	var/projectiles_cache
+	var/projectiles_cache //ammo to be loaded in, if possible.
+	var/projectiles_cache_max
+	var/disabledreload //For weapons with no cache (like the rockets) which are reloaded by hand
+	var/ammo_type = "/obj/item/ammo_casing/c9mm"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/New()
 	..()
@@ -194,19 +197,36 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/get_equip_info()
-	return "[..()]\[[src.projectiles]\][(src.projectiles < src.max_projectiles)?" - <a href='?src=\ref[src];rearm=1'>Rearm</a>":null]"
+	return "[..()] \[[src.projectiles][projectiles_cache_max &&!projectile_energy_cost?"/[projectiles_cache]":""]\][!disabledreload &&(src.projectiles < initial(src.projectiles))?" - <a href='?src=[ref(src)];rearm=1'>Rearm</a>":null]"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/rearm()
-	if(projectiles < max_projectiles)
-		var/projectiles_to_add = max_projectiles - projectiles
-		while(chassis.get_charge() >= projectile_energy_cost && projectiles_to_add)
-			projectiles++
-			projectiles_to_add--
-			chassis.use_power(projectile_energy_cost)
-	send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
-	log_message("Rearmed [src.name].")
-	to_chat(chassis.occupant, "<span class='notice'>Rearmed [src.name].</span>")
+	if(projectiles < initial(projectiles))
+		var/projectiles_to_add = initial(projectiles) - projectiles
+
+		if(projectile_energy_cost)
+			while(chassis.get_charge() >= projectile_energy_cost && projectiles_to_add)
+				projectiles++
+				projectiles_to_add--
+				chassis.use_power(projectile_energy_cost)
+
+		else
+			if(!projectiles_cache)
+				return FALSE
+			if(projectiles_to_add <= projectiles_cache)
+				projectiles = projectiles + projectiles_to_add
+				projectiles_cache = projectiles_cache - projectiles_to_add
+			else
+				projectiles = projectiles + projectiles_cache
+				projectiles_cache = 0
+
+		send_byjax(chassis.occupant,"exosuit.browser","[ref(src)]",src.get_equip_info())
+		to_chat(chassis.occupant, "<span class='notice'>Rearmed [src.name].</span>")
+		log_message("Rearmed [src.name].")
+		return TRUE
+
+
 	return
+
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/Topic(href, href_list)
 	if(..())
@@ -223,6 +243,8 @@
 	fire_sound = 'sound/weapons/shotgun.ogg'
 	max_projectiles = 20
 	projectile_energy_cost = 25
+	projectiles_cache = 50
+	projectiles_cache_max = 50
 	var/projectiles_per_shot = 1
 	var/deviation = 0.7  //the shots were perfectly accurate no matter what this was set to
 
@@ -266,6 +288,8 @@
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
 	max_projectiles = 300
 	projectile_energy_cost = 20
+	projectiles_cache = 200
+	projectiles_cache_max = 200
 	var/projectiles_per_shot = 3
 //	var/deviation = 0.3
 
@@ -319,7 +343,8 @@
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
 	max_projectiles = 100
 	projectile_energy_cost = 20
-	projectiles_cache = 100
+	projectiles_cache = 40
+	projectiles_cache_max = 40
 	projectiles_per_shot = 1
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack

@@ -86,7 +86,8 @@
 
 /obj/item/mecha_parts/component/take_damage()
 	.=..()
-	chassis.CheckEnclosed()
+	if(chassis.health > 0)
+		chassis.CheckEnclosed()
 	TryBreakComponent()
 
 /obj/item/mecha_parts/component/proc/get_efficiency()

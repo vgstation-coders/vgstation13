@@ -107,6 +107,7 @@
 	new /obj/item/mecha_parts/mecha_equipment/teleporter(src)
 	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
 	new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
+	max_ammo()
 
 /obj/mecha/combat/marauder/relaymove(mob/user,direction)
 	stopMechWalking()

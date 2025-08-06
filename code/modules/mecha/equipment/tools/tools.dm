@@ -56,6 +56,21 @@
 				playsound(FD, 'sound/mecha/hydraulic.ogg', 100, 1)
 				FD.force_open(chassis.occupant, src)
 			return
+/*
+	if(ismecha(target))
+		var/obj/mecha/M = target
+		var/obj/item/mecha_parts/weapon/ballistic/mech_gun
+		var/have_ammo
+		for(var/obj/item/ammo_storage/box/box in cargo_holder.cargo)
+			if(box.ammo_type == mech_gun.ammo_type) && box.rounds)
+				have_ammo = TRUE
+				if(M.ammo_resupply(box, chassis.occupant, TRUE))
+					return
+		if(have_ammo)
+			to_chat(chassis.occupant, "No further supplies can be provided to [M].")
+		else
+			to_chat(chassis.occupant, "No providable supplies found in cargo hold")
+*/
 		if(!O.anchored)
 			if(istype(O, /obj/item/stack/ore) && W.ore_box)
 				var/count = 0

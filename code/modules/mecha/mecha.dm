@@ -332,6 +332,14 @@
 
 /obj/mecha/proc/CheckEnclosed()
 	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
+	if(!HC || HC.integrity <= 0)
+		if(!enclosed)
+			return
+		else
+			enclosed = FALSE
+	maint_access = TRUE
+	add_req_access = TRUE
+/*
 	if(enclosed)
 		if(!HC || HC.integrity <= 0)
 			enclosed = FALSE
@@ -340,13 +348,12 @@
 	else
 		if(HC && HC.integrity > 0)
 			enclosed = TRUE
-
+*/
 /obj/mecha/proc/TryWeldBreak(var/obj/item/mecha_parts/component/component, var/mob/living/user, obj/item/weapon/W as obj) // Heeeeeeeeere's Johnny
 	if(!component || !user || !W)
 		return
 	to_chat(user, "<span class='warning'>You cut apart the [src]'s [component]!</span>")
 	visible_message("<span class='warning'>The [src]'s [component] is cut apart by [user]!</span>")
-	playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 	component.damage_part(1000, BRUTE)
 
 /obj/mecha/proc/TryMaints(mob/user as mob)
@@ -432,7 +439,7 @@
 /*
 Issues:
 
-Armor/hull balance
+Armor/hull balance Done?
 Aux components not being hit/damaged (gas, motor, electric)
 Slowdown not working Done?
 Icons not showing DONE!
@@ -532,6 +539,62 @@ Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool 
 	if(occupant)
 		return icon_state
 	return "[icon_state]-open"
+
+/obj/mecha/proc/max_ammo() //Max the ammo stored for Nuke Ops mechs, or anyone else that calls this
+	for(var/obj/item/I in equipment)
+		if(istype(I, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/))
+			var/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/gun = I
+			gun.projectiles_cache = gun.projectiles_cache_max
+
+///////////////////////
+////// Ammo stuff /////
+///////////////////////
+
+/obj/mecha/proc/ammo_resupply(var/obj/item/ammo_storage/box/A, mob/user,var/fail_chat_override = FALSE)
+	if(!A.stored_ammo)
+		if(!fail_chat_override)
+			to_chat(user, "<span class='warning'>This box of ammo is empty!</span>")
+		return FALSE
+	var/ammo_needed
+	var/found_gun
+	for(var/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/gun in equipment)
+		ammo_needed = 0
+
+		if(istype(gun, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic) && gun.ammo_type == A.ammo_type)
+			found_gun = TRUE
+//			if(A.direct_load)
+//				ammo_needed = initial(gun.projectiles) - gun.projectiles
+//			else
+			ammo_needed = gun.projectiles_cache_max - gun.projectiles_cache
+
+			if(ammo_needed)
+				if(ammo_needed < A.stored_ammo)
+//					if(A.direct_load)
+//						gun.projectiles = gun.projectiles + ammo_needed
+//					else
+					gun.projectiles_cache = gun.projectiles_cache + ammo_needed
+//					playsound(get_turf(user),A.load_audio,50,1)
+					to_chat(user, "<span class='notice'>You add [ammo_needed] [ammo_needed > 1?"s":""] to the [gun.name]</span>")
+					A.stored_ammo -= ammo_needed
+//					A.update_name()
+					return TRUE
+
+				else
+//					if(A.direct_load)
+//						gun.projectiles = gun.projectiles + A.rounds
+//					else
+					gun.projectiles_cache = gun.projectiles_cache + A.stored_ammo
+//					playsound(get_turf(user),A.load_audio,50,1)
+					to_chat(user, "<span class='notice'>You add [A.stored_ammo] [A.stored_ammo > 1?"s":""] to the [gun.name]</span>")
+					A.stored_ammo = 0
+//					A.update_name()
+					return TRUE
+	if(!fail_chat_override)
+		if(found_gun)
+			to_chat(user, "<span class='notice'>You can't fit any more ammo of this type!</span>")
+		else
+			to_chat(user, "<span class='notice'>None of the equipment on this exosuit can use this ammo!</span>")
+	return FALSE
 
 //////////////////////////////////
 ////////  Movement procs  ////////
@@ -1293,6 +1356,11 @@ Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool 
 			user.visible_message("[user] installs \the [W] in \the [src]", "You install \the [W] in \the [src].")
 			CheckEnclosed()
 		return
+
+	if(istype(W, /obj/item/ammo_storage/box))
+		ammo_resupply(W, user)
+		return
+
 	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if(add_req_access || maint_access)
 			if(internals_access_allowed(usr))
@@ -2447,22 +2515,41 @@ Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool 
 			return
 		var/mob/user = topic_filter.getMob("user")
 		if(user)
-			if(state==STATE_BOLTSHIDDEN)
-				state = STATE_BOLTSEXPOSED
+			if(occupant)
+				if(TryMaints()
+					if(state==STATE_BOLTSHIDDEN)
+						state = STATE_BOLTSEXPOSED
+						occupant_message("<span class='red'>Maintenance protocols engaged.</span>")
+						occupant << sound('sound/mecha/mechlockdown.ogg',wait=0)
 				to_chat(user, "The securing bolts are now exposed.")
-				log_message("Maintenance protocols engaged.")
-				if(occupant)
-					occupant_message("<span class='red'>Maintenance protocols engaged.</span>")
-					occupant << sound('sound/mecha/mechlockdown.ogg',wait=0)
-			else if(state==STATE_BOLTSEXPOSED)
-				state = STATE_BOLTSHIDDEN
-				to_chat(user, "The securing bolts are now hidden.")
-				log_message("Maintenance protocols terminated.")
-				if(occupant)
-					occupant_message("Maintenance protocols terminated.")
-					occupant << sound('sound/mecha/mechentry.ogg',wait=0)
+				log_message("Maintenance protocols engaged.")\
+			else
+				state = STATE_BOLTSEXPOSED
+					else if(state==STATE_BOLTSEXPOSED)
+						state = STATE_BOLTSHIDDEN
+						to_chat(user, "The securing bolts are now hidden.")
+						log_message("Maintenance protocols terminated.")
+						if(occupant)
+							occupant_message("Maintenance protocols terminated.")
+							occupant << sound('sound/mecha/mechentry.ogg',wait=0)
 		else
 			to_chat(user, "You can't toggle maintenance mode with the securing bolts unfastened.")
+
+
+/obj/mecha/proc/TryMaints(mob/user as mob)
+	if(!occupant)
+		maint_access = TRUE
+	else
+		if(user in range(1))
+			visible_message("<span class='warning'>[user] is attempting to force maintenance protocols on [src]!</span>")
+			spawn(3)
+			if(user in range(1))
+				visible_message("<span class='warning'>[user] enables !</span>")
+				maint_access = TRUE
+				occupant << sound('sound/mecha/mechlockdown.ogg',wait=0)
+				occupant_message("<span class='red'>Maintenance protocols engaged.</span>")
+
+
 		output_maintenance_dialog(topic_filter.getObj("id_card"),user)
 		return
 	if(href_list["set_internal_tank_valve"] && state >=STATE_BOLTSEXPOSED)
