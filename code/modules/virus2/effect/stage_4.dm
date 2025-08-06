@@ -1246,10 +1246,12 @@
 	QDEL_LIST_CUT(null_images)
 	activated = 0
 
-/mob/proc/loneliness_affected(atom/source = src)
+/mob/proc/loneliness_affected(atom/source = src, ignore_self = FALSE)
 	return FALSE
 
-/mob/living/loneliness_affected(atom/source = src)
+/mob/living/loneliness_affected(atom/source = src, ignore_self = FALSE)
+	if(ignore_self && source == src)
+		return FALSE
 	if(virus2.len)
 		for(var/ID in virus2)
 			var/datum/disease2/disease/V = virus2[ID]
