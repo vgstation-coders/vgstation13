@@ -123,7 +123,7 @@
 		var/mob/living/silicon/S = user
 		var/slipper = FALSE
 		for(var/mob/living/L in range(3,loc))
-			if(L.CheckSlip() > 0)
+			if(L.CheckSlip() >= 0)
 				slipper = TRUE
 				break
 		if(slipper && S.is_keeper())
