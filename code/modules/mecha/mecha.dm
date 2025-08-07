@@ -319,6 +319,7 @@
 
 /obj/mecha/proc/check_locks()
 	var/obj/item/mecha_parts/component/electrical/zap = internal_components[MECH_ELECTRIC]
+	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
 	if(!zap || zap.integrity <= 0)
 		dna = null
 		operation_req_access = list()
@@ -326,6 +327,14 @@
 		can_lock = FALSE
 		src.maint_access = TRUE
 		return 0
+
+#warn clean up these duplicates
+
+// The idea is, Hull controls if it can UNLOCK, and Electric controls if it can LOCK
+
+	if(!HC || HC.integrity <= 0)
+		can_lock = FALSE
+		src.maint_access = TRUE
 	else
 		can_lock = TRUE
 		return 1
@@ -337,25 +346,23 @@
 			return
 		else
 			enclosed = FALSE
+
+	else
+		can_lock = TRUE
+
+	can_lock = FALSE
 	maint_access = TRUE
 	add_req_access = TRUE
-/*
-	if(enclosed)
-		if(!HC || HC.integrity <= 0)
-			enclosed = FALSE
-		else
-			enclosed = TRUE
-	else
-		if(HC && HC.integrity > 0)
-			enclosed = TRUE
-*/
+
+
+
 /obj/mecha/proc/TryWeldBreak(var/obj/item/mecha_parts/component/component, var/mob/living/user, obj/item/weapon/W as obj) // Heeeeeeeeere's Johnny
 	if(!component || !user || !W)
 		return
 	to_chat(user, "<span class='warning'>You cut apart the [src]'s [component]!</span>")
 	visible_message("<span class='warning'>The [src]'s [component] is cut apart by [user]!</span>")
 	component.damage_part(1000, BRUTE)
-
+/*
 /obj/mecha/proc/TryMaints(mob/user as mob)
 	if(!occupant)
 		maint_access = TRUE
@@ -366,6 +373,33 @@
 			if(user in range(1))
 				visible_message("<span class='warning'>[user] enables !</span>")
 				maint_access = TRUE
+*/
+/obj/mecha/proc/TryMaints(var/mob/user, var/obj/item/weapon/card/id/id_card)
+	if(!user in range(1))
+		return
+
+	if(occupant && state == STATE_BOLTSEXPOSED)
+		to_chat(user, "<span class='notice'>You attempt to enable [src]'s maintenance protocols..</span>")
+		visible_message("<span class='warning'>[user] is attempting to enable maintenance protocols on [src]!</span>")
+		if(!do_after(user, 3, src))
+			return
+	if(state == STATE_BOLTSHIDDEN)
+		state = STATE_BOLTSEXPOSED
+		to_chat(user, "The securing bolts are now exposed.")
+		log_message("Maintenance protocols engaged.")
+		if(occupant)
+			occupant_message("<span class='red'>Maintenance protocols engaged.</span>")
+			occupant << sound('sound/mecha/mechlockdown.ogg', wait=0)
+	else if(state == STATE_BOLTSEXPOSED)
+		state = STATE_BOLTSHIDDEN
+		to_chat(user, "The securing bolts are now hidden.")
+		log_message("Maintenance protocols terminated.")
+		if(occupant)
+			occupant_message("Maintenance protocols terminated.")
+			occupant << sound('sound/mecha/mechentry.ogg', wait=0)
+	else
+		to_chat(user, "You can't toggle maintenance mode with the securing bolts unfastened.")
+		return
 
 /obj/mecha/proc/add_radio()
 	radio = new(src)
@@ -455,6 +489,8 @@ Add way for data core to be soldered, to not allow locks
 Change locks to be clearable via maints protocol
 Change maints accessibility to be based on the Hull
 Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool and a very long delay. DONE!
+
+Electric says if you can lock or not, hull says if outside people can simply unlock it
 
 */
 /obj/mecha/proc/UpdateIcon()
@@ -833,10 +869,11 @@ Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool 
 
 
 /obj/mecha/proc/setInternalDamage(int_dam_flag)
-	internal_damage |= int_dam_flag
-	pr_internal_damage.start()
-	log_append_to_last("Internal damage of type [int_dam_flag].",1)
-	occupant << sound('sound/machines/warning.ogg',wait=0)
+	if(src && src.health > 0)
+		internal_damage |= int_dam_flag
+		pr_internal_damage.start()
+		log_append_to_last("Internal damage of type [int_dam_flag].",1)
+		occupant << sound('sound/machines/warning.ogg',wait=0)
 	return
 
 /obj/mecha/proc/clearInternalDamage(int_dam_flag)
@@ -2494,11 +2531,12 @@ Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool 
 		if(usr != src.occupant)
 			return
 		var/obj/item/mecha_parts/component/electrical/zap = internal_components[MECH_ELECTRIC]
+		var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
 		var/mob/user = topic_filter.getMob("user")
 		if(state)
 			occupant_message("<span class='red'>Maintenance protocols in effect.</span>")
 			return
-		if(zap && zap.integrity > 0)
+		if(zap && zap.integrity > 0 && zap.can_lock && HC && HC.integrity > 0)
 			maint_access = !maint_access
 			send_byjax(src.occupant,"exosuit.browser","t_maint_access","[maint_access?"Forbid":"Permit"] maintenance protocols")
 		else
@@ -2515,43 +2553,9 @@ Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool 
 			return
 		var/mob/user = topic_filter.getMob("user")
 		if(user)
-			if(occupant)
-				if(TryMaints()
-					if(state==STATE_BOLTSHIDDEN)
-						state = STATE_BOLTSEXPOSED
-						occupant_message("<span class='red'>Maintenance protocols engaged.</span>")
-						occupant << sound('sound/mecha/mechlockdown.ogg',wait=0)
-				to_chat(user, "The securing bolts are now exposed.")
-				log_message("Maintenance protocols engaged.")\
-			else
-				state = STATE_BOLTSEXPOSED
-					else if(state==STATE_BOLTSEXPOSED)
-						state = STATE_BOLTSHIDDEN
-						to_chat(user, "The securing bolts are now hidden.")
-						log_message("Maintenance protocols terminated.")
-						if(occupant)
-							occupant_message("Maintenance protocols terminated.")
-							occupant << sound('sound/mecha/mechentry.ogg',wait=0)
-		else
-			to_chat(user, "You can't toggle maintenance mode with the securing bolts unfastened.")
-
-
-/obj/mecha/proc/TryMaints(mob/user as mob)
-	if(!occupant)
-		maint_access = TRUE
-	else
-		if(user in range(1))
-			visible_message("<span class='warning'>[user] is attempting to force maintenance protocols on [src]!</span>")
-			spawn(3)
-			if(user in range(1))
-				visible_message("<span class='warning'>[user] enables !</span>")
-				maint_access = TRUE
-				occupant << sound('sound/mecha/mechlockdown.ogg',wait=0)
-				occupant_message("<span class='red'>Maintenance protocols engaged.</span>")
-
-
-		output_maintenance_dialog(topic_filter.getObj("id_card"),user)
-		return
+			TryMaints(user)
+			output_maintenance_dialog(topic_filter.getObj("id_card"),user)
+			return
 	if(href_list["set_internal_tank_valve"] && state >=STATE_BOLTSEXPOSED)
 		if(!in_range(src, usr))
 			return
@@ -2584,22 +2588,14 @@ Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool 
 			operation_req_access += a
 		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return
-	if(href_list["del_req_access"] && add_req_access && topic_filter.getObj("id_card"))
+	if(href_list["del_req_access"] && add_req_access && topic_filter.getObj("id_card")) // We can't have it get stuck to delete..
 		if(!in_range(src, usr))
-			return
-		var/mob/user = topic_filter.getMob("user")
-		if(!can_lock)
-			to_chat(user, "The exosuit panel fails to respond to your input.")
 			return
 		operation_req_access -= topic_filter.getNum("del_req_access")
 		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return
 	if(href_list["del_all_req_access"] && add_req_access && topic_filter.getObj("id_card"))
 		if(!in_range(src, usr))
-			return
-		var/mob/user = topic_filter.getMob("user")
-		if(!can_lock)
-			to_chat(user, "The exosuit panel fails to respond to your input.")
 			return
 		operation_req_access = list()
 		internals_req_access = list()
@@ -2609,9 +2605,10 @@ Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool 
 	if(href_list["finish_req_access"])
 		if(!in_range(src, usr))
 			return
+		var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
 		var/mob/user = topic_filter.getMob("user")
-		if(!can_lock)
-			to_chat(user, "The exosuit panel fails to respond to your input.")
+		if(!HC || HC.integrity < 0)
+			visible_message("<span class='red'>The [src]'s access panel sparks as it attempts to lock!</span>")
 			return
 		add_req_access = 0
 		user << browse(null,"window=exosuit_add_access")

@@ -86,7 +86,7 @@
 
 /obj/item/mecha_parts/component/take_damage()
 	.=..()
-	if(chassis.health > 0)
+	if(chassis && chassis.health > 0)
 		chassis.CheckEnclosed()
 	TryBreakComponent()
 
