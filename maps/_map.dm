@@ -277,6 +277,7 @@ var/global/list/accessable_z_levels = list()
 	base_turf = /turf/unsimulated/floor/jungle/bedrock
 	base_area = /area/surface/jungle/underground
 	movementJammed = TRUE
+	event_whitelist = list(TRUE) // no events here
 
 //for Horizon
 /datum/zLevel/hyperspace
