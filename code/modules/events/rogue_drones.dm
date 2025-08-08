@@ -21,7 +21,7 @@
 		else
 			num = rand(2,6)
 		for(var/i in 1 to num)
-			var/mob/living/simple_animal/hostile/retaliate/malf_drone/D = new(get_turf(pick(possible_spawns)))
+			var/mob/living/simple_animal/hostile/retaliate/malf_drone/rogue/D = new(get_turf(pick(possible_spawns)))
 			D.from_event = src
 			drones_list.Add(D)
 	else
@@ -34,11 +34,11 @@
 		for(var/i in 1 to rand(2,6))
 			var/turf/spaceturf = pick_n_take(area_turfs_copy)
 			if(spaceturf.type == /turf/space)
-				var/mob/living/simple_animal/hostile/retaliate/malf_drone/D = new(spaceturf)
+				var/mob/living/simple_animal/hostile/retaliate/malf_drone/rogue/D = new(spaceturf)
 				D.from_event = src
 				drones_list.Add(D)
 	var/drone_logs = "Spawned drones from rogue event: "
-	for(var/mob/living/simple_animal/hostile/retaliate/malf_drone/D in drones_list)
+	for(var/mob/living/simple_animal/hostile/retaliate/malf_drone/rogue/D in drones_list)
 		drone_logs += "[formatJumpTo(D)], "
 	log_debug(drone_logs)
 
@@ -52,7 +52,7 @@
 
 /datum/event/rogue_drone/end()
 	var/num_recovered = 0
-	for(var/mob/living/simple_animal/hostile/retaliate/malf_drone/D in drones_list)
+	for(var/mob/living/simple_animal/hostile/retaliate/malf_drone/rogue/D in drones_list)
 		spark(D, 3, FALSE)
 		D.z = map.zCentcomm
 		D.has_loot = 0
