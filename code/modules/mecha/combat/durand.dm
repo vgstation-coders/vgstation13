@@ -9,7 +9,6 @@
 	health = 300
 	deflect_chance = 10
 	damage_absorption = list("brute"=0.7,"fire"=1,"bullet"=0.8,"laser"=1,"energy"=1,"bomb"=1)
-	max_temperature = 30000
 	infra_luminosity = 8
 	force = 40
 	var/defence_deflect = 35
@@ -38,7 +37,9 @@
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor/military,
 		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/communications,
+		/obj/item/mecha_parts/component/camera
 		)
 
 /obj/mecha/combat/durand/New()
@@ -80,12 +81,10 @@
 		flick("[Durand.initial_icon]-lockdown-a",Durand)
 		Durand.icon_state = Durand.initial_icon + "-lockdown"
 		Durand.deflect_chance = Durand.defence_deflect
-//		Durand.ablative.min_reduction = Durand.ablative_min_buff
 		Durand.occupant_message("<span class='notice'>You enable [Durand] defence mode.</span>")
 		playsound(src.linked_mech, 'sound/mecha/mechlockdown.ogg', 60, 1)
 	else
 		Durand.deflect_chance = initial(Durand.deflect_chance)
-//		Durand.ablative.min_reduction = initial(Durand.ablative.min_reduction)
 		Durand.icon_state = Durand.initial_icon
 		Durand.occupant_message("<span class='red'>You disable [Durand] defence mode.</span>")
 	Durand.log_message("Toggled defence mode.")

@@ -18,6 +18,7 @@
 	var/can_repair = TRUE
 	var/broken_icon
 	var/weldbreak_resist = 1
+	var/broken = FALSE
 
 /obj/item/mecha_parts/component/examine(mob/user)
 	. = ..()
@@ -48,17 +49,19 @@
 
 /obj/item/mecha_parts/component/proc/TryBreakComponent() // Doesn't actually break the component. // Breaks the component
 	if(get_efficiency() <= 0.1)
-		integrity = 0
-		name = "broken " + initial(name)
-		desc = "A completely broken mecha component. It appears as though it used to be a [name]."
-		icon_state = "[broken_icon]"
-		can_repair = FALSE
-		visible_message("<span class='danger'>\The [initial(name)] blows apart!</span>")
-		playsound(src, "shatter", 70, 1)
-		if(istype(src, /obj/item/mecha_parts/component/hull))
-			chassis.CheckEnclosed()
-	else
-		return
+		if(!broken)
+			broken = TRUE
+			integrity = 0
+			name = "broken " + initial(name)
+			desc = "A completely broken mecha component. It appears as though it used to be a [name]."
+			icon_state = "[broken_icon]"
+			can_repair = FALSE
+			visible_message("<span class='danger'>\The [initial(name)] blows apart!</span>")
+			playsound(src, "shatter", 70, 1)
+			if(istype(src, /obj/item/mecha_parts/component/hull))
+				chassis.CheckEnclosed()
+		else
+			return
 
 // Damage code.
 

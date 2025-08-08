@@ -13,6 +13,7 @@
 	var/inject_amount = 10
 	salvageable = 0
 	equip_type = EQUIP_UTILITY
+	step_delay = 0
 
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/can_attach(obj/mecha/medical/M)
 	if(..())

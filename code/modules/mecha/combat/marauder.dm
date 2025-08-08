@@ -8,7 +8,7 @@
 	health = 400
 	deflect_chance = 10
 	damage_absorption = list("brute"=0.7,"fire"=0.7,"bullet"=0.75,"laser"=0.8,"energy"=0.8,"bomb"=0.8)
-	max_temperature = 60000
+	max_temperature = 20000
 	infra_luminosity = 3
 	cell_type = /obj/item/weapon/cell/super
 	var/zoom = 0
@@ -75,6 +75,7 @@
 	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
 	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
 	new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
+	UpdateIcon()
 	src.smoke_system.set_up(3, 0, src)
 	src.smoke_system.attach(src)
 	rockets = image('icons/effects/160x160.dmi', icon_state= initial_icon + "_burst")
@@ -107,6 +108,7 @@
 	new /obj/item/mecha_parts/mecha_equipment/teleporter(src)
 	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
 	new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
+	UpdateIcon()
 	max_ammo()
 
 /obj/mecha/combat/marauder/relaymove(mob/user,direction)

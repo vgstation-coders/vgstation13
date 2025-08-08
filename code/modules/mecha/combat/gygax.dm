@@ -9,7 +9,6 @@
 	health = 250
 	deflect_chance = 0
 	damage_absorption = list("brute"=0.9,"fire"=1,"bullet"=1,"laser"=0.9,"energy"=1,"bomb"=1)
-	max_temperature = 25000
 	infra_luminosity = 6
 	var/overload_coeff = 2
 	wreckage = /obj/effect/decal/mecha_wreckage/gygax
@@ -33,7 +32,7 @@
 	max_special_equip = 1
 
 	starting_components = list(
-		/obj/item/mecha_parts/component/hull/lightweight,
+		/obj/item/mecha_parts/component/hull,
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor/marshal,
 		/obj/item/mecha_parts/component/gas,
@@ -50,7 +49,7 @@
 	health = 300
 	deflect_chance = 10
 	damage_absorption = list("brute"=0.8,"fire"=1,"bullet"=0.8,"laser"=0.8,"energy"=0.8,"bomb"=1)
-	max_temperature = 45000
+	max_temperature = 10000 // Syndie & Centcom mechs get some forgiveness here.
 	overload_coeff = 1
 	wreckage = /obj/effect/decal/mecha_wreckage/gygax/dark
 	step_energy_drain = 5
@@ -88,6 +87,7 @@
 	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang(src)
 	new /obj/item/mecha_parts/mecha_equipment/teleporter(src)
 	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
+	UpdateIcon()
 	max_ammo()
 	return
 

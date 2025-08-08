@@ -5,6 +5,7 @@
 	var/projectile
 	var/fire_sound
 	equip_type = EQUIP_WEAPON
+	step_delay = 0.5
 
 /obj/item/mecha_parts/mecha_equipment/weapon/can_attach(var/obj/mecha/combat/M as obj, var/override = FALSE)
 	if(..())

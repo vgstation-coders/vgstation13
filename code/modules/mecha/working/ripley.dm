@@ -10,7 +10,6 @@
 	var/fast_pressure_step_in = 1.5
 	/// How fast the mech is in normal pressure
 	var/slow_pressure_step_in = 2.5
-	max_temperature = 20000
 	health = 150
 	damage_absorption = list("brute"=0.85,"fire"=1.2,"bullet"=1,"laser"=1,"energy"=1,"bomb"=1)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley
@@ -27,7 +26,7 @@
 	penetration_reduction = 0
 
 	starting_components = list(
-		/obj/item/mecha_parts/component/hull/durable,
+		/obj/item/mecha_parts/component/hull,
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor/mining,
 		/obj/item/mecha_parts/component/gas,
@@ -81,7 +80,7 @@
 	name = "APLU \"Firefighter\""
 	icon_state = "firefighter"
 	initial_icon = "firefighter"
-	max_temperature = 65000
+	max_temperature = 10000
 	health = 250
 	light_range_on = 10
 	light_brightness_on = 3
@@ -94,6 +93,14 @@
 	paintable = 1
 	penetration_reduction = 3 // blocks .380
 	damage_minimum = 3
+
+	starting_components = list(
+		/obj/item/mecha_parts/component/hull/atmos,
+		/obj/item/mecha_parts/component/actuator,
+		/obj/item/mecha_parts/component/armor/mining,
+		/obj/item/mecha_parts/component/gas,
+		/obj/item/mecha_parts/component/electrical
+		)
 
 /obj/mecha/working/ripley/mk2/firefighter/deathripley
 	desc = "OH SHIT IT'S THE DEATHSQUAD WE'RE ALL GONNA DIE"

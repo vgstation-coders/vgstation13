@@ -25,7 +25,7 @@
 
 	var/optimal_type = /obj/mecha //may be either a type or a list of allowed types
 	var/equip_type = null //mechaequip2
-	var/step_delay = 0	// Does the component slow/speed up the suit?
+	var/step_delay = 0.5 	// Does the component slow/speed up the suit?
 	var/enable_special = FALSE	// Will the tool do its special?
 
 	var/has_equip_overlay = TRUE // in case we want our equipment to have a sprite on a mecha

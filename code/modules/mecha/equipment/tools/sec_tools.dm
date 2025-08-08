@@ -11,6 +11,7 @@
 	var/datum/global_iterator/pr_mech_jail
 	salvageable = 0
 	equip_type = EQUIP_UTILITY
+	step_delay = 0.5
 
 /obj/item/mecha_parts/mecha_equipment/tool/jail/can_attach(obj/mecha/combat/G)
 	if(..())

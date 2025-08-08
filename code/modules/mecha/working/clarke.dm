@@ -5,11 +5,11 @@
 	initial_icon = "clarke"
 	step_in = 0.75
 	step_energy_drain = 2
-	max_temperature = 100000
 	health = 75
 	wreckage = /obj/effect/decal/mecha_wreckage/clarke
 	cargo_capacity = 20
 	rad_protection = 100
+	max_temperature = 10000
 	var/image/thruster_overlay
 	var/overlay_applied = FALSE
 	var/obj/machinery/portable_atmospherics/scrubber/mech/scrubber
@@ -27,7 +27,7 @@
 	encumbrance_gap = 4
 
 	starting_components = list(
-		/obj/item/mecha_parts/component/hull/lightweight,
+		/obj/item/mecha_parts/component/hull/atmos,
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor/lightweight,
 		/obj/item/mecha_parts/component/gas,
