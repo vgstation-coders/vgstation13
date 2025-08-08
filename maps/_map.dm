@@ -254,7 +254,14 @@ var/global/list/accessable_z_levels = list()
 
 /datum/zLevel/krakenroid
 	name = "krakenroid"
-	has_events = FALSE // not enough stuff for now
+	event_whitelist = list(
+			/datum/event/thing_storm/meaty_gore,
+			/datum/event/old_vendotron_crash,
+			/datum/event/carp_migration,
+			/datum/event/rogue_drone,
+			/datum/event/cricketsbehindthefridge,
+			/datum/event/wallrot
+		)
 
 /datum/zLevel/krakenroid/blur_holomap(var/area/aera, var/turf/truf)
 	if (istype(aera, /area/mine/explored) && !istype(truf, /turf/unsimulated/floor/airless))
