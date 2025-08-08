@@ -459,7 +459,7 @@ var/init_station_funds = 0
 								//Requesting more than the entire station earned last cycle
 								//Doesn't play if this is the first cycle
 								var/datum/command_alert/suspicious_wages/SW = new()
-								SW.announce(suspicious_user,acc.owner_name)
+								SW.announce(0,suspicious_user,acc.owner_name)
 								qdel(SW)
 							if(acc.wage_gain && new_payout > acc.wage_gain*2)
 								//Send an audit request to IAA if more than double old age
