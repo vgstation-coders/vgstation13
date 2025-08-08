@@ -30,6 +30,7 @@
 				break
 		var/list/area_turfs_copy = A.area_turfs.Copy()
 		for(var/i in 1 to rand(25,35))
+			var/turf/spaceturf
 			do
 				spaceturf = pick_n_take(area_turfs_copy)
 			while(spaceturf.z != zlevel || spaceturf.type != /turf/space)
