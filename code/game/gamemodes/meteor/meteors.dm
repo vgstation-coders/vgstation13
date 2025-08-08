@@ -20,7 +20,7 @@
 						"Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon", "Phi", "Chi", "Psi", "Omega")
 	var/wave_final_name = "[number > 25 ? "Major":"Minor"] Meteor [pick("Wave", "Cluster", "Group")] [pick(greek_alphabet)]-[rand(1, 999)]"
 	var/datum/meteor_warning/warning = new (meteor_wave_delay, chosen_dir, max_size, number, wave_final_name, types == null)
-	output_information(warning)
+	output_information(warning,zlevel)
 	spawn(meteor_wave_delay)
 		for(var/i = 0 to number)
 			sleep(rand(1, 3)) //0.1 to 0.3 seconds between meteors
@@ -110,7 +110,7 @@ var/list/meteor_warnings = list()
 	..()
 
 //A bunch of information to be used by the bhangmeter (doubles as a meteor monitoring computer), and sent to the admins otherwise
-/proc/output_information(var/datum/meteor_warning/warning,var/zlevel = 0)
+/proc/output_information(var/datum/meteor_warning/warning,var/zlevel = 1)
 
 	var/meteor_l_size = "unknown"
 	switch(warning.size)
@@ -141,7 +141,7 @@ var/list/meteor_warnings = list()
 
 	//Send to all Bhangmeters
 	for(var/obj/machinery/computer/bhangmeter/bhangmeter in bhangmeters)
-		if(zlevel && bhangmeter.z == zlevel)
+		if(!zlevel || bhangmeter.z == zlevel)
 			bhangmeter.announce_meteors(warning)
 
 	spawn(warning.delay + 30 SECONDS)
