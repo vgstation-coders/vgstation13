@@ -2069,7 +2069,7 @@
 	name = "red turnip"
 	seed_name = "red turnip"
 	display_name = "red turnips"
-	plant_dmi = 'icons/obj/hydroponics/whitebeet.dmi'
+	plant_dmi = 'icons/obj/hydroponics/redturnip.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/redturnip)
 	chems = list(NUTRIMENT = list(1,10))
 
@@ -2088,7 +2088,7 @@
 	seed_name = "white turnip"
 	display_name = "white turnips"
 	plural = 1
-	plant_dmi = 'icons/obj/hydroponics/whitebeet.dmi'
+	plant_dmi = 'icons/obj/hydroponics/whiteturnip.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/redturnip/white)
 
 var/whiteturnip_run = 0
