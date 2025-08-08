@@ -3929,14 +3929,15 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				feedback_add_details("admin_secrets_fun_used","ALL")
 				var/choice = input("Which event do you want to trigger?") in subtypesof(/datum/event)+"Cancel"
 				if(choice != "Cancel")
-					new choice
+					var/level = clamp(input(usr,"What Z-level to trigger the event on?","Z-level",map.zMainStation) as num,1,map.zLevels.len)
+					new choice(TRUE,level)
 					message_admins("[key_name_admin(usr)] spawned a custom event of type [choice].")
 			if("roll_event")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RE")
-				if(map.zLevels[map.zMainStation])
-					var/datum/zLevel/mainZ = map.zLevels[map.zMainStation]
-					mainZ.spawn_dynamic_event(TRUE)
+				var/level = clamp(input(usr,"What Z-level to roll the event on?","Z-level",map.zMainStation) as num,1,map.zLevels.len)
+				var/datum/zLevel/mainZ = map.zLevels[level]
+				mainZ.spawn_dynamic_event(TRUE)
 				message_admins("[key_name_admin(usr)] spawned random dynamic event.")
 			if("spawnadminbus")
 				feedback_inc("admin_secrets_fun_used",1)
