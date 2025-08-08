@@ -287,7 +287,8 @@
 	where_to_spawn = SPAWN_ON_LOC
 	to_spawn = list(
 		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine,
-		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine
+		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine,
+		/obj/item/weapon/switchtool/swiss_army_knife/hydroponics
 	)
 
 // -- Clown
