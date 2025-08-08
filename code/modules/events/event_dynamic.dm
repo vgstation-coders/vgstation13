@@ -35,9 +35,15 @@ var/list/possibleEvents = list()
 		for(var/type in subtypesof(/datum/event))
 			if((map.event_blacklist.len && map.event_blacklist.Find(type)) || (map.event_whitelist.len && !map.event_whitelist.Find(type)))
 				continue //Blacklisted, don't even create them
+			if((src.event_blacklist.len && src.event_blacklist.Find(type)) || (src.event_whitelist.len && !src.event_whitelist.Find(type)))
+				continue //Blacklisted, don't even create them
 			var/datum/event/E = new type(FALSE)
 			possibleEvents += E
 
+	if(event_blacklist.len)
+		log_debug("EVENT: Blacklisted events for [name]: [jointext(event_blacklist,",")]")
+	if(event_whitelist.len)
+		log_debug("EVENT: Blacklisted events for [name]: [jointext(event_whitelist,",")]")
 	var/list/drawing = list()
 	for(var/datum/event/E in possibleEvents)
 		drawing[E] = max(0,E.can_start(active_with_role) - E.recency_weight()) //Reminder: never have negatives when using pickweight
