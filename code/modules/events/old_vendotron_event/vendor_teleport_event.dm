@@ -1,16 +1,13 @@
 /datum/event/old_vendotron_teleport
 	endWhen = 15
 	announceWhen = 5
+	alert_type = /datum/command_alert/old_vendotron_teleport
 
 /datum/event/old_vendotron_teleport/can_start()
 	return 15
 
 /datum/event/old_vendotron_teleport/setup()
 	startWhen = rand(5, 15)
-
-/datum/event/old_vendotron_teleport/announce()
-	if(..())
-		command_alert(/datum/command_alert/old_vendotron_teleport)
 
 /datum/event/old_vendotron_teleport/start()
 	teleportVendor()

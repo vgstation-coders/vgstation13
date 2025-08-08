@@ -27,10 +27,7 @@
 	releaseWhen = rand(20, 30)
 	src.startWhen = src.releaseWhen-1
 	src.endWhen = src.releaseWhen+1
-
-/datum/event/prison_break/announce()
-	if(..())
-		command_alert(/datum/command_alert/graytide)
+	alert_type = /datum/command_alert/graytide
 
 /datum/event/prison_break/start()
 	if(!prisonAreas || !prisonAreas.len)

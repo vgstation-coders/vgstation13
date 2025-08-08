@@ -1,16 +1,13 @@
 /datum/event/old_vendotron_crash
 	endWhen = 15
 	announceWhen = 5
+	alert_type = /datum/command_alert/old_vendotron_crash
 
 /datum/event/old_vendotron_crash/can_start()
 	return 5
 
 /datum/event/old_vendotron_crash/setup()
 	startWhen = rand(5, 15)
-
-/datum/event/old_vendotron_crash/announce()
-	if(..())
-		command_alert(/datum/command_alert/old_vendotron_crash)
 
 /datum/event/old_vendotron_crash/start()
 	launchVendor()

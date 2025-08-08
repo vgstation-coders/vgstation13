@@ -5,10 +5,7 @@
 	announceWhen = rand(0, 300)
 	endWhen = announceWhen + 1
 	severity = rand(5, 10)
-
-/datum/event/wallrot/announce()
-	if(..())
-		command_alert(/datum/command_alert/wall_fungi)
+	alert_type = /datum/command_alert/wall_fungi
 
 /datum/event/wallrot/can_start()
 	for(var/A in the_station_areas)

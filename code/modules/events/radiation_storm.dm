@@ -49,9 +49,9 @@
 			else
 				world << sound('sound/effects/explosionfar.ogg') //yes I know the fact that hearing the explosion makes no sense but it makes me smile
 				sleep(10 SECONDS) //extra 10 seconds to those paying attention
-			command_alert(/datum/command_alert/radiation_storm_malicious)
+			command_alert(/datum/command_alert/radiation_storm_malicious, z_level = zlevel)
 		else
-			command_alert(/datum/command_alert/radiation_storm)
+			command_alert(/datum/command_alert/radiation_storm, z_level = zlevel)
 
 		for(var/area/A in areas)
 			if(A.z != map.zMainStation || is_safe_zone(A))
@@ -63,7 +63,7 @@
 
 		sleep(30 SECONDS)
 
-		command_alert(/datum/command_alert/radiation_storm/start)
+		command_alert(/datum/command_alert/radiation_storm/start, z_level = zlevel)
 
 		for(var/i = 0, i < 15, i++)
 			var/irradiationThisBurst = rand(15,25) //everybody gets the same rads this radiation burst
@@ -108,7 +108,7 @@
 
 			sleep(25)
 
-		command_alert(/datum/command_alert/radiation_storm/end)
+		command_alert(/datum/command_alert/radiation_storm/end, z_level = zlevel)
 
 		for(var/area/A in areas)
 			if(A.z != map.zMainStation || is_safe_zone(A))

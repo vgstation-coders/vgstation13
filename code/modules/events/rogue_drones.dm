@@ -1,6 +1,7 @@
 /datum/event/rogue_drone
 	startWhen = 5
 	endWhen = 450
+	alert_type = /datum/command_alert/rogue_drone
 	var/list/drones_list = list()
 
 /datum/event/rogue_drone/can_start()
@@ -43,11 +44,6 @@
 	for(var/mob/living/simple_animal/hostile/retaliate/malf_drone/rogue/D in drones_list)
 		drone_logs += "[formatJumpTo(D)], "
 	log_debug(drone_logs)
-
-
-/datum/event/rogue_drone/announce()
-	if(..())
-		command_alert(/datum/command_alert/rogue_drone)
 
 /datum/event/rogue_drone/tick()
 	return

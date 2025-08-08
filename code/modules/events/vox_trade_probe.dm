@@ -9,6 +9,7 @@
 /datum/event/tradeprobe
 	endWhen	= 270 //How many 2-second ticks should we stay? 9 minutes = 540 / 2 = 270
 	oneShot = TRUE //one per shift
+	alert_type = /datum/command_alert/tradeprobe
 
 /datum/event/tradeprobe/can_start(var/list/active_with_role)
 	//No probe if... there is a trader, the trade shuttle is at the station, or financial mismanagement
@@ -24,10 +25,10 @@
 		message_admins("Rejected trade probe event: a shuttle occupying the trade port.")
 		return FALSE
 	if(!ports_open)
-		command_alert(/datum/command_alert/tradeaversion_closedport)
+		command_alert(/datum/command_alert/tradeaversion_closedport, z_level = zlevel)
 		return FALSE
 	if(payroll_modifier < 1)
-		command_alert(/datum/command_alert/tradeaversion_mismanagement)
+		command_alert(/datum/command_alert/tradeaversion_mismanagement, z_level = zlevel)
 		return FALSE
 
 	//Gain 1 weight per 3% above normal wages players received last cycle, up to 30 weight at 190%
@@ -48,11 +49,8 @@
 	/*tradeprobe.set_transit_dock(/obj/docking_port/destination/trade/station)
 	tradeprobe.move_to_dock(tradeprobe.destination_port)*/
 
-/datum/event/tradeprobe/announce()
-	command_alert(/datum/command_alert/tradeprobe)
-
 /datum/event/tradeprobe/end()
-	command_alert(/datum/command_alert/tradeprobe_depart)
+	command_alert(/datum/command_alert/tradeprobe_depart, z_level = zlevel)
 	spawn(1 MINUTES)
 		trade_shuttle.lockdown = FALSE
 		//Send shuttle to secondary dock at trade outpost

@@ -49,5 +49,4 @@
 
 
 /datum/event/mob_swarm/announce()
-	if(..())
-		command_alert(new /datum/command_alert/mob_swarm(mob_name))
+	command_alert(new /datum/command_alert/mob_swarm(mob_name), z_level = zlevel)
