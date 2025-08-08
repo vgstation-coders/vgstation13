@@ -238,7 +238,6 @@ var/global/list/accessable_z_levels = list()
 		/datum/event/old_vendotron_crash,
 		/datum/event/immovable_rod,
 		/datum/event/immovable_rod/big,
-		/datum/event/immovable_rod/hyper,
 		/datum/event/carp_migration,
 		/datum/event/rogue_drone,
 		)
