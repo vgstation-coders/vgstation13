@@ -18,8 +18,11 @@
 		var/out_text = strip_html(text)
 		if(gibberish_main)
 			out_text = Gibberish(out_text,70)
-		for(var/obj/item/device/dses in dses_devices)
-			dses.say(out_text)
+		for(var/obj/item/device/dses/D in dses_devices)
+			if(D.module_in_list("evnDCT"))
+				var/turf/T = get_turf(D)
+				if(T.z == z_level)
+					D.say(out_text)
 		return
 
 	if (small)

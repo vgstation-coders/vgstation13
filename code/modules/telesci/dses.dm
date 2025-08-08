@@ -47,7 +47,7 @@
 	var/y
 	var/z
 
-var/global/list/dses_devices = list()
+var/global/list/obj/item/device/dses/dses_devices = list()
 
 /obj/item/device/dses/New()
 	. = ..()
