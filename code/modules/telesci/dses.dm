@@ -47,6 +47,16 @@
 	var/y
 	var/z
 
+var/global/list/dses_devices = list()
+
+/obj/item/device/dses/New()
+	. = ..()
+	dses_devices += src
+
+/obj/item/device/dses/Destroy()
+	dses_devices -= src
+	. = ..()
+
 /obj/item/device/dses/attack_self(var/mob/user)
 	if(C)
 		return menu_open(user)
