@@ -1,8 +1,5 @@
 var/list/allEvents = subtypesof(/datum/event)
 
-var/eventTimeLower = 20 //minutes
-var/eventTimeUpper = 40
-
 /datum/zLevel
 	var/scheduledEvent = null
 
@@ -42,7 +39,7 @@ var/eventTimeUpper = 40
 			if(54000 to INFINITY) //Round has been going for 1 hour and 30 minutes at least
 				roundlength_modifier = 0.45
 
-		var/next_event_delay = round(rand(eventTimeLower, eventTimeUpper)*playercount_modifier*roundlength_modifier,1) MINUTES
+		var/next_event_delay = round(rand(EVENT_TIME_LOWER, EVENT_TIME_UPPER)*playercount_modifier*roundlength_modifier,1) MINUTES
 		scheduledEvent = world.timeofday + next_event_delay  //in deciseconds
 		message_admins("Random event call on [src.name] z-level. Next event call in [next_event_delay/600] minutes.")
 

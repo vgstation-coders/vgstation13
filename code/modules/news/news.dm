@@ -36,7 +36,7 @@ var/setup_news = 0
 var/scheduledNews = null
 /proc/checkNews()
 	if(!scheduledNews)
-		var/delay = rand(eventTimeLower, eventTimeUpper) MINUTES
+		var/delay = rand(EVENT_TIME_LOWER, EVENT_TIME_UPPER) MINUTES
 		scheduledNews = world.timeofday + delay
 		message_admins("News cycle refreshed. Next post in [delay/600] minutes.")
 	else if(world.timeofday >scheduledNews)

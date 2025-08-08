@@ -38,6 +38,7 @@
 #include "__DEFINES\dna2.dm"
 #include "__DEFINES\economy.dm"
 #include "__DEFINES\error_hander.dm"
+#include "__DEFINES\events.dm"
 #include "__DEFINES\flags.dm"
 #include "__DEFINES\game.dm"
 #include "__DEFINES\gases.dm"
