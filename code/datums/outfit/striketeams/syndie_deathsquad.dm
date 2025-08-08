@@ -14,7 +14,7 @@
 			slot_l_store_str = /obj/item/weapon/grenade/empgrenade,
 			slot_shoes_str = /obj/item/clothing/shoes/swat,
 			slot_gloves_str = /obj/item/clothing/gloves/swat,
-			slot_glasses_str = /obj/item/clothing/glasses/thermal,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/syndicate_elite,
 			slot_wear_mask_str = /obj/item/clothing/mask/gas/syndicate,
 			slot_s_store_str = /obj/item/weapon/tank/emergency_oxygen,

@@ -183,7 +183,7 @@
 		napalm.adjust_gas(GAS_PLASMA, toxinsToDeduce)
 
 		target_tile.assume_air(napalm)
-		spawn (0) target_tile.hotspot_expose(temperature, 400,surfaces=1)
+		spawn (0) target_tile.hotspot_expose(temperature, MEDIUM_FLAME,1)
 
 		hardness -= toxinsToDeduce/100
 		CheckHardness()
@@ -336,6 +336,7 @@
 
 /obj/machinery/door/mineral/cult
 	name = "cult door"
+	desc = "It opens and closes...for those in the know."
 	icon = 'icons/obj/doors/doorcult.dmi'
 	icon_state = "cultdoor_closed0"
 
@@ -362,15 +363,18 @@
 		var/mob/M = user
 		if (isanycultist(M))
 			return TRUE
+		if (istype(M,/mob/living/simple_animal/hostile/hex))
+			return TRUE
 	return FALSE
 
 /obj/machinery/door/mineral/cult/Uncrossed(var/atom/movable/mover)
-	if (!density && !operating && !(locate(/mob/living) in loc))
-		if (ismob(mover))
-			var/mob/M = mover
-			if (M.pulling && loc)
-				M.pulling.forceMove(loc)//so we don't stop pulling stuff when moving through cult doors
-		close()
+	spawn(2)
+		if (!density && !operating && !(locate(/mob/living) in loc))
+			if (ismob(mover))
+				var/mob/M = mover
+				if (M.pulling && loc)
+					M.pulling.forceMove(loc)//so we don't stop pulling stuff when moving through cult doors
+			close()
 
 /obj/machinery/door/mineral/cult/attack_construct(var/mob/user)
 	return TryToSwitchState(user)

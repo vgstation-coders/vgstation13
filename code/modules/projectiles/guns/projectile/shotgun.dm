@@ -57,8 +57,13 @@
 		playsound(M, 'sound/weapons/shotgunpump.ogg', 60, 1)
 	pumped = 0
 	if(current_shell)//We have a shell in the chamber
-		current_shell.forceMove(get_turf(src))//Eject casing
-		playsound(current_shell, casingsound, 25, 0.2, 1)
+		var/obj/item/ammo_casing/old_shell = current_shell
+		old_shell.forceMove(get_turf(src))//Eject casing
+		if(ismob(M))
+			var/target = get_ranged_target_turf(old_shell, turn(M.dir,pick(-45,-90,-90,-135,-135)), 5)
+			spawn(1)
+				old_shell.throw_at(target,rand(1,2),2)
+		playsound(old_shell, casingsound, 25, 0.2, 1)
 		current_shell = null
 		if(in_chamber)
 			in_chamber = null
@@ -81,6 +86,9 @@
 	ammo_type = "/obj/item/ammo_casing/shotgun"
 	silencer_offset = list(28,5)
 
+/obj/item/weapon/gun/projectile/shotgun/pump/combat/empty
+	ammo_type = null
+
 /obj/item/weapon/gun/projectile/shotgun/pump/combat/shorty //nuke op engineering special
 	name = "combat shorty"
 	desc = "Handy for close encounters."
@@ -88,6 +96,15 @@
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
 	max_shells = 3
+	silencer_offset = list(22,5)
+
+/obj/item/weapon/gun/projectile/shotgun/pump/combat/pistol
+	name = "shotgun pistol"
+	desc = "Even shortier than the combat shorty."
+	icon_state = "scshotgun"
+	w_class = W_CLASS_SMALL
+	slot_flags = SLOT_BELT
+	max_shells = 1
 	silencer_offset = list(22,5)
 
 //this is largely hacky and bad :(	-Pete

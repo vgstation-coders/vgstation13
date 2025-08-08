@@ -19,7 +19,6 @@
 	feedback_add_details("admin_verb","DG2") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
-
 /* 21st sept 2010
 Updated by Skie -- Still not perfect but better!
 Stuff you can't do:
@@ -37,7 +36,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		return
 
 	spawn(0)
-		var/target = null
+		var/datum/target = null
 		var/targetselected = 0
 		var/lst[] // List reference
 		lst = new/list() // Make the list
@@ -68,6 +67,13 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 		var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
 		if(!procname)
+			return
+
+		// absolutely not
+		if(findtextEx(trim(lowertext(procname)), "rustg"))
+			message_admins("<span class='userdanger'>[key_name_admin(src)] attempted to proc call rust-g procs ([strip_html_properly(procname)]). Inform the host <i>at once</i>.</span>")
+			log_admin("[key_name(src)] attempted to proc call rust-g procs. Inform the host at once.")
+			send2admindiscord("[key_name(src)] attempted to proc call rustg things. Inform the host at once.", TRUE)
 			return
 
 		// Do not make this a global reference. Global references can be cleared out.
@@ -519,12 +525,12 @@ Pressure: [env.pressure]"}
 		if(A && !(A.type in areas_with_light))
 			areas_with_light.Add(A.type)
 
-	for(var/obj/machinery/light_switch/LS in world)
+	for(var/obj/machinery/light_switch/LS in lightswitches)
 		var/area/A = get_area(LS)
 		if(A && !(A.type in areas_with_LS))
 			areas_with_LS.Add(A.type)
 
-	for(var/obj/item/device/radio/intercom/I in world)
+	for(var/obj/item/device/radio/intercom/I in radio_list)
 		var/area/A = get_area(I)
 		if(A && !(A.type in areas_with_intercom))
 			areas_with_intercom.Add(A.type)
@@ -542,33 +548,37 @@ Pressure: [env.pressure]"}
 	var/list/areas_without_intercom = areas_all - areas_with_intercom
 	var/list/areas_without_camera = areas_all - areas_with_camera
 
-	to_chat(world, "<b>AREAS WITHOUT AN APC:</b>")
+	var/error_str = "<h1>AREAS WITHOUT AN APC:</h1>"
 	for(var/areatype in areas_without_APC)
-		to_chat(world, "* [areatype]")
+		error_str += "* [areatype]<br>"
 
-	to_chat(world, "<b>AREAS WITHOUT AN AIR ALARM:</b>")
+	error_str += "<h1>AREAS WITHOUT AN AIR ALARM:</h1>"
 	for(var/areatype in areas_without_air_alarm)
-		to_chat(world, "* [areatype]")
+		error_str += "* [areatype]<br>"
 
-	to_chat(world, "<b>AREAS WITHOUT A REQUEST CONSOLE:</b>")
+	error_str += "<h1>AREAS WITHOUT A REQUEST CONSOLE:</h1>"
 	for(var/areatype in areas_without_RC)
-		to_chat(world, "* [areatype]")
+		error_str += "* [areatype]<br>"
 
-	to_chat(world, "<b>AREAS WITHOUT ANY LIGHTS:</b>")
+	error_str += "<h1>AREAS WITHOUT ANY LIGHTS:</h1>"
 	for(var/areatype in areas_without_light)
-		to_chat(world, "* [areatype]")
+		error_str += "* [areatype]<br>"
 
-	to_chat(world, "<b>AREAS WITHOUT A LIGHT SWITCH:</b>")
+	error_str += "<h1>AREAS WITHOUT A LIGHT SWITCH:</h1>"
 	for(var/areatype in areas_without_LS)
-		to_chat(world, "* [areatype]")
+		error_str += "* [areatype]<br>"
 
-	to_chat(world, "<b>AREAS WITHOUT ANY INTERCOMS:</b>")
+	error_str += "<h1>AREAS WITHOUT ANY INTERCOMS:</h1>"
 	for(var/areatype in areas_without_intercom)
-		to_chat(world, "* [areatype]")
+		error_str += "* [areatype]<br>"
 
-	to_chat(world, "<b>AREAS WITHOUT ANY CAMERAS:</b>")
+	error_str += "<h1>AREAS WITHOUT ANY CAMERAS:</h1>"
 	for(var/areatype in areas_without_camera)
-		to_chat(world, "* [areatype]")
+		error_str += "* [areatype]<br>"
+
+	var/datum/browser/popup = new(usr, "Area issues", usr.name, 300, 400)
+	popup.set_content(error_str)
+	popup.open()
 
 /client/proc/startSinglo()
 	set category = "Debug"
@@ -973,7 +983,7 @@ var/global/blood_virus_spreading_disabled = 0
 		"15x15 (4 players)",
 		"39x23 (10 players)",
 		)
-	var/arena_type = input("What size for the arena?", "Arena Construction") in arena_sizes | null
+	var/arena_type = input("What size for the arena?", "Arena Construction") as null|anything in arena_sizes
 
 	if(!arena_type)
 		return
@@ -1238,12 +1248,16 @@ var/global/blood_virus_spreading_disabled = 0
 		alert("Only observers can use this functionality")
 		return
 
-	if(adminmob.conversionHUD)
-		adminmob.conversionHUD = 0
-		to_chat(src, "<span class='notice'><B>conversionHUD Disabled</B></span>")
+	var/datum/visioneffect/cult_conversion/detected_hud = null
+	for(var/datum/visioneffect/cult_conversion/H in adminmob.huds)
+		detected_hud = H
+		break
+	if(detected_hud)
+		adminmob.remove_hud(detected_hud)
+		to_chat(src, "<span class='notice'><B>Conversion HUD disabled.</B></span>")
 	else
-		adminmob.conversionHUD = 1
-		to_chat(src, "<span class='notice'><B>conversionHUD Enabled</B></span>")
+		adminmob.apply_hud(new /datum/visioneffect/cult_conversion)
+		to_chat(src, "<span class='notice'><B>Conversion HUD enabled.</B></span>")
 
 /client/proc/spawn_datum(var/object as text)
 	set category = "Debug"
@@ -1265,7 +1279,7 @@ var/global/blood_virus_spreading_disabled = 0
 
 
 	//Exclude non-movable atoms
-	var/chosen = filter_list_input("Select a datum type", "Spawn Datum", get_matching_types(object, /datum) - typesof(/turf, /area, /datum/admins))
+	var/chosen = filter_typelist_input("Select a datum type", "Spawn Datum", get_matching_types(object, /datum) - typesof(/turf, /area, /datum/admins))
 	if(!chosen)
 		return
 
@@ -1491,7 +1505,7 @@ var/obj/blend_test = null
 	set name = "Edit MotD"
 	set desc = "Appears to players upon lobby entry."
 
-	if(!check_rights(R_PERMISSIONS))
+	if(!check_rights(R_SERVER))
 		return
 	if(alert("You are about to edit the MotD, which is displayed to anyone who enters the lobby. All changes persist across rounds. Continue?", "Warning", "Yes", "Cancel") == "Cancel")
 		return
@@ -1509,3 +1523,76 @@ var/obj/blend_test = null
 	log_admin("[key_name(usr)] has edited the message of the day. The new text is as follows: [newmotd].")
 	feedback_add_details("admin_verb", "Edit MotD")
 	message_admins("[key_name(usr)] has edited the message of the day. Check the game log for the full text.")
+
+/client/proc/force_next_map()
+	set category = "Debug"
+	set name = "Force Next Map"
+	set desc = "Sets the next map and skips the map vote."
+
+	if(!check_rights(R_FUN))
+		return
+
+	var/list/all_maps = get_all_maps()
+	all_maps += "RESET"
+	to_chat(usr,"<span class='warning'>This needs to be done BEFORE a map vote is called otherwise use the vote rigging option!</div>")
+	var/rigged_choice = input(usr, "Pick a map.") as null|anything in all_maps
+	if(!rigged_choice)
+		return
+	if(rigged_choice == "RESET")
+		log_admin("[key_name(usr)] has reset the forced map.")
+		feedback_add_details("admin_verb", "Force Next Map")
+		message_admins("[key_name(usr)] has reset the forced map.")
+		vote.forced_map = null
+		return
+	log_admin("[key_name(usr)] has forced the next map. The new map is: [rigged_choice].")
+	feedback_add_details("admin_verb", "Force Next Map")
+	message_admins("[key_name(usr)] has forced the next map. The new map is: [rigged_choice].")
+
+	vote.forced_map = rigged_choice
+
+/client/proc/check_for_unconnected_atmos()
+	set category = "Debug"
+	set name = "Check Vent/Scrubber Connections"
+	set desc = "Outputs a list of all vents and scrubbers that aren't connected to the main station's pipe network."
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	var/search_entire_world = 0
+	if(alert(usr, "Search the entire world, or just the station z-level?", "Specify scope of search", "Entire world!", "Just the station.") == "Entire world!")
+		search_entire_world = 1
+
+/* If search_entire_world is set, search all pumps and scrubbers. Otherwise, only search pumps and scrubbers on the map's designated main station z-level. */
+	var/list/unconnected_atmos = list()
+	for(var/obj/machinery/atmospherics/unary/vent_pump/V in atmos_machines)
+		if(istype(V) && (search_entire_world ? search_entire_world : V.z == map.zMainStation) && !V.node1)
+			unconnected_atmos.Add(V)
+	for(var/obj/machinery/atmospherics/unary/vent_scrubber/S in atmos_machines)
+		if(istype(S) && (search_entire_world ? search_entire_world : S.z == map.zMainStation) && !S.node1)
+			unconnected_atmos.Add(S)
+
+	var/output = ""
+	for(var/atom/found in unconnected_atmos)
+		output += "<a href='?_src_=vars;Vars=\ref[found]'>\ref[found]</a>"
+		if(found.loc && found.loc.x)
+			output += ": [found] in [found.loc] at ([found.loc.x], [found.loc.y], [found.loc.z])<br>"
+		else if (found.x)
+			output += ": [found] at ([found.x], [found.y], [found.z])<br>"
+		else
+			output += ": [found] at (no loc found (nullspace?))<br>"
+
+	if(!output)
+		output = "No unconnected vents/scrubbers found."
+
+	usr << browse (output, "window=unconnected-atmos-search")
+
+/client/proc/rig_crew_score()
+	set category = "Debug"
+	set name = "Rig crew score"
+	set desc = "Manually adjust round-end crew score."
+
+	if(!check_rights(R_FUN))
+		return
+
+	score.badmin_score = input(usr,"What score do you want?","Badmin score",score.badmin_score) as num
+	score.badmin_override = alert(usr,"Override or add to the round-end score?","Badmin score","Override","Add") == "Override"

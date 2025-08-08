@@ -1,9 +1,9 @@
-/proc/dopage(src,target)
+/proc/dopage(source,target)
 	var/href_list
 	var/href
-	href_list = params2list("src=\ref[src]&[target]=1")
-	href = "src=\ref[src];[target]=1"
-	src:Topic(href, href_list)
+	href_list = params2list("src=\ref[source]&[target]=1")
+	href = "src=\ref[source];[target]=1"
+	source:Topic(href, href_list)
 	return null
 
 /proc/get_area(const/atom/O)
@@ -521,3 +521,12 @@
 		if(istype(A,department_type))
 			department_areas += A
 	return department_areas
+
+/proc/get_department_area_typepaths(atom/AM)
+	var/areapathtext = "[get_area(AM).type]"
+	var/secondslash = findtext(areapathtext, "/", 2)
+	if(secondslash)
+		var/thirdslash = findtext(areapathtext, "/", secondslash + 1)
+		if(thirdslash)
+			return typesof(text2path(copytext(areapathtext, 1, thirdslash)))
+	return typesof(text2path(areapathtext))

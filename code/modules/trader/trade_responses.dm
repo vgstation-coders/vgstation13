@@ -50,6 +50,9 @@ var/static/tw_deposit_notable = list("This is a good amount. Feel the heft in th
 var/static/tw_deposit_large = list("Keh, keh. Very good! Let's stash that away... ", "Well now, don't mind if I do. Let's just move aaaaall this into the account. ", "Keh, don't tease me, you better not just withdraw this right away! ", "The Shoal appreciates your contributions. ", "A very good pleasure doing business with you. ")
 
 var/static/tw_deposit_firsttime = list("Remember, you can still withdraw this later, if you need.", "This is everyone's money - it's shared. Don't forget the PIN.", "This money will be put to good use - don't worry, you can still take it out!")
+var/static/tw_probe_return = "Trade probe skimmed NT station - done now. Should be docked outside somewhere, eh? Look around."
+
+var/static/tw_return_pinpointer = list("Hope flight in went okay.","Ah, recycling. Here's your coffee.","Maybe a bit bumpy, but you made it, eh?", "Oh, old pinpointer. Thank, will save for next time.")
 
 /obj/structure/trade_window/proc/greet(mob/living/carbon/human/user)
 	var/buildgreet
@@ -102,22 +105,26 @@ var/static/tw_deposit_firsttime = list("Remember, you can still withdraw this la
 			buildgreet += pick(tw_greet_medium_wait)
 		else //30 seconds
 			buildgreet += pick(tw_greet_short_wait)
-		switch(rand(1,20))
-			if(1 to 7) //33% chance to say nothing else.
-			if(8 to 10) //Comment on shoal account
-				buildgreet += shoal_account_commentary()
-			if(11 to 13) //Comment on sales
-				switch(SStrade.loyal_customers[username])
-					if(0 to 299)
-						buildgreet += pick(tw_low_sales)
-					if(300 to 999)
-						buildgreet += pick(tw_medium_sales)
-					if(1000 to INFINITY)
-						buildgreet += pick(tw_high_sales)
-			if(14 to 16) //advice
-				buildgreet += pick(tw_advice_intro) + pick(tw_advice)
-			if(17 to 20) //advertise
-				buildgreet += advertisement()
+		if(pending_messages.len)
+			buildgreet += pending_messages[1]
+			pending_messages -= pending_messages[1]
+		else
+			switch(rand(1,20))
+				if(1 to 7) //33% chance to say nothing else.
+				if(8 to 10) //Comment on shoal account
+					buildgreet += shoal_account_commentary()
+				if(11 to 13) //Comment on sales
+					switch(SStrade.loyal_customers[username])
+						if(0 to 299)
+							buildgreet += pick(tw_low_sales)
+						if(300 to 999)
+							buildgreet += pick(tw_medium_sales)
+						if(1000 to INFINITY)
+							buildgreet += pick(tw_high_sales)
+				if(14 to 16) //advice
+					buildgreet += pick(tw_advice_intro) + pick(tw_advice)
+				if(17 to 20) //advertise
+					buildgreet += advertisement()
 
 	last_greeted[username] = world.time
 	buildgreet = trim(buildgreet)
@@ -174,3 +181,7 @@ var/static/tw_deposit_firsttime = list("Remember, you can still withdraw this la
 		if(1000 to INFINITY)
 			reply += pick(tw_high_shoal)
 	return reply
+
+/obj/structure/trade_window/proc/new_pending(var/message)
+	pending_messages += message
+	say(pick("Got some new information... get over here.","Keh, listen up - new intel.","Hey - I've got some news, come listen."))

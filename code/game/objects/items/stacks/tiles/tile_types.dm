@@ -5,36 +5,6 @@
  *		Carpet
  */
 
-/obj/item/stack/tile
-	var/material
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sheets_n_ores.dmi', "right_hand" = 'icons/mob/in-hand/right/sheets_n_ores.dmi')
-
-/obj/item/stack/tile/proc/adjust_slowdown(mob/living/L, current_slowdown)
-	return current_slowdown
-
-/obj/item/stack/tile/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-				return
-		if(3.0)
-			if (prob(5))
-				qdel(src)
-				return
-		else
-	return
-
-/obj/item/stack/tile/blob_act()
-	qdel(src)
-
-/obj/item/stack/tile/singularity_act()
-	qdel(src)
-	return 2
-
 /*
  * Grass
  */
@@ -44,6 +14,7 @@
 	desc = "A patch of grass, like they often use on golf courses."
 	icon_state = "tile_grass"
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_BIOLOGICAL
 	force = 1.0
 	throwforce = 1.0
 	throw_speed = 5
@@ -52,9 +23,9 @@
 	siemens_coefficient = 0 //no conduct
 	max_amount = 60
 	origin_tech = Tc_BIOTECH + "=1"
-
+	flammable = TRUE
 	material = "grass"
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 /*
  * Wood
@@ -65,6 +36,8 @@
 	desc = "An easy to fit wooden floor tile."
 	icon_state = "tile-wood"
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	force = 1.0
 	throwforce = 1.0
 	throw_speed = 5
@@ -74,7 +47,6 @@
 	max_amount = 60
 	sheet_type = /obj/item/stack/sheet/wood
 	material = "wood"
-	autoignition_temperature = AUTOIGNITION_WOOD
 
 /obj/item/stack/tile/wood/proc/build(turf/S as turf)
 	if(S.air)
@@ -123,6 +95,8 @@
 	desc = "A piece of carpet. It is the same size as a floor tile."
 	icon_state = "tile-carpet"
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_FABRIC
+	flammable = TRUE
 	force = 1.0
 	throwforce = 1.0
 	throw_speed = 5
@@ -132,7 +106,12 @@
 	max_amount = 60
 
 	material = "fabric"
-	autoignition_temperature = AUTOIGNITION_FABRIC
+
+/obj/item/stack/tile/carpet/shag
+	name = "length of shag carpet"
+	singular_name = "length of shag carpet"
+	desc = "A shaggy piece of carpet."
+	icon_state = "tile-shag"
 
 /obj/item/stack/tile/arcade
 	name = "length of arcade carpet"
@@ -140,6 +119,8 @@
 	desc = "A piece of arcade carpet. It has a snazzy space theme."
 	icon_state = "tile-arcade"
 	w_class = W_CLASS_MEDIUM
+	w_class = RECYK_FABRIC
+	flammable = TRUE
 	force = 1.0
 	throwforce = 1.0
 	throw_speed = 5
@@ -147,15 +128,15 @@
 	flags = FPRINT
 	siemens_coefficient = 0 //no conduct
 	max_amount = 60
-
 	material = "fabric"
-	autoignition_temperature = AUTOIGNITION_FABRIC
 
 /obj/item/stack/tile/slime
 	name = "tile of slime"
 	desc = "A flat piece of slime made through xenobiology."
 	icon_state = "tile-slime"
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
 	force = 1
 	throwforce = 1.0
 	throw_speed = 5
@@ -163,7 +144,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	max_amount = 60
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 /obj/item/stack/tile/slime/adjust_slowdown(mob/living/L, current_slowdown)
 	if(isslimeperson(L) || isslime(L))
@@ -171,3 +152,19 @@
 	else
 		current_slowdown *= 0.01
 	..()
+
+/obj/item/stack/tile/plated_catwalk
+	name = "plated catwalk frame"
+	singular_name = "plated catwalk frame"
+	desc = "A frame for a plated catwalk. Add rods after installing."
+	icon_state = "ptile"
+	force = 1.0
+	throwforce = 5
+	throw_speed = 5
+	throw_range = 10
+	material = "metal"
+	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_METAL
+	flags = FPRINT
+	siemens_coefficient = 0
+	max_amount = 60

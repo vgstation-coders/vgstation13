@@ -132,12 +132,16 @@
 				else
 		else
 			dat += text("<A href='?src=\ref[];login=1'>{Log In}</A>", src)
-	user << browse(text("<HEAD><TITLE>Medical Records</TITLE></HEAD><TT>[]</TT>", dat), "window=med_rec")
+	user << browse(HTML_SKELETON_TITLE("Medical Records", "<TT>[dat]</TT>"), "window=med_rec")
 	onclose(user, "med_rec")
 	return
 
 
 /obj/machinery/computer/med_data/attackby(var/obj/item/O, var/mob/living/user)
+	if(istype(O, /obj/item/weapon/card/id) && !scan)
+		if(usr.drop_item(O, src))
+			scan = O
+			to_chat(user, "You insert \the [O].")
 	if (istype(user) && authenticated && (screen == 4.0) && active1)
 		if(istype(O, /obj/item/weapon/photo/id))
 			var/obj/item/weapon/photo/id/photo_id = O
@@ -595,7 +599,8 @@
 	name = "Medical Laptop"
 	desc = "A cheap laptop connected to the medical records."
 	icon_state = "medlaptop"
-	pass_flags = PASSTABLE
+	moody_state = "overlay_laptop"
+	pass_flags = PASSTABLE | PASSRAILING
 	machine_flags = 0
 
 	anchored = 0

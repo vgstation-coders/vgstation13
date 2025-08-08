@@ -2,8 +2,8 @@
 	name = "strong blob"
 	icon_state = "strong"
 	desc = "A dense part of a blob."
-	health = 75
-	maxHealth = 75
+	health = 50
+	maxHealth = 50
 	fire_resist = 2
 	layer = BLOB_SHIELD_LAYER
 	spawning = 0
@@ -28,7 +28,7 @@
 	if(health >= 50)
 		return 0
 
-	health += 10
+	health += min(maxHealth - health, 10)
 	return 1
 
 /obj/effect/blob/shield/update_icon(var/spawnend = 0)

@@ -57,7 +57,7 @@
 			visible_message("<span class='warning'>\The [src] suddenly springs to life, only to shut down halfway through startup.</span>")
 		return
 	for(var/obj/machinery/singularity/singulo in power_machines)
-		if(singulo.z == z)
+		if(singulo.seeks_beacon() && (singulo.z == z))
 			singulo.target = src
 	icon_state = "[icontype]1"
 	active = 1

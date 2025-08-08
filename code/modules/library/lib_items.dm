@@ -18,8 +18,9 @@
 	anchored = 1
 	density = 1
 	opacity = 1
-	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 10
+	w_class = W_CLASS_HUGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
 
 	health = 50
 	var/tmp/busy = 0
@@ -27,16 +28,25 @@
 								/obj/item/weapon/tome, \
 								/obj/item/weapon/tome_legacy, \
 								/obj/item/weapon/spellbook, \
-								/obj/item/weapon/storage/bible)
+								/obj/item/weapon/storage/bible, \
+								/obj/item/dictionary)
 
 /obj/structure/bookcase/cultify()
 	return
+
+/obj/structure/bookcase/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>It contains [english_list(contents)].</span>")
 
 /obj/structure/bookcase/initialize()
 	for(var/obj/item/I in loc)
 		if(is_type_in_list(I, valid_types))
 			I.forceMove(src)
 	update_icon()
+
+/obj/structure/bookcase/ignite()
+	..()
+	QDEL_NULL(firelightdummy) //prevent people from grabbing "fire" from the bookcase
 
 /obj/structure/bookcase/proc/healthcheck()
 
@@ -48,7 +58,13 @@
 /obj/structure/bookcase/attackby(obj/item/O as obj, mob/user as mob)
 	if(busy) //So that you can't mess with it while deconstructing
 		return
-	if(is_type_in_list(O, valid_types))
+	if(istype(O,/obj/item/weapon/storage/bag/bookbag))
+		var/obj/item/weapon/storage/S = O
+		for(var/obj/item/I in S.contents)
+			if(is_type_in_list(I, valid_types))
+				S.remove_from_storage(I, src)
+		update_icon()
+	else if(is_type_in_list(O, valid_types))
 		user.drop_item(O, src)
 		update_icon()
 	else if(O.is_screwdriver(user) && user.a_intent == I_HELP) //They're probably trying to open the "maintenance panel" to deconstruct it. Let them know what's wrong.
@@ -96,12 +112,9 @@
 	if(contents.len)
 		var/obj/item/weapon/book/choice = input("Which book would you like to remove from \the [src]?") as null|obj in contents
 		if(choice)
-			if(user.incapacitated() || user.lying || get_dist(user, src) > 1)
+			if(user.incapacitated() || user.lying || !in_range(src, user))
 				return
-			if(!user.get_active_hand())
-				user.put_in_hands(choice)
-			else
-				choice.forceMove(get_turf(src))
+			user.put_in_hands(choice)
 			update_icon()
 
 /obj/structure/bookcase/attack_ghost(mob/dead/observer/user as mob)
@@ -191,11 +204,12 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_MEDIUM		 //upped to three because books are, y'know, pretty big. (and you could hide them inside eachother recursively forever)
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	flags = FPRINT
 	attack_verb = list("bashes", "whacks", "educates")
 
-	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 3
+
 
 	var/dat			 // Actual page content
 	var/due_date = 0 // Game time in 1/10th seconds
@@ -235,10 +249,28 @@
 		return
 	if (!isobserver(user))
 		playsound(user, "pageturn", 50, 1, -5)
-	if(src.dat)
-		user << browse("<TT><I>Penned by [author].</I></TT> <BR>" + "[dat]", "window=[name];size=[book_width]x[book_height]")
+	if(wiki_page)
+		dat = {"
+		<html>
+		<body style="margin:5px;padding:0px;overflow:hidden">
+			<iframe width='100%' height='100%' frameborder="0" style="overflow:hidden;height:100%;width:100%" src="http://ss13.moe/wiki/index.php?title=[wiki_page]&printable=yes"></iframe>
+		</body>
+		</html>
+		"}
 		if(!isobserver(user))
-			user.visible_message("[user] opens a book titled \"[src.title]\" and begins reading intently.")
+			user.visible_message("<span class='notice'>[user] opens a manual titled \"[src.title]\" and begins reading intently.</span>")
+		user << browse(dat, "window=[name];size=[book_width]x[book_height]")
+		return
+	// typechecking src is the big gay but here it's kinda the most straightforward way to handle.
+	// Manuals have well-formed HTML so HTML_SKELETON isn't needed here
+	if (istype(src, /obj/item/weapon/book/manual))
+		if(!isobserver(user))
+			user.visible_message("<span class='notice'>[user] opens a manual titled \"[src.title]\" and begins reading intently.</span>")
+		user << browse(dat, "window=[name];size=[book_width]x[book_height]")
+	if(src.dat)
+		user << browse(HTML_SKELETON("<TT><I>Penned by [author].</I></TT> <BR>[dat]"), "window=[name];size=[book_width]x[book_height]")
+		if(!isobserver(user))
+			user.visible_message("<span class='notice'>[user] opens a book titled \"[src.title]\" and begins reading intently.</span>")
 		onclose(user, "book")
 	else if(occult)
 		to_chat(user, "<span class='sinister'>As you read the book, your mind is assaulted by foul, arcane energies!</span>")
@@ -441,3 +473,36 @@
 	else
 		to_chat(user, "<font color=red>No associated computer found. Only local scans will function properly.</font>")
 	to_chat(user, "\n")
+
+/obj/item/weapon/barcodescanner/Destroy()
+	book = null
+	..()
+
+/obj/structure/closet/secure_closet/library
+	name = "library cabinet"
+	desc = "Contains a variety of useful items for a library-dweller."
+	req_access = list(access_library)
+	icon_state = "cabinetdetective_locked"
+	icon_closed = "cabinetdetective"
+	icon_locked = "cabinetdetective_locked"
+	icon_opened = "cabinetdetective_open"
+	icon_broken = "cabinetdetective_broken"
+	icon_off = "cabinetdetective_broken"
+	is_wooden = TRUE
+	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
+
+
+/obj/structure/closet/secure_closet/library/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/suit/storage/lawyer/bluejacket,
+		/obj/item/clothing/under/suit_jacket/really_black,
+		/obj/item/clothing/under/suit_jacket/female,
+		/obj/item/clothing/shoes/brown,
+		/obj/item/clothing/accessory/tie/blue,
+		/obj/item/clothing/accessory/tie/red,
+		/obj/item/clothing/head/det_hat,
+		/obj/item/clothing/head/flatcap
+	)

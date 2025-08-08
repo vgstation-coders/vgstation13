@@ -12,7 +12,7 @@ code\game\\dna\genes\goon_powers.dm
 
 	var/disabilities = 0 //bits
 	var/list/mutations = list() //mutation strings
-	duration = 100 //deciseconds
+	duration = 10 SECONDS
 
 
 /spell/targeted/genetic/cast(list/targets)
@@ -22,11 +22,16 @@ code\game\\dna\genes\goon_powers.dm
 			target.mutations.Add(x)
 		target.disabilities |= disabilities
 		target.update_mutations()	//update target's mutation overlays
+		var/mob/living/carbon/human/H = target
+		if(istype(H))
+			H.update_body()
 		spawn(duration)
 			for(var/x in mutations)
 				target.mutations.Remove(x)
 			target.disabilities &= ~disabilities
 			target.update_mutations()
+			if(istype(H))
+				H.update_body()
 	return
 
 /spell/targeted/genetic/blind
@@ -35,15 +40,15 @@ code\game\\dna\genes\goon_powers.dm
 	abbreviation = "BD"
 	specialization = SSOFFENSIVE
 	disabilities = 1
-	duration = 300
+	duration = 30 SECONDS
 
-	charge_max = 300
+	charge_cooldown_max = 30 SECONDS
 
 	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
 	invocation = "STI KALY"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	message = "<span class='danger'>Your eyes cry out in pain!</span>"
-	cooldown_min = 50
+	cooldown_min = 5 SECONDS
 
 	range = 7
 	max_targets = 1
@@ -53,8 +58,9 @@ code\game\\dna\genes\goon_powers.dm
 
 	hud_state = "wiz_blind"
 
-	price = 0.5 * Sp_BASE_PRICE //Half of the normal spell price
+	price = 0.5 * SP_BASE_PRICE //Half of the normal spell price
 	user_type = USER_TYPE_WIZARD
+	valid_targets = list(/mob/living/carbon) //Silicons don't have DNA
 
 /spell/targeted/genetic/mutate
 	name = "Mutate"
@@ -63,20 +69,27 @@ code\game\\dna\genes\goon_powers.dm
 	specialization = SSUTILITY
 
 	school = "transmutation"
-	charge_max = 400
+	charge_cooldown_max = 40 SECONDS
 	spell_flags = NEEDSCLOTHES | INCLUDEUSER
 	invocation = "BIRUZ BENNAR"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	message = "<span class='notice'>You feel strong!</span>"
 	range = 0
 	max_targets = 1
 
 	mutations = list(M_HULK)
-	duration = 300
-	cooldown_min = 300 //25 deciseconds reduction per rank
+	duration = 30 SECONDS
+	cooldown_min = 30 SECONDS //25 seconds reduction per rank
 
 	hud_state = "wiz_hulk"
 	user_type = USER_TYPE_WIZARD
+
+/spell/targeted/genetic/mutate/before_cast(list/targets, user, bypass_range)
+	var/mob/living/carbon/human/H = user
+	if(istype(H) && (M_HULK in H.mutations))
+		to_chat(user, "<span class='warning'>You are already a hulk!</span>")
+		return list()
+	return ..()
 
 /spell/targeted/genetic/mutate/highlander
 	name = "Become Highlander"
@@ -85,6 +98,15 @@ code\game\\dna\genes\goon_powers.dm
 	mutations = list(M_HULK)
 	message = "<span class='notice'>You feel powerful! Nobody can take you down! It's time to take some heads!</span>"
 	user_type = USER_TYPE_OTHER
+
+//The same check as the parent except with a different message
+/spell/targeted/genetic/mutate/highlander/before_cast(list/targets, user, bypass_range)
+	var/mob/living/carbon/human/H = user
+	if(istype(H) && (M_HULK in H.mutations))
+		to_chat(user, "<span class='warning'>You already cannot be stunned!</span>")
+		return list()
+	return ..()
+
 
 /spell/targeted/genetic/eat_weed
 	name = "Eat Weeds"

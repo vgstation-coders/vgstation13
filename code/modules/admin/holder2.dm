@@ -5,7 +5,7 @@ var/list/admin_datums = list()
 	var/client/owner	= null
 	var/rights = 0
 	var/fakekey			= null
-	var/admin_examine   = 1 //If on, allows the admin to see additional examine messages.
+	var/admin_examine   = 0 //If on, allows the admin to see additional examine messages.
 
 	var/datum/marked_datum
 	var/atom/marked_appearance //Reference to an atom or an image
@@ -36,6 +36,8 @@ var/list/admin_datums = list()
 		owner = C
 		owner.holder = src
 		owner.add_admin_verbs()	//TODO
+		if(C.byond_version >= 516 && C.holder.rights & R_DEBUG)
+			winset(C, null, list("browser-options"="+devtools"))
 		admins |= C
 		owner.verbs -= /client/proc/readmin
 

@@ -33,6 +33,8 @@ var/list/factions_with_hud_icons = list()
 	var/required_pref = ""
 	var/list/restricted_species = list()
 	var/list/members = list()
+	var/peak_member_amount = 0
+	var/role_peak_member_typefilter
 	var/max_roles = 0
 	var/accept_latejoiners = FALSE
 	var/datum/objective_holder/objective_holder
@@ -159,6 +161,9 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/CheckObjectives()
 	return objective_holder.GetObjectiveString(check_success = TRUE)
 
+/datum/faction/proc/OnLateArrival(mob/living/carbon/human/character, rank)
+	return
+
 /datum/faction/proc/GetScoreboard()
 	var/count = 1
 	var/score_results = ""
@@ -284,8 +289,13 @@ var/list/factions_with_hud_icons = list()
 	return dat
 
 /datum/faction/proc/process()
+	var/total
 	for (var/datum/role/R in members)
 		R.process()
+		if(!role_peak_member_typefilter || istype(R,role_peak_member_typefilter))
+			total++
+	if(total > peak_member_amount)
+		peak_member_amount = total
 
 /datum/faction/proc/stage(var/value)
 	stage = value
@@ -366,6 +376,8 @@ var/list/factions_with_hud_icons = list()
 		if(R.antag && R.antag.current && R.antag.current.client && R.antag.GetRole(R.id))//if the mind doesn't have access to the role, they shouldn't see the icons
 			for(var/datum/role/R_target in members)
 				if(R_target.antag && R_target.antag.current)
+					if(R.antag.current.loneliness_affected(R_target.antag.current,TRUE))
+						continue
 					var/imageloc = R_target.antag.current
 					if(istype(R_target.antag.current.loc,/obj/mecha))
 						imageloc = R_target.antag.current.loc

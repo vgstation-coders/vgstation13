@@ -5,6 +5,7 @@
 	icon = 'icons/obj/library.dmi'
 	due_date = 0 // Game time in 1/10th seconds
 	unique = 1   // 0 - Normal book, 1 - Should not be treated as normal book, unable to be copied, unable to be modified
+	var/id = 0
 
 /obj/item/weapon/book/manual/engineering_construction
 	name = "Station Repairs and Construction"
@@ -13,6 +14,7 @@
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Station Repairs and Construction"
 	wiki_page = "Guide_to_Construction"
+	id = 1
 
 /obj/item/weapon/book/manual/engineering_particle_accelerator
 	name = "Particle Accelerator User's Guide"
@@ -20,6 +22,7 @@
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Particle Accelerator User's Guide"
 //big pile of shit below.
+	id = 2
 
 	dat = {"<html>
 				<head>
@@ -63,6 +66,7 @@
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Hacking"
 	wiki_page = "Hacking"
+	id = 3
 
 /obj/item/weapon/book/manual/engineering_singularity_safety
 	name = "Singularity Safety in Special Circumstances"
@@ -70,7 +74,7 @@
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Singularity Safety in Special Circumstances"
 //big pile of shit below.
-
+	id = 4
 	dat = {"<html>
 				<head>
 				<style>
@@ -118,6 +122,7 @@
 	item_state = "book5"
 	author = "Farmer John"
 	title = "Growing Dionae and YOU! A book on growing your new best friends!"
+	id = 5
 	dat = {"<html>
 				<head>
 				<style>
@@ -152,6 +157,7 @@
 	author = "Medical Journal, volume 3"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Cloning techniques of the 26th century"
 	wiki_page = "Guide_to_Cloning"
+	id = 6
 
 /obj/item/weapon/book/manual/chemistry_manual
 	name = "Chemistry 101"
@@ -160,13 +166,14 @@
 	author = "SpaceChem Inc."
 	title = "Chemistry 101"
 	wiki_page = "Guide_to_Chemistry"
-
+	id = 7
 
 /obj/item/weapon/book/manual/ripley_build_and_repair
 	name = "APLU \"Ripley\" Construction and Operation Manual"
 	icon_state ="book"
 	author = "Weyland-Yutani Corp"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "APLU \"Ripley\" Construction and Operation Manual"
+	id = 8
 //big pile of shit below.
 
 	/*dat = {"<html>
@@ -243,6 +250,7 @@
 	icon_state = "rdbook"
 	author = "Dr. L. Ight"
 	title = "Research and Development 101"
+	id = 9
 	dat = {"<html>
 				<head>
 				<style>
@@ -293,6 +301,7 @@
 	icon_state = "borgbook"
 	author = "XISC"
 	title = "Cyborgs for Dummies"
+	id = 10
 	dat = {"<html>
 				<head>
 				<style>
@@ -498,6 +507,7 @@
 	author = "Nanotrasen"
 	title = "Space Law"
 	wiki_page = "Space_Law"
+	id = 11
 
 /obj/item/weapon/book/manual/security_antag_guide	//if you wanna edit, just copypaste the dat into https://www.w3schools.com/html/tryit.asp?filename=tryhtml_default
 	name = "Enemies of Nanotrasen: A Quick Overview"
@@ -506,6 +516,7 @@
 	item_state = "bookAntagGuide"
 	author = "Nanotrasen"
 	title = "Enemies of Nanotrasen: A Quick Overview"
+	id = 12
 	book_width = 692
 
 /obj/item/weapon/book/manual/security_antag_guide/New(turf/loc)
@@ -672,6 +683,7 @@
 	author = "Engineering Encyclopedia"
 	title = "Engineering Textbook"
 	wiki_page = "Guide_to_Engineering"
+	id = 13
 
 /obj/item/weapon/book/manual/rust
 	name = "R-UST User Manual"
@@ -679,6 +691,7 @@
 	author = "NanoTrasen"
 	title = "R-UST User Manual"
 	wiki_page = "R-UST"
+	id = 14
 
 /obj/item/weapon/book/manual/chef_recipes
 	name = "Chef Recipes"
@@ -687,6 +700,7 @@
 	author = "Lord Frenrir Cageth"
 	title = "Chef Recipes"
 	wiki_page = "Guide_to_Food_and_Drinks"
+	id = 15
 
 /obj/item/weapon/book/manual/barman_recipes
 	name = "Barman Recipes"
@@ -695,6 +709,7 @@
 	author = "Sir John Rose"
 	title = "Barman Recipes"
 	wiki_page = "Barman_recipes"
+	id = 16
 
 /obj/item/weapon/book/manual/detective
 	name = "The Film Noir: proper Procedures for Investigations"
@@ -703,6 +718,7 @@
 	author = "Nanotrasen"
 	title = "The Film Noir: proper Procedures for Investigations"
 	wiki_page = "Guide_to_Forensics"
+	id = 17
 
 /obj/item/weapon/book/manual/nuclear
 	name = "Fission Mailed: Nuclear Sabotage 101"
@@ -712,6 +728,7 @@
 	title = "Fission Mailed: Nuclear Sabotage 101"
 	wiki_page = "Nuclear_Agent"
 	forbidden = 2 // Only available to emagged terminals.
+	id = 18
 
 /obj/item/weapon/book/manual/ship_building
 	name = "Dummies guide to Interstellar Flight"
@@ -719,12 +736,14 @@
 	icon_state = "bookDummy"
 	author = "David Alcubierre"
 	wiki_page = "Ship_Building"
+	id = 19
 
 /obj/item/weapon/book/manual/mailing_guide
 	name = "Guide to disposal mailing system"
 	icon_state ="book"     // a proper icon would be nice
 	author = "Ulyanovsk Logistics Division"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Guide to disposal mailing system"
+	id = 20
 	dat = {"<html>
 				<head>
 				<style>
@@ -789,6 +808,7 @@
 	title = "A Crash Course in Virology"
 	book_width = 819
 	book_height = 516
+	id = 25
 	dat = {"<html>
 				<head>
 				<style>
@@ -987,6 +1007,7 @@ var/virology_encyclopedia = ""
 	author = "Frederick Chapman Montagnier"
 	title = "Symptom Encyclopedia"
 	dat = ""
+	id = 21
 	book_width = 819
 	book_height = 516
 
@@ -1094,6 +1115,7 @@ var/virology_encyclopedia = ""
 	item_state ="snow"
 	author = "The Abominable Snowman"
 	title = "Snow Survival Guide"
+	id = 22
 	wiki_page = "Guide_to_Snow_Map"
 	desc = "A guide to surviving on the surface of a snow planet. It even comes with a magnesium strip to ignite for emergency heating when applied to snow!</span>"
 
@@ -1113,3 +1135,610 @@ var/virology_encyclopedia = ""
 		L.bodytemperature = L.bodytemperature + 10 //This is enough to push someone from the edge of passing out to safe
 		to_chat(L, "<span class='warning'>You feel a jolt of warmth from the flash-incineration of \the [src].")
 	qdel(src)
+
+/obj/item/weapon/book/manual/engineering_supermatter_guide
+	name = "\improper Introduction to Supermatter: Delamination (Not) Imminent"
+	icon_state = "bookSupermatter"
+	item_state = "bookSupermatter"
+	author = "Ashley Burns"
+	title = "Introduction to Supermatter: Delamination (Not) Imminent"
+	id = 23
+	wiki_page = "Supermatter"
+
+/obj/item/weapon/book/manual/wheelstation_sme_guide
+	name = "\improper Engine technician's notes"
+	icon_state = "bookSupermatter2"
+	item_state = "bookSupermatter2"
+	author = "Eris Bay"
+	title = "Engine technician's notes"
+	id = 24
+	dat = {"<html>
+			<head>
+			<style>
+			h1 {font-size: 18px; margin: 15px 0px 5px;}
+			h2 {font-size: 15px; margin: 15px 0px 5px;}
+			li {margin: 2px 0px 2px 15px;}
+			ul {list-style: none; margin: 5px; padding: 0px;}
+			ol {margin: 5px; padding: 0px 15px;}
+			</style>
+			</head>
+			<body>
+			<h1>Working This Piece of Junk Legacy Engine</h1>
+
+			<p>
+			So you were assigned to ol' NSS Wheelstation? My condolences. By the time you arrive,
+			I'll have rotated off this spinning bagel of rust. I'm leaving you some notes on this
+			ancient relic we call an engine so you can hopefully get it operational before reserve
+			power runs out. Good luck.
+			<br><br>
+			- Eris Bay, Engine Technician
+			</p>
+
+			<h2>Cold-starting the Engine</h2>
+
+			<p>
+			You arrived to find the engine fresh off its scheduled maintenance and have no idea how to
+			get it running again? Follow these steps.
+			</p>
+
+			<p>
+			<ol>
+			<li><b>Check the shard:</b> Put on your mesons and go have a look. Is the shard in the chamber? If all you see is a crate, the maintenance technician must've been too lazy or too scared to take the shard out of its box. Hit the bolts
+			control button in the observation room to unlock the airlock, then go in the chamber and <u>CAREFULLY</u>
+			take the shard out of the crate and drag the crate out of the chamber. Remember that contrary to
+			what some of the old farts will tell you, leaving the crate in the chamber with the shard is
+			NOT up to code, and neither is leaving the doors unbolted after you're done.</li>
+			<li><b>Fill the coolant loops:</b> There are two pipes connected to canister connector ports in front of
+			the observation room: green and cyan. Green is the "hot loop" that is injected into the chamber,
+			and cyan is the closed "cold loop" connected to the cooling pipes in space. Put two cans of CO2 into
+			the green pipe, and two cans of plasma into the cyan pipe. Remember to turn the pumps up all the way!</li>
+			<li><b>Set the filters:</b> Set the two gas filters in the green loop to filter for CO2 and turn the
+			pressure up all the way. These will scrub out waste gases from the loop into the yellow canister,
+			which must be periodically switched out for an empty one.</li>
+			<li><b>Start the cooling system:</b> Switch the four volume pumps next to the thermoelectric generators
+			on to enable the cold loop circulators. Then walk over to the Coolant Control computer in the
+			observation room and turn on the injector and the vent, and set the injector's rate to its maximum
+			of 10000.</li>
+			<li><b>Wait for the gas to get moving:</b> The loop takes a bit to get going. You'll know it's working
+			when the circulators on the TEGs are spinning, and when the meter on the green pipe outside the SM
+			chamber reports a temperature under 200 Kelvin.</li>
+			<li><b>Turn on the emitters:</b> Turn on the emitters to start powering up the shard. If it's your first
+			time, turn them on one by one while observing engine conditions just to be safe.</li>
+			<li><b>Monitor:</b> Monitor the readouts on the supermatter monitor and Coolant Control computers to
+			ensure that the shard does not get hotter than 800 Kelvin.</li>
+			</ol>
+			</p>
+
+			<h2>Controlling the temperature</h2>
+
+			<p>
+			If the shard is getting too toasty, you have three ways to regulate its temperature.
+			</p>
+			<p>
+			<ol>
+			<li><b>Turn off emitters.</b> Less emitters means less energy going into the shard, means less heat.
+			This may not help if oxygen concentrations in the chamber are too high, as the shard can enter a
+			self-sustaining chain reaction in a high-oxygen atmosphere.</li>
+			<li><b>Hit the emergency cool-off.</b> Below the TEGs you'll find two digital valves. One of them is
+			labeled Emergency Cool-off. This connects the hot loop to heat exchangers connected to the cold loop,
+			which will rapidly cool it down. This will decrease power production drastically.</li>
+			<li><b>Bypass the circulators.</b> The other digital valve is labeled Emergency Circulator Bypass.
+			You need both valves open for this one to work. It bypasses the TEG circulators, which should improve
+			cold gas flow speed in the chamber at the cost of killing nearly all power production.</li>
+			</ol>
+			</p>
+
+			<h2>OH SHIT IT'S DELAMINATING!!</h2>
+
+			<p>
+			The computer just announced some scary stuff over the radio and now the crew is out for blood!
+			First off, don't panic. You probably have over ten minutes to fix the situation.
+			</p>
+			<p>
+			<ol>
+			<li><b>Turn off all the emitters.</b> This should be a nobrainer. You don't want to excite the shard
+			any more than it already is.</li>
+			<li><b>Check the monitor.</b> How unstable is the shard? Once instability hits 100%, it's game over.
+			How high is the instability rate? How hot is the shard?</li>
+			<li><b>Instability is low, the rate is low, and the shard isn't far above 800 K:</b> Try opening both cool-off valves below the TEG.
+			Run back to the monitors and see if the shard temperature is going down. If it is, and you expect
+			it to cool back down to 800 K before it delaminates, crisis is averted. If not, move on to the next
+			step.</li>
+			<li><b>Instability is high, or the rate is high, or the shard is hot:</b> VENT IT! Hit the emergency
+			vent button in the observation room to open shutters connecting the chamber to space.</li>
+			<li><b>I vented the chamber and it's still delaminating AAHHH!!:</b> Put on a hardsuit and magboots,
+			you're going in. Unbolt the chamber, turn on your magboots and CAREFULLY drag the shard out into space.
+			Do not walk into it or touch it. Once it's in space, it should immediately calm down. You can also
+			put it back in its box to calm it down.</li>
+			</ol>
+			</p>
+			</body>
+			</html>
+			"}
+
+/obj/item/weapon/book/manual/how_to_win_friends_and_influence_people_primer
+	name = "\improper A Primer on How to Win Friends and Influence People"
+	icon_state = "bookCarnegie"
+	item_state = "bookCarnegie"
+	author = "Dale Carnegie"
+	title = "A Primer on How to Win Friends and Influence People"
+	id = 25
+
+	dat = {"<html>
+	<body>
+	<p>
+	Who cares what you desire? I am worried about my own problems.The bank is foreclosing the mortage on my house, the bugs are destroying the hollyhocks, the stock market tumbled yesterday.
+	I missed the eight-fifteen this morning, I wasn't invited to the Jones's dance last night, the doctor tells me I have high blood pressure and neuritis and dandruff.
+	And then what happens? I come down to the office this morning worried, open my mail and here is some little whippersnapper off in New York yapping about what he wants. Bah!
+	If he only realized what sort of impression his letter makes, he would get out of the advertising business and start manufacturing sheep dip.
+	</p>
+
+	<p>
+	You are big and rich and right at the top, are you? So what?
+	I don't give two whoops in Hades if you are as big as General Motors and General Electric and the General Staff of the U.S. Army all combined.
+	If you had as much sense as a half-witted hummingbird, you would realize that I am interested in how big I am - not how big you are.
+	</p>
+
+	<p>
+	You desire! You desire. You unmitigated ass.
+	I'm not interested in what you desire or what the President of the United States desires.
+	Let me tell you once and for all that I am interested in what I desire - and you haven't said a word about that yet in this absurd letter of yours.
+	</p>
+
+	<p>
+	Any advertising man who is guilty of perpetrating such drivel as you have sent me has something wrong with his medulla oblongata.
+	You don't need a letter giving our latest doings.
+	What you need is a quart of iodine in your thyroid gland.
+	</p>
+	</body>
+	</html>
+	"}
+
+
+/obj/item/weapon/book/manual/engineering_fissionreactor_guide
+	name = "Fission Reactor User's Guide"
+	icon_state ="bookEngineering2"
+	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
+	title = "Fission Reactor User's Guide"
+	//big pile of shit below.
+	id = 26
+	dat= {"<html>
+<head>
+<style>
+h1{
+text-align:center;
+}
+.reactor_schematic{
+border-collapse:collapse;
+font-family:monospace;
+font-size:200%;
+}
+.reactor_schematic > * > tr{
+/*height:2em;*/
+}
+.reactor_schematic > * > * > td{
+/*width:2em;*/
+border:2px black solid;
+}
+.r_case{
+background-color:grey;
+}
+.r_port{
+background-color:DarkSlateGray;
+}
+.r_frod{
+background-color:red;
+}
+.r_crod{
+background-color:dodgerblue;
+}
+.r_cont{
+background-color:DarkViolet;
+}
+
+.byproduct_display{
+display:inline-block;
+width:20em;
+}
+
+.reagent_lead{
+display:inline-block;
+background-color:grey;
+color:white;
+}
+
+.reagent_plutonium{
+display:inline-block;
+background-color:burlywood;
+color:black;
+}
+
+.reagent_radium{
+display:inline-block;
+background-color:yellowgreen;
+color:black;
+}
+
+.reagent_radon{
+display:inline-block;
+background-color:orange;
+color:black;
+}
+
+.reagent_thalium{
+display:inline-block;
+background-color:MediumAquamarine;
+color:black;
+}
+
+.reagent_uranium{
+display:inline-block;
+background-color:darkolivegreen;
+color:white;
+}
+
+.reagent_thorium{
+display:inline-block;
+background-color:DarkSlateGray;
+color:white;
+}
+</style>
+</head>
+<body>
+	
+<h1>Fission Reactors: A Quick Guide</h1>	
+<p>
+Though often said to be old, outdated technology, fission power should not be underestimated. Even a modest reactor is capable of powering a medium-sized station for several hours with no upkeep, and the dismissal of fission technology has delayed the uncovering of more recent discoveries in material sciences which may have been known decades earlier.
+</p>
+
+<hr>
+<h2>What you'll need</h2>
+building a reactor is an expensive endeavor, costing a lot of both time and resources. For the most basic of reactor designs, here is the bare minimum needed to set one up and start generating power. Most of the materials are either provided in the starter kit, or should be available on-site.
+<ul>
+	<li>60 sheets of plasteel</li>
+	<li>42 metal rods</li>
+	<li>15 lengths of wire</li>
+	<li>3 mater bins</li>
+	<li>2 scanning modules</li>
+	<li>2 micro-manipulators</li>
+	<li>1 console screen</li>
+	<li>Fissile material and a fuel reservoir (provided in the starter kit)</li>
+	<li>Circuit boards for the controller, fuel rod, and control rod assemblies</li>
+	<li>Piping (partially included)</li>
+	<li>At least 1 thermoelectric generator (not included)</li>
+	<li>A welder, crowbar, screwdriver, wrench, and wirecutters (not included)</li>
+</ul>
+
+<b>Additionally</b>, to make a isotopic separational combiner (the machine used to fill and additionally recycle spent fuel) you will need the following materials (provided in the starter kit):
+<ul>
+	<li>5 sheets of metal</li>
+	<li>5 lengths of wire</li>
+	<li>2 matter bins</li>
+	<li>2 scanning modules</li>
+	<li>1 micro-manipulator</li>
+	<li>1 console screen</li>
+	<li>The associated circuitboard</li>
+	<li>Piping (not included)</li>
+</ul>
+<hr>
+<h2>How to construct the parts</h2>
+	<h3>Reactor Casing</h3>
+	<ol>
+		<li>Use 3 plasteel to construct a reactor casing frame in the desired location</li>
+		<li>Insert 4 metal rods inside of the frame</li>
+		<li>Use a screwdriver to fasten the rods</li>
+		<li>(Optional) Insert a straight pipe into the frame to make it a coolant port</li>
+		<li>(Optional) Use a crowbar to change the direction of the port</li>
+		<li>Install 2 plasteel sheets as external plating</li>
+		<li>Weld the external plating to the frame</li>
+	</ol>
+	
+	<h3>Control & Fuel Rod Assembly</h3>
+	<ol>
+		<li>Use 5 plasteel to construct a reinforced machine frame in the desired location</li>
+		<li>Add 5 lengths of wiring to the machine</li>
+		<li>Insert the corresponding circuit board</li>
+		<li>Insert 2 metal rods inside of the frame</li>
+		<li>Add a matter bin to the frame</li>
+		<li><b>If control rod:</b> Add a micro-manipulator<br><b>If fuel rod:</b> Add a scanning module</li>
+		<li>Use a screwdriver to finish assembly</li>
+	</ol>	
+	
+	<h3>Reactor Controller</h3>
+	<ol>
+		<li>Use 5 plasteel to construct a reinforced machine frame in the desired location</li>
+		<li>Add 5 lengths of wiring to the machine</li>
+		<li>Insert the circuit board</li>
+		<li>Insert 2 metal rods inside of the frame</li>
+		<li>Add a matter bin, micro-manipulator, scanning module, and a console screen to the frame</li>
+		<li>Use a screwdriver to finish assembly</li>
+	</ol>	
+	
+	<h3>Isotopic Separational Combiner</h3>
+	<ol>
+		<li>Use 5 metal to construct a machine frame in the desired location</li>
+		<li><ul><li>Do note that the gas port will face SOUTH relative to your station's orientation</li></ul></li>
+		<li>Add 5 lengths of wiring to the machine</li>
+		<li>Insert the circuitboard</li>
+		<li>Add a 2 matter bins, micro-manipulator, 2 scanning modules, and a console screen to the frame</li>
+		<li>Use a screwdriver to finish assembly</li>
+	</ol>
+
+<h2>Design Considerations</h2>	
+<p>
+The design of a nuclear reactor is very important. Build it wrong, and you may find yourself with a meltdown.
+
+	<h3>Casing</h3>
+	The casing of a reactor should include the whole perimeter of it, with no gaps. A reactor will leak radiation and coolant into the environment if a casing is removed during operation.
+	<h3>Coolant Ports</h3>
+	A reactor should have at least 2 ports: one for a coolant input, and another for output. Coolant ports can be placed at any point in the casing. Coolant ports simply equalize the pressure between the gas inside of the reactor and the pipe connected to it, meaning that pumps or vents are required to properly pass coolant through the reactor.
+	<h3>controller</h3>
+	A reactor can only have 1 controller to it, and must be placed at a corner of a reactor. The corner which it is placed at does not matter.
+	<h3>Fuel Rods</h3>
+	Fuel rods should be placed in the interior of the reactor. For each cardinally-adjacent fuel rod, a fuel rod will gain bonus power production without affecting fuel duration. Fuel duration is only affected by the number of fuel rod assemblies.
+	<h3>Control Rods</h3>
+	Control rods are able to affect fuel rods in every ordinal direction around them. If a control rod is not affecting a fuel rod, then the reaction in that rod cannot be stopped. It is recommended to have all fuel rods be controlled for safety reasons.
+	
+	
+
+	
+	
+	<h3>Example Designs</h3>
+	
+	<div style='border:2px black solid;background-color:LightSteelBlue;'>
+	<h3 style='text-decoration:underline;'>key</h3>
+	<ul style='list-style-type: none;font-size:1.5em;padding:0;margin:0;margin-bottom:2px;'>
+		<li><span class='r_case'>&nbsp;&nbsp;&nbsp;</span>casing</li>
+		<li><span class='r_cont'>&nbsp;&nbsp;&nbsp;</span>controller</li>
+		<li><span class='r_port'>&nbsp;&nbsp;&nbsp;</span>coolant port</li>
+		<li><span class='r_frod'>&nbsp;&nbsp;&nbsp;</span>fuel rod</li>
+		<li><span class='r_crod'>&nbsp;&nbsp;&nbsp;</span>control rod</li>
+	</ul>
+	</div>
+	
+	<br>
+	<table class='reactor_schematic'>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_crod'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_cont'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+		</tr>
+	</table>
+	<b>The starter</b>
+	<div>
+		Fuel rods: 1<br>
+		Control rods: 1 <br>
+		Fissile speed: 100%<br>
+		Fuel reactivity: 100%<br>
+	</div>
+	
+	<table class='reactor_schematic'>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_crod'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_cont'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+		</tr>
+	</table>
+	<b>The upgrade</b>
+	<div>
+		Fuel rods: 3<br>
+		Control rods: 1 <br>
+		Fissile speed: 300%<br>
+		Fuel reactivity: 700%<br>
+	</div>
+	
+		<table class='reactor_schematic'>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_crod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_crod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>		
+		<tr>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_crod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_crod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_frod'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+		<tr>
+			<td class='r_cont'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_port'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+			<td class='r_case'>&nbsp;&nbsp;</td>
+		</tr>
+	</table>
+	<b>For those up to the challenge</b>
+	<div>
+		Fuel rods: 32<br>
+		Control rods: 4 <br>
+		Fissile speed: 3200%<br>
+		Fuel reactivity: 12000%<br>
+	</div>
+</p>
+
+
+<h2>Standard Operation</h2>
+To avoid a catastrophic meltdown, a reactor must be monitored periodically to ensure that the temperature does NOT get too high.<br>
+Reactors can withstand temperatures up to 5500K, though the controller will activate a SCRAM protocol if the temperature exceeds 4500K. Once SCRAM is enabled, the control rods will be forced downwards and will remain down until the reactor has dropped below 1000K.<br>
+<sub>The autoSCRAM routine may be disabled in the controller options menu by an authenticated engineer. However, this practice is not endorsed by NanoTrasen, and the engineer assumes all liability for any damage to the station as a result of this.</sub>
+<br>
+Once your reactor is built, you will need to insert a fuel reservoir (one is provided in the starter kit). A reactor accepts only a single fuel reservoir, so it is encouraged to carefully prepare the fuel mixture beforehand in accordance to the design of the reactor.<br>
+Next, ensure that the coolant lines are operating as normal, and that there is adequate cooling for the output of your reactor. Too little cooling and it might overheat, but too much and it'll won't heat enough. Once this is verified, return to the controller, and raise the control rods. It is recommended that this is done gradually, so that the engineer operating it can determine how far it can be safely pushed.<br>
+<br>
+Should the controller ever become unresponsive, a crowbar can be used to pry open the shielding and remove the fuel reservoir. Do note that if the reactor is still undergoing fission, you will need to overcome the safety locks, and you will most likely receive a hefty dose of radiation, so some form of protection is advised when doing so, followed up by a hasty visit to the station's medical staff for an examination.<br>
+<br>
+Depending on a few factors, such as control rod insertion, construction, and fissile materials, a reactor will take between hours or tens of minutes to churn through a fuel reservoir. When this occurs, eject the spent reservoir, and replace it with a fresh one. If you are feeling unsatisfied with the current fuel mixture, the reservoir may be prematurely ejected.<br>
+Spent fuel contains a wide variety of fission byproducts, dependent on what was used in the fuel. Designing a fuel mixture involves a lot of compromises, between lifespan, power output, and fission products. Beginners are advised to stick to a mixture of pure uranium, as it is a very consistent source of power, and has a relatively long lifespan, which allows a reactor to be ran with little maintenance or worries.<br>
+Different sizes of fuel reservoirs exist, with the starter kit coming with a fairly small 30u rod. A standard 90u fuel reservoir can be constructed at the workplace, using 2 plasteel sheets and forming them into shape. Additionally, a large capacity, 210u reservoir can be ordered from your station's cargo department, though newer engineers are discouraged from using this, as the higher abundance of fuel can result in an unstable reactor prone to meltdowns; proper use will require a significant amount of modification to the piping to accommodate the much greater heat generation.<br>
+
+
+
+
+<h2>How to Disassemble</h2>
+	
+	<span style='font-weight:bold;color:red;font-size:125%;'>IMPORTANT: Before disassembling a reactor, drain all coolant first, and make sure that it is not currently undergoing fission. Failure to do so may result in injury, destruction of property, or even death.</span>
+
+	<h3>Reactor Casing</h3>
+	<ol>
+		<li>Use a welder to detach the external plating from the frame</li>
+		<li>Use a crowbar to pry off the plating from the frame</li>
+		<li>(Optional) Use a wrench to remove the piping if there is any</li>
+		<li>Use a screwdriver to loosen the internal rods</li>
+		<li>Use wirecutters to remove the rods</li>
+		<li>Use a wrench to disassemble the frame</li>
+	</ol>
+	
+	<h3>Control & Fuel Rod Assembly, Reactor controller</h3>
+	<ol>
+		<li>Use a welder to detach the external plating from the frame</li>
+		<li>Use a crowbar to remove the internal components from the frame</li>
+		<li>Use wirecutters to remove the wiring from the frame</li>
+		<li>Use a wrench to disassemble the frame</li>
+	</ol>	
+	
+	<h3>Isotopic separational combiner</h3>
+	<ol>
+		<li>Use a screwdriver to open the maintenance hatch</li>
+		<li>Use a crowbar to pry out the electronics</li>
+		<li>Use wirecutters to remove the wiring from the frame</li>
+		<li>Use a wrench to disassemble the frame</li>
+		
+	</ol>
+
+<h2>Other notes</h2>
+	If you unscrew the maintenance hatch of a fuel rod assembly, you can add 4 metal sheets to it. Doing so will make the assembly not give any bonuses for adjacent fuel rods. You can undo this by removing said sheets with a crowbar.<br>
+	Some compounds will transform upon irradiation into novel chemicals. Try experimenting to see what can be made.
+
+<br>
+<br>
+<h3><u>Table of Fuels:</u></h3>
+<table>
+<tr>
+	<th>Fuel</th>
+	<th>Heat generation (Watts per unit)</th>
+	<th>Lifetime (weighted average)</th>
+	<th>Byproducts</th>
+</tr>
+<tr>
+	<td class="reagent_uranium">Uranium</td>
+	<td>16,667</td>
+	<td>2h 30m</td>
+	<td class="byproduct_display"><span class="reagent_lead" style="width:30%;">Pb</span><span class="reagent_plutonium" style="width:20%;">Pu</span><span class="reagent_radium" style="width:25%;">Ra</span><span class="reagent_radon" style="width:15%;">Rn</span><span class="reagent_thalium" style="width:10%;">Tl</span></td>
+</tr>
+<tr>
+	<td class="reagent_plutonium">Plutonium</td>
+	<td>66,667</td>
+	<td>1h 15m</td>
+	<td class="byproduct_display"><span class="reagent_lead" style="width:50%;">Pb</span><span class="reagent_uranium" style="width:20%;">U</span><span class="reagent_radium" style="width:20%;">Ra</span><span class="reagent_radon" style="width:10%;">Rn</span></td>
+</tr>
+<tr>
+	<td class="reagent_radon">Radon</td>
+	<td>1,667</td>
+	<td>25m</td>
+	<td class="byproduct_display"><span class="reagent_lead" style="width:100%;">Pb</span></td>
+</tr>
+<tr>
+	<td class="reagent_thorium">Thorium</td>
+	<td>0</td>
+	<td>2h</td>
+	<td class="byproduct_display"><span class="reagent_uranium" style="width:55%;">U</span><span class="reagent_radon" style="width:25%;">Rn</span><span class="reagent_lead" style="width:10%;">Pb</span><span class="reagent_thalium" style="width:10%;">Tl</span></td>
+</tr>
+
+</table>
+	
+</body>
+</html>"}

@@ -6,12 +6,14 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "soap"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
 	siemens_coefficient = 0 //no conduct
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
 	flags = FPRINT | NO_ATTACK_MSG
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 /obj/item/weapon/soap/nanotrasen
 	desc = "A Nanotrasen brand bar of soap. Smells of plasma."
@@ -77,8 +79,8 @@
 			qdel(target)
 			on_successful_use(user)
 
-	else if(istype(target,/turf/simulated))
-		var/turf/simulated/T = target
+	else if(istype(target,/turf))
+		var/turf/T = target
 		var/list/cleanables = list()
 
 		for(var/obj/effect/decal/cleanable/CC in T)
@@ -94,34 +96,32 @@
 			if(CC.on_wall == target)
 				cleanables += CC
 
-		if (T.advanced_graffiti)
-			T.overlays -= T.advanced_graffiti_overlay
-			T.advanced_graffiti_overlay = null
-			qdel(T.advanced_graffiti)
-			cleanables += "advanced graffiti"
+		if (istype(T,/turf/simulated))
+			var/turf/simulated/ST=T
+			if(ST.advanced_graffiti)
+				ST.overlays -= ST.advanced_graffiti_overlay
+				ST.advanced_graffiti_overlay = null
+				qdel(ST.advanced_graffiti)
+				cleanables += "advanced graffiti"
 
 		if(!cleanables.len)
 			user.simple_message("<span class='notice'>You fail to clean anything.</span>",
 				"<span class='notice'>There is nothing for you to vandalize.</span>")
 			return
 		cleanables = shuffle(cleanables)
-		var/obj/effect/decal/cleanable/C
-		for(var/obj/effect/decal/cleanable/d in cleanables)
-			if(d && istype(d))
-				C = d
-				break
-		user.simple_message("<span class='notice'>You scrub \the [C.name] out.</span>",
+		var/obj/effect/decal/cleanable/C = pick(cleanables)
+		user.simple_message("<span class='notice'>You scrub \the [isatom(C) ? "[C.name]" : "decal"] out.</span>",
 			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
 		qdel(C)
 		on_successful_use(user)
 	else
 		user.simple_message("<span class='notice'>You clean \the [target.name].</span>",
 			"<span class='warning'>You [pick("deface","ruin","stain")] \the [target.name].</span>")
-		target.clean_blood()
+		target.clean_act(CLEANLINESS_SPACECLEANER)
 		on_successful_use(user)
 
 /obj/item/weapon/soap/attack(var/mob/target, var/mob/user)
 	if(target && user && ishuman(target) && !target.stat && !user.stat && user.zone_sel &&user.zone_sel.selecting == "mouth" )
-		user.visible_message("<span class='warning'>\the [user] washes \the [target]'s mouth out with soap!</span>")
+		user.visible_message("<span class='warning'>\The [user] washes \the [target]'s mouth out with soap!</span>")
 		return
 	..()

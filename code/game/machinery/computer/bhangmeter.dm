@@ -1,5 +1,5 @@
 var/list/bhangmeters = list()
-var/list/sensed_explosions = list()
+var/list/list/sensed_explosions = list()
 
 /*
 	/obj/machinery/computer/bhangmeter
@@ -85,7 +85,7 @@ var/list/sensed_explosions = list()
 
 	if( (holoMiniMaps.len < user.loc.z) || (holoMiniMaps[user.loc.z] == null ))
 		to_chat(user, "<span class='notice'>The holomap doesn't seem to be working.</span>")
-		var/datum/browser/popup = new(user, "\ref[src]", name, 600, 300, src)
+		var/datum/browser/popup = new(user, "\ref[src]", name, 650, 300, src)
 		popup.set_content(bhangmeterPanel())
 		popup.open()
 		return
@@ -123,7 +123,7 @@ var/list/sensed_explosions = list()
 
 /obj/machinery/computer/bhangmeter/interface_act(var/mob/i_user,var/action)
 	if(action == "Database")
-		var/datum/browser/popup = new(i_user, "\ref[src]", name, 600, 300, src)
+		var/datum/browser/popup = new(i_user, "\ref[src]", name, 650, 300, src)
 		popup.set_content(bhangmeterPanel())
 		popup.open()
 
@@ -151,6 +151,7 @@ var/list/sensed_explosions = list()
 		<h2 style="text-align:center">Bhangmeter Database ([thisZ.name])</h2>
 		<table>
 		<tr>
+		<th style="width:0.2%">#</th>
 		<th style="width:0.2%">Time</th>
 		<th style="width:1%">Area</th>
 		<th style="width:0.2%">Epicenter</th>
@@ -161,6 +162,7 @@ var/list/sensed_explosions = list()
 	var/sensed_list = ""
 	for (var/datum/sensed_explosion/SE in sensed_explosions["z[z]"])
 		var/SE_dat = {"<tr>
+				<td style="text-align:center">[SE.ID]</td>
 				<td style="text-align:center">[SE.time]</td>
 				<td style="text-align:center">[SE.area.name]</td>
 				<td style="text-align:center">([SE.x],[SE.y],[SE.z])</td>
@@ -263,6 +265,7 @@ var/list/sensed_explosions = list()
 #define BHANGMAP_COLOR_LIGHT		"#FF8800"
 
 /datum/sensed_explosion
+	var/ID
 	var/x
 	var/y
 	var/z
@@ -291,6 +294,7 @@ var/list/sensed_explosions = list()
 
 	explosion_icon = icon('icons/480x480.dmi', "blank")
 	sensed_explosions["z[z]"] += src
+	ID = "[z]-[add_zero(sensed_explosions["z[z]"].len,3)]"
 
 /datum/sensed_explosion/Destroy()
 	sensed_explosions["z[z]"] -= src

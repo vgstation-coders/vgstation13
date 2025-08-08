@@ -6,7 +6,6 @@
 /datum/butchering_product
 	var/obj/item/result
 	//What item this is for
-
 	var/verb_name
 	//Something like "skin", don't name this "Butcher" please
 
@@ -25,6 +24,9 @@
 	var/radial_icon = "radial_butcher"
 	//Icon in the radial menu
 
+	/// Optional name to use instead of the result name
+	var/product_name
+
 /datum/butchering_product/New()
 	..()
 
@@ -38,6 +40,9 @@
 //This is added to the description of dead mobs! It's important to add a space at the end (like this: "It has been skinned. ").
 /datum/butchering_product/proc/desc_modifier(mob/parent, mob/user) //User - the guy who is looking at Parent
 	return
+
+/datum/butchering_product/proc/get_product_name()
+	return product_name || result.name
 
 //==============Teeth============
 
@@ -242,17 +247,51 @@
 	if(amount < 8)
 		return "It only has [amount] [amount==1 ? "leg" : "legs"]. "
 
-//=============Alien claws========
 
-/datum/butchering_product/xeno_claw
-	result = /obj/item/xenos_claw
+/datum/butchering_product/spider_legs/sleeperclown
+	result = /obj/item/weapon/reagent_containers/food/snacks/meat/clownleg
+
+/datum/butchering_product/spider_legs/sleeperclown/New()
+	amount = rand(6,10) * 2 //yeah uhhh.. yeah. honk honk honk
+
+/datum/butchering_product/spider_legs/sleeperclown/spawn_result(location, mob/parent)
+	if (..() && amount % 2)
+		return new /obj/item/clothing/shoes/clown_shoes(location)
+
+/datum/butchering_product/spider_legs/sleeperclown/desc_modifier()
+	if(amount >= 8)
+		return "It has legs for days."
+	..()
+
+//=============Claws========
+
+/datum/butchering_product/claws
 	verb_name = "declaw"
 	verb_gerund = "declawing"
 	radial_icon = "radial_xclaw"
 
-/datum/butchering_product/xeno_claw/desc_modifier()
+/datum/butchering_product/claws/desc_modifier()
 	if(!amount)
 		return "Its claws have been cut off. "
+
+/datum/butchering_product/claws/xeno
+	result = /obj/item/xenos_claw
+
+/datum/butchering_product/claws/crab
+	product_name = "claws"
+	/// The path for subtypes
+	var/claw_path
+
+/datum/butchering_product/claws/crab/spawn_result(location, mob/parent)
+	while(amount > 0)
+		var/left_claw = text2path("/obj/item/organ/external/l_hand/crab[claw_path]")
+		var/right_claw = text2path("/obj/item/organ/external/r_hand/crab[claw_path]")
+		new left_claw(location)
+		new right_claw(location)
+		amount--
+
+/datum/butchering_product/claws/crab/megamad
+	claw_path = "/megamad"
 
 //======frog legs
 
@@ -263,6 +302,7 @@
 	radial_icon = "radial_fleg"
 	amount = 2 //not a magic number, frogs have 2 legs
 	butcher_time = 10
+
 
 /datum/butchering_product/frog_leg/desc_modifier()
 	if(amount < 2)
@@ -286,6 +326,10 @@
 
 /datum/butchering_product/hivelord_core/heart
 	result = /obj/item/organ/internal/heart/hivelord
+
+/datum/butchering_product/hivelord_core/sleeperclown
+	result = /obj/item/weapon/circuitboard/sleeper
+	butcher_time = 20
 
 //======deer head
 
@@ -422,12 +466,12 @@
 		if(H.organ_has_mutation(LIMB_HEAD, M_BEAK))
 			var/obj/item/mask = H.get_item_by_slot(slot_wear_mask)
 			if(!mask || !(mask.body_parts_covered & MOUTH)) //If our mask doesn't cover mouth, we can use our beak to help us while butchering
-				butchSpeed += 0.25
+				butchSpeed += 0.5
 				if(!toolName)
 					toolName = "beak"
 		if(H.organ_has_mutation(H.get_active_hand_organ(), M_CLAWS))
 			if(!istype(H.gloves))
-				butchSpeed += 0.25
+				butchSpeed += 0.5
 				if(!toolName)
 					toolName = "claws"
 	else

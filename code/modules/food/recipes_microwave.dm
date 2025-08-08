@@ -14,24 +14,29 @@
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/donut/normal
+	silver_slime_result = /obj/item/weapon/reagent_containers/food/snacks/donut/normal/frosted
 
 /datum/recipe/jellydonut
 	reagents = list(BERRYJUICE = 5, FLOUR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/donut/jelly
+	silver_slime_result = /obj/item/weapon/reagent_containers/food/snacks/donut/jelly/frosted
 
 /datum/recipe/jellydonut/slime
 	reagents = list(SLIMEJELLY = 5, FLOUR = 5)
 	result = /obj/item/weapon/reagent_containers/food/snacks/donut/slimejelly
+	silver_slime_result = /obj/item/weapon/reagent_containers/food/snacks/donut/slimejelly/frosted
 
 /datum/recipe/jellydonut/cherry
 	reagents = list(CHERRYJELLY = 5, FLOUR = 5)
 	result = /obj/item/weapon/reagent_containers/food/snacks/donut/cherryjelly
+	silver_slime_result = /obj/item/weapon/reagent_containers/food/snacks/donut/cherryjelly/frosted
 
 /datum/recipe/chaosdonut
 	reagents = list(FROSTOIL = 5, CAPSAICIN = 5, FLOUR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/donut/chaos
+	silver_slime_result = /obj/item/weapon/reagent_containers/food/snacks/donut/chaos/frosted
 
 /datum/recipe/bagel
 	reagents = list(FLOUR = 5)
@@ -102,6 +107,10 @@
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/clothing/head/beret)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mimeburger
+
+/datum/recipe/nothingburger
+	reagents = list(FLOUR = 5, NOTHING = 5)
+	result = /obj/item/weapon/reagent_containers/food/snacks/nothingburger
 
 /datum/recipe/donutburger
 	items = list(
@@ -179,6 +188,46 @@
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/polyp)
 	result = /obj/item/weapon/reagent_containers/food/snacks/polypburger
+
+/datum/recipe/blobburger
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/blob)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blobburger
+
+/datum/recipe/blobkabob
+	items = list(
+		/obj/item/stack/rods,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/blob,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/blob
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blobkabob
+
+/datum/recipe/blobpudding
+	reagents = list(SUGARS = 5, CREAM = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/blob)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blobpudding
+
+/datum/recipe/blobegg
+	reagents = list(BLOBANINE = 5, CREAM = 5, BLACKPEPPER = 1, SODIUMCHLORIDE = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blobegg
+
+/datum/recipe/blobsoup
+	reagents = list(FLOUR = 5, CREAM = 5, WATER = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/blob,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blobsoup
+
+/datum/recipe/blobvolcano
+	reagents = list(MUTAGEN = 10, NUTRIMENT = 10, MESCALINE = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/blob/core,
+	)
+	result = /obj/structure/blob_volcano
 
 /datum/recipe/jellyburger
 	reagents = list(CHERRYJELLY = 5, FLOUR = 15)
@@ -286,6 +335,12 @@
 		/obj/item/clothing/head/beret
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/mime
+
+/datum/recipe/sliders/nothing
+	priority = 1
+	reagents = list(FLOUR = 10, NOTHING = 10)
+	items = list()
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider/nothing
 
 /datum/recipe/sliders/slippery
 	reagents = list(FLOUR = 10, LUBE = 5)
@@ -431,6 +486,10 @@
 /datum/recipe/pancake
 	reagents = list(PANCAKE = 5)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pancake
+
+/datum/recipe/paincake
+	reagents = list(PAINCAKE = 5)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pancake/pain
 
 /datum/recipe/sugarcookie
 	reagents = list(FLOUR = 5, SUGARS = 5)
@@ -806,6 +865,7 @@
 /datum/recipe/popcorn
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/corn)
 	result = /obj/item/weapon/reagent_containers/food/snacks/popcorn
+	silver_slime_result = /obj/item/weapon/reagent_containers/food/snacks/popcorn/allpopped
 
 /datum/recipe/syntisteak
 	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
@@ -1117,6 +1177,7 @@
 	reagents = list(FLOUR = 10)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/plump_pie
+	silver_slime_result = /obj/item/weapon/reagent_containers/food/snacks/pie/plump_pie/perfect
 
 /datum/recipe/asspie
 	reagents = list(FLOUR = 10)
@@ -1329,6 +1390,7 @@
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet)
 	result = /obj/item/weapon/reagent_containers/food/snacks/plumphelmetbiscuit
+	silver_slime_result = /obj/item/weapon/reagent_containers/food/snacks/plumphelmetbiscuit/perfect
 
 /datum/recipe/chawanmushi
 	reagents = list(WATER = 5, SOYSAUCE = 5)
@@ -1379,6 +1441,7 @@
 /datum/recipe/wishsoup
 	reagents = list(WATER = 20)
 	result = /obj/item/weapon/reagent_containers/food/snacks/wishsoup
+	silver_slime_result = /obj/item/weapon/reagent_containers/food/snacks/wishsoup/perfect
 
 /datum/recipe/stew
 	reagents = list(WATER = 10)
@@ -1512,11 +1575,13 @@
 	reagents = list(ZAMMILD = 5, CREAM = 5)
 	items = list()
 	result = /obj/item/weapon/reagent_containers/food/snacks/mothershipbroth
+	silver_slime_result = /obj/item/weapon/reagent_containers/food/snacks/mothershipbroth/abducted
 
 /datum/recipe/mothershipbroth_spicy
 	reagents = list(ZAMSPICYTOXIN = 5, CREAM = 5)
 	items = list()
 	result = /obj/item/weapon/reagent_containers/food/snacks/mothershipbroth_spicy
+	silver_slime_result = /obj/item/weapon/reagent_containers/food/snacks/mothershipbroth_spicy/abducted
 
 /datum/recipe/cheesybroth
 	reagents = list(ZAMMILD = 5, CREAM = 5)
@@ -2036,7 +2101,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno
-	
+
 /datum/recipe/hotchips
 	reagents = list (SODIUMCHLORIDE = 2)
 	items = list(
@@ -2044,7 +2109,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/chili,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot
-	
+
 /datum/recipe/novachips
 	reagents = list (SODIUMCHLORIDE = 2, NOVAFLOUR = 2)
 	items = list(
@@ -2701,6 +2766,26 @@
 		/obj/item/stack/ore/glass,
 		)
 	result = /obj/item/claypot
+
+//I hate this please for the love of god someone enable microwaves to batch produce items
+/datum/recipe/waxcake
+	reagents = list(WAX = 5)
+	result = /obj/item/stack/sheet/wax
+/datum/recipe/waxcake_times_two
+	reagents = list(WAX = 10)
+	result = /obj/item/stack/sheet/wax/times_two
+/datum/recipe/waxcake_times_three
+	reagents = list(WAX = 15)
+	result = /obj/item/stack/sheet/wax/times_three
+/datum/recipe/waxcake_times_four
+	reagents = list(WAX = 20)
+	result = /obj/item/stack/sheet/wax/times_four
+/datum/recipe/waxcake_times_ten
+	reagents = list(WAX = 50)
+	result = /obj/item/stack/sheet/wax/times_ten
+/datum/recipe/waxcake_times_twenty
+	reagents = list(WAX = 100)
+	result = /obj/item/stack/sheet/wax/bigstack
 
 /datum/recipe/cinnamonroll
 	reagents = list(MILK = 5, SUGARS = 10, FLOUR = 5, CINNAMON = 5)
@@ -3743,3 +3828,19 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/roachesonstick
+
+/datum/recipe/sugarcube
+	reagents = list(SODIUMCHLORIDE = 10)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube
+	cookable_with = COOKABLE_WITH_MIXING
+
+/datum/recipe/saltcube
+	reagents = list(SUGARS = 10)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube
+	cookable_with = COOKABLE_WITH_MIXING
+
+/datum/recipe/trackingbacon
+	reagents = list(CORNOIL = 10, SODIUMCHLORIDE = 5) //fried, salted, and not actually bacon
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/telebacon

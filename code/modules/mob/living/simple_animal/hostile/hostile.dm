@@ -7,6 +7,7 @@
 	var/atom/target // /vg/ edit:  Removed type specification so spiders can target doors.
 	var/attack_same = 0 //Set us to 1 to allow us to attack our own faction, or 2, to only ever attack our own faction
 	var/ranged = 0
+	var/doubleshot = 0
 	var/rapid = 0
 	var/projectiletype
 	var/projectilesound
@@ -35,6 +36,7 @@
 	var/list/target_rules = list()
 
 	var/can_ventcrawl = FALSE // If the mob can ventcrawl
+	var/avoids_poisonous = FALSE
 	var/mob/living/simple_animal/hostile/asteroid/hivelord/hivelord = null
 
 /mob/living/simple_animal/hostile/New()
@@ -149,6 +151,8 @@
 	var/list/Targets = list()
 	var/Target
 	for(var/atom/A in ListTargets())
+		if (!isValidTarget(A))
+			break
 		if(Found(A))//Just in case people want to override targetting
 			var/list/FoundTarget = list()
 			FoundTarget += A
@@ -163,6 +167,15 @@
 
 /mob/living/simple_animal/hostile/proc/Found(var/atom/A)//This is here as a potential override to pick a specific target if available
 	return
+
+/mob/living/simple_animal/hostile/proc/isValidTarget(var/atom/A)//we should have made that proc long ago instead of expanding CanAttack()
+	if(istype(A,/mob/living/simple_animal))
+		var/mob/living/simple_animal/SA=A
+		if(SA.is_poisonous && avoids_poisonous )
+			return FALSE
+		if(SA.pacify_aura)
+			return FALSE
+	return !loneliness_affected(A)
 
 /mob/living/simple_animal/hostile/proc/PickTarget(var/list/Targets)//Step 3, pick amongst the possible, attackable targets
 	if(target != null)//If we already have a target, but are told to pick again, calculate the lowest distance between all possible, and pick from the lowest distance targets
@@ -213,6 +226,13 @@
 		for(var/datum/weakref/ref in friends)
 			if (ref.get() == L)
 				return 0
+		
+		//don't attack things which pacify (eg pillows or capybaras)
+		if(istype(L,/mob/living/simple_animal))
+			var/mob/living/simple_animal/SA = L
+			if (SA.pacify_aura)
+				return 0
+				
 		return 1
 	if(isobj(the_target))
 		//if(the_target.type in wanted_objects)
@@ -385,6 +405,11 @@
 			TryToShoot(target_turf, ttarget)
 			sleep(1)
 			TryToShoot(target_turf, ttarget)
+	if(doubleshot)
+		spawn()
+			TryToShoot(target_turf, ttarget)
+			sleep(1)
+			TryToShoot(target_turf, ttarget)
 	else
 		TryToShoot(target_turf, ttarget)
 
@@ -477,6 +502,7 @@
 					 /obj/structure/grille,
 					 /obj/structure/girder,
 					 /obj/structure/rack,
+					 /obj/structure/railing,
 					 /obj/machinery/door/window,
 					 /obj/item/tape,
 					 /obj/item/toy/balloon/inflated/decoy,

@@ -12,6 +12,7 @@
 	pass_flags = PASSTABLE
 	icon = 'icons/obj/library.dmi'
 	icon_state = "computer"
+	moody_state = "overlay_computer_old"
 
 	var/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", "Reference", "Religion")
 
@@ -32,36 +33,40 @@
 	if(!query)
 		return
 
-	var/searchquery = ""
-	if(query)
-		var/where = 0
-		if(query.title && query.title != "")
-//			to_chat(world, "\red query title ([query.title])")
-			searchquery += " WHERE title LIKE :query_title "
-			where = 1
-		if(query.author && query.author != "")
-//			to_chat(world, "\red query author ([query.author])")
-			searchquery += " [!where ? "WHERE" : "AND"] author LIKE :query_author "
-			where = 1
-		if(query.category && query.category != "")
-//			to_chat(world, "\red query category ([query.category])")
-			searchquery += " [!where ? "WHERE" : "AND"] category LIKE :query_category "
-			if(query.category == "Fiction")
-				searchquery += " AND category NOT LIKE '%Non-Fiction%' "
-			where = 1
+	var/list/arguments = list()
+	var/list/searchquery_parts = list()
 
+	if(query.title && query.title != "")
+//		to_chat(world, "\red query title ([query.title])")
+		searchquery_parts += "WHERE title LIKE :query_title"
+		arguments["query_title"] = "%[query.title]%"
+
+	if(query.author && query.author != "")
+//		to_chat(world, "\red query author ([query.author])")
+		searchquery_parts += "[searchquery_parts.len ? "AND" : "WHERE"] author LIKE :query_author"
+		arguments["query_author"] = "%[query.author]%"
+
+	if(query.categories && query.categories[1] != "")
+		var/list/in_placeholders = list()
+		for(var/i=1, i<=query.categories.len, i++)
+//		to_chat(world, "\red query category ([query.categories[i]])")
+			var/placeholder = ":query_category_[i]"
+			in_placeholders += placeholder
+			arguments["query_category_[i]"] = query.categories[i]
+		searchquery_parts += "[searchquery_parts.len ? "AND" : "WHERE"] category IN ([in_placeholders.Join(", ")])"
+
+	if(query.order_by && (query.order_by in list("author", "title", "category", "id")))
+//		to_chat(world, "\red query order_by ([query.order_by])")
+		var/option = query.descending ? "DESC" : "ASC"
+		searchquery_parts += "ORDER BY [query.order_by] [option]"
+
+	arguments["lim_inf"] = page_num * LIBRARY_BOOKS_PER_PAGE
+	arguments["lim_sup"] = LIBRARY_BOOKS_PER_PAGE
+
+	var/searchquery = searchquery_parts.Join(" ")
 	var/sql = "SELECT id, author, title, content, category, description, ckey FROM `[library_table]` [searchquery] LIMIT :lim_inf, :lim_sup"
 
-	//if(query)
-		//sql += " [query.toSQL()]"
-	// Pagination
-//	to_chat(world, sql)
-	var/datum/DBQuery/_query = SSdbcore.NewQuery(sql, list(
-		"query_title" = "%[query.title]%",
-		"query_author" = "%[query.author]%",
-		"query_category" = "%[query.category]%",
-		"lim_inf" = page_num * LIBRARY_BOOKS_PER_PAGE,
-		"lim_sup" = LIBRARY_BOOKS_PER_PAGE))
+	var/datum/DBQuery/_query = SSdbcore.NewQuery(sql, arguments)
 	_query.Execute()
 	if(_query.ErrorMsg())
 		world.log << _query.ErrorMsg()
@@ -122,3 +127,8 @@
 /obj/machinery/computer/library/cultify()
 	new /obj/structure/cult_legacy/tome(loc)
 	..()
+
+/obj/machinery/computer/library/proc/get_sort_arrow(var/column)
+	if(query.order_by == column)
+		return query.descending ? "↓" : "↑"
+	return ""

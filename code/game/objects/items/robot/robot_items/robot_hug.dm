@@ -97,7 +97,7 @@
 						user.visible_message("<span class='danger'>[user] shocks [M]. It does not seem to have an effect</span>", \
 							"<span class='danger'>You shock [M] to no effect.</span>")
 				playsound(loc, 'sound/effects/sparks2.ogg', 50, 1, -1)
-				user.cell.charge -= 500
+				use_cell_charge(user,500)
 				shock_cooldown = TRUE
 				spawn(2 SECONDS)
 				shock_cooldown = FALSE
@@ -112,7 +112,7 @@
 				playsound(loc, 'sound/weapons/crushhug.ogg', 50, 1, -1)
 				M.adjustBruteLoss(20)
 				add_logs(user, M, "crushed with \the [src]", admin = (user.ckey && M.ckey))
-				user.cell.charge -= 300
+				use_cell_charge(user,300)
 				crush_cooldown = TRUE
 				spawn(2 SECONDS)
 				crush_cooldown = FALSE

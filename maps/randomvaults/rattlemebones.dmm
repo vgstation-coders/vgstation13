@@ -118,7 +118,7 @@
 /obj/item/clothing/under/pirate,
 /obj/item/clothing/accessory/medal/gold,
 /obj/item/clothing/suit/armor/vest/piratelord,
-/obj/item/clothing/glasses/thermal/eyepatch,
+/obj/item/clothing/glasses/hud/thermal/eyepatch,
 /obj/item/clothing/head/helmet/piratelord,
 /turf/simulated/floor/wood,
 /area/vault/rattlemebones)

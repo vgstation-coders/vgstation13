@@ -73,14 +73,33 @@
 
 	var/mute_time = 0
 
+	var/datum/paint_overlay/paint_overlay = null
+
+	var/list/footstep_sound = list()
+	var/list/footstep_sound_barefoot = list()
+	var/list/footstep_sound_claw = list()
+
+	//reagent stuff
+	var/list/turf_reagents = list() //a list of reagent ids, associated with their relative amount. eg WATER=1 these numbers should sum to 1, though.
+	var/reagent_interaction_flags = 0
+	var/turf_reagent_amount = null // null = do not make any reagents and skip the code
+	var/turf_reagent_method = TOUCH
+	var/turf_reagents_limited = null // if a non-null value, will treat it as a limited resivoir and will drain by reducing this number.
+	var/turf_reagents_temp = 0 //this uses strange reagent temperature stuff. i don't know what kind of unit method it's using but it's here regardless.
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
 		to_chat(user, "It has [bullet_marks > 1 ? "some holes" : "a hole"] in it.")
+	if(locate(/obj/effect/ash) in src)
+		to_chat(user, "It is covered in ashes.")
 
 /turf/proc/process()
 	set waitfor = FALSE
 	universe.OnTurfTick(src)
+	if((reagent_interaction_flags & TURF_REAGENT_PROCESS))
+		for(var/mob/M in contents)
+			GiveReagentsTo(M)
 
 /turf/initialize()
 	..()
@@ -104,6 +123,8 @@
 	return 0
 
 /turf/Exit(atom/movable/mover, atom/target)
+	if(reagent_interaction_flags & TURF_REAGENT_EXIT)
+		GiveReagentsTo(mover)
 	return TRUE
 
 /turf/Exited(atom/movable/mover, atom/newloc)
@@ -116,6 +137,8 @@
 		for(var/atom/movable/AM in src)
 			if(!AM.Cross(mover))
 				return FALSE
+	if(reagent_interaction_flags & TURF_REAGENT_ENTER)
+		GiveReagentsTo(mover)
 
 /turf/Entered(atom/movable/A as mob|obj, atom/OldLoc)
 	if(movement_disabled)
@@ -125,8 +148,17 @@
 	//THIS IS OLD TURF ENTERED CODE
 	var/loopsanity = 100
 
+
+
+	var/obj/A_obj = A
 	if(!src.has_gravity())
 		inertial_drift(A)
+	else if(istype(A_obj))
+		var/obj/effect/overlay/puddle/ice/this_puddle = locate(/obj/effect/overlay/puddle/ice) in src
+		if(!this_puddle || !A_obj.last_move)
+			A.inertia_dir = 0
+		else
+			A.process_inertia_ignore_gravity(src)
 	else
 		A.inertia_dir = 0
 
@@ -141,6 +173,8 @@
 			if(Obj.flags & PROXMOVE)
 				spawn( 0 )
 					Obj.HasProximity(A, 1)
+	if (ishuman(A) && paint_overlay)
+		paint_overlay.add_paint_to_feet(A)
 	// THIS IS NOW TRANSIT STUFF
 	if ((!(A) || src != A.loc))
 		return
@@ -162,11 +196,11 @@
 				if(B.is_locking(B.mob_lock_type))
 					contents_brought += recursive_type_check(B)
 
-			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
+			var/locked_to_current_z = FALSE//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
 
 			var/datum/zLevel/ZL = map.zLevels[z]
 			if(ZL.transitionLoops)
-				locked_to_current_z = z
+				locked_to_current_z = TRUE
 
 			var/obj/item/weapon/disk/nuclear/nuclear = locate() in contents_brought
 			if(nuclear)
@@ -187,7 +221,7 @@
 			for(var/mob/living/L in contents_brought)
 				if(L.locked_to_z != 0)
 					if(src.z == L.locked_to_z)
-						locked_to_current_z = map.zMainStation
+						locked_to_current_z = TRUE
 					else
 						to_chat(L, "<span class='warning'>You find your way back.</span>")
 						move_to_z = L.locked_to_z
@@ -247,7 +281,7 @@
 
 /turf/proc/is_plating()
 	return 0
-/turf/proc/can_place_cables()
+/turf/proc/can_place_cables(var/override_space = FALSE)
 	return is_plating()
 /turf/proc/is_asteroid_floor()
 	return 0
@@ -266,6 +300,8 @@
 /turf/proc/is_slime_floor()
 	return 0
 /turf/proc/is_mineral_floor()
+	return 0
+/turf/proc/is_plated_catwalk()
 	return 0
 /turf/proc/return_siding_icon_state()		//used for grass floors, which have siding.
 	return 0
@@ -301,12 +337,13 @@
 
 //Creates a new turf
 /turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+	var/area/original_area=loc
 	if(loc)
 		var/area/A = loc
 		A.area_turfs -= src
 	if (!N || !allow)
 		return
-
+	remove_particles()
 	var/datum/gas_mixture/env
 
 	var/old_opacity = opacity
@@ -333,6 +370,10 @@
 	if(N == /turf/space)
 		for(var/obj/effect/decal/cleanable/C in src)
 			qdel(C)//enough with footprints floating in space
+
+	if(!istype(N, /turf/simulated))
+		for(var/obj/effect/overlay/puddle/ice/P in src)
+			qdel(P)
 
 	//Rebuild turf
 	var/turf/T = src
@@ -417,8 +458,17 @@
 	registered_events = old_registered_events
 	if(density != old_density)
 		densityChanged()
+	if(istype(loc,/area/surface/jungle) && !istype(original_area,/area/surface/jungle) ) //outdoor areas need to be illuminated.
+		if(.)
+			var/turf/NewTurf=.
+			NewTurf.affecting_lights=list()
+			NewTurf.lighting_clear_overlay()
+			NewTurf.lighting_build_overlay()
+			NewTurf.set_light(SSDayNight.next_light_range,SSDayNight.next_light_power,SSDayNight.current_timeOfDay)
 
-/turf/proc/AddDecal(const/image/decal)
+
+
+/turf/proc/AddDecal(var/image/decal)
 	if(!turfdecals)
 		turfdecals = new
 
@@ -488,7 +538,7 @@
 	for(var/dir in cardinal)
 		T = get_step(src, dir)
 		if(istype(T) && !T.density)
-			if(!LinkBlockedWithAccess(src, T, ID))
+			if(!LinkBlockedWithAccess(T, src, ID))
 				L.Add(T)
 	return L
 
@@ -577,6 +627,9 @@
 		return
 	ChangeTurf(get_base_turf(src.z))
 
+/turf/proc/decultify()
+	update_icon()
+
 /turf/proc/clockworkify()
 	return
 
@@ -647,7 +700,7 @@
 	I.alpha = 128
 	// Since holomaps are overlays of the turf
 	// This'll make them always be just above the turf and not block interaction.
-	I.plane = FLOAT_PLANE + 1 //Yes, there's a define equal to this value, but what we specifically want here is one plane above the parent, which is what this means.
+	I.plane = OBJ_PLANE
 	// When I said above turfs I mean it.
 	I.layer = HOLOMAP_LAYER
 
@@ -713,6 +766,20 @@
 /turf/proc/remove_rot()
 	return
 
+/turf/attackby(var/obj/item/I, var/mob/user)
+	//if you're using this and it's not triggering, ensure your turf is calling ..() properly
+	if(turf_reagent_amount!=null && (reagent_interaction_flags & TURF_REAGENT_FILLS_CONTAINERS) && istype(I,/obj/item/weapon/reagent_containers))
+		to_chat(user,"<span class='notice'>You fill \the [I] from \the [src]</span>")
+		var/obj/item/weapon/reagent_containers/RC=I
+		for(var/RID in turf_reagents)
+			RC.reagents.add_reagent(RID,turf_reagents[RID]*RC.amount_per_transfer_from_this)
+		if(turf_reagents_limited!=null)
+			turf_reagents_limited-=RC.amount_per_transfer_from_this
+			if(turf_reagents_limited<=0)
+				OnEmptyReagents()
+		return TRUE
+	return ..()
+
 //Pathnode stuff
 
 /turf/proc/FindPathNode(var/id)
@@ -723,3 +790,43 @@
 	if (!PathNodes)
 		PathNodes = list()
 	PathNodes["[id]"] = PN
+
+/turf/clean_act(var/cleanliness)
+	..()
+	if (cleanliness >= CLEANLINESS_BLEACH)
+		remove_paint_overlay(TRUE)
+
+//reagent things
+
+/turf/proc/GiveReagentsTo(var/atom/A)
+	if(!A)
+		return
+	if(turf_reagent_amount==null)
+		return
+
+	for(var/RID in turf_reagents)
+		var/datum/reagent/D = chemical_reagents_list[RID]
+		if(D)
+			var/datum/reagent/R = new D.type()
+			R.volume = turf_reagent_amount * turf_reagents[RID]
+			R.adj_temp = turf_reagents_temp
+
+			if (ismob(A))
+				var/mob/M=A
+				if( (!(M.flags & INVULNERABLE)) || (reagent_interaction_flags & TURF_REAGENT_INGORES_INVULNERABLE) )
+					if (isanimal(A))
+						R.reaction_animal(A, turf_reagent_method , turf_reagent_amount)
+					else
+						R.reaction_mob(A, turf_reagent_method , turf_reagent_amount, ALL_LIMBS)
+			else if ( istype(A,/obj/machinery) || istype(A,/obj/item)  || istype(A,/obj/structure) )
+				R.reaction_obj(A, turf_reagent_amount)
+
+			qdel(R)
+
+	if(turf_reagents_limited!=null)
+		turf_reagents_limited-=turf_reagent_amount
+		if(turf_reagents_limited<=0)
+			OnEmptyReagents()
+
+/turf/proc/OnEmptyReagents()
+	turf_reagent_amount = null

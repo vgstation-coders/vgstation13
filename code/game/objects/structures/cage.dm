@@ -34,6 +34,13 @@
 		toggle_door() //Open it
 		toggle_door() //Close it again!
 
+/obj/structure/cage/autoclose/no_cover
+	name = "cage (coverless)"
+	desc = "A large and heavy plasteel box, used to store dangerous animals and humans. This cage has no cover, so keep your distance from the beast contained within."
+
+/obj/structure/cage/autoclose/no_cover/toggle_cover(mob/user)
+	return
+
 /obj/structure/cage/autoclose/cover/New()
 	..()
 

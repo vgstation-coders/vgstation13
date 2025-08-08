@@ -1,16 +1,50 @@
-/mob/verb/up()
+/mob/proc/up()
 	set name = "Move Upwards"
 	set category = "IC"
 
 	if(zMove(UP))
 		to_chat(src, "<span class='notice'>You move upwards.</span>")
 
-/mob/verb/down()
+/mob/proc/down()
 	set name = "Move Down"
 	set category = "IC"
 
 	if(zMove(DOWN))
 		to_chat(src, "<span class='notice'>You move down.</span>")
+
+/mob/proc/lookup()
+	set name = "Look Up"
+	set category = "IC"
+
+	if(HasAbove(src.z))
+		var/turf/T = GetAbove(src)
+		if(client.eye == T)
+			lookup_reset_view()
+		else if(T && isvisiblespace(T))
+			reset_view(GetAbove(src))
+			to_chat(src, "<span class='notice'>You look upwards.</span>")
+			register_event(/event/moved, src, nameof(src::lookup_reset_view()))
+		else
+			to_chat(src, "<span class='warning'>You see nothing but the ceiling.</span>")
+	else
+		to_chat(src, "<span class='warning'>You don't feel like doing that.</span>")
+
+/mob/proc/update_multi_z_verbs(mob/user, to_z, from_z)
+	if(HasAbove(src.z))
+		verbs += /mob/proc/up
+		verbs += /mob/proc/lookup
+	else
+		verbs -= /mob/proc/up
+		verbs -= /mob/proc/lookup
+	if(HasBelow(src.z))
+		verbs += /mob/proc/down
+	else
+		verbs -= /mob/proc/down
+
+/mob/proc/lookup_reset_view(atom/movable/mover)
+	unregister_event(/event/moved, src, nameof(src::lookup_reset_view()))
+	reset_view()
+	to_chat(src, "<span class='notice'>You stop looking up.</span>")
 
 /mob/proc/zMove(direction)
 	//if(eyeobj) This probably belongs in AIMove
@@ -109,7 +143,7 @@
 
 	if(Process_Spacemove())
 		return 1
-	
+
 	if(flying)
 		return 1
 
@@ -134,13 +168,13 @@
 
 	if(flying)
 		return 1
-	
+
 	if(module) // Finally, jetpacks allow it
 		for(var/obj/item/weapon/tank/jetpack/J in module.modules)
 			if(J && istype(J, /obj/item/weapon/tank/jetpack))
 				if(J.allow_thrust(0.01, src))
 					return 1
-	
+
 /* Same as above, hull scaling discussion pending
 
 	for(var/turf/simulated/T in trange(1,src)) //Robots get "magboots"

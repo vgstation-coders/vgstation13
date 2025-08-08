@@ -17,10 +17,10 @@
 	if(isobserver(usr) && !isAdminGhost(usr) && !holder.haunted)
 		return TRUE
 
-/datum/arcade_game/proc/import_data(var/list/args)
-	if(!args || !args["arcade_type"])
+/datum/arcade_game/proc/import_data(var/list/arguments)
+	if(!arguments || !arguments["arcade_type"])
 		return 0
-	if(args["arcade_type"] != type)
+	if(arguments["arcade_type"] != type)
 		return 0
 	return 1
 
@@ -39,6 +39,8 @@
 	return 0
 
 /datum/arcade_game/proc/emag_act(mob/user)
+	if(holder)
+		holder.name = name
 
 /datum/arcade_game/proc/emp_act(var/severity)
 
@@ -130,23 +132,23 @@
 				"arcade_type" = type,
 				)
 
-/datum/arcade_game/space_villain/import_data(var/list/args)
+/datum/arcade_game/space_villain/import_data(var/list/arguments)
 	if(!..())
 		return
-	name = args["name"]
-	emagged = args["emagged"]
-	enemy_name = args["enemy_name"]
-	temp = args["temp"]
-	player_hp = args["player_hp"]
-	player_max_hp = args["player_max_hp"]
-	player_mp = args["player_mp"]
-	player_max_mp = args["player_max_mp"]
-	enemy_hp = args["enemy_hp"]
-	enemy_max_hp = args["enemy_max_hp"]
-	enemy_mp = args["enemy_mp"]
-	enemy_max_mp = args["enemy_max_mp"]
-	gameover = args["gameover"]
-	blocked = args["blocked"]
+	name = arguments["name"]
+	emagged = arguments["emagged"]
+	enemy_name = arguments["enemy_name"]
+	temp = arguments["temp"]
+	player_hp = arguments["player_hp"]
+	player_max_hp = arguments["player_max_hp"]
+	player_mp = arguments["player_mp"]
+	player_max_mp = arguments["player_max_mp"]
+	enemy_hp = arguments["enemy_hp"]
+	enemy_max_hp = arguments["enemy_max_hp"]
+	enemy_mp = arguments["enemy_mp"]
+	enemy_max_mp = arguments["enemy_max_mp"]
+	gameover = arguments["gameover"]
+	blocked = arguments["blocked"]
 
 /datum/arcade_game/space_villain/get_dat()
 	var/dat = "<a href='byond://?src=\ref[src];close=1'>Close</a>"
@@ -467,6 +469,7 @@
 	return 0
 
 /datum/arcade_game/space_villain/emag_act(mob/user)
+	..()
 	if(is_cheater(user))
 		return
 

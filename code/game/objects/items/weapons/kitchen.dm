@@ -104,8 +104,7 @@
 
 /obj/item/weapon/kitchen/utensil/spoon/New()
 	..()
-	reagents = new(10)
-	reagents.my_atom = src
+	create_reagents(10)
 
 /obj/item/weapon/kitchen/utensil/spoon/examine(mob/user)
 	..()
@@ -119,11 +118,11 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/plated_food = snack
 		if (plated_food.ingredients.len)
 			var/obj/item/weapon/reagent_containers/food/snacks/ingredient = pick(plated_food.ingredients)
-			newcolor = ingredient.filling_color != "#FFFFFF" ? ingredient.filling_color : AverageColor(getFlatIcon(ingredient, ingredient.dir, 0), 1, 1)
+			newcolor = ingredient.filling_color != "#FFFFFF" ? ingredient.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(ingredient)), override_dir = ingredient.dir), 1, 1)
 		else
-			newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIcon(snack, snack.dir, 0), 1, 1)
+			newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)), override_dir = snack.dir), 1, 1)
 	else
-		newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIcon(snack, snack.dir, 0), 1, 1)
+		newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)), override_dir = snack.dir), 1, 1)
 	food_overlay.color = newcolor
 	overlays += food_overlay
 
@@ -186,10 +185,10 @@
 	icon_state = "pspoon"
 	force = 1
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 	bendable = FALSE
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
+	flammable = TRUE
 
 /*
  * Sporks
@@ -207,8 +206,7 @@
 
 /obj/item/weapon/kitchen/utensil/spork/New()
 	..()
-	reagents = new(10)
-	reagents.my_atom = src
+	create_reagents(10)
 
 /obj/item/weapon/kitchen/utensil/spork/examine(mob/user)
 	..()
@@ -223,11 +221,11 @@
 			var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/plated_food = snack
 			if (plated_food.ingredients.len)
 				var/obj/item/weapon/reagent_containers/food/snacks/ingredient = pick(plated_food.ingredients)
-				newcolor = ingredient.filling_color != "#FFFFFF" ? ingredient.filling_color : AverageColor(getFlatIcon(ingredient, ingredient.dir, 0), 1, 1)
+				newcolor = ingredient.filling_color != "#FFFFFF" ? ingredient.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(ingredient)), override_dir = ingredient.dir), 1, 1)
 			else
-				newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIcon(snack, snack.dir, 0), 1, 1)
+				newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)), override_dir = snack.dir), 1, 1)
 		else
-			newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIcon(snack, snack.dir, 0), 1, 1)
+			newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)), override_dir = snack.dir), 1, 1)
 		food_overlay.color = newcolor
 		overlays += food_overlay
 	else
@@ -235,11 +233,11 @@
 		if (istype(snack, /obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom))
 			var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/plated_food = snack
 			if (plated_food.ingredients.len)
-				food_to_load = getFlatIcon(pick(plated_food.ingredients)) // So the plate doesn't appear on the fork
+				food_to_load = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(pick(plated_food.ingredients)))) // So the plate doesn't appear on the fork
 			else
-				food_to_load = getFlatIcon(snack)
+				food_to_load = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)))
 		else
-			food_to_load = getFlatIcon(snack)
+			food_to_load = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)))
 		food_to_load.Scale(16,16)
 		food_overlay = image(food_to_load)
 		food_overlay.pixel_x = 8 * PIXEL_MULTIPLIER + pixel_x
@@ -289,9 +287,17 @@
 	desc = "Plork!"
 	icon_state = "pspork"
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
+
+/obj/item/weapon/kitchen/utensil/spork/plastic/teflon
+	name = "teflon spork"
+	desc = "Tlork!"
+	icon_state = "tspork"
+
+/obj/item/weapon/kitchen/utensil/spork/plastic/teflon/dissolvable()
+	return FALSE
 
 /*
  * Forks
@@ -308,8 +314,7 @@
 
 /obj/item/weapon/kitchen/utensil/fork/New()
 	..()
-	reagents = new(10)
-	reagents.my_atom = src
+	create_reagents(10)
 
 /obj/item/weapon/kitchen/utensil/fork/attack(var/mob/living/carbon/M, var/mob/living/carbon/user)
 	if(!istype(M) || !istype(user))
@@ -363,11 +368,11 @@
 	if (istype(snack, /obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom))
 		var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/plated_food = snack
 		if (plated_food.ingredients.len)
-			food_to_load = getFlatIcon(pick(plated_food.ingredients)) // So the plate doesn't appear on the fork
+			food_to_load = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(pick(plated_food.ingredients)))) // So the plate doesn't appear on the fork
 		else
-			food_to_load = getFlatIcon(snack)
+			food_to_load = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)))
 	else
-		food_to_load = getFlatIcon(snack)
+		food_to_load = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)))
 	food_to_load.Scale(16,16)
 	food_overlay = image(food_to_load)
 	food_overlay.pixel_x = 8 * PIXEL_MULTIPLIER + pixel_x
@@ -379,7 +384,7 @@
 	desc = "Yay, no washing up to do."
 	icon_state = "pfork"
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
 
@@ -388,14 +393,14 @@
 	desc = "Less likely to dissolve when picking up a forkful of mothership stew."
 	icon_state = "tfork"
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 
 /*
  * Knives
  */
 /obj/item/weapon/kitchen/utensil/knife
 	name = "small knife"
-	desc = "A round tipped knife used to cut food food."
+	desc = "A round tipped knife used to cut food."
 	icon_state = "smallknife"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 5.0
@@ -424,7 +429,7 @@
 	throwforce = 1
 	sharpness = 0.8
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
 
@@ -478,22 +483,25 @@
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
-			to_chat(user, "You slice the handle off of \the [src].")
-			WT.playtoolsound(user, 50)
-			if(src.loc == user)
-				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/metal_blade/I = new (get_turf(user))
-				user.put_in_hands(I)
-			else
-				new /obj/item/weapon/metal_blade(get_turf(src.loc))
-			qdel(src)
-			return
+			user.create_in_hands(src, /obj/item/weapon/metal_blade, msg = "You slice the handle off of \the [src].")
 
 /obj/item/weapon/kitchen/utensil/knife/large/ritual
 	name = "ritual knife"
 	desc = "The unearthly energies that once powered this blade are now dormant."
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "render"
+
+/obj/item/weapon/kitchen/utensil/knife/large/ritual/attack(var/mob/living/target, var/mob/living/carbon/human/user)
+	if (iscultist(user) && !iscultist(target) && !target.isDead())
+		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+		if (target.mind)
+			C.gain_devotion(30, DEVOTION_TIER_3, "attack_ritualknife", target)
+		else
+			C.gain_devotion(30, DEVOTION_TIER_2, "attack_ritualknife_nomind", target)
+	..()
+
+/obj/item/weapon/kitchen/utensil/knife/large/ritual/cultify()
+	return
 
 /*
  * Butcher's cleaver
@@ -554,11 +562,7 @@
 			H.attack_log += "\[[time_stamp()]\] Was chopped up into meat by <b>\the [key_name(M)]</b>"
 			user.attack_log += "\[[time_stamp()]\] Chopped up <b>\the [key_name(H)]</b> into meat</b>"
 			msg_admin_attack("\The [key_name(user)] chopped up \the [key_name(H)] into meat (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-			if(!iscarbon(user))
-				H.LAssailant = null
-			else
-				H.LAssailant = user
-				H.assaulted_by(user)
+			H.assaulted_by(user)
 			qdel(H)
 		return TRUE
 
@@ -570,52 +574,46 @@
 	name = "rolling pin"
 	desc = "Used to knock out the Bartender."
 	icon_state = "rolling_pin"
-	hitsound = "sound/weapons/smash.ogg"
+	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
 	force = 8
 	throwforce = 10
 	throw_speed = 2
 	throw_range = 7
 	w_class = W_CLASS_MEDIUM
-	autoignition_temperature=AUTOIGNITION_WOOD
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	attack_verb = list("bashes", "batters", "bludgeons", "thrashes", "whacks") //I think the rollingpin attackby will end up ignoring this anyway.
 
 /obj/item/weapon/kitchen/rollingpin/attack(mob/living/M as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
-		to_chat(user, "<span class='warning'>The [src] slips out of your hand and hits your head.</span>")
+		to_chat(user, "<span class='warning'>\The [src] slips out of your hand and hits your head.</span>")
 		user.take_organ_damage(10)
 		user.Paralyse(2)
 		return
-	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
-	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 
 	log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to attack [M.name] ([M.ckey])</font>")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 
 	var/t = user.zone_sel.selecting
 	if (t == LIMB_HEAD)
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-			if (H.stat < 2 && H.health < 50 && prob(90))
-				// ******* Check
-				if (istype(H, /obj/item/clothing/head) && H.flags & 8 && prob(80))
+			if(H.stat < DEAD && H.health < 50 && prob(90))
+				if ((H.head && istype(H.head, /obj/item/clothing/head/helmet)) && prob(80))
 					to_chat(H, "<span class='warning'>The helmet protects you from being hit hard in the head!</span>")
 					return
 				var/time = rand(2, 6)
-				if (prob(75))
+				if (prob(75) && !H.stat && !(M.status_flags & BUDDHAMODE))
+					user.do_attack_animation(H, src)
+					user.visible_message("<span class='danger'><B>[H] has been knocked unconscious!</B>", "<span class='warning'>You knock [H] unconscious!</span></span>")
+					playsound(H, 'sound/effects/bonk.ogg', 75)
 					H.Paralyse(time)
+					H.stat = UNCONSCIOUS
+					return
 				else
-					H.Stun(time)
-				if(H.stat != 2)
-					H.stat = 1
-				user.visible_message("<span class='danger'><B>[H] has been knocked unconscious!</B>", "<span class='warning'>You knock [H] unconscious!</span></span>")
-				return
-			else
+					H.eye_blurry += 3
+			if(H.stat < UNCONSCIOUS)
 				H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")
-				H.eye_blurry += 3
 	return ..()
 
 /*
@@ -673,11 +671,7 @@
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 
 		log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to attack [M.name] ([M.ckey])</font>")
-		if(!iscarbon(user))
-			M.LAssailant = null
-		else
-			M.LAssailant = user
-			M.assaulted_by(user)
+		M.assaulted_by(user)
 
 		if(prob(15))
 			M.Knockdown(3)
@@ -869,3 +863,19 @@
 /obj/item/weapon/tray/proc/whoops()
 	playsound(src, "trayhit", 35, 1)
 	send_items_flying()
+
+
+/obj/item/weapon/kitchen/canopener
+	name = "can opener"
+	desc = "Open soda cans in style."
+	icon_state = "can_opener"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	force = 7
+	w_class = W_CLASS_TINY
+	throwforce = 5
+	throw_speed = 3
+	throw_range = 5
+	flags = FPRINT
+	siemens_coefficient = 1
+	origin_tech = Tc_MATERIALS + "=1"
+	attack_verb = list("attacks", "stabs", "pokes")

@@ -1077,7 +1077,7 @@
 /turf/unsimulated/floor/evil,
 /area/awaymission/hive)
 "ep" = (
-/obj/item/weapon/invisible_spray,
+/obj/item/weapon/syndie_spray/invisible_spray,
 /turf/unsimulated/floor/evil/breathing,
 /area/awaymission/hive)
 "eq" = (
@@ -1999,7 +1999,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan,
 /obj/item/trash/pistachios,
 /obj/item/trash/plate,
-/obj/item/clothing/glasses/thermal/eyepatch,
+/obj/item/clothing/glasses/hud/thermal/eyepatch,
 /obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"

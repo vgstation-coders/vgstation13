@@ -6,7 +6,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 2000, MAT_GLASS = 500, MAT_URANIUM = 500)
 	category = "Misc"
-	build_path = /obj/item/weapon/gun/energy/floragun
+	build_path = /obj/item/floral_somatoray
 
 /datum/design/janicart_upgrade
 	name = "Janicart Upgrade Module"
@@ -26,6 +26,16 @@
 	build_path = /obj/item/weapon/reagent_containers/chempack
 	req_tech = list(Tc_ENGINEERING = 5, Tc_MATERIALS = 3, Tc_BLUESPACE = 3)
 	materials = list(MAT_GLASS = 8000, MAT_IRON=2000)
+	category = "Misc"
+
+/datum/design/high_roller
+	name = "High Roller"
+	desc = "A large two-handed paint roller that can cover floors and walls in paint much quicker than with a regular paint roller. Although you can use it to spread any reagent."
+	id = "high_roller"
+	build_type = PROTOLATHE
+	build_path = /obj/item/high_roller
+	req_tech = list(Tc_ENGINEERING = 2, Tc_MATERIALS = 3)
+	materials = list(MAT_IRON=18750)
 	category = "Misc"
 
 /datum/design/mannequin_frame
@@ -67,6 +77,26 @@
 	req_tech = list(Tc_MATERIALS = 2, Tc_BIOTECH = 2, Tc_PROGRAMMING = 2)
 	materials = list(MAT_GLASS = 500, MAT_IRON = 1000)
 	category = "Misc"
+
+/datum/design/library_scanner
+	name = "Barcode Scanner"
+	desc = "Used in registering books for checkin/checkout and longterm archive."
+	id = "libscanner"
+	build_type = PROTOLATHE
+	build_path = /obj/item/weapon/barcodescanner
+	req_tech = list(Tc_PROGRAMMING = 1)
+	materials = list(MAT_GLASS = 300, MAT_IRON = 500)
+	category = "Misc"
+
+/datum/design/lockbox
+	name = "Empty Lockbox"
+	desc = "An empty lockbox with pre installed access electronics."
+	id = "lockbox"
+	req_tech = list(Tc_MATERIALS = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_PLASMA = 1000, MAT_IRON = 1875)
+	category = "Misc"
+	build_path = /obj/item/weapon/storage/lockbox/unlockable
 
 /datum/design/dses
 	name = "Deep Space Exploration System"
@@ -146,4 +176,4 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_DIAMOND = 500)
 	category = "Misc"
-	build_path = /obj/item/clothing/glasses/regular/tracking
+	build_path = /obj/item/clothing/glasses/hud/tracking

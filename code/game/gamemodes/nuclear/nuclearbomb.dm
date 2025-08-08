@@ -153,7 +153,7 @@ var/list/nuclear_bombs = list()
 		<A href='?src=\ref[src];type=4'>4</A>-<A href='?src=\ref[src];type=5'>5</A>-<A href='?src=\ref[src];type=6'>6</A><BR>\n
 		<A href='?src=\ref[src];type=7'>7</A>-<A href='?src=\ref[src];type=8'>8</A>-<A href='?src=\ref[src];type=9'>9</A><BR>\n
 		<A href='?src=\ref[src];type=R'>R</A>-<A href='?src=\ref[src];type=0'>0</A>-<A href='?src=\ref[src];type=E'>E</A><BR>\n</TT>"}
-		user << browse(dat, "window=nuclearbomb;size=300x400")
+		user << browse(HTML_SKELETON(dat), "window=nuclearbomb;size=300x400")
 		onclose(user, "nuclearbomb")
 	else if (src.deployable)
 		if(removal_stage < 5)
@@ -285,6 +285,7 @@ var/list/nuclear_bombs = list()
 	return
 
 #define NUKERANGE 120
+var/area/nuked_area
 /obj/machinery/nuclearbomb/proc/explode(var/sound = TRUE)
 	if (src.safety)
 		src.timing = 0
@@ -302,6 +303,7 @@ var/list/nuclear_bombs = list()
 
 	var/off_station = 0
 	var/turf/bomb_location = get_turf(src)
+	nuked_area = bomb_location.loc
 	explosion(bomb_location, 30, 60, 120, 120, 10)
 	if( bomb_location && (bomb_location.z == map.zMainStation) )
 		var/map_center_x = world.maxx * 0.5
@@ -378,7 +380,7 @@ var/list/nuclear_bombs = list()
 		for(A=src, A && A.loc && !isturf(A.loc), A=A.loc);  // semicolon is for the empty statement
 		message_admins("\The [src] ended up in nullspace somehow, and has been replaced.[loc ? " It was contained in [A] when it was nullspaced." : ""]")
 		qdel(src)
-	if(T.z != map.zMainStation && T.z != map.zCentcomm)
+	if(T.z != map.zMainStation && T.z != map.zCentcomm && T.z != map.zAdditionalStationZlevel)
 		var/atom/A
 		for(A=src, A && A.loc && !isturf(A.loc), A=A.loc);  // semicolon is for the empty statement
 		message_admins("\The [src] ended up in a non-authorised z-Level somehow, and has been replaced.[loc ? " It was contained in [A] when it was moved." : ""]")

@@ -45,7 +45,7 @@
 				dat += "<br><br><A href='?src=\ref[src];betraitor=1'>\"[pick("I want to switch teams.", "I want to work for you.", "Let me join you.", "I can be of use to you.", "You want me working for you, and here's why...", "Give me an objective.", "How's the 401k over at the Syndicate?")]\"</A><BR>"
 	dat += temptext
 	dat += "</body>"
-	user << browse(dat, "window=syndbeacon")
+	user << browse(HTML_SKELETON(dat), "window=syndbeacon")
 	onclose(user, "syndbeacon")
 
 /obj/machinery/syndicate_beacon/Topic(href, href_list)
@@ -85,7 +85,7 @@
 			if (!reason)
 				temptext = ""
 				return
-			message_admins("[key_name(M)] wants to join the Syndicate by using a an already used syndicate beacon. [reason ? "Cover e-mail: [reason]" : "They didn't make a case for themselves."]. (<a href='?_src_=holder;syndbeaconpermission=1;syndbeacon=\ref[src];user=\ref[M];answer=1'>ACCEPT</a>/<a href='?_src_=holder;syndbeaconpermission=1;syndbeacon=\ref[src];user=\ref[M];answer=2'>DENY</a>/<a href='?_src_=holder;syndbeaconpermission=1;syndbeacon=\ref[src];user=\ref[M];answer=3'>DESTROY BEACON</a>)")
+			message_admins("[key_name(M)] wants to join the Syndicate by using an already used syndicate beacon. [reason ? "Cover e-mail: [reason]" : "They didn't make a case for themselves."]. (<a href='?_src_=holder;syndbeaconpermission=1;syndbeacon=\ref[src];user=\ref[M];answer=1'>ACCEPT</a>/<a href='?_src_=holder;syndbeaconpermission=1;syndbeacon=\ref[src];user=\ref[M];answer=2'>DENY</a>/<a href='?_src_=holder;syndbeaconpermission=1;syndbeacon=\ref[src];user=\ref[M];answer=3'>DESTROY BEACON</a>)")
 
 			temptext = "<i>Currently awaiting decision from the HR department...</i><br>"
 			updateUsrDialog()

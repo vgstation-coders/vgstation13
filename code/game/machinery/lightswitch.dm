@@ -1,6 +1,9 @@
 // the light switch
 // can have multiple per area
 // can also operate on non-loc area through "otherarea" var
+
+var/list/obj/machinery/light_switch/lightswitches = list()
+
 /obj/machinery/light_switch
 	name = "light switch"
 	desc = "It turns lights on and off. What are you, simple?"
@@ -8,43 +11,39 @@
 	icon_state = "light1"
 	anchored = 1.0
 	var/buildstage = 2
-	var/on = 1
+	var/on = 0
 	var/image/overlay
+	var/area/controlled_area
 
 /obj/machinery/light_switch/supports_holomap()
 	return TRUE
 
 /obj/machinery/light_switch/New(var/loc, var/ndir, var/building = 2)
 	..()
-	var/area/this_area = get_area(src)
-	name = "[this_area.name] light switch"
+	controlled_area = get_area(src)
+	name = "[controlled_area.name] light switch"
 	buildstage = building
-	this_area.haslightswitch = TRUE
+	controlled_area.haslightswitch = TRUE
+	lightswitches += src
+	controlled_area.lightswitches += src
 	if(!buildstage)
 		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER)
 		pixel_y = (ndir & 3)? (ndir ==1 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER) : 0
 		dir = ndir
 	updateicon()
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_lightswitch")
 	add_self_to_holomap()
 
-/obj/machinery/light_switch/proc/updateicon()
-	if(!overlay)
-		overlay = image(icon, "light1-overlay")
-		overlay.plane = ABOVE_LIGHTING_PLANE
-		overlay.layer = ABOVE_LIGHTING_LAYER
+/obj/machinery/light_switch/Destroy()
+	lightswitches -= src
+	controlled_area.lightswitches -= src
+	..()
 
-	overlays.Cut()
+/obj/machinery/light_switch/proc/updateicon()
 	if((stat & (FORCEDISABLE|NOPOWER)) || buildstage != 2)
 		icon_state = "light-p"
-		set_light(0)
 	else
 		icon_state = on ? "light1" : "light0"
-		overlay.icon_state = "[icon_state]-overlay"
-		overlays += overlay
-		//If the lightswitch itself is in total darkness, even the overlay won't render, so we gotta light up the lightswitch just a tiny bit.
-		//...which, sadly, thanks to goonlights means "oops we have to softlight up the entire 3x3 around the lightswitch because we can't handle one-tile lights anymore"
-		//Maybe vis-contents will bring a more elegant solution when we support them?
-		set_light(1, 0.5, on ? "#82ff4c" : "#f86060")
 
 /obj/machinery/light_switch/examine(mob/user)
 	..()
@@ -114,28 +113,32 @@
 /obj/machinery/light_switch/attack_hand(mob/user)
 	toggle_switch()
 
-/obj/machinery/light_switch/proc/toggle_switch(var/newstate = null, var/playsound = TRUE)
-	if(buildstage != 2)
+/obj/machinery/light_switch/proc/toggle_switch(var/newstate = null, var/playsound = TRUE, var/non_instant = TRUE)
+	if(on == newstate)
 		return
-
 	if(isnull(newstate))
 		on = !on
-	else if(on != newstate)
-		on = newstate
 	else
+		on = newstate
+
+	if(buildstage != 2)
 		return
 
 	if(playsound)
 		playsound(src,'sound/misc/click.ogg',30,0,-1)
 
-	var/area/this_area = get_area(src)
-	this_area.updateicon()
+	if(controlled_area)
+		controlled_area.lightswitches -= src
+	controlled_area = get_area(src)
+	controlled_area.lightswitches |= src
+	controlled_area.updateicon()
 
-	for(var/obj/machinery/light_switch/L in this_area)
+	for(var/obj/machinery/light_switch/L in controlled_area.lightswitches)
 		L.on = on
 		L.updateicon()
 
-	this_area.power_change()
+	for(var/obj/machinery/L2 in controlled_area.lights)
+		L2.power_change(non_instant)
 
 /obj/machinery/light_switch/power_change()
 	if(powered(LIGHT))

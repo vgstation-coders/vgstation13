@@ -6,22 +6,22 @@
 #define PRO_AUTOPSY_SCAN	"Autopsy Scan"
 
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro
-	name = "Health Analyzer Pro"
+	name = "Health Analyzer Pro F2"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	icon = 'icons/obj/device.dmi'
-	icon_state = "adv_health"
+	icon_state = "adv_health_folded"
 	item_state = "healthanalyzer"
-	desc = "A hand-held body scanner able to precisely distinguish vital signs of the subject. This particular device is an experimental model outfitted with several modules that fulfill the roles of common scanning tools, memory function to record last made scan and a printer."
+	desc = "A hand-held body scanner able to precisely distinguish vital signs of the subject. This particular device is an experimental model outfitted with several modules that fulfill the roles of common scanning tools, memory function to record last made scan and a printer. And it folds up, too!"
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	throwforce = 5
-	w_class = W_CLASS_MEDIUM
+	w_class = W_CLASS_SMALL
 	throw_speed = 4
 	starting_materials = list(MAT_IRON = 700, MAT_PLASTIC = 200, MAT_URANIUM = 50, MAT_SILVER = 50, MAT_GOLD = 50)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_MAGNETS + "=4;" + Tc_BIOTECH + "=4"
 	attack_delay = 0
 	var/last_scantime = 0
@@ -30,11 +30,13 @@
 	var/list/modes = list(PRO_HEALTH_SCAN, PRO_HEALTH_SCAN_SIMPLE, PRO_BODY_SCAN, PRO_REAGENT_SCAN, PRO_IMMUNE_SCAN, PRO_AUTOPSY_SCAN)
 	var/obj/item/device/antibody_scanner/immune
 	var/last_print
+	var/folded = TRUE
+	var/folding = FALSE
 
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>Current active mode: [mode].</span>")
-
+	to_chat(user, "<span class='info'>[(folded ? "It is currently folded up." : "Current active mode: [mode].")]</span>")
+	
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro/verb/toggle_mode()
 	set name = "Switch mode"
 	set src in usr
@@ -45,8 +47,28 @@
 	last_scantime = 0
 
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro/AltClick()
+	if(folded)
+		to_chat(usr, "<span class='warning'>Unfold it first!</span>")
+		return
 	if(usr.is_holding_item(src))
 		toggle_mode()
+		
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/CtrlClick(mob/living/user)
+	read_log(user)
+
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/proc/fold_scanner()
+	if(usr.is_holding_item(src))
+		if(do_after(usr, src, 1 SECONDS))
+			usr.playsound_local(usr, (folded ? 'sound/misc/cartridge_in.ogg' : 'sound/misc/cartridge_out.ogg'), 30, 0, 30000, TRUE, 0, FALSE)	
+			if(folded)
+				usr.playsound_local(usr, 'sound/machines/HAPF2.ogg', 30, 0, 30000, TRUE, 0, FALSE)
+				flick("adv_health_start", src)
+			folded = !folded
+			icon_state = "adv_health[folded ? "_folded" : ""]"
+			to_chat(usr, "<span class='info'>You [(folded ? "fold" : "unfold")] \the [src].</span>")
+			w_class = (folded ? W_CLASS_SMALL : W_CLASS_MEDIUM)
+			update_icon()
+	folding = FALSE
 
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro/print_data() //verb from autopsy scanner changed to work differently here
 	var/mob/user = usr
@@ -63,7 +85,7 @@
 		to_chat(user, "<span class='warning'>Printing energy spent, please wait a moment.</span>")
 		return
 
-	visible_message("<span class='warning'>\the [src] rattles and prints out a sheet of paper.</span>", 1)
+	visible_message("<span class='warning'>\The [src] rattles and prints out a sheet of paper.</span>", 1)
 	last_print = world.time
 	sleep(1 SECONDS)
 	var/obj/item/weapon/paper/R = new(loc)
@@ -78,28 +100,42 @@
 	if(user.hallucinating())
 		hallucinate_scan(L,user)
 		return
-	switch(mode)
-		if(PRO_HEALTH_SCAN, PRO_HEALTH_SCAN_SIMPLE)
-			health_scan(L,user)
-		if(PRO_BODY_SCAN)
-			if(istype(L,/mob/living/carbon/human))
-				body_scan(L,user)
-		if(PRO_AUTOPSY_SCAN)
-			if(istype(L,/mob/living/carbon/human))
-				autopsy_scan(L,user)
+	if(folded)
+		health_scan(L,user)
+	else
+		switch(mode)
+			if(PRO_HEALTH_SCAN, PRO_HEALTH_SCAN_SIMPLE)
+				health_scan(L,user)
+			if(PRO_BODY_SCAN)
+				if(istype(L,/mob/living/carbon/human))
+					body_scan(L,user)
+			if(PRO_AUTOPSY_SCAN)
+				if(istype(L,/mob/living/carbon/human))
+					autopsy_scan(L,user)
 	add_fingerprint(user)
 
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro/preattack(atom/O, mob/user) //snowlakes
-	switch(mode)
-		if(PRO_REAGENT_SCAN)
-			reagent_scan(O,user)
-		if(PRO_IMMUNE_SCAN)
-			immune_scan(O,user)
+	if(!folded)
+		switch(mode)
+			if(PRO_REAGENT_SCAN)
+				reagent_scan(O,user)
+			if(PRO_IMMUNE_SCAN)
+				immune_scan(O,user)
 	add_fingerprint(user)
 
-/obj/item/weapon/autopsy_scanner/healthanalyzerpro/attack_self(mob/living/user)
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/attack_self(mob/living/user) //this just folds it now
 	if(..())
 		return
+	if(!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return
+	if(!folding)
+		folding = TRUE
+		fold_scanner()
+	else
+		to_chat(user, "<span class='warning'>You're already fiddling with it.</span>")
+
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/proc/read_log(mob/living/user) //old attack_self is a verb now
 	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
@@ -107,7 +143,7 @@
 		if(!user.hallucinating())
 			to_chat(user, "<span class='bnotice'>Accessing Prior Scan Result</span>")
 			if(mode == PRO_AUTOPSY_SCAN || mode == PRO_BODY_SCAN)
-				user << browse(last_reading, "window=borerscan;size=430x600")
+				user << browse(HTML_SKELETON(last_reading), "window=borerscan;size=430x600")
 			else
 				to_chat(user, last_reading)
 		else
@@ -125,7 +161,7 @@
 
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro/proc/health_scan(mob/living/M, mob/living/user)
 	var/scan_detail
-	if(mode == PRO_HEALTH_SCAN)
+	if(folded || mode == PRO_HEALTH_SCAN)
 		scan_detail = 1
 	else
 		scan_detail = 0
@@ -165,7 +201,7 @@
 			to_chat(user, "<span class='warning'>Insuffient data retrieved. Please ensure that subject has proper surgical incisions.</span>")
 		else
 			to_chat(user, "<span class='info'>Autopsy analysis of [M] concluded.</span>")
-			user << browse(dat, "window=borerscan;size=430x600")
+			user << browse(HTML_SKELETON(dat), "window=borerscan;size=430x600")
 			last_reading = dat
 			last_scantime = world.time
 
@@ -189,7 +225,7 @@
 		to_chat(user, "<span class='info'>Showing medical statistics of [M]...</span>")
 		var/dat
 		dat = format_occupant_data(get_occupant_data(M),1) //basic scan in unupgraded body analyzer
-		user << browse(dat, "window=borerscan;size=430x600")
+		user << browse(HTML_SKELETON(dat), "window=borerscan;size=430x600")
 		last_reading = dat
 		last_scantime = world.time
 	return

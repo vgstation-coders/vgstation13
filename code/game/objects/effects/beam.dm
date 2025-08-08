@@ -40,7 +40,7 @@
 	var/full_damage = 0//The damage dealth when charged_up
 	var/damage_type=BURN
 
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
+	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE | PASSRAILING
 
 	// The first beam object
 	var/obj/effect/beam/master = null

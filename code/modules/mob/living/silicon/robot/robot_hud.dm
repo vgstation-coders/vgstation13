@@ -2,16 +2,15 @@
 	handle_sensor_modes()
 
 	regular_hud_updates() //Handles MED/SEC HUDs for borgs.
-	switch(sensor_mode)
-		if(SEC_HUD)
-			process_sec_hud(src, 1)
-		if(MED_HUD)
-			process_med_hud(src)
+
+	handle_vision_effect_updates()
+
+	check_dark_vision()
 
 	handle_health_hud()
 
-	if(cell)
-		var/cellcharge = cell.charge/cell.maxcharge
+	if(get_cell())
+		var/cellcharge = get_cell_charge_fraction()
 		switch(cellcharge)
 			if(0.5 to INFINITY)
 				clear_alert(SCREEN_ALARM_ROBOT_CELL)

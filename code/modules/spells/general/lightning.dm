@@ -4,18 +4,19 @@
 	desc = "Strike an enemy with a bolt of lightning."
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
-	charge_max = 100
-	cooldown_min = 40
-	cooldown_reduc = 30
+	charge_cooldown_max = 10 SECONDS
+	cooldown_min = 4 SECONDS
+	cooldown_reduc = 3 SECONDS
 
-	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0)
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3, Sp_POWER = 3) //each level of power grants 1 additional target.
+	spell_levels = list(SP_SPEED = 0, SP_POWER = 0)
+	level_max = list(SP_TOTAL = 3, SP_SPEED = 3, SP_POWER = 3) //each level of power grants 1 additional target.
 
 	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
-	charge_type = Sp_RECHARGE
+	charge_type = SP_RECHARGE
 	invocation = "ZAP MUTHA FUH KA"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	hud_state = "wiz_zap"
+	valid_targets = list(/mob/living,/obj/machinery/bot,/obj/mecha)
 
 	var/basedamage = 50
 	var/bounces = 0
@@ -25,37 +26,33 @@
 	var/multicast = 1
 	var/zapzap = 0
 	var/lastbumped = null
+	var/hit_valid_target = FALSE //If toggled off, prevents the lightning from jumping to other targets
 
 /spell/lightning/New()
 	..()
 	chargeoverlay = image("icon" = 'icons/mob/mob.dmi', "icon_state" = "sithlord")
 
-/spell/lightning/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
-	if(options)
-		return (target in options)
-	return ((target in view_or_range(range, user, selection_type)) && (istype(target, /mob/living) || istype(target, /obj/machinery/bot) || istype(target, /obj/mecha)))
-
 /spell/lightning/quicken_spell()
-	if(!can_improve(Sp_SPEED))
+	if(!can_improve(SP_SPEED))
 		return 0
 
-	spell_levels[Sp_SPEED]++
+	spell_levels[SP_SPEED]++
 
 	if(delay_reduc && cast_delay)
 		cast_delay = max(0, cast_delay - delay_reduc)
 	else if(cast_delay)
-		cast_delay = round( max(0, initial(cast_delay) * ((level_max[Sp_SPEED] - spell_levels[Sp_SPEED]) / level_max[Sp_SPEED] ) ) )
+		cast_delay = round( max(0, initial(cast_delay) * ((level_max[SP_SPEED] - spell_levels[SP_SPEED]) / level_max[SP_SPEED] ) ) )
 
-	if(charge_type == Sp_RECHARGE)
+	if(charge_type == SP_RECHARGE)
 		if(cooldown_reduc)
-			charge_max = max(cooldown_min, charge_max - cooldown_reduc)
+			charge_cooldown_max = max(cooldown_min, charge_cooldown_max - cooldown_reduc)
 		else
-			charge_max = round( max(cooldown_min, initial(charge_max) * ((level_max[Sp_SPEED] - spell_levels[Sp_SPEED]) / level_max[Sp_SPEED] ) ) ) //the fraction of the way you are to max speed levels is the fraction you lose
-	if(charge_max < charge_counter)
-		charge_counter = charge_max
+			charge_cooldown_max = round( max(cooldown_min, initial(charge_cooldown_max) * ((level_max[SP_SPEED] - spell_levels[SP_SPEED]) / level_max[SP_SPEED] ) ) ) //the fraction of the way you are to max speed levels is the fraction you lose
+	if(charge_cooldown_max < charge_counter)
+		charge_counter = charge_cooldown_max
 
 	var/temp = "You have improved [name]"
-	if(spell_levels[Sp_SPEED] >= level_max[Sp_SPEED])
+	if(spell_levels[SP_SPEED] >= level_max[SP_SPEED])
 		multicast = 2
 		temp += " and gain the ability to multicast, each incantation allows you to fire off two bolts of lightning before having to re-cast."
 	else
@@ -64,11 +61,11 @@
 	return temp
 
 /spell/lightning/empower_spell()
-	if(!can_improve(Sp_POWER))
+	if(!can_improve(SP_POWER))
 		return 0
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 	var/temp = ""
-	switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
+	switch(level_max[SP_POWER] - spell_levels[SP_POWER])
 		if(2)
 			temp = "You have improved [name] into Chain Lightning it will arc to one additional target."
 			name = "Chain Lightning"
@@ -98,17 +95,22 @@
 	else
 		//remove overlay
 		connected_button.name = name
-		charge_counter = charge_max
+		charge_counter = charge_cooldown_max
 		user.overlays -= chargeoverlay
 		if((zapzap != multicast) && (zapzap > 0)) //partial cast
 			take_charge(holder, 0)
 		zapzap = 0
 	return 1
 
+/spell/lightning/before_cast(list/targets, user, bypass_range)
+	if(targets[1] == user) //No self-hitting
+		return FALSE
+	return ..()
+
 /spell/lightning/cast(var/list/targets, mob/user)
-	var/mob/living/L = targets[1]
-	if(istype(L))
-		if (user.is_pacified(VIOLENCE_DEFAULT,L))
+	var/atom/A = targets[1]
+	if(istype(A))
+		if (user.is_pacified(VIOLENCE_DEFAULT,A))
 			return
 		zapzap--
 		if(zapzap > 0)
@@ -116,13 +118,14 @@
 			. = 1
 
 		spawn()
-			zapmuthafucka(user, L, bounces)
+			zapmuthafucka(user,A, bounces)
 		score.lightningwiz++
 
-/spell/lightning/proc/zapmuthafucka(var/mob/user, var/mob/living/target, var/chained = bounces, var/list/zapped = list(), var/oursound = null)
+/spell/lightning/proc/zapmuthafucka(var/mob/user, var/atom/target, var/chained = bounces, var/list/zapped = list(), var/oursound = null)
 	var/otarget = target
+	hit_valid_target = FALSE
 	src.lastbumped = null
-	zapped.Add(target)
+	zapped |= target
 	var/turf/T = get_turf(user)
 	var/turf/U = get_turf(target)
 	var/obj/item/projectile/beam/lightning/spell/L = new /obj/item/projectile/beam/lightning/spell(T)
@@ -145,15 +148,16 @@
 	while(!src.lastbumped)
 		sleep(world.tick_lag)
 	target = lastbumped
-	if(!istype(target)) //hit something
+	if(target) //hit something
 //		to_chat(world, "we hit a [formatJumpTo(target)] (<a href='?_src_=vars;Vars=\ref[target]'>VV</a>) instead of a mob")
 		U = get_turf(target)
 		var/list/zappanic = list()
-		for(var/mob/living/Living in get_turf(target)) //find a mob in the tile
-			if(Living == user || Living == holder || (Living in zapped))
-				continue
+		for(var/potential in get_turf(target)) //find a mob in the tile
+			if(is_type_in_list(potential, valid_targets))
+				if((potential == user) || (potential == holder) || (potential in zapped))
+					continue
 //			to_chat(world, "adding [Living](<a href='?_src_=vars;Vars=\ref[Living]'>VV</a>) to the potentials list")
-			zappanic |= Living
+				zappanic |= potential
 		if(zappanic.len)
 			target = pick(zappanic)
 //			to_chat(world, "picked [formatJumpTo(target)](<a href='?_src_=vars;Vars=\ref[target]'>VV</a>)")
@@ -162,36 +166,42 @@
 			if(isturf(target))
 				target = get_step_towards(target, get_dir(target, user))
 //				to_chat(world, "new target is [formatJumpTo(target)](<a href='?_src_=vars;Vars=\ref[target]'>VV</a>)")
-	if(istype(target))
-		if(!istype(target, /mob/living/simple_animal/hostile/glow_orb))
-			target.emp_act(2)
-			target.apply_damage((issilicon(target) ? basedamage*0.66 : basedamage), BURN, LIMB_CHEST, "blocked" = 0)
-	else if(target)
-		var/obj/item/projectile/beam/lightning/spell/B = new /obj/item/projectile/beam/lightning/spell
-		B.our_spell = src
-		B.damage = basedamage
-		target.bullet_act(B)
-		qdel(B)
-	if(chained)
+	if(is_type_in_list(target, valid_targets))
+		hit_valid_target = TRUE
+	if(!(target == holder)) //Not the wizard who cast the spell
+		spawn() //Blowing up something that might explode afterwards could cause chain lightning to not work properly
+			target.emp_act(1)
+			if(isliving(target))
+				var/mob/living/living_target = target
+				living_target.apply_damage((issilicon(target) ? basedamage*0.66 : basedamage), BURN, LIMB_CHEST, "blocked" = 0)
+			else
+				var/obj/item/projectile/beam/lightning/spell/B = new /obj/item/projectile/beam/lightning/spell
+				B.our_spell = src
+				B.damage = basedamage
+				target.bullet_act(B)
+				qdel(B)
+			target.emp_act(1)
+	if(chained && hit_valid_target) //If it didn't hit a correct target then the lightning just gets grounded
 		//DO IT AGAIN
-		var/mob/next_target
-		var/currdist = -1
-		for(var/mob/living/M in view(target,bounce_range))
+		var/atom/next_target
+		var/currdist = -1 //Keeps track of which target is the closest for the purpose of which one to arc to
+		for(var/potential in view(target,bounce_range))
 //			to_chat(world, "checking [formatJumpTo(M)] (<a href='?_src_=vars;Vars=\ref[M]'>VV</a>) for a bounce")
-			if(M != holder && M != user)
-				if(!(M in zapped) && target == otarget)//we are chaining off something going to our original target
-					continue
-				var/dist = get_dist(M, user)
-				if(currdist == -1)
-//					to_chat(world, "distance to [formatJumpTo(M)] (<a href='?_src_=vars;Vars=\ref[M]'>VV</a>) is the shortest so far([dist])")
-					currdist = dist
-					next_target = M
-				else if(dist < currdist)
-//					to_chat(world, "distance to [formatJumpTo(M)] (<a href='?_src_=vars;Vars=\ref[M]'>VV</a>) is the shortest so far([dist])")
-					next_target = M
-					currdist = dist
-				else
-//					to_chat(world, "too far away from [formatJumpTo(M)] (<a href='?_src_=vars;Vars=\ref[M]'>VV</a>) ")
+			if(is_type_in_list(potential, valid_targets))
+				if((potential != holder) && (potential != user)) //Don't consider the spell owner nor the target being arced from
+					if((potential in zapped) || (potential == otarget)) //Target was already zapped, or is the one the spell has currently affected
+						continue
+					var/dist = get_dist(potential, user)
+					if(currdist == -1)
+//						to_chat(world, "distance to [formatJumpTo(M)] (<a href='?_src_=vars;Vars=\ref[M]'>VV</a>) is the shortest so far([dist])")
+						currdist = dist
+						next_target = potential
+					else if(dist < currdist)
+//						to_chat(world, "distance to [formatJumpTo(M)] (<a href='?_src_=vars;Vars=\ref[M]'>VV</a>) is the shortest so far([dist])")
+						next_target = potential
+						currdist = dist
+					else
+//						to_chat(world, "too far away from [formatJumpTo(M)] (<a href='?_src_=vars;Vars=\ref[M]'>VV</a>) ")
 
 		if(!next_target)
 //			to_chat(world, "didn't have a next target")
@@ -201,16 +211,18 @@
 
 /spell/lightning/get_upgrade_info(upgrade_type, level)
 	switch(upgrade_type)
-		if(Sp_POWER)
+		if(SP_POWER)
 			switch(level)
 				if(1)
-					return "Allow the spell to arc to one additional target."
+					return "Allow the spell to arc to one additional target and slightly increases its damage."
 				if(2)
-					return "Allow the spell to arc up to 3 targets."
+					return "Allow the spell to arc up to 3 targets and slightly increases its damage."
 				if(3)
-					return "Allow the spell to arc up to 5 targets."
-		else
-			return ..()
+					return "Allow the spell to arc up to 5 targets and slightly increases its damage."
+		if(SP_SPEED)
+			if(spell_levels[SP_SPEED] == 2)
+				return "Allows you to multi-cast the spell, being able to fire up to two bolts of lightning before having to re-cast."
+	return ..()
 
 /spell/lightning/sith
 	basedamage = 25

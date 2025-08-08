@@ -157,7 +157,7 @@ var/list/ai_list = list()
 			if (mind && !stored_freqs)
 				to_chat(src, "The various frequencies used by the crew to communicate have been stored in your mind. Use the verb <i>Notes</i> to access them.")
 				spawn(1)
-					mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
+					mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>", category=MIND_MEMORY_GENERAL, forced=TRUE)
 				stored_freqs = 1
 
 			job = "AI"
@@ -296,7 +296,7 @@ var/static/list/ai_icon_states = list(
 		"Xerxes" = "ai-xerxes",
 		"Yes Man" = "yes-man",
 	)
-	
+
 /mob/living/silicon/ai/verb/pick_icon()
 	set category = "AI Commands"
 	set name = "Set AI Core Display"
@@ -359,7 +359,7 @@ var/static/list/ai_icon_states = list(
 		dat += "<BR>\n"
 
 	viewalerts = TRUE
-	src << browse(dat, "window=aialerts&can_close=0")
+	src << browse(HTML_SKELETON(dat), "window=aialerts&can_close=0")
 
 // this verb lets the ai see the stations manifest
 /mob/living/silicon/ai/proc/ai_roster()
@@ -579,6 +579,7 @@ var/static/list/ai_icon_states = list(
 
 /mob/living/silicon/ai/attack_animal(mob/living/simple_animal/M as mob)
 	M.unarmed_attack_mob(src)
+	return 1
 
 /mob/living/silicon/ai/reset_view(atom/A)
 	if(camera_light_on)
@@ -591,9 +592,7 @@ var/static/list/ai_icon_states = list(
 
 
 /mob/living/silicon/ai/proc/switchCamera(var/obj/machinery/camera/C)
-
-
-	src.cameraFollow = null
+	stop_ai_tracking()
 
 	if(!C || isDead()) //C.can_use())
 		return FALSE
@@ -676,7 +675,7 @@ var/static/list/ai_icon_states = list(
 	set category = "AI Commands"
 	set name = "Jump To Network"
 	unset_machine()
-	src.cameraFollow = null
+	stop_ai_tracking()
 	var/cameralist[0]
 
 	if(usr.isDead())

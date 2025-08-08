@@ -29,7 +29,8 @@
 	var/image/openimage
 	var/image/closeimage
 
-	machine_flags = SCREWTOGGLE | EMAGGABLE
+	machine_flags = SCREWTOGGLE | EMAGGABLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | WELD_FIXED
+	state=2
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
@@ -222,7 +223,13 @@
 	var/dat
 	if(..())
 		return
+	if(!anchored)
+		to_chat(user, "The [src] must be secured to the floor first.")
+		return
 	if(stat & (FORCEDISABLE|NOPOWER))
+		return
+	if(state!=2)
+		to_chat(user, "The [src] must be securely welded to the floor first.")
 		return
 	if(emagged)
 
@@ -237,14 +244,14 @@
 		dat+= text("<font color ='black'>A small dial with a \"ë\" symbol embroidded on it. It's pointing towards a gauge that reads []</font>.<BR> <font color='blue'><A href='?src=\ref[];toggleUV=1'> Turn towards []</A><BR>",(issuperUV ? "15nm" : "185nm"),src,(issuperUV ? "185nm" : "15nm") )
 		dat+= text("<font color ='black'>A thick old-style button, with 2 grimy LED lights next to it. The [] LED is on.</font><BR><font color ='blue'><A href='?src=\ref[];togglesafeties=1'>Press button</a></font>",(safetieson? "<font color='green'><B>GREEN</B></font>" : "<font color='red'><B>RED</B></font>"),src)
 		dat+= text("<HR><BR><A href='?src=\ref[];mach_close=suit_storage_unit'>Close panel</A>", user)
-		//user << browse(dat, "window=ssu_m_panel;size=400x500")
+		//user << browse(HTML_SKELETON(dat), "window=ssu_m_panel;size=400x500")
 		//onclose(user, "ssu_m_panel")
 	else if(isUV) //The thing is running its cauterisation cycle. You have to wait.
 
 		dat += {"<HEAD><TITLE>Suit storage unit</TITLE></HEAD>
 			<font color ='red'><B>Unit is cauterising contents with selected UV ray intensity. Please wait.</font></B><BR>"}
 		//dat+= "<font colr='black'><B>Cycle end in: [cycletimeleft()] seconds. </font></B>"
-		//user << browse(dat, "window=ssu_cycling_panel;size=400x500")
+		//user << browse(HTML_SKELETON(dat), "window=ssu_cycling_panel;size=400x500")
 		//onclose(user, "ssu_cycling_panel")
 
 	else
@@ -280,17 +287,17 @@
 			dat+= text("Unit status: []",(islocked? "<font color ='red'><B>**LOCKED**</B></font><BR>" : "<font color ='green'><B>**UNLOCKED**</B></font><BR>") )
 			dat+= text("<A href='?src=\ref[];start_UV=1'>Start Disinfection cycle</A><BR>",src)
 			dat += text("<BR><BR><A href='?src=\ref[];mach_close=suit_storage_unit'>Close control panel</A>", user)
-			//user << browse(dat, "window=Suit Storage Unit;size=400x500")
+			//user << browse(HTML_SKELETON(dat), "window=Suit Storage Unit;size=400x500")
 			//onclose(user, "Suit Storage Unit")
 		else //Ohhhh shit it's dirty or broken! Let's inform the guy.
 
 			dat += {"<HEAD><TITLE>Suit storage unit</TITLE></HEAD>
 				<font color='maroon'><B>Unit chamber is too contaminated to continue usage. Please call for a qualified individual to perform maintenance.</font></B><BR><BR>"}
 			dat+= text("<HR><A href='?src=\ref[];mach_close=suit_storage_unit'>Close control panel</A>", user)
-			//user << browse(dat, "window=suit_storage_unit;size=400x500")
+			//user << browse(HTML_SKELETON(dat), "window=suit_storage_unit;size=400x500")
 			//onclose(user, "suit_storage_unit")
 
-	user << browse(dat, "window=suit_storage_unit;size=400x500")
+	user << browse(HTML_SKELETON(dat), "window=suit_storage_unit;size=400x500")
 	onclose(user, "suit_storage_unit")
 	return
 
@@ -298,6 +305,8 @@
 /obj/machinery/suit_storage_unit/Topic(href, href_list) //I fucking HATE this proc
 	if(..())
 		return 1
+	if((!anchored) || (state!=2) ) //no opening this if it's not completely secured
+		return
 	else
 		usr.set_machine(src)
 		if (href_list["toggleUV"])
@@ -636,22 +645,33 @@
 /obj/machinery/suit_storage_unit/attackby(obj/item/I as obj, mob/user as mob)
 	if(((stat & BROKEN) || emagged) && issolder(I))
 		var/obj/item/tool/solder/S = I
-		if(!S.remove_fuel(4,user))
-			return
-		S.playtoolsound(loc, 100)
-		if(do_after(user, src,4 SECONDS * S.work_speed))
+		if(S.do_solder(user, src,4 SECONDS,4))
 			S.playtoolsound(loc, 100)
 			stat &= !BROKEN
 			emagged = FALSE
 			to_chat(user, "<span class='notice'>You repair the blown out electronics in the suit storage unit.</span>")
-	if((stat & (FORCEDISABLE|NOPOWER)) && iscrowbar(I) && !islocked)
+	if((stat & (FORCEDISABLE|NOPOWER)) && iscrowbar(I) && !islocked && ((helmet) || (suit) || (boots) || (mask)) )
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		to_chat(user, "<span class='notice'>You begin prying the equipment out of the suit storage unit</span>")
 		if(do_after(user, src,20))
 			dump_everything()
 			update_icon()
-	if(stat & (FORCEDISABLE|NOPOWER))
+		update_icon()
+		updateUsrDialog() //prevents refiring of the crowbar action to disassemble it when prying out equipment with an open pannel.
 		return
+	if(iswelder(I)& (isUV | issuperUV) )
+		to_chat(user, "<span class='warning'>Wait for the [src] to finish cauterising.</span>")
+		return
+	if (iscrowbar(I) & panel_open)
+		if((occupant) || (helmet) || (suit) || (boots) || (mask)) //don't allow deconstruction if there's anything inside
+			to_chat(usr, "<span class='red'>Empty the [src] before disassembling it.</span>")
+			return
+		return ..()
+	if(stat & (FORCEDISABLE|NOPOWER))
+		if(!(I.is_wrench(user) | iscrowbar(I) | I.is_screwdriver(user) ))
+			return
+		else //still allow wrenches, screwdrivers, and crowbars to interact with it while it's unpowered.
+			return ..()
 	if(..())
 		return 1
 	if ( istype(I, /obj/item/weapon/grab) )
@@ -755,3 +775,20 @@
 			R.cell.give(30)
 
 //////////////////////////////REMINDER: Make it lock once you place some fucker inside.
+
+
+/obj/machinery/suit_storage_unit/New()
+	. = ..()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/suit_storage_unit,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/console_screen
+	)
+
+	RefreshParts()
+
+

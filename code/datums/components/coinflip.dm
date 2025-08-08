@@ -25,7 +25,7 @@
 	if(!isfood(parent))
 		coinflip(user, TRUE)
 
-/datum/component/coinflip/proc/on_throw_impact(atom/hit_atom, speed, mob/user)
+/datum/component/coinflip/proc/on_throw_impact(atom/hit_atom, speed, mob/user, atom/thrown_atom)
 	coinflip(thrown = TRUE)
 
 /datum/component/coinflip/proc/equipped(mob/user, slot, hand_index = 0)

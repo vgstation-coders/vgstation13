@@ -4,7 +4,6 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	name       = "Persistence - Misc"
 	init_order = SS_INIT_PERSISTENCE_MISC
 	flags      = SS_NO_FIRE
-
 	var/list/tasks = list()
 
 /datum/subsystem/persistence_misc/New()
@@ -40,7 +39,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 
 // -- Abstract
 
-/datum/persistence_task/
+/datum/persistence_task
 	var/execute = FALSE // -- Do we execute this task or not ?
 	var/name = "Abstract persistence task"
 
@@ -212,8 +211,11 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	for (var/category in dynamic_mode.ruleset_category_weights)
 		data[category] = dynamic_mode.ruleset_category_weights[category]
 
-	for (var/datum/dynamic_ruleset/DR in dynamic_mode.executed_rules)
-		data[DR.weight_category] = 0
+	if (dynamic_mode.executed_rules.len <= 0)
+		data["Extended"] = 0
+	else
+		for (var/datum/dynamic_ruleset/DR in dynamic_mode.executed_rules)
+			data[DR.weight_category] = 0
 
 	write_file(data)
 
@@ -228,38 +230,59 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	if(!to_read)
 		log_debug("[name] task found an empty file on [file_path]")
 		return
-	for(var/list/L in to_read)
-		var/datum/record/money/record = new(L["ckey"], L["role"], L["cash"], L["shift_duration"], L["date"])
-		data += record
+
+	for (var/list/L in to_read)
+
+		// --------- LEGACY READING FOR MALFORMED JSON FILES ------------
+		if (L["fields"])
+			var/list/L2 = L["fields"]
+			if (!L2)
+				to_chat(world, "uuuh L2 doesn't exist")
+			var/datum/data/record/money/record = new(L2["ckey"], L2["role"], L2["cash"], L2["shift_duration"], L2["date"])
+			data += record
+			return
+		// -- END LEGACY
+		else
+			var/datum/data/record/money/record = new(L["ckey"], L["role"], L["cash"], L["shift_duration"], L["date"])
+			data += record
 
 /datum/persistence_task/highscores/on_shutdown()
 	var/list/L = list()
-	for(var/datum/record/money/record in data)
-		L += list(record.vars)
+	for(var/datum/data/record/money/record in data)
+		L += list(record.fields)
 	write_file(L)
 
-/datum/persistence_task/highscores/proc/insert_records(list/records)
+/datum/persistence_task/highscores/proc/insert_records(list/records, var/ckey_unique = FALSE)
 	data += records
-	cmp_field = "cash"
-	sortTim(data, /proc/cmp_list_by_element_asc)
+	global.cmp_field = "cash"
+	sortTim(data, /proc/cmp_records_numerically)
+
+	if (ckey_unique)
+		// This is already timSorted, so only keep the first one.
+		var/found_ckeys = list()
+		for(var/datum/data/record/money/record in data)
+			if (record.fields["ckey"] in found_ckeys)
+				data -= record
+			found_ckeys += record.fields["ckey"]
+
 	if (data.len > 5)
 		data.Cut(6) // we only store the top 5
-	for(var/datum/record/money/record in data)
+	for(var/datum/data/record/money/record in data)
 		if(record in records)
 			if(data[1] == record)
 				announce_new_highest_record(record)
 			else
 				announce_new_record(record)
 
-/datum/persistence_task/highscores/proc/announce_new_highest_record(var/datum/record/money/record)
+/datum/persistence_task/highscores/proc/announce_new_highest_record(var/datum/data/record/money/record)
 	var/name = "Richest escape ever"
-	var/desc = "You broke the record of the richest escape! $[record.cash] chips accumulated."
-	give_award(record.ckey, /obj/item/weapon/reagent_containers/food/drinks/golden_cup, name, desc)
+	var/desc = "You broke the record of the richest escape! $[record.fields["cash"]] chips accumulated."
+	give_award(record.fields["ckey"], /obj/item/weapon/reagent_containers/food/drinks/golden_cup, name, desc)
 
-/datum/persistence_task/highscores/proc/announce_new_record(var/datum/record/money/record)
+/datum/persistence_task/highscores/proc/announce_new_record(var/datum/data/record/money/record)
 	var/name = "Good rich escape"
-	var/desc = "You made it to the top 5! You accumulated $[record.cash]."
-	give_award(record.ckey, /obj/item/clothing/accessory/medal/gold, name, desc, FALSE)
+	var/desc = "You made it to the top 5! You accumulated $[record.fields["cash"]]."
+	give_award(record.fields["ckey"], /obj/item/clothing/accessory/medal/gold, name, desc, FALSE)
 
 /datum/persistence_task/highscores/proc/clear_records()
 	data = list()
@@ -270,15 +293,15 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	name = "Trader shoal highscores"
 	file_path = "data/persistence/trader_highscores.json"
 
-/datum/persistence_task/highscores/trader/announce_new_highest_record(var/datum/record/money/record)
+/datum/persistence_task/highscores/trader/announce_new_highest_record(var/datum/data/record/money/record)
 	var/name = "Richest shoal haul ever"
-	var/desc = "You broke the record of the richest shoal haul! $[record.cash] chips accumulated."
-	give_award(record.ckey, /obj/item/weapon/reagent_containers/food/drinks/golden_cup, name, desc)
+	var/desc = "You broke the record of the richest shoal haul! $[record.fields["cash"]] chips accumulated."
+	give_award(record.fields["ckey"], /obj/item/weapon/reagent_containers/food/drinks/golden_cup, name, desc)
 
-/datum/persistence_task/highscores/trader/announce_new_record(var/datum/record/money/record)
+/datum/persistence_task/highscores/trader/announce_new_record(var/datum/data/record/money/record)
 	var/name = "Good rich shoal haul"
-	var/desc = "You made it to the top 5! You accumulated $[record.cash]."
-	give_award(record.ckey, /obj/item/clothing/accessory/medal/gold, name, desc, FALSE)
+	var/desc = "You made it to the top 5! You accumulated $[record.fields["cash"]]."
+	give_award(record.fields["ckey"], /obj/item/clothing/accessory/medal/gold, name, desc, FALSE)
 
 //stores map votes for code/modules/html_interface/voting/voting.dm
 /datum/persistence_task/vote
@@ -362,3 +385,92 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	)
 	data = L
 	write_file(data)
+
+//Research Archive
+/datum/persistence_task/researcharchive
+	execute = TRUE
+	name = "Research Archive"
+	file_path = "data/persistence/researcharchive.json"
+
+/datum/persistence_task/researcharchive/on_init()
+	if(!research_archive_datum)
+		research_archive_datum = new /datum/research()
+	var/list/techs = read_file()
+	//world.log << "DEBUG ARCHIVE: [json_encode(techs)]"
+	var/skip_reporting = TRUE
+	for(var/obj/machinery/computer/rdconsole/C in machines)
+		for(var/element in techs)
+			var/datum/tech/T = C.files.known_tech[element]
+			if(!T)
+				continue
+			T.level = text2num(techs[element])
+			if(skip_reporting && (T.level>1))
+				skip_reporting = FALSE //If any level was increased, we want to report
+
+	if(!skip_reporting)
+		for(var/obj/machinery/computer/rdconsole/S in machines)
+			var/obj/item/weapon/paper/P = new (S.loc)
+			P.info = "Your station has benefitted from the research archive project."
+			P.update_icon()
+
+/datum/persistence_task/researcharchive/on_shutdown()
+	var/list/to_archive = list()
+	for(var/datum/tech/T in get_list_of_elements(research_archive_datum.known_tech))
+		if(T.id in list("syndicate", "Nanotrasen", "anomaly"))
+			continue
+		to_archive[T.id] = T.level
+	write_file(to_archive)
+
+// -- Betris Highscores
+
+/datum/persistence_task/highscores/tetris
+	name = "Tetris all-time high scores"
+	execute = TRUE
+	file_path = "data/persistence/tetris_highscores.json"
+
+/datum/persistence_task/highscores/tetris/on_shutdown()
+	var/list/temp_data = list()
+	for (var/obj/machinery/computer/tetris/T in tetris_machines)
+		for (var/list/L in T.leaderboard_this_round)
+			var/datum/data/record/money/M = new(
+				ckey = L["ckey"],
+				role = L["role"],
+				cash = L["cash"]
+			)
+			temp_data += M
+
+	for (var/list/L in deleted_machines_tetris_highscores)
+		var/datum/data/record/money/M = new(
+			ckey = L["ckey"],
+			role = L["role"],
+			cash = L["cash"]
+		)
+		temp_data += M
+
+	insert_records(temp_data, TRUE) // Does the trimming and all that stuff
+
+	. = ..() // Insert the record
+
+/datum/persistence_task/highscores/tetris/announce_new_highest_record(var/datum/data/record/money/record)
+	var/name = "Best scientist ever"
+	var/desc = "You broke the record of the most productive scientist! [record.fields["cash"]] research points accumulated."
+	give_award(record.fields["ckey"], /obj/item/weapon/reagent_containers/food/drinks/golden_cup, name, desc)
+
+/datum/persistence_task/highscores/tetris/announce_new_record(var/datum/data/record/money/record)
+	var/name = "Brightest minds of Nanotrasen"
+	var/desc = "You made it to the top 5! You accumulated [record.fields["cash"]]  research points."
+	give_award(record.fields["ckey"], /obj/item/clothing/accessory/medal/gold, name, desc, FALSE)
+
+//Crew Score
+/datum/persistence_task/crewscore
+	execute = TRUE
+	name = "Crew Score"
+	file_path = "data/persistence/crewscore.json"
+
+var/last_crewscore = 0
+
+/datum/persistence_task/crewscore/on_init()
+	last_crewscore = read_file()
+
+/datum/persistence_task/crewscore/on_shutdown()
+	write_file(score.crewscore)

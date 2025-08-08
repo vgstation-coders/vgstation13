@@ -17,6 +17,7 @@ var/station_allowance = 0//This is what Nanotrasen will send to the Station Acco
 var/latejoiner_allowance = 0//Added to station_allowance and reset before every wage payout.
 var/station_funding = 0 //A bonus to the station allowance that persists between cycles. Admins can set this on the database.
 var/station_bonus = 0 //A bonus to station allowance that gets reset after wage payout. Admins can boost this too.
+var/init_station_funds = 0
 
 /proc/create_station_account()
 	if(!station_account)
@@ -42,6 +43,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 	department_account.account_number = rand(11111, 99999)
 	department_account.remote_access_pin = rand(1111, 9999)
 	department_account.money = DEPARTMENT_START_FUNDS
+	init_station_funds += department_account.money
 	if(receives_wage == 1)
 		department_account.wage_gain = DEPARTMENT_START_WAGE
 		station_allowance += DEPARTMENT_START_WAGE + round(DEPARTMENT_START_WAGE/10)//overhead of 10%
@@ -129,9 +131,9 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 	var/remote_access_pin = 0
 	var/money = 0
 	var/list/transaction_log = list()
-	var/security_level = 1	//0 - auto-identify from worn ID, require only account number
-							//1 - require manual login / account number and pin
-							//2 - require card and manual login
+	var/security_level = SECURITY_MANUAL_LOGIN	//0 - auto-identify from worn ID, require only account number
+												//1 - require manual login / account number and pin
+												//2 - require card and manual login
 	var/virtual = 0
 	var/virtual_wallet_wage_ratio = 50
 	var/wage_gain = 0 // How much an account gains per 'wage' tick.
@@ -206,6 +208,8 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 /obj/machinery/account_database/New(loc)
 	..(loc)
 
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_account")
+
 	if(!station_account)
 		create_station_account()
 
@@ -213,7 +217,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 		for(var/department in station_departments)
 			create_department_account(department, receives_wage = 1)
 	if(!vendor_account)
-		vendor_account = create_account("Vendor", 0, null, 0, 1, TRUE, FALSE)
+		vendor_account = create_account("Vendor", 0, null, 0, 1, 0, TRUE, FALSE)
 
 	if(!current_date_string)
 		current_date_string = "[time2text(world.timeofday, "DD")] [time2text(world.timeofday, "Month")], [game_year]"
@@ -324,7 +328,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 							<td><a href='?src=\ref[src];choice=view_account_detail;account_index=[i]'>View in detail</a></td>
 							</tr>"}
 					dat += "</table>"
-		user << browse(dat,"window=account_db;size=700x650")
+		user << browse(HTML_SKELETON(dat),"window=account_db;size=700x650")
 	else
 		user << browse(null,"window=account_db")
 
@@ -344,6 +348,13 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 					access_level = 2
 				else if((access_hop in idcard.access) || (access_captain in idcard.access))
 					access_level = 1
+	if(issolder(O) && emagged)
+		var/obj/item/tool/solder/S = O
+		if(S.do_solder(user, src,4 SECONDS,4))
+			S.playtoolsound(loc, 100)
+			emagged = FALSE
+			access_level = 0
+			to_chat(user, "<span class='notice'>You repair the security checks on \the [src].</span>")
 
 /obj/machinery/account_database/emag_act(mob/user)
 	if(emagged)
@@ -394,8 +405,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 						access_level = 0
 				else
 					var/obj/item/I = usr.get_active_hand()
-					if(isEmag(I))
-						emag_act(usr)
+					if(emag_check(I,usr))
 						return
 					if (istype(I, /obj/item/weapon/card/id))
 						var/obj/item/weapon/card/id/C = I
@@ -425,17 +435,48 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 				station_bonus = new_bonus
 			if("toggle_account")
 				if(detailed_account_view)
-					detailed_account_view.disabled = detailed_account_view.disabled ? 0 : 2
+					if(detailed_account_view == station_account)
+						visible_message("<span class='warning'>The station account cannot be modified in this way.</span>")
+					else
+						detailed_account_view.disabled = detailed_account_view.disabled ? 0 : 2
 			if("edit_wage_payout")
 				var/acc_num = text2num(href_list["account_num"])
 				var/datum/money_account/acc = get_money_account_global(acc_num)
-				if(acc)
+				if(acc == station_account)
+					visible_message("<span class='warning'>The station account cannot be modified in this way.</span>")
+				else if(acc)
 					var/new_payout = input(usr, "Select a new payout for this account", "New payout", acc.wage_gain) as null|num
-					if(new_payout >= 0 && new_payout != null)
+					if(new_payout != null && new_payout >= 0)
+						if(new_payout > ARBITRARILY_LARGE_NUMBER)
+							//10x what the entire station should be earning
+							spark(loc, 3, FALSE)
+							visible_message("<span class='warning'>\The [src] shoots out sparks!</span>")
+							return
+						if(!isAdminGhost(usr))
+							//Admin ghosts never trigger audit
+							var/suspicious_user = held_card ? held_card.registered_name : "ERR;\\ invalid objectName 'ZZTPW00"
+							if(requested_payroll_amount && new_payout > requested_payroll_amount)
+								//Requesting more than the entire station earned last cycle
+								//Doesn't play if this is the first cycle
+								var/datum/command_alert/suspicious_wages/SW = new()
+								SW.announce(suspicious_user,acc.owner_name)
+								qdel(SW)
+							if(acc.wage_gain && new_payout > acc.wage_gain*2)
+								//Send an audit request to IAA if more than double old age
+								//Doesn't send if account had no wage before
+								var/obj/item/weapon/paper/audit/P
+								for(var/obj/machinery/faxmachine/F in allfaxes)
+									if(F.department == "Internal Affairs" && !F.stat)
+										flick("faxreceive", F)
+										playsound(F.loc, "sound/effects/fax.ogg", 50, 1)
+										P = new (F,suspicious_user,acc.owner_name,acc.wage_gain,new_payout)
+										spawn(2 SECONDS)
+											P.forceMove(F.loc)
+
 						acc.wage_gain = round(new_payout)
 					detailed_account_view = acc
 
-	src.attack_hand(usr)
+	attack_hand(usr)
 
 /obj/machinery/account_database/proc/charge_to_account(var/attempt_account_number, var/source_name, var/purpose, var/terminal_id, var/amount, var/target_name)
 	if(!activated || !attempt_account_number)

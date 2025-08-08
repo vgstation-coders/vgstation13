@@ -43,6 +43,11 @@
 	if(client && client.media)
 		client.media.stop_music()
 
+	if (sound_zone_manager)
+		sound_zone_manager.unregister_listener(src)
+
+	unregister_event(/event/mob_area_changed, src, nameof(src::OnMobAreaChanged()))
+
 	if(admin_datums[src.ckey])
 		message_admins("Admin logout: [key_name(src)]")
 		if (ticker && ticker.current_state == GAME_STATE_PLAYING) //Only report this stuff if we are currently playing.

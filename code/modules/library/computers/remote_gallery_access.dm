@@ -3,9 +3,10 @@
  * I apologise for the awful amount of copypaste with the existing library code ;_;
  */
 /obj/machinery/computer/library/checkout/remote_gallery
-	name = "Remote gallery Computer"
+	name = "remote gallery computer"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "artcomp"
+	moody_state = "overlay_artcomp"
 	anchored = 1
 	density = 1
 	req_access = list(access_library) //This access requirement is currently only used for the delete button showing
@@ -43,10 +44,36 @@
 		</ul>"}
 		var/pagelist = get_pagelist()
 
+		var/list/category_elements = list()
+		for(var/i=1,i<=library_section_names.len, ++i)
+			category_elements += "<option value='[library_section_names[i]]'>[library_section_names[i]]</option>"
+		category_elements = category_elements.Join("")
+
+		var/script = {"
+			<script type="text/javascript">
+				function toggleForm() {
+					var form = document.getElementById('category-form');
+					if (form.style.display === 'none' || form.style.display === '') {
+						form.style.display = 'block';
+					} else {
+						form.style.display = 'none';
+					}
+				}
+			</script>"}
+
 		dat += {"<h3>Search Settings</h3><br />
 			<A href='?src=\ref[src];settitle=1'>Filter by Title: [query.title]</A><br />
-			<A href='?src=\ref[src];setcategory=1'>Filter by Category: [query.category]</A><br />
 			<A href='?src=\ref[src];setauthor=1'>Filter by Author: [query.author]</A><br />
+			<A href="javascript:toggleForm();">Filter by Categories: [query.categories ? query.categories.Join(", ") : ""]</A><br />
+			<form id='category-form' name='setcategories' action='?src=\ref[src]' method='get' style='display:none; width: 130px'>
+				<input type='hidden' name='src' value='\ref[src]'>
+				<input type='hidden' name='setcategories' value='1'>
+				<select name='categories' multiple style='width: 100%; height: 80px; display: inline-block;'>
+					[category_elements]
+				</select>
+				<input type='submit' value='Set Categories' onclick='toggleForm();'>
+			</form>
+			[script]
 			<A href='?src=\ref[src];search=1'>\[Start Search\]</A><br />"}
 		dat += pagelist
 
@@ -60,8 +87,12 @@
 					</tr>"}
 
 		for(var/datum/cachedbook/C in get_page(page_num))
+			if(C) last_id_processed = C.id
 			var/author = C.author
 			var/datum/custom_painting/the_painting = json2painting(C.content)
+			if(!the_painting)
+				message_admins("The remote gallery tried to render a painting with blank content, which it can't display. <A style='color:red' href='?src=\ref[src];del=[C.id]'>\[Delete\]</A>")
+				continue
 			var/controls =  "<A href='?src=\ref[src];id=[C.id]'>\[Order\]</A>"
 			if(isAdminGhost(user))
 				author += " (<A style='color:red' href='?src=\ref[src];delbyckey=[ckey(C.ckey)]'>[ckey(C.ckey)])</A>)"
@@ -85,10 +116,10 @@
 	B.open()
 
 /obj/machinery/computer/library/checkout/remote_gallery/get_scanner_title(var/obj/machinery/libraryscanner/LS)
-	return LS.cached_painting.painting_data.title
+	return LS.cached_painting.painting_data.title || "Untitled painting"
 
 /obj/machinery/computer/library/checkout/remote_gallery/get_scanner_author(var/obj/machinery/libraryscanner/LS)
-	return LS.cached_painting.painting_data.author
+	return LS.cached_painting.painting_data.author || "Anonymous"
 
 /obj/machinery/computer/library/checkout/remote_gallery/get_scanner_dat(var/obj/machinery/libraryscanner/LS)
 	return painting2json(LS.cached_painting.painting_data)
@@ -97,7 +128,7 @@
 	return "[LS.cached_painting.painting_height]x[LS.cached_painting.painting_width]"
 
 /obj/machinery/computer/library/checkout/remote_gallery/get_scanner_desc(var/obj/machinery/libraryscanner/LS)
-	return LS.cached_painting.painting_data.description
+	return LS.cached_painting.painting_data.description || "No description available"
 
 /obj/machinery/computer/library/checkout/remote_gallery/has_cached_data()
 	return scanner.cached_painting
@@ -105,8 +136,23 @@
 /obj/machinery/computer/library/checkout/remote_gallery/make_external_book(var/datum/cachedbook/newbook)
 	if(!newbook)
 		return
-	var/obj/item/mounted/frame/painting/custom/C = new(get_turf(src))
+
+	var/obj/item/mounted/frame/painting/custom/C
+	var/datum/custom_painting/painting_data = json2painting(newbook.content, newbook.title, newbook.author, newbook.description)
+
+	//pick a canvas that fits the bitmap size.
+	if (painting_data.bitmap_width == 24)
+		if (painting_data.bitmap_height == 24)
+			C = new/obj/item/mounted/frame/painting/custom/large(get_turf(src))
+		else
+			C = new/obj/item/mounted/frame/painting/custom/landscape(get_turf(src))
+	else if(painting_data.bitmap_height == 24)
+		C = new/obj/item/mounted/frame/painting/custom/portrait(get_turf(src))
+	else
+		C = new/obj/item/mounted/frame/painting/custom(get_turf(src))
+
 	C.name = "[newbook.title] by [newbook.author]"
 	C.desc = newbook.description
-	C.set_painting_data(json2painting(newbook.content, newbook.title, newbook.author, newbook.description))
+	C.set_painting_data(painting_data)
+	C.update_painting(TRUE)
 	return C

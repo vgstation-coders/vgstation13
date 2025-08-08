@@ -74,10 +74,7 @@
 	else if(broken)
 		if(issolder(W))
 			var/obj/item/tool/solder/S = W
-			if(!S.remove_fuel(4,user))
-				return
-			S.playtoolsound(loc, 100)
-			if(do_after(user, src,4 SECONDS * S.work_speed))
+			if(S.do_solder(user, src,4 SECONDS,4))
 				S.playtoolsound(loc, 100)
 				broken = 0
 				to_chat(user, "<span class='notice'>You repair the electronics inside the locking mechanism!</span>")
@@ -85,15 +82,8 @@
 		else
 			to_chat(user, "<span class='notice'>The locker appears to be broken.</span>")
 			return
-	else if(isEmag(W) && !broken)
-		broken = TRUE
-		locked = FALSE
-		desc = "It appears to be broken."
-		icon_state = icon_off
-		flick(icon_broken, src)
-		for(var/mob/O in viewers(user, 3))
-			O.show_message("<span class='warning'>The locker has been broken by [user] with an electromagnetic card!</span>", 1, "You hear a faint electrical spark.", 2)
-		update_icon()
+	else if(!broken && emag_check(W,user))
+		return
 	else if(iswelder(W) && canweld())
 		var/obj/item/tool/weldingtool/WT = W
 		if(!WT.remove_fuel(1,user))
@@ -106,6 +96,17 @@
 		return
 	else
 		togglelock(user)
+
+/obj/structure/closet/secure_closet/emag_act(mob/user)
+	if(!broken)
+		broken = TRUE
+		locked = FALSE
+		desc = "It appears to be broken."
+		icon_state = icon_off
+		flick(icon_broken, src)
+		for(var/mob/O in viewers(user, 3))
+			O.show_message("<span class='warning'>The locker has been broken by [user] with an electromagnetic card!</span>", 1, "You hear a faint electrical spark.", 2)
+		update_icon()
 
 /obj/structure/closet/secure_closet/relaymove(mob/user)
 	if(user.stat || !isturf(src.loc))

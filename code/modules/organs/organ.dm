@@ -78,7 +78,9 @@
 	W.time_inflicted = world.time
 
 /mob/living/carbon/human/var/list/organs = list()
+/mob/living/carbon/human/var/list/cosmetic_organs = list()
 /mob/living/carbon/human/var/list/datum/organ/external/organs_by_name = list() //Map organ names to organs
+/mob/living/carbon/human/var/list/datum/organ/external/cosmetic_organs_by_name = list()
 /mob/living/carbon/human/var/list/datum/organ/internal/internal_organs_by_name = list() //So internal organs have less ickiness too
 /mob/living/carbon/human/var/list/grasp_organs = list()
 
@@ -109,7 +111,6 @@
 /mob/living/carbon/human/proc/handle_organs(var/force_process = 0)
 
 	number_wounds = 0
-	var/stand_broken = 0 //We cannot stand because one of our legs or foot is completely broken and unsplinted, or missing
 	var/damage_this_tick = getBruteLoss() + getFireLoss() + getToxLoss()
 	if(damage_this_tick > last_dam)
 		force_process = 1
@@ -180,28 +181,16 @@
 			if(E.grasp_id && (E.is_broken() || E.is_malfunctioning()))
 				E.process_grasp(held_items[E.grasp_id], get_index_limb_name(E.grasp_id))
 
-			//Special effects for legs and foot
-			else if(E.name in list(LIMB_LEFT_LEG, LIMB_LEFT_FOOT, LIMB_RIGHT_LEG, LIMB_RIGHT_FOOT) && !lying)
-				if(E.is_malfunctioning() || E.is_broken())
-					stand_broken = 1 //We can't stand like this
-
-	//We risk falling because stuff is broken bad
-	if(stand_broken && !paralysis && !(lying || resting) && prob(5))
-		if(feels_pain())
-			audible_scream()
-		emote("collapse")
-		Paralyse(10)
-
 	can_stand = check_stand_ability()
 	has_limbs = check_crawl_ability()
 
 /mob/living/carbon/human/proc/check_stand_ability()
-	//All legs must be usable in order for a human to stand
+	//At least one leg must be usable in order for a human to stand
 	for(var/datum/organ/external/leg in get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
-		if(!leg.can_stand())
-			return FALSE
+		if(leg.can_stand())
+			return TRUE
 
-	return TRUE
+	return FALSE
 
 /mob/living/carbon/human/proc/check_crawl_ability()
 	//At least one limb has to be usable for a human to crawl

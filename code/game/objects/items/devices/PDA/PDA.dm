@@ -18,6 +18,7 @@ var/global/msg_id = 0
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	slot_flags = SLOT_ID | SLOT_BELT
+	quick_equip_priority = list(slot_wear_id)
 
 	//Main variables
 	var/owner = null
@@ -212,7 +213,7 @@ var/global/msg_id = 0
 	dat += "</body></html>"
 	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
 
-	user << browse(dat, "window=pda;size=400x444;border=1;can_resize=1;can_minimize=0")
+	user << browse(HTML_SKELETON(dat), "window=pda;size=400x444;border=1;can_resize=1;can_minimize=0")
 	onclose(user, "pda", src)
 
 /obj/item/device/pda/Topic(href, href_list)
@@ -335,6 +336,27 @@ var/global/msg_id = 0
 	user.put_in_hands(id)
 	id = null
 	return TRUE
+
+/obj/item/device/pda/proc/toggle_flashlight(mob/user)
+	if(user.incapacitated())
+		to_chat(user, "<span class='notice'>You cannot do this while restrained.</span>")
+		return FALSE
+
+	if(!in_range(src, user))
+		to_chat(user, "<span class='notice'>You are too far away.</span>")
+		return FALSE
+
+	for(var/app in applications)
+		if(istype(app,/datum/pda_app/light))
+			var/datum/pda_app/light/flash = app
+			flash.on_select()
+
+/obj/item/device/pda/verb/verb_flashlight()
+	set category = "Object"
+	set name = "Toggle Flashlight"
+	set src in usr
+
+	toggle_flashlight(usr)
 
 /obj/item/device/pda/verb/verb_remove_id()
 	set category = "Object"
@@ -479,6 +501,7 @@ var/global/msg_id = 0
 			(istype(I,/obj/item/weapon/spacecash) && id && id.virtual_wallet)
 
 /obj/item/device/pda/quick_store(var/obj/item/I,mob/user)
+	..()
 	return !(attackby(I,user))
 
 /obj/item/device/pda/proc/add_to_virtual_wallet(var/amount, var/mob/user, var/atom/giver)
@@ -518,7 +541,7 @@ var/global/msg_id = 0
 		M.show_message("<span class='warning'>Your [src] explodes!</span>", 1)
 
 	if(T)
-		T.hotspot_expose(700,125,surfaces=istype(loc,/turf))
+		try_hotspot_expose(700,SMALL_FLAME,0)
 
 		explosion(T, -1, -1, 2, 3, whodunnit = user)
 

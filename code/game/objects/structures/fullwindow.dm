@@ -32,15 +32,6 @@
 /obj/structure/window/full/setup_border_dummy()
 	return
 
-/obj/structure/window/full/AltClick(mob/user)
-	var/turf/T = get_turf(src)
-	if(T && (T in range(1, user.loc)) && (T in view(1, user.virtualhearer))) //If next to user's location (to allow locker and mech alt-clicks) and if the user can actually view it
-		if(user.listed_turf == T)
-			user.listed_turf = null
-		else
-			user.listed_turf = T
-			user.client.statpanel = T.name
-
 /obj/structure/window/full/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(pass_flags_self))
 		dim_beam(mover)
@@ -180,6 +171,11 @@
 	reinforcetype = /obj/item/stack/sheet/ralloy
 	sheetamount = 4
 	health = 80
+
+/obj/structure/window/full/reinforced/clockwork/relativewall()
+	// Ignores adjacent anchored window tiles for "merging", since there's only a single brass window sprite
+	// Remove this whenever someone sprites all the required icon states
+	return
 
 /obj/structure/window/full/reinforced/clockwork/loose
 	anchored = 0

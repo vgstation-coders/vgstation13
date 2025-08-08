@@ -41,6 +41,7 @@
 #define MELTPOINT_PLASMA (MELTPOINT_STEEL+500)
 #define MELTPOINT_SILICON 1687 // KELVIN
 #define MELTPOINT_PLASTIC (180+T0C)
+#define MELTPOINT_WAX (65+T0C)
 #define MELTPOINT_SNOW	304.15	//about 30°C
 #define MELTPOINT_CARBON (T0C+3550)
 #define MELTPOINT_GOLD (T0C+1064)
@@ -57,5 +58,7 @@
 #define manhattan_distance(a, b) (abs(a.x - b.x) + abs(a.y - b.y))
 
 #define IS_INT(x) (x == round(x))
+
+#define fancytrunc(x, y) (floor(x*(y*10))/(y*10)) //X is the value to truncate, Y is the trunc multiplier, i.e: x,3 would truncate to the thousandth. 
 
 #define GLIDE_SIZE_OF_A_WALKING_HUMAN 2.4615386

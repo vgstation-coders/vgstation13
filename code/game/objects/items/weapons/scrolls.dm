@@ -6,12 +6,13 @@
 	var/uses = 4.0
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
+	w_type = RECYK_WOOD
+	flammable = TRUE //suffer all ye spellcasters
 	item_state = "paper"
 	throw_speed = 4
 	throw_range = 20
 	origin_tech = Tc_BLUESPACE + "=4"
 	mech_flags = MECH_SCAN_FAIL // Because why should the crew be able to make scrolls out of nothing
-	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/weapon/teleportation_scroll/apprentice
 	name = "lesser scroll of teleportation"
@@ -28,7 +29,7 @@
 	dat += "<B>Four uses, use them wisely:</B><BR>"
 	dat += "<A href='byond://?src=\ref[src];spell_teleport=1'>Teleport</A><BR>"
 	dat += "Kind regards,<br>Wizards Federation<br><br>P.S. Don't forget to bring your gear, you'll need it to cast most spells.<HR>"
-	user << browse(dat, "window=scroll")
+	user << browse(HTML_SKELETON(dat), "window=scroll")
 	onclose(user, "scroll")
 	return
 
@@ -51,6 +52,9 @@
 /obj/item/weapon/teleportation_scroll/proc/teleportscroll(var/mob/user)
 	var/A
 	A = input(user, "Area to jump to", "BOOYEA", A) as null|anything in teleportlocs
+
+	if(isnull(A))
+		return
 
 	var/area/thearea = teleportlocs[A]
 

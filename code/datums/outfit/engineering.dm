@@ -154,9 +154,20 @@
 		)
 	)
 
+	alt_title_items_to_collect = list(
+		"Electrician" = list(
+			/obj/item/weapon/rcl/pre_loaded/yellow,
+		)
+	)
+
 	pda_type = /obj/item/device/pda/engineering
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/engineering
+
+/datum/outfit/engineer/post_equip(var/mob/living/carbon/human/H)
+	..()
+	if(H.mind.role_alt_title == "Electrician")//So they get some extra cables
+		H.put_in_hands(new /obj/item/weapon/storage/toolbox/electrical(H))
 
 /datum/outfit/engineer/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/device/multitool/omnitool] = SURVIVAL_BOX
@@ -179,7 +190,10 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_eng,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/atmospheric_technician,
+			slot_w_uniform_str = list(
+				"Atmospheric Technician" = /obj/item/clothing/under/rank/atmospheric_technician,
+				"Firefighter" = /obj/item/clothing/under/rank/firefighter,
+			),
 			slot_shoes_str = /obj/item/clothing/shoes/workboots,
 			slot_head_str = /obj/item/clothing/head/hardhat,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/atmostech,

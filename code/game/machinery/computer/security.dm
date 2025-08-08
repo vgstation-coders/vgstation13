@@ -205,7 +205,7 @@
 				else
 		else
 			dat += text("<A href='?src=\ref[];choice=Log In'>{Log In}</A>", src)
-	user << browse(text("<HEAD><TITLE>Security Records</TITLE></HEAD><TT>[]</TT>", dat), "window=secure_rec;size=600x400")
+	user << browse(HTML_SKELETON_TITLE("Security Records", "<TT>[dat]</TT>"), "window=secure_rec;size=600x400")
 	onclose(user, "secure_rec")
 	return
 
@@ -582,6 +582,8 @@ What a mess.*/
 /obj/machinery/computer/secure_data/detective_computer
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "messyfiles"
+	moody_state = "overlay_messyfiles"
 
+	light_range_on = 1
 	light_color = null
 	computer_flags = NO_ONOFF_ANIMS

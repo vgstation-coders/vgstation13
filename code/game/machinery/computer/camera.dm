@@ -77,7 +77,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 			continue
 		var/list/tempnetwork = C.network & network
 		if(tempnetwork.len)
-			output["[C.c_tag]"] = C
+			output["\ref[C]"] = C
 	return output
 
 /obj/machinery/computer/security/attack_ai(var/mob/user)
@@ -125,21 +125,22 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	data["activeCamera"] = null
 	if(active_camera)
 		data["activeCamera"] = list(
-			name = active_camera.c_tag,
-			status = active_camera.status,
+			"name" = active_camera.c_tag,
+			"ref" = ref(active_camera),
+			"status" = active_camera.status,
 		)
 	return data
 
 /obj/machinery/computer/security/ui_static_data()
 	var/list/data = list()
-	data["title"] = name
 	data["mapRef"] = map_name
 	var/list/cameras = get_available_cameras()
 	data["cameras"] = list()
 	for(var/i in cameras)
 		var/obj/machinery/camera/C = cameras[i]
 		data["cameras"] += list(list(
-			name = C.c_tag,
+			"name" = C.c_tag,
+			"ref" = ref(C),
 		))
 
 	return data
@@ -150,9 +151,9 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		return
 
 	if(action == "switch_camera")
-		var/c_tag = params["name"]
+		var/c_ref = params["camera"]
 		var/list/cameras = get_available_cameras()
-		var/obj/machinery/camera/selected_camera = cameras[c_tag]
+		var/obj/machinery/camera/selected_camera = cameras[c_ref]
 		active_camera = selected_camera
 
 		if(!selected_camera)
@@ -161,6 +162,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		active_camera.camera_twitch()
 
 		update_active_camera_screen()
+		SStgui.update_uis(src) // Why do I have to this every time ?!
 
 		return TRUE
 
@@ -213,8 +215,12 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	density = 0
 	circuit = null
 	layer = ABOVE_WINDOW_LAYER
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	light_color = null
+
+/obj/machinery/computer/security/telescreen/New()
+	..()
+	update_icon()
 
 /obj/machinery/computer/security/telescreen/examine(mob/user)
 	..()
@@ -225,7 +231,9 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	icon_state = initial(icon_state)
 	if(stat & BROKEN)
 		icon_state += "b"
-	return
+		kill_moody_light()
+	else
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_telescreen")
 
 /obj/machinery/computer/security/telescreen/entertainment
 	name = "entertainment monitor"
@@ -238,6 +246,14 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 	light_color = null
 
+/obj/machinery/computer/security/telescreen/entertainment/update_icon()
+	icon_state = initial(icon_state)
+	if(stat & BROKEN)
+		icon_state += "b"
+		kill_moody_light()
+	else
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_entertainment")
+
 /obj/machinery/computer/security/telescreen/entertainment/spesstv
 	name = "low-latency Spess.TV CRT monitor"
 	desc = "An ancient computer monitor. They don't make them like they used to. A sticker reads: \"Come be their hero\"."
@@ -246,6 +262,10 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	network = list(CAMERANET_SPESSTV)
 	density = TRUE
 	tgui_interface = "SpessTVCameraConsole"
+
+/obj/machinery/computer/security/telescreen/entertainment/spesstv/New()
+	..()
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_crt")
 
 /obj/machinery/computer/security/telescreen/entertainment/spesstv/ui_act(action, list/params)
 	. = ..()
@@ -283,18 +303,21 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen/New()
 	..()
 	overlays += "spesstv_overlay"
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_telescreen")
 
 /obj/machinery/computer/security/telescreen/entertainment/wooden_tv
 	icon_state = "security_det"
+	moody_state = "overlay_security_det"
 	icon = 'icons/obj/computer.dmi'
 
 /obj/machinery/computer/security/wooden_tv
 	name = "Security Cameras"
 	desc = "An old TV hooked into the stations camera network."
 	icon_state = "security_det"
+	moody_state = "overlay_security_det"
 	circuit = /obj/item/weapon/circuitboard/security/wooden_tv
 	light_color = null
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 
 /obj/machinery/computer/security/mining
 	name = "Outpost Cameras"
@@ -314,5 +337,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 	light_color = LIGHT_COLOR_YELLOW
 
+/obj/machinery/computer/security/nukies
+	network = list(CAMERANET_SS13,CAMERANET_NUKE)
 
 #undef DEFAULT_MAP_SIZE

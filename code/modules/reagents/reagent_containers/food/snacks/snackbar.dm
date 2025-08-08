@@ -7,6 +7,7 @@
 	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/snackbar/on_reagent_change()
+	..()
 	if(!reagents.total_volume)  //This should only happen if a chemical reaction removes the reagents from the bar
 		icon_state = "" //So it isn't visible in the 1/10th of a second before it is deleted
 		spawn(1) //A small delay is needed before deleting to allow for reactions to occur
@@ -16,6 +17,7 @@
 		update_name()
 
 /obj/item/weapon/reagent_containers/food/snacks/snackbar/update_icon()
+	..()
 	var/icon/I = icon('icons/obj/food.dmi', "snackbar")
 	I += mix_color_from_reagents(reagents.reagent_list)
 	src.icon = I

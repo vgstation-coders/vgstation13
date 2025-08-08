@@ -1,27 +1,14 @@
-//Xeno Overlays Indexes//////////
-#define X_L_HAND_LAYER			1
-#define X_R_HAND_LAYER			2
-#define X_HANDCUFF_LAYER		3
-#define X_FIRE_LAYER			4
-#define X_TARGETED_LAYER			5
-#define X_TOTAL_LAYERS			6
-/////////////////////////////////
-
-/mob/living/carbon/alien/humanoid
-	var/list/overlays_lying[X_TOTAL_LAYERS]
-	var/list/overlays_standing[X_TOTAL_LAYERS]
-
 /mob/living/carbon/alien/humanoid/update_icons()
 	lying_prev = lying	//so we don't update overlays for lying/standing unless our stance changes again
 	update_hud()		//TODO: remove the need for this to be here
-	overlays.len = 0
+	update_icon_state()
+
+/mob/living/carbon/alien/humanoid/proc/update_icon_state()
 	if(stat == DEAD)
 		if(fireloss > 125)//If we mostly took damage from fire
 			icon_state = "alien[caste]_husked"
 		else
 			icon_state = "alien[caste]_dead"
-		for(var/image/I in overlays_lying)
-			overlays += I
 	else if(lying)
 		if(resting)
 			icon_state = "alien[caste]_sleep"
@@ -29,20 +16,16 @@
 			icon_state = "alien[caste]_unconscious"
 		else
 			icon_state = "alien[caste]_l"
-		for(var/image/I in overlays_lying)
-			overlays += I
 	else
 		if(m_intent == "run")
 			icon_state = "alien[caste]_running"
-		else						icon_state = "alien[caste]_s"
-		for(var/image/I in overlays_standing)
-			overlays += I
+		else
+			icon_state = "alien[caste]_s"
 
 /mob/living/carbon/alien/humanoid/regenerate_icons()
 	..()
 	if (monkeyizing)
 		return
-
 	update_inv_hands(FALSE)
 	update_inv_pockets(FALSE)
 	update_inv_handcuffed(FALSE)
@@ -51,13 +34,7 @@
 	update_icons()
 	update_fire()
 
-/mob/living/carbon/alien/humanoid/update_hud()
-	//TODO
-	if (client)
-		update_internals()
-		client.screen |= contents
-
-/mob/living/carbon/alien/humanoid/update_inv_pockets(var/update_icons=TRUE)
+/mob/living/carbon/alien/humanoid/update_inv_pockets(update_icons = TRUE)
 	if(l_store)
 		l_store.screen_loc = ui_storage1
 	if(r_store)
@@ -65,104 +42,34 @@
 	if(update_icons)
 		update_icons()
 
-/mob/living/carbon/alien/humanoid/update_inv_hand(index, var/update_icons=TRUE)
-	switch(index)
-		if(GRASP_LEFT_HAND)
-			return update_inv_l_hand(update_icons)
-		if(GRASP_RIGHT_HAND)
-			return update_inv_r_hand(update_icons)
-
-/mob/living/carbon/alien/humanoid/update_inv_r_hand(var/update_icons=TRUE)
-	overlays -= overlays_standing[X_R_HAND_LAYER]
-	var/obj/item/I = get_held_item_by_index(GRASP_RIGHT_HAND)
-
-	if(I)
-		var/t_state = I.item_state
-		var/t_inhand_state = I.inhand_states["right_hand"]
-		if(!t_state)
-			t_state = I.icon_state
-		I.screen_loc = ui_rhand
-		var/image/IM = image("icon" = t_inhand_state, "icon_state" = t_state)
-		IM.color = I.color
-		overlays_standing[X_R_HAND_LAYER] = IM
-		if(handcuffed)
-			drop_item(I)
-	else
-		overlays_standing[X_R_HAND_LAYER]	= null
-	if(update_icons)
-		update_icons()
-
-/mob/living/carbon/alien/humanoid/update_inv_l_hand(var/update_icons=TRUE)
-	overlays -= overlays_standing[X_L_HAND_LAYER]
-	var/obj/item/I = get_held_item_by_index(GRASP_LEFT_HAND)
-
-	if(I)
-		var/t_state = I.item_state
-		var/t_inhand_state = I.inhand_states["left_hand"] //this is a file
-		if(!t_state)
-			t_state = I.icon_state
-		I.screen_loc = ui_lhand
-		var/image/IM = image("icon" = t_inhand_state, "icon_state" = t_state)
-		IM.color = I.color
-		overlays_standing[X_L_HAND_LAYER] = IM
-		if(handcuffed)
-			drop_item(I)
-	else
-		overlays_standing[X_L_HAND_LAYER]	= null
-	if(update_icons)
-		update_icons()
-
-/mob/living/carbon/alien/humanoid/update_inv_handcuffed(var/update_icons=TRUE)
+/mob/living/carbon/alien/humanoid/update_inv_handcuffed(update_icons = TRUE)
+	remove_overlay(HANDCUFF_LAYER)
 	if(handcuffed)
 		drop_hands()
 		stop_pulling()	//TODO: should be handled elsewhere
-		overlays_standing[X_HANDCUFF_LAYER]	= image(icon = 'icons/obj/cuffs.dmi', icon_state = "[handcuffed.icon_state]")
-	else
-		overlays_standing[X_HANDCUFF_LAYER]	= null
+		overlays += overlays_standing[HANDCUFF_LAYER] = mutable_appearance('icons/obj/cuffs.dmi', "[handcuffed.icon_state]", -HANDCUFF_LAYER)
 	if(update_icons)
 		update_icons()
 
-/mob/living/carbon/alien/humanoid/update_inv_mutual_handcuffed(var/update_icons = TRUE)
+/mob/living/carbon/alien/humanoid/update_inv_mutual_handcuffed(update_icons = TRUE)
+	remove_overlay(HANDCUFF_LAYER)
 	if(mutual_handcuffs)
 		stop_pulling()
-		overlays_standing[X_HANDCUFF_LAYER]	= image(icon = 'icons/obj/cuffs.dmi', icon_state = "singlecuff1")//TODO: procedurally generated single-cuffs
-	else
-		overlays_standing[X_HANDCUFF_LAYER]	= null
+		overlays += overlays_standing[HANDCUFF_LAYER] = mutable_appearance('icons/obj/cuffs.dmi', "singlecuff1", -HANDCUFF_LAYER) //TODO: procedurally generated single-cuffs
 	if(update_icons)
 		update_icons()
 
-//Call when target overlay should be added/removed
-/mob/living/carbon/alien/humanoid/update_targeted(var/update_icons=TRUE)
-	if (targeted_by && target_locked)
-		overlays_lying[X_TARGETED_LAYER]		= target_locked
-		overlays_standing[X_TARGETED_LAYER]	= target_locked
-	else if (!targeted_by && target_locked)
-		del(target_locked)
-	if (!targeted_by)
-		overlays_lying[X_TARGETED_LAYER]		= null
-		overlays_standing[X_TARGETED_LAYER]	= null
-	if(update_icons)
-		update_icons()
-
-
-/mob/living/carbon/alien/humanoid/update_fire()
-	overlays -= overlays_lying[X_FIRE_LAYER]
-	overlays -= overlays_standing[X_FIRE_LAYER]
-	if(on_fire)
-		overlays_lying[X_FIRE_LAYER] = image("icon"='icons/mob/OnFire.dmi', "icon_state"="Lying", "layer"= -X_FIRE_LAYER)
-		overlays_standing[X_FIRE_LAYER] = image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing", "layer"= -X_FIRE_LAYER)
-		if(src.lying)
-			overlays += overlays_lying[X_FIRE_LAYER]
-		else
-			overlays += overlays_standing[X_FIRE_LAYER]
+/mob/living/carbon/alien/humanoid/update_fire(update_icons = TRUE)
+	remove_overlay(FIRE_LAYER)
+	if(!on_fire)
 		return
-	else
-		overlays_lying[X_FIRE_LAYER] = null
-		overlays_standing[X_FIRE_LAYER] = null
-
-//Xeno Overlays Indexes//////////
-#undef X_L_HAND_LAYER
-#undef X_R_HAND_LAYER
-#undef X_TARGETED_LAYER
-#undef X_FIRE_LAYER
-#undef X_TOTAL_LAYERS
+	var/mutable_appearance/fire_overlay = mutable_appearance('icons/mob/OnFire.dmi', "Standing", -FIRE_LAYER)
+	if(lying)
+		fire_overlay = image(fire_overlay, dir = SOUTH)
+		var/matrix/lying_transform = matrix()
+		lying_transform.Turn(90)
+		lying_transform.Translate(1, -6)
+		fire_overlay.transform = lying_transform
+	overlays += overlays_standing[FIRE_LAYER] = fire_overlay
+	if(update_icons)
+		update_icons()

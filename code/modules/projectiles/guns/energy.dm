@@ -17,6 +17,44 @@
 	var/modifystate
 	var/charge_states = 1 //if the gun changes icon states depending on charge, this is 1. Uses a var so it can be changed easily
 	var/icon_charge_multiple = 25 //Spacing of the charge level sprites
+	var/charge_tick = 0
+	var/recharge_time = 0 //Time it takes for shots to recharge (in ticks)
+	var/recharge_mult = 1
+	var/uses_borg_cell = FALSE
+	var/recharges_borg_cell = FALSE
+	var/borg_restocks = FALSE
+
+/obj/item/weapon/gun/energy/New()
+	..()
+	if(recharge_time)
+		processing_objects.Add(src)
+
+/obj/item/weapon/gun/energy/Destroy()
+	if(recharge_time)
+		processing_objects.Remove(src)
+	..()
+
+/obj/item/weapon/gun/energy/process()
+	if(recharge_time)
+		charge_tick++
+		if(charge_tick < recharge_time)
+			return 0
+		charge_tick = 0
+		if(!power_supply)
+			return 0
+		if(recharges_borg_cell && isrobot(loc) && !use_cell_charge(src.loc,charge_cost))
+			return 0
+		power_supply.give(charge_cost*recharge_mult)
+		update_icon()
+		return 1
+
+/obj/item/weapon/gun/energy/restock()
+	if(borg_restocks)
+		if(power_supply.charge < power_supply.maxcharge)
+			power_supply.give(charge_cost)
+			update_icon()
+		else
+			charge_tick = 0
 
 /obj/item/weapon/gun/energy/get_cell()
 	return power_supply
@@ -40,9 +78,10 @@
 /obj/item/weapon/gun/energy/process_chambered()
 	if(in_chamber)
 		return 1
-	if(!power_supply)
-		return 0
-	if(!power_supply.use(charge_cost))
+	if(uses_borg_cell && isrobot(loc))
+		if(!use_cell_charge(src.loc,charge_cost))
+			return 0
+	else if(!power_supply || !power_supply.use(charge_cost))
 		return 0
 	if(!projectile_type)
 		return 0
@@ -101,8 +140,19 @@
 		return 1
 	return ..()
 
-/obj/item/weapon/gun/energy/attack_self(mob/user)
-	return detach_cell(user)
+//There is a verb for this!
+// /obj/item/weapon/gun/energy/attack_self(mob/user)
+// 	return detach_cell(user)
+
+//Handles the detach cell verb for the energy gun, so that admins can adminbus it
+/obj/item/weapon/gun/energy/variable_edited(variable_name, old_value, new_value)
+	if(variable_name == "detachable_cell")
+		if(new_value) //New value is not 0 or null, give the verb
+			if(!verbs.Find(/obj/item/weapon/gun/energy/verb/detach_cell_verb))
+				verbs += /obj/item/weapon/gun/energy/verb/detach_cell_verb
+		else
+			verbs -= /obj/item/weapon/gun/energy/verb/detach_cell_verb
+	return ..()
 
 /obj/item/weapon/gun/energy/verb/detach_cell_verb()
 	set name = "Detach cell"
@@ -118,7 +168,6 @@
 		return
 
 	to_chat(user, "<span class='notice'>You slide the energy cell out of \the [src].</span>")
-	power_supply.forceMove(src.loc)
 	user.put_in_hands(power_supply)
 	power_supply.add_fingerprint(user)
 	power_supply.updateicon()
@@ -133,10 +182,9 @@
 	if(detachable_cell && istype(I,/obj/item/weapon/cell))
 		if(power_supply)
 			to_chat(user,"<span class='notice'>You quickly swap the cell of \the [src].</span>")
-			power_supply.forceMove(src.loc)
+			user.put_in_hands(power_supply)
 			user.drop_item(I, loc, 1)
 			I.forceMove(src)
-			user.put_in_hands(power_supply)
 			power_supply.add_fingerprint(user)
 			power_supply.updateicon()
 			src.power_supply = I

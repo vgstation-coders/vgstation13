@@ -50,10 +50,13 @@
 	//we're still gonna trim the obvious (mobs without clients, jobbanned players, etc)
 	living_players = trim_list(candidates[CURRENT_LIVING_PLAYERS])
 	living_antags = trim_list(candidates[CURRENT_LIVING_ANTAGS])
-	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS], trim_prefs_set_to_no = FALSE)
-	list_observers = trim_list(candidates[CURRENT_OBSERVERS], trim_prefs_set_to_no = FALSE)
+	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS], observer_override = TRUE)
+	list_observers = trim_list(candidates[CURRENT_OBSERVERS], observer_override = TRUE)
 
-/datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list(), trim_prefs_set_to_no = TRUE)
+//Added observer_override for when we want to count dead players and observers without
+//caring too much about their preferences nor their assigned roles.
+//To be used for trimming dead_players and list_observers.
+/datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list(), observer_override = FALSE)
 	var/list/trimmed_list = L.Copy()
 	var/role_id = initial(role_category.id)
 	var/role_pref = initial(role_category.required_pref)
@@ -62,13 +65,15 @@
 			trimmed_list.Remove(M)
 			continue
 		var/preference = get_role_desire_str(M.client.prefs.roles[role_pref])
-		if(preference == "Never" || (preference == "No" && trim_prefs_set_to_no)) // are they willing or at least not unwilling?
+		if(((preference == "Never") || (preference == "No")) && !observer_override) // are they willing or at least not unwilling?
 			trimmed_list.Remove(M)
 			continue
 		if (jobban_isbanned(M, role_id) || isantagbanned(M))//are they not antag-banned?
 			trimmed_list.Remove(M)
 			continue
 		if (M.mind)
+			if((observer_override && (M.stat == DEAD))) //We don't care about their role because they aren't alive
+				continue
 			if ((M.mind.assigned_role && (M.mind.assigned_role in restricted_from_jobs)) || (M.mind.role_alt_title && (M.mind.role_alt_title in restricted_from_jobs)))//does their job allow for it?
 				trimmed_list.Remove(M)
 				continue
@@ -97,7 +102,7 @@
 	return TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/ready(var/forced = 0)
-	if (required_candidates > (dead_players.len + list_observers.len) && !forced)
+	if ((required_candidates > (dead_players.len + list_observers.len)) && !forced)
 		return 0
 	return ..()
 
@@ -455,7 +460,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad
 	name = "Revolutionary Squad"
 	role_category = /datum/role/revolutionary/leader
-	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_pop = list(25,25,25,25,25,20,15,15,10,10)
 	required_candidates = 3
 	weight = BASE_RULESET_WEIGHT
@@ -564,7 +569,7 @@
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/generate_ruleset_body(mob/applicant)
-	var/mob/living/carbon/human/frankenstein/new_frank = new(pick(latejoin))
+	var/mob/living/carbon/human/frankenstein/new_frank = new(pick(latejoin), no_tail = TRUE)
 	var/gender = pick(MALE, FEMALE)
 	new_frank.randomise_appearance_for(gender)
 	new_frank.key = applicant.key
@@ -864,8 +869,8 @@
 /datum/dynamic_ruleset/midround/from_ghosts/pulse_demon
 	name = "Pulse Demon Infiltration"
 	role_category = /datum/role/pulse_demon
-	enemy_jobs = list("Station Engineer","Chief Engineer")
-	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
+	enemy_jobs = list("Station Engineer","Chief Engineer","Warden","Head of Security","Captain","AI","Cyborg")
+	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
 	weight_category = "Pulse"
@@ -910,7 +915,7 @@
 	weight = BASE_RULESET_WEIGHT
 	weight_category = "Grue"
 	cost = 20
-	requirements = list(70,60,50,40,30,20,10,10,10,10)
+	requirements = list(101,101,101,40,30,20,10,10,10,10)
 	high_population_requirement = 10
 	logo = "grue-logo"
 	repeatable = TRUE
@@ -1090,3 +1095,84 @@
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	logo = "gun-logo"
 	repeatable = TRUE
+
+//////////////////////////////////////////////
+//                                          //
+//       DIVERGENT CLONE                    //
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/divergentclone
+	name = "Divergent Clone"
+	role_category = /datum/role/divergentclone
+	required_candidates = 1
+	weight = 3
+	weight_category = "Clone"
+	cost = 5
+	requirements = list(40,30,20,10,10,10,10,10,10,10)
+	high_population_requirement = 10
+	logo = "divergentclone-logo"
+	repeatable = TRUE
+	makeBody = FALSE
+	flags = MINOR_RULESET
+
+/datum/dynamic_ruleset/midround/from_ghosts/divergentclone/trim_candidates()
+	..()
+	for(var/mob/M in dead_players)
+		if(isdivergentclone(M))
+			dead_players -= M
+	for(var/mob/M in list_observers)
+		if(isdivergentclone(M))
+			list_observers -= M
+
+
+/datum/dynamic_ruleset/midround/from_ghosts/divergentclone/ready(var/forced = 0)
+	if(!config.revival_cloning)
+		return 0
+
+	//Check that we have at least one ghost who isn't already a clone waiting to spawn
+	var/list/candies = dead_players + list_observers
+	var/list/valids[0]
+	for(var/mob/dead/observer/G in candies)
+		if(isdivergentclone(G))
+			continue
+		valids += G
+	if(valids.len == 0)
+		if(forced)
+			message_admins("Tried to force divergent clone, but no valid candidates found.")
+		return 0
+
+	var/list/clonepods = list()
+	for(var/obj/machinery/cloning/clonepod/pod in machines)
+		//Check that the pod has cloned something before
+		if(pod.cloned_records.len)
+			clonepods += pod
+	if(!forced && clonepods.len == 0)
+		return 0
+	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/divergentclone/finish_setup(mob/new_character, index)
+	//Create a new dummy body to create a new mind for the ghost.
+	var/L = get_turf(new_character)
+	var/mob/living/carbon/human/H = new /mob/living/carbon/human(pick(latejoin))
+	H.ckey = new_character.ckey
+	H.fully_replace_character_name(null, "\improper spirit of a divergent clone")
+
+	//Give the about-to-be-a-ghost mob the provisional role and objective
+	var/datum/role/divergentclone/new_role = new /datum/role/divergentclone(H.mind, override=TRUE)
+	new_role.ForgeObjectives()
+	new_role.AnnounceObjectives()
+
+	var/mob/dead/observer/G = H.ghostize(FALSE)
+	//Give it a more spirity looking icon.
+	G.icon = initial(G.icon)
+	G.icon_state = initial(G.icon_state)
+	QDEL_NULL(H)
+	G.forceMove(L)
+	G.add_spell(new /spell/targeted/ghost/divergentclone)
+
+	to_chat(G, "<span class='notice'><b>You were selected to be a divergent clone, but will not be spawned in yet!</b></span>")
+	to_chat(G, "<span class='notice'>You have been granted the \"Spawn as Divergent Clone\" ghost spell. Use this near a cloning pod to spawn in as a divergent clone of someone who was cloned, or is currently being cloned, in that pod.</span>")
+	to_chat(G, "<span class='notice'>Using this spell on an unoccupied cloning pod will allow you to choose a record of a person previously cloned in that pod. Using it on an occupied pod will cause you to become a twin of the person currently in the pod, and be ejected from the pod at the same time as them.</span>")
+	to_chat(G, "<span class='notice'>Remember: you can only use this spell once, and re-entering your corpse will remove it permanently. In fact, for your convenience we have removed your ability to re-enter your corpse.</span>")
+

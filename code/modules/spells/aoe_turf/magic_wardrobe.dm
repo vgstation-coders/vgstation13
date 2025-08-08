@@ -5,15 +5,15 @@
 	specialization = SSUTILITY
 	abbreviation = "MW"
 	hud_state = "wardrobe_main"
-	charge_max = 300 SECONDS
+	charge_cooldown_max = 300 SECONDS
 	cooldown_min = 150 SECONDS
 	spell_flags = NEEDSCLOTHES | Z2NOCAST
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	invocation = "NAR'NI'AH"
 	summon_type = list(/obj/structure/closet/magical_wardrobe)
-	price = 0.75 * Sp_BASE_PRICE
-	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0, Sp_MOVE = 0, Sp_AMOUNT = 0)
-	level_max = list(Sp_TOTAL = 8, Sp_SPEED = 3, Sp_POWER = 1, Sp_MOVE = 1, Sp_AMOUNT = 4)
+	price = 0.75 * SP_BASE_PRICE
+	spell_levels = list(SP_SPEED = 0, SP_POWER = 0, SP_MOVE = 0, SP_AMOUNT = 0)
+	level_max = list(SP_TOTAL = 8, SP_SPEED = 3, SP_POWER = 1, SP_MOVE = 1, SP_AMOUNT = 4)
 
 	var/obj/structure/closet/magical_wardrobe/magicCloset = null
 	var/spell/targeted/magical_wardrobe_recall/mWRecall = null
@@ -36,16 +36,16 @@
 
 /spell/aoe_turf/conjure/magical_wardrobe/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
+		if(SP_SPEED)
 			wardrobeHealth += 25
 			return quicken_spell()
-		if(Sp_POWER)
+		if(SP_POWER)
 			wardrobeHealth += 25
-			spell_levels[Sp_POWER]++
+			spell_levels[SP_POWER]++
 			return "You no longer suffer backlash when your wardrobe is destroyed."
-		if(Sp_MOVE)
+		if(SP_MOVE)
 			if(isliving(usr))	//Spellcode
-				spell_levels[Sp_MOVE]++
+				spell_levels[SP_MOVE]++
 				var/mob/living/user = usr
 				wardrobeHealth += 25
 				mWSummon = new /spell/magical_wardrobe_summon
@@ -56,30 +56,39 @@
 					user.mind.wizard_spells += mWSummon
 				user.add_spell(mWSummon)
 				return "You may now summon your wardrobe to you."
-		if(Sp_AMOUNT)
+		if(SP_AMOUNT)
 			wardrobeHealth += 50
-			spell_levels[Sp_AMOUNT]++
+			spell_levels[SP_AMOUNT]++
 			return "Your wardrobe is both sturdier and more fashionable."	//This exists because it took 5 seconds and might be good for a gimmick. No one should buy this.
 
 /spell/aoe_turf/conjure/magical_wardrobe/get_upgrade_price(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
+		if(SP_SPEED)
 			return 5
-		if(Sp_POWER)
+		if(SP_POWER)
 			return 10
-		if(Sp_MOVE)
+		if(SP_MOVE)
 			return 5
-		if(Sp_AMOUNT)
+		if(SP_AMOUNT)
 			return 10
 
 /spell/aoe_turf/conjure/magical_wardrobe/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_SPEED)
-		return "Decreases the cooldown on summoning a new wardrobe. Does not effect the recall or summon spells. Also increases its durability."
-	if(upgrade_type == Sp_MOVE)
+	if(upgrade_type == SP_SPEED)
+		if(spell_levels[SP_SPEED] >= level_max[SP_SPEED])
+			return "The spell can't be made any quicker than this!"
+		var/formula = round((initial_charge_cooldown_max - cooldown_min)/level_max[SP_SPEED])
+		return "Decreases the cooldown on summoning a new wardrobe by [formula/10]. Does not affect the recall or summon spells. Also increases its durability."
+	if(upgrade_type == SP_MOVE)
+		if(spell_levels[SP_MOVE] >= level_max[SP_MOVE])
+			return "You can already summon the wardrobe to your location!"
 		return "Allows you to summon your wardrobe to your location. Also increases its durability."
-	if(upgrade_type == Sp_POWER)
+	if(upgrade_type == SP_POWER)
+		if(spell_levels[SP_POWER] >= level_max[SP_POWER])
+			return "You are already immune to the magical backlash of your wardrobe getting destroyed!"
 		return "Prevents magical backlash from affecting you when your wardrobe is destroyed. Also increases its durability."
-	if(upgrade_type == Sp_AMOUNT)
+	if(upgrade_type == SP_AMOUNT)
+		if(spell_levels[SP_AMOUNT] >= level_max[SP_AMOUNT])
+			return "You have already made the wardrobe as durable as it can be through this upgrade! You may try buying a different upgrade."
 		return "Significantly increases durability. Only wizards completely devoted to fashion should choose this."
 	return ..()
 
@@ -87,7 +96,7 @@
 	if(magicCloset)
 		magicCloset.forceMove(user.loc)
 		magicCloset.wardrobeSetup()
-		if(spell_levels[Sp_POWER])
+		if(spell_levels[SP_POWER])
 			magicCloset.backlash = FALSE
 	else
 		..()
@@ -97,12 +106,17 @@
 	magicCloset.theWiz = user
 	magicCloset.mWOrigin = src
 	magicCloset.wardrobeSetup()
-	if(spell_levels[Sp_POWER])
+	if(spell_levels[SP_POWER])
 		magicCloset.backlash = FALSE
 	if(mWRecall)
 		mWRecall.mCloset = magicCloset
 	if(mWSummon)
 		mWSummon.mCloset = magicCloset
+
+//Set the new player as the user
+/spell/aoe_turf/conjure/magical_wardrobe/on_transfer(mob/user)
+	if(magicCloset)
+		magicCloset.theWiz = user
 
 /spell/aoe_turf/conjure/magical_wardrobe/proc/clearClosets()
 	magicCloset = null
@@ -117,36 +131,42 @@
 	desc = "Teleport back to your magical wardrobe, assuming it still exists."
 	abbreviation = "WR"
 	hud_state = "wardrobe_recall"
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	spell_flags = Z2NOCAST | INCLUDEUSER 	//Creating a wardrobe needs clothes, using it doesn't
 	range = SELFCAST
 	var/obj/structure/closet/magical_wardrobe/mCloset = null
 
-/spell/targeted/magical_wardrobe_recall/cast(list/targets, mob/user)
+/spell/targeted/magical_wardrobe_recall/before_cast(list/targets, user, bypass_range)
 	if(!mCloset)
 		to_chat(user, "<span class='warning'>You don't have a wardrobe to recall to!</span>")
-	else
-		do_teleport(user, mCloset, 0)
-		mCloset.wardrobeToggle()
+		return list()
+	return ..()
+
+/spell/targeted/magical_wardrobe_recall/cast(list/targets, mob/user)
+	do_teleport(user, mCloset, 0)
+	mCloset.wardrobeToggle()
 
 /spell/magical_wardrobe_summon
 	name = "Wardrobe Summon"
 	desc = "Teleport your magical wardrobe back to you, assuming it still exists."
 	abbreviation = "WS"
 	hud_state = "wardrobe_summon"
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	spell_flags = Z2NOCAST
 	var/obj/structure/closet/magical_wardrobe/mCloset = null
 
 /spell/magical_wardrobe_summon/choose_targets(mob/user = usr)
 	return list(user)
 
+/spell/magical_wardrobe_summon/before_cast(list/targets, user, bypass_range)
+	if(!mCloset)
+		to_chat(user, "<span class='warning'>You don't have a wardrobe to recall to!</span>")
+		return list()
+	return ..()
+
 /spell/magical_wardrobe_summon/cast(list/targets, mob/user)
-	if(mCloset)
-		do_teleport(mCloset, user, 0)
-		mCloset.wardrobeToggle()
-	else
-		to_chat(user, "<span class='warning'>You don't have a wardrobe to summon!</span>")
+	do_teleport(mCloset, user, 0)
+	mCloset.wardrobeToggle()
 
 
 /obj/structure/closet/magical_wardrobe
@@ -240,7 +260,6 @@
 		/obj/item/clothing/head/nursehat,
 		/obj/item/clothing/head/spaceninjafake,
 		/obj/item/clothing/head/cardborg,
-		/obj/item/clothing/head/sith,
 		/obj/item/clothing/head/beaverhat,
 		/obj/item/clothing/head/fedora,
 		/obj/item/clothing/head/fez,

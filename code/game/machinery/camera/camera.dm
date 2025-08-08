@@ -1,6 +1,7 @@
 #define CAMERA_MAX_HEALTH 120
 #define CAMERA_DEACTIVATE_HEALTH 45
 #define CAMERA_MIN_WEAPON_DAMAGE 5
+#define CAMERA_MAX_FAIL_CHANCE 25
 
 var/list/camera_names=list()
 /obj/machinery/camera
@@ -52,11 +53,17 @@ var/list/camera_names=list()
 	damage_armor = CAMERA_MIN_WEAPON_DAMAGE
 	damage_resist = 0
 
+/obj/machinery/camera/New()
+	..()
+	update_icon()
+
 /obj/machinery/camera/flawless
 	failure_chance = 0
 
 /obj/machinery/camera/initialize()
 	..()
+	if(failure_chance)
+		failure_chance = clamp(failure_chance-(last_crewscore/1000),0,CAMERA_MAX_FAIL_CHANCE) // 25% at highest, 0% at lowest
 	if(prob(failure_chance))
 		deactivate()
 
@@ -69,10 +76,13 @@ var/list/camera_names=list()
 
 	if (deactivated)
 		icon_state = "[camtype]1"
+		kill_moody_light()
 	else if (EMPd)
 		icon_state = "[camtype]emp"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_cameraemp")
 	else
 		icon_state = "[camtype]"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_camera")
 
 /obj/machinery/camera/proc/update_hear()//only cameras with voice analyzers can hear, to reduce the number of unecessary /mob/virtualhearer
 	if(!hear_voice && isHearing())
@@ -586,3 +596,4 @@ var/list/camera_messages = list()
 #undef CAMERA_MAX_HEALTH
 #undef CAMERA_DEACTIVATE_HEALTH
 #undef CAMERA_MIN_WEAPON_DAMAGE
+#undef CAMERA_MAX_FAIL_CHANCE

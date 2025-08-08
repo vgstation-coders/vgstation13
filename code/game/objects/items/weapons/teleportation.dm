@@ -24,7 +24,7 @@
 	throw_range = 20
 	starting_materials = list(MAT_IRON = 400)
 	w_type = RECYK_ELECTRONIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_MAGNETS + "=1"
 
 /obj/item/weapon/locator/attack_self(mob/user as mob)
@@ -42,7 +42,7 @@ Frequency:
 <A href='byond://?src=\ref[src];freq=10'>+</A><BR>
 
 <A href='?src=\ref[src];refresh=1'>Refresh</A>"}
-	user << browse(dat, "window=radio")
+	user << browse(HTML_SKELETON(dat), "window=radio")
 	onclose(user, "radio")
 	return
 
@@ -127,7 +127,9 @@ Frequency:
 	icon = 'icons/obj/hydroponics/bluespacebanana.dmi'
 	icon_state = "peel"
 	item_state = "bluespacebanana_peel"
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
+
 
 /obj/item/weapon/bananapeel/bluespace/handle_slip(atom/movable/AM)
 	if(..() && ishuman(AM))
@@ -156,10 +158,10 @@ Frequency:
 	throw_range = 5
 	starting_materials = list(MAT_IRON = 10000, MAT_GOLD = 500, MAT_PHAZON = 50)
 	w_type = RECYK_ELECTRONIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_BLUESPACE + "=3"
 	var/list/portals = list()
-	var/charge = HANDTELE_MAX_CHARGE//how many pairs of portal can the hand-tele sustain at once. a new charge is added every 30 seconds until the maximum is reached..
+	var/charge = HANDTELE_MAX_CHARGE//how many pairs of portal can the hand-tele sustain at once. a new charge is added every 30 seconds until the maximum is reached.
 	var/recharging = 0
 	var/destination_id
 	var/destination_name
@@ -171,7 +173,7 @@ Frequency:
 
 /obj/item/weapon/hand_tele/attack_self(mob/user as mob)
 	var/turf/current_location = get_turf(user)//What turf is the user on?
-	if(!current_location||current_location.z==2||current_location.z>=7)//If turf was not found or they're on z level 2 or >7 which does not currently exist.
+	if(!current_location||current_location.z==map.zCentcomm||current_location.z>=7)//If turf was not found or they're on z level 2 or >7 which does not currently exist.
 		to_chat(user, "<span class='notice'>\The [src] is malfunctioning.</span>")
 		return
 
@@ -179,13 +181,19 @@ Frequency:
 		user.show_message("<span class='notice'>\The [src] is recharging!</span>")
 		return
 
-	if(!destination_id)
+	var/T
+
+	if((destination_name == "None (Dangerous)"))
+		if(prob(5))
+			T = locate(rand(7, world.maxx - 7), rand(7, world.maxy -7), map.zTCommSat)
+		else
+			destination_id = scramble_destination(user)
+
+	else if(!destination_id)
 		if(!choose_destination(user))
 			return
-	var/T = destination_id
 
-	if((destination_name == "None (Dangerous)") && prob(5))
-		T = locate(rand(7, world.maxx - 7), rand(7, world.maxy -7), map.zTCommSat)
+	T = destination_id
 
 	var/turf/U = get_turf(src)
 	U.visible_message("<span class='notice'>Locked In.</span>")
@@ -246,10 +254,20 @@ Frequency:
 		src.destination_id = destination_id
 		return 1
 
-/obj/item/weapon/hand_tele/AltClick(var/mob/usr)
-	if((usr.incapacitated() || !Adjacent(usr)))
+/obj/item/weapon/hand_tele/proc/scramble_destination(var/mob/user)
+	var/list/turfs = list()
+	for(var/turf/T in trange(10, user))
+		if (T.x > world.maxx - 8 || T.x < 8)
+			continue
+		if (T.y > world.maxy - 8 || T.y < 8)
+			continue
+		turfs += T
+	return pick(turfs)
+
+/obj/item/weapon/hand_tele/AltClick(var/mob/user)
+	if((user.incapacitated() || !Adjacent(user)))
 		return
-	choose_destination(usr)
+	choose_destination(user)
 
 /obj/item/weapon/hand_tele/process()
 	charge = min(HANDTELE_MAX_CHARGE,charge+1)

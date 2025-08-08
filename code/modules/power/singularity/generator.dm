@@ -10,6 +10,7 @@
 	var/energy = 0
 
 	machine_flags = WRENCHMOVE | FIXED2WORK
+	pass_flags_self = 0
 
 /obj/machinery/the_singularitygen/process()
 	if (energy < 200)

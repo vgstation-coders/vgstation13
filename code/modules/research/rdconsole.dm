@@ -31,6 +31,43 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 */
 #define RESEARCH_MAX_Q_LEN 100
+
+// Defines for what used to be magic numbers.
+// The code partially relies on numbers to tell what device is supposed to show up (2.x = Protolathe for example).
+// The (machine)_UPPER_LIMIT defines are used due to the aforementioned.
+#define DATABASE_UPDATE 0.0
+#define DATABASE_PROCESS 0.1
+#define CONSOLE_LOCKED 0.2
+#define PROTOLATHE_BUILD 0.3
+#define CIRCUIT_BUILD 0.4
+
+#define CONSOLE_MENU 1.0
+#define CONSOLE_RESEARCH_MENU 1.1
+#define CONSOLE_DISK_TECH_MENU 1.2
+#define CONSOLE_DISK_TECH_DOWNLOAD_MENU 1.3
+#define CONSOLE_DISK_DESIGN_MENU 1.4
+#define CONSOLE_DISK_DESIGN_DOWNLOAD_MENU 1.5
+#define CONSOLE_SETTINGS_MENU 1.6
+#define CONSOLE_LINKAGE_MENU 1.7
+
+#define DA_UNLINKED 2.0
+#define DA_NO_ITEM_LOADED 2.1
+#define DA_ITEM_LOADED 2.2
+#define DA_UPPER_LIMIT 2.9
+
+#define PROTOLATHE_UNLINKED 3.0
+#define PROTOLATHE_MENU 3.1
+#define PROTOLATHE_RESOURCE_MENU 3.2
+#define PROTOLATHE_QUEUE_MENU 3.4
+#define PROTOLATHE_UPPER_LIMIT 3.9
+
+#define CIRCUIT_UNLINKED 4.0
+#define CIRCUIT_MENU 4.1
+#define CIRCUIT_CHEMICAL_MENU 4.2
+#define CIRCUIT_RESOURCE_MENU 4.3
+#define CIRCUIT_QUEUE_MENU 4.4
+#define CIRCUIT_UPPER_LIMIT 4.9
+
 /obj/machinery/computer/rdconsole
 	name = "R&D Console"
 	icon_state = "rdcomp"
@@ -55,7 +92,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		/obj/machinery/r_n_d/reverse_engine,
 		/obj/machinery/r_n_d/blueprinter
 		)
-	var/screen = 1.0	//Which screen is currently showing.
+	var/screen = CONSOLE_MENU	//Which screen is currently showing.
 	var/id = 0			//ID of the computer (for server restrictions).
 	var/sync = 1		//If sync = 0, it doesn't show up on Server Control Console
 
@@ -114,6 +151,20 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		var/datum/tech/KT = files.known_tech[ID]
 		if(KT.level < KT.max_level)
 			KT.level=KT.max_level
+
+/obj/machinery/computer/rdconsole/proc/GiveRandomResearch(var/obj/machinery/computer/tetris/source)
+	var/list/list_tech_to_upgrade = source.loaded_techs.Copy()
+	var/upgraded = FALSE
+	while (!upgraded && list_tech_to_upgrade.len)
+		var/candidate_tech = pick(list_tech_to_upgrade)
+		var/max_upgraded_level = list_tech_to_upgrade[candidate_tech]
+		if (!tech_list[candidate_tech])
+			CRASH("tetris gave us invalid upgrade tech: [candidate_tech]")
+		list_tech_to_upgrade -= candidate_tech
+		var/datum/tech/KT = files.known_tech[candidate_tech]
+		if (KT.level < KT.max_level && KT.level < max_upgraded_level)
+			KT.level++
+			upgraded = 0
 
 /obj/machinery/computer/rdconsole/proc/CallTechName(var/ID) //A simple helper proc to find the name of a tech with a given ID.
 	var/datum/tech/check_tech
@@ -235,7 +286,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	if(isLocked() || (linked_destroy.stat & (FORCEDISABLE|NOPOWER|BROKEN)) || (stat & (NOPOWER|BROKEN|FORCEDISABLE)))
 		return
 	linked_destroy.busy = 1
-	screen = 0.1
+	screen = DATABASE_PROCESS
 	updateUsrDialog()
 	flick("d_analyzer_process", linked_destroy)
 
@@ -244,7 +295,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			if(!linked_destroy.hacked)
 				if(!linked_destroy.loaded_item)
 					to_chat(user, "<span class='warning'>The destructive analyzer appears to be empty.</span>")
-					screen = 1.0
+					screen = CONSOLE_MENU
 					linked_destroy.busy = 0
 					return
 				if(linked_destroy.loaded_item.reliability >= 90)
@@ -271,7 +322,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			else
 				linked_destroy.icon_state = "d_analyzer"
 			use_power(250)
-			screen = 1.0
+			screen = CONSOLE_MENU
 			updateUsrDialog()
 			linked_destroy.busy = 0
 
@@ -283,113 +334,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	add_fingerprint(usr)
 
-	if(isLocked() && !allowed(usr))
-		to_chat(usr, "Unauthorized Access.")
-		return
-
-	usr.set_machine(src)
-
-	if(href_list["menu"]) //Switches menu screens. Converts a sent text string into a number. Saves a LOT of code.
-		var/temp_screen = text2num(href_list["menu"])
-		if(temp_screen <= 1.1 || (2 <= temp_screen && 4.9 >= temp_screen) || src.allowed(usr) || emagged) //Unless you are making something, you need access.
-			screen = temp_screen
-		else
-			to_chat(usr, "Unauthorized Access.")
-
-	else if(href_list["updt_tech"]) //Update the research holder with information from the technology disk.
-		screen = 0.0
-		spawn(50)
-			screen = 1.2
-			files.AddTech2Known(t_disk.stored)
-			if(t_disk.stored.new_category && !(t_disk.stored.new_category in part_sets))
-				part_sets += t_disk.stored.new_category
-				part_sets[t_disk.stored.new_category] = list()
-				if(linked_lathe)
-					linked_lathe.part_sets = part_sets
-			updateUsrDialog()
-			griefProtection() //Update centcomm too
-
-	else if(href_list["hax"]) // aww shit
-		if(!usr.client.holder)
-			return
-		if (alert("Are you sure you want to do this? This will maximize every research level!", "Admin R&D console Hax.", "Yes", "No") != "Yes")
-			return TRUE
-		screen = 0.0
-		spawn(50)
-			Maximize()
-			screen = 1.0
-			updateUsrDialog()
-			griefProtection() //Update centcomm too
-
-	else if(href_list["clear_tech"]) //Erase data on the technology disk.
-		t_disk.stored = null
-
-	else if(href_list["eject_tech"]) //Eject the technology disk.
-		t_disk:forceMove(src.loc)
-		t_disk = null
-		screen = 1.0
-
-	else if(href_list["copy_tech"]) //Copys some technology data from the research holder to the disk.
-		for(var/ID in files.known_tech)
-			var/datum/tech/T = files.known_tech[ID]
-			if(href_list["copy_tech_ID"] == T.id)
-				t_disk.stored = T
-				break
-		screen = 1.2
-
-	else if(href_list["updt_design"]) //Updates the research holder with design data from the design disk.
-		screen = 0.0
-		spawn(50)
-			screen = 1.4
-			files.AddDesign2Known(d_disk.blueprint)
-			updateUsrDialog()
-			griefProtection() //Update centcomm too
-
-	else if(href_list["clear_design"]) //Erases data on the design disk.
-		d_disk.blueprint = null
-
-	else if(href_list["eject_design"]) //Eject the design disk.
-		d_disk:forceMove(src.loc)
-		d_disk = null
-		screen = 1.0
-
-	else if(href_list["copy_design"]) //Copy design data from the research holder to the design disk.
-		for(var/datum/design/D in files.known_designs)
-			if(href_list["copy_design_ID"] == D.id)
-				d_disk.blueprint = D
-				break
-		screen = 1.4
-
-	else if(href_list["eject_item"]) //Eject the item inside the destructive analyzer.
-		if(linked_destroy)
-			if(linked_destroy.busy)
-				to_chat(usr, "<span class='warning'>The destructive analyzer is busy at the moment.</span>")
-
-			else if(linked_destroy.loaded_item)
-				linked_destroy.loaded_item.forceMove(linked_destroy.loc)
-				linked_destroy.loaded_item = null
-				linked_destroy.icon_state = "d_analyzer"
-				screen = 2.1
-
-	else if(href_list["deconstruct"]) //Deconstruct the item in the destructive analyzer and update the research holder.
-		if(linked_destroy)
-			if(linked_destroy.busy)
-				to_chat(usr, "<span class='warning'>The destructive analyzer is busy at the moment.</span>")
-			else
-				var/choice = input("Proceeding will destroy loaded item.") in list("Proceed", "Cancel")
-				if(choice == "Cancel" || !linked_destroy)
-					return
-
-				deconstruct_item(usr)
-
-	else if(href_list["lock"]) //Lock the console from use by anyone without tox access.
-		if(src.allowed(usr))
-			screen = text2num(href_list["lock"])
-		else
-			to_chat(usr, "Unauthorized Access.")
-
-	else if(href_list["sync"]) //Sync the research holder with all the R&D consoles in the game that aren't sync protected.
-		screen = 0.0
+	if(href_list["sync"]) //Sync the research holder with all the R&D consoles in the game that aren't sync protected.
+		screen = DATABASE_UPDATE
 		if(!sync)
 			to_chat(usr, "<span class='warning'>You must connect to the network first!</span>")
 		else
@@ -418,8 +364,114 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 							server_processed = 1
 						if(!istype(S, /obj/machinery/r_n_d/server/centcom) && server_processed)
 							S.produce_heat(100)
-					screen = 1.6
+					screen = CONSOLE_SETTINGS_MENU
 					updateUsrDialog()
+
+	if(isLocked() && !allowed(usr))
+		to_chat(usr, "Unauthorized Access.")
+		return
+
+	usr.set_machine(src)
+
+	if(href_list["menu"]) //Switches menu screens. Converts a sent text string into a number. Saves a LOT of code.
+		var/temp_screen = text2num(href_list["menu"])
+		if(temp_screen <= CONSOLE_RESEARCH_MENU || ((DA_UNLINKED <= temp_screen) && (CIRCUIT_UPPER_LIMIT >= temp_screen)) || src.allowed(usr) || emagged) //Unless you are making something, you need access.
+			screen = temp_screen
+		else
+			to_chat(usr, "Unauthorized Access.")
+
+	else if(href_list["updt_tech"]) //Update the research holder with information from the technology disk.
+		screen = DATABASE_UPDATE
+		spawn(50)
+			screen = CONSOLE_DISK_TECH_MENU
+			files.AddTech2Known(t_disk.stored)
+			if(t_disk.stored.new_category && !(t_disk.stored.new_category in part_sets))
+				part_sets += t_disk.stored.new_category
+				part_sets[t_disk.stored.new_category] = list()
+				if(linked_lathe)
+					linked_lathe.part_sets = part_sets
+			updateUsrDialog()
+			griefProtection() //Update centcomm too
+
+	else if(href_list["hax"]) // aww shit
+		if(!usr.client.holder)
+			return
+		if (alert("Are you sure you want to do this? This will maximize every research level!", "Admin R&D console Hax.", "Yes", "No") != "Yes")
+			return TRUE
+		screen = DATABASE_UPDATE
+		spawn(50)
+			Maximize()
+			screen = CONSOLE_MENU
+			updateUsrDialog()
+			griefProtection() //Update centcomm too
+
+	else if(href_list["clear_tech"]) //Erase data on the technology disk.
+		t_disk.stored = null
+
+	else if(href_list["eject_tech"]) //Eject the technology disk.
+		t_disk:forceMove(src.loc)
+		t_disk = null
+		screen = CONSOLE_MENU
+
+	else if(href_list["copy_tech"]) //Copys some technology data from the research holder to the disk.
+		for(var/ID in files.known_tech)
+			var/datum/tech/T = files.known_tech[ID]
+			if(href_list["copy_tech_ID"] == T.id)
+				t_disk.stored = create_tech(T.id)
+				t_disk.stored.level = T.level
+				break
+		screen = CONSOLE_DISK_TECH_MENU
+
+	else if(href_list["updt_design"]) //Updates the research holder with design data from the design disk.
+		screen = DATABASE_UPDATE
+		spawn(50)
+			screen = CONSOLE_DISK_DESIGN_MENU
+			files.AddDesign2Known(d_disk.blueprint)
+			updateUsrDialog()
+			griefProtection() //Update centcomm too
+
+	else if(href_list["clear_design"]) //Erases data on the design disk.
+		d_disk.blueprint = null
+
+	else if(href_list["eject_design"]) //Eject the design disk.
+		d_disk:forceMove(src.loc)
+		d_disk = null
+		screen = CONSOLE_MENU
+
+	else if(href_list["copy_design"]) //Copy design data from the research holder to the design disk.
+		for(var/datum/design/D in files.known_designs)
+			if(href_list["copy_design_ID"] == D.id)
+				d_disk.blueprint = D
+				break
+		screen = CONSOLE_DISK_DESIGN_MENU
+
+	else if(href_list["eject_item"]) //Eject the item inside the destructive analyzer.
+		if(linked_destroy)
+			if(linked_destroy.busy)
+				to_chat(usr, "<span class='warning'>The destructive analyzer is busy at the moment.</span>")
+
+			else if(linked_destroy.loaded_item)
+				linked_destroy.loaded_item.forceMove(linked_destroy.loc)
+				linked_destroy.loaded_item = null
+				linked_destroy.icon_state = "d_analyzer"
+				screen = DA_NO_ITEM_LOADED
+
+	else if(href_list["deconstruct"]) //Deconstruct the item in the destructive analyzer and update the research holder.
+		if(linked_destroy)
+			if(linked_destroy.busy)
+				to_chat(usr, "<span class='warning'>The destructive analyzer is busy at the moment.</span>")
+			else
+				var/choice = input("Proceeding will destroy loaded item.") in list("Proceed", "Cancel")
+				if(choice == "Cancel" || !linked_destroy)
+					return
+
+				deconstruct_item(usr)
+
+	else if(href_list["lock"]) //Lock the console from use by anyone without tox access.
+		if(src.allowed(usr))
+			screen = text2num(href_list["lock"])
+		else
+			to_chat(usr, "Unauthorized Access.")
 
 	else if(href_list["togglesync"]) //Prevents the console from being synced by other consoles. Can still send data.
 		sync = !sync
@@ -438,7 +490,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				for(var/M in being_built.materials)
 					power += round(being_built.materials[M] / 5)
 				power = max(2000, power)
-				//screen = 0.3
+				//screen = PROTOLATHE_BUILD
 				var/n
 				if (href_list["customamt"])
 					n = round(input("Queue how many? (Maximum [RESEARCH_MAX_Q_LEN - linked_lathe.queue.len])", "Protolathe Queue") as num|null)
@@ -575,10 +627,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				QDEL_NULL (sheet)
 
 	else if(href_list["find_device"]) //The R&D console looks for devices nearby to link up with.
-		screen = 0.0
+		screen = DATABASE_UPDATE
 		spawn(20)
 			SyncRDevices()
-			screen = 1.7
+			screen = CONSOLE_LINKAGE_MENU
 			updateUsrDialog()
 
 	else if(href_list["disconnect"]) //The R&D console disconnects with a specific device.
@@ -600,20 +652,20 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		griefProtection()
 		var/choice = alert("R&D Console Database Reset", "Are you sure you want to reset the R&D console's database? Data lost cannot be recovered.", "Continue", "Cancel")
 		if(choice == "Continue")
-			screen = 0.0
+			screen = DATABASE_UPDATE
 			qdel(files)
 			files = new /datum/research(src)
 			spawn(20)
-				screen = 1.6
+				screen = CONSOLE_SETTINGS_MENU
 				updateUsrDialog()
 
 	else if(href_list["alphatoggle"]) //Reset the R&D console's database.
 		griefProtection()
 		if(files)
-			screen = 0.0
+			screen = DATABASE_UPDATE
 			files.alphabetsort = !files.alphabetsort
 			spawn(20)
-				screen = 1.6
+				screen = CONSOLE_SETTINGS_MENU
 				updateUsrDialog()
 
 	else if(href_list["toggleCategory"]) //Filter or unfilter a category
@@ -646,135 +698,134 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	return
 
 /obj/machinery/computer/rdconsole/proc/protolathe_header()
-	var/list/options=list()
-	if(screen!=3.1)
-		options += "<A href='?src=\ref[src];menu=3.1'>Design Selection</A>"
-	if(screen!=3.2)
-		options += "<A href='?src=\ref[src];menu=3.2'>Material Storage</A>"
-	if(screen!=3.4)
-		options += "<A href='?src=\ref[src];menu=3.4'>Production Queue</A> ([linked_lathe.queue.len])"
-	return {"\[<A href='?src=\ref[src];menu=1.0'>Main Menu</A>\]
-	<div class="header">[jointext(options," || ")]</div><hr />"}
+	var/options = ""
+	if(screen!=PROTOLATHE_MENU)
+		options += "<A href='?src=\ref[src];menu=[PROTOLATHE_MENU]'>Design Selection</A>"
+	if(screen!=PROTOLATHE_RESOURCE_MENU)
+		options += "<A href='?src=\ref[src];menu=[PROTOLATHE_RESOURCE_MENU]'>Material Storage</A>"
+	if(screen!=PROTOLATHE_QUEUE_MENU)
+		options += "<A href='?src=\ref[src];menu=[PROTOLATHE_QUEUE_MENU]'>Production Queue ([linked_lathe.queue.len])</A>"
+	return {"<A href='?src=\ref[src];menu=[CONSOLE_MENU]'>Main Menu</A>
+	<div class="header">[options]<A href='?src=\ref[src];toggleAutoRefresh=1'>Auto-Refresh: [autorefresh ? "ON" : "OFF"]</A></div>"}
 
 /obj/machinery/computer/rdconsole/proc/CircuitImprinterHeader()
-	var/list/options=list()
-	if(screen!=4.1)
-		options += "<A href='?src=\ref[src];menu=4.1'>Design Selection</A>"
-	if(screen!=4.3)
-		options += "<A href='?src=\ref[src];menu=4.3'>Material Storage</A>"
-	if(screen!=4.2)
-		options += "<A href='?src=\ref[src];menu=4.2'>Chemical Storage</A>"
-	if(screen!=4.4)
-		options += "<A href='?src=\ref[src];menu=4.4'>Production Queue</A> ([linked_imprinter.queue.len])"
-	return {"\[<A href='?src=\ref[src];menu=1.0'>Main Menu</A>\]
-	<div class=\"header\">[jointext(options," || ")]</div><hr />"}
+	var/options = ""
+	if(screen!=CIRCUIT_MENU)
+		options += "<A href='?src=\ref[src];menu=[CIRCUIT_MENU]'>Design Selection</A>"
+	if(screen!=CIRCUIT_RESOURCE_MENU)
+		options += "<A href='?src=\ref[src];menu=[CIRCUIT_RESOURCE_MENU]'>Material Storage</A>"
+	if(screen!=CIRCUIT_CHEMICAL_MENU)
+		options += "<A href='?src=\ref[src];menu=[CIRCUIT_CHEMICAL_MENU]'>Chemical Storage</A>"
+	if(screen!=CIRCUIT_QUEUE_MENU)
+		options += "<A href='?src=\ref[src];menu=[CIRCUIT_QUEUE_MENU]'>Production Queue ([linked_imprinter.queue.len])</A>"
+	return {"<A href='?src=\ref[src];menu=[CONSOLE_MENU]'>Main Menu</A>
+	<div class=\"header\">[options]<A href='?src=\ref[src];toggleAutoRefresh=1'>Auto-Refresh: [autorefresh ? "ON" : "OFF"]</A></div>"}
 
 /obj/machinery/computer/rdconsole/attack_hand(mob/user as mob)
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	user.set_machine(src)
-	var/dat = list("<style>a:link {color: #0066CC} a:visited {color: #0066CC}</style>")
+	var/dat = list()
 	files.RefreshResearch()
 	switch(screen) //A quick check to make sure you get the right screen when a device is disconnected.
-		if(2 to 2.9)
+		if(DA_UNLINKED to DA_UPPER_LIMIT)
 			if(linked_destroy == null)
-				screen = 2.0
+				screen = DA_UNLINKED
 			else if(linked_destroy.loaded_item == null)
-				screen = 2.1
+				screen = DA_NO_ITEM_LOADED
 			else
-				screen = 2.2
-		if(3 to 3.9)
+				screen = DA_ITEM_LOADED
+		if(PROTOLATHE_UNLINKED to PROTOLATHE_UPPER_LIMIT)
 			if(linked_lathe == null)
-				screen = 3.0
-		if(4 to 4.9)
+				screen = PROTOLATHE_UNLINKED
+		if(CIRCUIT_UNLINKED to CIRCUIT_UPPER_LIMIT)
 			if(linked_imprinter == null)
-				screen = 4.0
+				screen = CIRCUIT_UNLINKED
 
 	switch(screen)
 
 		//////////////////////R&D CONSOLE SCREENS//////////////////
-		if(0.0)
+		if(DATABASE_UPDATE)
 			dat += "Updating Database...."
 
-		if(0.1)
+		if(DATABASE_PROCESS)
 			dat += "Processing and Updating Database..."
 
-		if(0.2)
+		if(CONSOLE_LOCKED)
 
-			dat += {"SYSTEM LOCKED<BR><BR>
-				<A href='?src=\ref[src];lock=1.6'>Unlock</A>"}
-		if(0.3)
+			dat += {"<h1>SYSTEM LOCKED</h1>
+				<A href='?src=\ref[src];lock=[CONSOLE_SETTINGS_MENU]'>Unlock</A>"}
+		if(PROTOLATHE_BUILD)
 			dat += "Constructing Prototypes. Please Wait..."
 
-		if(0.4)
+		if(CIRCUIT_BUILD)
 			dat += "Imprinting Circuit. Please Wait..."
 
-		if(1.0) //Main Menu
+		if(CONSOLE_MENU) //Main Menu
 
 			dat += {"Main Menu:<BR><BR>
-				<A href='?src=\ref[src];menu=1.1'>Current Research Levels</A><BR>"}
+				<A href='?src=\ref[src];menu=[CONSOLE_RESEARCH_MENU]'>Current Research Levels</A><BR>"}
 			if(t_disk)
-				dat += "<A href='?src=\ref[src];menu=1.2'>Disk Operations</A><BR>"
+				dat += "<A href='?src=\ref[src];menu=[CONSOLE_DISK_TECH_MENU]'>Disk Operations</A><BR>"
 			else if(d_disk)
-				dat += "<A href='?src=\ref[src];menu=1.4'>Disk Operations</A><BR>"
+				dat += "<A href='?src=\ref[src];menu=[CONSOLE_DISK_DESIGN_MENU]'>Disk Operations</A><BR>"
 			else
 				dat += "(Please Insert Disk)<BR>"
 			if(linked_destroy != null)
-				dat += "<A href='?src=\ref[src];menu=2.2'>Destructive Analyzer Menu</A><BR>"
+				dat += "<A href='?src=\ref[src];menu=[DA_ITEM_LOADED]'>Destructive Analyzer Menu</A><BR>"
 			if(linked_lathe != null)
-				dat += "<A href='?src=\ref[src];menu=3.1'>Protolathe Construction Menu</A><BR>"
+				dat += "<A href='?src=\ref[src];menu=[PROTOLATHE_MENU]'>Protolathe Construction Menu</A><BR>"
 			if(linked_imprinter != null)
-				dat += "<A href='?src=\ref[src];menu=4.1'>Circuit Construction Menu</A><BR>"
+				dat += "<A href='?src=\ref[src];menu=[CIRCUIT_MENU]'>Circuit Construction Menu</A><BR>"
 			if(user.client.holder)
 				dat += "<A href='?src=\ref[src];hax=1'>MAXIMUM SCIENCE</A><BR>"
-			dat += "<A href='?src=\ref[src];menu=1.6'>Settings</A>"
+			dat += "<A href='?src=\ref[src];menu=[CONSOLE_SETTINGS_MENU]'>Settings</A>"
 
-		if(1.1) //Research viewer
-			dat += "<A href='?src=\ref[src];menu=1.0'>Main Menu</A><BR>"
-			dat += "Current Research Levels:<BR><BR>"
+		if(CONSOLE_RESEARCH_MENU) //Research viewer
+			dat += "<A href='?src=\ref[src];menu=[CONSOLE_MENU]'>Main Menu</A><BR>"
+			dat += "<h1>Current Research Levels:</h1>"
 			for(var/ID in files.known_tech)
 				var/datum/tech/T = files.known_tech[ID]
-				dat += {"[T.name]<BR>
-					* Level: [T.level]<BR>
+				dat += {"[T.name]: level [T.level]<BR>
 					* Summary: [T.desc]<HR>"}
 
-		if(1.2) //Technology Disk Menu
+		if(CONSOLE_DISK_TECH_MENU) //Technology Disk Menu
 
 
-			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
-				Disk Contents: (Technology Data Disk)<BR><BR>"}
+			dat += {"<A href='?src=\ref[src];menu=[CONSOLE_MENU]'>Main Menu</A><BR>
+				<h1>Disk Contents: (Technology Data Disk)</h1>"}
 			if(t_disk.stored == null)
 
-				dat += {"The disk has no data stored on it.<HR>
+				dat += {"The disk has no data stored on it.<BR><BR>
 					Operations:
-					<A href='?src=\ref[src];menu=1.3'>Load Tech to Disk</A> || "}
+					<A href='?src=\ref[src];menu=[CONSOLE_DISK_TECH_DOWNLOAD_MENU]'>Load Tech to Disk</A> "}
 			else
 
 				dat += {"Name: [t_disk.stored.name]<BR>
 					Level: [t_disk.stored.level]<BR>
-					Description: [t_disk.stored.desc]<HR>
+					Description: [t_disk.stored.desc]<BR>
 					Operations:
-					<A href='?src=\ref[src];updt_tech=1'>Upload to Database</A> ||
-					<A href='?src=\ref[src];clear_tech=1'>Clear Disk</A> || "}
+					<A href='?src=\ref[src];updt_tech=1'>Upload to Database</A>
+					<A href='?src=\ref[src];clear_tech=1'>Clear Disk</A>"}
 			dat += "<A href='?src=\ref[src];eject_tech=1'>Eject Disk</A>"
 
-		if(1.3) //Technology Disk submenu
+		if(CONSOLE_DISK_TECH_DOWNLOAD_MENU) //Technology Disk submenu
 
-			dat += {"<BR><A href='?src=\ref[src];menu=1.0'>Main Menu</A> ||
-				<A href='?src=\ref[src];menu=1.2'>Return to Disk Operations</A><HR>
-				Load Technology to Disk:<BR><BR>"}
+			dat += {"<BR><A href='?src=\ref[src];menu=[CONSOLE_MENU]'>Main Menu</A>
+				<A href='?src=\ref[src];menu=[CONSOLE_DISK_TECH_MENU]'>Return to Disk Operations</A>
+				<h1>Load Technology to Disk:</h1>"}
 			for(var/ID in files.known_tech)
 				var/datum/tech/T = files.known_tech[ID]
 				dat += {"[T.name]
 					<A href='?src=\ref[src];copy_tech=1;copy_tech_ID=[T.id]'>(Copy to Disk)</A><BR>"}
-		if(1.4) //Design Disk menu.
-			dat += "<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>"
+		if(CONSOLE_DISK_DESIGN_MENU) //Design Disk menu.
+			dat += "<A href='?src=\ref[src];menu=[CONSOLE_MENU]'>Main Menu</A><BR><h1>Disk Contents: (Design Data Disk)</h1>"
 			if(d_disk.blueprint == null)
 
-				dat += {"The disk has no data stored on it.<HR>
+				dat += {"The disk has no data stored on it.<BR><BR>
 					Operations:
-					<A href='?src=\ref[src];menu=1.5'>Load Design to Disk</A> || "}
+					<A href='?src=\ref[src];menu=[CONSOLE_DISK_DESIGN_DOWNLOAD_MENU]'>Load Design to Disk</A>"}
 			else
 
 				dat += {"Name: [d_disk.blueprint.name]<BR>
@@ -793,24 +844,24 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					else
 						dat += "* [M] x [d_disk.blueprint.materials[M]]<BR>"
 
-				dat += {"<HR>Operations:
-					<A href='?src=\ref[src];updt_design=1'>Upload to Database</A> ||
-					<A href='?src=\ref[src];clear_design=1'>Clear Disk</A> || "}
+				dat += {"<BR><BR>Operations:
+					<A href='?src=\ref[src];updt_design=1'>Upload to Database</A>
+					<A href='?src=\ref[src];clear_design=1'>Clear Disk</A>"}
 			dat += "<A href='?src=\ref[src];eject_design=1'>Eject Disk</A>"
 
-		if(1.5) //Technology disk submenu
+		if(CONSOLE_DISK_DESIGN_DOWNLOAD_MENU) //Technology disk submenu
 
-			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A> ||
-				<A href='?src=\ref[src];menu=1.4'>Return to Disk Operations</A><HR>
-				Load Design to Disk:<BR><BR>"}
+			dat += {"<A href='?src=\ref[src];menu=[CONSOLE_MENU]'>Main Menu</A>
+				<A href='?src=\ref[src];menu=[CONSOLE_DISK_DESIGN_MENU]'>Return to Disk Operations</A><BR>
+				<h1>Load Design to Disk:</h1>"}
 			for(var/datum/design/D in files.known_designs)
 
 				dat += {"[D.name]
 					<A href='?src=\ref[src];copy_design=1;copy_design_ID=[D.id]'>(Copy to Disk)</A><BR>"}
-		if(1.6) //R&D console settings
+		if(CONSOLE_SETTINGS_MENU) //R&D console settings
 
-			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
-				R&D Console Setting:<BR><BR>"}
+			dat += {"<A href='?src=\ref[src];menu=[CONSOLE_MENU]'>Main Menu</A>
+				<h1>R&D Console Setting:</h1>"}
 			if(sync)
 
 				dat += {"<A href='?src=\ref[src];sync=1'>Sync Database with Network</A><BR>
@@ -818,15 +869,15 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			else
 				dat += "<A href='?src=\ref[src];togglesync=1'>Connect to Research Network</A><BR>"
 
-			dat += {"<A href='?src=\ref[src];menu=1.7'>Device Linkage Menu</A><BR>
-				<A href='?src=\ref[src];lock=0.2'>Lock Console</A><BR>
+			dat += {"<A href='?src=\ref[src];menu=[CONSOLE_LINKAGE_MENU]'>Device Linkage Menu</A><BR>
+				<A href='?src=\ref[src];lock=[CONSOLE_LOCKED]'>Lock Console</A><BR>
 				<A href='?src=\ref[src];alphatoggle=1'>[files?.alphabetsort ? "Dis" : "En"]able alphabetical sorting.</A><BR>
 				<A href='?src=\ref[src];reset=1'>Reset R&D Database.</A><BR>"}
-		if(1.7) //R&D device linkage
+		if(CONSOLE_LINKAGE_MENU) //R&D device linkage
 
-			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A> ||
-				<A href='?src=\ref[src];menu=1.6'>Settings Menu</A><HR>
-				R&D Console Device Linkage Menu:<BR><BR>
+			dat += {"<A href='?src=\ref[src];menu=[CONSOLE_MENU]'>Main Menu</A>
+				<A href='?src=\ref[src];menu=[CONSOLE_SETTINGS_MENU]'>Settings Menu</A>
+				<h1>R&D Console Device Linkage Menu:</h1>
 				<A href='?src=\ref[src];find_device=1'>Re-sync with Nearby Devices</A><BR>
 				Linked Devices:<BR>"}
 			var/remain_link = linked_machines
@@ -850,18 +901,18 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					dat += "* [R.name] <BR>"
 
 		////////////////////DESTRUCTIVE ANALYZER SCREENS////////////////////////////
-		if(2.0)
+		if(DA_UNLINKED)
 
 			dat += {"NO DESTRUCTIVE ANALYZER LINKED TO CONSOLE<BR><BR>
-				<A href='?src=\ref[src];menu=1.0'>Main Menu</A>"}
-		if(2.1)
+				<A href='?src=\ref[src];menu=[CONSOLE_MENU]'>Main Menu</A>"}
+		if(DA_NO_ITEM_LOADED)
 
-			dat += {"No Item Loaded. Standing-by...<BR><HR>
-				<A href='?src=\ref[src];menu=1.0'>Main Menu</A>"}
-		if(2.2)
+			dat += {"No Item Loaded. Standing-by...<BR><BR>
+				<A href='?src=\ref[src];menu=[CONSOLE_MENU]'>Main Menu</A>"}
+		if(DA_ITEM_LOADED)
 
-			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
-				Deconstruction Menu<HR>
+			dat += {"<A href='?src=\ref[src];menu=[CONSOLE_MENU]'>Main Menu</A>
+				<h1>Deconstruction Menu</h1>
 				Name: [linked_destroy.loaded_item.name]<BR>
 				Origin Tech:<UL>"}
 			var/list/temp_tech = linked_destroy.ConvertReqString2List(linked_destroy.loaded_item.origin_tech)
@@ -876,23 +927,20 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						var/datum/material/M = linked_destroy.loaded_item.materials.getMaterial(matID)
 						dat += "<LI>[M.processed_name]: [linked_destroy.loaded_item.materials.storage[matID]]</LI>"
 				dat += "</UL><BR>"
-			dat += {"<HR><A href='?src=\ref[src];deconstruct=1'>Deconstruct Item</A> ||
-				<A href='?src=\ref[src];eject_item=1'>Eject Item</A> || "}
+			dat += {"<A href='?src=\ref[src];deconstruct=1'>Deconstruct Item</A>
+				<A href='?src=\ref[src];eject_item=1'>Eject Item</A> "}
 		/////////////////////PROTOLATHE SCREENS/////////////////////////
-		if(3.0)
+		if(PROTOLATHE_UNLINKED)
 
-			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
+			dat += {"<A href='?src=\ref[src];menu=[CONSOLE_MENU]'>Main Menu</A><HR>
 				NO PROTOLATHE LINKED TO CONSOLE<BR><BR>"}
-		if(3.1)
+		if(PROTOLATHE_MENU)
 
-			dat += protolathe_header()+{"Protolathe Construction Menu \[<A href='?src=\ref[src];toggleAutoRefresh=1'>Auto-Refresh: [autorefresh ? "ON" : "OFF"]</A>\]<HR>"}
+			dat += protolathe_header()+{"<h1>Protolathe Construction Menu</h1>"}
 			dat += "Filter: "
 			for(var/name_set in linked_lathe.part_sets)
-				if (name_set in filtered["protolathe"])
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' style='color: #A66300'>[name_set]</a> / "
-				else
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' style='color: #0066CC'>[name_set]</a> / "
-			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["protolathe"]' style='color: #0066CC'>Filter All</a><HR>"
+				dat += "<a href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' [(name_set in filtered["protolathe"]) ? "class='redBackground'" : ""]>[name_set]</a> "
+			dat += "<a href='?src=\ref[src];toggleAllCategories=1;machine=["protolathe"]'>Filter All</a>"
 
 			for(var/name_set in linked_lathe.part_sets)
 				if(name_set in filtered["protolathe"])
@@ -901,7 +949,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				for(var/datum/design/D in files.known_designs)
 					if(!(D.build_type & PROTOLATHE) || D.category != name_set)
 						continue
-					var/temp_dat = "[D.name] [linked_lathe.output_part_cost(D)]"
+					var/temp_dat = "[D.name] ([linked_lathe.output_part_cost(D)])"
 					var/upTo=20
 					for(var/M in D.materials)
 						var/num_units_avail=linked_lathe.check_mat(D,M)
@@ -913,20 +961,20 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						dat += {"<li>
 							<A href='?src=\ref[src];build=[D.id];n=1;now=1'>[temp_dat]</A> Queue: "}
 						if(upTo>=5)
-							dat += "<A href='?src=\ref[src];build=[D.id];n=5'>(&times;5)</A>"
+							dat += "<A href='?src=\ref[src];build=[D.id];n=5'>&times;5</A>"
 						if(upTo>=10)
-							dat += "<A href='?src=\ref[src];build=[D.id];n=10'>(&times;10)</A>"
+							dat += "<A href='?src=\ref[src];build=[D.id];n=10'>&times;10</A>"
 						if(upTo>=20)
-							dat += "<A href='?src=\ref[src];build=[D.id];n=20'>(&times;20)</A>"
-						dat += "<A href='?src=\ref[src];build=[D.id];customamt=1'>(Custom)</A>"
+							dat += "<A href='?src=\ref[src];build=[D.id];n=20'>&times;20</A>"
+						dat += "<A href='?src=\ref[src];build=[D.id];customamt=1'>Custom</A>"
 						dat += "</li>"
 					else
 						dat += "<li>[temp_dat]</li>"
 				dat += "</ul>"
 
-		if(3.2) //Protolathe Material Storage Sub-menu
+		if(PROTOLATHE_RESOURCE_MENU) //Protolathe Material Storage Sub-menu
 
-			dat += protolathe_header()+{"Material Storage<ul>"}
+			dat += protolathe_header()+{"<h1>Material Storage</h1><ul>"}
 
 
 			for(var/matID in linked_lathe.materials.storage)
@@ -942,8 +990,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				dat += "</li>"
 			dat += "</ul>"
 
-		if(3.4) //Protolathe Queue Management
-			dat += protolathe_header()+"Production Queue<BR><HR><ul>"
+		if(PROTOLATHE_QUEUE_MENU) //Protolathe Queue Management
+			dat += protolathe_header()+"<h1>Production Queue</h1><ul>"
 			var/list/required_materials = list()
 			for(var/i=1;i<=linked_lathe.queue.len;i++)
 				var/datum/design/I=linked_lathe.queue[i]
@@ -960,35 +1008,32 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					var/success = "red"
 					var/success_amount = linked_lathe.check_mats(I)
 					if(linked_lathe.check_mats(I) >= required_materials[I])
-						success = "green"
+						success = "#00ff00"
 					else if(linked_lathe.check_mats_bluespace(I) >= required_materials[I])
 						success_amount = linked_lathe.check_mats_bluespace(I)
-						success = "blue"
+						success = "#00ffff"
 					dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
 			dat += "<br><A href='?src=\ref[src];clearQ=1;device=protolathe'>Remove All Queued Items</A><br />"
 			if(linked_lathe.stopped)
-				dat += "<A href='?src=\ref[src];setProtolatheStopped=0' style='color:green'>Start Production</A>"
+				dat += "<A href='?src=\ref[src];setProtolatheStopped=0' class='linkOn'>Start Production</A>"
 			else
-				dat += "<A href='?src=\ref[src];setProtolatheStopped=1' style='color:red'>Stop Production</A>"
+				dat += "<A href='?src=\ref[src];setProtolatheStopped=1' class='redBackground'>Stop Production</A>"
 
 		///////////////////CIRCUIT IMPRINTER SCREENS////////////////////
-		if(4.0)
+		if(CIRCUIT_UNLINKED)
 
-			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
+			dat += {"<A href='?src=\ref[src];menu=[CONSOLE_MENU]'>Main Menu</A><HR>
 				NO CIRCUIT IMPRINTER LINKED TO CONSOLE<BR><BR>"}
-		if(4.1)
+		if(CIRCUIT_MENU)
 
 			dat += {"[CircuitImprinterHeader()]
-				Circuit Imprinter Menu \[<A href='?src=\ref[src];toggleAutoRefresh=1'>Auto-Refresh: [autorefresh ? "ON" : "OFF"]</A>\]<BR>
+				<h1>Circuit Imprinter Menu</h1>
 				<b>Material Amount:</b> [linked_imprinter.TotalMaterials()] cm<sup>3</sup><BR>
-				<b>Chemical Volume:</b> [linked_imprinter.get_total_volume()] units<HR>"}
+				<b>Chemical Volume:</b> [linked_imprinter.get_total_volume()] units<BR>"}
 			dat += "Filter: "
 			for(var/name_set in linked_imprinter.part_sets)
-				if (name_set in filtered["imprinter"])
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' style='color: #A66300'>[name_set]</a> / "
-				else
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' style='color: #0066CC'>[name_set]</a> / "
-			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["imprinter"]' style='color: #0066CC'>Filter All</a><HR>"
+				dat += "<a href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' [(name_set in filtered["imprinter"]) ? "class='redBackground'" : ""]>[name_set]</a> "
+			dat += "<a href='?src=\ref[src];toggleAllCategories=1;machine=["imprinter"]'>Filter All</a><BR>"
 
 			for(var/name_set in linked_imprinter.part_sets)
 				if(name_set in filtered["imprinter"])
@@ -997,7 +1042,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				for(var/datum/design/D in files.known_designs)
 					if(!(D.build_type & IMPRINTER) || D.category != name_set)
 						continue
-					var/temp_dat = "[D.name] [linked_imprinter.output_part_cost(D)]"
+					var/temp_dat = "[D.name] ([linked_imprinter.output_part_cost(D)])"
 					var/upTo=10
 					for(var/M in D.materials)
 						var/num_units_avail=linked_imprinter.check_mat(D,M)
@@ -1008,19 +1053,19 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					if (upTo)
 						dat += {"<li><A href='?src=\ref[src];imprint=[D.id];n=1;now=1'>[temp_dat]</A> Queue: "}
 						if(upTo>=5)
-							dat += "<A href='?src=\ref[src];imprint=[D.id];n=5'>(&times;5)</A>"
+							dat += "<A href='?src=\ref[src];imprint=[D.id];n=5'>&times;5</A>"
 						if(upTo>=10)
-							dat += "<A href='?src=\ref[src];imprint=[D.id];n=10'>(&times;10)</A>"
-						dat += "<A href='?src=\ref[src];imprint=[D.id];customamt=1'>(Custom)</A>"
+							dat += "<A href='?src=\ref[src];imprint=[D.id];n=10'>&times;10</A>"
+						dat += "<A href='?src=\ref[src];imprint=[D.id];customamt=1'>Custom</A>"
 						dat += "</li>"
 					else
 						dat += "<li>[temp_dat]</li>"
 				dat += "</ul>"
 
-		if(4.2)
+		if(CIRCUIT_CHEMICAL_MENU)
 
 			dat += {"[CircuitImprinterHeader()]
-				Chemical Storage<HR>"}
+				<h1>Chemical Storage</h1>"}
 
 			var/beaker_index = 0
 			for(var/obj/item/weapon/reagent_containers/RC in linked_imprinter.component_parts)
@@ -1033,12 +1078,12 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				else
 					dat += "<em>(Empty)</em><BR>"
 				dat += "<BR>"
-			dat += "<A href='?src=\ref[src];disposeallI=1'><U>Disposal All Chemicals in Storage</U></A><BR>"
+			dat += "<A href='?src=\ref[src];disposeallI=1'>Disposal All Chemicals in Storage</A><BR>"
 
-		if(4.3)
+		if(CIRCUIT_RESOURCE_MENU)
 
 			dat += {"[CircuitImprinterHeader()]
-				Material Storage<HR><ul>"}
+				<h1>Material Storage</h1><ul>"}
 
 
 			for(var/matID in linked_imprinter.materials.storage)
@@ -1056,8 +1101,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				dat += "</li>"
 			dat += "</ul>"
 
-		if(4.4) //Imprinter Queue Management
-			dat += CircuitImprinterHeader()+"Production Queue<BR><HR><ul>"
+		if(CIRCUIT_QUEUE_MENU) //Imprinter Queue Management
+			dat += CircuitImprinterHeader()+"<h1>Production Queue</h1><ul>"
 			var/list/required_materials = list()
 			for(var/i=1;i<=linked_imprinter.queue.len;i++)
 				var/datum/design/I=linked_imprinter.queue[i]
@@ -1076,27 +1121,28 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 							var/success = "red"
 							var/success_amount = linked_imprinter.check_mats(I)
 							if(linked_imprinter.check_mats(I) >= required_materials[I])
-								success = "green"
+								success = "#00ff00"
 							else if(linked_imprinter.check_mats_bluespace(I) >= required_materials[I])
 								success_amount = linked_imprinter.check_mats_bluespace(I)
-								success = "blue"
+								success = "#00ffff"
 							dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
 					else
 						var/success = linked_imprinter.check_mats(I)
-						dat += "<span style='color:[success?"green":"red"]'>[required_materials[I]] ([success]) [reagent_name(I)]. </span>"
+						dat += "<span style='color:[success?"#00ff00":"red"]'>[required_materials[I]] ([success]) [reagent_name(I)]. </span>"
 
 			dat += "<br><A href='?src=\ref[src];clearQ=1;device=imprinter'>Remove All Queued Items</A><br />"
 			if(linked_imprinter.stopped)
-				dat += "<A href='?src=\ref[src];setImprinterStopped=0' style='color:green'>Start Production</A>"
+				dat += "<A href='?src=\ref[src];setImprinterStopped=0' class='linkOn'>Start Production</A>"
 			else
-				dat += "<A href='?src=\ref[src];setImprinterStopped=1' style='color:red'>Stop Production</A>"
+				dat += "<A href='?src=\ref[src];setImprinterStopped=1' class='redBackground'>Stop Production</A>"
 
 	dat = jointext(dat,"")
-	user << browse("<TITLE>Research and Development Console</TITLE><HR>[dat]", "window=rdconsole;size=575x400")
-	onclose(user, "rdconsole")
+	var/datum/browser/popup = new(user, "\ref[src]", name, 575, 400)
+	popup.set_content(dat)
+	popup.open()
 
 /obj/machinery/computer/rdconsole/proc/isLocked() //magic numbers ahoy!
-	return screen == 0.2
+	return screen == CONSOLE_LOCKED
 
 /obj/machinery/computer/rdconsole/npc_tamper_act(mob/living/L) //Turn on the destructive analyzer
 	//Item making happens when the gremlin tampers with the circuit imprinter / protolathe. They don't need this console for that

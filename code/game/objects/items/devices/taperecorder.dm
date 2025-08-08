@@ -8,8 +8,7 @@
 	starting_materials = list(MAT_IRON = 60, MAT_GLASS = 30)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
-	var/emagged = 0.0
+	flammable = TRUE
 	var/recording = 0.0
 	var/playing = 0.0
 	var/timerecorded = 0.0
@@ -28,16 +27,14 @@
 		timestamp += timerecorded
 		storedinfo += "\[[time2text(timerecorded*10,"mm:ss")]\] [speech.name]:  \"[html_encode(speech.message)]\""
 
-/obj/item/device/taperecorder/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	..()
-	if(istype(W, /obj/item/weapon/card/emag))
-		if(emagged == 0)
-			emagged = 1
-			recording = 0
-			to_chat(user, "<span class='warning'>PZZTTPFFFT</span>")
-			icon_state = "taperecorderidle"
-		else
-			to_chat(user, "<span class='warning'>It is already emagged!</span>")
+/obj/item/device/taperecorder/emag_act(mob/user)
+	if(!emagged)
+		emagged = 1
+		recording = 0
+		to_chat(user, "<span class='warning'>PZZTTPFFFT</span>")
+		icon_state = "taperecorderidle"
+	else
+		to_chat(user, "<span class='warning'>It is already emagged!</span>")
 
 /obj/item/device/taperecorder/proc/explode()
 	var/turf/T = get_turf(loc)
@@ -45,7 +42,7 @@
 		var/mob/M = loc
 		to_chat(M, "<span class='danger'>\The [src] explodes!</span>")
 	if(T)
-		T.hotspot_expose(700,125,surfaces=istype(loc,/turf))
+		try_hotspot_expose(700,SMALL_FLAME,1)
 		explosion(T, -1, -1, 0, 4)
 	qdel(src)
 	return

@@ -15,8 +15,8 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_MATERIALS + "=2"
-	autoignition_temperature = AUTOIGNITION_PLASTIC
-	var/emagged = 0
+	w_type = RECYK_ELECTRONIC
+	flammable = TRUE
 	var/upgraded
 	var/device_mode = LIGHTREPLACER_BASIC
 
@@ -80,18 +80,21 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 	if(!gather_loc || !isturf(gather_loc))
 		return 0
 	var/obj/machinery/light/lightfixture = locate() in gather_loc.contents
-	var/obj/item/weapon/light/best_light = get_best_light(lightfixture)
-	if(lightfixture && lightfixture.current_bulb && is_light_better(best_light, lightfixture.current_bulb))
-		. = ReplaceLight(lightfixture, usr)
-		return .
-	else if(lightfixture && !lightfixture.current_bulb)
-		. = ReplaceLight(lightfixture, usr)
-		if(.)
-			return .
-	else
+	if(!lightfixture)
+		// No light fixture found, try to gather light items from the turf
 		for(var/obj/O in gather_loc.contents)
 			. = insert_if_possible(O)
 		return .
+	
+	var/obj/item/weapon/light/best_light = get_best_light(lightfixture)
+	if(!best_light)
+		return 0
+	
+	// Replace light if fixture has no bulb or if we have a better bulb
+	if(!lightfixture.current_bulb || is_light_better(best_light, lightfixture.current_bulb))
+		return ReplaceLight(lightfixture, user)
+	
+	return 0
 
 /obj/item/device/lightreplacer/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/stack/sheet/glass/glass))
@@ -338,7 +341,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		"\proper You pick up the broken [L.name] using \the [src].")
 			return 1
 		else
-			to_chat(usr, "<span class='warning'>The [src] has no waste container!</span>")
+			to_chat(usr, "<span class='warning'>\The [src] has no waste container!</span>")
 			return 0
 
 /obj/item/device/lightreplacer/proc/build_light()
@@ -444,7 +447,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		target.explode()
 
 /obj/item/device/lightreplacer/proc/get_best_light(var/obj/machinery/light/target)
-	if(!istype(supply))
+	if(!istype(supply) || !istype(target))
 		return 0
 	var/best_light
 	if(!target.fitting) //no idea how this happens
@@ -459,12 +462,12 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 	return best_light
 
 /obj/item/device/lightreplacer/proc/is_light_better(var/obj/item/weapon/light/tested, var/obj/item/weapon/light/comparison)
+	if(tested?.status) //Is tested empty? If so, either it must be a tie or comparison wins, so tested cannot win.
+		return 0
 	if(tested.status >= LIGHT_BROKEN) //Is tested broken or burnt out? If so, it cannot win.
 		return 0
 	if(tested.status < comparison.status) //Is tested closer to functional than comparison? If so, it wins.
 		return 1
-	if(tested.status) //Is tested empty? If so, either it must be a tie or comparison wins, so tested cannot win.
-		return 0
 
 	//Now we know both work, so all that is left is to test if tested wins by being HE.
 	if(findtextEx(tested.base_state, "he", 1, 3) && !findtextEx(comparison.base_state, "he", 1, 3))
@@ -473,16 +476,13 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		return 0
 
 /obj/item/device/lightreplacer/proc/recharge(mob/user)
-	if(isrobot(user))
-		var/mob/living/silicon/robot/R = user
-		if(R && R.cell && R.cell.charge && (glass < glass_max))
-			var/added_glass = 0
-			added_glass = clamp(added_glass, 7500, (glass_max - glass))
-			if(R.cell.use(added_glass * 0.1))
-				add_glass(added_glass, 2)
-				to_chat(usr, "<span class='notice'>\The [src] synthesizes[added_glass] units of glass.</span>")
-				return 1
-		to_chat(usr, "<span class='warning'>You don't have enough charge to synthesize more glass!</span>")
+	if(get_cell_charge(user) && (glass < glass_max))
+		var/added_glass = 0
+		added_glass = clamp(added_glass, 7500, (glass_max - glass))
+		if(use_cell_charge(user,added_glass * 0.1))
+			add_glass(added_glass, 2)
+			to_chat(usr, "<span class='notice'>\The [src] synthesizes [added_glass] units of glass.</span>")
+			return 1
 	return 0
 
 /obj/item/device/lightreplacer/proc/dump_supply(mob/user)

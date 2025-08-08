@@ -116,6 +116,17 @@ var/datum/feed_network/news_network = new /datum/feed_network     //The global n
 
 var/list/obj/machinery/newscaster/allCasters = list() //Global list that will contain reference to all newscasters in existence.
 
+/datum/feed_channel/preset
+	locked = 1
+	is_admin_channel = 1
+
+/datum/feed_channel/preset/tauceti
+	channel_name = "Tau Ceti Daily"
+	author = "CentComm Minister of Information"
+
+/datum/feed_channel/preset/gibsongazette
+	channel_name = "The Gibson Gazette"
+	author = "Editor Mike Hammers"
 
 /obj/machinery/newscaster
 	name = "newscaster"
@@ -191,6 +202,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 /obj/machinery/newscaster/update_icon()
 	if(buildstage != 1)
 		icon_state = "newscaster_0"
+		kill_moody_light()
 		return
 
 	if((stat & (FORCEDISABLE|NOPOWER)) || (stat & BROKEN))
@@ -198,6 +210,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		if(stat & BROKEN) //If the thing is smashed, add crack overlay on top of the unpowered sprite.
 			overlays.Cut()
 			overlays += image(icon, "crack3")
+		kill_moody_light()
 		return
 
 	overlays.Cut() //reset overlays
@@ -213,7 +226,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		overlays += image(icon, "crack[hitstaken]")
 
 	icon_state = "newscaster_normal"
-	return
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_newscaster")
 
 /obj/machinery/newscaster/power_change()
 	if(stat & BROKEN || buildstage != 1) //Broken shit can't be powered.
@@ -419,7 +432,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							if(MESSAGE.img)
 								usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 
-								dat+="<BR><a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'></a><BR>"
+								dat+="<BR><a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='image-rendering: pixelated'></a><BR>"
 							dat+="<BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><HR>"
 
 				dat += {"<A href='?src=\ref[src];refresh=1'>Refresh</A>
@@ -546,7 +559,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				dat+="I'm sorry to break your immersion. This shit's bugged. Report this bug to Agouri, polyxenitopalidou@gmail.com"
 
 
-		M << browse(dat, "window=newscaster_main;size=400x600")
+		M << browse(HTML_SKELETON(dat), "window=newscaster_main;size=400x600")
 		onclose(M, "newscaster_main")
 
 /obj/machinery/newscaster/Topic(href, href_list)
@@ -1160,8 +1173,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	throw_speed = 1
 	pressure_resistance = 1
 	attack_verb = list("baps", "smacks", "whaps")
-	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = TRUE
+	flammable = TRUE
 
 	var/screen = 0
 	var/pages = 0

@@ -53,7 +53,7 @@
 	fire_sound = 'sound/weapons/ray1.ogg'
 
 	charge_cost = 50 //How much energy is needed to fire.
-	projectile_type = "/obj/item/projectile/beam/immolationray"
+	projectile_type = "/obj/item/projectile/beam/scorchray/immolationray"
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MAGNETS + "=2;" + Tc_MATERIALS + "=2"
 	modifystate = "heavydisintegratorimmolate"
 	fire_delay = 1.2 SECONDS // Here to slightly counterbalance the more damaging ray, but a lot less noticeable than the laser cannon
@@ -76,7 +76,7 @@
 			mode = 0
 			fire_sound = 'sound/weapons/ray1.ogg'
 			to_chat(user, "<span class='warning'>\The [src] is now set to immolate.</span>")
-			projectile_type = "/obj/item/projectile/beam/immolationray"
+			projectile_type = "/obj/item/projectile/beam/scorchray/immolationray"
 			modifystate = "heavydisintegratorimmolate"
 			if (power_supply.charge > 0)
 				playsound(user,'sound/weapons/egun_toggle_taser.ogg',70,0,-5)
@@ -95,35 +95,14 @@
 	fire_sound = 'sound/weapons/ray1.ogg'
 
 	charge_cost = 50 //How much energy is needed to fire.
-	projectile_type = "/obj/item/projectile/beam/atomizationray"
+	projectile_type = "/obj/item/projectile/beam/scorchray/atomizationray"
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=3" + Tc_POWERSTORAGE + "=4"
 	fire_delay = 0.6 SECONDS // Barely noticeable, mostly here to allow the firing noise .ogg to finish ~0.55 seconds
-
-	var/charge_tick = 0
-	var/charge_wait = 4 // This one charges itself like the Captain's laser, at the cost of fun alternate modes
+	recharge_time = 4 // This one charges itself like the Captain's laser, at the cost of fun alternate modes
+	recharge_mult = 2
 
 /obj/item/weapon/gun/energy/advdisintegrator/isHandgun()
 	return TRUE
-
-/obj/item/weapon/gun/energy/advdisintegrator/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/advdisintegrator/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-/obj/item/weapon/gun/energy/advdisintegrator/process()
-	charge_tick++
-	if(charge_tick < charge_wait)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
-	update_icon()
-	return 1
 
 /obj/item/weapon/gun/energy/advdisintegrator/dissolvable() // Can't be destroyed by polyacid
 	return 0

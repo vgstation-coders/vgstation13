@@ -30,7 +30,7 @@
 
 /datum/design/autolathe
 	name = "Circuit Design(Autolathe)"
-	desc = "The circuit board for a autolathe."
+	desc = "The circuit board for an autolathe."
 	id = "autolathe"
 	req_tech = list(Tc_PROGRAMMING = 2, Tc_ENGINEERING = 2)
 	build_type = IMPRINTER
@@ -60,7 +60,7 @@
 
 /datum/design/monkey_recycler
 	name = "Circuit Design (Animal Recycler)"
-	desc = "Allows for the construction of circuit boards used to build a Animal Recycler."
+	desc = "Allows for the construction of circuit boards used to build an Animal Recycler."
 	id = "monkey"
 	req_tech = list(Tc_PROGRAMMING = 3, Tc_ENGINEERING = 2, Tc_BIOTECH = 3, Tc_POWERSTORAGE = 2)
 	build_type = IMPRINTER
@@ -143,3 +143,23 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
 	build_path = /obj/item/weapon/circuitboard/weathercontrol
+
+/datum/design/suitstorageunit
+	name = "Circuit Design(Suit Storage Unit)"
+	desc = "The circuit board for a Suit Storage Unit."
+	id = "suitstorageunit"
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_ENGINEERING = 2, Tc_POWERSTORAGE = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 15)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/suit_storage_unit
+	
+/datum/design/spiderbotfabricator
+	name = "Circuit Design(Spiderbot Fabricator)"
+	desc = "The circuit board for a Spiderbot Fabricator."
+	id = "spiderbotfab"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/spiderbot_fabricator

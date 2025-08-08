@@ -25,6 +25,17 @@ a, a:link, a:visited, a:active, .linkOn, .linkOff
 	cursor:default;
 }
 
+a.darkred, a.darkred:link, a.darkred:visited, a.darkred:active
+{
+	color: #ffffff;
+	text-decoration: none;
+	background: #472121;
+	border: 1px solid #161616;
+	padding: 1px 4px 1px 4px;
+	margin: 0 2px 0 0;
+	cursor:default;
+}
+
 a.nobg, a.nobg:link, a.nobg:visited, a.nobg:active
 {
 	color: #ffffff;
@@ -193,7 +204,7 @@ h4
 	color: #ff0000;
 }
 
-.redBackground {
+.redBackground, a.redBackground {
     background: #ea0000;
 }
 
@@ -352,7 +363,7 @@ div.notice
 }
 
 .charPreview{
-	-ms-interpolation-mode: nearest-neighbor;
+	image-rendering: pixelated;
 	width: 64px;
 	height:64px;
 }

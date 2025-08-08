@@ -14,6 +14,7 @@
 #define SS_INIT_MAP                20
 #define SS_INIT_COMPONENT          19.5
 #define SS_INIT_POWER              19
+#define SS_INIT_PERSISTENCE_MISC   18.5 // Because Tetris needs to read from previous rounds. It inits in 0 seconds anyway.
 #define SS_INIT_OBJECT             18
 #define SS_INIT_PIPENET            17.5
 #define SS_INIT_XENOARCH           17
@@ -27,7 +28,6 @@
 #define SS_INIT_FINISH            -22
 #define SS_INIT_MINIMAP           -23
 #define SS_INIT_PERSISTENCE_MAP	  -98
-#define SS_INIT_PERSISTENCE_MISC  -99
 #define SS_INIT_PATHFINDER        -100
 #define SS_INIT_DAYNIGHT		  -200
 
@@ -54,21 +54,32 @@
 #define SS_PRIORITY_FAST_MACHINERY 55
 #define SS_PRIORITY_PLANT          40
 #define SS_PRIORITY_UNSPECIFIED    30
+#define SS_PRIORITY_SOUNDS		   23
+#define SS_PRIORITY_THERM_ENTROPY_RECHECK  22
+#define SS_PRIORITY_THERM_ENTROPY  21
 #define SS_PRIORITY_LIGHTING       20
-#define SS_PRIORITY_AMBIENCE	   19
-#define SS_PRIORITY_DBCORE		   18
+#define SS_PRIORITY_THERM_DISS     19
+#define SS_PRIORITY_AMBIENCE	   18
+#define SS_PRIORITY_DBCORE		   17
+#define SS_PRIORITY_MUSIC          16
 #define SS_PRIORITY_SUN            3
 #define SS_PRIORITY_GARBAGE        2
 #define SS_PRIORITY_INACTIVITY     1
+#define SS_PRIORITY_BURNABLE	  -50
 #define SS_PRIORITY_DAYNIGHT	  -200
+#define SS_PRIORITY_NEWS          -1000
 
 #define SS_WAIT_WEATHER         	2 SECONDS
 #define SS_WAIT_MACHINERY           2 SECONDS //TODO move the rest of these to defines
 #define SS_WAIT_BOTS           		1 SECONDS
 #define SS_WAIT_FAST_MACHINERY      0.7 SECONDS
 #define SS_WAIT_FAST_OBJECTS        0.5 SECONDS
+#define SS_WAIT_THERM_ENTROPY     	2 SECONDS
+#define SS_WAIT_THERM_ENTROPY_RECHECK	60 SECONDS
+#define SS_WAIT_THERM_DISS			1 SECONDS
 #define SS_WAIT_TICKER              2 SECONDS
 #define SS_WAIT_ENGINES				30 SECONDS
+#define SS_WAIT_BURNABLE			3 SECONDS
 
 #define SS_DISPLAY_TIMER          -110
 #define SS_DISPLAY_GARBAGE        -100
@@ -89,8 +100,12 @@
 #define SS_DISPLAY_WEATHER         5
 #define SS_DISPLAY_ENGINES		   6
 #define SS_DISPLAY_SUN             10
+#define SS_DISPLAY_THERM_ENTROPY_RECHECK   12
+#define SS_DISPLAY_THERM_ENTROPY   13
+#define SS_DISPLAY_THERM_DISS      14
 #define SS_DISPLAY_DBCORE		   15
 #define SS_DISPLAY_DAYNIGHT		   20
+#define SS_DISPLAY_BURNABLE		   21
 
 #define SS_TRASH                  "trash"
 #define SS_CLEANABLE              "cleanable_decals"

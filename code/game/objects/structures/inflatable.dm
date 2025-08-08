@@ -3,6 +3,7 @@
 	w_class = W_CLASS_MEDIUM
 	icon = 'icons/obj/inflatable.dmi'
 	w_type = RECYK_PLASTIC
+	flammable = FALSE
 	melt_temperature = MELTPOINT_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 1.5*CC_PER_SHEET_MISC)
 

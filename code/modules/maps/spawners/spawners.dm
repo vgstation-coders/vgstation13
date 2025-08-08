@@ -24,7 +24,11 @@
 		else
 			if(prob(chance))
 				CreateItem(pick(to_spawn))
-	qdel(src)
+	kill_spawner()
+
+/obj/abstract/map/spawner/proc/kill_spawner() //prevents hard dels
+	to_spawn = list()
+	src.forceMove(null, harderforce = TRUE)
 
 /obj/abstract/map/spawner/proc/CreateItem(new_item_type)
 	var/obj/spawned = new new_item_type(loc)
@@ -195,7 +199,7 @@
 		/obj/machinery/power/battery/smes,
 		/obj/machinery/processor,
 		/obj/machinery/recharge_station,
-		/obj/machinery/rust/gyrotron,
+		/obj/machinery/power/gyrotron,
 		/obj/machinery/shield_gen,
 		/obj/machinery/shieldgen,
 		/obj/machinery/shieldwallgen,
@@ -367,7 +371,7 @@
 		/obj/item/clothing/mask/cigarette,
 		/obj/item/clothing/shoes/laceup,
 		/obj/item/clothing/glasses/welding/superior,
-		/obj/item/clothing/glasses/sunglasses/sechud,
+		/obj/item/clothing/glasses/hud/security/sunglasses,
 		/obj/item/clothing/glasses/scanner/meson,
 		/obj/item/clothing/gloves/yellow,
 		/obj/item/clothing/gloves/knuckles,
@@ -494,7 +498,7 @@
 		/obj/item/clothing/mask/facehugger/toy,
 		/obj/item/trash/candle,
 		/obj/item/trash/candy,
-		/obj/item/trash/cheesie,
+		/obj/item/trash/chips/cheesie,
 		/obj/item/trash/chips,
 		/obj/item/trash/plate,
 		/obj/item/trash/popcorn,
@@ -594,6 +598,8 @@
 		/obj/item/weapon/switchtool/swiss_army_knife,
 		/obj/item/clothing/accessory/wristwatch,
 		/obj/item/clothing/accessory/wristwatch/black,
+		/obj/item/high_roller,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
 		)
 
 /obj/abstract/map/spawner/maint/lowchance
@@ -698,7 +704,7 @@
 		/obj/item/bluespace_crystal,
 		/obj/item/bodybag/cryobag,
 		/obj/item/borg/upgrade/syndicate,
-		/obj/item/clothing/glasses/thermal,
+		/obj/item/clothing/glasses/hud/thermal,
 		/obj/item/device/aicard,
 		/obj/item/device/ano_scanner,
 		/obj/item/device/flashlight/lantern,
@@ -851,19 +857,15 @@
  	icon_state = "space_supply"
 
 /obj/abstract/map/spawner/space/vox/trader/spacesuit/perform_spawn()
-	var/i = rand(1, 4) // 1 in 4 chance of spawning a single of listed below
+	var/i = rand(1, 3) // 1 in 4 chance of spawning a single of listed below
 	switch (i)
 		if (1)
-			new /obj/item/clothing/suit/space/vox/civ/trader(src.loc) // standard brownsuit and helmet
-			new /obj/item/clothing/head/helmet/space/vox/civ/trader(src.loc)
-
-		if (2)
 			new /obj/item/clothing/suit/space/vox/civ/trader/carapace(src.loc) // carapace
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/carapace(src.loc)
-		if (3)
+		if (2)
 			new /obj/item/clothing/suit/space/vox/civ/trader/medic(src.loc) // aqua coloured hardsuit
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/medic(src.loc)
-		if (4)
+		if (3)
 			new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src.loc) // black hardsuit. Not capable of any form of stealth systems or shit like that
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
 	qdel(src)
@@ -1107,6 +1109,7 @@
 		/obj/item/seeds/wheatseed,
 		/obj/item/seeds/whitebeetseed,
 		/obj/item/seeds/cinnamomum,
+		/obj/item/seeds/flaxseed,
 		)
 
 // Gym ///////////////////////////////////////////////////////

@@ -133,8 +133,11 @@
 			if(!S.invisible) //Do not list abilities that aren't meant to be shown, like drain toggling or abilities
 				var/icon/spellimg = icon('icons/mob/screen_spells.dmi', S.hud_state)
 				dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> <B>[S.name]</B> "
-				dat += "[S.can_improve(Sp_SPEED) ? "<A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken for [S.quicken_cost]W ([S.spell_levels[Sp_SPEED]]/[S.level_max[Sp_SPEED]])</A>" : "Quicken (MAXED)"] "
-				dat += "[S.can_improve(Sp_POWER) ? "<A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower for [S.empower_cost]W ([S.spell_levels[Sp_POWER]]/[S.level_max[Sp_POWER]])</A>" : "Empower (MAXED)"]<BR>"
+				if(S.level_max[SP_SPEED] > 1)
+					dat += "[S.can_improve(SP_SPEED) ? "<A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken for [S.quicken_cost]W ([S.spell_levels[SP_SPEED]]/[S.level_max[SP_SPEED]])</A>" : "Quicken (MAXED)"] "
+				if(S.level_max[SP_POWER] > 1)
+					dat += "[S.can_improve(SP_POWER) ? "<A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower for [S.empower_cost]W ([S.spell_levels[SP_POWER]]/[S.level_max[SP_POWER]])</A>" : "Empower (MAXED)"]"
+				dat += "<BR>"
 				if(show_desc)
 					dat += "<I>[S.desc]</I><BR>"
 		dat += "<HR>"
@@ -180,7 +183,7 @@
 		if(PDS.quicken_cost > charge)
 			to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
 			return
-		if(PDS.spell_levels[Sp_SPEED] >= PDS.level_max[Sp_SPEED])
+		if(PDS.spell_levels[SP_SPEED] >= PDS.level_max[SP_SPEED])
 			to_chat(src,"<span class='warning'>You cannot quicken this ability any further.</span>")
 			return
 
@@ -194,7 +197,7 @@
 		if(PDS.empower_cost > charge)
 			to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
 			return
-		if(PDS.spell_levels[Sp_POWER] >= PDS.level_max[Sp_POWER])
+		if(PDS.spell_levels[SP_POWER] >= PDS.level_max[SP_POWER])
 			to_chat(src,"<span class='warning'>You cannot empower this ability any further.</span>")
 			return
 
@@ -214,11 +217,11 @@
 	user_type = USER_TYPE_PULSEDEMON
 	school = "pulse demon"
 	spell_flags = 0
-	level_max = list(Sp_TOTAL = 6, Sp_SPEED = 3, Sp_POWER = 3)
+	level_max = list(SP_TOTAL = 6, SP_SPEED = 3, SP_POWER = 3)
 
 	override_base = "pulsedemon"
 	hud_state = "pd_icon_base"
-	charge_max = 20 SECONDS
+	charge_cooldown_max = 20 SECONDS
 	cooldown_min = 1 SECONDS
 	var/charge_cost = 0
 	var/purchase_cost = 0
@@ -232,7 +235,10 @@
 		return FALSE
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-		if (PD.charge < charge_cost) // Custom charge handling
+		if(PD.emp_lock)
+			to_chat(PD, "<span class='warning'>You cannot use this ability while unable to regenerate.</span>")
+			return FALSE
+		if(PD.charge < charge_cost) // Custom charge handling
 			to_chat(PD, "<span class='warning'>You are too low on power, this spell needs a charge of [charge_cost]W to cast.</span>")
 			return FALSE
 	else //only pulse demons allowed
@@ -249,9 +255,9 @@
 			to_chat(PD, "<span class='warning'>You use [charge_cost] to cast [name].</span>")
 
 /spell/pulse_demon/empower_spell() // Makes spells use less charge
-	if(!can_improve(Sp_POWER))
+	if(!can_improve(SP_POWER))
 		return 0
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 	var/new_name = generate_name()
 	charge_cost = round(charge_cost/1.5, 1) // -33%/-56%/-70% charge cost
 	. = "You have improved [name] into [new_name]. It now costs [charge_cost]W to cast."
@@ -259,21 +265,21 @@
 	empower_cost = round(empower_cost * 1.5, 1)
 
 /spell/pulse_demon/quicken_spell()
-	if(!can_improve(Sp_SPEED))
+	if(!can_improve(SP_SPEED))
 		return 0
-	spell_levels[Sp_SPEED]++
+	spell_levels[SP_SPEED]++
 	var/new_name = generate_name()
-	charge_max = round(charge_max/1.5, 1) // -33%/-56%/-70% cooldown reduction
-	. = "You have improved [name] into [new_name]. Its cooldown is now [round(charge_max/10, 1)] seconds."
+	charge_cooldown_max = round(charge_cooldown_max/1.5, 1) // -33%/-56%/-70% cooldown reduction
+	. = "You have improved [name] into [new_name]. Its cooldown is now [round(charge_cooldown_max/10, 1)] seconds."
 	name = new_name
 	quicken_cost = round(quicken_cost * 1.5, 1)
 
 /spell/pulse_demon/proc/generate_name()
 	var/original_name = initial(name)
 	var/power_name = ""
-	var/power_level = level_max[Sp_POWER] - spell_levels[Sp_POWER]
+	var/power_level = level_max[SP_POWER] - spell_levels[SP_POWER]
 	var/speed_name = ""
-	var/speed_level = level_max[Sp_SPEED] - spell_levels[Sp_SPEED]
+	var/speed_level = level_max[SP_SPEED] - spell_levels[SP_SPEED]
 	if(power_level == 0 && speed_level == 0) //Spell is maxed out
 		return "Perfected [original_name]"
 	switch(power_level) //We add an extra space so that the words are properly separated in the name regardless of upgrade status.
@@ -305,7 +311,7 @@
 	desc = "View and purchase abilities with your electrical charge."
 	abbreviation = "AB"
 	hud_state = "pd_closed"
-	charge_max = 0
+	charge_cooldown_max = 0
 	level_max = list()
 	invisible = 1
 
@@ -321,28 +327,6 @@
 	var/dat = "<BR>[desc]"
 	return dat
 
-/spell/pulse_demon/toggle_drain
-	name = "Toggle power drain"
-	desc = "Toggles the draining of power while in an APC, battery or cable"
-	abbreviation = "TD"
-	hud_state = "pd_toggle"
-	charge_max = 0
-	level_max = list()
-	invisible = 1
-
-/spell/pulse_demon/toggle_drain/choose_targets(var/mob/user = usr)
-	return list(user) // Self-cast
-
-/spell/pulse_demon/toggle_drain/cast(var/list/targets, var/mob/living/carbon/human/user)
-	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
-		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-		PD.draining = !PD.draining
-		to_chat(user,"<span class='notice'>Draining power is [PD.draining ? "on" : "off"].</span>")
-
-/spell/pulse_demon/toggle_drain/generate_tooltip()
-	var/dat = "<BR>[desc]"
-	return dat
-
 /spell/pulse_demon/remote_drain
 	name = "Remote Drain"
 	abbreviation = "RD"
@@ -350,8 +334,8 @@
 
 	range = 10
 	spell_flags = WAIT_FOR_CLICK
-	duration = 20
-	level_max = list(Sp_TOTAL = 2, Sp_POWER = 0, Sp_SPEED = 2)
+	duration = 2 SECONDS
+	level_max = list(SP_TOTAL = 2, SP_POWER = 0, SP_SPEED = 2)
 
 	hud_state = "pd_drain"
 	charge_cost = 100
@@ -384,8 +368,8 @@
 
 	range = 5
 	spell_flags = WAIT_FOR_CLICK
-	duration = 20
-	level_max = list(Sp_TOTAL = 3, Sp_POWER = 0, Sp_SPEED = 3)
+	duration = 2 SECONDS
+	level_max = list(SP_TOTAL = 3, SP_POWER = 0, SP_SPEED = 3)
 
 	hud_state = "pd_cablehop"
 	charge_cost = 5000
@@ -400,7 +384,7 @@
 	var/turf/T = get_turf(target)
 	if(T)
 		if((target in view_or_range(range, user, selection_type)) && ((locate(/obj/structure/cable) in T.contents) ||  istype(target,/obj/structure/cable)))
-			var/obj/structure/cable/cable = locate() in target
+			var/obj/structure/cable/cable = locate() in T
 			var/datum/powernet/PN = cable.get_powernet()
 			if(PN) // We need actual power in the cable powernet to move
 				if(!PN.avail)
@@ -409,33 +393,43 @@
 					return TRUE
 	return FALSE
 
-
-
 /spell/pulse_demon/cable_zap/cast(list/targets, mob/user = usr)
-	var/turf/T = get_turf(user)
-	var/turf/target = get_turf(targets[1])
-	var/obj/structure/cable/cable = locate() in target
-	if(!cable || !istype(cable)) // Sanity
-		to_chat(user,"<span class='warning'>...Where's the cable?</span>")
+	..()
+	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+		PD.zaptocable(targets[1])
+
+/obj/item/projectile/beam/lightning/pulsedemon
+	passdense = TRUE
+	yellow = TRUE
+
+/mob/living/simple_animal/hostile/pulse_demon/proc/zaptocable(atom/target)
+	var/turf/T = get_turf(src)
+	var/turf/TTarget = get_turf(target)
+	if(!T || !TTarget)
 		return
-	var/obj/item/projectile/beam/lightning/L = new /obj/item/projectile/beam/lightning(T)
+	var/obj/structure/cable/cable = locate() in TTarget
+	if(!cable || !istype(cable)) // Sanity
+		to_chat(src,"<span class='warning'>...Where's the cable?</span>")
+		return
+	var/obj/item/projectile/beam/lightning/pulsedemon/L = new /obj/item/projectile/beam/lightning/pulsedemon(T)
 	var/datum/powernet/PN = cable.get_powernet()
 	L.damage = PN.get_electrocute_damage()
 	// Ride the lightning
-	playsound(target, pick(lightning_sound), 75, 1)
-	L.tang = adjustAngle(get_angle(target,T))
+	playsound(TTarget, pick(lightning_sound), 75, 1)
+	L.tang = adjustAngle(get_angle(TTarget,T))
 	L.icon = midicon
 	L.icon_state = "[L.tang]"
-	L.firer = user
+	L.firer = src
 	L.def_zone = LIMB_CHEST
 	L.original = target
-	L.current = T
-	L.starting = T
-	L.yo = target.y - T.y
-	L.xo = target.x - T.x
-	spawn L.process()
-	user.forceMove(target)
-	..()
+	L.current = TTarget
+	L.starting = TTarget
+	L.yo = TTarget.y - T.y
+	L.xo = TTarget.x - T.x
+	L.process()
+	unlock_from() // just in case
+	forceMove(TTarget)
 
 /spell/pulse_demon/remote_hijack
 	name = "Remote Hijack"
@@ -445,7 +439,7 @@
 	range = 10
 	spell_flags = WAIT_FOR_CLICK
 	duration = 0 //you need to wait through the APC hack timer so this doesn't need another cooldown
-	level_max = list(Sp_TOTAL = 0)
+	level_max = list(SP_TOTAL = 0)
 
 	hud_state = "pd_hijack"
 	charge_cost = 10000
@@ -477,8 +471,8 @@
 
 	range = 10
 	spell_flags = WAIT_FOR_CLICK
-	duration = 20
-	level_max = list(Sp_TOTAL = 2, Sp_POWER = 0, Sp_SPEED = 2)
+	duration = 2 SECONDS
+	level_max = list(SP_TOTAL = 2, SP_POWER = 0, SP_SPEED = 2)
 
 	hud_state = "pd_emag"
 	charge_cost = 20000
@@ -513,8 +507,8 @@
 
 	range = 10
 	spell_flags = WAIT_FOR_CLICK
-	duration = 20
-	level_max = list(Sp_TOTAL = 2, Sp_POWER = 0, Sp_SPEED = 2)
+	duration = 2 SECONDS
+	level_max = list(SP_TOTAL = 2, SP_POWER = 0, SP_SPEED = 2)
 
 	hud_state = "wiz_tech"
 	charge_cost = 10000
@@ -542,8 +536,8 @@
 
 
 /spell/pulse_demon/sustaincharge
-	level_max = list(Sp_TOTAL = 2, Sp_SPEED = 0, Sp_POWER = 2) // Why would cooldown be here?
-	charge_max = 0 SECONDS // See?
+	level_max = list(SP_TOTAL = 2, SP_SPEED = 0, SP_POWER = 2) // Why would cooldown be here?
+	charge_cooldown_max = 0 SECONDS // See?
 	hud_state = "pd_cableleave"
 	name = "Self-Sustaining Charge"
 	abbreviation = "SC"
@@ -572,7 +566,7 @@
 
 		var/temp = ""
 		name = initial(name)
-		switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
+		switch(level_max[SP_POWER] - spell_levels[SP_POWER])
 			if(2)
 				temp = "You have improved [name] into Ambulatory [name]."
 				name = "Ambulatory [name]"
@@ -596,8 +590,8 @@
 
 	range = 10
 	spell_flags = WAIT_FOR_CLICK
-	duration = 20
-	level_max = list(Sp_TOTAL = 1, Sp_POWER = 0, Sp_SPEED = 1)
+	duration = 2 SECONDS
+	level_max = list(SP_TOTAL = 1, SP_POWER = 0, SP_SPEED = 1)
 
 	hud_state = "overload"
 	charge_cost = 50000
@@ -630,3 +624,55 @@
 		explosion(get_turf(M), -1, 1, 2, 3, whodunnit = user) //C4 Radius + 1 Dest for the machine
 		qdel(M)
 	..()
+
+/datum/action/pd_toggle_drain
+	name = "Toggle power drain"
+	desc = "Toggles the draining of power while in an APC, battery or cable"
+	icon_icon = 'icons/mob/screen_spells.dmi'
+	button_icon_state = "pd_toggle"
+
+/datum/action/pd_toggle_drain/Trigger()
+	if(ispulsedemon(owner))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = owner
+		PD.draining = !PD.draining
+		to_chat(PD,"<span class='notice'>Draining power is [PD.draining ? "on" : "off"].</span>")
+
+/datum/action/pd_leave_item
+	name = "Leave posessed item"
+	desc = "Exit the item you are currently in."
+	icon_icon = 'icons/mob/screen_spells.dmi'
+	button_icon_state = "pd_hijack"
+
+/datum/action/pd_leave_item/Trigger()
+	if(ispulsedemon(owner))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = owner
+		if(PD.current_power)
+			PD.forceMove(PD.current_power.loc)
+		else
+			PD.forceMove(get_turf(PD))
+		PD.current_robot = null
+		PD.current_bot = null
+		PD.current_weapon = null
+		PD.change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
+	else
+		owner.forceMove(get_turf(owner))
+	Remove(owner)
+
+/datum/action/pd_change_camera
+	name = "Change camera view"
+	desc = "Move to another camera in the area."
+	icon_icon = 'icons/mob/screen_ai.dmi'
+	button_icon_state = "camera"
+
+/datum/action/pd_change_camera/Trigger()
+	if(ispulsedemon(owner))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = owner
+		var/list/camstouse = list()
+		var/area/ourarea = get_area(PD)
+		for (var/obj/machinery/camera/C in cameranet.cameras)
+			if(get_area(C) == ourarea)
+				camstouse["[C.c_tag]"] += C
+		var/camtag = input(PD,"Choose a camera to jump to","Area cameras") as null|anything in camstouse
+		if(camtag)
+			var/obj/machinery/camera/ourcam = camstouse[camtag]
+			ourcam.attack_pulsedemon(PD)

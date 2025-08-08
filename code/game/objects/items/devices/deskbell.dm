@@ -92,7 +92,7 @@
 	if(world.time - last_ring_time >= ring_delay)
 		last_ring_time = world.time
 		flick("[icon_state]-push", src)
-		playsound(src, 'sound/machines/ding2.ogg', 50, 1)
+		playsound(src, hitsound, 50, 1)
 		return 1
 	return 0
 
@@ -269,7 +269,7 @@
 					to_chat(user, "<span class='warning'>You must add wires first.</span>")
 					return
 			if(1)
-				if(istype(W,/obj/item/tool/wirecutters))
+				if(W.is_wirecutter(user))
 					if(has_signaler)
 						to_chat(user, "<span class='warning'>You must remove the signaler first.</span>")
 						return

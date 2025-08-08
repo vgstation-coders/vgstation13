@@ -135,6 +135,7 @@ var/const/POS_HEADER = {"<html>
 	density = 0
 	name = "point of sale"
 	desc = "Also known as a cash register, or, more commonly, \"robbery magnet\"."
+	pass_flags = PASSTABLE
 
 	var/id = 0
 	var/sales = 0
@@ -446,7 +447,7 @@ var/const/POS_HEADER = {"<html>
 			dat += SettingsScreen()
 
 	dat += "</body></html>"
-	user << browse(dat, "window=pos")
+	user << browse(HTML_SKELETON(dat), "window=pos")
 	onclose(user, "pos")
 	return
 

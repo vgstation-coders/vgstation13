@@ -3,6 +3,7 @@
 	desc = "Does not support pinball."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "arcade"
+	moody_state = "overlay_arcade"
 	circuit = "/obj/item/weapon/circuitboard/arcade"
 	var/datum/arcade_game/game
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
@@ -55,14 +56,14 @@
 	playerone = user
 	var/dat = game.get_dat()
 
-	user << browse(dat, "window=arcade")
+	user << browse(HTML_SKELETON(dat), "window=arcade")
 	onclose(user, "arcade")
 
 // Lets you be "player two" against a human
 /obj/machinery/computer/arcade/attack_ai(mob/user)
     playertwo = user
     var/dat = game.get_p2_dat()
-    user << browse(dat, "window=arcade")
+    user << browse(HTML_SKELETON(dat), "window=arcade")
     onclose(user, "arcade")
 
 /obj/machinery/computer/arcade/emag_act(mob/user)

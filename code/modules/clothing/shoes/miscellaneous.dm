@@ -80,6 +80,7 @@
 	name = "mime shoes"
 	icon_state = "mime"
 	_color = "mime"
+	clothing_flags = SILENT_SHOES
 
 /obj/item/clothing/shoes/mime/biker
 	name = "Biker's shoes"
@@ -157,11 +158,11 @@
 	_color = "clown"
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
-
-	step_sound = "clownstep"
+	footsteps_range = 0
 
 /obj/item/clothing/shoes/clown_shoes/New()
 	..()
+	step_sound = sounds_clownstep
 	if(Holiday == APRIL_FOOLS_DAY)
 		modulo_steps = 1 //Honk on every step
 
@@ -230,7 +231,6 @@
 		"Dramatic" = 'sound/effects/dramatic_short.ogg',
 		"Random" = CLOWNSHOES_RANDOM_SOUND)
 	var/random_sound = 0
-	var/emagged = 0
 
 /obj/item/clothing/shoes/clown_shoes/advanced/attack_self(mob/living/user)
 	if(user.mind && !clumsy_check(user))
@@ -281,6 +281,7 @@
 
 		if(random_sound)
 			step_sound = sound_list[pick(sound_list)]
+
 	..()
 
 /obj/item/clothing/shoes/clown_shoes/advanced/emag_act(var/mob/user) //Causes the shoes to play a sound every step instead of 2
@@ -292,7 +293,7 @@
 			var/dat = {"<html><div><span style="color:#ff0000;">H</span><span style="color:#99ff00;">O</span><span style="color:#0000ff;">N</span><span style="color:#00ff80;">K</span><span style="color:#0066ff;">!</span></html></div>"}
 			to_chat(user, dat)
 			playsound(user, 'sound/items/bikehorn.ogg', 100, 0)
-			var/obj/item/weapon/reagent_containers/food/snacks/grown/banana/B = new()
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/banana/B = new(loc)
 			B.name = "consolation banana"
 			B.desc = "This one seems to be enchanted..."
 			B.potency = 1337 //Honk
@@ -440,38 +441,17 @@
 	..()
 	if(istype(W, /obj/item/weapon/soap))
 		if(do_after(user, src, 1 SECONDS))
-			user.drop_item(src)
-			if(!user.drop_item(W))
-				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
-				return
-			var/obj/item/weapon/soap_sock/I = new (get_turf(user))
-			W.transfer_fingerprints_to(I)
-			I.base_soap = W
-			I.base_sock = src
-			W.forceMove(I)
-			src.forceMove(I)
-			user.put_in_hands(I)
-			to_chat(user, "<span class='notice'>You place \the [W] into \the [src].</span>")
+			user.create_in_hands(src, new /obj/item/weapon/brick_sock/soap(loc, src, W), W, msg = "<span class='notice'>You place \the [W] into \the [src].</span>", move_in = TRUE)
 	else if(istype(W, /obj/item/stack/sheet/mineral/brick))
-		var/obj/item/stack/sheet/mineral/brick/S = W
 		if(do_after(user, src, 1 SECONDS))
-			user.drop_item(src)
-			if(!user.drop_item(S))
-				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
-				return
-			var/obj/item/weapon/brick_sock/I = new (get_turf(user))
-			if(!S.use(1))
-				return
-			I.base_sock = src
-			src.forceMove(I)
-			user.put_in_hands(I)
-			to_chat(user, "<span class='notice'>You place a brick into \the [src].</span>")
+			user.create_in_hands(src, new /obj/item/weapon/brick_sock(loc, src), W, msg = "<span class='notice'>You place a brick into \the [src].</span>", move_in = TRUE)
 
 /obj/item/clothing/shoes/jestershoes
 	name = "Jester Shoes"
 	desc = "As worn by the clowns of old."
 	icon_state = "jestershoes"
 	item_state = "jestershoes"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/aviatorboots
 	name = "Aviator Boots"
@@ -485,12 +465,14 @@
 	desc = "Freedom isn't free, neither were these shoes."
 	icon_state = "libertyshoes"
 	item_state = "libertyshoes"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/megaboots
 	name = "DRN-001 Boots"
 	desc = "Large armored boots, very weak to large spikes."
 	icon_state = "megaboots"
 	item_state = "megaboots"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/protoboots
 	name = "Prototype Boots"
@@ -560,11 +542,16 @@
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	actions_types = list(/datum/action/item_action/generic_toggle)
 	var/toggle = FALSE
+	var/shoes_damage = 10
 
-/obj/item/clothing/shoes/knifeboot/attack_self()
+/obj/item/clothing/shoes/knifeboot/proc/toggle_text()
+	return "hidden knife [toggle ? "out" : "in"]"
+
+/obj/item/clothing/shoes/knifeboot/attack_self(mob/user)
 	toggle = !toggle
-	to_chat(usr, "<span class = 'notice'>You toggle \the [src]'s hidden knife [toggle?"out":"in"].</span>")
+	to_chat(usr, "<span class = 'notice'>You toggle \the [src]'s [toggle_text()].</span>")
 	update_icon()
+	user.update_inv_shoes()
 	..()
 
 /obj/item/clothing/shoes/knifeboot/update_icon()
@@ -578,7 +565,25 @@
 	if(istype(victim) && toggle)
 		var/datum/organ/external/affecting = victim.get_organ(ran_zone(user.zone_sel.selecting))
 		//Sharpness 1.5, force 10, edge = SHARP_TIP | SHARP_BLADE
-		victim.apply_damage(victim.run_armor_absorb(affecting, "melee", 10), BRUTE, affecting, victim.run_armor_check(affecting, "melee"), sharp = 1.5, edge = SHARP_TIP | SHARP_BLADE, used_weapon = src)
+		victim.apply_damage(victim.run_armor_absorb(affecting, "melee", shoes_damage), BRUTE, affecting, victim.run_armor_check(affecting, "melee"), sharp = 1.5, edge = SHARP_TIP | SHARP_BLADE, used_weapon = src)
+
+/obj/item/clothing/shoes/knifeboot/vox
+	name = "vox boots"
+	desc = "A pair of heavy, jagged armored foot pieces. They seem suitable for a velociraptor."
+	item_state = "boots-vox"
+	icon_state = "boots-vox"
+	species_restricted = list(VOX_SHAPED)
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox
+	shoes_damage = 25
+
+/obj/item/clothing/shoes/knifeboot/vox/toggle_text()
+	return "high frequency talons [toggle ? "on" : "off"]"
+
+/obj/item/clothing/shoes/knifeboot/vox/on_kick_obj(mob/living/carbon/human/user, obj/target)
+	..()
+	if (istype(target, /obj/machinery/door) && toggle)
+		var/obj/machinery/door/d = target
+		d.attempt_slicing(user)
 
 /obj/item/clothing/shoes/lich_king
 	name = "old knight greaves"
@@ -606,11 +611,16 @@
 	name = "clown psychedelic shoes"
 	icon_state = "clownshoespsyche"
 	item_state = "clownshoespsyche"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	luminosity = 2
 	_color = "clownshoespsyche"
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 	species_fit = list(VOX_SHAPED)
 
-	step_sound = "clownstep"
+/obj/item/clothing/shoes/clownshoespsyche/New()
+	..()
+	step_sound = sounds_clownstep
+
 
 /obj/item/clothing/shoes/clownshoespsyche/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -624,3 +634,35 @@
 	desc = "Black shoes for formal occasions."
 	icon_state = "secshoes"
 	item_state = "secshoes"
+	species_fit = list(VOX_SHAPED)
+
+/obj/item/clothing/shoes/scubafloppers
+	name = "scuba floppers"
+	desc = "SCUBA floppers for swimming quickly... in space?"
+	icon_state = "scubafloppers"
+	item_state = "scubafloppers"
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, UNDEAD_SHAPED, MUSHROOM_SHAPED, INSECT_SHAPED)
+
+
+/obj/item/clothing/shoes/hunter
+	name = "heavy leather boots"
+	desc = "Tall leather boots, perfect for performing slide kicks."
+	icon_state = "hunter"
+	item_state = "hunter_boots"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
+	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
+	bonus_kick_damage = 3
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
+
+/obj/item/clothing/shoes/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/shoes/hunter/rangeTackleBonus()
+	return 1
+
+/obj/item/clothing/shoes/sonicman
+	name = "sonicman shoes"
+	icon_state = "sonicmanshoes"
+	item_state = "sonicmanshoes"
+	desc = "Lightspeed dash sold seperately."

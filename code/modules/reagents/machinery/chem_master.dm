@@ -46,6 +46,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
+	var/moody_state = "overlay_chem_master"
+
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
@@ -81,7 +83,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			manipcount += SP.rating-1
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
-	max_bottle_size = initial(max_bottle_size) + lasercount*5
+	if(!condi) //everything except the condimaster
+		max_bottle_size = initial(max_bottle_size) + lasercount*5
+	else
+		max_bottle_size = initial(max_bottle_size) + lasercount*12.5
 	max_pill_count = initial(max_pill_count) + manipcount*5
 	max_pill_size = initial(max_pill_size) + manipcount*25
 
@@ -140,8 +145,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		if(B.w_class > W_CLASS_SMALL)
 			to_chat(user, "<span class='warning'>\The [B] is too big to fit.</span>")
 			return
-		if(!user.drop_item(B, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [B]!</span>")
+		if(!user.drop_item(B, src, failmsg = TRUE))
 			return
 
 		src.container = B
@@ -159,8 +163,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		if(src.loaded_pill_bottle)
 			to_chat(user, "<span class='warning'>There already is a pill bottle loaded in the machine.</span>")
 			return
-		if(!user.drop_item(B, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [B]!</span>")
+		if(!user.drop_item(B, src, failmsg = TRUE))
 			return
 
 		src.loaded_pill_bottle = B
@@ -421,6 +424,19 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 			var/logged_message = " - [key_name(usr)] has made [count] pill[count > 1 ? "s, each" : ""] named '[name]' and containing "
 
+			//Bring the pills to ambient temperature, due to contact with the pilling machinery.
+			var/datum/gas_mixture/A = return_air()
+			if (A)
+				if(abs(reagents.chem_temp - A.temperature) >= MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
+					var/new_temp
+					if (istype(A, /datum/gas_mixture/unsimulated) || !(config.reagents_heat_air))
+						new_temp = A.temperature
+					else
+						new_temp = reagents.get_equalized_temperature(reagents.chem_temp, reagents.get_thermal_mass(), A.temperature, A.heat_capacity())
+						A.temperature = new_temp
+					reagents.chem_temp = new_temp
+					reagents.handle_reactions()
+
 			while(count>0)
 				count--
 				if(amount_per_pill == 0 || reagents.total_volume == 0)
@@ -439,7 +455,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 						P.forceMove(loaded_pill_bottle)
 				if(count == 0) //only do this ONCE
 					logged_message += "[P.reagents.get_reagent_ids(1)]. Icon: [pillIcon2Name[text2num(pillsprite)]]"
-				
+
 
 			investigation_log(I_CHEMS, logged_message)
 
@@ -478,7 +494,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				bottletype.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
 				//bottletype.icon_state = "bottle"+bottlesprite
 				reagents.trans_to(bottletype,amount_per_bottle)
-				
+
 			src.updateUsrDialog()
 			return 1
 
@@ -490,10 +506,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(href_list["createpacket_multiple"])
 				count = isgoodnumber(input("Select the number of packets to make.", "Amount:", 10) as num)
 			count = clamp(count, 1, 10)
-			
+
 			var/amount_per_packet = reagents.total_volume > 0 ? reagents.total_volume/count : 0
 			amount_per_packet = min(amount_per_packet,5)
-			
+
 			var/name = stripped_input(usr,"Name:", "Name your packet!","[reagents.get_master_reagent_name()] ([amount_per_packet] units)")
 			if(!name)
 				to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
@@ -753,6 +769,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	if(container)
 		detach()
 
+/obj/machinery/chem_master/power_change()
+	..()
+	update_icon()
+
 /obj/machinery/chem_master/update_icon()
 
 	overlays.len = 0
@@ -763,13 +783,26 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		container.update_icon() //Forcefully update the beaker
 		overlays += container //Set it as an overlay
 
-	if(reagents.total_volume && !(stat & (FORCEDISABLE|BROKEN|NOPOWER))) //If we have reagents in here, and the machine is powered and functional
+	var/image/mixer_prongs = image('icons/obj/chemical.dmi', src, "mixer_prongs")
+	overlays += mixer_prongs //Add prongs on top of the container
+
+	if (stat & BROKEN)
+		icon_state = "[initial(icon_state)]_b"
+		kill_moody_light()
+		return
+
+	if (stat & (FORCEDISABLE|NOPOWER))
+		icon_state = "[initial(icon_state)]_nopower"
+		kill_moody_light()
+		return
+
+	icon_state = initial(icon_state)
+	//If we have reagents in here, and the machine is powered and functional
+	if (reagents.total_volume)
 		var/image/overlay = image('icons/obj/chemical.dmi', src, "mixer_overlay")
 		overlay.icon += mix_color_from_reagents(reagents.reagent_list)
 		overlays += overlay
-
-	var/image/mixer_prongs = image('icons/obj/chemical.dmi', src, "mixer_prongs")
-	overlays += mixer_prongs //Add prongs on top of all of this
+	update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 
 /obj/machinery/chem_master/on_reagent_change()
 	update_icon()
@@ -780,6 +813,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	icon_state = "condimaster"
 	chem_board = /obj/item/weapon/circuitboard/condimaster
 	windowtype = "condi_master"
+	moody_state = "overlay_condimaster"
+	max_bottle_size = 50
 
 /obj/machinery/chem_master/electrolytic
 	name = "\improper Electrolytic ChemMaster"

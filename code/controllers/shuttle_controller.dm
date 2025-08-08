@@ -18,7 +18,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 /datum/emergency_shuttle
 	var/alert = 0 //0 = emergency, 1 = crew cycle
 
-	var/location = 0 //0 = in transit (or on standby), 1 = at the station, 2 = at centcom
+	var/location = 0 //0 = in transit (or on standby) [SHUTTLE_ON_STANDBY], 1 = at the station [SHUTTLE_ON_STATION], 2 = at centcom [SHUTTLE_ON_CENTCOM]
 	var/online = 0
 	var/direction = 0 //-1 = going back to centcom (recalled), 0 = on standby, 1 = going to the station, 2 = in transit to centcom (not recalled)
 
@@ -45,6 +45,10 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 	var/was_early_launched = FALSE //had timer shortened to 10 seconds
 
+	var/extremely_hihg_speed = FALSE
+
+	var/last_second_tick = 0
+
 	// call the shuttle
 	// if not called before, set the endtime to T+600 seconds
 	// otherwise if outgoing, switch to incoming
@@ -55,11 +59,11 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	if((!universe.OnShuttleCall(null) || deny_shuttle) && alert == 1) //crew transfer shuttle does not gets recalled by gamemode
 		return
 	if(endtime)
-		setdirection(1)
+		setdirection(EMERGENCY_SHUTTLE_GOING_TO_STATION)
 	else
 		settimeleft(SHUTTLEARRIVETIME*coeff)
 		online = 1
-		setdirection(1)
+		setdirection(EMERGENCY_SHUTTLE_GOING_TO_STATION)
 		if(always_fake_recall)
 			fake_recall = rand(300,500)
 	//turning on the red lights in hallways
@@ -79,14 +83,14 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 		return
 	if(!can_recall)
 		return
-	if(direction == 1)
+	if(direction == EMERGENCY_SHUTTLE_GOING_TO_STATION)
 		var/timeleft = timeleft()
 		if(alert == 0)
 			if(timeleft >= 600)
 				return
 			command_alert(/datum/command_alert/emergency_shuttle_recalled)
 			world << sound('sound/AI/shuttlerecalled.ogg')
-			setdirection(-1)
+			setdirection(EMERGENCY_SHUTTLE_RECALLED)
 			online = 1
 			for(var/area/A in areas)
 				if(istype(A, /area/hallway))
@@ -94,7 +98,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 			return
 		else //makes it possible to send shuttle back.
 			captain_announce("The shuttle has been recalled.")
-			setdirection(-1)
+			setdirection(EMERGENCY_SHUTTLE_RECALLED)
 			online = 1
 			return
 
@@ -104,6 +108,9 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	if(online)
 		var/timeleft = round((endtime - world.time)/10 ,1)
 		if(direction >= 0)
+			if(world.time - last_second_tick >= 1 SECONDS)
+				INVOKE_EVENT(src, /event/shuttletimer, "time" = timeleft, "direction" = direction)
+				last_second_tick = world.time
 			return timeleft
 		else
 			return SHUTTLEARRIVETIME-timeleft
@@ -112,8 +119,18 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 // sets the time left to a given delay (in seconds)
 /datum/emergency_shuttle/proc/settimeleft(var/delay)
-	endtime = world.time + delay * 10
-	timelimit = delay
+	if (extremely_hihg_speed)
+		endtime = world.time + 60 SECONDS
+		timelimit = 60
+	else
+		endtime = world.time + delay * 10
+		timelimit = delay
+
+/datum/emergency_shuttle/proc/get_shuttle_timer()
+	var/shuttle_time_left = timeleft()
+	if(shuttle_time_left)
+		return "[add_zero(num2text((shuttle_time_left / 60) % 60),2)]:[add_zero(num2text(shuttle_time_left % 60), 2)]"
+	return ""
 
 // sets the shuttle direction
 // 1 = towards SS13, -1 = back to centcom
@@ -143,6 +160,11 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 		if("transit")
 			if(!S.move_to_dock(S.transit_port, 0))
 				message_admins("Warning: [S] failed to move to transit.")
+		if("shuttle")
+			S.crashing_this_pod = 1
+			S.crash_into_shuttle()
+			playsound(shuttle.linked_port, 'sound/misc/weather_warning.ogg', 80, 0, 7, 0, 0)
+
 	spawn()
 		for(var/obj/machinery/door/D in S.linked_area)
 			if(destination == "transit" || destination == "shuttle")
@@ -154,8 +176,8 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	online=0
 	shutdown=1
 
-	if(direction == 2)
-		location = 1
+	if(direction == EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM)
+		location = SHUTTLE_ON_STATION
 
 		//main shuttle
 		if(shuttle && istype(shuttle,/datum/shuttle/escape))
@@ -218,7 +240,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 /datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 	switch (phase)
 		if ("station")
-			location = 1
+			location = SHUTTLE_ON_STATION
 
 			if(shuttle && istype(shuttle,/datum/shuttle/escape))
 				var/datum/shuttle/escape/E = shuttle
@@ -244,7 +266,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 					to_chat(world, "<span class='sinister' style='font-size:3'> A vile force of darkness is making its way toward the escape shuttle.</span>")
 				*/
 		if ("transit")
-			location = 0 // in deep space
+			location = SHUTTLE_ON_STANDBY // in deep space
 
 			for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.linked_area)
 				spawn(0)
@@ -252,16 +274,21 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 					D.locked = 1
 
 			if (casual)
-				direction = 1
+				direction = EMERGENCY_SHUTTLE_GOING_TO_STATION
 			else
 				departed = 1 // It's going!
-				direction = 2 // heading to centcom
+				direction = EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM // heading to centcom
 				settimeleft(SHUTTLETRANSITTIME)
 
-				// Shuttle Radio
-				CallHook("EmergencyShuttleDeparture", list())
 				command_alert(/datum/command_alert/emergency_shuttle_left)
 				vote_preload()
+
+				/* Handle jukebox updates */
+				spawn()
+					for(var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)
+						SJ.playing=1
+						SJ.update_music()
+						SJ.update_icon()
 
 			if(shuttle && istype(shuttle,/datum/shuttle/escape))
 				var/datum/shuttle/escape/E = shuttle
@@ -280,11 +307,11 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 		if ("centcom")
 			if (casual)
-				location = 0
-				direction = 0
+				location = SHUTTLE_ON_STANDBY
+				direction = EMERGENCY_SHUTTLE_STANDBY
 			else
 				vote_preload()
-				location = 2
+				location = EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM
 
 			//if the crew brought items ordered by centcom with them, they get paid for those as if it were the supply shuttle
 			for(var/atom/movable/MA in shuttle.linked_area)
@@ -334,10 +361,22 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 		warmup_sound = 0
 
 	switch(location)
-		if(0)
+		if(SHUTTLE_ON_STANDBY)
 
 			/* --- Shuttle is in transit toward centcom --- */
-			if(direction == 2)
+			if(direction == EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM)
+				if(timeleft <= 0)
+				/* --- Shuttle has arrived at centcom --- */
+
+					//main shuttle
+					shuttle_phase("centcom",0)
+
+					//pods
+					for (var/pod in escape_pods)
+						move_pod(pod, "centcom")
+
+					hyperspace_sounds("end")
+					return 1
 				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
 					spawn()
 						P.shoot_exhaust(backward = 3)
@@ -351,23 +390,9 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				if(collision_imminent)
 					playsound(shuttle.linked_port, 'sound/misc/weather_warning.ogg', 80, 0, 7, 0, 0)
 
-				if(timeleft>0)
-					return 0
-
-				/* --- Shuttle has arrived at centcom --- */
-				else
+				return 0
 
 
-
-					//main shuttle
-					shuttle_phase("centcom",0)
-
-					//pods
-					for (var/pod in escape_pods)
-						move_pod(pod, "centcom")
-
-					hyperspace_sounds("end")
-					return 1
 
 			/* --- Shuttle has docked centcom after being recalled --- */
 			if(timeleft>timelimit)
@@ -388,25 +413,9 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				shuttle_phase("station",0)
 				return 1
 
-		if(1)
-			if(timeleft <= 6 && !warmup_sound)
-				warmup_sound = 1
-				hyperspace_sounds("begin")
-			// Just before it leaves, close the damn doors!
-			if(timeleft == 2 || timeleft == 1)
-				for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.linked_area)
-					spawn(0)
-						D.close()
-						D.locked = 1
-				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
-					spawn()
-						P.shoot_exhaust(backward = 3)
-
-			if(timeleft>0)
-				return 0
-
+		if(SHUTTLE_ON_STATION)
+			if(timeleft <= 0)
 			/* --- Shuttle leaves the station, enters transit --- */
-			else
 
 				//main shuttle
 				shuttle_phase ("transit",0)
@@ -419,6 +428,23 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 
 				return 1
+
+			else if(timeleft <= 2) // Just before it leaves, close the damn doors!
+				for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.linked_area)
+					spawn(0)
+						D.close()
+						D.locked = 1
+				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
+					spawn()
+						P.shoot_exhaust(backward = 3)
+
+			else if(timeleft <= 6 && !warmup_sound)
+				warmup_sound = 1
+				hyperspace_sounds("begin")
+
+			else
+				return 0
+
 
 		else
 			return 1

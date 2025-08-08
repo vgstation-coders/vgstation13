@@ -11,6 +11,7 @@
 	var/mob/living/silicon/ai/ai = list()
 	var/last_tick //used to delay the powercheck
 	var/buildstage = 0
+	flammable = FALSE
 
 /obj/item/device/radio/intercom/supports_holomap()
 	return TRUE
@@ -149,6 +150,10 @@
 		icon_state="intercom-frame"
 		return
 	icon_state = "intercom[!on?"-p":""][b_stat ? "-open":""]"
+	if (on)
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_intercom")
+	else
+		kill_moody_light()
 
 /obj/item/device/radio/intercom/process()
 	if(((world.timeofday - last_tick) > 30) || ((world.timeofday - last_tick) < 0))
@@ -244,6 +249,8 @@
 	src.listening = copy.listening
 
 /obj/item/device/radio/intercom/AIShiftClick(var/mob/living/silicon/ai/clicker)
+	if(is_pulselocked(clicker))
+		return
 	if(clicker.intercom_clipboard)
 		src.frequency = clicker.intercom_clipboard.frequency
 		src.broadcasting = clicker.intercom_clipboard.broadcasting
@@ -256,5 +263,7 @@
 		to_chat(clicker, "<span class='warn'>You don't have any intercom settings copied to clipboard!</span>")
 
 /obj/item/device/radio/intercom/AICtrlClick(var/mob/living/silicon/ai/clicker)
+	if(is_pulselocked(clicker))
+		return
 	clicker.intercom_clipboard = new /datum/intercom_settings(src)
 	to_chat(clicker, "<span class='confirm'>Copied settings from \the [src].</span>")

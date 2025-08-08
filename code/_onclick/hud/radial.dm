@@ -96,6 +96,7 @@
 	var/max_elements
 	var/pages = 1
 	var/current_page = 1
+	var/color = null
 
 	var/hudfix_method = TRUE //TRUE to change anchor to user, FALSE to shift by py_shift
 	var/py_shift = 0
@@ -341,6 +342,7 @@
 	menu_holder.plane = ABOVE_HUD_PLANE
 	menu_holder.appearance_flags |= KEEP_APART
 	menu_holder.vis_contents += elements + close_button
+	menu_holder.color = color
 	current_user.images += menu_holder
 
 /datum/radial_menu/proc/hide()
@@ -418,7 +420,7 @@
 	Choices should be a list where list keys are movables or text used for element names and return value
 	and list values are movables/icons/images used for element icons
 */
-/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/callback/custom_check,var/uniqueid,var/radius,var/min_angle,var/starting_angle,var/ending_angle,var/recursive = FALSE, var/close_other_menus)
+/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/callback/custom_check,var/uniqueid,var/radius,var/min_angle,var/starting_angle,var/ending_angle,var/recursive = FALSE, var/close_other_menus, var/custom_color = null)
 	if(!user || !anchor || !length(choices))
 		return
 
@@ -437,7 +439,7 @@
 
 	if(istype(custom_check))
 		menu.custom_check = custom_check
-
+	menu.color = custom_color
 	menu.recursion = recursive
 	menu.check_screen_border(user) //Do what's needed to make it look good near borders or on hud
 	menu.set_choices(choices)

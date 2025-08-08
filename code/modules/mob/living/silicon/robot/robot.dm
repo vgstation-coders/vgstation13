@@ -37,13 +37,20 @@
 	var/mob/living/silicon/ai/connected_ai = null
 	var/AIlink = TRUE //Do we start linked to an AI?
 
-	var/obj/item/weapon/cell/cell = null
 	var/cell_type = /obj/item/weapon/cell/high/cyborg //The cell_type we're actually using.
 
 	var/obj/machinery/camera/camera = null
 
 	// Components are basically robot organs.
-	var/list/components = list()
+	var/list/components = list(
+		"actuator" = /datum/robot_component/actuator,
+		"radio" = /datum/robot_component/radio,
+		"power cell" = /datum/robot_component/cell,
+		"diagnosis unit" = /datum/robot_component/diagnosis_unit,
+		"camera" = /datum/robot_component/camera,
+		"comms" = /datum/robot_component/binary_communication,
+		"armour" = /datum/robot_component/armour
+	)
 	var/component_extension = null
 
 	var/obj/item/device/mmi/mmi = null
@@ -56,7 +63,6 @@
 	mob_push_flags = ALLMOBS //trundle trundle
 
 	var/opened = FALSE
-	var/emagged = FALSE
 	var/pulsecompromised = FALSE //Used for pulsedemons
 	var/illegal_weapons = FALSE
 	var/wiresexposed = FALSE
@@ -122,20 +128,18 @@
 		if(wires.IsCameraCut()) // 5 = BORG CAMERA
 			camera.status = 0
 
-	initialize_components()
 	// Create all the robot parts.
-	for(var/V in components) if(V != "power cell")
+	for(var/V in components)
+		var/comptype = components[V]
+		components[V] = new comptype(src)
 		var/datum/robot_component/C = components[V]
 		C.installed = COMPONENT_INSTALLED
 		C.wrapped = new C.external_type
 
-	if(!cell)
-		cell = new cell_type(src)
-
 	updateicon()
 
-	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
-	hud_list[DIAG_CELL_HUD] = image('icons/mob/hud.dmi', src, "hudbattmax")
+	hud_list[DIAG_HEALTH_HUD] = new/image/hud('icons/mob/hud.dmi', src, "huddiagmax")
+	hud_list[DIAG_CELL_HUD] = new/image/hud('icons/mob/hud.dmi', src, "hudbattmax")
 
 	..()
 
@@ -144,13 +148,8 @@
 
 	if(mind && !stored_freqs)
 		spawn(1)
-			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
+			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>", category=MIND_MEMORY_GENERAL, forced=TRUE)
 		stored_freqs = 1
-
-	if(cell)
-		var/datum/robot_component/cell_component = components["power cell"]
-		cell_component.wrapped = cell
-		cell_component.installed = COMPONENT_INSTALLED
 
 	playsound(src, startup_sound, 75, startup_vary)
 
@@ -211,6 +210,7 @@
 			if(initial(I.isupgrade))
 				I = new NC
 				C.installed = COMPONENT_INSTALLED
+				C.upgraded = TRUE
 				qdel(C.wrapped)
 				C.wrapped = I
 				C.vulnerability = I.vulnerability
@@ -244,7 +244,7 @@
 		sensor = null
 
 /mob/living/silicon/robot/proc/getModules()
-	return getAvailableRobotModules()
+	return getAvailableRobotModules(src)
 
 // /vg/: Enable forcing module type
 /mob/living/silicon/robot/proc/pick_module(var/forced_module=null)
@@ -339,7 +339,7 @@
 		dat += "<BR>\n"
 
 	viewalerts = TRUE
-	src << browse(dat, "window=robotalerts&can_close=0")
+	src << browse(HTML_SKELETON(dat), "window=robotalerts&can_close=0")
 
 /mob/living/silicon/robot/can_diagnose()
 	return is_component_functioning("diagnosis unit")
@@ -419,6 +419,7 @@
 
 // this function displays the cyborgs current cell charge in the stat panel
 /mob/living/silicon/robot/proc/show_cell_power()
+	var/obj/item/weapon/cell/cell = get_cell()
 	if(cell)
 		stat(null, text("Charge Left: [cell.charge]/[cell.maxcharge]"))
 	else
@@ -617,20 +618,9 @@
 		for(var/V in components)
 			var/datum/robot_component/C = components[V]
 			if(!C.installed && istype(W, C.external_type))
-				var/obj/item/robot_parts/robot_component/I = W
-				C.installed = COMPONENT_INSTALLED
-				C.wrapped = W
-				C.electronics_damage = I.electronics_damage
-				C.brute_damage = I.brute_damage
-				C.vulnerability = I.vulnerability
-				C.install()
+				C.install(user,W)
 				user.drop_item(W)
 				W.forceMove(null)
-
-				to_chat(usr, "<span class='notice'>You install the [W.name].</span>")
-				if(can_diagnose())
-					to_chat(src, "<span class='info' style=\"font-family:Courier\">New [W.name] installed.</span>")
-
 				return
 
 	if(iswelder(W))
@@ -664,7 +654,7 @@
 
 	else if(iscrowbar(W))	// crowbar means open or close the cover
 		if(opened)
-			if(cell)
+			if(get_cell())
 				to_chat(user, "You close the cover.")
 				if(can_diagnose())
 					to_chat(src, "<span class='info' style=\"font-family:Courier\">Cover closed.</span>")
@@ -699,24 +689,10 @@
 				if(!remove)
 					return
 				var/datum/robot_component/C = components[remove]
-				if(istype(C.wrapped, /obj/item/broken_device))
-					var/obj/item/broken_device/I = C.wrapped
-					to_chat(user, "You remove \the [I].")
-					if(can_diagnose())
-						to_chat(src, "<span class='info' style=\"font-family:Courier\">Destroyed [C] removed.</span>")
-					I.forceMove(loc)
-				else
-					var/obj/item/robot_parts/robot_component/I = C.wrapped
-					I.brute_damage = C.brute_damage
-					I.electronics_damage = C.electronics_damage
-					to_chat(user, "You remove \the [I].")
-					if(can_diagnose())
-						to_chat(src, "<span class='info' style=\"font-family:Courier\">Functional [I.name] removed.</span>")
-					I.forceMove(loc)
-
-				if(C.installed == COMPONENT_INSTALLED)
-					C.uninstall()
-				C.installed = FALSE
+				if(C.wrapped)
+					C.wrapped.forceMove(loc)
+					user.put_in_hands(C.wrapped)
+				C.uninstall(user)
 
 		else
 			if(locked)
@@ -729,51 +705,16 @@
 				updateicon()
 
 	else if(istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
-		var/datum/robot_component/C = components["power cell"]
 		if(wiresexposed)
 			to_chat(user, "Close the panel first.")
 			return
-		else if(cell)
-			to_chat(user, "You swap the power cell within with the new cell in your hand.")
-			var/obj/item/weapon/cell/oldpowercell = cell
-			C.wrapped = null
-			C.installed = COMPONENT_MISSING
-			cell = W
-			oldpowercell.electronics_damage = C.electronics_damage
-			oldpowercell.brute_damage = C.brute_damage
-			user.drop_item(W, src)
-			user.put_in_hands(oldpowercell)
-			if(can_diagnose())
-				to_chat(src, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
-			C.installed = COMPONENT_INSTALLED
-			C.wrapped = W
-			C.electronics_damage = cell.electronics_damage
-			C.brute_damage = cell.brute_damage
-			C.install()
-			if(can_diagnose())
-				to_chat(src, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [cell.name]. Charge: [cell.charge] out of [cell.maxcharge].</span>")
-		else
-			user.drop_item(W, src)
-			cell = W
-			to_chat(user, "You insert the power cell.")
-
-			C.installed = COMPONENT_INSTALLED
-			C.wrapped = W
-			C.electronics_damage = cell.electronics_damage
-			C.brute_damage = cell.brute_damage
-			C.install()
-			if(can_diagnose())
-				to_chat(src, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [cell.name]. Charge: [cell.charge] out of [cell.maxcharge].</span>")
-		if(cell.occupant)
-			to_chat(cell.occupant,"<span class='notice'>You are now inside \the [src], in control of its targeting.</span>")
-			pulsecompromised = 1
-			cell.occupant.loc = src
-			cell.occupant.current_robot = src
-			cell.occupant = null
-			to_chat(src, "<span class='danger'>ERRORERRORERROR</span>")
-			spawn(2 SECONDS)
-				to_chat(src, "<span class='danger'>ALERT: ELECTRICAL MALEVOLENCE DETECTED, TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
-		updateicon()
+		var/datum/robot_component/C = components["power cell"]
+		user.drop_item(W, src)
+		var/obj/item/weapon/cell/cell = get_cell()
+		if(cell)
+			C.uninstall(user)
+			user.put_in_hands(cell)
+		C.install(user,W)
 
 	else if(iswiretool(W))
 		if(wiresexposed)
@@ -781,14 +722,14 @@
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(W.is_screwdriver(user) && opened && !cell)	// haxing
+	else if(W.is_screwdriver(user) && opened && !get_cell())	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		if(can_diagnose())
 			to_chat(src, "<span class='info' style=\"font-family:Courier\">Internal wiring [wiresexposed ? "exposed" : "unexposed"].</span>")
 		updateicon()
 
-	else if(W.is_screwdriver(user) && opened && cell)	// radio
+	else if(W.is_screwdriver(user) && opened && get_cell())	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
 			if(can_diagnose())
@@ -819,6 +760,8 @@
 				updateicon()
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
+	else if(isEmag(W))
+		emag_check(W,user)
 	else if(istype(W, /obj/item/device/toner))
 		if(toner >= tonermax)
 			to_chat(user, "The toner level of [src] is at its highest level possible")
@@ -838,6 +781,9 @@
 	else if(istype(W, /obj/item/device/camera_bug))
 		help_shake_act(user)
 		return FALSE
+
+	else if(istype(W, /obj/item/weapon/storage/bag/gadgets/part_replacer))
+		return exchange_parts(user, W)
 
 	else
 		if(W.force > 0)
@@ -945,22 +891,19 @@
 
 /mob/living/silicon/robot/attack_animal(mob/living/simple_animal/M)
 	M.unarmed_attack_mob(src)
+	return 1
 
 /mob/living/silicon/robot/attack_hand(mob/living/user)
 	add_fingerprint(user)
 
 	if(opened && !wiresexposed && (!istype(user, /mob/living/silicon)))
 		var/datum/robot_component/cell_component = components["power cell"]
+		var/obj/item/weapon/cell/cell = get_cell()
 		if(cell)
-			cell.electronics_damage = cell_component.electronics_damage
-			cell.brute_damage = cell_component.brute_damage
+			cell_component.uninstall(user,TRUE)
 			cell.updateicon()
 			cell.add_fingerprint(user)
 			user.put_in_hands(cell)
-			user.visible_message("<span class='warning'>[user] removes [src]'s [cell.name].</span>", \
-			"<span class='notice'>You remove [src]'s [cell.name].</span>")
-			if(can_diagnose())
-				to_chat(src, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
 			attack_log += "\[[time_stamp()]\] <font color='orange'>Has had their [cell.name] removed by [user.name] ([user.ckey])</font>"
 			user.attack_log += "\[[time_stamp()]\] <font color='red'>Removed the [cell.name] of [name] ([ckey])</font>"
 			log_attack("<font color='red'>[user.name] ([user.ckey]) removed [src]'s [cell.name] ([ckey])</font>")
@@ -1029,6 +972,7 @@
 /mob/living/silicon/robot/proc/updateicon(var/overlay_layer = ABOVE_LIGHTING_LAYER, var/overlay_plane = ABOVE_LIGHTING_PLANE)
 	overlays.Cut()
 	update_fire()
+	var/obj/item/weapon/cell/cell = get_cell()
 	if(!stat && cell != null)
 		eyes = image(icon,"eyes-[icon_state]", overlay_layer)
 		eyes.plane = overlay_plane
@@ -1087,7 +1031,7 @@
 		else
 			dat += text("[obj]: <A HREF=?src=\ref[src];act=\ref[obj]>Activate</A><BR>")
 
-	src << browse(dat, "window=robotmod&can_close=1")
+	src << browse(HTML_SKELETON(dat), "window=robotmod&can_close=1")
 	onclose(src,"robotmod") // Register on-close shit, which unsets machinery.
 
 
@@ -1321,10 +1265,12 @@
 		component.electronics_damage = 0
 		component.brute_damage = 0
 		component.installed = COMPONENT_INSTALLED
-	if(!cell)
-		cell = new(src)
-	cell.maxcharge = max(15000, cell.maxcharge)
-	cell.charge = cell.maxcharge
+		if(istype(component.type,/datum/robot_component/cell))
+			if(!component.wrapped)
+				component.wrapped = new(src)
+			var/obj/item/weapon/cell/cell = component.wrapped
+			cell.maxcharge = max(15000, cell.maxcharge)
+			cell.charge = cell.maxcharge
 	..()
 	updatehealth()
 
@@ -1339,14 +1285,6 @@
 			client.screen -= A
 	module.remove_languages(src)
 	module = null
-
-/mob/living/silicon/robot/hasHUD(var/hud_kind)
-	switch(hud_kind)
-		if(HUD_MEDICAL)
-			return sensor_mode == 2
-		if(HUD_SECURITY)
-			return sensor_mode == 1
-	return FALSE
 
 /mob/living/silicon/robot/identification_string()
 	return "[name] ([modtype] [braintype])"
@@ -1369,8 +1307,34 @@
 /mob/living/silicon/robot/hasFullAccess()
 	return FALSE
 
+/mob/living/silicon/robot/proc/add_cell(var/obj/item/weapon/cell/C,var/mob/user)
+	if(components && components.len)
+		var/datum/robot_component/cellcomp = components["power cell"]
+		cellcomp.install(user,C)
+
+/mob/living/silicon/robot/proc/clear_cell()
+	if(components && components.len)
+		var/datum/robot_component/cellcomp = components["power cell"]
+		cellcomp.wrapped = null
+
 /mob/living/silicon/robot/get_cell()
-	return cell
+	if(components && components.len)
+		var/datum/robot_component/cellcomp = components["power cell"]
+		if(cellcomp)
+			return cellcomp.wrapped
+
+/mob/living/silicon/robot/proc/get_cell_charge_fraction()
+	var/obj/item/weapon/cell/cell = get_cell()
+	return cell ? cell.charge/cell.maxcharge : 0
+
+/mob/living/silicon/robot/proc/get_cell_maxcharge()
+	var/obj/item/weapon/cell/cell = get_cell()
+	return cell ? cell.maxcharge : 0
+
+/mob/living/silicon/robot/proc/drain_cell()
+	var/obj/item/weapon/cell/cell = get_cell()
+	if(cell)
+		cell.charge = 0
 
 /mob/living/silicon/robot/proc/toggle_modulelock()
 	modulelock = !modulelock
@@ -1378,4 +1342,10 @@
 
 //Currently only used for borg movement, to avoid awkward situations where borgs with RTG or basic cells are always slowed down
 /mob/living/silicon/robot/proc/get_percentage_power_for_movement()
-	return clamp(round(cell.maxcharge/4), 0, SILI_LOW_TRIGGER)
+	return clamp(round(get_cell_maxcharge()/4), 0, SILI_LOW_TRIGGER)
+
+/mob/living/silicon/robot/ignite()
+	if(module && locate(/obj/item/borg/fire_shield, module.modules))
+		return
+	else
+		..()

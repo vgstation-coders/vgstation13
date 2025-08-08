@@ -31,6 +31,10 @@
 	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 
+/obj/item/radio/integrated/signal/Destroy()
+	radio_controller.remove_object(src, frequency)
+	. = ..()
+
 /obj/item/radio/integrated/signal/initialize()
 	if (!radio_controller)
 		return
@@ -47,7 +51,7 @@
 /obj/item/radio/integrated/signal/proc/send_signal(message="ACTIVATE")
 
 
-	if(last_transmission && world.time < (last_transmission + 5))
+	if(last_transmission && world.time < (last_transmission + 0.5 SECONDS))
 		return
 	last_transmission = world.time
 
@@ -83,7 +87,11 @@
 		signal.source = src
 		signal.transmission_method = 1
 		signal.data["target"] = href_list["bot"]
-		signal.data["command"] = href_list["command"]
+		if(href_list["command"] == "send_to")
+			log_astar_command("Sending to: [locate(href_list["bot"])]")
+			signal.data["command"] = locate(href_list["place"])
+		else
+			signal.data["command"] = href_list["command"]
 		radio_connection.post_signal(src, signal)
 
 		if (istype(loc.loc, /obj/item/device/pda))

@@ -101,6 +101,28 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/pacman/mrs
 
+/datum/design/babypacman
+	name = "BABYPACMAN-type Generator Board"
+	desc = "The circuit board that for a BABYPACMAN-type portable generator."
+	id = "babypacman"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_POWERSTORAGE = 6, Tc_ENGINEERING = 5)
+	build_type = IMPRINTER
+	reliability_base = 74
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/pacman/baby
+
+/datum/design/professorpacman
+	name = "PROFESSORPACMAN-type Generator Board"
+	desc = "The circuit board that for a PROFESSORPACMAN-type portable generator."
+	id = "professorpacman"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_POWERSTORAGE = 7, Tc_ENGINEERING = 5)
+	build_type = IMPRINTER
+	reliability_base = 74
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/pacman/professor
+
 //
 //ATMOSPHERIC MACHINERY.
 //
@@ -154,6 +176,16 @@
 	materials = list (MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
 	build_path = /obj/item/weapon/circuitboard/airshield
+
+/datum/design/firefoam_popper
+	name = "Circuit Design (Firefoam Popper)"
+	desc = "Allows for the construction of circuit boards used to build a firefoam popper."
+	id = "fire_popper"
+	req_tech = list(Tc_ENGINEERING = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/firefoam_popper
 
 //
 //MECHANICS MACHINES.
@@ -283,3 +315,30 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 2000)
 	build_path = /obj/item/weapon/circuitboard/shield_cap
+
+// fission (machine) boards.
+
+
+
+
+/datum/design/fission_control_rod
+	name = "Internal circuitry (Control rod)"
+	desc = "Allows for the construction of circuit boards used to build control rods for a fission reactor"
+	id = "fission_control_rod"
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/fission_control_rod
+
+/datum/design/fission_fuel_rod
+	name = "Internal circuitry (Fuel rod)"
+	desc = "Allows for the construction of circuit boards used to build fuel rods for a fission reactor"
+	id = "fission_fuel_rod"
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/fission_fuel_rod
+
+

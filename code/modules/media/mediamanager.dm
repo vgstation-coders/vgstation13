@@ -12,7 +12,7 @@
 
 // Open up VLC and play musique.
 // Converted to VLC for cross-platform and ogg support. - N3X
-var/const/PLAYER_HTML=@{"
+/*var/const/PLAYER_HTML=@{"
 <object classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921" codebase="http://download.videolan.org/pub/videolan/vlc/last/win32/axvlc.cab" id="player"></object>
 <script>
 function noErrorMessages () { return true; }
@@ -38,8 +38,33 @@ function SetMusic(url, time, volume) {
 	}, 2000);
 }
 </script>
-"}
+"}*/
+var/const/PLAYER_HTML= @{"<video id="player" width="640" height="480" controls></video>
+<script>
+function noErrorMessages () { return true; }
+window.onerror = noErrorMessages;
 
+function SetMusic(url, time, volume) {
+    var videoPlayer = document.getElementById('player');
+
+    // Set the source
+    videoPlayer.src = url;
+
+    videoPlayer.muted = (volume == 0);
+    videoPlayer.volume = volume / 100; // HTML5 volume is 0.0 to 1.0
+
+    // Play the video
+    videoPlayer.play().then(() => {
+        if (videoPlayer.readyState >= 1) {
+            videoPlayer.currentTime = time;
+        } else {
+            videoPlayer.onloadedmetadata = function() {
+                videoPlayer.currentTime = time;
+            };
+        }
+    })
+}
+</script>"}
 /* OLD, DO NOT USE.  CONTROLS.CURRENTPOSITION IS BROKEN.*/
 /*var/const/PLAYER_OLD_HTML={"
 	<OBJECT id='playerwmp' CLASSID='CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6' type='application/x-oleobject'></OBJECT>
@@ -56,7 +81,7 @@ function SetMusic(url, time, volume) {
 
 */
 
-var/const/PLAYER_OLD_HTML={"
+/*var/const/PLAYER_OLD_HTML={"
 	<OBJECT id='player' CLASSID='CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6' type='application/x-oleobject'></OBJECT>
 	<script>
 function noErrorMessages () { return true; }
@@ -68,45 +93,14 @@ function SetMusic(url, time, volume) {
 	player.Settings.volume = +volume;
 }
 	</script>"}
-
+*/
+var/const/PLAYER_OLD_HTML=PLAYER_HTML
 /proc/stop_all_media()
+	log_startup_progress("Stopping all playing media...")
+	log_debug("Stopping all playing media...")
 	for(var/mob/M in mob_list)
 		if(M && M.client)
 			M.stop_all_music()
-
-// Hook into the events we desire.
-// Set up player on login
-/hook_handler/soundmanager/proc/OnLogin(var/list/args)
-	//testing("Received OnLogin.")
-	var/client/C = args["client"]
-	C.media = new /datum/media_manager(args["mob"])
-	C.media.open()
-	C.media.update_music()
-
-/hook_handler/soundmanager/proc/OnReboot(var/list/args)
-	//testing("Received OnReboot.")
-	log_startup_progress("Stopping all playing media...")
-	// Stop all music.
-	stop_all_media()
-	//  SHITTY HACK TO AVOID RACE CONDITION WITH SERVER REBOOT.
-	sleep(10)
-
-// Update when moving between areas.
-/hook_handler/soundmanager/proc/OnMobAreaChange(var/list/args)
-	var/mob/M = args["mob"]
-	//if(istype(M, /mob/living/carbon/human)||istype(M, /mob/dead/observer))
-	//	testing("Received OnMobAreaChange for [M.type] [M] (M.client=[M.client==null?"null":"/client"]).")
-	if(M.client && M.client.media && !M.client.media.forced)
-		spawn()
-			M.update_music()
-
-
-/hook_handler/shuttlejukes/proc/OnEmergencyShuttleDeparture(var/list/args)
-	spawn(0)
-		for(var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)
-			SJ.playing=1
-			SJ.update_music()
-			SJ.update_icon()
 
 /mob/proc/update_music()
 	if (client && client.media && !client.media.forced)
@@ -139,6 +133,7 @@ function SetMusic(url, time, volume) {
 
 #ifdef DEBUG_MEDIAPLAYER
 #define MP_DEBUG(x) to_chat(owner, x)
+#define JUKEBOX_DEBUG_PLAYER "debug"
 #warn Please comment out #define DEBUG_MEDIAPLAYER before committing.
 #else
 #define MP_DEBUG(x)
@@ -161,16 +156,16 @@ function SetMusic(url, time, volume) {
 
 	var/const/window_odd = "rpane.hosttracker"
 	var/const/window_even = "rpane.hosttracker2"
-	//var/const/window = "mediaplayer" // For debugging.
+	var/const/window_debug = "mediaplayer" // For debugging.
 	var/playerstyle
 
 /datum/media_manager/New(var/mob/holder)
 	src.mob=holder
 	owner=src.mob.client
 	if(owner.prefs)
-		if(!isnull(owner.prefs.volume))
-			volume = owner.prefs.volume
-		if(owner.prefs.usewmp)
+		if(!isnull(owner.prefs.get_pref(/datum/preference_setting/numerical/volume)))
+			volume = owner.prefs.get_pref(/datum/preference_setting/numerical/volume)
+		if(owner.prefs.get_pref(/datum/preference_setting/toggle/usewmp))
 			playerstyle = PLAYER_OLD_HTML
 		else
 			playerstyle = PLAYER_HTML
@@ -178,20 +173,24 @@ function SetMusic(url, time, volume) {
 // Actually pop open the player in the background.
 /datum/media_manager/proc/open()
 	owner << browse(null, "window=[window_odd]")
-	owner << browse(playerstyle, "window=[window_odd]")
+	owner << browse(HTML_SKELETON(playerstyle), "window=[window_odd]")
 	owner << browse(null, "window=[window_even]")
-	owner << browse(playerstyle, "window=[window_even]")
+	owner << browse(HTML_SKELETON(playerstyle), "window=[window_even]")
+
+	//owner << browse(null, "window=[window_debug]")
+	//owner << browse(HTML_SKELETON(playerstyle), "window=[window_debug]")
+
 	send_update()
 
 // Tell the player to play something via JS.
 /datum/media_manager/proc/send_update(var/target_url)
 	if(!(owner.prefs))
 		return
-	if(!(owner.prefs.toggles & SOUND_STREAMING) && target_url != "")
+	if(!(owner.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & SOUND_STREAMING) && target_url != "")
 		return // Nope.
 	MP_DEBUG("<span class='good'>Sending update to media player ([target_url])...</span>")
 	var/window_playing
-	if(owner.prefs.usewmp)
+	if(owner.prefs.get_pref(/datum/preference_setting/toggle/usewmp))
 		stop_music()
 		MP_DEBUG("<span class='good'>WMP user, no switching, going to even window.<span>")
 		currently_broadcasting = JUKEBOX_EVEN_PLAYER
@@ -209,14 +208,25 @@ function SetMusic(url, time, volume) {
 				currently_broadcasting = JUKEBOX_ODD_PLAYER
 				window_playing = window_odd
 				url_odd = target_url
+	#ifdef DEBUG_MEDIAPLAYER
+	currently_broadcasting = JUKEBOX_DEBUG_PLAYER
+	url_even = target_url
+	window_playing = window_debug
+	#endif
 	// We start to broadcast the music on the second media thing
-	owner << output(list2params(list(target_url, (world.time - start_time) / 10, volume*source_volume)), "[window_playing]:SetMusic")
+	var/_params = list2params(list(target_url, (world.time - start_time) / 10, volume*source_volume))
+	var/_command = "[window_playing]:SetMusic"
+	#ifdef DEBUG_MEDIAPLAYER
+	_command = "[window_playing].browser:SetMusic"
+	#endif
+	MP_DEBUG("<span class='good'>Params: [_params]<br>Command: [_command]</span>")
+	owner << output(_params, _command)
 
 
 
 /datum/media_manager/proc/push_music(var/targetURL,var/targetStartTime,var/targetVolume)
 	var/current_url
-	if (owner && owner.prefs.usewmp)
+	if (owner && owner.prefs.get_pref(/datum/preference_setting/toggle/usewmp))
 		current_url = url_even
 	else
 		switch (currently_broadcasting)
@@ -224,6 +234,9 @@ function SetMusic(url, time, volume) {
 				current_url = url_odd
 			if (JUKEBOX_EVEN_PLAYER)
 				current_url = url_even
+	#ifdef DEBUG_MEDIAPLAYER
+	current_url = url_even
+	#endif
 	if (current_url != targetURL || abs(targetStartTime - start_time) > 1 || abs(targetVolume - source_volume) > 0.1 /* 10% */)
 		start_time = targetStartTime
 		source_volume = clamp(targetVolume, 0, 1)
@@ -232,6 +245,8 @@ function SetMusic(url, time, volume) {
 /datum/media_manager/proc/stop_music()
 	owner << output(list2params(list("", world.time, 1)), "[window_odd]:SetMusic")
 	owner << output(list2params(list("", world.time, 1)), "[window_even]:SetMusic")
+	//owner << output(list2params(list("", world.time, 1)), "[window_debug].browser:SetMusic")
+
 
 // Scan for media sources and use them.
 /datum/media_manager/proc/update_music()
@@ -251,7 +266,7 @@ function SetMusic(url, time, volume) {
 	var/obj/machinery/media/M = A.media_source // TODO: turn into a list, then only play the first one that's playing.
 
 	var/current_url
-	if (owner.prefs.usewmp) // WMP only uses the even broadcaster
+	if (owner.prefs.get_pref(/datum/preference_setting/toggle/usewmp)) // WMP only uses the even broadcaster
 		current_url = url_even
 	else
 		switch (currently_broadcasting)
@@ -259,6 +274,9 @@ function SetMusic(url, time, volume) {
 				current_url = url_odd
 			if (JUKEBOX_EVEN_PLAYER)
 				current_url = url_even
+	#ifdef DEBUG_MEDIAPLAYER
+	current_url = url_even
+	#endif
 
 	if(M && M.playing)
 		MP_DEBUG("<span class='good'>[round(world.time - finish_time, 4)/10] seconds skipped...<span>")
@@ -293,12 +311,13 @@ function SetMusic(url, time, volume) {
 
 /client/proc/set_new_volume()
 	if(!media || !istype(media))
-		to_chat(usr, "You have no media datum to change, if you're not in the lobby tell an admin.")
+		to_chat(usr, "<span class='warning'>You have no media datum to change, if you're not in the lobby tell an admin.</span>")
 		return
-	var/oldvolume = prefs.volume
+	var/oldvolume = prefs.get_pref(/datum/preference_setting/numerical/volume)
 	var/value = input("Choose your Jukebox volume.", "Jukebox volume", media.volume)
 	value = round(max(0, min(100, value)))
 	media.update_volume(value)
 	if(prefs && (oldvolume != value))
-		prefs.volume = value
+		var/datum/preference_setting/volume_pref = prefs.get_pref_datum(/datum/preference_setting/numerical/volume)
+		volume_pref.setting = value
 		prefs.save_preferences_sqlite(src, ckey)

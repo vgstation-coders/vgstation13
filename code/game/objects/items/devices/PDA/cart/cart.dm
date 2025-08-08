@@ -6,6 +6,7 @@
 	item_state = "electronic"
 	origin_tech = Tc_PROGRAMMING + "=2"
 	w_class = W_CLASS_TINY
+	quick_equip_priority = list(slot_wear_id)
 
 	// -- What we use to communicate with bots
 	var/obj/item/radio/integrated/radio = null

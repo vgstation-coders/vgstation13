@@ -61,7 +61,7 @@
 
 /obj/item/weapon/card/debit/trader/New(var/new_loc, var/account_number)
 	if(!trader_account)
-		trader_account = create_account("Trader Shoal", 0, null, 0, 1, TRUE, FALSE)
+		trader_account = create_account("Trader Shoal", starting_funds = 0, source_db=null, wage_payout=0, security_pref=1, ratio_pref=0, makehidden=TRUE, isStationAccount=FALSE)
 	return ..(new_loc, trader_account.account_number)
 
 /obj/item/weapon/card/debit/preferred
@@ -71,12 +71,13 @@
 	melt_temperature = MELTPOINT_STEEL
 	starting_materials = list(MAT_IRON = 10)
 	w_type = RECYK_METAL
+	flammable = FALSE
 	to_cut = 1
 	var/examine_held = "<span class='notice'>You feel more important just by holding it.</span>"
 
 /obj/item/weapon/card/debit/preferred/examine(var/mob/user)
 	. = ..()
-	if(src in user.held_items || istype(user, /mob/dead))
+	if((src in user.held_items) || istype(user, /mob/dead))
 		to_chat(user, examine_held)
 
 /obj/item/weapon/card/debit/preferred/elite

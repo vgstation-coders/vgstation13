@@ -1,4 +1,4 @@
-/datum/power			
+/datum/power
 	var/name = "Power"
 	var/desc = "Placeholder"
 	var/helptext = ""
@@ -6,7 +6,7 @@
 	var/passive = FALSE     //is this a spell or a passive effect?
 	var/spellpath           //Path to a verb that contains the effects.
 	var/cost                //the cost of this power
-	var/datum/role/role 
+	var/datum/role/role
 	var/obj/abstract/screen/movable/spell_master/spellmaster
 
 	var/store_in_memory = FALSE
@@ -25,10 +25,11 @@
 	if (granttext)
 		to_chat(R.antag.current, "<span class = 'notice'>[granttext]</span>")
 	if (store_in_memory)
-		R.antag.store_memory("<font size = '1'>[granttext]</font>")
+		R.antag.store_memory("<font size = '1'>[granttext]</font>", category=MIND_MEMORY_ANTAGONIST, forced=TRUE)
 	R.current_powers += src
 	role = R
 	grant_spell()
+	post_upgrade()
 	return TRUE
 
 //gives the user the spells if theres one associated with it, seperated from add_power in instances where spells need to be added/removed repeatedly (changelings)
@@ -58,6 +59,9 @@
 				return TRUE
 		return FALSE
 
+//For when you want to do more things with upgraded spells, such as modify spell text.
+/datum/power/proc/post_upgrade()
+	return
 
 /datum/power_holder
 	var/datum/role/role
@@ -329,7 +333,7 @@
 	</body></html>
 	"}
 
-	usr << browse(dat, "window=powers;size=900x480")
+	usr << browse(HTML_SKELETON(dat), "window=powers;size=900x480")
 
 
 
@@ -350,7 +354,7 @@
 			break
 
 	if(!thepower)		//ABORT!
-		return 
+		return
 
 	if(thepower in role.current_powers)
 		to_chat(M.current, "<span class='warning'>You have already purchased this power.</span>")
@@ -362,7 +366,7 @@
 
 	role.powerpoints -= thepower.cost
 	thepower.add_power(role)
-	
+
 
 
 

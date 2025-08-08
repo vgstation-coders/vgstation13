@@ -209,8 +209,7 @@
 		visible_message("<span class='warning'>You hear a loud metallic grinding sound.</span>", \
 			drugged_message = "<span class='warning'>You faintly hear a guitar solo.</span>")
 		return
-	if(auto) /* We don't want people just walking out of the autogibber. */
-		occupant.Stun(gibtime + 10)
+	occupant.Stun(gibtime + 10) /* We don't want people just walking out of the gibber. */
 	var/robogib = issilicon(occupant)
 	use_power(1000)
 	visible_message("<span class='warning'>You hear a loud squelchy grinding sound.</span>", \
@@ -275,11 +274,7 @@
 	user.attack_log += "\[[time_stamp()]\] Gibbed <B>[key_name(src.occupant)]</B>"
 	log_attack("<B>[key_name(user)]</B> gibbed <B>[key_name(src.occupant)]</B>")
 
-	if(!iscarbon(user))
-		src.occupant.LAssailant = null
-	else
-		src.occupant.LAssailant = user
-		occupant.assaulted_by(user)
+	src.occupant.assaulted_by(user)
 
 	spawn(src.gibtime)//finally we throw both the meat and gibs in front of the gibber.
 		playsound(src, 'sound/effects/gib2.ogg', 50, 1)

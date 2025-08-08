@@ -59,7 +59,6 @@
 /datum/next_map/deff
 	name = "Defficiency"
 	path = "Defficiency"
-	min_players = 25
 
 /datum/next_map/dorf
 	name = "DorfStation"
@@ -74,12 +73,12 @@
 		warning(msg)
 		return FALSE
 	return ..()
-	
+
 /datum/next_map/line
 	name = "Frankenline Station"
 	path = "line"
 	min_players = 25
-	
+
 /datum/next_map/line/is_votable()
 	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
 	if (MM != 10)
@@ -107,10 +106,15 @@
 	path = "lowfatbagel"
 	min_players = 25
 
+/datum/next_map/horizon
+	name = "NRV Horizon"
+	path = "horizon"
+	min_players = 5
+	max_players = 25
+
 /datum/next_map/metaclub
 	name = "Meta Club"
 	path = "Metaclub"
-	min_players = 20
 
 /datum/next_map/packed
 	name = "Packed Station"
@@ -120,7 +124,6 @@
 /datum/next_map/roid
 	name = "Asteroid Station"
 	path = "RoidStation"
-	min_players = 25
 
 /datum/next_map/snaxi
 	name = "Snow Station"
@@ -140,7 +143,7 @@
 /datum/next_map/synergy
 	name = "Synergy Station"
 	path = "Synergy"
-	max_players = 30
+	min_players = 15
 
 /datum/next_map/waystation
 	name = "Waystation"
@@ -172,10 +175,19 @@
 		return FALSE
 	return ..()
 
-/datum/next_map/nerve
-	name = "Nerve Station"
-	path = "nervestation"
-	min_players = 20
+/datum/next_map/wheelstation
+	name = "Wheelstation"
+	path = "wheelstation"
+	min_players = 30
+
+/datum/next_map/junglestation
+	name = "Jungle Station" //NT Colony Gamma-8 - the trve name.
+	path = "junglestation"
+	min_players=1 //placeholders - adjust later. Or don't. maybe it'll be fun in deadpop and highpop.
+	max_players=99
+//disabled voting. re-enable when jungle is good to run full time. should still be able to be bussed like this.
+/datum/next_map/junglestation/is_votable()
+	return FALSE
 
 /proc/get_votable_maps()
 	var/list/votable_maps = list()

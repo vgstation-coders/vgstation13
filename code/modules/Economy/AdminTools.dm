@@ -13,9 +13,9 @@
             if("finalise_create_account")
                 var/account_name = hrefs["holder_name"]
                 var/starting_funds = max(text2num(hrefs["starting_funds"]), 0)
-                var/staring_payout = max(text2num(hrefs["staring_payout"]), 0)
+                var/starting_payout = max(text2num(hrefs["staring_payout"]), 0)
                 var/hidden = (hrefs["hidden"] == "hidden")
-                create_account(account_name, starting_funds, null, staring_payout, 0, hidden)
+                create_account(account_name, starting_funds, null, starting_payout, 0, 0, hidden)
                 creating_new_account = 0
             if("view_account_detail")
                 var/index = text2num(hrefs["account_index"])
@@ -37,7 +37,7 @@
                 var/datum/money_account/acc = get_money_account_global(acc_num)
                 if(acc)
                     var/new_payout = input(usr, "Select a new payout for this account", "New payout", acc.wage_gain) as null|num
-                    if(new_payout && new_payout >= 0)
+                    if(new_payout != null && new_payout >= 0)
                         acc.wage_gain = new_payout
                     detailed_account_view = acc
 
@@ -100,4 +100,4 @@
                     </tr>"}
             dat += "</table>"
 
-    usr << browse(dat, "window=econ_panel")
+    usr << browse(HTML_SKELETON(dat), "window=econ_panel")

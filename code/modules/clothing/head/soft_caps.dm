@@ -9,16 +9,18 @@
 	siemens_coefficient = 0.9
 	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
 
-/obj/item/clothing/head/soft/proc/flip(var/mob/user as mob)
+/obj/item/clothing/head/soft/proc/flip(var/mob/user)
 	if(!user.incapacitated())
-		src.flipped = !src.flipped
-		if(src.flipped)
+		flipped = !flipped
+		if(flipped)
 			icon_state = "[_color]soft_flipped"
 			to_chat(user, "You flip the hat backwards.")
 		else
 			icon_state = "[_color]soft"
 			to_chat(user, "You flip the hat back in normal position.")
+		update_icon()
 		user.update_inv_head()	//so our mob-overlays update
+
 
 /obj/item/clothing/head/soft/attack_self(var/mob/user as mob)
 	flip(user)
@@ -124,3 +126,24 @@
 	icon_state = "blacksoft"
 	_color = "black"
 	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
+
+/obj/item/clothing/head/soft/linen
+	name = "soft cap"
+	desc = "It's a baseball hat."
+	icon_state = "linensoft"
+	item_state = "linensoft"
+	_color = "linen"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
+	dyeable_parts = list("trim","frontmark")
+	dye_base_iconstate_override = "linensoft"
+
+/obj/item/clothing/head/soft/linen/update_icon()
+	if(flipped)
+		dye_base_iconstate_override = "linensoft_flipped"
+	else
+		dye_base_iconstate_override = "linensoft"
+	..()

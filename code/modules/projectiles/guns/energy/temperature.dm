@@ -6,7 +6,7 @@
 	slot_flags = SLOT_BACK
 	w_class = W_CLASS_LARGE
 	fire_sound = 'sound/weapons/pulse3.ogg'
-	desc = "A gun that changes the body temperature of its targets."
+	desc = "A gun that changes the temperature of its targets."
 	var/temperature = 300
 	var/target_temperature = 300
 	charge_cost = 90
@@ -19,7 +19,6 @@
 	var/powercostcolor = ""
 	var/tempcolor = ""
 
-	var/emagged = 0			//ups the temperature cap from 500 to 1000, targets hit by beams over 500 Kelvin will burst into flames
 	var/dat = ""
 
 /obj/item/weapon/gun/energy/temperature/New()
@@ -40,10 +39,10 @@
 	user << browse("<TITLE>Temperature Gun Configuration</TITLE><HR>[dat]", "window=tempgun;size=510x102")
 	onclose(user, "tempgun")
 
-/obj/item/weapon/gun/energy/temperature/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/card/emag) && !emagged)
+/obj/item/weapon/gun/energy/temperature/emag_act(mob/user)
+	if(!emagged)
 		emagged = 1
-		to_chat(user, "<span class='caution'>You double the gun's temperature cap! Targets hit by now searing beams will burst into flames!</span>")
+		to_chat(user, "<span class='caution'>You double the gun's temperature cap! Individuals hit by now searing beams will burst into flames!</span>")
 		desc = "A gun that changes the body temperature of its targets. Its temperature cap has been hacked."
 
 /obj/item/weapon/gun/energy/temperature/Topic(href, href_list)

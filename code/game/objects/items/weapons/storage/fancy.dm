@@ -20,13 +20,14 @@
 	icon = 'icons/obj/food_container.dmi'
 	icon_state = "donutbox6"
 	name = "donut box"
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	var/icon_type = "donut"
 	var/plural_type = "s" //Why does the english language have to be so complicated to work with ?
 	var/empty = 0
 	var/descriptive_type = "" //piece of, stick of, et cetera
 	var/plural_descriptive_type = "" //pieces of, sticks of
 	var/box_type = "box"
-	autoignition_temperature = AUTOIGNITION_PAPER
 
 	foldable = /obj/item/stack/sheet/cardboard
 
@@ -132,24 +133,60 @@
 
 /obj/item/weapon/storage/fancy/candle_box
 	name = "Candle pack"
-	desc = "A pack of red candles."
+	desc = "A pack of candles."
 	icon = 'icons/obj/candle.dmi'
-	icon_state = "candlebox5"
-	icon_type = "candle"
-	item_state = "candlebox5"
+	icon_state = "candlebox"
+	item_state = "candlebox"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/candles.dmi', "right_hand" = 'icons/mob/in-hand/right/candles.dmi')
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type = RECYK_MISC
-	storage_slots = 5
+	storage_slots = 14
 	throwforce = 2
 	flags = null
 	slot_flags = SLOT_BELT
 	var/obj/item/candle/waxtype = /obj/item/candle
+	var/candlesprite = "candlebox_candle"
 
 /obj/item/weapon/storage/fancy/candle_box/empty
 	empty = TRUE
-	icon_state = "candlebox0"
-	item_state = "candlebox0" //i don't know what this does but it seems like this should go here
+	icon_state = "candlebox"
+	item_state = "candlebox" //i don't know what this does but it seems like this should go here
+
+/obj/item/weapon/storage/fancy/candle_box/update_icon()
+	overlays.len = 0
+
+	for (var/i=0,i<contents.len,i++)
+		var/obj/O = contents[i+1]
+		var/image/I = image(icon, src, "[icon_state]_candle")
+		I.color = O.color
+		I.pixel_x = (i%5)*3
+		overlays += I
+	overlays += "[icon_state]_cover"
+	set_blood_overlay()
+
+	//dynamic in-hands
+	var/inhand_candles = 0
+	switch (contents.len)
+		if (1 to 5)
+			inhand_candles = 1
+		if (6 to 10)
+			inhand_candles = 2
+		if (1 to 14)
+			inhand_candles = 3
+	if (inhand_candles)
+		var/obj/O = contents[1]
+		var/image/left_I = image(inhand_states["left_hand"], src, "[icon_state]_[inhand_candles]")
+		left_I.color = O.color
+		var/image/right_I = image(inhand_states["right_hand"], src, "[icon_state]_[inhand_candles]")
+		right_I.color = O.color
+		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
+		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
+
+	if(iscarbon(loc))
+		var/mob/living/carbon/M = loc
+		M.update_inv_hands()
+
 
 /obj/item/weapon/storage/fancy/candle_box/New()
 	..()
@@ -157,14 +194,15 @@
 		return
 	for(var/i=1; i <= storage_slots; i++)
 		new waxtype(src)
+	update_icon()
 
 /obj/item/weapon/storage/fancy/candle_box/holo
 	name = "Holo candle pack"
 	desc = "A pack of holo candles."
-	icon_state = "holocandlebox5"
-	icon_type = "holocandle"
-	//item_state = "candlebox5"
-	waxtype = /obj/item/candle/holo
+	icon_state = "holocandlebox"
+	item_state = "holocandlebox"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/candles.dmi', "right_hand" = 'icons/mob/in-hand/right/candles.dmi')
+	waxtype = /obj/item/holocandle
 
 /*
  * Crayon Box
@@ -529,6 +567,11 @@
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	storage_slots = 6
 	req_one_access = list(access_virology) //Obj was inheriting from obj/storage/lockbox which requires armory access.  This behavior is overridden here.
+	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 200)
+
+/obj/item/weapon/storage/lockbox/vials/nolock
+	startswithelectronics = FALSE
+	locked = FALSE
 
 /obj/item/weapon/storage/lockbox/vials/New()
 	..()
@@ -538,7 +581,7 @@
 	overlays.len = 0
 	icon_state = "vialbox"
 	item_state = "vialbox"
-	if (!broken && !locked)
+	if (!emagged && !locked)
 		overlays += image('icons/obj/vialbox.dmi',src,"cover_open")
 
 	var/i = 0
@@ -560,7 +603,7 @@
 		overlays += vial_image
 		i++
 
-	if (!broken)
+	if (!emagged && electronics)
 		overlays += image(icon, src, "led[locked]")
 		if(locked)
 			overlays += image(icon, src, "cover")
@@ -702,7 +745,7 @@
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/New()
 	..()
-	for(var/i=1, i <= storage_slots; i++)
+	for(var/i=1; i <= storage_slots; i++)
 		new slider_type(src)
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/synth

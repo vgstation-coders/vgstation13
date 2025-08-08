@@ -6,10 +6,10 @@
 	icon_state = "folder_"
 	item_state = null	// automatically uses the icon_state
 	w_class = W_CLASS_SMALL
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	pressure_resistance = 2
 
-	autoignition_temperature = 522 // Kelvin
-	fire_fuel = 1
 	var/crayon = null
 
 /obj/item/weapon/folder/New()
@@ -92,7 +92,7 @@
 		dat += "<A href='?src=\ref[src];remove=\ref[P]'>Remove</A> - <A href='?src=\ref[src];read=\ref[P]'>[P.name]</A><BR>"
 	for(var/obj/item/weapon/photo/Ph in src)
 		dat += "<A href='?src=\ref[src];remove=\ref[Ph]'>Remove</A> - <A href='?src=\ref[src];look=\ref[Ph]'>[Ph.name]</A><BR>"
-	user << browse(dat, "window=folder")
+	user << browse(HTML_SKELETON(dat), "window=folder")
 	onclose(user, "folder")
 	add_fingerprint(usr)
 	return
@@ -121,7 +121,6 @@
 				admin_log.Add(message)
 				return
 			if(P)
-				P.forceMove(usr.loc)
 				usr.put_in_hands(P)
 
 		if(href_list["read"])

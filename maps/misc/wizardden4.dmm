@@ -282,7 +282,6 @@
 "X" = (
 /obj/structure/rack,
 /obj/item/clothing/suit/wizrobe/necro,
-/obj/item/clothing/head/wizard/necro,
 /obj/item/clothing/shoes/sandal,
 /turf/unsimulated/floor{
 	icon_state = "cult";

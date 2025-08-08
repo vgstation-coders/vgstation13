@@ -10,6 +10,15 @@
  * Misc
  */
 
+///Initialize the lazylist
+#define LAZYINITLIST(L) if (!L) { L = list(); }
+///If the provided list is empty, set it to null
+#define UNSETEMPTY(L) if (L && !length(L)) L = null
+///Remove an item from the list, set the list to null if empty
+#define LAZYREMOVE(L, I) if(L) { L -= I; if(!length(L)) { L = null; } }
+///Add an item to the list, if the list is null it will initialize it
+#define LAZYADD(L, I) if(!L) { L = list(); } L += I;
+
 //Returns a list in plain english as a string
 /proc/english_list(var/list/input, nothing_text = "nothing", and_text = " and ", comma_text = ", ", final_comma_text = "" )
 	var/total = input.len
@@ -149,6 +158,55 @@
 		return chosen
 
 /*
+ * Returns the length of a common prefix in a list, if any
+ * Requires a SORTED list
+ */
+/proc/find_string_list_prefix(var/list/inputlist)
+	if(!inputlist.len)
+		return
+	if(inputlist.len==1)
+		return inputlist[1]
+	var/i = 0
+	var/first = "[inputlist[1]]"
+	var/last = "[inputlist[inputlist.len]]"
+	while(i < length(first) && first[i+1] == last[i+1])
+		i++
+	return i
+
+/*
+ * Returns a choice from an input typelist, given a string filter
+ * If only one thing is returned, just gives us that with no input list.
+ */
+/proc/filter_typelist_input(input_text, input_heading, var/list/matches)
+	if(!matches.len)
+		return
+	if(matches.len==1)
+		return matches[1]
+	matches = sortList(matches)
+	var/prefix = ""
+	var/common = find_string_list_prefix(matches)
+	if(common)
+		prefix = copytext("[matches[1]]", 1, common+1)
+		var/foundpartial = findlasttext(prefix, "/")
+		if(foundpartial)
+			prefix = copytext(prefix, 1, foundpartial)
+			common = foundpartial
+	var/list/results = list()
+	for(var/x in matches)
+		if(common)
+			results += copytext("[x]", common)
+		else
+			results += "[x]"
+	var/newvalue = input("[input_text][(input_text && prefix) ? "\n" : ""][prefix ? "Prefix: [prefix]" : ""]",input_heading) as null|anything in results
+	if(isnull(newvalue))
+		return
+	if(prefix)
+		newvalue = text2path(prefix + newvalue)
+	else
+		newvalue = text2path(newvalue)
+	return newvalue
+
+/*
  * Returns list containing all the entries from first list that are not present in second.
  * If skiprep = 1, repeated elements are treated as one.
  * If either of arguments is not a list, returns null
@@ -179,6 +237,10 @@
 	else
 		result = first ^ second
 	return result
+
+//Returns a new list of only elements in both lists.
+/proc/andlist(var/list/A, var/list/B)
+	return A & B
 
 //Picks an element based on its weight
 /proc/pickweight(list/L)
@@ -365,6 +427,13 @@
 		keys += key
 	return keys
 
+//In an associative list, return a sum of the elements.
+/proc/get_sum_of_elements(var/list/L)
+	var/elements = 0
+	for(var/key in L)
+		elements += L[key]
+	return elements
+
 /proc/count_by_type(var/list/L, type)
 	var/i = 0
 	for(var/T in L)
@@ -507,3 +576,12 @@
     for(var/a in L)
         if(max == null || L[a] > max) max = L[a]
     return max
+
+//Convert a list of paths into a list of object names
+/proc/types_to_english_list(var/list/L)
+	var/list/names = list()
+	for(var/P in L)
+		if(!ispath(P))
+			continue
+		names += "\the [P:name]"
+	return english_list(names)

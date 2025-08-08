@@ -7,9 +7,9 @@
 	school = "changeling"
 	user_type = USER_TYPE_CHANGELING
 
-	charge_type = Sp_RECHARGE
-	charge_max = 1 SECONDS
-	invocation_type = SpI_NONE
+	charge_type = SP_RECHARGE
+	charge_cooldown_max = 1 SECONDS
+	invocation_type = SP_INV_NONE
 	range = 0
 
 	cooldown_min = 1 SECONDS

@@ -59,6 +59,7 @@
 		/obj/item/device/gps/secure/command,
 		/obj/item/weapon/card/debit/preferred/department/civilian,
 		/obj/item/mulebot_laser,
+		/obj/item/clothing/glasses/hud/wage,
 	)
 
 /obj/structure/closet/secure_closet/hop2

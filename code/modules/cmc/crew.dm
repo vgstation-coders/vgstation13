@@ -93,8 +93,14 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	..()
 	if(!holomap_z_levels_mapped.len)
 		holomap_z_levels_mapped = list(map.zMainStation, map.zAsteroid, map.zDerelict)
+		if(map.zAdditionalStationZlevel>0)
+			holomap_z_levels_mapped+=map.zAdditionalStationZlevel
 	if(!holomap_z_levels_unmapped.len)
-		holomap_z_levels_unmapped = list(map.zTCommSat, map.zDeepSpace)
+		holomap_z_levels_unmapped = list()
+		if(map.zTCommSat>0)
+			holomap_z_levels_unmapped+=map.zTCommSat
+		if(map.zDeepSpace>0)
+			holomap_z_levels_unmapped+=map.zDeepSpace		
 
 /obj/machinery/computer/crew/Destroy()
 	deactivateAll()
@@ -107,17 +113,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	initializeUser(user)
-
-/obj/machinery/computer/crew/update_icon()
-	if(stat & BROKEN)
-		icon_state = "[initial(icon_state)]b"
-	else
-		if(stat & (FORCEDISABLE|NOPOWER))
-			src.icon_state = "c_unpowered"
-			stat |= NOPOWER
-		else
-			icon_state = initial(icon_state)
-			stat &= ~NOPOWER
 
 /*
 GENERAL PROCS

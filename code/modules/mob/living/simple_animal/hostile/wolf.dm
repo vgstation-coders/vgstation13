@@ -54,6 +54,7 @@
 	faction = "wolf"
 	attack_same = 1 //Handled more in CanAttack
 	minbodytemp = 200
+	treadmill_speed = 2
 	nutrition = 250
 
 	var/alert = 0 //Listening out for pointings from the pack alpha

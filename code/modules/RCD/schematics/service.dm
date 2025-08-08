@@ -17,12 +17,15 @@
 	..()
 
 /datum/rcd_schematic/rsf/attack(var/atom/A, var/mob/user)
-	if(!is_type_in_list(A, list(/obj/structure/table, /turf/simulated/floor)))
+	if(!is_type_in_list(A, list(/obj/structure/table, /turf/simulated/floor, /obj/item/weapon/gripper)))
 		return 1
 
 	to_chat(user, "Dispensing [lowertext(name)]")
 	playsound(user, 'sound/machines/click.ogg', 10, 1)
-	new spawn_type(get_turf(A))
+	var/item = new spawn_type(get_turf(A))
+	if(istype(A, /obj/item/weapon/gripper))
+		var/obj/item/weapon/gripper/G = A
+		G.grip_item(item, user, feedback = FALSE)
 
 /datum/rcd_schematic/rsf/dosh
 	name		= "Dosh"

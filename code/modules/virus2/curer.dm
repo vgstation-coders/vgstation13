@@ -17,7 +17,7 @@
 				container = I
 	if(istype(I,/obj/item/weapon/virusdish))
 		if(virusing)
-			to_chat(user, "<b>The pathogen materializer is still recharging..")
+			to_chat(user, "<b>The pathogen materializer is still recharging</b>")
 			return
 		var/obj/item/weapon/reagent_containers/glass/beaker/product = new(src.loc)
 
@@ -63,7 +63,7 @@
 	else
 		dat = "Please insert a container."
 
-	user << browse(dat, "window=computer;size=400x500")
+	user << browse(HTML_SKELETON(dat), "window=computer;size=400x500")
 	onclose(user, "computer")
 	return
 

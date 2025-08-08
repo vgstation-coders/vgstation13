@@ -66,6 +66,7 @@
 			cat["items"] += list(list(
 				"name" = I.name,
 				"cost" = I.get_cost(job, species),
+				"base_cost" = I.cost,
 				"desc" = I.desc,
 				"discounted" = I.gives_discount(job) || I.gives_discount(species) || length(I.jobs_exclusive),
 				"refundable" = I.refundable,

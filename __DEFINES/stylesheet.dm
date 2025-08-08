@@ -49,7 +49,9 @@ h1.alert, h2.alert		{color: #000000;}
 .danger					{color: #ff0000;	font-weight: bold;}
 .userdanger				{color: #ff0000;	font-weight: bold;	font-size: 120%}
 .warning				{color: #ff0000;	font-style: italic;}
+.sinisteracolyte		{color: #600080;	font-weight: bold;	font-style: italic;} /* /vg/ */
 .sinister				{color: #800080;	font-weight: bold;	font-style: italic;} /* /vg/ */
+.sinistermentor			{color: #A00080;	font-weight: bold;	font-style: italic;} /* /vg/ */
 .sinisterbig			{color: #800080;	font-weight: bold;	font-style: italic;	font-size: 120%} /* /vg/ */
 .blob					{color: #006221;	font-weight: bold;	font-style: italic;}
 .numb					{color: transparent;font-weight: bold;	text-shadow: 0 0 2px rgba(0,161,161,0.5);} /* blurry text */
@@ -75,6 +77,7 @@ h1.alert, h2.alert		{color: #000000;}
 .cult					{color: #800080; font-weight: bold; font-style: italic;}
 .interface				{color: #330033;}
 .big					{font-size: 150%;}
+.verybig				{font-size: 200%;}
 .bold					{font-weight: bold;}
 .center					{text-align: center;}
 .red					{color: #FF0000;}
@@ -89,6 +92,7 @@ h1.alert, h2.alert		{color: #000000;}
 .borer					{color: #800080; font-weight: bold;}
 .grue					{color: #272728; font-weight: bold;}
 .valentines				{color: #db5b8c; font-weight: bold; font-family: Comic Sans MS, Comic Sans, cursive;}
+.spoken_into_telephone	{color: #330088;}
 
 /* If you're adding a new class here, add it to browserOutput.css too! */
 

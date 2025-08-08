@@ -29,10 +29,9 @@
 	item_state = "box"
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
 	starting_materials = list(MAT_CARDBOARD = 3750)
-	w_type=RECYK_MISC
-	autoignition_temperature = 522 // Kelvin
-	fire_fuel = 2
-	autoignition_temperature = AUTOIGNITION_PAPER
+	w_type=RECYK_WOOD
+	flammable = TRUE
+
 	on_armory_manifest = TRUE
 
 /obj/item/weapon/storage/box/large
@@ -46,9 +45,6 @@
 	starting_materials = list(MAT_CARDBOARD = 15000)
 	storage_slots = 21
 	max_combined_w_class = 42 // 21*2
-
-	autoignition_temperature = 530 // Kelvin
-	fire_fuel = 3
 
 /obj/item/weapon/storage/box/surveillance
 	name = "\improper DromedaryCo packet"
@@ -257,7 +253,8 @@
 
 /obj/item/weapon/storage/box/blanks
 	name = "box of blank shells"
-	desc = "It has a picture of a gun and several warning symbols on the front."
+	icon_state = "dart_shells"
+	desc = "It has a picture of a shotgun shell and several warning symbols on the front."
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/blank = BOX_SPACE)
 
 /obj/item/weapon/storage/box/flashbangs
@@ -368,7 +365,26 @@
 /obj/item/weapon/storage/box/drinkingglasses
 	name = "box of drinking glasses"
 	desc = "It has a picture of drinking glasses on it."
+	icon_state = "glass_box"
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/drinks/drinkingglass = BOX_SPACE)
+
+/obj/item/weapon/storage/box/partyhats
+	name = "box of party hats"
+	desc = "It has a picture of party hats on it."
+	icon_state = "party_box"
+	items_to_spawn = list(/obj/item/clothing/head/party_hat = BOX_SPACE)
+
+/obj/item/weapon/storage/box/partyjunk
+	name = "box of party supplies"
+	desc = "It has a picture of someone in a party hat screaming in joy."
+	items_to_spawn = list(
+					/obj/item/weapon/reagent_containers/food/drinks/discount_shaker,
+					/obj/item/weapon/reagent_containers/food/drinks/bottle/patron,
+					/obj/item/weapon/reagent_containers/food/drinks/bottle/goldschlager,
+					/obj/item/weapon/storage/fancy/cigarettes/dromedaryco,
+					/obj/item/weapon/lipstick/random,
+					/obj/item/device/maracas = 2,
+					)
 
 /obj/item/weapon/storage/box/cdeathalarm_kit
 	name = "Death Alarm Kit"
@@ -469,7 +485,7 @@
 	can_add_combinedwclass = TRUE
 	can_only_hold = list(
 		"/obj/item/device/radio/headset/headset_sec",
-		"/obj/item/clothing/glasses/sunglasses/sechud",
+		"/obj/item/clothing/glasses/hud/security/sunglasses",
 		"/obj/item/clothing/gloves/black",
 		"/obj/item/weapon/storage/belt/security",
 		"/obj/item/device/flashlight/tactical",
@@ -486,7 +502,7 @@
 	)
 	items_to_spawn = list(
 		/obj/item/device/radio/headset/headset_sec,
-		list(/obj/item/clothing/glasses/sunglasses/sechud/prescription,/obj/item/clothing/glasses/sunglasses/sechud),
+		list(/obj/item/clothing/glasses/hud/security/sunglasses/prescription,/obj/item/clothing/glasses/hud/security/sunglasses),
 		/obj/item/clothing/gloves/black,
 		/obj/item/weapon/storage/belt/security,
 		/obj/item/device/flashlight/tactical,
@@ -510,7 +526,7 @@
 	can_add_combinedwclass = TRUE
 	items_to_spawn = list(
 		/obj/item/device/radio/headset/headset_sec,
-			/obj/item/clothing/glasses/regular/tracking/detective,
+			/obj/item/clothing/glasses/hud/tracking/detective,
 		/obj/item/clothing/gloves/black,
 		/obj/item/weapon/storage/belt/detective,
 		/obj/item/weapon/switchtool/switchblade,
@@ -540,44 +556,86 @@
 /obj/item/weapon/storage/box/lethalshells
 	name = "12-gauge slugs"
 	icon_state = "slug_shells"
+	desc = "The box claims that these slugs have a near-perfect accuracy rating when used in defense situations."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun = 16)
 
 /obj/item/weapon/storage/box/beanbagshells
 	name = "12-gauge beanbag shells"
 	icon_state = "beanbag_shells"
+	desc = "A warning sticker states that improper aim can cause grievous injury with this less-than-lethal ammunition."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/beanbag = 16)
 
 /obj/item/weapon/storage/box/stunshells
 	name = "12-gauge stun shells"
 	icon_state = "stun_shells"
+	desc = "The box claims to only cause minor bruising and discomfort in \"neutralized hostiles\"."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/stunshell = 16)
 
 /obj/item/weapon/storage/box/dartshells
 	name = "12-gauge darts"
 	icon_state = "dart_shells"
+	desc = "Fujinsei brand toxic darts. A red label forbids modifying these shells with alterative chemical payloads."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/dart = 16)
 
 /obj/item/weapon/storage/box/buckshotshells
 	name = "12-gauge 00 buckshot shells"
 	icon_state = "buckshot_shells"
+	desc = "Covered in bright labels showing the number 9 in large print."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/buckshot = 16)
 
 /obj/item/weapon/storage/box/dragonsbreathshells
 	name = "12-gauge dragon's breath shells"
 	icon_state = "dragonsbreath_shells"
+	desc = "The box smells of burned cardboard."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/dragonsbreath = 16)
 
 /obj/item/weapon/storage/box/fragshells
 	name = "12-gauge high-explosive fragmentation shells"
 	icon_state = "frag_shells"
+	desc = "Rule 78 of the Geneva Conventions forbids the use of projectiles that explode within the human body. Therefore these are only to be used on non-humans."
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/frag = 16)
+
+/obj/item/weapon/storage/box/rocksaltshells
+	name = "12-gauge rocksalt shells"
+	icon_state = "rocksalt_shells"
+	desc = "Someone has scribbled \"DIE, SATANSPAWN\" below the picture of the shell."
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/rocksalt = 16)
+
+/obj/item/weapon/storage/box/superbeanbagshells
+	name = "12-gauge super beanbag shells"
+	icon_state = "superbeanbag_shells"
+	desc = "The box claims that these cause zero injuries, no matter the target."
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/superbeanbag = 16)
+
+/obj/item/weapon/storage/box/concussiveblastshells
+	name = "12-gauge concussive blast shells"
+	icon_state = "frag_shells"
+	desc = "The box has seventeen seperate labels instructing to always wear ear and eye protection while shooting."
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/concussiveblast = 16)
+
+/obj/item/weapon/storage/box/pepperballshells
+	name = "12-gauge pepperball shells"
+	icon_state = "pepper_shells"
+	desc = "The box warns not to ingest the contents of these shells."
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/pepperball = 16)
+
+/obj/item/weapon/storage/box/duckshotshells
+	name = "12-gauge duckshot shells"
+	icon_state = "duckshot_shells"
+	desc = "A small label below the festively printed duck states \"Not a toy - keep away from children\"."
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/duckshot = 16)
 
 /obj/item/weapon/storage/box/labels
 	name = "label roll box"
@@ -1083,14 +1141,6 @@
 	new /obj/item/clothing/shoes/protoboots(src)
 	..()
 
-/obj/item/weapon/storage/box/smartbox/clothing_box/hastur
-	name = "Hastur outfit box"
-
-/obj/item/weapon/storage/box/smartbox/clothing_box/hastur/New()
-	new	/obj/item/clothing/head/hasturhood(src)
-	new /obj/item/clothing/suit/hastur(src)
-	..()
-
 /obj/item/weapon/storage/box/smartbox/clothing_box/owl
 	name = "Owl outfit box"
 
@@ -1226,14 +1276,6 @@
 	new /obj/item/clothing/shoes/sandal/marisa/leather(src)
 	..()
 
-/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer
-	name = "Necromancer robe box"
-
-/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer/New()
-	new /obj/item/clothing/head/wizard/necro(src)
-	new /obj/item/clothing/suit/wizrobe/necro(src)
-	..()
-
 /obj/item/weapon/storage/box/smartbox/clothing_box/pharaoh
 	name = "Pharaoh robe box"
 
@@ -1276,6 +1318,42 @@
 /obj/item/weapon/storage/box/smartbox/clothing_box/banana_set/New()
 	new /obj/item/clothing/suit/banana_suit(src)
 	new /obj/item/clothing/head/banana_hat(src)
+
+	..()
+/obj/item/weapon/storage/box/smartbox/clothing_box/furtrapper_set
+	name = "Fur trapper's outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/furtrapper_set/New()
+	new /obj/item/clothing/head/coonskin_cap(src)
+	new /obj/item/clothing/suit/storage/wintercoat/fur_trapper(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/trader
+	name = "Standard trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/trader/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader(src) // standard brownsuit and helmet
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/carapace
+	name = "Carapace trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/carapace/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader/carapace(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader/carapace(src) // carapace
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/aqua
+	name = "Aqua trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/aqua/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader/medic(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader/medic(src) // aqua coloured hardsuit
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/stealth
+	name = "Stealth trader suit box"
+/obj/item/weapon/storage/box/smartbox/clothing_box/stealth/New()
+	new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src)
+	new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src) // black hardsuit. Not capable of any form of stealth systems or shit like that
 	..()
 
 /obj/item/weapon/storage/box/biscuit
@@ -1326,3 +1404,66 @@
 		/obj/item/device/modkit/demolition,
 		/obj/item/ammo_storage/magazine/lawgiver/demolition = 2,
 	)
+
+/obj/item/weapon/storage/box/castlevania
+	name = "modern vampire hunter set box"
+	desc = "Apparel for the cooler vampire hunters."
+	icon_state = "castlevania_box"
+
+/obj/item/weapon/storage/box/castlevania/New()
+	..()
+	new /obj/item/clothing/under/hunter(src)
+	new /obj/item/clothing/suit/hunter(src)
+	new /obj/item/clothing/shoes/hunter(src)
+	new /obj/item/clothing/head/hunter(src)
+	new /obj/item/clothing/gloves/hunter(src)
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/shadowsuit
+	name = "Shadow costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/shadowsuit/New()
+	new /obj/item/clothing/suit/shadowsuit(src)
+	new	/obj/item/clothing/head/shadowhead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicsuit
+	name = "Sonic costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicsuit/New()
+	new /obj/item/clothing/suit/sonicsuit(src)
+	new	/obj/item/clothing/head/sonichead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/tailssuit
+	name = "Tails costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/tailssuit/New()
+	new /obj/item/clothing/suit/tailssuit(src)
+	new	/obj/item/clothing/head/tailshead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/knucklessuit
+	name = "Knuckles costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/knucklessuit/New()
+	new /obj/item/clothing/suit/knucklessuit(src)
+	new	/obj/item/clothing/head/knuckleshead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/amysuit
+	name = "Amy costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/amysuit/New()
+	new /obj/item/clothing/suit/amysuit(src)
+	new	/obj/item/clothing/head/amyhead(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicman
+	name = "Sonicman costume box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/sonicman/New()
+	new /obj/item/clothing/under/sonicman(src)
+	new	/obj/item/clothing/head/helmet/sonicman(src)
+	new	/obj/item/clothing/gloves/sonicman(src)
+	new	/obj/item/clothing/shoes/sonicman(src)
+	..()

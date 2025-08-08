@@ -37,6 +37,7 @@
 		return 1
 
 /obj/item/weapon/reagent_containers/glass/bottle/on_reagent_change()
+	..()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bottle/pickup(mob/user)
@@ -298,12 +299,10 @@
 	amount_per_transfer_from_this = 5
 
 /obj/item/weapon/reagent_containers/glass/bottle/gbs/New()
-	var/datum/reagents/R = new/datum/reagents(20)
-	reagents = R
-	R.my_atom = src
+	create_reagents(20)
 	var/datum/disease/F = new /datum/disease/gbs
 	var/list/data = list("virus"= F)
-	R.add_reagent(BLOOD, 20, data)
+	reagents.add_reagent(BLOOD, 20, data)
 
 /obj/item/weapon/reagent_containers/glass/bottle/fake_gbs
 	name = "GBS culture bottle"
@@ -335,9 +334,7 @@
 	amount_per_transfer_from_this = 5
 
 /obj/item/weapon/reagent_containers/glass/bottle/rhumba_beat/New()
-	var/datum/reagents/R = new/datum/reagents(20)
-	reagents = R
-	R.my_atom = src
+	create_reagents(20)
 	var/datum/disease/F = new /datum/disease/rhumba_beat
 	var/list/data = list("virus"= F)
 	R.add_reagent(BLOOD, 20, data)
@@ -588,7 +585,7 @@ var/datum/disease2/disease/wizarditis = null
 	reagents.add_reagent(NANOBOTS, 10)
 
 /obj/item/weapon/reagent_containers/glass/bottle/bleach
-	name = "Bleach Bottle"
+	name = "bleach bottle"
 	desc = "A bottle of BLAM! Ultraclean brand bleach. Has many warning labels."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bleachbottle"
@@ -596,6 +593,8 @@ var/datum/disease2/disease/wizarditis = null
 	w_type = RECYK_PLASTIC
 	melt_temperature = MELTPOINT_PLASTIC
 	volume = 100
+	controlled_splash = TRUE
+	flags = FPRINT//initially closed
 
 /obj/item/weapon/reagent_containers/glass/bottle/bleach/update_icon()
 	overlays.len = 0
@@ -607,6 +606,29 @@ var/datum/disease2/disease/wizarditis = null
 /obj/item/weapon/reagent_containers/glass/bottle/bleach/New()
 	..()
 	reagents.add_reagent(BLEACH, 100)
+
+/obj/item/weapon/reagent_containers/glass/bottle/acetone
+	name = "acetone bottle"
+	desc = "The Dip. The enemy of all things made of paint."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "acetonebottle"
+	starting_materials = list(MAT_PLASTIC = 1000)
+	w_type = RECYK_PLASTIC
+	melt_temperature = MELTPOINT_PLASTIC
+	volume = 100
+	controlled_splash = TRUE
+	flags = FPRINT//initially closed
+
+/obj/item/weapon/reagent_containers/glass/bottle/acetone/update_icon()
+	overlays.len = 0
+
+	if(!is_open_container())
+		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
+		overlays += lid
+
+/obj/item/weapon/reagent_containers/glass/bottle/acetone/New()
+	..()
+	reagents.add_reagent(ACETONE, 100)
 
 /obj/item/weapon/reagent_containers/glass/bottle/pcp
 	name = "Gallon of PCP"
