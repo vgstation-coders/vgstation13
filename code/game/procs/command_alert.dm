@@ -1,18 +1,26 @@
 //First argument can be a /datum/command_alert object or path. See "code/datums/helper_datums/command_alerts.dm" for more info
 
-/proc/command_alert(var/text, var/title = "",var/force_report = 0,var/alert,var/noalert = 0,var/small = 0)
+/proc/command_alert(var/text, var/title = "",var/force_report = 0,var/alert,var/noalert = 0,var/small = 0,var/z_level=0)
 	if(ispath(text, /datum/command_alert))
 		var/datum/command_alert/CA = new text
-		return CA.announce()
+		return CA.announce(zlevel = z_level)
 	else if(istype(text, /datum/command_alert))
 		var/datum/command_alert/CA = text
-		return CA.announce()
+		return CA.announce(zlevel = z_level)
 
 	if(!alert && !noalert)
 		alert = 'sound/AI/commandreport.ogg'
 	var/gibberish = map.linked_to_centcomm ? 0 : 1
 	var/gibberish_main = (map.linked_to_centcomm || force_report) ? 0 : 1
 	var/command
+
+	if(z_level && z_level != map.zMainStation)
+		var/out_text = strip_html(text)
+		if(gibberish_main)
+			out_text = Gibberish(out_text,70)
+		for(var/obj/item/device/dses in dses_devices)
+			dses.say(out_text)
+		return
 
 	if (small)
 		command = "<br><b><font size = 3><font color = red>[gibberish ? Gibberish(html_encode(title),70) : html_encode(title)]:</font color> [gibberish_main ? Gibberish(html_encode(text),70) : html_encode(text)]</font size></b><br>"

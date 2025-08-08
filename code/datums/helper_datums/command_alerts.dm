@@ -14,8 +14,8 @@
 	var/stoptheme = 0 //Stop the theme
 	var/alertlevel = ""	//set the alert level to this
 
-/datum/command_alert/proc/announce()
-	command_alert(message, alert_title, force_report, alert, noalert, small)
+/datum/command_alert/proc/announce(zlevel = 0)
+	command_alert(message, alert_title, force_report, alert, noalert, small, zlevel)
 
 //////BIOHAZARD
 
@@ -29,7 +29,7 @@
 	var/level_max = 7
 	var/level_min = 4
 
-/datum/command_alert/biohazard_alert/announce()
+/datum/command_alert/biohazard_alert/announce(zlevel = 0)
 	level = rand(level_min,level_max)
 	message = "Confirmed outbreak of level [level] biohazard aboard [station_name()]. All personnel must contain the outbreak."
 
@@ -49,7 +49,7 @@
 	alert_title = "Risk of Spontaneous Organ Failure"
 	force_report = 1
 
-/datum/command_alert/biohazard_organ/announce()
+/datum/command_alert/biohazard_organ/announce(zlevel = 0)
 	message = "The microdosimetry meter onboard [station_name()] has been tripped by recent cosmic interference. Automated Bragg Curve calculations show a threat of ion implantation in crew members, which may lead to sickness or organ failure. Central Command advises regular health screening of staff displaying symptoms of malaise."
 	..()
 
@@ -67,7 +67,7 @@
 	alert = 'sound/AI/directive710_generic.ogg'
 	force_report = 1
 
-/datum/command_alert/xenomorph_station_lockdown/announce()
+/datum/command_alert/xenomorph_station_lockdown/announce(zlevel = 0)
 	message = "The presence of hostile alien lifeforms has been confirmed aboard [station_name()]. Under Directive 7-10, this station is now locked down until further notice."
 	..()
 
@@ -77,7 +77,7 @@
 	noalert = 1
 	theme = "endgame"
 
-/datum/command_alert/xenomorph_station_nuke/announce()
+/datum/command_alert/xenomorph_station_nuke/announce(zlevel = 0)
 	message = "Hostile lifeforms are continuing to spread unchecked throughout [station_name()], total quarantine failure is now possible. As such, Directive 7-12 has now been authorized."
 	..()
 
@@ -87,7 +87,7 @@
 	force_report = 1
 	stoptheme = 1
 
-/datum/command_alert/xenomorph_station_unlock/announce()
+/datum/command_alert/xenomorph_station_unlock/announce(zlevel = 0)
 	message = "External scanners indicate that all hostile lifeforms capable of reproduction have been destroyed. Quarantine lifted. Proceed with standard station duties, but excercise increased caution in case of any remaining entities."
 	..()
 
@@ -97,7 +97,7 @@
 	force_report = 1
 	stoptheme = 1
 
-/datum/command_alert/xenomorph_station_unlock/announce()
+/datum/command_alert/xenomorph_station_unlock/announce(zlevel = 0)
 	message = "External scanners indicate that the number of hostile lifeforms on your station has fallen back to reasonable levels. Quarantine lifted. Proceed with standard station duties, but excercise increased caution in case of any remaining entities."
 	..()
 
@@ -106,7 +106,7 @@
 	alert_title = "!@$$#ERROR-- S##SHUTTLE@LOCKDOWN LIFTED%%@##"
 	theme = "endgame"
 
-/datum/command_alert/xenomorph_station_deathsquad/announce()
+/datum/command_alert/xenomorph_station_deathsquad/announce(zlevel = 0)
 	message = Gibberish("Directive 7-13 has been authorized for [station_name()]. Squad [pick("Alpha", "Bravo", "Charlie", "Delta")] has been mobilized.", 90)
 	..()
 
@@ -120,7 +120,7 @@
 	alert = 'sound/AI/blob_confirmed.ogg'
 	force_report = 1
 
-/datum/command_alert/biohazard_station_lockdown/announce()
+/datum/command_alert/biohazard_station_lockdown/announce(zlevel = 0)
 	message = "Biohazard outbreak alert status upgraded to level 9.  [station_name()] is now locked down, under Directive 7-10, until further notice."
 
 	..()
@@ -131,7 +131,7 @@
 	noalert = 1
 	theme = "endgame"
 
-/datum/command_alert/biohazard_station_nuke/announce()
+/datum/command_alert/biohazard_station_nuke/announce(zlevel = 0)
 	message = "Biohazard outbreak containment status reaching critical mass, total quarantine failure is now possible. As such, Directive 7-12 has now been authorized for [station_name()]."
 	..()
 
@@ -141,7 +141,7 @@
 	force_report = 1
 	stoptheme = 1
 
-/datum/command_alert/biohazard_station_unlock/announce()
+/datum/command_alert/biohazard_station_unlock/announce(zlevel = 0)
 	message = "Biohazard outbreak contained successfully. Quarantine lifted. Please clean up biohazardous material and proceed with standard station duties."
 	..()
 
@@ -152,7 +152,7 @@
 	alert = 'sound/AI/shuttlecalled.ogg'
 	var/justification = ""
 
-/datum/command_alert/emergency_shuttle_called/announce()
+/datum/command_alert/emergency_shuttle_called/announce(zlevel = 0)
 	message = "The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes."
 	if(justification)
 		message += " Justification: [justification]"
@@ -164,7 +164,7 @@
 	force_report = 1
 	alert = 'sound/AI/shuttlerecalled.ogg'
 
-/datum/command_alert/emergency_shuttle_recalled/announce()
+/datum/command_alert/emergency_shuttle_recalled/announce(zlevel = 0)
 	message = "The emergency shuttle has been recalled."
 	..()
 
@@ -174,7 +174,7 @@
 	force_report = 1
 	alert = 'sound/AI/shuttledock.ogg'
 
-/datum/command_alert/emergency_shuttle_docked/announce()
+/datum/command_alert/emergency_shuttle_docked/announce(zlevel = 0)
 	message = "The Emergency Shuttle has docked with the station. You have [round(emergency_shuttle.timeleft()/60,1)] minutes to board the Emergency Shuttle."
 	..()
 
@@ -183,7 +183,7 @@
 	alert_title = "Priority Announcement"
 	force_report = 1
 
-/datum/command_alert/emergency_shuttle_left/announce()
+/datum/command_alert/emergency_shuttle_left/announce(zlevel = 0)
 	message = "The Emergency Shuttle has left the station. Estimate [round(emergency_shuttle.timeleft()/60,1)] minutes until the shuttle docks at Central Command."
 	..()
 
@@ -193,7 +193,7 @@
 	alert_title = "Evacuation of remaining assets."
 	force_report = 1
 
-/datum/command_alert/FUBAR/announce()
+/datum/command_alert/FUBAR/announce(zlevel = 0)
 	message = "Due to intense sustained damage to the station, Nanotrasen have deemed it fitting to evacuate remaining assets and personnel through an escape shuttle that was previously already en route."
 	..()
 
@@ -205,7 +205,7 @@
 	alert = 'sound/AI/outbreak5.ogg'
 	force_report = 1
 
-/datum/command_alert/biohazard_level_5/announce()
+/datum/command_alert/biohazard_level_5/announce(zlevel = 0)
 	message = "Confirmed outbreak of level 5 biohazard aboard [station_name()]. All personnel must contain the outbreak."
 	. = ..()
 
@@ -270,7 +270,7 @@
 	message = "ERROR"
 	theme = "endgame"
 
-/datum/command_alert/jungle_endgame/announce()
+/datum/command_alert/jungle_endgame/announce(zlevel = 0)
 	var/nukecode = "ERROR"
 	for(var/obj/machinery/nuclearbomb/bomb in machines)
 		if(bomb && bomb.r_code && bomb.z == map.zMainStation && bomb.nt_aligned)
@@ -290,7 +290,7 @@
 /datum/command_alert/ert_fail
 	name = "ERT - Unable To Send"
 
-/datum/command_alert/ert_fail/announce()
+/datum/command_alert/ert_fail/announce(zlevel = 0)
 	message = "It would appear that an emergency response team was requested for [station_name()]. Unfortunately, we were unable to send one at this time."
 
 	..()
@@ -298,7 +298,7 @@
 /datum/command_alert/ert_success
 	name = "ERT - Team Sent"
 
-/datum/command_alert/ert_success/announce()
+/datum/command_alert/ert_success/announce(zlevel = 0)
 	message = "It would appear that an emergency response team was requested for [station_name()]. We will prepare and send one as soon as possible."
 
 	..()
@@ -310,7 +310,7 @@
 	alert_title = "Lifesign Alert"
 	alert = 'sound/AI/aliens.ogg'
 
-/datum/command_alert/xenomorphs/announce()
+/datum/command_alert/xenomorphs/announce(zlevel = 0)
 	message = "Unidentified lifesigns detected coming aboard [station_name()]. Secure any exterior access, including ducting and ventilation."
 
 	..()
@@ -353,7 +353,7 @@
 	name = "Gr3y.T1d3 virus"
 	alert_title = "Security Alert"
 
-/datum/command_alert/graytide/announce()
+/datum/command_alert/graytide/announce(zlevel = 0)
 	message = "[pick("Gr3y.T1d3 virus","Malignant trojan")] detected in [station_name()] imprisonment subroutines. Recommend station AI involvement."
 
 	..()
@@ -364,7 +364,7 @@
 	name = "Carp Migration"
 	alert_title = "Lifesign Alert"
 
-/datum/command_alert/carp/announce()
+/datum/command_alert/carp/announce(zlevel = 0)
 	message = "Unknown biological entities have been detected near [station_name()], please stand-by."
 
 	..()
@@ -390,7 +390,7 @@
 	alert_title = "SUPERMATTER CASCADE DETECTED"
 	theme = "endgame"
 
-/datum/command_alert/supermatter_cascade/announce()
+/datum/command_alert/supermatter_cascade/announce(zlevel = 0)
 	message = {"
 There's been a galaxy-wide electromagnetic pulse.  All of our systems are heavily damaged and many personnel are dead or dying. We are seeing increasing indications of the universe itself beginning to unravel.
 
@@ -412,7 +412,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Critical Power Failure"
 	alert ='sound/AI/poweroff.ogg'
 
-/datum/command_alert/power_outage/announce()
+/datum/command_alert/power_outage/announce(zlevel = 0)
 	message = "Abnormal activity detected in [station_name()]'s powernet. As a precautionary measure, the station's power will be shut off for an indeterminate duration."
 
 	..()
@@ -422,7 +422,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Power Systems Nominal"
 	alert = 'sound/AI/poweron.ogg'
 
-/datum/command_alert/smes_charged/announce()
+/datum/command_alert/smes_charged/announce(zlevel = 0)
 	message = "All SMESs on [station_name()] have been recharged. We apologize for the inconvenience."
 
 	..()
@@ -455,7 +455,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "AI Malfunctioning Win"
 	alert = 'sound/effects/static/static4.ogg'
 
-/datum/command_alert/malf_win/announce()
+/datum/command_alert/malf_win/announce(zlevel = 0)
 	alert = pick(static_list)
 	alert_title = "ERROR"
 	message = Gibberish("CRITICAL ERROR: STATION SUBROUTINES OVERRIDDEN. RECOMMEND IMMEDIATE EVACUATION. DEVICE SAFETIES DISABLED.", 100)
@@ -475,7 +475,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	var/supply_delay = 100
 
 
-/datum/command_alert/meteor_round/announce()
+/datum/command_alert/meteor_round/announce(zlevel = 0)
 	meteor_delay = rand(4500, 6000)
 	if(prob(70)) //slightly off-scale
 		message = "A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteor_delay - 600, meteor_delay + 600))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supply_delay/10] seconds. Access requirements for non-critical areas has been lifted."
@@ -568,7 +568,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Automated Grid Check"
 	alert = 'sound/AI/poweroff.ogg'
 
-/datum/command_alert/power_disabled/announce()
+/datum/command_alert/power_disabled/announce(zlevel = 0)
 	message = "Abnormal activity detected in [station_name()]'s powernet. As a precautionary measure, the station's power will be shut off for an indeterminate duration."
 	..()
 
@@ -577,7 +577,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Power Nominal"
 	alert = 'sound/AI/poweron.ogg'
 
-/datum/command_alert/power_restored/announce()
+/datum/command_alert/power_restored/announce(zlevel = 0)
 	message = "Power has been restored to [station_name()]. We apologize for the inconvenience."
 	..()
 
@@ -666,7 +666,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Anomalous Solar Eclipse"
 	force_report = 1
 
-/datum/command_alert/eclipse_start/announce()
+/datum/command_alert/eclipse_start/announce(zlevel = 0)
 	message = "Bluespace distortions around your area have caused the star that [station_name()] is orbiting to seemingly disappear. This anomalous eclipse is estimated to last around ten minutes, and all crewmembers should be on alert for anomalous activity."
 	..()
 
@@ -675,7 +675,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Bluespace Distortions Stabilized"
 	force_report = 1
 
-/datum/command_alert/eclipse_end/announce()
+/datum/command_alert/eclipse_end/announce(zlevel = 0)
 	message = "External sensors have indicated that the nearby star has reappeared. Continue to monitor to station for any other abnormal activity."
 	..()
 
@@ -686,7 +686,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	theme = "endgame"
 	alertlevel = "red"
 
-/datum/command_alert/cult_eclipse_start/announce()
+/datum/command_alert/cult_eclipse_start/announce(zlevel = 0)
 	message = "The fabric of space-time around [station_name()] is weakening, and sensors are picking up a surge of occult energy. Such readings are consistent with attacks from the Cult of Nar-sie, who may be using the Eclipse as a way to tear through reality. Directive 7-10 is in effect until reality stabilizes."
 	..()
 
@@ -699,7 +699,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alertlevel = "red"
 
 
-/datum/command_alert/cult_eclipse_danger/announce()
+/datum/command_alert/cult_eclipse_danger/announce(zlevel = 0)
 	var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
 	if(!B || B.departments_left.len < 1) // HUHHH?
 		return 		// ABORT, ABORT
@@ -713,7 +713,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	force_report = 1
 
 
-/datum/command_alert/cult_eclipse_end/announce()
+/datum/command_alert/cult_eclipse_end/announce(zlevel = 0)
 	message = "Sensors indicate that the fabric of space-time around [station_name()] has stabilized. Continue to monitor the station for persistent occult activity. Directive 7-10 is hereby lifted."
 	..()
 */
@@ -732,21 +732,21 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Rampant Brand Intelligence Detected"
 	alert_title = "Machine Learning Alert"
 
-/datum/command_alert/vending_machines/announce()
+/datum/command_alert/vending_machines/announce(zlevel = 0)
 	message = "Rampant brand intelligence has been detected aboard [station_name()], be watchful for aggressive vending machines. If you find one of them broadcasting unusually agressive slogans, shut its speakers down."
 
 /datum/command_alert/vending_machines_end
 	name = "Rampant Brand Intelligence Purged"
 	alert_title = "Machine Learning Alert End"
 
-/datum/command_alert/vending_machines_end/announce()
+/datum/command_alert/vending_machines_end/announce(zlevel = 0)
 	message = "The rampant brand intelligence aboard [station_name()] has been purged. Vending machine behaviour should return to normal."
 
 /datum/command_alert/comms_blackout
 	name = "Ionospheric Anomalies - Telecommunications Failure"
 	message = "Ionospheric anomalies detected. Temporary telecommunication failure imminent. Please contact you-BZZT"
 
-/datum/command_alert/comms_blackout/announce()
+/datum/command_alert/comms_blackout/announce(zlevel = 0)
 	message = pick(	"Ionospheric anomalies detected. Temporary telecommunication failure imminent. Please contact you*%fj00)`5vc-BZZT", \
 						"Ionospheric anomalies detected. Temporary telecommunication failu*3mga;b4;'1v¬-BZZZT", \
 						"Ionospheric anomalies detected. Temporary telec#MCi46:5.;@63-BZZZZT", \
@@ -769,7 +769,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Rogue Drones - Alert"
 	alert_title = "Rogue Drone Alert"
 
-/datum/command_alert/rogue_drone/announce()
+/datum/command_alert/rogue_drone/announce(zlevel = 0)
 	if(prob(33))
 		message = "A combat drone wing operating out of the NMV Icarus has failed to return from a sweep of this sector, if any are sighted approach with caution."
 	else if(prob(50))
@@ -799,7 +799,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	theme = "nukesquad"
 	alertlevel = "red"
 
-/datum/command_alert/nuclear_operatives/announce()
+/datum/command_alert/nuclear_operatives/announce(zlevel = 0)
 	message = "Presence of hostile Syndicate operatives has been confirmed in the vicinity of [station_name()]. Command staff is advised to monitor the status of all high-value assets, and security staff should co-operate with all crew members in securing the station from infiltration."
 	..()
 
@@ -835,7 +835,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/old_vendotron_teleport
 	alert_title = "Warning - Unknown Bluespace Anom#ly Det%ct!$"
 
-/datum/command_alert/old_vendotron_teleport/announce()
+/datum/command_alert/old_vendotron_teleport/announce(zlevel = 0)
 	message = "A bluespace tear of unknown origin is formi!g w£thi$ !$@ cu&ic met£#s o£ [station_name()] plea$e-BZZZZZZZT Come on down for fabulous, splendiferous, one of a kind goods at reasona#le pri$es! We'%e prac@ic£all% giving #$e@ away! All $ales a#$ fi@%l-BZZZT excercise caution and report any anomalous activity."
 	..()
 
@@ -866,13 +866,13 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/archive_thanks
 	alert_title = "Science Thanks You"
 
-/datum/command_alert/archive_thanks/announce()
+/datum/command_alert/archive_thanks/announce(zlevel = 0)
 	message = "The Research Archive Project extends its profound thanks to [english_list(important_archivists)] for completing the research archival work this shift. There will be an extra stipend in the next pay cycle."
 	..()
 
 /datum/command_alert/suspicious_wages
 	alert_title = "Financial Audit Required"
 
-/datum/command_alert/suspicious_wages/announce(login, account)
+/datum/command_alert/suspicious_wages/announce(zlevel = 0, login, account)
 	message = "Central Command has noticed a suspicious increase in wages. A database action logged in as [login] has assigned a new wage to [account] with a payroll greater than the entire station's budget. Please conduct an emergency audit."
 	..()

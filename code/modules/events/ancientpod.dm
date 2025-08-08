@@ -10,5 +10,4 @@
     pod.ThrowAtCenterZ(zlevel = src.zlevel)
 
 /datum/event/ancientpod/announce()
-	if(..())
-		command_alert(/datum/command_alert/ancientpod)
+	command_alert(/datum/command_alert/ancientpod, z_level = zlevel)
