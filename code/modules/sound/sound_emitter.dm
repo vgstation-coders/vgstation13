@@ -238,7 +238,7 @@
 		player << S
 
 /datum/sound_emitter/proc/apply_player_effects(sound/s, var/mob/player)
-	if (player.is_deaf())
+	if (player.is_deaf() || player.loneliness_affected(source))
 		s.volume = 0
 		return s
 

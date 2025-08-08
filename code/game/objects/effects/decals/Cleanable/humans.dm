@@ -97,6 +97,11 @@ var/global/list/blood_list = list()
 	var/hit_endpoint = FALSE
 	var/list/blood_data = list()
 
+/obj/effect/decal/cleanable/blood/hitsplatter/New()
+	..()
+	spawn(3 SECONDS) //this should never exist for more than a few seconds
+		qdel(src)
+
 /// Set the splatter up to fly through the air until it rounds out of steam or hits something.
 /obj/effect/decal/cleanable/blood/hitsplatter/proc/fly_towards(turf/target_turf, range)
 	splatter_strength = range
@@ -116,18 +121,18 @@ var/global/list/blood_list = list()
 		if(splatter_strength <= 0) // we used all the puff so we delete it.
 			qdel(src)
 			return
-
-		var/obj/effect/decal/cleanable/blood/newsplatter = new /obj/effect/decal/cleanable/blood/splatter(get_turf(src))
-		newsplatter.add_blood_from_data(blood_data)
-		newsplatter.basecolor = blood_data["blood_colour"]
-		newsplatter.color = blood_data["blood_colour"]
-		prev_loc = loc
+		if(!istype(get_turf(src),/turf/space))
+			var/obj/effect/decal/cleanable/blood/newsplatter = new /obj/effect/decal/cleanable/blood/splatter(get_turf(src))
+			newsplatter.add_blood_from_data(blood_data)
+			newsplatter.basecolor = blood_data["blood_colour"]
+			newsplatter.color = blood_data["blood_colour"]
+			prev_loc = loc
 
 	qdel(src)
 	return
 
 /obj/effect/decal/cleanable/blood/hitsplatter/to_bump(atom/bumped_atom)
-	if(!iswall(bumped_atom) && !istype(bumped_atom, /obj/structure/window))
+	if(!iswall(bumped_atom))
 		qdel(src)
 		return
 	var/turf/newloc = get_turf(bumped_atom)

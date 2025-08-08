@@ -2739,6 +2739,21 @@
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 10
 
+/datum/chemical_reaction/applecider
+	name = "Apple Cider"
+	id = CIDER
+	result = CIDER
+	required_reagents = list(APPLEJUICE = 10)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 10
+
+/datum/chemical_reaction/snakebite
+	name = "Snakebite"
+	id = SNAKEBITE
+	result = SNAKEBITE
+	required_reagents = list(BEER = 5, CIDER = 5)
+	result_amount = 10
+
 /datum/chemical_reaction/vodka
 	name = "Vodka"
 	id = VODKA

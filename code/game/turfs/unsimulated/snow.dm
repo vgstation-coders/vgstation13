@@ -259,7 +259,7 @@
 
 	var/extract_amount = min(snowballs, snowball_amount)
 
-	for(var/i = 0; i < extract_amount, i++)
+	for(var/i = 0; i < extract_amount; i++)
 		if(snowball_stack)
 			snowball_stack.add(1)
 			snowballs--
