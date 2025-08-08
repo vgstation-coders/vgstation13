@@ -30,9 +30,10 @@
 				break
 		var/list/area_turfs_copy = A.area_turfs.Copy()
 		for(var/i in 1 to rand(25,35))
-			var/turf/spaceturf = pick_n_take(area_turfs_copy)
-			if(spaceturf.type == /turf/space)
-				spawned_carp.Add(new /mob/living/simple_animal/hostile/carp(spaceturf))
+			do
+				spaceturf = pick_n_take(area_turfs_copy)
+			while(spaceturf.z != zlevel || spaceturf.type != /turf/space)
+			spawned_carp.Add(new /mob/living/simple_animal/hostile/carp(spaceturf))
 	var/carp_logs = "Spawned carp from migration event: "
 	for(var/mob/living/simple_animal/hostile/carp/C in spawned_carp)
 		carp_logs += "[formatJumpTo(C)], "
