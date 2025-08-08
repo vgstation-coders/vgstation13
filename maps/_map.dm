@@ -246,6 +246,7 @@ var/global/list/accessable_z_levels = list()
 	event_whitelist = list(
 		/datum/event/thing_storm/meaty_gore,
 		/datum/event/old_vendotron_crash,
+		/datum/event/old_vendotron_teleport,
 		/datum/event/cricketsbehindthefridge,
 		/datum/event/wallrot,
 		/datum/event/brand_intelligence,
