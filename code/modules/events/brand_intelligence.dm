@@ -2,6 +2,7 @@
 	announceWhen	= 30
 	endWhen			= 900	//Ends when all vending machines are subverted anyway.
 	oneShot			= 1
+	alert_type		= /datum/command_alert/vending_machines
 
 	var/list/obj/machinery/vending/vendingMachines = list()
 	var/list/obj/machinery/vending/infectedVendingMachines = list()
@@ -9,11 +10,6 @@
 
 /datum/event/brand_intelligence/can_start()
 	return 30
-
-/datum/event/brand_intelligence/announce()
-	if(..())
-		command_alert(/datum/command_alert/vending_machines)
-
 
 /datum/event/brand_intelligence/start()
 	for(var/obj/machinery/vending/V in machines)

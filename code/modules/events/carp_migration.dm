@@ -1,6 +1,7 @@
 /datum/event/carp_migration
 	announceWhen	= 20
 	endWhen = 450
+	alert_type = /datum/command_alert/carp
 	var/list/spawned_carp = list()
 
 /datum/event/carp_migration/can_start(var/list/active_with_role)
@@ -11,10 +12,6 @@
 /datum/event/carp_migration/setup()
 	announceWhen = rand(15, 30)
 	endWhen = rand(600,1200)
-
-/datum/event/carp_migration/announce()
-	if(..())
-		command_alert(/datum/command_alert/carp)
 
 /datum/event/carp_migration/start()
 	if(zlevel == map.zMainStation)

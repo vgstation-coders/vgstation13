@@ -6,6 +6,7 @@
 	var/zlevel			= 1 //Z level to fire event on, if applicable
 	var/activeFor		= 0	//How long the event has existed. You don't need to change this.
 	var/last_fired		= 0 //When was the last time an event of this exact type fired?
+	var/alert_type		= null //What command alert type to use?
 
 //Called by event dynamic, returns the percent chance to fire if successful, 0 otherwise.
 // Args: list: active_with_role. The number of jobs that have active members. Used as active_with_role["AI"] = number of active.
@@ -29,9 +30,8 @@
 //Allows you to announce before starting or vice versa.
 //Only called once.
 /datum/event/proc/announce()
-	if(zlevel == map.zMainStation)
-		return 1
-	return 0
+	if(ispath(alert_type))
+		command_alert(alert_type, z_level = zlevel)
 
 //Called on or after the tick counter is equal to startWhen.
 //You can include code related to your event or add your own
