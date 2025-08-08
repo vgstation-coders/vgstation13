@@ -4,6 +4,9 @@ var/list/allEvents = subtypesof(/datum/event)
 	var/scheduledEvent = null
 
 /datum/zLevel/proc/checkEvent()
+	if(!has_events)
+		return
+
 	if(!scheduledEvent)
 		//The more players, the merrier
 		var/playercount_modifier = 1

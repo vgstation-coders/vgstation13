@@ -192,6 +192,7 @@ var/global/list/accessable_z_levels = list()
 	var/z //Number of the z-level (the z coordinate)
 	var/z_above //The linked zLevel Z above, for multiZ
 	var/z_below //Same, with below
+	var/has_events = TRUE
 	var/list/event_blacklist = list()
 	var/list/event_whitelist = list()
 
@@ -224,7 +225,7 @@ var/global/list/accessable_z_levels = list()
 	teleJammed = 1
 	movementJammed = 1
 	bluespace_jammed = 1
-	event_whitelist = list("Nothing") // no events here
+	has_events = FALSE // no events here
 
 /datum/zLevel/space
 
@@ -255,7 +256,7 @@ var/global/list/accessable_z_levels = list()
 
 /datum/zLevel/krakenroid
 	name = "krakenroid"
-	event_whitelist = list("Nothing") // not enough stuff for now
+	has_events = FALSE // not enough stuff for now
 
 /datum/zLevel/krakenroid/blur_holomap(var/area/aera, var/turf/truf)
 	if (istype(aera, /area/mine/explored) && !istype(truf, /turf/unsimulated/floor/airless))
@@ -283,7 +284,7 @@ var/global/list/accessable_z_levels = list()
 	base_turf = /turf/unsimulated/floor/jungle/bedrock
 	base_area = /area/surface/jungle/underground
 	movementJammed = TRUE
-	event_whitelist = list("Nothing") // no events here
+	has_events = FALSE // no events here
 
 //for Horizon
 /datum/zLevel/hyperspace
@@ -298,7 +299,7 @@ var/global/list/accessable_z_levels = list()
 	teleJammed = 1
 	movementJammed = 1
 	base_turf = /turf/unsimulated/beach/sand
-	event_whitelist = list("Nothing") // no events here
+	has_events = FALSE // no events here
 
 /datum/zLevel/snowmine //not used on snaxi
 	name = "belowMine"
@@ -307,7 +308,7 @@ var/global/list/accessable_z_levels = list()
 	movementJammed = TRUE
 	transitionLoops = TRUE
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
-	event_whitelist = list("Nothing") // no events here
+	has_events = FALSE // no events here
 
 /datum/zLevel/snow //not used on snaxi
 	name = "snow"
