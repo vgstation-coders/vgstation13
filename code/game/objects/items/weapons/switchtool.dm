@@ -594,7 +594,7 @@
 
 /obj/item/weapon/switchtool/swiss_army_knife/hydroponics
 	name = "Hydroponics switchtool"
-	desc = "Handcrafted by expert botanists of yore."
+	desc = "Handcrafted by expert botanists. A small carving on the side says 'K.I - L.S - KC.H'."
 	icon_state = "botanytool"
 	item_state = "botanytool"
 	stored_modules = list(
