@@ -139,6 +139,7 @@ var/global/list/thing_storm_types = list(
 )
 
 /datum/event/thing_storm
+	alert_type = /datum/command_alert/meteor_storm
 	var/storm_name = null
 
 /datum/event/thing_storm/setup()
@@ -147,10 +148,6 @@ var/global/list/thing_storm_types = list(
 	for(var/storm_id in thing_storm_types)
 		possible_names += storm_id
 	storm_name=pick(possible_names)
-
-/datum/event/thing_storm/announce()
-	if(..())
-		command_alert(/datum/command_alert/meteor_storm)
 
 //Meteor showers are lighter and more common
 //Since this isn't rocks of pure pain and explosion, we have more, anywhere from 10 to 40 items
@@ -174,14 +171,14 @@ var/global/list/thing_storm_types = list(
 	meteor_wave(rand(45, 60), types = thing_storm_types[storm_name], offset_origin = 150, offset_dest = 230)
 
 /datum/event/thing_storm/meaty_gore/announce()
-	if(..())
-		command_alert("The station is about to pass through an unknown organic debris field. No hull breaches are likely.", "Organic Debris Field")
+	command_alert("The station is about to pass through an unknown organic debris field. No hull breaches are likely.", "Organic Debris Field", z_level = zlevel)
 
 /datum/event/thing_storm/meaty_gore/end()
 	spawn(45 SECONDS)
 		command_alert("The station has cleared the organic debris field.", "Organic Debris Field")
 
 /datum/event/thing_storm/blob_shower
+	alert_type = /datum/command_alert/blob_storm
 
 /datum/event/thing_storm/blob_shower/can_start(var/list/active_with_role)
 	if(active_with_role["Engineer"] > 1)
@@ -195,15 +192,12 @@ var/global/list/thing_storm_types = list(
 /datum/event/thing_storm/blob_shower/tick()
 	meteor_wave(rand(12, 24), types = thing_storm_types[storm_name], offset_origin = 150, offset_dest = 230)
 
-/datum/event/thing_storm/blob_shower/announce()
-	if(..())
-		command_alert(/datum/command_alert/blob_storm)
-
 /datum/event/thing_storm/blob_shower/end()
 	spawn(45 SECONDS)
-		command_alert(/datum/command_alert/blob_storm/end)
+		command_alert(/datum/command_alert/blob_storm/end, z_level = zlevel)
 
 /datum/event/thing_storm/blob_storm
+	alert_type = /datum/command_alert/blob_storm/overminds
 	var/cores_spawned = 0
 	var/list/candidates = list()
 	var/started = FALSE
@@ -236,13 +230,9 @@ var/global/list/thing_storm_types = list(
 		candidates -= candidate
 		C.AssignMob(candidate.mob)
 
-/datum/event/thing_storm/blob_storm/announce()
-	if(..())
-		command_alert(/datum/command_alert/blob_storm/overminds)
-
 /datum/event/thing_storm/blob_storm/end()
 	spawn(45 SECONDS)
-		command_alert(/datum/command_alert/blob_storm/overminds/end)
+		command_alert(/datum/command_alert/blob_storm/overminds/end, z_level = zlevel)
 
 /datum/event/thing_storm/fireworks/setup()
 	endWhen = rand(60, 90) + 10
@@ -252,4 +242,4 @@ var/global/list/thing_storm_types = list(
 	meteor_wave(rand(45, 60), types = thing_storm_types[storm_name], offset_origin = 150, offset_dest = 230, zlevel = src.zlevel)
 
 /datum/event/thing_storm/fireworks/announce()
-	command_alert("The station is about to be bombarded by light-based distraction projectiles. Source unknown. No hull breaches are likely.", "Firework Fiasco")
+	command_alert("The station is about to be bombarded by light-based distraction projectiles. Source unknown. No hull breaches are likely.", "Firework Fiasco", z_level = zlevel)

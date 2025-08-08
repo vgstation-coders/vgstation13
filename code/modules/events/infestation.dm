@@ -162,9 +162,8 @@
 			break
 
 /datum/event/infestation/announce()
-	if(..())
-		var/warning = "Clear them out before this starts to affect productivity."
-		if(vermin == VERM_GREMLINS)
-			warning = "Drive them away!" //DF reference
+	var/warning = "Clear them out before this starts to affect productivity."
+	if(vermin == VERM_GREMLINS)
+		warning = "Drive them away!" //DF reference
 
-		command_alert(new /datum/command_alert/vermin(vermstring, locstring, warning))
+	command_alert(new /datum/command_alert/vermin(vermstring, locstring, warning), z_level = zlevel)

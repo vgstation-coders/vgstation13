@@ -5,8 +5,7 @@
 	announceWhen	= 90
 
 /datum/event/disease_outbreak/announce()
-	if(..())
-		biohazard_alert()
+	biohazard_alert()
 
 /datum/event/disease_outbreak/setup()
 	announceWhen = rand(30, 150) //Thanks Doc
