@@ -297,3 +297,9 @@
 
 /obj/item/projectile/beam/pulse/drone
 	damage = 7
+
+
+/mob/living/simple_animal/hostile/retaliate/malf_drone/rogue/New()
+	..()
+	if(prob(25))
+		disabled = rand(15, 60)

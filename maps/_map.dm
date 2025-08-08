@@ -192,7 +192,7 @@ var/global/list/accessable_z_levels = list()
 	var/z //Number of the z-level (the z coordinate)
 	var/z_above //The linked zLevel Z above, for multiZ
 	var/z_below //Same, with below
-	var/list/event_blacklist = list(/datum/event/carp_migration/deep_space, /datum/event/rogue_drone/deep_space)
+	var/list/event_blacklist = list()
 	var/list/event_whitelist = list()
 
 /datum/zLevel/proc/post_mapload()
@@ -230,7 +230,6 @@ var/global/list/accessable_z_levels = list()
 
 	name = "space"
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
-	event_blacklist = list() // deep space events are a go
 	event_whitelist = list(
 		/datum/event/meteor_wave,
 		/datum/event/meteor_shower,
@@ -240,8 +239,8 @@ var/global/list/accessable_z_levels = list()
 		/datum/event/immovable_rod,
 		/datum/event/immovable_rod/big,
 		/datum/event/immovable_rod/hyper,
-		/datum/event/carp_migration/deep_space,
-		/datum/event/rogue_drone/deep_space,
+		/datum/event/carp_migration,
+		/datum/event/rogue_drone,
 		)
 
 /datum/zLevel/mining
