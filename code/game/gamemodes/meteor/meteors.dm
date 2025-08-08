@@ -191,9 +191,8 @@ var/list/meteor_warnings = list()
 			return
 	while(!istype(pickedstart, /turf/space))
 
-	var/obj/item/projectile/meteor/newMeteor
 	if(meteorpath)
-		newMeteor = new meteorpath(pickedstart, pickedgoal)
+		return new meteorpath(pickedstart, pickedgoal)
 	else
 		var/list/possible_meteors = list()
 		if(!max_meteor_size || max_meteor_size >= 1) //Small waves
@@ -206,9 +205,7 @@ var/list/meteor_warnings = list()
 			possible_meteors[/obj/item/projectile/meteor/big] = 10
 			possible_meteors[/obj/item/projectile/meteor/big/cluster] = 1
 		var/chosen = pick(possible_meteors)
-		newMeteor = new chosen(pickedstart, pickedgoal)
-	log_debug("New [newMeteor] spawned at [formatJumpTo(newMeteor)]")
-	return newMeteor
+		return new chosen(pickedstart, pickedgoal)
 
 /*
  * Below are all meteor types
