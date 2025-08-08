@@ -21,6 +21,10 @@
 		if(C.name == "carpspawn")
 			if(prob(90)) //Give it a sliver of randomness
 				spawned_carp.Add(new /mob/living/simple_animal/hostile/carp(C.loc))
+	var/carp_logs = "Spawned carp from migration event: "
+	for(var/mob/living/simple_animal/hostile/carp/C in spawned_carp)
+		carp_logs += "[formatJumpTo(C)], "
+	log_debug(carp_logs)
 
 /datum/event/carp_migration/end()
 	for(var/mob/living/simple_animal/hostile/carp/C in spawned_carp)
@@ -35,8 +39,18 @@
 	return 0
 
 /datum/event/carp_migration/deep_space/start()
+	var/area/A
+	for(var/area/A2 in areas)
+		if(isspace(A2))
+			A = A2
+			break
+	var/list/area_turfs_copy = A.area_turfs.Copy()
 	for(var/i in 1 to rand(25,35))
-		var/turf/spaceturf = locate(rand(1,world.maxx),rand(1,world.maxy),zlevel)
+		var/turf/spaceturf = pick_n_take(area_turfs_copy)
 		if(isspace(spaceturf))
 			spawned_carp.Add(new /mob/living/simple_animal/hostile/carp(spaceturf))
+	var/carp_logs = "Spawned carp from migration event: "
+	for(var/mob/living/simple_animal/hostile/carp/C in spawned_carp)
+		carp_logs += "[formatJumpTo(C)], "
+	log_debug(carp_logs)
 
