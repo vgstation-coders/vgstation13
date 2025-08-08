@@ -1,8 +1,10 @@
-var/list/allEvents = typesof(/datum/event) - /datum/event
+var/list/allEvents = subtypesof(/datum/event)
 
 var/eventTimeLower = 20 //minutes
 var/eventTimeUpper = 40
-var/scheduledEvent = null
+
+/datum/zLevel
+	var/scheduledEvent = null
 
 /datum/zLevel/proc/checkEvent()
 	if(!scheduledEvent)
