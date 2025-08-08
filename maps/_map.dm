@@ -231,20 +231,29 @@ var/global/list/accessable_z_levels = list()
 	name = "space"
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 	event_whitelist = list(
-		/datum/event/meteor_wave,
-		/datum/event/meteor_shower,
-		/datum/event/meteor_shower/meteor_quiet,
-		/datum/event/thing_storm/meaty_gore,
-		/datum/event/old_vendotron_crash,
-		/datum/event/immovable_rod,
-		/datum/event/immovable_rod/big,
-		/datum/event/carp_migration,
-		/datum/event/rogue_drone,
+			/datum/event/meteor_wave,
+			/datum/event/meteor_shower,
+			/datum/event/meteor_shower/meteor_quiet,
+			/datum/event/thing_storm/meaty_gore,
+			/datum/event/old_vendotron_crash,
+			/datum/event/immovable_rod,
+			/datum/event/immovable_rod/big,
+			/datum/event/carp_migration,
+			/datum/event/rogue_drone,
+			/datum/event/cricketsbehindthefridge,
+			/datum/event/wallrot
 		)
 
 /datum/zLevel/mining
 	name = "mining"
-	event_whitelist = list(TRUE) // not enough stuff for now
+	event_whitelist = list(
+		/datum/event/thing_storm/meaty_gore,
+		/datum/event/old_vendotron_crash,
+		/datum/event/cricketsbehindthefridge,
+		/datum/event/wallrot,
+		/datum/event/brand_intelligence,
+		/datum/event/ancientpod
+	)
 
 /datum/zLevel/krakenroid
 	name = "krakenroid"
