@@ -59,6 +59,16 @@
 	src.go_out()
 	..()
 
+/obj/machinery/recharge_station/examine(mob/user)
+	. = ..()
+	if(occupant)
+		to_chat(user,"<span class='notice'>It currently has [occupant] inside.</span>")
+		if(isrobot(occupant))
+			var/mob/living/silicon/robot/R = occupant
+			to_chat(user,"<span class='notice'>[R] cell charge: [R.get_cell_charge(R)]/[R.get_cell_maxcharge()]</span>")
+		if(upgrading && istype(upgrading))
+			to_chat(user,"<span class='notice'>Currently installing: [upgrading]</span>")
+
 /obj/machinery/recharge_station/is_airtight()
 	return occupant
 
