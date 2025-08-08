@@ -1,5 +1,6 @@
 /datum/event/grid_check	//NOTE: Times are measured in master controller ticks!
 	announceWhen		= 5
+	alert_type			= /datum/command_alert/power_disabled
 
 /datum/event/grid_check/can_start()
 	return 20
@@ -9,10 +10,6 @@
 
 /datum/event/grid_check/start()
 	power_failure(0)
-
-/datum/event/grid_check/announce()
-	if(..())
-		command_alert(/datum/command_alert/power_disabled)
 
 /datum/event/grid_check/end()
 	if(universe.name != "Normal")

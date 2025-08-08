@@ -8,6 +8,7 @@ var/list/all_rods = list()
 
 /datum/event/immovable_rod
 	announceWhen = 1
+	alert_type = /datum/command_alert/immovable_rod
 
 /datum/event/immovable_rod/can_start(var/list/active_with_role)
 	if(active_with_role["Engineer"] > 1 && active_with_role["Any"] > 6)
@@ -21,10 +22,6 @@ var/list/all_rods = list()
 
 /datum/event/immovable_rod/hyper/can_start(var/list/active_with_role)
 	return 0
-
-/datum/event/immovable_rod/announce()
-	if(..())
-		command_alert(/datum/command_alert/immovable_rod)
 
 /datum/event/immovable_rod/start()
 	immovablerod(0,zlevel)

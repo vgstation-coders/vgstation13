@@ -7,6 +7,7 @@
 /datum/event/meteor_wave
 	startWhen		= 0 //Note : Meteor waves have a delay before striking now
 	endWhen			= 30
+	alert_type		= /datum/command_alert/meteor_wave
 
 /datum/event/meteor_wave/can_start(var/list/active_with_role)
 	if(active_with_role["Engineer"] > 1 && active_with_role["Any"] > 6)
@@ -17,22 +18,19 @@
 /datum/event/meteor_wave/setup()
 	endWhen = rand(45, 90) //More drawn out than the shower, but not too powerful. Supposed to be a devastating event
 
-/datum/event/meteor_wave/announce()
-	if(..())
-		command_alert(/datum/command_alert/meteor_wave)
-
 //Two to three waves. So 40 to 120
 /datum/event/meteor_wave/tick()
 	meteor_wave(rand(20, 40), max_size = 2, offset_origin = 150, offset_dest = 230, zlevel = src.zlevel) //Large waves, panic is mandatory
 
 /datum/event/meteor_wave/end()
 	spawn(45 SECONDS)
-		command_alert(/datum/command_alert/meteor_wave_end)
+		command_alert(/datum/command_alert/meteor_wave_end, z_level = zlevel)
 
 //One to two vawes
 /datum/event/meteor_shower
 	startWhen		= 0
 	endWhen 		= 30
+	alert_type		= /datum/command_alert/meteor_storm
 
 /datum/event/meteor_shower/can_start(var/list/active_with_role)
 	if(active_with_role["Engineer"] > 1 && active_with_role["Any"] > 6)
@@ -41,10 +39,6 @@
 
 /datum/event/meteor_shower/setup()
 	endWhen	= rand(45, 60) //From thirty seconds to one minute
-
-/datum/event/meteor_shower/announce()
-	if(..())
-		command_alert(/datum/command_alert/meteor_storm)
 
 //Meteor showers are lighter and more common
 //Sometimes a single wave, most likely two, so anywhere from 10 to 30 small meteors
@@ -60,8 +54,7 @@
 /datum/event/meteor_shower/meteor_quiet
 	startWhen       =0
 	endWhen         =30
-
-/datum/event/meteor_shower/meteor_quiet/announce()
+	alert_type		=null
 
 /datum/event/meteor_shower/meteor_quiet/tick()
 	meteor_wave(rand(7, 10), max_size = 2, offset_origin = 150, offset_dest = 230, zlevel = src.zlevel) //Good balance of sizes and abundance between shower and storm
