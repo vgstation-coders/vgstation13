@@ -15,13 +15,12 @@
 	meteor_wave_delay = (rand(30, 45)) * 10 //Between 30 and 45 seconds, engineers need time to shuffle in relative safety
 	chosen_dir = pick(cardinal) //Pick a direction
 	max_meteor_size = max_size
-	if(zlevel == map.zMainStation)
-		//Generate a name for our wave
-		var/greek_alphabet = list("Alpha", "Beta", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lambda", "Mu", \
-							"Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon", "Phi", "Chi", "Psi", "Omega")
-		var/wave_final_name = "[number > 25 ? "Major":"Minor"] Meteor [pick("Wave", "Cluster", "Group")] [pick(greek_alphabet)]-[rand(1, 999)]"
-		var/datum/meteor_warning/warning = new (meteor_wave_delay, chosen_dir, max_size, number, wave_final_name, types == null)
-		output_information(warning)
+	//Generate a name for our wave
+	var/greek_alphabet = list("Alpha", "Beta", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lambda", "Mu", \
+						"Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon", "Phi", "Chi", "Psi", "Omega")
+	var/wave_final_name = "[number > 25 ? "Major":"Minor"] Meteor [pick("Wave", "Cluster", "Group")] [pick(greek_alphabet)]-[rand(1, 999)]"
+	var/datum/meteor_warning/warning = new (meteor_wave_delay, chosen_dir, max_size, number, wave_final_name, types == null)
+	output_information(warning)
 	spawn(meteor_wave_delay)
 		for(var/i = 0 to number)
 			sleep(rand(1, 3)) //0.1 to 0.3 seconds between meteors
@@ -111,7 +110,7 @@ var/list/meteor_warnings = list()
 	..()
 
 //A bunch of information to be used by the bhangmeter (doubles as a meteor monitoring computer), and sent to the admins otherwise
-/proc/output_information(var/datum/meteor_warning/warning)
+/proc/output_information(var/datum/meteor_warning/warning,var/zlevel = 0)
 
 	var/meteor_l_size = "unknown"
 	switch(warning.size)
@@ -138,11 +137,12 @@ var/list/meteor_warnings = list()
 			wave_l_dir = "west"
 	warning.dir = wave_l_dir
 
-	message_admins("[warning.name], containing [warning.num] objects up to [warning.size] size and incoming from the [warning.dir], will strike in [warning.delay/10] seconds.")
+	message_admins("[warning.name], containing [warning.num] objects up to [warning.size] size and incoming from the [warning.dir], will strike z-level [zlevel || map.zMainStation] in [warning.delay/10] seconds.")
 
 	//Send to all Bhangmeters
 	for(var/obj/machinery/computer/bhangmeter/bhangmeter in bhangmeters)
-		bhangmeter.announce_meteors(warning)
+		if(zlevel && bhangmeter.z == zlevel)
+			bhangmeter.announce_meteors(warning)
 
 	spawn(warning.delay + 30 SECONDS)
 		qdel(warning)
