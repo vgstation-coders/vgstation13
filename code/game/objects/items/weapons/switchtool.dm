@@ -590,7 +590,19 @@
 						"/obj/item/weapon/kitchen/utensil/knife:knife" = null,
 						"/obj/item/weapon/pocket_mirror/comb:comb" = null,
 						"/obj/item/tool/wirecutters/scissors:scissors" = null,
-						"/obj/item/device/flashlight:flashlight" = null,)
+						"/obj/item/device/flashlight:flashlight" = null)
+
+/obj/item/weapon/switchtool/swiss_army_knife/hydroponics
+	name = "Hydroponics switchtool"
+	desc = "Handcrafted by expert botanists of yore."
+	icon_state = "botanytool"
+	item_state = "botanytool"
+	stored_modules = list(
+						"/obj/item/tool/wirecutters/scissors:scissors" = null,
+						"/obj/item/weapon/kitchen/utensil/fork:fork" = null,
+						"/obj/item/weapon/hatchet:hatchet" = null,
+						"/obj/item/weapon/lighter/zippo:Zippo lighter" = null,
+						"/obj/item/weapon/kitchen/utensil/knife:knife" = null) //TO DO: add the plant analyzer eventually
 
 /obj/item/weapon/switchtool/switchblade
 	name = "switchblade"
