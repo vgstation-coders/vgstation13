@@ -2,7 +2,7 @@ var/list/possibleEvents = list()
 //A list of events and their weights. These range from quite uncommon like a rod (15) to very common like carp (40)
 
 //Always triggers an event when called, dynamically chooses events based on job population
-/datum/zLevel/proc/spawn_dynamic_event()
+/datum/zLevel/proc/spawn_dynamic_event(forced=FALSE)
 	if(!forced)
 		if(!config.allow_random_events || (map && map.dorf))
 			return
