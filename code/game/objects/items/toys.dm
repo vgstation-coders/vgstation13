@@ -679,7 +679,7 @@
  * Water flower
  */
 /obj/item/clothing/accessory/waterflower
-	name = "Water Flower"
+	name = "water flower"
 	desc = "A seemingly innocent sunflower...with a twist."
 	icon = 'icons/obj/hydroponics/sunflower.dmi'
 	icon_state = "produce"
