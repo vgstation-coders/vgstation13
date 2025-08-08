@@ -745,7 +745,7 @@
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/New()
 	..()
-	for(var/i=1, i <= storage_slots; i++)
+	for(var/i=1; i <= storage_slots; i++)
 		new slider_type(src)
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/synth
