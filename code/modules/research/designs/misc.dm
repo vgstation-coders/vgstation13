@@ -168,6 +168,16 @@
 	category = "Misc"
 	build_path = /obj/item/dses_module/distance_get
 
+/datum/design/dses_module_distanceget
+	name = "DSES Hazard Detection System"
+	desc = "Tuning device for detecting nearby large scale environmental hazards."
+	id = "dses_module_hazarddetect"
+	req_tech = list(Tc_MAGNETS = 3)
+	build_type = PROTOLATHE | PODFAB
+	materials = list(MAT_GLASS=1000)
+	category = "Misc"
+	build_path = /obj/item/dses_module/event_warn
+
 /datum/design/trackingglasses
 	name = "Eye Tracking Glasses"
 	desc = "Eye tracking glasses which allow the wearer to see what others are looking at."

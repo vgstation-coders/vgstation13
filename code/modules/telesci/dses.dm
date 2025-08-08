@@ -19,6 +19,7 @@
 #define GETDISTANCEMODULE "getDST"
 #define RANGEDOUBLEMODULE "rngBOOST"
 #define HALFCOSTMODULE "chpPNG"
+#define EVENTDETECTORMODULE "evnDCT"
 
 /obj/item/device/dses
 	name = "deep space exploration system"
@@ -314,4 +315,10 @@
 	name = "DSES ping distance approximation system"
 	module_name = GETDISTANCEMODULE
 	desc = "A small mathematic system that calculates signal decay between transmission and sending, to approximate distance."
+	origin_tech = list(Tc_BLUESPACE = 4, Tc_MAGNETS = 3) 
+
+/obj/item/dses_module/event_warn
+	name = "DSES hazard detection system"
+	module_name = EVENTDETECTORMODULE
+	desc = "Tuning device for detecting nearby large scale environmental hazards."
 	origin_tech = list(Tc_BLUESPACE = 4, Tc_MAGNETS = 3) 
