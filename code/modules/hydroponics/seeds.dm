@@ -2079,7 +2079,7 @@
 	yield = 6
 	potency = 10
 	fluid_consumption = 6
-	
+
 /datum/seed/redturnip/process_fruit(var/obj/machinery/portable_atmospherics/hydroponics/tray)
 	biogen_multiplier = 1+((tray.age-maturation-production)/300) // doubles in value every 10 minutes
 
@@ -2095,7 +2095,7 @@ var/whiteturnip_run = 0
 var/whiteturnip_multiplier = 1
 
 /datum/seed/redturnip/white/process_fruit(var/obj/machinery/portable_atmospherics/hydroponics/tray)
-	if(tray.has_slimes & SLIME_GREEN || tray.age % 30 == 0) // every 1 in game minute (or 2 seconds with divine corporate insight...)
+	if((tray.has_slimes & SLIME_GREEN) || (tray.age % 30 == 0)) // every 1 in game minute (or 2 seconds with divine corporate insight...)
 		if(prob(10))
 			whiteturnip_run = rand(-10,10) // will it bull??? or bear...
 		whiteturnip_multiplier += ((rand(10,-10)+whiteturnip_run)/100) // STONKS
