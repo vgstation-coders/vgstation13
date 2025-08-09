@@ -2066,7 +2066,7 @@
 	constrained = 1
 
 /datum/seed/redturnip
-	name = "red turnip"
+	name = "redturnip"
 	seed_name = "red turnip"
 	display_name = "red turnips"
 	plant_dmi = 'icons/obj/hydroponics/redturnip.dmi'
@@ -2084,7 +2084,7 @@
 	biogen_multiplier = 1+((tray.age-maturation-production)/300) // doubles in value every 10 minutes
 
 /datum/seed/redturnip/white
-	name = "white turnip"
+	name = "whiteturnip"
 	seed_name = "white turnip"
 	display_name = "white turnips"
 	plural = 1
