@@ -1807,8 +1807,6 @@
 #include "code\modules\mecha\components\_component.dm"
 #include "code\modules\mecha\components\actuators.dm"
 #include "code\modules\mecha\components\armor.dm"
-#include "code\modules\mecha\components\camera.dm"
-#include "code\modules\mecha\components\communication.dm"
 #include "code\modules\mecha\components\electrical.dm"
 #include "code\modules\mecha\components\hull.dm"
 #include "code\modules\mecha\components\lifesupport.dm"

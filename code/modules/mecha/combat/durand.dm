@@ -37,9 +37,7 @@
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor/military,
 		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical,
-		/obj/item/mecha_parts/component/communications,
-		/obj/item/mecha_parts/component/camera
+		/obj/item/mecha_parts/component/electrical
 		)
 
 /obj/mecha/combat/durand/New()

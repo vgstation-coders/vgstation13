@@ -132,9 +132,7 @@
 		MECH_ACTUATOR = null,
 		MECH_ARMOR = null,
 		MECH_GAS = null,
-		MECH_ELECTRIC = null,
-		MECH_CAMERA = null,
-		MECH_RADIO = null
+		MECH_ELECTRIC = null
 		)
 
 	var/list/starting_components = list(
@@ -142,10 +140,8 @@
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor,
 		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical)
-//		/obj/item/mecha_parts/component/camera,
-//		/obj/item/mecha_parts/component/communications
-//		)
+		/obj/item/mecha_parts/component/electrical
+		)
 
 	var/overload = FALSE
 	var/defense_mode = FALSE
@@ -389,14 +385,14 @@ Issues:
 Adds:
 
 Armor/hull balance Done?
-Aux components not being hit/damaged (gas, motor, electric)
+Aux components not being hit/damaged (gas, motor, electric) Done?
 Slowdown not working Done?
 Icons not showing DONE!
 Make melee and proj penetration hit components
-Add camera and radio components
-Add binary radio (?)
+Add camera and radio components NOPE!
+Add binary radio (?) NOPE! For another day!
 Add cell EMP protection via mech electrical hub
-Make maints panel be unlocked if there's no electric hub
+Make maints panel be unlocked if there's no electric hub Done?
 Hull / Armor break visibly when broken Done?
 Breaking SFX and text when components break Done?
 Add way for data core to be soldered, to not allow locks
@@ -405,28 +401,29 @@ Change locks to be clearable via maints protocol DONE!
 Change maints accessibility to be based on the Hull
 Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool and a very long delay. DONE!
 
-Add camera/radio functionality
+Add camera/radio functionality NOPE!
 Add ballistic ammo
-Add hull atmospheric rating
+Add hull atmospheric rating Done?
+
+Make the mech construction require a real cell that is actually the cell the mech creates with! Massive time saver! No more messing about with maints protocol........
+
+Make EMPs electrocute (lethal) the user if there's no hull and no electrical component. OR if there's just no EC, at a low chance.
 
 Badds:
 
-Electric says if you can lock or not, hull says if outside people can simply unlock it
+Electric says if you can lock or not, hull says if outside people can simply unlock it DONE!
 
 Ions cause the armor and hull to disappear
 Throwing items cause the armor and hull to disappear
 Hull enclosure doesn't control atmos vulnerability
 
+Make examine text be much better and nicerer.
 */
 
 /obj/mecha/Hear(var/datum/speech/speech, var/rendered_message="")
-	var/obj/item/mecha_parts/component/communications/COM = internal_components[MECH_RADIO]
-	if(COM)
-		if(prob(COM.get_efficiency()))
-			if(speech.speaker == occupant && radio.broadcasting)
-				radio.talk_into(speech)
-	else
-		return 0
+	if(speech.speaker == occupant && radio.broadcasting)
+		radio.talk_into(speech)
+ 	return
 
 /obj/mecha/proc/click_action(atom/target,mob/user)
 	if(!src.occupant || src.occupant != user )
@@ -562,9 +559,8 @@ Hull enclosure doesn't control atmos vulnerability
 
 	if(!actuator)	// Relying purely on hydraulic pumps. You're going nowhere fast.
 		tally += 2
-		return
-
-	tally += 0.5 * (1 - actuator.get_efficiency())	// Damaged actuators run slower, slowing as damage increases beyond its threshold.
+	else
+		tally += 0.5 * (1 - actuator.get_efficiency())	// Damaged actuators run slower, slowing as damage increases beyond its threshold.
 
 	for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
 		if(istype(ME, /obj/item/mecha_parts/mecha_equipment/speedboost))
@@ -843,21 +839,19 @@ Hull enclosure doesn't control atmos vulnerability
 			continue
 		var/obj/item/mecha_parts/component/C = internal_components[component_key]
 		if(C && prob(C.relative_size))
-			var/damage_part_amt = round(damage / 2, 0.1)
+			var/damage_part_amt = round(damage / 3, 0.1)
 			C.damage_part(damage_part_amt)
 			damage -= damage_part_amt
 	return damage
 
-/obj/mecha/take_damage(incoming_damage, damage_type = "brute", skip_break, mute)
+/obj/mecha/take_damage(incoming_damage, damage_type = "brute", skip_break, mute, var/violent = TRUE)
 	if(incoming_damage)
 		var/damage = absorbDamage(incoming_damage,damage_type)
-
-		damage = components_handle_damage(damage,damage_type)
-
 		health -= damage
-
 		update_health()
-		log_append_to_last("Took [damage] points of damage. Damage type: \"[type]\".",1)
+		if(violent)
+			damage = components_handle_damage(damage,damage_type)
+		log_append_to_last("Took [damage] points of damage. Damage type: \"[damage_type]\".",1)
 	return
 
 /obj/mecha/proc/absorbDamage(damage,damage_type)
@@ -1174,7 +1168,7 @@ Hull enclosure doesn't control atmos vulnerability
 	if(get_charge())
 		if(!zap || zap.integrity <= 0) // Only EMP the cell if there's no electrical hub
 			cell.emp_act(severity*1.25)
-		take_damage(25 / severity, damage_type = "energy")
+		take_damage(25 / severity, damage_type = "energy", violent = FALSE)
 		src.log_message("EMP detected",1)
 		check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
 		for(var/obj/item/mecha_parts/mecha_equipment/M in equipment)
@@ -1476,22 +1470,27 @@ Hull enclosure doesn't control atmos vulnerability
 
 	if(iswelder(W) && user.a_intent != I_HURT)
 		var/obj/item/tool/weldingtool/WT = W
+		var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
+		var/obj/item/mecha_parts/component/armor/AC = internal_components[MECH_ARMOR]
 		if (WT.remove_fuel(0,user))
 			if (hasInternalDamage(MECHA_INT_TANK_BREACH))
 				clearInternalDamage(MECHA_INT_TANK_BREACH)
 				to_chat(user, "<span class='notice'>You repair the damaged gas tank.</span>")
 		else
 			return
-		if(src.health<initial(src.health))
-			to_chat(user, "<span class='notice'>You repair some damage to [src.name].</span>")
-			src.health += min(10, initial(src.health)-src.health)
+		if((src.health<initial(src.health)) || (HC.integrity<HC.max_integrity) || (AC.integrity<AC.max_integrity))
+			if(src.health<initial(src.health))
+				to_chat(user, "<span class='notice'>You repair some damage to [src.name].</span>")
+				src.health += min(10, initial(src.health)-src.health)
+			else	if(HC.integrity<HC.max_integrity)
+				to_chat(user, "<span class='notice'>You repair some damage to [HC.name].</span>")
+				HC.integrity += min(10, HC.max_integrity-HC.integrity)
+			else	if(AC.integrity<AC.max_integrity)
+				to_chat(user, "<span class='notice'>You repair some damage to [AC.name].</span>")
+				AC.integrity += min(10, AC.max_integrity-AC.integrity)
 		else
 			to_chat(user, "The [src.name] is at full integrity")
 		return
-	else
-		call((proc_res["dynattackby"]||src), "dynattackby")(W,user)
-	return
-
 /*
 /obj/mecha/attack_ai(var/mob/living/silicon/ai/user as mob)
 	if(!istype(user, /mob/living/silicon/ai))
@@ -2127,10 +2126,14 @@ Hull enclosure doesn't control atmos vulnerability
 /obj/mecha/proc/get_stats_part()
 	var/integrity = health/initial(health)*100
 	var/cell_charge = get_charge()
+	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
+	var/obj/item/mecha_parts/component/armor/AC = internal_components[MECH_ARMOR]
 	var/tank_pressure = internal_tank ? round(internal_tank.return_pressure(),0.01) : "None"
 	var/tank_temperature = internal_tank ? internal_tank.return_temperature() : "Unknown"
 	var/cabin_pressure = round(return_pressure(),0.01)
 	var/output = {"[report_internal_damage()]
+						<b>Armor Integrity: </b>[AC?"[round(AC.integrity / AC.max_integrity * 100, 0.1)]%":"<span class='warning'>ARMOR MISSING</span>"]<br>
+						<b>Hull Integrity: </b>[HC?"[round(HC.integrity / HC.max_integrity * 100, 0.1)]%":"<span class='warning'>HULL MISSING</span>"]<br>
 						[integrity<30?"<font color='red'><b>DAMAGE LEVEL CRITICAL</b></font><br>":null]
 						<b>Integrity: </b> [integrity]%<br>
 						<b>Powercell charge: </b>[isnull(cell_charge)?"No powercell installed":"[cell.percent()]%"]<br>
