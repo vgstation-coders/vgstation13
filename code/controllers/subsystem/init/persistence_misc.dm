@@ -386,7 +386,13 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/red_turnip/on_init()
 	data = read_file()
 	if(length(data) && data["red_turnip"])
-		var/obj/machinery/portable_atmospherics/hydroponics/tray = pick(hydro_trays)
+		var/list/obj/machinery/portable_atmospherics/hydroponics/trays = hydro_trays.Copy()
+		var/obj/machinery/portable_atmospherics/hydroponics/tray
+		var/area/tray_area
+		do
+			tray = pick_n_take(trays)
+			tray_area = get_area(tray)
+		while(trays.len && tray_area.type != data["redturnip_area"])
 		tray.seed = SSplant.seeds["redturnip"]
 		if(data["redturnip_lifespan"])
 			tray.seed.lifespan = data["redturnip_lifespan"]
@@ -397,12 +403,16 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	var/red_found = FALSE
 	var/tray_age = 1
 	var/tray_lifespan = 1
+	var/tray_area = /area/hydroponics
 	for(var/obj/machinery/portable_atmospherics/hydroponics/tray in hydro_trays)
 		if(tray.seed && tray.seed.type == /datum/seed/redturnip && !tray.dead) //exclude subtype
 			red_found = TRUE
 			tray_age = max(tray_age,tray.age)
 			tray_lifespan = max(tray_lifespan,tray.seed.lifespan)
-	write_file(list("red_turnip" = red_found,"redturnip_value" = tray_age,"redturnip_lifespan" = tray_lifespan))
+			var/area/A = get_area(tray)
+			if(A)
+				tray_area = A.type
+	write_file(list("red_turnip" = red_found,"redturnip_value" = tray_age,"redturnip_lifespan" = tray_lifespan,"redturnip_area" = tray_area))
 
 // Hub Settings
 
