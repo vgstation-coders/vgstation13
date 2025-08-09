@@ -378,6 +378,7 @@
 	var/biomass_coefficient = 9
 	var/tmp/processing = 0
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
+	var/obj/item/weapon/card/id/id = null
 	var/points = 0
 	var/credits = 0
 	var/menustat = "menu"
@@ -479,6 +480,10 @@
 			G.forceMove(src)
 			beaker = G
 			updateUsrDialog()
+	else if(!id && !panel_open && istype(AM, /obj/item/weapon/card/id))
+		AM.forceMove(src)
+		id = AM
+		updateUsrDialog()
 	else if(processing)
 		return FALSE
 	else if(istype(AM, /obj/item/weapon/storage/bag/plants))
@@ -521,6 +526,15 @@
 		else
 			if(user.drop_item(O, src))
 				beaker = O
+				updateUsrDialog()
+	else if(istype(O, /obj/item/weapon/card/id))
+		if(id)
+			to_chat(user, "<span class='warning'>The ID slot is already occupied.</span>")
+		else if(panel_open)
+			to_chat(user, "<span class='rose'>The biogenerator's maintenance panel must be closed first.</span>")
+		else
+			if(user.drop_item(O, src))
+				id = O
 				updateUsrDialog()
 	else if(processing)
 		to_chat(user, "<span class='warning'>The biogenerator is currently processing.</span>")
@@ -583,8 +597,10 @@
 		dat += "<FONT COLOR=red>Biogenerator is processing! Please wait...</FONT>"
 	else
 		dat += "Biomass: [points] points."
+		if(id)
+			dat += "<BR><A href='?src=\ref[src];action=ejectID'>Eject ID</A>"
 		if(credits > 0)
-			dat += {"<BR>Credits in machine: [credits] credits. <A href='?src=\ref[src];action=claim'>Print</A>"}
+			dat += "<BR>Credits in machine: [credits] credits. <A href='?src=\ref[src];action=claim'>[id ? "Claim" : "Print"]</A>"
 		dat += "<HR>"
 		switch(menustat)
 			if("menu")
@@ -715,8 +731,17 @@
 				update_icon()
 		if("eject")
 			eject_produce()
+		if("ejectID")
+			if(id)
+				usr.put_in_hands(id)
+				id = null
 		if("claim")
-			dispense_cash(credits,loc)
+			if(id)
+				var/datum/money_account/acct = get_card_account(id)
+				if(istype(acct))
+					acct.charge(-credits, null, "Claimed biogenerator credits.", src.name, dest_name = "Biogenerator")
+			else
+				dispense_cash(credits,loc)
 			points = clamp(points-credits,0,points)
 			credits = 0
 		if("create")
