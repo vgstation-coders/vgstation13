@@ -388,8 +388,10 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	if(length(data) && data["red_turnip"])
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = pick(hydro_trays)
 		tray.seed = SSplant.seeds["redturnip"]
-		tray.seed.lifespan = data["redturnip_lifespan"]
-		tray.age = data["redturnip_value"]
+		if(data["redturnip_lifespan"])
+			tray.seed.lifespan = data["redturnip_lifespan"]
+		if(data["redturnip_value"])
+			tray.age = data["redturnip_value"]
 
 /datum/persistence_task/red_turnip/on_shutdown()
 	var/red_found = FALSE
