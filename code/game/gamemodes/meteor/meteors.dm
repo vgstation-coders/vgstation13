@@ -141,7 +141,7 @@ var/list/meteor_warnings = list()
 
 	//Send to all Bhangmeters
 	for(var/obj/machinery/computer/bhangmeter/bhangmeter in bhangmeters)
-		if(!zlevel || bhangmeter.z == zlevel)
+		if(!zlevel || bhangmeter.original_zLevel == zlevel)
 			bhangmeter.announce_meteors(warning)
 
 	spawn(warning.delay + 30 SECONDS)
