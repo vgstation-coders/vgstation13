@@ -392,7 +392,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		do
 			tray = pick_n_take(trays)
 			tray_area = get_area(tray)
-		while(trays.len && tray_area.type != data["redturnip_area"])
+		while(trays.len && tray_area.type != text2path(data["redturnip_area"]))
 		tray.seed = SSplant.seeds["redturnip"]
 		if(data["redturnip_lifespan"])
 			tray.seed.lifespan = data["redturnip_lifespan"]
