@@ -104,7 +104,7 @@
 	else //End click drag construction, create grille
 		qdel(active)
 
-/obj/item/stack/tile/metal/can_drag_use(mob/user, turf/T)
+/obj/item/stack/tile/can_drag_use(mob/user, turf/T)
 	if(user.Adjacent(T)) //can we place here
 		var/canbuild = T.canBuildPlating()
 		if(canbuild == BUILD_SUCCESS || canbuild == BUILD_IGNORE || T.canBuildFloortile(src.type))
@@ -113,7 +113,7 @@
 			else
 				QDEL_NULL(active) //otherwise remove the draggable screen
 
-/obj/item/stack/tile/metal/drag_use(mob/user, turf/T)
+/obj/item/stack/tile/drag_use(mob/user, turf/T)
 	if(T.canBuildFloortile(src.type) && istype(T,/turf/simulated/floor))
 		var/turf/simulated/floor/F = T
 		F.make_tiled_floor(src)
@@ -127,7 +127,7 @@
 	playsound(T, 'sound/weapons/Genhit.ogg', 25, 1)
 	build(T)
 
-/obj/item/stack/tile/metal/end_drag_use()
+/obj/item/stack/tile/end_drag_use()
 	active = null
 
 /obj/item/stack/tile/metal/dropped()
