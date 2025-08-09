@@ -234,7 +234,7 @@
 	return new_item
 
 /datum/find/knife/additional_description(var/obj/item/I)
-	I.desc += " [pick("It doesn't look safe.",\
+	I.desc += " [pick("It doesn't look safe",\
 			"It looks wickedly jagged",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along the edges")]."
 
@@ -249,7 +249,7 @@
 	return new_item
 
 /datum/find/ritualknife/additional_description(var/obj/item/I)
-	I.desc += " [pick("It doesn't look safe.",\
+	I.desc += " [pick("It doesn't look safe",\
 			"It looks wickedly jagged",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along the edges")]."
 
@@ -358,7 +358,7 @@
 		return new /obj/item/tool/screwdriver
 
 /datum/find/tool/additional_description(var/obj/item/I)
-	I.desc += " [pick("It doesn't look safe.",\
+	I.desc += " [pick("It doesn't look safe",\
 			"You wonder what it was used for",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains on it")]."
 
@@ -434,7 +434,7 @@
 	return new_find
 
 /datum/find/crystal/additional_description(var/obj/item/I)
-	I.desc += pick("It shines faintly as it catches the light.","It appears to have a faint inner glow.","It seems to draw you inward as you look it at.","Something twinkles faintly as you look at it.","It's mesmerizing to behold.")
+	I.desc += " [pick("It shines faintly as it catches the light","It appears to have a faint inner glow","It seems to draw you inward as you look it at","Something twinkles faintly as you look at it","It's mesmerizing to behold")]."
 
 /datum/find/cultblade
 	find_ID = ARCHAEO_CULTBLADE
@@ -849,13 +849,13 @@
 	return new_item
 
 /datum/find/remains_human/additional_description(var/obj/item/I)
-	I.desc = pick("They appear almost human.",
-	"They are contorted in a most gruesome way.",
-	"They look almost peaceful.",
-	"The bones are yellowing and old, but remarkably well preserved.",
-	"The bones are scored by numerous burns and partially melted.",
-	"The are battered and broken, in some cases less than splinters are left.",
-	"The mouth is wide open in a death rictus, the victim would appear to have died screaming.")
+	I.desc = " [pick("They appear almost human",
+	"They are contorted in a most gruesome way",
+	"They look almost peaceful",
+	"The bones are yellowing and old, but remarkably well preserved",
+	"The bones are scored by numerous burns and partially melted",
+	"The are battered and broken, in some cases less than splinters are left",
+	"The mouth is wide open in a death rictus, the victim would appear to have died screaming")]."
 
 /datum/find/remains_robot
 	find_ID = ARCHAEO_REMAINS_ROBOT
@@ -873,13 +873,13 @@
 	return new_item
 
 /datum/find/remains_robot/additional_description(var/obj/item/I)
-	I.desc = pick("Almost mistakeable for the remains of a modern cyborg.",
-	"They are barely recognisable as anything other than a pile of waste metals.",
-	"It looks like the battered remains of an ancient robot chassis.",
-	"The chassis is rusting and old, but remarkably well preserved.",
-	"The chassis is scored by numerous burns and partially melted.",
-	"The chassis is battered and broken, in some cases only chunks of metal are left.",
-	"A pile of wires and crap metal that looks vaguely robotic.")
+	I.desc = " [pick("Almost mistakeable for the remains of a modern cyborg",
+	"They are barely recognisable as anything other than a pile of waste metals",
+	"It looks like the battered remains of an ancient robot chassis",
+	"The chassis is rusting and old, but remarkably well preserved",
+	"The chassis is scored by numerous burns and partially melted",
+	"The chassis is battered and broken, in some cases only chunks of metal are left",
+	"A pile of wires and crap metal that looks vaguely robotic")]."
 
 
 /datum/find/remains_xeno
@@ -898,14 +898,14 @@
 	return new_item
 
 /datum/find/remains_xeno/additional_description(var/obj/item/I)
-	I.desc = pick("It looks vaguely reptilian, but with more teeth.",\
-			"They are faintly unsettling.",\
-			"There is a faint aura of unease about them.",\
-			"The bones are yellowing and old, but remarkably well preserved.",\
-			"The bones are scored by numerous burns and partially melted.",\
-			"The are battered and broken, in some cases less than splinters are left.",\
-			"This creature would have been twisted and monstrous when it was alive.",\
-			"It doesn't look human.")
+	I.desc = " [pick("It looks vaguely reptilian, but with more teeth",\
+			"They are faintly unsettling",\
+			"There is a faint aura of unease about them",\
+			"The bones are yellowing and old, but remarkably well preserved",\
+			"The bones are scored by numerous burns and partially melted",\
+			"The are battered and broken, in some cases less than splinters are left",\
+			"This creature would have been twisted and monstrous when it was alive",\
+			"It doesn't look human")]."
 
 /datum/find/mask
 	find_ID = ARCHAEO_MASK
