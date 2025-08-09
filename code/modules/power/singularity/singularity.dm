@@ -704,8 +704,13 @@ var/list/obj/machinery/singularity/white_hole_candidates
 			M.dust()
 	return
 
+// Increases the emitted power by that many times.
+#define SINGULARITY_ENERGY_MULTIPLIER 3
+
 /obj/machinery/singularity/proc/pulse()
-	emitted_harvestable_radiation(get_turf(src), energy, range = 15)
+	emitted_harvestable_radiation(get_turf(src), energy * SINGULARITY_ENERGY_MULTIPLIER, range = 15)
+
+#undef SINGULARITY_ENERGY_MULTIPLIER
 
 /obj/machinery/singularity/proc/on_capture()
 	chained = 1
