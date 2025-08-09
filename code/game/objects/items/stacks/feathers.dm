@@ -1,3 +1,12 @@
+/obj/item/stack/sheet/feather
+	name = "feather"
+	desc = "A locally-sourced feather."
+	singular_name = "feather"
+	icon = 'icons/obj/butchering_products.dmi'
+	icon_state = "feather-single"
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
+
 //color mapping for feathers
 var/list/feather_colors = list(
 	"emerald" = list(hex = "#3de47b", name = "emerald"),
@@ -5,7 +14,8 @@ var/list/feather_colors = list(
 	"brown"   = list(hex = "#a67c52", name = "brown"),
 	"white"   = list(hex = "#ffffff", name = "white"),
 	"green"   = list(hex = "#808D11", name = "green"), // Default just in case...
-	"gray"    = list(hex = "#808080", name = "gray")
+	"gray"    = list(hex = "#808080", name = "gray"),
+	"black"   = list(hex = "#808080", name = "black") // Chickens don't have black feathers, but they're named black when its clearly gray...
 )
 
 //procs
@@ -24,11 +34,3 @@ var/list/feather_colors = list(
 		else
 			return "green"
 
-/obj/item/stack/sheet/feather
-	name = "feather"
-	desc = "A locally-sourced feather."
-	singular_name = "feather"
-	icon = 'icons/obj/butchering_products.dmi'
-	icon_state = "feather-single"
-	w_type = RECYK_BIOLOGICAL
-	flammable = TRUE

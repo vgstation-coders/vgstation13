@@ -15,6 +15,7 @@
 	var/fartCooldown = 20 SECONDS
 	//why are these here? Because Vox are humans wearing chickensuits.
 	var/original_vox_tone
+	var/feather_regen = 0
 
 /mob/living/carbon/human/dummy
 	real_name = "Test Dummy"

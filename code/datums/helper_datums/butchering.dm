@@ -281,10 +281,10 @@
 	amount--
 	var/obj/item/stack/sheet/feather/F = new result(location)
 	if(isvox(parent))
-		var/mob/living/carbon/human/vox/H = parent
-		if(!H.original_vox_tone) // Store original tone on first pluck
-			H.original_vox_tone = H.my_appearance.s_tone
-		var/color_key = get_vox_color_key(H.my_appearance.s_tone)
+		var/mob/living/carbon/human/vox/V = parent
+		if(!V.original_vox_tone) // Store original tone on first pluck
+			V.original_vox_tone = V.my_appearance.s_tone
+		var/color_key = get_vox_color_key(V.my_appearance.s_tone)
 		var/list/color_data = feather_colors[color_key]
 		if(color_data)
 			F.color = color_data["hex"]

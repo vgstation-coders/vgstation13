@@ -13,6 +13,7 @@
 	safe_oxygen_min = 0
 	var/eggsleft
 	var/eggcost = 250
+	var/feather_regen = 0
 	languagetoadd = LANGUAGE_VOX
 
 /mob/living/carbon/monkey/vox/attack_hand(mob/living/carbon/human/M as mob)
@@ -53,6 +54,17 @@
 	..()
 	if(prob(5) && eggsleft > 4)
 		lay_egg()
+
+	//feather regeneration
+	for(var/datum/butchering_product/feathers/voxchicken/F in butchering_drops)
+		if(F.amount <= 2)
+			feather_regen += 1 SECONDS
+			if(feather_regen == 2 SECONDS) //it would constantly spam if I didn't do this.
+				visible_message("[src] starts to regrow some feathers.")
+		if(feather_regen >= 5 MINUTES)
+			F.amount = F.initial_amount
+			visible_message("[src] regrows their feathers.")
+			feather_regen = 0
 
 /mob/living/carbon/monkey/vox/say(var/message)
 	if (prob(25))

@@ -185,3 +185,19 @@
 
 /datum/species/skellington/skelevox/fallback()
 	return "Vox"
+
+/mob/living/carbon/human/vox/Life()
+	..()
+
+	//feather regeneration
+	for(var/datum/butchering_product/feathers/vox/F in butchering_drops)
+		if(F.amount <= 5 && !stat)
+			feather_regen += 1 SECONDS
+			if(feather_regen == 2 SECONDS)
+				to_chat(src, "<span class='notice'>You feel a tingling sensation as your feathers begin to regrow.</span>")
+		else
+			feather_regen = 0
+		if(feather_regen >= 5 MINUTES)
+			F.amount = F.initial_amount
+			to_chat(src, "<span class='notice'>Your feathers regrow fully.</span>")
+			feather_regen = 0

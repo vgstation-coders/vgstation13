@@ -270,6 +270,7 @@
 	health = 10
 	var/eggsleft = 0
 	var/body_color
+	var/feather_regen = 0
 	pass_flags = PASSTABLE
 	size = SIZE_SMALL
 	speak_override = TRUE
@@ -320,6 +321,17 @@
 		E.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
 			processing_objects.Add(E)
+
+	//feather regeneration
+	for(var/datum/butchering_product/feathers/chicken/F in butchering_drops)
+		if(F.amount <= 2)
+			feather_regen += 1 SECONDS
+			if(feather_regen == 2 SECONDS) //it would constantly spam if I didn't do this.
+				visible_message("[src] starts to regrow some feathers.")
+		if(feather_regen >= 5 MINUTES)
+			F.amount = F.initial_amount
+			visible_message("[src] regrows their feathers.")
+			feather_regen = 0
 
 /mob/living/simple_animal/chicken/pomf
 	name = "Pomf chicken"
