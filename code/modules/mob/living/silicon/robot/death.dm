@@ -75,7 +75,7 @@
 
 	tod = worldtime2text() //weasellos time of death patch
 	if(mind)
-		mind.store_memory("Time of death: [tod]", 0)
+		mind.store_memory("Time of death: [tod]", category=MIND_MEMORY_GENERAL, forced=TRUE)
 		if(!mind.suiciding)
 			score.deadsilicon += 1
 
@@ -86,6 +86,13 @@
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 /mob/living/silicon/robot/Destroy()
 	cyborg_list -= src
+	qdel(wires)
+	qdel(station_holomap)
+	qdel(radio)
+	qdel(aicamera)
+	if(camera)
+		qdel(camera)
+	QDEL_LIST_ASSOC_VALUES_NULL(components)
 	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
 		if(T)

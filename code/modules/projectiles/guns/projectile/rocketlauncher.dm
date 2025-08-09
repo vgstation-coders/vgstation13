@@ -135,7 +135,6 @@
 	fire_sound = 'sound/weapons/rocket.ogg'
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg/nikita"
 	var/obj/item/projectile/rocket/nikita/fired = null
-	var/emagged = 0
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/update_icon()
 	return
@@ -155,12 +154,10 @@
 		explosion(src.loc, 1, 3, 5, 8, whodunnit = user) //Using the actual rocket damage, instead of the very old, super nerfed value
 		return SUICIDE_ACT_BRUTELOSS
 
-/obj/item/weapon/gun/projectile/rocketlauncher/nikita/attackby(var/obj/item/A as obj, mob/user as mob)
-	if(istype(A, /obj/item/weapon/card/emag) && !emagged)
+/obj/item/weapon/gun/projectile/rocketlauncher/nikita/emag_act(mob/user)
+	if(!emagged)
 		emagged = 1
 		to_chat(user, "<span class='warning'>You disable \the [src]'s idiot security!</span>")
-	else
-		..()
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/process_chambered()
 	if(..())

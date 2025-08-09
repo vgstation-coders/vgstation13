@@ -17,6 +17,12 @@
 			if(prob(20))
 				new/obj/effect/decal/cleanable/soot(src)
 
+/turf/unsimulated/floor/New()
+	..()
+	footstep_sound = sounds_floor
+	footstep_sound_barefoot = sounds_floor_barefoot
+	footstep_sound_claw = sounds_floor_claw
+
 /turf/unsimulated/floor/attack_paw(user as mob)
 	return src.attack_hand(user)
 
@@ -37,6 +43,9 @@
 /turf/unsimulated/floor/grass/New()
 	..()
 	icon_state = "grass[rand(1,4)]"
+	footstep_sound = sounds_grass
+	footstep_sound_barefoot = sounds_grass
+	footstep_sound_claw = sounds_grass
 
 /turf/unsimulated/floor/mars
 	name = "surface"

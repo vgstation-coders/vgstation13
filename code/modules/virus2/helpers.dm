@@ -1,6 +1,6 @@
 //Build random disease type
 /proc/get_random_weighted_disease(var/operation = WDISH)
-	var/list/possibles = subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined)
+	var/list/possibles = subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined) - /datum/disease2/disease/meme/super
 	var/list/weighted_list = list()
 	for(var/P in possibles)
 		var/datum/disease2/disease/D = new P
@@ -130,25 +130,25 @@
 	switch(body_part)
 		if (HEAD)//head-patting
 			var/datum/organ/external/head = organs_by_name[LIMB_HEAD]
-			if(head.status & ORGAN_BLEEDING)
+			if(head?.status & ORGAN_BLEEDING)
 				bleeding = 1
 		if (FULL_TORSO)//hugging, lying over infected blood, broken dishes
 			var/datum/organ/external/chest = organs_by_name[LIMB_CHEST]
-			if(chest.status & ORGAN_BLEEDING)
+			if(chest?.status & ORGAN_BLEEDING)
 				bleeding = 1
 		if (FEET)//walking over infected blood, broken dishes
 			var/datum/organ/external/l_foot = organs_by_name[LIMB_LEFT_FOOT]
-			if(l_foot.status & ORGAN_BLEEDING)
+			if(l_foot?.status & ORGAN_BLEEDING)
 				bleeding = 1
 			var/datum/organ/external/r_foot = organs_by_name[LIMB_RIGHT_FOOT]
-			if(r_foot.status & ORGAN_BLEEDING)
+			if(r_foot?.status & ORGAN_BLEEDING)
 				bleeding = 1
 		if (HANDS)//walking over infected blood, broken dishes
 			var/datum/organ/external/hand/l_hand = organs_by_name[LIMB_LEFT_HAND]
-			if(l_hand.status & ORGAN_BLEEDING)
+			if(l_hand?.status & ORGAN_BLEEDING)
 				bleeding = 1
 			var/datum/organ/external/hand/r_hand = organs_by_name[LIMB_RIGHT_HAND]
-			if(r_hand.status & ORGAN_BLEEDING)
+			if(r_hand?.status & ORGAN_BLEEDING)
 				bleeding = 1
 	return bleeding
 
@@ -201,7 +201,7 @@ var/list/infected_contact_mobs = list()
 		//--Cult Stuff--
 		if (disease.category == DISEASE_CULT)
 			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-			cult.check_ritual("cursed_infection", src)
+			cult?.check_ritual("cursed_infection", src)
 		//----------------
 
 		for (var/obj/item/device/pda/p in contents)

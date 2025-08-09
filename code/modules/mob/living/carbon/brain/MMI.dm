@@ -75,8 +75,9 @@
 		//M.custom_name = created_name
 
 		brainmob.mind.transfer_to(M)
-		M.cell = locate(/obj/item/weapon/cell) in contents
-		M.cell.forceMove(M)
+		var/obj/item/weapon/cell/ourcell = locate(/obj/item/weapon/cell) in contents
+		ourcell.forceMove(M)
+		M.add_cell(ourcell)
 		src.forceMove(M)//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
 		M.mmi = src
 
@@ -111,7 +112,7 @@
 			var/cc=contents_count(t)
 			var/req=sammi_assembly_parts[t]
 			if(cc<req)
-				to_chat(user, "<span class='warning'>You're short [req-cc] [initial(t)]\s.</span>")
+				to_chat(user, "<span class='warning'>You're short [req-cc] [t]\s.</span>")
 				return TRUE
 		if(!istype(loc,/turf))
 			to_chat(user, "<span class='warning'>You can't assemble the SAMMI, \the [src] has to be standing on the ground (or a table) to be perfectly precise.</span>")
@@ -238,10 +239,13 @@
 	brainmob.dna = new()
 	brainmob.dna.ResetUI()
 	brainmob.dna.ResetSE()
-	if(P.be_random_name)
-		P.real_name = random_name(P.gender, P.species)
-	brainmob.name = P.real_name
-	brainmob.real_name = P.real_name
+	var/datum/preference_setting/name_pref = P.get_pref_datum(/datum/preference_setting/string/real_name)
+	var/species = P.get_pref(/datum/preference_setting/string/species)
+	var/gender = P.get_pref(/datum/preference_setting/enum/gender)
+	if(P.get_pref(/datum/preference_setting/toggle/be_random_name))
+		name_pref.setting = random_name(gender, species)
+	brainmob.name = name_pref.setting
+	brainmob.real_name = name_pref.setting
 	brainmob.container = src
 
 	name = "Man-Machine Interface: [brainmob.real_name]"

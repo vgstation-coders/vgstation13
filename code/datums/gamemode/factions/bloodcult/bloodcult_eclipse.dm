@@ -23,12 +23,13 @@
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (!cult)
 		return
-	sun.eclipse_manager.eclipse_start(cult.eclipse_window)
+	if (sun.eclipse == ECLIPSE_NOT_YET)
+		sun.eclipse_manager.eclipse_start(cult.eclipse_window)
 
 /proc/eclipse_trigger_random()
 	if (!sun || !sun.eclipse_manager)
 		return
-	sun.eclipse_manager.eclipse_start(rand(8 MINUTES, 12 MINUTES))
+	sun.eclipse_manager.eclipse_start(rand(4 MINUTES, 6 MINUTES))
 
 /datum/eclipse_manager/proc/eclipse_start(var/duration)
 	eclipse_start_time = world.time

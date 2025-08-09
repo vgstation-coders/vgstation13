@@ -42,16 +42,15 @@
 		spawn()
 			timesoundloop(clamp(3-time,0,3)*3)
 
+	message_admins("[key_name_admin(usr)] [timing ? "started" : "stopped"] a timer at [formatJumpTo(src)]")
 	update_icon()
+	countdown()
 	return 0
 
 /obj/item/device/assembly/timer/toggle_secure()
 	secured = !secured
-	if(secured)
-		processing_objects.Add(src)
-	else
+	if(!secured)
 		timing = 0
-		processing_objects.Remove(src)
 	update_icon()
 	return secured
 
@@ -89,6 +88,22 @@
 				freq = 1
 			timesoundloop(decrement,freq)
 
+/obj/item/device/assembly/timer/proc/countdown()
+	if(timing)
+		if(time > 0)
+			spawn(10)
+				time--
+				countdown()
+		else
+			if(!repeat)
+				timing = 0
+			timer_end()
+			time = default_time
+			if(repeat && time > 0)
+				spawn()
+					countdown()
+		updateUsrDialog()
+
 /obj/item/device/assembly/timer/update_icon()
 	overlays.len = 0
 	attached_overlays = list()
@@ -106,15 +121,15 @@
 		return 0
 	var/second = time % 60
 	var/minute = (time - second) / 60
-	var/dat = text("<TT><B>Timing Unit</B>\n[] []:[]\n<A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT>", (timing ? text("<A href='?src=\ref[];time=0'>Timing</A>", src) : text("<A href='?src=\ref[];time=1'>Not Timing</A>", src)), minute, second, src, src, src, src)
-
+	var/dat = text("<TT><B>Timing Unit</B>\n[] []:[]\n<A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT>", (timing ? text("<A href='?src=\ref[];time=1'>Timing</A>", src) : text("<A href='?src=\ref[];time=1'>Not Timing</A>", src)), minute, second, src, src, src, src)
 	dat += "<BR><BR><A href='?src=\ref[src];set_default_time=1'>After countdown, reset time to [(default_time - default_time%60)/60]:[(default_time % 60)]</A>"
 	dat += {"<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>
 		<BR><BR><A href='?src=\ref[src];toggle_mode=1'>Mode: [repeat ? TIMEMODE_REPEAT : TIMEMODE_ONCE]</A>
 		<BR><BR><A href='byond://?src=\ref[src];toggle_silent=1'>Timer tick sound: O[silent ? "ff" : "n"]</A>
 		<BR><BR><A href='byond://?src=\ref[src];toggle_speedup=1'>Timer tick speedup: [speedsup == TICK_PITCHUP ? "Speed and pitch" : speedsup ? "Speed" : "None"]</A>
 		<BR><BR><A href='?src=\ref[src];close=1'>Close</A>"}
-	user << browse(dat, "window=timer")
+	dat += "<BR><BR><A href='?src=\ref[src];toggle_mode=1'>Mode: [repeat ? TIMEMODE_REPEAT : TIMEMODE_ONCE]</A>"
+	user << browse(HTML_SKELETON(dat), "window=timer")
 	onclose(user, "timer")
 	return
 
@@ -129,9 +144,7 @@
 		return
 
 	if(href_list["time"])
-		timing = text2num(href_list["time"])
-		message_admins("[key_name_admin(usr)] [timing ? "started" : "stopped"] a timer at [formatJumpTo(src)]")
-		update_icon()
+		activate()
 		if(!silent)
 			spawn()
 				timesoundloop(clamp(3-time,0,3)*3)
@@ -140,14 +153,14 @@
 		var/tp = text2num(href_list["tp"])
 		time += tp
 		time = min(max(round(time), 0), 600)
-	
+
 	if(href_list["toggle_mode"])
 		repeat = !repeat
 		return
-		
+
 	if(href_list["toggle_silent"])
 		silent = !silent
-	
+
 	if(href_list["toggle_speedup"])
 		speedsup = (speedsup + 1) % 3
 
@@ -158,10 +171,7 @@
 	if(href_list["set_default_time"])
 		default_time = time
 
-	if(usr)
-		attack_self(usr)
-
-	return
+	updateUsrDialog()
 
 /obj/item/device/assembly/timer/send_to_past(var/duration)
 	..()

@@ -909,28 +909,15 @@
 /turf/simulated/wall/r_wall,
 /area/turret_protected/goonroom)
 "cf" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /obj/structure/cable{
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/obj/structure/window/full/reinforced,
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/turret_protected/goonroom)
 "cg" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
 /obj/structure/cable{
 	d2 = 4;
 	icon_state = "0-4"
@@ -939,15 +926,10 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/turret_protected/goonroom)
 "ch" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2";
@@ -962,11 +944,10 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/turret_protected/goonroom)
 "ci" = (
-/obj/structure/grille,
 /obj/structure/cable{
 	d2 = 8;
 	icon_state = "0-8"
@@ -975,28 +956,16 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/turret_protected/goonroom)
 "cj" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
 /obj/structure/cable{
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/obj/structure/window/full/reinforced,
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/turret_protected/goonroom)
 "ck" = (
@@ -1259,44 +1228,24 @@
 	},
 /area/turret_protected/goonroom)
 "cG" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 6
 	},
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/turret_protected/tcomsat)
 "cH" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/turret_protected/tcomsat)
 "cI" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
 	},
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/turret_protected/tcomsat)
 "cJ" = (
@@ -1409,18 +1358,6 @@
 	temperature = 80
 	},
 /area/turret_protected/goonroom)
-"cQ" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating,
-/area/turret_protected/tcomsat)
 "cR" = (
 /obj/structure/closet/malf/suits,
 /turf/simulated/floor,
@@ -1511,16 +1448,8 @@
 /turf/space,
 /area/turret_protected/tcomsat)
 "db" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/turret_protected/tcomsat)
 "dc" = (
@@ -1711,17 +1640,7 @@
 /turf/space,
 /area/turret_protected/tcomsat)
 "du" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/turret_protected/tcomsat)
 "dv" = (
@@ -1820,17 +1739,6 @@
 	temperature = 80
 	},
 /area/turret_protected/goonroom)
-"dD" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating,
-/area/turret_protected/tcomsat)
 "dE" = (
 /obj/structure/table,
 /obj/item/weapon/spacecash/c1000,
@@ -1929,36 +1837,6 @@
 	temperature = 80
 	},
 /area/turret_protected/goonroom)
-"dM" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating,
-/area/turret_protected/tcomsat)
-"dN" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating,
-/area/turret_protected/tcomsat)
-"dO" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating,
-/area/turret_protected/tcomsat)
 "dP" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	canSpawnMice = 0;
@@ -2312,21 +2190,11 @@
 /turf/simulated/floor,
 /area/turret_protected/tcomfoyer)
 "ey" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
 /obj/structure/cable{
 	d2 = 4;
 	icon_state = "0-4"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/tcommsat/entrance)
 "ez" = (
@@ -2410,21 +2278,11 @@
 /turf/simulated/floor,
 /area/tcommsat/entrance)
 "eI" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
 /obj/structure/cable{
 	d2 = 8;
 	icon_state = "0-8"
 	},
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area/tcommsat/entrance)
 "eJ" = (
@@ -6501,12 +6359,12 @@ al
 an
 ao
 cG
-cQ
+db
 db
 dn
 du
-dD
-dM
+du
+du
 ao
 an
 ao
@@ -6585,7 +6443,7 @@ cR
 do
 dc
 dE
-dN
+du
 an
 cd
 an
@@ -6664,7 +6522,7 @@ dc
 dc
 dv
 dF
-dO
+du
 ao
 an
 ao

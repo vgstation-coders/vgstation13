@@ -262,15 +262,11 @@
 			if(chest.extension)
 				O.component_extension = chest.extension
 				O.upgrade_components()
-			O.cell = chest.cell
-			O.cell.forceMove(O)
+			var/datum/robot_component/cell_component = O.components["power cell"]
+			cell_component.wrapped = chest.cell
+			cell_component.installed = 1
+			chest.cell.forceMove(O)
 			W.forceMove(O) //Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
-
-			// Since we "magically" installed a cell, we also have to update the correct component.
-			if(O.cell)
-				var/datum/robot_component/cell_component = O.components["power cell"]
-				cell_component.wrapped = O.cell
-				cell_component.installed = 1
 
 			feedback_inc("cyborg_birth",1)
 
@@ -340,12 +336,9 @@
 			return
 	return
 
-/obj/item/robot_parts/attackby(obj/item/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/card/emag))
-		if(sabotaged)
-			to_chat(user, "<span class='warning'>[src] is already sabotaged!</span>")
-		else
-			to_chat(user, "<span class='warning'>You slide [W] into the dataport on [src] and short out the safeties.</span>")
-			sabotaged = 1
-		return
-	..()
+/obj/item/robot_parts/emag_act(mob/user)
+	if(sabotaged)
+		to_chat(user, "<span class='warning'>[src] is already sabotaged!</span>")
+	else
+		to_chat(user, "<span class='warning'>You slide the cryptographic sequencer into the dataport on [src] and short out the safeties.</span>")
+		sabotaged = 1

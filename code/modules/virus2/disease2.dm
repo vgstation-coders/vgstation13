@@ -121,6 +121,12 @@ var/global/list/disease2_list = list()
 	type_weight = list(0,0,0,0) //rare in dishes and never in mice, very common in people
 	//Note: if more types of creatures become infectable than humans/monkeys/mice, give them HEAR_ALWAYS
 
+/datum/disease2/disease/meme/super //A more powerful version that supports all 4 stages, acquired from traders.
+	form = "Anomalous Meme"
+	origin =  "X Laboratory"
+	max_stage = 4
+	speed = 2
+
 /datum/disease2/disease/proc/update_global_log()
 	if ("[uniqueID]-[subID]" in disease2_list)
 		return

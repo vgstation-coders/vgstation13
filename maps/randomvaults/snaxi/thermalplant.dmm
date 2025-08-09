@@ -131,15 +131,10 @@
 /turf/simulated/floor/engine,
 /area/vault/thermalplant)
 "kA" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/full/reinforced/plasma,
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden{
 	dir = 10
 	},
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/plating,
 /area/vault/thermalplant)
 "kD" = (
@@ -217,15 +212,7 @@
 	},
 /area/vault/thermalplant)
 "nq" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/full/reinforced/plasma,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/plating,
 /area/vault/thermalplant)
 "nA" = (
@@ -442,13 +429,8 @@
 	},
 /area/vault/thermalplant)
 "BI" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/full/reinforced/plasma,
 /obj/machinery/atmospherics/pipe/simple/yellow/hidden,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/plating,
 /area/vault/thermalplant)
 "CN" = (
@@ -458,15 +440,10 @@
 	},
 /area/vault/thermalplant)
 "Et" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/full/reinforced/plasma,
 /obj/machinery/atmospherics/pipe/manifold/insulated/hidden{
 	dir = 8
 	},
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/plating,
 /area/vault/thermalplant)
 "Fo" = (
@@ -477,15 +454,6 @@
 	icon_state = "bot"
 	},
 /turf/simulated/floor/engine,
-/area/vault/thermalplant)
-"Ho" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/full/reinforced/plasma,
-/turf/simulated/floor/plating,
 /area/vault/thermalplant)
 "Ij" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden{
@@ -672,21 +640,13 @@
 /turf/simulated/floor/engine,
 /area/vault/thermalplant)
 "RQ" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/full/reinforced/plasma,
 /obj/machinery/meter{
 	name = "Vent Gas Meter"
 	},
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden{
 	dir = 1
 	},
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/plating,
 /area/vault/thermalplant)
 "Sh" = (
@@ -830,7 +790,7 @@ Kz
 Ip
 LF
 SZ
-Ho
+nq
 MG
 uG
 uG

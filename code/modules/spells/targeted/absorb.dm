@@ -5,11 +5,11 @@
 	user_type = USER_TYPE_SPELLBOOK
 
 	school = "evocation"
-	charge_max = 100
+	charge_cooldown_max = 10 SECONDS
 	spell_flags = IS_HARMFUL
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 0
-	cooldown_min = 200
+	cooldown_min = 20 SECONDS
 
 	hud_state = "wiz_disint_old"
 
@@ -54,14 +54,14 @@
 								continue
 							if(targetspell.type == holderspell.type)
 								canAbsorb = FALSE
-								if(holderspell.can_improve(Sp_POWER)) //Prioritize empowerments over cooldown upgrades
+								if(holderspell.can_improve(SP_POWER)) //Prioritize empowerments over cooldown upgrades
 									to_chat(holder, "<span class='notice'>You absorb the magical energies from your foe and have empowered [targetspell.name]!</span>")
-									holderspell.apply_upgrade(Sp_POWER)
+									holderspell.apply_upgrade(SP_POWER)
 									hasAbsorbed = TRUE
 									consumed_spell = TRUE
-								else if(holderspell.can_improve(Sp_SPEED))
+								else if(holderspell.can_improve(SP_SPEED))
 									to_chat(holder, "<span class='notice'>You absorb the magical energies from your foe and have quickened [targetspell.name]!</span>")
-									holderspell.apply_upgrade(Sp_SPEED)
+									holderspell.apply_upgrade(SP_SPEED)
 									hasAbsorbed = TRUE
 									consumed_spell = TRUE
 						if(canAbsorb)
@@ -100,11 +100,9 @@
 	//Handle the attacker
 	var/datum/role/wizard/absorber_W = absorbed.mind.GetRole(WIZARD)
 	if(istype(absorber_W))
-		absorber_W.spells_from_spellbook += S
 		absorber_W.spells_from_absorb += S
 	var/datum/role/wizard_apprentice/absorber_WA = absorbed.mind.GetRole(WIZAPP)
 	if(istype(absorber_WA))
-		absorber_WA.spells_from_spellbook += S
 		absorber_WA.spells_from_absorb += S
 
 /obj/effect/absorb_effect

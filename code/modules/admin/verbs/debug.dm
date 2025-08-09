@@ -19,7 +19,6 @@
 	feedback_add_details("admin_verb","DG2") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
-
 /* 21st sept 2010
 Updated by Skie -- Still not perfect but better!
 Stuff you can't do:
@@ -37,7 +36,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		return
 
 	spawn(0)
-		var/target = null
+		var/datum/target = null
 		var/targetselected = 0
 		var/lst[] // List reference
 		lst = new/list() // Make the list
@@ -68,6 +67,13 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 		var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
 		if(!procname)
+			return
+
+		// absolutely not
+		if(findtextEx(trim(lowertext(procname)), "rustg"))
+			message_admins("<span class='userdanger'>[key_name_admin(src)] attempted to proc call rust-g procs ([strip_html_properly(procname)]). Inform the host <i>at once</i>.</span>")
+			log_admin("[key_name(src)] attempted to proc call rust-g procs. Inform the host at once.")
+			send2admindiscord("[key_name(src)] attempted to proc call rustg things. Inform the host at once.", TRUE)
 			return
 
 		// Do not make this a global reference. Global references can be cleared out.
@@ -519,12 +525,12 @@ Pressure: [env.pressure]"}
 		if(A && !(A.type in areas_with_light))
 			areas_with_light.Add(A.type)
 
-	for(var/obj/machinery/light_switch/LS in world)
+	for(var/obj/machinery/light_switch/LS in lightswitches)
 		var/area/A = get_area(LS)
 		if(A && !(A.type in areas_with_LS))
 			areas_with_LS.Add(A.type)
 
-	for(var/obj/item/device/radio/intercom/I in world)
+	for(var/obj/item/device/radio/intercom/I in radio_list)
 		var/area/A = get_area(I)
 		if(A && !(A.type in areas_with_intercom))
 			areas_with_intercom.Add(A.type)
@@ -542,33 +548,37 @@ Pressure: [env.pressure]"}
 	var/list/areas_without_intercom = areas_all - areas_with_intercom
 	var/list/areas_without_camera = areas_all - areas_with_camera
 
-	to_chat(world, "<b>AREAS WITHOUT AN APC:</b>")
+	var/error_str = "<h1>AREAS WITHOUT AN APC:</h1>"
 	for(var/areatype in areas_without_APC)
-		to_chat(world, "* [areatype]")
+		error_str += "* [areatype]<br>"
 
-	to_chat(world, "<b>AREAS WITHOUT AN AIR ALARM:</b>")
+	error_str += "<h1>AREAS WITHOUT AN AIR ALARM:</h1>"
 	for(var/areatype in areas_without_air_alarm)
-		to_chat(world, "* [areatype]")
+		error_str += "* [areatype]<br>"
 
-	to_chat(world, "<b>AREAS WITHOUT A REQUEST CONSOLE:</b>")
+	error_str += "<h1>AREAS WITHOUT A REQUEST CONSOLE:</h1>"
 	for(var/areatype in areas_without_RC)
-		to_chat(world, "* [areatype]")
+		error_str += "* [areatype]<br>"
 
-	to_chat(world, "<b>AREAS WITHOUT ANY LIGHTS:</b>")
+	error_str += "<h1>AREAS WITHOUT ANY LIGHTS:</h1>"
 	for(var/areatype in areas_without_light)
-		to_chat(world, "* [areatype]")
+		error_str += "* [areatype]<br>"
 
-	to_chat(world, "<b>AREAS WITHOUT A LIGHT SWITCH:</b>")
+	error_str += "<h1>AREAS WITHOUT A LIGHT SWITCH:</h1>"
 	for(var/areatype in areas_without_LS)
-		to_chat(world, "* [areatype]")
+		error_str += "* [areatype]<br>"
 
-	to_chat(world, "<b>AREAS WITHOUT ANY INTERCOMS:</b>")
+	error_str += "<h1>AREAS WITHOUT ANY INTERCOMS:</h1>"
 	for(var/areatype in areas_without_intercom)
-		to_chat(world, "* [areatype]")
+		error_str += "* [areatype]<br>"
 
-	to_chat(world, "<b>AREAS WITHOUT ANY CAMERAS:</b>")
+	error_str += "<h1>AREAS WITHOUT ANY CAMERAS:</h1>"
 	for(var/areatype in areas_without_camera)
-		to_chat(world, "* [areatype]")
+		error_str += "* [areatype]<br>"
+
+	var/datum/browser/popup = new(usr, "Area issues", usr.name, 300, 400)
+	popup.set_content(error_str)
+	popup.open()
 
 /client/proc/startSinglo()
 	set category = "Debug"
@@ -973,7 +983,7 @@ var/global/blood_virus_spreading_disabled = 0
 		"15x15 (4 players)",
 		"39x23 (10 players)",
 		)
-	var/arena_type = input("What size for the arena?", "Arena Construction") in arena_sizes | null
+	var/arena_type = input("What size for the arena?", "Arena Construction") as null|anything in arena_sizes
 
 	if(!arena_type)
 		return
@@ -1269,7 +1279,7 @@ var/global/blood_virus_spreading_disabled = 0
 
 
 	//Exclude non-movable atoms
-	var/chosen = filter_list_input("Select a datum type", "Spawn Datum", get_matching_types(object, /datum) - typesof(/turf, /area, /datum/admins))
+	var/chosen = filter_typelist_input("Select a datum type", "Spawn Datum", get_matching_types(object, /datum) - typesof(/turf, /area, /datum/admins))
 	if(!chosen)
 		return
 
@@ -1575,3 +1585,14 @@ var/obj/blend_test = null
 		output = "No unconnected vents/scrubbers found."
 
 	usr << browse (output, "window=unconnected-atmos-search")
+
+/client/proc/rig_crew_score()
+	set category = "Debug"
+	set name = "Rig crew score"
+	set desc = "Manually adjust round-end crew score."
+
+	if(!check_rights(R_FUN))
+		return
+
+	score.badmin_score = input(usr,"What score do you want?","Badmin score",score.badmin_score) as num
+	score.badmin_override = alert(usr,"Override or add to the round-end score?","Badmin score","Override","Add") == "Override"

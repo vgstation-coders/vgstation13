@@ -25,7 +25,7 @@
 		else
 			icon_state = "[base_icon]"
 
-	if(!stat && cell != null)
+	if(!stat && get_cell())
 		eyes = image(icon,"eyes-[base_icon][emagged?"-emagged":""]", ABOVE_LIGHTING_LAYER)
 		if(plane == HIDING_MOB_PLANE) // Hiding MoMMIs
 			overlay_plane = FLOAT_PLANE
@@ -45,7 +45,7 @@
 	if(opened)
 		if(wiresexposed)
 			overlays += image(icon = icon, icon_state = "[has_icon(icon, "[base_icon]-ov-openpanel +w")? "[icon_state]-ov-openpanel +w" : "ov-openpanel +w"]")
-		else if(cell)
+		else if(get_cell())
 			overlays += image(icon = icon, icon_state = "[has_icon(icon, "[base_icon]-ov-openpanel +c")? "[icon_state]-ov-openpanel +c" : "ov-openpanel +c"]")
 		else
 			overlays += image(icon = icon, icon_state = "[has_icon(icon, "[base_icon]-ov-openpanel -c")? "[icon_state]-ov-openpanel -c" : "ov-openpanel -c"]")

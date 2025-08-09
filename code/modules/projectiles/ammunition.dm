@@ -97,7 +97,7 @@
 		if((exact && (AC.type == text2path(ammo_type))) || (!exact && (AC.caliber == caliber)))
 			accepted = 1
 		else
-			to_chat(user, "<span class='warning'>\the [AC] does not fit into [src]. </span>")
+			to_chat(user, "<span class='warning'>\The [AC] does not fit into [src]. </span>")
 			return
 		if(AC.BB && accepted && stored_ammo.len < max_ammo)
 			if(user.drop_item(A, src, failmsg = TRUE))

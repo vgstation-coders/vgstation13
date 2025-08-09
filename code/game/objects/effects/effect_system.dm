@@ -80,6 +80,9 @@ would spawn and follow the beaker, even if it is carried or thrown.
 /obj/effect/blob_act()
 	return
 
+/obj/effect/ignite()
+	return
+
 /////////////////////////////////////////////
 // GENERIC STEAM SPREAD SYSTEM
 
@@ -190,7 +193,7 @@ steam.start() -- spawns the effect
 	else
 		location = get_turf(loca)
 
-/datum/effect/system/spark_spread/start(surfaceburn = TRUE)
+/datum/effect/system/spark_spread/start(surfaceburn = TRUE, silent = FALSE)
 	if (holder)
 		location = get_turf(holder)
 	if(!location)
@@ -201,7 +204,8 @@ steam.start() -- spawns the effect
 	else
 		directions = alldirs.Copy()
 
-	playsound(location, "sparks", 100, 1)
+	if(!silent)
+		playsound(location, "sparks", 100, 1)
 	for (var/i = 1 to number)
 		var/nextdir=pick_n_take(directions)
 		if(nextdir)
@@ -211,12 +215,22 @@ steam.start() -- spawns the effect
 			else
 				var/obj/effect/sparks/nosurfaceburn/sparks = new /obj/effect/sparks/nosurfaceburn(location)
 				sparks.start(nextdir)
-// This sparks.
-/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = FALSE) //surfaceburn means the sparks can ignite things on the ground. set it to false to keep eg. portals like in the time agent event from burning down the station
+/**
+  * This sparks.
+  *
+  * Generates some sparks at specified location
+  * Arguments:
+  * * atom/loc - where the sparks are set off
+  * * amount - how many sparks, default 3
+  * * cardinals - if true, sparks will not spread diagonally, default TRUE
+  * * surfaceburn - if it starts fires, default FALSE
+  * * silent - if TRUE, the initial spark won't make noise, default FALSE
+  */
+/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = FALSE, var/silent = FALSE)
 	loc = get_turf(loc)
 	var/datum/effect/system/spark_spread/S = new
 	S.set_up(amount, cardinals, loc)
-	S.start(surfaceburn)
+	S.start(surfaceburn, silent)
 
 #undef SPARK_TEMP
 
@@ -453,9 +467,7 @@ steam.start() -- spawns the effect
 /datum/effect/system/smoke_spread/chem/New()
 	..()
 	chemholder = new/obj()
-	var/datum/reagents/R = new/datum/reagents(500)
-	chemholder.reagents = R
-	R.my_atom = chemholder
+	chemholder.create_reagents(500)
 
 /datum/effect/system/smoke_spread/chem/set_up(var/datum/reagents/carry = null, n = 5, c = 0, loca, direct)
 	if(n > 20)
@@ -612,6 +624,8 @@ steam.start() -- spawns the effect
 	if(src.processing)
 		src.processing = 0
 		spawn(0)
+			if(!holder)
+				return
 			var/turf/T = get_turf(src.holder)
 			if(currloc != T)
 				switch(holder.dir)

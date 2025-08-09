@@ -27,7 +27,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/lit = 0
 	var/smoketime = 10
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
-	heat_production = 1000
+	heat_production = 5000
 	source_temperature = TEMPERATURE_FLAME
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
@@ -211,7 +211,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/list/unlit_attack_verb = list("prods", "pokes")
 	var/list/lit_attack_verb = list("burns", "singes")
 	attack_verb = list("prods", "pokes")
-	heat_production = 1000
+	heat_production = 5000
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
 	slot_flags = SLOT_MASK|SLOT_EARS
@@ -466,8 +466,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/clothing/mask/cigarette/process()
 	var/turf/location = get_turf(src)
 	var/mob/living/M = get_holder_of_type(src,/mob/living)
-	if(isliving(loc))
-		M.IgniteMob()
 	smoketime--
 	if (smoketime == 5 && ismob(loc))
 		to_chat(M, "<span class='warning'>Your [name] is about to go out.</span>")
@@ -623,7 +621,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return
 
 /obj/item/clothing/mask/cigarette/bugged/attack_self(mob/user as mob)
-	if(lit)
+	if(cig_tag && lit)
 		user.visible_message("<span class='notice'>[user] calmly drops and treads on the [name], putting it out.</span>")
 		var/turf/T = get_turf(src)
 		var/obj/item/trash/cigbutt/bugged/new_butt = new /obj/item/trash/cigbutt/bugged(T)
@@ -842,7 +840,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_MASK
 	overlay_on = "pipelit"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-	smoketime = 100
+	smoketime = 200
 
 /obj/item/clothing/mask/cigarette/pipe/light(var/flavor_text = "[usr] lights the [name].")
 	if(!src.lit)
@@ -930,7 +928,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/lightersound = list('sound/items/lighter1.ogg','sound/items/lighter2.ogg')
 	var/fuel = 20
 	var/fueltime
-	heat_production = 1500
+	heat_production = 10000
 	source_temperature = TEMPERATURE_FLAME
 	slot_flags = SLOT_BELT
 	var/list/unlit_attack_verb = list("prods", "pokes")

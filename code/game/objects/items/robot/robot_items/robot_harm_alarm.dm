@@ -21,10 +21,10 @@
 
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
-		if(R.cell.charge < 1200)
+		if(get_cell_charge(user) < 1200)
 			to_chat(user, "<span class='warning'>You don't have enough charge to do this!</span>")
 			return
-		R.cell.charge -= 1000
+		use_cell_charge(user,1000)
 		if(R.emagged)
 			safety = FALSE
 		if(R.connected_ai)

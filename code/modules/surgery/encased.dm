@@ -195,7 +195,7 @@
 	allowed_tools = list(
 		/obj/item/tool/bonegel = 100,
 		/obj/item/tool/bonesetter/bone_mender = 100,
-		/obj/item/tool/screwdriver = 75,
+		"screwdriver" = 75,
 		)
 
 	duration = 2 SECONDS

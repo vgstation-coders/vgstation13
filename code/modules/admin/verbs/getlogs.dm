@@ -122,27 +122,27 @@
 	feedback_add_details("admin_verb","VMAL")
 
 //Used by the other procs to actually send the selected logs to the user
-/proc/obtain_log(var/path = null, src)
-	if(path && src)
-		message_admins("[key_name_admin(src)] accessed file: [path]")
-		log_admin("[key_name(src)] accessed file: [path]")
+/proc/obtain_log(var/path = null, source)
+	if(path && source)
+		message_admins("[key_name_admin(source)] accessed file: [path]")
+		log_admin("[key_name(source)] accessed file: [path]")
 		#ifdef RUNWARNING
 		#if DM_VERSION > 506 && DM_VERSION < 508
 			#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
-		src << ftp(file(path))
+		source << ftp(file(path))
 		#else
 		var/method = alert("How do you want to get the logs?",,"Save to file","Open in notepad")
 		if(method == "Save to file")
-			src << ftp(file(path))
+			source << ftp(file(path))
 		else if(method == "Open in notepad")
-			src << run(file(path))
+			source << run(file(path))
 		#endif
 		#else
 		var/method = alert("How do you want to get the logs?",,"Save to file","Open in notepad")
 		if(method == "Save to file")
-			src << ftp(file(path))
+			source << ftp(file(path))
 		else if(method == "Open in notepad")
-			src << run(file(path))
+			source << run(file(path))
 		#endif
 	else
-		to_chat(src, "Error, no log file or src passed to obtain_log")
+		to_chat(source, "Error, no log file or src passed to obtain_log")

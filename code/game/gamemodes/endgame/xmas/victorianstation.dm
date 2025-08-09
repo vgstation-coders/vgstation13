@@ -17,10 +17,12 @@
 	var/target_zlevel = map.zMainStation
 	to_chat(map.zLevels[target_zlevel], "<span class='sinister'>There is a certain chill to the air, as bells ring faintly in the distance...</span>")
 	//Snow up the halls
+	var/list/snowed_areas = list()
 	for(var/A in typesof(/area/hallway))
 		var/area/to_snow = locate(A)
-		if(!to_snow)
+		if(!to_snow || (to_snow in snowed_areas))
 			continue
+		snowed_areas += to_snow
 		for(var/turf/simulated/floor/F in to_snow)
 			new /obj/structure/snow(F)
 			for(var/cdir in cardinal)

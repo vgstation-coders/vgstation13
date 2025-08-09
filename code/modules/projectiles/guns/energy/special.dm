@@ -84,28 +84,7 @@
 	origin_tech = null
 	clumsy_check = 0
 	honor_check = 0
-	var/charge_tick = 0
-
-
-/obj/item/weapon/gun/energy/staff/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/staff/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-
-/obj/item/weapon/gun/energy/staff/process()
-	charge_tick++
-	if(charge_tick < 4)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(200)
-	return 1
+	recharge_time = 4
 
 /obj/item/weapon/gun/energy/staff/update_icon()
 	return
@@ -215,88 +194,159 @@
 		P.status=setting
 	return 1
 
-/obj/item/weapon/gun/energy/staff/necro
+//This is not actually a real gun, but it doesn't behave as a gun so it's just a staff
+/obj/item/weapon/staff/necro
 	name = "staff of necromancy"
 	desc = "A wicked looking staff that pulses with evil energy."
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "necrostaff"
 	item_state = "necrostaff"
-	charge_tick = 0
-	var/charges = 3
-	var/raisetype = 0
-	var/next_change = 0
+	slot_flags = SLOT_BACK
+	w_class = W_CLASS_LARGE
+	var/charges = 30 //Zombification costs 10 charges
+	var/charge_limit = 30
+	var/list/necro_blacklist = list(
+		/mob/living/simple_animal/hostile/necro/zombie/leatherman, //You're not the boss of this gym
+	)
+//	var/raisetype = 0
+//	var/next_change = 0
 
-/obj/item/weapon/gun/energy/staff/necro/New()
+/obj/item/weapon/staff/necro/New()
 	..()
 	processing_objects.Add(src)
 
-/obj/item/weapon/gun/energy/staff/necro/Destroy()
+/obj/item/weapon/staff/necro/Destroy()
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/gun/energy/staff/necro/process()
-	if(islich(loc))
+/obj/item/weapon/staff/necro/process()
+	var/lich_user = islich(loc)
+	if(lich_user) //Liches are empowered just by holding onto it
 		var/mob/living/carbon/human/L = loc
 		L.adjustBruteLoss(-2)
-		charge_tick++
-	charge_tick++
-	if(charge_tick < 4)
-		return 0
-	charge_tick = 0
-	charges++
+	if(charges >= charge_limit)
+		return
+	var/charge_rate = islich(loc) ? 2 : 1
+	charges = min(charges + charge_rate, charge_limit)
 	return 1
 
-/obj/item/weapon/gun/energy/staff/necro/attack_self(mob/user)
-	if(next_change > world.timeofday)
-		to_chat(user, "<span class='warning'>You must wait longer to decide on a minion type.</span>")
-		return
-	raisetype = !raisetype
+/obj/item/weapon/staff/necro/examine(mob/user, size, show_name)
+	..()
+	to_chat(user, "<span class='notice'>It has [charges ? charges/10 : "no"] charges left.</span>")
+	if(iswizard(user))
+		var/datum/role/wizard/W = user.mind.GetRole(WIZARD)
+		to_chat(user, "<span class='notice'>[W.logo_image] This is a Staff of Necromancy! This staff allows you to turn most dead creatures into subservient undead.</span>")
+		to_chat(user, "<span class='notice'>Dead people will be controlled by their previous souls if they had any and they cannot harm you.</span>")
+		to_chat(user, "<span class='notice'>You can use the Staff of Necromancy on dead subservient undead to immediately bring them back to life at the cost of a charge.</span>")
+		to_chat(user, "<span class='notice'>You can use it on meat to create a walking piece of meat at the cost of only half a charge.</span>")
+		to_chat(user, "<span class='notice'>You can use it on most undead creatures not under your control to bring them under your control.</span>")
+		to_chat(user, "<span class='notice'>Becoming an undead lich yourself will unlock the staff's potential, recharging twice as fast and passively healing you of brute damage.</span>")
 
-	to_chat(user, "<span class='notice'>You will now raise [raisetype ? "skeletal" : "zombified"] minions from corpses.</span>")
-	next_change = world.timeofday + 30
 
-/obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/living/user = usr, flag, params, struggle = 0)
-	if(!charges || get_dist(target, user) > 7)
+//Commented out because skeletonizing people was basically removing them from the round instantly.
+//Can only raise zombies.
+///////////////////////////////////////////////////////
+// /obj/item/weapon/staff/necro/attack_self(mob/user)
+// 	if(next_change > world.timeofday)
+// 		to_chat(user, "<span class='warning'>You must wait longer to decide on a minion type.</span>")
+// 		return
+// 	raisetype = !raisetype
+
+// 	to_chat(user, "<span class='notice'>You will now raise [raisetype ? "skeletal" : "zombified"] minions from corpses.</span>")
+// 	next_change = world.timeofday + 30
+///////////////////////////////////////////////////////
+
+//Returning 0 will cause the staff to attack an object, 1 will cause it to not attack
+/obj/item/weapon/staff/necro/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(get_dist(target, user) > 7)
 		return 0
 	var/success = FALSE
+	var/charge_cost = 10 //Because some actions are less expensive to perform
+	var/turf/target_location = get_turf(target) //Because the original target could get deleted and it'd break the particle effects
 
-	if(ishuman(target))
-		success = TRUE
+	if(ishuman(target)) //Zombify a human
 		var/mob/living/carbon/human/H = target
-		if(H.stat)
-			if(raisetype)
+		if(H.InCritical() || (H.stat == DEAD)) //Unconscious or dead
+		///////////////////////////////////////////////////////
+			// if(raisetype)
+			// 	H.dropBorers()
+			// 	var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
+			// 	H.gib()
+			// 	spooky.faction = "\ref[user]"
+			// else
+		///////////////////////////////////////////////////////
+			if(charges >= charge_cost)
+				success = TRUE
+				if(H.stat)
+					if(H.locked_to)
+						H.locked_to = 0
+						H.anchored = 0
 				H.dropBorers()
-				var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
-				H.gib()
-				spooky.faction = "\ref[user]"
+				H.zombify(user, cannot_evolve = TRUE) //Necromancer zombies can't evolve
 			else
-				H.zombify(user)
+				to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")
+				return 1
 		else
-			success = FALSE
-			
-	else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/))
-		success = TRUE
-		var/mob/living/simple_animal/S = target
-		S.faction = "\ref[user]"
-	else if(isanimal(target) || ismonkey(target))
+			return 0 //Target is still alive, smack it
+
+	//Handle forcing the mob to switch allegiances to the necromancer, or reviving them immediately.
+	else if(istype(target, /mob/living/simple_animal/hostile/necro))
+		var/can_convert = TRUE
+		for(var/blacklisted_type in necro_blacklist)
+			if(istype(target, blacklisted_type))
+				can_convert = FALSE
+				break
+		if(can_convert)
+			if(charges >= charge_cost)
+				var/mob/living/simple_animal/S = target
+				if((S.faction == "\ref[user]") && (S.stat == DEAD)) //Bring them back if on the same side as the user
+					S.resurrect()
+					S.revive()
+					to_chat(user, "<span class='notice'>You rejuvenate \the dead [S], immediately bringing them back to life!</span>")
+					success = TRUE
+				else if(S.faction != "\ref[user]") //If not the same faction as the user, make it so
+					success = TRUE
+					S.faction = "\ref[user]"
+					to_chat(user, "<span class='notice'>You convert \the [S] to your side!</span>")
+				else
+					to_chat(user, "<span class='warning'>This undead creature already belongs to you!</span>")
+					return 1
+			else
+				to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")
+				return 1
+		else
+			return 0
+
+	else if(isanimal(target) || ismonkey(target)) //Any animal or monkey will become an animal ghoul if dead
 		var/mob/living/L = target
 		if(L.stat == DEAD)
-			success = TRUE
-			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(L), user)
-			mG.ghoulifyMeat(L)
-			mG.faction = "\ref[user]"
-			L.gib()
+			if(charges >= charge_cost)
+				success = TRUE
+				var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), user, L)
+				aG.ghoulifyAnimal(target)
+				aG.faction = "\ref[user]"
+				L.gib()
+			else
+				to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")
+				return 1
 		else
-			to_chat(user,"<span class = 'warning'>The creature must be dead before it can be undead.</span>")
-	else if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat))
-		var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), user, target)
-		success = TRUE
-		aG.ghoulifyAnimal(target)
-		aG.faction = "\ref[user]"
-		qdel(target)
+			return 0
+			//to_chat(user,"<span class = 'warning'>The creature must be dead before it can be undead.</span>")
+
+	else if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat)) //Meat can be turned into the undead
+		charge_cost = 5 //Meat is cheaper to raise
+		if(charges >= charge_cost)
+			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(target), user)
+			success = TRUE
+			mG.ghoulifyMeat(target)
+			mG.faction = "\ref[user]"
+			qdel(target)
+		else
+			to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")
+			return 1
 
 	if(success)
-		make_tracker_effects(get_turf(target), user)
+		make_tracker_effects(target_location, user)
 		if(iswizard(user) || isapprentice(user))
 			user.say(pick("ARISE, [pick("MY CREATION","MY MINION","CH'KUN")].",\
 			"BOW BEFORE [pick("MY POWER","ME, [uppertext(target.name)]")].",\
@@ -308,10 +358,9 @@
 			"YOUR TIME HAS NOT COME, YET.",\
 			"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
 		playsound(src, get_sfx("soulstone"), 50,1)
-		charges--
-
-/obj/item/weapon/gun/energy/staff/necro/attack(mob/living/target as mob, mob/living/user as mob)
-	afterattack(target,user,1)
+		charges -= charge_cost
+		return 1
+	return 0
 
 /obj/item/weapon/gun/energy/staff/destruction_wand
 	name = "wand of destruction"
@@ -432,132 +481,6 @@
 	else
 		projectile_type = initial(projectile_type)
 
-/obj/item/weapon/gun/energy/floragun
-	name = "floral somatoray"
-	desc = "A tool that discharges controlled radiation which induces mutation in plant cells."
-	icon_state = "floramut100"
-	item_state = null
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	charge_cost = 100
-	projectile_type = "/obj/item/projectile/energy/floramut"
-	origin_tech = Tc_MATERIALS + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=3"
-	mech_flags = null // So it can be scanned by the Device Analyser
-	modifystate = "floramut"
-	var/charge_tick = 0
-	var/mode = 1
-	var/list/genes = list(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_DEVELOPMENT, GENE_XENOPHYSIOLOGY)
-	var/emagged = FALSE
-	var/isSomatoraying = FALSE
-
-/obj/item/weapon/gun/energy/floragun/isHandgun()
-	return TRUE
-
-/obj/item/weapon/gun/energy/floragun/New()
-	..()
-	processing_objects.Add(src)
-
-/obj/item/weapon/gun/energy/floragun/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-/obj/item/weapon/gun/energy/floragun/process()
-	charge_tick++
-	if(charge_tick < 4)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
-	update_icon()
-	return 1
-
-/obj/item/weapon/gun/energy/floragun/attack_self(mob/living/user as mob)
-	//loops through all genes
-	mode = mode % length(genes) + 1
-	to_chat(user, "<span class='warning'>\The [src] is now set to modify [genes[mode]] traits.</span>")
-
-/obj/item/weapon/gun/energy/floragun/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isEmag(W) || issolder(W))
-		if (emagged)
-			to_chat(user, "The safeties are already de-activated.")
-		else
-			emagged = TRUE
-			projectile_type = "/obj/item/projectile/energy/floramut/emag"
-			to_chat(user, "<span class='warning'>You short out the safety limit of the [src.name]!</span>")
-			desc += " It seems to have it's safety features de-activated."
-			playsound(user, 'sound/effects/sparks4.ogg', 50, 1)
-			modifystate = "floraemag"
-			update_icon()
-
-/obj/item/weapon/gun/energy/floragun/attack(atom/movable/target, mob/living/user as mob)
-	afterattack(target,user,1)
-
-/obj/item/weapon/gun/energy/floragun/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
-	afterattack(target,user,1)
-
-/obj/item/weapon/gun/energy/floragun/afterattack(atom/movable/target, mob/living/user, flag, params, struggle = 0)
-	if(isSomatoraying)
-		return
-	isSomatoraying = TRUE
-	if(emagged)
-		if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
-			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
-			make_tracker_effects(get_turf(user), get_turf(tray))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
-			if(do_after(user,tray, 10))
-				for(var/gene in genes)
-					if(prob(50))
-						tray.mutate(gene)
-
-		if(ishuman(target))
-			var/mob/living/carbon/human/H = target
-			make_tracker_effects(get_turf(user), get_turf(H))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
-			if((H.species.flags & IS_PLANT))
-				H.apply_radiation((rand(10,30)),RAD_EXTERNAL)
-				H.Knockdown(5)
-				H.Stun(5)
-				user.show_message("<span class='warning'>[H] writhes in pain as \his vacuoles boil.</span>", 1, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
-			else
-				H.show_message("<span class='warning'>The radiation beam singes you!</span>")
-				if(prob(80))
-					randmutb(H)
-					domutcheck(H,null)
-				else
-					H.adjustFireLoss(rand(3, 10))
-					randmutg(H)
-					domutcheck(H,null)
-		if(istype(target, /obj/machinery/apiary))
-			var/obj/machinery/apiary/A = target
-			make_tracker_effects(get_turf(user), get_turf(A))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
-			A.angry_swarm()
-	else
-		if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
-			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
-			make_tracker_effects(get_turf(user), get_turf(tray))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
-			if(do_after(user,tray, 10))
-				if(prob(50))
-					tray.mutate((genes[mode]))
-		if(istype(target, /obj/machinery/apiary))
-			var/obj/machinery/apiary/A = target
-			make_tracker_effects(get_turf(user), get_turf(A))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
-			if(!A.yieldmod)
-				A.yieldmod += 1
-			else if (prob(1/(A.yieldmod * A.yieldmod) *100))//This formula gives you diminishing returns based on yield. 100% with 1 yield, decreasing to 25%, 11%, 6, 4, 2...
-				A.yieldmod += 1
-		if(ishuman(target))
-			var/mob/living/carbon/human/H = target
-			make_tracker_effects(get_turf(user), get_turf(H))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
-			if((H.species.flags & IS_PLANT) && (H.nutrition < 500))
-				H.nutrition += 30
-			else 
-				H.show_message("<span class='notice'>The radiation beam dissipates harmlessly through your body.</span>")
-	isSomatoraying = FALSE
-
 /obj/item/weapon/gun/energy/meteorgun
 	name = "meteor gun"
 	desc = "For the love of god, make sure you're aiming this the right way!"
@@ -568,30 +491,10 @@
 	charge_cost = 100
 	cell_type = "/obj/item/weapon/cell/potato"
 	clumsy_check = 0 //Admin spawn only, might as well let clowns use it.
-	var/charge_tick = 0
-	var/recharge_time = 5 //Time it takes for shots to recharge (in ticks)
-
-/obj/item/weapon/gun/energy/meteorgun/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/meteorgun/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-/obj/item/weapon/gun/energy/meteorgun/process()
-	charge_tick++
-	if(charge_tick < recharge_time)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
+	recharge_time = 5
 
 /obj/item/weapon/gun/energy/meteorgun/update_icon()
 	return
-
 
 /obj/item/weapon/gun/energy/meteorgun/pen
 	name = "meteor pen"
@@ -633,29 +536,54 @@
 	desc = "According to Nanotrasen accounting, this is mining equipment. It's been modified for extreme power output to crush rocks, but often serves as a miner's first defense against hostile alien life; it's not very powerful unless used in a low pressure environment."
 	icon_state = "kineticgun"
 	item_state = "kineticgun"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	fire_sound = 'sound/weapons/kinetic_accelerator.ogg'
 	projectile_type = "/obj/item/projectile/kinetic"
 	cell_type = "/obj/item/weapon/cell/crap"
 	charge_cost = 50
 	icon_charge_multiple = 20
+
+/obj/item/weapon/gun/energy/kinetic_accelerator/shotgun
+	name = "proto-kinetic pump-shotgun"
+	desc = "An upgraded proto-kinetic accelerator, with the ability to pump to reload."
+	icon_state = "kineticshotgun"
+	item_state = "kineticshotgun"
+	rechargeable = FALSE
+	charge_cost = 250
+	icon_charge_multiple = 50
+	clowned = CLOWNABLE
 	var/overheat = 0
-	var/recent_reload = 1
-/*
-/obj/item/weapon/gun/energy/kinetic_accelerator/shoot_live_shot()
-	overheat = 1
-	spawn(20)
-		overheat = 0
-		recent_reload = 0
-	..()
-*/
-/obj/item/weapon/gun/energy/kinetic_accelerator/attack_self(var/mob/living/user)
-	if(overheat || recent_reload)
+	var/pump_delay = 20 //cooldown after last real shot in decaseconds before reloading
+
+/obj/item/weapon/gun/energy/kinetic_accelerator/shotgun/attack_self(var/mob/living/user)
+	. = ..()
+	if(overheat)
+		to_chat(user, span_warning("The pump-recharger is still cooling down!"))
 		return
-	power_supply.give(500)
-	playsound(src.loc, 'sound/weapons/shotgunpump.ogg', 60, 1)
-	recent_reload = 1
+	overheat = 1
+	var/image/lightning_effect = image('icons/effects/effects.dmi', src, "shield2")
+	overlays += lightning_effect
+	spawn(5)
+		overlays -= lightning_effect
+	if(clowned == CLOWNED)
+		playsound(src.loc, 'sound/items/bikehorn.ogg', 50, 1)
+	else
+		playsound(src.loc, 'sound/weapons/shotgunpump.ogg', 50, 1)
+	power_supply.give(power_supply.maxcharge)
 	update_icon()
-	return
+	spawn(pump_delay)
+		overheat = 0
+
+/obj/item/weapon/gun/energy/kinetic_accelerator/shotgun/update_icon()
+	..()
+	if(clowned == CLOWNED)
+		fire_sound = 'sound/items/quack.ogg'
+		empty_sound = 'sound/items/quack.ogg'
+		hitsound = 'sound/items/bikehorn.ogg'
+	else
+		fire_sound = 'sound/weapons/kinetic_accelerator.ogg'
+		empty_sound = 'sound/weapons/empty.ogg'
+		hitsound = 'sound/weapons/smash.ogg'
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg
 	name = "proto-kinetic accelerator"
@@ -665,40 +593,9 @@
 	projectile_type = "/obj/item/projectile/kinetic"
 	cell_type = "/obj/item/weapon/cell/miningborg"
 	charge_cost = 50
-	var/charge_tick = 0
-
-/obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-/obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
-	charge_tick++
-	if(charge_tick < 3)
-		return 0
-	charge_tick = 0
-
-	if(!power_supply)
-		return 0 //sanity
-	if(isrobot(src.loc))
-		var/mob/living/silicon/robot/R = src.loc
-		if(R && R.cell)
-			R.cell.use(charge_cost) 		//Take power from the borg...
-			power_supply.give(charge_cost)	//... to recharge the shot
-
-	update_icon()
-	return 1
-
-/obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/restock()
-	if(power_supply.charge < power_supply.maxcharge)
-		power_supply.give(charge_cost)
-		update_icon()
-	else
-		charge_tick = 0
+	recharge_time = 3
+	recharges_borg_cell = TRUE
+	borg_restocks = TRUE
 
 /obj/item/weapon/gun/energy/radgun
 	name = "radgun"
@@ -708,31 +605,11 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	fire_sound = 'sound/weapons/radgun.ogg'
 	charge_cost = 100
-	var/charge_tick = 0
+	recharge_time = 4
 	projectile_type = "/obj/item/projectile/energy/rad"
 
 /obj/item/weapon/gun/energy/radgun/isHandgun()
 	return TRUE
-
-/obj/item/weapon/gun/energy/radgun/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/radgun/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-/obj/item/weapon/gun/energy/radgun/process()
-	charge_tick++
-	if(charge_tick < 4)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
-	update_icon()
-	return 1
 
 /obj/item/weapon/gun/energy/ricochet
 	name = "ricochet rifle"
@@ -901,27 +778,12 @@
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_POWERSTORAGE + "=4;" + Tc_COMBAT + "=5"
 	fire_delay = 0
 	projectile_type = "/obj/item/projectile/spur"
-	var/charge_tick = 0
-
-/obj/item/weapon/gun/energy/polarstar/spur/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/polarstar/spur/Destroy()
-	processing_objects.Remove(src)
-	..()
+	recharge_time = 2
 
 /obj/item/weapon/gun/energy/polarstar/spur/process()
-	charge_tick++
-	if(charge_tick < 2)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
-	levelChange()
-	return 1
+	. = ..()
+	if(.)
+		levelChange()
 
 #undef SPUR_FULL_POWER
 #undef SPUR_HIGH_POWER

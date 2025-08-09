@@ -1,0 +1,580 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/wall/syndicate,
+/area/vault/advanced_pocketsat)
+"b" = (
+/obj/machinery/vending/nazivend,
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"c" = (
+/obj/item/weapon/paper_bin{
+	pixel_x = -3;
+	pixel_y = 7
+	},
+/obj/item/weapon/pen,
+/obj/structure/table/reinforced,
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"d" = (
+/obj/machinery/computer/crew/selfpower,
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"e" = (
+/obj/machinery/turret/centcomm/syndie{
+	dir = 6
+	},
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"f" = (
+/turf/space,
+/area)
+"g" = (
+/obj/machinery/computer/security/selfpower,
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"h" = (
+/obj/item/weapon/circuitboard/autolathe,
+/obj/machinery/constructable_frame/machine_frame,
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"i" = (
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"j" = (
+/obj/machinery/vending/sovietvend,
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"k" = (
+/obj/structure/bed/chair/comfy/black,
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"l" = (
+/obj/machinery/vending/offlicence,
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"m" = (
+/obj/structure/table/reinforced,
+/obj/item/tool/surgicaldrill/diamond,
+/obj/item/tool/circular_saw/plasmasaw,
+/obj/item/stack/medical/advanced/ointment,
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"p" = (
+/obj/machinery/computer/teleporter,
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"q" = (
+/obj/machinery/sleeper,
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"r" = (
+/obj/machinery/turret/centcomm/syndie{
+	dir = 5
+	},
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"s" = (
+/obj/machinery/computer/arcade/syndicate,
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"t" = (
+/obj/structure/bed/chair/comfy/black{
+	dir = 8
+	},
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"u" = (
+/obj/machinery/turret/centcomm/syndie{
+	dir = 10
+	},
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"v" = (
+/obj/machinery/chem_dispenser/brewer/mapping{
+	pixel_x = -32;
+	density = 0
+	},
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"w" = (
+/obj/machinery/turret/centcomm/syndie{
+	dir = 9
+	},
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"x" = (
+/obj/item/weapon/folder,
+/obj/structure/table/reinforced,
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"z" = (
+/obj/structure/table/reinforced,
+/obj/item/tool/scalpel/laser/tier2,
+/obj/item/tool/retractor/manager,
+/obj/item/tool/hemostat/pico,
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"A" = (
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"B" = (
+/obj/structure/table/reinforced,
+/obj/machinery/recharger,
+/obj/item/weapon/gun/energy/gun,
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"C" = (
+/obj/machinery/chem_dispenser/booze_dispenser/mapping{
+	pixel_x = -32;
+	density = 0
+	},
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"E" = (
+/obj/structure/bed/chair/comfy/black{
+	dir = 1
+	},
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"F" = (
+/obj/machinery/teleport/station,
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"G" = (
+/obj/machinery/door/airlock/external/adv_pocketsat_entrance,
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"H" = (
+/obj/structure/bed/chair,
+/obj/item/device/radio/electropack,
+/obj/item/clothing/head/helmet,
+/obj/item/device/assembly/signaler,
+/obj/item/weapon/handcuffs/syndicate,
+/obj/item/weapon/reagent_containers/syringe/giant/chloral,
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"I" = (
+/obj/machinery/optable,
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"J" = (
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"L" = (
+/obj/structure/table/reinforced,
+/obj/machinery/station_map/strategic,
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"M" = (
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"N" = (
+/obj/machinery/computer/message_monitor,
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"O" = (
+/obj/structure/safe/floor/advanced_pocketsat,
+/obj/item/device/t_scanner/advanced,
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"P" = (
+/obj/machinery/chem_dispenser/mapping,
+/obj/item/weapon/storage/box/beakers,
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"Q" = (
+/obj/machinery/door_control{
+	name = "Satellite Door Control";
+	id_tag = "APS";
+	pixel_x = 24;
+	specialfunctions = 4;
+	normaldoorcontrol = 1
+	},
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"R" = (
+/obj/machinery/teleport/hub,
+/obj/machinery/turretid{
+	control_area = /area/vault/advanced_pocketsat;
+	pixel_x = 24
+	},
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"T" = (
+/obj/structure/rack,
+/obj/item/clothing/under/syndicate/executive,
+/obj/item/clothing/under/syndicate/combat,
+/obj/item/clothing/mask/gas/syndicate,
+/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical,
+/obj/item/clothing/gloves/swat/specops,
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating,
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating,
+/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating,
+/obj/item/weapon/storage/toolbox/syndicate,
+/obj/item/clothing/accessory/storage/bandolier,
+/obj/item/clothing/accessory/holster/handgun,
+/obj/item/clothing/shoes/jackboots,
+/obj/item/weapon/card/id/syndicate,
+/obj/item/device/pda/syndicate,
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"U" = (
+/obj/machinery/computer/operating/selfpower,
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+"V" = (
+/obj/machinery/chem_master,
+/obj/item/weapon/grenade/chem_grenade{
+	pixel_x = 8;
+	pixel_y = 4
+	},
+/obj/item/weapon/grenade/chem_grenade{
+	pixel_x = 8;
+	pixel_y = 4
+	},
+/obj/item/weapon/grenade/chem_grenade{
+	pixel_x = 8;
+	pixel_y = 4
+	},
+/obj/item/device/assembly/igniter{
+	pixel_y = -8
+	},
+/obj/item/device/assembly/igniter{
+	pixel_y = -8
+	},
+/obj/item/device/assembly/igniter{
+	pixel_y = -8
+	},
+/obj/item/device/assembly/timer{
+	pixel_x = -4;
+	pixel_y = 3
+	},
+/obj/item/device/assembly/timer{
+	pixel_x = -4;
+	pixel_y = 3
+	},
+/obj/item/device/assembly/timer{
+	pixel_x = -4;
+	pixel_y = 3
+	},
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"W" = (
+/obj/machinery/bodyscanner{
+	dir = 1
+	},
+/turf/simulated/floor/engine/plated{
+	icon_state = "dark"
+	},
+/area/vault/advanced_pocketsat)
+"X" = (
+/obj/structure/table/reinforced,
+/obj/item/tool/bonesetter/bone_mender,
+/obj/item/tool/FixOVein/clot,
+/obj/item/stack/medical/advanced/bruise_pack,
+/turf/simulated/floor/engine/plated,
+/area/vault/advanced_pocketsat)
+
+(1,1,1) = {"
+f
+f
+f
+f
+f
+a
+a
+a
+a
+a
+f
+f
+f
+f
+f
+"}
+(2,1,1) = {"
+f
+f
+a
+a
+a
+a
+d
+N
+g
+a
+a
+a
+a
+f
+f
+"}
+(3,1,1) = {"
+f
+a
+a
+l
+A
+C
+A
+t
+A
+v
+A
+i
+a
+a
+f
+"}
+(4,1,1) = {"
+f
+a
+i
+e
+A
+A
+A
+M
+A
+A
+A
+r
+j
+a
+f
+"}
+(5,1,1) = {"
+f
+a
+A
+A
+A
+A
+A
+H
+A
+A
+A
+A
+A
+a
+f
+"}
+(6,1,1) = {"
+a
+a
+s
+A
+A
+A
+A
+M
+A
+A
+A
+A
+P
+a
+a
+"}
+(7,1,1) = {"
+a
+a
+a
+i
+A
+A
+k
+c
+E
+A
+W
+A
+A
+p
+a
+"}
+(8,1,1) = {"
+G
+Q
+J
+M
+M
+M
+B
+L
+E
+M
+O
+M
+M
+F
+a
+"}
+(9,1,1) = {"
+a
+a
+a
+i
+A
+A
+k
+x
+E
+A
+q
+A
+A
+R
+a
+"}
+(10,1,1) = {"
+a
+a
+h
+A
+A
+A
+A
+M
+A
+A
+A
+A
+V
+a
+a
+"}
+(11,1,1) = {"
+f
+a
+A
+A
+A
+A
+A
+U
+A
+A
+A
+A
+A
+a
+f
+"}
+(12,1,1) = {"
+f
+a
+i
+u
+A
+A
+A
+I
+A
+A
+A
+w
+T
+a
+f
+"}
+(13,1,1) = {"
+f
+a
+a
+b
+A
+A
+A
+M
+A
+A
+A
+i
+a
+a
+f
+"}
+(14,1,1) = {"
+f
+f
+a
+a
+a
+a
+z
+X
+m
+a
+a
+a
+a
+f
+f
+"}
+(15,1,1) = {"
+f
+f
+f
+f
+f
+a
+a
+a
+a
+a
+f
+f
+f
+f
+f
+"}

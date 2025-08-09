@@ -356,6 +356,10 @@
 				name = "cocaine baggie"
 				desc = "You feel stimulated just by looking at it."
 				icon_state = "cocaine_[pick(1,2,3)]"
+			if(METHAMPHETAMINE)
+				name = "meth baggie"
+				desc = pick("Guess I got what I deserve...", "Kept you waiting there too long my love...", "All that time without a word...", "Didn't know you'd think that I'd forget? Or I'd regret...", "The special love I had for you...", "My Baby Blue...", "I AM the danger.", "I AM the one who KNOCKS!", "We use a different process but it is every bit as pure.")
+				icon_state = "meth"
 			if(HYPERZINE)
 				name = "hyperzine bottle"
 				desc = "Abuse with caution."
@@ -759,6 +763,8 @@
 					// Worst case scenario, the empty packet will appear on the ground.
 
 /obj/item/weapon/reagent_containers/food/condiment/small/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
+	if(loc && istype(loc,/obj/item/weapon/switchtool/swiss_army_knife/dan)) //special handling necessary, which sucks
+		return
 	if(reagents.reagent_list.len > 0)
 		condiment_overlay = null
 		overlay_colored = FALSE

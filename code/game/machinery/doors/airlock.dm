@@ -59,7 +59,7 @@
 	explosion_block = 1
 
 	emag_cost = 1 // in MJ
-	machine_flags = SCREWTOGGLE | WIREJACK
+	machine_flags = SCREWTOGGLE | WIREJACK | EMAGGABLE
 	animation_delay = 5
 
 	hack_abilities = list(
@@ -504,9 +504,10 @@ About the new airlock wires panel:
 	else
 		icon_state = "door_open"
 
-	return
+	update_moody_light(icon, "[icon_state]-moody")
 
 /obj/machinery/door/airlock/door_animate(var/animation)
+	kill_moody_light()
 	switch(animation)
 		if("opening")
 			if(overlays)
@@ -526,12 +527,34 @@ About the new airlock wires panel:
 			flick("door_spark", src)
 		if("deny")
 			flick("door_deny", src)
-	return
+
+	var/area/here = get_area(src)
+	if (here && here.dynamic_lighting)
+		switch(animation)
+			if("opening")
+				if(panel_open)
+					anim(target = src, a_icon = icon, flick_anim = "o_door_opening-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
+				else
+					anim(target = src, a_icon = icon, flick_anim = "door_opening-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
+			if("closing")
+				if(panel_open)
+					anim(target = src, a_icon = icon, flick_anim = "o_door_closing-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
+				else
+					anim(target = src, a_icon = icon, flick_anim = "door_closing-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
+			if("spark")
+				anim(target = src, a_icon = icon, flick_anim = "door_spark-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
+			if("deny")
+				anim(target = src, a_icon = icon, flick_anim = "door_deny-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
+
+
 
 /obj/machinery/door/airlock/attack_ai(mob/user as mob)
 	if(!allowed(user) && !isobserver(user))
 		return //So i heard you tried to interface with doors you have no access to
 	src.add_hiddenprint(user)
+	//Cyborgs can still walk into the airlocks.
+	if(is_pulselocked(user))
+		return
 	if(isAI(user))
 		if(!src.canAIControl(user))
 			if(src.canAIHack())
@@ -635,7 +658,7 @@ About the new airlock wires panel:
 			t1 += text("<A href='?src=\ref[];aiDisable=7'>Close door</a><br>\n", src)
 
 	t1 += text("<p><a href='?src=\ref[];close=1'>Close</a></p>\n", src)
-	user << browse(t1, "window=airlock")
+	user << browse(HTML_SKELETON(t1), "window=airlock")
 	onclose(user, "airlock")
 
 //aiDisable - 1 idscan, 2 disrupt main power, 3 disrupt backup power, 4 drop door bolts, 5 un-electrify door, 7 close door
@@ -644,6 +667,8 @@ About the new airlock wires panel:
 
 //Migrated from onclick
 /obj/machinery/door/airlock/AIAltClick() // Eletrifies doors.
+	if(is_pulselocked(usr))
+		return
 	if(allowed(usr))
 		if(!secondsElectrified)
 			// permenant shock
@@ -653,6 +678,8 @@ About the new airlock wires panel:
 			Topic("aiDisable=5", list("aiDisable"="5"), 1)
 
 /obj/machinery/door/airlock/AICtrlClick() // Bolts doors
+	if(is_pulselocked(usr))
+		return
 	if(allowed(usr))
 		if(locked)
 			Topic("aiEnable=4", list("aiEnable"="4"), 1)
@@ -660,6 +687,8 @@ About the new airlock wires panel:
 			Topic("aiDisable=4", list("aiDisable"="4"), 1)
 
 /obj/machinery/door/airlock/AIShiftClick()  // Opens and closes doors!
+	if(is_pulselocked(usr))
+		return
 	if(allowed(usr))
 		if(density)
 			Topic("aiEnable=7", list("aiEnable"="7"), 1)
@@ -673,6 +702,8 @@ About the new airlock wires panel:
 		break
 
 /obj/machinery/door/airlock/AIMiddleShiftClick()  // Turn safeties on and off
+	if(is_pulselocked(usr))
+		return
 	if(allowed(usr))
 		if(!safe)
 			Topic("aiEnable=8", list("aiEnable"="8"), 1)
@@ -1303,7 +1334,7 @@ About the new airlock wires panel:
 			I.playtoolsound(loc, 100)
 			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 			// TODO: refactor the called proc
-			to_chat(user, "<span class='notice'>You removed the airlock electronics!</span>")
+			to_chat(user, "<span class='notice'>You removed the access electronics!</span>")
 			revert(user,null)
 			qdel(src)
 			return
@@ -1330,8 +1361,8 @@ About the new airlock wires panel:
 						to_chat(user, "<span class='warning'>You need to be wielding \the [F] to do that.</span>")
 				else
 					spawn(0)	close(1)
-	else if (istype(I, /obj/item/weapon/card/emag))
-		emag_act(src)
+	else if(emag_check(I,user))
+		return
 	else if(istype(I, /obj/item/stack/rods) && boltsDestroyed)
 		var/obj/item/stack/rods/rawd=I
 		if(rawd.amount <4)
@@ -1604,5 +1635,5 @@ About the new airlock wires panel:
 		aiControlDisabled = 0
 
 /obj/machinery/door/airlock/tackled(mob/living/carbon/human/user)
-	if(ishuman(user) && istype(user.wear_id, /obj/item/weapon/card/emag))
-		emag_act()
+	if(ishuman(user))
+		emag_check(user.wear_id,user)

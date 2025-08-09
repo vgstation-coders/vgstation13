@@ -6,7 +6,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 2000, MAT_GLASS = 500, MAT_URANIUM = 500)
 	category = "Misc"
-	build_path = /obj/item/weapon/gun/energy/floragun
+	build_path = /obj/item/floral_somatoray
 
 /datum/design/janicart_upgrade
 	name = "Janicart Upgrade Module"
@@ -87,6 +87,16 @@
 	req_tech = list(Tc_PROGRAMMING = 1)
 	materials = list(MAT_GLASS = 300, MAT_IRON = 500)
 	category = "Misc"
+
+/datum/design/lockbox
+	name = "Empty Lockbox"
+	desc = "An empty lockbox with pre installed access electronics."
+	id = "lockbox"
+	req_tech = list(Tc_MATERIALS = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_PLASMA = 1000, MAT_IRON = 1875)
+	category = "Misc"
+	build_path = /obj/item/weapon/storage/lockbox/unlockable
 
 /datum/design/dses
 	name = "Deep Space Exploration System"

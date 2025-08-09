@@ -59,7 +59,7 @@
 					"Deposit 100$ and get 300$ totally free!", \
 					" 100K NT.|WOWGOLD �nly $89            <HOT>", \
 					"We have been filed with a complaint from one of your customers in respect of their business relations with you.", \
-					"We kindly ask you to open the COMPLAINT REPORT (attached) to reply on this complaint..")
+					"We kindly ask you to open the COMPLAINT REPORT (attached) to reply on this complaint.")
 				if(4)
 					sender = pick("Buy Dr. Maxman", "Having dysfuctional troubles?")
 					message = pick("DR MAXMAN: REAL Doctors, REAL Science, REAL Results!", \

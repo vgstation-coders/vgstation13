@@ -169,7 +169,7 @@
 			update_name()
 
 
-	//Adding airlock electronics for access. Step 6 complete.
+	//Adding access electronics for access. Step 6 complete.
 	if(istype(W, /obj/item/weapon/circuitboard/airlock) && anchored)
 		var/obj/item/weapon/circuitboard/airlock/AE = W
 		if(AE.icon_state =="door_electronics_smoked")
@@ -188,7 +188,7 @@
 			update_name()
 			user.drop_item(AE, src, force_drop = 1)
 
-	//Screwdriver to remove airlock electronics. Step 6 undone.
+	//Screwdriver to remove access electronics. Step 6 undone.
 	if(W.is_screwdriver(user) && (anchored && electronics))
 		W.playtoolsound(src, 100)
 		user.visible_message("[user] removes the [electronics] from [src].", "You start to uninstall [electronics] from [src].")

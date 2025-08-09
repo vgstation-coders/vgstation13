@@ -210,6 +210,8 @@ var/const/INGEST = 2
 		var/current_reagent_transfer = current_reagent.volume * part
 		if(preserve_data)
 			trans_data = current_reagent.data
+		if(current_reagent.id in reagents_to_always_log)
+			log_transfer = TRUE
 		if(log_transfer)
 			logged_message += "[current_reagent_transfer]u of [current_reagent.name]"
 			if(current_reagent.id in reagents_to_log)
@@ -616,10 +618,11 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	total_thermal_mass = get_thermal_mass()
 	return 0
 
-/datum/reagents/proc/clear_reagents()
+/datum/reagents/proc/clear_reagents(var/preserve_unremovable=FALSE)
 	amount_cache.len = 0
 	for(var/datum/reagent/R in reagent_list)
-		del_reagent(R.id,update_totals=0)
+		if( !(preserve_unremovable && (R.flags & CHEMFLAG_NOTREMOVABLE)) )
+			del_reagent(R.id,update_totals=0)
 	// Only call ONCE. -- N3X
 	update_total()
 	if(my_atom)
@@ -709,7 +712,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		warning("[usr] tried to equalize the temperature of a thermally-massless mixture.")
 		return T0C+20 //Sanity but this shouldn't happen.
 
-/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20, var/temp_adj = 0, var/mob/admin, var/list/additional_data=null)
+/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20, var/temp_adj = 0, var/mob/admin, var/list/additional_data=null, var/name_override = null)
 	if(!my_atom)
 		return 0
 	if(!amount)
@@ -720,7 +723,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(total_volume + amount > maximum_volume)
 		amount = (maximum_volume - total_volume) //Doesnt fit in. Make it disappear. Shouldn't happen. Will happen.
 	for (var/datum/reagent/R in reagent_list)
-		if (R.id == reagent)
+		if (R.id == reagent) //target already has reagent in their system
 
 			//Equalize temperatures
 			chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap * CC_PER_U)
@@ -736,37 +739,36 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			return 0
 
 	var/datum/reagent/D = chemical_reagents_list[reagent]
-	if(D)
-
-		var/datum/reagent/R = new D.type()
-
-		//Equalize temperatures
-		if(!total_volume)
-			chem_temp = reagtemp//adding reagents to an empty container? reset chem_temp
-		chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap * CC_PER_U)
-
-		reagent_list += R
-		R.holder = src
-		R.handle_data_copy(data, amount, admin)
-		if (additional_data)
-			R.handle_additional_data(additional_data)
-		R.volume = amount
-		if (temp_adj)
-			R.adj_temp = temp_adj
-
-		R.on_introduced()
-
-		update_total()
-		handle_special_behaviours()
-		my_atom.on_reagent_change()
-		handle_reactions()
-		return 0
-	else
+	if(!D)
 		warning("[my_atom] attempted to add a reagent called '[reagent]' which doesn't exist. ([usr])")
+		handle_reactions()
+		return 1
 
+	//target does not have the reagent in their system
+	var/datum/reagent/R = new D.type()
+	//Equalize temperatures
+	if(!total_volume)
+		chem_temp = reagtemp//adding reagents to an empty container? reset chem_temp
+	chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap * CC_PER_U)
+
+	reagent_list += R
+	R.holder = src
+	if(name_override)
+		R.name = name_override
+	R.handle_data_copy(data, amount, admin)
+	if (additional_data)
+		R.handle_additional_data(additional_data)
+	R.volume = amount
+	if (temp_adj)
+		R.adj_temp = temp_adj
+
+	R.on_introduced()
+
+	update_total()
+	handle_special_behaviours()
+	my_atom.on_reagent_change()
 	handle_reactions()
-
-	return 1
+	return 0
 
 /datum/reagents/proc/handle_special_behaviours()
 	for (var/datum/reagent/R in reagent_list)
@@ -915,6 +917,11 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /datum/reagents/proc/get_reagent_amount(var/reagent)
 	return amount_cache[reagent] + 0 //Convert null to 0.
 
+/datum/reagents/proc/get_reagent_amounts(var/list/input_reagents)
+	. = 0
+	for(var/i in input_reagents)
+		. += get_reagent_amount(i)
+
 /datum/reagents/proc/get_reagents()
 	var/res = ""
 	for(var/datum/reagent/A in reagent_list)
@@ -976,7 +983,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	reagent_list.Cut()
 
 	if(my_atom)
-		my_atom.reagents = null
+		// Sometimes atoms use /datum/reagents internal vars which are NOT their actual reagents datums
+		// This causes them to hard-del because the atom.reagents is nulled early in the Destroy() chain
+		// And is never deleted properly.
+		// The proper fix is of course to rework how datum/reagents work but I'll not do that.
+		if (my_atom.reagents == src)
+			my_atom.reagents = null
 		my_atom = null
 	..()
 
@@ -1069,9 +1081,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if (istype(my_atom,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) && reagent_list.len)
 		to_chat(user, "<span class='info'>It contains [total_volume] units of what looks like [get_master_reagent_name()].</span>")
 		return
-	to_chat(user, "It contains:")
 	if(!user.hallucinating())
 		if(reagent_list.len)
+			to_chat(user, "It contains:")
 			for(var/datum/reagent/R in reagent_list)
 				if(blood_type && R.id == BLOOD)
 					var/type = R.data["blood_type"]
@@ -1079,9 +1091,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				else
 					to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
 		else
-			to_chat(user, "<span class='info'>Nothing.</span>")
+			if (istype(my_atom,/obj/machinery/portable_atmospherics/hydroponics))
+				to_chat(user, "It contains <span class='info'>no reagents</span>.")//I mean, there's probably a big ass plant in there.
+			else
+				to_chat(user, "It contains <span class='info'>nothing</span>.")
 
 	else //Show stupid things to hallucinating mobs
+		to_chat(user, "It contains:")
 		var/list/fake_reagents = list("Water", "Orange juice", "Banana juice", "Tungsten", "Chloral Hydrate", "Helium",\
 			"Sea water", "Energy drink", "Gushin' Granny", "Salt", "Sugar", "something yellow", "something red", "something blue",\
 			"something suspicious", "something smelly", "something sweet", "Soda", "something that reminds you of home",\
@@ -1095,17 +1111,30 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 ///////////////////////////////////////////////////////////////////////////////////
 
-
+/*
+  * Helper proc that gets a default name from a reagent ID.
+  */
 /proc/reagent_name(id)
 	var/datum/reagent/D = chemical_reagents_list[id]
 	if(D)
 		return D.name
 
 /*
+  * Helper proc that gets a default description from a reagent ID.
+  */
+/proc/reagent_info(id)
+	var/datum/reagent/D = chemical_reagents_list[id]
+	if(D)
+		return D.description
+
+/*
  * Convenience proc to create a reagents holder for an atom
  * max_vol is maximum volume of holder
  */
 /atom/proc/create_reagents(const/max_vol)
+	if (reagents)
+		stack_trace("double reagents creation for [type]")
+		QDEL_NULL(reagents)
 	reagents = new/datum/reagents(max_vol)
 	reagents.my_atom = src
 

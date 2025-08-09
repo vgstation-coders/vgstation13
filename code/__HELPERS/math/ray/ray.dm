@@ -18,9 +18,9 @@
 
 /ray
 	var/z //the z-level we are casting our ray in
-	var/vector/origin //the origin of the ray
-	var/vector/origin_floored //the floored origin vector
-	var/vector/direction //direction of the ray
+	var/_vector/origin //the origin of the ray
+	var/_vector/origin_floored //the floored origin vector
+	var/_vector/direction //direction of the ray
 	var/original_damage //original damage of the ray when applicable
 	var/turf/final_turf
 	var/turf/previous_turf
@@ -29,7 +29,7 @@
 	return "\[Ray\](\n- origin = " + origin.toString() + "\n- origin_floored = "+ origin_floored.toString() + "\n- direction = " + direction.toString() + "\n- z-level = " + num2text(z) + "\n)"
 
 //use atom2vector for the origin, atoms2vector for the direction
-/ray/New(var/vector/p_origin, var/vector/p_direction, var/z)
+/ray/New(var/_vector/p_origin, var/_vector/p_direction, var/z)
 	origin = p_origin
 	origin_floored = origin.floored() //to save us from calculating it all over again
 	direction = p_direction.chebyshev_normalized()
@@ -53,7 +53,7 @@
 	return hitsPoint(other_ray.origin)
 
 //returns true if point is on our ray (can be called with a max distance)
-/ray/proc/hitsPoint(var/vector/point, var/max_distance = 0)
+/ray/proc/hitsPoint(var/_vector/point, var/max_distance = 0)
 	if(origin.equals(point)) //the easy way out
 		return TRUE
 
@@ -73,23 +73,23 @@
 // wrong?
 /ray/proc/getReboundOnAtom(var/rayCastHit/hit)
 	//calc where we hit the atom
-	var/vector/hit_point = hit.point_raw
+	var/_vector/hit_point = hit.point_raw
 	var/atom/movable/resolved_hit_atom = hit.hit_atom?.get()
-	var/vector/hit_atom_loc = atom2vector(resolved_hit_atom) + new /vector(0.5, 0.5)
+	var/_vector/hit_atom_loc = atom2vector(resolved_hit_atom) + new /_vector(0.5, 0.5)
 
-	var/vector/hit_vector = hit_point - hit_atom_loc
+	var/_vector/hit_vector = hit_point - hit_atom_loc
 
 	//we assume every atom is a octogonal, hence we use all_vectors
 	//here we calculate the "face" of the octagonal atom we want to rebound on
 	var/entry_byond_dir = vector2ClosestDir(hit_vector)
-	var/vector/entry_dir = dir2vector(entry_byond_dir)
+	var/_vector/entry_dir = dir2vector(entry_byond_dir)
 
 	return src.direction.mirrorWithNormal(entry_dir)
 
 
 //gets a point along the ray
 /ray/proc/getPoint(var/distance)
-	var/vector/path = direction * distance
+	var/_vector/path = direction * distance
 	return origin + path
 
 //inherit and override this for costum logic
@@ -101,15 +101,15 @@
 //returns list of raycasthits
 /ray/proc/cast(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/max_hits = RAY_CAST_UNLIMITED_HITS, var/ignore_origin = TRUE)
 	//calculating a step and its distance to use in the loop
-	var/vector/a_step = direction * RAY_CAST_STEP
+	var/_vector/a_step = direction * RAY_CAST_STEP
 	var/step_distance = a_step.chebyshev_norm()
 
 	//setting up our pointer and distance to track where we are
-	var/vector/pointer = new /vector(0,0)
+	var/_vector/pointer = new /_vector(0,0)
 	var/distance = 0
 
 	//positions list to easier check if we already found this position (since we are moving in tiny steps, not full numbers)
-	var/list/vector/positions = list()
+	var/list/_vector/positions = list()
 
 	//our result
 	var/list/rayCastHit/hits = list()
@@ -124,12 +124,12 @@
 		distance += step_distance
 
 		//calculating our current position in world space (its two lines cause byond)
-		var/vector/new_position_unfloored = origin + pointer
-		var/vector/new_position = new_position_unfloored.floored()
+		var/_vector/new_position_unfloored = origin + pointer
+		var/_vector/new_position = new_position_unfloored.floored()
 
 		//check if we already checked this (floored) vector
 		var/exists = FALSE
-		for(var/vector/V in positions)
+		for(var/_vector/V in positions)
 			if(V.equals(new_position))
 				exists = TRUE
 		if(exists)
@@ -191,14 +191,14 @@ var/list/ray_draw_icon_cache = list()
 	var/angle = direction.toAngle()
 	var/max_distance = draw_distance - distance_from_endpoint
 	while(distance_pointer < max_distance)
-		var/vector/point
+		var/_vector/point
 		if(distance_pointer > max_distance - step_size) //last loop
 			point = getPoint(max_distance - step_size)
 		else
 			point = getPoint(distance_pointer)
-		var/vector/point_floored = point.floored()
+		var/_vector/point_floored = point.floored()
 
-		var/vector/pixels = (point - point_floored - new /vector(0.5, 0.5)) * WORLD_ICON_SIZE
+		var/_vector/pixels = (point - point_floored - new /_vector(0.5, 0.5)) * WORLD_ICON_SIZE
 
 		var/turf/T = locate(point_floored.x, point_floored.y, z)
 

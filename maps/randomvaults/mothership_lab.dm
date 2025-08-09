@@ -119,10 +119,6 @@
 	explosion_block = 9999
 	walltype = "alloy"
 
-/turf/unsimulated/wall/ayy/canSmoothWith() // SMOOTH DAT WALL
-	var/static/list/smoothables = list(/turf/unsimulated/wall/ayy)
-	return smoothables
-
 /turf/unsimulated/wall/r_rock
 	name = "riveted porous rock"
 	desc = "Asteroid rock reinforced by a wall with massive rivets embedded in the struts."
@@ -130,10 +126,6 @@
 	icon_state = "rock_rf"
 	explosion_block = 9999
 	walltype = "rock_rf"
-
-/turf/unsimulated/wall/r_rock/canSmoothWith() // SMOOTH DAT WALL
-	var/static/list/smoothables = list(/turf/unsimulated/wall/r_rock)
-	return smoothables
 
 //////////////////////////////
 // FLOORS (Some ayy-themed floors, with walking sound effects!)
@@ -146,19 +138,16 @@
 	temperature = T20C
 	plane = PLATING_PLANE
 
+/turf/unsimulated/floor/ayy/New()
+	..()
+	footstep_sound = sounds_ayy
+
+
 /turf/unsimulated/floor/ayy/Entered(atom/A, atom/OL) // Ayy alloy tiles play walking sound effects!
 	..()
 	if(istype(A,/mob/living/simple_animal))
 		var/mob/living/simple_animal/L = A
 		if(L.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
-			if(prob(50))
-				playsound(src, 'sound/effects/metal_walk.ogg', 50, 0)
-			else
-				playsound(src, 'sound/effects/metal_walk2.ogg', 50, 0)
-
-	if(istype(A,/mob/living/carbon))
-		var/mob/living/carbon/M = A
-		if(M.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
 			if(prob(50))
 				playsound(src, 'sound/effects/metal_walk.ogg', 50, 0)
 			else
@@ -193,18 +182,12 @@
 	if(istype(A,/mob/living/simple_animal))
 		var/mob/living/simple_animal/L = A
 		if(L.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
-			if(prob(50))
-				playsound(src, 'sound/effects/sand_walk1.ogg', 50, 0)
-			else
-				playsound(src, 'sound/effects/sand_walk2.ogg', 50, 0)
+			playsound(src, "sand", 50, 0)
 
 	if(istype(A,/mob/living/carbon))
 		var/mob/living/carbon/M = A
 		if(M.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
-			if(prob(50))
-				playsound(src, 'sound/effects/sand_walk1.ogg', 50, 0)
-			else
-				playsound(src, 'sound/effects/sand_walk2.ogg', 50, 0)
+			playsound(src, "sand", 50, 0)
 
 /turf/unsimulated/floor/lab_asteroid
 	name = "Asteroid"
@@ -702,7 +685,7 @@
 	can_only_hold = list(
 		"/obj/item/weapon/gun/energy/smalldisintegrator",
 		"/obj/item/weapon/gun/energy/ionrifle/ioncarbine/ionpistol",
-		"/obj/item/weapon/melee/stunprobe",
+		"/obj/item/weapon/melee/baton/stunprobe",
 		"/obj/item/device/flash",
 		"/obj/item/weapon/grenade",
 		"/obj/item/weapon/handcuffs",
@@ -979,390 +962,61 @@
 // AYY-THEMED STUN BATON (I tried several times to make this a child of the stun baton, but couldn't get it to play nice with the sprites. My apologies for what you're about to see)
 //////////////////////////////
 
-/obj/item/weapon/melee/stunprobe
+/obj/item/weapon/melee/baton/stunprobe
 	name = "stun probe"
 	desc = "An unusual baton used by MDF pacifiers. Less than lethal, not quite nonlethal."
 	icon_state = "stun probe"
 	item_state = "s_probe0"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	flags = FPRINT
-	slot_flags = SLOT_BELT
-	force = 10
-	throwforce = 7
-	w_class = W_CLASS_MEDIUM
 	origin_tech = Tc_COMBAT + "=3" + Tc_POWERSTORAGE + "=2"
-	attack_verb = list("beats")
-	var/status = 0
-	var/obj/item/weapon/cell/bcell = null
-	var/hitcost = 50 // 20 stuns with integrated cell, but can't upgrade or remove it. Doesn't have a normal baton's vulnerability to emp blasts. Compatible with rechargers
-	var/stunsound = 'sound/weapons/electriczap.ogg'
-	var/swingsound = "swing_hit"
+	hitcost = 50 // 20 stuns with integrated cell, but can't upgrade or remove it. Doesn't have a normal baton's vulnerability to emp blasts. Compatible with rechargers
+	can_swap_cell = FALSE
+	has_stun_message = FALSE
+	stunsound = 'sound/weapons/electriczap.ogg'
 
-/obj/item/weapon/melee/stunprobe/get_cell()
-	return bcell
-
-/obj/item/weapon/melee/stunprobe/suicide_act(var/mob/living/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is putting the live [src.name] in \his mouth! It looks like \he's trying to commit suicide.</span>")
-	return (SUICIDE_ACT_FIRELOSS)
-
-/obj/item/weapon/melee/stunprobe/New() // Should always start with a cell integrated
+/obj/item/weapon/melee/baton/stunprobe/New() // Should always start with a cell integrated
 	..()
 	bcell = new(src)
 	bcell.charge=bcell.maxcharge // Charge this shit
 	update_icon()
 
-/obj/item/weapon/melee/stunprobe/Destroy()
-	if (bcell)
-		QDEL_NULL(bcell)
+/obj/item/weapon/melee/baton/stunprobe/canbehonkified()
+	return FALSE
 
-	return ..()
-
-/obj/item/weapon/melee/stunprobe/proc/deductcharge(var/chrgdeductamt)
-	if(bcell)
-		if(bcell.use(chrgdeductamt))
-			if(bcell.charge < hitcost)
-				status = 0
-				update_icon()
-				depower()
-			return 1
-		else
-			status = 0
-			update_icon()
-			depower()
-			return 0
-
-/obj/item/weapon/melee/stunprobe/update_icon()
-	if(status)
-		icon_state = "[initial(name)]_active"
-		item_state = "s_probe1"
-	else if(!bcell)
-		icon_state = "[initial(name)]_nocell"
-		item_state = "s_probe0"
-	else
-		icon_state = "[initial(name)]"
-		item_state = "s_probe0"
-
-	if (istype(loc,/mob/living/carbon))
-		var/mob/living/carbon/M = loc
-		M.update_inv_back()
-		M.update_inv_hands()
-
-/obj/item/weapon/melee/stunprobe/examine(mob/user)
-	..()
-	if(bcell)
-		to_chat(user, "<span class='info'>The probe is [round(bcell.percent())]% charged.</span>")
-	if(!bcell)
-		to_chat(user, "<span class='warning'>The probe does not have a power source installed.</span>")
-
-/obj/item/weapon/melee/stunprobe/proc/shockAttack(mob/living/carbon/human/target) // The main difference between this and a stun baton. It uses an electric shock attack, so genetics can make a player resistant
+/obj/item/weapon/melee/baton/stunprobe/apply_baton_effect(mob/living/L) // The main difference between this and a stun baton. It uses an electric shock attack, so genetics can make a player resistant
 	var/damage = rand(5, 10)
-	target.electrocute_act(damage, src, incapacitation_duration = 20 SECONDS, def_zone = LIMB_CHEST) // 20 code seconds is more like 10 real seconds, thus making the stun equal to the stun baton
-	if(iscarbon(target))
-		var/mob/living/L = target
-		L.apply_effect(10, STUTTER)
-	return
-
-/obj/item/weapon/melee/stunprobe/attack_self(mob/user)
-	if(status && clumsy_check(user) && prob(50))
-		user.simple_message("<span class='warning'>You grab the [src] on the wrong side.</span>",
-			"<span class='danger'>The [name] blasts you with its power!</span>")
-		shockAttack(user)
-		playsound(loc, "sparks", 75, 1, -1)
-		deductcharge(hitcost)
-		return
-	if(bcell && bcell.charge >= hitcost)
-		status = !status
-		user.simple_message("<span class='notice'>[src] is now [status ? "on" : "off"].</span>",
-			"<span class='notice'>[src] is now [pick("drowsy","hungry","thirsty","bored","unhappy")].</span>")
-		playsound(loc, "sparks", 75, 1, -1)
-		update_icon()
+	if(ishuman(L))
+		var/mob/living/carbon/human/H = L
+		H.electrocute_act(damage, src, incapacitation_duration = 20 SECONDS, def_zone = LIMB_CHEST) // 20 code seconds is more like 10 real seconds, thus making the stun equal to the stun baton
 	else
-		status = 0
-		if(!bcell)
-			user.simple_message("<span class='warning'>[src] does not have a power source!</span>",
-				"<span class='warning'>[src] has no pulse and its soul has departed...</span>")
-		else if (bcell.maxcharge < hitcost)
-			to_chat(user, "<span class='warning'>[src] clicks but nothing happens. Something must be wrong with the battery.</span>")
-		else
-			user.simple_message("<span class='warning'>[src] is out of charge.</span>",
-				"<span class='warning'>[src] refuses to obey you.</span>")
-
-	add_fingerprint(user)
-
-/obj/item/weapon/melee/stunprobe/attack(mob/M, mob/user)
-	if(status && clumsy_check(user) && prob(50))
-		user.simple_message("<span class='danger'>You accidentally hit yourself with [src]!</span>",
-			"<span class='danger'>The [name] goes mad!</span>")
-		shockAttack(user)
-		deductcharge(hitcost)
-		return
-
-	if(isrobot(M))
-		..()
-		return
-	if(!isliving(M))
-		return
-
-	var/mob/living/L = M
-
-	if(user.a_intent == I_HURT) // Harm intent : possibility to miss (in exchange for doing actual damage)
-		. = ..() // Does the actual damage and missing chance. Returns null on sucess ; 0 on failure (blame oldcoders)
-		playsound(loc, swingsound, 50, 1, -1)
-
-	else
-		if(!status) // Help intent + no charge = nothing
-			L.visible_message("<span class='attack'>\The [L] has been prodded with \the [src] by \the [user]. Luckily it was off.</span>",
-				self_drugged_message="<span class='warning'>\The [name] decides to spare this one.</span>")
-			return
-
+		L.electrocute_act(damage, src)
 	if(iscarbon(L))
-		var/mob/living/carbon/C = L
-		if(C.check_shields(force,src))
-			return FALSE //That way during a harmbaton it will not check for the shield twice
-
-	if(status && . != FALSE) // This is charged : we stun
-		user.lastattacked = L
-		L.lastattacker = user
-
-		shockAttack(L)
-		playsound(loc, stunsound, 50, 1, -1)
-
-		deductcharge(hitcost)
-
-		L.forcesay(hit_appends)
-
-		user.attack_log += "\[[time_stamp()]\]<font color='red'> Zapped [L.name] ([L.ckey]) with [name]</font>"
-		L.attack_log += "\[[time_stamp()]\]<font color='orange'> Zapped by [user.name] ([user.ckey]) with [name]</font>"
-		log_attack("<font color='red'>[user.name] ([user.ckey]) zapped [L.name] ([L.ckey]) with [name]</font>" )
-		M.assaulted_by(user)
-
-/obj/item/weapon/melee/stunprobe/throw_impact(atom/hit_atom)
-	if(prob(50))
-		return ..()
-	if(!isliving(hit_atom) || !status)
-		return
-	var/client/foundclient = directory[ckey(fingerprintslast)]
-	var/mob/foundmob = foundclient.mob
-	var/mob/living/L = hit_atom
-	if(foundmob && ismob(foundmob))
-		foundmob.lastattacked = L
-		L.lastattacker = foundmob
-
-	shockAttack(L)
-	playsound(loc, stunsound, 50, 1, -1)
-
-	deductcharge(hitcost)
-
-	L.forcesay(hit_appends)
-
-	foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Zapped [L.name] ([L.ckey]) with [name]</font>"
-	L.attack_log += "\[[time_stamp()]\]<font color='orange'> Zapped by thrown [src] by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""])</font>"
-	log_attack("<font color='red'>Flying [src.name], thrown by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) zapped [L.name] ([L.ckey])</font>" )
-	L.assaulted_by(foundmob)
-
-/obj/item/weapon/melee/stunprobe/emp_act(severity)
-	if(bcell)
-		deductcharge(1000 / severity)
-		if(bcell.reliability != 100 && prob(50/severity))
-			bcell.reliability -= 10 / severity
-	..()
-
-/obj/item/weapon/melee/stunprobe/restock()
-	if(bcell)
-		bcell.charge = bcell.maxcharge
-
-/obj/item/weapon/melee/stunprobe/proc/depower()
-	force = initial(force)
-	throwforce = initial(throwforce)
+		L.apply_effect(10, STUTTER)
 
 //////////////////////////////
-// AYY SINKS, TOILETS, AND SHOWERS (Only attainable via the vault and bussing for now. Coders forgive me for this terrible copy-paste apocalypse.)
+// AYY SINKS, TOILETS, AND SHOWERS (Only attainable via the vault and bussing for now)
 //////////////////////////////
 
 //Idea: Items placed in the cistern of this thing should just melt
-/obj/structure/acidtoilet
+/obj/structure/toilet/acid
 	name = "acid toilet"
 	desc = "The WD-451, a torque rotation-based, waste disposal unit for small matter. This one seems remarkably acidic."
-	icon = 'icons/obj/acidcloset.dmi'
 	icon_state = "acidtoilet00"
-	density = 0
-	anchored = 1
-	var/state = 0			//1 if rods added; 0 if not
-	var/open = 0			//if the lid is up
-	var/cistern = 0			//if the cistern bit is open
-	var/w_items = 0			//the combined w_class of all the items in the cistern
-	var/mob/living/swirlie = null	//the mob being given a swirlie
-	var/obj/item/weapon/reagent_containers/glass/beaker/acid/acidsource = null
+	watertype = /obj/item/weapon/reagent_containers/glass/beaker/acid
+	base_icon = "acidtoilet"
 
-/obj/structure/acidtoilet/New()
-	. = ..()
-	open = round(rand(0, 1))
-	acidsource = new /obj/item/weapon/reagent_containers/glass/beaker/acid()
-	update_icon()
-
-/obj/structure/acidtoilet/verb/empty_container_into()
-	set name = "Empty container into"
-	set category = "Object"
-	set src in oview(1)
-
-	if(!usr || !isturf(usr.loc))
-		return
-	if(!open)
-		to_chat(usr, "<span class='warning'>\The [src] is closed!</span>")
-		return
-	var/obj/item/weapon/reagent_containers/container = usr.get_active_hand()
-	if(!istype(container))
-		to_chat(usr, "<span class='warning'>You need a reagent container in your active hand to do that.</span>")
-		return
-	return container.drain_into(usr, src)
-
-/obj/structure/acidtoilet/AltClick()
-	if(Adjacent(usr))
-		return empty_container_into()
-	return ..()
-/obj/structure/acidtoilet/attack_hand(mob/living/user)
-	if(user.attack_delayer.blocked())
-		return
-	if(swirlie)
-		user.delayNextAttack(1 SECONDS)
-		swirlie.visible_message("<span class='danger'>[user] slams the toilet seat onto [swirlie.name]'s head!</span>", "<span class='userdanger'>[user] slams the toilet seat onto your head!</span>", "You hear reverberating porcelain.")
-		swirlie.apply_damage(8, BRUTE, LIMB_HEAD, used_weapon = name)
-		playsound(src, 'sound/weapons/tablehit1.ogg', 50, TRUE)
-		add_attacklogs(user, swirlie, "slammed the toilet seat", admin_warn=FALSE)
-		add_fingerprint(user)
-		add_fingerprint(swirlie)
-		return
-
-	if(cistern && !open)
-		if(!contents.len)
-			to_chat(user, "<span class='notice'>The cistern is empty.</span>")
-			return
-		else
-			var/obj/item/I = pick(contents)
-			if(ishuman(user))
-				user.put_in_hands(I)
-			else
-				I.forceMove(get_turf(src))
-			to_chat(user, "<span class='notice'>You find \an [I] in the cistern.</span>")
-			w_items -= I.w_class
-			return
-
-	open = !open
-	update_icon()
-
-/obj/structure/acidtoilet/update_icon()
-	icon_state = "acidtoilet[open][cistern]"
-
-/obj/structure/acidtoilet/attackby(obj/item/I as obj, mob/living/user as mob)
-	if(I.is_wrench(user))
-		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
-		anchored = !anchored
-	if(!anchored)
-		return
-	if(open && cistern && state == NORODS && istype(I,/obj/item/stack/rods)) //State = 0 if no rods
-		var/obj/item/stack/rods/R = I
-		if(R.amount < 2)
-			return
-		to_chat(user, "<span class='notice'>You add the rods to the toilet, creating flood avenues.</span>")
-		R.use(2)
-		state = RODSADDED //State 0 -> 1
-		return
-	if(open && cistern && state == RODSADDED && istype(I,/obj/item/weapon/paper)) //State = 1 if rods are added
-		to_chat(user, "<span class='notice'>You create a filter with the paper and insert it.</span>")
-		var/obj/structure/centrifuge/C = new /obj/structure/centrifuge(src.loc)
-		C.dir = src.dir
-		qdel(I)
-		qdel(src)
-		return
-	if(iscrowbar(I) || istype(I,/obj/item/weapon/chisel))
-		to_chat(user, "<span class='notice'>You start to [cistern ? "replace the lid on the cistern" : "lift the lid off the cistern"].</span>")
-		playsound(loc, 'sound/effects/stonedoor_openclose.ogg', 50, 1)
-		if(do_after(user, src, 30))
-			user.visible_message("<span class='notice'>[user] [cistern ? "replaces the lid on the cistern" : "lifts the lid off the cistern"]!</span>", "<span class='notice'>You [cistern ? "replace the lid on the cistern" : "lift the lid off the cistern"]!</span>", "You hear grinding porcelain.")
-			cistern = !cistern
-			update_icon()
-			return
-
-	if(istype(I, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = I
-
-		if(isliving(G.affecting))
-			var/mob/living/GM = G.affecting
-
-			if(G.state>1)
-				if(GM.loc != get_turf(src))
-					to_chat(user, "<span class='warning'>[GM.name] needs to be on the toilet.</span>")
-					return
-				if(open && !swirlie)
-					GM.visible_message("<span class='danger'>[user] starts to place [GM.name]'s head inside \the [src].</span>", "<span class='userdanger'>[user] is placing your head inside \the [src]!</span>")
-					swirlie = GM
-					if(do_after(user, src, 3 SECONDS, needhand = FALSE))
-						GM.forcesay(list("-BLERGH", "-BLURBL", "-HURGBL"))
-						playsound(src, 'sound/misc/toilet_flush.ogg', 50, TRUE)
-						GM.visible_message("<span class='danger'>[user] gives [GM.name] a swirlie!</span>", "<span class='userdanger'>[user] gives you a swirlie!</span>", "You hear a toilet flushing.")
-						add_fingerprint(user)
-						add_fingerprint(GM)
-						acidsource.reagents.reaction(GM, TOUCH)
-
-						if(!GM.internal && GM.losebreath <= 30)
-							GM.losebreath += 5
-							add_attacklogs(user, GM, "gave a swirlie to", admin_warn=FALSE)
-						else
-							add_attacklogs(user, GM, "gave a swirle with no effect to", admin_warn=FALSE)
-					swirlie = null
-				else
-					if(user.attack_delayer.blocked())
-						return
-					user.delayNextAttack(1 SECONDS)
-					GM.visible_message("<span class='danger'>[user] slams [GM.name] into \the [src]!</span>", "<span class='userdanger'>[user] slams you into \the [src]!</span>")
-					GM.adjustBruteLoss(8)
-					playsound(src, 'sound/weapons/tablehit1.ogg', 50, TRUE)
-					add_attacklogs(user, GM, "slammed into the toilet", admin_warn=FALSE)
-					add_fingerprint(user)
-					add_fingerprint(GM)
-					return
-			else
-				to_chat(user, "<span class='warning'>You need a tighter grip.</span>")
-		return
-
-	if(cistern)
-		if(I.w_class > W_CLASS_MEDIUM)
-			to_chat(user, "<span class='notice'>\The [I] does not fit.</span>")
-			return
-		if(w_items + I.w_class > W_CLASS_HUGE)
-			to_chat(user, "<span class='notice'>The cistern is full.</span>")
-			return
-		if(user.drop_item(I, src))
-			w_items += I.w_class
-			to_chat(user, "You carefully place \the [I] into the cistern.")
-			return
-
-/obj/structure/acidtoilet/bite_act(mob/user)
-	user.simple_message("<span class='notice'>That would be disgusting.</span>", "<span class='info'>You're not high enough for that... Yet.</span>") //Second message 4 hallucinations
-
-/obj/machinery/acidshower // Acid showers have an effect called "vapor" instead of mist, and they have a tendency to melt things left under them too long
+/obj/machinery/shower/acid // Acid showers have an effect called "vapor" instead of mist, and they have a tendency to melt things left under them too long
 	name = "acid shower"
 	desc = "The CB-762. Installed by the Mothership's Hygiene Division."
 	icon = 'icons/obj/acidcloset.dmi'
 	icon_state = "acidshower"
 	icon_state_open = "acidshower_t"
-	density = 0
-	anchored = 1
-	use_power = 0
-	var/on = 0
-	var/obj/effect/acidvapor/myvapor = null
-	var/isvapor = 0
-	var/acidtemp = "normal" //cold, normal, or boiling
-	var/obj/item/weapon/reagent_containers/glass/beaker/acid/acidsource = null
-
-	machine_flags = SCREWTOGGLE
-
-	ghost_read = 0
-	ghost_write = 0
-
-/obj/machinery/acidshower/New()
-	..()
-	acidsource = new /obj/item/weapon/reagent_containers/glass/beaker/acid()
+	watertype = /obj/item/weapon/reagent_containers/glass/beaker/acid
+	misttype = /obj/effect/acidvapor
+	overlay_state = "acid"
+	reagent_refill = SACID
+	coldtemp = -60
+	hottemp = 137
+	clean_power = 0
 
 /obj/effect/acidvapor
 	name = "acid vapor"
@@ -1372,382 +1026,12 @@
 	anchored = 1
 	mouse_opacity = 0
 
-/obj/machinery/acidshower/togglePanelOpen(var/obj/toggleitem, var/mob/user)
-	if(on)
-		to_chat(user, "<span class='warning'>You need to turn off \the [src] first.</span>")
-		return
-	..()
-
-/obj/machinery/acidshower/attack_hand(mob/M as mob)
-	if(..())
-		return
-	if(panel_open)
-		to_chat(M, "<span class='warning'>\The [src]'s maintenance hatch needs to be closed first.</span>")
-		return
-	if(!anchored)
-		to_chat(M, "<span class='warning'>\The [src] needs to be bolted to the floor to work.</span>")
-		return
-
-	on = !on
-	M.visible_message("<span class='notice'>[M] turns \the [src] [on ? "on":"off"]</span>", \
-					  "<span class='notice'>You turn \the [src] [on ? "on":"off"]</span>")
-	update_icon()
-	if(on)
-		for(var/atom/movable/G in get_turf(src))
-			G.clean_blood()
-
-/obj/machinery/acidshower/attackby(obj/item/I as obj, mob/user as mob)
-
-	..()
-
-	if(I.type == /obj/item/device/analyzer)
-		to_chat(user, "<span class='notice'>The acid's temperature seems to be [acidtemp].</span>")
-	if(panel_open) //The panel is open
-		if(I.is_wrench(user))
-			user.visible_message("<span class='warning'>[user] begins to adjust \the [src]'s temperature valve with \a [I.name].</span>", \
-								 "<span class='notice'>You begin to adjust \the [src]'s temperature valve with \a [I.name].</span>")
-			if(do_after(user, src, 50))
-				switch(acidtemp)
-					if("normal")
-						acidtemp = "cold"
-					if("cold")
-						acidtemp = "searing hot"
-					if("searing hot")
-						acidtemp = "normal"
-				I.playtoolsound(src, 100)
-				user.visible_message("<span class='warning'>[user] adjusts \the [src]'s temperature with \a [I.name].</span>",
-				"<span class='notice'>You adjust \the [src]'s temperature with \a [I.name], the acid is now [acidtemp].</span>")
-				add_fingerprint(user)
-	else
-		if(I.is_wrench(user))
-			user.visible_message("<span class='warning'>[user] starts adjusting the bolts on \the [src].</span>", \
-								 "<span class='notice'>You start adjusting the bolts on \the [src].</span>")
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
-			if(do_after(user, src, 50))
-				if(anchored)
-					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
-								 "<span class='notice'>You unbolt \the [src] from the floor.</span>")
-					on = 0
-					anchored = 0
-					update_icon()
-				else
-					src.visible_message("<span class='warning'>[user] bolts \the [src] to the floor.</span>", \
-								 "<span class='notice'>You bolt \the [src] to the floor.</span>")
-					anchored = 1
-
-/obj/machinery/acidshower/update_icon()	//This handles the acid overlay when the shower is on, and makes the vapor appear after a while
-	overlays.len = 0
-	if(myvapor)
-		QDEL_NULL(myvapor)
-
-	if(on)
-		var/image/acid = image('icons/obj/acidcloset.dmi', src, "acid", BELOW_OBJ_LAYER, dir)
-		acid.plane = relative_plane(ABOVE_HUMAN_PLANE)
-		overlays += acid
-		if(acidtemp == "cold") //No vapor if the acid is cold
-			return
-		if(!isvapor)
-			spawn(50)
-				if(src && on)
-					isvapor = 1
-					myvapor = new /obj/effect/acidvapor(get_turf(src))
-		else
-			isvapor = 1
-			myvapor = new /obj/effect/acidvapor(get_turf(src))
-	else if(isvapor)
-		isvapor = 1
-		myvapor = new /obj/effect/acidvapor(get_turf(src))
-		spawn(250)
-			if(src && !on)
-				QDEL_NULL(myvapor)
-				isvapor = 0
-
-/obj/machinery/acidshower/Crossed(atom/movable/O)
-	..()
-	wash(O)
-
-//Yes, showers are super powerful as far as washing goes
-//Shower cleaning has been nerfed (no, really). 75 % chance to clean everything on each tick
-//You'll have to stay under it for a bit to clean every last noggin
-
-#define ACID_CLEANSE_PROB 75 //Percentage
-
-/obj/machinery/acidshower/proc/wash(atom/movable/O as obj|mob)
-	if(!on)
-		return
-
-	if(iscarbon(O))
-		var/mob/living/carbon/M = O
-		for(var/obj/item/I in M.held_items)
-			if(prob(ACID_CLEANSE_PROB))
-				I.clean_blood()
-				M.update_inv_hand(M.is_holding_item(I))
-		if(M.back && prob(ACID_CLEANSE_PROB))
-			if(M.back.clean_blood())
-				M.update_inv_back(0)
-		if(ishuman(M))
-			var/mob/living/carbon/human/H = M
-			var/washgloves = 1
-			var/washshoes = 1
-			var/washmask = 1
-			var/washears = 1
-			var/washglasses = 1
-
-			if(H.wear_suit)
-				washgloves = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDEGLOVES, 0, H.wear_suit.body_parts_visible_override))
-				washshoes = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDESHOES, 0, H.wear_suit.body_parts_visible_override))
-
-			if(H.head)
-				washmask = !(is_slot_hidden(H.head.body_parts_covered, HIDEMASK, 0, H.head.body_parts_visible_override))
-				washglasses = !(is_slot_hidden(H.head.body_parts_covered, HIDEEYES, 0, H.head.body_parts_visible_override))
-				washears = !(is_slot_hidden(H.head.body_parts_covered, HIDEEARS, 0, H.head.body_parts_visible_override))
-
-			if(H.wear_mask)
-				if(washears)
-					washears = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEARS, 0, H.wear_mask.body_parts_visible_override))
-				if(washglasses)
-					washglasses = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEYES, 0, H.wear_mask.body_parts_visible_override))
-
-			if(H.head)
-				if(prob(ACID_CLEANSE_PROB) && H.head.clean_blood())
-					H.update_inv_head(0)
-			if(H.wear_suit)
-				if(prob(ACID_CLEANSE_PROB) && H.wear_suit.clean_blood())
-					H.update_inv_wear_suit(0)
-			else if(H.w_uniform)
-				if(prob(ACID_CLEANSE_PROB) && H.w_uniform.clean_blood())
-					H.update_inv_w_uniform(0)
-			if(H.gloves && washgloves)
-				if(prob(ACID_CLEANSE_PROB) && H.gloves.clean_blood())
-					H.update_inv_gloves(0)
-			if(H.shoes && washshoes)
-				if(prob(ACID_CLEANSE_PROB) && H.shoes.clean_blood())
-					H.update_inv_shoes(0)
-			if(H.wear_mask && washmask)
-				if(prob(ACID_CLEANSE_PROB) && H.wear_mask.clean_blood())
-					H.update_inv_wear_mask(0)
-			if(H.glasses && washglasses)
-				if(prob(ACID_CLEANSE_PROB) && H.glasses.clean_blood())
-					H.update_inv_glasses(0)
-			if(H.ears && washears)
-				if(prob(ACID_CLEANSE_PROB) && H.ears.clean_blood())
-					H.update_inv_ears(0)
-			if(H.belt)
-				if(prob(ACID_CLEANSE_PROB) && H.belt.clean_blood())
-					H.update_inv_belt(0)
-		else
-			if(M.wear_mask) //If the mob is not human, it cleans the mask without asking for bitflags
-				if(prob(ACID_CLEANSE_PROB) && M.wear_mask.clean_blood())
-					M.update_inv_wear_mask(0)
-	else
-		if(prob(ACID_CLEANSE_PROB))
-			O.clean_blood()
-
-	var/turf/turf = get_turf(src)
-	if(prob(ACID_CLEANSE_PROB))
-		turf.clean_blood()
-		for(var/obj/effect/E in turf)
-			if(istype(E, /obj/effect/rune_legacy) || istype(E, /obj/effect/decal/cleanable) || istype(E, /obj/effect/overlay))
-				qdel(E)
-
-/obj/machinery/acidshower/process()
-	if(!on)
-		return
-	for(var/atom/movable/O in loc)
-		if(iscarbon(O))
-			var/mob/living/carbon/C = O
-			check_heat(C)
-		wash(O)
-		acidsource.reagents.reaction(O, TOUCH)
-		if(istype(O, /obj/item/weapon/reagent_containers/glass))
-			var/obj/item/weapon/reagent_containers/glass/G = O
-			G.reagents.add_reagent(SACID, 5)
-	acidsource.reagents.reaction(get_turf(src), TOUCH)
-
-/obj/machinery/acidshower/proc/check_heat(mob/living/carbon/C as mob)
-	if(!on)
-		return
-
-	//Note : Remember process() rechecks this, so the mix/max procs slowly increase/decrease body temperature
-	//To-Do: Maybe add more sanity to the temperatures that sulphuric acid can reasonably reach? Freezing point is a big offender, since acid freezes at 10 degrees celsius
-	if(acidtemp == "cold") //Down to -60 degree Celsius, basically the inverse in temperature extremes compared to the normal shower
-		C.bodytemperature = max(T0C - 60, C.bodytemperature - 1)
-		return
-	if(acidtemp == "searing hot") //Up to 137 degree Celsius. Boiling hot and corrosive! Nice
-		C.bodytemperature = min(T0C + 137, C.bodytemperature + 3) // Any less than +3 and it doesn't actually heat above normal body temp
-		return
-	if(acidtemp == "normal") //Adjusts towards "perfect" body temperature, 37.5 degree Celsius. Actual showers tend to average at 40 degree Celsius, but it's the future
-		if(C.bodytemperature > T0C + 37.5) //Cooling down
-			C.bodytemperature = max(T0C + 37.5, C.bodytemperature - 1)
-			return
-		if(C.bodytemperature < T0C + 37.5) //Heating up
-			C.bodytemperature = min(T0C + 37.5, C.bodytemperature + 1)
-			return
-
-/obj/machinery/acidshower/npc_tamper_act(mob/living/L)
-	attack_hand(L)
-
-//Idea: Maybe make it melt more items if you try to clean them
-/obj/structure/acidsink
+/obj/structure/sink/acid
 	name = "acid sink"
+	desc = "A sink used for washing one's hands and face. This one seems to use acid instead of water."
 	icon = 'icons/obj/acidcloset.dmi'
 	icon_state = "acidsink"
-	desc = "A sink used for washing one's hands and face. This one seems to use acid instead of water."
-	anchored = 1
-	var/busy = 0 	//Something's being washed at the moment
-
-/obj/structure/acidsink/verb/empty_container_into()
-	set name = "Empty container into"
-	set category = "Object"
-	set src in oview(1)
-
-	if(!usr || !isturf(usr.loc))
-		return
-	var/obj/item/weapon/reagent_containers/container = usr.get_active_hand()
-	if(!istype(container))
-		to_chat(usr, "<span class='warning'>You need a reagent container in your active hand to do that.</span>")
-		return
-	return container.drain_into(usr, src)
-
-/obj/structure/acidsink/AltClick()
-	if(Adjacent(usr))
-		return empty_container_into()
-	return ..()
-
-/obj/structure/acidsink/attack_hand(mob/M as mob)
-	if(isrobot(M) || isAI(M))
-		return
-
-	if(!Adjacent(M))
-		return
-
-	if(!anchored)
-		return
-
-	if(busy)
-		to_chat(M, "<span class='warning'>Someone's already washing here.</span>")
-		return
-
-	to_chat(usr, "<span class='notice'>You start washing your hands.</span>")
-
-	busy = 1
-	sleep(40)
-	busy = 0
-
-	if(!Adjacent(M))
-		return		//Person has moved away from the sink
-
-	M.clean_blood()
-	if(ishuman(M))
-		M:update_inv_gloves()
-		var/mob/living/carbon/human/HM = M
-
-		if(HM.gloves) //This should make it so anyone who isn't wearing gloves and isn't an ayy will get some burns
-			to_chat(M, "<span class='warning'>Your gloves block direct contact with the acid.</span>")
-		if(!HM.gloves)
-			if(HM.species && HM.species.anatomy_flags & ACID4WATER)
-				to_chat(HM, "<span class='notice'>You feel the pleasant sensation of acid on your hands.</span>")
-			else
-				to_chat(M, "<span class='warning'>The acid burns your hands!</span>")
-				HM.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
-				HM.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
-
-	for(var/mob/V in viewers(src, null))
-		V.show_message("<span class='notice'>[M] washes their hands using \the [src].</span>")
-
-/obj/structure/acidsink/mop_act(obj/item/weapon/mop/M, mob/user) //It will melt your mop if you try to wet it here!
-	if(busy)
-		return 1
-	user.visible_message("<span class='notice'>[user] puts \the [M] underneath the running acid.","<span class='notice'>You put \the [M] underneath the running acid.</span>")
-	busy = 1
-	sleep(40)
-	busy = 0
-	user.visible_message("<span class='danger'>\The [M] melts under the flow of the acid!</span>")
-	var/turf/T = get_turf(user)
-	new /obj/effect/decal/cleanable/molten_item(T)
-	user.drop_item(M, force_drop = 1)
-	qdel(M)
-
-/obj/structure/acidsink/attackby(obj/item/O as obj, mob/user as mob)
-	if(busy)
-		to_chat(user, "<span class='warning'>Someone's already washing here.</span>")
-		return
-
-	if(O.is_wrench(user))
-		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
-		anchored = !anchored
-	if(!anchored)
-		return
-
-	if(istype(O, /obj/item/weapon/mop))
-		return
-
-	if (istype(O, /obj/item/weapon/reagent_containers))
-		var/obj/item/weapon/reagent_containers/RG = O
-		if(RG.reagents.total_volume >= RG.reagents.maximum_volume)
-			to_chat(user, "<span class='warning'>\The [RG] is full.</span>")
-			return
-		if (istype(RG, /obj/item/weapon/reagent_containers/chempack)) //Chempack can't use amount_per_transfer_from_this, so it needs its own if statement.
-			var/obj/item/weapon/reagent_containers/chempack/C = RG
-			C.reagents.add_reagent(SACID, C.fill_amount)
-		else
-			RG.reagents.add_reagent(SACID, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
-		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill the [RG] using \the [src].</span>")
-		return
-
-	if(istype(O,/obj/item/trash/plate))
-		var/obj/item/trash/plate/the_plate = O
-		the_plate.clean = TRUE
-		O.update_icon()
-
-	else if (istype(O, /obj/item/weapon/melee/baton))
-		var/obj/item/weapon/melee/baton/B = O
-		if (B.bcell && B.bcell.charge > 0 && B.status == 1)
-			flick("baton_active", src)
-			user.Stun(10)
-			user.stuttering = 10
-			user.Knockdown(10)
-			if(isrobot(user))
-				var/mob/living/silicon/robot/R = user
-				R.cell.charge -= 20
-			else
-				B.deductcharge(1)
-			user.visible_message( \
-				"<span class='warning'>[user] was stunned by \his wet [O.name]!</span>", \
-				"<span class='warning'>You have wet \the [O.name], it shocks you!</span>")
-			return
-
-	else if (istype(O, /obj/item/weapon/pen/fountain))
-		..()
-		var/obj/item/weapon/pen/fountain/P = O
-		if (P.bloodied)
-			to_chat(user, "<span class='notice'>You clean the blood out of the nib of \the [P].</span>")
-			P.colour = "black"
-			P.bloodied = FALSE
-
-	if (!isturf(user.loc))
-		return
-
-	if (isitem(O))
-		to_chat(user, "<span class='notice'>You start washing \the [O].</span>")
-		busy = TRUE
-
-		if (do_after(user,src, 40))
-			O.clean_blood()
-			if(O.current_glue_state == GLUE_STATE_TEMP)
-				O.unglue()
-			user.visible_message( \
-				"<span class='notice'>[user] washes \the [O] using \the [src].</span>", \
-				"<span class='notice'>You wash \the [O] using \the [src].</span>")
-			..()
-
-		busy = FALSE
-
-/obj/structure/acidsink/npc_tamper_act(mob/living/L)
-	if(istype(L, /mob/living/simple_animal/hostile/gremlin))
-		visible_message("<span class='danger'>\The [L] climbs into \the [src] and turns the faucet on!</span>")
-
-		var/mob/living/simple_animal/hostile/gremlin/G = L
-		G.divide()
-
-	return NPC_TAMPER_ACT_NOMSG
+	clean_power = 0
+	dissolver = PACID
+	reagent = SACID
+	reagent_name = "acid"

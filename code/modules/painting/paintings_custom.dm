@@ -65,7 +65,7 @@
 	var/datum/painting_utensil/p = new(user, W)
 	if (p.palette.len)
 		if (protected_by_glass)
-			to_chat(usr, "<span class='warning'>\the [name]'s glass cover stops you from painting on it.</span>")
+			to_chat(usr, "<span class='warning'>\The [name]'s glass cover stops you from painting on it.</span>")
 		else
 			painting_data.interact(user, p)
 
@@ -130,7 +130,7 @@
 	// Cleaning
 	if (istype(W, /obj/item/weapon/soap) && !protected_by_glass)
 		if (protected_by_glass)
-			to_chat(usr, "<span class='warning'>\the [name]'s glass cover stops you from cleaning it off.</span>")
+			to_chat(usr, "<span class='warning'>\The [name]'s glass cover stops you from cleaning it off.</span>")
 		else
 			to_chat(usr, "<span class='warning'>You start cleaning \the [name].</span>")
 			if (do_after(user, src, 20))
@@ -151,7 +151,7 @@
 		if (do_after(user, src, 6))
 			if (protected_by_glass)
 				protected_by_glass = FALSE
-				to_chat(usr, "<span class='warning'>\the [name]'s glass cover pops out and breaks!.</span>")
+				to_chat(usr, "<span class='warning'>\The [name]'s glass cover pops out and breaks!.</span>")
 				playsound(src, "shatter", 50, TRUE)
 				var/obj/item/stack/sheet/glass/glass/GS = new(user.loc, 1)
 				materials.removeAmount(GS.mat_type, GS.perunit)
@@ -168,7 +168,7 @@
 	// Protecting with glass
 	if (istype(W, /obj/item/stack/sheet/glass/glass) && !protected_by_glass)
 		if (!framed)
-			to_chat(usr, "<span class='warning'>\the [name] needs a frame to hold the glass sheet.</span>")
+			to_chat(usr, "<span class='warning'>\The [name] needs a frame to hold the glass sheet.</span>")
 		else
 			var/obj/item/stack/sheet/glass/glass/GS = W
 			GS.use(1)
@@ -214,7 +214,9 @@
 		name = (painting_data.title ? ("\proper[painting_data.title]") : "untitled artwork") + (painting_data.author ? ", [comp ? "[comp] " : ""]by [painting_data.author]" : "[comp ? ", [comp]" : ""]")
 		desc = painting_data.description ? "A small plaque reads: \"<span class='info'>[painting_data.description]\"</span>" : "A painting... But what could it mean?"
 		if (painting_data.copy)
-			desc += "A tag on this artwork indicates that it's a replica reproduced from Nanotrasen's databanks."
+			desc += "\nA tag on this artwork indicates that it's a replica reproduced from Nanotrasen's databanks. "
+			if (painting_data.copy == PAINTING_OC_MODIFIED_COPY)
+				desc += "Seems like someone gave it a fresh coat of paint..."
 		if (render)
 			icon = painting_data.render_on(icon(base_icon, base_icon_state))
 			nanomap = painting_data.render_nanomap(icon(base_icon, "[base_icon_state]-nano"))
@@ -242,7 +244,9 @@
 	unlock_from()
 
 	// Painting info
-	P.set_painting_data(painting_data.Copy())
+	P.set_painting_data(painting_data)
+	painting_data = null //We're no longer the one holding the painting_data, so stop having vars pointing at it
+
 	P.rendered_icon = icon
 	P.rendered_nanomap = nanomap
 	P.base_name = base_name
@@ -313,7 +317,7 @@
 	var/datum/painting_utensil/p = new(user, W)
 	if (p.palette.len)
 		if (protected_by_glass)
-			to_chat(usr, "<span class='warning'>\the [name]'s glass cover stops you from painting on it.</span>")
+			to_chat(usr, "<span class='warning'>\The [name]'s glass cover stops you from painting on it.</span>")
 		else
 			painting_data.interact(user, p)
 
@@ -371,7 +375,7 @@
 	// Cleaning
 	if (istype(W, /obj/item/weapon/soap) && !protected_by_glass)
 		if (protected_by_glass)
-			to_chat(usr, "<span class='warning'>\the [name]'s glass cover stops you from cleaning it off.</span>")
+			to_chat(usr, "<span class='warning'>\The [name]'s glass cover stops you from cleaning it off.</span>")
 		else
 			to_chat(usr, "<span class='warning'>You start cleaning \the [name].</span>")
 			if (do_after(user, src, 20))
@@ -392,7 +396,7 @@
 		if (do_after(user, src, 6))
 			if (protected_by_glass)
 				protected_by_glass = FALSE
-				to_chat(usr, "<span class='notice'>\the [name]'s glass cover pops out!</span>")
+				to_chat(usr, "<span class='notice'>\The [name]'s glass cover pops out!</span>")
 				var/obj/item/stack/sheet/glass/glass/GS = new(user.loc, 1)
 				materials.removeAmount(GS.mat_type, GS.perunit)
 				GS.forceMove(user.loc)
@@ -406,7 +410,7 @@
 	// Protecting with glass
 	if (istype(W, /obj/item/stack/sheet/glass/glass) && !protected_by_glass)
 		if (!framed)
-			to_chat(usr, "<span class='warning'>\the [name] needs a frame to hold the glass sheet.</span>")
+			to_chat(usr, "<span class='warning'>\The [name] needs a frame to hold the glass sheet.</span>")
 		else
 			var/obj/item/stack/sheet/glass/glass/GS = W
 			GS.use(1)
@@ -439,6 +443,10 @@
 		var/comp = painting_data.get_components()
 		name = (painting_data.title ? ("\proper[painting_data.title]") : "untitled artwork") + (painting_data.author ? ", [comp ? "[comp] " : ""]by [painting_data.author]" : "[comp ? ", [comp]" : ""]")
 		desc = painting_data.description ? "A small plaque reads: \"<span class='info'>[painting_data.description]\"</span>" : "A painting... But what could it mean?"
+		if (painting_data.copy)
+			desc += "\nA tag on this artwork indicates that it's a replica reproduced from Nanotrasen's databanks. "
+			if (painting_data.copy == PAINTING_OC_MODIFIED_COPY)
+				desc += "Seems like someone gave it a fresh coat of paint..."
 		if (render)
 			rendered_icon = painting_data.render_on(icon(base_icon, base_icon_state))
 			rendered_nanomap = painting_data.render_nanomap(icon(base_icon, "[base_icon_state]-nano"))
@@ -456,7 +464,9 @@
 	var/obj/structure/painting/custom/P = new(user.loc)
 
 	// Painting info
-	P.set_painting_data(painting_data.Copy())
+	P.set_painting_data(painting_data)
+	painting_data = null //We're no longer the one holding the painting_data, so stop having vars pointing at it
+
 	P.icon = rendered_icon ? rendered_icon : icon(base_icon, base_icon_state)
 	P.nanomap = rendered_nanomap ? rendered_nanomap : image('icons/effects/32x32.dmi',P,"black")
 	P.icon_state = base_icon_state

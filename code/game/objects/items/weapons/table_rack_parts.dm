@@ -234,3 +234,18 @@
 	R.add_fingerprint(user)
 	user.drop_item(src, force_drop = 1)
 	qdel(src)
+
+/obj/item/weapon/rack_parts/shelf
+	name = "crate shelf parts"
+	desc = "Parts of a shelf."
+	icon_state = "crate_shelf_parts"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	item_state = "shelf"
+	starting_materials = list(MAT_IRON = 11250)
+	sheet_amount = 3
+
+/obj/item/weapon/rack_parts/shelf/attack_self(mob/user)
+	var/obj/structure/rack/crate_shelf/C = new /obj/structure/rack/crate_shelf(user.loc)
+	C.add_fingerprint(user)
+	user.drop_item(src, force_drop = 1)
+	qdel(src)

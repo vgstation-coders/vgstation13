@@ -255,6 +255,15 @@
 		update_icon()
 	return ..()
 
+/obj/item/toy/cardhand/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		..()
+		return
+	for(var/obj/item/toy/singlecard/card in currenthand)
+		card.Flip()
+		update_icon()
+	return
+
 /obj/item/toy/cardhand/attack_hand(mob/user, params)
 	if(user.get_inactive_hand() == src)
 		return hand_click.action(null, user, params)
@@ -305,7 +314,6 @@
 /obj/item/toy/singlecard/update_icon()
 	if(flipped)
 		icon_state = "singlecard_down"
-		pixel_x = -5
 		name = "card"
 	else
 		if(cardname)
@@ -314,7 +322,6 @@
 		else
 			icon_state = "sc_Ace of Spades"
 			name = "What Card"
-		pixel_x = 5
 
 /obj/item/toy/singlecard/examine(mob/user)
 	..()
@@ -373,3 +380,12 @@
 						 "<span class='notice'>You flip the card over.</span>")
 	Flip()
 	return ..()
+
+/obj/item/toy/singlecard/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		..()
+		return
+	user.visible_message("<span class='notice'>[user] flips a card over.</span>", //So that players can see whether a dealer is looking at their cards as he deals them
+						 "<span class='notice'>You flip the card over.</span>")
+	Flip()
+	return

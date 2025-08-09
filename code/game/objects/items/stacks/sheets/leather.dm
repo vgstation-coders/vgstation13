@@ -175,8 +175,9 @@
 	icon_state = "sheet-wetleather"
 	var/source_string
 	origin_tech = ""
-	var/wetness = 30 //Reduced when exposed to high temperautres
-	var/drying_threshold_temperature = T0C + 40
+	var/wetness = 180 //Reduced when exposed to warm air, faster at higher temps, measured in ticks (2 seconds)
+	var/drying_threshold_temperature = T0C + 19 //Room temperature drying
+	var/dryingspeeddesc = "not drying."//Description of how fast it's drying.
 
 /obj/item/stack/sheet/wetleather/can_stack_with(var/obj/item/other_stack)
 	if(istype(other_stack, /obj/item/stack/sheet/wetleather))
@@ -228,11 +229,11 @@
 
 		else
 			//visible message on mobs is defined as visible_message(var/message, var/self_message, var/blind_message)
-			user.visible_message("<span class='notice'>\the [usr] starts cutting hair off \the [src]</span>", "<span class='notice'>You start cutting the hair off \the [src]</span>", "You hear the sound of a knife rubbing against flesh")
+			user.visible_message("<span class='notice'>\The [usr] starts cutting hair off \the [src].</span>", "<span class='notice'>You start cutting the hair off \the [src].</span>", "You hear the sound of a knife rubbing against flesh.")
 
 			spawn()
 				if(do_after(user, src, 5 SECONDS))
-					to_chat(user, "<span class='notice'>You cut the hair from this [src.singular_name]</span>")
+					to_chat(user, "<span class='notice'>You cut the hair from this [src.singular_name].</span>")
 
 					if(src.use(1))
 						var/obj/item/stack/sheet/hairlesshide/H = drop_stack(/obj/item/stack/sheet/hairlesshide, user.loc, 1, user)
@@ -243,23 +244,48 @@
 		..()
 
 
-//Step two - washing..... it's actually in washing machine code.
+//Step two - washing..... it's actually in washing machine code AND in sink code!
 
 //Step three - drying
 /obj/item/stack/sheet/wetleather/process()
+	dryingspeeddesc = "not drying."
 	var/turf/location = get_turf(src)
 	if(!location)
 		return
+	var/totaldrying = 0
 	var/datum/gas_mixture/environment = location.return_air()
-	if(environment.temperature >= drying_threshold_temperature)
-		wetness--
-		if(wetness <= 0)
-			if(amount)
-				var/obj/item/stack/sheet/leather/L = drop_stack(/obj/item/stack/sheet/leather, loc, amount)
-				L.source_string = source_string
-				L.name = source_string ? "[source_string] leather": "leather"
-				use(amount)
+	if(environment.temperature >= drying_threshold_temperature + 21) //Original pre-buff temperature behavior, default 1 minute
+		totaldrying = totaldrying + 6
+	else if(environment.temperature >= drying_threshold_temperature) //(Default variable value) Room temperature drying, default 6 minutes
+		totaldrying = totaldrying + 1
+	wetness = wetness - totaldrying
+	if(wetness <= 0)
+		if(amount)
+			var/obj/item/stack/sheet/leather/L = drop_stack(/obj/item/stack/sheet/leather, location, amount)
+			L.source_string = source_string
+			L.name = source_string ? "[source_string] leather": "leather"
+			use(amount)
+		return
+	switch(totaldrying)
+		if(1 to 3)
+			dryingspeeddesc = "drying slowly."
+		if(4 to INFINITY)
+			dryingspeeddesc = "drying quickly!"
 
+/obj/item/stack/sheet/wetleather/examine(mob/user)
+	..()
+	switch(round(1-(wetness/initial(wetness)),0.01)*100) //returns dryness percent
+		if(0 to 20)
+			to_chat(user, "<span class='info'>It's soaking wet!</span>")
+		if(21 to 40)
+			to_chat(user, "<span class='info'>It's wet.</span>")
+		if(41 to 60)
+			to_chat(user, "<span class='info'>It's damp.</span>")
+		if(61 to 80)
+			to_chat(user, "<span class='info'>It's still a little damp in places.</span>")
+		if(81 to 100)
+			to_chat(user, "<span class='info'>It's almost completely dry!</span>")
+	to_chat(user, "<span class='info'>It's [dryingspeeddesc]</span>")
 
 /obj/item/stack/leather_strip
 	name = "strip of leather"

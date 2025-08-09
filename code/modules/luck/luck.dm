@@ -156,3 +156,22 @@
 //Calls prob() on lucky_probability(), for convenience.
 /mob/proc/lucky_prob(var/baseprob = 50, var/luckfactor = 1, var/maxskew = 50, var/ourluck)
 	return prob(lucky_probability(baseprob, luckfactor, maxskew, ourluck))
+
+
+
+
+// returns a random number between 0 and 1, and skews it according to luck. floats!
+// luck -		the mob's luck
+// luckfactor -	how much to premultiply luck by for calculations
+// skewing - 	how much luck can affect the outcome, as a factor of how many "times" as lucky. eg, twice as lucky. as it approaches infinity, outcomes will be guaranteed to be the highest/lowest.
+// lower_is_preferable - if TRUE, it will skew in the opposite direction. basically just multiplies luck by -1
+/mob/proc/lucky_prob_rand(var/luck,var/luckfactor = 0.01,var/skewing=10,var/lower_is_preferable=FALSE)
+	if(luck==null)
+		luck=luck()
+	var/luck_post_sigmoid_curve=(2/(1+(E*E)**(-luckfactor* ((lower_is_preferable?-1:1)*luck) )))-1 //constrains values to -1 and 1
+	return 1-((1-rand())**(skewing**luck_post_sigmoid_curve))
+
+// returns a random number between min and max, skewing it according to luck. returns an int.
+/mob/proc/lucky_prob_rand_range(var/min,var/max,var/luck,var/luckfactor = 0.01,var/skewing=10,var/lower_is_preferable=FALSE)
+	return floor( (lucky_prob_rand(luck,luckfactor,skewing,lower_is_preferable)*(max-min+1))-0.001)+min
+

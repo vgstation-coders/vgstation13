@@ -5,19 +5,19 @@
 	specialization = SSUTILITY
 	abbreviation = "LB"
 
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	spell_flags = null
 	invocation = "EAIS' RAUG"
-	invocation_type = SpI_WHISPER
+	invocation_type = SP_INV_WHISPER
 	selection_type = "range"
 	range = 7
 	inner_radius = -1
 
-	cooldown_min = 50
+	cooldown_min = 5 SECONDS
 
 	hud_state = "blackout"
 
-	price = 0.25 * Sp_BASE_PRICE
+	price = 0.25 * SP_BASE_PRICE
 
 /spell/aoe_turf/lightbulb/cast(list/targets)
 

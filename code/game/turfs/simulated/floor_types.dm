@@ -66,6 +66,12 @@
 	thermal_material = new/datum/thermal_material/wood()
 	thermal_mass = 5
 
+/turf/simulated/floor/wood/New()
+	..()
+	footstep_sound = sounds_wood
+	footstep_sound_barefoot = sounds_wood_barefoot
+	footstep_sound_claw = sounds_wood_claw
+
 /turf/simulated/floor/wood/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/wood(null)
 
@@ -414,6 +420,10 @@
 				if(istype(get_step(src,direction),/turf/simulated/floor))
 					var/turf/simulated/floor/FF = get_step(src,direction)
 					FF.update_icon() //so siding get updated properly
+	
+	footstep_sound = sounds_grass
+	footstep_sound_barefoot = sounds_grass
+	footstep_sound_claw = sounds_grass
 
 /turf/simulated/floor/carpet
 	name = "Carpet"
@@ -430,6 +440,7 @@
 	if(!icon_state)
 		icon_state = initial(icon_state)
 	..()
+	
 	if(has_siding)
 		spawn(4)
 			if(src)
@@ -438,6 +449,10 @@
 					if(istype(get_step(src,direction),/turf/simulated/floor))
 						var/turf/simulated/floor/FF = get_step(src,direction)
 						FF.update_icon() //so siding get updated properly
+
+	footstep_sound = sounds_carpet
+	footstep_sound_barefoot = sounds_carpet_barefoot
+	footstep_sound_claw = sounds_carpet_barefoot
 
 /turf/simulated/floor/carpet/cultify()
 	return
@@ -540,3 +555,20 @@
 	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON
 	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD // So it totals to the same pressure
 	//icon = 'icons/turf/shuttle-debug.dmi'
+
+// Plated catwalks
+/turf/simulated/floor/plated_catwalk
+	icon = 'icons/turf/catwalks.dmi'
+	icon_state = "pcat0"
+	name = "plated catwalk"
+	desc = "A hybrid floor tile-catwalk which provides visibility and easy access to pipes and wires beneath it."
+	plane = TURF_PLANE
+	layer = PAINT_LAYER
+	hatch_installed = TRUE
+	hatch_open = FALSE
+
+/turf/simulated/floor/plated_catwalk/New()
+	..()
+	overlays.Cut()
+	overlays += mutable_appearance(icon='icons/turf/floors.dmi', icon_state="plating", layer = CATWALK_LAYER, plane = ABOVE_PLATING_PLANE)
+	overlays += mutable_appearance(icon='icons/turf/catwalks.dmi', icon_state="[icon_state]_olay", layer = PAINT_LAYER, plane = TURF_PLANE)

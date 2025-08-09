@@ -33,6 +33,7 @@
 #define MAT_GINGERBREAD "$gingerbread"
 
 
+#define VALUE_MISC 0.1
 #define VALUE_IRON 0.2
 #define VALUE_GLASS 0.2
 #define VALUE_DIAMOND 50

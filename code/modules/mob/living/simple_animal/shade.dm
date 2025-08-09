@@ -255,6 +255,25 @@
 			return
 	..()
 
+/mob/living/simple_animal/shade/mode()
+	set name = "Activate Held Object"
+	set category = "IC"
+	set src = usr
+	set hidden = TRUE
+	if (istype(loc, /obj/item/weapon/melee/soulblade))
+		var/spell/soulblade/blade_spin/BS = locate() in spell_list
+		if (BS)
+			BS.perform(src)
+			return
+	..()
+
+/mob/living/simple_animal/shade/toggle_throw_mode()
+	if (istype(loc, /obj/item/weapon/melee/soulblade))
+		var/spell/soulblade/blade_perforate/BP = locate() in spell_list
+		if(BP)
+			BP.perform(src)
+	..()
+
 /mob/living/simple_animal/shade/noncult
 	desc = "A bound spirit. This one appears more in tune with the realm of the dead."
 	universal_understand = 1 //They're closer to their observer selves, hence can understand any language

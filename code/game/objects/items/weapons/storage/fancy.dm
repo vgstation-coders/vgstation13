@@ -567,6 +567,11 @@
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	storage_slots = 6
 	req_one_access = list(access_virology) //Obj was inheriting from obj/storage/lockbox which requires armory access.  This behavior is overridden here.
+	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 200)
+
+/obj/item/weapon/storage/lockbox/vials/nolock
+	startswithelectronics = FALSE
+	locked = FALSE
 
 /obj/item/weapon/storage/lockbox/vials/New()
 	..()
@@ -576,7 +581,7 @@
 	overlays.len = 0
 	icon_state = "vialbox"
 	item_state = "vialbox"
-	if (!broken && !locked)
+	if (!emagged && !locked)
 		overlays += image('icons/obj/vialbox.dmi',src,"cover_open")
 
 	var/i = 0
@@ -598,7 +603,7 @@
 		overlays += vial_image
 		i++
 
-	if (!broken)
+	if (!emagged && electronics)
 		overlays += image(icon, src, "led[locked]")
 		if(locked)
 			overlays += image(icon, src, "cover")
@@ -740,7 +745,7 @@
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/New()
 	..()
-	for(var/i=1, i <= storage_slots; i++)
+	for(var/i=1; i <= storage_slots; i++)
 		new slider_type(src)
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/synth

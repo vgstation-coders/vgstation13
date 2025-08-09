@@ -82,7 +82,7 @@
 			M.LevelUp(level_gain)
 		M.health = M.maxHealth
 		qdel(src)
-		return
+		return 1
 	..()
 
 /mob/living/simple_animal/hostile/mushroom/revive(refreshbutcher = 1)

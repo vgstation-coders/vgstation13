@@ -165,31 +165,7 @@
 	},
 /area/vault/laundromat/drug_lab)
 "fH" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced/plasma,
-/obj/structure/window/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/turf/simulated/floor/engine{
-	icon_state = "floor4"
-	},
-/area/vault/laundromat/drug_lab)
-"jx" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 1
-	},
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/engine{
 	icon_state = "floor4"
 	},
@@ -376,19 +352,6 @@
 /area/vault/laundromat/drug_lab)
 "rT" = (
 /turf/simulated/floor/engine,
-/area/vault/laundromat/drug_lab)
-"sT" = (
-/obj/structure/grille,
-/obj/structure/window/full/reinforced/plasma,
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/turf/simulated/floor/engine{
-	icon_state = "floor4"
-	},
 /area/vault/laundromat/drug_lab)
 "uX" = (
 /obj/effect/decal/cleanable/blood,
@@ -920,12 +883,12 @@ Mv
 Oe
 mB
 DG
-jx
-sT
-sT
-sT
-sT
-sT
+fH
+fH
+fH
+fH
+fH
+fH
 fH
 MI
 MI

@@ -181,3 +181,13 @@
 	containername = "CM surplus medical equipment crate"
 	group = "Medical"
 	containsdesc = "Surplus wound-stitching supplies. Contains two lines and two grafts."
+
+/datum/supply_packs/ntbasicsleeper
+	name = "NT sleeper upgrade"
+	contains = list (
+					/obj/item/device/plugin/sleeper/ntbasic)
+	cost = 30
+	containertype = /obj/structure/largecrate
+	containername = "NT monitor equipment crate"
+	group = "Medical"
+	containsdesc = "An upgrade system for a sleeper. Looks outdated."

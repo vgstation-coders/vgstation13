@@ -340,6 +340,9 @@ var/global/list/playable_species = list("Human")
 /datum/species/proc/conditional_playable()
 	return 0
 
+/datum/species/proc/fallback()
+	return "Human"
+
 /datum/species/human
 	name = "Human"
 	known_languages = list(LANGUAGE_HUMAN)
@@ -465,6 +468,8 @@ var/global/list/playable_species = list("Human")
 	var/MM = text2num(time2text(world.timeofday, "MM"))
 	return MM == 10 //October
 
+/datum/species/skellington/fallback()
+	return "Plasmaman"
 
 /datum/species/skellington/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if (prob(25))

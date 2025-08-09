@@ -63,6 +63,7 @@
 	item_state = "card-id"
 	slot_flags = SLOT_ID
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=2"
+	flags = FPRINT | NO_ATTACK_MSG //because of overrides
 
 	/**
 	 * Number of uses left.  -1 = infinite
@@ -90,12 +91,13 @@
 	var/recharge_rate = 0
 
 	var/nticks=0
+	var/disable_config_sync = FALSE
 
 /obj/item/weapon/card/emag/New(var/loc, var/disable_tuning=0)
 	..(loc)
 
 	// For standardized subtypes, once they're established.
-	if(disable_tuning)
+	if(disable_tuning || disable_config_sync)
 		return
 
 	if(ticker)
@@ -130,14 +132,14 @@
 		nticks = 0
 		processing_objects.Remove(src)
 
-/obj/item/weapon/card/emag/proc/canUse(var/mob/user, var/obj/machinery/M)
+/obj/item/weapon/card/emag/proc/canUse(var/mob/user, var/atom/A)
 	// We've already checked for emaggability.  All we do here is check cost.
 
 	// Infinite uses?  Just return true.
 	if(energy < 0)
 		return 1
 
-	var/cost=M.getEmagCost(user,src)
+	var/cost=A.getEmagCost(user,src)
 
 	// Free to emag?  Return true every time.
 	if(cost == 0)
@@ -173,23 +175,17 @@
 
 //perform individual emag_act() stuff on children overriding the method here
 /obj/item/weapon/card/emag/afterattack(var/atom/target, mob/user, proximity)
-	if(!proximity)
+	if(!proximity || !canUse(user,target))
 		return
-	if (istype(target, /mob/living/carbon/human))
+	if (ishuman(target))
 		var/mob/living/carbon/target_living = target
 		//get target zone with 0% chance of missing
 		var/zone = ran_zone(user.zone_sel.selecting, 100)
 		var/datum/organ/external/organ = target_living.get_organ(zone)
 		target_living.emag_act(user, organ, src)
-		return
-	if(istype(target,/obj/machinery))
-		return // Handled in machine attackby()
-	if(arcanetampered && prob(50))
-		target.arcane_act(user)
-		if(prob(50))
-			return
-	target.emag_act(user)
 
+/mob/living/carbon/human/emag_check(obj/item/weapon/card/emag/E, mob/user) //handled above!
+	return FALSE
 
 var/list/global/id_cards = list()
 
@@ -320,7 +316,7 @@ var/list/global/id_cards = list()
 		return jobName
 	if(alt_jobName in get_all_job_icons()) //Check if the base job has a hud icon
 		return alt_jobName
-	if(jobName in get_all_centcom_jobs() || (alt_jobName in get_all_centcom_jobs())) //Return with the NT logo if it is a Centcom job
+	if((jobName in get_all_centcom_jobs()) || (alt_jobName in get_all_centcom_jobs())) //Return with the NT logo if it is a Centcom job
 		return "Centcom"
 	return "Unknown" //Return unknown if none of the above apply
 
@@ -362,6 +358,15 @@ var/list/global/id_cards = list()
 		"Nathan Aufweisser",
 		"Dee Tekteev",
 		"Scheitt Couritty",
+		"Valyd Huntre",
+		"Gunther Arrest",
+		"Obi Theelaw",
+		"Tazzhizzazz",
+		"Ziccurizzy",
+		"Kachaindaact",
+		"Wakitakiki",
+		"Kiyuritii",
+		"Yakkitisaks",
 	)
 
 /obj/item/weapon/card/id/nt_disguise/attack_self(mob/user)
@@ -441,6 +446,7 @@ var/list/global/id_cards = list()
 	access = AGENT_CARD_DEFAULT_ACCESS
 	base_access = list(access_syndicate)
 	origin_tech = Tc_SYNDICATE + "=3"
+	blocks_tracking = TRUE
 	var/registered_user=null
 	var/copy_appearance = FALSE
 

@@ -93,6 +93,9 @@ var/list/obj/machinery/singularity/white_hole_candidates
 		color= initial(color)
 	..()
 
+/obj/machinery/singularity/proc/seeks_beacon()
+	return TRUE
+
 /obj/machinery/singularity/proc/link_a_wormhole()
 	var/obj/machinery/singularity/other = null
 	do
@@ -799,11 +802,11 @@ var/list/obj/machinery/singularity/white_hole_candidates
 	for(var/mob/M in player_list)
 		if(istype(M, /mob/new_player) || !M.client)
 			continue
-		if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.toggles & CHAT_DEAD))
+		if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD))
 			to_chat(M, message)
-		else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.toggles & CHAT_DEAD))
+		else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD))
 			to_chat(M, message)
-		else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
+		else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD))
 			var/mob/living/carbon/brain/B = M
 			if(B.brain_dead_chat())
 				to_chat(M, message)
@@ -885,11 +888,11 @@ var/list/obj/machinery/singularity/white_hole_candidates
 			for(var/mob/M in player_list)
 				if(istype(M, /mob/new_player) || !M.client)
 					continue
-				if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.toggles & CHAT_DEAD)) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
+				if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD)) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
 					to_chat(M, message)
-				else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.toggles & CHAT_DEAD))
+				else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD))
 					to_chat(M, message)
-				else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
+				else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD))
 					var/mob/living/carbon/brain/B = M
 					if(B.brain_dead_chat())
 						to_chat(M, message)
@@ -898,11 +901,11 @@ var/list/obj/machinery/singularity/white_hole_candidates
 			for(var/mob/M in player_list)
 				if(istype(M, /mob/new_player) || !M.client)
 					continue
-				if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.toggles & CHAT_DEAD)) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
+				if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD)) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
 					to_chat(M, message)
-				else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.toggles & CHAT_DEAD))
+				else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD))
 					to_chat(M, message)
-				else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
+				else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & CHAT_DEAD))
 					var/mob/living/carbon/brain/B = M
 					if(B.brain_dead_chat())
 						to_chat(M, message)

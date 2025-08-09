@@ -124,7 +124,6 @@ Class Procs:
 	penetration_dampening = 5
 
 	var/stat = 0
-	var/emagged = 0
 	var/use_power = MACHINE_POWER_USE_IDLE
 		//0 = dont run the auto
 		//1 = run auto, use idle
@@ -154,11 +153,7 @@ Class Procs:
 	 * Machine construction/destruction/emag flags.
 	 */
 	var/machine_flags = 0
-
-	/**
-	 * Emag energy cost (in MJ).
-	 */
-	var/emag_cost = 1
+	emag_cost = 1
 
 	var/inMachineList = 1 // For debugging.
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
@@ -209,10 +204,12 @@ Class Procs:
 			AM.forceMove(loc)
 			component_parts -= AM
 */
-	component_parts = null
+	for(var/part in component_parts)
+		remove_part(part)
 	for(var/datum/malfhack_ability/MH in hack_abilities)
 		MH.machine = null
 		qdel(MH)
+	hack_abilities = null
 	qdel(hack_overlay)
 
 	..()
@@ -498,6 +495,9 @@ Class Procs:
 
 /obj/machinery/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
+	//If the APC has been used recently by a pulse demon, lock the silicons out, the proc itself is in pulsedemon.dm
+	if(is_pulselocked(user)) //Message is handled in the proc
+		return
 	if(isrobot(user))
 		// For some reason attack_robot doesn't work
 		// This is to stop robots from using cameras to remotely control machines.
@@ -565,6 +565,7 @@ Class Procs:
 
 /obj/machinery/proc/spillContents(var/destroy_chance = 0)
 	for(var/obj/I in component_parts)
+		remove_part(I)
 		if(prob(destroy_chance))
 			qdel(I)
 		else
@@ -661,29 +662,16 @@ Class Procs:
 	machine_flags &= ~EMAGGABLE
 	spark(src)
 
-
-/**
- * Returns the cost of emagging this machine (emag_cost by default)
- * @param user /mob The mob that used the emag.
- * @param emag /obj/item/weapon/card/emag The emag used on this device.
- * @return number Cost to emag.
- */
-/obj/machinery/proc/getEmagCost(var/mob/user, var/obj/item/weapon/card/emag/emag)
-	return emag_cost
+/obj/machinery/can_emag()
+	return machine_flags & EMAGGABLE
 
 /obj/machinery/attackby(var/obj/item/O, var/mob/user)
-	..()
+	. = ..()
 
 	add_fingerprint(user)
 
 	if(O.is_cookvessel && is_cooktop)
 		return 1
-
-	if(isEmag(O) && machine_flags & EMAGGABLE)
-		var/obj/item/weapon/card/emag/E = O
-		if(E.canUse(user,src))
-			emag_act(user)
-			return 1
 
 	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
@@ -814,8 +802,8 @@ Class Procs:
 						if(B.get_rating() > A.get_rating())
 							W.remove_from_storage(B, src)
 							W.handle_item_insertion(A, 1)
-							component_parts -= A
-							component_parts += B
+							remove_part(A)
+							add_part(B)
 							B.forceMove(null)
 							to_chat(user, "<span class='notice'>[A.name] replaced with [B.name].</span>")
 							shouldplaysound = 1 //Only play the sound when parts are actually replaced!
@@ -829,6 +817,16 @@ Class Procs:
 				to_chat(user, "<span class='notice'>    [C.name]</span>")
 		return 1
 	return 0
+
+/obj/machinery/proc/add_part(obj/item/weapon/stock_parts/S, atom/location)
+	component_parts += S
+	if(!(machine_flags & UPGRADENOSCORE) && istype(S) && (S.rating > 1))
+		score.machineupgrades += (S.rating - 1)
+
+/obj/machinery/proc/remove_part(obj/item/weapon/stock_parts/S)
+	component_parts -= S
+	if(!(machine_flags & UPGRADENOSCORE) && istype(S) && (S.rating > 1))
+		score.machineupgrades -= (S.rating - 1)
 
 //exclusively for use with machines being made from the flatpacker
 //works like the parts exchange but because we only call this from a certain location
@@ -851,8 +849,8 @@ Class Procs:
 			for(var/obj/item/B in M)
 				if(istype(B, P) && istype(A, P))
 					if(B.get_rating() > A.get_rating()) //base rating parts should not be added (they already shouldn't be in this list, but whatever)
-						component_parts -= A
-						component_parts += B
+						remove_part(A)
+						add_part(B)
 						M -= B //if you don't remove the part, one upgraded part will replace everything in the recipe
 						B.forceMove(null)
 						break

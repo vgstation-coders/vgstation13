@@ -2,27 +2,39 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 
 /datum/controller/gameticker/scoreboard
 	var/crewscore 			= 0 //This is the overall var/score for the whole round
+
 	var/plasmashipped		= 0 //How much plasma has been sent to centcom?
 	var/stuffshipped		= 0 //How many centcom orders have cargo fulfilled?
 	var/stuffforwarded		= 0 //How many cargo forwards have been fulfilled?
 	var/stuffnotforwarded	= 0 //How many cargo forwards have not been fulfilled?
+
 	var/stuffharvested		= 0 //How many harvests have hydroponics done (per crop)?
 	var/oremined			= 0 //How many chunks of ore were smelted
+	var/meals				= 0 //How much food was actively cooked that day
+	var/slimes				= 0 //How many slimes were harvested
+	var/artifacts			= 0 //How many large artifacts were analyzed and activated
+
 	var/eventsendured		= 0 //How many random events did the station endure?
+
 	var/powerloss			= 0 //How many APCs have alarms (under 30 %)?
 	var/atmoloss			= 0 //How many air alarms are giving issues?
 	var/powerbonus			= 0 //If all APCs on the station are running optimally, big bonus
 	var/atmobonus			= 0 //If all air alarms on the station are running optimally, big bonus
 	var/maxpower			= 0 //Most watts in grid on any of the world's powergrids.
+
+	var/machineupgrades		= 0 //How many machines were upgraded?
+
 	var/escapees			= 0 //How many people got out alive?
 	var/deadcrew			= 0 //Humans who died during the round
 	var/deadsilicon			= 0 //Silicons who died during the round
 	var/deadaipenalty		= 0 //AIs who died during the round
+	var/rescuedpets			= 0 //how many pets were brought back to centcomm (alive)
+	var/rescueianbonus		= 0 //ian is a special little guy :)
+
 	var/mess				= 0 //How much messes on the floor went uncleaned
 	var/litter				= 0 //How much trash is laying on the station floor
-	var/meals				= 0 //How much food was actively cooked that day
-	var/slimes				= 0 //How many slimes were harvested
-	var/artifacts			= 0 //How many large artifacts were analyzed and activated
+	var/messbonus			= 0 //If there are no messes on the station anywhere, huge bonus
+
 	var/disease_good		= 0 //How many unique diseases currently affecting living mobs of cumulated danger <3
 	var/disease_vaccine		= null //Which many vaccine antibody isolated
 	var/disease_vaccine_score= 0 //the associated score
@@ -31,11 +43,12 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/disease_bad			= 0 //How many unique diseases currently affecting living mobs of cumulated danger >= 3
 	var/disease_most		= null //Most spread disease
 	var/disease_most_count	= 0 //Most spread disease
+
 	var/turfssingulod		= 0 //Amount of turfs eaten by singularities.
+
 	var/static/list/badvars		= list("deadcrew","deadsilicon","deadaipenalty","mess","litter","powerloss","atmoloss","stuffnotforwarded","disease_bad","turfssingulod")
 
 	//These ones are mainly for the stat panel
-	var/messbonus			= 0 //If there are no messes on the station anywhere, huge bonus
 	var/foodeaten			= 0 //How much food was consumed
 	var/clownabuse			= 0 //How many times a clown was punched, struck or otherwise maligned
 	var/slips				= 0 //How many people have slipped during this round
@@ -83,10 +96,14 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/shuttlebombed		= 0
 	var/bagelscooked		= 0
 	var/disease				= 0
+	var/summon_guns_count   = 0 //Tracked by the Summon Guns artifact to determine if special audio is guaranteed to play.
 	var/list/money_leaderboard = list()
 	var/list/shoal_leaderboard = list()
 	var/list/implant_phrases = list()
 	var/list/global_paintings = list()
+
+	var/badmin_score		= 0
+	var/badmin_override		= FALSE
 
 /datum/controller/gameticker/scoreboard/proc/main(var/dat)
 	ticker.mode.declare_completion()
@@ -139,8 +156,12 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Cargo Crates Forwarded:</B> [score.stuffforwarded] ([score.stuffforwarded * 50] Points)<BR>"
 	if(score.oremined > 0)
 		dat += "<B>Ore Smelted:</B> [score.oremined] ([score.oremined] Points)<BR>"
+	if(score.rescuedpets)
+		dat += "<B>Rescued Pets:</B> [score.rescuedpets] ([score.rescuedpets*50 + score.rescueianbonus] Points<BR>)"
 	dat += "<B>Whole Station Powered:</B> [score.powerbonus ? "Yes" : "No"] ([score.powerbonus] Points)<BR>"
 	dat += "<B>Whole Station Airtight:</B> [score.atmobonus ? "Yes" : "No"] ([score.atmobonus] Points)<BR>"
+	if (score.machineupgrades > 0)
+		dat += "<B>Total Upgraded Machines Rating:</B> [score.machineupgrades] ([score.machineupgrades * 5] Points)<BR>"
 	if (score.disease_vaccine_score > 0)
 		dat += "<B>Isolated Vaccines:</B> [score.disease_vaccine] ([score.disease_vaccine_score] Points)<BR>"
 	if (score.disease_extracted > 0)
@@ -181,12 +202,16 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Nothing bad to report! Good job, crew!</B><BR>"
 
 	dat += "<BR><U>THE WEIRD</U><BR>"
-/*	<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"
-	var/profit = totalfunds - 100000
+	var/totalfunds = 0
+	for(var/dept in department_accounts)
+		var/datum/money_account/act = department_accounts[dept]
+		totalfunds += act.money
+	dat += "<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"
+	var/profit = totalfunds - init_station_funds
 	if (profit > 0)
-		dat += "<B>Station Profit:</B> +[num2text(profit,50)]<BR>"
+		dat += "<B>Station Profit:</B> +$[num2text(profit,50)]<BR>"
 	else if (profit < 0)
-		dat += "<B>Station Deficit:</B> [num2text(profit,50)]<BR>"*/
+		dat += "<B>Station Deficit:</B> -$[num2text(abs(profit),50)]<BR>"
 	if(score.foodeaten > 0)
 		dat += "<B>Food Eaten:</b> [score.foodeaten]<BR>"
 	if(score.clownabuse > 0)
@@ -266,6 +291,9 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	for (var/i = 1 to dept_leaderboard.len)
 		dat += "<B>#[i] - </B>[dept_leaderboard[i]] ($[dept_leaderboard[dept_leaderboard[i]]])<BR>"
 
+	if(score.badmin_score)
+		dat += "<BR><span class='sinister'><B>Mysterious circumstances:</B> [score.badmin_score] Points</span><BR>"
+
 	dat += "<HR><BR>"
 	dat += "<B><U>FINAL SCORE: [score.crewscore]</U></B><BR>"
 	score.rating = "A Rating"
@@ -312,27 +340,27 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/datum/persistence_task/highscores/leaderboard = score.money_leaderboard
 	dat += "<b>MONTHLY TOP 5 RICHEST ESCAPEES:</b><br>"
 	var/i = 1
-	for(var/datum/record/money/entry in leaderboard.data)
-		var/cash = num2text(entry.cash, 12)
-		var/list/split_date = splittext(entry.date, "-")
+	for(var/datum/data/record/money/entry in leaderboard.data)
+		var/cash = num2text(entry.fields["cash"], 12)
+		var/list/split_date = splittext(entry.fields["date"], "-")
 		if(text2num(split_date[2]) != text2num(time2text(world.timeofday, "MM")))
 			leaderboard.clear_records()
 			dat += "No rich escapees yet!"
 			break
 		else
-			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
+			dat += "[i++]) <b>$[cash]</b> by <b>[entry.fields["ckey"]]</b> ([entry.fields["role"]]). That shift lasted [entry.fields["shift_duration"]]. Date: [entry.fields["date"]]<br>"
 	var/datum/persistence_task/highscores/trader/leaderboard2 = score.shoal_leaderboard
 	dat += "<br><b>MONTHLY TOP 5 RICHEST TRADERS:</b><br>"
 	i = 1
-	for(var/datum/record/money/entry in leaderboard2.data)
-		var/cash = num2text(entry.cash, 12)
-		var/list/split_date = splittext(entry.date, "-")
+	for(var/datum/data/record/money/entry in leaderboard2.data)
+		var/cash = num2text(entry.fields["cash"], 12)
+		var/list/split_date = splittext(entry.fields["date"], "-")
 		if(text2num(split_date[2]) != text2num(time2text(world.timeofday, "MM")))
 			leaderboard2.clear_records()
 			dat += "No rich traders yet!"
 			break
 		else
-			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b>. That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
+			dat += "[i++]) <b>$[cash]</b> by <b>[entry.fields["ckey"]]</b>. That shift lasted [entry.fields["shift_duration"]]. Date: [entry.fields["date"]]<br>"
 	return dat
 
 /mob/proc/display_round_end_scoreboard()

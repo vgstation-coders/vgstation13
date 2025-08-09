@@ -316,7 +316,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 							{{if value.scrubbing==1}}
 							<div class="line">
 								<div class="statusLabel">Filtering:</div>
-								<div class="statusValue"> 
+								<div class="statusValue">
 									{{:helper.generateScrubberGasOptions(data.gas_datums, value)}}
 								</div>
 							</div>
@@ -379,6 +379,22 @@ Used In File(s): /code/game/machinery/alarm.dm
 							</div>
 						</div>
 						{{/for}}
+					</div>
+					<div class="item">
+						<div class="itemLabel">
+						Automatic Fire Suppression:
+						</div>
+						<div class="itemContent">
+							{{if data.locked && !data.siliconUser}}
+								{{if data.suppression_mode}}
+									<span class='good'>On</span>
+								{{else}}
+									<span class='bad'>Off</span>
+								{{/if}}
+							{{else}}
+								{{:helper.link('On', 'power', {'auto_suppress' : 1}, data.suppression_mode ? 'selected' : null)}}{{:helper.link('Off', 'close', {'auto_suppress' : 1}, data.suppression_mode ? null : 'selected')}}
+							{{/if}}
+						</div>
 					</div>
 				<!-- SENSORS -->
 				{{else data.screen == 5}}

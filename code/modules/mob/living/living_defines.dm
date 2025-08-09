@@ -40,8 +40,6 @@
 	var/mob_swap_flags = 0
 	var/mob_push_flags = 0
 
-	var/cameraFollow = null
-
 	var/tod = null // Time of death
 	var/update_slimes = 1
 
@@ -81,3 +79,7 @@
 	var/blood_color2	//color of this creature's blood for gibbing purposes (humanoids have their own species-defined values)
 	var/flesh_color2	//color of this creature's flesh for meat purposes (humanoids have their own species-defined values)
 	var/tangibility = 1 //can this mob be interacted with things hitting it and etc?
+
+	var/braindamagespeechcooldown = FALSE //used to avoid braindamage proc spamming when checking the like 80 replacements
+
+	var/list/luminosity_sources = list()

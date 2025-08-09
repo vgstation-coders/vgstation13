@@ -16,11 +16,13 @@
 #define MOB_NO_PETRIFY 64 //can't get petrified
 #define MOB_NO_LAZ 128 //Can not be revived via lazarus injector
 
+#define NO_BACKPACK 1
 #define BACKPACK 2
 #define SATCHEL_NORM 3
 #define SATCHEL_ALT 4
 #define MESSENGER_BAG 5
 
+#define NO_BACKPACK_STRING "1"
 #define BACKPACK_STRING "2"
 #define SATCHEL_NORM_STRING "3"
 #define SATCHEL_ALT_STRING "4"

@@ -12,7 +12,7 @@ var/area/space_area
 	var/list/obj/machinery/light_switch/lightswitches = list()
 	var/list/obj/machinery/light/lights = list()
 	var/list/area_turfs
-	plane = ABOVE_LIGHTING_PLANE
+	plane = LIGHTING_PLANE
 	layer = MAPPING_AREA_LAYER
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
@@ -330,7 +330,7 @@ var/area/space_area
 		updateicon()
 	return
 
-/area/proc/get_ambience_list()
+/area/proc/get_ambience_list(mob/user)
 	//Check if the area has an AI and add the appropriate ambience
 	var/list/ambience_list = list()
 	ambience_list.Add(ambient_sounds)
@@ -340,14 +340,18 @@ var/area/space_area
 			if(AI?.laws.name == "Asimov's Three Laws of Robotics")
 				ambience_list.Add(/datum/ambience/AI/harmonica)
 			break
+	if(user.loneliness_affected())
+		ambience_list.Add(/datum/ambience/nobodyhere)
 	if(ambience_list.len > 0)
 		return ambience_list
 
 /area/proc/updateicon()
 	if (!areaapc)
 		icon_state = null
+		luminosity = 0
 		return
 	if ((fire || eject || party || radalert) && ((!requires_power)?(!requires_power):power_environ))//If it doesn't require power, can still activate this proc.
+		luminosity = 1
 		// Highest priority at the top.
 		if(radalert && !fire)
 			icon_state = "radiation"
@@ -364,6 +368,7 @@ var/area/space_area
 	else
 	//	new lighting behaviour with obj lights
 		icon_state = null
+		luminosity = 0
 
 
 /*
@@ -715,6 +720,106 @@ var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are move
 
 	for(var/obj/machinery/door/D in doors)
 		D.update_nearby_tiles()
+
+
+/area/proc/copy_contents_to(area/A , platingRequired = FALSE)
+	//This version is used by the Holodeck.
+	//Moving it here from unsorted.dm for easier maintenance in the future.
+
+	if(!A || !src)
+		return 0
+
+	var/list/turfs_src = get_area_turfs(src.type)
+	var/list/turfs_trg = get_area_turfs(A.type)
+
+	var/src_min_x = 0
+	var/src_min_y = 0
+	for (var/turf/T in turfs_src)
+		if(T.x < src_min_x || !src_min_x)
+			src_min_x	= T.x
+		if(T.y < src_min_y || !src_min_y)
+			src_min_y	= T.y
+
+	var/trg_min_x = 0
+	var/trg_min_y = 0
+	for (var/turf/T in turfs_trg)
+		if(T.x < trg_min_x || !trg_min_x)
+			trg_min_x	= T.x
+		if(T.y < trg_min_y || !trg_min_y)
+			trg_min_y	= T.y
+
+	var/list/refined_src = new/list()
+	for(var/turf/T in turfs_src)
+		refined_src += T
+		refined_src[T] = new/datum/coords
+		var/datum/coords/C = refined_src[T]
+		C.x_pos = (T.x - src_min_x)
+		C.y_pos = (T.y - src_min_y)
+
+	var/list/refined_trg = new/list()
+	for(var/turf/T in turfs_trg)
+		refined_trg += T
+		refined_trg[T] = new/datum/coords
+		var/datum/coords/C = refined_trg[T]
+		C.x_pos = (T.x - trg_min_x)
+		C.y_pos = (T.y - trg_min_y)
+
+	var/list/copiedobjs = list()
+
+	moving:
+		for (var/turf/T in refined_src)
+			var/datum/coords/C_src = refined_src[T]
+			for (var/turf/B in refined_trg)
+				var/datum/coords/C_trg = refined_trg[B]
+				if(C_src.x_pos == C_trg.x_pos && C_src.y_pos == C_trg.y_pos)
+					var/old_name = T.name
+					var/old_dir = T.dir
+					var/old_icon_state = T.icon_state
+					var/old_icon = T.icon
+
+					if(platingRequired)
+						if(istype(B, /turf/space))
+							continue moving
+
+					B.ChangeTurf(T.type)
+					B.name = old_name
+					B.dir = old_dir
+					B.icon_state = old_icon_state
+					B.icon = old_icon
+
+					B.return_air().copy_from(T.return_air())
+
+					for(var/obj/O in T)
+						copiedobjs += O.DuplicateObject(B)
+
+					for(var/mob/M in T)
+						if(!M.can_shuttle_move())
+							continue
+						copiedobjs += M.DuplicateObject(B)
+
+					refined_src -= T
+					refined_trg -= B
+					continue moving
+
+	for(var/obj/machinery/door/new_door in copiedobjs)
+		new_door.update_nearby_tiles()
+
+	return copiedobjs
+
+// If you're looking at this proc and thinking "that's exactly what I need!"
+// then you're wrong and you need to take a step back and reconsider.
+/atom/movable/proc/DuplicateObject(var/location)
+	var/atom/movable/duplicate = new src.type(location)
+	duplicate.change_dir(dir)
+	duplicate.plane = plane
+	duplicate.layer = layer
+	duplicate.name = name
+	duplicate.desc = desc
+	duplicate.pixel_x = pixel_x
+	duplicate.pixel_y = pixel_y
+	duplicate.pixel_w = pixel_w
+	duplicate.pixel_z = pixel_z
+	return duplicate
 
 /area/proc/make_geyser(turf/T)
 	return
