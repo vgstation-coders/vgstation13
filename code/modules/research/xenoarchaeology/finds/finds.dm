@@ -122,7 +122,7 @@
 
 /datum/find/bowl/additional_description(var/obj/item/I)
 	if(prob(20))
-		I.desc += "There appear to be [pick("dark","faintly glowing","pungent","bright")] [pick("red","purple","green","blue")] stains inside."
+		I.desc += " There appear to be [pick("dark","faintly glowing","pungent","bright")] [pick("red","purple","green","blue")] stains inside."
 
 
 /datum/find/urn
@@ -143,7 +143,7 @@
 
 /datum/find/urn/additional_description(var/obj/item/I)
 	if(prob(20))
-		I.desc += "It [pick("whispers faintly","makes a quiet roaring sound","whistles softly","thrums quietly","throbs")] if you put it to your ear."
+		I.desc += " It [pick("whispers faintly","makes a quiet roaring sound","whistles softly","thrums quietly","throbs")] if you put it to your ear."
 		anomaly_factor = 1
 
 /datum/find/cutlery
@@ -161,7 +161,7 @@
 		return new /obj/item/weapon/kitchen/utensil/spoon
 
 /datum/find/cutlery/additional_description(var/obj/item/I)
-	I.desc += "[pick("It's like no [item_type] you've ever seen before",\
+	I.desc += " [pick("It's like no [item_type] you've ever seen before",\
 	"It's a mystery how anyone is supposed to eat with this",\
 	"You wonder what the creator's mouth was shaped like")]."
 
@@ -234,7 +234,7 @@
 	return new_item
 
 /datum/find/knife/additional_description(var/obj/item/I)
-	I.desc += "[pick("It doesn't look safe.",\
+	I.desc += " [pick("It doesn't look safe.",\
 			"It looks wickedly jagged",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along the edges")]."
 
@@ -249,7 +249,7 @@
 	return new_item
 
 /datum/find/ritualknife/additional_description(var/obj/item/I)
-	I.desc += "[pick("It doesn't look safe.",\
+	I.desc += " [pick("It doesn't look safe.",\
 			"It looks wickedly jagged",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along the edges")]."
 
@@ -277,7 +277,7 @@
 	return new /obj/item/weapon/handcuffs
 
 /datum/find/handcuffs/additional_description(var/obj/item/I)
-	I.desc += "[pick("They appear to be for securing two things together","Looks kinky","Doesn't seem like a children's toy")]."
+	I.desc += " [pick("They appear to be for securing two things together","Looks kinky","Doesn't seem like a children's toy")]."
 
 /datum/find/beartrap
 	find_ID = ARCHAEO_BEARTRAP
@@ -290,7 +290,7 @@
 	return new /obj/item/weapon/beartrap
 
 /datum/find/beartrap/additional_description(var/obj/item/I)
-	I.desc += "[pick("It looks like it could take a limb off",\
+	I.desc += " [pick("It looks like it could take a limb off",\
 			"Could be some kind of animal trap",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along part of it")]."
 
@@ -307,7 +307,7 @@
 
 
 /datum/find/lighter/additional_description(var/obj/item/I)
-	I.desc += "There is a tiny device attached."
+	I.desc += " There is a tiny device attached."
 
 /datum/find/box
 	find_ID = ARCHAEO_BOX
@@ -341,7 +341,7 @@
 	return new_item
 
 /datum/find/gastank/additional_description(var/obj/item/I)
-	I.desc += "It [pick("gloops","sloshes")] slightly when you shake it."
+	I.desc += " It [pick("gloops","sloshes")] slightly when you shake it."
 
 /datum/find/tool
 	find_ID = ARCHAEO_TOOL
@@ -358,7 +358,7 @@
 		return new /obj/item/tool/screwdriver
 
 /datum/find/tool/additional_description(var/obj/item/I)
-	I.desc += "[pick("It doesn't look safe.",\
+	I.desc += " [pick("It doesn't look safe.",\
 			"You wonder what it was used for",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains on it")]."
 
@@ -679,9 +679,9 @@
 	return new_gun
 
 /datum/find/laser/additional_description(var/obj/item/I)
-	I.desc += "Looks like an antique energy weapon, you're not sure if it will fire or not."
+	I.desc += " Looks like an antique energy weapon, you're not sure if it will fire or not."
 	if(istype(I, /obj/item/weapon/gun/energy/bison))
-		I.desc += "There seems to be some sort of pump on the back of the stock."
+		I.desc += " There seems to be some sort of pump on the back of the stock."
 	if(prob(10)) // 10% chance to be a smart gun
 		I.can_take_pai = TRUE
 		I.desc += " There seems to be some sort of slot in the handle."
@@ -752,7 +752,7 @@
 	item_state = "gun4"
 
 /datum/find/gun/additional_description(var/obj/item/I)
-	I.desc += "Looks like an antique projectile weapon, you're not sure if it will fire or not."
+	I.desc += " Looks like an antique projectile weapon, you're not sure if it will fire or not."
 	if(prob(10)) // 10% chance to be a smart gun
 		I.can_take_pai = TRUE
 		I.desc += " There seems to be some sort of slot in the handle."
@@ -788,7 +788,7 @@
 	return new spawn_type()
 
 /datum/find/fossil/additional_description(var/obj/item/I)
-	I.desc += "A fossilised part of an alien, long dead."
+	I.desc += " A fossilised part of an alien, long dead."
 
 /datum/find/shell
 	find_ID = ARCHAEO_SHELL
@@ -804,7 +804,7 @@
 	return new_item
 
 /datum/find/shell/additional_description(var/obj/item/I)
-	I.desc += "A fossilised, pre-Stygian alien crustacean."
+	I.desc += " A fossilised, pre-Stygian alien crustacean."
 
 /datum/find/plant
 	find_ID = ARCHAEO_PLANT
@@ -819,7 +819,7 @@
 	return new_item
 
 /datum/find/plant/additional_description(var/obj/item/I)
-	I.desc += "A fossilised shred of alien plant matter."
+	I.desc += " A fossilised shred of alien plant matter."
 
 /datum/find/egg
 	find_ID = ARCHAEO_EGG
