@@ -127,7 +127,7 @@ var/list/apiaries_list = list()
 	if (species)
 		species_name = species.common_name
 	if(!worker_bees_inside && !queen_bees_inside)
-		to_chat(user, "<span class='info'>There doesn't seem to be any [species_name]s in it.</span>")
+		to_chat(user, "<span class='info'>There don't seem to be any [species_name] in it.</span>")
 	else
 		if(worker_bees_inside < 10)
 			to_chat(user, "<span class='info'>You can hear a few [species_name]s buzzing inside.</span>")
