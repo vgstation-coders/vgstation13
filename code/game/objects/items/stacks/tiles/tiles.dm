@@ -71,6 +71,14 @@
 /obj/item/stack/tile/proc/build()
 	return FALSE
 
+/obj/item/stack/tile/attack_self(mob/user)
+	if(!active) //Start click drag construction
+		active = new /obj/abstract/screen/draggable(src, user)
+		to_chat(user, "Beginning plating construction mode, click and hold to use.")
+		return
+	else //End click drag construction, create grille
+		qdel(active)
+
 /obj/item/stack/tile/can_drag_use(mob/user, turf/T)
 	if(user.Adjacent(T)) //can we place here
 		var/canbuild = T.canBuildPlating()
@@ -124,14 +132,6 @@
 	..()
 	if(active)
 		QDEL_NULL(active)
-
-/obj/item/stack/tile/metal/attack_self(mob/user)
-	if(!active) //Start click drag construction
-		active = new /obj/abstract/screen/draggable(src, user)
-		to_chat(user, "Beginning plating construction mode, click and hold to use.")
-		return
-	else //End click drag construction, create grille
-		qdel(active)
 
 /obj/item/stack/tile/metal/dropped()
 	..()
