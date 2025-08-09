@@ -376,6 +376,32 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/stalk_market/on_shutdown()
 	write_file(list("whiteturnip_multiplier" = clamp(whiteturnip_multiplier,1,25)))
 
+//Red turnips
+
+/datum/persistence_task/red_turnip
+	execute = TRUE
+	name = "Red turnip"
+	file_path = "data/persistence/red_turnip.json"
+
+/datum/persistence_task/red_turnip/on_init()
+	data = read_file()
+	if(length(data) && data["red_turnip"])
+		var/obj/machinery/portable_atmospherics/hydroponics/tray = pick(hydro_trays)
+		tray.seed = SSplant.seeds["redturnip"]
+		tray.seed.lifespan = data["redturnip_lifespan"]
+		tray.age = data["redturnip_value"]
+
+/datum/persistence_task/red_turnip/on_shutdown()
+	var/red_found = FALSE
+	var/tray_age = 1
+	var/tray_lifespan = 1
+	for(var/obj/machinery/portable_atmospherics/hydroponics/tray in hydro_trays)
+		if(tray.seed && tray.seed.type == /datum/seed/redturnip && !tray.dead) //exclude subtype
+			red_found = TRUE
+			tray_age = max(tray_age,tray.age)
+			tray_lifespan = max(tray_lifespan,tray.seed.lifespan)
+	write_file(list("red_turnip" = red_found,"redturnip_value" = tray_age,"redturnip_lifespan" = tray_lifespan))
+
 // Hub Settings
 
 /datum/persistence_task/hub_settings
