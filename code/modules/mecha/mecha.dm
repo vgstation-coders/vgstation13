@@ -511,7 +511,7 @@ Hull enclosure doesn't control atmos vulnerability
 ////////  Movement procs  ////////
 //////////////////////////////////
 
-/obj/mecha/Move()
+/obj/mecha/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	.=..()
 	pressure_act() // this goes here until I can figure out how new processing works
 
@@ -553,15 +553,16 @@ Hull enclosure doesn't control atmos vulnerability
 		if(C && C.get_step_delay())
 			tally += C.get_step_delay()
 
-		if(tally <= encumbrance_gap)	// If the total is less than our encumbrance gap, ignore equipment weight.
-			tally = 0
-		else	// Otherwise, start the tally after cutting that gap out.
-			tally -= encumbrance_gap
+//		if(tally <= encumbrance_gap)	// If the total is less than our encumbrance gap, ignore equipment weight.
+//			tally = 0
+//		else	// Otherwise, start the tally after cutting that gap out.
+		tally -= encumbrance_gap
 
 	var/obj/item/mecha_parts/component/actuator/actuator = internal_components[MECH_ACTUATOR]
 
 	if(!actuator)	// Relying purely on hydraulic pumps. You're going nowhere fast.
 		tally += 2
+		return
 
 	tally += 0.5 * (1 - actuator.get_efficiency())	// Damaged actuators run slower, slowing as damage increases beyond its threshold.
 
@@ -788,7 +789,7 @@ Hull enclosure doesn't control atmos vulnerability
 			return AC.damage_absorption
 
 	return
-
+/*
 /obj/mecha/proc/components_handle_damage(var/damage, var/type = BRUTE)
 	var/obj/item/mecha_parts/component/armor/AC = internal_components[MECH_ARMOR]
 	var/penetrating_attack = FALSE
@@ -817,6 +818,34 @@ Hull enclosure doesn't control atmos vulnerability
 			C.damage_part(damage_part_amt)
 			damage -= damage_part_amt
 
+	return damage
+*/
+
+/obj/mecha/proc/components_handle_damage(var/damage, var/type = BRUTE)
+	var/obj/item/mecha_parts/component/armor/AC = internal_components[MECH_ARMOR]
+	var/penetrating_attack = FALSE
+	damage *= src.damage_absorption[type]
+	if(AC)
+		var/armor_efficiency = AC.get_efficiency()
+		var/damage_change = armor_efficiency * (damage * 0.5) * AC.damage_absorption[type]
+		AC.damage_part(damage_change, type)
+		damage -= damage_change
+		if(AC.integrity < 5)
+			AC.damage_part(AC.integrity) // No 0.1% health armor
+	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
+	if(HC)
+		if(HC.integrity)
+			var/hull_absorb = round(rand(5, 10) / 10, 0.1) * (damage * 0.5)
+			HC.damage_part(hull_absorb, type)
+			damage -= hull_absorb
+	for(var/component_key in internal_components)
+		if(component_key == MECH_HULL || component_key == MECH_ARMOR)
+			continue
+		var/obj/item/mecha_parts/component/C = internal_components[component_key]
+		if(C && prob(C.relative_size))
+			var/damage_part_amt = round(damage / 2, 0.1)
+			C.damage_part(damage_part_amt)
+			damage -= damage_part_amt
 	return damage
 
 /obj/mecha/take_damage(incoming_damage, damage_type = "brute", skip_break, mute)

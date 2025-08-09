@@ -165,13 +165,13 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic
 	name = "\improper General Ballistic Weapon"
-	var/max_projectiles
-	var/projectiles
-	var/projectile_energy_cost
+	var/max_projectiles = 0
+	var/projectiles = 1
+	var/projectile_energy_cost = 0
 
-	var/projectiles_cache //ammo to be loaded in, if possible.
-	var/projectiles_cache_max
-	var/disabledreload //For weapons with no cache (like the rockets) which are reloaded by hand
+	var/projectiles_cache = 100 //ammo to be loaded in, if possible.
+	var/projectiles_cache_max = 100
+	var/disabledreload = FALSE //For weapons with no cache (like the rockets) which are reloaded by hand
 	var/ammo_type = "/obj/item/ammo_casing/c9mm"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/New()
@@ -198,7 +198,7 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/get_equip_info()
-	return "[..()] \[[src.projectiles][projectiles_cache_max &&!projectile_energy_cost?"/[projectiles_cache]":""]\][!disabledreload &&(src.projectiles < initial(src.projectiles))?" - <a href='?src=[ref(src)];rearm=1'>Rearm</a>":null]"
+	return "[..()]\[[src.projectiles][projectiles_cache_max &&!projectile_energy_cost?"/[projectiles_cache]":""]\][!disabledreload &&(src.projectiles < src.max_projectiles)?" - <a href='?src=\ref[src];rearm=1'>Rearm</a>":null]"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/rearm()
 	if(projectiles < initial(projectiles))

@@ -5,7 +5,7 @@
 	w_class = W_CLASS_GIANT
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	component_type = MECH_HULL
-	emp_resistance = 0	// Amount of emp 'levels' removed.
+	emp_resistance = 4	// Amount of emp 'levels' removed.
 	optimal_type = null	// List, if it exists. Exosuits meant to use the component.
 	integrity_danger_mod = 0.5	// Multiplier for comparison to max_integrity before problems start.
 	max_integrity = 40
@@ -16,9 +16,6 @@
 	var/max_pressure = HAZARD_HIGH_PRESSURE * 10
 	var/surprise = FALSE // It's a surprise!
 	var/pressure_proof = FALSE
-
-/obj/item/mecha_parts/component/hull/emp_act(severity)
-	return
 
 /obj/item/mecha_parts/component/hull/lightweight
 	name = "lightweight mecha hull"
@@ -34,11 +31,21 @@
 	name = "durable mecha hull"
 	icon_state = "hull_durable"
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_ENGINEERING + "=3"
-	max_integrity = 80
+	max_integrity = 100
 	step_delay = 2
-	integrity_danger_mod = 0.25
+	integrity_danger_mod = 0.3
 	max_temperature = 15000
 	max_pressure = HAZARD_HIGH_PRESSURE * 5
+
+/obj/item/mecha_parts/component/hull/heavy
+	name = "heavily armoured mecha hull"
+	icon_state = "hull_durable"
+	origin_tech = Tc_MATERIALS + "=4;" + Tc_ENGINEERING + "=3"
+	max_integrity = 150
+	step_delay = 3
+	integrity_danger_mod = 0.3
+	max_temperature = 20000
+	max_pressure = HAZARD_HIGH_PRESSURE * 8
 
 /obj/item/mecha_parts/component/hull/atmos
 	name = "environment-sealed mecha hull"

@@ -29,9 +29,6 @@
 
 	var/damage_minimum = 10
 
-/obj/item/mecha_parts/component/armor/emp_act(severity)
-	return
-
 /obj/item/mecha_parts/component/armor/mining
 	name = "blast-resistant mecha plating"
 	desc = "A durable metal and foam plating designed to provide good protection from explosions, and to a lesser extent, kinetic impacts."
@@ -101,7 +98,6 @@
 	icon_state = "armor_military"
 	step_delay = 4
 	max_integrity = 120
-	emp_resistance = 2
 	optimal_type = list(/obj/mecha/combat)
 	damage_minimum = 15
 	pen_reduction = 5
@@ -136,7 +132,6 @@
 	icon_state = "armor_marshal"
 	step_delay = 3
 	max_integrity = 60
-	emp_resistance = 3
 	deflect_chance = 5
 	pen_reduction = 5
 	damage_minimum = 0
@@ -189,7 +184,6 @@
 	desc = "An advanced matrix of spaced composites, duraplastics and depleted uranium, very heavy, but provides extreme protection."
 	step_delay = 3
 	max_integrity = 160
-	emp_resistance = 3
 	optimal_type = list(/obj/mecha/combat/marauder)
 	deflect_chance = 15
 	damage_minimum = 10
@@ -223,6 +217,7 @@
 	name = "strange mecha plating"
 	desc = "A strange matrix of unknown composition, it seems to fall through your hands."
 	icon_state = "armor_alien"
+	emp_resistance = 2
 	step_delay = 2
 	max_integrity = 80
 	damage_minimum = 3
