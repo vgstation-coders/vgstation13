@@ -12,7 +12,7 @@
 	id = "mech_electrical_hi_current"
 	build_type = MECHFAB
 	req_tech = list(Tc_ENGINEERING = 3)
-	build_path = /obj/item/mecha_parts/component/electrical/hi_current
+	build_path = /obj/item/mecha_parts/component/electrical/high_current
 	category = "Exosuit_Hull"
 	materials = list(MAT_IRON = 5000, MAT_SILVER = 5000, MAT_GOLD = 5000)
 

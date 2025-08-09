@@ -21,6 +21,6 @@
 	id = "mech_actuator_hispeed"
 	build_type = MECHFAB
 	req_tech = list(Tc_ENGINEERING = 5)
-	build_path = /obj/item/mecha_parts/component/armor/hispeed
+	build_path = /obj/item/mecha_parts/component/actuator/hispeed
 	category = "Exosuit_Actuator"
 	materials = list(MAT_IRON = 5000, MAT_SILVER = 5000, MAT_GOLD = 5000, MAT_DIAMOND = 5000)
