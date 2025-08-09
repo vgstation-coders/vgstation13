@@ -414,6 +414,24 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 	mutation_log += text
 
+/datum/seed/proc/admin_max()
+	potency = 200
+	heat_tolerance = INFINITY
+	light_tolerance = INFINITY
+	lowkpa_tolerance = 0
+	highkpa_tolerance = INFINITY
+	toxin_affinity = INFINITY
+	pest_tolerance = INFINITY
+	weed_tolerance = INFINITY
+	lifespan = INFINITY
+	endurance = INFINITY
+	nutrient_consumption = 0
+	fluid_consumption = 0
+	production = 0
+	maturation = 0
+	harvest_repeat = 1
+	yield = 10
+
 //Returns a list of the desired trait values.
 /datum/seed/proc/get_gene(var/genetype)
 	if(!genetype)

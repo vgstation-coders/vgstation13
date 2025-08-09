@@ -41,6 +41,9 @@ Used In File(s): \code\modules\hydroponics\seed_machines.dm
 			<div class = "itemContent">
 				{{:data.loaded}}
 			</div>
+			{{if data.badmin}}
+				{{:helper.link('MAXIMUM STATS', 'gear', {'badmin_max' : 1}, null)}}
+			{{/if}}
 			{{:helper.link('Apply Gene Mods', 'gear', {'apply_gene' : 1}, null)}}
 			{{:helper.link('Eject Target', 'circle-arrow-e', {'eject_packet' : 1}, null)}}
 		</div>

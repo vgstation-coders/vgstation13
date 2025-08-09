@@ -381,6 +381,8 @@
 	else
 		data["loaded"] = 0
 
+	data["badmin"] = user.check_rights(R_ADMIN)
+
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "botany_editor.tmpl", "Bioballistic Delivery UI", 470, 450)
@@ -420,6 +422,11 @@
 					loaded_seed.seed.apply_gene(gene, mode, usr)
 			else
 				loaded_seed.seed.apply_gene(gene, mode, usr)
+
+	else if(href_list["badmin_max"])
+		if(usr.check_rights(R_ADMIN))
+			if(alert(usr,"This will max out every reasonable stat, are you sure?","Admin max","Yes","No") == "Yes")
+				loaded_seed.seed.admin_max()
 
 	else if(href_list["toggle_mode"])
 		switch(mode)
