@@ -8,6 +8,7 @@
 	is_activateable = FALSE
 	var/obj/item/weapon/storage/mechrack/rack
 	equip_type = EQUIP_HULL
+	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/passive/rack/New()
 	..()
@@ -53,6 +54,7 @@
 	origin_tech = Tc_MATERIALS + "=6;"
 	is_activateable = FALSE
 	equip_type = EQUIP_HULL
+	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/passive/runningboard/can_attach(obj/mecha/working/W)
 	if(..())
@@ -70,6 +72,7 @@
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=2;"
 	starting_materials = list(MAT_IRON = 112500, MAT_GLASS = 500)
 	equip_type = EQUIP_SPECIAL
+	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit/can_attach(obj/mecha/working/W)
 	if(!..())
@@ -108,8 +111,9 @@
 	icon_state = "tesla"
 	origin_tech = Tc_POWERSTORAGE + "=6" + Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;"
 	optimal_type = list(/obj/mecha/working/ripley)
-	has_equip_overlay = FALSE
 	equip_type = EQUIP_HULL
+	has_equip_overlay = FALSE
+
 
 	var/slowdown_multiplier = 0.75	// How much does the exosuit multiply its slowdown by if it's the proper type?
 	var/power_use_mod = 2

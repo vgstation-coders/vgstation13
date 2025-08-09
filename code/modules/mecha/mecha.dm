@@ -11,8 +11,8 @@
 #define STATE_BOLTSEXPOSED 1
 #define STATE_BOLTSOPENED 2
 
-#define HAND 1
-#define BACK 2
+#define MECHA_HAND 1
+#define MECHA_BACK 2
 
 /obj/mecha
 	name = "Mecha"
@@ -2985,10 +2985,10 @@ Hull enclosure doesn't control atmos vulnerability
 	var/back = 0
 	for(var/obj/item/mecha_parts/mecha_equipment/i in equipment)
 		if(i.has_equip_overlay)
-			if(i.equip_slot == HAND && hand < 2)
+			if(i.equip_slot == MECHA_HAND && hand < 2)
 				draw_layer(i, hand)
 				hand++
-			else if(i.equip_slot == BACK && back < 2)
+			else if(i.equip_slot == MECHA_BACK && back < 2)
 				draw_layer(i, back)
 				back++
 

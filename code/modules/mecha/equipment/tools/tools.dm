@@ -284,6 +284,7 @@
 	energy_drain = 15
 	var/dam_force = 20
 	equip_type = EQUIP_UTILITY
+	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/tool/scythe/can_attach(obj/mecha/working/M as obj)
 	if(..())
@@ -445,6 +446,7 @@
 	var/wait = 0
 	var/datum/effect/system/trail/ion_trail
 	equip_type = EQUIP_HULL
+	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/can_attach(obj/mecha/M as obj)
 	if(!(locate(src.type) in M.equipment) && !M.proc_res["dyndomove"])
@@ -629,7 +631,7 @@
 	origin_tech = Tc_BLUESPACE + "=10"
 	equip_cooldown = 150
 	energy_drain = 1000
-	equip_slot = BACK
+	equip_slot = MECHA_BACK
 	range = RANGED
 	equip_type = EQUIP_UTILITY
 
@@ -701,7 +703,7 @@
 	origin_tech = Tc_BLUESPACE + "=2;" + Tc_MAGNETS + "=3"
 	equip_cooldown = 10
 	energy_drain = 100
-	equip_slot = BACK
+	equip_slot = MECHA_BACK
 	range = MELEE|RANGED
 	equip_type = EQUIP_SPECIAL
 	var/atom/movable/locked
@@ -1443,6 +1445,7 @@
 	var/datum/global_iterator/pr_switchtool
 	var/obj/item/weapon/switchtool/engineering/mech/switchtool
 	equip_type = EQUIP_UTILITY
+	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/can_attach(var/obj/mecha/working/clarke/M)
 	if(..())
@@ -1529,6 +1532,7 @@
 	var/plating_active = FALSE
 	var/tiling_active = FALSE
 	equip_type = EQUIP_UTILITY
+	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler/Topic(href,href_list)
 	if(..())
@@ -1591,6 +1595,7 @@
 	var/active = FALSE
 	var/obj/machinery/power/rad_collector/mech/collector
 	equip_type = EQUIP_HULL
+	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector/New()
 	..()
@@ -1634,6 +1639,7 @@
 	desc = "A pressurized canopy attachment kit for an Autonomous Power Loader Unit \"Ripley\" MK-I mecha, to convert it to the slower, but space-worthy MK-II design. Requires access to the internal compartments, and that the mech has a power source, is unoccupied and the cargo compartment is empty."
 	icon_state = "ripleyupgrade"
 	equip_type = EQUIP_SPECIAL
+	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/tool/ripleyupgrade/can_attach(obj/mecha/working/ripley/M)
 	if(M.enclosed) // i'm dumb and missed why istype wasn't working :c

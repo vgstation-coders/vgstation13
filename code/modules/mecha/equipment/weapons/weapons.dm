@@ -108,7 +108,7 @@
 	icon_state = "mecha_honker"
 	energy_drain = 200
 	equip_cooldown = 150
-	equip_slot = BACK
+	equip_slot = MECHA_BACK
 	need_colorize = FALSE
 	range = MELEE|RANGED
 
@@ -356,7 +356,7 @@
 	max_projectiles = 8
 	projectile_energy_cost = 1000
 	equip_cooldown = 60
-	equip_slot = BACK
+	equip_slot = MECHA_BACK
 	var/missile_speed = 2
 	var/missile_range = 30
 
