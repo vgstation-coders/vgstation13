@@ -49,6 +49,7 @@
 
 //Copy over the icon state to the draggable screen objects.dmi for this to function
 	name = "[capitalize(attachedobject.name)] Construction"
+	icon = attachedobject.icon
 	mouse_over_pointer = "[attachedobject.icon_state]"
 	mouse_drag_pointer = "[attachedobject.icon_state]"
 

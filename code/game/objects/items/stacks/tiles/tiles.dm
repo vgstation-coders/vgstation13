@@ -7,6 +7,16 @@
 	var/list/stacked_paint = list()
 	var/active
 
+/obj/item/stack/tile/Destroy()
+	..()
+	if(active)
+		QDEL_NULL(active)
+
+/obj/item/stack/tile/dropped()
+	..()
+	if(active)
+		QDEL_NULL(active)
+
 /obj/item/stack/tile/transfer_data_from(var/obj/item/stack/tile/S, var/amount)
 	while(amount > 0)
 		if (!S.paint_overlay)
@@ -77,7 +87,7 @@
 		to_chat(user, "Beginning plating construction mode, click and hold to use.")
 		return
 	else //End click drag construction, create grille
-		qdel(active)
+		QDEL_NULL(active)
 
 /obj/item/stack/tile/can_drag_use(mob/user, turf/T)
 	if(user.Adjacent(T)) //can we place here
@@ -103,7 +113,7 @@
 	build(T)
 
 /obj/item/stack/tile/end_drag_use()
-	active = null
+	QDEL_NULL(active)
 
 /obj/item/stack/tile/metal
 	name = "floor tile"
@@ -127,16 +137,6 @@
 	. = ..()
 	pixel_x = rand(1, 14) * PIXEL_MULTIPLIER
 	pixel_y = rand(1, 14) * PIXEL_MULTIPLIER
-
-/obj/item/stack/tile/metal/Destroy()
-	..()
-	if(active)
-		QDEL_NULL(active)
-
-/obj/item/stack/tile/metal/dropped()
-	..()
-	if(active)
-		QDEL_NULL(active)
 
 /obj/item/stack/tile/metal/build(turf/S as turf)
 	if(S.air)
