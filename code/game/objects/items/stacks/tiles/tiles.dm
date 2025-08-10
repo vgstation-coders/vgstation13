@@ -194,7 +194,6 @@
 
 /obj/item/stack/tile/rglass
 	name = "glass tile"
-	singular_name = "tile"
 	desc = "A relatively clear reinforced glass tile."
 	icon_state = "tile_rglass"
 	max_amount = 60
