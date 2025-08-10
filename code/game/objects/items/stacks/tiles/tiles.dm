@@ -139,7 +139,6 @@
 		QDEL_NULL(active)
 
 /obj/item/stack/tile/metal/build(turf/S as turf)
-	. = TRUE
 	if(S.air)
 		var/datum/gas_mixture/GM = S.air
 		if(GM.pressure > HALF_ATM)
