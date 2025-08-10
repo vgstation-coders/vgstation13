@@ -742,7 +742,6 @@
 					acct.charge(-credits, null, "Claimed biogenerator credits.", src.name, dest_name = "Biogenerator")
 			else
 				dispense_cash(credits,loc)
-			points = clamp(points-credits,0,points)
 			credits = 0
 		if("create")
 			create_product(href_list["item"],text2num(href_list["num"]))
