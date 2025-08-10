@@ -69,7 +69,7 @@
 		update_icon()
 
 /obj/item/stack/tile/proc/build()
-	return FALSE
+	return
 
 /obj/item/stack/tile/attack_self(mob/user)
 	if(!active) //Start click drag construction
@@ -203,10 +203,8 @@
 	var/airless_type = /turf/simulated/floor/glass/airless
 
 /obj/item/stack/tile/rglass/build(turf/S as turf)
-	. = FALSE
 	var/obj/structure/lattice/L = S.canBuildCatwalk(src)
 	if(istype(L))
-		. = TRUE
 		qdel(L)
 		if(S.air)
 			var/datum/gas_mixture/GM = S.air
