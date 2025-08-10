@@ -205,12 +205,12 @@
 	var/obj/structure/lattice/L = S.canBuildCatwalk(src)
 	if(istype(L))
 		qdel(L)
-		if(S.air)
-			var/datum/gas_mixture/GM = S.air
-			if(GM.pressure > HALF_ATM)
-				S.ChangeTurf(air_type)
-				return
-		S.ChangeTurf(airless_type)
+	if(S.air)
+		var/datum/gas_mixture/GM = S.air
+		if(GM.pressure > HALF_ATM)
+			S.ChangeTurf(air_type)
+			return
+	S.ChangeTurf(airless_type)
 
 /obj/item/stack/tile/rglass/afterattack(atom/target, mob/user, adjacent, params)
 	if(adjacent)
