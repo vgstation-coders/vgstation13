@@ -1,6 +1,4 @@
 /obj/abstract/screen/draggable
-	icon = 'icons/mob/screen_draggable.dmi'
-	icon_state = "blank"
 	var/mob/attachedmob
 	var/obj/attachedobject
 	mouse_opacity = 2
@@ -16,8 +14,6 @@
 	var/obj/abstract/screen/fuckbyond
 
 /obj/abstract/screen/fuckbyond
-	icon = 'icons/mob/screen_draggable.dmi'
-	icon_state = "blank"
 	mouse_opacity = 0
 	screen_loc = ui_entire_screen
 	var/obj/abstract/screen/draggable
