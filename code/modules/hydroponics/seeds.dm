@@ -58,15 +58,15 @@
 	if(istype(W,/obj/item/weapon/pen))
 		var/n_name = copytext(sanitize(input(user, "What would you like to name this seed variety?", "Plant Renaming", null) as text|null), 1, MAX_NAME_LEN*3)
 		if(n_name && Adjacent(user) && !user.stat)
-			name = "packet of [n_name] seeds"
-			seed = seed.diverge(-1)
-			seed.add_newline_to_controller()
-			seed.seed_name = "[n_name]"
-			seed.display_name = "[n_name]"
+			seed = seed.diverge(-1)//creates a new seed datum with a unique identifier. Seed datums are globals, so you don't want to modify every other seed in existence.
+			seed.seed_name = "[n_name]"//the name on the packet
+			seed.display_name = "[n_name]"//the name on the description of the packet and on growing plants
+			seed.add_newline_to_controller()//adds the entry to the plant subsystem
 			seed.roundstart = 1
+			update_appearance()//automagically updates the name and desc to reflect on the seed_name varaible
+			desc += " The words [n_name] are scribbled on it."
 		return
-	if (..())
-		return
+	..()
 
 //the vegetable/fruit categories are made from a culinary standpoint. many of the "vegetables" in there are technically fruits. (tomatoes, pumpkins...)
 
