@@ -427,10 +427,10 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	endurance = INFINITY
 	nutrient_consumption = 0
 	fluid_consumption = 0
-	production = 0
-	maturation = 0
+	production = 1
+	maturation = 1
 	harvest_repeat = 1
-	yield = 10
+	yield = 15
 
 //Returns a list of the desired trait values.
 /datum/seed/proc/get_gene(var/genetype)
