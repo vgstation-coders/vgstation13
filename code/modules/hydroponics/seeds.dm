@@ -54,6 +54,22 @@
 	seed_type = seed.name
 	..()
 
+/obj/item/seeds/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W,/obj/item/weapon/pen))
+		var/n_name = copytext(sanitize(input(user, "What would you like to name this seed variety?", "Plant Renaming", null) as text|null), 1, MAX_NAME_LEN*3)
+		if(n_name && Adjacent(user) && !user.stat)
+			name = "packet of [n_name] seeds"
+			seed = seed.diverge(-1)
+			seed.add_newline_to_controller()
+			seed.seed_name = "[n_name]"
+			seed.display_name = "[n_name]"
+			seed.roundstart = 1
+			//new_seed_type = SSplant.seeds[F.plantname]
+			//seeds.seed_type = new_seed_type.name
+		return
+	if (..())
+		return
+
 //the vegetable/fruit categories are made from a culinary standpoint. many of the "vegetables" in there are technically fruits. (tomatoes, pumpkins...)
 
 /obj/item/seeds/dionanode
