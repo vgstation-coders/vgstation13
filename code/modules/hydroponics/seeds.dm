@@ -64,8 +64,6 @@
 			seed.seed_name = "[n_name]"
 			seed.display_name = "[n_name]"
 			seed.roundstart = 1
-			//new_seed_type = SSplant.seeds[F.plantname]
-			//seeds.seed_type = new_seed_type.name
 		return
 	if (..())
 		return
