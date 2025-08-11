@@ -2081,7 +2081,7 @@
 	fluid_consumption = 6
 
 /datum/seed/redturnip/process_fruit(var/obj/machinery/portable_atmospherics/hydroponics/tray)
-	biogen_multiplier = 1+((tray.age-maturation-production)/240) // doubles in value every hour
+	biogen_multiplier = 1+(max(tray.age-maturation-production,0)/240) // doubles in value every hour
 
 /datum/seed/redturnip/white
 	name = "whiteturnip"
