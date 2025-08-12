@@ -2,8 +2,6 @@
 // -- Engineering outfits
 // -- CE
 
-#warn revert this /obj/item/clothing/head/hardhat/white CE's head
-
 /datum/outfit/chief_engineer
 
 	outfit_name = "Chief Engineer"
@@ -20,7 +18,7 @@
 			slot_ears_str = /obj/item/device/radio/headset/heads/ce,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/chief_engineer,
 			slot_shoes_str = /obj/item/clothing/shoes/workboots,
-			slot_head_str = /obj/item/clothing/head/welding,
+			slot_head_str = /obj/item/clothing/head/hardhat/white,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
 		),

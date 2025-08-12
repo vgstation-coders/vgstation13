@@ -22,9 +22,10 @@
 		"veteranclarke"
 	)
 	paintable = 1
+	cargo_capacity = 20
 	penetration_reduction = 1
 	damage_minimum = 0
-	encumbrance_gap = 4
+	weight_max = 400
 
 	starting_components = list(
 		/obj/item/mecha_parts/component/hull/atmos,

@@ -12,7 +12,7 @@
 	var/integrity
 	var/integrity_danger_mod = 0.5	// Multiplier for comparison to max_integrity before problems start.
 	var/max_integrity = 100
-	var/step_delay = 0
+	var/step_delay = 20 // Kilograms
 	var/relative_size = 30	// Percent chance for the component to be hit.
 	var/internal_damage_flag	// If set, the component will toggle the flag on or off if it is destroyed / severely damaged.
 	var/can_repair = TRUE
@@ -88,7 +88,6 @@
 	return TRUE
 
 /obj/item/mecha_parts/component/take_damage()
-	.=..()
 	if(chassis && chassis.health > 0)
 		chassis.CheckEnclosed()
 	TryBreakComponent()
