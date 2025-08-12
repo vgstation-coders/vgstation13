@@ -12,7 +12,7 @@
 
 	penetration_reduction = 5
 	damage_minimum = 3
-	weight_max = 3.5
+	encumbrance_gap = 3.5
 
 	starting_components = list(
 		/obj/item/mecha_parts/component/hull,

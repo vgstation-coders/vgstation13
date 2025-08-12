@@ -23,7 +23,7 @@
 
 
 	damage_minimum = 5 			//Big stompy
-	weight_max = 400
+	encumbrance_gap = 4
 	penetration_reduction = 5 // blocks 9mm, up to 7.62 with armor
 
 	max_hull_equip = 2

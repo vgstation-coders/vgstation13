@@ -98,7 +98,7 @@
 	R.max_universal_equip = 1
 	R.max_special_equip = 2
 
-	R.weight_max = 3
+	R.encumbrance_gap = 3
 	R.damage_minimum = 10
 
 

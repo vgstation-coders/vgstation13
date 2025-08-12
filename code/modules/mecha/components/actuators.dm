@@ -7,7 +7,7 @@
 	origin_tech = list(TECH_DATA = 2, TECH_ENGINEERING = 2)
 	component_type = MECH_ACTUATOR
 	start_damaged = FALSE
-	step_delay = 20
+	step_delay = 0
 	emp_resistance = 1
 	optimal_type = null	// List, if it exists. Exosuits meant to use the component.
 	integrity_danger_mod = 0.6	// Multiplier for comparison to max_integrity before problems start.
@@ -21,7 +21,7 @@
 
 /obj/item/mecha_parts/component/actuator/hispeed
 	name = "overclocked mecha actuator"
-	step_delay = -100
+	step_delay = -1
 	relative_size = 15
 	emp_resistance = -1
 	integrity_danger_mod = 0.7
@@ -29,7 +29,7 @@
 
 /obj/item/mecha_parts/component/actuator/durable
 	name = "reinforced mecha actuator"
-	step_delay = 100
+	step_delay = 1
 	relative_size = 20
 	emp_resistance = 1
 	integrity_danger_mod = 0.5

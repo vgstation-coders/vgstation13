@@ -29,7 +29,7 @@
 
 	damage_minimum = 0
 
-	weight_max = 200
+	encumbrance_gap = 3
 	penetration_reduction = 5 // blocks 9mm
 
 	max_hull_equip = 2
@@ -38,7 +38,7 @@
 	max_universal_equip = 1
 	max_special_equip = 1
 
-	weight_max = 2
+	encumbrance_gap = 2
 
 	starting_components = list(
 		/obj/item/mecha_parts/component/hull/durable,

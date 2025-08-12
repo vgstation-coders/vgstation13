@@ -156,11 +156,6 @@
 	penetration = 1
 	projectile_speed = 1
 
-/obj/item/projectile/bullet/auto380_mech // 380's to_bump proc runtimes like heck when not in a normal gun
-	damage = 15
-	agony = 15
-	penetration = 2
-
 /obj/item/projectile/bullet/auto380 //new sec pistol ammo, reverse name because lol compiler
 	damage = 15
 	agony = 15

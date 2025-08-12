@@ -19,13 +19,13 @@
 		"urinetrouble"
 	)
 
-	weight_max = 150
+	encumbrance_gap = 3
 	penetration_reduction = 0
 	damage_minimum = 0
 
 	max_hull_equip = 1
 	max_weapon_equip = 0
-	max_utility_equip = 3
+	max_utility_equip = 2
 	max_universal_equip = 1
 	max_special_equip = 1
 
@@ -77,23 +77,9 @@
 	icon_state = "murdysseus"
 	initial_icon = "murdysseus"
 	deflect_chance = 10
-	health = 200
+	health = 240
 	wreckage = /obj/effect/decal/mecha_wreckage/odysseus/murdysseus
 	paintable = 0
-	emp_gear_proof = TRUE
-	max_hull_equip = 2
-	max_weapon_equip = 1
-	max_utility_equip = 4
-	max_universal_equip = 1
-	max_special_equip = 1
-
-	starting_components = list(
-		/obj/item/mecha_parts/component/hull,
-		/obj/item/mecha_parts/component/actuator/hispeed,
-		/obj/item/mecha_parts/component/armor/marshal,
-		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical
-		)
 
 /obj/mecha/medical/odysseus/murdysseus/New()
 	..()

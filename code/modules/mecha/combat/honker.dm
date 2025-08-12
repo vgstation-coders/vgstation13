@@ -16,7 +16,6 @@
 	var/squeak = 0
 
 	penetration_reduction = 3 // blocks .380
-	weight_max = 200
 
 /*
 /obj/mecha/combat/honker/New()

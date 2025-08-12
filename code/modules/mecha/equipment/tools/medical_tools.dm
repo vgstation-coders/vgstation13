@@ -13,7 +13,7 @@
 	var/inject_amount = 10
 	salvageable = 0
 	equip_type = EQUIP_UTILITY
-	step_delay = 20
+	step_delay = 0
 
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/can_attach(obj/mecha/medical/M)
 	if(..())
@@ -260,7 +260,6 @@
 	var/obj/item/stack/cable_coil/cable
 	var/max_cable = 1000
 	equip_type = EQUIP_UTILITY
-	step_delay = 20
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/New()
 	cable = new(src)
@@ -425,7 +424,6 @@
 	equip_cooldown = 10
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_BIOTECH + "=4;" + Tc_MAGNETS + "=4;" + Tc_PROGRAMMING + "=3"
 	equip_type = EQUIP_UTILITY
-	step_delay = 20
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/New()
 	..()

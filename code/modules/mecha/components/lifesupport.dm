@@ -9,7 +9,7 @@
 	emp_resistance = 1
 	integrity_danger_mod = 0.4
 	max_integrity = 40
-	step_delay = 40
+	step_delay = 0
 	relative_size = 20
 	internal_damage_flag = MECHA_INT_TANK_BREACH
 	broken_icon = "lifesupport_broken"
@@ -18,5 +18,5 @@
 	name = "reinforced mecha life-support"
 	emp_resistance = 2
 	max_integrity = 80
-	step_delay = 100
+	step_delay = 1
 	relative_size = 40
