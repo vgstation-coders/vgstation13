@@ -271,6 +271,7 @@
 	var/eggsleft = 0
 	var/body_color
 	var/feather_regen = 0
+	var/original_body_color = null
 	pass_flags = PASSTABLE
 	size = SIZE_SMALL
 	speak_override = TRUE
@@ -332,6 +333,13 @@
 			F.amount = F.initial_amount
 			visible_message("[src] regrows their feathers.")
 			feather_regen = 0
+			if(original_body_color)
+				body_color = original_body_color
+				original_body_color = null
+			icon_state = "chicken_[body_color]"
+			icon_living = "chicken_[body_color]"
+			icon_dead = "chicken_[body_color]_dead"
+			update_icon()
 
 /mob/living/simple_animal/chicken/pomf
 	name = "Pomf chicken"

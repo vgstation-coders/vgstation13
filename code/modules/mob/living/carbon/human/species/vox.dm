@@ -195,9 +195,10 @@
 			feather_regen += 1 SECONDS
 			if(feather_regen == 2 SECONDS)
 				to_chat(src, "<span class='notice'>You feel a tingling sensation as your feathers begin to regrow.</span>")
-		else
-			feather_regen = 0
-		if(feather_regen >= 5 MINUTES)
+		if(feather_regen >= 15 MINUTES)
+			my_appearance.s_tone = original_vox_tone
 			F.amount = F.initial_amount
 			to_chat(src, "<span class='notice'>Your feathers regrow fully.</span>")
 			feather_regen = 0
+			species.updatespeciescolor(src)
+			regenerate_icons()

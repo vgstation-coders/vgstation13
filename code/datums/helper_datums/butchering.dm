@@ -280,15 +280,19 @@
 		return
 	amount--
 	var/obj/item/stack/sheet/feather/F = new result(location)
+	var/mob/living/carbon/human/vox/V = parent
 	if(isvox(parent))
-		var/mob/living/carbon/human/vox/V = parent
-		if(!V.original_vox_tone) // Store original tone on first pluck
-			V.original_vox_tone = V.my_appearance.s_tone
 		var/color_key = get_vox_color_key(V.my_appearance.s_tone)
 		var/list/color_data = feather_colors[color_key]
 		if(color_data)
 			F.color = color_data["hex"]
 			F.name = "[color_data["name"]] feather"
+	if(amount == 0)
+		if(!V.original_vox_tone)
+			V.original_vox_tone = V.my_appearance.s_tone
+		V.my_appearance.s_tone = VOXPLUCKED
+		V.species.updatespeciescolor(V)
+		V.regenerate_icons()
 	return F
 
 /datum/butchering_product/feathers/chicken
@@ -301,8 +305,8 @@
 		return
 	amount--
 	var/obj/item/stack/sheet/feather/F = new result(location)
+	var/mob/living/simple_animal/chicken/C = parent
 	if(istype(parent, /mob/living/simple_animal/chicken))
-		var/mob/living/simple_animal/chicken/C = parent
 		var/color_key = C.body_color
 		// Only allow brown, black, or white
 		if(!(color_key in list("brown", "black", "white")))
@@ -311,6 +315,16 @@
 		if(color_data)
 			F.color = color_data["hex"]
 			F.name = "[color_data["name"]] feather"
+		if(amount == 0)
+			if(!C.original_body_color)
+				C.original_body_color = C.body_color
+			C.icon_living = "chicken_plucked"
+			C.icon_dead = "chicken_plucked_dead"
+			if(C.stat == DEAD)
+				C.icon_state = "chicken_plucked_dead"
+			else
+				C.icon_state = "chicken_plucked"
+			C.update_icon()
 	return F
 
 /datum/butchering_product/feathers/voxchicken
@@ -323,6 +337,7 @@
 		return
 	amount--
 	var/obj/item/stack/sheet/feather/F = new result(location)
+	var/mob/living/carbon/monkey/vox/V = parent
 	// Exclude certain colors
 	var/list/excluded = list("brown", "white", "gray")
 	var/list/color_keys = list()
@@ -334,6 +349,10 @@
 	if(color_data)
 		F.color = color_data["hex"]
 		F.name = "[color_data["name"]] feather"
+	if(amount == 0)
+		if(istype(parent, /mob/living/carbon/monkey/vox))
+			V.icon_state = "chickengreen_plucked"
+			V.update_icon()
 	return F
 //=============Claws========
 

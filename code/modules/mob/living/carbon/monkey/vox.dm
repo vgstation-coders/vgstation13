@@ -57,7 +57,7 @@
 
 	//feather regeneration
 	for(var/datum/butchering_product/feathers/voxchicken/F in butchering_drops)
-		if(F.amount <= 2)
+		if(F.amount <= 2 && !stat)
 			feather_regen += 1 SECONDS
 			if(feather_regen == 2 SECONDS) //it would constantly spam if I didn't do this.
 				visible_message("[src] starts to regrow some feathers.")
@@ -65,6 +65,9 @@
 			F.amount = F.initial_amount
 			visible_message("[src] regrows their feathers.")
 			feather_regen = 0
+			icon_state = "chickengreen"
+			update_icon()
+
 
 /mob/living/carbon/monkey/vox/say(var/message)
 	if (prob(25))
