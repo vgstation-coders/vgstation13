@@ -28,8 +28,9 @@
 	paintable = 0
 
 	damage_minimum = 10
-	encumbrance_gap = 5
+	weight_max = 500
 	penetration_reduction = 10 // blocks 7.62x55
+	emp_gear_proof = TRUE
 
 	max_hull_equip = 3
 	max_weapon_equip = 3

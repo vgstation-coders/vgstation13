@@ -8,10 +8,11 @@
 	energy_drain = 10
 	var/dam_force = 20
 	equip_type = EQUIP_UTILITY
+	step_delay = 50
 
-/obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/can_attach(obj/mecha/working/M as obj)
+/obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/can_attach(obj/mecha/M as obj)
 	if(..())
-		if(istype(M))
+		if(istype(M, /obj/mecha/working) || istype(M, /obj/mecha/medical))
 			return 1
 	return 0
 
@@ -30,8 +31,6 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/action(atom/target)
 	if(!action_checks(target))
-		return
-	if(!istype(chassis, /obj/mecha/working))
 		return
 	var/obj/mecha/working/W = chassis
 
@@ -56,21 +55,7 @@
 				playsound(FD, 'sound/mecha/hydraulic.ogg', 100, 1)
 				FD.force_open(chassis.occupant, src)
 			return
-/*
-	if(ismecha(target))
-		var/obj/mecha/M = target
-		var/obj/item/mecha_parts/weapon/ballistic/mech_gun
-		var/have_ammo
-		for(var/obj/item/ammo_storage/box/box in cargo_holder.cargo)
-			if(box.ammo_type == mech_gun.ammo_type) && box.rounds)
-				have_ammo = TRUE
-				if(M.ammo_resupply(box, chassis.occupant, TRUE))
-					return
-		if(have_ammo)
-			to_chat(chassis.occupant, "No further supplies can be provided to [M].")
-		else
-			to_chat(chassis.occupant, "No providable supplies found in cargo hold")
-*/
+
 		if(!O.anchored)
 			if(istype(O, /obj/item/stack/ore) && W.ore_box)
 				var/count = 0
@@ -115,7 +100,7 @@
 		if(M.stat == DEAD)
 			return
 		if(chassis.occupant.a_intent == I_HURT)
-			if(istype(chassis, /obj/mecha/working/clarke))
+			if(istype(M, /obj/mecha/working/clarke) || istype(M, /obj/mecha/medical/odysseus))
 				to_chat(chassis.occupant, "<span class='warning'>WARNING: OSHA regulations prohibit use of \the [src] in that way.</span>")
 				return
 			playsound(chassis, 'sound/mecha/hydraulic.ogg', 100, 1)
@@ -148,6 +133,7 @@
 	force = 15
 	var/dig_walls = 0 //probably a better way to do this through bitflags but I don't really know how
 	equip_type = EQUIP_UTILITY
+	step_delay = 50
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill/proc/effects_pre(atom/target)
 	playsound(target, 'sound/items/surgicaldrill.ogg', 100, 1)
@@ -285,6 +271,7 @@
 	var/dam_force = 20
 	equip_type = EQUIP_UTILITY
 	has_equip_overlay = FALSE
+	step_delay = 50
 
 /obj/item/mecha_parts/mecha_equipment/tool/scythe/can_attach(obj/mecha/working/M as obj)
 	if(..())
@@ -360,6 +347,7 @@
 	range = MELEE|RANGED
 	need_colorize = FALSE
 	equip_type = EQUIP_UTILITY
+	step_delay = 25
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/can_attach(obj/mecha/working/M)
 	if(..())
@@ -447,6 +435,7 @@
 	var/datum/effect/system/trail/ion_trail
 	equip_type = EQUIP_HULL
 	has_equip_overlay = FALSE
+	step_delay = 100
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/can_attach(obj/mecha/M as obj)
 	if(!(locate(src.type) in M.equipment) && !M.proc_res["dyndomove"])
@@ -559,6 +548,7 @@
 	var/obj/item/device/rcd/mech/RCD
 	var/obj/item/tool/wrench/socket/sock
 	equip_type = EQUIP_UTILITY
+	step_delay = 100
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/New()
 	..()
@@ -634,6 +624,7 @@
 	equip_slot = MECHA_BACK
 	range = RANGED
 	equip_type = EQUIP_UTILITY
+	step_delay = 100
 
 /obj/item/mecha_parts/mecha_equipment/teleporter/action(atom/target)
 	if(!action_checks(target) || src.loc.z == map.zCentcomm)
@@ -655,6 +646,7 @@
 	energy_drain = 300
 	range = RANGED
 	equip_type = EQUIP_UTILITY
+	step_delay = 100
 
 
 /obj/item/mecha_parts/mecha_equipment/wormhole_generator/action(atom/target)
@@ -706,6 +698,7 @@
 	equip_slot = MECHA_BACK
 	range = MELEE|RANGED
 	equip_type = EQUIP_SPECIAL
+	step_delay = 100
 	var/atom/movable/locked
 	var/mode = 1 //1 - gravsling 2 - gravpush
 
@@ -798,6 +791,7 @@
 	var/damage_coeff = 0.8
 	is_activateable = 0
 	equip_type = EQUIP_HULL
+	step_delay = 100
 
 /obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/can_attach(obj/mecha/M as obj)
 	if(..())
@@ -852,6 +846,7 @@
 	var/damage_coeff = 0.8
 	is_activateable = 0
 	equip_type = EQUIP_HULL
+	step_delay = 100
 	var/list/never_deflect = list(
 		/obj/item/projectile/ion,
 	)
@@ -931,6 +926,7 @@
 	var/icon/droid_overlay
 	var/list/repairable_damage = list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH)
 	equip_type = EQUIP_UTILITY
+	step_delay = 50
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/New()
 	..()
@@ -1038,6 +1034,7 @@
 	var/coeff = 100
 	var/list/use_channels = list(EQUIP,ENVIRON,LIGHT)
 	equip_type = EQUIP_HULL
+	step_delay = 50
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/New()
 	pr_energy_relay = new /datum/global_iterator/mecha_energy_relay(list(src),0)
@@ -1180,6 +1177,7 @@
 	var/power_per_cycle = 20
 	reliability = 1000
 	equip_type = EQUIP_HULL
+	step_delay = 100
 
 /obj/item/mecha_parts/mecha_equipment/generator/New()
 	..()
@@ -1446,6 +1444,7 @@
 	var/obj/item/weapon/switchtool/engineering/mech/switchtool
 	equip_type = EQUIP_UTILITY
 	has_equip_overlay = FALSE
+	step_delay = 50
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/can_attach(var/obj/mecha/working/clarke/M)
 	if(..())
@@ -1533,6 +1532,7 @@
 	var/tiling_active = FALSE
 	equip_type = EQUIP_UTILITY
 	has_equip_overlay = FALSE
+	step_delay = 50
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler/Topic(href,href_list)
 	if(..())
@@ -1596,6 +1596,7 @@
 	var/obj/machinery/power/rad_collector/mech/collector
 	equip_type = EQUIP_HULL
 	has_equip_overlay = FALSE
+	step_delay = 100
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector/New()
 	..()

@@ -12,7 +12,7 @@
 	salvageable = 0
 	equip_type = EQUIP_UTILITY
 	has_equip_overlay = FALSE
-	step_delay = 0.5
+	step_delay = 50
 
 /obj/item/mecha_parts/mecha_equipment/tool/jail/can_attach(obj/mecha/combat/G)
 	if(..())
@@ -68,9 +68,6 @@
 		return
 	if(!CellFree())
 		occupant_message("The jail cells are already occupied")
-		return
-	if(!(target.handcuffed || target.legcuffed))
-		occupant_message("[target] must be restrained before they can be properly placed in the holding cell.")
 		return
 	for(var/mob/living/carbon/slime/M in range(1,target))
 		if(M.Victim == target)

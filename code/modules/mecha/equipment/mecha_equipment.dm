@@ -225,6 +225,14 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/emp_act(severity)
+	var/obj/mecha/mecha
+	if(!chassis || chassis.health <= 0)
+		return
+	if(chassis.emp_gear_proof)
+		return
+	if(prob(severity / 15))
+		mecha.visible_message("\The [mecha]'s electromagnetic grippers spark, dropping [src] to the ground!")
+		detach()
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/get_step_delay() // Equipment returns its slowdown or speedboost.

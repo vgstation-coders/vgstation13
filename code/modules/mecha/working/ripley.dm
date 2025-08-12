@@ -21,7 +21,8 @@
 		"hauler"
 	)
 	paintable = 1
-	encumbrance_gap = 5
+	cargo_capacity = 20
+	weight_max = 500
 	damage_minimum = 0
 	penetration_reduction = 0
 
@@ -119,7 +120,7 @@
 	paintable = 0
 	penetration_reduction = 5 // blocks .380
 	damage_minimum = 5
-
+	emp_gear_proof = TRUE
 	max_hull_equip = 2
 	max_weapon_equip = 1
 	max_utility_equip = 4
