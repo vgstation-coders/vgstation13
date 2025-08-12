@@ -145,10 +145,7 @@
 
 	if(href_list["send"])
 		spawn(0)
-			if(!cooldown)
-				attempt_activate()
-			else
-				to_chat(usr, "<span class='warning'>You must wait a little before sending out a signal again!</span>")
+			attempt_activate()
 
 	if(href_list["toggle_silent"])
 		silent = !silent
