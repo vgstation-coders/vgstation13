@@ -188,7 +188,6 @@
 
 /mob/living/carbon/human/vox/Life()
 	..()
-
 	//feather regeneration
 	for(var/datum/butchering_product/feathers/vox/F in butchering_drops)
 		if(F.amount <= 5 && !stat)
@@ -202,3 +201,18 @@
 			feather_regen = 0
 			species.updatespeciescolor(src)
 			regenerate_icons()
+
+/mob/living/carbon/human/vox/handle_random_events()
+	..()
+	//BALD, BALD, BALD!!!
+	if(my_appearance.s_tone != VOXPLUCKED)
+		if(radiation >= 50)
+			for(var/datum/butchering_product/feathers/vox/F in butchering_drops)
+				while(F.amount > 0)
+					F.spawn_result(loc, src)
+			if(!original_vox_tone)
+				original_vox_tone = my_appearance.s_tone
+			my_appearance.s_tone = VOXPLUCKED
+			species.updatespeciescolor(src)
+			regenerate_icons()
+			to_chat(src, "<span class='notice'>Your feathers fall out from the radiation!</span>")
