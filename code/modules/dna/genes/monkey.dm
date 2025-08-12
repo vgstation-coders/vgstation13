@@ -43,7 +43,7 @@
 		animation.master = M
 		var/anim_name = M.get_unmonkey_anim()
 		flick(anim_name, animation)
-		sleep(48)
+		sleep(MONKEY_ANIM_TIME)
 		animation.master = null
 		qdel(animation)
 

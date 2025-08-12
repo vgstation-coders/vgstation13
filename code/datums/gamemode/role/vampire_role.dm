@@ -595,6 +595,17 @@
 			if (prob(35)) // 35% chance of dethralling
 				Drop(TRUE)
 
+/datum/role/thrall/handle_splashed_reagent(var/reagent_id, var/method, var/volume)
+	switch(reagent_id)
+		if(HOLYWATER, SACREDWATER)
+			var/mob/living/carbon/human/H = antag.current
+			if(!istype(H))
+				return
+			H.eye_blurry = max(H.eye_blurry, 5)
+			H.Dizzy(5)
+			H.stuttering = max(H.stuttering, 5)
+			H.Jitter(5)
+
 /mob/proc/vampire_power(var/required_blood = 0, var/max_stat = 0)
 	var/datum/role/vampire/vampire = isvampire(src)
 
