@@ -75,7 +75,7 @@
 	new /obj/item/mecha_parts/mecha_equipment/weapon/energy/pulse(src)
 	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
 	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
-	new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
+	new /obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster(src)
 	UpdateIcon()
 	src.smoke_system.set_up(3, 0, src)
 	src.smoke_system.attach(src)
@@ -108,7 +108,7 @@
 	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
 	new /obj/item/mecha_parts/mecha_equipment/teleporter(src)
 	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
-	new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
+	new /obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster(src)
 	UpdateIcon()
 	max_ammo()
 

@@ -13,11 +13,11 @@
 			var/int_dam_flag = safepick(possible_int_damage)
 			if(int_dam_flag)
 				setInternalDamage(int_dam_flag)
-	if(prob(5))
+	if(prob(10))
 		if(ignore_threshold || src.health*100/initial(src.health)<src.internal_damage_threshold)
-			var/obj/item/mecha_parts/mecha_equipment/destr = safepick(equipment)
-			if(destr)
-				qdel(destr)
+			var/obj/item/mecha_parts/mecha_equipment/drop = safepick(equipment)
+			if(drop)
+				drop.detach()
 	return
 
 /obj/mecha/proc/hasInternalDamage(int_dam_flag=null)

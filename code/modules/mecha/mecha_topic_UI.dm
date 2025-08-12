@@ -2,6 +2,10 @@
 ///// Rendering stats window ///////
 ////////////////////////////////////
 
+#define STATE_BOLTSHIDDEN 0
+#define STATE_BOLTSEXPOSED 1
+#define STATE_BOLTSOPENED 2
+
 /obj/mecha/proc/get_stats_html()
 	var/output = {"<html>
 						<head><title>[src.name] data</title>
@@ -531,3 +535,7 @@
 			src.occupant = cur_occupant
 */
 	return
+
+#undef STATE_BOLTSHIDDEN
+#undef STATE_BOLTSEXPOSED
+#undef STATE_BOLTSOPENED

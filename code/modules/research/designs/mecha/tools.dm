@@ -75,7 +75,7 @@
 	id = "mech_ccw_armor"
 	build_type = MECHFAB
 	req_tech = list(Tc_MATERIALS = 5, Tc_COMBAT = 4)
-	build_path = /obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster
+	build_path = /obj/item/mecha_parts/mecha_equipment/armor/anticcw_armor_booster
 	category = "Exosuit_Modules"
 	materials = list(MAT_IRON=20000,MAT_SILVER=5000)
 
@@ -85,7 +85,7 @@
 	id = "mech_proj_armor"
 	build_type = MECHFAB
 	req_tech = list(Tc_MATERIALS = 5, Tc_COMBAT = 5, Tc_ENGINEERING = 3)
-	build_path = /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster
+	build_path = /obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster
 	category = "Exosuit_Modules"
 	materials = list(MAT_IRON=20000,MAT_GOLD=5000)
 

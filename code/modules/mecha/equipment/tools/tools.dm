@@ -778,44 +778,44 @@
 		mode = 1
 		to_chat(chassis.occupant, "<span class='notice'>Pull mode activated.</span>")
 
-/obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster //what is that noise? A BAWWW from TK mutants.
-	name = "\improper Armor Booster Module (Close Combat Weaponry)"
-	desc = "Boosts exosuit armor against armed melee attacks. Requires energy to operate."
+/obj/item/mecha_parts/mecha_equipment/armor
+	name = "\improper Armor Booster Module (parent armor)"
+	desc = "Boosts exosuit armor against daddy issues."
 	icon_state = "mecha_abooster_ccw"
 	origin_tech = Tc_MATERIALS + "=3"
 	equip_cooldown = 10
 	energy_drain = 50
 	range = 0
 	has_equip_overlay = FALSE
-	var/deflect_coeff = 1.15
-	var/damage_coeff = 0.8
 	is_activateable = 0
 	equip_type = EQUIP_HULL
 	step_delay = 100
+	var/damage_coeff = 0.8
+	var/deflect_coeff = 1.15
+	var/armor_boost = list("brute"=1,"fire"=1,"bullet"=1,"laser"=1,"energy"=1,"bomb"=1)
 
-/obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/can_attach(obj/mecha/M as obj)
-	if(..())
-		if(!istype(M, /obj/mecha/combat/honker) && !istype(M, /obj/mecha/working/clarke))
-			if(!M.proc_res["dynattackby"])
-				return 1
-	return 0
-
-/obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/attach(obj/mecha/M as obj)
-	..()
-	chassis.proc_res["dynattackby"] = src
-	return
-
-/obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/detach()
-	chassis.proc_res["dynattackby"] = null
-	..()
-	return
-
-/obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/get_equip_info()
+/obj/item/mecha_parts/mecha_equipment/armor/get_equip_info()
 	if(!chassis)
 		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name]"
 
-/obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/mecha_parts/mecha_equipment/armor/anticcw_armor_booster //what is that noise? A BAWWW from TK mutants.
+	name = "\improper Armor Booster Module (Close Combat Weaponry)"
+	desc = "Boosts exosuit armor against armed melee attacks. Requires energy to operate."
+	icon_state = "mecha_abooster_ccw"
+	armor_boost = list("brute"=0.8,"fire"=1,"bullet"=1,"laser"=1,"energy"=1,"bomb"=0.9)
+
+/obj/item/mecha_parts/mecha_equipment/armor/anticcw_armor_booster/attach(obj/mecha/M as obj)
+	..()
+	chassis.proc_res["dynattackby"] = src
+	return
+
+/obj/item/mecha_parts/mecha_equipment/armor/anticcw_armor_booster/detach()
+	chassis.proc_res["dynattackby"] = null
+	..()
+	return
+
+/obj/item/mecha_parts/mecha_equipment/armor/anticcw_armor_booster/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(!action_checks(user))
 		return chassis.dynattackby(W,user)
 	chassis.log_message("Attacked by [W]. Attacker - [user]")
@@ -832,8 +832,7 @@
 	do_after_cooldown()
 	return
 
-
-/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster
+/obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster
 	name = "\improper Armor Booster Module (Ranged Weaponry)"
 	desc = "Boosts exosuit armor against ranged attacks. Completely blocks taser shots. Requires energy to operate."
 	icon_state = "mecha_abooster_proj"
@@ -842,8 +841,6 @@
 	energy_drain = 50
 	range = 0
 	has_equip_overlay = FALSE
-	var/deflect_coeff = 1.15
-	var/damage_coeff = 0.8
 	is_activateable = 0
 	equip_type = EQUIP_HULL
 	step_delay = 100
@@ -851,31 +848,24 @@
 		/obj/item/projectile/ion,
 	)
 
-/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/can_attach(obj/mecha/M as obj)
-	if(..())
-		if(!istype(M, /obj/mecha/combat/honker) && !istype(M, /obj/mecha/working/clarke))
-			if(!M.proc_res["dynbulletdamage"] && !M.proc_res["dynhitby"])
-				return 1
-	return 0
-
-/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/attach(obj/mecha/M as obj)
+/obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster/attach(obj/mecha/M as obj)
 	..()
 	chassis.proc_res["dynbulletdamage"] = src
 	chassis.proc_res["dynhitby"] = src
 	return
 
-/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/detach()
+/obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster/detach()
 	chassis.proc_res["dynbulletdamage"] = null
 	chassis.proc_res["dynhitby"] = null
 	..()
 	return
 
-/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/get_equip_info()
+/obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster/get_equip_info()
 	if(!chassis)
 		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name]"
 
-/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/proc/dynbulletdamage(var/obj/item/projectile/Proj)
+/obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster/proc/dynbulletdamage(var/obj/item/projectile/Proj)
 	if(!action_checks(src))
 		return chassis.dynbulletdamage(Proj)
 	if(prob(chassis.deflect_chance*deflect_coeff) && !is_type_in_list(Proj, never_deflect))
@@ -891,7 +881,7 @@
 	do_after_cooldown()
 	return
 
-/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/proc/dynhitby(atom/movable/A)
+/obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster/proc/dynhitby(atom/movable/A)
 	if(!action_checks(A))
 		return chassis.dynhitby(A)
 	if(prob(chassis.deflect_chance*deflect_coeff) || istype(A, /mob/living) || istype(A, /obj/item/mecha_parts/mecha_tracking))

@@ -9,9 +9,9 @@
 	component_type = MECH_ELECTRIC
 	emp_resistance = 1
 	integrity_danger_mod = 0.4
-	max_integrity = 40
+	max_integrity = 50
 	step_delay = 20
-	relative_size = 10
+	relative_size = 5
 	internal_damage_flag = MECHA_INT_SHORT_CIRCUIT
 	broken_icon = "board_broken"
 	var/charge_cost_mod = 1
@@ -33,16 +33,16 @@
 	desc = "A data and electrical hub optimized for higher energy throughput."
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=3"
 	emp_resistance = -1
-	max_integrity = 20
-	relative_size = 20
+	max_integrity = 30
+	relative_size = 10
 	charge_cost_mod = 0.5
 
 /obj/item/mecha_parts/component/electrical/durable
 	name = "armoured mecha electrical & data core"
 	desc = "A standard data and electrical hub, covered by a sheath of armour."
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=3"
-	emp_resistance = 1
-	max_integrity = 80
+	emp_resistance = 2
+	max_integrity = 120
 	step_delay = 100
-	relative_size = 20
+	relative_size = 10
 	charge_cost_mod = 1.25

@@ -1,4 +1,3 @@
-
 /obj/item/mecha_parts/component/actuator
 	name = "mecha actuator"
 	icon = 'icons/mecha/mech_component.dmi'

@@ -30,46 +30,7 @@
 
 /obj/mecha/proc/domove(direction)
 	return call((proc_res["dyndomove"]||src), "dyndomove")(direction)
-/*
-/obj/mecha/proc/get_step_delay()
-	var/tally = 0
 
-	if(equipment.len)
-		for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
-			if(ME.get_step_delay())
-				tally += ME.get_step_delay()
-
-	for(var/slot in internal_components)
-		var/obj/item/mecha_parts/component/C = internal_components[slot]
-		if(C && C.get_step_delay())
-			tally += C.get_step_delay()
-
-//		if(tally <= weight_max)	// If the total is less than our encumbrance gap, ignore equipment weight.
-//			tally = 0
-//		else	// Otherwise, start the tally after cutting that gap out.
-		tally -= weight_max
-
-	var/obj/item/mecha_parts/component/actuator/actuator = internal_components[MECH_ACTUATOR]
-
-	if(!actuator)	// Relying purely on hydraulic pumps. You're going nowhere fast.
-		tally += 2
-	else
-		tally += 0.5 * (1 - actuator.get_efficiency())	// Damaged actuators run slower, slowing as damage increases beyond its threshold.
-
-	for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
-		if(istype(ME, /obj/item/mecha_parts/mecha_equipment/speedboost))
-			var/obj/item/mecha_parts/mecha_equipment/speedboost/SB = ME
-			for(var/path in ME.optimal_type)
-				if(istype(src, path))
-					tally = round(tally * SB.slowdown_multiplier)
-					break
-			break
-
-	if(overload)	// At the end, because this would normally just make the mech *slower* since tally wasn't starting at 0.
-		tally = min(1, round(tally/2))
-
-	return step_in + max(1, round(tally, 0.1))	// Round the total to the nearest 10th. Can't go lower than 1 tick. Even humans have a delay longer than that.
-*/
 /obj/mecha/proc/get_step_delay(var/tally = 0)
 
 	if(equipment.len)

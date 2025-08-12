@@ -6,21 +6,7 @@
 	build_path = /obj/item/mecha_parts/component/armor/mining
 	category = "Exosuit_Armor"
 	materials = list(MAT_IRON=15000)
-#warn remove
-/*
-#define Tc_PROGRAMMING       "programming"
-#define Tc_ENGINEERING       "engineering"
-#define Tc_MATERIALS         "materials"
-#define Tc_PLASMATECH        "plasmatech"
-#define Tc_MAGNETS           "magnets"
-#define Tc_SYNDICATE         "syndicate"
-#define Tc_BLUESPACE         "bluespace"
-#define Tc_COMBAT            "combat"
-#define Tc_BIOTECH           "biotech"
-#define Tc_POWERSTORAGE      "powerstorage"
-#define Tc_NANOTRASEN        "nanotrasen"
-#define Tc_ANOMALY           "anomaly"
-*/
+
 /datum/design/mech_armor_lightweight
 	name = "Module Design (Mecha Lightweight Plating)"
 	id = "mech_armor_lightweight"
@@ -57,6 +43,15 @@
 	category = "Exosuit_Armor"
 	materials = list(MAT_IRON = 15000, MAT_PLASTIC = 15000, MAT_GLASS = 15000, MAT_SILVER = 5000)
 
+/datum/design/mech_armor_striker
+	name = "Module Design (Mecha Striker Plating)"
+	id = "mech_armor_striker"
+	build_type = MECHFAB
+	req_tech = list(Tc_MATERIALS = 7, Tc_COMBAT = 6)
+	build_path = /obj/item/mecha_parts/component/armor/marshal/striker
+	category = "Exosuit_Armor"
+	materials = list(MAT_IRON = 5000, MAT_PLASTIC = 15000, MAT_PLASMA = 15000, MAT_GLASS = 15000, MAT_SILVER = 5000, MAT_DIAMOND = 5000)
+
 /datum/design/mech_armor_marauder
 	name = "Module Design (Mecha Marauder/Ultraheavy Plating)"
 	id = "mech_armor_marauder"
@@ -73,4 +68,4 @@
 	req_tech = list(Tc_MATERIALS = 9, Tc_BLUESPACE = 10)
 	build_path = /obj/item/mecha_parts/component/armor/alien
 	category = "Exosuit_Armor"
-	materials = list(MAT_IRON = 15000, MAT_PHAZON = 15000, MAT_DIAMOND = 2500)
+	materials = list(MAT_IRON = 15000, MAT_PHAZON = 15000, MAT_DIAMOND = 5000)

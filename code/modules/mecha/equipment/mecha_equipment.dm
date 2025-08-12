@@ -107,6 +107,14 @@
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/proc/action(atom/target)
+	if(!action_checks())
+		return
+	var/obj/item/mecha_parts/component/electrical/EC = chassis.internal_components[MECH_ELECTRIC]
+	if(!EC || EC.integrity <= 0)
+		if(prob(50))
+			chassis.occupant_message("Equipment failure due to [EC?"malfunctioning":"missing"] electrical regulator.")
+			log_message("Electrical equipment failure",1)
+			return
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/can_attach(obj/mecha/M as obj)
@@ -225,13 +233,13 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/emp_act(severity)
-	var/obj/mecha/mecha
-	if(!chassis || chassis.health <= 0)
+	if(!action_checks())
 		return
 	if(chassis.emp_gear_proof)
 		return
 	if(prob(severity / 15))
-		mecha.visible_message("\The [mecha]'s electromagnetic grippers spark, dropping [src] to the ground!")
+		chassis.visible_message("\The [chassis]'s electromagnetic grippers spark, dropping [src] to the ground!")
+		chassis.log_message("Malfunction of grippers caused [src] to detach.")
 		detach()
 	return
 

@@ -99,7 +99,6 @@
 	step_delay = 400
 	max_integrity = 120
 	optimal_type = list(/obj/mecha/combat)
-	damage_minimum = 15
 	pen_reduction = 5
 	damage_minimum = 5
 	damage_absorption = list(
@@ -147,23 +146,29 @@
 
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_COMBAT + "=4;"
 
-/obj/item/mecha_parts/component/armor/marshal/attach(var/obj/mecha/target, var/mob/living/user)
-	. = ..()
-	if(.)
-		var/typepass = FALSE
-		for(var/type in optimal_type)
-			if(istype(chassis, type))
-				typepass = TRUE
+/obj/item/mecha_parts/component/armor/marshal/striker
+	name = "striker mecha plating"
+	desc = "A thick panel constructed of ultra-hard ceramic composite. Lacks a backer, sacrificing durability for mobility and stopping ability."
+	icon_state = "armor_marshal"
+	step_delay = 100
+	max_integrity = 45
+	deflect_chance = 5
+	pen_reduction = 10
+	damage_absorption = list(
+		"brute"=0.6,
+		"fire"=1,
+		"bullet"=0.5,
+		"laser"=0.5,
+		"energy"=1,
+		"bomb"=1
+		)
 
-		if(typepass)
-			step_delay *= 0.5
-		else
-			step_delay = initial(step_delay)
+	origin_tech = Tc_MATERIALS + "=7;" + Tc_COMBAT + "=5;"
 
 /obj/item/mecha_parts/component/armor/marshal/reinforced
 	name = "blackops mecha plating"
 	desc = "An armour panel that provides top protection, while remaining lightweight, thanks to the cutting-edge ceramics and duraplastics used."
-	step_delay = 160
+	step_delay = 140
 	max_integrity = 120
 	deflect_chance = 10
 	pen_reduction = 10
