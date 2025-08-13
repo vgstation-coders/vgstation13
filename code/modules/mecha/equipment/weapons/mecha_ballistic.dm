@@ -63,7 +63,6 @@
 			continue
 		found_gun = TRUE
 		if(gun.projectiles_cache < gun.projectiles_cache_max)
-//			gun.loaded_projectiles += CS.BB
 			gun.projectiles_cache++
 			CS.BB = null
 			to_chat(user, "<span class='notice'>You load the [CS.name] into the [gun.name].</span>")
@@ -89,7 +88,6 @@
 			for(var/i = 1 to ammo_to_transfer)
 				var/obj/item/ammo_casing/casing = A.get_round()
 				if(casing && casing.BB)
-//					gun.loaded_projectiles += casing.BB
 					gun.projectiles_cache++
 					A.stored_ammo -= dropped
 				else

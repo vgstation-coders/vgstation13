@@ -38,7 +38,7 @@
 	max_hull_equip = 1
 	max_weapon_equip = 0
 	max_utility_equip = 4
-	max_universal_equip = 2
+	max_universal_equip = 0
 	max_special_equip = 1
 
 /obj/mecha/working/clarke/New()

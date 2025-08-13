@@ -11,7 +11,7 @@
 	damage_absorption = list("brute"=0.7,"fire"=1,"bullet"=0.8,"laser"=1,"energy"=1,"bomb"=1)
 	infra_luminosity = 8
 	force = 40
-	var/defence_deflect = 35
+	var/defence_deflect = 25
 	var/defence_dam_min = 5
 	wreckage = /obj/effect/decal/mecha_wreckage/durand
 	mech_sprites = list(
@@ -62,8 +62,8 @@
 	desc = "Reduce incoming damage in exchange for preventing movement."
 	hud_state = "durand-lockdown"
 	override_icon = 'icons/mecha/mecha.dmi'
-	charge_cooldown_max = 10
-	charge_counter = 10
+	charge_cooldown_max = 20
+	charge_counter = 20
 
 /spell/mech/durand/defence_mode/New()
 	..()

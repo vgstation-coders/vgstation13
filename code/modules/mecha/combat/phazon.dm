@@ -38,7 +38,7 @@
 	max_universal_equip = 1
 	max_special_equip = 1
 
-	weight_max = 2
+	weight_max = 200
 
 	starting_components = list(
 		/obj/item/mecha_parts/component/hull/durable,

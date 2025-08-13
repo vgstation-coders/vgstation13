@@ -1629,7 +1629,7 @@ Make examine text be much better and nicerer.
 			F.update_hud_icons()
 	..()
 
-/obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE)
+/obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE, var/destroyed = FALSE)
 	if(!occupant)
 		return
 

@@ -13,7 +13,7 @@
 	step_delay = 100
 	broken_icon = "armor_broken"
 	var/pen_reduction = 1
-	var/deflect_chance = 10
+	var/deflect_chance = 0
 	var/list/damage_absorption = list(
 		"brute"=	0.8,
 		"fire"=		1.2,
@@ -35,6 +35,7 @@
 	icon_state = "armor_mining"
 	step_delay = 200
 	max_integrity = 60
+	deflect_chance = 3
 	pen_reduction = 2
 	damage_minimum = 3
 
@@ -79,6 +80,7 @@
 	icon_state = "armor_durable"
 	step_delay = 250
 	max_integrity = 90
+	deflect_chance = 5
 	pen_reduction = 3
 	damage_minimum = 3
 	damage_absorption = list(
@@ -98,6 +100,7 @@
 	icon_state = "armor_military"
 	step_delay = 400
 	max_integrity = 120
+	deflect_chance = 10
 	optimal_type = list(/obj/mecha/combat)
 	pen_reduction = 5
 	damage_minimum = 5
@@ -225,6 +228,7 @@
 	emp_resistance = 2
 	step_delay = 150
 	max_integrity = 80
+	deflect_chance = 10
 	damage_minimum = 3
 	damage_absorption = list(
 		"brute"=0.7,
