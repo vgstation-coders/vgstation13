@@ -65,16 +65,6 @@
 		process_cooldown()
 	return
 
-/obj/item/device/assembly/timer/process()
-	if(timing && (time > 0))
-		time--
-	if(timing && time <= 0)
-		if(!repeat)
-			timing = 0
-		timer_end()
-		time = default_time
-	return
-
 /obj/item/device/assembly/timer/proc/timesoundloop(decrement = 0,freq = 1)
 	if(!silent && timing && time > 0)
 		playsound(src,decrement >= 7 && speedsup == TICK_SPEEDUP ? 'sound/items/assemblytick1.ogg' : 'sound/items/assemblytick2.ogg',100,1,frequency = freq)
@@ -123,11 +113,8 @@
 	var/minute = (time - second) / 60
 	var/dat = text("<TT><B>Timing Unit</B>\n[] []:[]\n<A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT>", (timing ? text("<A href='?src=\ref[];time=1'>Timing</A>", src) : text("<A href='?src=\ref[];time=1'>Not Timing</A>", src)), minute, second, src, src, src, src)
 	dat += "<BR><BR><A href='?src=\ref[src];set_default_time=1'>After countdown, reset time to [(default_time - default_time%60)/60]:[(default_time % 60)]</A>"
-	dat += {"<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>
-		<BR><BR><A href='?src=\ref[src];toggle_mode=1'>Mode: [repeat ? TIMEMODE_REPEAT : TIMEMODE_ONCE]</A>
-		<BR><BR><A href='byond://?src=\ref[src];toggle_silent=1'>Timer tick sound: O[silent ? "ff" : "n"]</A>
-		<BR><BR><A href='byond://?src=\ref[src];toggle_speedup=1'>Timer tick speedup: [speedsup == TICK_PITCHUP ? "Speed and pitch" : speedsup ? "Speed" : "None"]</A>
-		<BR><BR><A href='?src=\ref[src];close=1'>Close</A>"}
+	dat += {"<BR><BR><A href='byond://?src=\ref[src];toggle_silent=1'>Timer tick sound: O[silent ? "ff" : "n"]</A>
+			<BR><BR><A href='byond://?src=\ref[src];toggle_speedup=1'>Timer tick speedup: [speedsup == TICK_PITCHUP ? "Speed and pitch" : speedsup ? "Speed" : "None"]</A>"}
 	dat += "<BR><BR><A href='?src=\ref[src];toggle_mode=1'>Mode: [repeat ? TIMEMODE_REPEAT : TIMEMODE_ONCE]</A>"
 	user << browse(HTML_SKELETON(dat), "window=timer")
 	onclose(user, "timer")
