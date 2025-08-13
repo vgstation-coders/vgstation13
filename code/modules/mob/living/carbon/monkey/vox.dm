@@ -22,6 +22,15 @@
 	if((M.a_intent == I_HELP) && !(locked_to) && (isturf(src.loc)) && (M.get_active_hand() == null)) //Unless their location isn't a turf!
 		scoop_up(M)
 
+	if(!stat && M.a_intent == I_GRAB)
+		// Only allow if there are feathers left to pluck
+		for(var/datum/butchering_product/feathers/voxchicken/F in butchering_drops)
+			if(F.amount > 0)
+				M.visible_message("<span class='warning'>[M] plucks a feather from [src]!</span>", "<span class='notice'>You pluck a feather from [src].</span>")
+				F.spawn_result(get_turf(src), src)
+				return
+		to_chat(M, "<span class='notice'>[src] has no feathers left to pluck!</span>")
+
 	..()
 
 /mob/living/carbon/monkey/vox/get_butchering_products()
@@ -36,6 +45,7 @@
 	alien = 1
 	eggsleft = rand(1,6)
 	set_hand_amount(1)
+	init_butchering_list()
 
 /mob/living/carbon/monkey/vox/skeletal
 	name = "skeleton chicken"

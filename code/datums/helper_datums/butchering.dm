@@ -291,6 +291,7 @@
 		if(!V.original_vox_tone)
 			V.original_vox_tone = V.my_appearance.s_tone
 		V.my_appearance.s_tone = VOXPLUCKED
+		to_chat(V, "<span class='notice'>Your plumage is looking a bit bare...</span>")
 		V.species.updatespeciescolor(V)
 		V.regenerate_icons()
 	return F

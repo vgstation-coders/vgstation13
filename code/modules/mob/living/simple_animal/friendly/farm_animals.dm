@@ -290,6 +290,8 @@
 	pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
 	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
 
+	init_butchering_list()
+
 /mob/living/simple_animal/chicken/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
 		if(!stat && eggsleft < 8)
@@ -305,6 +307,18 @@
 	else if(istype(O, /obj/item/weapon/dnainjector))
 		var/obj/item/weapon/dnainjector/I = O
 		I.inject(src, user)
+	else
+		..()
+
+/mob/living/simple_animal/chicken/attack_hand(mob/living/carbon/M as mob)
+	if(!stat && M.a_intent == I_GRAB)
+		// Only allow if there are feathers left to pluck
+		for(var/datum/butchering_product/feathers/chicken/F in butchering_drops)
+			if(F.amount > 0)
+				M.visible_message("<span class='warning'>[M] plucks a feather from [src]!</span>", "<span class='notice'>You pluck a feather from [src].</span>")
+				F.spawn_result(get_turf(src), src)
+				return
+		to_chat(M, "<span class='notice'>[src] has no feathers left to pluck!</span>")
 	else
 		..()
 

@@ -216,3 +216,15 @@
 			species.updatespeciescolor(src)
 			regenerate_icons()
 			to_chat(src, "<span class='notice'>Your feathers fall out from the radiation!</span>")
+
+/mob/living/carbon/human/vox/attack_hand(mob/living/carbon/M as mob)
+	if(!stat && M.a_intent == I_GRAB && M == src)
+		// Only allow if there are feathers left to pluck
+		for(var/datum/butchering_product/feathers/vox/F in butchering_drops)
+			if(F.amount > 0)
+				M.visible_message("<span class='warning'>[src] preens a feather from [src.gender==MALE ? "himself" : "herself"].</span>", "<span class='notice'>You preen a feather from yourself.</span>")
+				F.spawn_result(get_turf(src), src)
+				return
+		to_chat(M, "<span class='notice'>You have no feathers left to pluck!</span>")
+	else
+		..()
