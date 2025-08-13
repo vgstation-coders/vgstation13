@@ -370,7 +370,7 @@
 				if (can_be_infected())
 					var/block = 0
 					var/bleeding = 0
-					if (lying)
+					if (M.lying)
 						block = M.check_contact_sterility(FULL_TORSO)
 						bleeding = M.check_bodypart_bleeding(FULL_TORSO)
 					else
