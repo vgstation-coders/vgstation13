@@ -143,7 +143,6 @@
 
 	if(href_list["toggle_mode"])
 		repeat = !repeat
-		return
 
 	if(href_list["toggle_silent"])
 		silent = !silent
