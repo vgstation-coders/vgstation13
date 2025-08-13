@@ -359,23 +359,26 @@
 	if(ishuman(AM))
 		var/mob/living/carbon/human/M = AM
 		if (M.on_foot())
-			if (stat == UNCONSCIOUS)
-				wake_up()
-			if(stat == CONSCIOUS)
-				to_chat(M, "<span class='notice'>[bicon(src)] Squeek!</span>")
-				playsound(src, "[pick(emote_sound)]", 100, 1)
-			if (can_be_infected())
-				var/block = 0
-				var/bleeding = 0
-				if (lying)
-					block = M.check_contact_sterility(FULL_TORSO)
-					bleeding = M.check_bodypart_bleeding(FULL_TORSO)
-				else
-					block = M.check_contact_sterility(FEET)
-					bleeding = M.check_bodypart_bleeding(FEET)
+			if (M.m_intent == "walk")
+				to_chat(M, "<span class='warning'>You carefully step over \the [src].</span>")
+			else
+				if (stat == UNCONSCIOUS)
+					wake_up()
+				if(stat == CONSCIOUS)
+					to_chat(M, "<span class='notice'>[bicon(src)] Squeek!</span>")
+					playsound(src, "[pick(emote_sound)]", 100, 1)
+				if (can_be_infected())
+					var/block = 0
+					var/bleeding = 0
+					if (lying)
+						block = M.check_contact_sterility(FULL_TORSO)
+						bleeding = M.check_bodypart_bleeding(FULL_TORSO)
+					else
+						block = M.check_contact_sterility(FEET)
+						bleeding = M.check_bodypart_bleeding(FEET)
 
-				//sharing diseases with people stepping on us
-				share_contact_diseases(M,block,bleeding)
+					//sharing diseases with people stepping on us
+					share_contact_diseases(M,block,bleeding)
 	..()
 
 /mob/living/simple_animal/mouse/death(var/gibbed = FALSE)
