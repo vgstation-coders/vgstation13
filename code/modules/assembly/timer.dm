@@ -151,10 +151,6 @@
 	if(href_list["toggle_speedup"])
 		speedsup = (speedsup + 1) % 3
 
-	if(href_list["close"])
-		usr << browse(null, "window=timer")
-		return
-
 	if(href_list["set_default_time"])
 		default_time = time
 
