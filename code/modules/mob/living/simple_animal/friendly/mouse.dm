@@ -75,17 +75,11 @@
 		playsound(src, "[pick(emote_sound)]", 100, 1)
 
 	if(!ckey && stat == CONSCIOUS && prob(0.5) && !(status_flags & BUDDHAMODE))
-		stat = UNCONSCIOUS
-		wander = 0
-		speak_chance = 0
-		update_icon()
+		fall_asleep()
 		//snuffles
 	else if(stat == UNCONSCIOUS)
 		if(ckey || prob(1))
-			stat = CONSCIOUS
-			wander = 1
-			speak_chance = initial(speak_chance)
-			update_icon()
+			wake_up()
 		else if(prob(5))
 			emote("me", EMOTE_AUDIBLE, "snuffles")
 
@@ -220,11 +214,7 @@
 		share_contact_diseases(M,block,bleeding)
 
 	if(stat == UNCONSCIOUS && prob(33))
-		stat = CONSCIOUS
-		update_icon()
-		wander = 1
-		speak_chance = initial(speak_chance)
-		visible_message("\The [src] wakes up.")
+		wake_up()
 
 /mob/living/simple_animal/mouse/attackby(var/obj/item/O, var/mob/user, var/no_delay = FALSE, var/originator = null)
 	if(!..())
@@ -369,7 +359,9 @@
 	if(ishuman(AM))
 		var/mob/living/carbon/human/M = AM
 		if (M.on_foot())
-			if(!stat)
+			if (stat == UNCONSCIOUS)
+				wake_up()
+			if(stat == CONSCIOUS)
 				to_chat(M, "<span class='notice'>[bicon(src)] Squeek!</span>")
 				playsound(src, "[pick(emote_sound)]", 100, 1)
 			if (can_be_infected())
@@ -390,6 +382,23 @@
 	if(client)
 		client.time_died_as_mouse = world.time
 	..(gibbed)
+
+
+/mob/living/simple_animal/mouse/proc/fall_asleep()
+	stat = UNCONSCIOUS
+	wander = 0
+	speak_chance = 0
+	update_icon()
+	visible_message("\The [src] takes a nap.")
+
+/mob/living/simple_animal/mouse/proc/wake_up()
+	if (stat == DEAD)
+		return
+	stat = CONSCIOUS
+	wander = 1
+	speak_chance = initial(speak_chance)
+	update_icon()
+	visible_message("\The [src] wakes up.")
 
 /mob/living/simple_animal/mouse/say_quote(text)
 	if(!text)
