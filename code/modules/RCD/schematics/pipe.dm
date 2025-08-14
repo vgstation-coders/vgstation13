@@ -59,7 +59,7 @@
 		"green"  = PIPE_COLOR_GREEN,
 		"orange" = PIPE_COLOR_ORANGE,
 		"purple" = PIPE_COLOR_PURPLE,
-		"transparent" = "transparent"
+		"transparent" = "transparent",
 		"custom" = "custom"
 	)
 	var/last_colouration = 0
