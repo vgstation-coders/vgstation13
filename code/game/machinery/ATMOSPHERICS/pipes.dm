@@ -25,22 +25,12 @@
 /obj/machinery/atmospherics/pipe/proc/mass_colouration(mass_colour,transparency)
 	if (findtext(mass_colour,"#"))
 		var/datum/pipeline/pipeline = parent
-		var/list/update_later = list()
 		spawn()
 			for(var/obj/machinery/atmospherics/pipe in pipeline.members)
 				if(pipe.can_be_coloured)
 					pipe.color = mass_colour
 					pipe.transparent = transparency
-					if(pipe.transparent)
-						pipe.update_icon()
-						update_later -= pipe
-				CHECK_TICK
-			for(var/obj/machinery/atmospherics/pipe in pipeline.edges)
-				pipe.update_icon()
-				CHECK_TICK
-			update_later -= pipeline.edges
-			for(var/obj/machinery/atmospherics/pipe in update_later)
-				pipe.update_icon(1)
+					pipe.update_icon()
 				CHECK_TICK
 
 /obj/machinery/atmospherics/pipe/singularity_pull(/obj/machinery/singularity/S, size)
