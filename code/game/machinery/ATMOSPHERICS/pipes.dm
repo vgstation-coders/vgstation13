@@ -59,11 +59,7 @@
 	if(transparent)
 		var/datum/gas_mixture/gases = return_air()
 		if(gases)
-			var/list/gases_found = list()
-			if(gases.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)
-				gases_found += list("plasma")
-			if(gases.molar_density(GAS_SLEEPING) > 1 / CELL_VOLUME)
-				gases_found += list("nitrous")
+			var/list/gases_found = get_visible_gases()
 			for(var/direction in cardinal)
 				if(initialize_directions & direction)
 					for(var/gasfound in gases_found)
@@ -122,6 +118,20 @@
 		air_temporary = null
 
 	..()
+
+/obj/machinery/atmospherics/pipe/examine(mob/user)
+	. = ..()
+	if(transparent)
+		var/list/gases_found = get_visible_gases()
+		if(gases_found.len)
+			to_chat(user,"<span class='notice'>This [src.name] is filled with [english_list(gases_found)]!")
+
+/obj/machinery/atmospherics/pipe/proc/get_visible_gases()
+	. = list()
+	if(gases.molar_density(GAS_SLEEPING) > 1 / CELL_VOLUME)
+		. += list("nitrous oxide")
+	if(gases.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)
+		. += list("plasma")
 
 /obj/machinery/atmospherics/pipe/simple
 	icon = 'icons/obj/pipes.dmi'
