@@ -144,11 +144,11 @@
 		else if(istype(O, /obj/machinery/atmospherics/pipe))
 			pipe_to_mass_colour = O
 	if(pipe_to_mass_colour)
-		var/datum/pipeline/pipe_line = pipe_to_colour.parent
+		var/datum/pipeline/pipe_line = pipe_to_mass_colour.parent
 		var/list/pipeline_members = pipe_line.members
 		last_colouration = world.timeofday
 		colouring_delay = (pipeline_members.len)/2
-		pipe_to_colour.mass_colouration(selected_color,transparency)
+		pipe_to_mass_colour.mass_colouration(selected_color,transparency)
 	else
 		O.update_icon()
 	user.visible_message("<span class='notice'>[user] paints \the [O] [selected_color].</span>","<span class='notice'>You paint \the [O] [selected_color].</span>")
