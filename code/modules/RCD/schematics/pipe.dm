@@ -109,7 +109,6 @@
 			selected = " selected"
 		if (selected_color == "custom")
 			selected_color = input("Select Colour to change the pipe to", "Custom Pipe Colour", selected_color) as color
-		transparency = selected_color == "transparent"
 		if (selected_color == "#ffffff")
 			selected_color = "#fffffe"
 		. += "<a class='color [color_name][selected]' href='?src=\ref[master.interface];set_color=[color_name]'>&bull;</a>"
@@ -159,7 +158,7 @@
 			return "That pipe network is simply too big to paint!"
 	else
 		O.color = selected_color
-		o.transparent = transparency
+		O.transparent = transparency
 		O.update_icon()
 	user.visible_message("<span class='notice'>[user] paints \the [O] [selected_color].</span>","<span class='notice'>You paint \the [O] [selected_color].</span>")
 	// is pipe painting really worth logging? cmon now
@@ -167,6 +166,10 @@
 /datum/rcd_schematic/paint_pipes/Topic(var/href, var/list/href_list)
 	if(href_list["set_color"])
 		if(href_list["set_color"] in available_colors)
+			if(href_list["set_color"] == "transparent")
+				transparency = TRUE
+				master.update_options_menu()
+				return 1
 			selected_color = href_list["set_color"]
 			master.update_options_menu()
 	if(href_list["set_mass_colour"])

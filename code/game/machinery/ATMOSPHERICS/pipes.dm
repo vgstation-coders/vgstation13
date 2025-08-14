@@ -2,7 +2,6 @@
 	var/datum/gas_mixture/air_temporary //used when reconstructing a pipeline that broke
 	var/datum/pipeline/parent
 	var/volume = 0
-	var/transparent = FALSE // painted transparent?
 	force = 20
 	plane = ABOVE_TURF_PLANE //Set above turf for mapping preview only, supposed to be ABOVE_PLATING_PLANE, handled in update_planes_and_layers() (called on New())
 	layer = PIPE_LAYER
