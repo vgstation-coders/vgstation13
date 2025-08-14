@@ -9,7 +9,7 @@
 #define TICK_SPEEDUP 1
 #define TICK_PITCHUP 2
 
-#define SPEEDSUP_SECONDS 2
+#define SPEEDSUP_SECONDS 3
 
 /obj/item/device/assembly/timer
 	name = "timer"
@@ -71,7 +71,7 @@
 	if(!silent && timing && time > 0)
 		playsound(src,decrement >= 7 && speedsup == TICK_SPEEDUP ? 'sound/items/assemblytick1.ogg' : 'sound/items/assemblytick2.ogg',100,1,frequency = freq)
 		spawn(max(1,10 - decrement))
-			if(speedsup && time <= 3)
+			if(speedsup && time <= SPEEDSUP_SECONDS)
 				decrement++
 				if(speedsup == TICK_PITCHUP)
 					freq *= 1.03
