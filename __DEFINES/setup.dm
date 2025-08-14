@@ -1256,7 +1256,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 // /vg/ - Pipeline processing (enables exploding pipes and whatnot)
 // COMMENT OUT TO DISABLE
-// #define ATMOS_PIPELINE_PROCESSING 1
+// #define BURST_PIPES 1
 
 #define MAXIMUM_FREQUENCY 1600
 #define MINIMUM_FREQUENCY 1200
