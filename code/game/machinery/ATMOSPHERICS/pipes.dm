@@ -129,10 +129,10 @@
 	. = list()
 	var/datum/gas_mixture/gases = return_air()
 	if(gases)
-			if(gases.molar_density(GAS_SLEEPING) > 1 / CELL_VOLUME)
-				. += list("nitrous oxide")
-			if(gases.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)
-				. += list("plasma")
+		if(gases.molar_density(GAS_SLEEPING) > 1 / CELL_VOLUME)
+			. += list("nitrous oxide")
+		if(gases.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)
+			. += list("plasma")
 
 /obj/machinery/atmospherics/pipe/simple
 	icon = 'icons/obj/pipes.dmi'
