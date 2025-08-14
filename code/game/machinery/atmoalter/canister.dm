@@ -63,7 +63,6 @@
 		if (env_pressure > 0.01)
 			var/pressure_delta = min(release_pressure - env_pressure, (air_contents.return_pressure() - env_pressure)/2)
 			soundvol = clamp(pressure_delta / env_pressure, 0.001, 100)
-			world.log << "P/E = [pressure_delta / env_pressure]"
 		sound_emitter.update_active_sound_param(volume = soundvol)
 
 /obj/machinery/portable_atmospherics/canister/sleeping_agent
@@ -244,7 +243,6 @@
 		if (env_pressure > 0.01)
 			// pd/env usually in range 0~10
 			soundvol = clamp(10 * pressure_delta / env_pressure, 0.001, 100)
-			world.log << "P/E = [pressure_delta / env_pressure]"
 		sound_emitter.update_active_sound_param(volume = soundvol)
 
 		var/transfer_moles = 0
