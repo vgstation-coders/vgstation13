@@ -9,6 +9,8 @@
 #define TICK_SPEEDUP 1
 #define TICK_PITCHUP 2
 
+#define SPEEDSUP_SECONDS 2
+
 /obj/item/device/assembly/timer
 	name = "timer"
 	desc = "Used to time things. Works well with contraptions which have to count down. Tick tock."
@@ -40,7 +42,7 @@
 	timing = !timing
 	if(!silent)
 		spawn()
-			timesoundloop(clamp(3-time,0,3)*3)
+			timesoundloop()
 
 	message_admins("[key_name_admin(usr)] [timing ? "started" : "stopped"] a timer at [formatJumpTo(src)]")
 	update_icon()
@@ -65,7 +67,7 @@
 		process_cooldown()
 	return
 
-/obj/item/device/assembly/timer/proc/timesoundloop(decrement = 0,freq = 1)
+/obj/item/device/assembly/timer/proc/timesoundloop(decrement = clamp(SPEEDSUP_SECONDS-time,0,SPEEDSUP_SECONDS)*SPEEDSUP_SECONDS,freq = 1)
 	if(!silent && timing && time > 0)
 		playsound(src,decrement >= 7 && speedsup == TICK_SPEEDUP ? 'sound/items/assemblytick1.ogg' : 'sound/items/assemblytick2.ogg',100,1,frequency = freq)
 		spawn(max(1,10 - decrement))
@@ -134,7 +136,7 @@
 		activate()
 		if(!silent)
 			spawn()
-				timesoundloop(clamp(3-time,0,3)*3)
+				timesoundloop()
 
 	if(href_list["tp"])
 		var/tp = text2num(href_list["tp"])
@@ -169,3 +171,5 @@
 
 #undef TICK_SPEEDUP
 #undef TICK_PITCHUP
+
+#undef SPEEDSUP_SECONDS
