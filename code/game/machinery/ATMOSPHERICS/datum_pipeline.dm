@@ -38,7 +38,7 @@
 					break //Only delete 1 pipe per process
 	#endif
 	for(var/obj/machinery/atmospherics/pipe/member in members)
-		if(member.transparent && !member.exposed)
+		if(member.transparent && !member.exposed())
 			member.update_icon()
 
 	//Allow for reactions
