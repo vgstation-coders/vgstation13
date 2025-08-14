@@ -105,7 +105,7 @@
 	. += "<h4>Colour Choice:</h4>"
 	for(var/color_name in available_colors)
 		var/selected = ""
-		if(color_name == selected_color)
+		if(color_name == selected_color || (color_name == "transparent" && transparency))
 			selected = " selected"
 		if (selected_color == "custom")
 			selected_color = input("Select Colour to change the pipe to", "Custom Pipe Colour", selected_color) as color
