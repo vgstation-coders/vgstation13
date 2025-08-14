@@ -1105,23 +1105,23 @@ var/list/admin_verbs_mod = list(
 
 var/list/fax_presets = list(
 	"Centcomm" = {"<!DOCTYPE html>
-	<html>
-	<body style="background-color:darkblue;">
+<html>
+<body style="background-color:darkblue;">
 
-	<h1><center><font color="white">NANOTRASEN CENTRAL COMMAND</font></center></h1>
-	<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"  alt="Nanotrasen" height="50" width="110"></center>
-	<p><center><font color="white">\[MESSAGE BODY GOES HERE\]</center></font></p>
-	<p><center><font color="white">\[MESSAGE BODY GOES HERE\]</center></font></p>
+<h1><center><font color="white">NANOTRASEN CENTRAL COMMAND</font></center></h1>
+<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"  alt="Nanotrasen" height="50" width="110"></center>
+<p><center><font color="white">\[MESSAGE BODY GOES HERE\]</center></font></p>
+<p><center><font color="white">\[MESSAGE BODY GOES HERE\]</center></font></p>
 
-	</body>
-	</html>"},
+</body>
+</html>"},
 	"Internal Affairs" = {"<html><style>body {color: #000000; background: #ccffff;}
-	h1 {color: #000000; font-size:30px;}
-	fieldset {width:140px;}
-	</style><body><center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center><BR>
-	\[MESSAGE BODY GOES HERE\]
-	<BR><BR><I>Central Command</I>
-	</body></html>"},
+h1 {color: #000000; font-size:30px;}
+fieldset {width:140px;}
+</style><body><center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center><BR>
+\[MESSAGE BODY GOES HERE\]
+<BR><BR><I>Central Command</I>
+</body></html>"},
 	"Blank" = ""
 )
 
