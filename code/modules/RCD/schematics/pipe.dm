@@ -152,7 +152,7 @@
 		pipe_to_mass_colour.mass_colouration(painted_color,transparency)
 	else
 		O.update_icon()
-	var/object = "\the [O] [printed_color][transparency ? ", transparent" : ""]."
+	var/object = "\the [O] [selected_color][transparency ? ", transparent" : ""]."
 	user.visible_message("<span class='notice'>[user] paints [object]</span>","<span class='notice'>You paint [object]</span>")
 	// is pipe painting really worth logging? cmon now
 
