@@ -1109,7 +1109,7 @@ var/list/fax_presets = list(
 <body style="background-color:darkblue;">
 
 <h1><center><font color="white">NANOTRASEN CENTRAL COMMAND</font></center></h1>
-<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"  alt="Nanotrasen" height="50" width="110"></center>
+<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center>
 <p><center><font color="white">\[MESSAGE BODY GOES HERE\]</center></font></p>
 <p><center><font color="white">\[MESSAGE BODY GOES HERE\]</center></font></p>
 
