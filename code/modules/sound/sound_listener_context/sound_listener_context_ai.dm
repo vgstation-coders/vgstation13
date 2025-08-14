@@ -69,10 +69,8 @@
 	if (!istype(eye))
 		return FALSE
 
-	// TODO just cache the cameras that have a mic upgrade directly
-	for (var/datum/camerachunk/chunk in eye.visibleCameraChunks) // 9 of these on Box
-		for (var/obj/machinery/camera/cam in chunk.cameras) // each one has < ~20 cameras in
-			if (cam.isHearing() && cam.can_use()) // implying anyone ever upgrades this
-				// AI can hear it if emitter is close enough to camera and close enough to eye
-				if ((E.source in range(range, cam)) && (E.source in range(range, eye)))
-					return TRUE
+	for (var/obj/machinery/camera/cam in micd_cameras)
+		if (cam.isHearing() && cam.can_use()) // implying anyone ever upgrades this
+			// AI can hear it if emitter is close enough to camera and close enough to eye
+			if ((E.source in range(range, cam)) && (E.source in range(range, eye)))
+				return TRUE
