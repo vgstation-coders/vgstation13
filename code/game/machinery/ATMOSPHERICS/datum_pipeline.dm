@@ -31,6 +31,8 @@
 		var/pressure = air.return_pressure()
 		if(pressure > alert_pressure)
 			for(var/obj/machinery/atmospherics/pipe/member in members)
+				if(member.transparent)
+					member.update_icon()
 				if(!member.check_pressure(pressure))
 					// Delay next update so we have a chance to recalculate.
 					last_pressure_check=world.timeofday
