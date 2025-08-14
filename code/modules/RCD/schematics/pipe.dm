@@ -132,33 +132,25 @@
 		selected_color = available_colors[selected_color]
 	if(mass_colour && world.timeofday < last_colouration + colouring_delay)
 		return "We aren't ready to mass paint again; please wait [(last_colouration+colouring_delay)-world.timeofday] more seconds!"
+	O.color = selected_color
+	O.transparent = transparency
 	if(mass_colour && istype(O, /obj/machinery/atmospherics/unary/cap))
 		var/obj/machinery/atmospherics/unary/cap/cap = O
 		var/obj/machinery/atmospherics/pipe/maybe_pipe_to_colour = cap.node1
 		if (istype(maybe_pipe_to_colour))
 			var/datum/pipeline/pipe_line = maybe_pipe_to_colour.parent
 			var/list/pipeline_members = pipe_line.members
-			if(pipeline_members.len < 500)
-				last_colouration = world.timeofday
-				colouring_delay = (pipeline_members.len)/2
-				O.color = selected_color
-				maybe_pipe_to_colour.mass_colouration(selected_color)
-			else
-				return "That pipe network is simply too big to paint!"
+			last_colouration = world.timeofday
+			colouring_delay = (pipeline_members.len)/2
+			maybe_pipe_to_colour.mass_colouration(selected_color,transparency)
 	else if(mass_colour && istype(O, /obj/machinery/atmospherics/pipe))
 		var/obj/machinery/atmospherics/pipe/pipe_to_colour = O
 		var/datum/pipeline/pipe_line = pipe_to_colour.parent
 		var/list/pipeline_members = pipe_line.members
-		if(pipeline_members.len < 500)
-			last_colouration = world.timeofday
-			colouring_delay = (pipeline_members.len)/2
-			O.color = selected_color
-			pipe_to_colour.mass_colouration(selected_color)
-		else
-			return "That pipe network is simply too big to paint!"
+		last_colouration = world.timeofday
+		colouring_delay = (pipeline_members.len)/2
+		pipe_to_colour.mass_colouration(selected_color,transparency)
 	else
-		O.color = selected_color
-		O.transparent = transparency
 		O.update_icon()
 	user.visible_message("<span class='notice'>[user] paints \the [O] [selected_color].</span>","<span class='notice'>You paint \the [O] [selected_color].</span>")
 	// is pipe painting really worth logging? cmon now
