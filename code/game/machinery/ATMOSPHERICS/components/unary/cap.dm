@@ -23,7 +23,7 @@
 	alpha = invisibility || transparent ? 128 : 255
 	icon_state = initial(icon_state)
 
-	if (node1)
+	if (node1 && can_be_coloured)
 		color = node1.color
 
 /obj/machinery/atmospherics/unary/cap/visible
