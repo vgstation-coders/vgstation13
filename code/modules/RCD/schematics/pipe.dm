@@ -128,6 +128,7 @@
 		return 1
 
 	playsound(master, 'sound/machines/click.ogg', 50, 1)
+	var/printed_color = selected_color
 	if (selected_color in available_colors)
 		selected_color = available_colors[selected_color]
 	if(mass_colour && world.timeofday < last_colouration + colouring_delay)
@@ -151,7 +152,8 @@
 		pipe_to_mass_colour.mass_colouration(selected_color,transparency)
 	else
 		O.update_icon()
-	user.visible_message("<span class='notice'>[user] paints \the [O] [selected_color].</span>","<span class='notice'>You paint \the [O] [selected_color].</span>")
+	var/object = "\the [O] [printed_color][transparency ? ", transparent" : ""]."
+	user.visible_message("<span class='notice'>[user] paints [object]</span>","<span class='notice'>You paint [object]</span>")
 	// is pipe painting really worth logging? cmon now
 
 /datum/rcd_schematic/paint_pipes/Topic(var/href, var/list/href_list)
