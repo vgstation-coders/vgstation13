@@ -57,9 +57,8 @@
 
 /obj/machinery/atmospherics/pipe/proc/update_gas_underlay()
 	if(transparent)
-		var/datum/gas_mixture/gases = return_air()
-		if(gases)
-			var/list/gases_found = get_visible_gases()
+		var/list/gases_found = get_visible_gases()
+		if(gases_found.len)
 			for(var/direction in cardinal)
 				if(initialize_directions & direction)
 					for(var/gasfound in gases_found)
@@ -128,10 +127,12 @@
 
 /obj/machinery/atmospherics/pipe/proc/get_visible_gases()
 	. = list()
-	if(gases.molar_density(GAS_SLEEPING) > 1 / CELL_VOLUME)
-		. += list("nitrous oxide")
-	if(gases.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)
-		. += list("plasma")
+	var/datum/gas_mixture/gases = return_air()
+	if(gases)
+			if(gases.molar_density(GAS_SLEEPING) > 1 / CELL_VOLUME)
+				. += list("nitrous oxide")
+			if(gases.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)
+				. += list("plasma")
 
 /obj/machinery/atmospherics/pipe/simple
 	icon = 'icons/obj/pipes.dmi'
