@@ -736,6 +736,9 @@ Assign your candidates in choose_candidates() instead.
 		if(A && istype(A, /area/security)) // We also don't want people who are arrested to become headrevs
 			candidates.Remove(P)
 			continue
+		if(P.is_loyalty_implanted()) // No turning loyalty implanted people into headrevs, in case they were implanted shortly after game start
+			candidates.Remove(P)
+			continue
 
 /datum/dynamic_ruleset/roundstart/delayed/revs/choose_candidates()
 	var/max_canditates = 4
