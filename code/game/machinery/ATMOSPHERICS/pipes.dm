@@ -31,6 +31,9 @@
 				if(pipe.can_be_coloured)
 					pipe.color = mass_colour
 					pipe.transparent = transparency
+					if(pipe.transparent)
+						pipe.update_icon()
+						update_later -= pipe
 				CHECK_TICK
 			for(var/obj/machinery/atmospherics/pipe in pipeline.edges)
 				pipe.update_icon()
