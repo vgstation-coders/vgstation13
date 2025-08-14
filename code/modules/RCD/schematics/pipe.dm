@@ -128,12 +128,12 @@
 		return 1
 
 	playsound(master, 'sound/machines/click.ogg', 50, 1)
-	var/printed_color = selected_color
+	var/painted_color = selected_color
 	if (selected_color in available_colors)
-		selected_color = available_colors[selected_color]
+		painted_color = available_colors[selected_color]
 	if(mass_colour && world.timeofday < last_colouration + colouring_delay)
 		return "We aren't ready to mass paint again; please wait [(last_colouration+colouring_delay)-world.timeofday] more seconds!"
-	O.color = selected_color
+	O.color = painted_color
 	O.transparent = transparency
 	var/obj/machinery/atmospherics/pipe/pipe_to_mass_colour
 	if(mass_colour)
@@ -149,7 +149,7 @@
 		var/list/pipeline_members = pipe_line.members
 		last_colouration = world.timeofday
 		colouring_delay = (pipeline_members.len)/2
-		pipe_to_mass_colour.mass_colouration(selected_color,transparency)
+		pipe_to_mass_colour.mass_colouration(painted_color,transparency)
 	else
 		O.update_icon()
 	var/object = "\the [O] [printed_color][transparency ? ", transparent" : ""]."
