@@ -150,7 +150,7 @@ Pipelines + Other Objects -> Pipe network
 	else if(can_be_coloured && default_colour)
 		color = default_colour
 		default_colour = null
-	alpha = invisibility ? 128 : 255
+	alpha = invisibility || transparent ? 128 : 255
 	if (!update_icon_ready)
 		update_icon_ready = 1
 	else
