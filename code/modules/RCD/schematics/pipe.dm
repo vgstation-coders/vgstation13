@@ -134,17 +134,16 @@
 		return "We aren't ready to mass paint again; please wait [(last_colouration+colouring_delay)-world.timeofday] more seconds!"
 	O.color = selected_color
 	O.transparent = transparency
-	if(mass_colour && istype(O, /obj/machinery/atmospherics/unary/cap))
-		var/obj/machinery/atmospherics/unary/cap/cap = O
-		var/obj/machinery/atmospherics/pipe/maybe_pipe_to_colour = cap.node1
-		if (istype(maybe_pipe_to_colour))
-			var/datum/pipeline/pipe_line = maybe_pipe_to_colour.parent
-			var/list/pipeline_members = pipe_line.members
-			last_colouration = world.timeofday
-			colouring_delay = (pipeline_members.len)/2
-			maybe_pipe_to_colour.mass_colouration(selected_color,transparency)
-	else if(mass_colour && istype(O, /obj/machinery/atmospherics/pipe))
-		var/obj/machinery/atmospherics/pipe/pipe_to_colour = O
+	var/obj/machinery/atmospherics/pipe/pipe_to_mass_colour
+	if(mass_colour)
+		if(istype(O, /obj/machinery/atmospherics/unary/cap))
+			var/obj/machinery/atmospherics/unary/cap/cap = O
+			var/obj/machinery/atmospherics/pipe/maybe_pipe_to_colour = cap.node1
+			if (istype(maybe_pipe_to_colour))
+				pipe_to_mass_colour = maybe_pipe_to_colour
+		else if(istype(O, /obj/machinery/atmospherics/pipe))
+			pipe_to_mass_colour = O
+	if(pipe_to_mass_colour)
 		var/datum/pipeline/pipe_line = pipe_to_colour.parent
 		var/list/pipeline_members = pipe_line.members
 		last_colouration = world.timeofday
