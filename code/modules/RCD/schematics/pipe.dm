@@ -167,7 +167,7 @@
 	if(href_list["set_color"])
 		if(href_list["set_color"] in available_colors)
 			if(href_list["set_color"] == "transparent")
-				transparency = TRUE
+				transparency = !transparency
 				master.update_options_menu()
 				return 1
 			selected_color = href_list["set_color"]
