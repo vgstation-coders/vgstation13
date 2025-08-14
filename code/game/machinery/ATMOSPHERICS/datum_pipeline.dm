@@ -26,20 +26,20 @@
 	..()
 
 /datum/pipeline/proc/process()
+	#ifdef BURST_PIPES
 	if((world.timeofday - last_pressure_check) / 10 >= PRESSURE_CHECK_DELAY)
 		//Check to see if pressure is within acceptable limits
 		var/pressure = air.return_pressure()
 		if(pressure > alert_pressure)
 			for(var/obj/machinery/atmospherics/pipe/member in members)
-				if(member.transparent)
-					member.update_icon()
-				#ifdef BURST_PIPES
 				if(!member.check_pressure(pressure))
 					// Delay next update so we have a chance to recalculate.
 					last_pressure_check=world.timeofday
 					break //Only delete 1 pipe per process
-				#endif
-
+	#endif
+	for(var/obj/machinery/atmospherics/pipe/member in members)
+		if(member.transparent)
+			member.update_icon()
 
 	//Allow for reactions
 	//air.react() //Should be handled by pipe_network now
