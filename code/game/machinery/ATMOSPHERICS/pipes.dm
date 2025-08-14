@@ -32,6 +32,9 @@
 					pipe.transparent = transparency
 					pipe.update_icon()
 				CHECK_TICK
+			for(var/obj/machinery/atmospherics/pipe in pipeline.edges)
+				pipe.update_icon()
+				CHECK_TICK
 
 /obj/machinery/atmospherics/pipe/singularity_pull(/obj/machinery/singularity/S, size)
 	return
