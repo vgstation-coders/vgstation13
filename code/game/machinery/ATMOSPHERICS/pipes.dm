@@ -325,6 +325,18 @@
 		underlays.Cut()
 		icon_state = "intact"
 		alpha = transparent || invisibility ? 128 : 255
+		if(transparent)
+			var/datum/gas_mixture/gases = return_air()
+			if(gases)
+				var/list/gases_found = list()
+				if(gases.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)
+					gases_found += list("plasma")
+				if(gases.molar_density(GAS_SLEEPING) > 1 / CELL_VOLUME)
+					gases_found += list("nitrous")
+				for(var/direction in cardinal)
+					if(initialize_directions & direction)
+						for(var/gasfound in gases_found)
+							underlays += image('icons/obj/atmospherics/gas_overlays.dmi',src,gasfound,layer,direction)
 		if(!adjacent_procd)
 			for(var/obj/machinery/atmospherics/node in node_list)
 				if(node.update_icon_ready && !(istype(node,/obj/machinery/atmospherics/pipe/simple)))
