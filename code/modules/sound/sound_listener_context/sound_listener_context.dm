@@ -76,6 +76,10 @@
 	proxy = null
 	return ..()
 
+/datum/sound_listener_context/proc/operator""()
+	return "SLC: client: [client] proxy: [proxy] current: [current_channels_by_emitter.len] free: [free_channels.len] range: [range]"
+
+
 /datum/sound_listener_context/proc/assign_channel(datum/sound_emitter/E)
 	if (E in current_channels_by_emitter)
 		return current_channels_by_emitter[E]
@@ -145,9 +149,8 @@
 	// important note - clearing SOUND_UPDATE means that the sound will play FROM THE BEGINNING.
 	// this system was originally built with short repeating sounds in mind (machine hum, etc) however
 	// if you try to do something longer and more varied like music then this is very noticeable and unwanted.
-	// such support goes beyond scope for v1 but may be solvable using sound.len, tracking playback
-	// progress and modifying S.offset to start at the correct point.
-	// TODO /datum/managed_sound should do this!
+	// would best be handled by /datum/managed_sound using sound.len, tracking playback
+	// progress and modifying S.offset to start at the correct point
 	S.status &= ~SOUND_UPDATE
 	S.channel = chan
 	apply_proxymob_effects(S)

@@ -127,7 +127,7 @@
 	S.wait = 0
 	if (interrupt)
 		stop()
-	// reduce volume if emitter is in low pressure - TODO refactor more cleanly with update_env_effect
+	// reduce volume if emitter is in low pressure
 	S.volume *= turf_volume_coeff(source)
 	if (!S.volume)
 		return

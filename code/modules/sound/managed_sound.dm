@@ -3,8 +3,8 @@
 	Wrapper for /datum/sound for use in sound_emitters.
 	Facilitates temporarily overriding sound datum vars without messing up the master copy.
 
-	TODO: Support tracking of how much a sound has played-back and set `offset` accordingly
-	  for pausing/resuming sounds.
+	Support for tracking of how much a sound has played-back and set `offset` accordingly
+	  for pausing/resuming sounds best done here
 */
 
 /datum/managed_sound
@@ -13,7 +13,6 @@
 	var/volume_override = null // mutators apply separately to this - think of this as the source volume itself changing temporarily
 	var/frequency_override = null
 	var/volume_mutator = 1 // 1 means no change (multiply volume by 1)
-	// TODO other overrides
 
 /datum/managed_sound/New(sound/S)
 	base_sound = S
