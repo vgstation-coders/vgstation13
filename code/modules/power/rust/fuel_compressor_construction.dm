@@ -4,7 +4,7 @@
 /obj/item/mounted/frame/rust_fuel_compressor
 	name = "Fuel Compressor frame"
 	icon = 'icons/obj/machines/rust.dmi'
-	icon_state = "fuel_compressor0"
+	icon_state = "fuel_compressor1"
 	w_class = W_CLASS_LARGE
 	mount_reqs = list("simfloor", "nospace")
 	flags = FPRINT
@@ -30,10 +30,9 @@
 	if (building)
 		dir = ndir
 	else
-		has_electronics = 3
-		opened = 0
+		construct_progress = 3
 		locked = 0
-		icon_state = "fuel_compressor1"
+		icon_state = "fuel_compressor0"
 
 	//20% easier to read than apc code
 	pixel_x = (dir & 3)? 0 : (dir == 4 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE)
@@ -44,33 +43,31 @@
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
 		return src.attack_hand(user)
 	if (iscrowbar(W))
-		if(opened)
-			if(has_electronics & 1)
-				W.playtoolsound(src, 50)
-				to_chat(user, "You begin removing the circuitboard")//lpeters - fixed grammar issues
-
-				if(do_after(user, src, 50))
-					user.visible_message(\
-						"<span class='warning'>[user.name] has removed the circuitboard from [src.name]!</span>",\
-						"<span class='notice'>You remove the circuitboard board.</span>")
-					has_electronics = 0
-					new /obj/item/weapon/module/rust_fuel_compressor(loc)
-					has_electronics &= ~1
-			else
-				opened = 0
-				icon_state = "fuel_compressor0"
-				to_chat(user, "<span class='notice'>You close the maintenance cover.</span>")
-		else
-			if(compressed_matter > 0)
-				to_chat(user, "<span class='warning'>You cannot open the cover while there is compressed matter inside.</span>")
-			else
-				opened = 1
-				to_chat(user, "<span class='notice'>You open the maintenance cover.</span>")
-				icon_state = "fuel_compressor1"
+		W.playtoolsound(src, 50)
+		to_chat(user, "You begin removing the circuitboard.")
+		if(do_after(user, src, 50))
+			user.visible_message(\
+				"<span class='warning'>[user.name] has removed the circuitboard from [src.name]!</span>",\
+				"<span class='notice'>You remove the circuitboard board.</span>")
+			new /obj/item/weapon/module/rust_fuel_compressor(loc)
+			construct_progress = 0
 		return
-
+	else if (W.is_screwdriver(user) && construct_progress >= 2)
+		if(compressed_matter > 0)
+			to_chat(user, "<span class='warning'>You cannot open the cover while there is compressed matter inside.</span>")
+			return
+		if(construct_progress == 3)
+			to_chat(user, "<span class='notice'>You open the maintenance cover.</span>")
+			construct_progress = 2
+			icon_state = "fuel_compressor1"
+		else
+			to_chat(user, "<span class='notice'>You close the maintenance cover.</span>")
+			construct_progress = 3
+			icon_state = "fuel_compressor0"
+		W.playtoolsound(src, 50)
+		return
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
-		if(opened)
+		if(construct_progress == 3)
 			to_chat(user, "You must close the cover to swipe an ID card.")
 		else
 			if(src.allowed(usr))
@@ -80,8 +77,7 @@
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
-
-	else if (istype(W, /obj/item/stack/cable_coil) && opened && !(has_electronics & 2))
+	else if (istype(W, /obj/item/stack/cable_coil) && construct_progress == 1)
 		var/obj/item/stack/cable_coil/C = W
 		if(C.amount < 10)
 			to_chat(user, "<span class='warning'>You need more wires.</span>")
@@ -93,55 +89,50 @@
 			user.visible_message(\
 				"<span class='warning'>[user.name] has added cables to the compressor frame!</span>",\
 				"You add cables to the port frame.")
-			has_electronics &= 2
+			construct_progress = 2
 		return
-
-	else if (W.is_wirecutter(user) && opened && (has_electronics & 2))
+	else if (W.is_wirecutter(user) && construct_progress == 2)
 		to_chat(user, "You begin to cut the cables...")
-		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		if(do_after(user, src, 50))
 			new /obj/item/stack/cable_coil(loc,10)
 			user.visible_message(\
 				"<span class='warning'>[user.name] cuts the cabling inside the compressor.</span>",\
 				"You cut the cabling inside the port.")
-			has_electronics &= ~2
+			construct_progress = 1
 		return
-
-	else if (istype(W, /obj/item/weapon/module/rust_fuel_compressor) && opened && !(has_electronics & 1))
+	else if (istype(W, /obj/item/weapon/module/rust_fuel_compressor) && construct_progress == 0)
 		to_chat(user, "You try to insert the circuitboard into the frame...")
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 10))
-			has_electronics &= 1
+			construct_progress = 1
 			to_chat(user, "You place the circuitboard inside the frame.")
 			qdel(W)
 		return
-
-	else if (iswelder(W) && opened && !has_electronics)
+	else if (iswelder(W) && construct_progress == 0)
 		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You start welding the compressor frame...")
 		if (WT.do_weld(user, src, 50, 3))
 			if(gcDestroyed)
 				return
-			new /obj/item/mounted/frame/rust_fuel_assembly_port(loc)
+			new /obj/item/mounted/frame/rust_fuel_compressor(loc)
 			user.visible_message(\
 				"<span class='warning'>[src] has been cut away from the wall by [user.name].</span>",\
 				"You detached the compressor frame.",\
 				"<span class='warning'>You hear welding.</span>")
 			qdel(src)
 		return
-
 	..()
 
 /obj/machinery/rust_fuel_compressor/emag_act(mob/user)
-	if(!emagged)
-		if(opened)
-			to_chat(user, "You must close the cover to swipe an ID card.")
-		else
-			flick("apc-spark", src)
-			if (do_after(user,src,6))
-				if(prob(50))
-					emagged = 1
-					locked = 0
-					to_chat(user, "You emag the port interface.")
-				else
-					to_chat(user, "You fail to [ locked ? "unlock" : "lock"] the compressor interface.")
+	if(!emagged && construct_progress == 3)
+		flick("apc-spark", src)
+		if (do_after(user,src,6))
+			if(prob(50))
+				emagged = 1
+				locked = 0
+				to_chat(user, "You emag the port interface.")
+			else
+				to_chat(user, "You fail to [ locked ? "unlock" : "lock"] the compressor interface.")
+	else if(emagged)
+		to_chat(user, "The compressor interface's ID scanner is already fried.")

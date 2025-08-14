@@ -8,12 +8,12 @@
 	holder_var_type = "death"
 
 /spell/aoe_turf/necro/zombie/evolve/cast_check(skipcharge = FALSE, mob/living/simple_animal/hostile/necro/zombie/user)
-	. = ..()
-	if (!.)
+	if(!..())
 		return FALSE
 	if(!user.can_evolve)
-		return
-	return ..()
+		to_chat(holder, "<span class='warning'>You cannot evolve any further!</span>")
+		return FALSE
+	return TRUE
 
 /spell/aoe_turf/necro/zombie/evolve/cast(list/targets, mob/living/simple_animal/hostile/necro/zombie/user)
 	user.check_evolve()

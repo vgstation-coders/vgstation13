@@ -581,7 +581,7 @@
 	overlays.len = 0
 	icon_state = "vialbox"
 	item_state = "vialbox"
-	if (!broken && !locked)
+	if (!emagged && !locked)
 		overlays += image('icons/obj/vialbox.dmi',src,"cover_open")
 
 	var/i = 0
@@ -603,7 +603,7 @@
 		overlays += vial_image
 		i++
 
-	if (!broken && electronics)
+	if (!emagged && electronics)
 		overlays += image(icon, src, "led[locked]")
 		if(locked)
 			overlays += image(icon, src, "cover")
@@ -745,7 +745,7 @@
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/New()
 	..()
-	for(var/i=1, i <= storage_slots; i++)
+	for(var/i=1; i <= storage_slots; i++)
 		new slider_type(src)
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/synth

@@ -74,7 +74,7 @@
 			INS.OnPlayed(user,M)
 		if(!M.client.prefs.get_pref(/datum/preference_setting/toggle/hear_instruments))
 			continue
-		M.playsound_local(source, soundfile, 100, falloff = 5)
+		M.playsound_local(source, soundfile, 100, falloff = 5, source = instrumentObj)
 	if(recording && live)
 		if(world.time - time_since_last_note <= 0 && recorded_line != "")
 			recorded_line += "-"

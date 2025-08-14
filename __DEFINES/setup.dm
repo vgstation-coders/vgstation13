@@ -1,6 +1,9 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-#if DM_VERSION < 516
-#error Your version of byond is too old, you need version 513 or higher
+#ifndef SPACEMAN_DMM
+#define MIN_COMPILER_VERSION 515
+#if DM_VERSION < MIN_COMPILER_VERSION
+#error Your version of byond is too old, you need version 516 or higher
+#endif
 #endif
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
@@ -2003,3 +2006,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PVAR_FADE		"fade"
 
 #define ZAS_DUST_TURFS_PER_TICK	20
+
+#define LOBBY_TICKING_STOPPED 0
+#define LOBBY_TICKING 1
+#define LOBBY_TICKING_RESTARTED 2

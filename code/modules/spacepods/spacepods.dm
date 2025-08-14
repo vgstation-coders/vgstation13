@@ -147,7 +147,7 @@
 				ES.cargo_system.stored.forceMove(get_turf(src))
 				if(L)
 					to_chat(L, "<span class='warning'>Automatically jettisoning cargo.</span>")
-			for(var/i = 10, i >= 0; --i)
+			for(var/i = 10; i >= 0; --i)
 				if(L && L == get_pilot())
 					to_chat(L, "<span class='warning'>[i]</span>")
 				if(i == 0)

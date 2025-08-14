@@ -76,7 +76,7 @@ var/global/list/alert_overlays_global = list()
 
 	animation_delay_predensity_opening = 3
 	animation_delay_predensity_closing = 7
-	
+
 	machine_flags = SCREWTOGGLE | EMAGGABLE
 
 	var/list/alert_overlays_local
@@ -244,6 +244,8 @@ var/global/list/alert_overlays_global = list()
 	return
 
 /obj/machinery/door/firedoor/attack_ai(mob/user,var/override=FALSE)
+	if(is_pulselocked(user))
+		return
 	if(!isAdminGhost(user) && (isobserver(user) || user.stat))
 		return
 	spawn()

@@ -117,19 +117,10 @@
 /datum/supply_packs/party
 	name = "Party equipment"
 	contains = list(/obj/item/weapon/storage/box/drinkingglasses,
-					/obj/item/weapon/reagent_containers/food/drinks/discount_shaker,
-					/obj/item/weapon/reagent_containers/food/drinks/bottle/patron,
-					/obj/item/weapon/reagent_containers/food/drinks/bottle/goldschlager,
-					/obj/item/weapon/storage/fancy/cigarettes/dromedaryco,
-					/obj/item/weapon/lipstick/random,
-					/obj/item/weapon/reagent_containers/food/drinks/ale,
-					/obj/item/weapon/reagent_containers/food/drinks/ale,
-					/obj/item/weapon/reagent_containers/food/drinks/beer,
-					/obj/item/weapon/reagent_containers/food/drinks/beer,
-					/obj/item/weapon/reagent_containers/food/drinks/beer,
-					/obj/item/weapon/reagent_containers/food/drinks/beer,
-					/obj/item/device/maracas,
-					/obj/item/device/maracas,
+					/obj/item/weapon/storage/box/partyhats,
+					/obj/item/weapon/storage/box/partyjunk,
+					/obj/item/weapon/storage/fancy/beer_box,
+					/obj/item/weapon/storage/fancy/beer_box,
 					/obj/item/weapon/storage/box/balloons,
 					/obj/item/weapon/storage/box/balloons,
 					/obj/item/weapon/storage/box/balloons,
@@ -302,3 +293,13 @@
 	containsdesc = "A new synthesizer has hit the market! Get it while it's still hot!"
 
 	group = "Hospitality"
+
+/datum/supply_packs/dansleeper
+	name = "Discount sleeper upgrade"
+	contains = list (
+					/obj/item/device/plugin/sleeper/dan)
+	cost = 30
+	containertype = /obj/structure/largecrate
+	containername = "Discount sleeper upgrade crate"
+	group = "Hospitality"
+	containsdesc = "An upgrade system for a sleeper. Sounds delicious and sponsored by Discount Dan!"

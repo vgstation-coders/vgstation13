@@ -185,7 +185,7 @@
 		if("Vox")
 			var/new_hair_vox = input(user, "Choose your character's hair color:", "Character Preference") as null|anything in list("Green", "Azure", "Brown", "Emerald", "Gray", "Light Green", "Green-Brown")
 			if(new_hair_vox)
-				r_hair = haircolordesc(new_hair_vox) // Yeah, vox uses r_hair number as an index for discrete colour values.
+				r_hair.setting = haircolordesc(new_hair_vox) // Yeah, vox uses r_hair number as an index for discrete colour values.
 				// Why is that? Historical reasons
 				to_chat(user,"<span class='notice'>Your hair will now be [new_hair_vox] in color.</span>")
 
@@ -761,7 +761,7 @@
 	return list()
 
 /datum/preference_setting/assoc_list_setting/jobs/process_link(var/task, var/mob/user, var/list/href_list)
-	var/datum/preference_setting/alternate_option = parent.get_pref(/datum/preference_setting/enum/alternate_option)
+	var/datum/preference_setting/alternate_option = parent.get_pref_datum(/datum/preference_setting/enum/alternate_option)
 	switch(task)
 		if("close")
 			user << browse(null, "window=mob_occupation")
@@ -771,7 +771,7 @@
 		if("random") // This just changes the alternate option.
 			if(alternate_option.setting == GET_RANDOM_JOB || alternate_option.setting == BE_ASSISTANT || alternate_option.setting == RETURN_TO_LOBBY)
 				alternate_option.setting += 1
-			else if(alternate_option == GET_EMPTY_JOB)
+			else if(alternate_option.setting == GET_EMPTY_JOB)
 				alternate_option.setting = 0
 			else
 				return 0

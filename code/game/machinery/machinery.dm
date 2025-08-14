@@ -495,6 +495,9 @@ Class Procs:
 
 /obj/machinery/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
+	//If the APC has been used recently by a pulse demon, lock the silicons out, the proc itself is in pulsedemon.dm
+	if(is_pulselocked(user)) //Message is handled in the proc
+		return
 	if(isrobot(user))
 		// For some reason attack_robot doesn't work
 		// This is to stop robots from using cameras to remotely control machines.

@@ -1585,3 +1585,14 @@ var/obj/blend_test = null
 		output = "No unconnected vents/scrubbers found."
 
 	usr << browse (output, "window=unconnected-atmos-search")
+
+/client/proc/rig_crew_score()
+	set category = "Debug"
+	set name = "Rig crew score"
+	set desc = "Manually adjust round-end crew score."
+
+	if(!check_rights(R_FUN))
+		return
+
+	score.badmin_score = input(usr,"What score do you want?","Badmin score",score.badmin_score) as num
+	score.badmin_override = alert(usr,"Override or add to the round-end score?","Badmin score","Override","Add") == "Override"

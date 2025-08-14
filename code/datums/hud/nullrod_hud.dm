@@ -7,6 +7,8 @@
 	..()
 	if(!V.client)
 		return
+	if(V.loneliness_affected())
+		return
 	var/i = 1
 	for (var/image/I in cached_images)
 		I.loc = null

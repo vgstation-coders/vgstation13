@@ -476,16 +476,13 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		return 0
 
 /obj/item/device/lightreplacer/proc/recharge(mob/user)
-	if(isrobot(user))
-		var/mob/living/silicon/robot/R = user
-		if(R && R.cell && R.cell.charge && (glass < glass_max))
-			var/added_glass = 0
-			added_glass = clamp(added_glass, 7500, (glass_max - glass))
-			if(R.cell.use(added_glass * 0.1))
-				add_glass(added_glass, 2)
-				to_chat(usr, "<span class='notice'>\The [src] synthesizes[added_glass] units of glass.</span>")
-				return 1
-		to_chat(usr, "<span class='warning'>You don't have enough charge to synthesize more glass!</span>")
+	if(get_cell_charge(user) && (glass < glass_max))
+		var/added_glass = 0
+		added_glass = clamp(added_glass, 7500, (glass_max - glass))
+		if(use_cell_charge(user,added_glass * 0.1))
+			add_glass(added_glass, 2)
+			to_chat(usr, "<span class='notice'>\The [src] synthesizes [added_glass] units of glass.</span>")
+			return 1
 	return 0
 
 /obj/item/device/lightreplacer/proc/dump_supply(mob/user)

@@ -98,6 +98,37 @@
 	var/transfer_amount = amount_per_transfer_from_this
 	if (!can_transfer_an_APTFT() && !is_empty()) //If it doesn't contain enough reagents to fulfill its amount_per_transfer_from_this, but also isn't empty, it'll spray whatever it has left.
 		transfer_amount = reagents.total_volume
+	if(user.a_intent == I_HURT)
+		var/obj/item/I = user.get_inactive_hand()
+		if(I && I.is_hot() && reagents.has_any_reagents(possible_fuels))
+			reagents.remove_from_all(transfer_amount)
+			reagents.heating(I.thermal_energy_transfer()*(rand(5,10)/10), I.is_hot())
+			process_temperature()
+			if(clumsy_check(user))
+				user.ignite()
+				user.visible_message("<span class='danger'>[user] tried to spray a plume of fire from \his [src] but ignited himself!</span>","<span class='danger'>You try to spray a plume of fire from your [src] but only ignite yourself!</span>")
+				return
+			if(!user.get_item_by_slot(slot_gloves) && prob(10))
+				to_chat(user,"<span class='danger'>The heat from the spray bottle burns your hand!</span>")
+				user.drop_item(src)
+				if(isliving(user))
+					var/mob/living/L = user
+					L.apply_damage(rand(5,10), BURN, L.active_hand == GRASP_RIGHT_HAND ? LIMB_RIGHT_HAND : LIMB_LEFT_HAND)
+			var/obj/item/projectile/fire_breath/sprayer/projectile = new /obj/item/projectile/fire_breath/sprayer(get_turf(src),user.dir)
+			projectile.original = target
+			projectile.starting = get_turf(user)
+			projectile.target = get_turf(target)
+			projectile.shot_from = user //fired from the user
+			projectile.current = projectile.original
+			projectile.yo = target.y - user.y
+			projectile.xo = target.x - user.x
+			spawn()
+				projectile.OnFired()
+				projectile.process()
+			user.visible_message("<span class='danger'>[user] sprays a plume of fire from \his [src]!</span>","<span class='danger'>You spray a plume of fire from your [src]!</span>")
+			update_icon()
+			playsound(user, 'sound/weapons/flamethrower.ogg', 50, 1)
+			return
 	var/mix_color = mix_color_from_reagents(reagents.reagent_list)
 	var/obj/effect/decal/chemical_puff/D = new /obj/effect/decal/chemical_puff(get_turf(src), mix_color, amount_per_transfer_from_this)
 	reagents.trans_to(D, transfer_amount, 1/3)

@@ -67,7 +67,7 @@ Ambience system.
 		return personal
 	var/area/A = get_area(mob)//other overrides can go in here. eg: overrides for weather. or for cult.
 	if(A)
-		return A.get_ambience_list()
+		return A.get_ambience_list(mob)
 
 /datum/ambience
 	var/length = 0 MINUTES //doesn't need to be 100% accurate. should be in the ballpark though.

@@ -170,3 +170,18 @@ Helper procs and procs used in mobs
 			if(C.body_alphas[i] <= 1)
 				return FALSE
 	return TRUE
+
+//Since HUD images are on the viewer's side it's a little bit tricky to force the HUDs to be updated immediately
+//So instead we go through HUD user lists, get their distances from the target and if they're in range we update their HUDs
+//This is useful such as for instant invisibility effects like Ethereal Jaunt
+//Since this is a heavier proc (going through all users in range to update their clientside images) it should not be attached to something spammable
+/proc/update_HUD_in_range(var/target)
+	var/list/hud_users = list()
+	hud_users |= (med_hud_users + sec_hud_users + diagnostic_hud_users + wage_hud_users)
+	for(var/mob/M in hud_users)
+		if(!M.client)
+			continue
+		var/client/C = M.client
+		if(get_dist(get_turf(M), get_turf(target)) <= (C.view + DATAHUD_RANGE_OVERHEAD))
+			M.clean_up_hud()
+			M.handle_hud_vision_updates()

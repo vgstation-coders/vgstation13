@@ -216,11 +216,10 @@
 	update_env_effect()
 	INVOKE_EVENT(src, /event/sound_started, "emitter" = src)
 
-
 // halt sounds to clients, unregister from dynamic updates
 /datum/sound_emitter/proc/deactivate()
 	active_sound = null
-
+  
 	INVOKE_EVENT(src, /event/sound_stopped, "emitter" = src)
 
 /datum/sound_emitter/proc/update_env_effect()

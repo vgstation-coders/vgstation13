@@ -41,6 +41,7 @@
 	selection_color = "#fff5cc"
 	access = list(access_eva, access_engine_major, access_engine_minor, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics)
 	minimal_access = list(access_atmospherics, access_maint_tunnels, access_emergency_storage, access_construction, access_engine_minor, access_external_airlocks)
+	alt_titles = list("Firefighter")
 	outfit_datum = /datum/outfit/atmos
 
 /datum/job/mechanic
