@@ -17,6 +17,44 @@
 	var/modifystate
 	var/charge_states = 1 //if the gun changes icon states depending on charge, this is 1. Uses a var so it can be changed easily
 	var/icon_charge_multiple = 25 //Spacing of the charge level sprites
+	var/charge_tick = 0
+	var/recharge_time = 0 //Time it takes for shots to recharge (in ticks)
+	var/recharge_mult = 1
+	var/uses_borg_cell = FALSE
+	var/recharges_borg_cell = FALSE
+	var/borg_restocks = FALSE
+
+/obj/item/weapon/gun/energy/New()
+	..()
+	if(recharge_time)
+		processing_objects.Add(src)
+
+/obj/item/weapon/gun/energy/Destroy()
+	if(recharge_time)
+		processing_objects.Remove(src)
+	..()
+
+/obj/item/weapon/gun/energy/process()
+	if(recharge_time)
+		charge_tick++
+		if(charge_tick < recharge_time)
+			return 0
+		charge_tick = 0
+		if(!power_supply)
+			return 0
+		if(recharges_borg_cell && isrobot(loc) && !use_cell_charge(src.loc,charge_cost))
+			return 0
+		power_supply.give(charge_cost*recharge_mult)
+		update_icon()
+		return 1
+
+/obj/item/weapon/gun/energy/restock()
+	if(borg_restocks)
+		if(power_supply.charge < power_supply.maxcharge)
+			power_supply.give(charge_cost)
+			update_icon()
+		else
+			charge_tick = 0
 
 /obj/item/weapon/gun/energy/get_cell()
 	return power_supply
@@ -40,9 +78,10 @@
 /obj/item/weapon/gun/energy/process_chambered()
 	if(in_chamber)
 		return 1
-	if(!power_supply)
-		return 0
-	if(!power_supply.use(charge_cost))
+	if(uses_borg_cell && isrobot(loc))
+		if(!use_cell_charge(src.loc,charge_cost))
+			return 0
+	else if(!power_supply || !power_supply.use(charge_cost))
 		return 0
 	if(!projectile_type)
 		return 0

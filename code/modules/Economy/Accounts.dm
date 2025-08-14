@@ -17,6 +17,7 @@ var/station_allowance = 0//This is what Nanotrasen will send to the Station Acco
 var/latejoiner_allowance = 0//Added to station_allowance and reset before every wage payout.
 var/station_funding = 0 //A bonus to the station allowance that persists between cycles. Admins can set this on the database.
 var/station_bonus = 0 //A bonus to station allowance that gets reset after wage payout. Admins can boost this too.
+var/init_station_funds = 0
 
 /proc/create_station_account()
 	if(!station_account)
@@ -42,6 +43,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 	department_account.account_number = rand(11111, 99999)
 	department_account.remote_access_pin = rand(1111, 9999)
 	department_account.money = DEPARTMENT_START_FUNDS
+	init_station_funds += department_account.money
 	if(receives_wage == 1)
 		department_account.wage_gain = DEPARTMENT_START_WAGE
 		station_allowance += DEPARTMENT_START_WAGE + round(DEPARTMENT_START_WAGE/10)//overhead of 10%

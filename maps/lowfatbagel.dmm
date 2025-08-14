@@ -44730,7 +44730,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/obj/machinery/rust/gyrotron{
+/obj/machinery/power/gyrotron{
 	anchored = 1;
 	dir = 8;
 	state = 2
@@ -59080,6 +59080,7 @@
 /obj/item/weapon/fishtools/fish_food,
 /obj/item/weapon/fishtools/fish_net,
 /obj/item/weapon/fishtools/fish_tank_brush,
+/obj/item/weapon/circuitboard/conduction_plate,
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/vault)
 "jTD" = (
@@ -73977,7 +73978,7 @@
 	name = "Dorms"
 	})
 "ofq" = (
-/obj/machinery/rust/gyrotron{
+/obj/machinery/power/gyrotron{
 	anchored = 1;
 	dir = 8;
 	state = 2
@@ -80150,7 +80151,7 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/obj/machinery/rust/gyrotron{
+/obj/machinery/power/gyrotron{
 	anchored = 1;
 	dir = 4;
 	state = 2
@@ -108520,6 +108521,7 @@
 /obj/structure/hanging_lantern{
 	dir = 1
 	},
+/obj/item/weapon/circuitboard/destructive_analyzer,
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/vault)
 "yhW" = (

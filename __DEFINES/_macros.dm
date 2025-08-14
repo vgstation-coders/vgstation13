@@ -48,9 +48,9 @@
 
 #define islich(A)  (ishuman(A) && istype(A:species, /datum/species/lich))
 
-#define istruelich(A) ((islich(A) && (iswizard(A) || iswearinglichcrown(A))
+#define istruelich(A) (islich(A) && (iswizard(A) || iswearinglichcrown(A)))
 
-#define iswearinglichcrown(A) (ishuman(A) && (istype(A:head, /obj/item/clothing/head/wizard/skelelich)) //|| istype(A:head, /obj/item/clothing
+#define iswearinglichcrown(A) (ishuman(A) && (istype(A:head, /obj/item/clothing/head/wizard/skelelich))) //|| istype(A:head, /obj/item/clothing
 
 #define ishologram(A) (istype(A, /mob/living/simple_animal/hologram/advanced))
 

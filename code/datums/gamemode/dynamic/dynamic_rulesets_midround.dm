@@ -915,7 +915,7 @@
 	weight = BASE_RULESET_WEIGHT
 	weight_category = "Grue"
 	cost = 20
-	requirements = list(70,60,50,40,30,20,10,10,10,10)
+	requirements = list(101,101,101,40,30,20,10,10,10,10)
 	high_population_requirement = 10
 	logo = "grue-logo"
 	repeatable = TRUE
@@ -1129,7 +1129,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/divergentclone/ready(var/forced = 0)
 	if(!config.revival_cloning)
 		return 0
-	
+
 	//Check that we have at least one ghost who isn't already a clone waiting to spawn
 	var/list/candies = dead_players + list_observers
 	var/list/valids[0]
@@ -1174,5 +1174,5 @@
 	to_chat(G, "<span class='notice'><b>You were selected to be a divergent clone, but will not be spawned in yet!</b></span>")
 	to_chat(G, "<span class='notice'>You have been granted the \"Spawn as Divergent Clone\" ghost spell. Use this near a cloning pod to spawn in as a divergent clone of someone who was cloned, or is currently being cloned, in that pod.</span>")
 	to_chat(G, "<span class='notice'>Using this spell on an unoccupied cloning pod will allow you to choose a record of a person previously cloned in that pod. Using it on an occupied pod will cause you to become a twin of the person currently in the pod, and be ejected from the pod at the same time as them.</span>")
-	to_chat(G, "<span class='notice'>Remember: you can only use this spell once, and re-entering your corpse will remove it permanently. In fact, for your convenience we have removed your ability to re-enter your corpse.</span>")	
+	to_chat(G, "<span class='notice'>Remember: you can only use this spell once, and re-entering your corpse will remove it permanently. In fact, for your convenience we have removed your ability to re-enter your corpse.</span>")
 

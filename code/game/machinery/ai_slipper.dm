@@ -51,9 +51,10 @@
 
 /obj/machinery/ai_slipper/attack_ai(mob/user as mob)
 	add_hiddenprint(user)
+	if(is_pulselocked(user))
+		return
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
-
 	user.set_machine(src)
 	var/area/this_area = get_area(src)
 	var/t = "<TT><B>Foam Dispenser</B> ([this_area.name])<HR>"
@@ -70,12 +71,16 @@
 
 /obj/machinery/ai_slipper/AICtrlClick(mob/user as mob)
 	src.add_hiddenprint(user)
+	if(is_pulselocked(user))
+		return
 	src.disabled = !src.disabled
 	icon_state = src.disabled? "motion0":"motion3"
 	return
 
 /obj/machinery/ai_slipper/AIShiftClick(mob/user as mob)
 	src.add_hiddenprint(user)
+	if(is_pulselocked(user))
+		return
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(src.cooldown_on)

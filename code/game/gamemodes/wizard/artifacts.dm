@@ -88,9 +88,9 @@
 
 /datum/spellbook_artifact/staff_of_necro
 	name = "Staff of Necromancy"
-	desc = "An arcane staff capable of summoning undying minions from the corpses of your enemies. This magic doesn't affect machines."
+	desc = "An arcane staff capable of summoning undying minions from the corpses of your organic enemies. Stores 3 charges, and takes 20 seconds to gain a charge. Recharges twice as fast and provides a slight brute-healing effect when wielded by a lich."
 	abbreviation = "SN"
-	spawned_items = list(/obj/item/weapon/gun/energy/staff/necro)
+	spawned_items = list(/obj/item/weapon/staff/necro)
 
 /datum/spellbook_artifact/apprentice
 	name = "Contract of Apprenticeship"
@@ -194,6 +194,12 @@
 
 	H.rightandwrong("guns")
 	to_chat(H, "<span class='userdanger'>You have summoned guns.</span>")
+	score.summon_guns_count++
+	if(prob(20) || ((score.summon_guns_count % 5) == 0)) // 20% chance, or every time guns are summoned 5 times.
+		for(var/mob/M in player_list)
+			if(!M.client)
+				continue
+			M.playsound_local(M, 'sound/misc/ak47.ogg', 50)
 
 //SUMMON MAGIC
 /datum/spellbook_artifact/summon_magic

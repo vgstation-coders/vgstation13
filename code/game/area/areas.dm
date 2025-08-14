@@ -330,7 +330,7 @@ var/area/space_area
 		updateicon()
 	return
 
-/area/proc/get_ambience_list()
+/area/proc/get_ambience_list(mob/user)
 	//Check if the area has an AI and add the appropriate ambience
 	var/list/ambience_list = list()
 	ambience_list.Add(ambient_sounds)
@@ -340,6 +340,8 @@ var/area/space_area
 			if(AI?.laws.name == "Asimov's Three Laws of Robotics")
 				ambience_list.Add(/datum/ambience/AI/harmonica)
 			break
+	if(user.loneliness_affected())
+		ambience_list.Add(/datum/ambience/nobodyhere)
 	if(ambience_list.len > 0)
 		return ambience_list
 

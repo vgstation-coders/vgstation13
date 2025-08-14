@@ -68,11 +68,11 @@
 			if(istype(target) && target.locked_to == src)
 				target.electrocute_act(34, src, incapacitation_duration = 24 SECONDS)
 				to_chat(target, "<span class='danger'>You feel a deep shock course through your body!</span>")
-			spark(src, 12, FALSE)
+			spark(src, 8, FALSE)
 			sleep(10)
 
 		A.power_light = light
 		A.updateicon()
 	else
-		spark(src, 12, FALSE) //just something to let them know it works
+		spark(src, 8, FALSE) //just something to let them know it works
 	return

@@ -239,6 +239,8 @@
 	name = "crate shelf parts"
 	desc = "Parts of a shelf."
 	icon_state = "crate_shelf_parts"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	item_state = "shelf"
 	starting_materials = list(MAT_IRON = 11250)
 	sheet_amount = 3
 

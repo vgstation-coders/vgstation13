@@ -1,0 +1,117 @@
+<div style="min-width: 480px">
+	{{if !data.linked_core}}
+		<span style='color: red'><b>No linked R-UST Mk. 7 pattern Electromagnetic Field Generator</b></span>
+	{{else}}
+		<h3>Device Data</h3>
+		<div class = "item">
+			<div class = "itemLabelWide">
+				Device ID Tag:
+			</div>
+			<div class = "itemContentSmall">
+				{{:data.idtag}}
+			</div>
+		</div>
+			{{if !data.core_status}}
+				<b><span style='color: red'>ERROR: Device unresponsive</b><span>
+			{{else}}
+			<div class = "item">
+				<div class = "itemLabelWide">
+					Device Power Status:
+				</div>
+				<div class = "itemContentSmall">
+					{{:helper.displayBar(data.power_available, 0, data.power_needed, null, data.power_available + '/' + data.power_needed)}}
+<!--					{{if data.power_color == "orange"}}
+					<span style='color: orange'>{{:data.power_available}}/{{:data.power_needed}}</span>
+					{{else}}
+					<span style='color: green'>{{:data.power_available}}/{{:data.power_needed}}</span>
+					{{/if}} -->
+				</div>
+			</div>
+			<div class = "item">
+				<div class = "itemLabelWide">
+					Device Field Status:
+				</div>
+				<div class = "itemContentSmall">
+					{{if data.field_color == "orange"}}
+					<span style='color: orange'>{{:data.field_string}}</span>
+					{{else data.field_color == "green"}}
+					<span style='color: green'>{{:data.field_string}}</span>
+					{{else}}
+					<span style='color: red'>{{:data.field_string}}</span>
+					{{/if}}
+				</div>
+			</div>
+
+			<div class="item">&nbsp;</div>
+			<h3>Tokamak Field Settings</h3>
+			<div class = "item">
+				<div class = "itemLabelWide">
+					Targeted Field power density (W.m<sup>-3</sup>):
+				</div>
+				<div class = "itemContentSmall">
+					{{:data.targeted_field_strength}}
+				</div>
+			</div>
+			<div class = "item">
+				<div class = "itemLabelWide">
+					Field frequency (MHz):
+				</div>
+				<div class = "itemContentSmall">
+					{{:data.field_frequency}}
+				</div>
+			</div>
+			<h3>Active Field Data</h3>
+				{{if !data.owned_field}}
+				<div class = "item">
+					<span style='color: red'>No active field detected.</span>
+				</div>
+				{{else}}
+				<div class = "item">
+					<div class = "itemLabelWide">
+						Active Field Power Density (W.m<sup>-3</sup>):
+					</div>
+					<div class = "itemContentSmall">
+						{{:helper.displayBar(data.field_strength, 0, data.targeted_field_strength, null, data.field_strength + '/' + data.targeted_field_strength)}}
+					</div>
+				</div>
+				<div class = "item">
+					<div class = "itemLabelWide">
+						Approximate field diameter (m):
+					</div>
+					<div class = "itemContentSmall">
+						{{:data.field_diameter}}
+					</div>
+				</div>
+				<div class = "item">
+					<div class = "itemLabelWide">
+						Field mega energy:
+					</div>
+					<div class = "itemContentSmall">
+						{{:data.field_mega_energy}}
+					</div>
+				</div>
+				<div class = "item">
+					<div class = "itemLabelWide">
+						Field sub-mega energy:
+					</div>
+					<div class = "itemContentSmall">
+						{{:helper.displayBar(data.field_sub_mega_energy, 0, 1000000, null, data.field_sub_mega_energy + "/1000000")}}
+					</div>
+				</div>
+
+				<div class="item">&nbsp;</div>
+
+				<h3>Field Dormant Reagents</h3><br>
+					<table>
+						<tr>
+							<th>Name</th>
+							<th>Amount</th>
+						</tr>
+						{{for data.list_of_reagents}}
+							<tr><td>{{:value.key1}}</td><td>{{:value.key2}}</td></tr>
+						{{/for}}
+					</table>
+				{{/if}}
+			{{/if}}
+	{{/if}}
+</div>

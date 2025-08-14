@@ -972,6 +972,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 	desc = "Apparently a staff used by the wizard."
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "staff"
+	hitsound = 'sound/weapons/smash.ogg'
 	force = 3.0
 	throwforce = 5.0
 	throw_speed = 1

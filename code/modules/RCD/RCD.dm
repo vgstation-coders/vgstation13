@@ -307,26 +307,10 @@
 	var/cell_power_per_energy = 30
 
 /obj/item/device/rcd/borg/use_energy(var/amount, var/mob/user)
-	if(!isrobot(user))
-		return
-
-	var/mob/living/silicon/robot/R = user
-
-	if(!R.cell)
-		return
-
-	R.cell.use(amount * cell_power_per_energy)
+	use_cell_charge(user,amount * cell_power_per_energy)
 
 /obj/item/device/rcd/borg/get_energy(var/mob/user)
-	if(!isrobot(user))
-		return 0
-
-	var/mob/living/silicon/robot/R = user
-
-	if(!R.cell)
-		return
-
-	return R.cell.charge / cell_power_per_energy
+	return get_cell_charge(user) / cell_power_per_energy
 
 //Matter based RCDs.
 /obj/item/device/rcd/matter

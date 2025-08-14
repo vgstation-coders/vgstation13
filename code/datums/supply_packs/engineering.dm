@@ -233,7 +233,7 @@
 	containsdesc = "Circuit boards for controlling a R-UST engine."
 
 /datum/supply_packs/rust_gyrotron
-	contains = list(/obj/machinery/rust/gyrotron)
+	contains = list(/obj/machinery/power/gyrotron)
 	name = "R-UST Mk. 7 gyrotron"
 	cost = 25
 	containertype = /obj/structure/closet/crate/secure/large
@@ -446,7 +446,7 @@
 	group = "Engineering"
 	access = list(access_engine_major)
 	containsdesc = "Everything you need to build a very basic fission reactor. Comes with a pre-filled (albeit small) fuel reservoir."
-	
+
 /datum/supply_packs/fissionreactor_expansion
 	contains = list(
 		/obj/structure/closet/crate/flatpack/configurable/fission_interior,
@@ -463,8 +463,8 @@
 	containername = "Fission reactor expansion pak"
 	group = "Engineering"
 	access = list(access_engine_major)
-	containsdesc = "Contains supplies to expand an existing fission reactor. Includes parts for 4 casings and 3 interior assemblies. Remember to turn it off and drain the coolant first!"		
-		
+	containsdesc = "Contains supplies to expand an existing fission reactor. Includes parts for 4 casings and 3 interior assemblies. Remember to turn it off and drain the coolant first!"
+
 /datum/supply_packs/fissionreactor_bigrod
 	contains = list(
 		/obj/item/weapon/fuelrod/large
@@ -476,8 +476,8 @@
 	group = "Engineering"
 	access = list(access_engine_major)
 	containsdesc = "An extra-large fuel reservoir, for extra power or for more complex fuel mixes. Use with extreme caution and control rods inserted."
-		
-				
+
+
 /datum/supply_packs/fissionreactor_randomrod
 	contains = list(
 		/obj/item/weapon/fuelrod/randomized
@@ -488,7 +488,6 @@
 	containername = "Pre-filled fuel reservoir"
 	group = "Engineering"
 	access = list(access_engine_major)
-	containsdesc = "A standard fuel reservoir, filled with a unique mixture selected by NanoTransen's engineering team."	
-	
-	
-	
+	containsdesc = "A standard fuel reservoir, filled with a unique mixture selected by NanoTransen's engineering team."
+
+

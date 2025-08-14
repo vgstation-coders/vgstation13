@@ -46,7 +46,7 @@
 		// Really powerful melee weapons and energy shield, along with random extra goods and eviscerator nades. A dream come true
 		"Melee" = list(
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/prescription,
-			slot_belt_str = /obj/item/weapon/grenade/spawnergrenade/manhacks,
+			slot_belt_str = /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate,
 			slot_in_backpack_str = list(
 				/obj/item/weapon/melee/energy/sword/dualsaber = 1,
 				/obj/item/weapon/melee/energy/hfmachete = 1,

@@ -150,7 +150,7 @@
 	item_state = "gun"
 	w_class = W_CLASS_MEDIUM //it is smaller than the pickaxe
 	damtype = "fire"
-	heat_production = 3800
+	heat_production = 27000
 	source_temperature = TEMPERATURE_PLASMA
 	toolspeed = 0.2 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction/ light thermite on fire
 	sharpness = 1.0

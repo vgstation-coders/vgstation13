@@ -113,6 +113,11 @@
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
 	for(var/x in actions)
 		qdel(x)
+	if(istype(loc, /obj/item/weapon/storage)) //Update the storage screen for current users.
+		var/obj/item/weapon/storage/S = loc
+		spawn() //Allows properly removing the item from storage so that there's not an unused slot in the middle of its inventory until next refresh.
+			if(S && !S.gcDestroyed) //Double check to see if the storage still exists.
+				S.refresh_all()
 	..()
 
 
@@ -131,8 +136,8 @@
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
-/obj/item/acid_melt()
-	var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(loc)
+/obj/item/acid_melt(atom/customloc = null)
+	var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(customloc || loc)
 	I.desc = "Looks like this was \a [src] some time ago."
 	visible_message("<span class='warning'>\The [src] melts.</span>")
 	qdel(src)

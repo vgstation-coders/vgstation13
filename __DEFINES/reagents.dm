@@ -242,6 +242,9 @@
 #define HIPPIESDELIGHT 			"hippiesdelight"
 #define ETHANOL 			"ethanol"
 #define BEER 			"beer"
+#define CIDER 			"cider"
+#define STOUT 			"stout"
+#define SNAKEBITE 		"snakebite"
 #define WHISKEY 			"whiskey"
 #define SPECIALWHISKEY 			"specialwhiskey"
 #define GIN 			"gin"
@@ -260,6 +263,7 @@
 #define BLUECURACAO "bluecuracao"
 #define TRIPLESEC		"triplesec"
 #define BITTERS 		"bitters"
+#define CHUMPARI 		"chumpari"
 #define SCHNAPPS		"schnapps"
 #define ALE 			"ale"
 #define THIRTEENLOKO 			"thirteenloko"
@@ -498,6 +502,13 @@
 #define LOCUTOGEN		"locutogen"
 #define BUMCIVILIAN		"bumcivilian"
 #define PUNCTUALITE		"punctualite"
+#define MAHKOEXPITOL	"mahkoexpitol"
+#define MORATHIAL		"morathial"
+
+#define ALIENORIGIN		"alienorigin"
+#define UNKNOWNALPHA	"unknownalpha"
+#define UNKNOWNDELTA	"unknowndelta"
+#define UNKNOWNOMEGA	"unknownomega"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"

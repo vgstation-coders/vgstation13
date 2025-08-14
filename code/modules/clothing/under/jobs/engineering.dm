@@ -18,6 +18,15 @@
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/under/rank/firefighter
+	desc = "It's turnout gear worn by a firefighter."
+	name = "firefighter's jumpsuit"
+	icon_state = "firefighter"
+	item_state = "firefighter_suit"
+	_color = "firefighter"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/under/rank/engineer
 	desc = "It's an orange high visibility jumpsuit worn by engineers. It has minor radiation shielding."
 	name = "engineer's jumpsuit"

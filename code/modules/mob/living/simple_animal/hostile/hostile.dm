@@ -175,7 +175,7 @@
 			return FALSE
 		if(SA.pacify_aura)
 			return FALSE
-	return TRUE
+	return !loneliness_affected(A)
 
 /mob/living/simple_animal/hostile/proc/PickTarget(var/list/Targets)//Step 3, pick amongst the possible, attackable targets
 	if(target != null)//If we already have a target, but are told to pick again, calculate the lowest distance between all possible, and pick from the lowest distance targets

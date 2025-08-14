@@ -21,6 +21,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 	var/controlled_splash = FALSE	//If true, splashing someone/something with the reagent container will only usr the current amount_per_transfer_from_this instead of all of it
 									//Honestly we should try setting this to TRUE by default for all containers at some point, it's just convenient.
+	var/being_heated = FALSE
 
 /obj/item/weapon/reagent_containers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
@@ -442,10 +443,21 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 /obj/item/weapon/reagent_containers/attempt_heating(atom/A, mob/user)
 	var/temperature = A.is_hot()
-	if(temperature && reagents)
+	if(!(temperature && reagents))
+		return
+	if(!user)
 		reagents.heating(A.thermal_energy_transfer(), temperature)
-		if(user)
-			to_chat(user, "<span class='notice'>You heat \the [src] with \the [A].</span>")
+		return
+	if(being_heated)
+		return
+	being_heated = TRUE
+	to_chat(user, "<span class='notice'>You heat \the [src] with \the [A].</span>")
+	while(user && temperature && do_after(user,src,20)) //Have to keep checking if the thing is hot, welders run out of fuel...
+		temperature = A.is_hot()
+		if(temperature)
+			reagents.heating(A.thermal_energy_transfer(), temperature)
+	to_chat(user, "<span class='notice'>You stop heating \the [src] with \the [A].</span>")
+	being_heated = FALSE
 
 /obj/item/weapon/reagent_containers/Hear(var/datum/speech/speech, var/rendered_speech="")
 	. = ..()

@@ -84631,7 +84631,7 @@
 /area/lamprey/voxmetaclub)
 "dCF" = (
 /obj/structure/rack,
-/obj/item/weapon/gun/energy/staff/necro,
+/obj/item/weapon/staff/necro,
 /turf/simulated/floor/vox{
 	icon_state = "gold";
 	name = "gold floor"
@@ -129423,7 +129423,7 @@
 	pixel_y = 4
 	},
 /obj/item/weapon/gun/energy/staff/animate,
-/obj/item/weapon/gun/energy/staff/necro{
+/obj/item/weapon/staff/necro{
 	pixel_x = 4;
 	pixel_y = -4
 	},

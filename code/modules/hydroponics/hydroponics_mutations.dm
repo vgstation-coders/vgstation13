@@ -47,7 +47,7 @@
 						visible_message("<span class='notice'>\The [seed.display_name] grows an empty gland.</span>")
 					else
 						var/check_success = FALSE
-						if(prob(50) && seed.chems.len > 0)
+						if(prob(50) && seed.chems.len > 1)
 							check_success = seed.remove_random_chemical()
 							if(check_success)
 								visible_message("<span class='notice'>\A gland on the [seed.display_name] withers and dies.</span>")

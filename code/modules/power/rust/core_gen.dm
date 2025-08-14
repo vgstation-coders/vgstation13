@@ -40,12 +40,6 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 
 */
 
-#define MAX_FIELD_FREQ 1000
-#define MIN_FIELD_FREQ 1
-#define MAX_FIELD_STR 1000
-#define MIN_FIELD_STR 1
-#define RUST_CORE_STR_COST 5
-
 /obj/machinery/power/rust_core
 	name = "R-UST Mk 7 Tokamak core"
 	desc = "An enormous solenoid for generating extremely high power electromagnetic fields."
@@ -57,12 +51,19 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	light_color = LIGHT_COLOR_BLUE
 
 	var/obj/effect/rust_em_field/owned_field
-	var/field_strength = 1//0.01
-	var/field_frequency = 1
+	var/field_strength = MIN_FIELD_STR
+	var/targeted_field_strength = MIN_FIELD_STR
+	var/field_frequency = MIN_FIELD_FREQ
+	var/attempt_activate = FALSE
+	var/powered = 0
+	var/last_power_request = 0
+	var/last_power_received = 0
 
-	use_power = MACHINE_POWER_USE_IDLE
+	use_power = MACHINE_POWER_USE_NONE
+	power_priority = POWER_PRIORITY_POWER_EQUIPMENT
+	monitoring_enabled = TRUE
 	idle_power_usage = 50
-	active_power_usage = 500	//multiplied by field strength
+	active_power_usage = MIN_FIELD_FREQ * RUST_CORE_STR_COST	//multiplied by field strength
 	anchored = 0
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | WELD_FIXED | MULTITOOL_MENU
 
@@ -81,14 +82,36 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	if(ticker)
 		initialize()
 
+/obj/machinery/power/rust_core/Destroy()
+	qdel(owned_field)
+	..()
+
 /obj/machinery/power/rust_core/initialize()
 	if(!id_tag)
 		assign_uid()
 		id_tag = uid
 
 /obj/machinery/power/rust_core/process()
-	if(stat & BROKEN || !powernet)
+	if(stat & BROKEN || state != 2 || (!powernet && active_power_usage))
+		powered = 0
 		Shutdown()
+		return
+	var/cur_satisfaction = get_satisfaction()
+	var/power_received = last_power_request * cur_satisfaction
+	add_load((attempt_activate || owned_field) ? active_power_usage : idle_power_usage)
+	powered = power_received >= idle_power_usage
+	if(!powered)
+		Shutdown()
+	else if(owned_field && power_received < MIN_FIELD_STR * RUST_CORE_STR_COST)
+		Shutdown()
+	else if(attempt_activate)
+		if(owned_field)
+			set_strength(round(power_received / RUST_CORE_STR_COST))
+		else if(power_received >= MIN_FIELD_STR * RUST_CORE_STR_COST)
+			set_strength(round(power_received / RUST_CORE_STR_COST))
+			activate_field()
+	last_power_request = (attempt_activate || owned_field) ? active_power_usage : idle_power_usage
+	last_power_received = power_received
 
 /obj/machinery/power/rust_core/weldToFloor(var/obj/item/tool/weldingtool/WT, mob/user)
 	if(owned_field)
@@ -103,14 +126,14 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 				connect_to_network()
 		return 1
 	return -1
-
+/* //was this ever needed? The core lacks a direct interface
 /obj/machinery/power/rust_core/Topic(href, href_list)
 	if(..())
 		return 1
 	if(href_list["str"])
 		var/dif = text2num(href_list["str"])
 		field_strength = min(max(field_strength + dif, MIN_FIELD_STR), MAX_FIELD_STR)
-		active_power_usage = 5 * field_strength	//change to 500 later
+		active_power_usage = RUST_CORE_STR_COST * field_strength	//change to 500 later
 		if(owned_field)
 			owned_field.ChangeFieldStrength(field_strength)
 
@@ -119,25 +142,28 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 		field_frequency = min(max(field_frequency + dif, MIN_FIELD_FREQ), MAX_FIELD_FREQ)
 		if(owned_field)
 			owned_field.ChangeFieldFrequency(field_frequency)
-
+*/
 /obj/machinery/power/rust_core/proc/Startup()
 	if(owned_field)
 		return
+	attempt_activate = TRUE
+	. = 1
 
+/obj/machinery/power/rust_core/proc/activate_field()
+	if(owned_field)
+		return
 	owned_field = new(loc, src)
 	owned_field.ChangeFieldStrength(field_strength)
 	owned_field.ChangeFieldFrequency(field_frequency)
 	set_light(light_range_on, light_power_on)
 	icon_state = "core1"
-	use_power = MACHINE_POWER_USE_ACTIVE
 	. = 1
 
 /obj/machinery/power/rust_core/proc/Shutdown()
-	//todo: safety checks for field status
+	attempt_activate = FALSE
 	if(owned_field)
 		icon_state = "core0"
 		qdel(owned_field)
-		use_power = MACHINE_POWER_USE_IDLE
 		set_light(0)
 
 /obj/machinery/power/rust_core/proc/AddParticles(var/name, var/quantity = 1)
@@ -156,10 +182,14 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 		</ul>
 	"}
 
+/obj/machinery/power/rust_core/proc/set_targeted_strength(var/value)
+	value = clamp(value, MIN_FIELD_STR, MAX_FIELD_STR)
+	targeted_field_strength = value
+	active_power_usage = RUST_CORE_STR_COST * value
+
 /obj/machinery/power/rust_core/proc/set_strength(var/value)
 	value = clamp(value, MIN_FIELD_STR, MAX_FIELD_STR)
 	field_strength = value
-	active_power_usage = RUST_CORE_STR_COST * value
 	if(owned_field)
 		owned_field.ChangeFieldStrength(value)
 
