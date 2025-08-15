@@ -2927,6 +2927,7 @@
 #include "code\modules\surgery\suturing.dm"
 #include "code\modules\surgery\tail.dm"
 #include "code\modules\surgery\tooth.dm"
+#include "code\modules\surgery\vox_feather_pluck.dm"
 #include "code\modules\telesci\bscrystal.dm"
 #include "code\modules\telesci\dses.dm"
 #include "code\modules\telesci\gps.dm"
