@@ -260,15 +260,15 @@ var/list/global/id_cards = list()
 	var/hand_flash_icon_state
 	var/skin_color
 	var/pixel_x_offset
-
+	var/pixel_y_offset
 	if(user.active_hand == 1)
 		hand_flash_icon_state = "id_flash_left"
 		pixel_x_offset = -6
-		var/pixel_y_offset = -1
+		pixel_y_offset = 1
 	else
 		hand_flash_icon_state = "id_flash_right"
 		pixel_x_offset = 4
-		var/pixel_y_offset = 1
+		pixel_y_offset = 2
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/h = user
