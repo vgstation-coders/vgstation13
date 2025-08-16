@@ -8,6 +8,7 @@
 	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
 	var/watertype = /obj/item/weapon/reagent_containers/glass/beaker/water
 	var/can_take_watersource = TRUE
+	var/can_be_wrenched = TRUE
 
 /obj/structure/wc/New()
 	. = ..()
@@ -38,15 +39,16 @@
 	return ..()
 
 /obj/structure/wc/attackby(obj/item/I as obj, mob/living/user as mob)
-	if(I.is_wrench(user))
+	if(can_be_wrenched && I.is_wrench(user))
 		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
 		anchored = !anchored
+		return 1
 	if(!anchored)
 		if(!watersource && can_take_watersource && istype(I,/obj/item/weapon/reagent_containers/glass/beaker))
 			if(user.drop_item(I,src))
 				watersource = I
 				to_chat(user, "<span class='notice'>You add [I] as a reagent source for [src].</span>")
-				return
+				return 1
 		to_chat(user, "<span class='warning'>\The [src] needs to be bolted to the floor to work.</span>")
 		return 1
 
@@ -118,7 +120,7 @@
 	icon_state = "[base_icon][open][cistern]"
 
 /obj/structure/wc/toilet/attackby(obj/item/I as obj, mob/living/user as mob)
-	if(!..())
+	if(..())
 		return
 	if(open && cistern && rodded == 0 && istype(I,/obj/item/stack/rods))
 		var/obj/item/stack/rods/R = I
@@ -210,9 +212,12 @@
 	name = "urinal"
 	desc = "The HU-452, an experimental urinal."
 	icon_state = "urinal"
+	can_be_wrenched = FALSE //mustard gas prevention
+	can_take_watersource = FALSE //unused
+	watertype = null //unused
 
 /obj/structure/wc/urinal/attackby(obj/item/I as obj, mob/user as mob)
-	if(!..())
+	if(..())
 		return
 
 	if(istype(I, /obj/item/tool/crowbar))
