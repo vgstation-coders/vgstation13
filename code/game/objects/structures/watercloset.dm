@@ -1,6 +1,4 @@
 //todo: toothbrushes, and some sort of "toilet-filthinator" for the hos
-#define NORODS 0
-#define RODSADDED 1
 
 /obj/structure/wc
 	name = "base WC object"
@@ -67,7 +65,7 @@
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one seems remarkably clean."
 	icon_state = "toilet00"
 	var/open = 0			//if the lid is up
-	var/state = 0			//1 if rods added; 0 if not
+	var/rodded = 0			//1 if rods added; 0 if not
 	var/cistern = 0			//if the cistern bit is open
 	var/mob/living/swirlie = null	//the mob being given a swirlie
 	var/base_icon = "toilet"
@@ -122,15 +120,15 @@
 /obj/structure/wc/toilet/attackby(obj/item/I as obj, mob/living/user as mob)
 	if(!..())
 		return
-	if(open && cistern && state == NORODS && istype(I,/obj/item/stack/rods)) //State = 0 if no rods
+	if(open && cistern && rodded == 0 && istype(I,/obj/item/stack/rods))
 		var/obj/item/stack/rods/R = I
 		if(R.amount < 2)
 			return
 		to_chat(user, "<span class='notice'>You add the rods to the toilet, creating flood avenues.</span>")
 		R.use(2)
-		state = RODSADDED //State 0 -> 1
+		rodded = 1 //rodded 0 -> 1
 		return
-	if(open && cistern && state == RODSADDED && istype(I,/obj/item/weapon/paper)) //State = 1 if rods are added
+	if(open && cistern && rodded == 1 && istype(I,/obj/item/weapon/paper))
 		to_chat(user, "<span class='notice'>You create a filter with the paper and insert it.</span>")
 		var/obj/structure/centrifuge/C = new /obj/structure/centrifuge(src.loc)
 		C.dir = src.dir
