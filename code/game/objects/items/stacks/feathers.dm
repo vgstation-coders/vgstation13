@@ -7,6 +7,10 @@
 	w_type = RECYK_BIOLOGICAL
 	flammable = TRUE
 
+/obj/item/stack/sheet/feather/New(var/loc, var/amount=null)
+	recipes = feather_recipes
+	return ..()
+
 //color mapping for feathers
 var/list/feather_colors = list(
 	"emerald" = list(hex = "#3de47b", name = "emerald"),

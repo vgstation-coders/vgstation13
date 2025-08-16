@@ -703,3 +703,25 @@ var/list/datum/stack_recipe/ralloy_recipes = list (
 var/list/datum/stack_recipe/sand_recipes = list (
 	new/datum/stack_recipe("sandstone", /obj/item/stack/sheet/mineral/sandstone, 1, 1, 50),
 	)
+
+/* ========================================================================
+							FEATHER RECIPES
+======================================================================== */
+
+/datum/stack_recipe/feather/finish_building(var/mob/user, var/obj/item/stack/sheet/feather/S, var/obj/R)
+	if(S.color)
+		R.color = S.color
+	if(S.name)
+		R.name = "[S.name] [R.name]"
+	return R
+
+var/list/datum/stack_recipe/feather_recipes = list(
+	new/datum/stack_recipe/feather("feather coat", /obj/item/clothing/suit/feathercoat, 6, time = 50),
+	new/datum/stack_recipe/feather("feather vest", /obj/item/clothing/suit/feathervest, 4, time = 30),
+	new/datum/stack_recipe/feather("headdress", /obj/item/clothing/head/headdress, 3, time = 60),
+	new/datum/stack_recipe/feather("pillow", /obj/item/weapon/pillow, 2, time = 30),
+	new /datum/stack_recipe/feather("feather duster", /obj/item/weapon/featherduster, 2, time = 20),
+	new /datum/stack_recipe/feather("quill pen", /obj/item/weapon/pen/quill, 1, time = 10),
+	new /datum/stack_recipe/feather("feather wreath", /obj/item/mounted/frame/wreath/featherwreath, 4, time = 50),
+	new /datum/stack_recipe/feather("dreamcatcher", /obj/item/mounted/frame/wreath/dreamcatcher, 4, time = 50)
+)
