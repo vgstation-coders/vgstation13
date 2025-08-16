@@ -133,6 +133,8 @@
 			. += list("nitrous oxide")
 		if(gases.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)
 			. += list("plasma")
+		if(gases.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME)
+			. += list("cryotheum")
 
 /obj/machinery/atmospherics/pipe/simple
 	icon = 'icons/obj/pipes.dmi'
