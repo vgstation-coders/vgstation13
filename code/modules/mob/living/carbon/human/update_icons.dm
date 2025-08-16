@@ -299,7 +299,9 @@ var/global/list/damage_icon_parts = list()
 	var/hulk = (M_HULK in mutations) && !ishorrorform(src) && mind.special_role != HIGHLANDER // Part of the species.
 	var/skeleton = (M_SKELETON in mutations)
 
-	var/base_rgb = rgb(255, 202, 149)
+	var/base_rgb = species.flesh_color
+	if(base_rgb == null)
+		base_rgb = rgb(255, 202, 149)
 	if(!skeleton && !husk && !hulk)
 		if(species.anatomy_flags & MULTICOLOR)
 			return AddRGB(base_rgb, rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b))

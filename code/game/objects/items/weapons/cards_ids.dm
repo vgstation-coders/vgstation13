@@ -248,66 +248,11 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/attack_self(var/mob/user)
 	if(user.attack_delayer.blocked())
 		return
-	user.visible_message("[user] shows you: [bicon(src)] [name]: assignment: [assignment]",\
-		"You flash your ID card: [bicon(src)] [name]: assignment: [assignment]")
+	user.visible_message("[user] shows you: [bicon(src)] [name]. Assignment: [assignment]",\
+		"You flash your ID card: [bicon(src)] [name]. Assignment: [assignment]")
 	user.delayNextAttack(0.5 SECONDS)
 	add_fingerprint(user)
-	flash_id_animation(user, src)
-
-/proc/flash_id_animation(var/mob/user, var/obj/item/weapon/card/id/target_id)
-	// Credit to pgmzeta of Goonstation for the hand flash sprite under CC-BY-NC-SA. Minor modifications made so that
-	// the pixels align better with /vg/'s diagonal card.
-	var/hand_flash_icon_state
-	var/skin_color
-	var/pixel_x_offset
-	var/pixel_y_offset
-	if(user.active_hand == 1)
-		hand_flash_icon_state = "id_flash_left"
-		pixel_x_offset = -6
-		pixel_y_offset = 1
-	else
-		hand_flash_icon_state = "id_flash_right"
-		pixel_x_offset = 4
-		pixel_y_offset = 2
-
-	if(ishuman(user))
-		var/mob/living/carbon/human/h = user
-		skin_color = h.get_skin_color()
-		var/equipped_gloves = h.gloves
-		if(istype(equipped_gloves, /obj/item/clothing/gloves/yellow))
-			skin_color = rgb(255,255,0)
-		else if(istype(equipped_gloves, /obj/item/clothing/gloves/black))
-			skin_color = rgb(0,0,0)
-	else
-		skin_color = rgb(255, 202, 149)
-
-	var/image/hand_image = image("icon"='icons/effects/effects.dmi', "icon_state"=hand_flash_icon_state, "layer"=MOB_LAYER+1)
-	hand_image.color = skin_color
-	hand_image.pixel_x += pixel_x_offset
-	hand_image.pixel_y += pixel_y_offset
-	user.dir = SOUTH
-
-	var/cached_vis_flags = target_id.vis_flags
-	target_id.vis_flags |= (VIS_INHERIT_ID | VIS_INHERIT_PLANE | VIS_INHERIT_LAYER)
-	target_id.pixel_x += pixel_x_offset
-	target_id.pixel_y += pixel_y_offset
-
-	user.vis_contents += target_id
-	user.overlays += hand_image
-
-	user.delayNextMove(0.5 SECONDS)
-	playsound(user, 'sound/weapons/whip_crack.ogg', 40, 1)
-
-	spawn(5)
-		if(user != null)
-			user.overlays -= hand_image
-
-		if(target_id != null)
-			if(user != null)
-				user.vis_contents -= target_id
-			target_id.vis_flags = cached_vis_flags
-			target_id.pixel_x -= pixel_x_offset
-			target_id.pixel_y -= pixel_y_offset
+	flash_object_animation(user, src, HOLD_FLASH_ANIM)
 
 /obj/item/weapon/card/id/GetAccess()
 	if(arcanetampered)
