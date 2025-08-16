@@ -21,7 +21,7 @@
 
 	if(!usr || !isturf(usr.loc))
 		return
-	if(!open)
+	if(!is_open())
 		to_chat(usr, "<span class='warning'>\The [src] is closed!</span>")
 		return
 	var/obj/item/weapon/reagent_containers/container = usr.get_active_hand()
@@ -29,6 +29,9 @@
 		to_chat(usr, "<span class='warning'>You need a reagent container in your active hand to do that.</span>")
 		return
 	return container.drain_into(usr, src)
+
+/obj/structure/wc/proc/is_open()
+	return TRUE
 
 /obj/structure/wc/AltClick()
 	if(Adjacent(usr))
@@ -41,8 +44,8 @@
 	icon_state = "toilet00"
 	density = 0
 	anchored = 1
-	var/state = 0			//1 if rods added; 0 if not
 	var/open = 0			//if the lid is up
+	var/state = 0			//1 if rods added; 0 if not
 	var/cistern = 0			//if the cistern bit is open
 	var/mob/living/swirlie = null	//the mob being given a swirlie
 	var/base_icon = "toilet"
@@ -51,6 +54,9 @@
 	. = ..()
 	open = round(rand(0, 1))
 	update_icon()
+
+/obj/structure/wc/toilet/is_open()
+	return open
 
 /obj/structure/wc/toilet/attack_hand(mob/living/user)
 	if(user.attack_delayer.blocked())
