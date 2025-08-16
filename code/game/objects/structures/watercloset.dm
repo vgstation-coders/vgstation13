@@ -284,7 +284,7 @@
 		return
 	if(!anchored)
 		if(watersource)
-			watersource.put_in_hands(M)
+			M.put_in_hands(watersource)
 			watersource = null
 			to_chat(M, "<span class='warning'>You remove [M] from [src].</span>")
 		else
