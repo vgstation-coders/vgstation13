@@ -41,7 +41,9 @@
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
 	temp_offset = initial(temp_offset) - 5*lasercount
-	current_heat_capacity = 1000 + (3000 * lasercount) //Allows it to cool the gas faster
+	current_heat_capacity = 1000 + (1000 * lasercount) //Allows it to cool the gas faster
+	if(lasercount >= 6) //Tier 3 parts minimum, give it a nice boost
+		current_heat_capacity += 10000
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/update_icon()
 	if(node1)
@@ -212,7 +214,9 @@
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
 	temp_offset = initial(temp_offset) + 5*lasercount
-	current_heat_capacity = 1000 + (3000 * lasercount)
+	current_heat_capacity = 1000 + (1000 * lasercount)
+	if(lasercount >= 6)
+		current_heat_capacity += 10000
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/update_icon()
 	if(node1)
