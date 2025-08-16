@@ -38,12 +38,33 @@
 		return empty_container_into()
 	return ..()
 
+/obj/structure/wc/attackby(obj/item/I as obj, mob/living/user as mob)
+	if(I.is_wrench(user))
+		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
+		anchored = !anchored
+	if(!anchored)
+		if(!watersource && istype(I,/obj/item/weapon/reagent_containers/glass/beaker))
+			if(user.drop_item(I,src))
+				watersource = I
+				to_chat(user, "<span class='notice'>You add [I] as a reagent source for [src].</span>")
+				return
+		to_chat(user, "<span class='warning'>\The [src] needs to be bolted to the floor to work.</span>")
+		return 1
+
+/obj/structure/wc/attack_hand(mob/living/user)
+	if(!anchored)
+		if(watersource)
+			user.put_in_hands(watersource)
+			watersource = null
+			to_chat(user, "<span class='warning'>You remove [watersource] from [src].</span>")
+			return
+		to_chat(user, "<span class='warning'>\The [src] needs to be bolted to the floor to work.</span>")
+		return 1
+
 /obj/structure/wc/toilet
 	name = "toilet"
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one seems remarkably clean."
 	icon_state = "toilet00"
-	density = 0
-	anchored = 1
 	var/open = 0			//if the lid is up
 	var/state = 0			//1 if rods added; 0 if not
 	var/cistern = 0			//if the cistern bit is open
@@ -59,6 +80,8 @@
 	return open
 
 /obj/structure/wc/toilet/attack_hand(mob/living/user)
+	if(..())
+		return
 	if(user.attack_delayer.blocked())
 		return
 	if(swirlie)
@@ -96,14 +119,7 @@
 	icon_state = "[base_icon][open][cistern]"
 
 /obj/structure/wc/toilet/attackby(obj/item/I as obj, mob/living/user as mob)
-	if(I.is_wrench(user))
-		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
-		anchored = !anchored
-	if(!anchored)
-		if(!watersource && istype(I,/obj/item/weapon/reagent_containers/glass/beaker))
-			if(user.drop_item(I,src))
-				watersource = I
-				to_chat(user, "<span class='notice'>You add [I] as a reagent source for [src].</span>")
+	if(!..())
 		return
 	if(open && cistern && state == NORODS && istype(I,/obj/item/stack/rods)) //State = 0 if no rods
 		var/obj/item/stack/rods/R = I
@@ -195,14 +211,9 @@
 	name = "urinal"
 	desc = "The HU-452, an experimental urinal."
 	icon_state = "urinal"
-	density = 0
-	anchored = 1
 
 /obj/structure/wc/urinal/attackby(obj/item/I as obj, mob/user as mob)
-	if(I.is_wrench(user))
-		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
-		anchored = !anchored
-	if(!anchored)
+	if(!..())
 		return
 
 	if(istype(I, /obj/item/tool/crowbar))
@@ -308,6 +319,11 @@
 
 	if(I.type == /obj/item/device/analyzer)
 		to_chat(user, "<span class='notice'>The water's temperature seems to be [watertemp].</span>")
+	if(!anchored && !watersource && istype(I,/obj/item/weapon/reagent_containers/glass/beaker))
+		if(user.drop_item(I,src))
+			watersource = I
+			to_chat(user, "<span class='notice'>You add [I] as a reagent source for [src].</span>")
+			return
 	if(panel_open) //The panel is open
 		if(I.is_wrench(user))
 			user.visible_message("<span class='warning'>[user] begins to adjust \the [src]'s temperature valve with \a [I.name].</span>", \
@@ -502,7 +518,6 @@
 	name = "sink"
 	icon_state = "sink"
 	desc = "A sink used for washing one's hands and face."
-	anchored = 1
 	var/clean_power = CLEANLINESS_SPACECLEANER//Nanotrasen sinks are equipped with state of the art water propulsion for extra cleanliness
 	var/busy = 0 	//Something's being washed at the moment
 	var/dissolver = WATER
@@ -516,10 +531,10 @@
 	if(isrobot(M) || isAI(M))
 		return
 
-	if(!Adjacent(M))
+	if(..())
 		return
 
-	if(!anchored)
+	if(!Adjacent(M))
 		return
 
 	if(busy)
@@ -573,10 +588,7 @@
 		to_chat(user, "<span class='warning'>Someone's already washing here.</span>")
 		return
 
-	if(O.is_wrench(user))
-		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
-		anchored = !anchored
-	if(!anchored)
+	if(!..())
 		return
 
 	if(istype(O, /obj/item/weapon/mop) || istype(O, /obj/item/toy/waterballoon))
