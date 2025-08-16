@@ -85,6 +85,10 @@
 		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
 		anchored = !anchored
 	if(!anchored)
+		if(!watersource && istype(I,/obj/item/weapon/reagent_containers/glass/beaker))
+			if(user.drop_item(I,src))
+				watersource = I
+				to_chat(user, "<span class='notice'>You add [I] as a reagent source for [src].</span>")
 		return
 	if(open && cistern && state == NORODS && istype(I,/obj/item/stack/rods)) //State = 0 if no rods
 		var/obj/item/stack/rods/R = I
@@ -124,14 +128,18 @@
 					GM.visible_message("<span class='danger'>[user] starts to place [GM.name]'s head inside \the [src].</span>", "<span class='userdanger'>[user] is placing your head inside \the [src]!</span>")
 					swirlie = GM
 					if(do_after(user, src, 3 SECONDS, needhand = FALSE))
-						GM.forcesay(list("-BLERGH", "-BLURBL", "-HURGBL"))
-						playsound(src, 'sound/misc/toilet_flush.ogg', 50, TRUE)
-						GM.visible_message("<span class='danger'>[user] gives [GM.name] a swirlie!</span>", "<span class='userdanger'>[user] gives you a swirlie!</span>", "You hear a toilet flushing.")
 						add_fingerprint(user)
 						add_fingerprint(GM)
-						watersource.reagents.reaction(GM, TOUCH, zone_sels = list(LIMB_HEAD,TARGET_EYES,TARGET_MOUTH))
+						var/blind_msg = watersource && !watersource.reagents.is_empty() ? "You hear a toilet flushing." : null
+						GM.visible_message("<span class='danger'>[user] gives [GM.name] a swirlie!</span>", "<span class='userdanger'>[user] gives you a swirlie!</span>", blind_msg)
+						if(watersource && !watersource.reagents.is_empty())
+							watersource.reagents.reaction(GM, TOUCH, zone_sels = list(LIMB_HEAD,TARGET_EYES,TARGET_MOUTH))
+							GM.forcesay(list("-BLERGH", "-BLURBL", "-HURGBL"))
+							playsound(src, 'sound/misc/toilet_flush.ogg', 50, TRUE)
+						else
+							GM.visible_message("<span class='danger'>...with no effect, as [src] is dry!</span>")
 
-						if(!GM.internal && GM.losebreath <= 30)
+						if(watersource && !watersource.reagents.is_empty() && !GM.internal && GM.losebreath <= 30)
 							GM.losebreath += 5
 							add_attacklogs(user, GM, "gave a swirlie to", admin_warn=FALSE)
 						else
@@ -161,7 +169,8 @@
 			return
 		if(user.drop_item(I, src))
 			to_chat(user, "You carefully place \the [I] into the cistern.")
-			watersource.reagents.reaction(I, TOUCH) // Handles water affecting items, such as making dissolvable items dissolve.
+			if(watersource)
+				watersource.reagents.reaction(I, TOUCH) // Handles water affecting items, such as making dissolvable items dissolve.
 			return
 
 /obj/structure/toilet/bite_act(mob/user)
@@ -278,7 +287,12 @@
 		to_chat(M, "<span class='warning'>\The [src]'s maintenance hatch needs to be closed first.</span>")
 		return
 	if(!anchored)
-		to_chat(M, "<span class='warning'>\The [src] needs to be bolted to the floor to work.</span>")
+		if(watersource)
+			watersource.put_in_hands(M)
+			watersource = null
+			to_chat(M, "<span class='warning'>You remove [M] from [src].</span>")
+		else
+			to_chat(M, "<span class='warning'>\The [src] needs to be bolted to the floor to work.</span>")
 		return
 
 	on = !on
