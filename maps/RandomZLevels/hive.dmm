@@ -1009,7 +1009,7 @@
 /turf/unsimulated/floor/evil,
 /area/awaymission/hive)
 "ec" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 10
 	},
@@ -1044,7 +1044,7 @@
 /turf/unsimulated/floor/fake_supermatter/hive,
 /area/awaymission/hive)
 "ei" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /turf/unsimulated/floor/evil,
 /area/awaymission/hive)
 "ej" = (

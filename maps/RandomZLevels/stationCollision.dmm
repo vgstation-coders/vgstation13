@@ -2978,7 +2978,7 @@
 /turf/simulated/floor/airless,
 /area/awaymission/midblock)
 "hD" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 32
 	},
 /turf/simulated/floor,
@@ -3467,7 +3467,7 @@
 /turf/simulated/floor,
 /area/awaymission/arrivalblock)
 "iQ" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -4105,7 +4105,7 @@
 /turf/simulated/floor,
 /area/awaymission/arrivalblock)
 "kL" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 32
 	},
 /turf/simulated/floor,
@@ -4474,7 +4474,7 @@
 	},
 /area/awaymission/southblock)
 "lH" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 32
 	},
 /turf/simulated/floor{

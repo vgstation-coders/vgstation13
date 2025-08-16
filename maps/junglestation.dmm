@@ -1822,7 +1822,7 @@
 	icon_state = "0-2";
 	pixel_y = 1
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 22
 	},
 /turf/simulated/floor{
@@ -3398,7 +3398,7 @@
 	},
 /area/surface/jungle)
 "boL" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor/vox{
@@ -3778,7 +3778,7 @@
 	},
 /area/medical/cmo)
 "bwJ" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -12796,7 +12796,7 @@
 	},
 /area/vox_trading_post/trade_processing)
 "eRK" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},
@@ -13920,7 +13920,7 @@
 /turf/simulated/floor,
 /area/mine/production)
 "fsc" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /obj/effect/decal/cleanable/vomit,
@@ -14475,7 +14475,7 @@
 /turf/simulated/floor/plating,
 /area/security/prison)
 "fBB" = (
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	pixel_y = 32
 	},
 /turf/unsimulated/floor{
@@ -14811,7 +14811,7 @@
 	},
 /area/engineering/supermatter_room)
 "fJo" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/structure/curtain/open/privacy,
@@ -22878,7 +22878,7 @@
 /turf/simulated/floor,
 /area/supply/miningdock)
 "iVx" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -25152,7 +25152,7 @@
 	},
 /area/hydroponics)
 "jPq" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /turf/simulated/floor{
@@ -30190,7 +30190,7 @@
 	},
 /area/engineering/engine)
 "lMO" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/structure/curtain/open/privacy,
@@ -36028,7 +36028,7 @@
 /turf/simulated/floor/plating,
 /area/engineering/supermatter_room)
 "odv" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1
 	},
 /turf/simulated/floor{
@@ -36320,7 +36320,7 @@
 	},
 /area/science/hallway)
 "ojt" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -37720,7 +37720,7 @@
 	},
 /area/bridge)
 "oMX" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -38108,7 +38108,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/sleep)
 "oXt" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 17
 	},
@@ -41181,7 +41181,7 @@
 /area/supply/storage)
 "qim" = (
 /obj/item/weapon/soap/deluxe,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 13
 	},
@@ -42015,7 +42015,7 @@
 	dir = 4;
 	one_way = 1
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 3
 	},
@@ -46104,7 +46104,7 @@
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/atmos)
 "saC" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 10
 	},
@@ -50402,7 +50402,7 @@
 	d2 = 8;
 	icon_state = "2-8"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 24
 	},
@@ -50972,7 +50972,7 @@
 /turf/simulated,
 /area/medical/paramedics)
 "tWZ" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -56018,7 +56018,7 @@
 	},
 /area/medical/virology)
 "vSB" = (
-/obj/structure/sink/puddle,
+/obj/structure/wc/sink/puddle,
 /turf/unsimulated/floor/jungle/path,
 /area/surface/jungle)
 "vSK" = (
@@ -58401,7 +58401,7 @@
 /area/medical/virology)
 "wRK" = (
 /obj/machinery/bot/farmbot/duey,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},

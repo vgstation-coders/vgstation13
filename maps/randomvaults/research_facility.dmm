@@ -668,7 +668,7 @@
 	},
 /area/vault/research)
 "bO" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -962,7 +962,7 @@
 /area/vault/research)
 "cL" = (
 /obj/item/weapon/reagent_containers/glass/beaker/large,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12
 	},
@@ -1552,7 +1552,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -1651,7 +1651,7 @@
 	},
 /area/vault/research)
 "eR" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 1;
 	tag = "icon-toilet00 (NORTH)"
 	},

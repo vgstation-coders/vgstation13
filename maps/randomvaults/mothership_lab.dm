@@ -997,7 +997,7 @@
 //////////////////////////////
 
 //Idea: Items placed in the cistern of this thing should just melt
-/obj/structure/toilet/acid
+/obj/structure/wc/toilet/acid
 	name = "acid toilet"
 	desc = "The WD-451, a torque rotation-based, waste disposal unit for small matter. This one seems remarkably acidic."
 	icon_state = "acidtoilet00"
@@ -1026,7 +1026,7 @@
 	anchored = 1
 	mouse_opacity = 0
 
-/obj/structure/sink/acid
+/obj/structure/wc/sink/acid
 	name = "acid sink"
 	desc = "A sink used for washing one's hands and face. This one seems to use acid instead of water."
 	icon = 'icons/obj/acidcloset.dmi'

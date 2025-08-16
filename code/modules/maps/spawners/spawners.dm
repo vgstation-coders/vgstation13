@@ -221,7 +221,7 @@
 		/obj/structure/reagent_dispensers/water_cooler,
 		/obj/structure/safe,
 		/obj/structure/shuttle/engine/router,
-		/obj/structure/toilet,
+		/obj/structure/wc/toilet,
 		/obj/structure/turret/gun_turret,
 		/obj/spacepod/random,
 		)

@@ -2,28 +2,19 @@
 #define NORODS 0
 #define RODSADDED 1
 
-/obj/structure/toilet
-	name = "toilet"
-	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one seems remarkably clean."
+/obj/structure/wc
+	name = "base WC object"
 	icon = 'icons/obj/watercloset.dmi'
-	icon_state = "toilet00"
 	density = 0
 	anchored = 1
-	var/state = 0			//1 if rods added; 0 if not
-	var/open = 0			//if the lid is up
-	var/cistern = 0			//if the cistern bit is open
-	var/mob/living/swirlie = null	//the mob being given a swirlie
 	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
 	var/watertype = /obj/item/weapon/reagent_containers/glass/beaker/water
-	var/base_icon = "toilet"
 
-/obj/structure/toilet/New()
+/obj/structure/wc/New()
 	. = ..()
-	open = round(rand(0, 1))
 	watersource = new watertype
-	update_icon()
 
-/obj/structure/toilet/verb/empty_container_into()
+/obj/structure/wc/verb/empty_container_into()
 	set name = "Empty container into"
 	set category = "Object"
 	set src in oview(1)
@@ -39,11 +30,29 @@
 		return
 	return container.drain_into(usr, src)
 
-/obj/structure/toilet/AltClick()
+/obj/structure/wc/AltClick()
 	if(Adjacent(usr))
 		return empty_container_into()
 	return ..()
-/obj/structure/toilet/attack_hand(mob/living/user)
+
+/obj/structure/wc/toilet
+	name = "toilet"
+	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one seems remarkably clean."
+	icon_state = "toilet00"
+	density = 0
+	anchored = 1
+	var/state = 0			//1 if rods added; 0 if not
+	var/open = 0			//if the lid is up
+	var/cistern = 0			//if the cistern bit is open
+	var/mob/living/swirlie = null	//the mob being given a swirlie
+	var/base_icon = "toilet"
+
+/obj/structure/wc/toilet/New()
+	. = ..()
+	open = round(rand(0, 1))
+	update_icon()
+
+/obj/structure/wc/toilet/attack_hand(mob/living/user)
 	if(user.attack_delayer.blocked())
 		return
 	if(swirlie)
@@ -72,15 +81,15 @@
 	open = !open
 	update_icon()
 
-/obj/structure/toilet/proc/get_contents_w_class()
+/obj/structure/wc/toilet/proc/get_contents_w_class()
 	. = 0
 	for(var/obj/item/I in contents)
 		. += I.w_class
 
-/obj/structure/toilet/update_icon()
+/obj/structure/wc/toilet/update_icon()
 	icon_state = "[base_icon][open][cistern]"
 
-/obj/structure/toilet/attackby(obj/item/I as obj, mob/living/user as mob)
+/obj/structure/wc/toilet/attackby(obj/item/I as obj, mob/living/user as mob)
 	if(I.is_wrench(user))
 		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
 		anchored = !anchored
@@ -173,36 +182,17 @@
 				watersource.reagents.reaction(I, TOUCH) // Handles water affecting items, such as making dissolvable items dissolve.
 			return
 
-/obj/structure/toilet/bite_act(mob/user)
+/obj/structure/wc/toilet/bite_act(mob/user)
 	user.simple_message("<span class='notice'>That would be disgusting.</span>", "<span class='info'>You're not high enough for that... Yet.</span>") //Second message 4 hallucinations
 
-/obj/structure/urinal
+/obj/structure/wc/urinal
 	name = "urinal"
 	desc = "The HU-452, an experimental urinal."
-	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "urinal"
 	density = 0
 	anchored = 1
 
-/obj/structure/urinal/verb/empty_container_into()
-	set name = "Empty container into"
-	set category = "Object"
-	set src in oview(1)
-
-	if(!usr || !isturf(usr.loc))
-		return
-	var/obj/item/weapon/reagent_containers/container = usr.get_active_hand()
-	if(!istype(container))
-		to_chat(usr, "<span class='warning'>You need a reagent container in your active hand to do that.</span>")
-		return
-	return container.drain_into(usr, src)
-
-/obj/structure/urinal/AltClick()
-	if(Adjacent(usr))
-		return empty_container_into()
-	return ..()
-
-/obj/structure/urinal/attackby(obj/item/I as obj, mob/user as mob)
+/obj/structure/wc/urinal/attackby(obj/item/I as obj, mob/user as mob)
 	if(I.is_wrench(user))
 		to_chat(user, "<span class='notice'>You [anchored ? "un":""]bolt \the [src]'s grounding lines.</span>")
 		anchored = !anchored
@@ -230,7 +220,7 @@
 			else
 				to_chat(user, "<span class='notice'>You need a tighter grip.</span>")
 
-/obj/structure/urinal/bite_act(mob/user)
+/obj/structure/wc/urinal/bite_act(mob/user)
 	user.simple_message("<span class='notice'>That would be disgusting.</span>", "<span class='info'>You're not high enough for that... Yet.</span>") //Second message 4 hallucinations
 
 /obj/machinery/shower
@@ -502,9 +492,8 @@
 /obj/machinery/shower/npc_tamper_act(mob/living/L)
 	attack_hand(L)
 
-/obj/structure/sink
+/obj/structure/wc/sink
 	name = "sink"
-	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "sink"
 	desc = "A sink used for washing one's hands and face."
 	anchored = 1
@@ -514,28 +503,10 @@
 	var/reagent = WATER
 	var/reagent_name = "water"
 
-/obj/structure/sink/splashable()
+/obj/structure/wc/sink/splashable()
 	return FALSE
 
-/obj/structure/sink/verb/empty_container_into()
-	set name = "Empty container into"
-	set category = "Object"
-	set src in oview(1)
-
-	if(!usr || !isturf(usr.loc))
-		return
-	var/obj/item/weapon/reagent_containers/container = usr.get_active_hand()
-	if(!istype(container))
-		to_chat(usr, "<span class='warning'>You need a reagent container in your active hand to do that.</span>")
-		return
-	return container.drain_into(usr, src)
-
-/obj/structure/sink/AltClick()
-	if(Adjacent(usr))
-		return empty_container_into()
-	return ..()
-
-/obj/structure/sink/attack_hand(mob/M as mob)
+/obj/structure/wc/sink/attack_hand(mob/M as mob)
 	if(isrobot(M) || isAI(M))
 		return
 
@@ -571,7 +542,7 @@
 		M.visible_message("<span class='notice'>[M] washes \his hands using \the [src].</span>","<span class='notice'>You wash your hands using \the [src].</span>")
 	busy = FALSE
 
-/obj/structure/sink/mop_act(obj/item/weapon/mop/M, mob/user)
+/obj/structure/wc/sink/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(busy)
 		return 1
 	user.visible_message("<span class='notice'>[user] puts \the [M] underneath the running [reagent_name].","<span class='notice'>You put \the [M] underneath the running [reagent_name].</span>")
@@ -591,7 +562,7 @@
 	busy = FALSE
 	return 1
 
-/obj/structure/sink/attackby(obj/item/O as obj, mob/user as mob)
+/obj/structure/wc/sink/attackby(obj/item/O as obj, mob/user as mob)
 	if(busy)
 		to_chat(user, "<span class='warning'>Someone's already washing here.</span>")
 		return
@@ -680,7 +651,7 @@
 
 		busy = FALSE
 
-/obj/structure/sink/npc_tamper_act(mob/living/L)
+/obj/structure/wc/sink/npc_tamper_act(mob/living/L)
 	if(istype(L, /mob/living/simple_animal/hostile/gremlin))
 		visible_message("<span class='danger'>\The [L] climbs into \the [src] and turns the faucet on!</span>")
 
@@ -689,22 +660,22 @@
 
 	return NPC_TAMPER_ACT_NOMSG
 
-/obj/structure/sink/kitchen
+/obj/structure/wc/sink/kitchen
 	name = "kitchen sink"
 	icon_state = "sink_alt"
 
 
-/obj/structure/sink/puddle	//splishy splashy ^_^
+/obj/structure/wc/sink/puddle	//splishy splashy ^_^
 	name = "puddle"
 	icon_state = "puddle"
 	desc = "You can see your reflection! You look awful!"
 
-/obj/structure/sink/puddle/attack_hand(mob/M as mob)
+/obj/structure/wc/sink/puddle/attack_hand(mob/M as mob)
 	icon_state = "puddle-splash"
 	..()
 	icon_state = "puddle"
 
-/obj/structure/sink/puddle/attackby(obj/item/O as obj, mob/user as mob)
+/obj/structure/wc/sink/puddle/attackby(obj/item/O as obj, mob/user as mob)
 	icon_state = "puddle-splash"
 	..()
 	icon_state = "puddle"

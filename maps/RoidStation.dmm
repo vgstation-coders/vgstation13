@@ -403,7 +403,7 @@
 /area/vox_trading_post/gardens)
 "aaW" = (
 /obj/machinery/portable_atmospherics/hydroponics,
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /obj/machinery/light/he{
@@ -1203,7 +1203,7 @@
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/hallway)
 "acl" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/simulated/floor/vox{
@@ -4803,10 +4803,10 @@
 	dir = 4;
 	pixel_x = -24
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor/vox{
@@ -5441,7 +5441,7 @@
 	},
 /area/mine/north_outpost)
 "akU" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small,
@@ -7179,7 +7179,7 @@
 	},
 /area/derelictparts/fore)
 "aqp" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/effect/decal/cleanable/dirt,
@@ -7188,7 +7188,7 @@
 	},
 /area/derelictparts/fore)
 "aqq" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -8693,7 +8693,7 @@
 	},
 /obj/effect/decal/cleanable/generic,
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /obj/effect/decal/cleanable/cobweb,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1"
@@ -9061,7 +9061,7 @@
 /area/derelictparts/fore)
 "aub" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -9324,7 +9324,7 @@
 /turf/space,
 /area)
 "auF" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -9334,7 +9334,7 @@
 "auG" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/generic,
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
 	pixel_y = 32
 	},
@@ -9345,7 +9345,7 @@
 "auH" = (
 /obj/structure/grille/broken,
 /obj/item/stack/rods,
-/obj/structure/urinal{
+/obj/structure/wc/urinal{
 	desc = "The HU-452, an experimental urinal. This one is somehow more yellow than an assistant's teeth.";
 	pixel_y = 32
 	},
@@ -9610,7 +9610,7 @@
 /turf/simulated/wall,
 /area/maintenance/incinerator)
 "avo" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -13668,7 +13668,7 @@
 /obj/structure/mirror{
 	pixel_y = 28
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 20
 	},
 /obj/structure/cable{
@@ -14113,7 +14113,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -15758,7 +15758,7 @@
 	},
 /area/hallway/primary/fore)
 "aGm" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small,
@@ -16612,7 +16612,7 @@
 	},
 /area/chapel/office)
 "aHE" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -17009,7 +17009,7 @@
 /turf/simulated/wall,
 /area/maintenance/fore)
 "aIk" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -18227,7 +18227,7 @@
 	dir = 8;
 	pixel_x = 24
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -19874,7 +19874,7 @@
 /obj/structure/mirror{
 	pixel_y = 34
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -21386,7 +21386,7 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/spectro)
 "aQg" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12
 	},
@@ -22512,7 +22512,7 @@
 	},
 /area/maintenance/ghettobar)
 "aSp" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /obj/effect/decal/cleanable/dirt,
@@ -24554,7 +24554,7 @@
 /obj/machinery/light/small/broken{
 	dir = 8
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -24599,7 +24599,7 @@
 	},
 /area/research_outpost/bathroom)
 "aVR" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -26038,13 +26038,13 @@
 /obj/structure/mirror{
 	pixel_y = 28
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 20
 	},
 /turf/simulated/floor/asteroid/air,
 /area/maintenance/port)
 "aYR" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 8
 	},
 /obj/machinery/light/small{
@@ -30698,7 +30698,7 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/anomaly)
 "bhh" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -40492,7 +40492,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 1;
 	pixel_y = 25
 	},
@@ -42342,7 +42342,7 @@
 	},
 /area/medical/paramedics)
 "bCA" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -11
 	},
@@ -54131,7 +54131,7 @@
 	},
 /area/science/lab)
 "bXT" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	desc = "A sink used for washing one's hands and face. It looks rusty and home-made";
 	name = "old sink";
 	pixel_y = 28
@@ -54222,7 +54222,7 @@
 	name = "Research Division Access";
 	network = list("SS13","RD")
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -56643,7 +56643,7 @@
 	},
 /area/science/hallway)
 "ccs" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -59666,7 +59666,7 @@
 /obj/structure/mirror{
 	pixel_x = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -61676,7 +61676,7 @@
 	dir = 8;
 	flickering = 1
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 10
 	},
 /obj/effect/landmark{
@@ -62887,7 +62887,7 @@
 /obj/structure/mirror{
 	pixel_x = 32
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -64010,7 +64010,7 @@
 	dir = 8;
 	flickering = 1
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	pixel_y = 10
 	},
 /turf/simulated/floor{
@@ -71841,7 +71841,7 @@
 	name = "\improper Captain's Quarters"
 	})
 "cCT" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /obj/machinery/light/small{
 	dir = 1
 	},
@@ -71887,7 +71887,7 @@
 /obj/structure/mirror{
 	pixel_y = 30
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 20
 	},
 /obj/item/weapon/bikehorn/rubberducky,
@@ -72065,7 +72065,7 @@
 /obj/structure/mirror{
 	pixel_y = 28
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 20
 	},
 /obj/structure/disposalpipe/segment{
@@ -74853,7 +74853,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/bar)
 "cIe" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	desc = "A sink used for washing one's hands and face. It looks rusty and home-made";
 	name = "old sink";
 	pixel_y = 28
@@ -75109,7 +75109,7 @@
 	dir = 8;
 	flickering = 1
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/door_control{
@@ -75137,7 +75137,7 @@
 /turf/simulated/floor/carpet,
 /area/crew_quarters/sleep)
 "cIG" = (
-/obj/structure/toilet,
+/obj/structure/wc/toilet,
 /obj/machinery/door_control{
 	id_tag = "Unit2";
 	name = "Door Bolt Control";
@@ -75194,7 +75194,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/locker)
 "cIP" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small,
@@ -75214,7 +75214,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/locker)
 "cIR" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/structure/sign/poster{
@@ -76856,7 +76856,7 @@
 /obj/structure/mirror{
 	pixel_y = 28
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 20
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -80153,7 +80153,7 @@
 /obj/effect/decal/cleanable/cobweb,
 /obj/effect/decal/cleanable/vomit,
 /obj/item/weapon/broken_bottle,
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
 	dir = 4
 	},
@@ -80176,7 +80176,7 @@
 	},
 /area/maintenance/starboard2)
 "cSL" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -83240,7 +83240,7 @@
 	},
 /area/maintenance/apmaint2)
 "cYN" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -85050,7 +85050,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	dir = 1;
 	pixel_y = -18
 	},
@@ -86010,7 +86010,7 @@
 /area/maintenance/apmaint2)
 "deX" = (
 /obj/item/weapon/reagent_containers/glass/bucket,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -87573,7 +87573,7 @@
 /area/maintenance/apmaint2)
 "dhW" = (
 /obj/item/claypot,
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	desc = "A sink used for washing one's hands and face. It looks rusty and home-made";
 	name = "old sink";
 	pixel_y = 28
@@ -88220,7 +88220,7 @@
 /turf/simulated/floor/grass,
 /area/hydroponics)
 "djo" = (
-/obj/structure/sink/puddle,
+/obj/structure/wc/sink/puddle,
 /obj/item/fish_eggs/goldfish,
 /obj/item/fish_eggs/goldfish,
 /turf/simulated/floor/grass,
@@ -91761,7 +91761,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "dql" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -92439,7 +92439,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "dry" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -94960,7 +94960,7 @@
 	name = "Xenobiology Lab West";
 	network = list("SS13","RD")
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -96450,7 +96450,7 @@
 /turf/simulated/floor/engine,
 /area/science/xenobiology/specimen_3)
 "dyx" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/machinery/light/small,
@@ -97695,7 +97695,7 @@
 	},
 /area/science/xenobiology)
 "dAy" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -99491,7 +99491,7 @@
 /turf/simulated/wall/r_wall,
 /area/science/xenobiology/specimen_1)
 "dDh" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -100027,7 +100027,7 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -100654,7 +100654,7 @@
 /turf/simulated/floor/engine,
 /area/science/xenobiology/specimen_6)
 "dEZ" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -102117,7 +102117,7 @@
 	name = "Brig Dormitories"
 	})
 "dHg" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
@@ -110417,7 +110417,7 @@
 	},
 /area/prison/hallway/central)
 "dVz" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/structure/curtain/open/shower,
@@ -111107,7 +111107,7 @@
 	},
 /area/prison/cell_block/hydroponics)
 "dWI" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -113770,7 +113770,7 @@
 	},
 /area/vault)
 "ebE" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -118347,7 +118347,7 @@
 /area/centcom/test)
 "emE" = (
 /obj/machinery/bot/farmbot/duey,
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -118612,7 +118612,7 @@
 	},
 /area/centcom/ert)
 "enp" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -119532,7 +119532,7 @@
 	},
 /area/centcom/ert)
 "epu" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	pixel_y = 28
 	},
 /turf/unsimulated/floor{
@@ -121299,7 +121299,7 @@
 /turf/unsimulated/wall,
 /area/centcom/test)
 "esX" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -124461,7 +124461,7 @@
 	},
 /area/shuttle/escape/centcom)
 "eAq" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -128039,7 +128039,7 @@
 /obj/structure/mirror{
 	pixel_x = 28
 	},
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 4;
 	pixel_x = 11
 	},
@@ -129467,7 +129467,7 @@
 	},
 /area/derelict/secret)
 "fth" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. Oh god, this ancient thing has been festering in here for years.";
 	dir = 4
 	},
@@ -129485,7 +129485,7 @@
 	},
 /area/derelict/secret)
 "ftj" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 30
 	},
 /obj/structure/mirror{

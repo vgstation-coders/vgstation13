@@ -1765,7 +1765,7 @@
 	},
 /area/vault/black_site_prism)
 "wT" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/structure/window/reinforced{
@@ -1875,7 +1875,7 @@
 	},
 /area/vault/black_site_prism)
 "xY" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	dir = 8;
 	pixel_x = -12;
 	pixel_y = 2
@@ -1885,7 +1885,7 @@
 	},
 /area/vault/black_site_prism)
 "xZ" = (
-/obj/structure/sink/kitchen{
+/obj/structure/wc/sink/kitchen{
 	dir = 8;
 	pixel_x = 12
 	},
@@ -3562,7 +3562,7 @@
 	},
 /area/vault/black_site_prism)
 "Ux" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /obj/structure/window/reinforced{
