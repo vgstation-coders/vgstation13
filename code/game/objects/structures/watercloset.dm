@@ -520,6 +520,7 @@
 	icon_state = "sink"
 	desc = "A sink used for washing one's hands and face."
 	can_take_watersource = FALSE //As sinks are currently set up, these would essentially let crew get infinite sources of any beaker inside, so NO.
+	watertype = null //While we're at it, this doesn't even use beakers yet anyways, so nip this in the bud.
 	var/clean_power = CLEANLINESS_SPACECLEANER//Nanotrasen sinks are equipped with state of the art water propulsion for extra cleanliness
 	var/busy = 0 	//Something's being washed at the moment
 	var/dissolver = WATER
