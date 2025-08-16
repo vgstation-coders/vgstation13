@@ -1060,7 +1060,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	..()
 	if(W.sharpness_flags & SHARP_BLADE)
 		if(cut && cant_eat_msg)
-			var/obj/item/seeds/avocadoseed/whole/sneed = new(loc)
+			var/obj/item/seeds/avocadoseed/whole/sneed = new(get_turf(src))
 			var/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted/slice = new(get_turf(src))
 			reagents.trans_to(slice, reagents.total_volume)
 			sneed.seed = seed
