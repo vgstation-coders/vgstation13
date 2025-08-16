@@ -34,3 +34,14 @@ var/list/feather_colors = list(
 		else
 			return "green"
 
+/obj/item/stack/sheet/feather/update_icon()
+	if(amount > 1)
+		icon_state = "feather-stack"
+	else
+		icon_state = "feather-single"
+
+//So the feathers stack with their own colors only.
+/obj/item/stack/sheet/feather/can_stack_with(obj/item/stack/sheet/feather)
+	if(!..(feather))
+		return FALSE
+	return src.color == feather.color
