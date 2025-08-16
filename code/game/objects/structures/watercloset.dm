@@ -9,6 +9,7 @@
 	anchored = 1
 	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
 	var/watertype = /obj/item/weapon/reagent_containers/glass/beaker/water
+	var/can_take_watersource = TRUE
 
 /obj/structure/wc/New()
 	. = ..()
@@ -53,7 +54,7 @@
 
 /obj/structure/wc/attack_hand(mob/living/user)
 	if(!anchored)
-		if(watersource)
+		if(watersource && can_take_watersource)
 			user.put_in_hands(watersource)
 			watersource = null
 			to_chat(user, "<span class='warning'>You remove [watersource] from [src].</span>")
@@ -518,6 +519,7 @@
 	name = "sink"
 	icon_state = "sink"
 	desc = "A sink used for washing one's hands and face."
+	can_take_watersource = FALSE //As sinks are currently set up, these would essentially let crew get infinite sources of any beaker inside, so NO.
 	var/clean_power = CLEANLINESS_SPACECLEANER//Nanotrasen sinks are equipped with state of the art water propulsion for extra cleanliness
 	var/busy = 0 	//Something's being washed at the moment
 	var/dissolver = WATER
