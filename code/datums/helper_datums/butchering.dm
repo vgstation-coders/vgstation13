@@ -293,6 +293,7 @@
 		V.my_appearance.s_tone = VOXPLUCKED
 		to_chat(V, "<span class='notice'>Your plumage is looking a bit bare...</span>")
 		V.species.updatespeciescolor(V)
+		V.update_cold_levels()
 		V.regenerate_icons()
 	return F
 

@@ -200,6 +200,7 @@
 			to_chat(src, "<span class='notice'>Your feathers regrow fully.</span>")
 			feather_regen = 0
 			species.updatespeciescolor(src)
+			update_cold_levels()
 			regenerate_icons()
 
 /mob/living/carbon/human/vox/handle_random_events()
@@ -214,6 +215,7 @@
 				original_vox_tone = my_appearance.s_tone
 			my_appearance.s_tone = VOXPLUCKED
 			species.updatespeciescolor(src)
+			update_cold_levels()
 			regenerate_icons()
 			to_chat(src, "<span class='notice'>Your feathers fall out from the radiation!</span>")
 
@@ -228,3 +230,13 @@
 		to_chat(M, "<span class='notice'>You have no feathers left to pluck!</span>")
 	else
 		..()
+
+/mob/living/carbon/human/vox/proc/update_cold_levels()
+	if(my_appearance.s_tone == VOXPLUCKED)
+		species.cold_level_1 = 220
+		species.cold_level_2 = 200
+		species.cold_level_3 = 120
+	else
+		species.cold_level_1 = 80
+		species.cold_level_2 = 50
+		species.cold_level_3 = 0
