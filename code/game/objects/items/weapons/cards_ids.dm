@@ -252,7 +252,7 @@ var/list/global/id_cards = list()
 		"You flash your ID card: [bicon(src)] [name]. Assignment: [assignment]")
 	user.delayNextAttack(0.5 SECONDS)
 	add_fingerprint(user)
-	flash_object_animation(user, src, HOLD_FLASH_ANIM)
+	flash_object_animation(user, src, FLASH_ID_ANIM)
 
 /obj/item/weapon/card/id/GetAccess()
 	if(arcanetampered)
