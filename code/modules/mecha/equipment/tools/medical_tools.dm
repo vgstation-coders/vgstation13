@@ -689,3 +689,55 @@
 		S.reagents.add_reagent(reagent,amount)
 		S.chassis.use_power(energy_drain)
 	return 1
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/medical
+	name = "\improper Exosuit-Mounted Surgical Switchtool"
+	desc = "An exosuit-mounted Surgical switchtool. (Can be attached to: Odysseus exosuits)"
+	icon_state = "mecha_switchtool_medical"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_PROGRAMMING + "=3;" + Tc_POWERSTORAGE + "=2"
+	equip_cooldown = 10
+	energy_drain = 50
+	range = MELEE|RANGED
+	obj/item/weapon/switchtool/surgery/maxed/mech/switchtool
+	equip_type = EQUIP_UTILITY
+	has_equip_overlay = FALSE
+	step_delay = 50
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/can_attach(var/obj/mecha/medical/odysseus/M)
+	if(..())
+		if(istype(M))
+			return 1
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/New()
+	..()
+	switchtool = new(src)
+//	pr_switchtool = new /datum/global_iterator/mecha_switchtool(list(src),0)
+//	pr_switchtool.set_delay(equip_cooldown)
+//	pr_switchtool.toggle()
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/Destroy()
+	QDEL_NULL(switchtool)
+//	QDEL_NULL(pr_switchtool)
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/action(atom/target)
+	if(switchtool.deployed)
+		switchtool.preattack(target, chassis.occupant, chassis.Adjacent(target))
+		chassis.use_power(energy_drain)
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/Topic(href,href_list)
+	if(..())
+		return TRUE
+	if(href_list["change"])
+		if(switchtool.deployed)
+			switchtool.attack_self(chassis.occupant)
+		switchtool.attack_self(chassis.occupant)
+	update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/alt_action()
+	switchtool.attack_self(chassis.occupant)
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/get_equip_info()
+	return "[..()] Current tool: [switchtool.deployed ? "[switchtool.deployed]" : "None"] \[<a href='?src=\ref[src];change=0'>change</a>\]"
+
+//	return "[..()] Current tool: [switchtool.deployed ? "[switchtool.deployed]" : "None"] \[<a href='?src=\ref[src];change=0'>change</a>\] [pr_switchtool.active() ? "" : "\[<a href='?src=\ref[src];refill=0'>activate refilling</a>\]"]"

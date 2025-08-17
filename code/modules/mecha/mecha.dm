@@ -384,7 +384,7 @@ Breaking SFX and text when components break Done?
 Add way for data core to be soldered, to not allow locks
 
 Change locks to be clearable via maints protocol DONE!
-Change maints accessibility to be based on the Hull
+Change maints accessibility to be based on the Hull DONE!
 Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool and a very long delay. DONE!
 
 Add camera/radio functionality NOPE!
@@ -403,11 +403,13 @@ Badds:
 
 Electric says if you can lock or not, hull says if outside people can simply unlock it DONE!
 
-Ions cause the armor and hull to disappear
-Throwing items cause the armor and hull to disappear
+Ions cause the armor and hull to disappear DONE!
+Throwing items cause the armor and hull to disappear DONE!
 Hull enclosure doesn't control atmos vulnerability
 
 Make examine text be much better and nicerer.
+
+Throws and melees do not work...
 */
 
 /obj/mecha/Hear(var/datum/speech/speech, var/rendered_message="")
@@ -762,17 +764,6 @@ Make examine text be much better and nicerer.
 	return
 
 /obj/mecha/ex_act(severity)
-/*
-	var/obj/item/mecha_parts/component/armor/ArmC = internal_components[MECH_ARMOR]
-
-	var/temp_deflect_chance = deflect_chance
-
-	if(!ArmC)
-		temp_deflect_chance = 0
-
-	else
-		temp_deflect_chance = round(ArmC.get_efficiency() * ArmC.deflect_chance + (defense_mode ? 25 : 0))
-*/
 	src.log_message("Affected by explosion of severity: [severity].",1)
 //	if(prob(temp_deflect_chance))
 //		severity++
@@ -1163,6 +1154,7 @@ Make examine text be much better and nicerer.
 				"<span class='warning'>You hear welding noises.</span>")
 			if(WT.do_weld(user, src, 15 SECONDS, 5))
 				TryWeldBreak(AC, user, WT)
+				return
 
 		else if(HC && HC.integrity > 0)
 			user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s hull.</span>", \
@@ -1170,6 +1162,7 @@ Make examine text be much better and nicerer.
 				"<span class='warning'>You hear welding noises.</span>")
 			if(WT.do_weld(user, src, 15 SECONDS, 5))
 				TryWeldBreak(HC, user, WT)
+				return
 
 	if(iswelder(W) && user.a_intent == I_HELP)
 		var/obj/item/tool/weldingtool/WT = W
@@ -1194,6 +1187,8 @@ Make examine text be much better and nicerer.
 		else
 			to_chat(user, "The [src.name] is at full integrity")
 		return
+	return
+
 /*
 /obj/mecha/attack_ai(var/mob/living/silicon/ai/user as mob)
 	if(!istype(user, /mob/living/silicon/ai))

@@ -682,3 +682,19 @@
 		"/obj/item/tool/solder/pre_fueled:soldering iron" = null,
 		"/obj/item/device/silicate_sprayer:silicate sprayer" = null
 		)
+
+/obj/item/weapon/switchtool/surgery/maxed/mech
+	stored_modules = list(
+						"/obj/item/tool/scalpel/laser/tier2:scalpel" = null,
+						"/obj/item/tool/circular_saw/plasmasaw:circular saw" = null,
+						"/obj/item/tool/surgicaldrill/diamond:surgical drill" = null,
+						"/obj/item/tool/cautery/laser/tier2:cautery" = null,
+						"/obj/item/tool/hemostat/pico:hemostat" = null,
+						"/obj/item/tool/retractor/manager:retractor" = null,
+						"/obj/item/tool/bonesetter/bone_mender:bone setter" = null,
+						"/obj/item/tool/FixOVein/clot:fixovein" = null,
+						"/obj/item/tool/bonegel:bonegel" = null,
+						"/obj/item/device/healthanalyzer:health analyzer" = null,
+						"/obj/item/device/mass_spectrometer/adv:mass spectrometer" = null,
+						"/obj/item/device/reagent_scanner/adv:reagent scanner" = null
+						)
