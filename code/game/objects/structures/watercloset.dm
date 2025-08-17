@@ -544,7 +544,7 @@
 		return
 
 	if(!watersource || watersource.reagents.is_empty())
-		user.visible_message("<span class='warning'>The tap runs dry! Refuel the reservoir.</span>")
+		M.visible_message("<span class='warning'>The tap runs dry! Refuel the reservoir.</span>")
 		return 1
 
 	to_chat(usr, "<span class='notice'>You start washing your hands.</span>")
@@ -565,7 +565,7 @@
 	if(!watersource || watersource.reagents.is_empty())
 		user.visible_message("<span class='warning'>The tap runs dry! Refuel the reservoir.</span>")
 		return 1
-	user.visible_message("<span class='notice'>[user] puts \the [M] underneath the running [watersource.get_master_reagent_name()].","<span class='notice'>You put \the [M] underneath the running [watersource.get_master_reagent_name()].</span>")
+	user.visible_message("<span class='notice'>[user] puts \the [M] underneath the running [watersource.reagents.get_master_reagent_name()].","<span class='notice'>You put \the [M] underneath the running [watersource.reagents.get_master_reagent_name()].</span>")
 	busy = TRUE
 	if (do_after(user,src, 40))
 		M.clean_blood()
@@ -574,7 +574,7 @@
 		if(M)
 			if(M.reagents.maximum_volume > M.reagents.total_volume)
 				playsound(src, 'sound/effects/slosh.ogg', 25, 1)
-				M.reagents.add_reagent(watersource.get_master_reagent_id(), min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
+				M.reagents.add_reagent(watersource.reagents.get_master_reagent_id(), min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
 				user.visible_message("<span class='notice'>[user] finishes soaking \the [M], \he could clean the entire station with that.</span>","<span class='notice'>You finish soaking \the [M], you feel as if you could clean anything now, even the Chef's backroom...</span>")
 			else
 				user.visible_message("<span class='notice'>[user] removes \the [M], cleaner than before.</span>","<span class='notice'>You remove \the [M] from \the [src], it's all nice and sparkly now but somehow didnt get it any wetter.</span>")
@@ -603,9 +603,9 @@
 			return
 		if (istype(RG, /obj/item/weapon/reagent_containers/chempack)) //Chempack can't use amount_per_transfer_from_this, so it needs its own if statement.
 			var/obj/item/weapon/reagent_containers/chempack/C = RG
-			C.reagents.add_reagent(watersource.get_master_reagent_id(), C.fill_amount)
+			C.reagents.add_reagent(watersource.reagents.get_master_reagent_id(), C.fill_amount)
 		else
-			RG.reagents.add_reagent(watersource.get_master_reagent_id(), min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
+			RG.reagents.add_reagent(watersource.reagents.get_master_reagent_id(), min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
 		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill the [RG] using \the [src].</span>")
 		return
 
@@ -635,7 +635,7 @@
 
 	else if(istype(O, /obj/item/stack/sheet/hairlesshide))
 		var/obj/item/stack/sheet/hairlesshide/H = O
-		user.visible_message("<span class='notice'>[user] puts \the [H] underneath the running [watersource.get_master_reagent_name()] and begins soaking it.","<span class='notice'>You put \the [H] underneath the running [watersource.get_master_reagent_name()] and begin soaking it.</span>")
+		user.visible_message("<span class='notice'>[user] puts \the [H] underneath the running [watersource.reagents.get_master_reagent_name()] and begins soaking it.","<span class='notice'>You put \the [H] underneath the running [watersource.reagents.get_master_reagent_name()] and begin soaking it.</span>")
 		busy = TRUE
 		if (do_after(user, src, 10*H.amount))
 			var/obj/item/stack/sheet/wetleather/WL = new(src)
