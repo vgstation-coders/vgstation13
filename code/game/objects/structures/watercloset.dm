@@ -56,8 +56,8 @@
 	if(!anchored)
 		if(watersource && can_take_watersource)
 			user.put_in_hands(watersource)
-			watersource = null
 			to_chat(user, "<span class='warning'>You remove [watersource] from [src].</span>")
+			watersource = null
 			return
 		to_chat(user, "<span class='warning'>\The [src] needs to be bolted to the floor to work.</span>")
 		return 1
@@ -121,7 +121,7 @@
 
 /obj/structure/wc/toilet/attackby(obj/item/I as obj, mob/living/user as mob)
 	if(..())
-		return
+		return 1
 	if(open && cistern && rodded == 0 && istype(I,/obj/item/stack/rods))
 		var/obj/item/stack/rods/R = I
 		if(R.amount < 2)
@@ -218,7 +218,7 @@
 
 /obj/structure/wc/urinal/attackby(obj/item/I as obj, mob/user as mob)
 	if(..())
-		return
+		return 1
 
 	if(istype(I, /obj/item/tool/crowbar))
 		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
@@ -327,7 +327,7 @@
 		if(user.drop_item(I,src))
 			watersource = I
 			to_chat(user, "<span class='notice'>You add [I] as a reagent source for [src].</span>")
-			return
+			return 1
 	if(panel_open) //The panel is open
 		if(I.is_wrench(user))
 			user.visible_message("<span class='warning'>[user] begins to adjust \the [src]'s temperature valve with \a [I.name].</span>", \
@@ -587,7 +587,7 @@
 		return
 
 	if(!..())
-		return
+		return 1
 
 	if(istype(O, /obj/item/weapon/mop) || istype(O, /obj/item/toy/waterballoon))
 		return
