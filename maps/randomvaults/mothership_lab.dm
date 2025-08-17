@@ -1032,6 +1032,4 @@
 	icon = 'icons/obj/acidcloset.dmi'
 	icon_state = "acidsink"
 	clean_power = 0
-	dissolver = PACID
-	reagent = SACID
-	reagent_name = "acid"
+	watertype = /obj/item/weapon/reagent_containers/glass/beaker/acid

@@ -523,12 +523,8 @@
 	icon_state = "sink"
 	desc = "A sink used for washing one's hands and face."
 	can_take_watersource = FALSE //As sinks are currently set up, these would essentially let crew get infinite sources of any beaker inside, so NO.
-	watertype = null //While we're at it, this doesn't even use beakers yet anyways, so nip this in the bud.
 	var/clean_power = CLEANLINESS_SPACECLEANER//Nanotrasen sinks are equipped with state of the art water propulsion for extra cleanliness
 	var/busy = 0 	//Something's being washed at the moment
-	var/dissolver = WATER
-	var/reagent = WATER
-	var/reagent_name = "water"
 
 /obj/structure/wc/sink/splashable()
 	return FALSE
@@ -547,6 +543,10 @@
 		to_chat(M, "<span class='warning'>Someone's already washing here.</span>")
 		return
 
+	if(!watersource || watersource.reagents.is_empty())
+		user.visible_message("<span class='warning'>The tap runs dry! Refuel the reservoir.</span>")
+		return 1
+
 	to_chat(usr, "<span class='notice'>You start washing your hands.</span>")
 
 	busy = TRUE
@@ -555,37 +555,29 @@
 		if(ishuman(M))
 			var/mob/living/carbon/human/HM = M
 			HM.update_inv_gloves()
-			if(HM.species)
-				var/flag = HM.species.anatomy_flags & ACID4WATER
-				if(dissolver == PACID)
-					flag = !flag
-				if(flag)
-					if(HM.gloves) //This should make it so any ayy who isn't wearing gloves will get some burns
-						to_chat(HM, "<span class='warning'>Your gloves block direct contact with the [reagent_name].</span>")
-					else
-						to_chat(HM, "<span class='warning'>The [reagent_name] burns your hands!</span>")
-						HM.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
-						HM.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
 		M.visible_message("<span class='notice'>[M] washes \his hands using \the [src].</span>","<span class='notice'>You wash your hands using \the [src].</span>")
+		watersource.reagents.reaction(M, TOUCH, zone_sels = list(LIMB_LEFT_HAND,LIMB_RIGHT_HAND))
 	busy = FALSE
 
 /obj/structure/wc/sink/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(busy)
 		return 1
-	user.visible_message("<span class='notice'>[user] puts \the [M] underneath the running [reagent_name].","<span class='notice'>You put \the [M] underneath the running [reagent_name].</span>")
+	if(!watersource || watersource.reagents.is_empty())
+		user.visible_message("<span class='warning'>The tap runs dry! Refuel the reservoir.</span>")
+		return 1
+	user.visible_message("<span class='notice'>[user] puts \the [M] underneath the running [watersource.get_master_reagent_name()].","<span class='notice'>You put \the [M] underneath the running [watersource.get_master_reagent_name()].</span>")
 	busy = TRUE
 	if (do_after(user,src, 40))
-		if(M.dissolvable() == dissolver)
-			M.acid_melt(user.loc)
-		else
-			M.clean_blood()
+		M.clean_blood()
+		if(watersource && !watersource.reagents.is_empty())
+			watersource.reagents.reaction(M, TOUCH)
+		if(M)
 			if(M.reagents.maximum_volume > M.reagents.total_volume)
 				playsound(src, 'sound/effects/slosh.ogg', 25, 1)
-				M.reagents.add_reagent(reagent, min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
+				M.reagents.add_reagent(watersource.get_master_reagent_id(), min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
 				user.visible_message("<span class='notice'>[user] finishes soaking \the [M], \he could clean the entire station with that.</span>","<span class='notice'>You finish soaking \the [M], you feel as if you could clean anything now, even the Chef's backroom...</span>")
 			else
 				user.visible_message("<span class='notice'>[user] removes \the [M], cleaner than before.</span>","<span class='notice'>You remove \the [M] from \the [src], it's all nice and sparkly now but somehow didnt get it any wetter.</span>")
-
 	busy = FALSE
 	return 1
 
@@ -600,6 +592,10 @@
 	if(istype(O, /obj/item/weapon/mop) || istype(O, /obj/item/toy/waterballoon))
 		return
 
+	if(!watersource || watersource.reagents.is_empty())
+		user.visible_message("<span class='warning'>The tap runs dry! Refuel the reservoir.</span>")
+		return
+
 	if (istype(O, /obj/item/weapon/reagent_containers))
 		var/obj/item/weapon/reagent_containers/RG = O
 		if(RG.reagents.total_volume >= RG.reagents.maximum_volume)
@@ -607,9 +603,9 @@
 			return
 		if (istype(RG, /obj/item/weapon/reagent_containers/chempack)) //Chempack can't use amount_per_transfer_from_this, so it needs its own if statement.
 			var/obj/item/weapon/reagent_containers/chempack/C = RG
-			C.reagents.add_reagent(reagent, C.fill_amount)
+			C.reagents.add_reagent(watersource.get_master_reagent_id(), C.fill_amount)
 		else
-			RG.reagents.add_reagent(reagent, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
+			RG.reagents.add_reagent(watersource.get_master_reagent_id(), min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
 		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill the [RG] using \the [src].</span>")
 		return
 
@@ -639,7 +635,7 @@
 
 	else if(istype(O, /obj/item/stack/sheet/hairlesshide))
 		var/obj/item/stack/sheet/hairlesshide/H = O
-		user.visible_message("<span class='notice'>[user] puts \the [H] underneath the running [reagent_name] and begins soaking it.","<span class='notice'>You put \the [H] underneath the running [reagent_name] and begin soaking it.</span>")
+		user.visible_message("<span class='notice'>[user] puts \the [H] underneath the running [watersource.get_master_reagent_name()] and begins soaking it.","<span class='notice'>You put \the [H] underneath the running [watersource.get_master_reagent_name()] and begin soaking it.</span>")
 		busy = TRUE
 		if (do_after(user, src, 10*H.amount))
 			var/obj/item/stack/sheet/wetleather/WL = new(src)
@@ -664,13 +660,12 @@
 			user.visible_message( \
 				"<span class='notice'>[user] washes \the [O] using \the [src].</span>", \
 				"<span class='notice'>You wash \the [O] using \the [src].</span>")
-			if(O.dissolvable() == dissolver)
-				O.acid_melt()
+			if(clean_power)
+				O.clean_act(clean_power)//removes blood, unglues, etc
 			else
-				if(clean_power)
-					O.clean_act(clean_power)//removes blood, unglues, etc
-				else
-					O.clean_blood()
+				O.clean_blood()
+			if(watersource && !watersource.reagents.is_empty())
+				watersource.reagents.reaction(O, TOUCH)
 			..()
 
 		busy = FALSE
