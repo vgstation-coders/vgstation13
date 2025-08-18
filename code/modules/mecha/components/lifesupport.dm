@@ -16,6 +16,7 @@
 
 /obj/item/mecha_parts/component/gas/reinforced
 	name = "reinforced mecha life-support"
+	icon_state = "lifesupport_durable"
 	emp_resistance = 1
 	max_integrity = 80
 	step_delay = 100

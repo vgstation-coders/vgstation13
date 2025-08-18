@@ -20,6 +20,7 @@
 
 /obj/item/mecha_parts/component/actuator/hispeed
 	name = "overclocked mecha actuator"
+	icon_state = "motor_hispeed"
 	step_delay = -100
 	relative_size = 35
 	emp_resistance = -1
@@ -28,6 +29,7 @@
 
 /obj/item/mecha_parts/component/actuator/durable
 	name = "reinforced mecha actuator"
+	icon_state = "motor_durable"
 	step_delay = 100
 	relative_size = 35
 	emp_resistance = 1

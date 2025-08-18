@@ -351,49 +351,15 @@
 	return
 
 
-#warn // Add tidier damage strings
+#warn
 /*
 Issues:
-Adds:
 
-Armor/hull balance Done?
-Aux components not being hit/damaged (gas, motor, electric) Done?
-Slowdown not working Done?
-Icons not showing DONE!
-Make melee and proj penetration hit components
-Add camera and radio components NOPE!
-Add binary radio (?) NOPE! For another day!
-Add cell EMP protection via mech electrical hub
-Make maints panel be unlocked if there's no electric hub Done?
-Hull / Armor break visibly when broken Done?
-Breaking SFX and text when components break Done?
-Add way for data core to be soldered, to not allow locks
+Shotgun is awful to load 1 by 1
 
-Change locks to be clearable via maints protocol DONE!
-Change maints accessibility to be based on the Hull DONE!
-Add a way to precisely break the Armor (1st) and Hull (2nd) with a welding tool and a very long delay. DONE!
+Fire damage comes from tank
 
-Add camera/radio functionality NOPE!
-Add ballistic ammo DONE!
-Add hull atmospheric rating Done?
-
-Make the mech construction require a real cell that is actually the cell the mech creates with! Massive time saver! No more messing about with maints protocol........
-
-Make EMPs electrocute (lethal) the user if there's no hull and no electrical component. OR if there's just no EC, at a low chance.
-
-Fix EMP damaging that its not suppposed to
-
-
-
-Badds:
-
-Electric says if you can lock or not, hull says if outside people can simply unlock it DONE!
-
-Ions cause the armor and hull to disappear DONE!
-Throwing items cause the armor and hull to disappear DONE!
 Hull enclosure doesn't control atmos vulnerability
-
-Make examine text be much better and nicerer. DONE!
 
 Throws and melees do not work...
 */
@@ -675,9 +641,7 @@ Throws and melees do not work...
 			Proj.on_hit(src,0)
 	src.log_message("Hit by projectile. Type: [Proj.name]([Proj.flag]).",1)
 	call((proc_res["dynbulletdamage"]||src), "dynbulletdamage")(Proj) //calls equipment
-	if(Proj.penetration <= 5)
-		return PROJECTILE_COLLISION_DEFAULT
-	return
+	return ..()
 
 /obj/mecha/proc/dynbulletdamage(var/obj/item/projectile/Proj, var/penetrating = FALSE)
 
@@ -733,10 +697,11 @@ Throws and melees do not work...
 			src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),ignore_threshold)
 
 		//AP projectiles have a chance to cause additional damage
+		var/penetration = Proj.penetration + temp_proj_penetration
 		if(penetration_reduction)
-			Proj.penetration -= max(0, penetration_reduction)
-			temp_proj_penetration -= max(0, penetration_reduction)
-		if(Proj.penetration || temp_proj_penetration)
+			penetration -= penetration_reduction
+			penetration = max(0, penetration)
+		if(penetration > 0)
 			var/hit_occupant = 1 //only allow the occupant to be hit once
 			for(var/i in 1 to min(Proj.penetration, round(Proj.damage/2)))
 				if(src.occupant && hit_occupant && prob(75))
@@ -748,8 +713,8 @@ Throws and melees do not work...
 				else
 					if(damage > internal_damage_minimum)	//Only decently painful attacks trigger a chance of mech damage.
 						src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT), 1)
-
-				Proj.penetration--
+				if(Proj.penetration > 0)
+					Proj.penetration--
 
 	Proj.on_hit(src) //on_hit just returns if it's argument is not a living mob so does this actually do anything?
 	return
@@ -2018,10 +1983,10 @@ Throws and melees do not work...
 				mecha.setInternalDamage(MECHA_INT_TANK_BREACH)
 			var/datum/gas_mixture/int_tank_air = mecha.internal_tank.return_air()
 			if(int_tank_air && int_tank_air.return_volume()>0) //heat the air_contents
-				int_tank_air.temperature = min(mecha.max_temperature*0.8+T0C, int_tank_air.temperature+rand(10,15)) // This malfunction isn't supposed to actually melt the mech
+				int_tank_air.temperature = min(mecha.max_temperature*0.8, int_tank_air.temperature+rand(10,15)) // This malfunction isn't supposed to actually melt the mech
 		if(mecha.cabin_air && mecha.cabin_air.return_volume()>0)
-			mecha.cabin_air.temperature = min(mecha.max_temperature*0.8+T0C, mecha.cabin_air.return_temperature()+rand(10,15))
-			if(mecha.cabin_air.return_temperature()>mecha.max_temperature/2)
+			mecha.cabin_air.temperature = min(mecha.max_temperature*0.8, mecha.cabin_air.return_temperature()+rand(10,15))
+			if(mecha.cabin_air.return_temperature()>mecha.max_temperature)
 				mecha.take_damage(4/round(mecha.max_temperature/mecha.cabin_air.return_temperature(),0.1), damage_type = "fire")
 	if(mecha.hasInternalDamage(MECHA_INT_TEMP_CONTROL)) //stop the mecha_preserve_temp loop datum
 		mecha.pr_int_temp_processor.stop()

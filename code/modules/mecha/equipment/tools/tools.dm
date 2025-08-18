@@ -783,7 +783,6 @@
 	desc = "Boosts exosuit armor against daddy issues."
 	icon_state = "mecha_abooster_ccw"
 	origin_tech = Tc_MATERIALS + "=3"
-	equip_cooldown = 0
 	energy_drain = 50
 	range = 0
 	has_equip_overlay = FALSE
@@ -798,7 +797,6 @@
 	if(!chassis)
 		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name]"
-
 
 /obj/item/mecha_parts/mecha_equipment/armor/anticcw_armor_booster //what is that noise? A BAWWW from TK mutants.
 	name = "\improper Armor Booster Module (Close Combat Weaponry)"
@@ -835,9 +833,7 @@
 		if(round(W.force*damage_coeff) > chassis.internal_damage_minimum)
 			chassis.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 
-	set_ready_state(0)
 	chassis.use_power(energy_drain)
-	do_after_cooldown()
 	return TRUE
 
 
@@ -878,9 +874,7 @@
 		chassis.take_damage(round(Proj.damage*src.damage_coeff),Proj.flag)
 		chassis.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 		Proj.on_hit(chassis)
-	set_ready_state(0)
 	chassis.use_power(energy_drain)
-	do_after_cooldown()
 	return TRUE
 
 /obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster/proc/dynhitby(atom/movable/A)
@@ -898,9 +892,7 @@
 		if(O.throwforce)
 			chassis.take_damage(round(O.throwforce*damage_coeff))
 			chassis.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-	set_ready_state(0)
 	chassis.use_power(energy_drain)
-	do_after_cooldown()
 	return TRUE
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid

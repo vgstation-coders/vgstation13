@@ -36,7 +36,7 @@
 	icon_state = "armor_mining"
 	armor_soak = 0.5
 	step_delay = 200
-	max_integrity = 80
+	max_integrity = 90
 	deflect_chance = 3
 	pen_reduction = 2
 	damage_minimum = 3
@@ -59,7 +59,7 @@
 	desc = "A very lightweight foam panel that covers the internals of the mech."
 	icon_state = "armor_light"
 	armor_soak = 0.3
-	max_integrity = 30
+	max_integrity = 35
 	step_delay = 10
 	pen_reduction = 1
 	damage_minimum = 0
@@ -83,7 +83,7 @@
 	icon_state = "armor_durable"
 	armor_soak = 0.6
 	step_delay = 250
-	max_integrity = 90
+	max_integrity = 110
 	deflect_chance = 5
 	pen_reduction = 3
 	damage_minimum = 3
@@ -104,7 +104,7 @@
 	icon_state = "armor_military"
 	armor_soak = 0.75
 	step_delay = 400
-	max_integrity = 120
+	max_integrity = 140
 	deflect_chance = 10
 	optimal_type = list(/obj/mecha/combat)
 	pen_reduction = 5
@@ -139,11 +139,10 @@
 	icon_state = "armor_marshal"
 	armor_soak = 0.6
 	step_delay = 80
-	max_integrity = 60
+	max_integrity = 85
 	deflect_chance = 5
 	pen_reduction = 5
 	damage_minimum = 0
-	optimal_type = list(/obj/mecha/combat)
 	damage_absorption = list(
 		"brute"=0.7,
 		"fire"=1,
@@ -161,7 +160,7 @@
 	icon_state = "armor_marshal"
 	armor_soak = 0.8
 	step_delay = 100
-	max_integrity = 50
+	max_integrity = 70
 	deflect_chance = 5
 	pen_reduction = 10
 	damage_absorption = list(
@@ -180,7 +179,7 @@
 	desc = "An armour panel that provides top protection, while remaining lightweight, thanks to the cutting-edge ceramics and duraplastics used."
 	armor_soak = 0.75
 	step_delay = 140
-	max_integrity = 120
+	max_integrity = 140
 	deflect_chance = 10
 	pen_reduction = 10
 	damage_minimum = 5
@@ -200,7 +199,7 @@
 	desc = "An advanced matrix of spaced composites, duraplastics and depleted uranium, very heavy, but provides extreme protection."
 	armor_soak = 0.8
 	step_delay = 500
-	max_integrity = 180
+	max_integrity = 220
 	optimal_type = list(/obj/mecha/combat/marauder)
 	deflect_chance = 15
 	damage_minimum = 10
@@ -226,7 +225,7 @@
 				typepass = TRUE
 
 		if(typepass)
-			step_delay = 1
+			step_delay *= 0.5
 		else
 			step_delay = initial(step_delay)
 
@@ -237,7 +236,7 @@
 	armor_soak = 0.7
 	emp_resistance = 2
 	step_delay = 150
-	max_integrity = 80
+	max_integrity = 90
 	deflect_chance = 10
 	damage_minimum = 3
 	damage_absorption = list(
@@ -258,10 +257,10 @@
 	if(.)
 
 		if(istype(target, /obj/mecha/combat/phazon))
-			step_delay = -3
+			step_delay *= 0.75
 
 		else
-			step_delay = -1
+			step_delay *= 1
 
 /obj/item/mecha_parts/component/armor/killdozer
 	name = "concrete mecha plating"

@@ -115,13 +115,13 @@
 			chassis.occupant_message("Equipment failure due to [EC?"malfunctioning":"missing"] electrical regulator.")
 			log_message("Electrical equipment failure",1)
 			return
+	if(EC && EC.integrity > 0)
+		chassis.use_power(energy_drain * EC.charge_cost_mod)
+	else
+		chassis.use_power(energy_drain * 10)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/can_attach(obj/mecha/M as obj)
-//	if(!allow_duplicate)
-//		for(var/obj/item/mecha_parts/mecha_equipment/ME in M.equipment) //Exact duplicate components aren't allowed.
-//			if(ME.type == src.type)
-//				return 0
 	if(equip_type == EQUIP_HULL && M.hull_equipment.len < M.max_hull_equip)
 		return 1
 	if(equip_type == EQUIP_WEAPON && M.weapon_equipment.len < M.max_weapon_equip)

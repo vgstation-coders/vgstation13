@@ -31,6 +31,7 @@
 /obj/item/mecha_parts/component/electrical/high_current
 	name = "efficient mecha electrical & data core"
 	desc = "A data and electrical hub optimized for higher energy throughput."
+	icon_state = "board_efficient"
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=3"
 	emp_resistance = -1
 	max_integrity = 30
@@ -40,9 +41,10 @@
 /obj/item/mecha_parts/component/electrical/durable
 	name = "armoured mecha electrical & data core"
 	desc = "A standard data and electrical hub, covered by a sheath of armour."
+	icon_state = "board_durable"
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=3"
 	emp_resistance = 1
 	max_integrity = 120
 	step_delay = 100
 	relative_size = 25
-	charge_cost_mod = 1.25
+	charge_cost_mod = 1.5

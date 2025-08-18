@@ -9,7 +9,7 @@
 	step_energy_drain = 3
 	health = 150
 	deflect_chance = 10
-	damage_absorption = list("brute"=0.85,"fire"=0.85,"bullet"=0.85,"laser"=0.85,"energy"=0.85,"bomb"=0.85)
+	damage_absorption = list("brute"=0.9,"fire"=0.9,"bullet"=0.9,"laser"=0.9,"energy"=0.9,"bomb"=0.9)
 	infra_luminosity = 3
 	wreckage = /obj/effect/decal/mecha_wreckage/phazon
 	add_req_access = 1

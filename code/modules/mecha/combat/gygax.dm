@@ -22,7 +22,7 @@
 	)
 
 	damage_minimum = 0
-	weight_max = 200
+	weight_max = 300
 	penetration_reduction = 3 // blocks .380
 
 	max_hull_equip = 1

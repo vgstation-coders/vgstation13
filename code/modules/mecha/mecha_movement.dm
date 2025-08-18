@@ -62,6 +62,7 @@
 	return step_in + max(1, round(tally, 0.1))
 
 /obj/mecha/proc/dyndomove(direction)
+	var/obj/item/mecha_parts/component/electrical/EC = internal_components[MECH_ELECTRIC]
 	stopMechWalking()
 	if(!can_move)
 		return 0
@@ -88,7 +89,10 @@
 			else
 				ME.on_mech_turn()
 		can_move = 0
-		use_power(step_energy_drain)
+		if(EC && EC.integrity > 0)
+			use_power(step_energy_drain * (EC.charge_cost_mod * max(get_step_delay(), 1)))
+		else
+			use_power(step_energy_drain * 10)
 		if(istype(src.loc, /turf/space))
 			if(!src.check_for_support())
 				src.pr_inertial_movement.start(list(src,direction))
