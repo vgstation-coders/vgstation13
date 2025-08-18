@@ -72,9 +72,6 @@
 
 	to_chat(user, found_gun ? "<span class='notice'>You can't fit any more ammo of this type!</span>" : "<span class='notice'>None of the equipment on this exosuit can use this ammo!</span>")
 
-
-
-
 /obj/mecha/proc/resupply_box(var/obj/item/box, mob/user)
 	var/obj/item/ammo_casing/sample_ammo
 	var/is_storage = istype(box, /obj/item/weapon/storage/box)
@@ -83,7 +80,6 @@
 	if(!is_storage && !is_ammo_storage)
 		return
 
-	// Check if box is empty and get sample ammo
 	if(is_ammo_storage)
 		var/obj/item/ammo_storage/box/A = box
 		if(!A.stored_ammo)
@@ -142,35 +138,6 @@
 
 	to_chat(user, found_gun ? "<span class='notice'>You can't fit any more ammo of this type!</span>" : "<span class='notice'>None of the equipment on this exosuit can use this ammo!</span>")
 
-/*
-
-
-/obj/mecha/proc/resupply_box(var/obj/item/ammo_storage/box/A, mob/user)
-	if(!A.stored_ammo)
-		to_chat(user, "<span class='warning'>This box of ammo is empty!</span>")
-		return
-
-	var/found_gun = FALSE
-	for(var/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/gun in equipment)
-		if(gun.no_caliber || gun.ammo_type != A.ammo_type)
-			continue
-		found_gun = TRUE
-		var/ammo_needed = gun.projectiles_cache_max - gun.projectiles_cache
-		if(ammo_needed > 0)
-			var/ammo_to_transfer = min(ammo_needed, A.stored_ammo.len)
-			var/obj/item/ammo_casing/dropped = A.stored_ammo[ammo_to_transfer]
-			for(var/i = 1 to ammo_to_transfer)
-				var/obj/item/ammo_casing/casing = A.get_round()
-				if(casing && casing.BB)
-					gun.projectiles_cache++
-					A.stored_ammo -= dropped
-				else
-					break
-			to_chat(user, "<span class='notice'>You add [ammo_to_transfer] round[ammo_to_transfer > 1 ? "s" : ""] to the [gun.name].</span>")
-			return
-
-	to_chat(user, found_gun ? "<span class='notice'>You can't fit any more ammo of this type!</span>" : "<span class='notice'>None of the equipment on this exosuit can use this ammo!</span>")
-*/
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/rearm()
 	if(projectiles >= max_projectiles)
 		return FALSE
@@ -232,40 +199,3 @@
 			var/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/gun = I
 			gun.projectiles_cache = gun.projectiles_cache_max
 			gun.projectiles = gun.max_projectiles
-
-///
-
-/mob/living/simple_animal/hostile/mechahitler/mech380
-	name = "Mecha Hitler"
-
-	ranged = 1
-	rapid = 1
-
-	projectiletype = /obj/item/projectile/bullet/auto380
-
-
-/mob/living/simple_animal/hostile/mechahitler/ion
-	name = "Mecha Hitler"
-
-	ranged = 1
-	rapid = 0
-
-	projectiletype = /obj/item/projectile/ion
-
-
-/mob/living/simple_animal/hostile/mechahitler/mech9mm
-	name = "Mecha Hitler"
-
-	ranged = 1
-	rapid = 0
-
-	projectiletype = /obj/item/projectile/bullet/midbullet2
-
-
-/mob/living/simple_animal/hostile/mechahitler/mosin
-	name = "Mecha Hitler"
-
-	ranged = 1
-	rapid = 0
-
-	projectiletype = /obj/item/projectile/bullet/a762x55
