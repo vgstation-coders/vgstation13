@@ -84,8 +84,7 @@
 	var/silicon_pilot
 	var/silicon_icon_state = null
 	var/mech_maints_ready = FALSE
-	var/enter_delay = 1
-#warn set this back to 40
+	var/enter_delay = 40
 
 	var/list/equipment = new
 	var/obj/item/mecha_parts/mecha_equipment/selected
@@ -351,17 +350,11 @@
 	return
 
 
-#warn
 /*
 Issues:
-
 Shotgun is awful to load 1 by 1
 
 Fire damage comes from tank
-
-Hull enclosure doesn't control atmos vulnerability
-
-Throws and melees do not work...
 */
 
 /obj/mecha/Hear(var/datum/speech/speech, var/rendered_message="")
