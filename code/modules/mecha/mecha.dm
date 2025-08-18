@@ -65,7 +65,7 @@
 	var/obj/item/mecha_parts/mecha_tracking/tracking = null
 	var/starts_with_tracking_beacon = TRUE
 
-	var/max_temperature = 328 //Maximum temperature of a fire this mecha can withstand before it begins taking damage. Controlled by the mecha's hull. 328 k = about 55 degrees Celcius, reasonable for a unprotected machine.
+	var/max_temperature = 340 //Maximum temperature of a fire this mecha can withstand before it begins taking damage. Controlled by the mecha's hull. 340 k = about 65 degrees Celcius, reasonable for a unprotected machine.
 	var/max_pressure = HAZARD_HIGH_PRESSURE * 3 // It's metal, it probably shouldn't take damage at the human threshold
 	var/internal_damage_threshold = 50 //health percentage below which internal damage is possible
 	var/internal_damage = 0 //bitflags for what forms of damage we have (MECHA_INT_TEMP_CONTROL, MECHA_INT_SHORT_CIRCUIT, etc)
@@ -633,8 +633,8 @@ Throws and melees do not work...
 	var/obj/item/mecha_parts/component/armor/ArmC = internal_components[MECH_ARMOR]
 	var/chance = 75
 	if(!enclosed && occupant && !silicon_pilot)
-		if(ArmC && ArmC.integrity >= 0)
-			chance = 25
+		if(ArmC && ArmC.integrity > 0)
+			chance = 20
 		if(prob(chance))
 			occupant.bullet_act(Proj)
 			visible_message("<span class='warning'>[occupant] is hit by \the [Proj]!")
@@ -770,7 +770,7 @@ Throws and melees do not work...
 	if(get_charge())
 		if(!zap || zap.integrity <= 0) // Only EMP the cell if there's no electrical hub
 			cell.emp_act(severity*1.25)
-		take_damage(30 / severity, damage_type = "energy", violent = FALSE)
+		take_damage(50 / severity, damage_type = "energy", violent = FALSE)
 		src.log_message("EMP detected",1)
 		check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
 		for(var/obj/item/mecha_parts/mecha_equipment/M in equipment)
@@ -800,7 +800,7 @@ Throws and melees do not work...
 		src.take_damage(5, damage_type = "fire", violent = FALSE) // For now, make it so hull&armor doesn't take damage from fire.
 		src.check_for_internal_damage(list(MECHA_INT_FIRE, MECHA_INT_TEMP_CONTROL))
 
-	if(enclosed)// || mecha_flags & SILICON_PILOT)
+	if(enclosed)
 		return
 	for(var/mob/living/cookedalive as anything in occupant)
 		if(cookedalive.fire_stacks < 5)
@@ -969,7 +969,7 @@ Throws and melees do not work...
 	else if(W.is_wrench(user))
 		if(state==STATE_BOLTSEXPOSED)
 			state = STATE_BOLTSOPENED
-			to_chat(user, "You undo the securing bolts.")
+			to_chat(user, "You undo the securing bolts, allowing access to the component compartment (wirecutters) and cell compartment (pry bar).")
 			mech_maints_ready = TRUE
 			W.playtoolsound(src, 50)
 		else if(state==STATE_BOLTSOPENED)
@@ -979,7 +979,7 @@ Throws and melees do not work...
 			W.playtoolsound(src, 50)
 		return
 
-	else if(W.is_screwdriver(user))
+	else if(W.is_wirecutter(user))
 		if(state==STATE_BOLTSOPENED)
 			var/list/removable_components = list()
 			for(var/slot in internal_components)
@@ -1140,6 +1140,8 @@ Throws and melees do not work...
 		else
 			to_chat(user, "The [src.name] is at full integrity")
 		return
+
+	dynattackby(W, user)
 	return
 
 /*
