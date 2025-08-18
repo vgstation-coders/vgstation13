@@ -488,6 +488,6 @@
 	containername = "Pre-filled fuel reservoir"
 	group = "Engineering"
 	access = list(access_engine_major)
-	containsdesc = "A standard fuel reservoir, filled with a unique mixture selected by NanoTransen's engineering team."
+	containsdesc = "A standard fuel reservoir, filled with a unique mixture selected by NanoTrasen's engineering team."
 
 
