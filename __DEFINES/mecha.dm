@@ -3,5 +3,3 @@
 #define MECH_ARMOR		"Plating"
 #define MECH_GAS		"Life Support"
 #define MECH_ELECTRIC	"Firmware"
-#define MECH_CAMERA		"Camera"
-#define MECH_RADIO		"Communications"

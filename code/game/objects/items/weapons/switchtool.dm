@@ -695,6 +695,5 @@
 						"/obj/item/tool/FixOVein/clot:fixovein" = null,
 						"/obj/item/tool/bonegel:bonegel" = null,
 						"/obj/item/device/healthanalyzer:health analyzer" = null,
-						"/obj/item/device/mass_spectrometer/adv:mass spectrometer" = null,
 						"/obj/item/device/reagent_scanner/adv:reagent scanner" = null
 						)

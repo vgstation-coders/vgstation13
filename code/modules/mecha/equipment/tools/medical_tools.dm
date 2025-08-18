@@ -719,13 +719,9 @@
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool_med/New()
 	..()
 	switchtool = new(src)
-//	pr_switchtool = new /datum/global_iterator/mecha_switchtool(list(src),0)
-//	pr_switchtool.set_delay(equip_cooldown)
-//	pr_switchtool.toggle()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool_med/Destroy()
 	QDEL_NULL(switchtool)
-//	QDEL_NULL(pr_switchtool)
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool_med/action(atom/target)
