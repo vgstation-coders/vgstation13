@@ -60,14 +60,14 @@
 	cell_type = /obj/item/weapon/cell/hyper
 
 	penetration_reduction = 5
-	weight_max = 5
+	weight_max = 400
 	emp_gear_proof = TRUE
 
-	max_hull_equip = 3
+	max_hull_equip = 2
 	max_weapon_equip = 2
 	max_utility_equip = 2
 	max_universal_equip = 1
-	max_special_equip = 2
+	max_special_equip = 1
 
 	starting_components = list(
 		/obj/item/mecha_parts/component/hull,

@@ -14,6 +14,7 @@
 	var/no_caliber = FALSE
 	var/list/loaded_projectiles = list()
 	var/projectile_type
+	var/projectile_burst_delay = 1 // Delay that seperates each projectile when burst-firing
 
 	var/projectiles_per_shot = 1
 	var/deviation = 0.7  //the shots were perfectly accurate no matter what this was set to
@@ -71,6 +72,79 @@
 
 	to_chat(user, found_gun ? "<span class='notice'>You can't fit any more ammo of this type!</span>" : "<span class='notice'>None of the equipment on this exosuit can use this ammo!</span>")
 
+
+
+
+/obj/mecha/proc/resupply_box(var/obj/item/box, mob/user)
+	var/obj/item/ammo_casing/sample_ammo
+	var/is_storage = istype(box, /obj/item/weapon/storage/box)
+	var/is_ammo_storage = istype(box, /obj/item/ammo_storage/box)
+
+	if(!is_storage && !is_ammo_storage)
+		return
+
+	// Check if box is empty and get sample ammo
+	if(is_ammo_storage)
+		var/obj/item/ammo_storage/box/A = box
+		if(!A.stored_ammo)
+			to_chat(user, "<span class='warning'>This box of ammo is empty!</span>")
+			return
+		sample_ammo = A.stored_ammo[1]
+	else
+		var/obj/item/weapon/storage/box/B = box
+		if(!B.contents.len)
+			to_chat(user, "<span class='warning'>This box is empty!</span>")
+			return
+		for(var/obj/item/ammo_casing/AC in B.contents)
+			sample_ammo = AC
+			break
+		if(!sample_ammo)
+			to_chat(user, "<span class='warning'>This box doesn't contain any ammunition!</span>")
+			return
+
+	var/found_gun = FALSE
+	for(var/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/gun in equipment)
+		if(gun.no_caliber || gun.ammo_type != sample_ammo.type)
+			continue
+		found_gun = TRUE
+		var/ammo_needed = gun.projectiles_cache_max - gun.projectiles_cache
+		if(ammo_needed > 0)
+			var/ammo_loaded = 0
+
+			if(is_ammo_storage)
+				var/obj/item/ammo_storage/box/A = box
+				var/ammo_to_transfer = min(ammo_needed, A.stored_ammo.len)
+				for(var/i = 1 to ammo_to_transfer)
+					var/obj/item/ammo_casing/casing = A.get_round()
+					if(casing && casing.BB)
+						gun.projectiles_cache++
+						ammo_loaded++
+					else
+						break
+			else
+				var/obj/item/weapon/storage/box/B = box
+				var/list/ammo_to_remove = list()
+				for(var/obj/item/ammo_casing/casing in B.contents)
+					if(casing.type != gun.ammo_type || !casing.BB)
+						continue
+					if(ammo_loaded >= ammo_needed)
+						break
+					ammo_to_remove += casing
+					ammo_loaded++
+				for(var/obj/item/ammo_casing/casing in ammo_to_remove)
+					B.remove_from_storage(casing, null, 1, 0)
+					gun.projectiles_cache++
+					qdel(casing)
+				B.refresh_all()
+
+			to_chat(user, "<span class='notice'>You add [ammo_loaded] round[ammo_loaded > 1 ? "s" : ""] to the [gun.name].</span>")
+			return
+
+	to_chat(user, found_gun ? "<span class='notice'>You can't fit any more ammo of this type!</span>" : "<span class='notice'>None of the equipment on this exosuit can use this ammo!</span>")
+
+/*
+
+
 /obj/mecha/proc/resupply_box(var/obj/item/ammo_storage/box/A, mob/user)
 	if(!A.stored_ammo)
 		to_chat(user, "<span class='warning'>This box of ammo is empty!</span>")
@@ -96,7 +170,7 @@
 			return
 
 	to_chat(user, found_gun ? "<span class='notice'>You can't fit any more ammo of this type!</span>" : "<span class='notice'>None of the equipment on this exosuit can use this ammo!</span>")
-
+*/
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/rearm()
 	if(projectiles >= max_projectiles)
 		return FALSE
@@ -115,6 +189,7 @@
 		projectiles_cache -= ammo_used
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/New()
+	..()
 	if(starts_full)
 		projectiles_cache = projectiles_cache_max
 		projectiles = max_projectiles

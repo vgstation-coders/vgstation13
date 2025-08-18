@@ -25,7 +25,7 @@
 
 	var/optimal_type = /obj/mecha //may be either a type or a list of allowed types
 	var/equip_type = null //mechaequip2
-	var/step_delay = 0.5 	// Does the component slow/speed up the suit?
+	var/step_delay = 50 	// Does the component slow/speed up the suit?
 	var/enable_special = FALSE	// Will the tool do its special?
 
 	var/has_equip_overlay = TRUE // in case we want our equipment to have a sprite on a mecha
@@ -93,12 +93,12 @@
 /obj/item/mecha_parts/mecha_equipment/proc/is_melee()
 	return (range&MELEE)
 
-/obj/item/mecha_parts/mecha_equipment/proc/action_checks(atom/target)
-	if(!target)
+/obj/item/mecha_parts/mecha_equipment/proc/action_checks(atom/target, var/ignore = FALSE)
+	if(!target && !ignore) // is used for mech sleeper click-drops
 		return 0
 	if(!chassis)
 		return 0
-	if(!equip_ready)
+	if(!equip_ready && !ignore)
 		return 0
 	if(crit_fail)
 		return 0

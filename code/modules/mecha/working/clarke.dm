@@ -3,7 +3,7 @@
 	name = "Clarke"
 	icon_state = "clarke"
 	initial_icon = "clarke"
-	step_in = 0.75
+	step_in = 1
 	step_energy_drain = 2
 	health = 75
 	wreckage = /obj/effect/decal/mecha_wreckage/clarke

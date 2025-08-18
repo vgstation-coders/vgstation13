@@ -4,7 +4,7 @@
 	icon_state = "odysseus"
 	initial_icon = "odysseus"
 	base_color = "#FFFFFF"
-	step_in = 2
+	step_in = 1
 	health = 75
 	wreckage = /obj/effect/decal/mecha_wreckage/odysseus
 	internal_damage_threshold = 35
@@ -19,13 +19,13 @@
 		"urinetrouble"
 	)
 
-	weight_max = 150
+	weight_max = 120
 	penetration_reduction = 0
 	damage_minimum = 0
 
 	max_hull_equip = 1
 	max_weapon_equip = 0
-	max_utility_equip = 3
+	max_utility_equip = 4
 	max_universal_equip = 0
 	max_special_equip = 1
 

@@ -5,7 +5,7 @@
 	initial_icon = "ripley"
 	silicon_icon_state = "ripley-empty"
 	base_color = "#DFD472"
-	step_in = 2 //Move speed, lower is faster.
+	step_in = 2.5 //Move speed, lower is faster.
 	/// How fast the mech is in low pressure
 	var/fast_pressure_step_in = 1.5
 	/// How fast the mech is in normal pressure
@@ -44,18 +44,12 @@
 	. = ..()
 	update_pressure()
 
-/*
-/obj/mecha/working/ripley/New()
-	..()
-	return
-*/
-
 /obj/mecha/working/ripley/mk2
 	desc = "Autonomous Power Loader Unit. The workhorse of the exosuit world, this variant is fitted with a pressurized cabin. "
 	name = "APLU MK-II \"Ripley\""
 	icon_state = "ripleymkii"
 	initial_icon = "ripleymkii"
-	step_in = 2 //Move speed, lower is faster.
+	step_in = 3 //Move speed, lower is faster.
 	/// How fast the mech is in low pressure
 	fast_pressure_step_in = 2
 	/// How fast the mech is in normal pressure
@@ -85,7 +79,7 @@
 	health = 250
 	light_range_on = 10
 	light_brightness_on = 3
-	damage_absorption = list("brute"=0.7,"fire"=0.5,"bullet"= 1,"laser"=1, "bomb"=0.8)
+	damage_absorption = list("brute"=0.8,"fire"=0.5,"bullet"= 1,"laser"=1, "bomb"=0.8)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/firefighter
 	mech_sprites = list(
 		"firefighter",

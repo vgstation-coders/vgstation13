@@ -19,6 +19,7 @@
 	var/broken_icon
 	var/weldbreak_resist = 1
 	var/broken = FALSE
+	var/always_repair = FALSE
 
 /obj/item/mecha_parts/component/examine(mob/user)
 	. = ..()
@@ -55,7 +56,8 @@
 			name = "broken " + initial(name)
 			desc = "A completely broken mecha component. It appears as though it used to be a [name]."
 			icon_state = "[broken_icon]"
-			can_repair = FALSE
+			if(!always_repair)
+				can_repair = FALSE
 			visible_message("<span class='danger'>\The [initial(name)] blows apart!</span>")
 			playsound(src, "shatter", 70, 1)
 			if(istype(src, /obj/item/mecha_parts/component/hull))
@@ -66,7 +68,7 @@
 // Damage code.
 
 /obj/item/mecha_parts/component/emp_act(var/severity = 4)
-	if(severity + emp_resistance > 4)
+	if(severity + emp_resistance >= 4)
 		return
 	severity = clamp(severity + emp_resistance, 1, 4)
 	take_damage((4 - severity) * round(integrity * 0.1, 0.1))

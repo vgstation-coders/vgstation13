@@ -116,7 +116,61 @@
 	siemens_coefficient = 0
 	w_class = W_CLASS_SMALL
 	var/working = FALSE
-#warn Edit this so it asks the user what equipment slot they'd like to expand (Polaris mechport)
+
+/obj/item/weapon/mech_expansion_kit/preattack(atom/target, mob/user, proximity)
+	if(!proximity)
+		return
+	if(!istype(target, /obj/mecha))
+		to_chat(user, "<span class='warning'>That isn't an exosuit!</span>")
+		return
+	if(working)
+		to_chat(user, "<span class='warning'>This is already being used to upgrade something!</span>")
+		return
+
+	var/obj/mecha/M = target
+	var/list/slots = list()
+
+	if(M.max_hull_equip <= initial(M.max_hull_equip) + 1)
+		slots["Hull Equipment"] = "hull"
+	if(M.max_weapon_equip <= initial(M.max_weapon_equip) + 1)
+		slots["Weapon Equipment"] = "weapon"
+	if(M.max_utility_equip <= initial(M.max_utility_equip) + 1)
+		slots["Utility Equipment"] = "utility"
+	if(M.max_universal_equip <= initial(M.max_universal_equip) + 1)
+		slots["Universal Equipment"] = "universal"
+	if(M.max_special_equip <= initial(M.max_special_equip))
+		slots["Special Equipment"] = "special"
+
+	if(!slots.len)
+		to_chat(user, "<span class='warning'>That exosuit cannot be modified any further. There's no more legroom to eliminate!</span>")
+		return
+
+	var/slot_choice = input(user, "Which equipment slot would you like to expand?", "Slot Selection") as null|anything in slots
+	if(!slot_choice)
+		return
+
+	to_chat(user, "<span class='notice'>You begin modifying the exosuit.</span>")
+	working = TRUE
+
+	if(do_after(user, target, 4 SECONDS))
+		to_chat(user, "<span class='notice'>You finish modifying the exosuit!</span>")
+		switch(slot_choice)
+			if("Hull Equipment")
+				M.max_hull_equip++
+			if("Weapon Equipment")
+				M.max_weapon_equip++
+			if("Utility Equipment")
+				M.max_utility_equip++
+			if("Universal Equipment")
+				M.max_universal_equip++
+			if("Special Equipment")
+				M.max_special_equip++
+		qdel(src)
+	else
+		to_chat(user, "<span class='notice'>You stop modifying the exosuit.</span>")
+		working = FALSE
+	return 1
+
 /*
 /obj/item/weapon/mech_expansion_kit/preattack(atom/target, mob/user , proximity)
 	if(!proximity)

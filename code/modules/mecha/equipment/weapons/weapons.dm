@@ -7,12 +7,6 @@
 	equip_type = EQUIP_WEAPON
 	step_delay = 0.5
 
-/obj/item/mecha_parts/mecha_equipment/weapon/can_attach(var/obj/mecha/combat/M as obj, var/override = FALSE)
-	if(..())
-		if(istype(M) || override)
-			return 1
-	return 0
-
 /obj/item/mecha_parts/mecha_equipment/weapon/energy
 	name = "\improper General Energy Weapon"
 
@@ -504,6 +498,7 @@
 	caliber = null
 	no_caliber = TRUE
 	step_delay = 50
+	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas/action(target)
 	if(!action_checks(target))

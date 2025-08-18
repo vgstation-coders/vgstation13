@@ -86,57 +86,38 @@
 	R.icon_state = "killdozer"
 	R.initial_icon = "killdozer"
 	R.silicon_icon_state = "killdozer"
-	R.damage_absorption = list("brute"=0.01,"fire"=0.05,"bullet"=0.01,"laser"=0.05,"energy"=0.05,"bomb"=0.1) //good fucking luck killing it without ions
+//	R.damage_absorption = list("brute"=0.01,"fire"=0.05,"bullet"=0.01,"laser"=0.05,"energy"=0.05,"bomb"=0.1) //good fucking luck killing it without ions
 	R.step_in = 3//make it as slow as the mk2 ripley
 	R.fast_pressure_step_in = 3 // no atmos buffs
 	R.slow_pressure_step_in = 3
 	R.enclosed = TRUE //so bullets no longer hit the pilot
 
-	R.max_hull_equip = 2
-	R.max_weapon_equip = 2
-	R.max_utility_equip = 2
-	R.max_universal_equip = 1
-	R.max_special_equip = 2
+	R.max_hull_equip = 1
+	R.max_weapon_equip = 3
+	R.max_utility_equip = 1
+	R.max_universal_equip = 0
+	R.max_special_equip = 1
 
-	R.weight_max = 3
-	R.damage_minimum = 10
+	R.weight_max = 1500 // it doesn't
+	R.damage_minimum = 15
 
+	R.starting_components = list(
+		/obj/item/mecha_parts/component/hull/durable/killdozer,
+		/obj/item/mecha_parts/component/actuator/durable,
+		/obj/item/mecha_parts/component/armor/killdozer,
+		/obj/item/mecha_parts/component/gas/reinforced,
+		/obj/item/mecha_parts/component/electrical/durable
+		)
+
+	for(var/slot in chassis.internal_components)
+		var/obj/item/mecha_parts/component/C = chassis.internal_components[slot]
+		if(istype(C, /obj/item/mecha_parts/component))
+			qdel(C)
+
+	for(var/path in R.starting_components)
+		var/obj/item/mecha_parts/component/C = new path(src)
+		C.attach(R)
+		R.mech_parts.Add(C)
 
 /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit/detach()
 	return 0
-
-/obj/item/mecha_parts/mecha_equipment/speedboost
-	name = "ripley leg actuator overdrive"
-	desc = "System enhancements and overdrives to make a ripley's legs move faster."
-	icon_state = "tesla"
-	origin_tech = Tc_POWERSTORAGE + "=6" + Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;"
-	optimal_type = list(/obj/mecha/working/ripley)
-	equip_type = EQUIP_HULL
-	has_equip_overlay = FALSE
-
-
-	var/slowdown_multiplier = 0.75	// How much does the exosuit multiply its slowdown by if it's the proper type?
-	var/power_use_mod = 2
-
-/obj/item/mecha_parts/mecha_equipment/speedboost/attach(obj/mecha/M as obj)
-	..()
-	if(enable_special)
-		chassis.step_in = 3 // As fast as a gygax without overload. Slower than Ody.
-	else
-		chassis.step_in = 6 // Improper parts slow the mech down
-	chassis.step_energy_drain *= power_use_mod
-	return
-
-
-/obj/item/mecha_parts/mecha_equipment/speedboost/get_step_delay()
-	if(enable_special)
-		return -1
-	else
-		return 3
-
-/obj/item/mecha_parts/mecha_equipment/speedboost/detach()
-	chassis.step_in = initial(chassis.step_in)
-	chassis.step_energy_drain = initial(chassis.step_energy_drain)
-	..()
-	return
-

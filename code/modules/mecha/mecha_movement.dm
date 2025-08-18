@@ -49,19 +49,10 @@
 		tally -= weight_max
 
 	var/obj/item/mecha_parts/component/actuator/actuator = internal_components[MECH_ACTUATOR]
-	if(!actuator)	// No actuator = major slowdown
-		tally += 200
+	if(!actuator || actuator.integrity <= 0)
+		tally += 300
 	else
 		tally += 0.5 * (1 - actuator.get_efficiency())
-
-	for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
-		if(istype(ME, /obj/item/mecha_parts/mecha_equipment/speedboost))
-			var/obj/item/mecha_parts/mecha_equipment/speedboost/SB = ME
-			for(var/path in ME.optimal_type)
-				if(istype(src, path))
-					tally = round(tally * SB.slowdown_multiplier)
-					break
-			break
 
 	if(overload)
 		tally = min(100, round(tally/2))

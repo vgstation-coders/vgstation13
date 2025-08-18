@@ -32,9 +32,9 @@
 	var/dir_in = SOUTH//What direction will the mech face when entered/powered on? Defaults to South.
 	var/step_energy_drain = 10 //How much energy we consume in a single step
 	health = 300 //health is health
-	var/deflect_chance = 5 //chance to deflect the incoming projectiles, hits, or lesser the effect of ex_act.
+	var/deflect_chance = 0 //chance to deflect the incoming projectiles, hits, or lesser the effect of ex_act.
 	//the values in this list show how much damage will pass through, not how much will be absorbed.
-	var/list/damage_absorption = list("brute"=0.8,"fire"=1.2,"bullet"=0.9,"laser"=1,"energy"=1,"bomb"=1)
+	var/list/damage_absorption = list("brute"=1,"fire"=1,"bullet"=1,"laser"=1,"energy"=1,"bomb"=1)
 	var/obj/item/weapon/cell/cell = null
 	var/cell_type = /obj/item/weapon/cell/high/mecha
 	var/state = STATE_BOLTSHIDDEN
@@ -306,53 +306,19 @@
 	var/hull_condition = get_damage_string(HC)
 
 	if(AC)
-		var/repair_text = AC.integrity >= 5 ? " <span class='info'>It can be welded for repairs.</span>" : " <span class='danger'>It's too damaged to repair.</span>"
-		to_chat(user, "The armor plating appears [armor_condition].[repair_text]")
+		var/repair_text = AC.integrity >= 5 && AC.integrity < AC.max_integrity ? " <span class='info'>It can be welded for repairs.</span>" : ""
+		to_chat(user, "The [AC] appears [armor_condition].[repair_text]")
 	else
 		to_chat(user, "<span class='warning'>It lacks any armor plating.</span>")
 
 	if(HC)
-		var/repair_text = HC.integrity >= 5 ? " <span class='info'>It can be welded for repairs.</span>" : " <span class='danger'>It's too damaged to repair.</span>"
-		to_chat(user, "The hull structure appears [hull_condition].[repair_text]")
+		var/repair_text = HC.integrity >= 5 && HC.integrity < HC.max_integrity ? " <span class='info'>It can be welded for repairs.</span>" : ""
+		to_chat(user, "The [HC] appears [hull_condition].[repair_text]")
 	else
 		to_chat(user, "<span class='danger'>It lacks a proper hull structure.</span>")
 
 	if(!HC || HC.integrity <= 0)
 		to_chat(user, "<span class='warning'>The maintenance panel is exposed and accessible.</span>")
-
-/obj/mecha/proc/get_damage_string()
-	var/obj/item/mecha_parts/component/C
-	if(!C)
-		return "<span class='danger'>missing</span>"
-
-	var/eff = C.get_efficiency() * 100
-	switch(eff)
-		if(90 to 100)
-			return "<span class='info'>pristine</span>"
-		if(75 to 89)
-			return "<span class='notice'>slightly worn</span>"
-		if(50 to 74)
-			return "<span class='warning'>moderately damaged</span>"
-		if(25 to 49)
-			return "<span class='warning'>heavily damaged</span>"
-		if(10 to 24)
-			return "<span class='danger'>critically damaged</span>"
-		else
-			return "<span class='danger'>completely destroyed</span>"
-
-/*
-	if(AC)
-		to_chat(user, "<span class='notice'> It has [AC] attached. [AC.integrity >= 5 ?"On disarm intent, the [AC] can be sliced apart with a welder. ":""] [AC.get_efficiency()<0.5?"It is severely damaged.":""] </span>")
-	else
-		to_chat(user, "<span class='notice'>It does not seem to have armor plating.</span>")
-
-	if(HC)
-		to_chat(user, "<span class='notice'> It has [HC] attached. [HC.integrity >= 5 ?"On disarm intent, the [HC] can be sliced apart with a welder. ":""] [HC.get_efficiency()<0.5?"It is severely damaged.":""]</span>")
-	else
-		to_chat(user, "<span class='notice'>It does not seem to have a completed hull.</span>")
-
-	if(!HC || HC.integrity <= 0)
-		to_chat(user, "<span class='notice'>The [src]'s maintenance panel appears to be exposed.</span>")
 
 	if(enclosed)
 		return
@@ -360,7 +326,27 @@
 		to_chat(user, "<span class='info'>[src] appears to be piloting itself..</span>")
 	else
 		to_chat(user, "<span class='info'>You can see [occupant] inside.</span>")
-*/
+	return
+
+/obj/mecha/proc/get_damage_string(var/obj/item/mecha_parts/component/C)
+	if(!C)
+		return "<span class='danger'>missing</span>"
+
+	var/eff = C.get_efficiency() * 100
+	switch(eff)
+		if(95 to 100)
+			return "<span class='info'>pristine</span>"
+		if(80 to 94)
+			return "<span class='notice'>slightly worn</span>"
+		if(60 to 79)
+			return "<span class='warning'>moderately damaged</span>"
+		if(35 to 59)
+			return "<span class='warning'>heavily damaged</span>"
+		if(6 to 34)
+			return "<span class='danger'>critically damaged</span>"
+		else
+			return "<span class='danger'>completely destroyed</span>"
+
 /obj/mecha/proc/drop_item()//Derpfix, but may be useful in future for engineering exosuits.
 	return
 
@@ -407,7 +393,7 @@ Ions cause the armor and hull to disappear DONE!
 Throwing items cause the armor and hull to disappear DONE!
 Hull enclosure doesn't control atmos vulnerability
 
-Make examine text be much better and nicerer.
+Make examine text be much better and nicerer. DONE!
 
 Throws and melees do not work...
 */
@@ -480,7 +466,7 @@ Throws and melees do not work...
 	damage *= src.damage_absorption[type]
 	if(AC)
 		var/armor_efficiency = AC.get_efficiency()
-		var/damage_change = armor_efficiency * (damage * 0.5) * AC.damage_absorption[type]
+		var/damage_change = armor_efficiency * (damage * AC.armor_soak) * AC.damage_absorption[type]
 		AC.damage_part(damage_change, type)
 		damage -= damage_change
 		if(AC.integrity < 5)
@@ -488,7 +474,7 @@ Throws and melees do not work...
 	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
 	if(HC)
 		if(HC.integrity)
-			var/hull_absorb = round(rand(5, 10) / 10, 0.1) * (damage * 0.5)
+			var/hull_absorb = round(rand(5, 10) / 10, 0.1) * (damage * HC.hull_soak)
 			HC.damage_part(hull_absorb, type)
 			damage -= hull_absorb
 	for(var/component_key in internal_components)
@@ -496,7 +482,7 @@ Throws and melees do not work...
 			continue
 		var/obj/item/mecha_parts/component/C = internal_components[component_key]
 		if(C && prob(C.relative_size))
-			var/damage_part_amt = round(damage / 3, 0.1)
+			var/damage_part_amt = round(damage / 2, 0.1)
 			C.damage_part(damage_part_amt)
 			damage -= damage_part_amt
 	return damage
@@ -659,7 +645,7 @@ Throws and melees do not work...
 		if(O.throwforce)
 
 			var/pass_damage = O.throwforce
-			var/pass_damage_reduc_mod
+			var/pass_damage_reduc_mod = 1
 			if(pass_damage <= temp_damage_minimum)//Too little to go through.
 				src.occupant_message("<span class='notice'>\The [A] bounces off the armor.</span>")
 				src.visible_message("\The [A] bounces off \the [src] armor")
@@ -686,12 +672,12 @@ Throws and melees do not work...
 		if(prob(chance))
 			occupant.bullet_act(Proj)
 			visible_message("<span class='warning'>[occupant] is hit by \the [Proj]!")
-			Proj.on_hit(src,2)
-			if(Proj.penetration <= 5)
-				return PROJECTILE_COLLISION_DEFAULT
+			Proj.on_hit(src,0)
 	src.log_message("Hit by projectile. Type: [Proj.name]([Proj.flag]).",1)
 	call((proc_res["dynbulletdamage"]||src), "dynbulletdamage")(Proj) //calls equipment
-	return ..()
+	if(Proj.penetration <= 5)
+		return PROJECTILE_COLLISION_DEFAULT
+	return
 
 /obj/mecha/proc/dynbulletdamage(var/obj/item/projectile/Proj, var/penetrating = FALSE)
 
@@ -699,7 +685,12 @@ Throws and melees do not work...
 
 	var/temp_deflect_chance = 0
 	var/temp_damage_minimum = 0
-	var/penetration_reduction
+	var/penetration_reduction = 0
+	var/temp_proj_penetration = 0
+
+	if(istype(Proj, /obj/item/projectile/beam))
+		if(!Proj.penetration)
+			temp_proj_penetration = 3 // Lasers get a pen of 3
 
 	if(!ArmC || ArmC.integrity <= 5)
 		temp_deflect_chance = src.deflect_chance + (defense_mode ? 25 : 0)
@@ -742,18 +733,18 @@ Throws and melees do not work...
 			src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),ignore_threshold)
 
 		//AP projectiles have a chance to cause additional damage
-		if(Proj.penetration)
-			if(penetration_reduction)
-				Proj.penetration -= penetration_reduction
+		if(penetration_reduction)
+			Proj.penetration -= max(0, penetration_reduction)
+			temp_proj_penetration -= max(0, penetration_reduction)
+		if(Proj.penetration || temp_proj_penetration)
 			var/hit_occupant = 1 //only allow the occupant to be hit once
-			for(var/i in 1 to min(Proj.penetration, round(Proj.damage/3)))
+			for(var/i in 1 to min(Proj.penetration, round(Proj.damage/2)))
 				if(src.occupant && hit_occupant && prob(75))
 					occupant.bullet_act(Proj)
 					visible_message("<span class='warning'>[occupant] is hit by \the [Proj]!")
 					Proj.on_hit(src,2)
 					hit_occupant = 0
 					penetrating = TRUE
-					return PROJECTILE_COLLISION_DEFAULT
 				else
 					if(damage > internal_damage_minimum)	//Only decently painful attacks trigger a chance of mech damage.
 						src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT), 1)
@@ -836,7 +827,7 @@ Throws and melees do not work...
 	if(!istype(environment))
 		return
 
-	if(HC && HC.integrity <= 0)
+	if(HC && HC.integrity > 0)
 		max_temperature += HC.max_temperature
 
 	if(exposed_temperature>src.max_temperature && environment.return_pressure() >= HAZARD_HIGH_PRESSURE) // Has to be a sufficient pressure for fire to hurt mechs.
@@ -989,15 +980,12 @@ Throws and melees do not work...
 			SetPressure()
 			CheckLocks()
 		return
-
-	if(istype(W, /obj/item/ammo_storage/box))
+	if(istype(W, /obj/item/ammo_storage/box) || (istype(W, /obj/item/weapon/storage/box)))
 		resupply_box(W, user)
 		return
-
 	if(istype(W, /obj/item/ammo_casing))
 		resupply_single(W, user)
 		return
-
 	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if(add_req_access || maint_access)
 			if(internals_access_allowed(usr))
@@ -2030,9 +2018,9 @@ Throws and melees do not work...
 				mecha.setInternalDamage(MECHA_INT_TANK_BREACH)
 			var/datum/gas_mixture/int_tank_air = mecha.internal_tank.return_air()
 			if(int_tank_air && int_tank_air.return_volume()>0) //heat the air_contents
-				int_tank_air.temperature = min(mecha.max_temperature+T0C, int_tank_air.temperature+rand(10,15)) // This malfunction isn't supposed to actually melt the mech // This is a pretty nonsensical 'fix'
+				int_tank_air.temperature = min(mecha.max_temperature*0.8+T0C, int_tank_air.temperature+rand(10,15)) // This malfunction isn't supposed to actually melt the mech
 		if(mecha.cabin_air && mecha.cabin_air.return_volume()>0)
-			mecha.cabin_air.temperature = min(mecha.max_temperature+T0C, mecha.cabin_air.return_temperature()+rand(10,15))
+			mecha.cabin_air.temperature = min(mecha.max_temperature*0.8+T0C, mecha.cabin_air.return_temperature()+rand(10,15))
 			if(mecha.cabin_air.return_temperature()>mecha.max_temperature/2)
 				mecha.take_damage(4/round(mecha.max_temperature/mecha.cabin_air.return_temperature(),0.1), damage_type = "fire")
 	if(mecha.hasInternalDamage(MECHA_INT_TEMP_CONTROL)) //stop the mecha_preserve_temp loop datum
@@ -2119,7 +2107,7 @@ Throws and melees do not work...
 
 /obj/mecha/proc/CheckEnclosed() // Checks and sets if the mech is still enclosed
 	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
-	if(HC && HC.integrity >= 0)
+	if(HC && HC.integrity > 0)
 		enclosed = TRUE
 		SetPressure()
 		can_lock = TRUE
