@@ -1124,6 +1124,7 @@ var/list/has_died_as_golem = list()
 //	belt_icons      = 'icons/mob/belt.dmi'
 	wear_suit_icons = 'icons/mob/species/insectoid/suit.dmi'
 	wear_mask_icons = 'icons/mob/species/insectoid/mask.dmi'
+	accessory_icons = 'icons/mob/species/insectoid/clothing_accessories.dmi'
 //	back_icons      = 'icons/mob/back.dmi'
 
 

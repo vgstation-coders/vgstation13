@@ -1060,12 +1060,19 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	..()
 	if(W.sharpness_flags & SHARP_BLADE)
 		if(cut && cant_eat_msg)
-			new /obj/item/seeds/avocadoseed/whole(loc)
-			new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(loc)
-			user.create_in_hands(src, /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted, vismsg = "\The [user] removes the pit from \the [src] with \the [W].", msg = "You remove the pit from \the [src] with \the [W].")
+			var/obj/item/seeds/avocadoseed/whole/sneed = new(get_turf(src))
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted/slice = new(get_turf(src))
+			reagents.trans_to(slice, reagents.total_volume)
+			sneed.seed = seed
+			sneed.update_seed()
+			user.create_in_hands(src, slice, vismsg = "\The [user] removes the pit from \the [src] with \the [W].", msg = "You remove the pit from \the [src] with \the [W].")
 		else if(!cut)
-			var/list/halves = list(new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut(get_turf(src)), new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(get_turf(src)))
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/mypit = new(get_turf(src))
+			var/list/halves = list(new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(get_turf(src)), mypit)
+			for(var/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cado in halves)
+				reagents.trans_to(cado, (reagents.total_volume/2))
 			user.create_in_hands(src, pick(halves), vismsg = "\The [user] slices \the [src] in half with \the [W].", msg = "You slice \the [src] in half with \the [W].")
+			mypit.seed = seed
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut
 	name = "avocado half"

@@ -93,6 +93,7 @@
 		<TT>
 
 		<A href='byond://?src=\ref[src];send=1'>Send Signal</A><BR>
+		<A href='byond://?src=\ref[src];toggle_silent=1'>Button press sound: O[silent ? "ff" : "n"]</A><BR>
 		<B>Frequency/Code</B> for signaler:<BR>
 		Frequency:
 		<A href='byond://?src=\ref[src];freq=-10'>-</A>
@@ -146,6 +147,9 @@
 		spawn(0)
 			attempt_activate()
 
+	if(href_list["toggle_silent"])
+		silent = !silent
+
 	if(usr)
 		attack_self(usr)
 
@@ -163,6 +167,8 @@
 	signal.encryption = code
 	signal.data["message"] = "ACTIVATE"
 	radio_connection.post_signal(src, signal)
+	if(!silent)
+		playsound(src,'sound/items/assemblytick2.ogg',100)
 
 	if(istype(loc, /obj/item/device/assembly_holder))
 		investigation_log(I_WIRES, "used as signaler in \a [loc]. Last touched by: [fingerprintslast], Last user processed: [key_name(usr)] - [format_frequency(frequency)]/[code]")

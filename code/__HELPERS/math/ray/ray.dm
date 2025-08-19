@@ -186,7 +186,7 @@
 
 var/list/ray_draw_icon_cache = list()
 
-/ray/proc/draw(var/draw_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser", var/starting_distance=0.7, var/distance_from_endpoint=-0.5, var/step_size=0.5, var/lifetime=3, var/fade=TRUE, var/color_override=null, var/color_shift=null)
+/ray/proc/draw(var/draw_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser", var/starting_distance=0.7, var/distance_from_endpoint=-0.5, var/step_size=0.5, var/lifetime=3, var/fade=TRUE, var/color_override=null, var/color_shift=null, var/above_light=1)
 	var/distance_pointer = starting_distance
 	var/angle = direction.toAngle()
 	var/max_distance = draw_distance - distance_from_endpoint
@@ -206,8 +206,13 @@ var/list/ray_draw_icon_cache = list()
 		I.transform = matrix().Turn(angle)
 		I.pixel_x = pixels.x
 		I.pixel_y = pixels.y
-		I.plane = EFFECTS_PLANE
-		I.layer = PROJECTILE_LAYER
+		if (above_light)
+			I.plane = ABOVE_LIGHTING_PLANE
+			I.layer = ABOVE_LIGHTING_LAYER
+			I.luminosity = 2
+		else
+			I.plane = EFFECTS_PLANE
+			I.layer = PROJECTILE_LAYER
 
 		distance_pointer += step_size
 

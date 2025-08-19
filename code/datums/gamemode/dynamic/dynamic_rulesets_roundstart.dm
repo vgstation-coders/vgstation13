@@ -725,6 +725,21 @@ Assign your candidates in choose_candidates() instead.
 			head_check++
 	return (head_check >= required_heads)
 
+// Removes headrev candidates that are at an extreme risk of being outed as headrevs
+/datum/dynamic_ruleset/roundstart/delayed/revs/trim_candidates()
+	..()
+	for(var/mob/living/carbon/human/P in candidates) //required_type in the parent proc already filters non-humans
+		if(P.handcuffed) // We don't want people who are being dragged to the brig to become headrevs
+			candidates.Remove(P)
+			continue
+		var/area/A = get_area(P)
+		if(A && istype(A, /area/security)) // We also don't want people who are arrested to become headrevs
+			candidates.Remove(P)
+			continue
+		if(P.is_loyalty_implanted()) // No turning loyalty implanted people into headrevs, in case they were implanted shortly after game start
+			candidates.Remove(P)
+			continue
+
 /datum/dynamic_ruleset/roundstart/delayed/revs/choose_candidates()
 	var/max_canditates = 4
 	for(var/i = 1 to max_canditates)

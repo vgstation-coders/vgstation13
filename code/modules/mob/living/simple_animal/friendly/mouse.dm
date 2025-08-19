@@ -75,17 +75,11 @@
 		playsound(src, "[pick(emote_sound)]", 100, 1)
 
 	if(!ckey && stat == CONSCIOUS && prob(0.5) && !(status_flags & BUDDHAMODE))
-		stat = UNCONSCIOUS
-		wander = 0
-		speak_chance = 0
-		update_icon()
+		fall_asleep()
 		//snuffles
 	else if(stat == UNCONSCIOUS)
 		if(ckey || prob(1))
-			stat = CONSCIOUS
-			wander = 1
-			speak_chance = initial(speak_chance)
-			update_icon()
+			wake_up()
 		else if(prob(5))
 			emote("me", EMOTE_AUDIBLE, "snuffles")
 
@@ -220,11 +214,7 @@
 		share_contact_diseases(M,block,bleeding)
 
 	if(stat == UNCONSCIOUS && prob(33))
-		stat = CONSCIOUS
-		update_icon()
-		wander = 1
-		speak_chance = initial(speak_chance)
-		visible_message("\The [src] wakes up.")
+		wake_up()
 
 /mob/living/simple_animal/mouse/attackby(var/obj/item/O, var/mob/user, var/no_delay = FALSE, var/originator = null)
 	if(!..())
@@ -369,27 +359,49 @@
 	if(ishuman(AM))
 		var/mob/living/carbon/human/M = AM
 		if (M.on_foot())
-			if(!stat)
-				to_chat(M, "<span class='notice'>[bicon(src)] Squeek!</span>")
-				playsound(src, "[pick(emote_sound)]", 100, 1)
-			if (can_be_infected())
-				var/block = 0
-				var/bleeding = 0
-				if (lying)
-					block = M.check_contact_sterility(FULL_TORSO)
-					bleeding = M.check_bodypart_bleeding(FULL_TORSO)
-				else
-					block = M.check_contact_sterility(FEET)
-					bleeding = M.check_bodypart_bleeding(FEET)
+			if (M.m_intent == "walk")
+				to_chat(M, "<span class='warning'>You carefully step over \the [src].</span>")
+			else
+				if (stat == UNCONSCIOUS)
+					wake_up()
+				if(stat == CONSCIOUS)
+					to_chat(M, "<span class='notice'>[bicon(src)] Squeek!</span>")
+					playsound(src, "[pick(emote_sound)]", 100, 1)
+				if (can_be_infected())
+					var/block = 0
+					var/bleeding = 0
+					if (M.lying)
+						block = M.check_contact_sterility(FULL_TORSO)
+						bleeding = M.check_bodypart_bleeding(FULL_TORSO)
+					else
+						block = M.check_contact_sterility(FEET)
+						bleeding = M.check_bodypart_bleeding(FEET)
 
-				//sharing diseases with people stepping on us
-				share_contact_diseases(M,block,bleeding)
+					//sharing diseases with people stepping on us
+					share_contact_diseases(M,block,bleeding)
 	..()
 
 /mob/living/simple_animal/mouse/death(var/gibbed = FALSE)
 	if(client)
 		client.time_died_as_mouse = world.time
 	..(gibbed)
+
+
+/mob/living/simple_animal/mouse/proc/fall_asleep()
+	stat = UNCONSCIOUS
+	wander = 0
+	speak_chance = 0
+	update_icon()
+	visible_message("\The [src] takes a nap.")
+
+/mob/living/simple_animal/mouse/proc/wake_up()
+	if (stat == DEAD)
+		return
+	stat = CONSCIOUS
+	wander = 1
+	speak_chance = initial(speak_chance)
+	update_icon()
+	visible_message("\The [src] wakes up.")
 
 /mob/living/simple_animal/mouse/say_quote(text)
 	if(!text)

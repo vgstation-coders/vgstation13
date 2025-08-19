@@ -73,6 +73,68 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2025.08.19</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Mice now wake up when you step on them, and have visible messages when they take a nap or wake up.</li>
+				<li class="tweak">Stepping over mice while walking lets you &#34;carefully step over them&#34;, preventing them from squeaking, waking up, and more importantly, contracting their diseases.</li>
+				<li class="bugfix">Fixed walking over a mouse checking whether the mouse was lying down instead of the human to know whether to check sterility of the human&#39;s feet or torso.</li>
+			</ul>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Gym Rats, Pompadour Rats and ROID RATS will now notice that standing up lets them punch a fair bit harder at the cost of slower walking speed, and viceversa when laying down on all fours, with faster movement but weaker hits.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">All kinds of floor tiles can now be click dragged, not just metal. This includes placement on platings or lattices, where possible for each type.</li>
+				<li class="bugfix">Plasteel tile placement should now show the proper cursor image.</li>
+				<li class="rscadd">Signalers now play an actual sound when activated. This can be disabled in their settings.</li>
+				<li class="rscadd">Timers now play a countdown tick sound. This also has an option to increase in speed and pitch near the end, with both being on by default. This tick can also be disabled in settings.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug where if a mob was somehow nullspaced while still alive a shard would never explode from instability. This bug happened because it was trying to get a value out of a mob&#39;s turf, which did not exist because it was nullspaced.</li>
+				<li class="tweak">The game will no longer fire random events if the server has either no players online or no living players.</li>
+				<li class="bugfix">Fixed an oversight where an implanted person could become a head revolutionary. This could happen if a candidate was implanted within the first few minutes of the round.</li>
+				<li class="tweak">People who are being arrested should no longer be valid for being head revolutionaries.</li>
+			</ul>
+			<h3 class="author">mentgah updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The teeth necklace and the xeno necklace are now accessories.</li>
+			</ul>
+			<h3 class="author">vampirebat74 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed unusual behaviors related to slicing avocados</li>
+				<li class="rscadd">Allows players to re-name plants by using pens on their seed packets.</li>
+			</ul>
+			<h2 class="date">2025.08.13</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed the merch computer&#39;s transparent pixel.</li>
+			</ul>
+			<h2 class="date">2025.08.11</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Mr. V.A.L.I.D. portable threat detectors now properly toggle and clear logging for each category.</li>
+				<li class="spellcheck">Fixes a lot of missing spaces and extra full stops on small xenoarchaeology finds.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">melee nukies now get syndie viscerators instead of universal viscerators</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug where security camera consoles that were sabotaged by a malfunctioning AI could see if an APC was hacked by an AI if the lights were low enough.</li>
+				<li class="bugfix">Reduced the lag caused by creating too many sparks on one tile.</li>
+				<li class="bugfix">Fixed a bug where monkeys turned into humans via genetics took extra time to transform and would be invisible for a few seconds. They should now be properly interacted with after 2.2 seconds.</li>
+				<li class="tweak">The ninja&#39;s holograms now block flashes.</li>
+				<li class="tweak">Thralls will now become visibly disoriented when splashed with holy water.</li>
+			</ul>
+			<h2 class="date">2025.08.09</h2>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Simple animals such as mice and other creatures will now be shown intermediary temperature states instead of only feeling the cold or heat when it is already damaging them.</li>
+			</ul>
 			<h2 class="date">2025.08.08</h2>
 			<h3 class="author">SECBATON-GRIFFON updated:</h3>
 			<ul class="changes bgimages16">
@@ -1328,79 +1390,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<ul class="changes bgimages16">
 				<li class="bugfix">MoMMIs, Engineering cyborgs, and any cyborgs which have a fire shield installed will no longer catch on fire or take damage from fire.</li>
 				<li class="bugfix">Objects will properly stop smoking once they are removed from a hot room.</li>
-			</ul>
-			<h2 class="date">2024.09.04</h2>
-			<h3 class="author">jwhitak updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Thermostats now properly work when setting new temperatures.</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Updated rust-g to version 3.4.0.</li>
-			</ul>
-			<h2 class="date">2024.09.03</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed being able to walk through closed Firelocks after clicking on them while not having permission due to dangerous atmos conditions.</li>
-				<li class="bugfix">Fixed the leather glove &amp; handwraps not showing up on the character&#39;s sprite when worn.</li>
-				<li class="bugfix">Door Moody Lights no longer look much brighter than they should when door lights are flashing during their opening/closing/deny/emag animations.</li>
-				<li class="bugfix">Fixed stuff landing in disposals through windows.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="spellcheck">The merch computer entry for small cages now has a capitalised title, better grammar, and no extra full stop.</li>
-				<li class="spellcheck">Every other erroneous double full stop has also been fixed.</li>
-				<li class="bugfix">Players can now actually disallow item use when targeting with guns. As described, this will not count for turf or HUD clicks.</li>
-				<li class="bugfix">Moving in a vehicle now counts as moving when targeted with a gun.</li>
-				<li class="tweak">The message the player receives on being targeted now more helpfully tells them which restrictions are or are not in place.</li>
-				<li class="bugfix">Putting stacks in storage now properly updates their materials.</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Cigarettes will no longer ignite smokers. Big Tobacco wins again.</li>
-			</ul>
-			<h2 class="date">2024.09.02</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Chaplains who adhere to the Belmont religion now spawn with a box containing clothing reminiscent of Richter Belmont, and a flask of Sacred Water in their pocket. They can also throw their bible to hit people around them with it.</li>
-				<li class="rscadd">Sacred Water is a new reagent that turns Holy Water into more of itself when in contact with it. When splashed on a floor, it creates sacred flames that only burn the unholy (that is, vampires, cultists, and any other supernatural creature)</li>
-				<li class="rscadd">Players may now forge a Battle Cross out of silver at an anvil. Battle Crosses are basically boomerangs that deal bonus damage to supernatural creatures, but they only return to the hands of those of the Belmont religion.</li>
-				<li class="experiment">Boomerangs have been rewritten from scratch and now behave more like you would expect from a boomerang in a video game. They are now a lot more reliable so their damage has been lowered from 16 to 10, but they still feel really strong so I&#39;m looking forward to feedback by players who have been on both ends of a boomerang throw.</li>
-				<li class="imageadd">Boomerangs have also gotten a re-sprite.</li>
-				<li class="imageadd">Attacking supernatural creatures with holy weapons now displays a visual effect.</li>
-				<li class="imageadd">Kamina and Simon&#39;s glasses have gotten some visual adjustments on top of proper object icons. Furthermore, you can now unleash their power by using them in your hand and throwing them.</li>
-				<li class="bugfix">Fixed the wrong icon appearing for some bibles in the religion picker interface.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The mode change buttons on assemblies now properly refresh them.</li>
-				<li class="tweak">Assembly windows now refresh as the timers tick down, instead of manually with the refresh button.</li>
-				<li class="tweak">Unnecessary close and refresh buttons have now been removed from the UIs of timers, proximity sensors, infrared sensors and light tile remotes as these functions happen normally now.</li>
-			</ul>
-			<h2 class="date">2024.08.31</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The Floral Somatoray has been refactored and should now behave more as you might expect. You can use it on trays both at range and adjacently, although if someone is standing in-between they might get hit instead.</li>
-				<li class="rscadd">You can once again change the brute damage of bees by using the Floral Somatoray on apiaries while it&#39;s set to Morphology, while Development controls the yield. There are plans to allow further genetic alterations of bees in the future.</li>
-				<li class="rscadd">You can now use a solder to &#34;un-emag&#34; a floral somatoray.</li>
-				<li class="imageadd">The Floral Somatoray has had a sprite pass with its appearance depending on its currently selected mode. The rays it fire also change color based on the selected mode.</li>
-				<li class="soundadd">The Floral Somatoray makes a new sound when charging and firing at stuff.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="spellcheck">Typos on the mysterious d20 and mechanical toyboxes have been fixed</li>
-				<li class="bugfix">The hobo shacks and mine surprises now have dynamic lighting again.</li>
-				<li class="bugfix">Ghosts and admins can now jump to the areas of mining surprises and hobo shacks.</li>
-				<li class="bugfix">Normal ghosts can now haunt into the chapel again.</li>
-				<li class="rscadd">Admins now get a message if a bag of holding was quick equipped into another bag of holding really fast with hotkeys.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">slimefolk now get a proper feedback message if they don&#39;t have any limbs to regenerate with their special ability</li>
-			</ul>
-			<h3 class="author">hacker-on-steroids updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">vent pumps no longer appear on when unpowered</li>
 			</ul>
 		</div>
 		<!--
