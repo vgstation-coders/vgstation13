@@ -428,6 +428,14 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 4000)
 	build_path = /obj/item/ammo_storage/box/b380auto/rubber
+	
+/datum/design/ammo_b380auto/pepperball
+	name = "Ammunition box (.380AUTO pepperball)"
+	desc = "A box of .380AUTO pepperball cartridges."
+	id = "ammo_380auto_PB"
+	build_type = AMMOLATHE
+	materials = list(MAT_IRON = 4000)
+	build_path = /obj/item/ammo_storage/box/b380auto/pepperball
 
 /datum/design/ammo_38rubber
 	name = "Ammunition box (.38 rubber)"

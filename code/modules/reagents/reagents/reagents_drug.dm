@@ -636,3 +636,13 @@
 					return
 				else
 					E.fracture() //every bone in me body is broke - demoman
+
+/datum/reagent/grugzone
+	name = "Grugzone"
+	id = GRUGZONE
+	description = "Ooga Booga."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FF7400" //rgb: 255, 116, 0
+	custom_metabolism = 0.1
+	density = 2.12
+	specheatcap = 0.1996

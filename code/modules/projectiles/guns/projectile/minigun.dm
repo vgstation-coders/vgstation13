@@ -66,7 +66,12 @@
 		update_icon()
 		in_chamber = new gatlingbullet()//We create bullets as we are about to fire them. No other way to remove them.
 		if (casing_type)
-			new casing_type(get_turf(src))
+			var/atom/movable/AC = new casing_type(get_turf(src))
+			var/mob/M = get_holder_of_type(src, /mob/)
+			if(ismob(M))
+				var/target = get_ranged_target_turf(AC, turn(M.dir,pick(-45,-90,-90,-135,-135)), 5)
+				spawn(1)
+					AC.throw_at(target,rand(1,2),2)
 		return 1
 	return 0
 
@@ -126,13 +131,13 @@
 	icon_state = "hornetgun"
 	item_state = "hornetgun0"
 	gatlingbullet = /obj/item/projectile/bullet/beegun/hornet
-	
-	
+
+
 /obj/item/weapon/gun/gatling/beegun/ss_visceratorgun
 	name = "viscerator gun"
 	desc = "THE HAAAAAAACKS!"
 	icon_state = "ss_visceratorgun"
-	item_state = "ss_visceratorgun0"	
+	item_state = "ss_visceratorgun0"
 	gatlingbullet = /obj/item/projectile/bullet/beegun/ss_viscerator
 
 /obj/item/weapon/gun/gatling/batling

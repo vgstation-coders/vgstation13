@@ -15,6 +15,7 @@
 	var/list/components_in_use = null
 	var/build_state = 1
 	var/build_path = 0 //0 = Default path. 1 = Glass Frame
+	var/required_circuit_type = null
 
 	// For pods
 	var/list/connected_parts = list()
@@ -42,6 +43,9 @@
 	for(var/path in req_components)
 		amt += req_components[path]
 	return amt
+
+/obj/machinery/constructable_frame/machine_frame
+	required_circuit_type=MACHINE
 
 /obj/machinery/constructable_frame/machine_frame/attackby(obj/item/P as obj, mob/user as mob)
 	if(P.crit_fail)
@@ -125,7 +129,7 @@
 			if(!..())
 				if(istype(P, /obj/item/weapon/circuitboard))
 					var/obj/item/weapon/circuitboard/B = P
-					if(B.board_type == MACHINE)
+					if(B.board_type == required_circuit_type)
 						if(!user.drop_item(B, src, failmsg = TRUE))
 							return
 
@@ -193,7 +197,7 @@
 									O.forceMove(components_in_use)
 								else
 									O.forceMove(null)
-								new_machine.component_parts += O
+								new_machine.add_part(O)
 							if(circuit.contain_parts)
 								circuit.forceMove(components_in_use)
 							else
@@ -340,11 +344,8 @@ to destroy them and players will be able to make replacements.
 		if(!choice)
 			return
 		var/obj/item/tool/solder/S = O
-		if(!S.remove_fuel(4,user))
-			return
-		S.playtoolsound(loc, 50)
 		soldering = 1
-		if(do_after(user, src,4 SECONDS * S.work_speed))
+		if(S.do_solder(user, src,4 SECONDS,4,50))
 			user.create_in_hands(src, allowed_boards[choice], msg = "<span class='notice'>You fashion a crude [choice] board from the blank circuitboard.</span>")
 			return
 		soldering = 0
@@ -464,14 +465,6 @@ to destroy them and players will be able to make replacements.
 	icon_state = "door_electronics"
 	//origin_tech = Tc_PROGRAMMING + "=2"
 
-/obj/item/weapon/circuitboard/airlock
-	name = "Circuit board (Airlock)"
-	desc = "A circuit board used to operate airlocks and their access controls."
-	board_type= OTHER
-	icon = 'icons/obj/doors/door_assembly.dmi'
-	icon_state = "door_electronics"
-	//origin_tech = Tc_PROGRAMMING + "=2"
-
 /obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (R&D Server)"
 	desc = "A circuit board used to run a R&D server."
@@ -493,6 +486,17 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/manipulator = 2,
 							/obj/item/weapon/stock_parts/micro_laser = 2,
 							/obj/item/weapon/stock_parts/console_screen = 1)
+
+/obj/item/weapon/circuitboard/spiderbot_fabricator
+	name = "Circuit board (Spiderbot Fabricator)"
+	desc = "A circuit board used to run a spiderbot fabricator."
+	build_path = /obj/machinery/spiderbot_fabricator
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
+	req_components = list(
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 1)
 
 /obj/item/weapon/circuitboard/podfab
 	name = "Circuit board (Spacepod Fabricator)"
@@ -1718,3 +1722,4 @@ to destroy them and players will be able to make replacements.
 		/obj/item/weapon/stock_parts/manipulator = 2,
 		/obj/item/weapon/stock_parts/matter_bin = 1,
 	)
+

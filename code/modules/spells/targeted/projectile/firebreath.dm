@@ -8,21 +8,21 @@
 	proj_type = /obj/item/projectile/fire_breath
 
 	school = "evocation"
-	price = Sp_BASE_PRICE / 2
-	charge_max = 100
+	price = SP_BASE_PRICE / 2
+	charge_cooldown_max = 10 SECONDS
 	spell_flags = WAIT_FOR_CLICK | IS_HARMFUL
 	invocation = "SPY'SI MEAT'A'BAL"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 20
-	cooldown_min = 20
+	cooldown_min = 2 SECONDS
 
 	spell_aspect_flags = SPELL_FIRE
-	duration = 20
+	duration = 2 SECONDS
 	projectile_speed = 1
 	dumbfire = 0
 
 	var/pressure = ONE_ATMOSPHERE * 4.5
-	level_max = list(Sp_TOTAL = 8, Sp_SPEED = 4, Sp_POWER = 4)
+	level_max = list(SP_TOTAL = 8, SP_SPEED = 4, SP_POWER = 4)
 
 	hud_state = "wiz_firebreath"
 
@@ -30,16 +30,16 @@
 	return new proj_type(location, direction, P = pressure)
 
 /spell/targeted/projectile/dumbfire/firebreath/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
+	if(upgrade_type == SP_POWER)
 		return "Increase the size of the fire plume."
 	return ..()
 
 /spell/targeted/projectile/dumbfire/firebreath/empower_spell()
-	spell_levels[Sp_POWER]++
+	spell_levels[SP_POWER]++
 
 	var/current_name = name
 	var/explosion_description = "The plume of fire you breathe will now be larger."
-	switch(spell_levels[Sp_POWER])
+	switch(spell_levels[SP_POWER])
 		if(0)
 			name = "Fire Breath"
 			explosion_description = "You can now breathe fire."

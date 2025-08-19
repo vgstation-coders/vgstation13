@@ -477,3 +477,10 @@
 
 /obj/item/clothing/gloves/hunter/rangeTackleBonus()
 	return 1
+
+/obj/item/clothing/gloves/sonicman
+	name = "sonicman gloves"
+	desc = "A pair of gloves, hand-stitched with a custom logo."
+	icon_state = "sonicmangloves"
+	item_state = "sonicmangloves"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/gloves.dmi', "right_hand" = 'icons/mob/in-hand/right/gloves.dmi')

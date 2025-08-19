@@ -27,6 +27,12 @@ var/global/list/mineralSpawnChance[]
 		"Diamond"   = 1,
 		"Ice Cave"  = 1,
 	)
+	mineralSpawnChance["mecha_high"] = list(
+		"Nanotrasite" = 30,
+		"Electrum"  = 20,
+		"Plasma"    = 10,
+		"Diamond"   = 2,
+	)
 	mineralSpawnChance["random_high"] = list(
 		"Uranium" = 10,
 		"Iron"    = 30,
@@ -654,6 +660,7 @@ var/list/icon_state_to_appearance = list()
 	if(prob(20) && icon_state == "asteroid")
 		icon_state = "asteroid[rand(0,12)]"
 	add_rock_overlay()
+	footstep_sound = sounds_asteroid
 
 /turf/unsimulated/floor/asteroid/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', overlay_state,layer = SIDE_LAYER),var/offset=-4)
 	if(!overlay_state || overlay_state == "")
@@ -743,6 +750,9 @@ var/list/icon_state_to_appearance = list()
 		icon_state = "asteroid[rand(0,12)]"
 	icon_regular_floor = initial(icon_state)
 	add_rock_overlay()
+
+	footstep_sound = sounds_asteroid
+
 
 /turf/simulated/floor/asteroid/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', overlay_state,layer = SIDE_LAYER),var/offset=-4)
 	if(!overlay_state || overlay_state == "")
@@ -886,6 +896,11 @@ var/list/icon_state_to_appearance = list()
 	base_icon_state = "snow_rock"
 	mined_type = /turf/unsimulated/floor/snow/permafrost
 	overlay_state = "snow_rock_overlay"
+
+/turf/unsimulated/mineral/random/high_chance/mecha
+	icon_state = "rock(high)"
+	mineralChance = 40 //there's 46 turfs currently in the mecha graveyard...
+	mineralPool = "mecha_high"
 
 /turf/unsimulated/mineral/uranium
 	name = "Uranium deposit"

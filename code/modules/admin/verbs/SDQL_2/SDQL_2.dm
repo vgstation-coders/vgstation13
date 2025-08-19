@@ -127,7 +127,7 @@
 						CHECK_TICK
 					if(!text)
 						text = "None found."
-					usr << browse(text, "window=SDQL-result")
+					usr << browse(HTML_SKELETON(text), "window=SDQL-result")
 
 				if("update")
 					if("set" in query_tree)

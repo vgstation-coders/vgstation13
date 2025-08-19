@@ -64,6 +64,8 @@
 	minbodytemp = 0
 	held_items = list()
 
+	avoids_poisonous=TRUE
+	
 	//keeping this here for later color matrix testing
 	var/a_matrix_testing_override = FALSE
 	var/a_11 = 1
@@ -131,6 +133,7 @@
 /mob/living/simple_animal/hostile/giant_spider/get_butchering_products()
 	return list(/datum/butchering_product/spider_legs)
 
+
 //Can we actually attack a possible target?
 /mob/living/simple_animal/hostile/giant_spider/CanAttack(var/atom/the_target)
 	if(istype(the_target,/obj/machinery/light))
@@ -184,7 +187,7 @@
 	if(dark_plane)
 		if (master_plane)
 			master_plane.blend_mode = BLEND_ADD
-		dark_plane.alphas["spider"] = 15 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
+		dark_plane.alphas["spider"] = 0 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
 		client.color = list(
 			1,0,0,0,
 			0,0.2,0,0,
@@ -217,3 +220,6 @@
 			healths.icon_state = "health4"
 		else
 			healths.icon_state = "health5"
+
+/mob/living/simple_animal/hostile/giant_spider/jungle
+	faction="jungle"

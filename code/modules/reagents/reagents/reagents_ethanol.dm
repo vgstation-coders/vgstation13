@@ -496,7 +496,7 @@
 		glass_icon_state = "scientists_serendipity"
 		glass_name = "\improper Scientist's Sapience"
 		glass_desc = "Why research what has already been catalogued?"
-		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5;illegal=1;nanotrasen=1;syndicate=2" //Maxes everything but Illegal and Anomaly
+		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=6;combat=6;magnets=6;programming=5;syndicate=2" //Maxes everything but Illegal and Anomaly //the heck is illegal research...
 
 /datum/reagent/ethanol/beepskyclassic
 	name = "Beepsky Classic"
@@ -580,10 +580,10 @@
 		fakespell.desc = fromwhichwetake.desc
 		fakespell.hud_state = fromwhichwetake.hud_state
 		fakespell.invocation = "MAH'JIK"
-		fakespell.invocation_type = SpI_SHOUT
-		fakespell.charge_type = Sp_CHARGES
+		fakespell.invocation_type = SP_INV_SHOUT
+		fakespell.charge_type = SP_CHARGES
 		fakespell.charge_counter = 0
-		fakespell.charge_max = 1
+		fakespell.charge_cooldown_max = 1 CHARGES
 		if(prob(20))
 			fakespell.name = name_modifier + fakespell.name
 		fake_spells += fakespell
@@ -597,9 +597,9 @@
 			var/mob/living/carbon/human/H = M
 			var/spell/thisisdumb = new /spell/targeted/equip_item/robesummon
 			H.add_spell(thisisdumb)
-			thisisdumb.charge_type = Sp_CHARGES
+			thisisdumb.charge_type = SP_CHARGES
 			thisisdumb.charge_counter = 1
-			thisisdumb.charge_max = 1
+			thisisdumb.charge_cooldown_max = 1 CHARGES
 			H.cast_spell(thisisdumb,list(H))
 		holder.remove_reagent(MAGICADELUXE,5)
 
@@ -853,6 +853,32 @@
 	glass_icon_state = "aleglass"
 	glass_desc = "A cold pint of delicious ale."
 
+/datum/reagent/ethanol/drink/cider
+	name = "Cider"
+	id = CIDER
+	description = "Alcoholic, fermented apples."
+	nutriment_factor = 2 * REAGENTS_METABOLISM
+	color = "#ffee88"
+	glass_icon_state = "ciderglass"
+	glass_desc = "The hard kind. Alcoholic."
+
+/datum/reagent/ethanol/drink/stout
+	name = "Stout"
+	id = STOUT
+	description = "Warm fermented alcohol. A good source of iron."
+	nutriment_factor = 4 * REAGENTS_METABOLISM
+	color = "#301000"
+	glass_icon_state = "stoutglass"
+	glass_desc = "The black shtuff. A day's meal in a glass."
+	plant_nutrition = 2
+	plant_watering = 2
+
+/datum/reagent/ethanol/drink/stout/on_mob_life(mob/living/M)
+	if(..())
+		return 1
+
+	M.reagents.add_reagent(IRON,REAGENTS_METABOLISM)
+
 /datum/reagent/ethanol/drink/thirteenloko
 	name = "Thirteen Loko"
 	id = THIRTEENLOKO
@@ -878,6 +904,15 @@
 	glass_desc = "A delightful blush-pink cocktail, garnished with a cherry and the rind of a lemon."
 
 /////////////////////////////////////////////////////////////////Cocktail Entities//////////////////////////////////////////////
+
+/datum/reagent/ethanol/drink/snakebite
+	name = "Snakebite"
+	id = SNAKEBITE
+	description = "This appears to be beer mixed with cider."
+	nutriment_factor = 2 * REAGENTS_METABOLISM
+	color = "#802000"
+	glass_icon_state = "aleglass"
+	glass_desc = "This cocktail was illegal to serve from the same booze dispenser's taps until 2510."
 
 /datum/reagent/ethanol/drink/bilk
 	name = "Bilk"
@@ -1582,13 +1617,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "iced_beerglass"
-
-/datum/reagent/ethanol/drink/iced_beer/on_mob_life(var/mob/living/M)
-	if(..())
-		return 1
-
-	if(M.bodytemperature < T0C+33)
-		M.bodytemperature = min(T0C+33, M.bodytemperature - 4) //310 is the normal bodytemp. 310.055
+	adj_temp = -4
 
 /datum/reagent/ethanol/drink/grog
 	name = "Grog"
@@ -1975,3 +2004,18 @@
 		return 1
 	H.radiation = max(H.radiation - 5 * REM, 0)
 	H.rad_tick = max(H.rad_tick - 3 * REM, 0)
+
+/datum/reagent/ethanol/drink/chumpari
+	name = "Chumpari"
+	id = CHUMPARI
+	description = "Drinking this nasty mix will probably make you vomit."
+	color = "#DD0000" //rgb: 54, 20, 18
+	glass_icon_state = "dragonsspit"
+	glass_desc = "A glass of the worst thing to come out of Italy."
+
+/datum/reagent/ethanol/drink/chumpari/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(ishuman(M) && prob(5))
+		var/mob/living/carbon/human/H = M
+		H.vomit()

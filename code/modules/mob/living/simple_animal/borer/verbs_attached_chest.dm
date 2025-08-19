@@ -50,7 +50,7 @@
 	spawn(5 SECONDS)
 		var/dat
 		dat = format_host_data(get_host_data())
-		src << browse(dat, "window=borerscan;size=430x600")
+		src << browse(HTML_SKELETON(dat), "window=borerscan;size=430x600")
 		return
 
 /mob/living/simple_animal/borer/proc/get_host_data()

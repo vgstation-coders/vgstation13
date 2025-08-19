@@ -144,6 +144,7 @@ steam.start() -- spawns the effect
 /////////////////////////////////////////////
 
 #define SPARK_TEMP 500
+#define SPARK_TURF_LIMIT 8
 
 /obj/effect/sparks
 	name = "sparks"
@@ -228,11 +229,17 @@ steam.start() -- spawns the effect
   */
 /proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = FALSE, var/silent = FALSE)
 	loc = get_turf(loc)
+	var/tally = -1 //Prevent the sparks from starting if there are already too many sparks on the same tile. -1 to exclude itself
+	for(var/obj/effect/sparks/S in loc.contents)
+		tally++
+	if(tally >= SPARK_TURF_LIMIT)
+		return
 	var/datum/effect/system/spark_spread/S = new
 	S.set_up(amount, cardinals, loc)
 	S.start(surfaceburn, silent)
 
 #undef SPARK_TEMP
+#undef SPARK_TURF_LIMIT
 
 /////////////////////////////////////////////
 //// SMOKE SYSTEMS
@@ -467,9 +474,7 @@ steam.start() -- spawns the effect
 /datum/effect/system/smoke_spread/chem/New()
 	..()
 	chemholder = new/obj()
-	var/datum/reagents/R = new/datum/reagents(500)
-	chemholder.reagents = R
-	R.my_atom = chemholder
+	chemholder.create_reagents(500)
 
 /datum/effect/system/smoke_spread/chem/set_up(var/datum/reagents/carry = null, n = 5, c = 0, loca, direct)
 	if(n > 20)
@@ -626,6 +631,8 @@ steam.start() -- spawns the effect
 	if(src.processing)
 		src.processing = 0
 		spawn(0)
+			if(!holder)
+				return
 			var/turf/T = get_turf(src.holder)
 			if(currloc != T)
 				switch(holder.dir)

@@ -111,7 +111,7 @@ var/list/cult_parallax[(GRID_WIDTH**2)]
 
 /datum/hud/proc/update_parallax()
 	var/client/C = mymob.client
-	if(C.prefs.space_parallax)
+	if(C.prefs.get_pref(/datum/preference_setting/toggle/space_parallax))
 		parallax_on_clients |= C
 		for(var/obj/abstract/screen/parallax/bgobj in C.parallax)
 			C.screen |= bgobj
@@ -168,7 +168,7 @@ var/list/cult_parallax[(GRID_WIDTH**2)]
 
 		C.screen |= C.parallax_master
 		C.screen |= C.parallax_spacemaster
-		if(C.prefs.space_dust)
+		if(C.prefs.get_pref(/datum/preference_setting/toggle/space_dust))
 			switch(starlight)
 				if (STARLIGHT_REDSHIFT)
 					C.parallax_dustmaster.color = list(
@@ -226,8 +226,8 @@ var/list/cult_parallax[(GRID_WIDTH**2)]
 	C.previous_turf = posobj
 
 	for(var/obj/abstract/screen/parallax/bgobj in C.parallax_movable)
-		var/accumulated_offset_x = bgobj.base_offset_x - round(offsetx * bgobj.parallax_speed * C.prefs.parallax_speed)
-		var/accumulated_offset_y = bgobj.base_offset_y - round(offsety * bgobj.parallax_speed * C.prefs.parallax_speed)
+		var/accumulated_offset_x = bgobj.base_offset_x - round(offsetx * bgobj.parallax_speed * C.prefs.get_pref(/datum/preference_setting/numerical/parallax_speed))
+		var/accumulated_offset_y = bgobj.base_offset_y - round(offsety * bgobj.parallax_speed * C.prefs.get_pref(/datum/preference_setting/numerical/parallax_speed))
 
 		//This part makes the Parallax wrap around
 		while(accumulated_offset_x > PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE)

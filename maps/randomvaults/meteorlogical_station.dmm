@@ -356,51 +356,7 @@
 	},
 /area/vault/meteorlogical)
 "be" = (
-/obj/structure/grille,
-/obj/structure/window/full,
-/obj/structure/window,
-/obj/structure/window{
-	dir = 8
-	},
-/obj/structure/window{
-	dir = 1
-	},
-/obj/structure/window{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/vault/meteorlogical)
-"bf" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating,
-/area/vault/meteorlogical)
-"bg" = (
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating,
-/area/vault/meteorlogical)
-"bh" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/obj/structure/window/full/reinforced,
+/obj/structure/grille/window_spawner/full,
 /turf/simulated/floor/plating,
 /area/vault/meteorlogical)
 "bi" = (
@@ -430,18 +386,7 @@
 /turf/unsimulated/floor/asteroid/plating,
 /area/vault/meteorlogical)
 "bo" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/full/reinforced,
-/obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced/full,
 /turf/simulated/floor/plating,
 /area/vault/meteorlogical)
 "bp" = (
@@ -825,7 +770,7 @@ aN
 aS
 aX
 aV
-bf
+bo
 bn
 br
 bt
@@ -852,7 +797,7 @@ aN
 aT
 aI
 aV
-bg
+bo
 bn
 bn
 bn
@@ -879,7 +824,7 @@ aN
 aN
 aY
 aV
-bh
+bo
 bn
 bs
 bu

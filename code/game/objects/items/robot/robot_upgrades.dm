@@ -279,7 +279,7 @@
 
 /obj/item/borg/upgrade/organ_gripper
 	name = "medical cyborg organ gripper upgrade"
-	desc = "Used to give a medical cyborg a organ gripper."
+	desc = "Used to give a medical cyborg an organ gripper."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper-medical"
 	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
@@ -307,7 +307,7 @@
 
 /obj/item/borg/upgrade/magnetic_gripper
 	name = "engineering cyborg magnetic gripper upgrade"
-	desc = "Used to give a engineering cyborg a magnetic gripper."
+	desc = "Used to give an engineering cyborg a magnetic gripper."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper"
 	required_modules = list(ENGINEERING_MODULE)
@@ -316,10 +316,19 @@
 //Service Stuff
 /obj/item/borg/upgrade/hydro
 	name = "service cyborg H.U.E.Y. upgrade board"
-	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and glass containers."
+	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and diskettes."
 	icon_state = "mainboard"
 	required_modules = list(SERVICE_MODULE)
-	modules_to_add = list(/obj/item/weapon/minihoe, /obj/item/tool/wirecutters/clippers, /obj/item/weapon/storage/bag/plants/portactor, /obj/item/device/analyzer/plant_analyzer)
+	modules_to_add = list(
+		/obj/item/weapon/minihoe,
+		/obj/item/weapon/hatchet,
+		/obj/item/weapon/pickaxe/shovel/spade,
+		/obj/item/tool/wirecutters/clippers,
+		/obj/item/weapon/storage/bag/plants/portactor,
+		/obj/item/device/analyzer/plant_analyzer,
+		/obj/item/weapon/reagent_containers/glass/bottle/robot/water,
+		/obj/item/weapon/reagent_containers/glass/bottle/robot/eznutrient
+		)
 
 /obj/item/borg/upgrade/hydro/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -330,6 +339,19 @@
 		return FAILED_TO_ADD
 
 	G.can_hold.Add(/obj/item/seeds, /obj/item/weapon/disk/botany)
+	G.valid_containers.Add(/obj/item/weapon/storage/lockbox/diskettebox/open/botanydisk,/obj/item/weapon/storage/lockbox/diskettebox/large/open/botanydisk)
+
+/obj/item/borg/upgrade/hydro_adv
+	name = "service cyborg H.U.E.Y. MK-2 upgrade board"
+	desc = "Used to give a service cyborg more hydroponics tools to combat vines and mutate plants."
+	icon_state = "mainboard"
+	required_modules = list(SERVICE_MODULE)
+	required_upgrades = list(/obj/item/borg/upgrade/hydro)
+	modules_to_add = list(
+		/obj/item/floral_somatoray,
+		/obj/item/weapon/scythe,
+		/obj/item/weapon/reagent_containers/spray/plantbgone
+		)
 
 /obj/item/borg/upgrade/honk
 	name = "service cyborg H.O.N.K. upgrade board"

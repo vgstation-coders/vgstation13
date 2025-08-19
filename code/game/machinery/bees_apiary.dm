@@ -82,6 +82,9 @@ var/list/apiaries_list = list()
 		update_icon()
 
 /obj/machinery/apiary/attack_hand(var/mob/user)
+	if(isobserver(user) && !isAdminGhost(user))
+		to_chat(user, "<span class='warning'>Your ghostly limb passes right through \the [src].</span>")
+		return
 	if(reagents.total_volume <= 0)
 		alert(user,"There's no honey to harvest yet!","[name]","Ok")
 		return

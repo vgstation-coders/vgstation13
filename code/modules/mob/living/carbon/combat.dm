@@ -22,7 +22,8 @@
 
 
 //Checks armor, special attackby of object instances, and miss chance
-/mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
+//This intentionally does not use the "force" variable, as it performs its own damage calculations for carbon mobs.
+/mob/living/carbon/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor, var/force)
 	if(!I || !user)
 		return FALSE
 	var/accuracy_modifier = get_total_accuracy_modifier(user, src) //Negative value make it more likely to hit, and the opposite for positive values
@@ -217,7 +218,7 @@
 		tR += 1
 	if(spell_list.len)
 		var/spell/targeted/leap/leapTackle = locate(/spell/targeted/leap) in spell_list
-		if(leapTackle && leapTackle.charge_counter >= leapTackle.charge_max)
+		if(leapTackle && leapTackle.charge_counter >= leapTackle.charge_cooldown_max)
 			tR += 2
 			leapTackle.take_charge()
 	return tR

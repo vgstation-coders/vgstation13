@@ -1,4 +1,7 @@
-var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXIN, MINDBREAKER, SPIRITBREAKER, CYANIDE, IMPEDREZENE, LUBE)
+//reagents that should adminwarn upon transfer
+var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXIN, MINDBREAKER, SPIRITBREAKER, CYANIDE, IMPEDREZENE, LUBE, CHEFSPECIAL, AMANITIN)
+//dangerous reagents that should always be logged upon transfer no matter what
+var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECIAL, AMANITIN)
 
 /obj
 	var/origin_tech = null	//Used by R&D to determine what research bonuses it grants.
@@ -172,10 +175,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	if(handle_item_attack(W, user))
 		return
-	
+
 	if(emag_check(W,user))
 		. = 1
-			
+
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
@@ -234,7 +237,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return 0
 	else
 		delayNextpAIMove(getpAIMovementDelay())
-		if (user.client.prefs.stumble && ((world.time - user.last_movement) > 5) && getpAIMovementDelay() < 2)
+		if (user.client.prefs.get_pref(/datum/preference_setting/toggle/stumble) && ((world.time - user.last_movement) > 5) && getpAIMovementDelay() < 2)
 			delayNextpAIMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 		user.last_movement=world.time
 		return 1
@@ -464,13 +467,11 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/datum/gas_mixture/G = return_air()
 	if(!G)
 		return
-	while(G.temperature >= (autoignition_temperature * 0.75))
-		if(!G)
-			break
+	while(G && G.temperature >= (autoignition_temperature * 0.75))
 		if(!smoking)
 			add_particles(PS_SMOKE)
 			smoking = TRUE
-		var/rate = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+		var/rate = clamp(lerp_generic(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
 		adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
 		sleep(10 SECONDS)
 		G = return_air()
@@ -613,7 +614,7 @@ a {
 		else
 			dat += "<p><b>MULTITOOL BUFFER:</b> <a href='?src=\ref[src];buffer=1'>\[Add Machine\]</a></p>"
 	dat += "</body></html>"
-	user << browse(dat, "window=mtcomputer")
+	user << browse(HTML_SKELETON(dat), "window=mtcomputer")
 	user.set_machine(src)
 	onclose(user, "mtcomputer")
 
@@ -973,10 +974,10 @@ a {
  * Arguments:
  * * ID- An ID card representing what access we have (and thus if we can open things like airlocks or windows to pass through them). The ID card's physical location does not matter, just the reference
  * * to_dir- What direction we're trying to move in, relevant for things like directional windows that only block movement in certain directions
- * * caller- The movable we're checking pass flags for, if we're making any such checks
+ * * astar_caller- The movable we're checking pass flags for, if we're making any such checks
  **/
-/obj/proc/CanAStarPass(obj/item/weapon/card/id/ID, to_dir, atom/movable/caller)
-	if(istype(caller) && (caller.pass_flags & pass_flags_self))
+/obj/proc/CanAStarPass(obj/item/weapon/card/id/ID, to_dir, atom/movable/astar_caller)
+	if(istype(astar_caller) && (astar_caller.pass_flags & pass_flags_self))
 		return TRUE
 	. = !density
 

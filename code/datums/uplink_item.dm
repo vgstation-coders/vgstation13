@@ -17,6 +17,8 @@ var/list/discounted_items_of_the_round = list()
 	var/list/possible_picks = list()
 	for (var/thing in traitor_items)
 		var/datum/uplink_item/u_item = thing
+		if(initial(u_item.cost) <= 1) // no point discounting these
+			continue
 		if (thing in forbidden_items)
 			continue
 		if (initial(u_item.item))
@@ -1070,6 +1072,14 @@ var/list/discounted_items_of_the_round = list()
 	discounted_cost = 10
 	jobs_with_discount = list("Chef")
 
+/datum/uplink_item/jobspecific/service/kitchengun
+	name = "Kitchen Gun"
+	desc = "An otherwise ordinary glock that also has the power to completely clean the surface of anything it's fired on in three shots. Causes the holder to shout their speech loudly while held. Comes with night vision goggles for after dark cleaning."
+	item = /obj/item/weapon/storage/box/syndie_kit/kitchengun
+	cost = 14
+	discounted_cost = 10
+	jobs_with_discount = list("Chef","Janitor")
+
 /datum/uplink_item/jobspecific/service/cautionsign
 	name = "Proximity Mine Wet Floor Sign"
 	desc = "An anti-personnel proximity mine cleverly disguised as a wet floor caution sign that is triggered by running past it. Interact with it to start the 15 second timer and activate it again to disarm."
@@ -1337,6 +1347,15 @@ var/list/discounted_items_of_the_round = list()
 	discounted_cost = 6
 	jobs_exclusive = list("Trader","Vox","Skeletal Vox")
 	jobs_with_discount = list("Trader","Cargo Technician","Quartermaster")
+
+/datum/uplink_item/jobspecific/trader/hfboots
+	name = "High Frequency Vox Boots"
+	desc = "A modified pair of Vox boots, its magnetic grip technology replaced with high frequency talon blades that can kick doors open."
+	item = /obj/item/clothing/shoes/knifeboot/vox
+	cost = 7
+	discounted_cost = 5
+	jobs_exclusive = list("Trader","Vox","Skeletal Vox")
+	jobs_with_discount = list("Trader")
 
 /datum/uplink_item/jobspecific/cannedmatter
 	category = "Skrell Specials"

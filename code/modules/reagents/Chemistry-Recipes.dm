@@ -85,7 +85,7 @@
 		if(L.stat != DEAD)
 			e.amount *= 0.5
 	e.start()
-	holder.clear_reagents()
+	holder.clear_reagents(TRUE)
 	holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
 
 /datum/chemical_reaction/explosion_potassium/holy
@@ -785,7 +785,7 @@
 			S.start()
 			sleep(10)
 			S.start()
-	holder.clear_reagents()
+	holder.clear_reagents(TRUE)
 
 /datum/chemical_reaction/chemsmoke/bleach
 	name = "Bleach Fumes"
@@ -1200,7 +1200,7 @@
 		var/datum/effect/system/foam_spread/s = new()
 		s.set_up(created_volume, location, holder, 0)
 		s.start()
-	holder.clear_reagents()
+	holder.clear_reagents(TRUE)
 
 /datum/chemical_reaction/metalfoam
 	name = "Metal Foam"
@@ -2120,9 +2120,8 @@
 	required_container = /obj/item/slime_extract/adamantine
 
 /datum/chemical_reaction/slime_extract/slimegolem/on_reaction(var/datum/reagents/holder)
-	var/obj/effect/golem_rune/Z = new /obj/effect/golem_rune
-	Z.forceMove(get_turf(holder.my_atom))
-	Z.announce_to_ghosts()
+	var/obj/effect/decal/cleanable/golem_rune/Z = new /obj/effect/decal/cleanable/golem_rune(get_turf(holder.my_atom))
+	Z.creator = usr
 	..()
 
 /datum/chemical_reaction/slime_extract/slimediamond2
@@ -2536,6 +2535,13 @@
 	required_reagents = list(FLOUR = 10, MILK = 30, LIQUIDBUTTER = 2, EGG_YOLK = 8, SODIUMCHLORIDE = 1, SUGARS = 5)
 	result_amount = 56 // 1:1
 
+/datum/chemical_reaction/paincake_mix
+	name = "Paincake Mix"
+	id = PAINCAKE
+	result = PAINCAKE
+	required_reagents = list(NOVAFLOUR = 10, MILK = 30, LIQUIDBUTTER = 2, EGG_YOLK = 8, SODIUMCHLORIDE = 1, SUGARS = 5) //Not sure if I should replace the egg with pacid, so it's just a flour difference.
+	result_amount = 56 // 1:1
+
 //Jesus christ how horrible
 /datum/chemical_reaction/cream
 	name = "Cream"
@@ -2731,6 +2737,21 @@
 	result = BEER
 	required_reagents = list(FLOUR = 10)
 	required_catalysts = list(ENZYME = 5)
+	result_amount = 10
+
+/datum/chemical_reaction/applecider
+	name = "Apple Cider"
+	id = CIDER
+	result = CIDER
+	required_reagents = list(APPLEJUICE = 10)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 10
+
+/datum/chemical_reaction/snakebite
+	name = "Snakebite"
+	id = SNAKEBITE
+	result = SNAKEBITE
+	required_reagents = list(BEER = 5, CIDER = 5)
 	result_amount = 10
 
 /datum/chemical_reaction/vodka
@@ -4000,6 +4021,7 @@
 	id = null
 	result = null
 	result_amount = 1
+	var/mobAprob = 80
 	var/mob2spawnA = null
 	var/mob2spawnB = null
 
@@ -4039,7 +4061,7 @@
 	if(!location)
 		location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
-		if(prob(80)) //here so aminoblatella can spawn its two variants of roach on the mutagen reaction, does not affect aminocyprinidol, since that only makes baby carps
+		if(prob(mobAprob)) //here so aminoblatella can spawn its two variants of roach on the mutagen reaction, does not affect aminocyprinidol, since that only makes baby carps
 			new mob2spawnA(location)
 		else
 			new mob2spawnB(location)
@@ -4106,6 +4128,44 @@
 	result_amount = 1
 	mob2spawnA = /mob/living/simple_animal/hostile/bigroach
 	mob2spawnB = /mob/living/simple_animal/hostile/bigroach/queen //greater odds than getting a queen via mutating roaches (0.5%)
+
+/datum/chemical_reaction/aminocorydon
+	name = "Aminocorydon"
+	id = AMINOCORYDON
+	result = AMINOCORYDON
+	required_reagents = list(AMINOMICIN = 1, BANANA = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/aminocorydon/required_condition_check(datum/reagents/holder)
+	if(istype(holder.my_atom, /obj/item/weapon/reagent_containers))
+		return (locate(/obj/item/stack/sheet/mineral/clown) in holder.my_atom.contents) //you need that bananium catalyst
+	return FALSE
+
+/datum/chemical_reaction/synthmob/synthclown
+	name = "Synthclown"
+	id = "synthclown"
+	result = null
+	required_reagents = list(NUTRIMENT = 1, AMINOCORYDON = 1)
+	result_amount = 3
+	mob2spawn = /mob/living/simple_animal/hostile/retaliate/clown //don't do this
+
+/datum/chemical_reaction/synthmob/synthmime
+	name = "Synthmime"
+	id = "synthmime"
+	result = null
+	required_reagents = list(NOTHING = 1, AMINOCORYDON = 1)
+	result_amount = 3
+	mob2spawn = /mob/living/simple_animal/hostile/retaliate/mime
+
+/datum/chemical_reaction/synthmobhostile/synthcluwneguette
+	name = "Synthcluwneguette"
+	id = "synthcluwneguette"
+	result = null
+	required_reagents = list(HONKSERUM = 10, AMINOCORYDON = 1)
+	result_amount = 1
+	mobAprob = 95 //we only rarely want a mime
+	mob2spawnA = /mob/living/simple_animal/hostile/retaliate/cluwne
+	mob2spawnB = /mob/living/simple_animal/hostile/retaliate/faguette
 
 /datum/chemical_reaction/ectoplasm
 	name = "Ectoplasm"
@@ -4264,6 +4324,7 @@
 	result = VOMIT
 	required_reagents = list(NUTRIMENT = 1, SACID = 1)
 	required_catalysts = list(ENZYME = 5)
+	result_amount = 2
 
 /datum/chemical_reaction/squash
 	name = "Squash"

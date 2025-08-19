@@ -97,6 +97,8 @@ var/list/obj/machinery/prism/prism_list = list()
 
 /obj/machinery/prism/proc/update_beams(var/obj/effect/beam/emitter/touching_beam)
 	overlays.len = 0
+	underlays.len = 0
+	kill_moody_light_all()
 	//testing("Beam count: [beams.len]")
 	if(get_dir(src, touching_beam) == dir)
 		return 0 //Make no change for beams touching us on our emission side.
@@ -130,11 +132,20 @@ var/list/obj/machinery/prism/prism_list = list()
 
 			var/beamdir=get_dir(B.loc,src)
 			overlays += image(icon=icon,icon_state="beam_arrow",dir=beamdir)
+			update_moody_light_index("beam_arrow_[beamdir]",'icons/lighting/moody_lights.dmi', "overlay_beam_arrow", moody_color = "#66ffff", dir_override = beamdir)
+
+			var/indir = turn(beamdir, 180)
+			underlays += B.get_machine_underlay(indir)
+			update_moody_light_index("inbeam_dir[indir]",'icons/lighting/moody_lights.dmi', "overlay_emitter_beam_underlay_short", moody_color = "#66ffff", dir_override = indir)
+
 		if(newbeam)
 			beam.emit(spawn_by=spawners)
 		else
 			beam.set_power(beam.power)
 		icon_state = "prism_on"
+		update_moody_light_index("base",'icons/lighting/moody_lights.dmi', "overlay_prism", moody_color = "#66ffff")
+		underlays += beam.get_machine_underlay(dir)
+		update_moody_light_index("outbeam_dir[dir]",'icons/lighting/moody_lights.dmi', "overlay_emitter_beam_underlay_short", moody_color = "#66ffff", dir_override = dir)
 	else
 		icon_state = "prism_off"
 		if (beam)

@@ -116,6 +116,12 @@
 	pixel_x = 0
 	pixel_y = 0
 
+/obj/effect/afterimage/charge/New()
+	..()
+	transform = matrix()
+	pixel_x = 0
+	pixel_y = 0
+
 /obj/effect/afterimage/New(var/turf/loc, var/atom/model, var/fadout = 5, var/initial_alpha = 255, var/lay = NARSIE_GLOW, var/pla = ABOVE_LIGHTING_PLANE)
 	..()
 	if(model)

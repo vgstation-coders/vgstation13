@@ -171,8 +171,15 @@
 			refuse += AC
 		else
 			var/mob/M = get_holder_of_type(src, /mob/)
-			AC.forceMove(ismob(M) ? M.loc : get_turf(src.loc)) //special forceMove because this proc hate user so much it breaks if you try to use mob/user in arg
+			if(ismob(M))
+				AC.forceMove(M.loc)
+				var/target = get_ranged_target_turf(AC, turn(M.dir,pick(-45,-90,-90,-135,-135)), 5)
+				spawn(1)
+					AC.throw_at(target,rand(1,2),2)
+			else
+				AC.forceMove(get_turf(src.loc)) //special forceMove because this proc hate user so much it breaks if you try to use mob/user in arg
 			playsound(AC, casingsound, 25, 1)
+
 	if(AC.BB)
 		in_chamber = AC.BB //Load projectile into chamber.
 		AC.BB.forceMove(src) //Set projectile loc to gun.

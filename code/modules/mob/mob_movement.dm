@@ -393,7 +393,7 @@
 		else
 			if (mob.process_confused(Dir))
 				return
-			if (prefs.stumble && ((world.time - mob.last_movement) > 5 && move_delay < 2))
+			if (prefs.get_pref(/datum/preference_setting/toggle/stumble) && ((world.time - mob.last_movement) > 5 && move_delay < 2))
 				mob.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 			//	to_chat(src, "<span class='notice'>First Step</span>")
 			step(mob, Dir)

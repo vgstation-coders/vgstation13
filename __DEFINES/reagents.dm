@@ -9,6 +9,7 @@
 #define CHEMFLAG_DISHONORABLE 1
 #define CHEMFLAG_OBSCURING	2
 #define CHEMFLAG_PIGMENT	4
+#define CHEMFLAG_NOTREMOVABLE	8 //cannot be rid of by charcoal (or other reagent tomfoolery means).
 
 #define EXPLICITLY_INVALID_REAGENT_ID "Use this ID if the reagent is not supposed to be used, like for the base type of other reagents."
 
@@ -166,6 +167,7 @@
 #define HOLYSALTS 			"holysalts"
 #define CREATINE 			"creatine"
 #define CARPPHEROMONES 			"carppheromones"
+#define KILLERPHEROMONES 		"killerpheromones"
 #define BLACKPEPPER 			"blackpepper"
 #define CINNAMON 			"cinnamon"
 #define ZAMSPICES			"zamspices"
@@ -240,6 +242,9 @@
 #define HIPPIESDELIGHT 			"hippiesdelight"
 #define ETHANOL 			"ethanol"
 #define BEER 			"beer"
+#define CIDER 			"cider"
+#define STOUT 			"stout"
+#define SNAKEBITE 		"snakebite"
 #define WHISKEY 			"whiskey"
 #define SPECIALWHISKEY 			"specialwhiskey"
 #define GIN 			"gin"
@@ -258,6 +263,7 @@
 #define BLUECURACAO "bluecuracao"
 #define TRIPLESEC		"triplesec"
 #define BITTERS 		"bitters"
+#define CHUMPARI 		"chumpari"
 #define SCHNAPPS		"schnapps"
 #define ALE 			"ale"
 #define THIRTEENLOKO 			"thirteenloko"
@@ -463,6 +469,7 @@
 #define GEOMETER		"geometer"
 #define EGG_YOLK		"egg_yolk"
 #define PANCAKE			"pancake"
+#define PAINCAKE		"paincake"
 #define SPAGHETTI		"spaghetti"
 #define MUSTARD_POWDER	"mustard_powder"
 #define MAYO			"mayo"
@@ -483,6 +490,7 @@
 #define BLOBANINE		"blobanine"
 #define BLOB_ESSENCE	"blob_essence"
 #define METHAMPHETAMINE "methamphetamine"
+#define GRUGZONE		"grugzone"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -494,6 +502,13 @@
 #define LOCUTOGEN		"locutogen"
 #define BUMCIVILIAN		"bumcivilian"
 #define PUNCTUALITE		"punctualite"
+#define MAHKOEXPITOL	"mahkoexpitol"
+#define MORATHIAL		"morathial"
+
+#define ALIENORIGIN		"alienorigin"
+#define UNKNOWNALPHA	"unknownalpha"
+#define UNKNOWNDELTA	"unknowndelta"
+#define UNKNOWNOMEGA	"unknownomega"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"
@@ -524,6 +539,7 @@
 #define AMINOMICIAN		"aminomician"
 #define AMINOCYPRINIDOL	"aminocyprinidol"
 #define AMINOBLATELLA	"aminoblatella"
+#define AMINOCORYDON	"aminocorydon"
 #define TOMATO_SOUP		"tomato_soup"
 #define LUMINOL			"luminol"
 #define CAFFEINE		"caffeine"
@@ -538,6 +554,14 @@
 #define NANOPAINT		"nano_paint"
 #define FLAXOIL			"flax_oil"
 #define WAX				"wax"
+
+#define PLUTONIUM		"plutonium"
+#define RADON			"radon"
+#define LEAD			"lead"
+#define THALLIUM		"thallium"
+#define THORIUM			"thorium"
+#define REGENERATECALCIUM	"regeneratecalcium"
+#define EQUALIZONE		"equalizone"
 
 #define DYE_DANDELIONS	"dandelion_dye"
 

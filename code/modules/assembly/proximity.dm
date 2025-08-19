@@ -168,7 +168,7 @@
 	dat += {"<BR><A href='?src=\ref[src];scanning=1'>[scanning?"Armed":"Unarmed"]</A> (Movement sensor active when armed!)
 		<BR><BR><A href='?src=\ref[src];set_default_time=1'>After countdown, reset time to [(default_time - default_time%60)/60]:[(default_time % 60)]</A>
 		<BR><BR><A href='?src=\ref[src];toggle_mode=1'>Mode: [constant_pulse ? PROXMODE_CONSTANT : PROXMODE_ENTER]</A>"}
-	user << browse(dat, "window=prox")
+	user << browse(HTML_SKELETON(dat), "window=prox")
 	onclose(user, "prox")
 	return
 

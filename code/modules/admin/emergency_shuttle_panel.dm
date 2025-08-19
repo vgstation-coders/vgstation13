@@ -66,4 +66,4 @@
 		dat += "Move All Pods : <a href='?src=\ref[src];move_escape_pod=all;move_destination=station'>station</a> - <a href='?src=\ref[src];move_escape_pod=all;move_destination=transit'>transit</a> - <a href='?src=\ref[src];move_escape_pod=all;move_destination=centcom'>centcom</a> - <a href='?src=\ref[src];move_escape_pod=all;move_destination=shuttle'>crash into shuttle</a><br>"
 
 	dat += "</body></html>"
-	usr << browse(dat, "window=emergencyshuttle;size=440x500")
+	usr << browse(HTML_SKELETON(dat), "window=emergencyshuttle;size=440x500")

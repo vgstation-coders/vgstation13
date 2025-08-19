@@ -91,12 +91,13 @@
 	var/recharge_rate = 0
 
 	var/nticks=0
+	var/disable_config_sync = FALSE
 
 /obj/item/weapon/card/emag/New(var/loc, var/disable_tuning=0)
 	..(loc)
 
 	// For standardized subtypes, once they're established.
-	if(disable_tuning)
+	if(disable_tuning || disable_config_sync)
 		return
 
 	if(ticker)
@@ -357,6 +358,15 @@ var/list/global/id_cards = list()
 		"Nathan Aufweisser",
 		"Dee Tekteev",
 		"Scheitt Couritty",
+		"Valyd Huntre",
+		"Gunther Arrest",
+		"Obi Theelaw",
+		"Tazzhizzazz",
+		"Ziccurizzy",
+		"Kachaindaact",
+		"Wakitakiki",
+		"Kiyuritii",
+		"Yakkitisaks",
 	)
 
 /obj/item/weapon/card/id/nt_disguise/attack_self(mob/user)

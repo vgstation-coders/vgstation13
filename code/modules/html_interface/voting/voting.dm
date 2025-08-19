@@ -378,7 +378,7 @@ var/global/datum/controller/vote/vote = new()
 				var/msg = "A map vote was initiated with these options: [english_list(get_list_of_keys(maps))]."
 				send2maindiscord(msg)
 				send2mainirc(msg)
-				send2ickdiscord("**A round has ended.** You can discuss it at https://boards.4chan.org/vg/catalog#s=ss13g. A new round will begin soon.")
+				send2ickdiscord("**A round has ended.** You can discuss it at https://boards.4chan.org/vm/catalog#s=ss13g. A new round will begin soon.")
 			else
 				return 0
 
@@ -489,7 +489,7 @@ var/global/datum/controller/vote/vote = new()
 		interface = new/datum/html_interface/nanotrasen/vote(src, "Voting Panel", 400, 400, vote_head)
 		interface.updateContent("content", "<div id='vote_main'></div><div id='vote_choices'></div><div id='vote_admin'></div>")
 
-	if(world.time < last_update + 2)
+	if(world.time < last_update + 0.2 SECONDS)
 		return
 	last_update = world.time
 	status_data.len = 0

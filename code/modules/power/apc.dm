@@ -29,6 +29,7 @@
 #define APC_UPOVERLAY_ENVIRON2 2048
 #define APC_UPOVERLAY_LOCKED 4096
 #define APC_UPOVERLAY_OPERATING 8192
+#define APC_UPOVERLAY_PULSELOCK 16384
 
 #define APC_UPDATE_ICON_COOLDOWN 100 // 10 seconds
 
@@ -106,6 +107,7 @@
 
 	var/make_alerts = TRUE // Should this APC make power alerts to the area?
 	var/atom/movable/fake_camera_image/malfimage
+	var/atom/movable/fake_camera_image/fake_camera_buttons/malfbuttons
 
 	machine_flags = WIREJACK
 
@@ -120,6 +122,9 @@
 	monitoring_enabled = TRUE
 
 	var/recharge_load = 0 // How much power we've requested for recharging purposes
+
+	var/datum/pulselock/pulselock = null // Handled in pulsedemon.dm
+	var/icon/pulselock_overlay = null // Applies a separate overlay that shouldn't get replaced by icon state changes such as blue APCs.
 
 /obj/machinery/power/apc/get_cell()
 	return cell
@@ -321,6 +326,8 @@
 			overlays = 0
 			if (!(stat & (BROKEN|MAINT)) && light_range)
 				update_moody_light('icons/lighting/moody_lights.dmi', "overlay_apc", 255, light_color)
+			if(pulselock)
+				overlays += pulselock_overlay
 			return
 	if(update & 2)
 
@@ -334,14 +341,13 @@
 				overlays += status_overlays_equipment[equipment+1]
 				overlays += status_overlays_lighting[lighting+1]
 				overlays += status_overlays_environ[environ+1]
+		if(pulselock)
+			overlays += pulselock_overlay
 
 	if (!(stat & (BROKEN|MAINT)) && light_range)
 		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_apc", 255, light_color)
 
-
 /obj/machinery/power/apc/proc/check_updates()
-
-
 	var/last_update_state = update_state
 	var/last_update_overlay = update_overlay
 	update_state = 0
@@ -401,6 +407,9 @@
 			update_overlay |= APC_UPOVERLAY_ENVIRON1
 		else if(environ==2)
 			update_overlay |= APC_UPOVERLAY_ENVIRON2
+
+		if(pulselock)
+			update_overlay |= APC_UPOVERLAY_PULSELOCK
 
 	var/results = 0
 	if(last_update_state == update_state && last_update_overlay == update_overlay)
@@ -1149,7 +1158,6 @@
 		return 0
 
 /obj/machinery/power/apc/process()
-
 	if(stat & (BROKEN|MAINT|FORCEDISABLE))
 		return
 	var/area/this_area = get_area(src)
@@ -1450,6 +1458,11 @@
 
 	if(malfimage)
 		qdel(malfimage)
+	if(malfbuttons)
+		qdel(malfbuttons)
+
+	if(pulselock)
+		QDEL_NULL(pulselock)
 
 	..()
 

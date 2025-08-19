@@ -33,6 +33,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 	var/show_status = 1 //in order to prevent the signaler button in signaler.dm from saying "... is ready!" when examined
 	var/secured = 1
+	var/silent = 0
 	var/list/attached_overlays = list()
 	var/obj/item/device/assembly_holder/holder = null
 	var/cooldown = 0//To prevent spam

@@ -5,12 +5,12 @@
 	user_type = USER_TYPE_WIZARD // Now it's a meme available for wizards! //It's quite the exquisite meme
 	specialization = SSUTILITY
 	school = "transmutation"
-	charge_max = 100 //10 seconds
+	charge_cooldown_max = 10 SECONDS //10 seconds
 	spell_flags = WAIT_FOR_CLICK
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	max_targets = 1
 	valid_targets = list(/mob/living/carbon/human)
-	level_max = list(Sp_TOTAL = 0, Sp_SPEED = 0, Sp_POWER = 0) //You can't quicken this, this would be kind of useless
+	level_max = list(SP_TOTAL = 0, SP_SPEED = 0, SP_POWER = 0) //You can't quicken this, this would be kind of useless
 	hud_state = "card_trick"
 	var/current_card
 	var/list/card_type = list("Hearts", "Spades", "Clubs", "Diamonds")

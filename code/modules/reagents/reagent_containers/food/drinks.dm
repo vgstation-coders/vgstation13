@@ -290,9 +290,7 @@
 			spawn(5)
 				reagents.trans_to(M, gulp_size)
 
-		if(isrobot(user)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
-			var/mob/living/silicon/robot/bro = user
-			bro.cell.use(30)
+		if(use_cell_charge(user,30)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
 			var/refill = reagents.get_master_reagent_id()
 			spawn(600)
 				reagents.add_reagent(refill, gulp_size)
@@ -866,6 +864,12 @@
 		overlays += image(icon = icon, icon_state = "soda_open")
 		set_blood_overlay()
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(var/obj/item/I, mob/user as mob)
+	..()
+	if(istype(I, /obj/item/weapon/kitchen/canopener))
+		if(!is_open_container())
+			return pop_open(user)
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(var/mob/user)
 	if(!is_open_container())
 		return pop_open(user)
@@ -1180,8 +1184,8 @@
 	icon_state = "gibness"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness/New()
 	..()
-	reagents.add_reagent(BEER, 25)
-	reagents.add_reagent(POTATO, 25)
+	reagents.add_reagent(STOUT, 45)
+	reagents.add_reagent(POTATO, 5)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/geometer
 	name = "Geometer"
@@ -1210,8 +1214,7 @@
 	icon_state = "orchardtides"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides/New()
 	..()
-	reagents.add_reagent(BEER, 20)
-	reagents.add_reagent(APPLEJUICE, 30)
+	reagents.add_reagent(CIDER, 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken
 	name = "Sleimiken"
@@ -1228,8 +1231,7 @@
 	icon_state = "strongebow"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow/New()
 	..()
-	reagents.add_reagent(BEER, 30)
-	reagents.add_reagent(APPLEJUICE, 20)
+	reagents.add_reagent(CIDER, 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcoffee
 	name = "Kiririn FIRE"
@@ -2137,7 +2139,7 @@
 				user?.attack_log += text("\[[time_stamp()]\] <span class='danger'>Threw a [lit ? "lit" : "unlit"] molotov to \the [hit_atom], containing [reagents.get_reagent_ids()]</span>")
 				log_attack("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name(user)] and containing [reagents.get_reagent_ids()]")
 				message_admins("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name_admin(user)] and containing [reagents.get_reagent_ids()]")
-			reagents.splashplosion(reagents.total_volume >= (reagents.maximum_volume/2))//splashing everything on the tile hit, and the surrounding ones if we're over half full.
+			reagents.splashplosion(0)//splashing everything on the tile hit, and the surrounding ones if we're over half full.
 		invisibility = INVISIBILITY_MAXIMUM  //so it stays a while to ignite any fuel
 
 		if(molotov == 1) //for molotovs
@@ -2331,8 +2333,8 @@
 				return ..()
 
 			// Geometrically checking if we're on a straight line.
-			var/vector/V = atoms2vector(src, over_location)
-			var/vector/V_norm = V.normalized()
+			var/_vector/V = atoms2vector(src, over_location)
+			var/_vector/V_norm = V.normalized()
 			if (!V_norm.is_integer())
 				return ..() // Only a cardinal vector (north, south, east, west) can pass this test
 
@@ -2343,7 +2345,7 @@
 			do
 				temp_turf = temp_turf.get_translated_turf(V_norm)
 				if (!locate(/obj/structure/table) in temp_turf)
-					var/vector/V2 = atoms2vector(src, temp_turf)
+					var/_vector/V2 = atoms2vector(src, temp_turf)
 					vector_translate(V2, 0.1 SECONDS)
 					user.visible_message("<span class='warning'>\The [user] slides \the [src] down the table... and straight into the ground!</span>", "<span class='warning'>You slide \the [src] down the table, and straight into the ground!</span>")
 					create_broken_bottle()

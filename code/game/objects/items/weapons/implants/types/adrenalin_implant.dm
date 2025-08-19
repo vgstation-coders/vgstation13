@@ -29,7 +29,7 @@
 
 /obj/item/weapon/implant/adrenalin/implanted(mob/implanter)
 	imp_in.register_event(/event/emote, src, nameof(src::trigger()))
-	imp_in.mind.store_memory("The freedom implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.", 0, 0)
+	imp_in.mind.store_memory("The freedom implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.", category=MIND_MEMORY_GENERAL, forced=TRUE)
 	to_chat(imp_in, "The implanted freedom implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.")
 
 /obj/item/weapon/implant/adrenalin/handle_removal(mob/remover)

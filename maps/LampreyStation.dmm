@@ -16824,7 +16824,9 @@
 /turf/simulated/floor/plating,
 /area/lamprey/security)
 "aNk" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -16837,7 +16839,7 @@
 	},
 /area/lamprey/security)
 "aNm" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -54320,7 +54322,9 @@
 /turf/simulated/floor/plating,
 /area/lamprey/researchwarehousemaintenanceblob)
 "crZ" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/effect/decal/warning_stripes{
 	dir = 4;
 	icon_state = "unloading"
@@ -54339,7 +54343,7 @@
 	},
 /area/lamprey/researchwarehousemaintenanceblob)
 "csb" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -61193,8 +61197,8 @@
 	pixel_x = -4
 	},
 /obj/item/weapon/reagent_containers/glass/metal_bucket/nanopaint/filled/red{
-	pixel_y = 8;
-	pixel_x = 8
+	pixel_x = 8;
+	pixel_y = 8
 	},
 /turf/simulated/floor,
 /area/lamprey/tinyroomzone)
@@ -73016,7 +73020,9 @@
 	},
 /area/lamprey/barndgo)
 "dhc" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /obj/effect/decal/warning_stripes{
 	dir = 4;
 	icon_state = "warning";
@@ -73038,7 +73044,7 @@
 /turf/simulated/floor,
 /area/lamprey/barndgo)
 "dhe" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /obj/effect/decal/warning_stripes{
 	dir = 8;
 	icon_state = "warning";
@@ -84625,7 +84631,7 @@
 /area/lamprey/voxmetaclub)
 "dCF" = (
 /obj/structure/rack,
-/obj/item/weapon/gun/energy/staff/necro,
+/obj/item/weapon/staff/necro,
 /turf/simulated/floor/vox{
 	icon_state = "gold";
 	name = "gold floor"
@@ -114773,11 +114779,11 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 1;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/wood,
 /area/lamprey/catchall)
@@ -124554,7 +124560,9 @@
 	},
 /area/centcom/test)
 "fiP" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -124566,7 +124574,7 @@
 	},
 /area/centcom/test)
 "fiR" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -128327,7 +128335,9 @@
 /turf/space,
 /area/shuttle/nuclearops)
 "frC" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/simulated/floor/shuttle/vox{
 	icon_state = "floor4"
 	},
@@ -128547,7 +128557,9 @@
 /turf/space,
 /area/centcom/specops)
 "fsa" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	dir = 8;
 	icon_state = "dark-markings"
@@ -128568,7 +128580,7 @@
 	},
 /area/centcom/specops)
 "fsc" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/unsimulated/floor{
 	icon_state = "dark"
 	},
@@ -129411,7 +129423,7 @@
 	pixel_y = 4
 	},
 /obj/item/weapon/gun/energy/staff/animate,
-/obj/item/weapon/gun/energy/staff/necro{
+/obj/item/weapon/staff/necro{
 	pixel_x = 4;
 	pixel_y = -4
 	},
@@ -138283,7 +138295,9 @@
 	},
 /area/syndicate_mothership/elite_squad)
 "fOH" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/unsimulated/floor{
 	icon_state = "floor4"
 	},
@@ -160232,7 +160246,9 @@
 /turf/space,
 /area)
 "gHm" = (
-/obj/machinery/mech_bay_recharge_port,
+/obj/machinery/mech_bay_recharge_port{
+	dir = 4
+	},
 /turf/space,
 /area)
 "gHn" = (
@@ -160240,7 +160256,7 @@
 /turf/space,
 /area)
 "gHo" = (
-/obj/machinery/computer/mech_bay_power_console,
+/obj/machinery/computer/mech_bay_power_console/autolink_west,
 /turf/space,
 /area)
 "gHp" = (
@@ -166290,9 +166306,9 @@
 /area)
 "gSt" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
+	default_scrubbed_gases = list( "plasma" );
 	dir = 4;
-	name = "Telecomms Scrubber";
-	default_scrubbed_gases = list( "plasma" )
+	name = "Telecomms Scrubber"
 	},
 /turf/space,
 /area)
@@ -166302,8 +166318,8 @@
 	},
 /obj/machinery/air_sensor{
 	id_tag = "tcomms_sensor";
-	name = "Telecomms Gas Sensor";
-	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide");
+	name = "Telecomms Gas Sensor"
 	},
 /turf/space,
 /area)
@@ -183012,8 +183028,8 @@
 /obj/machinery/air_sensor{
 	frequency = 1441;
 	id_tag = "waste_sensor";
-	name = "Mix Sensor";
-	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide");
+	name = "Mix Sensor"
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -183919,8 +183935,8 @@
 /obj/machinery/air_sensor{
 	frequency = 1443;
 	id_tag = "air_sensor";
-	name = "Air Sensor";
-	metrics_monitored = list("pressure", "temperature", "oxygen")
+	metrics_monitored = list("pressure", "temperature", "oxygen");
+	name = "Air Sensor"
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -193128,10 +193144,10 @@
 /area/lamprey/combooutpost)
 "hSI" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "asteroidplating"
@@ -193638,11 +193654,11 @@
 "hTI" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/plating/vox,
 /area/lamprey/combooutpost)
@@ -193715,11 +193731,11 @@
 "hTQ" = (
 /obj/structure/table/glass,
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 1;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /obj/item/weapon/reagent_containers/spray/cleaner{
 	pixel_x = -3;
@@ -193978,11 +193994,11 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -194244,9 +194260,9 @@
 /area/lamprey/combooutpost)
 "hUP" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/plating/vox,
 /area/lamprey/combooutpost)
@@ -194902,10 +194918,10 @@
 	pixel_y = -24
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"
@@ -195228,10 +195244,10 @@
 /area/lamprey/combooutpost)
 "hWI" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /obj/structure/window{
 	dir = 4
@@ -195268,11 +195284,11 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 1;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox/wood,
 /area/lamprey/combooutpost)
@@ -195517,11 +195533,11 @@
 /area/lamprey/combooutpost)
 "hXh" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 4;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox,
 /area/lamprey/combooutpost)
@@ -195686,11 +195702,11 @@
 /area/lamprey/combooutpost)
 "hXB" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
+	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" );
 	dir = 8;
 	frequency = 1331;
 	name = "Outpost Air Scrubber";
-	on = 1;
-	default_scrubbed_gases = list( "carbon_dioxide", "plasma", "oxygen" )
+	on = 1
 	},
 /turf/simulated/floor/vox{
 	icon_state = "dark"

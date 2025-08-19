@@ -397,7 +397,7 @@
 	melee_damage_upper = 20 // Decent melee damage, but the stun is the real danger
 	move_to_delay = 1.8 // This is what he trained for! To fill the unforgiving minute with sixty seconds of distance sprinting
 
-	items_to_drop = list(/obj/item/weapon/melee/stunprobe)
+	items_to_drop = list(/obj/item/weapon/melee/baton/stunprobe)
 
 	attacktext = "beats"
 	attack_sound = 'sound/weapons/genhit1.ogg'
@@ -658,7 +658,7 @@
 	melee_damage_upper = 20 // Decent melee damage, but the stun is the real danger
 	move_to_delay = 1.8 // This is what he trained for! To fill the unforgiving minute with sixty seconds of distance sprinting
 
-	items_to_drop = list(/obj/item/weapon/melee/stunprobe)
+	items_to_drop = list(/obj/item/weapon/melee/baton/stunprobe)
 
 	attacktext = "beats"
 	attack_sound = 'sound/weapons/genhit1.ogg'

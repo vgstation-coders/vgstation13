@@ -13,5 +13,5 @@
 	output += {"Current Infomational Settings: <br>
 		BYOND version of server: [world.byond_version].[world.byond_build]<br>
 		Protect Authority Roles From Tratior: [config.protect_roles_from_antagonist]<br>"}
-	usr << browse(output,"window=revdata");
+	usr << browse(HTML_SKELETON(output),"window=revdata");
 	return

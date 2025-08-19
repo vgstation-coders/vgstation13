@@ -74,10 +74,7 @@
 	else if(broken)
 		if(issolder(W))
 			var/obj/item/tool/solder/S = W
-			if(!S.remove_fuel(4,user))
-				return
-			S.playtoolsound(loc, 100)
-			if(do_after(user, src,4 SECONDS * S.work_speed))
+			if(S.do_solder(user, src,4 SECONDS,4))
 				S.playtoolsound(loc, 100)
 				broken = 0
 				to_chat(user, "<span class='notice'>You repair the electronics inside the locking mechanism!</span>")

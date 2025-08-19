@@ -110,6 +110,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/is_pet = FALSE //We're somebody's precious, precious pet.
 
 	var/pacify_aura = FALSE
+	var/is_poisonous = FALSE //whether certian hostile mobs will avoid this.
 
 	var/blooded = TRUE	//Until we give them proper vessels, this lets us know which animals should bleed and stuff
 	var/acidimmune = 0 //A check for whether the mob doesn't take damage from acid reagents. Set to 0 by default
@@ -362,14 +363,41 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(!atmos_suitable)
 		adjustOxyLoss(unsuitable_atmos_damage)
 
-	if(bodytemperature < minbodytemp)
-		temperature_alert = TEMP_ALARM_COLD_STRONG
-		adjustBruteLoss(cold_damage_per_tick)
-	else if(bodytemperature > maxbodytemp)
-		temperature_alert = TEMP_ALARM_HEAT_STRONG
-		adjustBruteLoss(heat_damage_per_tick)
-	else
+	if(!client) //We do not care about temperature alerts when we can't show it to anyone so we use a simplified calculation
 		temperature_alert = 0
+		if(bodytemperature < minbodytemp)
+			adjustBruteLoss(cold_damage_per_tick)
+		else if(bodytemperature > maxbodytemp)
+			adjustBruteLoss(heat_damage_per_tick)
+	else if(bodytemperature < initial(bodytemperature))
+		if(minbodytemp) //It's not at 0
+			//Extract a percentage out of this
+			var/temp_difference = initial(bodytemperature) - bodytemperature
+			var/cold_difference = initial(bodytemperature) - minbodytemp
+			//Converts difference into a value from 0 to 1, 0.01 = 1%, 1 = 100%
+			var/percentage_to_minbodytemp = round(temp_difference/cold_difference, 0.01)
+			if(percentage_to_minbodytemp <= 0.33)
+				temperature_alert = 0
+			else if(percentage_to_minbodytemp <= 0.66)
+				temperature_alert = TEMP_ALARM_COLD_WEAK
+			else if(percentage_to_minbodytemp <= 1)
+				temperature_alert = TEMP_ALARM_COLD_MILD
+			else
+				temperature_alert = TEMP_ALARM_COLD_STRONG
+				adjustBruteLoss(heat_damage_per_tick)
+	else //bodytemperature is at or higher than what it was.
+		var/temp_difference = bodytemperature - initial(bodytemperature)
+		var/heat_difference = maxbodytemp - initial(bodytemperature)
+		var/percentage_to_maxbodytemp = round(temp_difference/heat_difference, 0.01)
+		if(percentage_to_maxbodytemp <= 0.33)
+			temperature_alert = 0
+		else if(percentage_to_maxbodytemp <= 0.66)
+			temperature_alert = TEMP_ALARM_HEAT_WEAK
+		else if(percentage_to_maxbodytemp <= 1)
+			temperature_alert = TEMP_ALARM_HEAT_MILD
+		else
+			temperature_alert = TEMP_ALARM_HEAT_STRONG
+			adjustBruteLoss(heat_damage_per_tick)
 
 /mob/living/simple_animal/gib(var/animation = 0, var/meat = 1)
 	if(status_flags & BUDDHAMODE)
@@ -735,6 +763,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		maxHealth = initial(maxHealth)
 		maxHealth -= (initial(maxHealth) / meat_amount) * meat_taken
 	health = maxHealth
+	bodytemperature = initial(bodytemperature)
 	..(0)
 
 /mob/living/simple_animal/proc/make_babies() // <3 <3 <3
@@ -838,7 +867,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/proc/delayedRegen()
 	set waitfor = 0
 	isRegenerating = 1
-	sleep(rand(minRegenTime, maxRegenTime)) //Don't want it being predictable
+	var/timer = rand(minRegenTime, maxRegenTime) //Don't want it being predictable
+	while((timer > 0))
+		timer -= 1 SECONDS
+		if(!(stat == DEAD)) //Some shenanigans caused the mob to be revived early, quit the regeneration
+			isRegenerating = 0
+			return
+		sleep(1 SECONDS)
 	if(src)
 		resurrect()
 		revive()

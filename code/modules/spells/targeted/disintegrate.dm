@@ -5,12 +5,12 @@
 	user_type = USER_TYPE_SPELLBOOK
 
 	school = "evocation"
-	charge_max = 600
+	charge_cooldown_max = 60 SECONDS
 	spell_flags = NEEDSCLOTHES | IS_HARMFUL
 	invocation = "EI NATH"
-	invocation_type = SpI_SHOUT
+	invocation_type = SP_INV_SHOUT
 	range = 1
-	cooldown_min = 200 //100 deciseconds reduction per rank
+	cooldown_min = 20 SECONDS //10 seconds reduction per rank
 
 	sparks_spread = 1
 	sparks_amt = 4

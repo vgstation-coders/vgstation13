@@ -696,6 +696,8 @@
 	glass_icon_state = "doctorsdelightglass"
 	glass_name = "\improper Doctor's Delight"
 	glass_desc = "A rejuvenating mixture of juices, guaranteed to keep you healthy until the next toolboxing takes place."
+	fission_time=3500 // 50 minutes (0hr 50m)
+	fission_absorbtion=3000
 
 /datum/reagent/drink/doctor_delight/on_mob_life(var/mob/living/M)
 	if(..())

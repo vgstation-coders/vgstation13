@@ -19,7 +19,7 @@
 	user_type = USER_TYPE_CULT
 	hud_state = "const_juggdash"
 	override_base = "cult"
-	charge_max = 150
+	charge_cooldown_max = 15 SECONDS
 	spell_flags = 0
 	range = 4
 
@@ -47,10 +47,10 @@
 	user_type = USER_TYPE_CULT
 	selection_type = "range"
 
-	charge_max = 75
+	charge_cooldown_max = 7.5 SECONDS
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK | WAIT_FOR_CLICK
 	invocation = "none"
-	invocation_type = SpI_NONE
+	invocation_type = SP_INV_NONE
 	range = 7
 
 	override_base = "cult"

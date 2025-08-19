@@ -14,7 +14,7 @@
 	icon_state = "incensestick"
 	item_state = "incensestick"
 	w_class = W_CLASS_TINY
-	heat_production = 1000
+	heat_production = 5000
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
 	siemens_coefficient = 0

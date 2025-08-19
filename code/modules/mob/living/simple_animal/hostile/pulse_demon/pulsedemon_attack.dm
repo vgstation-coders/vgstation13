@@ -31,7 +31,7 @@
 		else if(current_bot && !attack_delayer.blocked()) // Do bot stuff
 			current_bot.attack_integrated_pulsedemon(src,A)
 			delayNextAttack(10)
-		else if(get_area(A) == controlling_area) // Only in APC areas
+		else if((get_area(A) == controlling_area) || (istype(A, /obj/machinery/power/battery/smes) && current_power == A)) // Only in APC areas or if the pulse demon is interacting with an SMES it's in
 			var/list/modifiers = params2list(params) // For doors and other AI stuff
 			if(modifiers["middle"])
 				if(modifiers["shift"])

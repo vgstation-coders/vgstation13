@@ -1,0 +1,1773 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"ag" = (
+/obj/machinery/door/unpowered/shuttle,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"ay" = (
+/obj/machinery/atmospherics/pipe/manifold/general/visible{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"aN" = (
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"aS" = (
+/obj/item/tool/surgicaldrill,
+/turf/simulated/floor/shuttle/plating,
+/area/derelict/ship)
+"aX" = (
+/obj/machinery/door/airlock/glass,
+/turf/simulated/floor/shuttle/plating,
+/area/derelict/ship)
+"bF" = (
+/obj/machinery/door/unpowered/shuttle,
+/turf/simulated/floor/plating,
+/area/derelict/ship)
+"bO" = (
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"bW" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/floor/shuttle/plating,
+/area/derelict/ship)
+"ca" = (
+/obj/structure/table,
+/obj/item/device/radio,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"cV" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"dg" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/space/syndicate,
+/obj/item/clothing/head/helmet/space/syndicate,
+/obj/item/clothing/mask/breath,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"eO" = (
+/obj/machinery/bodyscanner,
+/obj/item/tool/scalpel,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"fb" = (
+/obj/structure/computerframe{
+	anchored = 1
+	},
+/obj/item/weapon/circuitboard/crew,
+/obj/item/stack/sheet/glass/glass{
+	amount = 50
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"fe" = (
+/obj/machinery/door/airlock/glass{
+	name = "Hibernation Pods"
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"fX" = (
+/obj/machinery/atmospherics/unary/cryo_cell,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"gc" = (
+/obj/effect/decal/remains/human,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"gp" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/obj/effect/decal/remains/human,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"gY" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"hr" = (
+/turf/simulated/floor/shuttle/plating,
+/area/derelict/ship)
+"hs" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle/plating,
+/area/derelict/ship)
+"hF" = (
+/obj/structure/table,
+/obj/item/tool/screwdriver,
+/obj/machinery/light,
+/obj/item/tool/hemostat{
+	pixel_y = 4
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"if" = (
+/obj/structure/shuttle/engine/propulsion{
+	dir = 4
+	},
+/turf/space,
+/area/derelict/ship)
+"kG" = (
+/obj/machinery/light/small,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"lR" = (
+/obj/machinery/atmospherics/pipe/simple/general/visible{
+	dir = 9
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"mE" = (
+/obj/structure/table,
+/obj/machinery/light{
+	dir = 4
+	},
+/obj/machinery/cell_charger,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"mV" = (
+/obj/item/weapon/shard,
+/obj/structure/bed/chair,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"mW" = (
+/obj/machinery/power/apc{
+	cell_type = 5000;
+	dir = 8;
+	environ = 0;
+	equipment = 0;
+	lighting = 0;
+	locked = 0;
+	name = "Worn-out APC";
+	pixel_x = -24
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"ni" = (
+/obj/structure/bed,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/item/tool/circular_saw,
+/obj/item/weapon/bedsheet,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"nv" = (
+/obj/structure/bed/chair,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"nS" = (
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"om" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"oV" = (
+/obj/item/device/multitool,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"pw" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/turf/space,
+/area/derelict/ship)
+"pH" = (
+/obj/machinery/door/airlock/glass{
+	name = "Living Module"
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"pI" = (
+/obj/machinery/portable_atmospherics/scrubber,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"qb" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"qc" = (
+/obj/machinery/door/window,
+/obj/item/weapon/reagent_containers/spray/cleaner{
+	desc = "Someone has crossed out the Space from Space Cleaner and written in Surgery. 'Do not remove under punishment of death!!!' is scrawled on the back.";
+	name = "Surgery Cleaner"
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"qz" = (
+/obj/structure/table,
+/obj/item/tool/retractor{
+	pixel_y = 6
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"qB" = (
+/obj/machinery/optable,
+/obj/item/weapon/autopsy_scanner{
+	pixel_x = 1;
+	pixel_y = 1
+	},
+/obj/item/weapon/tank/anesthetic,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"sC" = (
+/obj/machinery/door/poddoor{
+	id_tag = "oldship_gun";
+	name = "Pod Bay Door"
+	},
+/turf/simulated/floor/shuttle/plating,
+/area/derelict/ship)
+"sW" = (
+/obj/structure/table,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"sZ" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"vJ" = (
+/obj/machinery/computer/pod{
+	id_tags = list("oldship_gun")
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"wn" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/space,
+/area/derelict/ship)
+"xh" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"yc" = (
+/obj/structure/closet/walllocker/defiblocker{
+	pixel_y = 30
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"yE" = (
+/obj/machinery/portable_atmospherics/pump,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"zf" = (
+/obj/structure/cable,
+/obj/structure/computerframe{
+	anchored = 1
+	},
+/obj/item/stack/cable_coil/cut,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"zs" = (
+/obj/machinery/door/airlock/glass,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"zt" = (
+/obj/structure/grille/window_spawner/reinforced,
+/turf/simulated/floor/shuttle/plating,
+/area/derelict/ship)
+"AA" = (
+/obj/item/weapon/table_parts,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"AP" = (
+/obj/item/tool/bonesetter,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Bi" = (
+/obj/item/weapon/cell{
+	charge = 100;
+	maxcharge = 15000
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"CW" = (
+/obj/item/weapon/storage/box/bodybags,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Do" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/space,
+/area/derelict/ship)
+"Dq" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle/plating,
+/area/derelict/ship)
+"DX" = (
+/obj/machinery/door/window{
+	base_state = "right";
+	dir = 1
+	},
+/obj/effect/decal/remains/human,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Fe" = (
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"FR" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Hb" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/space,
+/area/derelict/ship)
+"He" = (
+/obj/machinery/sleeper,
+/obj/machinery/light{
+	dir = 1
+	},
+/obj/machinery/recharger/defibcharger/wallcharger{
+	pixel_x = 5;
+	pixel_y = 28
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Hn" = (
+/obj/structure/table,
+/obj/item/device/analyzer,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"IO" = (
+/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,
+/turf/simulated/floor/shuttle/plating,
+/area/derelict/ship)
+"Jm" = (
+/obj/machinery/door/airlock/glass{
+	name = "Pod Bay"
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Ko" = (
+/obj/machinery/light_switch{
+	pixel_x = 27
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"KX" = (
+/obj/machinery/atmospherics/unary/cold_sink/freezer,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Ln" = (
+/obj/structure/cable,
+/obj/structure/computerframe{
+	anchored = 1
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Lr" = (
+/turf/simulated/wall/shuttle,
+/area/derelict/ship)
+"LZ" = (
+/obj/structure/rack,
+/obj/item/weapon/tank/emergency_oxygen,
+/obj/item/weapon/tank/emergency_oxygen,
+/obj/item/weapon/tank/emergency_oxygen,
+/obj/item/weapon/tank/emergency_oxygen,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"ML" = (
+/obj/structure/shuttle/engine/heater{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area/derelict/ship)
+"Nq" = (
+/obj/structure/table,
+/obj/item/tool/FixOVein{
+	pixel_x = -6;
+	pixel_y = 1
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Nr" = (
+/obj/machinery/light_switch{
+	pixel_x = 27
+	},
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Ou" = (
+/obj/machinery/computer/med_data,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Pz" = (
+/obj/item/tool/cautery{
+	pixel_y = 4
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"RC" = (
+/obj/structure/shuttle/engine/propulsion/left{
+	dir = 4
+	},
+/turf/space,
+/area/derelict/ship)
+"St" = (
+/obj/item/tool/bonegel{
+	pixel_x = 4;
+	pixel_y = 3
+	},
+/turf/space,
+/area)
+"SH" = (
+/obj/structure/rack,
+/obj/item/weapon/storage/toolbox/syndicate,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Tb" = (
+/obj/structure/shuttle/engine/propulsion/right{
+	dir = 4
+	},
+/turf/space,
+/area/derelict/ship)
+"Ti" = (
+/turf/space,
+/area)
+"UB" = (
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 1;
+	name = "Connector Port (Air Supply)"
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"UL" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"US" = (
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Ve" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Xo" = (
+/obj/structure/table,
+/obj/item/weapon/gun/energy/laser/retro,
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+"Yk" = (
+/obj/docking_port/destination/salvage/abandoned_ship{
+	dir = 2
+	},
+/turf/space,
+/area)
+"YB" = (
+/obj/machinery/mass_driver{
+	dir = 8;
+	id_tag = "oldship_gun"
+	},
+/turf/simulated/floor/shuttle/plating,
+/area/derelict/ship)
+"YE" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle/plating,
+/area/derelict/ship)
+"Zr" = (
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/derelict/ship)
+
+(1,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+wn
+Lr
+Lr
+zt
+zt
+zt
+zt
+zt
+zt
+zt
+Lr
+Lr
+Do
+Ti
+Ti
+Ti
+Ti
+"}
+(2,1,1) = {"
+Ti
+Ti
+Ti
+wn
+Lr
+FR
+nS
+nS
+nS
+Xo
+Hn
+sW
+nS
+nS
+Fe
+gY
+Lr
+Ti
+Ti
+Ti
+Ti
+"}
+(3,1,1) = {"
+Ti
+Ti
+wn
+Lr
+FR
+nS
+nS
+nS
+nS
+sW
+gp
+Nq
+nS
+nS
+mV
+Ln
+Lr
+sC
+Do
+Ti
+Ti
+"}
+(4,1,1) = {"
+Ti
+wn
+Lr
+Lr
+fb
+Zr
+nS
+nS
+nS
+nS
+nS
+nS
+nS
+nS
+nv
+zf
+Lr
+YB
+Lr
+Ti
+Ti
+"}
+(5,1,1) = {"
+Ti
+Lr
+nS
+gY
+Ve
+nS
+nS
+nS
+nS
+nS
+nS
+nS
+nS
+nS
+nS
+cV
+Lr
+aX
+Lr
+Do
+Ti
+"}
+(6,1,1) = {"
+wn
+FR
+ay
+UB
+Lr
+qz
+Ou
+mE
+nS
+nS
+nS
+nS
+nS
+Nr
+cV
+Lr
+FR
+nS
+vJ
+Lr
+Do
+"}
+(7,1,1) = {"
+Lr
+fX
+lR
+nS
+Lr
+Lr
+Lr
+Lr
+Lr
+zt
+zs
+zt
+Lr
+Lr
+Lr
+FR
+nS
+nS
+nS
+gY
+Lr
+"}
+(8,1,1) = {"
+Lr
+yc
+nS
+nS
+zt
+oV
+nS
+nS
+nS
+nS
+nS
+nS
+nS
+gY
+Lr
+LZ
+nS
+nS
+nS
+CW
+Lr
+"}
+(9,1,1) = {"
+Lr
+He
+nS
+eO
+zt
+nS
+nS
+nS
+om
+om
+om
+om
+nS
+nS
+Lr
+dg
+nS
+nS
+nS
+hF
+Lr
+"}
+(10,1,1) = {"
+Lr
+nS
+nS
+nS
+zt
+Bi
+nS
+cV
+Lr
+Lr
+Lr
+Lr
+Ve
+nS
+Lr
+SH
+nS
+nS
+nS
+ca
+Lr
+"}
+(11,1,1) = {"
+Lr
+Ve
+nS
+nS
+Lr
+nS
+nS
+zs
+nS
+US
+nS
+DX
+Lr
+nS
+Lr
+Ve
+nS
+nS
+nS
+cV
+Lr
+"}
+(12,1,1) = {"
+pw
+Lr
+nS
+nS
+Lr
+nS
+nS
+Lr
+xh
+qB
+nS
+ni
+Lr
+nS
+gY
+Lr
+Lr
+Jm
+Lr
+Lr
+Hb
+"}
+(13,1,1) = {"
+Ti
+Lr
+Ve
+nS
+fe
+nS
+nS
+Lr
+qc
+Ko
+nS
+nS
+zs
+nS
+nS
+mW
+nS
+gc
+Lr
+Lr
+Ti
+"}
+(14,1,1) = {"
+Ti
+pw
+Lr
+Lr
+Lr
+nS
+nS
+gY
+Lr
+Lr
+Lr
+Lr
+FR
+nS
+nS
+nS
+nS
+cV
+Lr
+Hb
+Ti
+"}
+(15,1,1) = {"
+Ti
+Ti
+pw
+Lr
+Lr
+nS
+nS
+nS
+bO
+bO
+bO
+bO
+nS
+nS
+nS
+Bi
+cV
+Lr
+Hb
+Ti
+Ti
+"}
+(16,1,1) = {"
+Ti
+Ti
+Ti
+pw
+Lr
+nS
+nS
+Ko
+nS
+nS
+nS
+nS
+nS
+nS
+nS
+kG
+Lr
+Hb
+Ti
+Ti
+Ti
+"}
+(17,1,1) = {"
+Ti
+Ti
+Ti
+wn
+Lr
+bF
+Lr
+Lr
+Lr
+zt
+pH
+zt
+Lr
+Lr
+Lr
+bF
+Lr
+Do
+Ti
+Ti
+Ti
+"}
+(18,1,1) = {"
+Ti
+Ti
+wn
+hs
+IO
+hr
+Lr
+pI
+sZ
+nS
+nS
+nS
+nS
+yE
+Lr
+hr
+hr
+Dq
+Do
+Ti
+Ti
+"}
+(19,1,1) = {"
+Ti
+wn
+hs
+hr
+hr
+YE
+Lr
+Ve
+nS
+nS
+nS
+nS
+nS
+nS
+Lr
+bW
+hr
+aS
+Dq
+Do
+Ti
+"}
+(20,1,1) = {"
+wn
+Lr
+ML
+ML
+ML
+Lr
+pw
+Lr
+nS
+nS
+nS
+nS
+nS
+Lr
+Hb
+Lr
+ML
+ML
+ML
+Lr
+Do
+"}
+(21,1,1) = {"
+pw
+Tb
+if
+if
+if
+RC
+Ti
+Lr
+Ve
+nS
+nS
+nS
+cV
+Lr
+Ti
+Tb
+if
+if
+if
+RC
+Hb
+"}
+(22,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+pw
+Lr
+Ve
+nS
+cV
+Lr
+Hb
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(23,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+pw
+Lr
+ag
+Lr
+Hb
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(24,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+Pz
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(25,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+wn
+Lr
+ag
+Lr
+Do
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(26,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+FR
+nS
+gY
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(27,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+nS
+nS
+nS
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(28,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+nS
+nS
+nS
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(29,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+nS
+nS
+nS
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(30,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+qb
+nS
+nS
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(31,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+nS
+nS
+nS
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(32,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+nS
+nS
+nS
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(33,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+nS
+nS
+aN
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(34,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+Ve
+nS
+cV
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(35,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+pw
+Lr
+ag
+Lr
+Hb
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(36,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+UL
+UL
+UL
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(37,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+UL
+Ti
+UL
+Ti
+Ti
+Yk
+Ti
+Ti
+Ti
+Ti
+"}
+(38,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+UL
+Ti
+UL
+UL
+UL
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(39,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+St
+Ti
+wn
+Lr
+ag
+Lr
+Do
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(40,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+FR
+nS
+gY
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(41,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+nS
+nS
+AP
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(42,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+nS
+nS
+nS
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(43,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+nS
+nS
+nS
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(44,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+nS
+nS
+nS
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(45,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+nS
+nS
+AA
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(46,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+KX
+nS
+nS
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(47,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+nS
+nS
+nS
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(48,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Lr
+Ve
+nS
+cV
+Lr
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}
+(49,1,1) = {"
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+pw
+Lr
+ag
+Lr
+Hb
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+Ti
+"}

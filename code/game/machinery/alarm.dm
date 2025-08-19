@@ -105,7 +105,8 @@
 									GAS_CARBON = new /datum/airalarm_threshold(-1, -1, -1, -1),
 									GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, -1, -1),
 									GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, -1, -1),
-									GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, -1, -1) )
+									GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, -1, -1),
+									GAS_RADON = new /datum/airalarm_threshold(-1, -1, -1, -1))
 	// Partial pressure, kpa threshold for any gas not included in gas_thresholds. These gasses are added up.
 	var/datum/airalarm_threshold/other_gas_threshold = new /datum/airalarm_threshold(-1, -1, -1, -1)
 	// Kpa thresholds for what pressures are acceptable.
@@ -196,10 +197,11 @@
 							GAS_NITROGEN = new /datum/airalarm_threshold(-1, -1, -1, -1),
 							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 5, 10),
 							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_RADON = new /datum/airalarm_threshold(-1, -1, 0.05, 0.1),
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
-	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
+	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*2.00, ONE_ATMOSPHERE*3.20)
 	temperature_threshold = new /datum/airalarm_threshold(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
 	scrubbed_gases = list( GAS_CARBON, GAS_PLASMA )
@@ -212,10 +214,11 @@
 							GAS_NITROGEN = new /datum/airalarm_threshold(16, 18, 135, 140),
 							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 5, 10),
 							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_RADON = new /datum/airalarm_threshold(-1, -1, 0.05, 0.1),
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
-	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
+	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*2.00, ONE_ATMOSPHERE*3.20)
 	temperature_threshold = new /datum/airalarm_threshold(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
 	scrubbed_gases = list( GAS_OXYGEN, GAS_CARBON, GAS_PLASMA )
@@ -228,10 +231,11 @@
 							GAS_NITROGEN = new /datum/airalarm_threshold(-1, -1, -1, -1),
 							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 5, 10),
 							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_RADON = new /datum/airalarm_threshold(-1, -1, 0.05, 0.1),
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
-	pressure_threshold = new /datum/airalarm_threshold(-1, ONE_ATMOSPHERE*0.10, ONE_ATMOSPHERE*1.90, ONE_ATMOSPHERE*2.3)
+	pressure_threshold = new /datum/airalarm_threshold(-1, ONE_ATMOSPHERE*0.10, ONE_ATMOSPHERE*3.20, ONE_ATMOSPHERE*5.4)
 	temperature_threshold = new /datum/airalarm_threshold(20, 40, 140, 160)
 	target_temperature = 90
 	scrubbed_gases = list( GAS_OXYGEN, GAS_CARBON, GAS_PLASMA )
@@ -244,10 +248,11 @@
 							GAS_NITROGEN = new /datum/airalarm_threshold(-1, -1, -1, -1),
 							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 5, 10),
 							GAS_PLASMA = new /datum/airalarm_threshold(16, 18, 135, 140),
+							GAS_RADON = new /datum/airalarm_threshold(-1, -1, 0.05, 0.1),
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
-	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
+	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*2.00, ONE_ATMOSPHERE*3.20)
 	temperature_threshold = new /datum/airalarm_threshold(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
 	scrubbed_gases = list( GAS_OXYGEN, GAS_NITROGEN, GAS_CARBON )
@@ -260,6 +265,7 @@
 							GAS_NITROGEN = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
+							GAS_RADON = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
@@ -276,6 +282,7 @@
 							GAS_NITROGEN = new /datum/airalarm_threshold(16, 18, 135, 140),
 							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, -1, -1),
 							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_RADON = new /datum/airalarm_threshold(-1, -1, 0.05, 0.1),
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, -1, -1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, -1, -1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
@@ -383,6 +390,7 @@ var/global/list/air_alarms = list()
 			src.initialize()
 		return
 
+	setup_sound()
 	first_run()
 	update_icon()
 
@@ -398,6 +406,19 @@ var/global/list/air_alarms = list()
 		this_area.air_alarms.Remove(src)
 	air_alarms -= src
 	..()
+
+/obj/machinery/alarm/setup_sound()
+	sound_emitter = new /datum/sound_emitter(src, is_static = TRUE)
+	if (sound_emitter)
+		var/sound/warn_sound = sound()
+		warn_sound.file = 'sound/machines/effects/air_alarm_warning.ogg'
+		warn_sound.volume = 50
+		sound_emitter.add(warn_sound, "warn_sound")
+
+		var/sound/danger_sound = sound()
+		danger_sound.file = 'sound/machines/effects/air_alarm_danger.ogg'
+		danger_sound.volume = 50
+		sound_emitter.add(danger_sound, "danger_sound")
 
 /obj/machinery/alarm/proc/apply_preset(var/no_cycle_after=0, var/propagate=1)
 	if(airalarm_presets[preset_key])
@@ -503,6 +524,7 @@ var/global/list/air_alarms = list()
 	if (old_level < new_danger || (danger_averted_confidence >= 5 && new_danger < old_level))
 		setDangerLevel(new_danger)
 		update_icon()
+		update_sound()
 		danger_averted_confidence = 0 // Reset counter.
 		use_power = MACHINE_POWER_USE_ACTIVE
 
@@ -529,6 +551,8 @@ var/global/list/air_alarms = list()
 		if(this_area.fire)
 			preset_key = "Fire Suppression"
 			apply_preset(1)
+			auto_suppress = FALSE
+			config.suppression_mode = FALSE
 	return
 
 /obj/machinery/alarm/proc/calculate_local_danger_level(const/datum/gas_mixture/environment)
@@ -584,6 +608,16 @@ var/global/list/air_alarms = list()
 		if (2)
 			icon_state = "alarm1"
 			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_alarm1")
+
+/obj/machinery/alarm/proc/update_sound()
+	var/area/this_area = get_area(src)
+	switch(max(local_danger_level, this_area.atmosalm-1))
+		if (0)
+			sound_emitter.stop()
+		if (1)
+			sound_emitter.play("warn_sound")
+		if (2)
+			sound_emitter.play("danger_sound")
 
 /obj/machinery/alarm/receive_signal(datum/signal/signal)
 	var/area/this_area = get_area(src)
@@ -1293,6 +1327,8 @@ FIRE ALARM
 			alarm()
 
 /obj/machinery/firealarm/AICtrlClick()
+	if(is_pulselocked(usr))
+		return
 	if(alarm == 1)
 		reset()
 	else
@@ -1320,6 +1356,9 @@ FIRE ALARM
 	src.add_fingerprint(user)
 
 	if (istype(W,/obj/item/inflatable/shelter))
+		if(shelter)
+			to_chat(user, "<span class='warning'>\The [src] already has a shelter, remove it to put this one in.</span>")
+			return
 		qdel(W)
 		shelter = TRUE
 		update_icon()
@@ -1446,7 +1485,7 @@ FIRE ALARM
 		dat += "An emergency shelter is mounted within. <A href='?src=\ref[src];shelter=1'>Retrieve</A>"
 	else
 		dat += "The shelter has been removed. <A href='?src=\ref[src];shelter=1'>Insert</A>"
-	user << browse(dat, "window=firealarm")
+	user << browse(HTML_SKELETON(dat), "window=firealarm")
 	onclose(user, "firealarm")
 
 /obj/machinery/firealarm/Topic(href, href_list)
@@ -1602,7 +1641,7 @@ var/global/list/firealarms = list() //shrug
 		var/second = time % 60
 		var/minute = (time - second) / 60
 		var/dat = text("<HTML><HEAD></HEAD><BODY><TT><B>Party Button</B> []\n<HR>\nTimer System: []<BR>\nTime Left: [][] <A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT></BODY></HTML>", d1, d2, (minute ? text("[]:", minute) : null), second, src, src, src, src)
-		user << browse(dat, "window=partyalarm")
+		user << browse(HTML_SKELETON(dat), "window=partyalarm")
 		onclose(user, "partyalarm")
 	else
 		if (this_area.fire)
@@ -1616,7 +1655,7 @@ var/global/list/firealarms = list() //shrug
 		var/second = time % 60
 		var/minute = (time - second) / 60
 		var/dat = text("<HTML><HEAD></HEAD><BODY><TT><B>[]</B> []\n<HR>\nTimer System: []<BR>\nTime Left: [][] <A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT></BODY></HTML>", stars("Party Button"), d1, d2, (minute ? text("[]:", minute) : null), second, src, src, src, src)
-		user << browse(dat, "window=partyalarm")
+		user << browse(HTML_SKELETON(dat), "window=partyalarm")
 		onclose(user, "partyalarm")
 	return
 

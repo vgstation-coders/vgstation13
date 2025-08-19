@@ -53,6 +53,12 @@
 	message = "The microdosimetry meter onboard [station_name()] has been tripped by recent cosmic interference. Automated Bragg Curve calculations show a threat of ion implantation in crew members, which may lead to sickness or organ failure. Central Command advises regular health screening of staff displaying symptoms of malaise."
 	..()
 
+/datum/command_alert/hog
+	name = "HOG"
+	alert_title = "HOG"
+	force_report = 1
+	message = "A Hazardous Organic Grease-source (HOG) has been detected in your station maintenance. Remove it before its secretions damage station equipment."
+
 ///////HISS
 
 /datum/command_alert/xenomorph_station_lockdown

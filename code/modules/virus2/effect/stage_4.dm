@@ -1185,6 +1185,81 @@
 		H.set_species("Grey", transfer_damage = TRUE)
 		H.regenerate_icons()
 
+/datum/disease2/effect/loneliness
+	name = "Loneliness Syndrome"
+	desc =  "Causes the infected to be unable to perceive others at all."
+	stage = 4
+	badness = EFFECT_DANGER_DEADLY
+	var/list/image/null_images = list()
+	var/activated = 0
+
+/datum/disease2/effect/loneliness/activate(var/mob/living/mob)
+	if(count % 15 == 1)
+		to_chat(mob,pick("Where did everybody go?","It's so lonely now.","It's just you.","There's nobody here."))
+	if(!activated)
+		activated = world.time
+		QDEL_LIST_CUT(null_images)
+		if(mob.client)
+			for(var/mob/other in mob_list)
+				if(other != mob)
+					var/image/I = image(other.icon,other.icon_state)
+					I.overlays = other.overlays
+					I.override = 1
+					I.loc = other
+					mob.client.images += I
+					null_images += I
+					animate(I, alpha = 0, time = 20)
+	
+/datum/disease2/effect/loneliness/side_effect(var/mob/living/mob)
+	if(mob && mob.client && world.time - activated > 20)
+		QDEL_LIST_CUT(null_images)
+		for(var/mob/other in mob_list)
+			if(other != mob)
+				var/image/I = image(null)
+				I.override = 1
+				I.loc = other
+				mob.client.images += I
+				null_images += I
+		var/image/I2 = image(null)
+		I2.override = 1
+		I2.loc = typing_indicator
+		mob.client.images += I2
+		null_images += I2
+
+/datum/disease2/effect/loneliness/deactivate(mob/living/carbon/mob)
+	to_chat(mob,pick("Everybody is back now.","You feel more in with the crowd again."))
+	if(mob.client)
+		mob.client.images.Remove(null_images)
+		QDEL_LIST_CUT(null_images)
+		for(var/mob/other in mob_list)
+			if(other != mob)
+				var/image/I = image(other.icon,other.icon_state)
+				I.overlays = other.overlays
+				I.override = 1
+				I.loc = other
+				I.alpha = 0
+				mob.client.images += I
+				null_images += I
+				animate(I, alpha = 255, time = 20)
+		sleep(20)
+		mob.client.images.Remove(null_images)
+	QDEL_LIST_CUT(null_images)
+	activated = 0
+
+/mob/proc/loneliness_affected(atom/source = src, ignore_self = FALSE)
+	return FALSE
+
+/mob/living/loneliness_affected(atom/source = src, ignore_self = FALSE)
+	if(ignore_self && source == src)
+		return FALSE
+	if(virus2.len)
+		for(var/ID in virus2)
+			var/datum/disease2/disease/V = virus2[ID]
+			for(var/datum/disease2/effect/e in V.effects)
+				if(e.count > 0 && e.type == /datum/disease2/effect/loneliness)
+					return ismob(source)
+	return FALSE
+
 /*
 /datum/disease2/effect/faithless
 	name = "Curse of the Faithless"
