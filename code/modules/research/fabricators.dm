@@ -340,6 +340,9 @@
 					continue
 				being_built.materials.storage[matID] = 0 // Reset the item's resource cost and use the design's.
 				being_built.materials.addAmount(matID, get_resource_cost_w_coeff(part,matID)) //slap in what we built with - matching the cost
+		else if(being_built.materials) // Check if it has materials, and if so reduce them accordingly
+			for(var/matID in being_built.materials.storage)
+				being_built.materials.storage[matID] = get_resource_cost_w_coeff_no_design(being_built.materials.storage[matID], matID)
 		if(part.locked && research_flags &LOCKBOXES)
 			var/obj/item/weapon/storage/lockbox/L
 			//if(research_flags &TRUELOCKS)
@@ -499,6 +502,10 @@
 
 /obj/machinery/r_n_d/fabricator/proc/get_resource_cost_w_coeff(var/datum/design/part as obj,var/resource as text, var/roundto=1)
 	return max(1,round(part.materials[resource]*resource_coeff, roundto))
+
+// When you just want to convert a value directly into a resource cost without relying on the design
+/obj/machinery/r_n_d/fabricator/proc/get_resource_cost_w_coeff_no_design(var/value, var/resource, var/roundto = 1)
+	return max(1, round(value*resource_coeff, roundto))
 
 //produces the adjusted time taken to build a component
 //different fabricators have different modifiers

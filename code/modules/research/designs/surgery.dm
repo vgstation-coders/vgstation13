@@ -96,7 +96,7 @@
 		if(!I.materials)
 			continue
 		for(var/matID in I.materials.storage)
-			I.materials.storage[matID] = F.get_resource_cost_w_coeff(src, matID)
+			I.materials.storage[matID] = F.get_resource_cost_w_coeff_no_design(I.materials.storage[matID], matID)
 
 /datum/design/empty_switchtool
 	name = "Surgeon's Switchtool (Empty)"
