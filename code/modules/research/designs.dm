@@ -70,6 +70,7 @@ The required techs are the following:
 	var/locked = 0						//If true it will spawn inside a lockbox with currently sec access
 	var/list/req_lock_access			//Sets the access for the lockbox that a locked item spawns in
 	var/category = "Misc"				//Primarily used for Mech Fabricators, but can be used for anything
+	var/use_design_materials = TRUE		//Determines whether the printed item will have the design's material costs as its materials
 
 //A proc to calculate the reliability of a design based on tech levels and innate modifiers.
 //Input: A list of /datum/tech; Output: The new reliabilty.

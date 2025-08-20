@@ -332,13 +332,14 @@
 	if(start_end_anims)
 		flick("[base_state]_end",src)
 	if(being_built)
-		if(!being_built.materials)
-			being_built.materials = new /datum/materials(being_built)
-		for(var/matID in part.materials)
-			if(copytext(matID, 1, 2) != "$") //it's not a material, let's ignore it
-				continue
-			being_built.materials.storage = initial_materials.Copy()
-			being_built.materials.addAmount(matID, get_resource_cost_w_coeff(part,matID)) //slap in what we built with - matching the cost
+		if(part.use_design_materials) // Determines whether the printed item will use the design's resource costs for its materials
+			if(!being_built.materials)
+				being_built.materials = new /datum/materials(being_built)
+			for(var/matID in part.materials)
+				if(copytext(matID, 1, 2) != "$") //it's not a material, let's ignore it
+					continue
+				being_built.materials.storage[matID] = 0 // Reset the item's resource cost and use the design's.
+				being_built.materials.addAmount(matID, get_resource_cost_w_coeff(part,matID)) //slap in what we built with - matching the cost
 		if(part.locked && research_flags &LOCKBOXES)
 			var/obj/item/weapon/storage/lockbox/L
 			//if(research_flags &TRUELOCKS)
