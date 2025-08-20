@@ -6,7 +6,11 @@
 	return "Capture [amount] trophy skulls (decapitated heads). They must be from NT employees."
 
 /datum/objective/target/skulls/find_target()
-	amount = rand(2,5)
+	var/living_player_amt = player_list.len
+	if (istype(ticker.mode, /datum/gamemode/dynamic))
+		var/datum/gamemode/dynamic/D = ticker.mode
+		living_player_amt = D.living_players.len
+	amount = min(rand(2,5),living_player_amt)
 	explanation_text = format_explanation()
 	return 1
 
