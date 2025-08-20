@@ -15,7 +15,7 @@
 		for(var/mob/new_player/N in player_list)
 			if(N.ready)
 				living_player_amt++
-	amount = min(rand(2,5),living_player_amt)
+	amount = clamp(rand(2,5),1,living_player_amt)
 	explanation_text = format_explanation()
 	return 1
 
