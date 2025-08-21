@@ -32,7 +32,7 @@
 		var/slc = client.listener_context
 		qdel(slc) // dont ask me why its like this. i wont tell you (i dont know)
 		client.listener_context = null
-		client.listener_context = new /datum/sound_listener_context(client, src, world.view)
+	client.listener_context = new /datum/sound_listener_context(client, src, world.view)
 	return ..()
 
 /mob/living/silicon/ai/Login()
