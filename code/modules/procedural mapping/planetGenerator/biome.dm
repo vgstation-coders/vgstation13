@@ -20,14 +20,21 @@
 	var/list/mob_spawn_list
 	/// EXPANDED (no values) list of mobs that this biome can spawn.
 	var/list/mob_spawn_list_expanded
-
+	/// list of loot tables that this biome can spawn.
+	var/list/loot_tables_list
+	/// WEIGHTED list of loot objects that this biome can spawn.
+	var/list/loot_spawn_list
+	/// EXPANDED (no values) list of loot objects that this biome can spawn.
+	var/list/loot_spawn_list_expanded
 
 	/// Percentage chance that an open turf will attempt a flora spawn.
 	var/flora_spawn_chance = 2
 	/// Base percentage chance that an open turf will attempt a feature spawn.
-	var/feature_spawn_chance = 0.1
+	var/feature_spawn_chance = 1
 	/// Base percentage chance that an open turf will attempt a flora spawn.
 	var/mob_spawn_chance = 6
+	/// Base percentage chance that an open turf will attempt a loot spawn.
+	var/loot_spawn_chance = 1
 
 /datum/biome/New()
 	open_turf_types_expanded = expand_weights(open_turf_types)
@@ -37,6 +44,11 @@
 		feature_spawn_list_expanded = expand_weights(feature_spawn_list)
 	if(length(mob_spawn_list))
 		mob_spawn_list_expanded = expand_weights(mob_spawn_list)
+	for(var/datum/loot_table/LT in loot_spawn_list)
+		for(var/entry in LT.loot)
+			loot_spawn_list += entry
+	if(length(loot_spawn_list))
+		loot_spawn_list_expanded = expand_weights(loot_spawn_list)
 
 /// Changes the passed turf according to the biome's internal logic, optionally using string_gen,
 /// and adds it to the passed area.
@@ -122,6 +134,12 @@
 			// insert at the head of the list, so the most recent mobs get checked first
 			mob_list.Insert(1, spawned_mob)
 			floor_turf.turf_flags |= NO_LAVA_GEN_1
+
+	//LOOT SPAWNING HERE
+	if(length(flora_spawn_list_expanded) && prob(flora_spawn_chance) && (a_flags & FLORA_ALLOWED))
+		spawned_flora = pick(flora_spawn_list_expanded)
+		spawned_flora = new spawned_flora(floor_turf)
+		floor_turf.turf_flags |= NO_LAVA_GEN_1
 
 /datum/biome/cave
 	/// WEIGHTED list of closed turfs that this biome can place

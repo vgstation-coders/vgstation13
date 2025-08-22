@@ -52,7 +52,7 @@ var/datum/subsystem/mapping/SSmapping
 	//hobo shack generation, one shack will spawn, 1/3 chance of two shacks
 	if(!map.skip_hobo_shack)
 		generate_hoboshack()
-		if (rand(1,3) == 3)
+		if (prob(33))
 			generate_hoboshack()
 
 	watch = start_watch()

@@ -541,3 +541,18 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/crumpled/bloody
 	icon_state = "scrap_bloodied"
+
+/obj/item/weapon/paper/random
+	var/list/possible = list()
+	var/list/blacklist = list(
+		/obj/item/weapon/paper/flag,
+		/obj/item/weapon/paper/photograph,
+		)
+
+/obj/item/weapon/paper/random/New()
+	..()
+	possible = subtypesof(/obj/item/weapon/paper)
+	var/paper_type = pick(possible - blacklist)
+	var/obj/item/weapon/paper/P = new paper_type(get_turf(src))
+	P = null
+	qdel(src)
