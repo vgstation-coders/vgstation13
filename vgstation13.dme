@@ -2513,7 +2513,6 @@
 #include "code\modules\randomMaps\transit.dm"
 #include "code\modules\randomMaps\vault_definitions.dm"
 #include "code\modules\randomMaps\vaults.dm"
-#include "code\modules\randomvaults\loot_tables.dm"
 #include "code\modules\RCD\engie.dm"
 #include "code\modules\RCD\RCD.dm"
 #include "code\modules\RCD\RPD.dm"
