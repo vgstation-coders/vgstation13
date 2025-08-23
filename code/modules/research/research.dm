@@ -53,7 +53,7 @@ var/global/list/hidden_tech = list(
 	)
 
 /datum/research								//Holder for all the existing, archived, and known tech. Individual to console.
-	var/list/known_tech = list()			//List of locally known tech.
+	var/list/datum/tech/known_tech = list()			//List of locally known tech. Called with /datum/tech to be able to call tech variables directly
 	var/list/known_designs = list()			//List of available designs (at base reliability).
 	var/alphabetsort = FALSE				//Is it sorted alphabetically?
 

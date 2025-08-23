@@ -260,6 +260,7 @@
 #include "code\datums\disease.dm"
 #include "code\datums\emotes.dm"
 #include "code\datums\feedback.dm"
+#include "code\datums\flash_animations.dm"
 #include "code\datums\fuzzy_rules.dm"
 #include "code\datums\gas_giant.dm"
 #include "code\datums\laser_tag_game.dm"
