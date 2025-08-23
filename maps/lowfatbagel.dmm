@@ -16492,9 +16492,13 @@
 	},
 /area/engineering/engine)
 "aTT" = (
-/obj/machinery/door/poddoor{
+/obj/machinery/door/poddoor/preopen{
 	id_tag = "Secure Storage";
 	name = "Engineering Secure Storage"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
 	},
 /turf/simulated/floor,
 /area/engineering/engine_storage)
@@ -96379,10 +96383,6 @@
 /turf/simulated/floor/plating,
 /area/hallway/secondary/entry)
 "uHI" = (
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
@@ -96395,6 +96395,14 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 4;
 	tag = "icon-intact (EAST)"
+	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
 	},
 /turf/simulated/floor,
 /area/engineering/engine_storage)

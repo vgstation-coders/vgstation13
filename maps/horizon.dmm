@@ -39213,10 +39213,6 @@
 /turf/simulated/floor/plating,
 /area/engineering/engine_storage)
 "bxE" = (
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 4
 	},
@@ -39227,6 +39223,14 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 4;
+	name = "Firelock East"
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engine_storage)
@@ -39869,9 +39873,13 @@
 /turf/simulated/floor/plating,
 /area/engineering/engine_storage)
 "byE" = (
-/obj/machinery/door/poddoor{
+/obj/machinery/door/poddoor/preopen{
 	id_tag = "Secure Storage";
 	name = "Engineering Secure Storage"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 4;
+	name = "Firelock East"
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engine_storage)

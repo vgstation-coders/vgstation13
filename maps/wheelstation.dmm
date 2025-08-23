@@ -68095,22 +68095,22 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/machinery/door/firedoor/border_only{
 	name = "Firelock South"
+	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
 	},
 /turf/simulated/floor,
 /area/engineering/engine_storage)
 "ctI" = (
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/machinery/door/firedoor/border_only{
 	name = "Firelock South"
+	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
 	},
 /turf/simulated/floor,
 /area/engineering/engine_storage)

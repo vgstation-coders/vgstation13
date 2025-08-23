@@ -4801,11 +4801,20 @@
 	},
 /area/centcom/control)
 "bSk" = (
-/obj/machinery/door/poddoor{
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/obj/machinery/door/poddoor/preopen{
 	id_tag = "Secure Storage";
 	name = "Engineering Secure Storage"
 	},
-/turf/simulated/floor,
+/obj/machinery/door/firedoor/border_only{
+	dir = 1;
+	name = "Firelock North"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/engineering/engine_storage)
 "bSz" = (
 /obj/structure/table/woodentable,
@@ -61729,16 +61738,25 @@
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/atmos)
 "yft" = (
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/structure/cable/orange{
 	icon_state = "1-2";
 	d1 = 1;
 	d2 = 2
 	},
-/turf/simulated/floor,
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 1;
+	name = "Firelock North"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/engineering/engine_storage)
 "yfx" = (
 /obj/machinery/door/airlock/silver{

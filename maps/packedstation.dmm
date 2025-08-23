@@ -37432,14 +37432,14 @@
 	dir = 8;
 	name = "Firelock West"
 	},
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
 	},
 /turf/simulated/floor{
 	dir = 6;
@@ -37797,7 +37797,7 @@
 	dir = 8;
 	name = "Firelock West"
 	},
-/obj/machinery/door/poddoor{
+/obj/machinery/door/poddoor/preopen{
 	id_tag = "Secure Storage";
 	name = "Engineering Secure Storage"
 	},

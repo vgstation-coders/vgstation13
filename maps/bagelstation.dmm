@@ -42793,15 +42793,19 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "bFW" = (
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engine_storage)
@@ -43829,10 +43833,6 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "bHM" = (
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
@@ -43843,6 +43843,14 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 8;
+	name = "Firelock West"
+	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engine_storage)

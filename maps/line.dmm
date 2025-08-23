@@ -47311,10 +47311,6 @@
 	},
 /area/maintenance/fsmaint)
 "gcp" = (
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
@@ -47324,6 +47320,10 @@
 /obj/machinery/door/firedoor/border_only{
 	dir = 4;
 	name = "Firelock East"
+	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
 	},
 /turf/simulated/floor{
 	dir = 9;
@@ -88488,10 +88488,6 @@
 	},
 /area/science/lab)
 "qEw" = (
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
@@ -88506,6 +88502,10 @@
 /obj/machinery/door/firedoor/border_only{
 	dir = 4;
 	name = "Firelock East"
+	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
 	},
 /turf/simulated/floor{
 	dir = 9;

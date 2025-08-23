@@ -15756,10 +15756,6 @@
 /turf/simulated/floor,
 /area/janitor)
 "dIK" = (
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/structure/cable/orange{
 	d1 = 4;
 	d2 = 8;
@@ -15767,6 +15763,14 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
+	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 4;
+	name = "Firelock East"
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engine_storage)
@@ -81494,12 +81498,16 @@
 	},
 /area/medical/surgery)
 "xnw" = (
-/obj/machinery/door/poddoor{
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/door/poddoor/preopen{
 	id_tag = "Secure Storage";
 	name = "Engineering Secure Storage"
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
+/obj/machinery/door/firedoor/border_only{
+	dir = 4;
+	name = "Firelock East"
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engine_storage)

@@ -19910,12 +19910,15 @@
 	},
 /area/engineering/antimatter_room)
 "aJS" = (
-/obj/machinery/door/poddoor{
+/obj/effect/decal/warning_stripes{
+	icon_state = "unloading"
+	},
+/obj/machinery/door/poddoor/preopen{
 	id_tag = "Secure Storage";
 	name = "Engineering Secure Storage"
 	},
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -19923,10 +19926,6 @@
 	},
 /area/engineering/engine_storage)
 "aJT" = (
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
@@ -19937,20 +19936,30 @@
 	icon_state = "1-2";
 	tag = ""
 	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
+	},
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "vault"
 	},
 /area/engineering/engine_storage)
 "aJU" = (
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
+	},
+/obj/machinery/door/firedoor/border_only{
+	name = "Firelock South"
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "vault"

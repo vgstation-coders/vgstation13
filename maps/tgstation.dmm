@@ -79080,12 +79080,12 @@
 	dir = 1;
 	name = "Firelock North"
 	},
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
+	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
 	},
 /turf/simulated/floor{
 	dir = 6;
@@ -79100,14 +79100,14 @@
 	dir = 1;
 	name = "Firelock North"
 	},
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
+	},
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "dark"
@@ -79118,10 +79118,6 @@
 	dir = 1;
 	name = "Firelock North"
 	},
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Engineering Secure Storage"
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
@@ -79130,6 +79126,10 @@
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
 	},
 /turf/simulated/floor{
 	dir = 6;

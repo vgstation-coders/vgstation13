@@ -17900,12 +17900,16 @@
 	},
 /area/engineering/engine)
 "aLC" = (
-/obj/machinery/door/poddoor{
-	id_tag = "Secure Storage";
-	name = "Secure Storage"
-	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
+	},
+/obj/machinery/door/poddoor/preopen{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 4;
+	name = "Firelock East"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
