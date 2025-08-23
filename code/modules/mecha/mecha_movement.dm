@@ -63,6 +63,7 @@
 
 /obj/mecha/proc/dyndomove(direction)
 	var/obj/item/mecha_parts/component/electrical/EC = internal_components[MECH_ELECTRIC]
+	var/weight_excess = (get_step_delay() * 100)
 	stopMechWalking()
 	if(!can_move)
 		return 0
@@ -72,11 +73,15 @@
 		return 0
 	if(lock_controls) //No moving while using the Gravpult!
 		return 0
+	if(flipped)
+		return 0
 	var/move_result = 0
 	startMechWalking()
 	var/stepped = TRUE
 	if(hasInternalDamage(MECHA_INT_CONTROL_LOST))
 		move_result = mechsteprand()
+		if(prob(35))
+			TryFlip(TRUE, FALSE, TRUE)
 	else if(src.dir!=direction && !lock_dir)
 		move_result = mechturn(direction)
 		stepped = FALSE
@@ -97,6 +102,8 @@
 			if(!src.check_for_support())
 				src.pr_inertial_movement.start(list(src,direction))
 				src.log_message("Movement control lost. Inertial movement started.")
+		if(weight_excess * 1.5 > weight_max && prob(15)) // 1.5x forgiveness
+			TryFlip(TRUE, FALSE, TRUE)
 		sleep(get_step_delay())
 		if(!src)
 			return

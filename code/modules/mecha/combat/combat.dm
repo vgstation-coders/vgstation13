@@ -6,7 +6,6 @@
 	internal_damage_threshold = 50
 	light_range_off = 0 //combat mechs leak no cabin light for stealth operation
 	cursor_enabled = 1 //cursor is enabled by default for combat mechs
-	maint_access = 0
 	//add_req_access = 0
 	//operation_req_access = list(access_hos)
 	damage_absorption = list("brute"=0.7,"fire"=1,"bullet"=0.7,"laser"=0.85,"energy"=1,"bomb"=0.8)
@@ -22,9 +21,14 @@
 */
 
 /obj/mecha/combat/melee_action(target as obj|mob|turf)
+	var/obj/item/mecha_parts/component/actuator/actuator = internal_components[MECH_ACTUATOR]
 	if(internal_damage&MECHA_INT_CONTROL_LOST)
 		target = safepick(oview(1,src))
-	if(!melee_can_hit || !istype(target, /atom))
+	if(!melee_can_hit || !istype(target, /atom) || flipped)
+		return
+	if(!actuator || actuator.integrity <= 0)
+		src.occupant_message("Error: No response received from hydraulic circuits.")
+		src.visible_message("<span class='red'><b>The [src]'s arm hydraulics hiss weakly.</b></span>")
 		return
 	if(istype(target, /mob/living))
 		var/mob/living/M = target

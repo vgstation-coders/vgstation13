@@ -145,13 +145,15 @@
 	var/overload = FALSE
 	var/defense_mode = FALSE
 	var/emp_gear_proof = FALSE // Does this mecha's chassis have a random chance to drop gear when EMP'd?
-
 	var/base_color = null // Mecha padding color. Used to paint visible equipment in special color.
 
 	var/list/cargo = new
 	var/cargo_capacity = 0
 	var/obj/structure/ore_box/ore_box //to save on locate()
 	var/obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/hydraulic_clamp // Throws mech cargo stuff into mainline mechas.
+
+	var/flipped = FALSE
+	var/user_trapped = FALSE
 
 /obj/mecha/get_cell()
 	return cell
@@ -383,6 +385,7 @@ Fire damage comes from tank
 	if(hasInternalDamage(MECHA_INT_CONTROL_LOST))
 		target = safepick(view(3,target))
 		if(!target)
+
 			return
 	if(get_dist(src, target)>1)
 		if(selected && selected.is_ranged())
@@ -474,7 +477,7 @@ Fire damage comes from tank
 /obj/mecha/attack_hand(mob/living/user as mob, monkey = FALSE)
 	var/obj/item/mecha_parts/component/armor/ArmC = internal_components[MECH_ARMOR]
 
-	var/temp_deflect_chance = deflect_chance
+	var/temp_deflect_chance = deflect_chance + ArmC.deflect_chance
 
 	if(!ArmC)
 		temp_deflect_chance = 1
@@ -491,6 +494,25 @@ Fire damage comes from tank
 		R.rack.AltClick(user)
 		return
 	user.do_attack_animation(src, user)
+
+	var/intento = user.a_intent
+
+	if(M_HULK in user.mutations)
+		switch(intento)
+			if(I_DISARM)
+				TryFlip(user, TRUE, FALSE)
+			if(I_HURT)
+				if(!prob(temp_deflect_chance))
+					src.take_damage(15)
+					src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
+					user.visible_message("<span class='red'><b>[user] hits [src.name], doing some damage.</b></span>", "<span class='red'><b>You hit [src.name] with all your might. The metal creaks and bends.</b></span>")
+	else
+		if(user.a_intent == I_DISARM)
+			TryFlip(user, FALSE, FALSE)
+		else
+			user.visible_message("<span class='red'><b>[user] hits [src.name]. Nothing happens.</b></span>","<span class='red'><b>You hit [src.name] with no visible effect.</b></span>")
+			src.log_append_to_last("Armor saved.")
+/*
 	if ((M_HULK in user.mutations) && !prob(temp_deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
@@ -498,7 +520,7 @@ Fire damage comes from tank
 	else
 		user.visible_message("<span class='red'><b>[user] hits [src.name]. Nothing happens.</b></span>","<span class='red'><b>You hit [src.name] with no visible effect.</b></span>")
 		src.log_append_to_last("Armor saved.")
-
+*/
 	user.delayNextAttack(10)
 
 /obj/mecha/attack_paw(mob/user as mob)
@@ -856,7 +878,7 @@ Fire damage comes from tank
 	return "[icon_state]-open"
 
 /obj/mecha/proc/TryMaints(var/mob/user, var/obj/item/weapon/card/id/id_card)
-	if(!user in range(1))
+	if(!(user in range(1)))
 		return
 
 	if(occupant && state == STATE_BOLTSEXPOSED)
@@ -1029,6 +1051,8 @@ Fire damage comes from tank
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You pry out \the [remove] from \the [src].</span>")
 			src.log_message("Internal component removed - [remove]")
+		if(flipped)
+			TryUnFlip(user, FALSE, tool = W)
 		return
 
 	else if(istype(W, /obj/item/stack/cable_coil))
@@ -1509,6 +1533,17 @@ Fire damage comes from tank
 
 	if(usr != occupant)
 		return
+	if(user_trapped)
+		to_chat(occupant, "<span class='danger'>The [src]'s cockpit hatch is pinned underneath its bulk and won't budge! You try pushing with all your strength..</span>")
+		Jostle()
+		if(do_after(occupant, src, 5 SECONDS))
+			if(prob(10))
+				to_chat(occupant, "<span class='warning'>You manage to extract yourself from the [src].</span>")
+				src.go_out()
+			else
+				to_chat(occupant, "<span class='warning'>You fail to extract yourself from the [src]. </span>")
+				return
+		return
 	src.go_out()
 	add_fingerprint(usr)
 	return
@@ -1530,6 +1565,9 @@ Fire damage comes from tank
 	if(istype(occupant, /mob/living/carbon/brain))
 		return
 	if(usr.incapacitated() || !occupant)
+		return
+	if(user_trapped)
+		to_chat(occupant, "<span class='danger'>The [src]'s cockpit hatch is pinned underneath its bulk and won't budge!</span>")
 		return
 	if(usr != occupant)
 		if(occupant.isUnconscious())
@@ -1554,6 +1592,8 @@ Fire damage comes from tank
 	for(var/obj/O in src)
 		if(O in mech_parts) //One of our internal components
 			continue
+		if(O in internal_components)
+			continue // Polaris components, should already be in mech_parts
 		if(O in equipment) //It's our equipment
 			continue
 		if(extra_stuff && (O in extra_stuff)) //Something else we need to keep? Say no more!
@@ -2068,15 +2108,17 @@ Fire damage comes from tank
 /obj/mecha/proc/CheckEnclosed() // Checks and sets if the mech is still enclosed
 	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
 	if(HC && HC.integrity > 0)
-		enclosed = TRUE
-		SetPressure()
 		can_lock = TRUE
+		if(internal_tank in contents)
+			enclosed = TRUE
+			SetPressure()
 	else
 		enclosed = FALSE
 		can_lock = FALSE
 		maint_access = TRUE
 		add_req_access = TRUE
 		SetPressure()
+		use_internal_tank = !use_internal_tank
 
 /obj/mecha/proc/TryWeldBreak(var/obj/item/mecha_parts/component/component, var/mob/living/user, obj/item/weapon/W as obj) // Heeeeeeeeere's Johnny
 	if(!component || !user || !W)
@@ -2084,6 +2126,152 @@ Fire damage comes from tank
 	to_chat(user, "<span class='warning'>You cut apart the [src]'s [component]!</span>")
 	visible_message("<span class='warning'>The [src]'s [component] is cut apart by [user]!</span>")
 	component.damage_part(1000, BRUTE) // Smash
+
+//////////////////////////////////
+////////  Flip  ////////
+//////////////////////////////////
+/obj/mecha
+	var/falloutchance = 5
+	var/crushchance = 5
+/obj/mecha/working/ripley/hichance
+	crushchance = 95
+	falloutchance = 95
+#warn test
+/*
+// to-do:
+Add pushing mechs over
+Add hulk and fitness checks
+Add jostling similar to lockers
+Add trying to righten mechs without a tool
+Add mech table/rack climbing
+*/
+
+/obj/mecha/proc/TryFlip(var/mob/living/user, var/hulk = FALSE, var/mechanical = FALSE, var/mechaclamp = FALSE)
+	if(flipped)
+		return
+	if(!src || src.health <= 0)
+		return
+
+	var/weight = (max(1, get_step_delay()) * 100)
+	var/chance = (max(1, weight/10))
+	var/obj/item/mecha_parts/mecha_equipment/tool/clamp
+
+	if(mechanical) // If the cause is mech, it always suceeds
+		DoFlip(TRUE, reason = null)
+		return
+	else
+		if(hulk)
+			if(do_after(user, src, 2 SECONDS))
+				if(!prob(min(85, chance)))
+					to_chat(user, "<span class='warning'>You strain, muscles bulging, but nothing happens..</span>")
+					return
+				to_chat(user, "<span class='warning'>You shove over the [src]!</span>")
+				DoFlip(TRUE, reason = "[user]'s meaty arms")
+				return
+
+		if(mechaclamp)
+			if(do_after(user, src, 3 SECONDS))
+				if(!prob(min(25, chance * 0.5))) // Slightly slower, but much more likely
+					to_chat(user, "<span class='warning'>The [clamp] strains, hydraulics hissing, but nothing happens..</span>")
+					return
+				to_chat(user, "<span class='warning'>The [clamp]'s hydraulics whine loudly, as it overturns [src]!</span>")
+				DoFlip(TRUE, reason = "[clamp.chassis]'s hydraulic gripper")
+
+		else
+			if(user == /mob/living)
+				var/fitness = (min(1, user.get_strength())) // idk if it ever goes under 1
+				if(do_after(user, src, 6 SECONDS))
+					if(!prob(min(99 / fitness, chance / fitness))) // Difficult?
+						DoFlip(FALSE, reason = "[user]'s shove")
+						return
+
+/obj/mecha/proc/DoFlip(var/success = TRUE, var/reason)
+	var/weight_mult = 1 * get_step_delay() // Mech's weight increases damage (it falls on you)
+	var/mecha_crush_dam = 10 * max(weight_mult, 1) // Deadly if heavy/unlucky enough
+	if(!src || src.health <= 0)
+		return
+	Jostle(TRUE)
+	flip_horizontal()
+	user_trapped = TRUE // Locks the pilot compartment
+	flipped = TRUE
+	playsound(src, 'sound/effects/bang.ogg', 50, 1, -1)
+	visible_message("<span class='red'><b>[reason ? "[reason] causes [src] to turn over with a earth-shattering CRASH!" : "[src] violently turns over with a metallic thunk!"]</b></span>")
+	take_damage(mecha_crush_dam/2)
+	layer = CLOSED_DOOR_LAYER
+	plane = OBJ_PLANE
+	if(occupant && !enclosed)
+		if(prob(falloutchance)) // occuapnt falls out
+			to_chat(occupant, "<span class='danger'>As [src] turns over, you topple out of the open hull onto the ground!</span>")
+			occupant.take_overall_damage(10) // ow my face
+			occupant.Stun(1)
+			occupant.Knockdown(1)
+			if(prob(crushchance)) // occupant is crushed after falling out
+				occupant.take_overall_damage(mecha_crush_dam)
+				occupant.Stun(2)
+				occupant.Knockdown(2)
+				visible_message("<span class='red'><b>[occupant] is crushed by [src]!</b></span>")
+				src.go_out(loc)
+			src.go_out()
+
+/obj/mecha/Uncross(atom/movable/mover)
+	if(!src || src.health <= 0)
+		return
+
+	if(flipped)
+		if(density && ismob(mover) && !(istype(mover,/mob/living/simple_animal/shade)))//REEEEEEE // copied from airlock code
+			to_chat(mover, "<span class='danger'>You are pinned underneath the overturned [src]; you cannot move!")
+			return 0
+
+/obj/mecha/proc/Jostle(var/Flip = FALSE)
+
+// Put icon shaking here. "Jostle" is when the mech does something risky like climbing, or when it flips, and when something attempts to righten it.
+
+/obj/mecha/proc/TryUnFlip(mob/living/user, var/trying = FALSE, var/tool, var/mechclamp = FALSE)
+	if(!src || src.health <= 0 || !src.flipped)
+		return
+
+	var/chance = 95
+
+	if(user && ismob(user))
+		to_chat(user, "<span class='note'>You wedge the [tool] underneath the [src] and try to righten it..")
+		trying = TRUE
+		if(do_after(user, src, 1 SECONDS))
+			if(!trying)
+				return
+			if(!chance)
+				to_chat(user, "<span class='warning'>Despite your effort, the [src] slams back to the ground!")
+				trying = FALSE
+				if(prob(50))
+					to_chat(user, "<span class='danger'>The [src] slams ontop of your foot before you can move it away!")
+					user.take_overall_damage(10)
+					trying = FALSE
+					return
+				return
+			else
+				to_chat(user, "<span class='note'>Somehow, you manage to righten the [src] with your [tool].")
+				trying = FALSE
+				src.flipped = FALSE
+				src.unflip_horizontal()
+				src.Jostle()
+				layer = initial(layer)
+				plane = initial(plane)
+
+/obj/mecha/proc/flip_horizontal()
+
+	var/matrix/M = matrix()
+	M = matrix()
+	M.Scale(-1, 1)  // Flip horizontally
+	src.transform = M
+	src.transform = turn(src.transform, 90)
+
+/obj/mecha/proc/unflip_horizontal()
+
+	var/matrix/M = matrix()
+	M = matrix()
+	M.Scale(1, -1)  // Flip horizontally
+	src.transform = M
+	src.transform = turn(src.transform, -90)
+
 
 //////////////////////////////////
 ////////  Icon procs  ////////

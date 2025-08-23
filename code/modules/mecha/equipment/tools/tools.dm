@@ -122,7 +122,19 @@
 		set_ready_state(0)
 		chassis.use_power(energy_drain)
 		do_after_cooldown()
+	else if(istype(target, /obj/mecha))
+		var/obj/mecha/mecha = target
+		if(!mecha || mecha.health <= 0)
+			return
+		if(mecha.flipped)
+			mecha.TryUnFlip(user = chassis, FALSE, tool = src)
+		else
+			mecha.TryFlip(user = chassis, FALSE, FALSE, TRUE)
 	return 1
+
+// /obj/mecha/proc/TryFlip(var/mob/living/user, var/hulk = FALSE, var/mechanical = FALSE, var/mechaclamp = FALSE)
+
+// /obj/mecha/proc/TryUnFlip(mob/living/user, var/trying = FALSE, var/tool, var/mechclamp = FALSE)
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill
 	name = "\improper Exosuit-Mounted Drill"
