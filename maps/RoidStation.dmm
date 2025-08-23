@@ -61267,6 +61267,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/machinery/computer/tetris,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -133366,6 +133367,12 @@
 	},
 /turf/simulated/floor/plating,
 /area/turret_protected/tcomms_control_room)
+"xtw" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/prison/cell_block/A)
 "xCq" = (
 /obj/structure/window/reinforced/plasma{
 	dir = 8
@@ -334675,7 +334682,7 @@ dSQ
 ptc
 ptc
 dUp
-dSH
+xtw
 dVj
 dSH
 dVF

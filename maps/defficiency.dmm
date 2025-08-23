@@ -35127,6 +35127,7 @@
 	dir = 4
 	},
 /obj/structure/disposalpipe/segment,
+/obj/machinery/computer/tetris,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -110263,6 +110264,12 @@
 /obj/structure/reagent_dispensers/water_cooler,
 /turf/simulated/floor,
 /area/engineering/break_room)
+"lOW" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/prison)
 "lWt" = (
 /obj/effect/decal/cleanable/cobweb,
 /obj/item/stack/rods,
@@ -250025,7 +250032,7 @@ ciO
 cey
 cly
 eRl
-cnX
+lOW
 cpa
 cqd
 crm
