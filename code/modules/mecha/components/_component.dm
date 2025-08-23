@@ -144,6 +144,14 @@
 	chassis = null
 	return TRUE
 
+/obj/item/mecha_parts/component/proc/solder_act(var/mob/living/user, var/obj/item/tool/solder/S)
+	return
+
+/obj/item/mecha_parts/component/attackby(obj/item/W as obj, mob/user as mob) // todo: Add soldering interaction
+	if(issolder(W))
+		var/obj/item/tool/solder/S = W
+		return solder_act(user, S)
+
 /*
 /obj/item/mecha_parts/component/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/stack/nanopaste))

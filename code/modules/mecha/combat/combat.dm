@@ -6,8 +6,6 @@
 	internal_damage_threshold = 50
 	light_range_off = 0 //combat mechs leak no cabin light for stealth operation
 	cursor_enabled = 1 //cursor is enabled by default for combat mechs
-	//add_req_access = 0
-	//operation_req_access = list(access_hos)
 	damage_absorption = list("brute"=0.7,"fire"=1,"bullet"=0.7,"laser"=0.85,"energy"=1,"bomb"=0.8)
 	var/am = "d3c2fbcadca903a41161ccc9df9cf948"
 
@@ -30,6 +28,12 @@
 		src.occupant_message("Error: No response received from hydraulic circuits.")
 		src.visible_message("<span class='red'><b>The [src]'s arm hydraulics hiss weakly.</b></span>")
 		return
+	if(actuator && !actuator.combat_punches)
+		src.force = 5
+		src.fist.force = src.force
+	else
+		src.force = initial(src.force)
+		src.fist.force = initial(src.fist.force)
 	if(istype(target, /mob/living))
 		var/mob/living/M = target
 		if(src.occupant.a_intent == I_HURT)

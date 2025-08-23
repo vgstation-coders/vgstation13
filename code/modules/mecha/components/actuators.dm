@@ -14,9 +14,22 @@
 	relative_size = 25
 	internal_damage_flag = MECHA_INT_CONTROL_LOST
 	broken_icon = "motor_broken"
+	var/combat_punches = TRUE
 
 /obj/item/mecha_parts/component/actuator/get_step_delay()
 	return step_delay
+
+/obj/item/mecha_parts/component/actuator/solder_act(mob/living/user, obj/item/tool/solder/S)
+	if(!user || !src)
+		return
+
+	if(S.do_solder(user, src, 2 SECONDS, 4))
+		S.playtoolsound(loc, 100)
+		to_chat(user, "<span class='warning'>You [combat_punches ? "solder over" : "remove the solder from"] the high-pressure electro-hydraulic power socket [src].</span>")
+		if(combat_punches)
+			combat_punches = FALSE
+		else
+			combat_punches = TRUE
 
 /obj/item/mecha_parts/component/actuator/hispeed
 	name = "overclocked mecha actuator"

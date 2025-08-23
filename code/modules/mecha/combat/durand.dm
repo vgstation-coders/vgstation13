@@ -12,7 +12,7 @@
 	infra_luminosity = 8
 	force = 40
 	var/defence_deflect = 25
-	var/defence_dam_min = 5
+	var/defence_dam_min = 6
 	wreckage = /obj/effect/decal/mecha_wreckage/durand
 	mech_sprites = list(
 		"durand",

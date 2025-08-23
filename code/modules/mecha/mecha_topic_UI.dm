@@ -260,7 +260,7 @@
 /obj/mecha/Topic(href, href_list)
 	..()
 	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
-//	var/obj/item/mecha_parts/component/electrical/zap = internal_components[MECH_ELECTRIC]
+	var/obj/item/mecha_parts/component/electrical/EC = internal_components[MECH_ELECTRIC]
 	if(href_list["update_content"])
 		if(usr != src.occupant)
 			return
@@ -368,7 +368,7 @@
 		if(state)
 			occupant_message("<span class='red'>Maintenance protocols in effect.</span>")
 			return
-		if(!HC || HC.integrity <= 0) // Idea: you can't lock without a hull, rather than a electrical. Electrical is storage, here the hull is physically smashed or non-existent.
+		if(!HC || HC.integrity <= 0 || !HC.locking)
 			occupant_message("Error: no response from hull securing bolts. Aborting.")
 			return
 		maint_access = !maint_access
@@ -413,6 +413,9 @@
 		if(!can_lock)
 			to_chat(user, "The exosuit panel fails to respond to your input.")
 			return
+		if(!EC || EC.integrity <= 0 || !EC.locking)
+			to_chat(user, "The exosuit panel fails to respond to your input.")
+			return
 		var/obj/item/weapon/card/id/mycard = topic_filter.getObj("id_card")
 		var/list/myaccess = mycard.access
 		for(var/a in myaccess)
@@ -452,6 +455,9 @@
 				src.dna = src.occupant.dna.unique_enzymes
 				src.occupant_message("You feel a prick as the needle takes your DNA sample.")
 			else
+				src.occupant_message("Error: data storage device not found. Aborting.")
+				return
+			if(!EC || EC.integrity <= 0 || !EC.locking)
 				src.occupant_message("Error: data storage device not found. Aborting.")
 				return
 		return

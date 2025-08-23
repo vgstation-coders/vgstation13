@@ -17,6 +17,19 @@
 	var/surprise = FALSE // It's a surprise!
 	var/pressure_proof = FALSE
 	var/hull_soak = 0.5 // Percentage of damage 'soaked' by the hull
+	var/locking = TRUE
+
+/obj/item/mecha_parts/component/hull/solder_act(mob/living/user, obj/item/tool/solder/S)
+	if(!user || !src)
+		return
+
+	if(S.do_solder(user, src, 2 SECONDS, 4))
+		S.playtoolsound(loc, 100)
+		to_chat(user, "<span class='warning'>You [locking ? "solder over" : "remove the solder from"] the electromagnet power socket on [src].</span>")
+		if(locking)
+			locking = FALSE
+		else
+			locking = TRUE
 
 /obj/item/mecha_parts/component/hull/lightweight
 	name = "lightweight mecha hull"

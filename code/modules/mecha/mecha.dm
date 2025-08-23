@@ -131,7 +131,8 @@
 		MECH_ACTUATOR = null,
 		MECH_ARMOR = null,
 		MECH_GAS = null,
-		MECH_ELECTRIC = null
+		MECH_ELECTRIC = null,
+		MECH_COUPLER = null
 		)
 
 	var/list/starting_components = list(
@@ -139,7 +140,8 @@
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor,
 		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
 		)
 
 	var/overload = FALSE
@@ -318,7 +320,7 @@
 	else
 		to_chat(user, "<span class='danger'>It lacks a proper hull structure.</span>")
 
-	if(!HC || HC.integrity <= 0)
+	if(!HC || HC.integrity <= 0 || !HC.locking)
 		to_chat(user, "<span class='warning'>The maintenance panel is exposed and accessible.</span>")
 
 	if(enclosed)
@@ -500,15 +502,18 @@ Fire damage comes from tank
 	if(M_HULK in user.mutations)
 		switch(intento)
 			if(I_DISARM)
-				TryFlip(user, TRUE, FALSE)
+				TryFlip(user, FALSE, tool = "[user]'s meaty arms")
 			if(I_HURT)
 				if(!prob(temp_deflect_chance))
 					src.take_damage(15)
 					src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 					user.visible_message("<span class='red'><b>[user] hits [src.name], doing some damage.</b></span>", "<span class='red'><b>You hit [src.name] with all your might. The metal creaks and bends.</b></span>")
+				else
+					user.visible_message("<span class='red'><b>[user] hits [src.name]. Nothing happens.</b></span>","<span class='red'><b>You hit [src.name] with no visible effect.</b></span>")
+					src.log_append_to_last("Armor saved.")
 	else
-		if(user.a_intent == I_DISARM)
-			TryFlip(user, FALSE, FALSE)
+		if(user.a_intent == I_DISARM && !flipped)
+			TryFlip(user, FALSE, FALSE, tool = "[user]'s shove")
 		else
 			user.visible_message("<span class='red'><b>[user] hits [src.name]. Nothing happens.</b></span>","<span class='red'><b>You hit [src.name] with no visible effect.</b></span>")
 			src.log_append_to_last("Armor saved.")
@@ -533,10 +538,10 @@ Fire damage comes from tank
 	var/temp_deflect_chance = deflect_chance
 
 	if(!ArmC)
-		temp_deflect_chance = 1
+		temp_deflect_chance = src.deflect_chance
 
 	else
-		temp_deflect_chance = round(ArmC.get_efficiency() * ArmC.deflect_chance + (defense_mode ? 25 : 0))
+		temp_deflect_chance = round(ArmC.get_efficiency() * ArmC.deflect_chance + src.deflect_chance + (defense_mode ? 25 : 0))
 
 	user.do_attack_animation(src, user)
 	src.log_message("Attack by alien. Attacker - [user].",1)
@@ -561,10 +566,10 @@ Fire damage comes from tank
 	var/temp_deflect_chance = deflect_chance
 
 	if(!ArmC)
-		temp_deflect_chance = 1
+		temp_deflect_chance = src.deflect_chance
 
 	else
-		temp_deflect_chance = round(ArmC.get_efficiency() * ArmC.deflect_chance + (defense_mode ? 25 : 0))
+		temp_deflect_chance = round(ArmC.get_efficiency() * ArmC.deflect_chance + src.deflect_chance + (defense_mode ? 25 : 0))
 
 	user.do_attack_animation(src, user)
 	src.log_message("Attack by simple animal. Attacker - [user].",1)
@@ -677,7 +682,7 @@ Fire damage comes from tank
 		penetration_reduction = src.penetration_reduction
 
 	else
-		temp_deflect_chance = round(ArmC.get_efficiency() * ArmC.deflect_chance + (defense_mode ? 25 : 0))
+		temp_deflect_chance = round(ArmC.get_efficiency() * ArmC.deflect_chance + src.deflect_chance + (defense_mode ? 25 : 0))
 		temp_damage_minimum = round(ArmC.get_efficiency() * ArmC.damage_minimum) + src.damage_minimum
 		penetration_reduction = ArmC.pen_reduction + src.penetration_reduction
 
@@ -928,7 +933,7 @@ Fire damage comes from tank
 	if(istype(W, /obj/item/mecha_parts/mecha_equipment))
 		var/obj/item/mecha_parts/mecha_equipment/E = W
 		spawn()
-			if(E.can_attach(src))
+			if(E.can_attach(src, user))
 				user.drop_item()
 				E.attach(src)
 				user.visible_message("[user] attaches [W] to [src]", "You attach [W] to [src]")
@@ -992,6 +997,18 @@ Fire damage comes from tank
 			mech_maints_ready = FALSE
 			to_chat(user, "You tighten the securing bolts.")
 			W.playtoolsound(src, 50)
+		else
+			var/remove = input(user, "Which module would you like to unbolt?", "Remove Module") as null|anything in equipment
+			if(!remove)
+				return
+			visible_message(src, "<span class='warning'>[user] starts unbolting the [equipment] from the [src].</span>")
+			if(do_after(usr, src, 4 SECONDS))
+				var/obj/item/mecha_parts/mecha_equipment/RmE = equipment[remove]
+				RmE.detach()
+				mech_parts.Remove(RmE)
+				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+				to_chat(user, "<span class='notice'>You unbolt \the [RmE] from \the [src].</span>")
+				src.log_message("External module removed - [RmE]")
 		return
 
 	else if(W.is_wirecutter(user))
@@ -1535,7 +1552,6 @@ Fire damage comes from tank
 		return
 	if(user_trapped)
 		to_chat(occupant, "<span class='danger'>The [src]'s cockpit hatch is pinned underneath its bulk and won't budge! You try pushing with all your strength..</span>")
-		Jostle()
 		if(do_after(occupant, src, 5 SECONDS))
 			if(prob(10))
 				to_chat(occupant, "<span class='warning'>You manage to extract yourself from the [src].</span>")
@@ -2098,9 +2114,10 @@ Fire damage comes from tank
 		src.maint_access = TRUE
 		return 0
 
-	if(!HC || HC.integrity <= 0)
+	if(!HC || HC.integrity <= 0 || !HC.locking)
 		can_lock = FALSE
 		src.maint_access = TRUE
+		return 0
 	else
 		can_lock = TRUE
 		return 1
@@ -2118,7 +2135,6 @@ Fire damage comes from tank
 		maint_access = TRUE
 		add_req_access = TRUE
 		SetPressure()
-		use_internal_tank = !use_internal_tank
 
 /obj/mecha/proc/TryWeldBreak(var/obj/item/mecha_parts/component/component, var/mob/living/user, obj/item/weapon/W as obj) // Heeeeeeeeere's Johnny
 	if(!component || !user || !W)
@@ -2136,6 +2152,7 @@ Fire damage comes from tank
 /obj/mecha/working/ripley/hichance
 	crushchance = 95
 	falloutchance = 95
+	weight_max = 10
 #warn test
 /*
 // to-do:
@@ -2144,9 +2161,23 @@ Add hulk and fitness checks
 Add jostling similar to lockers
 Add trying to righten mechs without a tool
 Add mech table/rack climbing
+
+Add mech equipment securing (welder, solder) to make "safe" nonlethal combat mechs
+
 */
 
-/obj/mecha/proc/TryFlip(var/mob/living/user, var/hulk = FALSE, var/mechanical = FALSE, var/mechaclamp = FALSE)
+/obj/mecha/Uncross(atom/movable/mover)
+	if(!src || src.health <= 0)
+		return
+
+	if(flipped)
+		if(density && ismob(mover) && !(istype(mover,/mob/living/simple_animal/shade)))//REEEEEEE // copied from airlock code
+			to_chat(mover, "<span class='danger'>You are pinned underneath the overturned [src]; you cannot move!")
+			return 0
+	else
+		return ..()
+
+/obj/mecha/proc/TryFlip(var/mob/living/user, var/mechanical = FALSE, var/tool)
 	if(flipped)
 		return
 	if(!src || src.health <= 0)
@@ -2154,35 +2185,34 @@ Add mech table/rack climbing
 
 	var/weight = (max(1, get_step_delay()) * 100)
 	var/chance = (max(1, weight/10))
-	var/obj/item/mecha_parts/mecha_equipment/tool/clamp
+	var/obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/clamp
+	var/trying = FALSE
+
+	if(trying)
+		return
 
 	if(mechanical) // If the cause is mech, it always suceeds
 		DoFlip(TRUE, reason = null)
 		return
 	else
-		if(hulk)
-			if(do_after(user, src, 2 SECONDS))
-				if(!prob(min(85, chance)))
-					to_chat(user, "<span class='warning'>You strain, muscles bulging, but nothing happens..</span>")
-					return
-				to_chat(user, "<span class='warning'>You shove over the [src]!</span>")
-				DoFlip(TRUE, reason = "[user]'s meaty arms")
-				return
-
-		if(mechaclamp)
+		if(tool == clamp)
+			trying = TRUE
 			if(do_after(user, src, 3 SECONDS))
+				trying = FALSE
 				if(!prob(min(25, chance * 0.5))) // Slightly slower, but much more likely
-					to_chat(user, "<span class='warning'>The [clamp] strains, hydraulics hissing, but nothing happens..</span>")
+					to_chat(user, "<span class='warning'>The [tool] strains, hydraulics hissing, but nothing happens..</span>")
 					return
-				to_chat(user, "<span class='warning'>The [clamp]'s hydraulics whine loudly, as it overturns [src]!</span>")
-				DoFlip(TRUE, reason = "[clamp.chassis]'s hydraulic gripper")
-
+				to_chat(user, "<span class='warning'>The [tool]'s hydraulics whine loudly, as it overturns [src]!</span>")
+				DoFlip(TRUE, reason = "[user]'s [tool]")
 		else
-			if(user == /mob/living)
-				var/fitness = (min(1, user.get_strength())) // idk if it ever goes under 1
-				if(do_after(user, src, 6 SECONDS))
-					if(!prob(min(99 / fitness, chance / fitness))) // Difficult?
-						DoFlip(FALSE, reason = "[user]'s shove")
+			if(ishuman(user))
+				trying = TRUE
+				var/fitness = (max(1, user.get_strength())) // idk if it ever goes under 1
+				var/time = (min(2, 6 / fitness))
+				if(do_after(user, src, time))
+					trying = FALSE
+					if(!prob(min(99 / fitness, (chance * 1.5) / fitness))) // Difficult?
+						DoFlip(FALSE, reason = "[user]'s [tool]")
 						return
 
 /obj/mecha/proc/DoFlip(var/success = TRUE, var/reason)
@@ -2190,7 +2220,6 @@ Add mech table/rack climbing
 	var/mecha_crush_dam = 10 * max(weight_mult, 1) // Deadly if heavy/unlucky enough
 	if(!src || src.health <= 0)
 		return
-	Jostle(TRUE)
 	flip_horizontal()
 	user_trapped = TRUE // Locks the pilot compartment
 	flipped = TRUE
@@ -2210,57 +2239,60 @@ Add mech table/rack climbing
 				occupant.Stun(2)
 				occupant.Knockdown(2)
 				visible_message("<span class='red'><b>[occupant] is crushed by [src]!</b></span>")
-				src.go_out(loc)
-			src.go_out()
+				src.go_out()
+			src.go_out(loc)
 
-/obj/mecha/Uncross(atom/movable/mover)
-	if(!src || src.health <= 0)
-		return
-
-	if(flipped)
-		if(density && ismob(mover) && !(istype(mover,/mob/living/simple_animal/shade)))//REEEEEEE // copied from airlock code
-			to_chat(mover, "<span class='danger'>You are pinned underneath the overturned [src]; you cannot move!")
-			return 0
-
-/obj/mecha/proc/Jostle(var/Flip = FALSE)
-
-// Put icon shaking here. "Jostle" is when the mech does something risky like climbing, or when it flips, and when something attempts to righten it.
-
-/obj/mecha/proc/TryUnFlip(mob/living/user, var/trying = FALSE, var/tool, var/mechclamp = FALSE)
+/obj/mecha/proc/TryUnFlip(var/mob/living/user, var/tool)
 	if(!src || src.health <= 0 || !src.flipped)
 		return
 
-	var/chance = 95
+	var/chance = 10
+	var/trying = FALSE
+	var/obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/clamp
 
-	if(user && ismob(user))
-		to_chat(user, "<span class='note'>You wedge the [tool] underneath the [src] and try to righten it..")
+	if(trying)
+		to_chat(user, "<span class='note'>The [src] is already being rightened!")
+		return
+	if(user && ishuman(user))
 		trying = TRUE
-		if(do_after(user, src, 1 SECONDS))
-			if(!trying)
-				return
-			if(!chance)
+		to_chat(user, "<span class='note'>You wedge the [tool] underneath the [src] and try to righten it..")
+		chance = 5 * (max(1, user.get_strength()))
+		if(do_after(user, src, 3 SECONDS))
+			trying = FALSE
+			if(!prob(chance))
 				to_chat(user, "<span class='warning'>Despite your effort, the [src] slams back to the ground!")
-				trying = FALSE
 				if(prob(50))
 					to_chat(user, "<span class='danger'>The [src] slams ontop of your foot before you can move it away!")
 					user.take_overall_damage(10)
-					trying = FALSE
 					return
 				return
 			else
 				to_chat(user, "<span class='note'>Somehow, you manage to righten the [src] with your [tool].")
-				trying = FALSE
-				src.flipped = FALSE
-				src.unflip_horizontal()
-				src.Jostle()
-				layer = initial(layer)
-				plane = initial(plane)
+				UnFlip()
+	else
+		if(tool == clamp)
+			trying = TRUE
+			to_chat(user, "<span class='note'>The [user] wedges its [tool] underneath the [src], trying to raise it.")
+			chance = 90
+			if(do_after(user, src, 3 SECONDS))
+				if(prob(chance))
+					trying = FALSE
+					UnFlip()
+
+/obj/mecha/proc/UnFlip()
+	if(!src || src.health <= 0)
+		return
+
+	flipped = FALSE
+	user_trapped = FALSE
+	unflip_horizontal()
+	layer = initial(layer)
+	plane = initial(plane)
 
 /obj/mecha/proc/flip_horizontal()
 
 	var/matrix/M = matrix()
 	M = matrix()
-	M.Scale(-1, 1)  // Flip horizontally
 	src.transform = M
 	src.transform = turn(src.transform, 90)
 
@@ -2268,10 +2300,8 @@ Add mech table/rack climbing
 
 	var/matrix/M = matrix()
 	M = matrix()
-	M.Scale(1, -1)  // Flip horizontally
 	src.transform = M
 	src.transform = turn(src.transform, -90)
-
 
 //////////////////////////////////
 ////////  Icon procs  ////////

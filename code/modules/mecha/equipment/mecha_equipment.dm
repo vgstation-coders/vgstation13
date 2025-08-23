@@ -121,7 +121,11 @@
 		chassis.use_power(energy_drain * 10)
 	return
 
-/obj/item/mecha_parts/mecha_equipment/proc/can_attach(obj/mecha/M as obj)
+/obj/item/mecha_parts/mecha_equipment/proc/can_attach(obj/mecha/M as obj, var/mob/living/user)
+	var/obj/item/mecha_parts/component/coupler/CO = chassis.internal_components[MECH_COUPLER]
+	if(!CO || CO.integrity <= 0)
+		to_chat(user, "<span class='warning'>The [chassis]'s coupling system is loose, and doesn't catch the [src]..</span>")
+		return
 	if(equip_type == EQUIP_HULL && M.hull_equipment.len < M.max_hull_equip)
 		return 1
 	if(equip_type == EQUIP_WEAPON && M.weapon_equipment.len < M.max_weapon_equip)
@@ -199,9 +203,18 @@
 /obj/item/mecha_parts/mecha_equipment/Topic(href,href_list)
 	if(usr.incapacitated() || usr != chassis.occupant)
 		return TRUE
+	var/obj/item/mecha_parts/component/coupler/CO = chassis.internal_components[MECH_COUPLER]
 //	testing("[src] topic")
 	if(href_list["detach"])
-		detach()
+		if(CO.welded)
+			chassis.occupant_message("<span class='red'>Error: unable to detach [src].</span>")
+			chassis.log_message("[src] detachment failure.")
+			return
+		if(!CO.quick_attach)
+			chassis.occupant_message("<span class='red'>Error: quick-detach system not found.</span>")
+			chassis.log_message("[src] detachment failure due to missing function.")
+		else
+			detach()
 	return
 
 

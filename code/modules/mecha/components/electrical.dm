@@ -15,7 +15,7 @@
 	internal_damage_flag = MECHA_INT_SHORT_CIRCUIT
 	broken_icon = "board_broken"
 	var/charge_cost_mod = 1
-	var/can_lock = TRUE
+	var/locking = TRUE
 /*
 /obj/item/mecha_parts/component/electrical/attackby(obj/item/W as obj, mob/user as mob) // todo: Add soldering interaction
 	if(issolder(W))

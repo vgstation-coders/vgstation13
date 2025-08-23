@@ -63,7 +63,7 @@
 
 /obj/mecha/proc/dyndomove(direction)
 	var/obj/item/mecha_parts/component/electrical/EC = internal_components[MECH_ELECTRIC]
-	var/weight_excess = (get_step_delay() * 100)
+	var/weight = (get_step_delay() * 100)
 	stopMechWalking()
 	if(!can_move)
 		return 0
@@ -102,7 +102,7 @@
 			if(!src.check_for_support())
 				src.pr_inertial_movement.start(list(src,direction))
 				src.log_message("Movement control lost. Inertial movement started.")
-		if(weight_excess * 1.5 > weight_max && prob(15)) // 1.5x forgiveness
+		if(weight > weight_max * 1.5 && prob(15)) // 1.5x forgiveness
 			TryFlip(TRUE, FALSE, TRUE)
 		sleep(get_step_delay())
 		if(!src)
