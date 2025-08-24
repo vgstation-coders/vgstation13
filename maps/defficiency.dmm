@@ -35449,11 +35449,12 @@
 /area/engineering/engine_storage)
 "bnB" = (
 /obj/machinery/door/poddoor{
-	density = 0;
-	icon_state = "pdoor0";
 	id_tag = "Secure Storage";
-	name = "secure storage";
-	opacity = 0
+	name = "Engineering Secure Storage"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 1;
+	name = "Firelock North"
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engine_storage)
