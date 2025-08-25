@@ -72,6 +72,21 @@
 		return 1
 	return 0
 
+//checks if projectile 'P' from turf 'from' can hit whatever is behind the table. Returns 1 if it can, 0 if bullet stops.
+/obj/machinery/door/table/proc/check_cover(obj/item/projectile/P, turf/from)
+	var/shooting_at_the_table_directly = P.original == src
+	var/chance = 60
+	if(shooting_at_the_table_directly || prob(chance))
+		health -= P.damage/2
+		if (health > 0)
+			visible_message("<span class='warning'>[P] hits \the [src]!</span>")
+			return 0
+		else
+			visible_message("<span class='warning'>[src] breaks down!</span>")
+			destroy()
+			return 1
+	return 1
+
 /obj/machinery/door/table/proc/update_adjacent()
 	for(var/direction in cardinal)
 		var/obj/structure/table/T = locate(/obj/structure/table, get_step(src, direction))
