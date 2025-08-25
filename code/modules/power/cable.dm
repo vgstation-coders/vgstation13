@@ -582,9 +582,12 @@ By design, d1 is the smallest direction and d2 is the highest
 			C.d2 = found_dirs[i]
 			C.color = src.color
 			C.update_icon()
-	d1 = found_dirs[1]
 	if(found_dirs.len >= 2)
+		d1 = found_dirs[1]
 		d2 = found_dirs[2]
+	else if(found_dirs.len == 1)
+		d1 = 0
+		d2 = found_dirs[1]
 	update_icon()
 
 /obj/structure/cable/mapping/yellow
