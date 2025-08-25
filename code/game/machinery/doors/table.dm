@@ -19,6 +19,10 @@
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	sheet_type = /obj/item/stack/sheet/metal
 
+/obj/machinery/door/table/Destroy()
+	. = ..()
+	QDEL_NULL(electronics)
+
 /obj/machinery/door/table/Bumped(atom/user)
 	if(operating)
 		return
@@ -65,6 +69,9 @@
 		return open()
 
 /obj/machinery/door/table/proc/dismantle()
+	if (electronics)
+		electronics.forceMove(loc)
+		electronics = null
 	if(sheet_type)
 		new sheet_type(loc)
 	qdel(src)
@@ -81,12 +88,28 @@
 	if (!W)
 		return
 
-	if (W.is_wrench(user))
-		to_chat(user, "<span class='notice'>Now disassembling [src]...</span>")
-		W.playtoolsound(src, 50)
-		if(do_after(user, src,50))
-			dismantle()
+	// Make open doors able to remove circuits
+	if(!density && iscrowbar(I) && electronics)
+		user.visible_message("[user] is removing [electronics] from [src].", "You start to remove \the [electronics] from [src].")
+		I.playtoolsound(src, 100)
+		if(do_after(user, src, 40) && src && !density && electronics)
+			to_chat(user, "<span class='notice'>You removed [electronics]!</span>")
+			electronics.forceMove(loc)
+			electronics = null
 		return
+
+	if (!electronics)
+		if(W.is_wrench(user))
+			to_chat(user, "<span class='notice'>Now disassembling [src]...</span>")
+			W.playtoolsound(src, 50)
+			if(do_after(user, src,50))
+				dismantle()
+			return
+
+		else if(istype(W,/obj/item/weapon/circuitboard/airlock))
+			if(user.drop_item(W,src))
+				electronics = W
+				to_chat(user, "<span class='notice'>You add [electronics] to [src].</span>")
 
 /obj/machinery/door/table/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
