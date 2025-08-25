@@ -20,8 +20,10 @@
 	sheet_type = /obj/item/stack/sheet/metal
 
 /obj/machinery/door/table/Destroy()
-	. = ..()
 	QDEL_NULL(electronics)
+	setDensity(FALSE)
+	update_adjacent()
+	. = ..()
 
 /obj/machinery/door/table/Bumped(atom/user)
 	if(operating)
@@ -37,6 +39,12 @@
 			return
 		TryToSwitchState(user)
 	return
+
+/obj/machinery/door/table/proc/update_adjacent()
+	for(var/direction in cardinal)
+		var/obj/structure/table/T = locate(/obj/structure/table, get_step(src, direction))
+		if(T)
+			T.update_icon()
 
 /obj/machinery/door/table/door_animate(animation) // no spritework for it
 	return
