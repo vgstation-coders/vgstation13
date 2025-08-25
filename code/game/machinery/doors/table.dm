@@ -52,7 +52,7 @@
 	if(operating)
 		return
 
-	if(!allowed(user))
+	if(!emagged && !allowed(user))
 		denied()
 	else
 		open()
@@ -125,8 +125,6 @@
 	return ..()
 
 /obj/machinery/door/table/attackby(obj/item/W as obj, mob/user as mob, params)
-	if(..())
-		return
 
 	if (!electronics)
 		if(W.is_wrench(user))
@@ -134,6 +132,7 @@
 			W.playtoolsound(src, 50)
 			if(do_after(user, src,50))
 				dismantle()
+			return
 
 		else if(panel_open && istype(W,/obj/item/weapon/circuitboard/airlock))
 			if(W.icon_state == "door_electronics_smoked")
@@ -148,6 +147,7 @@
 				electronics.installed = TRUE
 				playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You add [electronics] to [src].</span>")
+			return
 
 	// Make open doors able to remove circuits
 	else if(!density && panel_open && iscrowbar(W) && electronics)
@@ -157,6 +157,9 @@
 			to_chat(user, "<span class='notice'>You removed [electronics]!</span>")
 			electronics.forceMove(loc)
 			electronics = null
+		return
+
+	. = ..()
 
 /obj/machinery/door/table/emag_act(var/mob/user)
 	if (!electronics || emagged)
