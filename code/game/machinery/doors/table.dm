@@ -44,7 +44,7 @@
 	set_opacity(0) //always seethru
 
 /obj/machinery/door/table/Bumped(atom/user)
-	if(operating)
+	if(!density || operating)
 		return
 
 	if(!emagged && !allowed(user))
