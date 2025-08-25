@@ -575,10 +575,18 @@ By design, d1 is the smallest direction and d2 is the highest
 	for(var/subdir in cardinal)
 		if(junction & subdir)
 			found_dirs += list(subdir)
-	if(found_dirs.len >= 2)
+	if(found_dirs.len > 2)
+		for(var/i in 2 to found_dirs.len)
+			var/obj/structure/cable/C = new(loc)
+			C.d1 = found_dirs[i-1]
+			C.d2 = found_dirs[i]
+			C.color = src.color
+			C.update_icon()
+		qdel(src)
+	else if(found_dirs.len == 2)
 		d1 = found_dirs[1]
 		d2 = found_dirs[2]
-	update_icon()
+		update_icon()
 
 /obj/structure/cable/mapping/yellow
 	color = "#FFED00"
