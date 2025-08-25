@@ -41313,12 +41313,8 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/structure/cable/yellow{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
 /obj/structure/window/full/reinforced,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/crew_quarters/hop)
 "bLC" = (
@@ -42181,12 +42177,8 @@
 	name = "HIGH VOLTAGE";
 	pixel_y = -32
 	},
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/cable/yellow,
 /obj/structure/window/full/reinforced,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/crew_quarters/hop)
 "bNs" = (
