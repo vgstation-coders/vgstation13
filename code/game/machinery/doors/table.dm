@@ -120,10 +120,15 @@
 	else
 		return open()
 
-/obj/machinery/door/table/proc/dismantle()
+/obj/machinery/door/table/proc/remove_electronics()
 	if (electronics)
 		electronics.forceMove(loc)
 		electronics = null
+	req_access = list()
+	req_one_access = list()
+
+/obj/machinery/door/table/proc/dismantle()
+	remove_electronics()
 	if(sheet_type)
 		new sheet_type(loc,2)
 	qdel(src)
@@ -167,8 +172,7 @@
 		W.playtoolsound(src, 100)
 		if(do_after(user, src, 40) && src && !density && electronics)
 			to_chat(user, "<span class='notice'>You removed [electronics]!</span>")
-			electronics.forceMove(loc)
-			electronics = null
+			remove_electronics()
 		return
 
 	. = ..()
