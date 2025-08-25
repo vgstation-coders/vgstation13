@@ -564,6 +564,8 @@ By design, d1 is the smallest direction and d2 is the highest
 
 /obj/structure/cable/mapping/isSmoothableNeighbor(atom/A)
 	if(istype(A,/obj/structure/cable))
+		if(istype(A,/obj/structure/cable/mapping))
+			return TRUE
 		var/obj/structure/cable/C = A
 		return C.hasDir(get_dir(C,src))
 
