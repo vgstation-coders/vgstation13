@@ -2,7 +2,9 @@
 	announceWhen		= 5
 
 /datum/event/grid_check/can_start()
-	return 20
+	if(active_with_role["Any"] > 4)
+		return 20
+	return 0
 
 /datum/event/grid_check/setup()
 	endWhen = rand(30,120)

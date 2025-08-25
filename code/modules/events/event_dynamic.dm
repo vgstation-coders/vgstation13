@@ -88,9 +88,10 @@ var/list/possibleEvents = list()
 	active_with_role["Any"] = 0
 
 	for(var/mob/M in player_list)
-		if(!M.mind || !M.client || M.client.inactivity > 10 * 10 * 60) // longer than 10 minutes AFK counts them as inactive
+		if(!M.mind || !M.client || (M.client.inactivity > 10 * 10 * 60)) // longer than 10 minutes AFK counts them as inactive
 			continue
-
+		if(!istype(M, /mob/living)) //No observers nor players in the lobby
+			continue
 		active_with_role["Any"]++
 
 		if(isrobot(M))
