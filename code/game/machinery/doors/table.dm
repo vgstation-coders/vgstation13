@@ -83,7 +83,7 @@
 			return 0
 		else
 			visible_message("<span class='warning'>[src] breaks down!</span>")
-			destroy()
+			dismantle()
 			return 1
 	return 1
 
@@ -220,9 +220,36 @@
 	icon_state = "glassdoor_closed"
 	prefix = "glass"
 	sheet_type = /obj/item/stack/sheet/glass/rglass
+	var/shard_type = /obj/item/weapon/shard
+
+/obj/machinery/door/table/glass/kick_act()
+	health -= 5
+	checkhealth()
+	..()
+
+/obj/machinery/door/table/glass/proc/checkhealth()
+	if(health <= 0)
+		playsound(src, "shatter", 50, 1)
+		new shard_type(src.loc)
+		sheet_type = /obj/item/stack/rods
+		dismantle()
+
+/obj/machinery/door/table/glass/attackby(obj/item/W, mob/user, params)
+	if (user.a_intent == I_HURT)
+		user.do_attack_animation(src, W)
+		user.delayNextAttack(10)
+		health -= W.force
+		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>", \
+		"<span class='warning'>You hit \the [src] with \the [W].</span>")
+		playsound(src, 'sound/effects/Glasshit.ogg', 50, 1)
+		checkhealth()
+		return
+
+	. = ..()
 
 /obj/machinery/door/table/glass/plasma
 	name = "plasma glass table door"
 	icon_state = "pglassdoor_closed"
 	prefix = "pglass"
 	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
+	shard_type = /obj/item/weapon/shard/plasma
