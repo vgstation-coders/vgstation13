@@ -1,7 +1,7 @@
 /datum/event/grid_check	//NOTE: Times are measured in master controller ticks!
 	announceWhen		= 5
 
-/datum/event/grid_check/can_start()
+/datum/event/grid_check/can_start(var/list/active_with_role)
 	if(active_with_role["Any"] > 4)
 		return 20
 	return 0
