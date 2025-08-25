@@ -4,9 +4,10 @@
 	id = "laserscalpel1"
 	req_tech = list(Tc_MATERIALS = 3, Tc_ENGINEERING = 2, Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000)
+	materials = list (MAT_IRON = 15000, MAT_GLASS = 7500) //Contains both the scalpel and the cautery
 	category = "Surgery"
 	build_path = /obj/item/tool/scalpel/laser
+	use_design_materials = FALSE //Split between the scalpel and cautery
 
 /datum/design/laserscalpel2
 	name = "High Precision Laser Scalpel"
@@ -14,9 +15,10 @@
 	id = "laserscalpel2"
 	req_tech = list(Tc_MATERIALS = 4, Tc_ENGINEERING = 3, Tc_BIOTECH = 4)
 	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_URANIUM = 500)
+	materials = list (MAT_IRON = 15000, MAT_GLASS = 7500, MAT_URANIUM = 500)
 	category = "Surgery"
 	build_path = /obj/item/tool/scalpel/laser/tier2
+	use_design_materials = FALSE
 
 /datum/design/incisionmanager
 	name = "Surgical Incision Manager"

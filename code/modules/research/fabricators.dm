@@ -342,7 +342,8 @@
 				being_built.materials.addAmount(matID, get_resource_cost_w_coeff(part,matID)) //slap in what we built with - matching the cost
 		else if(being_built.materials) // Check if it has materials, and if so reduce them accordingly
 			for(var/matID in being_built.materials.storage)
-				being_built.materials.storage[matID] = get_resource_cost_w_coeff_no_design(being_built.materials.storage[matID], matID)
+				if(being_built.materials.storage[matID]) // Only do this for materials that the printed item actually has
+					being_built.materials.storage[matID] = get_resource_cost_w_coeff_no_design(being_built.materials.storage[matID], matID)
 		if(part.locked && research_flags &LOCKBOXES)
 			var/obj/item/weapon/storage/lockbox/L
 			//if(research_flags &TRUELOCKS)

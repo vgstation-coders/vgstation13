@@ -153,8 +153,12 @@ The required techs are the following:
 //obj/O: The freshly created object
 //obj/machinery/r_n_d/fabricator/F: the machine where the object was just manufactured
 /datum/design/proc/after_craft(var/obj/O, var/obj/machinery/r_n_d/fabricator/F)
-	return
-
+// Reduce the printed item materials accordingly
+	for(var/obj/item/I in O.contents)
+		if(!I.materials)
+			continue
+		for(var/matID in I.materials.storage)
+			I.materials.storage[matID] = F.get_resource_cost_w_coeff_no_design(I.materials.storage[matID], matID)
 ////////////////////////////////////////
 //Disks for transporting design datums//
 ////////////////////////////////////////
