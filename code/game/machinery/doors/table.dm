@@ -22,6 +22,16 @@
 /obj/machinery/door/table/New()
 	. = ..()
 	update_adjacent()
+	if(req_access?.len || req_one_access?.len)
+		electronics = new /obj/item/weapon/circuitboard/airlock(src)
+		electronics.installed = TRUE
+		if(req_access?.len)
+			electronics.conf_access = req_access
+		else if(req_one_access?.len)
+			electronics.conf_access = req_one_access
+			electronics.one_access = 1
+		electronics.dir_access = req_access_dir
+		electronics.access_nodir = access_not_dir
 
 /obj/machinery/door/table/Destroy()
 	QDEL_NULL(electronics)
@@ -42,15 +52,25 @@
 	if(operating)
 		return
 
-	if(istype(user, /obj/mecha))
+	if(!allowed(user))
+		denied()
+	else
 		open()
-	else if (istype(user, /obj/machinery/bot) && SpecialAccess(user))
-		open()
-	else if(ismob(user))
-		var/mob/M = user
-		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //This is what we call blind trust
-			return
-		TryToSwitchState(user)
+
+/obj/machinery/door/table/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(locate(/obj/effect/unwall_field) in loc)
+		return 1
+	if(air_group || (height==0))
+		return 1
+	if(istype(mover,/obj/item/projectile))
+		return (check_cover(mover,target))
+	if(ismob(mover))
+		var/mob/M = mover
+		if(M.flying)
+			return 1
+	if(istype(mover) && mover.checkpass(pass_flags_self))
+		return 1
+	return 0
 
 /obj/machinery/door/table/proc/update_adjacent()
 	for(var/direction in cardinal)
@@ -115,9 +135,17 @@
 			if(do_after(user, src,50))
 				dismantle()
 
-		else if(istype(W,/obj/item/weapon/circuitboard/airlock))
+		else if(panel_open && istype(W,/obj/item/weapon/circuitboard/airlock))
+			if(W.icon_state == "door_electronics_smoked")
+				to_chat(user, "<span class='warning'>Repair \the [W] before putting it in!</span>")
 			if(user.drop_item(W,src))
 				electronics = W
+				if(electronics.conf_access?.len)
+					if(electronics.one_access)
+						req_one_access = electronics.conf_access
+					else
+						req_access = electronics.conf_access
+				electronics.installed = TRUE
 				playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You add [electronics] to [src].</span>")
 
@@ -129,6 +157,13 @@
 			to_chat(user, "<span class='notice'>You removed [electronics]!</span>")
 			electronics.forceMove(loc)
 			electronics = null
+
+/obj/machinery/door/table/emag_act(var/mob/user)
+	if (!electronics || emagged)
+		return FALSE
+	electronics.icon_state = "door_electronics_smoked"
+	emagged = TRUE
+	return TRUE
 
 /obj/machinery/door/table/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
