@@ -14,6 +14,8 @@
 	prefix = "metal" //Corresponds to the mineral type
 
 	soundeffect = 'sound/effects/wood_door_slam.ogg'
+	var/obj/item/weapon/circuitboard/airlock/electronics = null
+	var/sheet_type = /obj/item/stack/sheet/metal
 
 /obj/machinery/door/table/Bumped(atom/user)
 	if(operating)
@@ -60,6 +62,11 @@
 	else
 		return open()
 
+/obj/machinery/door/table/proc/dismantle()
+	if(sheet_type)
+		new sheet_type(loc)
+	qdel(src)
+
 /obj/machinery/door/table/open()
 	playsound(src, soundeffect, 100, 1)
 	return ..()
@@ -68,42 +75,57 @@
 	playsound(src, soundeffect, 100, 1)
 	return ..()
 
+/obj/machinery/door/table/attackby(obj/item/W as obj, mob/user as mob, params)
+	if (!W)
+		return
+
+	if (W.is_wrench(user))
+		to_chat(user, "<span class='notice'>Now disassembling [src]...</span>")
+		W.playtoolsound(src, 50)
+		if(do_after(user, src,50))
+			dismantle()
+		return
+
 /obj/machinery/door/table/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
-		qdel(src)
+		dismantle()
 	return ..()
 
 /obj/structure/table/blob_act()
 	if(prob(75))
-		qdel(src)
+		dismantle()
 
 /obj/machinery/door/table/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			qdel(src)
+			dismantle()
 		if(2.0)
 			if (prob(50))
-				qdel(src)
+				dismantle()
 		if(3.0)
 			if (prob(25))
-				destroy()
+				dismantle()
 
 /obj/machinery/door/table/reinforced
 	name = "reinforced table door"
 	icon_state = "rmetaldoor_closed"
 	prefix = "rmetal"
+	sheet_type = /obj/item/stack/sheet/plasteel
 
 /obj/machinery/door/table/wood
 	name = "wooden table door"
 	icon_state = "wooddoor_closed"
 	prefix = "wood"
+	sheet_type = /obj/item/stack/sheet/wood
 
 /obj/machinery/door/table/glass
 	name = "glass table door"
 	icon_state = "glassdoor_closed"
 	prefix = "glass"
+	sheet_type = /obj/item/stack/sheet/glass/rglass
 
 /obj/machinery/door/table/glass/plasma
 	name = "plasma glass table door"
 	icon_state = "pglassdoor_closed"
 	prefix = "pglass"
+	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
