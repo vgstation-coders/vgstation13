@@ -30476,7 +30476,6 @@
 	},
 /obj/machinery/door/airlock/maintenance{
 	name = "Bar Storage";
-	req_access_txt = 0;
 	req_one_access_txt = "25;28"
 	},
 /obj/structure/disposalpipe/segment{
@@ -31400,7 +31399,9 @@
 	dir = 8;
 	name = "Firelock West"
 	},
-/obj/machinery/door/table/reinforced,
+/obj/machinery/door/table/reinforced{
+	req_one_access_txt = "25;28;35"
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "cafeteria"
@@ -32052,7 +32053,8 @@
 	dir = 4
 	},
 /obj/machinery/door/table/reinforced{
-	dir = 1
+	dir = 1;
+	req_one_access_txt = "25;28"
 	},
 /turf/simulated/floor{
 	icon_state = "grimy"
@@ -32249,7 +32251,9 @@
 /obj/machinery/status_display{
 	pixel_y = 32
 	},
-/obj/machinery/door/table/wood,
+/obj/machinery/door/table/wood{
+	req_access_txt = "37"
+	},
 /turf/simulated/floor/wood,
 /area/library)
 "bjl" = (
@@ -43384,7 +43388,8 @@
 /area/medical/medbay)
 "bEM" = (
 /obj/machinery/door/table/reinforced{
-	dir = 1
+	dir = 1;
+	req_access_txt = "5"
 	},
 /turf/simulated/floor{
 	dir = 1;
