@@ -29,6 +29,11 @@
 	update_adjacent()
 	. = ..()
 
+/obj/machinery/door/table/open()
+	..()
+	spawn(2 SECONDS)
+		close()
+
 /obj/machinery/door/table/close()
 	..()
 	set_opacity(0) //always seethru
@@ -46,7 +51,6 @@
 		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //This is what we call blind trust
 			return
 		TryToSwitchState(user)
-	return
 
 /obj/machinery/door/table/proc/update_adjacent()
 	for(var/direction in cardinal)
