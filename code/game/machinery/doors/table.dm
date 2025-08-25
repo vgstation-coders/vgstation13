@@ -110,9 +110,9 @@
 				to_chat(user, "<span class='notice'>You add [electronics] to [src].</span>")
 
 	// Make open doors able to remove circuits
-	else if(!density && panel_open && iscrowbar(I) && electronics)
+	else if(!density && panel_open && iscrowbar(W) && electronics)
 		user.visible_message("[user] is removing [electronics] from [src].", "You start to remove \the [electronics] from [src].")
-		I.playtoolsound(src, 100)
+		W.playtoolsound(src, 100)
 		if(do_after(user, src, 40) && src && !density && electronics)
 			to_chat(user, "<span class='notice'>You removed [electronics]!</span>")
 			electronics.forceMove(loc)

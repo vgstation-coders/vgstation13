@@ -43383,7 +43383,9 @@
 	},
 /area/medical/medbay)
 "bEM" = (
-/obj/machinery/door/table/reinforced,
+/obj/machinery/door/table/reinforced{
+	dir = 1
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whitegreen"
