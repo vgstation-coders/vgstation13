@@ -1045,6 +1045,9 @@
 	responsive_reagent = IRON
 
 /datum/find/chaosblade/spawn_item()
+	if(prob(50))
+		apply_prefix = FALSE
+		return new /obj/item/weapon/nullrod/sword/chaos/mimicry
 	return new /obj/item/weapon/nullrod/sword/chaos
 
 /datum/find/guitar
