@@ -2650,6 +2650,7 @@
 #include "code\modules\research\designs\mecha\weapons.dm"
 #include "code\modules\research\designs\mecha\mecha_components\actuator.dm"
 #include "code\modules\research\designs\mecha\mecha_components\armor.dm"
+#include "code\modules\research\designs\mecha\mecha_components\coupler.dm"
 #include "code\modules\research\designs\mecha\mecha_components\gas.dm"
 #include "code\modules\research\designs\mecha\mecha_components\hull.dm"
 #include "code\modules\research\designs\mecha\mecha_components\zap.dm"

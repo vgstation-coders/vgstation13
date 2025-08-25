@@ -29,7 +29,7 @@
 
 	damage_minimum = 0
 
-	weight_max = 200
+	weight_max = 300
 	penetration_reduction = 5 // blocks 9mm
 
 	max_hull_equip = 2
@@ -45,7 +45,8 @@
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor/alien,
 		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
 		)
 
 /obj/mecha/combat/phazon/New()

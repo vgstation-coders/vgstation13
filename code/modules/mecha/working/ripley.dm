@@ -31,7 +31,8 @@
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor/mining,
 		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
 		)
 
 	max_hull_equip = 2
@@ -94,7 +95,8 @@
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor/mining,
 		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
 		)
 
 /obj/mecha/working/ripley/mk2/firefighter/deathripley
@@ -121,6 +123,14 @@
 	max_universal_equip = 1
 	max_special_equip = 1
 
+	starting_components = list(
+		/obj/item/mecha_parts/component/hull/durable,
+		/obj/item/mecha_parts/component/actuator,
+		/obj/item/mecha_parts/component/armor/military,
+		/obj/item/mecha_parts/component/gas,
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
+		)
 
 /obj/mecha/working/ripley/mk2/firefighter/deathripley/New()
 	..()

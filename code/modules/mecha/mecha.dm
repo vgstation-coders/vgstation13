@@ -156,6 +156,7 @@
 
 	var/flipped = FALSE
 	var/user_trapped = FALSE
+	var/trying_to_flip = FALSE
 
 /obj/mecha/get_cell()
 	return cell
@@ -513,7 +514,7 @@ Fire damage comes from tank
 					src.log_append_to_last("Armor saved.")
 	else
 		if(user.a_intent == I_DISARM && !flipped)
-			TryFlip(user, FALSE, FALSE, tool = "[user]'s shove")
+			TryFlip(user, FALSE, tool = "[user]'s shove")
 		else
 			user.visible_message("<span class='red'><b>[user] hits [src.name]. Nothing happens.</b></span>","<span class='red'><b>You hit [src.name] with no visible effect.</b></span>")
 			src.log_append_to_last("Armor saved.")
@@ -1003,7 +1004,7 @@ Fire damage comes from tank
 				return
 			visible_message(src, "<span class='warning'>[user] starts unbolting the [equipment] from the [src].</span>")
 			if(do_after(usr, src, 4 SECONDS))
-				var/obj/item/mecha_parts/mecha_equipment/RmE = equipment[remove]
+				var/obj/item/mecha_parts/mecha_equipment/RmE = remove
 				RmE.detach()
 				mech_parts.Remove(RmE)
 				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -2158,8 +2159,6 @@ Fire damage comes from tank
 // to-do:
 Add pushing mechs over
 Add hulk and fitness checks
-Add jostling similar to lockers
-Add trying to righten mechs without a tool
 Add mech table/rack climbing
 
 Add mech equipment securing (welder, solder) to make "safe" nonlethal combat mechs
@@ -2182,38 +2181,42 @@ Add mech equipment securing (welder, solder) to make "safe" nonlethal combat mec
 		return
 	if(!src || src.health <= 0)
 		return
+	if(trying_to_flip)
+		return
 
 	var/weight = (max(1, get_step_delay()) * 100)
 	var/chance = (max(1, weight/10))
-	var/obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/clamp
-	var/trying = FALSE
 
-	if(trying)
-		return
-
-	if(mechanical) // If the cause is mech, it always suceeds
+	if(mechanical)
 		DoFlip(TRUE, reason = null)
 		return
 	else
-		if(tool == clamp)
-			trying = TRUE
+		if(istype(tool, /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp))
+			trying_to_flip = TRUE
+			to_chat(user, "<span class='notice'>You position the [tool] and begin attempting to flip [src]...</span>")
 			if(do_after(user, src, 3 SECONDS))
-				trying = FALSE
-				if(!prob(min(25, chance * 0.5))) // Slightly slower, but much more likely
+				trying_to_flip = FALSE
+				if(prob(min(25, chance * 0.5))) // Fixed: removed the !
+					to_chat(user, "<span class='warning'>The [tool]'s hydraulics whine loudly, as it overturns [src]!</span>")
+					DoFlip(TRUE, reason = "[user]'s [tool]")
+				else
 					to_chat(user, "<span class='warning'>The [tool] strains, hydraulics hissing, but nothing happens..</span>")
-					return
-				to_chat(user, "<span class='warning'>The [tool]'s hydraulics whine loudly, as it overturns [src]!</span>")
-				DoFlip(TRUE, reason = "[user]'s [tool]")
+				trying_to_flip = FALSE
+
 		else
 			if(ishuman(user))
-				trying = TRUE
-				var/fitness = (max(1, user.get_strength())) // idk if it ever goes under 1
-				var/time = (min(2, 6 / fitness))
+				trying_to_flip = TRUE
+				var/fitness = max(1, user.get_strength())
+				var/time = max(3, 8 - fitness) * 2 // 2 seconds
+				to_chat(user, "<span class='notice'>You brace yourself and begin trying to flip [src]...</span>")
 				if(do_after(user, src, time))
-					trying = FALSE
-					if(!prob(min(99 / fitness, (chance * 1.5) / fitness))) // Difficult?
-						DoFlip(FALSE, reason = "[user]'s [tool]")
-						return
+					trying_to_flip = FALSE
+					var/success_chance = min(5, 15 / fitness) // Very low chance, worse for weak people
+					if(prob(success_chance)) // Fixed: removed the !
+						to_chat(user, "<span class='warning'>Against all odds, you manage to flip [src]!</span>")
+						DoFlip(TRUE, reason = "[user] with [tool]")
+					else
+						to_chat(user, "<span class='warning'>Despite your best efforts, [src] is too heavy to flip.</span>")
 
 /obj/mecha/proc/DoFlip(var/success = TRUE, var/reason)
 	var/weight_mult = 1 * get_step_delay() // Mech's weight increases damage (it falls on you)

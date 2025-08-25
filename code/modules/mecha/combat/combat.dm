@@ -28,12 +28,13 @@
 		src.occupant_message("Error: No response received from hydraulic circuits.")
 		src.visible_message("<span class='red'><b>The [src]'s arm hydraulics hiss weakly.</b></span>")
 		return
-	if(actuator && !actuator.combat_punches)
-		src.force = 5
-		src.fist.force = src.force
-	else
-		src.force = initial(src.force)
-		src.fist.force = initial(src.fist.force)
+	if(actuator && actuator.integrity > 0)
+		if(!actuator.combat_punches)
+			src.force = 5
+			src.fist.force = src.force
+		else
+			src.force = initial(src.force)
+			src.fist.force = initial(src.fist.force)
 	if(istype(target, /mob/living))
 		var/mob/living/M = target
 		if(src.occupant.a_intent == I_HURT)

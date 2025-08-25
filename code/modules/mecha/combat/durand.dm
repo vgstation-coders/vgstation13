@@ -24,7 +24,7 @@
 
 
 	damage_minimum = 5 			//Big stompy
-	weight_max = 400
+	weight_max = 440
 	penetration_reduction = 5 // blocks 9mm, up to 7.62 with armor
 
 	max_hull_equip = 2
@@ -38,7 +38,8 @@
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor/military,
 		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
 		)
 
 /obj/mecha/combat/durand/New()

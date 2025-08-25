@@ -122,9 +122,9 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/can_attach(obj/mecha/M as obj, var/mob/living/user)
-	var/obj/item/mecha_parts/component/coupler/CO = chassis.internal_components[MECH_COUPLER]
+	var/obj/item/mecha_parts/component/coupler/CO = M.internal_components[MECH_COUPLER]
 	if(!CO || CO.integrity <= 0)
-		to_chat(user, "<span class='warning'>The [chassis]'s coupling system is loose, and doesn't catch the [src]..</span>")
+		to_chat(user, "<span class='warning'>The [M]'s coupling system is loose, and doesn't catch the [src]..</span>")
 		return
 	if(equip_type == EQUIP_HULL && M.hull_equipment.len < M.max_hull_equip)
 		return 1

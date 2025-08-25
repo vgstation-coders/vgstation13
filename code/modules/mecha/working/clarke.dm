@@ -32,7 +32,8 @@
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor/lightweight,
 		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
 		)
 
 	max_hull_equip = 1

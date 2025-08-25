@@ -80,7 +80,7 @@
 	name = "eZ-13 MK2 heavy pulse rifle"
 	icon_state = "mecha_pulse"
 	energy_drain = 120
-	origin_tech = Tc_MATERIALS + "=3;" + Tc_COMBAT + "=6;" + Tc_POWERSTORAGE + "=4"
+	origin_tech = Tc_MATERIALS + "=9;" + Tc_COMBAT + "=5;" + Tc_POWERSTORAGE + "=9"
 	projectile = /obj/item/projectile/beam/pulse/heavy
 	fire_sound = 'sound/weapons/marauder.ogg'
 	step_delay = 100
@@ -187,13 +187,14 @@
 	max_projectiles = 100
 	projectiles_cache_max = 300
 	projectiles_per_shot = 3
+	burst_delay = 2
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	caliber = POINT380
 	step_delay = 20
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/smg
-	name = "\improper exosuit-mounted Uzi"
-	desc = "A exosuit-mounted submachine gun firing 9mm rounds."
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/carbine
+	name = "\improper exosuit-mounted carbine"
+	desc = "A exosuit-mounted pistol caliber carbine firing 9mm rounds."
 	icon_state = "mecha_uac2"
 	equip_cooldown = 5
 	projectile = /obj/item/projectile/bullet/midbullet2

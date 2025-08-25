@@ -43,7 +43,8 @@
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor/military/marauder,
 		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
 		)
 
 /obj/mecha/combat/marauder/seraph

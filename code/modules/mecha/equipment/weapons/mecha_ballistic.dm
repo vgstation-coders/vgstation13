@@ -14,7 +14,7 @@
 	var/no_caliber = FALSE
 	var/list/loaded_projectiles = list()
 	var/projectile_type
-	var/projectile_burst_delay = 1 // Delay that seperates each projectile when burst-firing
+	var/burst_delay = 0 // Delay that seperates each projectile when burst-firing
 
 	var/projectiles_per_shot = 1
 	var/deviation = 0.7  //the shots were perfectly accurate no matter what this was set to
@@ -45,6 +45,7 @@
 		A.starting = curloc
 		A.yo = targloc.y - curloc.y
 		A.xo = targloc.x - curloc.x
+		sleep(burst_delay)
 		set_ready_state(0)
 		A.OnFired()
 		A.process()

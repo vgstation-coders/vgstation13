@@ -22,7 +22,7 @@
 	)
 
 	damage_minimum = 0
-	weight_max = 300
+	weight_max = 360
 	penetration_reduction = 3 // blocks .380
 
 	max_hull_equip = 1
@@ -36,7 +36,8 @@
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor/marshal,
 		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
 		)
 
 
@@ -60,7 +61,7 @@
 	cell_type = /obj/item/weapon/cell/hyper
 
 	penetration_reduction = 5
-	weight_max = 400
+	weight_max = 460
 	emp_gear_proof = TRUE
 
 	max_hull_equip = 2
@@ -74,7 +75,8 @@
 		/obj/item/mecha_parts/component/actuator/hispeed,
 		/obj/item/mecha_parts/component/armor/marshal/reinforced,
 		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
 		)
 
 

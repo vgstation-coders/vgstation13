@@ -22,7 +22,7 @@
 		to_chat(user, "<span class='warning'>You start melting the [src]'s locking release..</span>")
 		if(WT.do_weld(user, src, 5 SECONDS, 0))
 			to_chat(user, "<span class='warning'>You permanently weld shut the locking release.</span>")
-			if(welded)
+			if(!welded)
 				welded = TRUE // Somehow, this permanently locks it. Removing the component allows you to detact gear, but not attach it.
 			else
 				to_chat(user, "<span class='warning'>The electronic locking components have been fused, you can't repair this!</span>")

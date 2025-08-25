@@ -19,7 +19,7 @@
 		"urinetrouble"
 	)
 
-	weight_max = 120
+	weight_max = 140
 	penetration_reduction = 0
 	damage_minimum = 0
 
@@ -34,7 +34,8 @@
 		/obj/item/mecha_parts/component/actuator/hispeed,
 		/obj/item/mecha_parts/component/armor/lightweight,
 		/obj/item/mecha_parts/component/gas,
-		/obj/item/mecha_parts/component/electrical
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
 		)
 
 /obj/mecha/medical/odysseus/New()
