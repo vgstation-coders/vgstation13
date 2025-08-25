@@ -575,3 +575,24 @@ By design, d1 is the smallest direction and d2 is the highest
 		d1 = found_dirs[1]
 		d2 = found_dirs[2]
 	update_icon()
+
+/obj/structure/cable/mapping/yellow
+	color = "#FFED00"
+
+/obj/structure/cable/mapping/green
+	color = "#0B8400"
+
+/obj/structure/cable/mapping/blue
+	color = "#005C84"
+
+/obj/structure/cable/mapping/pink
+	color = "#CA00B6"
+
+/obj/structure/cable/mapping/orange
+	color = "#CA6900"
+
+/obj/structure/cable/mapping/cyan
+	color = "#00B5CA"
+
+/obj/structure/cable/mapping/white
+	color = "#D0D0D0"
