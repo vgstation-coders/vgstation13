@@ -10,7 +10,7 @@
 	open_layer = TABLE_LAYER
 	throwpass = 1	//You can throw objects over this, despite its density.
 	use_power = MACHINE_POWER_USE_NONE
-	machine_flags = 0
+	machine_flags = SCREWTOGGLE
 	icon = 'icons/obj/doors/tabledoor.dmi'
 	icon_state = "metaldoor_closed"
 	prefix = "metal" //Corresponds to the mineral type
@@ -85,17 +85,7 @@
 	return ..()
 
 /obj/machinery/door/table/attackby(obj/item/W as obj, mob/user as mob, params)
-	if (!W)
-		return
-
-	// Make open doors able to remove circuits
-	if(!density && iscrowbar(I) && electronics)
-		user.visible_message("[user] is removing [electronics] from [src].", "You start to remove \the [electronics] from [src].")
-		I.playtoolsound(src, 100)
-		if(do_after(user, src, 40) && src && !density && electronics)
-			to_chat(user, "<span class='notice'>You removed [electronics]!</span>")
-			electronics.forceMove(loc)
-			electronics = null
+	if(..())
 		return
 
 	if (!electronics)
@@ -104,12 +94,21 @@
 			W.playtoolsound(src, 50)
 			if(do_after(user, src,50))
 				dismantle()
-			return
 
 		else if(istype(W,/obj/item/weapon/circuitboard/airlock))
 			if(user.drop_item(W,src))
 				electronics = W
+				playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You add [electronics] to [src].</span>")
+
+	// Make open doors able to remove circuits
+	else if(!density && panel_open && iscrowbar(I) && electronics)
+		user.visible_message("[user] is removing [electronics] from [src].", "You start to remove \the [electronics] from [src].")
+		I.playtoolsound(src, 100)
+		if(do_after(user, src, 40) && src && !density && electronics)
+			to_chat(user, "<span class='notice'>You removed [electronics]!</span>")
+			electronics.forceMove(loc)
+			electronics = null
 
 /obj/machinery/door/table/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
