@@ -3,6 +3,8 @@
 
 /obj/machinery/door/table
 	name = "table door"
+	opacity = 0
+	animation_delay = 0
 	pass_flags_self = PASSTABLE
 	layer = TABLE_LAYER
 	open_layer = TABLE_LAYER
