@@ -220,7 +220,7 @@
 	var/turf/T2
 	var/densefound = FALSE
 	for(var/direction in cardinal)
-		T2 = get_step(T,dir)
+		T2 = get_step(T,direction)
 		if(T2.density || (locate(/obj/structure/table) in T2))
 			densefound = TRUE
 			break

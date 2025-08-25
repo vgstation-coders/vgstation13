@@ -32051,7 +32051,9 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/obj/machinery/door/table/reinforced,
+/obj/machinery/door/table/reinforced{
+	dir = 1
+	},
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},

@@ -15,7 +15,7 @@
 
 	soundeffect = 'sound/effects/wood_door_slam.ogg'
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
-	var/sheet_type = /obj/item/stack/sheet/metal
+	sheet_type = /obj/item/stack/sheet/metal
 
 /obj/machinery/door/table/Bumped(atom/user)
 	if(operating)
@@ -91,7 +91,7 @@
 		dismantle()
 	return ..()
 
-/obj/structure/table/blob_act()
+/obj/machinery/door/table/blob_act()
 	if(prob(75))
 		dismantle()
 
