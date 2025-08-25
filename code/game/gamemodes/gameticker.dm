@@ -41,7 +41,6 @@ var/datum/controller/gameticker/ticker
 
 	var/explosion_in_progress
 	var/station_was_nuked
-	var/no_life_on_station
 	var/revolutionary_victory //If on, Castle can be voted if the conditions are right
 	var/malfunctioning_AI_victory //If on, will play a different credits song
 
@@ -471,33 +470,6 @@ var/datum/controller/gameticker/ticker
 
 	if(cinematic)
 		qdel(cinematic)		//end the cinematic
-
-/datum/controller/gameticker/proc/station_nolife_cinematic(var/override = null)
-	if( cinematic )
-		return	//already a cinematic in progress!
-
-	for (var/datum/html_interface/hi in html_interfaces)
-		hi.closeAll()
-
-	//initialise our cinematic screen object
-	cinematic = new(src)
-	cinematic.icon = 'icons/effects/station_explosion.dmi'
-	cinematic.icon_state = "station_nolife"
-	cinematic.plane = HUD_PLANE
-	cinematic.mouse_opacity = 0
-	cinematic.screen_loc = "1,0"
-
-	//actually turn everything off
-	power_failure(0)
-
-	//If its actually the end of the round, wait for it to end.
-	//Otherwise if its a verb it will continue on afterwards.
-	sleep(300)
-
-	if(cinematic)
-		qdel(cinematic)		//end the cinematic
-
-	no_life_on_station = TRUE
 
 /datum/controller/gameticker/proc/process()
 	if(current_state != GAME_STATE_PLAYING)
