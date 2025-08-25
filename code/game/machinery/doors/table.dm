@@ -39,11 +39,6 @@
 	update_adjacent()
 	. = ..()
 
-/obj/machinery/door/table/open()
-	..()
-	spawn(2 SECONDS)
-		close()
-
 /obj/machinery/door/table/close()
 	..()
 	set_opacity(0) //always seethru
@@ -56,6 +51,8 @@
 		denied()
 	else
 		open()
+		spawn(2 SECONDS)
+			close()
 
 /obj/machinery/door/table/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(locate(/obj/effect/unwall_field) in loc)
