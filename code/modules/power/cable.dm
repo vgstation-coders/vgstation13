@@ -141,10 +141,8 @@ By design, d1 is the smallest direction and d2 is the highest
 	update_icon()
 
 /obj/structure/cable/update_icon()
-	if(invisibility)
-		icon_state = "[d1]-[d2]-f"
-	else
-		icon_state = "[d1]-[d2]"
+	alpha = invisibility ? 128 : 255
+	icon_state = "[d1]-[d2]"
 
 /obj/structure/cable/t_scanner_expose()
 	if (level != LEVEL_BELOW_FLOOR)
@@ -556,3 +554,24 @@ By design, d1 is the smallest direction and d2 is the highest
 
 /obj/structure/cable/proc/hasDir(var/dir)
 	return (d1 == dir || d2 == dir)
+
+/obj/structure/cable/mapping
+	icon_state = "auto"
+
+/obj/structure/cable/mapping/canSmoothWith()
+	var/static/list/smoothables = list(/obj/structure/cable)
+	return smoothables
+
+/obj/structure/cable/mapping/isSmoothableNeighbor(atom/A)
+	return hasDir(get_dir(A))
+
+/obj/structure/cable/mapping/relativewall()
+	. = ..()
+	var/list/found_dirs = list()
+	for(var/subdir in cardinal)
+		if(junction & subdir)
+			found_dirs += list(subdir)
+	if(found_dirs.len >= 2)
+		d1 = found_dirs[1]
+		d2 = found_dirs[2]
+	update_icon()
