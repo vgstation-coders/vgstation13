@@ -216,6 +216,18 @@
 		R.dorfify(mat)
 	return 1
 
+/datum/stack_recipe/table_door/can_build_here(mob/user, turf/T)
+	var/turf/T2
+	var/densefound = FALSE
+	for(var/direction in cardinal)
+		T2 = get_step(T,dir)
+		if(T2.density || (locate(/obj/structure/table) in T2))
+			densefound = TRUE
+			break
+	if(!densefound)
+		to_chat(user, "<span class='warning'>\The [title] must be constructed next to a table or wall!</span>")
+		return 0
+	return 1
 
 /datum/stack_recipe/blacksmithing
 	var/req_strikes = 15
@@ -339,6 +351,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe/chair("red couch inwards turn",    /obj/structure/bed/chair/comfy/couch/turn/inward/red,    2, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("red couch outwards turn",   /obj/structure/bed/chair/comfy/couch/turn/outward/red,   2, one_per_turf = 1, on_floor = 1),
 		), 2),
+	new/datum/stack_recipe/table_door("table door", /obj/machinery/door/table, 					  2, 			one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("table parts", /obj/item/weapon/table_parts,                           2                                ),
 	new/datum/stack_recipe("rack parts",  /obj/item/weapon/rack_parts,                                                             ),
 	new/datum/stack_recipe("crate shelf parts", /obj/item/weapon/rack_parts/shelf,                5                                ),
@@ -425,6 +438,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 ======================================================================== */
 var/list/datum/stack_recipe/plasteel_recipes = list (
 	new/datum/stack_recipe("reinforced floor tile", /obj/item/stack/tile/metal/plasteel, 1, 4, 60),
+	new/datum/stack_recipe/table_door("reinforced table door", /obj/machinery/door/table/reinforced, 			2, 			one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("plasteel bolts",				/obj/item/stack/bolts,								1,	time = 20),
 	new/datum/stack_recipe("railings",   					/obj/structure/railing/plasteel/loose,             	2, time = 50, on_floor = 1),
 	new/datum/stack_recipe("AI core",						/obj/structure/AIcore,								4,	time = 50,	one_per_turf = 1				),
@@ -467,6 +481,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("railings",   		/obj/structure/railing/wood/loose,      2,		time = 25, on_floor = 1),
 	null,
 	new/datum/stack_recipe("barrel",            /obj/structure/reagent_dispensers/cauldron/barrel/wood, 20, time = 5 SECONDS, one_per_turf = 1   ),
+	new/datum/stack_recipe/table_door("table door", /obj/machinery/door/table/wood, 	2, 					  one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("table parts",		/obj/item/weapon/table_parts/wood,		2													),
 	new/datum/stack_recipe("wooden chair",		/obj/structure/bed/chair/wood/normal,	1,		time = 10,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
