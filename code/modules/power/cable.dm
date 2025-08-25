@@ -585,7 +585,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(found_dirs.len >= 2)
 		d1 = found_dirs[1]
 		d2 = found_dirs[2]
-		if(locate(/obj/machinery/power) in loc)
+		if((locate(/obj/machinery/power) in loc) || (locate(/obj/structure/grille) in loc))
 			var/obj/structure/cable/C = new(loc)
 			C.d1 = 0
 			C.d2 = found_dirs[1]
