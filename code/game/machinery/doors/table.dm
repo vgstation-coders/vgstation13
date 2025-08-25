@@ -39,10 +39,6 @@
 	update_adjacent()
 	. = ..()
 
-/obj/machinery/door/table/close()
-	..()
-	set_opacity(0) //always seethru
-
 /obj/machinery/door/table/Bumped(atom/user)
 	if(!density || operating)
 		return
@@ -55,6 +51,8 @@
 			close()
 
 /obj/machinery/door/table/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(!density)
+		return 1
 	if(locate(/obj/effect/unwall_field) in loc)
 		return 1
 	if(air_group || (height==0))
@@ -139,7 +137,8 @@
 
 /obj/machinery/door/table/close()
 	playsound(src, soundeffect, 100, 1)
-	return ..()
+	. = ..()
+	set_opacity(0) //always seethru
 
 /obj/machinery/door/table/attackby(obj/item/W as obj, mob/user as mob, params)
 
@@ -151,7 +150,7 @@
 				dismantle()
 			return
 
-		else if(panel_open && istype(W,/obj/item/weapon/circuitboard/airlock))
+		if(panel_open && istype(W,/obj/item/weapon/circuitboard/airlock))
 			if(W.icon_state == "door_electronics_smoked")
 				to_chat(user, "<span class='warning'>Repair \the [W] before putting it in!</span>")
 			if(user.drop_item(W,src))
@@ -167,12 +166,16 @@
 			return
 
 	// Make open doors able to remove circuits
-	else if(!density && panel_open && iscrowbar(W) && electronics)
+	if(!density && panel_open && iscrowbar(W) && electronics)
 		user.visible_message("[user] is removing [electronics] from [src].", "You start to remove \the [electronics] from [src].")
 		W.playtoolsound(src, 100)
 		if(do_after(user, src, 40) && src && !density && electronics)
 			to_chat(user, "<span class='notice'>You removed [electronics]!</span>")
 			remove_electronics()
+		return
+
+	if(!allowed(user))
+		denied()
 		return
 
 	. = ..()
