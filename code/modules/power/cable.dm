@@ -563,7 +563,9 @@ By design, d1 is the smallest direction and d2 is the highest
 	return smoothables
 
 /obj/structure/cable/mapping/isSmoothableNeighbor(atom/A)
-	return hasDir(get_dir(src,A))
+	if(istype(A,/obj/structure/cable))
+		var/obj/structure/cable/C = A
+		return C.hasDir(get_dir(C,src))
 
 /obj/structure/cable/mapping/relativewall()
 	. = ..()

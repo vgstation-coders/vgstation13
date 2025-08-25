@@ -34875,11 +34875,7 @@
 	dir = 8;
 	pixel_x = -24
 	},
-/obj/structure/cable/yellow{
-	d2 = 2;
-	icon_state = "0-2";
-	pixel_y = 1
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "boq" = (
@@ -36550,11 +36546,7 @@
 /turf/simulated/floor/plating,
 /area/hallway/secondary/entry)
 "brx" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "bry" = (
@@ -37908,15 +37900,11 @@
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "buv" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
 /obj/structure/rack{
 	dir = 4
 	},
 /obj/item/clothing/mask/gas,
+/obj/structure/cable/mapping/yellow,
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "buw" = (
@@ -115333,6 +115321,13 @@
 /obj/machinery/atmospherics/pipe/manifold/supply,
 /turf/space,
 /area/mine/living_quarters)
+"nQa" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 8
+	},
+/obj/structure/cable/mapping/yellow,
+/turf/simulated/floor/plating,
+/area/maintenance/port)
 "nSu" = (
 /obj/machinery/portable_atmospherics/canister/nitrogen,
 /turf/simulated/floor/plating,
@@ -198174,7 +198169,7 @@ boo
 bpZ
 boo
 boo
-bpZ
+nQa
 bvw
 bwY
 byq
