@@ -588,7 +588,7 @@ By design, d1 is the smallest direction and d2 is the highest
 		if(locate(/obj/machinery/power) in loc)
 			var/obj/structure/cable/C = new(loc)
 			C.d1 = 0
-			C.d2 = found_dirs[i]
+			C.d2 = found_dirs[1]
 			C.color = src.color
 			C.update_icon()
 	else if(found_dirs.len == 1)
