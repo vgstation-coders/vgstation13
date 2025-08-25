@@ -31400,12 +31400,7 @@
 	dir = 8;
 	name = "Firelock West"
 	},
-/obj/machinery/door/window/brigdoor{
-	dir = 8;
-	name = "Kitchen";
-	req_access = null;
-	req_one_access_txt = "25;28;35"
-	},
+/obj/machinery/door/table/reinforced,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "cafeteria"
@@ -32053,15 +32048,10 @@
 /area/bridge)
 "biQ" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 2;
-	name = "Bar Door";
-	req_one_access_txt = "25;28"
-	},
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/machinery/door/table/reinforced,
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -32257,12 +32247,7 @@
 /obj/machinery/status_display{
 	pixel_y = 32
 	},
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 8;
-	name = "Library Desk Door";
-	req_access_txt = "37"
-	},
+/obj/machinery/door/table/wood,
 /turf/simulated/floor/wood,
 /area/library)
 "bjl" = (
@@ -43396,11 +43381,7 @@
 	},
 /area/medical/medbay)
 "bEM" = (
-/obj/machinery/door/window{
-	dir = 1;
-	name = "Medbay Reception";
-	req_access_txt = "5"
-	},
+/obj/machinery/door/table/reinforced,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whitegreen"
