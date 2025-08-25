@@ -19,11 +19,19 @@
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	sheet_type = /obj/item/stack/sheet/metal
 
+/obj/machinery/door/table/New()
+	. = ..()
+	update_adjacent()
+
 /obj/machinery/door/table/Destroy()
 	QDEL_NULL(electronics)
 	setDensity(FALSE)
 	update_adjacent()
 	. = ..()
+
+/obj/machinery/door/table/close()
+	..()
+	set_opacity(0) //always seethru
 
 /obj/machinery/door/table/Bumped(atom/user)
 	if(operating)
@@ -81,7 +89,7 @@
 		electronics.forceMove(loc)
 		electronics = null
 	if(sheet_type)
-		new sheet_type(loc)
+		new sheet_type(loc,2)
 	qdel(src)
 
 /obj/machinery/door/table/open()
