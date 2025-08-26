@@ -14,7 +14,7 @@
 	icon = 'icons/obj/doors/tabledoor.dmi'
 	icon_state = "metaldoor_closed"
 	prefix = "metal" //Corresponds to the mineral type
-
+	health = 100
 	soundeffect = 'sound/effects/wood_door_slam.ogg'
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	sheet_type = /obj/item/stack/sheet/metal
@@ -220,6 +220,7 @@
 	name = "reinforced table door"
 	icon_state = "rmetaldoor_closed"
 	prefix = "rmetal"
+	health = 200
 	sheet_type = /obj/item/stack/sheet/plasteel
 	var/reinforced = TRUE
 
@@ -245,12 +246,16 @@
 	name = "wooden table door"
 	icon_state = "wooddoor_closed"
 	prefix = "wood"
+	health = 50
+	flammable = TRUE
+	w_type = RECYK_WOOD
 	sheet_type = /obj/item/stack/sheet/wood
 
 /obj/machinery/door/table/glass
 	name = "glass table door"
 	icon_state = "glassdoor_closed"
 	prefix = "glass"
+	health = 30
 	sheet_type = /obj/item/stack/sheet/glass/rglass
 	var/shard_type = /obj/item/weapon/shard
 
@@ -283,5 +288,6 @@
 	name = "plasma glass table door"
 	icon_state = "pglassdoor_closed"
 	prefix = "pglass"
+	health = 150
 	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	shard_type = /obj/item/weapon/shard/plasma
