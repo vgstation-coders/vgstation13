@@ -126,8 +126,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/savefile_version = 0
 
 	// Alist = associative lists. This is a new 516 thing. Woo!
-	var/alist/preference_settings_client = list()
-	var/alist/preference_settings_character = list()
+	var/alist/preference_settings_client = alist()
+	var/alist/preference_settings_character = alist()
 
 	// Don't like hardcoding this but I can't find a way..
 	var/list/organ_data = list()
