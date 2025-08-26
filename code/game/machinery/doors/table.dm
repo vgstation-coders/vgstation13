@@ -166,16 +166,15 @@
 				to_chat(user, "<span class='notice'>You add [electronics] to [src].</span>")
 			return
 
-	// Make open doors able to remove circuits
-	if(!density && panel_open && electronics)
+	else
 		if(W.is_wrench(user))
 			to_chat(user, "<span class='warning'>Remove [electronics] first!</span>")
 			return
 
-		if(iscrowbar(W))
+		if(panel_open && iscrowbar(W))
 			user.visible_message("[user] is removing [electronics] from [src].", "You start to remove \the [electronics] from [src].")
 			W.playtoolsound(src, 100)
-			if(do_after(user, src, 40) && src && !density && electronics)
+			if(do_after(user, src, 40) && src && panel_open && electronics)
 				to_chat(user, "<span class='notice'>You removed [electronics]!</span>")
 				remove_electronics()
 			return
