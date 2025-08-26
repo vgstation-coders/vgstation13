@@ -9136,10 +9136,7 @@
 	},
 /area/security/prison)
 "dvA" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 8;
-	name = "Library Desk Door";
+/obj/machinery/door/table/wood{
 	req_access_txt = "37"
 	},
 /turf/simulated/floor/wood,
@@ -11874,6 +11871,7 @@
 /area/medical/surgery)
 "ewu" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
+/obj/machinery/hologram/holopad,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -21733,12 +21731,10 @@
 	},
 /area/medical/paramedics)
 "ixg" = (
-/obj/machinery/door/window{
+/obj/machinery/door/table/reinforced{
 	dir = 1;
-	name = "Medbay Reception";
 	req_access_txt = "5"
 	},
-/obj/machinery/hologram/holopad,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whitegreen"
