@@ -216,18 +216,28 @@
 		R.dorfify(mat)
 	return 1
 
+/datum/stack_recipe/table_door
+	dirs_found = 0
+
 /datum/stack_recipe/table_door/can_build_here(mob/user, turf/T)
 	var/turf/T2
-	var/densefound = FALSE
+	dirs_found = 0
 	for(var/direction in cardinal)
 		T2 = get_step(T,direction)
 		if(T2.density || (locate(/obj/structure/table) in T2))
-			densefound = TRUE
+			dirs_found |= direction
 			break
-	if(!densefound)
+	if(!dirs_found)
 		to_chat(user, "<span class='warning'>\The [title] must be constructed next to a table or wall!</span>")
 		return 0
 	return 1
+
+/datum/stack_recipe/table_door/finish_building(mob/user, var/obj/item/stack/S, var/obj/R)
+	if(!(dirs_found & R.dir))
+		for(var/direction in cardinal)
+			if(dirs_found & direction)
+				R.dir = direction
+				break
 
 /datum/stack_recipe/blacksmithing
 	var/req_strikes = 15
