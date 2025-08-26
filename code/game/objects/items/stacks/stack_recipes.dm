@@ -236,7 +236,7 @@
 	if(!(dirs_found & clockwise_perpendicular_dirs(R.dir)))
 		for(var/direction in cardinal)
 			if(dirs_found & clockwise_perpendicular_dirs(direction))
-				R.dir = clockwise_perpendicular_dirs(direction)
+				R.dir = direction
 				break
 	return R
 
