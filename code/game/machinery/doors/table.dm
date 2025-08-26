@@ -190,6 +190,8 @@
 		return FALSE
 	electronics.icon_state = "door_electronics_smoked"
 	emagged = TRUE
+	spark(loc,2)
+	open()
 	return TRUE
 
 /obj/machinery/door/table/bullet_act(var/obj/item/projectile/Proj)
