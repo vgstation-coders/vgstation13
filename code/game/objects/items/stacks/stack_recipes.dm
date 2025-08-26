@@ -238,6 +238,7 @@
 			if(dirs_found & direction)
 				R.dir = direction
 				break
+	return R
 
 /datum/stack_recipe/blacksmithing
 	var/req_strikes = 15
