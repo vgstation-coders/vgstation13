@@ -22,7 +22,7 @@
 /obj/machinery/door/table/New()
 	. = ..()
 	update_adjacent()
-	if(req_access_txt != "0" && req_one_access_txt != "0")
+	if(req_access_txt != "0" || req_one_access_txt != "0")
 		set_up_access()
 		electronics = new /obj/item/weapon/circuitboard/airlock(src)
 		electronics.installed = TRUE
@@ -167,13 +167,18 @@
 			return
 
 	// Make open doors able to remove circuits
-	if(!density && panel_open && iscrowbar(W) && electronics)
-		user.visible_message("[user] is removing [electronics] from [src].", "You start to remove \the [electronics] from [src].")
-		W.playtoolsound(src, 100)
-		if(do_after(user, src, 40) && src && !density && electronics)
-			to_chat(user, "<span class='notice'>You removed [electronics]!</span>")
-			remove_electronics()
-		return
+	if(!density && panel_open && electronics)
+		if(W.is_wrench(user))
+			to_chat(user, "<span class='warning'>Remove [electronics] first!</span>")
+			return
+
+		if(iscrowbar(W))
+			user.visible_message("[user] is removing [electronics] from [src].", "You start to remove \the [electronics] from [src].")
+			W.playtoolsound(src, 100)
+			if(do_after(user, src, 40) && src && !density && electronics)
+				to_chat(user, "<span class='notice'>You removed [electronics]!</span>")
+				remove_electronics()
+			return
 
 	if(!allowed(user))
 		denied()
@@ -213,6 +218,25 @@
 	icon_state = "rmetaldoor_closed"
 	prefix = "rmetal"
 	sheet_type = /obj/item/stack/sheet/plasteel
+	var/reinforced = TRUE
+
+/obj/machinery/door/table/reinforced/attackby(obj/item/W as obj, mob/user as mob, params)
+	if(reinforced)
+		if(W.is_wrench(user))
+			to_chat(user, "<span class='warning'>Weaken \the [src] first!</span>")
+			return
+
+		if (iswelder(W))
+			var/obj/item/tool/weldingtool/WT = W
+			if(WT.isOn())
+				to_chat(user, "<span class='notice'>Now [reinforced ? "weak" : "strength"]ening \the [src].</span>")
+				if(WT.do_weld(user, src, 50, 0))
+					if(gcDestroyed)
+						return
+					reinforced = !reinforced
+					to_chat(user, "<span class='notice'>Table  [reinforced ? "strength" : "weak"]ened.</span>")
+				return
+	. = ..()
 
 /obj/machinery/door/table/wood
 	name = "wooden table door"
