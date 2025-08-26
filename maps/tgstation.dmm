@@ -19367,9 +19367,6 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aHU" = (
-/obj/structure/windoor_assembly/secure{
-	dir = 2
-	},
 /obj/machinery/light_switch{
 	pixel_x = -27
 	},
@@ -19377,6 +19374,9 @@
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/machinery/door/table/wood{
+	dir = 1
 	},
 /turf/simulated/floor/wood,
 /area/maintenance/ghettobar)
@@ -42270,16 +42270,14 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "bCQ" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	icon_state = "right";
-	name = "Captain's Desk Door";
-	req_access_txt = "20"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
 /obj/machinery/light,
+/obj/machinery/door/table/wood{
+	req_access_txt = "20";
+	dir = 8
+	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "bCR" = (

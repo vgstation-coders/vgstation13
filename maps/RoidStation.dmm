@@ -40632,13 +40632,13 @@
 	},
 /area/medical/medbay3)
 "bzx" = (
-/obj/machinery/door/window{
-	name = "Medbay Reception";
-	req_access_txt = "5"
-	},
 /obj/machinery/light_switch{
 	pixel_x = -5;
 	pixel_y = 25
+	},
+/obj/machinery/door/table/reinforced{
+	dir = 8;
+	req_access_txt = "5"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -72786,11 +72786,6 @@
 /turf/unsimulated/floor/asteroid,
 /area/mine/unexplored)
 "cEC" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	name = "Bar Door";
-	req_one_access_txt = "25;28"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
@@ -72798,6 +72793,10 @@
 	department = "Bar";
 	departmentType = 2;
 	pixel_y = -30
+	},
+/obj/machinery/door/table/reinforced{
+	dir = 8;
+	req_one_access_txt = "25;28"
 	},
 /turf/simulated/floor{
 	icon_state = "bar"
@@ -77553,11 +77552,9 @@
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
 "cNr" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	icon_state = "right";
-	name = "Captain's Desk Door";
-	req_access_txt = "20"
+/obj/machinery/door/table/wood{
+	req_access_txt = "20";
+	dir = 8
 	},
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
@@ -88576,11 +88573,9 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/machinery/door/window{
-	base_state = "right";
-	icon_state = "right";
-	name = "Library Desk Door";
-	req_access_txt = "37"
+/obj/machinery/door/table/wood{
+	req_access_txt = "37";
+	dir = 8
 	},
 /turf/simulated/floor/carpet/shag,
 /area/library)
