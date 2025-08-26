@@ -233,7 +233,7 @@
 	return 1
 
 /datum/stack_recipe/table_door/finish_building(mob/user, var/obj/item/stack/S, var/obj/R)
-	if(!(dirs_found & R.dir))
+	if(!(dirs_found & clockwise_perpendicular_dirs(R.dir)))
 		for(var/direction in cardinal)
 			if(dirs_found & clockwise_perpendicular_dirs(direction))
 				R.dir = clockwise_perpendicular_dirs(direction)
