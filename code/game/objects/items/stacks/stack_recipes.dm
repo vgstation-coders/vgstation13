@@ -217,7 +217,7 @@
 	return 1
 
 /datum/stack_recipe/table_door
-	dirs_found = 0
+	var/dirs_found = 0
 
 /datum/stack_recipe/table_door/can_build_here(mob/user, turf/T)
 	var/turf/T2
