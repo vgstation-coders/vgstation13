@@ -22,7 +22,8 @@
 /obj/machinery/door/table/New()
 	. = ..()
 	update_adjacent()
-	if((req_access?.len) || (req_one_access?.len))
+	if(req_access_txt != "0" && req_one_access_txt != "0")
+		set_up_access()
 		electronics = new /obj/item/weapon/circuitboard/airlock(src)
 		electronics.installed = TRUE
 		if(req_access?.len)
