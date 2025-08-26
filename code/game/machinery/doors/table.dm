@@ -190,6 +190,8 @@
 		return FALSE
 	electronics.icon_state = "door_electronics_smoked"
 	emagged = TRUE
+	req_access = list()
+	req_one_access = list()
 	spark(loc,2)
 	open()
 	return TRUE
