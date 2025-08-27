@@ -584,15 +584,15 @@ By design, d1 is the smallest direction and d2 is the highest
 			var/list/subfound = dir_in_found ? list(dir,found_dirs[i]) : list(found_dirs[i-1],[i])
 			sortTim(subfound)
 			var/obj/structure/cable/C = new(loc)
-			C.d1 = found_dirs[i-1]
-			C.d2 = found_dirs[i]
+			C.d1 = subfound[1]
+			C.d2 = subfound[2]
 			C.color = src.color
 			C.update_icon()
 	if(found_dirs.len >= 2)
 		var/list/subfound = list(found_dirs[1],found_dirs[2])
 		sortTim(subfound)
-		d1 = found_dirs[1]
-		d2 = found_dirs[2]
+		d1 = subfound[1]
+		d2 = subfound[2]
 		if((locate(/obj/machinery/power) in loc) || (locate(/obj/structure/grille) in loc))
 			var/obj/structure/cable/C = new(loc)
 			C.d1 = 0
