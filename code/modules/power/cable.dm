@@ -575,14 +575,22 @@ By design, d1 is the smallest direction and d2 is the highest
 	for(var/subdir in cardinal)
 		if(junction & subdir)
 			found_dirs += list(subdir)
+	var/dir_in_found = dir in found_dirs
+	if(found_dirs.len > 1 && dir_in_found)
+		found_dirs.Remove(dir)
+		unshift(found_dirs,dir)
 	if(found_dirs.len > 2)
 		for(var/i in 3 to found_dirs.len)
+			var/list/subfound = dir_in_found ? list(dir,found_dirs[i]) : list(found_dirs[i-1],[i])
+			sortTim(subfound)
 			var/obj/structure/cable/C = new(loc)
 			C.d1 = found_dirs[i-1]
 			C.d2 = found_dirs[i]
 			C.color = src.color
 			C.update_icon()
 	if(found_dirs.len >= 2)
+		var/list/subfound = list(found_dirs[1],found_dirs[2])
+		sortTim(subfound)
 		d1 = found_dirs[1]
 		d2 = found_dirs[2]
 		if((locate(/obj/machinery/power) in loc) || (locate(/obj/structure/grille) in loc))
