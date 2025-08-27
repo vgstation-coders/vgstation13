@@ -589,7 +589,7 @@ var/list/icon_state_to_appearance = list()
 			if(!(used_digging.diggables & DIG_SOIL)) //if the pickaxe can't dig soil, we don't
 				to_chat(user, "<span class='rose'>You can't dig soft soil with \the [W].</span>")
 				return
-		
+
 			if (dug)
 				to_chat(user, "<span class='rose'>This area has already been dug.</span>")
 				return
@@ -623,6 +623,7 @@ var/list/icon_state_to_appearance = list()
 		return
 	drop_stack(sand_type, src, 5)
 	dug = 1
+	QDEL_NULL(finddatum)
 	//icon_plating = "asteroid_dug"
 	update_icon()
 
