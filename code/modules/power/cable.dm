@@ -575,7 +575,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	for(var/subdir in cardinal)
 		if(junction & subdir)
 			found_dirs += list(subdir)
-	var/dir_in_found = dir in found_dirs
+	var/dir_in_found = dir in found_dirs ? TRUE : FALSE
 	if(found_dirs.len > 1 && dir_in_found)
 		found_dirs.Remove(dir)
 		unshift(found_dirs,dir)
