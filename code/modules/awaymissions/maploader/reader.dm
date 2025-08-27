@@ -560,6 +560,8 @@ var/use_preloader = FALSE
 
 /turf/template_noop
 	name = "Template Passthrough"
+	icon_state = "noop"
 
 /area/template_noop
 	name = "Template Passthrough"
+	icon_state = "noop"
