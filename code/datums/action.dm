@@ -262,3 +262,30 @@
 	name = "Toggle material scanner"
 	icon_icon = 'icons/obj/clothing/glasses.dmi'
 	button_icon_state = "material"
+
+/datum/action/item_action/science
+	name = "Science!"
+	icon_icon = 'icons/obj/clothing/suits.dmi'
+	button_icon_state = "labcoat_rd"
+	var/last_action_use = null // 8 second delay
+
+/datum/action/item_action/science/IsAvailable()
+	if(!..())
+		return FALSE
+	if(world.time >= (last_action_use + 8 SECONDS))
+		return TRUE
+	return FALSE
+
+/datum/action/item_action/science/Trigger()
+	if(!IsAvailable())
+		return FALSE
+	if(!owner.is_wearing_item(target))
+		to_chat(owner, span_warning("You have to wear \the [target]!"))
+		return FALSE
+	var/sound_file = pick('sound/voice/science1.ogg',
+						'sound/voice/science2.ogg',
+						'sound/voice/science3.ogg',
+						'sound/voice/science4.ogg')
+	playsound(owner, sound_file, 75, 0)
+	owner.visible_message(span_warning("[owner] reminds you about the importance of science."), span_warning("You remind everyone about the importance of science!"))
+	last_action_use = world.time

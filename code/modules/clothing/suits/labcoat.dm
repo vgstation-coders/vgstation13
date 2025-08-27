@@ -104,6 +104,7 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 20, bio = 50, rad = 50)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 50
+	actions_types = list(/datum/action/item_action/science)
 
 /obj/item/clothing/suit/storage/labcoat/forensic
 	name = "forensic labcoat"
