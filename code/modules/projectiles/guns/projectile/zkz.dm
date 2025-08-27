@@ -17,7 +17,7 @@
     mech_flags = MECH_SCAN_FAIL
     var/sheens = FALSE //white glow for millionaires on firing
     var/shotsleft = 30 //thirty fixed amount of shots, no extra ammo
-    
+
 /obj/item/weapon/gun/projectile/zkz/getAmmo()
     return shotsleft
 
@@ -39,15 +39,15 @@
             for(var/obj/item/weapon/spacecash/C2 in get_contents_in_object(M, /obj/item/weapon/spacecash))
                 totalvalue += C2.get_total()
             switch(totalvalue)
-                if(0 to 100)
+                if(0 to 99)
                     in_chamber.damage = 1
-                if(100 to 1000)
+                if(100 to 999)
                     in_chamber.damage = 10
-                if(1000 to 10000)
+                if(1000 to 9999)
                     in_chamber.damage = 25
-                if(10000 to 100000)
+                if(10000 to 99999)
                     in_chamber.damage = 50
-                if(100000 to 1000000)
+                if(100000 to 999999)
                     in_chamber.damage = 75
                 if(1000000 to INFINITY)
                     in_chamber.damage = 10000
