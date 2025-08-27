@@ -7,6 +7,7 @@
 	materials = list(MAT_IRON = 400, MAT_GLASS = 125)
 	category = "Medical"
 	build_path = /obj/item/stack/medical/bruise_pack
+	use_design_materials = FALSE //Cannot be recycled
 
 /datum/design/ointment
 	name = "Ointment"
@@ -17,6 +18,7 @@
 	materials = list(MAT_IRON = 400, MAT_GLASS = 125)
 	category = "Medical"
 	build_path = /obj/item/stack/medical/ointment
+	use_design_materials = FALSE
 
 /datum/design/adv_bruise_pack
 	name = "Advanced trauma kit"
@@ -27,6 +29,7 @@
 	materials = list(MAT_IRON = 600, MAT_GLASS = 250)
 	category = "Medical"
 	build_path = /obj/item/stack/medical/advanced/bruise_pack
+	use_design_materials = FALSE
 
 /datum/design/adv_ointment
 	name = "Advanced burn kit"
@@ -37,6 +40,7 @@
 	materials = list(MAT_IRON = 600, MAT_GLASS = 250)
 	category = "Medical"
 	build_path = /obj/item/stack/medical/advanced/ointment
+	use_design_materials = FALSE
 
 /datum/design/adv_reagent_scanner
 	name = "Advanced Reagent Scanner"

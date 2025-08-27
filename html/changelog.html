@@ -73,6 +73,19 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2025.08.27</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Blueprints and construction permits can now create rooms on the unexplored parts of the mine.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Drastically increased the surgeon switchtool&#39;s price in the Protolathe to compensate for the material costs of the surgery tools it contains. To compensate for this a second empty variant has been added which doesn&#39;t contain any item, which should be printed faster than the full variant.</li>
+				<li class="tweak">Nanopaste, medical kits and lockboxes printed from fabricators can no longer be recycled.</li>
+				<li class="bugfix">Fixed a decade-old bug where items printed at fabricators would only contain one material. This happened because as the code went through each material to readjust it when printed it would reset the list of materials each time.</li>
+				<li class="bugfix">Contents of printed items at fabricators such as the Protolathe will now also have their materials adjusted.</li>
+				<li class="bugfix">The high-precision laser scalpel and high-precision laser cautery now contain uranium.</li>
+			</ul>
 			<h2 class="date">2025.08.26</h2>
 			<h3 class="author">Eneocho updated:</h3>
 			<ul class="changes bgimages16">
@@ -1383,12 +1396,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="tweak">The duplicate AI holopad has been removed from the waystation HoS office.</li>
 				<li class="tweak">A holopad has been added to waystation permabrig.</li>
 				<li class="bugfix">Fast food vault cookbots, spessmart bots and dusky no longer drop meat when gibbed.</li>
-			</ul>
-			<h2 class="date">2024.09.11</h2>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Made &#39;client defines.dm&#39; AGPL compliant.</li>
-				<li class="tweak">Updated &#39;client procs.dm&#39; for AGPL compliance.</li>
 			</ul>
 		</div>
 		<!--
