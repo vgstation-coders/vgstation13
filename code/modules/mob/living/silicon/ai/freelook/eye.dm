@@ -41,6 +41,7 @@
 			for(destination = destination.loc; !isturf(destination); destination = destination.loc);
 
 		forceEnter(destination)
+		INVOKE_EVENT(src, /event/moved, "mover" = src)
 
 		cameranet.visibility(src)
 		if(ai.client && ai.client.eye != src) // Set the eye to us and give the AI the sight & visibility flags it needs.
@@ -192,6 +193,8 @@
 	eyeobj.ai = src
 	refresh_eyeobj_name()
 	eyeobj.forceMove(loc)
+	if (client?.listener_context)
+		client.listener_context.reset_proxy(eyeobj)
 
 /mob/living/silicon/ai/proc/refresh_eyeobj_name()
 	eyeobj.name = "[name] (AI Eye)"

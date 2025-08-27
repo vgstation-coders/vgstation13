@@ -87,9 +87,11 @@ var/list/camera_names=list()
 /obj/machinery/camera/proc/update_hear()//only cameras with voice analyzers can hear, to reduce the number of unecessary /mob/virtualhearer
 	if(!hear_voice && isHearing())
 		hear_voice = 1
+		micd_cameras |= src
 		addHear()
 	if(hear_voice && !isHearing())
 		hear_voice = 0
+		micd_cameras -= src
 		removeHear()
 
 /obj/machinery/camera/proc/update_upgrades()//Called when an upgrade is added or removed.

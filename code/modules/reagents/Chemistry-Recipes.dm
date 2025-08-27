@@ -1395,7 +1395,7 @@
 /datum/chemical_reaction/slime_extract/required_condition_check(datum/reagents/holder)
 	if(istype(holder.my_atom, /obj/item/slime_extract))
 		var/obj/item/slime_extract/S = holder.my_atom
-		if(S.Uses > 0)
+		if(S.uses > 0)
 			return 1
 	return 0
 
@@ -1407,9 +1407,9 @@
 		B.forceMove(get_turf(holder.my_atom))
 	if(istype(holder.my_atom, /obj/item/slime_extract))
 		var/obj/item/slime_extract/S = holder.my_atom
-		S.Uses--
+		S.uses--
 		S.update_icon()
-		if(S.Uses <= 0)
+		if(S.uses <= 0)
 			if(!istype(S.loc, /obj/item/weapon/grenade/chem_grenade) && !quiet)
 				S.visible_message("<span class='notice'>[bicon(holder.my_atom)] \The [holder.my_atom]'s power is consumed in the reaction.</span>")
 			qdel(S)

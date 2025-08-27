@@ -358,7 +358,7 @@
 	desc = "Used to give a service cyborg fun toys, Honk!"
 	icon_state = "gooncode"
 	required_modules = list(SERVICE_MODULE, HUG_MODULE)
-	modules_to_add = list(/obj/item/weapon/bikehorn, /obj/item/weapon/stamp/clown, /obj/item/toy/crayon/rainbow, /obj/item/toy/waterflower, /obj/item/device/soundsynth)
+	modules_to_add = list(/obj/item/weapon/bikehorn, /obj/item/weapon/stamp/clown, /obj/item/toy/crayon/rainbow, /obj/item/clothing/accessory/waterflower, /obj/item/device/soundsynth)
 
 /obj/item/borg/upgrade/honk/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())

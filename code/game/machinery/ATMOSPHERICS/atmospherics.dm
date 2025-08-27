@@ -40,6 +40,7 @@ Pipelines + Other Objects -> Pipe network
 	var/obj/machinery/atmospherics/mirror //not actually an object reference, but a type. The reflection of the current pipe
 	var/default_colour = null
 	var/image/pipe_image
+	var/transparent = FALSE // painted transparent?
 	plane = ABOVE_TURF_PLANE
 	layer = PIPE_LAYER
 	var/piping_layer = PIPING_LAYER_DEFAULT //used in multi-pipe-on-tile - pipes only connect if they're on the same pipe layer
@@ -149,7 +150,7 @@ Pipelines + Other Objects -> Pipe network
 	else if(can_be_coloured && default_colour)
 		color = default_colour
 		default_colour = null
-	alpha = invisibility ? 128 : 255
+	alpha = invisibility || transparent ? 128 : 255
 	if (!update_icon_ready)
 		update_icon_ready = 1
 	else

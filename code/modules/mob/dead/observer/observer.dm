@@ -262,8 +262,6 @@ Works together with spawning an observer, noted above.
 		if (deafmute)
 			ghostype = /mob/dead/observer/deafmute
 		var/mob/dead/observer/ghost = new ghostype(src, flags)	//Transfer safety to observer spawning proc.
-		if (sound_zone_manager)
-			sound_zone_manager.unregister_listener(src)
 		var/timetocheck = timeofdeath
 		if (isbrain(src))
 			var/mob/living/carbon/brain/brainmob = src

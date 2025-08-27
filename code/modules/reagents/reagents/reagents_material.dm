@@ -79,6 +79,8 @@
 	description = "Plasma in its liquid form."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#500064" //rgb: 80, 0, 100
+	fission_time=18000 //5 hours.
+	fission_absorbtion=8333.333
 
 /datum/reagent/plasma/New()
 	..()

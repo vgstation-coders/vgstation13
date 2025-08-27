@@ -678,72 +678,72 @@
 /*
  * Water flower
  */
-/obj/item/toy/waterflower
-	name = "Water Flower"
+/obj/item/clothing/accessory/waterflower
+	name = "water flower"
 	desc = "A seemingly innocent sunflower...with a twist."
 	icon = 'icons/obj/hydroponics/sunflower.dmi'
 	icon_state = "produce"
+	_color = "waterflower"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
 	item_state = "sunflower"
-	var/empty = 0
 	flags = OPENCONTAINER
 
-/obj/item/toy/waterflower/New()
+/obj/item/clothing/accessory/waterflower/New()
 	. = ..()
 	create_reagents(10)
 	reagents.add_reagent(WATER, 10)
 
-/obj/item/toy/waterflower/attack(mob/living/carbon/human/M as mob, mob/user as mob)
+/obj/item/clothing/accessory/waterflower/attack(mob/living/carbon/human/M as mob, mob/user as mob)
 	return
 
-/obj/item/toy/waterflower/afterattack(atom/A as mob|obj, mob/user as mob, proximity_flag)
+/obj/item/clothing/accessory/waterflower/afterattack(atom/A as mob|obj, mob/user as mob, proximity_flag)
 
 	if (istype(A, /obj/item/weapon/storage/backpack ) || istype(A, /obj/structure/bed/chair/vehicle/clowncart))
 		return
 
-	else if (locate (/obj/structure/table, src.loc))
+	if (locate (/obj/structure/table, src.loc))
 		return
 
-	else if (istype(A, /obj/structure/reagent_dispensers) && proximity_flag)
+	if (istype(A, /obj/structure/reagent_dispensers) && proximity_flag)
 		A.reagents.trans_to(src, 10)
 		to_chat(user, "<span class = 'notice'>You refill your flower!</span>")
 		return
 
-	else if (src.reagents.total_volume < 1)
-		src.empty = 1
+	if (src.reagents.total_volume < 1)
 		to_chat(user, "<span class = 'notice'>Your flower has run dry!</span>")
 		return
 
-	else
-		src.empty = 0
+	var/obj/effect/decal/D = new/obj/effect/decal/(get_turf(src))
+	D.name = "water"
+	D.icon = 'icons/obj/chemical.dmi'
+	D.icon_state = "chempuff"
+	D.create_reagents(5)
+	reagents.log_bad_reagents(user, src)
+	user.investigation_log(I_CHEMS, "sprayed 1u from \a [src] ([type]) containing [reagents.get_reagent_ids(1)] towards [A] ([A.x], [A.y], [A.z]).")
+	src.reagents.trans_to(D, 1)
+	playsound(src, 'sound/effects/spray3.ogg', 50, 1, -6)
 
+	spawn(0)
+		for(var/i=0, i<1, i++)
+			step_towards(D,A)
+			D.reagents.reaction(get_turf(D))
+			for(var/atom/T in get_turf(D))
+				D.reagents.reaction(T)
+				if(ismob(T) && T:client)
+					to_chat(T:client, "<span class = 'danger'>[user] has sprayed you with \the [src]!</span>")
+			sleep(4)
+		QDEL_NULL(D)
 
-		var/obj/effect/decal/D = new/obj/effect/decal/(get_turf(src))
-		D.name = "water"
-		D.icon = 'icons/obj/chemical.dmi'
-		D.icon_state = "chempuff"
-		D.create_reagents(5)
-		reagents.log_bad_reagents(user, src)
-		user.investigation_log(I_CHEMS, "sprayed 1u from \a [src] ([type]) containing [reagents.get_reagent_ids(1)] towards [A] ([A.x], [A.y], [A.z]).")
-		src.reagents.trans_to(D, 1)
-		playsound(src, 'sound/effects/spray3.ogg', 50, 1, -6)
-
-		spawn(0)
-			for(var/i=0, i<1, i++)
-				step_towards(D,A)
-				D.reagents.reaction(get_turf(D))
-				for(var/atom/T in get_turf(D))
-					D.reagents.reaction(T)
-					if(ismob(T) && T:client)
-						to_chat(T:client, "<span class = 'danger'>[user] has sprayed you with \the [src]!</span>")
-				sleep(4)
-			QDEL_NULL(D)
-
-		return
-
-/obj/item/toy/waterflower/examine(mob/user)
+/obj/item/clothing/accessory/waterflower/examine(mob/user)
 	..()
 	to_chat(user, "[src.reagents.total_volume] units of water left!")
+
+/obj/item/clothing/accessory/waterflower/on_accessory_interact(mob/user, delayed)
+	var/turf/T = get_step(user,user.dir)
+	if (T)
+		afterattack(T,user)
+		return 1
+	return ..()
 
 /*
  * Mech prizes

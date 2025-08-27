@@ -161,7 +161,7 @@
 "aaF" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/storage/fancy/crayons,
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/machinery/firealarm{
 	pixel_y = 25
 	},

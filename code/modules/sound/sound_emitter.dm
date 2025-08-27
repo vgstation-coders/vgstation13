@@ -1,3 +1,16 @@
+
+/*
+	This is a sound_emitter. It is made of /sounds and var/atom/source
+	These are passive data sources that hold information about which sound an atom is currently emitting.
+	The sound_emitter is the primary means by which developers interact with the sound system. For example,
+	  when writing an /obj/machine that needs to emit some sound (either one-off or looping ambient sounds),
+	  the user need only call `play` or `stop`. The sound_emitter maintains an internal container of sounds
+	  it can play which must be referenced with a key in `play`.
+	They are registered with the sound_zone_manager (SZM) on construction and invoke events when
+	  starting, updating or stopping a sound. These events are subscribed to by /mobs that enter range.
+	  The subscription is driven by the SZM, which maintains a hashmap of sound_emitter locations.
+*/
+
 /atom
 	var/datum/sound_emitter/sound_emitter
 
@@ -5,43 +18,79 @@
 	return
 
 /mob
-	var/list/current_sound_emitters = list()
 	var/last_sound_zone_hash = null
+	// proxy for when the sound needs to be sent to some other mob, e.g. aiEye mob movement needs sounds sent to AI Core mob
+	//  this is because the AI Eye client is null so we can't get to the SLC via the aiEye mob
+	var/mob/sound_endpoint = null
+/mob/New()
+	..()
+	sound_endpoint = src
+
+/proc/turf_volume_coeff(atom/a)
+	if (!a || !istype(a))
+		return 1 // ?:D?
+	var/turf/t = get_turf(a)
+	if (!t)
+		return 0 // no sound for the damned
+	if (istype(t, /turf/simulated))
+		var/turf/simulated/sim = t
+		if (sim.zone?.air?.sound_coeff)
+			return sim.zone.air.sound_coeff
+	if (istype(t, /turf/unsimulated))
+		return 1
+	return 0 //damned
+
+// Arguments:
+//   /datum/sound_emitter/emitter: The emitter whose sound was SOUND_UPDATEd.
+// Remember that SOUND_UPDATE will NOT start playing a sound!
+// You must first send the sound WITHOUT SOUND_UPDATE for the client to start
+//   hearing it if they couldn't before
+// Also remember that sounds are DATUMS and hence REFERENCE TYPES so copy
+//   in whatever you registered to the event!!!
+/event/sound_updated
+
+// Arguments:
+//   /datum/sound_emitter/emitter: The emitter that started playing a sound
+/event/sound_started
+
+// Arguments:
+//   /datum/sound_emitter/emitter: The emitter that stopped playing a sound
+/event/sound_stopped
+
+// Arguments:
+//   /sound/S: The sound that was pushed
+//   /datum/sound_emitter/emitter: The emitter that played the sound
+/event/sound_pushed
 
 /datum/sound_emitter
 	var/atom/source = null
-	var/list/sounds = list()
-	var/active_key = null
-	var/datum/sound_channel/channel = null
-	var/list/mob/hearers = list()
+	var/list/sounds = list() // list of managed_sound
+	var/datum/managed_sound/active_sound = null
 	var/range
 	var/last_hash = null
-	var/use_unique_pool = TRUE
 
 	// update driven by subsystem via update_active_sound_param
 	var/env_volume_coeff = 1
 
 	var/datum/sound_zone_manager/szm // not strictly necessary but its here for easy debugging in this early stage
-	var/datum/sound_channel_manager/scm // also not strictly necessary
 
 // for static things (e.g. machines that must be bolted to work) pass is_static = TRUE
 //  this causes the reserved channel to be taken from a shared pool, as static objects won't move close
 //  to eachother and won't contend. There is no overlap between the shared and unique pools, so no contention
 //  for example if someone carrying something noisy (mobile -> unique pool) walks close to something in the shared pool.
 // Dimensional Push is the exception to this (probably), the sound messing up is part of the !!! fun !!!
-/datum/sound_emitter/New(atom/A, is_static = FALSE)
+/datum/sound_emitter/New(atom/A, var/is_static = FALSE)
 	..()
 	source = A
 	range = world.view
 	sound_emitter_collection.add(src)
-	use_unique_pool = !is_static
 	if (sound_zone_manager)
 		szm = sound_zone_manager
-	if (sound_channel_manager)
-		scm = sound_channel_manager
+	sound_zone_manager.register_emitter(src)
 
 /datum/sound_emitter/Destroy()
 	sound_emitter_collection.remove(src)
+	sound_zone_manager.unregister_emitter(src)
 	deactivate();
 	if (sounds)
 		sounds.Cut()
@@ -60,21 +109,19 @@
 	s.atom = source
 	s.environment = -1 // byond bug(?) if you set this to anything else, it will permanently set the channel environment to it
 	s.transform = matrix(1, 0, 0, 0, 1, 0) //dont think theres a good reason for this to be anything else
-	sounds[key] = s
+	sounds[key] = new /datum/managed_sound(s)
 
 /datum/sound_emitter/proc/play(key)
-	var/sound/S = sounds[key]
+	var/datum/managed_sound/S = sounds[key]
 	if (!S)
-		CRASH("Sound emitter play called for key [key] on channel [channel.value], but sound does not exist.")
+		CRASH("Sound emitter play called for key [key], but sound does not exist.")
 
-	if (S.repeat == 1)
-		active_key = key
-		activate()
+	if (S.base_sound.repeat == 1)
+		activate(key)
 	else
-		play_once(S)
+		play_once(copy_sound(S.base_sound))
 
-/datum/sound_emitter/proc/play_once(sound/s, interrupt = FALSE)
-	var/sound/S = copy_sound(s)
+/datum/sound_emitter/proc/play_once(sound/S, interrupt = FALSE)
 	S.atom = source
 	S.repeat = 0 //no repeat - no need for channel reservation
 	S.wait = 0
@@ -84,53 +131,46 @@
 	S.volume *= turf_volume_coeff(source)
 	if (!S.volume)
 		return
-	var/vicinity = players_in_range()
-	for (var/mob/player in vicinity)
-		var/sound/PS = apply_player_effects(copy_sound(S), player)
-		if (PS.volume)
-			player << PS
+
+	INVOKE_EVENT(src, /event/sound_pushed, "S" = copy_sound(S), "emitter" = src)
 
 /datum/sound_emitter/proc/is_currently_playing()
-	return ((active_key != null) && (channel != null))
+	return (active_sound != null)
 
 /datum/sound_emitter/proc/update_active_sound_param(volume = null, frequency = null)
-	if (!active_key)
+	if (!is_currently_playing())
 		return
-	var/sound/S = sounds[active_key]
-	env_volume_coeff = turf_volume_coeff(source)
-	S = apply_env_effects(copy_sound(S))
-	S.atom = source
-
+	// update active_sound overrides if given
 	if (volume)
-		S.volume = volume
+		active_sound.volume_override = volume
 	if (frequency)
-		S.frequency = frequency
+		active_sound.frequency_override = frequency
+
+	update_env_effect()
+
+	var/sound/S = active_sound.get()
 	S.status |= SOUND_UPDATE
-	for (var/mob/player in hearers)
-		S = apply_player_effects(copy_sound(S), player)
-		player << S
+	INVOKE_EVENT(src, /event/sound_updated, "emitter" = src)
 
 /datum/sound_emitter/proc/stop()
-	if (!channel)
+	if (!is_currently_playing())
 		return
 	deactivate()
 
 /datum/sound_emitter/proc/update_source(atom/new_source)
 	sound_emitter_collection.remove(src)
-	if (channel)
-		sound_zone_manager.unregister_emitter(src)
+	sound_zone_manager.unregister_emitter(src)
 	//old source should no longer fire move events
 	source.unregister_event(/event/moved, src, nameof(src::on_source_moved()))
 
 	source = new_source
 	for (var/key in sounds)
-		var/sound/S = sounds[key]
-		S.atom = source
+		var/datum/managed_sound/S = sounds[key]
+		S.update_atom(new_source)
 	update_active_sound_param()
 
 	sound_emitter_collection.add(src)
-	if (channel)
-		sound_zone_manager.register_emitter(src)
+	sound_zone_manager.register_emitter(src)
 	//new source
 	source.register_event(/event/moved, src, nameof(src::on_source_moved()))
 
@@ -147,36 +187,6 @@
 	if (!T)
 		CRASH("Failed to get source turf")
 	sound_zone_manager.update_emitter(src, T.x, T.y, T.z)
-
-/datum/sound_emitter/proc/on_enter_range(mob/player)
-	if (player in hearers)
-		return
-	hearers |= player
-	player.current_sound_emitters |= src
-	if (channel && active_key)
-		var/sound/S = sounds[active_key]
-		if (!S)
-			CRASH("Sound emitter update_hearers called for key [active_key] on channel [channel.value], but sound does not exist.")
-		// important note - clearing SOUND_UPDATE means that the sound will play FROM THE BEGINNING.
-		// this system was originally built with short repeating sounds in mind (machine hum, etc) however
-		// if you try to do something longer and more varied like music then this is very noticeable and unwanted.
-		// such support goes beyond scope for v1 but may be solvable using sound.len, tracking playback progress and modifying
-		// S.offset to start at the correct point
-		S.status &= ~SOUND_UPDATE // clear update status for new hearers, else they cant hear it lmao
-		S.channel = channel.value
-		S = apply_env_effects(copy_sound(S))
-		S = apply_player_effects(S, player)
-		player << S
-
-/datum/sound_emitter/proc/on_exit_range(mob/player)
-	hearers -= player
-	player.current_sound_emitters -= src
-	if (!channel)
-		return
-	var/sound/nullsound = sound(file = null)
-	nullsound.channel = channel.value
-	nullsound.status = SOUND_UPDATE | SOUND_MUTE
-	player << nullsound
 
 /datum/sound_emitter/proc/contains(turf/T)
 	if (!T)
@@ -196,117 +206,44 @@
 		INTERNAL, DON'T CALL THESE DIRECTLY YOU
 */
 
-/datum/sound_emitter/proc/activate()
-	// expect active_key to be already set and validated
-	if (!channel)
-		channel = sound_channel_manager.reserve_channel(src, use_unique_pool)
-		if (!channel)
-			var/sound/S = sounds[active_key]
-			CRASH("Sound emitter was unable to reserve a channel for sound [S.file]")
-		sound_zone_manager.register_emitter(src)
-		init_hearers()
-	update_hearers()
+// push sounds to any clients in range, register with sound_zone_manager for dynamic updates
+/datum/sound_emitter/proc/activate(key)
+	// bookkeeping
+	active_sound = sounds[key]
+	if (!active_sound)
+		CRASH("[key] not found in sounds cache for emitter on [source]")
 
+	update_env_effect()
+	INVOKE_EVENT(src, /event/sound_started, "emitter" = src)
+
+// halt sounds to clients, unregister from dynamic updates
 /datum/sound_emitter/proc/deactivate()
-	active_key = null
-	update_hearers()
-	hearers.Cut()
-	if (channel)
-		sound_zone_manager.unregister_emitter(src)
-		release_channel()
+	active_sound = null
+  
+	INVOKE_EVENT(src, /event/sound_stopped, "emitter" = src)
 
-/datum/sound_emitter/proc/release_channel()
-	if (!channel)
+/datum/sound_emitter/proc/update_env_effect()
+	if (!is_currently_playing())
 		return
-	sound_channel_manager.release_channel(channel, src)
-	channel = null
+	env_volume_coeff = turf_volume_coeff(source)
+	active_sound.volume_mutator = env_volume_coeff
 
-/datum/sound_emitter/proc/init_hearers()
-	hearers = players_in_range()
-
-/datum/sound_emitter/proc/update_hearers()
-	var/sound/S = null
-	if (active_key)
-		S = sounds[active_key]
-		S.status &= ~SOUND_UPDATE
-	else
-		S = sound()
-		S.file = null
-		S.status = SOUND_UPDATE | SOUND_MUTE
-	S.channel = channel.value
-	for (var/mob/player in hearers)
-		player << S
-
-/datum/sound_emitter/proc/apply_player_effects(sound/s, var/mob/player)
-	if (player.is_deaf() || player.loneliness_affected(source))
-		s.volume = 0
-		return s
-
-	// loosely simulate some obstruction muffling the sound
-	if (!(source in view(range, player)))
-		s.volume /= 5
-
-	// similarly if player is in spaced area and emitter is in non-spaced nearby, shouldn't hear it
-	var/p_effect = turf_volume_coeff(player)
-	s.volume *= p_effect
-
-	return s
-
-/datum/sound_emitter/proc/apply_env_effects(sound/s)
-	s.volume *= env_volume_coeff
-	return s
-
-/datum/sound_emitter/proc/turf_volume_coeff(atom/a)
-	if (!a)
-		return 1 // ?:D?
-	var/turf/t = get_turf(a)
-	if (!t)
-		return 0 // no sound for the damned
-	if (istype(t, /turf/simulated))
-		var/turf/simulated/sim = t
-		if (sim.zone?.air?.sound_coeff)
-			return sim.zone.air.sound_coeff
-	if (istype(t, /turf/unsimulated))
-		return 1
-	return 0 //damned
-
-/datum/sound_emitter/proc/update_params_for_player(mob/player)
-	if (!channel || !active_key)
-		return
-	if (!(player in hearers))
-		return
-	var/sound/S = copy_sound(sounds[active_key])
-	if (!S)
-		CRASH("active_key not found in sounds")
-	apply_env_effects(S)
-	apply_player_effects(S, player)
-	S.status |= SOUND_UPDATE
-	player << S
-
-/datum/sound_emitter/proc/players_in_range()
+/datum/sound_emitter/proc/clients_in_range()
 	var/list/in_range = list()
 	var/turf/t_source = get_turf(source)
 	for (var/mob/player in player_list)
-		if (!player || !player.client)
-			continue
-		var/turf/receiver = get_turf(player)
+		if (!player || !player.sound_endpoint)
+			continue // nowhere to send the sound
+		var/client/client = player.sound_endpoint.client
+		if (!client || !client.listener_context)
+			continue // nowhere to send the sound
+		var/turf/receiver = get_turf(client.listener_context.proxy)
 		if (!receiver)
-			continue
+			continue //player on some invalid turf, CRASH?
 
 		if((get_z_dist(receiver, t_source) <= range))
-			in_range += player
+			in_range += client
 	return in_range
 
-// put this somewhere better than here
-/proc/copy_sound(sound/copy_from)
-	if (!copy_from)
-		return
-	var/sound/new_sound = sound(copy_from.file)
-	new_sound.atom = copy_from.atom
-	new_sound.channel = copy_from.channel
-	new_sound.frequency = copy_from.frequency
-	new_sound.repeat = copy_from.repeat
-	new_sound.status = copy_from.status
-	new_sound.transform = copy_from.transform
-	new_sound.volume = copy_from.volume
-	return new_sound
+/datum/sound_emitter/proc/operator""()
+	return "sound_emitter on [source] playing sound [active_sound?.base_sound?.file]"

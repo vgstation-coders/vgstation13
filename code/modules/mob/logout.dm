@@ -43,8 +43,6 @@
 	if(client && client.media)
 		client.media.stop_music()
 
-	if (sound_zone_manager)
-		sound_zone_manager.unregister_listener(src)
 
 	unregister_event(/event/mob_area_changed, src, nameof(src::OnMobAreaChanged()))
 
