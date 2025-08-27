@@ -603,8 +603,9 @@ var/list/icon_state_to_appearance = list()
 				totaldug += finddatum.excavation_level
 				finddatum.update_excav_level(used_digging)
 			if(totaldug >= 100)
-				if(finddatum && finddatum.spawn_boulder(user))
-					finddatum.large_artifact_fail()
+				if(!dug)
+					if(finddatum && finddatum.spawn_boulder(user))
+						finddatum.large_artifact_fail()
 				playsound(src, 'sound/items/shovel.ogg', 50, 1)
 				gets_dug()
 
@@ -623,7 +624,6 @@ var/list/icon_state_to_appearance = list()
 		return
 	drop_stack(sand_type, src, 5)
 	dug = 1
-	QDEL_NULL(finddatum)
 	//icon_plating = "asteroid_dug"
 	update_icon()
 
