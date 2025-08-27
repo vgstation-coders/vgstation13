@@ -581,7 +581,7 @@ By design, d1 is the smallest direction and d2 is the highest
 		unshift(found_dirs,dir)
 	if(found_dirs.len > 2)
 		for(var/i in 3 to found_dirs.len)
-			var/list/subfound = dir_in_found ? list(dir,found_dirs[i]) : list(found_dirs[i-1],[i])
+			var/list/subfound = dir_in_found ? list(dir,found_dirs[i]) : list(found_dirs[i-1],found_dirs[i])
 			sortTim(subfound)
 			var/obj/structure/cable/C = new(loc)
 			C.d1 = subfound[1]
