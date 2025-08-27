@@ -150,7 +150,12 @@ var/list/prisonerstart = list()
 var/list/voxstart = list() //Vox raider spawn points
 var/list/voxlocker = list() //Vox locker spawn points
 //	list/traitors = list()	//traitor list
-var/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
+var/static/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
+// the below are offsets
+var/static/list/cardinal_south = list( SOUTH,EAST,WEST,NORTH )
+var/static/list/cardinal_east = list( EAST, WEST, NORTH, SOUTH )
+var/static/list/cardinal_west = list( WEST, NORTH, SOUTH, EAST )
+
 var/list/diagonal = list(NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
 var/list/alldirs = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
 

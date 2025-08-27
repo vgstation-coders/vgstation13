@@ -572,7 +572,16 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable/mapping/relativewall()
 	. = ..()
 	var/list/found_dirs = list()
-	for(var/subdir in cardinal)
+	var/list/iterated_dirs = cardinal
+	switch(dir)
+		if(SOUTH)
+			iterated_dirs = cardinal_south
+		if(EAST)
+			iterated_dirs = cardinal_east
+		if(WEST)
+			iterated_dirs = cardinal_west
+	dir = 1
+	for(var/subdir in iterated_dirs)
 		if(junction & subdir)
 			found_dirs += list(subdir)
 	if(found_dirs.len > 2)
