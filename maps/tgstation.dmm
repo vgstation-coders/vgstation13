@@ -4266,39 +4266,20 @@
 /turf/space,
 /area)
 "ahP" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk4"
+	},
+/obj/structure/cable/mapping/yellow{
+	dir = 4
 	},
 /turf/space,
 /area/solar/fport)
 "ahQ" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk12"
+	},
+/obj/structure/cable/mapping/yellow{
+	dir = 4
 	},
 /turf/space,
 /area/solar/fport)
@@ -4308,60 +4289,21 @@
 	},
 /turf/space,
 /area/solar/fport)
-"ahS" = (
-/obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/structure/catwalk{
-	icon_state = "catwalk12"
-	},
-/turf/space,
-/area/solar/fport)
 "ahT" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk12"
 	},
-/turf/space,
-/area/solar/fport)
-"ahU" = (
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
-/obj/structure/catwalk{
-	icon_state = "catwalk12"
+/obj/structure/cable/mapping/yellow{
+	dir = 8
 	},
 /turf/space,
 /area/solar/fport)
 "ahV" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk8"
+	},
+/obj/structure/cable/mapping/yellow{
+	dir = 8
 	},
 /turf/space,
 /area/solar/fport)
@@ -5665,39 +5607,11 @@
 	},
 /area/security/hos)
 "akr" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk4"
 	},
-/turf/space,
-/area/solar/fstarboard)
-"aks" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/catwalk{
-	icon_state = "catwalk12"
+/obj/structure/cable/mapping/yellow{
+	dir = 4
 	},
 /turf/space,
 /area/solar/fstarboard)
@@ -5708,59 +5622,29 @@
 /turf/space,
 /area/solar/fstarboard)
 "aku" = (
-/obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk12"
 	},
-/turf/space,
-/area/solar/fstarboard)
-"akv" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/catwalk{
-	icon_state = "catwalk12"
+/obj/structure/cable/mapping/yellow{
+	dir = 4
 	},
 /turf/space,
 /area/solar/fstarboard)
 "akw" = (
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk12"
+	},
+/obj/structure/cable/mapping/yellow{
+	dir = 8
 	},
 /turf/space,
 /area/solar/fstarboard)
 "akx" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk8"
+	},
+/obj/structure/cable/mapping/yellow{
+	dir = 8
 	},
 /turf/space,
 /area/solar/fstarboard)
@@ -61126,19 +61010,10 @@
 /area/solar/aport)
 "cAr" = (
 /obj/structure/catwalk,
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk2"
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/space,
 /area/solar/aport)
 "cAs" = (
@@ -61782,24 +61657,10 @@
 /area/maintenance/astarboardsolar)
 "cBA" = (
 /obj/structure/catwalk,
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk3"
 	},
+/obj/structure/cable/mapping/yellow,
 /turf/space,
 /area/solar/aport)
 "cBB" = (
@@ -63361,14 +63222,6 @@
 /obj/structure/cable/mapping/yellow,
 /turf/space,
 /area/solar/astarboard)
-"cEQ" = (
-/obj/structure/catwalk,
-/obj/structure/cable/yellow,
-/obj/structure/catwalk{
-	icon_state = "catwalk3"
-	},
-/turf/space,
-/area/solar/aport)
 "cER" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -64076,7 +63929,9 @@
 /obj/structure/catwalk{
 	icon_state = "catwalk12"
 	},
-/obj/structure/cable/mapping/yellow,
+/obj/structure/cable/mapping/yellow{
+	dir = 4
+	},
 /turf/space,
 /area/solar/aport)
 "cGf" = (
@@ -64085,7 +63940,9 @@
 /obj/structure/catwalk{
 	icon_state = "catwalk4"
 	},
-/obj/structure/cable/mapping/yellow,
+/obj/structure/cable/mapping/yellow{
+	dir = 4
+	},
 /turf/space,
 /area/solar/aport)
 "cGg" = (
@@ -64716,12 +64573,11 @@
 /area)
 "cHx" = (
 /obj/structure/catwalk,
-/obj/structure/cable/yellow{
-	d2 = 2;
-	icon_state = "0-2"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk3"
+	},
+/obj/structure/cable/mapping/yellow{
+	dir = 1
 	},
 /turf/space,
 /area/solar/aport)
@@ -65296,27 +65152,14 @@
 	},
 /area/science/xenobiology)
 "cIN" = (
-/obj/structure/catwalk,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk3"
 	},
+/obj/structure/cable/mapping/yellow{
+	dir = 1
+	},
 /turf/space,
-/area/solar/aport)
+/area/solar/astarboard)
 "cIO" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -66596,39 +66439,20 @@
 /turf/simulated/floor/engine,
 /area/science/xenobiology/specimen_6)
 "cKR" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk12"
+	},
+/obj/structure/cable/mapping/yellow{
+	dir = 4
 	},
 /turf/space,
 /area/solar/astarboard)
 "cKS" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk4"
+	},
+/obj/structure/cable/mapping/yellow{
+	dir = 4
 	},
 /turf/space,
 /area/solar/astarboard)
@@ -66639,59 +66463,20 @@
 /turf/space,
 /area/solar/astarboard)
 "cKU" = (
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk12"
 	},
-/turf/space,
-/area/solar/astarboard)
-"cKV" = (
-/obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/structure/catwalk{
-	icon_state = "catwalk12"
-	},
-/turf/space,
-/area/solar/astarboard)
-"cKW" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/structure/catwalk{
-	icon_state = "catwalk12"
+/obj/structure/cable/mapping/yellow{
+	dir = 8
 	},
 /turf/space,
 /area/solar/astarboard)
 "cKX" = (
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk8"
+	},
+/obj/structure/cable/mapping/yellow{
+	dir = 8
 	},
 /turf/space,
 /area/solar/astarboard)
@@ -67765,18 +67550,11 @@
 /area/science/xenobiology/specimen_6)
 "cNc" = (
 /obj/structure/catwalk,
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable/yellow{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
 /obj/structure/catwalk{
 	icon_state = "catwalk1"
+	},
+/obj/structure/cable/mapping/yellow{
+	dir = 1
 	},
 /turf/space,
 /area/solar/aport)
@@ -70014,7 +69792,9 @@
 /obj/structure/catwalk{
 	icon_state = "catwalk15"
 	},
-/obj/structure/cable/mapping/yellow,
+/obj/structure/cable/mapping/yellow{
+	dir = 1
+	},
 /turf/space,
 /area/solar/astarboard)
 "cRq" = (
@@ -70522,7 +70302,9 @@
 /obj/structure/catwalk{
 	icon_state = "catwalk1"
 	},
-/obj/structure/cable/mapping/yellow,
+/obj/structure/cable/mapping/yellow{
+	dir = 1
+	},
 /turf/space,
 /area/solar/astarboard)
 "cSC" = (
@@ -189876,15 +189658,15 @@ aaj
 aaa
 aaa
 aaj
-ahS
+ahQ
 aaj
 aaj
 aaj
-ahS
+ahQ
 aaj
 aaa
 aaj
-ahS
+ahQ
 aaj
 aaa
 aaj
@@ -190880,15 +190662,15 @@ aaj
 aaa
 aaj
 aaj
-ahU
+ahT
 aaj
 aaa
 aaj
-ahU
+ahT
 aaj
 aaa
 aaj
-ahU
+ahT
 aaj
 aaa
 aaj
@@ -195000,13 +194782,13 @@ cBA
 cBA
 cBA
 cBA
-cEQ
+cBA
 cGh
 cHx
-cIN
-cIN
-cIN
-cIN
+cHx
+cHx
+cHx
+cHx
 cNc
 aaa
 aer
@@ -197008,13 +196790,13 @@ cBA
 cBA
 cBA
 cBA
-cEQ
+cBA
 cGh
 cHx
-cIN
-cIN
-cIN
-cIN
+cHx
+cHx
+cHx
+cHx
 cNc
 aaj
 acV
@@ -199016,13 +198798,13 @@ cBA
 cBA
 cBA
 cBA
-cEQ
+cBA
 cGh
 cHx
-cIN
-cIN
-cIN
-cIN
+cHx
+cHx
+cHx
+cHx
 cNc
 aaj
 acV
@@ -240078,15 +239860,15 @@ aaa
 acV
 aaj
 ajz
-aks
+aku
 alh
 aaa
 ajz
-aks
+aku
 alh
 aaa
 ajz
-aks
+aku
 alh
 aaa
 aaa
@@ -240580,15 +240362,15 @@ aaa
 acV
 aaj
 ajz
-aks
+aku
 alh
 aaj
 ajz
-aks
+aku
 alh
 aaj
 ajz
-aks
+aku
 alh
 aaj
 aaa
@@ -241082,15 +240864,15 @@ aaa
 aaa
 aaj
 ajz
-aks
+aku
 alh
 aaa
 ajz
-aks
+aku
 alh
 aaa
 ajz
-aks
+aku
 alh
 aaj
 aaj
@@ -241584,15 +241366,15 @@ acV
 aaa
 aaa
 ajz
-aks
+aku
 alh
 aaa
 ajz
-aks
+aku
 alh
 aaa
 ajz
-aks
+aku
 alh
 aaa
 aaa
@@ -243592,15 +243374,15 @@ acV
 aaa
 aaj
 ajz
-akv
+akw
 alh
 aaa
 ajz
-akv
+akw
 alh
 aaa
 ajz
-akv
+akw
 alh
 aaa
 aaa
@@ -244094,15 +243876,15 @@ aaa
 aaa
 aaa
 ajz
-akv
+akw
 alh
 aaa
 ajz
-akv
+akw
 alh
 aaa
 ajz
-akv
+akw
 alh
 aaj
 aaj
@@ -244596,15 +244378,15 @@ aaa
 acV
 aaj
 ajz
-akv
+akw
 alh
 aaj
 ajz
-akv
+akw
 alh
 aaj
 ajz
-akv
+akw
 alh
 aaa
 aaj
@@ -245098,15 +244880,15 @@ aaa
 acV
 aaj
 ajz
-akv
+akw
 alh
 aaa
 ajz
-akv
+akw
 alh
 aaa
 ajz
-akv
+akw
 alh
 aaa
 aaj
@@ -261770,15 +261552,15 @@ aaa
 aaj
 aaa
 cJO
-cKV
+cKR
 cMc
 aaa
 cJO
-cKV
+cKR
 cMc
 aaa
 cJO
-cKV
+cKR
 cMc
 aaa
 aaa
@@ -262278,12 +262060,12 @@ cJN
 cJN
 cKT
 cJN
-cEP
-cEP
+cIN
+cIN
 cRp
-cEP
-cEP
-cEP
+cIN
+cIN
+cIN
 cSB
 aaj
 aai
@@ -263276,15 +263058,15 @@ aaj
 aaj
 aaj
 cJM
-cKW
+cKU
 cMb
 aaj
 cJM
-cKW
+cKU
 cMb
 aaj
 cJM
-cKW
+cKU
 cMb
 aaa
 aaa
@@ -263778,15 +263560,15 @@ aaa
 aaj
 aaj
 cJM
-cKW
+cKU
 cMb
 aaa
 cJM
-cKW
+cKU
 cMb
 aaa
 cJM
-cKW
+cKU
 cMb
 aaa
 aaa
@@ -264280,15 +264062,15 @@ aaa
 aaj
 aaa
 cJM
-cKW
+cKU
 cMb
 aaj
 cJM
-cKW
+cKU
 cMb
 aaj
 cJM
-cKW
+cKU
 cMb
 aaj
 aai
@@ -264782,15 +264564,15 @@ aaa
 aaj
 aaa
 cJM
-cKW
+cKU
 cMb
 aaa
 cJM
-cKW
+cKU
 cMb
 aaj
 cJM
-cKW
+cKU
 cMb
 aaj
 aai

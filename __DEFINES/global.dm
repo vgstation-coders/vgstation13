@@ -152,7 +152,7 @@ var/list/voxlocker = list() //Vox locker spawn points
 //	list/traitors = list()	//traitor list
 var/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
 // the below are offsets
-var/list/cardinal_south = list( SOUTH,EAST,WEST,NORTH )
+var/list/cardinal_south = list( SOUTH, EAST, WEST, NORTH )
 var/list/cardinal_east = list( EAST, WEST, NORTH, SOUTH )
 var/list/cardinal_west = list( WEST, NORTH, SOUTH, EAST )
 
