@@ -572,16 +572,7 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable/mapping/relativewall()
 	. = ..()
 	var/list/found_dirs = list()
-	var/list/iterated_dirs = cardinal
-	switch(dir)
-		if(SOUTH)
-			iterated_dirs = cardinal_south
-		if(EAST)
-			iterated_dirs = cardinal_east
-		if(WEST)
-			iterated_dirs = cardinal_west
-	dir = 1
-	for(var/subdir in iterated_dirs)
+	for(var/subdir in cardinal)
 		if(junction & subdir)
 			found_dirs += list(subdir)
 	if(found_dirs.len > 2)
@@ -604,6 +595,7 @@ By design, d1 is the smallest direction and d2 is the highest
 		d1 = 0
 		d2 = found_dirs[1]
 	update_icon()
+	dir = SOUTH
 
 /obj/structure/cable/mapping/yellow
 	color = "#FFED00"
