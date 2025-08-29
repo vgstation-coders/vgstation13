@@ -31,10 +31,10 @@
 	if(actuator && actuator.integrity > 0)
 		if(!actuator.combat_punches)
 			src.force = 5
-			src.fist.force = src.force
+			fist.force = 5
 		else
 			src.force = initial(src.force)
-			src.fist.force = initial(src.fist.force)
+			fist.force = initial(src.force)
 	if(istype(target, /mob/living))
 		var/mob/living/M = target
 		if(src.occupant.a_intent == I_HURT)
@@ -58,7 +58,8 @@
 					var/update = 0
 					switch(damtype)
 						if("brute")
-							H.Paralyse(1)
+							if(force >= 15)
+								H.Paralyse(1)
 							update |= temp.take_damage(rand(force/2, force), 0)
 						if("fire")
 							update |= temp.take_damage(0, rand(force/2, force))
@@ -77,7 +78,8 @@
 			else
 				switch(damtype)
 					if("brute")
-						M.Paralyse(1)
+						if(force >= 15)
+							M.Paralyse(1)
 						M.take_overall_damage(rand(force/2, force))
 					if("fire")
 						M.take_overall_damage(0, rand(force/2, force))

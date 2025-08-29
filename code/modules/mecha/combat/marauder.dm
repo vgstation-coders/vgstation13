@@ -28,7 +28,7 @@
 	paintable = 0
 
 	damage_minimum = 10
-	weight_max = 500
+	weight_max = 800
 	penetration_reduction = 10 // blocks 7.62x55
 	emp_gear_proof = TRUE
 

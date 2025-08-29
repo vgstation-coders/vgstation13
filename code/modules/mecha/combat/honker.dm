@@ -16,7 +16,22 @@
 	var/squeak = 0
 
 	penetration_reduction = 3 // blocks .380
-	weight_max = 200
+	weight_max = 240
+
+	max_hull_equip = 1
+	max_weapon_equip = 2
+	max_utility_equip = 1
+	max_universal_equip = 0
+	max_special_equip = 1
+
+	starting_components = list(
+		/obj/item/mecha_parts/component/hull,
+		/obj/item/mecha_parts/component/actuator/hispeed,
+		/obj/item/mecha_parts/component/armor/lightweight,
+		/obj/item/mecha_parts/component/gas,
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
+		)
 
 /*
 /obj/mecha/combat/honker/New()

@@ -25,6 +25,7 @@
 	weight_max = 500
 	damage_minimum = 0
 	penetration_reduction = 0
+	weight_tolerance = 1.75
 
 	starting_components = list(
 		/obj/item/mecha_parts/component/hull,

@@ -59,17 +59,35 @@
 
 	tally /= 100
 
-	return step_in + max(1, round(tally, 0.1))
+	return step_in + max(1, tally)
+
+/obj/mecha/proc/CalcWeight(var/total_weight = 0)
+	if(!src || src.health <= 0)
+		return
+
+	total_weight = weight_max/10 // Baseline weight for empty mechs?
+	for(var/slot in internal_components)
+		var/obj/item/mecha_parts/component/C = internal_components[slot]
+		if(C && C.step_delay)
+			total_weight += C.step_delay
+	for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
+		if(ME && ME.step_delay)
+			total_weight += ME.step_delay
+	return total_weight
 
 /obj/mecha/proc/dyndomove(direction)
 	var/obj/item/mecha_parts/component/electrical/EC = internal_components[MECH_ELECTRIC]
-	var/weight = (get_step_delay() * 100)
+	var/predicted_power_cost = step_energy_drain
+	if(EC && EC.integrity > 0)
+		predicted_power_cost = step_energy_drain * (EC.charge_cost_mod * max(get_step_delay(), 1))
+	else
+		predicted_power_cost = step_energy_drain * 10
 	stopMechWalking()
 	if(!can_move)
 		return 0
 	if(src.pr_inertial_movement.active())
 		return 0
-	if(!has_charge(step_energy_drain))
+	if(!has_charge(predicted_power_cost))
 		return 0
 	if(lock_controls) //No moving while using the Gravpult!
 		return 0
@@ -81,7 +99,7 @@
 	if(hasInternalDamage(MECHA_INT_CONTROL_LOST))
 		move_result = mechsteprand()
 		if(prob(35))
-			TryFlip(TRUE, FALSE, TRUE)
+			TryFlip(occupant, TRUE, tool=null)
 	else if(src.dir!=direction && !lock_dir)
 		move_result = mechturn(direction)
 		stepped = FALSE
@@ -102,13 +120,24 @@
 			if(!src.check_for_support())
 				src.pr_inertial_movement.start(list(src,direction))
 				src.log_message("Movement control lost. Inertial movement started.")
-		if(weight > weight_max * 1.5 && prob(15)) // 1.5x forgiveness
-			TryFlip(TRUE, FALSE, TRUE)
+
+		var/current_weight = CalcWeight()
+		var/moderate_threshold = weight_max * weight_tolerance
+		var/severe_threshold = weight_max * weight_tolerance * 1.25
+
+		if(current_weight > severe_threshold && prob(10))
+			TryFlip(occupant, TRUE, tool=null)
+
+		if(current_weight > moderate_threshold && prob(35))
+			move_result = mechsteprand()
+			if(prob(25))
+				take_damage(10, "brute", FALSE)
 		sleep(get_step_delay())
 		if(!src)
 			return
 		can_move = 1
 		return 1
+
 	return 0
 
 /obj/mecha/proc/startMechWalking()

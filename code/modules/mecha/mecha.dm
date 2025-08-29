@@ -157,6 +157,7 @@
 	var/flipped = FALSE
 	var/user_trapped = FALSE
 	var/trying_to_flip = FALSE
+	var/weight_tolerance = 1.5
 
 /obj/mecha/get_cell()
 	return cell
@@ -791,16 +792,17 @@ Fire damage comes from tank
 	if(get_charge())
 		if(!zap || zap.integrity <= 0) // Only EMP the cell if there's no electrical hub
 			cell.emp_act(severity*1.25)
-		take_damage(50 / severity, damage_type = "energy", violent = FALSE)
+		take_damage(15 / severity, damage_type = "energy", violent = FALSE) // This *should* be a mission kill, still.
 		src.log_message("EMP detected",1)
 		check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
-		for(var/obj/item/mecha_parts/mecha_equipment/M in equipment)
-			M.emp_act(severity)
-		for(var/slot in internal_components)
-			var/obj/item/mecha_parts/component/C = internal_components[slot]
-			if(istype(C))
-				C.emp_act(severity)
-		return
+
+	for(var/obj/item/mecha_parts/mecha_equipment/M in equipment)
+		M.emp_act(severity)
+	for(var/slot in internal_components)
+		var/obj/item/mecha_parts/component/C = internal_components[slot]
+		if(istype(C))
+			C.emp_act(severity)
+	return
 
 /obj/mecha/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
@@ -1583,9 +1585,6 @@ Fire damage comes from tank
 		return
 	if(usr.incapacitated() || !occupant)
 		return
-	if(user_trapped)
-		to_chat(occupant, "<span class='danger'>The [src]'s cockpit hatch is pinned underneath its bulk and won't budge!</span>")
-		return
 	if(usr != occupant)
 		if(occupant.isUnconscious())
 			visible_message("<span class='notice'>[usr] starts pulling [occupant.name] out of \the [src].</span>")
@@ -1602,7 +1601,16 @@ Fire damage comes from tank
 				continue
 			return
 	if(istype(over_location))
-		go_out(over_location)
+		if(user_trapped)
+			if(do_after(occupant, src, 5 SECONDS))
+				if(prob(10))
+					to_chat(occupant, "<span class='warning'>You manage to extract yourself from the [src].</span>")
+					src.go_out(over_location)
+			else
+				to_chat(occupant, "<span class='warning'>You fail to extract yourself from the [src]. </span>")
+				return
+		else
+			go_out(over_location)
 	add_fingerprint(usr)
 
 /obj/mecha/proc/empty_bad_contents(var/list/extra_stuff=null) //stuff that shouldn't be there, possibly caused by the driver dropping it while inside the mech
@@ -2064,6 +2072,11 @@ Fire damage comes from tank
 
 /////////////
 
+#warn
+/*
+bugs:
+
+*/
 //debug
 /*
 /obj/mecha/verb/test_int_damage()
@@ -2154,16 +2167,6 @@ Fire damage comes from tank
 	crushchance = 95
 	falloutchance = 95
 	weight_max = 10
-#warn test
-/*
-// to-do:
-Add pushing mechs over
-Add hulk and fitness checks
-Add mech table/rack climbing
-
-Add mech equipment securing (welder, solder) to make "safe" nonlethal combat mechs
-
-*/
 
 /obj/mecha/Uncross(atom/movable/mover)
 	if(!src || src.health <= 0)
@@ -2185,10 +2188,10 @@ Add mech equipment securing (welder, solder) to make "safe" nonlethal combat mec
 		return
 
 	var/weight = (max(1, get_step_delay()) * 100)
-	var/chance = (max(1, weight/10))
+	var/chance = min(1, 20 - (weight / 10))
 
 	if(mechanical)
-		DoFlip(TRUE, reason = null)
+		DoFlip(TRUE)
 		return
 	else
 		if(istype(tool, /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp))
@@ -2196,9 +2199,9 @@ Add mech equipment securing (welder, solder) to make "safe" nonlethal combat mec
 			to_chat(user, "<span class='notice'>You position the [tool] and begin attempting to flip [src]...</span>")
 			if(do_after(user, src, 3 SECONDS))
 				trying_to_flip = FALSE
-				if(prob(min(25, chance * 0.5))) // Fixed: removed the !
+				if(prob(min(25, chance * 0.5)))
 					to_chat(user, "<span class='warning'>The [tool]'s hydraulics whine loudly, as it overturns [src]!</span>")
-					DoFlip(TRUE, reason = "[user]'s [tool]")
+					DoFlip(TRUE)
 				else
 					to_chat(user, "<span class='warning'>The [tool] strains, hydraulics hissing, but nothing happens..</span>")
 				trying_to_flip = FALSE
@@ -2207,27 +2210,28 @@ Add mech equipment securing (welder, solder) to make "safe" nonlethal combat mec
 			if(ishuman(user))
 				trying_to_flip = TRUE
 				var/fitness = max(1, user.get_strength())
-				var/time = max(3, 8 - fitness) * 2 // 2 seconds
-				to_chat(user, "<span class='notice'>You brace yourself and begin trying to flip [src]...</span>")
-				if(do_after(user, src, time))
+				to_chat(user, "<span class='notice'>You press your hands against the [src], pushing your weight into it..</span>")
+				if(do_after(user, src, 4 SECONDS))
 					trying_to_flip = FALSE
 					var/success_chance = min(5, 15 / fitness) // Very low chance, worse for weak people
 					if(prob(success_chance)) // Fixed: removed the !
-						to_chat(user, "<span class='warning'>Against all odds, you manage to flip [src]!</span>")
-						DoFlip(TRUE, reason = "[user] with [tool]")
+						to_chat(user, "<span class='warning'>You manage to overturn the [src]!</span>")
+						DoFlip(TRUE)
 					else
-						to_chat(user, "<span class='warning'>Despite your best efforts, [src] is too heavy to flip.</span>")
+						to_chat(user, "<span class='warning'>You push your weight into [src], but nothing happens.</span>")
+				else
+					trying_to_flip = FALSE
 
-/obj/mecha/proc/DoFlip(var/success = TRUE, var/reason)
+/obj/mecha/proc/DoFlip(var/success = TRUE)
 	var/weight_mult = 1 * get_step_delay() // Mech's weight increases damage (it falls on you)
 	var/mecha_crush_dam = 10 * max(weight_mult, 1) // Deadly if heavy/unlucky enough
 	if(!src || src.health <= 0)
 		return
 	flip_horizontal()
-	user_trapped = TRUE // Locks the pilot compartment
+	user_trapped = TRUE
 	flipped = TRUE
 	playsound(src, 'sound/effects/bang.ogg', 50, 1, -1)
-	visible_message("<span class='red'><b>[reason ? "[reason] causes [src] to turn over with a earth-shattering CRASH!" : "[src] violently turns over with a metallic thunk!"]</b></span>")
+	visible_message("<span class='red'><b>[src] violently turns over with a metallic thunk!</b></span>")
 	take_damage(mecha_crush_dam/2)
 	layer = CLOSED_DOOR_LAYER
 	plane = OBJ_PLANE

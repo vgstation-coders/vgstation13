@@ -31,6 +31,8 @@
 	var/has_equip_overlay = TRUE // in case we want our equipment to have a sprite on a mecha
 	var/need_colorize = TRUE // in case we don't have a padding or don't want to color our equipment
 	var/equip_slot = MECHA_HAND // Used to specify "layer" so we can easily display abstract missile launcher with an abstract laser.
+	var/equip_first = FALSE
+	var/requires_beacon = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/proc/do_after_cooldown(target=1, delay_mult=1)
 	sleep(equip_cooldown * delay_mult)
@@ -119,6 +121,10 @@
 		chassis.use_power(energy_drain * EC.charge_cost_mod)
 	else
 		chassis.use_power(energy_drain * 10)
+	if(requires_beacon)
+		if(!chassis.tracking)
+			chassis.occupant_message("Error: [src] requires telemetry from a exosuit tracking device to function!")
+			return
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/can_attach(obj/mecha/M as obj, var/mob/living/user)
@@ -126,6 +132,10 @@
 	if(!CO || CO.integrity <= 0)
 		to_chat(user, "<span class='warning'>The [M]'s coupling system is loose, and doesn't catch the [src]..</span>")
 		return
+	if(equip_first)
+		if(M.equipment)
+			to_chat(user, "<span class='warning'>The other equipment must be removed before you can attach [src]!</span>") // Force the sprite to appear
+			return
 	if(equip_type == EQUIP_HULL && M.hull_equipment.len < M.max_hull_equip)
 		return 1
 	if(equip_type == EQUIP_WEAPON && M.weapon_equipment.len < M.max_weapon_equip)

@@ -59,6 +59,7 @@
 	return allfree
 
 /obj/item/mecha_parts/mecha_equipment/tool/jail/action(var/mob/living/carbon/target)
+	..()
 	if(!action_checks(target))
 		return
 	if(!istype(target))

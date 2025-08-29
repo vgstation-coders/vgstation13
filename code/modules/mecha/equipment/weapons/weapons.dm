@@ -17,8 +17,7 @@
 		energy_drain = rand(energy_drain*3, energy_drain*5)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/action(atom/target)
-	if(!action_checks(target))
-		return
+	..()
 	var/originaltarget = target
 	var/turf/curloc = chassis.loc
 	var/atom/targloc = get_turf(target)
@@ -47,6 +46,23 @@
 	do_after_cooldown()
 	return
 
+/obj/item/mecha_parts/mecha_equipment/weapon/energy/laser/rigged // to-do make it have ACTUAL tool function later
+	equip_cooldown = 15
+	name = "\improper jury-rigged laser emitter"
+	desc = "A jury-rigged laser emitter that can be attached to a MK2 or Firefighter Ripley." // Only MK2s + for now.
+	icon_state = "mecha_laser"
+	energy_drain = 60
+	projectile = /obj/item/projectile/beam
+	fire_sound = 'sound/weapons/Laser.ogg'
+	step_delay = 75
+	requires_beacon = TRUE
+	equip_type = EQUIP_UTILITY
+
+/obj/item/mecha_parts/mecha_equipment/weapon/energy/laser/rigged/can_attach(obj/mecha/M as obj)
+	if(..())
+		if(!istype(M, /obj/mecha/working/ripley/mk2) || !istype(M, /obj/mecha/combat))
+			return 0
+	return 1
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser
 	equip_cooldown = 8
@@ -116,6 +132,7 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/honker/action(target)
+	..()
 	if(!chassis)
 		return 0
 	if(energy_drain && chassis.get_charge() < energy_drain)
@@ -163,19 +180,58 @@
 /////////////
 // Ballistics
 /////////////
-
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot
 	name = "\improper LBX AC 10 \"Scattershot\""
-	desc = "A exosuit-mounted shotgun, it takes 00 gauge buckshot."
+	desc = "A exosuit-mounted shotgun, it takes 00 gauge buckshot and slugs."
 	icon_state = "mecha_scatter"
 	equip_cooldown = 20
-	projectile = /obj/item/projectile/bullet/buckshot
+	projectile = null
 	fire_sound = 'sound/weapons/shotgun.ogg'
 	max_projectiles = 20
 	projectiles_cache_max = 60
-	ammo_type = "/obj/item/ammo_casing/shotgun/buckshot" // idk how to make it dynamically shoot whatever's in the tank, so force it to only take buckshot for now
+	ammo_type = "/obj/item/ammo_casing/shotgun/buckshot"
 	caliber = GAUGE12
-	step_delay = 20 // Ballistics are lighter
+	step_delay = 20
+	var/list/loaded_ammo = list()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/New()
+	..()
+	if(starts_full)
+		for(var/i = 1 to max_projectiles)
+			loaded_ammo += new ammo_type()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/action(atom/target)
+	// Set projectile type from next loaded ammo
+	if(loaded_ammo.len)
+		var/obj/item/ammo_casing/next_ammo = loaded_ammo[1]
+		// Get the projectile type from the loaded ammo casing
+		projectile = next_ammo.projectile_type
+		loaded_ammo.Cut(1, 2)
+		qdel(next_ammo)
+		// Call parent action with the correct projectile type set
+		return ..()
+	else
+		// No ammo loaded, can't fire
+		return FALSE
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/rearm()
+	if(projectiles >= max_projectiles || !projectiles_cache)
+		return FALSE
+	var/ammo_used = min(max_projectiles - projectiles, projectiles_cache)
+	projectiles += ammo_used
+	projectiles_cache -= ammo_used
+	// Create ammo casings of the default type when rearming from cache
+	for(var/i = 1 to ammo_used)
+		loaded_ammo += new ammo_type()
+	return TRUE
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/proc/load_ammo_casing(var/obj/item/ammo_casing/casing)
+	if(!casing?.BB || projectiles_cache >= projectiles_cache_max)
+		return FALSE
+	projectiles_cache++
+	// Store the actual casing so we can use its projectile type
+	loaded_ammo += casing
+	return TRUE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg
 	name = "\improper Ultra AC 2"
@@ -222,6 +278,7 @@
 	step_delay = 100
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/action(target)
+	..()
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
@@ -271,6 +328,7 @@
 	no_caliber = TRUE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/action(target)
+	..()
 	if(can_pre_detonate && grenade)
 		grenade.prime(chassis.occupant)
 		grenade = null
@@ -311,6 +369,7 @@
 	equip_cooldown = 30
 	range = RANGED | MELEE
 	starts_full = TRUE
+	equip_type = EQUIP_UTILITY
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/can_attach(var/obj/mecha/working/clarke/M)
 	if(istype(M))
@@ -330,6 +389,7 @@
 	var/mode = 0
 	var/inflatable_type = 0
 	ammo_type = "/obj/item/weapon/grenade/inflatable"
+	equip_type = EQUIP_UTILITY
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/Topic(href,href_list)
 	if(..())
@@ -354,6 +414,7 @@
 	return "[..()] \n[mode ? "" : "Current projectile: inflatable [inflatable_type ? "door" : "wall"]\[<a href='?src=\ref[src];inflatable_type=0'>change</a>\]"]\[<a href='?src=\ref[src];mode=0'>switch to [mode ? "deploy" : "deflate"] mode</a>\]"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/action(target)
+	..()
 	if(mode)
 		if(istype(target, /obj/structure/inflatable))
 			if(!chassis.Adjacent(target))
@@ -398,8 +459,7 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar/action(target)
-	if(!action_checks(target))
-		return
+	..()
 	set_ready_state(0)
 	var/obj/item/weapon/bananapeel/B = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 60, 1)
@@ -434,8 +494,7 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/mousetrap_mortar/action(target)
-	if(!action_checks(target))
-		return
+	..()
 	set_ready_state(0)
 	var/obj/item/device/assembly/mousetrap/M = new projectile(chassis.loc)
 	M.secured = 1
@@ -471,8 +530,7 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/creampie_mortar/action(target)
-	if(!action_checks(target))
-		return
+	..()
 	set_ready_state(0)
 	var/obj/item/weapon/reagent_containers/food/snacks/pie/P = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 60, 1)
@@ -502,8 +560,7 @@
 	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas/action(target)
-	if(!action_checks(target))
-		return
+	..()
 	set_ready_state(0)
 	var/obj/item/weapon/legcuffs/bolas/mech/M = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 50, 1)
@@ -525,8 +582,7 @@
 	range = MELEE | RANGED
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas/restrainment/action(target)
-	if(!action_checks(target))
-		return
+	..()
 	if(loc.Adjacent(target) && istype(target, /mob/living/carbon))
 		var/obj/mecha/M = loc
 		if(!istype(M))

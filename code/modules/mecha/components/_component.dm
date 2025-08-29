@@ -67,11 +67,12 @@
 
 // Damage code.
 
-/obj/item/mecha_parts/component/emp_act(var/severity = 4)
-	if(severity + emp_resistance >= 4)
+/obj/item/mecha_parts/component/emp_act(severity)
+	if(emp_resistance >= severity)
 		return
-	severity = clamp(severity + emp_resistance, 1, 4)
-	take_damage((4 - severity) * round(integrity * 0.1, 0.1))
+
+	severity = clamp(severity - emp_resistance, 1, 4)
+	damage_part((5 - severity) * round(integrity * 0.1, 0.1))
 	TryBreakComponent()
 
 /obj/item/mecha_parts/component/proc/adjust_integrity(var/amt = 0)
@@ -89,7 +90,7 @@
 		TryBreakComponent()
 	return TRUE
 
-/obj/item/mecha_parts/component/take_damage()
+/obj/item/mecha_parts/component/take_damage(incoming_damage, damage_type = "brute", skip_break = FALSE, mute = TRUE)
 	if(chassis && chassis.health > 0)
 		chassis.CheckEnclosed()
 	TryBreakComponent()

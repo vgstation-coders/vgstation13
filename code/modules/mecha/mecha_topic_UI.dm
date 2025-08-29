@@ -72,7 +72,9 @@
 
 
 /obj/mecha/proc/get_stats_part()
-	var/total_weight = 0
+
+	var/total_weight = CalcWeight()
+/*
 	for(var/slot in internal_components)
 		var/obj/item/mecha_parts/component/C = internal_components[slot]
 		if(C && C.step_delay)
@@ -80,6 +82,7 @@
 	for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
 		if(ME && ME.step_delay)
 			total_weight += ME.step_delay
+*/
 	var/integrity = health/initial(health)*100
 	var/cell_charge = get_charge()
 	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]

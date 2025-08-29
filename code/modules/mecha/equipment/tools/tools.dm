@@ -30,8 +30,7 @@
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/action(atom/target)
-	if(!action_checks(target))
-		return
+	..()
 	var/obj/mecha/working/W = chassis
 
 	if(istype(target,/obj/machinery/power/supermatter))
@@ -160,8 +159,7 @@
 		playsound(target, pick('sound/effects/squelch1.ogg', 'sound/effects/flesh_squelch.ogg'), 100, 1)
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill/action(atom/target)
-	if(!action_checks(target))
-		return
+	..()
 	if(isobj(target))
 		if(!target.can_mech_drill())
 			return
@@ -292,9 +290,7 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/tool/scythe/action(atom/target)
-	if(!action_checks(target))
-		return
-
+	..()
 	if(istype(target, /obj/machinery/portable_atmospherics/hydroponics))
 		set_ready_state(0)
 		if(do_after_cooldown(target, 1/2))
@@ -577,6 +573,7 @@
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/action(atom/target)
+	..()
 	if(istype(target,/area/shuttle)||istype(target, /turf/space/transit))//>implying these are ever made -Sieve
 		disabled = 1
 	else
@@ -639,6 +636,7 @@
 	step_delay = 100
 
 /obj/item/mecha_parts/mecha_equipment/teleporter/action(atom/target)
+	..()
 	if(!action_checks(target) || src.loc.z == map.zCentcomm)
 		return
 	var/turf/T = get_turf(target)
@@ -662,6 +660,7 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/wormhole_generator/action(atom/target)
+	..()
 	if(!action_checks(target) || src.loc.z == map.zCentcomm)
 		return
 	var/list/theareas = list()
@@ -718,7 +717,7 @@
 	var/fire_delay = 10 //Used to prevent spam-brute against humans.
 
 /obj/item/mecha_parts/mecha_equipment/gravcatapult/action(atom/movable/target)
-
+	..()
 	if(world.time >= last_fired + fire_delay)
 		last_fired = world.time
 	else
@@ -1379,8 +1378,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/safety_clamp/action(atom/target)
 	//this whole thing is seriously fucking stupid and should be a child of the clamp
-	if(!action_checks(target))
-		return
+	..()
 	if(!cargo_holder)
 		return
 	if(istype(target,/obj))
@@ -1459,6 +1457,7 @@
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/action(atom/target)
+	..()
 	if(switchtool.deployed)
 		switchtool.preattack(target, chassis.occupant, chassis.Adjacent(target))
 		chassis.use_power(energy_drain)
@@ -1603,6 +1602,7 @@
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector/action(atom/target)
+	..()
 	var/obj/item/weapon/tank/plasma/plas = target
 	if(istype(plas))
 		if(collector.P)

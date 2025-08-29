@@ -40,6 +40,7 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/action(var/mob/living/carbon/target)
+	..()
 	if(!action_checks(target, TRUE))
 		return
 	if(occupant && isturf(target) && chassis.Adjacent(target) && !target.density)
@@ -294,6 +295,7 @@
 	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/action(var/obj/item/stack/cable_coil/target)
+	..()
 	if(!action_checks(target))
 		return
 	var/result = load_cable(target)
@@ -475,6 +477,7 @@
 	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/action(atom/movable/target)
+	..()
 	if(!action_checks(target))
 		return
 	if(istype(target,/obj/item/weapon/reagent_containers/syringe))
@@ -725,6 +728,7 @@
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool_med/action(atom/target)
+	..()
 	if(switchtool.deployed)
 		switchtool.preattack(target, chassis.occupant, chassis.Adjacent(target))
 		chassis.use_power(energy_drain)

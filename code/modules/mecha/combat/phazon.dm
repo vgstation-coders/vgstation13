@@ -29,7 +29,7 @@
 
 	damage_minimum = 0
 
-	weight_max = 300
+	weight_max = 500
 	penetration_reduction = 5 // blocks 9mm
 
 	max_hull_equip = 2
@@ -41,7 +41,7 @@
 	weight_max = 200
 
 	starting_components = list(
-		/obj/item/mecha_parts/component/hull/durable,
+		/obj/item/mecha_parts/component/hull,
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor/alien,
 		/obj/item/mecha_parts/component/gas,

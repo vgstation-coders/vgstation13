@@ -16,6 +16,12 @@
 	var/quick_attach = TRUE
 	var/welded = FALSE
 
+/obj/item/mecha_parts/component/coupler/detach()
+	if(welded)
+		src.damage_part(1000) // it breaks
+		visible_message(src, "<span class='danger'>The melted connector breaks apart when you pry it out!</span>")
+	return
+
 /obj/item/mecha_parts/component/coupler/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
@@ -37,19 +43,5 @@
 	relative_size = 10
 	quick_attach = FALSE
 
-/obj/item/mecha_parts/component/coupler/durable/solder_act()
-	return
-
 /obj/item/mecha_parts/component/coupler/durable/attackby(obj/item/W as obj, mob/user as mob)
 	return ..()
-
-/*
-/obj/item/mecha_parts/component/coupler/smart
-	name = "mecha manual module coupler"
-	desc = "A hefty mechanical coupler that trades usability  for durability. It lacks a magnetic system, requiring hands-on work instead."
-	emp_resistance = 4
-	integrity_danger_mod = 0.2
-	max_integrity = 200
-	relative_size = 20
-	electronic_attach = FALSE
-*/
