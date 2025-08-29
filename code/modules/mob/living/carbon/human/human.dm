@@ -2593,7 +2593,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 		if ("Tajaran")
 			return list(/datum/butchering_product/teeth/human, /datum/butchering_product/skin/cat/lots)
 		if ("Vox")
-			return list(/datum/butchering_product/feathers/vox)
+			return list(/datum/butchering_product/teeth/human, /datum/butchering_product/feathers/vox)
 	return list()
 		/*	Missing Sprites, pls contribute
 
