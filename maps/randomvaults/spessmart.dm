@@ -160,6 +160,7 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/pen/sleepypen = 1200,
 /obj/item/weapon/reagent_containers/spray/chemsprayer = 150,
 /obj/item/device/device_analyser/syndicate = 1800,
+/obj/item/clothing/accessory/necklace/cwc_medal = 1500,
 
 //No guns sorry
 )

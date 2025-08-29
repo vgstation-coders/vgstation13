@@ -1095,6 +1095,18 @@
 /datum/find/mirror/spawn_item()
 	return new /obj/item/weapon/pocket_mirror/arcane
 
+/datum/find/cwc_medal
+	find_ID = ARCHAEO_MEDALLION
+	anomaly_factor = 3
+	apply_prefix = FALSE
+
+/datum/find/cwc_medal/spawn_item()
+	if(prob(25))
+		anomaly_factor++
+		apply_prefix = TRUE
+		talkative = TRUE//not a weapon so this doesn't work
+	return new /obj/item/clothing/accessory/necklace/cwc_medal
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Strange rocks
 

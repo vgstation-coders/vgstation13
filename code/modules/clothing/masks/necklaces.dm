@@ -182,3 +182,32 @@
 
 	name = "[prefix][animal_name] necklace"
 	desc = "A necklace made out of [teeth_amount] [animal_name]."
+
+/obj/item/clothing/accessory/necklace/cwc_medal//TODO: apply brain damage when worn
+	name = "sonichu medallion"
+	desc = "It's made with Crayola fuckin' Model Magic and acrylic paint."
+	icon_state = "cwc_medal"
+	_color = "cwc_medal"
+	canremove = FALSE
+	clothing_flags = MASKINTERNALS
+	origin_tech = Tc_MATERIALS + "=1"
+	starting_materials = list(MAT_GLASS = 2000, MAT_CLOWN = CC_PER_SHEET_CLOWN)
+	var/wearing
+
+/obj/item/clothing/accessory/necklace/cwc_medal/can_attach_to(obj/item/clothing/C)
+	if(!iscarbon(C.loc))
+		return FALSE
+	return istype(C, /obj/item/clothing/under)
+
+/obj/item/clothing/accessory/necklace/cwc_medal/on_attached(obj/item/clothing/C)
+	..()
+	if(iscarbon(C.loc))
+		var/mob/living/carbon/human/wearer = C.loc
+		wearer.overeatduration += 600
+		var/datum/organ/internal/brain/sponge = wearer.internal_organs_by_name["brain"]
+		sponge.damage += 65
+	C.canremove = FALSE
+
+/obj/item/clothing/accessory/necklace/cwc_medal/on_removed(user, obj/item/clothing/C)
+	attached_to.canremove = TRUE
+	..()

@@ -52,6 +52,7 @@
 #define ARCHAEO_TOYBOX "mechanical toybox"
 #define ARCHAEO_POCKETWATCH "pocketwatch"
 #define ARCHAEO_MIRROR "pocket mirror"
+#define ARCHAEO_MEDALLION "medallion"
 
 #define DIGSITE_GARDEN "garden"
 #define DIGSITE_ANIMAL "animal"
