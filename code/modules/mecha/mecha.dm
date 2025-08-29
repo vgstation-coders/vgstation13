@@ -111,6 +111,9 @@
 	var/penetration_reduction = 1
 	var/can_lock = TRUE // If the mecha can be dna or id locked
 
+	var/can_strafe = TRUE
+	var/can_climb = TRUE
+
 //mechaequipt2 stuffs
 	var/list/hull_equipment = new
 	var/list/weapon_equipment = new
@@ -461,7 +464,8 @@ Fire damage comes from tank
 		health -= damage
 		update_health()
 		CheckEnclosed()
-		CheckLocks()
+		CheckLocks() // holy procs batman!
+		CheckMobility()
 		SetPressure()
 		log_append_to_last("Took [damage] points of damage. Damage type: \"[damage_type]\".",1)
 	return
@@ -967,6 +971,7 @@ Fire damage comes from tank
 			CheckEnclosed()
 			SetPressure()
 			CheckLocks()
+			CheckMobility()
 		return
 	if(istype(W, /obj/item/ammo_storage/box) || (istype(W, /obj/item/weapon/storage/box)))
 		resupply_box(W, user)
@@ -1035,6 +1040,7 @@ Fire damage comes from tank
 			CheckEnclosed()
 			SetPressure()
 			CheckLocks()
+			CheckMobility()
 		return
 
 	else if(iscrowbar(W))
@@ -1573,6 +1579,9 @@ Fire damage comes from tank
 	set src = usr.loc
 	set popup_menu = 0
 	if(usr != src.occupant)
+		return
+	if(!can_strafe)
+		to_chat(occupant, "<span class='warning'>Error: no response received from directional coordinator.</span>")
 		return
 	lock_dir = !lock_dir
 
@@ -2118,9 +2127,9 @@ bugs:
 //////////////////////////////////
 
 /obj/mecha/proc/CheckLocks() // Checks and sets if the mech is/can still lock
-	var/obj/item/mecha_parts/component/electrical/zap = internal_components[MECH_ELECTRIC]
+	var/obj/item/mecha_parts/component/electrical/EC = internal_components[MECH_ELECTRIC]
 	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
-	if(!zap || zap.integrity <= 0)
+	if(!EC || EC.integrity <= 0)
 		dna = null
 		operation_req_access = list()
 		internals_req_access = list()
@@ -2135,6 +2144,17 @@ bugs:
 	else
 		can_lock = TRUE
 		return 1
+
+/obj/mecha/proc/CheckMobility()
+	var/obj/item/mecha_parts/component/actuator/actuator = internal_components[MECH_ACTUATOR]
+	if(!actuator || actuator.integrity <= 0 || actuator.rigid)
+		can_climb = FALSE
+		can_strafe = FALSE
+		if(lock_dir)
+			lock_direction()
+	else
+		can_climb = TRUE
+		can_strafe = TRUE
 
 /obj/mecha/proc/CheckEnclosed() // Checks and sets if the mech is still enclosed
 	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
@@ -2268,8 +2288,10 @@ bugs:
 			trying = FALSE
 			if(!prob(chance))
 				to_chat(user, "<span class='warning'>Despite your effort, the [src] slams back to the ground!")
+				playsound(src, 'sound/effects/bang.ogg', 50, 1, -1)
 				if(prob(50))
-					to_chat(user, "<span class='danger'>The [src] slams ontop of your foot before you can move it away!")
+					to_chat(user, "<span class='danger'>The [src] slams ontop of your foot!")
+					playsound(src, 'sound/effects/bang.ogg', 50, 1, -1)
 					user.take_overall_damage(10)
 					return
 				return
@@ -2297,18 +2319,13 @@ bugs:
 	plane = initial(plane)
 
 /obj/mecha/proc/flip_horizontal()
-
 	var/matrix/M = matrix()
-	M = matrix()
+	M.Turn(90)
 	src.transform = M
-	src.transform = turn(src.transform, 90)
 
 /obj/mecha/proc/unflip_horizontal()
-
-	var/matrix/M = matrix()
-	M = matrix()
+	var/matrix/M = matrix()  // Identity matrix = no rotation
 	src.transform = M
-	src.transform = turn(src.transform, -90)
 
 //////////////////////////////////
 ////////  Icon procs  ////////

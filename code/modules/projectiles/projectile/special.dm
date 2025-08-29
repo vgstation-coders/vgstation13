@@ -208,6 +208,11 @@
 /obj/item/projectile/kinetic/cutter
 	monster_bonus = 15
 
+/obj/item/projectile/kinetic/mech
+	damage = 20
+	low_pressure_bonus = 20
+	monster_bonus = 15
+
 /obj/item/effect/kinetic_blast
 	name = "kinetic explosion"
 	icon = 'icons/obj/projectiles.dmi'

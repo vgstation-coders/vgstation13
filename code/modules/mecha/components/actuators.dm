@@ -15,6 +15,7 @@
 	internal_damage_flag = MECHA_INT_CONTROL_LOST
 	broken_icon = "motor_broken"
 	var/combat_punches = TRUE
+	var/rigid = FALSE
 
 /obj/item/mecha_parts/component/actuator/get_step_delay()
 	return step_delay
@@ -48,3 +49,14 @@
 	emp_resistance = 1
 	integrity_danger_mod = 0.5
 	max_integrity = 80
+
+/obj/item/mecha_parts/component/actuator/stable
+	name = "rigid mecha movement system"
+	desc = "A rigid, non-articulated movement system for exosuits. Prevents strafing and climbing over obstacles, but has excellent stability in any condition."
+	icon_state = "motor_hispeed"
+	step_delay = 100
+	relative_size = 35
+	emp_resistance = 3
+	integrity_danger_mod = 0.5
+	max_integrity = 120
+	rigid = TRUE

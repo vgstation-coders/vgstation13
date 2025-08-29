@@ -157,7 +157,7 @@
 /obj/item/mecha_parts/component/armor/marshal/striker
 	name = "striker mecha plating"
 	desc = "A thick panel constructed of ultra-hard ceramic composite. Lacks a backer, sacrificing durability for mobility and stopping ability."
-	icon_state = "armor_marshal"
+	icon_state = "armor_striker"
 	armor_soak = 0.8
 	step_delay = 100
 	max_integrity = 70
@@ -173,6 +173,26 @@
 		)
 
 	origin_tech = Tc_MATERIALS + "=7;" + Tc_COMBAT + "=5;"
+
+/obj/item/mecha_parts/component/armor/marshal/plasmaweave // Space Kevlar
+	name = "plasma-weave mecha plating"
+	desc = "A flexible, lightweight panel constructed from precision-woven plasma-based fabric, offering decent protection from blunt impact, but is vulnerable to heat-based weaponry."
+	icon_state = "armor_kevlar"
+	armor_soak = 0.5
+	step_delay = 60
+	max_integrity = 100
+	deflect_chance = 0
+	pen_reduction = 5
+	damage_absorption = list(
+		"brute"=0.7,
+		"fire"=1.2,
+		"bullet"=0.7,
+		"laser"=0.9,
+		"energy"=0.9,
+		"bomb"=0.9
+		)
+
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_COMBAT + "=5;" + Tc_PLASMATECH + "=5;"
 
 /obj/item/mecha_parts/component/armor/marshal/reinforced
 	name = "blackops mecha plating"

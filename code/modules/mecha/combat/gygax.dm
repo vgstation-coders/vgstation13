@@ -113,7 +113,7 @@
 		Gygax.step_in = initial(Gygax.step_in)
 		Gygax.step_energy_drain = initial(Gygax.step_energy_drain)
 		Gygax.occupant_message("<span class='notice'>You disable leg actuators overload.</span>")
-		Gygax.weight_tolerance = 1
+		Gygax.weight_tolerance = initial(Gygax.weight_tolerance)
 		flick("[Gygax.initial_icon]-gofast-aoff",Gygax)
 		Gygax.icon_state = Gygax.initial_icon
 	else
@@ -121,7 +121,7 @@
 		Gygax.step_in = min(1, round(Gygax.step_in/2))
 		Gygax.step_energy_drain = Gygax.step_energy_drain*Gygax.overload_coeff
 		Gygax.occupant_message("<span class='red'>You enable leg actuators overload.</span>")
-		Gygax.weight_tolerance = initial(Gygax.weight_tolerance)
+		Gygax.weight_tolerance = 1
 		flick("[Gygax.initial_icon]-gofast-aon",Gygax)
 		Gygax.icon_state = Gygax.initial_icon + "-gofast"
 	Gygax.log_message("Toggled leg actuators overload.")

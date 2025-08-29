@@ -46,24 +46,6 @@
 	do_after_cooldown()
 	return
 
-/obj/item/mecha_parts/mecha_equipment/weapon/energy/laser/rigged // to-do make it have ACTUAL tool function later
-	equip_cooldown = 15
-	name = "\improper jury-rigged laser emitter"
-	desc = "A jury-rigged laser emitter that can be attached to a MK2 or Firefighter Ripley." // Only MK2s + for now.
-	icon_state = "mecha_laser"
-	energy_drain = 60
-	projectile = /obj/item/projectile/beam
-	fire_sound = 'sound/weapons/Laser.ogg'
-	step_delay = 75
-	requires_beacon = TRUE
-	equip_type = EQUIP_UTILITY
-
-/obj/item/mecha_parts/mecha_equipment/weapon/energy/laser/rigged/can_attach(obj/mecha/M as obj)
-	if(..())
-		if(!istype(M, /obj/mecha/working/ripley/mk2) || !istype(M, /obj/mecha/combat))
-			return 0
-	return 1
-
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser
 	equip_cooldown = 8
 	name = "\improper CH-PS \"Immolator\" Laser"
