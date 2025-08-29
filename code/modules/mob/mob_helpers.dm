@@ -608,7 +608,8 @@ var/list/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT
 	if(!ismultitool(P))
 		if(istype(P,/obj/item/weapon/switchtool)) //Switchtool deployed multitool special case!
 			var/obj/item/weapon/switchtool/ST = P
-			return ST.deployed
+			if(ismultitool(ST.deployed))
+				return ST.deployed
 		return null
 	return P
 
