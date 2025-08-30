@@ -16157,6 +16157,12 @@
 /area/hallway/primary/fore{
 	name = "\improper Taxi Civilian Dock"
 	})
+"aKB" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor{
+	icon_state = "purple"
+	},
+/area/science/lab)
 "aKD" = (
 /obj/machinery/recharge_station,
 /turf/simulated/floor/engine,
@@ -90188,6 +90194,12 @@
 	icon_state = "white"
 	},
 /area/medical/chemistry)
+"yiJ" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/perma)
 "yja" = (
 /obj/machinery/computer/communications,
 /turf/simulated/floor/shuttle,
@@ -120941,7 +120953,7 @@ boY
 bqb
 tca
 qez
-brG
+aKB
 brW
 bss
 bsP
@@ -128828,7 +128840,7 @@ lRT
 xmY
 ssu
 bMt
-bDc
+yiJ
 qGY
 sRS
 bMt

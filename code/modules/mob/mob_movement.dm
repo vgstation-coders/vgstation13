@@ -511,6 +511,7 @@
 			var/obj/structure/stairs/up_stairs = locate(/obj/structure/stairs) in T
 			if(up_stairs && up_stairs.dir == mob.dir)
 				up_stairs.Bumped(mob)
+			INVOKE_EVENT(mob, /event/moved, "mover" = mob)
 			mob.delayNextMove(movedelay)
 		if(INCORPOREAL_ETHEREAL, INCORPOREAL_ETHEREAL_IMPROVED) //Jaunting, without needing to be done through relaymove
 			var/jaunt_type = mob.incorporeal_move

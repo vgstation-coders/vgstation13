@@ -161,7 +161,7 @@
 "aaF" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/storage/fancy/crayons,
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/machinery/firealarm{
 	pixel_y = 25
 	},
@@ -73338,6 +73338,7 @@
 /obj/machinery/camera/autoname{
 	dir = 4
 	},
+/obj/machinery/computer/tetris,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -107164,10 +107165,10 @@
 /turf/simulated/floor/plating,
 /area/research_outpost/hallway)
 "xPB" = (
-/obj/machinery/computer/arcade,
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/machinery/computer/tetris,
 /turf/simulated/floor/arcade,
 /area/security/perma)
 "xPM" = (

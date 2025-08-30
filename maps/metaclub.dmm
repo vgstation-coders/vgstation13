@@ -120003,6 +120003,12 @@
 	icon_state = "grimy"
 	},
 /area/security/interrogation)
+"ovq" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/prison/rec_room)
 "ovF" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -120550,6 +120556,13 @@
 /area/medical/medbay2{
 	name = "Medbay Storage"
 	})
+"qrw" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whitepurple"
+	},
+/area/science/lab)
 "qsF" = (
 /obj/structure/rack,
 /obj/item/weapon/gun/energy/gun{
@@ -236522,7 +236535,7 @@ cgo
 cgB
 cje
 cks
-clG
+qrw
 cmO
 cnY
 cpq
@@ -1251067,7 +1251080,7 @@ eww
 ewQ
 exj
 exz
-ewr
+ovq
 eyh
 eyF
 etQ

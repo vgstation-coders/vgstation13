@@ -20662,7 +20662,7 @@
 /area/lamprey/voxtradepost)
 "aWl" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/wood,
 /area/lamprey/voxtradepost)
@@ -100973,7 +100973,7 @@
 /area/lamprey/bridge)
 "ekB" = (
 /obj/structure/table/woodentable,
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/item/weapon/lipstick,
 /turf/simulated/floor/arcade,
 /area/lamprey/bridge)
@@ -182013,7 +182013,7 @@
 	dir = 1;
 	pixel_y = -25
 	},
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/item/clothing/mask/horsehead,
 /obj/item/clothing/mask/pig,
 /obj/item/clothing/mask/fakemoustache,

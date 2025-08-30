@@ -45,10 +45,12 @@
 			*pointer_to_var = null
 		if (pointer_to_list)
 			var/list/L = *pointer_to_list
-			L -= src
+			if (islist(L))
+				L -= src
 		if (pointer_to_secondary_list)
 			var/list/L = *pointer_to_secondary_list
-			L -= src
+			if (islist(L))
+				L -= src
 	catch (var/exception/E)
 		log_debug("Error in handling screen objects pointers. [E.name] at file [E.file] and [E.line]")
 

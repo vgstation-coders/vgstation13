@@ -50,6 +50,21 @@
 		hiss.volume = 100
 		sound_emitter.add(hiss, "gas_hiss")
 
+/obj/machinery/portable_atmospherics/canister/proc/set_initial_sound_volume() // i copied some of this from process(). sorry
+	if(valve_open)
+		var/datum/gas_mixture/environment
+		if(holding && !arcanetampered)
+			environment = holding.air_contents
+		else
+			environment = loc.return_air()
+
+		var/env_pressure = environment.return_pressure()
+		var/soundvol = 0
+		if (env_pressure > 0.01)
+			var/pressure_delta = min(release_pressure - env_pressure, (air_contents.return_pressure() - env_pressure)/2)
+			soundvol = clamp(pressure_delta / env_pressure, 0.001, 100)
+		sound_emitter.update_active_sound_param(volume = soundvol)
+
 /obj/machinery/portable_atmospherics/canister/sleeping_agent
 	name = "Canister: \[N2O\]"
 	icon_state = "redws"
@@ -226,7 +241,8 @@
 		//Can not have a pressure delta that would cause environment pressure > tank pressure
 		var/soundvol = 0
 		if (env_pressure > 0.01)
-			soundvol = min(100, pressure_delta / env_pressure)
+			// pd/env usually in range 0~10
+			soundvol = clamp(10 * pressure_delta / env_pressure, 0.001, 100)
 		sound_emitter.update_active_sound_param(volume = soundvol)
 
 		var/transfer_moles = 0
@@ -383,7 +399,6 @@
 				investigation_log(I_ATMOS, "had its valve <b>closed</b> by [key_name(usr)], stopping transfer into \the [holding].")
 			else
 				investigation_log(I_ATMOS, "had its valve <b>closed</b> by [key_name(usr)], stopping transfer into the <font color='red'><b>air</b></font>")
-			sound_emitter.stop()
 		else
 			if (holding && !arcanetampered)
 				investigation_log(I_ATMOS, "had its valve <b>OPENED</b> by [key_name(usr)], starting transfer into \the [holding]")
@@ -393,9 +408,13 @@
 				if(naughty_stuff)
 					message_admins("[usr.real_name] ([formatPlayerPanel(usr,usr.ckey)]) opened a[arcanetampered ? "n arcane tampered" : ""] canister that contains [naughty_stuff] at [formatJumpTo(loc)]!")
 					log_admin("[usr]([ckey(usr.key)]) opened a[arcanetampered ? "n arcane tampered" : ""] canister that contains [naughty_stuff] at [loc.x], [loc.y], [loc.z]")
-			sound_emitter.play("gas_hiss")
 
 		valve_open = !valve_open
+		if (!valve_open)
+			sound_emitter.stop()
+		else
+			sound_emitter.play("gas_hiss")
+			set_initial_sound_volume()
 
 	if (href_list["remove_tank"])
 		if(holding)

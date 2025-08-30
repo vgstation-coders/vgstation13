@@ -192,7 +192,7 @@
 					to_chat(user, "<span class='notice'>Set to paint the floor!</span>")
 				else
 					to_chat(user, "<span class='notice'>Set to print the following text: [printing_text].</span>")
-	else if(istype(W, /obj/item/toy/waterflower)) //Water flower
+	else if(istype(W, /obj/item/clothing/accessory/waterflower)) //Water flower
 		to_chat(user, "<span class='notice'>You plug [W] into [src]!</span>")//Using it on the clown cart will transfer anything in the fuel tank (other than banana juice) into the flower
 
 		if(max_health >= HEALTH_FOR_FLOWER_RECHARGE)

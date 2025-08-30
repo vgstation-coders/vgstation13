@@ -1653,7 +1653,7 @@ The design of a nuclear reactor is very important. Build it wrong, and you may f
 
 <h2>Standard Operation</h2>
 To avoid a catastrophic meltdown, a reactor must be monitored periodically to ensure that the temperature does NOT get too high.<br>
-Reactors can withstand temperatures up to 5500K, though the controller will activate a SCRAM protocol if the temperature exceeds 4500K. Once SCRAM is enabled, the control rods will be forced downwards and will remain down until the reactor has dropped below 1000K.<br>
+Reactors can withstand temperatures up to 11000K, though the controller will activate a SCRAM protocol if the temperature exceeds 9000K. Once SCRAM is enabled, the control rods will be forced downwards and will remain down until the reactor has dropped below 2000K.<br>
 <sub>The autoSCRAM routine may be disabled in the controller options menu by an authenticated engineer. However, this practice is not endorsed by NanoTrasen, and the engineer assumes all liability for any damage to the station as a result of this.</sub>
 <br>
 Once your reactor is built, you will need to insert a fuel reservoir (one is provided in the starter kit). A reactor accepts only a single fuel reservoir, so it is encouraged to carefully prepare the fuel mixture beforehand in accordance to the design of the reactor.<br>

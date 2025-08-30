@@ -1,6 +1,9 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-#if DM_VERSION < 516
-#error Your version of byond is too old, you need version 513 or higher
+#ifndef SPACEMAN_DMM
+#define MIN_COMPILER_VERSION 515
+#if DM_VERSION < MIN_COMPILER_VERSION
+#error Your version of byond is too old, you need version 516 or higher
+#endif
 #endif
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
@@ -1255,7 +1258,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 // /vg/ - Pipeline processing (enables exploding pipes and whatnot)
 // COMMENT OUT TO DISABLE
-// #define ATMOS_PIPELINE_PROCESSING 1
+// #define BURST_PIPES 1
 
 #define MAXIMUM_FREQUENCY 1600
 #define MINIMUM_FREQUENCY 1200
@@ -1422,10 +1425,8 @@ var/proccalls = 1
 #define ORE_PROCESSING_ALLOY 2
 
 //SOUND CHANNELS
-#define CHANNEL_SHARED_MIN			1
-#define CHANNEL_SHARED_MAX			256
-#define CHANNEL_UNIQUE_MIN			257
-#define CHANNEL_UNIQUE_MAX			512
+#define CHANNEL_RESERVABLE_MIN		1
+#define CHANNEL_RESERVABLE_MAX		512
 #define CHANNEL_MUS_RESERVABLE_MIN  513
 #define CHANNEL_MUS_RESERVABLE_MAX  1017	// todo check if it even needs nearly this many
 #define CHANNEL_WEATHER				1018
@@ -2007,3 +2008,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PVAR_FADE		"fade"
 
 #define ZAS_DUST_TURFS_PER_TICK	20
+
+#define LOBBY_TICKING_STOPPED 0
+#define LOBBY_TICKING 1
+#define LOBBY_TICKING_RESTARTED 2

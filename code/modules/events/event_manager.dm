@@ -5,6 +5,12 @@ var/eventTimeUpper = 40
 var/scheduledEvent = null
 
 /proc/checkEvent()
+	if(!player_list.len) //Don't start any events while the server is empty
+		return
+	var/datum/gamemode/dynamic/D = ticker.mode
+	if(istype(D)) //Now check for living, active players, if there are no living players then don't call events
+		if(!D.living_players.len)
+			return
 	if(!scheduledEvent)
 		//The more players, the merrier
 		var/playercount_modifier = 1

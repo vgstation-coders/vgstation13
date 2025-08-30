@@ -41,10 +41,11 @@ var/list/name_to_mineral
 		O.pixel_y = rand(-16,16) * PIXEL_MULTIPLIER
 	if(istype(O, /obj/item/stack/ore))
 		var/obj/item/stack/ore/OR = O
-		if(!T.geologic_data)
-			T.geologic_data = new/datum/geosample(T)
-		T.geologic_data.UpdateNearbyArtifactInfo(T)
-		OR.geologic_data = T.geologic_data
+		if(T.finddatum)
+			if(!T.finddatum.geologic_data)
+				T.finddatum.geologic_data = new/datum/geosample(T)
+			T.finddatum.geologic_data.UpdateNearbyArtifactInfo(T)
+			OR.geologic_data = T.finddatum.geologic_data
 	return O
 
 /mineral/uranium

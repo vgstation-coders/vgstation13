@@ -84,6 +84,7 @@ var/list/beam_master = list()
 	var/list/ray/past_rays = list() //full of rays
 	var/turf/final_turf = null
 	var/turf/previous_turf = null
+	var/luminous = 1
 
 /obj/item/projectile/beam/Destroy()
 	QDEL_LIST_NULL(past_rays)
@@ -129,7 +130,7 @@ var/list/beam_master = list()
 			spawn()
 				portal(last_hit.hit_atom)
 
-	shot_ray.draw(distance, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
+	shot_ray.draw(distance, icon, icon_state, color_override = beam_color, color_shift = beam_shift, above_light = luminous)
 
 	if(gcDestroyed)
 		qdel(shot_ray)
@@ -922,6 +923,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	custom_impact = 1
 	penetration = 0
 	pass_flags = PASSTABLE | PASSRAILING
+	luminous = 0
 	var/has_splashed = FALSE
 	var/atom/splashed_atom = null
 
@@ -1013,3 +1015,4 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	damage_type = BRUTE
 	pass_flags = PASSTABLE | PASSRAILING
 	eyeblur = 0
+	luminous = 0

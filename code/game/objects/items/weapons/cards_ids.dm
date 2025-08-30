@@ -91,12 +91,13 @@
 	var/recharge_rate = 0
 
 	var/nticks=0
+	var/disable_config_sync = FALSE
 
 /obj/item/weapon/card/emag/New(var/loc, var/disable_tuning=0)
 	..(loc)
 
 	// For standardized subtypes, once they're established.
-	if(disable_tuning)
+	if(disable_tuning || disable_config_sync)
 		return
 
 	if(ticker)
@@ -247,10 +248,11 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/attack_self(var/mob/user)
 	if(user.attack_delayer.blocked())
 		return
-	user.visible_message("[user] shows you: [bicon(src)] [name]: assignment: [assignment]",\
-		"You flash your ID card: [bicon(src)] [name]: assignment: [assignment]")
-	user.delayNextAttack(1 SECONDS)
+	user.visible_message("[user] shows you: [bicon(src)] [name]. Assignment: [assignment]",\
+		"You flash your ID card: [bicon(src)] [name]. Assignment: [assignment]")
+	user.delayNextAttack(0.5 SECONDS)
 	add_fingerprint(user)
+	flash_object_animation(user, src, FLASH_ID_ANIM)
 
 /obj/item/weapon/card/id/GetAccess()
 	if(arcanetampered)

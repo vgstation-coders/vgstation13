@@ -1,5 +1,0 @@
-author: 9percents
-delete-after: true
-changes:
-- bugfix: Nanotrasen fixed a mishap in the equipment paperwork. Vox and plasmamen
-    security officer will now spawn with security vests as expected.

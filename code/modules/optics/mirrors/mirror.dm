@@ -124,10 +124,13 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 		qdel(beam)
 		emitted_beams[i]=null
 		beam=null
+
+	kill_moody_light_all()
 	emitted_beams.len = 4
 
 /obj/machinery/mirror/proc/update_beams()
 	overlays.len = 0
+	kill_moody_light_all()
 
 	var/list/beam_dirs[4] // dir = list(
                         //  type = power
@@ -156,9 +159,10 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 			// For recursion protection
 			spawners |= B.sources
 
-			var/beamdir=get_dir(src,B)
+			var/beamdir = get_dir(src,B)
 
 			overlays += B.get_machine_underlay(beamdir)
+			update_moody_light_index("inbeam_dir[beamdir]",'icons/lighting/moody_lights.dmi', "overlay_emitter_beam_underlay", moody_color = "#66ffff", dir_override = beamdir)
 
 			// Figure out how much power to emit in each direction
 			var/list/deflections = get_deflections(beamdir)
@@ -218,6 +222,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 					EB.power = dirdata[beamtype]
 
 				overlays += beam.get_machine_underlay(cdir)
+				update_moody_light_index("outbeam_dir[cdir]",'icons/lighting/moody_lights.dmi', "overlay_emitter_beam_underlay", moody_color = "#66ffff", dir_override = cdir)
 
 				if(newbeam)
 					beam.emit(spawn_by=spawners)

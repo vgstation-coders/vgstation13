@@ -25,40 +25,45 @@
 
 /obj/item/device/depth_scanner/proc/scan_atom(var/mob/user, var/atom/A)
 	user.visible_message("<span class='notice'>[user] scans [A], the air around them humming gently.</span>")
-	if(istype(A,/turf/unsimulated/mineral))
-		var/turf/unsimulated/mineral/M = A
-		if(M.finds.len || M.artifact_find)
-			for(var/mob/L in range(src, 1))
-				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings.</span>")
-			playsound(user, 'sound/machines/info.ogg', 20, 1)
-			//create a new scanlog entry
-			var/datum/depth_scan/D = new()
-			D.coords = "[M.x-WORLD_X_OFFSET[M.z]].[rand(0,9)]:[M.y-WORLD_Y_OFFSET[M.z]].[rand(0,9)]:[10 * M.z].[rand(0,9)]"
-			D.time = worldtime2text()
-			D.record_index = positive_locations.len + 1
-			D.material = M.mineral ? M.mineral.display_name : "Rock"
+	if(istype(A,/turf/unsimulated))
+		var/turf/unsimulated/M = A
+		if(M.finddatum)
+			if(M.finddatum.finds.len || M.finddatum.artifact_find)
+				for(var/mob/L in range(src, 1))
+					to_chat(L, "<span class='notice'>[bicon(src)] [src] pings.</span>")
+				playsound(user, 'sound/machines/info.ogg', 20, 1)
+				//create a new scanlog entry
+				var/datum/depth_scan/D = new()
+				D.coords = "[M.x-WORLD_X_OFFSET[M.z]].[rand(0,9)]:[M.y-WORLD_Y_OFFSET[M.z]].[rand(0,9)]:[10 * M.z].[rand(0,9)]"
+				D.time = worldtime2text()
+				D.record_index = positive_locations.len + 1
+				D.material = "Rock"
+				if(istype(M,/turf/unsimulated/mineral))
+					var/turf/unsimulated/mineral/MI = M
+					if(MI.mineral)
+						D.material = MI.mineral.display_name
 
-			//find the first artifact and store it
-			if(M.finds.len)
-				var/datum/find/F = M.finds[1]
-				D.depth = F.excavation_required	//0-100% and 0-100cm
-				D.clearance = F.clearance_range
-				D.material = F.responsive_reagent
-				to_chat(user,"<span class='notice'>Anomaly depth: <strong>[F.excavation_required]</strong> cm</span>")
-				to_chat(user,"<span class='notice'>Clearance above anomaly depth: <strong>[F.clearance_range]</strong> cm</span>")
-				var/index = responsive_carriers.Find(F.responsive_reagent)
-				if(index > 0 && index <= finds_as_strings.len)
-					to_chat(user,"<span class='notice'>Anomaly material: <strong><font color=[color_from_find_reagent[finds_as_strings[index]]]>[finds_as_strings[index]]</font></strong></span>")
+				//find the first artifact and store it
+				if(M.finddatum.finds.len)
+					var/datum/find/F = M.finddatum.finds[1]
+					D.depth = F.excavation_required	//0-100% and 0-100cm
+					D.clearance = F.clearance_range
+					D.material = F.responsive_reagent
+					to_chat(user,"<span class='notice'>Anomaly depth: <strong>[F.excavation_required]</strong> cm</span>")
+					to_chat(user,"<span class='notice'>Clearance above anomaly depth: <strong>[F.clearance_range]</strong> cm</span>")
+					var/index = responsive_carriers.Find(F.responsive_reagent)
+					if(index > 0 && index <= finds_as_strings.len)
+						to_chat(user,"<span class='notice'>Anomaly material: <strong><font color=[color_from_find_reagent[finds_as_strings[index]]]>[finds_as_strings[index]]</font></strong></span>")
+					else
+						to_chat(user,"<span class='notice'>Anomaly material: <strong>Unknown</strong></span>")
 				else
+					to_chat(user,"<span class='notice'>Anomaly depth: <strong>0</strong> cm</span>")
+					to_chat(user,"<span class='notice'>Clearance above anomaly depth: <strong>0</strong> cm</span>")
 					to_chat(user,"<span class='notice'>Anomaly material: <strong>Unknown</strong></span>")
-			else
-				to_chat(user,"<span class='notice'>Anomaly depth: <strong>0</strong> cm</span>")
-				to_chat(user,"<span class='notice'>Clearance above anomaly depth: <strong>0</strong> cm</span>")
-				to_chat(user,"<span class='notice'>Anomaly material: <strong>Unknown</strong></span>")
 
-			positive_locations.Add(D)
-		else
-			playsound(user, 'sound/items/detscan.ogg', 10, 1)
+				positive_locations.Add(D)
+			else
+				playsound(user, 'sound/items/detscan.ogg', 10, 1)
 
 	else if(istype(A,/obj/structure/boulder))
 		var/obj/structure/boulder/B = A

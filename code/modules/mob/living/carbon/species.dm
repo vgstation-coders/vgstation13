@@ -880,7 +880,7 @@ var/list/has_died_as_golem = list()
 /mob/living/adamantine_dust/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/slime_extract/adamantine))
 		var/obj/item/slime_extract/adamantine/A = I
-		if(A.Uses)
+		if(A.uses)
 			if(!mind)
 				to_chat(user, "<span class='warning'>You press \the [A] into \the [src], but nothing happens.</span>")
 			else
@@ -1124,6 +1124,7 @@ var/list/has_died_as_golem = list()
 //	belt_icons      = 'icons/mob/belt.dmi'
 	wear_suit_icons = 'icons/mob/species/insectoid/suit.dmi'
 	wear_mask_icons = 'icons/mob/species/insectoid/mask.dmi'
+	accessory_icons = 'icons/mob/species/insectoid/clothing_accessories.dmi'
 //	back_icons      = 'icons/mob/back.dmi'
 
 

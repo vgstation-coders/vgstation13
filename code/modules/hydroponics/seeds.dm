@@ -54,6 +54,23 @@
 	seed_type = seed.name
 	..()
 
+/obj/item/seeds/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W,/obj/item/weapon/pen))
+		if(seed.immutable)//if the seed cannot be gene edited, like diona nodes
+			return
+		var/n_name = copytext(sanitize(input(user, "What would you like to name this seed variety?", "Plant Renaming", null) as text|null), 1, MAX_NAME_LEN*3)
+		if(n_name && Adjacent(user) && !user.stat)
+			var/newnoun = seed.seed_noun
+			seed = seed.diverge(-1)//creates a new seed datum with a unique identifier. Seed datums are globals, so you don't want to modify every other seed in existence.
+			seed.seed_name = "[n_name]"//the name on the packet
+			seed.display_name = "[n_name]"//the name on the description of the packet and on growing plants
+			seed.add_newline_to_controller()//adds the entry to the plant subsystem
+			seed.roundstart = 1
+			seed.seed_noun = newnoun
+			update_appearance()//automagically updates the name and desc to reflect the seed_name varaible
+			desc += " The words [n_name] are scribbled on it."
+	..()
+
 //the vegetable/fruit categories are made from a culinary standpoint. many of the "vegetables" in there are technically fruits. (tomatoes, pumpkins...)
 
 /obj/item/seeds/dionanode

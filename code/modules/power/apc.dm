@@ -107,6 +107,7 @@
 
 	var/make_alerts = TRUE // Should this APC make power alerts to the area?
 	var/atom/movable/fake_camera_image/malfimage
+	var/atom/movable/fake_camera_image/fake_camera_buttons/malfbuttons
 
 	machine_flags = WIREJACK
 
@@ -1457,6 +1458,8 @@
 
 	if(malfimage)
 		qdel(malfimage)
+	if(malfbuttons)
+		qdel(malfbuttons)
 
 	if(pulselock)
 		QDEL_NULL(pulselock)

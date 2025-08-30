@@ -20,10 +20,10 @@
 
 /obj/machinery/atmospherics/unary/cap/update_icon()
 	overlays = 0
-	alpha = invisibility ? 128 : 255
-	icon_state = "cap"
+	alpha = invisibility || transparent ? 128 : 255
+	icon_state = initial(icon_state)
 
-	if (node1)
+	if (node1 && can_be_coloured)
 		color = node1.color
 
 /obj/machinery/atmospherics/unary/cap/visible
@@ -90,11 +90,6 @@
 	..()
 	initialize_directions_he = initialize_directions
 
-/obj/machinery/atmospherics/unary/cap/heat/update_icon()
-	overlays = 0
-	alpha = invisibility ? 128 : 255
-	icon_state = "he_cap"
-
 /obj/machinery/atmospherics/unary/cap/heat/buildFrom(var/mob/user,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions = 0
@@ -135,13 +130,13 @@
 	can_be_coloured = 0
 	color = "#FFFFFF"
 	var/network_color = "#b4b4b4"    // default grey color that all pipes have
-	
+
 	var/color_r = 180
 	var/color_g = 180
 	var/color_b = 180
 
 	var/image/color_overlay
-	
+
 var/global/list/pipe_colors = list(
 	"custom", \
 	"grey" = rgb(180,180,180), \
@@ -154,16 +149,14 @@ var/global/list/pipe_colors = list(
 	"orange" = rgb(183,121,0), \
 	"white" = rgb(255,255,255), \
 )
-	
+
 /obj/machinery/atmospherics/unary/cap/bluespace/update_icon()
-	overlays = 0
-	alpha = invisibility ? 128 : 255
-	icon_state = "bscap"
+	..()
 	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_bscap")
 	color_overlay = image('icons/obj/pipes.dmi', icon_state = "bscap-overlay")
 	color_overlay.color = rgb(color_r,color_g,color_b)
 	overlays += color_overlay
-	
+
 
 var/global/list/obj/machinery/atmospherics/unary/cap/bluespace/bspipe_list = list()
 var/global/list/obj/machinery/atmospherics/unary/cap/bluespace/bspipe_item_list = list()
@@ -171,12 +164,12 @@ var/global/list/obj/machinery/atmospherics/unary/cap/bluespace/bspipe_item_list 
 /obj/machinery/atmospherics/unary/cap/bluespace/New()
 	..()
 	bspipe_list.Add(src)
-	
+
 /obj/machinery/atmospherics/unary/cap/bluespace/Destroy()
 	bspipe_list.Remove(src)
 	..()
-	
-	
+
+
 /obj/machinery/atmospherics/unary/cap/bluespace/proc/merge_all()
 	var/datum/pipe_network/main_network
 	for(var/obj/machinery/atmospherics/unary/cap/bluespace/bscap in bspipe_list)
@@ -191,15 +184,15 @@ var/global/list/obj/machinery/atmospherics/unary/cap/bluespace/bspipe_item_list 
 			continue
 		else
 			main_network.merge(bscap.network)
-				
+
 /obj/machinery/atmospherics/unary/cap/bluespace/build_network()
 	if(!network && node1)
 		network = new /datum/pipe_network
 		network.normal_members += src
 		network.build_network(node1, src)
 		merge_all()
-		
-		
+
+
 /obj/machinery/atmospherics/unary/cap/bluespace/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O,/obj/item/device/multitool))
 		var/list/choice_list = pipe_colors
@@ -220,9 +213,9 @@ var/global/list/obj/machinery/atmospherics/unary/cap/bluespace/bspipe_item_list 
 			color_r = hex2num(copytext(new_color, 2, 4))
 			color_g = hex2num(copytext(new_color, 4, 6))
 			color_b = hex2num(copytext(new_color, 6, 8))
-			
+
 		update_icon()
-		
+
 		network_color = new_color
 		qdel(network)
 		merge_all()

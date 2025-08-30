@@ -294,6 +294,26 @@ var/global/list/damage_icon_parts = list()
 	if(update_icons)
 		update_icons()
 
+/mob/living/carbon/human/proc/get_skin_color()
+	var/husk = (M_HUSK in mutations)
+	var/hulk = (M_HULK in mutations) && !ishorrorform(src) && mind.special_role != HIGHLANDER // Part of the species.
+	var/skeleton = (M_SKELETON in mutations)
+
+	var/base_rgb = species.flesh_color
+	if(base_rgb == null)
+		base_rgb = rgb(255, 202, 149)
+	if(!skeleton && !husk && !hulk)
+		if(species.anatomy_flags & MULTICOLOR)
+			return AddRGB(base_rgb, rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b))
+		else if(species.anatomy_flags & RGBSKINTONE)
+			return AddRGB(base_rgb, rgb(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair))
+		else if(species.anatomy_flags & HAS_SKIN_TONE)
+			if(my_appearance.s_tone >= 0)
+				return AddRGB(base_rgb, rgb(my_appearance.s_tone, my_appearance.s_tone, my_appearance.s_tone))
+			else
+				return SubRGB(base_rgb, rgb(-my_appearance.s_tone, -my_appearance.s_tone, -my_appearance.s_tone))
+	return base_rgb
+
 //HAIR OVERLAY
 /mob/living/carbon/human/update_hair(update_icons = TRUE)
 	if(monkeyizing)
