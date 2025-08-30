@@ -903,6 +903,13 @@
 	icon_state = "med_pine_dead"
 	pixel_x = -16
 
+/obj/structure/flora/tree/dead_acacia
+	name = "dead acacia"
+	desc = "A dead acacia tree, its leaves stripped away."
+	icon = 'icons/obj/flora/bigtrees.dmi'
+	icon_state = "african_acacia_dead"
+	pixel_x = -16
+
 /obj/structure/flora/tree/dead/tall
 	name = "dead tall tree"
 	desc = "The last vestiges of an once majestic tree."
@@ -919,3 +926,12 @@
 	name = "petrified trunk"
 	desc = "An ancient tree was carbonized in fire and ash. Only a skeleton remains."
 	icon = 'icons/obj/flora/tall_trees_dead.dmi'
+
+/obj/structure/flora/tree/dead/tall/living //lol
+	name = "tall pine tree"
+	desc = "A majestic pine tree."
+	icon_state = "pine_1"
+
+/obj/structure/flora/tree/dead/tall/living/New()
+	. = ..()
+	icon_state = pick("pine_1","pine_2","bald")

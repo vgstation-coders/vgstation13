@@ -14,6 +14,12 @@
 	///Customizable planet names.
 	var/planet_name
 
+/datum/planet_type/beach
+	name = "beach planetoid"
+	desc = "The platonic ideal of vacation spots. Warm, comfortable temperatures, and a breathable atmosphere."
+	mapgen = /datum/planetGenerator/beach
+	default_baseturf = /turf/unsimulated/beach/sand
+	ruin_type = RUINTYPE_BEACH
 
 /datum/planet_type/desert
 	name = "desert planetoid"
@@ -22,12 +28,12 @@
 	default_baseturf = /turf/simulated/floor/plating/ironsand
 	ruin_type = RUINTYPE_LAVA
 
-/datum/planet_type/beach
-	name = "beach planetoid"
-	desc = "The platonic ideal of vacation spots. Warm, comfortable temperatures, and a breathable atmosphere."
-	mapgen = /datum/planetGenerator/beach
-	default_baseturf = /turf/unsimulated/beach/sand
-	ruin_type = RUINTYPE_BEACH
+/datum/planet_type/grass
+	name = "grass planetoid"
+	desc = "A temperate planet with a breathable atmosphere and abundant flora and fauna."
+	mapgen = /datum/planetGenerator/grass
+	default_baseturf = /turf/unsimulated/floor/grass
+	ruin_type = RUINTYPE_LAVA
 
 /datum/planet_type/lava
 	name = "lava planetoid"

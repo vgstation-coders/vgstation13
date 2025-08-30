@@ -553,6 +553,5 @@ var/global/list/paper_folding_results = list ( \
 	..()
 	possible = subtypesof(/obj/item/weapon/paper)
 	var/paper_type = pick(possible - blacklist)
-	var/obj/item/weapon/paper/P = new paper_type(get_turf(src))
-	P = null
+	new paper_type(get_turf(src))
 	qdel(src)

@@ -12,8 +12,9 @@ var/datum/subsystem/mapping/SSmapping
 	var/list/biomes = list()
 	//All possible planet types
 	var/list/planet_types = list(
-		/datum/planet_type/desert,
 		/datum/planet_type/beach,
+		/datum/planet_type/desert,
+		/datum/planet_type/grass,
 		/datum/planet_type/lava,
 		/datum/planet_type/snow,
 		/datum/planet_type/xeno
@@ -76,7 +77,8 @@ var/datum/subsystem/mapping/SSmapping
 	..()
 
 /proc/generate_planet()//debug
-	return SSmapping.spawn_planetoid(pick(SSmapping.planet_types), /datum/map_element/mining_surprise/crashed_tradeship)
+//	return SSmapping.spawn_planetoid(pick(SSmapping.planet_types), /datum/map_element/mining_surprise/crashed_tradeship)
+	return SSmapping.spawn_planetoid(/datum/planet_type/grass, /datum/map_element/mining_surprise/crashed_tradeship)
 
 //Creates a grid of 25 99x99 squares for procedural generation
 /datum/subsystem/mapping/proc/create_procgen_level()
