@@ -161,13 +161,7 @@
 	client << S
 
 /datum/sound_listener_context/proc/stop_hearing(datum/sound_emitter/emitter)
-	var/chan = current_channels_by_emitter[emitter]
-	if (!chan)
-		return // already can't hear it (probably)
-	var/sound/nullsound = sound(file = null)
-	nullsound.channel = chan
-	nullsound.status = SOUND_UPDATE | SOUND_MUTE
-	client << nullsound
+	release(emitter)
 
 /datum/sound_listener_context/proc/on_sound_update(datum/sound_emitter/emitter)
 	var/chan = current_channels_by_emitter[emitter]
