@@ -38,7 +38,9 @@
 
 
 /turf/unsimulated/floor/grass
+	name = "grass"
 	icon_state = "grass1"
+	plane = PLATING_PLANE
 
 /turf/unsimulated/floor/grass/New()
 	..()

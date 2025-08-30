@@ -1,6 +1,7 @@
 /turf/unsimulated/beach
 	name = "Beach"
 	icon = 'icons/misc/beach.dmi'
+	plane = PLATING_PLANE
 
 /turf/unsimulated/beach/sand
 	name = "Sand"

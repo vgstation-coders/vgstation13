@@ -141,8 +141,8 @@
 	loot_spawn_chance = 0.25
 
 /datum/biome/cave/desert
-	open_turf_types = list(/turf/unsimulated/floor/cave = 1)
-	closed_turf_types = list(/turf/unsimulated/mineral/cave = 1)
+	open_turf_types = list(/turf/simulated/floor/asteroid/air = 1)
+	closed_turf_types = list(/turf/unsimulated/mineral/random = 1)
 	flora_spawn_chance = 4
 	flora_spawn_list = list(
 		/obj/structure/flora/rock = 5,

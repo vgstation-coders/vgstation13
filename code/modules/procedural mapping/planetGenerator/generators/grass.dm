@@ -146,7 +146,7 @@
 		/obj/structure/flora/rock = 5,
 		/obj/structure/flora/rock/pile = 3,
 	)
-	flora_spawn_chance = 15
+	flora_spawn_chance = 1
 	mob_spawn_chance = 1
 	mob_spawn_list = list(
 		/mob/living/simple_animal/mouse = 20,
@@ -228,7 +228,7 @@
 		/obj/structure/flora/tree/shitty = 3,
 		/obj/structure/flora/tree/palm = 1,
 	)
-	flora_spawn_chance = 65
+	flora_spawn_chance = 5
 	mob_spawn_chance = 3
 	mob_spawn_list = list(
 		/mob/living/simple_animal/mouse = 15,
@@ -293,7 +293,7 @@
 // Cave biomes
 /datum/biome/cave/grass
 	open_turf_types = list(/turf/unsimulated/floor/cave = 1)
-	closed_turf_types = list(/turf/unsimulated/mineral/cave = 1)
+	closed_turf_types = list(/turf/unsimulated/mineral/random/cave = 1)
 	flora_spawn_chance = 10
 	flora_spawn_list = list(
 		/obj/structure/flora/rock = 10,

@@ -20,6 +20,7 @@
 	nitrogen = MOLES_N2STANDARD
 	temperature = T20C
 	icon_state = "cavefl_1"
+	plane = PLATING_PLANE
 
 /turf/unsimulated/floor/cave/New()
 	..()
@@ -35,6 +36,7 @@
 /turf/unsimulated/floor/desert
 	name = "desert"
 	icon_state = "ironsand1"
+	plane = TURF_PLANE
 
 	carbon_dioxide = 0
 	oxygen = MOLES_O2STANDARD
@@ -63,6 +65,7 @@
 	name = "desert"
 	icon = 'icons/turf/planetary/desert.dmi'
 	icon_state = "desert"
+	plane = PLATING_PLANE
 
 /turf/unsimulated/floor/planetary/desert/dry
 	name = "dry desert"

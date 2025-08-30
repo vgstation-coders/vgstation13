@@ -77,8 +77,18 @@ var/datum/subsystem/mapping/SSmapping
 	..()
 
 /proc/generate_planet()//debug
-//	return SSmapping.spawn_planetoid(pick(SSmapping.planet_types), /datum/map_element/mining_surprise/crashed_tradeship)
-	return SSmapping.spawn_planetoid(pick(/datum/planet_type/jungle,/datum/planet_type/desert), /datum/map_element/mining_surprise/crashed_tradeship)
+	var/list/available_planets = list()
+	for(var/planet_path in subtypesof(/datum/planet_type))
+		var/datum/planet_type/P = new planet_path()
+		available_planets[P.name] = planet_path
+		qdel(P)
+
+	var/selected_name = input(usr, "Select a planet type to generate:", "Planet Generation") as null|anything in available_planets
+	if(!selected_name)
+		return
+
+	var/selected_type = available_planets[selected_name]
+	return SSmapping.spawn_planetoid(selected_type, /datum/map_element/mining_surprise/crashed_tradeship)
 
 //Creates a grid of 25 99x99 squares for procedural generation
 /datum/subsystem/mapping/proc/create_procgen_level()

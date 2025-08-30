@@ -138,7 +138,7 @@
 	loot_spawn_chance = 1
 
 /datum/biome/beach
-	open_turf_types = list(/turf/unsimulated/beach/sand = 1)
+	open_turf_types = list(/turf/unsimulated/beach/sand/spread = 1)
 	mob_spawn_list = list(/mob/living/simple_animal/crab = 7, /mob/living/simple_animal/capybara = 1, /mob/living/simple_animal/snail = 1)
 	mob_spawn_chance = 1
 	flora_spawn_list = list(
@@ -157,7 +157,7 @@
 	loot_spawn_chance = 0.5
 
 /datum/biome/beach/dense
-	open_turf_types = list(/turf/unsimulated/beach/sand = 1)
+	open_turf_types = list(/turf/unsimulated/beach/sand/spread = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/tree/palm = 5,
 		/obj/structure/flora/rock = 1,
@@ -167,7 +167,7 @@
 	flora_spawn_chance = 2
 
 /datum/biome/ocean
-	open_turf_types = list(/turf/unsimulated/beach/sandbar = 1)
+	open_turf_types = list(/turf/unsimulated/beach/shallows = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/rock = 1,
 		/obj/structure/flora/rock/pile = 1,
@@ -187,7 +187,7 @@
 
 /datum/biome/cave/beach
 	open_turf_types = list(/turf/unsimulated/floor/asteroid/air = 1)
-	closed_turf_types = list(/turf/unsimulated/mineral/cave = 1)
+	closed_turf_types = list(/turf/unsimulated/mineral/random = 1)
 	flora_spawn_chance = 4
 	flora_spawn_list = list(/obj/structure/flora/rock/pile = 1, /obj/structure/flora/rock = 6)
 	mob_spawn_chance = 1
@@ -198,7 +198,7 @@
 	loot_spawn_chance = 1.5
 
 /datum/biome/cave/beach/cove
-	open_turf_types = list(/turf/unsimulated/beach/sand = 1)
+	open_turf_types = list(/turf/unsimulated/beach/sand/spread = 1)
 	flora_spawn_list = list(/obj/structure/geyser = 1, /obj/structure/flora/rock/pile = 3, /obj/structure/flora/rock = 2, /obj/structure/flora/coconut = 5)
 	flora_spawn_chance = 6
 

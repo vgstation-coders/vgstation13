@@ -589,7 +589,7 @@ var/list/icon_state_to_appearance = list()
 			if(!(used_digging.diggables & DIG_SOIL)) //if the pickaxe can't dig soil, we don't
 				to_chat(user, "<span class='rose'>You can't dig soft soil with \the [W].</span>")
 				return
-		
+
 			if (dug)
 				to_chat(user, "<span class='rose'>This area has already been dug.</span>")
 				return
@@ -779,6 +779,23 @@ var/list/icon_state_to_appearance = list()
 	base_icon_state = pick("snow_rock","snow_rock1","snow_rock2","snow_rock3","snow_rock4")
 	..()
 
+/turf/unsimulated/mineral/random/cave
+	name = "cave wall"
+	icon_state = "cave_wall"
+	base_icon_state = "cave_wall"
+	mined_type = /turf/unsimulated/floor/cave
+
+/turf/unsimulated/mineral/random/cave/add_rock_overlay()
+	..(img = image('icons/turf/spookycave.dmi', "spooky_cave",layer = SIDE_LAYER),offset=-16)
+	..(img = image('icons/turf/spookycave.dmi', "spooky_cave_corners",layer = CORNER_LAYER),offset = -16)
+
+/turf/unsimulated/mineral/random/xeno
+	name = "strange wall"
+	icon_state = "rock(clown)"
+	base_icon_state = "rock(clown)"
+	overlay_state = "xeno_overlay"
+	mined_type = /turf/unsimulated/floor/grey_sand
+
 /turf/unsimulated/mineral/random/high_chance
 	icon_state = "rock(high)"
 	mineralChance = 25
@@ -790,6 +807,21 @@ var/list/icon_state_to_appearance = list()
 	mined_type = /turf/unsimulated/floor/snow/permafrost
 	overlay_state = "snow_rock_overlay"
 
+/turf/unsimulated/mineral/random/high_chance/cave
+	name = "cave wall"
+	icon_state = "cave_wall"
+	base_icon_state = "cave_wall"
+	mined_type = /turf/unsimulated/floor/cave
+
+/turf/unsimulated/mineral/random/high_chance/cave/add_rock_overlay()
+	..(img = image('icons/turf/spookycave.dmi', "spooky_cave",layer = SIDE_LAYER),offset=-16)
+	..(img = image('icons/turf/spookycave.dmi', "spooky_cave_corners",layer = CORNER_LAYER),offset = -16)
+
+/turf/unsimulated/mineral/random/high_chance/xeno
+	name = "strange wall"
+	icon_state = "rock(clown)"
+	base_icon_state = "rock(clown)"
+	mined_type = /turf/unsimulated/floor/grey_sand
 
 /turf/unsimulated/mineral/random/high_chance_clown
 	icon_state = "rock(clown)"

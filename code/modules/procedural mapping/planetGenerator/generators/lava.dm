@@ -233,7 +233,8 @@
 		/turf/simulated/floor/plating/asteroid/basalt/lava_land_surface = 1
 	)
 	closed_turf_types = list(
-		/turf/unsimulated/mineral/underground = 1
+		/turf/unsimulated/mineral/random/cave = 3,
+		/turf/unsimulated/mineral/random/high_chance/cave = 1,
 	)
 	mob_spawn_chance = 4
 	mob_spawn_list = list(

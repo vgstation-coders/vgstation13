@@ -304,7 +304,10 @@
 // Cave biomes
 /datum/biome/cave/jungle
 	open_turf_types = list(/turf/unsimulated/floor/jungle/wasteland = 1)
-	closed_turf_types = list(/turf/unsimulated/mineral/cave = 1)
+	closed_turf_types = list(
+		/turf/unsimulated/mineral/random/cave = 5,
+		/turf/unsimulated/mineral/random/high_chance/cave = 1,
+		)
 	flora_spawn_chance = 8
 	flora_spawn_list = list(
 		/obj/structure/flora/rock = 10,

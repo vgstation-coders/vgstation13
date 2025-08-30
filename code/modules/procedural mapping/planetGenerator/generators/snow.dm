@@ -81,7 +81,7 @@
 			BIOME_LOW_HUMIDITY = /datum/biome/cave/snow/thawed,
 			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/volcanic/lava,
 			BIOME_HIGH_HUMIDITY = /datum/biome/cave/volcanic/lava,
-			BIOME_HIGHEST_HUMIDITY = /datum/biome/cave/volcanic/lava/total
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/cave/volcanic/lava
 		)
 	)
 
@@ -195,7 +195,8 @@
 		/obj/structure/flora/rock/pile/snow = 1,
 	)
 	closed_turf_types = list(
-		/turf/unsimulated/wall/rock/ice = 1
+		/turf/unsimulated/mineral/random/snow = 10,
+		/turf/unsimulated/mineral/random/high_chance/snow = 1,
 	)
 	mob_spawn_chance = 2
 	mob_spawn_list = list(
@@ -210,7 +211,8 @@
 		/turf/unsimulated/floor/snow/cave/rock = 1
 	)
 	closed_turf_types = list(
-		/turf/unsimulated/wall/rock/ice = 1
+		/turf/unsimulated/mineral/random/snow = 10,
+		/turf/unsimulated/mineral/random/high_chance/snow = 1,
 	)
 
 /datum/biome/cave/snow/ice
@@ -226,7 +228,8 @@
 		/turf/unsimulated/floor/basalt = 1
 	)
 	closed_turf_types = list(
-		/turf/unsimulated/wall/rock/ice = 1
+		/turf/unsimulated/mineral/random/snow = 5,
+		/turf/unsimulated/mineral/random/high_chance/snow = 1,
 		)
 	mob_spawn_chance = 2
 	mob_spawn_list = list(
@@ -243,11 +246,6 @@
 	feature_spawn_chance = 0.2
 
 /datum/biome/cave/volcanic/lava
-	open_turf_types = list(
-		/turf/unsimulated/floor/lava = 1
-	)
-
-/datum/biome/cave/volcanic/lava/total
 	open_turf_types = list(
 		/turf/unsimulated/floor/lava = 1
 	)

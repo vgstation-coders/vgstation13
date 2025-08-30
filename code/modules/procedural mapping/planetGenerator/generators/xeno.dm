@@ -93,22 +93,25 @@
 	)
 	mob_spawn_chance = 1
 	mob_spawn_list = list(
-		/mob/living/carbon/alien/humanoid/drone = 1,
-		/mob/living/carbon/alien/humanoid/hunter = 1,
-		/mob/living/carbon/alien/humanoid/sentinel = 1,
+		/mob/living/simple_animal/hostile/alien/drone = 1,
+		/mob/living/simple_animal/hostile/alien = 1,
+		/mob/living/simple_animal/hostile/alien/sentinel = 1,
 		/mob/living/carbon/alien/larva = 5
 	)
 
 /datum/biome/cave/xeno
 	open_turf_types = list(/turf/unsimulated/floor/cave = 1)
-	closed_turf_types = list(/turf/unsimulated/wall/evil = 1)
+	closed_turf_types = list(
+		/turf/unsimulated/mineral/random/xeno = 3,
+		/turf/unsimulated/mineral/random/high_chance/xeno = 1,
+	)
 
 	mob_spawn_chance = 3
 	mob_spawn_list = list(
-		/mob/living/carbon/alien/humanoid/drone = 10,
-		/mob/living/carbon/alien/humanoid/hunter = 10,
-		/mob/living/carbon/alien/humanoid/queen = 1,
-		/mob/living/carbon/alien/humanoid/sentinel = 10,
+		/mob/living/simple_animal/hostile/alien/drone = 10,
+		/mob/living/simple_animal/hostile/alien = 10,
+		/mob/living/simple_animal/hostile/alien/queen = 1,
+		/mob/living/simple_animal/hostile/alien/sentinel = 10,
 		/mob/living/carbon/alien/larva = 10
 	)
 
