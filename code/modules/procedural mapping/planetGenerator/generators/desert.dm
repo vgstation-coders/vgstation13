@@ -80,7 +80,7 @@
 	)
 
 /datum/biome/desert
-	open_turf_types = list(/turf/unsimulated/floor/desert = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/desert = 1)
 
 	flora_spawn_list = list(
 		/obj/structure/flora/rock = 10,
@@ -116,7 +116,7 @@
 	loot_spawn_chance = 0.5
 
 /datum/biome/dry_seafloor
-	open_turf_types = list(/turf/unsimulated/floor/desert/dry_basin = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/desert/dry = 1)
 
 	flora_spawn_list = list(
 		/obj/structure/flora/rock = 10,

@@ -59,6 +59,15 @@
 	if(prob(20) && icon_state == "asteroid")
 		icon_state = "asteroid[rand(0,12)]"
 
+/turf/unsimulated/floor/planetary/desert
+	name = "desert"
+	icon = 'icons/turf/planetary/desert.dmi'
+	icon_state = "desert"
+
+/turf/unsimulated/floor/planetary/desert/dry
+	name = "dry desert"
+	icon_state = "drydesert"
+
 //Snow
 /turf/unsimulated/floor/basalt
 	name = "basalt"

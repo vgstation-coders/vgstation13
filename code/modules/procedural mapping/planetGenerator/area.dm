@@ -47,3 +47,9 @@
 	requires_power = 0
 	dynamic_lighting = 1
 	flags = CAVES_ALLOWED|NO_PERSISTENCE|FLORA_ALLOWED|MOB_SPAWN_ALLOWED
+
+/area/planetoid/jungle
+	name = "Jungle Planetoid"
+	requires_power = 0
+	dynamic_lighting = 1
+	flags = CAVES_ALLOWED|NO_PERSISTENCE|FLORA_ALLOWED|MOB_SPAWN_ALLOWED

@@ -266,6 +266,7 @@ var/MAX_EXPLOSION_RANGE = 32
 #define CAN_BE_DIRTY_1 4 // If a procgen turf can be made dirty at roundstart. This is also used in areas.
 #define NO_LAVA_GEN_1 8 // Blocks lava rivers being generated on the turf
 #define NO_RUINS_1 16 // Blocks ruins spawning on the turf
+#define NO_FLORA 32 // Prevents plants from growing
 
 //slots
 #define slot_back 1

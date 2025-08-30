@@ -213,13 +213,8 @@ var/list/foliage_replacments=list(
 	name="Mud"
 	desc="A viscous mixture of water and soil."
 	turf_speed_multiplier=2 //mud is difficult to travel over
-	icon='icons/turf/walls.dmi'
-	icon_state = "rock(high)"
-
-/turf/unsimulated/floor/jungle/mud/New()
-	..()
-	icon_state="ironsand[rand(1,15)]"
-
+	icon='icons/turf/planetary/jungle.dmi'
+	icon_state = "wateryrock"
 
 /turf/unsimulated/floor/jungle/concrete
 	name="Concrete"
@@ -244,7 +239,8 @@ var/list/foliage_replacments=list(
 /turf/unsimulated/floor/jungle/dirt
 	name="Soil"
 	desc="A mixture of sediments, clays, and decomposed matter."
-	icon_state = "ironsand1"
+	icon =  'icons/turf/planetary/jungle.dmi'
+	icon_state = "greendirt"
 	var/obj/structure/ladder/jungle_tunnel/hashole=null
 	construction_allowed=TRUE
 
@@ -395,6 +391,7 @@ var/list/foliage_replacments=list(
 	turf_reagents = list(WATER=1.0)
 	reagent_interaction_flags = TURF_REAGENT_ENTER | TURF_REAGENT_FILLS_CONTAINERS
 	turf_reagent_amount = 5
+	turf_flags = NO_FLORA
 
 /turf/unsimulated/floor/jungle/water_deep
 	name="Deep Water"
@@ -604,6 +601,16 @@ var/list/foliage_replacments=list(
 	return
 /turf/unsimulated/floor/jungle/worldborder/attackby(obj/item/C as obj, mob/user as mob)
 	return
+
+/turf/unsimulated/floor/jungle/wasteland
+	name="wasteland"
+	desc="A dry, cracked surface with little vegetation."
+	icon = 'icons/turf/planetary/jungle.dmi'
+	icon_state = "wasteland"
+
+/turf/unsimulated/floor/jungle/wasteland/New()
+	..()
+	icon_state="wasteland[rand(0,12)]"
 
 #undef T_JUNGLE
 #undef JUNGLE_PRESSURE

@@ -91,7 +91,7 @@
 	var/atom/spawned_mob
 
 	//FLORA SPAWNING HERE
-	if(length(flora_spawn_list_expanded) && prob(flora_spawn_chance) && (a_flags & FLORA_ALLOWED))
+	if(length(flora_spawn_list_expanded) && prob(flora_spawn_chance) && (a_flags & FLORA_ALLOWED) && !(floor_turf.turf_flags & NO_FLORA))
 		spawned_flora = pick(flora_spawn_list_expanded)
 		spawned_flora = new spawned_flora(floor_turf)
 		floor_turf.turf_flags |= NO_LAVA_GEN_1

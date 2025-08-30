@@ -35,6 +35,13 @@
 	default_baseturf = /turf/unsimulated/floor/grass
 	ruin_type = RUINTYPE_LAVA
 
+/datum/planet_type/jungle
+	name = "jungle planetoid"
+	desc = "A hot, humid planet teeming with exotic flora and fauna."
+	mapgen = /datum/planetGenerator/jungle
+	default_baseturf = /turf/unsimulated/floor/jungle/grass
+	ruin_type = RUINTYPE_LAVA
+
 /datum/planet_type/lava
 	name = "lava planetoid"
 	desc = "A planet rife with seismic and volcanic activity. High temperatures and dangerous xenofauna render it dangerous for the unprepared."

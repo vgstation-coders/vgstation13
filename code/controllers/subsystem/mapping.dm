@@ -78,7 +78,7 @@ var/datum/subsystem/mapping/SSmapping
 
 /proc/generate_planet()//debug
 //	return SSmapping.spawn_planetoid(pick(SSmapping.planet_types), /datum/map_element/mining_surprise/crashed_tradeship)
-	return SSmapping.spawn_planetoid(/datum/planet_type/grass, /datum/map_element/mining_surprise/crashed_tradeship)
+	return SSmapping.spawn_planetoid(pick(/datum/planet_type/jungle,/datum/planet_type/desert), /datum/map_element/mining_surprise/crashed_tradeship)
 
 //Creates a grid of 25 99x99 squares for procedural generation
 /datum/subsystem/mapping/proc/create_procgen_level()
