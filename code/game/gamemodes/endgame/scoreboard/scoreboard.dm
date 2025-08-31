@@ -259,7 +259,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		for(var/i = 1; i < world.maxz; i++)
 			var/datum/climate/C = SSweather.get_climate(i)
 			if(C)
-				dat += "<B>Z-Level [z] Climate Composition: ([C])</B> "
+				dat += "<B>Z-Level [i] Climate Composition: ([C])</B> "
 				//first, total ticks
 				var/totalticks = total_list(get_list_of_elements(weathertracker))
 				for(var/element in weathertracker)
