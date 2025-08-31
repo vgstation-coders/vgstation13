@@ -28,8 +28,8 @@ var/list/climatecomps = list()
 	var/dat = list()
 	dat += "<center>"
 	dat += "<div class='modal'><div class='modal-content'><div class='line'><b>Weather Report</b></div><br>"
-	if(map.climate)
-		var/datum/climate/C = map.climate
+	var/datum/climate/C = SSweather.get_climate(src.z)
+	if(C)
 		if(istype(C.current_weather,/datum/weather/snow)) //This is a snowmap!
 			var/datum/weather/snow/S = C.current_weather
 			var/reported_temp = S.temperature - 273.15

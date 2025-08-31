@@ -3,12 +3,12 @@ var/blizzard_cooldown = 5 MINUTES
 
 
 /datum/event/blizzard/can_start()
-	return 80 * istype(map.climate,/datum/climate/arctic)
+	return 80 * istype(SSweather.get_climate(1),/datum/climate/arctic)
 
 /datum/event/blizzard/start()
 	if(blizzard_ready)
 
-		var/datum/climate/C = map.climate
+		var/datum/climate/C = SSweather.get_climate(1)
 		var/datum/weather/W = C.current_weather
 		if(istype(W,/datum/weather/snow/blizzard))
 			command_alert(/datum/command_alert/blizzard_extended)
@@ -32,7 +32,7 @@ var/blizzard_cooldown = 5 MINUTES
 	if(blizzard_ready)
 		blizzard_ready = 0
 		command_alert(/datum/command_alert/omega_blizzard)
-		var/datum/climate/C = map.climate
+		var/datum/climate/C = SSweather.get_climate(1)
 		var/datum/weather/W = C.current_weather
 		W.timeleft = round(rand(8 MINUTES, 10 MINUTES),SS_WAIT_WEATHER)
 		W.next_weather = list(/datum/weather/snow/blizzard/omega = 100)

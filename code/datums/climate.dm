@@ -20,9 +20,11 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/datum/weather/current_weather
 	var/list/datum/weather/forecasts = list()
 	var/cycle_freq = list(3 MINUTES,6 MINUTES) //shortest possible time, longest possible time until next weather
+	var/z //z-level the climate is occupying
 
-/datum/climate/New()
+/datum/climate/New(var/active_z)
 	..()
+	z = active_z
 	if(current_weather)
 		forecast()
 	else

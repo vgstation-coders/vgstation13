@@ -59,8 +59,8 @@
 	var/data[0]
 	data["error"] = error_message
 
-	if(map.climate)
-		var/datum/climate/C = map.climate
+	var/datum/climate/C = SSweather.get_climate(src.z)
+	if(C)
 		var/datum/weather/CW = C.current_weather
 		var/forecast_dat
 		for(var/datum/weather/W in C.forecasts)
@@ -91,14 +91,14 @@
 /obj/machinery/weathercontrol/Topic(href, href_list)
 	if(..())
 		return
-	if(usr.incapacitated() || (!Adjacent(usr)&&!isAdminGhost(usr)) || !usr.dexterity_check() || !map.climate)
+	if(usr.incapacitated() || (!Adjacent(usr)&&!isAdminGhost(usr)) || !usr.dexterity_check() || !SSweather.get_climate(src.z))
 		return
 	if(!allowed(usr) && !emagged)
 		to_chat(usr,"<span class='warning'>Access denied.</span>")
 		return
 	if(stat & (FORCEDISABLE|NOPOWER))
 		return
-	var/datum/climate/C = map.climate
+	var/datum/climate/C = SSweather.get_climate(src.z)
 	var/datum/weather/CW = C.current_weather
 
 	var/feedback = NOFIRE
