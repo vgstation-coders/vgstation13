@@ -256,9 +256,10 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		for(var/datum/disease2/effect/e in D.effects)
 			dat += "&#x25CF; Stage [e.stage] - <b>[e.name]</b><BR>"
 	if(weathertracker.len && climates.len)
-		for(var/datum/climate/C in climates)
-			if(C.z == 1)
-				dat += "<B>Climate Composition: ([C])</B> "
+		for(var/i = 1; i < world.maxz; i++)
+			var/datum/climate/C = SSweather.get_climate(i)
+			if(C)
+				dat += "<B>Z-Level [z] Climate Composition: ([C])</B> "
 				//first, total ticks
 				var/totalticks = total_list(get_list_of_elements(weathertracker))
 				for(var/element in weathertracker)
