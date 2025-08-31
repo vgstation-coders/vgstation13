@@ -204,6 +204,7 @@
 	if(iscarbon(C.loc))
 		var/mob/living/carbon/human/wearer = C.loc
 		wearer.overeatduration += 600
+		wearer.luck_adjust(-99999, TRUE)
 		var/datum/organ/internal/brain/sponge = wearer.internal_organs_by_name["brain"]
 		sponge.damage += 65
 	C.canremove = FALSE
