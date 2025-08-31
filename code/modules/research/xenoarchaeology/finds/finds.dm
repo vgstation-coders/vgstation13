@@ -1043,12 +1043,16 @@
 	apply_image_decorations = FALSE
 	anomaly_factor = 4
 	responsive_reagent = IRON
+	var/list/possible_spawns = list(
+	/obj/item/weapon/nullrod/sword/chaos/mimicry,
+	/obj/item/weapon/nullrod/sword/chaos
+	)
 
 /datum/find/chaosblade/spawn_item()
-	if(prob(50))
+	var/newitem = pick(possible_spawns)
+	if(newitem == (/obj/item/weapon/nullrod/sword/chaos/mimicry))
 		apply_prefix = FALSE
-		return new /obj/item/weapon/nullrod/sword/chaos/mimicry
-	return new /obj/item/weapon/nullrod/sword/chaos
+	return new newitem
 
 /datum/find/guitar
 	find_ID = ARCHAEO_GUITAR

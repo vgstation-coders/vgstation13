@@ -465,7 +465,7 @@
 	return TRUE
 
 /obj/item/weapon/nullrod/sword/chaos/mimicry
-	name = "mimicry"
+	name = "sentient blade"
 	desc = "What is the meaning of 'human'? Does it matter?"
 	icon_state = "mimicry"
 	item_state = "mimicry"
