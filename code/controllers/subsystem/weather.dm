@@ -18,7 +18,18 @@ var/datum/subsystem/weather/SSweather
 	if(map.climate)
 		var/datum/climate/C = map.climate
 		C.tick()
+	if(SSmapping.allocations.len)
+		for(var/datum/allocation/A in SSmapping.allocations)
+			if(istype(A) && A?.ptype?.climate)
+				var/datum/climate/C = A.ptype.climate
+				C.tick()
 	else
 		flags |= SS_NO_FIRE
 		pause()
 		message_admins("Weather subsystem was paused due to lack of climate.")
+
+/datum/subsystem/weather/proc/resume()
+	if(!(flags & SS_NO_FIRE))
+		return
+	flags &= ~SS_NO_FIRE
+	fire()

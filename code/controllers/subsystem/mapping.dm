@@ -137,7 +137,8 @@ var/datum/subsystem/mapping/SSmapping
 	message_admins("Starting day/night cycle")
 	SSDayNight.get_turflist()
 	SSDayNight.process_lighting()
-
+	message_admins("Starting weather controller")
+	SSweather.resume()
 	return world.maxz
 
 //Assigns a planetoid to a region

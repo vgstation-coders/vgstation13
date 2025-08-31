@@ -115,6 +115,21 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	blizzard_image.UpdateSnowfall(SNOW_CALM)
 	..()
 
+/datum/climate/temperate
+	name = "snow"
+
+/datum/climate/tropical
+	name = "tropical"
+
+/datum/climate/desert
+	name = "desert"
+
+/datum/climate/lava
+	name = "lava"
+
+/datum/climate/xeno
+	name = "xenoclime"
+
 ///////////////////////////////////  WEATHER DATUMS //////////////////////////////
 
 /datum/weather

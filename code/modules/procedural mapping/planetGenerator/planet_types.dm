@@ -13,6 +13,14 @@
 	var/weight = 40
 	///Customizable planet names.
 	var/planet_name
+	//Climate datum
+	var/datum/climate/climate
+	var/climate_type = CLIMATE_NONE
+
+/datum/planet_type/New()
+	..()
+	if(climate_type)
+		climate = new climate_type
 
 /datum/planet_type/beach
 	name = "beach planetoid"
@@ -20,6 +28,7 @@
 	mapgen = /datum/planetGenerator/beach
 	default_baseturf = /turf/unsimulated/beach/sand
 	ruin_type = RUINTYPE_BEACH
+	climate_type = CLIMATE_TROPICAL
 
 /datum/planet_type/desert
 	name = "desert planetoid"
@@ -27,6 +36,7 @@
 	mapgen = /datum/planetGenerator/desert
 	default_baseturf = /turf/simulated/floor/plating/ironsand
 	ruin_type = RUINTYPE_LAVA
+	climate_type = CLIMATE_DESERT
 
 /datum/planet_type/grass
 	name = "grass planetoid"
@@ -34,6 +44,7 @@
 	mapgen = /datum/planetGenerator/grass
 	default_baseturf = /turf/unsimulated/floor/grass
 	ruin_type = RUINTYPE_LAVA
+	climate_type = CLIMATE_TEMPERATE
 
 /datum/planet_type/jungle
 	name = "jungle planetoid"
@@ -41,6 +52,7 @@
 	mapgen = /datum/planetGenerator/jungle
 	default_baseturf = /turf/unsimulated/floor/jungle/grass
 	ruin_type = RUINTYPE_LAVA
+	climate_type = CLIMATE_TROPICAL
 
 /datum/planet_type/lava
 	name = "lava planetoid"
@@ -48,6 +60,7 @@
 	mapgen = /datum/planetGenerator/lava
 	default_baseturf = /turf/simulated/floor/plating/asteroid/basalt/lava
 	ruin_type = RUINTYPE_LAVA
+	climate_type = CLIMATE_LAVA
 
 /datum/planet_type/snow
 	name = "frozen planetoid"
@@ -55,6 +68,7 @@
 	mapgen = /datum/planetGenerator/snow
 	default_baseturf = /turf/unsimulated/floor/snow
 	ruin_type = RUINTYPE_SNOW
+	climate_type = CLIMATE_ARCTIC
 
 /datum/planet_type/xeno
 	name = "unknown planetoid"
@@ -62,3 +76,4 @@
 	mapgen = /datum/planetGenerator/xeno
 	default_baseturf = /turf/unsimulated/floor/grey_sand
 	ruin_type = RUINTYPE_XENO
+	climate_type = CLIMATE_XENO

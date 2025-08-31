@@ -1993,6 +1993,9 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PS_SACRED_FLAME		"Sacred Flame"
 #define PS_SACRED_FLAME2	"Sacred Flame2"
 #define PS_BIBLE_PAGE		"Bible Page"
+#define PS_RAIN 			"Rain"
+#define PS_ASH 				"Ash"
+#define PS_FALLOUT 			"Fallout"
 
 //Particles variable defines
 #define PVAR_SPAWNING	"spawning"

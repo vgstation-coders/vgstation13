@@ -16,3 +16,11 @@
 #define BIOME_COLD_CAVE "cold_cave"
 #define BIOME_WARM_CAVE "warm_cave"
 #define BIOME_HOT_CAVE "hot_cave"
+
+#define CLIMATE_ARCTIC	/datum/climate/arctic
+#define CLIMATE_TEMPERATE /datum/climate/temperate
+#define CLIMATE_TROPICAL /datum/climate/tropical
+#define CLIMATE_DESERT /datum/climate/desert
+#define CLIMATE_LAVA /datum/climate/lava
+#define CLIMATE_XENO /datum/climate/xeno
+#define CLIMATE_NONE null
