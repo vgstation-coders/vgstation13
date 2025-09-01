@@ -1,14 +1,16 @@
 var/blizzard_ready = TRUE //Whether a new blizzard can be started.
 var/blizzard_cooldown = 5 MINUTES
+var/blizzardz = 1
 
 
 /datum/event/blizzard/can_start()
-	return 80 * istype(SSweather.get_climate(1),/datum/climate/arctic)
+	for(var/datum/climate/C in climates)
+		if(istype(C,/datum/climate/arctic))
+			return 80
 
 /datum/event/blizzard/start()
 	if(blizzard_ready)
-
-		var/datum/climate/C = SSweather.get_climate(1)
+		var/datum/climate/C = pick(climates) //one lucky z-level gets a blizzard!
 		var/datum/weather/W = C.current_weather
 		if(istype(W,/datum/weather/snow/blizzard))
 			command_alert(/datum/command_alert/blizzard_extended)
@@ -36,7 +38,7 @@ var/blizzard_cooldown = 5 MINUTES
 	if(blizzard_ready)
 		blizzard_ready = 0
 		command_alert(/datum/command_alert/omega_blizzard)
-		var/datum/climate/C = SSweather.get_climate(1)
+		var/datum/climate/C = pick(climates)
 		var/datum/weather/W = C.current_weather
 		W.timeleft = round(rand(8 MINUTES, 10 MINUTES),SS_WAIT_WEATHER)
 		var/list/old_transitions = C.weather_transitions[W.type]

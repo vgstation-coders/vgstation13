@@ -196,12 +196,18 @@ var/list/global_snowtiles = list()
 var/list/environment_snowtiles = list()
 var/list/snow_state_to_texture = list()
 
+/datum/weather/proc/weather_details()
+	return //additional info to report to the climate computer
+
 /datum/weather/snow
 	var/snow_intensity = SNOW_CALM
 	var/tile_interval = 5
 	var/snowfall_prob = 0
 	var/snowfall_rate = list(0,0)
 	var/snow_fluff_estimate = "snowing"
+
+/datum/weather/snow/weather_details()
+	return "<b>Snowfall:</b> <div class='line'>[snow_fluff_estimate] </div>"
 
 var/obj/effect/blizzard_holder/blizzard_image = null
 
