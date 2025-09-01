@@ -38,8 +38,8 @@ var/list/climatecomps = list()
 		dat += W.weather_details()
 		dat += "<b>Next Meteorlogical Event:</b> <div class='line'>[remaining_time]</div>"
 		dat += "<b>Forecasted Weather:</b> <div class='line'>"
-		for(var/datum/weather/W in C.forecasts)
-			dat += "[W.name] "
+		for(var/datum/weather/wnext in C.forecasts)
+			dat += "[wnext.name] "
 		dat += "</div></div></div></center>"
 	else
 		dat += "<b>Panic:</b> <div class='line'>No climate detected!</div></div></div></center>"

@@ -107,21 +107,28 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		weather_transitions[current_weather.type] = old_transitions
 		return TRUE
 
-/datum/climate/proc/change_weather(weather)
+/datum/climate/proc/change_weather(weather, force = FALSE)
 	if(ispath(weather))
 		//We have been provided a path. Let's see if it's identical to the one we have.
 		if(ispath(weather, current_weather.type)) //This is a separate check so that we can have our warning work.
 			return //No need to change, this is our current type.
 		else
-			qdel(current_weather)
-			current_weather = new weather(src)
-			current_weather.execute()
+			if(force)
+				qdel(current_weather)
+				current_weather = new weather(src)
+				current_weather.execute()
+			else
+				weather_transitions[current_weather.type] = list(weather = 100)
 
 	else if(istype(weather,/datum/weather))
 		//We have been given a specific weather datum. It may be modified, so run it no matter what.
-		qdel(current_weather)
-		current_weather = weather
-		current_weather.execute()
+		if(force)
+			qdel(current_weather)
+			current_weather = weather
+			current_weather.execute()
+		else
+			var/datum/weather/W = weather
+			weather_transitions[current_weather.type] = list(W.type = 100)
 
 	else
 		WARNING("Change weather was called with [weather], neither a weather datum nor a path.")

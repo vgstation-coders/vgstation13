@@ -21,7 +21,7 @@ var/blizzardz = 1
 			W.timeleft = round(rand(2 MINUTES, 4 MINUTES),SS_WAIT_WEATHER)
 			// Temporarily override transitions to force blizzard
 			var/list/old_transitions = C.weather_transitions[W.type]
-			C.weather_transitions[W.type] = list(/datum/weather/snow/blizzard = 100)
+			C.change_weather(/datum/weather/snow/blizzard, force = FALSE)
 			C.forecast()
 			// Restore original transitions after forecasting
 			C.weather_transitions[W.type] = old_transitions
