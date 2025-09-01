@@ -114,17 +114,12 @@
 
 /mob/living/simple_animal/hostile/forgotten_beast/proc/PickProjectile()
 	ranged = TRUE
-	var/list/available_projectiles = existing_typesof(/obj/item/projectile)
-	projectiletype = pick(available_projectiles)
-	for(var/I in restricted_roulette_projectiles)
-		if(projectiletype == I)
-			PickProjectile()
-			return
-	for(var/I in restrict_with_subtypes)
-		if(ispath(projectiletype, I))
-			PickProjectile()
-			return
-	var/obj/item/projectile/P = projectiletype
+	var/list/available_projectiles = existing_typesof(/obj/item/projectile) - restricted_roulette_projectiles
+	for(var/type in restricted_with_subtypes)
+		for(var/subtype in subtypesof(type))
+			available_projectiles -= subtype
+		available_projectiles -= type
+	var/obj/item/projectile/P = pick(available_projectiles)
 	desc += " Beware of its deadly [P.name]s!"
 
 /mob/living/simple_animal/hostile/forgotten_beast/proc/PickBreath()
