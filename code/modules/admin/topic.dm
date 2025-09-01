@@ -655,11 +655,19 @@
 
 		var/list/valid_climates = list()
 
-		for(var/subtype in subtypesof(/datum/weather))
-			var/datum/weather/instance = subtype
-			var/weather_name = initial(instance.name)
-			if (weather_name != "weather")
-				valid_climates[weather_name] = subtype
+		// Use the climate's allowed weather types if available, otherwise fall back to all weather types
+		if(C.allowed_weather_types && C.allowed_weather_types.len)
+			for(var/weather_type in C.allowed_weather_types)
+				var/datum/weather/instance = weather_type
+				var/weather_name = initial(instance.name)
+				if (weather_name != "weather")
+					valid_climates[weather_name] = weather_type
+		else
+			for(var/subtype in subtypesof(/datum/weather))
+				var/datum/weather/instance = subtype
+				var/weather_name = initial(instance.name)
+				if (weather_name != "weather")
+					valid_climates[weather_name] = subtype
 
 		if (valid_climates.len <= 0)
 			alert(usr, "There are somehow no weather subtypes!", "Error", "Wtf?")

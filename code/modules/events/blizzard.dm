@@ -17,8 +17,12 @@ var/blizzard_cooldown = 5 MINUTES
 			blizzard_ready = FALSE
 			command_alert(/datum/command_alert/blizzard_start)
 			W.timeleft = round(rand(2 MINUTES, 4 MINUTES),SS_WAIT_WEATHER)
-			W.next_weather = list(/datum/weather/snow/blizzard = 100)
+			// Temporarily override transitions to force blizzard
+			var/list/old_transitions = C.weather_transitions[W.type]
+			C.weather_transitions[W.type] = list(/datum/weather/snow/blizzard = 100)
 			C.forecast()
+			// Restore original transitions after forecasting
+			C.weather_transitions[W.type] = old_transitions
 		spawn(blizzard_cooldown)
 			blizzard_ready = TRUE
 
@@ -35,5 +39,7 @@ var/blizzard_cooldown = 5 MINUTES
 		var/datum/climate/C = SSweather.get_climate(1)
 		var/datum/weather/W = C.current_weather
 		W.timeleft = round(rand(8 MINUTES, 10 MINUTES),SS_WAIT_WEATHER)
-		W.next_weather = list(/datum/weather/snow/blizzard/omega = 100)
+		var/list/old_transitions = C.weather_transitions[W.type]
+		C.weather_transitions[W.type] = list(/datum/weather/snow/blizzard/omega = 100)
 		C.forecast()
+		C.weather_transitions[W.type] = old_transitions

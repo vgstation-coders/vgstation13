@@ -113,7 +113,8 @@
 			if(!burn_crystals(DISRUPT_COST))
 				feedback = NEED_CRYSTALS
 			else
-				if(C.current_weather.next_weather.len < 2)
+				var/list/possible_transitions = C.weather_transitions[C.current_weather.type]
+				if(!possible_transitions || possible_transitions.len < 2)
 					feedback = CANNOT_CHANGE
 				else
 					CW.timeleft = min(1 MINUTES, CW.timeleft)

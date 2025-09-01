@@ -42,8 +42,16 @@ var/list/climatecomps = list()
 			for(var/datum/weather/W in C.forecasts)
 				dat += "[W.name] "
 			dat += "</div></div></div></center>"
-		else
-			dat += "<b>Unknown Climate:</b> <div class='line'>Not configured for climate.</div></div></div></center>"
+		else // Generic weather display for other climate types
+			var/reported_temp = C.current_weather.temperature - 273.15
+			var/remaining_time = formatTimeDuration(C.current_weather.timeleft)
+			dat += "<b>Current Weather:</b> <div class='line'>[C.current_weather.name]</div>"
+			dat += "<b>Temperature:</b> <div class='line'>[reported_temp] Celcius</div>"
+			dat += "<b>Next Meteorlogical Event:</b> <div class='line'>[remaining_time]</div>"
+			dat += "<b>Forecasted Weather:</b> <div class='line'>"
+			for(var/datum/weather/W in C.forecasts)
+				dat += "[W.name] "
+			dat += "</div></div></div></center>"
 	else
 		dat += "<b>Panic:</b> <div class='line'>No climate detected!</div></div></div></center>"
 	dat = jointext(dat,"")
