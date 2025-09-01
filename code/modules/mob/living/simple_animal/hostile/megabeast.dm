@@ -48,6 +48,17 @@
 	var/list/gas_types = list()
 	var/radioactive
 	var/rad_cooldown = 0
+	var/special_cooldown
+	var/breath_string
+	var/breath_damage = 10
+	var/breath_damage_type = BRUTE
+	var/breath_list = list(
+		"burning plasma" = BURN,//VIOLET
+		"scorching ray" = BURN,//NULL)
+		"acidic spray" = TOXIN,//ORANGE
+		"toxic breath" = TOXIN,//YELLOW
+		"dust cloud" = BRUTE,//GREY
+		)
 	var/list/appendage_types = list(
 		"head",
 		"eye",
@@ -66,7 +77,7 @@
 		"ugly",
 		"translucent",
 		"warty",
-		"mutant",
+		"mutated",
 		"twisted",
 		"hairy",
 		"feathery",
@@ -82,11 +93,24 @@
 	if(!picked)
 		PickMob()
 		if(!ranged)
-			if(prob(50))
+			if(prob(30))
 				PickProjectile()
+			else
+				PickBreath()
 	if(radioactive)
 		if(world.time > rad_cooldown +20 SECONDS)
 			rad_blast()
+
+/mob/living/simple_animal/hostile/forgotten_beast/OpenFire(target)
+	if(!breath_string)
+		return ..()
+	if(prob(70))
+		BreathAttack(target)
+		return
+	if(!projectiletype)
+		return
+	..()
+
 
 /mob/living/simple_animal/hostile/forgotten_beast/proc/PickProjectile()
 	ranged = TRUE
@@ -103,6 +127,13 @@
 	var/obj/item/projectile/P = projectiletype
 	desc += " Beware of its deadly [P.name]s!"
 
+/mob/living/simple_animal/hostile/forgotten_beast/proc/PickBreath()
+	ranged = TRUE
+	var/breath_type = pick(breath_list)
+	breath_string = breath_type[1]
+	breath_damage_type = breath_type[2]
+	desc += " Beware its deadly [breath_type]!"
+
 /mob/living/simple_animal/hostile/forgotten_beast/proc/PickMob(mob/living/mobtype)
 	picked = TRUE
 	mymob = mobtype
@@ -111,7 +142,7 @@
 		mymob = pick(mob_types)
 	health = clamp((mymob.health * 10), 100, 1000)
 	maxHealth = clamp((mymob.maxHealth * 10), 100, 1000)
-	desc = "A great [mymob.name]."
+	GenerateDesc()
 	if(prob(90))
 		AddFlavorText()
 	if(prob(50))
@@ -123,6 +154,7 @@
 	pixel_y = mymob.pixel_y
 	melee_damage_lower = clamp((mymob.melee_damage_lower * 2), 15, 60)
 	melee_damage_upper = clamp((mymob.melee_damage_upper * 2), 35, 80)
+	breath_damage = clamp(rand(30), 10, 30)
 	if(mymob.ranged)
 		ranged = TRUE
 		rapid = mymob.rapid
@@ -139,6 +171,14 @@
 		radioactive = TRUE
 		desc += " It has a spooky green glow around it!"
 
+/mob/living/simple_animal/hostile/forgotten_beast/proc/GenerateDesc()//can be done much better
+	var/list/mydesc = list(
+		"A great [mymob.name].",
+		"An abominable [mymob.name].",
+		"An enormous [mymob.name].",
+		)
+	desc = pick(mydesc)
+
 /mob/living/simple_animal/hostile/forgotten_beast/proc/AddFlavorText(randompart = FALSE)
 	var/modifier = pick(appendage_modifier)
 	if(randompart)
@@ -150,7 +190,20 @@
 		return
 	desc += " It is [modifier]."
 
-/mob/living/simple_animal/hostile/forgotten_beast/proc/BreathAttack()
+/mob/living/simple_animal/hostile/forgotten_beast/proc/BreathAttack(atom/A = target)
+	if(!world.time > (special_cooldown + 10 SECONDS))
+		return
+	var/obj/item/projectile/fire_breath/mybreath = new()
+	mybreath.fire_damage = 0
+	switch(breath_damage_type)
+		if(BURN)
+			mybreath.fire_damage = breath_damage
+		if(BRUTE)
+			mybreath.damage = breath_damage
+		if(TOXIN)
+			mybreath.damage = breath_damage//todo: make this actually toxins
+	generic_projectile_fire(get_ranged_target_turf(src, dir, 10), src, mybreath, 'sound/weapons/flamethrower.ogg', src)
+	special_cooldown = world.time
 
 /mob/living/simple_animal/hostile/forgotten_beast/proc/GasAttack()
 
