@@ -119,6 +119,8 @@
 
 /obj/item/weapon/extinguisher/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag)
+		if((istype(target, /obj/structure/bed/chair/vehicle/tractor/fire))) //Don't spray while loading!
+			return
 		if((istype(target, /obj/structure/reagent_dispensers)))
 			target.reagents.trans_to(src, 50, log_transfer = TRUE, whodunnit = user)
 			to_chat(user, "<span class='notice'>\The [src] is now refilled</span>")
@@ -221,6 +223,8 @@
 
 /obj/item/weapon/extinguisher/foam/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag)
+		if((istype(target, /obj/structure/bed/chair/vehicle/tractor/fire))) //Don't spray while loading!
+			return
 		if((istype(target, /obj/structure/reagent_dispensers/watertank)))
 			var/obj/o = target
 			o.reagents.trans_to(src, 50)

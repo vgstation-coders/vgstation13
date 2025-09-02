@@ -374,6 +374,16 @@
 	group = "Supplies"
 	containsdesc = "Standard firefighting gear. Includes two full suits to protect upcoming firemen against the dangers of fire, plus two classic fire extinguishers. Fire axe not included."
 
+/datum/supply_packs/fire_truck
+	name = "Fire tractor"
+	contains = list(/obj/structure/bed/chair/vehicle/tractor/fire)
+	cost = 80
+	containertype = /obj/structure/largecrate
+	containername = "fire tractor crate"
+	group = "Supplies"
+	containsicon = "firetractor"
+	containsdesc = "A tractor specialized in firefighting. Comes with a free fire extinguisher, pre-attached."
+
 /datum/supply_packs/paintgeneral
 	name = "Painter general supplies"
 	contains = list(/obj/item/weapon/storage/fancy/crayons,
