@@ -52,10 +52,18 @@
 	desc = "The quartermaster sobs quietly on a pile of guns."
 
 //and they say that a hero can save us
+//Fire Tractors
+
+/obj/item/key/tractor/fire
+	name = "fire tractor key"
+	desc = "Blazing keys."
+	icon_state = "fire_keys"
+
 /obj/structure/bed/chair/vehicle/tractor/fire
 	name = "fire tractor"
 	icon_state = "firetractor"
 	desc = "The chariot of true heroes. Features a water synthesizer that can connect with any OSHA-compliant fire extinguisher."
+	keytype = /obj/item/key/tractor/fire
 	headlights = FALSE //Has the siren headlights instead, over in New()
 
 	var/obj/item/weapon/extinguisher/attached_extinguisher
