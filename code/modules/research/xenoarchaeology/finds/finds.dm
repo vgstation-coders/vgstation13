@@ -1101,7 +1101,7 @@
 	apply_prefix = FALSE
 
 /datum/find/cwc_medal/spawn_item()
-	if(prob(25))
+	if(prob(75))
 		anomaly_factor++
 		apply_prefix = TRUE
 		talkative = TRUE//not a weapon so this doesn't work

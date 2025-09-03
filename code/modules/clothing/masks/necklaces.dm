@@ -183,8 +183,8 @@
 	name = "[prefix][animal_name] necklace"
 	desc = "A necklace made out of [teeth_amount] [animal_name]."
 
-/obj/item/clothing/accessory/necklace/cwc_medal//TODO: apply brain damage when worn
-	name = "sonichu medallion"
+/obj/item/clothing/accessory/necklace/cwc_medal
+	name = "medallion"
 	desc = "It's made with Crayola fuckin' Model Magic and acrylic paint."
 	icon_state = "cwc_medal"
 	_color = "cwc_medal"
