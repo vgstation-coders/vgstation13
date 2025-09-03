@@ -1050,7 +1050,7 @@
 
 /datum/find/chaosblade/spawn_item()
 	var/newitem = pick(possible_spawns)
-	if(newitem == (/obj/item/weapon/nullrod/sword/chaos/mimicry))
+	if(ispath(newitem,/obj/item/weapon/nullrod/sword/chaos/mimicry))
 		apply_prefix = FALSE
 	return new newitem
 
