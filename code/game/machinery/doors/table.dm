@@ -172,7 +172,7 @@
 			return
 
 		if(panel_open && iscrowbar(W))
-			user.visible_message("[user] is removing [electronics] from [src].", "You start to remove \the [electronics] from [src].")
+			user.visible_message("<span class='notice'>[user] is removing [electronics] from [src].</span>", "<span class='notice'>You start to remove \the [electronics] from [src].</span>")
 			W.playtoolsound(src, 100)
 			if(do_after(user, src, 40) && src && panel_open && electronics)
 				to_chat(user, "<span class='notice'>You removed [electronics]!</span>")
