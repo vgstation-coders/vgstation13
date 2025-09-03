@@ -224,6 +224,7 @@ var/list/tgui_religion_data
 	var/preferred_incense = /obj/item/weapon/storage/fancy/incensebox/harebells
 	var/symbolstyle = 10
 	var/bookstyle = "Holy Light"
+	var/retribution_message = "Thou has angered me, mortal!"
 
 /// Returns a string to be displayed in the ChooseReligion UI.
 /// Base proc just cares about whether it can convert anyone but it can be
@@ -261,10 +262,7 @@ var/list/tgui_religion_data
  */
 /datum/religion/proc/convertAct(var/mob/living/preacher, var/mob/living/subject, var/obj/item/weapon/storage/bible/B)
 	if (B.my_rel != src) // BLASPHEMY
-		to_chat(preacher, "<span class='warning'>You are a heathen to this God. You feel [B.my_rel.deity_name]'s wrath strike you for this blasphemy.</span>")
-		preacher.fire_stacks += 5
-		preacher.ignite()
-		preacher.audible_scream()
+		B.my_rel.smite(preacher)
 		return FALSE
 	if (preacher != religiousLeader.current)
 		to_chat(preacher, "<span class='warning'>You fail to muster enough mental strength to begin the conversion. Only the Spiritual Guide of [name] can perfom this.</span>")
@@ -356,6 +354,12 @@ var/list/tgui_religion_data
 	to_chat(subject, "<span class='notice'>You renounce [name].</span>")
 	adepts -= subject.mind
 	subject.mind.faith = null
+
+/datum/religion/proc/smite(var/mob/living/subject)
+	to_chat(subject, "<span class='warning'>You are a heathen to this God. You feel [deity_name]'s wrath strike you for this blasphemy.</span>")
+	subject.fire_stacks += 5
+	subject.ignite()
+	subject.audible_scream()
 
 // interceptPrayer: Called when anyone (not necessarily one of our adepts!) whispers a prayer.
 // Return 1 to CANCEL THAT GUY'S PRAYER (!!!), or return null and just do something fun.
@@ -1220,10 +1224,28 @@ var/list/all_bible_styles = list(
 	female_adept = "Co-Clown"
 	keys = list("honk", "clown", "honkmother")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
+	bible_type = /obj/item/weapon/storage/bible/clown
+	convert_method = "having them fart on your bible."
 	bookstyle = "Honk"
+	retribution_message = "HONK!"
 
 /datum/religion/clown/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/mask/gas/clown_hat(H), slot_wear_mask)
+
+/datum/religion/clown/smite(var/mob/living/subject)
+	to_chat(subject, "<span class='warning'>You are unfunny and lame in the eyes of the Honkmother.</span> <span class='sinister'>H[pick("A","E","O","U")]NK!</span>")
+	subject.Cluwneize()
+
+/datum/religion/clown/convertCeremony(mob/living/preacher, mob/living/subject) //keeps it basic
+	subject.visible_message("<span class='notice'>\The [preacher] attempts to convert \the [subject] to [name].</span>")
+	if(!convertCheck(subject))
+		subject.visible_message("<span class='warning'>\The [subject] refuses conversion.</span>")
+		return FALSE
+
+	// Everything is ok : begin the conversion
+	subject.visible_message("<span class='notice'>\The [subject] is blessed by \the [preacher] and embraces [name]. Praise [deity_name]!</span>")
+	convert(subject, preacher)
+	return TRUE
 
 /datum/religion/mime
 	name = "..."
@@ -1233,6 +1255,7 @@ var/list/all_bible_styles = list(
 	female_adept = "..."
 	keys = list("silence", "mime", "quiet", "...")
 	bookstyle = "Scrapbook"
+	retribution_message = "..."
 
 /datum/religion/mime/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/mask/gas/mime(H), slot_wear_mask)

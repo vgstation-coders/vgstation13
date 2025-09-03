@@ -51,7 +51,7 @@
 		if(prob(80)) //20% chance to escape God's justice
 			spawn(rand(10,30))
 				if(user)
-					user.show_message("<span class='game say'><span class='name'>[my_rel.deity_name]</span> says, \"Thou hast angered me, mortal!\"",2)
+					user.show_message("<span class='game say'><span class='name'>[my_rel.deity_name]</span> says, \"[my_rel.retribution_message]\"",2)
 					sleep(10)
 					if(user)
 						to_chat(user, "<span class='danger'>You were disintegrated by [my_rel.deity_name]'s bolt of lightning.</span>")
@@ -69,6 +69,63 @@
 		/obj/item/weapon/reagent_containers/food/drinks/beer = 2,
 		/obj/item/weapon/spacecash = 3,
 	)
+
+//Clown bible
+/obj/item/weapon/storage/bible/clown
+	icon_state = "honkbook"
+	flammable = FALSE //Not actually paper
+	items_to_spawn = list(
+		/obj/item/weapon/bananapeel = 3,
+		/obj/item/weapon/bikehorn,
+		/obj/item/toy/crayon/rainbow,
+	)
+	actions_types = list() //you fart instead
+
+/obj/item/weapon/storage/bible/clown/divine_retribution(var/mob/living/user, var/action = "doing something to")
+	if(clumsy_check(user)) //Already a clown, no point.
+		return
+	to_chat(user, "<span class='danger'>You feel incredibly hilarious for [action] [src]!</span>")
+	spawn(rand(10,30))
+		if(user)
+			user.show_message("<span class='game say'><span class='name'>[my_rel.deity_name]</span> says, \"HONK!\"",2)
+			sleep(10)
+			if(user)
+				to_chat(user, "<span class='danger'>You were stamped by [my_rel.deity_name]'s print of clumsiness.</span>")
+				user.attack_log += text("\[[time_stamp()]\] <font color='orange'>[action] a clown bible and amused [my_rel.deity_name]'s show.</font>")
+				if(user.wear_mask && !istype(user.wear_mask, /obj/item/clothing/mask/gas/clown_hat))
+					user.u_equip(user.wear_mask,1)
+				if(!user.wear_mask)
+					var/obj/item/clothing/mask/gas/clown_hat/ch = new(loc)
+					user.equip_to_slot(ch, slot_wear_mask)
+				user.say("HONK!")
+				if(ishuman(user))
+					var/mob/living/carbon/human/affected = user
+					//clown shoes added
+					if(affected.shoes && !istype(affected.shoes, /obj/item/clothing/shoes/clown_shoes))
+						affected.u_equip(affected.shoes,1)
+					if(!affected.shoes)
+						var/obj/item/clothing/shoes/clown_shoes/cshoes = new(loc)
+						affected.equip_to_slot(cshoes, slot_shoes)
+					//clown suit added
+					if(affected.w_uniform && !istype(affected.w_uniform, /obj/item/clothing/under/rank/clown/))
+						affected.u_equip(affected.w_uniform,1)
+					if(!affected.w_uniform)
+						var/obj/item/clothing/under/rank/clown/csuit = new(loc)
+						affected.equip_to_slot(csuit, slot_w_uniform)
+				//makes you clumsy
+				user.dna.SetSEState(CLUMSYBLOCK,1)
+				genemutcheck(user,CLUMSYBLOCK,null,MUTCHK_FORCED)
+				user.update_mutations()
+				if(my_rel.religiousLeader)
+					my_rel.convertAct(my_rel.religiousLeader,user,src)
+
+/obj/item/weapon/storage/bible/clown/suicide_act(var/mob/living/user)
+	user.visible_message("<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>")
+	user.emote("fart")
+	sleep(1 SECONDS) //Wait for it
+	to_chat(user,"<span class='sinister'>What a terrible, terrible, idea.</span>")
+	user.Cluwneize()
+	return SUICIDE_ACT_CUSTOM //A fate worse than death
 
 //Even more "Special" Bible with a nicer gift on introduction
 /obj/item/weapon/storage/bible/traitor_gun
