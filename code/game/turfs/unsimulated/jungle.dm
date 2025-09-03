@@ -136,7 +136,7 @@ var/list/foliage_replacments=list(
 )
 
 /turf/unsimulated/floor/jungle/grass
-	name="Jungle Grass"
+	name="grass"
 	desc="A thick and lush carpet of various plant species, sustained by a regular supply to water."
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "grass_alt1"

@@ -10,7 +10,7 @@
 #define RUINTYPE_XENO "Xeno"
 #define RUINTYPE_DESERT "Desert"
 #define RUINTYPE_WATER "Water"
-#define RUINTYPE_BATTLEFIELD "Battlefield"
+#define RUINTYPE_URBAN "Urban"
 
 /// do not actually use this for your ruin type, this is for the ruintype_to_list proc
 #define RUINTYPE_EVERYTHING "Everything"

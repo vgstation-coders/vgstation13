@@ -10,43 +10,42 @@
 			BIOME_LOW_HUMIDITY = /datum/biome/ocean,
 			BIOME_MEDIUM_HUMIDITY = /datum/biome/beach,
 			BIOME_HIGH_HUMIDITY = /datum/biome/beach,
-			BIOME_HIGHEST_HUMIDITY = /datum/biome/grass
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/beach/grass
 		),
 		BIOME_COLD = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/ocean/deep,
 			BIOME_LOW_HUMIDITY = /datum/biome/ocean,
 			BIOME_MEDIUM_HUMIDITY = /datum/biome/beach,
-			BIOME_HIGH_HUMIDITY = /datum/biome/grass/dense,
-//			BIOME_HIGHEST_HUMIDITY = /datum/biome/beach_jungle
-			BIOME_HIGHEST_HUMIDITY = /datum/biome/beach
+			BIOME_HIGH_HUMIDITY = /datum/biome/beach/grass/dense,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/jungle/beach
 		),
 		BIOME_WARM = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/ocean/deep,
 			BIOME_LOW_HUMIDITY = /datum/biome/ocean,
 			BIOME_MEDIUM_HUMIDITY = /datum/biome/beach,
-			BIOME_HIGH_HUMIDITY = /datum/biome/grass/dense,
-			BIOME_HIGHEST_HUMIDITY = /datum/biome/grass
+			BIOME_HIGH_HUMIDITY = /datum/biome/beach/grass/dense,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/beach/grass
 		),
 		BIOME_TEMPERATE = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/ocean/deep,
 			BIOME_LOW_HUMIDITY = /datum/biome/ocean,
 			BIOME_MEDIUM_HUMIDITY = /datum/biome/beach/dense,
 			BIOME_HIGH_HUMIDITY = /datum/biome/beach,
-			BIOME_HIGHEST_HUMIDITY = /datum/biome/grass
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/beach/grass
 		),
 		BIOME_HOT = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/ocean/deep,
 			BIOME_LOW_HUMIDITY = /datum/biome/ocean,
 			BIOME_MEDIUM_HUMIDITY = /datum/biome/beach/dense,
 			BIOME_HIGH_HUMIDITY = /datum/biome/beach,
-			BIOME_HIGHEST_HUMIDITY = /datum/biome/grass,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/beach/grass,
 		),
 		BIOME_HOTTEST = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/ocean/deep,
 			BIOME_LOW_HUMIDITY = /datum/biome/ocean,
 			BIOME_MEDIUM_HUMIDITY = /datum/biome/beach/dense,
 			BIOME_HIGH_HUMIDITY = /datum/biome/beach,
-			BIOME_HIGHEST_HUMIDITY = /datum/biome/grass
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/beach/grass
 		)
 	)
 
@@ -81,7 +80,36 @@
 		)
 	)
 
-/datum/biome/grass
+/datum/biome/beach
+	open_turf_types = list(/turf/unsimulated/beach/sand/spread = 1)
+	mob_spawn_list = list(/mob/living/simple_animal/crab = 7, /mob/living/simple_animal/capybara = 1, /mob/living/simple_animal/snail = 1)
+	mob_spawn_chance = 1
+	flora_spawn_list = list(
+		/obj/structure/flora/tree/palm = 1,
+		/obj/structure/flora/rock = 1,
+		/obj/structure/flora/rock/pile = 1,
+		/obj/structure/flora/coconut = 1
+	)
+	flora_spawn_chance = 5
+	loot_tables_list = list(
+		/datum/loot_table/clothing = 5,
+		/datum/loot_table/entertainment = 10,
+		/datum/loot_table/food_or_drink = 10,
+		/datum/loot_table/trash = 20,
+	)
+	loot_spawn_chance = 0.5
+
+/datum/biome/beach/dense
+	open_turf_types = list(/turf/unsimulated/beach/sand/spread = 1)
+	flora_spawn_list = list(
+		/obj/structure/flora/tree/palm = 5,
+		/obj/structure/flora/rock = 1,
+		/obj/structure/flora/rock/pile = 1,
+		/obj/structure/flora/coconut = 3
+	)
+	flora_spawn_chance = 2
+
+/datum/biome/beach/grass
 	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/brflowers = 1,
@@ -126,7 +154,7 @@
 	)
 	loot_spawn_chance = 1
 
-/datum/biome/grass/dense
+/datum/biome/beach/grass/dense
 	flora_spawn_chance = 70
 	mob_spawn_list = list(
 		/mob/living/simple_animal/mouse = 10,
@@ -136,35 +164,6 @@
 	mob_spawn_chance = 2
 	feature_spawn_chance = 1.2
 	loot_spawn_chance = 1
-
-/datum/biome/beach
-	open_turf_types = list(/turf/unsimulated/beach/sand/spread = 1)
-	mob_spawn_list = list(/mob/living/simple_animal/crab = 7, /mob/living/simple_animal/capybara = 1, /mob/living/simple_animal/snail = 1)
-	mob_spawn_chance = 1
-	flora_spawn_list = list(
-		/obj/structure/flora/tree/palm = 1,
-		/obj/structure/flora/rock = 1,
-		/obj/structure/flora/rock/pile = 1,
-		/obj/structure/flora/coconut = 1
-	)
-	flora_spawn_chance = 5
-	loot_tables_list = list(
-		/datum/loot_table/clothing = 5,
-		/datum/loot_table/entertainment = 10,
-		/datum/loot_table/food_or_drink = 10,
-		/datum/loot_table/trash = 20,
-	)
-	loot_spawn_chance = 0.5
-
-/datum/biome/beach/dense
-	open_turf_types = list(/turf/unsimulated/beach/sand/spread = 1)
-	flora_spawn_list = list(
-		/obj/structure/flora/tree/palm = 5,
-		/obj/structure/flora/rock = 1,
-		/obj/structure/flora/rock/pile = 1,
-		/obj/structure/flora/coconut = 3
-	)
-	flora_spawn_chance = 2
 
 /datum/biome/ocean
 	open_turf_types = list(/turf/unsimulated/beach/shallows = 1)
@@ -202,26 +201,3 @@
 	flora_spawn_list = list(/obj/structure/geyser = 1, /obj/structure/flora/rock/pile = 3, /obj/structure/flora/rock = 2, /obj/structure/flora/coconut = 5)
 	flora_spawn_chance = 6
 
-//Add after junglestation is merged
-/* /datum/biome/beach_jungle
-	flora_spawn_chance = 100
-	open_turf_types = list(/turf/open/floor/plating/grass/beach/lit = 1, /turf/open/floor/plating/dirt/beach/lit = 9)
-	flora_spawn_list = list(
-		/obj/structure/flora/grass/jungle = 1,
-		/obj/structure/flora/grass/jungle/b = 1,
-		/obj/structure/flora/tree/jungle = 5,
-		/obj/structure/flora/rock/jungle = 1,
-		/obj/structure/flora/junglebush = 1,
-		/obj/structure/flora/junglebush/b = 1,
-		/obj/structure/flora/junglebush/c = 1,
-		/obj/structure/flora/junglebush/large = 1,
-		/obj/structure/spacevine/dense = 20,
-		/obj/structure/flora/ash/garden = 1,
-	)
-	mob_spawn_chance = 0.6
-	mob_spawn_list = list(
-		/mob/living/simple_animal/hostile/gorilla = 1,
-		/mob/living/carbon/monkey = 6,
-		/mob/living/simple_animal/hostile/retaliate/chicken = 4,
-		/obj/effect/spawner/random/chicken/jungle/flock = 1
-		) */

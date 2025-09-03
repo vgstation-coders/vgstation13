@@ -416,3 +416,37 @@
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 20,
 		/mob/living/simple_animal/capybara/jungle = 10,
 	)
+
+/datum/biome/jungle/beach
+	flora_spawn_chance = 25
+	open_turf_types = list(/turf/unsimulated/floor/jungle/grass = 1)
+	flora_spawn_list = list(
+		/obj/structure/flora/ausbushes/fullgrass = 25,
+		/obj/structure/flora/ausbushes/leafybush = 20,
+		/obj/structure/flora/ausbushes/fernybush = 15,
+		/obj/structure/flora/ausbushes/pointybush = 15,
+		/obj/structure/flora/ausbushes/stalkybush = 12,
+		/obj/structure/flora/ausbushes/brflowers = 8,
+		/obj/structure/flora/ausbushes/ppflowers = 8,
+		/obj/structure/flora/ausbushes/ywflowers = 6,
+		/obj/structure/flora/tree/palm = 15,
+		/obj/structure/flora/tree/shitty = 8,
+		/obj/structure/flora/tree/dead_acacia = 4,
+		/obj/structure/flora/jungle_berries = 12,
+		/obj/structure/flora/rock = 5,
+		/obj/structure/flora/rock/pile = 3,
+		/obj/structure/flora/ausbushes/reedbush = 4,
+		/obj/structure/flora/coconut = 6,
+	)
+	mob_spawn_chance = 6
+	mob_spawn_list = list(
+		/mob/living/simple_animal/parrot/jungle = 25,
+		/mob/living/simple_animal/capybara/jungle = 20,
+		/mob/living/carbon/monkey = 30,
+		/mob/living/simple_animal/hostile/lizard/frog = 15,
+		/mob/living/simple_animal/hostile/lizard/frog/poison = 10,
+		/mob/living/simple_animal/cockroach = 15,
+		/mob/living/simple_animal/hostile/bear/panther = 5,
+		/mob/living/simple_animal/hostile/giant_spider/jungle = 5,
+		/mob/living/simple_animal/crab = 10,
+	)

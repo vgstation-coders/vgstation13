@@ -1346,6 +1346,7 @@
 #include "code\game\turfs\unsimulated\floor.dm"
 #include "code\game\turfs\unsimulated\jungle.dm"
 #include "code\game\turfs\unsimulated\snow.dm"
+#include "code\game\turfs\unsimulated\urban.dm"
 #include "code\game\turfs\unsimulated\walls.dm"
 #include "code\game\verbs\ooc.dm"
 #include "code\game\verbs\suicide.dm"

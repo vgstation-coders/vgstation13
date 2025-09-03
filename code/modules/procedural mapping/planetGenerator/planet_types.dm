@@ -70,6 +70,14 @@
 	ruin_type = RUINTYPE_SNOW
 	climate_type = CLIMATE_ARCTIC
 
+/datum/planet_type/urban
+	name = "wasteland planetoid"
+	desc = "A desolate, toxic world littered with the remnants of a long-gone civilization and the conflict that ended it."
+	mapgen = /datum/planetGenerator/urban
+	default_baseturf = /turf/unsimulated/wasteland
+	ruin_type = RUINTYPE_URBAN
+	climate_type = CLIMATE_DESERT
+
 /datum/planet_type/xeno
 	name = "unknown planetoid"
 	desc = "A distress signal eminates from this planetoid."
