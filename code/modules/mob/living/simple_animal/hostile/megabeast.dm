@@ -34,6 +34,7 @@
 	var/pressure = ONE_ATMOSPHERE * 4.5
 	var/temperature = T0C + 175
 	var/special
+	var/datum/reagent/reagent_type
 
 /mob/living/simple_animal/hostile/forgotten_beast//randomly generated
 	name = "Forgotten Beast"
@@ -68,15 +69,21 @@
 	var/breath_damage_type = BRUTE
 	var/datum/custom_breath/mybreath
 	var/breath_list = list(
-		list("steam breath", BURN, "WHITE", ""),
-		list("firey breath", BURN, "#FFAC1C", "IGNITE"),
-		list("burning plasma", BURN, "#733B97", "PLASMA"),
-		list("dark flame", BURN, "#000066", "IGNITE"),
-		list("acidic spray", TOXIN, "GREEN", "CHEM"),
-		list("toxic breath", TOXIN, "YELLOW", "CHEM"),
-		list("plasma dust", BRUTE,"GREY", "PLASMA"),
-		list("radioactive dust", BRUTE, "YELLOW", "RADIATION"),
-		list("dust cloud", BRUTE,"GREY", "PUSH"),
+		list("steam breath", BURN, "WHITE", list("CHEM"), /datum/reagent/water),
+		list("firey breath", BURN, "#FFAC1C", list("IGNITE")),
+		list("plasmafire breath", BURN, "#844A97", list("PLASMA", "IGNITE")),
+		list("dark flame", BURN, "#000066", list("IGNITE")),
+		list("acidic spray", TOXIN, "GREEN", list("CHEM"),/datum/reagent/pacid),
+		list("toxic breath", TOXIN, "YELLOW", list("CHEM"), /datum/reagent/toxin),
+		list("mysterious sludge", TOXIN, "#5E02F8", list("CHEM"), /datum/reagent/phazon),
+		list("petrifying breath", BRUTE, "GREY", list("CHEM"), /datum/reagent/petritricin),
+		list("plasma dust", BRUTE,"#733B97", list("PLASMA", "COUGH")),
+		list("radioactive dust", BRUTE, "YELLOW", list("RADIATION", "COUGH")),
+		list("dust cloud", BRUTE,"GREY", list("PUSH", "COUGH")),
+		list("sand breath", BRUTE,"#EOE8C5", list("PUSH", "BLIND")),
+		list("water cannon", BRUTE,"#DEF7F5", list("PUSH", "CHEM"), /datum/reagent/water),
+		list("booze blast", BRUTE,"#664300", list("PUSH", "CHEM"), /datum/reagent/ethanol),
+		list("paint breath", BRUTE,"#DEF7F5", list("PUSH", "CHEM"), /datum/reagent/colorful_reagent)
 		)
 	var/list/appendage_types = list(
 		"head",
@@ -102,10 +109,6 @@
 		"feathery",
 		"tentacled",
 		)
-
-/mob/living/simple_animal/hostile/forgotten_beast/initialize(mob/living/mobtype)
-	. = ..()
-	PickMob(mobtype)//needs to be fixed
 
 /mob/living/simple_animal/hostile/forgotten_beast/Life()
 	..()
@@ -153,8 +156,10 @@
 	mybreath = new()
 	mybreath.name = breath_string
 	mybreath.color = breath_type[3]
-	mybreath.special = breath_type[4]
+	mybreath.special = breath_type[4]//this is a list
 	mybreath.damage = breath_damage
+	if(length(breath_type)>= 5)
+		mybreath.reagent_type = breath_type[5]
 	desc += " Beware its deadly [breath_string]!"
 	switch(breath_damage_type)
 		if(BRUTE)
@@ -229,6 +234,7 @@
 	thebreath.pressure = mybreath.pressure
 	thebreath.temperature = mybreath.temperature
 	thebreath.special = mybreath.special
+	thebreath.reagent_type = mybreath.reagent_type
 	generic_projectile_fire(get_ranged_target_turf(src, dir, 10), src, thebreath, 'sound/weapons/flamethrower.ogg', src)
 	special_cooldown = world.time
 
@@ -261,10 +267,11 @@
 
 	var/stepped_range = 0
 	var/max_range = 9
-	var/pressure = ONE_ATMOSPHERE * 4.5
+	var/pressure = ONE_ATMOSPHERE * 9
 	var/temperature = T0C + 175
 	var/fire_duration
 	var/special
+	var/datum/reagent/reagent_type
 
 /obj/item/projectile/custom_breath/New(turf/T, var/direction, var/Dam, var/P, var/Temp, var/F_Dur)
 	..(T,direction)
@@ -291,19 +298,22 @@
 	F.color = color
 	F.damage_type = damage_type
 	F.special = special
+	F.reagent_type = reagent_type
 
 /obj/effect/fire_blast/custom
 	icon_state = "key1"
+	spread_chance = 100
 	var/damage_type = BURN
 	var/damage = 10
 	var/special
+	var/datum/reagent/reagent_type
 
 /obj/effect/fire_blast/custom/New(atom/A, var/damage = 0, var/current_step = 0, var/age = 1, var/pressure = 0, var/blast_temperature = 0, var/fire_duration, var/origin)
 	..(A)
 	icon_state = "key[rand(1,3)]"
 
 /obj/effect/fire_blast/custom/burn_mob(mob/living/L, var/adjusted_fire_damage)
-	say("[damage] [damage_type] damage")
+	say("[adjusted_fire_damage] [damage_type] damage")
 	if(special)
 		ApplyStatus(L, special, adjusted_fire_damage)
 	if(L.mutations.Find(M_RESIST_HEAT) && damage_type == BURN)
@@ -311,20 +321,35 @@
 	L.apply_damage(adjusted_fire_damage, damage_type)
 
 /obj/effect/fire_blast/custom/proc/ApplyStatus(mob/living/L, special, adjusted_fire_damage)
-	switch(special)
-		if("IGNITE")
+	var/mob/living/carbon/H = L
+	if(adjusted_fire_damage < 1)
+		adjusted_fire_damage++
+	for(var/status in special)
+		if(status == "IGNITE")
 			if(!L.on_fire)
 				L.adjust_fire_stacks(0.5)
 				L.ignite()
-		if("RADIATION")//irradiates
-			L.apply_radiation(adjusted_fire_damage, RAD_EXTERNAL)
-		if("PLASMA")//contaminate equipment with plasma
+		if(status == "RADIATION")//irradiates
+			L.apply_radiation((damage*0.5), RAD_EXTERNAL)
+		if(status == "PLASMA")//contaminate equipment with plasma
 			if(!ishuman(L))
 				return
-			var/mob/living/carbon/H = L
 			if(H.flags & PLASMA_IMMUNE)
 				return
 			H.contaminate()
-		if("CHEM")
-		if("PUSH")
-			L.throw_at(get_step(dir, 1), 1, 1)
+		if(status == "CHEM")
+			var/datum/reagents/R = L.reagents
+			R.add_reagent(reagent_type.id, 10)
+		if(status == "PUSH")
+			say("pushing")
+			L.throw_at(get_step(L.dir, 1), 1, 1)//needs fixing
+		if(status == "COUGH")
+			if(ishuman(H))
+				if(H.has_breathing_mask())
+					return
+			L.audible_cough()
+			var/obj/item/I = H.get_active_hand()
+			if(I && I.w_class < W_CLASS_MEDIUM)
+				H.drop_item(I)
+		if(status == "BLIND")
+			L.apply_effects(0, 0, 0, 0,  0, 10)
