@@ -70,7 +70,7 @@
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the table. Returns 1 if it can, 0 if bullet stops.
 /obj/machinery/door/table/proc/check_cover(obj/item/projectile/P, turf/from)
-	var/shooting_at_the_table_directly = P.original == src
+	var/shooting_at_the_table_directly = (P.original == src)
 	var/chance = 60
 	if(shooting_at_the_table_directly || prob(chance))
 		health -= P.damage/2
