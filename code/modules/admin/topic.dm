@@ -680,7 +680,7 @@
 		if(nu == C.current_weather.name)
 			to_chat(usr, "That's already the current weather you dummy.")
 			return
-		C.change_weather(valid_climates[nu])
+		C.change_weather(valid_climates[nu],force = TRUE)
 		C.forecast()
 		log_admin("[key_name(usr)] changed the weather to [nu] for Z-[C.z].")
 		message_admins("<span class='notice'>[key_name(usr)] changed the weather to [nu] for Z-[C.z].</span>", 1)

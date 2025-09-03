@@ -160,12 +160,13 @@
 	anchored = 1
 	plane = ABOVE_TURF_PLANE
 	mouse_opacity = 0
+	var/datum/climate/arctic/parent_climate = null
 
-/obj/effect/blizzard_holder/New()
+/obj/effect/blizzard_holder/New(var/datum/climate/arctic/climate_ref = null)
 	..()
-	var/datum/climate/C = SSweather.get_climate(src.z)
-	if(map && C && istype(C.current_weather,/datum/weather/snow))
-		var/datum/weather/snow/S = C.current_weather
+	parent_climate = climate_ref
+	if(map && parent_climate && istype(parent_climate.current_weather,/datum/weather/snow))
+		var/datum/weather/snow/S = parent_climate.current_weather
 		UpdateSnowfall(S.snow_intensity)
 	else
 		UpdateSnowfall(SNOW_CALM)

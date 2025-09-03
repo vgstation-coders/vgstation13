@@ -72,7 +72,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		return
 	current_weather.tick()
 	if(current_weather.timeleft <= 0)
-		change_weather(forecasts[1])
+		change_weather(forecasts[1],force = TRUE)
 		forecasts -= forecasts[1]
 	if(forecasts.len < PREDICTION_MINIMUM)
 		forecast()
@@ -178,7 +178,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 /datum/climate/arctic/New()
 	..()
 	if(!blizzard_image)
-		blizzard_image = new
+		blizzard_image = new(src)
 	blizzard_image.UpdateSnowfall(SNOW_CALM)
 
 ///////////////////////////////////  WEATHER DATUMS //////////////////////////////
