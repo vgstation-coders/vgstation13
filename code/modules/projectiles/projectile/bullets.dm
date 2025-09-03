@@ -454,6 +454,18 @@
 	penetration = 10
 	projectile_speed = 1
 
+/obj/item/projectile/bullet/a76239mm_financial
+	name = "7.6239mm financial round"
+	damage = 1
+
+/obj/item/projectile/bullet/a76239mm_financial/on_hit(var/atom/target, var/blocked = 0)
+	if(blocked)
+		blocked = 100 // completely useless against armor
+	. = ..(target, blocked)
+	if(. && damage > 200 && (def_zone == LIMB_CHEST || def_zone == LIMB_GROIN) && isliving(target))
+		var/mob/living/L = target
+		L.gib()
+
 /obj/item/projectile/bullet/beegun
 	name = "bee"
 	icon = 'icons/obj/projectiles_experimental.dmi'

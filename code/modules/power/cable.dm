@@ -141,10 +141,8 @@ By design, d1 is the smallest direction and d2 is the highest
 	update_icon()
 
 /obj/structure/cable/update_icon()
-	if(invisibility)
-		icon_state = "[d1]-[d2]-f"
-	else
-		icon_state = "[d1]-[d2]"
+	alpha = invisibility ? 128 : 255
+	icon_state = "[d1]-[d2]"
 
 /obj/structure/cable/t_scanner_expose()
 	if (level != LEVEL_BELOW_FLOOR)
@@ -556,3 +554,74 @@ By design, d1 is the smallest direction and d2 is the highest
 
 /obj/structure/cable/proc/hasDir(var/dir)
 	return (d1 == dir || d2 == dir)
+
+/obj/structure/cable/mapping
+	icon_state = "auto"
+
+/obj/structure/cable/mapping/canSmoothWith()
+	var/static/list/smoothables = list(/obj/structure/cable)
+	return smoothables
+
+/obj/structure/cable/mapping/isSmoothableNeighbor(atom/A)
+	if(istype(A,/obj/structure/cable))
+		if(istype(A,/obj/structure/cable/mapping))
+			return TRUE
+		var/obj/structure/cable/C = A
+		return C.hasDir(get_dir(C,src))
+
+/obj/structure/cable/mapping/relativewall()
+	. = ..()
+	var/list/found_dirs = list()
+	for(var/subdir in cardinal)
+		if(junction & subdir)
+			found_dirs += list(subdir)
+	var/dir_in_found = (dir in found_dirs) ? TRUE : FALSE
+	if(found_dirs.len > 1 && dir_in_found)
+		found_dirs.Remove(dir)
+		unshift(found_dirs,dir)
+	if(found_dirs.len > 2)
+		for(var/i in 3 to found_dirs.len)
+			var/list/subfound = dir_in_found ? list(dir,found_dirs[i]) : list(found_dirs[i-1],found_dirs[i])
+			sortTim(subfound)
+			var/obj/structure/cable/C = new(loc)
+			C.d1 = subfound[1]
+			C.d2 = subfound[2]
+			C.color = src.color
+			C.update_icon()
+	if(found_dirs.len >= 2)
+		var/list/subfound = list(found_dirs[1],found_dirs[2])
+		sortTim(subfound)
+		d1 = subfound[1]
+		d2 = subfound[2]
+		if((locate(/obj/machinery/power) in loc) || (locate(/obj/structure/grille) in loc))
+			var/obj/structure/cable/C = new(loc)
+			C.d1 = 0
+			C.d2 = found_dirs[1]
+			C.color = src.color
+			C.update_icon()
+	else if(found_dirs.len == 1)
+		d1 = 0
+		d2 = found_dirs[1]
+	update_icon()
+	dir = SOUTH
+
+/obj/structure/cable/mapping/yellow
+	color = "#FFED00"
+
+/obj/structure/cable/mapping/green
+	color = "#0B8400"
+
+/obj/structure/cable/mapping/blue
+	color = "#005C84"
+
+/obj/structure/cable/mapping/pink
+	color = "#CA00B6"
+
+/obj/structure/cable/mapping/orange
+	color = "#CA6900"
+
+/obj/structure/cable/mapping/cyan
+	color = "#00B5CA"
+
+/obj/structure/cable/mapping/white
+	color = "#D0D0D0"

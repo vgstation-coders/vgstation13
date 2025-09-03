@@ -589,7 +589,7 @@ var/list/icon_state_to_appearance = list()
 			if(!(used_digging.diggables & DIG_SOIL)) //if the pickaxe can't dig soil, we don't
 				to_chat(user, "<span class='rose'>You can't dig soft soil with \the [W].</span>")
 				return
-		
+
 			if (dug)
 				to_chat(user, "<span class='rose'>This area has already been dug.</span>")
 				return
@@ -603,8 +603,9 @@ var/list/icon_state_to_appearance = list()
 				totaldug += finddatum.excavation_level
 				finddatum.update_excav_level(used_digging)
 			if(totaldug >= 100)
-				if(finddatum && finddatum.spawn_boulder(user))
-					finddatum.large_artifact_fail()
+				if(!dug)
+					if(finddatum && finddatum.spawn_boulder(user))
+						finddatum.large_artifact_fail()
 				playsound(src, 'sound/items/shovel.ogg', 50, 1)
 				gets_dug()
 

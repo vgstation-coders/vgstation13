@@ -79,6 +79,9 @@
 					if(oh_shit_new_living_in_target.len)
 						return
 					if(T == chassis.loc && src == chassis.selected)
+						if(istype(O.loc,/obj/structure/rack/crate_shelf)) //Loading a crate from a crate shelf
+							var/obj/structure/rack/crate_shelf/shelf = O.loc
+							shelf.force_unload(O)
 						W.cargo += O
 						O.forceMove(chassis)
 						if(!W.ore_box && istype(O, /obj/structure/ore_box))
@@ -92,7 +95,50 @@
 			else
 				occupant_message("<span class='red'>Not enough room in cargo compartment.</span>")
 		else
-			occupant_message("<span class='red'>[target] is firmly secured.</span>")
+			if(!istype(O,/obj/structure/rack/crate_shelf)) //To avoid another tab, we exit here if we're not an anchored crate shelf!
+				occupant_message("<span class='red'>[target] is firmly secured.</span>")
+				return
+			//Crate shelf direct unloading
+			if(!W.cargo.len) //Nothing in the cargo bay? No unloading needed!
+				return
+			var/total_crates = 0
+			var/obj/crate_to_load
+			var/list/crate_list = list()
+			for(var/obj/structure/closet/crate/counted_crate in W.cargo) //Count the amount of crates in the mech cargo
+				total_crates++
+				var/name_attempt = counted_crate.name //Brace yourself for the 6 roundstart "crate" crates on box!
+				var/exists = crate_list[name_attempt]
+				if(exists) //If a crate already exists with the same name, generate a number for it so they don't stack in one list entry
+					var/count_trial = 2
+					while(crate_list[name_attempt])
+						name_attempt = "[counted_crate.name] #[count_trial]"
+						count_trial++
+				crate_list[name_attempt] = counted_crate
+				crate_to_load = counted_crate
+			if(!total_crates) //No crates found in the mech cargo
+				return
+			if(total_crates >= 2) //If there's more than one crate, pick the one to unload
+				var/response = input(chassis.occupant,"Which crate to unload?", "[src]", "Cancel") as null|anything in crate_list
+				if(response == "Cancel" || !response)
+					return
+				if(!W.Adjacent(O)) //Moved away somehow
+					return
+				crate_to_load = crate_list[response]
+			occupant_message("You lift [crate_to_load] and start to load it into [O].")
+			chassis.visible_message("[chassis] lifts [crate_to_load] and starts to load it into [O].")
+			playsound(chassis, 'sound/mecha/hydraulic.ogg', 100, 1)
+			set_ready_state(0)
+			chassis.use_power(energy_drain)
+			if(do_after_cooldown(target))
+				if(W != crate_to_load.loc) //Protection against hitting the unload button while unloading
+					return
+				if(!W.Adjacent(O)) //Moved away somehow
+					return
+				var/obj/structure/rack/crate_shelf/shelf = O
+				shelf.force_load(crate_to_load) //Force the crate into the shelf
+				W.cargo -= crate_to_load //Remove the shelf from the cargo hold list
+				W.log_message("Unloaded [crate_to_load]. Cargo compartment capacity: [W.cargo_capacity - W.cargo.len]")
+				occupant_message("<span class='notice'>[crate_to_load] successfully unloaded.</span>")
 
 	else if(istype(target,/mob/living))
 		var/mob/living/M = target

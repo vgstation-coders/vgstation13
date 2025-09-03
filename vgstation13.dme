@@ -2466,6 +2466,7 @@
 #include "code\modules\projectiles\guns\projectile\siren.dm"
 #include "code\modules\projectiles\guns\projectile\sniper.dm"
 #include "code\modules\projectiles\guns\projectile\stickylauncher.dm"
+#include "code\modules\projectiles\guns\projectile\zkz.dm"
 #include "code\modules\projectiles\guns\projectile\constructable\blastcannon.dm"
 #include "code\modules\projectiles\guns\projectile\constructable\blinder.dm"
 #include "code\modules\projectiles\guns\projectile\constructable\blunderbuss.dm"

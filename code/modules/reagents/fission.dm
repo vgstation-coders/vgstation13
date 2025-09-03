@@ -21,8 +21,9 @@
 /datum/reagent/thorium/irradiate(var/list/current_reagents=null) //purpose: generates uranium, as well as some byproducts
 	return list(URANIUM=0.55, RADON=0.25, LEAD=0.1, THALLIUM=0.1)
 
+/datum/reagent/plasma/irradiate(var/list/current_reagents=null) //primary purpose: a very lossy way to get phazon via plasma. powergaymers rejoice.
+	return list(PHAZON=0.05) //fun fact. 1 sheet of plas = 20 units. 1 sheet of phaz = 1 unit. funny, huh?
 
-	
 /datum/reagent/degeneratecalcium/irradiate(var/list/current_reagents=null)
 	return list(REGENERATECALCIUM=1.0)
 
