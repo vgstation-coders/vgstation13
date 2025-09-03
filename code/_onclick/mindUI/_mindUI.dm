@@ -408,7 +408,8 @@ var/list/mind_ui_ID2type = list()
 				y_loc = 7
 			else
 				y_loc = 9
-			openToolTip(M,src,"icon-x=1;icon-y=1;screen-loc=[x_loc]:1,[y_loc]:1",title = tooltip_title,content = tooltip_content,theme = tooltip_theme)
+			M.client?.tooltips.show(src,mouse=params,title = tooltip_title, content=tooltip_content, theme=tooltip_theme)
+			//openToolTip(M,src,"icon-x=1;icon-y=1;screen-loc=[x_loc]:1,[y_loc]:1",title = tooltip_title,content = tooltip_content,theme = tooltip_theme)
 
 /obj/abstract/mind_ui_element/hoverable/proc/StopHovering()
 	if (hover_state)
@@ -416,7 +417,7 @@ var/list/mind_ui_ID2type = list()
 	if (element_flags & MINDUI_FLAG_TOOLTIP)
 		var/mob/M = GetUser()
 		if (M)
-			closeToolTip(M)
+			M.client?.tooltips.hide()
 
 
 ////////////////// MOVABLE ////////////////////////
