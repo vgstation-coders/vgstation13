@@ -92,19 +92,19 @@
 /obj/machinery/door/table/door_animate(animation) // no spritework for it
 	return
 
-/obj/machinery/door/table/attack_ai(mob/user as mob) //those aren't really machinery, they're just big fucking slabs of a mineral
+/obj/machinery/door/table/attack_ai(mob/user) //those aren't really machinery, they're just big fucking slabs of a mineral
 	if(isAI(user)) //so the AI can't open it
 		return
 	else if(isrobot(user) && get_dist(user,src) <= 1) //but robots can, not remotely though
 		return TryToSwitchState(user) //also >nesting if statements
 
-/obj/machinery/door/table/attack_paw(mob/user as mob)
+/obj/machinery/door/table/attack_paw(mob/user)
 	return TryToSwitchState(user)
 
-/obj/machinery/door/table/attack_hand(mob/user as mob)
+/obj/machinery/door/table/attack_hand(mob/user)
 	return TryToSwitchState(user)
 
-/obj/machinery/door/table/proc/TryToSwitchState(mob/user as mob)
+/obj/machinery/door/table/proc/TryToSwitchState(mob/user)
 	if(operating)
 		return
 
@@ -141,7 +141,7 @@
 	. = ..()
 	set_opacity(0) //always seethru
 
-/obj/machinery/door/table/attackby(obj/item/W as obj, mob/user as mob, params)
+/obj/machinery/door/table/attackby(obj/item/W, mob/user, params)
 
 	if (!electronics)
 		if(W.is_wrench(user))
@@ -207,12 +207,12 @@
 
 /obj/machinery/door/table/ex_act(severity)
 	switch(severity)
-		if(1.0)
+		if(1)
 			dismantle()
-		if(2.0)
+		if(2)
 			if (prob(50))
 				dismantle()
-		if(3.0)
+		if(3)
 			if (prob(25))
 				dismantle()
 
@@ -224,7 +224,7 @@
 	sheet_type = /obj/item/stack/sheet/plasteel
 	var/reinforced = TRUE
 
-/obj/machinery/door/table/reinforced/attackby(obj/item/W as obj, mob/user as mob, params)
+/obj/machinery/door/table/reinforced/attackby(obj/item/W, mob/user, params)
 	if(reinforced)
 		if(W.is_wrench(user))
 			to_chat(user, "<span class='warning'>Weaken \the [src] first!</span>")
