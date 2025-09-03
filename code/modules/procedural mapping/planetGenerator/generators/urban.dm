@@ -54,15 +54,15 @@
 			BIOME_LOWEST_HUMIDITY = /datum/biome/cave/urban,
 			BIOME_LOW_HUMIDITY = /datum/biome/cave/urban,
 			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/urban,
-			BIOME_HIGH_HUMIDITY = /datum/biome/cave/urban/ruins,
-			BIOME_HIGHEST_HUMIDITY = /datum/biome/cave/urban/ruins
+			BIOME_HIGH_HUMIDITY = /datum/biome/cave/urban,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/cave/urban
 		),
 		BIOME_COLD_CAVE = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/cave/urban,
 			BIOME_LOW_HUMIDITY = /datum/biome/cave/urban,
-			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/urban/ruins,
-			BIOME_HIGH_HUMIDITY = /datum/biome/cave/urban/ruins,
-			BIOME_HIGHEST_HUMIDITY = /datum/biome/cave/urban/contaminated
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/urban,
+			BIOME_HIGH_HUMIDITY = /datum/biome/cave/urban,
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/cave/urban
 		),
 		BIOME_WARM_CAVE = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/cave/urban,
