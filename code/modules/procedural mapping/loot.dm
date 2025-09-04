@@ -1,8 +1,3 @@
-#define COMMON_LOOT 100
-#define UNCOMMON_LOOT 50
-#define RARE_LOOT 10
-#define VERY_RARE_LOOT 1
-
 //Loot tables
 /datum/loot_table
 	var/list/loot = list()
@@ -10,144 +5,212 @@
 
 /datum/loot_table/bedsheet
 	loot = list(
-		/obj/item/weapon/bedsheet/black = COMMON_LOOT,
-		/obj/item/weapon/bedsheet/blue = COMMON_LOOT,
-		/obj/item/weapon/bedsheet/brown = COMMON_LOOT,
-		/obj/item/weapon/bedsheet/green = COMMON_LOOT,
-		/obj/item/weapon/bedsheet/medical = COMMON_LOOT,
-		/obj/item/weapon/bedsheet/orange = COMMON_LOOT,
-		/obj/item/weapon/bedsheet/plaid = UNCOMMON_LOOT,
-		/obj/item/weapon/bedsheet/purple = COMMON_LOOT,
-		/obj/item/weapon/bedsheet/red = COMMON_LOOT,
-		/obj/item/weapon/bedsheet/yellow = COMMON_LOOT,
-		/obj/item/weapon/bedsheet/clown = UNCOMMON_LOOT,
-		/obj/item/weapon/bedsheet/linen = UNCOMMON_LOOT,
-		/obj/item/weapon/bedsheet/mime = UNCOMMON_LOOT,
-		/obj/item/weapon/bedsheet/rainbow = UNCOMMON_LOOT,
-		/obj/item/weapon/bedsheet/rd = RARE_LOOT,
-		/obj/item/weapon/bedsheet/hop = RARE_LOOT,
-		/obj/item/weapon/bedsheet/hos = RARE_LOOT,
-		/obj/item/weapon/bedsheet/captain = RARE_LOOT,
-		/obj/item/weapon/bedsheet/ce = RARE_LOOT,
+		"common" = list(
+			/obj/item/weapon/bedsheet/black,
+			/obj/item/weapon/bedsheet/blue,
+			/obj/item/weapon/bedsheet/brown,
+			/obj/item/weapon/bedsheet/green,
+			/obj/item/weapon/bedsheet/medical,
+			/obj/item/weapon/bedsheet/orange,
+			/obj/item/weapon/bedsheet/purple,
+			/obj/item/weapon/bedsheet/red,
+			/obj/item/weapon/bedsheet/yellow,
+		),
+		"uncommon" = list(
+			/obj/item/weapon/bedsheet/plaid,
+			/obj/item/weapon/bedsheet/clown,
+			/obj/item/weapon/bedsheet/linen,
+			/obj/item/weapon/bedsheet/mime,
+			/obj/item/weapon/bedsheet/rainbow,
+		),
+		"rare" = list(
+			/obj/item/weapon/bedsheet/rd,
+			/obj/item/weapon/bedsheet/hop,
+			/obj/item/weapon/bedsheet/hos,
+			/obj/item/weapon/bedsheet/captain,
+			/obj/item/weapon/bedsheet/ce,
+		),
+		"very rare" = list()
 	)
 
 /datum/loot_table/bureaucracy
 	loot = list(
-		/obj/item/toy/crayon/black = COMMON_LOOT,
-		/obj/item/toy/crayon/blue = COMMON_LOOT,
-		/obj/item/toy/crayon/green = COMMON_LOOT,
-		/obj/item/toy/crayon/mime = COMMON_LOOT,
-		/obj/item/toy/crayon/orange = COMMON_LOOT,
-		/obj/item/toy/crayon/purple = COMMON_LOOT,
-		/obj/item/toy/crayon/rainbow = COMMON_LOOT,
-		/obj/item/toy/crayon/red = COMMON_LOOT,
-		/obj/item/toy/crayon/yellow = COMMON_LOOT,
-		/obj/item/weapon/folder = COMMON_LOOT,
-		/obj/item/weapon/folder/black = COMMON_LOOT,
-		/obj/item/weapon/folder/blue = COMMON_LOOT,
-		/obj/item/weapon/folder/green = COMMON_LOOT,
-		/obj/item/weapon/folder/mime = COMMON_LOOT,
-		/obj/item/weapon/folder/orange = COMMON_LOOT,
-		/obj/item/weapon/folder/purple = COMMON_LOOT,
-		/obj/item/weapon/folder/rainbow = COMMON_LOOT,
-		/obj/item/weapon/folder/red = COMMON_LOOT,
-		/obj/item/weapon/folder/white = COMMON_LOOT,
-		/obj/item/weapon/folder/yellow = COMMON_LOOT,
-		/obj/item/weapon/gavelblock = COMMON_LOOT,
-		/obj/item/weapon/gavelhammer = COMMON_LOOT,
-		/obj/item/weapon/hand_labeler = COMMON_LOOT,
-		/obj/item/weapon/paper/random = COMMON_LOOT,
-		/obj/item/weapon/paper_bin = COMMON_LOOT,
-		/obj/item/weapon/paper_pack = COMMON_LOOT,
-		/obj/item/weapon/pen = COMMON_LOOT,
-		/obj/item/weapon/pen/blue = COMMON_LOOT,
-		/obj/item/weapon/pen/fountain = COMMON_LOOT,
-		/obj/item/weapon/pen/invisible = COMMON_LOOT,
-		/obj/item/weapon/pen/red = COMMON_LOOT,
-		/obj/item/weapon/stamp/denied = COMMON_LOOT,
-		/obj/item/weapon/storage/photo_album = COMMON_LOOT,
-		/obj/item/weapon/glue/temp_glue = UNCOMMON_LOOT,
-		/obj/item/weapon/pen/multi = UNCOMMON_LOOT,
-		/obj/item/weapon/pen/sleepypen = UNCOMMON_LOOT,
-		/obj/item/weapon/stamp/captain = UNCOMMON_LOOT,
-		/obj/item/weapon/stamp/ce = UNCOMMON_LOOT,
-		/obj/item/weapon/stamp/chaplain = UNCOMMON_LOOT,
-		/obj/item/weapon/stamp/clown = UNCOMMON_LOOT,
-		/obj/item/weapon/stamp/cmo = UNCOMMON_LOOT,
-		/obj/item/weapon/stamp/hop = UNCOMMON_LOOT,
-		/obj/item/weapon/stamp/hos = UNCOMMON_LOOT,
-		/obj/item/weapon/stamp/hos = UNCOMMON_LOOT,
-		/obj/item/weapon/stamp/iaa = UNCOMMON_LOOT,
-		/obj/item/weapon/stamp/judge = UNCOMMON_LOOT,
-		/obj/item/weapon/stamp/mime = UNCOMMON_LOOT,
-		/obj/item/weapon/stamp/rd = UNCOMMON_LOOT,
-		/obj/item/weapon/stamp/trader = UNCOMMON_LOOT,
-		/obj/item/weapon/stamp/warden = UNCOMMON_LOOT,
-		/obj/item/weapon/storage/briefcase = UNCOMMON_LOOT,
-		/obj/item/weapon/storage/briefcase/centcomm = UNCOMMON_LOOT,
-		/obj/item/weapon/glue = RARE_LOOT,
-		/obj/item/weapon/pen/paralysis = RARE_LOOT,
-		/obj/item/weapon/pen/tactical = RARE_LOOT,
-		/obj/item/weapon/storage/briefcase/insurance = RARE_LOOT,
-		/obj/item/weapon/storage/briefcase/orderly = RARE_LOOT,
-		/obj/item/weapon/storage/briefcase/false_bottomed = VERY_RARE_LOOT,
+		"common" = list(
+			/obj/item/toy/crayon/black,
+			/obj/item/toy/crayon/blue,
+			/obj/item/toy/crayon/green,
+			/obj/item/toy/crayon/mime,
+			/obj/item/toy/crayon/orange,
+			/obj/item/toy/crayon/purple,
+			/obj/item/toy/crayon/rainbow,
+			/obj/item/toy/crayon/red,
+			/obj/item/toy/crayon/yellow,
+			/obj/item/weapon/folder,
+			/obj/item/weapon/folder/black,
+			/obj/item/weapon/folder/blue,
+			/obj/item/weapon/folder/green,
+			/obj/item/weapon/folder/mime,
+			/obj/item/weapon/folder/orange,
+			/obj/item/weapon/folder/purple,
+			/obj/item/weapon/folder/rainbow,
+			/obj/item/weapon/folder/red,
+			/obj/item/weapon/folder/white,
+			/obj/item/weapon/folder/yellow,
+			/obj/item/weapon/gavelblock,
+			/obj/item/weapon/gavelhammer,
+			/obj/item/weapon/hand_labeler,
+			/obj/item/weapon/paper/random,
+			/obj/item/weapon/paper_bin,
+			/obj/item/weapon/paper_pack,
+			/obj/item/weapon/pen,
+			/obj/item/weapon/pen/blue,
+			/obj/item/weapon/pen/fountain,
+			/obj/item/weapon/pen/invisible,
+			/obj/item/weapon/pen/red,
+			/obj/item/weapon/stamp/denied,
+			/obj/item/weapon/storage/photo_album,
+		),
+		"uncommon" = list(
+			/obj/item/weapon/glue/temp_glue,
+			/obj/item/weapon/pen/multi,
+			/obj/item/weapon/pen/sleepypen,
+			/obj/item/weapon/stamp/captain,
+			/obj/item/weapon/stamp/ce,
+			/obj/item/weapon/stamp/chaplain,
+			/obj/item/weapon/stamp/clown,
+			/obj/item/weapon/stamp/cmo,
+			/obj/item/weapon/stamp/hop,
+			/obj/item/weapon/stamp/hos,
+			/obj/item/weapon/stamp/hos,
+			/obj/item/weapon/stamp/iaa,
+			/obj/item/weapon/stamp/judge,
+			/obj/item/weapon/stamp/mime,
+			/obj/item/weapon/stamp/rd,
+			/obj/item/weapon/stamp/trader,
+			/obj/item/weapon/stamp/warden,
+			/obj/item/weapon/storage/briefcase,
+			/obj/item/weapon/storage/briefcase/centcomm,
+		),
+		"rare" = list(
+			/obj/item/weapon/glue,
+			/obj/item/weapon/pen/paralysis,
+			/obj/item/weapon/pen/tactical,
+			/obj/item/weapon/storage/briefcase/insurance,
+			/obj/item/weapon/storage/briefcase/orderly,
+		),
+		"very rare" = list(
+			/obj/item/weapon/storage/briefcase/false_bottomed,
+		)
 	)
 
 /datum/loot_table/clothing
-	loot = list()
+	loot = list(
+		"common" = list(),
+		"uncommon" = list(),
+		"rare" = list(),
+		"very rare" = list()
+	)
 
 /datum/loot_table/combat
-	loot = list()
+	loot = list(
+		"common" = list(),
+		"uncommon" = list(),
+		"rare" = list(),
+		"very rare" = list()
+	)
 
 /datum/loot_table/decoration
-	loot = list()
+	loot = list(
+		"common" = list(),
+		"uncommon" = list(),
+		"rare" = list(),
+		"very rare" = list()
+	)
 
 /datum/loot_table/engineering
-	loot = list()
+	loot = list(
+		"common" = list(),
+		"uncommon" = list(),
+		"rare" = list(),
+		"very rare" = list()
+	)
 
 /datum/loot_table/entertainment
-	loot = list()
+	loot = list(
+		"common" = list(),
+		"uncommon" = list(),
+		"rare" = list(),
+		"very rare" = list()
+	)
 
 /datum/loot_table/exotic
-	loot = list()
+	loot = list(
+		"common" = list(),
+		"uncommon" = list(),
+		"rare" = list(),
+		"very rare" = list()
+	)
 
 /datum/loot_table/food_or_drink
-	loot = list()
+	loot = list(
+		"common" = list(),
+		"uncommon" = list(),
+		"rare" = list(),
+		"very rare" = list()
+	)
 
 /datum/loot_table/medical
-	loot = list()
+	loot = list(
+		"common" = list(),
+		"uncommon" = list(),
+		"rare" = list(),
+		"very rare" = list()
+	)
 
 /datum/loot_table/module
 	loot = list(
-		/obj/item/weapon/aiModule/core/asimov = COMMON_LOOT,
-		/obj/item/weapon/aiModule/core/corp = COMMON_LOOT,
-		/obj/item/weapon/aiModule/core/nanotrasen = COMMON_LOOT,
-		/obj/item/weapon/aiModule/core/robocop = COMMON_LOOT,
-		/obj/item/weapon/aiModule/freeform/core = COMMON_LOOT,
-		/obj/item/weapon/aiModule/keeper = COMMON_LOOT,
-		/obj/item/weapon/aiModule/purge = COMMON_LOOT,
-		/obj/item/weapon/aiModule/core/hogan = UNCOMMON_LOOT,
-		/obj/item/weapon/aiModule/core/lazymov = UNCOMMON_LOOT,
-		/obj/item/weapon/aiModule/core/paladin = UNCOMMON_LOOT,
-		/obj/item/weapon/aiModule/core/tyrant = UNCOMMON_LOOT,
-		/obj/item/weapon/aiModule/randomize = UNCOMMON_LOOT,
-		/obj/item/weapon/aiModule/standard/protectStation = UNCOMMON_LOOT,
-		/obj/item/weapon/aiModule/standard/teleporterOffline = UNCOMMON_LOOT,
-		/obj/item/weapon/aiModule/core/antimov = RARE_LOOT,
-		/obj/item/weapon/aiModule/standard/oxygen = RARE_LOOT,
-		/obj/item/weapon/aiModule/standard/quarantine = RARE_LOOT,
-		/obj/item/weapon/aiModule/freeform/syndicate = VERY_RARE_LOOT,
-		/obj/item/weapon/aiModule/targetted/safeguard = VERY_RARE_LOOT,
-		/obj/item/weapon/aiModule/targetted/oneHuman = VERY_RARE_LOOT,
+		"common" = list(
+			/obj/item/weapon/aiModule/core/asimov,
+			/obj/item/weapon/aiModule/core/corp,
+			/obj/item/weapon/aiModule/core/nanotrasen,
+			/obj/item/weapon/aiModule/core/robocop,
+			/obj/item/weapon/aiModule/freeform/core,
+			/obj/item/weapon/aiModule/keeper,
+			/obj/item/weapon/aiModule/purge,
+		),
+		"uncommon" = list(
+			/obj/item/weapon/aiModule/core/hogan,
+			/obj/item/weapon/aiModule/core/lazymov,
+			/obj/item/weapon/aiModule/core/paladin,
+			/obj/item/weapon/aiModule/core/tyrant,
+			/obj/item/weapon/aiModule/randomize,
+			/obj/item/weapon/aiModule/standard/protectStation,
+			/obj/item/weapon/aiModule/standard/teleporterOffline,
+		),
+		"rare" = list(
+			/obj/item/weapon/aiModule/core/antimov,
+			/obj/item/weapon/aiModule/standard/oxygen,
+			/obj/item/weapon/aiModule/standard/quarantine,
+		),
+		"very rare" = list(
+			/obj/item/weapon/aiModule/freeform/syndicate,
+			/obj/item/weapon/aiModule/targetted/safeguard,
+			/obj/item/weapon/aiModule/targetted/oneHuman,
+		)
 	)
 
 /datum/loot_table/structure
-	loot = list()
+	loot = list(
+		"common" = list(),
+		"uncommon" = list(),
+		"rare" = list(),
+		"very rare" = list()
+	)
 
 /datum/loot_table/trash
-	loot = list()
-
-#undef COMMON_LOOT
-#undef UNCOMMON_LOOT
-#undef RARE_LOOT
-#undef VERY_RARE_LOOT
+	loot = list(
+		"common" = list(),
+		"uncommon" = list(),
+		"rare" = list(),
+		"very rare" = list()
+	)
