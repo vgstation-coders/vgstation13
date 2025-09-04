@@ -21,8 +21,6 @@
 	var/mapControl = "map"
 	/// The tooltip HTML, for caching
 	var/html = ""
-	/// Whether tooltip debugging enabled
-	var/debug = FALSE
 	/// The tooltip used for hovering over a target (we assume clients can only hover over one thing at a time)
 	var/datum/tooltip/hoverTip = null
 
@@ -120,9 +118,6 @@
 	clearAll()
 	preload()
 
-/datum/tooltips/proc/toggleDebug()
-	debug = !debug
-	reset()
 
 	/// Called when a tooltip is deleted. Do not call manually.
 /datum/tooltips/proc/onTooltipRemoved(datum/tooltip/tooltip)
@@ -157,7 +152,6 @@
 
 /datum/tooltip/proc/create()
 	var/isDisabled = !pinned
-	if (holder.debug) isDisabled = FALSE
 	winset(holder.owner, window, list2params(alist(
 		"parent" = holder.mapId,
 		"type" = "browser",
@@ -176,7 +170,6 @@
 				ref: '\ref[src]',
 				windowId: '[window]',
 				mapControlId: '[holder.mapId].[holder.mapControl]',
-				debug: [holder.debug ? "true" : "false"],
 			};
 		</script>
 	"})
