@@ -118,7 +118,8 @@
 				genemutcheck(user,CLUMSYBLOCK,null,MUTCHK_FORCED)
 				user.update_mutations()
 				var/turf/T = get_turf(user)
-				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvenate.ogg',anim_plane = MOB_PLANE)
+				playsound(T,'sound/items/bikehorn.ogg',50)
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = EFFECTS_PLANE)
 				if(my_rel.religiousLeader?.current)
 					my_rel.convertAct(my_rel.religiousLeader.current,user,src)
 
