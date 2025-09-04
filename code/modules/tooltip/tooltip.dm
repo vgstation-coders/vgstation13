@@ -1,3 +1,8 @@
+////////////////////////////////////////////////////////////////////////////////
+/// Made by Wirewraith for goonstation. Ported by mentgah with authorisation ///
+////////////////////////////////////////////////////////////////////////////////
+
+
 //Alignment around the turf. Any can be combined with center (top and bottom for horizontal centering, left and right for vertical).
 #define TOOLTIP_BOTTOM 0
 #define TOOLTIP_TOP 1
