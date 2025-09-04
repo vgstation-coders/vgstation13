@@ -88,7 +88,7 @@
 	to_chat(user, "<span class='danger'>You feel incredibly hilarious for [action] [src]!</span>")
 	spawn(rand(10,30))
 		if(user)
-			user.show_message("<span class='game say'><span class='name'>[my_rel.deity_name]</span> says, \"HONK!\"",2)
+			user.show_message("<span class='game say'><span class='name'>[my_rel.deity_name]</span> says, \"You intend to swear your life to the Path of the Jester? Very well, clown. Make me laugh.\"",2)
 			sleep(10)
 			if(user)
 				to_chat(user, "<span class='danger'>You were stamped by [my_rel.deity_name]'s print of clumsiness.</span>")

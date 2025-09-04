@@ -1227,7 +1227,7 @@ var/list/all_bible_styles = list(
 	bible_type = /obj/item/weapon/storage/bible/clown
 	convert_method = "having them fart on your bible."
 	bookstyle = "Honk"
-	retribution_message = "HONK!"
+	retribution_message = "You intend to swear your life to the Path of the Jester? Very well, clown. Make me laugh."
 
 /datum/religion/clown/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/mask/gas/clown_hat(H), slot_wear_mask)
