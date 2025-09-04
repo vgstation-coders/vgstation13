@@ -11,6 +11,7 @@
 	wires = WIRE_PULSE
 
 	secured = TRUE
+	accepts_electronics = TRUE
 
 	var/on = FALSE
 	var/visible = TRUE
@@ -132,8 +133,10 @@
 	return 1
 
 
-/obj/item/device/assembly/infra/proc/trigger_beam()
+/obj/item/device/assembly/infra/proc/trigger_beam(atom/movable/AM)
 	if((!secured)||(!on)||(cooldown > 0))
+		return 0
+	if(AM && !allowed(AM))
 		return 0
 	pulse(0)
 	if(!holder)
@@ -246,9 +249,9 @@
 		var/obj/effect/beam/infrared/B=next
 		B.set_visible(v)
 
-/obj/effect/beam/infrared/proc/hit()
+/obj/effect/beam/infrared/proc/hit(atom/movable/AM)
 	if(assembly && stepped)//by checking for stepped we ensure the hit won't be triggered while the beam is still deploying
-		assembly.trigger_beam()
+		assembly.trigger_beam(AM)
 
 ////////////////////////////////////Entering the beam triggers the emitter//////////////////////
 /obj/effect/beam/infrared/Crossed(var/atom/movable/AM)
@@ -268,7 +271,7 @@
 		return
 	if (!ismob(AM) && AM.Cross(src))
 		return
-	hit()
+	hit(AM)
 	..()
 
 /obj/effect/beam/infrared/Bumped(var/atom/movable/AM)
@@ -276,18 +279,18 @@
 		return
 	if(istype(AM, /obj/effect/beam) || !AM.density)
 		return
-	hit()
+	hit(AM)
 	..()
 
 ////////////////////////////////////Leaving the beam triggers the emitter//////////////////////
 /obj/effect/beam/infrared/target_moved(atom/movable/mover)
-	hit()
+	hit(mover)
 	..()
 
 /obj/effect/beam/infrared/target_density_change(atom/atom)
-	hit()
+	hit(atom)
 	..()
 
 /obj/effect/beam/infrared/target_destroyed(datum/thing)
-	hit()
+	hit(thing)
 	..()
