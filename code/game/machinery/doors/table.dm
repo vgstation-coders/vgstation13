@@ -99,10 +99,34 @@
 		return TryToSwitchState(user) //also >nesting if statements
 
 /obj/machinery/door/table/attack_paw(mob/user)
+	if(M_HULK in user.mutations)
+		user.do_attack_animation(src, user)
+		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+		visible_message("<span class='danger'>[user] smashes the [src] apart!</span>")
+		user.delayNextAttack(8)
+		dismantle()
+		return
 	return TryToSwitchState(user)
 
 /obj/machinery/door/table/attack_hand(mob/user)
+	if(M_HULK in user.mutations)
+		user.do_attack_animation(src, user)
+		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
+		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+		dismantle()
+		return
 	return TryToSwitchState(user)
+
+/obj/machinery/door/table/attack_alien(mob/living/user)
+	user.do_attack_animation(src, user)
+	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
+	dismantle()
+
+/obj/machinery/door/table/attack_animal(mob/living/simple_animal/user)
+	if(user.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
+		user.do_attack_animation(src, user)
+		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
+		dismantle()
 
 /obj/machinery/door/table/proc/TryToSwitchState(mob/user)
 	if(operating)
