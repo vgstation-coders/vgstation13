@@ -304,6 +304,8 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 				else
 					req_access = electronics.conf_access
 			electronics.installed = TRUE
+			underlays.Cut()
+			underlays += image(icon,src,"id_under")
 			to_chat(user, "<span class='notice'>You add [electronics] to [src].</span>")
 	..()
 	return
