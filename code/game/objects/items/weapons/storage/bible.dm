@@ -117,8 +117,8 @@
 				user.dna.SetSEState(CLUMSYBLOCK,1)
 				genemutcheck(user,CLUMSYBLOCK,null,MUTCHK_FORCED)
 				user.update_mutations()
-				if(my_rel.religiousLeader)
-					my_rel.convertAct(my_rel.religiousLeader,user,src)
+				if(my_rel.religiousLeader?.current)
+					my_rel.convertAct(my_rel.religiousLeader.current,user,src)
 
 /obj/item/weapon/storage/bible/clown/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>")
