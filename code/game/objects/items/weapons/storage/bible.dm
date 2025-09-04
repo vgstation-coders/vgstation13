@@ -83,6 +83,7 @@
 
 /obj/item/weapon/storage/bible/clown/divine_retribution(var/mob/living/user, var/action = "doing something to")
 	if(clumsy_check(user)) //Already a clown, no point.
+		bless_mob(null,user) //Except for this!
 		return
 	to_chat(user, "<span class='danger'>You feel incredibly hilarious for [action] [src]!</span>")
 	spawn(rand(10,30))
@@ -257,7 +258,8 @@
 /obj/item/weapon/storage/bible/proc/bless_mob(mob/living/carbon/human/user, mob/living/carbon/human/H)
 	var/datum/organ/internal/brain/sponge = H.internal_organs_by_name["brain"]
 	if(sponge && sponge.damage >= 60) //Massive brain damage
-		to_chat(user, "<span class='warning'>[H] responds to \the [src]'s blessing with drooling and an empty stare. [my_rel.deity_name]'s teachings appear to be lost on this poor soul.</span>")
+		if(user)
+			to_chat(user, "<span class='warning'>[H] responds to \the [src]'s blessing with drooling and an empty stare. [my_rel.deity_name]'s teachings appear to be lost on this poor soul.</span>")
 		return //Brainfart
 	//TODO: Put code for followers right here
 	if(prob(20)) //1/5 chance of adding some brain damage. You can't just heal people for free
