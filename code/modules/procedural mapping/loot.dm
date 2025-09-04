@@ -1,7 +1,11 @@
 //Loot tables
 /datum/loot_table
-	var/list/loot = list()
-
+	var/list/loot = list(
+		"common" = list(),
+		"uncommon" = list(),
+		"rare" = list(),
+		"very rare" = list()
+	)
 
 /datum/loot_table/bedsheet
 	loot = list(
