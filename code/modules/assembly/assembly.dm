@@ -288,7 +288,8 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 			to_chat(user, "<span class='notice'>\The [src] can now be attached!</span>")
 		if (electronics)
 			to_chat(user, "<span class='notice'>You remove [electronics] from [src].</span>")
-			electronics.forceMove(loc)
+			electronics.forceMove(get_turf(src))
+			user.put_in_hands(electronics)
 			electronics = null
 			req_access = list()
 			req_one_access = list()
