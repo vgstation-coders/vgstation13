@@ -189,7 +189,7 @@ var/global/list/screen_alarms_locs = list(
 /obj/abstract/screen/alert/MouseEntered(location,control,params)
 	if(!gcDestroyed)
 		//openToolTip(usr, src, params, title = name, content = desc, theme = alerttooltipstyle)
-		usr.client?.tooltips.show(src, mouse=params, title=name, content=desc)
+		usr.client?.tooltips.show(src, mouse=params, title=name, content=desc, theme = alerttooltipstyle)
 
 /obj/abstract/screen/alert/MouseExited()
 	usr.client?.tooltips.hide()
