@@ -30,33 +30,33 @@
 	..()
 	spawn(0)
 		if (!C) return
-		src.owner = C
-		src.clearAll()
-		src.loadAssets()
-		src.preload()
+		owner = C
+		clearAll()
+		loadAssets()
+		preload()
 
 	/// Special method to remove all tooltip windows
 	/// Used on client login to clean up any tooltips that might have been stuck open from a previous round
 /datum/tooltips/proc/clearAll()
 	//
-	if (!src.owner) return
-	for (var/window,windowId in params2list(winget(src.owner, "[src.mapId].*", "id")))
-		if (findtext(windowId, src.windowPrefix, 1, length(src.windowPrefix) + 1))
-			winset(src.owner, windowId, "parent=none")
+	if (!owner) return
+	for (var/window,windowId in params2list(winget(owner, "[mapId].*", "id")))
+		if (findtext(windowId, windowPrefix, 1, length(windowPrefix) + 1))
+			winset(owner, windowId, "parent=none")
 
 	/// Send browser assets to the client
 
 /datum/tooltips/proc/loadAssets()
 
 	register_asset("tooltip.css", 'code/modules/tooltip/tooltip.css')
-	send_asset(src.owner, "tooltip.css")
+	send_asset(owner, "tooltip.css")
 	register_asset("eta.min.js", 'code/modules/tooltip/eta.min.js')
-	send_asset(src.owner, "eta.min.js")
+	send_asset(owner, "eta.min.js")
 	register_asset("tooltip.js", 'code/modules/tooltip/tooltip.js')
-	send_asset(src.owner, "tooltip.js")
+	send_asset(owner, "tooltip.js")
 
 
-	src.html = file2text('code/modules/tooltip/tooltip.html')
+	html = file2text('code/modules/tooltip/tooltip.html')
 
 	/// Determine if we're allowed to show hover tooltips to a client
 /datum/tooltips/proc/canShowHover()
@@ -98,42 +98,39 @@
 	
 	var/datum/tooltip/tooltip = null
 	tooltip = new /datum/tooltip(src)
-	src.hoverTip = tooltip
+	hoverTip = tooltip
 	tooltip.preloading = TRUE
 	tooltip.create()
 	return tooltip
 
 	/**
 	 * Hide a tooltip
-	 *
-	 * Arguments:
-	 * * target (atom) - The target of the tooltip (only required if hiding a pinned tooltip)
 	 */
-/datum/tooltips/proc/hide(atom/target)
-	src.hoverTip?.hide()
+/datum/tooltips/proc/hide()
+	hoverTip?.hide()
 
 /datum/tooltips/proc/hideAll()
-	src.hide()
+	hide()
 
 	/// Escape hatch to completely reset in case of a broken state
 /datum/tooltips/proc/reset()
-	src.loadAssets()
-	src.hoverTip?.remove()
-	src.clearAll()
-	src.preload()
+	loadAssets()
+	hoverTip?.remove()
+	clearAll()
+	preload()
 
 /datum/tooltips/proc/toggleDebug()
-	src.debug = !src.debug
-	src.reset()
+	debug = !debug
+	reset()
 
 	/// Called when a tooltip is deleted. Do not call manually.
 /datum/tooltips/proc/onTooltipRemoved(datum/tooltip/tooltip)
-	if (src.hoverTip == tooltip)
-		src.hoverTip = null
+	if (hoverTip == tooltip)
+		hoverTip = null
 
 	/// Called on window resize
 /datum/tooltips/proc/onResize()
-	src.hideAll()
+	hideAll()
 
 
 /datum/tooltip
@@ -154,14 +151,14 @@
 	src.options = new()
 
 /datum/tooltip/Destroy()
-	src.remove()
+	remove()
 	..()
 
 /datum/tooltip/proc/create()
-	var/isDisabled = !src.pinned
-	if (src.holder.debug) isDisabled = FALSE
-	winset(src.holder.owner, src.window, list2params(alist(
-		"parent" = src.holder.mapId,
+	var/isDisabled = !pinned
+	if (holder.debug) isDisabled = FALSE
+	winset(holder.owner, window, list2params(alist(
+		"parent" = holder.mapId,
 		"type" = "browser",
 		"pos" = "0,0",
 		"size" = "1x1",
@@ -172,19 +169,19 @@
 		"use-title" = TRUE,
 	)))
 
-	var/html = replacetext(src.holder.html, "<!-- TOOLTIP_CONFIG -->", {"
+	var/html = replacetext(holder.html, "<!-- TOOLTIP_CONFIG -->", {"
 		<script>
 			window.tooltip_config = {
 				ref: '\ref[src]',
-				windowId: '[src.window]',
-				mapControlId: '[src.holder.mapId].[src.holder.mapControl]',
-				debug: [src.holder.debug ? "true" : "false"],
+				windowId: '[window]',
+				mapControlId: '[holder.mapId].[holder.mapControl]',
+				debug: [holder.debug ? "true" : "false"],
 			};
 		</script>
 	"})
 
-	src.holder.owner << browse(html, list2params(list("window" = src.window)))
-	src.focusMap()
+	holder.owner << browse(html, list2params(list("window" = window)))
+	focusMap()
 
 
 
@@ -200,10 +197,10 @@
 
 /datum/tooltip/proc/getView()
 	
-	var/viewX = src.holder.owner.view
-	var/viewY = src.holder.owner.view
-	if (istext(src.holder.owner.view))
-		var/list/viewSizes = splittext(src.holder.owner.view, "x")
+	var/viewX = holder.owner.view
+	var/viewY = holder.owner.view
+	if (istext(holder.owner.view))
+		var/list/viewSizes = splittext(holder.owner.view, "x")
 		viewX = (text2num(viewSizes[1]) - 1) / 2
 		viewY = (text2num(viewSizes[2]) - 1) / 2
 	return alist("x" = viewX, "y" = viewY)
@@ -228,26 +225,26 @@
 
 /datum/tooltip/proc/build()
 	
-	var/atom/refTarget = src.target.get()
+	var/atom/refTarget = target.get()
 	if (!refTarget) return
 
-	if (!src.options.bounds["width"] && !src.options.bounds["height"])
+	if (!options.bounds["width"] && !options.bounds["height"])
 		var/icon/targetIcon = icon(refTarget.icon)
-		src.options.setBounds(list(targetIcon.Width(), targetIcon.Height()))
+		options.setBounds(list(targetIcon.Width(), targetIcon.Height()))
 
-	src.options.pinned = src.pinned
-	src.options.transform = refTarget.transform
-	src.options.hud = !refTarget.z
+	options.pinned = pinned
+	options.transform = refTarget.transform
+	options.hud = !refTarget.z
 
-	var/list/iconSize = src.getIconSize()
-	var/list/clientView = src.getView()
+	var/list/iconSize = getIconSize()
+	var/list/clientView = getView()
 
-	if (length(src.options.mouse["left"]) == 0)
-		src.setMouseWithoutParams(clientView, iconSize)
+	if (length(options.mouse["left"]) == 0)
+		setMouseWithoutParams(clientView, iconSize)
 
 	var/params = list2params(list(
 		json_encode(alist(
-			"options" = src.options.toList(),
+			"options" = options.toList(),
 			"world" = alist(
 				"maxx" = world.maxx,
 				"maxy" = world.maxy,
@@ -256,22 +253,22 @@
 			"client" = alist(
 				"view" = clientView,
 				"bounds" = alist(
-					"width" = src.holder.owner.bound_width,
-					"height" = src.holder.owner.bound_height,
+					"width" = holder.owner.bound_width,
+					"height" = holder.owner.bound_height,
 				),
 			),
 		))
 	))
 
-	if (src.hiding) return
-	src.holder.owner << output(params, "[src.window]:tooltip.init")
+	if (hiding) return
+	holder.owner << output(params, "[window]:tooltip.init")
 
 /datum/tooltip/proc/update()
 	
-	if (src.hiding) return
-	src.holder.owner << output(list2params(list(json_encode(alist(
-		"options" = src.options.toList(),
-	)))), "[src.window]:tooltip.update")
+	if (hiding) return
+	holder.owner << output(list2params(list(json_encode(alist(
+		"options" = options.toList(),
+	)))), "[window]:tooltip.update")
 
 
 /datum/tooltip/proc/show(atom/target, mouse, title, content, theme, list/align, list/size, list/offset, list/bounds, list/extra)
@@ -301,34 +298,35 @@
 		src.loaded ? src.build() : src.create()
 
 /datum/tooltip/proc/hide()
-	if (src.hiding || !src.holder) return
-	src.hiding = TRUE
-	src.holder.owner << output("", "[src.window]:tooltip.hide")
+	if (hiding || !holder) 
+		return
+	hiding = TRUE
+	holder.owner << output("", "[window]:tooltip.hide")
 
 /datum/tooltip/proc/onHidden()
-	src.showing = FALSE
-	if (src.holder?.owner?.mob)
-		usr.unregister_event(/event/death, src.holder.owner.mob, nameof(src::hide()))
+	showing = FALSE
+	if (holder?.owner?.mob)
+		usr.unregister_event(/event/death, holder.owner.mob, nameof(src::hide()))
 
 
 /datum/tooltip/proc/remove()
-	src.hiding = TRUE
-	winset(src.holder.owner, src.window, "parent=null")
-	src.onHidden()
-	src.holder.onTooltipRemoved(src)
+	hiding = TRUE
+	winset(holder.owner, window, "parent=null")
+	onHidden()
+	holder.onTooltipRemoved(src)
 
 /datum/tooltip/proc/focusMap()
-	winset(src.holder.owner, "[src.holder.mapId].[src.holder.mapControl]", "focus=1")
+	winset(holder.owner, "[holder.mapId].[holder.mapControl]", "focus=1")
 
 /datum/tooltip/Topic(href, href_list)
 	switch (href_list["action"])
 		if ("loaded")
-			src.loaded = TRUE
-			if (!src.preloading) src.build()
+			loaded = TRUE
+			if (!preloading) build()
 		if ("showing")
-			src.showing = TRUE
+			showing = TRUE
 		if ("hidden")
-			src.onHidden()
+			onHidden()
 
 /datum/tooltipOptions
 	/// The text to display as a title
@@ -357,33 +355,33 @@
 	var/list/extra
 
 /datum/tooltipOptions/proc/reset()
-	src.title = null
-	src.content = null
-	src.theme = null
-	src.transform = null
-	src.pinned = FALSE
-	src.hud = FALSE
-	src.mouse = alist("left" = alist(), "bottom" = alist())
-	src.align = alist("x" = "left", "y" = "bottom")
-	src.size = alist("width" = 0, "height" = 0)
-	src.offset = alist("x" = 0, "y" = 0, "tiles" = alist())
-	src.bounds = alist("width" = 0, "height" = 0)
-	src.extra = alist()
+	title = null
+	content = null
+	theme = null
+	transform = null
+	pinned = FALSE
+	hud = FALSE
+	mouse = alist("left" = alist(), "bottom" = alist())
+	align = alist("x" = "left", "y" = "bottom")
+	size = alist("width" = 0, "height" = 0)
+	offset = alist("x" = 0, "y" = 0, "tiles" = alist())
+	bounds = alist("width" = 0, "height" = 0)
+	extra = alist()
 
 /datum/tooltipOptions/proc/toList()
 	return alist(
-		"title" = src.title,
-		"content" = src.content,
-		"theme" = src.theme,
-		"transform" = src.transform,
-		"pinned" = src.pinned,
-		"hud" = src.hud,
-		"mouse" = src.mouse,
-		"align" = src.align,
-		"size" = src.size,
-		"offset" = src.offset,
-		"bounds" = src.bounds,
-		"extra" = src.extra,
+		"title" = title,
+		"content" = content,
+		"theme" = theme,
+		"transform" = transform,
+		"pinned" = pinned,
+		"hud" = hud,
+		"mouse" = mouse,
+		"align" = align,
+		"size" = size,
+		"offset" = offset,
+		"bounds" = bounds,
+		"extra" = extra,
 	)
 
 /datum/tooltipOptions/proc/setContent(content)
@@ -396,23 +394,23 @@
 	 * * params (string) - Provided from MouseEntered (and similar) procs
 	 */
 /datum/tooltipOptions/proc/setMouse(params)
-	src.mouse = alist("left" = alist(), "bottom" = alist())
+	mouse = alist("left" = alist(), "bottom" = alist())
 	if (!params) return
 	params = params2list(params)
 
-	src.mouse["left"]["icon"] = text2num(params["icon-x"])
-	src.mouse["bottom"]["icon"] = text2num(params["icon-y"])
+	mouse["left"]["icon"] = text2num(params["icon-x"])
+	mouse["bottom"]["icon"] = text2num(params["icon-y"])
 
-	if (params["vis-x"]) src.mouse["left"]["vis"] = text2num(params["vis-x"])
-	if (params["vis-y"]) src.mouse["bottom"]["vis"] = text2num(params["vis-y"])
+	if (params["vis-x"]) mouse["left"]["vis"] = text2num(params["vis-x"])
+	if (params["vis-y"]) mouse["bottom"]["vis"] = text2num(params["vis-y"])
 
 	var/list/screenLoc = splittext(params["screen-loc"], ",")
 	var/list/screenLocLeft = splittext(screenLoc[1], ":")
-	src.mouse["left"]["tiles"] = text2num(screenLocLeft[1])
-	src.mouse["left"]["pixels"] = text2num(screenLocLeft[2])
+	mouse["left"]["tiles"] = text2num(screenLocLeft[1])
+	mouse["left"]["pixels"] = text2num(screenLocLeft[2])
 	var/list/screenLocBottom = splittext(screenLoc[2], ":")
-	src.mouse["bottom"]["tiles"] = text2num(screenLocBottom[1])
-	src.mouse["bottom"]["pixels"] = text2num(screenLocBottom[2])
+	mouse["bottom"]["tiles"] = text2num(screenLocBottom[1])
+	mouse["bottom"]["pixels"] = text2num(screenLocBottom[2])
 
 	/**
 	 * Set the position of the tooltip around the target
@@ -422,7 +420,7 @@
 	 * 					 			 Multiple flags can be combined, e.g. `TOOLTIP_TOP | TOOLTIP_CENTER`
 	 */
 /datum/tooltipOptions/proc/setAlign(flags)
-	src.align = alist("x" = "left", "y" = "bottom")
+	align = alist("x" = "left", "y" = "bottom")
 	if (!flags) return
 
 	var/list/newAlign = alist("x" = "", "y" = "")
@@ -436,7 +434,7 @@
 
 	if (!newAlign["x"]) newAlign["x"] = "left"
 	if (!newAlign["y"]) newAlign["y"] = "bottom"
-	src.align = newAlign
+	align = newAlign
 
 	/**
 	 * Override the size of the tooltip.
@@ -447,7 +445,7 @@
 	 * 										Use `0` for either to use the automatic size for that axis
 	 */
 /datum/tooltipOptions/proc/setSize(list/newSize)
-	src.size = alist(
+	size = alist(
 		"width" = newSize.len >= 1 ? newSize[1] : 0,
 		"height" = newSize.len >= 2 ? newSize[2] : 0,
 	)
@@ -459,8 +457,8 @@
 	 * * newOffset (list) - X and Y pixels respectively, e.g. `list(10, 20)`
 	 */
 /datum/tooltipOptions/proc/setOffset(list/newOffset)
-	src.offset["x"] = newOffset.len >= 1 ? newOffset[1] : 0
-	src.offset["y"] = newOffset.len >= 2 ? newOffset[2] : 0
+	offset["x"] = newOffset.len >= 1 ? newOffset[1] : 0
+	offset["y"] = newOffset.len >= 2 ? newOffset[2] : 0
 
 	/**
 	 * Set the dimensions of the target, required for tooltip positioning.
@@ -470,7 +468,7 @@
 	 * * newBounds (list) - Width and height respectively, e.g. `list(200, 300)`
 	 */
 /datum/tooltipOptions/proc/setBounds(list/newBounds)
-	src.bounds = alist(
+	bounds = alist(
 		"width" = newBounds.len >= 1 ? newBounds[1] : 0,
 		"height" = newBounds.len >= 2 ? newBounds[2] : 0,
 	)
@@ -483,4 +481,4 @@
 	 * * amount (int) - How many tiles to move
 	 */
 /datum/tooltipOptions/proc/pushTiles(direction, amount)
-	src.offset["tiles"][direction] = amount
+	offset["tiles"][direction] = amount
