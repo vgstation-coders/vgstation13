@@ -117,6 +117,8 @@
 				user.dna.SetSEState(CLUMSYBLOCK,1)
 				genemutcheck(user,CLUMSYBLOCK,null,MUTCHK_FORCED)
 				user.update_mutations()
+				var/turf/T = get_turf(user)
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvenate.ogg',anim_plane = MOB_PLANE)
 				if(my_rel.religiousLeader?.current)
 					my_rel.convertAct(my_rel.religiousLeader.current,user,src)
 
