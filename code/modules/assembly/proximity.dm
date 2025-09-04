@@ -75,7 +75,7 @@
 	if(is_type_in_list(AM, global.prox_sensor_ignored_types))
 		return
 
-	if(AM.move_speed < 12)
+	if(allowed(AM) && AM.move_speed < 12)
 		sense()
 
 /obj/item/device/assembly/prox_sensor/proc/sense()
