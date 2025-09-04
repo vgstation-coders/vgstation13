@@ -292,6 +292,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 			electronics = null
 			req_access = list()
 			req_one_access = list()
+			underlays.Cut()
 		return
 	if(accepts_electronics && istype(W,/obj/item/weapon/circuitboard/airlock))
 		if(W.icon_state == "door_electronics_smoked")
