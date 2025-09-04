@@ -10,6 +10,7 @@
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MAGNETS + "=1"
 	flags = HEAR
+	accepts_electronics = TRUE
 
 	var/listening = 0
 	var/recorded = "" //the activation message
@@ -32,7 +33,7 @@
 	else
 		if(!recorded || findtext(speech.message, recorded))
 			var/mob/living/L = speech.speaker
-			if(istype(L) && L.stuttering)
+			if(istype(L) && (L.stuttering || !allowed(L)))
 				return
 			if(istype(speech.speaker, /obj/item/device/assembly) || istype(speech.speaker, /obj/item/device/assembly_frame))
 				playsound(src, 'sound/machines/buzz-sigh.ogg', 25, 1)

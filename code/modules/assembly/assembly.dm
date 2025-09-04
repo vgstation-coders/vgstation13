@@ -36,6 +36,8 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	var/silent = 0
 	var/list/attached_overlays = list()
 	var/obj/item/device/assembly_holder/holder = null
+	var/obj/item/weapon/circuitboard/airlock/electronics = null
+	var/accepts_electronics = FALSE
 	var/cooldown = 0//To prevent spam
 	var/datum/wires/connected = null
 	var/wires = WIRE_RECEIVE | WIRE_PULSE
@@ -218,7 +220,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 		var/obj/item/device/assembly_frame/AF = src.loc
 
 		AF.eject_assembly(src)
-
+	QDEL_NULL(electronics)
 	..()
 
 /obj/item/device/assembly/pulsed(var/radio = 0)
@@ -284,7 +286,25 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 			to_chat(user, "<span class='notice'>\The [src] is ready!</span>")
 		else
 			to_chat(user, "<span class='notice'>\The [src] can now be attached!</span>")
+		if (electronics)
+			to_chat(user, "<span class='notice'>You remove [electronics] from [src].</span>")
+			electronics.forceMove(loc)
+			electronics = null
+			req_access = list()
+			req_one_access = list()
 		return
+	if(accepts_electronics && istype(W,/obj/item/weapon/circuitboard/airlock))
+		if(W.icon_state == "door_electronics_smoked")
+			to_chat(user, "<span class='warning'>Repair \the [W] before putting it in!</span>")
+		if(user.drop_item(W,src))
+			electronics = W
+			if(electronics.conf_access?.len)
+				if(electronics.one_access)
+					req_one_access = electronics.conf_access
+				else
+					req_access = electronics.conf_access
+			electronics.installed = TRUE
+			to_chat(user, "<span class='notice'>You add [electronics] to [src].</span>")
 	..()
 	return
 

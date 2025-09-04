@@ -28,6 +28,7 @@
 	flags = FPRINT | PROXMOVE
 
 	secured = 0
+	accepts_electronics = TRUE
 
 	var/scanning = 0
 	var/timing = 0
@@ -96,14 +97,14 @@
 		if(constant_pulse || !in_proximity)
 			var/turf/mainloc = get_turf(src)
 			for(var/mob/living/A in range(range,mainloc))
-				if (A.move_speed < 12)
+				if (allowed(A) && A.move_speed < 12)
 					in_proximity = TRUE
 					sense()
 		else
 			var/turf/mainloc = get_turf(src)
 			var/still_in_proximity = FALSE
 			for(var/mob/living/A in range(range,mainloc))
-				if (A.move_speed < 12)
+				if (allowed(A) && A.move_speed < 12)
 					still_in_proximity = TRUE
 					break
 			if(!still_in_proximity)
@@ -200,7 +201,7 @@
 
 	if(href_list["set_default_time"])
 		default_time = time
-	
+
 	if(href_list["toggle_mode"])
 		constant_pulse = !constant_pulse
 
