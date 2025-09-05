@@ -17,12 +17,11 @@
 		RARE_LOOT = 80,
 		VERY_RARE_LOOT = 95
 	)
-	var/roll_mod = 0
 	//Indicates which planets can spawn this loot table
 	var/loot_flags = LOOT_TYPE_BEACH|LOOT_TYPE_DESERT|LOOT_TYPE_GRASS|LOOT_TYPE_JUNGLE|LOOT_TYPE_LAVA|LOOT_TYPE_SNOW|LOOT_TYPE_URBAN|LOOT_TYPE_XENO
 
 // Rolls on the loot table, returning an item or null if nothing was found
-/datum/loot_table/proc/loot_roll()
+/datum/loot_table/proc/loot_roll(roll_mod = 0)
 	var/roll = rand(1, 100) + roll_mod
 
 	var/list/possible_loot = list()
@@ -160,20 +159,102 @@
 	)
 
 /datum/loot_table/clothing
-	loot = list(
-		COMMON_LOOT = list(),
-		UNCOMMON_LOOT = list(),
-		RARE_LOOT = list(),
-		VERY_RARE_LOOT = list()
-	)
+
+/datum/loot_table/clothing/New()
+	loot[COMMON_LOOT] += subtypesof(/obj/item/clothing) - subtypesof(/obj/item/clothing/suit/armor)
 
 /datum/loot_table/combat
 	loot_flags = LOOT_TYPE_DESERT|LOOT_TYPE_JUNGLE|LOOT_TYPE_LAVA|LOOT_TYPE_SNOW|LOOT_TYPE_URBAN|LOOT_TYPE_XENO
 	loot = list(
-		COMMON_LOOT = list(),
-		UNCOMMON_LOOT = list(),
-		RARE_LOOT = list(),
-		VERY_RARE_LOOT = list()
+		COMMON_LOOT = list(
+			/obj/item/weapon/bat,
+			/obj/item/weapon/bat/spiked,
+			/obj/item/weapon/beartrap,
+			/obj/item/weapon/blunderbuss,
+			/obj/item/weapon/boomerang,
+			/obj/item/weapon/brick_sock,
+			/obj/item/weapon/brick_sock/soap,
+			/obj/item/weapon/cane,
+			/obj/item/weapon/hammer,
+			/obj/item/weapon/pitchfork,
+			/obj/item/weapon/mop,
+			/obj/item/weapon/melee/training_sword,
+			/obj/item/weapon/scythe,
+			/obj/item/weapon/shield/riot/buckler,
+			/obj/item/weapon/shield/riot/roman,
+			/obj/item/weapon/spear,
+			/obj/item/weapon/melee/baton/cattleprod,
+			/obj/item/weapon/melee/classic_baton,
+			/obj/item/weapon/melee/wooden_club
+			),
+		UNCOMMON_LOOT = list(
+			/obj/item/weapon/claymore,
+			/obj/item/weapon/crossbow,
+			/obj/item/weapon/fireaxe,
+			/obj/item/weapon/grenade/flashbang,
+			/obj/item/weapon/grenade/smokebomb,
+			/obj/item/weapon/harpoon,
+			/obj/item/weapon/hatchet,
+			/obj/item/weapon/hatchet/tomahawk,
+			/obj/item/weapon/hatchet/unathiknife,
+			/obj/item/weapon/katana,
+			/obj/item/weapon/shield/riot,
+			/obj/item/weapon/melee/baton,
+			/obj/item/weapon/melee/classic_baton/daystick,
+			/obj/item/weapon/melee/energy/axe/rusty,
+			/obj/item/weapon/melee/lance,
+			/obj/item/weapon/gun/mahoguny,
+			/obj/item/weapon/gun/lolly_lobber,
+			),
+		RARE_LOOT = list(
+			/obj/item/weapon/banhammer,
+			/obj/item/weapon/batteringram,
+			/obj/item/weapon/blunderbuss/flawless,
+			/obj/item/weapon/butterflyknife,
+			/obj/item/weapon/caber,
+			/obj/item/weapon/rsscimmy,
+			/obj/item/weapon/shield/energy,
+			/obj/item/weapon/melee/baton/harm,
+			/obj/item/weapon/melee/baton/stunprobe,
+			/obj/item/weapon/melee/energy/axe,
+			/obj/item/weapon/melee/energy/sword,
+			/obj/item/weapon/melee/energy/hfmachete,
+			/obj/item/weapon/melee/lance/dire,
+			/obj/item/weapon/melee/morningstar,
+			/obj/item/weapon/melee/telebaton,
+			/obj/item/weapon/gun/energy,
+			/obj/item/weapon/gun/siren,
+			/obj/item/weapon/gun/siren/caduceus,
+			/obj/item/weapon/gun/siren/supersoaker,
+			/obj/item/weapon/gun/portalgun,
+			/obj/item/weapon/gun/grenadelauncher,
+		),
+		VERY_RARE_LOOT = list(
+			/obj/item/weapon/butterflyknife/viscerator,
+			/obj/item/weapon/c4,
+			/obj/item/weapon/caber/admin,
+			/obj/item/weapon/damocles,
+			/obj/item/weapon/grenade/spawnergrenade/bearnade,
+			/obj/item/weapon/grenade/spawnergrenade/beenade,
+			/obj/item/weapon/grenade/spawnergrenade/manhacks,
+			/obj/item/weapon/grenade/spawnergrenade/mothershipdrone,
+			/obj/item/weapon/grenade/spawnergrenade/spesscarp,
+			/obj/item/weapon/grenade/syndigrenade,
+			/obj/item/weapon/katana/hfrequency,
+			/obj/item/weapon/katana/magic,
+			/obj/item/weapon/organ_remover/traitor,
+			/obj/item/weapon/melee/morningstar/catechizer,
+			/obj/item/weapon/gun/banannon,
+			/obj/item/weapon/gun/bulletstorm,
+			/obj/item/weapon/gun/tesla/preloaded,
+			/obj/item/weapon/gun/stickybomb,
+			/obj/item/weapon/gun/osipr,
+			/obj/item/weapon/gun/grenadelauncher/syndicate,
+			/obj/item/weapon/gun/gatling,
+			/obj/item/weapon/gun/gatling/beegun,
+			/obj/item/weapon/gun/gatling/beegun/chillgun,
+			/obj/item/weapon/gun/gatling/beegun/hornetgun,
+		)
 	)
 
 /datum/loot_table/decoration
@@ -221,8 +302,10 @@
 	loot = list(
 		COMMON_LOOT = list(),
 		UNCOMMON_LOOT = list(),
-		RARE_LOOT = list(),
-		VERY_RARE_LOOT = list()
+		RARE_LOOT = list(
+			/obj/item/weapon/dnainjector/nofail/randompower,),
+		VERY_RARE_LOOT = list(
+			/obj/item/weapon/dnascrambler,)
 	)
 
 /datum/loot_table/module
@@ -271,6 +354,19 @@
 		UNCOMMON_LOOT = list(),
 		RARE_LOOT = list(),
 		VERY_RARE_LOOT = list()
+	)
+
+//Top-tier loot only found in ruins
+/datum/loot_table/ruins
+	loot = list(
+		COMMON_LOOT = list(),
+		UNCOMMON_LOOT = list(),
+		RARE_LOOT = list(
+			/obj/item/weapon/organ_remover/adminbus_edition,
+		),
+		VERY_RARE_LOOT = list(
+			/obj/item/weapon/meteor_gun, //lol
+		)
 	)
 
 #undef COMMON_LOOT
