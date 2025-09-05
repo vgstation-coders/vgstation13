@@ -101,6 +101,12 @@
 		for(var/mob/M in contents)
 			GiveReagentsTo(M)
 
+/turf/New()
+	..()
+	footstep_sound = sounds_floor
+	footstep_sound_barefoot = sounds_floor_barefoot
+	footstep_sound_claw = sounds_floor_claw
+
 /turf/initialize()
 	..()
 	if(loc)
