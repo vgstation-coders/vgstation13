@@ -19373,6 +19373,7 @@
 	},
 /obj/machinery/door/table/wood{
 	dir = 1
+	},
 /obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
