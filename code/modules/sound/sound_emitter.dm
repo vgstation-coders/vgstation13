@@ -11,10 +11,10 @@
 	  The subscription is driven by the SZM, which maintains a hashmap of sound_emitter locations.
 */
 
-/atom
+/atom/movable
 	var/datum/sound_emitter/sound_emitter
 
-/atom/Destroy()
+/atom/movable/Destroy()
 	qdel(sound_emitter)
 	return ..()
 
