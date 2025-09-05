@@ -262,7 +262,7 @@ var/list/tgui_religion_data
  */
 /datum/religion/proc/convertAct(var/mob/living/preacher, var/mob/living/subject, var/obj/item/weapon/storage/bible/B)
 	if (B.my_rel != src) // BLASPHEMY
-		B.my_rel.smite(preacher)
+		smite(preacher)
 		return FALSE
 	if (preacher != religiousLeader.current)
 		to_chat(preacher, "<span class='warning'>You fail to muster enough mental strength to begin the conversion. Only the Spiritual Guide of [name] can perfom this.</span>")
