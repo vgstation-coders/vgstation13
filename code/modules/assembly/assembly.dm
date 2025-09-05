@@ -274,6 +274,13 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 		return 1
 	return 0
 
+/obj/item/device/assembly/allowed(mob/M)
+	if(!electronics)
+		return TRUE
+	var/list/accesses = M.GetAccess()
+	if(!accesses.len)
+		return TRUE
+	return ..()
 
 /obj/item/device/assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(isassembly(W))
