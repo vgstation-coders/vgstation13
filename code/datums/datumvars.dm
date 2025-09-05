@@ -141,7 +141,7 @@
 		body += "<option value='?_src_=vars;toggle_aliasing=\ref[D]'>Toggle Transform Aliasing</option>"
 	if(istype(D,/obj/item/weapon/gun))
 		body += "<option value='?_src_=vars;projectile_edit=\ref[D]'>Edit Projectile Variables</option>"
-	if(has_initialized_sound_emitter(D))
+	if(istype(D, /atom/movable))
 		body += "<option value='?_src_=vars;halt_sound=\ref[D]'>Stop Sound</option>"
 
 
@@ -997,9 +997,9 @@ function loadPage(list) {
 		if (!check_rights(R_DEBUG))
 			return
 
-		var/atom/A = locate(href_list["halt_sound"])
-		if(!istype(A) || !has_initialized_sound_emitter(A))
-			to_chat(src, "This can only be done to atoms that have an initialized sound emitter")
+		var/atom/movable/A = locate(href_list["halt_sound"])
+		if(!istype(A) || (A.sound_emitter == null))
+			to_chat(src, "This can only be done to atom/movables that have an initialized sound emitter")
 			return
 
 		A.sound_emitter.stop()
