@@ -1,15 +1,67 @@
+#define COMMON_LOOT "common"
+#define UNCOMMON_LOOT "uncommon"
+#define RARE_LOOT "rare"
+#define VERY_RARE_LOOT "very rare"
+
 //Loot tables
 /datum/loot_table
 	var/list/loot = list(
-		"common" = list(),
-		"uncommon" = list(),
-		"rare" = list(),
-		"very rare" = list()
+		COMMON_LOOT = list(),
+		UNCOMMON_LOOT = list(),
+		RARE_LOOT = list(),
+		VERY_RARE_LOOT = list()
 	)
+	var/list/thresholds = list(
+		COMMON_LOOT = 0,
+		UNCOMMON_LOOT = 50,
+		RARE_LOOT = 80,
+		VERY_RARE_LOOT = 95
+	)
+	var/roll_mod = 0
+	//Indicates which planets can spawn this loot table
+	var/loot_flags = LOOT_TYPE_BEACH|LOOT_TYPE_DESERT|LOOT_TYPE_GRASS|LOOT_TYPE_JUNGLE|LOOT_TYPE_LAVA|LOOT_TYPE_SNOW|LOOT_TYPE_URBAN|LOOT_TYPE_XENO
+
+// Rolls on the loot table, returning an item or null if nothing was found
+/datum/loot_table/proc/loot_roll()
+	var/roll = rand(1, 100) + roll_mod
+
+	var/list/possible_loot = list()
+
+	for(var/rank in list(COMMON_LOOT, UNCOMMON_LOOT, RARE_LOOT, VERY_RARE_LOOT))
+		if(roll >= thresholds[rank] && length(loot[rank]))
+			possible_loot += loot[rank]
+
+	if(length(possible_loot))
+		return possible_loot[rand(1, length(possible_loot))]
+
+// Merges multiple loot tables, returning a new one with the contents of all
+/proc/merge_loot_table(...)
+	var/list/tables = args
+	if(!length(tables))
+		return new /datum/loot_table
+
+	var/datum/loot_table/new_table = new
+	var/datum/loot_table/first_table = tables[1]
+	if(!istype(first_table, /datum/loot_table))
+		CRASH("Tried to merge a non-loot table!")
+
+	// Initialize with the first table's structure
+	for(var/rank in first_table.loot)
+		new_table.loot[rank] = list()
+
+	// Merge all tables
+	for(var/datum/loot_table/table in tables)
+		if(!istype(table, /datum/loot_table))
+			CRASH("Tried to merge a non-loot table!")
+		for(var/rank in new_table.loot)
+			if(table.loot[rank])
+				new_table.loot[rank] += table.loot[rank]
+
+	return new_table
 
 /datum/loot_table/bedsheet
 	loot = list(
-		"common" = list(
+		COMMON_LOOT = list(
 			/obj/item/weapon/bedsheet/black,
 			/obj/item/weapon/bedsheet/blue,
 			/obj/item/weapon/bedsheet/brown,
@@ -20,26 +72,26 @@
 			/obj/item/weapon/bedsheet/red,
 			/obj/item/weapon/bedsheet/yellow,
 		),
-		"uncommon" = list(
+		UNCOMMON_LOOT = list(
 			/obj/item/weapon/bedsheet/plaid,
 			/obj/item/weapon/bedsheet/clown,
 			/obj/item/weapon/bedsheet/linen,
 			/obj/item/weapon/bedsheet/mime,
 			/obj/item/weapon/bedsheet/rainbow,
 		),
-		"rare" = list(
+		RARE_LOOT = list(
 			/obj/item/weapon/bedsheet/rd,
 			/obj/item/weapon/bedsheet/hop,
 			/obj/item/weapon/bedsheet/hos,
 			/obj/item/weapon/bedsheet/captain,
 			/obj/item/weapon/bedsheet/ce,
 		),
-		"very rare" = list()
+		VERY_RARE_LOOT = list()
 	)
 
 /datum/loot_table/bureaucracy
 	loot = list(
-		"common" = list(
+		COMMON_LOOT = list(
 			/obj/item/toy/crayon/black,
 			/obj/item/toy/crayon/blue,
 			/obj/item/toy/crayon/green,
@@ -74,7 +126,7 @@
 			/obj/item/weapon/stamp/denied,
 			/obj/item/weapon/storage/photo_album,
 		),
-		"uncommon" = list(
+		UNCOMMON_LOOT = list(
 			/obj/item/weapon/glue/temp_glue,
 			/obj/item/weapon/pen/multi,
 			/obj/item/weapon/pen/sleepypen,
@@ -95,85 +147,87 @@
 			/obj/item/weapon/storage/briefcase,
 			/obj/item/weapon/storage/briefcase/centcomm,
 		),
-		"rare" = list(
+		RARE_LOOT = list(
 			/obj/item/weapon/glue,
 			/obj/item/weapon/pen/paralysis,
 			/obj/item/weapon/pen/tactical,
 			/obj/item/weapon/storage/briefcase/insurance,
 			/obj/item/weapon/storage/briefcase/orderly,
 		),
-		"very rare" = list(
+		VERY_RARE_LOOT = list(
 			/obj/item/weapon/storage/briefcase/false_bottomed,
 		)
 	)
 
 /datum/loot_table/clothing
 	loot = list(
-		"common" = list(),
-		"uncommon" = list(),
-		"rare" = list(),
-		"very rare" = list()
+		COMMON_LOOT = list(),
+		UNCOMMON_LOOT = list(),
+		RARE_LOOT = list(),
+		VERY_RARE_LOOT = list()
 	)
 
 /datum/loot_table/combat
+	loot_flags = LOOT_TYPE_DESERT|LOOT_TYPE_JUNGLE|LOOT_TYPE_LAVA|LOOT_TYPE_SNOW|LOOT_TYPE_URBAN|LOOT_TYPE_XENO
 	loot = list(
-		"common" = list(),
-		"uncommon" = list(),
-		"rare" = list(),
-		"very rare" = list()
+		COMMON_LOOT = list(),
+		UNCOMMON_LOOT = list(),
+		RARE_LOOT = list(),
+		VERY_RARE_LOOT = list()
 	)
 
 /datum/loot_table/decoration
 	loot = list(
-		"common" = list(),
-		"uncommon" = list(),
-		"rare" = list(),
-		"very rare" = list()
+		COMMON_LOOT = list(),
+		UNCOMMON_LOOT = list(),
+		RARE_LOOT = list(),
+		VERY_RARE_LOOT = list()
 	)
 
 /datum/loot_table/engineering
 	loot = list(
-		"common" = list(),
-		"uncommon" = list(),
-		"rare" = list(),
-		"very rare" = list()
+		COMMON_LOOT = list(),
+		UNCOMMON_LOOT = list(),
+		RARE_LOOT = list(),
+		VERY_RARE_LOOT = list()
 	)
 
 /datum/loot_table/entertainment
 	loot = list(
-		"common" = list(),
-		"uncommon" = list(),
-		"rare" = list(),
-		"very rare" = list()
+		COMMON_LOOT = list(),
+		UNCOMMON_LOOT = list(),
+		RARE_LOOT = list(),
+		VERY_RARE_LOOT = list()
 	)
 
 /datum/loot_table/exotic
+	loot_flags = LOOT_TYPE_LAVA|LOOT_TYPE_XENO
 	loot = list(
-		"common" = list(),
-		"uncommon" = list(),
-		"rare" = list(),
-		"very rare" = list()
+		COMMON_LOOT = list(),
+		UNCOMMON_LOOT = list(),
+		RARE_LOOT = list(),
+		VERY_RARE_LOOT = list()
 	)
 
 /datum/loot_table/food_or_drink
 	loot = list(
-		"common" = list(),
-		"uncommon" = list(),
-		"rare" = list(),
-		"very rare" = list()
+		COMMON_LOOT = list(),
+		UNCOMMON_LOOT = list(),
+		RARE_LOOT = list(),
+		VERY_RARE_LOOT = list()
 	)
 
 /datum/loot_table/medical
 	loot = list(
-		"common" = list(),
-		"uncommon" = list(),
-		"rare" = list(),
-		"very rare" = list()
+		COMMON_LOOT = list(),
+		UNCOMMON_LOOT = list(),
+		RARE_LOOT = list(),
+		VERY_RARE_LOOT = list()
 	)
 
 /datum/loot_table/module
 	loot = list(
-		"common" = list(
+		COMMON_LOOT = list(
 			/obj/item/weapon/aiModule/core/asimov,
 			/obj/item/weapon/aiModule/core/corp,
 			/obj/item/weapon/aiModule/core/nanotrasen,
@@ -182,7 +236,7 @@
 			/obj/item/weapon/aiModule/keeper,
 			/obj/item/weapon/aiModule/purge,
 		),
-		"uncommon" = list(
+		UNCOMMON_LOOT = list(
 			/obj/item/weapon/aiModule/core/hogan,
 			/obj/item/weapon/aiModule/core/lazymov,
 			/obj/item/weapon/aiModule/core/paladin,
@@ -191,12 +245,12 @@
 			/obj/item/weapon/aiModule/standard/protectStation,
 			/obj/item/weapon/aiModule/standard/teleporterOffline,
 		),
-		"rare" = list(
+		RARE_LOOT = list(
 			/obj/item/weapon/aiModule/core/antimov,
 			/obj/item/weapon/aiModule/standard/oxygen,
 			/obj/item/weapon/aiModule/standard/quarantine,
 		),
-		"very rare" = list(
+		VERY_RARE_LOOT = list(
 			/obj/item/weapon/aiModule/freeform/syndicate,
 			/obj/item/weapon/aiModule/targetted/safeguard,
 			/obj/item/weapon/aiModule/targetted/oneHuman,
@@ -205,16 +259,21 @@
 
 /datum/loot_table/structure
 	loot = list(
-		"common" = list(),
-		"uncommon" = list(),
-		"rare" = list(),
-		"very rare" = list()
+		COMMON_LOOT = list(),
+		UNCOMMON_LOOT = list(),
+		RARE_LOOT = list(),
+		VERY_RARE_LOOT = list()
 	)
 
 /datum/loot_table/trash
 	loot = list(
-		"common" = list(),
-		"uncommon" = list(),
-		"rare" = list(),
-		"very rare" = list()
+		COMMON_LOOT = list(),
+		UNCOMMON_LOOT = list(),
+		RARE_LOOT = list(),
+		VERY_RARE_LOOT = list()
 	)
+
+#undef COMMON_LOOT
+#undef UNCOMMON_LOOT
+#undef RARE_LOOT
+#undef VERY_RARE_LOOT

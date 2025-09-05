@@ -3,7 +3,7 @@
 	var/name = "planet"
 	///The description we show on examine
 	var/desc = "A planet."
-	///The ID  tag for the set of ruins this planet uses
+	///The ID tag for the set of ruins and loot tables this planet uses
 	var/ruin_type = null
 	///The mapgen we set when we are used
 	var/mapgen = null
@@ -13,9 +13,13 @@
 	var/weight = 40
 	///Customizable planet names.
 	var/planet_name
+	// The type of loot this planet can spawn
+	var/loot_type
 	//Climate datum
 	var/datum/climate/climate
 	var/climate_type = CLIMATE_NONE
+	//Value that gets added to loot rolls on this planet.
+	var/loot_modifier = 0
 
 /datum/planet_type/New()
 	..()
@@ -28,6 +32,7 @@
 	mapgen = /datum/planetGenerator/beach
 	default_baseturf = /turf/unsimulated/beach/sand
 	ruin_type = RUINTYPE_BEACH
+	loot_type = LOOT_TYPE_BEACH
 	climate_type = CLIMATE_TROPICAL
 
 /datum/planet_type/desert
@@ -36,7 +41,9 @@
 	mapgen = /datum/planetGenerator/desert
 	default_baseturf = /turf/simulated/floor/plating/ironsand
 	ruin_type = RUINTYPE_LAVA
+	loot_type = LOOT_TYPE_DESERT
 	climate_type = CLIMATE_DESERT
+	loot_modifier = 5
 
 /datum/planet_type/grass
 	name = "grass planetoid"
@@ -44,6 +51,7 @@
 	mapgen = /datum/planetGenerator/grass
 	default_baseturf = /turf/unsimulated/floor/grass
 	ruin_type = RUINTYPE_LAVA
+	loot_type = LOOT_TYPE_GRASS
 	climate_type = CLIMATE_TEMPERATE
 
 /datum/planet_type/jungle
@@ -52,7 +60,9 @@
 	mapgen = /datum/planetGenerator/jungle
 	default_baseturf = /turf/unsimulated/floor/jungle/grass
 	ruin_type = RUINTYPE_LAVA
+	loot_type = LOOT_TYPE_JUNGLE
 	climate_type = CLIMATE_TROPICAL
+	loot_modifier = 10
 
 /datum/planet_type/lava
 	name = "lava planetoid"
@@ -60,7 +70,9 @@
 	mapgen = /datum/planetGenerator/lava
 	default_baseturf = /turf/simulated/floor/plating/asteroid/basalt/lava
 	ruin_type = RUINTYPE_LAVA
+	loot_type = LOOT_TYPE_LAVA
 	climate_type = CLIMATE_LAVA
+	loot_modifier = 15
 
 /datum/planet_type/snow
 	name = "frozen planetoid"
@@ -68,7 +80,9 @@
 	mapgen = /datum/planetGenerator/snow
 	default_baseturf = /turf/unsimulated/floor/snow
 	ruin_type = RUINTYPE_SNOW
+	loot_type = LOOT_TYPE_SNOW
 	climate_type = CLIMATE_ARCTIC
+	loot_modifier = 5
 
 /datum/planet_type/urban
 	name = "wasteland planetoid"
@@ -76,7 +90,9 @@
 	mapgen = /datum/planetGenerator/urban
 	default_baseturf = /turf/unsimulated/wasteland
 	ruin_type = RUINTYPE_URBAN
+	loot_type = LOOT_TYPE_URBAN
 	climate_type = CLIMATE_DESERT
+	loot_modifier = 10
 
 /datum/planet_type/xeno
 	name = "unknown planetoid"
@@ -84,4 +100,6 @@
 	mapgen = /datum/planetGenerator/xeno
 	default_baseturf = /turf/unsimulated/floor/grey_sand
 	ruin_type = RUINTYPE_XENO
+	loot_type = LOOT_TYPE_XENO
 	climate_type = CLIMATE_XENO
+	loot_modifier = 20

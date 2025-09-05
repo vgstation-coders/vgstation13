@@ -124,6 +124,7 @@ var/datum/subsystem/mapping/SSmapping
 	// fill in the turfs, AFTER generating the ruin. this prevents them from generating within the ruin
 	// and ALSO prevents the ruin from being spaced when it spawns in
 	// WITHOUT needing to fill the reservation with a bunch of dummy turfs
+	mapgen.setup_loot_tables(planet_datum)
 	message_admins("Populating turfs")
 	mapgen.populate_turfs(turfs_from_sector(A.sector, world.maxz))
 	message_admins("Finished populating turfs")

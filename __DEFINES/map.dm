@@ -24,3 +24,12 @@
 #define CLIMATE_LAVA /datum/climate/lava
 #define CLIMATE_XENO /datum/climate/xeno
 #define CLIMATE_NONE null
+
+#define LOOT_TYPE_BEACH 1<<0
+#define LOOT_TYPE_DESERT 1<<1
+#define LOOT_TYPE_GRASS 1<<2
+#define LOOT_TYPE_JUNGLE 1<<3
+#define LOOT_TYPE_LAVA 1<<4
+#define LOOT_TYPE_SNOW 1<<5
+#define LOOT_TYPE_URBAN 1<<6
+#define LOOT_TYPE_XENO 1<<7

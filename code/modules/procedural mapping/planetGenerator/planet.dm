@@ -58,6 +58,9 @@
 	// a turf's biome for populating it without having to recalculate (which is impossible, due to drift)
 	var/list/turf_biome_cache
 
+	// Merged loot table this planet uses to spawn loot
+	var/datum/loot_table/planet_loot
+
 /datum/planetGenerator/New()
 	// initialize the perlin seeds
 	height_seed = rand(0, 50000)
@@ -105,7 +108,7 @@
 		return */
 
 	var/datum/biome/turf_biome = get_biome(gen_turf)
-	turf_biome.populate_turf(gen_turf, created_features, created_mobs)
+	turf_biome.populate_turf(gen_turf, created_features, created_mobs, planet_loot)
 
 /// Checks the turf biome cache for the biome of the passed turf; if none is found, it is generated.
 /datum/planetGenerator/proc/get_biome(turf/a_turf)
@@ -173,5 +176,15 @@
 
 	turf_biome_cache[a_turf] = sel_biome
 	return sel_biome
+
+/datum/planetGenerator/proc/setup_loot_tables(var/datum/planet_type/planet)
+	var/list/loots = list()
+	for(var/lt_type in subtypesof(/datum/loot_table))
+		var/datum/loot_table/T = new lt_type
+		if(T.loot_flags & planet.loot_type)
+			loots += T
+	var/datum/loot_table/merged_loot = merge_loot_table(arglist(loots))
+	merged_loot.roll_mod = planet.loot_modifier
+	planet_loot = merged_loot
 
 #undef BIOME_RANDOM_SQUARE_DRIFT

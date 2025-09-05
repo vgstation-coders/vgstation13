@@ -76,7 +76,7 @@
 /// The features and creatures compare against and add to the lists passed to determine
 /// if they can spawn at the tested turf. This method of checking reduces the amount of
 /// time spent populating a planet.
-/datum/biome/proc/populate_turf(turf/gen_turf, list/feature_list, list/mob_list)
+/datum/biome/proc/populate_turf(turf/gen_turf, list/feature_list, list/mob_list, var/datum/loot_table/loot_to_spawn)
 	if(iswall(gen_turf) || istype(gen_turf, /turf/unsimulated/mineral)) //make helper
 		return
 	var/turf/simulated/floor/floor_turf = gen_turf
@@ -135,11 +135,17 @@
 			mob_list.Insert(1, spawned_mob)
 			floor_turf.turf_flags |= NO_LAVA_GEN_1
 
-	//LOOT SPAWNING HERE
+	//FLORA SPAWNING HERE
 	if(length(flora_spawn_list_expanded) && prob(flora_spawn_chance) && (a_flags & FLORA_ALLOWED))
 		spawned_flora = pick(flora_spawn_list_expanded)
 		spawned_flora = new spawned_flora(floor_turf)
 		floor_turf.turf_flags |= NO_LAVA_GEN_1
+
+	//LOOT SPAWNING HERE
+	if(loot_to_spawn && prob(loot_spawn_chance) && !spawned_flora && !spawned_feature && !spawned_mob)
+		var/atom/movable/AM = loot_to_spawn.loot_roll()
+		if(AM)
+			new AM(floor_turf)
 
 /datum/biome/cave
 	/// WEIGHTED list of closed turfs that this biome can place
