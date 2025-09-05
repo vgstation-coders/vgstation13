@@ -114,7 +114,7 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 				CRASH("Found a listener with no client or endpoint client")
 			var/datum/sound_listener_context/context = client.listener_context
 
-			if (E in context.current_channels_by_emitter)
+			if (E in context.audible_emitters)
 				if (!E.contains(listener))
 					context.on_exit_range(E)
 				else
@@ -197,7 +197,7 @@ var/global/datum/sound_zone_manager/sound_zone_manager = new
 	var/datum/sound_listener_context/context = receive_client.listener_context
 
 	var/list/current = list()
-	for (var/datum/sound_emitter/E in context.current_channels_by_emitter)
+	for (var/datum/sound_emitter/E in context.audible_emitters)
 		current[E] = TRUE
 	var/list/fresh = list()
 
