@@ -20,7 +20,7 @@ obj/effect/landmark/procedural_mobspawn/forgottenbeast
 //
 //refer to procedural_mobspawn for the datums
 */
-/mob/living/simple_animal/hostile/forgotten_beast//randomly generated
+/mob/living/simple_animal/hostile/forgotten_beast
 	name = "Forgotten Beast"
 	desc = "Some indescribable horror."
 	health = 1000
@@ -58,6 +58,11 @@ obj/effect/landmark/procedural_mobspawn/forgottenbeast
 	if(radioactive)
 		if(world.time > rad_cooldown +20 SECONDS)
 			rad_blast()
+
+/mob/living/simple_animal/hostile/forgotten_beast/death(var/gibbed = FALSE)
+	..(TRUE)
+	visible_message("<span class='warning'><b>[src]</b> stops moving!</span>")
+	qdel(src)
 
 /mob/living/simple_animal/hostile/forgotten_beast/OpenFire(target)
 	if(!mybreath)

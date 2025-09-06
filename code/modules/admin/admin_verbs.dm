@@ -1435,5 +1435,5 @@ fieldset {width:140px;}
 	set category = "Admin"
 	if(holder)
 		holder.beasts_panel()
-		log_admin("[key_name(usr)] checked the Beasts Panel.")
+		log_admin("[key_name(usr)] checked the Megabeast Panel.")
 	feedback_add_details("admin_verb","BST")

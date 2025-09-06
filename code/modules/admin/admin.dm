@@ -1685,7 +1685,8 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 		<th style="width:1%">Mob</th>
 		<th style="width:1%">Name</th>
 		<th style="width:1%">Datum Info</th>
-		<th style="width:3%">Ability</th>
+		<th style="width:2%">Ability</th>
+		<th style="width:2%"><a href='?src=\ref[src];create_megabeast=1'>New</a></th><!-- Spawn a random FB -->
 		</tr>
 		"}
 
@@ -1702,8 +1703,9 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 			<td>[ID.name]</td>
 			<td><a href='?_src_=vars;Vars=\ref[ID]'>\[VV\]</a> <a href='?_src_=vars;mark_object=\ref[ID]'>\[mark datum\]</a></td>
 			<td>[abilityname]</td>
+			<td><a href='?src=\ref[src];create_megabeast=\ref[ID]'>Spawn</a></td><!-- Spawn this FB specifically.-->
 			</tr>
-			"}
+			"}//<FONT SIZE=2><A href='?src=\ref[src];ac_censor_channel_author=\ref[src.admincaster_feed_channel]'>[(src.admincaster_feed_channel.author=="\[REDACTED\]") ? ("Undo Author censorship") : ("Censor channel Author")]</A></FONT><HR>
 
 	dat += {"</table>
 		</body>
@@ -1712,3 +1714,8 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 
 	usr << browse(HTML_SKELETON(dat), "window=beastspanel;size=840x450")
 
+/datum/admins/proc/create_megabeast(var/datum/procedural_mobspawn/add_template)
+	if(!add_template)
+		new /datum/procedural_mobspawn()
+		return
+	new /mob/living/simple_animal/hostile/forgotten_beast(get_turf(usr), add_template)

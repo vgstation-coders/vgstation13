@@ -19,7 +19,7 @@ var/list/breath_list = list(
 	list("sand breath", BRUTE,"#EOE8C5", list("PUSH", "BLIND")),
 	list("water cannon", BRUTE,"#DEF7F5", list("PUSH", "CHEM"), /datum/reagent/water),
 	list("booze blast", BRUTE,"#664300", list("PUSH", "CHEM"), /datum/reagent/ethanol),
-	list("paint breath", BRUTE,"#DEF7F5", list("PUSH", "CHEM"), /datum/reagent/colorful_reagent)
+	list("paint spray", BRUTE,"#DEF7F5", list("PUSH", "CHEM"), /datum/reagent/colorful_reagent)
 	)
 var/list/appendage_modifier = list(
 	"gaunt",
@@ -110,7 +110,7 @@ var/list/appendage_modifier = list(
 	pixel_y = mymob.pixel_y
 	melee_damage_lower = clamp((mymob.melee_damage_lower * 2), 15, 60)
 	melee_damage_upper = clamp((mymob.melee_damage_upper * 2), 35, 80)
-	breath_damage = clamp(rand(30), 10, 30)
+	breath_damage = clamp(rand(15), 5, 15)
 	if(mymob.projectiletype)
 		ranged = TRUE
 		rapid = mymob.rapid
@@ -213,7 +213,7 @@ var/list/appendage_modifier = list(
 
 	var/stepped_range = 0
 	var/max_range = 9
-	var/pressure = ONE_ATMOSPHERE * 9
+	var/pressure = ONE_ATMOSPHERE * 4.5
 	var/temperature = T0C + 175
 	var/fire_duration
 	var/special
@@ -254,12 +254,11 @@ var/list/appendage_modifier = list(
 	var/special
 	var/datum/reagent/reagent_type
 
-/obj/effect/fire_blast/custom/New(atom/A, var/damage = 0, var/current_step = 0, var/age = 1, var/pressure = 0, var/blast_temperature = 0, var/fire_duration, var/origin)
-	..(A)
+/obj/effect/fire_blast/custom/New(atom/A, var/damage = 0, var/current_step = 0, var/age = 1, var/pressure = 0, var/blast_temperature = 0, var/fire_duration, var/origin, color, damage_type, special, reagent_type)
+	..()
 	icon_state = "key[rand(1,3)]"
 
 /obj/effect/fire_blast/custom/burn_mob(mob/living/L, var/adjusted_fire_damage)
-	say("[adjusted_fire_damage] [damage_type] damage")
 	if(special)
 		ApplyStatus(L, special, adjusted_fire_damage)
 	if(L.mutations.Find(M_RESIST_HEAT) && damage_type == BURN)
@@ -287,8 +286,8 @@ var/list/appendage_modifier = list(
 			var/datum/reagents/R = L.reagents
 			R.add_reagent(reagent_type.id, 10)
 		if(status == "PUSH")
-			say("pushing")
-			L.throw_at(get_step(L.dir, 1), 1, 1)//needs fixing
+			var/randomdir = pick(alldirs)
+			L.Move(get_turf(src), randomdir)
 		if(status == "COUGH")
 			if(ishuman(H))
 				if(H.has_breathing_mask())
@@ -299,6 +298,28 @@ var/list/appendage_modifier = list(
 				H.drop_item(I)
 		if(status == "BLIND")
 			L.apply_effects(0, 0, 0, 0,  0, 10)
+
+/obj/effect/fire_blast/custom/blast_spread(current_step, pressure, blast_temperature)//needs to transfer the new vars
+	if(spread && current_step >= spread_start && blast_age < 4)
+		var/turf/TS = get_turf(src)
+		for(var/turf/TU in range(1, TS))
+			if(TU != get_turf(src))
+				var/tilehasfire = 0
+				var/obstructed = 0
+				for(var/obj/effect/E in TU)
+					if(istype(E, /obj/effect/fire_blast))
+						tilehasfire = 1
+				for(var/obj/machinery/door/D in TU)
+					if(istype(D, /obj/machinery/door/airlock) || istype(D, /obj/machinery/door/mineral))
+						if(D.density)
+							obstructed = 1
+				if(prob(spread_chance) && TS.Adjacent(TU) && !TU.density && !tilehasfire && !obstructed)
+					var/obj/effect/fire_blast/custom/blast_spread/breath = new type(TU, fire_damage, current_step, blast_age+1, pressure, blast_temperature, duration, damage, color, damage_type, special, reagent_type)
+					breath.color = color
+					breath.damage_type = damage_type
+					breath.special = special
+					breath.reagent_type = reagent_type
+			sleep(1)
 
 /*
 //Testing item used to test stuff
