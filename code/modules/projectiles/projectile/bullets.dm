@@ -991,6 +991,11 @@
 	name = "admin buckshot pellet"
 	type_to_fire = /obj/item/projectile/bullet/hecate
 
+/obj/item/projectile/bullet/buckshot/fragments // Mech shotgun doesn't fire this
+	name = "fragment shell"
+	inaccurate = TRUE
+	variance_angle = 33
+
 /obj/item/projectile/bullet/invisible
 	name = "invisible bullet"
 	icon_state = null
