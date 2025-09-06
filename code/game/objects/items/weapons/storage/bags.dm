@@ -174,9 +174,9 @@
 	to_chat(user, "You turn [src] [handling? "on":"off"].")
 
 	if(handling)
-		user.register_event(/event/moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+		user.register_event(/event/moved, src, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 	else
-		user.unregister_event(/event/moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+		user.unregister_event(/event/moved, src, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_fill(var/mob/holder)
 	var/obj/structure/ore_box/box = null
