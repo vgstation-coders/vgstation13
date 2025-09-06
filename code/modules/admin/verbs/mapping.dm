@@ -421,7 +421,7 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
 			error_str += "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span><br>"
 	error_str += "<h1>Terminal connections on current Z Level [z]</h1>"
-	for(var/obj/machinery/power/terminal/T in power_machines)
+	for(var/obj/machinery/power/terminal/T in terminals)
 		var/turf/T2 = get_turf(T)
 		if(!T2.get_cable_node())
 			error_str += "<span class = 'warning'>Disconnected terminal at [formatJumpTo(T2)]</span><br>"
