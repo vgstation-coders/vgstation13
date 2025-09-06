@@ -142,7 +142,7 @@
 	actions_types = list(/datum/action/item_action/toggle_auto_handling)
 	var/handling = FALSE
 
-/obj/item/weapon/storage/bag/ore/auto/attack_hand(mob/user)
+/obj/item/weapon/storage/bag/ore/auto/attack_self(mob/user)
 	if(!contents.len)
 		toggle_hold(user)
 	. = ..()
