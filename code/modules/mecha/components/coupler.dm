@@ -17,6 +17,7 @@
 	var/welded = FALSE
 
 /obj/item/mecha_parts/component/coupler/detach()
+	.=..()
 	if(welded)
 		src.damage_part(1000) // it breaks
 		visible_message(src, "<span class='danger'>The melted connector breaks apart when you pry it out!</span>")
@@ -44,4 +45,4 @@
 	quick_attach = FALSE
 
 /obj/item/mecha_parts/component/coupler/durable/attackby(obj/item/W as obj, mob/user as mob)
-	return ..()
+	return

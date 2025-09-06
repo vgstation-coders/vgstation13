@@ -18,6 +18,7 @@
 	var/pressure_proof = FALSE
 	var/hull_soak = 0.5 // Percentage of damage 'soaked' by the hull
 	var/locking = TRUE
+	var/egress_delay = 10 // exit/enter delay
 
 /obj/item/mecha_parts/component/hull/solder_act(mob/living/user, obj/item/tool/solder/S)
 	if(!user || !src)
@@ -52,17 +53,19 @@
 	max_temperature = 5000
 	max_pressure = HAZARD_HIGH_PRESSURE * 5
 	hull_soak = 0.6
+	egress_delay = 15
 
 /obj/item/mecha_parts/component/hull/heavy
 	name = "heavily armoured mecha hull"
 	icon_state = "hull_durable"
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_ENGINEERING + "=3"
-	max_integrity = 150
+	max_integrity = 160
 	step_delay = 300
 	integrity_danger_mod = 0.3
 	max_temperature = 10000
-	max_pressure = HAZARD_HIGH_PRESSURE * 8
+	max_pressure = HAZARD_HIGH_PRESSURE * 10
 	hull_soak = 0.7
+	egress_delay = 30
 
 /obj/item/mecha_parts/component/hull/atmos
 	name = "environment-sealed mecha hull"
@@ -90,9 +93,11 @@
 	icon_state = "hull_durable"
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_ENGINEERING + "=3"
 	max_integrity = 1000
-	step_delay = 400
+	step_delay = 600
 	integrity_danger_mod = 0.1
 	max_temperature = 10000
 	max_pressure = HAZARD_HIGH_PRESSURE * 20
 	always_repair = TRUE
 	hull_soak = 1
+	weldbreak_resist = 2
+	egress_delay = 20

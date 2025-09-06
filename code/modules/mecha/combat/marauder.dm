@@ -39,7 +39,7 @@
 	max_special_equip = 1
 
 	starting_components = list(
-		/obj/item/mecha_parts/component/hull/durable,
+		/obj/item/mecha_parts/component/hull/heavy,
 		/obj/item/mecha_parts/component/actuator,
 		/obj/item/mecha_parts/component/armor/military/marauder,
 		/obj/item/mecha_parts/component/gas,

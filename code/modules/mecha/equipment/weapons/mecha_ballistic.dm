@@ -64,6 +64,7 @@
 			continue
 		found_gun = TRUE
 		if(gun.projectiles_cache < gun.projectiles_cache_max)
+			playsound(src, 'sound/weapons/magazine_load_click.ogg', 50, 1)
 			gun.projectiles_cache++
 			CS.BB = null
 			to_chat(user, "<span class='notice'>You load the [CS.name] into the [gun.name].</span>")
@@ -113,8 +114,10 @@
 				for(var/i = 1 to ammo_to_transfer)
 					var/obj/item/ammo_casing/casing = A.get_round()
 					if(casing && casing.BB)
-						gun.projectiles_cache++
-						ammo_loaded++
+						if(do_after(user, 2 SECONDS, src))
+							playsound(src, 'sound/weapons/magazine_load_click.ogg', 50, 1)
+							gun.projectiles_cache++
+							ammo_loaded++
 					else
 						break
 			else

@@ -98,7 +98,7 @@
 	R.max_universal_equip = 0
 	R.max_special_equip = 1
 
-	R.weight_max = 1500 // it doesn't
+	R.weight_max = 2000 // it doesn't
 	R.damage_minimum = 15
 
 	R.starting_components = list(

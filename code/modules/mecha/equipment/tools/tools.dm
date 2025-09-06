@@ -17,7 +17,7 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/attach(obj/mecha/M as obj)
-	..()
+	.=..()
 	if(istype(chassis, /obj/mecha/working))
 		var/obj/mecha/working/W = chassis
 		W.hydraulic_clamp = src
@@ -30,7 +30,7 @@
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/action(atom/target)
-	..()
+	.=..()
 	var/obj/mecha/working/W = chassis
 
 	if(istype(target,/obj/machinery/power/supermatter))
@@ -45,17 +45,6 @@
 	if(living_in_target.len) //no picking up lockers with people in them
 		occupant_message("<span class='warning'>Safety features prevent this action.</span>")
 		return
-
-	if(istype(target, /obj/mecha))
-		var/obj/mecha/mecha = target
-		if(!mecha || mecha.health <= 0)
-			return
-		if(mecha.flipped)
-			mecha.TryUnFlip(user = chassis, FALSE, tool = src)
-			return
-		else
-			mecha.TryFlip(user = chassis, tool = src)
-			return
 
 	if(istype(target,/obj))
 		var/obj/O = target
@@ -159,7 +148,7 @@
 		playsound(target, pick('sound/effects/squelch1.ogg', 'sound/effects/flesh_squelch.ogg'), 100, 1)
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill/action(atom/target)
-	..()
+	.=..()
 	if(isobj(target))
 		if(!target.can_mech_drill())
 			return
@@ -290,7 +279,7 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/tool/scythe/action(atom/target)
-	..()
+	.=..()
 	if(istype(target, /obj/machinery/portable_atmospherics/hydroponics))
 		set_ready_state(0)
 		if(do_after_cooldown(target, 1/2))
@@ -454,7 +443,7 @@
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/attach(obj/mecha/M as obj)
-	..()
+	.=..()
 	if(!ion_trail)
 		ion_trail = new /datum/effect/system/trail()
 	ion_trail.set_up(chassis)
@@ -559,7 +548,7 @@
 	step_delay = 100
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/New()
-	..()
+	.=..()
 	RPD = new(src)
 	RCD = new(src)
 	sock = new(src)
@@ -573,7 +562,7 @@
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/action(atom/target)
-	..()
+	.=..()
 	if(istype(target,/area/shuttle)||istype(target, /turf/space/transit))//>implying these are ever made -Sieve
 		disabled = 1
 	else
@@ -636,7 +625,7 @@
 	step_delay = 100
 
 /obj/item/mecha_parts/mecha_equipment/teleporter/action(atom/target)
-	..()
+	.=..()
 	if(!action_checks(target) || src.loc.z == map.zCentcomm)
 		return
 	var/turf/T = get_turf(target)
@@ -660,7 +649,7 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/wormhole_generator/action(atom/target)
-	..()
+	.=..()
 	if(!action_checks(target) || src.loc.z == map.zCentcomm)
 		return
 	var/list/theareas = list()
@@ -717,7 +706,7 @@
 	var/fire_delay = 10 //Used to prevent spam-brute against humans.
 
 /obj/item/mecha_parts/mecha_equipment/gravcatapult/action(atom/movable/target)
-	..()
+	.=..()
 	if(world.time >= last_fired + fire_delay)
 		last_fired = world.time
 	else
@@ -857,7 +846,7 @@
 	)
 
 /obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster/attach(obj/mecha/M as obj)
-	..()
+	.=..()
 	chassis.proc_res["dynbulletdamage"] = src
 	chassis.proc_res["dynhitby"] = src
 	return
@@ -923,13 +912,13 @@
 	step_delay = 50
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/New()
-	..()
+	.=..()
 	pr_repair_droid = new /datum/global_iterator/mecha_repair_droid(list(src),0)
 	pr_repair_droid.set_delay(equip_cooldown)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/attach(obj/mecha/M as obj)
-	..()
+	.=..()
 	droid_overlay = new(src.icon, icon_state = "repair_droid")
 	M.overlays += droid_overlay
 	linked_spell = new /spell/mech/repair(M, src)
@@ -1048,7 +1037,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/attach(obj/mecha/M)
-	..()
+	.=..()
 	chassis.proc_res["dyngetcharge"] = src
 //		chassis.proc_res["dynusepower"] = src
 	linked_spell = new /spell/mech/tesla(M, src)

@@ -49,6 +49,7 @@
 	return ..()
 
 /obj/item/mecha_parts/component/proc/TryBreakComponent() // Doesn't actually break the component. // Breaks the component
+	var/obj/item/mecha_parts/component/actuator/stable/stable // Because it doesn't actually delete the component
 	if(get_efficiency() <= 0.1)
 		if(!broken)
 			broken = TRUE
@@ -62,6 +63,8 @@
 			playsound(src, "shatter", 70, 1)
 			if(istype(src, /obj/item/mecha_parts/component/hull))
 				chassis.CheckEnclosed()
+			if(istype(src, stable))
+				stable.rigid = FALSE // Remember this if repairs are added
 		else
 			return
 

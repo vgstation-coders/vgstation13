@@ -52,9 +52,9 @@
 
 /obj/item/mecha_parts/component/actuator/stable
 	name = "rigid mecha movement system"
-	desc = "A rigid, non-articulated movement system for exosuits. Prevents strafing and climbing over obstacles, but has excellent stability in any condition."
+	desc = "A rigid, non-articulated movement system for exosuits. Prevents strafing, but has excellent stability in any condition."
 	icon_state = "motor_hispeed"
-	step_delay = 100
+	step_delay = 150
 	relative_size = 35
 	emp_resistance = 3
 	integrity_danger_mod = 0.5

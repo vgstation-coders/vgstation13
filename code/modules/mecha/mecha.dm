@@ -32,7 +32,7 @@
 	var/dir_in = SOUTH//What direction will the mech face when entered/powered on? Defaults to South.
 	var/step_energy_drain = 10 //How much energy we consume in a single step
 	health = 300 //health is health
-	var/deflect_chance = 0 //chance to deflect the incoming projectiles, hits, or lesser the effect of ex_act.
+	var/deflect_chance = 1 //chance to deflect the incoming projectiles, hits, or lesser the effect of ex_act.
 	//the values in this list show how much damage will pass through, not how much will be absorbed.
 	var/list/damage_absorption = list("brute"=1,"fire"=1,"bullet"=1,"laser"=1,"energy"=1,"bomb"=1)
 	var/obj/item/weapon/cell/cell = null
@@ -113,6 +113,7 @@
 
 	var/can_strafe = TRUE
 	var/can_climb = TRUE
+	var/omnidir = FALSE // If the mech can target directions it's not facing
 
 //mechaequipt2 stuffs
 	var/list/hull_equipment = new
@@ -309,6 +310,7 @@
 
 	var/obj/item/mecha_parts/component/armor/AC = internal_components[MECH_ARMOR]
 	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
+	var/obj/item/mecha_parts/component/coupler/CO = internal_components[MECH_COUPLER]
 
 	var/armor_condition = get_damage_string(AC)
 	var/hull_condition = get_damage_string(HC)
@@ -336,28 +338,35 @@
 		to_chat(user, "<span class='info'>You can see [occupant] inside.</span>")
 	return
 
+	if(!CO || CO.integrity <= 0)
+		to_chat(user, "<span class='warning'>The equipment coupling system appears non-functional.</span>")
+	else
+		if(CO.welded)
+			to_chat(user, "<span class='warning'>The equipment couplers are completely welded shut.</span>")
+		else if(!CO.quick_attach)
+			to_chat(user, "<span class='info'>The equipment coupling system lacks a quick-attach function.</span>")
+
 /obj/mecha/proc/get_damage_string(var/obj/item/mecha_parts/component/C)
 	if(!C)
 		return "<span class='danger'>missing</span>"
 
 	var/eff = C.get_efficiency() * 100
 	switch(eff)
-		if(95 to 100)
+		if(85 to 100)
 			return "<span class='info'>pristine</span>"
-		if(80 to 94)
+		if(65 to 85)
 			return "<span class='notice'>slightly worn</span>"
-		if(60 to 79)
+		if(45 to 65)
 			return "<span class='warning'>moderately damaged</span>"
-		if(35 to 59)
+		if(25 to 45)
 			return "<span class='warning'>heavily damaged</span>"
-		if(6 to 34)
+		if(5 to 25)
 			return "<span class='danger'>critically damaged</span>"
 		else
 			return "<span class='danger'>completely destroyed</span>"
 
 /obj/mecha/proc/drop_item()//Derpfix, but may be useful in future for engineering exosuits.
 	return
-
 
 /*
 Issues:
@@ -497,41 +506,23 @@ Fire damage comes from tank
 		src.log_message("Attack by paw. Attacker - [user].",1)
 	else
 		src.log_message("Attack by hand. Attacker - [user].",1)
-	var/obj/item/mecha_parts/mecha_equipment/passive/rack/R = get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/rack)
+	var/obj/item/mecha_parts/mecha_equipment/passive/rack/R = get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/rack) // :O you can use get_equipment!!
 	if(R && operation_allowed(user))
 		R.rack.AltClick(user)
 		return
 	user.do_attack_animation(src, user)
 
-	var/intento = user.a_intent
 
-	if(M_HULK in user.mutations)
-		switch(intento)
-			if(I_DISARM)
-				TryFlip(user, FALSE, tool = "[user]'s meaty arms")
-			if(I_HURT)
-				if(!prob(temp_deflect_chance))
-					src.take_damage(15)
-					src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-					user.visible_message("<span class='red'><b>[user] hits [src.name], doing some damage.</b></span>", "<span class='red'><b>You hit [src.name] with all your might. The metal creaks and bends.</b></span>")
-				else
-					user.visible_message("<span class='red'><b>[user] hits [src.name]. Nothing happens.</b></span>","<span class='red'><b>You hit [src.name] with no visible effect.</b></span>")
-					src.log_append_to_last("Armor saved.")
-	else
-		if(user.a_intent == I_DISARM && !flipped)
-			TryFlip(user, FALSE, tool = "[user]'s shove")
-		else
-			user.visible_message("<span class='red'><b>[user] hits [src.name]. Nothing happens.</b></span>","<span class='red'><b>You hit [src.name] with no visible effect.</b></span>")
-			src.log_append_to_last("Armor saved.")
-/*
-	if ((M_HULK in user.mutations) && !prob(temp_deflect_chance))
+	if(user.a_intent == I_DISARM && !flipped)
+		TryFlip(user, FALSE, tool = "[user]'s shove")
+		return
+	else if((M_HULK in user.mutations) && !prob(temp_deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 		user.visible_message("<span class='red'><b>[user] hits [src.name], doing some damage.</b></span>", "<span class='red'><b>You hit [src.name] with all your might. The metal creaks and bends.</b></span>")
 	else
 		user.visible_message("<span class='red'><b>[user] hits [src.name]. Nothing happens.</b></span>","<span class='red'><b>You hit [src.name] with no visible effect.</b></span>")
 		src.log_append_to_last("Armor saved.")
-*/
 	user.delayNextAttack(10)
 
 /obj/mecha/attack_paw(mob/user as mob)
@@ -675,7 +666,7 @@ Fire damage comes from tank
 
 	var/temp_deflect_chance = 0
 	var/temp_damage_minimum = 0
-	var/penetration_reduction = 0
+	var/temp_penetration_reduction = 0
 	var/temp_proj_penetration = 0
 
 	if(istype(Proj, /obj/item/projectile/beam))
@@ -685,12 +676,11 @@ Fire damage comes from tank
 	if(!ArmC || ArmC.integrity <= 5)
 		temp_deflect_chance = src.deflect_chance + (defense_mode ? 25 : 0)
 		temp_damage_minimum = src.damage_minimum
-		penetration_reduction = src.penetration_reduction
-
+		temp_penetration_reduction = src.penetration_reduction
 	else
 		temp_deflect_chance = round(ArmC.get_efficiency() * ArmC.deflect_chance + src.deflect_chance + (defense_mode ? 25 : 0))
 		temp_damage_minimum = round(ArmC.get_efficiency() * ArmC.damage_minimum) + src.damage_minimum
-		penetration_reduction = ArmC.pen_reduction + src.penetration_reduction
+		temp_penetration_reduction = ArmC.pen_reduction + src.penetration_reduction
 
 	if(prob(temp_deflect_chance))
 		src.occupant_message("<span class='notice'>The armor deflects incoming projectile.</span>")
@@ -712,8 +702,8 @@ Fire damage comes from tank
 			damage = ME.dynbulletdamage(Proj, damage)
 
 		if(damage < temp_damage_minimum)//too pathetic to really damage you.
-			src.occupant_message("<span class='notice'>The armor deflects incoming projectile.</span>")
-			src.visible_message("The [src.name] armor deflects\the [Proj]")
+			src.occupant_message("<span class='notice'>The [Proj] is fully absorbed by [src.name]'s armor.</span>")
+			src.visible_message("The [src.name] armor absorbs\the [Proj]")
 			return
 
 		src.take_damage(damage, Proj.flag)	//The take_damage() proc handles armor values
@@ -724,9 +714,8 @@ Fire damage comes from tank
 
 		//AP projectiles have a chance to cause additional damage
 		var/penetration = Proj.penetration + temp_proj_penetration
-		if(penetration_reduction)
-			penetration -= penetration_reduction
-			penetration = max(0, penetration)
+		if(temp_penetration_reduction)
+			penetration = max(0, (penetration - temp_proj_penetration))
 		if(penetration > 0)
 			var/hit_occupant = 1 //only allow the occupant to be hit once
 			for(var/i in 1 to min(Proj.penetration, round(Proj.damage/2)))
@@ -1148,7 +1137,7 @@ Fire damage comes from tank
 			user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s armor plating.</span>", \
 				"<span class='notice'>You begin slicing through \the [src]'s armor plating.</span>", \
 				"<span class='warning'>You hear welding noises.</span>")
-			if(WT.do_weld(user, src, 15 SECONDS, 5))
+			if(WT.do_weld(user, src, 15 SECONDS * AC.weldbreak_resist, 5))
 				TryWeldBreak(AC, user, WT)
 				return
 
@@ -1156,7 +1145,7 @@ Fire damage comes from tank
 			user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s hull.</span>", \
 				"<span class='notice'>You begin slicing through \the [src]'s hull.</span>", \
 				"<span class='warning'>You hear welding noises.</span>")
-			if(WT.do_weld(user, src, 15 SECONDS, 5))
+			if(WT.do_weld(user, src, 15 SECONDS * HC.weldbreak_resist, 5))
 				TryWeldBreak(HC, user, WT)
 				return
 
@@ -1390,6 +1379,7 @@ Fire damage comes from tank
 	move_inside(M, user)
 
 /obj/mecha/verb/move_inside()
+	var/obj/item/mecha_parts/component/hull/HC = internal_components[MECH_HULL]
 	set category = "Object"
 	set name = "Enter Exosuit"
 	set src in oview(1)
@@ -1420,12 +1410,17 @@ Fire damage comes from tank
 			return
 
 	if(get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/runningboard))
-		moved_inside(usr)
-		refresh_spells()
-		visible_message("<span class='good'>[usr] is instantly lifted into \the [src] by the running board!</span>")
+		enter_delay = max(0, enter_delay -= 40)
+		if(enter_delay <= 0)
+			visible_message("<span class='good'>[usr] is instantly lifted into \the [src] by the running board!</span>")
+			refresh_spells()
+			moved_inside(usr)
 	else
+		var/delay = 0
 		visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
-		if(do_after(usr, src, enter_delay))
+		if(HC)
+			delay += HC.egress_delay
+		if(do_after(usr, src, enter_delay + delay))
 			if(!src.occupant)
 				moved_inside(usr)
 				refresh_spells()
@@ -1673,7 +1668,6 @@ Fire damage comes from tank
 	var/obj/structure/deathsquad_gravpult/G = locate() in get_turf(src)
 	if(mob_container)
 		log_message("[mob_container] moved out.")
-		occupant.reset_view()
 		empty_bad_contents()
 		occupant << browse(null, "window=exosuit")
 
@@ -1682,6 +1676,7 @@ Fire damage comes from tank
 			occupant.client.mouse_pointer_icon = initial(occupant.client.mouse_pointer_icon)
 
 		mob_container.forceMove(exit)
+		occupant.reset_view(src)
 
 		if(istype(mob_container, /obj/item/device/mmi) || istype(mob_container, /obj/item/device/mmi/posibrain))
 			var/obj/item/device/mmi/mmi = mob_container
@@ -2081,9 +2076,11 @@ Fire damage comes from tank
 
 /////////////
 
-#warn
+
 /*
 bugs:
+Overturn messages not going to pilot
+Manual flips too hard and too easy
 
 */
 //debug
@@ -2148,12 +2145,10 @@ bugs:
 /obj/mecha/proc/CheckMobility()
 	var/obj/item/mecha_parts/component/actuator/actuator = internal_components[MECH_ACTUATOR]
 	if(!actuator || actuator.integrity <= 0 || actuator.rigid)
-		can_climb = FALSE
 		can_strafe = FALSE
 		if(lock_dir)
 			lock_direction()
 	else
-		can_climb = TRUE
 		can_strafe = TRUE
 
 /obj/mecha/proc/CheckEnclosed() // Checks and sets if the mech is still enclosed
@@ -2199,6 +2194,9 @@ bugs:
 	else
 		return ..()
 
+/obj/mecha
+	var/weight2 = 0
+
 /obj/mecha/proc/TryFlip(var/mob/living/user, var/mechanical = FALSE, var/tool)
 	if(flipped)
 		return
@@ -2208,39 +2206,26 @@ bugs:
 		return
 
 	var/weight = (max(1, get_step_delay()) * 100)
-	var/chance = min(1, 20 - (weight / 10))
+	weight2 = weight
 
 	if(mechanical)
 		DoFlip(TRUE)
 		return
-	else
-		if(istype(tool, /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp))
+
+		if(ishuman(user))
 			trying_to_flip = TRUE
-			to_chat(user, "<span class='notice'>You position the [tool] and begin attempting to flip [src]...</span>")
-			if(do_after(user, src, 3 SECONDS))
+			var/fitness = max(1, user.get_strength())
+			to_chat(user, "<span class='notice'>You press your hands against the [src], pushing your weight into it..</span>")
+			if(do_after(user, src, 4 SECONDS))
 				trying_to_flip = FALSE
-				if(prob(min(25, chance * 0.5)))
-					to_chat(user, "<span class='warning'>The [tool]'s hydraulics whine loudly, as it overturns [src]!</span>")
+				var/success_chance = max(5, min(75, (fitness * fitness) / (weight / 100))) // AI calculation. Supposedly capped at 5-75%. Who knows
+				if(prob(success_chance))
+					to_chat(user, "<span class='warning'>You manage to overturn the [src]!</span>")
 					DoFlip(TRUE)
 				else
-					to_chat(user, "<span class='warning'>The [tool] strains, hydraulics hissing, but nothing happens..</span>")
+					to_chat(user, "<span class='warning'>You push your weight into [src], but nothing happens.</span>")
+			else
 				trying_to_flip = FALSE
-
-		else
-			if(ishuman(user))
-				trying_to_flip = TRUE
-				var/fitness = max(1, user.get_strength())
-				to_chat(user, "<span class='notice'>You press your hands against the [src], pushing your weight into it..</span>")
-				if(do_after(user, src, 4 SECONDS))
-					trying_to_flip = FALSE
-					var/success_chance = min(5, 15 / fitness) // Very low chance, worse for weak people
-					if(prob(success_chance)) // Fixed: removed the !
-						to_chat(user, "<span class='warning'>You manage to overturn the [src]!</span>")
-						DoFlip(TRUE)
-					else
-						to_chat(user, "<span class='warning'>You push your weight into [src], but nothing happens.</span>")
-				else
-					trying_to_flip = FALSE
 
 /obj/mecha/proc/DoFlip(var/success = TRUE)
 	var/weight_mult = 1 * get_step_delay() // Mech's weight increases damage (it falls on you)

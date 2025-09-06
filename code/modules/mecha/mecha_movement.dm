@@ -77,6 +77,7 @@
 
 /obj/mecha/proc/dyndomove(direction)
 	var/obj/item/mecha_parts/component/electrical/EC = internal_components[MECH_ELECTRIC]
+	var/obj/item/mecha_parts/component/actuator/actuator = internal_components[MECH_ACTUATOR]
 	var/predicted_power_cost = step_energy_drain
 	if(EC && EC.integrity > 0)
 		predicted_power_cost = step_energy_drain * (EC.charge_cost_mod * max(get_step_delay(), 1))
@@ -99,7 +100,8 @@
 	if(hasInternalDamage(MECHA_INT_CONTROL_LOST))
 		move_result = mechsteprand()
 		if(prob(35))
-			TryFlip(occupant, TRUE, tool=null)
+			if(!actuator.rigid)
+				TryFlip(occupant, TRUE, tool=null)
 	else if(src.dir!=direction && !lock_dir)
 		move_result = mechturn(direction)
 		stepped = FALSE
@@ -125,7 +127,7 @@
 		var/moderate_threshold = weight_max * weight_tolerance
 		var/severe_threshold = weight_max * weight_tolerance * 1.25
 
-		if(current_weight > severe_threshold && prob(10))
+		if(current_weight > severe_threshold && prob(10) && !actuator.rigid)
 			TryFlip(occupant, TRUE, tool=null)
 
 		if(current_weight > moderate_threshold && prob(35))

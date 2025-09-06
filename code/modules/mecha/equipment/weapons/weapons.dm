@@ -17,7 +17,7 @@
 		energy_drain = rand(energy_drain*3, energy_drain*5)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/action(atom/target)
-	..()
+	.=..()
 	var/originaltarget = target
 	var/turf/curloc = chassis.loc
 	var/atom/targloc = get_turf(target)
@@ -114,7 +114,7 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/honker/action(target)
-	..()
+	.=..()
 	if(!chassis)
 		return 0
 	if(energy_drain && chassis.get_charge() < energy_drain)
@@ -260,7 +260,7 @@
 	step_delay = 100
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/action(target)
-	..()
+	.=..()
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
@@ -310,7 +310,7 @@
 	no_caliber = TRUE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/action(target)
-	..()
+	.=..()
 	if(can_pre_detonate && grenade)
 		grenade.prime(chassis.occupant)
 		grenade = null
@@ -396,7 +396,7 @@
 	return "[..()] \n[mode ? "" : "Current projectile: inflatable [inflatable_type ? "door" : "wall"]\[<a href='?src=\ref[src];inflatable_type=0'>change</a>\]"]\[<a href='?src=\ref[src];mode=0'>switch to [mode ? "deploy" : "deflate"] mode</a>\]"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/action(target)
-	..()
+	.=..()
 	if(mode)
 		if(istype(target, /obj/structure/inflatable))
 			if(!chassis.Adjacent(target))
@@ -542,7 +542,7 @@
 	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas/action(target)
-	..()
+	.=..()
 	set_ready_state(0)
 	var/obj/item/weapon/legcuffs/bolas/mech/M = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 50, 1)
@@ -564,7 +564,7 @@
 	range = MELEE | RANGED
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas/restrainment/action(target)
-	..()
+	.=..()
 	if(loc.Adjacent(target) && istype(target, /mob/living/carbon))
 		var/obj/mecha/M = loc
 		if(!istype(M))
@@ -614,7 +614,7 @@
 		)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/random_weapon/New()
-	..()
+	.=..()
 	var/weapontype = pick(existing_typesof(/obj/item/mecha_parts/mecha_equipment/weapon) - blacklisted)
 	new weapontype (loc)
 	qdel(src)

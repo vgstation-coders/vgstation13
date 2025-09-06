@@ -299,3 +299,4 @@
 		)
 
 	pen_reduction = 100 // blocks a lot of things
+	weldbreak_resist = 2
