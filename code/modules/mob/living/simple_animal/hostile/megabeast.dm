@@ -28,6 +28,7 @@ obj/effect/landmark/procedural_mobspawn/forgottenbeast
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "otherthing"
 	icon_dead = "otherthing-dead"
+	attack_sound = 'sound/weapons/heavysmash.ogg'
 	faction = "megabeast"
 	min_oxy = 0
 	max_oxy = 0
@@ -38,15 +39,15 @@ obj/effect/landmark/procedural_mobspawn/forgottenbeast
 	min_n2 = 0
 	max_n2 = 0
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
-	size = SIZE_BIG
+	size = SIZE_HUGE
 	a_intent = I_HURT
 	var/picked
 	var/mob/living/simple_animal/hostile/mymob
 	var/list/mob_types
 	var/list/breath_types = list()
-	var/list/gas_types = list()
+	var/datum/reagent/vapors
 	var/radioactive
-	var/rad_cooldown = 0
+	var/pulse_cooldown = 0
 	var/special_cooldown
 	var/breath_damage = 10
 	var/breath_damage_type = BRUTE
@@ -56,8 +57,11 @@ obj/effect/landmark/procedural_mobspawn/forgottenbeast
 /mob/living/simple_animal/hostile/forgotten_beast/Life()
 	..()
 	if(radioactive)
-		if(world.time > rad_cooldown +20 SECONDS)
+		if(world.time > pulse_cooldown +20 SECONDS)
 			rad_blast()
+	if(vapors)
+		if(world.time > pulse_cooldown +60 SECONDS)
+			GasAttack()
 
 /mob/living/simple_animal/hostile/forgotten_beast/death(var/gibbed = FALSE)
 	..(TRUE)
@@ -75,6 +79,7 @@ obj/effect/landmark/procedural_mobspawn/forgottenbeast
 	..()
 
 /mob/living/simple_animal/hostile/forgotten_beast/New(loc, var/datum/procedural_mobspawn/add_template)
+	appearance_flags |= PIXEL_SCALE
 	if(!add_template) //no template provided
 		if(!procgen_mob_datums.len) //if no pre-generated templates available...
 			add_template = new /datum/procedural_mobspawn/ //generating a new one will add it to the list automatically
@@ -101,6 +106,7 @@ obj/effect/landmark/procedural_mobspawn/forgottenbeast
 	color = template.color
 	transform = template.size_matrix
 	radioactive = template.radioactive
+	vapors = template.vapors
 	..()
 
 /mob/living/simple_animal/hostile/forgotten_beast/proc/BreathAttack(atom/A = target)
@@ -119,6 +125,12 @@ obj/effect/landmark/procedural_mobspawn/forgottenbeast
 	special_cooldown = world.time
 
 /mob/living/simple_animal/hostile/forgotten_beast/proc/GasAttack()
+	playsound(get_turf(src), 'sound/effects/smoke.ogg', 50, FALSE, 8)
+	// Create the reagents to put into the air
+	reagents.add_reagent(vapors.id, 100)
+	var/datum/chemical_reaction/chemsmoke/CS = new()
+	CS.on_reaction(src.reagents)
+	pulse_cooldown = world.time
 
 /mob/living/simple_animal/hostile/forgotten_beast/proc/rad_blast()//copied from glowing ones, does not require radiation
 	if(prob(30))
@@ -129,6 +141,6 @@ obj/effect/landmark/procedural_mobspawn/forgottenbeast
 
 	for(var/mob/living/carbon/human/H in view(src, vision_range))
 		H.apply_radiation(15, RAD_EXTERNAL)
-		rad_cooldown = world.time
+		pulse_cooldown = world.time
 		spawn(3 SECONDS)
 			set_light(1, 2, "#5dca31")

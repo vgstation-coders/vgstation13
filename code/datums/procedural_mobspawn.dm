@@ -19,7 +19,7 @@ var/list/breath_list = list(
 	list("sand breath", BRUTE,"#EOE8C5", list("PUSH", "BLIND")),
 	list("water cannon", BRUTE,"#DEF7F5", list("PUSH", "CHEM"), /datum/reagent/water),
 	list("booze blast", BRUTE,"#664300", list("PUSH", "CHEM"), /datum/reagent/ethanol),
-	list("paint spray", BRUTE,"#DEF7F5", list("PUSH", "CHEM"), /datum/reagent/colorful_reagent)
+	list("color spray", BRUTE,"#DEF7F5", list("PUSH", "CHEM"), /datum/reagent/colorful_reagent)
 	)
 var/list/appendage_modifier = list(
 	"gaunt",
@@ -64,12 +64,14 @@ var/list/appendage_modifier = list(
 	var/matrix/size_matrix
 	var/color
 	var/radioactive
+	var/datum/reagent/vapors
 	var/rad_cooldown
 	var/special_cooldown
 	var/breath_string
 	var/breath_damage
 	var/breath_damage_type
 	var/datum/custom_breath/mybreath
+	var/datum/reagent/mypoison
 	var/list/appendage_types = list(
 		"head",
 		"eye",
@@ -77,6 +79,7 @@ var/list/appendage_modifier = list(
 		"arm",
 		"leg",
 		"tail",
+		"wing",
 		)
 
 //Generate datum variables on creation
@@ -125,6 +128,8 @@ var/list/appendage_modifier = list(
 	if(prob(10))
 		radioactive = TRUE
 		desc += " It has a spooky green glow around it!"
+	else if(prob(20))
+		PickVapors()
 
 /datum/procedural_mobspawn/proc/GenerateDesc()//can be done much better
 	var/list/mydesc = list(
@@ -141,12 +146,16 @@ var/list/appendage_modifier = list(
 		appendage_types -= appendage
 		var/number = roll(1, 10)
 		var/amount = num2text(number)
-		desc += " Its [amount] [appendage][number < 1 ? " is" : "s are"] [modifier]."
+		desc += " Its [amount] [appendage][number <= 1 ? " is" : "s are"] [modifier]."
 		return
 	desc += " It is [modifier]."
 
 /datum/procedural_mobspawn/proc/PickProjectile()
 	ranged = TRUE
+	if(prob(20))
+		projectiletype = /obj/item/projectile/web
+		desc += " Beware of its webs!"
+		return
 	var/list/available_projectiles = existing_typesof(/obj/item/projectile) - restricted_roulette_projectiles
 	for(var/type in restrict_with_subtypes)
 		for(var/subtype in subtypesof(type))
@@ -154,7 +163,6 @@ var/list/appendage_modifier = list(
 		available_projectiles -= type
 	var/obj/item/projectile/P = pick(available_projectiles)
 	if(!P.name)
-		to_chat(world,"fission mailed")
 		PickProjectile()
 		return
 	projectiletype = P
@@ -178,6 +186,12 @@ var/list/appendage_modifier = list(
 			mybreath.damage_type = BRUTE
 		if(TOXIN)
 			mybreath.damage_type = TOX
+
+/datum/procedural_mobspawn/proc/PickVapors()
+	var/list/all_reagents = subtypesof(/datum/reagent)
+	var/vapornoun = pick("vapors", "gas", "smoke", "mist", "fog", "clouds")
+	vapors = pick(all_reagents)
+	desc += (" Beware its deadly [vapors.name] [vapornoun]!")
 
 /datum/procedural_mobspawn/proc/gen_monster(var/target)
 	new /mob/living/simple_animal/hostile/forgotten_beast(target, src)
@@ -274,8 +288,8 @@ var/list/appendage_modifier = list(
 			if(!L.on_fire)
 				L.adjust_fire_stacks(0.5)
 				L.ignite()
-		if(status == "RADIATION")//irradiates
-			L.apply_radiation((damage*0.5), RAD_EXTERNAL)
+		if(status == "RADIATION")
+			L.apply_radiation((damage), RAD_EXTERNAL)
 		if(status == "PLASMA")//contaminate equipment with plasma
 			if(!ishuman(L))
 				return
