@@ -328,7 +328,7 @@ var/list/appendage_modifier = list(
 						if(D.density)
 							obstructed = 1
 				if(prob(spread_chance) && TS.Adjacent(TU) && !TU.density && !tilehasfire && !obstructed)
-					var/obj/effect/fire_blast/custom/blast_spread/breath = new type(TU, fire_damage, current_step, blast_age+1, pressure, blast_temperature, duration, damage, color, damage_type, special, reagent_type)
+					var/obj/effect/fire_blast/custom/breath = new type(TU, fire_damage, current_step, blast_age+1, pressure, blast_temperature, duration, damage)
 					breath.color = color
 					breath.damage_type = damage_type
 					breath.special = special
