@@ -66,7 +66,7 @@
 					return
 
 			if(T.canBuildLattice(src))
-				to_chat(user, "<span class='notice'>Constructing support lattice ...</span>")
+				to_chat(user, "<span class='notice'>Constructing support lattice...</span>")
 				playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 				new /obj/structure/lattice(T)
 				use(1)

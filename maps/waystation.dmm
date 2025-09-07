@@ -43616,7 +43616,7 @@
 "kBh" = (
 /obj/machinery/atmospherics/trinary/mixer/mirrored{
 	dir = 1;
-	name = "Air to MIx"
+	name = "Air to Mix"
 	},
 /turf/simulated/floor,
 /area/engineering/atmos)

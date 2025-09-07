@@ -301,7 +301,7 @@
 
 /obj/structure/strange_present
 	name = "strange present"
-	desc = "It's a ... present?"
+	desc = "It's a... present?"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "strangepresent"
 	density = 1
