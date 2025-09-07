@@ -5,6 +5,7 @@
 
 //Loot tables
 /datum/loot_table
+	var/roll_mod = 0
 	var/list/loot = list(
 		COMMON_LOOT = list(),
 		UNCOMMON_LOOT = list(),
@@ -21,7 +22,7 @@
 	var/loot_flags = LOOT_TYPE_BEACH|LOOT_TYPE_DESERT|LOOT_TYPE_GRASS|LOOT_TYPE_JUNGLE|LOOT_TYPE_LAVA|LOOT_TYPE_SNOW|LOOT_TYPE_URBAN|LOOT_TYPE_XENO
 
 // Rolls on the loot table, returning an item or null if nothing was found
-/datum/loot_table/proc/loot_roll(roll_mod = 0)
+/datum/loot_table/proc/loot_roll()
 	var/roll = rand(1, 100) + roll_mod
 
 	var/list/possible_loot = list()
