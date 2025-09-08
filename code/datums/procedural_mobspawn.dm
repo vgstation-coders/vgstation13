@@ -37,6 +37,26 @@ var/list/appendage_modifier = list(
 	"feathery",
 	"tentacled",
 	)
+var/list/procgen_loot = list(
+	list(/obj/item/weapon/gun/energy/bison/alien, 1),//path, # of items
+	list(/obj/item/weapon/gun/energy/laser/captain/alien, 2),
+	list(/obj/item/weapon/gun/projectile/roulette_revolver, 2),
+	list(/obj/item/weapon/gun/stickybomb, 1),
+	list(/obj/item/weapon/gun/gravitywell, 1),
+	list(/obj/item/weapon/gun/energy/laser/captain, 1),
+	list(/obj/item/weapon/gun/portalgun, 1),
+	list(/obj/item/stack/sheet/mineral/phazon, 5),
+	list(/obj/item/stack/sheet/mineral/clown, 20),
+	list(/obj/item/stack/sheet/mineral/adamantine, 5),
+	list(/obj/machinery/chem_dispenser/scp_294, 1),
+	list(/obj/machinery/sleeper/mancrowave/galo, 1),
+	list(/obj/mecha/combat/phazon, 1),
+	list(/obj/mecha/combat/durand/old, 1),
+	list(/obj/mecha/medical/odysseus/murdysseus, 1),
+	list(/obj/item/weapon/storage/box/syndie_kit/mech_killdozer, 1),
+	list(/obj/item/weapon/storage/box/syndie_kit/emags_and_glue/, 1),
+	list(/obj/item/clothing/accessory/medal/participation, 1),
+	)
 
 /*
 //PROC GENNED MEGABEASTS
@@ -81,6 +101,7 @@ var/list/appendage_modifier = list(
 		"tail",
 		"wing",
 		)
+	var/list/randomloot
 
 //Generate datum variables on creation
 /datum/procedural_mobspawn/New(var/mob/living/simple_animal/hostile/mobtype)
@@ -123,6 +144,7 @@ var/list/appendage_modifier = list(
 	move_to_delay = mymob.move_to_delay
 	size_matrix = matrix()
 	size_matrix.Scale(1.5,1.5)
+	randomloot = pick(procgen_loot)
 	if(prob(33))
 		color = rgb(rand(0, 255), rand(0, 255), rand(0, 255))
 	if(prob(10))

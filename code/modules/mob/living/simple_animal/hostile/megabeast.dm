@@ -53,6 +53,8 @@ obj/effect/landmark/procedural_mobspawn/forgottenbeast
 	var/breath_damage_type = BRUTE
 	var/datum/custom_breath/mybreath
 	var/datum/procedural_mobspawn/template
+	var/obj/loot
+	var/loot_count
 
 /mob/living/simple_animal/hostile/forgotten_beast/Life()
 	..()
@@ -64,8 +66,13 @@ obj/effect/landmark/procedural_mobspawn/forgottenbeast
 			GasAttack()
 
 /mob/living/simple_animal/hostile/forgotten_beast/death(var/gibbed = FALSE)
-	..(TRUE)
-	visible_message("<span class='warning'><b>[src]</b> stops moving!</span>")
+	if(!gibbed)
+		gib()
+		return
+	for(var/i = loot_count; i > 0)
+		new loot(get_turf(src))
+		--i
+	new /obj/effect/gibspawner/generic(src.loc)
 	qdel(src)
 
 /mob/living/simple_animal/hostile/forgotten_beast/OpenFire(target)
@@ -86,6 +93,7 @@ obj/effect/landmark/procedural_mobspawn/forgottenbeast
 		else
 			add_template = pick(procgen_mob_datums)
 	template = add_template
+	meat_type = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/meat))
 
 	name = template.name
 	health = template.health
@@ -107,6 +115,8 @@ obj/effect/landmark/procedural_mobspawn/forgottenbeast
 	transform = template.size_matrix
 	radioactive = template.radioactive
 	vapors = template.vapors
+	loot = template.randomloot[1]
+	loot_count = template.randomloot[2]
 	..()
 
 /mob/living/simple_animal/hostile/forgotten_beast/proc/BreathAttack(atom/A = target)
