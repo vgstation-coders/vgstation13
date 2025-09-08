@@ -20,6 +20,8 @@
 	var/climate_type = CLIMATE_NONE
 	//Value that gets added to loot rolls on this planet.
 	var/loot_modifier = 0
+	//Allocation occupied by this planet.
+	var/allocation = null
 
 /datum/planet_type/New()
 	..()

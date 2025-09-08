@@ -12,37 +12,70 @@
 	var/scanning = FALSE
 	var/scans_completed = 0
 	var/max_scans = 25
-	var/base_power_cost = 100000
-	var/scan_time = 30 SECONDS
-	var/current_scan_power = 0
-	var/required_scan_power = 0
-	var/scan_start_time = 0
+	var/base_energy_cost = 1000000 // Base energy cost in Joules
+	var/max_power_rate = 10000 // Maximum power consumption rate in Watts (modified by upgrades)
+	var/current_scan_energy = 0 // Current energy accumulated in Joules
+	var/required_scan_energy = 0 // Required energy for current scan in Joules
+	var/energy_efficiency_modifier = 1.0 // Modifier for energy requirements (lower = more efficient)
+	var/power_rate_modifier = 1.0 // Modifier for power consumption rate (higher = more power)
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/planet_scanner,
 		/obj/item/weapon/stock_parts/scanning_module,
 		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/console_screen,
+		/obj/item/weapon/stock_parts/capacitor,
 		/obj/item/weapon/stock_parts/capacitor
 	)
 
 /obj/machinery/planet_scanner/New()
 	..()
-	calculate_required_power()
+	RefreshParts()
+	calculate_required_energy()
 	update_icon()
 
-/obj/machinery/planet_scanner/proc/calculate_required_power()
-	required_scan_power = base_power_cost * (2 ** scans_completed)
+/obj/machinery/planet_scanner/RefreshParts()
+	var/T = 0
+	// Better scanning modules reduce energy requirements by 25% per level
+	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
+		T += SM.rating
+	energy_efficiency_modifier = 0.75 ** max(0, T/2 - 1)
 
-/obj/machinery/planet_scanner/examine(mob/user)
-	..()
-	if(scans_completed >= max_scans)
-		to_chat(user, "<span class='notice'>The scanner's display shows: 'EXPLORATION LIMIT REACHED - NO MORE SUITABLE PLANETS DETECTED'</span>")
-	else if(scanning)
-		to_chat(user, "<span class='notice'>The scanner is currently performing a deep space scan. Power consumption: [current_scan_power]/[required_scan_power] watts.</span>")
-	else
-		to_chat(user, "<span class='notice'>The scanner's display shows: 'READY FOR SCAN [scans_completed + 1]/[max_scans] - REQUIRED POWER: [required_scan_power] WATTS'</span>")
+	T = 0
+	// Better capacitors increase maximum power consumption rate
+	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+		T += C.rating
+	// With 2 capacitors: T1=2, T2=4, T3=6, T4=8
+	// Power rates: 10kW, 100kW, 500kW, 1.25MW
+	switch(T)
+		if(2) // T1 capacitors
+			max_power_rate = 10000
+		if(3)
+			max_power_rate = 50000
+		if(4) // T2 capacitors
+			max_power_rate = 100000
+		if(5)
+			max_power_rate = 250000
+		if(6) // T3 capacitors
+			max_power_rate = 500000
+		if(7)
+			max_power_rate = 750000
+		if(8) // T4 capacitors
+			max_power_rate = 1250000
+
+	calculate_required_energy()
+/obj/machinery/planet_scanner/proc/calculate_required_energy()
+	required_scan_energy = round(base_energy_cost * (2 ** scans_completed) * energy_efficiency_modifier)
+
+/obj/machinery/planet_scanner/proc/get_available_power()
+	// Get the area power
+	var/area/our_area = get_area(src)
+	if(!our_area || !our_area.areaapc)
+		return 0
+
+	var/obj/machinery/power/apc/apc = our_area.areaapc
+	return apc.avail()
 
 /obj/machinery/planet_scanner/update_icon()
 	if(!anchored)
@@ -60,7 +93,7 @@
 
 /obj/machinery/planet_scanner/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(scanning)
-		to_chat(user, "<span class='notice'>Cannot anchor/unanchor while scanning!</span>")
+		to_chat(user, "<span class='notice'>Cannot unanchor while scanning!</span>")
 		return FALSE
 	. = ..()
 	if(!.)
@@ -71,30 +104,84 @@
 	if(!anchored)
 		to_chat(user, "<span class='warning'>\The [src] must be anchored before it can be operated!</span>")
 		return
+	tgui_interact(user)
 
-	if(stat & (BROKEN|NOPOWER))
-		to_chat(user, "<span class='warning'>\The [src] has no power!</span>")
-		return
+/obj/machinery/planet_scanner/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "PlanetScanner", "Deep Space Scanner")
+		ui.set_autoupdate(TRUE)
+		ui.open()
 
-	if(scans_completed >= max_scans)
-		to_chat(user, "<span class='warning'>The scanner has reached its exploration limit. No more suitable planets can be detected in this region of space.</span>")
-		return
+/obj/machinery/planet_scanner/ui_data(mob/user)
+	var/list/data = list()
+	data["anchored"] = anchored
+	data["powered"] = !(stat & (BROKEN|NOPOWER))
+	data["scanning"] = scanning
+	data["scans_completed"] = scans_completed
+	data["max_scans"] = max_scans
+	data["required_energy"] = required_scan_energy
+	data["min_power_rate"] = max_power_rate
+	data["available_power"] = get_available_power()
+	if(scanning)
+		data["current_energy"] = current_scan_energy
+	else
+		data["current_energy"] = null
+	data["can_scan"] = anchored && !(stat & (BROKEN|NOPOWER)) && !scanning && scans_completed < max_scans
+	data["at_scan_limit"] = scans_completed >= max_scans
+
+	if(SSmapping && SSmapping.discovered_planet_data && SSmapping.discovered_planet_data.len > 0)
+		data["discovered_planets"] = SSmapping.discovered_planet_data.Copy()
+		data["has_discoveries"] = TRUE
+	else
+		data["discovered_planets"] = null
+		data["has_discoveries"] = FALSE
 
 	if(scanning)
-		to_chat(user, "<span class='notice'>The scanner is already performing a scan.</span>")
+		var/progress = min(current_scan_energy / required_scan_energy, 1.0)
+		data["progress"] = round(progress * 100, 1)
+	else
+		data["progress"] = null
+
+	return data
+
+/obj/machinery/planet_scanner/ui_act(action, params)
+	. = ..()
+	if(.)
 		return
 
-	start_scan(user)
+	switch(action)
+		if("start_scan")
+			if(!anchored)
+				return FALSE
+			if(stat & (BROKEN|NOPOWER))
+				return FALSE
+			if(scans_completed >= max_scans)
+				return FALSE
+			if(scanning)
+				return FALSE
+			start_scan(usr)
+			return TRUE
+		if("print_disk")
+			var/planet_index = text2num(params["planet_index"])
+			if(!SSmapping || !SSmapping.discovered_planet_data || !SSmapping.discovered_planet_data.len)
+				return FALSE
+			// planet_index comes from frontend (0-indexed), check bounds accordingly
+			if(planet_index < 0 || planet_index >= SSmapping.discovered_planet_data.len)
+				to_chat(usr, "<span class='warning'>Invalid planet selected.</span>")
+				return FALSE
+			print_destination_disk(usr, planet_index)
+			return TRUE
+
+/obj/machinery/planet_scanner/ui_state(mob/user)
+	return default_state
 
 /obj/machinery/planet_scanner/proc/start_scan(mob/user)
-	to_chat(user, "<span class='notice'>You activate \the [src]. It begins scanning deep space for suitable planets...</span>")
-	visible_message("<span class='notice'>\The [src] hums to life and begins its scanning sequence.</span>")
-
 	scanning = TRUE
-	current_scan_power = 0
-	scan_start_time = world.time
+	current_scan_energy = 0
 	use_power = MACHINE_POWER_USE_ACTIVE
 	update_icon()
+	return TRUE
 
 /obj/machinery/planet_scanner/process()
 	if(!anchored)
@@ -103,69 +190,66 @@
 
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		if(scanning)
-			abort_scan("power failure")
+			abort_scan()
 		return
 
 	if(scanning)
-		// Check if we've been scanning too long (safety check)
-		if(world.time - scan_start_time > scan_time * 2)
-			abort_scan("system timeout")
+		// Get available power and consume what we can (up to max_power_rate)
+		var/available_power = get_available_power()
+		if(available_power <= 0)
+			to_chat(viewers(src), "<span class='warning'>[src] stops scanning due to no power!</span>")
+			abort_scan()
 			return
 
-		// Calculate progress based on elapsed time
-		var/elapsed_time = world.time - scan_start_time
-		var/progress = min(elapsed_time / scan_time, 1.0)
-		current_scan_power = progress * required_scan_power
+		// Use the minimum of available power and max power rate
+		var/power_consumed = min(available_power, max_power_rate)
 
-		// Consume power from the grid each tick while scanning
-		use_power(active_power_usage)
+		// Calculate energy accumulated this tick based on power consumed
+		// Power subsystem and machinery subsystem both tick every 2 seconds
+		// Energy (Joules) = Power (Watts) × Time (seconds)
+		// So each tick: Energy = power_consumed × 2 seconds
+		var/energy_per_tick = power_consumed * 2
+		current_scan_energy += energy_per_tick
 
-		// Show progress every 15 seconds (approximately every 8 process cycles)
-		if((world.time - scan_start_time) % 150 == 0 && progress < 1.0)
-			visible_message("<span class='notice'>\The [src] continues scanning... ([round(progress * 100)]% complete)</span>")
+		// Consume the power from the grid through area power system
+		use_power(power_consumed)
 
 		// Check if scan is complete
-		if(progress >= 1.0)
+		if(current_scan_energy >= required_scan_energy)
 			complete_scan()
 
 	..() // Call parent process
 
-/obj/machinery/planet_scanner/proc/abort_scan(reason)
+/obj/machinery/planet_scanner/proc/abort_scan()
 	scanning = FALSE
-	current_scan_power = 0
+	current_scan_energy = 0
 	use_power = MACHINE_POWER_USE_IDLE
+	playsound(src, 'sound/machines/alert.ogg', 50, 1)
 	update_icon()
-	visible_message("<span class='warning'>\The [src] stops scanning due to [reason].</span>")
 
 /obj/machinery/planet_scanner/proc/complete_scan()
 	scanning = FALSE
 	use_power = MACHINE_POWER_USE_IDLE
 	scans_completed++
 
-	visible_message("<span class='notice'>\The [src] completes its scan with a satisfied beep!</span>")
-	playsound(src, 'sound/machines/ding.ogg', 50, 1)
+	playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
 
-	// Generate the planet
+	// Generate the planet and register it with the correct discoverer
 	spawn_new_planet()
 
-	// Calculate power for next scan
-	calculate_required_power()
+	// Calculate energy for next scan
+	calculate_required_energy()
 	update_icon()
 
 /obj/machinery/planet_scanner/proc/spawn_new_planet()
 	if(!SSmapping)
-		visible_message("<span class='warning'>\The [src] displays an error: 'MAPPING SUBSYSTEM UNAVAILABLE'</span>")
-		return
+		CRASH("New planet spawn attempted before mapping subsystem initialized")
 
-	// Get random planet type
+	// Pick random planet type
 	var/list/available_planets = SSmapping.planet_types.Copy()
-	if(!available_planets.len)
-		visible_message("<span class='warning'>\The [src] displays an error: 'NO PLANET TYPES AVAILABLE'</span>")
-		return
-
 	var/selected_planet_type = pick(available_planets)
 
-	// Get random ruin type
+	// Pick random ruin
 	var/list/available_ruins = list()
 	for(var/ruin_path in subtypesof(/datum/map_element/mining_surprise))
 		available_ruins += ruin_path
@@ -174,29 +258,31 @@
 	if(available_ruins.len)
 		selected_ruin_type = pick(available_ruins)
 
-	message_admins("Planet scanner at [src.x],[src.y],[src.z] is generating a new planet (scan #[scans_completed])")
+	SSmapping.spawn_planetoid(selected_planet_type, selected_ruin_type, "Deep Space Scanner")
 
-	try
-		var/new_z_level = SSmapping.spawn_planetoid(selected_planet_type, selected_ruin_type)
-		if(new_z_level)
-			var/datum/planet_type/planet_instance = new selected_planet_type
-			visible_message("<span class='notice'>\The [src] displays: 'PLANET DETECTED AND CATALOGUED - TYPE: [planet_instance.name] - Z-LEVEL: [new_z_level]'</span>")
-			message_admins("Successfully generated [planet_instance.name] on z-level [new_z_level]")
-			qdel(planet_instance)
-		else
-			visible_message("<span class='warning'>\The [src] displays an error: 'PLANET GENERATION FAILED'</span>")
-			message_admins("Planet scanner failed to generate planet")
-	catch(var/exception/e)
-		visible_message("<span class='warning'>\The [src] displays an error: 'CRITICAL SYSTEM ERROR'</span>")
-		message_admins("Planet scanner encountered error: [e]")
+	return selected_planet_type
 
-/obj/item/weapon/circuitboard/planet_scanner
-	name = "circuit board (Deep Space Scanner)"
-	build_path = /obj/machinery/planet_scanner
-	board_type = "machine"
-	origin_tech = "programming=3;engineering=3;bluespace=4"
-	req_components = list(
-		/obj/item/weapon/stock_parts/scanning_module = 2,
-		/obj/item/weapon/stock_parts/manipulator = 1,
-		/obj/item/weapon/stock_parts/capacitor = 1
-	)
+/obj/machinery/planet_scanner/proc/print_destination_disk(mob/user, planet_index)
+	if(!SSmapping || !SSmapping.discovered_planet_data || !SSmapping.discovered_planet_data.len)
+		to_chat(user, "<span class='warning'>No planets discovered to print.</span>")
+		return FALSE
+
+	// Convert from 0-indexed frontend to 1-indexed DM list
+	var/dm_index = planet_index + 1
+	if(dm_index < 1 || dm_index > SSmapping.discovered_planet_data.len)
+		to_chat(user, "<span class='warning'>Invalid planet selected.</span>")
+		return FALSE
+
+	var/list/planet_data = SSmapping.discovered_planet_data[dm_index]
+	if(!planet_data)
+		to_chat(user, "<span class='warning'>Planet data corrupted.</span>")
+		return FALSE
+
+	// For now, just show a message. This could be expanded to create actual disk items
+	to_chat(user, "<span class='notice'>Printing destination disk for [planet_data["procedural_name"]]...</span>")
+	playsound(src, 'sound/effects/dotmatrixprinter.ogg', 40, 1)
+
+	// TODO: Create actual destination disk item with planet data
+	// This would require implementing a destination disk item type
+
+	return TRUE

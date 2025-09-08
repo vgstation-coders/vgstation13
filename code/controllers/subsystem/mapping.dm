@@ -20,7 +20,11 @@ var/datum/subsystem/mapping/SSmapping
 		/datum/planet_type/xeno
 	)
 	//All spawned planetoids
+	var/list/planets = list()
+	//All allocations
 	var/list/allocations = list()
+	//List of planet discovery data for scanner UI
+	var/list/discovered_planet_data = list()
 
 /datum/subsystem/mapping/New()
 	NEW_SS_GLOBAL(SSmapping)
@@ -88,7 +92,7 @@ var/datum/subsystem/mapping/SSmapping
 		return
 
 	var/selected_type = available_planets[selected_name]
-	return SSmapping.spawn_planetoid(selected_type, /datum/map_element/mining_surprise/crashed_tradeship)
+	return SSmapping.spawn_planetoid(selected_type, /datum/map_element/mining_surprise/crashed_tradeship, "Administrative Command")
 
 //Creates a grid of 25 99x99 squares for procedural generation
 /datum/subsystem/mapping/proc/create_procgen_level()
@@ -106,11 +110,17 @@ var/datum/subsystem/mapping/SSmapping
 		var/datum/biome/biome_instance = new biome_path()
 		biomes[biome_path] += biome_instance
 
-/datum/subsystem/mapping/proc/spawn_planetoid(datum/planet_type/planet_datum, ruin_type)
-	var/datum/planetGenerator/mapgen = new planet_datum.mapgen
+/datum/subsystem/mapping/proc/spawn_planetoid(datum/planet_type/planet_datum, ruin_type, discoverer_name = "Administrative Command")
+	var/datum/planet_type/newplanet = new planet_datum
+	var/datum/planetGenerator/mapgen = new newplanet.mapgen
+	planets += newplanet
+
+	// Register the planet discovery automatically when spawned
+	register_planet(newplanet, discoverer_name)
+
 	var/datum/map_element/mining_surprise/used_ruin = ispath(ruin_type) ? (new ruin_type) : ruin_type
 	message_admins("Generating turfs")
-	var/datum/allocation/A = assign_allocation(planet_datum, world.maxz)
+	var/datum/allocation/A = assign_allocation(newplanet, world.maxz)
 	mapgen.generate_turfs(A.turfs)
 	var/list/ruin_turfs = list()
 	var/list/ruin_templates = list()
@@ -134,6 +144,49 @@ var/datum/subsystem/mapping/SSmapping
 	message_admins("Starting weather controller")
 	SSweather.resume()
 	return world.maxz
+
+//Registers a planet discovery for UI purposes
+/datum/subsystem/mapping/proc/register_planet(datum/planet_type/planet_instance, discoverer_name = "Deep Space Scanner")
+	var/list/planet_data = list()
+	planet_data["name"] = planet_instance.name
+	planet_data["desc"] = planet_instance.desc
+	planet_data["type"] = planet_instance.type
+	planet_data["procedural_name"] = generate_procedural_planet_name()
+	planet_data["discoverer"] = discoverer_name
+	planet_data["discovery_time"] = world.time
+
+	discovered_planet_data += list(planet_data)
+	return planet_data
+
+//Helper function for procedural planet name generation
+/datum/subsystem/mapping/proc/generate_procedural_planet_name()
+	var/list/placeholder_names = list(
+		"Kepler-442b", "Proxima Centauri b", "TRAPPIST-1e", "Gliese 667Cc",
+		"HD 40307g", "Wolf 1061c", "Kepler-186f", "TOI-715b",
+		"LHS 1140b", "K2-18b", "WASP-96b", "55 Cancri e"
+	)
+	return pick(placeholder_names)
+
+//Manual discovery registration for admin-spawned planets
+/datum/subsystem/mapping/proc/register_existing_planet(datum/planet_type/planet_instance, discoverer_name = "Administrative Command")
+	// Check if this planet is already discovered to avoid duplicates
+	for(var/list/existing_data in discovered_planet_data)
+		if(existing_data["type"] == planet_instance.type)
+			return null // Already discovered
+
+	return register_planet(planet_instance, discoverer_name)
+
+//Debug/admin proc to manually register planets from the planets list
+/proc/register_all_existing_planets()//debug
+	if(!SSmapping || !SSmapping.planets)
+		return "No mapping subsystem or planets found"
+
+	var/registered_count = 0
+	for(var/datum/planet_type/planet in SSmapping.planets)
+		if(SSmapping.register_existing_planet(planet, "Administrative Discovery"))
+			registered_count++
+
+	return "Registered [registered_count] planets for discovery"
 
 //// BEGIN LLM-SLOP I MUST REVIEW AND FIX LATER ////
 //Post-processes ruin turfs to match the planet environment
@@ -256,6 +309,7 @@ var/datum/subsystem/mapping/SSmapping
 	A.z = z_id
 	A.turfs = turfs_from_sector(A.sector, z_id)
 	allocations += A
+	planet_type.allocation = A
 	return A
 
 //Gets turfs given sector
@@ -267,6 +321,13 @@ var/datum/subsystem/mapping/SSmapping
 	var/y_min = 1 + (sector_y - 1) * 100
 	var/y_max = sector_y * 100 - 1
 	return block(locate(x_min, y_min, z_in), locate(x_max, y_max, z_in))
+
+//Get turfs from planet
+/datum/subsystem/mapping/proc/turfs_from_planet(var/datum/planet_type/planet)
+	if(!planet || !planet.allocation)
+		return list()
+	var/datum/allocation/A = planet.allocation
+	return A.turfs
 
 //Get allocation from coords or turf
 /datum/subsystem/mapping/proc/get_allocation(var/x = 0, var/y = 0, var/z = 7, var/turf/T = null)
