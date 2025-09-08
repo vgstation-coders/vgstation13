@@ -187,11 +187,11 @@
             else
                 artifact_debris(1)
 
-        else if(!excavation_level > 0 && prob(15))
+        else if(excavation_level > 0 && prob(15))
             B = new /obj/structure/boulder(T)
             B.geological_data = geologic_data
 
-        
+
 /datum/finds/proc/large_artifact_fail()
     var/turf/unsimulated/T = holder.get()
     if(!istype(T))
