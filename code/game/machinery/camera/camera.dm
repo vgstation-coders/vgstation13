@@ -294,7 +294,7 @@ var/list/camera_messages = list()
 	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
 		user.delayNextAttack(5)
 		var/mob/living/U = user
-		to_chat(U, "You hold [W] up to the camera...")
+		to_chat(U, "You hold \the [W] up to the camera...")
 
 		var/info = ""
 		if(istype(W, /obj/item/weapon/paper))
