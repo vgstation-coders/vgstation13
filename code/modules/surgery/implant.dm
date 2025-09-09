@@ -196,7 +196,7 @@
 	if (affected.implants.len)
 		var/obj/item/obj = affected.implants[affected.implants.len]
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
-		"<span class='notice'>You take [obj] out of the incision on [target]'s [affected.display_name] with \the [tool].</span>" )
+		"<span class='notice'>You take \the [obj] out of the incision on \the [target]'s [affected.display_name] with \the [tool].</span>" )
 		affected.implants -= obj
 
 		//Handle possessive brain borers.
