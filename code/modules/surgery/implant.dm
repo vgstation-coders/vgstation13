@@ -214,7 +214,7 @@
 			obj.forceMove(get_turf(target))
 	else if (affected.hidden)
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
-		"<span class='notice'>You take something out of the incision on [target]'s [affected.display_name] with \the [tool].</span>" )
+		"<span class='notice'>You take something out of the incision on \the [target]'s [affected.display_name] with \the [tool].</span>" )
 		affected.hidden.forceMove(get_turf(target))
 		user.put_in_hands(affected.hidden)
 		if(!affected.hidden.blood_DNA)
