@@ -225,7 +225,7 @@
 
 	else if (tool.clumsy_check(user) && prob(20))
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
-		"<span class='notice'>You take something out of the incision on [target]'s [affected.display_name] with \the [tool].</span>" )
+		"<span class='notice'>You take something out of the incision on \the [target]'s [affected.display_name] with \the [tool].</span>" )
 		var/obj/clowndigobj = pick(/obj/item/weapon/bikehorn/rubberducky, /obj/item/weapon/reagent_containers/food/snacks/pie, /obj/item/toy/singlecard, /obj/item/clothing/accessory/waterflower)
 		clowndigobj = new clowndigobj(target.loc)
 		if (istype(clowndigobj, /obj/item/toy/singlecard))
