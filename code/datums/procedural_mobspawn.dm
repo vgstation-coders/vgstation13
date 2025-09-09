@@ -356,23 +356,3 @@ var/list/procgen_loot = list(
 					breath.special = special
 					breath.reagent_type = reagent_type
 			sleep(1)
-
-/*
-//Testing item used to test stuff
-*/
-/obj/item/device/mobspawner
-	name = "Test Beastspawner"
-	desc = "This spawns megabeasts!"
-	icon = 'icons/obj/lighting.dmi'
-	icon_state = "flashlight"
-	item_state = "flashlight"
-	color = COLOR_RED
-
-/obj/item/device/mobspawner/attack_self(mob/user)
-	new /mob/living/simple_animal/hostile/forgotten_beast(get_turf(src), new /datum/procedural_mobspawn())
-	say("Processing!")
-	playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
-
-/obj/item/device/mobspawner/AltClick(mob/user)
-	user.client.beasts_panel()
-
