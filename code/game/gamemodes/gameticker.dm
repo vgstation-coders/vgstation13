@@ -746,7 +746,8 @@ var/datum/controller/gameticker/ticker
 		var/datum/gamemode/dynamic/D = mode
 		if(D.living_players.len < 6) // Fill all the SMES to capacity if there's 5 or less players, to give players more time to set up the power.
 			for(var/obj/machinery/power/battery/smes/S in power_machines)
-				S.charge = S.capacity
+				if(S.charge) //Only do this if the SMES has any charge in the first place
+					S.charge = S.capacity
 
 // -- Tag mode!
 /datum/controller/gameticker/proc/tag_mode(var/mob/user)
