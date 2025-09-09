@@ -18,7 +18,7 @@
 	return target_zone == LIMB_CHEST
 
 /datum/surgery_step/pluck/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	user.visible_message("[user] starts plucking feathers from [target]'s chest with \the [tool].", \
+	user.visible_message("<span class='notice'>[user] starts plucking feathers from [target]'s chest with \the [tool].</span>", \
 	"You start plucking feathers from [target]'s chest with \the [tool].")
 	..()
 

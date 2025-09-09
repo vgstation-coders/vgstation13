@@ -342,10 +342,10 @@
 		if(F.amount <= 2)
 			feather_regen += 1 SECONDS
 			if(feather_regen == 2 SECONDS) //it would constantly spam if I didn't do this.
-				visible_message("[src] starts to regrow some feathers.")
+				visible_message("<span class='notice'>[src] starts to regrow some feathers.</span>")
 		if(feather_regen >= 5 MINUTES)
 			F.amount = F.initial_amount
-			visible_message("[src] regrows their feathers.")
+			visible_message("<span class='notice'>[src] regrows their feathers.</span>")
 			feather_regen = 0
 			if(original_body_color)
 				body_color = original_body_color
