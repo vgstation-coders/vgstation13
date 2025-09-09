@@ -80,19 +80,63 @@ var/datum/subsystem/mapping/SSmapping
 
 	..()
 
-/proc/generate_planet()//debug
+/proc/generate_planet(mob/user)//admin function for creating custom planets
+	if(!user)
+		return
+
+	if(!check_rights(R_ADMIN, 0, user))
+		return
+
+	if(!SSmapping)
+		to_chat(user, "<span class='warning'>Mapping subsystem not initialized!</span>")
+		return
+
 	var/list/available_planets = list()
 	for(var/planet_path in subtypesof(/datum/planet_type))
 		var/datum/planet_type/P = new planet_path()
 		available_planets[P.name] = planet_path
 		qdel(P)
 
-	var/selected_name = input(usr, "Select a planet type to generate:", "Planet Generation") as null|anything in available_planets
+	var/selected_name = input(user, "Select a planet type to generate:", "Planet Generation") as null|anything in available_planets
 	if(!selected_name)
 		return
 
 	var/selected_type = available_planets[selected_name]
-	return SSmapping.spawn_planetoid(selected_type, /datum/map_element/mining_surprise/crashed_tradeship, "Administrative Command")
+
+	// Allow selection of vault/ruin type
+	var/list/available_vaults = list("None" = null)
+	for(var/vault_path in subtypesof(/datum/map_element))
+		if(vault_path == /datum/map_element)
+			continue
+		var/datum/map_element/V = new vault_path()
+		if(V.name && V.name != "map element")
+			available_vaults[V.name] = vault_path
+		else
+			// Use the type name if no custom name
+			var/type_name = copytext("[vault_path]", findlasttext("[vault_path]", "/") + 1)
+			available_vaults[type_name] = vault_path
+		qdel(V)
+
+	var/selected_vault_name = input(user, "Select a vault/ruin to place on the planet (optional):", "Vault Selection") as null|anything in available_vaults
+	if(!selected_vault_name)
+		return
+
+	var/selected_vault = available_vaults[selected_vault_name]
+
+	// Get the admin's name for discovery registration
+	var/discoverer_name = "Administrative Command ([user.key])"
+
+	message_admins("[key_name_admin(user)] is generating a new planet of type [selected_name] with vault [selected_vault_name ? selected_vault_name : "None"].")
+	log_admin("[key_name(user)] generated a new planet of type [selected_name] with vault [selected_vault_name ? selected_vault_name : "None"].")
+
+	var/z_level = SSmapping.spawn_planetoid(selected_type, selected_vault, discoverer_name)
+
+	if(z_level)
+		to_chat(user, "<span class='notice'>Successfully generated planet on z-level [z_level].</span>")
+		return z_level
+	else
+		to_chat(user, "<span class='warning'>Failed to generate planet!</span>")
+		return
 
 //Creates a grid of 25 99x99 squares for procedural generation
 /datum/subsystem/mapping/proc/create_procgen_level()

@@ -817,6 +817,30 @@
 				usr = new_mob //We probably transformed ourselves
 			show_player_panel(new_mob)
 
+	// Procedural generation panel handlers
+	else if(href_list["procgen_create"])
+		if(!check_rights(R_ADMIN))
+			return
+		generate_planet(usr)
+		// Refresh the panel after planet generation
+		src.procedural_generation_panel()
+		return
+
+	else if(href_list["procgen_jump"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/planet_type/planet = locate(href_list["procgen_jump"])
+		if(planet && planet.allocation)
+			var/datum/allocation/alloc = planet.allocation
+			var/turf/jump_target = locate(alloc.sector[1] * 50, alloc.sector[2] * 50, alloc.z)
+			if(jump_target)
+				SendAdminGhostTo(jump_target, null)
+				to_chat(usr, "<span class='notice'>Jumped to planet [planet.name] at sector [alloc.sector[1]], [alloc.sector[2]] on z-level [alloc.z].</span>")
+			else
+				to_chat(usr, "<span class='warning'>Failed to find jump target for planet [planet.name].</span>")
+		else
+			to_chat(usr, "<span class='warning'>Invalid planet reference or allocation!</span>")
+		return
 
 	/////////////////////////////////////new ban stuff
 	else if(href_list["unbanf"])
