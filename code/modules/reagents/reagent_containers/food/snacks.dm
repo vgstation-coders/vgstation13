@@ -4,7 +4,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks
 	name = "snack"
-	desc = "yummy"
+	desc = "Yummy."
 	icon_state = null
 	log_reagents = 1
 	w_type = RECYK_BIOLOGICAL

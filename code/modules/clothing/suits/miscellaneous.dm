@@ -293,7 +293,7 @@ var/list/tag_suits_list = list()
 
 /obj/item/clothing/suit/justice
 	name = "justice suit"
-	desc = "this pretty much looks ridiculous."
+	desc = "This pretty much looks ridiculous."
 	icon_state = "justice"
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS

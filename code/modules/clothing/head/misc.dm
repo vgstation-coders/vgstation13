@@ -188,7 +188,7 @@
 
 /obj/item/clothing/head/justice
 	name = "justice hat"
-	desc = "fight for what's righteous!"
+	desc = "Fight for what's righteous!"
 	icon_state = "justicered"
 	item_state = "justicered"
 	flags = FPRINT
