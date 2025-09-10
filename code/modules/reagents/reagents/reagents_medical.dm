@@ -608,7 +608,7 @@ var/global/list/charcoal_doesnt_remove=list(
 /datum/reagent/engnanobots/on_overdose(var/mob/living/M)
 	var/turf/T = get_turf(M)
 	var/obj/structure/cable/C = T.get_cable_node()
-	if(C && electrocute_mob(user, C, src, siemens_coeff))
+	if(C && electrocute_mob(user, C, src, 1))
 		spark(M)
 		return
 
