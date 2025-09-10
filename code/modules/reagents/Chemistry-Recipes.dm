@@ -97,13 +97,12 @@
 	secondary = 1
 
 /datum/chemical_reaction/fake_explosion_potassium/on_reaction(var/datum/reagents/holder, var/created_volume)
-	var/range = min (MAX_EXPLOSION_RANGE, light + round(created_volume/3))
+	var/range = min (MAX_EXPLOSION_RANGE, round(created_volume/3) - 1)
 	var/devastation = round(min(3, range * 0.25)) // clamps to 3 devastation for grenades
 	var/heavy = round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
 	var/light = min(7, range) // clamps to 7 light range for grenades
 	var/flash = range * 1.5
 	explosion_effect(get_turf(holder),devastation,heavy,light,flash)
-	holder.clear_reagents(TRUE)
 
 /datum/chemical_reaction/explosion_potassium/holy
 	id = "holy_explosion_potassium"
