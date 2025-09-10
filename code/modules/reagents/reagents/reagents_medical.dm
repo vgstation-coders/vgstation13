@@ -592,6 +592,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#80805F" //rgb: 52, 63, 66
+	overdose_am = 15
 	custom_metabolism = 0.1
 	density = 134.21
 	specheatcap = 0.19999
@@ -603,6 +604,13 @@ var/global/list/charcoal_doesnt_remove=list(
 	for(var/obj/item/I in M)
 		I.restock()
 	M.radiation = max(M.radiation - 5 * REM, 0)
+
+/datum/reagent/engnanobots/on_overdose(var/mob/living/M)
+	var/turf/T = get_turf(M)
+	var/obj/structure/cable/C = T.get_cable_node()
+	if(C && electrocute_mob(user, C, src, siemens_coeff))
+		spark(M)
+		return
 
 /datum/reagent/cargonanobots
 	name = "Cargonian Nanobots"
