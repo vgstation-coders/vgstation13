@@ -601,6 +601,9 @@ var/global/list/charcoal_doesnt_remove=list(
 	if(..())
 		return 1
 
+	var/obj/item/cell/possible_cell = M.get_cell()
+	if(possible_cell)
+		possible_cell.give(200 * REM)
 	for(var/obj/item/I in M)
 		I.restock()
 	M.radiation = max(M.radiation - 5 * REM, 0)
@@ -621,6 +624,9 @@ var/global/list/charcoal_doesnt_remove=list(
 	if(..())
 		return 1
 
+	var/obj/item/cell/possible_cell = M.get_cell()
+	if(possible_cell)
+		possible_cell.give(volume*10)
 	for(var/obj/item/I in M)
 		I.restock()
 
