@@ -103,7 +103,7 @@
 	var/heavy = round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
 	var/light = min(7, range) // clamps to 7 light range for grenades
 	var/flash = range * 1.5
-	explosion_effect(get_turf(holder),devastation,heavy,light,flash)
+	explosion_effect(get_turf(holder.my_atom),devastation,heavy,light,flash)
 
 /datum/chemical_reaction/fake_explosion_potassium/bigger
 	name = "Honkoglycerin Explosion"
