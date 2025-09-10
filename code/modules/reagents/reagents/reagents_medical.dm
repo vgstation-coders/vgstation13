@@ -606,9 +606,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	M.radiation = max(M.radiation - 5 * REM, 0)
 
 /datum/reagent/engnanobots/on_overdose(var/mob/living/M)
-	var/turf/T = get_turf(M)
-	var/obj/structure/cable/C = T.get_cable_node()
-	if(C && electrocute_mob(M, C, C, 1))
+	var/obj/structure/cable/C = locate() in get_turf(M)
+	if(electrocute_mob(M, C, C, 1))
 		spark(M)
 		return
 
