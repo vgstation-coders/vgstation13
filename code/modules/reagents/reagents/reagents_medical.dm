@@ -601,7 +601,7 @@ var/global/list/charcoal_doesnt_remove=list(
 		return 1
 
 	for(var/obj/item/I in M)
-		I.recharger_process()
+		I.restock()
 	M.radiation = max(M.radiation - 5 * REM, 0)
 
 /datum/reagent/cargonanobots
