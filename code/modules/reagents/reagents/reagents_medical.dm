@@ -620,7 +620,7 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	if(isitem(O))
 		var/obj/item/I = O
-		I.restock()
+		I.restock(TRUE)
 
 /datum/reagent/engnanobots/reaction_mob(mob/living/M, method, volume, list/zone_sels, allow_permeability, list/splashplosion)
 	if(..())

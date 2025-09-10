@@ -390,8 +390,8 @@
 		return
 	return ..()
 
-/obj/item/stack/restock()
-	if(!restock_amount)
+/obj/item/stack/restock(nanobots = FALSE)
+	if(nanobots || !restock_amount)
 		return //Do not restock this stack type
 	if(amount < max_amount)
 		amount += restock_amount

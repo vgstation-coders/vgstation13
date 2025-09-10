@@ -88,7 +88,7 @@
 	capacity = 1
 	var/charge = 0
 
-/obj/item/robot_rack/ammo/restock()
+/obj/item/robot_rack/ammo/restock(nanobots = FALSE)
 	charge++
 	if((charge >= NEEDED_CHARGE_TO_RESTOCK_MAG) && (length(held) < capacity)) //takes about 60 seconds.
 		var/obj/item/ammo_storage/magazine/ammo = new initial_type(src)

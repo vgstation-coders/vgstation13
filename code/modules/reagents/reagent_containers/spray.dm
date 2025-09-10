@@ -87,8 +87,8 @@
 	amount_per_transfer_from_this = (amount_per_transfer_from_this == 10 ? 5 : 10)
 	to_chat(user, "<span class='notice'>You switched [amount_per_transfer_from_this == 10 ? "on" : "off"] the pressure nozzle. You'll now use [amount_per_transfer_from_this] units per spray.</span>")
 
-/obj/item/weapon/reagent_containers/spray/restock()
-	if(preset_reagent)
+/obj/item/weapon/reagent_containers/spray/restock(nanobots = FALSE)
+	if(!nanobots && preset_reagent)
 		reagents.add_reagent(preset_reagent, 2)
 
 /obj/item/weapon/reagent_containers/spray/proc/make_puff(var/atom/target, var/mob/user)
@@ -221,7 +221,7 @@
 /obj/item/weapon/reagent_containers/spray/pacid
 	name = "Polyacid spray"
 	preset_reagent = PACID
-	
+
 /obj/item/weapon/reagent_containers/spray/lube
 	name = "Lube spray"
 	preset_reagent = LUBE
