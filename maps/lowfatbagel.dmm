@@ -57595,7 +57595,7 @@
 	},
 /area/centcom/ert)
 "jyl" = (
-/obj/effect/landmark/map_element/salvage_shuttle,
+/obj/effect/landmark/map_element/salvage_shuttle_spiders,
 /turf/space,
 /area)
 "jyA" = (
