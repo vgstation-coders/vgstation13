@@ -369,7 +369,10 @@
 	..()
 
 /obj/structure/closet/bullet_act(var/obj/item/projectile/Proj)
-	health -= Proj.damage
+	var/multiplier = 1
+	if(Proj.firer?.reagents?.has_reagent(CARGONANOBOTS))
+		multiplier = 2
+	health -= (Proj.damage * multiplier)
 	. = ..()
 	if(health <= 0)
 		broken = 1
