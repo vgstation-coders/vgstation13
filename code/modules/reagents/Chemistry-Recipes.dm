@@ -105,7 +105,7 @@
 	var/flash = range * 1.5
 	explosion_effect(get_turf(holder),devastation,heavy,light,flash)
 
-/datum/chemical_reaction/ake_explosion_potassium/bigger
+/datum/chemical_reaction/fake_explosion_potassium/bigger
 	name = "Honkoglycerin Explosion"
 	id = "explosion_honk_2"
 	result = null
