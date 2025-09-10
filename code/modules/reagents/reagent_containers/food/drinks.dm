@@ -1251,7 +1251,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee
 	name = "Energizer"
-	desc = "Smells a bit like Battery Acid"
+	desc = "Smells a bit like Battery Acid."
 	icon_state = "engicoffee"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee/New()
 	..()
@@ -1259,7 +1259,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee_shard
 	name = "Supermatter Sea Salt Soda "
-	desc = "Mmmmm Blurple"
+	desc = "Mmmmm... blurple."
 	icon_state = "engicoffee_shard"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/engicoffee_shard/New()
 	..()
@@ -1961,7 +1961,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/kahlua
 	name = "Robert Robust's Coffee Liqueur"
-	desc = "A widely known, Mexican coffee-flavoured liqueur. In production since 1936, HONK"
+	desc = "A widely known, Mexican coffee-flavoured liqueur. In production since 1936, HONK!"
 	icon_state = "kahluabottle"
 	vending_cat = "fermented"
 	molotov = -1

@@ -1018,7 +1018,7 @@
 
 /obj/item/toy/gasha/comdom
 	name = "toy comdom"
-	desc = "WE GOT THE VALIDS AI CALL THE SHUTTLE"
+	desc = "WE GOT THE VALIDS AI, CALL THE SHUTTLE!"
 	icon_state = "comdom"
 
 /obj/item/toy/gasha/maniac
@@ -1237,12 +1237,12 @@
 /obj/item/toy/gasha/femsec
 	name = "toy femsec"
 	icon_state = "femsec"
-	desc = "bodybag accessory not included"
+	desc = "bodybag accessory not included."
 
 /obj/item/toy/gasha/hoptard
 	name = "toy HoPtard"
 	icon_state = "hoptard"
-	desc = "uhhhhhhhh"
+	desc = "Uhhhhhhhh..."
 
 	//I couldn't think of anywhere else to put this
 /obj/item/toy/canary

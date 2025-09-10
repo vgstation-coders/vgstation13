@@ -1006,7 +1006,7 @@
 
 /obj/item/clothing/under/hunter
 	name = "modern vampire hunter's attire"
-	desc = "A tough leather vest with stylish white pants"
+	desc = "A tough leather vest with stylish white pants."
 	icon_state = "hunter"
 	item_state = "hunter_uniform"
 	_color = "hunter"

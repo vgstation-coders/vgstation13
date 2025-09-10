@@ -395,7 +395,7 @@ var/list/tag_suits_list = list()
 
 /obj/item/clothing/suit/reaper_robes
 	name = "\improper grim robes"
-	desc = "Tends to snag on tombstones"
+	desc = "Tends to snag on tombstones."
 	icon_state = "reaper_hoodie" //edited version of chaplain_hoodie. 1px longer, and more open at the front
 	item_state = "reaper_hoodie"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
@@ -781,7 +781,7 @@ var/list/tag_suits_list = list()
 
 /obj/item/clothing/suit/bedsheet_ghost
 	name = "Bedsheet Ghost"
-	desc = "You did cut out eye holes, but you don't remember drawing a face. Spooooky"
+	desc = "You did cut out eye holes, but you don't remember drawing a face. Spooooky."
 	icon_state = "bedsheet_ghost"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	blood_overlay_type = "coat"

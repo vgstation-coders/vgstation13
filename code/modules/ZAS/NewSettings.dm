@@ -78,7 +78,7 @@ var/global/ZAS_Settings/zas_settings = new
 /datum/ZAS_Setting/fire_fuel_energy_release
 	value = 2000000
 	name = "Fire - Fuel energy release"
-	desc = "The energy in joule released when burning one mol of a burnable substance"
+	desc = "The energy in joule released when burning one mol of a burnable substance."
 	valtype=ZAS_TYPE_NUMERIC
 
 /datum/ZAS_Setting/airflow_lightest_pressure
@@ -194,7 +194,7 @@ var/global/ZAS_Settings/zas_settings = new
 
 /datum/ZAS_Setting/PLASMA_DMG
 	name = "Plasma Damage Amount"
-	desc = "Self Descriptive"
+	desc = "Self descriptive."
 	value = 3
 	valtype=ZAS_TYPE_NUMERIC
 
@@ -230,7 +230,7 @@ var/global/ZAS_Settings/zas_settings = new
 
 /datum/ZAS_Setting/CONTAMINATION_LOSS
 	name = "Contamination Loss"
-	desc = "How much toxin damage is dealt from contaminated clothing"
+	desc = "How much toxin damage is dealt from contaminated clothing."
 	value = 0.02 //Per tick?  ASK ARYN
 	valtype=ZAS_TYPE_NUMERIC
 
