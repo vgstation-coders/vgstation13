@@ -602,6 +602,7 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	for(var/obj/item/I in M)
 		I.recharger_process()
+	M.radiation = max(M.radiation - 5 * REM, 0)
 
 /datum/reagent/cargonanobots
 	name = "Cargonian Nanobots"
