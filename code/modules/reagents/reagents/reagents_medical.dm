@@ -585,6 +585,46 @@ var/global/list/charcoal_doesnt_remove=list(
 		H.update_body()
 		to_chat(H, "The nanobots burn themselves out in your body.")
 
+/datum/reagent/engnanobots
+	name = "Energetic Nanobots"
+	id = ENGNANOBOTS
+	description = "Microscopic robots intended for use in humans. Configured for rapid recharging of electrical systems."
+	reagent_state = REAGENT_STATE_SOLID
+	dupeable = FALSE
+	color = "#80805F" //rgb: 52, 63, 66
+	custom_metabolism = 0.1
+	density = 134.21
+	specheatcap = 0.19999
+
+/datum/reagent/engnanobots/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	for(var/obj/item/I in M)
+		I.recharger_process()
+
+/datum/reagent/cargonanobots
+	name = "Cargonian Nanobots"
+	id = CARGONANOBOTS
+	description = "Microscopic robots intended for use in humans. Configured for departmental seccession and overthrowals."
+	reagent_state = REAGENT_STATE_SOLID
+	dupeable = FALSE
+	color = "#A05F3F" //rgb: 52, 63, 66
+	custom_metabolism = 0.1
+	density = 96.64
+	specheatcap = 5.14318
+
+/datum/reagent/cargonanobots/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(prob(10))
+		to_chat(M, "You feel [pick("as if your department needs to secede",\
+									"like proudly proclaiming your department allegiance",\
+									"the need to move a lot of crates around")].")
+	if(prob(5))
+		M.say("[pick("Hail cargonia","Move freight","Miners, [pick("don't die on me","bring me my materials")]")]!")
+
 /datum/reagent/cryoxadone
 	name = "Cryoxadone"
 	id = CRYOXADONE

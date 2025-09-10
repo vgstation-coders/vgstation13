@@ -1,3 +1,5 @@
+#define CARGONIA_FACTOR 5
+
 /*
  * Recipe datum
  * For the actual crafting that uses these datums, see stack.dm
@@ -14,10 +16,11 @@
 	var/start_unanchored = 0
 	var/z_up_required = 0
 	var/z_down_required = 0
+	var/cargonia_boost = 0
 	var/list/other_reqs = list()
 	var/list/extra_data = list()
 
-/datum/stack_recipe/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list(), z_up_required = 0, z_down_required = 0)
+/datum/stack_recipe/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list(), z_up_required = 0, z_down_required = 0, cargonia_boost = 0)
 	src.title = title
 	src.result_type = result_type
 	src.req_amount = req_amount
@@ -30,6 +33,7 @@
 	src.other_reqs = other_reqs
 	src.z_up_required = z_up_required
 	src.z_down_required = z_down_required
+	src.cargonia_boost = cargonia_boost
 
 /datum/stack_recipe/proc/can_build_here(var/mob/user, var/turf/T)
 	if(one_per_turf && locate(result_type) in T)
@@ -63,6 +67,8 @@
 	S.last_work = current_work
 	if (time)
 		var/actual_time = S.time_modifier(time)
+		if(cargonia_boost && user.reagents && user.reagents.has_reagent(CARGONANOBOTS))
+			actual_time /= CARGONIA_FACTOR
 		if (!do_after(user, get_turf(S), actual_time))
 			S.stop_build(current_work == S.last_work)
 			return
@@ -273,7 +279,7 @@ var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes",
 var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/metal, 1, 4, 60),
 	new/datum/stack_recipe("metal rod",  /obj/item/stack/rods,          1, 2, 60),
-	new/datum/stack_recipe("conveyor belt", /obj/item/stack/conveyor_assembly, 2, 1, 20),
+	new/datum/stack_recipe("conveyor belt", /obj/item/stack/conveyor_assembly, 2, 1, 20, cargonia_boost = 1),
 	new/datum/stack_recipe("plated catwalk frame", /obj/item/stack/tile/plated_catwalk, 1, 4, 60),
 	//new/datum/stack_recipe/dorf("chain", /obj/item/stack/chains, 2, 1, 20, 5, inherit_material = TRUE),
 	null,
@@ -344,7 +350,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("crate shelf parts", /obj/item/weapon/rack_parts/shelf,                5                                ),
 	new/datum/stack_recipe("filing cabinet", /obj/structure/filingcabinet/filingcabinet,						  2, one_per_turf = 1, time = 15   ),
 	new/datum/stack_recipe("closet",      /obj/structure/closet/basic,                            2, one_per_turf = 1, time = 15   ),
-	new/datum/stack_recipe("metal crate", /obj/structure/closet/crate/basic,                      2, one_per_turf = 1, time = 15   ),
+	new/datum/stack_recipe("metal crate", /obj/structure/closet/crate/basic,                      2, one_per_turf = 1, time = 15, cargonia_boost = 1),
 	null,
 	new/datum/stack_recipe_list("airlock assemblies", list(
 		new/datum/stack_recipe("standard airlock assembly",      /obj/structure/door_assembly,                            4, time = 50, one_per_turf = 1, on_floor = 1),
@@ -413,7 +419,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("cannonball", /obj/item/cannonball/iron, 20, time = 4 SECONDS, one_per_turf = 0, on_floor = 1),
 	new/datum/stack_recipe("frying pan", /obj/item/weapon/reagent_containers/pan, 10, time = 4 SECONDS, one_per_turf = 0, on_floor = 0),
 	new/datum/stack_recipe("lunch box", /obj/item/weapon/storage/lunchbox/metal, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0),
-	new/datum/stack_recipe("lockless coinbox", /obj/item/weapon/storage/lockbox/coinbox/nolock, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0),
+	new/datum/stack_recipe("lockless coinbox", /obj/item/weapon/storage/lockbox/coinbox/nolock, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0, cargonia_boost = 1),
 	null,
 	blacksmithing_recipes,
 	null,
@@ -482,7 +488,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	null,
 	new/datum/stack_recipe("apiary",			/obj/item/apiary,						10,		time = 25,	one_per_turf = 0,	on_floor = 0),
 	new/datum/stack_recipe("trophy mount",		/obj/item/mounted/frame/trophy_mount,	2,		time = 15									),
-	new/datum/stack_recipe("notice board",		/obj/structure/noticeboard,				2,		time = 15,	one_per_turf = 1,	on_floor = 1),
+	new/datum/stack_recipe("notice board",		/obj/structure/noticeboard,				2,		time = 15,	one_per_turf = 1,	on_floor = 1, cargonia_boost = 1),
 	null,
 	//Painting
 	new/datum/stack_recipe("knitting needles",	/obj/item/knitting_needles,				1,		time = 10,	one_per_turf = 0,	on_floor = 0),
@@ -703,3 +709,5 @@ var/list/datum/stack_recipe/ralloy_recipes = list (
 var/list/datum/stack_recipe/sand_recipes = list (
 	new/datum/stack_recipe("sandstone", /obj/item/stack/sheet/mineral/sandstone, 1, 1, 50),
 	)
+
+#undef CARGONIA_FACTOR
