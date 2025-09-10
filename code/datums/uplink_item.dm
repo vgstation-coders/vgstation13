@@ -573,8 +573,8 @@ var/list/discounted_items_of_the_round = list()
 	name = "Seismic Artillery Remote"
 	desc = "This device can periodically fire a remote syndicate bluespace artillery, detonating a seismic impact on direct intercept with the station, superficially resembling a real explosion and even alerting nearby bhangmeters as if legitimate."
 	item = /obj/item/device/seismic_remote
-	cost = 10
-	discounted_cost = 8
+	cost = 4
+	discounted_cost = 2
 	jobs_with_discount = SCIENCE_POSITIONS
 
 /datum/uplink_item/sabotage_tools/radstorm_remote
