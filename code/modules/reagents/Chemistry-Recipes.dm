@@ -1152,7 +1152,7 @@
 	id = CARGONANOBOTS
 	result = CARGONANOBOTS
 	required_reagents = list(NANOBOTS = 1, PLASMA = 50)
-	result_amount = 1
+	result_amount = 2.5
 
 //Surgery tools from chemicals because why not? Requires a vial to make them and consumes it as a part of making the tool.
 //DO NOT COPY PASTE THESE WITHOUT SOME KIND OF CONTAINER/HOLDER CHECK BECAUSE qdel WILL DELETE ANY REAGENT CONTAINER WITHOUT IT. IE PLAYERS
