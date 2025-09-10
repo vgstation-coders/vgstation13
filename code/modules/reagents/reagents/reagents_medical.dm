@@ -611,6 +611,25 @@ var/global/list/charcoal_doesnt_remove=list(
 		spark(M)
 		return
 
+/datum/reagent/engnanobots/reaction_obj(obj/O, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	O.restock()
+
+/datum/reagent/engnanobots/reaction_mob(mob/living/M, method, volume, list/zone_sels, allow_permeability, list/splashplosion)
+	if(..())
+		return 1
+
+	for(var/obj/item/I in M)
+		I.restock()
+
+/datum/reagent/engnanobots/reaction_turf(turf/simulated/T, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	emitted_harvestable_radiation(T, volume, volume/10)
+
 /datum/reagent/cargonanobots
 	name = "Cargonian Nanobots"
 	id = CARGONANOBOTS
