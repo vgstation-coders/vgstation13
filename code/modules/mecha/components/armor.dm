@@ -36,7 +36,7 @@
 	icon_state = "armor_mining"
 	armor_soak = 0.5
 	step_delay = 200
-	max_integrity = 90
+	max_integrity = 110
 	deflect_chance = 3
 	pen_reduction = 2
 	damage_minimum = 3
@@ -59,7 +59,7 @@
 	desc = "A very lightweight foam panel that covers the internals of the mech."
 	icon_state = "armor_light"
 	armor_soak = 0.3
-	max_integrity = 35
+	max_integrity = 40
 	step_delay = 10
 	pen_reduction = 1
 	damage_minimum = 0
@@ -83,7 +83,7 @@
 	icon_state = "armor_durable"
 	armor_soak = 0.6
 	step_delay = 250
-	max_integrity = 110
+	max_integrity = 130
 	deflect_chance = 5
 	pen_reduction = 3
 	damage_minimum = 3
@@ -104,10 +104,10 @@
 	icon_state = "armor_military"
 	armor_soak = 0.75
 	step_delay = 400
-	max_integrity = 140
+	max_integrity = 160
 	deflect_chance = 10
 	optimal_type = list(/obj/mecha/combat)
-	pen_reduction = 5
+	pen_reduction = 7
 	damage_minimum = 5
 	damage_absorption = list(
 		"brute"=0.5,
@@ -139,7 +139,7 @@
 	icon_state = "armor_marshal"
 	armor_soak = 0.6
 	step_delay = 80
-	max_integrity = 85
+	max_integrity = 95
 	deflect_chance = 5
 	pen_reduction = 5
 	damage_minimum = 0
@@ -160,7 +160,7 @@
 	icon_state = "armor_striker"
 	armor_soak = 0.8
 	step_delay = 100
-	max_integrity = 70
+	max_integrity = 75
 	deflect_chance = 5
 	pen_reduction = 10
 	damage_absorption = list(
@@ -180,7 +180,7 @@
 	icon_state = "armor_kevlar"
 	armor_soak = 0.5
 	step_delay = 60
-	max_integrity = 100
+	max_integrity = 120
 	deflect_chance = 0
 	pen_reduction = 5
 	damage_absorption = list(
@@ -199,7 +199,7 @@
 	desc = "An armour panel that provides top protection, while remaining lightweight, thanks to the cutting-edge ceramics and duraplastics used."
 	armor_soak = 0.75
 	step_delay = 140
-	max_integrity = 140
+	max_integrity = 160
 	deflect_chance = 10
 	pen_reduction = 10
 	damage_minimum = 5
@@ -219,7 +219,7 @@
 	desc = "An advanced matrix of spaced composites, duraplastics and depleted uranium, very heavy, but provides extreme protection."
 	armor_soak = 0.8
 	step_delay = 500
-	max_integrity = 220
+	max_integrity = 250
 	optimal_type = list(/obj/mecha/combat/marauder)
 	deflect_chance = 15
 	damage_minimum = 10

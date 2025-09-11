@@ -4,7 +4,7 @@
 	icon_state = "phazon"
 	initial_icon = "phazon"
 	base_color = "#4D79A0"
-	step_in = 0.75
+	step_in = 1
 	dir_in = 1 //Facing North.
 	step_energy_drain = 3
 	health = 150
@@ -29,7 +29,7 @@
 
 	damage_minimum = 0
 
-	weight_max = 500
+	weight_max = 400
 	penetration_reduction = 5 // blocks 9mm
 
 	max_hull_equip = 2

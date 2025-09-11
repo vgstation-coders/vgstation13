@@ -14,7 +14,7 @@
 	relative_size = 20
 	internal_damage_flag = MECHA_INT_SHORT_CIRCUIT
 	broken_icon = "board_broken"
-	var/charge_cost_mod = 1
+	var/efficiency_mod = 1
 	var/locking = TRUE
 /*
 /obj/item/mecha_parts/component/electrical/attackby(obj/item/W as obj, mob/user as mob) // todo: Add soldering interaction
@@ -36,15 +36,15 @@
 	emp_resistance = -1
 	max_integrity = 30
 	relative_size = 25
-	charge_cost_mod = 0.5
+	efficiency_mod = 0.5
 
 /obj/item/mecha_parts/component/electrical/durable
 	name = "armoured mecha electrical & data core"
 	desc = "A standard data and electrical hub, covered by a sheath of armour."
 	icon_state = "board_durable"
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=3"
-	emp_resistance = 1
-	max_integrity = 120
+	emp_resistance = 2
+	max_integrity = 150
 	step_delay = 100
 	relative_size = 25
-	charge_cost_mod = 1.5
+	efficiency_mod = 2

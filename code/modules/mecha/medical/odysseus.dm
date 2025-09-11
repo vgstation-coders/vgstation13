@@ -19,7 +19,7 @@
 		"urinetrouble"
 	)
 
-	weight_max = 140
+	weight_max = 160
 	penetration_reduction = 0
 	damage_minimum = 0
 	weight_tolerance = 1.2
@@ -88,6 +88,8 @@
 	max_utility_equip = 4
 	max_universal_equip = 1
 	max_special_equip = 1
+
+	weight_max = 240
 
 	starting_components = list(
 		/obj/item/mecha_parts/component/hull,

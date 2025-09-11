@@ -24,7 +24,7 @@
 
 
 	damage_minimum = 5 			//Big stompy
-	weight_max = 650
+	weight_max = 500
 	penetration_reduction = 5 // blocks 9mm, up to 7.62 with armor
 	weight_tolerance = 2
 

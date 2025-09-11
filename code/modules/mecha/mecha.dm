@@ -161,7 +161,8 @@
 	var/flipped = FALSE
 	var/user_trapped = FALSE
 	var/trying_to_flip = FALSE
-	var/weight_tolerance = 1.5
+	var/weight_tolerance = 1.5 // Mult to max weight before serious problems occur
+	var/equipment_power_mult = 1
 
 /obj/mecha/get_cell()
 	return cell
@@ -191,6 +192,11 @@
 	icon_state = initial_icon
 	icon_state += "-open"
 	UpdateIcon()
+	CheckEnclosed()
+	CheckLocks()
+	CheckMobility()
+	CheckPowerUse()
+	SetPressure()
 
 /obj/mecha/Destroy()
 	go_out(loc, TRUE)
@@ -475,6 +481,7 @@ Fire damage comes from tank
 		CheckEnclosed()
 		CheckLocks() // holy procs batman!
 		CheckMobility()
+		CheckPowerUse()
 		SetPressure()
 		log_append_to_last("Took [damage] points of damage. Damage type: \"[damage_type]\".",1)
 	return
@@ -510,12 +517,12 @@ Fire damage comes from tank
 	if(R && operation_allowed(user))
 		R.rack.AltClick(user)
 		return
-	user.do_attack_animation(src, user)
 
+	user.do_attack_animation(src, user)
 
 	if(user.a_intent == I_DISARM && !flipped)
 		TryFlip(user, FALSE, tool = "[user]'s shove")
-		return
+		to_chat(user, "<span class='warning'>debug: probably called TryFlip! [user]</span>")
 	else if((M_HULK in user.mutations) && !prob(temp_deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
@@ -645,7 +652,6 @@ Fire damage comes from tank
 				src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 	return
 
-
 /obj/mecha/bullet_act(var/obj/item/projectile/Proj) //wrapper
 	var/obj/item/mecha_parts/component/armor/ArmC = internal_components[MECH_ARMOR]
 	var/chance = 75
@@ -691,6 +697,9 @@ Fire damage comes from tank
 	if(Proj.flag == "taser")
 		use_power(200)
 		return
+
+	var/ignore_threshold
+	var/damage = Proj.damage
 
 	if(!(Proj.nodamage))
 		var/ignore_threshold
@@ -1416,10 +1425,7 @@ Fire damage comes from tank
 			refresh_spells()
 			moved_inside(usr)
 	else
-		var/delay = 0
 		visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
-		if(HC)
-			delay += HC.egress_delay
 		if(do_after(usr, src, enter_delay + delay))
 			if(!src.occupant)
 				moved_inside(usr)
@@ -1656,6 +1662,7 @@ Fire damage comes from tank
 				UpdateIcon()
 				break
 
+
 	var/atom/movable/mob_container
 	if(ishuman(occupant))
 		mob_container = occupant
@@ -1668,6 +1675,7 @@ Fire damage comes from tank
 	var/obj/structure/deathsquad_gravpult/G = locate() in get_turf(src)
 	if(mob_container)
 		log_message("[mob_container] moved out.")
+		occupant.reset_view(src)
 		empty_bad_contents()
 		occupant << browse(null, "window=exosuit")
 
@@ -1676,7 +1684,6 @@ Fire damage comes from tank
 			occupant.client.mouse_pointer_icon = initial(occupant.client.mouse_pointer_icon)
 
 		mob_container.forceMove(exit)
-		occupant.reset_view(src)
 
 		if(istype(mob_container, /obj/item/device/mmi) || istype(mob_container, /obj/item/device/mmi/posibrain))
 			var/obj/item/device/mmi/mmi = mob_container
@@ -1879,28 +1886,14 @@ Fire damage comes from tank
 	return call((proc_res["dynusepower"]||src), "dynusepower")(amount)
 
 /obj/mecha/proc/dynusepower(amount)
-	var/obj/item/mecha_parts/component/electrical/EC = internal_components[MECH_ELECTRIC]
-
-	if(EC)
-		amount = amount * (2 - EC.get_efficiency()) * EC.charge_cost_mod
-	else
-		amount *= 5
-
 	if(get_charge())
-		cell.use(amount)
+		cell.use(amount*equipment_power_mult)
 		return 1
 	return 0
 
 /obj/mecha/proc/give_power(amount)
-	var/obj/item/mecha_parts/component/electrical/EC = internal_components[MECH_ELECTRIC]
-
-	if(!EC)
-		amount /= 4
-	else
-		amount *= EC.get_efficiency()
-
 	if(!isnull(get_charge()))
-		cell.give(amount)
+		cell.give(amount/equipment_power_mult)
 		return 1
 	return 0
 
@@ -2142,6 +2135,13 @@ Manual flips too hard and too easy
 		can_lock = TRUE
 		return 1
 
+/obj/mecha/proc/CheckPowerUse()
+	var/obj/item/mecha_parts/component/electrical/EC = internal_components[MECH_ELECTRIC]
+	if(!EC || EC.integrity <= 0)
+		equipment_power_mult = 10
+	else
+		equipment_power_mult = EC.efficiency_mod
+
 /obj/mecha/proc/CheckMobility()
 	var/obj/item/mecha_parts/component/actuator/actuator = internal_components[MECH_ACTUATOR]
 	if(!actuator || actuator.integrity <= 0 || actuator.rigid)
@@ -2194,9 +2194,6 @@ Manual flips too hard and too easy
 	else
 		return ..()
 
-/obj/mecha
-	var/weight2 = 0
-
 /obj/mecha/proc/TryFlip(var/mob/living/user, var/mechanical = FALSE, var/tool)
 	if(flipped)
 		return
@@ -2206,26 +2203,25 @@ Manual flips too hard and too easy
 		return
 
 	var/weight = (max(1, get_step_delay()) * 100)
-	weight2 = weight
 
 	if(mechanical)
 		DoFlip(TRUE)
 		return
 
-		if(ishuman(user))
-			trying_to_flip = TRUE
-			var/fitness = max(1, user.get_strength())
-			to_chat(user, "<span class='notice'>You press your hands against the [src], pushing your weight into it..</span>")
-			if(do_after(user, src, 4 SECONDS))
-				trying_to_flip = FALSE
-				var/success_chance = max(5, min(75, (fitness * fitness) / (weight / 100))) // AI calculation. Supposedly capped at 5-75%. Who knows
-				if(prob(success_chance))
-					to_chat(user, "<span class='warning'>You manage to overturn the [src]!</span>")
-					DoFlip(TRUE)
-				else
-					to_chat(user, "<span class='warning'>You push your weight into [src], but nothing happens.</span>")
+	if(user && ishuman(user))
+		trying_to_flip = TRUE
+		var/fitness = max(1, user.get_strength())
+		to_chat(user, "<span class='notice'>You press your hands against the [src], pushing your weight into it..</span>")
+		if(do_after(user, src, 3  SECONDS))
+			trying_to_flip = FALSE
+			var/success_chance = max(10, min(75, (fitness * fitness) / (weight / 100))) // AI calculation. Supposedly capped at 10-75%. Who knows
+			if(prob(success_chance))
+				to_chat(user, "<span class='warning'>You manage to overturn the [src]!</span>")
+				DoFlip(TRUE)
 			else
-				trying_to_flip = FALSE
+				to_chat(user, "<span class='warning'>You push your weight into [src], but nothing happens.</span>")
+		else
+			trying_to_flip = FALSE
 
 /obj/mecha/proc/DoFlip(var/success = TRUE)
 	var/weight_mult = 1 * get_step_delay() // Mech's weight increases damage (it falls on you)
@@ -2241,7 +2237,7 @@ Manual flips too hard and too easy
 	layer = CLOSED_DOOR_LAYER
 	plane = OBJ_PLANE
 	if(occupant && !enclosed)
-		if(prob(falloutchance)) // occuapnt falls out
+		if(prob(falloutchance)) // occupant falls out
 			to_chat(occupant, "<span class='danger'>As [src] turns over, you topple out of the open hull onto the ground!</span>")
 			occupant.take_overall_damage(10) // ow my face
 			occupant.Stun(1)
@@ -2251,7 +2247,7 @@ Manual flips too hard and too easy
 				occupant.Stun(2)
 				occupant.Knockdown(2)
 				visible_message("<span class='red'><b>[occupant] is crushed by [src]!</b></span>")
-				src.go_out()
+				src.go_out(src.loc)
 			src.go_out(loc)
 
 /obj/mecha/proc/TryUnFlip(var/mob/living/user, var/tool)
@@ -2260,7 +2256,6 @@ Manual flips too hard and too easy
 
 	var/chance = 10
 	var/trying = FALSE
-	var/obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/clamp
 
 	if(trying)
 		to_chat(user, "<span class='note'>The [src] is already being rightened!")
@@ -2283,15 +2278,6 @@ Manual flips too hard and too easy
 			else
 				to_chat(user, "<span class='note'>Somehow, you manage to righten the [src] with your [tool].")
 				UnFlip()
-	else
-		if(tool == clamp)
-			trying = TRUE
-			to_chat(user, "<span class='note'>The [user] wedges its [tool] underneath the [src], trying to raise it.")
-			chance = 90
-			if(do_after(user, src, 3 SECONDS))
-				if(prob(chance))
-					trying = FALSE
-					UnFlip()
 
 /obj/mecha/proc/UnFlip()
 	if(!src || src.health <= 0)

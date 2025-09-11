@@ -44,7 +44,7 @@
 			tally += C.get_step_delay()
 
 	if(tally <= weight_max)
-		tally = 0
+		tally -= (max(0, weight_max * 0.5))
 	else
 		tally -= weight_max
 
@@ -59,7 +59,7 @@
 
 	tally /= 100
 
-	return step_in + max(1, tally)
+	return step_in + max(0, tally)
 
 /obj/mecha/proc/CalcWeight(var/total_weight = 0)
 	if(!src || src.health <= 0)
@@ -80,7 +80,7 @@
 	var/obj/item/mecha_parts/component/actuator/actuator = internal_components[MECH_ACTUATOR]
 	var/predicted_power_cost = step_energy_drain
 	if(EC && EC.integrity > 0)
-		predicted_power_cost = step_energy_drain * (EC.charge_cost_mod * max(get_step_delay(), 1))
+		predicted_power_cost = step_energy_drain * (EC.efficiency_mod * max(get_step_delay(), 1))
 	else
 		predicted_power_cost = step_energy_drain * 10
 	stopMechWalking()
@@ -115,7 +115,7 @@
 				ME.on_mech_turn()
 		can_move = 0
 		if(EC && EC.integrity > 0)
-			use_power(step_energy_drain * (EC.charge_cost_mod * max(get_step_delay(), 1)))
+			use_power(step_energy_drain * (EC.efficiency_mod * max(get_step_delay(), 1)))
 		else
 			use_power(step_energy_drain * 10)
 		if(istype(src.loc, /turf/space))

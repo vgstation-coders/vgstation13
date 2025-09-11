@@ -19,6 +19,10 @@
 		return 1
 	return 0
 
+/obj/item/projectile/bullet/testingnodamage
+	damage = 0
+
+
 /obj/item/projectile/bullet/dart
 	name = "shotgun dart"
 	damage = 5

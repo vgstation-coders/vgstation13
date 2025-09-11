@@ -71,7 +71,7 @@
 				chassis.visible_message("[chassis] lifts [target] and starts to load it into cargo compartment.")
 				playsound(chassis, 'sound/mecha/hydraulic.ogg', 100, 1)
 				set_ready_state(0)
-				chassis.use_power(energy_drain)
+				chassis.use_power(energy_drain * chassis.equipment_power_mult)
 				O.anchored = 1 //Why
 				var/T = chassis.loc
 				if(do_after_cooldown(target))
@@ -119,7 +119,7 @@
 			occupant_message("You push [target] out of the way.")
 			chassis.visible_message("[chassis] pushes [target] out of the way.")
 		set_ready_state(0)
-		chassis.use_power(energy_drain)
+		chassis.use_power(energy_drain * chassis.equipment_power_mult)
 		do_after_cooldown()
 
 	return 1
@@ -239,7 +239,7 @@
 			chassis.visible_message("<span class='red'><b>[chassis] drills into \the [target]!</b></span>", "You hear a drill breaking something.")
 			target.mech_drill_act(2)
 
-	chassis.use_power(energy_drain)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill/can_attach(obj/mecha/M as obj)
@@ -331,7 +331,7 @@
 			do_after_cooldown()
 	else
 		return 0
-	chassis.use_power(energy_drain)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher
@@ -493,7 +493,7 @@
 					B.forceMove(chassis.loc)
 	if(move_result)
 		wait = 1
-		chassis.use_power(energy_drain)
+		chassis.use_power(energy_drain * chassis.equipment_power_mult)
 		if(!chassis.pr_inertial_movement.active())
 			chassis.pr_inertial_movement.start(list(chassis,direction))
 		else
@@ -505,7 +505,7 @@
 /obj/item/mecha_parts/mecha_equipment/jetpack/action_checks()
 	if(equip_ready || wait)
 		return 0
-	if(energy_drain && !chassis.has_charge(energy_drain))
+	if(energy_drain && !chassis.has_charge(energy_drain * chassis.equipment_power_mult))
 		return 0
 	if(crit_fail)
 		return 0
@@ -583,9 +583,9 @@
 	var/t = R.selected.attack(target, chassis.occupant)
 	if(!t) // No errors
 		if(device)
-			chassis.use_power(energy_drain/5)
+			chassis.use_power(energy_drain * chassis.equipment_power_mult/5)
 		else
-			chassis.use_power(energy_drain)
+			chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	else
 		occupant_message("<span class='warning'>\The [src]'s error light flickers[istext(t) ? ": [t]" : "."]</span>")
 
@@ -631,7 +631,7 @@
 	var/turf/T = get_turf(target)
 	if(T)
 		set_ready_state(0)
-		chassis.use_power(energy_drain)
+		chassis.use_power(energy_drain * chassis.equipment_power_mult)
 		do_teleport(chassis, T)
 		do_after_cooldown()
 	return
@@ -676,7 +676,7 @@
 	var/turf/target_turf = pick(L)
 	if(!target_turf)
 		return
-	chassis.use_power(energy_drain)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	set_ready_state(0)
 	var/obj/effect/portal/P = new /obj/effect/portal(get_turf(target))
 	P.target = target_turf
@@ -732,7 +732,7 @@
 					locked = null
 					send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
 					set_ready_state(0)
-					chassis.use_power(energy_drain)
+					chassis.use_power(energy_drain * chassis.equipment_power_mult)
 					do_after_cooldown()
 				else
 					locked = null
@@ -755,7 +755,7 @@
 						step_away(A,target)
 						sleep(2)
 			set_ready_state(0)
-			chassis.use_power(energy_drain)
+			chassis.use_power(energy_drain * chassis.equipment_power_mult)
 			do_after_cooldown()
 	return
 
@@ -833,7 +833,7 @@
 		if(round(W.force*damage_coeff) > chassis.internal_damage_minimum)
 			chassis.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 
-	chassis.use_power(energy_drain)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	return TRUE
 
 
@@ -874,7 +874,7 @@
 		chassis.take_damage(round(Proj.damage*src.damage_coeff),Proj.flag)
 		chassis.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 		Proj.on_hit(chassis)
-	chassis.use_power(energy_drain)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	return TRUE
 
 /obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster/proc/dynhitby(atom/movable/A)
@@ -892,7 +892,7 @@
 		if(O.throwforce)
 			chassis.take_damage(round(O.throwforce*damage_coeff))
 			chassis.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-	chassis.use_power(energy_drain)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	return TRUE
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid
@@ -986,7 +986,7 @@
 		RD.chassis.health += min(health_boost, initial(RD.chassis.health)-RD.chassis.health)
 		repaired = 1
 	if(repaired)
-		if(RD.chassis.use_power(RD.energy_drain))
+		if(RD.chassis.use_power(RD.energy_drain * RD.chassis.equipment_power_mult))
 			RD.set_ready_state(0)
 		else
 			stop()
@@ -1377,7 +1377,7 @@
 				chassis.occupant_message("You lift [target] and start to load it into cargo compartment.")
 				chassis.visible_message("[chassis] lifts [target] and starts to load it into cargo compartment.")
 				set_ready_state(0)
-				chassis.use_power(energy_drain)
+				chassis.use_power(energy_drain * chassis.equipment_power_mult)
 				O.anchored = 1
 				var/T = chassis.loc
 				if(do_after_cooldown(target))
@@ -1410,7 +1410,7 @@
 			chassis.occupant_message("You smash into [target], sending them flying.")
 			chassis.visible_message("[chassis] tosses [target] like a piece of paper.")
 		set_ready_state(0)
-		chassis.use_power(energy_drain)
+		chassis.use_power(energy_drain * chassis.equipment_power_mult)
 		do_after_cooldown()
 	return 1
 
@@ -1449,7 +1449,7 @@
 	..()
 	if(switchtool.deployed)
 		switchtool.preattack(target, chassis.occupant, chassis.Adjacent(target))
-		chassis.use_power(energy_drain)
+		chassis.use_power(energy_drain * chassis.equipment_power_mult)
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/Topic(href,href_list)
 	if(..())
@@ -1486,22 +1486,22 @@
 			var/obj/item/tool/weldingtool/W = I
 			if(W.reagents.total_volume <= W.max_fuel-10)
 				W.reagents.add_reagent(FUEL, 10)
-				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain * mech_switchtool.chassis.equipment_power_mult/2)
 		else if(iscablecoil(I))
 			var/obj/item/stack/cable_coil/C = I
 			if(C.amount <= C.max_amount-5)
 				C.add(5)
-				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain * mech_switchtool.chassis.equipment_power_mult/2)
 		else if(issolder(I))
 			var/obj/item/tool/solder/S = I
 			if(S.reagents.total_volume < S.max_fuel-5)
 				S.reagents.add_reagent(SACID, 5)
-				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain * mech_switchtool.chassis.equipment_power_mult)
 		else if(issilicatesprayer(I))
 			var/obj/item/device/silicate_sprayer/SI = I
 			if(SI.reagents.total_volume < SI.max_silicate-5)
 				SI.reagents.add_reagent(SILICATE, 5)
-				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain * mech_switchtool.chassis.equipment_power_mult/2)
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler
 	name = "\improper Automatic Floor Tiler"

@@ -121,7 +121,7 @@
 	prisoner.Stun(10)
 	prisoner.Knockdown(10)
 	prisoner.apply_effect(10, STUTTER)
-	chassis.use_power(energy_drain)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	playsound(chassis, 'sound/weapons/Egloves.ogg', 50, 1)
 	occupant_message("[prisoner] has been subdued.")
 	log_message("[prisoner] has been subdued.")
@@ -163,7 +163,7 @@
 	if(!J.chassis)
 		J.set_ready_state(1)
 		return stop()
-	if(!J.chassis.has_charge(J.energy_drain))
+	if(!J.chassis.has_charge(J.energy_drain * J.chassis.equipment_power_mult))
 		J.set_ready_state(1)
 		J.log_message("Deactivated.")
 		J.occupant_message("[J] deactivated - no power.")
@@ -172,7 +172,7 @@
 		return stop()
 	if(J.AllFree())
 		return stop()
-	J.chassis.use_power(J.energy_drain)
+	J.chassis.use_power(J.energy_drain * J.chassis.equipment_power_mult)
 	J.update_equip_info()
 	return
 

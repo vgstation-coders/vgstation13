@@ -20,8 +20,8 @@
 	var/deviation = 0.7  //the shots were perfectly accurate no matter what this was set to
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/action(atom/target)
-	..()
-
+	if(!action_checks(target))
+		return
 	var/originaltarget = target
 	var/turf/curloc = get_turf(chassis)
 	var/turf/targloc = get_turf(target)

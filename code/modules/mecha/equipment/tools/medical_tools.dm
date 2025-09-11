@@ -240,7 +240,7 @@
 	if(!S.chassis)
 		S.set_ready_state(1)
 		return stop()
-	if(!S.chassis.has_charge(S.energy_drain))
+	if(!S.chassis.has_charge(S.energy_drain * S.chassis.equipment_power_mult))
 		S.set_ready_state(1)
 		S.log_message("Deactivated.")
 		S.occupant_message("[S] deactivated - no power.")
@@ -256,7 +256,7 @@
 	M.AdjustKnockdown(-4)
 	if(M.reagents.get_reagent_amount(INAPROVALINE) < 5)
 		M.reagents.add_reagent(INAPROVALINE, 5)
-	S.chassis.use_power(S.energy_drain)
+	S.chassis.use_power(S.energy_drain * S.chassis.equipment_power_mult)
 	S.update_equip_info()
 	return
 
@@ -495,7 +495,7 @@
 		occupant_message("<span class=\"alert\">No available reagents to load syringe with.</span>")
 		return
 	set_ready_state(0)
-	chassis.use_power(energy_drain)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	var/turf/curloc = get_turf(chassis)
 	var/turf/trg = get_turf(target)
 	var/obj/item/weapon/reagent_containers/syringe/S = syringes[1]
@@ -688,8 +688,8 @@
 /datum/global_iterator/mech_synth/process(var/obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/S)
 	if(!S.chassis)
 		return stop()
-	var/energy_drain = S.energy_drain*10
-	if(!S.processed_reagents.len || S.reagents.total_volume >= S.reagents.maximum_volume || !S.chassis.has_charge(energy_drain))
+	var/energy_drain = S.energy_drain * S.chassis.equipment_power_mult * 10
+	if(!S.processed_reagents.len || S.reagents.total_volume >= S.reagents.maximum_volume || !S.chassis.has_charge(energy_drain * S.chassis.equipment_power_mult))
 		S.occupant_message("<span class=\"alert\">Reagent processing stopped.</a>")
 		S.log_message("Reagent processing stopped.")
 		return stop()
@@ -731,7 +731,7 @@
 	..()
 	if(switchtool.deployed)
 		switchtool.preattack(target, chassis.occupant, chassis.Adjacent(target))
-		chassis.use_power(energy_drain)
+		chassis.use_power(energy_drain * chassis.equipment_power_mult)
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool_med/Topic(href,href_list)
 	if(..())

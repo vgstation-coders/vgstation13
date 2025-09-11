@@ -13,6 +13,7 @@
 	relative_size = 30
 	internal_damage_flag = MECHA_INT_TANK_BREACH
 	broken_icon = "lifesupport_broken"
+	var/beeper = TRUE
 
 /obj/item/mecha_parts/component/gas/reinforced
 	name = "reinforced mecha life-support"
@@ -21,3 +22,4 @@
 	max_integrity = 80
 	step_delay = 100
 	relative_size = 35
+

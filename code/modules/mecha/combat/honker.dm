@@ -16,7 +16,7 @@
 	var/squeak = 0
 
 	penetration_reduction = 3 // blocks .380
-	weight_max = 240
+	weight_max = 300
 
 	max_hull_equip = 1
 	max_weapon_equip = 2

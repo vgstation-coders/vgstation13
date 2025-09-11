@@ -17,7 +17,8 @@
 		energy_drain = rand(energy_drain*3, energy_drain*5)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/action(atom/target)
-	.=..()
+	if(!action_checks(target))
+		return
 	var/originaltarget = target
 	var/turf/curloc = chassis.loc
 	var/atom/targloc = get_turf(target)
@@ -37,14 +38,14 @@
 	A.starting = curloc
 	A.yo = targloc.y - curloc.y
 	A.xo = targloc.x - curloc.x
-	chassis.use_power(energy_drain)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	A.OnFired()
 	A.process()
 	chassis.log_message("Fired from [src.name], targeting [originaltarget].")
 	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
 	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
 	do_after_cooldown()
-	return
+	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser
 	equip_cooldown = 8

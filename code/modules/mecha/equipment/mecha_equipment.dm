@@ -95,16 +95,17 @@
 /obj/item/mecha_parts/mecha_equipment/proc/is_melee()
 	return (range&MELEE)
 
-/obj/item/mecha_parts/mecha_equipment/proc/action_checks(atom/target, var/ignore = FALSE)
-	if(!target && !ignore) // is used for mech sleeper click-drops
+/obj/item/mecha_parts/mecha_equipment/proc/action_checks(atom/target)
+	if(!target) // is used for mech sleeper click-drops
 		return 0
 	if(!chassis)
 		return 0
-	if(!equip_ready && !ignore)
+	if(!equip_ready)
 		return 0
 	if(crit_fail)
 		return 0
-	if(energy_drain && !chassis.has_charge(energy_drain))
+	var/drain = energy_drain * chassis.equipment_power_mult
+	if(energy_drain && (drain > chassis.get_charge()))
 		return 0
 	return 1
 
@@ -117,13 +118,10 @@
 			chassis.occupant_message("Equipment failure due to [EC?"malfunctioning":"missing"] electrical regulator.")
 			log_message("Electrical equipment failure",1)
 			return
-	if(EC && EC.integrity > 0)
-		chassis.use_power(energy_drain * EC.charge_cost_mod)
-	else
-		chassis.use_power(energy_drain * 10)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	if(requires_beacon)
 		if(!chassis.tracking)
-			chassis.occupant_message("Error: [src] requires telemetry from a exosuit tracking device to function!")
+			chassis.occupant_message("Error: [src] requires telemetry from a exosuit tracking device to function.")
 			return
 	return
 
@@ -216,16 +214,17 @@
 	var/obj/item/mecha_parts/component/coupler/CO = chassis.internal_components[MECH_COUPLER]
 //	testing("[src] topic")
 	if(href_list["detach"])
-		if(CO.welded)
-			chassis.occupant_message("<span class='red'>Error: unable to detach [src].</span>")
-			chassis.log_message("[src] detachment failure.")
-			return
-		if(!CO.quick_attach)
-			chassis.occupant_message("<span class='red'>Error: quick-detach system not found.</span>")
-			chassis.log_message("[src] detachment failure due to missing function.")
+		if(CO)
+			if(CO.welded)
+				chassis.occupant_message("<span class='red'>Error: unable to detach [src].</span>")
+				chassis.log_message("[src] detachment failure.")
+				return
+			if(!CO.quick_attach)
+				chassis.occupant_message("<span class='red'>Error: quick-detach system not found.</span>")
+				chassis.log_message("[src] detachment failure due to missing function.")
 		else
 			detach()
-	return
+		return
 
 
 /obj/item/mecha_parts/mecha_equipment/proc/set_ready_state(state)
