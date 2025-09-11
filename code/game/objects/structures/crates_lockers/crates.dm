@@ -12,12 +12,6 @@
 	var/sound_effect_open = 'sound/machines/click.ogg'
 	var/sound_effect_close = 'sound/machines/click.ogg'
 
-/obj/structure/closet/crate/proc/jiggle(var/obj/item/I)
-	var/jx = I.w_class == W_CLASS_TINY ? 7 : 3
-	var/jy = I.w_class == W_CLASS_TINY ? 3 : 1
-	I.pixel_x = rand(-jx,jx)
-	I.pixel_y = rand(-jy,jy)
-
 /obj/structure/closet/crate/basic
 	has_lock_type = /obj/structure/closet/crate/secure/basic
 
@@ -400,16 +394,23 @@
 		return 0
 	return (!density)
 
+/obj/structure/closet/crate/proc/jiggle(var/obj/item/I)
+	var/jx = I.w_class == W_CLASS_TINY ? 7 : 3
+	var/jy = I.w_class == W_CLASS_TINY ? 3 : 1
+	I.pixel_x = rand(-jx,jx)
+	I.pixel_y = rand(-jy,jy)
+
+/obj/structure/closet/crate/proc/jiggle_all(var/max_size_jiggle = W_CLASS_SMALL)
+	for(var/obj/item/I in contents)
+		if(I.w_class <= max_size_jiggle)
+			jiggle(I)
+
 /obj/structure/closet/crate/open()
 	if(src.opened)
 		return 0
 	if(!src.can_open())
 		return 0
 	playsound(src, sound_effect_open, 15, 1, -3)
-
-	for(var/obj/item/I in contents)
-		if(I.w_class <= W_CLASS_SMALL)
-			jiggle(I)
 
 	dump_contents()
 
@@ -473,6 +474,14 @@
 					return
 		open()
 	return
+
+/obj/structure/closet/crate/tackled(var/mob/living/user)
+	..()
+	jiggle_all(W_CLASS_SMALL)
+
+/obj/structure/closet/crate/kick_act(var/mob/living/carbon/human/user)
+	..()
+	jiggle_all(W_CLASS_SMALL)
 
 /obj/structure/closet/crate/secure/attack_hand(mob/user as mob)
 	if(!Adjacent(user))
@@ -670,6 +679,8 @@
 					dump_electronics()
 				dump_contents()
 				qdel(src)
+			else
+				jiggle_all(W_CLASS_MEDIUM)
 
 /obj/structure/closet/crate/secure/weapon/experimental
 	name = "Experimental Weapons Crate"
