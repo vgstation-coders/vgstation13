@@ -28,7 +28,10 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 
 /datum/climate/New(var/active_z)
 	..()
-	z = active_z
+	if(active_z)
+		z = active_z
+	else
+		z = map.zMainStation
 	setup_weather_system()
 	if(starting_weather_type)
 		current_weather = new starting_weather_type(src)
