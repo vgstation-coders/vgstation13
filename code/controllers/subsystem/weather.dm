@@ -27,7 +27,10 @@ var/list/climates = list()
 	for(var/datum/climate/C in climates)
 		if(C.z == z)
 			return C
-	return climates[1] //failsafe
+	if(climates?.len)
+		return climates[1] //failsafe
+	else
+		return null //even more powerful failsave
 
 /datum/subsystem/weather/proc/set_climate(var/datum/climate/climate_type, var/z = 1)
 	if(!climate_type)
