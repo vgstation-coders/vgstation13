@@ -60,6 +60,10 @@ ANIMAL_DELAY 0
 ## DEFAULT: 32
 MAX_EXPLOSION_RANGE 32
 
+## DISABLE_LOWPOP_UPLINK_PRICES
+## Comment out to enable syndicate uplink item prices for low population (<5 players)
+DISABLE_LOWPOP_UPLINK_PRICES
+
 #################
 ### EMAG SHIT ###
 #################
