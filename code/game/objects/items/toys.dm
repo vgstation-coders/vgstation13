@@ -1242,7 +1242,7 @@
 /obj/item/toy/gasha/hoptard
 	name = "toy HoPtard"
 	icon_state = "hoptard"
-	desc = "Uhhhhhhhh..."
+	desc = "uhhhhhhhh"
 
 	//I couldn't think of anywhere else to put this
 /obj/item/toy/canary
