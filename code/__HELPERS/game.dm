@@ -530,3 +530,13 @@
 		if(thirdslash)
 			return typesof(text2path(copytext(areapathtext, 1, thirdslash)))
 	return typesof(text2path(areapathtext))
+
+/proc/get_living_players_amount()
+	. = 0
+	for (var/mob/M in player_list)
+		if (!M.client)
+			continue
+		if (istype(M,/mob/new_player))
+			continue
+		if (M.stat != DEAD)
+			.++
