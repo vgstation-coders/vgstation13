@@ -61,7 +61,7 @@
 			"items" = list()
 		)
 		for(var/datum/uplink_item/I in uplink_items[category])
-			if((!I.available_for_job(job) && !I.available_for_job(species)) || (!I.available_for_nuke_ops && nuke_ops_inventory))
+			if((I.lowpop_disabled && (get_living_players_amount() <= 5)) || (!I.available_for_job(job) && !I.available_for_job(species)) || (!I.available_for_nuke_ops && nuke_ops_inventory))
 				continue
 			cat["items"] += list(list(
 				"name" = I.name,

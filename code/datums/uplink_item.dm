@@ -73,6 +73,7 @@ var/list/discounted_items_of_the_round = list()
 	var/desc = "Item Description"
 	var/item = null
 	var/cost = 0
+	var/lowpop_cost = 0
 	var/discounted_cost = 0
 	var/abstract = 0
 	var/list/jobs_with_discount = list() //Jobs in this list get the discount price.
@@ -81,6 +82,7 @@ var/list/discounted_items_of_the_round = list()
 	var/list/roles_exclusive = list() //If empty, does nothing. If not empty, ONLY roles in this list can buy this item.
 	var/available_for_traitors = TRUE
 	var/available_for_nuke_ops = TRUE
+	var/lowpop_disabled = FALSE
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
 	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
@@ -90,7 +92,9 @@ var/list/discounted_items_of_the_round = list()
 	var/refund_amount // specified refund amount in case there needs to be a TC penalty for refunds.
 
 /datum/uplink_item/proc/get_cost(var/user_job, var/user_species, var/cost_modifier = 1)
-	if(gives_discount(user_job) || gives_discount(user_species))
+	if(get_living_players_amount() <= 5)
+		. = lowpop_cost
+	else if(gives_discount(user_job) || gives_discount(user_species))
 		. = discounted_cost
 	else
 		. = cost
@@ -114,11 +118,14 @@ var/list/discounted_items_of_the_round = list()
 	return new new_item(location)
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, datum/component/uplink/U, mob/user)
+	if(lowpop_disabled && (get_living_players_amount() <= 5))
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite population being too low! ([formatJumpTo(user)])")
+		return
 	if(!available_for_job(U.job) && !available_for_job(U.species))
-		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to them! (Job: [U.job]) (Species: [U.species]) ([formatJumpTo(get_turf(U))])")
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to them! (Job: [U.job]) (Species: [U.species]) ([formatJumpTo(user)])")
 		return
 	if(U.nuke_ops_inventory && !available_for_nuke_ops)
-		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite being a nuclear operative")
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite being a nuclear operative! ([formatJumpTo(user)])")
 		return
 	U.telecrystals -= max(get_cost(U.job, U.species), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
@@ -290,6 +297,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A traditional repeating handgun with seven chambers which fires .357 rounds. Can incapacitate most unarmored targets in two shots."
 	item = /obj/item/weapon/gun/projectile/revolver
 	cost = 12
+	lowpop_cost = 20
 
 /datum/uplink_item/dangerous/ammo
 	name = ".357 Speedloader"
@@ -302,12 +310,14 @@ var/list/discounted_items_of_the_round = list()
 	desc = "The energy sword is a blade of pure energy able to easily cut through organics. The sword can be drawn and retracted from a small metal hilt that can be easily concealed, or linked to another sword for a double blade. Activating it produces a loud, distinctive noise."
 	item = /obj/item/weapon/melee/energy/sword
 	cost = 8
+	lowpop_cost = 14
 
 /datum/uplink_item/dangerous/machete
 	name = "High-Frequency Machete"
 	desc = "A high quality machete blade augmented with a high-frequency blade not dissimilar to the Energy Sword. When inactive, can be used as a powerful throwing weapon. Can be dual-wielded with another machete but will cause bloodlust until death."
 	item = /obj/item/weapon/melee/energy/hfmachete
 	cost = 8
+	lowpop_cost = 14
 
 /datum/uplink_item/dangerous/viscerator
 	name = "Viscerator Grenade"
@@ -341,6 +351,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A miniature energy crossbow small enough to both fit into a pocket and slip into a backpack unnoticed, making it hard to spot when firing. Fires up to five bolts tipped with a poisonous substance that stuns targets for a short period of time and recharges on its own."
 	item = /obj/item/weapon/gun/energy/crossbow
 	cost = 12
+	lowpop_cost = 16
 	discounted_cost = 10
 	jobs_with_discount = list("Nuclear Operative")
 
@@ -349,6 +360,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A functional pen containing a hidden syringe filled with a neuromuscular-blocking drug that paralyses a target and makes them appear dead to observers and basic medical scanners. Apply with a firm stabbing motion. The pen holds one dose of paralyzing mix and cannot be refilled."
 	item = /obj/item/weapon/pen/paralysis
 	cost = 8
+	lowpop_disabled = TRUE
 
 /datum/uplink_item/stealthy_weapons/butterfly
 	name = "Butterfly Knife"
@@ -403,6 +415,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A pair of species-flexible shoes that can look and sound like any other piece of footwear. Protects against slipping on virtually all slippery surfaces and items with the exception of lubrication agents. Can be discerned as syndicate technology when examined closely."
 	item = /obj/item/clothing/shoes/syndigaloshes
 	cost = 2
+	lowpop_cost = 10
 
 /datum/uplink_item/stealthy_tools/voice_changer
 	name = "Chameleon Voice Changer"
@@ -541,12 +554,14 @@ var/list/discounted_items_of_the_round = list()
 	desc = "When screwed down onto an exposed wire connected to the power grid, this large device will cause an excessive and untraceable power load on the grid, causing a stationwide power failure in short order. Do note that the power sink can explode if it feeds too much power. Ordering this will send you a full power sink that can be carried but cannot be stored away. No screwdriver included, plan accordingly."
 	item = /obj/item/device/powersink
 	cost = 10
+	lowpop_disabled = TRUE
 
 /datum/uplink_item/sabotage_tools/singularity_beacon
 	name = "Singularity Beacon"
 	desc = "When anchored to the floor and ran through a powered wire by hand, this large device will pull the singularity towards it regularly if it is loose from containment. Ordering this will send a small beacon that will teleport the singularity beacon to your location on activation. Beacon cannot be stored again, requires a lot of power to run, has an internal battery of one minute if power fails, and glows in the dark. No wrench included, plan accordingly."
 	item = /obj/item/beacon/syndicate
 	cost = 14
+	lowpop_disabled = TRUE
 
 /datum/uplink_item/sabotage_tools/hacked_module
 	name = "Hacked AI Freeform Module"
@@ -590,6 +605,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "C-4 is plastic explosive of the common variety Composition C. Can be attached to any item or organic to reliably destroy it. Connect a signaler to its wiring to make it remotely detonable even when unplanted. Timer starts at 10 seconds but can be set to any length. Takes a few seconds to apply."
 	item = /obj/item/weapon/c4
 	cost = 4
+	lowpop_disabled = TRUE
 
 /datum/uplink_item/sabotage_tools/megaphone
 	name = "Mad Scientist Megaphone"
@@ -617,6 +633,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A powerful military issue alien laser weapon. It has a primary firing mode capable of incapacitating most unarmored targets in three shots, and a secondary mode capable of instantaneously inducing nausea and vomiting."
 	item = /obj/item/weapon/gun/energy/heavydisintegrator
 	cost = 16
+	lowpop_cost = 20
 	discounted_cost = 12
 	jobs_with_discount = list("Grey")
 
@@ -667,6 +684,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "An implant usable after being injected into one's body. When activated with a specific speech line that is chosen upon injection, it will cause a large explosion from the implant that will gib the user and easily space a room. Can be triggered remotely using the communications system, avoid common words and phrases."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_explosive
 	cost = 12
+	lowpop_cost = 20
 
 /datum/uplink_item/implants/compression
 	name = "Compressed Matter Implant"
@@ -737,6 +755,8 @@ var/list/discounted_items_of_the_round = list()
 		for(var/datum/uplink_item/I in buyable_items[category])
 			if(I == src)
 				continue
+			if(I.lowpop_disabled && (get_living_players_amount() <= 5))
+				continue
 			if(!I.available_for_job(U.job) && !I.available_for_job(U.species))
 				continue
 			if(!I.available_for_nuke_ops && U.nuke_ops_inventory)
@@ -781,6 +801,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A stun baton modified with tesla relay coils capable of discharging high amount of shock to overload human pain registers. It can also use this energy to boost the impact of the baton."
 	item = /obj/item/weapon/melee/baton/harm/loaded
 	cost = 12
+	lowpop_cost = 20
 	discounted_cost = 9
 	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
 
@@ -789,6 +810,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A gatling gun modified to fire stun batons. The batons are launched in such a way that guarantees the stunning end always connects, and the launch velocity is high enough to cause injuries. Can be reloaded with stun batons."
 	item = /obj/item/weapon/gun/gatling/batling
 	cost = 16
+	lowpop_cost = 20
 	discounted_cost = 10
 	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
 
@@ -797,6 +819,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A box containing 5 implants disguised as chemical implants usable after being injected into one's body. When activated with from a prisoner management console, it will cause a small yet breaching explosion from the implant that will gib the user and easily space a room."
 	item = /obj/item/weapon/storage/box/chemimp/remeximp
 	cost = 18
+	lowpop_cost = 20
 	discounted_cost = 12
 	jobs_with_discount = list("Warden", "Head of Security")
 
@@ -813,6 +836,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A bundle that comes with a professional revolver conversion kit and one box of .357 ammo. This kit allows you to convert your ballistic revolver to fire either .357 lethal or .38 less-than-lethal rounds. The modification is perfect and will never result in a chamber failure, but remember to empty your gun before attempting a modification!"
 	item = /obj/item/weapon/storage/box/syndie_kit/conversion
 	cost = 12
+	lowpop_cost = 20
 	discounted_cost = 10
 	jobs_with_discount = list("Detective")
 
@@ -832,6 +856,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "This combat-modified motorized wheelchair has a forward thrust sufficient enough to knock down and run over victims, with special bladed wheels that will make short work of anyone caught under them. Provides limited protection against ballistic weaponry."
 	item = /obj/item/syndicate_wheelchair_kit
 	cost = 18
+	lowpop_cost = 20
 	discounted_cost = 12
 	jobs_with_discount = list("Orderly", "Medical Doctor", "Chief Medical Officer")
 
@@ -872,6 +897,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "An experimental energy gun that fires radioactive projectiles that burn, irradiate and scramble DNA, giving the victim a different appearance and name, and potentially harmful or beneficial mutations. Recharges on its own."
 	item = /obj/item/weapon/gun/energy/radgun
 	cost = 18
+	lowpop_cost = 20
 	discounted_cost = 12
 	jobs_with_discount = list("Geneticist", "Chief Medical Officer")
 
@@ -907,6 +933,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "Insulated gloves that can utilize the station's power grid to deliver a short but powerful arc of electricity at a target. Requires standing over a powered cable to use, but does not require for it to be uncovered. Damage scales with spare power in the grid."
 	item = /obj/item/clothing/gloves/yellow/power
 	cost = 14
+	lowpop_cost = 20
 	discounted_cost = 8
 	jobs_with_discount = list("Station Engineer", "Chief Engineer")
 
@@ -915,6 +942,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "This device uses stored power to create a devastating orb of electricity that shocks nearly everyone in its path. The device must be loaded with capacitors in order to fire, each charged to at least 1 MW. The amount of damage scales with the power stored in the capacitor. The cannon comes with one free, pre-charged capacitor."
 	item = /obj/item/weapon/gun/tesla/preloaded
 	cost = 18
+	lowpop_cost = 20
 	discounted_cost = 14
 	jobs_with_discount = list("Station Engineer", "Chief Engineer")
 
@@ -1069,6 +1097,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A mean looking meat cleaver that does damage comparable to an Energy Sword but with the added benefit of chopping your victim into hunks of meat after they've died. It also stuns when thrown."
 	item = /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver
 	cost = 12
+	lowpop_cost = 16
 	discounted_cost = 10
 	jobs_with_discount = list("Chef")
 
@@ -1101,6 +1130,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A seemingly innocent die with a lethal secret. When rolled, it will set a four second timer and then explode for the strength of the roll. More powerful than even expert-crafted bombs on a Nat 20!"
 	item = /obj/item/weapon/dice/d20/e20
 	cost = 6
+	lowpop_disabled = TRUE
 	jobs_exclusive = list("Librarian")
 
 /datum/uplink_item/jobspecific/service/traitor_bible
@@ -1108,6 +1138,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A copy of the station's holy book of choice, with a little ballistic discount on conversions in the form of a genuine, Chinese-made Luger pistol. 88 rapid, eight in the gun, eight in the extra mag."
 	item = /obj/item/weapon/storage/bible/traitor_gun
 	cost = 14
+	lowpop_cost = 20
 	discounted_cost = 10
 	jobs_with_discount = list("Chaplain")
 
@@ -1134,6 +1165,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "An ancient piece of technology from a lost civilization. This energy sword conceals perfectly into a banana hilt that will easily fool most, but becomes extremely lethal when activated. Two of these can be combined to create the ultimate power weapon, but only a Clown may safely handle such power for the glory of Clown-kind."
 	item = /obj/item/weapon/melee/energy/sword/bsword
 	cost = 8
+	lowpop_cost = 16
 	jobs_exclusive = list("Clown")
 
 /datum/uplink_item/jobspecific/clown_mime/livingballoons
@@ -1156,6 +1188,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A single-shot but particularly powerful banana gun, appearing as a banana until fired. Will do catastrophic damage to whomever it hits and only leave a banana peel behind as evidence. Do not attempt to eat."
 	item = /obj/item/weapon/gun/projectile/banana
 	cost = 4
+	lowpop_cost = 8
 	discounted_cost = 2
 	jobs_with_discount = list("Clown")
 
@@ -1202,6 +1235,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "Grants the user the ability to periodically fire an invisible gun from their white gloves with two rounds in the chamber, dealing decent damage. Only real Mimes are trained in the art of firing this artefact silently when using the forbidden hand-gun technique."
 	item = /obj/item/clothing/gloves/white/advanced
 	cost = 12
+	lowpop_cost = 20
 	jobs_exclusive = list("Mime")
 
 /datum/uplink_item/jobspecific/clown_mime/unwall_spell
@@ -1225,6 +1259,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "These aren't homemade, they were made in a factory. A bomb factory. They're bombs."
 	item = /obj/item/weapon/reagent_containers/food/snacks/explosive_pie
 	cost = 4
+	lowpop_cost = 8
 	discounted_cost = 2
 	jobs_with_discount = list("Clown", "Mime")
 
@@ -1287,12 +1322,14 @@ var/list/discounted_items_of_the_round = list()
 	desc = "A container that comes with a Lawgiver modification kit, converting it into a Demolition variant Lawgiver. Also comes with two spare demolition magazines."
 	item = /obj/item/weapon/storage/box/demolition
 	cost = 12
+	lowpop_cost = 20
 	jobs_exclusive = list("Head of Security")
 
 /datum/uplink_item/jobspecific/command/briefcase_smg
 	name = "Briefcase SMG"
 	desc = "A modified briefcase capable of storing and firing a gun under a false bottom, while still allowing regular storage functions. Starts with a 9mm SMG loaded with 18 rounds that can be fired by holding the briefcase. Use a screwdriver to pry away the false bottom and either retrieve the gun or insert a new one. Distinguishable upon close examination due to the added weight."
 	item = /obj/item/weapon/storage/briefcase/false_bottomed/smg
+	lowpop_cost = 20
 	cost = 14
 	discounted_cost = 10
 	jobs_with_discount = list("Internal Affairs Agent")
@@ -1306,6 +1343,7 @@ var/list/discounted_items_of_the_round = list()
 	name = "Concealed knife shoes"
 	desc = "Lace-up shoes with a knife concealed in the toecap. Tap your heels together to reveal the small knife. Remember to kick the target to stab them. Knife will be visible when pulled out, but kicking with the knife will not be directly obvious to observers."
 	item = /obj/item/clothing/shoes/knifeboot
+	lowpop_cost = 8
 	cost = 4
 	discounted_cost = 2
 	jobs_with_discount = list("Internal Affairs Agent")
