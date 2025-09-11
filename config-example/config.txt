@@ -364,6 +364,10 @@ NO_AMBIENCE
 ## Comment out to disable wages being enabled by default.
 ENABLE_WAGES
 
+## DISABLE_LOWPOP_UPLINK_PRICES
+## Comment out to enable syndicate uplink item prices for low population (<5 players)
+DISABLE_LOWPOP_UPLINK_PRICES
+
 # HTTP URL to send Discord messages to.
 # DISCORD_URL
 # DISCORD_PASSWORD

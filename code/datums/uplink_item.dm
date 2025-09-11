@@ -93,6 +93,12 @@ var/list/discounted_items_of_the_round = list()
 	var/refund_path = null // Alternative path for refunds, in case the item purchased isn't what is actually refunded (Bombs and such).
 	var/refund_amount // specified refund amount in case there needs to be a TC penalty for refunds.
 
+/datum/uplink_item/New()
+	. = ..()
+	if(config.disable_lowpop_uplink_prices)
+		lowpop_disabled = FALSE
+		lowpop_cost = 0
+
 /datum/uplink_item/proc/get_cost(var/user_job, var/user_species, var/cost_modifier = 1)
 	if(lowpop_cost > 0 && get_living_players_amount() <= 5)
 		. = lowpop_cost

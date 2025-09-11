@@ -232,6 +232,7 @@
 	var/asset_cdn_url = ""
 	//Is Dynamic+ Enabled
 	var/dynamic_plus = FALSE
+	var/disable_lowpop_uplink_prices = FALSE
 
 
 /datum/configuration/New()
@@ -738,6 +739,8 @@
 					voice_noises = 1
 				if("dynamic_plus")
 					config.dynamic_plus = TRUE
+				if("disable_lowpop_uplink_prices")
+					config.disable_lowpop_uplink_prices = TRUE
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 
