@@ -158,6 +158,9 @@
 	// Prevent AIs from being crammed into lockers. /vg/ Redmine #153 - N3X
 	if(istype(AM, /mob/living/silicon/ai) || istype(AM, /mob/living/simple_animal/scp_173))
 		return 0
+	//Prevent cargo carts from getting dragged into crates and closets
+	if(istype(AM, /obj/machinery/cart))
+		return 0
 
 	if(istype(AM, /mob/living))
 		var/mob/living/L = AM
@@ -168,7 +171,7 @@
 			L.client.eye = src
 	else if(!istype(AM, /obj/item) && !istype(AM, /obj/effect/dummy/chameleon))
 		return 0
-	else if(AM.density || AM.anchored || istype(AM,/obj/structure/closet))
+	else if(AM.density || AM.anchored || istype(AM,/obj/structure/closet) || locked_to == AM)
 		return 0
 	AM.forceMove(src)
 	return 1
@@ -504,6 +507,10 @@
 	if(user.incapacitated())
 		return 0
 	if((!( istype(O, /atom/movable) ) || O.anchored || !user.Adjacent(O) || !user.Adjacent(src)))
+		return 0
+	if(istype(O, /obj/machinery/cart)) //Prevent cargo carts from getting dragged into crates and closets
+		return 0
+	if(locked_to == O) //Don't let a closet contain that which it is attached to!
 		return 0
 	if(!istype(user.loc, /turf)) // are you in a container/closet/pod/etc? Will also check for null loc
 		return 0

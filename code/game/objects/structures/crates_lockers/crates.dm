@@ -447,7 +447,11 @@
 	else if(isobj(AM))
 		if(AM.density || AM.anchored || istype(AM,/obj/structure/closet))
 			return 0
-
+		else if(locked_to == AM)
+			return 0
+	//Prevent cargo carts from getting dragged into crates and closets
+	if(istype(AM, /obj/machinery/cart))
+		return 0
 	if(istype(AM, /obj/structure/bed)) //This is only necessary because of rollerbeds and swivel chairs.
 		var/obj/structure/bed/B = AM
 		if(B.is_locking(/datum/locking_category/buckle, subtypes=TRUE))
