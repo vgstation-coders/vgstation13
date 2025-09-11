@@ -191,6 +191,8 @@ var/list/procgen_loot = list(
 	desc += " Beware of its deadly [P.name]s!"//needs some variation
 
 /datum/procedural_mobspawn/proc/PickBreath()
+	if(breath_type.len < 5)
+		return
 	ranged = TRUE
 	var/breath_type = pick(breath_list)
 	breath_string = breath_type[1]

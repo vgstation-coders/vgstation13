@@ -1,4 +1,4 @@
-obj/effect/landmark/procedural_mobspawn/forgottenbeast
+/obj/effect/landmark/procedural_mobspawn/forgottenbeast
 	name = "forgotten beast spawner"
 	desc = "You shouldn't be seeing this"
 	icon = 'icons/mob/screen1.dmi'
@@ -8,7 +8,7 @@ obj/effect/landmark/procedural_mobspawn/forgottenbeast
 /obj/effect/landmark/procedural_mobspawn/forgottenbeast/New()
 	SpawnMob(mobtype)
 
-/obj/effect/landmark/procedural_mobspawn/forgottenbeast/proc/SpawnMob(mob/living/mobtype)
+/obj/effect/landmark/procedural_mobspawn/forgottenbeast/proc/SpawnMob()
 	new /mob/living/simple_animal/hostile/forgotten_beast(get_turf(src), new /datum/procedural_mobspawn(mobtype))
 	qdel(src)
 
