@@ -676,8 +676,9 @@ Fire damage comes from tank
 	var/temp_proj_penetration = 0
 
 	if(istype(Proj, /obj/item/projectile/beam))
-		if(!Proj.penetration)
-			temp_proj_penetration = 3 // Lasers get a pen of 3
+		temp_proj_penetration = 3 // Lasers get a pen of 3
+	if(istype(Proj, /obj/item/projectile/beam/pulse))
+		temp_proj_penetration = 10
 
 	if(!ArmC || ArmC.integrity <= 5)
 		temp_deflect_chance = src.deflect_chance + (defense_mode ? 25 : 0)
@@ -686,7 +687,7 @@ Fire damage comes from tank
 	else
 		temp_deflect_chance = round(ArmC.get_efficiency() * ArmC.deflect_chance + src.deflect_chance + (defense_mode ? 25 : 0))
 		temp_damage_minimum = round(ArmC.get_efficiency() * ArmC.damage_minimum) + src.damage_minimum
-		temp_penetration_reduction = ArmC.pen_reduction + src.penetration_reduction
+		temp_penetration_reduction = round(ArmC.get_efficiency() * ArmC.pen_reduction) + src.penetration_reduction
 
 	if(prob(temp_deflect_chance))
 		src.occupant_message("<span class='notice'>The armor deflects incoming projectile.</span>")
@@ -967,6 +968,7 @@ Fire damage comes from tank
 			mech_parts.Add(MC)
 			user.visible_message("[user] installs \the [W] in \the [src]", "You install \the [W] in \the [src].")
 			CheckEnclosed()
+			CheckPowerUse()
 			SetPressure()
 			CheckLocks()
 			CheckMobility()
@@ -1036,6 +1038,7 @@ Fire damage comes from tank
 			to_chat(user, "<span class='notice'>You pry out \the [RmC] from \the [src].</span>")
 			src.log_message("Internal component removed - [RmC]")
 			CheckEnclosed()
+			CheckPowerUse()
 			SetPressure()
 			CheckLocks()
 			CheckMobility()
@@ -1418,7 +1421,12 @@ Fire damage comes from tank
 			to_chat(usr, "You're too busy getting your life sucked out of you.")
 			return
 
+	var/delay = 0
+
+	if(HC)
+		delay += HC.egress_delay
 	if(get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/runningboard))
+		enter_delay += delay
 		enter_delay = max(0, enter_delay -= 40)
 		if(enter_delay <= 0)
 			visible_message("<span class='good'>[usr] is instantly lifted into \the [src] by the running board!</span>")
