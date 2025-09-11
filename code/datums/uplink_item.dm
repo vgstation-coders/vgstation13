@@ -1167,7 +1167,7 @@ var/list/discounted_items_of_the_round = list()
 	desc = "An ancient piece of technology from a lost civilization. This energy sword conceals perfectly into a banana hilt that will easily fool most, but becomes extremely lethal when activated. Two of these can be combined to create the ultimate power weapon, but only a Clown may safely handle such power for the glory of Clown-kind."
 	item = /obj/item/weapon/melee/energy/sword/bsword
 	cost = 8
-	lowpop_cost = 16
+	lowpop_cost = 14
 	jobs_exclusive = list("Clown")
 
 /datum/uplink_item/jobspecific/clown_mime/livingballoons
