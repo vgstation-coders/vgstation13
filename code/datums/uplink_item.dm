@@ -17,6 +17,8 @@ var/list/discounted_items_of_the_round = list()
 	var/list/possible_picks = list()
 	for (var/thing in traitor_items)
 		var/datum/uplink_item/u_item = thing
+		if((u.lowpop_disabled || (u.lowpop_cost > 0)) && get_living_players_amount() <= 5) // don't discount these on lowpop
+			continue
 		if(initial(u_item.cost) <= 1) // no point discounting these
 			continue
 		if (thing in forbidden_items)
