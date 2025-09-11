@@ -467,16 +467,7 @@
 	if (stage == BLOODCULT_STAGE_NARSIE)
 		cultist_cap = 666
 		return
-	var/living_players = 0
-	var/new_cap = 0
-	for (var/mob/M in player_list)
-		if (!M.client)
-			continue
-		if (istype(M,/mob/new_player))
-			continue
-		if (M.stat != DEAD)
-			living_players++
-	new_cap =  clamp(round(living_players / 3),min_cultist_cap,max_cultist_cap)
+	var/new_cap =  clamp(round(get_living_players_amount() / 3),min_cultist_cap,max_cultist_cap)
 	if (new_cap > cultist_cap)
 		cultist_cap = new_cap
 		for (var/datum/role/R in members)
