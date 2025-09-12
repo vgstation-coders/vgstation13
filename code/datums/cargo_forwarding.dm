@@ -255,6 +255,8 @@
 	..()
 	if(!istype(C))
 		return
+	if(!isturf(C.loc))
+		return
 	if(user.incapacitated() || user.lying)
 		return
 	if(!Adjacent(user) || !Adjacent(C) || !user.Adjacent(C))
