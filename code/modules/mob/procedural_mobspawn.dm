@@ -38,24 +38,23 @@ var/list/appendage_modifier = list(
 	"tentacled",
 	)
 var/list/procgen_loot = list(
-	list(/obj/item/weapon/gun/energy/bison/alien, 1),//path, # of items
-	list(/obj/item/weapon/gun/energy/laser/captain/alien, 2),
-	list(/obj/item/weapon/gun/projectile/roulette_revolver, 2),
-	list(/obj/item/weapon/gun/stickybomb, 1),
-	list(/obj/item/weapon/gun/gravitywell, 1),
-	list(/obj/item/weapon/gun/energy/laser/captain, 1),
-	list(/obj/item/weapon/gun/portalgun, 1),
-	list(/obj/item/stack/sheet/mineral/phazon, 5),
-	list(/obj/item/stack/sheet/mineral/clown, 20),
-	list(/obj/item/stack/sheet/mineral/adamantine, 5),
-	list(/obj/machinery/chem_dispenser/scp_294, 1),
-	list(/obj/machinery/sleeper/mancrowave/galo, 1),
-	list(/obj/mecha/combat/phazon, 1),
-	list(/obj/mecha/combat/durand/old, 1),
-	list(/obj/mecha/medical/odysseus/murdysseus, 1),
-	list(/obj/item/weapon/storage/box/syndie_kit/mech_killdozer, 1),
-	list(/obj/item/weapon/storage/box/syndie_kit/emags_and_glue/, 1),
-	list(/obj/item/clothing/accessory/medal/participation, 1),
+	list(/obj/item/weapon/gun/energy/bison/alien = 100, 1),//path, # of items
+	list(/obj/item/weapon/gun/energy/laser/captain = 100, 1),
+	list(/obj/item/weapon/gun/projectile/roulette_revolver = 100, 2),
+	list(/obj/item/weapon/gun/energy/laser/captain/alien = 50, 2),
+	list(/obj/item/weapon/gun/gravitywell = 50, 1),
+	list(/obj/item/weapon/gun/portalgun = 50, 1),
+	list(/obj/item/stack/sheet/mineral/clown = 200, 20),
+	list(/obj/item/stack/sheet/mineral/adamantine = 200, 5),
+	list(/obj/item/stack/sheet/mineral/phazon = 100, 5),
+	list(/obj/machinery/sleeper/mancrowave/galo = 50, 1),
+	list(/obj/machinery/chem_dispenser/scp_294 = 10, 1),
+	list(/obj/mecha/combat/durand/old = 10, 1),
+	list(/obj/mecha/combat/phazon = 5, 1),
+	list(/obj/mecha/medical/odysseus/murdysseus = 5, 1),
+	list(/obj/item/weapon/storage/box/syndie_kit/mech_killdozer = 5, 1),
+	list(/obj/item/weapon/storage/box/syndie_kit/emags_and_glue/ = 25, 1),
+	list(/obj/item/clothing/accessory/medal/participation = 10, 1),
 	)
 
 /*
@@ -141,10 +140,12 @@ var/list/procgen_loot = list(
 		projectiletype =  mymob.projectiletype
 		var/obj/item/projectile/P = projectiletype
 		desc += " Beware of its deadly [P.name]s!"
+	var/scaling_x = rand(1.5, 2)
+	var/scaling_y = rand(1.5, 2)
 	move_to_delay = mymob.move_to_delay
 	size_matrix = matrix()
-	size_matrix.Scale(1.5,1.5)
-	randomloot = pick(procgen_loot)
+	size_matrix.Scale(scaling_x, scaling_y)
+	randomloot = pickweight(procgen_loot)
 	if(prob(33))
 		color = rgb(rand(0, 255), rand(0, 255), rand(0, 255))
 	if(prob(10))
@@ -191,10 +192,10 @@ var/list/procgen_loot = list(
 	desc += " Beware of its deadly [P.name]s!"//needs some variation
 
 /datum/procedural_mobspawn/proc/PickBreath()
-	if(breath_type.len < 5)
+	var/list/breath_type = pick(breath_list)
+	if(breath_type.len < 4)
 		return
 	ranged = TRUE
-	var/breath_type = pick(breath_list)
 	breath_string = breath_type[1]
 	breath_damage_type = breath_type[2]
 	mybreath = new()
