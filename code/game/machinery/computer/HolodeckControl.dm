@@ -621,7 +621,11 @@
 		travel_foul(atom/movable/mover)
 
 /obj/item/weapon/beach_ball/holoball/rigged/proc/travel_foul(atom/movable/mover)
+	say("Technical foul! Travelling!")
 	travel = 0
+
+/obj/item/weapon/beach_ball/holoball/rigged/say_quote(var/text)
+	return "beeps, [text]"
 
 /obj/item/weapon/beach_ball/holoball/rigged/explosive/travel_foul(atom/movable/mover)
 	. = ..()
