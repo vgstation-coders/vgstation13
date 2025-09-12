@@ -690,9 +690,10 @@
 
 /obj/structure/holohoop/attack_hand(mob/user, params, proximity)
 	. = ..()
-	if(alert(user,"Reset the score?","Hoop score","Yes","No") == "Yes")
-		score = 0
-		user.visible_message("<span class='notice'>[user] resets the score on \the [src].</span>","<span class='notice'>You reset the score on \the [src].</span>")
+	if(score > 0)
+		if(alert(user,"Reset the score?","Hoop score","Yes","No") == "Yes")
+			score = 0
+			user.visible_message("<span class='notice'>[user] resets the score on \the [src].</span>","<span class='notice'>You reset the score on \the [src].</span>")
 
 /obj/structure/holohoop/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
@@ -721,7 +722,7 @@
 		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
 		if(prob(50) || (mob && mob.reagents.get_sportiness()>=5))
 			I.forceMove(src.loc)
-			visible_message("<span class='notice'>Swish! \the [I] lands in \the [src].</span>")
+			visible_message("<span class='notice'>[mob && prob(1) ? "Sign [mob] up for the Knicks!"/*Deus Ex reference*/ : "Swish! \the [I] lands in \the [src]."]</span>")
 			score += 2
 			if(get_dist(src,mob)>3)
 				score += 1 //Three pointer
