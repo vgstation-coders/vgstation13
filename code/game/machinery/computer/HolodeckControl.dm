@@ -594,6 +594,9 @@
 		spawn(4)
 			item_state = "basketball"
 
+/obj/item/weapon/beach_ball/holoball/on_disarm_drop(mob/user)
+	pickup(user)
+
 /obj/item/weapon/beach_ball/holoball/rigged
 	var/travel = 0
 	var/travel_limit = 4
@@ -611,9 +614,6 @@
 /obj/item/weapon/beach_ball/holoball/rigged/dropped(mob/user)
 	. = ..()
 	user.unregister_event(/event/moved, src, nameof(src::travel()))
-
-/obj/item/weapon/beach_ball/holoball/rigged/on_disarm_drop(mob/user)
-	pickup(user)
 
 /obj/item/weapon/beach_ball/holoball/rigged/attack_self(mob/user)
 	. = ..()
