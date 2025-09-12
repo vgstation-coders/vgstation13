@@ -6,6 +6,11 @@
 #define TIMEMODE_REPEAT "Repeat pulse and recount"
 #define TIMEMODE_ONCE "Pulse once and stop"
 
+#define TICK_SPEEDUP 1
+#define TICK_PITCHUP 2
+
+#define SPEEDSUP_SECONDS 3
+
 /obj/item/device/assembly/timer
 	name = "timer"
 	desc = "Used to time things. Works well with contraptions which have to count down. Tick tock."
@@ -22,6 +27,7 @@
 	var/time = 10
 	var/repeat = FALSE
 	var/default_time = 10
+	var/speedsup = TICK_PITCHUP
 
 	accessible_values = list(\
 		VALUE_REMAINING_TIME = "time;"+VT_NUMBER,\
@@ -34,6 +40,10 @@
 		return 0//Cooldown check
 
 	timing = !timing
+	if(!silent)
+		spawn()
+			timesoundloop()
+
 	message_admins("[key_name_admin(usr)] [timing ? "started" : "stopped"] a timer at [formatJumpTo(src)]")
 	update_icon()
 	countdown()
@@ -56,6 +66,19 @@
 	spawn(10)
 		process_cooldown()
 	return
+
+/obj/item/device/assembly/timer/proc/timesoundloop(decrement = clamp(SPEEDSUP_SECONDS-time,0,SPEEDSUP_SECONDS)*SPEEDSUP_SECONDS,freq = 1)
+	if(!silent && timing && time > 0)
+		playsound(src,decrement >= 7 && speedsup == TICK_SPEEDUP ? 'sound/items/assemblytick1.ogg' : 'sound/items/assemblytick2.ogg',100,1,frequency = freq)
+		spawn(max(1,10 - decrement))
+			if(speedsup && time <= SPEEDSUP_SECONDS)
+				decrement++
+				if(speedsup == TICK_PITCHUP)
+					freq *= 1.03
+			else
+				decrement = 0
+				freq = 1
+			timesoundloop(decrement,freq)
 
 /obj/item/device/assembly/timer/proc/countdown()
 	if(timing)
@@ -92,6 +115,8 @@
 	var/minute = (time - second) / 60
 	var/dat = text("<TT><B>Timing Unit</B>\n[] []:[]\n<A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT>", (timing ? text("<A href='?src=\ref[];time=1'>Timing</A>", src) : text("<A href='?src=\ref[];time=1'>Not Timing</A>", src)), minute, second, src, src, src, src)
 	dat += "<BR><BR><A href='?src=\ref[src];set_default_time=1'>After countdown, reset time to [(default_time - default_time%60)/60]:[(default_time % 60)]</A>"
+	dat += {"<BR><BR><A href='byond://?src=\ref[src];toggle_silent=1'>Timer tick sound: O[silent ? "ff" : "n"]</A>
+			<BR><BR><A href='byond://?src=\ref[src];toggle_speedup=1'>Timer tick speedup: [speedsup == TICK_PITCHUP ? "Speed and pitch" : speedsup ? "Speed" : "None"]</A>"}
 	dat += "<BR><BR><A href='?src=\ref[src];toggle_mode=1'>Mode: [repeat ? TIMEMODE_REPEAT : TIMEMODE_ONCE]</A>"
 	user << browse(HTML_SKELETON(dat), "window=timer")
 	onclose(user, "timer")
@@ -109,14 +134,23 @@
 
 	if(href_list["time"])
 		activate()
+		if(!silent)
+			spawn()
+				timesoundloop()
 
 	if(href_list["tp"])
 		var/tp = text2num(href_list["tp"])
 		time += tp
 		time = min(max(round(time), 0), 600)
-	
+
 	if(href_list["toggle_mode"])
 		repeat = !repeat
+
+	if(href_list["toggle_silent"])
+		silent = !silent
+
+	if(href_list["toggle_speedup"])
+		speedsup = (speedsup + 1) % 3
 
 	if(href_list["set_default_time"])
 		default_time = time
@@ -134,3 +168,8 @@
 #undef VALUE_REMAINING_TIME
 #undef VALUE_DEFAULT_TIME
 #undef VALUE_TIMING
+
+#undef TICK_SPEEDUP
+#undef TICK_PITCHUP
+
+#undef SPEEDSUP_SECONDS

@@ -2286,7 +2286,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/dandelionseed = 3,
 		)//,/obj/item/seeds/synthbuttseed = 3)
 	premium = list(
-		/obj/item/toy/waterflower = 1,
+		/obj/item/clothing/accessory/waterflower = 1,
 		)
 
 	pack = /obj/structure/vendomatpack/hydroseeds

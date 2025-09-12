@@ -32,10 +32,11 @@
 	return ..()
 
 /obj/abstract/screen/movable/spell_master/MouseEntered(location,control,params)
-	openToolTip(usr,src,params,title = name,content = "Click and drag while closed to move this around the screen")
+	//openToolTip(usr,src,params,title = name,content = "Click and drag while closed to move this around the screen")
+	usr.client?.tooltips.show(src, mouse=params, title=name, content="Click and drag while closed to move this around the screen")
 
 /obj/abstract/screen/movable/spell_master/MouseExited()
-	closeToolTip(usr)
+	usr.client?.tooltips.hide()
 
 /obj/abstract/screen/movable/spell_master/Click()
 	if(!spell_objects.len)
@@ -271,10 +272,11 @@
 	if(!spell)
 		return
 	var/dat = spell.generate_tooltip()
-	openToolTip(usr,src,params,title = name,content = dat)
+	//openToolTip(usr,src,params,title = name,content = dat)
+	usr.client?.tooltips.show(src, mouse=params, title=name, content=dat)
 
 /obj/abstract/screen/spell/MouseExited()
-	closeToolTip(usr)
+	usr.client?.tooltips.hide()
 
 /obj/abstract/screen/spell/Destroy()
 	..()

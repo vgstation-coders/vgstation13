@@ -251,26 +251,26 @@
 	for(var/obj/item/slime_extract/S in beakers)		//checking for reagents inside the slime extracts
 		S.reagents.trans_to(reservoir, S.reagents.total_volume)
 	if (firstExtract != null)
-		while(firstExtract && firstExtract.Uses)//<-------//exception for slime extracts injected with steroids. The grenade will repeat its checks untill all its remaining uses are gone
-			var/init_uses = firstExtract.Uses
+		while(firstExtract && firstExtract.uses)//<-------//exception for slime extracts injected with steroids. The grenade will repeat its checks untill all its remaining uses are gone
+			var/init_uses = firstExtract.uses
 			for(var/reagent in firstExtract.reactive_reagents) //If the grenade contains a slime extract, the grenade will check in this order
 				if (reservoir.reagents.has_reagent(reagent, 5))
 					reservoir.reagents.trans_id_to(firstExtract, reagent, 5) //and inject 5u of it into the slime extract.
 				if (!firstExtract)
 					break
-			if(!firstExtract || init_uses == firstExtract.Uses) //Nothing happened, get outta here
+			if(!firstExtract || init_uses == firstExtract.uses) //Nothing happened, get outta here
 				break
 		if(firstExtract && firstExtract.reagents && firstExtract.reagents.total_volume)	//<-------//exception for slime reactions that produce new reagents. The grenade checks if any
 			firstExtract.reagents.trans_to(reservoir, firstExtract.reagents.total_volume)	//reagents are left in the slime extracts after the slime reactions occured
 		if (secondExtract != null)
-			while(secondExtract && secondExtract.Uses)	//why don't anyone ever uses "while" directives anyway? //we do now
-				var/init_uses = secondExtract.Uses
+			while(secondExtract && secondExtract.uses)	//why don't anyone ever uses "while" directives anyway? //we do now
+				var/init_uses = secondExtract.uses
 				for(var/reagent2 in secondExtract.reactive_reagents)
 					if (reservoir.reagents.has_reagent(reagent2, 5))
 						reservoir.reagents.trans_id_to(secondExtract, reagent2, 5)
 					if (!secondExtract)
 						break
-				if(!secondExtract || init_uses == secondExtract.Uses)
+				if(!secondExtract || init_uses == secondExtract.uses)
 					break
 			if(secondExtract && secondExtract.reagents && secondExtract.reagents.total_volume)
 				secondExtract.reagents.trans_to(reservoir, secondExtract.reagents.total_volume)

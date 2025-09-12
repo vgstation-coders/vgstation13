@@ -26,6 +26,31 @@
 	. = ..()
 	update_pressure()
 
+/obj/mecha/working/ripley/create_visholder()
+	if(!..())
+		return
+	var/matrix/size_matrix = matrix()
+	size_matrix.Scale(0.5,0.5)
+	visholder.transform = size_matrix
+	visholder.pixel_y = 6
+
+/obj/mecha/working/ripley/handle_vis_offset()
+	if(!visholder)
+		return
+	if(dir == WEST)
+		visholder.pixel_x = -4
+	else if(dir == EAST)
+		visholder.pixel_x = 4
+	else
+		visholder.pixel_x = 0
+
+
+/obj/mecha/working/ripley/handle_vis_enter()
+	..()
+
+/obj/mecha/working/ripley/handle_vis_exit()
+	..()
+
 /*
 /obj/mecha/working/ripley/New()
 	..()

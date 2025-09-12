@@ -428,9 +428,11 @@
 	var/obj/machinery/computer/security/S = machine
 	if(!istype(S))
 		return
-	var/obj/abstract/screen/plane_master/fakecamera_planemaster/F = locate(/obj/abstract/screen/plane_master/fakecamera_planemaster) in S.cam_plane_masters
-	if(F)
+	var/obj/abstract/screen/plane_master/fakecamera_screen_planemaster/F = locate(/obj/abstract/screen/plane_master/fakecamera_screen_planemaster) in S.cam_plane_masters
+	var/obj/abstract/screen/plane_master/fakecamera_button_planemaster/G = locate(/obj/abstract/screen/plane_master/fakecamera_button_planemaster) in S.cam_plane_masters
+	if(F && G)
 		F.alpha = 255  // make the fake image visible
+		G.alpha = 255
 		to_chat(A, "<span class='warning'>You reprogram the image processing software on \the [machine]</span>")
 
 //--------------------------------------------------------

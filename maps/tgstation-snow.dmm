@@ -102082,7 +102082,7 @@
 /area/engineering/atmos)
 "sfW" = (
 /obj/structure/table/woodentable,
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/item/weapon/storage/fancy/cigarettes,
 /obj/item/weapon/lipstick,
 /turf/simulated/floor/wood,

@@ -228,7 +228,7 @@ var/list/hydro_trays = list()
 	lastcycle = world.time
 	weedlevel = 0
 	update_icon()
-	visible_message("<span class='info'>[initial(name)] has been overtaken by [seed.display_name]</span>.")
+	visible_message("<span class='info'>\The [initial(name)] has been overtaken by [seed.display_name]</span>.")
 
 	return
 

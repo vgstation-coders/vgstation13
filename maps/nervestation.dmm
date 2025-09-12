@@ -5780,7 +5780,7 @@
 "bhp" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/cartridge/clown,
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/item/device/instrument/violin,
 /obj/machinery/light_switch{
 	pixel_y = 28

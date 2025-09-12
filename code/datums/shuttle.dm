@@ -834,17 +834,17 @@
 					warning("Invalid or missing starting area for [S.name] ([S.type]) [msg]")
 				else
 					var/msg = S.linked_area ? "- \"[S.linked_area]\" was given as a starting area." : ""
-					world.log << "Invalid or missing starting area for [S.name] ([S.type]) [msg]"
+					log_debug("Invalid or missing starting area for [S.name] ([S.type]) [msg]")
 			if(INIT_NO_PORT)
 				if(S.is_special())
 					warning("Couldn't find a shuttle docking port for [S.name] ([S.type]).")
 				else
-					world.log << "Couldn't find a shuttle docking port for [S.name] ([S.type])."
+					log_debug("Couldn't find a shuttle docking port for [S.name] ([S.type]).")
 			if(INIT_NO_START)
 				if(S.is_special())
 					warning("[S.name] ([S.type]) couldn't connect to a destination port on init - unless this is intended, there might be problems.")
 				else
-					world.log << "[S.name] ([S.type]) couldn't connect to a destination port on init - unless this is intended, there might be problems."
+					log_debug("[S.name] ([S.type]) couldn't connect to a destination port on init - unless this is intended, there might be problems.")
 
 
 	//THE MOST IMPORTANT PIECE OF CODE HERE

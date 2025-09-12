@@ -28,7 +28,7 @@ var/list/discounted_items_of_the_round = list()
 		var/picked = pick(possible_picks)
 		possible_picks -= picked
 		item_list += picked
-		world.log << "Picked: [picked]"
+		//world.log << "Picked: [picked]" //this lasted 19 months before getting silenced
 
 	discounted_items_of_the_round = item_list
 

@@ -54,7 +54,7 @@
 /obj/machinery/sleeper/splashable()
 	return FALSE
 
-/obj/machinery/sleeper/spillContents()
+/obj/machinery/sleeper/spillContents(destroy_chance = 0)
 	for(var/obj/plug in plugins)
 		plug.forceMove(src.loc)
 	..()

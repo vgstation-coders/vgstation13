@@ -18,9 +18,6 @@
 	if(iscultist(src) && hud_used && !hud_used.cult_Act_display)
 		hud_used.cult_hud()
 
-	// Register as something able to receive sounds from sound_emitters
-	if (sound_zone_manager)
-		sound_zone_manager.register_listener(src)
 
 	//Round specific stuff like hud updates
 	if(ticker && ticker.mode)
@@ -30,3 +27,11 @@
 
 		if (hasFactionIcons(src))
 			update_faction_icons()
+	
+	if(virus2.len)
+		for(var/ID in virus2)
+			var/datum/disease2/disease/V = virus2[ID]
+			for(var/datum/disease2/effect/e in V.effects)
+				if(e.count > 0 && e.type == /datum/disease2/effect/loneliness)
+					e.side_effect(src)
+					return

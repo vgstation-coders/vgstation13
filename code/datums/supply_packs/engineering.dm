@@ -440,7 +440,7 @@
 		/obj/item/weapon/storage/box/fissionsupply_fuelmaker,
 	)
 	name = "Fission reactor starter kit"
-	cost = 200 //Includes a lot of plasteel. Fuck you, ask the miners for more you socially inept jobbie.
+	cost = 150 //Includes a lot of plasteel. Fuck you, ask the miners for more you socially inept jobbie.
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "Fission reactor starter kit"
 	group = "Engineering"
@@ -458,7 +458,7 @@
 		/obj/structure/closet/crate/flatpack/configurable/fission_exterior,
 	)
 	name = "Fission reactor expansion pak"
-	cost = 75 //See above.
+	cost = 50 //See above.
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "Fission reactor expansion pak"
 	group = "Engineering"
@@ -470,7 +470,7 @@
 		/obj/item/weapon/fuelrod/large
 	)
 	name = "High-capacity fuel reservoir"
-	cost = 75 //It's a one time purchase, really. somewhat costly, but not that much for a department. watch for meltdowns.
+	cost = 65 //It's a one time purchase, really. somewhat costly, but not that much for a department. watch for meltdowns.
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "Large fuel reservoir"
 	group = "Engineering"
@@ -483,11 +483,11 @@
 		/obj/item/weapon/fuelrod/randomized
 	)
 	name = "Pre-filled fuel reservoir"
-	cost = 50 //expendable item. costs a decent bit because it's the standard size, and comes with materials in it. random materials, too. have fun!
+	cost = 33 //expendable item. costs a decent bit because it's the standard size, and comes with materials in it. random materials, too. have fun!
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "Pre-filled fuel reservoir"
 	group = "Engineering"
 	access = list(access_engine_major)
-	containsdesc = "A standard fuel reservoir, filled with a unique mixture selected by NanoTransen's engineering team."
+	containsdesc = "A standard fuel reservoir, filled with a unique mixture selected by NanoTrasen's engineering team."
 
 

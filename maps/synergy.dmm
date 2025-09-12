@@ -7584,6 +7584,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/machinery/computer/tetris,
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "whitered"
@@ -50861,6 +50862,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
+/obj/machinery/computer/tetris,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -57279,7 +57281,7 @@
 /area/crew_quarters/theatre)
 "bZv" = (
 /obj/structure/table/woodentable,
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/item/weapon/storage/fancy/cigarettes,
 /obj/item/weapon/lipstick,
 /obj/item/weapon/bikehorn{

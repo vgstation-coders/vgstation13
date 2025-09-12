@@ -485,9 +485,10 @@
 	throw_range = 6
 	origin_tech = Tc_BIOTECH + "=4"
 	mech_flags = MECH_SCAN_FAIL
-	var/Uses = 1 // uses before it goes inert
+	var/uses = 1 // uses before it goes inert
 	var/enhanced = 0 //has it been enhanced before?
 	var/primarytype = SLIME_GREY
+	var/came_from_slime_type = null
 	var/list/reactive_reagents = list() //easier lookup for reaction checks in grenades
 	var/icon_state_backup	//backup icon_state_name to switch between multiple use sprites
 
@@ -497,19 +498,19 @@
 			to_chat(user, "<span class='warning'>This extract has already been enhanced!</span>")
 			return ..()
 		to_chat(user, "You apply the enhancer to \the [src]. It now has triple the amount of uses.")
-		Uses = 3
+		uses = 3
 		enhanced = 1
 		update_icon()
 		qdel(O)
 
 	//slime res
 	if(istype(O, /obj/item/weapon/slimeres))
-		if(Uses == 0)
+		if(uses == 0)
 			to_chat(user, "<span class='warning'>The solution doesn't work on used extracts!</span>")
 			return ..()
-		to_chat(user, "You splash the Slime Resurrection Serum onto \the [src] causing it to quiver and come to life.")
-		new primarytype(get_turf(src))
-		Uses--
+		to_chat(user, "You splash the [O] onto \the [src], causing it to quiver and come to life!")
+		new came_from_slime_type(get_turf(src))
+		uses--
 		qdel(O)
 
 //perform individual slime_act() stuff on children overriding the method here
@@ -517,157 +518,178 @@
 	if(!proximity)
 		return
 	if(target.slime_act(primarytype,user))
-		if (Uses > 0)
-			Uses -= 1
+		if (uses > 0)
+			uses -= 1
 			update_icon()
-		if (Uses == 0)
+		if (uses == 0)
 			qdel(src)
 
 /obj/item/slime_extract/New()
 	..()
 	create_reagents(100)
 	icon_state_backup = icon_state
-	if (Uses > 1)
+	if (uses > 1)
 		update_icon()
 
 
 /obj/item/slime_extract/update_icon()
 	..()
-	if (Uses == 1||Uses<0) //return if 1 or less uses
+	if (uses == 1||uses<0) //return if 1 or less uses
 		icon_state = icon_state_backup
-	else if (Uses == 3||Uses>2) //if 3 or more uses use the triple icon
+	else if (uses == 3||uses>2) //if 3 or more uses use the triple icon
 		icon_state = "[icon_state_backup]_3"
 	else 		//only option left is two uses
 		icon_state = "[icon_state_backup]_2"
 
 /obj/item/slime_extract/examine(mob/user)
 	..()
-	to_chat(user, "<span class='notice'>\The [name] has [Uses] left.</span>")
+	to_chat(user, "<span class='notice'>\The [name] has [uses] left.</span>")
 
 /obj/item/slime_extract/grey
 	name = "grey slime extract"
 	icon_state = "grey slime extract"
 	primarytype = SLIME_GREY
+	came_from_slime_type = /mob/living/carbon/slime
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/gold
 	name = "gold slime extract"
 	icon_state = "gold slime extract"
 	primarytype = SLIME_GOLD
+	came_from_slime_type = /mob/living/carbon/slime/gold
 	reactive_reagents = list(PLASMA,BLOOD,WATER)
 
 /obj/item/slime_extract/silver
 	name = "silver slime extract"
 	icon_state = "silver slime extract"
 	primarytype = SLIME_SILVER
+	came_from_slime_type = /mob/living/carbon/slime/silver
 	reactive_reagents = list(PLASMA,WATER,CARBON)
 
 /obj/item/slime_extract/metal
 	name = "metal slime extract"
 	icon_state = "metal slime extract"
 	primarytype = SLIME_METAL
+	came_from_slime_type = /mob/living/carbon/slime/metal
 	reactive_reagents = list(PLASMA,COPPER,TUNGSTEN,RADIUM,CARBON)
 
 /obj/item/slime_extract/purple
 	name = "purple slime extract"
 	icon_state = "purple slime extract"
 	primarytype = SLIME_PURPLE
+	came_from_slime_type = /mob/living/carbon/slime/purple
 	reactive_reagents = list(PLASMA,SUGAR)
 
 /obj/item/slime_extract/darkpurple
 	name = "dark purple slime extract"
 	icon_state = "dark purple slime extract"
 	primarytype = SLIME_DARKPURPLE
+	came_from_slime_type = /mob/living/carbon/slime/darkpurple
 	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/orange
 	name = "orange slime extract"
 	icon_state = "orange slime extract"
 	primarytype = SLIME_ORANGE
+	came_from_slime_type = /mob/living/carbon/slime/orange
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/yellow
 	name = "yellow slime extract"
 	icon_state = "yellow slime extract"
 	primarytype = SLIME_YELLOW
+	came_from_slime_type = /mob/living/carbon/slime/yellow
 	reactive_reagents = list(PLASMA,BLOOD,WATER)
 
 /obj/item/slime_extract/red
 	name = "red slime extract"
 	icon_state = "red slime extract"
 	primarytype = SLIME_RED
+	came_from_slime_type = /mob/living/carbon/slime/red
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/blue
 	name = "blue slime extract"
 	icon_state = "blue slime extract"
 	primarytype = SLIME_BLUE
+	came_from_slime_type = /mob/living/carbon/slime/blue
 	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/darkblue
 	name = "dark blue slime extract"
 	icon_state = "dark blue slime extract"
 	primarytype = SLIME_DARKBLUE
+	came_from_slime_type = /mob/living/carbon/slime/darkblue
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/pink
 	name = "pink slime extract"
 	icon_state = "pink slime extract"
 	primarytype = SLIME_PINK
+	came_from_slime_type = /mob/living/carbon/slime/pink
 	reactive_reagents = list(PLASMA)
 
 /obj/item/slime_extract/green
 	name = "green slime extract"
 	icon_state = "green slime extract"
 	primarytype = SLIME_GREEN
+	came_from_slime_type = /mob/living/carbon/slime/green
 	reactive_reagents = list(PLASMA,IRON,BLOOD,WATER)
 
 /obj/item/slime_extract/lightpink
 	name = "light pink slime extract"
 	icon_state = "light pink slime extract"
 	primarytype = SLIME_LIGHTPINK
+	came_from_slime_type = /mob/living/carbon/slime/lightpink
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/black
 	name = "black slime extract"
 	icon_state = "black slime extract"
 	primarytype = SLIME_BLACK
+	came_from_slime_type = /mob/living/carbon/slime/black
 	reactive_reagents = list(PLASMA,GOLD,WATER,SUGAR,BLOOD)
 
 /obj/item/slime_extract/oil
 	name = "oil slime extract"
 	icon_state = "oil slime extract"
 	primarytype = SLIME_OIL
+	came_from_slime_type = /mob/living/carbon/slime/oil
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/adamantine
 	name = "adamantine slime extract"
 	icon_state = "adamantine slime extract"
 	primarytype = SLIME_ADAMANTINE
+	came_from_slime_type = /mob/living/carbon/slime/adamantine
 	reactive_reagents = list(PLASMA,CARBON,GOLD,SILVER)
 
 /obj/item/slime_extract/bluespace
 	name = "bluespace slime extract"
 	icon_state = "bluespace slime extract"
 	primarytype = SLIME_BLUESPACE
+	came_from_slime_type = /mob/living/carbon/slime/bluespace
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/pyrite
 	name = "pyrite slime extract"
 	icon_state = "pyrite slime extract"
 	primarytype = SLIME_PYRITE
+	came_from_slime_type = /mob/living/carbon/slime/pyrite
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/cerulean
 	name = "cerulean slime extract"
 	icon_state = "cerulean slime extract"
 	primarytype = SLIME_CERULEAN
+	came_from_slime_type = /mob/living/carbon/slime/cerulean
 	reactive_reagents = list(PLASMA,BLOOD)
 
 /obj/item/slime_extract/sepia
 	name = "sepia slime extract"
 	icon_state = "sepia slime extract"
 	primarytype = SLIME_SEPIA
+	came_from_slime_type = /mob/living/carbon/slime/sepia
 	reactive_reagents = list(PLASMA,BLOOD,PHAZON)
 
 ////Pet Slime Creation///
@@ -776,7 +798,7 @@
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle12"
 	w_class = W_CLASS_TINY
-	var/Uses = 2
+	var/uses = 2
 
 /obj/item/weapon/slimenutrient/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
 	if(!istype(M))//If target is not a slime.
@@ -792,9 +814,9 @@
 	to_chat(user, "You feed \the [M] the nutrient. It now appears ready to grow.")
 	M.amount_grown = 10
 
-	if (Uses > 0)
-		Uses -= 1
-	if (Uses == 0)
+	if (uses > 0)
+		uses -= 1
+	if (uses == 0)
 		qdel (src)
 
 /obj/item/weapon/slimesteroid2
@@ -1070,13 +1092,13 @@
 	origin_tech = Tc_BIOTECH + "=4"
 	var/POWERFLAG = 0 // sshhhhhhh
 	var/Flush = 30
-	var/Uses = 5 // uses before it goes inert
+	var/uses = 5 // uses before it goes inert
 
 /obj/item/slime_core/New()
 		..()
 		create_reagents(100)
 		POWERFLAG = rand(1,10)
-		Uses = rand(7, 25)
+		uses = rand(7, 25)
 		//flags |= NOREACT
 /*
 		spawn()

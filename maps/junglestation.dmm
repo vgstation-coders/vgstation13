@@ -24203,7 +24203,7 @@
 	},
 /obj/structure/table/woodentable,
 /obj/item/weapon/cartridge/clown,
-/obj/item/toy/waterflower,
+/obj/item/clothing/accessory/waterflower,
 /obj/structure/cable/yellow{
 	d2 = 2;
 	icon_state = "0-2";

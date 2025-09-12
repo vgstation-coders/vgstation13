@@ -272,12 +272,14 @@
 			to_chat(src, "<span class='notice'><B>They don't have a mouth!</B></span>")
 			return 0
 	if(src.check_body_part_coverage(MOUTH))
-		to_chat(src, "<span class='notice'><B>Remove your [src.get_body_part_coverage(MOUTH)]!</B></span>")
+		var/obj/item/I = src.get_body_part_coverage(MOUTH)
+		to_chat(src, "<span class='notice'><B>Remove your [I.name]!</B></span>")
 		return 0
 	if(ishuman(target))
 		var/mob/living/carbon/human/H = target
 		if(H.check_body_part_coverage(MOUTH))
-			to_chat(src, "<span class='notice'><B>Remove their [H.get_body_part_coverage(MOUTH)]!</B></span>")
+			var/obj/item/I = H.get_body_part_coverage(MOUTH)
+			to_chat(src, "<span class='notice'><B>Remove their [I.name]!</B></span>")
 			return 0
 
 	if(!target.cpr_time)

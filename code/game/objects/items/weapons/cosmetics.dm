@@ -754,7 +754,7 @@
 
 /obj/item/weapon/pocket_mirror/arcane
 	name = "strange pocket mirror"
-	desc = "is that your reflection? or someone elses."
+	desc = "Is that your reflection? Or someone else's..."
 	arcanetampered = 1
 
 

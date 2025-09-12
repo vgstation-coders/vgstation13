@@ -355,7 +355,7 @@
 		/obj/item/weapon/stamp/clown = null,
 		/obj/item/toy/crayon/rainbow = null,
 		/obj/item/weapon/storage/fancy/crayons = null,
-		/obj/item/toy/waterflower = null,
+		/obj/item/clothing/accessory/waterflower = null,
 	)
 
 	pda_type = /obj/item/device/pda/clown

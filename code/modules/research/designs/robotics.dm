@@ -82,6 +82,7 @@
 	materials = list(MAT_IRON = 7000, MAT_GLASS = 7000)
 	category = "Robotics"
 	build_path = /obj/item/stack/nanopaste
+	use_design_materials = FALSE // Cannot be recycled because stack code doesn't work well with recycling
 
 /datum/design/robotanalyzer
 	name = "Cyborg Analyzer"

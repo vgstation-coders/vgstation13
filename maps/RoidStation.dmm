@@ -55879,17 +55879,14 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "caV" = (
-/obj/machinery/door/poddoor{
-	density = 0;
-	icon_state = "pdoor0";
-	id_tag = "Secure Storage";
-	name = "secure storage";
-	opacity = 0
-	},
 /obj/machinery/door/firedoor/border_only{
 	name = "Firelock South"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/door/poddoor{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "brownold";
@@ -55897,13 +55894,6 @@
 	},
 /area/engineering/engine_storage)
 "caW" = (
-/obj/machinery/door/poddoor{
-	density = 0;
-	icon_state = "pdoor0";
-	id_tag = "Secure Storage";
-	name = "secure storage";
-	opacity = 0
-	},
 /obj/machinery/door/firedoor/border_only{
 	name = "Firelock South"
 	},
@@ -55913,6 +55903,10 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/door/poddoor{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "brownold";
@@ -61267,6 +61261,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/machinery/computer/tetris,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -133366,6 +133361,12 @@
 	},
 /turf/simulated/floor/plating,
 /area/turret_protected/tcomms_control_room)
+"xtw" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/prison/cell_block/A)
 "xCq" = (
 /obj/structure/window/reinforced/plasma{
 	dir = 8
@@ -334675,7 +334676,7 @@ dSQ
 ptc
 ptc
 dUp
-dSH
+xtw
 dVj
 dSH
 dVF

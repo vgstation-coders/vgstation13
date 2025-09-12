@@ -5,6 +5,17 @@
 	var/material
 	var/datum/paint_overlay/paint_overlay = null
 	var/list/stacked_paint = list()
+	var/active
+
+/obj/item/stack/tile/Destroy()
+	..()
+	if(active)
+		QDEL_NULL(active)
+
+/obj/item/stack/tile/dropped()
+	..()
+	if(active)
+		QDEL_NULL(active)
 
 /obj/item/stack/tile/transfer_data_from(var/obj/item/stack/tile/S, var/amount)
 	while(amount > 0)
@@ -67,6 +78,43 @@
 		stacked_paint.len = 0
 		update_icon()
 
+/obj/item/stack/tile/proc/build()
+	return
+
+/obj/item/stack/tile/attack_self(mob/user)
+	if(!active) //Start click drag construction
+		active = new /obj/abstract/screen/draggable(src, user)
+		to_chat(user, "Beginning plating construction mode, click and hold to use.")
+		return
+	else //End click drag construction, create grille
+		QDEL_NULL(active)
+
+/obj/item/stack/tile/can_drag_use(mob/user, turf/T)
+	if(user.Adjacent(T)) //can we place here
+		var/canbuild = T.canBuildPlating()
+		if(canbuild == BUILD_SUCCESS || canbuild == BUILD_IGNORE || T.canBuildFloortile(src.type))
+			if(use(1)) //place and use rod
+				return 1
+			else
+				QDEL_NULL(active) //otherwise remove the draggable screen
+
+/obj/item/stack/tile/drag_use(mob/user, turf/T)
+	if(T.canBuildFloortile(src.type) && istype(T,/turf/simulated/floor))
+		var/turf/simulated/floor/F = T
+		F.make_tiled_floor(src)
+		playsound(T, 'sound/weapons/Genhit.ogg', 25, 1)
+		return
+	if(T.canBuildPlating() == BUILD_SUCCESS) //This deletes lattices, only necessary for BUILD_SUCCESS
+		var/L = locate(/obj/structure/lattice) in T
+		if(!L)
+			return
+		qdel(L)
+	playsound(T, 'sound/weapons/Genhit.ogg', 25, 1)
+	build(T)
+
+/obj/item/stack/tile/end_drag_use()
+	QDEL_NULL(active)
+
 /obj/item/stack/tile/metal
 	name = "floor tile"
 	singular_name = "floor tile"
@@ -84,58 +132,13 @@
 	siemens_coefficient = 1
 	max_amount = 60
 	material = "metal"
-	var/active
 
 /obj/item/stack/tile/metal/New(var/loc, var/amount=null)
 	. = ..()
 	pixel_x = rand(1, 14) * PIXEL_MULTIPLIER
 	pixel_y = rand(1, 14) * PIXEL_MULTIPLIER
 
-/obj/item/stack/tile/metal/Destroy()
-	..()
-	if(active)
-		QDEL_NULL(active)
-
-/obj/item/stack/tile/metal/attack_self(mob/user)
-	if(!active) //Start click drag construction
-		active = new /obj/abstract/screen/draggable(src, user)
-		to_chat(user, "Beginning plating construction mode, click and hold to use.")
-		return
-	else //End click drag construction, create grille
-		qdel(active)
-
-/obj/item/stack/tile/metal/can_drag_use(mob/user, turf/T)
-	if(user.Adjacent(T)) //can we place here
-		var/canbuild = T.canBuildPlating()
-		if(canbuild == BUILD_SUCCESS || canbuild == BUILD_IGNORE || T.canBuildFloortile(src.type))
-			if(use(1)) //place and use rod
-				return 1
-			else
-				QDEL_NULL(active) //otherwise remove the draggable screen
-
-/obj/item/stack/tile/metal/drag_use(mob/user, turf/T)
-	if(T.canBuildFloortile(src.type) && istype(T,/turf/simulated/floor))
-		var/turf/simulated/floor/F = T
-		F.make_tiled_floor(src)
-		playsound(T, 'sound/weapons/Genhit.ogg', 25, 1)
-		return
-	if(T.canBuildPlating() == BUILD_SUCCESS) //This deletes lattices, only necessary for BUILD_SUCCESS
-		var/L = locate(/obj/structure/lattice) in T
-		if(!L)
-			return
-		qdel(L)
-	playsound(T, 'sound/weapons/Genhit.ogg', 25, 1)
-	build(T)
-
-/obj/item/stack/tile/metal/end_drag_use()
-	active = null
-
-/obj/item/stack/tile/metal/dropped()
-	..()
-	if(active)
-		QDEL_NULL(active)
-
-/obj/item/stack/tile/metal/proc/build(turf/S as turf)
+/obj/item/stack/tile/metal/build(turf/S as turf)
 	if(S.air)
 		var/datum/gas_mixture/GM = S.air
 		if(GM.pressure > HALF_ATM)
@@ -189,6 +192,24 @@
 					to_chat(user, "<span class='warning'>The plating is going to need some support.</span>")
 					return
 
+/obj/item/stack/tile/rglass
+	name = "glass tile"
+	desc = "A relatively clear reinforced glass tile."
+	icon_state = "tile_rglass"
+	max_amount = 60
+	var/air_type = /turf/simulated/floor/glass
+	var/airless_type = /turf/simulated/floor/glass/airless
+
+/obj/item/stack/tile/rglass/build(turf/S as turf)
+	var/obj/structure/lattice/L = S.canBuildCatwalk(src)
+	if(istype(L))
+		qdel(L)
+	if(S.air)
+		var/datum/gas_mixture/GM = S.air
+		if(GM.pressure > HALF_ATM)
+			S.ChangeTurf(air_type)
+			return
+	S.ChangeTurf(airless_type)
 
 /obj/item/stack/tile/rglass/afterattack(atom/target, mob/user, adjacent, params)
 	if(adjacent)
@@ -200,44 +221,13 @@
 					build(T)
 					use(1)
 
-/obj/item/stack/tile/rglass
-	name = "glass tile"
-	singular_name = "tile"
-	desc = "A relatively clear reinforced glass tile."
-	icon_state = "tile_rglass"
-	max_amount = 60
-
-/obj/item/stack/tile/rglass/proc/build(turf/S as turf)
-	var/obj/structure/lattice/L = S.canBuildCatwalk(src)
-	if(istype(L))
-		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-		qdel(L)
-		if(S.air)
-			var/datum/gas_mixture/GM = S.air
-			if(GM.pressure > HALF_ATM)
-				S.ChangeTurf(/turf/simulated/floor/glass)
-				return
-		S.ChangeTurf(/turf/simulated/floor/glass/airless)
-
-
-
 /obj/item/stack/tile/rglass/plasma
 	name = "plasma glass tile"
 	singular_name = "tile"
 	desc = "A relatively clear reinforced plasma glass tile."
 	icon_state = "tile_plasmarglass"
-
-/obj/item/stack/tile/rglass/plasma/build(turf/S as turf)
-	var/obj/structure/lattice/L = S.canBuildCatwalk(src)
-	if(istype(L))
-		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-		qdel(L)
-		if(S.air)
-			var/datum/gas_mixture/GM = S.air
-			if(GM.pressure > HALF_ATM)
-				S.ChangeTurf(/turf/simulated/floor/glass/plasma)
-				return
-		S.ChangeTurf(/turf/simulated/floor/glass/plasma/airless)
+	air_type = /turf/simulated/floor/glass/plasma
+	airless_type = /turf/simulated/floor/glass/plasma/airless
 
 /obj/item/stack/tile/metal/plasteel
 	name = "reinforced floor tile"

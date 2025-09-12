@@ -35127,6 +35127,7 @@
 	dir = 4
 	},
 /obj/structure/disposalpipe/segment,
+/obj/machinery/computer/tetris,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -35449,11 +35450,12 @@
 /area/engineering/engine_storage)
 "bnB" = (
 /obj/machinery/door/poddoor{
-	density = 0;
-	icon_state = "pdoor0";
 	id_tag = "Secure Storage";
-	name = "secure storage";
-	opacity = 0
+	name = "Engineering Secure Storage"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 1;
+	name = "Firelock North"
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engine_storage)
@@ -110263,6 +110265,12 @@
 /obj/structure/reagent_dispensers/water_cooler,
 /turf/simulated/floor,
 /area/engineering/break_room)
+"lOW" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/prison)
 "lWt" = (
 /obj/effect/decal/cleanable/cobweb,
 /obj/item/stack/rods,
@@ -250025,7 +250033,7 @@ ciO
 cey
 cly
 eRl
-cnX
+lOW
 cpa
 cqd
 crm

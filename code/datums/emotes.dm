@@ -76,7 +76,7 @@
 						O.create_chat_message(user, null, msg_runechat, "", list("italics"))
 	else if(emote_type & EMOTE_AUDIBLE)
 		for(var/mob/O in get_hearers_in_view(world.view, user))
-			O.show_message(msg)
+			O.show_message(msg, source = user)
 			if(!(emote_type & EMOTE_NO_RUNECHAT))
 				if(user.client && O?.client?.prefs.get_pref(/datum/preference_setting/toggle/mob_chat_on_map) && O.stat != UNCONSCIOUS && !O.is_deaf())
 					O.create_chat_message(user, null, msg_runechat, "", list("italics"))

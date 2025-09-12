@@ -567,10 +567,11 @@ Tooltip interface
 	parseAdd = A
 
 /obj/abstract/screen/interface/tooltip/MouseEntered(location,control,params)
-	openToolTip(user, src, params, title = title, content = content)
+	//openToolTip(user, src, params, title = title, content = content)
+	usr.client?.tooltips.show(src, mouse=params, title=title, content=content)
 
 /obj/abstract/screen/interface/tooltip/MouseExited(location,control,params)
-	closeToolTip(user)
+	usr.client?.tooltips.hide()
 
 /obj/abstract/screen/interface/tooltip/Click(location,control,params)
 	..()

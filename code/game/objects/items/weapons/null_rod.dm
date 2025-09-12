@@ -463,3 +463,11 @@
 
 /obj/item/weapon/nullrod/sword/chaos/IsShield()
 	return TRUE
+
+/obj/item/weapon/nullrod/sword/chaos/mimicry
+	name = "sentient blade"
+	desc = "What is the meaning of 'human'? Does it matter?"
+	icon_state = "mimicry"
+	item_state = "mimicry"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/48x48.dmi', "right_hand" = 'icons/mob/in-hand/right/48x48.dmi')
+	hitsound = 'sound/weapons/mimicry.ogg'

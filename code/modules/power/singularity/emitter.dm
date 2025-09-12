@@ -154,6 +154,9 @@
 		emitterbeam.plane = ABOVE_LIGHTING_PLANE
 		emitterbeam.layer = ABOVE_LIGHTING_LAYER
 		overlays += emitterbeam
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_emitter", moody_color = "#66ffff")
+	else
+		kill_moody_light()
 
 	if(locked)
 		var/image/emitterlock = image(icon,"emitter-lock")
@@ -373,6 +376,7 @@
 	//if(!master)
 		//testing("Visible power: [visible_power]")
 	icon_state = "[base_state]_[visible_power]"
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_emitter_beam", moody_color = "#66ffff")//might do eyes/mice versions later
 
 /obj/effect/beam/emitter/get_machine_underlay(var/mdir)
 	var/visible_power = clamp(round(power/3) + 1, 1, 3)

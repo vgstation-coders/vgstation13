@@ -134,3 +134,5 @@ var/list/laser_pointers_list = list()
 var/list/obj/structure/morgue/morgue_list = list()
 var/list/obj/effect/time_anomaly/time_anomaly_list = list()
 var/list/map_pickspawners = list()
+// cameras that have a mic upgrade on them
+var/list/micd_cameras = list()

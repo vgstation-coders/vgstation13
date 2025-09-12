@@ -142,6 +142,11 @@
 	actions_types = list(/datum/action/item_action/toggle_auto_handling)
 	var/handling = FALSE
 
+/obj/item/weapon/storage/bag/ore/auto/attack_self(mob/user)
+	if(!contents.len)
+		toggle_hold(user)
+	. = ..()
+
 /datum/action/item_action/toggle_auto_handling
 	name = "Toggle Ore Loader"
 
@@ -156,19 +161,22 @@
 	if(!istype(T))
 		return
 
-	T.handling = !T.handling
-
-	to_chat(user, "You turn \the [T.name] [T.handling? "on":"off"].")
-
-	if(T.handling == TRUE)
-		user.register_event(/event/moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
-	else
-		user.unregister_event(/event/moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+	T.toggle_hold(user)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_collect(var/turf/collect_loc)
 	for(var/obj/item/stack/ore/ore in collect_loc.contents)
 		preattack(collect_loc, src, TRUE)
 		break
+
+/obj/item/weapon/storage/bag/ore/auto/proc/toggle_hold(var/mob/user)
+	handling = !handling
+
+	to_chat(user, "You turn [src] [handling? "on":"off"].")
+
+	if(handling)
+		user.register_event(/event/moved, src, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+	else
+		user.unregister_event(/event/moved, src, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_fill(var/mob/holder)
 	var/obj/structure/ore_box/box = null
