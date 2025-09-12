@@ -584,7 +584,7 @@
 	. = ..()
 	if(!user.attack_delayer.blocked())
 		playsound(src,'sound/items/basketball_bounce.ogg',50)
-		user.visible_message("<span class='notice'>[user] bounces /the [src].</span>","<span class='notice'>You bounce /the [src].</span>","<span class='notice'>You hear a ball bouncing.</span>")
+		user.visible_message("<span class='notice'>[user] bounces \the [src].</span>","<span class='notice'>You bounce \the [src].</span>","<span class='notice'>You hear a ball bouncing.</span>")
 		user.delayNextAttack(4)
 		item_state = "basketball_bounce"
 		spawn(4)
@@ -615,21 +615,21 @@
 	. = ..()
 	travel = 0
 
-/obj/item/weapon/beach_ball/holoball/rigged/proc/travel()
+/obj/item/weapon/beach_ball/holoball/rigged/proc/travel(atom/movable/mover)
 	travel++
 	if(travel > travel_limit)
-		travel_foul()
+		travel_foul(atom/movable/mover)
 
-/obj/item/weapon/beach_ball/holoball/rigged/proc/travel_foul()
+/obj/item/weapon/beach_ball/holoball/rigged/proc/travel_foul(atom/movable/mover)
 	travel = 0
 
-/obj/item/weapon/beach_ball/holoball/rigged/explosive/travel_foul()
+/obj/item/weapon/beach_ball/holoball/rigged/explosive/travel_foul(atom/movable/mover)
 	. = ..()
 	var/turf/T = get_turf(src.loc)
 
 	var/mob/M
-	if (ismob(loc))
-		M = loc
+	if (ismob(mover))
+		M = mover
 		M.show_message("<span class='warning'>Your [src.name] explodes!</span>", 1)
 
 	if(T)
@@ -658,7 +658,7 @@
 			if(!discrete_grenade)
 				silent = FALSE
 
-/obj/item/weapon/beach_ball/holoball/rigged/grenade/travel_foul()
+/obj/item/weapon/beach_ball/holoball/rigged/grenade/travel_foul(atom/movable/mover)
 	. = ..()
 	if(held_grenade)
 		held_grenade.prime()
