@@ -81,10 +81,14 @@
 	talked |= break_grabs(target)
 
 	if(!talked)
-		target.drop_item()
+		var/obj/item/dropped_item = target.drop_item()
+		dropped_item.on_disarm_drop(src)
 		visible_message("<span class='danger'>[src] has disarmed [target]!</span>")
 	playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 	return 1
+
+/obj/item/proc/on_disarm_drop(mob/user)
+	return
 
 /mob/living/carbon/human/proc/get_organ_species(organ)
 	var/datum/organ/external/OE
