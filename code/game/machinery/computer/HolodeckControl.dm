@@ -384,6 +384,10 @@
 		for(var/obj/item/weapon/holo/esword/H in linkedholodeck)
 			H.damtype = BRUTE
 
+		for(var/obj/item/weapon/beach_ball/holoball/B in linkedholodeck)
+			new /obj/item/weapon/beach_ball/holoball/rigged/explosive(B.loc)
+			qdel(B)
+
 	if (!bandaid && (!linkedholodeck.area_turfs || linkedholodeck.area_turfs.len <= 0))
 		log_admin("The Holodeck broke when switching from [old_room ? old_room : "null"] to [room_name]. Attempting bandaid fix.")
 		message_admins("The Holodeck broke when switching from [old_room ? old_room : "null"] to [room_name]. Attempting bandaid fix.")
