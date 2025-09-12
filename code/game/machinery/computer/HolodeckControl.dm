@@ -622,7 +622,7 @@
 /obj/item/weapon/beach_ball/holoball/rigged/proc/travel(atom/movable/mover)
 	travel++
 	if(travel > travel_limit)
-		travel_foul(atom/movable/mover)
+		travel_foul(mover)
 
 /obj/item/weapon/beach_ball/holoball/rigged/proc/travel_foul(atom/movable/mover)
 	say("Technical foul! Travelling!")
