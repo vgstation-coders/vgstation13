@@ -368,7 +368,7 @@
 	return TRUE
 
 /obj/item/ammo_storage/magazine/lawgiver/recharger_process(var/obj/machinery/recharger/charger)
-	if(charger && isFull())
+	if(isFull())
 		charger.update_icon()
 		charger.icon_state = "recharger2"
 		return
@@ -379,12 +379,11 @@
 	for(var/datum/lawgiver_mode/mode in ammo_counters)
 		if(ammo_counters[mode] ==  mode.ammo_per_shot)
 			continue
-		charged_amount += mode.ammo_per_shot * (charger ? charger.charging_speed_modifier : 1)
+		charged_amount += mode.ammo_per_shot * charger.charging_speed_modifier
 		ammo_counters[mode] = min(ammo_counters[mode] + charged_amount, mode.ammo_per_shot)
 
-	if(charger)
-		charger.try_use_power(100 * charger.charging_speed_modifier + 100 * charger.charging_speed_modifier * charger.efficiency_modifier)
-		charger.update_icon()
+	charger.try_use_power(100 * charger.charging_speed_modifier + 100 * charger.charging_speed_modifier * charger.efficiency_modifier)
+	charger.update_icon()
 
 /obj/item/ammo_storage/magazine/lawgiver/attackby(var/atom/A, var/mob/user)
 	if(istype(A,/obj/item/toy/crayon/rainbow)&& !istype(src,/obj/item/ammo_storage/magazine/lawgiver/honkgiver))

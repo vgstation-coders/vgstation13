@@ -20,7 +20,7 @@
 	to_chat(user, "It has [kit_uses] uses left for regular barricades. It can [kit_uses < 3 ? "no longer be used" : "also be used"] for full barricades.")
 
 /obj/item/weapon/barricade_kit/proc/build_time(mob/user)
-	return user?.reagents?.has_reagent(CARGONANOBOTS) ? 2 : 10
+	return user?.reagents?.has_reagent(CARGONANOBOTS) ? 5 : 10
 
 //Basically a rip from window construction, because it's the same idea
 /obj/item/weapon/barricade_kit/attack_self(mob/user as mob)

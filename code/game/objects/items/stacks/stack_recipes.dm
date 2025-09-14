@@ -1,5 +1,3 @@
-#define CARGONIA_FACTOR 5
-
 /*
  * Recipe datum
  * For the actual crafting that uses these datums, see stack.dm
@@ -68,7 +66,7 @@
 	if (time)
 		var/actual_time = S.time_modifier(time)
 		if(cargonia_boost && user.reagents && user.reagents.has_reagent(CARGONANOBOTS))
-			actual_time /= CARGONIA_FACTOR
+			actual_time /= 2
 		if (!do_after(user, get_turf(S), actual_time))
 			S.stop_build(current_work == S.last_work)
 			return
@@ -709,5 +707,3 @@ var/list/datum/stack_recipe/ralloy_recipes = list (
 var/list/datum/stack_recipe/sand_recipes = list (
 	new/datum/stack_recipe("sandstone", /obj/item/stack/sheet/mineral/sandstone, 1, 1, 50),
 	)
-
-#undef CARGONIA_FACTOR
