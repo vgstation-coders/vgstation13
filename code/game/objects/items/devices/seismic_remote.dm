@@ -2,7 +2,7 @@
 	name = "\improper suspicious radio"
 	desc = "Press the button to feel station structure shake all around you!"
 	icon = 'icons/obj/device.dmi'
-	icon_state = "rad_remote"
+	icon_state = "seismic_remote"
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	var/cooldown = 0
@@ -15,7 +15,7 @@
 	update_icon()
 
 /obj/item/device/seismic_remote/update_icon()
-	icon_state = "[cooldown-world.time < 0 ? "rad_remote" : "rad_remote_off"]"
+	icon_state = "seismic_remote[cooldown-world.time < 0 ? "" : "_off"]"
 
 /obj/item/device/seismic_remote/examine(mob/user)
 	..()
