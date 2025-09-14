@@ -20,7 +20,8 @@
 	to_chat(user, "It has [kit_uses] uses left for regular barricades. It can [kit_uses < 3 ? "no longer be used" : "also be used"] for full barricades.")
 
 /obj/item/weapon/barricade_kit/proc/build_time(mob/user)
-	return user?.reagents?.has_reagent(CARGONANOBOTS) ? 5 : 10
+	. = user?.reagents?.has_reagent(CARGONANOBOTS) ? 5 : 10
+	message_admins(.)
 
 //Basically a rip from window construction, because it's the same idea
 /obj/item/weapon/barricade_kit/attack_self(mob/user as mob)
@@ -47,7 +48,7 @@
 					return
 			user.visible_message("<span class='warning'>[user] starts building a barricade.</span>", \
 			"<span class='notice'>You start building a barricade.</span>")
-			if(do_after(user, src, build_time() * 3))
+			if(do_after(user, src, build_time(user) * 3))
 				to_chat(user, "<span class='notice'>You finish the barricade.</span>")
 				var/obj/structure/window/barricade/BC = new /obj/structure/window/barricade(user.loc)
 				BC.change_dir(user.dir)
@@ -68,7 +69,7 @@
 				return 1
 			user.visible_message("<span class='warning'>[user] starts building a full barricade.</span>", \
 			"<span class='notice'>You start building a full barricade.</span>")
-			if(do_after(user, src, build_time() * 5))
+			if(do_after(user, src, build_time(user) * 5))
 				to_chat(user, "<span class='notice'>You finish the full barricade.</span>")
 				new /obj/structure/window/barricade/full(user.loc)
 				qdel(src) //Use it up
