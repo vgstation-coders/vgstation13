@@ -199,15 +199,25 @@
 
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		if(scanning)
-			abort_scan()
+			visible_message("<span class='warning'>[src] stops scanning due to no power!</span>")
+			scanning = FALSE
+			current_scan_energy = 0
+			use_power = MACHINE_POWER_USE_IDLE
+			playsound(src, 'sound/machines/alert.ogg', 50, 1)
+			update_icon()
+			return
 		return
 
 	if(scanning)
 		// Get available power and consume what we can (up to max_power_rate)
 		var/available_power = get_available_power()
 		if(available_power <= 0)
-			to_chat(viewers(src), "<span class='warning'>[src] stops scanning due to no power!</span>")
-			abort_scan()
+			visible_message("<span class='warning'>[src] stops scanning due to no power!</span>")
+			scanning = FALSE
+			current_scan_energy = 0
+			use_power = MACHINE_POWER_USE_IDLE
+			playsound(src, 'sound/machines/alert.ogg', 50, 1)
+			update_icon()
 			return
 
 		// Use the minimum of available power and max power rate
@@ -225,30 +235,14 @@
 
 		// Check if scan is complete
 		if(current_scan_energy >= required_scan_energy)
-			complete_scan()
-
-	..() // Call parent process
-
-/obj/machinery/planet_scanner/proc/abort_scan()
-	scanning = FALSE
-	current_scan_energy = 0
-	use_power = MACHINE_POWER_USE_IDLE
-	playsound(src, 'sound/machines/alert.ogg', 50, 1)
-	update_icon()
-
-/obj/machinery/planet_scanner/proc/complete_scan()
-	scanning = FALSE
-	use_power = MACHINE_POWER_USE_IDLE
-	scans_completed++
-
-	playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
-
-	// Generate the planet and register it with the correct discoverer
-	spawn_new_planet()
-
-	// Calculate energy for next scan
-	calculate_required_energy()
-	update_icon()
+			scanning = FALSE
+			use_power = MACHINE_POWER_USE_IDLE
+			scans_completed++
+			playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
+			spawn_new_planet()
+			calculate_required_energy()
+			update_icon()
+	..()
 
 /obj/machinery/planet_scanner/proc/spawn_new_planet()
 	if(!SSmapping)
