@@ -275,6 +275,20 @@
 	w_type = RECYK_WOOD
 	sheet_type = /obj/item/stack/sheet/wood
 
+/obj/machinery/door/table/plastic
+	name = "plastic table door"
+	icon_state = "plasticdoor_closed"
+	prefix = "plastic"
+	health = 50
+	sheet_type = /obj/item/stack/sheet/mineral/plastic
+
+/obj/machinery/door/table/brass
+	name = "brass table door"
+	icon_state = "brassdoor_closed"
+	prefix = "brass"
+	health = 75
+	sheet_type = /obj/item/stack/sheet/brass
+
 /obj/machinery/door/table/glass
 	name = "glass table door"
 	icon_state = "glassdoor_closed"
