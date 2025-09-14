@@ -281,12 +281,12 @@
 		to_chat(user, "<span class='warning'>Planet data corrupted.</span>")
 		return FALSE
 
-	// For now, just show a message. This could be expanded to create actual disk items
 	to_chat(user, "<span class='notice'>Printing destination disk for [planet.planet_name]...</span>")
 	playsound(src, 'sound/effects/dotmatrixprinter.ogg', 40, 1)
 
-	// TODO: Create actual destination disk item with planet data
-	// This would require implementing a destination disk item type
+	var/obj/item/weapon/disk/shuttle_coords/procedural/disk = new(get_turf(src))
+	disk.planet_ref = planet
+	disk.header = "[planet.planet_name] Landing"
 
 	return TRUE
 

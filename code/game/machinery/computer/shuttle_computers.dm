@@ -97,6 +97,12 @@
 	..()
 	header = initial(header)
 
+/obj/item/weapon/disk/shuttle_coords/procedural
+	name = "planetary destination disk"
+	desc = "A disk containing coordinates to a recently discovered planet."
+	header = "PLANETARY LANDING"
+	var/datum/planet_type/planet_ref
+
 /obj/docking_port/destination/coord //Specific subtype to hunt for when doing cleanup
 
 /obj/item/weapon/card/shuttle_pass
@@ -156,6 +162,9 @@
 	var/custom_y = 0
 	var/custom_z = 0
 	var/custom_rot = 0
+
+	// For procedural planetary destinations
+	var/selected_procedural_planet
 
 /obj/machinery/computer/shuttle_control/New()
 	if(shuttle)
@@ -248,6 +257,9 @@
 				for(var/obj/docking_port/destination/D in shuttle.docking_ports)
 					if(D.docked_with)
 						continue
+					// Skip planet surface ports when we have a procedural disk - they'll be shown via the disk instead
+					if(istype(D, /obj/docking_port/destination/planet_surface) && disk && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+						continue
 					else
 						text = get_doc_href(D)
 
@@ -258,9 +270,20 @@
 					dat += " | <b>[get_doc_href(disk.destination)]</b> | "
 				else //Shuttle not allowed to use disk
 					dat += " | <b>ERROR: Unable to read coordinates from disk (unknown encryption key)</b>"
+			else if(disk && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+				var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
+				if(proc_disk.planet_ref && proc_disk.compatible(shuttle))
+					dat += " | <b><a href='?src=\ref[src];select_procedural=1'>[proc_disk.planet_ref.planet_name] Landing</a></b> | "
+				else
+					dat += " | <b>ERROR: Unable to read planetary coordinates</b>"
 
 			dat += " |<BR>"
-			dat += "<center>[shuttle_name]:<br> <b><A href='?src=\ref[src];move=[1]'>Send[selected_port ? " to [selected_port.areaname]" : ""]</A></b></center><BR>"
+			var/destination_text = ""
+			if(selected_port)
+				destination_text = " to [selected_port.areaname]"
+			else if(selected_procedural_planet)
+				destination_text = " to [selected_procedural_planet] surface"
+			dat += "<center>[shuttle_name]:<br> <b><A href='?src=\ref[src];move=[1]'>Send[destination_text]</A></b></center><BR>"
 			dat += "<div align=\"right\"><a href='?src=\ref[src];disk=1'>Disk: [disk ? disk.header : "--------"]</a></div>"
 
 			if(istype(disk, /obj/item/weapon/disk/shuttle_coords/free_move))
@@ -296,14 +319,74 @@
 			to_chat(user, "<span class='warning'>No shuttle detected.</span>")
 		return
 
+	// Handle procedural planetary landing ONLY if procedural destination is selected
+	if(selected_procedural_planet && disk && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+		var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
+		if(proc_disk.planet_ref)
+			initiate_planetary_landing(proc_disk.planet_ref, user)
+			return
+
 	if(!selected_port && shuttle.docking_ports.len >= 2)
 		selected_port = pick(shuttle.docking_ports - shuttle.current_port)
+
+	// Close shuttle doors before departure
+	shuttle.close_all_doors()
 
 	//Send a message to the shuttle to move
 	shuttle.travel_to(selected_port, src, user)
 
 	selected_port = null
+	selected_procedural_planet = null
 	updateUsrDialog()
+
+/obj/machinery/computer/shuttle_control/proc/initiate_planetary_landing(datum/planet_type/planet, mob/user)
+	if(!planet || !planet.allocation)
+		to_chat(user, "<span class='warning'>Planet data unavailable.</span>")
+		return
+
+	var/list/shuttle_size = shuttle.get_shuttle_size()
+	if(!shuttle_size)
+		to_chat(user, "<span class='warning'>Unable to determine shuttle dimensions.</span>")
+		return
+
+	// Get or create a landing zone for this shuttle
+	var/obj/docking_port/destination/planet_surface/surface_port = SSmapping.get_shuttle_landing_zone(planet.allocation, shuttle, shuttle_size)
+	if(!surface_port)
+		to_chat(user, "<span class='warning'>No suitable landing zone found on [planet.planet_name].</span>")
+		return
+
+	// Set the disk's destination to the surface port for validation purposes
+	if(disk && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+		var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
+		proc_disk.destination = surface_port
+
+	// Don't add surface port to shuttle destinations - it will be accessed via the disk
+	// This prevents duplication in the UI since the disk provides access
+
+	// Get shuttle engine direction for proper transit orientation
+	var/engine_dir = SOUTH // default direction
+	for(var/obj/structure/shuttle/engine/propulsion/engine in shuttle.linked_area)
+		engine_dir = engine.dir
+		break // use the first engine's direction
+
+	// Create transit area for the journey with correct orientation
+	var/obj/docking_port/destination/transit/transit_port = generate_transit_area(shuttle, engine_dir, 1)
+	if(!transit_port)
+		to_chat(user, "<span class='warning'>Failed to create transit area.</span>")
+		return
+
+	// Set up the transit port
+	transit_port.areaname = "transit to [planet.planet_name]"
+	transit_port.generate_borders = 1
+
+	// Set up the shuttle to use this transit port
+	shuttle.set_transit_dock(transit_port)
+
+	// Close shuttle doors before departure
+	shuttle.close_all_doors()
+
+	// Travel to the surface port - the system will automatically use transit
+	shuttle.travel_to(surface_port, src, user)
 
 /obj/machinery/computer/shuttle_control/Topic(href, href_list)
 	if(..())
@@ -355,6 +438,17 @@
 			return
 
 		selected_port = A
+		selected_procedural_planet = null
+		updateUsrDialog()
+	if(href_list["select_procedural"])
+		if(!allowed(usr))
+			to_chat(usr, "<span class='red'>Access denied.</span>")
+			return
+		// Set procedural planet selection and clear regular port selection
+		if(disk && istype(disk, /obj/item/weapon/disk/shuttle_coords/procedural))
+			var/obj/item/weapon/disk/shuttle_coords/procedural/proc_disk = disk
+			selected_procedural_planet = proc_disk.planet_ref?.planet_name
+			selected_port = null
 		updateUsrDialog()
 	if(href_list["link_to_shuttle"])
 		if(!allowed(usr))
@@ -527,6 +621,8 @@
 			to_chat(usr, "<span class='info'>You eject \the [disk] from \the [src].</span>")
 			if(disk.destination == selected_port)
 				selected_port = null
+			// Clear procedural planet selection when disk is ejected
+			selected_procedural_planet = null
 			disk = null
 			updateUsrDialog()
 
@@ -545,6 +641,8 @@
 		//An old disk is already inserted.
 		to_chat(user, "<span class='warning'>The old [disk.name] pops out of the disk slot!</span>")
 		disk.forceMove(loc)
+		// Clear procedural planet selection when disk is replaced
+		selected_procedural_planet = null
 		disk = null
 
 	if(user.drop_item(SC, src))

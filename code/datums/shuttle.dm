@@ -560,6 +560,27 @@
 				occupants.Add(L)
 	return occupants
 
+/datum/shuttle/proc/get_shuttle_size()
+	if(!linked_area)
+		return null
+	
+	var/low_x = world.maxx
+	var/low_y = world.maxy
+	var/high_x = 1
+	var/high_y = 1
+	
+	for(var/turf/T in linked_area)
+		if(T.x < low_x)
+			low_x = T.x
+		if(T.x > high_x)
+			high_x = T.x
+		if(T.y < low_y)
+			low_y = T.y
+		if(T.y > high_y)
+			high_y = T.y
+	
+	return list(abs(high_x - low_x) + 1, abs(high_y - low_y) + 1)
+
 /proc/get_refill_area(var/obj/docking_port/destination/D)
 	if(ispath(D?.refill_area))
 		return locate(D.refill_area)

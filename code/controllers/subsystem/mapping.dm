@@ -309,27 +309,98 @@ var/datum/subsystem/mapping/SSmapping
 	var/x_dim = size[1]
 	var/y_dim = size[2]
 	var/list/turf/search_turfs = turfs_from_sector(alloc.sector, alloc.z)
-	var/datum/turf_matrix[99][99]
+
+	// Get sector boundaries to calculate relative positions
+	var/sector_x = alloc.sector[1]
+	var/sector_y = alloc.sector[2]
+	var/x_min = 1 + (sector_x - 1) * 100
+	var/y_min = 1 + (sector_y - 1) * 100
+
+	// Create matrix with relative coordinates
+	var/datum/turf_matrix[100][100]
 	for (var/turf/T in search_turfs)
-		turf_matrix[T.x][T.y] = T
-	for (var/turf/T in search_turfs)
-		var/start_x = T.x
-		var/start_y = T.y
-		if(iswall(T) || istype(T, /turf/unsimulated/mineral))
-			continue
+		var/rel_x = T.x - x_min + 1
+		var/rel_y = T.y - y_min + 1
+		turf_matrix[rel_x][rel_y] = T
+
+	// Define safe zone boundaries (11 tiles from edge, accounting for shuttle size)
+	var/edge_buffer = 11
+	var/safe_x_min = edge_buffer + 1
+	var/safe_x_max = 100 - edge_buffer - x_dim
+	var/safe_y_min = edge_buffer + 1
+	var/safe_y_max = 100 - edge_buffer - y_dim
+
+	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
+		return null // Not enough space for safe landing
+
+	// Create randomized search list within safe boundaries
+	var/list/search_positions = list()
+	for(var/rel_x = safe_x_min; rel_x <= safe_x_max; rel_x++)
+		for(var/rel_y = safe_y_min; rel_y <= safe_y_max; rel_y++)
+			var/turf/T = turf_matrix[rel_x][rel_y]
+			if(T && !iswall(T) && !istype(T, /turf/unsimulated/mineral))
+				search_positions += T
+
+	// Shuffle the search positions for randomization
+	if(!search_positions.len)
+		return null
+
+	search_positions = shuffle(search_positions)
+
+	// Search through randomized positions
+	for(var/turf/T in search_positions)
+		var/rel_x = T.x - x_min + 1
+		var/rel_y = T.y - y_min + 1
 		var/found = TRUE
 
 		for (var/dx = 0; dx < x_dim && found; dx++)
 			for (var/dy = 0; dy < y_dim && found; dy++)
-				var/turf/target = turf_matrix[start_x + dx][start_y + dy]
-				if (!istype(target,T.type))
+				var/check_x = rel_x + dx
+				var/check_y = rel_y + dy
+				if(check_x > 100 || check_y > 100) // Out of sector bounds
+					found = FALSE
+					continue
+				var/turf/target = turf_matrix[check_x][check_y]
+				if (!target || !istype(target,T.type))
 					found = FALSE
 
 		if (found)
-			message_admins("Found a landing zone at [T.x], [T.y] for allocation [alloc.sector] in z-level [alloc.z]")
 			return T  // Return top-left turf of matching rectangle
 
 	return null
+
+// Get or create a landing zone for a specific shuttle on a planet
+/datum/subsystem/mapping/proc/get_shuttle_landing_zone(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size)
+	if(!alloc || !shuttle || !size)
+		return null
+
+	// Check if this shuttle already has a landing zone on this planet
+	if(alloc.shuttle_landing_zones[shuttle.type])
+		var/obj/docking_port/existing_port = alloc.shuttle_landing_zones[shuttle.type]
+		if(existing_port && existing_port.loc) // Make sure it still exists
+			return existing_port
+		else
+			// Clean up dead reference
+			alloc.shuttle_landing_zones -= shuttle.type
+
+	// Find a new landing zone
+	var/turf/landing_zone = get_landing_zone(alloc, size)
+	if(!landing_zone)
+		return null
+
+	// Create and register the landing zone
+	var/obj/docking_port/destination/planet_surface/surface_port = new(landing_zone)
+	surface_port.dir = NORTH
+	surface_port.areaname = "[alloc.ptype.planet_name] surface"
+
+	// Set the base turf type for proper surface restoration when shuttles depart
+	if(alloc.ptype && alloc.ptype.default_baseturf)
+		surface_port.base_turf_type = alloc.ptype.default_baseturf
+
+	// Remember this landing zone for this shuttle type
+	alloc.shuttle_landing_zones[shuttle.type] = surface_port
+
+	return surface_port
 
 //Contains the ID of the allocation, its turfs, and the planety type. To be replaced with vlevels in the future.
 /datum/allocation
@@ -337,3 +408,5 @@ var/datum/subsystem/mapping/SSmapping
 	var/z = 7
 	var/datum/planet_type/ptype
 	var/list/turf/turfs = list()
+	// Track shuttle landing zones
+	var/list/shuttle_landing_zones = list() // Associated list: shuttle_type -> docking_port
