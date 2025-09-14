@@ -18,6 +18,7 @@
 	soundeffect = 'sound/effects/wood_door_slam.ogg'
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	sheet_type = /obj/item/stack/sheet/metal
+	sheet_amt = 2
 
 /obj/machinery/door/table/New()
 	. = ..()
@@ -153,7 +154,7 @@
 /obj/machinery/door/table/proc/dismantle()
 	remove_electronics()
 	if(sheet_type)
-		new sheet_type(loc,2)
+		new sheet_type(loc,sheet_amt)
 	qdel(src)
 
 /obj/machinery/door/table/open()
@@ -281,6 +282,7 @@
 	prefix = "plastic"
 	health = 50
 	sheet_type = /obj/item/stack/sheet/mineral/plastic
+	sheet_amt = 5
 
 /obj/machinery/door/table/brass
 	name = "brass table door"
@@ -288,6 +290,7 @@
 	prefix = "brass"
 	health = 75
 	sheet_type = /obj/item/stack/sheet/brass
+	sheet_amt = 4
 
 /obj/machinery/door/table/glass
 	name = "glass table door"

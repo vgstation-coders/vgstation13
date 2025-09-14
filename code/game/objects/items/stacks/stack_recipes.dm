@@ -697,6 +697,7 @@ var/list/datum/stack_recipe/leather_recipes = list (
 
 var/list/datum/stack_recipe/brass_recipes = list (
 	new/datum/stack_recipe("brass table parts", /obj/item/weapon/table_parts/clockwork, 4),
+	new/datum/stack_recipe/table_door("brass table door", /obj/machinery/door/table/brass, 4, one_per_turf = 1, on_floor = 1),
 	null,
 	new/datum/stack_recipe("clockwork airlock", /obj/structure/door_assembly/clockwork, 4, time = 70, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 4)),
 	new/datum/stack_recipe("clockwork girders", /obj/structure/girder/clockwork, 3, time = 70, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 3)),
