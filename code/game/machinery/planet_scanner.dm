@@ -1,3 +1,5 @@
+#define PLANET_SCANNER_MAX_SCANS 25
+
 /obj/machinery/planet_scanner
 	name = "deep space scanner"
 	desc = "A sophisticated scanning array capable of detecting suitable planets for exploration. Each scan requires exponentially more power as space becomes more thoroughly explored."
@@ -11,7 +13,6 @@
 
 	var/scanning = FALSE
 	var/scans_completed = 0
-	var/max_scans = 25
 	var/base_energy_cost = 1000000 // Base energy cost in Joules
 	var/max_power_rate = 10000 // Maximum power consumption rate in Watts (modified by upgrades)
 	var/current_scan_energy = 0 // Current energy accumulated in Joules
@@ -119,7 +120,7 @@
 	data["powered"] = !(stat & (BROKEN|NOPOWER))
 	data["scanning"] = scanning
 	data["scans_completed"] = scans_completed
-	data["max_scans"] = max_scans
+	data["max_scans"] = PLANET_SCANNER_MAX_SCANS
 	data["required_energy"] = required_scan_energy
 	data["min_power_rate"] = max_power_rate
 	data["available_power"] = get_available_power()
@@ -127,11 +128,19 @@
 		data["current_energy"] = current_scan_energy
 	else
 		data["current_energy"] = null
-	data["can_scan"] = anchored && !(stat & (BROKEN|NOPOWER)) && !scanning && scans_completed < max_scans
-	data["at_scan_limit"] = scans_completed >= max_scans
+	data["can_scan"] = anchored && !(stat & (BROKEN|NOPOWER)) && !scanning && scans_completed < PLANET_SCANNER_MAX_SCANS
+	data["at_scan_limit"] = scans_completed >= PLANET_SCANNER_MAX_SCANS
 
-	if(SSmapping && SSmapping.discovered_planet_data && SSmapping.discovered_planet_data.len > 0)
-		data["discovered_planets"] = SSmapping.discovered_planet_data.Copy()
+	if(SSmapping && SSmapping.planets && SSmapping.planets.len > 0)
+		var/list/planet_data = list()
+		for(var/datum/planet_type/planet in SSmapping.planets)
+			var/list/planet_info = list()
+			planet_info["name"] = planet.name
+			planet_info["desc"] = planet.desc
+			planet_info["type"] = planet.type
+			planet_info["procedural_name"] = planet.planet_name
+			planet_data += list(planet_info)
+		data["discovered_planets"] = planet_data
 		data["has_discoveries"] = TRUE
 	else
 		data["discovered_planets"] = null
@@ -156,7 +165,7 @@
 				return FALSE
 			if(stat & (BROKEN|NOPOWER))
 				return FALSE
-			if(scans_completed >= max_scans)
+			if(scans_completed >= PLANET_SCANNER_MAX_SCANS)
 				return FALSE
 			if(scanning)
 				return FALSE
@@ -164,10 +173,10 @@
 			return TRUE
 		if("print_disk")
 			var/planet_index = text2num(params["planet_index"])
-			if(!SSmapping || !SSmapping.discovered_planet_data || !SSmapping.discovered_planet_data.len)
+			if(!SSmapping || !SSmapping.planets || !SSmapping.planets.len)
 				return FALSE
 			// planet_index comes from frontend (0-indexed), check bounds accordingly
-			if(planet_index < 0 || planet_index >= SSmapping.discovered_planet_data.len)
+			if(planet_index < 0 || planet_index >= SSmapping.planets.len)
 				to_chat(usr, "<span class='warning'>Invalid planet selected.</span>")
 				return FALSE
 			print_destination_disk(usr, planet_index)
@@ -258,31 +267,34 @@
 	if(available_ruins.len)
 		selected_ruin_type = pick(available_ruins)
 
-	SSmapping.spawn_planetoid(selected_planet_type, selected_ruin_type, "Deep Space Scanner")
+	SSmapping.spawn_planetoid(selected_planet_type, selected_ruin_type)
 
 	return selected_planet_type
 
 /obj/machinery/planet_scanner/proc/print_destination_disk(mob/user, planet_index)
-	if(!SSmapping || !SSmapping.discovered_planet_data || !SSmapping.discovered_planet_data.len)
+	if(!SSmapping || !SSmapping.planets || !SSmapping.planets.len)
 		to_chat(user, "<span class='warning'>No planets discovered to print.</span>")
 		return FALSE
 
 	// Convert from 0-indexed frontend to 1-indexed DM list
 	var/dm_index = planet_index + 1
-	if(dm_index < 1 || dm_index > SSmapping.discovered_planet_data.len)
+	if(dm_index < 1 || dm_index > SSmapping.planets.len)
 		to_chat(user, "<span class='warning'>Invalid planet selected.</span>")
 		return FALSE
 
-	var/list/planet_data = SSmapping.discovered_planet_data[dm_index]
-	if(!planet_data)
+	var/datum/planet_type/planet = SSmapping.planets[dm_index]
+	if(!planet)
 		to_chat(user, "<span class='warning'>Planet data corrupted.</span>")
 		return FALSE
 
 	// For now, just show a message. This could be expanded to create actual disk items
-	to_chat(user, "<span class='notice'>Printing destination disk for [planet_data["procedural_name"]]...</span>")
+	to_chat(user, "<span class='notice'>Printing destination disk for [planet.planet_name]...</span>")
 	playsound(src, 'sound/effects/dotmatrixprinter.ogg', 40, 1)
 
 	// TODO: Create actual destination disk item with planet data
 	// This would require implementing a destination disk item type
 
 	return TRUE
+
+
+#undef PLANET_SCANNER_MAX_SCANS

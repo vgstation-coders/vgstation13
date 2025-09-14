@@ -136,24 +136,6 @@ export const PlanetScanner = (props) => {
                         </Stack.Item>
                       </Stack>
                     </Stack.Item>
-                    {!!scanning && (
-                      <Stack.Item>
-                        <Stack>
-                          <Stack.Item basis="40%">
-                            Current Energy Accumulated:
-                          </Stack.Item>
-                          <Stack.Item grow>
-                            <ProgressBar
-                              value={current_energy || 0}
-                              maxValue={required_energy || 1}
-                              color="teal"
-                            >
-                              {current_energy?.toLocaleString() || 0} J
-                            </ProgressBar>
-                          </Stack.Item>
-                        </Stack>
-                      </Stack.Item>
-                    )}
                     {!!at_scan_limit && (
                       <Stack.Item>
                         Scans Completed: {scans_completed} / {max_scans}

@@ -1,6 +1,8 @@
 /datum/planet_type
-	///The name we show on examine
+	///The planet datum type
 	var/name = "planet"
+	//The procgen name players see
+	var/planet_name = "Planet"
 	///The description we show on examine
 	var/desc = "A planet."
 	///The ID tag for the set of ruins and loot tables this planet uses
@@ -11,8 +13,6 @@
 	var/default_baseturf = null
 	///Our weight when picking a new planet.
 	var/weight = 40
-	///Customizable planet names.
-	var/planet_name
 	// The type of loot this planet can spawn
 	var/loot_type
 	//Climate datum
@@ -27,6 +27,161 @@
 	..()
 	if(climate_type)
 		climate = new climate_type
+	planet_name = generate_planet_name()
+
+/datum/planet_type/proc/generate_planet_name()
+	// Complete planet names
+	var/list/whole_names = list(
+		"Aurelia",
+		"Valeria",
+		"Meridian",
+		"Stellaris",
+		"Novara",
+		"Caldris",
+		"Zephyria",
+		"Astoria",
+		"Lysander",
+		"Celestine",
+		"Umbria",
+		"Solara",
+		"Nexaria",
+		"Verdania",
+		"Crystallis",
+		"Tempest",
+		"Serenity",
+		"Horizon",
+		"Elysian",
+		"Cascadia"
+	)
+
+	// Name prefixes
+	var/list/prefixes = list(
+		"Alpha",
+		"Beta",
+		"Gamma",
+		"Delta",
+		"Epsilon",
+		"Zeta",
+		"Eta",
+		"Theta",
+		"Iota",
+		"Kappa",
+		"Lambda",
+		"Mu",
+		"Nu",
+		"Xi",
+		"Omicron",
+		"Pi",
+		"Rho",
+		"Sigma",
+		"Tau",
+		"Upsilon",
+		"Phi",
+		"Chi",
+		"Psi",
+		"Omega",
+		"Neo",
+		"Proto",
+		"Meta",
+		"Ultra",
+		"Mega",
+		"Hyper"
+	)
+
+	// Base names
+	var/list/bases = list(
+		"Centauri",
+		"Orionis",
+		"Draconis",
+		"Cygni",
+		"Ursa",
+		"Lyrae",
+		"Aquila",
+		"Cassiopeia",
+		"Andromeda",
+		"Perseus",
+		"Hercules",
+		"Gemini",
+		"Virgo",
+		"Scorpius",
+		"Sagittarius",
+		"Aquarius",
+		"Taurus",
+		"Aries",
+		"Libra",
+		"Pisces",
+		"Cancer",
+		"Leo",
+		"Capricorn",
+		"Terra",
+		"Luna",
+		"Sol",
+		"Helios",
+		"Titan",
+		"Cosmos",
+		"Nexus",
+		"Void",
+		"Prime",
+		"Major",
+		"Minor",
+		"Central"
+	)
+
+	// Name suffixes
+	var/list/suffixes = list(
+		"I",
+		"II",
+		"III",
+		"IV",
+		"V",
+		"VI",
+		"VII",
+		"VIII",
+		"IX",
+		"X",
+		"Prime",
+		"Alpha",
+		"Beta",
+		"Gamma",
+		"Delta",
+		"One",
+		"Two",
+		"Three",
+		"Four",
+		"Five",
+		"Six",
+		"Seven",
+		"Eight",
+		"Nine",
+		"Ten",
+		"Major",
+		"Minor",
+		"Central",
+		"Outer",
+		"Inner",
+		"North",
+		"South",
+		"East",
+		"West"
+	)
+
+	// 30% chance to use a complete name, 70% chance to build one
+	if(prob(30))
+		return pick(whole_names)
+
+	// Build a name from components
+	var/generated_name = ""
+	var/name_type = rand(1, 3)
+
+	switch(name_type)
+		if(1) // Prefix + Base + Suffix
+			generated_name = "[pick(prefixes)] [pick(bases)] [pick(suffixes)]"
+		if(2) // Prefix + Base only
+			generated_name = "[pick(prefixes)] [pick(bases)]"
+		if(3) // Base + Suffix only
+			generated_name = "[pick(bases)] [pick(suffixes)]"
+
+	return generated_name
 
 /datum/planet_type/beach
 	name = "beach planetoid"

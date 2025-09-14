@@ -1006,40 +1006,28 @@ var/global/floorIsLava = 0
 	dat += "<h2>Planet Registry:</h2>"
 	var/has_planets = FALSE
 
-	// Check if we have any planets or discovery data
-	if(SSmapping.planets.len || SSmapping.discovered_planet_data.len)
+	// Check if we have any planets
+	if(SSmapping.planets.len)
 		has_planets = TRUE
 		dat += "<table border='1' style='width:100%'>"
-		dat += "<tr><th>Planet Name</th><th>Planet Type</th><th>Z-Level</th><th>Sector</th><th>Discoverer</th><th>Discovery Time</th><th>Actions</th></tr>"
+		dat += "<tr><th>Planet Name</th><th>Planet Type</th><th>Z-Level</th><th>Sector</th><th>Actions</th></tr>"
 
 		// Display existing planets with their allocation data
 		for(var/datum/planet_type/planet in SSmapping.planets)
 			var/z_level = "Unknown"
 			var/sector = "Unknown"
-			var/planet_name = planet.name
-			var/discoverer = "Unknown"
-			var/discovery_time = "Unknown"
+			var/planet_name = planet.planet_name
 
 			if(planet.allocation)
 				var/datum/allocation/alloc = planet.allocation
 				z_level = alloc.z
 				sector = "[alloc.sector[1]], [alloc.sector[2]]"
 
-			// Try to find corresponding discovery data
-			for(var/list/discovery_data in SSmapping.discovered_planet_data)
-				if(discovery_data["type"] == planet.type)
-					planet_name = discovery_data["procedural_name"]
-					discoverer = discovery_data["discoverer"]
-					discovery_time = discovery_data["discovery_time"] ? time2text(discovery_data["discovery_time"], "hh:mm:ss") : "Unknown"
-					break
-
 			dat += "<tr>"
 			dat += "<td>[planet_name]</td>"
 			dat += "<td>[planet.name]</td>"
 			dat += "<td>[z_level]</td>"
 			dat += "<td>[sector]</td>"
-			dat += "<td>[discoverer]</td>"
-			dat += "<td>[discovery_time]</td>"
 			dat += "<td><A href='?_src_=holder;procgen_jump=\ref[planet]'>Jump to Planet</A></td>"
 			dat += "</tr>"
 

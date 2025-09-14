@@ -23,8 +23,6 @@ var/datum/subsystem/mapping/SSmapping
 	var/list/planets = list()
 	//All allocations
 	var/list/allocations = list()
-	//List of planet discovery data for scanner UI
-	var/list/discovered_planet_data = list()
 
 /datum/subsystem/mapping/New()
 	NEW_SS_GLOBAL(SSmapping)
@@ -80,63 +78,29 @@ var/datum/subsystem/mapping/SSmapping
 
 	..()
 
-/proc/generate_planet(mob/user)//admin function for creating custom planets
+/proc/generate_planet(mob/user)
 	if(!user)
 		return
-
-	if(!check_rights(R_ADMIN, 0, user))
+	if(!check_rights(R_ADMIN))
 		return
 
-	if(!SSmapping)
-		to_chat(user, "<span class='warning'>Mapping subsystem not initialized!</span>")
-		return
-
-	var/list/available_planets = list()
+	var/list/planet_types = list()
 	for(var/planet_path in subtypesof(/datum/planet_type))
-		var/datum/planet_type/P = new planet_path()
-		available_planets[P.name] = planet_path
-		qdel(P)
+		planet_types += planet_path
 
-	var/selected_name = input(user, "Select a planet type to generate:", "Planet Generation") as null|anything in available_planets
-	if(!selected_name)
+	var/chosen_planet_type = input(user, "Select a planet type to generate:", "Planet Generation") as null|anything in planet_types
+	if(!chosen_planet_type)
 		return
 
-	var/selected_type = available_planets[selected_name]
+	var/list/ruin_types = list()
+	for(var/ruin_path in subtypesof(/datum/map_element/mining_surprise))
+		ruin_types += ruin_path
 
-	// Allow selection of vault/ruin type
-	var/list/available_vaults = list("None" = null)
-	for(var/vault_path in subtypesof(/datum/map_element))
-		if(vault_path == /datum/map_element)
-			continue
-		var/datum/map_element/V = new vault_path()
-		if(V.name && V.name != "map element")
-			available_vaults[V.name] = vault_path
-		else
-			// Use the type name if no custom name
-			var/type_name = copytext("[vault_path]", findlasttext("[vault_path]", "/") + 1)
-			available_vaults[type_name] = vault_path
-		qdel(V)
+	var/chosen_ruin_type = input(user, "Select a ruin to place on the planet (random if no selection):", "Vault Selection") as null|anything in ruin_types
+	if(!chosen_ruin_type)
+		chosen_ruin_type = pick(ruin_types)
 
-	var/selected_vault_name = input(user, "Select a vault/ruin to place on the planet (optional):", "Vault Selection") as null|anything in available_vaults
-	if(!selected_vault_name)
-		return
-
-	var/selected_vault = available_vaults[selected_vault_name]
-
-	// Get the admin's name for discovery registration
-	var/discoverer_name = "Administrative Command ([user.key])"
-
-	message_admins("[key_name_admin(user)] is generating a new planet of type [selected_name] with vault [selected_vault_name ? selected_vault_name : "None"].")
-	log_admin("[key_name(user)] generated a new planet of type [selected_name] with vault [selected_vault_name ? selected_vault_name : "None"].")
-
-	var/z_level = SSmapping.spawn_planetoid(selected_type, selected_vault, discoverer_name)
-
-	if(z_level)
-		to_chat(user, "<span class='notice'>Successfully generated planet on z-level [z_level].</span>")
-		return z_level
-	else
-		to_chat(user, "<span class='warning'>Failed to generate planet!</span>")
-		return
+	SSmapping.spawn_planetoid(chosen_planet_type, chosen_ruin_type)
 
 //Creates a grid of 25 99x99 squares for procedural generation
 /datum/subsystem/mapping/proc/create_procgen_level()
@@ -154,13 +118,10 @@ var/datum/subsystem/mapping/SSmapping
 		var/datum/biome/biome_instance = new biome_path()
 		biomes[biome_path] += biome_instance
 
-/datum/subsystem/mapping/proc/spawn_planetoid(datum/planet_type/planet_datum, ruin_type, discoverer_name = "Administrative Command")
+/datum/subsystem/mapping/proc/spawn_planetoid(datum/planet_type/planet_datum, ruin_type)
 	var/datum/planet_type/newplanet = new planet_datum
 	var/datum/planetGenerator/mapgen = new newplanet.mapgen
 	planets += newplanet
-
-	// Register the planet discovery automatically when spawned
-	register_planet(newplanet, discoverer_name)
 
 	var/datum/map_element/mining_surprise/used_ruin = ispath(ruin_type) ? (new ruin_type) : ruin_type
 	message_admins("Generating turfs")
@@ -188,49 +149,6 @@ var/datum/subsystem/mapping/SSmapping
 	message_admins("Starting weather controller")
 	SSweather.resume()
 	return world.maxz
-
-//Registers a planet discovery for UI purposes
-/datum/subsystem/mapping/proc/register_planet(datum/planet_type/planet_instance, discoverer_name = "Deep Space Scanner")
-	var/list/planet_data = list()
-	planet_data["name"] = planet_instance.name
-	planet_data["desc"] = planet_instance.desc
-	planet_data["type"] = planet_instance.type
-	planet_data["procedural_name"] = generate_procedural_planet_name()
-	planet_data["discoverer"] = discoverer_name
-	planet_data["discovery_time"] = world.time
-
-	discovered_planet_data += list(planet_data)
-	return planet_data
-
-//Helper function for procedural planet name generation
-/datum/subsystem/mapping/proc/generate_procedural_planet_name()
-	var/list/placeholder_names = list(
-		"Kepler-442b", "Proxima Centauri b", "TRAPPIST-1e", "Gliese 667Cc",
-		"HD 40307g", "Wolf 1061c", "Kepler-186f", "TOI-715b",
-		"LHS 1140b", "K2-18b", "WASP-96b", "55 Cancri e"
-	)
-	return pick(placeholder_names)
-
-//Manual discovery registration for admin-spawned planets
-/datum/subsystem/mapping/proc/register_existing_planet(datum/planet_type/planet_instance, discoverer_name = "Administrative Command")
-	// Check if this planet is already discovered to avoid duplicates
-	for(var/list/existing_data in discovered_planet_data)
-		if(existing_data["type"] == planet_instance.type)
-			return null // Already discovered
-
-	return register_planet(planet_instance, discoverer_name)
-
-//Debug/admin proc to manually register planets from the planets list
-/proc/register_all_existing_planets()//debug
-	if(!SSmapping || !SSmapping.planets)
-		return "No mapping subsystem or planets found"
-
-	var/registered_count = 0
-	for(var/datum/planet_type/planet in SSmapping.planets)
-		if(SSmapping.register_existing_planet(planet, "Administrative Discovery"))
-			registered_count++
-
-	return "Registered [registered_count] planets for discovery"
 
 //// BEGIN LLM-SLOP I MUST REVIEW AND FIX LATER ////
 //Post-processes ruin turfs to match the planet environment
