@@ -37,24 +37,25 @@ var/list/appendage_modifier = list(
 	"feathery",
 	"tentacled",
 	)
-var/list/procgen_loot = list(
-	list(/obj/item/weapon/gun/energy/bison/alien = 100, 1),//path, # of items
-	list(/obj/item/weapon/gun/energy/laser/captain = 100, 1),
-	list(/obj/item/weapon/gun/projectile/roulette_revolver = 100, 2),
-	list(/obj/item/weapon/gun/energy/laser/captain/alien = 50, 2),
-	list(/obj/item/weapon/gun/gravitywell = 50, 1),
-	list(/obj/item/weapon/gun/portalgun = 50, 1),
-	list(/obj/item/stack/sheet/mineral/clown = 200, 20),
-	list(/obj/item/stack/sheet/mineral/adamantine = 200, 5),
-	list(/obj/item/stack/sheet/mineral/phazon = 100, 5),
-	list(/obj/machinery/sleeper/mancrowave/galo = 50, 1),
-	list(/obj/machinery/chem_dispenser/scp_294 = 10, 1),
-	list(/obj/mecha/combat/durand/old = 10, 1),
-	list(/obj/mecha/combat/phazon = 5, 1),
-	list(/obj/mecha/medical/odysseus/murdysseus = 5, 1),
-	list(/obj/item/weapon/storage/box/syndie_kit/mech_killdozer = 5, 1),
-	list(/obj/item/weapon/storage/box/syndie_kit/emags_and_glue/ = 25, 1),
-	list(/obj/item/clothing/accessory/medal/participation = 10, 1),
+var/list/procgen_loot = list(//path, # of items
+	list(/obj/item/weapon/gun/energy/bison/alien, 1) = 100,//guns
+	list(/obj/item/weapon/gun/energy/laser/captain, 1) = 100,
+	list(/obj/item/weapon/gun/projectile/roulette_revolver, 2) = 100,
+	list(/obj/item/weapon/gun/energy/laser/captain/alien, 2) = 50,
+	list(/obj/item/weapon/gun/gravitywell, 1) = 50,
+	list(/obj/item/weapon/gun/portalgun, 1) = 50,
+	list(/obj/item/stack/sheet/mineral/clown, 20) = 200,//sheets
+	list(/obj/item/stack/sheet/mineral/adamantine, 5) = 200,
+	list(/obj/item/stack/sheet/mineral/phazon, 5) = 100,
+	list(/obj/machinery/sleeper/mancrowave/galo, 1) = 50,//machines
+	list(/obj/machinery/chem_dispenser/scp_294, 1) = 10,
+	list(/obj/mecha/combat/durand/old, 1) = 10,//mechs
+	list(/obj/mecha/combat/phazon, 1) = 5,
+	list(/obj/mecha/medical/odysseus/murdysseus, 1) = 5,
+	list(/obj/item/weapon/storage/box/syndie_kit/mech_killdozer, 1) = 5,//syndie packs
+	list(/obj/item/weapon/storage/box/syndie_kit/emags_and_glue/, 1) = 25,
+	list(/obj/item/clothing/accessory/medal/participation, 1) = 10,//trash
+	list(/obj/item/weapon/paper/iou, 1) = 10
 	)
 
 /*
@@ -311,7 +312,6 @@ var/list/procgen_loot = list(
 	for(var/status in special)
 		if(status == "IGNITE")
 			if(!L.on_fire)
-				L.adjust_fire_stacks(0.5)
 				L.ignite()
 		if(status == "RADIATION")
 			L.apply_radiation((damage), RAD_EXTERNAL)
