@@ -61,7 +61,7 @@ ANIMAL_DELAY 0
 MAX_EXPLOSION_RANGE 32
 
 ## DISABLE_LOWPOP_UPLINK_PRICES
-## Comment out to enable syndicate uplink item prices for low population (<5 players)
+## Comment out to enable increased syndicate uplink item prices during low population (<5 players)
 DISABLE_LOWPOP_UPLINK_PRICES
 
 #################
