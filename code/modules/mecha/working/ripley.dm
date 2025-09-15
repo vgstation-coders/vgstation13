@@ -26,6 +26,7 @@
 	damage_minimum = 0
 	penetration_reduction = 0
 	weight_tolerance = 2
+	transparent_cabin = TRUE
 
 	starting_components = list(
 		/obj/item/mecha_parts/component/hull,
@@ -45,6 +46,31 @@
 /obj/mecha/working/ripley/Move()
 	. = ..()
 	update_pressure()
+
+/obj/mecha/working/ripley/create_visholder()
+	if(!..())
+		return
+	var/matrix/size_matrix = matrix()
+	size_matrix.Scale(0.5,0.5)
+	visholder.transform = size_matrix
+	visholder.pixel_y = 6
+
+/obj/mecha/working/ripley/handle_vis_offset()
+	if(!visholder)
+		return
+	if(dir == WEST)
+		visholder.pixel_x = -4
+	else if(dir == EAST)
+		visholder.pixel_x = 4
+	else
+		visholder.pixel_x = 0
+
+
+/obj/mecha/working/ripley/handle_vis_enter()
+	..()
+
+/obj/mecha/working/ripley/handle_vis_exit()
+	..()
 
 /obj/mecha/working/ripley/mk2
 	desc = "Autonomous Power Loader Unit. The workhorse of the exosuit world, this variant is fitted with a pressurized cabin. "
@@ -71,6 +97,7 @@
 	paintable = 1
 	penetration_reduction = 2
 	damage_minimum = 2
+	transparent_cabin = FALSE
 
 	weight_max = 800
 

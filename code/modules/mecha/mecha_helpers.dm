@@ -61,3 +61,44 @@
 		return 1
 	else
 		return 0
+
+////////////////////////////////////////
+////// Open-topped Visual Handlers /////
+////////////////////////////////////////
+//Creates a visholder atom that can be transformed so you can visually display a strange sized mob without touching the mob directly!
+//Override/make a child to set specific sizes/pixel offsets
+/obj/mecha/proc/create_visholder()
+	if(visholder)
+		return FALSE
+	//Gotta make them in this order due to vis_contents underlaying shenanigans
+	//Back most layer, holds the seat behind the pilot
+	seat = new(src)
+	seat.name = "mecha.dm vis_contents backseat-holder"
+	seat.vis_flags = (VIS_INHERIT_DIR | VIS_INHERIT_PLANE | VIS_INHERIT_LAYER | VIS_UNDERLAY | VIS_INHERIT_ID)
+	seat.icon = 'icons/mecha/mecha.dmi'
+	seat.icon_state = "[initial_icon]_underlay"
+	vis_contents += seat
+	//Next layer up, holds The Little Man
+	visholder = new(src)
+	visholder.name = "mecha.dm visual open-topped pilot-holder"
+	visholder.vis_flags = (VIS_INHERIT_DIR | VIS_INHERIT_PLANE | VIS_INHERIT_LAYER | VIS_UNDERLAY | VIS_INHERIT_ID)
+	visholder.appearance_flags |= PIXEL_SCALE
+	vis_contents += visholder
+	return TRUE
+
+//Handles open topped visual man offsets based on direction faced. Override with pix offsets for visholder
+/obj/mecha/proc/handle_vis_offset()
+	return
+
+//Handles visholder interactions when a human mob enters an open-topped mech
+/obj/mecha/proc/handle_vis_enter()
+	occupant_vis_cache = occupant.vis_flags
+	occupant.vis_flags = (VIS_INHERIT_DIR | VIS_INHERIT_PLANE | VIS_INHERIT_LAYER | VIS_UNDERLAY | VIS_INHERIT_ID)
+	occupant.appearance_flags |= PIXEL_SCALE
+	visholder.vis_contents += occupant
+
+//Handles visholder interactions when a human mob exits an open-topped mech
+/obj/mecha/proc/handle_vis_exit()
+	if(occupant)
+		occupant.vis_flags = occupant_vis_cache
+		visholder.vis_contents -= occupant

@@ -80,7 +80,14 @@
 
 	var/dash_dir = null
 	var/wreckage
+	//Enclosement variables
 	var/enclosed = TRUE
+	var/atom/movable/visholder //Used to modify a visible person inside open topped variables, control offset with handle_vis_offset() proc after changing dir
+	var/atom/movable/seat //due to vis_contents tomfoolery, we can't underlay a seat image using underlays. Gotta make ANOTHER vis_contents atom...
+	var/occupant_vis_cache //Caches an occupant's vis_flags, as they must be changed to be seen inside the mech!
+
+	var/transparent_cabin = FALSE
+
 	var/silicon_pilot
 	var/silicon_icon_state = null
 	var/mech_maints_ready = FALSE
@@ -112,8 +119,6 @@
 	var/can_lock = TRUE // If the mecha can be dna or id locked
 
 	var/can_strafe = TRUE
-	var/can_climb = TRUE
-	var/omnidir = FALSE // If the mech can target directions it's not facing
 
 //mechaequipt2 stuffs
 	var/list/hull_equipment = new
@@ -281,6 +286,11 @@
 		QDEL_NULL(pr_give_air)
 	if(pr_internal_damage)
 		QDEL_NULL(pr_internal_damage)
+	if(visholder)
+		vis_contents.Cut()
+		QDEL_NULL(visholder)
+	if(seat)
+		QDEL_NULL(seat)
 	selected = null
 	..()
 
@@ -1479,6 +1489,13 @@ Fire damage comes from tank
 		if(H.client && cursor_enabled)
 			H.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
 
+		//open-topped handler
+		if(enclosed)
+			return 1
+		if(!visholder)
+			create_visholder()
+		handle_vis_enter()
+
 		return 1
 	else
 		return 0
@@ -1658,6 +1675,9 @@ Fire damage comes from tank
 		remove_mech_spells()
 		if(occupant.client)
 			occupant.client.mouse_pointer_icon = initial(occupant.client.mouse_pointer_icon)
+		//open topped handling
+		if(transparent_cabin)
+			handle_vis_exit()
 		occupant = null
 		icon_state = initial_icon+"-open"
 		for (var/datum/faction/F in factions_with_hud_icons)
@@ -1695,6 +1715,10 @@ Fire damage comes from tank
 		occupant.reset_view(src)
 		empty_bad_contents()
 		occupant << browse(null, "window=exosuit")
+
+		//open topped handling
+		if(transparent_cabin)
+			handle_vis_exit()
 
 		//change the cursor
 		if(occupant && occupant.client)
@@ -1983,6 +2007,10 @@ Fire damage comes from tank
 		to_chat(user, "<span class='info'>You paint the mech.</span>")
 		M.initial_icon = icontype
 		M.icon_state = icontype +"-open"
+		if(M.transparent_cabin)
+			M.vis_contents.Cut()
+			QDEL_NULL(M.visholder)
+			QDEL_NULL(M.seat)
 		for(var/spell/mech/MS in M.intrinsic_spells)
 			MS.update_spell_icon()
 		M.refresh_spells() //I think this does something important

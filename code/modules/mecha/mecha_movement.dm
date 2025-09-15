@@ -114,6 +114,8 @@
 	else
 		move_result = mechstep(direction)
 	if(move_result)
+		if(visholder)
+			handle_vis_offset()
 		for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
 			if(stepped)
 				ME.on_mech_step()
