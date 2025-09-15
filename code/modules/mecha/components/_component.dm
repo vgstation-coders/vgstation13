@@ -38,6 +38,9 @@
 		if(0 to 1)
 			to_chat(user, "<span class='warning'><b>It is completely destroyed.</b></span>")
 
+	if(step_delay)
+		to_chat(user, "Weight: [step_delay].")
+
 /obj/item/mecha_parts/component/New()
 	. = ..()
 	integrity = max_integrity

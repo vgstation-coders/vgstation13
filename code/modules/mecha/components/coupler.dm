@@ -41,6 +41,7 @@
 	emp_resistance = 4
 	integrity_danger_mod = 0.2
 	max_integrity = 200
+	step_delay = 100
 	relative_size = 10
 	quick_attach = FALSE
 

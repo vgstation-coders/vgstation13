@@ -19,10 +19,9 @@
 		"urinetrouble"
 	)
 
-	weight_max = 160
+	weight_max = 240
 	penetration_reduction = 0
 	damage_minimum = 0
-	weight_tolerance = 1.2
 
 	max_hull_equip = 1
 	max_weapon_equip = 0

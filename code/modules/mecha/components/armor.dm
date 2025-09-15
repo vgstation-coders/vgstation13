@@ -36,7 +36,7 @@
 	icon_state = "armor_mining"
 	armor_soak = 0.5
 	step_delay = 200
-	max_integrity = 110
+	max_integrity = 100
 	deflect_chance = 3
 	pen_reduction = 2
 	damage_minimum = 3
@@ -83,7 +83,7 @@
 	icon_state = "armor_durable"
 	armor_soak = 0.6
 	step_delay = 250
-	max_integrity = 130
+	max_integrity = 120
 	deflect_chance = 5
 	pen_reduction = 3
 	damage_minimum = 3
@@ -104,7 +104,7 @@
 	icon_state = "armor_military"
 	armor_soak = 0.75
 	step_delay = 400
-	max_integrity = 160
+	max_integrity = 150
 	deflect_chance = 10
 	optimal_type = list(/obj/mecha/combat)
 	pen_reduction = 7
@@ -138,8 +138,8 @@
 	desc = "A surprisingly thin, lightweight armour panel constructed out of flexible and combat-resistant reinforced plastics."
 	icon_state = "armor_marshal"
 	armor_soak = 0.6
-	step_delay = 80
-	max_integrity = 95
+	step_delay = 70
+	max_integrity = 85
 	deflect_chance = 5
 	pen_reduction = 5
 	damage_minimum = 0
@@ -147,7 +147,7 @@
 		"brute"=0.7,
 		"fire"=1,
 		"bullet"=0.75,
-		"laser"=0.7,
+		"laser"=0.75,
 		"energy"=0.85,
 		"bomb"=1
 		)
@@ -159,8 +159,8 @@
 	desc = "A thick panel constructed of ultra-hard ceramic composite. Lacks a backer, sacrificing durability for mobility and stopping ability."
 	icon_state = "armor_striker"
 	armor_soak = 0.8
-	step_delay = 100
-	max_integrity = 75
+	step_delay = 85
+	max_integrity = 70
 	deflect_chance = 5
 	pen_reduction = 10
 	damage_absorption = list(
@@ -180,7 +180,7 @@
 	icon_state = "armor_kevlar"
 	armor_soak = 0.5
 	step_delay = 60
-	max_integrity = 120
+	max_integrity = 110
 	deflect_chance = 0
 	pen_reduction = 5
 	damage_absorption = list(
@@ -199,7 +199,7 @@
 	desc = "An armour panel that provides top protection, while remaining lightweight, thanks to the cutting-edge ceramics and duraplastics used."
 	armor_soak = 0.75
 	step_delay = 140
-	max_integrity = 160
+	max_integrity = 150
 	deflect_chance = 10
 	pen_reduction = 10
 	damage_minimum = 5
@@ -219,7 +219,7 @@
 	desc = "An advanced matrix of spaced composites, duraplastics and depleted uranium, very heavy, but provides extreme protection."
 	armor_soak = 0.8
 	step_delay = 500
-	max_integrity = 250
+	max_integrity = 200
 	optimal_type = list(/obj/mecha/combat/marauder)
 	deflect_chance = 15
 	damage_minimum = 10
@@ -255,8 +255,8 @@
 	icon_state = "armor_alien"
 	armor_soak = 0.7
 	emp_resistance = 2
-	step_delay = 150
-	max_integrity = 90
+	step_delay = 25
+	max_integrity = 70
 	deflect_chance = 10
 	damage_minimum = 3
 	damage_absorption = list(
@@ -285,8 +285,8 @@
 /obj/item/mecha_parts/component/armor/killdozer
 	name = "concrete mecha plating"
 	desc = "An absurdly heavy matrix of steel and concrete."
-	armor_soak = 1
-	max_integrity = 1000
+	armor_soak = 0.9
+	max_integrity = 600
 	step_delay = 1000
 	always_repair = TRUE
 	damage_absorption = list(
@@ -300,3 +300,4 @@
 
 	pen_reduction = 100 // blocks a lot of things
 	weldbreak_resist = 2
+	damage_minimum = 10

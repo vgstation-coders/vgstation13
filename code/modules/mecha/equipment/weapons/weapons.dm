@@ -5,7 +5,7 @@
 	var/projectile
 	var/fire_sound
 	equip_type = EQUIP_WEAPON
-	step_delay = 0.5
+	step_delay = 40
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy
 	name = "\improper General Energy Weapon"
@@ -54,7 +54,6 @@
 	energy_drain = 30
 	projectile = /obj/item/projectile/beam
 	fire_sound = 'sound/weapons/Laser.ogg'
-	step_delay = 50
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser/heavy
 	equip_cooldown = 15
@@ -63,7 +62,7 @@
 	energy_drain = 60
 	projectile = /obj/item/projectile/beam/heavylaser
 	fire_sound = 'sound/weapons/lasercannonfire.ogg'
-	step_delay = 100
+	step_delay = 80
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/ion
 	equip_cooldown = 40
@@ -72,7 +71,6 @@
 	energy_drain = 120
 	projectile = /obj/item/projectile/ion
 	fire_sound = 'sound/weapons/ion.ogg'
-	step_delay = 50
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/pulse
 	equip_cooldown = 30
@@ -82,7 +80,7 @@
 	origin_tech = Tc_MATERIALS + "=9;" + Tc_COMBAT + "=5;" + Tc_POWERSTORAGE + "=9"
 	projectile = /obj/item/projectile/beam/pulse/heavy
 	fire_sound = 'sound/weapons/marauder.ogg'
-	step_delay = 100
+	step_delay = 80
 
 /obj/item/projectile/beam/pulse/heavy
 	name = "heavy pulse laser"
@@ -96,7 +94,6 @@
 	equip_cooldown = 8
 	projectile = /obj/item/projectile/energy/electrode
 	fire_sound = 'sound/weapons/Taser.ogg'
-	step_delay = 50
 
 /obj/item/mecha_parts/mecha_equipment/weapon/honker
 	name = "\improper HoNkER BlAsT 5000"
@@ -106,7 +103,7 @@
 	equip_slot = MECHA_BACK
 	need_colorize = FALSE
 	range = MELEE|RANGED
-	step_delay = 25
+	step_delay = 20
 
 /obj/item/mecha_parts/mecha_equipment/weapon/honker/can_attach(obj/mecha/combat/honker/M as obj)
 	if(..())
@@ -115,7 +112,7 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/honker/action(target)
-	.=..()
+	..()
 	if(!chassis)
 		return 0
 	if(energy_drain && chassis.get_charge() < energy_drain)
@@ -165,56 +162,16 @@
 /////////////
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot
 	name = "\improper LBX AC 10 \"Scattershot\""
-	desc = "A exosuit-mounted shotgun, it takes 00 gauge buckshot and slugs."
+	desc = "A exosuit-mounted shotgun, it takes 00 gauge buckshot."
 	icon_state = "mecha_scatter"
 	equip_cooldown = 20
-	projectile = null
+	projectile = /obj/item/projectile/bullet/buckshot
 	fire_sound = 'sound/weapons/shotgun.ogg'
 	max_projectiles = 20
 	projectiles_cache_max = 60
 	ammo_type = "/obj/item/ammo_casing/shotgun/buckshot"
 	caliber = GAUGE12
 	step_delay = 20
-	var/list/loaded_ammo = list()
-
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/New()
-	..()
-	if(starts_full)
-		for(var/i = 1 to max_projectiles)
-			loaded_ammo += new ammo_type()
-
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/action(atom/target)
-	// Set projectile type from next loaded ammo
-	if(loaded_ammo.len)
-		var/obj/item/ammo_casing/next_ammo = loaded_ammo[1]
-		// Get the projectile type from the loaded ammo casing
-		projectile = next_ammo.projectile_type
-		loaded_ammo.Cut(1, 2)
-		qdel(next_ammo)
-		// Call parent action with the correct projectile type set
-		return ..()
-	else
-		// No ammo loaded, can't fire
-		return FALSE
-
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/rearm()
-	if(projectiles >= max_projectiles || !projectiles_cache)
-		return FALSE
-	var/ammo_used = min(max_projectiles - projectiles, projectiles_cache)
-	projectiles += ammo_used
-	projectiles_cache -= ammo_used
-	// Create ammo casings of the default type when rearming from cache
-	for(var/i = 1 to ammo_used)
-		loaded_ammo += new ammo_type()
-	return TRUE
-
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/proc/load_ammo_casing(var/obj/item/ammo_casing/casing)
-	if(!casing?.BB || projectiles_cache >= projectiles_cache_max)
-		return FALSE
-	projectiles_cache++
-	// Store the actual casing so we can use its projectile type
-	loaded_ammo += casing
-	return TRUE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg
 	name = "\improper Ultra AC 2"
@@ -258,10 +215,9 @@
 	var/missile_range = 30
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg"
 	caliber = ROCKETGRENADE
-	step_delay = 100
+	step_delay = 80
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/action(target)
-	.=..()
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
@@ -311,7 +267,6 @@
 	no_caliber = TRUE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/action(target)
-	.=..()
 	if(can_pre_detonate && grenade)
 		grenade.prime(chassis.occupant)
 		grenade = null
@@ -397,7 +352,6 @@
 	return "[..()] \n[mode ? "" : "Current projectile: inflatable [inflatable_type ? "door" : "wall"]\[<a href='?src=\ref[src];inflatable_type=0'>change</a>\]"]\[<a href='?src=\ref[src];mode=0'>switch to [mode ? "deploy" : "deflate"] mode</a>\]"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/action(target)
-	.=..()
 	if(mode)
 		if(istype(target, /obj/structure/inflatable))
 			if(!chassis.Adjacent(target))
@@ -433,7 +387,7 @@
 	ammo_type = "/obj/item/weapon/bananapeel"
 	caliber = null
 	no_caliber = TRUE
-	step_delay = 25
+	step_delay = 20
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar/can_attach(obj/mecha/combat/honker/M as obj)
 	if(..())
@@ -468,7 +422,7 @@
 	ammo_type = "/obj/item/device/assembly/mousetrap"
 	caliber = null
 	no_caliber = TRUE
-	step_delay = 25
+	step_delay = 20
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/mousetrap_mortar/can_attach(obj/mecha/combat/honker/M as obj)
 	if(..())
@@ -504,7 +458,7 @@
 	ammo_type = "/obj/item/weapon/reagent_containers/food/snacks/pie"
 	caliber = null
 	no_caliber = TRUE
-	step_delay = 25
+	step_delay = 20
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/creampie_mortar/can_attach(obj/mecha/combat/honker/M as obj)
 	if(..())
@@ -539,11 +493,12 @@
 	ammo_type = "/obj/item/weapon/legcuffs/bolas"
 	caliber = null
 	no_caliber = TRUE
-	step_delay = 50
+	step_delay = 40
 	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas/action(target)
-	.=..()
+	if(!action_checks(target))
+		return
 	set_ready_state(0)
 	var/obj/item/weapon/legcuffs/bolas/mech/M = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 50, 1)
@@ -565,7 +520,8 @@
 	range = MELEE | RANGED
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas/restrainment/action(target)
-	.=..()
+	if(!action_checks(target))
+		return
 	if(loc.Adjacent(target) && istype(target, /mob/living/carbon))
 		var/obj/mecha/M = loc
 		if(!istype(M))
@@ -615,7 +571,7 @@
 		)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/random_weapon/New()
-	.=..()
+	..()
 	var/weapontype = pick(existing_typesof(/obj/item/mecha_parts/mecha_equipment/weapon) - blacklisted)
 	new weapontype (loc)
 	qdel(src)

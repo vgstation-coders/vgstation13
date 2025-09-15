@@ -5,7 +5,7 @@
 	initial_icon = "marauder"
 	base_color = "#7886A5"
 	step_in = 4
-	health = 400
+	health = 350
 	deflect_chance = 10
 	damage_absorption = list("brute"=0.7,"fire"=0.7,"bullet"=0.75,"laser"=0.8,"energy"=0.8,"bomb"=0.8)
 	max_temperature = 20000
@@ -28,7 +28,7 @@
 	paintable = 0
 
 	damage_minimum = 10
-	weight_max = 800
+	weight_max = 1000
 	penetration_reduction = 10 // blocks 7.62x55
 	emp_gear_proof = TRUE
 
@@ -55,7 +55,7 @@
 	base_color = "#878C97"
 	operation_req_access = list(access_cent_creed)
 	step_in = 2
-	health = 450
+	health = 400
 	wreckage = /obj/effect/decal/mecha_wreckage/seraph
 	internal_damage_threshold = 20
 	force = 55
@@ -76,7 +76,7 @@
 	new /obj/item/mecha_parts/mecha_equipment/weapon/energy/pulse(src)
 	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
 	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
-	new /obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster(src)
+//	new /obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster(src)
 	UpdateIcon()
 	src.smoke_system.set_up(3, 0, src)
 	src.smoke_system.attach(src)
@@ -109,7 +109,7 @@
 	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
 	new /obj/item/mecha_parts/mecha_equipment/teleporter(src)
 	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
-	new /obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster(src)
+//	new /obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster(src)
 	UpdateIcon()
 	max_ammo()
 

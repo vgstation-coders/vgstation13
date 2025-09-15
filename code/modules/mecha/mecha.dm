@@ -350,7 +350,7 @@
 		if(CO.welded)
 			to_chat(user, "<span class='warning'>The equipment couplers are completely welded shut.</span>")
 		else if(!CO.quick_attach)
-			to_chat(user, "<span class='info'>The equipment coupling system lacks a quick-attach function.</span>")
+			to_chat(user, "<span class='info'>The equipment coupling system lacks a quick-attach function, requiring a wrench to loosen modules.</span>")
 
 /obj/mecha/proc/get_damage_string(var/obj/item/mecha_parts/component/C)
 	if(!C)
@@ -653,17 +653,11 @@ Fire damage comes from tank
 	return
 
 /obj/mecha/bullet_act(var/obj/item/projectile/Proj) //wrapper
-	var/obj/item/mecha_parts/component/armor/ArmC = internal_components[MECH_ARMOR]
-	var/chance = 75
-	if(!enclosed && occupant && !silicon_pilot)
-		if(ArmC && ArmC.integrity > 0)
-			chance = 20
-		if(prob(chance))
-			occupant.bullet_act(Proj)
-			visible_message("<span class='warning'>[occupant] is hit by \the [Proj]!")
-			Proj.on_hit(src,0)
 	src.log_message("Hit by projectile. Type: [Proj.name]([Proj.flag]).",1)
 	call((proc_res["dynbulletdamage"]||src), "dynbulletdamage")(Proj) //calls equipment
+	if(Proj.penetration > 20)
+		Proj.penetration--
+		return PROJECTILE_COLLISION_MISS
 	return ..()
 
 /obj/mecha/proc/dynbulletdamage(var/obj/item/projectile/Proj, var/penetrating = FALSE)
@@ -674,6 +668,7 @@ Fire damage comes from tank
 	var/temp_damage_minimum = 0
 	var/temp_penetration_reduction = 0
 	var/temp_proj_penetration = 0
+	var/damage = Proj.damage
 
 	if(istype(Proj, /obj/item/projectile/beam))
 		temp_proj_penetration = 3 // Lasers get a pen of 3
@@ -699,15 +694,11 @@ Fire damage comes from tank
 		use_power(200)
 		return
 
-	var/ignore_threshold
-	var/damage = Proj.damage
-
 	if(!(Proj.nodamage))
 		var/ignore_threshold
 		if(istype(Proj, /obj/item/projectile/beam/pulse))	//ATM, this is literally only for the pulse rifles used mostly by deathsquads.
 			ignore_threshold = 1
 
-		var/damage = Proj.damage
 		for(var/obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster/ME in equipment)
 			damage = ME.dynbulletdamage(Proj, damage)
 
@@ -716,31 +707,49 @@ Fire damage comes from tank
 			src.visible_message("The [src.name] armor absorbs\the [Proj]")
 			return
 
-		src.take_damage(damage, Proj.flag)	//The take_damage() proc handles armor values
 		if(prob(25))
 			spark(src, 2, FALSE)
 		if(damage >= internal_damage_minimum)	//Only decently painful attacks trigger a chance of mech damage.
 			src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),ignore_threshold)
 
-		//AP projectiles have a chance to cause additional damage
+//		var/obj/item/mecha_parts/component/armor/ArmC = internal_components[MECH_ARMOR]
+		var/chance = 75
 		var/penetration = Proj.penetration + temp_proj_penetration
+		if(!enclosed && occupant && !silicon_pilot)
+			if(ArmC && ArmC.integrity > 0)
+				chance = 20
+			if(prob(chance))
+				rad_protection = 0 // fix later
+				occupant.bullet_act(Proj)
+				visible_message("<span class='warning'>[occupant] is hit by \the [Proj]!")
+				Proj.on_hit(src,0)
+				rad_protection = initial(rad_protection)
+				if(penetration > temp_penetration_reduction + 5)
+					src.take_damage(damage/1.5, Proj.flag) // Less damage transferred to the mech
+					return
+				return
+//		rad_protection = initial(rad_protection)
+
+		//AP projectiles have a chance to cause additional damage
 		if(temp_penetration_reduction)
-			penetration = max(0, (penetration - temp_proj_penetration))
+			penetration = max(0, (penetration - temp_penetration_reduction))
 		if(penetration > 0)
 			var/hit_occupant = 1 //only allow the occupant to be hit once
-			for(var/i in 1 to min(Proj.penetration, round(Proj.damage/2)))
-				if(src.occupant && hit_occupant && prob(75))
-					occupant.bullet_act(Proj)
-					visible_message("<span class='warning'>[occupant] is hit by \the [Proj]!")
-					Proj.on_hit(src,2)
-					hit_occupant = 0
-					penetrating = TRUE
-				else
-					if(damage > internal_damage_minimum)	//Only decently painful attacks trigger a chance of mech damage.
-						src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT), 1)
-				if(Proj.penetration > 0)
-					Proj.penetration--
+//			for(var/i in 1 to min(Proj.penetration, round(Proj.damage/2)))
+			if(src.occupant && hit_occupant && prob(chance))
+				rad_protection = 0
+				occupant.bullet_act(Proj)
+//				Proj.on_hit(src,2)
+				hit_occupant = 0
+				damage /= 1.5
+			else
+				if(damage > internal_damage_minimum)	//Only decently painful attacks trigger a chance of mech damage.
+					src.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT), 1)
+			if(Proj.penetration > 0)
+				Proj.penetration--
 
+	src.take_damage(damage, Proj.flag)	//The take_damage() proc handles armor values
+	rad_protection = initial(rad_protection)
 	Proj.on_hit(src) //on_hit just returns if it's argument is not a living mob so does this actually do anything?
 	return
 
@@ -795,7 +804,7 @@ Fire damage comes from tank
 	if(get_charge())
 		if(!zap || zap.integrity <= 0) // Only EMP the cell if there's no electrical hub
 			cell.emp_act(severity*1.25)
-		take_damage(15 / severity, damage_type = "energy", violent = FALSE) // This *should* be a mission kill, still.
+		take_damage(20 / severity, damage_type = "energy", violent = FALSE) // This *should* be a mission kill, still.
 		src.log_message("EMP detected",1)
 		check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
 

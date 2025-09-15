@@ -25,7 +25,7 @@
 	cargo_capacity = 20
 	penetration_reduction = 1
 	damage_minimum = 0
-	weight_max = 400
+	weight_max = 500
 
 	starting_components = list(
 		/obj/item/mecha_parts/component/hull/atmos,

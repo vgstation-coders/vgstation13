@@ -7,7 +7,7 @@
 	step_in = 1
 	dir_in = 1 //Facing North.
 	step_energy_drain = 3
-	health = 150
+	health = 140
 	deflect_chance = 10
 	damage_absorption = list("brute"=0.9,"fire"=0.9,"bullet"=0.9,"laser"=0.9,"energy"=0.9,"bomb"=0.9)
 	infra_luminosity = 3
@@ -29,7 +29,7 @@
 
 	damage_minimum = 0
 
-	weight_max = 400
+	weight_max = 500
 	penetration_reduction = 5 // blocks 9mm
 
 	max_hull_equip = 2
@@ -37,8 +37,6 @@
 	max_utility_equip = 2
 	max_universal_equip = 1
 	max_special_equip = 1
-
-	weight_max = 200
 
 	starting_components = list(
 		/obj/item/mecha_parts/component/hull,

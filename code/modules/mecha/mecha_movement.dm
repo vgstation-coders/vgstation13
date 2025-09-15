@@ -44,22 +44,20 @@
 			tally += C.get_step_delay()
 
 	if(tally <= weight_max)
-		tally -= (max(0, weight_max * 0.5))
+		tally -= (clamp(tally, 0, tally * 0.5))
 	else
-		tally -= weight_max
+		tally += weight_max
 
 	var/obj/item/mecha_parts/component/actuator/actuator = internal_components[MECH_ACTUATOR]
 	if(!actuator || actuator.integrity <= 0)
-		tally += 300
+		tally += 500
 	else
 		tally += 0.5 * (1 - actuator.get_efficiency())
 
 	if(overload)
 		tally = min(100, round(tally/2))
 
-	tally /= 100
-
-	return step_in + max(0, tally)
+	return step_in + clamp(tally/100, 0, 10)
 
 /obj/mecha/proc/CalcWeight(var/total_weight = 0)
 	if(!src || src.health <= 0)
@@ -103,10 +101,18 @@
 			if(!actuator.rigid)
 				TryFlip(occupant, TRUE, tool=null)
 	else if(src.dir!=direction && !lock_dir)
-		move_result = mechturn(direction)
-		stepped = FALSE
+		if(!actuator || actuator.integrity <= 0 || actuator.rigid)
+			if(direction == GetOppositeDir(dir))
+				move_result = mechturn(direction, pick(90, -90))
+				stepped = FALSE
+			else
+				move_result = mechturn(direction)
+				stepped = FALSE
+		else
+			move_result = mechturn(direction)
+			stepped = FALSE
 	else
-		move_result	= mechstep(direction)
+		move_result = mechstep(direction)
 	if(move_result)
 		for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
 			if(stepped)
@@ -132,6 +138,7 @@
 
 		if(current_weight > moderate_threshold && prob(35))
 			move_result = mechsteprand()
+			stepped = TRUE
 			if(prob(25))
 				take_damage(10, "brute", FALSE)
 		sleep(get_step_delay())
@@ -147,8 +154,11 @@
 /obj/mecha/proc/stopMechWalking()
 	icon_state = initial_icon
 
-/obj/mecha/proc/mechturn(direction)
-	dir = direction
+/obj/mecha/proc/mechturn(direction, increment = 0)
+	if(increment != 0)
+		dir = turn(dir, increment)
+	else
+		dir = direction
 	playsound(src,'sound/mecha/mechturn.ogg',40,1)
 	return 1
 

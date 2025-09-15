@@ -10,7 +10,7 @@
 	emp_resistance = 0
 	integrity_danger_mod = 0.4
 	max_integrity = 50
-	step_delay = 20
+	step_delay = 30
 	relative_size = 20
 	internal_damage_flag = MECHA_INT_SHORT_CIRCUIT
 	broken_icon = "board_broken"
@@ -45,6 +45,6 @@
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=3"
 	emp_resistance = 2
 	max_integrity = 150
-	step_delay = 100
+	step_delay = 70
 	relative_size = 25
 	efficiency_mod = 2

@@ -12,7 +12,7 @@
 	salvageable = 0
 	equip_type = EQUIP_UTILITY
 	has_equip_overlay = FALSE
-	step_delay = 50
+	step_delay = 40
 
 /obj/item/mecha_parts/mecha_equipment/tool/jail/can_attach(obj/mecha/combat/G)
 	if(..())

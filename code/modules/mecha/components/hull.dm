@@ -10,7 +10,7 @@
 	integrity_danger_mod = 0.5	// Multiplier for comparison to max_integrity before problems start.
 	max_integrity = 75
 	internal_damage_flag = MECHA_INT_FIRE
-	step_delay = 100
+	step_delay = 70
 	broken_icon = "hull_broken"
 	var/max_temperature = 2000
 	var/max_pressure = HAZARD_HIGH_PRESSURE * 10
@@ -42,6 +42,7 @@
 	max_temperature = 500
 	max_pressure = HAZARD_HIGH_PRESSURE
 	hull_soak = 0.3
+	egress_delay = 0
 
 /obj/item/mecha_parts/component/hull/durable
 	name = "durable mecha hull"
@@ -99,6 +100,6 @@
 	max_temperature = 10000
 	max_pressure = HAZARD_HIGH_PRESSURE * 20
 	always_repair = TRUE
-	hull_soak = 1
+	hull_soak = 0.9
 	weldbreak_resist = 2
-	egress_delay = 20
+	egress_delay = 30

@@ -22,10 +22,10 @@
 	)
 	paintable = 1
 	cargo_capacity = 20
-	weight_max = 500
+	weight_max = 600
 	damage_minimum = 0
 	penetration_reduction = 0
-	weight_tolerance = 1.75
+	weight_tolerance = 2
 
 	starting_components = list(
 		/obj/item/mecha_parts/component/hull,
@@ -71,6 +71,8 @@
 	paintable = 1
 	penetration_reduction = 2
 	damage_minimum = 2
+
+	weight_max = 800
 
 /obj/mecha/working/ripley/mk2/firefighter
 	desc = "Standard APLU MK-II chassis, refitted with additional thermal protection and cistern."

@@ -98,15 +98,16 @@
 	R.max_universal_equip = 0
 	R.max_special_equip = 1
 
-	R.weight_max = 2000 // it doesn't
-	R.damage_minimum = 15
+	R.weight_max = 3500 // it doesn't
+	R.damage_minimum = 10
 
 	R.starting_components = list(
 		/obj/item/mecha_parts/component/hull/durable/killdozer,
 		/obj/item/mecha_parts/component/actuator/durable,
 		/obj/item/mecha_parts/component/armor/killdozer,
 		/obj/item/mecha_parts/component/gas/reinforced,
-		/obj/item/mecha_parts/component/electrical/durable
+		/obj/item/mecha_parts/component/electrical/durable,
+		/obj/item/mecha_parts/component/coupler/durable
 		)
 
 	for(var/slot in chassis.internal_components)

@@ -44,7 +44,7 @@
 /obj/item/mecha_parts/component/actuator/durable
 	name = "reinforced mecha actuator"
 	icon_state = "motor_durable"
-	step_delay = 100
+	step_delay = 70
 	relative_size = 35
 	emp_resistance = 1
 	integrity_danger_mod = 0.5
@@ -54,7 +54,7 @@
 	name = "rigid mecha movement system"
 	desc = "A rigid, non-articulated movement system for exosuits. Prevents strafing, but has excellent stability in any condition."
 	icon_state = "motor_hispeed"
-	step_delay = 150
+	step_delay = 70
 	relative_size = 35
 	emp_resistance = 3
 	integrity_danger_mod = 0.5

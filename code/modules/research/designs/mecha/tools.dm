@@ -68,7 +68,8 @@
 	build_path = /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay
 	category = "Exosuit_Modules"
 	materials = list(MAT_IRON=10000,MAT_GOLD=2000,MAT_SILVER=3000,MAT_GLASS=2000)
-
+/*
+Temporarily disabled
 /datum/design/mech_ccw_armor
 	name = "Module Design (Melee Armor Booster Module)"
 	desc = "Exosuit-mounted armor booster."
@@ -88,7 +89,7 @@
 	build_path = /obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster
 	category = "Exosuit_Modules"
 	materials = list(MAT_IRON=20000,MAT_GOLD=5000)
-
+*/
 /datum/design/mech_syringe_gun
 	name = "Module Design (Syringe Gun)"
 	desc = "Exosuit-mounted syringe gun and chemical synthesizer."
