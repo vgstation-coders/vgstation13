@@ -22,7 +22,12 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 	if(locked)
 		if (src.allowed(usr))
 			return ..()
+		if (usr.stat || usr.incapacitated())
+			return
 		to_chat(user, "<span class='notice'>The crate is locked with a Deca-code lock.</span>")
+		if (!usr.dexterity_check())
+			to_chat(usr, "<span class='warning'>You don't have the dexterity to enter a keycode!</span>")
+			return
 		var/input = input(usr, "Enter digit from [min] to [max].", "Deca-Code Lock", "") as num
 		if(in_range(src, user))
 			input = clamp(input, 0, 10)
@@ -37,11 +42,7 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 				lastattempt = input
 				attempts--
 				if (attempts == 0)
-					to_chat(user, "<span class='danger'>The crate's anti-tamper system activates!</span>")
-					var/turf/T = get_turf(src.loc)
-					explosion(T, 0, 0, 0, 1)
-					for(var/item in contents)
-						qdel(item)
+					detonate(user)
 					qdel(src)
 					return
 		else
@@ -49,6 +50,23 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 			return
 	else
 		return ..()
+
+//Handles most of an abandoned crate exploding. Does not qdel the crate due to Destroy() calling this.
+/obj/structure/closet/crate/secure/loot/proc/detonate(var/mob/user)
+	visible_message("<span class='red'><b>\The [src]'s anti-tampering device explodes!</b></span>", "You hear an explosion.")
+	for(var/item in contents)
+		qdel(item)
+	var/turf/T = get_turf(src.loc)
+	locked = 0 //Prevents recursive explosions
+	broken = TRUE
+	explosion(T, 0, 0, 1, 1, whitelist = list(src))
+	//Trying to input the code directly is very dangerous!
+	if(user && istype(user, /mob/living))
+		var/mob/living/subject = user
+		var/armor = subject.run_armor_check(attack_flag = "bomb")
+		if(armor >= 100)
+			return
+		subject.apply_damage(20, armor)
 
 /obj/structure/closet/crate/secure/loot/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(locked)
@@ -70,3 +88,22 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 			..()
 	else
 		..()
+
+/obj/structure/closet/crate/secure/loot/Destroy()
+	if(locked && !broken && prob(30))
+		detonate()
+	..()
+
+/obj/structure/closet/crate/secure/loot/emp_act(severity)
+	if(locked && !broken && prob(30/severity))
+		detonate()
+		qdel(src)
+		return
+	..()
+
+/obj/structure/closet/crate/secure/loot/mech_drill_act(severity)
+	if(prob(30))
+		detonate()
+		qdel(src)
+		return
+	..()
