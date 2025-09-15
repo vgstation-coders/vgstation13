@@ -1,7 +1,7 @@
 //Barber
 /obj/item/clothing/head/barber
 	name = "barber's hat"
-	desc = "a stylish hat for a stylish stylist."
+	desc = "A stylish hat for a stylish stylist."
 	icon_state = "barber"
 	item_state = "barber"
 	species_fit = list(INSECT_SHAPED)

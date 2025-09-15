@@ -20,14 +20,29 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/datum/weather/current_weather
 	var/list/datum/weather/forecasts = list()
 	var/cycle_freq = list(3 MINUTES,6 MINUTES) //shortest possible time, longest possible time until next weather
+	var/z //z-level the climate is occupying
+	var/list/allowed_weather_types = list() // List of weather types this climate can have
+	var/list/weather_transitions = list() // Associative list: weather_type = list(possible_transitions)
+	var/list/weather_intensities = list() // Associative list: weather_type = intensity_level
+	var/starting_weather_type = null // The initial weather type for this climate
 
-/datum/climate/New()
+/datum/climate/New(var/active_z)
 	..()
-	if(current_weather)
+	if(active_z)
+		z = active_z
+	else
+		z = map.zMainStation
+	setup_weather_system()
+	if(starting_weather_type)
+		current_weather = new starting_weather_type(src)
 		forecast()
 	else
 		WARNING("Climate tried to forecast without a starting weather.")
 		message_admins("Climate tried to forecast without a starting weather.")
+
+// Override this in climate subtypes to define the weather system
+/datum/climate/proc/setup_weather_system()
+	return
 
 /datum/climate/proc/forecast()
 	var/cycle = 1
@@ -35,13 +50,16 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	forecasts = list(current_weather) //project based on current weather
 	while(forecasts.len <= PREDICTION_MINIMUM+1 && cycle <= PREDICTION_MAXIMUM)
 		var/datum/weather/W = forecasts[forecasts.len]
-		var/path = pickweight(W.next_weather)
+		var/list/possible_transitions = weather_transitions[W.type]
+		if(!possible_transitions || !possible_transitions.len)
+			break //No further transitions possible
+		var/path = pickweight(possible_transitions)
 		if(path == W.type)
 			W.timeleft += round(rand(cycle_freq[1],cycle_freq[2]),SS_WAIT_WEATHER)
 		else
 			var/datum/weather/future = new path(src)
 			forecasts += future
-		if(W.next_weather.len == 1)
+		if(possible_transitions.len == 1)
 			break //Forecast no further.
 		cycle++
 	forecasts -= current_weather //remove it from our future weather
@@ -57,7 +75,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		return
 	current_weather.tick()
 	if(current_weather.timeleft <= 0)
-		change_weather(forecasts[1])
+		change_weather(forecasts[1],force = TRUE)
 		forecasts -= forecasts[1]
 	if(forecasts.len < PREDICTION_MINIMUM)
 		forecast()
@@ -69,59 +87,106 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	if(direction**2 != 1)
 		return INVALID_STEP //must be 1 or -1
 	if(current_weather)
-		var/weathers = current_weather.next_weather.len
-		if(weathers == 1)
+		var/current_intensity = weather_intensities[current_weather.type]
+		if(isnull(current_intensity))
 			return CANNOT_CHANGE
-		var/preferred_weather
-		if(direction == INTENSIFY)
-			preferred_weather = current_weather.next_weather[weathers] //the last value
-		else if(direction == ABATE)
-			preferred_weather = current_weather.next_weather[1] //the first value
+		var/target_intensity = current_intensity + direction
+		var/preferred_weather = null
+		for(var/weather_type in allowed_weather_types)
+			if(weather_intensities[weather_type] == target_intensity)
+				var/list/possible_transitions = weather_transitions[current_weather.type]
+				if(possible_transitions && (weather_type in possible_transitions))
+					preferred_weather = weather_type
+					break
+		if(!preferred_weather)
+			return CANNOT_CHANGE
 		if(preferred_weather == current_weather.type)
 			return FALSE
 		current_weather.timeleft = min(1 MINUTES, current_weather.timeleft)
-		current_weather.next_weather.Cut()
-		current_weather.next_weather[preferred_weather] = 100
+		var/list/old_transitions = weather_transitions[current_weather.type]
+		weather_transitions[current_weather.type] = list()
+		weather_transitions[current_weather.type][preferred_weather] = 100
 		forecast()
+		weather_transitions[current_weather.type] = old_transitions
 		return TRUE
 
-/datum/climate/proc/change_weather(weather)
+/datum/climate/proc/change_weather(weather, force = FALSE)
 	if(ispath(weather))
 		//We have been provided a path. Let's see if it's identical to the one we have.
 		if(ispath(weather, current_weather.type)) //This is a separate check so that we can have our warning work.
 			return //No need to change, this is our current type.
 		else
-			qdel(current_weather)
-			current_weather = new weather(src)
-			current_weather.execute()
+			if(force)
+				qdel(current_weather)
+				current_weather = new weather(src)
+				current_weather.execute()
+			else
+				weather_transitions[current_weather.type] = list(weather = 100)
 
 	else if(istype(weather,/datum/weather))
 		//We have been given a specific weather datum. It may be modified, so run it no matter what.
-		qdel(current_weather)
-		current_weather = weather
-		current_weather.execute()
+		if(force)
+			qdel(current_weather)
+			current_weather = weather
+			current_weather.execute()
+		else
+			var/datum/weather/W = weather
+			weather_transitions[current_weather.type] = list(W.type = 100)
 
 	else
 		WARNING("Change weather was called with [weather], neither a weather datum nor a path.")
 
 /datum/climate/arctic
 	name = "snow" //what scoreboard displays
-	//some day this may not be the norm
+
+	starting_weather_type = /datum/weather/snow/calm
+	allowed_weather_types = list(
+		/datum/weather/snow/calm,
+		/datum/weather/snow/light,
+		/datum/weather/snow/heavy,
+		/datum/weather/snow/blizzard,
+		/datum/weather/snow/blizzard/omega
+	)
+	weather_intensities = list(
+		/datum/weather/snow/calm = 0,
+		/datum/weather/snow/light = 1,
+		/datum/weather/snow/heavy = 2,
+		/datum/weather/snow/blizzard = 3,
+		/datum/weather/snow/blizzard/omega = 4
+	)
+	weather_transitions = list(
+		/datum/weather/snow/calm = list(
+			/datum/weather/snow/calm = 60,
+			/datum/weather/snow/light = 40
+		),
+		/datum/weather/snow/light = list(
+			/datum/weather/snow/calm = 25,
+			/datum/weather/snow/light = 55,
+			/datum/weather/snow/heavy = 20
+		),
+		/datum/weather/snow/heavy = list(
+			/datum/weather/snow/light = 30,
+			/datum/weather/snow/heavy = 60,
+			/datum/weather/snow/blizzard = 10
+		),
+		/datum/weather/snow/blizzard = list(
+			/datum/weather/snow/heavy = 65,
+			/datum/weather/snow/blizzard = 35
+		),
+		/datum/weather/snow/blizzard/omega = list(
+			/datum/weather/snow/heavy = 100
+		)
+	)
 
 /datum/climate/arctic/New()
-	current_weather = new /datum/weather/snow/calm(src)
-	if(!blizzard_image)
-		blizzard_image = new
-	blizzard_image.UpdateSnowfall(SNOW_CALM)
 	..()
+	if(!blizzard_image)
+		blizzard_image = new(src)
+	blizzard_image.UpdateSnowfall(SNOW_CALM)
 
 ///////////////////////////////////  WEATHER DATUMS //////////////////////////////
-
 /datum/weather
 	var/name = "weather"
-	var/list/next_weather = list() //associative list
-	//for next_weather, order matters: put in order of weather intensity, so that step() will work
-	//only one in list means it can't be changed by the weather control device
 	var/timeleft = 1
 	var/datum/climate/parent
 	var/temperature = T20C
@@ -141,12 +206,18 @@ var/list/global_snowtiles = list()
 var/list/environment_snowtiles = list()
 var/list/snow_state_to_texture = list()
 
+/datum/weather/proc/weather_details()
+	return //additional info to report to the climate computer
+
 /datum/weather/snow
 	var/snow_intensity = SNOW_CALM
 	var/tile_interval = 5
 	var/snowfall_prob = 0
 	var/snowfall_rate = list(0,0)
 	var/snow_fluff_estimate = "snowing"
+
+/datum/weather/snow/weather_details()
+	return "<b>Snowfall:</b> <div class='line'>[snow_fluff_estimate] </div>"
 
 var/obj/effect/blizzard_holder/blizzard_image = null
 
@@ -190,7 +261,6 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 /datum/weather/snow/calm
 	name = "calm"
 	snow_intensity = SNOW_CALM
-	next_weather = list(/datum/weather/snow/calm = 60, /datum/weather/snow/light = 40)
 	snowfall_prob = 3
 	snowfall_rate = list(-1,0)
 	temperature = T_ARCTIC
@@ -205,7 +275,6 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 /datum/weather/snow/light
 	name = "light"
 	snow_intensity = SNOW_AVERAGE
-	next_weather = list(/datum/weather/snow/calm = 25, /datum/weather/snow/light = 55, /datum/weather/snow/heavy = 20)
 	snowfall_prob = 5
 	snowfall_rate = list(1,8)
 	temperature = T_ARCTIC - 5
@@ -220,7 +289,6 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 /datum/weather/snow/heavy
 	name = "<font color='orange'>heavy</font>"
 	snow_intensity = SNOW_HARD
-	next_weather = list(/datum/weather/snow/light = 30, /datum/weather/snow/heavy = 60, /datum/weather/snow/blizzard = 10)
 	snowfall_prob = 8
 	snowfall_rate = list(2,15)
 	temperature = T_ARCTIC - 10
@@ -235,7 +303,6 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 /datum/weather/snow/blizzard
 	name = "<font color='red'>blizzard</font>"
 	snow_intensity = SNOW_BLIZZARD
-	next_weather = list(/datum/weather/snow/heavy = 65, /datum/weather/snow/blizzard = 35)
 	tile_interval = 3
 	snowfall_prob = 12
 	snowfall_rate = list(3,20)
@@ -250,7 +317,6 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 
 /datum/weather/snow/blizzard/omega
 	name = "<font color='purple'>dark season</font>"
-	next_weather = list(/datum/weather/snow/heavy = 100)
 	snowfall_prob = 15
 	snow_fluff_estimate = "<font color='purple'>more than 13.5cm/minute (Dark Season)</font>"
 

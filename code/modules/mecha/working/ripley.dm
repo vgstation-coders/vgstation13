@@ -99,7 +99,7 @@
 		)
 
 /obj/mecha/working/ripley/mk2/firefighter/deathripley
-	desc = "OH SHIT IT'S THE DEATHSQUAD WE'RE ALL GONNA DIE"
+	desc = "OH SHIT IT'S THE DEATHSQUAD WE'RE ALL GONNA DIE!"
 	name = "DEATH-RIPLEY"
 	icon_state = "deathripley"
 	initial_icon = "deathripley"

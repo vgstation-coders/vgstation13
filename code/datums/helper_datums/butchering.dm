@@ -263,6 +263,99 @@
 		return "It has legs for days."
 	..()
 
+//=============Feathers========
+/datum/butchering_product/feathers
+	result = /obj/item/stack/sheet/feather
+	verb_name = "pluck"
+	verb_gerund = "plucking"
+	radial_icon = "radial_pluck"
+
+/datum/butchering_product/feathers/vox
+	result = /obj/item/stack/sheet/feather
+	amount = 6
+	initial_amount = 6
+
+/datum/butchering_product/feathers/vox/spawn_result(location, mob/parent)
+	if(!amount)
+		return
+	amount--
+	var/obj/item/stack/sheet/feather/F = new result(location)
+	var/mob/living/carbon/human/vox/V = parent
+	if(isvox(parent))
+		var/color_key = get_vox_color_key(V.my_appearance.s_tone)
+		var/list/color_data = feather_colors[color_key]
+		if(color_data)
+			F.color = color_data["hex"]
+			F.name = "[color_data["name"]] feather"
+	if(amount == 0)
+		if(!V.original_vox_tone)
+			V.original_vox_tone = V.my_appearance.s_tone
+		V.my_appearance.s_tone = VOXPLUCKED
+		to_chat(V, "<span class='notice'>Your plumage is looking a bit bare...</span>")
+		V.species.updatespeciescolor(V)
+		V.update_cold_levels()
+		V.regenerate_icons()
+	return F
+
+/datum/butchering_product/feathers/chicken
+	result = /obj/item/stack/sheet/feather
+	amount = 3
+	initial_amount = 3
+
+/datum/butchering_product/feathers/chicken/spawn_result(location, mob/parent)
+	if(!amount)
+		return
+	amount--
+	var/obj/item/stack/sheet/feather/F = new result(location)
+	var/mob/living/simple_animal/chicken/C = parent
+	if(istype(parent, /mob/living/simple_animal/chicken))
+		var/color_key = C.body_color
+		// Only allow brown, black, or white
+		if(!(color_key in list("brown", "black", "white")))
+			color_key = "brown" // fallback
+		var/list/color_data = feather_colors[color_key]
+		if(color_data)
+			F.color = color_data["hex"]
+			F.name = "[color_data["name"]] feather"
+		if(amount == 0)
+			if(!C.original_body_color)
+				C.original_body_color = C.body_color
+			C.icon_living = "chicken_plucked"
+			C.icon_dead = "chicken_plucked_dead"
+			if(C.stat == DEAD)
+				C.icon_state = "chicken_plucked_dead"
+			else
+				C.icon_state = "chicken_plucked"
+			C.update_icon()
+	return F
+
+/datum/butchering_product/feathers/voxchicken
+	result = /obj/item/stack/sheet/feather
+	amount = 3
+	initial_amount = 3
+
+/datum/butchering_product/feathers/voxchicken/spawn_result(location, mob/parent)
+	if(!amount)
+		return
+	amount--
+	var/obj/item/stack/sheet/feather/F = new result(location)
+	var/mob/living/carbon/monkey/vox/V = parent
+	// Exclude certain colors
+	var/list/excluded = list("brown", "white", "gray")
+	var/list/color_keys = list()
+	for(var/key in feather_colors)
+		if(!(key in excluded))
+			color_keys += key
+	var/color_key = pick(color_keys)
+	var/list/color_data = feather_colors[color_key]
+	if(color_data)
+		F.color = color_data["hex"]
+		F.name = "[color_data["name"]] feather"
+	if(amount == 0)
+		if(istype(parent, /mob/living/carbon/monkey/vox))
+			V.icon_state = "chickengreen_plucked"
+			V.update_icon()
+	return F
 //=============Claws========
 
 /datum/butchering_product/claws

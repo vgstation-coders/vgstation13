@@ -51,7 +51,7 @@
 
 /obj/effect/decal/cleanable/crumbs
 	name = "crumbs"
-	desc = "some food remains"
+	desc = "Some food remains."
 	gender = PLURAL
 	density = 0
 	anchored = 1
