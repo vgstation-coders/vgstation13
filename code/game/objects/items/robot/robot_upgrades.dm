@@ -36,7 +36,7 @@
 
 	if(required_modules.len)
 		if(!(R.modtype in required_modules))
-			to_chat(user, "<span class='warning'>\The [src] will not fit into \the [R.module.name]!</span>")
+			to_chat(user, "<span class='warning'>\The [src] is not compatible with \the [R.module.name]!</span>")
 			return FAILED_TO_ADD
 
 	if(required_upgrades.len)
