@@ -649,6 +649,29 @@
 /obj/item/weapon/beach_ball/holoball/rigged/explosive/discrete
 	silent = TRUE
 
+/obj/item/weapon/beach_ball/holoball/rigged/stun
+	var/stuns = TRUE
+
+/obj/item/weapon/beach_ball/holoball/rigged/stun/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user))
+		stuns = !stuns
+		to_chat(user,"<span class='notice'>You turn stunning on travelling [stuns ? "On" : "Off"].</span>")
+		return
+	return ..()
+
+/obj/item/weapon/beach_ball/holoball/rigged/stun/travel_foul(atom/movable/mover)
+	if (stuns && ismob(mover))
+		. = ..()
+		var/mob/M = mover
+		playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+		M.Knockdown(5)
+		M.Stun(5)
+		if(iscarbon(M))
+			M.apply_effect(10, STUTTER)
+
+/obj/item/weapon/beach_ball/holoball/rigged/stun/discrete
+	silent = TRUE
+
 /obj/item/weapon/beach_ball/holoball/rigged/grenade
 	silent = TRUE //Set to false when a nade is put inside
 	var/obj/item/weapon/grenade/held_grenade = null
@@ -706,12 +729,9 @@
 		G.affecting.Stun(5)
 		visible_message("<span class='warning'>[G.assailant] dunks [G.affecting] into the [src]!</span>")
 		qdel(W)
-		return
 	else if (istype(W, /obj/item) && get_dist(src,user)<2)
 		if(user.drop_item(W, src.loc))
 			visible_message("<span class='notice'>[user] dunks [W] into the [src]!</span>")
-			score += 2
-			return
 
 /obj/structure/holohoop/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover,/obj/item) && mover.throwing)
