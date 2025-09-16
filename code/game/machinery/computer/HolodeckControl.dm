@@ -660,9 +660,9 @@
 	return ..()
 
 /obj/item/weapon/beach_ball/holoball/rigged/stun/travel_foul(atom/movable/mover)
-	if (stuns && ismob(mover))
+	if (stuns && isliving(mover))
 		. = ..()
-		var/mob/M = mover
+		var/mob/living/M = mover
 		playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 		M.Knockdown(5)
 		M.Stun(5)
