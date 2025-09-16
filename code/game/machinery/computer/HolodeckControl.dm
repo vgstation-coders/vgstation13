@@ -586,16 +586,15 @@
 
 /obj/item/weapon/beach_ball/holoball/attack_self(mob/user)
 	. = ..()
-	if(!user.attack_delayer.blocked())
+	if(!user.attack_delayer.blocked() && user.drop_item(src,get_step(src,user.dir)))
 		playsound(src,'sound/items/basketball_bounce.ogg',50)
 		user.visible_message("<span class='notice'>[user] bounces \the [src].</span>","<span class='notice'>You bounce \the [src].</span>","<span class='notice'>You hear a ball bouncing.</span>")
 		user.delayNextAttack(4)
-		item_state = "basketball_bounce"
-		spawn(4)
-			item_state = "basketball"
+		spawn(2)
+			user.put_in_hands(src)
 
 /obj/item/weapon/beach_ball/holoball/on_disarm_drop(mob/user)
-	pickup(user)
+	user.put_in_hands(src)
 
 /obj/item/weapon/beach_ball/holoball/rigged
 	var/travel = 0
