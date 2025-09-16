@@ -72,8 +72,8 @@
 	for(var/i = loot_count; i > 0)
 		new loot(get_turf(src))
 		--i
-	new /obj/effect/gibspawner/generic(src.loc)
-	qdel(src)
+	gibs(loc)
+	..()
 
 /mob/living/simple_animal/hostile/forgotten_beast/OpenFire(target)
 	if(!mybreath)
