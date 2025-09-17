@@ -8,6 +8,7 @@
 	pass_flags_self = PASSTABLE
 	layer = TABLE_LAYER
 	open_layer = TABLE_LAYER
+	closed_layer = TABLE_LAYER
 	throwpass = 1	//You can throw objects over this, despite its density.
 	use_power = MACHINE_POWER_USE_NONE
 	machine_flags = SCREWTOGGLE

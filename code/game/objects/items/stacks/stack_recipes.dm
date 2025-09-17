@@ -230,7 +230,7 @@
 	if(!dirs_found)
 		to_chat(user, "<span class='warning'>\The [title] must be constructed next to a table or wall!</span>")
 		return 0
-	return 1
+	return ..()
 
 /datum/stack_recipe/table_door/finish_building(mob/user, var/obj/item/stack/S, var/obj/R)
 	if(!(dirs_found & clockwise_perpendicular_dirs(R.dir)))
