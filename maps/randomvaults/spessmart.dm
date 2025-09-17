@@ -645,7 +645,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	anchored = 1
 	canmove = 0
 
-	stat_calm_threshold = DEAD
+	stat_calm_threshold = INFINITY //keeps attacking after kill, as per original design wishes
 
 	melee_damage_lower = 10
 	melee_damage_upper = 25
