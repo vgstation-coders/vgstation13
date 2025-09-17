@@ -555,6 +555,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "booty-red"
+	faction = "spessmart"
 
 	var/spawn_sample_on_creation = 1
 	var/obj/item/weapon/reagent_containers/food/snacks/food_type = /obj/item/weapon/reagent_containers/food/snacks/faggot //Type of the food
@@ -692,7 +693,8 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	qdel(src)
 
 /mob/living/simple_animal/hostile/spessmart_guardian/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	if(alert_on_movement && !canmove)
+	canmove = client != null
+	if(!client && alert_on_movement && !canmove)
 		Retaliate()
 
 	..()
@@ -777,6 +779,9 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 			clothing -= clothing_type
 	if (!clothing_prices.len)
 		for(var/C in clothing)
+			var/obj/item/clothing/CL = C
+			if(!initial(CL.canremove)) // no cursed unremovable stuff
+				continue
 			clothing_prices[C] = 150
 	to_spawn = clothing_prices
 	return ..()
