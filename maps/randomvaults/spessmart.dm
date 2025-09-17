@@ -677,6 +677,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	meat_type = null
 
 	var/alert_on_movement = 1 //If moved, trigger an alert and become agressive
+	var/retaliated = FALSE
 
 /mob/living/simple_animal/hostile/spessmart_guardian/New()
 	..()
@@ -684,9 +685,14 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-securitron"))
 
 /mob/living/simple_animal/hostile/spessmart_guardian/Life()
-	canmove = client != null
-	anchored = client == null
-	timestopped = client == null
+	if(retaliated || client)
+		canmove = 1
+		anchored = 0
+		timestopped = 0
+	else
+		canmove = 0
+		anchored = 1
+		timestopped = 1
 	EscapeConfinement()
 	..()
 
@@ -704,6 +710,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 /mob/living/simple_animal/hostile/spessmart_guardian/proc/Retaliate()
 	if(timestopped)
 		spawn(5)
+			retaliated = TRUE
 			canmove = 1
 			anchored = 0
 			timestopped = 0
