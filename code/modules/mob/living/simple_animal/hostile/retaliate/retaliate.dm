@@ -1,11 +1,12 @@
 /mob/living/simple_animal/hostile/retaliate
 	var/list/enemies = list()
 	var/hostile = 0 //Reverts back into a hostile mob when toggle to 1
+	var/stat_calm_threshold = UNCONSCIOUS
 
 /mob/living/simple_animal/hostile/retaliate/Found(var/atom/A)
 	if(isliving(A))
 		var/mob/living/L = A
-		if(!L.stat)
+		if(L.stat < stat_threshold)
 			stance = HOSTILE_STANCE_ATTACK
 			return L
 		else if(!L.reagents || !L.reagents.has_reagent(KILLERPHEROMONES))
