@@ -645,8 +645,6 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	anchored = 1
 	canmove = 0
 
-	stat_calm_threshold = INFINITY //keeps attacking after kill, as per original design wishes
-
 	melee_damage_lower = 10
 	melee_damage_upper = 25
 
@@ -710,7 +708,6 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	..()
 
 /mob/living/simple_animal/hostile/retaliate/spessmart_guardian/Retaliate()
-	. = ..()
 	if(!hostile)
 		spawn(5)
 			wander = 1
