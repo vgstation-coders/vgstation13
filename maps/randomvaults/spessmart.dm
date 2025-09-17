@@ -679,7 +679,6 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	meat_type = null
 
 	var/alert_on_movement = 1 //If moved, trigger an alert and become agressive
-	var/retaliated = FALSE
 
 /mob/living/simple_animal/hostile/retaliate/spessmart_guardian/New()
 	..()
@@ -696,7 +695,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	qdel(src)
 
 /mob/living/simple_animal/hostile/retaliate/spessmart_guardian/update_canmove()
-	if(retaliated || client)
+	if(enemies.len || client)
 		canmove = 1
 		anchored = 0
 	else
@@ -712,7 +711,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 /mob/living/simple_animal/hostile/retaliate/spessmart_guardian/Retaliate()
 	. = ..()
-	if(!retaliated)
+	if(!enemies.len)
 		spawn(5)
 			wander = 1
 			canmove = 1
