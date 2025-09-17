@@ -680,6 +680,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 /mob/living/simple_animal/hostile/spessmart_guardian/New()
 	..()
+
 	overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-securitron"))
 
 /mob/living/simple_animal/hostile/spessmart_guardian/Life()
