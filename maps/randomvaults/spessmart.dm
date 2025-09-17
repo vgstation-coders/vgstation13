@@ -709,6 +709,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	if(timestopped)
 		spawn(5)
 			retaliated = TRUE
+			wander = 1
 			canmove = 1
 			anchored = 0
 
