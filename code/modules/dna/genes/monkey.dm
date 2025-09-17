@@ -53,7 +53,7 @@
 
 	var/mob/living/carbon/human/O
 	if(Mo.greaterform == "Vox")
-		O = new /mob/living/carbon/human/vox(src)
+		O = new /mob/living/carbon/human/vox(src) //this is here because if you vox chicken to a into a vox, they never got the proper mob type.
 	else
 		O = new(src)
 	if(Mo.greaterform)

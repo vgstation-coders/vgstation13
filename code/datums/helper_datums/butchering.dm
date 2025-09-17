@@ -287,9 +287,10 @@
 		if(color_data)
 			F.color = color_data["hex"]
 			F.name = "[color_data["name"]] feather"
-	if(amount == 0)
+	if(amount >= 5)
 		if(!V.original_vox_tone)
-			V.original_vox_tone = V.my_appearance.s_tone
+			V.original_vox_tone = V.my_appearance.s_tone // Moving this here so it stores the original tone when voxes lose their first feather.
+	if(amount == 0)
 		V.my_appearance.s_tone = VOXPLUCKED
 		to_chat(V, "<span class='notice'>Your plumage is looking a bit bare...</span>")
 		V.species.updatespeciescolor(V)
