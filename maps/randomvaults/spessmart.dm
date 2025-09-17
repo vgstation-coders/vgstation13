@@ -641,7 +641,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "securitron"
 
-	timestopped = 1
+	wander = 0
 	anchored = 1
 	canmove = 0
 
@@ -688,11 +688,9 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	if(retaliated || client)
 		canmove = 1
 		anchored = 0
-		timestopped = 0
 	else
 		canmove = 0
 		anchored = 1
-		timestopped = 1
 	EscapeConfinement()
 	..()
 
@@ -713,7 +711,6 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 			retaliated = TRUE
 			canmove = 1
 			anchored = 0
-			timestopped = 0
 
 			visible_message("<span class='userdanger'>\The [src] activates.</span>")
 
