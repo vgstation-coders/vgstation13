@@ -142,7 +142,8 @@
 					continue
 			if(!skip_sum) //means there is a window between the two tiles in this direction
 				var/obj/structure/table/T = locate(/obj/structure/table,get_step(src,direction))
-				if(T && !T.flipped)
+				var/obj/machinery/door/table/DT = locate(/obj/machinery/door/table,get_step(src,direction))
+				if((T && !T.flipped) || (DT && DT.density))
 					if(direction <5)
 						dir_sum += direction
 					else

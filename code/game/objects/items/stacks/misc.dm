@@ -138,7 +138,7 @@
 
 /obj/item/stack/chains
 	name = "chain"
-	desc = "link by link, my chain got longer."
+	desc = "Link by link, my chain got longer."
 	icon_state = "chains"
 	singular_name = "chain"
 	irregular_plural = "chains"

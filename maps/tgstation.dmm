@@ -19368,11 +19368,11 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aHU" = (
-/obj/structure/windoor_assembly/secure{
-	dir = 2
-	},
 /obj/machinery/light_switch{
 	pixel_x = -27
+	},
+/obj/machinery/door/table/wood{
+	dir = 1
 	},
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -30477,7 +30477,6 @@
 	},
 /obj/machinery/door/airlock/maintenance{
 	name = "Bar Storage";
-	req_access_txt = 0;
 	req_one_access_txt = "25;28"
 	},
 /obj/structure/disposalpipe/segment{
@@ -31401,10 +31400,7 @@
 	dir = 8;
 	name = "Firelock West"
 	},
-/obj/machinery/door/window/brigdoor{
-	dir = 8;
-	name = "Kitchen";
-	req_access = null;
+/obj/machinery/door/table/reinforced{
 	req_one_access_txt = "25;28;35"
 	},
 /turf/simulated/floor{
@@ -32054,14 +32050,12 @@
 /area/bridge)
 "biQ" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 2;
-	name = "Bar Door";
-	req_one_access_txt = "25;28"
-	},
 /obj/machinery/light{
 	dir = 4
+	},
+/obj/machinery/door/table/reinforced{
+	dir = 1;
+	req_one_access_txt = "25;28"
 	},
 /turf/simulated/floor{
 	icon_state = "grimy"
@@ -32258,10 +32252,7 @@
 /obj/machinery/status_display{
 	pixel_y = 32
 	},
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 8;
-	name = "Library Desk Door";
+/obj/machinery/door/table/wood{
 	req_access_txt = "37"
 	},
 /turf/simulated/floor/wood,
@@ -42280,16 +42271,14 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "bCQ" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	icon_state = "right";
-	name = "Captain's Desk Door";
-	req_access_txt = "20"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
 /obj/machinery/light,
+/obj/machinery/door/table/wood{
+	req_access_txt = "20";
+	dir = 8
+	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "bCR" = (
@@ -43397,9 +43386,8 @@
 	},
 /area/medical/medbay)
 "bEM" = (
-/obj/machinery/door/window{
+/obj/machinery/door/table/reinforced{
 	dir = 1;
-	name = "Medbay Reception";
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{

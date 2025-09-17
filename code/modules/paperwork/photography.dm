@@ -275,7 +275,7 @@
 
 /obj/item/device/camera/cartridge
 	name = "PDA camera"
-	desc = "You should not be seeing this outside of a cartridge"
+	desc = "You should not be seeing this outside of a cartridge."
 	start_with_bulb = FALSE
 	var/obj/item/weapon/cartridge/camera/host_cart = null
 

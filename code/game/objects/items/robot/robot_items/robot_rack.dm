@@ -80,7 +80,7 @@
 //Ammo racks, they hold/make mags and borgs can attack it with projectile guns to load them.
 /obj/item/robot_rack/ammo
 	name = "default magazine carrier"
-	desc = "ADMINS STOP SPAWNING ME"
+	desc = "ADMINS STOP SPAWNING ME!!!"
 	initial_type = /obj/item/ammo_storage/magazine
 	object_type = /obj/item/ammo_storage/magazine
 	var/reload_type = /obj/item/weapon/gun/projectile/automatic

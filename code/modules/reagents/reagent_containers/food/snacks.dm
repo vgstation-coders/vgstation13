@@ -4,7 +4,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks
 	name = "snack"
-	desc = "yummy"
+	desc = "Yummy."
 	icon_state = null
 	log_reagents = 1
 	w_type = RECYK_BIOLOGICAL
@@ -2765,7 +2765,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/spacylibertyduff
 	name = "Spacy Liberty Duff"
-	desc = "Jello gelatin, from Alfred Hubbard's cookbook"
+	desc = "Jello gelatin, from Alfred Hubbard's cookbook."
 	icon_state = "spacylibertyduff"
 	trash = /obj/item/trash/snack_bowl
 	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
@@ -8079,7 +8079,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe
 	name = "Steamed Lobster"
-	desc = "A steamed lobster, served with a side of melted butter and a slice of lemon. You can still feel its hatred"
+	desc = "A steamed lobster, served with a side of melted butter and a slice of lemon. You can still feel its hatred."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_steamed_deluxe"
 	food_flags = FOOD_MEAT

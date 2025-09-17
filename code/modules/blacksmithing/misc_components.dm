@@ -51,7 +51,7 @@
 /obj/item/item_head/hammer_head
 	name = "hammer head"
 	icon_state = "hammer_head"
-	desc = "unlike the shark, this one lacks bite."
+	desc = "Unlike the shark, this one lacks bite."
 	result = /obj/item/weapon/hammer
 
 /obj/item/item_head/pitchfork_head
@@ -70,7 +70,7 @@
 	name = "item handle"
 	icon = 'icons/obj/misc_components.dmi'
 	icon_state = "item_handle"
-	desc = "a generic handle, with no purpose."
+	desc = "A generic handle, with no purpose."
 	starting_materials = list(MAT_WOOD = 0.5 * CC_PER_SHEET_WOOD)
 	w_type = RECYK_WOOD
 

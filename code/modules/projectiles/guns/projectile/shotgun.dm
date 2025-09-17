@@ -190,7 +190,7 @@
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/super
 	name = "super shotgun"
-	desc = "bang-bang, click, tack, shoomph, click"
+	desc = "Bang-bang, click, tack, shoomph, click."
 	icon_state = "supershotgun"
 	item_state = "sawnshotgun"
 	fire_sound = 'sound/weapons/supershotgun_fire.ogg'
@@ -206,7 +206,7 @@
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/superduper
 	name = "super duper shotgun"
-	desc = "bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang, click, tack, shoomph, click"
+	desc = "Bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang-bang, click, tack, shoomph, click."
 	icon_state = "superdupershotgun"
 	item_state = "sawnshotgun"
 	fire_sound = 'sound/weapons/supershotgun_fire.ogg'
