@@ -6,7 +6,7 @@
 /mob/living/simple_animal/hostile/retaliate/Found(var/atom/A)
 	if(isliving(A))
 		var/mob/living/L = A
-		if(L.stat < stat_threshold)
+		if(L.stat < stat_calm_threshold)
 			stance = HOSTILE_STANCE_ATTACK
 			return L
 		else if(!L.reagents || !L.reagents.has_reagent(KILLERPHEROMONES))
