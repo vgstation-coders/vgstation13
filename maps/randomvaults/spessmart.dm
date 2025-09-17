@@ -277,13 +277,13 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		return
 
 	if(items.Find(AM))
-		return on_theft(AM,loc)
+		return on_theft(AM)
 	else
 		var/list/AM_contents = get_contents_in_object(AM, /obj/item)
 
 		for(var/obj/item/I in AM_contents)
 			if(items.Find(I))
-				return on_theft(I,loc)
+				return on_theft(I)
 
 /area/vault/supermarket/shop/proc/purchased(obj/item/I, price)
 	items.Remove(I)
@@ -307,15 +307,15 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	if(!lockdown && map_element.customer_has_entered)
 		message_admins("Spessmart has entered lockdown due to the destruction of \a [destroyed]!")
-		on_theft(user = usr)
+		on_theft()
 
 /area/vault/supermarket/shop/proc/on_robot_kill()
 	if(map_element)
 		map_element.set_stats_alarm_activated("Destruction of a robot[usr ? " by [usr]" : ""]")
 
-	on_theft(user = usr)
+	on_theft()
 
-/area/vault/supermarket/shop/proc/on_theft(obj/item/I,mob/user)
+/area/vault/supermarket/shop/proc/on_theft(obj/item/I)
 	if(lockdown)
 		return
 
@@ -333,8 +333,6 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 			S.close()
 
 	for(var/mob/living/simple_animal/hostile/retaliate/spessmart_guardian/C in all_contents)
-		if(istype(user))
-			C.enemies |= user
 		C.Retaliate()
 
 	src.firealert()
@@ -697,7 +695,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	qdel(src)
 
 /mob/living/simple_animal/hostile/retaliate/spessmart_guardian/update_canmove()
-	if(enemies.len || client)
+	if(hostile || client)
 		canmove = 1
 		anchored = 0
 	else
@@ -713,11 +711,12 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 /mob/living/simple_animal/hostile/retaliate/spessmart_guardian/Retaliate()
 	. = ..()
-	if(!enemies.len)
+	if(!hostile)
 		spawn(5)
 			wander = 1
 			canmove = 1
 			anchored = 0
+			hostile = 1
 
 			visible_message("<span class='userdanger'>\The [src] activates.</span>")
 
