@@ -685,12 +685,6 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-securitron"))
 
 /mob/living/simple_animal/hostile/spessmart_guardian/Life()
-	if(retaliated || client)
-		canmove = 1
-		anchored = 0
-	else
-		canmove = 0
-		anchored = 1
 	EscapeConfinement()
 	..()
 
@@ -698,6 +692,15 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	..(TRUE)
 	robogibs(get_turf(src))
 	qdel(src)
+
+/mob/living/simple_animal/hostile/spessmart_guardian/update_canmove()
+	if(retaliated || client)
+		canmove = 1
+		anchored = 0
+	else
+		canmove = 0
+		anchored = 1
+	return canmove
 
 /mob/living/simple_animal/hostile/spessmart_guardian/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(alert_on_movement && !canmove)
