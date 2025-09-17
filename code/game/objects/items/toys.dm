@@ -181,6 +181,7 @@
 	melt_temperature = MELTPOINT_PLASTIC
 	attack_verb = list("strikes", "pistol whips", "hits", "bashes")
 	var/bullets = 7.0
+	var/max_bullets = 7
 
 /obj/item/toy/gun/examine(mob/user)
 	..()
@@ -188,20 +189,20 @@
 
 /obj/item/toy/gun/attackby(obj/item/toy/ammo/gun/A as obj, mob/user as mob)
 	if (istype(A, /obj/item/toy/ammo/gun))
-		if (src.bullets >= 7)
+		if (src.bullets >= max_bullets)
 			to_chat(user, "<span class = 'notice'>It's already fully loaded!</span>")
 			return 1
 		if (A.amount_left <= 0)
 			to_chat(user, "<span class = 'warning'>There are no more caps left in \the [A]!</span>")
 			return 1
-		if (A.amount_left < (7 - src.bullets))
+		if (A.amount_left < (max_bullets - src.bullets))
 			src.bullets += A.amount_left
 			to_chat(user, text("<span class = 'warning'>You reload [] cap\s!</span>", A.amount_left))
 			A.amount_left = 0
 		else
-			to_chat(user, text("<span class = 'warning'>You reload [] cap\s!</span>", 7 - src.bullets))
-			A.amount_left -= 7 - src.bullets
-			src.bullets = 7
+			to_chat(user, text("<span class = 'warning'>You reload [] cap\s!</span>", max_bullets - src.bullets))
+			A.amount_left -= max_bullets - src.bullets
+			src.bullets = max_bullets
 		A.update_icon()
 		return 1
 	return

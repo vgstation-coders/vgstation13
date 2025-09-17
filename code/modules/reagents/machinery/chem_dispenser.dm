@@ -53,6 +53,7 @@
 		PLASMA
 		)
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
+	var/max_beaker_size = W_CLASS_SMALL
 /*
 USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 */
@@ -340,7 +341,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			return FALSE
 		if(istype(AM,/obj/item))
 			var/obj/item/I = AM
-			if(I.w_class > W_CLASS_SMALL)
+			if(I.w_class > max_beaker_size)
 				return FALSE
 		else if(!panel_open)
 			AM.forceMove(src)
@@ -370,7 +371,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(src.container)
 			to_chat(user, "\A [src.container] is already loaded into the machine.")
 			return
-		if(D.w_class > W_CLASS_SMALL)
+		if(D.w_class > max_beaker_size)
 			to_chat(user, "<span class='warning'>\The [D] is too big to fit.</span>")
 			return
 		else if(!panel_open)
@@ -661,4 +662,4 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		to_chat(usr, "<span class='notice'>You are not capable of such fine manipulation.</span>")
 		return
 	move_that_gear_up()
-	
+
