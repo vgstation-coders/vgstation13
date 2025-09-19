@@ -419,7 +419,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 			return 0
 
 /obj/item/pipe/attack_self(mob/user as mob)
-	return rotate()
+	return rotate_ccw()
 
 /obj/item/pipe/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	..()

@@ -290,7 +290,7 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 
 /obj/AltClick(mob/user)
 	if(!user.incapacitated() && Adjacent(user) && alt_click_rotates)
-		rotate()
+		rotate_ccw()
 	return ..()
 
 /obj/proc/rotate_cw()

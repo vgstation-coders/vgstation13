@@ -87,7 +87,7 @@
 		O.playtoolsound(src, 50)
 
 /obj/item/pod_parts/pod_frame/attack_hand()
-	src.rotate()
+	rotate_ccw()
 
 /obj/item/pod_parts/pod_frame/fore_port
 	name = "fore port pod frame"
