@@ -311,9 +311,7 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 	return 1
 
 /obj/proc/rotate(var/angle = 90)
-	if(isobserver(usr))
-		if(!ghost_can_rotate)
-			return
+	if(ghost_can_rotate && isobserver(usr))
 		var/mob/dead/observer/ghost = usr
 		if(ghost.last_obj_spin <= world.time - 5) //do not spam this
 			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
