@@ -11,6 +11,8 @@
 	desc = "You sit in this. Either by will or force."
 	icon_state = "chair"
 	sheet_amt = 1
+	verb_rotates = TRUE
+	rotate_type = /obj/structure/bed/chair
 	var/image/buckle_overlay = null // image for overlays when a mob is buckled to the chair
 	var/image/secondary_buckle_overlay = null // for those really complicated chairs
 	var/can_rotate = TRUE
@@ -136,7 +138,7 @@
 	else
 		plane = OBJ_PLANE
 
-/obj/structure/bed/chair/proc/spin(mob/user)
+/obj/structure/bed/chair/rotate(var/angle = 90)
 	if(!can_rotate || !user || !isturf(user.loc))
 		return
 
@@ -148,14 +150,7 @@
 			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 		ghost.lastchairspin = world.time
 
-	change_dir(turn(dir, 90))
-
-/obj/structure/bed/chair/verb/rotate()
-	set name = "Rotate Chair"
-	set category = "Object"
-	set src in oview(1)
-
-	spin(usr)
+	change_dir(turn(dir, angle))
 
 /obj/structure/bed/chair/relayface(var/mob/living/user, direction) //ALSO for vehicles!
 	if(!can_rotate || user.incapacitated())
