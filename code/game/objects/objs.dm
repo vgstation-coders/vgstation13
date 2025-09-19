@@ -321,7 +321,7 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 		if(T)
 			for(var/obj/O in T)
 				var/rotated_type = rotate_type || src.type
-				if(istype(O,src.type) && !O.anchored && O.dir == src.dir)
+				if(istype(O,rotated_type) && !O.anchored && O.dir == src.dir)
 					O.rotate(angle)
 					return
 		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")

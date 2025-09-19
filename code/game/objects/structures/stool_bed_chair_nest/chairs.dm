@@ -715,8 +715,8 @@
 	can_rotate = TRUE
 	ghost_can_rotate = TRUE
 
-/obj/structure/bed/chair/shuttle/gamer/spin(var/mob/M)
-	change_dir(turn(dir, 90))
+/obj/structure/bed/chair/shuttle/gamer/rotate(angle)
+	change_dir(turn(dir, angle))
 
 //Plastic chairs
 /obj/structure/bed/chair/plastic
