@@ -16,6 +16,8 @@
 	density = FALSE
 	dir = NORTH
 	pass_flags_self = PASSDOOR|PASSGLASS
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	var/windoor_type = /obj/machinery/door/window
 	var/secure_type = /obj/machinery/door/window/brigdoor
@@ -233,15 +235,13 @@
 	update_icon()
 
 //Rotates the windoor assembly clockwise
-/obj/structure/windoor_assembly/verb/revrotate()
-	set name = "Rotate window door assembly"
-	set category = "Object"
-	set src in oview(1)
+/obj/structure/windoor_assembly/rotate()
+	..()
+	update_nearby_tiles()
+	update_icon()
 
-	if(anchored)
-		to_chat(usr, "It is fastened to the floor; therefore, you can't rotate it!")
-		return FALSE
-	change_dir(turn(dir, 270))
+/obj/structure/windoor_assembly/rotate_ccw()
+	..()
 	update_nearby_tiles()
 	update_icon()
 
