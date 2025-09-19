@@ -13,6 +13,7 @@
 	sheet_amt = 1
 	verb_rotates = TRUE
 	rotate_type = /obj/structure/bed/chair
+	ghost_can_rotate = TRUE
 	var/image/buckle_overlay = null // image for overlays when a mob is buckled to the chair
 	var/image/secondary_buckle_overlay = null // for those really complicated chairs
 	var/can_rotate = TRUE
