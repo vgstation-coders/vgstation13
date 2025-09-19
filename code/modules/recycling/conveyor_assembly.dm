@@ -116,7 +116,7 @@
 			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			var/build_time = 3 SECONDS
 			if(user?.reagents?.has_reagent(CARGONANOBOTS))
-				build_time = round(build_time/2)
+				build_time = 15
 			if(do_after(user, src, build_time) && S.amount > 2)
 				S.use(2)
 				to_chat(user, "<span class='notice'>You add the plates to \the [src].</span>")

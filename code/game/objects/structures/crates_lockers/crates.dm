@@ -12,6 +12,11 @@
 	var/sound_effect_open = 'sound/machines/click.ogg'
 	var/sound_effect_close = 'sound/machines/click.ogg'
 
+/obj/structure/closet/crate/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.firer?.reagents?.has_reagent(CARGONANOBOTS))
+		health -= Proj.damage //double power
+	. = ..()
+
 /obj/structure/closet/crate/proc/jiggle(var/obj/item/I)
 	var/jx = I.w_class == W_CLASS_TINY ? 7 : 3
 	var/jy = I.w_class == W_CLASS_TINY ? 3 : 1
