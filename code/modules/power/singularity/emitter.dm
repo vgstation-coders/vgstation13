@@ -27,6 +27,8 @@
 	var/last_satisfaction = 0
 
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | WELD_FIXED | MULTITOOL_MENU
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 
 	var/frequency = 0
 	var/datum/radio_frequency/radio_connection
@@ -44,33 +46,6 @@
 	frequency = new_frequency
 	if(frequency)
 		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
-
-/obj/machinery/power/emitter/verb/rotate_cw()
-	set name = "Rotate (Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	if(src.anchored || usr:stat)
-		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
-		return 0
-	src.dir = turn(src.dir, -90)
-	return 1
-
-/obj/machinery/power/emitter/verb/rotate_ccw()
-	set name = "Rotate (Counter-Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	if(src.anchored || usr:stat)
-		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
-		return 0
-	src.dir = turn(src.dir, 90)
-	return 1
-
-/obj/machinery/power/emitter/AltClick(mob/user)
-	if(user.incapacitated() || !Adjacent(user))
-		return
-	rotate_cw()
 
 /obj/machinery/power/emitter/initialize()
 	..()

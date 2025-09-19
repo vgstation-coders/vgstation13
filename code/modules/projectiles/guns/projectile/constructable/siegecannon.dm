@@ -4,6 +4,7 @@
 	icon = 'icons/obj/siege_cannon.dmi'
 	icon_state = "siege_cannon"
 	density = TRUE
+	verb_rotates = TRUE
 	var/obj/item/loadedItem = null
 	var/mob/living/loadedMob = null
 	var/wFuel = 0
@@ -180,22 +181,6 @@
 		beenClowned = TRUE
 		icon_state = "clownnon"
 		name = "circus cannon"
-
-/obj/structure/siege_cannon/verb/rotate_cw()
-	set name = "Rotate (Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	src.dir = turn(src.dir, -90)
-	return 1
-
-/obj/structure/siege_cannon/verb/rotate_ccw()
-	set name = "Rotate (Counter-Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	src.dir = turn(src.dir, 90)
-	return 1
 
 
 //CANNONBALLS/////

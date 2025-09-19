@@ -24,6 +24,8 @@
 	power_priority = POWER_PRIORITY_POWER_EQUIPMENT
 	idle_power_usage = 10
 	active_power_usage = GYRO_MEGA_COST * MIN_MEGA_ENERGY
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 
 /obj/machinery/power/gyrotron/initialize()
 	if(!id_tag)
@@ -139,36 +141,3 @@
 				connect_to_network()
 		return 1
 	return -1
-
-/obj/machinery/power/gyrotron/verb/rotate_cw()
-	set name = "Rotate (Clockwise)"
-	set src in oview(1)
-	set category = "Object"
-
-	if(usr.incapacitated() || !Adjacent(usr))
-		return
-
-	if(anchored)
-		to_chat(usr, "<span class='notify'>\The [src] is anchored to the floor!</span>")
-		return
-
-	dir = turn(dir, -90)
-
-/obj/machinery/power/gyrotron/verb/rotate_ccw()
-	set name = "Rotate (Counter-Clockwise)"
-	set src in oview(1)
-	set category = "Object"
-
-	if(usr.incapacitated() || !Adjacent(usr))
-		return
-
-	if(anchored)
-		to_chat(usr, "<span class='notify'>\The [src] is anchored to the floor!</span>")
-		return
-
-	dir = turn(dir, 90)
-
-/obj/machinery/power/gyrotron/AltClick(mob/user)
-	if(user.incapacitated() || !Adjacent(user))
-		return
-	rotate_cw()
