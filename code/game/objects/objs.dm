@@ -71,6 +71,7 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 	var/verb_rotates = FALSE
 	var/alt_click_rotates = FALSE
 	var/ghost_can_rotate = FALSE
+	var/rotates_anchored = FALSE
 	var/rotate_type = null
 
 /obj/New()
@@ -319,7 +320,7 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 	else if (usr.incapacitated())
 		to_chat(usr, "You cannot rotate this while incapacitated!")
 		return 0
-	if(anchored)
+	if(!rotates_anchored && anchored)
 		var/turf/T = loc
 		if(T)
 			for(var/obj/O in T)
