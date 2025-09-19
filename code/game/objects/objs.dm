@@ -735,6 +735,14 @@ a {
 		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
 								"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
 								"<span class='notice'>You hear a ratchet.</span>")
+
+		if(verb_rotates)
+			if(anchored)
+				verbs |= /obj/proc/rotate_cw
+				verbs |= /obj/proc/rotate_ccw
+			else
+				verbs -= /obj/proc/rotate_cw
+				verbs -= /obj/proc/rotate_ccw
 		return TRUE
 	return FALSE
 
