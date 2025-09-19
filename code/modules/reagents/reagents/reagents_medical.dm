@@ -660,6 +660,13 @@ var/global/list/charcoal_doesnt_remove=list(
 	if(prob(5))
 		M.say("[pick("Hail cargonia","Move freight","Miners, [pick("don't die on me","bring me my materials")]")]!")
 
+/datum/reagent/cargonanobots/reaction_obj(obj/O, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	if(istype(O,/obj/structure/closet/crate))
+		O.health -= volume
+
 /datum/reagent/cryoxadone
 	name = "Cryoxadone"
 	id = CRYOXADONE
