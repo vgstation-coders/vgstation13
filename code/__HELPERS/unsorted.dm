@@ -557,7 +557,8 @@
 	if(!user || numticks == 0 || !targets || !targets.len)
 		return 0
 
-	var/delay_fraction = max(round(delay / numticks),1)
+	numticks = min(numticks,delay)
+	var/delay_fraction = round(delay / numticks)
 	if(istype(user.loc, /obj/mecha))
 		use_user_turf = TRUE
 	var/initial_user_location = use_user_turf ? get_turf(user) : user.loc
@@ -658,7 +659,8 @@
 	if(numticks == 0)
 		return 0
 
-	var/delayfraction = max(round(delay / numticks),1)
+	numticks = min(numticks,delay)
+	var/delayfraction = round(delay/numticks)
 	var/Location
 	if(istype(user.loc, /obj/mecha))
 		use_user_turf = TRUE
