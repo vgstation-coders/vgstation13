@@ -139,13 +139,13 @@
 		plane = OBJ_PLANE
 
 /obj/structure/bed/chair/rotate(var/angle = 90)
-	if(!can_rotate || !user || !isturf(user.loc))
+	if(!can_rotate || !usr || !isturf(usr.loc))
 		return
 
-	if(isobserver(user))
+	if(isobserver(usr))
 		if(!ghost_can_rotate)
 			return
-		var/mob/dead/observer/ghost = user
+		var/mob/dead/observer/ghost = usr
 		if(ghost.lastchairspin <= world.time - 5) //do not spam this
 			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 		ghost.lastchairspin = world.time
