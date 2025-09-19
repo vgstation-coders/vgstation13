@@ -16,7 +16,6 @@
 	var/image/buckle_overlay = null // image for overlays when a mob is buckled to the chair
 	var/image/secondary_buckle_overlay = null // for those really complicated chairs
 	var/can_rotate = TRUE
-	var/ghost_can_rotate = TRUE
 	mob_lock_type = /datum/locking_category/buckle/chair
 
 /obj/structure/bed/chair/New()
@@ -137,20 +136,6 @@
 		plane = ABOVE_HUMAN_PLANE
 	else
 		plane = OBJ_PLANE
-
-/obj/structure/bed/chair/rotate(var/angle = 90)
-	if(!can_rotate || !usr || !isturf(usr.loc))
-		return
-
-	if(isobserver(usr))
-		if(!ghost_can_rotate)
-			return
-		var/mob/dead/observer/ghost = usr
-		if(ghost.lastchairspin <= world.time - 5) //do not spam this
-			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
-		ghost.lastchairspin = world.time
-
-	change_dir(turn(dir, angle))
 
 /obj/structure/bed/chair/relayface(var/mob/living/user, direction) //ALSO for vehicles!
 	if(!can_rotate || user.incapacitated())

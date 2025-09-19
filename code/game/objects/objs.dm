@@ -70,6 +70,7 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 
 	var/verb_rotates = FALSE
 	var/alt_click_rotates = FALSE
+	var/ghost_can_rotate = FALSE
 	var/rotate_type = null
 
 /obj/New()
@@ -298,9 +299,6 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 	set category = "Object"
 	set src in oview(1)
 
-	if (usr.incapacitated())
-		to_chat(usr, "You cannot rotate this while incapacitated!")
-		return 0
 	rotate(270)
 	return 1
 
@@ -309,13 +307,20 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 	set category = "Object"
 	set src in oview(1)
 
-	if (usr.incapacitated())
-		to_chat(usr, "You cannot rotate this while incapacitated!")
-		return 0
 	rotate(90)
 	return 1
 
 /obj/proc/rotate(var/angle = 90)
+	if(isobserver(usr))
+		if(!ghost_can_rotate)
+			return
+		var/mob/dead/observer/ghost = usr
+		if(ghost.last_obj_spin <= world.time - 5) //do not spam this
+			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+		ghost.last_obj_spin = world.time
+	else if (usr.incapacitated())
+		to_chat(usr, "You cannot rotate this while incapacitated!")
+		return 0
 	if(anchored)
 		var/turf/T = loc
 		if(T)
