@@ -658,7 +658,7 @@
 	if(numticks == 0)
 		return 0
 
-	var/delayfraction = round(delay/numticks)
+	var/delayfraction = max(round(delay / numticks),1)
 	var/Location
 	if(istype(user.loc, /obj/mecha))
 		use_user_turf = TRUE
