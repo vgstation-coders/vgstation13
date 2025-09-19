@@ -66,6 +66,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	density = 1
 	verb_rotates = TRUE
 	alt_click_rotates = TRUE
+	rotate_type = /obj/structure/particle_accelerator
 	var/obj/machinery/particle_accelerator/control_box/master = null
 	var/construction_state = 0
 	var/reference = null
@@ -243,40 +244,15 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 0
 	active_power_usage = 0
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
+	rotate_type = /obj/structure/railing
 	var/construction_state = 0
 	var/active = 0
 	var/reference = null
 	var/powered = null
 	var/strength = 0
 	var/desc_holder = null
-
-
-/obj/machinery/particle_accelerator/verb/rotate()
-	set name = "Rotate Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored || usr:stat)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, -90)
-	return 1
-
-/obj/machinery/particle_accelerator/verb/rotateccw()
-	set name = "Rotate Counter-Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored || usr:stat)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, 90)
-	return 1
-
-/obj/machinery/particle_accelerator/AltClick(mob/user)
-	if(user.incapacitated() || !Adjacent(user))
-		return
-	rotate()
 
 /obj/machinery/particle_accelerator/update_icon()
 	return

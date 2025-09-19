@@ -234,13 +234,7 @@
 	//Update to reflect changes(if applicable)
 	update_icon()
 
-//Rotates the windoor assembly clockwise
-/obj/structure/windoor_assembly/rotate()
-	..()
-	update_nearby_tiles()
-	update_icon()
-
-/obj/structure/windoor_assembly/rotate_ccw()
+/obj/structure/windoor_assembly/rotate(var/angle = 90)
 	..()
 	update_nearby_tiles()
 	update_icon()

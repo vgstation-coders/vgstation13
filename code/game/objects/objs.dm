@@ -70,6 +70,7 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 
 	var/verb_rotates = FALSE
 	var/alt_click_rotates = FALSE
+	var/rotate_type = null
 
 /obj/New()
 	..()
@@ -96,7 +97,7 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 		if(istype(T))
 			T.zone?.burnable_atoms |= src
 	if(verb_rotates)
-		verbs += /obj/proc/rotate
+		verbs += /obj/proc/rotate_cw
 		verbs += /obj/proc/rotate_ccw
 
 //More cooking stuff:
@@ -292,18 +293,15 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 		rotate()
 	return ..()
 
-/obj/proc/rotate()
+/obj/proc/rotate_cw()
 	set name = "Rotate Clockwise"
 	set category = "Object"
 	set src in oview(1)
 
-	if (src.anchored)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
 	if (usr.incapacitated())
 		to_chat(usr, "You cannot rotate this while incapacitated!")
 		return 0
-	src.dir = turn(src.dir, -90)
+	rotate(270)
 	return 1
 
 /obj/proc/rotate_ccw()
@@ -311,14 +309,25 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 	set category = "Object"
 	set src in oview(1)
 
-	if (src.anchored)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
 	if (usr.incapacitated())
 		to_chat(usr, "You cannot rotate this while incapacitated!")
 		return 0
-	src.dir = turn(src.dir, 90)
+	rotate(90)
 	return 1
+
+/obj/proc/rotate(var/angle = 90)
+	if(anchored)
+		var/turf/T = loc
+		if(T)
+			for(var/obj/O in T)
+				var/rotated_type = rotate_type || src.type
+				if(istype(O,src.type) && !O.anchored && O.dir == src.dir)
+					O.rotate(angle)
+					return
+		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
+		return
+
+	change_dir(turn(dir, angle))
 
 /obj/recycle(var/datum/materials/rec)
 	if(..())
