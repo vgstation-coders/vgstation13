@@ -614,7 +614,7 @@ var/list/blob_candidates = list()
 
 /obj/item/projectile/meteor/firework
 	name = "firework"
-	desc = "Oooh! Aaaaah"
+	desc = "Oooh! Aaaaah..."
 	icon_state = "firework"
 
 /obj/item/projectile/meteor/firework/New()

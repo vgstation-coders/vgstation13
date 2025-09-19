@@ -1380,6 +1380,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 						icon_name = "grey"
 					if(VOXBROWN)
 						icon_name = "brown"
+					if(VOXPLUCKED)
+						icon_name = "plucked"
 					else
 						icon_name = "green"
 			if("tajaran")

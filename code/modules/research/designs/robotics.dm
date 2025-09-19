@@ -117,7 +117,7 @@
 /* Perhaps this can come back one day in the future, when one can't spam them every round
 /datum/design/killdozer_modkit
 	name = "Ripley Killdozer kit"
-	desc = "this never even shows up ingame???"
+	desc = "This never even shows up ingame???"
 	id = "killdozer_modkit"
 	req_tech = list(Tc_MATERIALS = 3, Tc_MAGNETS = 3, Tc_SYNDICATE = 2)
 	build_type = PROTOLATHE | MECHFAB

@@ -121,7 +121,7 @@
 	..()
 	emagged = 1
 	name = "\improper DREADMILL"
-	desc = "FEEL THE BURN"
+	desc = "FEEL THE BURN!"
 
 /obj/machinery/power/treadmill/verb/rotate_clock()
 	set category = "Object"

@@ -14,7 +14,7 @@
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/bluespace
 	name = "Bluespace rapid part exchange device"
-	desc = "This device is a better variant of the RPED that can hold twice as many parts and can function on machines that do not have their panels open. It can store a total of 200 components"
+	desc = "This device is a better variant of the RPED that can hold twice as many parts and can function on machines that do not have their panels open. It can store a total of 200 components."
 	icon_state = "BRPED"
 	item_state = "BRPED"
 	max_combined_w_class = 400

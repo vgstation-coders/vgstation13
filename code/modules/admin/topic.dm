@@ -635,47 +635,55 @@
 	else if(href_list["climate_timeleft"])
 		if(!check_rights(R_ADMIN))
 			return
-		if(!map.climate)
+		var/datum/weather/W = locate(href_list["climate_timeleft"])
+		if(!W || !istype(W))
 			return
-		var/datum/weather/W = map.climate.current_weather
 		var/nu = input(usr, "Enter remaining time (nearest 2 seconds)", "Adjust Timeleft", W.timeleft / (1 SECONDS)) as null|num
 		if(!nu)
 			return
 		W.timeleft = round(nu SECONDS,SS_WAIT_WEATHER)
-		log_admin("[key_name(usr)] adjusted weather time.")
-		message_admins("<span class='notice'>[key_name(usr)] adjusted weather time.</span>", 1)
+		log_admin("[key_name(usr)] adjusted weather time for Z-[W.parent.z].")
+		message_admins("<span class='notice'>[key_name(usr)] adjusted weather time for Z-[W.parent.z].</span>", 1)
 		climate_panel()
 
 	else if(href_list["climate_weather"])
 		if(!check_rights(R_ADMIN))
 			return
-		if(!map.climate)
+		var/datum/climate/C = locate(href_list["climate_weather"])
+		if(!C || !istype(C))
 			return
-		var/datum/climate/C = map.climate
 
 		var/list/valid_climates = list()
 
-		for(var/subtype in subtypesof(/datum/weather))
-			var/datum/weather/instance = subtype
-			var/weather_name = initial(instance.name)
-			if (weather_name != "weather")
-				valid_climates[weather_name] = subtype
+		// Use the climate's allowed weather types if available, otherwise fall back to all weather types
+		if(C.allowed_weather_types && C.allowed_weather_types.len)
+			for(var/weather_type in C.allowed_weather_types)
+				var/datum/weather/instance = weather_type
+				var/weather_name = initial(instance.name)
+				if (weather_name != "weather")
+					valid_climates[weather_name] = weather_type
+		else
+			for(var/subtype in subtypesof(/datum/weather))
+				var/datum/weather/instance = subtype
+				var/weather_name = initial(instance.name)
+				if (weather_name != "weather")
+					valid_climates[weather_name] = subtype
 
 		if (valid_climates.len <= 0)
 			alert(usr, "There are somehow no weather subtypes!", "Error", "Wtf?")
 			return
 
-		var/nu = input(usr, "Select New Weather", "Adjust Weather", null) as null|anything in valid_climates
+		var/nu = input(usr, "Select New Weather for Z-[C.z]", "Adjust Weather", null) as null|anything in valid_climates
 		if(!nu)
 			to_chat(usr, "Weather change canceled.")
 			return
 		if(nu == C.current_weather.name)
 			to_chat(usr, "That's already the current weather you dummy.")
 			return
-		C.change_weather(valid_climates[nu])
+		C.change_weather(valid_climates[nu],force = TRUE)
 		C.forecast()
-		log_admin("[key_name(usr)] changed the weather to [nu].")
-		message_admins("<span class='notice'>[key_name(usr)] changed the weather to [nu].</span>", 1)
+		log_admin("[key_name(usr)] changed the weather to [nu] for Z-[C.z].")
+		message_admins("<span class='notice'>[key_name(usr)] changed the weather to [nu] for Z-[C.z].</span>", 1)
 		climate_panel()
 
 	else if(href_list["delay_round_end"])

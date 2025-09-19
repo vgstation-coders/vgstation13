@@ -669,7 +669,7 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/mayo
 	name = "mayonnaise jar"
-	desc = "we have such sights to show you."
+	desc = "We have such sights to show you."
 
 /obj/item/weapon/reagent_containers/food/condiment/mayo/New()
 	..()

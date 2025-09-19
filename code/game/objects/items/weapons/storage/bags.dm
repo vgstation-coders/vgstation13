@@ -560,7 +560,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 
 /obj/item/weapon/storage/bag/potion/dice_potion_bundle
 	name = "Lucky potion bundle"
-	desc = "A bundle of potions for a lucky individual"
+	desc = "A bundle of potions for a lucky individual."
 
 /obj/item/weapon/storage/bag/potion/dice_potion_bundle/New()
 	..()

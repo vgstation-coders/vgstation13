@@ -83,3 +83,18 @@
 	train_net = new
 	train_net.members += src
 	train_net.train_rebuild(src)
+
+//If destroyed, disconnect the cart from any trains!
+/obj/machinery/cart/Destroy()
+	if(next_cart)
+		var/obj/machinery/cart/C = next_cart
+		next_cart.previous_cart = null
+		next_cart = null
+		C.disconnected()
+	if(previous_cart)
+		var/obj/machinery/cart/C = previous_cart
+		previous_cart.next_cart = null
+		previous_cart = null
+		C.disconnected()
+	train_net = null
+	..()

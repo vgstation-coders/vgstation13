@@ -28,19 +28,19 @@
 
 /spell/aoe_turf/conjure/pitbull/invocation(mob/user, list/targets)
 	if(empowered)
-		invocation = pick("P'MPY S'N 'PP", "P'MPY S'N 'PP", "R'V'R'D' K'NN'LS", "BL'DSK'LL") 
+		invocation = pick("P'MPY S'N 'PP", "P'MPY S'N 'PP", "R'V'R'D' K'NN'LS", "BL'DSK'LL")
 	..()
 
 var/list/pitbulls_exclude_kinlist = list() //all pitbulls go in here so pitbulls won't attack other pitbulls when feeling treacherous (and instead attack the wizard)
 
 /spell/aoe_turf/conjure/pitbull/perform(mob/user = usr, skipcharge = 0, list/target_override, var/ignore_timeless = FALSE, var/ignore_path = null)
 	if(empowered)
-		summon_type = list(/mob/living/simple_animal/hostile/pitbull/smashednslammed/summoned_pitbull)
+		summon_type = list(/mob/living/simple_animal/hostile/pitbull/summoned_pitbull/smashednslammed)
 	..()
 
 /spell/aoe_turf/conjure/pitbull/summon_object(var/type, var/location)
 	if(empowered)
-		var/mob/living/simple_animal/hostile/pitbull/smashednslammed/summoned_pitbull/P = new type(location)
+		var/mob/living/simple_animal/hostile/pitbull/summoned_pitbull/smashednslammed/P = new type(location)
 		P.friends.Add(holder)
 	else
 		var/mob/living/simple_animal/hostile/pitbull/summoned_pitbull/P = new type(location)

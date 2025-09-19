@@ -465,7 +465,7 @@
 
 /obj/item/weapon/hammer
 	name = "smithing hammer"
-	desc = "for those with a predeliction for applying concussive maintenance."
+	desc = "For those with a predilection for applying concussive maintenance."
 	icon = 'icons/obj/blacksmithing/hammer.dmi'
 	icon_state = "hammer"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/hammer_left.dmi', "right_hand" = 'icons/mob/in-hand/right/hammer_right.dmi')

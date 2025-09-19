@@ -87,7 +87,7 @@
 
 /datum/design/rdservercontrol
 	name = "Circuit Design(R&D Server Control Console)"
-	desc = "The circuit board for a R&D Server Control Console"
+	desc = "The circuit board for a R&D Server Control Console."
 	id = "rdservercontrol"
 	req_tech = list(Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER

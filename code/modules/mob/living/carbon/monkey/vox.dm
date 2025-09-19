@@ -13,6 +13,7 @@
 	safe_oxygen_min = 0
 	var/eggsleft
 	var/eggcost = 250
+	var/feather_regen = 0
 	languagetoadd = LANGUAGE_VOX
 
 /mob/living/carbon/monkey/vox/attack_hand(mob/living/carbon/human/M as mob)
@@ -21,8 +22,19 @@
 	if((M.a_intent == I_HELP) && !(locked_to) && (isturf(src.loc)) && (M.get_active_hand() == null)) //Unless their location isn't a turf!
 		scoop_up(M)
 
+	if(!stat && M.a_intent == I_GRAB)
+		// Only allow if there are feathers left to pluck
+		for(var/datum/butchering_product/feathers/voxchicken/F in butchering_drops)
+			if(F.amount > 0)
+				M.visible_message("<span class='warning'>[M] plucks a feather from [src]!</span>", "<span class='notice'>You pluck a feather from [src].</span>")
+				F.spawn_result(get_turf(src), src)
+				return
+		to_chat(M, "<span class='notice'>[src] has no feathers left to pluck!</span>")
+
 	..()
 
+/mob/living/carbon/monkey/vox/get_butchering_products()
+	return list(/datum/butchering_product/feathers/voxchicken)
 
 /mob/living/carbon/monkey/vox/New()
 
@@ -33,6 +45,7 @@
 	alien = 1
 	eggsleft = rand(1,6)
 	set_hand_amount(1)
+	init_butchering_list()
 
 /mob/living/carbon/monkey/vox/skeletal
 	name = "skeleton chicken"
@@ -51,6 +64,20 @@
 	..()
 	if(prob(5) && eggsleft > 4)
 		lay_egg()
+
+	//feather regeneration
+	for(var/datum/butchering_product/feathers/voxchicken/F in butchering_drops)
+		if(F.amount <= 2 && !stat)
+			feather_regen += 1 SECONDS
+			if(feather_regen == 2 SECONDS) //it would constantly spam if I didn't do this.
+				visible_message("[src] starts to regrow some feathers.")
+		if(feather_regen >= 5 MINUTES)
+			F.amount = F.initial_amount
+			visible_message("[src] regrows their feathers.")
+			feather_regen = 0
+			icon_state = "chickengreen"
+			update_icon()
+
 
 /mob/living/carbon/monkey/vox/say(var/message)
 	if (prob(25))
