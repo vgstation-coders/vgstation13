@@ -318,7 +318,7 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 		ghost.last_obj_spin = world.time
 	else if (usr.incapacitated())
-		to_chat(usr, "You cannot rotate this while incapacitated!")
+		to_chat(usr, "<span class='warning'>You cannot rotate this while incapacitated!</span>")
 		return 0
 	if(!rotates_anchored && anchored)
 		var/turf/T = loc
