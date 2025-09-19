@@ -21,7 +21,6 @@
 
 /obj/item/weapon/barricade_kit/proc/build_time(mob/user)
 	. = user?.reagents?.has_reagent(CARGONANOBOTS) ? 5 : 10
-	message_admins(.)
 
 //Basically a rip from window construction, because it's the same idea
 /obj/item/weapon/barricade_kit/attack_self(mob/user as mob)

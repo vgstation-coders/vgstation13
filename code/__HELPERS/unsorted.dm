@@ -557,7 +557,7 @@
 	if(!user || numticks == 0 || !targets || !targets.len)
 		return 0
 
-	var/delay_fraction = round(delay / numticks)
+	var/delay_fraction = max(round(delay / numticks),1)
 	if(istype(user.loc, /obj/mecha))
 		use_user_turf = TRUE
 	var/initial_user_location = use_user_turf ? get_turf(user) : user.loc
