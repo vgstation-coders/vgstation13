@@ -1,5 +1,9 @@
 //vg-themed lootcrates
-//taken directly from peach's castle
+
+//for those who enter here: the name of the game is funny
+//anything below should give miners at least a sensible chuckle of some sort
+
+//taken directly from peach's castle (old crate, updated)
 /obj/structure/closet/crate/secure/loot/vg_painting/New()
 	..()
 	for(var/i = 0, i < 5, i++)
@@ -22,16 +26,16 @@
 	for(var/i = 0, i < 30, i++)
 		new/obj/item/weapon/cartridge/spess_pets(src)
 
-//anime fans rejoice
+//anime fans rejoice, now you can be the anime pirate king
 /obj/structure/closet/crate/secure/loot/vg_anime_pirate/New()
 	..()
 	new/obj/item/weapon/reagent_containers/food/snacks/devil(src)
 
 //cash
-//bottlecaps separate crate, more common as a result
+//bottlecaps are in a separate crate, more common as a result
 /obj/structure/closet/crate/secure/loot/vg_coins/New()
 	..()
-	var/picked = pick(subtypesof(/obj/item/weapon/coin) - /obj/item/weapon/coin/pomf - /obj/item/weapon/coin/pumf - /obj/item/weapon/coin/nuka)
+	var/picked = pick(subtypesof(/obj/item/weapon/coin) + /obj/item/weapon/reagent_containers/food/snacks/chococoin - /obj/item/weapon/coin/pomf - /obj/item/weapon/coin/pumf - /obj/item/weapon/coin/nuka)
 	for(var/i = 0, i < 30, i++)
 		new picked(src)
 
@@ -55,7 +59,7 @@
 //the space pirates knew how to drink
 /obj/structure/closet/crate/secure/loot/vg_va11halla/New()
 	..()
-	new/obj/structure/reagent_dispensers/karmotrinetank(src)
+	new/obj/item/weapon/circuitboard/chem_dispenser/single(src, optional_reagent = "karmotrine")
 	new/obj/item/weapon/reagent_containers/food/drinks/shaker(src)
 	new/obj/item/weapon/book/manual/barman_recipes(src)
 
@@ -100,6 +104,7 @@
 	new/obj/item/weapon/paper/captain/finalmessage(src)
 
 /obj/structure/closet/crate/secure/loot/vg_pickaxe/New()
+	..()
 	var/obj/item/weapon/pickaxe/diamond/dorillu = new(src)
 	dorillu.name = "sharp pickaxe"
 	dorillu.desc = "A very sharp pickaxe made with a material that looks similar to solid plasma but isn't."
@@ -121,7 +126,8 @@
 //troll
 /obj/structure/closet/crate/secure/loot/vg_goliath/New()
 	..()
-	new/mob/living/simple_animal/hostile/asteroid/goliath(src)
+	var/mob/living/simple_animal/hostile/asteroid/goliath/surprise_inside = new(src)
+	surprise_inside.environment_smash_flags &= SMASH_CONTAINERS //so it won't just... break out instantly
 
 //troll
 /obj/structure/closet/crate/secure/loot/vg_lootget/New()
@@ -140,10 +146,12 @@
 		new gift(my_bag)
 	my_bag.update_icon()
 
-//literally maint trash, not even the good stuff
+//literally maint trash
 /obj/structure/closet/crate/secure/loot/vg_trash/New()
 	..()
 	new/obj/abstract/map/spawner/maint/filled_crate(src)
+	new/obj/abstract/map/spawner/floorpill/guaranteed(src)
+	new/obj/abstract/map/spawner/floorpill/guaranteed(src)
 
 //A crown with a third hand you say
 /obj/structure/closet/crate/secure/loot/vg_crown/New()
@@ -154,6 +162,146 @@
 /obj/structure/closet/crate/secure/loot/vg_rare_dispenser/New()
 	..()
 	new/obj/item/weapon/circuitboard/chem_dispenser/single/loot(src)
+
+//Someone was clippin' coupons...
+/obj/structure/closet/crate/secure/loot/vg_coupons/New()
+	..()
+	var/list/valid_vouchers = subtypesof(/obj/item/voucher/free_item) - /obj/item/voucher/free_item/scrip - /obj/item/voucher/free_item/glowing //ask pomf for one not the lootcrate system
+	for(var/i = 0, i < 10, i++)
+		var/obj/picked = pick(valid_vouchers)
+		new picked(src)
+		if(istype(picked, /obj/item/voucher/free_item/scrip))
+			picked.desc = "This looks old and faded. You can barely make out the words Deepvein Trust vendor."
+
+//Turns out the pirates were actually just actors and these were their spare costumes
+/obj/structure/closet/crate/secure/loot/vg_costumes/New()
+	..()
+	var/list/funny_outfits = list(
+		/obj/item/weapon/storage/box/smartbox/clothing_box/chickensuit,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/monkeysuit,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/xenosuit,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/gladiatorsuit,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/captaincasualoutfit,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/schoolgirloutfit,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/sovietoutfit,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/fakewizard,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/witch,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/marisa,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/mega,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/sexyclown,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/sexymime,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/clownpiece,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/jester,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/maid,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/liberty,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/aviator,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/proto,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/owl,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/pirateoutfit,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/lordadmiral,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/plaguedoctor,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/rotten,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/frank,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/mexican,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/banana_set,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/furtrapper_set,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/sonicman,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/sonicsuit,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/tailssuit,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/knucklessuit,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/amysuit,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/shadowsuit,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/clownpsyche,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/chickensuitwhite,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/joe,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/lola,
+	)
+	for(var/i = 0, i < 7, i++)
+		var/picked = pick(funny_outfits)
+		new picked(src)
+
+//They stole a crate from the traders
+/obj/structure/closet/crate/secure/loot/vg_trader/New()
+	..()
+	var/datum/trade_product/picked = pick(subtypesof(/datum/trade_product))
+	var/obj/picked_box = new picked.path(src)
+	if(picked.sales_category == "Variety Packs")
+		for(var/obj/item/I in picked_box.contents)
+			I.forceMove(src)
+		qdel(picked_box)
+
+//Tabletop gaming emergency crate
+/obj/structure/closet/crate/secure/loot/vg_dice/New()
+	..()
+	var/list/good_dice = list(
+		/obj/item/weapon/dice/d2,
+		/obj/item/weapon/dice/d4,
+		/obj/item/weapon/dice, //d6
+		/obj/item/weapon/dice/d8,
+		/obj/item/weapon/dice/d10,
+		/obj/item/weapon/dice/d00,
+		/obj/item/weapon/dice/d12,
+		/obj/item/weapon/dice/d20,
+		/obj/item/weapon/dice/fudge,
+		/obj/item/weapon/dice/loaded,
+		/obj/item/weapon/dice/loaded/d20,
+	)
+	for(var/i = 0, i < 13, i++)
+		var/picked = pick(good_dice)
+		new picked(src)
+	new/obj/item/dicetower(src)
+	new/obj/item/weapon/storage/box/redcore(src)
+
+//Bunch of random parts
+/obj/structure/closet/crate/secure/loot/vg_parts/New()
+	..()
+	var/list/parts = subtypesof(/obj/item/weapon/stock_parts) - subtypesof(/obj/item/weapon/stock_parts/subspace)
+	var/really_good_part_picked = FALSE
+	for(var/i = 0, i < 20, i++)
+		var/obj/item/weapon/stock_parts/picked = pick(parts)
+		if(picked.rating >= 4)
+			if(really_good_part_picked) //You only can get one, extras are lost!
+				continue
+			really_good_part_picked = TRUE
+		new picked(src)
+	var/bonus_tool = pick(list(
+			/obj/item/tool/wrench,
+			/obj/item/tool/wrench/socket,
+			/obj/item/tool/screwdriver,
+			/obj/item/tool/solder/screw,
+	))
+	new bonus_tool(src)
+
+//I asked a random guy what he would find in a buried chest on the roid, and he said "a cup or something"
+/obj/structure/closet/crate/secure/loot/vg_cup/New()
+	..()
+	var/picked = subtypesof(/obj/item/weapon/reagent_containers/food/drinks/flagmug)
+	new picked(src)
+
+//monky
+/obj/structure/closet/crate/secure/loot/vg_monkey/New()
+	..()
+	new/mob/living/carbon/monkey(src)
+	for(var/i = 0, i < 6, i++)
+		new/obj/item/weapon/bananapeel(src)
+
+//monky
+/obj/structure/closet/crate/secure/loot/vg_recursive/New(var/loc, var/recursion = 0)
+	..()
+	if(recursion >= 4)
+		new/obj/item/toy/figure/cargotech(src)
+		return
+	var/obj/structure/closet/crate/secure/loot/vg_recursive/smaller = new(src, recusion + 1)
+	var/matrix/shrink = matrix()
+	shrink.Scale(1 - ((recusion+1) * 0.1))
+	smaller.transform = shrink
+
+
+
+
+
+
+
 
 
 /*
@@ -331,226 +479,6 @@
 
 //futureproofed maint spanwer crate in case the loot tables change
 /obj/abstract/map/spawner/maint/filled_crate
-	amount = 30
+	amount = 28
 	chance = 100
 
-
-//Special Chemistry Dispensers that Dispense Single Reagents
-/obj/machinery/chem_dispenser/single
-	name = "\improper Single Chemical Dispenser"
-	icon_state = "mixertall"
-	dispensable_reagents = list()
-	var/single_reagent = WATER
-	beaker_height = 1
-	max_beaker_size = W_CLASS_MEDIUM
-
-/obj/machinery/chem_dispenser/single/New()
-	..()
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/chem_dispenser/single,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen
-	)
-	dispensable_reagents = list(single_reagent)
-	var/datum/reagent/temp = chemical_reagents_list[single_reagent]
-	desc = "It dispenses [temp ? temp.name : single_reagent]."
-
-/obj/machinery/chem_dispenser/single/update_icon()
-
-	overlays.len = 0
-
-	if(container)
-
-		var/image/overlay
-
-		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/bluespace) || istype(container, /obj/item/weapon/reagent_containers/glass/beaker/noreact))
-			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_bluesp")
-		else if(istype(container, /obj/item/weapon/reagent_containers/food/drinks/soda_cans))
-			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_soda")
-		else if(istype(container, /obj/item/weapon/reagent_containers/glass/bucket))
-			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_bucket")
-		else
-			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_glassb")
-
-		overlay.pixel_y = beaker_height * PIXEL_MULTIPLIER //used for children
-		overlays += overlay
-
-//Returns the pixel_x that our beaker overlay should have to match up with where the user clicked.
-/obj/machinery/chem_dispenser/single/x_coord_to_nozzle(x_coord)
-	return 0
-
-/obj/machinery/chem_dispenser/single/RefreshParts()
-	..()
-	for(var/obj/item/weapon/circuitboard/chem_dispenser/single/C in component_parts)
-		single_reagent = C.single_reagent
-	update_chem_list()
-
-/obj/machinery/chem_dispenser/single/update_chem_list()
-	dispensable_reagents = list(single_reagent)
-	var/datum/reagent/temp = chemical_reagents_list[single_reagent]
-	desc = "It dispenses [temp ? temp.name : single_reagent]."
-
-/obj/machinery/chem_dispenser/single/examine(var/mob/user)
-	..()
-	if(user?.client?.holder)
-		to_chat(user,"Hello admin, you can use the change_reagent proc to change the reagent!")
-
-//admin proc to change the reagent
-/obj/machinery/chem_dispenser/single/proc/change_reagent()
-	var/input_reagent = copytext(sanitize(input("Enter the name of any liquid", "Input") as text),1,MAX_MESSAGE_LEN)
-	input_reagent = lowertext(input_reagent) // Lowercase for easier parsing
-	if(findtext(input_reagent,"a cup of ")) // These appear at the start of a lot of requests in the SCP so parse these properly too
-		input_reagent = replacetext(input_reagent,"a cup of ","")
-	else if(findtext(input_reagent,"cup of ",0,7))
-		input_reagent = replacetext(input_reagent,"cup of ","")
-	var/chemfound = FALSE
-	// Then searches through the list of all reagents and ignores case, plus converts spaces into either nothing or underscores for IDs
-	// (due to no consistent alternating between either)
-	for(var/reagent_id in chemical_reagents_list)
-		var/datum/reagent/R = chemical_reagents_list[reagent_id]
-		if(input_reagent == lowertext(R.name) || input_reagent == lowertext(reagent_id) || lowertext(reagent_id) == replacetext(input_reagent," ","") || lowertext(reagent_id) == replacetext(input_reagent," ","_"))
-			input_reagent = reagent_id
-			chemfound = R.name
-			break
-	if(chemfound)
-		single_reagent = input_reagent
-		for(var/obj/item/weapon/circuitboard/chem_dispenser/single/C in component_parts)
-			C.single_reagent = input_reagent
-		RefreshParts()
-		to_chat(usr,"Updated \the [src] to have [chemfound].")
-	else
-		to_chat(usr,"OUT OF RANGE")
-
-//
-//Looted Dispenser
-//Has random reagents
-//
-/obj/machinery/chem_dispenser/single/loot
-	name = "\improper Mysterious Dispenser"
-	single_reagent = null
-
-/obj/machinery/chem_dispenser/single/loot/New()
-	..()
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/chem_dispenser/single/loot,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen
-	)
-	RefreshParts() //Circuitboard controls everything!
-
-//Circuitboards for the above
-/obj/item/weapon/circuitboard/chem_dispenser/single
-	name = "Circuit Board (Single Chemical Dispenser)"
-	desc = "A circuit board used to run a reagent dispensing machine which dispenses a single chemical."
-	build_path = /obj/machinery/chem_dispenser/single
-	var/single_reagent = WATER
-
-/obj/item/weapon/circuitboard/chem_dispenser/single/New()
-	..()
-	if(istype(loc,/obj/machinery/chem_dispenser/single))
-		var/obj/machinery/chem_dispenser/single/my_dispenser = loc
-		single_reagent = my_dispenser.single_reagent
-	var/datum/reagent/temp = chemical_reagents_list[single_reagent]
-	desc = "A circuit board used to run a reagent dispensing machine which dispenses a single chemical. An attached label says [temp ? temp.name : single_reagent]."
-
-//Lootboard
-/obj/item/weapon/circuitboard/chem_dispenser/single/loot
-	name = "Circuit Board (Mysterious Dispenser)"
-	desc = "A circuit board used to run a strange dispensing machine."
-	build_path = /obj/machinery/chem_dispenser/single/loot
-	single_reagent = null
-
-/obj/item/weapon/circuitboard/chem_dispenser/single/loot/New()
-	..()
-	if(!single_reagent)
-		single_reagent = determine_random_loot_reagent()
-	var/datum/reagent/temp = chemical_reagents_list[single_reagent]
-	desc = "A circuit board used to run a strange dispensing machine. A faded label says [temp ? temp.name : single_reagent]."
-
-//Helper proc to generate looty reagents.
-/proc/determine_random_loot_reagent()
-	return pick(list(
-	BEER,
-	WHISKEY,
-	TEQUILA,
-	VODKA,
-	VERMOUTH,
-	RUM,
-	COGNAC,
-	WINE,
-	SAKE,
-	TRIPLESEC,
-	BITTERS,
-	CINNAMONWHISKY,
-	SCHNAPPS,
-	BLUECURACAO,
-	KAHLUA,
-	ALE,
-	CHAMPAGNE,
-	PWINE,
-	WATER,
-	GIN,
-	SODAWATER,
-	COLA,
-	CREAM,
-	TOMATOJUICE,
-	ORANGEJUICE,
-	LIMEJUICE,
-	TONIC,
-	SPACEMOUNTAINWIND,
-	LEMON_LIME,
-	DR_GIBB,
-	TEA,
-	GREENTEA,
-	REDTEA,
-	COFFEE,
-	MILK,
-	HOT_COCO,
-	SOYMILK,
-	SPORTDRINK,
-	REFRIEDBEANS,
-	BEFF,
-	HORSEMEAT,
-	CORNSYRUP,
-	OFFCOLORCHEESE,
-	BONEMARROW,
-	GREENRAMEN,
-	DEEPFRIEDRAMEN,
-	DISCOUNT,
-	NUTRIMENT,
-	SUGAR,
-	CORNOIL,
-	LIPOZINE,
-	INAPROVALINE,
-	ANTI_TOXIN,
-	BLISTEROL,
-	KELOTANE,
-	DEXALIN,
-	LEPORAZINE,
-	COCAINE,
-	HYPERZINE,
-	OPIUM,
-	SPACE_DRUGS,
-	ZAMMILD,
-	ZAMSPICES,
-	BLOOD,
-	PANCAKE,
-	FLOUR,
-	MANNITOL,
-	TRICORDRAZINE,
-	HONKSERUM,
-	AMINOMICIN,
-	AMINOBLATELLA,
-	))
