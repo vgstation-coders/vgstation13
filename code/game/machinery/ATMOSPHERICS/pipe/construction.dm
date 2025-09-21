@@ -331,6 +331,14 @@ var/list/straight_pipes = list(PIPE_SIMPLE_STRAIGHT, PIPE_HE_STRAIGHT, PIPE_INSU
 var/list/bent_pipes = list(PIPE_SIMPLE_BENT, PIPE_HE_BENT, PIPE_INSULATED_BENT)
 var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_MANIFOLD4W)
 
+/obj/item/pipe/change_dir(new_dir, changer)
+	. = ..()
+	if (pipe_type in straight_pipes)
+		dir=rotate_pipe_straight(dir)
+	else if (pipe_type in manifold_pipes)
+		dir = 2
+	//src.pipe_dir = get_pipe_dir()
+
 /obj/item/pipe/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if ((pipe_type in bent_pipes) \
