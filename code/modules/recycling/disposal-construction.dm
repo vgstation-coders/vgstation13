@@ -28,6 +28,10 @@
 	else
 		to_chat(user, "<span class='info'>It's currently detached from the floor plating.</span>")
 
+/obj/structure/disposalconstruct/change_dir(new_dir, changer)
+	. = ..()
+	update()
+
 // update iconstate and dpdir due to dir and type
 /obj/structure/disposalconstruct/proc/update()
 	var/flip = turn(dir, 180)
