@@ -22,7 +22,6 @@
 	verb_rotates = TRUE
 	alt_click_rotates = TRUE
 	rotates_anchored = FALSE
-	rotate_type = /obj/structure/mannequin
 	var/trueForm = /mob/living/simple_animal/hostile/mannequin
 	var/pedestal = /obj/item/trash/mannequin
 	var/datum/species/species
