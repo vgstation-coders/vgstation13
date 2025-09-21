@@ -17,6 +17,8 @@
 	use_power = MACHINE_POWER_USE_NONE
 	idle_power_usage = 0
 	pass_flags_self = PASSGLASS
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 	var/count_power = 0 //How much power have we produced SO FAR this count?
 	var/tick_power = 0 //How much power did we produce last count?
 	var/power_efficiency = 1 //Based on parts
@@ -122,24 +124,3 @@
 	emagged = 1
 	name = "\improper DREADMILL"
 	desc = "FEEL THE BURN!"
-
-/obj/machinery/power/treadmill/verb/rotate_clock()
-	set category = "Object"
-	set name = "Rotate Treadmill (Clockwise)"
-	set src in view(1)
-
-	if (usr.isUnconscious() || usr.restrained()  || anchored)
-		return
-
-	change_dir(turn(src.dir, -90))
-
-/obj/machinery/power/treadmill/verb/rotate_anticlock()
-	set category = "Object"
-	set name = "Rotate Treadmill (Counterclockwise)"
-	set src in view(1)
-
-	if (usr.isUnconscious() || usr.restrained()  || anchored)
-		to_chat(usr, "It is fastened to the floor!")
-		return
-
-	change_dir(turn(src.dir, 90))
