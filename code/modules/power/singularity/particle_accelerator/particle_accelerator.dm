@@ -66,7 +66,6 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	density = 1
 	verb_rotates = TRUE
 	alt_click_rotates = TRUE
-	rotate_type = /obj/structure/particle_accelerator
 	var/obj/machinery/particle_accelerator/control_box/master = null
 	var/construction_state = 0
 	var/reference = null
@@ -246,7 +245,6 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	active_power_usage = 0
 	verb_rotates = TRUE
 	alt_click_rotates = TRUE
-	rotate_type = /obj/structure/railing
 	var/construction_state = 0
 	var/active = 0
 	var/reference = null
