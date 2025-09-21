@@ -63,11 +63,10 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	var/obj/structure/mirror_frame/MF = new (src.loc)
 	MF.anchored=anchored
 
-/obj/machinery/mirror/rotate(var/angle = 90)
-	..()
+/obj/machinery/mirror/change_dir(new_dir, changer)
+	. = ..()
 	kill_all_beams()
 	update_beams()
-	return 1
 
 /obj/machinery/mirror/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()

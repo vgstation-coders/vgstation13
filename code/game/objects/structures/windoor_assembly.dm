@@ -234,8 +234,8 @@
 	//Update to reflect changes(if applicable)
 	update_icon()
 
-/obj/structure/windoor_assembly/rotate(var/angle = 90)
-	..()
+/obj/structure/windoor_assembly/change_dir(new_dir, changer)
+	. = ..()
 	update_nearby_tiles()
 	update_icon()
 

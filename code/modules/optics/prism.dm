@@ -36,6 +36,12 @@ var/list/obj/machinery/prism/prism_list = list()
 		if(get_dir(src, B) != dir)
 			return 1
 
+/obj/machinery/prism/change_dir(new_dir, changer)
+	. = ..()
+	qdel(beam)
+	beam=null
+	update_beams()
+
 /obj/machinery/prism/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
