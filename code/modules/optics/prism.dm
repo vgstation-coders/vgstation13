@@ -25,8 +25,7 @@ var/list/obj/machinery/prism/prism_list = list()
 	prism_list += src
 
 /obj/machinery/prism/Destroy()
-	qdel(beam)
-	beam=null
+	QDEL_NULL(beam)
 	prism_list -= src
 	..()
 
@@ -38,8 +37,7 @@ var/list/obj/machinery/prism/prism_list = list()
 
 /obj/machinery/prism/change_dir(new_dir, changer)
 	. = ..()
-	qdel(beam)
-	beam=null
+	QDEL_NULL(beam)
 	update_beams()
 
 /obj/machinery/prism/wrenchAnchor(var/mob/user, var/obj/item/I)
