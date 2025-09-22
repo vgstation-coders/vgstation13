@@ -591,7 +591,8 @@
 		user.visible_message("<span class='notice'>[user] bounces \the [src].</span>","<span class='notice'>You bounce \the [src].</span>","<span class='notice'>You hear a ball bouncing.</span>")
 		user.delayNextAttack(4)
 		spawn(2)
-			user.put_in_hands(src)
+			if(isturf(loc))
+				user.put_in_hands(src)
 
 /obj/item/weapon/beach_ball/holoball/on_disarm_drop(mob/user)
 	user.put_in_hands(src)

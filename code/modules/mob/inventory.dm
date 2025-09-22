@@ -409,7 +409,7 @@
 				var/datum/objective/target/locate/rearrange/L = locate() in R.objectives.GetObjectives()
 				if(L)
 					L.check(list(to_drop))
-		return to_drop
+		return 1
 	if(failmsg)
 		to_chat(src, failmsg)
 	return 0
