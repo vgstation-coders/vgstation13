@@ -1307,14 +1307,13 @@ var/list/icon_state_to_appearance = list()
 		while(spreaded <= rand(roid_size_min,roid_size_max) && roid_turfs.len)
 			var/turf/spread_turf = pick_n_take(roid_turfs)
 			var/turf/other_turf
-			for(var/direction in shuffle(cardinal))
+			for(var/direction in cardinal)
 				other_turf = get_step(spread_turf,direction)
 				if(istype(other_turf,src.type))
 					if(other_turf != src)
 						other_turf.ChangeTurf(roid_type)
 					roid_turfs |= other_turf
 					spreaded++
-					break
 		ChangeTurf(roid_type)
 
 /turf/space/asteroids/valuable
