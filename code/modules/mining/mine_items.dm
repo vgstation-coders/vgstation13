@@ -145,14 +145,15 @@
 	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD * 4, MAT_WOOD = CC_PER_SHEET_WOOD * 0.5)
 
 /obj/item/weapon/pickaxe/plasmacutter
-	name = "plasma torch"
+	name = "plasma cutter"
 	icon_state = "plasmacutter"
-	item_state = "gun"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
+	item_state = "plasmacutter"
 	w_class = W_CLASS_MEDIUM //it is smaller than the pickaxe
 	damtype = "fire"
 	heat_production = 27000
 	source_temperature = TEMPERATURE_PLASMA
-	toolspeed = 0.2 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction/ light thermite on fire
+	toolspeed = 0.15 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction/ light thermite on fire
 	sharpness = 1.0
 	sharpness_flags = SHARP_BLADE | HOT_EDGE | INSULATED_EDGE
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=3;" + Tc_ENGINEERING + "=3"
@@ -163,7 +164,9 @@
 	hitsound = "sound/weapons/welderattack.ogg"
 
 /obj/item/weapon/pickaxe/plasmacutter/accelerator
-	name = "plasma cutter"
+	name = "advanced plasma cutter"
+	icon_state = "advplasmacutter"
+	item_state = "advplasmacutter"
 	desc = "A rock cutter that's powerful enough to cut through rocks and xenos with ease. Ingeniously, it's powered by putting solid plasma directly into it - even plasma ore, for those miners on the go."
 	toolspeed = 0.05
 	diggables = DIG_ROCKS | DIG_SOIL | DIG_WALLS | DIG_RWALLS
@@ -191,6 +194,7 @@
 		current_ammo--
 		generic_projectile_fire(A, src, /obj/item/projectile/kinetic/cutter, 'sound/weapons/Taser.ogg', user)
 		user.delayNextAttack(4)
+		update_icon()
 	else
 		src.visible_message("*click click*")
 		playsound(src, 'sound/weapons/empty.ogg', 100, 1)
@@ -198,15 +202,25 @@
 /obj/item/weapon/pickaxe/plasmacutter/accelerator/attackby(atom/target, mob/user, proximity_flag)
 	if(proximity_flag && istype(target, /obj/item/stack/ore/plasma))
 		var/obj/item/stack/ore/plasma/A = target
-		if(current_ammo < max_ammo)
-			var/loading_ammo = min(max_ammo - current_ammo, A.amount)
-			A.use(loading_ammo)
-			current_ammo += loading_ammo
-			to_chat(user, "<span class='notice'>You load \the [src].</span>")
-			return
-		else
+		if(!(current_ammo < max_ammo))
 			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
 			return
+		to_chat(user, "<span class='notice'>You start smelting \the [target] with \the [src]'s built in energy converter.</span>")
+		while(current_ammo < max_ammo)
+			if(!A || A.amount == 0)
+				break
+			if(do_after(user, src, 5, 5))
+				if(!(current_ammo < max_ammo))
+					return
+				if(!A || !A.use(1))
+					break
+				current_ammo += 1
+				playsound(usr, 'sound/items/lighter1.ogg', 100, 1)
+				update_icon()
+			else
+				to_chat(user, "<span class='notice'>You stop loading \the [src].</span>")
+				return
+		to_chat(user, "<span class='notice'>You finish loading \the [src].</span>")
 
 	if(proximity_flag && istype(target, /obj/item/stack/sheet/mineral/plasma))
 		var/obj/item/stack/sheet/mineral/plasma/A = target
@@ -215,6 +229,8 @@
 			A.use(loading_ammo)
 			current_ammo += loading_ammo
 			to_chat(user, "<span class='notice'>You load \the [src].</span>")
+			playsound(usr, 'sound/items/lighter1.ogg', 100, 1)
+			update_icon()
 			return
 		else
 			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
@@ -224,6 +240,22 @@
 /obj/item/weapon/pickaxe/plasmacutter/accelerator/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It has [current_ammo] round\s remaining. The safety is [safety ? "on" : "off"].</span>")
+
+/obj/item/weapon/pickaxe/plasmacutter/accelerator/update_icon()
+	..()
+	switch(15 * current_ammo / max_ammo) //magic to convert arbitary amounts of max ammo into the 15 scale!
+		if(0)
+			icon_state = initial(icon_state) + "0"
+		if(1 to 3)
+			icon_state = initial(icon_state) + "20"
+		if(4 to 6)
+			icon_state = initial(icon_state) + "40"
+		if(7 to 9)
+			icon_state = initial(icon_state) + "60"
+		if(10 to 12)
+			icon_state = initial(icon_state) + "80"
+		if(13 to 15)
+			icon_state = initial(icon_state)
 
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"

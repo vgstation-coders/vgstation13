@@ -12,12 +12,6 @@
 	var/sound_effect_open = 'sound/machines/click.ogg'
 	var/sound_effect_close = 'sound/machines/click.ogg'
 
-/obj/structure/closet/crate/proc/jiggle(var/obj/item/I)
-	var/jx = I.w_class == W_CLASS_TINY ? 7 : 3
-	var/jy = I.w_class == W_CLASS_TINY ? 3 : 1
-	I.pixel_x = rand(-jx,jx)
-	I.pixel_y = rand(-jy,jy)
-
 /obj/structure/closet/crate/basic
 	has_lock_type = /obj/structure/closet/crate/secure/basic
 
@@ -400,16 +394,25 @@
 		return 0
 	return (!density)
 
+//Jiggles an item in a crate, raw power scales how much things are jostled
+/obj/structure/closet/crate/proc/jiggle(var/obj/item/I, var/raw_power = W_CLASS_SMALL)
+	var/jx = I.w_class < raw_power ? 7 : 3
+	var/jy = I.w_class < raw_power ? 3 : 1
+	I.pixel_x = rand(-jx,jx)
+	I.pixel_y = rand(-jy,jy)
+
+//Randomly moves around objects inside the crate based off of item size, representing items getting jostled around
+/obj/structure/closet/crate/proc/jiggle_all(var/max_size_jiggle = W_CLASS_SMALL)
+	for(var/obj/item/I in contents)
+		if(I.w_class <= max_size_jiggle)
+			jiggle(I, max_size_jiggle)
+
 /obj/structure/closet/crate/open()
 	if(src.opened)
 		return 0
 	if(!src.can_open())
 		return 0
 	playsound(src, sound_effect_open, 15, 1, -3)
-
-	for(var/obj/item/I in contents)
-		if(I.w_class <= W_CLASS_SMALL)
-			jiggle(I)
 
 	dump_contents()
 
@@ -477,6 +480,50 @@
 					return
 		open()
 	return
+
+//Jiggles when tackled
+/obj/structure/closet/crate/tackled(var/mob/living/user)
+	..()
+	if(M_HULK in user.mutations)
+		jiggle_all(W_CLASS_MEDIUM)
+	else
+		jiggle_all(W_CLASS_SMALL)
+
+//Jiggles when kicked
+/obj/structure/closet/crate/kick_act(var/mob/living/carbon/human/user)
+	..()
+	if(M_HULK in user.mutations)
+		jiggle_all(W_CLASS_MEDIUM)
+	else
+		jiggle_all(W_CLASS_SMALL)
+
+//Jiggles when run into with heavy objects
+/obj/structure/closet/crate/Bumped(atom/movable/AM)
+	..()
+	var/bump_amt = 0
+	if(istype(AM,/obj))
+		if(istype(AM,/obj/item/projectile))
+			bump_amt = W_CLASS_TINY
+		else if(istype(AM,/obj/structure/bed/chair/vehicle))
+			bump_amt = W_CLASS_MEDIUM
+		else
+			var/obj/O = AM
+			switch(O.w_class)
+				if(W_CLASS_LARGE)
+					bump_amt = W_CLASS_TINY
+				if(W_CLASS_HUGE)
+					bump_amt = W_CLASS_SMALL
+				if(W_CLASS_GIANT)
+					bump_amt = W_CLASS_MEDIUM
+	else if(istype(AM,/mob/living))
+		var/mob/living/M = AM
+		if(M.reagents)
+			if(M.reagents.get_sportiness() > 1)
+				bump_amt = W_CLASS_SMALL
+		if(M_HULK in M.mutations)
+			bump_amt = W_CLASS_MEDIUM
+	if(bump_amt)
+		jiggle_all(bump_amt)
 
 /obj/structure/closet/crate/secure/attack_hand(mob/user as mob)
 	if(!Adjacent(user))
@@ -674,6 +721,8 @@
 					dump_electronics()
 				dump_contents()
 				qdel(src)
+			else
+				jiggle_all(W_CLASS_MEDIUM)
 
 /obj/structure/closet/crate/secure/weapon/experimental
 	name = "Experimental Weapons Crate"
