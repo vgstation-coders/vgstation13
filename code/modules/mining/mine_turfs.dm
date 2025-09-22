@@ -1324,3 +1324,6 @@ var/list/icon_state_to_appearance = list()
 
 /turf/space/asteroids/clownroid
 	roid_type = /turf/unsimulated/mineral/random/high_chance_clown
+
+/turf/space/asteroids/plating
+	roid_type = /turf/simulated/floor/plating/airless
