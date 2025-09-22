@@ -1293,6 +1293,7 @@ var/list/icon_state_to_appearance = list()
 	mined_type = /turf/unsimulated/floor/asteroid/hive
 
 /turf/space/asteroids
+	icon_state = "roidspawn"
 	var/roid_type = /turf/unsimulated/mineral/random
 	var/roid_chance = 4
 	var/roid_size_min = 8
@@ -1320,10 +1321,13 @@ var/list/icon_state_to_appearance = list()
 		ChangeTurf(roid_type)
 
 /turf/space/asteroids/valuable
+	icon_state = "roidspawn_high"
 	roid_type = /turf/unsimulated/mineral/random/high_chance
 
 /turf/space/asteroids/clownroid
+	icon_state = "roidspawn_clown"
 	roid_type = /turf/unsimulated/mineral/random/high_chance_clown
 
 /turf/space/asteroids/plating
+	icon_state = "roidspawn_plating"
 	roid_type = /turf/simulated/floor/plating/airless
