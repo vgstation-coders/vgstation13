@@ -1294,7 +1294,7 @@ var/list/icon_state_to_appearance = list()
 
 /turf/space/asteroids
 	icon_state = "roidspawn"
-	var/roid_type = /turf/unsimulated/mineral/random
+	var/roid_type = /turf/unsimulated/mineral
 	var/roid_chance = 2
 	var/roid_size_min = 5
 	var/roid_size_max = 10
@@ -1318,6 +1318,10 @@ var/list/icon_state_to_appearance = list()
 					if(spreaded > true_size)
 						break
 		ChangeTurf(roid_type)
+
+/turf/space/asteroids/ore
+	icon_state = "roidspawn"
+	roid_type = /turf/unsimulated/mineral/random
 
 /turf/space/asteroids/valuable
 	icon_state = "roidspawn_high"
