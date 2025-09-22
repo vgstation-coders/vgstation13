@@ -1294,7 +1294,7 @@ var/list/icon_state_to_appearance = list()
 
 /turf/space/asteroids
 	var/roid_type = /turf/unsimulated/mineral/random
-	var/roid_chance = 10
+	var/roid_chance = 5
 	var/roid_size_min = 10
 	var/roid_size_max = 15
 
