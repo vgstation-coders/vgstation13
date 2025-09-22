@@ -1295,9 +1295,9 @@ var/list/icon_state_to_appearance = list()
 /turf/space/asteroids
 	icon_state = "roidspawn"
 	var/roid_type = /turf/unsimulated/mineral/random
-	var/roid_chance = 4
-	var/roid_size_min = 8
-	var/roid_size_max = 12
+	var/roid_chance = 2
+	var/roid_size_min = 5
+	var/roid_size_max = 10
 
 /turf/space/asteroids/New()
 	. = ..()
