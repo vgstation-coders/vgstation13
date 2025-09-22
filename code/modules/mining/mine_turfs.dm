@@ -1291,3 +1291,34 @@ var/list/icon_state_to_appearance = list()
 	mining_difficulty = MINE_DIFFICULTY_DENSE
 	minimum_mine_time = 99 SECONDS //GL HF
 	mined_type = /turf/unsimulated/floor/asteroid/hive
+
+/turf/space/asteroids
+	var/roid_type = /turf/unsimulated/mineral/random
+	var/roid_chance = 1
+	var/roid_size_min = 10
+	var/roid_size_max = 15
+
+/turf/space/asteroids/New()
+	. = ..()
+	if(prob(roid_chance))
+		var/list/turf/roid_turfs = list(src)
+		for(var/i in 1 to rand(roid_size_min,roid_size_max))
+			var/turf/spread_turf = pick_n_take(roid_turfs)
+			var/spreadable = FALSE
+			var/turf/other_turf
+			for(var/direction in shuffle(cardinal))
+				other_turf = get_step(spread_turf,direction)
+				if(istype(other_turf,src.type))
+					spreadable = TRUE
+					break
+			if(spreadable)
+				if(other_turf != src)
+					other_turf.ChangeTurf(roid_type)
+				roid_turfs |= other_turf
+		ChangeTurf(roid_type)
+
+/turf/space/asteroids/valuable
+	roid_type = /turf/unsimulated/mineral/random/high_chance
+
+/turf/space/asteroids/clownroid
+	roid_type = /turf/unsimulated/mineral/random/high_chance_clown

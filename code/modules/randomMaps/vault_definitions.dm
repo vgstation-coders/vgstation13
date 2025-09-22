@@ -149,6 +149,11 @@ var/list/existing_vaults = list()
 	can_rotate = TRUE
 	spawn_cost = 2
 
+/datum/map_element/vault/asteroids_random
+	file_path = "maps/randomvaults/asteroids_random.dmm"
+	can_rotate = TRUE
+	spawn_cost = 2
+
 /datum/map_element/vault/listening
 	file_path = "maps/randomvaults/listening.dmm"
 	spawn_cost = 3
