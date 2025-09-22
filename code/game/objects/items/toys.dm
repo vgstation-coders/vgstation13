@@ -182,10 +182,14 @@
 	attack_verb = list("strikes", "pistol whips", "hits", "bashes")
 	var/bullets = 7.0
 	var/max_bullets = 7
+	var/disguised = FALSE //if true, the examine message will look like a real message!
 
 /obj/item/toy/gun/examine(mob/user)
 	..()
-	to_chat(user, "There [bullets == 1 ? "is" : "are"] [bullets] cap\s left.")
+	if(disguised)
+		to_chat(user, "<span class='info'>Has [bullets] round\s remaining.</span>")
+	else
+		to_chat(user, "There [bullets == 1 ? "is" : "are"] [bullets] cap\s left.")
 
 /obj/item/toy/gun/attackby(obj/item/toy/ammo/gun/A as obj, mob/user as mob)
 	if (istype(A, /obj/item/toy/ammo/gun))

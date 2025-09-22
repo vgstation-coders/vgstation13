@@ -77,7 +77,7 @@
 //another anime stash...
 /obj/structure/closet/crate/secure/loot/vg_fumo/New()
 	..()
-	for(var/i = 0, i < 15, i++)
+	for(var/i = 0, i < 9, i++)
 		var/picked = pick(subtypesof(/obj/item/toy/plushie/fumo))
 		var/obj/item/toy/plushie/fumo/fuuumo = new picked(src)
 		fuuumo.name = "rare " + fuuumo.name
@@ -117,22 +117,36 @@
 	dorillu.diggables = DIG_ROCKS | DIG_SOIL | DIG_WALLS | DIG_RWALLS //it's that strong
 	dorillu.starting_materials += list(MAT_PHAZON = CC_PER_SHEET_PHAZON * 0.1) //the secret sauce is a phazon edge
 
-//taken directly from peach's castle
+//also taken directly from peach's castle
 /obj/structure/closet/crate/secure/loot/vg_pinups/New()
 	..()
 	for(var/i = 0, i < 10, i++)
 		new/obj/item/mounted/poster/pinups(src)
 
 //troll
+/obj/structure/closet/crate/secure/loot/vg_goliath
+	var/opening_buff = FALSE
+
 /obj/structure/closet/crate/secure/loot/vg_goliath/New()
 	..()
 	var/mob/living/simple_animal/hostile/asteroid/goliath/surprise_inside = new(src)
-	surprise_inside.environment_smash_flags &= SMASH_CONTAINERS //so it won't just... break out instantly
+	surprise_inside.environment_smash_flags = 0//so it won't just... break out instantly
 
-//troll
+/obj/structure/closet/crate/secure/loot/vg_goliath/open()
+	if(opening_buff)
+		return ..()
+	var/list/monsters_inside = list()
+	for(var/mob/living/simple_animal/hostile/asteroid/goliath/creature in contents)
+		monsters_inside += creature
+	if(..())
+		for(var/mob/living/simple_animal/hostile/asteroid/goliath/creature in monsters_inside)
+			creature.environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS //once they are free, they will smash containers once more.
+		opening_buff = TRUE
+
+//loot get!
 /obj/structure/closet/crate/secure/loot/vg_lootget/New()
 	..()
-	for(var/i = 0, i < 10, i++)
+	for(var/i = 0, i < 12, i++)
 		new/obj/item/weapon/winter_gift/dorkcube(src)
 
 //santa's lost presents
@@ -150,8 +164,8 @@
 /obj/structure/closet/crate/secure/loot/vg_trash/New()
 	..()
 	new/obj/abstract/map/spawner/maint/filled_crate(src)
-	new/obj/abstract/map/spawner/floorpill/guaranteed(src)
-	new/obj/abstract/map/spawner/floorpill/guaranteed(src)
+	new/obj/item/weapon/reagent_containers/pill/random/maintenance(src)
+	new/obj/item/weapon/reagent_containers/pill/random/maintenance(src)
 
 //A crown with a third hand you say
 /obj/structure/closet/crate/secure/loot/vg_crown/New()
@@ -170,8 +184,6 @@
 	for(var/i = 0, i < 10, i++)
 		var/obj/picked = pick(valid_vouchers)
 		new picked(src)
-		if(istype(picked, /obj/item/voucher/free_item/scrip))
-			picked.desc = "This looks old and faded. You can barely make out the words Deepvein Trust vendor."
 
 //Turns out the pirates were actually just actors and these were their spare costumes
 /obj/structure/closet/crate/secure/loot/vg_costumes/New()
@@ -255,7 +267,7 @@
 //Bunch of random parts
 /obj/structure/closet/crate/secure/loot/vg_parts/New()
 	..()
-	var/list/parts = subtypesof(/obj/item/weapon/stock_parts) - subtypesof(/obj/item/weapon/stock_parts/subspace)
+	var/list/parts = subtypesof(/obj/item/weapon/stock_parts) - typesof(/obj/item/weapon/stock_parts/subspace)
 	var/really_good_part_picked = FALSE
 	for(var/i = 0, i < 20, i++)
 		var/obj/item/weapon/stock_parts/picked = pick(parts)
@@ -275,7 +287,7 @@
 //I asked a random guy what he would find in a buried chest on the roid, and he said "a cup or something"
 /obj/structure/closet/crate/secure/loot/vg_cup/New()
 	..()
-	var/picked = subtypesof(/obj/item/weapon/reagent_containers/food/drinks/flagmug)
+	var/picked = pick(subtypesof(/obj/item/weapon/reagent_containers/food/drinks/flagmug))
 	new picked(src)
 
 //monky
@@ -285,22 +297,107 @@
 	for(var/i = 0, i < 6, i++)
 		new/obj/item/weapon/bananapeel(src)
 
-//monky
+//funny
 /obj/structure/closet/crate/secure/loot/vg_recursive/New(var/loc, var/recursion = 0)
 	..()
 	if(recursion >= 4)
 		new/obj/item/toy/figure/cargotech(src)
 		return
-	var/obj/structure/closet/crate/secure/loot/vg_recursive/smaller = new(src, recusion + 1)
+	var/obj/structure/closet/crate/secure/loot/vg_recursive/smaller = new(src, recursion + 1)
 	var/matrix/shrink = matrix()
-	shrink.Scale(1 - ((recusion+1) * 0.1))
+	shrink.Scale(1 - ((recursion+1) * 0.1))
 	smaller.transform = shrink
 
+//20 bucks
+/obj/structure/closet/crate/secure/loot/vg_20_bucks/New()
+	..()
+	new/obj/item/weapon/spacecash/c10(src, 2)
 
+//can't give you the suit but how about this
+/obj/structure/closet/crate/secure/loot/vg_bomberman/New()
+	..()
+	new/obj/item/weapon/vinyl/bomberman(src)
+	new/obj/item/cannonball/fuse_bomb(src)
+	for(var/i = 0, i < 4, i++)
+		var/picked = pick(typesof(/obj/item/toy/gasha/bomberman))
+		new picked(src)
 
+//beans
+/obj/structure/closet/crate/secure/loot/vg_beans/New()
+	..()
+	for(var/i = 0, i < 6, i++)
+		new/obj/item/weapon/reagent_containers/food/snacks/beans(src)
 
+//cargo lost a crate
+/obj/structure/closet/crate/secure/loot/vg_cargo/New()
+	..()
+	var/list/packlist = subtypesof(/datum/supply_packs)
+	var/list/valid_list = list()
+	for(var/choice in packlist)
+		var/datum/supply_packs/possible_choice = choice
+		//no mann and co keys, you gotta actually pay for those!
+		if(possible_choice.require_holiday)
+			continue
+		//no wooden large crates or unusual crates
+		if(!ispath(possible_choice.containertype, /obj/structure/closet/crate))
+			continue
+		//regular sized crates only!
+		if(ispath(possible_choice.containertype, /obj/structure/closet/crate/secure/large))
+			continue
+		valid_list += possible_choice
+	var/listpick = pick(valid_list)
+	var/datum/supply_packs/picked = new listpick()
+	//we've chosen a crate. Now, make a manifest for it...
+	var/obj/item/weapon/paper/manifest/slip = new /obj/item/weapon/paper/manifest(src)
+	slip.name = "Shipping Manifest for ... ..."
+	slip.info = {"<h3>... Shipping Manifest ... Order...</h3><hr><br>
+		Order #[rand(30000,90000)]<br>
+		[picked.name] crate<br>
+		The destination is too faded to make out.<br>
+		PACKAGES IN .... SHIPMENT<br>
+		CONTENTS:<br><ul>"}
+	//random crates have a different method of picking their contents
+	if(istype(picked,/datum/supply_packs/randomised))
+		var/datum/supply_packs/randomised/random_picked = picked
+		for(var/i = 0, i < random_picked.num_contained, i++)
+			var/atom/picked_inside = pick(picked.contains)
+			new picked_inside(src)
+			slip.info += "<li>[picked_inside.name]</li>"
+	else
+		for(var/picked_inside in picked.contains)
+			new picked_inside(src)
+			var/atom/picked_name_reader = picked_inside
+			slip.info += "<li>[picked_name_reader.name]</li>"
+	slip.info += {"</ul><br>
+	CHECK CONTENTS ... BELOW THE LINE TO ...<hr>"}
+	//cleanup
+	QDEL_NULL(picked)
 
+//perfect, some dude's old battery storage box! plenty of batteries for you to use.
+//what? they're trash and even a generic cell is more useful? i can't believe this!
+/obj/structure/closet/crate/secure/loot/vg_battery/New()
+	..()
+	new/obj/item/weapon/storage/fancy/battery_box(src)
+	for(var/i = 0, i < 5, i++)
+		var/picked = pick(typesof(/obj/item/weapon/cell/crap))
+		new picked(src)
 
+//lipstick
+/obj/structure/closet/crate/secure/loot/vg_lipstick/New()
+	..()
+	for(var/i = 0, i < 12, i++)
+		var/picked = pickweight(list(/obj/item/weapon/lipstick = 5,
+									/obj/item/weapon/grenade/chem_grenade/teargas/lipstick = 1))
+		new picked(src)
+
+//pdas
+/obj/structure/closet/crate/secure/loot/vg_pdas/New()
+	..()
+	for(var/i = 0, i < 12, i++)
+		var/picked = pickweight(list(/obj/item/device/pda = 3,
+									/obj/item/weapon/reagent_containers/food/drinks/flask/pdaflask = 2,
+									/obj/item/weapon/gun/energy/taser/disguised_pda = 1))
+		new picked(src)
 
 
 
@@ -399,17 +496,23 @@
 //Fake glocks!
 /obj/item/toy/gun/glock
 	name = "\improper NT Glock"
-	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses... caps. This is a cap gun. The real thing is so cheap that you couldn't initially tell the difference between it and a toy."
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. Its subcompact frame can fit in your pocket."
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "secglock"
 	bullets = 10
 	max_bullets = 10
+	disguised = TRUE
 
 /obj/item/toy/gun/glock/New()
 	var/image/magazine_adjustment = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = "m380AUTO")
 	magazine_adjustment.pixel_x -= 11
 	magazine_adjustment.pixel_y -= 11
 	overlays += magazine_adjustment
+
+/obj/item/toy/gun/glock/examine(user)
+	..()
+	if(get_dist(user,src) <= 1)
+		to_chat(user, "<span class='info'>On closer inspection, you realize that this actually uses... caps. This is a cap gun. The real thing is so cheap that you couldn't initially tell the difference between it and a toy.</span>")
 
 //The ultimate fate of the salvage captain
 /obj/effect/landmark/corpse/skellington/spess_captain
@@ -455,8 +558,8 @@
 
 //I don't want to sprite this but here you go
 /obj/item/cursed_hand_crown
-	name = "\improper Cursed Hand Crown"
-	desc = "It almost seems as though it's alive."
+	name = "\improper Crown of Many Hands"
+	desc = "This crown menaces with a hand carved out of pure gold. It almost seems as though it's alive."
 	icon = 'icons/obj/clothing/hats.dmi'
 	icon_state = "lichcrown_fancy"
 	item_state = "lichcrown_fancy"
@@ -482,3 +585,45 @@
 	amount = 28
 	chance = 100
 
+/obj/item/weapon/gun/energy/taser/disguised_pda
+	name = "\improper PDA"
+	desc = "A portable microcomputer by Thinktronic Systems, LTD. Functionality determined by applications on ROM cartridge. Can download additional applications from PDA terminals."
+	icon = 'icons/obj/pda.dmi'
+	icon_state = "pda"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
+	item_state = "electronic"
+	charge_states = FALSE
+	slot_flags = SLOT_ID | SLOT_BELT
+	w_class = W_CLASS_TINY
+
+/obj/item/weapon/gun/energy/taser/disguised_pda/examine(user)
+	..()
+	if(get_dist(user,src) <= 1)
+		to_chat(user, "<span class='info'>On closer inspection, you realize that the screen and buttons are fake. This thing is actually a taser!</span>")
+
+/obj/item/weapon/reagent_containers/food/drinks/flask/pdaflask
+	name = "\improper PDA"
+	desc = "A portable microcomputer by Thinktronic Systems, LTD. Functionality determined by applications on ROM cartridge. Can download additional applications from PDA terminals."
+	icon = 'icons/obj/pda.dmi'
+	icon_state = "pda"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
+	item_state = "electronic"
+	volume = 60
+
+/obj/item/weapon/reagent_containers/food/drinks/flask/pdaflask/examine(user)
+	..()
+	if(get_dist(user,src) <= 1)
+		to_chat(user, "<span class='info'>On closer inspection, you realize that the screen and buttons are fake. This thing is actually a flask!</span>")
+
+/obj/item/weapon/grenade/chem_grenade/teargas/lipstick
+	name = "red lipstick"
+	desc = "A generic brand of lipstick."
+	icon_state = "lipstick"
+	item_state = null //lipstick has no inhands...
+	w_class = W_CLASS_TINY
+	disguised = TRUE
+
+/obj/item/weapon/grenade/chem_grenade/teargas/lipstick/examine(user)
+	..()
+	if(get_dist(user,src) <= 1)
+		to_chat(user, "<span class='info'>On closer inspection, you realize that this is actually some form of grenade! The hidden label reads tear gas.</span>")

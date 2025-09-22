@@ -19,6 +19,7 @@
 	new/obj/item/device/taperecorder(src)
 	new/obj/item/clothing/suit/space(src)
 	new/obj/item/clothing/head/helmet/space(src)
+	new/obj/item/weapon/paper/tommyboy(src)
 
 //a bluespace beaker, but larger
 /obj/structure/closet/crate/secure/loot/bay_03/New()

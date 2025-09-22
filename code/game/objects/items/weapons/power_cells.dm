@@ -37,7 +37,7 @@
 	name = "\improper Nanotrasen brand rechargeable AA battery"
 	desc = "You can't top the plasma top." //TOTALLY TRADEMARK INFRINGEMENT
 	origin_tech = Tc_POWERSTORAGE + "=0"
-	icon_state = "crapcell"
+	icon_state = "crapcell_large"
 	maxcharge = 500
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
 	rating = 1
@@ -48,17 +48,28 @@
 
 /obj/item/weapon/cell/crap/better
 	name = "\improper Nanotrasen brand rechargeable D battery"
+	icon_state = "crapcell_huge"
 	maxcharge = 700 //for the ion carbine
 	rating = 3
 
+/obj/item/weapon/cell/crap/better/empty/New()
+	..()
+	charge = 0
+
 /obj/item/weapon/cell/crap/worse
 	name = "\improper Nanotrasen brand rechargeable AAA battery"
+	icon_state = "crapcell"
 	maxcharge = 250
 	rating = 0
+
+/obj/item/weapon/cell/crap/worse/empty/New()
+	..()
+	charge = 0
 
 /obj/item/weapon/cell/secborg
 	name = "\improper Security borg rechargeable D battery"
 	origin_tech = Tc_POWERSTORAGE + "=0"
+	icon_state = "crapcell_huge"
 	maxcharge = 600	//600 max charge / 100 charge per shot = six shots
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
 	rating = 2
@@ -71,6 +82,7 @@
 /obj/item/weapon/cell/miningborg
 	name = "\improper Mining borg rechargeable D battery"
 	origin_tech = Tc_POWERSTORAGE + "=0"
+	icon_state = "crapcell_huge"
 	maxcharge = 600	//600 max charge / 100 charge per shot = six shots
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
 	rating = 2

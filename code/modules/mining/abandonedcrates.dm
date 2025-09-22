@@ -15,6 +15,14 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 	var/max = 10
 
 /obj/structure/closet/crate/secure/loot/New()
+	var/chest_icon = pickweight(list(
+						"rustysecurecrate" = 5,
+						"chestsecure" = 1,
+						"ayysecurecrate2" = 1,
+						"plasmacrate" = 1,))
+	icon_state = chest_icon
+	icon_opened = chest_icon + "open"
+	icon_closed = chest_icon
 	..()
 	code = rand(min,max)
 
@@ -28,12 +36,13 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 		if (!usr.dexterity_check())
 			to_chat(usr, "<span class='warning'>You don't have the dexterity to enter a keycode!</span>")
 			return
-		var/input = input(usr, "Enter digit from [min] to [max].", "Deca-Code Lock", "") as num
+		var/input = input(usr, "Enter digit from [min] to [max].", "Deca-Code Lock", "") as null|num
 		if(in_range(src, user))
 			input = clamp(input, 0, 10)
 			if (input == code)
 				to_chat(user, "<span class='notice'>The crate unlocks!</span>")
 				locked = 0
+				attempts = initial(attempts) //in case you relock it with the salvage captain ID
 				update_icon()
 			else if (input == null || input > max || input < min)
 				to_chat(user, "<span class='notice'>You leave the crate alone.</span>")
