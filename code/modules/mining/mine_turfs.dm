@@ -1311,6 +1311,18 @@ var/list/icon_state_to_appearance = list()
 			for(var/direction in cardinal)
 				other_turf = get_step(spread_turf,direction)
 				if(istype(other_turf,src.type))
+					var/turf/near_turf
+					var/roid_near = FALSE
+					var/list/checkdirs = alldirs.Copy()
+					for(var/dir2 in checkdirs)
+						if(dir2 & direction)
+							continue
+						near_turf = get_step(other_turf,near_turf)
+						if(istype(near_turf,roid_type))
+							roid_near = TRUE
+							break
+					if(roid_near)
+						continue
 					if(other_turf != src)
 						other_turf.ChangeTurf(roid_type)
 					roid_turfs |= other_turf
