@@ -4073,12 +4073,18 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 					to_chat(usr, "<span class='warning'>Invalid input range (null or negative)</span>")
 					return
 				var/realeffect = alert(usr,"Use visible explosions?", "Fake Explosions", "Yes", "No") == "Yes"
+				var/realsense = alert(usr,"Fool the bhangmeters?", "Fake Explosions", "Yes", "No") == "Yes"
 				message_admins("[key_name_admin(usr)] triggered [round(amount)] fake explosions.")
 				log_admin("[key_name_admin(usr)] triggered [round(amount)] fake explosions.")
 				for(var/i = 1 to amount)
 					if(realeffect)
 						var/turf/epicenter = locate(rand(1,world.maxx),rand(1,world.maxy),map.zMainStation)
 						explosion_effect(epicenter,7,14,28)
+						if(realsense)
+							var/datum/sensed_explosion/sensed = new(epicenter.x, epicenter.y, epicenter.z, 7, 14, 28)
+							if(sensed)
+								sensed.paint(epicenter)
+								sensed.ready(20)
 					else
 						world << sound('sound/effects/explosionfar.ogg')
 					sleep(rand(2, 10)) //Sleep 0.2 to 1 second

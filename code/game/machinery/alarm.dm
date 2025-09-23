@@ -201,7 +201,7 @@
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
-	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*2.00, ONE_ATMOSPHERE*3.20)
+	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
 	temperature_threshold = new /datum/airalarm_threshold(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
 	scrubbed_gases = list( GAS_CARBON, GAS_PLASMA )
@@ -218,7 +218,7 @@
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
-	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*2.00, ONE_ATMOSPHERE*3.20)
+	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
 	temperature_threshold = new /datum/airalarm_threshold(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
 	scrubbed_gases = list( GAS_OXYGEN, GAS_CARBON, GAS_PLASMA )
@@ -235,7 +235,7 @@
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
-	pressure_threshold = new /datum/airalarm_threshold(-1, ONE_ATMOSPHERE*0.10, ONE_ATMOSPHERE*3.20, ONE_ATMOSPHERE*5.4)
+	pressure_threshold = new /datum/airalarm_threshold(-1, ONE_ATMOSPHERE*0.10, ONE_ATMOSPHERE*1.90, ONE_ATMOSPHERE*2.3)
 	temperature_threshold = new /datum/airalarm_threshold(20, 40, 140, 160)
 	target_temperature = 90
 	scrubbed_gases = list( GAS_OXYGEN, GAS_CARBON, GAS_PLASMA )
@@ -252,7 +252,7 @@
 							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, 0.5, 1),
 							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, 0.5, 1) )
 	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
-	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*2.00, ONE_ATMOSPHERE*3.20)
+	pressure_threshold = new /datum/airalarm_threshold(ONE_ATMOSPHERE*0.80, ONE_ATMOSPHERE*0.90, ONE_ATMOSPHERE*1.10, ONE_ATMOSPHERE*1.20)
 	temperature_threshold = new /datum/airalarm_threshold(T0C-30, T0C, T0C+40, T0C+70)
 	target_temperature = T0C+20
 	scrubbed_gases = list( GAS_OXYGEN, GAS_NITROGEN, GAS_CARBON )

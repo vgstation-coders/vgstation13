@@ -974,6 +974,7 @@
 #include "code\game\objects\items\devices\rigbuilding.dm"
 #include "code\game\objects\items\devices\roganbot.dm"
 #include "code\game\objects\items\devices\scanners.dm"
+#include "code\game\objects\items\devices\seismic_remote.dm"
 #include "code\game\objects\items\devices\silicate sprayer.dm"
 #include "code\game\objects\items\devices\sleeperplugins.dm"
 #include "code\game\objects\items\devices\sound_synth.dm"

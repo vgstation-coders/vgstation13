@@ -88,6 +88,31 @@
 	holder.clear_reagents(TRUE)
 	holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
 
+/datum/chemical_reaction/fake_explosion_potassium
+	name = "Honk Potassium Explosion"
+	id = "explosion_honk"
+	result = null
+	required_reagents = list(POTASSIUM = 1, HONKSERUM = 1)
+	result_amount = 2
+	secondary = 1
+	var/volume_divisor = 3
+
+/datum/chemical_reaction/fake_explosion_potassium/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/range = min (MAX_EXPLOSION_RANGE, round(created_volume/volume_divisor) - 1)
+	var/devastation = round(min(3, range * 0.25)) // clamps to 3 devastation for grenades
+	var/heavy = round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
+	var/light = min(7, range) // clamps to 7 light range for grenades
+	var/flash = range * 1.5
+	explosion_effect(get_turf(holder.my_atom),devastation,heavy,light,flash)
+
+/datum/chemical_reaction/fake_explosion_potassium/bigger
+	name = "Honkoglycerin Explosion"
+	id = "explosion_honk_2"
+	result = null
+	required_reagents = list(HONKSERUM = 3, SACIDS = 5, PACIDS = 4)
+	result_amount = 8
+	volume_divisor = 2
+
 /datum/chemical_reaction/explosion_potassium/holy
 	id = "holy_explosion_potassium"
 	required_reagents = list(POTASSIUM = 1, HOLYWATER = 1)
