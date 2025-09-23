@@ -45,7 +45,7 @@ var/list/potential_theft_objectives=list(
 		return FALSE
 	if (new_target == "custom")
 		var/datum/theft_objective/O=new
-		O.typepath = input("Select type:","Type") as null|anything in typesof(/obj/item)
+		O.typepath = filter_typelist_input("Select type:", "Type", subtypesof(/obj/item))
 		if (!O.typepath)
 			return FALSE
 		var/tmp_obj = new O.typepath

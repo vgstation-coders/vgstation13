@@ -410,7 +410,7 @@ Pressure: [env.pressure]"}
 
 	// to prevent REALLY stupid deletions
 	var/blocked = list(/obj, /mob, /mob/living, /mob/living/carbon, /mob/living/carbon/human, /mob/dead, /mob/dead/observer, /mob/living/silicon, /mob/living/silicon/robot, /mob/living/silicon/ai)
-	var/hsbitem = input(usr, "Choose an object to delete.", "Delete:") as null|anything in typesof(/obj) + typesof(/mob) - blocked
+	var/hsbitem = filter_typelist_input("Choose an object to delete.", "Delete:", subtypesof(/obj) + subtypesof(/mob) - blocked)
 	if(hsbitem)
 		for(var/atom/O in world)
 			if(istype(O, hsbitem))

@@ -1154,7 +1154,7 @@ fieldset {width:140px;}
 	var/mission_to_load = alert(usr, "How do you want to select the map element?", "Map element loading", "Choose a /datum/map_element object", "Load external .dmm file", "Cancel")
 	switch(mission_to_load)
 		if("Choose a /datum/map_element object")
-			var/new_map_element = input(usr, "Please select the map element object.", "Map element loading") as null|anything in typesof(/datum/map_element) - /datum/map_element
+			var/new_map_element = filter_typelist_input("Please select the map element object.", "Map element loading", subtypesof(/datum/map_element))
 			if(!new_map_element)
 				return
 
