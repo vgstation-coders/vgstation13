@@ -17,12 +17,6 @@
 		health -= Proj.damage //double power
 	. = ..()
 
-/obj/structure/closet/crate/proc/jiggle(var/obj/item/I)
-	var/jx = I.w_class == W_CLASS_TINY ? 7 : 3
-	var/jy = I.w_class == W_CLASS_TINY ? 3 : 1
-	I.pixel_x = rand(-jx,jx)
-	I.pixel_y = rand(-jy,jy)
-
 /obj/structure/closet/crate/basic
 	has_lock_type = /obj/structure/closet/crate/secure/basic
 
@@ -404,6 +398,13 @@
 	if(istype(mover, /obj/structure/closet/crate))
 		return 0
 	return (!density)
+
+//Jiggles an item in a crate, raw power scales how much things are jostled
+/obj/structure/closet/crate/proc/jiggle(var/obj/item/I, var/raw_power = W_CLASS_SMALL)
+	var/jx = I.w_class < raw_power ? 7 : 3
+	var/jy = I.w_class < raw_power ? 3 : 1
+	I.pixel_x = rand(-jx,jx)
+	I.pixel_y = rand(-jy,jy)
 
 //Randomly moves around objects inside the crate based off of item size, representing items getting jostled around
 /obj/structure/closet/crate/proc/jiggle_all(var/max_size_jiggle = W_CLASS_SMALL)
