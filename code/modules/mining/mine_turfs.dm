@@ -1316,11 +1316,10 @@ var/list/icon_state_to_appearance = list()
 					var/list/checkdirs = alldirs.Copy()
 					for(var/dir2 in checkdirs)
 						if(dir2 & direction)
-							continue
-						near_turf = get_step(other_turf,near_turf)
-						if(istype(near_turf,roid_type))
-							roid_near = TRUE
-							break
+							near_turf = get_step(other_turf,near_turf)
+							if(istype(near_turf,roid_type))
+								roid_near = TRUE
+								break
 					if(roid_near)
 						continue
 					if(other_turf != src)
