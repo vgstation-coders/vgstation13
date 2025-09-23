@@ -625,7 +625,7 @@
 		travel_foul(mover)
 
 /obj/item/weapon/beach_ball/holoball/rigged/proc/travel_foul(atom/movable/mover)
-	say("Technical foul! Travelling!")
+	say("Technical foul! Traveling!")
 	travel = 0
 
 /obj/item/weapon/beach_ball/holoball/rigged/say_quote(var/text)
