@@ -656,7 +656,7 @@
 /obj/item/weapon/beach_ball/holoball/rigged/stun/AltClick(mob/user)
 	if(!user.incapacitated() && Adjacent(user))
 		stuns = !stuns
-		to_chat(user,"<span class='notice'>You turn stunning on travelling [stuns ? "On" : "Off"].</span>")
+		to_chat(user,"<span class='notice'>You turn stunning on traveling [stuns ? "On" : "Off"].</span>")
 		return
 	return ..()
 
