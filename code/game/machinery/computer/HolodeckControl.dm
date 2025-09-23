@@ -605,7 +605,7 @@
 /obj/item/weapon/beach_ball/holoball/rigged/examine(mob/user)
 	. = ..()
 	if(!silent)
-		to_chat(user,"<span class='danger'>This ball is fitted with anti-travelling defense mechanisms! Be sure to bounce it every [travel_limit] steps or else!</span>")
+		to_chat(user,"<span class='danger'>This ball is fitted with anti-traveling defense mechanisms! Be sure to bounce it every [travel_limit] steps or else!</span>")
 
 /obj/item/weapon/beach_ball/holoball/rigged/pickup(mob/user)
 	. = ..()
@@ -625,7 +625,7 @@
 		travel_foul(mover)
 
 /obj/item/weapon/beach_ball/holoball/rigged/proc/travel_foul(atom/movable/mover)
-	say("Technical foul! Travelling!")
+	say("Technical foul! Traveling!")
 	travel = 0
 
 /obj/item/weapon/beach_ball/holoball/rigged/say_quote(var/text)
@@ -656,7 +656,7 @@
 /obj/item/weapon/beach_ball/holoball/rigged/stun/AltClick(mob/user)
 	if(!user.incapacitated() && Adjacent(user))
 		stuns = !stuns
-		to_chat(user,"<span class='notice'>You turn stunning on travelling [stuns ? "On" : "Off"].</span>")
+		to_chat(user,"<span class='notice'>You turn stunning on traveling [stuns ? "On" : "Off"].</span>")
 		return
 	return ..()
 
@@ -684,7 +684,7 @@
 		if(held_grenade)
 			to_chat(user,"<span class='warning'>There is already a grenade in \the [src]!</span>")
 		else if(user.drop_item(W,src))
-			to_chat(user,"<span class='notice'>You add \the [W] to \the [src], rigging it to prime on travelling fouls.</span>")
+			to_chat(user,"<span class='notice'>You add \the [W] to \the [src], rigging it to prime on traveling fouls.</span>")
 			held_grenade = W
 			if(!discrete_grenade)
 				silent = FALSE
