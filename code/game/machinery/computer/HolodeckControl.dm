@@ -605,7 +605,7 @@
 /obj/item/weapon/beach_ball/holoball/rigged/examine(mob/user)
 	. = ..()
 	if(!silent)
-		to_chat(user,"<span class='danger'>This ball is fitted with anti-travelling defense mechanisms! Be sure to bounce it every [travel_limit] steps or else!</span>")
+		to_chat(user,"<span class='danger'>This ball is fitted with anti-traveling defense mechanisms! Be sure to bounce it every [travel_limit] steps or else!</span>")
 
 /obj/item/weapon/beach_ball/holoball/rigged/pickup(mob/user)
 	. = ..()
