@@ -251,19 +251,23 @@
 	if(module)
 		return
 	var/list/modules = getModules()
+	var/selected_module
 	if(forced_module)
-		modtype = forced_module
+		selected_module = forced_module
 	else
-		modtype = input("Please, select a module!", "Robot", null, null) as null|anything in modules
+		selected_module = input("Please, select a module!", "Robot", null, null) as null|anything in modules
 	// END forced modules.
 
+	if(!selected_module)
+		return
 	if(module)
 		return
-	if(!(modtype in all_robot_modules))
+	if(!(selected_module in all_robot_modules))
 		return
 
-	var/module_type = all_robot_modules[modtype]
+	var/module_type = all_robot_modules[selected_module]
 	module = new module_type(src)
+	modtype = selected_module
 
 	feedback_inc("cyborg_[lowertext(modtype)]",1)
 	updatename()

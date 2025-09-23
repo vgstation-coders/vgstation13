@@ -73,6 +73,49 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2025.09.23</h2>
+			<h3 class="author">Inorien updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Batch atmos presets no longer fuck up station air</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Syndicate agents can now purchase the seismic artillery remote for 2 telecrystals in the sabotage section, or for 1 telecrystal if in science positions. This allows the creation of a fake explosion effect in the area that gets reported to bhangmeters. Cooldown is 1 minute per every level of devastation up to a maximum of 8.</li>
+				<li class="rscadd">Honk serum can be mixed with potassium to create fake explosion effects, or with polyacid and suphuric acid for larger ones. Bhangmeters do not recognise them, though.</li>
+				<li class="tweak">Admin fake explosions now have an option to be detected by bhangmeters.</li>
+			</ul>
+			<h2 class="date">2025.09.22</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Plastic and brass table doors can now be built.</li>
+			</ul>
+			<h2 class="date">2025.09.19</h2>
+			<h3 class="author">Blonichu updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed vox chickens not having feathers to pluck as well as fixing vox turning green after regenerating.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Spessmart MERC bots no longer target the free sample offering bots.</li>
+				<li class="bugfix">Spessmart MERC bots can now move if controlled by a player.</li>
+				<li class="tweak">Unremovable clothing items can no longer spawn in spessmart.</li>
+				<li class="bugfix">Table doors no longer display above their proper layer when closed.</li>
+				<li class="bugfix">Table doors can no longer be spam built on one turf.</li>
+				<li class="tweak">Packed station no longer has increased uplink item prices for the map.</li>
+			</ul>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Plasma Cutters are now called Advanced Plasma Cutters</li>
+				<li class="imageadd">Advanced Plasma Cutters have a new sprite with ammo meter</li>
+				<li class="tweak">Plasma Torches are once again called Plasma Cutters</li>
+				<li class="imageadd">Both cutters now have unique in-hands.</li>
+				<li class="tweak">Plasma Cutter Conversion Kits now only require a Plasma Cutter (+pka) instead of a Diamond Drill (+pka), but have an additional diamond cost to compensate</li>
+				<li class="tweak">Plasma Cutters mine in 1.5 seconds, up from 2 seconds</li>
+				<li class="tweak">Advanced Plasma Cutter plasma ore reloading is slower, but cooler (smelted plasma remains a full, instant load)</li>
+				<li class="rscadd">Crate contents now jiggle around when the crate is subject to sufficient force, such as from kicks, being shot through disposals, or exploding.</li>
+				<li class="bugfix">Borgs can no longer change their internal borg type multiple times by spamming the set module button.</li>
+				<li class="bugfix">Borgs and MoMMi can remotely view tgui-based windows again.</li>
+			</ul>
 			<h2 class="date">2025.09.16</h2>
 			<h3 class="author">SECBATON-GRIFFON updated:</h3>
 			<ul class="changes bgimages16">
@@ -1363,56 +1406,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">west3436 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Updated rust-g to version 3.4.0.</li>
-			</ul>
-			<h2 class="date">2024.10.07</h2>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">AIs now retrack their targets as soon as they come back into view.</li>
-			</ul>
-			<h2 class="date">2024.10.03</h2>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Mappers can now make use of more types of window-grille spawners, (for all windows except tinted and brass ones) with clearer, updated sprites.</li>
-				<li class="tweak">The &#34;construct window&#34; option on RCDs now has a newer, cleaner looking sprite.</li>
-			</ul>
-			<h3 class="author">jwhitak updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds the proto-kinetic pump-shotgun modkit to mining vending machines under their premium selection.</li>
-				<li class="tweak">Proto-kinetic accelerator shots now appear blue-white when they&#39;re shot at full force in low pressure environments.</li>
-			</ul>
-			<h2 class="date">2024.10.02</h2>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Null rods can now show if something is arcane tampered by hitting it with them.</li>
-				<li class="rscadd">Blessing an arcane tampered item now shows a message confirming the removal of this property to nearby people.</li>
-				<li class="rscadd">Silver slime extracts now allow for the creation of cooking recipes in their random probability &#34;perfect&#34; forms, such as frosted donuts.</li>
-				<li class="rscadd">Red slime extracts now refill bunsen burners with glycerol and remove its downsides, while refilling itself.</li>
-				<li class="rscadd">Pyrite slime extracts now boost the output of mining tools depending on ore, with diamond multiplying by 4 and gold/silver/uranium by 2, and dusty crates becoming more common finds.</li>
-				<li class="rscadd">Insecticide and plantbgone sprays can now be refilled with red slime extracts, luminol and fakecreep with green and pyrite respectively.</li>
-				<li class="rscadd">Port generators can now accept slime extracts to run a small amount of extra automatic output. PACMAN requires dark purple, SUPERPACMAN requires dark purple and metal, MRSPACMAN requires dark purple, metal and adamantine, BABYPACMAN requires dark purple, metal, adamantine and pyrite, and PROFESSORPACMAN requires dark purple, metal, adamantine, pyrite and black.</li>
-				<li class="rscadd">Bar dispensers can now dispense banana juice and chemical dispensers can now dispense colorful reagent by adding pyrite slime extract to them. Bar dispensers now have different reagents dispensed to delightful syrup when black slime extract is applied; blood for space breweries and tricordrazine for everything else.</li>
-				<li class="tweak">AIs and pulse demons can now emag many more things a cryptographic sequencer already can, including mulebots, megaphones, tape recorders, security hailers, robot parts, nukeop gasha toys, the randomize AI module, defibrilators, secure closets, secure crates, secure lockboxes, the clowncart, EFTPOS scanners, holobadges, floral somatorays, spiderbots, temperature guns, nikitas, trash compactors, R&amp;D server control computer, suspension generators, RUST fuel compressors and rapid crate senders.</li>
-				<li class="tweak">Pulse demons can now emag supply computers and firedoors.</li>
-				<li class="bugfix">The EFTPOS emag now works.</li>
-				<li class="imageadd">Mysterious artifact vendors now have their own unique sprite, all black with no markings.</li>
-				<li class="bugfix">Lockboxes can no longer be quick stored into if locked and not broken.</li>
-				<li class="bugfix">Quick equipping accessories to clothes now updates the icon properly.</li>
-				<li class="rscadd">Recycling furnaces can now have credits claimed from them for recycling, albeit meager amounts in the majority of cases, and with the tradeoff of deducting from materials smeltable for value claimed.</li>
-				<li class="rscadd">Smelter consoles can now be ID locked or unlocked to prevent claiming of credits. Recycling ones start unlocked by default, mining ones default to mining access. Emagging also removes all access locks.</li>
-				<li class="rscadd">Uplinks now have a new item in the pointless badassery section: KILLbots! These sound systems make sounds for various events such as killstreaks, headshots and other miscellaneous round related things when held by someone.</li>
-			</ul>
-			<h3 class="author">jwhitak updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed guns exploding when you couldn&#39;t even fire them in the first place.</li>
-				<li class="bugfix">Screwsolders, omnitools, and switchtools can be used in more situations.</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed collapsed crate shelves falling on people.</li>
-				<li class="bugfix">Fixed ghost crates appearing on collapsed crate shelves.</li>
-				<li class="bugfix">Fixed crate shelves allowing people to phase into walls.</li>
-				<li class="rscadd">Added admin vars to crate shelves.</li>
-				<li class="bugfix">Fixed fires spawning endlessly in breached rooms.</li>
 			</ul>
 		</div>
 		<!--
