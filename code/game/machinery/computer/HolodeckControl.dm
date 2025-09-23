@@ -684,7 +684,7 @@
 		if(held_grenade)
 			to_chat(user,"<span class='warning'>There is already a grenade in \the [src]!</span>")
 		else if(user.drop_item(W,src))
-			to_chat(user,"<span class='notice'>You add \the [W] to \the [src], rigging it to prime on travelling fouls.</span>")
+			to_chat(user,"<span class='notice'>You add \the [W] to \the [src], rigging it to prime on traveling fouls.</span>")
 			held_grenade = W
 			if(!discrete_grenade)
 				silent = FALSE
