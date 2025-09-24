@@ -20,7 +20,7 @@
 /obj/machinery/cart/cargo/get_cell()
 	return internal_battery
 
-/obj/machinery/cart/cargo/process()			
+/obj/machinery/cart/cargo/process()
 	if(internal_battery)
 		if(internal_battery.charge == 0 && loaded_machine)
 			loaded_machine.power_change()
@@ -78,7 +78,7 @@
 		return
 	if(is_locking(/datum/locking_category/cargocart) || istype(C, /obj/machinery/cart/))
 		return
-	
+
 	load(C)
 
 /obj/machinery/cart/cargo/MouseDropFrom(obj/over_object as obj, src_location, over_location)
@@ -113,10 +113,10 @@
 	if(istype(C,/obj/structure/closet/crate))
 		var/obj/structure/closet/crate/crate = C
 		crate.close()
-	
+
 	visible_message("The [C] is loaded onto the cart.")
 	lock_atom(C, /datum/locking_category/cargocart)
-	
+
 	if(istype(C, /obj/machinery))
 		loaded_machine = C
 		loaded_machine.anchored = 1
@@ -125,16 +125,12 @@
 		if(!is_blacklisted(C))
 			if(internal_battery)
 				loaded_machine.connected_cell = internal_battery
-			loaded_machine.state = 1		
+			loaded_machine.state = 1
 			loaded_machine.power_change()
 			visible_message("The [C]'s cables hook onto the carts power lines.")
-		
-
-
-	
 	return TRUE
 
-/obj/machinery/cart/cargo/proc/unload(var/dirn = 0)
+/obj/machinery/cart/cargo/proc/unload(var/dirn = 0, var/silent = FALSE)
 	if(!is_locking(/datum/locking_category/cargocart))
 		return
 
@@ -148,9 +144,10 @@
 		loaded_machine.connected_cell = null
 		loaded_machine.power_change()
 		loaded_machine.machine_flags |= WRENCHMOVE
-		visible_message("The [load] is unloaded from the cart.")
-		if(!is_blacklisted(load))		
-			visible_message("The [load]'s cables disconnect from the cart.'")			
+		if(!silent)
+			visible_message("The [load] is unloaded from the cart.")
+			if(!is_blacklisted(load))
+				visible_message("The [load]'s cables disconnect from the cart.")
 		loaded_machine = null
 
 
@@ -165,6 +162,11 @@
 	for(var/atom/movable/AM in src)
 		if(AM != internal_battery)
 			AM.forceMove(src.loc)
+
+//If destroyed, unload any cargo to avoid having permanently locked stuff sitting around
+/obj/machinery/cart/cargo/Destroy()
+	unload(silent = TRUE)
+	..()
 
 /obj/machinery/cart/cargo/lock_atom(var/atom/movable/AM, var/datum/locking_category/category)
 	. = ..()

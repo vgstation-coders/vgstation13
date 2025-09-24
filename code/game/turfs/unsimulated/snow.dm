@@ -67,8 +67,9 @@
 
 /turf/unsimulated/floor/snow/proc/get_snow_state()
 	. = snow_intensity_override
-	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
-		var/datum/weather/snow/S = map.climate.current_weather
+	var/datum/climate/C = SSweather.get_climate(src.z)
+	if(map && C && istype(C.current_weather,/datum/weather/snow))
+		var/datum/weather/snow/S = C.current_weather
 		if(!.)
 			. = S.snow_intensity
 	if(!.)
@@ -159,11 +160,13 @@
 	anchored = 1
 	plane = ABOVE_TURF_PLANE
 	mouse_opacity = 0
+	var/datum/climate/arctic/parent_climate = null
 
-/obj/effect/blizzard_holder/New()
+/obj/effect/blizzard_holder/New(var/datum/climate/arctic/climate_ref = null)
 	..()
-	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
-		var/datum/weather/snow/S = map.climate.current_weather
+	parent_climate = climate_ref
+	if(map && parent_climate && istype(parent_climate.current_weather,/datum/weather/snow))
+		var/datum/weather/snow/S = parent_climate.current_weather
 		UpdateSnowfall(S.snow_intensity)
 	else
 		UpdateSnowfall(SNOW_CALM)

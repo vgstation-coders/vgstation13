@@ -207,7 +207,7 @@
 		message = defib_message_success_override
 	target.visible_message(message)
 
-/obj/item/weapon/melee/defibrillator/restock()
+/obj/item/weapon/melee/defibrillator/restock(nanobots = FALSE)
 	charges = initial(charges)
 
 //**************************************************************

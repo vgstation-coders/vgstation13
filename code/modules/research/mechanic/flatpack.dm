@@ -308,9 +308,9 @@
 
 /obj/structure/closet/crate/flatpack/configurable
 	name = "configurable flatpack"
-	desc = "The latest advancement in portable easy assembly technology. This model of a flatpack must be configured before construction"
+	desc = "The latest advancement in portable easy assembly technology. This model of a flatpack must be configured before construction."
 	var/list/machine_options = list()
-	
+
 /obj/structure/closet/crate/flatpack/configurable/attackby(var/atom/A, mob/user)
 	if(istype(A,/obj/item))
 		var/obj/item/I=A
@@ -329,7 +329,7 @@
 		qdel(machine)
 		machine=null
 	machine_options=list()
-	
+
 
 
 /obj/structure/closet/crate/flatpack/suit_modifier/New()

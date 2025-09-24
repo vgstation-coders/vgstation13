@@ -54,6 +54,7 @@
 	var/mob/proxy = null
 	var/list/current_channels_by_emitter = list()
 	var/list/free_channels = list()
+	var/list/audible_emitters = list()
 	var/range = null
 
 /datum/sound_listener_context/New(client/C, mob/P, hearing_range = world.view)
@@ -61,6 +62,7 @@
 	proxy = P
 	current_channels_by_emitter = list()
 	free_channels = list()
+	audible_emitters = list()
 	for (var/i = CHANNEL_RESERVABLE_MIN, i <= CHANNEL_RESERVABLE_MAX, i++)
 		free_channels += i
 	range = hearing_range
@@ -69,6 +71,9 @@
 /datum/sound_listener_context/Destroy()
 	for (var/datum/sound_emitter/E in current_channels_by_emitter)
 		release(E)
+	for (var/datum/sound_emitter/E in audible_emitters)
+		unsubscribe_from(E)
+	audible_emitters.Cut()
 	free_channels.Cut()
 	current_channels_by_emitter.Cut()
 	sound_zone_manager.unregister_listener(src)
@@ -96,7 +101,7 @@
 	// which channel this client is using for this emitter
 	var/chan = current_channels_by_emitter[E]
 	if (!chan)
-		CRASH("listener_context attempted to release [E] with no channel, possible double-release or other fuckery")
+		return //no channel to release, no sound to stop (hopefully)
 	// flush it
 	var/sound/nullsound = sound(file = null)
 	nullsound.channel = chan
@@ -105,8 +110,6 @@
 
 	current_channels_by_emitter -= E
 	free_channels += chan
-
-	unsubscribe_from(E)
 
 /datum/sound_listener_context/proc/reset_proxy(mob/P)
 	sound_zone_manager.unregister_listener(src)
@@ -130,7 +133,6 @@
 	E.register_event(/event/sound_started, src, nameof(src::start_hearing()))
 	E.register_event(/event/sound_stopped, src, nameof(src::stop_hearing()))
 	E.register_event(/event/sound_pushed, src, nameof(src::hear_once()))
-
 
 /datum/sound_listener_context/proc/unsubscribe_from(datum/sound_emitter/E)
 	E.unregister_event(/event/sound_updated, src, nameof(src::on_sound_update()))
@@ -161,13 +163,7 @@
 	client << S
 
 /datum/sound_listener_context/proc/stop_hearing(datum/sound_emitter/emitter)
-	var/chan = current_channels_by_emitter[emitter]
-	if (!chan)
-		return // already can't hear it (probably)
-	var/sound/nullsound = sound(file = null)
-	nullsound.channel = chan
-	nullsound.status = SOUND_UPDATE | SOUND_MUTE
-	client << nullsound
+	release(emitter)
 
 /datum/sound_listener_context/proc/on_sound_update(datum/sound_emitter/emitter)
 	var/chan = current_channels_by_emitter[emitter]
@@ -184,6 +180,9 @@
 /datum/sound_listener_context/proc/on_enter_range(datum/sound_emitter/E)
 	start_hearing(E) // this can throw if channel reservation fails, subscribe after its safe
 	subscribe_to(E)
+	audible_emitters |= E
 
 /datum/sound_listener_context/proc/on_exit_range(datum/sound_emitter/E)
-	release(E)
+	stop_hearing(E)
+	unsubscribe_from(E)
+	audible_emitters -= E

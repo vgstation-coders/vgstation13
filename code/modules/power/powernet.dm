@@ -15,6 +15,7 @@
 									//  An unsatisfied_priority of 0 means either there was either no power or more than enough to cover every load, so priorities get the
 									//  same satisfaction (0% for no power, 100% for excess)
 	var/haspulsedemon = 0
+	var/no_pop_mode = FALSE // If on, will always fulfill load demand. This is toggled on by having zero players.
 
 ////////////////////////////////////////////
 // POWERNET DATUM PROCS
@@ -120,11 +121,13 @@
 	// Apply loads, calculate satisfaction, and see how much excess we're left with (if any)
 	netexcess = max(avail, 0)
 	unsatisfied_priority = 0
-	if (!netexcess)
+	if (!netexcess && !no_pop_mode)
 		satisfaction = 0 // No power -> 0% satisfaction for all
 	else
 		satisfaction = 1 // Assume 100% satisfaction for all, for now
 		for (var/i in 1 to load.len)
+			if(no_pop_mode)
+				load[i] = 0
 			if (netexcess >= load[i]) // Go through all loads and substract them from excess
 				netexcess -= load[i]
 

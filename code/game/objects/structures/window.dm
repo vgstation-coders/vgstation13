@@ -28,6 +28,9 @@ var/list/one_way_windows
 	var/reinforced = 0 //Used for deconstruction steps
 	penetration_dampening = 1
 	pass_flags_self = PASSGLASS
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
+	rotate_type = /obj/structure/window
 	var/mutable_appearance/damage_overlay
 	var/image/oneway_overlay
 	var/cracked_base = "crack"
@@ -63,7 +66,7 @@ var/list/one_way_windows
 /obj/structure/window/isSmoothableNeighbor(atom/A)
 	if(A?.density && ismovable(A))
 		var/atom/movable/O = A
-		return O.anchored && ..() 
+		return O.anchored && ..()
 
 /obj/structure/window/relativewall()
 	icon_state = anchored && density ? "[base_state][..()]" : initial(icon_state)
@@ -88,14 +91,6 @@ var/list/one_way_windows
 /obj/structure/window/examine(mob/user)
 	..()
 	examine_health(user)
-
-/obj/structure/window/AltClick(mob/user)
-	if(is_fulltile)
-		. = ..()
-	else
-		if(user.incapacitated() || !Adjacent(user))
-			return
-		ccwrotate()
 
 /obj/structure/window/proc/examine_health(mob/user)
 	if(!anchored)
@@ -612,33 +607,9 @@ var/list/one_way_windows
 					return 0
 	return 1
 
-/obj/structure/window/verb/ccwrotate()
-	set name = "Rotate Window Counter-Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	rotate(90)
-
-/obj/structure/window/verb/cwrotate()
-	set name = "Rotate Window Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	rotate(270)
-
-/obj/structure/window/proc/rotate(var/angle = 90)
-	if(anchored)
-		var/turf/T = loc
-		if(T)
-			for(var/obj/structure/window/W in T)
-				if(!W.anchored && W.dir == src.dir)
-					W.rotate(angle)
-					return
-		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
-		return
-
+/obj/structure/window/change_dir(new_dir, changer)
 	update_nearby_tiles() //Compel updates before
-	change_dir(turn(dir, angle))
+	. = ..()
 	update_nearby_tiles()
 
 /obj/structure/window/Destroy()

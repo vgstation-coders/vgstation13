@@ -650,7 +650,7 @@ Auto Patrol: []"},
 
 /obj/item/weapon/secbot_assembly/britsky
 	name = "custodian signaler assembly"
-	desc = "some sort of british assembly."
+	desc = "Some sort of british assembly."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "bhelmet_signaler"
 	build_step = 0

@@ -862,7 +862,7 @@
 /*
 /obj/item/clothing/under/golem
 	name = "adamantine skin"
-	desc = "a golem's skin."
+	desc = "A golem's skin."
 	icon_state = "golem"
 	item_state = "golem"
 	_color = "golem"
@@ -872,7 +872,7 @@
 
 /obj/item/clothing/suit/golem
 	name = "adamantine shell"
-	desc = "a golem's thick outer shell."
+	desc = "A golem's thick outer shell."
 	icon_state = "golem"
 	item_state = "golem"
 	w_class = W_CLASS_LARGE//bulky item
@@ -889,7 +889,7 @@
 
 /obj/item/clothing/shoes/golem
 	name = "golem's feet"
-	desc = "sturdy adamantine feet."
+	desc = "Sturdy adamantine feet."
 	icon_state = "golem"
 	item_state = null
 	canremove = 0

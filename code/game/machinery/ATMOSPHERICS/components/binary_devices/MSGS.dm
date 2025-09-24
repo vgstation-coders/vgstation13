@@ -11,6 +11,9 @@
 	machine_flags = WRENCHMOVE | FIXED2WORK
 	idle_power_usage = 1000					//This thing's serious
 
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
+
 	var/internal_volume = 10000
 	var/max_pressure = 10000
 
@@ -208,27 +211,6 @@
 
 		node1 = null
 		node2 = null
-
-/obj/machinery/atmospherics/binary/msgs/verb/rotate_clockwise()
-	set category = "Object"
-	set name = "Rotate MSGS (Clockwise)"
-	set src in view(1)
-
-	if(usr.isUnconscious() || usr.restrained() || anchored)
-		return
-
-	src.dir = turn(src.dir, -90)
-
-
-/obj/machinery/atmospherics/binary/msgs/verb/rotate_anticlockwise()
-	set category = "Object"
-	set name = "Rotate MSGS (Counter-clockwise)"
-	set src in view(1)
-
-	if(usr.isUnconscious() || usr.restrained() || anchored)
-		return
-
-	src.dir = turn(src.dir, 90)
 
 /obj/machinery/atmospherics/binary/msgs/toggle_status(var/mob/user)
 	return FALSE

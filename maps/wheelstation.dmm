@@ -14751,13 +14751,12 @@
 	},
 /area/medical/paramedics)
 "aAf" = (
-/obj/machinery/door/window{
-	dir = 2;
-	name = "Medbay Reception";
-	req_access_txt = "5"
-	},
 /obj/machinery/light{
 	dir = 8
+	},
+/obj/machinery/door/table/reinforced{
+	dir = 1;
+	req_access_txt = "5"
 	},
 /turf/simulated/floor{
 	icon_state = "whiteblue"
@@ -22629,12 +22628,12 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "aOD" = (
-/obj/machinery/door/window{
-	name = "Captain's Desk Door";
-	req_access_txt = "20"
-	},
 /obj/machinery/recharger{
 	pixel_y = 32
+	},
+/obj/machinery/door/table/wood{
+	req_access_txt = "20";
+	dir = 8
 	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
@@ -30942,15 +30941,13 @@
 	},
 /area/crew_quarters/kitchen)
 "bdZ" = (
-/obj/machinery/door/window/brigdoor{
-	dir = 2;
-	name = "Kitchen";
-	req_access = null;
-	req_one_access_txt = "25;28;35"
-	},
 /obj/machinery/camera{
 	dir = 4;
 	name = "Bar Northwest"
+	},
+/obj/machinery/door/table/reinforced{
+	req_one_access_txt = "25;28;35";
+	dir = 1
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -34020,15 +34017,12 @@
 	},
 /area/crew_quarters/bar)
 "bjC" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 1;
-	icon_state = "right";
-	name = "Bar Door";
-	req_one_access_txt = "25;28"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
+/obj/machinery/door/table/reinforced{
+	dir = 1;
+	req_one_access_txt = "25;28"
+	},
 /turf/simulated/floor{
 	icon_state = "grimy"
 	},
@@ -35695,16 +35689,13 @@
 /turf/simulated/floor/wood,
 /area/library)
 "bmF" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 1;
-	icon_state = "right";
-	name = "Library Desk Door";
-	req_access_txt = "37"
-	},
 /obj/machinery/camera{
 	dir = 8;
 	name = "Library"
+	},
+/obj/machinery/door/table/wood{
+	req_access_txt = "37";
+	dir = 1
 	},
 /turf/simulated/floor/wood,
 /area/library)

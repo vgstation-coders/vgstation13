@@ -122,7 +122,7 @@ var/static/list/mat2type = list(
 		var/unit_can_produce
 		var/tospawn
 
-		unit_can_produce = round(matter / modifier)
+		unit_can_produce = min(50, round(matter / modifier))
 
 		if (unit_can_produce >= 1)
 			tospawn = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize? (0 - [unit_can_produce])", "Material Synthesizer") as num

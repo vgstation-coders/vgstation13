@@ -537,7 +537,7 @@
  */
 /obj/item/toy/foamblade
 	name = "foam armblade"
-	desc = "it says \"Sternside Changs #1 fan\" on it. "
+	desc = "It says \"Sternside Changs #1 fan\" on it. "
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "foamblade"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
@@ -1018,7 +1018,7 @@
 
 /obj/item/toy/gasha/comdom
 	name = "toy comdom"
-	desc = "WE GOT THE VALIDS AI CALL THE SHUTTLE"
+	desc = "WE GOT THE VALIDS AI, CALL THE SHUTTLE!"
 	icon_state = "comdom"
 
 /obj/item/toy/gasha/maniac
@@ -1237,7 +1237,7 @@
 /obj/item/toy/gasha/femsec
 	name = "toy femsec"
 	icon_state = "femsec"
-	desc = "bodybag accessory not included"
+	desc = "Bodybag accessory not included."
 
 /obj/item/toy/gasha/hoptard
 	name = "toy HoPtard"

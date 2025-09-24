@@ -68,6 +68,12 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 	//Is the object covered in ash?
 	var/ash_covered = FALSE
 
+	var/verb_rotates = FALSE
+	var/alt_click_rotates = FALSE
+	var/ghost_can_rotate = FALSE
+	var/rotates_anchored = FALSE
+	var/rotate_type = null
+
 /obj/New()
 	..()
 	if(breakable_flags)
@@ -92,6 +98,9 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 		var/turf/simulated/T = get_turf(src)
 		if(istype(T))
 			T.zone?.burnable_atoms |= src
+	if(verb_rotates)
+		verbs += /obj/proc/rotate_cw
+		verbs += /obj/proc/rotate_ccw
 
 //More cooking stuff:
 /obj/proc/can_cook() //Returns true if object is currently in a state that would allow for food to be cooked on it (eg. the grill is currently powered on). Can (and generally should) be overriden to check for more specific conditions.
@@ -280,6 +289,50 @@ var/global/list/reagents_to_always_log = list(AMUTATIONTOXIN, CYANIDE, CHEFSPECI
 		QDEL_NULL(pAImove_delayer)
 		return P
 	return 0
+
+/obj/AltClick(mob/user)
+	if(alt_click_rotates & Adjacent(user))
+		rotate_ccw()
+	return ..()
+
+/obj/proc/rotate_cw()
+	set name = "Rotate Clockwise"
+	set category = "Object"
+	set src in oview(1)
+
+	rotate(270)
+	return 1
+
+/obj/proc/rotate_ccw()
+	set name = "Rotate Counter Clockwise"
+	set category = "Object"
+	set src in oview(1)
+
+	rotate(90)
+	return 1
+
+/obj/proc/rotate(var/angle = 90)
+	if(ghost_can_rotate && isobserver(usr))
+		var/mob/dead/observer/ghost = usr
+		if(ghost.last_obj_spin <= world.time - 5) //do not spam this
+			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+		ghost.last_obj_spin = world.time
+	else if (usr.incapacitated())
+		to_chat(usr, "<span class='warning'>You cannot rotate this while incapacitated!</span>")
+		return 0
+	if(!rotates_anchored && anchored)
+		var/turf/T = loc
+		if(T)
+			for(var/obj/O in T)
+				var/rotated_type = rotate_type || src.type
+				if(istype(O,rotated_type) && !O.anchored && O.dir == src.dir)
+					O.rotate(angle)
+					return 0
+		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
+		return 0
+
+	change_dir(turn(dir, angle))
+	return 1
 
 /obj/recycle(var/datum/materials/rec)
 	if(..())
@@ -687,6 +740,13 @@ a {
 		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
 								"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
 								"<span class='notice'>You hear a ratchet.</span>")
+		if(verb_rotates)
+			if(anchored)
+				verbs |= /obj/proc/rotate_cw
+				verbs |= /obj/proc/rotate_ccw
+			else
+				verbs -= /obj/proc/rotate_cw
+				verbs -= /obj/proc/rotate_ccw
 		return TRUE
 	return FALSE
 

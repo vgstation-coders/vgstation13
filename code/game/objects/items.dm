@@ -263,7 +263,7 @@ var/global/objects_thrown_when_explode = FALSE
 	add_hiddenprint(usr)
 	return FALSE
 
-/obj/item/proc/restock() //used for borg recharging
+/obj/item/proc/restock(nanobots = FALSE) //used for borg recharging and engi nanites
 	return
 
 /obj/item/proc/SlipDropped(var/mob/living/user, var/slip_dir, var/slipperiness = TURF_WET_WATER)

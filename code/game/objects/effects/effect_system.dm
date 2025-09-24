@@ -148,7 +148,7 @@ steam.start() -- spawns the effect
 
 /obj/effect/sparks
 	name = "sparks"
-	desc = "it's a spark what do you need to know?"
+	desc = "It's a spark, what do you need to know?"
 	icon_state = "sparks"
 	anchored = 1
 

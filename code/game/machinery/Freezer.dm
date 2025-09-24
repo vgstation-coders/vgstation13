@@ -14,10 +14,8 @@
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
-	var/list/rotate_verbs=list(
-		/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate,
-		/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate_ccw,
-	)
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/New()
 	. = ..()
@@ -31,9 +29,6 @@
 	)
 
 	RefreshParts()
-
-	if(anchored)
-		verbs -= rotate_verbs
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/RefreshParts()
 	var/lasercount = 0
@@ -74,7 +69,6 @@
 	if(!.)
 		return
 	if(anchored)
-		verbs -= rotate_verbs
 		initialize_directions = dir
 		initialize()
 		build_network()
@@ -82,7 +76,6 @@
 			node1.initialize()
 			node1.build_network()
 	else
-		verbs += rotate_verbs
 		if(node1)
 			node1.disconnect(src)
 			node1 = null
@@ -137,29 +130,6 @@
 	..()
 	src.updateUsrDialog()
 
-
-/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate()
-	set name = "Rotate Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored || usr:stat)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, -90)
-	return 1
-
-/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate_ccw()
-	set name = "Rotate Counter Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored || usr:stat)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, 90)
-	return 1
-
 /obj/machinery/atmospherics/unary/cold_sink/freezer/exposed()
 	return TRUE
 
@@ -185,11 +155,8 @@
 	var/temp_offset = 0
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
-
-	var/list/rotate_verbs=list(
-		/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate,
-		/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate_ccw,
-	)
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/New()
 	. = ..()
@@ -203,9 +170,6 @@
 	)
 
 	RefreshParts()
-
-	if(anchored)
-		verbs -= rotate_verbs
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/RefreshParts()
 	var/lasercount = 0
@@ -247,7 +211,6 @@
 	if(!.)
 		return
 	if(anchored)
-		verbs -= rotate_verbs
 		initialize_directions = dir
 		initialize()
 		build_network()
@@ -255,7 +218,6 @@
 			node1.initialize()
 			node1.build_network()
 	else
-		verbs += rotate_verbs
 		if(node1)
 			node1.disconnect(src)
 			node1 = null
@@ -306,29 +268,6 @@
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/process()
 	..()
 	src.updateUsrDialog()
-
-
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate()
-	set name = "Rotate Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored || usr:stat)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, -90)
-	return 1
-
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate_ccw()
-	set name = "Rotate Counter Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored || usr:stat)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, 90)
-	return 1
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/exposed()
 	return TRUE

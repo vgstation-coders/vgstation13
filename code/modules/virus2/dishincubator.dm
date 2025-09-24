@@ -188,7 +188,7 @@
 		if(!stage_to_focus)
 			to_chat(usr, "<span class='notice'>The effect focusing is now turned off.</span>")
 		else
-			to_chat(usr, "span class='notice'>\The [src] will now focus on stage [stage_to_focus].</span>")
+			to_chat(usr, "<span class='notice'>\The [src] will now focus on stage [stage_to_focus].</span>")
 		effect_focus = stage_to_focus
 		return TRUE
 

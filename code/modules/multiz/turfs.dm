@@ -94,7 +94,7 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 
 /obj/effect/open_overlay
 	name = "open overlay"
-	desc = "The darkness of the abyss below"
+	desc = "The darkness of the abyss below."
 	icon = 'icons/effects/32x32.dmi'
 	icon_state = "white"
 	layer = ABOVE_LIGHTING_LAYER
@@ -254,7 +254,7 @@ var/list/open_overlay_depths
 
 /obj/effect/glass_open_overlay
 	name = "glass open overlay"
-	desc = "The window over the darkness of the abyss below"
+	desc = "The window over the darkness of the abyss below."
 	icon = 'icons/turf/overlays.dmi'
 	icon_state = "glass_floor"
 	layer = 0
@@ -268,12 +268,12 @@ var/obj/effect/glass_open_overlay/plasma/openpgfloor
 
 /obj/effect/glass_open_overlay/damage
 	name = "glass open overlay cracks"
-	desc = "The dent in the window over the darkness of the abyss below"
+	desc = "The dent in the window over the darkness of the abyss below."
 	icon = 'icons/obj/structures.dmi'
 
 /obj/effect/glass_open_overlay/decal
 	name = "glass open overlay decal"
-	desc = "The decoration on the window over the darkness of the abyss below"
+	desc = "The decoration on the window over the darkness of the abyss below."
 	icon = 'icons/effects/floor_decals.dmi'
 
 /turf/simulated/floor/glass/update_icon()

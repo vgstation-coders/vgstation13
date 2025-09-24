@@ -17,6 +17,8 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	var/list/emitted_beams[4] // directions
 
 	machine_flags = WRENCHMOVE | SCREWTOGGLE | CROWDESTROY
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 
 /obj/machinery/mirror/New()
 	..()
@@ -61,31 +63,10 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	var/obj/structure/mirror_frame/MF = new (src.loc)
 	MF.anchored=anchored
 
-/obj/machinery/mirror/verb/rotate_cw()
-	set name = "Rotate (Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, -90)
+/obj/machinery/mirror/change_dir(new_dir, changer)
+	. = ..()
 	kill_all_beams()
 	update_beams()
-	return 1
-
-/obj/machinery/mirror/verb/rotate_ccw()
-	set name = "Rotate (Counter-Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, 90)
-	kill_all_beams()
-	update_beams()
-	return 1
 
 /obj/machinery/mirror/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()

@@ -133,6 +133,8 @@
 	update_colour()
 	if (client.byond_version >= 516)
 		winset(client, null, list("browser-options"="find,refresh,byondstorage"))
+		if(client.holder?.rights & R_DEBUG)
+			winset(client, null, list("browser-options"="+devtools"))
 
 	if(client)
 		client.CAN_MOVE_DIAGONALLY = 0

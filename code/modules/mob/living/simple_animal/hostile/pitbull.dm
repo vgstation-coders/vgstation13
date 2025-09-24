@@ -81,22 +81,24 @@
 /mob/living/simple_animal/hostile/pitbull/summoned_pitbull
 	faction = "wizard" // so they get along with other wizard mobs
 	meat_type = /obj/item/weapon/ectoplasm //a magical dog
+	var/fade_chance = 95
 
 /mob/living/simple_animal/hostile/pitbull/summoned_pitbull/death(var/gibbed = FALSE)
 	..()
 	if(!gibbed)
-		if(prob(95))
+		if(prob(fade_chance))
 			animate(src, alpha = 0, time = 4 SECONDS)
 			spawn(4 SECONDS)
 				qdel(src)
 		else
 			gib()
 
-/mob/living/simple_animal/hostile/pitbull/smashednslammed
+/mob/living/simple_animal/hostile/pitbull/summoned_pitbull/smashednslammed
 	name = "toadline pitbull"
 	icon_state = "toadlinepitbull"
 	icon_living = "toadlinepitbull"
 	icon_dead = "toadlinepitbull_dead"
+	faction = "hostile"
 	pass_flags = PASSMOB|PASSDOOR //so smashed and slammed they can squeeze through doors
 	health = 35
 	maxHealth = 35
@@ -104,8 +106,10 @@
 
 	melee_damage_lower = 4
 	melee_damage_upper = 6 //stumpy but they hit harder
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal
+	fade_chance = 90
 
-/mob/living/simple_animal/hostile/pitbull/smashednslammed/New()
+/mob/living/simple_animal/hostile/pitbull/summoned_pitbull/smashednslammed/New()
 	..()
 	desc = pick(
 		"SMASHED and SLAMMED",
@@ -115,17 +119,3 @@
 		"Two times Pimpy...",
 		"Three times Bape!",
 		"Not a family tree, but a family circle.")
-
-/mob/living/simple_animal/hostile/pitbull/smashednslammed/summoned_pitbull
-	faction = "wizard" // so they get along with other wizard mobs
-	meat_type = /obj/item/weapon/ectoplasm //a magical dog
-	
-/mob/living/simple_animal/hostile/pitbull/smashednslammed/summoned_pitbull/death(var/gibbed = FALSE)
-	..()
-	if(!gibbed)
-		if(prob(90))
-			animate(src, alpha = 0, time = 4 SECONDS)
-			spawn(4 SECONDS)
-				qdel(src)
-		else
-			gib()

@@ -9,6 +9,8 @@ var/list/obj/machinery/prism/prism_list = list()
 	use_power = MACHINE_POWER_USE_NONE
 	anchored = 0
 	density = 1
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 
 	var/obj/effect/beam/emitter/beam
 
@@ -23,8 +25,7 @@ var/list/obj/machinery/prism/prism_list = list()
 	prism_list += src
 
 /obj/machinery/prism/Destroy()
-	qdel(beam)
-	beam=null
+	QDEL_NULL(beam)
 	prism_list -= src
 	..()
 
@@ -34,39 +35,10 @@ var/list/obj/machinery/prism/prism_list = list()
 		if(get_dir(src, B) != dir)
 			return 1
 
-/obj/machinery/prism/verb/rotate_cw()
-	set name = "Rotate (Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, -90)
-	qdel(beam)
-	beam=null
+/obj/machinery/prism/change_dir(new_dir, changer)
+	. = ..()
+	QDEL_NULL(beam)
 	update_beams()
-	return 1
-
-/obj/machinery/prism/verb/rotate_ccw()
-	set name = "Rotate (Counter-Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, 90)
-	qdel(beam)
-	beam=null
-	update_beams()
-	return 1
-
-
-/obj/machinery/prism/AltClick(mob/user)
-	if(user.incapacitated() || !Adjacent(user))
-		return
-	rotate_cw()
 
 /obj/machinery/prism/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()

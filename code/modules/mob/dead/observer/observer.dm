@@ -44,7 +44,7 @@ var/creating_arena = FALSE
 	var/conversionHUD = 0
 	incorporeal_move = INCORPOREAL_GHOST
 	var/movespeed = 0.75
-	var/lastchairspin
+	var/last_obj_spin
 	var/pathogenHUD = FALSE
 	var/manual_poltergeist_cooldown //var-edit this to manually modify a ghost's poltergeist cooldown, set it to null to reset to global
 

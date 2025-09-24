@@ -176,6 +176,12 @@
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
+/datum/reagent/uranium/ferro
+	name = "Ferrouranium"
+	id = FERROURANIUM
+	description = "An alloy of iron and uranium, specially bonded for metallic elasticity and tensility."
+	color = "#A0C0C0"
+
 //----------------------------------------------------------------------------------------------------
 
 /datum/reagent/wax
@@ -239,7 +245,7 @@
 	specheatcap = 0.124
 	fission_time=4500 //1.25 hours.
 	fission_power=66666.67 //spooky
-	
+
 /datum/reagent/plutonium/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
@@ -255,7 +261,7 @@
 	specheatcap = 0.936
 	custom_metabolism = 1 //decays really fast, so it shouldn't linger long.
 	fission_time=300 //5 minutes.
-	
+
 /datum/reagent/radon/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
@@ -270,7 +276,7 @@
 	color = "#676767" //rgb: 103, 103, 103
 	density = 11.34
 	specheatcap = 0.129
-	
+
 /datum/reagent/lead/on_mob_life(var/mob/living/M) //less potent mercury
 	if(..())
 		return 1
@@ -304,7 +310,7 @@
 	specheatcap = 0.124
 	fission_time=7200 //2 hours
 	//no fission power because thorium isn't actually fissile.
-	
+
 /datum/reagent/thorium/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1

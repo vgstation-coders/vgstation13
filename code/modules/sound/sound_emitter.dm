@@ -11,8 +11,12 @@
 	  The subscription is driven by the SZM, which maintains a hashmap of sound_emitter locations.
 */
 
-/atom
+/atom/movable
 	var/datum/sound_emitter/sound_emitter
+
+/atom/movable/Destroy()
+	qdel(sound_emitter)
+	return ..()
 
 /atom/proc/setup_sound()
 	return
@@ -91,7 +95,7 @@
 /datum/sound_emitter/Destroy()
 	sound_emitter_collection.remove(src)
 	sound_zone_manager.unregister_emitter(src)
-	deactivate();
+	deactivate()
 	if (sounds)
 		sounds.Cut()
 		sounds = null
@@ -219,7 +223,7 @@
 // halt sounds to clients, unregister from dynamic updates
 /datum/sound_emitter/proc/deactivate()
 	active_sound = null
-  
+
 	INVOKE_EVENT(src, /event/sound_stopped, "emitter" = src)
 
 /datum/sound_emitter/proc/update_env_effect()

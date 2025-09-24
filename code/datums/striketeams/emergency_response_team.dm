@@ -124,7 +124,7 @@ var/list/response_team_members = list()
 	..()
 	if(Adjacent(user))
 		if(occupant)
-			to_chat(user, "A figure floats in the depths, they appear to be [occupant.real_name]")
+			to_chat(user, "A figure floats in the depths, they appear to be [occupant.real_name].")
 		else
 			to_chat(user, "<span class='info'>The chamber appears devoid of anything but its biotic fluids.</span>")
 	else

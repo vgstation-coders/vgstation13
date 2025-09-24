@@ -1,6 +1,6 @@
 /spell/aoe_turf/necro/zombie/evolve
 	name = "Evolve"
-	desc = "Decay further into undead"
+	desc = "Decay further into undead."
 	user_type = USER_TYPE_ZOMBIE
 	insufficient_holder_msg = "<span class='notice'>You are not dead enough.</span>"
 	charge_cooldown_max = 0

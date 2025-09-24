@@ -48,8 +48,8 @@
 		update_icon()
 		return 1
 
-/obj/item/weapon/gun/energy/restock()
-	if(borg_restocks)
+/obj/item/weapon/gun/energy/restock(nanobots = FALSE)
+	if(borg_restocks || nanobots)
 		if(power_supply.charge < power_supply.maxcharge)
 			power_supply.give(charge_cost)
 			update_icon()

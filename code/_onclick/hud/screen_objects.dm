@@ -242,10 +242,11 @@
 	screen_loc = ui_gun_select
 
 /obj/abstract/screen/gun/MouseEntered(location,control,params)
-	openToolTip(usr,src,params,title = name,content = desc)
+	//openToolTip(usr,src,params,title = name,content = desc)
+	usr.client?.tooltips.show(src, mouse=params, title=name, content=desc)
 
 /obj/abstract/screen/gun/MouseExited()
-	closeToolTip(usr)
+	usr.client?.tooltips.hide()
 
 /proc/get_random_zone_sel()
 	return pick("l_foot", "r_foot", "l_leg", "r_leg", "l_hand", "r_hand", "l_arm", "r_arm", "chest", "groin", "eyes", "mouth", "head")
