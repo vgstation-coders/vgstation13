@@ -340,6 +340,39 @@
 		mobs_found += M
 	return mobs_found
 
+/proc/mobs_in_zlevel(var/target_z, var/client_needed=0, var/moblist=mob_list)
+	var/list/mobs_found[0]
+	for(var/mob/M in moblist)
+		if(client_needed && !M.client)
+			continue
+		var/turf/T = get_turf(M)
+		if(!T || T.z != target_z)
+			continue
+		mobs_found += M
+	return mobs_found
+
+/proc/mobs_in_allocation(var/datum/allocation/alloc, var/client_needed=0, var/moblist=mob_list)
+	var/list/mobs_found[0]
+	if(!alloc)
+		return mobs_found
+	for(var/mob/M in moblist)
+		if(client_needed && !M.client)
+			continue
+		var/turf/T = get_turf(M)
+		if(!T || T.z != alloc.z)
+			continue
+		// Check if mob is within the allocation's sector boundaries
+		var/sector_x = alloc.sector[1]
+		var/sector_y = alloc.sector[2]
+		var/x_min = 1 + (sector_x - 1) * 100
+		var/x_max = sector_x * 100 - 1
+		var/y_min = 1 + (sector_y - 1) * 100
+		var/y_max = sector_y * 100 - 1
+		if(T.x < x_min || T.x > x_max || T.y < y_min || T.y > y_max)
+			continue
+		mobs_found += M
+	return mobs_found
+
 /proc/GetRedPart(const/hexa)
 	return hex2num(copytext(hexa, 2, 4))
 

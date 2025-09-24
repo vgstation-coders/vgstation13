@@ -40,6 +40,7 @@ On the map dm file, redefine the following:
 	//The initial values don't matter, it just needs to fire initially, then set itself into the cycle.
 	var/next_firetime = 0 //In essence this is world.time + the time you want. Ex: world.time + 3 MINUTES
 	var/list/currentrun
+	var/weather_mod = 1 //weather light modifier
 
 /datum/subsystem/daynightcycle/New()
 	NEW_SS_GLOBAL(SSDayNight)
@@ -63,7 +64,7 @@ On the map dm file, redefine the following:
 
 		if(!T || T.gcDestroyed)
 			continue
-
+		next_light_power *= weather_mod
 		T.set_light(next_light_range,next_light_power,current_timeOfDay)
 
 		if(MC_TICK_CHECK)
@@ -78,7 +79,7 @@ On the map dm file, redefine the following:
 			if(IsEven(T.x)) //If we are also even.
 				if(IsEven(T.y)) //If we are also even.
 					var/area/A = get_area(T)
-					if(istype(A, /area/surface) || istype(A, /area/planetoid)) //If we are outside.
+					if((istype(A, /area/surface) || istype(A, /area/planetoid)) && !istype(A, /area/planetoid/cave)) //If we are outside.
 						daynight_turfs += T
 					else //If We aren't we need to make sure we handle the outside segment
 						for(var/cdir in cardinal)//Ironically, this part didn't work correctly but....

@@ -149,11 +149,11 @@ var/list/open_overlay_depths
 
 /turf/unsimulated/floor/snow/openspace_update(var/turf/above)
 	if(above && !isopenspace(above))
-		snow_intensity_override = SNOW_CALM // should be at least a bit chilly
+		precip_intensity_override = WEATHER_CALM // should be at least a bit chilly
 		ignore_blizzard_updates = TRUE
 		vis_contents.Cut()
 	else
-		snow_intensity_override = 0
+		precip_intensity_override = 0
 		ignore_blizzard_updates = FALSE
 		if(!blizzard_image)
 			blizzard_image = new

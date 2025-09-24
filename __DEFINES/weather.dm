@@ -1,0 +1,4 @@
+#define WEATHER_CALM 0
+#define WEATHER_MODERATE 1
+#define WEATHER_HEAVY 2
+#define WEATHER_SEVERE 3

@@ -18,7 +18,7 @@
 	var/snowballs = 0
 	var/snowprints = TRUE //if false, do not make snowprints
 	var/ignore_blizzard_updates = FALSE //if true, don't worry about global blizzard events
-	var/snow_intensity_override = 0
+	var/precip_intensity_override = 0
 	turf_speed_multiplier = 1
 	gender = PLURAL
 	var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
@@ -66,14 +66,14 @@
 			ClearSnowprints()
 
 /turf/unsimulated/floor/snow/proc/get_snow_state()
-	. = snow_intensity_override
+	. = precip_intensity_override
 	var/datum/climate/C = SSweather.get_climate(src.z)
 	if(map && C && istype(C.current_weather,/datum/weather/snow))
 		var/datum/weather/snow/S = C.current_weather
 		if(!.)
-			. = S.snow_intensity
+			. = S.precip_intensity
 	if(!.)
-		. = SNOW_CALM
+		. = WEATHER_CALM
 
 /turf/unsimulated/floor/snow/adjust_slowdown(mob/living/L, current_slowdown)
 	current_slowdown *= (max(1,1.4*(get_snow_state()-1)) /*CALM = 1, AVERAGE = 1, HARD = 1.4, BLIZZARD = 2.8*/ * (1+(snowballs/10))) //higher numbers mean slower
@@ -113,18 +113,18 @@
 				AddSnowprint(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir, SNOWPRINT_COMING)
 		var/snow_state = get_snow_state()
 		switch(snow_state)
-			if(SNOW_CALM)
+			if(WEATHER_CALM)
 				H.clear_fullscreen("snowfall_average",0)
 				H.clear_fullscreen("snowfall_hard",0)
 				H.clear_fullscreen("snowfall_blizzard",0)
-			if(SNOW_AVERAGE)
+			if(WEATHER_MODERATE)
 				H.overlay_fullscreen("snowfall_average", /obj/abstract/screen/fullscreen/snowfall_average)
 				H.clear_fullscreen("snowfall_hard",0)
 				H.clear_fullscreen("snowfall_blizzard",0)
-			if(SNOW_HARD)
+			if(WEATHER_HEAVY)
 				H.clear_fullscreen("snowfall_average",0)
 				H.overlay_fullscreen("snowfall_hard", /obj/abstract/screen/fullscreen/snowfall_hard)
-			if(SNOW_BLIZZARD)
+			if(WEATHER_SEVERE)
 				H.clear_fullscreen("snowfall_average",0)
 				H.clear_fullscreen("snowfall_hard",0)
 				H.overlay_fullscreen("snowfall_blizzard", /obj/abstract/screen/fullscreen/snowfall_blizzard)
@@ -167,9 +167,9 @@
 	parent_climate = climate_ref
 	if(map && parent_climate && istype(parent_climate.current_weather,/datum/weather/snow))
 		var/datum/weather/snow/S = parent_climate.current_weather
-		UpdateSnowfall(S.snow_intensity)
+		UpdateSnowfall(S.precip_intensity)
 	else
-		UpdateSnowfall(SNOW_CALM)
+		UpdateSnowfall(WEATHER_CALM)
 
 /obj/effect/blizzard_holder/proc/UpdateSnowfall(var/snow_state)
 	if(!snow_state_to_texture["[snow_state]"])
@@ -356,7 +356,7 @@
 	ignore_blizzard_updates = TRUE
 	icon_state = "blizz_placeholder" //easy to see for mapping, updates in new()
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
-	snow_intensity_override = SNOW_BLIZZARD
+	precip_intensity_override = WEATHER_SEVERE
 
 /turf/unsimulated/floor/snow/heavy_blizzard/New()
 	..() //forces this to always be blizzarding regardless of blizzard rules
@@ -369,13 +369,13 @@ var/obj/effect/blizzard_holder/heavy/heavy_blizzard_image = null
 
 /obj/effect/blizzard_holder/heavy/New()
 	..()
-	UpdateSnowfall(SNOW_BLIZZARD)
+	UpdateSnowfall(WEATHER_SEVERE)
 
 /obj/effect/blizzard_holder/heavy/UpdateSnowfall(var/snow_state)
-	..(SNOW_BLIZZARD)
+	..(WEATHER_SEVERE)
 
 /obj/effect/blizzard_holder/heavy/cache_snowtile(var/snow_state)
-	..(SNOW_BLIZZARD)
+	..(WEATHER_SEVERE)
 
 /turf/unsimulated/floor/noblizz_permafrost
 	icon = 'icons/turf/new_snow.dmi'

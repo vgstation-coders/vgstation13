@@ -146,8 +146,10 @@ var/datum/subsystem/mapping/SSmapping
 	message_admins("Starting day/night cycle")
 	SSDayNight.get_turflist()
 	SSDayNight.process_lighting()
-	message_admins("Starting weather controller")
-	SSweather.resume()
+	if(newplanet.climate_type)
+		message_admins("Starting weather controller")
+		newplanet.climate = SSweather.set_climate(newplanet.climate_type, world.maxz, A)
+		SSweather.fire()
 	return world.maxz
 
 //// BEGIN LLM-SLOP I MUST REVIEW AND FIX LATER ////

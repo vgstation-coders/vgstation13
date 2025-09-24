@@ -32,8 +32,12 @@ var/list/climates = list()
 	else
 		return null //even more powerful failsave
 
-/datum/subsystem/weather/proc/set_climate(var/datum/climate/climate_type, var/z = 1)
+// Set the climate for a specific z-level. Uses an allocation if provided.
+/datum/subsystem/weather/proc/set_climate(var/datum/climate/climate_type, var/z = 1, var/datum/allocation/A = null)
+	if(A)
+		z = A.z
 	if(!climate_type)
 		CRASH("Failed to set climate: climate_type was null.")
-	var/datum/climate/C = new climate_type(z)
+	var/datum/climate/C = new climate_type(z,A)
 	climates += C
+	return C

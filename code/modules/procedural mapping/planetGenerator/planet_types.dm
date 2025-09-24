@@ -25,8 +25,6 @@
 
 /datum/planet_type/New()
 	..()
-	if(climate_type)
-		climate = new climate_type
 	planet_name = generate_planet_name()
 
 /datum/planet_type/proc/generate_planet_name()
