@@ -40,6 +40,7 @@
 	toolsounds = list('sound/items/Screwdriver.ogg')
 
 /obj/item/weapon/circuitboard/small
+	name = "mini circuit board"
 	board_type = MACHINE_SMALL
 	icon_state = "small_mod"
 	starting_materials = list(MAT_GLASS = 1000) // Recycle glass only

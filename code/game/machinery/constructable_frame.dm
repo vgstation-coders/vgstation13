@@ -798,7 +798,7 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/small/microwave
-	name = "Circuit Board (Microwave)"
+	name = "Mini Circuit Board (Microwave)"
 	desc = "A circuit board used to run a general purpose kitchen appliance."
 	build_path = /obj/machinery/microwave
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_ENGINEERING + "=2;" + Tc_MAGNETS + "=3"
@@ -808,7 +808,7 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/small/reagentgrinder
-	name = "Circuit Board (All-In-One Grinder)"
+	name = "Mini Circuit Board (All-In-One Grinder)"
 	desc = "A circuit board used to run a machine that grinds or juices solid items."
 	build_path = /obj/machinery/reagentgrinder
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
@@ -1268,7 +1268,7 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/capacitor = 6)
 
 /obj/item/weapon/circuitboard/small/cell_charger
-	name = "Circuit Board (Cell Charger)"
+	name = "Mini Circuit Board (Cell Charger)"
 	desc = "A circuit board used to run a small device that recharges power cells."
 	build_path = /obj/machinery/cell_charger
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_POWERSTORAGE + "=3"
@@ -1277,7 +1277,7 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/capacitor = 2)
 
 /obj/item/weapon/circuitboard/small/recharger
-	name = "Circuit Board (Recharger)"
+	name = "Mini Circuit Board (Recharger)"
 	desc = "A circuit board used to run a machine that replenishes energy weapon charge."
 	build_path = /obj/machinery/recharger
 	origin_tech = Tc_POWERSTORAGE + "=2;" + Tc_COMBAT + "=2"
@@ -1399,7 +1399,7 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/capacitor = 1)
 
 /obj/item/weapon/circuitboard/small/fax
-	name = "Circuit Board (Fax Machine)"
+	name = "Mini Circuit Board (Fax Machine)"
 	desc = "A circuit board used to run a machine that sends pieces of paper through bluespace."
 	build_path = /obj/machinery/faxmachine
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_BLUESPACE + "=2"
