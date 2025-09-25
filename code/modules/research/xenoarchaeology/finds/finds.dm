@@ -735,6 +735,11 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
 	desc = ""
 
+/obj/item/weapon/gun/projectile/xenoarch/examine(mob/user)
+	..()
+	for(var/x in caliber)
+		to_chat(user, "<span class='info'>Appears to fit [x] caliber rounds.</span>")
+
 /obj/item/weapon/gun/projectile/xenoarch/gun1
 	icon_state = "gun1"
 	item_state = "gun1"
@@ -1162,3 +1167,15 @@
 /obj/item/weapon/archaeological_find/New(loc)
 	..()
 	icon_state = "unknown[rand(1,4)]"
+
+/proc/debug_spawn_find()
+	if(!usr)
+		return
+	if(!usr.client || !usr.client.holder)
+		to_chat(usr, "<span class='warning'>You need to be an administrator to access this.</span>")
+		return
+	var/result = input(usr, "What type of find?", "spawn find debug", null) as null|anything in subtypesof(/datum/find)
+	if(!result)
+		return
+	var/datum/find/our_find = new result()
+	our_find.create_find(usr.loc)
