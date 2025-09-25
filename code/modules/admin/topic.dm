@@ -825,20 +825,19 @@
 				usr = new_mob //We probably transformed ourselves
 			show_player_panel(new_mob)
 
-	// Procedural generation panel handlers
+	// Procedural generation panel
 	else if(href_list["procgen_create"])
 		if(!check_rights(R_ADMIN))
 			return
 		generate_planet(usr)
-		// Refresh the panel after planet generation
-		src.procedural_generation_panel()
+		procedural_generation_panel()
 		return
 
 	else if(href_list["procgen_jump"])
 		if(!check_rights(R_ADMIN))
 			return
 		var/datum/planet_type/planet = locate(href_list["procgen_jump"])
-		if(planet && planet.allocation)
+		if(planet?.allocation)
 			var/datum/allocation/alloc = planet.allocation
 			var/turf/jump_target = locate(alloc.sector[1] * 50, alloc.sector[2] * 50, alloc.z)
 			if(jump_target)
