@@ -9,6 +9,7 @@ type PlanetData = {
   desc: string;
   type: string;
   procedural_name: string;
+  icon_data: string;
 };
 
 type Data = {
@@ -80,7 +81,7 @@ export const PlanetScanner = (props) => {
   };
 
   return (
-    <Window width={600} height={450}>
+    <Window width={600} height={485}>
       <Window.Content>
         <Stack fill vertical>
           {!anchored && (
@@ -107,22 +108,6 @@ export const PlanetScanner = (props) => {
                     <Stack.Item>
                       <Stack>
                         <Stack.Item basis="40%">
-                          Maximum Power Rate:
-                        </Stack.Item>
-                        <Stack.Item grow>
-                          <ProgressBar
-                            value={Math.min(available_power, min_power_rate)}
-                            maxValue={min_power_rate || 1}
-                            color="blue"
-                          >
-                            {min_power_rate?.toLocaleString() || 0} W
-                          </ProgressBar>
-                        </Stack.Item>
-                      </Stack>
-                    </Stack.Item>
-                    <Stack.Item>
-                      <Stack>
-                        <Stack.Item basis="40%">
                           Available Power:
                         </Stack.Item>
                         <Stack.Item grow>
@@ -131,7 +116,7 @@ export const PlanetScanner = (props) => {
                             maxValue={Math.max(available_power || 0, min_power_rate || 1)}
                             color="good"
                           >
-                            {available_power?.toLocaleString() || 0} W
+                            {available_power?.toLocaleString() || 0} W / {min_power_rate?.toLocaleString() || 0} W
                           </ProgressBar>
                         </Stack.Item>
                       </Stack>
@@ -157,13 +142,13 @@ export const PlanetScanner = (props) => {
                 <Stack.Item grow>
                   <Section title="Discovered Planets">
                     <Stack>
-                      <Stack.Item width="150px">
+                      <Stack.Item width="280px">
                         <Box textAlign="center">
                           <Box
                             as="img"
-                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
-                            width="128px"
-                            height="128px"
+                            src={currentPlanet ? `data:image/png;base64,${currentPlanet.icon_data}` : undefined}
+                            height="256px"
+                            width="256px"
                             style={{
                               border: '2px solid #888',
                               backgroundColor: '#333',
@@ -177,11 +162,11 @@ export const PlanetScanner = (props) => {
                         </Box>
                       </Stack.Item>
                       <Stack.Item grow>
-                        <Stack vertical>
+                        <Stack vertical fill>
                           <Stack.Item>
                             <Stack>
                               <Stack.Item grow>
-                                <Box fontSize="16px" bold color="good">
+                                <Box fontSize="18px" bold color="good">
                                   {currentPlanet ? currentPlanet.procedural_name : 'No Planet Selected'}
                                 </Box>
                               </Stack.Item>
@@ -193,7 +178,7 @@ export const PlanetScanner = (props) => {
                             </Stack>
                           </Stack.Item>
                           <Stack.Item>
-                            <Box mb={1}>
+                            <Box mb={2} fontSize="14px">
                               {currentPlanet ? currentPlanet.desc : 'No planet data available.'}
                             </Box>
                           </Stack.Item>

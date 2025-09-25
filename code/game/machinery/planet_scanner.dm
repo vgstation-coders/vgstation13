@@ -131,7 +131,7 @@
 	data["can_scan"] = anchored && !(stat & (BROKEN|NOPOWER)) && !scanning && scans_completed < PLANET_SCANNER_MAX_SCANS
 	data["at_scan_limit"] = scans_completed >= PLANET_SCANNER_MAX_SCANS
 
-	if(SSmapping && SSmapping.planets && SSmapping.planets.len > 0)
+	if(SSmapping?.planets.len > 0)
 		var/list/planet_data = list()
 		for(var/datum/planet_type/planet in SSmapping.planets)
 			var/list/planet_info = list()
@@ -139,6 +139,7 @@
 			planet_info["desc"] = planet.desc
 			planet_info["type"] = planet.type
 			planet_info["procedural_name"] = planet.planet_name
+			planet_info["icon_data"] = icon2base64(planet.ico)
 			planet_data += list(planet_info)
 		data["discovered_planets"] = planet_data
 		data["has_discoveries"] = TRUE

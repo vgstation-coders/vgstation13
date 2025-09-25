@@ -22,10 +22,16 @@
 	var/loot_modifier = 0
 	//Allocation occupied by this planet.
 	var/allocation = null
+	//Icon shown in the planet scanner.
+	var/icon_state = "moon"
+	var/icon/ico
 
 /datum/planet_type/New()
 	..()
 	planet_name = generate_planet_name()
+	ico = icon('icons/ui/planet_scanner/128x128.dmi', "bg")
+	var/icon/fg = icon('icons/ui/planet_scanner/64x64.dmi', icon_state)
+	ico.Blend(fg,ICON_OVERLAY,32,32)
 
 /datum/planet_type/proc/generate_planet_name()
 	// Complete planet names
@@ -189,6 +195,7 @@
 	ruin_type = RUINTYPE_BEACH
 	loot_type = LOOT_TYPE_BEACH
 	climate_type = CLIMATE_TROPICAL
+	icon_state = "beach2"
 
 /datum/planet_type/desert
 	name = "desert planetoid"
@@ -199,6 +206,7 @@
 	loot_type = LOOT_TYPE_DESERT
 	climate_type = CLIMATE_DESERT
 	loot_modifier = 5
+	icon_state = "desert"
 
 /datum/planet_type/grass
 	name = "grass planetoid"
@@ -208,6 +216,7 @@
 	ruin_type = RUINTYPE_LAVA
 	loot_type = LOOT_TYPE_GRASS
 	climate_type = CLIMATE_TEMPERATE
+	icon_state = "earth"
 
 /datum/planet_type/jungle
 	name = "jungle planetoid"
@@ -218,6 +227,7 @@
 	loot_type = LOOT_TYPE_JUNGLE
 	climate_type = CLIMATE_TROPICAL
 	loot_modifier = 10
+	icon_state = "jungle2"
 
 /datum/planet_type/lava
 	name = "lava planetoid"
@@ -228,6 +238,7 @@
 	loot_type = LOOT_TYPE_LAVA
 	climate_type = CLIMATE_LAVA
 	loot_modifier = 15
+	icon_state = "lava"
 
 /datum/planet_type/snow
 	name = "frozen planetoid"
@@ -238,6 +249,7 @@
 	loot_type = LOOT_TYPE_SNOW
 	climate_type = CLIMATE_ARCTIC
 	loot_modifier = 5
+	icon_state = "snow"
 
 /datum/planet_type/urban
 	name = "wasteland planetoid"
@@ -248,6 +260,7 @@
 	loot_type = LOOT_TYPE_URBAN
 	climate_type = CLIMATE_DESERT
 	loot_modifier = 10
+	icon_state = "barren"
 
 /datum/planet_type/xeno
 	name = "unknown planetoid"
@@ -258,3 +271,4 @@
 	loot_type = LOOT_TYPE_XENO
 	climate_type = CLIMATE_XENO
 	loot_modifier = 20
+	icon_state = "xeno1"
