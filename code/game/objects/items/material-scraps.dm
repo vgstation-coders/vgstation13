@@ -1,6 +1,6 @@
 /obj/item/scrap
 	name = "metal scraps"
-	desc = "Leftover metal in small quantities, not enough to make a full sheet out of."
+	desc = "Leftover metal in small quantities."
 	icon = 'icon/obj/stacks_sheets.dmi'
 	icon_state = "scrap"
 	var/sheet_material = MAT_IRON
@@ -14,7 +14,7 @@
 	sheet_type = mat.sheettype
 	var/material_name = lowertext(mat.name)
 	name = "[material_name] scraps"
-	desc = "Leftover [material_name] in small quantities, not enough to make a full sheet out of."
+	desc = "Leftover [material_name] in small quantities."
 
 /obj/item/scrap/examine(mob/user, size, show_name)
 	. = ..()
