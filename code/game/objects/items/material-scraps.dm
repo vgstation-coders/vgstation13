@@ -5,7 +5,9 @@
 	icon_state = "scrap"
 	var/sheet_material = MAT_IRON
 
-/obj/item/scrap/New(location,material_amount = 0)
+/obj/item/scrap/New(location,material_amount = 0,material_type)
+	if(material_type)
+		sheet_material = material_type
 	if(material_amount > 0)
 		min_required_for_sheet = material_amount
 	starting_materials = list(sheet_material = min_required_for_sheet)
@@ -41,8 +43,3 @@
 	if(src == S) //We need to check this because items can cross themselves for some fucked up reason
 		return
 	//TODO: code here
-
-/obj/item/scrap/glass
-	name = "glass scraps"
-	desc = "Leftover glass in small quantities, not enough to make a full sheet out of."
-	sheet_material = MAT_GLASS
