@@ -28,7 +28,7 @@
 		var/obj/item/tool/weldingtool/WT = W
 		var/datum/material/mat = materials.getMaterial(sheet_material)
 		if(materials.getValueByMaterial(sheet_material) >= mat.cc_per_sheet && WT.remove_fuel(1,user))
-			to_chat(user, "<span class='notice'>You weld \the [src] into a sheet of [lowertext(mat.name)]</span>")
+			to_chat(user, "<span class='notice'>You weld \the [src] into sheets of [lowertext(mat.name)]</span>")
 			mat.makeSheets(loc)
 			qdel(src)
 			return
