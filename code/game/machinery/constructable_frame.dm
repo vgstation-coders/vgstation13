@@ -46,6 +46,7 @@
 
 /obj/machinery/constructable_frame/machine_frame
 	required_circuit_type=MACHINE
+	sheet_amt = 5
 
 /obj/machinery/constructable_frame/machine_frame/attackby(obj/item/P as obj, mob/user as mob)
 	if(P.crit_fail)
@@ -109,7 +110,7 @@
 							C.use(5)
 							to_chat(user, "<span class='notice'>You add cables to the frame.</span>")
 							set_build_state(2)
-			else if(istype(P, /obj/item/stack/sheet/glass/glass))
+			else if(required_circuit_type == MACHINE && istype(P, /obj/item/stack/sheet/glass/glass))
 				var/obj/item/stack/sheet/glass/glass/G=P
 				if(G.amount<1)
 					return
@@ -123,7 +124,7 @@
 				if(P.is_wrench(user))
 					P.playtoolsound(src, 75)
 					to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
-					drop_stack(sheet_type, get_turf(src), 5, user)
+					drop_stack(sheet_type, get_turf(src), sheet_amt, user)
 					qdel(src)
 		if(2)
 			if(!..())
@@ -284,6 +285,11 @@
 
 /obj/item/weapon/circuitboard/proc/finish_building(var/obj/machinery/new_machine, var/mob/user) //Something that will get done after the last step of construction.
 	return
+
+/obj/machinery/constructable_frame/machine_frame/small
+	required_circuit_type=MACHINE_SMALL
+	sheet_amt = 2
+	pass_flags = PASSTABLE
 
 //Machine Frame Circuit Boards
 /*Common Parts: Parts List: Igniter, Timer, Infra-red laser, Infra-red sensor, t_scanner, Capacitor, Valve, sensor unit,
@@ -792,7 +798,7 @@ to destroy them and players will be able to make replacements.
 	name = "Circuit Board (Microwave)"
 	desc = "A circuit board used to run a general purpose kitchen appliance."
 	build_path = /obj/machinery/microwave
-	board_type = MACHINE
+	board_type = MACHINE_SMALL
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_ENGINEERING + "=2;" + Tc_MAGNETS + "=3"
 	req_components = list(
 							/obj/item/weapon/stock_parts/micro_laser = 1,
@@ -803,7 +809,7 @@ to destroy them and players will be able to make replacements.
 	name = "Circuit Board (All-In-One Grinder)"
 	desc = "A circuit board used to run a machine that grinds or juices solid items."
 	build_path = /obj/machinery/reagentgrinder
-	board_type = MACHINE
+	board_type = MACHINE_SMALL
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
 	req_components = list(
 							/obj/item/weapon/stock_parts/matter_bin = 2,
@@ -1264,7 +1270,7 @@ to destroy them and players will be able to make replacements.
 	name = "Circuit Board (Cell Charger)"
 	desc = "A circuit board used to run a small device that recharges power cells."
 	build_path = /obj/machinery/cell_charger
-	board_type = MACHINE
+	board_type = MACHINE_SMALL
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_POWERSTORAGE + "=3"
 	req_components = list(
 							/obj/item/weapon/stock_parts/scanning_module = 1,
@@ -1273,7 +1279,7 @@ to destroy them and players will be able to make replacements.
 /obj/item/weapon/circuitboard/recharger
 	name = "Circuit Board (Recharger)"
 	desc = "A circuit board used to run a machine that replenishes energy weapon charge."
-	board_type = MACHINE
+	board_type = MACHINE_SMALL
 	build_path = /obj/machinery/recharger
 	origin_tech = Tc_POWERSTORAGE + "=2;" + Tc_COMBAT + "=2"
 	req_components = list(
@@ -1397,7 +1403,7 @@ to destroy them and players will be able to make replacements.
 	name = "Circuit Board (Fax Machine)"
 	desc = "A circuit board used to run a machine that sends pieces of paper through bluespace."
 	build_path = /obj/machinery/faxmachine
-	board_type = MACHINE
+	board_type = MACHINE_SMALL
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_BLUESPACE + "=2"
 	req_components = list(
 							/obj/item/weapon/stock_parts/subspace/ansible = 1,

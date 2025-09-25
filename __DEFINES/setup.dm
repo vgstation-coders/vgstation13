@@ -1781,6 +1781,7 @@ var/proccalls = 1
 #define CUSTOM_VENDING_MAX_SLOGANS	5
 
 #define MACHINE "machine"
+#define MACHINE_SMALL "small machine"
 #define COMPUTER "computer"
 #define EMBEDDED_CONTROLLER "embedded controller"
 #define OTHER "other"
