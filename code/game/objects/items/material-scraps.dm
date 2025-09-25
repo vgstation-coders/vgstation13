@@ -5,12 +5,10 @@
 	icon_state = "scrap"
 	var/sheet_material = MAT_IRON
 
-/obj/item/scrap/New(location,material_amount = 0,material_type)
+/obj/item/scrap/New(location,material_amount = CC_PER_SHEET_DEFAULT,material_type)
 	if(material_type)
 		sheet_material = material_type
-	if(material_amount > 0)
-		min_required_for_sheet = material_amount
-	starting_materials = list(sheet_material = min_required_for_sheet)
+	starting_materials = list(sheet_material = material_amount)
 	. = ..()
 	var/datum/material/mat = materials.getMaterial(sheet_material)
 	sheet_type = mat.sheettype
@@ -22,7 +20,7 @@
 	. = ..()
 	var/datum/material/mat = materials.getMaterial(sheet_material)
 	to_chat(user,"<span class='notice'>It holds [materials.getAmount(sheet_material)] units of [lowertext(mat.name)].\
-	[materials.getValueByMaterial(sheet_material) >= min_required_for_sheet ? "It can make [materials.getAmount(sheet_material)/mat.cc_per_sheet] sheets." : ""]</span>")
+	[materials.getValueByMaterial(sheet_material) >= mat.cc_per_sheet ? "It can make [materials.getAmount(sheet_material)/mat.cc_per_sheet] sheets." : ""]</span>")
 
 /obj/item/scrap/attackby(obj/item/weapon/W, mob/user)
 	. = ..()
