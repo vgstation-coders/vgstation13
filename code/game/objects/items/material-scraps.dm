@@ -1,7 +1,7 @@
 /obj/item/scrap
 	name = "metal scraps"
 	desc = "Leftover metal in small quantities."
-	icon = 'icon/obj/stacks_sheets.dmi'
+	icon = 'icons/obj/stacks_sheets.dmi'
 	icon_state = "scrap"
 	var/sheet_material = MAT_IRON
 
