@@ -9,7 +9,7 @@
 	if(material_type)
 		sheet_material = material_type
 	starting_materials = list(sheet_material = material_amount)
-	. = ..()
+	. = ..(location)
 	var/datum/material/mat = materials.getMaterial(sheet_material)
 	sheet_type = mat.sheettype
 	var/material_name = lowertext(mat.name)
