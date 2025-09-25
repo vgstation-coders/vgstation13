@@ -150,7 +150,7 @@
 						update_desc() // sets the description based on req_components
 						to_chat(user, desc)
 					else
-						to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
+						to_chat(user, "<span class='warning'>This frame does not accept [required_circuit_type] circuit boards!</span>")
 				else
 					if(P.is_wirecutter(user))
 						P.playtoolsound(src, 50)
