@@ -325,10 +325,10 @@ to destroy them and players will be able to make replacements.
 	"cereal maker"=/obj/item/weapon/circuitboard/cooking/cerealmaker,
 	"food press"=/obj/item/weapon/circuitboard/cooking/foodpress)
 	var/soldering = 0 //Busy check
+	var/solder_time = 4
 
 /obj/item/weapon/circuitboard/blank/small
 	name = "unprinted mini circuitboard"
-	board_type = MACHINE_SMALL
 	icon_state = "small_blank_mod"
 	starting_materials = list(MAT_GLASS = 1000) // Recycle glass only
 	w_class = W_CLASS_TINY
@@ -336,6 +336,7 @@ to destroy them and players will be able to make replacements.
 	"microwave"=/obj/item/weapon/circuitboard/small/microwave,
 	"cell charger"=/obj/item/weapon/circuitboard/small/cell_charger,
 	"recharger"=/obj/item/weapon/circuitboard/small/recharger)
+	solder_time = 2
 
 /obj/item/weapon/circuitboard/blank/New()
 	..()
@@ -362,7 +363,7 @@ to destroy them and players will be able to make replacements.
 			return
 		var/obj/item/tool/solder/S = O
 		soldering = 1
-		if(S.do_solder(user, src,4 SECONDS,4,50))
+		if(S.do_solder(user, src,solder_time SECONDS,4,50))
 			user.create_in_hands(src, allowed_boards[choice], msg = "<span class='notice'>You fashion a crude [choice] board from the blank circuitboard.</span>")
 			return
 		soldering = 0
