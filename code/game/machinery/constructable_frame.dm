@@ -316,10 +316,7 @@ to destroy them and players will be able to make replacements.
 	"airlock"=/obj/item/weapon/circuitboard/airlock,
 	"APC"=/obj/item/weapon/circuitboard/power_control,
 	"vendomat"=/obj/item/weapon/circuitboard/vendomat,
-	"microwave"=/obj/item/weapon/circuitboard/small/microwave,
 	"station map"=/obj/item/weapon/circuitboard/station_map,
-	"cell charger"=/obj/item/weapon/circuitboard/small/cell_charger,
-	"recharger"=/obj/item/weapon/circuitboard/small/recharger,
 	"fishtank filter"=/obj/item/weapon/circuitboard/fishtank,
 	"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall,
 	"data"=/obj/item/weapon/circuitboard/disk_duplicator,
@@ -328,6 +325,17 @@ to destroy them and players will be able to make replacements.
 	"cereal maker"=/obj/item/weapon/circuitboard/cooking/cerealmaker,
 	"food press"=/obj/item/weapon/circuitboard/cooking/foodpress)
 	var/soldering = 0 //Busy check
+
+/obj/item/weapon/circuitboard/blank/small
+	name = "unprinted mini circuitboard"
+	board_type = MACHINE_SMALL
+	icon_state = "small_mod"
+	starting_materials = list(MAT_GLASS = 1000) // Recycle glass only
+	w_class = W_CLASS_TINY
+	allowed_boards = list(
+	"microwave"=/obj/item/weapon/circuitboard/small/microwave,
+	"cell charger"=/obj/item/weapon/circuitboard/small/cell_charger,
+	"recharger"=/obj/item/weapon/circuitboard/small/recharger)
 
 /obj/item/weapon/circuitboard/blank/New()
 	..()
