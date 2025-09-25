@@ -91,7 +91,7 @@ var/global/list/juice_items = list (
 	beaker = new /obj/item/weapon/reagent_containers/glass/beaker/large(src)
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/reagentgrinder,
+		/obj/item/weapon/circuitboard/small/reagentgrinder,
 		/obj/item/weapon/stock_parts/matter_bin,
 		/obj/item/weapon/stock_parts/matter_bin,
 		/obj/item/weapon/stock_parts/micro_laser,

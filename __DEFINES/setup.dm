@@ -1784,7 +1784,7 @@ var/proccalls = 1
 #define MACHINE_SMALL "small machine"
 #define COMPUTER "computer"
 #define EMBEDDED_CONTROLLER "embedded controller"
-#define OTHER "other"
+#define OTHER "this kind of"
 #define MACHINE_REINFORCED "reinforced machine"
 
 // Bedsheet altering

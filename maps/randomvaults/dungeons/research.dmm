@@ -2810,8 +2810,8 @@
 /obj/machinery/recharger,
 /obj/machinery/recharger,
 /obj/machinery/recharger,
-/obj/item/weapon/circuitboard/recharger,
-/obj/item/weapon/circuitboard/recharger,
+/obj/item/weapon/circuitboard/small/recharger,
+/obj/item/weapon/circuitboard/small/recharger,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/armory)
 "DG" = (

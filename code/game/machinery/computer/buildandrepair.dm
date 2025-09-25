@@ -39,6 +39,12 @@
 	var/contain_parts = 1
 	toolsounds = list('sound/items/Screwdriver.ogg')
 
+/obj/item/weapon/circuitboard/small
+	board_type = MACHINE_SMALL
+	icon_state = "small_mod"
+	starting_materials = list(MAT_GLASS = 1000) // Recycle glass only
+	w_class = W_CLASS_TINY
+
 /obj/item/weapon/circuitboard/message_monitor
 	name = "Circuit board (Message Monitor)"
 	desc = "A circuit board for running a computer used for telecommunications monitoring."

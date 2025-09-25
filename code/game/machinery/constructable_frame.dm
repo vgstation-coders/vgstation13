@@ -305,7 +305,6 @@ to destroy them and players will be able to make replacements.
 /obj/item/weapon/circuitboard/blank
 	name = "unprinted circuitboard"
 	desc = "A blank circuitboard ready for design."
-	icon = 'icons/obj/module.dmi'
 	icon_state = "blank_mod"
 	board_type = OTHER
 	//var/datum/circuits/local_fuses = null
@@ -317,10 +316,10 @@ to destroy them and players will be able to make replacements.
 	"airlock"=/obj/item/weapon/circuitboard/airlock,
 	"APC"=/obj/item/weapon/circuitboard/power_control,
 	"vendomat"=/obj/item/weapon/circuitboard/vendomat,
-	"microwave"=/obj/item/weapon/circuitboard/microwave,
+	"microwave"=/obj/item/weapon/circuitboard/small/microwave,
 	"station map"=/obj/item/weapon/circuitboard/station_map,
-	"cell charger"=/obj/item/weapon/circuitboard/cell_charger,
-	"recharger"=/obj/item/weapon/circuitboard/recharger,
+	"cell charger"=/obj/item/weapon/circuitboard/small/cell_charger,
+	"recharger"=/obj/item/weapon/circuitboard/small/recharger,
 	"fishtank filter"=/obj/item/weapon/circuitboard/fishtank,
 	"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall,
 	"data"=/obj/item/weapon/circuitboard/disk_duplicator,
@@ -798,22 +797,20 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/scanning_module = 1,
 							/obj/item/weapon/stock_parts/console_screen = 1)
 
-/obj/item/weapon/circuitboard/microwave
+/obj/item/weapon/circuitboard/small/microwave
 	name = "Circuit Board (Microwave)"
 	desc = "A circuit board used to run a general purpose kitchen appliance."
 	build_path = /obj/machinery/microwave
-	board_type = MACHINE_SMALL
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_ENGINEERING + "=2;" + Tc_MAGNETS + "=3"
 	req_components = list(
 							/obj/item/weapon/stock_parts/micro_laser = 1,
 							/obj/item/weapon/stock_parts/scanning_module = 1,
 							/obj/item/weapon/stock_parts/console_screen = 1)
 
-/obj/item/weapon/circuitboard/reagentgrinder
+/obj/item/weapon/circuitboard/small/reagentgrinder
 	name = "Circuit Board (All-In-One Grinder)"
 	desc = "A circuit board used to run a machine that grinds or juices solid items."
 	build_path = /obj/machinery/reagentgrinder
-	board_type = MACHINE_SMALL
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
 	req_components = list(
 							/obj/item/weapon/stock_parts/matter_bin = 2,
@@ -1270,20 +1267,18 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/micro_laser/high = 3,
 							/obj/item/weapon/stock_parts/capacitor = 6)
 
-/obj/item/weapon/circuitboard/cell_charger
+/obj/item/weapon/circuitboard/small/cell_charger
 	name = "Circuit Board (Cell Charger)"
 	desc = "A circuit board used to run a small device that recharges power cells."
 	build_path = /obj/machinery/cell_charger
-	board_type = MACHINE_SMALL
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_POWERSTORAGE + "=3"
 	req_components = list(
 							/obj/item/weapon/stock_parts/scanning_module = 1,
 							/obj/item/weapon/stock_parts/capacitor = 2)
 
-/obj/item/weapon/circuitboard/recharger
+/obj/item/weapon/circuitboard/small/recharger
 	name = "Circuit Board (Recharger)"
 	desc = "A circuit board used to run a machine that replenishes energy weapon charge."
-	board_type = MACHINE_SMALL
 	build_path = /obj/machinery/recharger
 	origin_tech = Tc_POWERSTORAGE + "=2;" + Tc_COMBAT + "=2"
 	req_components = list(
@@ -1403,11 +1398,10 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/matter_bin = 3,
 							/obj/item/weapon/stock_parts/capacitor = 1)
 
-/obj/item/weapon/circuitboard/fax
+/obj/item/weapon/circuitboard/small/fax
 	name = "Circuit Board (Fax Machine)"
 	desc = "A circuit board used to run a machine that sends pieces of paper through bluespace."
 	build_path = /obj/machinery/faxmachine
-	board_type = MACHINE_SMALL
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_BLUESPACE + "=2"
 	req_components = list(
 							/obj/item/weapon/stock_parts/subspace/ansible = 1,
