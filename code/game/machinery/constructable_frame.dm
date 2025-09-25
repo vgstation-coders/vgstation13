@@ -288,7 +288,8 @@
 	return
 
 /obj/machinery/constructable_frame/machine_frame/small
-	required_circuit_type=MACHINE_SMALL
+	name = "small machine frame"
+	required_circuit_type = MACHINE_SMALL
 	sheet_amt = 2
 	cables_needed = 2
 	pass_flags = PASSTABLE
