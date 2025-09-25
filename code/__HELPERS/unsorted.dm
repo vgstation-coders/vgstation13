@@ -556,9 +556,12 @@
 /proc/do_after_many(var/mob/user, var/list/targets, var/delay, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE)
 	if(!user || numticks == 0 || !targets || !targets.len)
 		return 0
+	if(delay <= 0)
+		return TRUE //instant finish speed so no need for any of the below code
 
-	numticks = min(numticks,delay)
 	var/delay_fraction = round(delay / numticks)
+	if(delay_fraction == 0)
+		return TRUE //A sleep(0) below means instant finish speed, the progbar isn't even shown to the user since it finishes so fast.
 	if(istype(user.loc, /obj/mecha))
 		use_user_turf = TRUE
 	var/initial_user_location = use_user_turf ? get_turf(user) : user.loc
@@ -647,7 +650,7 @@
   * Arguments:
   * * mob/user - the user who will see the progress bar
   * * atom/target - the atom the progress bar will be attached to
-  * * delay - duration in deciseconds of the delay
+  * * delay - duration in deciseconds of the delay. If this is below numticks or is <=0, this will return TRUE instantly.
   * * numticks - how many times the failure conditions will be checked throughout the duration. default 10
   * * needhand - if TRUE, the item in the hands of the user needs to stay the same throughout the duration. default TRUE
   * * use_user_turf - if TRUE, the turf of the user is checked instead of its location. default FALSE
@@ -656,11 +659,14 @@
 /proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE, callback/custom_checks)
 	if(!user || isnull(user))
 		return 0
+	if(delay <= 0)
+		return TRUE //instant finish speed so no need for any of the below code
 	if(numticks == 0)
 		return 0
 
-	numticks = min(numticks,delay)
 	var/delayfraction = round(delay/numticks)
+	if(delayfraction == 0)
+		return TRUE //A sleep(0) below means instant finish speed, the progbar isn't even shown to the user since it finishes so fast.
 	var/Location
 	if(istype(user.loc, /obj/mecha))
 		use_user_turf = TRUE
