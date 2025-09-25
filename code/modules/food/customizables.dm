@@ -271,7 +271,7 @@
 		to_chat(user, "<span class='warning'>That's already got a plate!</span>")
 		return
 	if(istype(snack,/obj/item/weapon/reagent_containers/food/snacks/devil)) //the plate doesn't call after_consume, so this will do for now.
-		to_chat(user, "<span class='warning'>\The [snack] cannot be contained by any traditional diningware and must be eaten by hand!</span>")
+		to_chat(user, "<span class='warning'>\The [snack] cannot be contained by any traditional dinnerware and must be eaten by hand!</span>")
 		return
 
 	var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/F = new(get_turf(src),snack)

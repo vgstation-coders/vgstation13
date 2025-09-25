@@ -186,10 +186,7 @@
 
 /obj/item/toy/gun/examine(mob/user)
 	..()
-	if(disguised)
-		to_chat(user, "<span class='info'>Has [bullets] round\s remaining.</span>")
-	else
-		to_chat(user, "There [bullets == 1 ? "is" : "are"] [bullets] cap\s left.")
+	to_chat(user, "<span class='info'>Has [bullets] [disguised ? "round" : "cap"]\s remaining.</span>")
 
 /obj/item/toy/gun/attackby(obj/item/toy/ammo/gun/A as obj, mob/user as mob)
 	if (istype(A, /obj/item/toy/ammo/gun))

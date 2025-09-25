@@ -888,7 +888,7 @@
 
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
-	w_type = RECYK_MISC
+	w_type = RECYK_PAPER
 
 /obj/item/weapon/storage/fancy/battery_box/empty
 	empty = 1
