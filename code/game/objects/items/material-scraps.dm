@@ -3,12 +3,9 @@
 	desc = "Leftover metal in small quantities."
 	icon = 'icons/obj/stacks_sheets.dmi'
 	icon_state = "scrap"
-	var/sheet_material = MAT_IRON
 
-/obj/item/scrap/New(location,material_amount = CC_PER_SHEET_DEFAULT,material_type)
-	if(material_type)
-		sheet_material = material_type
-	starting_materials = list(sheet_material = material_amount)
+/obj/item/scrap/New(location,material_amount = CC_PER_SHEET_DEFAULT,material_type = MAT_IRON)
+	starting_materials = list(material_type = material_amount)
 	. = ..(location)
 	var/datum/material/mat = materials.getMaterial(sheet_material)
 	sheet_type = mat.sheettype
