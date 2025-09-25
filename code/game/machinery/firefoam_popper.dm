@@ -211,7 +211,7 @@
 		pixel_y = 4
 
 /obj/item/weapon/circuitboard/small/firefoam_popper
-	name = "Circuit Board (Firefoam Popper)"
+	name = "Mini Circuit Board (Firefoam Popper)"
 	desc = "A circuit board used to run a firefoam popper."
 	build_path = /obj/machinery/firefoam_popper
 	origin_tech = Tc_ENGINEERING + "=2;"
