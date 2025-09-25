@@ -16,6 +16,7 @@
 	var/build_state = 1
 	var/build_path = 0 //0 = Default path. 1 = Glass Frame
 	var/required_circuit_type = null
+	var/cables_needed = 5
 
 	// For pods
 	var/list/connected_parts = list()
@@ -72,7 +73,7 @@
 							icon_state="box_glass_circuit"
 				if (iswelder(P))
 					to_chat(user, "<span class='notice'>You use the machine frame as a vice and shape the glass with the welder into a fish bowl.</span>")
-					new /obj/item/stack/sheet/metal(get_turf(src), 5)
+					new /obj/item/stack/sheet/metal(get_turf(src), sheet_amt)
 					new /obj/machinery/fishtank/bowl(get_turf(src))
 					qdel(src)
 				return
@@ -102,12 +103,12 @@
 		if(1)
 			if(istype(P, /obj/item/stack/cable_coil))
 				var/obj/item/stack/cable_coil/C = P
-				if(C.amount >= 5)
+				if(C.amount >= cables_needed)
 					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You start to add cables to the frame.</span>")
 					if(do_after(user, src, 20))
-						if(C && C.amount >= 5) // Check again
-							C.use(5)
+						if(C && C.amount >= cables_needed) // Check again
+							C.use(cables_needed)
 							to_chat(user, "<span class='notice'>You add cables to the frame.</span>")
 							set_build_state(2)
 			else if(required_circuit_type == MACHINE && istype(P, /obj/item/stack/sheet/glass/glass))
@@ -156,7 +157,7 @@
 						to_chat(user, "<span class='notice'>You remove the cables.</span>")
 						set_build_state(1)
 						var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( src.loc )
-						A.amount = 5
+						A.amount = cables_needed
 
 		if(3)
 			if(!..())
@@ -289,6 +290,7 @@
 /obj/machinery/constructable_frame/machine_frame/small
 	required_circuit_type=MACHINE_SMALL
 	sheet_amt = 2
+	cables_needed = 2
 	pass_flags = PASSTABLE
 	icon = 'icons/obj/machines/constructable_small.dmi'
 
