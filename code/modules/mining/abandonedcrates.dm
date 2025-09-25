@@ -28,15 +28,15 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 
 /obj/structure/closet/crate/secure/loot/attack_hand(mob/user as mob)
 	if(locked)
-		if (src.allowed(usr))
+		if (src.allowed(user))
 			return ..()
-		if (usr.stat || usr.incapacitated())
+		if (user.stat || user.incapacitated())
 			return
 		to_chat(user, "<span class='notice'>The crate is locked with a Deca-code lock.</span>")
-		if (!usr.dexterity_check())
-			to_chat(usr, "<span class='warning'>You don't have the dexterity to enter a keycode!</span>")
+		if (!user.dexterity_check())
+			to_chat(user, "<span class='warning'>You don't have the dexterity to enter a keycode!</span>")
 			return
-		var/input = input(usr, "Enter digit from [min] to [max].", "Deca-Code Lock", "") as null|num
+		var/input = input(user, "Enter digit from [min] to [max].", "Deca-Code Lock", "") as null|num
 		if(in_range(src, user))
 			input = clamp(input, 0, 10)
 			if (input == code)
