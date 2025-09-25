@@ -214,7 +214,7 @@
 	name = "Circuit Board (Firefoam Popper)"
 	desc = "A circuit board used to run a firefoam popper."
 	build_path = /obj/machinery/firefoam_popper
-	board_type = MACHINE
+	board_type = MACHINE_SMALL
 	origin_tech = Tc_ENGINEERING + "=2;"
 	req_components = list (
 							/obj/item/weapon/stock_parts/scanning_module = 1,
