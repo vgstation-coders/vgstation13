@@ -2,7 +2,7 @@
 	mountain_height = 0.85
 	perlin_zoom = 60
 
-	primary_area_type = /area/planetoid/urban
+	primary_area_type = /area/planet/urban
 
 	biome_table = list(
 		BIOME_COLDEST = list(

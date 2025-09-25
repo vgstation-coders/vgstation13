@@ -262,7 +262,7 @@
 	if(available_ruins.len)
 		selected_ruin_type = pick(available_ruins)
 
-	SSmapping.spawn_planetoid(selected_planet_type, selected_ruin_type)
+	SSmapping.spawn_planet(selected_planet_type, selected_ruin_type)
 
 	return selected_planet_type
 

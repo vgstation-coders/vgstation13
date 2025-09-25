@@ -4,7 +4,7 @@
 	mountain_height = 0.45
 	perlin_zoom = 65
 
-	primary_area_type = /area/planetoid/lava
+	primary_area_type = /area/planet/lava
 
 	biome_table = list(
 		BIOME_COLDEST = list(

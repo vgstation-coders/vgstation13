@@ -458,7 +458,7 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 	var/sound/S = sound(get_sfx("explosion"), 0, 0, 0, 100)
 	var/sound/S_quiet = sound('sound/effects/explosionfar.ogg', 0, 0, 0, 100)
 	for(var/mob/M in playerlist)
-		if(istype(get_area(M),/area/planetoid/cave))
+		if(istype(get_area(M),/area/planet/cave))
 			M << S_quiet
 		else
 			M << S
@@ -468,7 +468,7 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 	for(var/mob/living/ML in playerlist)
 		if(!istype(ML))
 			continue
-		if(istype(get_area(ML),/area/planetoid/cave))
+		if(istype(get_area(ML),/area/planet/cave))
 			continue
 		ML.flash_eyes(visual = 1)
 

@@ -71,7 +71,6 @@
 #include "__DEFINES\research_levels.dm"
 #include "__DEFINES\rigbuilding.dm"
 #include "__DEFINES\role_datums_defines.dm"
-#include "__DEFINES\ruins.dm"
 #include "__DEFINES\rust_g.dm"
 #include "__DEFINES\security.dm"
 #include "__DEFINES\setup.dm"

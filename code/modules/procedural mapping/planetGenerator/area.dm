@@ -1,61 +1,38 @@
 //Collection of areas used only for procgen.
+/area/planet
+	name = "Planet"
+	flags = NO_PERSISTENCE|CAVES_ALLOWED|FLORA_ALLOWED|MOB_SPAWN_ALLOWED
+	requires_power = 0
+	dynamic_lighting = 1
 
-/area/planetoid/beach
+/area/planet/beach
 	name = "Beach"
-	requires_power = 0
-	dynamic_lighting = 1
-	flags = CAVES_ALLOWED|NO_PERSISTENCE|FLORA_ALLOWED|MOB_SPAWN_ALLOWED
 
-/area/planetoid/cave
+/area/planet/cave
 	name = "Cave"
-	requires_power = 0
-	dynamic_lighting = 1
-	flags = CAVES_ALLOWED|NO_PERSISTENCE|FLORA_ALLOWED|MOB_SPAWN_ALLOWED
 
-/area/planetoid/desert
-	name = "Desert Planetoid"
-	requires_power = 0
-	dynamic_lighting = 1
-	flags = CAVES_ALLOWED|NO_PERSISTENCE|FLORA_ALLOWED|MOB_SPAWN_ALLOWED
+/area/planet/desert
+	name = "Desert Planet"
 
-/area/planetoid/lava
-	name = "Lava Planetoid"
-	requires_power = 0
-	dynamic_lighting = 1
-	flags = CAVES_ALLOWED|NO_PERSISTENCE|FLORA_ALLOWED|MOB_SPAWN_ALLOWED
+/area/planet/lava
+	name = "Lava Planet"
 
-/area/planetoid/rock
-	name = "Rock Planetoid"
-	requires_power = 0
-	dynamic_lighting = 1
-	flags = CAVES_ALLOWED|NO_PERSISTENCE|FLORA_ALLOWED|MOB_SPAWN_ALLOWED
+/area/planet/snow
+	name = "Frozen Planet"
 
-/area/planetoid/snow
-	name = "Frozen Planetoid"
-	requires_power = 0
-	dynamic_lighting = 1
-	flags = CAVES_ALLOWED|NO_PERSISTENCE|FLORA_ALLOWED|MOB_SPAWN_ALLOWED
+/area/planet/grass
+	name = "Grass Planet"
 
-/area/planetoid/grass
-	name = "Grass Planetoid"
-	requires_power = 0
-	dynamic_lighting = 1
-	flags = CAVES_ALLOWED|NO_PERSISTENCE|FLORA_ALLOWED|MOB_SPAWN_ALLOWED
+/area/planet/xeno
+	name = "Xeno Planet"
 
-/area/planetoid/xeno
-	name = "Xeno Planetoid"
-	requires_power = 0
-	dynamic_lighting = 1
-	flags = CAVES_ALLOWED|NO_PERSISTENCE|FLORA_ALLOWED|MOB_SPAWN_ALLOWED
+/area/planet/jungle
+	name = "Jungle Planet"
 
-/area/planetoid/jungle
-	name = "Jungle Planetoid"
-	requires_power = 0
-	dynamic_lighting = 1
-	flags = CAVES_ALLOWED|NO_PERSISTENCE|FLORA_ALLOWED|MOB_SPAWN_ALLOWED
+/area/planet/urban
+	name = "Urban Planet"
 
-/area/planetoid/urban
-	name = "Urban Planetoid"
-	requires_power = 0
-	dynamic_lighting = 1
-	flags = CAVES_ALLOWED|NO_PERSISTENCE|FLORA_ALLOWED|MOB_SPAWN_ALLOWED
+// Example with flora and caves disabled
+// /area/planet/moon
+// 	name = "Moon"
+// 	flags = NO_PERSISTENCE|MOB_SPAWN_ALLOWED

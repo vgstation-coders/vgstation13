@@ -6,7 +6,7 @@
 	icon_state = "basalt"
 	base_icon_state = "basalt"
 	floor_variance = 0
-	light_color = COLOR_LAVAPLANET_LIGHT
+	light_color = LIGHT_COLOR_LAVA
 
 /turf/simulated/floor/plating/asteroid/basalt/lava_land_surface/lit
 	light_range = 2
@@ -28,7 +28,7 @@
 	icon_state = "sand_1"
 	base_icon_state = "sand"
 
-	light_color = COLOR_LAVAPLANET_LIGHT
+	light_color = LIGHT_COLOR_LAVA
 
 	floor_variance = 83
 	var/max_icon_states = 5
@@ -52,7 +52,7 @@
 	base_icon_state = "grass"
 	light_range = 2
 	light_power = 0.6
-	light_color = COLOR_LAVAPLANET_LIGHT
+	light_color = LIGHT_COLOR_LAVA
 
 /turf/simulated/floor/plating/asteroid/dirt/grass/lavaland/New()
 	icon_state = "[base_icon_state]_[rand(1,3)]"
@@ -75,37 +75,37 @@
 /turf/simulated/floor/concrete/pavement/lava
 	light_range = 2
 	light_power = 0.6
-	light_color = COLOR_LAVAPLANET_LIGHT
+	light_color = LIGHT_COLOR_LAVA
 
 /turf/simulated/floor/concrete/lava
 	light_range = 2
 	light_power = 0.6
-	light_color = COLOR_LAVAPLANET_LIGHT
+	light_color = LIGHT_COLOR_LAVA
 
 /turf/simulated/floor/concrete/slab_1/lava
 	light_range = 2
 	light_power = 0.6
-	light_color = COLOR_LAVAPLANET_LIGHT
+	light_color = LIGHT_COLOR_LAVA
 
 /turf/simulated/floor/plating/lava
 	light_range = 2
 	light_power = 0.6
-	light_color = COLOR_LAVAPLANET_LIGHT
+	light_color = LIGHT_COLOR_LAVA
 
 /turf/simulated/floor/plating/rust/lava
 	light_range = 2
 	light_power = 0.6
-	light_color = COLOR_LAVAPLANET_LIGHT
+	light_color = LIGHT_COLOR_LAVA
 
 /turf/simulated/floor/plasteel/white/lava
 	light_range = 2
 	light_power = 0.6
-	light_color = COLOR_LAVAPLANET_LIGHT
+	light_color = LIGHT_COLOR_LAVA
 
 /turf/simulated/floor/plasteel/dark/lava
 	light_range = 2
 	light_power = 0.6
-	light_color = COLOR_LAVAPLANET_LIGHT
+	light_color = LIGHT_COLOR_LAVA
 
 /turf/simulated/floor/plating/asteroid/obsidian
 	name = "obsidian"
@@ -118,7 +118,7 @@
 /turf/simulated/floor/plating/asteroid/obsidian/lit
 	light_range = 2
 	light_power = 0.6
-	light_color = COLOR_LAVAPLANET_LIGHT
+	light_color = LIGHT_COLOR_LAVA
 
 ///LAVA
 /turf/simulated/floor/lava

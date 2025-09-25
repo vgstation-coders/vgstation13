@@ -361,14 +361,8 @@
 		var/turf/T = get_turf(M)
 		if(!T || T.z != alloc.z)
 			continue
-		// Check if mob is within the allocation's sector boundaries
-		var/sector_x = alloc.sector[1]
-		var/sector_y = alloc.sector[2]
-		var/x_min = 1 + (sector_x - 1) * 100
-		var/x_max = sector_x * 100 - 1
-		var/y_min = 1 + (sector_y - 1) * 100
-		var/y_max = sector_y * 100 - 1
-		if(T.x < x_min || T.x > x_max || T.y < y_min || T.y > y_max)
+		var/datum/allocation/A = SSmapping.get_allocation(trf = T)
+		if(A != alloc)
 			continue
 		mobs_found += M
 	return mobs_found

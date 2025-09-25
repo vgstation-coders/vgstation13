@@ -19,7 +19,7 @@ var/datum/subsystem/mapping/SSmapping
 		/datum/planet_type/snow,
 		/datum/planet_type/xeno
 	)
-	//All spawned planetoids
+	//All spawned planets
 	var/list/planets = list()
 	//All allocations
 	var/list/allocations = list()
@@ -100,7 +100,7 @@ var/datum/subsystem/mapping/SSmapping
 	if(!chosen_ruin_type)
 		chosen_ruin_type = pick(ruin_types)
 
-	SSmapping.spawn_planetoid(chosen_planet_type, chosen_ruin_type)
+	SSmapping.spawn_planet(chosen_planet_type, chosen_ruin_type)
 
 //Creates a grid of 25 99x99 squares for procedural generation
 /datum/subsystem/mapping/proc/create_procgen_level()
@@ -118,7 +118,7 @@ var/datum/subsystem/mapping/SSmapping
 		var/datum/biome/biome_instance = new biome_path()
 		biomes[biome_path] += biome_instance
 
-/datum/subsystem/mapping/proc/spawn_planetoid(datum/planet_type/planet_datum, ruin_type)
+/datum/subsystem/mapping/proc/spawn_planet(datum/planet_type/planet_datum, ruin_type)
 	var/datum/planet_type/newplanet = new planet_datum
 	var/datum/planetGenerator/mapgen = new newplanet.mapgen
 	planets += newplanet
@@ -263,12 +263,12 @@ var/datum/subsystem/mapping/SSmapping
 		return null
 //// END LLM-SLOP I MUST REVIEW AND FIX LATER ////
 
-//Assigns a planetoid to a region
+//Assigns a planet to a region
 /datum/subsystem/mapping/proc/assign_allocation(var/datum/planet_type/planet_type, z_id)
 	var/datum/allocation/A = new
 	var/sector_count = allocations.len + 1
 	A.sector = list((sector_count - 1) % 5 + 1, ceil(sector_count / 5))
-	message_admins("Assigning planetoid to sector x:[A.sector[1]] y:[A.sector[2]] in z-level [z_id]")
+	message_admins("Assigning planet to sector x:[A.sector[1]] y:[A.sector[2]] in z-level [z_id]")
 	A.ptype = planet_type
 	A.z = z_id
 	A.turfs = turfs_from_sector(A.sector, z_id)
@@ -294,17 +294,17 @@ var/datum/subsystem/mapping/SSmapping
 	return A.turfs
 
 //Get allocation from coords or turf
-/datum/subsystem/mapping/proc/get_allocation(var/x = 0, var/y = 0, var/z = 7, var/turf/T = null)
-	if(T)
-		x = T.x
-		y = T.y
-		z = T.z
+/datum/subsystem/mapping/proc/get_allocation(var/x = 0, var/y = 0, var/z = 7, var/turf/trf = null)
+	if(trf)
+		x = trf.x
+		y = trf.y
+		z = trf.z
 	var/sector = list(ceil(x / 100), ceil(y / 100))
 	for(var/datum/allocation/A in allocations)
 		if(A.sector == sector && A.z == z)
 			return A
 
-//Gets a landing zone for a given planetoid
+//Gets a landing zone for a given planet
 /datum/subsystem/mapping/proc/get_landing_zone(var/datum/allocation/alloc,var/list/size)
 	if (!alloc || !size || size.len != 2)
 		return null

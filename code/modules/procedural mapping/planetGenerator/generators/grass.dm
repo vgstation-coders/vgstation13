@@ -2,7 +2,7 @@
 	mountain_height = 0.7
 	perlin_zoom = 60
 
-	primary_area_type = /area/planetoid/grass
+	primary_area_type = /area/planet/grass
 
 	biome_table = list(
 		BIOME_COLDEST = list(

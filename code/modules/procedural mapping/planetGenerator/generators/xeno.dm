@@ -2,7 +2,7 @@
 	mountain_height = 0.8
 	perlin_zoom = 65
 
-	primary_area_type = /area/planetoid/xeno
+	primary_area_type = /area/planet/xeno
 
 	biome_table = list(
 		BIOME_COLDEST = list(

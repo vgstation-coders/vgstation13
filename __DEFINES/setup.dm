@@ -263,10 +263,9 @@ var/MAX_EXPLOSION_RANGE = 32
 //turf-only flags
 #define NOJAUNT		1
 #define NO_MINIMAP  2 //Invisible to minimaps (fuck minimaps)
-#define CAN_BE_DIRTY_1 4 // If a procgen turf can be made dirty at roundstart. This is also used in areas.
-#define NO_LAVA_GEN_1 8 // Blocks lava rivers being generated on the turf
-#define NO_RUINS_1 16 // Blocks ruins spawning on the turf
-#define NO_FLORA 32 // Prevents plants from growing
+#define NO_LAVA_GEN_1 4 // Blocks lava rivers being generated on the turf
+#define NO_RUINS_1 8 // Blocks ruins spawning on the turf
+#define NO_FLORA 16 // Prevents plants from growing
 
 //slots
 #define slot_back 1
@@ -1993,9 +1992,6 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PS_SACRED_FLAME		"Sacred Flame"
 #define PS_SACRED_FLAME2	"Sacred Flame2"
 #define PS_BIBLE_PAGE		"Bible Page"
-#define PS_RAIN 			"Rain"
-#define PS_ASH 				"Ash"
-#define PS_FALLOUT 			"Fallout"
 
 //Particles variable defines
 #define PVAR_SPAWNING	"spawning"

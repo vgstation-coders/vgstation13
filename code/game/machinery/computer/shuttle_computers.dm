@@ -344,7 +344,7 @@
 		to_chat(user, "<span class='warning'>Planet data unavailable.</span>")
 		return
 
-	var/list/shuttle_size = shuttle.get_shuttle_size()
+	var/list/shuttle_size = shuttle.get_size()
 	if(!shuttle_size)
 		to_chat(user, "<span class='warning'>Unable to determine shuttle dimensions.</span>")
 		return

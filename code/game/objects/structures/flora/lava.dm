@@ -1,4 +1,4 @@
-//*******************Contains everything related to the flora on lavaland planetoids.*******************************
+//*******************Contains everything related to the flora on lavaland planets.*******************************
 
 /obj/structure/flora/ash
 	gender = PLURAL

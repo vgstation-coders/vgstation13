@@ -79,7 +79,7 @@ On the map dm file, redefine the following:
 			if(IsEven(T.x)) //If we are also even.
 				if(IsEven(T.y)) //If we are also even.
 					var/area/A = get_area(T)
-					if((istype(A, /area/surface) || istype(A, /area/planetoid)) && !istype(A, /area/planetoid/cave)) //If we are outside.
+					if(isopensurface(A)) //If we are outside.
 						daynight_turfs += T
 					else //If We aren't we need to make sure we handle the outside segment
 						for(var/cdir in cardinal)//Ironically, this part didn't work correctly but....

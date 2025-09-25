@@ -25,7 +25,7 @@
 	var/area/primary_area
 
 	/// The type of the area that will be used for all cave biomes.
-	var/area/cave_area_type = /area/planetoid/cave
+	var/area/cave_area_type = /area/planet/cave
 	/// The area instance that will be used for all cave biomes.
 	var/area/cave_area
 

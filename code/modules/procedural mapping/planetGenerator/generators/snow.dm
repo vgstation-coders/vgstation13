@@ -7,7 +7,7 @@
 	birth_limit = 4
 	death_limit = 3
 
-	primary_area_type = /area/planetoid/snow
+	primary_area_type = /area/planet/snow
 
 	biome_table = list(
 		BIOME_COLDEST = list(
