@@ -121,7 +121,7 @@
 				icon_state="box_glass"
 				return
 			else
-				if(iscrowbar(P))
+				if(P.is_wrench(user))
 					P.playtoolsound(src, 75)
 					to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
 					drop_stack(sheet_type, get_turf(src), sheet_amt, user)
