@@ -329,7 +329,7 @@ to destroy them and players will be able to make replacements.
 /obj/item/weapon/circuitboard/blank/small
 	name = "unprinted mini circuitboard"
 	board_type = MACHINE_SMALL
-	icon_state = "small_mod"
+	icon_state = "small_blank_mod"
 	starting_materials = list(MAT_GLASS = 1000) // Recycle glass only
 	w_class = W_CLASS_TINY
 	allowed_boards = list(
