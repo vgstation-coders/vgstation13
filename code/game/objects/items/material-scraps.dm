@@ -40,6 +40,7 @@
 	return ..()
 
 /obj/item/scrap/proc/merge(obj/item/scrap/S) //Merge src into S, as much as possible
-	if(src == S) //We need to check this because items can cross themselves for some fucked up reason
+	if(src == S || sheet_material != S.sheet_material)
 		return
-	//TODO: code here
+	materials.addAmount(sheet_material,S.materials.getAmount(S.sheet_material,amount))
+	qdel(S)
