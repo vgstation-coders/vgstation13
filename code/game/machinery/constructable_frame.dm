@@ -3,7 +3,7 @@
 /obj/machinery/constructable_frame //Made into a seperate type to make future revisions easier.
 	name = "machine frame"
 	desc = "A metal frame ready to receive wires, a circuit board and parts."
-	icon = 'icons/obj/stock_parts.dmi'
+	icon = 'icons/obj/machines/constructable.dmi'
 	icon_state = "box_0"
 	density = 1
 	anchored = 1
@@ -290,6 +290,7 @@
 	required_circuit_type=MACHINE_SMALL
 	sheet_amt = 2
 	pass_flags = PASSTABLE
+	icon = 'icons/obj/machines/constructable_small.dmi'
 
 //Machine Frame Circuit Boards
 /*Common Parts: Parts List: Igniter, Timer, Infra-red laser, Infra-red sensor, t_scanner, Capacitor, Valve, sensor unit,

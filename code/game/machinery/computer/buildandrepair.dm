@@ -5,7 +5,7 @@
 	anchored = 0
 	name = "computer frame"
 	desc = "A metal frame ready to receive a circuit board, wires and a glass panel."
-	icon = 'icons/obj/stock_parts.dmi'
+	icon = 'icons/obj/machines/constructable.dmi'
 	icon_state = "0"
 	var/state = 0
 	var/obj/item/weapon/circuitboard/circuit = null
