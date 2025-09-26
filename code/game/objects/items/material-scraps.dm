@@ -3,10 +3,9 @@
 	desc = "Leftover metal in small quantities."
 	icon = 'icons/obj/stacks_sheets.dmi'
 	icon_state = "scrap"
-	var/sheet_material
+	var/material_type = MAT_IRON
 
-/obj/item/scrap/New(location,material_amount = CC_PER_SHEET_DEFAULT,material_type = MAT_IRON)
-	sheet_material = material_type
+/obj/item/scrap/New(location,material_amount = CC_PER_SHEET_DEFAULT)
 	starting_materials = list(material_type = material_amount)
 	. = ..(location)
 	var/datum/material/mat = materials.getMaterial(sheet_material)
@@ -42,5 +41,5 @@
 /obj/item/scrap/proc/merge(obj/item/scrap/S) //Merge src into S, as much as possible
 	if(src == S || sheet_material != S.sheet_material)
 		return
-	S.materials.addAmount(sheet_material,materials.getAmount(S.sheet_material))
-	qdel(src)
+	materials.addAmount(sheet_material,S.materials.getAmount(S.sheet_material))
+	qdel(Ss)
