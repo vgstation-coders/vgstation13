@@ -147,7 +147,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/materials/proc/removeAmountByValue(var/mat_id,var/amount)
 	addAmountByValue(mat_id,-amount)
 
-/datum/materials/proc/makeSheets(var/atom/loc,remove_from_mats = FALSE)
+/datum/materials/proc/makeSheets(var/atom/loc,removes_from_mats = FALSE)
 	for (var/id in storage)
 		var/amount = getAmount(id)
 		if(amount)
