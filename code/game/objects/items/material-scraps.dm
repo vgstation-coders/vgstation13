@@ -21,8 +21,9 @@
 /obj/item/trash/scrap/examine(mob/user, size, show_name)
 	. = ..()
 	var/datum/material/mat = materials.getMaterial(sheet_material)
+	var/sheet_number = floor(materials.getAmount(sheet_material)/mat.cc_per_sheet)
 	to_chat(user,"<span class='notice'>It holds [materials.getAmount(sheet_material)] cm<sup>3</sup> of [lowertext(mat.name)]\
-	[materials.getAmount(sheet_material) >= mat.cc_per_sheet ? ", enough for [floor(materials.getAmount(sheet_material)/mat.cc_per_sheet)] sheets" : ""].</span>")
+	[sheet_number > 0 ? ", enough for [sheet_number] sheet[sheet_number > 1 ? "s" : ""]" : ""].</span>")
 
 /obj/item/trash/scrap/attackby(obj/item/weapon/W, mob/user)
 	. = ..()
