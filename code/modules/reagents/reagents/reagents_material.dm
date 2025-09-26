@@ -139,7 +139,7 @@
 			H.eye_blurry = max(H.eye_blurry, rand(3,8))
 			H.eye_blind = max(H.eye_blind, rand(1,3))
 			H.drop_hands(get_turf(H))
-		log_attack("<font color='red'>[M] ([H ? H.ckey : "what"]) was pocketsanded by ([src.fingerprintslast])</font>")
+		log_attack("<font color='red'>[M] ([H ? H.ckey : "what"]) was pocketsanded by ([holder.my_atom.fingerprintslast])</font>")
 	M.extinguish()
 
 /datum/reagent/silica/reaction_obj(obj/O, volume, list/splashplosion)
