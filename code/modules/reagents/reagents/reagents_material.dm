@@ -122,8 +122,8 @@
 	description = "Fine particles of silicon dioxide, often found as a component of rock."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFBB88"
-	density = 0.69
-	specheatcap =  0.59
+	density = 2,2
+	specheatcap =  0.7
 
 /datum/reagent/silica/reaction_mob(mob/living/M, method, volume, list/zone_sels, allow_permeability, list/splashplosion)
 	if(..())
