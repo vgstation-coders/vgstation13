@@ -3,6 +3,8 @@
 	desc = "Leftover metal in small quantities."
 	icon = 'icons/obj/stacks_sheets.dmi'
 	icon_state = "scrap"
+	w_type = RECYK_METAL
+	flammable = FALSE
 	var/sheet_material = MAT_IRON
 
 /obj/item/trash/scrap/New(location,material_amount = CC_PER_SHEET_DEFAULT,material_type)
