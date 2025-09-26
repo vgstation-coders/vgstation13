@@ -20,7 +20,7 @@
 	. = ..()
 	var/datum/material/mat = materials.getMaterial(sheet_material)
 	to_chat(user,"<span class='notice'>It holds [materials.getAmount(sheet_material)] cm<sup>3</sup> of [lowertext(mat.name)]\
-	[materials.getAmount(sheet_material) >= mat.cc_per_sheet ? ", enough for [materials.getAmount(sheet_material)/mat.cc_per_sheet] sheets" : ""].</span>")
+	[materials.getAmount(sheet_material) >= mat.cc_per_sheet ? ", enough for [floor(materials.getAmount(sheet_material)/mat.cc_per_sheet)] sheets" : ""].</span>")
 
 /obj/item/trash/scrap/attackby(obj/item/weapon/W, mob/user)
 	. = ..()
@@ -29,9 +29,10 @@
 		var/datum/material/mat = materials.getMaterial(sheet_material)
 		if(materials.getAmount(sheet_material) >= mat.cc_per_sheet && WT.remove_fuel(1,user))
 			to_chat(user, "<span class='notice'>You weld \the [src] into sheets of [lowertext(mat.name)]</span>")
-			materials.makeSheets(loc)
-			qdel(src)
-			return
+			materials.makeSheets(loc,TRUE)
+			if(materials.getAmount(sheet_material) <= 0)
+				qdel(src)
+				return
 	if(istype(W, src.type))
 		merge(W)
 
