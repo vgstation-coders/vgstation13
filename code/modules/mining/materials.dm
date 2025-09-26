@@ -155,7 +155,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 			var/sheet_number = Floor(amount / mat.cc_per_sheet)
 			drop_stack(mat.sheettype, loc, sheet_number)
 			if(removes_from_mats)
-				removeAmount(mat.cc_per_sheet * sheet_number)
+				removeAmount(id,mat.cc_per_sheet * sheet_number)
 
 /datum/materials/proc/makeOre(var/atom/loc)
 	for(var/id in storage)
