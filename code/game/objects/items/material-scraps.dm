@@ -42,4 +42,4 @@
 	if(src == S || sheet_material != S.sheet_material)
 		return
 	materials.addAmount(sheet_material,S.materials.getAmount(S.sheet_material))
-	qdel(Ss)
+	qdel(S)
