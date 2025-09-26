@@ -43,5 +43,11 @@
 /obj/item/trash/scrap/proc/merge(obj/item/trash/scrap/S) //Merge src into S, as much as possible
 	if(src == S || sheet_material != S.sheet_material)
 		return
-	materials.addAmount(sheet_material,S.materials.getAmount(S.sheet_material))
-	qdel(S)
+	S.materials.addAmount(S.sheet_material,materials.getAmount(sheet_material))
+	if(pulledby)
+		pulledby.start_pulling(S)
+	src.blood_DNA = S.blood_DNA
+	src.fingerprints  = S.fingerprints
+	src.fingerprintshidden  = S.fingerprintshidden
+	src.fingerprintslast  = S.fingerprintslast
+	qdel(src)
