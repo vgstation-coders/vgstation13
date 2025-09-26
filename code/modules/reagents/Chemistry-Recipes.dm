@@ -974,7 +974,7 @@
 	required_reagents = list(SILICATE = 10, FROSTOIL = 10, SILICA = 20)
 	result_amount = 1 //amount of sheets created per the above reagents ^
 
-/datum/chemical_reaction/solidification/glass/proc/product_to_spawn()
+/datum/chemical_reaction/solidification/glass/product_to_spawn()
 	return /obj/item/stack/sheet/glass
 
 /datum/chemical_reaction/solidification/glass/alternate
