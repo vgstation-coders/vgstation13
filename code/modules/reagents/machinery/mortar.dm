@@ -12,6 +12,7 @@
 	var/crush_flick = "mortar_crush"
 
 	var/list/blend_items = list (
+		/obj/item/trash/scrap                 = list(IRON,10),
 		/obj/item/stack/sheet/metal           = list(IRON,20),
 		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA,20),
 		/obj/item/stack/sheet/mineral/uranium = list(URANIUM,20),
