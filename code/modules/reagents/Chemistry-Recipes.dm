@@ -174,12 +174,19 @@
 	holder.clear_reagents(TRUE)
 	holder.add_reagent(FERROURANIUM,created_volume/10)
 
+/datum/chemical_reaction/silica
+	name = "Silica"
+	id = SILICA
+	result = SILICA
+	required_reagents = list(SILICON = 1, OXYGEN = 2)
+	result_amount = 3
+
 /datum/chemical_reaction/silicate
 	name = "Silicate"
 	id = SILICATE
 	result = SILICATE
-	required_reagents = list(ALUMINUM = 1, SILICON = 1, OXYGEN = 1)
-	result_amount = 9
+	required_reagents = list(ALUMINUM = 1, SILICA = 1)
+	result_amount = 6
 
 /datum/chemical_reaction/phalanximine
 	name = "Phalanximine"
@@ -959,6 +966,22 @@
 
 /datum/chemical_reaction/solidification/proc/product_to_spawn()
 	return /obj/item/stack/sheet/metal
+
+/datum/chemical_reaction/solidification/glass
+	name = "Solid Glass"
+	id = "glasssolid"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, SILICA = 20)
+	result_amount = 1 //amount of sheets created per the above reagents ^
+
+/datum/chemical_reaction/solidification/glass/proc/product_to_spawn()
+	return /obj/item/stack/sheet/glass
+
+/datum/chemical_reaction/solidification/glass/alternate
+	name = "Heated Solid Glass"
+	id = "glasssolid2"
+	required_reagents = list(SILICA = 20)
+	required_temp = MELTPOINT_GLASS
 
 /datum/chemical_reaction/solidification/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)

@@ -13,6 +13,7 @@
 
 	var/list/blend_items = list (
 		/obj/item/stack/sheet/metal           = list(IRON,20),
+		/obj/item/stack/sheet/glass           = list(SILICA,20),
 		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA,20),
 		/obj/item/stack/sheet/mineral/uranium = list(URANIUM,20),
 		/obj/item/stack/sheet/mineral/clown   = list(BANANA,20),
