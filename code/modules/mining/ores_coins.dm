@@ -69,7 +69,7 @@
 		to_chat(user, "<span class='warning'>You can't seem to be able to pour \the [src] into \the [target]. Make a bug report!</span>")
 		return
 
-	target.add_reagent(SILICA,tx_amount)
+	target.reagents.add_reagent(SILICA,tx_amount)
 	materials.removeAmount(MAT_GLASS,tx_amount*mat.cc_per_sheet)
 	if(materials.getAmount(MAT_GLASS) <= 0)
 		user.visible_message("<span class='warning'>[user] pours \the [src] into \the [target].</span>", \
