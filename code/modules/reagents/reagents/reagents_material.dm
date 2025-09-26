@@ -140,6 +140,14 @@
 			H.eye_blind = max(H.eye_blind, rand(1,3))
 			H.drop_hands(get_turf(H))
 		log_attack("<font color='red'>[M] ([H ? H.ckey : "what"]) was pocketsanded by ([src.fingerprintslast])</font>")
+	M.extinguish()
+
+/datum/reagent/silica/reaction_obj(obj/O, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	if(O.on_fire)
+		O.extinguish()
 
 /datum/reagent/silica/reaction_turf(turf/simulated/T, volume, list/splashplosion)
 	if(..())
