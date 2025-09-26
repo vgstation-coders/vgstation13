@@ -49,7 +49,7 @@
 	name = "cave sand"
 	icon_state = "cavesand"
 
-// Handles pill dissolving in containers
+// Handles sand pouring in containers
 /obj/item/stack/ore/glass/afterattack(atom/target, var/mob/user, var/adjacency_flag, var/click_params)
 	var/static/list/allowed_targets = list(/obj/item/weapon/reagent_containers, /obj/structure/reagent_dispensers/cauldron)
 	if(!adjacency_flag || !is_type_in_list(target, allowed_targets) || !target.is_open_container())
