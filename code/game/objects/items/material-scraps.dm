@@ -19,15 +19,15 @@
 /obj/item/trash/scrap/examine(mob/user, size, show_name)
 	. = ..()
 	var/datum/material/mat = materials.getMaterial(sheet_material)
-	to_chat(user,"<span class='notice'>It holds [materials.getAmount(sheet_material)] units of [lowertext(mat.name)].\
-	[materials.getValueByMaterial(sheet_material) >= mat.cc_per_sheet ? "It can make [materials.getAmount(sheet_material)/mat.cc_per_sheet] sheets." : ""]</span>")
+	to_chat(user,"<span class='notice'>It holds [materials.getAmount(sheet_material)] cm<sup>3</sup> of [lowertext(mat.name)]\
+	[materials.getAmount(sheet_material) >= mat.cc_per_sheet ? ", enough for [materials.getAmount(sheet_material)/mat.cc_per_sheet] sheets" : ""].</span>")
 
 /obj/item/trash/scrap/attackby(obj/item/weapon/W, mob/user)
 	. = ..()
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
 		var/datum/material/mat = materials.getMaterial(sheet_material)
-		if(materials.getValueByMaterial(sheet_material) >= mat.cc_per_sheet && WT.remove_fuel(1,user))
+		if(materials.getAmount(sheet_material) >= mat.cc_per_sheet && WT.remove_fuel(1,user))
 			to_chat(user, "<span class='notice'>You weld \the [src] into sheets of [lowertext(mat.name)]</span>")
 			materials.makeSheets(loc)
 			qdel(src)
