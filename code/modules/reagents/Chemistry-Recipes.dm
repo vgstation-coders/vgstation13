@@ -186,7 +186,7 @@
 	id = SILICATE
 	result = SILICATE
 	required_reagents = list(ALUMINUM = 2, SILICA = 3, SILICON = 1)
-	result_amount = 12
+	result_amount = 18
 
 /datum/chemical_reaction/phalanximine
 	name = "Phalanximine"
