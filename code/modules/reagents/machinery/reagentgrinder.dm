@@ -32,6 +32,8 @@ var/global/list/juice_items = list (
 	var/speed_multiplier = 1
 	var/list/blend_items = list (
 
+		/obj/item/trash/scrap                 = list(IRON = 10),
+
 		//Sheets
 		/obj/item/stack/sheet/metal           = list(IRON = 20),
 		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA = 20),

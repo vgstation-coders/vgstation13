@@ -364,7 +364,8 @@ var/global/list/accessable_z_levels = list()
 		var/choice = input("Which Z-level do you wish to set the base turf for?") as null|num
 		if(!choice)
 			return
-		var/new_base_path = input("Please select a turf path (cancel to reset to /turf/space).") as null|anything in typesof(/turf)
+		var/new_base_text = input("Filter to a turf type.","Turf Type") as text
+		var/new_base_path = filter_typelist_input("Please select a turf path (cancel to reset to /turf/space).","Turf Path",get_matching_types(new_base_text,/turf))
 		if(!new_base_path)
 			new_base_path = /turf/space //Only hardcode in the whole thing, feel free to change this if somewhere in the distant future spess is deprecated
 		var/update_old_base = alert(src, "Do you wish to update the old base? This will LAG.", "Update old turfs?", "Yes", "No")
