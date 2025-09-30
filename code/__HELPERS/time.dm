@@ -44,7 +44,7 @@
 	[give_seconds ? ":[add_zero(round(timestamp / 10) % 60, 2)]" : ""]"
 
 /proc/get_round_time()
-	return world.time - time_taken_to_init - time_taken_in_lobby
+	return (world.time - time_taken_to_init - time_taken_in_lobby) + admin_time_offset
 
 /proc/formatTimeDuration(var/deciseconds)
 	var/m = round(deciseconds / 600)
