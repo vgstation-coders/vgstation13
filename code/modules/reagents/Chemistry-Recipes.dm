@@ -3812,7 +3812,7 @@
 	name = "Sodium Silicate"
 	id = SODIUMSILICATE
 	result = SODIUMSILICATE
-	required_reagents = list(SODIUM = 2, SILICA = 3, SILICON = 1)
+	required_reagents = list(SODIUM = 2, SILICA = 3, OXYGEN = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/untable
