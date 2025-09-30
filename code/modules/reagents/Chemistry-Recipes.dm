@@ -299,7 +299,7 @@
 	name = "Space Lube"
 	id = LUBE
 	result = LUBE
-	required_reagents = list(WATER = 2, SILICA = 3, OXYGEN = 1)
+	required_reagents = list(WATER = 2, SILICA = 3, SILICON = 1)
 	result_amount = 8
 
 /datum/chemical_reaction/sodium_polyacrylate
@@ -3812,7 +3812,7 @@
 	name = "Sodium Silicate"
 	id = SODIUMSILICATE
 	result = SODIUMSILICATE
-	required_reagents = list(SODIUM = 2, SILICA = 3, OXYGEN = 1)
+	required_reagents = list(SODIUM = 2, SILICA = 3, SILICON = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/untable
