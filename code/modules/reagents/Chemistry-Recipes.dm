@@ -185,8 +185,8 @@
 	name = "Silicate"
 	id = SILICATE
 	result = SILICATE
-	required_reagents = list(ALUMINUM = 1, SILICA = 1)
-	result_amount = 8
+	required_reagents = list(ALUMINUM = 2, SILICA = 3, SILICON = 1)
+	result_amount = 12
 
 /datum/chemical_reaction/phalanximine
 	name = "Phalanximine"
