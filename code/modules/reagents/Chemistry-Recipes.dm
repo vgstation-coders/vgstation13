@@ -972,16 +972,6 @@
 	var/to_spawn = product_to_spawn()
 	new to_spawn(location, created_volume)
 
-/datum/chemical_reaction/solidification/glass
-	name = "Solid Glass"
-	id = "glasssolid"
-	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, SILICA = 20)
-	result_amount = 1 //amount of sheets created per the above reagents ^
-
-/datum/chemical_reaction/solidification/glass/product_to_spawn()
-	return /obj/item/stack/sheet/glass
-
 /datum/chemical_reaction/solidification/plasma
 	name = "Solid Plasma"
 	id = "solidplasma"
