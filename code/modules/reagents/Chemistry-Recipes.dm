@@ -967,6 +967,11 @@
 /datum/chemical_reaction/solidification/proc/product_to_spawn()
 	return /obj/item/stack/sheet/metal
 
+/datum/chemical_reaction/solidification/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/location = get_turf(holder.my_atom)
+	var/to_spawn = product_to_spawn()
+	new to_spawn(location, created_volume)
+
 /datum/chemical_reaction/solidification/glass
 	name = "Solid Glass"
 	id = "glasssolid"
@@ -976,17 +981,6 @@
 
 /datum/chemical_reaction/solidification/glass/product_to_spawn()
 	return /obj/item/stack/sheet/glass
-
-/datum/chemical_reaction/solidification/glass/alternate
-	name = "Heated Solid Glass"
-	id = "glasssolid2"
-	required_reagents = list(SILICA = 20)
-	required_temp = MELTPOINT_GLASS
-
-/datum/chemical_reaction/solidification/on_reaction(var/datum/reagents/holder, var/created_volume)
-	var/location = get_turf(holder.my_atom)
-	var/to_spawn = product_to_spawn()
-	new to_spawn(location, created_volume)
 
 /datum/chemical_reaction/solidification/plasma
 	name = "Solid Plasma"
