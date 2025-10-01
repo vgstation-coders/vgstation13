@@ -66,7 +66,6 @@
 /obj/item/trash/scrap/glass
 	name = "glass scraps"
 	desc = "Leftover glass in small quantities."
-	icon = 'icons/obj/stacks_sheets.dmi'
 	icon_state = "scrap_glass"
 	w_type = RECYK_GLASS
 	sheet_material = MAT_GLASS
