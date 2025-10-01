@@ -2,9 +2,12 @@
 	name = "metal scraps"
 	desc = "Leftover metal in small quantities."
 	icon = 'icons/obj/stacks_sheets.dmi'
-	icon_state = "scrap"
+	icon_state = "scrap_metal"
 	w_type = RECYK_METAL
 	flammable = FALSE
+	sharpness = 0.4
+	force = 2.5
+	throwforce = 7.5
 	var/sheet_material = MAT_IRON
 
 /obj/item/trash/scrap/New(location,material_amount = CC_PER_SHEET_DEFAULT,material_type)
@@ -17,6 +20,7 @@
 	var/material_name = lowertext(mat.name)
 	name = "[material_name] scraps"
 	desc = "Leftover [material_name] in small quantities."
+	icon_state = "scrap_[material_name]"
 
 /obj/item/trash/scrap/examine(mob/user, size, show_name)
 	. = ..()
@@ -39,10 +43,13 @@
 	if(istype(W, src.type))
 		merge(W)
 
-/obj/item/trash/scrap/Crossed(obj/o)
-	if(src != o && istype(o, src.type) && !o.throwing)
-		merge(o)
-	return ..()
+/obj/item/trash/scrap/Crossed(atom/movable/AM)
+	if(src != AM && istype(AM, src.type) && !AM.throwing)
+		merge(AM)
+	if(..())
+		return 1
+	if(isliving(AM))
+		FeetStab(AM,'sound/effects/glass_step.ogg',2.5,3)
 
 /obj/item/trash/scrap/proc/merge(obj/item/trash/scrap/S) //Merge src into S, as much as possible
 	if(src == S || sheet_material != S.sheet_material)
@@ -55,3 +62,11 @@
 	src.fingerprintshidden  = S.fingerprintshidden
 	src.fingerprintslast  = S.fingerprintslast
 	qdel(src)
+
+/obj/item/trash/scrap/glass
+	name = "glass scraps"
+	desc = "Leftover glass in small quantities."
+	icon = 'icons/obj/stacks_sheets.dmi'
+	icon_state = "scrap_glass"
+	w_type = RECYK_GLASS
+	sheet_material = MAT_GLASS
