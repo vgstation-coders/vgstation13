@@ -204,7 +204,7 @@
 		..()
 		if(prob(15))
 			if(materials)
-				S = materials.makeScrap(loc)
+				materials.makeScrap(loc)
 			else
 				new /obj/item/weapon/shard(loc)
 			playsound(src, "shatter", 50, 1)
