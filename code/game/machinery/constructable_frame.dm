@@ -371,6 +371,7 @@ to destroy them and players will be able to make replacements.
 		var/obj/item/tool/weldingtool/WT = O
 		if(WT.remove_fuel(1,user))
 			if(materials)
+				to_chat(user,"<span class='notice'>You melt \the [src] down into scraps.</span>")
 				var/obj/item/trash/scrap/glass/new_item = new(null,materials.getAmount(MAT_GLASS))
 				new_item.forceMove(src.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other scraps on the ground.
 			qdel(src)
