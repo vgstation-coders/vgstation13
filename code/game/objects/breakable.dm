@@ -58,7 +58,11 @@
 				numtodrop=fragment_amounts[frag_ind]
 			thisfragment=breakable_fragments[frag_ind]
 			for(var/n in 1 to numtodrop)
-				var/obj/O = new thisfragment (get_turf(src))
+				var/obj/O
+				if(materials && ispath(thisfragment,/obj/item/trash/scrap))
+					O = materials.makeScrap(get_turf(src))
+				else
+					O = new thisfragment (get_turf(src))
 				//Transfer fingerprints, fibers, and bloodstains to the fragment.
 				transfer_fingerprints(src,O)
 				transfer_obj_blood_data(src,O)

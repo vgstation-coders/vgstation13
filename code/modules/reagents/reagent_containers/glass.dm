@@ -104,7 +104,7 @@
 	breakable_flags = BREAKABLE_ALL
 	damage_armor = BREAKARMOR_FLIMSY
 	damage_resist = BREAKARMOR_NOARMOR
-	breakable_fragments = list(/obj/item/weapon/shard)
+	breakable_fragments = list(/obj/item/trash/scrap/glass)
 	damaged_examine_text = "It is cracked."
 	take_hit_text = list("cracking", "chipping")
 	take_hit_text2 = list("cracks", "chips")

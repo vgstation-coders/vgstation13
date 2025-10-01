@@ -17,7 +17,7 @@
 	. = ..(location)
 	var/datum/material/mat = materials.getMaterial(sheet_material)
 	sheet_type = mat.sheettype
-	var/material_name = lowertext(mat.name)
+	var/material_name = lowertext(mat.processed_name)
 	name = "[material_name] scraps"
 	desc = "Leftover [material_name] in small quantities."
 	icon_state = "scrap_[material_name]"
@@ -26,7 +26,7 @@
 	. = ..()
 	var/datum/material/mat = materials.getMaterial(sheet_material)
 	var/sheet_number = floor(materials.getAmount(sheet_material)/mat.cc_per_sheet)
-	to_chat(user,"<span class='notice'>It holds [materials.getAmount(sheet_material)] cm<sup>3</sup> of [lowertext(mat.name)]\
+	to_chat(user,"<span class='notice'>It holds [materials.getAmount(sheet_material)] cm<sup>3</sup> of [lowertext(mat.processed_name)]\
 	[sheet_number > 0 ? ", enough for [sheet_number] sheet[sheet_number > 1 ? "s" : ""]" : ""].</span>")
 
 /obj/item/trash/scrap/attackby(obj/item/weapon/W, mob/user)

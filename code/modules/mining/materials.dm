@@ -169,6 +169,14 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	for(var/id in storage)
 		removeAmount(id, storage[id])
 
+/datum/materials/proc/makeScrap(var/atom/loc,removes_from_mats = FALSE)
+	for (var/id in storage)
+		var/amount = getAmount(id)
+		if(amount)
+			. = new /obj/item/trash/scrap(loc,amount,id)
+			if(removes_from_mats)
+				removeAmount(id,amount)
+
 /proc/get_material_cc_per_sheet(var/matID)
 	var/datum/material/mat = material_list[matID]
 	return mat.cc_per_sheet
