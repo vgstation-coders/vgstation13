@@ -228,7 +228,7 @@ BLIND     // can't see anything
 
 	if(materials)
 		var/obj/item/S = materials.makeScrap(get_turf(src))
-		S.Crossed())
+		S.Crossed()
 
 	qdel(src)
 	return SPECIAL_ATTACK_FAILED
