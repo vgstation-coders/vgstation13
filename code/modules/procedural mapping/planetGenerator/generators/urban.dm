@@ -98,21 +98,6 @@
 		/mob/living/simple_animal/hostile/lizard = 20,
 		/mob/living/simple_animal/rabbit = 10,
 	)
-	loot_tables_list = list(
-		/datum/loot_table/bedsheet = 5,
-		/datum/loot_table/bureaucracy = 15,
-		/datum/loot_table/clothing = 10,
-		/datum/loot_table/combat = 3,
-		/datum/loot_table/decoration = 8,
-		/datum/loot_table/engineering = 12,
-		/datum/loot_table/entertainment = 8,
-		/datum/loot_table/food_or_drink = 5,
-		/datum/loot_table/medical = 8,
-		/datum/loot_table/module = 3,
-		/datum/loot_table/structure = 2,
-		/datum/loot_table/trash = 30,
-	)
-	loot_spawn_chance = 1.2
 
 /datum/biome/urban/wasteland
 	open_turf_types = list(/turf/unsimulated/wasteland = 1)
@@ -133,7 +118,6 @@
 		/mob/living/simple_animal/rabbit = 5,
 		/mob/living/simple_animal/hostile/asteroid/magmaw = 5,
 	)
-	loot_spawn_chance = 1.5
 
 /datum/biome/urban/wasteland/dense
 	flora_spawn_list = list(
@@ -153,7 +137,6 @@
 		/mob/living/simple_animal/hostile/lizard = 20,
 		/mob/living/simple_animal/hostile/asteroid/magmaw = 10,
 	)
-	loot_spawn_chance = 1.8
 
 /datum/biome/urban/toxic
 	open_turf_types = list(/turf/unsimulated/toxic = 1)
@@ -172,7 +155,6 @@
 		/mob/living/simple_animal/hostile/asteroid/magmaw = 15,
 		/mob/living/simple_animal/hostile/asteroid/goliath = 5,
 	)
-	loot_spawn_chance = 1.0
 
 /datum/biome/urban/toxic/dense
 	flora_spawn_list = list(
@@ -190,7 +172,6 @@
 		/mob/living/simple_animal/hostile/asteroid/magmaw = 20,
 		/mob/living/simple_animal/hostile/asteroid/goliath = 10,
 	)
-	loot_spawn_chance = 0.8
 
 // Cave biomes
 /datum/biome/cave/urban

@@ -105,16 +105,6 @@
 		/mob/living/simple_animal/hostile/asteroid/goliath = 50,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 40
 	)
-	loot_tables_list = list(
-		/datum/loot_table/clothing = 5,
-		/datum/loot_table/combat = 1,
-		/datum/loot_table/engineering = 5,
-		/datum/loot_table/medical = 5,
-		/datum/loot_table/module = 5,
-		/datum/loot_table/structure = 1,
-		/datum/loot_table/trash = 20,
-	)
-	loot_spawn_chance = 2
 
 /datum/biome/lavaland/forest
 	open_turf_types = list(/turf/simulated/floor/plating/asteroid/purple/lit = 1)
@@ -212,7 +202,6 @@
 	)
 	flora_spawn_chance = 2
 	feature_spawn_chance = 0
-	loot_spawn_chance = 0
 
 /datum/biome/lavaland/nearlava
 	open_turf_types = list(
@@ -223,7 +212,6 @@
 		/obj/structure/flora/rock/pile/lava = 1
 	)
 	flora_spawn_chance = 2
-	loot_spawn_chance = 1
 
 /datum/biome/lavaland/lava/rocky
 	flora_spawn_chance = 4
@@ -283,4 +271,3 @@
 	open_turf_types = list(/turf/simulated/floor/lava = 1)
 	feature_spawn_chance = 1
 	feature_spawn_list = list(/obj/structure/flora/rock/pile/lava = 1)
-	loot_spawn_chance = 0

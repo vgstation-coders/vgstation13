@@ -9,15 +9,13 @@
 	var/mapgen = null
 	///The fallback turf if mapgen fails.
 	var/default_baseturf = null
-	///Our weight when picking a new planet.
-	var/weight = 40
 	// The type of loot this planet can spawn
 	var/loot_type
+	//Value that gets added to loot rolls on this planet.
+	var/loot_modifier = 0
 	//Climate datum
 	var/datum/climate/climate
 	var/climate_type = CLIMATE_NONE
-	//Value that gets added to loot rolls on this planet.
-	var/loot_modifier = 0
 	//Allocation occupied by this planet.
 	var/allocation = null
 	//Icon shown in the planet scanner.
@@ -196,7 +194,7 @@
 
 /datum/planet_type/desert
 	name = "desert planet"
-	desc = "A very weak energy signal originating from a very hot and harsh planet."
+	desc = "A hot, arid world with vast deserts and scarce water sources."
 	mapgen = /datum/planetGenerator/desert
 	default_baseturf = /turf/simulated/floor/plating/ironsand
 	loot_type = LOOT_TYPE_DESERT
@@ -227,7 +225,7 @@
 	name = "lava planet"
 	desc = "A planet rife with seismic and volcanic activity. High temperatures and dangerous xenofauna render it dangerous for the unprepared."
 	mapgen = /datum/planetGenerator/lava
-	default_baseturf = /turf/simulated/floor/plating/asteroid/basalt/lava
+	default_baseturf = /turf/simulated/floor/lava
 	loot_type = LOOT_TYPE_LAVA
 	climate_type = CLIMATE_LAVA
 	loot_modifier = 15
@@ -255,7 +253,7 @@
 
 /datum/planet_type/xeno
 	name = "unknown planet"
-	desc = "A distress signal eminates from this planet."
+	desc = "An alien world with an atmosphere and ecosystem that defies human understanding."
 	mapgen = /datum/planetGenerator/xeno
 	default_baseturf = /turf/unsimulated/floor/grey_sand
 	loot_type = LOOT_TYPE_XENO

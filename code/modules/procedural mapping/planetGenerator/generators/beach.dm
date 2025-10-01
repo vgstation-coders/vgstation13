@@ -91,13 +91,6 @@
 		/obj/structure/flora/coconut = 1
 	)
 	flora_spawn_chance = 5
-	loot_tables_list = list(
-		/datum/loot_table/clothing = 5,
-		/datum/loot_table/entertainment = 10,
-		/datum/loot_table/food_or_drink = 10,
-		/datum/loot_table/trash = 20,
-	)
-	loot_spawn_chance = 0.5
 
 /datum/biome/beach/dense
 	open_turf_types = list(/turf/unsimulated/beach/sand/spread = 1)
@@ -138,21 +131,6 @@
 		/mob/living/simple_animal/rabbit = 1
 	)
 	mob_spawn_chance = 1
-	loot_tables_list = list(
-		/datum/loot_table/bedsheet = 10,
-		/datum/loot_table/bureaucracy = 5,
-		/datum/loot_table/clothing = 5,
-		/datum/loot_table/combat = 1,
-		/datum/loot_table/decoration = 5,
-		/datum/loot_table/engineering = 5,
-		/datum/loot_table/entertainment = 10,
-		/datum/loot_table/food_or_drink = 10,
-		/datum/loot_table/medical = 5,
-		/datum/loot_table/module = 5,
-		/datum/loot_table/structure = 1,
-		/datum/loot_table/trash = 20,
-	)
-	loot_spawn_chance = 1
 
 /datum/biome/beach/grass/dense
 	flora_spawn_chance = 70
@@ -163,7 +141,6 @@
 	)
 	mob_spawn_chance = 2
 	feature_spawn_chance = 1.2
-	loot_spawn_chance = 1
 
 /datum/biome/ocean
 	open_turf_types = list(/turf/unsimulated/beach/shallows = 1)
@@ -172,17 +149,9 @@
 		/obj/structure/flora/rock/pile = 1,
 	)
 	flora_spawn_chance = 1
-	loot_tables_list = list(
-		/datum/loot_table/clothing = 5,
-		/datum/loot_table/entertainment = 10,
-		/datum/loot_table/food_or_drink = 10,
-		/datum/loot_table/trash = 20,
-	)
-	loot_spawn_chance = 0.25
 
 /datum/biome/ocean/deep
 	open_turf_types = list(/turf/unsimulated/beach/water = 1)
-	loot_spawn_chance = 0
 
 /datum/biome/cave/beach
 	open_turf_types = list(/turf/unsimulated/floor/asteroid/air = 1)
@@ -194,7 +163,6 @@
 		/mob/living/simple_animal/hostile/bear/brownbear = 5,
 		/mob/living/simple_animal/hostile/crab = 1,
 	)
-	loot_spawn_chance = 1.5
 
 /datum/biome/cave/beach/cove
 	open_turf_types = list(/turf/unsimulated/beach/sand/spread = 1)

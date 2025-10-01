@@ -8,15 +8,11 @@
 	floor_variance = 0
 	light_color = LIGHT_COLOR_LAVA
 
+/turf/simulated/floor/plating/asteroid/basalt/lava_land_surface
+
 /turf/simulated/floor/plating/asteroid/basalt/lava_land_surface/lit
 	light_range = 2
 	light_power = 0.6
-
-/turf/simulated/floor/plating/asteroid/basalt/lava //lava underneath
-
-/turf/simulated/floor/plating/asteroid/basalt/airless
-
-/turf/simulated/floor/plating/asteroid/basalt/lava_land_surface
 
 ///Sand
 
@@ -132,8 +128,6 @@
 
 	var/particle_emitter = /obj/effect/particle_emitter/lava
 	var/particle_prob = 15
-	/// Whether the lava has been dug with hellstone found successfully
-	var/is_mined = FALSE
 
 /turf/simulated/floor/lava/New()
 	. = ..()

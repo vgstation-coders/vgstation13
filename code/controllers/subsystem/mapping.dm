@@ -1,16 +1,27 @@
-// Subsystem for things such as vaults, away mission init, and procgen.
+/**
+ * # Mapping Subsystem
+ *
+ * Handles map generation, including vaults, away missions, and procedural generation.
+ *
+ * This subsystem is responsible for:
+ * * Initializing away missions at round start
+ * * Generating fixed and random vaults/structures in space
+ * * Creating asteroid secrets and hobo shacks
+ * * Managing procedurally generated planets and biomes
+ * * Allocating sectors for planets in z-levels
+ * * Handling planet-specific map generation and climate systems
+ */
 
 var/datum/subsystem/mapping/SSmapping
-
 
 /datum/subsystem/mapping
 	name       = "Map"
 	init_order = SS_INIT_MAP
 	flags      = SS_NO_FIRE
 
-	///All possible biomes in assoc list as type || instance
+	/// All possible biomes in assoc list as type || instance
 	var/list/biomes = list()
-	//All possible planet types
+	/// All possible planet types available for generation
 	var/list/planet_types = list(
 		/datum/planet_type/beach,
 		/datum/planet_type/desert,
@@ -19,9 +30,9 @@ var/datum/subsystem/mapping/SSmapping
 		/datum/planet_type/snow,
 		/datum/planet_type/xeno
 	)
-	//All spawned planets
+	/// All spawned planets
 	var/list/planets = list()
-	//All allocations
+	/// All sector allocations for planets
 	var/list/allocations = list()
 
 /datum/subsystem/mapping/New()
@@ -102,31 +113,58 @@ var/datum/subsystem/mapping/SSmapping
 
 	SSmapping.spawn_planet(chosen_planet_type, chosen_ruin_type)
 
-//Creates a grid of 25 99x99 squares for procedural generation
+/**
+ * Creates a grid of 25 99x99 sectors for procedural generation
+ *
+ * Adds a new z-level and creates a grid structure with border turfs
+ * separating each sector. Each sector can hold a different planet.
+ */
 /datum/subsystem/mapping/proc/create_procgen_level()
 	world.maxz += 1
 	map.addZLevel(new /datum/zLevel/away, world.maxz, TRUE, TRUE)
-	for(var/x = 1,  x < 500, x++)
-		for(var/y = 1, y < 500, y++)
-			if(!(x % 100) || !(y % 100))
+	for(var/x = 1,  x < world.maxx, x++)
+		for(var/y = 1, y < world.maxy, y++)
+			if(!(x % SECTOR_SIZE) || !(y % SECTOR_SIZE))
 				var/turf/T = locate(x,y,world.maxz)
 				T.ChangeTurf(/turf/unsimulated/border)
 
-///Initialize all biomes, assoc as type || instance
+/**
+ * Initialize all biomes
+ *
+ * Creates instances of all biome subtypes and stores them in an associative list
+ * as type || instance for quick lookup during map generation.
+ */
 /datum/subsystem/mapping/proc/initialize_biomes()
 	for(var/biome_path in subtypesof(/datum/biome))
 		var/datum/biome/biome_instance = new biome_path()
 		biomes[biome_path] += biome_instance
 
+/**
+ * Spawns a new planet with optional ruin
+ *
+ * Creates a new planet in the procgen z-level, generates terrain using the planet's
+ * map generator, places an optional ruin, populates the terrain with features,
+ * initializes day/night cycle and weather systems.
+ *
+ * Arguments:
+ * * planet_datum - The planet type path or instance to spawn
+ * * ruin_type - Optional ruin type to place on the planet
+ *
+ * Returns:
+ * * The z-level number where the planet was spawned
+ */
 /datum/subsystem/mapping/proc/spawn_planet(datum/planet_type/planet_datum, ruin_type)
 	var/datum/planet_type/newplanet = new planet_datum
 	var/datum/planetGenerator/mapgen = new newplanet.mapgen
 	planets += newplanet
 
 	var/datum/map_element/mining_surprise/used_ruin = ispath(ruin_type) ? (new ruin_type) : ruin_type
-	message_admins("Generating turfs")
 	var/datum/allocation/A = assign_allocation(newplanet, world.maxz)
+
+	// Generate base terrain
 	mapgen.generate_turfs(A.turfs)
+
+	// Place optional ruin before populating terrain
 	var/list/ruin_turfs = list()
 	var/list/ruin_templates = list()
 	if(used_ruin)
@@ -136,24 +174,32 @@ var/datum/subsystem/mapping/SSmapping
 			ruin_turfs[used_ruin.name] = result_data["turf"]
 			ruin_templates[used_ruin.name] = used_ruin
 
-	// fill in the turfs, AFTER generating the ruin. this prevents them from generating within the ruin
-	// and ALSO prevents the ruin from being spaced when it spawns in
-	// WITHOUT needing to fill the reservation with a bunch of dummy turfs
-	mapgen.setup_loot_tables(planet_datum)
-	message_admins("Populating turfs")
+	// Populate turfs AFTER generating the ruin to prevent:
+	// * Features from spawning inside the ruin
+	// * The ruin from being spaced when it spawns in
 	mapgen.populate_turfs(turfs_from_sector(A.sector, world.maxz))
-	message_admins("Finished populating turfs")
-	message_admins("Starting day/night cycle")
+
+	// Initialize environmental systems
 	SSDayNight.get_turflist()
 	SSDayNight.process_lighting()
 	if(newplanet.climate_type)
-		message_admins("Starting weather controller")
 		newplanet.climate = SSweather.set_climate(newplanet.climate_type, world.maxz, A)
 		SSweather.fire()
+
+	message_admins("Planet '[newplanet.planet_name]' generated successfully at z-level [world.maxz]")
 	return world.maxz
 
-//// BEGIN LLM-SLOP I MUST REVIEW AND FIX LATER ////
-//Post-processes ruin turfs to match the planet environment
+/**
+ * Post-processes ruin turfs to match the planet environment
+ *
+ * After a ruin is placed on a planet, this proc replaces generic asteroid floors
+ * and mineral walls with planet-appropriate turf types to ensure visual consistency.
+ *
+ * Arguments:
+ * * ruin - The map element/ruin that was placed
+ * * allocation - The sector allocation containing planet information
+ * * spawned_objects - List of all objects spawned by the ruin template
+ */
 /datum/subsystem/mapping/proc/post_process_ruin_turfs(datum/map_element/ruin, datum/allocation/allocation, list/spawned_objects)
 	if(!ruin || !allocation || !allocation.ptype)
 		return
@@ -185,10 +231,6 @@ var/datum/subsystem/mapping/SSmapping
 	if(!mineral_replacement)
 		mineral_replacement = /turf/unsimulated/mineral/random
 
-	var/turfs_processed = 0
-	var/floor_replacements = 0
-	var/mineral_replacements = 0
-
 	// Process all turfs in the spawned objects
 	for(var/atom/A in spawned_objects)
 		if(isturf(A))
@@ -198,20 +240,24 @@ var/datum/subsystem/mapping/SSmapping
 			if(istype(T, /turf/unsimulated/floor/asteroid))
 				if(default_baseturf)
 					T.ChangeTurf(default_baseturf)
-					floor_replacements++
 
 			// Replace mineral turfs with planet's mineral type
 			else if(istype(T, /turf/unsimulated/mineral))
 				T.ChangeTurf(mineral_replacement)
-				mineral_replacements++
 
-			turfs_processed++
-
-	if(turfs_processed > 0)
-		message_admins("Post-processed [turfs_processed] turfs in ruin [ruin.name]: [floor_replacements] floors → [default_baseturf], [mineral_replacements] minerals → [mineral_replacement]")
-
-//Places a ruin within an allocation's sector boundaries
-//Returns a list with placement data on success, or null on failure
+/**
+ * Places a ruin within an allocation's sector boundaries
+ *
+ * Finds a safe random location within the sector for the ruin, loads the ruin template,
+ * and post-processes the turfs to match the planet environment.
+ *
+ * Arguments:
+ * * ruin - The map element/ruin to place
+ * * allocation - The sector allocation to place the ruin in
+ *
+ * Returns:
+ * * A list containing "turf" (placement location) and "objects" (spawned objects) on success, or null on failure
+ */
 /datum/subsystem/mapping/proc/place_ruin_in_allocation(datum/map_element/ruin, datum/allocation/allocation)
 	if(!ruin || !allocation)
 		return null
@@ -220,24 +266,17 @@ var/datum/subsystem/mapping/SSmapping
 	ruin.assign_dimensions()
 
 	// Calculate sector boundaries for proper placement within allocation
-	var/sector_x = allocation.sector[1]
-	var/sector_y = allocation.sector[2]
-	var/sector_x_min = 1 + (sector_x - 1) * 100
-	var/sector_x_max = sector_x * 100 - 1
-	var/sector_y_min = 1 + (sector_y - 1) * 100
-	var/sector_y_max = sector_y * 100 - 1
+	var/list/bounds = get_sector_bounds(allocation.sector)
 
 	// Calculate safe placement bounds within the sector, with padding
-	var/padding = 5
-	var/safe_x_min = sector_x_min + padding
-	var/safe_x_max = sector_x_max - ruin.width - padding
-	var/safe_y_min = sector_y_min + padding
-	var/safe_y_max = sector_y_max - ruin.height - padding
+	var/safe_x_min = bounds["x_min"] + RUIN_PLACEMENT_PADDING
+	var/safe_x_max = bounds["x_max"] - ruin.width - RUIN_PLACEMENT_PADDING
+	var/safe_y_min = bounds["y_min"] + RUIN_PLACEMENT_PADDING
+	var/safe_y_max = bounds["y_max"] - ruin.height - RUIN_PLACEMENT_PADDING
 
 	// Ensure we have valid placement area
 	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
-		message_admins("Warning: Ruin [ruin.name] ([ruin.width]x[ruin.height]) too large for sector [sector_x],[sector_y] - skipping ruin placement")
-		return null
+		CRASH("Warning: Ruin [ruin.name] ([ruin.width]x[ruin.height]) too large for sector [allocation.sector[1]],[allocation.sector[2]] - skipping ruin placement")
 
 	// Find random placement location within safe bounds
 	var/turf/ruin_turf = locate(
@@ -246,29 +285,32 @@ var/datum/subsystem/mapping/SSmapping
 		allocation.z
 	)
 
-	message_admins("Generating ruin [ruin.name] at [ruin_turf.x], [ruin_turf.y] in sector [sector_x],[sector_y] (z[allocation.z])")
-
 	// Note: load() adds +1 to x and y coordinates, so we subtract 1 to place at exact location
 	var/load_result = ruin.load(ruin_turf.x - 1, ruin_turf.y - 1, allocation.z, 0, TRUE, TRUE)
 
 	if(load_result)
-		message_admins("Successfully loaded ruin [ruin.name] - [length(load_result)] objects spawned")
-
-		// Post-processing: Replace turfs to match planet environment
 		post_process_ruin_turfs(ruin, allocation, load_result)
-
 		return list("turf" = ruin_turf, "objects" = load_result)
 	else
-		message_admins("Failed to load ruin [ruin.name] at [ruin_turf.x], [ruin_turf.y]")
-		return null
-//// END LLM-SLOP I MUST REVIEW AND FIX LATER ////
+		CRASH("Failed to load ruin [ruin.name] at [ruin_turf.x], [ruin_turf.y]")
 
-//Assigns a planet to a region
+/**
+ * Assigns a planet to a sector
+ *
+ * Allocates a sector in the procgen grid for a planet, calculates the sector coordinates,
+ * and retrieves all turfs within that sector.
+ *
+ * Arguments:
+ * * planet_type - The planet type to assign to the sector
+ * * z_id - The z-level ID where the sector exists
+ *
+ * Returns:
+ * * The newly created allocation datum
+ */
 /datum/subsystem/mapping/proc/assign_allocation(var/datum/planet_type/planet_type, z_id)
 	var/datum/allocation/A = new
 	var/sector_count = allocations.len + 1
 	A.sector = list((sector_count - 1) % 5 + 1, ceil(sector_count / 5))
-	message_admins("Assigning planet to sector x:[A.sector[1]] y:[A.sector[2]] in z-level [z_id]")
 	A.ptype = planet_type
 	A.z = z_id
 	A.turfs = turfs_from_sector(A.sector, z_id)
@@ -276,35 +318,96 @@ var/datum/subsystem/mapping/SSmapping
 	planet_type.allocation = A
 	return A
 
-//Gets turfs given sector
-/datum/subsystem/mapping/proc/turfs_from_sector(var/list/sector, var/z_in)
+/**
+ * Calculates the coordinate bounds for a sector
+ *
+ * Helper function to avoid duplicating sector bound calculation logic.
+ *
+ * Arguments:
+ * * sector - List containing [x, y] sector coordinates
+ *
+ * Returns:
+ * * An associative list with keys: "x_min", "x_max", "y_min", "y_max"
+ */
+/datum/subsystem/mapping/proc/get_sector_bounds(var/list/sector)
 	var/sector_x = sector[1]
 	var/sector_y = sector[2]
-	var/x_min = 1 + (sector_x - 1) * 100
-	var/x_max = sector_x * 100 - 1
-	var/y_min = 1 + (sector_y - 1) * 100
-	var/y_max = sector_y * 100 - 1
-	return block(locate(x_min, y_min, z_in), locate(x_max, y_max, z_in))
+	return list(
+		"x_min" = 1 + (sector_x - 1) * SECTOR_SIZE,
+		"x_max" = sector_x * SECTOR_SIZE - 1,
+		"y_min" = 1 + (sector_y - 1) * SECTOR_SIZE,
+		"y_max" = sector_y * SECTOR_SIZE - 1
+	)
 
-//Get turfs from planet
+/**
+ * Gets all turfs within a sector
+ *
+ * Calculates the bounds of a sector in the procgen grid and returns all turfs within it.
+ *
+ * Arguments:
+ * * sector - List containing [x, y] sector coordinates
+ * * z_in - The z-level to get turfs from
+ *
+ * Returns:
+ * * A list of all turfs in the sector
+ */
+/datum/subsystem/mapping/proc/turfs_from_sector(var/list/sector, var/z_in)
+	var/list/bounds = get_sector_bounds(sector)
+	return block(locate(bounds["x_min"], bounds["y_min"], z_in), locate(bounds["x_max"], bounds["y_max"], z_in))
+
+/**
+ * Gets all turfs from a planet's allocation
+ *
+ * Arguments:
+ * * planet - The planet type to get turfs from
+ *
+ * Returns:
+ * * A list of all turfs in the planet's allocated sector, or an empty list if no allocation
+ */
 /datum/subsystem/mapping/proc/turfs_from_planet(var/datum/planet_type/planet)
 	if(!planet || !planet.allocation)
 		return list()
 	var/datum/allocation/A = planet.allocation
 	return A.turfs
 
-//Get allocation from coords or turf
+/**
+ * Gets the allocation at given coordinates or turf
+ *
+ * Looks up which sector allocation contains the specified coordinates.
+ *
+ * Arguments:
+ * * x - X coordinate (optional if trf provided)
+ * * y - Y coordinate (optional if trf provided)
+ * * z - Z level (defaults to 7, optional if trf provided)
+ * * trf - Turf to look up allocation for (takes priority over x/y/z)
+ *
+ * Returns:
+ * * The allocation datum for the sector, or null if none found
+ */
 /datum/subsystem/mapping/proc/get_allocation(var/x = 0, var/y = 0, var/z = 7, var/turf/trf = null)
 	if(trf)
 		x = trf.x
 		y = trf.y
 		z = trf.z
-	var/sector = list(ceil(x / 100), ceil(y / 100))
+	var/sector = list(ceil(x / SECTOR_SIZE), ceil(y / SECTOR_SIZE))
 	for(var/datum/allocation/A in allocations)
 		if(A.sector == sector && A.z == z)
 			return A
 
-//Gets a landing zone for a given planet
+/**
+ * Finds a suitable landing zone for a shuttle on a planet
+ *
+ * Searches the planet's sector for a flat area large enough to accommodate
+ * the specified dimensions, staying at least 11 tiles from sector edges.
+ * Returns a random valid location to provide variety.
+ *
+ * Arguments:
+ * * alloc - The planet allocation to search within
+ * * size - List containing [width, height] of the landing area needed
+ *
+ * Returns:
+ * * The top-left turf of a suitable landing zone, or null if no valid location found
+ */
 /datum/subsystem/mapping/proc/get_landing_zone(var/datum/allocation/alloc,var/list/size)
 	if (!alloc || !size || size.len != 2)
 		return null
@@ -313,24 +416,22 @@ var/datum/subsystem/mapping/SSmapping
 	var/list/turf/search_turfs = turfs_from_sector(alloc.sector, alloc.z)
 
 	// Get sector boundaries to calculate relative positions
-	var/sector_x = alloc.sector[1]
-	var/sector_y = alloc.sector[2]
-	var/x_min = 1 + (sector_x - 1) * 100
-	var/y_min = 1 + (sector_y - 1) * 100
+	var/list/bounds = get_sector_bounds(alloc.sector)
+	var/x_min = bounds["x_min"]
+	var/y_min = bounds["y_min"]
 
 	// Create matrix with relative coordinates
-	var/datum/turf_matrix[100][100]
+	var/datum/turf_matrix[SECTOR_SIZE][SECTOR_SIZE]
 	for (var/turf/T in search_turfs)
 		var/rel_x = T.x - x_min + 1
 		var/rel_y = T.y - y_min + 1
 		turf_matrix[rel_x][rel_y] = T
 
-	// Define safe zone boundaries (11 tiles from edge, accounting for shuttle size)
-	var/edge_buffer = 11
-	var/safe_x_min = edge_buffer + 1
-	var/safe_x_max = 100 - edge_buffer - x_dim
-	var/safe_y_min = edge_buffer + 1
-	var/safe_y_max = 100 - edge_buffer - y_dim
+	// Define safe zone boundaries (accounting for edge buffer and shuttle size)
+	var/safe_x_min = LANDING_ZONE_EDGE_BUFFER + 1
+	var/safe_x_max = SECTOR_SIZE - LANDING_ZONE_EDGE_BUFFER - x_dim
+	var/safe_y_min = LANDING_ZONE_EDGE_BUFFER + 1
+	var/safe_y_max = SECTOR_SIZE - LANDING_ZONE_EDGE_BUFFER - y_dim
 
 	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
 		return null // Not enough space for safe landing
@@ -359,7 +460,7 @@ var/datum/subsystem/mapping/SSmapping
 			for (var/dy = 0; dy < y_dim && found; dy++)
 				var/check_x = rel_x + dx
 				var/check_y = rel_y + dy
-				if(check_x > 100 || check_y > 100) // Out of sector bounds
+				if(check_x > SECTOR_SIZE || check_y > SECTOR_SIZE) // Out of sector bounds
 					found = FALSE
 					continue
 				var/turf/target = turf_matrix[check_x][check_y]
@@ -371,7 +472,21 @@ var/datum/subsystem/mapping/SSmapping
 
 	return null
 
-// Get or create a landing zone for a specific shuttle on a planet
+/**
+ * Gets or creates a persistent landing zone for a specific shuttle on a planet
+ *
+ * Checks if the shuttle type already has a registered landing zone on this planet.
+ * If not, finds a new landing zone and creates a docking port for it.
+ * This ensures shuttles return to the same location on repeated landings.
+ *
+ * Arguments:
+ * * alloc - The planet allocation to create a landing zone in
+ * * shuttle - The shuttle that needs a landing zone
+ * * size - List containing [width, height] for the landing area
+ *
+ * Returns:
+ * * The docking port for the landing zone, or null if no suitable location found
+ */
 /datum/subsystem/mapping/proc/get_shuttle_landing_zone(var/datum/allocation/alloc, var/datum/shuttle/shuttle, var/list/size)
 	if(!alloc || !shuttle || !size)
 		return null
@@ -404,11 +519,22 @@ var/datum/subsystem/mapping/SSmapping
 
 	return surface_port
 
-//Contains the ID of the allocation, its turfs, and the planety type. To be replaced with vlevels in the future.
+/**
+ * # Allocation Datum
+ *
+ * Represents a sector allocation for a planet in the procedural generation grid.
+ *
+ * Contains information about which sector a planet occupies, what turfs are in that sector,
+ * and which planet type is assigned to it. Also tracks shuttle landing zones for persistent
+ * shuttle landings on the planet.
+ *
+ * NOTE: To be replaced with vlevels in the future.
+ */
 /datum/allocation
-	var/list/sector = list(1,1) //x,y
+	/// Sector coordinates as [x, y] in the procgen grid
+	var/list/sector = list(1,1)
 	var/z = 7
 	var/datum/planet_type/ptype
 	var/list/turf/turfs = list()
-	// Track shuttle landing zones
-	var/list/shuttle_landing_zones = list() // Associated list: shuttle_type -> docking_port
+	/// Tracks persistent shuttle landing zones - associative list: shuttle_type -> docking_port
+	var/list/shuttle_landing_zones = list()

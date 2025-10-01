@@ -33,3 +33,7 @@
 #define LOOT_TYPE_SNOW 1<<5
 #define LOOT_TYPE_URBAN 1<<6
 #define LOOT_TYPE_XENO 1<<7
+
+#define SECTOR_SIZE 100 //max width/height of a sector in turfs. temporary - will be dynamic later
+#define RUIN_PLACEMENT_PADDING 5 // Padding around ruins when placing them in sectors to avoid edge issues
+#define LANDING_ZONE_EDGE_BUFFER 11 // Buffer distance from sector edges for shuttle landing zones

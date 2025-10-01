@@ -103,21 +103,6 @@
 		/mob/living/simple_animal/rabbit = 15,
 		/mob/living/simple_animal/cockroach = 15,
 	)
-	loot_tables_list = list(
-		/datum/loot_table/bedsheet = 10,
-		/datum/loot_table/bureaucracy = 5,
-		/datum/loot_table/clothing = 5,
-		/datum/loot_table/combat = 1,
-		/datum/loot_table/decoration = 5,
-		/datum/loot_table/engineering = 5,
-		/datum/loot_table/entertainment = 10,
-		/datum/loot_table/food_or_drink = 10,
-		/datum/loot_table/medical = 5,
-		/datum/loot_table/module = 5,
-		/datum/loot_table/structure = 1,
-		/datum/loot_table/trash = 20,
-	)
-	loot_spawn_chance = 0.8
 
 /datum/biome/jungle/temperate
 	open_turf_types = list(/turf/unsimulated/floor/jungle/grass = 1)
@@ -142,7 +127,6 @@
 		/mob/living/simple_animal/rabbit = 10,
 		/mob/living/simple_animal/cockroach = 10,
 	)
-	loot_spawn_chance = 1.0
 
 /datum/biome/jungle/dense
 	open_turf_types = list(/turf/unsimulated/floor/jungle/grass = 1)
@@ -168,7 +152,6 @@
 		/mob/living/simple_animal/cockroach = 15,
 		/mob/living/simple_animal/hostile/bear/panther = 5,
 	)
-	loot_spawn_chance = 1.2
 
 /datum/biome/jungle/lush
 	open_turf_types = list(/turf/unsimulated/floor/jungle/grass = 1)
@@ -198,7 +181,6 @@
 		/mob/living/simple_animal/hostile/bear/panther = 8,
 		/mob/living/simple_animal/hostile/giant_spider/jungle = 5,
 	)
-	loot_spawn_chance = 1.5
 
 /datum/biome/jungle/tropical
 	open_turf_types = list(/turf/unsimulated/floor/jungle/grass = 1)
@@ -230,7 +212,6 @@
 		/mob/living/simple_animal/hostile/giant_spider/jungle = 8,
 		/mob/living/simple_animal/hostile/bear/dinosaur = 5,
 	)
-	loot_spawn_chance = 1.8
 
 /datum/biome/jungle/rainforest
 	open_turf_types = list(/turf/unsimulated/floor/jungle/grass = 1)
@@ -264,7 +245,6 @@
 		/mob/living/simple_animal/hostile/bear/dinosaur = 8,
 		/mob/living/simple_animal/hostile/bear/brownbear/jungle = 5,
 	)
-	loot_spawn_chance = 2.0
 
 /datum/biome/jungle/swamp
 	open_turf_types = list(
@@ -299,7 +279,6 @@
 		/mob/living/simple_animal/hostile/bear/dinosaur = 8,
 		/mob/living/simple_animal/hostile/bear/brownbear/jungle = 8,
 	)
-	loot_spawn_chance = 1.5
 
 // Cave biomes
 /datum/biome/cave/jungle

@@ -99,21 +99,6 @@
 		/mob/living/simple_animal/hostile/deer = 15,
 		/mob/living/simple_animal/cockroach = 10,
 	)
-	loot_tables_list = list(
-		/datum/loot_table/bedsheet = 10,
-		/datum/loot_table/bureaucracy = 5,
-		/datum/loot_table/clothing = 5,
-		/datum/loot_table/combat = 1,
-		/datum/loot_table/decoration = 5,
-		/datum/loot_table/engineering = 5,
-		/datum/loot_table/entertainment = 10,
-		/datum/loot_table/food_or_drink = 10,
-		/datum/loot_table/medical = 5,
-		/datum/loot_table/module = 5,
-		/datum/loot_table/structure = 1,
-		/datum/loot_table/trash = 20,
-	)
-	loot_spawn_chance = 0.8
 
 /datum/biome/grass/dense
 	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
@@ -134,7 +119,6 @@
 		/mob/living/simple_animal/cockroach = 15,
 		/mob/living/simple_animal/bee = 5,
 	)
-	loot_spawn_chance = 1
 
 /datum/biome/grass/sparse
 	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
@@ -154,21 +138,6 @@
 		/mob/living/simple_animal/hostile/deer = 10,
 		/mob/living/simple_animal/cockroach = 5,
 	)
-	loot_tables_list = list(
-		/datum/loot_table/bedsheet = 10,
-		/datum/loot_table/bureaucracy = 5,
-		/datum/loot_table/clothing = 5,
-		/datum/loot_table/combat = 1,
-		/datum/loot_table/decoration = 5,
-		/datum/loot_table/engineering = 5,
-		/datum/loot_table/entertainment = 10,
-		/datum/loot_table/food_or_drink = 10,
-		/datum/loot_table/medical = 5,
-		/datum/loot_table/module = 5,
-		/datum/loot_table/structure = 1,
-		/datum/loot_table/trash = 20,
-	)
-	loot_spawn_chance = 0.5
 
 /datum/biome/grass/forest
 	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
@@ -191,7 +160,6 @@
 		/mob/living/simple_animal/hostile/bear = 5,
 		/mob/living/simple_animal/cockroach = 10,
 	)
-	loot_spawn_chance = 1
 
 /datum/biome/grass/lush
 	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
@@ -214,7 +182,6 @@
 		/mob/living/simple_animal/hostile/deer = 15,
 		/mob/living/simple_animal/bee = 10,
 	)
-	loot_spawn_chance = 1.2
 
 /datum/biome/grass/meadow
 	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
@@ -237,7 +204,6 @@
 		/mob/living/simple_animal/hostile/deer = 20,
 		/mob/living/simple_animal/bee = 30,
 	)
-	loot_spawn_chance = 1.5
 
 /datum/biome/grass/jungle
 	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
@@ -263,7 +229,6 @@
 		/mob/living/simple_animal/bee = 15,
 		/mob/living/simple_animal/hostile/lizard = 15,
 	)
-	loot_spawn_chance = 2
 
 /datum/biome/grass/tropical
 	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
@@ -288,7 +253,6 @@
 		/mob/living/simple_animal/hostile/lizard = 25,
 		/mob/living/simple_animal/hostile/bear = 5,
 	)
-	loot_spawn_chance = 2.5
 
 // Cave biomes
 /datum/biome/cave/grass
