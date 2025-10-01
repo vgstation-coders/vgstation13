@@ -205,8 +205,6 @@
 		if(prob(15))
 			if(materials)
 				materials.makeScrap(loc)
-			else
-				new /obj/item/weapon/shard(loc)
 			playsound(src, "shatter", 50, 1)
 			qdel(src)
 			return

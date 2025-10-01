@@ -169,12 +169,9 @@ BLIND     // can't see anything
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
 	playsound(src, "shatter", 50, 1)
 
-	var/obj/item/S
 	if(materials)
-		S = materials.makeScrap(get_turf(src))
-	else
-		S = new /obj/item/weapon/shard(get_turf(src))
-	S.Crossed()
+		var/obj/item/S = materials.makeScrap(get_turf(src))
+		S.Crossed()
 
 	qdel(src)
 	return SPECIAL_ATTACK_FAILED
@@ -229,12 +226,9 @@ BLIND     // can't see anything
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
 	playsound(src, "shatter", 50, 1)
 
-	var/obj/item/S
 	if(materials)
-		S = materials.makeScrap(get_turf(src))
-	else
-		S = new /obj/item/weapon/shard(get_turf(src))
-	S.Crossed()
+		var/obj/item/S = materials.makeScrap(get_turf(src))
+		S.Crossed())
 
 	qdel(src)
 	return SPECIAL_ATTACK_FAILED
