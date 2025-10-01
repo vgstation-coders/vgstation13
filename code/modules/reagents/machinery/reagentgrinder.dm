@@ -33,22 +33,22 @@ var/global/list/juice_items = list (
 	var/list/blend_items = list (
 
 		//Sheets
-		/obj/item/stack/sheet/metal           = list(IRON = 20),
-		/obj/item/stack/sheet/glass           = list(SILICA = 20),
-		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA = 20),
-		/obj/item/stack/sheet/mineral/uranium = list(URANIUM = 20),
-		/obj/item/stack/sheet/mineral/clown   = list(BANANA = 20),
-		/obj/item/stack/sheet/mineral/silver  = list(SILVER = 20),
-		/obj/item/stack/sheet/mineral/gold    = list(GOLD = 20),
-		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST = 20),
+		/obj/item/stack/sheet/metal           = list(IRON = SHEET_PER_U),
+		/obj/item/stack/sheet/glass           = list(SILICA = SHEET_PER_U),
+		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA = SHEET_PER_U),
+		/obj/item/stack/sheet/mineral/uranium = list(URANIUM = SHEET_PER_U),
+		/obj/item/stack/sheet/mineral/clown   = list(BANANA = SHEET_PER_U),
+		/obj/item/stack/sheet/mineral/silver  = list(SILVER = SHEET_PER_U),
+		/obj/item/stack/sheet/mineral/gold    = list(GOLD = SHEET_PER_U),
+		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST = SHEET_PER_U),
 		/obj/item/stack/sheet/mineral/phazon  = list(PHAZON = 1),
 		/obj/item/stack/sheet/wax			  = list(WAX = 5),
 		/obj/item/candle					  = list(WAX = 1.25),
 		/obj/item/trash/candle				  = list(WAX = 1),
 		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID = 0),
 		/obj/item/weapon/grown/deathnettle    = list(PHENOL = 0),
-		/obj/item/stack/sheet/charcoal        = list(CHARCOAL = 20),
-		/obj/item/stack/sheet/bone	          = list(BONEMARROW = 20),
+		/obj/item/stack/sheet/charcoal        = list(CHARCOAL = SHEET_PER_U),
+		/obj/item/stack/sheet/bone	          = list(BONEMARROW = SHEET_PER_U),
 
 		//Blender Stuff
 		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans = list(SOYMILK = -10), //I have no fucking idea what most of these numbers mean and I hate them.

@@ -163,6 +163,9 @@
 		if(atm.on_fire) // For extinguishing objects on fire
 			atm.extinguish()
 
+	if(volume >= SHEET_PER_U)
+		drop_stack(/obj/item/stack/ore/glass,T,floor(volume/SHEET_PER_U))
+
 /datum/reagent/silicate
 	name = "Silicate"
 	id = SILICATE
