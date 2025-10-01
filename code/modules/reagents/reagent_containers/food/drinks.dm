@@ -828,6 +828,7 @@
 	vending_cat = "fermented"
 	molotov = -1 //can become a molotov
 	isGlass = 1
+	starting_materials = list(MAT_GLASS = 500)
 	can_flip = TRUE
 
 /obj/item/weapon/reagent_containers/food/drinks/beer/New()
@@ -843,6 +844,7 @@
 	vending_cat = "fermented"
 	molotov = -1 //can become a molotov
 	isGlass = 1
+	starting_materials = list(MAT_GLASS = 500)
 	can_flip = TRUE
 
 /obj/item/weapon/reagent_containers/food/drinks/ale/New()
@@ -989,6 +991,7 @@
 	tabself = "You pop the cap off"
 	molotov = -1 //can become a molotov
 	isGlass = 1
+	starting_materials = list(MAT_GLASS = 500)
 	can_flip = TRUE
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka/New()
@@ -1020,6 +1023,7 @@
 	icon_state = "quantum"
 	molotov = -1 //can become a molotov
 	isGlass = 1
+	starting_materials = list(MAT_GLASS = 500)
 	can_flip = TRUE
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum/New()
@@ -2090,7 +2094,6 @@
 	desc = "Experts spent a long time squatting around a mixing bench to bring you this."
 	icon_state = "grey_vodka"
 	vending_cat = "spirits"
-	starting_materials = null
 	isGlass = 1
 	molotov = -1
 
@@ -2107,26 +2110,7 @@
 
 	//Creates a shattering noise and replaces the bottle with a broken_bottle
 	user.drop_item(force_drop = 1)
-	var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(user.loc)
-	B.icon_state = src.icon_state
-	B.name = src.smashname
-
-	if(istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
-		B.icon_state = "glass_empty"
-
-	if(prob(33))
-		new /obj/item/weapon/shard(get_turf(M || src)) // Create a glass shard at the target's location! O)
-
-	var/icon/I = new('icons/obj/drinks.dmi', B.icon_state)
-	I.Blend(B.broken_outline, ICON_OVERLAY, rand(5), 1)
-	I.SwapColor(rgb(255, 0, 220, 255), rgb(0, 0, 0, 0))
-	B.icon = I
-
-	user.put_in_active_hand(B)
-	src.transfer_fingerprints_to(B)
-	playsound(src, "shatter", 70, 1)
-
-	qdel(src)
+	create_broken_bottle(user,M)
 
 //smashing when thrown
 /obj/item/weapon/reagent_containers/food/drinks/throw_impact(atom/hit_atom, var/speed, mob/user)
@@ -2155,22 +2139,24 @@
 
 		create_broken_bottle()
 
-/obj/item/weapon/reagent_containers/food/drinks/proc/create_broken_bottle()
+/obj/item/weapon/reagent_containers/food/drinks/proc/create_broken_bottle(mob/user,mob/target)
 	//create new broken bottle
-	var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(loc)
+	var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(get_turf(user || src))
 	B.name = smashname
 	B.icon_state = icon_state
 
 	if(istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
 		B.icon_state = "glass_empty"
 
-	if(prob(33))
-		new /obj/item/weapon/shard(get_turf(src)) // Create a glass shard at the hit location)
+	if(materials?.getAmount(MAT_GLASS))
+		materials.makeScrap(get_turf(target || src)) // Create a glass shard at the hit location
 
 	var/icon/Q = new('icons/obj/drinks.dmi', B.icon_state)
 	Q.Blend(B.broken_outline, ICON_OVERLAY, rand(5), 1)
 	Q.SwapColor(rgb(255, 0, 220, 255), rgb(0, 0, 0, 0))
 	B.icon = Q
+	if(user)
+		user.put_in_active_hand(B)
 	src.transfer_fingerprints_to(B)
 	playsound(src, "shatter", 70, 1)
 	qdel(src)
@@ -2234,6 +2220,7 @@
 	flags = FPRINT
 	molotov = 1
 	isGlass = 1
+	starting_materials = list(MAT_GLASS = 500)
 	icon_state = "vodkabottle" //not strictly necessary for the "abstract" molotov type that the molotov-making-process copies variables from, but is used for pre-spawned molotovs
 	can_flip = TRUE
 
