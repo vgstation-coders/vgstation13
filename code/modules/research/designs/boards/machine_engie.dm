@@ -50,9 +50,9 @@
 	id = "cellcharger"
 	req_tech = list(Tc_MATERIALS = 2, Tc_ENGINEERING = 2, Tc_POWERSTORAGE = 3)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 3)
+	materials = list(MAT_GLASS = 1000, SACID = 3)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/cell_charger
+	build_path = /obj/item/weapon/circuitboard/small/cell_charger
 
 /datum/design/tracker_electronics
 	name = "Circuit Design (Tracker Electronics)"
@@ -183,9 +183,9 @@
 	id = "fire_popper"
 	req_tech = list(Tc_ENGINEERING = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 1000, SACID = 20)
 	category = "Misc"
-	build_path = /obj/item/weapon/circuitboard/firefoam_popper
+	build_path = /obj/item/weapon/circuitboard/small/firefoam_popper
 
 //
 //MECHANICS MACHINES.

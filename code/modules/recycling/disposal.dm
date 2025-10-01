@@ -1587,7 +1587,7 @@
 	// for broken pipe, remove and turn into scrap
 
 /obj/structure/disposalpipe/broken/welded()
-//	var/obj/item/scrap/S = new(src.loc)
+//	var/obj/item/trash/scrap/S = new(src.loc)
 //	S.set_components(200,0,0)
 	qdel(src)
 

@@ -522,6 +522,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			return
 		if(broken || burnt)
 			to_chat(user, "<span class='warning'>You remove the broken plating.</span>")
+			new /obj/item/trash/scrap(src,CC_PER_SHEET_METAL/rand(6,10))
 		else
 			if(is_wood_floor())
 				to_chat(user, "<span class='warning'>You forcefully pry off the planks, destroying them in the process.</span>")
