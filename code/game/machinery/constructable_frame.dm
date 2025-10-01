@@ -370,8 +370,9 @@ to destroy them and players will be able to make replacements.
 	else if(iswelder(O))
 		var/obj/item/tool/weldingtool/WT = O
 		if(WT.remove_fuel(1,user))
-			var/obj/item/stack/sheet/glass/glass/new_item = new()
-			new_item.forceMove(src.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
+			if(materials)
+				var/obj/item/trash/scrap/glass/new_item = new(null,materials.getAmount(MAT_GLASS))
+				new_item.forceMove(src.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other scraps on the ground.
 			qdel(src)
 			return
 	else
