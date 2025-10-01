@@ -169,7 +169,11 @@ BLIND     // can't see anything
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
 	playsound(src, "shatter", 50, 1)
 
-	var/obj/item/weapon/shard/S = new(get_turf(src))
+	var/obj/item/S
+	if(materials)
+		S = materials.makeScrap(get_turf(src))
+	else
+		S = new /obj/item/weapon/shard(get_turf(src))
 	S.Crossed()
 
 	qdel(src)
@@ -225,7 +229,11 @@ BLIND     // can't see anything
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
 	playsound(src, "shatter", 50, 1)
 
-	var/obj/item/weapon/shard/S = new(get_turf(src))
+	var/obj/item/S
+	if(materials)
+		S = materials.makeScrap(get_turf(src))
+	else
+		S = new /obj/item/weapon/shard(get_turf(src))
 	S.Crossed()
 
 	qdel(src)
