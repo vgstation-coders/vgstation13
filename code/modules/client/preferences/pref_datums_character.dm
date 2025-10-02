@@ -196,12 +196,12 @@
 				var/datum/preference_setting/numerical/g_facial = parent.get_pref_datum(/datum/preference_setting/numerical/g_facial)
 				var/datum/preference_setting/numerical/b_facial = parent.get_pref_datum(/datum/preference_setting/numerical/b_facial)
 
-				r_facial.setting = hex2num(copytext(carapace, 2, 4))
-				g_facial.setting = hex2num(copytext(carapace, 4, 6))
-				b_facial.setting = hex2num(copytext(carapace, 6, 8))
-				r_facial.setting = clamp(r_hair, 0, 80)
-				g_facial.setting = clamp(g_hair, 0, 50)
-				b_facial.setting = clamp(b_hair, 0, 35)
+				r_hair.setting = hex2num(copytext(carapace, 2, 4))
+				g_hair.setting = hex2num(copytext(carapace, 4, 6))
+				b_hair.setting = hex2num(copytext(carapace, 6, 8))
+				r_hair.setting = clamp(r_hair.setting, 0, 80)
+				g_hair.setting = clamp(g_hair.setting, 0, 50)
+				b_hair.setting = clamp(b_hair.setting, 0, 35)
 	parent.ShowChoices(user)
 
 /datum/preference_setting/string/h_style/choose_setting(var/mob/user)
