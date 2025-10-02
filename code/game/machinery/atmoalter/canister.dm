@@ -248,7 +248,6 @@
 		//Can not have a pressure delta that would cause environment pressure > tank pressure
 		var/soundvol = 0
 		if (env_pressure > 0.01)
-			// pd/env usually in range 0~10
 			soundvol = calc_sound_vol(pressure_delta, env_pressure)
 		sound_emitter.update_active_sound_param(volume = soundvol)
 
