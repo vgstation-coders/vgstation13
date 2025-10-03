@@ -2,6 +2,7 @@
 	name = "Chemical Sting (5)"
 	desc = "We sting a human with chemicals learned."
 	abbreviation = "CS"
+	hud_state = "chem-sting"
 	chemcost = 5
 
 	var/current_chem
