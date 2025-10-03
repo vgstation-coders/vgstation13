@@ -28,9 +28,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/starting_weather_type = null // The initial weather type for this climate
 	var/weather_image_type = /obj/effect/weather_holder // The type of weather holder this climate uses
 	var/obj/effect/weather_holder/weather_image = null // The weather holder object for this climate
-	var/list/snowtiles = list() // All snow turfs affected by this climate
-	var/list/environment_snowtiles = list() // Snow turfs that respond to weather changes (real_snow_tile && !ignore_blizzard_updates)
-	var/list/weather_turfs = list() // All turfs affected by this climate (generalized for all weather types)
+	var/list/weather_turfs = list() // All turfs affected by this climate (includes snow turfs and other outdoor turfs)
 
 /datum/climate/New(var/active_z,var/datum/allocation/A = null)
 	..()
@@ -56,25 +54,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	else
 		weather_image.UpdatePrecipitation(WEATHER_CALM)
 
-// Register a snow turf with this climate
-/datum/climate/proc/register_snow_turf(var/turf/unsimulated/floor/snow/S)
-	if(!S)
-		return
-	if(S in snowtiles)
-		return
-	snowtiles += S
-	if(S.real_snow_tile && !S.ignore_blizzard_updates)
-		environment_snowtiles += S
-	if(weather_image)
-		S.vis_contents += weather_image
-
-// Unregister a snow turf from this climate
-/datum/climate/proc/unregister_snow_turf(var/turf/unsimulated/floor/snow/S)
-	if(!S)
-		return
-	snowtiles -= S
-	environment_snowtiles -= S
-
 // Register any outdoor turf with this climate (generalized for all weather types)
 /datum/climate/proc/register_weather_turf(var/turf/T)
 	if(!T)
@@ -90,7 +69,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	if(!T)
 		return
 	weather_turfs -= T
-	if(T in T.vis_contents)
+	if(weather_image && (weather_image in T.vis_contents))
 		T.vis_contents -= weather_image
 
 // Override this in climate subtypes to define the weather system
@@ -312,9 +291,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	timeleft -= SS_WAIT_WEATHER
 	weathertracker[name] += SS_WAIT_WEATHER
 
-var/list/global_snowtiles = list()
-var/list/environment_snowtiles = list()
-
 /datum/weather/proc/weather_details()
 	return //additional info to report to the climate computer
 
@@ -344,8 +320,10 @@ var/list/environment_snowtiles = list()
 		E.alarm(!(precip_intensity % WEATHER_SEVERE))
 		//sends 1 if precip_intensity equals blizzard exactly, otherwise sends 0
 	..()
-	for(var/turf/unsimulated/floor/snow/tile in parent.environment_snowtiles)
-		tile.update_environment()
+	// Update environment for snow turfs that respond to weather changes
+	for(var/turf/unsimulated/floor/snow/tile in parent.weather_turfs)
+		if(tile.real_snow_tile && !tile.ignore_blizzard_updates)
+			tile.update_environment()
 	force_update_snowfall_sfx()
 
 /datum/weather/snow/tick()
@@ -353,7 +331,7 @@ var/list/environment_snowtiles = list()
 	if(!prob(precip_prob))
 		return
 	var/i = rand(1,tile_interval)
-	for(var/turf/unsimulated/floor/snow/tile in parent.snowtiles)
+	for(var/turf/unsimulated/floor/snow/tile in parent.weather_turfs)
 		if(i == tile_interval)
 			tile.change_snowballs(precip_rate[1],precip_rate[2])
 			tile.ClearSnowprints()

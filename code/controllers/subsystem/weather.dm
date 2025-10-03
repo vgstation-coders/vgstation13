@@ -42,12 +42,15 @@ var/list/precip_state_to_texture = list()
 	var/datum/climate/C = new climate_type(z,A)
 	climates += C
 
-	// Snaxi exception
-	for(var/turf/unsimulated/floor/snow/S in global_snowtiles)
-		if(S.z == z)
-			var/datum/allocation/turf_alloc = SSmapping.get_allocation(trf = S)
-			// Only register if allocation matches (or both are null)
-			if(A == turf_alloc)
-				C.register_snow_turf(S)
+	// Retroactively register turfs that were created before the climate system
+	// This handles legacy maps where turfs exist before climate is set up
+	if(A && A.turfs)
+		// Use allocation's turfs list for procedurally generated planets
+		for(var/turf/unsimulated/floor/snow/S in A.turfs)
+			C.register_weather_turf(S)
+	else
+		// For legacy maps without allocations, scan the z-level
+		for(var/turf/unsimulated/floor/snow/S in block(locate(1, 1, z), locate(world.maxx, world.maxy, z)))
+			C.register_weather_turf(S)
 
 	return C

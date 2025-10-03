@@ -28,10 +28,7 @@
 	var/datum/allocation/A = SSmapping.get_allocation(trf = src)
 	var/datum/climate/C = SSweather.get_climate(src.z, A)
 	if(C)
-		C.unregister_snow_turf(src)
-	global_snowtiles -= src
-	if(real_snow_tile && !ignore_blizzard_updates)
-		environment_snowtiles -= src
+		C.unregister_weather_turf(src)
 	ClearSnowprints()
 	vis_contents.Cut()
 	..()
@@ -45,9 +42,6 @@
 			snowballs = initial_snowballs
 		icon_state = "snow[rand(0, 6)]"
 	update_environment()
-	global_snowtiles += src
-	if(real_snow_tile && !ignore_blizzard_updates)
-		environment_snowtiles += src
 	footstep_sound = sounds_snow
 	footstep_sound_barefoot = sounds_snow
 	footstep_sound_claw = sounds_snow
@@ -56,10 +50,7 @@
 	var/datum/allocation/A = SSmapping.get_allocation(trf = src)
 	var/datum/climate/C = SSweather.get_climate(src.z, A)
 	if(C)
-		C.unregister_snow_turf(src)
-	if(real_snow_tile && !ignore_blizzard_updates)
-		environment_snowtiles -= src
-	global_snowtiles -= src
+		C.unregister_weather_turf(src)
 	..()
 
 /turf/unsimulated/floor/snow/proc/update_environment()
