@@ -100,11 +100,13 @@
 	else if(user.zone_sel.selecting == "r_hand")
 		I = M.get_held_item_by_index(GRASP_RIGHT_HAND)
 	if(I && istype(I,src.type) && user.a_intent == I_HELP)
-		visible_message("<span class='notice'>[user] offers a toast to [M] with \his [src.name].</span>", "<span class='notice'>You offer a toast to [M] with your [src.name].</span>")
+		user.visible_message("<span class='notice'>[user] offers a toast to [M] with \his [src.name].</span>", "<span class='notice'>You offer a toast to [M] with your [src.name].</span>")
 		if(alert(M,"Accept [user]\'s toast proposal?","Offered toast","Yes","No") == "Yes")
 			if(M.Adjacent(user) && !M.stat && !user.stat)
 				playsound(get_turf(user), "trayhit", 50, 1)
-				visible_message("<span class='notice'>[user] toasts with [M].</span>", "<span class='notice'>You toast with [M].</span>")
+				user.visible_message("<span class='notice'>[user] toasts with [M].</span>", "<span class='notice'>You toast with [M].</span>")
+		else
+			user.visible_message("<span class='warning'>[M] declines [user]\'s toast offer.</span>")
 	else
 		..()
 
