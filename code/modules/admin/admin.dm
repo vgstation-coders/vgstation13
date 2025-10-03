@@ -1020,18 +1020,20 @@ var/global/floorIsLava = 0
 			var/current_weather = "N/A"
 			var/current_time = "N/A"
 
-			if(planet.allocation)
-				var/datum/allocation/alloc = planet.allocation
-				z_level = alloc.z
-				sector = "[alloc.sector[1]], [alloc.sector[2]]"
+			var/datum/allocation/alloc = planet.allocation
+			z_level = alloc.z
+			sector = "[alloc.sector[1]], [alloc.sector[2]]"
+
+			if(!alloc)
+				CRASH("Planet [planet_name] has no allocation!")
 
 			// Get current weather info
 			if(planet.climate && planet.climate.current_weather)
 				current_weather = planet.climate.current_weather.name
 
-			// Get current time of day info
-			if(SSDayNight && (z_level in daynight_z_lvls))
-				switch(SSDayNight.current_timeOfDay)
+			// Get current time of day info for this specific planet
+			if(SSDayNight && alloc && (z_level in daynight_z_lvls))
+				switch(planet.current_timeOfDay)
 					if(TOD_MORNING) current_time = "Morning"
 					if(TOD_SUNRISE) current_time = "Sunrise"
 					if(TOD_DAYTIME) current_time = "Daytime"

@@ -55,7 +55,7 @@
 /datum/subsystem/daynightcycle
 	var/solartime=0 //start at 0. set not like that for debugging.
 
-/datum/subsystem/daynightcycle/process_lighting()
+/datum/subsystem/daynightcycle/advance_time()
 	// YCbCr is a superior colorspace. fight me.
 	var/luma=0.0
 	var/chroma_b=0.0

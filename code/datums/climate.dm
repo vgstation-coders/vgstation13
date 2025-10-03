@@ -506,7 +506,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		var/delay = rand(1,5) SECONDS
 		spawn(delay)
 			thunder()
-	else if(prob(lightning_chance))
+	else if(prob(lightning_chance)*2)
 		thunder()
 
 /datum/weather/cloudy/storm/proc/thunder()

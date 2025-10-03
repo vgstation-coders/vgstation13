@@ -179,9 +179,25 @@ var/datum/subsystem/mapping/SSmapping
 	// * The ruin from being spaced when it spawns in
 	mapgen.populate_turfs(turfs_from_sector(A.sector, world.maxz))
 
-	// Initialize environmental systems
-	SSDayNight.get_turflist()
-	SSDayNight.process_lighting()
+	// Initialize day/night cycle for this planet
+	newplanet.build_daynight_turflist()
+
+	// Set a random time of day for the new planet
+	var/list/possible_times = list(TOD_MORNING, TOD_SUNRISE, TOD_DAYTIME, TOD_AFTERNOON, TOD_SUNSET, TOD_NIGHTTIME)
+	newplanet.current_timeOfDay = pick(possible_times)
+
+	// Set next_firetime based on the randomly chosen time to match natural cycle durations
+	switch(newplanet.current_timeOfDay)
+		if(TOD_MORNING) newplanet.next_firetime = world.time + 5 MINUTES
+		if(TOD_SUNRISE) newplanet.next_firetime = world.time + 3 MINUTES
+		if(TOD_DAYTIME) newplanet.next_firetime = world.time + 14 MINUTES
+		if(TOD_AFTERNOON) newplanet.next_firetime = world.time + 15 MINUTES
+		if(TOD_SUNSET) newplanet.next_firetime = world.time + 3 MINUTES
+		if(TOD_NIGHTTIME) newplanet.next_firetime = world.time + 36 MINUTES
+
+	// Apply initial lighting to the planet (immediate = TRUE for instant visibility)
+	SSDayNight.update_planet_lighting(newplanet, immediate = TRUE)
+
 	if(newplanet.climate_type)
 		newplanet.climate = SSweather.set_climate(newplanet.climate_type, world.maxz, A)
 		register_weather_turfs(newplanet.climate, mapgen, A)

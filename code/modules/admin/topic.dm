@@ -908,9 +908,14 @@
 			if("Sunset") new_time = TOD_SUNSET
 			if("Nighttime") new_time = TOD_NIGHTTIME
 
-		SSDayNight.current_timeOfDay = new_time
-		SSDayNight.fire()
-		message_admins("[key_name_admin(usr)] changed time of day on [planet.planet_name] to [choice].")
+		// Set the time for this specific planet
+		planet.current_timeOfDay = new_time
+		planet.next_firetime = world.time + 10 MINUTES
+
+		// Force immediate lighting update for this planet only
+		SSDayNight.update_planet_lighting(planet, immediate = TRUE)
+
+		message_admins("[key_name_admin(usr)] changed time of day to [choice] on [planet.planet_name].")
 		procedural_generation_panel()
 		return
 
