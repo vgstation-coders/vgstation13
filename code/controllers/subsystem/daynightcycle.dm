@@ -182,8 +182,9 @@ On the map dm file, redefine the following:
 	if(!planet || !planet.daynight_turfs)
 		return
 
+	// Use the same light power calculation as global cycle
 	var/light_power = (planet.current_timeOfDay == TOD_NIGHTTIME) ? 3 : 10
-	light_power *= weather_mod
+	light_power *= planet.weather_mod // Apply planet-specific weather modifier
 	var/lowpriority = !immediate
 
 	for(var/turf/T in planet.daynight_turfs)

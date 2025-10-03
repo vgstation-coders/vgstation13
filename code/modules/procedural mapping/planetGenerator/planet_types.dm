@@ -25,6 +25,7 @@
 	var/current_timeOfDay = TOD_DAYTIME
 	var/next_firetime = 0
 	var/list/daynight_turfs = list()
+	var/weather_mod = 1 // Planet-specific weather light modifier
 
 /**
  * Builds the list of turfs affected by day/night cycle for this planet

@@ -112,6 +112,15 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	if(forecasts.len < PREDICTION_MINIMUM)
 		forecast()
 
+// Get the planet associated with this climate's allocation
+/datum/climate/proc/get_planet()
+	if(!allocation)
+		return null
+	for(var/datum/planet_type/planet in SSmapping.planets)
+		if(planet.allocation == allocation)
+			return planet
+	return null
+
 #define INVALID_STEP -1
 #define CANNOT_CHANGE -2
 //step -1 to go down a step, 1 to go up a step
@@ -284,6 +293,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/precip_estimate = "snowing"
 	var/weather_sound = null // Sound file for this weather type
 	var/weather_sound_volume = 50 // Volume for the weather sound
+	var/light_modifier = 1 // Light reduction multiplier (1 = normal, 0.8 = 20% darker, etc.)
 
 /datum/weather/New(var/datum/climate/C)
 	parent = C
@@ -292,6 +302,15 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 
 /datum/weather/proc/execute()
 	parent.weather_image.UpdatePrecipitation(precip_intensity)
+
+	// Update lighting based on weather conditions
+	var/datum/planet_type/planet = parent.get_planet()
+	if(planet)
+		planet.weather_mod = light_modifier
+		SSDayNight.update_planet_lighting(planet, immediate = TRUE)
+	else if(parent.z)
+		SSDayNight.weather_mod = light_modifier
+		SSDayNight.update_global_lighting()
 
 /datum/weather/proc/tick()
 	timeleft -= SS_WAIT_WEATHER
@@ -450,6 +469,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	precip_intensity = WEATHER_CALM
 	temperature = T20C
 	precip_estimate = "none expected"
+	light_modifier = 1 // Normal brightness
 
 //////////////////////// CLOUDY ////////////////////////
 /datum/weather/cloudy
@@ -457,12 +477,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	precip_intensity = WEATHER_CALM
 	temperature = T20C
 	precip_estimate = "none expected"
-	var/light_reduction = 0.8 // 20% light reduction
-
-/datum/weather/cloudy/execute()
-	..()
-	SSDayNight.weather_mod = light_reduction
-	SSDayNight.fire()
+	light_modifier = 0.8 // 20% light reduction
 
 /datum/weather/cloudy/fog
 	name = "fog"
@@ -501,7 +516,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	temperature = T20C - 2
 	precip_estimate = "<font color='red'>about 100mm/hour (ALERT)</font>"
 	var/lightning_chance = 10
-	var/list/thunder_sounds = list("sound/effects/weather/thunder1.ogg", "sound/effects/weather/thunder2.ogg", "sound/effects/weather/thunder3.ogg")
+	var/list/thunder_sounds = list('sound/effects/weather/thunder1.ogg', 'sound/effects/weather/thunder2.ogg', 'sound/effects/weather/thunder3.ogg')
 	weather_sound = 'sound/effects/weather/rain_storm.ogg'
 	weather_sound_volume = 80
 
