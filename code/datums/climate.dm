@@ -145,10 +145,12 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 /datum/climate/proc/change_weather(weather, force = FALSE)
 	if(ispath(weather))
 		//We have been provided a path. Let's see if it's identical to the one we have.
-		if(ispath(weather, current_weather.type)) //This is a separate check so that we can have our warning work.
+		if(weather == current_weather.type) //This is a separate check so that we can have our warning work.
 			return //No need to change, this is our current type.
 		else
 			if(force)
+				if(current_weather)
+					current_weather.stop_weather_sounds()
 				qdel(current_weather)
 				current_weather = new weather(src)
 				current_weather.execute()
@@ -158,6 +160,8 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	else if(istype(weather,/datum/weather))
 		//We have been given a specific weather datum. It may be modified, so run it no matter what.
 		if(force)
+			if(current_weather)
+				current_weather.stop_weather_sounds()
 			qdel(current_weather)
 			current_weather = weather
 			current_weather.execute()
@@ -311,6 +315,12 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	for(var/mob/M in affected_players)
 		if(M && M.client)
 			M << sound(weather_sound, repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = weather_sound_volume)
+
+/datum/weather/proc/stop_weather_sounds()
+	var/list/affected_players = get_weather_affected_players()
+	for(var/mob/M in affected_players)
+		if(M && M.client)
+			M << sound(null, repeat = 0, wait = 0, channel = CHANNEL_WEATHER, volume = 0)
 
 /datum/weather/snow
 	precip_intensity = WEATHER_CALM
