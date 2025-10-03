@@ -127,7 +127,10 @@
 				H.overlay_fullscreen("snowfall_blizzard", /obj/abstract/screen/fullscreen/snowfall_blizzard)
 		if(H.client)
 			if(!istype(OL,/turf/unsimulated/floor/snow))
-				H << sound(snowstorm_ambience[snow_state+1], repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = snowstorm_ambience_volumes[snow_state+1])
+				var/datum/allocation/A_alloc = SSmapping.get_allocation(trf = src)
+				var/datum/climate/C = SSweather.get_climate(src.z, A_alloc)
+				if(C?.current_weather?.weather_sound)
+					H << sound(C.current_weather.weather_sound, repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = C.current_weather.weather_sound_volume)
 
 
 /turf/unsimulated/floor/snow/cultify()

@@ -278,6 +278,8 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/precip_prob = 0
 	var/precip_rate = list(0,0)
 	var/precip_estimate = "snowing"
+	var/weather_sound = null // Sound file for this weather type
+	var/weather_sound_volume = 50 // Volume for the weather sound
 
 /datum/weather/New(var/datum/climate/C)
 	parent = C
@@ -301,6 +303,14 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	else
 		playerlist = mobs_in_zlevel(parent.z,client_needed = TRUE)
 	return playerlist
+
+/datum/weather/proc/update_weather_sounds()
+	if(!weather_sound)
+		return
+	var/list/affected_players = get_weather_affected_players()
+	for(var/mob/M in affected_players)
+		if(M && M.client)
+			M << sound(weather_sound, repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = weather_sound_volume)
 
 /datum/weather/snow
 	precip_intensity = WEATHER_CALM
@@ -339,8 +349,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		else
 			i++
 
-var/list/snowstorm_ambience = list('sound/misc/snowstorm/snowfall_calm.ogg','sound/misc/snowstorm/snowfall_average.ogg','sound/misc/snowstorm/snowfall_hard.ogg','sound/misc/snowstorm/snowfall_blizzard.ogg')
-var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 /datum/weather/snow/proc/force_update_snowfall_sfx() //Since the vision blocking UI only updates on Entered, let's call it.
 	var/list/affected_players = get_weather_affected_players()
 	for(var/mob/M in affected_players)
@@ -348,7 +356,7 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 			var/turf/unsimulated/floor/snow/snow = get_turf(M)
 			if(snow && istype(snow))
 				snow.Entered(M)
-				M << sound(snowstorm_ambience[precip_intensity+1], repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = snowstorm_ambience_volumes[precip_intensity+1])
+	update_weather_sounds()
 
 //////////////////////// SNOW SUBTYPES ////////////////////////
 
@@ -359,6 +367,8 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 	precip_rate = list(-1,0)
 	temperature = T_ARCTIC
 	precip_estimate = "minimal"
+	weather_sound = 'sound/misc/snowstorm/snowfall_calm.ogg'
+	weather_sound_volume = 30
 
 /datum/weather/snow/calm/execute()
 	..()
@@ -373,6 +383,8 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 	precip_rate = list(1,8)
 	temperature = T_ARCTIC - 5
 	precip_estimate = "about 1.5cm/minute (light)"
+	weather_sound = 'sound/misc/snowstorm/snowfall_average.ogg'
+	weather_sound_volume = 40
 
 /datum/weather/snow/light/execute()
 	..()
@@ -387,6 +399,8 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 	precip_rate = list(2,15)
 	temperature = T_ARCTIC - 10
 	precip_estimate = "<font color='orange'>about 4.8cm/minute (heavy)</font>"
+	weather_sound = 'sound/misc/snowstorm/snowfall_hard.ogg'
+	weather_sound_volume = 60
 
 /datum/weather/snow/heavy/execute()
 	..()
@@ -402,6 +416,8 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 	precip_rate = list(3,20)
 	temperature = T_ARCTIC - 20
 	precip_estimate = "<font color='red'>about 10.8cm/minute (ALERT)</font>"
+	weather_sound = 'sound/misc/snowstorm/snowfall_blizzard.ogg'
+	weather_sound_volume = 80
 
 /datum/weather/snow/blizzard/execute()
 	..()
@@ -449,18 +465,24 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 	precip_rate = list(0,-1)
 	temperature = T20C - 2
 	precip_estimate = "about 5mm/hour (average)"
+	weather_sound = 'sound/effects/weather/rain_light.ogg'
+	weather_sound_volume = 40
 
 /datum/weather/cloudy/rain/execute()
 	..()
+	update_weather_sounds()
 
 /datum/weather/cloudy/rain/heavy
 	name = "heavy rainfall"
 	precip_intensity = WEATHER_HEAVY
 	precip_rate = list(1,-2)
 	precip_estimate = "<font color='orange'>about 50mm/hour (heavy)</font>"
+	weather_sound = 'sound/effects/weather/rain_heavy.ogg'
+	weather_sound_volume = 60
 
 /datum/weather/cloudy/rain/heavy/execute()
 	..()
+	update_weather_sounds()
 
 /datum/weather/cloudy/storm
 	name = "severe thunderstorm"
@@ -469,10 +491,13 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 	temperature = T20C - 2
 	precip_estimate = "<font color='red'>about 100mm/hour (ALERT)</font>"
 	var/lightning_chance = 10
-	var/list/thunder_sounds = list("sound/effects/thunder1.ogg", "sound/effects/thunder2.ogg", "sound/effects/thunder3.ogg")
+	var/list/thunder_sounds = list("sound/effects/weather/thunder1.ogg", "sound/effects/weather/thunder2.ogg", "sound/effects/weather/thunder3.ogg")
+	weather_sound = 'sound/effects/weather/rain_storm.ogg'
+	weather_sound_volume = 80
 
 /datum/weather/cloudy/storm/execute()
 	..()
+	update_weather_sounds()
 
 /datum/weather/cloudy/storm/tick()
 	..()
