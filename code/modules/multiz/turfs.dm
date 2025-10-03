@@ -155,10 +155,6 @@ var/list/open_overlay_depths
 	else
 		precip_intensity_override = 0
 		ignore_blizzard_updates = FALSE
-		if(!blizzard_image)
-			blizzard_image = new
-		if(!(blizzard_image in vis_contents))
-			vis_contents += blizzard_image
 
 /turf/simulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	var/turf/simulated/open/BS = GetBelow(src)

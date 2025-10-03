@@ -25,6 +25,10 @@
 	var/list/existing_prints = list()
 
 /turf/unsimulated/floor/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+	var/datum/allocation/A = SSmapping.get_allocation(trf = src)
+	var/datum/climate/C = SSweather.get_climate(src.z, A)
+	if(C)
+		C.unregister_snow_turf(src)
 	global_snowtiles -= src
 	if(real_snow_tile && !ignore_blizzard_updates)
 		environment_snowtiles -= src
@@ -34,9 +38,6 @@
 
 /turf/unsimulated/floor/snow/New()
 	..()
-	if(!blizzard_image)
-		blizzard_image = new
-	vis_contents += blizzard_image
 	if(real_snow_tile)
 		if(initial_snowballs == -1)
 			snowballs = rand(5, 10)
@@ -52,6 +53,10 @@
 	footstep_sound_claw = sounds_snow
 
 /turf/unsimulated/floor/snow/Destroy()
+	var/datum/allocation/A = SSmapping.get_allocation(trf = src)
+	var/datum/climate/C = SSweather.get_climate(src.z, A)
+	if(C)
+		C.unregister_snow_turf(src)
 	if(real_snow_tile && !ignore_blizzard_updates)
 		environment_snowtiles -= src
 	global_snowtiles -= src
@@ -67,7 +72,8 @@
 
 /turf/unsimulated/floor/snow/proc/get_snow_state()
 	. = precip_intensity_override
-	var/datum/climate/C = SSweather.get_climate(src.z)
+	var/datum/allocation/A = SSmapping.get_allocation(trf = src)
+	var/datum/climate/C = SSweather.get_climate(src.z, A)
 	if(map && C && istype(C.current_weather,/datum/weather/snow))
 		var/datum/weather/snow/S = C.current_weather
 		if(!.)
@@ -152,39 +158,6 @@
 	for(var/print in existing_prints)
 		overlays -= existing_prints[print]
 	existing_prints.Cut()
-
-/obj/effect/blizzard_holder //Exists to make it unclickable
-	name = "blizzard"
-	desc = "Brrr."
-	density = 0
-	anchored = 1
-	plane = ABOVE_TURF_PLANE
-	mouse_opacity = 0
-	var/datum/climate/arctic/parent_climate = null
-
-/obj/effect/blizzard_holder/New(var/datum/climate/arctic/climate_ref = null)
-	..()
-	parent_climate = climate_ref
-	if(map && parent_climate && istype(parent_climate.current_weather,/datum/weather/snow))
-		var/datum/weather/snow/S = parent_climate.current_weather
-		UpdateSnowfall(S.precip_intensity)
-	else
-		UpdateSnowfall(WEATHER_CALM)
-
-/obj/effect/blizzard_holder/proc/UpdateSnowfall(var/snow_state)
-	if(!snow_state_to_texture["[snow_state]"])
-		cache_snowtile(snow_state)
-	appearance = snow_state_to_texture["[snow_state]"]
-
-/obj/effect/blizzard_holder/proc/cache_snowtile(var/snow_state)
-	overlays.Cut()
-	var/list/snowfall_overlays = list("snowfall_calm","snowfall_average","snowfall_hard","snowfall_blizzard")
-	var/list/overlay_counts = list(2,2,2,3)
-	for(var/i = 1 to overlay_counts[snow_state+1])
-		var/image/snowfx = image('icons/turf/snowfx.dmi', "[snowfall_overlays[snow_state+1]][i]",SNOW_OVERLAY_LAYER)
-		snowfx.plane = EFFECTS_PLANE
-		overlays += snowfx
-	snow_state_to_texture["[snow_state]"] = appearance
 
 /turf/unsimulated/floor/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
@@ -365,16 +338,16 @@
 	vis_contents.Cut()
 	vis_contents += heavy_blizzard_image
 
-var/obj/effect/blizzard_holder/heavy/heavy_blizzard_image = null
+var/obj/effect/weather_holder/blizzard/heavy/heavy_blizzard_image = null //exists just for heavy blizzard tiles
 
-/obj/effect/blizzard_holder/heavy/New()
+/obj/effect/weather_holder/blizzard/heavy/New()
 	..()
-	UpdateSnowfall(WEATHER_SEVERE)
+	UpdatePrecipitation(WEATHER_SEVERE)
 
-/obj/effect/blizzard_holder/heavy/UpdateSnowfall(var/snow_state)
+/obj/effect/weather_holder/blizzard/heavy/UpdatePrecipitation(var/snow_state)
 	..(WEATHER_SEVERE)
 
-/obj/effect/blizzard_holder/heavy/cache_snowtile(var/snow_state)
+/obj/effect/weather_holder/blizzard/heavy/cache_weather_tile(var/snow_state)
 	..(WEATHER_SEVERE)
 
 /turf/unsimulated/floor/noblizz_permafrost

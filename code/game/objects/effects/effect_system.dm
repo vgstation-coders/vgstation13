@@ -1112,3 +1112,52 @@ steam.start() -- spawns the effect
 
 		if(dmglevel<4)
 			holder.ex_act(dmglevel)
+
+//Weather Holders
+/obj/effect/weather_holder
+	name = "weather holder"
+	desc = "you shouldn't see this"
+	density = 0
+	anchored = 1
+	plane = ABOVE_TURF_PLANE
+	mouse_opacity = 0
+	var/datum/climate/parent_climate = null
+	var/list/precip_overlays = list()
+	var/list/overlay_counts = list()
+	var/overlay_icon = 'icons/turf/weatherfx.dmi'
+
+/obj/effect/weather_holder/New(var/datum/climate/arctic/climate_ref = null)
+	..()
+	parent_climate = climate_ref
+	if(map && parent_climate && istype(parent_climate.current_weather,/datum/weather/snow))
+		var/datum/weather/snow/S = parent_climate.current_weather
+		UpdatePrecipitation(S.precip_intensity)
+	else
+		UpdatePrecipitation(WEATHER_CALM)
+
+/obj/effect/weather_holder/proc/UpdatePrecipitation(var/weather_state)
+	if(!precip_state_to_texture["[weather_state]"])
+		cache_weather_tile(weather_state)
+	appearance = precip_state_to_texture["[weather_state]"]
+
+/obj/effect/weather_holder/proc/cache_weather_tile(var/weather_state)
+	overlays.Cut()
+	for(var/i = 1 to overlay_counts[weather_state+1])
+		var/image/precipfx = image(overlay_icon, "[precip_overlays[weather_state+1]][i]",SNOW_OVERLAY_LAYER)
+		precipfx.plane = EFFECTS_PLANE
+		overlays += precipfx
+	precip_state_to_texture["[weather_state]"] = appearance
+
+/obj/effect/weather_holder/blizzard
+	precip_overlays = list("snowfall_calm","snowfall_average","snowfall_hard","snowfall_blizzard")
+	overlay_counts = list(2,2,2,3)
+
+/obj/effect/weather_holder/blizzard/heavy
+
+/obj/effect/weather_holder/rain
+
+/obj/effect/weather_holder/sand
+
+/obj/effect/weather_holder/ash
+
+/obj/effect/weather_holder/fallout

@@ -26,6 +26,10 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/list/weather_transitions = list() // Associative list: weather_type = list(possible_transitions)
 	var/list/weather_intensities = list() // Associative list: weather_type = intensity_level
 	var/starting_weather_type = null // The initial weather type for this climate
+	var/weather_image_type = /obj/effect/weather_holder // The type of weather holder this climate uses
+	var/obj/effect/weather_holder/weather_image = null // The weather holder object for this climate
+	var/list/snowtiles = list() // All snow turfs affected by this climate
+	var/list/environment_snowtiles = list() // Snow turfs that respond to weather changes (real_snow_tile && !ignore_blizzard_updates)
 
 /datum/climate/New(var/active_z,var/datum/allocation/A = null)
 	..()
@@ -42,6 +46,30 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	else
 		WARNING("Climate tried to forecast without a starting weather.")
 		message_admins("Climate tried to forecast without a starting weather.")
+	if(!weather_image_type)
+		return
+	if(!weather_image)
+		weather_image = new weather_image_type
+	weather_image.UpdatePrecipitation(WEATHER_CALM)
+
+// Register a snow turf with this climate
+/datum/climate/proc/register_snow_turf(var/turf/unsimulated/floor/snow/S)
+	if(!S)
+		return
+	if(S in snowtiles)
+		return
+	snowtiles += S
+	if(S.real_snow_tile && !S.ignore_blizzard_updates)
+		environment_snowtiles += S
+	if(weather_image)
+		S.vis_contents += weather_image
+
+// Unregister a snow turf from this climate
+/datum/climate/proc/unregister_snow_turf(var/turf/unsimulated/floor/snow/S)
+	if(!S)
+		return
+	snowtiles -= S
+	environment_snowtiles -= S
 
 // Override this in climate subtypes to define the weather system
 /datum/climate/proc/setup_weather_system()
@@ -143,6 +171,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	name = "snow" //what scoreboard displays
 
 	starting_weather_type = /datum/weather/snow/calm
+	weather_image_type = /obj/effect/weather_holder/blizzard
 	allowed_weather_types = list(
 		/datum/weather/snow/calm,
 		/datum/weather/snow/light,
@@ -181,15 +210,10 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		)
 	)
 
-/datum/climate/arctic/New()
-	..()
-	if(!blizzard_image)
-		blizzard_image = new(src)
-	blizzard_image.UpdateSnowfall(WEATHER_CALM)
-
 /datum/climate/temperate
 	name = "temperate"
 	starting_weather_type = /datum/weather/standard
+	weather_image_type = /obj/effect/weather_holder/rain
 	allowed_weather_types = list(
 		/datum/weather/standard,
 		/datum/weather/cloudy,
@@ -274,7 +298,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 
 var/list/global_snowtiles = list()
 var/list/environment_snowtiles = list()
-var/list/snow_state_to_texture = list()
 
 /datum/weather/proc/weather_details()
 	return //additional info to report to the climate computer
@@ -297,8 +320,6 @@ var/list/snow_state_to_texture = list()
 /datum/weather/snow/weather_details()
 	return "<b>Snowfall:</b> <div class='line'>[precip_estimate] </div>"
 
-var/obj/effect/blizzard_holder/blizzard_image = null
-
 /datum/weather/snow/New(var/datum/climate/C)
 	..()
 
@@ -306,8 +327,8 @@ var/obj/effect/blizzard_holder/blizzard_image = null
 	for(var/obj/machinery/teleport/hub/emergency/E in machines)
 		E.alarm(!(precip_intensity % WEATHER_SEVERE))
 		//sends 1 if precip_intensity equals blizzard exactly, otherwise sends 0
-	blizzard_image.UpdateSnowfall(precip_intensity)
-	for(var/turf/unsimulated/floor/snow/tile in environment_snowtiles)
+	parent.weather_image.UpdatePrecipitation(precip_intensity)
+	for(var/turf/unsimulated/floor/snow/tile in parent.environment_snowtiles)
 		tile.update_environment()
 	force_update_snowfall_sfx()
 
@@ -316,7 +337,7 @@ var/obj/effect/blizzard_holder/blizzard_image = null
 	if(!prob(precip_prob))
 		return
 	var/i = rand(1,tile_interval)
-	for(var/turf/unsimulated/floor/snow/tile in global_snowtiles)
+	for(var/turf/unsimulated/floor/snow/tile in parent.snowtiles)
 		if(i == tile_interval)
 			tile.change_snowballs(precip_rate[1],precip_rate[2])
 			tile.ClearSnowprints()
@@ -327,7 +348,8 @@ var/obj/effect/blizzard_holder/blizzard_image = null
 var/list/snowstorm_ambience = list('sound/misc/snowstorm/snowfall_calm.ogg','sound/misc/snowstorm/snowfall_average.ogg','sound/misc/snowstorm/snowfall_hard.ogg','sound/misc/snowstorm/snowfall_blizzard.ogg')
 var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 /datum/weather/snow/proc/force_update_snowfall_sfx() //Since the vision blocking UI only updates on Entered, let's call it.
-	for(var/mob/M in player_list)
+	var/list/affected_players = get_weather_affected_players()
+	for(var/mob/M in affected_players)
 		if(M && M.client)
 			var/turf/unsimulated/floor/snow/snow = get_turf(M)
 			if(snow && istype(snow))

@@ -389,9 +389,10 @@ var/datum/subsystem/mapping/SSmapping
 		x = trf.x
 		y = trf.y
 		z = trf.z
-	var/sector = list(ceil(x / SECTOR_SIZE), ceil(y / SECTOR_SIZE))
+	var/sector_x = ceil(x / SECTOR_SIZE)
+	var/sector_y = ceil(y / SECTOR_SIZE)
 	for(var/datum/allocation/A in allocations)
-		if(A.sector == sector && A.z == z)
+		if(A.sector[1] == sector_x && A.sector[2] == sector_y && A.z == z)
 			return A
 
 /**
