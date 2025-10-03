@@ -64,7 +64,7 @@
 		return
 
 	var/datum/material/mat = materials.getMaterial(MAT_GLASS)
-	var/tx_amount = SHEET_PER_U * materials.getAmount(MAT_GLASS)/mat.cc_per_sheet
+	var/tx_amount = U_PER_SHEET * materials.getAmount(MAT_GLASS)/mat.cc_per_sheet
 	if(tx_amount <= 0)
 		to_chat(user, "<span class='warning'>You can't seem to be able to pour \the [src] into \the [target]. Make a bug report!</span>")
 		return
