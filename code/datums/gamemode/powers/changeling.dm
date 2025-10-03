@@ -150,6 +150,13 @@
 	cost = 0
 	spellpath = /spell/changeling/sting/fat
 
+/datum/power/changeling/chem_sting
+	name = "Chemical Sting"
+	desc = "We evolve the ability to sting a target with chemicals learned."
+	helptext = "Does not provide a warning to others. Chemicals are selected from liquids consumed at any point."
+	cost = 1
+	spellpath = /spell/changeling/sting/chem
+
 /datum/power/changeling/boost_range
 	name = "Boost Range"
 	desc = "We evolve the ability to shoot our stingers at humans, with some preparation."

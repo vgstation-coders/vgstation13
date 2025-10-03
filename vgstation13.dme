@@ -2847,6 +2847,7 @@
 #include "code\modules\spells\changeling\unstun.dm"
 #include "code\modules\spells\changeling\voicechange.dm"
 #include "code\modules\spells\changeling\stings\blind.dm"
+#include "code\modules\spells\changeling\stings\chem.dm"
 #include "code\modules\spells\changeling\stings\deaf.dm"
 #include "code\modules\spells\changeling\stings\dnaextract.dm"
 #include "code\modules\spells\changeling\stings\fat.dm"
