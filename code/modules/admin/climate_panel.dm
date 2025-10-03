@@ -31,6 +31,7 @@
 		<table>
 		<tr class="climate-header">
 		<th>Z-Level</th>
+		<th>Sector</th>
 		<th>Climate Type</th>
 		<th>Current Weather</th>
 		<th>Time Remaining</th>
@@ -42,26 +43,23 @@
 	var/list/sorted_climates = list()
 	var/list/z_levels = list()
 
-	// Collect all z-levels
 	for(var/datum/climate/C in climates)
-		z_levels += C.z
-
-	// Sort z-levels numerically
+		if(!(C.z in z_levels))
+			z_levels += C.z
 	z_levels = sortList(z_levels)
-
-	// Add climates in z-level order
 	for(var/z in z_levels)
 		for(var/datum/climate/C in climates)
 			if(C.z == z)
 				sorted_climates += C
-				break
 
 	for(var/datum/climate/C in sorted_climates)
 		if(!C.current_weather)
 			continue
 		var/datum/weather/W = C.current_weather
+		var/sector_display = C.allocation ? "([C.allocation.sector[1]], [C.allocation.sector[2]])" : "N/A"
 		dat += {"<tr>
 			<td>Z-[C.z]</td>
+			<td>[sector_display]</td>
 			<td>[C.name] <a href='?_src_=vars;Vars=\ref[C]'>\[VV\]</A></td>
 			<td>[W.name] <a href='?_src_=vars;Vars=\ref[W]'>\[VV\]</A></td>
 			<td><a href='?src=\ref[src];climate_timeleft=\ref[W]'>[formatTimeDuration(W.timeleft)]</A></td>

@@ -184,10 +184,50 @@ var/datum/subsystem/mapping/SSmapping
 	SSDayNight.process_lighting()
 	if(newplanet.climate_type)
 		newplanet.climate = SSweather.set_climate(newplanet.climate_type, world.maxz, A)
+		register_weather_turfs(newplanet.climate, mapgen, A)
 		SSweather.fire()
 
 	message_admins("Planet '[newplanet.planet_name]' generated successfully at z-level [world.maxz]")
 	return world.maxz
+
+/**
+ * Registers open turfs from a planet with its climate for weather overlays
+ *
+ * Iterates through all turfs in the allocation and registers those matching
+ * the biome's open_turf_types with the climate system.
+ * Arguments:
+ * * climate - The climate datum to register turfs with
+ * * mapgen - The planet generator containing biome information
+ * * allocation - The allocation containing the planet's turfs
+ */
+/datum/subsystem/mapping/proc/register_weather_turfs(var/datum/climate/climate, var/datum/planetGenerator/mapgen, var/datum/allocation/allocation)
+	if(!climate || !mapgen || !allocation)
+		return
+
+	if(!mapgen.biome_table)
+		return
+
+	// Collect all unique open turf types from all biomes in the biome table
+	var/list/all_open_turf_types = list()
+	for(var/temp_key in mapgen.biome_table)
+		var/list/humidity_list = mapgen.biome_table[temp_key]
+		for(var/humidity_key in humidity_list)
+			var/biome_type = humidity_list[humidity_key]
+			var/datum/biome/biome = new biome_type
+			if(biome.open_turf_types)
+				for(var/turf_type in biome.open_turf_types)
+					all_open_turf_types[turf_type] = TRUE
+			qdel(biome)
+
+	if(!all_open_turf_types.len)
+		return
+
+	// Register all turfs in the allocation that match any open turf type from any biome
+	for(var/turf/T in allocation.turfs)
+		for(var/turf_type in all_open_turf_types)
+			if(istype(T, turf_type))
+				climate.register_weather_turf(T)
+				break
 
 /**
  * Post-processes ruin turfs to match the planet environment

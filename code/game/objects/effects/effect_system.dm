@@ -1126,27 +1126,28 @@ steam.start() -- spawns the effect
 	var/list/overlay_counts = list()
 	var/overlay_icon = 'icons/turf/weatherfx.dmi'
 
-/obj/effect/weather_holder/New(var/datum/climate/arctic/climate_ref = null)
+/obj/effect/weather_holder/New(var/datum/climate/climate_ref = null)
 	..()
 	parent_climate = climate_ref
-	if(map && parent_climate && istype(parent_climate.current_weather,/datum/weather/snow))
-		var/datum/weather/snow/S = parent_climate.current_weather
-		UpdatePrecipitation(S.precip_intensity)
+	if(map && parent_climate && parent_climate.current_weather)
+		UpdatePrecipitation(parent_climate.current_weather.precip_intensity)
 	else
 		UpdatePrecipitation(WEATHER_CALM)
 
 /obj/effect/weather_holder/proc/UpdatePrecipitation(var/weather_state)
-	if(!precip_state_to_texture["[weather_state]"])
+	var/cache_key = "[type]_[weather_state]"
+	if(!precip_state_to_texture[cache_key])
 		cache_weather_tile(weather_state)
-	appearance = precip_state_to_texture["[weather_state]"]
+	appearance = precip_state_to_texture[cache_key]
 
 /obj/effect/weather_holder/proc/cache_weather_tile(var/weather_state)
 	overlays.Cut()
 	for(var/i = 1 to overlay_counts[weather_state+1])
-		var/image/precipfx = image(overlay_icon, "[precip_overlays[weather_state+1]][i]",SNOW_OVERLAY_LAYER)
+		var/image/precipfx = image(overlay_icon, "[precip_overlays[weather_state+1]][i]", SNOW_OVERLAY_LAYER)
 		precipfx.plane = EFFECTS_PLANE
 		overlays += precipfx
-	precip_state_to_texture["[weather_state]"] = appearance
+	var/cache_key = "[type]_[weather_state]"
+	precip_state_to_texture[cache_key] = appearance
 
 /obj/effect/weather_holder/blizzard
 	precip_overlays = list("snowfall_calm","snowfall_average","snowfall_hard","snowfall_blizzard")
@@ -1154,10 +1155,14 @@ steam.start() -- spawns the effect
 
 /obj/effect/weather_holder/blizzard/heavy
 
-/obj/effect/weather_holder/rain
+/obj/effect/weather_holder/temperate
+	precip_overlays = list("rain_calm","rain_average","rain_hard","rain_storm")
+	overlay_counts = list(0,1,1,2)
 
 /obj/effect/weather_holder/sand
 
 /obj/effect/weather_holder/ash
+	precip_overlays = list("ash_average","ash_heavy")
+	overlay_counts = list(1,1)
 
 /obj/effect/weather_holder/fallout

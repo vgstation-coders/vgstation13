@@ -31,7 +31,6 @@ var/list/precip_state_to_texture = list()
 				return C
 			else if(!A && !C.allocation)
 				return C
-	// No exact match found - return null
 	return null
 
 // Set the climate for a specific z-level. Uses an allocation if provided.
@@ -43,7 +42,7 @@ var/list/precip_state_to_texture = list()
 	var/datum/climate/C = new climate_type(z,A)
 	climates += C
 
-	// Register existing snow turfs from this z-level/allocation with the climate
+	// Snaxi exception
 	for(var/turf/unsimulated/floor/snow/S in global_snowtiles)
 		if(S.z == z)
 			var/datum/allocation/turf_alloc = SSmapping.get_allocation(trf = S)

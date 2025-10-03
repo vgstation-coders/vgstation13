@@ -30,6 +30,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/obj/effect/weather_holder/weather_image = null // The weather holder object for this climate
 	var/list/snowtiles = list() // All snow turfs affected by this climate
 	var/list/environment_snowtiles = list() // Snow turfs that respond to weather changes (real_snow_tile && !ignore_blizzard_updates)
+	var/list/weather_turfs = list() // All turfs affected by this climate (generalized for all weather types)
 
 /datum/climate/New(var/active_z,var/datum/allocation/A = null)
 	..()
@@ -49,8 +50,11 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	if(!weather_image_type)
 		return
 	if(!weather_image)
-		weather_image = new weather_image_type
-	weather_image.UpdatePrecipitation(WEATHER_CALM)
+		weather_image = new weather_image_type(src)
+	if(current_weather)
+		weather_image.UpdatePrecipitation(current_weather.precip_intensity)
+	else
+		weather_image.UpdatePrecipitation(WEATHER_CALM)
 
 // Register a snow turf with this climate
 /datum/climate/proc/register_snow_turf(var/turf/unsimulated/floor/snow/S)
@@ -70,6 +74,24 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		return
 	snowtiles -= S
 	environment_snowtiles -= S
+
+// Register any outdoor turf with this climate (generalized for all weather types)
+/datum/climate/proc/register_weather_turf(var/turf/T)
+	if(!T)
+		return
+	if(T in weather_turfs)
+		return
+	weather_turfs += T
+	if(weather_image)
+		T.vis_contents += weather_image
+
+// Unregister an outdoor turf from this climate
+/datum/climate/proc/unregister_weather_turf(var/turf/T)
+	if(!T)
+		return
+	weather_turfs -= T
+	if(T in T.vis_contents)
+		T.vis_contents -= weather_image
 
 // Override this in climate subtypes to define the weather system
 /datum/climate/proc/setup_weather_system()
@@ -213,14 +235,13 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 /datum/climate/temperate
 	name = "temperate"
 	starting_weather_type = /datum/weather/standard
-	weather_image_type = /obj/effect/weather_holder/rain
+	weather_image_type = /obj/effect/weather_holder/temperate
 	allowed_weather_types = list(
 		/datum/weather/standard,
 		/datum/weather/cloudy,
 		/datum/weather/cloudy/rain,
 		/datum/weather/cloudy/rain/heavy,
 		/datum/weather/cloudy/storm,
-		/datum/weather/cloudy/storm/dry,
 	)
 	weather_intensities = list(
 		/datum/weather/standard = 0,
@@ -228,23 +249,21 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		/datum/weather/cloudy/rain = 2,
 		/datum/weather/cloudy/rain/heavy = 3,
 		/datum/weather/cloudy/storm = 4,
-		/datum/weather/cloudy/storm/dry = 3,
 	)
 	weather_transitions = list(
 		/datum/weather/standard = list(
-			/datum/weather/standard = 70,
-			/datum/weather/cloudy = 30
+			/datum/weather/standard = 60,
+			/datum/weather/cloudy = 40,
 		),
 		/datum/weather/cloudy = list(
-			/datum/weather/standard = 40,
+			/datum/weather/standard = 30,
 			/datum/weather/cloudy = 40,
-			/datum/weather/cloudy/rain = 20
+			/datum/weather/cloudy/rain = 30
 		),
 		/datum/weather/cloudy/rain = list(
 			/datum/weather/cloudy = 30,
-			/datum/weather/cloudy/rain = 30,
-			/datum/weather/cloudy/rain/heavy = 30,
-			/datum/weather/cloudy/storm/dry = 10
+			/datum/weather/cloudy/rain = 40,
+			/datum/weather/cloudy/rain/heavy = 30
 		),
 		/datum/weather/cloudy/rain/heavy = list(
 			/datum/weather/cloudy/rain = 40,
@@ -253,11 +272,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		),
 		/datum/weather/cloudy/storm = list(
 			/datum/weather/cloudy/rain/heavy = 70,
-			/datum/weather/cloudy/storm/dry = 30
-		),
-		/datum/weather/cloudy/storm/dry = list(
-			/datum/weather/cloudy/storm = 30,
-			/datum/weather/cloudy = 70
+			/datum/weather/cloudy/storm = 30
 		)
 	)
 
@@ -291,6 +306,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	//round to 2 seconds, since that's how often we check in
 
 /datum/weather/proc/execute()
+	parent.weather_image.UpdatePrecipitation(precip_intensity)
 
 /datum/weather/proc/tick()
 	timeleft -= SS_WAIT_WEATHER
@@ -327,7 +343,7 @@ var/list/environment_snowtiles = list()
 	for(var/obj/machinery/teleport/hub/emergency/E in machines)
 		E.alarm(!(precip_intensity % WEATHER_SEVERE))
 		//sends 1 if precip_intensity equals blizzard exactly, otherwise sends 0
-	parent.weather_image.UpdatePrecipitation(precip_intensity)
+	..()
 	for(var/turf/unsimulated/floor/snow/tile in parent.environment_snowtiles)
 		tile.update_environment()
 	force_update_snowfall_sfx()
@@ -444,6 +460,11 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 	SSDayNight.weather_mod = light_reduction
 	SSDayNight.fire()
 
+/datum/weather/cloudy/fog
+	name = "fog"
+	precip_intensity = WEATHER_CALM
+	precip_estimate = "none expected"
+
 /datum/weather/cloudy/rain
 	name = "rain shower"
 	precip_intensity = WEATHER_MODERATE
@@ -451,11 +472,17 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 	temperature = T20C - 2
 	precip_estimate = "about 5mm/hour (average)"
 
+/datum/weather/cloudy/rain/execute()
+	..()
+
 /datum/weather/cloudy/rain/heavy
 	name = "heavy rainfall"
 	precip_intensity = WEATHER_HEAVY
 	precip_rate = list(1,-2)
 	precip_estimate = "<font color='orange'>about 50mm/hour (heavy)</font>"
+
+/datum/weather/cloudy/rain/heavy/execute()
+	..()
 
 /datum/weather/cloudy/storm
 	name = "severe thunderstorm"
@@ -464,6 +491,10 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 	temperature = T20C - 2
 	precip_estimate = "<font color='red'>about 100mm/hour (ALERT)</font>"
 	var/lightning_chance = 10
+	var/list/thunder_sounds = list("sound/effects/thunder1.ogg", "sound/effects/thunder2.ogg", "sound/effects/thunder3.ogg")
+
+/datum/weather/cloudy/storm/execute()
+	..()
 
 /datum/weather/cloudy/storm/tick()
 	..()
@@ -477,7 +508,8 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 
 /datum/weather/cloudy/storm/proc/thunder()
 	var/playerlist = get_weather_affected_players()
-	var/sound/S = sound(get_sfx("explosion"), 0, 0, 0, 100)
+	var/chosen_sound = pick(thunder_sounds)
+	var/sound/S = sound(chosen_sound, 0, 0, 0, 100)
 	var/sound/S_quiet = sound('sound/effects/explosionfar.ogg', 0, 0, 0, 100)
 	for(var/mob/M in playerlist)
 		if(istype(get_area(M),/area/planet/cave))
