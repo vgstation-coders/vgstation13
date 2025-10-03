@@ -1010,24 +1010,42 @@ var/global/floorIsLava = 0
 	if(SSmapping.planets.len)
 		has_planets = TRUE
 		dat += "<table border='1' style='width:100%'>"
-		dat += "<tr><th>Planet Name</th><th>Planet Type</th><th>Z-Level</th><th>Sector</th><th>Actions</th></tr>"
+		dat += "<tr><th>Planet Name</th><th>Planet Type</th><th>Z-Level</th><th>Sector</th><th>Weather</th><th>Time</th><th>Actions</th></tr>"
 
 		// Display existing planets with their allocation data
 		for(var/datum/planet_type/planet in SSmapping.planets)
 			var/z_level = "Unknown"
 			var/sector = "Unknown"
 			var/planet_name = planet.planet_name
+			var/current_weather = "N/A"
+			var/current_time = "N/A"
 
 			if(planet.allocation)
 				var/datum/allocation/alloc = planet.allocation
 				z_level = alloc.z
 				sector = "[alloc.sector[1]], [alloc.sector[2]]"
 
+			// Get current weather info
+			if(planet.climate && planet.climate.current_weather)
+				current_weather = planet.climate.current_weather.name
+
+			// Get current time of day info
+			if(SSDayNight && (z_level in daynight_z_lvls))
+				switch(SSDayNight.current_timeOfDay)
+					if(TOD_MORNING) current_time = "Morning"
+					if(TOD_SUNRISE) current_time = "Sunrise"
+					if(TOD_DAYTIME) current_time = "Daytime"
+					if(TOD_AFTERNOON) current_time = "Afternoon"
+					if(TOD_SUNSET) current_time = "Sunset"
+					if(TOD_NIGHTTIME) current_time = "Nighttime"
+
 			dat += "<tr>"
 			dat += "<td>[planet_name]</td>"
 			dat += "<td>[planet.name]</td>"
 			dat += "<td>[z_level]</td>"
 			dat += "<td>[sector]</td>"
+			dat += "<td>[current_weather] <A href='?_src_=holder;procgen_weather=\ref[planet]'>\[Change\]</A></td>"
+			dat += "<td>[current_time] <A href='?_src_=holder;procgen_time=\ref[planet]'>\[Change\]</A></td>"
 			dat += "<td><A href='?_src_=holder;procgen_jump=\ref[planet]'>Jump to Planet</A></td>"
 			dat += "</tr>"
 

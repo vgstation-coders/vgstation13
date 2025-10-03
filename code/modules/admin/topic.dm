@@ -849,6 +849,71 @@
 			to_chat(usr, "<span class='warning'>Invalid planet reference or allocation!</span>")
 		return
 
+	else if(href_list["procgen_weather"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/planet_type/planet = locate(href_list["procgen_weather"])
+		if(!planet)
+			to_chat(usr, "<span class='warning'>Invalid planet reference!</span>")
+			return
+		if(!planet.climate)
+			to_chat(usr, "<span class='warning'>This planet has no climate system!</span>")
+			return
+
+		// Build list of available weather types for this climate
+		var/list/weather_options = list()
+		for(var/weather_type in planet.climate.allowed_weather_types)
+			var/datum/weather/W = new weather_type(planet.climate)
+			weather_options[W.name] = weather_type
+			qdel(W)
+
+		var/choice = input(usr, "Select new weather for [planet.planet_name]:", "Change Weather") as null|anything in weather_options
+		if(!choice)
+			return
+
+		var/weather_path = weather_options[choice]
+		planet.climate.change_weather(weather_path, force = TRUE)
+		message_admins("[key_name_admin(usr)] changed weather on [planet.planet_name] to [choice].")
+		procedural_generation_panel()
+		return
+
+	else if(href_list["procgen_time"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/planet_type/planet = locate(href_list["procgen_time"])
+		if(!planet)
+			to_chat(usr, "<span class='warning'>Invalid planet reference!</span>")
+			return
+		if(!planet.allocation)
+			to_chat(usr, "<span class='warning'>This planet has no allocation!</span>")
+			return
+
+		var/datum/allocation/alloc = planet.allocation
+		if(!(alloc.z in daynight_z_lvls))
+			to_chat(usr, "<span class='warning'>This planet does not have a day/night cycle!</span>")
+			return
+
+		var/list/time_options = list("Morning", "Sunrise", "Daytime", "Afternoon", "Sunset", "Nighttime")
+		var/choice = input(usr, "Select new time of day for [planet.planet_name]:", "Change Time of Day") as null|anything in time_options
+		if(!choice)
+			return
+
+		// Map choice to TOD constants
+		var/new_time
+		switch(choice)
+			if("Morning") new_time = TOD_MORNING
+			if("Sunrise") new_time = TOD_SUNRISE
+			if("Daytime") new_time = TOD_DAYTIME
+			if("Afternoon") new_time = TOD_AFTERNOON
+			if("Sunset") new_time = TOD_SUNSET
+			if("Nighttime") new_time = TOD_NIGHTTIME
+
+		SSDayNight.current_timeOfDay = new_time
+		SSDayNight.fire()
+		message_admins("[key_name_admin(usr)] changed time of day on [planet.planet_name] to [choice].")
+		procedural_generation_panel()
+		return
+
 	/////////////////////////////////////new ban stuff
 	else if(href_list["unbanf"])
 		if(!check_rights(R_BAN))
