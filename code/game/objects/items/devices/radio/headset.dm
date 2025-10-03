@@ -171,7 +171,7 @@
 
 /obj/item/device/radio/headset/heads/hop
 	name = "head of personnel's headset"
-	desc = "The headset of the guy who will one day be captain. Channels are as follows: :u - supply, :d - service, :c - command, :s - security"
+	desc = "The headset of the guy who will one day be captain. Channels are as follows: :u - supply, :d - service, :c - command, :s - security."
 	icon_state = "com_headset"
 	item_state = "headset"
 	init_keyslot2_type = /obj/item/device/encryptionkey/heads/hop
@@ -185,7 +185,7 @@
 
 /obj/item/device/radio/headset/headset_mining
 	name = "supply radio headset"
-	desc = "A headset used by the shaft miners to be yelled at from the QM and R&D at the same time. Channels are as follows: :u - supply, :n - science"
+	desc = "A headset used by the shaft miners to be yelled at from the QM and R&D at the same time. Channels are as follows: :u - supply, :n - science."
 	icon_state = "mine_headset"
 	item_state = "headset"
 	init_keyslot2_type = /obj/item/device/encryptionkey/headset_mining

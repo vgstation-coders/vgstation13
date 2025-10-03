@@ -871,3 +871,33 @@
 		return
 	for(var/i in 1 to storage_slots)
 		new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
+
+/*
+ * Bad Battery Box
+ */
+
+/obj/item/weapon/storage/fancy/battery_box
+	icon = 'icons/obj/storage/battery_container.dmi'
+	icon_state = "batterybox6"
+	icon_type = "battery"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
+	item_state = "box"
+	name = "battery box"
+	storage_slots = 6
+	can_only_hold = list("/obj/item/weapon/cell/crap","/obj/item/weapon/cell/secborg","/obj/item/weapon/cell/miningborg")
+
+	foldable = /obj/item/stack/sheet/cardboard
+	starting_materials = list(MAT_CARDBOARD = 3750)
+	w_type = RECYK_CARDBOARD
+
+/obj/item/weapon/storage/fancy/battery_box/empty
+	empty = 1
+	icon_state = "batterybox0"
+
+/obj/item/weapon/storage/fancy/battery_box/New()
+	..()
+	if(empty)
+		update_icon()
+		return
+	for(var/i in 1 to storage_slots)
+		new /obj/item/weapon/cell/crap(src)

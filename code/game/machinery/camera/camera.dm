@@ -294,7 +294,7 @@ var/list/camera_messages = list()
 	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
 		user.delayNextAttack(5)
 		var/mob/living/U = user
-		to_chat(U, "You hold [W] up to the camera ...")
+		to_chat(U, "You hold \the [W] up to the camera...")
 
 		var/info = ""
 		if(istype(W, /obj/item/weapon/paper))
@@ -314,13 +314,13 @@ var/list/camera_messages = list()
 		for(var/mob/living/silicon/ai/O in living_mob_list)
 			if(!O.client)
 				continue
-			to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track=[U.name]'>[U.name]</a></span> holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of your cameras ...")
+			to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track=[U.name]'>[U.name]</a></span> holds <a href='byond://?src=\ref[src];message_id=[key]'>\the [W]</a> up to one of your cameras...")
 
 		for(var/obj/machinery/computer/security/tv in tv_monitors)
 			if(tv.active_camera != src)
 				continue
 			for(var/datum/tgui/ui in SStgui.open_uis_by_src[tv])
-				to_chat(ui.user, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
+				to_chat(ui.user, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>\the [W]</a> up to one of the cameras...")
 	else
 		..()
 		add_fingerprint(user)

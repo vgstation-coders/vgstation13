@@ -250,7 +250,7 @@
 			bcell.reliability -= 10 / severity
 	..()
 
-/obj/item/weapon/melee/baton/restock()
+/obj/item/weapon/melee/baton/restock(nanobots = FALSE)
 	if(bcell)
 		bcell.charge = bcell.maxcharge
 

@@ -181,27 +181,29 @@
 	melt_temperature = MELTPOINT_PLASTIC
 	attack_verb = list("strikes", "pistol whips", "hits", "bashes")
 	var/bullets = 7.0
+	var/max_bullets = 7
+	var/disguised = FALSE //if true, the examine message will look like a real message!
 
 /obj/item/toy/gun/examine(mob/user)
 	..()
-	to_chat(user, "There [bullets == 1 ? "is" : "are"] [bullets] cap\s left.")
+	to_chat(user, "<span class='info'>Has [bullets] [disguised ? "round" : "cap"]\s remaining.</span>")
 
 /obj/item/toy/gun/attackby(obj/item/toy/ammo/gun/A as obj, mob/user as mob)
 	if (istype(A, /obj/item/toy/ammo/gun))
-		if (src.bullets >= 7)
+		if (src.bullets >= max_bullets)
 			to_chat(user, "<span class = 'notice'>It's already fully loaded!</span>")
 			return 1
 		if (A.amount_left <= 0)
 			to_chat(user, "<span class = 'warning'>There are no more caps left in \the [A]!</span>")
 			return 1
-		if (A.amount_left < (7 - src.bullets))
+		if (A.amount_left < (max_bullets - src.bullets))
 			src.bullets += A.amount_left
 			to_chat(user, text("<span class = 'warning'>You reload [] cap\s!</span>", A.amount_left))
 			A.amount_left = 0
 		else
-			to_chat(user, text("<span class = 'warning'>You reload [] cap\s!</span>", 7 - src.bullets))
-			A.amount_left -= 7 - src.bullets
-			src.bullets = 7
+			to_chat(user, text("<span class = 'warning'>You reload [] cap\s!</span>", max_bullets - src.bullets))
+			A.amount_left -= max_bullets - src.bullets
+			src.bullets = max_bullets
 		A.update_icon()
 		return 1
 	return
@@ -537,7 +539,7 @@
  */
 /obj/item/toy/foamblade
 	name = "foam armblade"
-	desc = "it says \"Sternside Changs #1 fan\" on it. "
+	desc = "It says \"Sternside Changs #1 fan\" on it. "
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "foamblade"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
@@ -1018,7 +1020,7 @@
 
 /obj/item/toy/gasha/comdom
 	name = "toy comdom"
-	desc = "WE GOT THE VALIDS AI CALL THE SHUTTLE"
+	desc = "WE GOT THE VALIDS AI, CALL THE SHUTTLE!"
 	icon_state = "comdom"
 
 /obj/item/toy/gasha/maniac
@@ -1237,7 +1239,7 @@
 /obj/item/toy/gasha/femsec
 	name = "toy femsec"
 	icon_state = "femsec"
-	desc = "bodybag accessory not included"
+	desc = "Bodybag accessory not included."
 
 /obj/item/toy/gasha/hoptard
 	name = "toy HoPtard"

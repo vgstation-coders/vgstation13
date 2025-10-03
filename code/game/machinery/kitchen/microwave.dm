@@ -44,7 +44,7 @@
 	)
 
 	component_parts = newlist(\
-		/obj/item/weapon/circuitboard/microwave,\
+		/obj/item/weapon/circuitboard/small/microwave,\
 		/obj/item/weapon/stock_parts/micro_laser,\
 		/obj/item/weapon/stock_parts/scanning_module,\
 		/obj/item/weapon/stock_parts/console_screen\

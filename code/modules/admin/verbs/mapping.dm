@@ -420,7 +420,12 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 		neighbour = locate() in get_step(get_turf(C),C.d2)
 		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
 			error_str += "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span><br>"
-	
+	error_str += "<h1>Terminal connections on current Z Level [z]</h1>"
+	for(var/obj/machinery/power/terminal/T in terminals)
+		var/turf/T2 = get_turf(T)
+		if(!T2.get_cable_node())
+			error_str += "<span class = 'warning'>Disconnected terminal at [formatJumpTo(T2)]</span><br>"
+
 	var/datum/browser/popup = new(usr, "Wire connections", usr.name, 300, 400)
 	popup.set_content(error_str)
 	popup.open()

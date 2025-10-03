@@ -420,8 +420,8 @@
 	..()
 	reagents.add_reagent(ENZYME, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/enzyme/restock()
-	if(istype(src,/obj/item/weapon/reagent_containers/food/condiment/enzyme))
+/obj/item/weapon/reagent_containers/food/condiment/enzyme/restock(nanobots = FALSE)
+	if(!nanobots && istype(src,/obj/item/weapon/reagent_containers/food/condiment/enzyme))
 		if(reagents.get_reagent_amount(ENZYME) < 50)
 			reagents.add_reagent(ENZYME, 2)
 
@@ -669,7 +669,7 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/mayo
 	name = "mayonnaise jar"
-	desc = "we have such sights to show you."
+	desc = "We have such sights to show you."
 
 /obj/item/weapon/reagent_containers/food/condiment/mayo/New()
 	..()

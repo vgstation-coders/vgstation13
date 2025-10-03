@@ -41,7 +41,7 @@
 	icon_state = "propulsion"
 	opacity = 1
 	var/exhaust_type = /obj/item/projectile/fire_breath/shuttle_exhaust
-	var/destroyed = 0 
+	var/destroyed = 0
 
 /obj/structure/shuttle/engine/propulsion/ex_act(severity)
 	switch(severity)
@@ -111,6 +111,8 @@
 	name = "shuttle engine"
 	var/obj/structure/shuttle/engine/heater/DIY/heater = null
 	anchored = FALSE
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 
 /obj/structure/shuttle/engine/propulsion/DIY/proc/disconnect()
 	if(heater)
@@ -167,36 +169,6 @@
 		if(O.flow_flags & ON_BORDER && dir == O.dir)
 			to_chat(user, "<span class = 'warning''>\The [O] is blocking engine flow to space.</span>")
 			return FALSE
-	return ..()
-
-/obj/structure/shuttle/engine/propulsion/DIY/verb/rotate_cw()
-	set src in view(1)
-	set name = "Rotate suspension gen (Clockwise)"
-	set category = "Object"
-
-	if(anchored)
-		to_chat(usr, "<span class='warning'>You cannot rotate [src], it has been firmly fixed to the floor.</span>")
-	else
-		dir = turn(dir, -90)
-
-/obj/structure/shuttle/engine/propulsion/DIY/verb/rotate_ccw()
-	set src in view(1)
-	set name = "Rotate suspension gen (Counter-Clockwise)"
-	set category = "Object"
-
-	if(anchored)
-		to_chat(usr, "<span class='warning'>You cannot rotate [src], it has been firmly fixed to the floor.</span>")
-	else
-		dir = turn(dir, 90)
-
-/obj/structure/shuttle/engine/propulsion/DIY/AltClick(mob/user)
-	if(Adjacent(user))
-		return rotate_cw()
-	return ..()
-
-/obj/structure/shuttle/engine/propulsion/DIY/ShiftClick(mob/user)
-	if(Adjacent(user))
-		return rotate_ccw()
 	return ..()
 
 /obj/structure/shuttle/engine/propulsion/proc/shoot_exhaust(forward=9, backward=9, var/turf/source_turf)

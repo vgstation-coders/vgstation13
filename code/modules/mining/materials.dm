@@ -147,12 +147,15 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/materials/proc/removeAmountByValue(var/mat_id,var/amount)
 	addAmountByValue(mat_id,-amount)
 
-/datum/materials/proc/makeSheets(var/atom/loc)
+/datum/materials/proc/makeSheets(var/atom/loc,removes_from_mats = FALSE)
 	for (var/id in storage)
 		var/amount = getAmount(id)
 		if(amount)
 			var/datum/material/mat = getMaterial(id)
-			drop_stack(mat.sheettype, loc, Floor(amount / mat.cc_per_sheet))
+			var/sheet_number = Floor(amount / mat.cc_per_sheet)
+			drop_stack(mat.sheettype, loc, sheet_number)
+			if(removes_from_mats)
+				removeAmount(id,mat.cc_per_sheet * sheet_number)
 
 /datum/materials/proc/makeOre(var/atom/loc)
 	for(var/id in storage)

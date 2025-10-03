@@ -49612,18 +49612,16 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/machinery/door/window/brigdoor{
-	dir = 8;
-	name = "Kitchen";
-	req_access = null;
-	req_one_access_txt = "25;28;35"
-	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
 	icon_state = "shutter0";
 	id_tag = "kitchen";
 	name = "Kitchen Shutters";
 	opacity = 0
+	},
+/obj/machinery/door/table/reinforced{
+	req_one_access_txt = "25;28;35";
+	dir = 8
 	},
 /turf/simulated/floor{
 	icon_state = "bar"
@@ -51384,12 +51382,11 @@
 /turf/simulated/floor,
 /area/engineering/engine_storage)
 "hfn" = (
-/obj/machinery/door/window{
-	dir = 2;
-	name = "Medbay Reception";
+/obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/door/table/reinforced{
+	dir = 1;
 	req_access_txt = "5"
 	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
 	icon_state = "whitegreen"
 	},
@@ -86810,10 +86807,8 @@
 	name = "Bar Shutters";
 	opacity = 0
 	},
-/obj/machinery/door/window/brigdoor{
+/obj/machinery/door/table/reinforced{
 	dir = 8;
-	name = "Bar";
-	req_access = null;
 	req_one_access_txt = "25;28"
 	},
 /turf/simulated/floor{
@@ -91069,14 +91064,11 @@
 /turf/simulated/floor/plating,
 /area/maintenance/apmaint)
 "rmO" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 8;
-	name = "Library Desk Door";
-	req_access_txt = "37"
-	},
 /obj/machinery/status_display{
 	pixel_y = 32
+	},
+/obj/machinery/door/table/wood{
+	req_access_txt = "37"
 	},
 /turf/simulated/floor/wood,
 /area/library)
@@ -92158,15 +92150,11 @@
 	},
 /area/security/main)
 "rzr" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 8;
-	icon_state = "right";
-	name = "Captain's Desk Door";
-	req_access_txt = "20"
-	},
 /obj/machinery/alarm{
 	pixel_y = 23
+	},
+/obj/machinery/door/table/wood{
+	req_access_txt = "20"
 	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)

@@ -466,7 +466,9 @@
 
 /obj/structure/bed/chair/vehicle/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	var/oldloc = loc
-	..()
+	if(!..())
+		//Failed to move at all
+		return
 	if (loc == oldloc)
 		return
 	if(next_cart)
@@ -483,18 +485,18 @@
 //           VEHICLE ACTIONS
 ////////////////////////////////////
 
+/datum/action/vehicle/New(var/obj/structure/bed/chair/vehicle/Target)
+	..()
+	icon_icon = Target.icon
+	button_icon_state = Target.icon_state
+	Target.vehicle_actions += src
+
 /datum/action/vehicle/toggle_headlights
 	name = "toggle headlights"
 	desc = "Turn the headlights on or off."
 	var/on = FALSE
 	var/brightness = 6
 	var/sounds = list('sound/items/flashlight_on.ogg','sound/items/flashlight_off.ogg')
-
-/datum/action/vehicle/toggle_headlights/New(var/obj/structure/bed/chair/vehicle/Target)
-	..()
-	icon_icon = Target.icon
-	button_icon_state = Target.icon_state
-	Target.vehicle_actions += src
 
 /datum/action/vehicle/toggle_headlights/Trigger()
 	if(!..())
@@ -512,3 +514,31 @@
 	name = "toggle siren"
 	desc = "Turn the siren lights on or off."
 	sounds = list('sound/voice/woopwoop.ogg','sound/items/flashlight_off.ogg')
+
+/datum/action/vehicle/spray_extinguisher
+	name = "spray extinguisher"
+	desc = "Spray an attached extinguisher directly in front of you."
+
+/datum/action/vehicle/spray_extinguisher/New()
+	..()
+	icon_icon = 'icons/obj/items.dmi'
+	button_icon_state = "fire_extinguisher0"
+
+/datum/action/vehicle/spray_extinguisher/IsAvailable()
+	. = ..()
+	if(!locate(/obj/item/weapon/extinguisher) in target.contents)
+		return FALSE
+
+/datum/action/vehicle/spray_extinguisher/Trigger()
+	if(!..())
+		return FALSE
+	for(var/obj/item/weapon/extinguisher/sprayer in target.contents)
+		if(sprayer.safety)
+			to_chat(owner,"<span class='notice'>The trigger is locked, the safety on \the [sprayer] is on.</span>")
+			return FALSE
+		sprayer.afterattack(get_ranged_target_turf(target, target.dir, 4), owner)
+		if(istype(target,/obj/structure/bed/chair/vehicle/tractor/fire/))
+			var/obj/structure/bed/chair/vehicle/tractor/fire/my_tractor = target
+			if(my_tractor.extinguisher_linked)
+				var/avail_vol = sprayer.reagents.maximum_volume - sprayer.reagents.total_volume
+				sprayer.reagents.add_reagent(WATER, avail_vol)

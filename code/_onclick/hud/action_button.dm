@@ -62,10 +62,11 @@
 
 
 /obj/abstract/screen/movable/action_button/MouseEntered(location,control,params)
-	openToolTip(usr,src,params,title = name,content = desc,theme = actiontooltipstyle)
+	//openToolTip(usr,src,params,title = name,content = desc,theme = actiontooltipstyle)
+	usr.client?.tooltips.show(src, mouse=params, title=name, content=desc)
 
 /obj/abstract/screen/movable/action_button/MouseExited()
-	closeToolTip(usr)
+	usr.client?.tooltips.hide()
 
 /mob/proc/update_action_buttons_icon()
 	for(var/X in actions)

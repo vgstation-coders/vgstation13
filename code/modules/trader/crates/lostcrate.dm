@@ -40,61 +40,6 @@ var/global/list/lemuria_stuff = list(
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		qdel(src)
 
-/area/vault/mecha_graveyard
-
-/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard
-	name = "Coordinates to the Mecha Graveyard"
-	desc = "Here lay the dead steel of lost mechas, so says some gypsy."
-	destination = /obj/docking_port/destination/vault/mecha_graveyard
-
-/obj/docking_port/destination/vault/mecha_graveyard
-	areaname = "mecha graveyard"
-
-/datum/map_element/dungeon/mecha_graveyard
-	file_path = "maps/randomvaults/dungeons/mecha_graveyard.dmm"
-	unique = TRUE
-
-/obj/effect/decal/mecha_wreckage/graveyard_ripley
-	name = "Ripley wreckage"
-	desc = "Surprisingly well preserved."
-	icon_state = "ripley-broken"
-
-/obj/effect/decal/mecha_wreckage/graveyard_ripley/New()
-	..()
-	var/list/parts = list(/obj/item/mecha_parts/part/ripley_torso,
-								/obj/item/mecha_parts/part/ripley_left_arm,
-								/obj/item/mecha_parts/part/ripley_right_arm,
-								/obj/item/mecha_parts/part/ripley_left_leg,
-								/obj/item/mecha_parts/part/ripley_right_leg)
-	welder_salvage += parts
-
-	if(prob(80))
-		add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/drill,100)
-	else
-		add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/drill/diamonddrill,100)
-	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp,100)
-	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/jetpack,100)
-
-/obj/effect/decal/mecha_wreckage/graveyard_clarke
-	name = "Clarke wreckage"
-	desc = "Surprisingly well preserved."
-	icon_state = "clarke-broken"
-
-/obj/effect/decal/mecha_wreckage/graveyard_clarke/New()
-	..()
-	var/list/parts = list(
-								/obj/item/mecha_parts/part/clarke_torso,
-								/obj/item/mecha_parts/part/clarke_head,
-								/obj/item/mecha_parts/part/clarke_left_arm,
-								/obj/item/mecha_parts/part/clarke_right_arm,
-								/obj/item/mecha_parts/part/clarke_left_tread,
-								/obj/item/mecha_parts/part/clarke_right_tread)
-	welder_salvage += parts
-
-	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/collector,100)
-	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/tiler,100)
-	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/switchtool,100)
-
 /obj/item/weapon/fakeposter_kit
 	name = "cargo cache kit"
 	desc = "Used to create a hidden cache behind what appears to be a cargo poster."
@@ -361,7 +306,7 @@ var/global/list/lemuria_stuff = list(
 
 /obj/item/weapon/pickaxe
     var/depresses_digsites = FALSE
-		
+
 /obj/item/weapon/pickaxe/New()
 	. = ..()
 	update_icon()
@@ -401,7 +346,7 @@ var/global/list/lemuria_stuff = list(
 	spawn(5)
 		D.update_icon()
 	qdel(src)
-	
+
 /obj/item/device/mule_painter
 	name = "\improper MULEbot painter"
 	desc = "A device used to paint MULEbots in various colours and fashions."

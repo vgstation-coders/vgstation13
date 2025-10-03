@@ -5606,9 +5606,9 @@
 /obj/machinery/light{
 	dir = 1
 	},
-/obj/machinery/door/window{
-	name = "Kitchen Door";
-	req_one_access_txt = "25;28;35"
+/obj/machinery/door/table/reinforced{
+	req_one_access_txt = "25;28;35";
+	dir = 8
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -5654,13 +5654,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 8;
-	icon_state = "right";
-	name = "Bar Door";
-	req_one_access_txt = "25;28;35"
-	},
 /obj/machinery/camera{
 	c_tag = "Bar"
 	},
@@ -5671,6 +5664,9 @@
 /obj/machinery/power/apc{
 	dir = 1;
 	pixel_y = 24
+	},
+/obj/machinery/door/table/reinforced{
+	req_one_access_txt = "25;28"
 	},
 /turf/simulated/floor{
 	icon_state = "grimy"
@@ -16157,6 +16153,12 @@
 /area/hallway/primary/fore{
 	name = "\improper Taxi Civilian Dock"
 	})
+"aKB" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor{
+	icon_state = "purple"
+	},
+/area/science/lab)
 "aKD" = (
 /obj/machinery/recharge_station,
 /turf/simulated/floor/engine,
@@ -22024,9 +22026,8 @@
 	},
 /area/medical/medbay)
 "aYB" = (
-/obj/machinery/door/window{
+/obj/machinery/door/table/reinforced{
 	dir = 1;
-	name = "Medbay Reception";
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -48023,12 +48024,9 @@
 /area/crew_quarters/captain)
 "bYy" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden,
-/obj/machinery/door/window/brigdoor{
-	base_state = "left";
-	dir = 2;
-	name = "Captain's Office";
-	req_access = null;
-	req_access_txt = "20"
+/obj/machinery/door/table/wood{
+	req_access_txt = "20";
+	dir = 2
 	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
@@ -74597,7 +74595,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/table,
 /obj/item/weapon/circuitboard/autolathe,
-/obj/item/weapon/circuitboard/microwave,
+/obj/item/weapon/circuitboard/small/microwave,
 /obj/item/weapon/circuitboard/arcade,
 /obj/item/weapon/circuitboard/washing_machine,
 /turf/simulated/floor/vox{
@@ -90188,6 +90186,12 @@
 	icon_state = "white"
 	},
 /area/medical/chemistry)
+"yiJ" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/perma)
 "yja" = (
 /obj/machinery/computer/communications,
 /turf/simulated/floor/shuttle,
@@ -120941,7 +120945,7 @@ boY
 bqb
 tca
 qez
-brG
+aKB
 brW
 bss
 bsP
@@ -128828,7 +128832,7 @@ lRT
 xmY
 ssu
 bMt
-bDc
+yiJ
 qGY
 sRS
 bMt

@@ -40632,13 +40632,13 @@
 	},
 /area/medical/medbay3)
 "bzx" = (
-/obj/machinery/door/window{
-	name = "Medbay Reception";
-	req_access_txt = "5"
-	},
 /obj/machinery/light_switch{
 	pixel_x = -5;
 	pixel_y = 25
+	},
+/obj/machinery/door/table/reinforced{
+	dir = 8;
+	req_access_txt = "5"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -55879,17 +55879,14 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "caV" = (
-/obj/machinery/door/poddoor{
-	density = 0;
-	icon_state = "pdoor0";
-	id_tag = "Secure Storage";
-	name = "secure storage";
-	opacity = 0
-	},
 /obj/machinery/door/firedoor/border_only{
 	name = "Firelock South"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/door/poddoor{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "brownold";
@@ -55897,13 +55894,6 @@
 	},
 /area/engineering/engine_storage)
 "caW" = (
-/obj/machinery/door/poddoor{
-	density = 0;
-	icon_state = "pdoor0";
-	id_tag = "Secure Storage";
-	name = "secure storage";
-	opacity = 0
-	},
 /obj/machinery/door/firedoor/border_only{
 	name = "Firelock South"
 	},
@@ -55913,6 +55903,10 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/door/poddoor{
+	id_tag = "Secure Storage";
+	name = "Engineering Secure Storage"
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "brownold";
@@ -61267,6 +61261,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/machinery/computer/tetris,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -72786,11 +72781,6 @@
 /turf/unsimulated/floor/asteroid,
 /area/mine/unexplored)
 "cEC" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	name = "Bar Door";
-	req_one_access_txt = "25;28"
-	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
@@ -72798,6 +72788,10 @@
 	department = "Bar";
 	departmentType = 2;
 	pixel_y = -30
+	},
+/obj/machinery/door/table/reinforced{
+	dir = 8;
+	req_one_access_txt = "25;28"
 	},
 /turf/simulated/floor{
 	icon_state = "bar"
@@ -77553,11 +77547,9 @@
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
 "cNr" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	icon_state = "right";
-	name = "Captain's Desk Door";
-	req_access_txt = "20"
+/obj/machinery/door/table/wood{
+	req_access_txt = "20";
+	dir = 8
 	},
 /turf/simulated/floor/carpet,
 /area/crew_quarters/captain)
@@ -88576,11 +88568,9 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/machinery/door/window{
-	base_state = "right";
-	icon_state = "right";
-	name = "Library Desk Door";
-	req_access_txt = "37"
+/obj/machinery/door/table/wood{
+	req_access_txt = "37";
+	dir = 8
 	},
 /turf/simulated/floor/carpet/shag,
 /area/library)
@@ -133366,6 +133356,12 @@
 	},
 /turf/simulated/floor/plating,
 /area/turret_protected/tcomms_control_room)
+"xtw" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/prison/cell_block/A)
 "xCq" = (
 /obj/structure/window/reinforced/plasma{
 	dir = 8
@@ -334675,7 +334671,7 @@ dSQ
 ptc
 ptc
 dUp
-dSH
+xtw
 dVj
 dSH
 dVF

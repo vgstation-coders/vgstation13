@@ -70,6 +70,7 @@
 		</head>
 		<body>
 		<h2 style="text-align:center">Artifact Panel</h2>
+		<b><a href='?src=\ref[src];artifactpanel_spawnsmall=1'>Small Find Spawn Tool</a></b>
 		<table>
 		<tr>
 		<th style="width:1%">Artifact ID</th>

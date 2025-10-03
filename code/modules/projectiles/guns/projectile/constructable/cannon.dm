@@ -69,22 +69,6 @@
 		to_chat(usr, "You clean the fuel out of \the [src].")
 	update_verbs()
 
-/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/verb/rotate_cw()
-	set name = "Rotate (Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	src.dir = turn(src.dir, -90)
-	return 1
-
-/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/verb/rotate_ccw()
-	set name = "Rotate (Counter-Clockwise)"
-	set category = "Object"
-	set src in oview(1)
-
-	src.dir = turn(src.dir, 90)
-	return 1
-
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/attackby(obj/item/W as obj, mob/user as mob)
 	var/item_prohibited = 0
 	for(var/i=1, i<=prohibited_items.len, i++)

@@ -1781,9 +1781,10 @@ var/proccalls = 1
 #define CUSTOM_VENDING_MAX_SLOGANS	5
 
 #define MACHINE "machine"
+#define MACHINE_SMALL "small machine"
 #define COMPUTER "computer"
 #define EMBEDDED_CONTROLLER "embedded controller"
-#define OTHER "other"
+#define OTHER "non-standard" //has to be named this so it shows up in the message in a way that makes sense
 #define MACHINE_REINFORCED "reinforced machine"
 
 // Bedsheet altering

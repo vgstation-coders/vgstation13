@@ -10,6 +10,9 @@
 
 	use_power = MACHINE_POWER_USE_NONE
 
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
+
 	var/obj/machinery/power/generator/linked_generator
 
 	var/kinetic_efficiency				= 0.04 //combined kinetic and kinetic-to-electric efficiency
@@ -146,26 +149,6 @@
 		node2 = null
 
 		linked_generator.reconnect()
-
-/obj/machinery/atmospherics/binary/circulator/verb/rotate_clockwise()
-	set category = "Object"
-	set name = "Rotate Circulator (Clockwise)"
-	set src in view(1)
-
-	if(usr.isUnconscious() || usr.restrained() || anchored)
-		return
-
-	src.dir = turn(src.dir, -90)
-
-/obj/machinery/atmospherics/binary/circulator/verb/rotate_anticlockwise()
-	set category = "Object"
-	set name = "Rotate Circulator (Counterclockwise)"
-	set src in view(1)
-
-	if(usr.isUnconscious() || usr.restrained() || anchored)
-		return
-
-	src.dir = turn(src.dir, 90)
 
 /obj/machinery/atmospherics/binary/circulator/toggle_status(var/mob/user)
 	return FALSE

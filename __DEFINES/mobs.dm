@@ -36,6 +36,7 @@
 #define VOXLGREEN 4
 #define VOXAZURE 5
 #define VOXEMERALD 6
+#define VOXPLUCKED 7
 
 #define GREYGRAY 1
 #define GREYLIGHT 2

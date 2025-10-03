@@ -582,6 +582,11 @@
 
 		SendAdminGhostTo(T,null)
 
+	else if(href_list["artifactpanel_spawnsmall"])
+		if(!check_rights(R_ADMIN))
+			return
+		debug_spawn_find()
+
 	else if(href_list["bodyarchivepanel_focus"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -635,47 +640,55 @@
 	else if(href_list["climate_timeleft"])
 		if(!check_rights(R_ADMIN))
 			return
-		if(!map.climate)
+		var/datum/weather/W = locate(href_list["climate_timeleft"])
+		if(!W || !istype(W))
 			return
-		var/datum/weather/W = map.climate.current_weather
 		var/nu = input(usr, "Enter remaining time (nearest 2 seconds)", "Adjust Timeleft", W.timeleft / (1 SECONDS)) as null|num
 		if(!nu)
 			return
 		W.timeleft = round(nu SECONDS,SS_WAIT_WEATHER)
-		log_admin("[key_name(usr)] adjusted weather time.")
-		message_admins("<span class='notice'>[key_name(usr)] adjusted weather time.</span>", 1)
+		log_admin("[key_name(usr)] adjusted weather time for Z-[W.parent.z].")
+		message_admins("<span class='notice'>[key_name(usr)] adjusted weather time for Z-[W.parent.z].</span>", 1)
 		climate_panel()
 
 	else if(href_list["climate_weather"])
 		if(!check_rights(R_ADMIN))
 			return
-		if(!map.climate)
+		var/datum/climate/C = locate(href_list["climate_weather"])
+		if(!C || !istype(C))
 			return
-		var/datum/climate/C = map.climate
 
 		var/list/valid_climates = list()
 
-		for(var/subtype in subtypesof(/datum/weather))
-			var/datum/weather/instance = subtype
-			var/weather_name = initial(instance.name)
-			if (weather_name != "weather")
-				valid_climates[weather_name] = subtype
+		// Use the climate's allowed weather types if available, otherwise fall back to all weather types
+		if(C.allowed_weather_types && C.allowed_weather_types.len)
+			for(var/weather_type in C.allowed_weather_types)
+				var/datum/weather/instance = weather_type
+				var/weather_name = initial(instance.name)
+				if (weather_name != "weather")
+					valid_climates[weather_name] = weather_type
+		else
+			for(var/subtype in subtypesof(/datum/weather))
+				var/datum/weather/instance = subtype
+				var/weather_name = initial(instance.name)
+				if (weather_name != "weather")
+					valid_climates[weather_name] = subtype
 
 		if (valid_climates.len <= 0)
 			alert(usr, "There are somehow no weather subtypes!", "Error", "Wtf?")
 			return
 
-		var/nu = input(usr, "Select New Weather", "Adjust Weather", null) as null|anything in valid_climates
+		var/nu = input(usr, "Select New Weather for Z-[C.z]", "Adjust Weather", null) as null|anything in valid_climates
 		if(!nu)
 			to_chat(usr, "Weather change canceled.")
 			return
 		if(nu == C.current_weather.name)
 			to_chat(usr, "That's already the current weather you dummy.")
 			return
-		C.change_weather(valid_climates[nu])
+		C.change_weather(valid_climates[nu],force = TRUE)
 		C.forecast()
-		log_admin("[key_name(usr)] changed the weather to [nu].")
-		message_admins("<span class='notice'>[key_name(usr)] changed the weather to [nu].</span>", 1)
+		log_admin("[key_name(usr)] changed the weather to [nu] for Z-[C.z].")
+		message_admins("<span class='notice'>[key_name(usr)] changed the weather to [nu] for Z-[C.z].</span>", 1)
 		climate_panel()
 
 	else if(href_list["delay_round_end"])
@@ -3921,7 +3934,8 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				var/choice = input("Are you sure you want to fill the station with a bunch of unnecessary mobs?") in list("Of course!", "No, I hate timespace anomalies involving fun")
 				if(choice == "Of course!")
 					var/amt = input("How many would you like to spawn?", 10) as num
-					var/mobtype = input("What mob would you like?", "Mob Swarm") as null|anything in typesof(/mob/living)
+					var/typefilter = input("Mob type to filter to?","Mob Swarm") as text
+					var/mobtype = filter_typelist_input("What mob would you like?", "Mob Swarm", get_matching_types(typefilter,/mob/living))
 					message_admins("[key_name_admin(usr)] triggered a mob swarm.")
 					new /datum/event/mob_swarm(mobtype, amt)
 			if("pick_event")
@@ -4065,12 +4079,18 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 					to_chat(usr, "<span class='warning'>Invalid input range (null or negative)</span>")
 					return
 				var/realeffect = alert(usr,"Use visible explosions?", "Fake Explosions", "Yes", "No") == "Yes"
+				var/realsense = alert(usr,"Fool the bhangmeters?", "Fake Explosions", "Yes", "No") == "Yes"
 				message_admins("[key_name_admin(usr)] triggered [round(amount)] fake explosions.")
 				log_admin("[key_name_admin(usr)] triggered [round(amount)] fake explosions.")
 				for(var/i = 1 to amount)
 					if(realeffect)
 						var/turf/epicenter = locate(rand(1,world.maxx),rand(1,world.maxy),map.zMainStation)
 						explosion_effect(epicenter,7,14,28)
+						if(realsense)
+							var/datum/sensed_explosion/sensed = new(epicenter.x, epicenter.y, epicenter.z, 7, 14, 28)
+							if(sensed)
+								sensed.paint(epicenter)
+								sensed.ready(20)
 					else
 						world << sound('sound/effects/explosionfar.ogg')
 					sleep(rand(2, 10)) //Sleep 0.2 to 1 second

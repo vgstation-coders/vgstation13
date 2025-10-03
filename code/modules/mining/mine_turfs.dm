@@ -589,7 +589,7 @@ var/list/icon_state_to_appearance = list()
 			if(!(used_digging.diggables & DIG_SOIL)) //if the pickaxe can't dig soil, we don't
 				to_chat(user, "<span class='rose'>You can't dig soft soil with \the [W].</span>")
 				return
-		
+
 			if (dug)
 				to_chat(user, "<span class='rose'>This area has already been dug.</span>")
 				return
@@ -603,8 +603,9 @@ var/list/icon_state_to_appearance = list()
 				totaldug += finddatum.excavation_level
 				finddatum.update_excav_level(used_digging)
 			if(totaldug >= 100)
-				if(finddatum && finddatum.spawn_boulder(user))
-					finddatum.large_artifact_fail()
+				if(!dug)
+					if(finddatum && finddatum.spawn_boulder(user))
+						finddatum.large_artifact_fail()
 				playsound(src, 'sound/items/shovel.ogg', 50, 1)
 				gets_dug()
 
@@ -1290,3 +1291,57 @@ var/list/icon_state_to_appearance = list()
 	mining_difficulty = MINE_DIFFICULTY_DENSE
 	minimum_mine_time = 99 SECONDS //GL HF
 	mined_type = /turf/unsimulated/floor/asteroid/hive
+
+/turf/space/asteroids
+	icon_state = "roidspawn"
+	var/roid_type = /turf/unsimulated/mineral
+	var/roid_chance = 2
+	var/roid_size_min = 5
+	var/roid_size_max = 10
+
+/turf/space/asteroids/New()
+	. = ..()
+	if(prob(roid_chance))
+		var/list/turf/roid_turfs = list(src)
+		var/spreaded = 0
+		var/true_size = rand(roid_size_min,roid_size_max)
+		while(spreaded <= true_size && roid_turfs.len)
+			var/turf/spread_turf = pick_n_take(roid_turfs)
+			var/turf/other_turf
+			for(var/direction in cardinal)
+				other_turf = get_step(spread_turf,direction)
+				if(istype(other_turf,src.type))
+					var/turf/near_turf
+					var/roid_near = FALSE
+					var/list/checkdirs = alldirs.Copy()
+					for(var/dir2 in checkdirs)
+						if(dir2 & direction)
+							near_turf = get_step(other_turf,near_turf)
+							if(istype(near_turf,roid_type))
+								roid_near = TRUE
+								break
+					if(roid_near)
+						continue
+					if(other_turf != src)
+						other_turf.ChangeTurf(roid_type)
+					roid_turfs |= other_turf
+					spreaded++
+					if(spreaded > true_size)
+						break
+		ChangeTurf(roid_type)
+
+/turf/space/asteroids/ore
+	icon_state = "roidspawn"
+	roid_type = /turf/unsimulated/mineral/random
+
+/turf/space/asteroids/valuable
+	icon_state = "roidspawn_high"
+	roid_type = /turf/unsimulated/mineral/random/high_chance
+
+/turf/space/asteroids/clownroid
+	icon_state = "roidspawn_clown"
+	roid_type = /turf/unsimulated/mineral/random/high_chance_clown
+
+/turf/space/asteroids/plating
+	icon_state = "roidspawn_plating"
+	roid_type = /turf/simulated/floor/plating/airless
