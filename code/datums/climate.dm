@@ -270,15 +270,181 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 
 /datum/climate/tropical
 	name = "tropical"
+	starting_weather_type = /datum/weather/standard
+	weather_image_type = /obj/effect/weather_holder/tropical
+	allowed_weather_types = list(
+		/datum/weather/standard,
+		/datum/weather/cloudy,
+		/datum/weather/cloudy/rain,
+		/datum/weather/cloudy/storm,
+	)
+	weather_intensities = list(
+		/datum/weather/standard = 0,
+		/datum/weather/cloudy = 1,
+		/datum/weather/cloudy/rain = 2,
+		/datum/weather/cloudy/storm = 3,
+	)
+	weather_transitions = list(
+		/datum/weather/standard = list(
+			/datum/weather/standard = 80,
+			/datum/weather/cloudy = 20,
+		),
+		/datum/weather/cloudy = list(
+			/datum/weather/standard = 50,
+			/datum/weather/cloudy = 25,
+			/datum/weather/cloudy/rain = 25,
+		),
+		/datum/weather/cloudy/rain = list(
+			/datum/weather/cloudy = 50,
+			/datum/weather/cloudy/rain = 25,
+			/datum/weather/cloudy/storm = 25,
+		),
+		/datum/weather/cloudy/storm = list(
+			/datum/weather/cloudy/rain = 70,
+			/datum/weather/cloudy/storm = 30
+		)
+	)
 
 /datum/climate/desert
 	name = "desert"
+	starting_weather_type = /datum/weather/desert
+	weather_image_type = /obj/effect/weather_holder/desert
+	allowed_weather_types = list(
+		/datum/weather/desert,
+		/datum/weather/dust_storm,
+		/datum/weather/sand_storm,
+		/datum/weather/heatwave,
+	)
+	weather_intensities = list(
+		/datum/weather/desert = 0,
+		/datum/weather/dust_storm = 1,
+		/datum/weather/sand_storm = 2,
+		/datum/weather/heatwave = 3,
+	)
+	weather_transitions = list(
+		/datum/weather/desert = list(
+			/datum/weather/desert = 60,
+			/datum/weather/dust_storm = 40,
+		),
+		/datum/weather/dust_storm = list(
+			/datum/weather/standard = 25,
+			/datum/weather/dust_storm = 50,
+			/datum/weather/sand_storm = 25,
+		),
+		/datum/weather/sand_storm = list(
+			/datum/weather/dust_storm = 40,
+			/datum/weather/sand_storm = 30,
+			/datum/weather/heatwave = 30,
+		),
+		/datum/weather/heatwave = list(
+			/datum/weather/sand_storm = 50,
+			/datum/weather/heatwave = 50,
+		)
+	)
 
 /datum/climate/lava
 	name = "lava"
+	starting_weather_type = /datum/weather/standard
+	weather_image_type = /obj/effect/weather_holder/lava
+	allowed_weather_types = list(
+		/datum/weather/lava,
+		/datum/weather/ash,
+		/datum/weather/ash/storm,
+	)
+	weather_intensities = list(
+		/datum/weather/lava = 0,
+		/datum/weather/ash = 1,
+		/datum/weather/ash/storm = 2,
+	)
+	weather_transitions = list(
+		/datum/weather/lava = list(
+			/datum/weather/lava = 50,
+			/datum/weather/ash = 50,
+		),
+		/datum/weather/ash = list(
+			/datum/weather/lava = 30,
+			/datum/weather/ash = 40,
+			/datum/weather/ash/storm = 30
+		),
+		/datum/weather/ash/storm = list(
+			/datum/weather/ash = 60,
+			/datum/weather/ash/storm = 40,
+		)
+	)
+
+/datum/climate/wasteland
+	name = "wasteland"
+	starting_weather_type = /datum/weather/desert
+	weather_image_type = /obj/effect/weather_holder/fallout
+	allowed_weather_types = list(
+		/datum/weather/fallout,
+		/datum/weather/fallout/storm,
+		/datum/weather/desert,
+		/datum/weather/cloudy/rain/toxic,
+		/datum/weather/cloudy/rain/heavy/toxic,
+	)
+	weather_intensities = list(
+		/datum/weather/fallout/storm = 0,
+		/datum/weather/fallout = 1,
+		/datum/weather/desert = 2,
+		/datum/weather/cloudy/rain/toxic = 3,
+		/datum/weather/cloudy/rain/heavy/toxic = 4,
+	)
+	weather_transitions = list(
+		/datum/weather/fallout/storm = list(
+			/datum/weather/fallout = 60,
+			/datum/weather/fallout/storm = 40,
+		),
+		/datum/weather/fallout = list(
+			/datum/weather/fallout/storm = 30,
+			/datum/weather/fallout = 40,
+			/datum/weather/desert = 30
+		),
+		/datum/weather/desert = list(
+			/datum/weather/fallout = 30,
+			/datum/weather/desert = 40,
+			/datum/weather/cloudy/rain/toxic = 30,
+		),
+		/datum/weather/cloudy/rain/toxic = list(
+			/datum/weather/desert = 30,
+			/datum/weather/cloudy/rain/toxic = 40,
+			/datum/weather/cloudy/rain/heavy/toxic = 30,
+		),
+		/datum/weather/cloudy/rain/heavy/toxic = list(
+			/datum/weather/cloudy/rain/toxic = 60,
+			/datum/weather/cloudy/rain/heavy/toxic = 40,
+		)
+	)
 
 /datum/climate/xeno
 	name = "xenoclime"
+	starting_weather_type = /datum/weather/standard
+	weather_image_type = /obj/effect/weather_holder/xeno
+	allowed_weather_types = list(
+		/datum/weather/standard,
+		/datum/weather/cloudy/rain/acid,
+		/datum/weather/cloudy/rain/heavy/acid,
+	)
+	weather_intensities = list(
+		/datum/weather/standard = 0,
+		/datum/weather/cloudy/rain/acid = 1,
+		/datum/weather/cloudy/rain/heavy/acid = 2,
+	)
+	weather_transitions = list(
+		/datum/weather/standard = list(
+			/datum/weather/standard = 50,
+			/datum/weather/cloudy/rain/acid = 50,
+		),
+		/datum/weather/cloudy/rain/acid = list(
+			/datum/weather/standard = 40,
+			/datum/weather/cloudy/rain/acid = 30,
+			/datum/weather/cloudy/rain/heavy/acid = 30
+		),
+		/datum/weather/cloudy/rain/heavy/acid = list(
+			/datum/weather/cloudy/rain/acid = 60,
+			/datum/weather/cloudy/rain/heavy/acid = 40,
+		)
+	)
 
 ///////////////////////////////////  WEATHER DATUMS //////////////////////////////
 /datum/weather
@@ -294,6 +460,9 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/weather_sound = null // Sound file for this weather type
 	var/weather_sound_volume = 50 // Volume for the weather sound
 	var/light_modifier = 1 // Light reduction multiplier (1 = normal, 0.8 = 20% darker, etc.)
+	var/exposed_damage = 0 //damage per tick to unprotected limbs
+	var/damage_type = BRUTE //type of damage to deal
+	var/slowdown = 0 //speed reduction to apply to mobs
 
 /datum/weather/New(var/datum/climate/C)
 	parent = C
@@ -301,7 +470,8 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	//round to 2 seconds, since that's how often we check in
 
 /datum/weather/proc/execute()
-	parent.weather_image.UpdatePrecipitation(precip_intensity)
+	if(parent.weather_image)
+		parent.weather_image.UpdatePrecipitation(precip_intensity)
 
 	// Update lighting based on weather conditions
 	var/datum/planet_type/planet = parent.get_planet()
@@ -311,6 +481,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	else if(parent.z)
 		SSDayNight.weather_mod = light_modifier
 		SSDayNight.update_global_lighting()
+	update_weather_sounds()
 
 /datum/weather/proc/tick()
 	timeleft -= SS_WAIT_WEATHER
@@ -481,7 +652,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 
 /datum/weather/cloudy/fog
 	name = "fog"
-	precip_intensity = WEATHER_CALM
+	precip_intensity = WEATHER_HEAVY
 	precip_estimate = "none expected"
 
 /datum/weather/cloudy/rain
@@ -493,10 +664,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	weather_sound = 'sound/effects/weather/rain_light.ogg'
 	weather_sound_volume = 40
 
-/datum/weather/cloudy/rain/execute()
-	..()
-	update_weather_sounds()
-
 /datum/weather/cloudy/rain/heavy
 	name = "heavy rainfall"
 	precip_intensity = WEATHER_HEAVY
@@ -504,10 +671,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	precip_estimate = "<font color='orange'>about 50mm/hour (heavy)</font>"
 	weather_sound = 'sound/effects/weather/rain_heavy.ogg'
 	weather_sound_volume = 60
-
-/datum/weather/cloudy/rain/heavy/execute()
-	..()
-	update_weather_sounds()
 
 /datum/weather/cloudy/storm
 	name = "severe thunderstorm"
@@ -519,10 +682,6 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/list/thunder_sounds = list('sound/effects/weather/thunder1.ogg', 'sound/effects/weather/thunder2.ogg', 'sound/effects/weather/thunder3.ogg')
 	weather_sound = 'sound/effects/weather/rain_storm.ogg'
 	weather_sound_volume = 80
-
-/datum/weather/cloudy/storm/execute()
-	..()
-	update_weather_sounds()
 
 /datum/weather/cloudy/storm/tick()
 	..()
@@ -561,3 +720,116 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	temperature = T20C
 	precip_estimate = "none expected"
 	lightning_chance = 20
+
+/datum/weather/desert
+	name = "desert"
+	precip_intensity = WEATHER_CALM
+	temperature = T20C + 10
+	precip_estimate = "none expected"
+
+/datum/weather/dust_storm
+	name = "dust storm"
+	precip_intensity = WEATHER_MODERATE
+	temperature = T20C + 10
+	precip_estimate = "none expected"
+	light_modifier = 0.8
+	exposed_damage = 1
+	weather_sound = 'sound/effects/wind/wind_4_1.ogg'
+	weather_sound_volume = 50
+	slowdown =  0.9
+
+/datum/weather/sand_storm
+	name = "sand storm"
+	precip_intensity = WEATHER_HEAVY
+	temperature = T20C + 10
+	precip_estimate = "none expected"
+	light_modifier = 0.5
+	exposed_damage = 2
+	weather_sound = 'sound/effects/wind/wind_5_1.ogg'
+	weather_sound_volume = 80
+	slowdown = 0.7
+
+/datum/weather/heatwave
+	name = "heatwave"
+	precip_intensity = WEATHER_SEVERE
+	temperature = T20C + 30
+	precip_estimate = "none expected"
+	light_modifier = 1.5
+
+/datum/weather/heatwave/New()
+	..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		weather_sound = 'sound/effects/weather/desert.ogg'
+		weather_sound_volume = 80
+
+/datum/weather/lava
+	name = "scorched air"
+	precip_intensity = WEATHER_CALM
+	temperature = T20C + 15
+	precip_estimate = "none expected"
+
+/datum/weather/ash
+	name = "light ashfall"
+	precip_intensity = WEATHER_MODERATE
+	temperature = T20C + 30
+	precip_estimate = "none expected"
+	light_modifier = 0.8
+	exposed_damage = 1
+	damage_type = BURN
+	weather_sound = 'sound/effects/wind/wind_4_1.ogg'
+	weather_sound_volume = 50
+
+/datum/weather/ash/storm
+	name = "ash storm"
+	precip_intensity = WEATHER_HEAVY
+	temperature = T20C + 60
+	precip_estimate = "none expected"
+	light_modifier = 0.5
+	exposed_damage = 2
+	damage_type = BURN
+	weather_sound = 'sound/effects/wind/wind_5_1.ogg'
+	weather_sound_volume = 80
+
+
+/datum/weather/fallout
+	name = "nuclear fallout"
+	precip_intensity = WEATHER_MODERATE
+	temperature = T20C
+	precip_estimate = "none expected"
+	light_modifier = 0.8
+	exposed_damage = 1
+	damage_type = IRRADIATE
+	weather_sound = 'sound/effects/wind/wind_4_1.ogg'
+	weather_sound_volume = 50
+
+/datum/weather/fallout/storm
+	name = "heavy nuclear fallout"
+	precip_intensity = WEATHER_HEAVY
+	light_modifier = 0.5
+	exposed_damage = 2
+	weather_sound = 'sound/effects/wind/wind_5_1.ogg'
+	weather_sound_volume = 80
+
+/datum/weather/cloudy/rain/toxic
+	name = "toxic rain"
+	precip_intensity = WEATHER_SEVERE
+	exposed_damage = 1
+	damage_type = TOX
+
+/datum/weather/cloudy/rain/heavy/toxic
+	name = "toxic downpour"
+	precip_intensity = WEATHER_EXTREME
+	exposed_damage = 2
+	damage_type = TOX
+
+/datum/weather/cloudy/rain/acid
+	name = "acid rain"
+	precip_intensity = WEATHER_MODERATE
+	exposed_damage = 1
+	damage_type = BURN
+
+/datum/weather/cloudy/rain/heavy/acid
+	name = "acid downpour"
+	precip_intensity = WEATHER_HEAVY
+	exposed_damage = 2
+	damage_type = BURN

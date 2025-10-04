@@ -22,6 +22,7 @@
 #define CLIMATE_TROPICAL /datum/climate/tropical
 #define CLIMATE_DESERT /datum/climate/desert
 #define CLIMATE_LAVA /datum/climate/lava
+#define CLIMATE_TOXIC /datum/climate/wasteland
 #define CLIMATE_XENO /datum/climate/xeno
 #define CLIMATE_NONE null
 

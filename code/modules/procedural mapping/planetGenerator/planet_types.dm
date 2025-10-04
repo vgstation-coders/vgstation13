@@ -280,7 +280,7 @@
 	mapgen = /datum/planetGenerator/urban
 	default_baseturf = /turf/unsimulated/wasteland
 	loot_type = LOOT_TYPE_URBAN
-	climate_type = CLIMATE_DESERT
+	climate_type = CLIMATE_TOXIC
 	loot_modifier = 10
 	icon_state = "barren"
 

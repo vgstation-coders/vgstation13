@@ -1156,13 +1156,25 @@ steam.start() -- spawns the effect
 /obj/effect/weather_holder/blizzard/heavy
 
 /obj/effect/weather_holder/temperate
-	precip_overlays = list("rain_calm","rain_average","rain_hard","rain_storm")
-	overlay_counts = list(0,1,1,2)
+	precip_overlays = list("clear","rain_average","rain_hard","rain_storm")
+	overlay_counts = list(1,1,1,3)
 
-/obj/effect/weather_holder/sand
+/obj/effect/weather_holder/tropical
+	precip_overlays = list("clear","rain_average","rain_average","rain_storm")
+	overlay_counts = list(1,1,1,3)
 
-/obj/effect/weather_holder/ash
-	precip_overlays = list("ash_average","ash_heavy")
-	overlay_counts = list(1,1)
+/obj/effect/weather_holder/desert
+	precip_overlays = list("clear","dust","sand","clear")
+	overlay_counts = list(1,2,3,1)
+
+/obj/effect/weather_holder/lava
+	precip_overlays = list("clear","ash","ash_storm")
+	overlay_counts = list(1,2,1)
 
 /obj/effect/weather_holder/fallout
+	precip_overlays = list("clear","rad","rad_storm","toxic_rain","toxic_rain_hard")
+	overlay_counts = list(1,1,1,1,1)
+
+/obj/effect/weather_holder/xeno
+	precip_overlays = list("clear","acid_rain","acid_rain_hard")
+	overlay_counts = list(1,1,1)
