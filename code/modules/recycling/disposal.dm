@@ -652,6 +652,8 @@
 		AM.forceMove(src)
 		if(istype(AM, /obj/item/delivery/large) && !hasmob)
 			var/obj/item/delivery/large/T = AM
+			for(var/obj/structure/closet/crate/my_box in T.contents)
+				my_box.jiggle_all(W_CLASS_SMALL) //Properly packaged, less shaking!
 			src.destinationTag = T.sortTag
 		if(istype(AM, /obj/item/delivery) && !hasmob)
 			var/obj/item/delivery/T = AM
@@ -659,6 +661,9 @@
 		if(istype(AM, /obj/item/weapon/paper/envelope) && !hasmob)
 			var/obj/item/weapon/paper/envelope/E = AM
 			src.destinationTag = E.sortTag
+		if(istype(AM, /obj/structure/closet/crate))
+			var/obj/structure/closet/crate/my_box = AM
+			my_box.jiggle_all(W_CLASS_MEDIUM)
 
 // start the movement process
 // argument is the disposal unit the holder started in
@@ -1582,7 +1587,7 @@
 	// for broken pipe, remove and turn into scrap
 
 /obj/structure/disposalpipe/broken/welded()
-//	var/obj/item/scrap/S = new(src.loc)
+//	var/obj/item/trash/scrap/S = new(src.loc)
 //	S.set_components(200,0,0)
 	qdel(src)
 

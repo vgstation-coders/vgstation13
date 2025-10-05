@@ -146,8 +146,8 @@
 	finished[1] = /obj/item/weapon/gun/energy/gun/nuclear
 
 /obj/item/device/modkit/plasmacutter
-	name = "plasma cutter conversion kit"
-	desc = "A set of tools that enables conversion of a mining diamond drill into a plasma cutter. Needs to be loaded with the parts of a proto-kinetic accelerator first."
+	name = "advanced plasma cutter conversion kit"
+	desc = "A set of tools that enables conversion of a plamsa cutter into a more advanced form. Needs to be loaded with the parts of a proto-kinetic accelerator first."
 
 /obj/item/device/modkit/plasmacutter/New()
 	..()
@@ -156,7 +156,7 @@
 	finished = new/list(1)
 
 	parts[1] =	0
-	original[1] = /obj/item/weapon/pickaxe/drill/diamond
+	original[1] = /obj/item/weapon/pickaxe/plasmacutter
 	finished[1] = /obj/item/weapon/pickaxe/plasmacutter/accelerator
 
 /obj/item/device/modkit/plasmacutter/attackby(atom/target, mob/user, proximity_flag)

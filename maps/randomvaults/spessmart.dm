@@ -332,7 +332,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		spawn()
 			S.close()
 
-	for(var/mob/living/simple_animal/hostile/spessmart_guardian/C in all_contents)
+	for(var/mob/living/simple_animal/hostile/retaliate/spessmart_guardian/C in all_contents)
 		C.Retaliate()
 
 	src.firealert()
@@ -555,6 +555,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "booty-red"
+	faction = "spessmart"
 
 	var/spawn_sample_on_creation = 1
 	var/obj/item/weapon/reagent_containers/food/snacks/food_type = /obj/item/weapon/reagent_containers/food/snacks/faggot //Type of the food
@@ -633,14 +634,14 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	return 1
 
-/mob/living/simple_animal/hostile/spessmart_guardian
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian
 	name = "Spessmart MERC-Bot"
 	desc = "Equipped with a ballistic weapon and a melee range shocker that is powerful enough to knock out a mega goliath through three layers of protection, this EMP-proof bot is not to be messed around with."
 
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "securitron"
 
-	timestopped = 1
+	wander = 0
 	anchored = 1
 	canmove = 0
 
@@ -677,32 +678,42 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	var/alert_on_movement = 1 //If moved, trigger an alert and become agressive
 
-/mob/living/simple_animal/hostile/spessmart_guardian/New()
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian/New()
 	..()
 
 	overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-securitron"))
 
-/mob/living/simple_animal/hostile/spessmart_guardian/Life()
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian/Life()
 	EscapeConfinement()
 	..()
 
-/mob/living/simple_animal/hostile/spessmart_guardian/death(var/gibbed = FALSE)
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian/death(var/gibbed = FALSE)
 	..(TRUE)
 	robogibs(get_turf(src))
 	qdel(src)
 
-/mob/living/simple_animal/hostile/spessmart_guardian/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian/update_canmove()
+	if(hostile || client)
+		canmove = 1
+		anchored = 0
+	else
+		canmove = 0
+		anchored = 1
+	return canmove
+
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(alert_on_movement && !canmove)
 		Retaliate()
 
 	..()
 
-/mob/living/simple_animal/hostile/spessmart_guardian/proc/Retaliate()
-	if(timestopped)
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian/Retaliate()
+	if(!hostile)
 		spawn(5)
+			wander = 1
 			canmove = 1
 			anchored = 0
-			timestopped = 0
+			hostile = 1
 
 			visible_message("<span class='userdanger'>\The [src] activates.</span>")
 
@@ -711,16 +722,16 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 			var/phrase = pick("Spessmart law was broken. The punishment is death.", "Spessmart law is above everything. Prepare to die.", "Spessmart law is sacred. Die, heretic.", "Threat to Spessmart detected. Extermination protocol started.")
 			say(phrase)
 
-/mob/living/simple_animal/hostile/spessmart_guardian/secure_area/attack_hand(mob/user)
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian/secure_area/attack_hand(mob/user)
 	if(user.a_intent == I_HELP)
 		say("[user.gender == FEMALE ? "Miss" : "Sir"], only Spessmart employees with level 5 access may access this area. If you are a Spessmart employee, please show me your ID card.")
 	else
 		return ..()
 
-/mob/living/simple_animal/hostile/spessmart_guardian/recharging
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian/recharging
 	var/introduced = FALSE
 
-/mob/living/simple_animal/hostile/spessmart_guardian/recharging/Aggro()
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian/recharging/Aggro()
 	if(!introduced)
 		say("The tank was labeled and scanned as drinking water, not welding fuel. It was not my fault that it was fed to the human. It is nonsense that you're punishing me instead of... Wait. You are not EPSILON. Unknown intruder detected. Extermination protocol started.")
 		introduced = TRUE
@@ -777,6 +788,9 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 			clothing -= clothing_type
 	if (!clothing_prices.len)
 		for(var/C in clothing)
+			var/obj/item/clothing/CL = C
+			if(!initial(CL.canremove)) // no cursed unremovable stuff
+				continue
 			clothing_prices[C] = 150
 	to_spawn = clothing_prices
 	return ..()

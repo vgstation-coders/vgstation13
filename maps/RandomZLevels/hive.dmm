@@ -2145,7 +2145,7 @@
 	},
 /area/awaymission/hive)
 "ia" = (
-/obj/item/weapon/circuitboard/microwave,
+/obj/item/weapon/circuitboard/small/microwave,
 /obj/item/trash/liquidfood,
 /obj/effect/decal/cleanable/scattered_sand,
 /turf/simulated/floor/shuttle{

@@ -201,12 +201,21 @@
 		),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_eng,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/atmospheric_technician,
+			slot_w_uniform_str = list(
+				"Atmospheric Technician" = /obj/item/clothing/under/rank/atmospheric_technician,
+				"Firefighter" = /obj/item/clothing/under/rank/firefighter,
+			),
 			slot_shoes_str = /obj/item/clothing/shoes/workboots,
-			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/atmostech,
+			slot_head_str = list(
+				 "Atmospheric Technician" = /obj/item/clothing/head/helmet/space/plasmaman/atmostech,
+				 "Firefighter" = /obj/item/clothing/head/helmet/space/plasmaman/atmostech/firefighter,
+			),
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/atmostech,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/atmostech,
+			slot_wear_suit_str = list(
+				 "Atmospheric Technician" = /obj/item/clothing/suit/space/plasmaman/atmostech,
+				 "Firefighter" = /obj/item/clothing/suit/space/plasmaman/atmostech/firefighter,
+			),
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 		),
 		/datum/species/vox/ = list(

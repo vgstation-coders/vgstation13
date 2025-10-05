@@ -393,7 +393,7 @@
 
 /datum/disease2/effect/piglatin
 	name = "Porcus Latinus Syndrome"
-	desc = "Securitas Eunt Domus"
+	desc = "Securitas Eunt Domus!"
 	stage = 2
 	affect_voice = 1
 	max_count = 1

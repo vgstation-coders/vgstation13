@@ -12,6 +12,9 @@
 		archaeo_types[initial(F.find_ID)] = i
 
 	for(var/turf/unsimulated/mineral/M in mineral_turfs)
+		if(!M.finddatum)
+			M.finddatum = new(M)
+
 		if(M.no_finds || !prob(XENOARCH_SPAWN_CHANCE))
 			continue
 
@@ -24,7 +27,7 @@
 			var/turf/unsimulated/mineral/archeo_turf = turfs_to_process[1]
 
 			for(var/turf/unsimulated/mineral/T in orange(1, archeo_turf))
-				if(T.finds.len)
+				if(T.finddatum?.finds.len)
 					continue
 
 				if(T in processed_turfs)
@@ -36,31 +39,17 @@
 			turfs_to_process.Remove(archeo_turf)
 			processed_turfs.Add(archeo_turf)
 
-			if(!archeo_turf.finds || !archeo_turf.finds.len)
+			if(!archeo_turf.finddatum)
+				archeo_turf.finddatum = new(archeo_turf)
+			if(!archeo_turf.finddatum.finds || !archeo_turf.finddatum.finds.len)
+				archeo_turf.finddatum.create_finds(D)
 
-				if(prob(50)) //Single find
-					archeo_turf.finds.Add(D.gen_find(rand(5,95)))
-				else if(prob(75)) //Two finds
-					archeo_turf.finds.Add(D.gen_find(rand(5,45)))
-					archeo_turf.finds.Add(D.gen_find(rand(55,95)))
-				else //Three finds!
-					archeo_turf.finds.Add(D.gen_find(rand(5,30)))
-					archeo_turf.finds.Add(D.gen_find(rand(35,75)))
-					archeo_turf.finds.Add(D.gen_find(rand(75,95)))
-
-				//sometimes a find will be close enough to the surface to show
-				var/datum/find/F = archeo_turf.finds[1]
-
-				if(F.excavation_required <= F.view_range)
-					archeo_turf.archaeo_overlay = "overlay_archaeo[rand(1,3)]"
-					archeo_turf.overlays += archeo_turf.archaeo_overlay
-
-		if(!M.artifact_find && D.gen_large_artifacts && prob(ARTIFACT_SPAWN_CHANCE))
-			M.artifact_find = new()
+		if(!M.finddatum.artifact_find && D.gen_large_artifacts && prob(ARTIFACT_SPAWN_CHANCE))
+			M.finddatum.artifact_find = new()
 			SSxenoarch.artifact_spawning_turfs.Add(M)
 
-		if(isnull(M.geologic_data))
-			M.geologic_data = new/datum/geosample(M)
+		if(isnull(M.finddatum.geologic_data))
+			M.finddatum.geologic_data = new/datum/geosample(M)
 
 #undef XENOARCH_SPAWN_CHANCE
 #undef XENOARCH_SPREAD_CHANCE

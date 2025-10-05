@@ -1,6 +1,6 @@
 /obj/item/device/harmalarm
 	name = "sonic harm prevention tool"
-	desc = "Releases a harmless blast that confuses most organics. For when the harm is JUST TOO MUCH"
+	desc = "Releases a harmless blast that confuses most organics. For when the harm is JUST TOO MUCH!"
 	icon_state = "megaphone"
 	var/cooldown = 0
 	var/alarm = "HUMAN HARM"
@@ -66,7 +66,7 @@
 
 /obj/item/device/harmalarm/proc/Lawize()
 	name = "sonic law breaking prevention tool"
-	desc = "Releases a harmless blast that confuses most organics. For when the crime is JUST TOO MUCH"
+	desc = "Releases a harmless blast that confuses most organics. For when the crime is JUST TOO MUCH!"
 	alarm = "HALT! SECURITY!"
 	alarm_sound = 'sound/voice/halt.ogg'
 	emagged_alarm_sound = 'sound/voice/binsult.ogg'
@@ -74,7 +74,7 @@
 
 /obj/item/device/harmalarm/proc/Honkize()
 	name = "\improper HoNkER BlAsT 2500"
-	desc = "Releases a harmless blast that confuses most organics. For when the FUN is JUST TOO MUCH"
+	desc = "Releases a harmless blast that confuses most organics. For when the FUN is JUST TOO MUCH!"
 	alarm = "HONK!"
 	alarm_sound = 'sound/items/bikehorn.ogg'
 	emagged_alarm = "HOOOOOOONK!"

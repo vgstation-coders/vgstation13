@@ -251,6 +251,23 @@
 	if(current_crate && current_crate.loc != src.loc)
 		remove_crate()
 
+/obj/machinery/crate_weigher/MouseDropTo(var/obj/structure/C, mob/user)
+	..()
+	if(!istype(C))
+		return
+	if(!isturf(C.loc))
+		return
+	if(user.incapacitated() || user.lying)
+		return
+	if(!Adjacent(user) || !Adjacent(C) || !user.Adjacent(C))
+		return
+	if(C.anchored)
+		to_chat(user, "\The [C] is fastened to the floor!")
+		return
+	if(C.locked_to || C.is_locking())
+		return
+	C.Move(loc)
+
 /obj/machinery/crate_weigher/proc/remove_crate()
 	current_crate = null
 	icon_state = "up"

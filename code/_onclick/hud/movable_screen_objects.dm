@@ -13,10 +13,10 @@
 	var/moved = FALSE
 
 /obj/abstract/screen/movable/MouseEntered(location,control,params)
-	openToolTip(usr,src,params,title = name,content = desc)
+	usr.client?.tooltips.show(src, mouse=params, title=name, content=desc)
 
 /obj/abstract/screen/movable/MouseExited()
-	closeToolTip(usr)
+	usr.client?.tooltips.hide()
 //Snap Screen Object
 //Tied to the grid, snaps to the nearest turf
 

@@ -20,7 +20,7 @@
 	var/adminobs		= null
 	var/area			= null
 	var/time_died_as_mouse = null //when the client last died as a mouse
-	var/datum/tooltip/tooltips //datum that controls the displaying and hiding of tooltips
+	var/datum/tooltips/tooltips //datum that controls the displaying and hiding of tooltips
 	var/list/radial_menu_anchors = list() //keeping track of open menus so we're not gonna have several on top of each other.
 	var/list/radial_menus = list()
 	var/click_held_down_time //Used by MouseDown in _onclick/click.dm

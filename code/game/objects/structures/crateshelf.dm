@@ -98,15 +98,11 @@
 /obj/structure/rack/crate_shelf/destroy(dropParts = TRUE)
 	var/turf/dump_turf = get_turf(src)
 	for(var/obj/structure/closet/crate/crate in shelf_contents)
-		crate.plane = initial(crate.plane)
-		crate.layer = initial(crate.layer) // Reset the crates back to default visual state
-		crate.pixel_y = initial(crate.pixel_y)
-		crate.forceMove(dump_turf)
+		force_unload(crate, dump_turf)
 		step(crate, pick(cardinal)) // Shuffle the crates around as though they've fallen down.
 		if(prob(5)) // Open the crate!
 			if(crate.open())
 				crate.visible_message("<span class='warning'>[crate]'s lid falls open!</span>")
-		shelf_contents[shelf_contents.Find(crate)] = null
 	if(trapping)
 		unlock_atom(trappeduser)
 		trappeduser = null
@@ -133,28 +129,40 @@
 	vis_contents = contents // It really do be that shrimple.
 	return
 
+// Used when a mob attempts to put a crate on the rack.
 /obj/structure/rack/crate_shelf/proc/load(obj/structure/closet/crate/crate, mob/user)
 	var/next_free = shelf_contents.Find(null) // Find the first empty slot in the shelf.
 	if(!next_free) // If we don't find an empty slot, return early.
 		to_chat(user, "<span class='warning'>\The [src] is full!</span>")
 		return FALSE
 	if(do_after(user, use_delay, target = crate))
-		if(shelf_contents[next_free] != null)
-			return FALSE // Something has been added to the shelf while we were waiting, abort!
-		if(crate.opened) // If the crate is open, try to close it.
-			if(!crate.close())
-				return FALSE // If we fail to close it, don't load it into the shelf.
-		shelf_contents[next_free] = crate // Insert a reference to the crate into the free slot.
-		crate.forceMove(src) // Insert the crate into the shelf.
-		crate.pixel_y = DEFAULT_SHELF_VERTICAL_OFFSET * (next_free - 1) // Adjust the vertical offset of the crate to look like it's on the shelf.
-		crate.plane = FLOAT_PLANE
-		if(next_free >= 3) // If we're at or above three, we'll be on the way to going off the tile we're on. This allows mobs to be below the crate when this happens.
-			crate.plane = HUMAN_PLANE
-		crate.layer = BELOW_OBJ_LAYER + 0.02 * (next_free - 1) // Adjust the layer of the crate to look like it's in the shelf.
-		handle_visuals()
-		return TRUE
+		return force_load(crate, next_free)
 	return FALSE // If the do_after() is interrupted, return FALSE!
 
+// Directly inserts a crate into the rack.
+// next_free: Used for if you're trying to insert a crate into a specific position. Default: next available slot
+// Returns FALSE if the crate can't be forced on for whatever reason.
+/obj/structure/rack/crate_shelf/proc/force_load(obj/structure/closet/crate/crate, next_free)
+	if(!next_free)
+		next_free = shelf_contents.Find(null) // Find the first empty slot in the shelf.
+		if(!next_free)
+			return FALSE //No slots open!
+	if(shelf_contents[next_free] != null)
+		return FALSE // Can't load if no room.
+	if(crate.opened) // If the crate is open, try to close it.
+		if(!crate.close())
+			return FALSE // If we fail to close it, don't load it into the shelf.
+	shelf_contents[next_free] = crate // Insert a reference to the crate into the free slot.
+	crate.forceMove(src) // Insert the crate into the shelf.
+	crate.pixel_y = DEFAULT_SHELF_VERTICAL_OFFSET * (next_free - 1) // Adjust the vertical offset of the crate to look like it's on the shelf.
+	crate.plane = FLOAT_PLANE
+	if(next_free >= 3) // If we're at or above three, we'll be on the way to going off the tile we're on. This allows mobs to be below the crate when this happens.
+		crate.plane = HUMAN_PLANE
+	crate.layer = BELOW_OBJ_LAYER + 0.02 * (next_free - 1) // Adjust the layer of the crate to look like it's in the shelf.
+	handle_visuals()
+	return TRUE
+
+// Used when a mob attempts take a crate off the rack.
 /obj/structure/rack/crate_shelf/proc/unload(obj/structure/closet/crate/crate, mob/user, turf/unload_turf)
 	if(!unload_turf)
 		unload_turf = get_turf(user) // If a turf somehow isn't passed into the proc, put it at the user's feet.
@@ -164,16 +172,24 @@
 		to_chat(user,"<span class='warning'>There is already a crate here.</span>")
 		return
 	if(do_after(user, use_delay, target = crate))
-		if(!shelf_contents.Find(crate))
-			return FALSE // If something has happened to the crate while we were waiting, abort!
-		crate.plane = initial(crate.plane)
-		crate.layer = initial(crate.layer) // Reset the crate back to having the default layer, otherwise we might get strange interactions.
-		crate.pixel_y = initial(crate.pixel_y) // Reset the crate back to having no offset, otherwise it will be floating.
-		crate.forceMove(unload_turf)
-		shelf_contents[shelf_contents.Find(crate)] = null // We do this instead of removing it from the list to preserve the order of the shelf.
-		handle_visuals()
-		return TRUE
+		return force_unload(crate, unload_turf)
 	return FALSE  // If the do_after() is interrupted, return FALSE!
+
+// Directly removes a specific crate from the rack.
+// unload_turf: Used to specify where the crate will be dropped. default: get_turf(src)
+// Returns FALSE if the crate does not exist on the rack.
+/obj/structure/rack/crate_shelf/proc/force_unload(obj/structure/closet/crate/crate, turf/unload_turf)
+	if(!shelf_contents.Find(crate))
+		return FALSE // If something has happened to the crate while we were waiting, abort!
+	if(!unload_turf)
+		unload_turf = get_turf(src)
+	crate.plane = initial(crate.plane)
+	crate.layer = initial(crate.layer) // Reset the crate back to having the default layer, otherwise we might get strange interactions.
+	crate.pixel_y = initial(crate.pixel_y) // Reset the crate back to having no offset, otherwise it will be floating.
+	crate.forceMove(unload_turf)
+	shelf_contents[shelf_contents.Find(crate)] = null // We do this instead of removing it from the list to preserve the order of the shelf.
+	handle_visuals()
+	return TRUE
 
 /obj/structure/rack/crate_shelf/Bumped(atom/movable/AM)
 	..()
@@ -304,16 +320,11 @@
 	plane = HUMAN_PLANE
 
 	for(var/obj/structure/closet/crate/crate in shelf_contents)
-		crate.plane = initial(crate.plane)
-		crate.layer = initial(crate.layer)
-		crate.pixel_y = initial(crate.pixel_y)
-		crate.forceMove(fallturf)
+		force_unload(crate, fallturf)
 		step(crate, pick(cardinal))
 		if(prob(50))
 			if(crate.open())
 				crate.visible_message("<span class='warning'>[crate]'s lid falls open!</span>")
-		shelf_contents[shelf_contents.Find(crate)] = null
-		handle_visuals()
 
 	for(var/mob/living/carbon/human/H in fallturf)
 		if(made_in_china)

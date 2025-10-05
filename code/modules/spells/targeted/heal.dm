@@ -8,20 +8,28 @@
 
 	school = "transmutation"
 	charge_cooldown_max = 30 SECONDS
-	cooldown_reduc = 7.5 SECONDS
-	cooldown_min = 15 SECONDS
+	cooldown_reduc = 10 SECONDS
+	cooldown_min = 10 SECONDS
 	invocation = "DI TIUB SEEL IM"
 	invocation_type = SP_INV_SHOUT
 	message = "<span class='sinister'>You feel refreshed.<span>"
-	level_max = list(SP_TOTAL = 3, SP_SPEED = 2, SP_POWER = 1, SP_RANGE = 1)
+	level_max = list(SP_TOTAL = 4, SP_SPEED = 2, SP_POWER = 1, SP_RANGE = 1)
 	valid_targets = list(/mob/living)
 
 	max_targets = 1
 
-	amt_dam_fire = -15
-	amt_dam_brute = -15
-	amt_dam_oxy = -15
-	amt_dam_tox = -15
+	amt_dam_fire = -50
+	amt_dam_brute = -50
+	amt_dam_oxy = -50
+	amt_dam_tox = -50
+
+	amt_knockdown = -5
+	amt_paralysis = -5
+	amt_stunned = -5
+
+	amt_dizziness = -10
+	amt_confused = -10
+	amt_stuttering = -10
 
 	spell_flags = WAIT_FOR_CLICK
 
@@ -32,7 +40,7 @@
 		if(spell_levels[SP_RANGE])
 			if(T != user)
 				aoe_heal(T)
-		if(istype(T, /mob/living) && T != user)
+		else if(istype(T, /mob/living) && T != user)
 			var/mob/living/L = T
 			L.vis_contents += new /obj/effect/overlay/heal(L)
 			apply_spell_damage(L)
@@ -48,11 +56,15 @@
 		if(SP_POWER)
 			spell_levels[SP_POWER]++
 			name = "Superior " + name
-			return "The spell now has a chance to mend internal wounds."
+			return "The spell now has a chance to mend internal wounds and will now stop any bleeding, both external and internal."
 		if(SP_RANGE)
 			spell_levels[SP_RANGE]++
 			name = "Splashing " + name
 			return "The spell will now affect a small area around the target."
+
+// All upgrades cost 10 points only
+/spell/targeted/heal/get_upgrade_price(upgrade_type)
+	return 10
 
 /spell/targeted/heal/get_upgrade_info(upgrade_type, level)
 	switch(upgrade_type)
@@ -62,15 +74,15 @@
 			return "Reduce this spell's cooldown by [cooldown_reduc/10] seconds."
 		if(SP_POWER)
 			if(spell_levels[SP_POWER] >= level_max[SP_POWER])
-				return "This spell already has a chance of mending internal injuries!"
-			return "Grants the spell a chance of mending internal injuries in the primary target."
+				return "This spell already has a chance of mending internal injuries and sealing wounds!"
+			return "Grants the spell a chance of mending internal injuries in the primary target and makes it stop all bleeding."
 		if(SP_RANGE)
 			if(spell_levels[SP_RANGE] >= level_max[SP_RANGE])
 				return "This spell already affects a small area around the target!"
 			return "Expands the spell's effects to a small area around the target."
 
 
-//50% chance per organ/limb of healing all its internal injuries
+//50% chance per organ/limb of healing all its internal injuries, and stops all bleeding
 /spell/targeted/heal/proc/strong_heal(var/mob/living/carbon/human/H)
 	for(var/datum/organ/internal/I in H.internal_organs)
 		if(prob(50))
@@ -85,6 +97,9 @@
 			O.status &= ~ORGAN_BROKEN
 			O.status &= ~ORGAN_SPLINTED
 			O.status &= ~ORGAN_BLEEDING
+		for(var/datum/wound/W in O.wounds)
+			if(W.bleed_timer)
+				W.bleed_timer = 0 //Stop any bleeding
 
 /spell/targeted/heal/proc/aoe_heal(var/target)
 	for(var/mob/living/M in range(1, target))
@@ -92,6 +107,8 @@
 			continue
 		M.vis_contents += new /obj/effect/overlay/heal(M)
 		apply_spell_damage(M)
+		if(spell_levels[SP_POWER] && istype(M, /mob/living/carbon/human))
+			strong_heal(M)
 
 /obj/effect/overlay/heal
 	name = "sparkles"

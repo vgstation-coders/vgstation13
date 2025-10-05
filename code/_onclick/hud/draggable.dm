@@ -1,5 +1,4 @@
 /obj/abstract/screen/draggable
-	icon = 'icons/mob/screen_draggable.dmi'
 	icon_state = "blank"
 	var/mob/attachedmob
 	var/obj/attachedobject
@@ -16,7 +15,6 @@
 	var/obj/abstract/screen/fuckbyond
 
 /obj/abstract/screen/fuckbyond
-	icon = 'icons/mob/screen_draggable.dmi'
 	icon_state = "blank"
 	mouse_opacity = 0
 	screen_loc = ui_entire_screen
@@ -49,6 +47,7 @@
 
 //Copy over the icon state to the draggable screen objects.dmi for this to function
 	name = "[capitalize(attachedobject.name)] Construction"
+	icon = attachedobject.icon
 	mouse_over_pointer = "[attachedobject.icon_state]"
 	mouse_drag_pointer = "[attachedobject.icon_state]"
 

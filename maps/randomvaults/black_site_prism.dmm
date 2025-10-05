@@ -372,7 +372,6 @@
 "bd" = (
 /obj/item/clothing/under/syndicate/executive,
 /obj/item/clothing/suit/storage/syndicateexec,
-/obj/item/clothing/head/helmet/space/rig/syndicate_elite,
 /obj/item/clothing/suit/space/rig/syndicate_elite,
 /obj/item/clothing/shoes/swat,
 /obj/item/clothing/mask/gas/swat,

@@ -183,27 +183,29 @@
 	melt_temperature = MELTPOINT_PLASTIC
 	attack_verb = list("strikes", "pistol whips", "hits", "bashes")
 	var/bullets = 7.0
+	var/max_bullets = 7
+	var/disguised = FALSE //if true, the examine message will look like a real message!
 
 /obj/item/toy/gun/examine(mob/user)
 	..()
-	to_chat(user, "There [bullets == 1 ? "is" : "are"] [bullets] cap\s left.")
+	to_chat(user, "<span class='info'>Has [bullets] [disguised ? "round" : "cap"]\s remaining.</span>")
 
 /obj/item/toy/gun/attackby(obj/item/toy/ammo/gun/A as obj, mob/user as mob)
 	if (istype(A, /obj/item/toy/ammo/gun))
-		if (src.bullets >= 7)
+		if (src.bullets >= max_bullets)
 			to_chat(user, "<span class = 'notice'>It's already fully loaded!</span>")
 			return 1
 		if (A.amount_left <= 0)
 			to_chat(user, "<span class = 'warning'>There are no more caps left in \the [A]!</span>")
 			return 1
-		if (A.amount_left < (7 - src.bullets))
+		if (A.amount_left < (max_bullets - src.bullets))
 			src.bullets += A.amount_left
 			to_chat(user, text("<span class = 'warning'>You reload [] cap\s!</span>", A.amount_left))
 			A.amount_left = 0
 		else
-			to_chat(user, text("<span class = 'warning'>You reload [] cap\s!</span>", 7 - src.bullets))
-			A.amount_left -= 7 - src.bullets
-			src.bullets = 7
+			to_chat(user, text("<span class = 'warning'>You reload [] cap\s!</span>", max_bullets - src.bullets))
+			A.amount_left -= max_bullets - src.bullets
+			src.bullets = max_bullets
 		A.update_icon()
 		return 1
 	return
@@ -539,7 +541,7 @@
  */
 /obj/item/toy/foamblade
 	name = "foam armblade"
-	desc = "it says \"Sternside Changs #1 fan\" on it. "
+	desc = "It says \"Sternside Changs #1 fan\" on it. "
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "foamblade"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
@@ -680,72 +682,72 @@
 /*
  * Water flower
  */
-/obj/item/toy/waterflower
-	name = "Water Flower"
+/obj/item/clothing/accessory/waterflower
+	name = "water flower"
 	desc = "A seemingly innocent sunflower...with a twist."
 	icon = 'icons/obj/hydroponics/sunflower.dmi'
 	icon_state = "produce"
+	_color = "waterflower"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
 	item_state = "sunflower"
-	var/empty = 0
 	flags = OPENCONTAINER
 
-/obj/item/toy/waterflower/New()
+/obj/item/clothing/accessory/waterflower/New()
 	. = ..()
 	create_reagents(10)
 	reagents.add_reagent(WATER, 10)
 
-/obj/item/toy/waterflower/attack(mob/living/carbon/human/M as mob, mob/user as mob)
+/obj/item/clothing/accessory/waterflower/attack(mob/living/carbon/human/M as mob, mob/user as mob)
 	return
 
-/obj/item/toy/waterflower/afterattack(atom/A as mob|obj, mob/user as mob, proximity_flag)
+/obj/item/clothing/accessory/waterflower/afterattack(atom/A as mob|obj, mob/user as mob, proximity_flag)
 
 	if (istype(A, /obj/item/weapon/storage/backpack ) || istype(A, /obj/structure/bed/chair/vehicle/clowncart))
 		return
 
-	else if (locate (/obj/structure/table, src.loc))
+	if (locate (/obj/structure/table, src.loc))
 		return
 
-	else if (istype(A, /obj/structure/reagent_dispensers) && proximity_flag)
+	if (istype(A, /obj/structure/reagent_dispensers) && proximity_flag)
 		A.reagents.trans_to(src, 10)
 		to_chat(user, "<span class = 'notice'>You refill your flower!</span>")
 		return
 
-	else if (src.reagents.total_volume < 1)
-		src.empty = 1
+	if (src.reagents.total_volume < 1)
 		to_chat(user, "<span class = 'notice'>Your flower has run dry!</span>")
 		return
 
-	else
-		src.empty = 0
+	var/obj/effect/decal/D = new/obj/effect/decal/(get_turf(src))
+	D.name = "water"
+	D.icon = 'icons/obj/chemical.dmi'
+	D.icon_state = "chempuff"
+	D.create_reagents(5)
+	reagents.log_bad_reagents(user, src)
+	user.investigation_log(I_CHEMS, "sprayed 1u from \a [src] ([type]) containing [reagents.get_reagent_ids(1)] towards [A] ([A.x], [A.y], [A.z]).")
+	src.reagents.trans_to(D, 1)
+	playsound(src, 'sound/effects/spray3.ogg', 50, 1, -6)
 
+	spawn(0)
+		for(var/i=0, i<1, i++)
+			step_towards(D,A)
+			D.reagents.reaction(get_turf(D))
+			for(var/atom/T in get_turf(D))
+				D.reagents.reaction(T)
+				if(ismob(T) && T:client)
+					to_chat(T:client, "<span class = 'danger'>[user] has sprayed you with \the [src]!</span>")
+			sleep(4)
+		QDEL_NULL(D)
 
-		var/obj/effect/decal/D = new/obj/effect/decal/(get_turf(src))
-		D.name = "water"
-		D.icon = 'icons/obj/chemical.dmi'
-		D.icon_state = "chempuff"
-		D.create_reagents(5)
-		reagents.log_bad_reagents(user, src)
-		user.investigation_log(I_CHEMS, "sprayed 1u from \a [src] ([type]) containing [reagents.get_reagent_ids(1)] towards [A] ([A.x], [A.y], [A.z]).")
-		src.reagents.trans_to(D, 1)
-		playsound(src, 'sound/effects/spray3.ogg', 50, 1, -6)
-
-		spawn(0)
-			for(var/i=0, i<1, i++)
-				step_towards(D,A)
-				D.reagents.reaction(get_turf(D))
-				for(var/atom/T in get_turf(D))
-					D.reagents.reaction(T)
-					if(ismob(T) && T:client)
-						to_chat(T:client, "<span class = 'danger'>[user] has sprayed you with \the [src]!</span>")
-				sleep(4)
-			QDEL_NULL(D)
-
-		return
-
-/obj/item/toy/waterflower/examine(mob/user)
+/obj/item/clothing/accessory/waterflower/examine(mob/user)
 	..()
 	to_chat(user, "[src.reagents.total_volume] units of water left!")
+
+/obj/item/clothing/accessory/waterflower/on_accessory_interact(mob/user, delayed)
+	var/turf/T = get_step(user,user.dir)
+	if (T)
+		afterattack(T,user)
+		return 1
+	return ..()
 
 /*
  * Mech prizes
@@ -1020,7 +1022,7 @@
 
 /obj/item/toy/gasha/comdom
 	name = "toy comdom"
-	desc = "WE GOT THE VALIDS AI CALL THE SHUTTLE"
+	desc = "WE GOT THE VALIDS AI, CALL THE SHUTTLE!"
 	icon_state = "comdom"
 
 /obj/item/toy/gasha/maniac
@@ -1239,7 +1241,7 @@
 /obj/item/toy/gasha/femsec
 	name = "toy femsec"
 	icon_state = "femsec"
-	desc = "bodybag accessory not included"
+	desc = "Bodybag accessory not included."
 
 /obj/item/toy/gasha/hoptard
 	name = "toy HoPtard"

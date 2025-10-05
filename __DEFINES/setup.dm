@@ -1256,7 +1256,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 // /vg/ - Pipeline processing (enables exploding pipes and whatnot)
 // COMMENT OUT TO DISABLE
-// #define ATMOS_PIPELINE_PROCESSING 1
+// #define BURST_PIPES 1
 
 #define MAXIMUM_FREQUENCY 1600
 #define MINIMUM_FREQUENCY 1200
@@ -1423,10 +1423,8 @@ var/proccalls = 1
 #define ORE_PROCESSING_ALLOY 2
 
 //SOUND CHANNELS
-#define CHANNEL_SHARED_MIN			1
-#define CHANNEL_SHARED_MAX			256
-#define CHANNEL_UNIQUE_MIN			257
-#define CHANNEL_UNIQUE_MAX			512
+#define CHANNEL_RESERVABLE_MIN		1
+#define CHANNEL_RESERVABLE_MAX		512
 #define CHANNEL_MUS_RESERVABLE_MIN  513
 #define CHANNEL_MUS_RESERVABLE_MAX  1017	// todo check if it even needs nearly this many
 #define CHANNEL_WEATHER				1018
@@ -1783,9 +1781,10 @@ var/proccalls = 1
 #define CUSTOM_VENDING_MAX_SLOGANS	5
 
 #define MACHINE "machine"
+#define MACHINE_SMALL "small machine"
 #define COMPUTER "computer"
 #define EMBEDDED_CONTROLLER "embedded controller"
-#define OTHER "other"
+#define OTHER "non-standard" //has to be named this so it shows up in the message in a way that makes sense
 #define MACHINE_REINFORCED "reinforced machine"
 
 // Bedsheet altering

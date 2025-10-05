@@ -182,7 +182,7 @@
 /turf/simulated/floor,
 /area/vault/supermarket/shop)
 "aw" = (
-/mob/living/simple_animal/hostile/spessmart_guardian,
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -306,7 +306,7 @@
 /turf/simulated/floor/grass,
 /area/vault/supermarket/shop)
 "aM" = (
-/mob/living/simple_animal/hostile/spessmart_guardian,
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian,
 /turf/simulated/floor,
 /area/vault/supermarket/shop)
 "aN" = (
@@ -319,7 +319,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/mob/living/simple_animal/hostile/spessmart_guardian,
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -383,7 +383,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/mob/living/simple_animal/hostile/spessmart_guardian,
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "dark"
@@ -715,7 +715,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (SOUTHWEST)"
 	},
-/mob/living/simple_animal/hostile/spessmart_guardian,
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "dark"
@@ -988,7 +988,7 @@
 	dir = 4;
 	icon_state = "pipe-c"
 	},
-/mob/living/simple_animal/hostile/spessmart_guardian,
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -1016,7 +1016,7 @@
 /area/vault/supermarket/restricted)
 "cp" = (
 /obj/machinery/recharge_station,
-/mob/living/simple_animal/hostile/spessmart_guardian/recharging,
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian/recharging,
 /turf/simulated/floor/plating/airless,
 /area/vault/supermarket/restricted)
 "cq" = (
@@ -1579,7 +1579,7 @@
 /turf/simulated/floor/plating/airless,
 /area/vault/supermarket/restricted)
 "dC" = (
-/mob/living/simple_animal/hostile/spessmart_guardian/secure_area,
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian/secure_area,
 /turf/simulated/floor,
 /area/vault/supermarket/restricted)
 "dD" = (
@@ -1587,7 +1587,7 @@
 /turf/simulated/floor,
 /area/vault/supermarket/entrance)
 "dE" = (
-/mob/living/simple_animal/hostile/spessmart_guardian,
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian,
 /turf/simulated/floor,
 /area/vault/supermarket/entrance)
 "dF" = (
@@ -1984,7 +1984,7 @@
 	},
 /area/vault/supermarket/entrance)
 "eF" = (
-/mob/living/simple_animal/hostile/spessmart_guardian,
+/mob/living/simple_animal/hostile/retaliate/spessmart_guardian,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},

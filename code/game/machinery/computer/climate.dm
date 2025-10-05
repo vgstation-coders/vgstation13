@@ -28,22 +28,19 @@ var/list/climatecomps = list()
 	var/dat = list()
 	dat += "<center>"
 	dat += "<div class='modal'><div class='modal-content'><div class='line'><b>Weather Report</b></div><br>"
-	if(map.climate)
-		var/datum/climate/C = map.climate
-		if(istype(C.current_weather,/datum/weather/snow)) //This is a snowmap!
-			var/datum/weather/snow/S = C.current_weather
-			var/reported_temp = S.temperature - 273.15
-			var/reported_snow = S.snow_fluff_estimate
-			var/remaining_time = formatTimeDuration(C.current_weather.timeleft)
-			dat += "<b>Temperature:</b> <div class='line'>[reported_temp] Celcius</div>"
-			dat += "<b>Snowfall:</b> <div class='line'>[reported_snow] </div>"
-			dat += "<b>Next Meteorlogical Event:</b> <div class='line'>[remaining_time]</div>"
-			dat += "<b>Forecasted Snowfall:</b> <div class='line'>"
-			for(var/datum/weather/W in C.forecasts)
-				dat += "[W.name] "
-			dat += "</div></div></div></center>"
-		else
-			dat += "<b>Unknown Climate:</b> <div class='line'>Not configured for climate.</div></div></div></center>"
+	var/datum/climate/C = SSweather.get_climate(src.z)
+	if(C)
+		var/datum/weather/W = C.current_weather
+		var/reported_temp = C.current_weather.temperature - 273.15
+		var/remaining_time = formatTimeDuration(C.current_weather.timeleft)
+		dat += "<b>Current Weather:</b> <div class='line'>[C.current_weather.name]</div>"
+		dat += "<b>Temperature:</b> <div class='line'>[reported_temp] Celcius</div>"
+		dat += W.weather_details()
+		dat += "<b>Next Meteorlogical Event:</b> <div class='line'>[remaining_time]</div>"
+		dat += "<b>Forecasted Weather:</b> <div class='line'>"
+		for(var/datum/weather/wnext in C.forecasts)
+			dat += "[wnext.name] "
+		dat += "</div></div></div></center>"
 	else
 		dat += "<b>Panic:</b> <div class='line'>No climate detected!</div></div></div></center>"
 	dat = jointext(dat,"")

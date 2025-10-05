@@ -14,10 +14,8 @@
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
-	var/list/rotate_verbs=list(
-		/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate,
-		/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate_ccw,
-	)
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/New()
 	. = ..()
@@ -32,15 +30,14 @@
 
 	RefreshParts()
 
-	if(anchored)
-		verbs -= rotate_verbs
-
 /obj/machinery/atmospherics/unary/cold_sink/freezer/RefreshParts()
 	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
-	temp_offset = initial(temp_offset) - 5*lasercount
+	var/laser_modifier = (lasercount >= 9) ? 8 : 5 //Upgrading the parts to tier 4 allows it to cool the gas to 1.15K (temp_offset = -72)
+	temp_offset = initial(temp_offset) - laser_modifier * lasercount
+	current_heat_capacity = 1000 + (500 * lasercount) //Makes it cool the gas faster when upgraded, with tier 3 parts each freezer will have the cooling power of 4 freezers
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/update_icon()
 	if(node1)
@@ -72,7 +69,6 @@
 	if(!.)
 		return
 	if(anchored)
-		verbs -= rotate_verbs
 		initialize_directions = dir
 		initialize()
 		build_network()
@@ -80,7 +76,6 @@
 			node1.initialize()
 			node1.build_network()
 	else
-		verbs += rotate_verbs
 		if(node1)
 			node1.disconnect(src)
 			node1 = null
@@ -135,29 +130,6 @@
 	..()
 	src.updateUsrDialog()
 
-
-/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate()
-	set name = "Rotate Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored || usr:stat)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, -90)
-	return 1
-
-/obj/machinery/atmospherics/unary/cold_sink/freezer/verb/rotate_ccw()
-	set name = "Rotate Counter Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored || usr:stat)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, 90)
-	return 1
-
 /obj/machinery/atmospherics/unary/cold_sink/freezer/exposed()
 	return TRUE
 
@@ -183,11 +155,8 @@
 	var/temp_offset = 0
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
-
-	var/list/rotate_verbs=list(
-		/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate,
-		/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate_ccw,
-	)
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/New()
 	. = ..()
@@ -202,15 +171,14 @@
 
 	RefreshParts()
 
-	if(anchored)
-		verbs -= rotate_verbs
-
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/RefreshParts()
 	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
-	temp_offset = initial(temp_offset) + 5*lasercount
+	var/laser_modifier = (lasercount >= 9) ? 100 : 5 //Tier 4 parts allow it to heat the gas up to 1453.15K
+	temp_offset = initial(temp_offset) + laser_modifier * lasercount
+	current_heat_capacity = 1000 + (500 * lasercount)
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/update_icon()
 	if(node1)
@@ -243,7 +211,6 @@
 	if(!.)
 		return
 	if(anchored)
-		verbs -= rotate_verbs
 		initialize_directions = dir
 		initialize()
 		build_network()
@@ -251,7 +218,6 @@
 			node1.initialize()
 			node1.build_network()
 	else
-		verbs += rotate_verbs
 		if(node1)
 			node1.disconnect(src)
 			node1 = null
@@ -302,29 +268,6 @@
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/process()
 	..()
 	src.updateUsrDialog()
-
-
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate()
-	set name = "Rotate Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored || usr:stat)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, -90)
-	return 1
-
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/verb/rotate_ccw()
-	set name = "Rotate Counter Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	if (src.anchored || usr:stat)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, 90)
-	return 1
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/exposed()
 	return TRUE

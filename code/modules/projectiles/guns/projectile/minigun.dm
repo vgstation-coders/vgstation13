@@ -120,7 +120,7 @@
 
 /obj/item/weapon/gun/gatling/beegun/chillgun
 	name = "chill gun"
-	desc = "Rapid chill-pill dispenser"
+	desc = "Rapid chill-pill dispenser."
 	icon_state = "chillgun"
 	item_state = "chillgun0"
 	gatlingbullet = /obj/item/projectile/bullet/beegun/chillbug

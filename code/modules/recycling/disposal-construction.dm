@@ -13,6 +13,8 @@
 	starting_materials = list(MAT_IRON = 1850)
 	w_type = RECYK_METAL
 	level = 2
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 	var/ptype = 0
 	// 0=straight, 1=bent, 2=junction-j1, 3=junction-j2, 4=junction-y, 5=trunk, 6=disposal bin, 7=outlet, 8=inlet, 9=up, 10=down
 
@@ -25,6 +27,10 @@
 		to_chat(user, "<span class='info'>It's bolted down to the floor plating.</span>")
 	else
 		to_chat(user, "<span class='info'>It's currently detached from the floor plating.</span>")
+
+/obj/structure/disposalconstruct/change_dir(new_dir, changer)
+	. = ..()
+	update()
 
 // update iconstate and dpdir due to dir and type
 /obj/structure/disposalconstruct/proc/update()
@@ -102,23 +108,6 @@
 	// change visibility status and force update of icon
 /obj/structure/disposalconstruct/hide(var/intact)
 	invisibility = (intact && level==1) ? 101: 0	// hide if floor is intact
-	update()
-
-
-	// flip and rotate verbs
-/obj/structure/disposalconstruct/verb/rotate()
-	set name = "Rotate Pipe"
-	set category = "Object"
-	set src in view(1)
-
-	if(usr.isUnconscious())
-		return
-
-	if(anchored)
-		to_chat(usr, "You must unfasten the pipe before rotating it.")
-		return
-
-	dir = turn(dir, -90)
 	update()
 
 /obj/structure/disposalconstruct/verb/flip()

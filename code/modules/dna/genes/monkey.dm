@@ -51,7 +51,11 @@
 		if (borer.controlling)
 			Mo.do_release_control(0)
 
-	var/mob/living/carbon/human/O = new(src)
+	var/mob/living/carbon/human/O
+	if(Mo.greaterform == "Vox")
+		O = new /mob/living/carbon/human/vox(src) //Special case for vox, needed for vox chickens else they never get feathers.
+	else
+		O = new(src)
 	if(Mo.greaterform)
 		O.set_species(Mo.greaterform) //Damage transfer is handled later in the code
 	Mo.transferImplantsTo(O)

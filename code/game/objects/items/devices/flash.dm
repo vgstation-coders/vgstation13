@@ -237,7 +237,7 @@
 						O.show_message("<span class='disarm'>[M] is blinded by the flash!</span>")
 	..()
 
-/obj/item/device/flash/restock()
+/obj/item/device/flash/restock(nanobots = FALSE)
 	if(broken)
 		broken = 0
 		times_used = 0

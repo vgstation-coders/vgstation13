@@ -76,7 +76,12 @@
 
 	var/dash_dir = null
 	var/wreckage
+	//Enclosement variables
 	var/enclosed = TRUE
+	var/atom/movable/visholder //Used to modify a visible person inside open topped variables, control offset with handle_vis_offset() proc after changing dir
+	var/atom/movable/seat //due to vis_contents tomfoolery, we can't underlay a seat image using underlays. Gotta make ANOTHER vis_contents atom...
+	var/occupant_vis_cache //Caches an occupant's vis_flags, as they must be changed to be seen inside the mech!
+
 	var/silicon_pilot
 	var/silicon_icon_state = null
 	var/mech_maints_ready = FALSE
@@ -191,6 +196,11 @@
 		QDEL_NULL(pr_give_air)
 	if(pr_internal_damage)
 		QDEL_NULL(pr_internal_damage)
+	if(visholder)
+		vis_contents.Cut()
+		QDEL_NULL(visholder)
+	if(seat)
+		QDEL_NULL(seat)
 	selected = null
 	..()
 
@@ -400,6 +410,8 @@
 	else
 		move_result	= mechstep(direction)
 	if(move_result)
+		if(visholder)
+			handle_vis_offset()
 		for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
 			if(stepped)
 				ME.on_mech_step()
@@ -1250,6 +1262,12 @@
 		if(H.client && cursor_enabled)
 			H.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
 
+		//open-topped handler
+		if(enclosed)
+			return 1
+		if(!visholder)
+			create_visholder()
+		handle_vis_enter()
 		return 1
 	else
 		return 0
@@ -1414,6 +1432,9 @@
 		remove_mech_spells()
 		if(occupant.client)
 			occupant.client.mouse_pointer_icon = initial(occupant.client.mouse_pointer_icon)
+		//open topped handling
+		if(!enclosed)
+			handle_vis_exit()
 		occupant = null
 		icon_state = initial_icon+"-open"
 		for (var/datum/faction/F in factions_with_hud_icons)
@@ -1449,6 +1470,10 @@
 		occupant.reset_view()
 		empty_bad_contents()
 		occupant << browse(null, "window=exosuit")
+
+		//open topped handling
+		if(!enclosed)
+			handle_vis_exit()
 
 		//change the cursor
 		if(occupant && occupant.client)
@@ -1493,6 +1518,47 @@
 		spawn(10)
 		if (occupant)
 			go_out()
+
+////////////////////////////////////////
+////// Open-topped Visual Handlers /////
+////////////////////////////////////////
+//Creates a visholder atom that can be transformed so you can visually display a strange sized mob without touching the mob directly!
+//Override/make a child to set specific sizes/pixel offsets
+/obj/mecha/proc/create_visholder()
+	if(visholder)
+		return FALSE
+	//Gotta make them in this order due to vis_contents underlaying shenanigans
+	//Back most layer, holds the seat behind the pilot
+	seat = new(src)
+	seat.name = "mecha.dm vis_contents backseat-holder"
+	seat.vis_flags = (VIS_INHERIT_DIR | VIS_INHERIT_PLANE | VIS_INHERIT_LAYER | VIS_UNDERLAY | VIS_INHERIT_ID)
+	seat.icon = 'icons/mecha/mecha.dmi'
+	seat.icon_state = "[initial_icon]_underlay"
+	vis_contents += seat
+	//Next layer up, holds The Little Man
+	visholder = new(src)
+	visholder.name = "mecha.dm visual open-topped pilot-holder"
+	visholder.vis_flags = (VIS_INHERIT_DIR | VIS_INHERIT_PLANE | VIS_INHERIT_LAYER | VIS_UNDERLAY | VIS_INHERIT_ID)
+	visholder.appearance_flags |= PIXEL_SCALE
+	vis_contents += visholder
+	return TRUE
+
+//Handles open topped visual man offsets based on direction faced. Override with pix offsets for visholder
+/obj/mecha/proc/handle_vis_offset()
+	return
+
+//Handles visholder interactions when a human mob enters an open-topped mech
+/obj/mecha/proc/handle_vis_enter()
+	occupant_vis_cache = occupant.vis_flags
+	occupant.vis_flags = (VIS_INHERIT_DIR | VIS_INHERIT_PLANE | VIS_INHERIT_LAYER | VIS_UNDERLAY | VIS_INHERIT_ID)
+	occupant.appearance_flags |= PIXEL_SCALE
+	visholder.vis_contents += occupant
+
+//Handles visholder interactions when a human mob exits an open-topped mech
+/obj/mecha/proc/handle_vis_exit()
+	if(occupant)
+		occupant.vis_flags = occupant_vis_cache
+		visholder.vis_contents -= occupant
 
 /////////////////////////
 ////// Access stuff /////
@@ -2237,6 +2303,10 @@
 		to_chat(user, "<span class='info'>You paint the mech.</span>")
 		M.initial_icon = icontype
 		M.icon_state = icontype +"-open"
+		if(!M.enclosed)
+			M.vis_contents.Cut()
+			QDEL_NULL(M.visholder)
+			QDEL_NULL(M.seat)
 		for(var/spell/mech/MS in M.intrinsic_spells)
 			MS.update_spell_icon()
 		M.refresh_spells() //I think this does something important

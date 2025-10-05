@@ -11,10 +11,11 @@
 	desc = "You sit in this. Either by will or force."
 	icon_state = "chair"
 	sheet_amt = 1
+	verb_rotates = TRUE
+	ghost_can_rotate = TRUE
 	var/image/buckle_overlay = null // image for overlays when a mob is buckled to the chair
 	var/image/secondary_buckle_overlay = null // for those really complicated chairs
-	var/can_rotate = TRUE
-	var/ghost_can_rotate = TRUE
+	rotates_anchored = TRUE
 	mob_lock_type = /datum/locking_category/buckle/chair
 
 /obj/structure/bed/chair/New()
@@ -136,29 +137,8 @@
 	else
 		plane = OBJ_PLANE
 
-/obj/structure/bed/chair/proc/spin(mob/user)
-	if(!can_rotate || !user || !isturf(user.loc))
-		return
-
-	if(isobserver(user))
-		if(!ghost_can_rotate)
-			return
-		var/mob/dead/observer/ghost = user
-		if(ghost.lastchairspin <= world.time - 5) //do not spam this
-			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
-		ghost.lastchairspin = world.time
-
-	change_dir(turn(dir, 90))
-
-/obj/structure/bed/chair/verb/rotate()
-	set name = "Rotate Chair"
-	set category = "Object"
-	set src in oview(1)
-
-	spin(usr)
-
 /obj/structure/bed/chair/relayface(var/mob/living/user, direction) //ALSO for vehicles!
-	if(!can_rotate || user.incapacitated())
+	if(!rotates_anchored || user.incapacitated())
 		return
 	change_dir(direction)
 	return 1
@@ -224,7 +204,7 @@
 	desc = "Uncomfortable."
 	sheet_amt = 2
 	anchored = 1
-	can_rotate = FALSE
+	rotates_anchored = FALSE
 
 /obj/structure/bed/chair/wood/pew/left
 	icon_state = "bench_left"
@@ -455,7 +435,6 @@
 	desc = "Looks really comfy."
 	sheet_amt = 2
 	anchored = 1
-	can_rotate = TRUE
 	color = null
 
 // layer stuff
@@ -646,8 +625,6 @@
 	desc = "A reinforced chair that's firmly secured to the ground."
 	icon_state = "shuttleseat_neutral"
 	anchored = 1
-	can_rotate = TRUE
-	ghost_can_rotate = TRUE
 
 /obj/structure/bed/chair/shuttle/attackby(var/obj/item/W, var/mob/user)
 	var/mob/living/M = locate() in loc //so attacking people isn't made harder by the seats' bulkiness
@@ -717,11 +694,6 @@
 /obj/structure/bed/chair/shuttle/gamer
 	desc = "Ain't got nothing to compensate."
 	icon_state = "shuttleseat_GAMER"
-	can_rotate = TRUE
-	ghost_can_rotate = TRUE
-
-/obj/structure/bed/chair/shuttle/gamer/spin(var/mob/M)
-	change_dir(turn(dir, 90))
 
 //Plastic chairs
 /obj/structure/bed/chair/plastic

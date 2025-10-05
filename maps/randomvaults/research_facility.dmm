@@ -40,7 +40,7 @@
 	icon_state = "2-8";
 	tag = ""
 	},
-/obj/item/weapon/circuitboard/cell_charger,
+/obj/item/weapon/circuitboard/small/cell_charger,
 /turf/simulated/floor/plating,
 /area/vault/research)
 "ag" = (

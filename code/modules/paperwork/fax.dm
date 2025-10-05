@@ -29,7 +29,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/fax,
+		/obj/item/weapon/circuitboard/small/fax,
 		/obj/item/weapon/stock_parts/subspace/ansible,
 		/obj/item/weapon/stock_parts/scanning_module
 	)

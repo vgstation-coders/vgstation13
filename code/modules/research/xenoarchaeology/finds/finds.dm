@@ -1043,9 +1043,16 @@
 	apply_image_decorations = FALSE
 	anomaly_factor = 4
 	responsive_reagent = IRON
+	var/list/possible_spawns = list(
+	/obj/item/weapon/nullrod/sword/chaos/mimicry,
+	/obj/item/weapon/nullrod/sword/chaos
+	)
 
 /datum/find/chaosblade/spawn_item()
-	return new /obj/item/weapon/nullrod/sword/chaos
+	var/newitem = pick(possible_spawns)
+	if(ispath(newitem,/obj/item/weapon/nullrod/sword/chaos/mimicry))
+		apply_prefix = FALSE
+	return new newitem
 
 /datum/find/guitar
 	find_ID = ARCHAEO_GUITAR
@@ -1155,3 +1162,16 @@
 /obj/item/weapon/archaeological_find/New(loc)
 	..()
 	icon_state = "unknown[rand(1,4)]"
+
+//Debug proc to help test and debug xenoarch finds
+/proc/debug_spawn_find()
+	if(!usr)
+		return
+	if(!usr.client || !usr.client.holder)
+		to_chat(usr, "<span class='warning'>You need to be an administrator to access this.</span>")
+		return
+	var/result = filter_typelist_input("What type of find?", "Small Find Spawn List", subtypesof(/datum/find))
+	if(!result)
+		return
+	var/datum/find/our_find = new result()
+	our_find.create_find(usr.loc)

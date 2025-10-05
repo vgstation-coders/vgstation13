@@ -330,7 +330,7 @@
 /spell/pulse_demon/remote_drain
 	name = "Remote Drain"
 	abbreviation = "RD"
-	desc = "Remotely drains a power source"
+	desc = "Remotely drains a power source."
 
 	range = 10
 	spell_flags = WAIT_FOR_CLICK
@@ -364,7 +364,7 @@
 /spell/pulse_demon/cable_zap
 	name = "Cable Hop"
 	abbreviation = "CH"
-	desc = "Jump to another cable in view"
+	desc = "Jump to another cable in view."
 
 	range = 5
 	spell_flags = WAIT_FOR_CLICK
@@ -434,7 +434,7 @@
 /spell/pulse_demon/remote_hijack
 	name = "Remote Hijack"
 	abbreviation = "RH"
-	desc = "Remotely hijacks an APC"
+	desc = "Remotely hijacks an APC."
 
 	range = 10
 	spell_flags = WAIT_FOR_CLICK
@@ -627,7 +627,7 @@
 
 /datum/action/pd_toggle_drain
 	name = "Toggle power drain"
-	desc = "Toggles the draining of power while in an APC, battery or cable"
+	desc = "Toggles the draining of power while in an APC, battery or cable."
 	icon_icon = 'icons/mob/screen_spells.dmi'
 	button_icon_state = "pd_toggle"
 

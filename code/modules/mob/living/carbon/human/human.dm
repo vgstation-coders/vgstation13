@@ -13,6 +13,9 @@
 	var/stepstaken = 0
 	var/modulo_step = 2
 	var/fartCooldown = 20 SECONDS
+	//why are these here? Because Vox are humans wearing chickensuits.
+	var/original_vox_tone
+	var/feather_regen = 0
 
 /mob/living/carbon/human/dummy
 	real_name = "Test Dummy"
@@ -2589,11 +2592,11 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 			return list(/datum/butchering_product/teeth/human)
 		if ("Tajaran")
 			return list(/datum/butchering_product/teeth/human, /datum/butchering_product/skin/cat/lots)
+		if ("Vox")
+			return list(/datum/butchering_product/teeth/human, /datum/butchering_product/feathers/vox)
 	return list()
 		/*	Missing Sprites, pls contribute
 
-		if ("Vox")
-			return list(
 		if ("Diona")
 			return list(
 		if ("Skeletal Vox")

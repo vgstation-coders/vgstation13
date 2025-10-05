@@ -356,10 +356,10 @@
 		return 1
 
 	if(stat & BROKEN)
-		to_chat(user, "<span class='warning'>\The [S] is too damaged.</span>")
+		to_chat(user, "<span class='warning'>\The [src] is too damaged.</span>")
 		return 1
 
-	var/diff = initial(health) - health
+	var/diff = maxHealth - health
 	if(!diff) // Not damaged.
 		to_chat(user, "<span class='notice'>\The [src] is already in perfect condition!</span>")
 		return 1

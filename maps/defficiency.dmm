@@ -28693,9 +28693,8 @@
 	dir = 8
 	},
 /obj/structure/cable/yellow,
-/obj/machinery/door/window{
+/obj/machinery/door/table/reinforced{
 	dir = 1;
-	name = "Medbay Reception";
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -29493,16 +29492,15 @@
 	},
 /area/crew_quarters/bar)
 "bdB" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	name = "Bar Door"
-	},
 /obj/machinery/light_switch{
 	pixel_y = 25
 	},
 /obj/machinery/door/firedoor/border_only{
 	dir = 4;
 	name = "Firelock West"
+	},
+/obj/machinery/door/table/reinforced{
+	req_one_access_txt = "25;28"
 	},
 /turf/simulated/floor{
 	icon_state = "grimy"
@@ -30602,12 +30600,6 @@
 	dir = 8;
 	name = "Firelock West"
 	},
-/obj/machinery/door/window/brigdoor{
-	dir = 8;
-	name = "Kitchen";
-	req_access = null;
-	req_one_access_txt = "25;28;35"
-	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
 	dir = 8;
@@ -30620,6 +30612,9 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/machinery/door/table/reinforced{
+	req_one_access_txt = "25;28;35"
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -35127,6 +35122,7 @@
 	dir = 4
 	},
 /obj/structure/disposalpipe/segment,
+/obj/machinery/computer/tetris,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -35449,11 +35445,12 @@
 /area/engineering/engine_storage)
 "bnB" = (
 /obj/machinery/door/poddoor{
-	density = 0;
-	icon_state = "pdoor0";
 	id_tag = "Secure Storage";
-	name = "secure storage";
-	opacity = 0
+	name = "Engineering Secure Storage"
+	},
+/obj/machinery/door/firedoor/border_only{
+	dir = 1;
+	name = "Firelock North"
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engine_storage)
@@ -38173,11 +38170,9 @@
 /turf/simulated/floor/wood,
 /area/derelictparts/library)
 "bsG" = (
-/obj/machinery/door/window{
-	name = "Library Desk Door"
-	},
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/camera_assembly,
+/obj/machinery/door/table/wood,
 /turf/simulated/floor/plating,
 /area/derelictparts/library)
 "bsH" = (
@@ -65717,10 +65712,9 @@
 	dir = 4;
 	name = "Library Main"
 	},
-/obj/machinery/door/window{
-	dir = 2;
-	name = "Library Desk Door";
-	req_access_txt = "37"
+/obj/machinery/door/table/wood{
+	req_access_txt = "37";
+	dir = 1
 	},
 /turf/simulated/floor/wood,
 /area/library)
@@ -70591,15 +70585,11 @@
 /turf/simulated/floor/carpet,
 /area/crew_quarters/hop)
 "cEb" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 8;
-	icon_state = "right";
-	name = "Captain's Desk Door";
-	req_access_txt = "20"
-	},
 /obj/machinery/alarm{
 	pixel_y = 23
+	},
+/obj/machinery/door/table/wood{
+	req_access_txt = "20"
 	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
@@ -110263,6 +110253,12 @@
 /obj/structure/reagent_dispensers/water_cooler,
 /turf/simulated/floor,
 /area/engineering/break_room)
+"lOW" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/prison)
 "lWt" = (
 /obj/effect/decal/cleanable/cobweb,
 /obj/item/stack/rods,
@@ -250025,7 +250021,7 @@ ciO
 cey
 cly
 eRl
-cnX
+lOW
 cpa
 cqd
 crm

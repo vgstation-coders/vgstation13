@@ -142,7 +142,7 @@
 /////////////////////////////
 /datum/storeitem/snap_pops
 	name = "Snap-Pops"
-	desc = "Ten-thousand-year-old chinese fireworks: IN SPACE"
+	desc = "Ten-thousand-year-old chinese fireworks: IN SPACE!"
 	typepath = /obj/item/weapon/storage/box/snappops
 	cost = 10
 	category = "Toys"

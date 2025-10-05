@@ -35,6 +35,7 @@
 											"/obj/item/device/multitool:multitool" = null)
 	var/obj/item/deployed //what's currently in use
 	var/can_remove_items = TRUE //if you can remove items with a screwdriver
+	var/spawn_empty = FALSE // In case you want switchtools that do not contain items but can be fitted out later
 
 /obj/item/weapon/switchtool/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(istype(target, /obj/item/weapon/storage) && !istype(target, /obj/item/weapon/storage/pill_bottle)) //we place automatically, but want pill bottles to be meltable
@@ -73,6 +74,8 @@
 
 /obj/item/weapon/switchtool/New()
 	..()
+	if(spawn_empty) //No new modules
+		return
 	for(var/module in stored_modules) //making the modules
 		var/new_type = text2path(get_module_type(module))
 		stored_modules[module] = new new_type(src)
@@ -339,6 +342,9 @@
 						"/obj/item/tool/bonesetter:bone setter" = null,
 						"/obj/item/tool/FixOVein:fixovein" = null,
 						"/obj/item/tool/bonegel:bonegel"= null)
+
+/obj/item/weapon/switchtool/surgery/empty
+	spawn_empty = TRUE
 
 /obj/item/weapon/switchtool/surgery/undeploy(mob/user)
 	playsound(src, undeploy_sound, 10, 1)

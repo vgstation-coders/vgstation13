@@ -12,20 +12,16 @@
 	density = 1
 	anchored = 1
 	machine_flags = WRENCHMOVE
+	verb_rotates = TRUE
+	alt_click_rotates = TRUE
 
 	var/init_temp = T20C
 	var/init_gas
-	var/list/rotate_verbs = list(
-		/obj/machinery/atmospherics/unary/tank/verb/rotate,
-		/obj/machinery/atmospherics/unary/tank/verb/rotate_ccw,
-	)
 
 /obj/machinery/atmospherics/unary/tank/New()
 	..()
 	air_contents.temperature = init_temp
 	atmos_machines.Remove(src)
-	if(anchored)
-		verbs -= rotate_verbs
 	if(init_gas)
 		air_contents.adjust_gas(init_gas, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
@@ -118,34 +114,11 @@
 	..()
 	update_icon()
 
-/obj/machinery/atmospherics/unary/tank/verb/rotate()
-	set name = "Rotate Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	if(src.anchored || usr:stat)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, -90)
-	return 1
-
-/obj/machinery/atmospherics/unary/tank/verb/rotate_ccw()
-	set name = "Rotate Counter Clockwise"
-	set category = "Object"
-	set src in oview(1)
-
-	if(src.anchored || usr:stat)
-		to_chat(usr, "It is fastened to the floor!")
-		return 0
-	src.dir = turn(src.dir, 90)
-	return 1
-
 /obj/machinery/atmospherics/unary/tank/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return
 	if(anchored)
-		verbs -= rotate_verbs
 		initialize_directions = dir
 		initialize()
 		build_network()
@@ -153,7 +126,6 @@
 			node1.initialize()
 			node1.build_network()
 	else
-		verbs += rotate_verbs
 		if(node1)
 			node1.disconnect(src)
 			node1 = null

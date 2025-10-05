@@ -28,7 +28,7 @@ var/list/discounted_items_of_the_round = list()
 		var/picked = pick(possible_picks)
 		possible_picks -= picked
 		item_list += picked
-		world.log << "Picked: [picked]"
+		//world.log << "Picked: [picked]" //this lasted 19 months before getting silenced
 
 	discounted_items_of_the_round = item_list
 
@@ -364,7 +364,7 @@ var/list/discounted_items_of_the_round = list()
 
 /datum/uplink_item/stealthy_weapons/framecart
 	name = "F.R.A.M.E PDA Cartridge"
-	desc = "When inserted into a PDA, gives you four charges allowing you to create a fake uplink on PDAs of crewmembers who have messaging enabled. The fake uplinks will use the same unlock code as your uplink if applicable, or else generate a new one. TC can also be inserted into the cartridge to send to the PDA"
+	desc = "When inserted into a PDA, gives you four charges allowing you to create a fake uplink on PDAs of crewmembers who have messaging enabled. The fake uplinks will use the same unlock code as your uplink if applicable, or else generate a new one. TC can also be inserted into the cartridge to send to the PDA."
 	item = /obj/item/weapon/cartridge/syndifake
 	cost = 6
 
@@ -567,6 +567,14 @@ var/list/discounted_items_of_the_round = list()
 	item = /obj/item/device/loic_remote
 	cost = 8
 	discounted_cost = 6
+	jobs_with_discount = SCIENCE_POSITIONS
+
+/datum/uplink_item/sabotage_tools/seismic_remote
+	name = "Seismic Artillery Remote"
+	desc = "This device can periodically fire a remote syndicate bluespace artillery, detonating a seismic impact on direct intercept with the station, superficially resembling a real explosion and even alerting nearby bhangmeters as if legitimate."
+	item = /obj/item/device/seismic_remote
+	cost = 2
+	discounted_cost = 1
 	jobs_with_discount = SCIENCE_POSITIONS
 
 /datum/uplink_item/sabotage_tools/radstorm_remote

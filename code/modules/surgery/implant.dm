@@ -196,7 +196,7 @@
 	if (affected.implants.len)
 		var/obj/item/obj = affected.implants[affected.implants.len]
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
-		"<span class='notice'>You take [obj] out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
+		"<span class='notice'>You take \the [obj] out of the incision on \the [target]'s [affected.display_name] with \the [tool].</span>" )
 		affected.implants -= obj
 
 		//Handle possessive brain borers.
@@ -214,7 +214,7 @@
 			obj.forceMove(get_turf(target))
 	else if (affected.hidden)
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
-		"<span class='notice'>You take something out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
+		"<span class='notice'>You take something out of the incision on \the [target]'s [affected.display_name] with \the [tool].</span>" )
 		affected.hidden.forceMove(get_turf(target))
 		user.put_in_hands(affected.hidden)
 		if(!affected.hidden.blood_DNA)
@@ -225,14 +225,14 @@
 
 	else if (tool.clumsy_check(user) && prob(20))
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
-		"<span class='notice'>You take something out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
-		var/obj/clowndigobj = pick(/obj/item/weapon/bikehorn/rubberducky, /obj/item/weapon/reagent_containers/food/snacks/pie, /obj/item/toy/singlecard, /obj/item/toy/waterflower)
+		"<span class='notice'>You take something out of the incision on \the [target]'s [affected.display_name] with \the [tool].</span>" )
+		var/obj/clowndigobj = pick(/obj/item/weapon/bikehorn/rubberducky, /obj/item/weapon/reagent_containers/food/snacks/pie, /obj/item/toy/singlecard, /obj/item/clothing/accessory/waterflower)
 		clowndigobj = new clowndigobj(target.loc)
 		if (istype(clowndigobj, /obj/item/toy/singlecard))
 			var/obj/item/toy/singlecard/O = clowndigobj
 			O.cardname = pick("Red Joker","Black Joker")
 			clowndigobj = O
-		else if (istype(clowndigobj, /obj/item/toy/waterflower))
+		else if (istype(clowndigobj, /obj/item/clothing/accessory/waterflower))
 			clowndigobj.reagents.remove_reagent(WATER, 10)
 			clowndigobj.reagents.add_reagent(BLOOD, 10)
 		user.put_in_hands(clowndigobj)

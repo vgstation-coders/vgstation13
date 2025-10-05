@@ -967,7 +967,7 @@
 
 /obj/machinery/microwave/upgraded
 	component_parts = newlist(\
-		/obj/item/weapon/circuitboard/microwave,\
+		/obj/item/weapon/circuitboard/small/microwave,\
 		/obj/item/weapon/stock_parts/micro_laser/high/ultra,\
 		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,\
 		/obj/item/weapon/stock_parts/console_screen\

@@ -2776,12 +2776,9 @@
 	name = "\improper Captain's Quarters"
 	})
 "aeT" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 1;
-	icon_state = "right";
-	name = "Captain's Desk Door";
-	req_access_txt = "20"
+/obj/machinery/door/table/wood{
+	req_access_txt = "20";
+	dir = 2
 	},
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain{
@@ -4227,10 +4224,9 @@
 /turf/simulated/floor/wood,
 /area/library)
 "ahs" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	name = "Library Desk Door";
-	req_access_txt = "37"
+/obj/machinery/door/table/wood{
+	req_access_txt = "37";
+	dir = 8
 	},
 /turf/simulated/floor/carpet/shag,
 /area/library)
@@ -6612,10 +6608,10 @@
 	},
 /area/security/perma)
 "alu" = (
-/obj/machinery/computer/arcade,
 /obj/machinery/camera/autoname{
 	dir = 8
 	},
+/obj/machinery/computer/tetris,
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -12011,6 +12007,7 @@
 	pixel_x = -27;
 	pixel_y = 3
 	},
+/obj/machinery/computer/tetris,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "whitepurple"
@@ -29698,12 +29695,6 @@
 	dir = 1;
 	name = "Firelock North"
 	},
-/obj/machinery/door/window/brigdoor{
-	dir = 1;
-	name = "Bar Access";
-	req_access = null;
-	req_one_access_txt = "25;28"
-	},
 /obj/machinery/door/poddoor/shutters{
 	density = 0;
 	dir = 2;
@@ -29718,6 +29709,10 @@
 	opacity = 0
 	},
 /obj/structure/disposalpipe/segment,
+/obj/machinery/door/table/reinforced{
+	req_one_access_txt = "25;28;35";
+	dir = 1
+	},
 /turf/simulated/floor{
 	dir = 5;
 	icon_state = "cafeteria"

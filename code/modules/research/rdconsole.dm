@@ -146,7 +146,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		linked_lathe					= null
 
 /obj/machinery/computer/rdconsole/proc/Maximize()
-	files.known_tech = tech_list.Copy()
 	for(var/ID in files.known_tech)
 		var/datum/tech/KT = files.known_tech[ID]
 		if(KT.level < KT.max_level)
@@ -222,7 +221,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					linked_imprinter = D
 	if(linked_lathe)
 		linked_lathe.part_sets = part_sets
-	return
+	updated_research()
 
 //Have it automatically push research to the centcomm server so wild griffins can't fuck up R&D's work --NEO
 /obj/machinery/computer/rdconsole/proc/griefProtection()
@@ -250,6 +249,14 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 /obj/machinery/computer/rdconsole/process()
 	griefProtection()
 */
+
+//This will get called whenever techs are changed so that it goes through some of its linked machines and updates them
+//Currently only covers the Protolathe and Circuit Imprinter, because they do not have dedicated procs for updating their tech level
+/obj/machinery/computer/rdconsole/proc/updated_research()
+	if(linked_lathe)
+		linked_lathe.update_coeff()
+	if(linked_imprinter)
+		linked_imprinter.update_coeff()
 
 /obj/machinery/computer/rdconsole/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
 	if(..())
@@ -302,6 +309,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					var/list/temp_tech = linked_destroy.ConvertReqString2List(linked_destroy.loaded_item.origin_tech)
 					for(var/T in temp_tech)
 						files.UpdateTech(T, temp_tech[T])
+						updated_research()
 				if(linked_destroy.loaded_item.reliability < 100 && linked_destroy.loaded_item.crit_fail)
 					files.UpdateDesign(linked_destroy.loaded_item.type)
 
@@ -364,6 +372,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 							server_processed = 1
 						if(!istype(S, /obj/machinery/r_n_d/server/centcom) && server_processed)
 							S.produce_heat(100)
+					updated_research()
 					screen = CONSOLE_SETTINGS_MENU
 					updateUsrDialog()
 
@@ -390,6 +399,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				part_sets[t_disk.stored.new_category] = list()
 				if(linked_lathe)
 					linked_lathe.part_sets = part_sets
+			updated_research()
 			updateUsrDialog()
 			griefProtection() //Update centcomm too
 
@@ -402,6 +412,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		spawn(50)
 			Maximize()
 			screen = CONSOLE_MENU
+			updated_research()
 			updateUsrDialog()
 			griefProtection() //Update centcomm too
 
@@ -420,6 +431,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				t_disk.stored = create_tech(T.id)
 				t_disk.stored.level = T.level
 				break
+		updated_research()
 		screen = CONSOLE_DISK_TECH_MENU
 
 	else if(href_list["updt_design"]) //Updates the research holder with design data from the design disk.
@@ -655,6 +667,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			screen = DATABASE_UPDATE
 			qdel(files)
 			files = new /datum/research(src)
+			updated_research()
 			spawn(20)
 				screen = CONSOLE_SETTINGS_MENU
 				updateUsrDialog()

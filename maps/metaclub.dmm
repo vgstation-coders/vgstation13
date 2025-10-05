@@ -43194,12 +43194,9 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/bar)
 "bEg" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	icon_state = "right";
-	name = "Bar";
-	pixel_x = -3;
-	req_access_txt = "25"
+/obj/machinery/door/table/reinforced{
+	dir = 8;
+	req_one_access_txt = "25;28"
 	},
 /turf/simulated/floor{
 	icon_state = "bar"
@@ -61269,11 +61266,6 @@
 	name = "Sleepers"
 	})
 "cjZ" = (
-/obj/machinery/door/window{
-	dir = 1;
-	name = "Medbay Reception";
-	req_access_txt = "5"
-	},
 /obj/machinery/camera{
 	dir = 4;
 	name = "Medbay - Reception"
@@ -61281,6 +61273,10 @@
 /obj/machinery/door/firedoor/border_only{
 	dir = 1;
 	name = "Firelock North"
+	},
+/obj/machinery/door/table/reinforced{
+	dir = 1;
+	req_access_txt = "5"
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -120003,6 +119999,12 @@
 	icon_state = "grimy"
 	},
 /area/security/interrogation)
+"ovq" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/prison/rec_room)
 "ovF" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -120346,11 +120348,9 @@
 /turf/simulated/floor/plating,
 /area/prison)
 "pCs" = (
-/obj/machinery/door/window{
-	dir = 8;
-	name = "Library Desk Door";
-	pixel_x = 3;
-	req_access_txt = "37"
+/obj/machinery/door/table/wood{
+	req_access_txt = "37";
+	dir = 8
 	},
 /turf/simulated/floor/carpet/shag,
 /area/library)
@@ -120550,6 +120550,13 @@
 /area/medical/medbay2{
 	name = "Medbay Storage"
 	})
+"qrw" = (
+/obj/machinery/computer/tetris,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whitepurple"
+	},
+/area/science/lab)
 "qsF" = (
 /obj/structure/rack,
 /obj/item/weapon/gun/energy/gun{
@@ -236522,7 +236529,7 @@ cgo
 cgB
 cje
 cks
-clG
+qrw
 cmO
 cnY
 cpq
@@ -1251067,7 +1251074,7 @@ eww
 ewQ
 exj
 exz
-ewr
+ovq
 eyh
 eyF
 etQ

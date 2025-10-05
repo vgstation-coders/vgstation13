@@ -10,7 +10,7 @@
 	..()
 	reagents.add_reagent(reagent, 60)
 
-/obj/item/weapon/reagent_containers/glass/bottle/robot/restock()
+/obj/item/weapon/reagent_containers/glass/bottle/robot/restock(nanobots = FALSE)
 	if(reagent && (reagents.get_reagent_amount(reagent) < volume))
 		reagents.add_reagent(reagent, 2)
 
@@ -27,7 +27,7 @@
 	icon = 'icons/obj/chemical.dmi'
 	//icon_state = "bottle17"
 	reagent = ANTI_TOXIN
-	
+
 /obj/item/weapon/reagent_containers/glass/bottle/robot/water
 	name = "internal water bottle"
 	desc = "A small bottle for watering plants."

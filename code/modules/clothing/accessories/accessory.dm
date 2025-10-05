@@ -306,18 +306,23 @@
 	slot_flags = SLOT_BELT
 
 	var/stored_name = null
+	var/flash_animation = FLASH_BADGE_ANIM
 
 /obj/item/clothing/accessory/holobadge/cord
 	icon_state = "holobadge-cord"
 	_color = "holobadge-cord"
 	slot_flags = SLOT_MASK
+	flash_animation = FLASH_BADGE_CORD_ANIM
 
 /obj/item/clothing/accessory/holobadge/attack_self(mob/user as mob)
 	if(!stored_name)
 		to_chat(user, "Waving around a badge before swiping an ID would be pretty pointless.")
 		return
 	if(isliving(user))
+		user.delayNextAttack(0.5 SECONDS)
+		add_fingerprint(user)
 		user.visible_message("<span class='warning'>[user] displays their Nanotrasen Internal Security Legal Authorization Badge.\nIt reads: [stored_name], NT Security.</span>","<span class='warning'>You display your Nanotrasen Internal Security Legal Authorization Badge.\nIt reads: [stored_name], NT Security.</span>")
+		flash_object_animation(user, src, flash_animation)
 
 /obj/item/clothing/accessory/holobadge/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
