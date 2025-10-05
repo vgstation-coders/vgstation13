@@ -582,7 +582,7 @@
 		to_chat(user, "<span class='warning'>Someone's already washing here.</span>")
 		return
 
-	if(!..())
+	if(..())
 		return 1
 
 	if(istype(O, /obj/item/weapon/mop) || istype(O, /obj/item/toy/waterballoon))
