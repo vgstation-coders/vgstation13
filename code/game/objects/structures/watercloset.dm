@@ -716,7 +716,6 @@
 	. = ..()
 
 /obj/item/reagent_core/process()
-	. = ..()
 	if(reagents.total_volume < reagents.maximum_volume)
 		reagents.add_reagent(reagent_filled,reagents.maximum_volume-reagents.total_volume)
 
