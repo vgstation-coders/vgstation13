@@ -43,7 +43,7 @@
 		anchored = !anchored
 		return 1
 	if(!anchored)
-		if(!watersource && istype(I,/obj/item/weapon/reagent_containers/glass/beaker))
+		if(!watersource && (istype(I,/obj/item/weapon/reagent_containers/glass/beaker) || istype(I,/obj/item/reagent_core)))
 			if(user.drop_item(I,src))
 				watersource = I
 				to_chat(user, "<span class='notice'>You add [I] as a reagent source for [src].</span>")
