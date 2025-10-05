@@ -600,9 +600,9 @@
 			return
 		if (istype(RG, /obj/item/weapon/reagent_containers/chempack)) //Chempack can't use amount_per_transfer_from_this, so it needs its own if statement.
 			var/obj/item/weapon/reagent_containers/chempack/C = RG
-			C.reagents.add_reagent(watersource.reagents.get_master_reagent_id(), C.fill_amount)
+			watersource.reagents.trans_to(C, C.fill_amount)
 		else
-			RG.reagents.add_reagent(watersource.reagents.get_master_reagent_id(), min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
+			watersource.reagents.trans_to(RG, RG.amount_per_transfer_from_this)
 		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill the [RG] using \the [src].</span>")
 		return
 
