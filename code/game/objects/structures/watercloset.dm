@@ -260,7 +260,6 @@
 	var/obj/item/watersource = null
 	var/watertype = /obj/item/reagent_core //TODO: Make /obj/item/weapon/reagent_containers/glass/beaker/water when plumbing starts to exist.
 	var/clean_power = CLEANLINESS_SPACECLEANER//Nanotrasen showers scrub you clean
-	var/reagent_refill = WATER
 	var/coldtemp = -137
 	var/hottemp = 60
 
@@ -490,7 +489,7 @@
 		watersource.reagents.reaction(O, TOUCH)
 		if(istype(O, /obj/item/weapon/reagent_containers/glass))
 			var/obj/item/weapon/reagent_containers/glass/G = O
-			G.reagents.add_reagent(reagent_refill, 5)
+			watersource.reagents.trans_to(G, 5)
 	watersource.reagents.reaction(get_turf(src), TOUCH)
 
 /obj/machinery/shower/proc/check_heat(mob/living/carbon/C as mob)

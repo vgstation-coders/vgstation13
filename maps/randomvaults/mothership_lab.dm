@@ -1013,7 +1013,6 @@
 	watertype = /obj/item/reagent_core/acid
 	misttype = /obj/effect/acidvapor
 	overlay_state = "acid"
-	reagent_refill = SACID
 	coldtemp = -60
 	hottemp = 137
 	clean_power = 0
