@@ -5,9 +5,8 @@
 	icon = 'icons/obj/watercloset.dmi'
 	density = 0
 	anchored = 1
-	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
+	var/obj/item/weapon/reagent_containers/glass/beaker/watersource = null
 	var/watertype = /obj/item/weapon/reagent_containers/glass/beaker/water
-	var/can_take_watersource = TRUE
 	var/can_be_wrenched = TRUE
 
 /obj/structure/wc/New()
@@ -44,7 +43,7 @@
 		anchored = !anchored
 		return 1
 	if(!anchored)
-		if(!watersource && can_take_watersource && istype(I,/obj/item/weapon/reagent_containers/glass/beaker))
+		if(!watersource && istype(I,/obj/item/weapon/reagent_containers/glass/beaker))
 			if(user.drop_item(I,src))
 				watersource = I
 				to_chat(user, "<span class='notice'>You add [I] as a reagent source for [src].</span>")
@@ -54,7 +53,7 @@
 
 /obj/structure/wc/attack_hand(mob/living/user)
 	if(!anchored)
-		if(watersource && can_take_watersource)
+		if(watersource)
 			user.put_in_hands(watersource)
 			to_chat(user, "<span class='warning'>You remove [watersource] from [src].</span>")
 			watersource = null
@@ -213,7 +212,6 @@
 	desc = "The HU-452, an experimental urinal."
 	icon_state = "urinal"
 	can_be_wrenched = FALSE //mustard gas prevention
-	can_take_watersource = FALSE //unused
 	watertype = null //unused
 
 /obj/structure/wc/urinal/attackby(obj/item/I as obj, mob/user as mob)
@@ -259,7 +257,7 @@
 	var/overlay_state = "water"
 	var/ismist = 0 //Needs a var so we can make it linger~
 	var/watertemp = "cool" //Freezing, normal, or boiling
-	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
+	var/obj/item/weapon/reagent_containers/glass/beaker/watersource = null
 	var/watertype = /obj/item/weapon/reagent_containers/glass/beaker/water
 	var/clean_power = CLEANLINESS_SPACECLEANER//Nanotrasen showers scrub you clean
 	var/reagent_refill = WATER
@@ -522,7 +520,6 @@
 	name = "sink"
 	icon_state = "sink"
 	desc = "A sink used for washing one's hands and face."
-	can_take_watersource = FALSE //As sinks are currently set up, these would essentially let crew get infinite sources of any beaker inside, so NO.
 	var/clean_power = CLEANLINESS_SPACECLEANER//Nanotrasen sinks are equipped with state of the art water propulsion for extra cleanliness
 	var/busy = 0 	//Something's being washed at the moment
 
