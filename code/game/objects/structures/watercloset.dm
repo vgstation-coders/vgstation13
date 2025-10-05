@@ -702,6 +702,7 @@
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "beakernoreact"
 	w_class = W_CLASS_TINY
+	origin_tech = Tc_BLUESPACE + "=1" //just so mechanics can make more of these and replace em
 	var/reagent_filled = WATER
 
 /obj/item/reagent_core/New()
