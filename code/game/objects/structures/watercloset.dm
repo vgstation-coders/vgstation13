@@ -5,8 +5,8 @@
 	icon = 'icons/obj/watercloset.dmi'
 	density = 0
 	anchored = 1
-	var/obj/item/weapon/reagent_containers/glass/beaker/watersource = null
-	var/watertype = /obj/item/weapon/reagent_containers/glass/beaker/water
+	var/obj/item/watersource = null
+	var/watertype = /obj/item/reagent_core //TODO: Make /obj/item/weapon/reagent_containers/glass/beaker/water when plumbing starts to exist.
 	var/can_be_wrenched = TRUE
 
 /obj/structure/wc/New()
@@ -257,8 +257,8 @@
 	var/overlay_state = "water"
 	var/ismist = 0 //Needs a var so we can make it linger~
 	var/watertemp = "cool" //Freezing, normal, or boiling
-	var/obj/item/weapon/reagent_containers/glass/beaker/watersource = null
-	var/watertype = /obj/item/weapon/reagent_containers/glass/beaker/water
+	var/obj/item/watersource = null
+	var/watertype = /obj/item/reagent_core //TODO: Make /obj/item/weapon/reagent_containers/glass/beaker/water when plumbing starts to exist.
 	var/clean_power = CLEANLINESS_SPACECLEANER//Nanotrasen showers scrub you clean
 	var/reagent_refill = WATER
 	var/coldtemp = -137
@@ -695,3 +695,22 @@
 	icon_state = "puddle-splash"
 	..()
 	icon_state = "puddle"
+
+//TODO: Remove this and replace them with when stations get water plumbing, if ever.
+/obj/item/reagent_core
+	name = "water core"
+	desc = "Anomalous bluespace device that provides water to plumbing sources."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "beakernoreact"
+	w_class = W_CLASS_TINY
+	var/reagent_filled = WATER
+
+/obj/item/reagent_core/New()
+	. = ..()
+	create_reagents(50)
+	reagents.add_reagent(reagent_filled,50)
+
+/obj/item/reagent_core/acid
+	name = "acid core"
+	desc = "Anomalous bluespace device that provides sulphuric acid to plumbing sources."
+	reagent_filled = SACID
