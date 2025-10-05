@@ -706,8 +706,18 @@
 
 /obj/item/reagent_core/New()
 	. = ..()
-	create_reagents(50)
-	reagents.add_reagent(reagent_filled,50)
+	create_reagents(200) //pretty heavy duty
+	reagents.add_reagent(reagent_filled,200)
+	processing_objects += src
+
+/obj/item/reagent_core/Destroy()
+	processing_objects -= src
+	. = ..()
+
+/obj/item/reagent_core/process()
+	. = ..()
+	if(reagents.total_volume < reagents.maximum_volume)
+		reagents.add_reagent(reagent_filled,reagents.maximum_volume-reagents.total_volume)
 
 /obj/item/reagent_core/acid
 	name = "acid core"
