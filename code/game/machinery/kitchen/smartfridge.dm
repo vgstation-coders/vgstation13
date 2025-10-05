@@ -39,6 +39,8 @@
 	light_color = LIGHT_COLOR_CYAN
 	light_power_on = 1
 	light_range_on = 2
+	var/max_contained_allowed //If defined, sets a maximum amount of contents inside the fridge. Multiplied by rating of matter bins
+	var/cached_total = 0 //Used to keep a rolling tally of contents without needing to iterate the list on every insert/removal
 
 /obj/machinery/smartfridge/power_change()
 	..()
@@ -85,6 +87,15 @@
 		if(2)
 			if(prob(35))
 				breakdown()
+
+/obj/machinery/smartfridge/RefreshParts()
+	..()
+	if(!max_contained_allowed)
+		return
+	var/storage_mult = 0
+	for(var/obj/item/weapon/stock_parts/matter_bin/B in component_parts)
+		storage_mult += B.rating
+	max_contained_allowed = initial(max_contained_allowed) * storage_mult
 
 /datum/fridge_pile
 	var/name = ""
@@ -331,6 +342,43 @@
 	if (ticker?.current_state == GAME_STATE_PLAYING)
 		initialize()
 
+/obj/machinery/smartfridge/mini
+	name = "\improper Minifridge"
+	desc = "A refrigerated storage unit for just about anything, with limited space."
+	icon = 'icons/obj/kitchen.dmi'
+	icon_state = "minifridge"
+	icon_on = "minifridge"
+	icon_off = "minifridge-off"
+	icon_broken = "minifridge-broken"
+	icon_deny = null
+	moody_state = "overlay_vending_minifridge"
+	opacity = 0
+	pass_flags = PASSTABLE | PASSMACHINE
+	max_contained_allowed = 11 //the silent minifridge standard, 5 pizzas and 7 drinks
+
+	accepted_types = list(	/obj/item/weapon/reagent_containers,
+							/obj/item/weapon/grown,
+							/obj/item/seeds,
+							/obj/item/weapon/storage/pill_bottle,)
+
+/obj/machinery/smartfridge/mini/New()
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/small/minifridge,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/console_screen,
+	)
+
+	RefreshParts()
+
+//Default wrench time is standard for a minifridge, no 10 SECONDS wait needed!
+/obj/machinery/smartfridge/mini/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
+	. = ..()
+
 /*******************
 *   Item Adding
 ********************/
@@ -343,10 +391,17 @@
 		to_chat(user, "<span class='warning'>[bicon(src)] Access denied.</span>")
 		flick(icon_deny,src)
 		return FALSE
+	if(max_contained_allowed && cached_total >= max_contained_allowed)
+		to_chat(user, "<span class='warning'>[bicon(src)] \The [src] is full.</span>")
+		return FALSE
 	if(accept_check(O))
+		if(max_contained_allowed && (cached_total+O.w_class) > max_contained_allowed)
+			to_chat(user, "<span class='warning'>[bicon(src)] \The [O] is too large to fit, make some space.</span>")
+			return FALSE
 		if(!user.drop_item(O, src))
 			return FALSE
 		insert_item(O)
+		cached_total += O.w_class
 		user.visible_message(	"<span class='notice'>[user] has added \the [O] to \the [src].", \
 								"<span class='notice'>You add \the [O] to \the [src].")
 		updateUsrDialog()
@@ -374,9 +429,16 @@
 	for(var/obj/G in B.contents)
 		if(!accept_check(G))
 			continue
+		if(max_contained_allowed)
+			if(cached_total >= max_contained_allowed)
+				to_chat(user, "<span class='warning'>[bicon(src)] \The [src] is now full.</span>")
+				break
+			if((cached_total+G.w_class) > max_contained_allowed)
+				continue
 		if(!B.remove_from_storage(G, src))
 			continue
 		insert_item(G)
+		cached_total += G.w_class
 		objects_loaded++
 	if(objects_loaded)
 		user.visible_message("<span class='notice'>[user] loads \the [src] with \the [B].</span>", \
@@ -479,7 +541,7 @@
 				imagedesc = "Off"
 		dat += "<span class='imageToggleButton'><TT>Images: <a href='byond://?src=\ref[src];display_miniicons=1;'>[imagedesc]</A></TT></span>"
 
-		dat += "<TT><b>Select an item:</b></TT>"
+		dat += "<TT><b>Select an item:</b>[max_contained_allowed ? " ([round(100*cached_total/max_contained_allowed,1)]% full)" : ""]</TT>"
 
 		var/list/shelves[MAX_SHELVES]
 		for(var/i = 1 to MAX_SHELVES)
@@ -571,6 +633,7 @@
 		for(var/obj/O in contents)
 			if(format_text(O.name) == formatted_name)
 				O.forceMove(src.loc)
+				cached_total -= O.w_class
 				i--
 				if(i <= 0)
 					break
