@@ -379,6 +379,14 @@
 /obj/machinery/smartfridge/mini/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
 	. = ..()
 
+/obj/machinery/smartfridge/mini/table_shift()
+	pixel_x = -3
+	pixel_y = 6
+
+/obj/machinery/smartfridge/mini/table_unshift()
+	pixel_x = 0
+	pixel_y = 0
+
 /*******************
 *   Item Adding
 ********************/
