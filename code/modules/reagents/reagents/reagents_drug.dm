@@ -575,7 +575,7 @@
 		if(100 to INFINITY)
 			M.druggy = max(M.druggy, 35)
 			if(prob(1))
-				to_chat(H, "<span class='rose'>Gotta get a grip!</span>")
+				to_chat(M, "<span class='rose'>Gotta get a grip!</span>")
 
 
 	if(isturf(M.loc) && !istype(M.loc, /turf/space))
