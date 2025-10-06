@@ -253,8 +253,6 @@
 	use_power = MACHINE_POWER_USE_NONE
 	var/on = 0
 	var/obj/effect/mymist = null
-	var/misttype = /obj/effect/mist
-	var/overlay_state = "water"
 	var/ismist = 0 //Needs a var so we can make it linger~
 	var/watertemp = "cool" //Freezing, normal, or boiling
 	var/obj/item/watersource = null
@@ -362,6 +360,11 @@
 	if(mymist)
 		QDEL_NULL(mymist)
 
+	var/misttype = /obj/effect/mist
+	var/overlay_state = "water"
+	if(watersource?.reagents?.has_any_reagents(ACIDS))
+		misttype = /obj/effect/acidvapor
+		overlay_state = "acid"
 	if(on)
 		var/image/water = image(icon, src, overlay_state, BELOW_OBJ_LAYER, dir)
 		water.plane = relative_plane(ABOVE_HUMAN_PLANE)

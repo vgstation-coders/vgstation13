@@ -1011,8 +1011,6 @@
 	icon_state = "acidshower"
 	icon_state_open = "acidshower_t"
 	watertype = /obj/item/reagent_core/acid
-	misttype = /obj/effect/acidvapor
-	overlay_state = "acid"
 	coldtemp = -60
 	hottemp = 137
 	clean_power = 0
