@@ -548,8 +548,10 @@
 			if(MINIICONS_OFF)
 				imagedesc = "Off"
 		dat += "<span class='imageToggleButton'><TT>Images: <a href='byond://?src=\ref[src];display_miniicons=1;'>[imagedesc]</A></TT></span>"
-
-		dat += "<TT><b>Select an item:</b>[max_contained_allowed ? " ([round(100*cached_total/max_contained_allowed,1)]% full)" : ""]</TT>"
+		var/fullness = round(100*contents.len / MAX_N_OF_ITEMS,1)
+		if(max_contained_allowed)
+			fullness = max(fullness, round(100*cached_total/max_contained_allowed,1))
+		dat += "<TT><b>Select an item:</b> ([fullness]% full)</TT>"
 
 		var/list/shelves[MAX_SHELVES]
 		for(var/i = 1 to MAX_SHELVES)
