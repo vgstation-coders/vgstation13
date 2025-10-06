@@ -700,7 +700,7 @@
 	name = "water core"
 	desc = "Anomalous bluespace device that provides water to plumbing sources."
 	icon = 'icons/obj/chemical.dmi'
-	icon_state = "beakernoreact"
+	icon_state = "reagentcore"
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_BLUESPACE + "=1" //just so mechanics can make more of these and replace em
 	var/reagent_filled = WATER
@@ -710,6 +710,11 @@
 	create_reagents(200) //pretty heavy duty
 	reagents.add_reagent(reagent_filled,200)
 	processing_objects += src
+	var/image/over = image(icon,src,"reagentcore_overlay")
+	var/datum/reagent/R = chemical_reagents_list[reagent_filled]
+	if(R)
+		over.color = R.color
+	overlays += over
 
 /obj/item/reagent_core/Destroy()
 	processing_objects -= src
