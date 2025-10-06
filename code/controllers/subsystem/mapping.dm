@@ -18,6 +18,7 @@ var/datum/subsystem/mapping/SSmapping
 	name       = "Map"
 	init_order = SS_INIT_MAP
 	flags      = SS_NO_FIRE
+	priority   = SS_PRIORITY_MAPPING
 
 	/// All possible biomes in assoc list as type || instance
 	var/list/biomes = list()
@@ -34,6 +35,14 @@ var/datum/subsystem/mapping/SSmapping
 	var/list/planets = list()
 	/// All sector allocations for planets
 	var/list/allocations = list()
+	/// Whether a planet is currently being generated
+	var/generating = FALSE
+	/// The planet currently being generated
+	var/datum/planet_type/current_planet
+	/// The allocation for the current planet
+	var/datum/allocation/current_allocation
+	/// Start time for generation tracking
+	var/generation_start_time = 0
 
 /datum/subsystem/mapping/New()
 	NEW_SS_GLOBAL(SSmapping)
@@ -140,71 +149,87 @@ var/datum/subsystem/mapping/SSmapping
 		biomes[biome_path] += biome_instance
 
 /**
- * Spawns a new planet with optional ruin
+ * Spawns a new planet asynchronously with optional ruin
  *
- * Creates a new planet in the procgen z-level, generates terrain using the planet's
- * map generator, places an optional ruin, populates the terrain with features,
- * initializes day/night cycle and weather systems.
+ * Generates a planet in chunks across multiple ticks to prevent server lag.
+ * The generation process includes terrain generation, ruin placement, population,
+ * weather registration, and day/night cycle initialization.
  *
  * Arguments:
  * * planet_datum - The planet type path or instance to spawn
  * * ruin_type - Optional ruin type to place on the planet
  *
  * Returns:
- * * The z-level number where the planet was spawned
+ * * TRUE if generation started successfully, FALSE if already generating
  */
 /datum/subsystem/mapping/proc/spawn_planet(datum/planet_type/planet_datum, ruin_type)
-	var/datum/planet_type/newplanet = new planet_datum
-	var/datum/planetGenerator/mapgen = new newplanet.mapgen
-	planets += newplanet
+	if(generating)
+		message_admins("Planet generation already in progress! Please wait for '[current_planet.planet_name]' to complete.")
+		return FALSE
 
-	var/datum/map_element/mining_surprise/used_ruin = ispath(ruin_type) ? (new ruin_type) : ruin_type
-	var/datum/allocation/A = assign_allocation(newplanet, world.maxz)
+	generating = TRUE
+	generation_start_time = world.timeofday
+	current_planet = new planet_datum
+	var/datum/planetGenerator/mapgen = new current_planet.mapgen
+	current_allocation = assign_allocation(current_planet, world.maxz)
+	planets += current_planet
 
-	// Generate base terrain
-	mapgen.generate_turfs(A.turfs)
+	spawn(0)
+		var/turfs_processed = 0
+		var/tick_yields = 0
 
-	// Place optional ruin before populating terrain
-	var/list/ruin_turfs = list()
-	var/list/ruin_templates = list()
-	if(used_ruin)
-		var/placement_result = place_ruin_in_allocation(used_ruin, A)
-		if(placement_result)
-			var/list/result_data = placement_result
-			ruin_turfs[used_ruin.name] = result_data["turf"]
-			ruin_templates[used_ruin.name] = used_ruin
+		for(var/turf/T in current_allocation.turfs)
+			mapgen.generate_turf(T)
+			turfs_processed++
+			if(turfs_processed % 500 == 0 && TICK_CHECK)
+				tick_yields++
+				stoplag()
 
-	// Populate turfs AFTER generating the ruin to prevent:
-	// * Features from spawning inside the ruin
-	// * The ruin from being spaced when it spawns in
-	mapgen.populate_turfs(turfs_from_sector(A.sector, world.maxz))
+		if(ruin_type)
+			var/datum/map_element/mining_surprise/used_ruin = ispath(ruin_type) ? (new ruin_type) : ruin_type
+			place_ruin_in_allocation(used_ruin, current_allocation)
 
-	// Initialize day/night cycle for this planet
-	newplanet.build_daynight_turflist()
+		turfs_processed = 0
+		var/list/sector_turfs = turfs_from_sector(current_allocation.sector, world.maxz)
+		var/list/created_features = list()
+		var/list/created_mobs = list()
 
-	// Set a random time of day for the new planet
-	var/list/possible_times = list(TOD_MORNING, TOD_SUNRISE, TOD_DAYTIME, TOD_AFTERNOON, TOD_SUNSET, TOD_NIGHTTIME)
-	newplanet.current_timeOfDay = pick(possible_times)
+		for(var/turf/T in sector_turfs)
+			mapgen.populate_turf(T, created_features, created_mobs, mapgen.planet_loot)
+			turfs_processed++
+			if(turfs_processed % 300 == 0 && TICK_CHECK)
+				tick_yields++
+				stoplag()
 
-	// Set next_firetime based on the randomly chosen time to match natural cycle durations
-	switch(newplanet.current_timeOfDay)
-		if(TOD_MORNING) newplanet.next_firetime = world.time + 5 MINUTES
-		if(TOD_SUNRISE) newplanet.next_firetime = world.time + 3 MINUTES
-		if(TOD_DAYTIME) newplanet.next_firetime = world.time + 14 MINUTES
-		if(TOD_AFTERNOON) newplanet.next_firetime = world.time + 15 MINUTES
-		if(TOD_SUNSET) newplanet.next_firetime = world.time + 3 MINUTES
-		if(TOD_NIGHTTIME) newplanet.next_firetime = world.time + 36 MINUTES
+		if(current_planet.climate_type)
+			current_planet.climate = SSweather.set_climate(current_planet.climate_type, world.maxz, current_allocation)
+			register_weather_turfs(current_planet.climate, mapgen, current_allocation)
+			SSweather.fire()
 
-	// Apply initial lighting to the planet (immediate = TRUE for instant visibility)
-	SSDayNight.update_planet_lighting(newplanet, immediate = TRUE)
+		current_planet.build_daynight_turflist()
 
-	if(newplanet.climate_type)
-		newplanet.climate = SSweather.set_climate(newplanet.climate_type, world.maxz, A)
-		register_weather_turfs(newplanet.climate, mapgen, A)
-		SSweather.fire()
+		var/list/possible_times = list(TOD_MORNING, TOD_SUNRISE, TOD_DAYTIME, TOD_AFTERNOON, TOD_SUNSET, TOD_NIGHTTIME)
+		current_planet.current_timeOfDay = pick(possible_times)
 
-	message_admins("Planet '[newplanet.planet_name]' generated successfully at z-level [world.maxz]")
-	return world.maxz
+		switch(current_planet.current_timeOfDay)
+			if(TOD_MORNING) current_planet.next_firetime = world.time + 5 MINUTES
+			if(TOD_SUNRISE) current_planet.next_firetime = world.time + 3 MINUTES
+			if(TOD_DAYTIME) current_planet.next_firetime = world.time + 14 MINUTES
+			if(TOD_AFTERNOON) current_planet.next_firetime = world.time + 15 MINUTES
+			if(TOD_SUNSET) current_planet.next_firetime = world.time + 3 MINUTES
+			if(TOD_NIGHTTIME) current_planet.next_firetime = world.time + 36 MINUTES
+
+		SSDayNight.update_planet_lighting(current_planet, immediate = TRUE)
+
+		// Finalize
+		var/total_time = (world.timeofday - generation_start_time) / 10
+		message_admins("Planet '[current_planet.planet_name]' generated successfully at z-level [world.maxz] in [total_time]s ([tick_yields] tick yields)")
+
+		generating = FALSE
+		current_planet = null
+		current_allocation = null
+
+	return TRUE
 
 /**
  * Registers open turfs from a planet with its climate for weather overlays

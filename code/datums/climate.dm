@@ -344,7 +344,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 
 /datum/climate/lava
 	name = "lava"
-	starting_weather_type = /datum/weather/standard
+	starting_weather_type = /datum/weather/lava
 	weather_image_type = /obj/effect/weather_holder/lava
 	allowed_weather_types = list(
 		/datum/weather/lava,
