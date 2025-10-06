@@ -82,7 +82,7 @@
 
 // Surface biomes
 /datum/biome/grass
-	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 15,
 		/obj/structure/flora/ausbushes/grassybush = 10,
@@ -110,7 +110,7 @@
 	)
 
 /datum/biome/grass/dense
-	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 25,
 		/obj/structure/flora/ausbushes/grassybush = 20,
@@ -130,7 +130,7 @@
 	)
 
 /datum/biome/grass/sparse
-	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/sparsegrass = 20,
 		/obj/structure/flora/ausbushes/fullgrass = 10,
@@ -149,7 +149,7 @@
 	)
 
 /datum/biome/grass/forest
-	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/tree/shitty = 8,
 		/obj/structure/flora/tree/dead/tall/living = 4,
@@ -171,7 +171,7 @@
 	)
 
 /datum/biome/grass/lush
-	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 25,
 		/obj/structure/flora/ausbushes/grassybush = 20,
@@ -193,7 +193,7 @@
 	)
 
 /datum/biome/grass/meadow
-	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 30,
 		/obj/structure/flora/ausbushes/brflowers = 15,
@@ -215,7 +215,7 @@
 	)
 
 /datum/biome/grass/jungle
-	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/tree/palm = 5,
 		/obj/structure/flora/tree/shitty = 4,
@@ -240,7 +240,7 @@
 	)
 
 /datum/biome/grass/tropical
-	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/tree/palm = 15,
 		/obj/structure/flora/tree/shitty = 3,
@@ -279,7 +279,6 @@
 		/mob/living/simple_animal/cockroach = 20,
 		/mob/living/simple_animal/mouse = 15,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 10,
-		/mob/living/simple_animal/hostile/asteroid/goldgrub = 5,
 	)
 
 /datum/biome/cave/grass/mossy
@@ -297,7 +296,6 @@
 		/mob/living/simple_animal/mouse = 20,
 		/mob/living/simple_animal/rabbit = 5,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 8,
-		/mob/living/simple_animal/hostile/asteroid/goldgrub = 8,
 	)
 
 /datum/biome/cave/grass/lush
@@ -316,7 +314,6 @@
 		/mob/living/simple_animal/mouse = 20,
 		/mob/living/simple_animal/rabbit = 10,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 10,
-		/mob/living/simple_animal/hostile/asteroid/goldgrub = 10,
 	)
 
 /datum/biome/cave/grass/fungi
@@ -334,7 +331,6 @@
 	mob_spawn_list = list(
 		/mob/living/simple_animal/cockroach = 25,
 		/mob/living/simple_animal/mouse = 15,
-		/mob/living/simple_animal/hostile/asteroid/goldgrub = 15,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 5,
 	)
 
@@ -355,6 +351,5 @@
 		/mob/living/simple_animal/mouse = 15,
 		/mob/living/simple_animal/rabbit = 5,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 15,
-		/mob/living/simple_animal/hostile/asteroid/goldgrub = 20,
 		/mob/living/simple_animal/snail = 25,
 	)

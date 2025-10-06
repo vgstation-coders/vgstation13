@@ -235,9 +235,8 @@
 	)
 	mob_spawn_chance = 4
 	mob_spawn_list = list(
-		/mob/living/simple_animal/hostile/asteroid/goliath = 50,
+		/mob/living/simple_animal/hostile/asteroid/goliath = 60,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 40,
-		/mob/living/simple_animal/hostile/asteroid/goldgrub = 10
 	)
 	flora_spawn_chance = 1
 	flora_spawn_list = list(

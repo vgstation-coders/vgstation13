@@ -112,7 +112,7 @@
 	flora_spawn_chance = 2
 
 /datum/biome/beach/grass
-	open_turf_types = list(/turf/unsimulated/floor/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/brflowers = 1,
 		/obj/structure/flora/ausbushes/fernybush = 1,

@@ -93,7 +93,7 @@
 	)
 
 /datum/biome/jungle/sparse
-	open_turf_types = list(/turf/unsimulated/floor/jungle/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/sparsegrass = 20,
 		/obj/structure/flora/ausbushes/grassybush = 15,
@@ -116,7 +116,7 @@
 	)
 
 /datum/biome/jungle/temperate
-	open_turf_types = list(/turf/unsimulated/floor/jungle/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 20,
 		/obj/structure/flora/ausbushes/grassybush = 15,
@@ -140,7 +140,7 @@
 	)
 
 /datum/biome/jungle/dense
-	open_turf_types = list(/turf/unsimulated/floor/jungle/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 25,
 		/obj/structure/flora/ausbushes/leafybush = 20,
@@ -165,7 +165,7 @@
 	)
 
 /datum/biome/jungle/lush
-	open_turf_types = list(/turf/unsimulated/floor/jungle/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 30,
 		/obj/structure/flora/ausbushes/leafybush = 25,
@@ -194,7 +194,7 @@
 	)
 
 /datum/biome/jungle/tropical
-	open_turf_types = list(/turf/unsimulated/floor/jungle/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 35,
 		/obj/structure/flora/ausbushes/leafybush = 30,
@@ -225,7 +225,7 @@
 	)
 
 /datum/biome/jungle/rainforest
-	open_turf_types = list(/turf/unsimulated/floor/jungle/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 40,
 		/obj/structure/flora/ausbushes/leafybush = 35,
@@ -259,7 +259,7 @@
 
 /datum/biome/jungle/swamp
 	open_turf_types = list(
-		/turf/unsimulated/floor/jungle/grass = 7,
+		/turf/unsimulated/floor/planetary/grass = 7,
 		/turf/unsimulated/floor/jungle/mud = 2,
 		/turf/unsimulated/floor/jungle/water = 1
 	)
@@ -315,7 +315,7 @@
 	)
 
 /datum/biome/cave/jungle/dirt
-	open_turf_types = list(/turf/unsimulated/floor/jungle/dirt = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/dirt = 1)
 	flora_spawn_chance = 15
 	flora_spawn_list = list(
 		/obj/structure/flora/rock = 8,
@@ -334,7 +334,7 @@
 	)
 
 /datum/biome/cave/jungle/lush
-	open_turf_types = list(/turf/unsimulated/floor/jungle/dirt = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/dirt = 1)
 	flora_spawn_chance = 25
 	flora_spawn_list = list(
 		/obj/structure/flora/rock = 6,
@@ -409,7 +409,7 @@
 
 /datum/biome/jungle/beach
 	flora_spawn_chance = 25
-	open_turf_types = list(/turf/unsimulated/floor/jungle/grass = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 25,
 		/obj/structure/flora/ausbushes/leafybush = 20,

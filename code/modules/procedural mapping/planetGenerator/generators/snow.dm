@@ -104,7 +104,6 @@
 		/mob/living/simple_animal/hostile/deer = 5,
 		/mob/living/simple_animal/hostile/bear/polarbear = 2,
 		/mob/living/simple_animal/rabbit = 3,
-		/mob/living/simple_animal/hostile/asteroid/goldgrub = 1,
 		/mob/living/simple_animal/hostile/decoy/snowman = 1,
 	)
 	loot_spawners = list(
@@ -164,7 +163,6 @@
 		/mob/living/simple_animal/hostile/deer = 10,
 		/mob/living/simple_animal/hostile/bear/polarbear = 5,
 		/mob/living/simple_animal/rabbit = 2,
-		/mob/living/simple_animal/hostile/asteroid/goldgrub = 1,
 		/mob/living/simple_animal/hostile/decoy/snowman = 1,
 	)
 	mob_spawn_chance = 1
@@ -184,7 +182,6 @@
 	mob_spawn_list = list(
 		/mob/living/simple_animal/hostile/wolf = 10,
 		/mob/living/simple_animal/hostile/bear/polarbear = 10,
-		/mob/living/simple_animal/hostile/asteroid/goldgrub = 2,
 		/mob/living/simple_animal/hostile/decoy/snowman = 1,
 	)
 

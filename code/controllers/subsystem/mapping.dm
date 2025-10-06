@@ -176,14 +176,12 @@ var/datum/subsystem/mapping/SSmapping
 
 	spawn(0)
 		var/turfs_processed = 0
-		var/tick_yields = 0
 
 		for(var/turf/T in current_allocation.turfs)
 			mapgen.generate_turf(T)
 			turfs_processed++
-			if(turfs_processed % 500 == 0 && TICK_CHECK)
-				tick_yields++
-				stoplag()
+			if(!(turfs_processed % 100))
+				CHECK_TICK
 
 		if(ruin_type)
 			var/datum/map_element/mining_surprise/used_ruin = ispath(ruin_type) ? (new ruin_type) : ruin_type
@@ -197,9 +195,8 @@ var/datum/subsystem/mapping/SSmapping
 		for(var/turf/T in sector_turfs)
 			mapgen.populate_turf(T, created_features, created_mobs, mapgen.planet_loot)
 			turfs_processed++
-			if(turfs_processed % 300 == 0 && TICK_CHECK)
-				tick_yields++
-				stoplag()
+			if(!(turfs_processed % 100))
+				CHECK_TICK
 
 		if(current_planet.climate_type)
 			current_planet.climate = SSweather.set_climate(current_planet.climate_type, world.maxz, current_allocation)
@@ -223,7 +220,7 @@ var/datum/subsystem/mapping/SSmapping
 
 		// Finalize
 		var/total_time = (world.timeofday - generation_start_time) / 10
-		message_admins("Planet '[current_planet.planet_name]' generated successfully at z-level [world.maxz] in [total_time]s ([tick_yields] tick yields)")
+		message_admins("Planet '[current_planet.planet_name]' generated successfully at z-level [world.maxz] in [total_time]s")
 
 		generating = FALSE
 		current_planet = null

@@ -71,6 +71,35 @@
 	name = "dry desert"
 	icon_state = "drydesert"
 
+/turf/unsimulated/floor/planetary/grass
+	name = "grass"
+	icon = 'icons/turf/planetary/grass.dmi'
+	icon_state = "grass0"
+	plane = PLATING_PLANE
+	carbon_dioxide = 0
+	oxygen = MOLES_O2STANDARD
+	nitrogen = MOLES_N2STANDARD
+	temperature = T20C
+
+/turf/unsimulated/floor/planetary/grass/New()
+	..()
+	if(prob(30))
+		icon_state = "grass[rand(1,3)]"
+
+/turf/unsimulated/floor/planetary/dirt
+	name = "dirt"
+	icon = 'icons/turf/planetary/grass.dmi'
+	icon_state = "dirt.1"
+	plane = PLATING_PLANE
+	carbon_dioxide = 0
+	oxygen = MOLES_O2STANDARD
+	nitrogen = MOLES_N2STANDARD
+	temperature = T20C
+
+/turf/unsimulated/floor/planetary/dirt/New()
+	..()
+	icon_state = "dirt.[rand(1,4)]"
+
 //Snow
 /turf/unsimulated/floor/basalt
 	name = "basalt"

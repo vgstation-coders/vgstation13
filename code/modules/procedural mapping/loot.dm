@@ -2,8 +2,6 @@
 #define UNCOMMON_LOOT "uncommon"
 #define RARE_LOOT "rare"
 #define VERY_RARE_LOOT "very rare"
-#define ULTRA_RARE_LOOT "ultra rare"
-
 
 ///////////// LOOT TABLES /////////////
 //Unweighted
@@ -18,14 +16,12 @@
 		UNCOMMON_LOOT = list(),
 		RARE_LOOT = list(),
 		VERY_RARE_LOOT = list(),
-		ULTRA_RARE_LOOT = list()
 	)
 	var/list/thresholds = list(
 		COMMON_LOOT = 0,
 		UNCOMMON_LOOT = 50,
 		RARE_LOOT = 80,
 		VERY_RARE_LOOT = 95,
-		ULTRA_RARE_LOOT = 99
 	)
 
 // Rolls on the loot table, returning an item or null if nothing was found
@@ -43,7 +39,7 @@
 	var/list/results = list()
 	for(var/i = 1; i <= rolls; i++)
 		roll = rand(1, 100) + roll_mod
-		for(var/rarity in list(ULTRA_RARE_LOOT, VERY_RARE_LOOT, RARE_LOOT, UNCOMMON_LOOT, COMMON_LOOT))
+		for(var/rarity in list(VERY_RARE_LOOT, RARE_LOOT, UNCOMMON_LOOT, COMMON_LOOT))
 			if(roll >= thresholds[rarity] && length(loot[rarity]))
 				chosen_loot = pick(loot[rarity])
 				break
@@ -223,100 +219,276 @@
 
 /datum/loot_table/decoration
 	loot = list(
-		COMMON_LOOT = list(),
-		UNCOMMON_LOOT = list(),
-		RARE_LOOT = list(),
-		VERY_RARE_LOOT = list()
+		/obj/item/painting_brush,
+		/obj/item/candle,
+		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
+		/obj/item/weapon/beach_ball,
+		/obj/item/trash/candle,
+		/obj/item/mounted/poster,
+		/obj/item/weapon/storage/photo_album,
+		/obj/item/device/flashlight/lamp,
+		/obj/item/device/flashlight/lamp/green,
+		/obj/item/weapon/reagent_containers/glass/beaker,
+		/obj/item/mounted/frame/painting,
+		/obj/item/mounted/frame/wreath,
+		/obj/item/weapon/reagent_containers/glass/rag,
+		/obj/item/weapon/lipstick/random,
+		/obj/item/weapon/reagent_containers/food/drinks/flask,
+		/obj/item/weapon/lighter/zippo,
 	)
 
 /datum/loot_table/engineering
 	loot = list(
-		COMMON_LOOT = list(),
-		UNCOMMON_LOOT = list(),
-		RARE_LOOT = list(),
-		VERY_RARE_LOOT = list()
+		/obj/item/tool/screwdriver,
+		/obj/item/tool/wrench,
+		/obj/item/tool/weldingtool,
+		/obj/item/tool/crowbar,
+		/obj/item/tool/wirecutters,
+		/obj/item/device/multitool,
+		/obj/item/device/t_scanner,
+		/obj/item/device/analyzer,
+		/obj/item/stack/cable_coil,
+		/obj/item/stack/rods,
+		/obj/item/device/flashlight,
+		/obj/item/taperoll/engineering,
+		/obj/item/weapon/extinguisher,
+		/obj/item/device/geiger_counter,
+		/obj/item/clothing/glasses/scanner/meson,
+		/obj/item/clothing/head/hardhat,
+		/obj/item/clothing/gloves/yellow,
+		/obj/item/weapon/rcl,
+		/obj/item/weapon/cell,
+		/obj/item/weapon/glowstick,
+		/obj/item/weapon/glowstick/red,
+		/obj/item/weapon/glowstick/blue,
+		/obj/item/weapon/circuitboard/airlock,
+		/obj/item/stack/sheet/metal,
+		/obj/item/stack/sheet/glass,
+		/obj/item/weapon/storage/belt/utility,
 	)
 
 /datum/loot_table/entertainment
 	loot = list(
-		COMMON_LOOT = list(),
-		UNCOMMON_LOOT = list(),
-		RARE_LOOT = list(),
-		VERY_RARE_LOOT = list()
+		/obj/item/toy/balloon,
+		/obj/item/toy/blink,
+		/obj/item/toy/spinningtoy,
+		/obj/item/toy/sword,
+		/obj/item/toy/katana,
+		/obj/item/toy/foamblade,
+		/obj/item/toy/gun,
+		/obj/item/toy/crossbow,
+		/obj/item/toy/cards,
+		/obj/item/toy/cards/une,
+		/obj/item/weapon/dice,
+		/obj/item/weapon/storage/pill_bottle/dice,
+		/obj/item/toy/prize/ripley,
+		/obj/item/toy/prize/gygax,
+		/obj/item/toy/prize/durand,
+		/obj/item/toy/plushie/carp,
+		/obj/item/toy/plushie/cat,
+		/obj/item/toy/plushie/teddy,
+		/obj/item/toy/figure/clown,
+		/obj/item/toy/figure/mime,
+		/obj/item/toy/snappop,
+		/obj/item/toy/bomb,
+		/obj/item/toy/minimeteor,
+		/obj/item/weapon/bikehorn,
+		/obj/item/device/instrument/violin,
+		/obj/item/device/instrument/guitar,
+		/obj/item/device/instrument/harmonica,
+		/obj/item/device/instrument/trombone,
+		/obj/item/device/instrument/accordion,
+		/obj/item/device/instrument/saxophone,
+		/obj/item/device/instrument/recorder,
+		/obj/item/device/instrument/glockenspiel,
+		/obj/item/device/instrument/drum,
+		/obj/item/device/instrument/drum/drum_makeshift,
+		/obj/item/device/instrument/drum/drum_makeshift/bongos,
+		/obj/structure/piano,
+		/obj/structure/piano/xylophone,
 	)
 
 /datum/loot_table/weighted/exotic
 	loot = list(
-		COMMON_LOOT = list(),
-		UNCOMMON_LOOT = list(),
-		RARE_LOOT = list(),
-		VERY_RARE_LOOT = list()
-	)
-
-/datum/loot_table/food_or_drink
-	loot = list(
-		COMMON_LOOT = list(),
-		UNCOMMON_LOOT = list(),
-		RARE_LOOT = list(),
-		VERY_RARE_LOOT = list()
-	)
-
-/datum/loot_table/medical
-	loot = list(
-		COMMON_LOOT = list(),
-		UNCOMMON_LOOT = list(),
+		COMMON_LOOT = list(
+			/obj/item/weapon/fossil/plant,
+			/obj/item/weapon/fossil/egg,
+			/obj/item/weapon/strangerock,
+		),
+		UNCOMMON_LOOT = list(
+			/obj/item/weapon/glow_orb,
+			/obj/item/soulstone,
+			/obj/item/weapon/reagent_containers/glass/replenishing,
+			/obj/item/device/plugin/sleeper/alien,
+			/obj/item/clothing/under/grey/grey_worker,
+			/obj/item/clothing/under/grey/grey_scout,
+			/obj/item/dictionary/martian,
+			/obj/item/weapon/blood_tesseract/xenoarchfind,
+		),
 		RARE_LOOT = list(
-			/obj/item/weapon/dnainjector/nofail/randompower,),
+			/obj/item/weapon/robot_spawner/strange/ball,
+			/obj/item/weapon/robot_spawner/strange/egg,
+			/obj/item/weapon/butterflyknife/viscerator/bunny,
+			/obj/item/supermatter_splinter,
+			/obj/structure/crystal,
+			/obj/item/clothing/under/grey/grey_soldier,
+			/obj/item/clothing/under/grey/grey_researcher,
+		),
 		VERY_RARE_LOOT = list(
-			/obj/item/weapon/dnascrambler,)
+			/obj/item/weapon/nullrod/sword/chaos/mimicry,
+			/obj/item/weapon/dnascrambler,
+			/obj/item/clothing/gloves/warping_claws,
+			/obj/item/clothing/under/grey/grey_leader,
+			/obj/machinery/vending/artifact,
+			/obj/machinery/artifact,
+			/obj/machinery/auto_cloner,
+			/obj/machinery/communication,
+			/obj/machinery/replicator,
+		)
+	)
+
+/datum/loot_table/food_or_drink/New()
+	loot = subtypesof(/obj/item/weapon/reagent_containers/food)
+
+/datum/loot_table/weighted/medical
+	loot = list(
+		COMMON_LOOT = list(
+			/obj/item/weapon/reagent_containers/syringe,
+			/obj/item/stack/medical/bruise_pack,
+			/obj/item/stack/medical/ointment,
+			/obj/item/stack/medical/splint,
+			/obj/item/weapon/reagent_containers/pill/antitox,
+			/obj/item/device/healthanalyzer,
+			/obj/item/weapon/reagent_containers/glass/bottle/inaprovaline,
+			/obj/item/weapon/reagent_containers/glass/beaker/vial,
+			/obj/item/weapon/storage/pill_bottle,
+			/obj/item/weapon/thermometer,
+		),
+		UNCOMMON_LOOT = list(
+			/obj/item/weapon/reagent_containers/hypospray,
+			/obj/item/clothing/glasses/hud/health,
+			/obj/item/weapon/storage/pill_bottle/antitox,
+			/obj/item/weapon/storage/pill_bottle,
+			/obj/item/weapon/reagent_containers/glass/bottle/antitoxin,
+			/obj/item/weapon/storage/firstaid/regular,
+			/obj/item/weapon/storage/firstaid/toxin,
+			/obj/item/device/antibody_scanner,
+			/obj/item/weapon/reagent_containers/glass/bottle/stoxin,
+			/obj/item/weapon/reagent_containers/glass/bottle/charcoal,
+			/obj/item/stack/medical/advanced/bruise_pack,
+			/obj/item/stack/medical/advanced/ointment,
+		),
+		RARE_LOOT = list(
+			/obj/item/weapon/dnainjector/nofail/randompower,
+			/obj/item/weapon/storage/firstaid/adv,
+			/obj/item/weapon/autopsy_scanner,
+			/obj/item/tool/scalpel,
+			/obj/item/tool/surgicaldrill,
+			/obj/item/tool/FixOVein,
+			/obj/item/tool/bonegel,
+			/obj/item/tool/bonesetter,
+			/obj/item/weapon/storage/firstaid/internalbleed,
+			/obj/item/weapon/implanter/adrenalin,
+		),
+		VERY_RARE_LOOT = list(
+			/obj/item/weapon/dnascrambler,
+			/obj/item/weapon/reagent_containers/glass/bottle/peridaxon,
+			/obj/item/weapon/organ_remover/traitor,
+			/obj/item/weapon/implanter/peace,
+			/obj/item/weapon/medbot_cube,
+		)
 	)
 
 /datum/loot_table/module
 	loot = list(
-		COMMON_LOOT = list(
-			/obj/item/weapon/aiModule/core/asimov,
-			/obj/item/weapon/aiModule/core/corp,
-			/obj/item/weapon/aiModule/core/nanotrasen,
-			/obj/item/weapon/aiModule/core/robocop,
-			/obj/item/weapon/aiModule/freeform/core,
-			/obj/item/weapon/aiModule/keeper,
-			/obj/item/weapon/aiModule/purge,
-		),
-		UNCOMMON_LOOT = list(
-			/obj/item/weapon/aiModule/core/hogan,
-			/obj/item/weapon/aiModule/core/lazymov,
-			/obj/item/weapon/aiModule/core/paladin,
-			/obj/item/weapon/aiModule/core/tyrant,
-			/obj/item/weapon/aiModule/randomize,
-			/obj/item/weapon/aiModule/standard/protectStation,
-			/obj/item/weapon/aiModule/standard/teleporterOffline,
-		),
-		RARE_LOOT = list(
-			/obj/item/weapon/aiModule/core/antimov,
-			/obj/item/weapon/aiModule/standard/oxygen,
-			/obj/item/weapon/aiModule/standard/quarantine,
-		),
-		VERY_RARE_LOOT = list(
-			/obj/item/weapon/aiModule/freeform/syndicate,
-			/obj/item/weapon/aiModule/targetted/safeguard,
-			/obj/item/weapon/aiModule/targetted/oneHuman,
-		)
+		/obj/item/weapon/aiModule/core/asimov,
+		/obj/item/weapon/aiModule/core/corp,
+		/obj/item/weapon/aiModule/core/nanotrasen,
+		/obj/item/weapon/aiModule/core/robocop,
+		/obj/item/weapon/aiModule/freeform/core,
+		/obj/item/weapon/aiModule/keeper,
+		/obj/item/weapon/aiModule/purge,
+		/obj/item/weapon/aiModule/core/hogan,
+		/obj/item/weapon/aiModule/core/lazymov,
+		/obj/item/weapon/aiModule/core/paladin,
+		/obj/item/weapon/aiModule/core/tyrant,
+		/obj/item/weapon/aiModule/randomize,
+		/obj/item/weapon/aiModule/standard/protectStation,
+		/obj/item/weapon/aiModule/standard/teleporterOffline,
+		/obj/item/weapon/aiModule/core/antimov,
+		/obj/item/weapon/aiModule/standard/oxygen,
+		/obj/item/weapon/aiModule/standard/quarantine,
+		/obj/item/weapon/aiModule/freeform/syndicate,
+		/obj/item/weapon/aiModule/targetted/safeguard,
+		/obj/item/weapon/aiModule/targetted/oneHuman,
 	)
 
 /datum/loot_table/weighted/structure
 	loot = list(
-		COMMON_LOOT = list(),
-		UNCOMMON_LOOT = list(),
-		RARE_LOOT = list(),
-		VERY_RARE_LOOT = list()
+		COMMON_LOOT = list(
+			/obj/structure/bed/chair,
+			/obj/structure/bed/chair/wood/normal,
+			/obj/structure/table,
+			/obj/structure/table/woodentable,
+			/obj/structure/rack,
+			/obj/structure/closet,
+			/obj/structure/closet/crate,
+		),
+		UNCOMMON_LOOT = list(
+			/obj/structure/bed,
+			/obj/structure/bed/chair/office,
+			/obj/structure/bed/chair/comfy,
+			/obj/structure/closet/cabinet,
+			/obj/structure/filingcabinet,
+			/obj/structure/table/reinforced,
+			/obj/machinery/vending/cola,
+			/obj/machinery/vending/snack,
+			/obj/machinery/vending/coffee,
+		),
+		RARE_LOOT = list(
+			/obj/structure/bed/chair/comfy/black,
+			/obj/structure/bed/chair/wood/wings,
+			/obj/structure/closet/secure_closet,
+			/obj/structure/table/glass,
+			/obj/machinery/vending/medical,
+			/obj/machinery/vending/engivend,
+			/obj/machinery/vending/robotics,
+			/obj/machinery/artifact,
+			/obj/machinery/auto_cloner,
+		),
+		VERY_RARE_LOOT = list(
+			/obj/structure/bed/chair/wood/throne,
+			/obj/structure/closet/secure_closet/personal,
+			/obj/machinery/vending/artifact,
+			/obj/machinery/replicator,
+			/obj/machinery/communication,
+		)
 	)
 
 /datum/loot_table/trash
 	loot = list(
-		COMMON_LOOT = list(),
-		UNCOMMON_LOOT = list(),
-		RARE_LOOT = list(),
-		VERY_RARE_LOOT = list()
+		/obj/item/trash/raisins,
+		/obj/item/trash/candy,
+		/obj/item/trash/chips,
+		/obj/item/trash/popcorn,
+		/obj/item/trash/sosjerky,
+		/obj/item/trash/syndi_cakes,
+		/obj/item/trash/waffles,
+		/obj/item/trash/plate,
+		/obj/item/trash/snack_bowl,
+		/obj/item/trash/pistachios,
+		/obj/item/trash/tray,
+		/obj/item/trash/candle,
+		/obj/item/trash/liquidfood,
+		/obj/item/trash/soda_cans,
+		/obj/item/trash/cigbutt,
+		/obj/item/trash/cigbutt/spaceportbutt,
+		/obj/item/trash/broken_ashtray,
+		/obj/item/trash/used_tray,
+		/obj/item/trash/emptybowl,
+		/obj/item/trash/packet/ketchup,
+		/obj/item/trash/packet/mayo,
+		/obj/item/trash/packet/soysauce,
 	)
 
 ///////////// LOOT SPAWNERS /////////////
@@ -517,7 +689,7 @@
 /obj/abstract/loot_spawner/medical
 	name = "medical spawner"
 	icon_state = "loot_medical"
-	table = /datum/loot_table/medical
+	table = /datum/loot_table/weighted/medical
 	roll_min = 3
 	roll_max = 10
 	containers = list(

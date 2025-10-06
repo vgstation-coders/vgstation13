@@ -153,8 +153,13 @@
 	return spawned
 
 /datum/biome/proc/spawn_loot(turf/simulated/floor/floor_turf, area_flags, var/cavespawn = FALSE)
-	if(!(prob(loot_spawn_chance) && prob(50)))
+	if(!length(loot_spawners))
 		return null
+	if(!prob(loot_spawn_chance))
+		return null
+	if(!cavespawn)
+		if(!prob(20)) //non-cave loot is rarer
+			return null
 	if(!(area_flags & FLORA_ALLOWED)) // Uses FLORA_ALLOWED flag
 		return null
 
@@ -163,8 +168,8 @@
 	floor_turf.turf_flags |= NO_LAVA_GEN_1
 	return spawned
 
-/datum/biome/cave/spawn_loot()
-	..(cavespawn = TRUE)
+/datum/biome/cave/spawn_loot(turf/simulated/floor/floor_turf, area_flags, var/cavespawn = FALSE)
+	return ..(floor_turf, area_flags, TRUE)
 
 /**
  * Checks if a feature can spawn at the given location based on distance from other features
