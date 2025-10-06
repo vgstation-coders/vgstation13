@@ -153,7 +153,7 @@
 	return spawned
 
 /datum/biome/proc/spawn_loot(turf/simulated/floor/floor_turf, area_flags, var/cavespawn = FALSE)
-	if(!prob(loot_spawn_chance))
+	if(!(prob(loot_spawn_chance) && prob(50)))
 		return null
 	if(!(area_flags & FLORA_ALLOWED)) // Uses FLORA_ALLOWED flag
 		return null
