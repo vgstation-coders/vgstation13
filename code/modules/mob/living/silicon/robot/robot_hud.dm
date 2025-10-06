@@ -65,7 +65,7 @@
 		overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
 		update_fullscreen_alpha("high", DRUGGY_ALPHA, DRUGGY_FADE_IN)
 	else
-			clear_fullscreen("high", DRUGGY_FADE_OUT)
+		clear_fullscreen("high", DRUGGY_FADE_OUT)
 
 	if(!isDead())
 		if(machine)
