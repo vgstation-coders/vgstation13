@@ -105,6 +105,15 @@
 		/mob/living/simple_animal/hostile/asteroid/goliath = 50,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 40
 	)
+	loot_spawn_chance = 2
+	loot_spawners = list(
+		/obj/abstract/loot_spawner/clothing = 1,
+		/obj/abstract/loot_spawner/engineering = 1,
+		/obj/abstract/loot_spawner/food_or_drink = 1,
+		/obj/abstract/loot_spawner/medical = 1,
+		/obj/abstract/loot_spawner/module = 1,
+		/obj/abstract/loot_spawner/trash = 1,
+	)
 
 /datum/biome/lavaland/forest
 	open_turf_types = list(/turf/simulated/floor/plating/asteroid/purple/lit = 1)
@@ -239,6 +248,14 @@
 		/obj/structure/flora/ash/tall_shroom = 2,
 		/obj/structure/flora/ash/fern = 2,
 		/obj/structure/flora/ash/puce = 2,
+	)
+	loot_spawn_chance = 3
+	loot_spawners = list(
+		/obj/abstract/loot_spawner/medical = 5,
+		/obj/abstract/loot_spawner/combat = 4,
+		/obj/abstract/loot_spawner/exotic = 1,
+		/obj/abstract/loot_spawner/module = 3,
+		/obj/abstract/loot_spawner/structure = 2,
 	)
 
 /datum/biome/cave/lavaland/obsidian

@@ -99,6 +99,15 @@
 		/mob/living/simple_animal/hostile/deer = 15,
 		/mob/living/simple_animal/cockroach = 10,
 	)
+	loot_spawners = list(
+		/obj/abstract/loot_spawner/bedsheet = 1,
+		/obj/abstract/loot_spawner/bureaucracy = 1,
+		/obj/abstract/loot_spawner/clothing = 1,
+		/obj/abstract/loot_spawner/decoration = 1,
+		/obj/abstract/loot_spawner/entertainment = 1,
+		/obj/abstract/loot_spawner/food_or_drink = 2,
+		/obj/abstract/loot_spawner/trash = 3,
+	)
 
 /datum/biome/grass/dense
 	open_turf_types = list(/turf/unsimulated/floor/grass = 1)

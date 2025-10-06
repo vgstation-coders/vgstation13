@@ -98,6 +98,9 @@
 		/mob/living/simple_animal/hostile/alien/sentinel = 1,
 		/mob/living/carbon/alien/larva = 5
 	)
+	loot_spawners = list(
+		/obj/abstract/loot_spawner/exotic = 1
+	)
 
 /datum/biome/cave/xeno
 	open_turf_types = list(/turf/unsimulated/floor/cave = 1)
@@ -119,4 +122,8 @@
 	flora_spawn_list = list(
 		/obj/item/clothing/mask/facehugger = 1,
 		/obj/structure/acid_puddle = 5
+	)
+	loot_spawners = list(
+		/obj/abstract/loot_spawner/combat = 1,
+		/obj/abstract/loot_spawner/exotic = 2
 	)

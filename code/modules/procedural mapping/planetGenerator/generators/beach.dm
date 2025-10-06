@@ -91,6 +91,15 @@
 		/obj/structure/flora/coconut = 1
 	)
 	flora_spawn_chance = 5
+	loot_spawners = list(
+		/obj/abstract/loot_spawner/bedsheet = 1,
+		/obj/abstract/loot_spawner/bureaucracy = 1,
+		/obj/abstract/loot_spawner/clothing = 1,
+		/obj/abstract/loot_spawner/decoration = 1,
+		/obj/abstract/loot_spawner/entertainment = 1,
+		/obj/abstract/loot_spawner/food_or_drink = 2,
+		/obj/abstract/loot_spawner/trash = 3,
+	)
 
 /datum/biome/beach/dense
 	open_turf_types = list(/turf/unsimulated/beach/sand/spread = 1)

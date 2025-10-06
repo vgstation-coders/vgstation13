@@ -91,13 +91,17 @@
 	)
 	flora_spawn_chance = 4
 	mob_spawn_chance = 1
-
 	mob_spawn_list = list(
 		/mob/living/simple_animal/cockroach = 10,
 		/mob/living/simple_animal/rabbit = 50,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 20,
 		/mob/living/simple_animal/hostile/asteroid/magmaw = 20,
 		/mob/living/simple_animal/hostile/lizard = 50,
+	)
+	loot_spawners = list(
+		/obj/abstract/loot_spawner/engineering = 1,
+		/obj/abstract/loot_spawner/medical = 1,
+		/obj/abstract/loot_spawner/trash = 2,
 	)
 
 /datum/biome/dry_seafloor
@@ -109,6 +113,7 @@
 		/obj/structure/flora/ausbushes/stalkybush = 5,
 	)
 	flora_spawn_chance = 1
+	loot_spawners = list(/obj/abstract/loot_spawner/trash/on_ground) //it's bleak
 
 /datum/biome/cave/desert
 	open_turf_types = list(/turf/simulated/floor/asteroid/air = 1)

@@ -28,6 +28,8 @@
 	var/list/mob_spawn_list
 	/// EXPANDED (no values) list of mobs that this biome can spawn
 	var/list/mob_spawn_list_expanded
+	// Loot tables that can spawn in this biome
+	var/list/loot_spawners
 
 	/// Percentage chance that an open turf will attempt a flora spawn
 	var/flora_spawn_chance = 2
@@ -35,7 +37,8 @@
 	var/feature_spawn_chance = 1
 	/// Base percentage chance that an open turf will attempt a mob spawn
 	var/mob_spawn_chance = 6
-
+	/// Base percentage chance that an open turf will attempt a loot spawn
+	var/loot_spawn_chance = 1
 
 /**
  * Initializes the biome by expanding all weighted spawn lists
@@ -149,6 +152,20 @@
 	floor_turf.turf_flags |= NO_LAVA_GEN_1
 	return spawned
 
+/datum/biome/proc/spawn_loot(turf/simulated/floor/floor_turf, area_flags, var/cavespawn = FALSE)
+	if(!prob(loot_spawn_chance))
+		return null
+	if(!(area_flags & FLORA_ALLOWED)) // Uses FLORA_ALLOWED flag
+		return null
+
+	var/spawner_type = pickweight(loot_spawners)
+	var/obj/abstract/loot_spawner/spawned = new spawner_type(floor_turf, cave = cavespawn)
+	floor_turf.turf_flags |= NO_LAVA_GEN_1
+	return spawned
+
+/datum/biome/cave/spawn_loot()
+	..(cavespawn = TRUE)
+
 /**
  * Checks if a feature can spawn at the given location based on distance from other features
  *
@@ -244,19 +261,22 @@
 	var/atom/spawned_flora
 	var/atom/spawned_feature
 	var/atom/spawned_mob
+	var/atom/spawned_loot
 
-	// First flora spawn attempt
-	spawned_flora = try_spawn_flora(floor_turf, area_flags)
+	// First loot spawn attempt
+	spawned_loot = spawn_loot(floor_turf, area_flags)
 
-	// Feature spawning
-	spawned_feature = try_spawn_feature(floor_turf, area_flags, feature_list)
+	// Flora & Feature spawning (only if no loot was spawned)
+	if(!spawned_loot)
+		spawned_flora = try_spawn_flora(floor_turf, area_flags)
+		spawned_feature = try_spawn_feature(floor_turf, area_flags, feature_list)
 
-	// Mob spawning (only if no flora or feature was spawned)
-	if(!spawned_flora && !spawned_feature)
+	// Mob spawning (only if no flora, feature, or loot was spawned)
+	if(!spawned_flora && !spawned_feature && !spawned_loot)
 		spawned_mob = try_spawn_mob(floor_turf, area_flags, mob_list)
 
 	// Second flora spawn attempt
-	if(!spawned_mob)
+	if(!spawned_mob && !spawned_loot)
 		spawned_flora = try_spawn_flora(floor_turf, area_flags, ignore_no_flora_flag = TRUE)
 
 /**
@@ -270,6 +290,14 @@
 	var/list/closed_turf_types = list(/turf/unsimulated/mineral/cave = 1)
 	/// EXPANDED (no values) list of closed turfs that this biome can place
 	var/list/closed_turf_types_expanded
+	loot_spawn_chance = 2
+	loot_spawners = list(
+		/obj/abstract/loot_spawner/medical = 2,
+		/obj/abstract/loot_spawner/combat = 1,
+		/obj/abstract/loot_spawner/engineering = 2,
+		/obj/abstract/loot_spawner/module = 1,
+		/obj/abstract/loot_spawner/structure = 2,
+	)
 
 /**
  * Initializes the cave biome by expanding weighted lists for both open and closed turfs

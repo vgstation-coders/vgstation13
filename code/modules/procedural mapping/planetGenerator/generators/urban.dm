@@ -81,6 +81,19 @@
 	)
 
 // Surface biomes
+/datum/biome/urban
+	loot_spawn_chance = 2
+
+	loot_spawners = list(
+		/obj/abstract/loot_spawner/bureaucracy = 2,
+		/obj/abstract/loot_spawner/clothing = 2,
+		/obj/abstract/loot_spawner/combat = 1,
+		/obj/abstract/loot_spawner/engineering = 1,
+		/obj/abstract/loot_spawner/medical = 1,
+		/obj/abstract/loot_spawner/structure = 1,
+		/obj/abstract/loot_spawner/trash = 3,
+	)
+
 /datum/biome/urban/ruins
 	open_turf_types = list(/turf/unsimulated/wasteland = 1)
 	flora_spawn_list = list(
@@ -172,6 +185,7 @@
 		/mob/living/simple_animal/hostile/asteroid/magmaw = 20,
 		/mob/living/simple_animal/hostile/asteroid/goliath = 10,
 	)
+	loot_spawn_chance = 3
 
 // Cave biomes
 /datum/biome/cave/urban
