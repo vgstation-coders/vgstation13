@@ -144,11 +144,14 @@
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	icon_state = "druggy"
+	blend_mode = 3
+	plane = LIGHTING_PLANE
 
 /obj/abstract/screen/fullscreen/high/red
 	color = "red"
 	alpha = 150
 	blend_mode = 4
+	plane = FULLSCREEN_PLANE
 
 /obj/abstract/screen/fullscreen/hackview_border
 	icon_state = "malfview"

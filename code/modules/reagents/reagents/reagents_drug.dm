@@ -164,7 +164,7 @@
 	if(..())
 		return 1
 
-	M.druggy = max(M.druggy, 50)
+	M.druggy = max(M.druggy, 45)
 	switch(tick)
 		if(1 to 5)
 			if(!M.stuttering)
@@ -177,7 +177,7 @@
 				M.stuttering = 1
 			M.Jitter(20)
 			M.Dizzy(20)
-			M.druggy = max(M.druggy, 45)
+			M.druggy = max(M.druggy, 50)
 			if(prob(20))
 				M.emote(pick("twitch", "giggle"))
 		if(10 to INFINITY)
@@ -266,13 +266,13 @@
 /datum/reagent/hyperzine/methamphetamine/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-//most of this code purloined from piccolyn 
+//most of this code purloined from piccolyn
 	if(M && prob(5)) //ocassionally switches you to HARM intent
 		M.a_intent = I_HURT
 		if(M?.hud_used?.action_intent)
 			M.hud_used.action_intent.icon_state = "intent_hurt"
 	if(prob(5) && M.stat == CONSCIOUS)
-		M.emote(pick("twitch","blink_r","shiver")) 
+		M.emote(pick("twitch","blink_r","shiver"))
 	if(M && prob(5)) //you will occasionally say something completely out of left field to a seccie, centcommie, captain or HoP
 		var/list/nearest_officer = null
 		for(var/mob/living/L in view(M))
@@ -567,6 +567,17 @@
 		return 1
 
 	M.druggy = max(M.druggy, 15)
+	switch(tick)
+		if(10 to 30)
+			M.druggy = max(M.druggy, 25)
+		if(30 to 100)
+			M.druggy = max(M.druggy, 35)
+		if(100 to INFINITY)
+			M.druggy = max(M.druggy, 35)
+			if(prob(1))
+				to_chat(H, "<span class='rose'>Gotta get a grip!</span>")
+
+
 	if(isturf(M.loc) && !istype(M.loc, /turf/space))
 		if(M.canmove && !M.restrained())
 			if(prob(10))

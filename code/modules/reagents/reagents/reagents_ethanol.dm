@@ -189,7 +189,7 @@
 /datum/reagent/ethanol/pwine/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	M.druggy = max(M.druggy, 50)
+	M.druggy = max(M.druggy, 45)
 	switch(tick)
 		if(1 to 25)
 			if(!M.stuttering)
@@ -204,7 +204,7 @@
 			M.hallucination = max(M.hallucination, 10)
 			M.Jitter(2)
 			M.Dizzy(2)
-			M.druggy = max(M.druggy, 45)
+			M.druggy = max(M.druggy, 50)
 			if(prob(5))
 				M.emote(pick("twitch", "giggle"))
 		if(75 to 150)
