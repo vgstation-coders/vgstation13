@@ -57,7 +57,7 @@
 			M.Jitter(5)
 			if(prob(5) && M.feels_pain())
 				to_chat(M, "<span class='warning'>Oh god, the pain!</span>")
-		if(25 to INFINITY)
+		if(26 to INFINITY)
 			if(ishuman(M)) //If human and not diona, hulk out
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona") //Dionae are broken as fuck
@@ -172,7 +172,7 @@
 			M.Dizzy(10)
 			if(prob(10))
 				M.emote(pick("twitch", "giggle"))
-		if(5 to 10)
+		if(6 to 10)
 			if(!M.stuttering)
 				M.stuttering = 1
 			M.Jitter(20)
@@ -180,7 +180,7 @@
 			M.druggy = max(M.druggy, 50)
 			if(prob(20))
 				M.emote(pick("twitch", "giggle"))
-		if(10 to INFINITY)
+		if(11 to INFINITY)
 			if(!M.stuttering)
 				M.stuttering = 1
 			M.Jitter(40)
@@ -514,7 +514,7 @@
 			M.Dizzy(5)
 			if(prob(10))
 				M.emote(pick("twitch", "giggle"))
-		if(5 to 10)
+		if(6 to 10)
 			if(!M.stuttering)
 				M.stuttering = 1
 			M.Jitter(10)
@@ -522,7 +522,7 @@
 			M.druggy = max(M.druggy, 35)
 			if(prob(20))
 				M.emote(pick("twitch", "giggle"))
-		if (10 to INFINITY)
+		if (11 to INFINITY)
 			if(!M.stuttering)
 				M.stuttering = 1
 			M.Jitter(20)
@@ -570,9 +570,9 @@
 	switch(tick)
 		if(10 to 30)
 			M.druggy = max(M.druggy, 25)
-		if(30 to 100)
+		if(31 to 100)
 			M.druggy = max(M.druggy, 35)
-		if(100 to INFINITY)
+		if(101 to INFINITY)
 			M.druggy = max(M.druggy, 35)
 			if(prob(1))
 				to_chat(M, "<span class='rose'>Gotta get a grip!</span>")
