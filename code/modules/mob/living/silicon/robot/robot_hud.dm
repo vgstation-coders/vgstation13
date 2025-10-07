@@ -62,10 +62,9 @@
 	else
 		clear_fullscreen("blurry")
 	if(druggy)
-		overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
-		update_fullscreen_alpha("high", DRUGGY_ALPHA, DRUGGY_FADE_IN)
+		enable_druggy_overlays()
 	else
-		clear_fullscreen("high", DRUGGY_FADE_OUT)
+		disable_druggy_overlays()
 
 	if(!isDead())
 		if(machine)

@@ -144,14 +144,22 @@
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	icon_state = "druggy"
-	blend_mode = 3
+	blend_mode = BLEND_SUBTRACT
 	plane = LIGHTING_PLANE
 	alpha = 0//set to 255 by update_fullscreen_alpha();
+
+/obj/abstract/screen/fullscreen/high/space
+	plane = ABOVE_PARALLAX_PLANE
+
+/obj/abstract/screen/fullscreen/high/over
+	blend_mode = BLEND_MULTIPLY
+	plane = FULLSCREEN_PLANE
+	layer = HALLUCINATION_LAYER
 
 /obj/abstract/screen/fullscreen/high/red
 	color = "red"
 	alpha = 150
-	blend_mode = 4
+	blend_mode = BLEND_MULTIPLY
 	plane = FULLSCREEN_PLANE
 	alpha = 255
 
