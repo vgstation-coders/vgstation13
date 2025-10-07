@@ -361,6 +361,11 @@ function loadPage(list) {
 			html += {"
 			(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>save</a> |
 			<a href='?_src_=vars;datumedit=\ref[DA];varnameedit=[name]'>load</a>) "}
+		else if(name == "filters")
+			html += {"
+			(<a href='?_src_=vars;datumaddfilter=\ref[DA];varnameaddfilter=[name]'>add filter</a> |
+			<a href='?_src_=vars;datumremovefilter=\ref[DA];varnameremovefilter=[name]'>remove filter</a>) "}
+			//can't figure out easily how to copy filters from one atom to another, here's a mission for the willing
 		else
 			html += {"
 			(<a href='?_src_=vars;datumedit=\ref[DA];varnameedit=[name]'>E</a>)
@@ -570,6 +575,182 @@ function loadPage(list) {
 			else
 				holder.marked_datum = saved_value
 				to_chat(usr, "Your marked datum is now: [holder.marked_datum]")
+
+	else if(href_list["varnameaddfilter"] && href_list["datumaddfilter"])
+		if(!check_rights(R_VAREDIT))
+			return
+
+		var/atom/A = locate(href_list["datumaddfilter"])
+		if(!istype(A))
+			to_chat(usr, "This can only be used on instances of type /atom")
+			return
+
+		var/edited_variable = href_list["varnamechange"]
+
+		var/filter_setups = list(
+			"Alpha Mask" = "alpha",
+			"Angular Blur" = "angular_blur",
+			"Bloom" = "bloom",
+			"Drop Shadow" = "drop_shadow",
+			"Gaussian Blur" = "blur",
+			"Motion Blur" = "motion_blur",
+			)//me or someone else will do the other ones later
+
+		var/filter_name = input(usr, "Select a new filter", "New Filter Effect", null) as null|anything in filter_setups
+
+		if (!filter_name)
+			return
+
+		var/filter = filter_setups[filter_name]
+
+		switch(filter)
+			if ("alpha")
+				var/mask_icon = null
+				var/mask_target = null
+
+				var/mask_x = input(usr, "Choose the horizontal offset of the mask", "New Filter Effect (Alpha Mask)", 0) as null|num
+				if (mask_x == null)
+					return
+
+				var/mask_y = input(usr, "Choose the vertical offset of the mask", "New Filter Effect (Alpha Mask)", 0) as null|num
+				if (mask_y == null)
+					return
+
+				var/choice = alert("Use icon or render_target as mask?", "New Filter Effect (Alpha Mask)", "icon", "render_target")
+				if (choice == "icon")
+					mask_icon = input(usr, "Choose the icon to use as a mask", "New Filter Effect (Alpha Mask)", null) as null|icon
+					if (mask_icon == null)
+						return
+				else
+					mask_target = input(usr, "Choose the render_target to use as a mask", "New Filter Effect (Alpha Mask)", "") as null|text
+					if (mask_target == null)
+						return
+
+				var/available_mask_flags = list(
+					"MASK_INVERSE" = MASK_INVERSE,
+					"MASK_SWAP" = MASK_SWAP,
+					"MASK_SWAP | MASK_INVERSE" = (MASK_SWAP | MASK_INVERSE),
+					"none" = 0
+					)
+
+				var/mask_flag = input(usr, "Choose any flags to add or none", "New Filter Effect (Alpha Mask)", "none") as null|anything in available_mask_flags
+				if (mask_flag == null)
+					return
+
+				var/added_flag = available_mask_flags[mask_flag]
+
+				if (choice == "icon")
+					A.filters += filter(type="alpha", x=mask_x, y=mask_y, icon=mask_icon, flags=added_flag)
+				else
+					A.filters += filter(type="alpha", x=mask_x, y=mask_y, render_source=mask_target, flags=added_flag)
+
+			if ("angular_blur")
+				var/blur_x = input(usr, "Choose the horizontal center of effect, in pixels, relative to image center", "New Filter Effect (Angular Blur)", 0) as null|num
+				if (blur_x == null)
+					return
+
+				var/blur_y = input(usr, "Choose the vertical center of effect, in pixels, relative to image center", "New Filter Effect (Angular Blur)", 0) as null|num
+				if (blur_y == null)
+					return
+
+				var/blur_size = input(usr, "Choose the amount of blur", "New Filter Effect (Angular Blur)", 1) as null|num
+				if (blur_size == null)
+					return
+
+				var/blur_offset = input(usr, "Choose the pixel radius before blurring occurs ", "New Filter Effect (Angular Blur)", 0) as null|num
+				if (blur_offset == null)
+					return
+
+				A.filters += filter(type="angular_blur", x=blur_x, y=blur_y, size=blur_size, offset=blur_offset)
+
+			if ("bloom")
+				var/bloom_threshold = input(usr, "Choose the color threshold for bloom", "New Filter Effect (Bloom)", null) as null|color
+				if (bloom_threshold == null)
+					return
+
+				var/bloom_size = input(usr, "Choose the blur radius of bloom effect (please avoid going above 6!)", "New Filter Effect (Bloom)", 1) as null|num
+				if (bloom_size == null)
+					return
+
+				var/bloom_offset = input(usr, "Choose the growth/outline radius of bloom effect before blur", "New Filter Effect (Bloom)", 0) as null|num
+				if (bloom_size == null)
+					return
+
+				var/bloom_alpha = input(usr, "Choose the opacity of effect", "New Filter Effect (Bloom)", 255) as null|num
+				if (bloom_size == null)
+					return
+
+				A.filters += filter(type="bloom", threshold=bloom_threshold, size=bloom_size, offset=bloom_offset, alpha=bloom_alpha)
+
+			if ("drop_shadow")
+				var/shadow_x = input(usr, "Choose the shadow's horizontal offset", "New Filter Effect (Drop Shadow)", 1) as null|num
+				if (shadow_x == null)
+					return
+
+				var/shadow_y = input(usr, "Choose the shadow's vertical offset", "New Filter Effect (Drop Shadow)", -1) as null|num
+				if (shadow_y == null)
+					return
+
+				var/shadow_blur = input(usr, "Choose the blur amount (negative values create inset shadows)", "New Filter Effect (Drop Shadow)", 1) as null|num
+				if (shadow_blur == null)
+					return
+
+				var/shadow_offset = input(usr, "Choose the size increase before blur ", "New Filter Effect (Drop Shadow)", 0) as null|num
+				if (shadow_offset == null)
+					return
+
+				var/shadow_color = input(usr, "Choose the shadow's color", "New Filter Effect (Drop Shadow)", null) as null|color
+				if (shadow_color == null)
+					return
+
+				A.filters += filter(type="drop_shadow", x=shadow_x, y=shadow_y, size=shadow_blur, offset=shadow_offset, color=shadow_color)
+
+			if ("blur")
+				var/blur_size = input(usr, "Choose the amount of blur (please avoid going above 6!)", "New Filter Effect (Gaussian Blur)", null) as null|num
+				if (blur_size == null)
+					return
+				//hopefully I won't have to add extra failsafes to deal with badmins setting blur size to 99999 or something like that
+
+				A.filters += filter(type="blur", size=blur_size)
+
+			if ("motion_blur")
+				var/motion_x = input(usr, "Choose the blur vector on the X axis", "New Filter Effect (Motion Blur)", 0) as null|num
+				if (motion_x == null)
+					return
+
+				var/motion_y = input(usr, "Choose the blur vector on the Y axis", "New Filter Effect (Motion Blur)", 0) as null|num
+				if (motion_y == null)
+					return
+
+				A.filters += filter(type="motion_blur", x=motion_x, y=motion_y)
+
+		message_admins("[key_name_admin(src)] added a [filter_name] effect to \the [A].", 1)
+		world.log << "### VarEdit by [src]: [A.type] [edited_variable]=[html_encode("[filter_name]")]"
+
+	else if(href_list["varnameremovefilter"] && href_list["datumremovefilter"])
+		if(!check_rights(R_VAREDIT))
+			return
+
+		var/atom/A = locate(href_list["datumremovefilter"])
+		if(!istype(A))
+			to_chat(usr, "This can only be used on instances of type /atom")
+			return
+
+		if (!A.filters?.len)
+			to_chat(usr, "There are no filters to remove")
+			return
+
+		var/edited_variable = href_list["varnameremovefilter"]
+
+		var/filter = input(usr, "Choose which filter to remove", "Removing Filter Effect", null) as null|anything in A.filters
+
+		if (!filter)
+			return
+
+		A.filters -= filter
+
+		message_admins("[key_name_admin(src)] removed a filter effect from \the [A].", 1)
+		world.log << "### VarEdit by [src]: [A.type] [edited_variable]=[html_encode("0")]"
 
 	else if(href_list["mob_player_panel"])
 		if(!check_rights(0))
