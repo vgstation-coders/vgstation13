@@ -742,6 +742,6 @@
 		reagent_filled = input(user,"Type a reagent ID for this thing to regenerate","Reagent ID on refill",WATER) as text
 		if(reagent_filled && reagent_filled != "")
 			reagents.clear_reagents()
-			if(reagents.add_reagent(reagent_filled, reagents.maximum_volume, admin = uesr))
-				to_chat(user, "<span class='warning'>[reagentDatum] doesn't exist.</span>")
+			if(reagents.add_reagent(reagent_filled, reagents.maximum_volume, admin = user))
+				to_chat(user, "<span class='warning'>[reagent_filled] doesn't exist.</span>")
 			update_icon()
