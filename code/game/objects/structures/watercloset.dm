@@ -573,7 +573,7 @@
 		if(M)
 			if(M.reagents.maximum_volume > M.reagents.total_volume)
 				playsound(src, 'sound/effects/slosh.ogg', 25, 1)
-				M.reagents.add_reagent(watersource.reagents.get_master_reagent_id(), min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
+				watersource.reagents.trans_to(src, min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
 				user.visible_message("<span class='notice'>[user] finishes soaking \the [M], \he could clean the entire station with that.</span>","<span class='notice'>You finish soaking \the [M], you feel as if you could clean anything now, even the Chef's backroom...</span>")
 			else
 				user.visible_message("<span class='notice'>[user] removes \the [M], cleaner than before.</span>","<span class='notice'>You remove \the [M] from \the [src], it's all nice and sparkly now but somehow didnt get it any wetter.</span>")
