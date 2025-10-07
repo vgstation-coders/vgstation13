@@ -1599,19 +1599,3 @@ var/obj/blend_test = null
 
 	score.badmin_score = input(usr,"What score do you want?","Badmin score",score.badmin_score) as num
 	score.badmin_override = alert(usr,"Override or add to the round-end score?","Badmin score","Override","Add") == "Override"
-
-var/admin_time_offset = 0
-
-/client/proc/set_round_time()
-	set category = "Debug"
-	set name = "Set station time offset"
-	set desc = "Manually adjust station time offset."
-
-	if(!check_rights(R_DEBUG))
-		return
-
-	var/hours = input(usr,"How many hours?","Round time",0) as num
-	var/mins = input(usr,"How many minutes?","Round time",0) as num
-	var/secs = input(usr,"How many seconds?","Round time",0) as num
-
-	admin_time_offset = (hours HOURS) + (mins MINUTES) + (secs SECONDS)

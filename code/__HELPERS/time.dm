@@ -43,6 +43,8 @@
 	return "[add_zero((round(timestamp / 36000) + 12) % 24, 2)]:[add_zero(round(timestamp / 600) % 60, 2)]\
 	[give_seconds ? ":[add_zero(round(timestamp / 10) % 60, 2)]" : ""]"
 
+var/admin_time_offset = 0
+
 /proc/get_round_time()
 	return (world.time - time_taken_to_init - time_taken_in_lobby) + admin_time_offset
 
