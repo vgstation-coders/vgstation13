@@ -713,6 +713,10 @@
 	create_reagents(200) //pretty heavy duty
 	reagents.add_reagent(reagent_filled,200)
 	processing_objects += src
+	update_icon()
+
+/obj/item/reagent_core/update_icon()
+	overlays.len = 0
 	var/image/over = image(icon,src,"reagentcore_overlay")
 	var/datum/reagent/R = chemical_reagents_list[reagent_filled]
 	if(R)
@@ -731,3 +735,13 @@
 	name = "acid core"
 	desc = "Anomalous bluespace device that provides sulphuric acid to plumbing sources."
 	reagent_filled = SACID
+
+/obj/item/reagent_core/admin/attack_self(mob/user)
+	. = ..()
+	if(user.check_rights(R_ADMIN))
+		reagent_filled = input(user,"Type a reagent ID for this thing to regenerate","Reagent ID on refill",WATER) as text
+		if(reagent_filled && reagent_filled != "")
+			reagents.clear_reagents()
+			if(reagents.add_reagent(reagent_filled, reagents.maximum_volume, admin = uesr))
+				to_chat(user, "<span class='warning'>[reagentDatum] doesn't exist.</span>")
+			update_icon()
