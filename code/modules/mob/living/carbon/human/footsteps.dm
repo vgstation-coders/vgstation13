@@ -89,3 +89,18 @@ var/list/sounds_snow = list(
     'sound/misc/snow4.ogg',
     'sound/misc/snow5.ogg',
     'sound/misc/snow6.ogg')
+
+var/list/sounds_sand = list(
+	'sound/effects/footstep/sand1.ogg',
+    'sound/effects/footstep/sand2.ogg',
+    'sound/effects/footstep/sand3.ogg',
+    'sound/effects/footstep/sand4.ogg',
+    'sound/effects/footstep/sand5.ogg',
+)
+
+var/list/sounds_water = list(
+	'sound/effects/footstep/water1.ogg',
+    'sound/effects/footstep/water2.ogg',
+    'sound/effects/footstep/water3.ogg',
+    'sound/effects/footstep/water4.ogg',
+)

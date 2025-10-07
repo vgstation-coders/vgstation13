@@ -1658,3 +1658,69 @@ var/alien_ship_location = 1 // 0 = base , 1 = mine
 		dat += "<br/>"
 
 	usr << browse(HTML_SKELETON(dat), "window=rodswindow;size=350x300")
+
+/datum/admins/proc/beasts_panel()
+
+	var/dat = {"<html>
+		<head>
+		<title>Megabeast Panel</title>
+		<style>
+		table,h2 {
+		font-family: Arial, Helvetica, sans-serif;
+		border-collapse: collapse;
+		}
+		td, th {
+		border: 1px solid #dddddd;
+		padding: 8px;
+		}
+		tr:nth-child(even) {
+		background-color: #dddddd;
+		}
+		</style>
+		</head>
+		<body>
+		<h2 style="text-align:center">Megabeast Panel</h2>
+		<table>
+		<tr>
+		<th style="width:1%">Mob</th>
+		<th style="width:1%">Name</th>
+		<th style="width:1%">Datum Info</th>
+		<th style="width:2%">Ability</th>
+		<th style="width:2%"><a href='?src=\ref[src];create_megabeast=1'>New</a></th><!-- Spawn a random FB -->
+		</tr>
+		"}
+
+	for(var/datum/procedural_mobspawn/ID in procgen_mob_datums)
+		var/abilityname = "None"
+		var/passivename = ""
+		if(ID.ranged)
+			if(ID.mybreath)
+				abilityname = "Breath: [ID.mybreath.name]"
+			else if(ID.projectiletype)
+				abilityname = "Projectile: [ID.projectiletype.name]"
+		if(ID.radioactive)
+			passivename += "Radiation Pulse"
+		if(ID.vapors)
+			passivename += "[ID.vapors.name] Smoke"
+
+		dat += {"<tr>
+			<td>[bicon(ID)]</td>
+			<td>[ID.name]</td>
+			<td><a href='?_src_=vars;Vars=\ref[ID]'>\[VV\]</a> <a href='?_src_=vars;mark_object=\ref[ID]'>\[mark datum\]</a></td>
+			<td>[abilityname]<br>[passivename]</br></td>
+			<td><a href='?src=\ref[src];create_megabeast=\ref[ID]'>Spawn</a></td><!-- Spawn this FB specifically.-->
+			</tr>
+			"}//<FONT SIZE=2><A href='?src=\ref[src];ac_censor_channel_author=\ref[src.admincaster_feed_channel]'>[(src.admincaster_feed_channel.author=="\[REDACTED\]") ? ("Undo Author censorship") : ("Censor channel Author")]</A></FONT><HR>
+
+	dat += {"</table>
+		</body>
+		</html>
+		"}
+
+	usr << browse(HTML_SKELETON(dat), "window=beastspanel;size=840x450")
+
+/datum/admins/proc/create_megabeast(var/datum/procedural_mobspawn/add_template)
+	if(!add_template)
+		new /datum/procedural_mobspawn()
+		return
+	new /mob/living/simple_animal/hostile/forgotten_beast(get_turf(usr), add_template)

@@ -89,8 +89,9 @@ var/list/admin_verbs_admin = list(
 	/client/proc/body_archive_panel,
 	/client/proc/climate_panel,
 	/datum/admins/proc/ashInvokedEmotions,	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
-	/client/proc/toggle_admin_examine
-)
+	/client/proc/toggle_admin_examine,
+	/client/proc/beasts_panel	/* Lists all forgotten beasts generated, along with their characteristics */
+	)
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
 	/client/proc/jobbans,
@@ -1429,3 +1430,11 @@ fieldset {width:140px;}
 		to_chat(usr, "<span class='notice'>You toggle [holder.admin_examine ? "on" : "off"] admin examining.")
 	feedback_add_details("admin_verb","admin_examine")
 	return
+
+/client/proc/beasts_panel()
+	set name = "Megabeast Panel"
+	set category = "Admin"
+	if(holder)
+		holder.beasts_panel()
+		log_admin("[key_name(usr)] checked the Megabeast Panel.")
+	feedback_add_details("admin_verb","BST")
