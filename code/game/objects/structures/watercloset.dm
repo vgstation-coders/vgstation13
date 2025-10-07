@@ -744,4 +744,9 @@
 			reagents.clear_reagents()
 			if(reagents.add_reagent(reagent_filled, reagents.maximum_volume, admin = user))
 				to_chat(user, "<span class='warning'>[reagent_filled] doesn't exist.</span>")
+				return
+			var/datum/reagent/R = chemical_reagents_list[reagent_filled]
+			if(R)
+				name = "[R.name] core"
+				desc = "Anomalous bluespace device that provides [R.name] to plumbing sources."
 			update_icon()
