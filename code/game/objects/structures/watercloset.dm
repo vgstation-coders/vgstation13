@@ -542,7 +542,7 @@
 		to_chat(M, "<span class='warning'>Someone's already washing here.</span>")
 		return
 
-	if(!watersource || watersource.reagents.is_empty())
+	if(!watersource || !watersource.reagents || watersource.reagents.is_empty())
 		M.visible_message("<span class='warning'>The tap runs dry! Refuel the reservoir.</span>")
 		return 1
 
@@ -551,10 +551,23 @@
 	busy = TRUE
 	if (do_after(M,src, 40))
 		M.clean_blood()
+		M.visible_message("<span class='notice'>[M] washes \his hands using \the [src].</span>","<span class='notice'>You wash your hands using \the [src].</span>")
 		if(ishuman(M))
 			var/mob/living/carbon/human/HM = M
 			HM.update_inv_gloves()
-		M.visible_message("<span class='notice'>[M] washes \his hands using \the [src].</span>","<span class='notice'>You wash your hands using \the [src].</span>")
+			//normally the below line would handle reagents on hands but this hotcode has to stay because while writing this PR i didn't want to touch acid reaction code again.
+			if(HM.species)
+				var/flag = (HM.species.anatomy_flags & ACID4WATER) && watersource.reagents.has_reagent(WATER)
+				if(watersource.reagents.has_any_reagents(ACIDS))
+					flag = !flag
+				if(flag)
+					if(HM.gloves) //This should make it so any ayy who isn't wearing gloves will get some burns
+						to_chat(HM, "<span class='warning'>Your gloves block direct contact with the [reagent_name].</span>")
+					else
+						to_chat(HM, "<span class='warning'>The [reagent_name] burns your hands!</span>")
+						HM.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
+						HM.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
+					return
 		watersource.reagents.reaction(M, TOUCH, zone_sels = list(LIMB_LEFT_HAND,LIMB_RIGHT_HAND))
 	busy = FALSE
 
