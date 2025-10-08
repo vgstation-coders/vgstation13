@@ -100,11 +100,6 @@
 	turf_biome_cache = list()
 	return ..()
 
-/datum/planetGenerator/proc/generate_turfs(var/list/turfs)
-	for(var/turf/current_turf in turfs)
-		generate_turf(current_turf)
-		CHECK_TICK
-
 /datum/planetGenerator/proc/generate_turf(turf/gen_turf)
 	var/area/turf_area = get_area(gen_turf)
 	if(!(turf_area.flags & CAVES_ALLOWED))
@@ -115,16 +110,6 @@
 	// Determine which area to use based on biome type
 	var/area/used_area = istype(turf_biome, /datum/biome/cave) ? cave_area : primary_area
 	turf_biome.generate_turf(gen_turf, used_area, cave_automaton_data)
-
-/datum/planetGenerator/proc/populate_turfs(var/list/turfs)
-	created_features = list()
-	created_mobs = list()
-	for(var/turf/current_turf in turfs)
-		populate_turf(current_turf)
-		CHECK_TICK
-	// Clear temporary lists to prevent hard deletions
-	created_features = null
-	created_mobs = null
 
 /datum/planetGenerator/proc/populate_turf(turf/gen_turf)
 	var/datum/biome/turf_biome = get_biome(gen_turf)

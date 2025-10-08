@@ -12,13 +12,20 @@
  * * Handling planet-specific map generation and climate systems
  */
 
+#define STAGE_TERRAIN 1
+#define STAGE_RUIN 2
+#define STAGE_POPULATION 3
+#define STAGE_WEATHER 4
+#define STAGE_FINALIZE 5
+
 var/datum/subsystem/mapping/SSmapping
 
 /datum/subsystem/mapping
 	name       = "Map"
 	init_order = SS_INIT_MAP
-	flags      = SS_NO_FIRE
+	flags      = SS_BACKGROUND
 	priority   = SS_PRIORITY_MAPPING
+	wait       = 0.5 SECONDS
 
 	/// All possible biomes in assoc list as type || instance
 	var/list/biomes = list()
@@ -44,9 +51,59 @@ var/datum/subsystem/mapping/SSmapping
 	/// Start time for generation tracking
 	var/generation_start_time = 0
 
+	// Queue-based processing variables
+	/// Current processing stage: STAGE_TERRAIN, STAGE_POPULATION, STAGE_WEATHER, or STAGE_FINALIZE
+	var/current_stage = null
+	/// Queue of turfs for terrain generation
+	var/list/terrain_queue = list()
+	/// Queue of turfs for population
+	var/list/population_queue = list()
+	/// Current position in the active queue
+	var/queue_index = 1
+	/// The mapgen instance for the current planet
+	var/datum/planetGenerator/current_mapgen
+	/// The ruin type to place on the current planet
+	var/current_ruin_type
+	/// Features created during population
+	var/list/created_features = list()
+	/// Mobs created during population
+	var/list/created_mobs = list()
+	/// Base turfs processed per tick (adjusted dynamically)
+	var/turfs_per_tick = 200
+	/// Maximum turfs to process per tick
+	var/max_turfs_per_tick = 1000
+	/// Minimum turfs to process per tick
+	var/min_turfs_per_tick = 50
+
 /datum/subsystem/mapping/New()
 	NEW_SS_GLOBAL(SSmapping)
 
+/datum/subsystem/mapping/stat_entry(msg)
+	if(!generating)
+		return ..("Idle")
+
+	var/stage_name
+	var/progress = 0
+	switch(current_stage)
+		if(STAGE_TERRAIN)
+			stage_name = "Terrain"
+			if(terrain_queue.len > 0)
+				progress = round((queue_index / terrain_queue.len) * 100, 0.1)
+		if(STAGE_RUIN)
+			stage_name = "Ruin"
+			progress = 100
+		if(STAGE_POPULATION)
+			stage_name = "Population"
+			if(population_queue.len > 0)
+				progress = round((queue_index / population_queue.len) * 100, 0.1)
+		if(STAGE_WEATHER)
+			stage_name = "Weather"
+			progress = 100
+		if(STAGE_FINALIZE)
+			stage_name = "Finalize"
+			progress = 100
+
+	return ..("[stage_name] [progress]% | TpT:[turfs_per_tick]")
 
 /datum/subsystem/mapping/Initialize(timeofday)
 	if (config.enable_roundstart_away_missions)
@@ -97,6 +154,133 @@ var/datum/subsystem/mapping/SSmapping
 	log_startup_progress("Finished initializing procgen in [stop_watch(watch)]s.")
 
 	..()
+
+/datum/subsystem/mapping/fire(resumed = FALSE)
+	if(!generating)
+		return
+
+	var/tick_start = world.tick_usage
+	var/turfs_processed = 0
+	var/target_turfs = turfs_per_tick
+
+	switch(current_stage)
+		if(STAGE_TERRAIN)
+			while(queue_index <= terrain_queue.len && turfs_processed < target_turfs)
+				var/turf/T = terrain_queue[queue_index]
+				if(T)
+					current_mapgen.generate_turf(T)
+				queue_index++
+				turfs_processed++
+
+				if(MC_TICK_CHECK)
+					throttle(tick_start, turfs_processed)
+					return
+
+			if(queue_index > terrain_queue.len)
+				current_stage = STAGE_RUIN
+				queue_index = 1
+			else
+				throttle(tick_start, turfs_processed)
+				return
+
+		if(STAGE_RUIN)
+			if(current_ruin_type)
+				var/datum/map_element/mining_surprise/used_ruin = ispath(current_ruin_type) ? (new current_ruin_type) : current_ruin_type
+				place_ruin_in_allocation(used_ruin, current_allocation)
+
+			current_stage = STAGE_POPULATION
+			queue_index = 1
+			created_features = list()
+			created_mobs = list()
+			turfs_processed = 0
+
+		if(STAGE_POPULATION)
+			while(queue_index <= population_queue.len && turfs_processed < target_turfs)
+				var/turf/T = population_queue[queue_index]
+				if(T)
+					current_mapgen.populate_turf(T, created_features, created_mobs, current_mapgen.planet_loot)
+				queue_index++
+				turfs_processed++
+
+				if(MC_TICK_CHECK)
+					throttle(tick_start, turfs_processed)
+					return
+
+			if(queue_index > population_queue.len)
+				current_stage = STAGE_WEATHER
+				queue_index = 1
+			else
+				throttle(tick_start, turfs_processed)
+				return
+
+		if(STAGE_WEATHER)
+			if(current_planet.climate_type)
+				current_planet.climate = SSweather.set_climate(current_planet.climate_type, world.maxz, current_allocation)
+				register_weather_turfs(current_planet.climate, current_mapgen, current_allocation)
+				SSweather.fire()
+
+			current_stage = STAGE_FINALIZE
+			queue_index = 1
+
+		if(STAGE_FINALIZE)
+			current_planet.build_daynight_turflist()
+
+			var/list/possible_times = list(TOD_MORNING, TOD_SUNRISE, TOD_DAYTIME, TOD_AFTERNOON, TOD_SUNSET, TOD_NIGHTTIME)
+			current_planet.current_timeOfDay = pick(possible_times)
+
+			switch(current_planet.current_timeOfDay)
+				if(TOD_MORNING) current_planet.next_firetime = world.time + 5 MINUTES
+				if(TOD_SUNRISE) current_planet.next_firetime = world.time + 3 MINUTES
+				if(TOD_DAYTIME) current_planet.next_firetime = world.time + 14 MINUTES
+				if(TOD_AFTERNOON) current_planet.next_firetime = world.time + 15 MINUTES
+				if(TOD_SUNSET) current_planet.next_firetime = world.time + 3 MINUTES
+				if(TOD_NIGHTTIME) current_planet.next_firetime = world.time + 36 MINUTES
+
+			SSDayNight.update_planet_lighting(current_planet, immediate = TRUE)
+
+			var/total_time = (world.timeofday - generation_start_time) / 10
+			message_admins("Planet '[current_planet.planet_name]' generated successfully at z-level [world.maxz] in [total_time]s")
+
+			generating = FALSE
+			current_planet = null
+			current_allocation = null
+			current_stage = null
+			current_mapgen = null
+			current_ruin_type = null
+			terrain_queue = list()
+			population_queue = list()
+			queue_index = 1
+			created_features = null
+			created_mobs = null
+
+	// Adjust processing rate based on performance
+	if(turfs_processed > 0)
+		throttle(tick_start, turfs_processed)
+
+/**
+ * Adjusts the turfs_per_tick based on current tick usage
+ *
+ * Increases rate if we're using less than 50% of tick, decreases if using more than 80%
+ *
+ * Arguments:
+ * * tick_start - Tick usage at the start of processing
+ * * turfs_processed - Number of turfs processed this tick
+ */
+/datum/subsystem/mapping/proc/throttle(tick_start, turfs_processed)
+	var/tick_used = world.tick_usage - tick_start
+
+	// If we used less than 30% of tick, increase rate significantly
+	if(tick_used < 30 && turfs_per_tick < max_turfs_per_tick)
+		turfs_per_tick = min(turfs_per_tick + 100, max_turfs_per_tick)
+	// If we used less than 50% of tick, increase rate moderately
+	else if(tick_used < 50 && turfs_per_tick < max_turfs_per_tick)
+		turfs_per_tick = min(turfs_per_tick + 50, max_turfs_per_tick)
+	// If we used more than 80% of tick, decrease rate
+	else if(tick_used > 80 && turfs_per_tick > min_turfs_per_tick)
+		turfs_per_tick = max(turfs_per_tick - 100, min_turfs_per_tick)
+	// If we used more than 70% of tick, decrease rate moderately
+	else if(tick_used > 70 && turfs_per_tick > min_turfs_per_tick)
+		turfs_per_tick = max(turfs_per_tick - 50, min_turfs_per_tick)
 
 /proc/generate_planet(mob/user)
 	if(!user)
@@ -155,6 +339,8 @@ var/datum/subsystem/mapping/SSmapping
  * The generation process includes terrain generation, ruin placement, population,
  * weather registration, and day/night cycle initialization.
  *
+ * The generation is handled by the subsystem's fire() proc through a queue-based system.
+ *
  * Arguments:
  * * planet_datum - The planet type path or instance to spawn
  * * ruin_type - Optional ruin type to place on the planet
@@ -167,64 +353,26 @@ var/datum/subsystem/mapping/SSmapping
 		message_admins("Planet generation already in progress! Please wait for '[current_planet.planet_name]' to complete.")
 		return FALSE
 
+	// Initialize generation state
 	generating = TRUE
 	generation_start_time = world.timeofday
 	current_planet = new planet_datum
-	var/datum/planetGenerator/mapgen = new current_planet.mapgen
+	current_mapgen = new current_planet.mapgen
 	current_allocation = assign_allocation(current_planet, world.maxz)
+	current_ruin_type = ruin_type
 	planets += current_planet
 
-	spawn(0)
-		var/turfs_processed = 0
+	// Populate terrain generation queue
+	terrain_queue = current_allocation.turfs.Copy()
 
-		for(var/turf/T in current_allocation.turfs)
-			mapgen.generate_turf(T)
-			turfs_processed++
-			if(!(turfs_processed % 100))
-				CHECK_TICK
+	// Populate population queue with all sector turfs
+	population_queue = turfs_from_sector(current_allocation.sector, world.maxz)
 
-		if(ruin_type)
-			var/datum/map_element/mining_surprise/used_ruin = ispath(ruin_type) ? (new ruin_type) : ruin_type
-			place_ruin_in_allocation(used_ruin, current_allocation)
+	// Start at terrain generation stage
+	current_stage = STAGE_TERRAIN
+	queue_index = 1
 
-		turfs_processed = 0
-		var/list/sector_turfs = turfs_from_sector(current_allocation.sector, world.maxz)
-		var/list/created_features = list()
-		var/list/created_mobs = list()
-
-		for(var/turf/T in sector_turfs)
-			mapgen.populate_turf(T, created_features, created_mobs, mapgen.planet_loot)
-			turfs_processed++
-			if(!(turfs_processed % 100))
-				CHECK_TICK
-
-		if(current_planet.climate_type)
-			current_planet.climate = SSweather.set_climate(current_planet.climate_type, world.maxz, current_allocation)
-			register_weather_turfs(current_planet.climate, mapgen, current_allocation)
-			SSweather.fire()
-
-		current_planet.build_daynight_turflist()
-
-		var/list/possible_times = list(TOD_MORNING, TOD_SUNRISE, TOD_DAYTIME, TOD_AFTERNOON, TOD_SUNSET, TOD_NIGHTTIME)
-		current_planet.current_timeOfDay = pick(possible_times)
-
-		switch(current_planet.current_timeOfDay)
-			if(TOD_MORNING) current_planet.next_firetime = world.time + 5 MINUTES
-			if(TOD_SUNRISE) current_planet.next_firetime = world.time + 3 MINUTES
-			if(TOD_DAYTIME) current_planet.next_firetime = world.time + 14 MINUTES
-			if(TOD_AFTERNOON) current_planet.next_firetime = world.time + 15 MINUTES
-			if(TOD_SUNSET) current_planet.next_firetime = world.time + 3 MINUTES
-			if(TOD_NIGHTTIME) current_planet.next_firetime = world.time + 36 MINUTES
-
-		SSDayNight.update_planet_lighting(current_planet, immediate = TRUE)
-
-		// Finalize
-		var/total_time = (world.timeofday - generation_start_time) / 10
-		message_admins("Planet '[current_planet.planet_name]' generated successfully at z-level [world.maxz] in [total_time]s")
-
-		generating = FALSE
-		current_planet = null
-		current_allocation = null
+	message_admins("Started generating planet '[current_planet.planet_name]' at z-level [world.maxz] (Sector [current_allocation.sector[1]],[current_allocation.sector[2]]). [terrain_queue.len] turfs to process.")
 
 	return TRUE
 
@@ -617,3 +765,9 @@ var/datum/subsystem/mapping/SSmapping
 	var/list/turf/turfs = list()
 	/// Tracks persistent shuttle landing zones - associative list: shuttle_type -> docking_port
 	var/list/shuttle_landing_zones = list()
+
+#undef STAGE_TERRAIN
+#undef STAGE_RUIN
+#undef STAGE_POPULATION
+#undef STAGE_WEATHER
+#undef STAGE_FINALIZE
