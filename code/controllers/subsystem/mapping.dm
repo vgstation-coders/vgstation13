@@ -625,6 +625,7 @@ var/datum/subsystem/mapping/SSmapping
 	for(var/datum/allocation/A in allocations)
 		if(A.sector[1] == sector_x && A.sector[2] == sector_y && A.z == z)
 			return A
+	return z //return the z level if no allocation found
 
 /**
  * Finds a suitable landing zone for a shuttle on a planet

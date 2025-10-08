@@ -463,6 +463,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/exposed_damage = 0 //damage per tick to unprotected limbs
 	var/damage_type = BRUTE //type of damage to deal
 	var/slowdown = 0 //speed reduction to apply to mobs
+	var/vision_reduction = 0 //tiles of vision reduction (0 = none, 1 = slight, 3 = significant)
 
 /datum/weather/New(var/datum/climate/C)
 	parent = C
@@ -487,15 +488,25 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	timeleft -= SS_WAIT_WEATHER
 	weathertracker[name] += SS_WAIT_WEATHER
 
+
 /datum/weather/proc/weather_details()
 	return //additional info to report to the climate computer
 
 /datum/weather/proc/get_weather_affected_players()
 	var/list/playerlist = list()
+	var/list/players_near_weather = list()
+
 	if(parent.allocation)
-		playerlist = mobs_in_allocation(parent.allocation, client_needed = TRUE)
+		players_near_weather = mobs_in_allocation(parent.allocation, client_needed = TRUE)
 	else
-		playerlist = mobs_in_zlevel(parent.z,client_needed = TRUE)
+		players_near_weather = mobs_in_zlevel(parent.z, client_needed = TRUE)
+
+	// Filter to only players in open surface areas (not caves/indoors)
+	for(var/mob/M in players_near_weather)
+		var/area/A = get_area(M)
+		if(A && isopensurface(A))
+			playerlist += M
+
 	return playerlist
 
 /datum/weather/proc/update_weather_sounds()
@@ -585,6 +596,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	precip_estimate = "about 1.5cm/minute (light)"
 	weather_sound = 'sound/misc/snowstorm/snowfall_average.ogg'
 	weather_sound_volume = 40
+	vision_reduction = 1
 
 /datum/weather/snow/light/execute()
 	..()
@@ -601,6 +613,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	precip_estimate = "<font color='orange'>about 4.8cm/minute (heavy)</font>"
 	weather_sound = 'sound/misc/snowstorm/snowfall_hard.ogg'
 	weather_sound_volume = 60
+	vision_reduction = 2
 
 /datum/weather/snow/heavy/execute()
 	..()
@@ -618,6 +631,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	precip_estimate = "<font color='red'>about 10.8cm/minute (ALERT)</font>"
 	weather_sound = 'sound/misc/snowstorm/snowfall_blizzard.ogg'
 	weather_sound_volume = 80
+	vision_reduction = 3
 
 /datum/weather/snow/blizzard/execute()
 	..()
@@ -671,6 +685,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	precip_estimate = "<font color='orange'>about 50mm/hour (heavy)</font>"
 	weather_sound = 'sound/effects/weather/rain_heavy.ogg'
 	weather_sound_volume = 60
+	vision_reduction = 1
 
 /datum/weather/cloudy/storm
 	name = "severe thunderstorm"
@@ -682,6 +697,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/list/thunder_sounds = list('sound/effects/weather/thunder1.ogg', 'sound/effects/weather/thunder2.ogg', 'sound/effects/weather/thunder3.ogg')
 	weather_sound = 'sound/effects/weather/rain_storm.ogg'
 	weather_sound_volume = 80
+	vision_reduction = 2
 
 /datum/weather/cloudy/storm/tick()
 	..()
@@ -737,6 +753,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	weather_sound = 'sound/effects/wind/wind_4_1.ogg'
 	weather_sound_volume = 50
 	slowdown =  0.9
+	vision_reduction = 1
 
 /datum/weather/sand_storm
 	name = "sand storm"
@@ -748,6 +765,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	weather_sound = 'sound/effects/wind/wind_5_1.ogg'
 	weather_sound_volume = 80
 	slowdown = 0.7
+	vision_reduction = 3
 
 /datum/weather/heatwave
 	name = "heatwave"
@@ -778,6 +796,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	damage_type = BURN
 	weather_sound = 'sound/effects/wind/wind_4_1.ogg'
 	weather_sound_volume = 50
+	vision_reduction = 1
 
 /datum/weather/ash/storm
 	name = "ash storm"
@@ -789,6 +808,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	damage_type = BURN
 	weather_sound = 'sound/effects/wind/wind_5_1.ogg'
 	weather_sound_volume = 80
+	vision_reduction = 2
 
 
 /datum/weather/fallout
@@ -809,6 +829,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	exposed_damage = 2
 	weather_sound = 'sound/effects/wind/wind_5_1.ogg'
 	weather_sound_volume = 80
+	vision_reduction = 1
 
 /datum/weather/cloudy/rain/toxic
 	name = "toxic rain"
@@ -821,6 +842,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	precip_intensity = WEATHER_EXTREME
 	exposed_damage = 2
 	damage_type = TOX
+	vision_reduction = 1
 
 /datum/weather/cloudy/rain/acid
 	name = "acid rain"
@@ -833,3 +855,4 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	precip_intensity = WEATHER_HEAVY
 	exposed_damage = 2
 	damage_type = BURN
+	vision_reduction = 1

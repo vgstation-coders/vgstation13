@@ -33,6 +33,17 @@ var/list/precip_state_to_texture = list()
 				return C
 	return null
 
+// Get the climate for a specific turf by checking its allocation or z-level
+/datum/subsystem/weather/proc/get_climate_from_turf(var/turf/T)
+	if(!T)
+		return null
+
+	var/datum/allocation/A = SSmapping.get_allocation(trf = T)
+	if(A)
+		return get_climate(T.z, A)
+	else
+		return get_climate(T.z)
+
 // Set the climate for a specific z-level. Uses an allocation if provided.
 /datum/subsystem/weather/proc/set_climate(var/datum/climate/climate_type, var/z = 1, var/datum/allocation/A = null)
 	if(A)
