@@ -567,6 +567,7 @@
 						to_chat(HM, "<span class='warning'>The [watersource.reagents.get_master_reagent_name()] burns your hands!</span>")
 						HM.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
 						HM.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
+					busy = FALSE
 					return
 		watersource.reagents.reaction(M, TOUCH, zone_sels = list(LIMB_LEFT_HAND,LIMB_RIGHT_HAND))
 	busy = FALSE
