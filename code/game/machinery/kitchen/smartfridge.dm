@@ -363,6 +363,11 @@
 
 /obj/machinery/smartfridge/mini/New()
 	. = ..()
+	if(map.nameShort == "deff")
+		icon_state = "minifridge_black"
+		icon_on = "minifridge_black"
+		icon_off = "minifridge_black-off"
+		icon_broken = "minifridge_black-broken"
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/small/minifridge,
@@ -374,6 +379,35 @@
 	)
 
 	RefreshParts()
+
+/obj/machinery/smartfridge/mini/attackby(obj/item/W, mob/user)
+	if (istype(W, /obj/item/toy/crayon/black) && icon_on == "minifridge")
+		user.visible_message("<span class='notice'>[user] starts coloring the case of \the [src].</span>", \
+							"<span class='notice'>You start coloring the case of \the [src].</span>")
+		if(do_after(user,src,3 SECONDS))
+			user.visible_message("<span class='notice'>[user] finishes coloring \the [src].</span>", \
+							"<span class='notice'>You finish coloring \the [src].</span>")
+			icon_state = "minifridge_black"
+			icon_on = "minifridge_black"
+			icon_off = "minifridge_black-off"
+			icon_broken = "minifridge_black-broken"
+			update_icon()
+		return
+	if (istype(W, /obj/item/weapon/soap) && icon_on != "minifridge")
+		user.visible_message("<span class='notice'>[user] starts cleaning the color off of the case of \the [src].</span>", \
+							"<span class='notice'>You start cleaning the color off of the case of \the [src].</span>")
+		if(do_after(user,src,3 SECONDS))
+			user.visible_message("<span class='notice'>[user] finishes cleaning \the [src].</span>", \
+							"<span class='notice'>You finish cleaning \the [src].</span>")
+			var/obj/item/weapon/soap/used_soap = W
+			used_soap.on_successful_use(user)
+			icon_state = "minifridge"
+			icon_on = "minifridge"
+			icon_off = "minifridge-off"
+			icon_broken = "minifridge-broken"
+			update_icon()
+		return
+	. = ..()
 
 //Default wrench time is standard for a minifridge, no 10 SECONDS wait needed!
 /obj/machinery/smartfridge/mini/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
