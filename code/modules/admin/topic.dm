@@ -844,7 +844,9 @@
 		var/datum/planet_type/planet = locate(href_list["procgen_jump"])
 		if(planet?.allocation)
 			var/datum/allocation/alloc = planet.allocation
-			var/turf/jump_target = locate(alloc.sector[1] * 50, alloc.sector[2] * 50, alloc.z)
+			var/center_x = alloc.sector[1] * SECTOR_SIZE - (SECTOR_SIZE / 2)
+			var/center_y = alloc.sector[2] * SECTOR_SIZE - (SECTOR_SIZE / 2)
+			var/turf/jump_target = locate(center_x, center_y, alloc.z)
 			if(jump_target)
 				SendAdminGhostTo(jump_target, null)
 				to_chat(usr, "<span class='notice'>Jumped to planet [planet.name] at sector [alloc.sector[1]], [alloc.sector[2]] on z-level [alloc.z].</span>")

@@ -362,6 +362,11 @@ var/datum/subsystem/mapping/SSmapping
 	current_ruin_type = ruin_type
 	planets += current_planet
 
+	// Set base_turf_type on areas so explosions reveal the correct turf
+	if(current_planet.default_baseturf)
+		current_mapgen.primary_area.base_turf_type = current_planet.default_baseturf
+		current_mapgen.cave_area.base_turf_type = current_planet.default_baseturf
+
 	// Populate terrain generation queue
 	terrain_queue = current_allocation.turfs.Copy()
 
