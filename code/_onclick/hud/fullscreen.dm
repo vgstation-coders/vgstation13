@@ -199,6 +199,7 @@
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	icon_state = "science"
+	blend_mode = BLEND_MULTIPLY
 
 /obj/abstract/screen/fullscreen/snowfall_blizzard
 	icon_state = "oxydamageoverlay7"
