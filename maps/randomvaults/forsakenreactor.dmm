@@ -179,6 +179,13 @@
 /obj/structure/lattice,
 /turf/simulated/floor/foamedmetal,
 /area/vault/forsakenreactor)
+"bZ" = (
+/obj/machinery/light/he,
+/turf/simulated/floor{
+	icon_state = "yellowcornersiding";
+	tag = "icon-yellowcornersiding (WEST)"
+	},
+/area/vault/forsakenreactor)
 "cj" = (
 /obj/machinery/door/airlock/glass_medical{
 	id_tag = "MedbayFoyerL";
@@ -1317,9 +1324,13 @@
 	},
 /area/vault/forsakenreactor)
 "rJ" = (
-/obj/structure/girder/reinforced,
-/turf/simulated/floor/plating{
-	misc_gases = list("radon" = 5000)
+/obj/machinery/light/he/broken{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
 	},
 /area/vault/forsakenreactor)
 "rS" = (
@@ -1562,6 +1573,12 @@
 	tag = "icon-dark brown stripe (NORTH)"
 	},
 /area/vault/forsakenreactor)
+"uY" = (
+/obj/machinery/light/he/broken{
+	dir = 8
+	},
+/turf/simulated/floor/damaged,
+/area/vault/forsakenreactor)
 "vc" = (
 /obj/machinery/door/airlock/medical{
 	name = "Operating Theatre";
@@ -1610,6 +1627,14 @@
 /obj/machinery/door/airlock/glass_atmos,
 /turf/simulated/floor{
 	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"vY" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	misc_gases = list("radon" = 5000)
 	},
 /area/vault/forsakenreactor)
 "ws" = (
@@ -2201,6 +2226,9 @@
 /area/vault/forsakenreactor)
 "GB" = (
 /obj/structure/flora/pottedplant/random,
+/obj/machinery/light/he{
+	dir = 8
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "yellowsiding";
@@ -2744,6 +2772,16 @@
 	icon_state = "white"
 	},
 /area/vault/forsakenreactor)
+"Oj" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
 "Ov" = (
 /turf/simulated/floor{
 	dir = 4;
@@ -3143,6 +3181,14 @@
 	dir = 9;
 	icon_state = "dark brown stripe";
 	tag = "icon-dark brown stripe (NORTH)"
+	},
+/area/vault/forsakenreactor)
+"Wi" = (
+/obj/machinery/light/he,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellowcornersiding";
+	tag = "icon-yellowcornersiding (WEST)"
 	},
 /area/vault/forsakenreactor)
 "Wl" = (
@@ -3642,20 +3688,20 @@ pU
 eW
 pU
 pU
+Oj
 pU
 pU
 pU
-pU
-eW
-pU
+uY
 pU
 pU
+rJ
 pU
 pU
-wN
+vY
 pU
 pU
-pU
+Oj
 eW
 pU
 GB
@@ -4138,7 +4184,7 @@ DZ
 ir
 AA
 kA
-ny
+Wi
 PJ
 Be
 AK
@@ -4226,7 +4272,7 @@ bS
 ir
 no
 eW
-Rc
+bZ
 PJ
 oA
 AK
@@ -4257,7 +4303,7 @@ sa
 sN
 kA
 sa
-rJ
+AA
 Ro
 ir
 GD
