@@ -1319,7 +1319,7 @@
 "rJ" = (
 /obj/structure/girder/reinforced,
 /turf/simulated/floor/plating{
-	misc_gases = sss
+	misc_gases = list("radon" = 5000)
 	},
 /area/vault/forsakenreactor)
 "rS" = (
@@ -2417,7 +2417,7 @@
 "KL" = (
 /turf/simulated/floor{
 	icon_state = "dark";
-	toxins = 5000sssssss
+	toxins = 5000
 	},
 /area/vault/forsakenreactor)
 "KX" = (
