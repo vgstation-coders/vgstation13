@@ -562,9 +562,9 @@
 					flag = !flag
 				if(flag)
 					if(HM.gloves) //This should make it so any ayy who isn't wearing gloves will get some burns
-						to_chat(HM, "<span class='warning'>Your gloves block direct contact with the [reagent_name].</span>")
+						to_chat(HM, "<span class='warning'>Your gloves block direct contact with the [watersource.reagents.get_master_reagent_name()].</span>")
 					else
-						to_chat(HM, "<span class='warning'>The [reagent_name] burns your hands!</span>")
+						to_chat(HM, "<span class='warning'>The [watersource.reagents.get_master_reagent_name()] burns your hands!</span>")
 						HM.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
 						HM.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
 					return
