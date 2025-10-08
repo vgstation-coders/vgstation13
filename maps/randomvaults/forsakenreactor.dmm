@@ -204,9 +204,7 @@
 /area/vault/forsakenreactor)
 "cz" = (
 /obj/effect/landmark/corpse/engineer,
-/turf/simulated/floor/airless{
-	icon_state = "dark"
-	},
+/turf/simulated/floor,
 /area/vault/forsakenreactor)
 "cE" = (
 /obj/spacepod/taxi,
@@ -240,7 +238,7 @@
 	anchored = 1;
 	dir = 8
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -281,7 +279,7 @@
 	dir = 4;
 	tag = "icon-pathmarker (EAST)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -343,7 +341,7 @@
 /obj/machinery/light/he{
 	dir = 1
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -384,7 +382,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -413,7 +411,7 @@
 	dir = 4;
 	tag = "icon-pathmarker (EAST)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -429,7 +427,7 @@
 	dir = 4;
 	tag = "icon-pathmarker (EAST)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -486,7 +484,7 @@
 	},
 /obj/machinery/atmospherics/unary/portables_connector,
 /obj/effect/decal/warning_stripes/pathmarkers/blue,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -546,7 +544,7 @@
 /obj/machinery/light/he{
 	dir = 1
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -555,7 +553,7 @@
 	name = "Cold Gas Circulator";
 	dir = 4
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -574,7 +572,7 @@
 /obj/machinery/meter{
 	name = "Hot Loop"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -602,7 +600,7 @@
 	dir = 4;
 	tag = "icon-pathmarker (EAST)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -610,7 +608,7 @@
 /turf/space,
 /area/vault/forsakenreactor)
 "ir" = (
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -672,7 +670,7 @@
 /obj/machinery/light/he{
 	dir = 1
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -751,7 +749,7 @@
 	dir = 4;
 	icon_state = "plasma"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -778,7 +776,7 @@
 /area/vault/forsakenreactor)
 "kl" = (
 /obj/effect/landmark/corpse/cargotechnician,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -836,7 +834,7 @@
 	icon_state = "bot"
 	},
 /obj/machinery/portable_atmospherics/canister/radon,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -870,7 +868,7 @@
 /obj/machinery/atmospherics/binary/volume_pump{
 	dir = 1
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -899,7 +897,7 @@
 	icon_state = "bot"
 	},
 /obj/structure/closet/crate/secure/loot/ultramegameltdown_reactor_fuel,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1019,7 +1017,7 @@
 	name = "Engine Room";
 	req_one_access_txt = "11;24"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1032,13 +1030,15 @@
 	dir = 1;
 	tag = "icon-pathmarker (NORTH)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
 "nr" = (
 /obj/machinery/door/airlock/centcom,
-/turf/space,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/vault/forsakenreactor)
 "nu" = (
 /obj/structure/closet/secure_closet/personal/cabinet,
@@ -1116,6 +1116,13 @@
 	tag = "icon-yellowsiding (SOUTHEAST)"
 	},
 /area/vault/forsakenreactor)
+"oj" = (
+/obj/machinery/door/airlock/centcom,
+/obj/structure/window/barricade/full/block,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
 "oA" = (
 /turf/simulated/floor/damaged/airless,
 /area/vault/forsakenreactor)
@@ -1151,7 +1158,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (EAST)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1176,9 +1183,7 @@
 /obj/machinery/light/he/broken{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
-	icon_state = "dark"
-	},
+/turf/simulated/floor,
 /area/vault/forsakenreactor)
 "pC" = (
 /obj/machinery/shower{
@@ -1225,7 +1230,7 @@
 	name = "HIGH VOLTAGE";
 	pixel_x = -32
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1279,6 +1284,23 @@
 	tag = "icon-yellowsiding"
 	},
 /area/vault/forsakenreactor)
+"rm" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
 "rB" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden{
 	dir = 1
@@ -1295,11 +1317,10 @@
 	},
 /area/vault/forsakenreactor)
 "rJ" = (
-/obj/machinery/door/airlock/glass_medical{
-	name = "Chemistry Lab";
-	req_access_txt = "5; 33"
+/obj/structure/girder/reinforced,
+/turf/simulated/floor/plating{
+	misc_gases = sss
 	},
-/turf/space,
 /area/vault/forsakenreactor)
 "rS" = (
 /turf/simulated/floor/plating,
@@ -1350,7 +1371,7 @@
 	dir = 1;
 	tag = "icon-pathmarker (NORTH)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1360,7 +1381,7 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1391,7 +1412,7 @@
 	icon_state = "green-1";
 	name = "Canister \[Rn\]"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1402,7 +1423,7 @@
 	name = "VACUUM";
 	pixel_y = -32
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1497,7 +1518,7 @@
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1507,7 +1528,7 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1587,7 +1608,7 @@
 /area/vault/forsakenreactor)
 "vC" = (
 /obj/machinery/door/airlock/glass_atmos,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1595,10 +1616,6 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 1
@@ -1611,8 +1628,13 @@
 	},
 /obj/item/stack/sheet/metal,
 /obj/item/stack/sheet/metal,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"wN" = (
+/turf/simulated/floor/plating{
+	misc_gases = list("radon" = 5000)
 	},
 /area/vault/forsakenreactor)
 "wU" = (
@@ -1716,7 +1738,7 @@
 	tag = "icon-pathmarker (NORTH)"
 	},
 /obj/effect/decal/warning_stripes/pathmarkers/red,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1832,7 +1854,7 @@
 /obj/item/pizzabox/meat,
 /obj/item/pizzabox/meat,
 /obj/structure/closet/crate,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1862,7 +1884,7 @@
 	dir = 4;
 	icon_state = "plasma"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1876,9 +1898,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "plasma"
 	},
-/turf/simulated/floor/airless{
-	icon_state = "dark"
-	},
+/turf/simulated/floor,
 /area/vault/forsakenreactor)
 "AP" = (
 /obj/structure/grille,
@@ -1897,9 +1917,7 @@
 /area/vault/forsakenreactor)
 "Be" = (
 /obj/item/broken_device,
-/turf/simulated/floor/airless{
-	icon_state = "dark"
-	},
+/turf/simulated/floor,
 /area/vault/forsakenreactor)
 "Bg" = (
 /obj/structure/grille/broken,
@@ -1940,7 +1958,7 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1951,7 +1969,7 @@
 "CT" = (
 /obj/machinery/constructable_frame/machine_frame,
 /obj/item/weapon/circuitboard/chemmaster3000,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1967,7 +1985,7 @@
 	icon_state = "bot"
 	},
 /obj/structure/closet/crate,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -1985,7 +2003,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (SOUTHWEST)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2004,7 +2022,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2016,7 +2034,7 @@
 /obj/item/weapon/fuelrod/challenge,
 /obj/item/weapon/fuelrod/challenge,
 /obj/item/weapon/fuelrod/challenge,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2143,7 +2161,7 @@
 	dir = 1;
 	tag = "icon-pathmarker (NORTH)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2151,9 +2169,7 @@
 /obj/machinery/door/airlock{
 	name = "Dorms"
 	},
-/turf/simulated/floor/airless{
-	icon_state = "dark"
-	},
+/turf/simulated/floor,
 /area/vault/forsakenreactor)
 "FY" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
@@ -2250,7 +2266,7 @@
 	tag = "icon-pathmarker (NORTH)"
 	},
 /obj/effect/decal/warning_stripes/pathmarkers/red,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2277,10 +2293,6 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	one_way = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 1
@@ -2341,7 +2353,7 @@
 	d2 = 2;
 	icon_state = "0-2"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2402,6 +2414,12 @@
 /obj/item/weapon/bedsheet,
 /turf/simulated/floor/carpet,
 /area/vault/forsakenreactor)
+"KL" = (
+/turf/simulated/floor{
+	icon_state = "dark";
+	toxins = 5000sssssss
+	},
+/area/vault/forsakenreactor)
 "KX" = (
 /obj/structure/table/reinforced,
 /obj/machinery/door/window{
@@ -2421,7 +2439,7 @@
 /area/vault/forsakenreactor)
 "KY" = (
 /obj/structure/closet/radiation,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2446,7 +2464,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTHWEST)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2475,7 +2493,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (SOUTHEAST)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2506,7 +2524,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2518,7 +2536,7 @@
 	icon_state = "green-1";
 	name = "Canister \[Rn\]"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2545,8 +2563,14 @@
 	dir = 1;
 	icon_state = "warning"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Mp" = (
+/turf/simulated/floor{
+	icon_state = "dark";
+	toxins = 25000
 	},
 /area/vault/forsakenreactor)
 "Mq" = (
@@ -2622,7 +2646,7 @@
 	d2 = 8;
 	icon_state = "0-8"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2641,7 +2665,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTHEAST)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2674,7 +2698,7 @@
 	icon_state = "green-1";
 	name = "Canister \[Rn\]"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2682,7 +2706,7 @@
 /obj/machinery/light/he{
 	dir = 8
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2771,6 +2795,20 @@
 /obj/structure/grille,
 /turf/simulated/floor/plating,
 /area/vault/forsakenreactor)
+"Pj" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/item/weapon/shard,
+/obj/item/weapon/shard,
+/turf/simulated/floor/plating{
+	misc_gases = list("radon" = 5000)
+	},
+/area/vault/forsakenreactor)
 "Pm" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden{
 	dir = 1
@@ -2823,8 +2861,8 @@
 /area/vault/forsakenreactor)
 "Qb" = (
 /obj/structure/door_assembly/door_assembly_min,
-/turf/simulated/floor/airless{
-	icon_state = "dark"
+/turf/simulated/floor/plating{
+	toxins = 5000
 	},
 /area/vault/forsakenreactor)
 "Qc" = (
@@ -2842,7 +2880,7 @@
 /obj/machinery/meter{
 	name = "Hot Loop"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2861,7 +2899,7 @@
 /area/vault/forsakenreactor)
 "Qu" = (
 /obj/machinery/chem_dispenser/mapping,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2908,7 +2946,7 @@
 "Ro" = (
 /obj/item/mounted/frame/light_fixture,
 /obj/item/weapon/light/tube/he/broken,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2917,7 +2955,7 @@
 	name = "Cargo Bay";
 	req_access_txt = "31"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -2925,7 +2963,7 @@
 /obj/machinery/atmospherics/unary/fissionfuelmaker{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -3041,7 +3079,7 @@
 	anchored = 1;
 	dir = 4
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -3070,7 +3108,7 @@
 /area/vault/forsakenreactor)
 "UU" = (
 /obj/structure/closet/secure_closet/personal,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -3078,7 +3116,7 @@
 /obj/machinery/portable_atmospherics/canister/plasma/broken{
 	fire_sprite = "green-1"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -3098,9 +3136,7 @@
 "VX" = (
 /obj/machinery/door/airlock/centcom,
 /obj/structure/window/barricade/full/block,
-/turf/simulated/floor/airless{
-	icon_state = "dark"
-	},
+/turf/simulated/floor,
 /area/vault/forsakenreactor)
 "Wd" = (
 /turf/simulated/floor{
@@ -3129,9 +3165,7 @@
 /obj/machinery/light/he/broken{
 	dir = 4
 	},
-/turf/simulated/floor/airless{
-	icon_state = "dark"
-	},
+/turf/simulated/floor,
 /area/vault/forsakenreactor)
 "WP" = (
 /obj/item/weapon/reagent_containers/food/snacks/meat,
@@ -3171,13 +3205,12 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/space,
+/obj/item/weapon/shard,
+/turf/simulated/floor/plating{
+	misc_gases = list("radon" = 5000)
+	},
 /area/vault/forsakenreactor)
 "XG" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
@@ -3204,7 +3237,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -3227,7 +3260,7 @@
 	dir = 1
 	},
 /obj/effect/decal/warning_stripes/pathmarkers/red,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -3259,7 +3292,7 @@
 /obj/item/weapon/fuelrod/large,
 /obj/item/weapon/light/tube/he/broken,
 /obj/item/mounted/frame/light_fixture,
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -3275,7 +3308,7 @@
 	dir = 8;
 	tag = "icon-pathmarker (WEST)"
 	},
-/turf/simulated/floor/airless{
+/turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
@@ -3619,7 +3652,7 @@ pU
 pU
 pU
 pU
-rS
+wN
 pU
 pU
 pU
@@ -3663,11 +3696,11 @@ CY
 CY
 CY
 eW
-rS
+wN
 Ov
 Rc
 eW
-CY
+Th
 CY
 CY
 CY
@@ -3826,7 +3859,7 @@ Ue
 eW
 bz
 bz
-rS
+wN
 sa
 no
 NX
@@ -3870,7 +3903,7 @@ CY
 CY
 CY
 CY
-rS
+wN
 Me
 lY
 fi
@@ -3910,9 +3943,9 @@ kA
 bz
 ga
 Gb
-sN
+rm
 rZ
-sN
+rm
 Gb
 eW
 fe
@@ -4151,8 +4184,8 @@ no
 eW
 bz
 VX
-ir
-ir
+bz
+bz
 JI
 cO
 cO
@@ -4224,7 +4257,7 @@ sa
 sN
 kA
 sa
-AA
+rJ
 Ro
 ir
 GD
@@ -4277,7 +4310,7 @@ bS
 GD
 bS
 ir
-ir
+Th
 ir
 no
 kA
@@ -4317,7 +4350,7 @@ Qu
 ir
 ir
 ir
-ir
+Mp
 ir
 ir
 ir
@@ -4361,7 +4394,7 @@ RI
 Mc
 Ro
 ir
-ir
+KL
 ir
 DE
 ZH
@@ -4394,7 +4427,7 @@ bB
 kA
 ga
 Gb
-XC
+Pj
 rZ
 XC
 Gb
@@ -4496,10 +4529,10 @@ bz
 bz
 rS
 bz
-rS
+wN
 bz
 bz
-rS
+wN
 bz
 sa
 nr
@@ -4544,8 +4577,8 @@ bz
 bz
 eW
 bz
-bz
-rS
+Th
+wN
 uh
 GR
 pC
@@ -4583,7 +4616,7 @@ CY
 CY
 CY
 CY
-rS
+wN
 CY
 MW
 CY
@@ -4594,7 +4627,7 @@ uh
 uh
 uh
 PJ
-VX
+oj
 PJ
 uh
 NF
@@ -4788,7 +4821,7 @@ bI
 It
 Gb
 Kf
-rJ
+tq
 Ub
 Gb
 QX
