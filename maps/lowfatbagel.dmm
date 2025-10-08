@@ -101695,7 +101695,7 @@
 /obj/structure/rack,
 /obj/item/weapon/circuitboard/arcade,
 /obj/item/weapon/circuitboard/med_data,
-/obj/item/weapon/circuitboard/microwave,
+/obj/item/weapon/circuitboard/small/microwave,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},

@@ -32,6 +32,8 @@ var/global/list/juice_items = list (
 	var/speed_multiplier = 1
 	var/list/blend_items = list (
 
+		/obj/item/trash/scrap                 = list(IRON = 10),
+
 		//Sheets
 		/obj/item/stack/sheet/metal           = list(IRON = 20),
 		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA = 20),
@@ -91,7 +93,7 @@ var/global/list/juice_items = list (
 	beaker = new /obj/item/weapon/reagent_containers/glass/beaker/large(src)
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/reagentgrinder,
+		/obj/item/weapon/circuitboard/small/reagentgrinder,
 		/obj/item/weapon/stock_parts/matter_bin,
 		/obj/item/weapon/stock_parts/matter_bin,
 		/obj/item/weapon/stock_parts/micro_laser,

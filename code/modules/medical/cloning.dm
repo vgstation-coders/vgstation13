@@ -231,8 +231,12 @@
 							return FALSE
 					if(G.mind != clonemind)
 						return FALSE
-	
-	var/mob/living/carbon/human/H = new /mob/living/carbon/human(src, R.dna.species, delay_ready_dna = TRUE)
+
+	var/mob/living/carbon/human/H
+	if(R.dna.species == "Vox") //Special case for vox so they get their feathers.
+		H = new /mob/living/carbon/human/vox(src, R.dna.species, delay_ready_dna = TRUE)
+	else
+		H = new /mob/living/carbon/human(src, R.dna.species, delay_ready_dna = TRUE)
 	H.times_cloned = R.times_cloned + 1
 	H.talkcount = R.talkcount
 
@@ -292,7 +296,11 @@
 				break
 	
 	var/original_in_cloner = (original in occupants)
-	var/mob/living/carbon/human/H = new /mob/living/carbon/human(src, original.dna.species, delay_ready_dna = TRUE)
+	var/mob/living/carbon/human/H
+	if(original.dna.species == "Vox") //Special case for vox so they get their feathers.
+		H = new /mob/living/carbon/human/vox(src, original.dna.species, delay_ready_dna = TRUE)
+	else
+		H = new /mob/living/carbon/human(src, original.dna.species, delay_ready_dna = TRUE)
 	if(original_in_cloner)
 		H.times_cloned = original.times_cloned
 	else

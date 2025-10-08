@@ -50,6 +50,13 @@
 		hiss.volume = 100
 		sound_emitter.add(hiss, "gas_hiss")
 
+/obj/machinery/portable_atmospherics/canister/proc/calc_sound_vol(var/p_delta, var/p_env)
+	var/soundvol = 0
+	if (p_env > 0.01)
+		// p_delta/p_env is usually 0~10
+		soundvol = clamp(10 * p_delta / p_env, 0.001, 100)
+	return soundvol
+
 /obj/machinery/portable_atmospherics/canister/proc/set_initial_sound_volume() // i copied some of this from process(). sorry
 	if(valve_open)
 		var/datum/gas_mixture/environment
@@ -62,7 +69,7 @@
 		var/soundvol = 0
 		if (env_pressure > 0.01)
 			var/pressure_delta = min(release_pressure - env_pressure, (air_contents.return_pressure() - env_pressure)/2)
-			soundvol = clamp(pressure_delta / env_pressure, 0.001, 100)
+			soundvol = calc_sound_vol(pressure_delta, env_pressure)
 		sound_emitter.update_active_sound_param(volume = soundvol)
 
 /obj/machinery/portable_atmospherics/canister/sleeping_agent
@@ -241,8 +248,7 @@
 		//Can not have a pressure delta that would cause environment pressure > tank pressure
 		var/soundvol = 0
 		if (env_pressure > 0.01)
-			// pd/env usually in range 0~10
-			soundvol = clamp(10 * pressure_delta / env_pressure, 0.001, 100)
+			soundvol = calc_sound_vol(pressure_delta, env_pressure)
 		sound_emitter.update_active_sound_param(volume = soundvol)
 
 		var/transfer_moles = 0

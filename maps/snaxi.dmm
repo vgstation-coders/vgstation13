@@ -74595,7 +74595,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/table,
 /obj/item/weapon/circuitboard/autolathe,
-/obj/item/weapon/circuitboard/microwave,
+/obj/item/weapon/circuitboard/small/microwave,
 /obj/item/weapon/circuitboard/arcade,
 /obj/item/weapon/circuitboard/washing_machine,
 /turf/simulated/floor/vox{

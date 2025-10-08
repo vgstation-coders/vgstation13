@@ -3,6 +3,12 @@
 	icon = 'icons/misc/beach.dmi'
 	plane = PLATING_PLANE
 
+/turf/unsimulated/beach/New()
+	..()
+	footstep_sound = sounds_sand
+	footstep_sound_barefoot = sounds_sand
+	footstep_sound_claw = sounds_sand
+	
 /turf/unsimulated/beach/sand
 	name = "Sand"
 	icon_state = "sand"
@@ -42,6 +48,9 @@ var/obj/effect/beach_water/unsimmed/BWU
 	if(!BWU)
 		BWU = new
 	vis_contents.Add(BWU)
+	footstep_sound = sounds_water
+	footstep_sound_barefoot = sounds_water
+	footstep_sound_claw = sounds_water
 
 /turf/unsimulated/beach/water/Destroy()
 	vis_contents.Cut()

@@ -103,10 +103,7 @@
 	if (!chan)
 		return //no channel to release, no sound to stop (hopefully)
 	// flush it
-	var/sound/nullsound = sound(file = null)
-	nullsound.channel = chan
-	nullsound.status = SOUND_UPDATE | SOUND_MUTE
-	client << nullsound
+	client << sound(file = null, channel = chan)
 
 	current_channels_by_emitter -= E
 	free_channels += chan

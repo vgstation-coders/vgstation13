@@ -582,6 +582,11 @@
 
 		SendAdminGhostTo(T,null)
 
+	else if(href_list["artifactpanel_spawnsmall"])
+		if(!check_rights(R_ADMIN))
+			return
+		debug_spawn_find()
+
 	else if(href_list["bodyarchivepanel_focus"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -3335,6 +3340,12 @@
 			return
 		return create_mob(usr)
 
+	else if(href_list["create_megabeast"])
+		if(!check_rights(0))
+			return
+		var/datum/D = locate(href_list["create_megabeast"])
+		return create_megabeast(D)
+
 	else if(href_list["object_list"])			//this is the laggiest thing ever
 		if(!check_rights(R_SPAWN))
 			return
@@ -4022,7 +4033,8 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				var/choice = input("Are you sure you want to fill the station with a bunch of unnecessary mobs?") in list("Of course!", "No, I hate timespace anomalies involving fun")
 				if(choice == "Of course!")
 					var/amt = input("How many would you like to spawn?", 10) as num
-					var/mobtype = input("What mob would you like?", "Mob Swarm") as null|anything in typesof(/mob/living)
+					var/typefilter = input("Mob type to filter to?","Mob Swarm") as text
+					var/mobtype = filter_typelist_input("What mob would you like?", "Mob Swarm", get_matching_types(typefilter,/mob/living))
 					message_admins("[key_name_admin(usr)] triggered a mob swarm.")
 					new /datum/event/mob_swarm(mobtype, amt)
 			if("pick_event")

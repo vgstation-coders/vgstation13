@@ -90,6 +90,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/climate_panel,
 	/datum/admins/proc/ashInvokedEmotions,	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
 	/client/proc/toggle_admin_examine,
+	/client/proc/beasts_panel,	/* Lists all forgotten beasts generated, along with their characteristics */
 	/datum/admins/proc/procedural_generation_panel
 )
 var/list/admin_verbs_ban = list(
@@ -1155,7 +1156,8 @@ fieldset {width:140px;}
 	var/mission_to_load = alert(usr, "How do you want to select the map element?", "Map element loading", "Choose a /datum/map_element object", "Load external .dmm file", "Cancel")
 	switch(mission_to_load)
 		if("Choose a /datum/map_element object")
-			var/new_map_element = input(usr, "Please select the map element object.", "Map element loading") as null|anything in typesof(/datum/map_element) - /datum/map_element
+			var/element_type = input("Specify a map element type. Periods exclude subtypes.", "Map element type") as text
+			var/new_map_element = filter_typelist_input("Please select the map element object.", "Map element loading", get_matching_types(element_type,/datum/map_element))
 			if(!new_map_element)
 				return
 
@@ -1429,3 +1431,11 @@ fieldset {width:140px;}
 		to_chat(usr, "<span class='notice'>You toggle [holder.admin_examine ? "on" : "off"] admin examining.")
 	feedback_add_details("admin_verb","admin_examine")
 	return
+
+/client/proc/beasts_panel()
+	set name = "Megabeast Panel"
+	set category = "Admin"
+	if(holder)
+		holder.beasts_panel()
+		log_admin("[key_name(usr)] checked the Megabeast Panel.")
+	feedback_add_details("admin_verb","BST")

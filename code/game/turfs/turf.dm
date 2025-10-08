@@ -104,6 +104,12 @@
 		for(var/mob/M in contents)
 			GiveReagentsTo(M)
 
+/turf/New()
+	..()
+	footstep_sound = sounds_floor
+	footstep_sound_barefoot = sounds_floor_barefoot
+	footstep_sound_claw = sounds_floor_claw
+
 /turf/initialize()
 	..()
 	if(loc)
@@ -703,7 +709,7 @@
 	I.alpha = 128
 	// Since holomaps are overlays of the turf
 	// This'll make them always be just above the turf and not block interaction.
-	I.plane = OBJ_PLANE
+	I.plane = FLOAT_PLANE + 1
 	// When I said above turfs I mean it.
 	I.layer = HOLOMAP_LAYER
 
