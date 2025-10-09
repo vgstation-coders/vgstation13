@@ -821,10 +821,9 @@
 /turf/simulated/floor/foamedmetal,
 /area/vault/forsakenreactor)
 "kF" = (
-/obj/structure/lattice,
 /obj/item/clothing/head/radiation,
 /turf/space,
-/area)
+/area/vault/forsakenreactor)
 "kJ" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden{
 	dir = 1
@@ -1701,6 +1700,12 @@
 	},
 /turf/space,
 /area/vault/forsakenreactor)
+"xA" = (
+/obj/structure/rack,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
 "xI" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden,
 /obj/effect/decal/warning_stripes/pathmarkers/red{
@@ -2003,6 +2008,12 @@
 	dir = 4;
 	icon_state = "yellowsiding";
 	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"Dd" = (
+/obj/structure/dispenser/oxygen,
+/turf/simulated/floor{
+	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
 "Dg" = (
@@ -4016,7 +4027,7 @@ bE
 bE
 bE
 bE
-kF
+RT
 NF
 "}
 (16,1,1) = {"
@@ -4540,7 +4551,7 @@ eW
 uh
 GR
 Ow
-UU
+Dd
 ND
 UU
 uh
@@ -4628,7 +4639,7 @@ wN
 uh
 GR
 pC
-UU
+xA
 ir
 UU
 uh
@@ -4928,7 +4939,7 @@ ir
 ir
 Ad
 Lb
-il
+kF
 il
 il
 il
