@@ -8,12 +8,7 @@
 /turf/space,
 /area/vault/forsakenreactor)
 "aj" = (
-/obj/machinery/door/airlock/glass_medical{
-	id_tag = "MedbayFoyerL";
-	name = "Medbay";
-	req_access_dir = 2;
-	req_access_txt = "5"
-	},
+/obj/structure/bed/chair/office/light,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "whiteblue"
@@ -290,10 +285,26 @@
 	icon_state = "dark"
 	},
 /area/vault/forsakenreactor)
+"ew" = (
+/obj/structure/reagent_dispensers/water_cooler,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
 "ex" = (
 /obj/machinery/vending/cola,
 /turf/simulated/floor{
 	dir = 9;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"ez" = (
+/obj/machinery/disposal/compactor,
+/turf/simulated/floor{
+	dir = 8;
 	icon_state = "yellowsiding";
 	tag = "icon-yellowsiding"
 	},
@@ -529,6 +540,12 @@
 	pixel_y = 6
 	},
 /turf/simulated/floor/wood,
+/area/vault/forsakenreactor)
+"hw" = (
+/obj/structure/bed/chair/office/light,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
 /area/vault/forsakenreactor)
 "hz" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden{
@@ -1636,6 +1653,14 @@
 	misc_gases = list("radon" = 5000)
 	},
 /area/vault/forsakenreactor)
+"wo" = (
+/obj/machinery/disposal/compactor,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
 "ws" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -2282,11 +2307,26 @@
 /turf/simulated/floor/plating,
 /area/vault/forsakenreactor)
 "HB" = (
-/obj/machinery/light/he{
-	dir = 8
+/obj/structure/sink{
+	dir = 8;
+	pixel_x = -12;
+	pixel_y = 2
+	},
+/obj/structure/mirror{
+	pixel_x = -28
 	},
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
+	},
+/area/vault/forsakenreactor)
+"HG" = (
+/obj/structure/table/reinforced,
+/obj/item/device/flashlight/lamp/green{
+	pixel_x = -3;
+	pixel_y = 8
+	},
+/turf/simulated/floor{
+	icon_state = "whiteblue"
 	},
 /area/vault/forsakenreactor)
 "HW" = (
@@ -2307,6 +2347,12 @@
 /obj/effect/decal/warning_stripes/pathmarkers/red,
 /turf/simulated/floor{
 	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Ir" = (
+/obj/machinery/light/he,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
 	},
 /area/vault/forsakenreactor)
 "It" = (
@@ -2809,6 +2855,17 @@
 	icon_state = "freezerfloor"
 	},
 /area/vault/forsakenreactor)
+"Oy" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/paper_bin/white{
+	pixel_x = 1;
+	pixel_y = 9
+	},
+/obj/item/weapon/pen,
+/turf/simulated/floor{
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
 "OI" = (
 /obj/structure/flora/pottedplant/random,
 /turf/simulated/floor{
@@ -3299,6 +3356,7 @@
 	},
 /area/vault/forsakenreactor)
 "Yn" = (
+/obj/structure/table/reinforced,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "whiteblue"
@@ -3565,7 +3623,7 @@ sa
 Gb
 VP
 jh
-jh
+Ir
 Gb
 Gb
 Gb
@@ -3909,7 +3967,7 @@ gq
 ir
 Gb
 sM
-pU
+ez
 pU
 pU
 Ue
@@ -4969,7 +5027,7 @@ bI
 bI
 bI
 aX
-pp
+HG
 kA
 bz
 sa
@@ -5056,7 +5114,7 @@ he
 db
 md
 bI
-bI
+hw
 pp
 kA
 bz
@@ -5100,8 +5158,8 @@ bI
 bI
 bI
 bI
-aX
-pp
+bI
+Oy
 kA
 bz
 sa
@@ -5146,8 +5204,8 @@ yP
 uL
 aj
 Yn
-Vo
-CY
+wo
+ew
 lr
 hi
 mV
