@@ -793,11 +793,11 @@ function loadPage(list) {
 				var/layer_icon = null
 				var/layer_target = null
 
-				var/layer_x = input(usr, "Choose the shadow's horizontal offset", "New Filter Effect (Layering)", 0) as null|num
+				var/layer_x = input(usr, "Choose the horizontal offset of second image", "New Filter Effect (Layering)", 0) as null|num
 				if (layer_x == null)
 					return
 
-				var/layer_y = input(usr, "Choose the shadow's vertical offset", "New Filter Effect (Layering)", 0) as null|num
+				var/layer_y = input(usr, "Choose the vertical offset of second image", "New Filter Effect (Layering)", 0) as null|num
 				if (layer_y == null)
 					return
 
@@ -850,15 +850,6 @@ function loadPage(list) {
 							return
 						if(alert(src,"Modify matrix further?", "New Filter Effect (Layering)","Yes","No") == "No")
 							break
-
-				var/color_matrix = matrix()
-
-				while (color_matrix != null)
-					color_matrix = modify_matrix_menu(color_matrix)
-					if (color_matrix == null)
-						return
-					if(alert(src,"Modify matrix further?","Yes","No") == "No")
-						break
 
 				var/available_blend_modes = list(
 					"BLEND_DEFAULT (default)" = BLEND_DEFAULT,
@@ -1028,11 +1019,11 @@ function loadPage(list) {
 				if (wave_y == null)
 					return
 
-				var/wave_size = input(usr, "Choose the amount of blur per pixel of distance", "New Filter Effect (Wave)", 1) as null|num
+				var/wave_size = input(usr, "Choose the maximum distortion in pixels", "New Filter Effect (Wave)", 1) as null|num
 				if (wave_size == null)
 					return
 
-				var/wave_offset = input(usr, "Choose the pixel radius before blurring occurs ", "New Filter Effect (Wave)", 0) as null|num
+				var/wave_offset = input(usr, "Choose the phase of wave ", "New Filter Effect (Wave)", 0) as null|num
 				if (wave_offset == null)
 					return
 
