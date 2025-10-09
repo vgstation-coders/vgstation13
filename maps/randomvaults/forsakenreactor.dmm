@@ -291,7 +291,7 @@
 	},
 /area/vault/forsakenreactor)
 "ex" = (
-/obj/machinery/vending/old_vendotron,
+/obj/machinery/vending/cola,
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "yellowsiding";
