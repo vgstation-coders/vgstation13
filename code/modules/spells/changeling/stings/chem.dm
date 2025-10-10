@@ -1,9 +1,9 @@
 /spell/changeling/sting/chem
-	name = "Chemical Sting (5)"
+	name = "Chemical Sting (10)"
 	desc = "We sting a human with chemicals learned."
 	abbreviation = "CS"
 	hud_state = "chem-sting"
-	chemcost = 5
+	chemcost = 10
 
 	var/current_chem
 

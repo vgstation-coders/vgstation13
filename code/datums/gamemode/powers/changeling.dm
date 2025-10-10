@@ -154,7 +154,7 @@
 	name = "Chemical Sting"
 	desc = "We evolve the ability to sting a target with chemicals learned."
 	helptext = "Does not provide a warning to others. Chemicals are selected from liquids consumed at any point."
-	cost = 1
+	cost = 2
 	spellpath = /spell/changeling/sting/chem
 
 /datum/power/changeling/boost_range
