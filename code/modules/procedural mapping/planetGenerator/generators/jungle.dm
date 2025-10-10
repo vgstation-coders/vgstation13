@@ -107,8 +107,8 @@
 	flora_spawn_chance = 25
 	mob_spawn_chance = 3
 	mob_spawn_list = list(
-		/mob/living/simple_animal/parrot/jungle = 15,
-		/mob/living/simple_animal/capybara/jungle = 10,
+		/mob/living/simple_animal/parrot = 15,
+		/mob/living/simple_animal/capybara = 10,
 		/mob/living/carbon/monkey = 25,
 		/mob/living/simple_animal/hostile/lizard/frog = 30,
 		/mob/living/simple_animal/rabbit = 15,
@@ -131,8 +131,8 @@
 	flora_spawn_chance = 35
 	mob_spawn_chance = 4
 	mob_spawn_list = list(
-		/mob/living/simple_animal/parrot/jungle = 20,
-		/mob/living/simple_animal/capybara/jungle = 15,
+		/mob/living/simple_animal/parrot = 20,
+		/mob/living/simple_animal/capybara = 15,
 		/mob/living/carbon/monkey = 30,
 		/mob/living/simple_animal/hostile/lizard/frog = 25,
 		/mob/living/simple_animal/rabbit = 10,
@@ -155,13 +155,13 @@
 	flora_spawn_chance = 50
 	mob_spawn_chance = 5
 	mob_spawn_list = list(
-		/mob/living/simple_animal/parrot/jungle = 25,
-		/mob/living/simple_animal/capybara/jungle = 20,
+		/mob/living/simple_animal/parrot = 25,
+		/mob/living/simple_animal/capybara = 20,
 		/mob/living/carbon/monkey = 35,
 		/mob/living/simple_animal/hostile/lizard/frog = 15,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 10,
 		/mob/living/simple_animal/cockroach = 15,
-		/mob/living/simple_animal/hostile/bear/panther = 5,
+		/mob/living/complex_animal/panther = 5,
 	)
 
 /datum/biome/jungle/lush
@@ -183,14 +183,14 @@
 	flora_spawn_chance = 65
 	mob_spawn_chance = 6
 	mob_spawn_list = list(
-		/mob/living/simple_animal/parrot/jungle = 30,
-		/mob/living/simple_animal/capybara/jungle = 25,
+		/mob/living/simple_animal/parrot = 30,
+		/mob/living/simple_animal/capybara = 25,
 		/mob/living/carbon/monkey = 40,
 		/mob/living/simple_animal/hostile/lizard/frog = 10,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 15,
 		/mob/living/simple_animal/cockroach = 20,
-		/mob/living/simple_animal/hostile/bear/panther = 8,
-		/mob/living/simple_animal/hostile/giant_spider/jungle = 5,
+		/mob/living/complex_animal/panther = 8,
+		/mob/living/simple_animal/hostile/giant_spider = 5,
 	)
 
 /datum/biome/jungle/tropical
@@ -213,15 +213,15 @@
 	flora_spawn_chance = 75
 	mob_spawn_chance = 7
 	mob_spawn_list = list(
-		/mob/living/simple_animal/parrot/jungle = 35,
-		/mob/living/simple_animal/capybara/jungle = 20,
+		/mob/living/simple_animal/parrot = 35,
+		/mob/living/simple_animal/capybara = 20,
 		/mob/living/carbon/monkey = 45,
 		/mob/living/simple_animal/hostile/lizard/frog = 8,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 18,
 		/mob/living/simple_animal/cockroach = 25,
-		/mob/living/simple_animal/hostile/bear/panther = 12,
-		/mob/living/simple_animal/hostile/giant_spider/jungle = 8,
-		/mob/living/simple_animal/hostile/bear/dinosaur = 5,
+		/mob/living/complex_animal/panther = 12,
+		/mob/living/simple_animal/hostile/giant_spider = 8,
+		/mob/living/complex_animal/dinosaur = 5,
 	)
 
 /datum/biome/jungle/rainforest
@@ -245,16 +245,16 @@
 	flora_spawn_chance = 85
 	mob_spawn_chance = 8
 	mob_spawn_list = list(
-		/mob/living/simple_animal/parrot/jungle = 40,
-		/mob/living/simple_animal/capybara/jungle = 15,
+		/mob/living/simple_animal/parrot = 40,
+		/mob/living/simple_animal/capybara = 15,
 		/mob/living/carbon/monkey = 50,
 		/mob/living/simple_animal/hostile/lizard/frog = 5,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 20,
 		/mob/living/simple_animal/cockroach = 30,
-		/mob/living/simple_animal/hostile/bear/panther = 15,
-		/mob/living/simple_animal/hostile/giant_spider/jungle = 12,
-		/mob/living/simple_animal/hostile/bear/dinosaur = 8,
-		/mob/living/simple_animal/hostile/bear/brownbear/jungle = 5,
+		/mob/living/complex_animal/panther = 15,
+		/mob/living/simple_animal/hostile/giant_spider = 12,
+		/mob/living/complex_animal/dinosaur = 8,
+		/mob/living/simple_animal/hostile/bear/brownbear = 5,
 	)
 
 /datum/biome/jungle/swamp
@@ -279,16 +279,16 @@
 	flora_spawn_chance = 60
 	mob_spawn_chance = 9
 	mob_spawn_list = list(
-		/mob/living/simple_animal/parrot/jungle = 20,
-		/mob/living/simple_animal/capybara/jungle = 25,
+		/mob/living/simple_animal/parrot = 20,
+		/mob/living/simple_animal/capybara = 25,
 		/mob/living/carbon/monkey = 30,
 		/mob/living/simple_animal/hostile/lizard/frog = 10,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 25,
 		/mob/living/simple_animal/cockroach = 35,
-		/mob/living/simple_animal/hostile/bear/panther = 12,
-		/mob/living/simple_animal/hostile/giant_spider/jungle = 15,
-		/mob/living/simple_animal/hostile/bear/dinosaur = 8,
-		/mob/living/simple_animal/hostile/bear/brownbear/jungle = 8,
+		/mob/living/complex_animal/panther = 12,
+		/mob/living/simple_animal/hostile/giant_spider = 15,
+		/mob/living/complex_animal/dinosaur = 8,
+		/mob/living/simple_animal/hostile/bear/brownbear = 8,
 	)
 
 // Cave biomes
@@ -310,8 +310,8 @@
 		/mob/living/simple_animal/cockroach = 25,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 20,
 		/mob/living/simple_animal/hostile/asteroid/goliath = 15,
-		/mob/living/simple_animal/hostile/giant_spider/jungle = 12,
-		/mob/living/simple_animal/hostile/bear/brownbear/jungle = 8,
+		/mob/living/simple_animal/hostile/giant_spider = 12,
+		/mob/living/simple_animal/hostile/bear/brownbear = 8,
 	)
 
 /datum/biome/cave/jungle/dirt
@@ -329,8 +329,8 @@
 		/mob/living/simple_animal/cockroach = 20,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 18,
 		/mob/living/simple_animal/hostile/asteroid/goliath = 12,
-		/mob/living/simple_animal/hostile/giant_spider/jungle = 15,
-		/mob/living/simple_animal/hostile/bear/brownbear/jungle = 8,
+		/mob/living/simple_animal/hostile/giant_spider = 15,
+		/mob/living/simple_animal/hostile/bear/brownbear = 8,
 	)
 
 /datum/biome/cave/jungle/lush
@@ -350,9 +350,9 @@
 		/mob/living/simple_animal/cockroach = 18,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 15,
 		/mob/living/simple_animal/hostile/asteroid/goliath = 10,
-		/mob/living/simple_animal/hostile/giant_spider/jungle = 18,
-		/mob/living/simple_animal/hostile/bear/brownbear/jungle = 10,
-		/mob/living/simple_animal/parrot/jungle = 8,
+		/mob/living/simple_animal/hostile/giant_spider = 18,
+		/mob/living/simple_animal/hostile/bear/brownbear = 10,
+		/mob/living/simple_animal/parrot = 8,
 	)
 
 /datum/biome/cave/jungle/wet
@@ -376,9 +376,9 @@
 		/mob/living/simple_animal/cockroach = 15,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 12,
 		/mob/living/simple_animal/hostile/asteroid/goliath = 8,
-		/mob/living/simple_animal/hostile/giant_spider/jungle = 20,
-		/mob/living/simple_animal/hostile/bear/brownbear/jungle = 12,
-		/mob/living/simple_animal/parrot/jungle = 12,
+		/mob/living/simple_animal/hostile/giant_spider = 20,
+		/mob/living/simple_animal/hostile/bear/brownbear = 12,
+		/mob/living/simple_animal/parrot = 12,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 15,
 	)
 
@@ -400,11 +400,11 @@
 	mob_spawn_list = list(
 		/mob/living/simple_animal/cockroach = 10,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 8,
-		/mob/living/simple_animal/hostile/giant_spider/jungle = 18,
-		/mob/living/simple_animal/hostile/bear/brownbear/jungle = 10,
-		/mob/living/simple_animal/parrot/jungle = 8,
+		/mob/living/simple_animal/hostile/giant_spider = 18,
+		/mob/living/simple_animal/hostile/bear/brownbear = 10,
+		/mob/living/simple_animal/parrot = 8,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 20,
-		/mob/living/simple_animal/capybara/jungle = 10,
+		/mob/living/simple_animal/capybara = 10,
 	)
 
 /datum/biome/jungle/beach
@@ -430,13 +430,13 @@
 	)
 	mob_spawn_chance = 6
 	mob_spawn_list = list(
-		/mob/living/simple_animal/parrot/jungle = 25,
-		/mob/living/simple_animal/capybara/jungle = 20,
+		/mob/living/simple_animal/parrot = 25,
+		/mob/living/simple_animal/capybara = 20,
 		/mob/living/carbon/monkey = 30,
 		/mob/living/simple_animal/hostile/lizard/frog = 15,
 		/mob/living/simple_animal/hostile/lizard/frog/poison = 10,
 		/mob/living/simple_animal/cockroach = 15,
-		/mob/living/simple_animal/hostile/bear/panther = 5,
-		/mob/living/simple_animal/hostile/giant_spider/jungle = 5,
+		/mob/living/complex_animal/panther = 5,
+		/mob/living/simple_animal/hostile/giant_spider = 5,
 		/mob/living/simple_animal/crab = 10,
 	)
