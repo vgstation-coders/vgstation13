@@ -198,7 +198,7 @@ var/datum/subsystem/mapping/SSmapping
 			while(queue_index <= population_queue.len && turfs_processed < target_turfs)
 				var/turf/T = population_queue[queue_index]
 				if(T)
-					current_mapgen.populate_turf(T, created_features, created_mobs, current_mapgen.planet_loot)
+					current_mapgen.populate_turf(T, created_features, created_mobs, current_mapgen.planet_loot, current_planet.mob_faction)
 				queue_index++
 				turfs_processed++
 
@@ -223,6 +223,12 @@ var/datum/subsystem/mapping/SSmapping
 			queue_index = 1
 
 		if(STAGE_FINALIZE)
+			// Error-proofing
+			if(current_planet.default_baseturf)
+				for(var/turf/T in current_allocation.turfs)
+					if(istype(T, /turf/space))
+						T.ChangeTurf(current_planet.default_baseturf)
+
 			current_planet.build_daynight_turflist()
 
 			var/list/possible_times = list(TOD_MORNING, TOD_SUNRISE, TOD_DAYTIME, TOD_AFTERNOON, TOD_SUNSET, TOD_NIGHTTIME)
@@ -509,12 +515,38 @@ var/datum/subsystem/mapping/SSmapping
 	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
 		CRASH("Warning: Ruin [ruin.name] ([ruin.width]x[ruin.height]) too large for sector [allocation.sector[1]],[allocation.sector[2]] - skipping ruin placement")
 
-	// Find random placement location within safe bounds
-	var/turf/ruin_turf = locate(
-		rand(safe_x_min, safe_x_max),
-		rand(safe_y_min, safe_y_max),
-		allocation.z
-	)
+	// Try up to 5 times to find a valid placement location
+	var/max_attempts = 5
+	var/turf/ruin_turf = null
+
+	for(var/attempt = 1; attempt <= max_attempts; attempt++)
+		// Find random placement location within safe bounds
+		var/turf/candidate_turf = locate(
+			rand(safe_x_min, safe_x_max),
+			rand(safe_y_min, safe_y_max),
+			allocation.z
+		)
+
+		// Check if any turfs in the ruin footprint have NO_RUINS flag
+		var/valid_location = TRUE
+		for(var/dx = 0; dx < ruin.width; dx++)
+			for(var/dy = 0; dy < ruin.height; dy++)
+				var/turf/check_turf = locate(candidate_turf.x + dx, candidate_turf.y + dy, allocation.z)
+				if(check_turf && (check_turf.turf_flags & NO_RUINS))
+					valid_location = FALSE
+					break
+			if(!valid_location)
+				break
+
+		if(valid_location)
+			ruin_turf = candidate_turf
+			break
+		else if(attempt == max_attempts)
+			message_admins("Warning: Failed to find valid placement for ruin [ruin.name] after [max_attempts] attempts - NO_RUINS flags blocking placement")
+			return null
+
+	if(!ruin_turf)
+		return null
 
 	// Note: load() adds +1 to x and y coordinates, so we subtract 1 to place at exact location
 	var/load_result = ruin.load(ruin_turf.x - 1, ruin_turf.y - 1, allocation.z, 0, TRUE, TRUE)

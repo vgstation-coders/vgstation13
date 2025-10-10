@@ -264,8 +264,9 @@ var/MAX_EXPLOSION_RANGE = 32
 #define NOJAUNT		1
 #define NO_MINIMAP  2 //Invisible to minimaps (fuck minimaps)
 #define NO_LAVA_GEN_1 4 // Blocks lava rivers being generated on the turf
-#define NO_RUINS_1 8 // Blocks ruins spawning on the turf
+#define NO_RUINS 8 // Blocks ruins spawning on the turf
 #define NO_FLORA 16 // Prevents plants from growing
+#define NO_LOOT 32 // No loot spawning here
 
 //slots
 #define slot_back 1

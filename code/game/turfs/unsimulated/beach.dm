@@ -8,12 +8,12 @@
 	footstep_sound = sounds_sand
 	footstep_sound_barefoot = sounds_sand
 	footstep_sound_claw = sounds_sand
-	
+
 /turf/unsimulated/beach/sand
 	name = "Sand"
 	icon_state = "sand"
 
-/turf/unsimulated/beach/sand/spread/New()
+/turf/unsimulated/beach/sand/New()
 	..()
 	var/image/img = image('icons/turf/rock_overlay.dmi', "sand_overlay",layer = SIDE_LAYER)
 	img.pixel_x = -4*PIXEL_MULTIPLIER

@@ -13,28 +13,28 @@
 	},
 /obj/item/stack/ore/telecrystal,
 /turf/unsimulated/floor/asteroid/underground,
-/area/template_noop)
+/area/ruin)
 "e" = (
 /obj/item/stack/ore/diamond,
 /turf/unsimulated/floor/asteroid/underground,
-/area/template_noop)
+/area/ruin)
 "j" = (
 /obj/structure/crystal,
 /turf/unsimulated/floor/asteroid/underground,
-/area/template_noop)
+/area/ruin)
 "y" = (
 /obj/item/stack/ore/telecrystal,
 /turf/unsimulated/floor/asteroid/underground,
-/area/template_noop)
+/area/ruin)
 "z" = (
 /turf/unsimulated/floor/asteroid/underground,
-/area/template_noop)
+/area/ruin)
 "D" = (
 /obj/structure/crystal,
 /turf/unsimulated/mineral/snow{
 	mined_type = /turf/unsimulated/floor/asteroid/underground
 	},
-/area/template_noop)
+/area/ruin)
 "E" = (
 /obj/item/stack/ore/diamond{
 	pixel_x = 3;
@@ -42,12 +42,12 @@
 	},
 /obj/item/stack/ore/diamond,
 /turf/unsimulated/floor/asteroid/underground,
-/area/template_noop)
+/area/ruin)
 "O" = (
 /turf/unsimulated/mineral/snow{
 	mined_type = /turf/unsimulated/floor/asteroid/underground
 	},
-/area/template_noop)
+/area/ruin)
 "X" = (
 /obj/item/stack/ore/telecrystal,
 /obj/item/stack/ore/telecrystal{
@@ -55,7 +55,7 @@
 	pixel_y = 10
 	},
 /turf/unsimulated/floor/asteroid/underground,
-/area/template_noop)
+/area/ruin)
 
 (1,1,1) = {"
 a

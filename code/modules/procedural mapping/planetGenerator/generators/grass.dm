@@ -54,25 +54,25 @@
 			BIOME_LOWEST_HUMIDITY = /datum/biome/cave/grass,
 			BIOME_LOW_HUMIDITY = /datum/biome/cave/grass,
 			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/grass,
-			BIOME_HIGH_HUMIDITY = /datum/biome/cave/grass/mossy,
+			BIOME_HIGH_HUMIDITY = /datum/biome/cave/grass,
 			BIOME_HIGHEST_HUMIDITY = /datum/biome/cave/grass/lush
 		),
 		BIOME_COLD_CAVE = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/cave/grass,
 			BIOME_LOW_HUMIDITY = /datum/biome/cave/grass,
-			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/grass/mossy,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/grass,
 			BIOME_HIGH_HUMIDITY = /datum/biome/cave/grass/lush,
 			BIOME_HIGHEST_HUMIDITY = /datum/biome/cave/grass/fungi
 		),
 		BIOME_WARM_CAVE = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/cave/grass,
-			BIOME_LOW_HUMIDITY = /datum/biome/cave/grass/mossy,
+			BIOME_LOW_HUMIDITY = /datum/biome/cave/grass,
 			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/grass/lush,
 			BIOME_HIGH_HUMIDITY = /datum/biome/cave/grass/fungi,
 			BIOME_HIGHEST_HUMIDITY = /datum/biome/cave/grass/wet
 		),
 		BIOME_HOT_CAVE = list(
-			BIOME_LOWEST_HUMIDITY = /datum/biome/cave/grass/mossy,
+			BIOME_LOWEST_HUMIDITY = /datum/biome/cave/grass,
 			BIOME_LOW_HUMIDITY = /datum/biome/cave/grass/lush,
 			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/grass/fungi,
 			BIOME_HIGH_HUMIDITY = /datum/biome/cave/grass/wet,
@@ -281,25 +281,8 @@
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 10,
 	)
 
-/datum/biome/cave/grass/mossy
-	open_turf_types = list(/turf/unsimulated/floor/planetary/moss = 1)
-	flora_spawn_chance = 20
-	flora_spawn_list = list(
-		/obj/structure/flora/ausbushes/sparsegrass = 15,
-		/obj/structure/flora/ausbushes/fullgrass = 10,
-		/obj/structure/flora/ausbushes/grassybush = 8,
-		/obj/structure/flora/rock = 5,
-	)
-	mob_spawn_chance = 3
-	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 15,
-		/mob/living/simple_animal/mouse = 20,
-		/mob/living/simple_animal/rabbit = 5,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 8,
-	)
-
 /datum/biome/cave/grass/lush
-	open_turf_types = list(/turf/unsimulated/floor/planetary/moss = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/dirt = 1)
 	flora_spawn_chance = 35
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 20,
@@ -317,7 +300,7 @@
 	)
 
 /datum/biome/cave/grass/fungi
-	open_turf_types = list(/turf/unsimulated/floor/planetary/moss = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/cave = 1)
 	flora_spawn_chance = 40
 	flora_spawn_list = list(
 		/obj/structure/flora/ash/leaf_shroom = 8,
@@ -335,7 +318,11 @@
 	)
 
 /datum/biome/cave/grass/wet
-	open_turf_types = list(/turf/unsimulated/floor/planetary/moss = 1)
+	open_turf_types = list(
+		/turf/unsimulated/floor/jungle/mud = 3,
+		/turf/unsimulated/floor/jungle/water = 1,
+		/turf/unsimulated/floor/planetary/dirt = 6,
+		)
 	flora_spawn_chance = 50
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 25,

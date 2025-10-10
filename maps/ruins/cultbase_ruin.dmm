@@ -7,50 +7,50 @@
 /turf/simulated/wall/cult{
 	icon_state = "cult0"
 	},
-/area/template_noop)
+/area/ruin)
 "c" = (
 /obj/structure/cult/pillar,
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "d" = (
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "e" = (
 /obj/structure/grille/cult,
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "f" = (
 /obj/structure/cult_legacy/forge,
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "g" = (
 /turf/simulated/wall/cult{
 	icon_state = "cult0"
 	},
-/area/template_noop)
+/area/ruin)
 "h" = (
 /obj/effect/gateway/active/cult,
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "i" = (
 /obj/item/candle/blood{
 	lit = 1;
 	wax = 50000
 	},
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "j" = (
 /mob/living/simple_animal/hostile/faithless/cult,
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "k" = (
 /mob/living/simple_animal/hostile/scarybat/cult,
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "l" = (
 /obj/item/clothing/suit/space/plasmaman/cultist,
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "m" = (
 /obj/structure/cult_legacy/talisman{
 	icon_state = "altar";
@@ -64,68 +64,68 @@
 	pixel_y = 8
 	},
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "n" = (
 /obj/item/clothing/head/helmet/space/plasmaman/cultist,
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "o" = (
 /obj/structure/cult_legacy/tome,
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "p" = (
 /obj/structure/cult_legacy/talisman,
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "q" = (
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor4"
 	},
 /turf/simulated/floor/carpet,
-/area/template_noop)
+/area/ruin)
 "r" = (
 /obj/effect/decal/cleanable/blood{
 	icon_state = "gibbl4"
 	},
 /turf/simulated/floor/carpet,
-/area/template_noop)
+/area/ruin)
 "s" = (
 /obj/item/weapon/storage/cult{
 	pixel_y = 6
 	},
 /obj/structure/table/woodentable,
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "t" = (
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor7"
 	},
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "A" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/kitchen/utensil/knife/large/ritual{
 	pixel_y = 8
 	},
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "D" = (
 /obj/structure/cult/pillar/alt,
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "L" = (
 /obj/structure/table/woodentable,
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 "T" = (
 /turf/simulated/floor/carpet,
-/area/template_noop)
+/area/ruin)
 "Z" = (
 /obj/effect/decal/cleanable/blood{
 	icon_state = "floor4"
 	},
 /turf/simulated/floor/engine/cult,
-/area/template_noop)
+/area/ruin)
 
 (1,1,1) = {"
 a

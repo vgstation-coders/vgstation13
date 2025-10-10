@@ -146,6 +146,7 @@
 	icon_state = "lava"
 	temperature = MELTPOINT_GLASS
 	gender = PLURAL //"That's some lava."
+	turf_flags = NO_RUINS|NO_FLORA|NO_LOOT
 
 	light_range = 2
 	light_power = 0.75
@@ -192,13 +193,14 @@
 		return
 	return FALSE
 
-/obj/effect/particle_holder
-	name = ""
-	anchored = TRUE
-	mouse_opacity = 0
-
-/obj/effect/particle_emitter/New()
-	. = ..()
-
 /obj/effect/particle_emitter/lava
 	particles = new/particles/candle
+
+/turf/unsimulated/floor/planetary/xeno/desert
+	name = "xeno desert"
+	icon = 'icons/turf/planetary/shrouded.dmi'
+	icon_state = "shrouded0"
+	base_icon_state = "shrouded"
+	floor_variance = 80
+	min_icon_states = 0
+	max_icon_states = 8

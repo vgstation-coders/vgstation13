@@ -97,10 +97,14 @@
 	feature_spawn_chance = 0.3
 	feature_spawn_list = list(
 		/obj/structure/flora/rock/hell = 20,
-		/obj/structure/geyser = 6,
+		/obj/structure/geyser/hell = 5,
+		/obj/structure/geyser/unstable/hell = 1,
+		/obj/structure/geyser/critical/hell = 1,
+		/obj/structure/geyser/vent/hell = 1,
+		/obj/structure/sealedgeyser/hell = 1,
 		/obj/structure/flora/rock/hell = 14
 	)
-	mob_spawn_chance = 4
+	mob_spawn_chance = 2
 	mob_spawn_list = list(
 		/mob/living/simple_animal/hostile/asteroid/goliath = 50,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 40
@@ -233,7 +237,7 @@
 		/turf/unsimulated/mineral/random/cave = 3,
 		/turf/unsimulated/mineral/random/high_chance/cave = 1,
 	)
-	mob_spawn_chance = 4
+	mob_spawn_chance = 3
 	mob_spawn_list = list(
 		/mob/living/simple_animal/hostile/asteroid/goliath = 60,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 40,

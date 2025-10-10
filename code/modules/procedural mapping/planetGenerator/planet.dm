@@ -111,9 +111,9 @@
 	var/area/used_area = istype(turf_biome, /datum/biome/cave) ? cave_area : primary_area
 	turf_biome.generate_turf(gen_turf, used_area, cave_automaton_data)
 
-/datum/planetGenerator/proc/populate_turf(turf/gen_turf)
+/datum/planetGenerator/proc/populate_turf(turf/gen_turf, created_features, created_mobs, planet_loot, planet_faction = null)
 	var/datum/biome/turf_biome = get_biome(gen_turf)
-	turf_biome.populate_turf(gen_turf, created_features, created_mobs, planet_loot)
+	turf_biome.populate_turf(gen_turf, created_features, created_mobs, planet_loot, planet_faction)
 
 /// Gets the biome for a turf, using the cache if available, otherwise calculating and caching it.
 /// Returns: The datum/biome for the given turf

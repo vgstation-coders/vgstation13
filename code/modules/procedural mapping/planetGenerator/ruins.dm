@@ -1,5 +1,10 @@
 //See maps/ruins for dmm's
 
+/area/ruin
+	name = "ruin"
+	icon = 'icons/turf/areas.dmi'
+	icon_state = "ruin"
+
 /datum/map_element/ruin/geode_ruin
 	name="Geode"
 	file_path = "maps/ruins/geode_ruin.dmm"

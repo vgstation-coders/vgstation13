@@ -3,11 +3,10 @@
 /turf/template_noop,
 /area/template_noop)
 "ad" = (
-/turf/template_noop,
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 4;
-	icon_state = "diagonalWall3"
+/obj/structure/shuttle/diag_wall/smooth/black{
+	dir = 4
 	},
+/turf/template_noop,
 /area/template_noop)
 "ae" = (
 /obj/structure/boulder,
@@ -15,18 +14,16 @@
 /turf/template_noop,
 /area/template_noop)
 "af" = (
-/turf/template_noop,
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 8;
-	icon_state = "diagonalWall3"
+/obj/structure/shuttle/diag_wall/smooth/black{
+	dir = 8
 	},
+/turf/template_noop,
 /area/template_noop)
 "ag" = (
-/turf/template_noop,
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 1;
-	icon_state = "diagonalWall3"
+/obj/structure/shuttle/diag_wall/smooth/black{
+	dir = 1
 	},
+/turf/template_noop,
 /area/template_noop)
 "ah" = (
 /obj/effect/decal/cleanable/scattered_sand,
@@ -35,12 +32,10 @@
 "ai" = (
 /obj/structure/door_assembly/door_assembly_ext,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "aj" = (
+/obj/structure/shuttle/diag_wall/smooth/black,
 /turf/template_noop,
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "diagonalWall3"
-	},
 /area/template_noop)
 "ak" = (
 /obj/item/stack/rods,
@@ -50,19 +45,19 @@
 "aq" = (
 /obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "dg" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "ep" = (
 /obj/structure/bed/chair,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "et" = (
 /obj/structure/bed/chair{
 	dir = 1
@@ -70,7 +65,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "fb" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/blood/drip{
@@ -84,20 +79,20 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "fO" = (
 /obj/item/weapon/rack_parts,
 /obj/abstract/map/spawner/assistant/materials,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "fQ" = (
 /turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
 	icon_state = "wall3"
 	},
-/area/template_noop)
+/area/ruin)
 "gb" = (
 /obj/effect/decal/cleanable/scattered_sand,
 /obj/item/weapon/shard,
@@ -111,7 +106,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/shard,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "kr" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -129,7 +124,7 @@
 	pixel_y = -5
 	},
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "kv" = (
 /obj/effect/decal/cleanable/soot,
 /obj/effect/decal/cleanable/blood/gibs/robot/down,
@@ -145,7 +140,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/template_noop)
+/area/ruin)
 "mr" = (
 /obj/structure/shuttle/engine/heater,
 /obj/effect/decal/cleanable/soot,
@@ -186,26 +181,26 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "qx" = (
 /obj/structure/computerframe{
 	anchored = 1
 	},
 /obj/effect/decal/cleanable/scattered_sand,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "qV" = (
 /obj/effect/decal/cleanable/soot,
 /obj/item/stack/rods,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "tD" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/broken_bottle,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "vG" = (
 /obj/structure/shuttle/engine/propulsion{
 	dir = 1
@@ -218,7 +213,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "wB" = (
 /obj/structure/table/reinforced,
 /obj/structure/window/reinforced{
@@ -228,7 +223,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "xL" = (
 /obj/structure/window/reinforced{
 	dir = 1
@@ -238,7 +233,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/template_noop)
+/area/ruin)
 "xQ" = (
 /obj/item/weapon/rack_parts,
 /turf/template_noop,
@@ -247,7 +242,7 @@
 /obj/structure/grille/broken,
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "yN" = (
 /obj/item/weapon/shard{
 	icon_state = "medium"
@@ -257,7 +252,7 @@
 "zj" = (
 /obj/effect/decal/cleanable/soot,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "zy" = (
 /obj/structure/grille,
 /obj/item/weapon/shard,
@@ -268,7 +263,7 @@
 	dir = 8
 	},
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "zG" = (
 /obj/item/weapon/shard{
 	icon_state = "small";
@@ -277,7 +272,7 @@
 	},
 /obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "Ar" = (
 /obj/item/stack/sheet/metal,
 /turf/template_noop,
@@ -288,7 +283,7 @@
 	},
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "Cp" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -296,7 +291,7 @@
 	},
 /obj/item/weapon/shard,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "CW" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/blood/drip{
@@ -313,14 +308,14 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "Dc" = (
 /obj/effect/decal/cleanable/soot,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1";
 	tag = "icon-platingdmg1"
 	},
-/area/template_noop)
+/area/ruin)
 "Dh" = (
 /obj/structure/window/reinforced{
 	dir = 8
@@ -334,7 +329,7 @@
 	icon_state = "medium"
 	},
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "DA" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/stack/rods,
@@ -343,7 +338,7 @@
 "DD" = (
 /obj/structure/girder,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "DO" = (
 /obj/structure/bed/chair,
 /obj/machinery/light/broken{
@@ -352,13 +347,13 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "FS" = (
 /obj/structure/flora/pottedplant/claypot,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "FX" = (
 /obj/effect/decal/cleanable/scattered_sand,
 /obj/effect/decal/cleanable/soot,
@@ -390,17 +385,17 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "KY" = (
 /obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating/vox,
-/area/template_noop)
+/area/ruin)
 "LV" = (
 /obj/effect/decal/cleanable/soot,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "Rl" = (
 /obj/structure/shuttle/engine/propulsion{
 	dir = 4
@@ -414,7 +409,7 @@
 	dir = 4
 	},
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "RR" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/template_noop,
@@ -426,7 +421,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/template_noop)
+/area/ruin)
 "Sc" = (
 /obj/structure/table,
 /obj/item/weapon/shard,
@@ -434,14 +429,14 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/template_noop)
+/area/ruin)
 "SD" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg1";
 	tag = "icon-platingdmg1"
 	},
-/area/template_noop)
+/area/ruin)
 "SR" = (
 /obj/item/weapon/shard{
 	icon_state = "small";
@@ -449,7 +444,7 @@
 	pixel_y = -5
 	},
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "TS" = (
 /obj/structure/table/reinforced,
 /obj/structure/window/reinforced{
@@ -459,7 +454,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "UB" = (
 /obj/effect/decal/cleanable/scattered_sand,
 /obj/effect/decal/cleanable/soot,
@@ -478,13 +473,13 @@
 	},
 /obj/item/stack/rods,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "VF" = (
 /obj/item/weapon/table_parts/reinforced,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "Wf" = (
 /obj/item/weapon/shard{
 	icon_state = "small"
@@ -500,7 +495,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "WZ" = (
 /obj/effect/decal/cleanable/soot,
 /obj/effect/decal/cleanable/dirt,
@@ -515,7 +510,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "Yj" = (
 /obj/structure/boulder,
 /turf/template_noop,
@@ -531,24 +526,24 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "Zb" = (
 /obj/effect/decal/cleanable/soot,
 /turf/simulated/floor/plating{
 	icon_state = "platingdmg2"
 	},
-/area/template_noop)
+/area/ruin)
 "Zc" = (
 /obj/structure/table/reinforced,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "Zl" = (
 /obj/effect/decal/cleanable/soot,
 /obj/item/weapon/broken_bottle,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "Zv" = (
 /obj/machinery/light/broken{
 	dir = 8
@@ -558,12 +553,12 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "ZQ" = (
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
-/area/template_noop)
+/area/ruin)
 "ZU" = (
 /obj/structure/window/reinforced{
 	dir = 1
@@ -576,7 +571,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/template_noop)
+/area/ruin)
 
 (1,1,1) = {"
 ab

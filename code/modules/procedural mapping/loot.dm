@@ -425,43 +425,20 @@
 
 /datum/loot_table/weighted/structure
 	loot = list(
-		COMMON_LOOT = list(
-			/obj/structure/bed/chair,
-			/obj/structure/bed/chair/wood/normal,
-			/obj/structure/table,
-			/obj/structure/table/woodentable,
-			/obj/structure/rack,
-			/obj/structure/closet,
-			/obj/structure/closet/crate,
-		),
-		UNCOMMON_LOOT = list(
-			/obj/structure/bed,
-			/obj/structure/bed/chair/office,
-			/obj/structure/bed/chair/comfy,
-			/obj/structure/closet/cabinet,
-			/obj/structure/filingcabinet,
-			/obj/structure/table/reinforced,
+		COMMON_LOOT = list(),
+		UNCOMMON_LOOT = list(),
+		RARE_LOOT = list(
 			/obj/machinery/vending/cola,
 			/obj/machinery/vending/snack,
 			/obj/machinery/vending/coffee,
-		),
-		RARE_LOOT = list(
-			/obj/structure/bed/chair/comfy/black,
-			/obj/structure/bed/chair/wood/wings,
-			/obj/structure/closet/secure_closet,
-			/obj/structure/table/glass,
-			/obj/machinery/vending/medical,
-			/obj/machinery/vending/engivend,
-			/obj/machinery/vending/robotics,
-			/obj/machinery/artifact,
-			/obj/machinery/auto_cloner,
+			/obj/machinery/vending/artifact,
 		),
 		VERY_RARE_LOOT = list(
 			/obj/structure/bed/chair/wood/throne,
-			/obj/structure/closet/secure_closet/personal,
-			/obj/machinery/vending/artifact,
 			/obj/machinery/replicator,
 			/obj/machinery/communication,
+			/obj/machinery/artifact,
+			/obj/machinery/auto_cloner,
 		)
 	)
 

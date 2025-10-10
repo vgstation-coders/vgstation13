@@ -14,7 +14,7 @@
 "c" = (
 /obj/machinery/door/unpowered/shuttle,
 /turf/simulated/floor/shuttle,
-/area/template_noop)
+/area/ruin)
 "e" = (
 /obj/structure/flora/rock/pile,
 /turf/template_noop,
@@ -46,13 +46,13 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/shuttle,
-/area/template_noop)
+/area/ruin)
 "m" = (
 /turf/template_noop,
 /area/template_noop)
 "p" = (
 /turf/simulated/wall/shuttle,
-/area/template_noop)
+/area/ruin)
 "q" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -66,7 +66,7 @@
 	},
 /obj/item/weapon/shard,
 /turf/simulated/floor/shuttle/plating,
-/area/template_noop)
+/area/ruin)
 "u" = (
 /obj/machinery/media/receiver/boombox/wallmount/shuttle{
 	pixel_x = -32
@@ -80,17 +80,17 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/shuttle,
-/area/template_noop)
+/area/ruin)
 "x" = (
 /obj/structure/shuttle/engine/propulsion/left,
 /obj/effect/decal/cleanable/soot,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "z" = (
 /obj/structure/shuttle/engine/propulsion/right,
 /obj/effect/decal/cleanable/soot,
 /turf/simulated/floor/plating,
-/area/template_noop)
+/area/ruin)
 "C" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/weapon/storage/fancy/donut_box/empty,

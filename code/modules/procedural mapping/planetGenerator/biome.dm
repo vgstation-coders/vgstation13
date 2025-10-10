@@ -58,7 +58,7 @@
  * Changes the passed turf according to the biome's internal logic and adds it to the passed area
  *
  * Reassigns the turf to a new area, determines the appropriate turf type, and performs the turf change
- * while preserving certain flags like NO_RUINS_1.
+ * while preserving certain flags like NO_RUINS.
  * Arguments:
  * * gen_turf - The turf to generate
  * * new_area - The area to assign the turf to
@@ -73,8 +73,8 @@
 	new_area.contents += gen_turf
 	gen_turf.change_area(current_area, new_area)
 
-	// Preserve NO_RUINS_1 flag through turf change
-	var/stored_flags = gen_turf.turf_flags & NO_RUINS_1
+	// Preserve NO_RUINS flag through turf change
+	var/stored_flags = gen_turf.turf_flags & NO_RUINS
 	var/turf/new_turf_type = get_turf_type(gen_turf, string_gen)
 	var/turf/new_turf = gen_turf.ChangeTurf(new_turf_type)
 	// Restore the preserved flag
@@ -157,6 +157,8 @@
 		return null
 	if(!prob(loot_spawn_chance))
 		return null
+	if(floor_turf.turf_flags & NO_LOOT)
+		return null
 	if(!cavespawn)
 		if(!prob(20)) //non-cave loot is rarer
 			return null
@@ -193,8 +195,9 @@
  * * floor_turf - The floor turf to spawn the mob on
  * * area_flags - The flags from the turf's area
  * * mob_list - List of existing mobs (for distance checking)
+ * * planet_faction - Optional faction to assign to spawned mobs
  */
-/datum/biome/proc/try_spawn_mob(turf/simulated/floor/floor_turf, area_flags, list/mob_list)
+/datum/biome/proc/try_spawn_mob(turf/simulated/floor/floor_turf, area_flags, list/mob_list, planet_faction = null)
 	if(!length(mob_spawn_list_expanded))
 		return null
 	if(!prob(mob_spawn_chance))
@@ -208,6 +211,12 @@
 		return null
 
 	var/atom/spawned = new picked_mob(floor_turf)
+
+	// Assign planet faction to the spawned mob if provided
+	if(planet_faction && ismob(spawned))
+		var/mob/M = spawned
+		M.faction = planet_faction
+
 	// Insert at the head of the list, so the most recent mobs get checked first
 	mob_list.Insert(1, spawned)
 	floor_turf.turf_flags |= NO_LAVA_GEN_1
@@ -250,8 +259,9 @@
  * * feature_list - List of existing features (used for distance checking)
  * * mob_list - List of existing mobs (used for distance checking)
  * * loot_to_spawn - Optional loot table datum (currently unused)
+ * * planet_faction - Optional faction to assign to spawned mobs
  */
-/datum/biome/proc/populate_turf(turf/gen_turf, list/feature_list, list/mob_list, var/datum/loot_table/loot_to_spawn)
+/datum/biome/proc/populate_turf(turf/gen_turf, list/feature_list, list/mob_list, var/datum/loot_table/loot_to_spawn, planet_faction = null)
 	if(!can_populate_turf(gen_turf))
 		return
 
@@ -278,7 +288,7 @@
 
 	// Mob spawning (only if no flora, feature, or loot was spawned)
 	if(!spawned_flora && !spawned_feature && !spawned_loot)
-		spawned_mob = try_spawn_mob(floor_turf, area_flags, mob_list)
+		spawned_mob = try_spawn_mob(floor_turf, area_flags, mob_list, planet_faction)
 
 	// Second flora spawn attempt
 	if(!spawned_mob && !spawned_loot)

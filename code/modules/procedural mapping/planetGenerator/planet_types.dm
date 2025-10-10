@@ -29,6 +29,8 @@
 	// Player tracking for mob processing optimization
 	var/list/planet_mobs = list() // All mobs on this planet
 	var/player_count = 0 // Number of player mobs currently on planet
+	// Faction for mobs spawned on this planet
+	var/mob_faction
 
 /**
  * Builds the list of turfs affected by day/night cycle for this planet
@@ -61,6 +63,8 @@
 /datum/planet_type/New()
 	..()
 	planet_name = generate_planet_name()
+	// Generate unique faction name for this planet instance
+	mob_faction = planet_name
 	ico = icon('icons/ui/planet_scanner/128x128.dmi', "bg")
 	var/icon/fg = icon('icons/ui/planet_scanner/64x64.dmi', icon_state)
 	ico.Blend(fg,ICON_OVERLAY,32,32)

@@ -116,8 +116,8 @@
 	loot_spawners = list(/obj/abstract/loot_spawner/trash/on_ground) //it's bleak
 
 /datum/biome/cave/desert
-	open_turf_types = list(/turf/simulated/floor/asteroid/air = 1)
-	closed_turf_types = list(/turf/unsimulated/mineral/random = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/desert = 1)
+	closed_turf_types = list(/turf/unsimulated/mineral/random/cave = 1)
 	flora_spawn_chance = 4
 	flora_spawn_list = list(
 		/obj/structure/flora/rock = 5,

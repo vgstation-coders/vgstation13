@@ -1,7 +1,6 @@
 /datum/planetGenerator/urban
 	mountain_height = 0.85
 	perlin_zoom = 60
-
 	primary_area_type = /area/planet/urban
 
 	biome_table = list(
@@ -83,7 +82,6 @@
 // Surface biomes
 /datum/biome/urban
 	loot_spawn_chance = 2
-
 	loot_spawners = list(
 		/obj/abstract/loot_spawner/bureaucracy = 2,
 		/obj/abstract/loot_spawner/clothing = 2,
@@ -102,7 +100,7 @@
 		/obj/structure/grille/broken = 3,
 		/obj/item/weapon/shard = 2,
 	)
-	flora_spawn_chance = 15
+	flora_spawn_chance = 10
 	mob_spawn_chance = 2
 	mob_spawn_list = list(
 		/mob/living/simple_animal/cockroach = 25,
@@ -121,7 +119,7 @@
 		/obj/item/weapon/shard = 3,
 		/obj/structure/flora/ausbushes/sparsegrass = 5,
 	)
-	flora_spawn_chance = 25
+	flora_spawn_chance = 5
 	mob_spawn_chance = 3
 	mob_spawn_list = list(
 		/mob/living/simple_animal/cockroach = 30,
@@ -141,7 +139,7 @@
 		/obj/structure/flora/ausbushes/sparsegrass = 8,
 		/obj/structure/flora/ausbushes/grassybush = 3,
 	)
-	flora_spawn_chance = 35
+	flora_spawn_chance = 25
 	mob_spawn_chance = 4
 	mob_spawn_list = list(
 		/mob/living/simple_animal/cockroach = 35,
