@@ -3371,7 +3371,7 @@
 /turf/simulated/floor/plating/airless,
 /area/shuttle/mining/station)
 "bnQ" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 22
 	},
 /obj/structure/mirror{
@@ -24531,7 +24531,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/theatre)
 "jwM" = (
-/obj/structure/sink/puddle,
+/obj/structure/wc/sink/puddle,
 /turf/unsimulated/floor/jungle/grass/no_flora,
 /area/surface/jungle/zoned/botanty_outside)
 "jxh" = (
@@ -29709,7 +29709,7 @@
 	name = "Toxins Storage"
 	})
 "lzQ" = (
-/obj/structure/sink{
+/obj/structure/wc/sink{
 	pixel_y = 22
 	},
 /obj/structure/mirror{
@@ -40323,7 +40323,7 @@
 /turf/space,
 /area/shuttle/escape/centcom)
 "pJD" = (
-/obj/structure/toilet{
+/obj/structure/wc/toilet{
 	dir = 4
 	},
 /turf/simulated/floor{
