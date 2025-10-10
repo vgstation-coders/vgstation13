@@ -292,7 +292,7 @@
 
 	// Second flora spawn attempt
 	if(!spawned_mob && !spawned_loot)
-		spawned_flora = try_spawn_flora(floor_turf, area_flags, ignore_no_flora_flag = TRUE)
+		spawned_flora = try_spawn_flora(floor_turf, area_flags)
 
 /**
  * Cave biome subtype

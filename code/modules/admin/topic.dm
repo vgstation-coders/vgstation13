@@ -926,6 +926,44 @@
 		procedural_generation_panel()
 		return
 
+	else if(href_list["procgen_delete"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/datum/planet_type/planet = locate(href_list["procgen_delete"])
+
+		if(!planet?.allocation)
+			return
+
+		var/datum/allocation/alloc = planet.allocation
+		var/planet_name = planet.planet_name
+
+		// Check if any players are on the planet
+		if(planet.player_count > 0)
+			to_chat(usr, "<span class='warning'>Cannot delete [planet_name]: [planet.player_count] player(s) currently on the planet. Remove all players first.</span>")
+			return
+
+		var/confirm = alert(usr, "Are you sure you want to delete [planet_name]? This will permanently remove all contents and cannot be undone.", "Confirm Deletion", "Yes", "No")
+		if(confirm != "Yes")
+			return
+
+		message_admins("[key_name_admin(usr)] is deleting planet [planet_name].")
+
+		// Delete all contents in the allocation's turfs
+		for(var/turf/T in alloc.turfs)
+			for(var/atom/movable/AM in T.contents)
+				qdel(AM)
+			T.ChangeTurf(/turf/space)
+
+		SSmapping.planets -= planet
+
+		qdel(planet)
+		qdel(alloc)
+
+		message_admins("[key_name_admin(usr)] deleted planet [planet_name].")
+		to_chat(usr, "<span class='notice'>Planet [planet_name] has been deleted.</span>")
+		procedural_generation_panel()
+		return
+
 	/////////////////////////////////////new ban stuff
 	else if(href_list["unbanf"])
 		if(!check_rights(R_BAN))

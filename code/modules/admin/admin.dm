@@ -1048,7 +1048,7 @@ var/global/floorIsLava = 0
 			dat += "<td>[sector]</td>"
 			dat += "<td>[current_weather] <A href='?_src_=holder;procgen_weather=\ref[planet]'>\[Change\]</A></td>"
 			dat += "<td>[current_time] <A href='?_src_=holder;procgen_time=\ref[planet]'>\[Change\]</A></td>"
-			dat += "<td><A href='?_src_=holder;procgen_jump=\ref[planet]'>Jump to Planet</A></td>"
+			dat += "<td><A href='?_src_=holder;procgen_jump=\ref[planet]'>Jump to Planet</A> | <A href='?_src_=holder;procgen_delete=\ref[planet]'>Destroy</A></td>"
 			dat += "</tr>"
 
 		dat += "</table>"
