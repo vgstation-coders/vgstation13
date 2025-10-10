@@ -332,7 +332,9 @@
 /datum/biome/cave/get_turf_type(turf/gen_turf, string_gen)
 	// Gets the character in string_gen corresponding to gen_turf's coords. If it is nonzero,
 	// place a closed turf; otherwise place an open turf
-	var/string_index = SECTOR_SIZE * (gen_turf.y - 1) + gen_turf.x
+	var/rel_x = ((gen_turf.x - 1) % SECTOR_SIZE) + 1
+	var/rel_y = ((gen_turf.y - 1) % SECTOR_SIZE) + 1
+	var/string_index = SECTOR_SIZE * (rel_y - 1) + rel_x
 	var/is_closed = text2num(string_gen[string_index])
 	return pick(is_closed ? closed_turf_types_expanded : open_turf_types_expanded)
 

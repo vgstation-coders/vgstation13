@@ -236,7 +236,7 @@
 	name = "desert planet"
 	desc = "A hot, arid world with vast deserts and scarce water sources."
 	mapgen = /datum/planetGenerator/desert
-	default_baseturf = /turf/simulated/floor/plating/ironsand
+	default_baseturf = /turf/unsimulated/floor/planetary/desert
 	loot_type = LOOT_TYPE_DESERT
 	climate_type = CLIMATE_DESERT
 	loot_modifier = 5
@@ -265,7 +265,7 @@
 	name = "lava planet"
 	desc = "A planet rife with seismic and volcanic activity. High temperatures and dangerous xenofauna render it dangerous for the unprepared."
 	mapgen = /datum/planetGenerator/lava
-	default_baseturf = /turf/unsimulated/floor/planetary/lava
+	default_baseturf = /turf/unsimulated/floor/planetary/basalt
 	loot_type = LOOT_TYPE_LAVA
 	climate_type = CLIMATE_LAVA
 	loot_modifier = 15

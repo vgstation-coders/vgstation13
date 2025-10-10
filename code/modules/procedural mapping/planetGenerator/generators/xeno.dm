@@ -1,5 +1,5 @@
 /datum/planetGenerator/xeno
-	mountain_height = 0.8
+	mountain_height = 0.4
 	perlin_zoom = 65
 
 	primary_area_type = /area/planet/xeno
