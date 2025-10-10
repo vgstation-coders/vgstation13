@@ -2196,7 +2196,11 @@ Use this proc preferably at the end of an equipment loadout
 			continue
 		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
 		return TRUE
-
+	for(var/mob/living/complex_animal/P in view(src))
+		if(P.isDead() || !P.pacify_aura)
+			continue
+		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
+		return TRUE
 	return FALSE
 
 /mob/proc/handle_regular_hud_updates()

@@ -91,13 +91,13 @@
 				M.bodytemperature += rand(5,20)
 			if(isslimeperson(H))
 				M.bodytemperature += rand(5,20)
-		if(15 to 25)
+		if(16 to 25)
 			M.bodytemperature += 0.9 * TEMPERATURE_DAMAGE_COEFFICIENT
 			if(isslime(M))
 				M.bodytemperature += rand(10,20)
 			if(isslimeperson(H))
 				M.bodytemperature += rand(10,20)
-		if(25 to INFINITY)
+		if(26 to INFINITY)
 			M.bodytemperature += 1.2 * TEMPERATURE_DAMAGE_COEFFICIENT
 			if(isslime(M))
 				M.bodytemperature += rand(15,20)
@@ -234,7 +234,7 @@
 				M.bodytemperature += rand(10,20)
 			if(isslimeperson(H))
 				M.bodytemperature += rand(10,20)
-		if(15 to 30)
+		if(16 to 30)
 			M.bodytemperature += 1.1 * TEMPERATURE_DAMAGE_COEFFICIENT
 			if(prob(6))//Start vomiting
 				H.vomit(0,1)
@@ -242,7 +242,7 @@
 				M.bodytemperature += rand(20,25)
 			if(isslimeperson(H))
 				M.bodytemperature += rand(20,25)
-		if(30 to 45)//Reagent dies out at about 50. Set up the vomiting to "fade out".
+		if(31 to 45)//Reagent dies out at about 50. Set up the vomiting to "fade out".
 			if(prob(9))
 				H.vomit()
 
@@ -271,14 +271,14 @@
 				if(prob(5))
 					H.emote("me", 1, "burps.")
 					holder.remove_reagent(id, 0.1 * FOOD_METABOLISM)
-			if(15 to 100)
+			if(16 to 100)
 				if(prob(10))
 					to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
 				if(prob(5))
 					if(heart && !heart.robotic)
 						to_chat(H,"<span class='warning'>You feel a burn in your chest.</span>")
 						heart.take_damage(0.2, 1)
-			if(100 to INFINITY)//Too much corn oil holy shit, no one should ever get this high
+			if(101 to INFINITY)//Too much corn oil holy shit, no one should ever get this high
 				if(heart && !heart.robotic)
 					to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
 					has_had_heart_explode = 1 //That way it doesn't blow up any new transplant hearts
@@ -445,13 +445,13 @@
 				M.bodytemperature -= rand(5,20)
 			if(isslimeperson(H))
 				M.bodytemperature -= rand(5,20)
-		if(15 to 25)
+		if(16 to 25)
 			M.bodytemperature = max(M.bodytemperature-0.6 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
 			if(isslime(M))
 				M.bodytemperature -= rand(10,20)
 			if(isslimeperson(H))
 				M.bodytemperature -= rand(10,20)
-		if(25 to INFINITY)
+		if(26 to INFINITY)
 			M.bodytemperature = max(M.bodytemperature-0.9 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
 			if(prob(1))
 				M.emote("shiver")
@@ -1038,7 +1038,7 @@
 						to_chat(M,"<span class='notice'>Your throat feels a little hot!</span>")
 					if(prob(5))
 						to_chat(M,"<span class='notice'>[pick("Now that's a Zam zing!","By the mothership, that was a perfect spice level.","That was an excellent flavor.","Spicy goodness is flowing through your system.")]</span>")
-				if(15 to 30)
+				if(16 to 30)
 					if(prob(10))
 						to_chat(M,"<span class='notice'>Your throat feels like it's on fire!</span>")
 						M.visible_message("<span class='warning'>[M] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
@@ -1047,7 +1047,7 @@
 					if(prob(5))
 						to_chat(M,"<span class='warning'>You feel a slight burning in your chest.</span>")
 						M.adjustToxLoss(1)
-				if(30 to INFINITY)
+				if(31 to INFINITY)
 					M.Jitter(5)
 					if(prob(15))
 						H.custom_pain("You feel an awful burning in your chest.",1)
@@ -1073,7 +1073,7 @@
 					if(prob(5))
 						to_chat(M,"<span class='warning'>You feel a slight burning in your chest.</span>")
 						M.adjustToxLoss(1)
-				if(15 to 30)
+				if(16 to 30)
 					M.Jitter(5)
 					if(prob(15))
 						H.custom_pain("You feel an awful burning in your chest.",1)
@@ -1084,7 +1084,7 @@
 						var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
 						if(istype(L))
 							L.take_damage(1, 0)
-				if(30 to INFINITY)
+				if(31 to INFINITY)
 					M.Jitter(5)
 					if(prob(40))
 						M.adjustToxLoss(6)

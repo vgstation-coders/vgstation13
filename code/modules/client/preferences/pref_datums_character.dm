@@ -192,10 +192,6 @@
 		if("Insectoid")
 			var/carapace = input(user, "Choose your character's carapace colour, color values will be adjusted to between 35 and 80:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
 			if(carapace)
-				var/datum/preference_setting/numerical/r_facial = parent.get_pref_datum(/datum/preference_setting/numerical/r_facial)
-				var/datum/preference_setting/numerical/g_facial = parent.get_pref_datum(/datum/preference_setting/numerical/g_facial)
-				var/datum/preference_setting/numerical/b_facial = parent.get_pref_datum(/datum/preference_setting/numerical/b_facial)
-
 				r_hair.setting = hex2num(copytext(carapace, 2, 4))
 				g_hair.setting = hex2num(copytext(carapace, 4, 6))
 				b_hair.setting = hex2num(copytext(carapace, 6, 8))

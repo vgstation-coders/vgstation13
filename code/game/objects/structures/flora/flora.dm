@@ -13,7 +13,10 @@
 /obj/structure/flora/Destroy()
 	if(istype(loc,/turf/unsimulated/floor/jungle/grass))
 		var/turf/unsimulated/floor/jungle/grass/G=loc
-		G.turf_speed_multiplier=1.1
+		G.turf_speed_multiplier=1.0
+		if(SSFoliageRegrow)
+			turfs_to_regrow +=G
+			G.regrowticks=world.time
 	..()
 
 /obj/structure/flora/update_icon()
@@ -724,9 +727,9 @@
 		tickssincelastgrowth=0
 		var/i=3
 		while(i)
-			new/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle(loc)
+			new/obj/item/weapon/reagent_containers/food/snacks/grown/berries/jungle(loc,user)
 			i--
-			if(prob(50))
+			if(user.lucky_prob_rand()<0.5) //luckier people get more berries.
 				i=0
 		icon_state="stage-6"
 	else

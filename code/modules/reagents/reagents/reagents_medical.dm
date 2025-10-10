@@ -341,7 +341,7 @@
 				H.dizziness = max(H.dizziness, 10)
 				if(prob(5))
 					to_chat(H,"<span class='warning'>Your stomach grumbles and you feel a little nauseous.</span>")
-			if(75 to INFINITY)
+			if(76 to INFINITY)
 				H.dizziness = max(H.dizziness, 20)
 				if(prob(10))
 					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
@@ -549,13 +549,13 @@ var/global/list/charcoal_doesnt_remove=list(
 		return 1
 
 	switch(volume)
-		if(1 to 4.5)
+		if(1 to 4.59)
 			M.Jitter(5)
 			if(prob(10))
 				to_chat(M, "You feel slightly energized, but nothing happens")
 			if(has_been_armstrong>0) //Added in case person metabolizes below 5 units to prevent infinite hulk
 				dehulk(M)
-		if(4.5 to 15)
+		if(4.60 to 15)
 			if(ishuman(M)) //Does nothing to non-humans.
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona") //Dionae are broken as fuck
@@ -1178,7 +1178,7 @@ var/global/list/charcoal_doesnt_remove=list(
 				if(prob(20))
 					to_chat(M, pick("You feel more like yourself again."))
 
-		if(5 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
+		if(6 to 20)	//Processing above 5 units runs the risk of getting a big enough dose of nanobots to turn you into a cyberhorror.
 			percent_machine += 0.5 //The longer it metabolizes at this stage the more likely.
 			if(prob(20))
 				to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>",
@@ -1186,7 +1186,7 @@ var/global/list/charcoal_doesnt_remove=list(
 			if(prob(percent_machine))
 				holder.add_reagent(MEDNANOBOTS, 20)
 				to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
-		if(20 to INFINITY) //Now you've done it.
+		if(21 to INFINITY) //Now you've done it.
 			if(istype(M, /mob/living/simple_animal/hostile/monster/cyber_horror))
 				return
 			spawning_horror = 1
@@ -1553,7 +1553,7 @@ var/global/list/charcoal_doesnt_remove=list(
 		if(1 to 15)
 			M.adjustCloneLoss(-1)
 			M.heal_organ_damage(1, 1)
-		if(15 to 35)
+		if(16 to 35)
 			M.adjustCloneLoss(-2)
 			M.heal_organ_damage(2, 1)
 			if(ishuman(M))
@@ -1673,7 +1673,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	switch(tick)
 		if(1 to 5)
 			M.eye_blurry = max(M.eye_blurry, 10) //Eyes get blurry immediately
-		if(5 to INFINITY)
+		if(6 to INFINITY)
 			M.drowsyness  = max(M.drowsyness, 10) //Drowsiness even outside of the sleeper
 
 	//This handles sleeper/cryo vs out of sleeper/cryo behaviors

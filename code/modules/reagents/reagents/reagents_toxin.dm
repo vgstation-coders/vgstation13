@@ -39,7 +39,7 @@
 				H.adjustToxLoss(0.1)
 				if(prob(8))
 					H.vomit()
-		if(600 to INFINITY)	//Ded in 10 minutes with a minimum of 6 units
+		if(601 to INFINITY)	//Ded in 10 minutes with a minimum of 6 units
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(prob(20))
@@ -665,14 +665,14 @@
 		return 1
 
 	switch(tick)
-		if(1 to 15)
+		if (1 to 15)
 			M.eye_blurry = max(M.eye_blurry, 10)
-		if(15 to 25)
+		if (16 to 25)
 			M.drowsyness  = max(M.drowsyness, 20)
-		if (25 to 240)
+		if (26 to 240)
 			M.Paralyse(20)
 			M.drowsyness  = max(M.drowsyness, 30)
-		if(240 to INFINITY) // 8 minutes
+		if (241 to INFINITY) // 8 minutes
 			var/mob/living/carbon/human/H = M
 			var/datum/organ/internal/heart/damagedheart = H.get_heart()
 			damagedheart.damage += 10

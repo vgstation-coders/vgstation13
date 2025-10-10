@@ -250,6 +250,17 @@ BLIND     // can't see anything
 	icon_state = "sun_purple"
 	species_fit = list(GREY_SHAPED)
 
+/obj/item/clothing/glasses/sunglasses/purple/equipped(mob/M, slot)
+	if(slot == slot_glasses)
+		M.overlay_fullscreen("purple", /obj/abstract/screen/fullscreen/science)
+	return ..()
+
+/obj/item/clothing/glasses/sunglasses/purple/unequipped(mob/living/carbon/human/M, from_slot)
+	if(from_slot == slot_glasses)
+		M.clear_fullscreen("purple",0)
+	return ..()
+
+
 /obj/item/clothing/glasses/sunglasses/star
 	name = "star-shaped sunglasses"
 	desc = "Novelty sunglasses, both lenses are in the shape of a star."
