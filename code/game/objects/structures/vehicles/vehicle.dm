@@ -402,6 +402,8 @@
 		die()
 
 /obj/structure/bed/chair/vehicle/suicide_act(var/mob/living/user)
+	if(!keytype)
+		return ..()
 	if(occupant == user)
 		to_chat(viewers(user), "<span class='danger'>[user] is licking the keyhole of the [src]! It looks like \he's trying to commit suicide.</span>")
 		return(SUICIDE_ACT_FIRELOSS)

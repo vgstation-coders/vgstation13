@@ -151,19 +151,27 @@
 	shock(user, 100)
 	return
 
-/obj/structure/grille/attack_animal(var/mob/living/simple_animal/M as mob)
-	M.delayNextAttack(8)
-	if(M.melee_damage_upper == 0)
-		return
-	M.do_attack_animation(src, M)
-	M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
-					  "<span class='warning'>You smash against \the [src].</span>", \
-					  "You hear twisting metal.")
-	health -= rand(M.melee_damage_lower, M.melee_damage_upper)
+/obj/structure/grille/attack_animal(var/mob/living/simple_animal/M)
+	if(istype(M,/mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = M
+		M.delayNextAttack(8)
+		if(!SA.melee_damage_upper)
+			return
+		M.do_attack_animation(src, M)
+		M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
+						  "<span class='warning'>You smash against \the [src].</span>", \
+						  "You hear twisting metal.")
+		health -= rand(SA.melee_damage_lower, SA.melee_damage_upper)
+	else if(istype(M,/mob/living/complex_animal))
+		var/mob/living/complex_animal/CA = M
+		M.delayNextAttack(8)
+		M.do_attack_animation(src, M)
+		M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
+						  "<span class='warning'>You smash against \the [src].</span>", \
+						  "You hear twisting metal.")
+		health -= CA.base_damage  + rand(-CA.damage_variance , CA.damage_variance )
 	healthcheck(hitsound = 1)
 	shock(M, 100)
-	return
-
 
 /obj/structure/grille/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || (height == 0))

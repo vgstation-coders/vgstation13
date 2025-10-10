@@ -1969,6 +1969,11 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define HEX_MODE_GUARD	 1
 #define HEX_MODE_ESCORT	 2
 
+//Druggy overlay time to fade in/out
+#define DRUGGY_ALPHA		(min(255, 75 + (3 * druggy)))
+#define DRUGGY_FADE_IN		(40)
+#define DRUGGY_FADE_OUT		(80)
+
 //Particles system defines
 #define PS_STEAM			"Steam"
 #define PS_SMOKE			"Smoke"

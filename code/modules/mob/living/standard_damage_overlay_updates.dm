@@ -103,9 +103,9 @@
 		else
 			clear_fullscreen("blurry")
 		if(druggy)
-			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
+			enable_druggy_overlays()
 		else
-			clear_fullscreen("high")
+			disable_druggy_overlays()
 		if(has_reagent_in_blood(INCENSE_MOONFLOWERS))
 			overlay_fullscreen("high_red", /obj/abstract/screen/fullscreen/high/red)
 		else

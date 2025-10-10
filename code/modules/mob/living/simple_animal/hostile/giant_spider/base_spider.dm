@@ -220,6 +220,3 @@
 			healths.icon_state = "health4"
 		else
 			healths.icon_state = "health5"
-
-/mob/living/simple_animal/hostile/giant_spider/jungle
-	faction="jungle"

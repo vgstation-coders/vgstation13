@@ -136,40 +136,42 @@ var/list/foliage_replacments=list(
 )
 
 /turf/unsimulated/floor/jungle/grass
-	name="Jungle Grass"
+	name="Dense Grass"
 	desc="A thick and lush carpet of various plant species, sustained by a regular supply to water."
 	icon = 'icons/turf/floors.dmi'
-	icon_state = "grass_alt1"
-	turf_speed_multiplier=1.1 // tall grass.
+	icon_state = "grass_jungle1"
+	turf_speed_multiplier=1.0 // tall grass.
 	construction_allowed=TRUE
-
-/turf/unsimulated/floor/jungle/grass/New(var/loc,var/NO_GROW=FALSE)
+	var/regrowticks=0 //world.time
+	
+/turf/unsimulated/floor/jungle/grass/New(var/loc)
 	..()
+	icon_state="grass_jungle[rand(1,4)]"
 	footstep_sound = sounds_grass
 	footstep_sound_barefoot = sounds_grass
 	footstep_sound_claw = sounds_grass
-	if(NO_GROW)
-		return
-
-	//var/area/A = loc
-	//if(prob( (A.type!=/area/surface/jungle) ? 50 : 100 )) //populated areas have less plants. DOESN'T WORK. IS NULL. WHYYYYYYYYYYYYY
+	
+	if(SSFoliageRegrow && !generate_foliage())
+		turfs_to_regrow +=src
+		regrowticks=0
+	
+/turf/unsimulated/floor/jungle/grass/proc/generate_foliage()
 	if (prob(50))
 		if(prob(10)) //10% chance to replace with rocks or some shit. 5% over all
 			var/rep=pick(foliage_replacments)
-			new rep(src)
 			turf_speed_multiplier+=0.6
+			return new rep(src)
 		else //45% over all
 			var/plantseed = abs(( sin((x+rand(-2,2))*5.01+213.998) + sin((y+rand(-2,2))*4.56+71.294) )%%1.0)
 			plantseed = 1+floor(plantseed*(foliage_choices.len-0.01))//mmm, dumb float math
 
 			var/create=foliage_choices[plantseed]
 			if(create)
-				new create(src)
 				turf_speed_multiplier+=0.6
+				return new create(src)
 	else if(prob(50)) //25% overall
 		if( !(locate(/obj/structure/flora/tree) in range(2,src)) )
-			new/obj/structure/flora/tree/shitty(src)
-
+			return new/obj/structure/flora/tree/shitty(src)
 
 /turf/unsimulated/floor/jungle/grass/Destroy()
 	..()
@@ -200,14 +202,11 @@ var/list/foliage_replacments=list(
 			if(prob(40))
 				ChangeTurf(/turf/unsimulated/floor/jungle/dirt)
 
-/turf/unsimulated/floor/jungle/grass/New()
-	..()
-	icon_state="grass_alt[rand(1,4)]"
+/turf/unsimulated/floor/jungle/grass/no_flora
+	icon_state="grass_alt1" //uses an alt texture at first so that it appears different while mapping. this will correct itself when it spawns.
 
-/turf/unsimulated/floor/jungle/grass/no_flora //BYOND...
-/turf/unsimulated/floor/jungle/grass/no_flora/New(var/loc)
-	..(loc,TRUE)
-
+/turf/unsimulated/floor/jungle/grass/no_flora/generate_foliage()
+	return
 
 /turf/unsimulated/floor/jungle/mud
 	name="Mud"
@@ -285,12 +284,12 @@ var/list/foliage_replacments=list(
 			return
 	if(C.type== /obj/item/stack/ore/glass && hashole)
 		var/obj/item/stack/ore/glass/T = C
-		if(T.amount<50)
-			to_chat(usr,"you need 50 sand to do this!")
+		if(T.amount<25)
+			to_chat(usr,"you need 25 sand to do this!")
 			return
 		to_chat(usr,"you start filling the hole back with soil...")
 		if(do_after(user, src, 80 ))
-			if(T.use(50))
+			if(T.use(25))
 				to_chat(usr,"you fill the hole back with soil.")
 				var/turf/T2=hashole.down.loc
 				T2?.ChangeTurf(/turf/unsimulated/floor/jungle/underground)
@@ -423,7 +422,7 @@ var/list/foliage_replacments=list(
 	opacity=1
 	desc="Solid dirt as far as the eye can see."
 	icon='icons/turf/walls.dmi'
-	icon_state = "gingerbread15"
+	icon_state = "j_dirtwall"	
 	var/loosened=FALSE // you dig with a pickaxe, too, dumbass.
 
 
@@ -448,22 +447,26 @@ var/list/foliage_replacments=list(
 	s=item_terraforming_ispickaxe(C)
 	if(s>0.0)
 		if (loosened)
-			to_chat(user, "<span class='notice'>The soil is already loose.</span>")
+			to_chat(user,"<span class='notice'>You begin to break apart the soil...</span>")
+			if(do_after(user, src, 30/s ))
+				generate_loot(C,user)
+				ChangeTurf(/turf/unsimulated/floor/jungle/bedrock)
+				return
 		else
 			to_chat(user, "<span class='notice'>You start to loosen the soil...</span>")
-			if(do_after(user, src, 20/s ))
+			if(do_after(user, src, 15/s ))
 				loosened=TRUE
 	s=item_terraforming_isshovel(C)
 	if(s>0.0)
 		to_chat(user, loosened ? "<span class='notice'>You begin to break apart the soil...</span>" : "<span class='notice'>You struggle to break up the soil...</span>")
-		if(do_after(user, src, (loosened ? 20 : 60)/s ))
+		if(do_after(user, src, (loosened ? 15 : 45)/s ))
 			generate_loot(C,user)
 			ChangeTurf(/turf/unsimulated/floor/jungle/bedrock)
 			return
 
 
 /turf/unsimulated/floor/jungle/underground/generate_loot(var/obj/item/C, var/mob/user)
-	new/obj/item/stack/ore/glass(src,50) //theres no dirt, so we use sand instead.
+	new/obj/item/stack/ore/glass(src,25) //theres no dirt, so we use sand instead.
 	if(!user)
 		return
 	if (user.lucky_prob_rand()>0.5) //50% base chance
@@ -480,21 +483,37 @@ var/list/foliage_replacments=list(
 			new/obj/item/stack/ore/uranium(src,user.lucky_prob_rand_range(1,3))
 	return
 
+
+
+/turf/unsimulated/floor/jungle/underground/crate_loot
+	icon_state="rock(high)"
+	
+/turf/unsimulated/floor/jungle/underground/crate_loot/New()
+	..()
+	icon_state="j_dirtwall" //use the normal icon. initial icon is different so you can see it in the map editor.
+
+/turf/unsimulated/floor/jungle/underground/crate_loot/generate_loot(var/obj/item/C, var/mob/user)
+	..()
+	if(user.lucky_prob_rand()>0.996) //0.4% chance (1 in 250). affected by luck, naturally.
+		visible_message("<span class='notice'>An old dusty crate was buried within!</span>")
+		var/ctype=pick(valid_abandoned_crate_types)
+		new ctype(src)
+
 /turf/unsimulated/floor/jungle/bedrock
 	name="Bedrock"
 	desc="A very dense rock. Nothing seems to be able to dig through it."
 	icon='icons/turf/walls.dmi'
-	icon_state = "mariahive_noanimation"
+	icon_state = "j_rockfloor"	
 	var/obj/structure/ladder/jungle_tunnel/hashole=null
 	construction_allowed=TRUE
 
 
 /turf/unsimulated/floor/jungle/bedrock/New(var/loc)
 	if(locate(/obj/structure/ladder/jungle_tunnel) in contents)
-		icon_state="mariahive_noanimation_l"
+		icon_state="j_rockfloor_l"
 
 	if(cannot_dig_up())
-		icon_state="mariahive_noanimation_d"
+		icon_state="j_rockfloor_d"
 
 /turf/unsimulated/floor/jungle/bedrock/attackby(obj/item/C as obj, mob/user as mob)
 	..()
@@ -508,8 +527,8 @@ var/list/foliage_replacments=list(
 			if(do_after(user, src, 80/s ))
 				if(!hashole && !cannot_dig_up() )
 					to_chat(usr,"you finish making a hole.")
-					icon_state="mariahive_noanimation_l"
-
+					icon_state="j_rockfloor_l"
+					
 					var/obj/structure/ladder/jungle_tunnel/l_tunnel=new(src)
 					var/obj/structure/ladder/jungle_tunnel/l_surf=new(locate(x,y,1))
 
@@ -530,10 +549,10 @@ var/list/foliage_replacments=list(
 
 /turf/unsimulated/floor/jungle/bedrock/examine()
 	..()
-	if(icon_state=="mariahive_noanimation_d")
+	if(icon_state=="j_rockfloor_d")
 		to_chat(usr,cannot_dig_up() || "it seems that there's something solid above you that you won't be able to dig through.")
 		return
-	if(icon_state=="mariahive_noanimation_l")
+	if(icon_state=="j_rockfloor_l")
 		to_chat(usr,"there's a hole leading to the surface.")
 
 
@@ -541,13 +560,13 @@ var/list/foliage_replacments=list(
 /turf/unsimulated/floor/jungle/bedrock/Entered(var/atom/movable/Obj,var/recursive=TRUE)
 	if(recursive)
 		..()
-	icon_state="mariahive_noanimation"
-
+	icon_state="j_rockfloor"
+	
 	if(locate(/obj/structure/ladder/jungle_tunnel) in contents)
-		icon_state="mariahive_noanimation_l"
-
+		icon_state="j_rockfloor_l"
+	
 	if(cannot_dig_up())
-		icon_state="mariahive_noanimation_d"
+		icon_state="j_rockfloor_d"
 
 	if(recursive) //we reveal the state of surrounding bedrock. there's probably a better way to do this.
 		var/turf/T2=get_step(src,NORTH)

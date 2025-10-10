@@ -256,10 +256,10 @@
 			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
 		else
 			clear_fullscreen("blurry")
-		if (src.druggy)
-			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
+		if(druggy)
+			enable_druggy_overlays()
 		else
-			clear_fullscreen("high")
+			disable_druggy_overlays()
 
 	if (stat != 2)
 		if (machine)

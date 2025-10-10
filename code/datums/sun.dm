@@ -42,9 +42,12 @@ var/global/datum/sun/sun
 		var/obj/machinery/power/solar/panel/tracker/T
 		for(T in solars_list)
 			if(T.powernet)
-				occlusion(T)
-				if (!T.obscured)
-					T.set_angle(angle)
+				if(SSDayNight?.overwrite_solars && (T.z in daynight_z_lvls) )
+					T.set_angle(SSDayNight.nearest_star_angle)
+				else
+					occlusion(T)
+					if (!T.obscured)
+						T.set_angle(angle)
 		lastAngle = angle
 
 	if(world.time < nextTime)
@@ -70,7 +73,10 @@ var/global/datum/sun/sun
 
 	for(S in solars_list)
 		if(S.powernet)
-			occlusion(S)
+			if(SSDayNight?.overwrite_solars && (S.z in daynight_z_lvls) )
+				occlusion_planetside(S)
+			else
+				occlusion(S)
 
 //For a solar panel, trace towards sun to see if we're in shadow.
 
@@ -104,5 +110,11 @@ var/global/datum/sun/sun
 			return
 
 	S.obscured = 0 //If hit the edge or stepped 20 times, not obscured.
+	S.update_solar_exposure()
+	S.update_icon()
+
+//ignore blocking tiles if we're using the day/night for our power determination, and instead use angles and whatnot.
+/datum/sun/proc/occlusion_planetside(const/obj/machinery/power/solar/panel/S)	
+	S.obscured = 0
 	S.update_solar_exposure()
 	S.update_icon()

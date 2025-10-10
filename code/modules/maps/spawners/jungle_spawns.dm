@@ -1,46 +1,39 @@
 //things that try to kill you.
 var/list/junglemobs_hostile=list(
-	/mob/living/simple_animal/hostile/giant_spider/jungle,
-	/mob/living/simple_animal/hostile/bear/dinosaur,
-	/mob/living/simple_animal/hostile/bear/panther,
-	/mob/living/simple_animal/hostile/bear/brownbear/jungle,
+	/mob/living/complex_animal/dinosaur,
+	/mob/living/complex_animal/panther,
+	/mob/living/complex_animal/bear,
 )
 
-//things that could kill you
-var/list/junglemobs_dangerous=list(
-/mob/living/simple_animal/hostile/lizard/frog/poison,
-)
 
-//things that won't kill you
-var/list/junglemobs_safe=list(
-/mob/living/simple_animal/hostile/lizard/frog,
-/mob/living/simple_animal/parrot/jungle,
-/mob/living/simple_animal/capybara/jungle,
+//things that won't attack you
+var/list/junglemobs_passive=list(
+/mob/living/complex_animal/frog,
+/mob/living/complex_animal/frog/poison,
+/mob/living/complex_animal/parrot,
 /mob/living/carbon/monkey,
 )
-
-
+//they don't kill you, but also are less frequent. capy bappies are here because the pacify aura is quite strong and funny. so we limit that, because we HATE fun.
+var/list/junglemobs_passive_rare=list(
+/mob/living/complex_animal/capybara_wild,
+)
 
 //any wildlife, be it fren-shaped or not.
 /obj/abstract/map/spawner/jungle_any
 	icon_state="jungle_mob_random"
 
 /obj/abstract/map/spawner/jungle_any/New()
-	var/list/pickfrom=list()
-	
-	pickfrom+=junglemobs_hostile
-	pickfrom+=junglemobs_dangerous
-	pickfrom+=junglemobs_safe
-	
-	to_spawn = pick(pickfrom)
-	..()
-
-
-/obj/abstract/map/spawner/jungle_any/multi
-	icon_state="jungle_mob_randomany"
-
-/obj/abstract/map/spawner/jungle_any/multi/New()	
-	amount=rand(4,7)
+	var/rng=rand()
+	if(rng < 0.65) //65% chance of friendly mobs
+		amount=rand(3,6)
+		if(prob(20)) //20% chance for rare (13% overall)
+			amount = rand(1,2)
+			to_spawn = pick(junglemobs_passive_rare)
+		else
+			to_spawn = pick(junglemobs_passive)
+	else
+		amount=rand(2,5)
+		to_spawn = pick(junglemobs_hostile)
 	..()
 
 
@@ -49,14 +42,12 @@ var/list/junglemobs_safe=list(
 	icon_state="jungle_mob_fren"
 	
 /obj/abstract/map/spawner/jungle_fren/New()
-	to_spawn = pick(junglemobs_safe)
-	..()
-
-/obj/abstract/map/spawner/jungle_fren/multi
-	icon_state="jungle_mob_frenmany"
-
-/obj/abstract/map/spawner/jungle_fren/multi/New()	
-	amount=rand(4,7)
+	amount=rand(3,6)
+	if(prob(20))
+		to_spawn = pick(junglemobs_passive_rare)
+		amount = rand(1,2)
+	else
+		to_spawn = pick(junglemobs_passive)
 	..()
 
 
@@ -65,28 +56,6 @@ var/list/junglemobs_safe=list(
 	icon_state="jungle_mob_hostile"
 	
 /obj/abstract/map/spawner/jungle_hostile/New()
+	amount=rand(3,6)
 	to_spawn = pick(junglemobs_hostile)
 	..()
-
-/obj/abstract/map/spawner/jungle_hostile/multi
-	icon_state="jungle_mob_hostilemany"
-
-/obj/abstract/map/spawner/jungle_hostile/multi/New()	
-	amount=rand(4,7)
-	..()	
-
-
-//random dangerous wildlife. <:O
-/obj/abstract/map/spawner/jungle_danger
-	icon_state="jungle_mob_danger"
-	
-/obj/abstract/map/spawner/jungle_danger/New()
-	to_spawn = pick(junglemobs_dangerous)
-	..()
-
-/obj/abstract/map/spawner/jungle_danger/multi
-	icon_state="jungle_mob_dangermany"
-
-/obj/abstract/map/spawner/jungle_danger/multi/New()	
-	amount=rand(4,7)
-	..()		

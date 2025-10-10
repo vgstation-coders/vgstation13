@@ -126,10 +126,15 @@
 /obj/machinery/power/solar/panel/proc/panel_rotation(var/target, var/speed)
 	if(adir != target)
 		// Take the shortest rotation possible
-		var/direction = ((abs(target - adir) < 180) ? (target - adir) : (adir - target))
-		adir = (360 + adir + clamp(clamp(direction,-1*(360 - max(target,adir) + min(target,adir)),360 - max(target,adir) + min(target,adir)), -speed, speed)) % 360
-		//the extra 360 ensures the result of the % is positive
-		//the inside clamp() prevents the rotation from overshooting its target if it passes the 0°|360° mark
+		var/adiff=(target - adir+180)
+		adiff=adiff-360*floor(adiff/360)-180
+		if( adiff<=speed ) //the below code does not in fact prevent overshooting the target.
+			adir=target
+		else
+			var/direction = ((abs(target - adir) < 180) ? (target - adir) : (adir - target))
+			adir = (360 + adir + clamp(clamp(direction,-1*(360 - max(target,adir) + min(target,adir)),360 - max(target,adir) + min(target,adir)), -speed, speed)) %% 360
+			//the extra 360 ensures the result of the % is positive
+			//the inside clamp() prevents the rotation from overshooting its target if it passes the 0°|360° mark
 		update_solar_exposure()
 		update_icon()
 
@@ -249,14 +254,22 @@
 		else if(obscured || !sun)
 			icon_state += "-dark"
 		else
-			glow.transform = turn(matrix(), (sun.angle + 180) % 360)
+			if(SSDayNight?.overwrite_solars && (src.z in daynight_z_lvls) )
+				glow.transform = turn(matrix(), (SSDayNight.nearest_star_angle + 180) % 360)
+			else
+				glow.transform = turn(matrix(), (sun.angle + 180) % 360)
 			glow.alpha = glow_intensity
 			overlays += glow
 
 
 /obj/machinery/power/solar/panel/proc/update_solar_exposure()
+	var/use_daynight_ss=FALSE
 	if(!sun)
 		obscured = 1
+
+	if(SSDayNight?.overwrite_solars && (src.z in daynight_z_lvls) )
+		use_daynight_ss=TRUE
+		obscured=0
 
 	if(obscured)
 		sunfrac = 0
@@ -267,16 +280,17 @@
 	plane = ABOVE_LIGHTING_PLANE
 	layer = ABOVE_LIGHTING_LAYER
 
-	var/p_angle = abs(sun.angle - adir)
+	var/starangle=(use_daynight_ss ? SSDayNight.nearest_star_angle : sun.angle)
+	var/p_angle = abs( starangle - adir)
 
 	if (p_angle > 180)
-		p_angle = 360 - max(sun.angle, adir) + min(sun.angle, adir)
+		p_angle = 360 - max(starangle, adir) + min(starangle, adir)
 
 	if(p_angle > 90)			//If facing more than 90deg from sun, zero output
 		sunfrac = 0
 		return
 
-	sunfrac = cos(p_angle) ** 2
+	sunfrac = (use_daynight_ss ? SSDayNight.nearest_star_power : 1.0)*(cos(p_angle) ** 2)
 
 /obj/machinery/power/solar/panel/process()//TODO: remove/add this from machines to save on processing as needed ~Carn PRIORITY
 	if(stat & BROKEN)
