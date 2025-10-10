@@ -87,9 +87,6 @@
 	var/turf_reagents_limited = null // if a non-null value, will treat it as a limited resivoir and will drain by reducing this number.
 	var/turf_reagents_temp = 0 //this uses strange reagent temperature stuff. i don't know what kind of unit method it's using but it's here regardless.
 
-	var/base_icon_state //used for procgen
-	var/floor_variance
-
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)

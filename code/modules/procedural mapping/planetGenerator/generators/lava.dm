@@ -84,7 +84,7 @@
 
 /datum/biome/lavaland
 	open_turf_types = list(
-		/turf/simulated/floor/plating/asteroid/basalt/lava_land_surface/lit = 1,
+		/turf/unsimulated/floor/planetary/basalt = 1,
 	)
 	flora_spawn_chance = 1
 	flora_spawn_list = list(
@@ -116,7 +116,7 @@
 	)
 
 /datum/biome/lavaland/forest
-	open_turf_types = list(/turf/simulated/floor/plating/asteroid/purple/lit = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/sand/volcanic = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/tree/dead/tall/grey = 1,
 		/obj/structure/flora/tree/dead/barren = 1,
@@ -138,7 +138,7 @@
 
 /datum/biome/lavaland/plains
 	open_turf_types = list(
-		/turf/simulated/floor/plating/asteroid/dirt/grass/lavaland = 30
+		/turf/unsimulated/floor/planetary/grass/lavaland = 30
 	)
 
 	flora_spawn_list = list(
@@ -153,7 +153,7 @@
 /datum/biome/lavaland/plains/dense
 	flora_spawn_chance = 85
 	open_turf_types = list(
-		/turf/simulated/floor/plating/asteroid/dirt/grass/lavaland = 50
+		/turf/unsimulated/floor/planetary/grass/lavaland = 50
 	)
 	feature_spawn_chance = 5
 	feature_spawn_list = list(
@@ -164,14 +164,14 @@
 /datum/biome/lavaland/plains/dense/mixed
 	flora_spawn_chance = 50
 	open_turf_types = list(
-		/turf/simulated/floor/plating/asteroid/dirt/grass/lavaland = 50,
-		/turf/simulated/floor/plating/asteroid/dirt/grass/lavaland = 45,
-		/turf/simulated/floor/plating/moss = 1
+		/turf/unsimulated/floor/planetary/grass/lavaland = 50,
+		/turf/unsimulated/floor/planetary/grass/lavaland = 45,
+		/turf/unsimulated/floor/planetary/moss = 1
 	)
 
 /datum/biome/lavaland/outback
 	open_turf_types = list(
-		/turf/simulated/floor/plating/asteroid/dirt/grass/lavaland = 20
+		/turf/unsimulated/floor/planetary/grass/lavaland = 20
 	)
 
 	flora_spawn_list = list(
@@ -186,8 +186,8 @@
 
 /datum/biome/lavaland/lush
 	open_turf_types = list(
-		/turf/simulated/floor/plating/asteroid/dirt/grass/lavaland = 20,
-		/turf/simulated/floor/plating/asteroid/basalt/lava_land_surface/lit = 1
+		/turf/unsimulated/floor/planetary/grass/lavaland = 20,
+		/turf/unsimulated/floor/planetary/basalt = 1
 	)
 	flora_spawn_list = list(
 		/obj/structure/flora/ash/fireblossom = 3,
@@ -204,7 +204,7 @@
 	flora_spawn_chance = 30
 
 /datum/biome/lavaland/lava
-	open_turf_types = list(/turf/simulated/floor/lava = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/lava = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/rock/lava = 1,
 		/obj/structure/flora/rock/pile/lava = 1
@@ -214,7 +214,7 @@
 
 /datum/biome/lavaland/nearlava
 	open_turf_types = list(
-		/turf/simulated/floor/plating/asteroid/obsidian/lit = 1,
+		/turf/unsimulated/floor/planetary/obsidian = 1,
 	)
 	flora_spawn_list = list(
 		/obj/structure/flora/rock/lava = 1,
@@ -227,7 +227,7 @@
 
 /datum/biome/cave/lavaland
 	open_turf_types = list(
-		/turf/simulated/floor/plating/asteroid/basalt/lava_land_surface = 1
+		/turf/unsimulated/floor/planetary/basalt = 1
 	)
 	closed_turf_types = list(
 		/turf/unsimulated/mineral/random/cave = 3,
@@ -259,11 +259,11 @@
 
 /datum/biome/cave/lavaland/obsidian
 	open_turf_types = list(
-		/turf/simulated/floor/plating/asteroid/obsidian = 1
+		/turf/unsimulated/floor/planetary/obsidian = 1
 	)
 
 /datum/biome/cave/lavaland/rocky
-	open_turf_types = list(/turf/simulated/floor/plating/asteroid/purple = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/sand/volcanic = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/rock/pile/lava = 6,
 		/obj/structure/flora/rock/lava = 6,
@@ -271,7 +271,7 @@
 	flora_spawn_chance = 5
 
 /datum/biome/cave/lavaland/mossy
-	open_turf_types = list(/turf/simulated/floor/plating/moss = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/moss = 1)
 	flora_spawn_chance = 8
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass/hell = 10,
@@ -284,6 +284,6 @@
 	)
 
 /datum/biome/cave/lavaland/lava
-	open_turf_types = list(/turf/simulated/floor/lava = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/lava = 1)
 	feature_spawn_chance = 1
 	feature_spawn_list = list(/obj/structure/flora/rock/pile/lava = 1)

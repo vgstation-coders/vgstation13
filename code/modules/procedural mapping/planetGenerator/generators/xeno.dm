@@ -103,7 +103,7 @@
 	)
 
 /datum/biome/cave/xeno
-	open_turf_types = list(/turf/unsimulated/floor/cave = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/cave = 1)
 	closed_turf_types = list(
 		/turf/unsimulated/mineral/random/xeno = 3,
 		/turf/unsimulated/mineral/random/high_chance/xeno = 1,

@@ -265,7 +265,7 @@
 
 // Cave biomes
 /datum/biome/cave/grass
-	open_turf_types = list(/turf/unsimulated/floor/cave = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/cave = 1)
 	closed_turf_types = list(/turf/unsimulated/mineral/random/cave = 1)
 	flora_spawn_chance = 10
 	flora_spawn_list = list(
@@ -282,7 +282,7 @@
 	)
 
 /datum/biome/cave/grass/mossy
-	open_turf_types = list(/turf/simulated/floor/plating/moss = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/moss = 1)
 	flora_spawn_chance = 20
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/sparsegrass = 15,
@@ -299,7 +299,7 @@
 	)
 
 /datum/biome/cave/grass/lush
-	open_turf_types = list(/turf/simulated/floor/plating/moss = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/moss = 1)
 	flora_spawn_chance = 35
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 20,
@@ -317,7 +317,7 @@
 	)
 
 /datum/biome/cave/grass/fungi
-	open_turf_types = list(/turf/simulated/floor/plating/moss = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/moss = 1)
 	flora_spawn_chance = 40
 	flora_spawn_list = list(
 		/obj/structure/flora/ash/leaf_shroom = 8,
@@ -335,7 +335,7 @@
 	)
 
 /datum/biome/cave/grass/wet
-	open_turf_types = list(/turf/simulated/floor/plating/moss = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/moss = 1)
 	flora_spawn_chance = 50
 	flora_spawn_list = list(
 		/obj/structure/flora/ausbushes/fullgrass = 25,

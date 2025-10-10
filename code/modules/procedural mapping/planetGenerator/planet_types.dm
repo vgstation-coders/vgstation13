@@ -26,6 +26,9 @@
 	var/next_firetime = 0
 	var/list/daynight_turfs = list()
 	var/weather_mod = 1 // Planet-specific weather light modifier
+	// Player tracking for mob processing optimization
+	var/list/planet_mobs = list() // All mobs on this planet
+	var/player_count = 0 // Number of player mobs currently on planet
 
 /**
  * Builds the list of turfs affected by day/night cycle for this planet
@@ -258,7 +261,7 @@
 	name = "lava planet"
 	desc = "A planet rife with seismic and volcanic activity. High temperatures and dangerous xenofauna render it dangerous for the unprepared."
 	mapgen = /datum/planetGenerator/lava
-	default_baseturf = /turf/simulated/floor/lava
+	default_baseturf = /turf/unsimulated/floor/planetary/lava
 	loot_type = LOOT_TYPE_LAVA
 	climate_type = CLIMATE_LAVA
 	loot_modifier = 15
@@ -278,7 +281,7 @@
 	name = "wasteland planet"
 	desc = "A desolate, toxic world littered with the remnants of a long-gone civilization and the conflict that ended it."
 	mapgen = /datum/planetGenerator/urban
-	default_baseturf = /turf/unsimulated/wasteland
+	default_baseturf = /turf/unsimulated/floor/planetary/wasteland
 	loot_type = LOOT_TYPE_URBAN
 	climate_type = CLIMATE_TOXIC
 	loot_modifier = 10

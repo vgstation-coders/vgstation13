@@ -58,7 +58,7 @@ var/global/list/mineralSpawnChance[]
 	name = "Rock"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "rock"
-	base_icon_state = "rock" // above is for mappers.
+	var/base_icon_state = "rock" // above is for mappers.
 	oxygen = 0
 	nitrogen = 0
 	opacity = 1
@@ -77,7 +77,6 @@ var/global/list/mineralSpawnChance[]
 	var/minimum_mine_time = 0
 	var/mining_difficulty = MINE_DIFFICULTY_NORM
 	var/fortune_multiplier = 1 //how much extra mineral comes from a pyrite slime enhancement
-
 
 /turf/unsimulated/mineral/snow
 	icon_state = "snow_rock"
@@ -784,7 +783,7 @@ var/list/icon_state_to_appearance = list()
 	name = "cave wall"
 	icon_state = "cave_wall"
 	base_icon_state = "cave_wall"
-	mined_type = /turf/unsimulated/floor/cave
+	mined_type = /turf/unsimulated/floor/planetary/cave
 
 /turf/unsimulated/mineral/random/cave/add_rock_overlay()
 	..(img = image('icons/turf/spookycave.dmi', "spooky_cave",layer = SIDE_LAYER),offset=-16)
@@ -812,7 +811,7 @@ var/list/icon_state_to_appearance = list()
 	name = "cave wall"
 	icon_state = "cave_wall"
 	base_icon_state = "cave_wall"
-	mined_type = /turf/unsimulated/floor/cave
+	mined_type = /turf/unsimulated/floor/planetary/cave
 
 /turf/unsimulated/mineral/random/high_chance/cave/add_rock_overlay()
 	..(img = image('icons/turf/spookycave.dmi', "spooky_cave",layer = SIDE_LAYER),offset=-16)

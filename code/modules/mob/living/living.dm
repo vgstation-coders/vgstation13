@@ -92,7 +92,7 @@
 		FireBurn(11, 9001, ONE_ATMOSPHERE) // lag free weird way of doing it
 		fire_stacks = 11
 		ignite() // ffffFIRE!!!! FIRE!!! FIRE!!
-	else if(istype(get_turf(src),/turf/unsimulated/toxic))
+	else if(istype(get_turf(src),/turf/unsimulated/floor/planetary/toxic))
 		apply_radiation(0.5, RAD_EXTERNAL)
 	return 1
 

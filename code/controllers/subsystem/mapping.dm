@@ -21,7 +21,7 @@
 var/datum/subsystem/mapping/SSmapping
 
 /datum/subsystem/mapping
-	name       = "Map"
+	name       = "Mapping"
 	init_order = SS_INIT_MAP
 	flags      = SS_BACKGROUND
 	priority   = SS_PRIORITY_MAPPING
@@ -185,7 +185,7 @@ var/datum/subsystem/mapping/SSmapping
 
 		if(STAGE_RUIN)
 			if(current_ruin_type)
-				var/datum/map_element/mining_surprise/used_ruin = ispath(current_ruin_type) ? (new current_ruin_type) : current_ruin_type
+				var/datum/map_element/ruin/used_ruin = ispath(current_ruin_type) ? (new current_ruin_type) : current_ruin_type
 				place_ruin_in_allocation(used_ruin, current_allocation)
 
 			current_stage = STAGE_POPULATION
@@ -297,7 +297,7 @@ var/datum/subsystem/mapping/SSmapping
 		return
 
 	var/list/ruin_types = list()
-	for(var/ruin_path in subtypesof(/datum/map_element/mining_surprise))
+	for(var/ruin_path in subtypesof(/datum/map_element/ruin))
 		ruin_types += ruin_path
 
 	var/chosen_ruin_type = input(user, "Select a ruin to place on the planet (random if no selection):", "Vault Selection") as null|anything in ruin_types

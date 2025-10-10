@@ -72,9 +72,9 @@
 	var/cave_automaton_data
 
 	/// Temporary list storing features created during population phase (cleared after use)
-	var/list/created_features
+	var/list/created_features = list()
 	/// Temporary list storing mobs created during population phase (cleared after use)
-	var/list/created_mobs
+	var/list/created_mobs = list()
 
 	/// Cache mapping turfs to their calculated biomes to avoid recalculation
 	var/list/turf_biome_cache

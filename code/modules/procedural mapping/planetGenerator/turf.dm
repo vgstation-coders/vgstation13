@@ -1,5 +1,5 @@
-///Collection of turfs used only for procgen.
-//Border
+/// Planetary turfs used in procedural planet generation
+//Border turf
 /turf/unsimulated/border
 	name = "border"
 	icon = 'icons/turf/space.dmi'
@@ -12,146 +12,193 @@
 	explosion_block = 9999
 	turf_flags = NOJAUNT
 
-//Caves
-/turf/unsimulated/floor/cave
-	name = "cave floor"
+//Baseturf
+/turf/unsimulated/floor/planetary
+	name = "planetary floor"
+	plane = PLATING_PLANE
 	carbon_dioxide = 0
 	oxygen = MOLES_O2STANDARD
 	nitrogen = MOLES_N2STANDARD
 	temperature = T20C
-	icon_state = "cavefl_1"
-	plane = PLATING_PLANE
+	var/base_icon_state
+	var/floor_variance = 30 //how often the floor texture is randomized
+	var/min_icon_states = 1 //because some states are indexed from 0 for whatever fucking reason
+	var/max_icon_states = 1 //how many different floor textures there are
 
-/turf/unsimulated/floor/cave/New()
+/turf/unsimulated/floor/planetary/New()
 	..()
-	icon_state = pick("cavefl_1","cavefl_2","cavefl_3","cavefl_4")
+	if(prob(floor_variance) && max_icon_states > 1)
+		icon_state = base_icon_state + "[rand(min_icon_states,max_icon_states)]"
+
+//Caves
+/turf/unsimulated/floor/planetary/cave
+	name = "cave floor"
+	icon_state = "cavefl_1"
+	base_icon_state = "cavefl_"
+	max_icon_states = 4
 
 /turf/unsimulated/mineral/cave
 	name = "cave wall"
 	icon_state = "cave_wall"
-	base_icon_state = "cave_wall"
 	mined_type = /turf/unsimulated/floor/asteroid/underground
 
-//Desert
-/turf/unsimulated/floor/desert
-	name = "desert"
-	icon_state = "ironsand1"
-	plane = TURF_PLANE
-
-	carbon_dioxide = 0
-	oxygen = MOLES_O2STANDARD
-	nitrogen = MOLES_N2STANDARD
-	temperature = T20C
-
-/turf/unsimulated/floor/desert/New()
-	..()
-	if(prob(30))
-		icon_state = "ironsand[rand(1,15)]"
-
-/turf/unsimulated/floor/desert/dry_basin
-	name = "dry sea basin"
-	icon_state = "asteroid"
-	carbon_dioxide = 0
-	oxygen = MOLES_O2STANDARD
-	nitrogen = MOLES_N2STANDARD
-	temperature = T20C
-
-/turf/unsimulated/floor/desert/dry_basin/New()
-	..()
-	if(prob(20) && icon_state == "asteroid")
-		icon_state = "asteroid[rand(0,12)]"
-
+//Floors
 /turf/unsimulated/floor/planetary/desert
 	name = "desert"
 	icon = 'icons/turf/planetary/desert.dmi'
 	icon_state = "desert"
-	plane = PLATING_PLANE
 
 /turf/unsimulated/floor/planetary/desert/dry
-	name = "dry desert"
+	name = "dry basin"
 	icon_state = "drydesert"
 
 /turf/unsimulated/floor/planetary/grass
 	name = "grass"
 	icon = 'icons/turf/planetary/grass.dmi'
 	icon_state = "grass0"
-	plane = PLATING_PLANE
-	carbon_dioxide = 0
-	oxygen = MOLES_O2STANDARD
-	nitrogen = MOLES_N2STANDARD
-	temperature = T20C
-
-/turf/unsimulated/floor/planetary/grass/New()
-	..()
-	if(prob(30))
-		icon_state = "grass[rand(1,3)]"
+	base_icon_state = "grass"
+	max_icon_states = 3
 
 /turf/unsimulated/floor/planetary/dirt
 	name = "dirt"
 	icon = 'icons/turf/planetary/grass.dmi'
 	icon_state = "dirt.1"
-	plane = PLATING_PLANE
-	carbon_dioxide = 0
-	oxygen = MOLES_O2STANDARD
-	nitrogen = MOLES_N2STANDARD
-	temperature = T20C
-
-/turf/unsimulated/floor/planetary/dirt/New()
-	..()
-	icon_state = "dirt.[rand(1,4)]"
-
-//Snow
-/turf/unsimulated/floor/basalt
-	name = "basalt"
-	icon = 'icons/turf/new_snow.dmi'
-	icon_state = "concrete"
-	carbon_dioxide = 0
-	oxygen = MOLES_O2STANDARD
-	nitrogen = MOLES_N2STANDARD
-	temperature = T0C
+	base_icon_state = "dirt."
+	max_icon_states = 4
 
 /turf/unsimulated/floor/snow/glacier
 	name = "glacier"
-	carbon_dioxide = 0
-	oxygen = MOLES_O2STANDARD
-	nitrogen = MOLES_N2STANDARD
 	temperature = T0C
 
-/turf/unsimulated/floor/snow/glacier/New()
+/turf/unsimulated/floor/snow/glacier/initialize()
 	..()
 	new	/obj/glacier(src, icon_update_later = 1)
 
-/turf/unsimulated/floor/lava
-	name = "lava"
-	icon = 'icons/turf/floors.dmi'
-	icon_state = "lava"
-	carbon_dioxide = 0
-	oxygen = MOLES_O2STANDARD
-	nitrogen = MOLES_N2STANDARD
-	temperature = MELTPOINT_GLASS
-
-/turf/unsimulated/floor/lava/Entered(atom/movable/A as mob|obj, atom/OldLoc)
-	..()
-	A.ignite()
-
-/turf/unsimulated/wasteland
+/turf/unsimulated/floor/planetary/wasteland
 	name = "wasteland"
 	icon = 'icons/turf/planetary/battlefield.dmi'
 	icon_state = "wasteland"
-	plane = PLATING_PLANE
+	base_icon_state = "wasteland"
+	floor_variance = 60
+	min_icon_states = 0
+	max_icon_states = 32
 
-/turf/unsimulated/wasteland/New()
-	..()
-	icon_state = icon_state + "[rand(0,32)]"
-
-/turf/unsimulated/toxic //gives mobs rads
+/turf/unsimulated/floor/planetary/toxic //gives mobs rads
 	name = "no man's land"
 	desc = "The toxic remnants of an irradiated battlefield."
 	icon = 'icons/turf/planetary/wasteplanet.dmi'
-	icon_state = "wasteplanet"
-	plane = PLATING_PLANE
+	icon_state = "wasteplanet0"
+	base_icon_state = "wasteplanet"
+	floor_variance = 10
+	max_icon_states = 12
 
-/turf/unsimulated/toxic/New()
+/turf/unsimulated/floor/planetary/toxic/New()
 	..()
-	icon_state = icon_state + "[rand(0,12)]"
-	set_light(2, 1, "#00ff00")
+	if(prob(floor_variance))
+		set_light(2, 1, "#00ff00")
+
+/turf/unsimulated/floor/planetary/basalt
+	name = "basalt"
+	icon = 'icons/turf/planetary/lava.dmi'
+	icon_state = "basalt"
+	base_icon_state = "basalt"
+	min_icon_states = 0
+	max_icon_states = 12
+
+/turf/unsimulated/floor/planetary/sand/volcanic
+	name = "volcanic sand"
+	desc = "Sand, filled with a wide array of volcanic minerals have turned it a soft black color. Suprisingly good for plants, all things considered"
+	icon = 'icons/turf/planetary/volcanicsand.dmi'
+	icon_state = "sand_1"
+	base_icon_state = "sand_"
+	floor_variance = 50
+	max_icon_states = 5
+
+/turf/unsimulated/floor/planetary/grass/lavaland
+	name = "crimson grass"
+	desc = "This grass has adapted extremely well to the hot enviroments of lava planets, as it is adept at absorbing the red light that passes the atmosphere."
+	icon = 'icons/turf/planetary/redgrass.dmi'
+	icon_state = "grass_1"
+	base_icon_state = "grass_"
+	floor_variance = 100
+	max_icon_states = 3
+
+/turf/unsimulated/floor/planetary/moss
+	name = "mossy carpet"
+	desc = "When the forests burned away and the sky grew dark, the moss learned to feed on the falling ash."
+	icon_state = "moss"
+	icon = 'icons/turf/planetary/lava_moss.dmi'
+	base_icon_state = "moss"
+	gender = PLURAL
+	light_power = 1
+	light_range = 2
+	pixel_x = -9
+	pixel_y = -9
+
+/turf/unsimulated/floor/planetary/obsidian
+	name = "obsidian"
+	desc = "Cooled magma forms a dark, cool glass."
+	icon = 'icons/turf/planetary/lava.dmi'
+	icon_state = "obsidian"
+
+/turf/unsimulated/floor/planetary/lava
+	name = "lava"
+	icon_state = "lava"
+	temperature = MELTPOINT_GLASS
+	gender = PLURAL //"That's some lava."
+
+	light_range = 2
+	light_power = 0.75
+	light_color = LIGHT_COLOR_FLARE
+
+	var/particle_emitter = /obj/effect/particle_emitter/lava
+	var/particle_prob = 15
+
+/turf/unsimulated/floor/planetary/lava/New()
+	. = ..()
+	if(prob(particle_prob) && ispath(particle_emitter, /obj/effect/particle_emitter))
+		particle_emitter = new particle_emitter(src)
+
+/turf/unsimulated/floor/planetary/lava/Destroy()
+	. = ..()
+	if(isatom(particle_emitter))
+		QDEL_NULL(particle_emitter)
+
+/turf/unsimulated/floor/planetary/lava/Entered(atom/movable/AM)
+	. = ..()
+	AM.ignite()
+
+/turf/unsimulated/floor/planetary/lava/Exited(atom/movable/Obj, atom/newloc)
+	. = ..()
+	if(isliving(Obj))
+		var/mob/living/L = Obj
+		if(!istype(newloc,/turf/unsimulated/floor/planetary/lava) && !L.on_fire)
+			L.ignite()
+
+/turf/unsimulated/floor/planetary/lava/attackby(obj/item/attacking_item, mob/user, params)
+	..()
+	if(istype(attacking_item, /obj/item/stack/rods))
+		var/obj/item/stack/rods/R = attacking_item
+		var/obj/structure/lattice/H = locate(/obj/structure/lattice, src)
+		if(H)
+			to_chat(user, span_warning("There is already a lattice here!"))
+			return
+		if(R.use(1))
+			to_chat(user, span_notice("You construct a lattice."))
+			playsound(src, 'sound/weapons/genhit.ogg', 50, TRUE)
+			new /obj/structure/lattice(locate(x, y, z))
+		else
+			to_chat(user, span_warning("You need one rod to build a heatproof lattice."))
+		return
+	return FALSE
+
+/obj/effect/particle_holder
+	name = ""
+	anchored = TRUE
+	mouse_opacity = 0
+
+/obj/effect/particle_emitter/New()
+	. = ..()
+
+/obj/effect/particle_emitter/lava
+	particles = new/particles/candle

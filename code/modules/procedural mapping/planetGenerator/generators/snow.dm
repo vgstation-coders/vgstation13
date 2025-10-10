@@ -231,7 +231,7 @@
 
 /datum/biome/cave/volcanic
 	open_turf_types = list(
-		/turf/unsimulated/floor/basalt = 1
+		/turf/unsimulated/floor/planetary/basalt = 1
 	)
 	closed_turf_types = list(
 		/turf/unsimulated/mineral/random/snow = 5,
@@ -253,5 +253,5 @@
 
 /datum/biome/cave/volcanic/lava
 	open_turf_types = list(
-		/turf/unsimulated/floor/lava = 1
+		/turf/unsimulated/floor/planetary/lava = 1
 	)

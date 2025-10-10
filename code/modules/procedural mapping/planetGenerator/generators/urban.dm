@@ -95,7 +95,7 @@
 	)
 
 /datum/biome/urban/ruins
-	open_turf_types = list(/turf/unsimulated/wasteland = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/wasteland = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/rock = 15,
 		/obj/structure/flora/rock/pile = 10,
@@ -113,7 +113,7 @@
 	)
 
 /datum/biome/urban/wasteland
-	open_turf_types = list(/turf/unsimulated/wasteland = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/wasteland = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/rock = 20,
 		/obj/structure/flora/rock/pile = 15,
@@ -152,7 +152,7 @@
 	)
 
 /datum/biome/urban/toxic
-	open_turf_types = list(/turf/unsimulated/toxic = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/toxic = 1)
 	flora_spawn_list = list(
 		/obj/structure/flora/rock = 15,
 		/obj/structure/flora/rock/pile = 10,
@@ -189,7 +189,7 @@
 
 // Cave biomes
 /datum/biome/cave/urban
-	open_turf_types = list(/turf/unsimulated/floor/cave = 1)
+	open_turf_types = list(/turf/unsimulated/floor/planetary/cave = 1)
 	closed_turf_types = list(/turf/unsimulated/mineral/random/cave = 3, /turf/unsimulated/mineral/random/high_chance/cave = 1)
 	flora_spawn_chance = 8
 	flora_spawn_list = list(

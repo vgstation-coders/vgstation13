@@ -13,7 +13,7 @@
  */
 /datum/biome
 	/// WEIGHTED list of open turfs that this biome can place
-	var/list/open_turf_types = list(/turf/unsimulated/floor/cave = 1)
+	var/list/open_turf_types = list(/turf/unsimulated/floor/planetary/cave = 1)
 	/// EXPANDED (no values) list of open turfs that this biome can place
 	var/list/open_turf_types_expanded
 	/// WEIGHTED list of flora that this biome can spawn. Flora do not have any local keep-away logic; all spawns are independent.
