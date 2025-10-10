@@ -115,6 +115,9 @@
 	var/datum/biome/turf_biome = get_biome(gen_turf)
 	turf_biome.populate_turf(gen_turf, created_features, created_mobs, planet_loot, planet_faction)
 
+/datum/planetGenerator/proc/post_process(datum/allocation/allocation)
+	return // override in child types
+
 /// Gets the biome for a turf, using the cache if available, otherwise calculating and caching it.
 /// Returns: The datum/biome for the given turf
 /datum/planetGenerator/proc/get_biome(turf/a_turf)

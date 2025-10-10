@@ -69,10 +69,7 @@
 /turf/unsimulated/floor/snow/glacier
 	name = "glacier"
 	temperature = T0C
-
-/turf/unsimulated/floor/snow/glacier/initialize()
-	..()
-	new	/obj/glacier(src, icon_update_later = 1)
+	var/glacier_processed = FALSE
 
 /turf/unsimulated/floor/planetary/wasteland
 	name = "wasteland"

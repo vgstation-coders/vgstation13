@@ -223,6 +223,9 @@ var/datum/subsystem/mapping/SSmapping
 			queue_index = 1
 
 		if(STAGE_FINALIZE)
+			if(current_mapgen)
+				current_mapgen.post_process(current_allocation)
+
 			// Error-proofing
 			if(current_planet.default_baseturf)
 				for(var/turf/T in current_allocation.turfs)

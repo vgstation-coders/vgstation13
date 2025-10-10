@@ -9,6 +9,44 @@
 
 	primary_area_type = /area/planet/snow
 
+/datum/planetGenerator/snow/post_process(datum/allocation/allocation)
+	if(!allocation || !allocation.turfs)
+		return
+
+	var/list/glacier_turfs = list()
+	var/list/isolated_glaciers = list()
+
+	// collect all glacier turfs
+	for(var/turf/T in allocation.turfs)
+		if(istype(T, /turf/unsimulated/floor/snow/glacier))
+			glacier_turfs += T
+
+	// identify isolated glaciers (5+ non-glacier neighbors)
+	for(var/turf/unsimulated/floor/snow/glacier/G in glacier_turfs)
+		var/non_glacier_neighbors = 0
+		for(var/direction in alldirs)
+			var/turf/neighbor = get_step(G, direction)
+			if(!istype(neighbor, /turf/unsimulated/floor/snow/glacier))
+				non_glacier_neighbors++
+
+		// If surrounded by 5 or more non-glacier turfs, mark for conversion
+		if(non_glacier_neighbors >= 5)
+			isolated_glaciers += G
+
+	// convert isolated glaciers to snow
+	for(var/turf/unsimulated/floor/snow/glacier/G in isolated_glaciers)
+		G.ChangeTurf(/turf/unsimulated/floor/snow)
+		glacier_turfs -= G
+
+	// create glacier objects on remaining glacier turfs
+	for(var/turf/unsimulated/floor/snow/glacier/G in glacier_turfs)
+		var/turf/unsimulated/floor/snow/glacier/GG = G
+		if(!GG.glacier_processed)
+			new /obj/glacier(G, icon_update_later = 1)
+			GG.glacier_processed = TRUE
+	return ..()
+
+/datum/planetGenerator/snow
 	biome_table = list(
 		BIOME_COLDEST = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/arctic/rocky,
