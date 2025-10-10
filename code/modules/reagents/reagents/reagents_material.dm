@@ -315,3 +315,19 @@
 	if(..())
 		return 1
 	M.apply_radiation(0.5, RAD_INTERNAL)
+
+/datum/reagent/agentw
+	name ="Agent W Isotope III-B"
+	id = AGENT_W
+	description = "A highly energetic fissile fuel mixture whose composition was lost to time. Attempts to recreate it have fallen short, leaving the only stock remaining to be sitting around as a collector's item, suspended in bluespace containment. Those foolish enough to use it have often met unfortunate fates."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#FCCAD2" //rgb: 252, 202, 210
+	density = 23.13
+	specheatcap = 0.431
+	fission_time=1800 //30 minutes (1/2 an hour).
+	fission_power=333333.333 //5x plutonium
+
+/datum/reagent/agentw/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.apply_radiation(25, RAD_INTERNAL)

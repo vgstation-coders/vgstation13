@@ -152,7 +152,7 @@
 	var/Target
 	for(var/atom/A in ListTargets())
 		if (!isValidTarget(A))
-			break
+			continue
 		if(Found(A))//Just in case people want to override targetting
 			var/list/FoundTarget = list()
 			FoundTarget += A
@@ -174,6 +174,10 @@
 		if(SA.is_poisonous && avoids_poisonous )
 			return FALSE
 		if(SA.pacify_aura)
+			return FALSE
+	if(istype(A,/mob/living/complex_animal))
+		var/mob/living/complex_animal/CA=A
+		if(CA.pacify_aura)
 			return FALSE
 	return !loneliness_affected(A)
 
@@ -232,7 +236,10 @@
 			var/mob/living/simple_animal/SA = L
 			if (SA.pacify_aura)
 				return 0
-
+		if(istype(L,/mob/living/complex_animal))
+			var/mob/living/complex_animal/CA=L
+			if(CA.pacify_aura)
+				return 0		
 		return 1
 	if(isobj(the_target))
 		//if(the_target.type in wanted_objects)
@@ -481,6 +488,11 @@
 
 /mob/living/simple_animal/hostile/proc/create_projectile(var/mob/user)
 	return new projectiletype(user.loc)
+
+/mob/living/simple_animal/hostile/UnarmedAttack(var/atom/A,var/proximity,var/params)
+	if(istype(A,/mob/living/complex_animal))
+		unarmed_attack_mob(A)
+	..()
 
 /mob/living/simple_animal/hostile/proc/DestroySurroundings()
 	if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)

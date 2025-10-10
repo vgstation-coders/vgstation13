@@ -118,9 +118,6 @@
 
 	var/has_headset = 1 //excluding parrotmorph parrots from gaining headsets when a mob is transformed into a parrot via wizard.
 
-/mob/living/simple_animal/parrot/jungle
-	has_headset=0 //they randomly spawn, no radio for them.
-
 /mob/living/simple_animal/parrot/New()
 	..()
 	if(!ears && has_headset)

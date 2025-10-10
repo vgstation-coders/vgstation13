@@ -565,6 +565,7 @@
 #define THORIUM			"thorium"
 #define REGENERATECALCIUM	"regeneratecalcium"
 #define EQUALIZONE		"equalizone"
+#define AGENT_W		"agentw"
 
 #define DYE_DANDELIONS	"dandelion_dye"
 

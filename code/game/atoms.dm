@@ -793,7 +793,11 @@ its easier to just keep the beam vertical.
 	if(!istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
 
-	blood_color = blood_DNA.len ? BlendRYB(blood_color, blood_data["blood_colour"], 0.5) : blood_data["blood_colour"] //mix new color into existing blood_color if applicable
+	if (blood_color && blood_DNA.len)
+		blood_color = BlendRYB(blood_color, blood_data["blood_colour"], 0.5) //mix new color into existing blood_color if applicable
+	else
+		blood_color = blood_data["blood_colour"]
+
 	return TRUE
 
 /atom/proc/add_vomit_floor(mob/living/carbon/M, toxvomit = 0, active = 0, steal_reagents_from_mob = 1)

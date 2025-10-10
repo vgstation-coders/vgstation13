@@ -62,9 +62,9 @@
 	else
 		clear_fullscreen("blurry")
 	if(druggy)
-		overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
+		enable_druggy_overlays()
 	else
-		clear_fullscreen("high")
+		disable_druggy_overlays()
 
 	if(!isDead())
 		if(machine)

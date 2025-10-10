@@ -189,7 +189,7 @@
 /datum/reagent/ethanol/pwine/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	M.druggy = max(M.druggy, 50)
+	M.druggy = max(M.druggy, 45)
 	switch(tick)
 		if(1 to 25)
 			if(!M.stuttering)
@@ -198,16 +198,16 @@
 			M.hallucination = max(M.hallucination, 3)
 			if(prob(1))
 				M.emote(pick("twitch", "giggle"))
-		if(25 to 75)
+		if(26 to 75)
 			if(!M.stuttering)
 				M.stuttering = 1
 			M.hallucination = max(M.hallucination, 10)
 			M.Jitter(2)
 			M.Dizzy(2)
-			M.druggy = max(M.druggy, 45)
+			M.druggy = max(M.druggy, 50)
 			if(prob(5))
 				M.emote(pick("twitch", "giggle"))
-		if(75 to 150)
+		if(76 to 150)
 			if(!M.stuttering)
 				M.stuttering = 1
 			M.hallucination = max(M.hallucination, 60)
@@ -218,7 +218,7 @@
 				M.emote(pick("twitch", "giggle"))
 			if(prob(30))
 				M.adjustToxLoss(2)
-		if(150 to 300)
+		if(151 to 300)
 			if(!M.stuttering)
 				M.stuttering = 1
 			M.hallucination = max(M.hallucination, 60)
@@ -235,7 +235,7 @@
 					var/datum/organ/internal/heart/L = H.internal_organs_by_name["heart"]
 					if(L && istype(L))
 						L.take_damage(5, 0)
-		if(300 to INFINITY)
+		if(301 to INFINITY)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				var/datum/organ/internal/heart/L = H.internal_organs_by_name["heart"]
@@ -1865,7 +1865,7 @@
 					to_chat(H,"<span class='warning'>Your stomach grumbles and you feel a little nauseous.</span>")
 					H.adjustToxLoss(0.5)
 				H.adjustToxLoss(0.1)
-			if(15 to 25)
+			if(16 to 25)
 				if(prob(10))
 					to_chat(H,"<span class='warning'>Something in your abdomen definitely doesn't feel right.</span>")
 					H.adjustToxLoss(1)
@@ -1873,7 +1873,7 @@
 					H.adjustToxLoss(2)
 					H.vomit()
 				H.adjustToxLoss(0.2)
-			if(25 to INFINITY)
+			if(26 to INFINITY)
 				if(prob(10))
 					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
 					var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
