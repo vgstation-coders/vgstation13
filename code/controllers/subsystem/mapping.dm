@@ -216,7 +216,7 @@ var/datum/subsystem/mapping/SSmapping
 		if(STAGE_WEATHER)
 			if(current_planet.climate_type)
 				current_planet.climate = SSweather.set_climate(current_planet.climate_type, world.maxz, current_allocation)
-				register_weather_turfs(current_planet.climate, current_mapgen, current_allocation)
+				register_weather_turfs(current_planet.climate, current_allocation)
 				SSweather.fire()
 
 			current_stage = STAGE_FINALIZE
@@ -390,41 +390,22 @@ var/datum/subsystem/mapping/SSmapping
 /**
  * Registers open turfs from a planet with its climate for weather overlays
  *
- * Iterates through all turfs in the allocation and registers those matching
- * the biome's open_turf_types with the climate system.
+ * Iterates through all turfs in the allocation and registers those in open surface areas
+ * with the climate system for weather effects.
+ *
  * Arguments:
  * * climate - The climate datum to register turfs with
- * * mapgen - The planet generator containing biome information
  * * allocation - The allocation containing the planet's turfs
  */
-/datum/subsystem/mapping/proc/register_weather_turfs(var/datum/climate/climate, var/datum/planetGenerator/mapgen, var/datum/allocation/allocation)
-	if(!climate || !mapgen || !allocation)
+/datum/subsystem/mapping/proc/register_weather_turfs(var/datum/climate/climate, var/datum/allocation/allocation)
+	if(!climate || !allocation)
 		return
 
-	if(!mapgen.biome_table)
-		return
-
-	// Collect all unique open turf types from all biomes in the biome table
-	var/list/all_open_turf_types = list()
-	for(var/temp_key in mapgen.biome_table)
-		var/list/humidity_list = mapgen.biome_table[temp_key]
-		for(var/humidity_key in humidity_list)
-			var/biome_type = humidity_list[humidity_key]
-			var/datum/biome/biome = new biome_type
-			if(biome.open_turf_types)
-				for(var/turf_type in biome.open_turf_types)
-					all_open_turf_types[turf_type] = TRUE
-			qdel(biome)
-
-	if(!all_open_turf_types.len)
-		return
-
-	// Register all turfs in the allocation that match any open turf type from any biome
+	// Register all turfs in open surface areas
 	for(var/turf/T in allocation.turfs)
-		for(var/turf_type in all_open_turf_types)
-			if(istype(T, turf_type))
-				climate.register_weather_turf(T)
-				break
+		var/area/A = get_area(T)
+		if(isopensurface(A))
+			climate.register_weather_turf(T)
 
 /**
  * Post-processes ruin turfs to match the planet environment

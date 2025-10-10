@@ -421,14 +421,10 @@ var/obj/effect/weather_holder/blizzard/heavy/heavy_blizzard_image = null //exist
 		overlays += image(icon,"hole_overlay")
 
 /obj/glacier/relativewall_neighbours()
-	..()
 	for(var/direction in diagonal)
 		var/turf/adj_tile = get_step(src, direction)
-		if(isSmoothableNeighbor(adj_tile))
-			adj_tile.relativewall()
-		for(var/atom/A in adj_tile)
-			if(isSmoothableNeighbor(A))
-				A.relativewall()
+		for(var/obj/glacier/G in adj_tile)
+			G.relativewall()
 
 /obj/glacier/attackby(var/obj/item/W, mob/user)
 	if(!hole && prob(W.force*5))
