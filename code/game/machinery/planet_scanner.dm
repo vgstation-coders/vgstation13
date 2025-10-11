@@ -4,6 +4,7 @@
 #define PLANET_SCANNER_ENERGY_EXPONENT 2 // Exponential growth factor for scan costs
 #define PLANET_SCANNER_SCAN_MODULE_EFFICIENCY 0.75 // Energy efficiency per scanning module tier
 #define PLANET_SCANNER_TICK_DURATION 2 // Seconds per process tick
+#define PLANET_SCANNER_DISK_PRINT_COOLDOWN 30 SECONDS // Cooldown between disk prints
 
 // Power constants (Watts) for different capacitor tiers
 #define POWER_T1 10000 // 10 kW
@@ -30,10 +31,14 @@
 	var/scans_completed = 0
 	var/current_scan_energy = 0 // Current energy accumulated in Joules
 	var/required_scan_energy = 0 // Required energy for current scan in Joules
+	var/waiting_for_generation = FALSE // Waiting for planet generation to complete
 
 	// Upgrade modifiers
 	var/max_power = POWER_T1 // Maximum power consumption in Watts (modified by upgrades)
 	var/energy_efficiency_modifier = 1.0 // Modifier for energy requirements (lower = more efficient)
+
+	// Cooldown tracking
+	var/last_disk_print_time = 0 // World time of last disk print
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
 	component_parts = newlist(
@@ -114,7 +119,7 @@
 		icon_state = "scanner_unanchor"
 	else if(stat & (BROKEN|NOPOWER))
 		icon_state = "scanner_depower"
-	else if(scanning)
+	else if(scanning || waiting_for_generation)
 		icon_state = "scanner_active"
 	else
 		icon_state = "scanner_idle"
@@ -156,6 +161,7 @@
 	data["max_scans"] = PLANET_SCANNER_MAX_SCANS
 	data["at_scan_limit"] = scans_completed >= PLANET_SCANNER_MAX_SCANS
 	data["can_scan"] = can_start_scan()
+	data["waiting_for_generation"] = waiting_for_generation
 
 	// Power and energy information
 	data["required_energy"] = required_scan_energy
@@ -163,6 +169,14 @@
 	data["available_power"] = get_available_power()
 	data["current_energy"] = scanning ? current_scan_energy : null
 	data["progress"] = get_scan_progress()
+
+	// Generation stage information
+	if(waiting_for_generation && SSmapping)
+		data["generation_stage"] = SSmapping.current_stage
+		data["generation_progress"] = get_generation_stage_progress()
+	else
+		data["generation_stage"] = null
+		data["generation_progress"] = null
 
 	// Planet discoveries
 	data["has_discoveries"] = SSmapping?.planets.len > 0
@@ -176,10 +190,29 @@
 
 /// Get the current scan progress as a percentage (0-100), or null if not scanning
 /obj/machinery/planet_scanner/proc/get_scan_progress()
-	if(!scanning)
+	if(!scanning && !waiting_for_generation)
 		return null
+	if(waiting_for_generation)
+		return 100 // Show 100% while waiting for generation
 	var/progress = min(current_scan_energy / required_scan_energy, 1.0)
 	return round(progress * 100, 1)
+
+/// Get the progress of the current generation stage as a percentage (0-100)
+/obj/machinery/planet_scanner/proc/get_generation_stage_progress()
+	if(!SSmapping || !SSmapping.generating)
+		return 0
+
+	switch(SSmapping.current_stage)
+		if(1)
+			if(SSmapping.terrain_queue.len > 0)
+				return round((SSmapping.queue_index / SSmapping.terrain_queue.len) * 100, 1)
+		if(3)
+			if(SSmapping.population_queue.len > 0)
+				return round((SSmapping.queue_index / SSmapping.population_queue.len) * 100, 1)
+		else
+			return 100
+
+	return 0
 
 /// Build the list of discovered planets for the UI
 /// Returns: List of planet data dictionaries, or null if no planets discovered
@@ -261,8 +294,12 @@
 
 	..()
 
-/// Handle the scanning process each tick
 /obj/machinery/planet_scanner/proc/process_scanning()
+	if(waiting_for_generation)
+		if(!SSmapping.generating)
+			finalize_scan()
+		return
+
 	var/available_power = get_available_power()
 	if(available_power <= 0)
 		abort_scan("no power")
@@ -279,7 +316,6 @@
 
 /// Accumulate energy for the current scan based on power consumed
 /// Energy (Joules) = Power (Watts) × Time (seconds)
-/// Process tick duration is defined by PLANET_SCANNER_TICK_DURATION
 /obj/machinery/planet_scanner/proc/accumulate_scan_energy(power_consumed)
 	var/energy_per_tick = power_consumed * PLANET_SCANNER_TICK_DURATION
 	current_scan_energy += energy_per_tick
@@ -288,18 +324,25 @@
 /obj/machinery/planet_scanner/proc/abort_scan(reason)
 	visible_message("<span class='warning'>[src] stops scanning due to [reason]!</span>")
 	scanning = FALSE
+	waiting_for_generation = FALSE
 	current_scan_energy = 0
 	use_power = MACHINE_POWER_USE_IDLE
 	playsound(src, 'sound/machines/alert.ogg', 50, 1)
 	update_icon()
 
-/// Complete the current scan and spawn a new planet
+/// Complete the current scan and spawn a new planet (energy requirement met)
 /obj/machinery/planet_scanner/proc/complete_scan()
+	waiting_for_generation = TRUE
+	use_power = MACHINE_POWER_USE_IDLE // Stop consuming power
+	spawn_new_planet()
+
+/// Finalize the scan after planet generation is complete
+/obj/machinery/planet_scanner/proc/finalize_scan()
 	scanning = FALSE
-	use_power = MACHINE_POWER_USE_IDLE
+	waiting_for_generation = FALSE
 	scans_completed++
 	playsound(src, 'sound/machines/twobeep.ogg', 50, 1)
-	spawn_new_planet()
+	visible_message("<span class='notice'>[src] completes its scan and displays the results.</span>")
 	calculate_required_energy()
 	update_icon()
 
@@ -332,12 +375,11 @@
 		return pick(available_ruins)
 	return null
 
-/// Print a destination disk for a discovered planet
-/// Args:
-///   user - The mob requesting the print
-///   planet_index - 0-indexed planet index from the UI
-/// Returns: TRUE if successful, FALSE otherwise
 /obj/machinery/planet_scanner/proc/print_destination_disk(mob/user, planet_index)
+	if(world.time < last_disk_print_time + PLANET_SCANNER_DISK_PRINT_COOLDOWN)
+		to_chat(user, "<span class='warning'>Disk printer is still cooling down! Please wait [(last_disk_print_time + PLANET_SCANNER_DISK_PRINT_COOLDOWN - world.time) SECONDS] seconds.</span>")
+		return FALSE
+
 	// Convert from 0-indexed frontend to 1-indexed DM list
 	var/dm_index = planet_index + 1
 
@@ -352,6 +394,8 @@
 	var/obj/item/weapon/disk/shuttle_coords/procedural/disk = new(get_turf(src))
 	disk.planet_ref = planet
 	disk.header = "[planet.planet_name] Landing"
+
+	last_disk_print_time = world.time
 
 	return TRUE
 
@@ -373,6 +417,7 @@
 #undef PLANET_SCANNER_ENERGY_EXPONENT
 #undef PLANET_SCANNER_SCAN_MODULE_EFFICIENCY
 #undef PLANET_SCANNER_TICK_DURATION
+#undef PLANET_SCANNER_DISK_PRINT_COOLDOWN
 #undef POWER_T1
 #undef POWER_T1_MIXED
 #undef POWER_T2

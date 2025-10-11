@@ -27,7 +27,16 @@ type Data = {
   at_scan_limit: boolean;
   discovered_planets: PlanetData[] | null;
   has_discoveries: boolean;
+  waiting_for_generation: boolean;
+  generation_stage: number | null;
+  generation_progress: number | null;
 };
+
+const STAGE_TERRAIN = 1;
+const STAGE_RUIN = 2;
+const STAGE_POPULATION = 3;
+const STAGE_WEATHER = 4;
+const STAGE_FINALIZE = 5;
 
 export const PlanetScanner = (props) => {
   const { act, data } = useBackend<Data>();
@@ -46,6 +55,9 @@ export const PlanetScanner = (props) => {
     at_scan_limit,
     discovered_planets,
     has_discoveries,
+    waiting_for_generation,
+    generation_stage,
+    generation_progress,
   } = data;
 
   // State for cycling through planets
@@ -130,7 +142,7 @@ export const PlanetScanner = (props) => {
                 </Section>
               </Stack.Item>
 
-              {!!scanning && (
+              {!!scanning && !waiting_for_generation && (
                 <Stack.Item>
                   <Section title="Scanning Progress">
                     <ProgressBar value={progress} maxValue={100} />
@@ -138,7 +150,40 @@ export const PlanetScanner = (props) => {
                 </Stack.Item>
               )}
 
-              {!!has_discoveries && !scanning && (
+              {!!waiting_for_generation && (
+                <Stack.Item>
+                  <Section title="Generating Planet...">
+                    <Stack vertical>
+                      <Stack.Item>
+                        <Box mb={0.5}>Analyzing Altimetry</Box>
+                        <ProgressBar
+                          value={generation_stage >= STAGE_TERRAIN ? (generation_stage > STAGE_TERRAIN ? 100 : generation_progress) : 0}
+                          maxValue={100}
+                          color={generation_stage > STAGE_TERRAIN ? "good" : generation_stage === STAGE_TERRAIN ? "average" : "default"}
+                        />
+                      </Stack.Item>
+                      <Stack.Item>
+                        <Box mb={0.5}>Classifying Flora & Fauna</Box>
+                        <ProgressBar
+                          value={generation_stage >= STAGE_POPULATION ? (generation_stage > STAGE_POPULATION ? 100 : generation_progress) : 0}
+                          maxValue={100}
+                          color={generation_stage > STAGE_POPULATION ? "good" : generation_stage === STAGE_POPULATION ? "average" : "default"}
+                        />
+                      </Stack.Item>
+                      <Stack.Item>
+                        <Box mb={0.5}>Writing data to memory</Box>
+                        <ProgressBar
+                          value={generation_stage >= STAGE_WEATHER ? 100 : 0}
+                          maxValue={100}
+                          color={generation_stage >= STAGE_FINALIZE ? "good" : generation_stage >= STAGE_WEATHER ? "average" : "default"}
+                        />
+                      </Stack.Item>
+                    </Stack>
+                  </Section>
+                </Stack.Item>
+              )}
+
+              {!!has_discoveries && !scanning && !waiting_for_generation && (
                 <Stack.Item grow>
                   <Section title="Discovered Planets">
                     <Stack>
@@ -219,7 +264,7 @@ export const PlanetScanner = (props) => {
                 </Stack.Item>
               )}
 
-              {!has_discoveries && !scanning && !at_scan_limit && (
+              {!has_discoveries && !scanning && !waiting_for_generation && !at_scan_limit && (
                 <Stack.Item grow>
                   <Section title="Deep Space Scanner">
                     <Box textAlign="center" color="label" fontSize="14px">
