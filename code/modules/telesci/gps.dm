@@ -86,6 +86,8 @@ var/list/all_GPS_list = list()
 		return "ERROR"
 	else if(!device_turf || !device_area)
 		return "UNKNOWN"
+	else if(device_turf.z == map.zProcGen)
+		return "SIGNAL JAMMED"
 	else if(device_turf.z > WORLD_X_OFFSET.len)
 		return "[format_text(device_area.name)] (UNKNOWN, UNKNOWN, UNKNOWN)"
 	else
@@ -107,7 +109,8 @@ var/list/all_GPS_list = list()
 	data["autorefresh"] = autorefreshing
 	data["location_text"] = get_location_name()
 	var/list/devices = list()
-	if(!emped && transmitting)
+	var/turf/device_turf = get_turf(src)
+	if(!emped && transmitting && !(device_turf && device_turf.z == map.zProcGen))
 		var/list/ui_list
 		if(view_all)
 			ui_list = all_GPS_list
@@ -167,18 +170,20 @@ var/list/all_GPS_list = list()
 	data["autorefresh"] = autorefreshing
 	data["location_text"] = get_location_name()
 	var/list/devices = list()
-	var/list/ui_list
-	if(view_all)
-		ui_list = all_GPS_list
-	else
-		ui_list = gps_list
-	for(var/D in ui_list)
-		var/obj/item/device/gps/G = D
-		if(G.transmitting && src != G)
-			var/device_data[0]
-			device_data["tag"] = G.gpstag
-			device_data["location_text"] = G.get_location_name()
-			devices += list(device_data)
+	var/turf/device_turf = get_turf(src)
+	if(!(device_turf && device_turf.z == map.zProcGen))
+		var/list/ui_list
+		if(view_all)
+			ui_list = all_GPS_list
+		else
+			ui_list = gps_list
+		for(var/D in ui_list)
+			var/obj/item/device/gps/G = D
+			if(G.transmitting && src != G)
+				var/device_data[0]
+				device_data["tag"] = G.gpstag
+				device_data["location_text"] = G.get_location_name()
+				devices += list(device_data)
 	data["devices"] = devices
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)

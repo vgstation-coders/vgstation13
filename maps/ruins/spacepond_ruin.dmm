@@ -1,0 +1,1039 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/template_noop,
+/area/template_noop)
+"ab" = (
+/turf/unsimulated/mineral,
+/area/vault/spacepond)
+"ac" = (
+/turf/simulated/wall/mineral/wood,
+/area/vault/spacepond)
+"ad" = (
+/obj/structure/ladder/spacepond/ground,
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"ae" = (
+/obj/machinery/cooking,
+/turf/simulated/floor{
+	icon_state = "cafeteria"
+	},
+/area/vault/spacepond)
+"af" = (
+/obj/structure/closet/secure_closet/freezer/fridge,
+/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
+/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat,
+/obj/item/weapon/reagent_containers/food/drinks/flour,
+/obj/item/weapon/storage/fancy/egg_box,
+/turf/simulated/floor{
+	icon_state = "cafeteria"
+	},
+/area/vault/spacepond)
+"ag" = (
+/obj/structure/table,
+/obj/machinery/microwave,
+/turf/simulated/floor{
+	icon_state = "cafeteria"
+	},
+/area/vault/spacepond)
+"ah" = (
+/obj/structure/table,
+/obj/item/weapon/kitchen/utensil/knife/large/butch,
+/obj/item/weapon/kitchen/rollingpin,
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/americup,
+/turf/simulated/floor{
+	icon_state = "cafeteria"
+	},
+/area/vault/spacepond)
+"ai" = (
+/obj/effect/decal/cleanable/blood/drip,
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"aj" = (
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
+/turf/unsimulated/beach/sand,
+/area/ruin/surface)
+"ak" = (
+/obj/machinery/door/mineral/wood,
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"al" = (
+/turf/simulated/floor{
+	icon_state = "cafeteria"
+	},
+/area/vault/spacepond)
+"am" = (
+/obj/item/weapon/broken_bottle,
+/turf/simulated/floor{
+	icon_state = "cafeteria"
+	},
+/area/vault/spacepond)
+"an" = (
+/obj/effect/decal/cleanable/flour,
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "cafeteria"
+	},
+/area/vault/spacepond)
+"ao" = (
+/obj/structure/closet/crate/chest/potential_mimic,
+/obj/item/stack/sheet/wood,
+/obj/item/weapon/storage/fancy/matchbox/strike_anywhere,
+/turf/simulated/floor/carpet,
+/area/vault/spacepond)
+"ap" = (
+/obj/machinery/space_heater/campfire/stove/fireplace,
+/turf/simulated/floor/carpet,
+/area/vault/spacepond)
+"aq" = (
+/obj/effect/decal/cleanable/generic,
+/obj/item/clothing/suit/spaceblanket,
+/turf/simulated/floor/carpet,
+/area/vault/spacepond)
+"ar" = (
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"as" = (
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken4"
+	},
+/area/vault/spacepond)
+"at" = (
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken6"
+	},
+/area/vault/spacepond)
+"au" = (
+/obj/effect/decal/cleanable/blood,
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"av" = (
+/obj/effect/decal/cleanable/blood/gibs/up,
+/obj/effect/decal/cleanable/blood/tracks/footprints{
+	dir = 1;
+	icon_state = "human1";
+	tag = "icon-human1 (NORTH)"
+	},
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"aw" = (
+/obj/item/clothing/shoes/black,
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"ax" = (
+/obj/effect/decal/cleanable/blood/tracks/footprints{
+	dir = 1;
+	icon_state = "human2";
+	tag = "icon-human2 (NORTH)"
+	},
+/obj/effect/decal/cleanable/blood/tracks/footprints{
+	dir = 8;
+	icon_state = "human1";
+	tag = "icon-human1 (WEST)"
+	},
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"ay" = (
+/mob/living/simple_animal/hostile/carp/baby,
+/turf/unsimulated/beach/water,
+/area/ruin/surface)
+"az" = (
+/obj/abstract/map/spawner/space/drinks,
+/turf/simulated/floor/carpet,
+/area/vault/spacepond)
+"aA" = (
+/turf/simulated/floor/carpet,
+/area/vault/spacepond)
+"aB" = (
+/obj/structure/bed,
+/obj/effect/decal/cleanable/blood/tracks/footprints{
+	dir = 1;
+	icon_state = "human2";
+	tag = "icon-human2 (NORTH)"
+	},
+/obj/item/weapon/bedsheet/brown,
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"aC" = (
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"aD" = (
+/obj/effect/decal/cleanable/blood/splatter,
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"aE" = (
+/obj/effect/decal/cleanable/blood,
+/obj/effect/landmark/corpse,
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"aF" = (
+/obj/structure/hanging_lantern{
+	dir = 4
+	},
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"aG" = (
+/obj/effect/decal/cleanable/blood/tracks/footprints{
+	dir = 1;
+	icon_state = "human2";
+	tag = "icon-human2 (NORTH)"
+	},
+/obj/effect/decal/cleanable/blood/tracks/footprints{
+	dir = 1;
+	icon_state = "human1";
+	tag = "icon-human1 (NORTH)"
+	},
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"aH" = (
+/obj/structure/bed/chair/comfy/brown{
+	dir = 1
+	},
+/obj/item/clothing/mask/cigarette/pipe,
+/obj/item/clothing/glasses/regular/hipster,
+/turf/simulated/floor/carpet,
+/area/vault/spacepond)
+"aI" = (
+/obj/structure/bed/chair/comfy/brown{
+	dir = 1
+	},
+/turf/simulated/floor/carpet,
+/area/vault/spacepond)
+"aJ" = (
+/obj/effect/decal/cleanable/generic,
+/obj/structure/hanging_lantern,
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"aK" = (
+/obj/structure/coatrack/full,
+/obj/item/clothing/accessory/necklace/xeno_claw,
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken4"
+	},
+/area/vault/spacepond)
+"aL" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 4
+	},
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"aM" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/obj/structure/closet,
+/obj/item/clothing/shoes/blue,
+/obj/item/clothing/under/bluepants,
+/obj/item/clothing/under/lawyer/bluesuit,
+/obj/item/clothing/suit/jumper/christmas/blue,
+/obj/item/clothing/head/hairflower,
+/obj/item/clothing/head/bearpelt/real,
+/obj/item/clothing/head/ushanka,
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken3"
+	},
+/area/vault/spacepond)
+"aN" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/wall/mineral/wood,
+/area/vault/spacepond)
+"aO" = (
+/obj/machinery/atmospherics/unary/vent{
+	dir = 8
+	},
+/turf/template_noop,
+/area/template_noop)
+"aP" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/unsimulated/mineral,
+/area/vault/spacepond)
+"aQ" = (
+/obj/effect/decal/cleanable/blood/gibs/limb,
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"aR" = (
+/obj/item/stack/medical/ointment,
+/obj/item/stack/medical/bruise_pack,
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"aS" = (
+/obj/item/weapon/harpoon,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"aT" = (
+/obj/structure/hanging_lantern,
+/turf/unsimulated/beach/sand,
+/area/ruin/surface)
+"aU" = (
+/obj/structure/flora/pottedplant,
+/turf/simulated/floor/carpet,
+/area/vault/spacepond)
+"aV" = (
+/obj/structure/bookcase,
+/obj/item/weapon/storage/bible,
+/turf/simulated/floor/carpet,
+/area/vault/spacepond)
+"aW" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"aX" = (
+/obj/machinery/alarm{
+	dir = 8;
+	pixel_x = 24
+	},
+/obj/machinery/atmospherics/unary/tank/air{
+	dir = 8
+	},
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"aY" = (
+/mob/living/simple_animal/hostile/carp/baby,
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken3"
+	},
+/area/vault/spacepond)
+"aZ" = (
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken"
+	},
+/area/vault/spacepond)
+"ba" = (
+/mob/living/simple_animal/hostile/carp/baby,
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"bb" = (
+/obj/effect/decal/cleanable/blood/tracks/footprints{
+	dir = 8;
+	icon_state = "human2";
+	tag = "icon-human2 (WEST)"
+	},
+/obj/effect/decal/cleanable/blood/tracks/footprints{
+	dir = 1;
+	icon_state = "human1";
+	tag = "icon-human1 (NORTH)"
+	},
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"bc" = (
+/turf/unsimulated/mineral,
+/area/ruin/surface)
+"bd" = (
+/obj/structure/flora/ausbushes/reedbush,
+/turf/unsimulated/beach/sand,
+/area/ruin/surface)
+"be" = (
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken"
+	},
+/area/vault/spacepond)
+"bf" = (
+/mob/living/simple_animal/hostile/carp,
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"bg" = (
+/obj/machinery/door/mineral/wood,
+/turf/unsimulated/floor/asteroid,
+/area/vault/spacepond)
+"bh" = (
+/obj/effect/decal/cleanable/campfire,
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"bi" = (
+/turf/unsimulated/beach/sand,
+/area/ruin/surface)
+"bj" = (
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor/wood,
+/area/vault/spacepond)
+"bk" = (
+/turf/unsimulated/beach/water,
+/area/ruin/surface)
+"bl" = (
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"bm" = (
+/obj/machinery/door/mineral/sandstone,
+/turf/unsimulated/floor/asteroid,
+/area/vault/spacepond)
+"bn" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"bo" = (
+/obj/item/clothing/under/overalls,
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+"bp" = (
+/turf/unsimulated/floor/asteroid,
+/area/ruin/surface)
+
+(1,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(2,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+ab
+aa
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(3,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+bp
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+aa
+aa
+"}
+(4,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ac
+ac
+ac
+ac
+ab
+bp
+bp
+ab
+bp
+bp
+bp
+bp
+ab
+ab
+aa
+"}
+(5,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ac
+aR
+aY
+ac
+bp
+bp
+bp
+bp
+bi
+bi
+bp
+bp
+bp
+ab
+aa
+"}
+(6,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ac
+aS
+aZ
+bg
+bp
+bp
+bi
+bi
+bi
+bi
+bi
+bp
+bp
+ab
+ab
+"}
+(7,1,1) = {"
+aa
+aa
+aa
+aa
+ab
+ac
+as
+ba
+ac
+bi
+bi
+bd
+bk
+bk
+bi
+bi
+bp
+bp
+bp
+ab
+"}
+(8,1,1) = {"
+aa
+aa
+aa
+ab
+ab
+ac
+ac
+ac
+ac
+bi
+bd
+bk
+bk
+bk
+bk
+bi
+bp
+bp
+bp
+ab
+"}
+(9,1,1) = {"
+ab
+ab
+ab
+ab
+bp
+bp
+bp
+bp
+bi
+bi
+bk
+bk
+ay
+bk
+bk
+bd
+bp
+bp
+ab
+ab
+"}
+(10,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+bl
+bp
+bp
+bi
+bk
+bk
+bk
+bk
+bk
+bi
+bi
+aT
+ab
+ab
+aa
+"}
+(11,1,1) = {"
+aa
+aa
+ab
+ab
+bp
+bp
+bp
+bp
+bd
+bk
+bk
+bk
+bk
+bk
+bk
+bi
+bi
+ab
+ab
+ab
+"}
+(12,1,1) = {"
+aa
+ab
+ab
+bp
+bp
+bp
+bp
+bp
+bi
+bk
+bk
+bk
+bk
+bk
+bk
+bi
+ab
+ab
+bp
+ab
+"}
+(13,1,1) = {"
+aa
+ab
+bp
+bp
+bp
+bo
+bc
+bp
+bi
+bk
+bk
+bk
+bk
+ay
+bk
+bi
+bp
+ab
+bp
+ab
+"}
+(14,1,1) = {"
+aa
+ab
+ab
+bp
+aw
+aD
+bc
+ai
+bi
+bi
+bk
+bk
+bk
+bk
+bi
+bi
+bp
+bp
+bp
+bm
+"}
+(15,1,1) = {"
+aa
+aa
+ab
+bp
+aQ
+aE
+aG
+ax
+bp
+bi
+bi
+bk
+bk
+bk
+bi
+bi
+bp
+bp
+bp
+ab
+"}
+(16,1,1) = {"
+aa
+aa
+ab
+bp
+bp
+bp
+bp
+bb
+bp
+bp
+bi
+bi
+bi
+bi
+bi
+bp
+bp
+bp
+bp
+ab
+"}
+(17,1,1) = {"
+aa
+aa
+ac
+ac
+ac
+aC
+aC
+ac
+bp
+bp
+bi
+bi
+bi
+bp
+bp
+bp
+bp
+bp
+ab
+ab
+"}
+(18,1,1) = {"
+aa
+aa
+ac
+ao
+az
+aH
+aU
+aC
+bp
+bp
+bi
+bi
+bp
+bp
+bh
+bp
+bp
+ab
+ab
+aa
+"}
+(19,1,1) = {"
+ac
+ac
+ac
+ap
+aA
+aA
+aA
+be
+bp
+bp
+bi
+bi
+bp
+bp
+bp
+bp
+bp
+ab
+aa
+aa
+"}
+(20,1,1) = {"
+ac
+ad
+ak
+aq
+aA
+aI
+aV
+ac
+bi
+bi
+bi
+bi
+bp
+aF
+bp
+bp
+bp
+ab
+aa
+aa
+"}
+(21,1,1) = {"
+ac
+ac
+ac
+ar
+ar
+aJ
+ac
+ac
+ac
+aj
+bi
+bp
+ab
+ab
+bp
+bp
+ab
+ab
+aa
+aa
+"}
+(22,1,1) = {"
+ac
+ae
+al
+as
+ar
+ar
+ak
+bf
+bj
+bi
+bi
+bp
+bp
+ab
+ab
+ab
+ab
+aa
+aa
+aa
+"}
+(23,1,1) = {"
+ac
+af
+am
+at
+as
+aK
+ac
+ac
+ac
+bi
+bp
+bp
+bp
+bp
+bp
+ab
+ab
+ab
+aa
+aa
+"}
+(24,1,1) = {"
+ac
+ag
+al
+au
+ar
+aL
+aW
+aC
+bi
+bp
+bp
+bp
+bi
+bp
+bp
+bp
+ab
+ab
+ab
+aa
+"}
+(25,1,1) = {"
+ac
+ah
+an
+av
+aB
+aM
+aX
+ac
+bp
+bp
+bp
+bi
+bi
+bp
+bp
+ab
+ab
+aa
+aa
+aa
+"}
+(26,1,1) = {"
+ac
+ac
+ac
+ac
+aC
+aN
+ac
+ac
+bp
+bp
+bp
+bp
+bp
+bp
+bp
+ab
+aa
+aa
+aa
+aa
+"}
+(27,1,1) = {"
+aa
+aa
+ab
+ab
+bp
+bn
+bp
+bp
+bp
+bp
+bp
+bp
+bp
+ab
+ab
+ab
+aa
+aa
+aa
+aa
+"}
+(28,1,1) = {"
+aa
+aa
+aa
+ab
+ab
+aP
+ab
+bp
+ab
+ab
+ab
+bm
+ab
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(29,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aO
+ab
+ab
+ab
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
