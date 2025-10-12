@@ -950,7 +950,9 @@ var/static/list/ai_icon_states = list(
 	icon_state = chosen_core_icon_state
 
 /mob/living/silicon/ai/update_perception()
-	if(ai_flags & HIGHRESCAMS)
-		client?.darkness_planemaster.alpha = 150
-	else
-		client?.darkness_planemaster.alpha = 255
+	if(dark_plane)
+		if(ai_flags & HIGHRESCAMS)
+			dark_plane.alphas["ai"] = 105
+		else
+			dark_plane.alphas["ai"] = 10
+	check_dark_vision()

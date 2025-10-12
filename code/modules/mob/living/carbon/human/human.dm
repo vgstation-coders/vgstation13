@@ -1615,8 +1615,8 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 		dark_plane.colours = null
 		dark_plane.blend_mode = BLEND_ADD
 
-	if (master_plane)
-		master_plane.blend_mode = BLEND_MULTIPLY
+	if (lighting_planemaster)
+		lighting_planemaster.blend_mode = BLEND_MULTIPLY
 
 	if(client && dark_plane)
 		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
