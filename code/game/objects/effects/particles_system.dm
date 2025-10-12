@@ -183,6 +183,8 @@ var/list/particle_string_to_type = list(
 	PS_SACRED_FLAME = /particles/sacred_flame,
 	PS_SACRED_FLAME2 = /particles/sacred_flame/alt,
 	PS_BIBLE_PAGE = /particles/bible_page,
+	PS_SHADOW_SMOKE = /particles/cult_smoke,
+	PS_SHADOW_SMOKE2 = /particles/cult_smoke/alt,
 	)
 
 /particles
