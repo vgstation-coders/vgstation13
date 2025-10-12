@@ -86,7 +86,7 @@
 	icon = 'icons/turf/planetary/wasteplanet.dmi'
 	icon_state = "wasteplanet0"
 	base_icon_state = "wasteplanet"
-	floor_variance = 10
+	floor_variance = 40
 	max_icon_states = 12
 
 /turf/unsimulated/floor/planetary/toxic/New()

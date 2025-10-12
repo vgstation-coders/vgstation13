@@ -90,7 +90,7 @@
 /obj/effect/decal/cleanable/blood/oil{
 	icon_state = "floor2"
 	},
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "aW" = (
 /obj/machinery/floodlight/on/infinite,
@@ -173,7 +173,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "cq" = (
 /mob/living/simple_animal/cockroach,
@@ -423,7 +423,7 @@
 	},
 /obj/item/weapon/reagent_containers/food/condiment/spacemilk,
 /obj/item/weapon/reagent_containers/food/condiment/spacemilk,
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "hw" = (
 /obj/item/weapon/reagent_containers/glass/bottle/insecticide,
@@ -435,7 +435,7 @@
 	icon_state = "bot"
 	},
 /obj/item/weapon/reagent_containers/glass/bottle/insecticide,
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "hD" = (
 /mob/living/simple_animal/cockroach,
@@ -458,12 +458,12 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "hL" = (
 /obj/effect/decal/warning_stripes/pathmarkers,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "hQ" = (
 /obj/structure/closet/crate/freezer,
@@ -480,7 +480,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "if" = (
 /mob/living/simple_animal/hostile/bigroach,
@@ -556,7 +556,7 @@
 	icon_state = "bot"
 	},
 /obj/machinery/portable_atmospherics/canister/air,
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "kb" = (
 /obj/machinery/floodlight/on/infinite,
@@ -855,7 +855,7 @@
 /area/ruin/surface)
 "oZ" = (
 /obj/effect/decal/cleanable/blood/oil,
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "pn" = (
 /obj/structure/bed/chair{
@@ -1221,11 +1221,11 @@
 	name = "Pod Station Airlock"
 	},
 /obj/structure/window/barricade/full/block,
-/turf/simulated/floor/plating,
+/turf/template_noop,
 /area/vault/podstation/interior)
 "xt" = (
 /obj/structure/closet/walllocker/emerglocker/north,
-/turf/simulated/floor/plating,
+/turf/template_noop,
 /area/vault/podstation/interior)
 "yE" = (
 /obj/machinery/atmospherics/unary/vent_pump{
@@ -1301,7 +1301,7 @@
 /area/vault/podstation/interior)
 "AD" = (
 /obj/machinery/light/small/broken,
-/turf/simulated/floor/plating,
+/turf/template_noop,
 /area/vault/podstation/interior)
 "AF" = (
 /obj/effect/decal/cleanable/cockroach_remains,
@@ -1413,14 +1413,14 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "DR" = (
 /obj/item/weapon/storage/toolbox/emergency,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "DW" = (
 /obj/structure/lattice,
@@ -1644,7 +1644,7 @@
 /area/vault/podstation/interior)
 "KC" = (
 /obj/effect/decal/warning_stripes/pathmarkers,
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "Li" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1658,7 +1658,7 @@
 	icon_state = "bot"
 	},
 /obj/item/device/silicate_sprayer,
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "LD" = (
 /obj/structure/table,
@@ -1715,7 +1715,7 @@
 	icon_state = "bot"
 	},
 /obj/machinery/cryopod,
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "Nl" = (
 /obj/structure/catwalk,
@@ -1734,7 +1734,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "NF" = (
 /obj/effect/decal/cleanable/dirt,
@@ -1966,7 +1966,7 @@
 	icon_state = "bot"
 	},
 /obj/machinery/portable_atmospherics/canister/oxygen,
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "Sn" = (
 /obj/structure/bed/chair{
@@ -2000,7 +2000,7 @@
 "Ts" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "TM" = (
 /obj/item/weapon/shard,
@@ -2011,7 +2011,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "TV" = (
 /turf/unsimulated/floor/asteroid,
@@ -2021,7 +2021,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "UN" = (
 /obj/structure/window/barricade/full/block,
@@ -2288,7 +2288,7 @@
 /area/vault/podstation/interior)
 "YT" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "Zo" = (
 /obj/structure/rack,
@@ -2311,7 +2311,7 @@
 	},
 /area/vault/podstation/interior)
 "Zy" = (
-/turf/unsimulated/floor/asteroid/underground/airless,
+/turf/unsimulated/floor/jungle/concrete,
 /area/ruin/surface)
 "ZI" = (
 /turf/unsimulated/floor/airless{

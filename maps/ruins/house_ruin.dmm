@@ -192,7 +192,7 @@
 "aS" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating,
+/turf/template_noop,
 /area/vault/zathura)
 "aT" = (
 /obj/effect/landmark/corpse/skellington{
@@ -201,10 +201,10 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating,
+/turf/template_noop,
 /area/vault/zathura)
 "aU" = (
-/turf/simulated/floor/plating,
+/turf/template_noop,
 /area/vault/zathura)
 "aV" = (
 /obj/effect/decal/cleanable/dirt,
@@ -274,11 +274,11 @@
 "bf" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/soot,
-/turf/simulated/floor/plating,
+/turf/template_noop,
 /area/vault/zathura)
 "bg" = (
 /obj/effect/decal/cleanable/dirt,
-/turf/simulated/floor/plating,
+/turf/template_noop,
 /area/vault/zathura)
 "bh" = (
 /obj/machinery/light/built{
@@ -322,7 +322,7 @@
 "bn" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/bed/chair/office/dark,
-/turf/simulated/floor/plating,
+/turf/template_noop,
 /area/vault/zathura)
 "bo" = (
 /obj/machinery/light/built{
