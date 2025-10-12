@@ -272,10 +272,10 @@ var/list/barsigns = list()
 					viscon.filters = null //SPECIAL LIST, IT CANNOT BE CUT NOOOOOOOOO
 				if("Dropshadow")
 					if(viscon.filters.len <= MAX_FILTER_LIMIT)
-						viscon.filters += filter(type="drop_shadow", x=0, y=0, size=3, offset=2, color="[filter_selection["Dropshadow"]["color"]]")
+						viscon.filters += filter(type="drop_shadow", name="barsign_drop_shadow", x=0, y=0, size=3, offset=2, color="[filter_selection["Dropshadow"]["color"]]")
 				if("Ripple")
 					if(viscon.filters.len <= MAX_FILTER_LIMIT)
-						viscon.filters += filter(type="ripple", x=0, y=0, size=rand()*2.5+0.5, repeat=rand()*2.5+0.5, radius=rand(), falloff=rand()*2.5+0.5)
+						viscon.filters += filter(type="ripple", name="barsign_ripple", x=0, y=0, size=rand()*2.5+0.5, repeat=rand()*2.5+0.5, radius=rand(), falloff=rand()*2.5+0.5)
 				if("dshadow_color")
 					var/colorhex = input(user, "Choose your dropshadow color:", "Sign Color Selection",filter_selection["Dropshadow"]["color"]) as color|null
 					if(colorhex)
@@ -419,7 +419,7 @@ var/list/barsigns = list()
 		while(rsq<100 || rsq>900)   // keep trying if we don't like the numbers
 		// keep distortion (size) small, from 0.5 to 3 pixels
 		// choose a random phase (offset)
-		viscon.filters += filter(type="wave", x=X, y=Y, size=rand()*2.5+0.5, offset=rand())
+		viscon.filters += filter(type="wave", name="example_wave" , x=X, y=Y, size=rand()*2.5+0.5, offset=rand())
 	for(i=1, i<=7, ++i)
 		// animate phase of each wave from its original phase to phase-1 and then reset;
 		// this moves the wave forward in the X,Y direction
