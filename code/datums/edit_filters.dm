@@ -29,7 +29,7 @@
 		"Rays" = "rays",
 		"Ripple" = "ripple",
 		"Wave" = "wave",
-		)//me or someone else will do the other ones later
+		)
 
 	var/filter_name = input(usr, "Select a new filter", "New Filter Effect", null) as null|anything in filter_setups
 
