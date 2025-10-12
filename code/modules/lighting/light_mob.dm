@@ -27,7 +27,7 @@
 
 /mob/proc/update_darkness()
 	if(seedarkness)
-		lighting_planemaster?.LIGHTING_PLANEMASTER_COLOR
+		lighting_planemaster?.color = LIGHTING_PLANEMASTER_COLOR
 	else
 		lighting_planemaster?.color = ""
 
