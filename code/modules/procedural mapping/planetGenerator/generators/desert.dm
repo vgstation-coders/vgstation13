@@ -90,13 +90,18 @@
 		/obj/structure/flora/desert/tumbleweed = 5,
 	)
 	flora_spawn_chance = 4
-	mob_spawn_chance = 1
+	mob_spawn_chance = 2
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 10,
-		/mob/living/simple_animal/rabbit = 50,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 20,
-		/mob/living/simple_animal/hostile/asteroid/magmaw = 20,
-		/mob/living/simple_animal/hostile/lizard = 50,
+		/mob/living/simple_animal/cockroach = 20,
+		/mob/living/simple_animal/rabbit/bunny = 30,
+		/mob/living/simple_animal/hostile/asteroid/basilisk = 15,
+		/mob/living/simple_animal/hostile/asteroid/magmaw = 10,
+		/mob/living/simple_animal/hostile/lizard = 35,
+		/mob/living/simple_animal/mouse/common = 25,
+		/mob/living/simple_animal/cricket = 20,
+		/mob/living/simple_animal/hostile/asteroid/goliath = 10,
+		/mob/living/simple_animal/hostile/lizard/frog = 10,
+		/mob/living/simple_animal/hostile/warriorbug = 1,
 	)
 	loot_spawners = list(
 		/obj/abstract/loot_spawner/engineering = 1,
@@ -113,6 +118,7 @@
 		/obj/structure/flora/ausbushes/stalkybush = 5,
 	)
 	flora_spawn_chance = 1
+	loot_spawn_chance = 1
 	loot_spawners = list(/obj/abstract/loot_spawner/trash/on_ground) //it's bleak
 
 /datum/biome/cave/desert
@@ -123,11 +129,16 @@
 		/obj/structure/flora/rock = 5,
 		/obj/structure/flora/rock/pile = 1,
 		)
-	mob_spawn_chance = 1
+	mob_spawn_chance = 3
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 10,
+		/mob/living/simple_animal/cockroach = 25,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 20,
-		/mob/living/simple_animal/hostile/asteroid/goliath = 20,
-		/mob/living/simple_animal/hostile/asteroid/rockernaut = 20,
+		/mob/living/simple_animal/hostile/asteroid/goliath = 25,
 		/mob/living/simple_animal/hostile/monster/skrite = 1,
+		/mob/living/simple_animal/hostile/mimic/crate/chest = 10,
+		/mob/living/simple_animal/hostile/scarybat/cave = 20,
+		/mob/living/simple_animal/hostile/asteroid/hivelord = 8,
+		/mob/living/simple_animal/hostile/mushroom = 10,
+		/mob/living/simple_animal/mouse/common = 15,
+		/mob/living/simple_animal/hostile/warriorbug = 1
 	)

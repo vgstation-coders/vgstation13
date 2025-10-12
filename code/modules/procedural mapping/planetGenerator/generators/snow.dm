@@ -136,13 +136,22 @@
 		/obj/structure/flora/grass/white = 3
 	)
 	flora_spawn_chance = 10
-	mob_spawn_chance = 1
+	mob_spawn_chance = 2
 	mob_spawn_list = list(
-		/mob/living/simple_animal/hostile/wolf = 5,
-		/mob/living/simple_animal/hostile/deer = 5,
-		/mob/living/simple_animal/hostile/bear/polarbear = 2,
-		/mob/living/simple_animal/rabbit = 3,
-		/mob/living/simple_animal/hostile/decoy/snowman = 1,
+		/mob/living/simple_animal/hostile/wolf = 20,
+		/mob/living/simple_animal/hostile/wolf/alpha = 5,
+		/mob/living/simple_animal/hostile/wolf/pliable = 3,
+		/mob/living/simple_animal/hostile/deer = 15,
+		/mob/living/simple_animal/hostile/bear/polarbear = 12,
+		/mob/living/simple_animal/rabbit/bunny = 18,
+		/mob/living/simple_animal/hostile/retaliate/snowman = 3,
+		/mob/living/simple_animal/penguin = 10,
+		/mob/living/simple_animal/penguin/chick = 5,
+		/mob/living/simple_animal/hostile/wendigo/human = 8,
+		/mob/living/simple_animal/hostile/wendigo = 3,
+		/mob/living/simple_animal/hostile/wendigo/alpha = 1,
+		/mob/living/simple_animal/mouse/common = 15,
+		/mob/living/simple_animal/capybara = 2
 	)
 	loot_spawners = list(
 		/obj/abstract/loot_spawner/bedsheet = 1,
@@ -197,13 +206,19 @@
 		/turf/unsimulated/floor/snow = 4
 	)
 	mob_spawn_list = list(
-		/mob/living/simple_animal/hostile/wolf = 10,
-		/mob/living/simple_animal/hostile/deer = 10,
-		/mob/living/simple_animal/hostile/bear/polarbear = 5,
-		/mob/living/simple_animal/rabbit = 2,
-		/mob/living/simple_animal/hostile/decoy/snowman = 1,
+		/mob/living/simple_animal/hostile/wolf = 25,
+		/mob/living/simple_animal/hostile/wolf/alpha = 8,
+		/mob/living/simple_animal/hostile/deer = 15,
+		/mob/living/simple_animal/hostile/bear/polarbear = 18,
+		/mob/living/simple_animal/rabbit/bunny = 12,
+		/mob/living/simple_animal/hostile/retaliate/snowman = 3,
+		/mob/living/simple_animal/penguin = 8,
+		/mob/living/simple_animal/hostile/wendigo/human = 10,
+		/mob/living/simple_animal/hostile/wendigo = 5,
+		/mob/living/simple_animal/hostile/wendigo/skifree = 4,
+		/mob/living/simple_animal/mouse/common = 10
 	)
-	mob_spawn_chance = 1
+	mob_spawn_chance = 2
 
 /datum/biome/arctic/rocky
 	flora_spawn_chance = 5
@@ -216,11 +231,16 @@
 	open_turf_types = list(
 		/turf/unsimulated/floor/noblizz_permafrost/icecore = 1
 	)
-	mob_spawn_chance = 2
+	mob_spawn_chance = 3
 	mob_spawn_list = list(
-		/mob/living/simple_animal/hostile/wolf = 10,
-		/mob/living/simple_animal/hostile/bear/polarbear = 10,
-		/mob/living/simple_animal/hostile/decoy/snowman = 1,
+		/mob/living/simple_animal/hostile/wolf = 25,
+		/mob/living/simple_animal/hostile/wolf/alpha = 10,
+		/mob/living/simple_animal/hostile/bear/polarbear = 25,
+		/mob/living/simple_animal/hostile/retaliate/snowman = 3,
+		/mob/living/simple_animal/penguin = 15,
+		/mob/living/simple_animal/hostile/wendigo = 8,
+		/mob/living/simple_animal/hostile/wendigo/evolved = 3,
+		/mob/living/simple_animal/hostile/wendigo/skifree = 5
 	)
 
 
@@ -242,12 +262,21 @@
 		/turf/unsimulated/mineral/random/snow = 10,
 		/turf/unsimulated/mineral/random/high_chance/snow = 1,
 	)
-	mob_spawn_chance = 2
+	mob_spawn_chance = 3
 	mob_spawn_list = list(
-		/mob/living/simple_animal/hostile/wolf = 10,
-		/mob/living/simple_animal/hostile/bear/polarbear = 5,
-		/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/knight = 1,
-		/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/wizard = 1,
+		/mob/living/simple_animal/hostile/wolf = 25,
+		/mob/living/simple_animal/hostile/wolf/alpha = 8,
+		/mob/living/simple_animal/hostile/bear/polarbear = 15,
+		/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/knight = 5,
+		/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/wizard = 5,
+		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
+		/mob/living/simple_animal/hostile/scarybat/cave = 20,
+		/mob/living/simple_animal/hostile/wendigo = 8,
+		/mob/living/simple_animal/hostile/wendigo/evolved = 2,
+		/mob/living/simple_animal/cockroach = 15,
+		/mob/living/simple_animal/mouse/common = 15,
+		/mob/living/simple_animal/hostile/mushroom = 12,
+		/mob/living/simple_animal/hostile/tree = 8
 	)
 
 /datum/biome/cave/snow/thawed
@@ -275,12 +304,22 @@
 		/turf/unsimulated/mineral/random/snow = 5,
 		/turf/unsimulated/mineral/random/high_chance/snow = 1,
 		)
-	mob_spawn_chance = 2
+	mob_spawn_chance = 3
 	mob_spawn_list = list(
-		/mob/living/simple_animal/hostile/wolf = 10,
-		/mob/living/simple_animal/hostile/bear/polarbear = 5,
-		/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/knight = 1,
-		/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/wizard = 1,
+		/mob/living/simple_animal/hostile/wolf = 20,
+		/mob/living/simple_animal/hostile/wolf/alpha = 6,
+		/mob/living/simple_animal/hostile/bear/polarbear = 12,
+		/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/knight = 5,
+		/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/wizard = 5,
+		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
+		/mob/living/simple_animal/hostile/scarybat/cave = 18,
+		/mob/living/simple_animal/hostile/wendigo = 10,
+		/mob/living/simple_animal/hostile/wendigo/evolved = 3,
+		/mob/living/simple_animal/hostile/asteroid/magmaw = 15,
+		/mob/living/simple_animal/hostile/asteroid/goliath = 10,
+		/mob/living/simple_animal/cockroach = 12,
+		/mob/living/simple_animal/mouse/common = 12,
+		/mob/living/simple_animal/hostile/mushroom = 10
 	)
 	flora_spawn_chance = 3
 	flora_spawn_list = list(

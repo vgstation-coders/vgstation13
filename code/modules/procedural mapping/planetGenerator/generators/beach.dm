@@ -82,8 +82,12 @@
 
 /datum/biome/beach
 	open_turf_types = list(/turf/unsimulated/beach/sand = 1)
-	mob_spawn_list = list(/mob/living/simple_animal/crab = 7, /mob/living/simple_animal/capybara = 1, /mob/living/simple_animal/snail = 1)
-	mob_spawn_chance = 1
+	mob_spawn_list = list(
+		/mob/living/simple_animal/crab = 25,
+		/mob/living/simple_animal/capybara = 10,
+		/mob/living/simple_animal/snail = 5,
+	)
+	mob_spawn_chance = 2
 	flora_spawn_list = list(
 		/obj/structure/flora/tree/palm = 1,
 		/obj/structure/flora/rock = 1,
@@ -134,21 +138,38 @@
 	)
 	flora_spawn_chance = 25
 	mob_spawn_list = list(
-		/mob/living/simple_animal/mouse = 1,
-		/mob/living/simple_animal/cow = 1,
-		/mob/living/simple_animal/hostile/deer = 1,
-		/mob/living/simple_animal/rabbit = 1
+		/mob/living/simple_animal/mouse/common = 20,
+		/mob/living/simple_animal/cow = 10,
+		/mob/living/simple_animal/hostile/deer = 15,
+		/mob/living/simple_animal/rabbit/bunny = 25,
+		/mob/living/simple_animal/chicken = 15,
+		/mob/living/simple_animal/chick = 10,
+		/mob/living/simple_animal/cat = 3,
+		/mob/living/simple_animal/cat/kitten = 2,
+		/mob/living/simple_animal/corgi = 2,
+		/mob/living/simple_animal/corgi/puppy = 1,
+		/mob/living/simple_animal/hostile/frog = 20,
+		/mob/living/simple_animal/hostile/lizard/frog = 20,
 	)
-	mob_spawn_chance = 1
+	mob_spawn_chance = 2
 
 /datum/biome/beach/grass/dense
 	flora_spawn_chance = 70
 	mob_spawn_list = list(
-		/mob/living/simple_animal/mouse = 10,
-		/mob/living/simple_animal/rabbit = 10,
-		/mob/living/simple_animal/hostile/spacehog/piglet = 1
+		/mob/living/simple_animal/mouse/common = 20,
+		/mob/living/simple_animal/rabbit/bunny = 30,
+		/mob/living/simple_animal/hostile/spacehog/piglet = 5,
+		/mob/living/simple_animal/hostile/spacehog/adult = 3,
+		/mob/living/simple_animal/hostile/spacehog/adult/mama = 1,
+		/mob/living/simple_animal/rampagingspacehog = 1,
+		/mob/living/simple_animal/chicken = 15,
+		/mob/living/simple_animal/chick = 10,
+		/mob/living/simple_animal/cat = 5,
+		/mob/living/simple_animal/cat/kitten = 3,
+		/mob/living/simple_animal/hostile/deer = 10,
+		/mob/living/simple_animal/hostile/retaliate/goat = 10
 	)
-	mob_spawn_chance = 2
+	mob_spawn_chance = 3
 	feature_spawn_chance = 1.2
 
 /datum/biome/ocean
@@ -167,10 +188,20 @@
 	closed_turf_types = list(/turf/unsimulated/mineral/random/cave = 1)
 	flora_spawn_chance = 4
 	flora_spawn_list = list(/obj/structure/flora/rock/pile = 1, /obj/structure/flora/rock = 6)
-	mob_spawn_chance = 1
+	mob_spawn_chance = 2
 	mob_spawn_list = list(
-		/mob/living/simple_animal/hostile/bear/brownbear = 5,
-		/mob/living/simple_animal/hostile/crab = 1,
+		/mob/living/simple_animal/hostile/bear/brownbear = 10,
+		/mob/living/simple_animal/crab = 10,
+		/mob/living/simple_animal/hostile/scarybat/cave = 1,
+		/mob/living/simple_animal/hostile/mimic/crate/chest = 10,
+		/mob/living/simple_animal/cockroach = 25,
+		/mob/living/simple_animal/mouse/common = 20,
+		/mob/living/simple_animal/hostile/mushroom = 5,
+		/mob/living/simple_animal/snail/greasy = 1,
+		/mob/living/simple_animal/hostile/frog/centurion = 15,
+		/mob/living/simple_animal/hostile/frog/javelineer = 15,
+		/mob/living/simple_animal/hostile/scarybat = 20,
+		/mob/living/simple_animal/hostile/scarybat/cave = 5,
 	)
 
 /datum/biome/cave/beach/cove

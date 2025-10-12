@@ -246,13 +246,18 @@
 		/obj/item/weapon/shard = 2,
 	)
 	flora_spawn_chance = 10
-	mob_spawn_chance = 2
+	mob_spawn_chance = 3
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 25,
-		/mob/living/simple_animal/mouse = 15,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 10,
-		/mob/living/simple_animal/hostile/lizard = 20,
-		/mob/living/simple_animal/rabbit = 10,
+		/mob/living/simple_animal/cockroach = 30,
+		/mob/living/simple_animal/mouse/common = 20,
+		/mob/living/simple_animal/hostile/asteroid/basilisk = 12,
+		/mob/living/simple_animal/hostile/lizard = 25,
+		/mob/living/simple_animal/rabbit/bunny = 15,
+		/mob/living/simple_animal/hostile/bigroach = 20,
+		/mob/living/simple_animal/hostile/pitbull = 10,
+		/mob/living/simple_animal/hostile/necro/zombie = 8,
+		/mob/living/simple_animal/hostile/necro/skeleton = 10,
+		/mob/living/simple_animal/cricket = 15
 	)
 
 /datum/biome/urban/wasteland
@@ -265,14 +270,20 @@
 		/obj/structure/flora/ausbushes/sparsegrass = 5,
 	)
 	flora_spawn_chance = 5
-	mob_spawn_chance = 3
+	mob_spawn_chance = 4
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 30,
-		/mob/living/simple_animal/mouse = 20,
+		/mob/living/simple_animal/cockroach = 35,
+		/mob/living/simple_animal/mouse/common = 25,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 15,
-		/mob/living/simple_animal/hostile/lizard = 25,
-		/mob/living/simple_animal/rabbit = 5,
-		/mob/living/simple_animal/hostile/asteroid/magmaw = 5,
+		/mob/living/simple_animal/hostile/lizard = 30,
+		/mob/living/simple_animal/rabbit/bunny = 8,
+		/mob/living/simple_animal/hostile/asteroid/magmaw = 8,
+		/mob/living/simple_animal/hostile/bigroach = 30,
+		/mob/living/simple_animal/hostile/pitbull = 15,
+		/mob/living/simple_animal/hostile/necro/zombie = 12,
+		/mob/living/simple_animal/hostile/necro/skeleton = 15,
+		/mob/living/simple_animal/cricket = 18,
+		/mob/living/simple_animal/snail = 10
 	)
 
 /datum/biome/urban/wasteland/dense
@@ -285,13 +296,20 @@
 		/obj/structure/flora/ausbushes/grassybush = 3,
 	)
 	flora_spawn_chance = 25
-	mob_spawn_chance = 4
+	mob_spawn_chance = 5
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 35,
-		/mob/living/simple_animal/mouse = 15,
+		/mob/living/simple_animal/cockroach = 40,
+		/mob/living/simple_animal/mouse/common = 20,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 20,
-		/mob/living/simple_animal/hostile/lizard = 20,
-		/mob/living/simple_animal/hostile/asteroid/magmaw = 10,
+		/mob/living/simple_animal/hostile/lizard = 25,
+		/mob/living/simple_animal/hostile/asteroid/magmaw = 12,
+		/mob/living/simple_animal/hostile/bigroach = 40,
+		/mob/living/simple_animal/hostile/bigroach/queen = 3,
+		/mob/living/simple_animal/hostile/pitbull = 18,
+		/mob/living/simple_animal/hostile/necro/zombie = 15,
+		/mob/living/simple_animal/hostile/necro/skeleton = 18,
+		/mob/living/simple_animal/cricket = 20,
+		/mob/living/simple_animal/snail = 12
 	)
 
 /datum/biome/urban/toxic
@@ -303,13 +321,21 @@
 		/obj/item/weapon/shard = 4,
 	)
 	flora_spawn_chance = 1
-	mob_spawn_chance = 5
+	mob_spawn_chance = 6
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 40,
+		/mob/living/simple_animal/cockroach = 45,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 25,
-		/mob/living/simple_animal/hostile/lizard = 15,
-		/mob/living/simple_animal/hostile/asteroid/magmaw = 15,
-		/mob/living/simple_animal/hostile/asteroid/goliath = 5,
+		/mob/living/simple_animal/hostile/lizard = 18,
+		/mob/living/simple_animal/hostile/asteroid/magmaw = 18,
+		/mob/living/simple_animal/hostile/asteroid/goliath = 8,
+		/mob/living/simple_animal/hostile/bigroach = 50,
+		/mob/living/simple_animal/hostile/bigroach/queen = 5,
+		/mob/living/simple_animal/hostile/pitbull = 20,
+		/mob/living/simple_animal/hostile/necro/zombie = 20,
+		/mob/living/simple_animal/hostile/necro/skeleton = 22,
+		/mob/living/simple_animal/hostile/necro/necromorph = 5,
+		/mob/living/simple_animal/hostile/monster/cyber_horror = 3,
+		/mob/living/simple_animal/cricket = 20
 	)
 
 /datum/biome/urban/toxic/dense
@@ -320,13 +346,25 @@
 		/obj/item/weapon/shard = 6,
 	)
 	flora_spawn_chance = 5
-	mob_spawn_chance = 6
+	mob_spawn_chance = 7
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 45,
+		/mob/living/simple_animal/cockroach = 50,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 30,
-		/mob/living/simple_animal/hostile/lizard = 10,
-		/mob/living/simple_animal/hostile/asteroid/magmaw = 20,
-		/mob/living/simple_animal/hostile/asteroid/goliath = 10,
+		/mob/living/simple_animal/hostile/lizard = 15,
+		/mob/living/simple_animal/hostile/asteroid/magmaw = 22,
+		/mob/living/simple_animal/hostile/asteroid/goliath = 12,
+		/mob/living/simple_animal/hostile/bigroach = 55,
+		/mob/living/simple_animal/hostile/bigroach/queen = 8,
+		/mob/living/simple_animal/hostile/pitbull = 22,
+		/mob/living/simple_animal/hostile/necro/zombie = 25,
+		/mob/living/simple_animal/hostile/necro/skeleton = 25,
+		/mob/living/simple_animal/hostile/necro/necromorph = 8,
+		/mob/living/simple_animal/hostile/necro/meat_ghoul = 10,
+		/mob/living/simple_animal/hostile/necro/animal_ghoul = 8,
+		/mob/living/simple_animal/hostile/monster/cyber_horror = 5,
+		/mob/living/simple_animal/cricket = 20,
+		/mob/living/simple_animal/hostile/creature = 5,
+		/mob/living/simple_animal/scp_173 = 1
 	)
 	loot_spawn_chance = 3
 
@@ -339,11 +377,21 @@
 		/obj/structure/flora/rock = 15,
 		/obj/structure/flora/rock/pile = 10,
 	)
-	mob_spawn_chance = 3
+	mob_spawn_chance = 4
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 30,
+		/mob/living/simple_animal/cockroach = 35,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 25,
 		/mob/living/simple_animal/hostile/asteroid/goliath = 20,
 		/mob/living/simple_animal/hostile/asteroid/rockernaut = 15,
-		/mob/living/simple_animal/hostile/monster/skrite = 2,
+		/mob/living/simple_animal/hostile/monster/skrite = 5,
+		/mob/living/simple_animal/hostile/bigroach = 30,
+		/mob/living/simple_animal/hostile/bigroach/queen = 3,
+		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
+		/mob/living/simple_animal/hostile/scarybat/cave = 20,
+		/mob/living/simple_animal/hostile/necro/zombie = 15,
+		/mob/living/simple_animal/hostile/necro/skeleton = 18,
+		/mob/living/simple_animal/hostile/necro/necromorph = 5,
+		/mob/living/simple_animal/hostile/monster/cyber_horror = 4,
+		/mob/living/simple_animal/mouse/common = 15,
+		/mob/living/simple_animal/hostile/mushroom = 12
 	)

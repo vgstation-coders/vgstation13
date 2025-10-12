@@ -90,12 +90,16 @@
 		/obj/structure/flora/xeno_flora/orange = 10,
 		/obj/structure/acid_puddle = 5
 	)
-	mob_spawn_chance = 1
+	mob_spawn_chance = 2
 	mob_spawn_list = list(
-		/mob/living/simple_animal/hostile/alien/drone = 1,
-		/mob/living/simple_animal/hostile/alien = 1,
-		/mob/living/simple_animal/hostile/alien/sentinel = 1,
-		/mob/living/carbon/alien/larva = 5
+		/mob/living/simple_animal/hostile/alien/drone = 10,
+		/mob/living/simple_animal/hostile/alien = 10,
+		/mob/living/simple_animal/hostile/alien/sentinel = 8,
+		/mob/living/carbon/alien/larva = 15,
+		/mob/living/simple_animal/hostile/mothership_saucerdrone = 5,
+		/mob/living/simple_animal/hostile/mothership_hoverdisc = 5,
+		/mob/living/simple_animal/hostile/retaliate/polyp = 12,
+		/mob/living/simple_animal/hostile/retaliate/cattle_specimen = 8
 	)
 	loot_spawners = list(
 		/obj/abstract/loot_spawner/exotic = 1
@@ -109,12 +113,16 @@
 		/obj/structure/flora/rock = 1,
 		/obj/structure/flora/rock/pile = 1,
 	)
-	mob_spawn_chance = 1
+	mob_spawn_chance = 2
 	mob_spawn_list = list(
-		/mob/living/simple_animal/hostile/alien/drone = 1,
-		/mob/living/simple_animal/hostile/alien = 1,
-		/mob/living/simple_animal/hostile/alien/sentinel = 1,
-		/mob/living/carbon/alien/larva = 5
+		/mob/living/simple_animal/hostile/alien/drone = 8,
+		/mob/living/simple_animal/hostile/alien = 8,
+		/mob/living/simple_animal/hostile/alien/sentinel = 6,
+		/mob/living/carbon/alien/larva = 12,
+		/mob/living/simple_animal/hostile/mothership_saucerdrone = 8,
+		/mob/living/simple_animal/hostile/mothership_hoverdisc = 8,
+		/mob/living/simple_animal/hostile/retaliate/polyp = 15,
+		/mob/living/simple_animal/hostile/retaliate/cattle_specimen = 10
 	)
 	loot_spawners = list(
 		/obj/abstract/loot_spawner/exotic = 1
@@ -127,12 +135,18 @@
 		/turf/unsimulated/mineral/random/high_chance/xeno = 1,
 	)
 
-	mob_spawn_chance = 3
+	mob_spawn_chance = 4
 	mob_spawn_list = list(
-		/mob/living/simple_animal/hostile/alien/drone = 10,
-		/mob/living/simple_animal/hostile/alien = 10,
-		/mob/living/simple_animal/hostile/alien/queen = 1,
-		/mob/living/simple_animal/hostile/alien/sentinel = 10,
+		/mob/living/simple_animal/hostile/alien/drone = 25,
+		/mob/living/simple_animal/hostile/alien = 25,
+		/mob/living/simple_animal/hostile/alien/queen = 3,
+		/mob/living/simple_animal/hostile/alien/sentinel = 20,
+		/mob/living/carbon/alien/larva = 15,
+		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
+		/mob/living/simple_animal/hostile/mothership_saucerdrone = 8,
+		/mob/living/simple_animal/hostile/mothership_hoverdisc = 8,
+		/mob/living/simple_animal/hostile/retaliate/polyp = 12,
+		/mob/living/simple_animal/hostile/retaliate/cattle_specimen = 10
 	)
 
 	flora_spawn_chance = 0.4
@@ -152,12 +166,20 @@
 		/turf/unsimulated/mineral/random/high_chance/xeno = 1,
 	)
 
-	mob_spawn_chance = 3
+	mob_spawn_chance = 5
 	mob_spawn_list = list(
-		/mob/living/simple_animal/hostile/alien/drone = 10,
-		/mob/living/simple_animal/hostile/alien = 10,
-		/mob/living/simple_animal/hostile/alien/queen = 1,
-		/mob/living/simple_animal/hostile/alien/sentinel = 10,
+		/mob/living/simple_animal/hostile/alien/drone = 30,
+		/mob/living/simple_animal/hostile/alien = 30,
+		/mob/living/simple_animal/hostile/alien/queen = 5,
+		/mob/living/simple_animal/hostile/alien/sentinel = 25,
+		/mob/living/carbon/alien/larva = 20,
+		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
+		/mob/living/simple_animal/hostile/mothership_saucerdrone = 10,
+		/mob/living/simple_animal/hostile/mothership_hoverdisc = 10,
+		/mob/living/simple_animal/hostile/retaliate/polyp = 15,
+		/mob/living/simple_animal/hostile/retaliate/cattle_specimen = 12,
+		/mob/living/simple_animal/vox/armalis = 3,
+		/mob/living/simple_animal/hostile/warriorbug = 8
 	)
 
 	flora_spawn_chance = 1

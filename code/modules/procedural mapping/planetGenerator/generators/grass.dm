@@ -92,12 +92,31 @@
 		/obj/structure/flora/rock/pile = 2,
 	)
 	flora_spawn_chance = 25
-	mob_spawn_chance = 1
+	mob_spawn_chance = 2
 	mob_spawn_list = list(
-		/mob/living/simple_animal/mouse = 25,
-		/mob/living/simple_animal/rabbit = 35,
-		/mob/living/simple_animal/hostile/deer = 15,
+		/mob/living/simple_animal/mouse/common = 50,
+		/mob/living/simple_animal/rabbit/bunny = 50,
+		/mob/living/simple_animal/hostile/deer = 10,
 		/mob/living/simple_animal/cockroach = 10,
+		/mob/living/simple_animal/cricket = 10,
+		/mob/living/simple_animal/chicken = 50,
+		/mob/living/simple_animal/chick = 10,
+		/mob/living/simple_animal/snail = 10,
+		/mob/living/simple_animal/cow = 25,
+		/mob/living/simple_animal/cow/chocolate = 1,
+		/mob/living/simple_animal/cat = 15,
+		/mob/living/simple_animal/cat/kitten = 5,
+		/mob/living/simple_animal/corgi = 15,
+		/mob/living/simple_animal/corgi/puppy = 5,
+		/mob/living/simple_animal/hamster = 10,
+		/mob/living/simple_animal/hostile/pitbull = 5,
+		/mob/living/simple_animal/hostile/retaliate/cockatrice = 5,
+		/mob/living/simple_animal/hostile/retaliate/cockatrice/chick = 5,
+		/mob/living/simple_animal/hostile/retaliate/goat = 25,
+		/mob/living/simple_animal/hostile/wendigo = 5,
+		/mob/living/simple_animal/hostile/wendigo/alpha = 1,
+		/mob/living/simple_animal/hostile/wendigo/evolved = 2,
+		/mob/living/simple_animal/hostile/wendigo/human = 5,
 	)
 	loot_spawners = list(
 		/obj/abstract/loot_spawner/bedsheet = 1,
@@ -120,14 +139,7 @@
 		/obj/structure/flora/rock = 2,
 	)
 	flora_spawn_chance = 40
-	mob_spawn_chance = 2
-	mob_spawn_list = list(
-		/mob/living/simple_animal/mouse = 20,
-		/mob/living/simple_animal/rabbit = 30,
-		/mob/living/simple_animal/hostile/deer = 15,
-		/mob/living/simple_animal/cockroach = 15,
-		/mob/living/simple_animal/bee = 5,
-	)
+	mob_spawn_chance = 3
 
 /datum/biome/grass/sparse
 	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
@@ -141,12 +153,6 @@
 	)
 	flora_spawn_chance = 1
 	mob_spawn_chance = 1
-	mob_spawn_list = list(
-		/mob/living/simple_animal/mouse = 20,
-		/mob/living/simple_animal/rabbit = 30,
-		/mob/living/simple_animal/hostile/deer = 10,
-		/mob/living/simple_animal/cockroach = 5,
-	)
 
 /datum/biome/grass/forest
 	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
@@ -161,13 +167,18 @@
 		/obj/structure/flora/ausbushes/genericbush = 5,
 	)
 	flora_spawn_chance = 60
-	mob_spawn_chance = 2
+	mob_spawn_chance = 3
 	mob_spawn_list = list(
-		/mob/living/simple_animal/mouse = 15,
-		/mob/living/simple_animal/rabbit = 25,
+		/mob/living/simple_animal/mouse/common = 15,
+		/mob/living/simple_animal/rabbit/bunny = 25,
 		/mob/living/simple_animal/hostile/deer = 20,
-		/mob/living/simple_animal/hostile/bear = 5,
+		/mob/living/simple_animal/hostile/deer/flesh = 1,
+		/mob/living/simple_animal/hostile/bear/brownbear = 8,
 		/mob/living/simple_animal/cockroach = 10,
+		/mob/living/simple_animal/hostile/wolf = 5,
+		/mob/living/simple_animal/hostile/mushroom = 10,
+		/mob/living/simple_animal/cricket = 15,
+		/mob/living/simple_animal/snail = 12,
 	)
 
 /datum/biome/grass/lush
@@ -183,14 +194,7 @@
 		/obj/structure/flora/ausbushes/lavendergrass = 8,
 	)
 	flora_spawn_chance = 50
-	mob_spawn_chance = 2
-	mob_spawn_list = list(
-		/mob/living/simple_animal/mouse = 20,
-		/mob/living/simple_animal/rabbit = 30,
-		/mob/living/simple_animal/cow = 5,
-		/mob/living/simple_animal/hostile/deer = 15,
-		/mob/living/simple_animal/bee = 10,
-	)
+	mob_spawn_chance = 3
 
 /datum/biome/grass/meadow
 	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
@@ -205,14 +209,7 @@
 		/obj/structure/flora/tree/palm = 1,
 	)
 	flora_spawn_chance = 5
-	mob_spawn_chance = 3
-	mob_spawn_list = list(
-		/mob/living/simple_animal/mouse = 15,
-		/mob/living/simple_animal/rabbit = 25,
-		/mob/living/simple_animal/cow = 10,
-		/mob/living/simple_animal/hostile/deer = 20,
-		/mob/living/simple_animal/bee = 30,
-	)
+	mob_spawn_chance = 4
 
 /datum/biome/grass/jungle
 	open_turf_types = list(/turf/unsimulated/floor/planetary/grass = 1)
@@ -228,15 +225,23 @@
 		/obj/structure/flora/ausbushes/stalkybush = 10,
 	)
 	flora_spawn_chance = 80
-	mob_spawn_chance = 4
+	mob_spawn_chance = 5
 	mob_spawn_list = list(
-		/mob/living/simple_animal/mouse = 10,
-		/mob/living/simple_animal/rabbit = 15,
+		/mob/living/simple_animal/mouse/common = 10,
+		/mob/living/simple_animal/rabbit/bunny = 15,
 		/mob/living/simple_animal/hostile/deer = 15,
-		/mob/living/simple_animal/hostile/bear = 10,
+		/mob/living/simple_animal/hostile/bear/brownbear = 10,
 		/mob/living/simple_animal/cockroach = 20,
 		/mob/living/simple_animal/bee = 15,
-		/mob/living/simple_animal/hostile/lizard = 15,
+		/mob/living/simple_animal/hostile/lizard = 20,
+		/mob/living/simple_animal/hostile/wolf = 8,
+		/mob/living/simple_animal/hostile/mushroom = 12,
+		/mob/living/simple_animal/cricket = 15,
+		/mob/living/simple_animal/snail = 10,
+		/mob/living/simple_animal/parrot = 5,
+		/mob/living/simple_animal/hostile/spacehog/adult = 1,
+		/mob/living/simple_animal/hostile/spacehog/adult/mama =1,
+		/mob/living/simple_animal/hostile/spacehog/piglet = 1
 	)
 
 /datum/biome/grass/tropical
@@ -253,14 +258,19 @@
 		/obj/structure/flora/ausbushes/sunnybush = 5,
 	)
 	flora_spawn_chance = 85
-	mob_spawn_chance = 5
+	mob_spawn_chance = 6
 	mob_spawn_list = list(
-		/mob/living/simple_animal/mouse = 5,
-		/mob/living/simple_animal/rabbit = 10,
+		/mob/living/simple_animal/mouse/common = 10,
+		/mob/living/simple_animal/rabbit/bunny = 12,
 		/mob/living/simple_animal/cockroach = 25,
 		/mob/living/simple_animal/bee = 30,
-		/mob/living/simple_animal/hostile/lizard = 25,
-		/mob/living/simple_animal/hostile/bear = 5,
+		/mob/living/simple_animal/hostile/lizard = 30,
+		/mob/living/simple_animal/hostile/bear/brownbear = 8,
+		/mob/living/simple_animal/hostile/lizard/frog = 15,
+		/mob/living/simple_animal/cricket = 20,
+		/mob/living/simple_animal/snail = 15,
+		/mob/living/simple_animal/parrot = 10,
+		/mob/living/simple_animal/capybara = 5
 	)
 
 // Cave biomes
@@ -274,11 +284,16 @@
 		/obj/structure/flora/ausbushes/sparsegrass = 8,
 		/obj/structure/flora/ausbushes/grassybush = 5,
 	)
-	mob_spawn_chance = 2
+	mob_spawn_chance = 3
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 20,
-		/mob/living/simple_animal/mouse = 15,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 10,
+		/mob/living/simple_animal/cockroach = 25,
+		/mob/living/simple_animal/mouse/common = 20,
+		/mob/living/simple_animal/hostile/asteroid/basilisk = 15,
+		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
+		/mob/living/simple_animal/hostile/scarybat/cave = 20,
+		/mob/living/simple_animal/hostile/mushroom = 15,
+		/mob/living/simple_animal/hostile/asteroid/pillow = 1,
+		/mob/living/simple_animal/hostile/asteroid/hivelordbrood = 1,
 	)
 
 /datum/biome/cave/grass/lush
@@ -291,12 +306,16 @@
 		/obj/structure/flora/ausbushes/fernybush = 10,
 		/obj/structure/flora/ausbushes/genericbush = 8,
 	)
-	mob_spawn_chance = 4
+	mob_spawn_chance = 5
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 15,
-		/mob/living/simple_animal/mouse = 20,
-		/mob/living/simple_animal/rabbit = 10,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 10,
+		/mob/living/simple_animal/cockroach = 20,
+		/mob/living/simple_animal/mouse/common = 25,
+		/mob/living/simple_animal/rabbit/bunny = 15,
+		/mob/living/simple_animal/hostile/asteroid/basilisk = 12,
+		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
+		/mob/living/simple_animal/hostile/scarybat/cave = 18,
+		/mob/living/simple_animal/hostile/mushroom = 20,
+		/mob/living/simple_animal/snail = 10
 	)
 
 /datum/biome/cave/grass/fungi
@@ -310,11 +329,15 @@
 		/obj/structure/flora/ausbushes/sparsegrass = 10,
 		/obj/structure/flora/ausbushes/fullgrass = 8,
 	)
-	mob_spawn_chance = 3
+	mob_spawn_chance = 4
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 25,
-		/mob/living/simple_animal/mouse = 15,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 5,
+		/mob/living/simple_animal/cockroach = 30,
+		/mob/living/simple_animal/mouse/common = 20,
+		/mob/living/simple_animal/hostile/asteroid/basilisk = 8,
+		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
+		/mob/living/simple_animal/hostile/scarybat/cave = 15,
+		/mob/living/simple_animal/hostile/mushroom = 35,
+		/mob/living/simple_animal/snail = 12
 	)
 
 /datum/biome/cave/grass/wet
@@ -332,11 +355,16 @@
 		/obj/structure/flora/ash/cap_shroom = 8,
 		/obj/structure/flora/ausbushes/reedbush = 12,
 	)
-	mob_spawn_chance = 5
+	mob_spawn_chance = 6
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 20,
-		/mob/living/simple_animal/mouse = 15,
-		/mob/living/simple_animal/rabbit = 5,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 15,
-		/mob/living/simple_animal/snail = 25,
+		/mob/living/simple_animal/cockroach = 25,
+		/mob/living/simple_animal/mouse/common = 18,
+		/mob/living/simple_animal/rabbit/bunny = 10,
+		/mob/living/simple_animal/hostile/asteroid/basilisk = 18,
+		/mob/living/simple_animal/snail = 30,
+		/mob/living/simple_animal/snail/greasy = 8,
+		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
+		/mob/living/simple_animal/hostile/scarybat/cave = 20,
+		/mob/living/simple_animal/hostile/mushroom = 25,
+		/mob/living/simple_animal/hostile/lizard/frog = 15
 	)

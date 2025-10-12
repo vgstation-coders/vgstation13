@@ -162,16 +162,13 @@
 	if(isatom(particle_emitter))
 		QDEL_NULL(particle_emitter)
 
-/turf/unsimulated/floor/planetary/lava/Entered(atom/movable/AM)
+/turf/unsimulated/floor/planetary/lava/Entered(atom/movable/AM,atom/OldLoc)
 	. = ..()
-	AM.ignite()
-
-/turf/unsimulated/floor/planetary/lava/Exited(atom/movable/Obj, atom/newloc)
-	. = ..()
-	if(isliving(Obj))
-		var/mob/living/L = Obj
-		if(!istype(newloc,/turf/unsimulated/floor/planetary/lava) && !L.on_fire)
-			L.ignite()
+	if(istype(OldLoc,/turf/unsimulated/floor/planetary/lava))
+		return
+	if(ishuman(AM)) //igniting all mobs causes a mass extinction event in lavaland
+		var/mob/living/carbon/human/L = AM
+		L.ignite()
 
 /turf/unsimulated/floor/planetary/lava/attackby(obj/item/attacking_item, mob/user, params)
 	..()
