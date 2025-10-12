@@ -275,15 +275,18 @@
 			if (layer_y == null)
 				return
 
-			var/choice = alert("Use icon or render_target as second image?", "New Filter Effect (Layering)", "icon", "render_target")
-			if (choice == "icon")
-				layer_icon = input(usr, "Choose the icon to use as a second image", "New Filter Effect (Layering)", null) as null|icon
-				if (layer_icon == null)
-					return
-			else
-				layer_target = input(usr, "Choose the render_target to use as a second image", "New Filter Effect (Layering)", "") as null|text
-				if (layer_target == null)
-					return
+			var/choice = alert("Use icon or render_target as second image?", "New Filter Effect (Layering)", "same icon", "other icon (load file)", "render_target")
+			switch(choice)
+				if ("same icon")
+					layer_icon = icon(A.icon, A.icon_state)
+				if ("other icon (load file)")
+					layer_icon = input(usr, "Choose the icon to use as a second image", "New Filter Effect (Layering)", null) as null|icon
+					if (layer_icon == null)
+						return
+				if ("render_target")
+					layer_target = input(usr, "Choose the render_target to use as a second image", "New Filter Effect (Layering)", "") as null|text
+					if (layer_target == null)
+						return
 
 			var/available_map_flags = list(
 				"FILTER_OVERLAY (default)" = FILTER_OVERLAY,
@@ -335,10 +338,10 @@
 
 			var/entry_name = get_next_filter_entry_name(A, filter)
 
-			if (choice == "icon")
-				A.filters += filter(type="layer", name=entry_name, x=layer_x, y=layer_y, icon=layer_icon, flags=added_flag, color=color_layer, transform=transform_layer, blend_mode=layer_blend)
-			else
+			if (choice == "render_target")
 				A.filters += filter(type="layer", name=entry_name, x=layer_x, y=layer_y, render_source=layer_target, flags=added_flag, color=color_layer, transform=transform_layer, blend_mode=layer_blend)
+			else
+				A.filters += filter(type="layer", name=entry_name, x=layer_x, y=layer_y, icon=layer_icon, flags=added_flag, color=color_layer, transform=transform_layer, blend_mode=layer_blend)
 
 		////////////////////////////////////////////////////////////////////
 		//																  //
