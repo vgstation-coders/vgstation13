@@ -1619,6 +1619,9 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 		lighting_planemaster.blend_mode = BLEND_MULTIPLY
 
 	if(client && dark_plane)
+		if(dna && (dna.mutantrace == "shadow"))
+			dark_plane.alphas["shadow"] = 155
+
 		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 		if(E)
 			E.update_perception(src)
