@@ -4,12 +4,20 @@ import { Box, Button, ProgressBar, Section, Stack } from 'tgui-core/components';
 import { useBackend } from '../backend';
 import { Window } from '../layouts';
 
+type BeaconData = {
+  tag: string;
+  active: boolean;
+  location: string;
+};
+
 type PlanetData = {
   name: string;
   desc: string;
   type: string;
   procedural_name: string;
   icon_data: string;
+  beacons: BeaconData[];
+  has_active_beacon: boolean;
 };
 
 type Data = {
@@ -227,6 +235,24 @@ export const PlanetScanner = (props) => {
                               {currentPlanet ? currentPlanet.desc : 'No planet data available.'}
                             </Box>
                           </Stack.Item>
+                          {currentPlanet && currentPlanet.beacons && currentPlanet.beacons.length > 0 && (
+                            <Stack.Item>
+                              <Box mb={1} fontSize="14px" bold>
+                                Active Trackers:
+                              </Box>
+                              {currentPlanet.beacons.map((beacon, index) => (
+                                <Box
+                                  key={index}
+                                  fontSize="12px"
+                                  color={beacon.active ? "bad" : "label"}
+                                  bold={beacon.active}
+                                  mb={0.5}
+                                >
+                                  {beacon.active ? "🚨 " : ""}{beacon.tag}
+                                </Box>
+                              ))}
+                            </Stack.Item>
+                          )}
                           <Stack.Item>
                             <Stack>
                               <Stack.Item>
