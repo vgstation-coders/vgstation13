@@ -336,9 +336,9 @@
 			var/entry_name = get_next_filter_entry_name(A, filter)
 
 			if (choice == "icon")
-				A.filters += filter(type="displace", name=entry_name, x=layer_x, y=layer_y, icon=layer_icon, flags=added_flag, color=color_layer, transform=transform_layer, blend_mode=layer_blend)
+				A.filters += filter(type="layer", name=entry_name, x=layer_x, y=layer_y, icon=layer_icon, flags=added_flag, color=color_layer, transform=transform_layer, blend_mode=layer_blend)
 			else
-				A.filters += filter(type="displace", name=entry_name, x=layer_x, y=layer_y, render_source=layer_target, flags=added_flag, color=color_layer, transform=transform_layer, blend_mode=layer_blend)
+				A.filters += filter(type="layer", name=entry_name, x=layer_x, y=layer_y, render_source=layer_target, flags=added_flag, color=color_layer, transform=transform_layer, blend_mode=layer_blend)
 
 		////////////////////////////////////////////////////////////////////
 		//																  //
