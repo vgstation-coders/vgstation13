@@ -228,6 +228,28 @@
 		planet_info["type"] = planet.type
 		planet_info["procedural_name"] = planet.planet_name
 		planet_info["icon_data"] = icon2base64(planet.ico)
+
+		// Get all beacons on this planet
+		var/list/beacons = list()
+		var/has_active_beacon = FALSE
+		if(planet.allocation)
+			var/datum/allocation/alloc = planet.allocation
+			for(var/obj/item/device/gps/planetary/gps in GPS_list)
+				var/turf/gps_turf = get_turf(gps)
+				if(!gps_turf || gps_turf.z != map.zProcGen)
+					continue
+				var/datum/allocation/gps_alloc = SSmapping.get_allocation(trf = gps_turf)
+				if(gps_alloc == alloc && gps.transmitting)
+					var/list/beacon_info = list()
+					beacon_info["tag"] = gps.gpstag
+					beacon_info["active"] = gps.beacon_active
+					beacon_info["location"] = gps.get_location_name()
+					if(gps.beacon_active)
+						has_active_beacon = TRUE
+					beacons += list(beacon_info)
+
+		planet_info["beacons"] = beacons
+		planet_info["has_active_beacon"] = has_active_beacon
 		planet_data += list(planet_info)
 
 	return planet_data
