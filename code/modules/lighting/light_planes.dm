@@ -17,6 +17,18 @@
 	plane = LIGHTING_PLANE
 	mouse_opacity = 0
 
+/obj/abstract/screen/plane/master/New(client/C)
+	..()
+	vis_contents += AMB_SQUARE
+
+
+/obj/abstract/screen/plane/amblight
+	icon = 'icons/mob/screen1.dmi'
+	appearance_flags = NO_CLIENT_COLOR | PLANE_MASTER | RESET_TRANSFORM | RESET_COLOR | RESET_ALPHA
+	plane = MAP_EFX_PLANE
+	render_target = AMBLIGHT_RENDER_TARGET
+	mouse_opacity = 0
+
 /obj/abstract/screen/plane/self_vision
 	blend_mode = BLEND_ADD
 	mouse_opacity = 0

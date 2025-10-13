@@ -58,10 +58,10 @@
 	overwrite_solars=TRUE
 	solar_orbit_period=130.6359
 	var/solartime=0 //start at 0. set not like that for debugging. or manually set next_firetime with varedit.
-
+/*
 /datum/subsystem/daynightcycle/process_lighting()
 	flags&=(0^SS_FIRE_IN_LOBBY) //we don't want this one firing in lobby constantly, as we've tweaked the lighting to be just right on startup. we still want it to fire once though.
-	
+
 	// YCbCr is a superior colorspace. fight me.
 	var/luma=0.0
 	var/chroma_b=0.0
@@ -77,7 +77,7 @@
 	luma+=0.64*power //red dwarves are weak stars.
 	chroma_r+=0.70*power //they also would give off fuckhuge solar flares.
 	chroma_b-=0.40*power // but that's a problem for silicons to deal with.
-	
+
 	//long-wave atmospheric absorption when the star is at a sharper angle (this is why sunsets are red)
 	chroma_r+=0.2*(1-power)*power
 	chroma_b-=0.3*(1-power)*power
@@ -102,7 +102,7 @@
 
 
 	//all numbers above this are completely arbitrary and are there to insure that the day/night cycle looks as cool as possible, meaning we have a lot of color variety and a satisfying progression between light and dark, and that it changes not too fast and not too slow. change them however you want.
-	
+
 	luma=luma**(1/2.2) //apply standard gamma correction
 
 	//constants defined by ITU-R BT.2020
@@ -174,11 +174,11 @@
 			bestangle=angle-90 //offset by 90. we start at 0, which makes it start at -90 (270), making it to that the stars "rise" in the west, then set in the east.
 	nearest_star_angle=bestangle%%360
 	nearest_star_power=bestpower
-	
-	
+
+
 	next_firetime=world.time + 4 MINUTES //station is too big to tick at 2 minutes. not without severe sever raep, at least.
 	solartime++
-
+*/
 /datum/subsystem/daynightcycle/play_globalsound()
 	return
 
@@ -186,8 +186,8 @@
 /datum/subsystem/foliage_regrow
 	growth_chance=95
 	var/growth_delay=5 MINUTES
-	
-	
+
+
 /datum/subsystem/foliage_regrow/regrow_turf(var/turf/T)
 	if(!T)
 		return null

@@ -18,12 +18,32 @@ Nighttime - 36 Minutes
 #define TOD_SUNSET 		"#75497e"
 #define TOD_NIGHTTIME 	"#000b11"
 
+var/atom/movable/amblight_square/AMB_SQUARE = new()
+/atom/movable/amblight_square
+	icon = null
+	color = "#FFFFFF"
+	appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
+	vis_flags = VIS_INHERIT_PLANE|VIS_INHERIT_LAYER|VIS_UNDERLAY
+	blend_mode = BLEND_ADD
+	mouse_opacity = 0
+	screen_loc = "1,1"
+
+/atom/movable/amblight_overlay
+	name = "white square of ambiance"
+	icon = 'icons/effects/32x32.dmi'
+	icon_state = "white"
+	plane = MAP_EFX_PLANE
+	appearance_flags = PIXEL_SCALE | TILE_BOUND | RESET_ALPHA | RESET_COLOR
+	mouse_opacity = 0
+/turf
+	var/atom/movable/amblight_overlay/amblight_overlay
+
 /datum/subsystem/daynightcycle
 	name          = "Day Night Cycle"
 	init_order    = SS_INIT_DAYNIGHT
 	display_order = SS_DISPLAY_DAYNIGHT
 	priority      = SS_PRIORITY_DAYNIGHT
-	wait          = 1 MINUTES
+	wait          = 2 SECONDS
 /*
 On the map dm file, redefine the following:
 	- 'daynight_z_lvls' to change the zLevels that the day/night cycle applies to. Do not redefine if you want this subsystem disabled.
@@ -51,44 +71,24 @@ On the map dm file, redefine the following:
 /datum/subsystem/daynightcycle/Initialize()
 	if(!daynight_z_lvls.len)
 		flags = SS_NO_INIT | SS_NO_FIRE
+	AMB_SQUARE.filters += filter(type="layer", render_source=AMBLIGHT_RENDER_TARGET)
 	get_turflist()
 	..()
 
 /datum/subsystem/daynightcycle/fire(resumed = FALSE)
 	if(world.time >= next_firetime)
-		process_lighting()
-		if(!resumed)
-			currentrun = daynight_turfs.Copy()
+		process_ass()
+		animate(AMB_SQUARE, color = current_timeOfDay, time = 2 SECONDS)
 
-	while(currentrun.len)
-		var/turf/T = currentrun[currentrun.len]
-		currentrun.len--
-
-		if(!T || T.gcDestroyed)
-			continue
-
-		T.set_light(next_light_range,next_light_power,current_timeOfDay,TRUE)
-
-		if(MC_TICK_CHECK)
-			return
-
-		if(!resumed)
-			currentrun = daynight_turfs.Copy()
 
 /datum/subsystem/daynightcycle/proc/get_turflist()
 	for(var/z in daynight_z_lvls)
 		for(var/turf/T in block(locate(1, 1, z), locate(world.maxx, world.maxy, z)))
-			if(IsEven(T.x)) //If we are also even.
-				if(IsEven(T.y)) //If we are also even.
-					var/area/A = get_area(T)
-					if(istype(A, /area/surface)) //If we are outside.
-						daynight_turfs += T
-					else //If We aren't we need to make sure we handle the outside segment
-						for(var/cdir in cardinal)//Ironically, this part didn't work correctly but....
-							var/turf/T1 = get_step(T,cdir)// It also ironically produced better looking day/night lighting
-							var/area/A1 = get_area(T1)
-							if(istype(A1, /area/surface)) //If we are outside.
-								daynight_turfs += T
+			var/area/A = get_area(T)
+			if(istype(A, /area/surface)) //If we are outside.
+				daynight_turfs += T
+				T.amblight_overlay = new()
+				T.overlays += T.amblight_overlay
 
 /datum/subsystem/daynightcycle/proc/play_globalsound()
 	for(var/mob/M in player_list)
@@ -103,27 +103,27 @@ On the map dm file, redefine the following:
 
 
 //Default lighting scheme; intitially purpose-built for Snaxi. Overwrite this proc in your map.dm file if you want to change the lighting scheme. See junglestation.dm for an example.
-/datum/subsystem/daynightcycle/proc/process_lighting()
+/datum/subsystem/daynightcycle/proc/process_ass()
 	switch(current_timeOfDay) //Then set the next segment up.
 		if(TOD_MORNING)
 			current_timeOfDay = TOD_SUNRISE
-			next_firetime = world.time + 3 MINUTES
+			next_firetime = world.time + 2 SECONDS
 			play_globalsound()
 		if(TOD_SUNRISE)
 			current_timeOfDay = TOD_DAYTIME
-			next_firetime = world.time + 14 MINUTES
+			next_firetime = world.time + 2 SECONDS
 		if(TOD_DAYTIME)
 			current_timeOfDay = TOD_AFTERNOON
-			next_firetime = world.time + 15 MINUTES
+			next_firetime = world.time + 2 SECONDS
 		if(TOD_AFTERNOON)
 			current_timeOfDay = TOD_SUNSET
-			next_firetime = world.time + 3 MINUTES
+			next_firetime = world.time + 2 SECONDS
 		if(TOD_SUNSET)
 			current_timeOfDay = TOD_NIGHTTIME
 			next_light_power = 3
-			next_firetime = world.time + 36 MINUTES
+			next_firetime = world.time + 2 SECONDS
 			play_globalsound()
 		if(TOD_NIGHTTIME)
 			current_timeOfDay = TOD_MORNING
 			next_light_power = 10
-			next_firetime = world.time + 5 MINUTES
+			next_firetime = world.time + 2 SECONDS

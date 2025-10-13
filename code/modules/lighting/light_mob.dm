@@ -1,5 +1,6 @@
 /mob
 	var/obj/abstract/screen/plane/master/master_plane
+	var/obj/abstract/screen/plane/amblight/amblight
 	var/obj/abstract/screen/plane/self_vision/self_vision
 	var/obj/abstract/screen/plane/dark/dark_plane
 	var/seedarkness = 1
@@ -21,6 +22,7 @@
 	dark_plane = new(client)
 	master_plane = new(client)
 	self_vision = new(client)
+	amblight = new(client)
 
 	update_darkness()
 	register_event(/event/before_move, src, /mob/proc/check_dark_vision)
