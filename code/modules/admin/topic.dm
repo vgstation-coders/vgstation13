@@ -937,11 +937,6 @@
 		var/datum/allocation/alloc = planet.allocation
 		var/planet_name = planet.planet_name
 
-		// Check if any players are on the planet
-		if(planet.has_living_players())
-			to_chat(usr, "<span class='warning'>Cannot delete [planet_name]: Players are currently on the planet. Remove all players first.</span>")
-			return
-
 		var/confirm = alert(usr, "Are you sure you want to delete [planet_name]? This will permanently remove all contents and cannot be undone.", "Confirm Deletion", "Yes", "No")
 		if(confirm != "Yes")
 			return
