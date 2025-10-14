@@ -267,7 +267,6 @@ var/MAX_EXPLOSION_RANGE = 32
 #define NO_RUINS 8 // Blocks ruins spawning on the turf
 #define NO_FLORA 16 // Prevents plants from growing
 #define NO_LOOT 32 // No loot spawning here
-#define NO_PATHING 64 // Prevents AI/mob pathfinding through this turf
 
 //slots
 #define slot_back 1
