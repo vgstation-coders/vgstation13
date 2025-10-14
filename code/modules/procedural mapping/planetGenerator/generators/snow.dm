@@ -124,6 +124,7 @@
 	)
 
 /datum/biome/snow
+	biome_temperature = T0C
 	open_turf_types = list(
 		/turf/unsimulated/floor/snow = 10
 	)
@@ -250,6 +251,7 @@
 	)
 
 /datum/biome/cave/snow
+	biome_temperature = T0C
 	open_turf_types = list(
 		/turf/unsimulated/floor/snow/cave = 1
 	)

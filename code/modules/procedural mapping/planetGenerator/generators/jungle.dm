@@ -82,6 +82,7 @@
 
 // Surface biomes
 /datum/biome/jungle
+	biome_temperature = T20C + 10
 	loot_spawners = list(
 		/obj/abstract/loot_spawner/bedsheet = 1,
 		/obj/abstract/loot_spawner/bureaucracy = 1,
@@ -337,6 +338,7 @@
 
 // Cave biomes
 /datum/biome/cave/jungle
+	biome_temperature = T20C + 10
 	open_turf_types = list(/turf/unsimulated/floor/jungle/wasteland = 1)
 	closed_turf_types = list(
 		/turf/unsimulated/mineral/random/cave = 5,

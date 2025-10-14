@@ -81,6 +81,7 @@
 	)
 
 /datum/biome/beach
+	biome_temperature = T20C + 5
 	open_turf_types = list(/turf/unsimulated/beach/sand = 1)
 	mob_spawn_list = list(
 		/mob/living/simple_animal/crab = 25,
@@ -184,6 +185,7 @@
 	open_turf_types = list(/turf/unsimulated/beach/water = 1)
 
 /datum/biome/cave/beach
+	biome_temperature = T20C + 5
 	open_turf_types = list(/turf/unsimulated/floor/planetary/cave = 1)
 	closed_turf_types = list(/turf/unsimulated/mineral/random/cave = 1)
 	flora_spawn_chance = 4

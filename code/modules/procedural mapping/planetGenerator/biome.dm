@@ -39,6 +39,8 @@
 	var/mob_spawn_chance = 6
 	/// Base percentage chance that an open turf will attempt a loot spawn
 	var/loot_spawn_chance = 1
+	// Biome temperature
+	var/biome_temperature = T20C
 
 /**
  * Initializes the biome by expanding all weighted spawn lists
@@ -79,6 +81,9 @@
 	var/turf/new_turf = gen_turf.ChangeTurf(new_turf_type)
 	// Restore the preserved flag
 	new_turf?.turf_flags |= stored_flags
+	new_turf.oxygen = MOLES_O2STANDARD
+	new_turf.nitrogen = MOLES_N2STANDARD
+	new_turf.temperature = biome_temperature
 	return TRUE
 
 /**

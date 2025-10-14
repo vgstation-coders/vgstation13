@@ -83,6 +83,7 @@
 	)
 
 /datum/biome/lavaland
+	biome_temperature = T20C + 15
 	open_turf_types = list(
 		/turf/unsimulated/floor/planetary/basalt = 1,
 	)
@@ -238,6 +239,7 @@
 	flora_spawn_chance = 4
 
 /datum/biome/cave/lavaland
+	biome_temperature = T20C + 15
 	open_turf_types = list(
 		/turf/unsimulated/floor/planetary/basalt = 1
 	)
