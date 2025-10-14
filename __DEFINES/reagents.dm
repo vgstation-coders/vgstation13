@@ -41,6 +41,7 @@
 #define HOLYWATER 			"holywater"
 #define SACREDWATER 		"sacredwater"
 #define SEROTROTIUM 			"serotrotium"
+#define SILICA 			"silica"
 #define SILICATE 			"silicate"
 #define OXYGEN 			"oxygen"
 #define COPPER 			"copper"

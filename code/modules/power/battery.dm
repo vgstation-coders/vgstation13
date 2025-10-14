@@ -199,10 +199,6 @@ var/global/list/battery_online =	list(
 
 		add_avail(output) // Add output to powernet (smes side)
 
-		if (charge < 0.0001)
-			online = FALSE
-			output = 0
-
 	// Reflect state change
 	if(_charging != charging || _online != online || _chargedisplay != chargedisplay())
 		update_icon()
