@@ -59005,8 +59005,6 @@
 /turf/simulated/floor,
 /area/hallway/primary/central)
 "cgy" = (
-/obj/structure/table/reinforced,
-/obj/item/weapon/storage/firstaid/regular,
 /obj/structure/closet/walllocker/defiblocker{
 	pixel_x = -32
 	},
@@ -59017,6 +59015,13 @@
 /obj/structure/window/reinforced{
 	one_way = 1
 	},
+/obj/machinery/planet_scanner{
+	anchored = 1;
+	icon_state = "scanner_idle"
+	},
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "darkred";
@@ -62273,6 +62278,7 @@
 /obj/item/weapon/storage/secure/briefcase,
 /obj/item/weapon/storage/box/PDAs,
 /obj/item/weapon/storage/box/ids,
+/obj/item/weapon/storage/firstaid/regular,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},

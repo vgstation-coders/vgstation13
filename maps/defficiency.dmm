@@ -110326,6 +110326,21 @@
 	icon_state = "dark-markings"
 	},
 /area/engineering/engine)
+"nil" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/planet_scanner{
+	anchored = 1;
+	icon_state = "scanner_idle"
+	},
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/obj/item/device/gps/planetary,
+/turf/simulated/floor/carpet,
+/area/bridge)
 "niJ" = (
 /obj/machinery/claw_machine,
 /turf/simulated/floor{
@@ -225950,7 +225965,7 @@ cOq
 cOq
 cOq
 cOq
-cOq
+nil
 cTZ
 cUL
 cVv
