@@ -263,7 +263,7 @@
 	name = "grass planet"
 	desc = "A temperate planet with a breathable atmosphere and abundant flora and fauna."
 	mapgen = /datum/planetGenerator/grass
-	default_baseturf = /turf/unsimulated/floor/grass
+	default_baseturf = /turf/unsimulated/floor/planetary/dirt
 	loot_type = LOOT_TYPE_GRASS
 	climate_type = CLIMATE_TEMPERATE
 	icon_state = "earth"
