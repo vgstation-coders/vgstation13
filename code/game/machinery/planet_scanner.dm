@@ -399,7 +399,7 @@
 
 /obj/machinery/planet_scanner/proc/print_destination_disk(mob/user, planet_index)
 	if(world.time < last_disk_print_time + PLANET_SCANNER_DISK_PRINT_COOLDOWN)
-		to_chat(user, "<span class='warning'>Disk printer is still cooling down! Please wait [(last_disk_print_time + PLANET_SCANNER_DISK_PRINT_COOLDOWN - world.time) SECONDS] seconds.</span>")
+		to_chat(user, "<span class='warning'>Disk printer is still cooling down! Please wait [(last_disk_print_time + PLANET_SCANNER_DISK_PRINT_COOLDOWN - world.time)] seconds.</span>")
 		return FALSE
 
 	// Convert from 0-indexed frontend to 1-indexed DM list

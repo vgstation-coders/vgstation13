@@ -22,6 +22,12 @@
 	return RECYK_BIOLOGICAL
 
 /mob/Destroy() // This makes sure that mobs with clients/keys are not just deleted from the game.
+	if(planet)
+		if(client)
+			planet.remove_player(src)
+		else
+			planet.planet_mobs -= src
+
 	for(var/datum/mind/mind in heard_by)
 		for(var/M in mind.heard_before)
 			if(mind.heard_before[M] == src)
@@ -304,7 +310,7 @@
 	//Because the person who made this is a fucking idiot, let's clarify. 1 is sight-related messages (aka emotes in general), 2 is hearing-related (aka HEY DUMBFUCK I'M TALKING TO YOU)
 	if(loneliness_affected(source || speaker,TRUE))
 		return
-	
+
 	if(!client) //We dun goof
 		return
 

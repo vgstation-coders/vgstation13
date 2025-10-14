@@ -28,7 +28,8 @@
 	var/weather_mod = 1 // Planet-specific weather light modifier
 	// Player tracking for mob processing optimization
 	var/list/planet_mobs = list() // All mobs on this planet
-	var/player_count = 0 // Number of player mobs currently on planet
+	var/list/players = list() // All living player mobs currently on this planet
+	var/process_mobs = FALSE // Whether to process mobs on this planet
 	// Faction for mobs spawned on this planet
 	var/mob_faction
 
@@ -68,6 +69,22 @@
 	ico = icon('icons/ui/planet_scanner/128x128.dmi', "bg")
 	var/icon/fg = icon('icons/ui/planet_scanner/64x64.dmi', icon_state)
 	ico.Blend(fg,ICON_OVERLAY,32,32)
+
+/datum/planet_type/proc/add_player(var/mob/add_mob)
+	if(!add_mob || !add_mob.client)
+		return
+	if(isobserver(add_mob))
+		return
+	if(!(add_mob in players))
+		players += add_mob
+	process_mobs = players.len ? TRUE : FALSE
+
+/datum/planet_type/proc/remove_player(var/mob/rem_mob)
+	if(!rem_mob || !rem_mob.client)
+		return
+	if(rem_mob in players)
+		players -= rem_mob
+	process_mobs = players.len ? TRUE : FALSE
 
 /datum/planet_type/proc/generate_planet_name()
 	// Complete planet names

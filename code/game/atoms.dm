@@ -57,6 +57,9 @@ var/global/list/ghdel_profiling_roundstart = list()
 	/// The chat color var, without alpha.
 	var/chat_color_hover
 
+	// The planet the atom is on, if any.
+	var/datum/planet_type/planet = null
+
 	var/emagged = 0 // Some things other than machinery can be
 	var/emag_cost = 0 // Emag energy cost (in MJ)
 	var/arcanetampered = 0 //A looot of things can be

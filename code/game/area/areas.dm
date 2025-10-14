@@ -455,21 +455,55 @@ var/area/space_area
 		Obj.underlays -= Obj.shadow
 
 	Obj.area_entered(src)
+	if(planet)
+		Obj.planet = planet
 	for(var/atom/movable/thing in get_contents_in_object(Obj))
 		thing.area_entered(src)
+		if(planet)
+			thing.planet = planet
 
 	for(var/mob/mob_in_obj in Obj.contents)
 		if(istype(mob_in_obj))
 			INVOKE_EVENT(mob_in_obj, /event/mob_area_changed, "mob" = mob_in_obj, "newarea" = src, "oldarea" = oldArea)
+			if(planet)
+				if(mob_in_obj.client)
+					planet.add_player(mob_in_obj)
+				else
+					planet.planet_mobs += mob_in_obj
 
 	INVOKE_EVENT(src, /event/area_entered, "enterer" = Obj)
 	var/mob/M = Obj
 	if(istype(M))
 		INVOKE_EVENT(M, /event/mob_area_changed, "mob" = M, "newarea" = src, "oldarea" = oldArea)
+		if(planet)
+			if(M.client)
+				planet.add_player(M)
+			else
+				planet.planet_mobs += M
 		if(narrator)
 			narrator.Crossed(M)
 
 /area/Exited(atom/movable/Obj)
+	if(planet)
+		var/turf/T = get_turf(Obj)
+		var/area/newArea = T ? get_area(T) : null
+		if(!newArea || newArea.planet != planet)
+			Obj.planet = null
+			if(istype(Obj, /mob))
+				var/mob/M = Obj
+				if(M.client)
+					planet.remove_player(M)
+				else
+					planet.planet_mobs -= M
+			for(var/atom/movable/thing in get_contents_in_object(Obj))
+				thing.planet = null
+				if(istype(thing, /mob))
+					var/mob/M = thing
+					if(M.client)
+						planet.remove_player(M)
+					else
+						planet.planet_mobs -= M
+
 	INVOKE_EVENT(src, /event/area_exited, "exiter" = Obj)
 	..()
 

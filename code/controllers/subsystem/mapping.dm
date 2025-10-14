@@ -169,6 +169,10 @@ var/datum/subsystem/mapping/SSmapping
 				var/turf/T = terrain_queue[queue_index]
 				if(T)
 					current_mapgen.generate_turf(T)
+					T.planet = current_planet
+					var/area/A = get_area(T)
+					if(A)
+						A.planet = current_planet
 				queue_index++
 				turfs_processed++
 
@@ -199,6 +203,8 @@ var/datum/subsystem/mapping/SSmapping
 				var/turf/T = population_queue[queue_index]
 				if(T)
 					current_mapgen.populate_turf(T, created_features, created_mobs, current_mapgen.planet_loot, current_planet.mob_faction)
+					for(var/atom/movable/AM in T)
+						AM.planet = current_planet
 				queue_index++
 				turfs_processed++
 
