@@ -71,6 +71,7 @@
 	icon_state = "dirt.1"
 	base_icon_state = "dirt."
 	max_icon_states = 4
+	turf_flags = NO_RUINS
 
 /turf/unsimulated/floor/snow/glacier
 	name = "glacier"
