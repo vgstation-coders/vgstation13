@@ -28,3 +28,31 @@
 <div id='uiContent' unselectable="on">
 	<div id='uiLoadingNotice'>Initiating...</div>
 </div>
+
+<script type="text/javascript">
+(function () {
+	if (window.__nanouiViewportReported) {
+		return;
+	}
+	window.__nanouiViewportReported = true;
+	var raw = document.body.getAttribute('data-url-parameters');
+	if (!raw) {
+		return;
+	}
+	try {
+		var params = JSON.parse(raw);
+		if (!params.src) {
+			return;
+		}
+		var query = [
+			"src=" + encodeURIComponent(params.src),
+			"nanoui_dpr=" + encodeURIComponent(window.devicePixelRatio || 1)
+		];
+		if (window.innerWidth) {
+			query.push("nanoui_inner_w=" + Math.round(window.innerWidth));
+		}
+		window.location.href = "byond://?" + query.join("&");
+	} catch (e) {
+	}
+})();
+</script>
