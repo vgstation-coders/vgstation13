@@ -460,7 +460,6 @@ nanoui is used to open and update nano browser uis
 
 	var/window_size = ""
 	if (width && height)
-		window_size = "size=[width]x[height];"
 		var/effective_width = width
 		var/effective_height = height
 		if (user.client.dpiScale && user.client.dpiScale != 1)
@@ -543,7 +542,7 @@ nanoui is used to open and update nano browser uis
 				user.client.dpiScale = scale
 			if (user && width && height)
 				var/adjusted_width = round(width * scale)
-				var/adjusted_height = round (height * scale)
+				var/adjusted_height = round(height * scale)
 				winset(user, window_id, "size=[adjusted_width]x[adjusted_height]")
 
 	update_status(0) // update the status
