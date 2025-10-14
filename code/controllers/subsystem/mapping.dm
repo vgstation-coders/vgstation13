@@ -505,8 +505,8 @@ var/datum/subsystem/mapping/SSmapping
 	if(safe_x_max < safe_x_min || safe_y_max < safe_y_min)
 		CRASH("Warning: Ruin [ruin.name] ([ruin.width]x[ruin.height]) too large for sector [allocation.sector[1]],[allocation.sector[2]] - skipping ruin placement")
 
-	// Try up to 5 times to find a valid placement location
-	var/max_attempts = 5
+	// Try up to 20 times to find a valid placement location
+	var/max_attempts = 20
 	var/turf/ruin_turf = null
 
 	for(var/attempt = 1; attempt <= max_attempts; attempt++)
