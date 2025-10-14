@@ -283,6 +283,7 @@
 		/obj/structure/flora/rock/pile = 5,
 		/obj/structure/flora/ausbushes/sparsegrass = 8,
 		/obj/structure/flora/ausbushes/grassybush = 5,
+		/obj/effect/glowshroom = 5
 	)
 	mob_spawn_chance = 3
 	mob_spawn_list = list(
@@ -305,6 +306,7 @@
 		/obj/structure/flora/ausbushes/leafybush = 10,
 		/obj/structure/flora/ausbushes/fernybush = 10,
 		/obj/structure/flora/ausbushes/genericbush = 8,
+		/obj/effect/glowshroom = 10
 	)
 	mob_spawn_chance = 5
 	mob_spawn_list = list(
@@ -328,6 +330,7 @@
 		/obj/structure/flora/ash/tall_shroom = 8,
 		/obj/structure/flora/ausbushes/sparsegrass = 10,
 		/obj/structure/flora/ausbushes/fullgrass = 8,
+		/obj/effect/glowshroom = 10
 	)
 	mob_spawn_chance = 4
 	mob_spawn_list = list(
@@ -354,6 +357,7 @@
 		/obj/structure/flora/ash/leaf_shroom = 10,
 		/obj/structure/flora/ash/cap_shroom = 8,
 		/obj/structure/flora/ausbushes/reedbush = 12,
+		/obj/effect/glowshroom = 10
 	)
 	mob_spawn_chance = 6
 	mob_spawn_list = list(

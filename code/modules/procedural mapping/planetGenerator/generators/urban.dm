@@ -339,6 +339,7 @@
 	flora_spawn_list = list(
 		/obj/structure/flora/rock = 15,
 		/obj/structure/flora/rock/pile = 10,
+		/obj/effect/glowshroom = 15
 	)
 	mob_spawn_chance = 4
 	mob_spawn_list = list(

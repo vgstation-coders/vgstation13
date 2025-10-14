@@ -189,7 +189,11 @@
 	open_turf_types = list(/turf/unsimulated/floor/planetary/cave = 1)
 	closed_turf_types = list(/turf/unsimulated/mineral/random/cave = 1)
 	flora_spawn_chance = 4
-	flora_spawn_list = list(/obj/structure/flora/rock/pile = 1, /obj/structure/flora/rock = 6)
+	flora_spawn_list = list(
+		/obj/structure/flora/rock/pile = 1,
+		/obj/structure/flora/rock = 6,
+		/obj/effect/glowshroom = 5
+		)
 	mob_spawn_chance = 2
 	mob_spawn_list = list(
 		/mob/living/simple_animal/hostile/bear/brownbear = 10,
@@ -208,6 +212,12 @@
 
 /datum/biome/cave/beach/cove
 	open_turf_types = list(/turf/unsimulated/beach/sand = 1)
-	flora_spawn_list = list(/obj/structure/geyser = 1, /obj/structure/flora/rock/pile = 3, /obj/structure/flora/rock = 2, /obj/structure/flora/coconut = 5)
+	flora_spawn_list = list(
+		/obj/structure/geyser = 1,
+		/obj/structure/flora/rock/pile = 3,
+		/obj/structure/flora/rock = 2,
+		/obj/structure/flora/coconut = 5,
+		/obj/effect/glowshroom = 2
+		)
 	flora_spawn_chance = 6
 
