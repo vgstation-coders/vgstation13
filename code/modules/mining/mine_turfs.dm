@@ -773,6 +773,7 @@ var/list/icon_state_to_appearance = list()
 	overlay_state = "snow_rock_overlay"
 
 	mineralPool = "snow"
+	turf_flags = NO_RUINS
 
 
 /turf/unsimulated/mineral/random/snow/New()
