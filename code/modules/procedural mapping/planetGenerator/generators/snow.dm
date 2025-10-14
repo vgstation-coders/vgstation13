@@ -51,16 +51,16 @@
 		BIOME_COLDEST = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/arctic/rocky,
 			BIOME_LOW_HUMIDITY = /datum/biome/snow,
-			BIOME_MEDIUM_HUMIDITY = /datum/biome/iceberg/lake,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/iceberg,
 			BIOME_HIGH_HUMIDITY = /datum/biome/iceberg,
-			BIOME_HIGHEST_HUMIDITY = /datum/biome/iceberg
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/iceberg/lake
 		),
 		BIOME_COLD = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/arctic,
 			BIOME_LOW_HUMIDITY = /datum/biome/arctic/rocky,
 			BIOME_MEDIUM_HUMIDITY = /datum/biome/snow/lush,
 			BIOME_HIGH_HUMIDITY = /datum/biome/snow,
-			BIOME_HIGHEST_HUMIDITY = /datum/biome/iceberg
+			BIOME_HIGHEST_HUMIDITY = /datum/biome/iceberg/lake
 		),
 		BIOME_WARM = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/snow/thawed,
@@ -117,8 +117,8 @@
 		BIOME_HOT_CAVE = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/cave/snow/thawed,
 			BIOME_LOW_HUMIDITY = /datum/biome/cave/snow/thawed,
-			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/volcanic/lava,
-			BIOME_HIGH_HUMIDITY = /datum/biome/cave/volcanic/lava,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/cave/snow,
+			BIOME_HIGH_HUMIDITY = /datum/biome/cave/snow,
 			BIOME_HIGHEST_HUMIDITY = /datum/biome/cave/volcanic/lava
 		)
 	)

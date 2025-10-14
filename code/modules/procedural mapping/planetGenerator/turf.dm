@@ -37,6 +37,11 @@
 	base_icon_state = "cavefl_"
 	max_icon_states = 4
 
+/turf/unsimulated/floor/planetary/cave/xeno
+
+/turf/unsimulated/floor/planetary/cave/xeno/New()
+	new /obj/effect/alien/weeds(src)
+
 /turf/unsimulated/mineral/cave
 	name = "cave wall"
 	icon_state = "cave_wall"
@@ -191,10 +196,16 @@
 	particles = new/particles/candle
 
 /turf/unsimulated/floor/planetary/xeno/desert
-	name = "xeno desert"
+	name = "purple sand desert"
 	icon = 'icons/turf/planetary/shrouded.dmi'
 	icon_state = "shrouded0"
 	base_icon_state = "shrouded"
 	floor_variance = 80
 	min_icon_states = 0
 	max_icon_states = 8
+
+/turf/unsimulated/floor/planetary/xeno/desert/white
+	name = "white sand desert"
+	icon = 'icons/turf/planetary/whitesands.dmi'
+	icon_state = "sand"
+	max_icon_states = 1

@@ -95,8 +95,6 @@
 	mob_spawn_list = list(
 		/mob/living/simple_animal/cockroach = 20,
 		/mob/living/simple_animal/rabbit/bunny = 30,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 15,
-		/mob/living/simple_animal/hostile/asteroid/magmaw = 10,
 		/mob/living/simple_animal/hostile/lizard = 35,
 		/mob/living/simple_animal/mouse/common = 25,
 		/mob/living/simple_animal/cricket = 20,
@@ -111,6 +109,7 @@
 	)
 
 /datum/biome/dry_seafloor
+	biome_temperature = T20C + 10
 	open_turf_types = list(/turf/unsimulated/floor/planetary/desert/dry = 1)
 
 	flora_spawn_list = list(
@@ -119,6 +118,14 @@
 		/obj/structure/flora/ausbushes/stalkybush = 5,
 	)
 	flora_spawn_chance = 1
+	mob_spawn_chance = 1
+	mob_spawn_list = list(
+		/mob/living/simple_animal/cockroach = 20,
+		/mob/living/simple_animal/hostile/lizard = 35,
+		/mob/living/simple_animal/hostile/asteroid/goliath = 10,
+		/mob/living/simple_animal/hostile/lizard/frog = 10,
+		/mob/living/simple_animal/hostile/warriorbug = 1,
+	)
 	loot_spawn_chance = 1
 	loot_spawners = list(/obj/abstract/loot_spawner/trash/on_ground) //it's bleak
 
@@ -134,7 +141,6 @@
 	mob_spawn_chance = 3
 	mob_spawn_list = list(
 		/mob/living/simple_animal/cockroach = 25,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 20,
 		/mob/living/simple_animal/hostile/asteroid/goliath = 25,
 		/mob/living/simple_animal/hostile/monster/skrite = 1,
 		/mob/living/simple_animal/hostile/mimic/crate/chest = 10,

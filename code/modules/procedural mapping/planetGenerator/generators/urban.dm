@@ -4,23 +4,23 @@
 	primary_area_type = /area/planet/urban
 	biome_table = list(
 		BIOME_COLDEST = list(
-			BIOME_LOWEST_HUMIDITY = /datum/biome/urban/ruins,
+			BIOME_LOWEST_HUMIDITY = /datum/biome/urban/wasteland,
 			BIOME_LOW_HUMIDITY = /datum/biome/urban/wasteland,
-			BIOME_MEDIUM_HUMIDITY = /datum/biome/urban/wasteland,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/urban/ruins,
 			BIOME_HIGH_HUMIDITY = /datum/biome/urban/wasteland,
 			BIOME_HIGHEST_HUMIDITY = /datum/biome/urban/wasteland/dense
 		),
 		BIOME_COLD = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/urban/wasteland,
 			BIOME_LOW_HUMIDITY = /datum/biome/urban/wasteland,
-			BIOME_MEDIUM_HUMIDITY = /datum/biome/urban/wasteland,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/urban/ruins,
 			BIOME_HIGH_HUMIDITY = /datum/biome/urban/wasteland/dense,
 			BIOME_HIGHEST_HUMIDITY = /datum/biome/urban/wasteland/dense
 		),
 		BIOME_WARM = list(
 			BIOME_LOWEST_HUMIDITY = /datum/biome/urban/wasteland,
-			BIOME_LOW_HUMIDITY = /datum/biome/urban/wasteland,
-			BIOME_MEDIUM_HUMIDITY = /datum/biome/urban/wasteland/dense,
+			BIOME_LOW_HUMIDITY = /datum/biome/urban/ruins,
+			BIOME_MEDIUM_HUMIDITY = /datum/biome/urban/ruins,
 			BIOME_HIGH_HUMIDITY = /datum/biome/urban/wasteland/dense,
 			BIOME_HIGHEST_HUMIDITY = /datum/biome/urban/wasteland/dense
 		),
@@ -236,6 +236,7 @@
 		/obj/abstract/loot_spawner/structure = 1,
 		/obj/abstract/loot_spawner/trash = 3,
 	)
+	mob_spawn_chance = 3
 
 /datum/biome/urban/ruins
 	open_turf_types = list(/turf/unsimulated/floor/planetary/wasteland = 1)
@@ -246,18 +247,16 @@
 		/obj/item/weapon/shard = 2,
 	)
 	flora_spawn_chance = 10
-	mob_spawn_chance = 3
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 30,
-		/mob/living/simple_animal/mouse/common = 20,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 12,
-		/mob/living/simple_animal/hostile/lizard = 25,
-		/mob/living/simple_animal/rabbit/bunny = 15,
-		/mob/living/simple_animal/hostile/bigroach = 20,
-		/mob/living/simple_animal/hostile/pitbull = 10,
-		/mob/living/simple_animal/hostile/necro/zombie = 8,
-		/mob/living/simple_animal/hostile/necro/skeleton = 10,
-		/mob/living/simple_animal/cricket = 15
+		/mob/living/simple_animal/cockroach = 100,
+		/mob/living/simple_animal/hostile/lizard = 50,
+		/mob/living/simple_animal/hostile/necro/zombie = 25,
+		/mob/living/simple_animal/hostile/necro/skeleton = 25,
+		/mob/living/simple_animal/hostile/creature = 10,
+		/mob/living/simple_animal/hostile/monster/cyber_horror = 5,
+		/mob/living/simple_animal/hostile/necro/necromorph = 5,
+		/mob/living/simple_animal/hostile/necro/skeleton = 25,
+		/mob/living/simple_animal/hostile/necro/zombie = 25,
 	)
 
 /datum/biome/urban/wasteland
@@ -272,18 +271,18 @@
 	flora_spawn_chance = 5
 	mob_spawn_chance = 4
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 35,
-		/mob/living/simple_animal/mouse/common = 25,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 15,
-		/mob/living/simple_animal/hostile/lizard = 30,
-		/mob/living/simple_animal/rabbit/bunny = 8,
-		/mob/living/simple_animal/hostile/asteroid/magmaw = 8,
-		/mob/living/simple_animal/hostile/bigroach = 30,
-		/mob/living/simple_animal/hostile/pitbull = 15,
-		/mob/living/simple_animal/hostile/necro/zombie = 12,
-		/mob/living/simple_animal/hostile/necro/skeleton = 15,
-		/mob/living/simple_animal/cricket = 18,
-		/mob/living/simple_animal/snail = 10
+		/mob/living/simple_animal/cockroach = 100,
+		/mob/living/simple_animal/hostile/lizard = 50,
+		/mob/living/simple_animal/hostile/bigroach = 25,
+		/mob/living/simple_animal/hostile/bigroach/queen = 10,
+		/mob/living/simple_animal/hostile/necro/zombie = 25,
+		/mob/living/simple_animal/hostile/necro/skeleton = 25,
+		/mob/living/simple_animal/borer = 10,
+		/mob/living/simple_animal/hostile/creature = 10,
+		/mob/living/simple_animal/hostile/necro/necromorph = 5,
+		/mob/living/simple_animal/hostile/necro/skeleton = 25,
+		/mob/living/simple_animal/hostile/necro/zombie = 25,
+		/mob/living/simple_animal/hostile/mushroom = 50
 	)
 
 /datum/biome/urban/wasteland/dense
@@ -297,20 +296,6 @@
 	)
 	flora_spawn_chance = 25
 	mob_spawn_chance = 5
-	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 40,
-		/mob/living/simple_animal/mouse/common = 20,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 20,
-		/mob/living/simple_animal/hostile/lizard = 25,
-		/mob/living/simple_animal/hostile/asteroid/magmaw = 12,
-		/mob/living/simple_animal/hostile/bigroach = 40,
-		/mob/living/simple_animal/hostile/bigroach/queen = 3,
-		/mob/living/simple_animal/hostile/pitbull = 18,
-		/mob/living/simple_animal/hostile/necro/zombie = 15,
-		/mob/living/simple_animal/hostile/necro/skeleton = 18,
-		/mob/living/simple_animal/cricket = 20,
-		/mob/living/simple_animal/snail = 12
-	)
 
 /datum/biome/urban/toxic
 	open_turf_types = list(/turf/unsimulated/floor/planetary/toxic = 1)
@@ -323,19 +308,14 @@
 	flora_spawn_chance = 1
 	mob_spawn_chance = 6
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 45,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 25,
-		/mob/living/simple_animal/hostile/lizard = 18,
-		/mob/living/simple_animal/hostile/asteroid/magmaw = 18,
-		/mob/living/simple_animal/hostile/asteroid/goliath = 8,
-		/mob/living/simple_animal/hostile/bigroach = 50,
-		/mob/living/simple_animal/hostile/bigroach/queen = 5,
-		/mob/living/simple_animal/hostile/pitbull = 20,
-		/mob/living/simple_animal/hostile/necro/zombie = 20,
-		/mob/living/simple_animal/hostile/necro/skeleton = 22,
-		/mob/living/simple_animal/hostile/necro/necromorph = 5,
-		/mob/living/simple_animal/hostile/monster/cyber_horror = 3,
-		/mob/living/simple_animal/cricket = 20
+		/mob/living/simple_animal/cockroach = 100,
+		/mob/living/simple_animal/hostile/bigroach = 10,
+		/mob/living/simple_animal/hostile/bigroach/queen = 1,
+		/mob/living/simple_animal/hostile/necro/animal_ghoul = 25,
+		/mob/living/simple_animal/hostile/necro/meat_ghoul = 10,
+		/mob/living/simple_animal/hostile/necro/zombie/ghoul = 10,
+		/mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one = 5,
+		/mob/living/simple_animal/hostile/mushroom = 50
 	)
 
 /datum/biome/urban/toxic/dense
@@ -347,25 +327,6 @@
 	)
 	flora_spawn_chance = 5
 	mob_spawn_chance = 7
-	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 50,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 30,
-		/mob/living/simple_animal/hostile/lizard = 15,
-		/mob/living/simple_animal/hostile/asteroid/magmaw = 22,
-		/mob/living/simple_animal/hostile/asteroid/goliath = 12,
-		/mob/living/simple_animal/hostile/bigroach = 55,
-		/mob/living/simple_animal/hostile/bigroach/queen = 8,
-		/mob/living/simple_animal/hostile/pitbull = 22,
-		/mob/living/simple_animal/hostile/necro/zombie = 25,
-		/mob/living/simple_animal/hostile/necro/skeleton = 25,
-		/mob/living/simple_animal/hostile/necro/necromorph = 8,
-		/mob/living/simple_animal/hostile/necro/meat_ghoul = 10,
-		/mob/living/simple_animal/hostile/necro/animal_ghoul = 8,
-		/mob/living/simple_animal/hostile/monster/cyber_horror = 5,
-		/mob/living/simple_animal/cricket = 20,
-		/mob/living/simple_animal/hostile/creature = 5,
-		/mob/living/simple_animal/scp_173 = 1
-	)
 	loot_spawn_chance = 3
 
 // Cave biomes
@@ -379,19 +340,17 @@
 	)
 	mob_spawn_chance = 4
 	mob_spawn_list = list(
-		/mob/living/simple_animal/cockroach = 35,
-		/mob/living/simple_animal/hostile/asteroid/basilisk = 25,
-		/mob/living/simple_animal/hostile/asteroid/goliath = 20,
-		/mob/living/simple_animal/hostile/asteroid/rockernaut = 15,
-		/mob/living/simple_animal/hostile/monster/skrite = 5,
-		/mob/living/simple_animal/hostile/bigroach = 30,
-		/mob/living/simple_animal/hostile/bigroach/queen = 3,
-		/mob/living/simple_animal/hostile/mimic/crate/chest = 5,
-		/mob/living/simple_animal/hostile/scarybat/cave = 20,
-		/mob/living/simple_animal/hostile/necro/zombie = 15,
-		/mob/living/simple_animal/hostile/necro/skeleton = 18,
+		/mob/living/simple_animal/cockroach = 100,
+		/mob/living/simple_animal/hostile/lizard = 50,
+		/mob/living/simple_animal/hostile/bigroach = 25,
+		/mob/living/simple_animal/hostile/bigroach/queen = 10,
+		/mob/living/simple_animal/hostile/necro/zombie = 25,
+		/mob/living/simple_animal/hostile/necro/skeleton = 25,
+		/mob/living/simple_animal/borer = 10,
+		/mob/living/simple_animal/hostile/creature = 10,
 		/mob/living/simple_animal/hostile/necro/necromorph = 5,
-		/mob/living/simple_animal/hostile/monster/cyber_horror = 4,
-		/mob/living/simple_animal/mouse/common = 15,
-		/mob/living/simple_animal/hostile/mushroom = 12
+		/mob/living/simple_animal/hostile/necro/skeleton = 25,
+		/mob/living/simple_animal/hostile/necro/zombie = 25,
+		/mob/living/simple_animal/hostile/mushroom = 50,
+		/mob/living/simple_animal/scp_173 = 1
 	)
