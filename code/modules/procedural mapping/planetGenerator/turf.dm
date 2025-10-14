@@ -46,6 +46,7 @@
 	name = "cave wall"
 	icon_state = "cave_wall"
 	mined_type = /turf/unsimulated/floor/asteroid/underground
+	turf_flags = NO_RUINS|NO_FLORA|NO_LOOT
 
 //Floors
 /turf/unsimulated/floor/planetary/desert

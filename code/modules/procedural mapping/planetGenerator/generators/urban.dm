@@ -219,6 +219,8 @@
 							new /obj/structure/girder(build_turf)
 						else
 							build_turf.ChangeTurf(/turf/simulated/wall)
+						for(var/obj/thing in build_turf.contents)
+							qdel(thing) // no things in walls
 				else
 					build_turf.ChangeTurf(pick(building_floor_types))
 
