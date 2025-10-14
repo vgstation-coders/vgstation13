@@ -25,8 +25,17 @@
 						H.add_weedlevel(-10 * help)
 						H.add_pestlevel(-10 * help)
 					if(3)
-						H.age = max(0, H.age - help)
 						H.add_toxinlevel(-10 * help)
+						if ((help < 0) || (H.age < H.seed.maturation))
+							H.age++//If the plant is young, age it up regardless
+						else
+							if (help > 0)
+								//The helpful variant keeps the plant alive and allows for more frequent harvests
+								if (harvest)
+									H.skip_aging++
+								else
+									H.lastproduce--
+
 
 /datum/artifact_effect/planttender/DoEffectPulse()
 	if(holder)
@@ -39,7 +48,17 @@
 				H.add_nutrientlevel(25 * help)
 				H.add_weedlevel(-10 * help)
 				H.add_pestlevel(-10 * help)
-				H.age = max(0, H.age - help)
 				H.add_toxinlevel(-10 * help)
+
+				if ((help < 0) || (H.age < H.seed.maturation))
+					H.age += 3//If the plant is young, age it up regardless
+				else
+					if (help > 0)
+						//The helpful variant keeps the plant alive and allows for more frequent harvests
+						if (harvest)
+							H.skip_aging += 5
+						else
+							H.lastproduce -= 5
+
 				if((help < 0) && prob(5))
 					H.die()
