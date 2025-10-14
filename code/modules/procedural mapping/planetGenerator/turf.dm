@@ -143,7 +143,7 @@
 	icon_state = "lava"
 	temperature = MELTPOINT_GLASS
 	gender = PLURAL //"That's some lava."
-	turf_flags = NO_RUINS|NO_FLORA|NO_LOOT|NO_PATHING
+	turf_flags = NO_RUINS|NO_FLORA|NO_LOOT
 
 	light_range = 2
 	light_power = 0.75

@@ -543,7 +543,7 @@
 
 	for(var/dir in cardinal)
 		T = get_step(src, dir)
-		if(istype(T) && !T.density && !(T.turf_flags & NO_PATHING))
+		if(istype(T) && !T.density)
 			if(!LinkBlockedWithAccess(T, src, ID))
 				L.Add(T)
 	return L
@@ -556,7 +556,7 @@
 
 	for(var/dir in cardinal)
 		T = get_step(src, dir)
-		if(istype(T) && !T.density && !(T.turf_flags & NO_PATHING))
+		if(istype(T) && !T.density)
 			if(!LinkBlocked(src, T))
 				L.Add(T)
 	return L
@@ -574,7 +574,7 @@
 		T = get_step(src,dir)
 		if(T in closed) //turf already proceeded in A*
 			continue
-		if(istype(T) && !T.density && !(T.turf_flags & NO_PATHING))
+		if(istype(T) && !T.density)
 			if(!LinkBlockedWithAccess(src, T, ID))
 				L.Add(T)
 	return L
@@ -587,7 +587,7 @@
 		T = get_step(src,dir)
 		if(T in closed) //turf already proceeded by A*
 			continue
-		if(istype(T) && !T.density && !(T.turf_flags & NO_PATHING))
+		if(istype(T) && !T.density)
 			if(!LinkBlocked(src, T))
 				L.Add(T)
 	return L
@@ -600,7 +600,7 @@
 		T = get_step(src,dir)
 		if(T in closed) //turf already proceeded by A*
 			continue
-		if(istype(T) && !T.density && !(T.turf_flags & NO_PATHING))
+		if(istype(T) && !T.density)
 			if(!ID)
 				if(!LinkBlocked(src, T))
 					L.Add(T)
