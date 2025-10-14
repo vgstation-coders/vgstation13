@@ -116,6 +116,56 @@
 	//Toxins are really weak, but without being treated, last very long
 	M.adjustToxLoss(0.2)
 
+/datum/reagent/silica
+	name = "Silica"
+	id = SILICA
+	description = "Fine particles of silicon dioxide, often found as a component of rock."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#FFBB88"
+	density = 2.2
+	specheatcap = 0.7
+
+/datum/reagent/silica/reaction_mob(mob/living/M, method, volume, list/zone_sels, allow_permeability, list/splashplosion)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if (H.check_body_part_coverage(EYES))
+			to_chat(H, "<span class='warning'>Your eyewear protects you from \the [src]!</span>")
+		else
+			H.visible_message("<span class='warning'>[H] is blinded by the [src]!</span>", \
+				"<span class='warning'>\The [src] flies into your eyes!</span>")
+			H.eye_blurry = max(H.eye_blurry, rand(3,8))
+			H.eye_blind = max(H.eye_blind, rand(1,3))
+			H.drop_hands(get_turf(H))
+		log_attack("<font color='red'>[M] ([H ? H.ckey : "what"]) was pocketsanded by ([holder.my_atom.fingerprintslast])</font>")
+	M.extinguish()
+
+/datum/reagent/silica/reaction_obj(obj/O, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	if(O.on_fire)
+		O.extinguish()
+
+/datum/reagent/silica/reaction_turf(turf/simulated/T, volume, list/splashplosion)
+	if(..())
+		return 1
+
+	if(!locate(/obj/effect/decal/cleanable/scattered_sand) in T)
+		new/obj/effect/decal/cleanable/scattered_sand(T)
+
+	for(var/atom/atm in T) //extinguishing things
+		if(isliving(atm)) // For extinguishing mobs on fire
+			var/mob/living/M = atm
+			M.extinguish()
+		if(atm.on_fire) // For extinguishing objects on fire
+			atm.extinguish()
+
+	if(volume >= U_PER_SHEET)
+		drop_stack(/obj/item/stack/ore/glass,T,floor(volume/U_PER_SHEET))
+
 /datum/reagent/silicate
 	name = "Silicate"
 	id = SILICATE
