@@ -6,11 +6,11 @@
 	var/max_pressure
 	copy_for_battery = list("max_pressure")
 	var/effect_gas = null
+	effect_hint = EFFECT_HINT_ATOMIC_SYNTHESIS
 
 /datum/artifact_effect/gas/New()
 	..()
 	max_pressure = rand(115,1000)
-	effect_type = pick(6,7)
 	effect_gas = pick(GAS_NITROGEN, GAS_OXYGEN, GAS_CARBON, GAS_PLASMA, GAS_SLEEPING, GAS_CRYOTHEUM)
 
 

@@ -4,10 +4,7 @@
 	effecttype = "sleepy"
 	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ANCIENT)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
-
-/datum/artifact_effect/sleepy/New()
-	..()
-	effect_type = pick(5,2)
+	effect_hint = EFFECT_HINT_INTERMITTENT_PSIONIC_WAVEFRONT
 
 /datum/artifact_effect/sleepy/DoEffectTouch(var/mob/toucher)
 	if(toucher)

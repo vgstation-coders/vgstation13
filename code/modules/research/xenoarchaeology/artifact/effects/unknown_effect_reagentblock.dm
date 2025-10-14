@@ -4,10 +4,10 @@
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	var/duration = 0
 	copy_for_battery = list("duration")
+	effect_hint = EFFECT_HINT_ATOMIC_SYNTHESIS
 
 /datum/artifact_effect/reagentblock/New()
 	..()
-	effect_type = pick(5,7)
 	duration = rand(600,6000)
 	if(effect == ARTIFACT_EFFECT_AURA)
 		effectrange = rand(1,5)

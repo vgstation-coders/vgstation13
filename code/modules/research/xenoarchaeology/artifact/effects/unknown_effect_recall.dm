@@ -5,7 +5,7 @@
 	effecttype = "recall"
 	effect = ARTIFACT_EFFECT_PULSE
 	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_WIZARD, ARTIFACT_STYLE_ANCIENT, ARTIFACT_STYLE_PRECURSOR, ARTIFACT_STYLE_RELIQUARY)
-	effect_type = 6
+	effect_hint = EFFECT_HINT_INTERDIMENSIONAL_BLUESPACE_PHASING
 
 	var/list/current_recorded_items = list()
 
