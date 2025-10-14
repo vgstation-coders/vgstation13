@@ -3,7 +3,7 @@ var/list/climates = list()
 var/list/precip_state_to_texture = list()
 
 /datum/subsystem/weather
-	name          = "weather"
+	name          = "Weather"
 	wait          = SS_WAIT_WEATHER
 	flags         = SS_NO_INIT | SS_KEEP_TIMING
 	priority      = SS_PRIORITY_WEATHER
@@ -13,15 +13,11 @@ var/list/precip_state_to_texture = list()
 	NEW_SS_GLOBAL(SSweather)
 
 /datum/subsystem/weather/fire(resumed = FALSE)
-	if(flags & SS_NO_FIRE)
+	if(!climates.len)
 		return
-	if(climates.len)
-		for(var/datum/climate/C in climates)
-			C.tick()
-	else
-		flags |= SS_NO_FIRE
-		pause()
-		message_admins("Weather subsystem was paused due to lack of climate.")
+
+	for(var/datum/climate/C in climates)
+		C.tick()
 
 /datum/subsystem/weather/proc/get_climate(var/z, var/datum/allocation/A = null)
 	// Try to find exact match (z-level and allocation)
@@ -45,12 +41,12 @@ var/list/precip_state_to_texture = list()
 		return get_climate(T.z)
 
 // Set the climate for a specific z-level. Uses an allocation if provided.
-/datum/subsystem/weather/proc/set_climate(var/datum/climate/climate_type, var/z = 1, var/datum/allocation/A = null)
+/datum/subsystem/weather/proc/set_climate(var/datum/climate/climate_type, var/z = 1, var/datum/allocation/A = null, var/random_start = FALSE)
 	if(A)
 		z = A.z
 	if(!climate_type)
 		CRASH("Failed to set climate: climate_type was null.")
-	var/datum/climate/C = new climate_type(z,A)
+	var/datum/climate/C = new climate_type(z,A,random_start)
 	climates += C
 
 	// Retroactively register turfs that were created before the climate system

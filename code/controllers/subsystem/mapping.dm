@@ -221,7 +221,7 @@ var/datum/subsystem/mapping/SSmapping
 
 		if(STAGE_WEATHER)
 			if(current_planet.climate_type)
-				current_planet.climate = SSweather.set_climate(current_planet.climate_type, world.maxz, current_allocation)
+				current_planet.climate = SSweather.set_climate(current_planet.climate_type, world.maxz, current_allocation, random_start = TRUE)
 				register_weather_turfs(current_planet.climate, current_allocation)
 				SSweather.fire()
 

@@ -30,7 +30,7 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	var/obj/effect/weather_holder/weather_image = null // The weather holder object for this climate
 	var/list/weather_turfs = list() // All turfs affected by this climate (includes snow turfs and other outdoor turfs)
 
-/datum/climate/New(var/active_z,var/datum/allocation/A = null)
+/datum/climate/New(var/active_z,var/datum/allocation/A = null,var/random_starting_weather = FALSE)
 	..()
 	if(active_z)
 		z = active_z
@@ -39,6 +39,8 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 	if(A)
 		allocation = A
 	setup_weather_system()
+	if(random_starting_weather)
+		starting_weather_type = pick(allowed_weather_types)
 	if(starting_weather_type)
 		current_weather = new starting_weather_type(src)
 		forecast()
