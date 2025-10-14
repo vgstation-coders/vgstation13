@@ -1,6 +1,6 @@
 /datum/artifact_effect/darkness
 	effecttype = "darkness"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH)
 	effect = list(ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_hint = EFFECT_HINT_LOW_LEVEL_EMISSIONS
 	var/dark_level

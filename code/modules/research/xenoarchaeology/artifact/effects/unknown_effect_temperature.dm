@@ -1,7 +1,7 @@
 
 /datum/artifact_effect/temperature
 	effecttype = "temperature"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_MARTIAN)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_MARTIAN)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA)
 	var/target_temp = T20C
 	copy_for_battery = list("target_temp")

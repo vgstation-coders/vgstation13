@@ -1,7 +1,7 @@
 
 /datum/artifact_effect/stun
 	effecttype = "stun"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_hint = EFFECT_HINT_INTERMITTENT_PSIONIC_WAVEFRONT
 

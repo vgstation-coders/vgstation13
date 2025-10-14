@@ -1,6 +1,6 @@
 /datum/artifact_effect/planttender
 	effecttype = "planttender"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_UNKNOWN)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_UNKNOWN)
 	effect = list(ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_hint = EFFECT_HINT_ORGANICALLY_REACTIVE_EXOTIC_PARTICLES
 	var/help = 1

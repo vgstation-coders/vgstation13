@@ -25,7 +25,7 @@
 
 /datum/artifact_effect/projectiles
 	effecttype = "projectiles"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_PRECURSOR)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_PRECURSOR)
 	effect = ARTIFACT_EFFECT_PULSE
 	effectrange = 7
 	effect_hint = EFFECT_HINT_CONCENTRATED_ENERGY_EMISSIONS

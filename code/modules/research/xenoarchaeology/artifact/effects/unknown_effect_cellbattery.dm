@@ -1,11 +1,11 @@
 /datum/artifact_effect/cellbattery
 	effecttype = "cellbattery"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ANCIENT, ARTIFACT_STYLE_PRECURSOR, ARTIFACT_STYLE_RELIQUARY)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ANCIENT, ARTIFACT_STYLE_PRECURSOR, ARTIFACT_STYLE_RELIQUARY)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_hint = EFFECT_HINT_ELECTROMAGNETIC_ENERGY
 	var/recharge = 1
 	copy_for_battery = list("recharge")
-	var/styles = ["warning", "notice"]
+	var/styles = list("warning", "notice")
 
 /datum/artifact_effect/cellbattery/New()
 	..()

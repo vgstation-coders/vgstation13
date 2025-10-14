@@ -1,7 +1,7 @@
 
 /datum/artifact_effect/pathogen
 	effecttype = "pathogen"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_PRECURSOR)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_PRECURSOR)
 	effect = ARTIFACT_EFFECT_PULSE
 	var/datum/disease2/disease/pathogen
 	effect_hint = EFFECT_HINT_ATOMIC_SYNTHESIS

@@ -64,7 +64,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 					secondary_effect.ToggleActivate(2)
 
 /obj/machinery/artifact/proc/generate_icon()
-	prefix = pick(primary_effect.valid_styles)
+	prefix = pick(primary_effect.valid_artifact_styles)
 	numsuffix = pick(rand(1,all_artifact_styles[prefix]))
 
 	if(prefix in goon_artifact_styles)

@@ -12,7 +12,7 @@
 	var/list/copy_for_battery  //add any effect-specific variables you need copied for anomaly batteries as a list of strings
 	var/effect_hint = EFFECT_HINT_LOW_LEVEL_EMISSIONS
 	var/isolated = 0
-	var/list/valid_style_types = list(ARTIFACT_STYLE_ANOMALY)
+	var/list/valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY)
 	var/triggered = 0 //set to 1 if it has been activated at least once
 	var/activation_sound = null
 

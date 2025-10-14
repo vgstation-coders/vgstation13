@@ -1,6 +1,6 @@
 /datum/artifact_effect/floors
 	effecttype = "floors"
-	valid_style_types = list(ARTIFACT_STYLE_WIZARD, ARTIFACT_STYLE_RELIQUARY, ARTIFACT_STYLE_PRECURSOR)
+	valid_artifact_styles = list(ARTIFACT_STYLE_WIZARD, ARTIFACT_STYLE_RELIQUARY, ARTIFACT_STYLE_PRECURSOR)
 	effect = list(ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_hint = EFFECT_HINT_ATOMIC_SYNTHESIS
 	var/randomize = 1 	//If set to 1 will create random floors. Always at 1 for the time being.

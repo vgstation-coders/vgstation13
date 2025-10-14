@@ -1,6 +1,6 @@
 /datum/artifact_effect/darkrevive
 	effecttype = "darkrevive"
-	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH, ARTIFACT_STYLE_WIZARD)
+	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH, ARTIFACT_STYLE_WIZARD)
 	effect = ARTIFACT_EFFECT_TOUCH
 	effect_hint = EFFECT_HINT_LOW_LEVEL_EMISSIONS
 
