@@ -31,7 +31,7 @@
 						else
 							if (help > 0)
 								//The helpful variant keeps the plant alive and allows for more frequent harvests
-								if (harvest)
+								if (H.harvest)
 									H.skip_aging++
 								else
 									H.lastproduce--
@@ -55,7 +55,7 @@
 				else
 					if (help > 0)
 						//The helpful variant keeps the plant alive and allows for more frequent harvests
-						if (harvest)
+						if (H.harvest)
 							H.skip_aging += 5
 						else
 							H.lastproduce -= 5
