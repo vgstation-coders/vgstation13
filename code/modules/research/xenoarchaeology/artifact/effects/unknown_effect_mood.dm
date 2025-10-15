@@ -56,11 +56,11 @@
 			if(prob(50))
 				if(prob(75))
 					var/message = pick(drastic_messages)
-					var/style = styles[0]
+					var/style = styles[1]
 					to_chat(H, "<b><font color='[style[mood]]' size='[num2text(rand(1,5))]'><b>[message[mood]]</b></font>")
 				else
 					var/message = pick(messages)
-					var/style = styles[1]
+					var/style = styles[2]
 					to_chat(H, "<span class='[style[mood]]'>[message[mood]]</span>")
 
 			if(prob(50))
@@ -75,11 +75,11 @@
 			if(prob(5))
 				if(prob(75))
 					var/message = pick(messages)
-					var/style = styles[1]
+					var/style = styles[2]
 					to_chat(H, "<span class='[style[mood]]'>[message[mood]]</span>")
 				else
 					var/message = pick(drastic_messages)
-					var/style = styles[0]
+					var/style = styles[1]
 					to_chat(H, "<font color='[style[mood]]' size='[num2text(rand(1,5))]'><b>[message[mood]]</b></font>")
 
 			if(prob(10))
@@ -94,11 +94,11 @@
 			if(prob(50))
 				if(prob(95))
 					var/message = pick(drastic_messages)
-					var/style = styles[0]
+					var/style = styles[1]
 					to_chat(H, "<font color='[style[mood]]' size='[num2text(rand(1,5))]'><b>[message[mood]]</b></font>")
 				else
 					var/message = pick(messages)
-					var/style = styles[1]
+					var/style = styles[2]
 					to_chat(H, "<span class='[style[mood]]'>[message[mood]]</span>")
 
 			if(prob(50))
