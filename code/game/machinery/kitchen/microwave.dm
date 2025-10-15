@@ -404,7 +404,7 @@
 			if(!running(10))
 				abort()
 				return
-			stop()
+			stop(TRUE)
 			cooked = contents[1]//if there's just one item and no reagents, warm it up
 			var/cook_temp = COOKTEMP_READY//100°C
 			if(emagged || arcanetampered)
@@ -415,6 +415,8 @@
 				cooked.reagents.chem_temp = cook_temp
 				cooked.update_icon()
 			cooked.forceMove(src.loc)
+			cooked.pixel_x = pixel_x - 2
+			cooked.pixel_y = pixel_y - 1
 			return
 
 		// Otherwise we fucked up
@@ -458,6 +460,8 @@
 		if(cooked)
 			adjust_cooked_food_reagents_temperature(cooked, recipe)
 			cooked.forceMove(get_output())
+			cooked.pixel_x = pixel_x - 2
+			cooked.pixel_y = pixel_y - 1
 		return
 
 /obj/machinery/microwave/proc/adjust_cooked_food_reagents_temperature(atom/cooked, datum/recipe/cookedrecipe)
