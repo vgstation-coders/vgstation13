@@ -58,7 +58,7 @@ var/global/list/mineralSpawnChance[]
 	name = "Rock"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "rock"
-	var/base_icon_state = "rock" // above is for mappers.
+	base_icon_state = "rock" // above is for mappers.
 	oxygen = 0
 	nitrogen = 0
 	opacity = 1
@@ -84,15 +84,18 @@ var/global/list/mineralSpawnChance[]
 	base_icon_state = "snow_rock"
 	mined_type = /turf/unsimulated/floor/snow/permafrost
 	overlay_state = "snow_rock_overlay"
-
-/turf/unsimulated/mineral/snow/New()
-	base_icon_state = pick("snow_rock","snow_rock1","snow_rock2","snow_rock3","snow_rock4")
-	..()
+	base_icon_state = "snow_rock"
+	min_icon_states = 1
+	max_icon_states = 4
+	variance = 80
 
 /turf/unsimulated/mineral/underground
 	icon_state = "cave_wall"
 	base_icon_state = "cave_wall"
 	mined_type = /turf/unsimulated/floor/asteroid/underground
+	turf_flags = HAS_EDGES
+	edge_priority = ROCK_EDGE_PRIORITY
+	edge_flags = ALL_EDGES
 
 /turf/unsimulated/mineral/air
 	oxygen = MOLES_O2STANDARD
@@ -144,10 +147,9 @@ var/global/list/mineralSpawnChance[]
 	nitrogen = MOLES_N2STANDARD
 	temperature = T0C
 	mined_type = /turf/simulated/floor/plating/snow/cold
-
-/turf/unsimulated/mineral/internal/ice/New()
-	base_icon_state = pick("snow_rock","snow_rock1","snow_rock2","snow_rock3","snow_rock4")
-	..()
+	min_icon_states = 1
+	max_icon_states = 4
+	variance = 80
 
 /turf/unsimulated/mineral/hive
 	mined_type = /turf/unsimulated/floor/evil
@@ -157,6 +159,7 @@ var/global/list/mineralSpawnChance[]
 	. = ..()
 	if(istype(src))
 		MineralSpread()
+	base_icon_state = icon_state
 	update_icon()
 
 var/list/icon_state_to_appearance = list()
@@ -182,10 +185,6 @@ var/list/icon_state_to_appearance = list()
 	img.pixel_y = offset*PIXEL_MULTIPLIER
 	img.plane = BELOW_TURF_PLANE
 	overlays += img
-
-/turf/unsimulated/mineral/underground/add_rock_overlay()
-	..(img = image('icons/turf/spookycave.dmi', "spooky_cave",layer = SIDE_LAYER),offset=-16)
-	..(img = image('icons/turf/spookycave.dmi', "spooky_cave_corners",layer = CORNER_LAYER),offset = -16)
 
 /turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1, var/digsite_depressed = 0)
 	mineral_turfs -= src

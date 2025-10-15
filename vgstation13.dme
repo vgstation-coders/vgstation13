@@ -1328,6 +1328,7 @@
 #include "code\game\turfs\portal.dm"
 #include "code\game\turfs\simulated.dm"
 #include "code\game\turfs\turf.dm"
+#include "code\game\turfs\turf_edges.dm"
 #include "code\game\turfs\turf_flick_animations.dm"
 #include "code\game\turfs\unsimulated.dm"
 #include "code\game\turfs\simulated\floor.dm"

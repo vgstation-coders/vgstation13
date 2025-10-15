@@ -263,7 +263,17 @@ var/MAX_EXPLOSION_RANGE = 32
 //turf-only flags
 #define NOJAUNT		1
 #define NO_MINIMAP  2 //Invisible to minimaps (fuck minimaps)
+#define HAS_EDGES   4
 
+//turf edge flags
+#define EDGE_OUTER_DIAGONAL 1<<1 // on an outside corner
+#define EDGE_INNER_DIAGONAL 1<<2 // on an inside corner
+#define EDGE_THREEFOLD		1<<3 // inside of two inner corners
+#define ALL_EDGES EDGE_OUTER_DIAGONAL|EDGE_INNER_DIAGONAL|EDGE_THREEFOLD
+
+#define SAND_EDGE_PRIORITY			1
+#define GRASS_EDGE_PRIORITY			2
+#define ROCK_EDGE_PRIORITY			3
 
 //slots
 #define slot_back 1

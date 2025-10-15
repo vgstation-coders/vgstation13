@@ -39,10 +39,16 @@
 
 /turf/unsimulated/floor/grass
 	icon_state = "grass1"
+	base_icon_state = "grass"
+	min_icon_states = 2
+	max_icon_states = 4
+	variance = 50
+	turf_flags = HAS_EDGES
+	edge_priority = GRASS_EDGE_PRIORITY
+	edge_flags = ALL_EDGES
 
 /turf/unsimulated/floor/grass/New()
 	..()
-	icon_state = "grass[rand(1,4)]"
 	footstep_sound = sounds_grass
 	footstep_sound_barefoot = sounds_grass
 	footstep_sound_claw = sounds_grass

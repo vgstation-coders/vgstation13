@@ -8,6 +8,16 @@
 	var/intact = 1
 	var/turf_flags = 0
 
+	//icon stuff
+	var/base_icon_state
+	var/min_icon_states = 0
+	var/max_icon_states = 0
+	var/variance = 50 // % chance to use varied icon state
+	var/edge_priority = 0 // higher priority edges are placed over lower-priority ones
+	var/edge_flags = 0
+	var/edge_overlay_type = /obj/effect/edge_overlay
+	var/list/datum/weakref/edge_overlays = list()
+
 	//properties for open tiles (/floor)
 	var/oxygen = 0
 	var/carbon_dioxide = 0
@@ -106,6 +116,8 @@
 	footstep_sound = sounds_floor
 	footstep_sound_barefoot = sounds_floor_barefoot
 	footstep_sound_claw = sounds_floor_claw
+	if(base_icon_state && min_icon_states && max_icon_states && prob(variance))
+		icon_state = "[base_icon_state][rand(min_icon_states,max_icon_states)]"
 
 /turf/initialize()
 	..()
@@ -114,8 +126,14 @@
 		A.area_turfs += src
 	for(var/atom/movable/AM in src)
 		src.Entered(AM)
+		if(istype(AM, /obj/effect/edge_overlay))
+			var/obj/effect/edge_overlay/edge = AM
+			if(edge.turf_type == src.type || edge.priority <= edge_priority)
+				qdel(edge)
 	if(opacity)
 		has_opaque_atom = TRUE
+	if(turf_flags & HAS_EDGES)
+		update_edges()
 
 /turf/ex_act(severity)
 	return 0
@@ -380,6 +398,12 @@
 	if(!istype(N, /turf/simulated))
 		for(var/obj/effect/overlay/puddle/ice/P in src)
 			qdel(P)
+
+	if(edge_overlays.len)
+		for(var/datum/weakref/EO in edge_overlays)
+			var/obj/effect/edge_overlay/E = EO.get()
+			qdel(E)
+		edge_overlays.len = 0
 
 	//Rebuild turf
 	var/turf/T = src
