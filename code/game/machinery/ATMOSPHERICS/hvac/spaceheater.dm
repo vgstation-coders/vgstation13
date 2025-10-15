@@ -382,10 +382,7 @@
 			 	for (var/mob/living/carbon/M in view(src,light_range_on))
 			 		M.bodytemperature += 0.01 * set_temperature * 1/((get_dist(src,M)+1)) // this is a temporary algorithm until we fix life to not have body temperature change so willy-nilly.
 		else
-			on = 0
-			update_icon()
-
-	return
+			putOutFire()
 
 /obj/machinery/space_heater/campfire/process()
 	..()
@@ -402,7 +399,11 @@
 	if(on)
 		playsound(src, pick(comfyfire), (cell.charge/250)*5, 1, -1,channel = 124)
 
-/obj/machinery/space_heater/campfire/proc/putOutFire()
+/obj/machinery/space_heater/proc/putOutFire()
+	on = 0
+	update_icon()
+
+/obj/machinery/space_heater/campfire/putOutFire()
 	remove_particles(PS_CANDLE)
 	remove_particles(PS_CANDLE2)
 	if (cell.charge)
