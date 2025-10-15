@@ -1,10 +1,13 @@
 
+#define MOOD_NEGATIVE	1
+#define MOOD_POSITIVE	2
+
 /datum/artifact_effect/mood
 	effecttype = "mood"
 	valid_artifact_styles = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_hint = EFFECT_HINT_INTERMITTENT_PSIONIC_WAVEFRONT
-	var/positive = 1
+	var/mood = MOOD_POSITIVE
 	var/alteration_cap = 70
 	copy_for_battery = list("positive")
 
@@ -44,7 +47,7 @@
 /datum/artifact_effect/mood/New()
 	..()
 	if (prob(50))
-		positive = 0
+		mood = MOOD_NEGATIVE
 
 /datum/artifact_effect/mood/DoEffectTouch(var/mob/user)
 	if(user)
@@ -54,17 +57,17 @@
 				if(prob(75))
 					var/message = pick(drastic_messages)
 					var/style = styles[0]
-					to_chat(H, "<b><font color='[style[positive]]' size='[num2text(rand(1,5))]'><b>[message[positive]]</b></font>")
+					to_chat(H, "<b><font color='[style[mood]]' size='[num2text(rand(1,5))]'><b>[message[mood]]</b></font>")
 				else
 					var/message = pick(messages)
 					var/style = styles[1]
-					to_chat(H, "<span class='[style[positive]]'>[message[positive]]</span>")
+					to_chat(H, "<span class='[style[mood]]'>[message[mood]]</span>")
 
 			if(prob(50))
-				if (positive)
-					H.druggy = min(H.druggy + rand(3,5), alteration_cap)
+				if (mood == MOOD_POSITIVE)
+					H.druggy = min(H.druggy + 10, alteration_cap)
 				else
-					H.dizziness = min(H.dizziness + rand(3,5), alteration_cap)
+					H.dizziness = min(H.dizziness + 10, alteration_cap)
 
 /datum/artifact_effect/mood/DoEffectAura()
 	if(holder)
@@ -73,17 +76,17 @@
 				if(prob(75))
 					var/message = pick(messages)
 					var/style = styles[1]
-					to_chat(H, "<span class='[style[positive]]'>[message[positive]]</span>")
+					to_chat(H, "<span class='[style[mood]]'>[message[mood]]</span>")
 				else
 					var/message = pick(drastic_messages)
 					var/style = styles[0]
-					to_chat(H, "<font color='[style[positive]]' size='[num2text(rand(1,5))]'><b>[message[positive]]</b></font>")
+					to_chat(H, "<font color='[style[mood]]' size='[num2text(rand(1,5))]'><b>[message[mood]]</b></font>")
 
 			if(prob(10))
-				if (positive)
-					H.druggy = min(H.druggy + rand(3,5), alteration_cap)
+				if (mood == MOOD_POSITIVE)
+					H.druggy = min(H.druggy + 5, alteration_cap)
 				else
-					H.dizziness = min(H.dizziness + rand(3,5), alteration_cap)
+					H.dizziness = min(H.dizziness + 5, alteration_cap)
 
 /datum/artifact_effect/mood/DoEffectPulse()
 	if(holder)
@@ -92,19 +95,22 @@
 				if(prob(95))
 					var/message = pick(drastic_messages)
 					var/style = styles[0]
-					to_chat(H, "<font color='[style[positive]]' size='[num2text(rand(1,5))]'><b>[message[positive]]</b></font>")
+					to_chat(H, "<font color='[style[mood]]' size='[num2text(rand(1,5))]'><b>[message[mood]]</b></font>")
 				else
 					var/message = pick(messages)
 					var/style = styles[1]
-					to_chat(H, "<span class='[style[positive]]'>[message[positive]]</span>")
+					to_chat(H, "<span class='[style[mood]]'>[message[mood]]</span>")
 
 			if(prob(50))
-				if (positive)
-					H.druggy = min(H.druggy + rand(3,5), alteration_cap)
+				if (mood == MOOD_POSITIVE)
+					H.druggy = min(H.druggy + 30, alteration_cap)
 				else
-					H.dizziness = min(H.dizziness + rand(3,5), alteration_cap)
+					H.dizziness = min(H.dizziness + 30, alteration_cap)
 			else if(prob(25))
-				if (positive)
-					H.druggy = min(H.druggy + rand(5,15), alteration_cap)
+				if (mood == MOOD_POSITIVE)
+					H.druggy = min(H.druggy + 50, alteration_cap)
 				else
-					H.dizziness = min(H.dizziness + rand(5,15), alteration_cap)
+					H.dizziness = min(H.dizziness + 50, alteration_cap)
+
+#undef MOOD_NEGATIVE
+#undef MOOD_POSITIVE
