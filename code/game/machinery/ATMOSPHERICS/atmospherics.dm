@@ -31,6 +31,7 @@ Pipelines + Other Objects -> Pipe network
 	var/initialize_directions_he = 0 // Same, but for HE pipes.
 
 	var/can_be_coloured = 1 //set to 0 to blacklist your atmos thing from being colored
+	var/can_be_transparent = 1 //set to 0 to blacklist your atmos thing from being painted transparent
 	var/image/centre_overlay = null
 	// Investigation logs
 	var/log
