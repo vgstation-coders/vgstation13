@@ -54,6 +54,7 @@ var/datum/subsystem/more_init/SSmore_init
 	CHECK_TICK
 	centcomm_store = new
 	create_randomized_reagents()
+	init_smes_overlays()
 	log_debug("Finished doing the other misc. initializations in [stop_watch(watch)]s.", FALSE)
 
 /proc/init_sensed_explosions_list()

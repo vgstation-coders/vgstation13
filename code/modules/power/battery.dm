@@ -26,14 +26,25 @@ var/global/list/battery_online =	list(
 										image('icons/obj/power.dmi', "smes-op1")
 										)
 
+/proc/init_smes_overlays()
+	for (var/image/I in battery_charge)
+		I.plane = ABOVE_LIGHTING_PLANE
+	for (var/image/I in battery_charging)
+		I.plane = ABOVE_LIGHTING_PLANE
+	for (var/image/I in battery_online)
+		I.plane = ABOVE_LIGHTING_PLANE
+
 /obj/machinery/power/battery/update_icon()
 	overlays.len = 0
 	icon_state = initial(icon_state)
 
 	if(stat & (BROKEN | FORCEDISABLE | EMPED))
+		luminosity = 0
 		return
 
 	overlays += battery_online[online + 1]
+
+	luminosity = 2
 
 	if(charging)
 		overlays += battery_charging[2]
