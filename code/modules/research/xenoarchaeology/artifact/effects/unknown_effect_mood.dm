@@ -9,7 +9,7 @@
 	effect_hint = EFFECT_HINT_INTERMITTENT_PSIONIC_WAVEFRONT
 	var/mood = MOOD_POSITIVE
 	var/alteration_cap = 70
-	copy_for_battery = list("positive")
+	copy_for_battery = list("mood")
 
 	var/list/styles = list(
 		list("red","blue"),
