@@ -33,6 +33,8 @@ var/global/list/battery_online =	list(
 		I.plane = ABOVE_LIGHTING_PLANE
 	for (var/image/I in battery_online)
 		I.plane = ABOVE_LIGHTING_PLANE
+	for(var/obj/machinery/power/battery/smes/S in power_machines)
+		S.update_icon()
 
 /obj/machinery/power/battery/update_icon()
 	overlays.len = 0

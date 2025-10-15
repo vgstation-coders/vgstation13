@@ -519,13 +519,14 @@
 /obj/machinery/microwave/proc/stop(var/flick_door = FALSE)
 	playsound(src, 'sound/machines/ding.ogg', 50, 1)
 	src.operating = 0 // Turn it off again aferwards
-	update_icon()
 	src.updateUsrDialog()
 	if (flick_door)
 		flick("mwo",src)
 		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_microwave_open")
 		spawn(15)
 			update_icon()
+	else
+		update_icon()
 
 /obj/machinery/microwave/proc/dispose()
 	if(operating)
@@ -558,13 +559,11 @@
 
 /obj/machinery/microwave/proc/muck()
 	playsound(src, 'sound/effects/splat.ogg', 50, 1) // Play a splat sound
-	src.icon_state = "mwbloody1" // Make it look dirty!!
 	src.visible_message("<span class='warning'>The microwave gets covered in muck!</span>")
 	src.dirty = 100 // Make it dirty so it can't be used util cleaned
 	src.flags &= ~OPENCONTAINER //So you can't add condiments
 	src.operating = 0 // Turn it off again aferwards
-	update_icon() // Make it look dirty too
-	flick("mwbloody-flick", src)
+	flick("mwbloody-flick", src) // Make it look dirty too
 	spawn(5)
 		playsound(src, 'sound/machines/ding.ogg', 50, 1)
 		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_microwave_open")
