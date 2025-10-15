@@ -135,6 +135,9 @@ Pipelines + Other Objects -> Pipe network
 
 	return PIPE_COLOR_GREY
 
+/obj/machinery/atmospherics/proc/node_alpha_for(var/obj/machinery/atmospherics/other)
+	return other.alpha
+
 /obj/machinery/atmospherics/proc/node_layer()
 	var/new_layer = level == LEVEL_BELOW_FLOOR ? PIPE_LAYER : EXPOSED_PIPE_LAYER
 	return PIPING_LAYER(new_layer, piping_layer)
@@ -164,6 +167,7 @@ Pipelines + Other Objects -> Pipe network
 		var/image/nodecon = icon_node_con(con_dir)
 		if(nodecon)
 			nodecon.color = node_color_for(connected_node)
+			nodecon.alpha = node_alpha_for()
 			nodecon.plane = node_plane()
 			nodecon.layer = node_layer()
 			underlays += nodecon
