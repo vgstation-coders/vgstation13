@@ -1,0 +1,5366 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"ah" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 4
+	},
+/obj/structure/lattice,
+/obj/structure/lattice,
+/turf/space,
+/area/vault/forsakenreactor)
+"aj" = (
+/obj/structure/bed/chair/office/light,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"an" = (
+/obj/structure/lattice,
+/obj/machinery/atmospherics/unary/cap/heat{
+	dir = 8
+	},
+/turf/space,
+/area/vault/forsakenreactor)
+"ax" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/turf/simulated/floor/damaged,
+/area/vault/forsakenreactor)
+"aF" = (
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"aN" = (
+/obj/structure/table,
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"aO" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk4"
+	},
+/turf/space,
+/area)
+"aT" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"aX" = (
+/obj/structure/table/reinforced,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"ba" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"bn" = (
+/obj/structure/table,
+/obj/item/weapon/book{
+	name = "Chief's Journal"
+	},
+/turf/simulated/floor/carpet,
+/area/vault/forsakenreactor)
+"bp" = (
+/obj/structure/airshield{
+	opacity = 0
+	},
+/obj/structure/plasticflaps/mining,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"br" = (
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding (SOUTHEAST)"
+	},
+/area/vault/forsakenreactor)
+"bs" = (
+/obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"bu" = (
+/turf/simulated/floor/airless{
+	icon_state = "dark";
+	misc_gases = list("radon" = 5000)
+	},
+/area/vault/forsakenreactor)
+"by" = (
+/obj/machinery/chem_master,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"bz" = (
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"bB" = (
+/turf/simulated/floor/wood,
+/area/vault/forsakenreactor)
+"bE" = (
+/obj/structure/lattice,
+/turf/space,
+/area/vault/forsakenreactor)
+"bF" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"bI" = (
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"bO" = (
+/obj/structure/toilet{
+	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
+	dir = 1
+	},
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/forsakenreactor)
+"bR" = (
+/obj/structure/table/reinforced,
+/obj/item/pizzabox,
+/obj/item/pizzabox,
+/obj/item/pizzabox,
+/obj/item/pizzabox,
+/obj/item/pizzabox,
+/obj/item/pizzabox,
+/turf/simulated/floor/wood,
+/area/vault/forsakenreactor)
+"bS" = (
+/obj/structure/lattice,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"bZ" = (
+/obj/machinery/light/he,
+/turf/simulated/floor{
+	icon_state = "yellowcornersiding";
+	tag = "icon-yellowcornersiding (WEST)"
+	},
+/area/vault/forsakenreactor)
+"cj" = (
+/obj/machinery/door/airlock/glass_medical{
+	id_tag = "MedbayFoyerL";
+	name = "Medbay";
+	req_access_dir = 2;
+	req_access_txt = "5"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"cl" = (
+/obj/structure/lattice,
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold,
+/turf/space,
+/area/vault/forsakenreactor)
+"cw" = (
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"cz" = (
+/obj/effect/landmark/corpse/engineer,
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"cE" = (
+/obj/spacepod/taxi,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"cJ" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,
+/turf/simulated/wall/invulnerable/r_wall,
+/area/vault/forsakenreactor)
+"cK" = (
+/obj/machinery/fissionreactor/fissionreactor_fuelrod/inert,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"cO" = (
+/turf/simulated/floor/airless,
+/area/vault/forsakenreactor)
+"cQ" = (
+/obj/machinery/chem_dispenser/mapping,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"db" = (
+/obj/structure/table,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"ds" = (
+/obj/machinery/atmospherics/binary/circulator{
+	anchored = 1;
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"dx" = (
+/obj/effect/landmark/corpse/engineer,
+/turf/simulated/floor/airless,
+/area/vault/forsakenreactor)
+"dB" = (
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 1;
+	name = "Connector Port (Air Supply)"
+	},
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"dG" = (
+/obj/effect/landmark/corpse/engineer/rig,
+/turf/simulated/floor/airless,
+/area/vault/forsakenreactor)
+"dN" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/turf/space,
+/area)
+"dV" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 5
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"ew" = (
+/obj/structure/reagent_dispensers/water_cooler,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"ex" = (
+/obj/machinery/vending/cola,
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"ez" = (
+/obj/machinery/disposal/compactor,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"eK" = (
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"eW" = (
+/turf/simulated/floor/damaged,
+/area/vault/forsakenreactor)
+"fc" = (
+/obj/effect/landmark/corpse/chef,
+/obj/machinery/light/he,
+/turf/simulated/floor/carpet,
+/area/vault/forsakenreactor)
+"fe" = (
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"ff" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning";
+	tag = "icon-warning (EAST)"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"fi" = (
+/obj/machinery/atmospherics/binary/volume_pump,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"fL" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"fP" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning";
+	tag = "icon-warning (EAST)"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"fX" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction{
+	dir = 8
+	},
+/turf/space,
+/area/vault/forsakenreactor)
+"ga" = (
+/obj/machinery/light/he,
+/turf/simulated/floor{
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"gk" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 5
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"gq" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"gs" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"gA" = (
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/machinery/meter{
+	name = "Hot Loop"
+	},
+/obj/structure/lattice,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"gC" = (
+/obj/machinery/cooking/deepfryer,
+/turf/simulated/floor/wood,
+/area/vault/forsakenreactor)
+"gL" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/structure/reagent_dispensers/sacid,
+/turf/simulated/floor{
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"hd" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/obj/machinery/atmospherics/unary/portables_connector,
+/obj/effect/decal/warning_stripes/pathmarkers/blue,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"he" = (
+/obj/machinery/bodyscanner,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"hi" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"hr" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 4
+	},
+/obj/machinery/light/he,
+/turf/space,
+/area/vault/forsakenreactor)
+"ht" = (
+/obj/structure/table/reinforced,
+/obj/machinery/microwave{
+	pixel_x = -3;
+	pixel_y = 6
+	},
+/turf/simulated/floor/wood,
+/area/vault/forsakenreactor)
+"hw" = (
+/obj/structure/bed/chair/office/light,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"hz" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 6
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"hT" = (
+/obj/machinery/atmospherics/binary/volume_pump{
+	name = "Cold Gas Circulator";
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"ia" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/obj/machinery/meter{
+	name = "Hot Loop"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"ic" = (
+/obj/structure/airshield{
+	opacity = 0
+	},
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor/plating/airless,
+/area/vault/forsakenreactor)
+"ig" = (
+/obj/machinery/light/he,
+/turf/simulated/floor/carpet,
+/area/vault/forsakenreactor)
+"ii" = (
+/obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/blue,
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"il" = (
+/turf/space,
+/area/vault/forsakenreactor)
+"ir" = (
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"is" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"iM" = (
+/obj/structure/closet/secure_closet/personal/cabinet,
+/obj/item/stack/sheet/mineral/phazon{
+	amount = 50s
+	},
+/turf/simulated/floor/carpet,
+/area/vault/forsakenreactor)
+"iQ" = (
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)"
+	},
+/area/vault/forsakenreactor)
+"iS" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"iU" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning";
+	tag = "icon-warning (EAST)"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning";
+	tag = "icon-warning (EAST)"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"iW" = (
+/obj/machinery/conveyor{
+	dir = 4;
+	id_tag = "QMLoad2"
+	},
+/turf/simulated/floor{
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)"
+	},
+/area/vault/forsakenreactor)
+"iX" = (
+/obj/machinery/computer/supplycomp,
+/turf/simulated/floor{
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)"
+	},
+/area/vault/forsakenreactor)
+"iY" = (
+/obj/structure/table/reinforced,
+/obj/machinery/chem_dispenser/brewer/mapping,
+/turf/simulated/floor/wood,
+/area/vault/forsakenreactor)
+"je" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"jh" = (
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/forsakenreactor)
+"ju" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellowcornersiding";
+	tag = "icon-yellowcornersiding (WEST)"
+	},
+/area/vault/forsakenreactor)
+"jv" = (
+/obj/machinery/atmospherics/unary/cryo_cell,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"jz" = (
+/obj/structure/plasticflaps/mining,
+/obj/structure/plasticflaps/mining,
+/obj/structure/airshield{
+	opacity = 0
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"jU" = (
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "plasma"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"jX" = (
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"kf" = (
+/obj/machinery/conveyor{
+	dir = 4;
+	id_tag = "QMLoad"
+	},
+/turf/simulated/floor{
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)"
+	},
+/area/vault/forsakenreactor)
+"kl" = (
+/obj/effect/landmark/corpse/cargotechnician,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"kr" = (
+/obj/effect/landmark/corpse/chiefengineer,
+/obj/machinery/light/he,
+/turf/simulated/floor/carpet,
+/area/vault/forsakenreactor)
+"ks" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"kx" = (
+/obj/structure/bed/chair/wood/wings,
+/turf/simulated/floor/wood,
+/area/vault/forsakenreactor)
+"kA" = (
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"kB" = (
+/obj/structure/lattice,
+/obj/machinery/light/he/broken{
+	dir = 8
+	},
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"kF" = (
+/obj/item/clothing/head/radiation,
+/turf/space,
+/area/vault/forsakenreactor)
+"kJ" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"kS" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/machinery/portable_atmospherics/canister/radon,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"kT" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)"
+	},
+/area/vault/forsakenreactor)
+"kU" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/machinery/atmospherics/binary/volume_pump{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"kX" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"kZ" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/floor/damaged,
+/area/vault/forsakenreactor)
+"la" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/closet/crate/secure/loot/ultramegameltdown_reactor_fuel,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"lm" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/vault/forsakenreactor)
+"lr" = (
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"lu" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/grille/broken,
+/obj/item/weapon/shard/plasma,
+/obj/item/stack/rods,
+/turf/simulated/floor/plating/airless,
+/area/vault/forsakenreactor)
+"lx" = (
+/obj/structure/table,
+/obj/item/stack/medical/advanced/ointment,
+/obj/item/stack/medical/advanced/ointment,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/forsakenreactor)
+"lA" = (
+/obj/machinery/portable_atmospherics/canister/nitrogen,
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)";
+	dir = 4
+	},
+/area/vault/forsakenreactor)
+"lM" = (
+/obj/machinery/light/he/broken,
+/turf/simulated/floor/carpet,
+/area/vault/forsakenreactor)
+"lY" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/wall/r_wall,
+/area/vault/forsakenreactor)
+"mb" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/grille/broken,
+/obj/item/weapon/shard/plasma,
+/obj/item/stack/rods,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"md" = (
+/obj/machinery/sleeper{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"me" = (
+/obj/machinery/atmospherics/unary/fissionreactor_coolantport{
+	dir = 1
+	},
+/obj/structure/lattice,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"mU" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/floor{
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"mV" = (
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTHEAST)"
+	},
+/area/vault/forsakenreactor)
+"mY" = (
+/obj/item/stack/sheet/metal,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"ne" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/machinery/door/airlock/glass_engineering{
+	name = "Engine Room";
+	req_one_access_txt = "11;24"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"no" = (
+/turf/simulated/wall/r_wall,
+/area/vault/forsakenreactor)
+"nq" = (
+/obj/machinery/atmospherics/unary/portables_connector,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"nr" = (
+/obj/machinery/door/airlock/centcom,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"nu" = (
+/obj/structure/closet/secure_closet/personal/cabinet,
+/turf/simulated/floor/carpet,
+/area/vault/forsakenreactor)
+"nx" = (
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)";
+	dir = 4
+	},
+/area/vault/forsakenreactor)
+"ny" = (
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellowcornersiding";
+	tag = "icon-yellowcornersiding (WEST)"
+	},
+/area/vault/forsakenreactor)
+"nA" = (
+/obj/machinery/computer/rdconsole/robotics,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"nH" = (
+/obj/machinery/computer/rdconsole/core,
+/turf/simulated/floor{
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"nZ" = (
+/obj/structure/airshield{
+	opacity = 0
+	},
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor/airless,
+/area/vault/forsakenreactor)
+"og" = (
+/obj/machinery/reagentgrinder,
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/glass/beaker/large{
+	pixel_x = -12;
+	pixel_y = 2
+	},
+/obj/item/weapon/reagent_containers/glass/beaker/large{
+	pixel_x = -12;
+	pixel_y = 2
+	},
+/obj/item/weapon/reagent_containers/glass/beaker/large{
+	pixel_x = -12;
+	pixel_y = 2
+	},
+/obj/item/stack/sheet/mineral/plasma,
+/obj/item/stack/sheet/mineral/plasma,
+/obj/item/stack/sheet/mineral/plasma,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"oi" = (
+/obj/structure/flora/pottedplant/random,
+/obj/machinery/light/he/broken{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding (SOUTHEAST)"
+	},
+/area/vault/forsakenreactor)
+"oj" = (
+/obj/machinery/door/airlock/centcom,
+/obj/structure/window/barricade/full/block,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"oA" = (
+/turf/simulated/floor/damaged/airless,
+/area/vault/forsakenreactor)
+"oD" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/vault/forsakenreactor)
+"oN" = (
+/obj/machinery/computer/operating,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/forsakenreactor)
+"oO" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/machinery/portable_atmospherics/canister/plasma,
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning";
+	tag = "icon-warning (EAST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"pf" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"pp" = (
+/obj/structure/table/reinforced,
+/turf/simulated/floor{
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"pB" = (
+/obj/machinery/light/he/broken{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"pC" = (
+/obj/machinery/shower{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/forsakenreactor)
+"pM" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/grille/broken,
+/obj/item/weapon/shard/plasma,
+/obj/item/stack/rods,
+/turf/simulated/floor/plating/airless,
+/area/vault/forsakenreactor)
+"pU" = (
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"qa" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/machinery/door/airlock/glass_engineering{
+	name = "Engine Room";
+	req_one_access_txt = "11;24"
+	},
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'HIGH VOLTAGE'";
+	icon_state = "shock";
+	name = "HIGH VOLTAGE";
+	pixel_x = -32
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"qw" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/wall/r_wall,
+/area/vault/forsakenreactor)
+"qz" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"qM" = (
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"qX" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 6
+	},
+/obj/structure/lattice,
+/turf/space,
+/area/vault/forsakenreactor)
+"rh" = (
+/obj/structure/table/reinforced,
+/obj/machinery/door/window{
+	dir = 1;
+	name = "Research and Development Desk";
+	req_access_txt = "7"
+	},
+/obj/item/weapon/paper_bin/purple{
+	pixel_x = -3;
+	pixel_y = 7
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"rm" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"rB" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"rJ" = (
+/obj/machinery/light/he/broken{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"rS" = (
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"rX" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 5
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"rY" = (
+/obj/structure/closet/secure_closet/personal/patient,
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"rZ" = (
+/obj/machinery/door/airlock/glass_research{
+	name = "Research and Development";
+	req_access_txt = "7"
+	},
+/turf/simulated/wall,
+/area/vault/forsakenreactor)
+"sa" = (
+/turf/simulated/floor{
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"st" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/damaged/airless,
+/area/vault/forsakenreactor)
+"sA" = (
+/obj/effect/decal/warning_stripes/pathmarkers/blue,
+/obj/machinery/atmospherics/binary/volume_pump,
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"sF" = (
+/obj/machinery/power/battery/smes,
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"sM" = (
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"sN" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"tj" = (
+/obj/machinery/portable_atmospherics/canister/plasma/broken{
+	icon_state = "green-1";
+	name = "Canister \[Rn\]"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"to" = (
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'VACUUM'";
+	icon_state = "space";
+	name = "VACUUM";
+	pixel_y = -32
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"tp" = (
+/obj/machinery/suit_modifier,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding (SOUTHEAST)"
+	},
+/area/vault/forsakenreactor)
+"tq" = (
+/obj/machinery/door/airlock/glass_medical{
+	name = "Chemistry Lab";
+	req_access_txt = "5; 33"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"tz" = (
+/obj/machinery/atmospherics/binary/volume_pump{
+	dir = 1;
+	name = "Emergency Vacuum Pump"
+	},
+/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"tV" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
+	icon_state = "space";
+	name = "EXTERNAL AIRLOCK"
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"tY" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"ug" = (
+/obj/machinery/door/airlock{
+	name = "Unisex Restrooms"
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"uh" = (
+/turf/simulated/wall/invulnerable/r_wall,
+/area/vault/forsakenreactor)
+"ul" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"us" = (
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"uB" = (
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"uI" = (
+/obj/machinery/door/airlock/glass_medical{
+	id_tag = "GeneticsDoor";
+	name = "Genetics";
+	req_access_txt = "5"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"uL" = (
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"uN" = (
+/obj/machinery/door/airlock/external{
+	name = "Supply Dock Airlock";
+	req_access_txt = "31"
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"uT" = (
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)"
+	},
+/area/vault/forsakenreactor)
+"uY" = (
+/obj/machinery/light/he/broken{
+	dir = 8
+	},
+/turf/simulated/floor/damaged,
+/area/vault/forsakenreactor)
+"vc" = (
+/obj/machinery/door/airlock/medical{
+	name = "Operating Theatre";
+	req_access_txt = "45"
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/forsakenreactor)
+"vn" = (
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"vq" = (
+/obj/machinery/door/airlock/external{
+	name = "Supply Dock Airlock";
+	req_access_txt = "31"
+	},
+/obj/structure/window/barricade/full/block,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"vA" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/vault/forsakenreactor)
+"vC" = (
+/obj/machinery/door/airlock/glass_atmos,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"vY" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	misc_gases = list("radon" = 5000)
+	},
+/area/vault/forsakenreactor)
+"wo" = (
+/obj/machinery/disposal/compactor,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"ws" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"wx" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/item/stack/sheet/metal,
+/obj/item/stack/sheet/metal,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"wN" = (
+/turf/simulated/floor/plating{
+	misc_gases = list("radon" = 5000)
+	},
+/area/vault/forsakenreactor)
+"wU" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"xg" = (
+/obj/structure/bed/chair/office/dark{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)"
+	},
+/area/vault/forsakenreactor)
+"xo" = (
+/obj/machinery/atmospherics/unary/cap/heat{
+	dir = 8
+	},
+/turf/space,
+/area/vault/forsakenreactor)
+"xt" = (
+/obj/machinery/bodyscanner,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"xy" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 9
+	},
+/turf/space,
+/area/vault/forsakenreactor)
+"xA" = (
+/obj/structure/rack,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"xI" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"xP" = (
+/obj/machinery/r_n_d/fabricator/mech{
+	output_dir = 2
+	},
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"xQ" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"ya" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor/wood,
+/area/vault/forsakenreactor)
+"yd" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/vault/forsakenreactor)
+"ye" = (
+/obj/effect/landmark/corpse/scientist,
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"yk" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"yl" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"yz" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"yP" = (
+/obj/machinery/sleeper{
+	dir = 1
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"yX" = (
+/obj/machinery/r_n_d/fabricator/circuit_imprinter,
+/obj/item/weapon/reagent_containers/glass/beaker/large{
+	pixel_x = 3;
+	pixel_y = 2
+	},
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"ze" = (
+/turf/simulated/floor/carpet,
+/area/vault/forsakenreactor)
+"zf" = (
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"zj" = (
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"zA" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/airless,
+/area/vault/forsakenreactor)
+"zI" = (
+/obj/structure/toilet{
+	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one is a gruesome sight indeed.";
+	dir = 1
+	},
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/forsakenreactor)
+"zU" = (
+/obj/machinery/bunsen_burner{
+	pixel_y = 8
+	},
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/glass/beaker{
+	pixel_x = 7;
+	pixel_y = 11
+	},
+/obj/item/weapon/reagent_containers/glass/beaker{
+	pixel_x = 7;
+	pixel_y = 11
+	},
+/obj/item/weapon/reagent_containers/glass/beaker{
+	pixel_x = 7;
+	pixel_y = 11
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"zV" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/item/pizzabox/meat,
+/obj/item/pizzabox/meat,
+/obj/item/pizzabox/meat,
+/obj/structure/closet/crate,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Ad" = (
+/obj/machinery/conveyor{
+	dir = 1;
+	id_tag = "QMLoad3"
+	},
+/turf/simulated/floor{
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)"
+	},
+/area/vault/forsakenreactor)
+"Ap" = (
+/obj/machinery/atmospherics/unary/cold_sink/freezer,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"Ax" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "plasma"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"AA" = (
+/obj/structure/girder/reinforced,
+/turf/simulated/floor/plating{
+	misc_gases = list("radon" = 5000)
+	},
+/area/vault/forsakenreactor)
+"AK" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "plasma"
+	},
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"AP" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"AY" = (
+/obj/spacepod/random,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"Be" = (
+/obj/item/broken_device,
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"Bg" = (
+/obj/structure/grille/broken,
+/obj/item/weapon/shard/plasma,
+/obj/item/weapon/shard/plasma,
+/obj/item/stack/rods,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"BJ" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma,
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/vault/forsakenreactor)
+"BN" = (
+/obj/structure/table,
+/obj/item/toy/cards,
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"BQ" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"Ck" = (
+/obj/machinery/power/generator,
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"CA" = (
+/obj/machinery/corium,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"CT" = (
+/obj/machinery/constructable_frame/machine_frame,
+/obj/item/weapon/circuitboard/chemmaster3000,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"CY" = (
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"Dd" = (
+/obj/structure/dispenser/oxygen,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Dg" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/closet/crate,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Dp" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/machinery/portable_atmospherics/canister/plasma,
+/obj/structure/window/reinforced,
+/obj/effect/decal/warning_stripes{
+	dir = 10;
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHWEST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Dx" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 10
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/machinery/portable_atmospherics/canister/plasma,
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "warning";
+	tag = "icon-warning (WEST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"DE" = (
+/obj/structure/rack,
+/obj/item/weapon/fuelrod/challenge,
+/obj/item/weapon/fuelrod/challenge,
+/obj/item/weapon/fuelrod/challenge,
+/obj/item/weapon/fuelrod/challenge,
+/obj/item/weapon/fuelrod/challenge,
+/obj/item/weapon/fuelrod/challenge,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"DF" = (
+/obj/machinery/fissioncontroller,
+/obj/structure/lattice,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"DU" = (
+/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe,
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"DV" = (
+/obj/structure/table,
+/obj/item/stack/medical/advanced/bruise_pack,
+/obj/item/stack/medical/advanced/bruise_pack,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/forsakenreactor)
+"DZ" = (
+/obj/structure/fission_reactor_case,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"Ei" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/vault/forsakenreactor)
+"Em" = (
+/obj/machinery/door/window{
+	dir = 2;
+	name = "Medbay Reception";
+	req_access_txt = "5"
+	},
+/turf/simulated/floor{
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"EE" = (
+/obj/structure/closet/walllocker/defiblocker/north,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"EH" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma,
+/turf/simulated/floor/plating/airless,
+/area/vault/forsakenreactor)
+"EK" = (
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/obj/effect/landmark/corpse/scientist,
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"EO" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold{
+	dir = 1
+	},
+/turf/space,
+/area/vault/forsakenreactor)
+"EX" = (
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/grille/broken,
+/obj/item/stack/rods,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"EY" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/structure/table/reinforced,
+/obj/machinery/door/window{
+	dir = 2;
+	name = "Research and Development Desk";
+	req_access_txt = "7"
+	},
+/obj/item/device/deskbell/signaler/rnd,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"Fr" = (
+/obj/structure/table,
+/obj/item/weapon/spacecash/c10,
+/obj/item/weapon/spacecash/c10,
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"FB" = (
+/obj/effect/decal/warning_stripes/pathmarkers/blue,
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"FX" = (
+/obj/machinery/door/airlock{
+	name = "Dorms"
+	},
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"FY" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 10
+	},
+/turf/space,
+/area/vault/forsakenreactor)
+"Gb" = (
+/turf/simulated/wall,
+/area/vault/forsakenreactor)
+"Gl" = (
+/obj/machinery/portable_atmospherics/canister/nitrogen,
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)";
+	dir = 4
+	},
+/area/vault/forsakenreactor)
+"Go" = (
+/turf/simulated/floor{
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)";
+	dir = 4
+	},
+/area/vault/forsakenreactor)
+"GB" = (
+/obj/structure/flora/pottedplant/random,
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"GD" = (
+/obj/structure/fission_reactor_case,
+/obj/structure/lattice,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"GG" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk8"
+	},
+/turf/space,
+/area)
+"GR" = (
+/obj/structure/closet/radiation,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/forsakenreactor)
+"GW" = (
+/obj/structure/lattice,
+/obj/structure/lattice,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"GZ" = (
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "plasma"
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"HB" = (
+/obj/structure/sink{
+	dir = 8;
+	pixel_x = -12;
+	pixel_y = 2
+	},
+/obj/structure/mirror{
+	pixel_x = -28
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/forsakenreactor)
+"HG" = (
+/obj/structure/table/reinforced,
+/obj/item/device/flashlight/lamp/green{
+	pixel_x = -3;
+	pixel_y = 8
+	},
+/turf/simulated/floor{
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"HW" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 5
+	},
+/obj/structure/lattice,
+/turf/space,
+/area/vault/forsakenreactor)
+"Ie" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Ir" = (
+/obj/machinery/light/he,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/forsakenreactor)
+"It" = (
+/obj/machinery/recharger/defibcharger/wallcharger{
+	pixel_x = 5;
+	pixel_y = -28
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"Iw" = (
+/obj/structure/table/woodentable,
+/turf/simulated/floor/wood,
+/area/vault/forsakenreactor)
+"Iz" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"IJ" = (
+/obj/machinery/light/small,
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "plasma"
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"IS" = (
+/obj/item/mounted/frame/light_fixture,
+/obj/item/weapon/light/tube/he/broken,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"Jh" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellowcornersiding";
+	tag = "icon-yellowcornersiding (WEST)"
+	},
+/area/vault/forsakenreactor)
+"Jm" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 4
+	},
+/turf/space,
+/area/vault/forsakenreactor)
+"Jo" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 1
+	},
+/turf/simulated/floor/plating/airless,
+/area/vault/forsakenreactor)
+"Jy" = (
+/obj/structure/cable/yellow{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"JI" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/airless,
+/area/vault/forsakenreactor)
+"JK" = (
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor/wood,
+/area/vault/forsakenreactor)
+"Kf" = (
+/obj/machinery/smartfridge/chemistry,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"Kk" = (
+/obj/structure/girder,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"Km" = (
+/obj/machinery/atmospherics/binary/pump{
+	dir = 1;
+	icon_state = "intact_on";
+	name = "Cryogenics Gas Pump";
+	on = 1
+	},
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"Kw" = (
+/obj/machinery/door/airlock{
+	name = "Unisex Restrooms"
+	},
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/forsakenreactor)
+"KC" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet,
+/turf/simulated/floor/carpet,
+/area/vault/forsakenreactor)
+"KL" = (
+/turf/simulated/floor{
+	icon_state = "dark";
+	toxins = 5000
+	},
+/area/vault/forsakenreactor)
+"KX" = (
+/obj/structure/table/reinforced,
+/obj/machinery/door/window{
+	dir = 2;
+	name = "Research and Development Desk";
+	req_access_txt = "7"
+	},
+/obj/item/weapon/paper_bin/purple{
+	pixel_x = -3;
+	pixel_y = 7
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"KY" = (
+/obj/structure/closet/radiation,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"KZ" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/obj/machinery/light/he{
+	dir = 1
+	},
+/obj/machinery/portable_atmospherics/canister/plasma,
+/obj/effect/decal/warning_stripes{
+	dir = 9;
+	icon_state = "warning";
+	tag = "icon-warning (NORTHWEST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Lb" = (
+/obj/structure/plasticflaps/mining,
+/obj/machinery/conveyor{
+	dir = 1;
+	id_tag = "QMLoad3"
+	},
+/obj/structure/girder/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"Lg" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/machinery/portable_atmospherics/canister/plasma,
+/obj/structure/window/reinforced,
+/obj/effect/decal/warning_stripes{
+	dir = 6;
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHEAST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Lj" = (
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/forsakenreactor)
+"Lk" = (
+/obj/structure/lattice,
+/obj/item/mounted/frame/light_fixture,
+/obj/item/weapon/light/tube/he/broken,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"Lw" = (
+/obj/machinery/dna_scannernew,
+/turf/simulated/floor{
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"Lx" = (
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"LW" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Mc" = (
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 1
+	},
+/obj/machinery/portable_atmospherics/canister/plasma/broken{
+	icon_state = "green-1";
+	name = "Canister \[Rn\]"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Me" = (
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"Mm" = (
+/obj/machinery/conveyor_switch/oneway{
+	convdir = -1;
+	id_tag = "QMLoad"
+	},
+/turf/simulated/floor{
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)"
+	},
+/area/vault/forsakenreactor)
+"Mo" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Mp" = (
+/turf/simulated/floor{
+	icon_state = "dark";
+	toxins = 25000
+	},
+/area/vault/forsakenreactor)
+"Mq" = (
+/obj/structure/rack{
+	dir = 8
+	},
+/obj/item/weapon/storage/toolbox/electrical{
+	pixel_x = 1;
+	pixel_y = 6
+	},
+/obj/item/weapon/storage/toolbox/mechanical{
+	pixel_x = -2;
+	pixel_y = -1
+	},
+/obj/item/clothing/head/welding{
+	pixel_x = -3;
+	pixel_y = 5
+	},
+/obj/item/clothing/glasses/welding,
+/obj/item/device/robotanalyzer,
+/obj/item/device/robotanalyzer,
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"MO" = (
+/obj/machinery/fissionreactor/fissionreactor_controlrod,
+/obj/structure/lattice,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"MW" = (
+/obj/machinery/light/he/broken{
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"Nf" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/turf/simulated/floor{
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"Nl" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Nq" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 10
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/machinery/portable_atmospherics/canister/plasma,
+/obj/effect/decal/warning_stripes{
+	dir = 5;
+	icon_state = "warning";
+	tag = "icon-warning (NORTHEAST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Nr" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"Ns" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 4
+	},
+/obj/structure/lattice,
+/turf/space,
+/area/vault/forsakenreactor)
+"NB" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/machinery/portable_atmospherics/canister/plasma/broken{
+	icon_state = "green-1";
+	name = "Canister \[Rn\]"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"ND" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"NF" = (
+/turf/space,
+/area)
+"NG" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "yellowcornersiding";
+	tag = "icon-yellowcornersiding"
+	},
+/area/vault/forsakenreactor)
+"NW" = (
+/obj/structure/table,
+/obj/item/weapon/switchtool/surgery/maxed,
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/forsakenreactor)
+"NX" = (
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"Oa" = (
+/obj/item/weapon/reagent_containers/food/snacks/meat,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"Oj" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"Ov" = (
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "yellowcornersiding";
+	tag = "icon-yellowcornersiding (WEST)"
+	},
+/area/vault/forsakenreactor)
+"Ow" = (
+/obj/machinery/shower{
+	dir = 4
+	},
+/obj/structure/window/reinforced,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/forsakenreactor)
+"Oy" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/paper_bin/white{
+	pixel_x = 1;
+	pixel_y = 9
+	},
+/obj/item/weapon/pen,
+/turf/simulated/floor{
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"OI" = (
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor{
+	dir = 10;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"OJ" = (
+/obj/structure/table,
+/obj/item/device/mmi/posibrain,
+/obj/item/device/mmi/posibrain,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"ON" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden,
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"Pb" = (
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"Pj" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/item/weapon/shard,
+/obj/item/weapon/shard,
+/turf/simulated/floor/plating{
+	misc_gases = list("radon" = 5000)
+	},
+/area/vault/forsakenreactor)
+"Pm" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/structure/table/reinforced,
+/obj/machinery/door/window{
+	dir = 1;
+	name = "Research and Development Desk";
+	req_access_txt = "7"
+	},
+/obj/item/device/deskbell/signaler/rnd,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"Pr" = (
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/grille/broken,
+/obj/item/stack/rods,
+/obj/item/stack/rods,
+/turf/simulated/floor/plating/airless,
+/area/vault/forsakenreactor)
+"PD" = (
+/obj/structure/fission_reactor_case,
+/obj/machinery/atmospherics/unary/fissionreactor_coolantport{
+	dir = 1
+	},
+/obj/structure/lattice,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"PJ" = (
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'RADIOACTIVE AREA'";
+	icon_state = "radiation";
+	name = "RADIOACTIVE AREA"
+	},
+/turf/simulated/wall/invulnerable/r_wall,
+/area/vault/forsakenreactor)
+"Qb" = (
+/obj/structure/door_assembly/door_assembly_min,
+/turf/simulated/floor/plating{
+	toxins = 5000
+	},
+/area/vault/forsakenreactor)
+"Qc" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 4
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/obj/machinery/meter{
+	name = "Hot Loop"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Qi" = (
+/obj/structure/table/reinforced,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"Qq" = (
+/obj/machinery/cloning/clonepod/full,
+/turf/simulated/floor{
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"Qu" = (
+/obj/machinery/chem_dispenser/mapping,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"QA" = (
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/obj/machinery/meter{
+	name = "Hot Loop"
+	},
+/obj/structure/lattice,
+/obj/item/stack/sheet/metal,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"QT" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/vault/forsakenreactor)
+"QX" = (
+/turf/simulated/floor{
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"Rc" = (
+/turf/simulated/floor{
+	icon_state = "yellowcornersiding";
+	tag = "icon-yellowcornersiding (WEST)"
+	},
+/area/vault/forsakenreactor)
+"Re" = (
+/obj/structure/lattice,
+/obj/machinery/corium,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"Ro" = (
+/obj/item/mounted/frame/light_fixture,
+/obj/item/weapon/light/tube/he/broken,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"RH" = (
+/obj/machinery/door/airlock/glass_mining{
+	name = "Cargo Bay";
+	req_access_txt = "31"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"RI" = (
+/obj/machinery/atmospherics/unary/fissionfuelmaker{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"RR" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/turf/simulated/floor/plating/airless,
+/area/vault/forsakenreactor)
+"RT" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"Si" = (
+/obj/structure/plasticflaps/mining,
+/obj/structure/airshield{
+	opacity = 0
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"Sj" = (
+/obj/machinery/power/apc,
+/turf/simulated/wall/invulnerable/r_wall,
+/area/vault/forsakenreactor)
+"SE" = (
+/obj/machinery/atmospherics/unary/cap/heat{
+	dir = 4
+	},
+/obj/structure/lattice,
+/turf/space,
+/area/vault/forsakenreactor)
+"SI" = (
+/obj/structure/window/reinforced/plasma,
+/obj/structure/grille,
+/obj/structure/window/reinforced/plasma{
+	dir = 4
+	},
+/obj/structure/window/reinforced/plasma{
+	dir = 8
+	},
+/turf/simulated/floor/plating/airless,
+/area/vault/forsakenreactor)
+"SX" = (
+/obj/machinery/r_n_d/fabricator/protolathe,
+/obj/machinery/light/he,
+/turf/simulated/floor{
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"Th" = (
+/turf/simulated/floor/plating{
+	toxins = 5000
+	},
+/area/vault/forsakenreactor)
+"Tk" = (
+/obj/item/stack/sheet/metal,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"TC" = (
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/forsakenreactor)
+"TP" = (
+/obj/machinery/atmospherics/unary/vent/high_volume,
+/turf/space,
+/area)
+"TV" = (
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)"
+	},
+/area/vault/forsakenreactor)
+"Ub" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"Ue" = (
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "yellowcornersiding";
+	tag = "icon-yellowcornersiding"
+	},
+/area/vault/forsakenreactor)
+"Up" = (
+/obj/machinery/atmospherics/binary/circulator{
+	anchored = 1;
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Uu" = (
+/obj/item/weapon/reagent_containers/food/snacks/meat,
+/obj/item/weapon/reagent_containers/food/snacks/meat,
+/obj/item/weapon/reagent_containers/food/snacks/meat,
+/obj/item/weapon/reagent_containers/food/snacks/meat,
+/obj/item/weapon/reagent_containers/food/snacks/meat,
+/obj/item/weapon/reagent_containers/food/snacks/meat,
+/obj/item/weapon/reagent_containers/food/snacks/meat,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"UR" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"UU" = (
+/obj/structure/closet/secure_closet/personal,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Vk" = (
+/obj/machinery/portable_atmospherics/canister/plasma/broken{
+	fire_sprite = "green-1"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Vo" = (
+/turf/simulated/floor{
+	dir = 5;
+	icon_state = "yellowsiding";
+	tag = "icon-yellowsiding"
+	},
+/area/vault/forsakenreactor)
+"VP" = (
+/obj/machinery/shower,
+/turf/simulated/floor{
+	icon_state = "freezerfloor"
+	},
+/area/vault/forsakenreactor)
+"VX" = (
+/obj/machinery/door/airlock/centcom,
+/obj/structure/window/barricade/full/block,
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"Wd" = (
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "dark brown stripe";
+	tag = "icon-dark brown stripe (NORTH)"
+	},
+/area/vault/forsakenreactor)
+"Wi" = (
+/obj/machinery/light/he,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "yellowcornersiding";
+	tag = "icon-yellowcornersiding (WEST)"
+	},
+/area/vault/forsakenreactor)
+"Wl" = (
+/obj/machinery/computer/cloning,
+/turf/simulated/floor{
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"Wo" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 10
+	},
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/space,
+/area/vault/forsakenreactor)
+"WO" = (
+/obj/item/clothing/suit/radiation,
+/obj/machinery/light/he/broken{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/forsakenreactor)
+"WP" = (
+/obj/item/weapon/reagent_containers/food/snacks/meat,
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"Xb" = (
+/obj/machinery/sleeper/mancrowave,
+/turf/simulated/floor{
+	dir = 9;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"Xd" = (
+/obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue,
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/vault/forsakenreactor)
+"Xl" = (
+/obj/structure/table,
+/turf/simulated/floor/carpet,
+/area/vault/forsakenreactor)
+"Xx" = (
+/obj/machinery/fissionreactor/fissionreactor_fuelrod/inert,
+/obj/structure/lattice,
+/turf/simulated/floor/foamedmetal,
+/area/vault/forsakenreactor)
+"XC" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	one_way = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/item/weapon/shard,
+/turf/simulated/floor/plating{
+	misc_gases = list("radon" = 5000)
+	},
+/area/vault/forsakenreactor)
+"XG" = (
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging{
+	dir = 6
+	},
+/obj/structure/lattice,
+/obj/structure/lattice,
+/turf/space,
+/area/vault/forsakenreactor)
+"XJ" = (
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/turf/simulated/floor/plating,
+/area/vault/forsakenreactor)
+"Yd" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"Yn" = (
+/obj/structure/table/reinforced,
+/turf/simulated/floor{
+	dir = 6;
+	icon_state = "whiteblue"
+	},
+/area/vault/forsakenreactor)
+"Yo" = (
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red{
+	dir = 4;
+	tag = "icon-pathmarker (EAST)"
+	},
+/obj/machinery/atmospherics/pipe/manifold/insulated/hidden{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/red,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"ZE" = (
+/obj/machinery/optable,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault/forsakenreactor)
+"ZH" = (
+/obj/structure/rack,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/fuelrod/large,
+/obj/item/weapon/light/tube/he/broken,
+/obj/item/mounted/frame/light_fixture,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+"ZK" = (
+/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
+	dir = 9
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 1;
+	tag = "icon-pathmarker (NORTH)"
+	},
+/obj/effect/decal/warning_stripes/pathmarkers/blue{
+	dir = 8;
+	tag = "icon-pathmarker (WEST)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/vault/forsakenreactor)
+
+(1,1,1) = {"
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+"}
+(2,1,1) = {"
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+"}
+(3,1,1) = {"
+NF
+NF
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+NF
+NF
+"}
+(4,1,1) = {"
+NF
+NF
+uh
+qX
+HW
+qX
+HW
+XG
+HW
+qX
+HW
+SE
+BJ
+ex
+OI
+Gb
+VP
+HB
+jh
+Kw
+bO
+Gb
+KC
+Xl
+Gb
+KC
+Xl
+Gb
+KC
+Xl
+Gb
+KC
+Xl
+Gb
+KC
+Xl
+Gb
+KC
+Xl
+uh
+NF
+NF
+"}
+(5,1,1) = {"
+NF
+NF
+uh
+Jm
+Jm
+Jm
+Jm
+Ns
+Jm
+Jm
+Jm
+hr
+Ei
+kA
+sa
+Gb
+VP
+jh
+Ir
+Gb
+Gb
+Gb
+eW
+fc
+Gb
+ze
+lM
+Gb
+ze
+lM
+Gb
+ze
+ig
+Gb
+ze
+ig
+Gb
+ze
+ig
+uh
+NF
+NF
+"}
+(6,1,1) = {"
+NF
+NF
+uh
+Jm
+Jm
+Jm
+Jm
+Ns
+Jm
+Jm
+Jm
+Jm
+Ei
+kA
+sa
+Gb
+VP
+jh
+jh
+Kw
+zI
+Gb
+eW
+ze
+Gb
+nu
+ze
+Kk
+nu
+ze
+Gb
+nu
+ze
+Gb
+nu
+ze
+Gb
+nu
+ze
+uh
+NF
+NF
+"}
+(7,1,1) = {"
+NF
+NF
+uh
+Jm
+Jm
+Jm
+Jm
+Ns
+Jm
+Jm
+Jm
+Jm
+Ei
+kA
+ga
+Gb
+Gb
+ug
+ug
+Gb
+Gb
+Gb
+rS
+FX
+Gb
+Kk
+FX
+Kk
+Kk
+FX
+Gb
+Gb
+FX
+Gb
+Gb
+FX
+Gb
+Gb
+FX
+uh
+NF
+NF
+"}
+(8,1,1) = {"
+NF
+NF
+uh
+Ns
+Ns
+Ns
+Ns
+ah
+Ns
+Ns
+Ns
+Ns
+Ei
+kA
+ny
+pU
+pU
+eW
+pU
+pU
+Oj
+pU
+pU
+pU
+uY
+pU
+pU
+rJ
+pU
+pU
+vY
+pU
+pU
+Oj
+eW
+pU
+GB
+pU
+cw
+uh
+NF
+NF
+"}
+(9,1,1) = {"
+NF
+NF
+uh
+Jm
+Jm
+Jm
+Jm
+Ns
+Jm
+Jm
+Jm
+Jm
+Ei
+kA
+eW
+bz
+bz
+bz
+eW
+CY
+CY
+eW
+CY
+CY
+CY
+CY
+CY
+CY
+CY
+eW
+wN
+Ov
+Rc
+eW
+Th
+CY
+CY
+CY
+br
+uh
+NF
+NF
+"}
+(10,1,1) = {"
+NF
+NF
+uh
+Jm
+Jm
+Jm
+EO
+cl
+Jm
+Jm
+Jm
+hr
+oD
+kA
+bz
+EK
+Lx
+bz
+sa
+no
+no
+vC
+tY
+wU
+gs
+gs
+mb
+gs
+Bg
+AP
+no
+kA
+sa
+Kk
+Gb
+FX
+Gb
+Gb
+FX
+uh
+NF
+NF
+"}
+(11,1,1) = {"
+NF
+NF
+uh
+xo
+Wo
+xy
+fX
+an
+FY
+xy
+Wo
+xy
+ic
+kA
+bz
+BN
+Fr
+bz
+eW
+no
+KY
+ir
+kB
+Tk
+rS
+ir
+ir
+kB
+ir
+ir
+no
+kA
+sa
+Gb
+nu
+ze
+Gb
+iM
+ze
+uh
+NF
+NF
+"}
+(12,1,1) = {"
+NF
+NF
+uh
+yd
+RR
+RR
+vA
+EH
+Gb
+yd
+RR
+RR
+SI
+eW
+bz
+aT
+ax
+bz
+sa
+no
+KY
+bS
+bS
+GD
+GD
+mY
+rS
+NX
+DZ
+bS
+no
+kA
+sa
+Gb
+ze
+ig
+Gb
+ze
+kr
+uh
+NF
+NF
+"}
+(13,1,1) = {"
+NF
+NF
+uh
+sF
+Jy
+uB
+gq
+ir
+Gb
+sM
+ez
+pU
+pU
+Ue
+eW
+bz
+bz
+wN
+sa
+no
+NX
+bS
+bS
+Xx
+Re
+bS
+cK
+Re
+DZ
+NX
+no
+eW
+sa
+Gb
+KC
+Xl
+Gb
+KC
+bn
+uh
+NF
+NF
+"}
+(14,1,1) = {"
+NF
+NF
+uh
+hz
+gk
+Yd
+ii
+dV
+yl
+kA
+bz
+Rc
+CY
+CY
+CY
+CY
+CY
+wN
+Me
+lY
+fi
+gA
+me
+NX
+NX
+mY
+Xx
+MO
+NX
+rS
+no
+kA
+sa
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+NF
+NF
+"}
+(15,1,1) = {"
+NF
+NF
+Sj
+Nl
+Up
+Ck
+ds
+gq
+Pb
+kA
+bz
+ga
+Gb
+rm
+rZ
+rm
+Gb
+eW
+fe
+AA
+Lk
+bS
+GD
+NX
+NX
+NX
+NX
+NX
+DZ
+Lk
+AA
+kA
+sa
+uh
+bE
+bE
+bE
+bE
+bE
+bE
+RT
+NF
+"}
+(16,1,1) = {"
+NF
+NF
+uh
+ia
+ia
+ir
+Qc
+Qc
+UR
+kA
+bz
+sa
+sN
+DU
+pU
+yX
+sN
+eW
+Nf
+no
+Tk
+bS
+bS
+NX
+bS
+NX
+Re
+NX
+NX
+GW
+no
+kA
+sa
+uh
+bE
+bE
+bE
+bE
+bE
+bE
+RT
+NF
+"}
+(17,1,1) = {"
+NF
+NF
+uh
+Yo
+kU
+nq
+hT
+gq
+Gb
+kA
+bz
+sa
+EX
+kA
+eW
+nH
+pf
+rS
+Nf
+no
+NX
+rS
+DZ
+NX
+NX
+NX
+NX
+bS
+mY
+rS
+no
+kA
+sa
+uh
+uh
+uh
+yd
+lu
+QT
+uh
+RT
+NF
+"}
+(18,1,1) = {"
+NF
+NF
+uh
+us
+hd
+sA
+FB
+ZK
+Gb
+kA
+bz
+sa
+EX
+IS
+xQ
+SX
+EX
+rS
+fe
+no
+ir
+NX
+bS
+NX
+CA
+NX
+NX
+Xx
+DZ
+bS
+AA
+kA
+eW
+uh
+pB
+oA
+zA
+cO
+cO
+Jo
+RT
+NF
+"}
+(19,1,1) = {"
+NF
+NF
+uh
+KZ
+Dx
+Dp
+yk
+yk
+qa
+xI
+ON
+mU
+Iz
+xI
+kZ
+gL
+Iz
+zj
+XJ
+AA
+ir
+Tk
+GD
+NX
+bS
+Re
+NX
+CA
+DZ
+ir
+AA
+kA
+Wi
+PJ
+Be
+AK
+st
+dG
+oA
+oD
+RT
+NF
+"}
+(20,1,1) = {"
+NF
+NF
+uh
+Nq
+oO
+Lg
+Ie
+Ie
+ne
+rB
+Jh
+ju
+EY
+NG
+kJ
+ju
+Pm
+NG
+zj
+qw
+Ie
+QA
+PD
+NX
+NX
+NX
+NX
+NX
+GD
+bS
+no
+eW
+bz
+VX
+bz
+bz
+JI
+cO
+cO
+nZ
+RT
+NF
+"}
+(21,1,1) = {"
+NF
+NF
+uh
+Gb
+Gb
+Gb
+Gb
+Gb
+Gb
+Gb
+kA
+Rc
+KX
+Ov
+eW
+Rc
+rh
+Ov
+sa
+no
+ir
+bS
+bS
+NX
+bS
+NX
+NX
+Re
+bS
+ir
+no
+eW
+bZ
+PJ
+oA
+AK
+st
+dx
+cO
+Jo
+RT
+NF
+"}
+(22,1,1) = {"
+NF
+NF
+uh
+ht
+ya
+bB
+bB
+bB
+ya
+bB
+kA
+sa
+sN
+OJ
+eW
+sa
+sN
+kA
+sa
+AA
+Ro
+ir
+GD
+rS
+mY
+NX
+bS
+rS
+GD
+ir
+AA
+kA
+sa
+uh
+WO
+cz
+zA
+oA
+cO
+oD
+RT
+NF
+"}
+(23,1,1) = {"
+NF
+NF
+uh
+iY
+bB
+kx
+Iw
+Iw
+lm
+bB
+kA
+sa
+pf
+xP
+xQ
+ga
+pf
+eW
+sa
+Th
+CT
+ir
+DF
+DZ
+bS
+GD
+bS
+ir
+Th
+ir
+no
+kA
+sa
+uh
+uh
+uh
+pM
+Pr
+QT
+uh
+RT
+NF
+"}
+(24,1,1) = {"
+NF
+NF
+uh
+bR
+bB
+kx
+Iw
+Iw
+lm
+bB
+kA
+sa
+EX
+nA
+ye
+sa
+EX
+kA
+sa
+no
+Qu
+ir
+ir
+ir
+Mp
+ir
+ir
+ir
+Vk
+tj
+no
+kA
+sa
+uh
+bE
+bE
+bE
+bE
+bE
+bE
+RT
+NF
+"}
+(25,1,1) = {"
+NF
+NF
+uh
+gC
+bB
+bB
+bB
+bB
+bB
+bB
+kA
+sa
+ws
+Mq
+CY
+tp
+ws
+kA
+sa
+no
+RI
+Mc
+Ro
+ir
+KL
+ir
+DE
+ZH
+tj
+tj
+no
+eW
+sa
+uh
+bE
+bE
+bE
+bE
+bE
+bE
+RT
+NF
+"}
+(26,1,1) = {"
+NF
+NF
+uh
+bR
+bB
+kx
+Iw
+Iw
+lm
+bB
+kA
+ga
+Gb
+Pj
+rZ
+XC
+Gb
+kA
+sa
+no
+no
+no
+AA
+no
+no
+AA
+no
+AA
+no
+AA
+no
+kA
+sa
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+NF
+NF
+"}
+(27,1,1) = {"
+NF
+NF
+uh
+iY
+bB
+kx
+Iw
+Iw
+lm
+bB
+kA
+ny
+pU
+pU
+pU
+pU
+pU
+eW
+eW
+rS
+pU
+eW
+pU
+eW
+pU
+pU
+rS
+eW
+pU
+pU
+pU
+Ue
+eW
+uh
+GR
+Ow
+Dd
+ND
+UU
+uh
+NF
+NF
+"}
+(28,1,1) = {"
+NF
+NF
+uh
+ht
+JK
+bB
+bB
+bB
+JK
+bB
+Vo
+CY
+CY
+CY
+CY
+Ov
+bz
+bz
+rS
+bz
+bz
+bz
+bz
+bz
+bz
+rS
+bz
+wN
+bz
+bz
+wN
+bz
+sa
+nr
+jh
+jh
+ir
+ir
+UU
+uh
+NF
+NF
+"}
+(29,1,1) = {"
+NF
+NF
+uh
+Gb
+Gb
+Gb
+Gb
+Gb
+Gb
+Gb
+iS
+Qi
+fL
+Gb
+zf
+kA
+bz
+eW
+bz
+bz
+bz
+eW
+bz
+bz
+eW
+bz
+bz
+bz
+bz
+eW
+bz
+Th
+wN
+uh
+GR
+pC
+xA
+ir
+UU
+uh
+NF
+NF
+"}
+(30,1,1) = {"
+NF
+NF
+uh
+lx
+NW
+DV
+Gb
+aF
+aF
+vn
+cQ
+bI
+zU
+eK
+QX
+kA
+bz
+Rc
+CY
+CY
+CY
+CY
+CY
+CY
+CY
+CY
+wN
+CY
+MW
+CY
+CY
+CY
+oi
+uh
+uh
+uh
+PJ
+oj
+PJ
+uh
+NF
+NF
+"}
+(31,1,1) = {"
+NF
+NF
+uh
+ZE
+TC
+Lj
+vc
+bI
+bI
+jX
+by
+bI
+bI
+aX
+QX
+kA
+bz
+sa
+Gb
+bF
+BQ
+BQ
+BQ
+BQ
+BQ
+BQ
+kX
+uh
+uh
+uN
+tV
+uN
+uh
+uh
+rS
+AY
+Ax
+ir
+jU
+bp
+aO
+NF
+"}
+(32,1,1) = {"
+NF
+NF
+uh
+oN
+Lj
+Lj
+Gb
+ul
+bI
+jX
+cQ
+bI
+bI
+Kf
+QX
+kA
+bz
+sa
+vn
+Wd
+kT
+iQ
+iQ
+iQ
+kT
+iQ
+xg
+uh
+uh
+IJ
+Pb
+GZ
+uh
+uh
+rS
+rS
+Mo
+ir
+ir
+bp
+dN
+NF
+"}
+(33,1,1) = {"
+NF
+NF
+uh
+yz
+ks
+je
+Gb
+bI
+bI
+jX
+by
+bI
+bI
+tq
+QX
+kA
+bz
+sa
+jX
+uT
+ir
+NB
+ir
+ir
+NB
+ir
+iX
+uh
+PJ
+vq
+UR
+vq
+PJ
+uh
+ff
+fP
+ir
+ir
+ir
+bp
+dN
+NF
+"}
+(34,1,1) = {"
+NF
+NF
+uh
+qM
+qz
+qz
+is
+bI
+bI
+hi
+bI
+bI
+og
+Ub
+QX
+kA
+bz
+sa
+jX
+uT
+ir
+kS
+ir
+ir
+NB
+ir
+iW
+uh
+il
+il
+bE
+il
+il
+uh
+rS
+AY
+Mo
+ir
+to
+uh
+dN
+NF
+"}
+(35,1,1) = {"
+NF
+NF
+uh
+qM
+bI
+bI
+bI
+bI
+It
+Gb
+Kf
+tq
+Ub
+Gb
+QX
+kA
+bz
+sa
+ba
+uT
+ir
+kS
+kl
+bu
+NB
+ir
+iW
+uh
+il
+il
+bE
+il
+il
+uh
+rS
+rS
+Mo
+ir
+ir
+bp
+dN
+NF
+"}
+(36,1,1) = {"
+NF
+NF
+uh
+Gb
+uI
+uI
+Gb
+Gb
+EE
+is
+bI
+bI
+bI
+cj
+QX
+kA
+bz
+sa
+RH
+ir
+ir
+ir
+bu
+ir
+ir
+ir
+Ad
+Lb
+kF
+il
+il
+il
+il
+uh
+iU
+fP
+ir
+ir
+ir
+bp
+dN
+NF
+"}
+(37,1,1) = {"
+NF
+NF
+uh
+Xb
+aF
+WP
+rY
+vn
+bI
+bI
+bI
+bI
+bI
+aX
+HG
+kA
+bz
+sa
+Qb
+ir
+ir
+ir
+bu
+kl
+ir
+kl
+Mm
+uh
+il
+il
+il
+il
+il
+uh
+rS
+rS
+Mo
+ir
+ir
+bp
+dN
+NF
+"}
+(38,1,1) = {"
+NF
+TP
+cJ
+tz
+rX
+Uu
+Qq
+jX
+bI
+bI
+bI
+bI
+bI
+bI
+Em
+kA
+bz
+sa
+Nr
+uT
+ir
+Dg
+ir
+ir
+wx
+ir
+Mm
+uh
+bE
+bE
+il
+bE
+bE
+uh
+rS
+rS
+Mo
+ir
+to
+uh
+dN
+NF
+"}
+(39,1,1) = {"
+NF
+NF
+uh
+jv
+Xd
+Oa
+Wl
+jX
+bI
+he
+db
+md
+bI
+hw
+pp
+kA
+bz
+sa
+jX
+uT
+ir
+la
+ir
+bu
+zV
+ir
+Ad
+Lb
+il
+il
+il
+il
+il
+uh
+ff
+fP
+ir
+ir
+ir
+Si
+dN
+NF
+"}
+(40,1,1) = {"
+NF
+NF
+uh
+jv
+Xd
+bI
+Lw
+jX
+bI
+bI
+bI
+bI
+bI
+bI
+Oy
+kA
+bz
+sa
+jX
+TV
+ir
+LW
+bu
+ir
+LW
+ir
+kf
+uh
+il
+il
+il
+il
+il
+uh
+rS
+cE
+Mo
+ir
+ir
+Si
+dN
+NF
+"}
+(41,1,1) = {"
+NF
+NF
+uh
+Ap
+bs
+Km
+dB
+hi
+uL
+xt
+aN
+yP
+uL
+aj
+Yn
+wo
+ew
+lr
+hi
+mV
+nx
+Go
+Gl
+lA
+nx
+Go
+kf
+uh
+il
+il
+il
+il
+il
+uh
+rS
+rS
+Mo
+ir
+ir
+jz
+GG
+NF
+"}
+(42,1,1) = {"
+NF
+NF
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+il
+il
+il
+il
+il
+uh
+uh
+uh
+uh
+uh
+uh
+uh
+NF
+NF
+"}
+(43,1,1) = {"
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+RT
+NF
+NF
+NF
+RT
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+"}
+(44,1,1) = {"
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+RT
+RT
+RT
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+NF
+"}

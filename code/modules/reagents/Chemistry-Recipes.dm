@@ -174,12 +174,19 @@
 	holder.clear_reagents(TRUE)
 	holder.add_reagent(FERROURANIUM,created_volume/10)
 
+/datum/chemical_reaction/silica
+	name = "Silica"
+	id = SILICA
+	result = SILICA
+	required_reagents = list(SILICON = 1, OXYGEN = 2)
+	result_amount = 3
+
 /datum/chemical_reaction/silicate
 	name = "Silicate"
 	id = SILICATE
 	result = SILICATE
-	required_reagents = list(ALUMINUM = 1, SILICON = 1, OXYGEN = 1)
-	result_amount = 9
+	required_reagents = list(ALUMINUM = 2, SILICA = 3, SILICON = 1)
+	result_amount = 18
 
 /datum/chemical_reaction/phalanximine
 	name = "Phalanximine"
@@ -292,8 +299,8 @@
 	name = "Space Lube"
 	id = LUBE
 	result = LUBE
-	required_reagents = list(WATER = 1, SILICON = 1, OXYGEN = 1)
-	result_amount = 4
+	required_reagents = list(WATER = 2, SILICA = 3, SILICON = 1)
+	result_amount = 8
 
 /datum/chemical_reaction/sodium_polyacrylate
 	name = "Sodium Polyacrylate"
@@ -954,7 +961,7 @@
 	name = "Solid Metal"
 	id = "metalsolid"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, IRON = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, IRON = U_PER_SHEET)
 	result_amount = 1 //amount of sheets created per the above reagents ^
 
 /datum/chemical_reaction/solidification/proc/product_to_spawn()
@@ -969,7 +976,7 @@
 	name = "Solid Plasma"
 	id = "solidplasma"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, PLASMA = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, PLASMA = U_PER_SHEET)
 	result_amount = 1
 
 /datum/chemical_reaction/solidification/plasma/product_to_spawn()
@@ -979,7 +986,7 @@
 	name = "Solid Silver"
 	id = "solidsilver"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, SILVER = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, SILVER = U_PER_SHEET)
 	result_amount = 1
 
 /datum/chemical_reaction/solidification/silver/product_to_spawn()
@@ -989,7 +996,7 @@
 	name = "Solid Gold"
 	id = "solidgold"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, GOLD = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, GOLD = U_PER_SHEET)
 	result_amount = 1
 
 /datum/chemical_reaction/solidification/gold/product_to_spawn()
@@ -999,7 +1006,7 @@
 	name = "Solid Uranium"
 	id = "soliduranium"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, URANIUM = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, URANIUM = U_PER_SHEET)
 	result_amount = 1
 
 /datum/chemical_reaction/solidification/uranium/product_to_spawn()
@@ -1009,7 +1016,7 @@
 	name = "Solid Diamond"
 	id = "soliddiamond"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, DIAMONDDUST = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, DIAMONDDUST = U_PER_SHEET)
 	result_amount = 1
 
 /datum/chemical_reaction/solidification/diamond/product_to_spawn()
@@ -1019,7 +1026,7 @@
 	name = "Solid Bananium"
 	id = "solidbananium"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, BANANA = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, BANANA = U_PER_SHEET)
 	required_catalysts = list(PHAZON = 1)
 	result_amount = 1
 
@@ -1051,7 +1058,7 @@
 	name = "Solid Plasma Glass"
 	id = "solidplasmaglass"
 	result = null
-	required_reagents = list(SILICATE = 20, CONDENSEDCAPSAICIN = 10, PLASMA = 20) //You need even stronger heat to make plasmaglass
+	required_reagents = list(SILICATE = 20, CONDENSEDCAPSAICIN = 10, PLASMA = U_PER_SHEET) //You need even stronger heat to make plasmaglass
 	result_amount = 1 //amount of sheets created per the above reagents
 
 /datum/chemical_reaction/solidification/plasmaglass/product_to_spawn()
@@ -3805,7 +3812,7 @@
 	name = "Sodium Silicate"
 	id = SODIUMSILICATE
 	result = SODIUMSILICATE
-	required_reagents = list(SODIUM = 2, SILICON = 1, OXYGEN = 3)
+	required_reagents = list(SODIUM = 2, SILICA = 3, OXYGEN = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/untable

@@ -89,3 +89,4 @@
 #define CC_PER_SHEET_GINGERBREAD CC_PER_SHEET_METAL
 
 #define CC_PER_U 10 //How many cc per 1 u of reagent in eg. a glass of water or a human's bloodstream.
+#define U_PER_SHEET 20 //Same as above, but for making sheets
