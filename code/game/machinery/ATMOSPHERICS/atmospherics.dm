@@ -136,7 +136,7 @@ Pipelines + Other Objects -> Pipe network
 	return PIPE_COLOR_GREY
 
 /obj/machinery/atmospherics/proc/node_alpha_for(var/obj/machinery/atmospherics/other)
-	return other.alpha
+	return alpha < 255 ? alpha : other.alpha
 
 /obj/machinery/atmospherics/proc/node_layer()
 	var/new_layer = level == LEVEL_BELOW_FLOOR ? PIPE_LAYER : EXPOSED_PIPE_LAYER
