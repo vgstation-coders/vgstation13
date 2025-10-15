@@ -167,7 +167,7 @@ Pipelines + Other Objects -> Pipe network
 		var/image/nodecon = icon_node_con(con_dir)
 		if(nodecon)
 			nodecon.color = node_color_for(connected_node)
-			nodecon.alpha = node_alpha_for()
+			nodecon.alpha = node_alpha_for(connected_node)
 			nodecon.plane = node_plane()
 			nodecon.layer = node_layer()
 			var/list/node_gases = connected_node.get_visible_gases()
