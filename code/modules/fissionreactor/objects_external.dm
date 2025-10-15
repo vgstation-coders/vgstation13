@@ -184,9 +184,8 @@ included:
 	playsound(src,'sound/machines/fission/rc_scram.ogg',50)
 	say("#pd=_e$%@er~is(i-n re\"ui\[ements?", class = "binaryradio")
 	req_config_access=list()
-
-/obj/machinery/fissioncontroller/can_emag()
-	return req_config_access.len>=1
+	machine_flags &= ~EMAGGABLE
+	emagged=TRUE
 
 /obj/machinery/fissioncontroller/New()
 	..()
@@ -427,9 +426,9 @@ CRITICAL<br>
 	
 	
 	
-		var/coolant_tempdisplay="[floor(associated_reactor.coolant.temperature)]K"
-		var/reactor_tempdisplay="[floor(associated_reactor.temperature)]K"
-		var/reactor_highesttempdisplay="[floor(highesttemp)]K"
+		var/coolant_tempdisplay="[floor(associated_reactor.coolant.temperature)][emagged ? "°" : ""]K"
+		var/reactor_tempdisplay="[floor(associated_reactor.temperature)][emagged ? "°" : ""]K"
+		var/reactor_highesttempdisplay="[floor(highesttemp)][emagged ? "°" : ""]K"
 		if(tempdisplaymode==1) //C
 			coolant_tempdisplay="[floor(associated_reactor.coolant.temperature-273.15)]°C"
 			reactor_tempdisplay="[floor(associated_reactor.temperature-273.15)]°C"
@@ -439,9 +438,9 @@ CRITICAL<br>
 			reactor_tempdisplay="[floor(1.8*associated_reactor.temperature-459.67)]°F"
 			reactor_highesttempdisplay="[floor(1.8*highesttemp-459.67)]°F"
 		else if(tempdisplaymode==3) //R (because muh absolute scale)
-			coolant_tempdisplay="[floor(1.8*associated_reactor.coolant.temperature)]R"
-			reactor_tempdisplay="[floor(1.8*associated_reactor.temperature)]R"
-			reactor_highesttempdisplay="[floor(1.8*highesttemp)]R"
+			coolant_tempdisplay="[floor(1.8*associated_reactor.coolant.temperature)][emagged ? "°" : ""]R"
+			reactor_tempdisplay="[floor(1.8*associated_reactor.temperature)][emagged ? "°" : ""]R"
+			reactor_highesttempdisplay="[floor(1.8*highesttemp)][emagged ? "°" : ""]R"
 		
 	
 		aychteeemel_string={"<table style='border-collapse:initial;'>

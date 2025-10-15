@@ -334,3 +334,10 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/croesus_vault
 	file_path = "maps/randomvaults/croesus_vault.dmm"
 	spawn_cost = 3
+
+/area/vault/forsakenreactor
+	name = "Forsaken Reactor"
+
+/datum/map_element/vault/forsakenreactor
+	file_path = "maps/randomvaults/forsakenreactor.dmm"
+	spawn_cost = 2

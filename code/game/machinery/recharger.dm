@@ -27,7 +27,7 @@
 /obj/machinery/recharger/New()
 	. = ..()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/recharger,
+		/obj/item/weapon/circuitboard/small/recharger,
 		/obj/item/weapon/stock_parts/scanning_module,
 		/obj/item/weapon/stock_parts/capacitor,
 		/obj/item/weapon/stock_parts/capacitor

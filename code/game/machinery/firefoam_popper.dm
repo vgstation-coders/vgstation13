@@ -16,7 +16,7 @@
 
 /obj/item/firefoam_popper/New()
 	contained_parts = newlist(
-		/obj/item/weapon/circuitboard/firefoam_popper,
+		/obj/item/weapon/circuitboard/small/firefoam_popper,
 		/obj/item/weapon/stock_parts/scanning_module,
 		/obj/item/weapon/stock_parts/manipulator,
 		/obj/item/weapon/stock_parts/manipulator
@@ -96,7 +96,7 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/firefoam_popper,
+		/obj/item/weapon/circuitboard/small/firefoam_popper,
 		/obj/item/weapon/stock_parts/scanning_module,
 		/obj/item/weapon/stock_parts/manipulator,
 		/obj/item/weapon/stock_parts/manipulator
@@ -210,11 +210,10 @@
 		alpha = 0
 		pixel_y = 4
 
-/obj/item/weapon/circuitboard/firefoam_popper
-	name = "Circuit Board (Firefoam Popper)"
+/obj/item/weapon/circuitboard/small/firefoam_popper
+	name = "Mini Circuit Board (Firefoam Popper)"
 	desc = "A circuit board used to run a firefoam popper."
 	build_path = /obj/machinery/firefoam_popper
-	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;"
 	req_components = list (
 							/obj/item/weapon/stock_parts/scanning_module = 1,

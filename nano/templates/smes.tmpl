@@ -20,8 +20,8 @@
 		Charge Mode:
 	</div>
 	<div class="itemContent">
-		{{:helper.link('Auto', 'refresh', {'cmode' : 'auto'}, data.chargeMode == 2 ? 'selected' : null)}}
-		{{:helper.link('Manual', 'refresh', {'cmode' : 'manual'}, data.chargeMode == 1 ? 'selected' : null)}}
+		{{:helper.link('Always', 'refresh', {'cmode' : 'auto'}, data.chargeMode == 2 ? 'selected' : null)}}
+		{{:helper.link('Exact', 'refresh', {'cmode' : 'manual'}, data.chargeMode == 1 ? 'selected' : null)}}
 		{{:helper.link('Off', 'close', {'cmode' : 'off'}, data.chargeMode ? null : 'selected')}}
 		&nbsp;
 		{{if data.charging}}

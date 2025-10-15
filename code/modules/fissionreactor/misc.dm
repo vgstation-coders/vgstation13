@@ -1,6 +1,7 @@
 /*
 in this file:
 boxes used for cargo orders to make my life easier.
+other cargo stuff related to reactors
 */
 
 
@@ -217,4 +218,39 @@ boxes used for cargo orders to make my life easier.
 			machine = new/obj/machinery/fissionreactor/fissionreactor_fuelrod(src)
 		if("Fuel rod assembly (shielded)")
 			machine = new/obj/machinery/fissionreactor/fissionreactor_fuelrod/inert(src)
+
+
+
+/obj/item/weapon/fuelrod/challenge
+	name="ancient fuel reservoir"
+	desc="The labeling is faded and torn, and is mostly illegible. All that remains is a pictogram with a radiation symbol, a skull, and a man running."
+	icon='icons/obj/fissionreactor/items.dmi'
+	icon_state="challenge_fuelrod"
+	units_of_storage=100
+
+/obj/item/weapon/fuelrod/challenge/update_icon()
+	..()
+	icon_state="challenge_fuelrod"
+
+/obj/item/weapon/fuelrod/challenge/New()
+	..()
+	fueldata.add_shit_to(AGENT_W,units_of_storage,fueldata.fuel)
+	fueldata.rederive_stats()
+	fueldata.life=1
+
+/obj/structure/closet/crate/secure/loot/ultramegameltdown_reactor_fuel
+	name = "abandoned crate"
+	desc = "The exterior is adorned in tiny spikes and is engraved with text in multiple languages as well as several pictograms with various lifeforms, some of which appear dead, alongside multiple warning symbols.\n\n Whatever it is that's inside, it must be quite honorable."
+	icon_state = "ayysecurecrate"
+	icon_opened = "ayysecurecrateopen"
+	icon_closed = "ayysecurecrate"
+	locked = 0
+	
+/obj/structure/closet/crate/secure/loot/ultramegameltdown_reactor_fuel/New()
+	..()
+	icon_state = "ayysecurecrate"
+	icon_opened = "ayysecurecrateopen"
+	icon_closed = "ayysecurecrate"
+	new/obj/item/weapon/fuelrod/challenge(src)
+
 

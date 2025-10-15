@@ -1781,9 +1781,10 @@ var/proccalls = 1
 #define CUSTOM_VENDING_MAX_SLOGANS	5
 
 #define MACHINE "machine"
+#define MACHINE_SMALL "small machine"
 #define COMPUTER "computer"
 #define EMBEDDED_CONTROLLER "embedded controller"
-#define OTHER "other"
+#define OTHER "non-standard" //has to be named this so it shows up in the message in a way that makes sense
 #define MACHINE_REINFORCED "reinforced machine"
 
 // Bedsheet altering
@@ -1968,6 +1969,11 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define HEX_MODE_GUARD	 1
 #define HEX_MODE_ESCORT	 2
 
+//Druggy overlay time to fade in/out
+#define DRUGGY_ALPHA		(min(255, 75 + (3 * druggy)))
+#define DRUGGY_FADE_IN		(40)
+#define DRUGGY_FADE_OUT		(80)
+
 //Particles system defines
 #define PS_STEAM			"Steam"
 #define PS_SMOKE			"Smoke"
@@ -1990,6 +1996,8 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PS_SACRED_FLAME		"Sacred Flame"
 #define PS_SACRED_FLAME2	"Sacred Flame2"
 #define PS_BIBLE_PAGE		"Bible Page"
+#define PS_SHADOW_SMOKE		"Shadow Smoke"
+#define PS_SHADOW_SMOKE2	"Shadow Smoke2"
 
 //Particles variable defines
 #define PVAR_SPAWNING	"spawning"

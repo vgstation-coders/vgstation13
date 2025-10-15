@@ -422,16 +422,23 @@
 		return src.attack_hand(user)
 	..(user)
 
-/obj/structure/closet/attack_animal(mob/living/simple_animal/user as mob)
-	if(user.environment_smash_flags & SMASH_CONTAINERS)
-//		user.do_attack_animation(src, user) //This will look stupid
+/obj/structure/closet/attack_animal(var/mob/living/user)
+	if(istype(user,/mob/living/simple_animal))
+		var/mob/living/simple_animal/M=user
+		if(M.environment_smash_flags & SMASH_CONTAINERS)
+			visible_message("<span class='warning'>[user] destroys the [src]. </span>")
+			broken = 1
+			if(has_electronics)
+				dump_electronics()
+			dump_contents()
+			qdel(src)
+	else if(istype(user,/mob/living/complex_animal))
 		visible_message("<span class='warning'>[user] destroys the [src]. </span>")
 		broken = 1
 		if(has_electronics)
 			dump_electronics()
 		dump_contents()
 		qdel(src)
-
 // this should probably use dump_contents()
 /obj/structure/closet/blob_act()
 	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)

@@ -582,6 +582,11 @@
 
 		SendAdminGhostTo(T,null)
 
+	else if(href_list["artifactpanel_spawnsmall"])
+		if(!check_rights(R_ADMIN))
+			return
+		debug_spawn_find()
+
 	else if(href_list["bodyarchivepanel_focus"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -3241,6 +3246,12 @@
 		if(!check_rights(R_SPAWN))
 			return
 		return create_mob(usr)
+
+	else if(href_list["create_megabeast"])
+		if(!check_rights(0))
+			return
+		var/datum/D = locate(href_list["create_megabeast"])
+		return create_megabeast(D)
 
 	else if(href_list["object_list"])			//this is the laggiest thing ever
 		if(!check_rights(R_SPAWN))
