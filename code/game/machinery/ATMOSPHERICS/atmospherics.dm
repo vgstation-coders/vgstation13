@@ -173,7 +173,7 @@ Pipelines + Other Objects -> Pipe network
 			var/list/node_gases = connected_node.get_visible_gases()
 			if(node_gases)
 				for(var/nodegas in node_gases)
-					nodecon.underlays += image('icons/obj/atmospherics/gas_overlays.dmi',src,nodegas,layer,con_dir)
+					nodecon.underlays += image('icons/obj/atmospherics/gas_overlays.dmi',src,nodegas,nodecon.layer,con_dir)
 			underlays += nodecon
 		if (!adjacent_procd && connected_node.update_icon_ready && !(istype(connected_node,/obj/machinery/atmospherics/pipe/simple)))
 			connected_node.update_icon(1)
