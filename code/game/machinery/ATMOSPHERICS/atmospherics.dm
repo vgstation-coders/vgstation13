@@ -172,10 +172,17 @@ Pipelines + Other Objects -> Pipe network
 			nodecon.plane = node_plane()
 			nodecon.layer = node_layer()
 			if(nodecon.alpha < 255)
-				var/list/node_gases = connected_node.get_visible_gases()
-				if(node_gases)
-					for(var/nodegas in node_gases)
-						nodecon.underlays += image('icons/obj/atmospherics/gas_overlays.dmi',src,nodegas,nodecon.layer,con_dir)
+				var/should_show_gases = TRUE
+				if(istype(connected_node, /obj/machinery/atmospherics/pipe))
+					var/obj/machinery/atmospherics/pipe/connected_pipe = connected_node
+					if(!connected_pipe.parent)
+						should_show_gases = FALSE
+
+				if(should_show_gases)
+					var/list/node_gases = connected_node.get_visible_gases()
+					if(node_gases)
+						for(var/nodegas in node_gases)
+							nodecon.underlays += image('icons/obj/atmospherics/gas_overlays.dmi',src,nodegas,nodecon.layer,con_dir)
 			underlays += nodecon
 		if (!adjacent_procd && connected_node.update_icon_ready && !(istype(connected_node,/obj/machinery/atmospherics/pipe/simple)))
 			connected_node.update_icon(1)
