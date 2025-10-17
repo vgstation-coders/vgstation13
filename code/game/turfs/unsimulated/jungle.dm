@@ -144,7 +144,6 @@ var/list/foliage_replacments=list(
 	variance = 100
 	min_icon_states = 1
 	max_icon_states = 4
-	turf_flags = HAS_EDGES
 	edge_flags = ALL_EDGES
 	edge_priority = GRASS_EDGE_PRIORITY
 	turf_speed_multiplier=1.0 // tall grass.

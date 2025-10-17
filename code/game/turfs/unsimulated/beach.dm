@@ -7,18 +7,14 @@
 	footstep_sound = sounds_sand
 	footstep_sound_barefoot = sounds_sand
 	footstep_sound_claw = sounds_sand
-	
+
 /turf/unsimulated/beach/sand
 	name = "Sand"
 	icon_state = "sand"
 
-/turf/unsimulated/beach/sand/spread/New()
-	..()
-	var/image/img = image('icons/turf/rock_overlay.dmi', "sand_overlay",layer = SIDE_LAYER)
-	img.pixel_x = -4*PIXEL_MULTIPLIER
-	img.pixel_y = -4*PIXEL_MULTIPLIER
-	img.plane = BELOW_TURF_PLANE
-	overlays += img
+/turf/unsimulated/beach/sand/spread
+	edge_flags = EDGE_CARDINAL
+	edge_priority = SAND_EDGE_PRIORITY
 
 /turf/unsimulated/beach/coastline
 	name = "Coastline"

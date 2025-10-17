@@ -13,7 +13,7 @@
 
 /turf/unsimulated/wall/isSmoothableNeighbor(atom/A, bordercheck)
 	return smooths && istype(A, src.type)
-	
+
 /turf/unsimulated/wall/canSmoothWith()
 	return smooths
 
@@ -40,14 +40,8 @@
 	name = "unnaturally hard ice wall"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "snow_rock"
-
-/turf/unsimulated/wall/rock/ice/New()
-	..()
-	var/image/img = image('icons/turf/rock_overlay.dmi', "snow_rock_overlay",layer = SIDE_LAYER)
-	img.pixel_x = -4*PIXEL_MULTIPLIER
-	img.pixel_y = -4*PIXEL_MULTIPLIER
-	img.plane = BELOW_TURF_PLANE
-	overlays += img
+	edge_flags = EDGE_CARDINAL
+	edge_priority = ROCK_EDGE_PRIORITY
 
 /turf/unsimulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
@@ -115,9 +109,7 @@ var/icon/current_round_splashscreen
 	opacity = 1
 	density = 1
 	smooths = 0
-
-/turf/unsimulated/wall/evil/New()
-	..()
-
-	if(prob(80))
-		icon_state = "evilwall_[rand(1,8)]"
+	base_icon_state = "evilwall_"
+	min_icon_states = 2
+	max_icon_states = 8
+	variance = 80

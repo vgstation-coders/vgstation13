@@ -9,7 +9,7 @@
 	return edges
 
 /turf/proc/update_edges()
-	if(!(turf_flags & HAS_EDGES))
+	if(!(edge_flags & EDGE_CARDINAL))
 		return
 	var/list/dirs = edge_check()
 	for(var/direction in dirs)

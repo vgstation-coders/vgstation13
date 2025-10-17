@@ -43,7 +43,6 @@
 	min_icon_states = 2
 	max_icon_states = 4
 	variance = 50
-	turf_flags = HAS_EDGES
 	edge_priority = GRASS_EDGE_PRIORITY
 	edge_flags = ALL_EDGES
 
@@ -56,17 +55,15 @@
 /turf/unsimulated/floor/mars
 	name = "surface"
 	icon_state = "ironsand1"
+	base_icon_state = "ironsand"
+	min_icon_states = 2
+	max_icon_states = 15
+	variance = 30
 
 	carbon_dioxide = MOLES_CO2MARS
 	nitrogen = MOLES_N2MARS
 	oxygen = 0
 	temperature = T20C
-
-/turf/unsimulated/floor/mars/New()
-	..()
-
-	if(prob(30))
-		icon_state = "ironsand[rand(1,15)]"
 
 /turf/unsimulated/floor/mars/air
 	carbon_dioxide = 0
@@ -103,13 +100,16 @@
 
 /turf/unsimulated/floor/brimstone
 	icon_state = "ironsand1"
+	base_icon_state = "ironsand"
+	min_icon_states = 2
+	max_icon_states = 15
+	variance = 30
 
 /turf/unsimulated/floor/brimstone/New()
 	..()
 	if(Holiday == APRIL_FOOLS_DAY)
 		ChangeTurf(/turf/unsimulated/floor/snow) // hell froze over
 		return
-	icon_state = "ironsand[rand(1,15)]"
 	overlays.Cut()
 	var/image/fire = image('icons/effects/fire.dmi', "[rand(1,3)]")
 	fire.blend_mode = BLEND_ADD

@@ -116,6 +116,11 @@
 	footstep_sound = sounds_floor
 	footstep_sound_barefoot = sounds_floor_barefoot
 	footstep_sound_claw = sounds_floor_claw
+	if(!base_icon_state)
+		base_icon_state = icon_state
+	pick_icon_state()
+
+/turf/proc/pick_icon_state()
 	if(base_icon_state && min_icon_states && max_icon_states && prob(variance))
 		icon_state = "[base_icon_state][rand(min_icon_states,max_icon_states)]"
 
@@ -132,7 +137,7 @@
 				qdel(edge)
 	if(opacity)
 		has_opaque_atom = TRUE
-	if(turf_flags & HAS_EDGES)
+	if(edge_flags & EDGE_CARDINAL)
 		update_edges()
 
 /turf/ex_act(severity)
