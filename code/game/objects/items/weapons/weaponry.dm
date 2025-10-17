@@ -319,6 +319,7 @@
 	siemens_coefficient = 1
 	w_class = W_CLASS_MEDIUM
 	attack_verb = list("smacks")
+	var/qualitybuff = 1
 	var/list/blades = list(
 		"blade_1" = null,
 		"blade_2" = null,
@@ -366,8 +367,8 @@
 		name = "macuahuitl"
 		desc = "Though the blades are sharp, they are also fragile."
 		hitsound = "sound/weapons/bloodyslice.ogg"
-		force = blades_left * 2
-		sharpness = 2
+		force = blades_left * 2 * qualitybuff
+		sharpness = 2 * qualitybuff
 		attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cleaves")
 		sharpness_flags = SHARP_BLADE | INSULATED_EDGE
 	else
@@ -384,7 +385,7 @@
 	if(blades.len)
 		for(var/i in blades)
 			var/obj/item/weapon/shard/S = blades[i]
-			var/break_chance = 15
+			var/break_chance = 15 / qualitybuff
 			if(istype(S, /obj/item/weapon/shard/plasma))
 				break_chance = round(break_chance * 0.66)
 			if(prob(break_chance))
@@ -462,6 +463,10 @@
 //		base_overlay.plane = FLOAT_PLANE
 //		overlays += base_overlay
 
+/obj/item/weapon/macuahuitl/flawless
+	name = "perfect macuahuitl"
+	desc = "This wooden plank has been expertly carved by master craftsmen, holding blades in such a way to increase damage, and reduce wear." 
+	qualitybuff = 3
 
 /obj/item/weapon/hammer
 	name = "smithing hammer"
