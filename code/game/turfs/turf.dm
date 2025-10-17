@@ -488,6 +488,8 @@
 	registered_events = old_registered_events
 	if(density != old_density)
 		densityChanged()
+	for(var/turf/adj in range(1,src))
+		adj.update_edges()
 	if(istype(loc,/area/surface/jungle) && !istype(original_area,/area/surface/jungle) ) //outdoor areas need to be illuminated.
 		if(.)
 			var/turf/NewTurf=.
