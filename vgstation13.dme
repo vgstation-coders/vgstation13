@@ -62,6 +62,7 @@
 #include "__DEFINES\pai_software.dm"
 #include "__DEFINES\pipes.dm"
 #include "__DEFINES\planes+layers.dm"
+#include "__DEFINES\planes+masters.dm"
 #include "__DEFINES\power.dm"
 #include "__DEFINES\preferences.dm"
 #include "__DEFINES\profile.dm"
