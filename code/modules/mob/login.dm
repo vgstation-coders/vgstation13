@@ -76,6 +76,7 @@
 	client.initialize_fakecamera_planemaster()
 	update_perception()
 	create_lighting_planes()
+	create_other_planemasters()
 	regular_hud_updates()
 
 	update_antag_huds()

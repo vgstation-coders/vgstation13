@@ -1,0 +1,191 @@
+/* copy-pasted from planes+layers.dm because relevant I guess
+
+What are Planesmasters?
+	Planesmasters render all objects of the plane on the one object.
+	Planesmasters, when in the sight of a player, will have its appearance properties (for example, colour matrices, alpha, transform, etc)
+	applied to all the other objects in the plane. This is all client sided.
+	Usually you would want to add the planesmaster as an invisible image in the client's screen.
+
+What can I do with Planesmasters?
+	You can: Make certain players not see an entire plane,
+	Make an entire plane have a certain colour matrices,
+	Make an entire plane transform in a certain way,
+	Make players see a plane which is hidden to normal players - I intend to implement this with the antag HUDs for example.
+	Planesmasters can be used as a neater way to deal with client images or potentially to do some neat things
+*/
+
+/obj/abstract/screen/plane_master
+	appearance_flags = PLANE_MASTER
+	screen_loc = "CENTER,CENTER"
+	icon_state = "blank"
+	globalscreen = 1
+
+// CLICKMASTER
+// Singleton implementation
+// One planemaster for everybody, everybody always has it, they gain it during mob/login()
+/obj/abstract/screen/plane_master/clickmaster
+	plane = BASE_PLANE
+	mouse_opacity = 0
+
+var/obj/abstract/screen/plane_master/clickmaster/clickmaster = new()
+
+/obj/abstract/screen/plane_master/clickmaster_dummy
+	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
+	alpha = 0
+	appearance_flags = 0
+	plane = BASE_PLANE
+
+var/obj/abstract/screen/plane_master/clickmaster_dummy/clickmaster_dummy = new()
+
+// NOIR
+// Immutable, so we use a singleton implementation
+// (only one planemaster for everybody, they gain or lose the unique planemaster depending on whether they want the effect or not)
+/obj/abstract/screen/plane_master/noir_master
+	plane = NOIR_BLOOD_PLANE
+	color = list("#0000",
+				 "#0000",
+				 "#0000",
+				 "#000F",
+				 "#A110")//turns everything in the plane to the color human blood. unfortunate side effect is the loss of detail on gibs
+	appearance_flags = NO_CLIENT_COLOR|PLANE_MASTER//NO_CLIENT_COLOR sadly doesn't prevent the blood itself from turning grey, which is why it has to be recolored with the above matrix
+
+/obj/abstract/screen/plane_master/noir_dummy
+	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
+	alpha = 0
+	appearance_flags = 0
+	plane = NOIR_BLOOD_PLANE
+
+var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /obj/abstract/screen/plane_master/noir_dummy())
+
+// GHOST PLANEMASTER
+// One planemaster for each client, which they gain during mob/login()
+// By default their planemaster has no changes, if we modify a person's planemaster, it will affect only them
+/obj/abstract/screen/plane_master/ghost_planemaster
+	plane = GHOST_PLANE
+
+/obj/abstract/screen/plane_master/ghost_planemaster_dummy
+	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
+	alpha = 0
+	appearance_flags = 0
+	plane = GHOST_PLANE
+
+/client/proc/initialize_ghost_planemaster()
+	//We want to explicitly reset the planemaster's visibility on login() so if you toggle ghosts while dead you can still see cultghosts if revived etc.
+	if(ghost_planemaster)
+		screen -= ghost_planemaster
+		qdel(ghost_planemaster)
+	if(ghost_planemaster_dummy)
+		screen -= ghost_planemaster_dummy
+		qdel(ghost_planemaster_dummy)
+	ghost_planemaster = new /obj/abstract/screen/plane_master/ghost_planemaster
+	screen |= ghost_planemaster
+	ghost_planemaster_dummy = new /obj/abstract/screen/plane_master/ghost_planemaster_dummy
+	screen |= ghost_planemaster_dummy
+
+// OVERDARKNESS PLANEMASTER
+// Used to move the BYOND darkness plane from SEE_BLACKNESS to a different plane so it covers things on desired planes above 0
+/obj/abstract/screen/plane_master/overdark_planemaster
+	plane = 0
+	render_target = "*overdark"
+
+var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster = new()
+
+/obj/abstract/screen/plane_master/overdark_planemaster_target
+	appearance_flags = 0
+	plane = BASE_PLANE
+	mouse_opacity = 0
+	screen_loc = "SOUTHWEST"
+	render_source = "*overdark"
+
+var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planemaster_target = new()
+
+/obj/abstract/screen/plane_master/fakecamera_screen_planemaster
+	plane = FAKE_CAMERA_SCREEN_PLANE
+	alpha = 0
+
+/obj/abstract/screen/plane_master/fakecamera_screen_planemaster_dummy
+	alpha = 0
+	appearance_flags = 0
+	plane = FAKE_CAMERA_SCREEN_PLANE
+
+/obj/abstract/screen/plane_master/fakecamera_button_planemaster
+	plane = FAKE_CAMERA_BUTTONS_PLANE
+	alpha = 0
+
+/client/proc/initialize_fakecamera_planemaster()
+	if(fakecamera_screen_planemaster)
+		screen -= fakecamera_screen_planemaster
+		qdel(fakecamera_screen_planemaster)
+	if(fakecamera_screen_planemaster_dummy)
+		screen -= fakecamera_screen_planemaster_dummy
+		qdel(fakecamera_screen_planemaster_dummy)
+	if(fakecamera_button_planemaster)
+		screen -= fakecamera_button_planemaster
+		qdel(fakecamera_button_planemaster)
+	fakecamera_screen_planemaster = new /obj/abstract/screen/plane_master/fakecamera_screen_planemaster
+	screen |= fakecamera_screen_planemaster
+	fakecamera_screen_planemaster_dummy = new /obj/abstract/screen/plane_master/fakecamera_screen_planemaster_dummy
+	screen |= fakecamera_screen_planemaster_dummy
+	fakecamera_button_planemaster = new /obj/abstract/screen/plane_master/fakecamera_button_planemaster
+	screen |= fakecamera_button_planemaster
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Adding planemasters for every other relevant planes so we can easily add effects over the whole screen
+
+/mob
+	var/list/other_planemasters = list()
+
+/mob/proc/create_other_planemasters()
+	for (var/planemaster in other_planemasters)
+		var/obj/abstract/screen/plane_master/PM = other_planemasters[planemaster]
+		client.screen -= PM
+		other_planemasters -= planemaster
+		qdel(PM)
+
+	var/static/list/planes_without_dedicated_planemasters = list(
+		"ABOVE_PARALLAX_PLANE"	= ABOVE_PARALLAX_PLANE,
+		"BELOW_PLATING_PLANE"	= BELOW_PLATING_PLANE,
+		"BELOW_PLATING_PLANE"	= PLATING_PLANE,
+		"ABOVE_PLATING_PLANE"	= ABOVE_PLATING_PLANE,
+		"BELOW_TURF_PLANE"		= BELOW_TURF_PLANE,
+		"TURF_PLANE"			= TURF_PLANE,
+		"GLASSTILE_PLANE"		= GLASSTILE_PLANE,
+		"ABOVE_TURF_PLANE"		= ABOVE_TURF_PLANE,
+		"ABOVE_TURF_PLANE"		= HIDING_MOB_PLANE,
+		"OBJ_PLANE"				= OBJ_PLANE,
+		"LYING_MOB_PLANE"		= LYING_MOB_PLANE,
+		"LYING_HUMAN_PLANE"		= LYING_HUMAN_PLANE,
+		"ABOVE_OBJ_PLANE"		= ABOVE_OBJ_PLANE,
+		"HUMAN_PLANE"			= HUMAN_PLANE,
+		"MOB_PLANE"				= MOB_PLANE,
+		"ABOVE_HUMAN_PLANE"		= ABOVE_HUMAN_PLANE,
+		"BLOB_PLANE"			= BLOB_PLANE,
+		"EFFECTS_PLANE"			= EFFECTS_PLANE,
+		"GAS_PLANE"				= GAS_PLANE,
+		"ABOVE_LIGHTING_PLANE"	= ABOVE_LIGHTING_PLANE,
+		)
+
+	for (var/orphan_plane in planes_without_dedicated_planemasters)
+		var/obj/abstract/screen/plane_master/PM = new(client)
+		PM.plane = planes_without_dedicated_planemasters[orphan_plane]
+		other_planemasters[orphan_plane] += PM
+		client.screen += PM
+
+/mob/proc/test_nearsightedness()
+	if (!client)
+		return
+
+	var/nearsightedness = filter(type="angular_blur", name="nearsightedness", x=0, y=0, size=1, offset=0)
+
+	client.parallax_spacemaster.filters += nearsightedness
+	client.parallax_master.filters += nearsightedness
+	client.parallax_dustmaster.filters += nearsightedness
+
+	for (var/planemaster in other_planemasters)
+		var/obj/abstract/screen/plane_master/PM = other_planemasters[planemaster]
+		PM.filters += nearsightedness
+
+	client.fakecamera_button_planemaster.filters += nearsightedness
+	client.fakecamera_screen_planemaster.filters += nearsightedness
+
+	lighting_planemaster.filters += nearsightedness
