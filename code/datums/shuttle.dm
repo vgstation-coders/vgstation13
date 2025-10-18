@@ -666,6 +666,7 @@
 
 
 	var/list/turfs_to_update = list()
+	var/list/corner_turfs = list()
 
 	//Move turfs
 	for(var/datum/coords/C in new_turfs)
@@ -682,6 +683,10 @@
 		if(!new_turf)
 			message_admins("ERROR when moving [src.name] ([src.type]) - failed to get new turf at [C.x_pos];[C.y_pos];[new_center.z]")
 			continue
+
+		// stop the shuttle corners from stealing turfs
+		if(locate(/obj/structure/shuttle/diag_wall) in old_turf)
+			corner_turfs[new_turf] = 1
 
 		var/turf/displace_to = locate(C.x_pos,throwy,new_center.z)
 		for(var/atom/movable/AM as mob|obj in new_turf.contents)
@@ -709,7 +714,7 @@
 
 		linked_area.contents.Add(new_turf)
 		new_turf.change_area(old_area,linked_area)
-		if(!istype(old_turf, /turf/space))
+		if(isshuttleturf(old_turf))
 			new_turf.ChangeTurf(old_turf.type, allow = 1)
 		new_turfs[C] = new_turf
 
@@ -823,6 +828,30 @@
 
 		if(istype(old_turf,/turf/space))
 			old_turf.lighting_clear_overlay() //A horrible band-aid fix for lighting overlays appearing over space
+
+	// shuttle corner adjustments
+	for(var/turf/diag_turf in corner_turfs)
+		var/obj/structure/shuttle/diag_wall/wall = locate(/obj/structure/shuttle/diag_wall) in diag_turf
+		if(!wall)
+			continue
+
+		var/area/turf_area = get_area(diag_turf)
+		wall.plane = isopensurface(turf_area) ? EFFECTS_PLANE : OBJ_PLANE //prevents weather overlays from appearing over diagonal walls on procgen planets and snaxi
+
+		if(istype(diag_turf, /turf/space))
+			var/turf/space/nextturf = null
+			for(var/direction in list(NORTH, SOUTH, EAST, WEST))
+				var/turf/check_turf = get_step(diag_turf, direction)
+				if(check_turf && istype(check_turf, /turf/space))
+					nextturf = check_turf
+					break
+
+			if(nextturf)
+				diag_turf.ChangeTurf(nextturf.type, allow = 1)
+				diag_turf.icon = nextturf.icon
+				diag_turf.icon_state = nextturf.icon_state
+			else
+				diag_turf.ChangeTurf(/turf/space, allow = 1)
 
 	//Update doors
 	if(turfs_to_update.len)
