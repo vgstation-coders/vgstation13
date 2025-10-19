@@ -246,6 +246,8 @@
 	if(flags & HEAR_ALWAYS)
 		virtualhearer = new /mob/virtualhearer(src)
 
+	perception_filters = new
+
 	update_colour(0)
 
 	register_event(/event/z_transition, src, nameof(src::update_multi_z_verbs()))

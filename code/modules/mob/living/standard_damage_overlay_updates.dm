@@ -95,9 +95,11 @@
 			clear_fullscreen("blind")
 		var/impaired_vision = get_impaired_vision_range()
 		if(impaired_vision)
-			overlay_fullscreen("nearsighted", /obj/abstract/screen/fullscreen/nearsighted, impaired_vision)
+			enable_nearsightedness(impaired_vision)
+			//overlay_fullscreen("nearsighted", /obj/abstract/screen/fullscreen/nearsighted, impaired_vision)
 		else
-			clear_fullscreen("nearsighted")
+			disable_nearsightedness()
+			//clear_fullscreen("nearsighted")
 		if(eye_blurry)
 			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
 		else

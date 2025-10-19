@@ -564,9 +564,10 @@
 				if(0)
 					user.simple_message("<span class='warning'>Your eyes burn.</span>",\
 						"<span class='warning'>Some tears fall down from your eyes.</span>")
-					E.damage += rand(2, 4)
 					if(E.damage > 10)
-						E.damage += rand(4,10)
+						E.damage += rand(3, 6)
+					else
+						E.damage += rand(2, 4)
 				if(-1)
 					var/obj/item/clothing/to_blame = H.head //blame the hat
 					if(!to_blame || (istype(to_blame) && H.glasses && H.glasses.eyeprot < to_blame.eyeprot)) //if we don't have a hat, the issue is the glasses. Otherwise, if the glasses are worse, blame the glasses
@@ -582,12 +583,12 @@
 				user.simple_message("<span class='warning'>You go blind!</span>","<span class='warning'>Somebody turns the lights off.</span>")
 				user.sdisabilities |= BLIND
 			else if (E.damage >= E.min_bruised_damage)
-				user.simple_message("<span class='warning'>You go blind!</span>","<span class='warning'>Somebody turns the lights off.</span>")
-				user.eye_blind = 5
+				user.simple_message("<span class='warning'>Your vision is getting darker!</span>","<span class='warning'>Somebody turns the lights off.</span>")
+				//user.eye_blind = 5
 				user.eye_blurry = 5
-				user.disabilities |= NEARSIGHTED
-				spawn(100)
-					user.disabilities &= ~NEARSIGHTED
+				//user.disabilities |= NEARSIGHTED
+				//spawn(100)
+				//	user.disabilities &= ~NEARSIGHTED
 
 /obj/item/tool/weldingtool/update_icon()
 	..()

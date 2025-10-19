@@ -130,16 +130,25 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 	screen |= fakecamera_button_planemaster
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Adding planemasters for every other relevant planes so we can easily add effects over the whole screen
+//Adding planemasters for every other relevant planes so we can easily add filters over the whole screen
 
 /mob
-	var/list/other_planemasters = list()
+	var/datum/perception_filters/perception_filters = null
 
-/mob/proc/create_other_planemasters()
-	for (var/planemaster in other_planemasters)
-		var/obj/abstract/screen/plane_master/PM = other_planemasters[planemaster]
+//Storing those in a datum to not crowd up the View Variable window even further
+/datum/perception_filters
+	var/list/orphan_planemasters = list()
+	var/list/perception_planemasters = list()
+	var/list/perception_filters = list()
+	var/list/misc_planemasters = list()
+
+//Creating new planemasters for every plane that doesn't already have a dedicated planemaster
+//BE SURE TO UPDATE THIS LIST IF YOU ADD OR REMOVE OTHER PLANEMASTERS
+/mob/proc/create_orphan_planemasters()
+	for (var/planemaster in perception_filters.orphan_planemasters)
+		var/obj/abstract/screen/plane_master/PM = perception_filters.orphan_planemasters[planemaster]
 		client.screen -= PM
-		other_planemasters -= planemaster
+		perception_filters.orphan_planemasters -= planemaster
 		qdel(PM)
 
 	var/static/list/planes_without_dedicated_planemasters = list(
@@ -151,7 +160,7 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 		"TURF_PLANE"			= TURF_PLANE,
 		"GLASSTILE_PLANE"		= GLASSTILE_PLANE,
 		"ABOVE_TURF_PLANE"		= ABOVE_TURF_PLANE,
-		"ABOVE_TURF_PLANE"		= HIDING_MOB_PLANE,
+		"HIDING_MOB_PLANE"		= HIDING_MOB_PLANE,
 		"OBJ_PLANE"				= OBJ_PLANE,
 		"LYING_MOB_PLANE"		= LYING_MOB_PLANE,
 		"LYING_HUMAN_PLANE"		= LYING_HUMAN_PLANE,
@@ -168,24 +177,79 @@ var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planem
 	for (var/orphan_plane in planes_without_dedicated_planemasters)
 		var/obj/abstract/screen/plane_master/PM = new(client)
 		PM.plane = planes_without_dedicated_planemasters[orphan_plane]
-		other_planemasters[orphan_plane] += PM
+		perception_filters.orphan_planemasters[orphan_plane] = PM
 		client.screen += PM
 
-/mob/proc/test_nearsightedness()
-	if (!client)
-		return
+	var/obj/abstract/screen/plane_master/PM = new(client)
+	PM.plane = IMPAIRED_PLANE
+	perception_filters.misc_planemasters["IMPAIRED_PLANE"] = PM
+	client.screen += PM
+	PM.filters += filter(type="radial_blur", name="impaired_radial", x = 0, y = 0, size = 0, offset = 340)
 
-	var/nearsightedness = filter(type="angular_blur", name="nearsightedness", x=0, y=0, size=1, offset=0)
 
-	client.parallax_spacemaster.filters += nearsightedness
-	client.parallax_master.filters += nearsightedness
-	client.parallax_dustmaster.filters += nearsightedness
+//Adding all the planemasters we want to add filters on top to a single list so it's easier to manipulate
+/mob/proc/list_perception_planemasters()
+	perception_filters.perception_planemasters.len = 0
 
-	for (var/planemaster in other_planemasters)
-		var/obj/abstract/screen/plane_master/PM = other_planemasters[planemaster]
-		PM.filters += nearsightedness
+	for (var/plane in perception_filters.orphan_planemasters)
+		var/P = perception_filters.orphan_planemasters[plane]
+		perception_filters.perception_planemasters += P
 
-	client.fakecamera_button_planemaster.filters += nearsightedness
-	client.fakecamera_screen_planemaster.filters += nearsightedness
+	perception_filters.perception_planemasters += client.parallax_spacemaster.filters
+	perception_filters.perception_planemasters += client.parallax_master.filters
+	perception_filters.perception_planemasters += client.parallax_dustmaster.filters
+	perception_filters.perception_planemasters += client.fakecamera_button_planemaster.filters
+	perception_filters.perception_planemasters += client.fakecamera_screen_planemaster.filters
 
-	lighting_planemaster.filters += nearsightedness
+
+/mob/proc/init_perception_filters()
+	perception_filters.perception_filters.len = 0
+
+	//Nearsightedness
+	var/nearsightedness_angular = filter(type="angular_blur", name="nearsightedness_angular", x = 0, y = 0, size = 0, offset = 256)
+	perception_filters.perception_filters += "nearsightedness_angular"
+
+	var/nearsightedness_radial = filter(type="radial_blur", name="nearsightedness_radial", x = 0, y = 0, size = 0, offset = 256)
+	perception_filters.perception_filters += "nearsightedness_radial"
+
+	for (var/obj/planemaster in perception_filters.perception_planemasters)
+		planemaster.filters += nearsightedness_angular
+		planemaster.filters += nearsightedness_radial
+
+	overlay_fullscreen("impaired_crit", /obj/abstract/screen/fullscreen/impaired_crit)//displayed right from the start, and scaled up so that its out of view
+
+/mob/proc/remove_perception_filters()
+	for (var/obj/planemaster in perception_filters.perception_planemasters)
+		for (var/filter in perception_filters.perception_filters)
+			planemaster.filters -= filter
+
+var/static/nearsightedness_offsets = list(192, 128, 64, 32, 16, 8, 4, 2, 1, 0)
+var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
+
+/mob/proc/enable_nearsightedness(var/_severity)
+	var/_offset = nearsightedness_offsets[_severity]
+
+	for (var/obj/planemaster in perception_filters.perception_planemasters)
+		var/F1 = planemaster.filters["nearsightedness_angular"]
+		animate(F1, size = 0.5, offset = _offset, time = 20)
+		spawn(1)//Don't remove or THE GAME WILL EXPLODE
+			var/F2 = planemaster.filters["nearsightedness_radial"]
+			animate(F2, size = 0.01, offset = _offset, time = 20)
+
+	var/_scale = impaired_scale[_severity]
+	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
+	var/matrix/M = matrix()
+	M.Scale(_scale, _scale)
+	animate(screen, transform = M, time = 20)
+
+/mob/proc/disable_nearsightedness()
+	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
+	var/matrix/M = matrix()
+	M.Scale(40, 40)
+	animate(screen, transform = M, time = 20)
+	for (var/obj/planemaster in perception_filters.perception_planemasters)
+		var/F1 = planemaster.filters["nearsightedness_angular"]
+		animate(F1, size = 0, offset = 256, time = 20)
+		spawn(1)//Don't remove or THE GAME WILL EXPLODE
+			var/F2 = planemaster.filters["nearsightedness_radial"]
+			animate(F2, size = 0, offset = 256, time = 20)
