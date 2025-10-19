@@ -116,3 +116,8 @@
 /turf/unsimulated/floor/brimstone/Destroy()
 	overlays.Cut()
 	..()
+
+
+/turf/unsimulated/floor/brimstone/mob_life_effects(mob/living/affected)
+	affected.FireBurn(11, 9001, ONE_ATMOSPHERE) // lag free weird way of doing it
+	affected.ignite() // ffffFIRE!!!! FIRE!!! FIRE!!

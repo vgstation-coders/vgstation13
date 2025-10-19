@@ -96,6 +96,9 @@
 	floor_variance = 40
 	max_icon_states = 12
 
+/turf/unsimulated/floor/planetary/toxic/mob_life_effects(mob/living/affected)
+	affected.apply_radiation(0.5, RAD_EXTERNAL)
+
 /turf/unsimulated/floor/planetary/toxic/New()
 	..()
 	if(prob(floor_variance))

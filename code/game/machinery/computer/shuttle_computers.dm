@@ -329,8 +329,9 @@
 	if(!selected_port && shuttle.docking_ports.len >= 2)
 		selected_port = pick(shuttle.docking_ports - shuttle.current_port)
 
-	// Close shuttle doors before departure
-	shuttle.close_all_doors()
+	// Close shuttle doors before departure only when traveling to or from procgen levels
+	if(selected_port.z == map.zProcGen || shuttle.linked_area.z == map.zProcGen)
+		shuttle.close_all_doors()
 
 	//Send a message to the shuttle to move
 	shuttle.travel_to(selected_port, src, user)

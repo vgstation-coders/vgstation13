@@ -836,3 +836,6 @@
 
 /turf/proc/OnEmptyReagents()
 	turf_reagent_amount = null
+
+/turf/proc/mob_life_effects(mob/living/affected) //apply effects to mobs standing on this turf every life() tick
+	return
