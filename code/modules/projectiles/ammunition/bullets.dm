@@ -92,7 +92,7 @@
 	caliber = POINT380
 	projectile_type = /obj/item/projectile/bullet/auto380/rubber
 	icon_state = "s-r-casing"
-	
+
 /obj/item/ammo_casing/c380auto/pepperball
 	desc = "A .380AUTO pepperball bullet casing."
 	caliber = POINT380
@@ -140,23 +140,23 @@
 	projectile_type = /obj/item/projectile/bullet/blank
 	starting_materials = list(MAT_IRON = 125)
 	var/building = null
-	
+
 /obj/item/ammo_casing/shotgun/blank/attack_self(var/mob/living/user)
 	..()
 	if(building)
 		to_chat(user,"<span class='notice'>You empty out \the [src].</span>")
 		building = null
-	
+
 /obj/item/ammo_casing/shotgun/blank/attackby(obj/item/W, mob/user)
 	..()
 	if(building)
 		if(building == "salt" && istype(W,/obj/item/weapon/paper))
 			if(user.drop_item(W, src))
-				user.create_in_hands(src, /obj/item/ammo_casing/shotgun/rocksalt, W, vismsg = "<span class='notice'>You stuff \the [W] into \the [src], finishing the new shell.</span>")			
+				user.create_in_hands(src, /obj/item/ammo_casing/shotgun/rocksalt, W, vismsg = "<span class='notice'>You stuff \the [W] into \the [src], finishing the new shell.</span>")
 		else
 			to_chat(user,"<span class='warning'>\The [src] already has [building] in it.</span>")
 			return
-	else 
+	else
 		if(istype(W,/obj/item/weapon/reagent_containers))
 			var/obj/item/weapon/reagent_containers/R = W
 			if(R.reagents.has_reagent(SODIUMCHLORIDE) || R.reagents.has_reagent(HOLYSALTS))
@@ -171,7 +171,7 @@
 					to_chat(user,"<span class='notice'>You add [building] to \the [src].</span>")
 					return
 				to_chat(user,"<span class='notice'>You need more salt to do this.</span>")
-	
+
 /obj/item/ammo_casing/shotgun/beanbag
 	name = "beanbag shell"
 	desc = "A weak beanbag shell."
@@ -234,14 +234,14 @@
 	icon_state = "sbshell"
 	projectile_type = /obj/item/projectile/bullet/superbeanbag
 	starting_materials = list(MAT_IRON = 250)
-	
+
 /obj/item/ammo_casing/shotgun/concussiveblast
 	name = "concussive blast shell"
 	desc = "A less-lethal 12 gauge shell that produces a bright flash and loud noise shortly after leaving the muzzle."
 	icon_state = "cbshell"
 	projectile_type = /obj/item/projectile/bullet/concussiveblast
 	starting_materials = list(MAT_IRON = 250)
-	
+
 /obj/item/ammo_casing/shotgun/pepperball
 	name = "pepperball shell"
 	desc = "A less-lethal 12 gauge shell containing a number of small pepperball rounds."
@@ -253,9 +253,9 @@
 	name = "duckshot shell"
 	desc = "A novelty 12 gauge shell containing a number of plastic ducks and BBs. Warning: not a toy!"
 	icon_state = "dsshell"
-	projectile_type = /obj/item/projectile/bullet/buckshot/duckshot 
-	starting_materials = list(MAT_IRON = 250)	
-	
+	projectile_type = /obj/item/projectile/bullet/buckshot/duckshot
+	starting_materials = list(MAT_IRON = 250)
+
 /obj/item/ammo_casing/a762
 	desc = "A 7.62x51mm bullet casing."
 	caliber = POINT762
@@ -293,3 +293,9 @@
 	desc = "An invisible bullet casing, it's hard to tell if it's been spent or not."
 	projectile_type = /obj/item/projectile/bullet/invisible
 	icon_state = null
+
+/obj/item/ammo_casing/fragment
+	desc = "A 12 gauge shell filled with fragments, designed for a exosuit shotgun. Usable in any shotgun, but is less accurate."
+	caliber = GAUGE12
+	projectile_type = /obj/item/projectile/bullet/buckshot/fragments
+	w_type = RECYK_METAL

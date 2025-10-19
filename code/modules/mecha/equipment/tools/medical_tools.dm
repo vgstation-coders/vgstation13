@@ -1,17 +1,20 @@
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper
 	name = "\improper Mounted Sleeper"
 	desc = "Mounted Sleeper. (Can be attached to: Medical Exosuits)"
-	icon = 'icons/obj/Cryogenic2.dmi'
-	icon_state = "sleeper_0"
+	icon_state = "mecha_sleeper"
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=3"
 	energy_drain = 20
+	equip_slot = MECHA_BACK
 	range = MELEE
 	reliability = 1000
 	equip_cooldown = 20
 	var/mob/living/carbon/occupant = null
 	var/datum/global_iterator/pr_mech_sleeper
 	var/inject_amount = 10
+	var/take_types = list(/obj/structure/table, /obj/machinery/optable, /obj/structure/bed, /obj/machinery/sleeper, /obj/machinery/atmospherics/unary/cryo_cell)
 	salvageable = 0
+	equip_type = EQUIP_UTILITY
+	step_delay = 20
 
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/can_attach(obj/mecha/medical/M)
 	if(..())
@@ -37,8 +40,14 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/action(var/mob/living/carbon/target)
-	if(!action_checks(target))
+	..()
+	if(!action_checks(target, TRUE))
 		return
+	if(occupant && isturf(target) && chassis.Adjacent(target) && !target.density)
+		occupant_message("Ejecting [occupant] to selected location...")
+	if(do_after_cooldown(chassis.occupant, 1) && occupant)
+		go_out(target)
+	return
 	if(!istype(target))
 		return
 	if(target.abiotic())
@@ -79,10 +88,14 @@
 		msg_admin_attack("[chassis.occupant] has loaded [target] into a mecha-sleeper. ([formatJumpTo(chassis)])")
 	return
 
-/obj/item/mecha_parts/mecha_equipment/tool/sleeper/proc/go_out()
+/obj/item/mecha_parts/mecha_equipment/tool/sleeper/proc/go_out(var/turf/target_turf)
 	if(!occupant)
 		return
-	occupant.forceMove(get_turf(src))
+
+	if(!target_turf)
+		target_turf = get_turf(src)
+
+	occupant.forceMove(target_turf)
 	occupant_message("[occupant] ejected. Life support functions disabled.")
 	log_message("[occupant] ejected. Life support functions disabled.")
 	occupant.reset_view()
@@ -94,9 +107,7 @@
 	occupant = null
 	pr_mech_sleeper.stop()
 	set_ready_state(1)
-
 	chassis.empty_bad_contents()
-
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/detach()
@@ -229,7 +240,7 @@
 	if(!S.chassis)
 		S.set_ready_state(1)
 		return stop()
-	if(!S.chassis.has_charge(S.energy_drain))
+	if(!S.chassis.has_charge(S.energy_drain * S.chassis.equipment_power_mult))
 		S.set_ready_state(1)
 		S.log_message("Deactivated.")
 		S.occupant_message("[S] deactivated - no power.")
@@ -245,7 +256,7 @@
 	M.AdjustKnockdown(-4)
 	if(M.reagents.get_reagent_amount(INAPROVALINE) < 5)
 		M.reagents.add_reagent(INAPROVALINE, 5)
-	S.chassis.use_power(S.energy_drain)
+	S.chassis.use_power(S.energy_drain * S.chassis.equipment_power_mult)
 	S.update_equip_info()
 	return
 
@@ -257,6 +268,8 @@
 	var/obj/structure/cable/last_piece
 	var/obj/item/stack/cable_coil/cable
 	var/max_cable = 1000
+	equip_type = EQUIP_UTILITY
+	step_delay = 20
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/New()
 	cable = new(src)
@@ -282,6 +295,7 @@
 	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/action(var/obj/item/stack/cable_coil/target)
+	..()
 	if(!action_checks(target))
 		return
 	var/result = load_cable(target)
@@ -405,8 +419,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun
 	name = "\improper Exosuit-Mounted Syringe Gun"
 	desc = "Exosuit-mounted chem synthesizer with syringe gun. Reagents inside are held in stasis, so no reactions will occur. (Can be attached to: Medical Exosuits)"
-	icon = 'icons/obj/gun.dmi'
-	icon_state = "syringegun"
+	icon_state = "mecha_syringe_gun"
 	var/list/syringes
 	var/list/known_reagents
 	var/list/processed_reagents
@@ -416,9 +429,13 @@
 	energy_drain = 10
 	var/mode = 0 //0 - fire syringe, 1 - analyze reagents.
 	var/datum/global_iterator/mech_synth/synth
+	equip_slot = MECHA_BACK
+	need_colorize = FALSE
 	range = MELEE|RANGED
 	equip_cooldown = 10
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_BIOTECH + "=4;" + Tc_MAGNETS + "=4;" + Tc_PROGRAMMING + "=3"
+	equip_type = EQUIP_UTILITY
+	step_delay = 20
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/New()
 	..()
@@ -460,6 +477,7 @@
 	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/action(atom/movable/target)
+	..()
 	if(!action_checks(target))
 		return
 	if(istype(target,/obj/item/weapon/reagent_containers/syringe))
@@ -477,7 +495,7 @@
 		occupant_message("<span class=\"alert\">No available reagents to load syringe with.</span>")
 		return
 	set_ready_state(0)
-	chassis.use_power(energy_drain)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	var/turf/curloc = get_turf(chassis)
 	var/turf/trg = get_turf(target)
 	var/obj/item/weapon/reagent_containers/syringe/S = syringes[1]
@@ -670,8 +688,8 @@
 /datum/global_iterator/mech_synth/process(var/obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/S)
 	if(!S.chassis)
 		return stop()
-	var/energy_drain = S.energy_drain*10
-	if(!S.processed_reagents.len || S.reagents.total_volume >= S.reagents.maximum_volume || !S.chassis.has_charge(energy_drain))
+	var/energy_drain = S.energy_drain * S.chassis.equipment_power_mult * 10
+	if(!S.processed_reagents.len || S.reagents.total_volume >= S.reagents.maximum_volume || !S.chassis.has_charge(energy_drain * S.chassis.equipment_power_mult))
 		S.occupant_message("<span class=\"alert\">Reagent processing stopped.</a>")
 		S.log_message("Reagent processing stopped.")
 		return stop()

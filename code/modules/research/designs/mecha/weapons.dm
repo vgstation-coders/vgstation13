@@ -15,8 +15,20 @@
 	desc = "Allows for the construction of Ultra AC 2."
 	id = "mech_lmg"
 	build_type = MECHFAB
-	req_tech = list(Tc_COMBAT = 1)
+	req_tech = list(Tc_COMBAT = 4)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg
+	category = "Exosuit_Weapons"
+	locked = 1
+	req_lock_access = list(access_armory)
+	materials = list(MAT_IRON=10000)
+
+/datum/design/mech_carbine
+	name = "Weapon Design Exosuit-mounted carbine"
+	desc = "Allows for the construction of exosuit-mounted carbine."
+	id = "mech_carbine"
+	build_type = MECHFAB
+	req_tech = list(Tc_COMBAT = 4)
+	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/carbine
 	category = "Exosuit_Weapons"
 	locked = 1
 	req_lock_access = list(access_armory)
@@ -27,7 +39,7 @@
 	desc = "Allows for the construction of PBT \"Pacifier\" mounted taser."
 	id = "mech_taser"
 	build_type = MECHFAB
-	req_tech = list(Tc_COMBAT = 1)
+	req_tech = list(Tc_COMBAT = 2)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/energy/taser
 	category = "Exosuit_Weapons"
 	locked = 1
@@ -122,6 +134,18 @@
 	req_lock_access = list(access_armory)
 	materials = list(MAT_IRON=10000)
 
+/datum/design/mech_pulse
+	name = "Weapon Design (eZ-13 MK2 heavy pulse rifle)"
+	desc = "Allows for the construction of eZ-13 MK2 heavy pulse rifle."
+	id = "mech_pulse"
+	build_type = MECHFAB
+	req_tech = list(Tc_COMBAT = 7, Tc_NANOTRASEN = 5, Tc_MATERIALS = 9, Tc_POWERSTORAGE = 9, Tc_BLUESPACE = 10)
+	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/energy/pulse
+	category = "Exosuit_Weapons"
+	locked = 1
+	req_lock_access = list(access_armory)
+	materials = list(MAT_IRON=10000,MAT_URANIUM=10000,MAT_PLASMA=10000,MAT_DIAMOND=5000,MAT_PHAZON=10000)
+
 /datum/design/mech_ion_cannon
 	name = "Weapon Design (mkIV Ion Heavy Cannon)"
 	desc = "Allows for the construction of the mkIV Ion Heavy Cannon."
@@ -152,7 +176,7 @@
 	id = "clusterbang_launcher"
 	build_type = MECHFAB
 	req_tech = list(Tc_COMBAT = 5, Tc_MATERIALS = 5, Tc_SYNDICATE = 3)
-	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/limited
+	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang
 	category = "Exosuit_Weapons"
 	locked = 1
 	req_lock_access = list(access_armory)

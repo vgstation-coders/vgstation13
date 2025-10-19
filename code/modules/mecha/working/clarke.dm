@@ -5,12 +5,11 @@
 	initial_icon = "clarke"
 	step_in = 1
 	step_energy_drain = 2
-	max_temperature = 100000
-	health = 100
+	health = 75
 	wreckage = /obj/effect/decal/mecha_wreckage/clarke
-	max_equip = 4
 	cargo_capacity = 20
 	rad_protection = 100
+	max_temperature = 10000
 	var/image/thruster_overlay
 	var/overlay_applied = FALSE
 	var/obj/machinery/portable_atmospherics/scrubber/mech/scrubber
@@ -23,6 +22,25 @@
 		"veteranclarke"
 	)
 	paintable = 1
+	cargo_capacity = 20
+	penetration_reduction = 1
+	damage_minimum = 0
+	weight_max = 500
+
+	starting_components = list(
+		/obj/item/mecha_parts/component/hull/atmos,
+		/obj/item/mecha_parts/component/actuator,
+		/obj/item/mecha_parts/component/armor/lightweight,
+		/obj/item/mecha_parts/component/gas,
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
+		)
+
+	max_hull_equip = 1
+	max_weapon_equip = 0
+	max_utility_equip = 4
+	max_universal_equip = 0
+	max_special_equip = 1
 
 /obj/mecha/working/clarke/New()
 	..()

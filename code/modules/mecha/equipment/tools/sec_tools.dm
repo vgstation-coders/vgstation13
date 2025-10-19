@@ -10,6 +10,9 @@
 	var/list/cells = list("cell1" = null, "cell2" = null)
 	var/datum/global_iterator/pr_mech_jail
 	salvageable = 0
+	equip_type = EQUIP_UTILITY
+	has_equip_overlay = FALSE
+	step_delay = 40
 
 /obj/item/mecha_parts/mecha_equipment/tool/jail/can_attach(obj/mecha/combat/G)
 	if(..())
@@ -56,6 +59,7 @@
 	return allfree
 
 /obj/item/mecha_parts/mecha_equipment/tool/jail/action(var/mob/living/carbon/target)
+	..()
 	if(!action_checks(target))
 		return
 	if(!istype(target))
@@ -65,9 +69,6 @@
 		return
 	if(!CellFree())
 		occupant_message("The jail cells are already occupied")
-		return
-	if(!(target.handcuffed || target.legcuffed))
-		occupant_message("[target] must be restrained before they can be properly placed in the holding cell.")
 		return
 	for(var/mob/living/carbon/slime/M in range(1,target))
 		if(M.Victim == target)
@@ -120,7 +121,7 @@
 	prisoner.Stun(10)
 	prisoner.Knockdown(10)
 	prisoner.apply_effect(10, STUTTER)
-	chassis.use_power(energy_drain)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	playsound(chassis, 'sound/weapons/Egloves.ogg', 50, 1)
 	occupant_message("[prisoner] has been subdued.")
 	log_message("[prisoner] has been subdued.")
@@ -162,7 +163,7 @@
 	if(!J.chassis)
 		J.set_ready_state(1)
 		return stop()
-	if(!J.chassis.has_charge(J.energy_drain))
+	if(!J.chassis.has_charge(J.energy_drain * J.chassis.equipment_power_mult))
 		J.set_ready_state(1)
 		J.log_message("Deactivated.")
 		J.occupant_message("[J] deactivated - no power.")
@@ -171,7 +172,7 @@
 		return stop()
 	if(J.AllFree())
 		return stop()
-	J.chassis.use_power(J.energy_drain)
+	J.chassis.use_power(J.energy_drain * J.chassis.equipment_power_mult)
 	J.update_equip_info()
 	return
 

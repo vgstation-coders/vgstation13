@@ -7,6 +7,8 @@
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=3;"
 	is_activateable = FALSE
 	var/obj/item/weapon/storage/mechrack/rack
+	equip_type = EQUIP_HULL
+	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/passive/rack/New()
 	..()
@@ -51,6 +53,8 @@
 	icon_state = "mecha_runningboard"
 	origin_tech = Tc_MATERIALS + "=6;"
 	is_activateable = FALSE
+	equip_type = EQUIP_HULL
+	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/passive/runningboard/can_attach(obj/mecha/working/W)
 	if(..())
@@ -67,24 +71,54 @@
 	is_activateable = FALSE
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=2;"
 	starting_materials = list(MAT_IRON = 112500, MAT_GLASS = 500)
-	
+	equip_type = EQUIP_SPECIAL
+	has_equip_overlay = FALSE
+
 /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit/can_attach(obj/mecha/working/W)
 	if(!..())
 		return 0
 	if(istype(W,/obj/mecha/working/ripley))
 		return 1
-	
+
 /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit/attach(obj/mecha/working/ripley/R)
 	..()
 	R.mech_sprites = list("killdozer","killdozer_clean")
 	R.icon_state = "killdozer"
 	R.initial_icon = "killdozer"
 	R.silicon_icon_state = "killdozer"
-	R.damage_absorption = list("brute"=0.01,"fire"=0.05,"bullet"=0.01,"laser"=0.05,"energy"=0.05,"bomb"=0.1) //good fucking luck killing it without ions
-	R.step_in = 2.5 //make it as slow as the mk2 ripley
-	R.fast_pressure_step_in = 2.5
-	R.slow_pressure_step_in = 4
+//	R.damage_absorption = list("brute"=0.01,"fire"=0.05,"bullet"=0.01,"laser"=0.05,"energy"=0.05,"bomb"=0.1) //good fucking luck killing it without ions
+	R.step_in = 3//make it as slow as the mk2 ripley
+	R.fast_pressure_step_in = 3 // no atmos buffs
+	R.slow_pressure_step_in = 3
 	R.enclosed = TRUE //so bullets no longer hit the pilot
+
+	R.max_hull_equip = 1
+	R.max_weapon_equip = 3
+	R.max_utility_equip = 1
+	R.max_universal_equip = 0
+	R.max_special_equip = 1
+
+	R.weight_max = 3500 // it doesn't
+	R.damage_minimum = 10
+
+	R.starting_components = list(
+		/obj/item/mecha_parts/component/hull/durable/killdozer,
+		/obj/item/mecha_parts/component/actuator/durable,
+		/obj/item/mecha_parts/component/armor/killdozer,
+		/obj/item/mecha_parts/component/gas/reinforced,
+		/obj/item/mecha_parts/component/electrical/durable,
+		/obj/item/mecha_parts/component/coupler/durable
+		)
+
+	for(var/slot in chassis.internal_components)
+		var/obj/item/mecha_parts/component/C = chassis.internal_components[slot]
+		if(istype(C, /obj/item/mecha_parts/component))
+			qdel(C)
+
+	for(var/path in R.starting_components)
+		var/obj/item/mecha_parts/component/C = new path(src)
+		C.attach(R)
+		R.mech_parts.Add(C)
 
 /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit/detach()
 	return 0

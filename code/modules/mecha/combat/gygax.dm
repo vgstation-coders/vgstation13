@@ -3,18 +3,16 @@
 	name = "Gygax"
 	icon_state = "gygax"
 	initial_icon = "gygax"
-	step_in = 3
+	base_color = "#ED5F3B"
+	step_in = 2
 	dir_in = 1 //Facing North.
-	health = 300
-	deflect_chance = 15
-	damage_absorption = list("brute"=0.75,"fire"=1,"bullet"=0.8,"laser"=0.7,"energy"=0.85,"bomb"=1)
-	max_temperature = 25000
+	health = 250
+	deflect_chance = 0
+	damage_absorption = list("brute"=0.9,"fire"=1,"bullet"=1,"laser"=0.9,"energy"=1,"bomb"=1)
 	infra_luminosity = 6
-	var/overload = 0
 	var/overload_coeff = 2
 	wreckage = /obj/effect/decal/mecha_wreckage/gygax
 	internal_damage_threshold = 35
-	max_equip = 3
 	paintable = 1
 	mech_sprites = list(
 		"gygax",
@@ -23,24 +21,64 @@
 		"pobeda"
 	)
 
+	damage_minimum = 0
+	weight_max = 550
+	penetration_reduction = 3 // blocks .380
+
+	max_hull_equip = 1
+	max_weapon_equip = 2
+	max_utility_equip = 2
+	max_universal_equip = 1
+	max_special_equip = 1
+
+	starting_components = list(
+		/obj/item/mecha_parts/component/hull,
+		/obj/item/mecha_parts/component/actuator,
+		/obj/item/mecha_parts/component/armor/marshal,
+		/obj/item/mecha_parts/component/gas,
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
+		)
+
+
 /obj/mecha/combat/gygax/dark
 	desc = "A lightweight exosuit used by Nanotrasen Death Squads. A significantly upgraded Gygax security mech."
 	name = "Dark Gygax"
 	icon_state = "darkgygax"
 	initial_icon = "darkgygax"
-	health = 400
-	deflect_chance = 25
-	damage_absorption = list("brute"=0.6,"fire"=0.8,"bullet"=0.6,"laser"=0.5,"energy"=0.65,"bomb"=0.8)
-	max_temperature = 45000
+	base_color = "#4E4E4E"
+	health = 300
+	deflect_chance = 10
+	damage_absorption = list("brute"=0.8,"fire"=1,"bullet"=0.8,"laser"=0.8,"energy"=0.8,"bomb"=1)
+	max_temperature = 10000 // Syndie & Centcom mechs get some forgiveness here.
 	overload_coeff = 1
 	wreckage = /obj/effect/decal/mecha_wreckage/gygax/dark
-	max_equip = 4
 	step_energy_drain = 5
 	mech_sprites = list(
 		"darkgygax",
 	)
 	paintable = 0
 	cell_type = /obj/item/weapon/cell/hyper
+
+	penetration_reduction = 5
+	weight_max = 800
+	emp_gear_proof = TRUE
+
+	max_hull_equip = 2
+	max_weapon_equip = 2
+	max_utility_equip = 2
+	max_universal_equip = 1
+	max_special_equip = 1
+
+	starting_components = list(
+		/obj/item/mecha_parts/component/hull,
+		/obj/item/mecha_parts/component/actuator/hispeed,
+		/obj/item/mecha_parts/component/armor/marshal/reinforced,
+		/obj/item/mecha_parts/component/gas,
+		/obj/item/mecha_parts/component/electrical,
+		/obj/item/mecha_parts/component/coupler
+		)
+
 
 /obj/mecha/combat/gygax/New()
 	..()
@@ -52,6 +90,8 @@
 	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang(src)
 	new /obj/item/mecha_parts/mecha_equipment/teleporter(src)
 	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
+	UpdateIcon()
+	max_ammo()
 	return
 
 /spell/mech/gygax/overload
@@ -73,6 +113,7 @@
 		Gygax.step_in = initial(Gygax.step_in)
 		Gygax.step_energy_drain = initial(Gygax.step_energy_drain)
 		Gygax.occupant_message("<span class='notice'>You disable leg actuators overload.</span>")
+		Gygax.weight_tolerance = initial(Gygax.weight_tolerance)
 		flick("[Gygax.initial_icon]-gofast-aoff",Gygax)
 		Gygax.icon_state = Gygax.initial_icon
 	else
@@ -80,6 +121,7 @@
 		Gygax.step_in = min(1, round(Gygax.step_in/2))
 		Gygax.step_energy_drain = Gygax.step_energy_drain*Gygax.overload_coeff
 		Gygax.occupant_message("<span class='red'>You enable leg actuators overload.</span>")
+		Gygax.weight_tolerance = 1
 		flick("[Gygax.initial_icon]-gofast-aon",Gygax)
 		Gygax.icon_state = Gygax.initial_icon + "-gofast"
 	Gygax.log_message("Toggled leg actuators overload.")

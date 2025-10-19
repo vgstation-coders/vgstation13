@@ -7,10 +7,12 @@
 	equip_cooldown = 15
 	energy_drain = 10
 	var/dam_force = 20
+	equip_type = EQUIP_UTILITY
+	step_delay = 50
 
-/obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/can_attach(obj/mecha/working/M as obj)
+/obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/can_attach(obj/mecha/M as obj)
 	if(..())
-		if(istype(M))
+		if(istype(M, /obj/mecha/working) || istype(M, /obj/mecha/medical))
 			return 1
 	return 0
 
@@ -177,6 +179,8 @@
 	energy_drain = 10
 	force = 15
 	var/dig_walls = 0 //probably a better way to do this through bitflags but I don't really know how
+	equip_type = EQUIP_UTILITY
+	step_delay = 50
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill/proc/effects_pre(atom/target)
 	playsound(target, 'sound/items/surgicaldrill.ogg', 100, 1)
@@ -283,7 +287,7 @@
 			chassis.visible_message("<span class='red'><b>[chassis] drills into \the [target]!</b></span>", "You hear a drill breaking something.")
 			target.mech_drill_act(2)
 
-	chassis.use_power(energy_drain)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill/can_attach(obj/mecha/M as obj)
@@ -312,6 +316,9 @@
 	equip_cooldown = 20
 	energy_drain = 15
 	var/dam_force = 20
+	equip_type = EQUIP_UTILITY
+	has_equip_overlay = FALSE
+	step_delay = 50
 
 /obj/item/mecha_parts/mecha_equipment/tool/scythe/can_attach(obj/mecha/working/M as obj)
 	if(..())
@@ -322,7 +329,6 @@
 /obj/item/mecha_parts/mecha_equipment/tool/scythe/action(atom/target)
 	if(!action_checks(target))
 		return
-
 	if(istype(target, /obj/machinery/portable_atmospherics/hydroponics))
 		set_ready_state(0)
 		if(do_after_cooldown(target, 1/2))
@@ -374,7 +380,7 @@
 			do_after_cooldown()
 	else
 		return 0
-	chassis.use_power(energy_drain)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher
@@ -385,6 +391,9 @@
 	equip_cooldown = 15
 	energy_drain = 0
 	range = MELEE|RANGED
+	need_colorize = FALSE
+	equip_type = EQUIP_UTILITY
+	step_delay = 25
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/can_attach(obj/mecha/working/M)
 	if(..())
@@ -470,7 +479,9 @@
 	energy_drain = 75
 	var/wait = 0
 	var/datum/effect/system/trail/ion_trail
-
+	equip_type = EQUIP_HULL
+	has_equip_overlay = FALSE
+	step_delay = 100
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/can_attach(obj/mecha/M as obj)
 	if(!(locate(src.type) in M.equipment) && !M.proc_res["dyndomove"])
@@ -531,7 +542,7 @@
 					B.forceMove(chassis.loc)
 	if(move_result)
 		wait = 1
-		chassis.use_power(energy_drain)
+		chassis.use_power(energy_drain * chassis.equipment_power_mult)
 		if(!chassis.pr_inertial_movement.active())
 			chassis.pr_inertial_movement.start(list(chassis,direction))
 		else
@@ -543,7 +554,7 @@
 /obj/item/mecha_parts/mecha_equipment/jetpack/action_checks()
 	if(equip_ready || wait)
 		return 0
-	if(energy_drain && !chassis.has_charge(energy_drain))
+	if(energy_drain && !chassis.has_charge(energy_drain * chassis.equipment_power_mult))
 		return 0
 	if(crit_fail)
 		return 0
@@ -582,6 +593,8 @@
 	var/obj/item/device/rcd/rpd/mech/RPD
 	var/obj/item/device/rcd/mech/RCD
 	var/obj/item/tool/wrench/socket/sock
+	equip_type = EQUIP_UTILITY
+	step_delay = 100
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/New()
 	..()
@@ -618,9 +631,9 @@
 	var/t = R.selected.attack(target, chassis.occupant)
 	if(!t) // No errors
 		if(device)
-			chassis.use_power(energy_drain/5)
+			chassis.use_power(energy_drain * chassis.equipment_power_mult/5)
 		else
-			chassis.use_power(energy_drain)
+			chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	else
 		occupant_message("<span class='warning'>\The [src]'s error light flickers[istext(t) ? ": [t]" : "."]</span>")
 
@@ -654,7 +667,10 @@
 	origin_tech = Tc_BLUESPACE + "=10"
 	equip_cooldown = 150
 	energy_drain = 1000
+	equip_slot = MECHA_BACK
 	range = RANGED
+	equip_type = EQUIP_UTILITY
+	step_delay = 100
 
 /obj/item/mecha_parts/mecha_equipment/teleporter/action(atom/target)
 	if(!action_checks(target) || src.loc.z == map.zCentcomm)
@@ -662,7 +678,7 @@
 	var/turf/T = get_turf(target)
 	if(T)
 		set_ready_state(0)
-		chassis.use_power(energy_drain)
+		chassis.use_power(energy_drain * chassis.equipment_power_mult)
 		do_teleport(chassis, T)
 		do_after_cooldown()
 	return
@@ -675,6 +691,8 @@
 	equip_cooldown = 50
 	energy_drain = 300
 	range = RANGED
+	equip_type = EQUIP_UTILITY
+	step_delay = 100
 
 
 /obj/item/mecha_parts/mecha_equipment/wormhole_generator/action(atom/target)
@@ -704,7 +722,7 @@
 	var/turf/target_turf = pick(L)
 	if(!target_turf)
 		return
-	chassis.use_power(energy_drain)
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
 	set_ready_state(0)
 	var/obj/effect/portal/P = new /obj/effect/portal(get_turf(target))
 	P.target = target_turf
@@ -723,7 +741,10 @@
 	origin_tech = Tc_BLUESPACE + "=2;" + Tc_MAGNETS + "=3"
 	equip_cooldown = 10
 	energy_drain = 100
+	equip_slot = MECHA_BACK
 	range = MELEE|RANGED
+	equip_type = EQUIP_SPECIAL
+	step_delay = 100
 	var/atom/movable/locked
 	var/mode = 1 //1 - gravsling 2 - gravpush
 
@@ -731,7 +752,6 @@
 	var/fire_delay = 10 //Used to prevent spam-brute against humans.
 
 /obj/item/mecha_parts/mecha_equipment/gravcatapult/action(atom/movable/target)
-
 	if(world.time >= last_fired + fire_delay)
 		last_fired = world.time
 	else
@@ -757,7 +777,7 @@
 					locked = null
 					send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
 					set_ready_state(0)
-					chassis.use_power(energy_drain)
+					chassis.use_power(energy_drain * chassis.equipment_power_mult)
 					do_after_cooldown()
 				else
 					locked = null
@@ -780,7 +800,7 @@
 						step_away(A,target)
 						sleep(2)
 			set_ready_state(0)
-			chassis.use_power(energy_drain)
+			chassis.use_power(energy_drain * chassis.equipment_power_mult)
 			do_after_cooldown()
 	return
 
@@ -803,100 +823,94 @@
 		mode = 1
 		to_chat(chassis.occupant, "<span class='notice'>Pull mode activated.</span>")
 
-/obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster //what is that noise? A BAWWW from TK mutants.
-	name = "\improper Armor Booster Module (Close Combat Weaponry)"
-	desc = "Boosts exosuit armor against armed melee attacks. Requires energy to operate."
+/obj/item/mecha_parts/mecha_equipment/armor
+	name = "\improper Armor Booster Module (parent armor)"
+	desc = "Boosts exosuit armor against daddy issues."
 	icon_state = "mecha_abooster_ccw"
 	origin_tech = Tc_MATERIALS + "=3"
-	equip_cooldown = 10
 	energy_drain = 50
 	range = 0
+	has_equip_overlay = FALSE
+	is_activateable = 0
+	equip_type = EQUIP_HULL
+	step_delay = 100
 	var/deflect_coeff = 1.15
 	var/damage_coeff = 0.8
 	is_activateable = 0
 
-/obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/can_attach(obj/mecha/M as obj)
-	if(..())
-		if(!istype(M, /obj/mecha/combat/honker) && !istype(M, /obj/mecha/working/clarke))
-			if(!M.proc_res["dynattackby"])
-				return 1
-	return 0
-
-/obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/attach(obj/mecha/M as obj)
-	..()
-	chassis.proc_res["dynattackby"] = src
-	return
-
-/obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/detach()
-	chassis.proc_res["dynattackby"] = null
-	..()
-	return
-
-/obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/get_equip_info()
+/obj/item/mecha_parts/mecha_equipment/armor/get_equip_info()
 	if(!chassis)
 		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name]"
 
-/obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/mecha_parts/mecha_equipment/armor/anticcw_armor_booster //what is that noise? A BAWWW from TK mutants.
+	name = "\improper Armor Booster Module (Close Combat Weaponry)"
+	desc = "Boosts exosuit armor against armed melee attacks. Requires energy to operate."
+	icon_state = "mecha_abooster_ccw"
+
+/obj/item/mecha_parts/mecha_equipment/armor/anticcw_armor_booster/attach(obj/mecha/M as obj)
+	chassis.proc_res["dynattackby"] = src
+	..()
+	return
+
+/obj/item/mecha_parts/mecha_equipment/armor/anticcw_armor_booster/detach()
+	chassis.proc_res["dynattackby"] = null
+	set_ready_state(TRUE)
+	..()
+	return
+
+/obj/item/mecha_parts/mecha_equipment/armor/anticcw_armor_booster/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(!action_checks(user))
-		return chassis.dynattackby(W,user)
+		return FALSE
+
 	chassis.log_message("Attacked by [W]. Attacker - [user]")
+	user.delayNextAttack(8)
+	user.do_attack_animation(chassis, W)
+
 	if(prob(chassis.deflect_chance*deflect_coeff))
 		to_chat(user, "<span class='warning'>\The [W] bounces off [chassis] armor.</span>")
+		chassis.occupant_message("<span class='notice'>\The [W] bounces off [chassis.name].</span>")
 		chassis.log_append_to_last("Armor saved.")
 	else
 		chassis.occupant_message("<span class='red'><b>[user] hits [chassis] with [W].</b></span>")
-		user.visible_message("<span class='red'><b>[user] hits [chassis] with [W].</b></span>", "<span class='red'><b>You hit [src] with [W].</b></span>")
+		user.visible_message("<span class='red'><b>[user] hits [chassis] with [W].</b></span>", "<span class='red'><b>You hit [chassis] with [W].</b></span>")
 		chassis.take_damage(round(W.force*damage_coeff),W.damtype)
-		chassis.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-	set_ready_state(0)
-	chassis.use_power(energy_drain)
-	do_after_cooldown()
-	return
+		if(round(W.force*damage_coeff) > chassis.internal_damage_minimum)
+			chassis.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
+
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
+	return TRUE
 
 
-/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster
+/obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster
 	name = "\improper Armor Booster Module (Ranged Weaponry)"
 	desc = "Boosts exosuit armor against ranged attacks. Completely blocks taser shots. Requires energy to operate."
 	icon_state = "mecha_abooster_proj"
-	origin_tech = Tc_MATERIALS + "=4"
-	equip_cooldown = 10
-	energy_drain = 50
-	range = 0
-	var/deflect_coeff = 1.15
-	var/damage_coeff = 0.8
-	is_activateable = 0
 	var/list/never_deflect = list(
 		/obj/item/projectile/ion,
 	)
 
-/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/can_attach(obj/mecha/M as obj)
-	if(..())
-		if(!istype(M, /obj/mecha/combat/honker) && !istype(M, /obj/mecha/working/clarke))
-			if(!M.proc_res["dynbulletdamage"] && !M.proc_res["dynhitby"])
-				return 1
-	return 0
-
-/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/attach(obj/mecha/M as obj)
+/obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster/attach(obj/mecha/M as obj)
 	..()
 	chassis.proc_res["dynbulletdamage"] = src
 	chassis.proc_res["dynhitby"] = src
 	return
 
-/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/detach()
+/obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster/detach()
 	chassis.proc_res["dynbulletdamage"] = null
 	chassis.proc_res["dynhitby"] = null
+	set_ready_state(TRUE)
 	..()
 	return
 
-/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/get_equip_info()
+/obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster/get_equip_info()
 	if(!chassis)
-		return
+		return FALSE
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name]"
 
-/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/proc/dynbulletdamage(var/obj/item/projectile/Proj)
+/obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster/proc/dynbulletdamage(var/obj/item/projectile/Proj)
 	if(!action_checks(src))
-		return chassis.dynbulletdamage(Proj)
+		return FALSE
 	if(prob(chassis.deflect_chance*deflect_coeff) && !is_type_in_list(Proj, never_deflect))
 		chassis.occupant_message("<span class='notice'>The armor deflects incoming projectile.</span>")
 		chassis.visible_message("<span class='warning'>\The [chassis.name] armor deflects the projectile!</span>")
@@ -905,14 +919,12 @@
 		chassis.take_damage(round(Proj.damage*src.damage_coeff),Proj.flag)
 		chassis.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
 		Proj.on_hit(chassis)
-	set_ready_state(0)
-	chassis.use_power(energy_drain)
-	do_after_cooldown()
-	return
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
+	return TRUE
 
-/obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/proc/dynhitby(atom/movable/A)
+/obj/item/mecha_parts/mecha_equipment/armor/antiproj_armor_booster/proc/dynhitby(atom/movable/A)
 	if(!action_checks(A))
-		return chassis.dynhitby(A)
+		return FALSE
 	if(prob(chassis.deflect_chance*deflect_coeff) || istype(A, /mob/living) || istype(A, /obj/item/mecha_parts/mecha_tracking))
 		chassis.occupant_message("<span class='notice'>\The [A] bounces off the armor.</span>")
 		chassis.visible_message("\The [A] bounces off the [chassis] armor")
@@ -925,11 +937,8 @@
 		if(O.throwforce)
 			chassis.take_damage(round(O.throwforce*damage_coeff))
 			chassis.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-	set_ready_state(0)
-	chassis.use_power(energy_drain)
-	do_after_cooldown()
-	return
-
+	chassis.use_power(energy_drain * chassis.equipment_power_mult)
+	return TRUE
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid
 	name = "\improper Repair Droid Module"
@@ -939,10 +948,13 @@
 	equip_cooldown = 20
 	energy_drain = 100
 	range = 0
+	has_equip_overlay = FALSE
 	var/health_boost = 2
 	var/datum/global_iterator/pr_repair_droid
 	var/icon/droid_overlay
 	var/list/repairable_damage = list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH)
+	equip_type = EQUIP_UTILITY
+	step_delay = 40
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/New()
 	..()
@@ -1019,7 +1031,7 @@
 		RD.chassis.health += min(health_boost, initial(RD.chassis.health)-RD.chassis.health)
 		repaired = 1
 	if(repaired)
-		if(RD.chassis.use_power(RD.energy_drain))
+		if(RD.chassis.use_power(RD.energy_drain * RD.chassis.equipment_power_mult))
 			RD.set_ready_state(0)
 		else
 			stop()
@@ -1045,9 +1057,12 @@
 	equip_cooldown = 10
 	energy_drain = 0
 	range = 0
+	has_equip_overlay = FALSE
 	var/datum/global_iterator/pr_energy_relay
 	var/coeff = 100
 	var/list/use_channels = list(EQUIP,ENVIRON,LIGHT)
+	equip_type = EQUIP_HULL
+	step_delay = 40
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/New()
 	pr_energy_relay = new /datum/global_iterator/mecha_energy_relay(list(src),0)
@@ -1180,6 +1195,7 @@
 	equip_cooldown = 10
 	energy_drain = 0
 	range = MELEE
+	has_equip_overlay = FALSE
 	var/datum/global_iterator/pr_mech_generator
 	var/coeff = 100
 	var/obj/item/stack/sheet/fuel
@@ -1188,6 +1204,8 @@
 	var/fuel_per_cycle_active = 500
 	var/power_per_cycle = 20
 	reliability = 1000
+	equip_type = EQUIP_HULL
+	step_delay = 40
 
 /obj/item/mecha_parts/mecha_equipment/generator/New()
 	..()
@@ -1378,6 +1396,8 @@
 	energy_drain = 0
 	var/dam_force = 0
 	var/obj/mecha/working/ripley/cargo_holder
+	equip_type = EQUIP_UTILITY
+	need_colorize = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/tool/safety_clamp/can_attach(obj/mecha/working/ripley/M as obj)
 	if(..())
@@ -1392,8 +1412,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/safety_clamp/action(atom/target)
 	//this whole thing is seriously fucking stupid and should be a child of the clamp
-	if(!action_checks(target))
-		return
+	..()
 	if(!cargo_holder)
 		return
 	if(istype(target,/obj))
@@ -1403,7 +1422,7 @@
 				chassis.occupant_message("You lift [target] and start to load it into cargo compartment.")
 				chassis.visible_message("[chassis] lifts [target] and starts to load it into cargo compartment.")
 				set_ready_state(0)
-				chassis.use_power(energy_drain)
+				chassis.use_power(energy_drain * chassis.equipment_power_mult)
 				O.anchored = 1
 				var/T = chassis.loc
 				if(do_after_cooldown(target))
@@ -1436,7 +1455,7 @@
 			chassis.occupant_message("You smash into [target], sending them flying.")
 			chassis.visible_message("[chassis] tosses [target] like a piece of paper.")
 		set_ready_state(0)
-		chassis.use_power(energy_drain)
+		chassis.use_power(energy_drain * chassis.equipment_power_mult)
 		do_after_cooldown()
 	return 1
 
@@ -1450,6 +1469,9 @@
 	range = MELEE|RANGED
 	var/datum/global_iterator/pr_switchtool
 	var/obj/item/weapon/switchtool/engineering/mech/switchtool
+	equip_type = EQUIP_UTILITY
+	has_equip_overlay = FALSE
+	step_delay = 40
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/can_attach(var/obj/mecha/working/clarke/M)
 	if(..())
@@ -1469,9 +1491,10 @@
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/action(atom/target)
+	..()
 	if(switchtool.deployed)
 		switchtool.preattack(target, chassis.occupant, chassis.Adjacent(target))
-		chassis.use_power(energy_drain)
+		chassis.use_power(energy_drain * chassis.equipment_power_mult)
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/Topic(href,href_list)
 	if(..())
@@ -1508,22 +1531,22 @@
 			var/obj/item/tool/weldingtool/W = I
 			if(W.reagents.total_volume <= W.max_fuel-10)
 				W.reagents.add_reagent(FUEL, 10)
-				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain * mech_switchtool.chassis.equipment_power_mult/2)
 		else if(iscablecoil(I))
 			var/obj/item/stack/cable_coil/C = I
 			if(C.amount <= C.max_amount-5)
 				C.add(5)
-				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain * mech_switchtool.chassis.equipment_power_mult/2)
 		else if(issolder(I))
 			var/obj/item/tool/solder/S = I
 			if(S.reagents.total_volume < S.max_fuel-5)
 				S.reagents.add_reagent(SACID, 5)
-				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain * mech_switchtool.chassis.equipment_power_mult)
 		else if(issilicatesprayer(I))
 			var/obj/item/device/silicate_sprayer/SI = I
 			if(SI.reagents.total_volume < SI.max_silicate-5)
 				SI.reagents.add_reagent(SILICATE, 5)
-				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain * mech_switchtool.chassis.equipment_power_mult/2)
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler
 	name = "\improper Automatic Floor Tiler"
@@ -1535,6 +1558,9 @@
 	range = 0
 	var/plating_active = FALSE
 	var/tiling_active = FALSE
+	equip_type = EQUIP_UTILITY
+	has_equip_overlay = FALSE
+	step_delay = 40
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler/Topic(href,href_list)
 	if(..())
@@ -1596,6 +1622,9 @@
 	range = MELEE
 	var/active = FALSE
 	var/obj/machinery/power/rad_collector/mech/collector
+	equip_type = EQUIP_HULL
+	has_equip_overlay = FALSE
+	step_delay = 40
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector/New()
 	..()
@@ -1607,6 +1636,7 @@
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector/action(atom/target)
+	..()
 	var/obj/item/weapon/tank/plasma/plas = target
 	if(istype(plas))
 		if(collector.P)
@@ -1638,6 +1668,8 @@
 	name = "Ripley MK-II Conversion Kit"
 	desc = "A pressurized canopy attachment kit for an Autonomous Power Loader Unit \"Ripley\" MK-I mecha, to convert it to the slower, but space-worthy MK-II design. Requires access to the internal compartments, and that the mech has a power source, is unoccupied and the cargo compartment is empty."
 	icon_state = "ripleyupgrade"
+	equip_type = EQUIP_SPECIAL
+	has_equip_overlay = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/tool/ripleyupgrade/can_attach(obj/mecha/working/ripley/M)
 	if(M.enclosed) // i'm dumb and missed why istype wasn't working :c

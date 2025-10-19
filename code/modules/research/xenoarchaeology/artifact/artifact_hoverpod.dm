@@ -4,9 +4,30 @@
 	icon_state = "engineering_pod"
 	initial_icon = "engineering_pod"
 	desc = "Stubby and round, it has a human sized access hatch on the top."
+	base_color = "#F8F8F8"
+	damage_absorption = list("brute"=0.85,"fire"=1,"bullet"=0.9,"laser"=0.9,"energy"=1,"bomb"=0.9)
 	step_energy_drain = 2
 	step_in = 1
 	wreckage = /obj/effect/decal/mecha_wreckage/hoverpod
+
+	penetration_reduction = 5
+	damage_minimum = 3
+	weight_max = 3.5
+
+	starting_components = list(
+		/obj/item/mecha_parts/component/hull,
+		/obj/item/mecha_parts/component/actuator,
+		/obj/item/mecha_parts/component/armor/mining,
+		/obj/item/mecha_parts/component/gas,
+		/obj/item/mecha_parts/component/electrical
+		)
+
+	max_hull_equip = 1
+	max_weapon_equip = 1
+	max_utility_equip = 3
+	max_universal_equip = 1
+	max_special_equip = 1
+
 
 /obj/mecha/working/hoverpod/Destroy()
 	new /datum/artifact_postmortem_data(src)
