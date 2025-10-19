@@ -130,6 +130,7 @@
 /obj/abstract/screen/fullscreen/impaired_crit
 	icon_state = "blackimageoverlay"
 	plane = IMPAIRED_PLANE
+	globalscreen = 1//need this screen object to keep existing
 
 /obj/abstract/screen/fullscreen/impaired_crit/New()
 	..()

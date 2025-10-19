@@ -243,13 +243,13 @@ var/static/impaired_scale = list(40, 40, 40, 20, 16, 12, 9, 6, 3, 1)
 	animate(screen, transform = M, time = 20)
 
 /mob/proc/disable_nearsightedness()
-	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
-	var/matrix/M = matrix()
-	M.Scale(40, 40)
-	animate(screen, transform = M, time = 20)
 	for (var/obj/planemaster in perception_filters.perception_planemasters)
 		var/F1 = planemaster.filters["nearsightedness_angular"]
 		animate(F1, size = 0, offset = 256, time = 20)
 		spawn(1)//Don't remove or THE GAME WILL EXPLODE
 			var/F2 = planemaster.filters["nearsightedness_radial"]
 			animate(F2, size = 0, offset = 256, time = 20)
+	var/obj/abstract/screen/fullscreen/screen = screens["impaired_crit"]
+	var/matrix/M = matrix()
+	M.Scale(40, 40)
+	animate(screen, transform = M, time = 20)
