@@ -33,6 +33,7 @@ var/list/nuclear_bombs = list()
 	..()
 	nuclear_bombs += src
 	r_code = "[rand(10000, 99999)]"//Creates a random code upon object spawn.
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_nuclearbomb")
 
 /obj/machinery/nuclearbomb/Destroy()
 	nuclear_bombs -= src

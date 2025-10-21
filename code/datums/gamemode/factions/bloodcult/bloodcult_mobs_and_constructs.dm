@@ -826,9 +826,9 @@ var/list/astral_projections = list()
 
 /mob/living/simple_animal/astral_projection/update_perception()
 	if(client)
-		if(client.darkness_planemaster)
-			client.darkness_planemaster.blend_mode = BLEND_MULTIPLY
-			client.darkness_planemaster.alpha = 180
+		if(dark_plane)
+			dark_plane.alphas["astralprojection"] = 75
+		check_dark_vision()
 		if(!tangibility)
 			client.color = list(
 						1,0,0,0,

@@ -73,7 +73,6 @@
 	client.screen += overdark_planemaster
 	client.screen += overdark_planemaster_target
 	client.initialize_ghost_planemaster() //We want to explicitly reset the planemaster's visibility on login() so if you toggle ghosts while dead you can still see cultghosts if revived etc.
-	client.initialize_darkness_planemaster()
 	client.initialize_fakecamera_planemaster()
 	update_perception()
 	create_lighting_planes()
