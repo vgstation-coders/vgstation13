@@ -466,7 +466,7 @@
 /obj/item/weapon/macuahuitl/flawless
 	name = "perfect macuahuitl"
 	desc = "This wooden plank has been expertly carved by master craftsmen, holding blades in such a way to increase damage, and reduce wear." 
-	qualitybuff = 3
+	qualitybuff = 2
 
 /obj/item/weapon/hammer
 	name = "smithing hammer"
