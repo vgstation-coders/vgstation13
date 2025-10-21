@@ -35,6 +35,55 @@ var/atom/movable/amblight_square/AMB_SQUARE = new()
 	plane = MAP_EFX_PLANE
 	appearance_flags = PIXEL_SCALE | TILE_BOUND | RESET_ALPHA | RESET_COLOR
 	mouse_opacity = 0
+	anchored = TRUE
+	ignoreinvert = TRUE
+	luminosity = 1
+
+/atom/movable/amblight_overlay/New()
+	. = ..()
+	var/turf/T = loc
+	T.amblight_overlay = src
+
+/atom/movable/amblight_overlay/Destroy()
+	var/turf/T = loc
+	if(istype(T))
+		T.amblight_overlay = null
+
+	. = ..()
+
+/atom/movable/amblight_overlay/ex_act(severity)
+	return 0
+
+/atom/movable/amblight_overlay/shuttle_act()
+	return 0
+
+/atom/movable/amblight_overlay/can_shuttle_move()
+	return 0
+
+/atom/movable/amblight_overlay/singularity_act()
+	return
+
+/atom/movable/amblight_overlay/singularity_pull()
+	return
+
+/atom/movable/amblight_overlay/blob_act()
+	return
+
+// Override here to prevent things accidentally moving around overlays.
+/atom/movable/amblight_overlay/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+	if(harderforce)
+		. = ..()
+
+/atom/movable/amblight_overlay/send_to_future(var/duration)
+	return
+
+/atom/movable/amblight_overlay/send_to_past(var/duration)
+	return
+
+/atom/movable/amblight_overlay/clean_act(var/cleanliness)
+	return
+
+
 /turf
 	var/atom/movable/amblight_overlay/amblight_overlay
 
@@ -87,8 +136,7 @@ On the map dm file, redefine the following:
 			var/area/A = get_area(T)
 			if(istype(A, /area/surface)) //If we are outside.
 				daynight_turfs += T
-				T.amblight_overlay = new()
-				T.overlays += T.amblight_overlay
+				new /atom/movable/amblight_overlay(T)
 
 /datum/subsystem/daynightcycle/proc/play_globalsound()
 	for(var/mob/M in player_list)

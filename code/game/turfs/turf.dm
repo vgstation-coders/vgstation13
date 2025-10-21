@@ -343,7 +343,6 @@
 
 //Creates a new turf
 /turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
-	var/area/original_area=loc
 	if(loc)
 		var/area/A = loc
 		A.area_turfs -= src
@@ -372,6 +371,9 @@
 		connections[T].erase()
 
 	connections = null
+
+	if(amblight_overlay)
+		qdel(amblight_overlay)
 
 	if(N == /turf/space)
 		for(var/obj/effect/decal/cleanable/C in src)
@@ -468,8 +470,7 @@
 	if(istype(loc, /area/surface))
 		if(.)
 			var/turf/NewTurf = .
-			NewTurf.amblight_overlay = new()
-			NewTurf.overlays += NewTurf.amblight_overlay
+			new /atom/movable/amblight_overlay(NewTurf)
 
 /turf/proc/AddDecal(var/image/decal)
 	if(!turfdecals)

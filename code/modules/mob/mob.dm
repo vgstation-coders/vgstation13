@@ -304,7 +304,7 @@
 	//Because the person who made this is a fucking idiot, let's clarify. 1 is sight-related messages (aka emotes in general), 2 is hearing-related (aka HEY DUMBFUCK I'M TALKING TO YOU)
 	if(loneliness_affected(source || speaker,TRUE))
 		return
-	
+
 	if(!client) //We dun goof
 		return
 
@@ -1610,10 +1610,11 @@ Use this proc preferably at the end of an equipment loadout
 	if (self_vision)
 		if (isturf(loc))
 			var/turf/T = loc
-			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (master_plane.blend_mode == BLEND_MULTIPLY))
+			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (master_plane.blend_mode == BLEND_MULTIPLY) && !T.amblight_overlay)
 				animate(self_vision, alpha = self_vision.target_alpha, time = 0)
 			else
 				animate(self_vision, alpha = 0, time = 0)
+
 
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
