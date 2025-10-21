@@ -741,7 +741,6 @@
 #include "code\game\machinery\ATMOSPHERICS\datum_pipe_network.dm"
 #include "code\game\machinery\ATMOSPHERICS\datum_pipeline.dm"
 #include "code\game\machinery\ATMOSPHERICS\he_pipes.dm"
-#include "code\game\machinery\ATMOSPHERICS\mapdebugging.dm"
 #include "code\game\machinery\ATMOSPHERICS\pipe_defines_for_mapping.dm"
 #include "code\game\machinery\ATMOSPHERICS\pipes.dm"
 #include "code\game\machinery\ATMOSPHERICS\utils.dm"
