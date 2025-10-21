@@ -155,23 +155,23 @@ On the map dm file, redefine the following:
 	switch(current_timeOfDay) //Then set the next segment up.
 		if(TOD_MORNING)
 			current_timeOfDay = TOD_SUNRISE
-			next_firetime = world.time + 2 SECONDS
+			next_firetime = world.time + 3 MINUTES
 			play_globalsound()
 		if(TOD_SUNRISE)
 			current_timeOfDay = TOD_DAYTIME
-			next_firetime = world.time + 2 SECONDS
+			next_firetime = world.time + 14 MINUTES
 		if(TOD_DAYTIME)
 			current_timeOfDay = TOD_AFTERNOON
-			next_firetime = world.time + 2 SECONDS
+			next_firetime = world.time + 15 MINUTES
 		if(TOD_AFTERNOON)
 			current_timeOfDay = TOD_SUNSET
-			next_firetime = world.time + 2 SECONDS
+			next_firetime = world.time + 3 MINUTES
 		if(TOD_SUNSET)
 			current_timeOfDay = TOD_NIGHTTIME
 			next_light_power = 3
-			next_firetime = world.time + 2 SECONDS
+			next_firetime = world.time + 36 MINUTES
 			play_globalsound()
 		if(TOD_NIGHTTIME)
 			current_timeOfDay = TOD_MORNING
 			next_light_power = 10
-			next_firetime = world.time + 2 SECONDS
+			next_firetime = world.time + 5 MINUTES
