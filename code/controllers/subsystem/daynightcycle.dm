@@ -127,7 +127,8 @@ On the map dm file, redefine the following:
 /datum/subsystem/daynightcycle/fire(resumed = FALSE)
 	if(world.time >= next_firetime)
 		process_amblightang()
-		animate(AMB_SQUARE, color = current_timeOfDay, time = 2 SECONDS)
+		var/ass_time = next_firetime - world.time
+		animate(AMB_SQUARE, color = current_timeOfDay, time = ass_time)
 
 
 /datum/subsystem/daynightcycle/proc/get_turflist()
