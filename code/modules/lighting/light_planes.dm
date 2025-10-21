@@ -19,7 +19,8 @@
 
 /obj/abstract/screen/plane/master/New(client/C)
 	..()
-	vis_contents += AMB_SQUARE
+	if(AMB_SQUARE)
+		vis_contents += AMB_SQUARE
 
 
 /obj/abstract/screen/plane/amblight
