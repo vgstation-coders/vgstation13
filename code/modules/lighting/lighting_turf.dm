@@ -50,6 +50,13 @@
 	for (var/datum/lighting_corner/L in corners)
 		totallums += L.lum_r + L.lum_b + L.lum_g
 
+	if(amblight_overlay) // there will probably be no daywalkers sorry blade fans
+		var/ambsquare_lumz = GetRedPart("[AMB_SQUARE.color]") / 255
+		ambsquare_lumz += GetGreenPart("[AMB_SQUARE.color]") / 255
+		ambsquare_lumz += GetBluePart("[AMB_SQUARE.color]") / 255
+		ambsquare_lumz = ambsquare_lumz * 4
+		totallums += ambsquare_lumz
+
 	totallums /= 12 // 4 corners, each with 3 channels, get the average.
 	totallums = (totallums - minlum) / (maxlum - minlum)
 
