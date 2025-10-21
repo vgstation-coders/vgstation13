@@ -126,7 +126,7 @@ On the map dm file, redefine the following:
 
 /datum/subsystem/daynightcycle/fire(resumed = FALSE)
 	if(world.time >= next_firetime)
-		process_ass()
+		process_amblightang()
 		animate(AMB_SQUARE, color = current_timeOfDay, time = 2 SECONDS)
 
 
@@ -151,7 +151,7 @@ On the map dm file, redefine the following:
 
 
 //Default lighting scheme; intitially purpose-built for Snaxi. Overwrite this proc in your map.dm file if you want to change the lighting scheme. See junglestation.dm for an example.
-/datum/subsystem/daynightcycle/proc/process_ass()
+/datum/subsystem/daynightcycle/proc/process_amblightang()
 	switch(current_timeOfDay) //Then set the next segment up.
 		if(TOD_MORNING)
 			current_timeOfDay = TOD_SUNRISE

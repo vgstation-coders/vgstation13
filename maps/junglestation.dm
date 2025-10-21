@@ -58,8 +58,8 @@
 	overwrite_solars=TRUE
 	solar_orbit_period=130.6359
 	var/solartime=0 //start at 0. set not like that for debugging. or manually set next_firetime with varedit.
-/*
-/datum/subsystem/daynightcycle/process_lighting()
+
+/datum/subsystem/daynightcycle/process_amblightang()
 	flags&=(0^SS_FIRE_IN_LOBBY) //we don't want this one firing in lobby constantly, as we've tweaked the lighting to be just right on startup. we still want it to fire once though.
 
 	// YCbCr is a superior colorspace. fight me.
@@ -178,7 +178,7 @@
 
 	next_firetime=world.time + 4 MINUTES //station is too big to tick at 2 minutes. not without severe sever raep, at least.
 	solartime++
-*/
+
 /datum/subsystem/daynightcycle/play_globalsound()
 	return
 
