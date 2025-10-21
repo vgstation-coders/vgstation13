@@ -464,15 +464,12 @@
 	registered_events = old_registered_events
 	if(density != old_density)
 		densityChanged()
-	if(istype(loc,/area/surface/jungle) && !istype(original_area,/area/surface/jungle) ) //outdoor areas need to be illuminated.
+
+	if(istype(loc, /area/surface))
 		if(.)
-			var/turf/NewTurf=.
-			NewTurf.affecting_lights=list()
-			NewTurf.lighting_clear_overlay()
-			NewTurf.lighting_build_overlay()
-			NewTurf.set_light(SSDayNight.next_light_range,SSDayNight.next_light_power,SSDayNight.current_timeOfDay)
-
-
+			var/turf/NewTurf = .
+			NewTurf.amblight_overlay = new()
+			NewTurf.overlays += NewTurf.amblight_overlay
 
 /turf/proc/AddDecal(var/image/decal)
 	if(!turfdecals)
