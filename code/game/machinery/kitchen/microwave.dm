@@ -17,7 +17,6 @@
 	slimes_accepted = SLIME_SILVER
 	slimeadd_success_message = "It gives off a distinct shine as a result"
 	var/operating = 0 // Is it on?
-	var/opened = 0.0
 	var/dirty = 0 // = {0..100} Does it need cleaning?
 	var/broken = 0 // ={0,1,2} How broken is it???
 	var/reagent_disposal = 1 //Does it empty out reagents when you eject? Default yes.
@@ -80,6 +79,8 @@
 
 	if(ticker)
 		initialize()
+
+	update_icon()
 
 /*******************
 *   Part Upgrades
@@ -151,10 +152,10 @@
 					"<span class='notice'>[user] fixes the microwave.</span>", \
 					"<span class='notice'>You have fixed the microwave.</span>" \
 				)
-				src.icon_state = "mw"
 				src.broken = 0 // Fix it!
 				src.dirty = 0 // just to be sure
 				src.flags |= OPENCONTAINER
+				update_icon()
 		else
 			to_chat(user, "<span class='warning'>It's broken!</span>")
 			return 1
@@ -175,8 +176,8 @@
 				)
 				src.dirty = 0 // It's clean!
 				src.broken = 0 // just to be sure
-				src.icon_state = "mw"
 				src.flags |= OPENCONTAINER
+				update_icon()
 				return 1
 		else //Otherwise bad luck!!
 			to_chat(user, "<span class='warning'>It's too dirty!</span>")
@@ -403,7 +404,7 @@
 			if(!running(10))
 				abort()
 				return
-			stop()
+			stop(TRUE)
 			cooked = contents[1]//if there's just one item and no reagents, warm it up
 			var/cook_temp = COOKTEMP_READY//100°C
 			if(emagged || arcanetampered)
@@ -414,6 +415,8 @@
 				cooked.reagents.chem_temp = cook_temp
 				cooked.update_icon()
 			cooked.forceMove(src.loc)
+			cooked.pixel_x = pixel_x - 2
+			cooked.pixel_y = pixel_y - 1
 			return
 
 		// Otherwise we fucked up
@@ -422,8 +425,7 @@
 			if (!running(4))
 				abort()
 				return
-			muck_start()
-			muck_finish()
+			muck()
 			cooked = fail()
 			cooked.forceMove(src.loc)
 			return
@@ -454,10 +456,12 @@
 			cooked.forceMove(src.loc)
 			return
 		cooked = recipe.make_food(src,user)
-		stop()
+		stop(TRUE)
 		if(cooked)
 			adjust_cooked_food_reagents_temperature(cooked, recipe)
 			cooked.forceMove(get_output())
+			cooked.pixel_x = pixel_x - 2
+			cooked.pixel_y = pixel_y - 1
 		return
 
 /obj/machinery/microwave/proc/adjust_cooked_food_reagents_temperature(atom/cooked, datum/recipe/cookedrecipe)
@@ -508,19 +512,25 @@
 /obj/machinery/microwave/proc/start()
 	src.visible_message("<span class='notice'>The microwave turns on.</span>", "<span class='notice'>You hear a microwave.</span>")
 	src.operating = 1
-	src.icon_state = "mw1"
+	update_icon()
 	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/abort()
 	src.operating = 0 // Turn it off again aferwards
-	src.icon_state = "mw"
+	update_icon()
 	src.updateUsrDialog()
 
-/obj/machinery/microwave/proc/stop()
+/obj/machinery/microwave/proc/stop(var/flick_door = FALSE)
 	playsound(src, 'sound/machines/ding.ogg', 50, 1)
 	src.operating = 0 // Turn it off again aferwards
-	src.icon_state = "mw"
 	src.updateUsrDialog()
+	if (flick_door)
+		flick("mwo",src)
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_microwave_open")
+		spawn(15)
+			update_icon()
+	else
+		update_icon()
 
 /obj/machinery/microwave/proc/dispose()
 	if(operating)
@@ -551,26 +561,27 @@
 	to_chat(usr, "<span class='notice'>You dispose of the microwave contents.</span>")
 	src.updateUsrDialog()
 
-/obj/machinery/microwave/proc/muck_start()
+/obj/machinery/microwave/proc/muck()
 	playsound(src, 'sound/effects/splat.ogg', 50, 1) // Play a splat sound
-	src.icon_state = "mwbloody1" // Make it look dirty!!
-
-/obj/machinery/microwave/proc/muck_finish()
-	playsound(src, 'sound/machines/ding.ogg', 50, 1)
 	src.visible_message("<span class='warning'>The microwave gets covered in muck!</span>")
 	src.dirty = 100 // Make it dirty so it can't be used util cleaned
 	src.flags &= ~OPENCONTAINER //So you can't add condiments
-	src.icon_state = "mwbloody" // Make it look dirty too
 	src.operating = 0 // Turn it off again aferwards
+	flick("mwbloody-flick", src) // Make it look dirty too
+	spawn(5)
+		playsound(src, 'sound/machines/ding.ogg', 50, 1)
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_microwave_open")
+		sleep(15)
+		update_icon()
 	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/broke()
 	spark(src, 2)
-	src.icon_state = "mwb" // Make it look all busted up and shit
 	src.visible_message("<span class='warning'>The microwave breaks!</span>") //Let them know they're stupid
 	src.broken = 2 // Make it broken so it can't be used util fixed
 	src.flags &= ~OPENCONTAINER //So you can't add condiments
 	src.operating = 0 // Turn it off again aferwards
+	update_icon()// Make it look all busted up and shit
 	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/fail(var/arcane = FALSE)
@@ -589,8 +600,7 @@
 	if(emagged || arcanetampered || arcane || Holiday == APRIL_FOOLS_DAY)
 		playsound(src, "goon/sound/effects/dramatic.ogg", 100, 0)
 	if(arcanetampered || arcane)
-		muck_start()
-		muck_finish()
+		muck()
 		broke()
 	var/cook_temp = COOKTEMP_READY//100°C
 	if(emagged || arcanetampered)
@@ -709,6 +719,32 @@
 /obj/machinery/microwave/table_unshift()
 	pixel_x = 0
 	pixel_y = 0
+
+/obj/machinery/microwave/power_change()
+	..()
+	update_icon()
+
+/obj/machinery/microwave/update_icon()
+	var/no_power = (stat & (NOPOWER|FORCEDISABLE))
+
+	if ((broken > 0) || (stat & BROKEN))
+		kill_moody_light()
+		icon_state = "mwb"
+	else if (operating)
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_microwave_on")
+		icon_state = "mw1"
+	else if (no_power)
+		kill_moody_light()
+		if(src.dirty == 100)
+			icon_state = "mwbloody0"
+		else
+			icon_state = "mw0"
+	else
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_microwave_off")
+		if(src.dirty == 100)
+			icon_state = "mwbloody"
+		else
+			icon_state = "mw"
 
 
 #undef CAN_AUTOMAKE_SOMETHING

@@ -88,11 +88,14 @@
 	add_hiddenprint(user)
 	icon_state = "analyser_processing"
 	flick("analyser_turnon",src)
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_analyser_turnon")
 	set_light(2,2)
 	playsound(loc, "sound/machines/heps.ogg", 50, 1)
 	spawn(1 SECONDS)
-		update_icon()
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_analyser_turnoff")
 		flick("analyser_turnoff",src)
+		sleep(2)
+		update_icon()
 
 /obj/machinery/disease2/diseaseanalyser/attack_hand(var/mob/user)
 	. = ..()
@@ -136,9 +139,11 @@
 	scanner = user
 	icon_state = "analyser_processing"
 	flick("analyser_turnon",src)
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_analyser_turnon")
 
-	spawn (1)
+	spawn (2)
 		var/image/I = image(icon,"analyser_light")
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_analyser_process")
 		I.plane = ABOVE_LIGHTING_PLANE
 		I.layer = ABOVE_LIGHTING_LAYER
 		overlays += I
@@ -171,16 +176,21 @@
 	else
 		alert_noise("buzz")
 
-	update_icon()
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_analyser_turnoff")
 	flick("analyser_turnoff",src)
+	spawn(2)
+		update_icon()
 	scanner = null
 
 /obj/machinery/disease2/diseaseanalyser/update_icon()
 	overlays.len = 0
 	icon_state = "analyser"
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_analyser")
+
 
 	if (stat & (NOPOWER|FORCEDISABLE))
 		icon_state = "analyser0"
+		kill_moody_light()
 
 	if (stat & (BROKEN))
 		icon_state = "analyserb"
@@ -239,8 +249,10 @@
 
 	if (scanner && !(scanner in range(src,1)))
 		alert_noise("buzz")
-		update_icon()
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_analyser_turnoff")
 		flick("analyser_turnoff",src)
+		spawn(2)
+			update_icon()
 		scanner = null
 
 
