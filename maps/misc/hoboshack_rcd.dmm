@@ -77,7 +77,7 @@
 "v" = (
 /obj/item/weapon/paper{
 	name = "Thank you for purchasing the homemaker kit!";
-	info = "Thank you for purchasing Syndy Kat's homemaker kit! This prefab bundle has all you need to start building your own home anywhere in space! Just make sure to not pressurize the room until you're happy with the size. Enjoy!"
+	info = "Thank you for purchasing Syndie Kat's homemaker kit! This prefab bundle has all you need to start building your own home anywhere in space! Just make sure to not pressurize the room until you're happy with the size. Enjoy!"
 	},
 /obj/machinery/power/apc{
 	cell_type = 0;
@@ -163,6 +163,14 @@
 	},
 /obj/item/weapon/storage/box/lights/he,
 /obj/item/weapon/storage/wallet,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/weapon/storage/bag/ore,
+/obj/item/device/flashlight/lantern,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/storage/belt/mining,
+/obj/item/weapon/storage/belt/mining,
 /turf/simulated/floor/plating/airless{
 	name = "plating"
 	},
