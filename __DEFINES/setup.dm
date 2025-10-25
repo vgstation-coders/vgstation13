@@ -185,33 +185,40 @@ var/MAX_EXPLOSION_RANGE = 32
 
 //FLAGS BITMASK
 
+#define NONE 					0x000000
+
 //Item flags!
-#define PROXMOVE	1	// Will the code check us when we move or when something moves near us? Note that if the item doesn't have this flag, HasProximity() will never execute for it.
-#define FPRINT		2	// takes a fingerprint
-#define INVULNERABLE 8
-#define HEAR		16 // This flag is necessary to give an item (or mob) the ability to hear spoken messages! Mobs without a client still won't hear anything unless given HEAR_ALWAYS
-#define HEAR_ALWAYS 32 // Assign a virtualhearer to the mob even when no client is controlling it. (technically not an item flag, but related to the above)
+#define PROXMOVE				0x000001 // Will the code check us when we move or when something moves near us? Note that if the item doesn't have this flag, HasProximity() will never execute for it.
+#define FPRINT					0x000002 // takes a fingerprint
+#define INVULNERABLE 			0x000004
+#define HEAR					0x000008 // This flag is necessary to give an item (or mob) the ability to hear spoken messages! Mobs without a client still won't hear anything unless given HEAR_ALWAYS
 
-#define TWOHANDABLE	64
-#define MUSTTWOHAND	128
-#define SLOWDOWN_WHEN_CARRIED 256 //Apply slowdown when carried in hands, instead of only when worn
+#define HEAR_ALWAYS 			0x000010 // Assign a virtualhearer to the mob even when no client is controlling it. (technically not an item flag, but related to the above)
+#define TWOHANDABLE				0x000020
+#define MUSTTWOHAND				0x000040
+#define SLOWDOWN_WHEN_CARRIED 	0x000080 //Apply slowdown when carried in hands, instead of only when worn
 
-#define NOBLOODY	512	// used to items if they don't want to get a blood overlay
+#define NOBLOODY				0x000100 // used to items if they don't want to get a blood overlay
+#define NO_ATTACK_MSG			0x000200 // when an item has this it produces no "X has been hit by Y with Z" message with the default handler
+#define NO_THROW_MSG 			0x000400 // produce no "X has thrown Y" message when somebody throws this item
+#define NO_STORAGE_MSG 			0x000800 // produce no "X puts the Y into the backpack" message when somebody moves this item in their inventory
 
-#define NO_ATTACK_MSG 	1024 // when an item has this it produces no "X has been hit by Y with Z" message with the default handler
-#define NO_THROW_MSG 	2048 // produce no "X has thrown Y" message when somebody throws this item
-#define NO_STORAGE_MSG 	4096 // produce no "X puts the Y into the backpack" message when somebody moves this item in their inventory
+#define OPENCONTAINER			0x001000 // is an open container for chemistry purposes
+#define	NOREACT 				0x002000 // Reagents don't react inside this container.
+#define TIMELESS				0x004000 // Immune to time manipulation.
+#define SILENTCONTAINER			0x008000 //reactions inside make no noise
 
-#define OPENCONTAINER	8192  // is an open container for chemistry purposes
-#define	NOREACT 		16384 // Reagents don't react inside this container.
+#define ATOM_INITIALIZED 		0x010000 // initialize() was called
+//define <>						0x020000
+//define <>						0x040000
+//define <>						0x080000
 
-#define TIMELESS		32768 // Immune to time manipulation.
+//define <>				 		0x100000
+//define <>						0x200000
+//define <>						0x400000
+//define <>						0x800000 <- Don't go higher! As of 2025 we are limited to 24 bits for bitwise operations.
 
-#define SILENTCONTAINER	65536 //reactions inside make no noise
-#define ATOM_INITIALIZED 131072 // initialize() was called
-
-#define ALL ~0
-#define NONE 0
+#define ALL ~0				//	0xFFFFFF
 
 //These go in flow_flags but don't really have anything in particular to do with airflow. Bad name.
 
