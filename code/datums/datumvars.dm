@@ -361,6 +361,13 @@ function loadPage(list) {
 			html += {"
 			(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>save</a> |
 			<a href='?_src_=vars;datumedit=\ref[DA];varnameedit=[name]'>load</a>) "}
+		else if(name == "filters")
+			html += {"
+			(<a href='?_src_=vars;datumaddfilter=\ref[DA];varnameaddfilter=[name]'>add filter</a> |
+			<a href='?_src_=vars;datumremovefilter=\ref[DA];varnameremovefilter=[name]'>remove filter</a>)
+			(<a href='?_src_=vars;datumcopyfilter=\ref[DA];varnamecopyfilter=[name]'>copy</a> |
+			<a href='?_src_=vars;datumpastefilter=\ref[DA];varnamepastefilter=[name]'>paste</a>) "}
+			//can't figure out easily how to copy filters from one atom to another, here's a mission for the willing
 		else
 			html += {"
 			(<a href='?_src_=vars;datumedit=\ref[DA];varnameedit=[name]'>E</a>)
@@ -403,25 +410,35 @@ function loadPage(list) {
 		var/list/L = value
 		html += "[prefix]/list ([L.len])"
 
+
+
 		if (L.len > 0 && L.len <= 500 && !(L in searched))
 			// not sure if this is completely right...
 			html += "<ul>"
 			var/index = 1
-			for (var/entry in L)
-				var/assoc
-				if(!isnum(entry))
-					try //Certain wacky builtin lists will runtime on attempted associative access
-						assoc = L[entry]
-					catch
-						//Do nothing
+			if (name == "filters")
+				var/atom/A = DA
+				if (istype(A))
+					for (var/filter_entry in A.filters)
+						var/F_name = filter_entry:name//I don't think we can typecast filters but F:name works properly here.
+						html += "<li>[index]. [F_name]"
+						index++
+			else
+				for (var/entry in L)
+					var/assoc
+					if(!isnum(entry))
+						try //Certain wacky builtin lists will runtime on attempted associative access
+							assoc = L[entry]
+						catch
+							//Do nothing
 
-				if(!isnull(assoc))
-					html += "<li>[index]. " + debug_variable(entry, assoc, searched + list(L))
-				else
-					html += "<li>[index]. " + debug_variable(null, entry, searched + list(L))
+					if(!isnull(assoc))
+						html += "<li>[index]. " + debug_variable(entry, assoc, searched + list(L))
+					else
+						html += "<li>[index]. " + debug_variable(null, entry, searched + list(L))
 
-				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[DA]'>(Delete)</a></li>"
-				index++
+					html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[DA]'>(Delete)</a></li>"
+					index++
 			html += "</ul>"
 
 	else
@@ -570,6 +587,83 @@ function loadPage(list) {
 			else
 				holder.marked_datum = saved_value
 				to_chat(usr, "Your marked datum is now: [holder.marked_datum]")
+
+	else if(href_list["varnameaddfilter"] && href_list["datumaddfilter"])
+		if(!check_rights(R_VAREDIT))
+			return
+
+		var/atom/A = locate(href_list["datumaddfilter"])
+		if(!istype(A))
+			to_chat(usr, "This can only be used on instances of type /atom")
+			return
+
+		var/edited_filter = add_filter(A)
+
+		if (edited_filter != null)
+			message_admins("[key_name_admin(src)] added a [edited_filter] effect to \the [A].", 1)
+			world.log << "### VarEdit by [src]: [A.type] filters=[html_encode("[edited_filter]")]"
+
+		href_list["datumrefresh"] = href_list["datumaddfilter"]
+
+	else if(href_list["varnameremovefilter"] && href_list["datumremovefilter"])
+		if(!check_rights(R_VAREDIT))
+			return
+
+		var/atom/A = locate(href_list["datumremovefilter"])
+		if(!istype(A))
+			to_chat(usr, "This can only be used on instances of type /atom")
+			return
+
+		if (!A.filters?.len)
+			to_chat(usr, "There are no filters to remove")
+			return
+
+		var/removed_filter = remove_filter(A)
+
+		if (!removed_filter)
+			return
+
+		message_admins("[key_name_admin(src)] removed filter [removed_filter] from \the [A].", 1)
+		world.log << "### VarEdit by [src]: [A.type] filters=[html_encode("[removed_filter]")]"
+
+		href_list["datumrefresh"] = href_list["datumremovefilter"]
+
+	else if(href_list["varnamecopyfilter"] && href_list["datumcopyfilter"])
+		if(!check_rights(R_VAREDIT))
+			return
+
+		var/atom/A = locate(href_list["datumcopyfilter"])
+		if(!istype(A))
+			to_chat(usr, "This can only be used on instances of type /atom")
+			return
+
+		if (!A.filters?.len)
+			to_chat(usr, "There are no filters to copy")
+			return
+
+		holder.copied_filters = A.filters
+
+		message_admins("[key_name_admin(src)] copied \the [A]'s filters.", 1)
+
+
+	else if(href_list["varnamepastefilter"] && href_list["datumpastefilter"])
+		if(!check_rights(R_VAREDIT))
+			return
+
+		var/atom/A = locate(href_list["datumpastefilter"])
+		if(!istype(A))
+			to_chat(usr, "This can only be used on instances of type /atom")
+			return
+
+		if (!holder.copied_filters?.len)
+			to_chat(usr, "You haven't copied filters to paste yet")
+			return
+
+		A.filters = holder.copied_filters
+
+		message_admins("[key_name_admin(src)] pasted filters onto \the [A]'s.", 1)
+
+		href_list["datumrefresh"] = href_list["datumpastefilter"]
 
 	else if(href_list["mob_player_panel"])
 		if(!check_rights(0))

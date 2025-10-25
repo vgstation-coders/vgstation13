@@ -127,6 +127,10 @@
 		to_chat(user, "<span class='danger'>\The [O] cannot be painted.</span>")
 		return 1
 
+	if(transparency && !O.can_be_transparent)
+		to_chat(user, "<span class='danger'>\The [O] cannot be painted transparent.</span>")
+		return 1
+
 	playsound(master, 'sound/machines/click.ogg', 50, 1)
 	var/painted_color = selected_color
 	if (selected_color in available_colors)

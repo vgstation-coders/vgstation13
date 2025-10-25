@@ -172,6 +172,9 @@
 		image('icons/obj/atmos.dmi', "can-o3")
 	)
 
+	var/image/I = status_overlays_pressure[state]
+	I.plane = ABOVE_LIGHTING_PLANE
+
 	return status_overlays_pressure[state]
 
 /obj/machinery/portable_atmospherics/canister/proc/other_overlays(var/state)
