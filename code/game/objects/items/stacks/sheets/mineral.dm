@@ -392,12 +392,12 @@ var/list/datum/stack_recipe/clown_recipes = list ( \
 	mat_type = MAT_MYTHRIL
 	starting_materials = list(MAT_MYTHRIL = CC_PER_SHEET_MYTHRIL)
 
-var/list/datum/stack_recipe/mythril_recipes = list ( \
+var/list/datum/stack_recipe/blacksmith_only_recipes = list ( \
 	blacksmithing_recipes,
 	)
 
 /obj/item/stack/sheet/mineral/mythril/New(var/loc, var/amount=null)
-	recipes = mythril_recipes
+	recipes = blacksmith_only_recipes
 	..()
 
 
@@ -413,6 +413,10 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	perunit = CC_PER_SHEET_PHAROSIUM
 	mat_type = MAT_PHAROSIUM
 	starting_materials = list(MAT_PHAROSIUM = CC_PER_SHEET_PHAROSIUM)
+
+/obj/item/stack/sheet/mineral/pharosium/New(var/loc, var/amount=null)
+	recipes = blacksmith_only_recipes
+	..()
 
 /obj/item/stack/sheet/mineral/char
 	name = "char"
@@ -441,6 +445,9 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	mat_type = MAT_CLARETINE
 	starting_materials = list(MAT_CLARETINE = CC_PER_SHEET_CLARETINE)
 
+/obj/item/stack/sheet/mineral/claretine/New(var/loc, var/amount=null)
+	recipes = blacksmith_only_recipes
+	..()
 
 /obj/item/stack/sheet/mineral/cobryl
 	name = "cobryl"
@@ -455,6 +462,9 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	mat_type = MAT_COBRYL
 	starting_materials = list(MAT_COBRYL = CC_PER_SHEET_COBRYL)
 
+/obj/item/stack/sheet/mineral/cobryl/New(var/loc, var/amount=null)
+	recipes = blacksmith_only_recipes
+	..()
 
 /obj/item/stack/sheet/mineral/bohrum
 	name = "bohrum"
@@ -469,6 +479,9 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	mat_type = MAT_BOHRUM
 	starting_materials = list(MAT_BOHRUM = CC_PER_SHEET_BOHRUM)
 
+/obj/item/stack/sheet/mineral/bohrum/New(var/loc, var/amount=null)
+	recipes = blacksmith_only_recipes
+	..()
 
 /obj/item/stack/sheet/mineral/syreline
 	name = "syreline"
@@ -483,6 +496,9 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	mat_type = MAT_SYRELINE
 	starting_materials = list(MAT_SYRELINE = CC_PER_SHEET_SYRELINE)
 
+/obj/item/stack/sheet/mineral/syreline/New(var/loc, var/amount=null)
+	recipes = blacksmith_only_recipes
+	..()
 
 /obj/item/stack/sheet/mineral/erebite
 	name = "erebite"
@@ -496,6 +512,10 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	perunit = CC_PER_SHEET_EREBITE
 	mat_type = MAT_EREBITE
 	starting_materials = list(MAT_EREBITE = CC_PER_SHEET_EREBITE)
+
+/obj/item/stack/sheet/mineral/erebite/New(var/loc, var/amount=null)
+	recipes = blacksmith_only_recipes
+	..()
 
 /obj/item/stack/sheet/mineral/erebite/ex_act()
 	explosion(src.loc,-1,1,3)
@@ -517,6 +537,10 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	perunit = CC_PER_SHEET_CERENKITE
 	mat_type = MAT_CERENKITE
 	starting_materials = list(MAT_CERENKITE = CC_PER_SHEET_CERENKITE)
+
+/obj/item/stack/sheet/mineral/cerenkite/New(var/loc, var/amount=null)
+	recipes = blacksmith_only_recipes
+	..()
 
 /obj/item/stack/sheet/mineral/cerenkite/ex_act()
 	visible_message("<span class='danger'>\The [src] emits some dangerous radiation!</span>")
@@ -570,6 +594,9 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	mat_type = MAT_UQILL
 	starting_materials = list(MAT_UQILL = CC_PER_SHEET_UQILL)
 
+/obj/item/stack/sheet/mineral/uqill/New(var/loc, var/amount=null)
+	recipes = blacksmith_only_recipes
+	..()
 
 /obj/item/stack/sheet/mineral/telecrystal
 	name = "telecrystal"
@@ -597,6 +624,9 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	mat_type = MAT_MAUXITE
 	starting_materials = list(MAT_MAUXITE = CC_PER_SHEET_MAUXITE)
 
+/obj/item/stack/sheet/mineral/mauxite/New(var/loc, var/amount=null)
+	recipes = blacksmith_only_recipes
+	..()
 
 /obj/item/stack/sheet/mineral/molitz
 	name = "molitz"
@@ -610,6 +640,10 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	perunit = CC_PER_SHEET_MOLITZ
 	mat_type = MAT_MOLITZ
 	starting_materials = list(MAT_MOLITZ = CC_PER_SHEET_MOLITZ)
+
+/obj/item/stack/sheet/mineral/molitz/New(var/loc, var/amount=null)
+	recipes = blacksmith_only_recipes
+	..()
 
 /obj/item/stack/sheet/mineral/gingerbread
 	name = "gingerbread"
