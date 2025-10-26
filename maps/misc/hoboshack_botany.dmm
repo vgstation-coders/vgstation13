@@ -430,6 +430,7 @@
 /area/shack)
 "GW" = (
 /obj/item/anvil,
+/obj/item/weapon/reagent_containers/glass/bucket/water_filled,
 /turf/simulated/floor/wood,
 /area/shack)
 "He" = (
