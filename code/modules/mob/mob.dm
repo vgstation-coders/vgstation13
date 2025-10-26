@@ -2162,7 +2162,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
 	if(status_flags & PACIFIED)
 		if(locate(/datum/event/profound_peace) in events)
-			to_chat(src, "<span class='notice'>You feel [pick("like","as if","")] this [pick("would misalign your inner chakras","prevents you from attaining nirvana","would be bad for your own karma")].</span>")
+			to_chat(src, "<span class='notice'>You feel [pick("like ","as if ","")]this [pick("would misalign your inner chakras","prevents you from attaining nirvana","would be bad for your own karma")].</span>")
 		else
 			to_chat(src, "<span class='warning'>You feel some strange force preventing you from being violent.</span>")
 		return TRUE
