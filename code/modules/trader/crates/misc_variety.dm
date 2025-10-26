@@ -198,7 +198,19 @@
 		/obj/item/stack/sheet/cardboard = 20,
 		/obj/item/stack/telecrystal = 2,	//Emergent gameplay!
 		/obj/item/stack/teeth/gold = 10,
-		/obj/item/stack/tile/slime = 20
+		/obj/item/stack/tile/slime = 20,
+		/obj/item/stack/sheet/mineral/pharosium = 1,
+		/obj/item/stack/sheet/mineral/char = 1,
+		/obj/item/stack/sheet/mineral/claretine = 1,
+		/obj/item/stack/sheet/mineral/cobryl = 1,
+		/obj/item/stack/sheet/mineral/bohrum = 1,
+		/obj/item/stack/sheet/mineral/syreline = 1,
+		/obj/item/stack/sheet/mineral/erebite = 1,
+		/obj/item/stack/sheet/mineral/cerenkite = 1,
+		/obj/item/stack/sheet/mineral/cytine = 1,
+		/obj/item/stack/sheet/mineral/uqill = 1,
+		/obj/item/stack/sheet/mineral/mauxite = 1,
+		/obj/item/stack/sheet/mineral/molitz = 1,
 	)
 
 /obj/item/weapon/storage/box/large/mystery_material/New()
