@@ -497,6 +497,13 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	mat_type = MAT_EREBITE
 	starting_materials = list(MAT_EREBITE = CC_PER_SHEET_EREBITE)
 
+/obj/item/stack/sheet/mineral/erebite/ex_act()
+	explosion(src.loc,-1,1,3)
+	qdel(src)
+
+/obj/item/stack/sheet/mineral/erebite/bullet_act(var/obj/item/projectile/P)
+	explosion(src.loc,-1,1,3)
+	qdel(src)
 
 /obj/item/stack/sheet/mineral/cerenkite
 	name = "cerenkite"
@@ -511,6 +518,19 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	mat_type = MAT_CERENKITE
 	starting_materials = list(MAT_CERENKITE = CC_PER_SHEET_CERENKITE)
 
+/obj/item/stack/sheet/mineral/cerenkite/ex_act()
+	visible_message("<span class='danger'>\The [src] emits some dangerous radiation!</span>")
+	var/L = get_turf(src)
+	for(var/mob/living/carbon/human/M in viewers(L, null))
+		M.apply_radiation((rand(amount, amount*5)), RAD_EXTERNAL)
+	qdel(src)
+
+/obj/item/stack/ore/cerenkite/attack_self(mob/user)
+	visible_message("<span class='danger'>\The [src] emits some dangerous radiation!</span>")
+	var/L = get_turf(user)
+	for(var/mob/living/carbon/human/M in viewers(L, null))
+		M.apply_radiation((rand(1, 5)), RAD_EXTERNAL)
+	use(1)
 
 /obj/item/stack/sheet/mineral/cytine
 	name = "cytine"
@@ -525,6 +545,17 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	mat_type = MAT_CYTINE
 	starting_materials = list(MAT_CYTINE = CC_PER_SHEET_CYTINE)
 
+/obj/item/stack/sheet/mineral/cytine/New()
+	..()
+	color = pick("#FF0000","#0000FF","#008000","#FFFF00")
+
+/obj/item/stack/sheet/mineral/cytine/attack_self(mob/user)
+	var/obj/item/weapon/glowstick/G = new /obj/item/weapon/glowstick(user.loc)
+	G.color = color
+	G.light_color = color
+	to_chat(user,"<span class='notice'>You fashion \a [G] out of \the [src]</span>")
+	color = pick("#FF0000","#0000FF","#008000","#FFFF00")
+	use(1)
 
 /obj/item/stack/sheet/mineral/uqill
 	name = "uqill"

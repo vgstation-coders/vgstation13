@@ -249,6 +249,7 @@
 	desc = "A chunk of Erebite, an extremely volatile high-energy mineral."
 	icon_state = "erebite"
 	starting_materials = list(MAT_EREBITE = CC_PER_SHEET_EREBITE)
+
 /obj/item/stack/ore/erebite/ex_act()
 	explosion(src.loc,-1,0,2)
 	qdel(src)
@@ -264,37 +265,35 @@
 	starting_materials = list(MAT_CERENKITE = CC_PER_SHEET_CERENKITE)
 
 /obj/item/stack/ore/cerenkite/ex_act()
+	visible_message("<span class='danger'>\The [src] emits some dangerous radiation!</span>")
 	var/L = get_turf(src)
 	for(var/mob/living/carbon/human/M in viewers(L, null))
-		M.apply_radiation((rand(10, 50)), RAD_EXTERNAL)
+		M.apply_radiation((rand(amount/5, amount)), RAD_EXTERNAL)
 	qdel(src)
 
 /obj/item/stack/ore/cerenkite/attack_self(mob/user)
+	visible_message("<span class='danger'>\The [src] emits some dangerous radiation!</span>")
 	var/L = get_turf(user)
 	for(var/mob/living/carbon/human/M in viewers(L, null))
-		M.apply_radiation((rand(10, 50)), RAD_EXTERNAL)
-	qdel(src)
+		M.apply_radiation((rand(0.2, 1)), RAD_EXTERNAL)
+	use(1)
 
 /obj/item/stack/ore/cerenkite/bullet_act(var/obj/item/projectile/P)
+	visible_message("<span class='danger'>\The [src] emits some dangerous radiation!</span>")
 	var/L = get_turf(src)
 	for(var/mob/living/carbon/human/M in viewers(L, null))
-		M.apply_radiation((rand(10, 50)), RAD_EXTERNAL)
-	qdel(src)
+		M.apply_radiation((rand(0.2, 1)), RAD_EXTERNAL)
+	use(1)
 
 /obj/item/stack/ore/cytine
 	name = "cytine"
 	desc = "A glowing Cytine gemstone, somewhat valuable but not paticularly useful."
 	icon_state = "cytine"
 	starting_materials = list(MAT_CYTINE = CC_PER_SHEET_CYTINE)
+
 /obj/item/stack/ore/cytine/New()
 	..()
 	color = pick("#FF0000","#0000FF","#008000","#FFFF00")
-
-/obj/item/stack/ore/cytine/attack_self(mob/user)
-	var/obj/item/weapon/glowstick/G = new /obj/item/weapon/glowstick(user.loc)
-	G.color = color
-	G.light_color = color
-	qdel(src)
 
 /obj/item/stack/ore/uqill
 	name = "uqill nugget"
