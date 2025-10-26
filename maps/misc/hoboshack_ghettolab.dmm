@@ -114,6 +114,7 @@
 "gm" = (
 /obj/item/anvil,
 /obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/reagent_containers/glass/bucket/water_filled,
 /turf/simulated/floor,
 /area/shack)
 "gz" = (
