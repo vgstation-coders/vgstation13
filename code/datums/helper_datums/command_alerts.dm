@@ -879,4 +879,4 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/nirvana
 	alert_title = "Profound Peace Detected"
-	message = "Your station's fourth spatial axis has been intersected by a non-Euclidean moksha void. Given that Nanotrasen is a business, total detachment from the material world is not endorsed per company policy. Crewman are advised to wait for the sensation to pass and avoid contemplating the inescapable cycle of samsara."
+	message = "Your station's fourth spatial axis has been intersected by a non-Euclidean moksha void. Given that Nanotrasen is a business, total detachment from the material world is not endorsed per company policy. Station crew are advised to wait for the sensation to pass and avoid contemplating the inescapable cycle of samsara."

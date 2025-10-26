@@ -304,7 +304,7 @@
 	//Because the person who made this is a fucking idiot, let's clarify. 1 is sight-related messages (aka emotes in general), 2 is hearing-related (aka HEY DUMBFUCK I'M TALKING TO YOU)
 	if(loneliness_affected(source || speaker,TRUE))
 		return
-	
+
 	if(!client) //We dun goof
 		return
 
@@ -2160,6 +2160,10 @@ Use this proc preferably at the end of an equipment loadout
 		alpha = alphas[alphas[1]]
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if(status_flags & PACIFIED)
+		to_chat(src, "<span class='notice'>You feel [pick("like","as if","")] this [pick("would misalign your inner chakras","prevents you from attaining nirvana","would be bad for your own karma")].</span>")
+		return TRUE
+
 	if(paxban_isbanned(ckey))
 		to_chat(src, "<span class='warning'>You feel some strange force preventing you from being violent.</span>")
 		return TRUE
