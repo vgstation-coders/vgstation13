@@ -3,8 +3,9 @@
 	parent_organ = LIMB_HEAD
 	organ_type = "eyes"
 	removed_type = /obj/item/organ/internal/eyes
+	min_bruised_damage = 5
+	min_broken_damage = 35
 
-	var/welding_proof=0
 	var/eyeprot=0
 	var/see_in_dark=2
 	var/list/colourmatrix = list()
@@ -94,7 +95,7 @@
 
 /datum/organ/internal/eyes/adv_1
 	name = "advanced eyes"
-	welding_proof=1
+	eyeprot=2
 	see_in_dark=5
 	robotic=2
 	removed_type = /obj/item/organ/internal/eyes/adv_1
