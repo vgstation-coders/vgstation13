@@ -409,7 +409,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_DERELICT + "=1"
 	perunit = CC_PER_SHEET_PHAROSIUM
 	mat_type = MAT_PHAROSIUM
 	starting_materials = list(MAT_PHAROSIUM = CC_PER_SHEET_PHAROSIUM)
@@ -422,7 +422,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_DERELICT + "=1"
 	perunit = CC_PER_SHEET_CHAR
 	mat_type = MAT_CHAR
 	starting_materials = list(MAT_CHAR = CC_PER_SHEET_CHAR)
@@ -436,7 +436,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_DERELICT + "=1"
 	perunit = CC_PER_SHEET_CLARETINE
 	mat_type = MAT_CLARETINE
 	starting_materials = list(MAT_CLARETINE = CC_PER_SHEET_CLARETINE)
@@ -450,7 +450,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_DERELICT + "=1"
 	perunit = CC_PER_SHEET_COBRYL
 	mat_type = MAT_COBRYL
 	starting_materials = list(MAT_COBRYL = CC_PER_SHEET_COBRYL)
@@ -464,7 +464,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_DERELICT + "=1"
 	perunit = CC_PER_SHEET_BOHRUM
 	mat_type = MAT_BOHRUM
 	starting_materials = list(MAT_BOHRUM = CC_PER_SHEET_BOHRUM)
@@ -478,7 +478,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_DERELICT + "=1"
 	perunit = CC_PER_SHEET_SYRELINE
 	mat_type = MAT_SYRELINE
 	starting_materials = list(MAT_SYRELINE = CC_PER_SHEET_SYRELINE)
@@ -492,7 +492,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_DERELICT + "=1"
 	perunit = CC_PER_SHEET_EREBITE
 	mat_type = MAT_EREBITE
 	starting_materials = list(MAT_EREBITE = CC_PER_SHEET_EREBITE)
@@ -513,7 +513,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_DERELICT + "=1"
 	perunit = CC_PER_SHEET_CERENKITE
 	mat_type = MAT_CERENKITE
 	starting_materials = list(MAT_CERENKITE = CC_PER_SHEET_CERENKITE)
@@ -540,7 +540,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_DERELICT + "=1"
 	perunit = CC_PER_SHEET_CYTINE
 	mat_type = MAT_CYTINE
 	starting_materials = list(MAT_CYTINE = CC_PER_SHEET_CYTINE)
@@ -565,7 +565,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_DERELICT + "=1"
 	perunit = CC_PER_SHEET_UQILL
 	mat_type = MAT_UQILL
 	starting_materials = list(MAT_UQILL = CC_PER_SHEET_UQILL)
@@ -579,7 +579,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5"
+	origin_tech = Tc_MATERIALS + "=5
 	perunit = CC_PER_SHEET_TELECRYSTAL
 	mat_type = MAT_TELECRYSTAL
 	starting_materials = list(MAT_TELECRYSTAL = CC_PER_SHEET_TELECRYSTAL)
@@ -592,7 +592,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_DERELICT + "=1"
 	perunit = CC_PER_SHEET_MAUXITE
 	mat_type = MAT_MAUXITE
 	starting_materials = list(MAT_MAUXITE = CC_PER_SHEET_MAUXITE)
@@ -606,7 +606,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_DERELICT + "=1"
 	perunit = CC_PER_SHEET_MOLITZ
 	mat_type = MAT_MOLITZ
 	starting_materials = list(MAT_MOLITZ = CC_PER_SHEET_MOLITZ)

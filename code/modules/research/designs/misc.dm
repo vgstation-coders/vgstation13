@@ -177,3 +177,13 @@
 	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_DIAMOND = 500)
 	category = "Misc"
 	build_path = /obj/item/clothing/glasses/hud/tracking
+
+/datum/design/goonecode
+	name = "Goonecode"
+	desc = "???"
+	id = "goonecode"
+	req_tech = list(Tc_DERELICT = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_PHAROSIUM=10000,MAT_CHAR=10000,MAT_CLARETINE=10000,MAT_BOHRUM=10000,MAT_SYRELINE=10000,MAT_EREBITE=10000,MAT_CYTINE=10000,MAT_UQILL=10000,MAT_MAUXITE=10000,MAT_COBRYL=10000,MAT_CERENKITE=10000,MAT_MOLITZ=10000)
+	category = "Misc"
+	build_path = /obj/item/toy/gooncode
