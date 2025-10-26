@@ -529,6 +529,10 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_EREBITE
 
+/datum/material/erebite/on_use(obj/source, atom/target, mob/user)
+	if(!..())
+		return
+	explosion(get_turf(target),-1,0,2*source.quality)
 
 /datum/material/cytine
 	name="Cytine"
@@ -579,6 +583,13 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_CERENKITE
 
+/datum/material/cerenkite/on_use(obj/source, atom/target, mob/user)
+	if(!..())
+		return
+	if(isliving(target))
+		var/mob/living/L = target
+		L.apply_radiation(rand(3,9)*source.quality, RAD_EXTERNAL)
+
 /datum/material/molitz
 	name="Molitz"
 	id=MAT_MOLITZ
@@ -587,6 +598,15 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/molitz
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_MOLITZ
+
+/datum/material/molitz/on_use(obj/source)
+	if(!..())
+		return
+	if(prob(10/source.quality))
+		source.visible_message("<span class = 'warning'>\The [source] shatters!</span>")
+		new /obj/item/weapon/shard(get_turf(source))
+		playsound(source, "shatter", 70, 1)
+		qdel(source)
 
 /datum/material/gingerbread
 	name="Gingerbread"
