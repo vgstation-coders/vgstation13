@@ -579,7 +579,7 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_MATERIALS + "=5
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_DERELICT + "=1"
 	perunit = CC_PER_SHEET_TELECRYSTAL
 	mat_type = MAT_TELECRYSTAL
 	starting_materials = list(MAT_TELECRYSTAL = CC_PER_SHEET_TELECRYSTAL)
