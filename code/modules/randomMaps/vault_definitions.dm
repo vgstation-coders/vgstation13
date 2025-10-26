@@ -155,7 +155,7 @@ var/list/existing_vaults = list()
 	spawn_cost = 2
 
 /datum/map_element/vault/asteroids_random/pre_load()
-	file_path = "maps/randomvaults/asteroids_random[pick("_clown","_plating")].dmm"
+	file_path = "maps/randomvaults/asteroids_random[pick("_old","_clown","_plating")].dmm"
 
 /datum/map_element/vault/listening
 	file_path = "maps/randomvaults/listening.dmm"

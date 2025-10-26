@@ -50,6 +50,20 @@ var/global/list/mineralSpawnChance[]
 		"Clown"   = 15,
 		"Phazon"  = 10
 	)
+	mineralSpawnChance["old"] = list(
+		"Pharosium" = 5,
+		"Char" = 5,
+		"Claretine" = 5,
+		"Bohrum" = 5,
+		"Syereline" = 5,
+		"Erebite" = 5,
+		"Cytine" = 5,
+		"Uqill" = 5,
+		"Mauxite" = 5,
+		"Cobryl" = 5,
+		"Cerenkite" = 5,
+		"Molitz" = 5
+	)
 /**********************Mineral deposits**************************/
 /turf
 	var/overlay_state = ""
@@ -797,6 +811,11 @@ var/list/icon_state_to_appearance = list()
 	mineralChance = 40
 	mineralPool = "clown"
 
+/turf/unsimulated/mineral/random/high_chance_old
+	icon_state = "rock(clown)"
+	mineralChance = 40
+	mineralPool = "old"
+
 /turf/unsimulated/mineral/random/high_chance_clown/snow
 	icon_state = "snow_rock"
 	base_icon_state = "snow_rock"
@@ -1341,6 +1360,10 @@ var/list/icon_state_to_appearance = list()
 /turf/space/asteroids/clownroid
 	icon_state = "roidspawn_clown"
 	roid_type = /turf/unsimulated/mineral/random/high_chance_clown
+
+/turf/space/asteroids/oldroid
+	icon_state = "roidspawn_clown"
+	roid_type = /turf/unsimulated/mineral/random/high_chance_old
 
 /turf/space/asteroids/plating
 	icon_state = "roidspawn_plating"
